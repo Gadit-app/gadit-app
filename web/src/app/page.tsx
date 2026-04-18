@@ -295,7 +295,7 @@ export default function Home() {
                       placeholder={ui.placeholder.replace("{word}", result.word)}
                       rows={2}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
-                      dir="auto"
+                      dir={isRTL ? "rtl" : "ltr"}
                     />
                     <button
                       onClick={handleCheckSentence}
