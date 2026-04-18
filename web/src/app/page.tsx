@@ -138,7 +138,7 @@ export default function Home() {
                 dir="auto"
               />
               {detectedLang && (
-                <span className="absolute -bottom-5 right-1 text-xs text-slate-400 pointer-events-none">
+                <span className="absolute -bottom-6 right-1 text-xs text-slate-400 pointer-events-none">
                   {detectedLang} detected
                 </span>
               )}
@@ -156,7 +156,7 @@ export default function Home() {
 
         {/* Quick examples */}
         {!result && (
-          <div className="flex flex-wrap gap-2 justify-center mb-10">
+          <div className="flex flex-wrap gap-2 justify-center mt-8 mb-6">
             <span className="text-slate-400 text-sm mr-1 self-center">Try:</span>
             {EXAMPLES.map((ex) => (
               <button
