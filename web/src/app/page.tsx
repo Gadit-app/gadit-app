@@ -19,13 +19,14 @@ interface WordResult {
 
 const PLACEHOLDERS = [
   'Type a word or sentence…',
-  'Try "set"',
+  'Try "שלום"',
+  'Try "banco"',
+  'Try "amor"',
   'Try "bank"',
-  'Try "I feel off today"',
-  'Type a word or sentence…',
+  'Try "مرحبا"',
 ];
 
-const EXAMPLES = ["set", "bank", "ephemeral", "I feel off today"];
+const EXAMPLES = ["set", "banco", "שלום", "любовь", "ephemeral", "مرحبا"];
 
 const isRTLLanguage = (lang?: string) =>
   ["Hebrew", "Arabic", "Urdu", "Persian"].includes(lang ?? "");
@@ -50,6 +51,18 @@ export default function Home() {
   }, []);
 
   const isRTL = isRTLLanguage(result?.language);
+
+  function detectInputLanguage(text: string): string | null {
+    if (!text.trim()) return null;
+    if (/[\u0590-\u05FF]/.test(text)) return "Hebrew";
+    if (/[\u0600-\u06FF]/.test(text)) return "Arabic";
+    if (/[\u0400-\u04FF]/.test(text)) return "Russian";
+    if (/[\u3040-\u30FF\u4E00-\u9FFF]/.test(text)) return "Japanese";
+    if (/[\u0900-\u097F]/.test(text)) return "Hindi";
+    return null;
+  }
+
+  const detectedLang = detectInputLanguage(input);
 
   async function handleSearch(wordOrSentence?: string) {
     const query = (wordOrSentence ?? input).trim();
@@ -115,14 +128,21 @@ export default function Home() {
           className="mb-4"
         >
           <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={PLACEHOLDERS[placeholderIdx]}
-              className="flex-1 px-5 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-              dir="auto"
-            />
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={PLACEHOLDERS[placeholderIdx]}
+                className="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                dir="auto"
+              />
+              {detectedLang && (
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none">
+                  {detectedLang} detected
+                </span>
+              )}
+            </div>
             <button
               type="submit"
               disabled={loading}
@@ -150,11 +170,14 @@ export default function Home() {
           </div>
         )}
 
-        {/* Tagline */}
+        {/* Tagline + language support */}
         {!result && !loading && (
-          <p className="text-center text-slate-400 text-sm">
-            Not a dictionary. A way to understand.
-          </p>
+          <div className="text-center space-y-2">
+            <p className="text-slate-400 text-sm">Not a dictionary. A way to understand.</p>
+            <p className="text-slate-300 text-xs">
+              English · Hebrew · Arabic · Spanish · French · Russian · German · Hindi · Portuguese · Japanese
+            </p>
+          </div>
         )}
 
         {error && (
