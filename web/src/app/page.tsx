@@ -325,7 +325,7 @@ export default function Home() {
                         {sentenceFeedback.message}
                         {sentenceFeedback.status === "perfect" && (
                           <div className="mt-1 font-semibold" style={{ color: "#10B981" }}>
-                            {rui.wordMastered}
+                            Word mastered ✓
                           </div>
                         )}
                       </div>
