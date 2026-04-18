@@ -21,14 +21,14 @@ const PLANS = [
       "All 10 languages",
     ],
     missing: ["Unlimited searches", "AI images", "History & Favorites", "Quiz mode"],
-    cta: "Start free",
+    cta: "Start understanding",
     popular: false,
     note: null,
   },
   {
     id: "clear",
     name: "Clear",
-    description: "Everything you need to understand any word",
+    description: "Everything you need to fully understand any word",
     monthlyPrice: 1.99,
     yearlyPrice: 15.99,
     monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY,
@@ -52,7 +52,7 @@ const PLANS = [
   {
     id: "deep",
     name: "Deep",
-    description: "For deeper understanding and advanced learning",
+    description: "Go beyond understanding — into mastery",
     monthlyPrice: 3.99,
     yearlyPrice: 31.99,
     monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY,
@@ -108,7 +108,7 @@ export default function PricingPage() {
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold mb-3" style={{ color: "#0F172A" }}>
-            Simple, honest pricing
+            Understand any word.<br />Choose how deep you go.
           </h1>
           <p className="text-slate-400 text-lg">Understand for free. Go deeper when you&apos;re ready.</p>
         </div>
@@ -133,7 +133,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
           {PLANS.map((plan) => {
             const price = billing === "yearly" && plan.yearlyPrice > 0
               ? (plan.yearlyPrice / 12).toFixed(2)
@@ -145,7 +145,7 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className={`relative bg-white rounded-3xl border p-7 flex flex-col ${plan.popular ? "border-blue-400 shadow-lg shadow-blue-100" : "border-slate-100 shadow-sm"}`}
+                className={`relative bg-white rounded-3xl border p-7 flex flex-col ${plan.popular ? "border-blue-400 shadow-xl shadow-blue-200 scale-[1.02]" : "border-slate-100 shadow-sm"}`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white" style={{ background: "#2563EB" }}>
@@ -177,7 +177,7 @@ export default function PricingPage() {
                     </li>
                   ))}
                   {plan.missing.map((f, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-slate-300">
+                    <li key={i} className={`flex gap-2 text-sm ${plan.id === "basic" && f === "Unlimited searches" ? "text-slate-400 font-medium" : "text-slate-300"}`}>
                       <span>✗</span> {f}
                     </li>
                   ))}
