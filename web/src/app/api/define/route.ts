@@ -25,7 +25,7 @@ Your response must follow this exact JSON structure:
   "language": "detected language in English",
   "definition": "simple, clear definition — no academic language. If multiple meanings exist, give the most common one first.",
   "examples": ["example 1", "example 2", "example 3"],
-  "etymology": "brief origin story focusing on the linguistic root (e.g. Greek 'mathema' = learning). Not grammatical root.",
+  "etymology": "The true linguistic origin of the word — which ancient language it came from (Greek, Latin, Arabic, Akkadian, etc.), the original root word, and its original meaning. Example: 'fund' comes from Latin 'fundus' meaning 'bottom/base'. Do NOT explain the current Hebrew/Arabic meaning — explain the historical source language.",
   "forKids": "super simple explanation a child would understand",
   "multiplemeanings": false,
   "opposite": "the most natural opposite word or phrase (in the same language)",

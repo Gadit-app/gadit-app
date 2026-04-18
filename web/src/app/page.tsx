@@ -37,6 +37,7 @@ const UI_STRINGS: Record<string, {
   goDeeper: string; moreExamples: string; forKids: string;
   opposite: string; confusable: string; register: string;
   frequency: string; wordFamily: string; searchAnother: string;
+  origin: string;
 }> = {
   Hebrew: {
     useThisWord: "✍️ השתמש במילה",
@@ -54,6 +55,7 @@ const UI_STRINGS: Record<string, {
     frequency: "תדירות",
     wordFamily: "משפחת המילה",
     searchAnother: "← חפש מילה אחרת",
+    origin: "מקור המילה",
   },
   Arabic: {
     useThisWord: "✍️ استخدم هذه الكلمة",
@@ -71,6 +73,7 @@ const UI_STRINGS: Record<string, {
     frequency: "التكرار",
     wordFamily: "عائلة الكلمة",
     searchAnother: "← ابحث عن كلمة أخرى",
+    origin: "أصل الكلمة",
   },
 };
 
@@ -91,6 +94,7 @@ function getUI(language?: string) {
     frequency: "Frequency",
     wordFamily: "Word family",
     searchAnother: "← Search another word",
+    origin: "Origin",
   };
 }
 
@@ -389,7 +393,7 @@ export default function Home() {
 
                 {result.etymology && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Origin</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.origin}</p>
                     <p className="text-slate-600 text-sm">{result.etymology}</p>
                   </section>
                 )}
