@@ -69,7 +69,9 @@ async function callGemini(word: string): Promise<object> {
     }
   );
   const data = await res.json();
+  console.log("Gemini response:", JSON.stringify(data).slice(0, 500));
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error("Gemini returned no text: " + JSON.stringify(data).slice(0, 200));
   return JSON.parse(text);
 }
 
