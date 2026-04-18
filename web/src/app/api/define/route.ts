@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { initializeApp, getApps } from "firebase/app";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
+function getDb() {
+  const firebaseConfig = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  };
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  return getFirestore(app);
+}
 
 const SYSTEM_PROMPT = `You are Gadit — a word explanation assistant. Your job is to explain words clearly and simply.
 
@@ -27,7 +40,7 @@ Rules:
 
 async function getCachedResult(word: string, language: string) {
   const key = `${language}_${word.toLowerCase().trim()}`;
-  const ref = doc(db, "cache", key);
+  const ref = doc(getDb(), "cache", key);
   const snap = await getDoc(ref);
   if (snap.exists()) return snap.data();
   return null;
@@ -35,7 +48,7 @@ async function getCachedResult(word: string, language: string) {
 
 async function setCachedResult(word: string, language: string, data: object) {
   const key = `${language}_${word.toLowerCase().trim()}`;
-  const ref = doc(db, "cache", key);
+  const ref = doc(getDb(), "cache", key);
   await setDoc(ref, { ...data, cachedAt: new Date().toISOString() });
 }
 
