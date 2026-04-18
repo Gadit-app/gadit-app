@@ -239,7 +239,7 @@ export default function Home() {
 
           {/* Search */}
           <div ref={searchRef} className="animate-fade-in-up delay-200">
-            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} dir={uiDir}>
               <div className="search-container flex gap-0 p-2">
                 <div className="relative flex-1">
                   <input
@@ -283,9 +283,8 @@ export default function Home() {
 
             {/* Support line */}
             {!result && !loading && (
-              <p className="text-center text-slate-400 text-sm mt-6 animate-fade-in delay-400">
-                {t.heroSupport}
-              </p>
+              <p className="text-center text-slate-400 text-sm mt-6 animate-fade-in delay-400"
+                dangerouslySetInnerHTML={{ __html: t.heroSupport }} />
             )}
           </div>
 
@@ -500,7 +499,7 @@ export default function Home() {
               <h2 className="text-3xl font-bold text-center mb-2" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
                 {t.demoSectionTitle}
               </h2>
-              <p className="text-center text-slate-400 mb-10 text-base">{t.heroSupport}</p>
+              <p className="text-center text-slate-400 mb-10 text-base italic" dangerouslySetInnerHTML={{ __html: t.heroSupport }} />
 
               <div className="gadit-card overflow-hidden" style={{ boxShadow: "var(--shadow-md)" }}>
                 {/* Fake browser bar */}
