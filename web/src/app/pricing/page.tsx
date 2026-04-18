@@ -7,27 +7,28 @@ const PLANS = [
   {
     id: "basic",
     name: "Basic",
-    description: "Start understanding words",
+    description: "Start understanding words for free",
     monthlyPrice: 0,
     yearlyPrice: 0,
     monthlyPriceId: null,
     yearlyPriceId: null,
     features: [
-      "20 daily insights",
+      "20 searches per day",
       "Full definition",
       "Examples",
       "For Kids explanation",
       "Basic etymology",
       "All 10 languages",
     ],
-    missing: ["AI images", "History & Favorites", "Quiz mode", "Use this word feedback"],
+    missing: ["Unlimited searches", "AI images", "History & Favorites", "Quiz mode"],
     cta: "Start free",
     popular: false,
+    note: null,
   },
   {
     id: "clear",
     name: "Clear",
-    description: "Unlimited word understanding",
+    description: "Everything you need to understand any word",
     monthlyPrice: 1.99,
     yearlyPrice: 15.99,
     monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY,
@@ -44,13 +45,14 @@ const PLANS = [
       "All 10 languages",
     ],
     missing: ["AI word images"],
-    cta: "Get Clear",
+    cta: "Start understanding fully",
     popular: true,
+    note: "Most people choose this",
   },
   {
     id: "deep",
     name: "Deep",
-    description: "The complete word experience",
+    description: "For deeper understanding and advanced learning",
     monthlyPrice: 3.99,
     yearlyPrice: 31.99,
     monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY,
@@ -64,8 +66,9 @@ const PLANS = [
       "All 10 languages",
     ],
     missing: [],
-    cta: "Go Deep",
+    cta: "Unlock Deep",
     popular: false,
+    note: null,
   },
 ];
 
@@ -107,7 +110,7 @@ export default function PricingPage() {
           <h1 className="text-4xl font-bold mb-3" style={{ color: "#0F172A" }}>
             Simple, honest pricing
           </h1>
-          <p className="text-slate-400 text-lg">Start free. Upgrade when you&apos;re ready.</p>
+          <p className="text-slate-400 text-lg">Understand for free. Go deeper when you&apos;re ready.</p>
         </div>
 
         {/* Billing toggle */}
@@ -124,7 +127,7 @@ export default function PricingPage() {
           >
             Yearly
             <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-semibold text-white" style={{ background: "#10B981" }}>
-              Save 33%
+              Save 33% — 2 months free
             </span>
           </button>
         </div>
@@ -192,6 +195,10 @@ export default function PricingPage() {
                 >
                   {loading === plan.id ? "…" : plan.cta}
                 </button>
+
+                {plan.note && (
+                  <p className="text-center text-xs text-slate-400 mt-2">{plan.note}</p>
+                )}
               </div>
             );
           })}
