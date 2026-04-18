@@ -31,6 +31,69 @@ const EXAMPLES = ["set", "banco", "שלום", "любовь", "ephemeral", "مر
 const isRTLLanguage = (lang?: string) =>
   ["Hebrew", "Arabic", "Urdu", "Persian"].includes(lang ?? "");
 
+const UI_STRINGS: Record<string, {
+  useThisWord: string; makeItYours: string; placeholder: string;
+  checkBtn: string; checking: string; understandMore: string;
+  goDeeper: string; moreExamples: string; forKids: string;
+  opposite: string; confusable: string; register: string;
+  frequency: string; wordFamily: string; searchAnother: string;
+}> = {
+  Hebrew: {
+    useThisWord: "✍️ השתמש במילה",
+    makeItYours: "תעשה את זה שלך",
+    placeholder: 'השתמש ב"{word}" במשפט משלך',
+    checkBtn: "בדוק את המשפט שלי",
+    checking: "בודק…",
+    understandMore: "הבן יותר ↓",
+    goDeeper: "העמק ↓",
+    moreExamples: "עוד דוגמאות",
+    forKids: "הסבר לילדים",
+    opposite: "הפך",
+    confusable: "לא להתבלבל עם",
+    register: "רישום",
+    frequency: "תדירות",
+    wordFamily: "משפחת המילה",
+    searchAnother: "← חפש מילה אחרת",
+  },
+  Arabic: {
+    useThisWord: "✍️ استخدم هذه الكلمة",
+    makeItYours: "اجعلها لك",
+    placeholder: 'استخدم "{word}" في جملتك الخاصة',
+    checkBtn: "تحقق من جملتي",
+    checking: "جارٍ التحقق…",
+    understandMore: "فهم أكثر ↓",
+    goDeeper: "تعمق أكثر ↓",
+    moreExamples: "مزيد من الأمثلة",
+    forKids: "شرح للأطفال",
+    opposite: "المعاكس",
+    confusable: "لا تخلط مع",
+    register: "المستوى اللغوي",
+    frequency: "التكرار",
+    wordFamily: "عائلة الكلمة",
+    searchAnother: "← ابحث عن كلمة أخرى",
+  },
+};
+
+function getUI(language?: string) {
+  return UI_STRINGS[language ?? ""] ?? {
+    useThisWord: "✍️ Use this word",
+    makeItYours: "Make it yours",
+    placeholder: 'Use "{word}" in your own sentence',
+    checkBtn: "Check my sentence",
+    checking: "Checking…",
+    understandMore: "Understand more ↓",
+    goDeeper: "Go deeper ↓",
+    moreExamples: "More examples",
+    forKids: "Explain like I'm 10",
+    opposite: "Opposite",
+    confusable: "Don't confuse with",
+    register: "Register",
+    frequency: "Frequency",
+    wordFamily: "Word family",
+    searchAnother: "← Search another word",
+  };
+}
+
 export default function Home() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<WordResult | null>(null);
@@ -51,6 +114,7 @@ export default function Home() {
   }, []);
 
   const isRTL = isRTLLanguage(result?.language);
+  const ui = getUI(result?.language);
 
   function detectInputLanguage(text: string): string | null {
     if (!text.trim()) return null;
@@ -215,16 +279,16 @@ export default function Home() {
                   onClick={() => setUseThisWordOpen((v) => !v)}
                   className="mt-1 px-4 py-2 rounded-xl text-sm font-medium border border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-all"
                 >
-                  ✍️ Use this word
+                  {ui.useThisWord}
                 </button>
 
                 {useThisWordOpen && (
                   <div className="mt-4 space-y-3">
-                    <p className="text-sm font-semibold text-slate-500">Make it yours</p>
+                    <p className="text-sm font-semibold text-slate-500">{ui.makeItYours}</p>
                     <textarea
                       value={userSentence}
                       onChange={(e) => setUserSentence(e.target.value)}
-                      placeholder={`Use "${result.word}" in your own sentence`}
+                      placeholder={ui.placeholder.replace("{word}", result.word)}
                       rows={2}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
                       dir="auto"
@@ -235,7 +299,7 @@ export default function Home() {
                       className="px-5 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
                       style={{ background: "#2563EB" }}
                     >
-                      {checkingsentence ? "Checking…" : "Check my sentence"}
+                      {checkingsentence ? ui.checking : ui.checkBtn}
                     </button>
 
                     {sentenceFeedback && (
@@ -266,15 +330,15 @@ export default function Home() {
                 onClick={() => setLayer(2)}
                 className="w-full py-3 rounded-2xl border border-slate-200 bg-white text-slate-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 transition-all"
               >
-                Understand more ↓
+                {ui.understandMore}
               </button>
             ) : (
               <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Understand more</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{ui.understandMore.replace(" ↓","")}</p>
 
                 {result.examples?.length > 1 && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">More examples</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{ui.moreExamples}</p>
                     <ul className="space-y-2">
                       {result.examples.slice(1).map((ex, i) => (
                         <li key={i} className="flex gap-2 text-slate-600 text-sm">
@@ -288,21 +352,21 @@ export default function Home() {
 
                 {result.forKids && (
                   <section className="bg-amber-50 rounded-2xl p-4">
-                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">Explain like I&apos;m 10</p>
+                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">{ui.forKids}</p>
                     <p className="text-slate-700 text-sm">{result.forKids}</p>
                   </section>
                 )}
 
                 {result.opposite && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Opposite</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.opposite}</p>
                     <p className="text-slate-600 text-sm">{result.opposite}</p>
                   </section>
                 )}
 
                 {result.confusable && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Don&apos;t confuse with</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.confusable}</p>
                     <p className="text-slate-600 text-sm">{result.confusable}</p>
                   </section>
                 )}
@@ -315,13 +379,13 @@ export default function Home() {
                 onClick={() => setLayer(3)}
                 className="w-full py-3 rounded-2xl border border-slate-200 bg-white text-slate-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 transition-all"
               >
-                Go deeper ↓
+                {ui.goDeeper}
               </button>
             )}
 
             {layer >= 3 && (
               <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Go deeper</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{ui.goDeeper.replace(" ↓","")}</p>
 
                 {result.etymology && (
                   <section>
@@ -332,21 +396,21 @@ export default function Home() {
 
                 {result.register && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Register</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.register}</p>
                     <p className="text-slate-600 text-sm">{result.register}</p>
                   </section>
                 )}
 
                 {result.frequency && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Frequency</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.frequency}</p>
                     <p className="text-slate-600 text-sm">{result.frequency}</p>
                   </section>
                 )}
 
                 {result.wordFamily && result.wordFamily.length > 0 && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Word family</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{ui.wordFamily}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.wordFamily.map((w, i) => (
                         <span key={i} className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-sm">{w}</span>
@@ -362,7 +426,7 @@ export default function Home() {
               onClick={() => { setResult(null); setInput(""); setLayer(1); }}
               className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-all"
             >
-              ← Search another word
+              {ui.searchAnother}
             </button>
           </div>
         )}
