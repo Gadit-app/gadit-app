@@ -12,7 +12,7 @@ export default function Header() {
   const [langOpen, setLangOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-sm border-b border-slate-100">
+    <header className="fixed top-0 left-0 right-0 z-40 border-b border-slate-100/80" style={{ background: "rgb(255 255 255 / 0.85)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
         <Link href="/" className="text-lg font-bold shrink-0" style={{ color: "#0F172A" }}>
           <span style={{ color: "#2563EB" }}>Gad</span>it

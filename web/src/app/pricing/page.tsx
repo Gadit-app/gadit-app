@@ -136,15 +136,15 @@ export default function PricingPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-16 px-4" dir={dir}>
+    <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold mb-3 whitespace-pre-line" style={{ color: "#0F172A" }}>
+          <h1 className="text-4xl font-bold mb-3 whitespace-pre-line" style={{ color: "#0F172A", letterSpacing: "-1px" }}>
             {t.pricingHeadline}
           </h1>
-          <p className="text-slate-400 text-lg">{t.pricingSubline}</p>
+          <p className="text-slate-400 text-lg leading-relaxed">{t.pricingSubline}</p>
         </div>
 
         {/* Billing toggle */}
@@ -167,7 +167,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 items-start">
           {PLANS_T.map((plan) => {
             const price = billing === "yearly" && plan.yearlyPrice > 0
               ? (plan.yearlyPrice / 12).toFixed(2)
@@ -179,40 +179,51 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className={`relative bg-white rounded-3xl border p-7 flex flex-col ${plan.popular ? "border-blue-400 shadow-xl shadow-blue-200 scale-[1.02]" : "border-slate-100 shadow-sm"}`}
+                className="relative bg-white rounded-3xl flex flex-col transition-all duration-200"
+                style={plan.popular ? {
+                  border: "1.5px solid rgb(147 197 253)",
+                  boxShadow: "0 8px 32px 0 rgb(37 99 235 / 0.13), 0 2px 8px 0 rgb(37 99 235 / 0.08)",
+                  transform: "scale(1.025)",
+                  padding: "1.75rem",
+                } : {
+                  border: "1px solid rgb(226 232 240 / 0.9)",
+                  boxShadow: "0 2px 8px 0 rgb(0 0 0 / 0.05)",
+                  padding: "1.75rem",
+                }}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white" style={{ background: "#2563EB" }}>
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white"
+                    style={{ background: "#2563EB", boxShadow: "0 2px 8px rgb(37 99 235 / 0.35)" }}>
                     {t.mostPopular}
                   </div>
                 )}
 
                 <div className="mb-5">
                   <h2 className="text-xl font-bold mb-1" style={{ color: "#0F172A" }}>{plan.name}</h2>
-                  <p className="text-slate-400 text-sm">{plan.description}</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">{plan.description}</p>
                 </div>
 
-                <div className="mb-5">
+                <div className="mb-6 pb-6 border-b border-slate-100">
                   {plan.monthlyPrice === 0 ? (
                     <span className="text-3xl font-bold" style={{ color: "#0F172A" }}>Free</span>
                   ) : (
                     <>
                       <span className="text-3xl font-bold" style={{ color: "#0F172A" }}>${price}</span>
                       <span className="text-slate-400 text-sm">/month</span>
-                      {billed && <p className="text-xs text-slate-400 mt-0.5">{t.billedYearly} {billed}</p>}
+                      {billed && <p className="text-xs text-slate-400 mt-1">{t.billedYearly} {billed}</p>}
                     </>
                   )}
                 </div>
 
-                <ul className="space-y-2 mb-6 flex-1">
+                <ul className="space-y-2.5 mb-7 flex-1">
                   {plan.features.map((f, i) => (
                     <li key={i} className="flex gap-2 text-sm text-slate-600">
-                      <span style={{ color: "#10B981" }}>✓</span> {f}
+                      <span className="shrink-0 font-semibold" style={{ color: "#10B981" }}>✓</span> {f}
                     </li>
                   ))}
                   {plan.missing.map((f, i) => (
-                    <li key={i} className={`flex gap-2 text-sm ${plan.id === "basic" && f === "Unlimited searches" ? "text-slate-400 font-medium" : "text-slate-300"}`}>
-                      <span>✗</span> {f}
+                    <li key={i} className="flex gap-2 text-sm text-slate-300">
+                      <span className="shrink-0">✗</span> {f}
                     </li>
                   ))}
                 </ul>
@@ -220,12 +231,17 @@ export default function PricingPage() {
                 <button
                   onClick={() => handleSubscribe(plan)}
                   disabled={loading === plan.id}
-                  className={`w-full py-3 rounded-xl font-semibold text-sm transition-all disabled:opacity-50 ${
+                  className={`w-full py-3 rounded-xl font-semibold text-sm disabled:opacity-50 transition-all ${
                     plan.popular
-                      ? "text-white"
-                      : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600"
+                      ? "text-white hover:opacity-90"
+                      : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 bg-white"
                   }`}
-                  style={plan.popular ? { background: "#2563EB" } : {}}
+                  style={plan.popular ? {
+                    background: "#2563EB",
+                    boxShadow: "0 4px 14px rgb(37 99 235 / 0.25)",
+                  } : {
+                    boxShadow: "0 1px 3px rgb(0 0 0 / 0.05)",
+                  }}
                 >
                   {loading === plan.id ? "…" : plan.cta}
                 </button>
