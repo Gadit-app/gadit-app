@@ -299,7 +299,7 @@ export default function Home() {
                     <textarea
                       value={userSentence}
                       onChange={(e) => setUserSentence(e.target.value)}
-                      placeholder={rui.sentencePlaceholder.replace("{word}", result.word)}
+                      placeholder={rui.placeholder.replace("{word}", result.word)}
                       rows={2}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
                       dir={isRTL ? "rtl" : "ltr"}
