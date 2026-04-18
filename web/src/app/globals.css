@@ -39,6 +39,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+[dir="rtl"] {
+  font-family: var(--font-heebo), 'Heebo', system-ui, sans-serif;
+}
+
 /* Scroll-triggered fade-in */
 @keyframes fadeInUp {
   from {
