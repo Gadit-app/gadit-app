@@ -39,17 +39,21 @@ Rules:
 - Examples must be everyday real-life sentences`;
 
 async function getCachedResult(word: string, language: string) {
-  const key = `${language}_${word.toLowerCase().trim()}`;
-  const ref = doc(getDb(), "cache", key);
-  const snap = await getDoc(ref);
-  if (snap.exists()) return snap.data();
+  try {
+    const key = `${language}_${word.toLowerCase().trim()}`;
+    const ref = doc(getDb(), "cache", key);
+    const snap = await getDoc(ref);
+    if (snap.exists()) return snap.data();
+  } catch {}
   return null;
 }
 
 async function setCachedResult(word: string, language: string, data: object) {
-  const key = `${language}_${word.toLowerCase().trim()}`;
-  const ref = doc(getDb(), "cache", key);
-  await setDoc(ref, { ...data, cachedAt: new Date().toISOString() });
+  try {
+    const key = `${language}_${word.toLowerCase().trim()}`;
+    const ref = doc(getDb(), "cache", key);
+    await setDoc(ref, { ...data, cachedAt: new Date().toISOString() });
+  } catch {}
 }
 
 async function callGemini(word: string): Promise<object> {
@@ -108,7 +112,8 @@ export async function POST(req: NextRequest) {
 
     await setCachedResult(word, "auto", result);
     return NextResponse.json(result);
-  } catch {
-    return NextResponse.json({ error: "Failed to define word" }, { status: 500 });
+  } catch (err) {
+    console.error("Define error:", err);
+    return NextResponse.json({ error: "Failed to define word", details: String(err) }, { status: 500 });
   }
 }
