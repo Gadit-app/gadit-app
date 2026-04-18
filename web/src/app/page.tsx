@@ -173,7 +173,7 @@ export default function Home() {
         {/* Tagline + language support */}
         {!result && !loading && (
           <div className="text-center space-y-2">
-            <p className="text-slate-400 text-sm">Not a dictionary. A way to understand.</p>
+            <p className="text-slate-400 text-sm">Not <em>just</em> a dictionary. A way to understand.</p>
             <p className="text-slate-300 text-xs">
               English · Hebrew · Arabic · Spanish · French · Russian · German · Hindi · Portuguese · Japanese
             </p>
