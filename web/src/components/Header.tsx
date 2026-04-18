@@ -19,6 +19,12 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-3 ms-auto">
+          <a href="/#how-it-works" className="hidden md:block text-sm text-slate-500 hover:text-blue-600 transition-all">
+            {t.navHowItWorks}
+          </a>
+          <a href="/#features" className="hidden md:block text-sm text-slate-500 hover:text-blue-600 transition-all">
+            {t.navFeatures}
+          </a>
           <Link href="/pricing" className="text-sm text-slate-500 hover:text-blue-600 transition-all">
             {t.pricing}
           </Link>

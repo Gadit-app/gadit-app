@@ -100,6 +100,57 @@ export const T: Record<Lang, {
   wordOfDay: string;
   advancedInsights: string;
   everythingInClear: string;
+  // Homepage sections
+  heroHeadline: string;
+  heroSubline: string;
+  heroSupport: string;
+  heroLangs: string;
+  demoSectionTitle: string;
+  demoWord: string;
+  demoDefinition: string;
+  demoExample: string;
+  demoInsight: string;
+  demoInsightLabel: string;
+  howItWorksTitle: string;
+  howStep1Title: string;
+  howStep1Desc: string;
+  howStep2Title: string;
+  howStep2Desc: string;
+  howStep3Title: string;
+  howStep3Desc: string;
+  howCta: string;
+  featuresTitle: string;
+  feat1: string;
+  feat2: string;
+  feat3: string;
+  feat4: string;
+  feat5: string;
+  feat6: string;
+  feat7: string;
+  feat8: string;
+  whoTitle: string;
+  who1: string;
+  who2: string;
+  who3: string;
+  who4: string;
+  who5: string;
+  whyTitle: string;
+  whyCopy: string;
+  whyBullet1: string;
+  whyBullet2: string;
+  whyBullet3: string;
+  pricingTeaserTitle: string;
+  pricingTeaserText: string;
+  viewPricing: string;
+  finalCtaTitle: string;
+  finalCtaText: string;
+  startUnderstandingFree: string;
+  footerTagline: string;
+  footerPrivacy: string;
+  footerTerms: string;
+  footerContact: string;
+  navHowItWorks: string;
+  navFeatures: string;
 }> = {
   en: {
     tagline: "Every word, understood.",
@@ -175,6 +226,56 @@ export const T: Record<Lang, {
     wordOfDay: "Word of the Day (personal)",
     advancedInsights: "Advanced insights",
     everythingInClear: "Everything in Clear",
+    heroHeadline: "Understand any word instantly",
+    heroSubline: "Gadit explains words simply, clearly, and deeply — in your own language.",
+    heroSupport: "Not a dictionary. A way to understand.",
+    heroLangs: "Available in English · עברית · العربية · Русский",
+    demoSectionTitle: "See how Gadit works",
+    demoWord: "ephemeral",
+    demoDefinition: "Lasting for only a short time; quickly fading or disappearing.",
+    demoExample: "\"The beauty of cherry blossoms is ephemeral — here for a week, then gone.\"",
+    demoInsight: "From Greek ephḗmeros — 'lasting only a day' (epi- 'on' + hēmera 'day'). Used in philosophy, art, and poetry to describe the bittersweet nature of things that don't last.",
+    demoInsightLabel: "Deeper insight",
+    howItWorksTitle: "How it works",
+    howStep1Title: "Type any word or sentence",
+    howStep1Desc: "Search a single word, or paste a full sentence when context matters.",
+    howStep2Title: "Get instant clarity",
+    howStep2Desc: "See a simple explanation right away, with examples that make meaning easy to grasp.",
+    howStep3Title: "Go deeper if you want",
+    howStep3Desc: "Explore all meanings, kid-friendly explanation, etymology, and more.",
+    howCta: "Try Gadit now",
+    featuresTitle: "What you can do with Gadit",
+    feat1: "Multiple meanings, clearly separated",
+    feat2: "Real examples in context",
+    feat3: "Kid-friendly explanation",
+    feat4: "Context understanding",
+    feat5: "Word relationships",
+    feat6: "Origin & etymology",
+    feat7: "Use the word yourself",
+    feat8: "Built for daily use",
+    whoTitle: "Who Gadit is for",
+    who1: "Students",
+    who2: "Parents",
+    who3: "Teachers",
+    who4: "Language learners",
+    who5: "Curious minds",
+    whyTitle: "Why Gadit feels different",
+    whyCopy: "Most tools give you definitions. Gadit helps you understand.",
+    whyBullet1: "Not just a definition",
+    whyBullet2: "Not just a translation",
+    whyBullet3: "Built for understanding",
+    pricingTeaserTitle: "Start free. Go deeper from $1.99.",
+    pricingTeaserText: "Use Gadit every day for free, then upgrade only if you want unlimited access and deeper tools.",
+    viewPricing: "View pricing",
+    finalCtaTitle: "Try Gadit for free",
+    finalCtaText: "Type a word, paste a sentence, and see how clear language can feel.",
+    startUnderstandingFree: "Start understanding",
+    footerTagline: "Gadit — Every word, understood.",
+    footerPrivacy: "Privacy Policy",
+    footerTerms: "Terms of Use",
+    footerContact: "Contact",
+    navHowItWorks: "How it works",
+    navFeatures: "Features",
   },
   he: {
     tagline: "כל מילה, מובנת.",
@@ -250,6 +351,56 @@ export const T: Record<Lang, {
     wordOfDay: "מילת היום (אישית)",
     advancedInsights: "תובנות מתקדמות",
     everythingInClear: "כל מה שיש ב-Clear",
+    heroHeadline: "הבן כל מילה מיד",
+    heroSubline: "Gadit מסביר מילים בפשטות, בבהירות ובעומק — בשפה שלך.",
+    heroSupport: "לא מילון. דרך להבין.",
+    heroLangs: "זמין בעברית · English · العربية · Русский",
+    demoSectionTitle: "ראה איך Gadit עובד",
+    demoWord: "ephemeral",
+    demoDefinition: "דבר שנמשך זמן קצר בלבד; שנעלם מהר.",
+    demoExample: "\"יופי פרחי הדובדבן הוא ephemeral — כאן שבוע, ואז נעלם.\"",
+    demoInsight: "מהיוונית ephḗmeros — 'שנמשך יום אחד בלבד'. משמש בפילוסופיה, אמנות ושירה לתאר את הטבע המר-מתוק של דברים שאינם מתמידים.",
+    demoInsightLabel: "תובנה מעמיקה",
+    howItWorksTitle: "איך זה עובד",
+    howStep1Title: "הקלד כל מילה או משפט",
+    howStep1Desc: "חפש מילה בודדת, או הדבק משפט שלם כשההקשר חשוב.",
+    howStep2Title: "קבל בהירות מיידית",
+    howStep2Desc: "ראה הסבר פשוט מיד, עם דוגמאות שמקלות על ההבנה.",
+    howStep3Title: "העמק אם תרצה",
+    howStep3Desc: "חקור את כל המשמעויות, הסבר לילדים, אטימולוגיה, ועוד.",
+    howCta: "נסה את Gadit עכשיו",
+    featuresTitle: "מה אפשר לעשות עם Gadit",
+    feat1: "משמעויות מרובות, מופרדות בבהירות",
+    feat2: "דוגמאות אמיתיות בהקשר",
+    feat3: "הסבר ידידותי לילדים",
+    feat4: "הבנת הקשר",
+    feat5: "קשרים בין מילים",
+    feat6: "מקור ואטימולוגיה",
+    feat7: "השתמש במילה בעצמך",
+    feat8: "בנוי לשימוש יומיומי",
+    whoTitle: "למי Gadit מתאים",
+    who1: "תלמידים",
+    who2: "הורים",
+    who3: "מורים",
+    who4: "לומדי שפות",
+    who5: "נפשות סקרניות",
+    whyTitle: "למה Gadit מרגיש שונה",
+    whyCopy: "רוב הכלים נותנים לך הגדרות. Gadit עוזר לך להבין.",
+    whyBullet1: "לא רק הגדרה",
+    whyBullet2: "לא רק תרגום",
+    whyBullet3: "בנוי להבנה",
+    pricingTeaserTitle: "התחל בחינם. העמק מ-$1.99.",
+    pricingTeaserText: "השתמש ב-Gadit כל יום בחינם, ושדרג רק אם תרצה גישה ללא הגבלה וכלים מעמיקים.",
+    viewPricing: "ראה תמחור",
+    finalCtaTitle: "נסה את Gadit בחינם",
+    finalCtaText: "הקלד מילה, הדבק משפט, וראה כמה ברורה יכולה להיות השפה.",
+    startUnderstandingFree: "התחל להבין",
+    footerTagline: "Gadit — כל מילה, מובנת.",
+    footerPrivacy: "מדיניות פרטיות",
+    footerTerms: "תנאי שימוש",
+    footerContact: "צור קשר",
+    navHowItWorks: "איך זה עובד",
+    navFeatures: "פיצ'רים",
   },
   ar: {
     tagline: "كل كلمة، مفهومة.",
@@ -325,6 +476,56 @@ export const T: Record<Lang, {
     wordOfDay: "كلمة اليوم (شخصية)",
     advancedInsights: "رؤى متقدمة",
     everythingInClear: "كل شيء في Clear",
+    heroHeadline: "افهم أي كلمة على الفور",
+    heroSubline: "Gadit يشرح الكلمات ببساطة ووضوح وعمق — بلغتك.",
+    heroSupport: "ليس قاموساً. طريقة للفهم.",
+    heroLangs: "متاح بـ العربية · English · עברית · Русский",
+    demoSectionTitle: "اكتشف كيف يعمل Gadit",
+    demoWord: "ephemeral",
+    demoDefinition: "شيء يدوم وقتاً قصيراً فقط؛ يتلاشى بسرعة.",
+    demoExample: "\"جمال أزهار الكرز ephemeral — هنا لأسبوع ثم يختفي.\"",
+    demoInsight: "من اليونانية ephḗmeros — 'يدوم يوماً واحداً فقط'. يُستخدم في الفلسفة والفن والشعر لوصف الطبيعة المُرّة-الحلوة للأشياء العابرة.",
+    demoInsightLabel: "رؤية أعمق",
+    howItWorksTitle: "كيف يعمل",
+    howStep1Title: "اكتب أي كلمة أو جملة",
+    howStep1Desc: "ابحث عن كلمة واحدة، أو الصق جملة كاملة عندما يهم السياق.",
+    howStep2Title: "احصل على وضوح فوري",
+    howStep2Desc: "اطلع على شرح بسيط فوراً، مع أمثلة تسهّل فهم المعنى.",
+    howStep3Title: "تعمق إذا أردت",
+    howStep3Desc: "استكشف جميع المعاني، وشرح للأطفال، وأصل الكلمة، والمزيد.",
+    howCta: "جرب Gadit الآن",
+    featuresTitle: "ما يمكنك فعله مع Gadit",
+    feat1: "معاني متعددة، مفصولة بوضوح",
+    feat2: "أمثلة حقيقية في السياق",
+    feat3: "شرح ودود للأطفال",
+    feat4: "فهم السياق",
+    feat5: "العلاقات بين الكلمات",
+    feat6: "الأصل والاشتقاق",
+    feat7: "استخدم الكلمة بنفسك",
+    feat8: "مبني للاستخدام اليومي",
+    whoTitle: "لمن Gadit مناسب",
+    who1: "الطلاب",
+    who2: "الآباء",
+    who3: "المعلمون",
+    who4: "متعلمو اللغات",
+    who5: "العقول الفضولية",
+    whyTitle: "لماذا Gadit يشعر بالاختلاف",
+    whyCopy: "معظم الأدوات تعطيك تعريفات. Gadit يساعدك على الفهم.",
+    whyBullet1: "ليس مجرد تعريف",
+    whyBullet2: "ليس مجرد ترجمة",
+    whyBullet3: "مبني للفهم",
+    pricingTeaserTitle: "ابدأ مجاناً. تعمق من 1.99$.",
+    pricingTeaserText: "استخدم Gadit يومياً مجاناً، ثم قم بالترقية فقط إذا أردت وصولاً غير محدود وأدوات أعمق.",
+    viewPricing: "عرض الأسعار",
+    finalCtaTitle: "جرب Gadit مجاناً",
+    finalCtaText: "اكتب كلمة، الصق جملة، واكتشف كم يمكن أن تكون اللغة واضحة.",
+    startUnderstandingFree: "ابدأ الفهم",
+    footerTagline: "Gadit — كل كلمة، مفهومة.",
+    footerPrivacy: "سياسة الخصوصية",
+    footerTerms: "شروط الاستخدام",
+    footerContact: "اتصل بنا",
+    navHowItWorks: "كيف يعمل",
+    navFeatures: "المميزات",
   },
   ru: {
     tagline: "Каждое слово — понято.",
@@ -400,5 +601,55 @@ export const T: Record<Lang, {
     wordOfDay: "Слово дня (персональное)",
     advancedInsights: "Расширенный анализ",
     everythingInClear: "Всё из Clear",
+    heroHeadline: "Понимай любое слово мгновенно",
+    heroSubline: "Gadit объясняет слова просто, ясно и глубоко — на твоём языке.",
+    heroSupport: "Не словарь. Способ понять.",
+    heroLangs: "Доступно на Русский · English · עברית · العربية",
+    demoSectionTitle: "Посмотри как работает Gadit",
+    demoWord: "ephemeral",
+    demoDefinition: "То, что длится очень недолго; быстро исчезающее.",
+    demoExample: "«Красота цветущей сакуры ephemeral — здесь неделю, потом исчезает.»",
+    demoInsight: "От греческого ephḗmeros — «длящийся один день». Используется в философии, искусстве и поэзии для описания горько-сладкой природы вещей, которые не длятся.",
+    demoInsightLabel: "Более глубокое понимание",
+    howItWorksTitle: "Как это работает",
+    howStep1Title: "Введи любое слово или предложение",
+    howStep1Desc: "Ищи одно слово или вставь целое предложение, когда важен контекст.",
+    howStep2Title: "Получи мгновенную ясность",
+    howStep2Desc: "Сразу увидишь простое объяснение с примерами, которые помогают понять смысл.",
+    howStep3Title: "Углубись если хочешь",
+    howStep3Desc: "Изучи все значения, объяснение для детей, этимологию и многое другое.",
+    howCta: "Попробуй Gadit сейчас",
+    featuresTitle: "Что ты можешь делать с Gadit",
+    feat1: "Несколько значений, чётко разделённых",
+    feat2: "Реальные примеры в контексте",
+    feat3: "Объяснение для детей",
+    feat4: "Понимание контекста",
+    feat5: "Связи между словами",
+    feat6: "Происхождение и этимология",
+    feat7: "Используй слово сам",
+    feat8: "Создан для ежедневного использования",
+    whoTitle: "Для кого Gadit",
+    who1: "Студенты",
+    who2: "Родители",
+    who3: "Учителя",
+    who4: "Изучающие языки",
+    who5: "Любопытные умы",
+    whyTitle: "Почему Gadit ощущается иначе",
+    whyCopy: "Большинство инструментов дают определения. Gadit помогает понять.",
+    whyBullet1: "Не просто определение",
+    whyBullet2: "Не просто перевод",
+    whyBullet3: "Создан для понимания",
+    pricingTeaserTitle: "Начни бесплатно. Углубляйся от $1.99.",
+    pricingTeaserText: "Используй Gadit каждый день бесплатно, затем обновись если хочешь безлимитный доступ и более глубокие инструменты.",
+    viewPricing: "Посмотреть тарифы",
+    finalCtaTitle: "Попробуй Gadit бесплатно",
+    finalCtaText: "Введи слово, вставь предложение и почувствуй насколько ясным может быть язык.",
+    startUnderstandingFree: "Начать понимать",
+    footerTagline: "Gadit — Каждое слово понято.",
+    footerPrivacy: "Политика конфиденциальности",
+    footerTerms: "Условия использования",
+    footerContact: "Контакты",
+    navHowItWorks: "Как это работает",
+    navFeatures: "Функции",
   },
 };
