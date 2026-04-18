@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/lib/auth-context";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Header() {
   const { user, logout, promptLogin } = useAuth();
@@ -9,9 +10,13 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-sm border-b border-slate-100">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-        <span className="text-lg font-bold" style={{ color: "#0F172A" }}>
+        <Link href="/" className="text-lg font-bold" style={{ color: "#0F172A" }}>
           <span style={{ color: "#2563EB" }}>Gad</span>it
-        </span>
+        </Link>
+
+        <Link href="/pricing" className="text-sm text-slate-500 hover:text-blue-600 transition-all">
+          Pricing
+        </Link>
 
         {user ? (
           <div className="relative">
