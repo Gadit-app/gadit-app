@@ -112,7 +112,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
-      <div className="max-w-2xl mx-auto px-4 py-14">
+      <div className="max-w-2xl mx-auto px-4 pt-24 pb-14">
 
         {/* Header */}
         <div className="text-center mb-10">
