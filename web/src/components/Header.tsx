@@ -20,7 +20,7 @@ export default function Header() {
 
         <div className="flex items-center gap-3 ms-auto">
           <Link href="/pricing" className="text-sm text-slate-500 hover:text-blue-600 transition-all">
-            Pricing
+            {t.pricing}
           </Link>
 
           {/* Language switcher */}

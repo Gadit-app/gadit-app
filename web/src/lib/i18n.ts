@@ -62,6 +62,7 @@ export const T: Record<Lang, {
   signUp: string;
   logIn: string;
   // Pricing
+  pricing: string;
   pricingHeadline: string;
   pricingSubline: string;
   monthly: string;
@@ -138,6 +139,7 @@ export const T: Record<Lang, {
     haveAccount: "Already have one?",
     signUp: "Sign up",
     logIn: "Log in",
+    pricing: "Pricing",
     pricingHeadline: "Understand any word.\nChoose how deep you go.",
     pricingSubline: "Understand for free. Go deeper when you're ready.",
     monthly: "Monthly",
@@ -212,6 +214,7 @@ export const T: Record<Lang, {
     haveAccount: "יש לך חשבון?",
     signUp: "הירשם",
     logIn: "התחבר",
+    pricing: "תמחור",
     pricingHeadline: "הבן כל מילה.\nבחר עד כמה עמוק.",
     pricingSubline: "התחל בחינם. תעמיק כשתהיה מוכן.",
     monthly: "חודשי",
@@ -286,6 +289,7 @@ export const T: Record<Lang, {
     haveAccount: "لديك حساب بالفعل؟",
     signUp: "إنشاء حساب",
     logIn: "تسجيل الدخول",
+    pricing: "الأسعار",
     pricingHeadline: "افهم أي كلمة.\naختر مدى العمق.",
     pricingSubline: "ابدأ مجاناً. تعمق عندما تكون مستعداً.",
     monthly: "شهري",
@@ -360,6 +364,7 @@ export const T: Record<Lang, {
     haveAccount: "Уже есть аккаунт?",
     signUp: "Зарегистрироваться",
     logIn: "Войти",
+    pricing: "Цены",
     pricingHeadline: "Понимай любое слово.\nВыбери глубину.",
     pricingSubline: "Начни бесплатно. Углубляйся когда будешь готов.",
     monthly: "Ежемесячно",
