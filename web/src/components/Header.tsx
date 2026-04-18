@@ -18,7 +18,7 @@ export default function Header() {
           <span style={{ color: "#2563EB" }}>Gad</span>it
         </Link>
 
-        <div className="flex items-center gap-3 ms-auto">
+        <div className="flex items-center gap-3">
           <a href="/#how-it-works" className="hidden md:block text-sm text-slate-500 hover:text-blue-600 transition-all">
             {t.navHowItWorks}
           </a>
