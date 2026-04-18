@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
 import { useRouter } from "next/navigation";
 
 const PLANS = [
@@ -75,6 +76,7 @@ const PLANS = [
 export default function PricingPage() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const { user, promptLogin } = useAuth();
+  const { t, dir } = useLang();
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -101,16 +103,48 @@ export default function PricingPage() {
     }
   }
 
+  const PLANS_T = [
+    {
+      id: "basic", name: "Basic",
+      description: t.basicDesc,
+      monthlyPrice: 0, yearlyPrice: 0,
+      monthlyPriceId: null, yearlyPriceId: null,
+      features: [t.searchesPerDay, t.fullDefinition, t.examples, t.forKidsFeature, t.basicEtymology, t.allLanguages],
+      missing: [t.unlimitedSearches, t.aiImages, t.historyFavorites, t.quizMode],
+      cta: t.startUnderstanding, popular: false, note: null,
+    },
+    {
+      id: "clear", name: "Clear",
+      description: t.clearDesc,
+      monthlyPrice: 1.99, yearlyPrice: 15.99,
+      monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY,
+      yearlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY,
+      features: [t.unlimitedSearches, t.allBasicFeatures, t.oppositeConfusable, t.registerFrequency, t.wordFamilyFeature, t.historyFavorites, t.quizMode, t.useThisWordFeature, t.allLanguages],
+      missing: [t.aiImages],
+      cta: t.startUnderstandingFully, popular: true, note: t.mostPeopleChoose,
+    },
+    {
+      id: "deep", name: "Deep",
+      description: t.deepDesc,
+      monthlyPrice: 3.99, yearlyPrice: 31.99,
+      monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY,
+      yearlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY,
+      features: [t.everythingInClear, t.aiImages, t.wordCollections, t.wordOfDay, t.advancedInsights, t.allLanguages],
+      missing: [],
+      cta: t.unlockDeep, popular: false, note: null,
+    },
+  ];
+
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-16 px-4">
+    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-16 px-4" dir={dir}>
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold mb-3" style={{ color: "#0F172A" }}>
-            Understand any word.<br />Choose how deep you go.
+          <h1 className="text-4xl font-bold mb-3 whitespace-pre-line" style={{ color: "#0F172A" }}>
+            {t.pricingHeadline}
           </h1>
-          <p className="text-slate-400 text-lg">Understand for free. Go deeper when you&apos;re ready.</p>
+          <p className="text-slate-400 text-lg">{t.pricingSubline}</p>
         </div>
 
         {/* Billing toggle */}
@@ -119,22 +153,22 @@ export default function PricingPage() {
             onClick={() => setBilling("monthly")}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${billing === "monthly" ? "bg-white shadow-sm border border-slate-200 text-slate-700" : "text-slate-400"}`}
           >
-            Monthly
+            {t.monthly}
           </button>
           <button
             onClick={() => setBilling("yearly")}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${billing === "yearly" ? "bg-white shadow-sm border border-slate-200 text-slate-700" : "text-slate-400"}`}
           >
-            Yearly
-            <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-semibold text-white" style={{ background: "#10B981" }}>
-              Save 33% — 2 months free
+            {t.yearly}
+            <span className="ms-2 px-2 py-0.5 rounded-full text-xs font-semibold text-white" style={{ background: "#10B981" }}>
+              {t.yearlyBadge}
             </span>
           </button>
         </div>
 
         {/* Plans */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-          {PLANS.map((plan) => {
+          {PLANS_T.map((plan) => {
             const price = billing === "yearly" && plan.yearlyPrice > 0
               ? (plan.yearlyPrice / 12).toFixed(2)
               : plan.monthlyPrice.toFixed(2);
@@ -149,7 +183,7 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white" style={{ background: "#2563EB" }}>
-                    Most popular
+                    {t.mostPopular}
                   </div>
                 )}
 
@@ -165,7 +199,7 @@ export default function PricingPage() {
                     <>
                       <span className="text-3xl font-bold" style={{ color: "#0F172A" }}>${price}</span>
                       <span className="text-slate-400 text-sm">/month</span>
-                      {billed && <p className="text-xs text-slate-400 mt-0.5">Billed {billed}</p>}
+                      {billed && <p className="text-xs text-slate-400 mt-0.5">{t.billedYearly} {billed}</p>}
                     </>
                   )}
                 </div>
@@ -205,7 +239,7 @@ export default function PricingPage() {
         </div>
 
         <p className="text-center text-slate-400 text-xs mt-8">
-          Cancel anytime. No hidden fees. Secure payments by Stripe.
+          {t.cancelAnytime}
         </p>
       </div>
     </main>

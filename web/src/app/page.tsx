@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useLang } from "@/lib/lang-context";
 
 interface WordResult {
   word: string;
@@ -110,15 +111,21 @@ export default function Home() {
   const [sentenceFeedback, setSentenceFeedback] = useState<{status: string; message: string} | null>(null);
   const [checkingsentence, setCheckingsentence] = useState(false);
 
+  const { t, dir: uiDir } = useLang();
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setPlaceholderIdx((i) => (i + 1) % PLACEHOLDERS.length);
+      setPlaceholderIdx((i) => (i + 1) % t.placeholder.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [t]);
 
   const isRTL = isRTLLanguage(result?.language);
-  const ui = getUI(result?.language);
+  // For result UI: use result language direction; for page UI: use app lang
+  const resultDir = isRTL ? "rtl" : "ltr";
+
+  // Result-language-aware UI labels (keep per-result-language labels for the content area)
+  const rui = getUI(result?.language);
 
   function detectInputLanguage(text: string): string | null {
     if (!text.trim()) return null;
@@ -179,7 +186,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC]">
+    <main className="min-h-screen bg-[#F8FAFC]" dir={uiDir}>
       <div className="max-w-2xl mx-auto px-4 pt-24 pb-14">
 
         {/* Header */}
@@ -187,7 +194,7 @@ export default function Home() {
           <h1 className="text-5xl font-bold mb-2" style={{ color: "#0F172A", letterSpacing: "-1px" }}>
             <span style={{ color: "#2563EB" }}>Gad</span>it
           </h1>
-          <p className="text-slate-400 text-base">Every word, understood.</p>
+          <p className="text-slate-400 text-base">{t.tagline}</p>
         </div>
 
         {/* Search */}
@@ -201,7 +208,7 @@ export default function Home() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={PLACEHOLDERS[placeholderIdx]}
+                placeholder={t.placeholder[placeholderIdx]}
                 className="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
                 dir="auto"
               />
@@ -217,7 +224,7 @@ export default function Home() {
               className="px-7 py-4 rounded-2xl font-semibold text-lg text-white disabled:opacity-50 transition-all"
               style={{ background: "#2563EB" }}
             >
-              {loading ? "…" : "Explain"}
+              {loading ? "…" : t.explainBtn}
             </button>
           </div>
         </form>
@@ -225,7 +232,7 @@ export default function Home() {
         {/* Quick examples */}
         {!result && (
           <div className="flex flex-wrap gap-2 justify-center mt-8 mb-6">
-            <span className="text-slate-400 text-sm mr-1 self-center">Try:</span>
+            <span className="text-slate-400 text-sm self-center">{t.tryLabel}</span>
             {EXAMPLES.map((ex) => (
               <button
                 key={ex}
@@ -241,7 +248,7 @@ export default function Home() {
         {/* Tagline + language support */}
         {!result && !loading && (
           <div className="text-center space-y-2">
-            <p className="text-slate-400 text-sm">Not <em>just</em> a dictionary. A way to understand.</p>
+            <p className="text-slate-400 text-sm" dangerouslySetInnerHTML={{ __html: t.notJust }} />
             <p className="text-slate-300 text-xs">
               English · Hebrew · Arabic · Spanish · French · Russian · German · Hindi · Portuguese · Japanese
             </p>
@@ -256,7 +263,7 @@ export default function Home() {
 
         {/* Result */}
         {result && (
-          <div dir={isRTL ? "rtl" : "ltr"} className="mt-6 space-y-3">
+          <div dir={resultDir} className="mt-6 space-y-3">
 
             {/* Word header */}
             <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6">
@@ -283,16 +290,16 @@ export default function Home() {
                   onClick={() => setUseThisWordOpen((v) => !v)}
                   className="mt-1 px-4 py-2 rounded-xl text-sm font-medium border border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-all"
                 >
-                  {ui.useThisWord}
+                  {rui.useThisWord}
                 </button>
 
                 {useThisWordOpen && (
                   <div className="mt-4 space-y-3">
-                    <p className="text-sm font-semibold text-slate-500">{ui.makeItYours}</p>
+                    <p className="text-sm font-semibold text-slate-500">{rui.makeItYours}</p>
                     <textarea
                       value={userSentence}
                       onChange={(e) => setUserSentence(e.target.value)}
-                      placeholder={ui.placeholder.replace("{word}", result.word)}
+                      placeholder={rui.sentencePlaceholder.replace("{word}", result.word)}
                       rows={2}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
                       dir={isRTL ? "rtl" : "ltr"}
@@ -303,7 +310,7 @@ export default function Home() {
                       className="px-5 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
                       style={{ background: "#2563EB" }}
                     >
-                      {checkingsentence ? ui.checking : ui.checkBtn}
+                      {checkingsentence ? rui.checking : rui.checkBtn}
                     </button>
 
                     {sentenceFeedback && (
@@ -314,11 +321,11 @@ export default function Home() {
                           ? "bg-amber-50 text-amber-700"
                           : "bg-red-50 text-red-600"
                       }`}>
-                        <span className="font-semibold capitalize">{sentenceFeedback.status}. </span>
+                        <span className="font-semibold">{rui.perfect === "Perfect" ? sentenceFeedback.status : (sentenceFeedback.status === "perfect" ? rui.perfect : sentenceFeedback.status === "almost" ? rui.almost : rui.notQuite)}. </span>
                         {sentenceFeedback.message}
                         {sentenceFeedback.status === "perfect" && (
                           <div className="mt-1 font-semibold" style={{ color: "#10B981" }}>
-                            Word mastered ✓
+                            {rui.wordMastered}
                           </div>
                         )}
                       </div>
@@ -334,15 +341,15 @@ export default function Home() {
                 onClick={() => setLayer(2)}
                 className="w-full py-3 rounded-2xl border border-slate-200 bg-white text-slate-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 transition-all"
               >
-                {ui.understandMore}
+                {rui.understandMore}
               </button>
             ) : (
               <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{ui.understandMore.replace(" ↓","")}</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{rui.understandMore.replace(" ↓","").replace("↓ ","")}</p>
 
                 {result.examples?.length > 1 && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{ui.moreExamples}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{rui.moreExamples}</p>
                     <ul className="space-y-2">
                       {result.examples.slice(1).map((ex, i) => (
                         <li key={i} className="flex gap-2 text-slate-600 text-sm">
@@ -356,21 +363,21 @@ export default function Home() {
 
                 {result.forKids && (
                   <section className="bg-amber-50 rounded-2xl p-4">
-                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">{ui.forKids}</p>
+                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">{rui.forKids}</p>
                     <p className="text-slate-700 text-sm">{result.forKids}</p>
                   </section>
                 )}
 
                 {result.opposite && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.opposite}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.opposite}</p>
                     <p className="text-slate-600 text-sm">{result.opposite}</p>
                   </section>
                 )}
 
                 {result.confusable && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.confusable}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.confusable}</p>
                     <p className="text-slate-600 text-sm">{result.confusable}</p>
                   </section>
                 )}
@@ -383,38 +390,38 @@ export default function Home() {
                 onClick={() => setLayer(3)}
                 className="w-full py-3 rounded-2xl border border-slate-200 bg-white text-slate-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 transition-all"
               >
-                {ui.goDeeper}
+                {rui.goDeeper}
               </button>
             )}
 
             {layer >= 3 && (
               <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{ui.goDeeper.replace(" ↓","")}</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{rui.goDeeper.replace(" ↓","").replace("↓ ","")}</p>
 
                 {result.etymology && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.origin}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.origin}</p>
                     <p className="text-slate-600 text-sm">{result.etymology}</p>
                   </section>
                 )}
 
                 {result.register && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.register}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.register}</p>
                     <p className="text-slate-600 text-sm">{result.register}</p>
                   </section>
                 )}
 
                 {result.frequency && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{ui.frequency}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.frequency}</p>
                     <p className="text-slate-600 text-sm">{result.frequency}</p>
                   </section>
                 )}
 
                 {result.wordFamily && result.wordFamily.length > 0 && (
                   <section>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{ui.wordFamily}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{rui.wordFamily}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.wordFamily.map((w, i) => (
                         <span key={i} className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-sm">{w}</span>
@@ -430,7 +437,7 @@ export default function Home() {
               onClick={() => { setResult(null); setInput(""); setLayer(1); }}
               className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-all"
             >
-              {ui.searchAnother}
+              {rui.searchAnother}
             </button>
           </div>
         )}
