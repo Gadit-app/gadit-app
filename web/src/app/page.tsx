@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface WordResult {
   word: string;
@@ -9,33 +9,68 @@ interface WordResult {
   etymology: string;
   forKids: string;
   multiplemeanings: boolean;
+  opposite?: string;
+  confusable?: string;
+  register?: string;
+  frequency?: string;
+  wordFamily?: string[];
   fromCache?: boolean;
 }
+
+const PLACEHOLDERS = [
+  'Type a word or sentence…',
+  'Try "set"',
+  'Try "bank"',
+  'Try "I feel off today"',
+  'Type a word or sentence…',
+];
+
+const EXAMPLES = ["set", "bank", "ephemeral", "I feel off today"];
+
+const isRTLLanguage = (lang?: string) =>
+  ["Hebrew", "Arabic", "Urdu", "Persian"].includes(lang ?? "");
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const [layer, setLayer] = useState(1);
+  const [useThisWordOpen, setUseThisWordOpen] = useState(false);
+  const [userSentence, setUserSentence] = useState("");
+  const [sentenceFeedback, setSentenceFeedback] = useState<{status: string; message: string} | null>(null);
+  const [checkingsentence, setCheckingsentence] = useState(false);
 
-  const isRTL = result?.language &&
-    ["Hebrew", "Arabic", "Urdu", "Persian"].includes(result.language);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIdx((i) => (i + 1) % PLACEHOLDERS.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
-  async function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const isRTL = isRTLLanguage(result?.language);
+
+  async function handleSearch(wordOrSentence?: string) {
+    const query = (wordOrSentence ?? input).trim();
+    if (!query) return;
     setLoading(true);
     setError("");
     setResult(null);
+    setLayer(1);
+    setUseThisWordOpen(false);
+    setUserSentence("");
+    setSentenceFeedback(null);
     try {
       const res = await fetch("/api/define", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: input.trim() }),
+        body: JSON.stringify({ word: query }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setResult(data);
+      if (wordOrSentence) setInput(wordOrSentence);
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -43,90 +78,271 @@ export default function Home() {
     }
   }
 
+  async function handleCheckSentence() {
+    if (!userSentence.trim() || !result) return;
+    setCheckingsentence(true);
+    setSentenceFeedback(null);
+    try {
+      const res = await fetch("/api/check-sentence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word: result.word, sentence: userSentence, definition: result.definition }),
+      });
+      const data = await res.json();
+      setSentenceFeedback(data);
+    } catch {
+      setSentenceFeedback({ status: "error", message: "Could not check. Try again." });
+    } finally {
+      setCheckingsentence(false);
+    }
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-2xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-slate-800 mb-3">Gadit</h1>
-          <p className="text-slate-500 text-lg">Every word, understood.</p>
+    <main className="min-h-screen bg-[#F8FAFC]">
+      <div className="max-w-2xl mx-auto px-4 py-14">
+
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-5xl font-bold mb-2" style={{ color: "#0F172A", letterSpacing: "-1px" }}>
+            <span style={{ color: "#2563EB" }}>Gad</span>it
+          </h1>
+          <p className="text-slate-400 text-base">Every word, understood.</p>
         </div>
 
-        <form onSubmit={handleSearch} className="mb-10">
-          <div className="flex gap-3">
+        {/* Search */}
+        <form
+          onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
+          className="mb-4"
+        >
+          <div className="flex gap-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type any word in any language..."
-              className="flex-1 px-5 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder={PLACEHOLDERS[placeholderIdx]}
+              className="flex-1 px-5 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
               dir="auto"
             />
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-4 bg-blue-600 text-white rounded-2xl font-semibold text-lg hover:bg-blue-700 disabled:opacity-50 transition-colors shadow-sm"
+              className="px-7 py-4 rounded-2xl font-semibold text-lg text-white disabled:opacity-50 transition-all"
+              style={{ background: "#2563EB" }}
             >
-              {loading ? "..." : "→"}
+              {loading ? "…" : "Explain"}
             </button>
           </div>
         </form>
 
+        {/* Quick examples */}
+        {!result && (
+          <div className="flex flex-wrap gap-2 justify-center mb-10">
+            <span className="text-slate-400 text-sm mr-1 self-center">Try:</span>
+            {EXAMPLES.map((ex) => (
+              <button
+                key={ex}
+                onClick={() => handleSearch(ex)}
+                className="px-3 py-1.5 rounded-full text-sm border border-slate-200 bg-white text-slate-500 hover:border-blue-300 hover:text-blue-600 transition-all"
+              >
+                {ex}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Tagline */}
+        {!result && !loading && (
+          <p className="text-center text-slate-400 text-sm">
+            Not a dictionary. A way to understand.
+          </p>
+        )}
+
         {error && (
-          <div className="bg-red-50 text-red-600 px-5 py-4 rounded-2xl mb-6">
+          <div className="bg-red-50 text-red-500 px-5 py-4 rounded-2xl mb-6 text-sm">
             {error}
           </div>
         )}
 
+        {/* Result */}
         {result && (
-          <div
-            dir={isRTL ? "rtl" : "ltr"}
-            className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden"
-          >
-            <div className="bg-blue-600 px-8 py-6">
-              <h2 className="text-3xl font-bold text-white">{result.word}</h2>
-              <span className="text-blue-200 text-sm mt-1 block">{result.language}</span>
+          <div dir={isRTL ? "rtl" : "ltr"} className="mt-6 space-y-3">
+
+            {/* Word header */}
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6">
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 className="text-3xl font-bold" style={{ color: "#0F172A" }}>{result.word}</h2>
+                <span className="text-sm text-slate-400">{result.language}</span>
+              </div>
             </div>
 
-            <div className="p-8 space-y-7">
-              <section>
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">🧠 Definition</h3>
-                <p className="text-slate-700 text-lg leading-relaxed">{result.definition}</p>
-              </section>
+            {/* Layer 1 — Immediate clarity */}
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
+              <p className="text-slate-700 text-lg leading-relaxed">{result.definition}</p>
 
-              {result.examples?.length > 0 && (
-                <section>
-                  <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">📄 Examples</h3>
-                  <ul className="space-y-2">
-                    {result.examples.map((ex, i) => (
-                      <li key={i} className="flex gap-2 text-slate-600">
-                        <span className="text-blue-400 mt-1">•</span>
-                        <span>{ex}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+              {result.examples?.[0] && (
+                <div className="flex gap-2 text-slate-500 text-base">
+                  <span style={{ color: "#2563EB" }}>•</span>
+                  <span className="italic">{result.examples[0]}</span>
+                </div>
               )}
 
-              {result.etymology && (
-                <section>
-                  <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">🔍 Origin</h3>
-                  <p className="text-slate-600">{result.etymology}</p>
-                </section>
-              )}
+              {/* Use this word */}
+              <div>
+                <button
+                  onClick={() => setUseThisWordOpen((v) => !v)}
+                  className="mt-1 px-4 py-2 rounded-xl text-sm font-medium border border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-all"
+                >
+                  ✍️ Use this word
+                </button>
 
-              {result.forKids && (
-                <section className="bg-amber-50 rounded-2xl p-5">
-                  <h3 className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">👧 For Kids</h3>
-                  <p className="text-slate-700">{result.forKids}</p>
-                </section>
-              )}
+                {useThisWordOpen && (
+                  <div className="mt-4 space-y-3">
+                    <p className="text-sm font-semibold text-slate-500">Make it yours</p>
+                    <textarea
+                      value={userSentence}
+                      onChange={(e) => setUserSentence(e.target.value)}
+                      placeholder={`Use "${result.word}" in your own sentence`}
+                      rows={2}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
+                      dir="auto"
+                    />
+                    <button
+                      onClick={handleCheckSentence}
+                      disabled={checkingsentence || !userSentence.trim()}
+                      className="px-5 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
+                      style={{ background: "#2563EB" }}
+                    >
+                      {checkingsentence ? "Checking…" : "Check my sentence"}
+                    </button>
+
+                    {sentenceFeedback && (
+                      <div className={`px-4 py-3 rounded-xl text-sm ${
+                        sentenceFeedback.status === "perfect"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : sentenceFeedback.status === "almost"
+                          ? "bg-amber-50 text-amber-700"
+                          : "bg-red-50 text-red-600"
+                      }`}>
+                        <span className="font-semibold capitalize">{sentenceFeedback.status}. </span>
+                        {sentenceFeedback.message}
+                        {sentenceFeedback.status === "perfect" && (
+                          <div className="mt-1 font-semibold" style={{ color: "#10B981" }}>
+                            Word mastered ✓
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
+
+            {/* Layer 2 — Understand more */}
+            {layer < 2 ? (
+              <button
+                onClick={() => setLayer(2)}
+                className="w-full py-3 rounded-2xl border border-slate-200 bg-white text-slate-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 transition-all"
+              >
+                Understand more ↓
+              </button>
+            ) : (
+              <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Understand more</p>
+
+                {result.examples?.length > 1 && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">More examples</p>
+                    <ul className="space-y-2">
+                      {result.examples.slice(1).map((ex, i) => (
+                        <li key={i} className="flex gap-2 text-slate-600 text-sm">
+                          <span style={{ color: "#2563EB" }}>•</span>
+                          <span className="italic">{ex}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {result.forKids && (
+                  <section className="bg-amber-50 rounded-2xl p-4">
+                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">Explain like I&apos;m 10</p>
+                    <p className="text-slate-700 text-sm">{result.forKids}</p>
+                  </section>
+                )}
+
+                {result.opposite && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Opposite</p>
+                    <p className="text-slate-600 text-sm">{result.opposite}</p>
+                  </section>
+                )}
+
+                {result.confusable && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Don&apos;t confuse with</p>
+                    <p className="text-slate-600 text-sm">{result.confusable}</p>
+                  </section>
+                )}
+              </div>
+            )}
+
+            {/* Layer 3 — Go deeper */}
+            {layer === 2 && (
+              <button
+                onClick={() => setLayer(3)}
+                className="w-full py-3 rounded-2xl border border-slate-200 bg-white text-slate-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 transition-all"
+              >
+                Go deeper ↓
+              </button>
+            )}
+
+            {layer >= 3 && (
+              <div className="bg-white rounded-3xl border border-slate-100 shadow-sm px-8 py-6 space-y-5">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Go deeper</p>
+
+                {result.etymology && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Origin</p>
+                    <p className="text-slate-600 text-sm">{result.etymology}</p>
+                  </section>
+                )}
+
+                {result.register && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Register</p>
+                    <p className="text-slate-600 text-sm">{result.register}</p>
+                  </section>
+                )}
+
+                {result.frequency && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Frequency</p>
+                    <p className="text-slate-600 text-sm">{result.frequency}</p>
+                  </section>
+                )}
+
+                {result.wordFamily && result.wordFamily.length > 0 && (
+                  <section>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Word family</p>
+                    <div className="flex flex-wrap gap-2">
+                      {result.wordFamily.map((w, i) => (
+                        <span key={i} className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-sm">{w}</span>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </div>
+            )}
+
+            {/* New search */}
+            <button
+              onClick={() => { setResult(null); setInput(""); setLayer(1); }}
+              className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-all"
+            >
+              ← Search another word
+            </button>
           </div>
         )}
-
-        <p className="text-center text-slate-400 text-sm mt-10">
-          Hebrew · English · Arabic · Russian · Spanish · French · German · Hindi · Portuguese · Japanese
-        </p>
       </div>
     </main>
   );
