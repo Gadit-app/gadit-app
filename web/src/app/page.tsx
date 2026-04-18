@@ -138,7 +138,7 @@ export default function Home() {
                 dir="auto"
               />
               {detectedLang && (
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none">
+                <span className="absolute -bottom-5 right-1 text-xs text-slate-400 pointer-events-none">
                   {detectedLang} detected
                 </span>
               )}
