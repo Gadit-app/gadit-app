@@ -321,7 +321,7 @@ export default function Home() {
                           ? "bg-amber-50 text-amber-700"
                           : "bg-red-50 text-red-600"
                       }`}>
-                        <span className="font-semibold">{rui.perfect === "Perfect" ? sentenceFeedback.status : (sentenceFeedback.status === "perfect" ? rui.perfect : sentenceFeedback.status === "almost" ? rui.almost : rui.notQuite)}. </span>
+                        <span className="font-semibold capitalize">{sentenceFeedback.status}. </span>
                         {sentenceFeedback.message}
                         {sentenceFeedback.status === "perfect" && (
                           <div className="mt-1 font-semibold" style={{ color: "#10B981" }}>
