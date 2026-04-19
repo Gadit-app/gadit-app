@@ -123,7 +123,7 @@ export default function Home() {
   const [sentenceFeedback, setSentenceFeedback] = useState<{status: string; message: string} | null>(null);
   const [checkingsentence, setCheckingsentence] = useState(false);
 
-  const { t, dir: uiDir } = useLang();
+  const { t, dir: uiDir, lang } = useLang();
   const resultRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -207,34 +207,36 @@ export default function Home() {
   const WHO_ICONS = ["🎓", "👨‍👩‍👧", "🏫", "🌍", "💡"];
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC]" dir={uiDir}>
+    <main className="min-h-screen bg-[#F8FAFC]" dir={uiDir} data-lang={lang}>
 
       {/* ── HERO ── */}
-      <section id="hero" className="relative pt-28 pb-20 px-4 overflow-hidden">
-        {/* Subtle background glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgb(37 99 235 / 0.06) 0%, transparent 70%)",
-          }}
-        />
+      <section id="hero" className="relative pt-28 pb-24 px-4 overflow-hidden">
+        {/* Page-level background gradient */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse 80% 55% at 50% -10%, rgb(37 99 235 / 0.07) 0%, transparent 65%)",
+        }} />
 
         <div className="relative max-w-2xl mx-auto">
-          {/* Brand + headline */}
-          <div className="text-center mb-10 animate-fade-in-up">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight" style={{ color: "#0F172A", letterSpacing: "-1.5px" }}>
+          {/* Headline */}
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h1 className="font-bold mb-4" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.3px" : "-1.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.2", fontSize: "clamp(36px, 6vw, 52px)" }}>
               <span style={{ color: "#2563EB" }}>Gad</span>it
             </h1>
-            <p className="text-2xl font-semibold mb-3" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
+            <p className="font-semibold mb-3" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.25", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 600 }}>
               {t.heroHeadline}
             </p>
-            <p className="text-slate-400 text-lg leading-relaxed max-w-md mx-auto">
+            <p className="text-slate-400 leading-relaxed max-w-md mx-auto" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.7" : "1.6" }}>
               {t.heroSubline}
             </p>
           </div>
 
           {/* Search */}
-          <div ref={searchRef} className="animate-fade-in-up delay-200">
+          <div ref={searchRef} className="animate-fade-in-up delay-200 relative">
+            {/* Radial glow behind search */}
+            <div className="absolute inset-0 pointer-events-none -z-10" style={{
+              background: "radial-gradient(ellipse 90% 120% at 50% 50%, rgb(37 99 235 / 0.05) 0%, transparent 70%)",
+              transform: "scale(1.4)",
+            }} />
             <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
               <div className="search-container flex gap-0 p-2" style={{ flexDirection: uiDir === "rtl" ? "row-reverse" : "row" }}>
                 <div className="relative flex-1">

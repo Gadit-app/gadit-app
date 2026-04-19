@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Heebo } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
@@ -16,10 +16,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const heebo = Heebo({
-  variable: "--font-heebo",
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["hebrew", "latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600"],
+});
+
+const cairo = Cairo({
+  variable: "--font-cairo",
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -47,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${heebo.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           <LangProvider>

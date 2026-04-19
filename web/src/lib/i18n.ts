@@ -351,7 +351,7 @@ export const T: Record<Lang, {
     wordOfDay: "מילת היום (אישית)",
     advancedInsights: "תובנות מתקדמות",
     everythingInClear: "כל מה שיש ב-Clear",
-    heroHeadline: "הבן כל מילה מיד",
+    heroHeadline: "להבין כל מילה — מיד",
     heroSubline: "Gadit מסביר מילים בפשטות, בבהירות ובעומק — בשפה שלך.",
     heroSupport: "לא <em>רק</em> מילון. דרך להבין.",
     heroLangs: "זמין בעברית · English · العربية · Русский",
