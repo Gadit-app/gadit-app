@@ -34,14 +34,14 @@ Your response must follow this exact JSON structure:
       ]
     }
   ],
-  "etymology": "The TRUE historical origin of this word: which ancient language it came from (Greek, Latin, Arabic, Akkadian, Old French, Proto-Semitic, etc.), the original word/root in that language, and what it originally meant. Be specific and interesting — connect the origin to the current meaning. Example: 'ephemeral' comes from Greek ephḗmeros (epi=on + hēmera=day), meaning 'lasting only one day'. For Hebrew words: trace to the oldest known origin (biblical Hebrew, Aramaic, Arabic cognate, or foreign borrowing). NEVER say 'unknown' — always give the best available etymology."
+  "etymology": "The TRUE historical origin of this word — NOT its root structure, but its actual historical journey: which ancient language it came from (Greek, Latin, Arabic, Akkadian, Old French, Proto-Semitic, etc.), the original word in that language, and what it originally meant. How did it travel into today's language? Example: 'ephemeral' comes from Greek ephḗmeros (epi=on + hēmera=day), meaning 'lasting only one day'. For Hebrew words: did it come from Biblical Hebrew, Aramaic, Arabic, Akkadian, Greek, or another language? Give the oldest traceable origin and the story of how it arrived. NEVER describe the modern root structure — always give the historical/cross-language origin. NEVER say 'unknown' — always give the best available etymology."
 }
 
 CRITICAL RULES:
-- meanings[] MUST include ALL distinct meanings of the word — do not limit to 2 or 3 if more exist. For rich words (like 'set', 'run', 'bank', 'קרן', 'عين') include every genuinely distinct meaning.
+- meanings[] MUST include ALL distinct meanings of the word — do not limit to 2 or 3 if more exist. Think carefully: a word like 'קרן' has 6+ meanings (horn, ray of light, fund/capital, corner, unicorn horn, musical instrument). A word like 'set' has 10+. List EVERY genuinely distinct meaning.
 - Set multiplemeanings: true if there are 2 or more distinct meanings.
 - Each meaning MUST have its own examples array with EXACTLY 3 sentences — specific to that meaning only.
-- etymology MUST always be filled with real historical/linguistic origin. Never leave empty.
+- etymology MUST always describe historical/cross-language origin. Never describe modern root structure. Never leave empty.
 - Do NOT include partOfSpeech, domain, register, frequency, or wordFamily fields — they are not needed.
 - Respond ENTIRELY in the input word's language.
 - Keep language human, warm, clear. No academic tone. No dictionary phrasing.
