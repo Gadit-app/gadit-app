@@ -81,7 +81,9 @@ async function getCachedResult(key: string) {
     const ref = doc(getDb(), "cache", key);
     const snap = await getDoc(ref);
     if (snap.exists()) return snap.data();
-  } catch {}
+  } catch (e) {
+    console.error("Firestore getCached error:", e);
+  }
   return null;
 }
 
@@ -89,7 +91,9 @@ async function setCachedResult(key: string, data: object) {
   try {
     const ref = doc(getDb(), "cache", key);
     await setDoc(ref, { ...data, cachedAt: new Date().toISOString() });
-  } catch {}
+  } catch (e) {
+    console.error("Firestore setCache error:", e);
+  }
 }
 
 async function callGemini(prompt: string): Promise<object> {
