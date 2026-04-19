@@ -126,8 +126,9 @@ export const T: Record<Lang, {
   heroLangs: string;
   demoSectionTitle: string;
   demoWord: string;
+  demoLang: string;
   demoDefinition: string;
-  demoExample: string;
+  demoExamples: string[];
   demoInsight: string;
   demoInsightLabel: string;
   howItWorksTitle: string;
@@ -268,8 +269,13 @@ export const T: Record<Lang, {
     heroLangs: "Available in English · עברית · العربية · Русский",
     demoSectionTitle: "See how Gadit works",
     demoWord: "ephemeral",
+    demoLang: "English",
     demoDefinition: "Lasting for only a short time; quickly fading or disappearing.",
-    demoExample: "\"The beauty of cherry blossoms is ephemeral — here for a week, then gone.\"",
+    demoExamples: [
+      "\"The beauty of cherry blossoms is ephemeral — here for a week, then gone.\"",
+      "\"Fame can be ephemeral; what matters is the work you leave behind.\"",
+      "\"Children's laughter is ephemeral, but the memory of it lasts forever.\"",
+    ],
     demoInsight: "From Greek ephḗmeros — 'lasting only a day' (epi- 'on' + hēmera 'day'). Used in philosophy, art, and poetry to describe the bittersweet nature of things that don't last.",
     demoInsightLabel: "Deeper insight",
     howItWorksTitle: "How it works",
@@ -409,10 +415,15 @@ export const T: Record<Lang, {
     heroSupport: "לא <em>רק</em> מילון. דרך להבין.",
     heroLangs: "זמין בעברית · English · العربية · Русский",
     demoSectionTitle: "ראה איך Gadit עובד",
-    demoWord: "ephemeral",
-    demoDefinition: "דבר שנמשך זמן קצר בלבד; שנעלם מהר.",
-    demoExample: "\"יופי פרחי הדובדבן הוא ephemeral — כאן שבוע, ואז נעלם.\"",
-    demoInsight: "מהיוונית ephḗmeros — 'שנמשך יום אחד בלבד'. משמש בפילוסופיה, אמנות ושירה לתאר את הטבע המר-מתוק של דברים שאינם מתמידים.",
+    demoWord: "רגעי",
+    demoLang: "עברית",
+    demoDefinition: "משהו שנמשך זמן קצר מאוד ואז נעלם — כמו רגע שחולף לפני שהספקת להחזיק בו.",
+    demoExamples: [
+      "\"יופי פרחי השקד הוא רגעי — שבוע אחד, ואז הוא נעלם.\"",
+      "\"האושר לפעמים רגעי, אבל הזיכרון ממנו נשאר לנצח.\"",
+      "\"היה רגע רגעי של שקט לפני שהילדים חזרו הביתה.\"",
+    ],
+    demoInsight: "מהשורש ר-ג-ע, שמשמעותו 'רגע' — יחידת הזמן הקטנה ביותר. המילה מתארת משהו שכל כולו הוא רגע אחד בלבד.",
     demoInsightLabel: "תובנה מעמיקה",
     howItWorksTitle: "איך זה עובד",
     howStep1Title: "הקלד כל מילה או משפט",
@@ -551,10 +562,15 @@ export const T: Record<Lang, {
     heroSupport: "ليس <em>مجرد</em> قاموس. طريقة للفهم.",
     heroLangs: "متاح بـ العربية · English · עברית · Русский",
     demoSectionTitle: "اكتشف كيف يعمل Gadit",
-    demoWord: "ephemeral",
-    demoDefinition: "شيء يدوم وقتاً قصيراً فقط؛ يتلاشى بسرعة.",
-    demoExample: "\"جمال أزهار الكرز ephemeral — هنا لأسبوع ثم يختفي.\"",
-    demoInsight: "من اليونانية ephḗmeros — 'يدوم يوماً واحداً فقط'. يُستخدم في الفلسفة والفن والشعر لوصف الطبيعة المُرّة-الحلوة للأشياء العابرة.",
+    demoWord: "عابر",
+    demoLang: "العربية",
+    demoDefinition: "شيء يمرّ بسرعة ولا يبقى — كلحظة تمضي قبل أن تمسك بها.",
+    demoExamples: [
+      "\"جمال أزهار اللوز عابر — أسبوع واحد ثم يختفي.\"",
+      "\"السعادة أحياناً عابرة، لكن ذكراها تبقى للأبد.\"",
+      "\"كان هناك صمت عابر قبل أن يعود الأطفال إلى البيت.\"",
+    ],
+    demoInsight: "من الجذر ع-ب-ر، ومعناه 'العبور والمرور'. الكلمة تصف ما هو في حالة مرور دائم، لا يستقرّ ولا يثبت.",
     demoInsightLabel: "رؤية أعمق",
     howItWorksTitle: "كيف يعمل",
     howStep1Title: "اكتب أي كلمة أو جملة",
@@ -693,10 +709,15 @@ export const T: Record<Lang, {
     heroSupport: "Не <em>просто</em> словарь. Способ понять.",
     heroLangs: "Доступно на Русский · English · עברית · العربية",
     demoSectionTitle: "Посмотри как работает Gadit",
-    demoWord: "ephemeral",
-    demoDefinition: "То, что длится очень недолго; быстро исчезающее.",
-    demoExample: "«Красота цветущей сакуры ephemeral — здесь неделю, потом исчезает.»",
-    demoInsight: "От греческого ephḗmeros — «длящийся один день». Используется в философии, искусстве и поэзии для описания горько-сладкой природы вещей, которые не длятся.",
+    demoWord: "мимолётный",
+    demoLang: "Русский",
+    demoDefinition: "То, что длится совсем недолго и исчезает — как момент, который уходит прежде, чем успеваешь его удержать.",
+    demoExamples: [
+      "«Красота цветущей сакуры мимолётна — неделя, и она исчезает.»",
+      "«Счастье бывает мимолётным, но воспоминание о нём остаётся навсегда.»",
+      "«Наступила мимолётная тишина, прежде чем дети вернулись домой.»",
+    ],
+    demoInsight: "От слова «мимо» + «лететь» — буквально «пролетающий мимо». Слово передаёт ощущение чего-то, что проносится так быстро, что едва успеваешь заметить.",
     demoInsightLabel: "Более глубокое понимание",
     howItWorksTitle: "Как это работает",
     howStep1Title: "Введи любое слово или предложение",

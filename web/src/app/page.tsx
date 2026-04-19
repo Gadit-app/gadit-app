@@ -293,18 +293,21 @@ export default function Home() {
                 </div>
                 <div className="px-8 py-5 border-b border-slate-100 flex items-baseline justify-between">
                   <span className="text-2xl font-bold" style={{ color: "#0F172A" }}>{t.demoWord}</span>
-                  <span className="text-sm text-slate-400 font-medium">English</span>
+                  <span className="text-sm text-slate-400 font-medium">{t.demoLang}</span>
                 </div>
                 <div className="px-8 py-6 space-y-4">
-                  <p className="text-slate-700 text-lg leading-relaxed">{t.demoDefinition}</p>
-                  <div className="flex gap-2 text-slate-500">
-                    <span style={{ color: "#2563EB" }}>•</span>
-                    <span className="italic text-base">{t.demoExample}</span>
-                  </div>
+                  <p className="text-slate-700 text-base font-medium leading-relaxed">{t.demoDefinition}</p>
+                  <ul className="space-y-2">
+                    {t.demoExamples.map((ex, i) => (
+                      <li key={i} className="flex gap-2 text-slate-500 text-sm">
+                        <span style={{ color: "#2563EB" }}>•</span>
+                        <span className="italic">{ex}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <div className="pt-4 border-t border-slate-100">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-3"
-                      style={{ background: "rgb(37 99 235 / 0.07)", color: "#2563EB" }}>
-                      ↓ {t.demoInsightLabel}
+                    <div className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "#2563EB" }}>
+                      {t.etymologyLabel}
                     </div>
                     <p className="text-slate-500 text-sm leading-relaxed">{t.demoInsight}</p>
                   </div>
