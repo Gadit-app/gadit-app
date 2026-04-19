@@ -5,8 +5,7 @@ import Link from "next/link";
 
 interface Meaning {
   meaning: string;
-  partOfSpeech?: string;
-  domain?: string;
+  examples: string[];
 }
 
 interface WordResult {
@@ -14,13 +13,7 @@ interface WordResult {
   language: string;
   multiplemeanings: boolean;
   meanings: Meaning[];
-  examples: string[];
   etymology: string;
-  opposite?: string;
-  confusable?: string;
-  register?: string;
-  frequency?: string;
-  wordFamily?: string[];
   contextNote?: string;
   fromCache?: boolean;
 }
@@ -462,133 +455,87 @@ function ResultView({ result, uiDir, t, onReset }: {
   onShowAll: () => void;
 }) {
   const resultLangDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
+  const rDir = resultLangDir;
+  const lineH = rDir === "rtl" ? "1.7" : "1.6";
 
   return (
-    <div className="space-y-4 animate-fade-in" dir={resultLangDir}>
+    <div className="space-y-4 animate-fade-in" dir={rDir}>
 
       {/* Word header */}
       <div className="gadit-card px-8 py-6">
         <div className="flex items-baseline justify-between gap-4">
-          <h2 className="font-bold" style={{ color: "#0F172A", fontSize: "clamp(24px, 4vw, 32px)", letterSpacing: resultLangDir === "rtl" ? "0.3px" : "-0.5px" }}>
+          <h2 className="font-bold" style={{ color: "#0F172A", fontSize: "clamp(24px, 4vw, 32px)", letterSpacing: rDir === "rtl" ? "0.3px" : "-0.5px" }}>
             {result.word}
           </h2>
           <span className="text-sm text-slate-400 font-medium shrink-0">{result.language}</span>
         </div>
       </div>
 
-      {/* Meanings */}
-      <div className="gadit-card px-8 py-6 space-y-4">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.definitionsLabel}</p>
-        {result.meanings?.map((m, i) => (
-          <div key={i} className={result.meanings.length > 1 ? "pb-4 border-b border-slate-100 last:border-0 last:pb-0" : ""}>
-            <div className="flex items-start gap-3">
-              {result.meanings.length > 1 && (
-                <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5" style={{ background: "#2563EB", minWidth: "1.5rem" }}>
-                  {i + 1}
-                </span>
-              )}
-              <div className="space-y-1">
-                <p className="text-slate-700 leading-relaxed" style={{ fontSize: "1.05rem", lineHeight: resultLangDir === "rtl" ? "1.7" : "1.6" }}>
-                  {m.meaning}
-                </p>
-                {(m.partOfSpeech || m.domain) && (
-                  <div className="flex gap-2 flex-wrap mt-1">
-                    {m.partOfSpeech && (
-                      <span className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: "rgb(241 245 249)", color: "#64748b" }}>
-                        {m.partOfSpeech}
-                      </span>
-                    )}
-                    {m.domain && m.domain !== "general" && (
-                      <span className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: "rgb(239 246 255)", color: "#2563EB" }}>
-                        {m.domain}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Context note (when searched by context) */}
+      {/* Context note */}
       {result.contextNote && (
-        <div className="gadit-card px-8 py-5" style={{ borderColor: "rgb(147 197 253 / 0.5)", background: "rgb(239 246 255)" }}>
+        <div className="px-8 py-5 rounded-3xl" style={{ background: "rgb(239 246 255)", border: "1px solid rgb(147 197 253 / 0.4)" }}>
           <p className="text-xs font-semibold mb-1" style={{ color: "#2563EB" }}>{t.contextNote}</p>
           <p className="text-slate-600 text-sm leading-relaxed">{result.contextNote}</p>
         </div>
       )}
 
-      {/* Examples */}
-      {result.examples?.length > 0 && (
-        <div className="gadit-card px-8 py-6 space-y-3">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.examplesLabel}</p>
-          <ul className="space-y-3">
-            {result.examples.map((ex, i) => (
-              <li key={i} className="flex gap-3 text-slate-600" style={{ lineHeight: resultLangDir === "rtl" ? "1.7" : "1.6" }}>
-                <span className="shrink-0 font-semibold" style={{ color: "#2563EB" }}>•</span>
-                <span className="italic">{ex}</span>
-              </li>
-            ))}
-          </ul>
+      {/* Meanings — each with its own examples */}
+      {result.meanings?.map((m, i) => (
+        <div key={i} className="gadit-card px-8 py-6 space-y-4">
+          {/* Meaning header */}
+          <div className="flex items-start gap-3">
+            {result.meanings.length > 1 && (
+              <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5"
+                style={{ background: "#2563EB", minWidth: "1.5rem" }}>
+                {i + 1}
+              </span>
+            )}
+            <p className="text-slate-800 font-medium leading-relaxed" style={{ fontSize: "1.05rem", lineHeight: lineH }}>
+              {m.meaning}
+            </p>
+          </div>
+
+          {/* Examples for this meaning */}
+          {m.examples?.length > 0 && (
+            <ul className="space-y-2 pt-1 border-t border-slate-100">
+              {m.examples.map((ex, j) => (
+                <li key={j} className="flex gap-2.5 text-slate-500 text-sm" style={{ lineHeight: lineH }}>
+                  <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#2563EB" }}>•</span>
+                  <span className="italic">{ex}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      )}
+      ))}
 
       {/* Etymology */}
       {result.etymology && (
         <div className="gadit-card px-8 py-6">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{t.etymologyLabel}</p>
-          <p className="text-slate-600 text-sm leading-relaxed" style={{ lineHeight: resultLangDir === "rtl" ? "1.7" : "1.6" }}>
+          <p className="text-slate-600 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
             {result.etymology}
           </p>
         </div>
       )}
 
-      {/* Word family + register quick pills */}
-      {(result.wordFamily?.length || result.register || result.frequency) && (
-        <div className="gadit-card px-8 py-5 flex flex-wrap gap-3 items-center">
-          {result.register && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: "rgb(241 245 249)", color: "#475569" }}>
-              {result.register}
-            </span>
-          )}
-          {result.frequency && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: "rgb(241 245 249)", color: "#475569" }}>
-              {result.frequency}
-            </span>
-          )}
-          {result.wordFamily?.map((w, i) => (
-            <span key={i} className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: "rgb(239 246 255)", color: "#2563EB" }}>
-              {w}
-            </span>
-          ))}
+      {/* Upsell */}
+      <div className="rounded-3xl px-8 py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all" style={{ boxShadow: "var(--shadow-xs)" }}>
+          <span className="text-xl shrink-0">🧒</span>
+          <p className="font-medium text-slate-700 text-sm">{t.upsellKids}</p>
         </div>
-      )}
-
-      {/* Upsell CTA */}
-      <div className="gadit-card px-8 py-7 space-y-4" style={{ background: "linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 100%)" }}>
-        <div className="space-y-3">
-          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
-            <span className="text-xl shrink-0">🖼️</span>
-            <div>
-              <p className="font-semibold text-slate-800 text-sm">{t.upsellVisual}</p>
-              <p className="text-slate-400 text-xs mt-0.5">Clear plan</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
-            <span className="text-xl shrink-0">✍️</span>
-            <div>
-              <p className="font-semibold text-slate-800 text-sm">{t.upsellSentence}</p>
-              <p className="text-slate-400 text-xs mt-0.5">Clear plan</p>
-            </div>
-          </div>
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all" style={{ boxShadow: "var(--shadow-xs)" }}>
+          <span className="text-xl shrink-0">🖼️</span>
+          <p className="font-medium text-slate-700 text-sm">{t.upsellVisual}</p>
         </div>
-        <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block">
+        <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block mt-1">
           {t.upsellBtn}
         </Link>
       </div>
 
-      {/* Back to search */}
+      {/* Back */}
       <button onClick={onReset} className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-colors">
         {t.searchAnother}
       </button>
