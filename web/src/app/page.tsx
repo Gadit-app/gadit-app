@@ -254,7 +254,7 @@ export default function Home() {
                   <button onClick={handleContextSubmit} disabled={!contextInput.trim()} className="btn-primary px-6 py-2.5 text-sm disabled:opacity-50">
                     {t.multiMeaningContextBtn}
                   </button>
-                  <button onClick={() => setPhase({ kind: "chooseMeaning", word: phase.word, result: { word: phase.word, language: "", multiplemeanings: true, meanings: [], examples: [], etymology: "" } })} className="btn-secondary px-5 py-2.5 text-sm">
+                  <button onClick={() => setPhase({ kind: "chooseMeaning", word: phase.word, result: { word: phase.word, language: "", multiplemeanings: true, meanings: [], etymology: "" } })} className="btn-secondary px-5 py-2.5 text-sm">
                     {t.showAllMeanings}
                   </button>
                 </div>
