@@ -15,38 +15,82 @@ function getDb() {
   return getFirestore(app);
 }
 
-const SYSTEM_PROMPT = `You are Gadit — a word understanding engine. Your job is to explain words and sentences clearly, simply, and humanly.
+const SYSTEM_PROMPT = `You are Gadit — a word understanding engine. Your job is not to give definitions. Your job is to guide the user into genuinely understanding a word.
 
-When given a word or sentence, detect its language and respond ENTIRELY in that same language.
+When given a word, detect its language and respond ENTIRELY in that same language.
 
 Your response must follow this exact JSON structure:
 {
-  "word": "the word (or key word from the sentence)",
-  "language": "detected language in English",
-  "definition": "simple, clear definition — no academic language. If multiple meanings exist, give the most common one first.",
-  "examples": ["example 1", "example 2", "example 3"],
-  "etymology": "The true linguistic origin of the word — which ancient language it came from (Greek, Latin, Arabic, Akkadian, etc.), the original root word, and its original meaning. Example: 'fund' comes from Latin 'fundus' meaning 'bottom/base'. Do NOT explain the current Hebrew/Arabic meaning — explain the historical source language.",
-  "forKids": "super simple explanation a child would understand",
-  "multiplemeanings": false,
-  "opposite": "the most natural opposite word or phrase (in the same language)",
-  "confusable": "a word people often confuse this with, and why they are different (1 sentence)",
-  "register": "formal / informal / slang / literary / technical",
+  "word": "the word as given",
+  "language": "detected language name in English (e.g. Hebrew, Arabic, English, Russian)",
+  "multiplemeanings": true or false,
+  "meanings": [
+    {
+      "meaning": "clear, simple explanation of this meaning — no academic language, no dictionary tone",
+      "partOfSpeech": "noun / verb / adjective / adverb / etc.",
+      "domain": "general / finance / nature / emotion / etc. (optional label)"
+    }
+  ],
+  "examples": [
+    "natural everyday sentence using the word",
+    "another natural sentence — different context",
+    "a third sentence that shows a different nuance"
+  ],
+  "etymology": "The TRUE linguistic origin: which ancient or source language this word came from (Greek, Latin, Arabic, Akkadian, Hebrew root, etc.), the original root/word, and what it originally meant. Be specific and interesting. Example: 'ephemeral' comes from Greek 'ephḗmeros' — epi (on) + hēmera (day), meaning 'lasting only a day'. If the word is Hebrew — trace it to its Hebrew root (shoresh) and explain the root meaning. If Arabic — trace to the Arabic root. Always connect origin to current meaning.",
+  "opposite": "the most natural opposite word or phrase in the same language (single word or short phrase)",
+  "confusable": "one word people often confuse this with — explain the difference in one clear sentence",
+  "register": "formal / informal / slang / literary / technical / neutral",
   "frequency": "very common / common / uncommon / rare",
-  "wordFamily": ["related word 1", "related word 2", "related word 3"]
+  "wordFamily": ["related form 1", "related form 2", "related form 3"]
 }
 
-If the word has multiple meanings, set multiplemeanings to true and give the most common definition first.
+IMPORTANT RULES:
+- meanings[] must have AT LEAST 1 item. If multiple meanings exist, include all of them (up to 5).
+- Set multiplemeanings: true if there are 2 or more genuinely distinct meanings.
+- examples[] must have EXACTLY 3 items — always. Real sentences, not definitions in disguise.
+- etymology must always be filled. Never leave it empty or say "unknown". Give the best available origin.
+- Respond ENTIRELY in the input word's language — including meaning, examples, etymology.
+- Keep it human, warm, clear. No academic tone. No dictionary phrasing.
+- examples must feel like real life — things a person would actually say or read.`;
 
-Rules:
-- Always respond in the SAME language as the input word
-- Never use complex academic language
-- Keep it human, warm, and simple
-- Examples must be everyday real-life sentences
-- etymology must focus on language origin (Greek, Latin, Arabic, etc.) not grammar`;
+const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 
-async function getCachedResult(word: string, language: string) {
+Given:
+- word: the word to explain
+- sentence: the full sentence providing context
+
+Your job: identify which meaning of the word is being used in this sentence, and explain ONLY that meaning.
+
+Respond ENTIRELY in the same language as the input word.
+
+Return this exact JSON:
+{
+  "word": "the word",
+  "language": "detected language in English",
+  "multiplemeanings": false,
+  "meanings": [
+    {
+      "meaning": "the specific meaning used in the given sentence — clear and simple",
+      "partOfSpeech": "noun / verb / adjective / etc.",
+      "domain": "optional domain label"
+    }
+  ],
+  "examples": [
+    "the user's original sentence",
+    "another natural sentence with the same meaning",
+    "a third sentence showing the same usage"
+  ],
+  "etymology": "brief origin of the word — source language, root, original meaning",
+  "opposite": "natural opposite in the same language",
+  "confusable": "word people confuse this with and why they differ (1 sentence)",
+  "register": "formal / informal / slang / literary / technical / neutral",
+  "frequency": "very common / common / uncommon / rare",
+  "wordFamily": ["related form 1", "related form 2", "related form 3"],
+  "contextNote": "brief explanation of why this specific meaning fits the given sentence"
+}`;
+
+async function getCachedResult(key: string) {
   try {
-    const key = `${language}_${word.toLowerCase().trim()}`;
     const ref = doc(getDb(), "cache", key);
     const snap = await getDoc(ref);
     if (snap.exists()) return snap.data();
@@ -54,34 +98,32 @@ async function getCachedResult(word: string, language: string) {
   return null;
 }
 
-async function setCachedResult(word: string, language: string, data: object) {
+async function setCachedResult(key: string, data: object) {
   try {
-    const key = `${language}_${word.toLowerCase().trim()}`;
     const ref = doc(getDb(), "cache", key);
     await setDoc(ref, { ...data, cachedAt: new Date().toISOString() });
   } catch {}
 }
 
-async function callGemini(word: string): Promise<object> {
+async function callGemini(prompt: string): Promise<object> {
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `${SYSTEM_PROMPT}\n\nWord: ${word}` }] }],
+        contents: [{ parts: [{ text: prompt }] }],
         generationConfig: { responseMimeType: "application/json" },
       }),
     }
   );
   const data = await res.json();
-  console.log("Gemini response:", JSON.stringify(data).slice(0, 500));
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error("Gemini returned no text: " + JSON.stringify(data).slice(0, 200));
   return JSON.parse(text);
 }
 
-async function callOpenAI(word: string): Promise<object> {
+async function callOpenAI(systemPrompt: string, userContent: string): Promise<object> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -92,8 +134,8 @@ async function callOpenAI(word: string): Promise<object> {
       model: "gpt-4o-mini",
       response_format: { type: "json_object" },
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: `Word: ${word}` },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userContent },
       ],
     }),
   });
@@ -103,22 +145,35 @@ async function callOpenAI(word: string): Promise<object> {
 
 export async function POST(req: NextRequest) {
   try {
-    const { word } = await req.json();
+    const { word, contextSentence } = await req.json();
     if (!word?.trim()) {
       return NextResponse.json({ error: "Word is required" }, { status: 400 });
     }
 
-    const cached = await getCachedResult(word, "auto");
+    const cacheKey = contextSentence
+      ? `ctx_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
+      : `auto_${word.toLowerCase().trim()}`;
+
+    const cached = await getCachedResult(cacheKey);
     if (cached) return NextResponse.json({ ...cached, fromCache: true });
 
     let result: object;
-    try {
-      result = await callGemini(word);
-    } catch {
-      result = await callOpenAI(word);
+    if (contextSentence) {
+      const userContent = `Word: ${word}\nSentence: ${contextSentence}`;
+      try {
+        result = await callGemini(`${CONTEXT_PROMPT}\n\n${userContent}`);
+      } catch {
+        result = await callOpenAI(CONTEXT_PROMPT, userContent);
+      }
+    } else {
+      try {
+        result = await callGemini(`${SYSTEM_PROMPT}\n\nWord: ${word}`);
+      } catch {
+        result = await callOpenAI(SYSTEM_PROMPT, `Word: ${word}`);
+      }
     }
 
-    await setCachedResult(word, "auto", result);
+    await setCachedResult(cacheKey, result);
     return NextResponse.json(result);
   } catch (err) {
     console.error("Define error:", err);

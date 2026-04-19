@@ -25,10 +25,23 @@ export const T: Record<Lang, {
   tagline: string;
   slogan: string;
   placeholder: string[];
+  chips: string[];
   explainBtn: string;
   tryLabel: string;
   notJust: string;
+  // Multi-meaning flow
+  multiMeaningPrompt: string;
+  multiMeaningOptionAll: string;
+  multiMeaningOptionContext: string;
+  multiMeaningContextPlaceholder: string;
+  multiMeaningContextBtn: string;
+  showAllMeanings: string;
+  meaningLabel: string;
+  contextNote: string;
   // Result UI
+  definitionsLabel: string;
+  examplesLabel: string;
+  etymologyLabel: string;
   understandMore: string;
   goDeeper: string;
   moreExamples: string;
@@ -49,6 +62,10 @@ export const T: Record<Lang, {
   almost: string;
   notQuite: string;
   wordMastered: string;
+  // Upsell
+  upsellVisual: string;
+  upsellSentence: string;
+  upsellBtn: string;
   // Auth
   login: string;
   logout: string;
@@ -155,10 +172,22 @@ export const T: Record<Lang, {
   en: {
     tagline: "Every word, understood.",
     slogan: 'Not <em>just</em> a dictionary. A way to understand.',
-    placeholder: ['Type a word or sentence…', 'Try "שלום"', 'Try "banco"', 'Try "amor"', 'Try "bank"', 'Try "مرحبا"'],
+    placeholder: ["Type a word"],
+    chips: ["ephemeral", "resilience", "ambiguous", "melancholy", "set", "serendipity"],
     explainBtn: "Explain",
     tryLabel: "Try:",
     notJust: "Not <em>just</em> a dictionary. A way to understand.",
+    multiMeaningPrompt: "«{word}» has several meanings. What would you like?",
+    multiMeaningOptionAll: "Show all meanings",
+    multiMeaningOptionContext: "Write a sentence — get the exact meaning",
+    multiMeaningContextPlaceholder: "Write a sentence using «{word}»…",
+    multiMeaningContextBtn: "Find the meaning",
+    showAllMeanings: "Show all meanings",
+    meaningLabel: "Meaning",
+    contextNote: "Why this meaning fits your sentence",
+    definitionsLabel: "Meanings",
+    examplesLabel: "Examples",
+    etymologyLabel: "Origin",
     understandMore: "Understand more ↓",
     goDeeper: "Go deeper ↓",
     moreExamples: "More examples",
@@ -179,6 +208,9 @@ export const T: Record<Lang, {
     almost: "Almost",
     notQuite: "Not quite",
     wordMastered: "Word mastered ✓",
+    upsellVisual: "See it visually",
+    upsellSentence: "Make sure you really understand",
+    upsellBtn: "Upgrade to Clear",
     login: "Log in",
     logout: "Log out",
     welcomeBack: "Welcome back",
@@ -280,10 +312,22 @@ export const T: Record<Lang, {
   he: {
     tagline: "כל מילה, מובנת.",
     slogan: "לא <em>רק</em> מילון. דרך להבין.",
-    placeholder: ['הקלד מילה או משפט…', 'נסה "שלום"', 'נסה "אהבה"', 'נסה "חופש"', 'נסה "בנק"', 'נסה "مرحبا"'],
+    placeholder: ["הקלד מילה"],
+    chips: ["אהבה", "חופש", "קרן", "עמוס", "שלום", "תקווה"],
     explainBtn: "פרש",
     tryLabel: "נסה:",
     notJust: "לא <em>רק</em> מילון. דרך להבין באמת.",
+    multiMeaningPrompt: "למילה «{word}» יש כמה משמעויות. מה תרצה?",
+    multiMeaningOptionAll: "הצג את כל ההגדרות",
+    multiMeaningOptionContext: "כתוב משפט — קבל את המשמעות המדויקת",
+    multiMeaningContextPlaceholder: "כתוב משפט עם המילה «{word}»…",
+    multiMeaningContextBtn: "מצא את המשמעות",
+    showAllMeanings: "הצג את כל המשמעויות",
+    meaningLabel: "משמעות",
+    contextNote: "למה המשמעות הזו מתאימה למשפטך",
+    definitionsLabel: "משמעויות",
+    examplesLabel: "דוגמאות",
+    etymologyLabel: "מקור המילה",
     understandMore: "הבן יותר ↓",
     goDeeper: "העמק ↓",
     moreExamples: "עוד דוגמאות",
@@ -304,6 +348,9 @@ export const T: Record<Lang, {
     almost: "כמעט",
     notQuite: "לא מדויק",
     wordMastered: "המילה נרכשה ✓",
+    upsellVisual: "ראה את זה ויזואלית",
+    upsellSentence: "בדוק שהבנת באמת",
+    upsellBtn: "שדרג ל-Clear",
     login: "התחבר",
     logout: "התנתק",
     welcomeBack: "ברוך שובך",
@@ -405,10 +452,22 @@ export const T: Record<Lang, {
   ar: {
     tagline: "كل كلمة، مفهومة.",
     slogan: "ليس <em>مجرد</em> قاموس. طريقة للفهم.",
-    placeholder: ['اكتب كلمة أو جملة…', 'جرب "مرحبا"', 'جرب "حرية"', 'جرب "حب"', 'جرب "بنك"', 'جرب "שלום"'],
+    placeholder: ["اكتب كلمة"],
+    chips: ["حب", "حرية", "عين", "سلام", "أمل", "وقت"],
     explainBtn: "اشرح",
     tryLabel: "جرب:",
     notJust: "ليس <em>مجرد</em> قاموس. طريقة للفهم.",
+    multiMeaningPrompt: "لكلمة «{word}» عدة معانٍ. ماذا تريد؟",
+    multiMeaningOptionAll: "عرض جميع المعاني",
+    multiMeaningOptionContext: "اكتب جملة — احصل على المعنى الدقيق",
+    multiMeaningContextPlaceholder: "اكتب جملة تستخدم فيها «{word}»…",
+    multiMeaningContextBtn: "ابحث عن المعنى",
+    showAllMeanings: "عرض جميع المعاني",
+    meaningLabel: "معنى",
+    contextNote: "لماذا هذا المعنى يناسب جملتك",
+    definitionsLabel: "المعاني",
+    examplesLabel: "أمثلة",
+    etymologyLabel: "أصل الكلمة",
     understandMore: "↓ فهم أكثر",
     goDeeper: "↓ تعمق أكثر",
     moreExamples: "مزيد من الأمثلة",
@@ -429,6 +488,9 @@ export const T: Record<Lang, {
     almost: "تقريباً",
     notQuite: "ليس تماماً",
     wordMastered: "تم إتقان الكلمة ✓",
+    upsellVisual: "شاهده بصرياً",
+    upsellSentence: "تأكد من فهمك الحقيقي",
+    upsellBtn: "ترقية إلى Clear",
     login: "تسجيل الدخول",
     logout: "تسجيل الخروج",
     welcomeBack: "مرحباً بعودتك",
@@ -530,10 +592,22 @@ export const T: Record<Lang, {
   ru: {
     tagline: "Каждое слово — понято.",
     slogan: "Не <em>просто</em> словарь. Способ понять.",
-    placeholder: ['Введите слово или предложение…', 'Попробуй "שלום"', 'Попробуй "banco"', 'Попробуй "amor"', 'Попробуй "bank"', 'Попробуй "مرحبا"'],
+    placeholder: ["Введите слово"],
+    chips: ["любовь", "эфемерный", "свобода", "надежда", "время", "мир"],
     explainBtn: "Объяснить",
     tryLabel: "Попробуй:",
     notJust: "Не <em>просто</em> словарь. Способ понять.",
+    multiMeaningPrompt: "У слова «{word}» несколько значений. Что ты хочешь?",
+    multiMeaningOptionAll: "Показать все значения",
+    multiMeaningOptionContext: "Написать предложение — получить точное значение",
+    multiMeaningContextPlaceholder: "Напиши предложение со словом «{word}»…",
+    multiMeaningContextBtn: "Найти значение",
+    showAllMeanings: "Показать все значения",
+    meaningLabel: "Значение",
+    contextNote: "Почему это значение подходит к твоему предложению",
+    definitionsLabel: "Значения",
+    examplesLabel: "Примеры",
+    etymologyLabel: "Происхождение",
     understandMore: "Подробнее ↓",
     goDeeper: "Глубже ↓",
     moreExamples: "Ещё примеры",
@@ -554,6 +628,9 @@ export const T: Record<Lang, {
     almost: "Почти",
     notQuite: "Не совсем",
     wordMastered: "Слово усвоено ✓",
+    upsellVisual: "Увидеть визуально",
+    upsellSentence: "Убедись, что ты действительно понял",
+    upsellBtn: "Перейти на Clear",
     login: "Войти",
     logout: "Выйти",
     welcomeBack: "С возвращением",

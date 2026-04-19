@@ -3,93 +3,37 @@ import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/lib/lang-context";
 import Link from "next/link";
 
+interface Meaning {
+  meaning: string;
+  partOfSpeech?: string;
+  domain?: string;
+}
+
 interface WordResult {
   word: string;
   language: string;
-  definition: string;
+  multiplemeanings: boolean;
+  meanings: Meaning[];
   examples: string[];
   etymology: string;
-  forKids: string;
-  multiplemeanings: boolean;
   opposite?: string;
   confusable?: string;
   register?: string;
   frequency?: string;
   wordFamily?: string[];
+  contextNote?: string;
   fromCache?: boolean;
 }
 
-const EXAMPLES = ["set", "banco", "שלום", "любовь", "ephemeral", "مرحبا"];
+type SearchPhase =
+  | { kind: "idle" }
+  | { kind: "loading" }
+  | { kind: "chooseMeaning"; word: string; result: WordResult }
+  | { kind: "contextInput"; word: string }
+  | { kind: "result"; result: WordResult };
 
 const isRTLLanguage = (lang?: string) =>
   ["Hebrew", "Arabic", "Urdu", "Persian"].includes(lang ?? "");
-
-const UI_STRINGS: Record<string, {
-  useThisWord: string; makeItYours: string; placeholder: string;
-  checkBtn: string; checking: string; understandMore: string;
-  goDeeper: string; moreExamples: string; forKids: string;
-  opposite: string; confusable: string; register: string;
-  frequency: string; wordFamily: string; searchAnother: string;
-  origin: string;
-}> = {
-  Hebrew: {
-    useThisWord: "✍️ השתמש במילה",
-    makeItYours: "תעשה את זה שלך",
-    placeholder: 'השתמש ב"{word}" במשפט משלך',
-    checkBtn: "בדוק את המשפט שלי",
-    checking: "בודק…",
-    understandMore: "הבן יותר ↓",
-    goDeeper: "העמק ↓",
-    moreExamples: "עוד דוגמאות",
-    forKids: "הסבר לילדים",
-    opposite: "הפך",
-    confusable: "לא להתבלבל עם",
-    register: "רישום",
-    frequency: "תדירות",
-    wordFamily: "משפחת המילה",
-    searchAnother: "← חפש מילה אחרת",
-    origin: "מקור המילה",
-  },
-  Arabic: {
-    useThisWord: "✍️ استخدم هذه الكلمة",
-    makeItYours: "اجعلها لك",
-    placeholder: 'استخدم "{word}" في جملتك الخاصة',
-    checkBtn: "تحقق من جملتي",
-    checking: "جارٍ التحقق…",
-    understandMore: "فهم أكثر ↓",
-    goDeeper: "تعمق أكثر ↓",
-    moreExamples: "مزيد من الأمثلة",
-    forKids: "شرح للأطفال",
-    opposite: "المعاكس",
-    confusable: "لا تخلط مع",
-    register: "المستوى اللغوي",
-    frequency: "التكرار",
-    wordFamily: "عائلة الكلمة",
-    searchAnother: "← ابحث عن كلمة أخرى",
-    origin: "أصل الكلمة",
-  },
-};
-
-function getUI(language?: string) {
-  return UI_STRINGS[language ?? ""] ?? {
-    useThisWord: "✍️ Use this word",
-    makeItYours: "Make it yours",
-    placeholder: 'Use "{word}" in your own sentence',
-    checkBtn: "Check my sentence",
-    checking: "Checking…",
-    understandMore: "Understand more ↓",
-    goDeeper: "Go deeper ↓",
-    moreExamples: "More examples",
-    forKids: "Explain like I'm 10",
-    opposite: "Opposite",
-    confusable: "Don't confuse with",
-    register: "Register",
-    frequency: "Frequency",
-    wordFamily: "Word family",
-    searchAnother: "← Search another word",
-    origin: "Origin",
-  };
-}
 
 function useSectionObserver() {
   useEffect(() => {
@@ -113,15 +57,9 @@ function useSectionObserver() {
 
 export default function Home() {
   const [input, setInput] = useState("");
-  const [result, setResult] = useState<WordResult | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [phase, setPhase] = useState<SearchPhase>({ kind: "idle" });
+  const [contextInput, setContextInput] = useState("");
   const [error, setError] = useState("");
-  const [placeholderIdx, setPlaceholderIdx] = useState(0);
-  const [layer, setLayer] = useState(1);
-  const [useThisWordOpen, setUseThisWordOpen] = useState(false);
-  const [userSentence, setUserSentence] = useState("");
-  const [sentenceFeedback, setSentenceFeedback] = useState<{status: string; message: string} | null>(null);
-  const [checkingsentence, setCheckingsentence] = useState(false);
 
   const { t, dir: uiDir, lang } = useLang();
   const resultRef = useRef<HTMLDivElement>(null);
@@ -129,76 +67,60 @@ export default function Home() {
 
   useSectionObserver();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPlaceholderIdx((i) => (i + 1) % t.placeholder.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [t]);
+  const isIdle = phase.kind === "idle";
+  const isLoading = phase.kind === "loading";
+  const result = phase.kind === "result" ? phase.result : null;
 
-  const isRTL = isRTLLanguage(result?.language);
-  const resultDir = isRTL ? "rtl" : "ltr";
-  const rui = getUI(result?.language);
-
-  function detectInputLanguage(text: string): string | null {
-    if (!text.trim()) return null;
-    if (/[\u0590-\u05FF]/.test(text)) return "Hebrew";
-    if (/[\u0600-\u06FF]/.test(text)) return "Arabic";
-    if (/[\u0400-\u04FF]/.test(text)) return "Russian";
-    if (/[\u3040-\u30FF\u4E00-\u9FFF]/.test(text)) return "Japanese";
-    if (/[\u0900-\u097F]/.test(text)) return "Hindi";
-    return null;
+  function scrollToResult() {
+    setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
   }
 
-  const detectedLang = detectInputLanguage(input);
-
-  async function handleSearch(wordOrSentence?: string) {
-    const query = (wordOrSentence ?? input).trim();
-    if (!query) return;
-    setLoading(true);
+  async function fetchWord(word: string, contextSentence?: string) {
+    setPhase({ kind: "loading" });
     setError("");
-    setResult(null);
-    setLayer(1);
-    setUseThisWordOpen(false);
-    setUserSentence("");
-    setSentenceFeedback(null);
-    if (wordOrSentence) setInput(wordOrSentence);
-    setTimeout(() => {
-      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
     try {
       const res = await fetch("/api/define", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: query }),
+        body: JSON.stringify({ word, contextSentence }),
       });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      setResult(data);
+      const data: WordResult = await res.json();
+      if ((data as { error?: string }).error) throw new Error((data as { error?: string }).error);
+
+      // If multiple meanings and no context provided — let user choose
+      if (data.multiplemeanings && !contextSentence) {
+        setPhase({ kind: "chooseMeaning", word, result: data });
+        scrollToResult();
+      } else {
+        setPhase({ kind: "result", result: data });
+        scrollToResult();
+      }
     } catch {
       setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      setPhase({ kind: "idle" });
     }
   }
 
-  async function handleCheckSentence() {
-    if (!userSentence.trim() || !result) return;
-    setCheckingsentence(true);
-    setSentenceFeedback(null);
-    try {
-      const res = await fetch("/api/check-sentence", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: result.word, sentence: userSentence, definition: result.definition }),
-      });
-      const data = await res.json();
-      setSentenceFeedback(data);
-    } catch {
-      setSentenceFeedback({ status: "error", message: "Could not check. Try again." });
-    } finally {
-      setCheckingsentence(false);
-    }
+  async function handleSearch(wordOverride?: string) {
+    const query = (wordOverride ?? input).trim();
+    if (!query) return;
+    if (wordOverride) setInput(wordOverride);
+    await fetchWord(query);
+  }
+
+  async function handleContextSubmit() {
+    if (phase.kind !== "contextInput") return;
+    const sentence = contextInput.trim();
+    if (!sentence) return;
+    await fetchWord(phase.word, sentence);
+  }
+
+  function reset() {
+    setPhase({ kind: "idle" });
+    setInput("");
+    setContextInput("");
+    setError("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const FEATURES = [t.feat1, t.feat2, t.feat3, t.feat4, t.feat5, t.feat6, t.feat7, t.feat8];
@@ -206,37 +128,42 @@ export default function Home() {
   const WHO = [t.who1, t.who2, t.who3, t.who4, t.who5];
   const WHO_ICONS = ["🎓", "👨‍👩‍👧", "🏫", "🌍", "💡"];
 
+  const showSections = isIdle && !isLoading;
+
   return (
     <main className="min-h-screen bg-[#F8FAFC]" dir={uiDir} data-lang={lang}>
 
       {/* ── HERO ── */}
       <section id="hero" className="relative pt-28 pb-24 px-4 overflow-hidden">
-        {/* Page-level background gradient */}
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse 80% 55% at 50% -10%, rgb(37 99 235 / 0.07) 0%, transparent 65%)",
         }} />
 
         <div className="relative max-w-2xl mx-auto">
-          {/* Headline */}
-          <div className="text-center mb-12 animate-fade-in-up">
-            <h1 className="font-bold mb-4" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.3px" : "-1.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.2", fontSize: "clamp(36px, 6vw, 52px)" }}>
-              <span style={{ color: "#2563EB" }}>Gad</span>it
-            </h1>
-            <p className="font-semibold mb-3" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.25", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 600 }}>
-              {t.heroHeadline}
-            </p>
-            <p className="text-slate-400 leading-relaxed max-w-md mx-auto" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.7" : "1.6" }}>
-              {t.heroSubline}
-            </p>
-          </div>
+
+          {/* Headline — only when idle */}
+          {isIdle && (
+            <div className="text-center mb-12 animate-fade-in-up">
+              <h1 className="font-bold mb-4" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.3px" : "-1.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.2", fontSize: "clamp(36px, 6vw, 52px)" }}>
+                <span style={{ color: "#2563EB" }}>Gad</span>it
+              </h1>
+              <p className="font-semibold mb-3" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.25", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 600 }}>
+                {t.heroHeadline}
+              </p>
+              <p className="text-slate-400 leading-relaxed max-w-md mx-auto" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.7" : "1.6" }}>
+                {t.heroSubline}
+              </p>
+            </div>
+          )}
 
           {/* Search */}
-          <div ref={searchRef} className="animate-fade-in-up delay-200 relative">
-            {/* Radial glow behind search */}
-            <div className="absolute inset-0 pointer-events-none -z-10" style={{
-              background: "radial-gradient(ellipse 90% 120% at 50% 50%, rgb(37 99 235 / 0.05) 0%, transparent 70%)",
-              transform: "scale(1.4)",
-            }} />
+          <div ref={searchRef} className={isIdle ? "animate-fade-in-up delay-200 relative" : "relative mb-8"}>
+            {isIdle && (
+              <div className="absolute inset-0 pointer-events-none -z-10" style={{
+                background: "radial-gradient(ellipse 90% 120% at 50% 50%, rgb(37 99 235 / 0.05) 0%, transparent 70%)",
+                transform: "scale(1.5)",
+              }} />
+            )}
             <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
               <div className="search-container flex gap-0 p-2" style={{ flexDirection: uiDir === "rtl" ? "row-reverse" : "row" }}>
                 <div className="relative flex-1">
@@ -244,294 +171,143 @@ export default function Home() {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder={t.placeholder[placeholderIdx]}
+                    placeholder={t.placeholder[0]}
                     className="w-full px-5 py-3.5 rounded-xl bg-transparent text-slate-800 text-lg focus:outline-none placeholder-slate-300 transition-all"
                     dir={uiDir}
-                    style={{ fontSize: "1.05rem", textAlign: uiDir === "rtl" ? "right" : "left" }}
+                    style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
+                    autoFocus={false}
                   />
-                  {detectedLang && (
-                    <span
-                      className="absolute -bottom-6 text-xs text-slate-400 pointer-events-none"
-                      style={{ [uiDir === "rtl" ? "left" : "right"]: "0.5rem" }}
-                    >
-                      {detectedLang} detected
-                    </span>
-                  )}
                 </div>
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="btn-primary px-7 py-3.5 rounded-xl font-semibold text-base shrink-0 disabled:opacity-50"
+                  disabled={isLoading}
+                  className="btn-primary px-7 py-3.5 rounded-xl font-semibold text-base shrink-0 disabled:opacity-60"
                 >
-                  {loading ? "…" : t.explainBtn}
+                  {isLoading ? "…" : t.explainBtn}
                 </button>
               </div>
             </form>
 
-            {/* Chips */}
-            <div
-              className="flex flex-wrap gap-2 mt-8"
-              style={{ justifyContent: uiDir === "rtl" ? "flex-end" : "flex-start", direction: uiDir }}
-            >
-              <span className="text-slate-400 text-sm self-center">{t.tryLabel}</span>
-              {EXAMPLES.map((ex) => (
-                <button
-                  key={ex}
-                  onClick={() => handleSearch(ex)}
-                  className="gadit-chip"
-                >
-                  {ex}
-                </button>
-              ))}
-            </div>
+            {/* Chips — idle only */}
+            {isIdle && (
+              <div className="flex flex-wrap gap-2 mt-6" style={{ justifyContent: uiDir === "rtl" ? "flex-end" : "flex-start" }}>
+                <span className="text-slate-400 text-sm self-center">{t.tryLabel}</span>
+                {t.chips.map((ex) => (
+                  <button key={ex} onClick={() => handleSearch(ex)} className="gadit-chip">{ex}</button>
+                ))}
+              </div>
+            )}
 
             {/* Support line */}
-            {!result && !loading && (
-              <p className="text-center text-slate-400 text-sm mt-6 animate-fade-in delay-400 italic"
+            {isIdle && (
+              <p className="text-center text-slate-400 text-sm mt-6 italic animate-fade-in delay-400"
                 dangerouslySetInnerHTML={{ __html: t.heroSupport }} />
             )}
           </div>
 
           {error && (
-            <div className="mt-6 px-5 py-4 rounded-2xl text-sm animate-fade-in"
-              style={{ background: "rgb(254 226 226)", color: "#DC2626" }}>
+            <div className="mt-4 px-5 py-4 rounded-2xl text-sm animate-fade-in" style={{ background: "rgb(254 226 226)", color: "#DC2626" }}>
               {error}
             </div>
           )}
 
-          {/* ── RESULT ── */}
-          <div ref={resultRef} className="mt-10">
-            {result && (
-              <div dir={resultDir} className="space-y-3 animate-fade-in">
+          {/* ── RESULT AREA ── */}
+          <div ref={resultRef}>
 
-                {/* Word header */}
-                <div className="gadit-card px-8 py-6">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h2 className="text-3xl font-bold" style={{ color: "#0F172A" }}>{result.word}</h2>
-                    <span className="text-sm text-slate-400 font-medium">{result.language}</span>
-                  </div>
-                </div>
-
-                {/* Layer 1 */}
-                <div className="gadit-card px-8 py-6 space-y-5">
-                  <p className="text-slate-700 text-lg leading-relaxed">{result.definition}</p>
-
-                  {result.examples?.[0] && (
-                    <div className="flex gap-2 text-slate-500 text-base">
-                      <span style={{ color: "#2563EB" }}>•</span>
-                      <span className="italic">{result.examples[0]}</span>
-                    </div>
-                  )}
-
-                  <div>
-                    <button
-                      onClick={() => setUseThisWordOpen((v) => !v)}
-                      className="btn-secondary px-4 py-2 text-sm"
-                    >
-                      {rui.useThisWord}
-                    </button>
-
-                    {useThisWordOpen && (
-                      <div className="mt-4 space-y-3 animate-fade-in">
-                        <p className="text-sm font-semibold text-slate-500">{rui.makeItYours}</p>
-                        <textarea
-                          value={userSentence}
-                          onChange={(e) => setUserSentence(e.target.value)}
-                          placeholder={rui.placeholder.replace("{word}", result.word)}
-                          rows={2}
-                          className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:border-blue-300 resize-none transition-all"
-                          style={{ boxShadow: "var(--shadow-xs)" }}
-                          dir={isRTL ? "rtl" : "ltr"}
-                        />
-                        <button
-                          onClick={handleCheckSentence}
-                          disabled={checkingsentence || !userSentence.trim()}
-                          className="btn-primary px-5 py-2 text-sm disabled:opacity-50"
-                        >
-                          {checkingsentence ? rui.checking : rui.checkBtn}
-                        </button>
-
-                        {sentenceFeedback && (
-                          <div className={`px-4 py-3 rounded-xl text-sm animate-fade-in ${
-                            sentenceFeedback.status === "perfect"
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
-                              : sentenceFeedback.status === "almost"
-                              ? "bg-amber-50 text-amber-700 border border-amber-100"
-                              : "bg-red-50 text-red-600 border border-red-100"
-                          }`}>
-                            <span className="font-semibold capitalize">{sentenceFeedback.status}. </span>
-                            {sentenceFeedback.message}
-                            {sentenceFeedback.status === "perfect" && (
-                              <div className="mt-1 font-semibold" style={{ color: "#10B981" }}>
-                                Word mastered ✓
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Layer 2 toggle */}
-                {layer < 2 ? (
+            {/* Multi-meaning chooser */}
+            {phase.kind === "chooseMeaning" && (
+              <div className="gadit-card px-8 py-8 space-y-5 animate-fade-in">
+                <p className="font-semibold text-slate-700" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.6" : "1.5" }}>
+                  {t.multiMeaningPrompt.replace("{word}", phase.word)}
+                </p>
+                <div className="space-y-3">
+                  {/* Option 1: show all */}
                   <button
-                    onClick={() => setLayer(2)}
-                    className="btn-secondary w-full py-3 text-sm font-medium"
+                    onClick={() => setPhase({ kind: "result", result: phase.result })}
+                    className="w-full text-start px-5 py-4 rounded-2xl border-2 font-medium transition-all hover:border-blue-300 hover:bg-blue-50"
+                    style={{ borderColor: "rgb(226 232 240)", color: "#0F172A" }}
                   >
-                    {rui.understandMore}
+                    <span className="text-blue-500 me-2">①</span>
+                    {t.multiMeaningOptionAll}
                   </button>
-                ) : (
-                  <div className="gadit-card px-8 py-6 space-y-5 animate-fade-in">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                      {rui.understandMore.replace(" ↓","").replace("↓ ","")}
-                    </p>
-
-                    {result.examples?.length > 1 && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{rui.moreExamples}</p>
-                        <ul className="space-y-2">
-                          {result.examples.slice(1).map((ex, i) => (
-                            <li key={i} className="flex gap-2 text-slate-600 text-sm">
-                              <span style={{ color: "#2563EB" }}>•</span>
-                              <span className="italic">{ex}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </section>
-                    )}
-
-                    {result.forKids && (
-                      <section className="rounded-2xl p-4" style={{ background: "rgb(255 251 235)", border: "1px solid rgb(253 230 138 / 0.5)" }}>
-                        <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">{rui.forKids}</p>
-                        <p className="text-slate-700 text-sm">{result.forKids}</p>
-                      </section>
-                    )}
-
-                    {result.opposite && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.opposite}</p>
-                        <p className="text-slate-600 text-sm">{result.opposite}</p>
-                      </section>
-                    )}
-
-                    {result.confusable && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.confusable}</p>
-                        <p className="text-slate-600 text-sm">{result.confusable}</p>
-                      </section>
-                    )}
-                  </div>
-                )}
-
-                {/* Layer 3 toggle */}
-                {layer === 2 && (
+                  {/* Option 2: context */}
                   <button
-                    onClick={() => setLayer(3)}
-                    className="btn-secondary w-full py-3 text-sm font-medium"
+                    onClick={() => setPhase({ kind: "contextInput", word: phase.word })}
+                    className="w-full text-start px-5 py-4 rounded-2xl border-2 font-medium transition-all hover:border-blue-300 hover:bg-blue-50"
+                    style={{ borderColor: "rgb(226 232 240)", color: "#0F172A" }}
                   >
-                    {rui.goDeeper}
+                    <span className="text-blue-500 me-2">②</span>
+                    {t.multiMeaningOptionContext}
                   </button>
-                )}
-
-                {layer >= 3 && (
-                  <div className="gadit-card px-8 py-6 space-y-5 animate-fade-in">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                      {rui.goDeeper.replace(" ↓","").replace("↓ ","")}
-                    </p>
-
-                    {result.etymology && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.origin}</p>
-                        <p className="text-slate-600 text-sm leading-relaxed">{result.etymology}</p>
-                      </section>
-                    )}
-
-                    {result.register && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.register}</p>
-                        <p className="text-slate-600 text-sm">{result.register}</p>
-                      </section>
-                    )}
-
-                    {result.frequency && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{rui.frequency}</p>
-                        <p className="text-slate-600 text-sm">{result.frequency}</p>
-                      </section>
-                    )}
-
-                    {result.wordFamily && result.wordFamily.length > 0 && (
-                      <section>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{rui.wordFamily}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {result.wordFamily.map((w, i) => (
-                            <span key={i} className="px-3 py-1 rounded-full text-sm font-medium"
-                              style={{ background: "rgb(241 245 249)", color: "#475569" }}>
-                              {w}
-                            </span>
-                          ))}
-                        </div>
-                      </section>
-                    )}
-                  </div>
-                )}
-
-                {/* New search */}
-                <button
-                  onClick={() => {
-                    setResult(null); setInput(""); setLayer(1);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-colors"
-                >
-                  {rui.searchAnother}
-                </button>
+                </div>
               </div>
+            )}
+
+            {/* Context input */}
+            {phase.kind === "contextInput" && (
+              <div className="gadit-card px-8 py-8 space-y-4 animate-fade-in">
+                <p className="font-semibold text-slate-700">{t.multiMeaningContextPlaceholder.replace("{word}", phase.word)}</p>
+                <textarea
+                  value={contextInput}
+                  onChange={(e) => setContextInput(e.target.value)}
+                  placeholder={t.multiMeaningContextPlaceholder.replace("{word}", phase.word)}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-base focus:outline-none focus:ring-2 focus:border-blue-300 resize-none transition-all"
+                  dir={uiDir}
+                  style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
+                  autoFocus
+                />
+                <div className="flex gap-3 flex-wrap">
+                  <button onClick={handleContextSubmit} disabled={!contextInput.trim()} className="btn-primary px-6 py-2.5 text-sm disabled:opacity-50">
+                    {t.multiMeaningContextBtn}
+                  </button>
+                  <button onClick={() => setPhase({ kind: "chooseMeaning", word: phase.word, result: { word: phase.word, language: "", multiplemeanings: true, meanings: [], examples: [], etymology: "" } })} className="btn-secondary px-5 py-2.5 text-sm">
+                    {t.showAllMeanings}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Full result */}
+            {result && (
+              <ResultView
+                result={result}
+                uiDir={uiDir}
+                t={t}
+                onReset={reset}
+                onShowAll={() => {/* already showing all */}}
+              />
             )}
           </div>
         </div>
       </section>
 
       {/* ── DEMO + HOW IT WORKS ── */}
-      {!result && (
+      {showSections && (
         <section id="how-it-works" className="py-24 px-4 bg-white">
           <div className="max-w-2xl mx-auto">
-
-            {/* Demo card */}
             <div className="observe-section section-hidden mb-20">
-              <h2 className="text-3xl font-bold text-center mb-2" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
+              <h2 className="text-3xl font-bold text-center mb-2" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>
                 {t.demoSectionTitle}
               </h2>
               <p className="text-center text-slate-400 mb-10 text-base italic" dangerouslySetInnerHTML={{ __html: t.heroSupport }} />
-
               <div className="gadit-card overflow-hidden" style={{ boxShadow: "var(--shadow-md)" }}>
-                {/* Fake browser bar */}
-                <div className="px-6 py-3 border-b border-slate-100 flex items-center gap-2"
-                  style={{ background: "rgb(248 250 252)" }}>
+                <div className="px-6 py-3 border-b border-slate-100 flex items-center gap-2" style={{ background: "rgb(248 250 252)" }}>
                   <div className="w-2.5 h-2.5 rounded-full bg-red-300" />
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-300" />
                   <div className="w-2.5 h-2.5 rounded-full bg-green-300" />
-                  <div className="flex-1 mx-3 px-3 py-1 rounded-md text-xs text-slate-400 border border-slate-200 bg-white text-center">
-                    gadit.app
-                  </div>
+                  <div className="flex-1 mx-3 px-3 py-1 rounded-md text-xs text-slate-400 border border-slate-200 bg-white text-center">gadit.app</div>
                 </div>
-
-                {/* Word header */}
                 <div className="px-8 py-5 border-b border-slate-100 flex items-baseline justify-between">
                   <span className="text-2xl font-bold" style={{ color: "#0F172A" }}>{t.demoWord}</span>
                   <span className="text-sm text-slate-400 font-medium">English</span>
                 </div>
-
-                {/* Content */}
                 <div className="px-8 py-6 space-y-4">
                   <p className="text-slate-700 text-lg leading-relaxed">{t.demoDefinition}</p>
                   <div className="flex gap-2 text-slate-500">
                     <span style={{ color: "#2563EB" }}>•</span>
                     <span className="italic text-base">{t.demoExample}</span>
                   </div>
-
-                  {/* Deeper insight chip */}
                   <div className="pt-4 border-t border-slate-100">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-3"
                       style={{ background: "rgb(37 99 235 / 0.07)", color: "#2563EB" }}>
@@ -543,9 +319,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* How it works */}
             <div className="observe-section section-hidden">
-              <h2 className="text-3xl font-bold text-center mb-14" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
+              <h2 className="text-3xl font-bold text-center mb-14" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>
                 {t.howItWorksTitle}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -565,10 +340,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="text-center mt-12">
-                <button
-                  onClick={() => searchRef.current?.scrollIntoView({ behavior: "smooth" })}
-                  className="btn-primary px-8 py-3.5 text-sm"
-                >
+                <button onClick={() => searchRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn-primary px-8 py-3.5 text-sm">
                   {t.howCta}
                 </button>
               </div>
@@ -577,11 +349,10 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── FEATURES ── */}
-      {!result && (
+      {showSections && (
         <section id="features" className="py-24 px-4 bg-[#F8FAFC]">
           <div className="max-w-2xl mx-auto observe-section section-hidden">
-            <h2 className="text-3xl font-bold text-center mb-14" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
+            <h2 className="text-3xl font-bold text-center mb-14" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>
               {t.featuresTitle}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -596,11 +367,10 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── WHO IT'S FOR ── */}
-      {!result && (
+      {showSections && (
         <section className="py-24 px-4 bg-white">
           <div className="max-w-2xl mx-auto observe-section section-hidden">
-            <h2 className="text-3xl font-bold text-center mb-12" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
+            <h2 className="text-3xl font-bold text-center mb-12" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>
               {t.whoTitle}
             </h2>
             <div className="flex flex-wrap justify-center gap-4">
@@ -615,13 +385,10 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── WHY DIFFERENT ── */}
-      {!result && (
+      {showSections && (
         <section className="py-24 px-4 bg-[#F8FAFC]">
           <div className="max-w-xl mx-auto text-center observe-section section-hidden">
-            <h2 className="text-3xl font-bold mb-4" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
-              {t.whyTitle}
-            </h2>
+            <h2 className="text-3xl font-bold mb-4" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>{t.whyTitle}</h2>
             <p className="text-slate-500 text-lg mb-10 leading-relaxed">{t.whyCopy}</p>
             <div className="flex flex-col gap-3 items-center">
               {[t.whyBullet1, t.whyBullet2, t.whyBullet3].map((b, i) => (
@@ -635,50 +402,27 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── PRICING TEASER ── */}
-      {!result && (
+      {showSections && (
         <section id="pricing-teaser" className="py-24 px-4 bg-white">
           <div className="max-w-xl mx-auto text-center observe-section section-hidden">
-            <h2 className="text-3xl font-bold mb-3" style={{ color: "#0F172A", letterSpacing: "-0.5px" }}>
-              {t.pricingTeaserTitle}
-            </h2>
-            <p className="text-slate-400 text-base mb-10 leading-relaxed max-w-sm mx-auto">
-              {t.pricingTeaserText}
-            </p>
-            <Link
-              href="/pricing"
-              className="btn-secondary inline-block px-8 py-3.5 text-sm font-semibold"
-            >
-              {t.viewPricing}
-            </Link>
+            <h2 className="text-3xl font-bold mb-3" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>{t.pricingTeaserTitle}</h2>
+            <p className="text-slate-400 text-base mb-10 leading-relaxed max-w-sm mx-auto">{t.pricingTeaserText}</p>
+            <Link href="/pricing" className="btn-secondary inline-block px-8 py-3.5 text-sm font-semibold">{t.viewPricing}</Link>
           </div>
         </section>
       )}
 
-      {/* ── FINAL CTA ── */}
-      {!result && (
+      {showSections && (
         <section className="py-28 px-4 relative overflow-hidden" style={{ background: "#2563EB" }}>
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgb(255 255 255 / 0.06) 0%, transparent 70%)" }}
-          />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgb(255 255 255 / 0.06) 0%, transparent 70%)" }} />
           <div className="relative max-w-xl mx-auto text-center observe-section section-hidden">
-            <h2 className="text-3xl font-bold text-white mb-3" style={{ letterSpacing: "-0.5px" }}>
-              {t.finalCtaTitle}
-            </h2>
+            <h2 className="text-3xl font-bold text-white mb-3" style={{ letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px" }}>{t.finalCtaTitle}</h2>
             <p className="text-blue-200 text-base mb-10 leading-relaxed">{t.finalCtaText}</p>
             <div className="flex gap-3 justify-center flex-wrap">
-              <button
-                onClick={() => searchRef.current?.scrollIntoView({ behavior: "smooth" })}
-                className="px-8 py-3.5 rounded-xl font-semibold text-sm bg-white hover:bg-blue-50 transition-all"
-                style={{ color: "#2563EB", boxShadow: "0 4px 16px rgb(0 0 0 / 0.12)" }}
-              >
+              <button onClick={() => searchRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-8 py-3.5 rounded-xl font-semibold text-sm bg-white hover:bg-blue-50 transition-all" style={{ color: "#2563EB", boxShadow: "0 4px 16px rgb(0 0 0 / 0.12)" }}>
                 {t.startUnderstandingFree}
               </button>
-              <Link
-                href="/pricing"
-                className="px-8 py-3.5 rounded-xl font-semibold text-sm border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 transition-all"
-              >
+              <Link href="/pricing" className="px-8 py-3.5 rounded-xl font-semibold text-sm border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 transition-all">
                 {t.viewPricing}
               </Link>
             </div>
@@ -686,8 +430,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── FOOTER ── */}
-      {!result && (
+      {showSections && (
         <footer className="py-12 px-4 bg-[#F8FAFC] border-t border-slate-100">
           <div className="max-w-2xl mx-auto">
             <div className="flex flex-wrap items-center justify-between gap-6">
@@ -707,5 +450,148 @@ export default function Home() {
       )}
 
     </main>
+  );
+}
+
+// ── RESULT VIEW ──
+function ResultView({ result, uiDir, t, onReset }: {
+  result: WordResult;
+  uiDir: "ltr" | "rtl";
+  t: ReturnType<typeof useLang>["t"];
+  onReset: () => void;
+  onShowAll: () => void;
+}) {
+  const resultLangDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
+
+  return (
+    <div className="space-y-4 animate-fade-in" dir={resultLangDir}>
+
+      {/* Word header */}
+      <div className="gadit-card px-8 py-6">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="font-bold" style={{ color: "#0F172A", fontSize: "clamp(24px, 4vw, 32px)", letterSpacing: resultLangDir === "rtl" ? "0.3px" : "-0.5px" }}>
+            {result.word}
+          </h2>
+          <span className="text-sm text-slate-400 font-medium shrink-0">{result.language}</span>
+        </div>
+      </div>
+
+      {/* Meanings */}
+      <div className="gadit-card px-8 py-6 space-y-4">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.definitionsLabel}</p>
+        {result.meanings?.map((m, i) => (
+          <div key={i} className={result.meanings.length > 1 ? "pb-4 border-b border-slate-100 last:border-0 last:pb-0" : ""}>
+            <div className="flex items-start gap-3">
+              {result.meanings.length > 1 && (
+                <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5" style={{ background: "#2563EB", minWidth: "1.5rem" }}>
+                  {i + 1}
+                </span>
+              )}
+              <div className="space-y-1">
+                <p className="text-slate-700 leading-relaxed" style={{ fontSize: "1.05rem", lineHeight: resultLangDir === "rtl" ? "1.7" : "1.6" }}>
+                  {m.meaning}
+                </p>
+                {(m.partOfSpeech || m.domain) && (
+                  <div className="flex gap-2 flex-wrap mt-1">
+                    {m.partOfSpeech && (
+                      <span className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: "rgb(241 245 249)", color: "#64748b" }}>
+                        {m.partOfSpeech}
+                      </span>
+                    )}
+                    {m.domain && m.domain !== "general" && (
+                      <span className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: "rgb(239 246 255)", color: "#2563EB" }}>
+                        {m.domain}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Context note (when searched by context) */}
+      {result.contextNote && (
+        <div className="gadit-card px-8 py-5" style={{ borderColor: "rgb(147 197 253 / 0.5)", background: "rgb(239 246 255)" }}>
+          <p className="text-xs font-semibold mb-1" style={{ color: "#2563EB" }}>{t.contextNote}</p>
+          <p className="text-slate-600 text-sm leading-relaxed">{result.contextNote}</p>
+        </div>
+      )}
+
+      {/* Examples */}
+      {result.examples?.length > 0 && (
+        <div className="gadit-card px-8 py-6 space-y-3">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.examplesLabel}</p>
+          <ul className="space-y-3">
+            {result.examples.map((ex, i) => (
+              <li key={i} className="flex gap-3 text-slate-600" style={{ lineHeight: resultLangDir === "rtl" ? "1.7" : "1.6" }}>
+                <span className="shrink-0 font-semibold" style={{ color: "#2563EB" }}>•</span>
+                <span className="italic">{ex}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Etymology */}
+      {result.etymology && (
+        <div className="gadit-card px-8 py-6">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{t.etymologyLabel}</p>
+          <p className="text-slate-600 text-sm leading-relaxed" style={{ lineHeight: resultLangDir === "rtl" ? "1.7" : "1.6" }}>
+            {result.etymology}
+          </p>
+        </div>
+      )}
+
+      {/* Word family + register quick pills */}
+      {(result.wordFamily?.length || result.register || result.frequency) && (
+        <div className="gadit-card px-8 py-5 flex flex-wrap gap-3 items-center">
+          {result.register && (
+            <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: "rgb(241 245 249)", color: "#475569" }}>
+              {result.register}
+            </span>
+          )}
+          {result.frequency && (
+            <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: "rgb(241 245 249)", color: "#475569" }}>
+              {result.frequency}
+            </span>
+          )}
+          {result.wordFamily?.map((w, i) => (
+            <span key={i} className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: "rgb(239 246 255)", color: "#2563EB" }}>
+              {w}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Upsell CTA */}
+      <div className="gadit-card px-8 py-7 space-y-4" style={{ background: "linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 100%)" }}>
+        <div className="space-y-3">
+          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
+            <span className="text-xl shrink-0">🖼️</span>
+            <div>
+              <p className="font-semibold text-slate-800 text-sm">{t.upsellVisual}</p>
+              <p className="text-slate-400 text-xs mt-0.5">Clear plan</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
+            <span className="text-xl shrink-0">✍️</span>
+            <div>
+              <p className="font-semibold text-slate-800 text-sm">{t.upsellSentence}</p>
+              <p className="text-slate-400 text-xs mt-0.5">Clear plan</p>
+            </div>
+          </div>
+        </div>
+        <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block">
+          {t.upsellBtn}
+        </Link>
+      </div>
+
+      {/* Back to search */}
+      <button onClick={onReset} className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-colors">
+        {t.searchAnother}
+      </button>
+    </div>
   );
 }
