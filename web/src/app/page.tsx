@@ -222,10 +222,6 @@ export default function Home() {
         <div className="relative max-w-2xl mx-auto">
           {/* Brand + headline */}
           <div className="text-center mb-10 animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6 border"
-              style={{ background: "rgb(37 99 235 / 0.06)", borderColor: "rgb(37 99 235 / 0.15)", color: "#2563EB" }}>
-              ✦ {t.heroLangs}
-            </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight" style={{ color: "#0F172A", letterSpacing: "-1.5px" }}>
               <span style={{ color: "#2563EB" }}>Gad</span>it
             </h1>
@@ -239,8 +235,8 @@ export default function Home() {
 
           {/* Search */}
           <div ref={searchRef} className="animate-fade-in-up delay-200">
-            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} dir={uiDir}>
-              <div className="search-container flex gap-0 p-2">
+            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+              <div className="search-container flex gap-0 p-2" style={{ flexDirection: uiDir === "rtl" ? "row-reverse" : "row" }}>
                 <div className="relative flex-1">
                   <input
                     type="text"
@@ -248,11 +244,14 @@ export default function Home() {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={t.placeholder[placeholderIdx]}
                     className="w-full px-5 py-3.5 rounded-xl bg-transparent text-slate-800 text-lg focus:outline-none placeholder-slate-300 transition-all"
-                    dir="auto"
-                    style={{ fontSize: "1.05rem" }}
+                    dir={uiDir}
+                    style={{ fontSize: "1.05rem", textAlign: uiDir === "rtl" ? "right" : "left" }}
                   />
                   {detectedLang && (
-                    <span className="absolute -bottom-6 right-2 text-xs text-slate-400 pointer-events-none">
+                    <span
+                      className="absolute -bottom-6 text-xs text-slate-400 pointer-events-none"
+                      style={{ [uiDir === "rtl" ? "left" : "right"]: "0.5rem" }}
+                    >
                       {detectedLang} detected
                     </span>
                   )}
@@ -268,7 +267,10 @@ export default function Home() {
             </form>
 
             {/* Chips */}
-            <div className="flex flex-wrap gap-2 justify-center mt-8">
+            <div
+              className="flex flex-wrap gap-2 mt-8"
+              style={{ justifyContent: uiDir === "rtl" ? "flex-end" : "flex-start", direction: uiDir }}
+            >
               <span className="text-slate-400 text-sm self-center">{t.tryLabel}</span>
               {EXAMPLES.map((ex) => (
                 <button
@@ -283,7 +285,7 @@ export default function Home() {
 
             {/* Support line */}
             {!result && !loading && (
-              <p className="text-center text-slate-400 text-sm mt-6 animate-fade-in delay-400"
+              <p className="text-center text-slate-400 text-sm mt-6 animate-fade-in delay-400 italic"
                 dangerouslySetInnerHTML={{ __html: t.heroSupport }} />
             )}
           </div>
