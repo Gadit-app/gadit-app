@@ -169,7 +169,7 @@ export default function PricingPage() {
                 </div>
 
                 <div className="mb-7 flex-1 flex justify-center" dir={dir}>
-                  <ul className="space-y-2.5 text-start">
+                  <ul className="space-y-2.5 text-start w-full max-w-[200px]">
                     {plan.features.map((f, i) => (
                       <li key={i} className="flex gap-2 text-sm text-slate-600 items-start">
                         <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#10B981" }}>✓</span>
