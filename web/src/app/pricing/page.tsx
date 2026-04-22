@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/track";
 
 export default function PricingPage() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
@@ -59,6 +60,8 @@ export default function PricingPage() {
 
     const priceId = billing === "monthly" ? plan.monthlyPriceId : plan.yearlyPriceId;
     if (!priceId) return;
+
+    track("checkout_started", { planId: plan.id, billing });
 
     setLoading(plan.id);
     try {

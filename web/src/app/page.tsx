@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { useKidsMode } from "@/lib/kids-mode";
+import { track } from "@/lib/track";
 import VoiceInput from "@/components/VoiceInput";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
@@ -212,6 +213,16 @@ export default function Home() {
       if (!finalResult) throw new Error("Stream ended without final result");
       setPhase({ kind: "result", result: finalResult });
       if (!startedStreaming) scrollToResult();
+
+      // Track the search event
+      track("search", {
+        word: word.trim().slice(0, 40),
+        uiLang: lang,
+        plan,
+        withContext: Boolean(contextSentence),
+        fromCache: Boolean(finalResult.fromCache),
+        meaningsCount: finalResult.meanings?.length ?? 0,
+      });
 
       // Save to history (paid users only) — fire and forget, optimistic local update
       if (user && isPaidPlan) {
@@ -982,8 +993,14 @@ function MeaningImage({ word, meaning, uiLang, getIdToken, t, lineH }: {
         return;
       }
       const data = await res.json();
-      if (data.url) setUrl(data.url);
-      else setError(t.imageFailed);
+      if (data.url) {
+        setUrl(data.url);
+        track("image_generated", {
+          word: word.slice(0, 40),
+          uiLang,
+          cached: Boolean(data.cached),
+        });
+      } else setError(t.imageFailed);
     } catch (e) {
       console.error("image gen error:", e);
       setError(t.imageFailed);
@@ -1086,6 +1103,11 @@ function MeaningCompose({ word, meaning, uiLang, getIdToken, t, lineH }: {
       }
       const data = (await res.json()) as ComposeFeedback;
       setFeedback(data);
+      track("compose_sentence", {
+        word: word.slice(0, 40),
+        uiLang,
+        status: data.status,
+      });
     } catch (e) {
       console.error("check-sentence error:", e);
       setError(t.imageFailed);
