@@ -339,14 +339,14 @@ export default function Home() {
               }} />
             )}
             <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} dir={uiDir}>
-              <div className="search-container flex gap-0 p-2 items-center">
-                <div className="relative flex-1 flex items-center gap-2 px-3">
+              <div className="search-container flex gap-0 p-2 items-center w-full">
+                <div className="relative flex-1 min-w-0 flex items-center gap-2 px-3">
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={t.placeholder[0]}
-                    className="flex-1 py-3.5 bg-transparent text-slate-800 text-lg focus:outline-none placeholder-slate-300 transition-all"
+                    className="flex-1 min-w-0 py-3.5 bg-transparent text-slate-800 text-lg focus:outline-none placeholder-slate-300 transition-all"
                     dir={uiDir}
                     style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
                     autoFocus={false}
@@ -362,7 +362,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="btn-primary px-7 py-3.5 rounded-xl font-semibold text-base shrink-0 disabled:opacity-60"
+                  className="btn-primary px-5 sm:px-7 py-3.5 rounded-xl font-semibold text-base shrink-0 disabled:opacity-60"
                 >
                   {isLoading ? "…" : t.explainBtn}
                 </button>
