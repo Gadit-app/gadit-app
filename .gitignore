@@ -14,6 +14,12 @@ node_modules
 web/.next/
 web/out/
 
+# vercel
+.vercel
+
+# root-level artifacts (workspace uses web/package-lock.json)
+/package-lock.json
+
 # misc
 .DS_Store
 *.pem

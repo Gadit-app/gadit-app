@@ -1,11 +1,26 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/lib/lang-context";
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
+import { parse as parsePartialJson, Allow } from "partial-json";
 
 interface Meaning {
   meaning: string;
   examples: string[];
+}
+
+interface KidsExplanation {
+  intro: string;
+  explanation: string;
+  examples: string[];
+}
+
+interface Etymology {
+  sourceLanguage: string;
+  originalWord: string;
+  breakdown: string;
+  originalMeaning: string;
 }
 
 interface WordResult {
@@ -13,7 +28,7 @@ interface WordResult {
   language: string;
   multiplemeanings: boolean;
   meanings: Meaning[];
-  etymology: string;
+  etymology: Etymology | string;
   contextNote?: string;
   fromCache?: boolean;
 }
@@ -53,12 +68,63 @@ export default function Home() {
   const [phase, setPhase] = useState<SearchPhase>({ kind: "idle" });
   const [contextInput, setContextInput] = useState("");
   const [error, setError] = useState("");
+  const [kidsExplanation, setKidsExplanation] = useState<KidsExplanation | null>(null);
+  const [kidsLoading, setKidsLoading] = useState(false);
+  const [kidsError, setKidsError] = useState("");
 
   const { t, dir: uiDir, lang } = useLang();
+  const { user, plan, promptLogin } = useAuth();
   const resultRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useSectionObserver();
+
+  async function fetchKidsExplanation(word: string, meaning: string) {
+    if (!user) {
+      promptLogin(t.kidsUpgradeNeeded);
+      return;
+    }
+    if (plan === "basic") {
+      setKidsError(t.kidsUpgradeNeeded);
+      return;
+    }
+    setKidsLoading(true);
+    setKidsError("");
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/explain-for-kids", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ word, meaning, uiLang: lang }),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        if (errData.error === "upgrade_required") {
+          setKidsError(t.kidsUpgradeNeeded);
+        } else {
+          setKidsError(t.kidsError);
+        }
+        return;
+      }
+      const data: KidsExplanation = await res.json();
+      setKidsExplanation(data);
+    } catch (e) {
+      console.error("kids fetch error:", e);
+      setKidsError(t.kidsError);
+    } finally {
+      setKidsLoading(false);
+    }
+  }
+
+  // Reset kids explanation whenever phase changes to a new result
+  useEffect(() => {
+    setKidsExplanation(null);
+    setKidsError("");
+    setKidsLoading(false);
+  }, [phase.kind, phase.kind === "result" ? phase.result.word : null]);
 
   const isIdle = phase.kind === "idle";
   const isLoading = phase.kind === "loading";
@@ -75,20 +141,81 @@ export default function Home() {
       const res = await fetch("/api/define", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word, contextSentence }),
+        body: JSON.stringify({ word, contextSentence, uiLang: lang }),
       });
-      const data: WordResult = await res.json();
-      if ((data as { error?: string }).error) throw new Error((data as { error?: string }).error);
 
-      // If multiple meanings and no context provided — let user choose
-      if (data.multiplemeanings && !contextSentence) {
-        setPhase({ kind: "chooseMeaning", word, result: data });
+      if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finalResult: WordResult | null = null;
+      let startedStreaming = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("data:")) continue;
+          const payload = trimmed.slice(5).trim();
+          if (!payload) continue;
+
+          try {
+            const event = JSON.parse(payload) as
+              | { type: "delta"; partial: string }
+              | { type: "done"; result: WordResult }
+              | { type: "error"; message: string };
+
+            if (event.type === "delta") {
+              try {
+                const partial = parsePartialJson(event.partial, Allow.ALL) as Partial<WordResult>;
+                if (partial && typeof partial === "object") {
+                  const streamingResult: WordResult = {
+                    word: partial.word ?? word,
+                    language: partial.language ?? "",
+                    multiplemeanings: partial.multiplemeanings ?? false,
+                    meanings: partial.meanings ?? [],
+                    etymology: partial.etymology ?? { sourceLanguage: "", originalWord: "", breakdown: "", originalMeaning: "" },
+                    contextNote: partial.contextNote,
+                  };
+                  if (!startedStreaming) {
+                    startedStreaming = true;
+                    scrollToResult();
+                  }
+                  setPhase({ kind: "result", result: streamingResult });
+                }
+              } catch {
+                // partial JSON not yet parseable — keep accumulating
+              }
+            } else if (event.type === "done") {
+              finalResult = event.result;
+            } else if (event.type === "error") {
+              throw new Error(event.message);
+            }
+          } catch (e) {
+            console.error("SSE parse error:", e);
+          }
+        }
+      }
+
+      if (!finalResult) throw new Error("Stream ended without final result");
+
+      // After streaming completes — if multi-meaning without context, switch to chooser
+      if (finalResult.multiplemeanings && !contextSentence) {
+        setPhase({ kind: "chooseMeaning", word, result: finalResult });
         scrollToResult();
       } else {
-        setPhase({ kind: "result", result: data });
-        scrollToResult();
+        setPhase({ kind: "result", result: finalResult });
+        if (!startedStreaming) scrollToResult();
       }
-    } catch {
+    } catch (e) {
+      console.error("fetchWord error:", e);
       setError("Something went wrong. Please try again.");
       setPhase({ kind: "idle" });
     }
@@ -254,7 +381,7 @@ export default function Home() {
                   <button onClick={handleContextSubmit} disabled={!contextInput.trim()} className="btn-primary px-6 py-2.5 text-sm disabled:opacity-50">
                     {t.multiMeaningContextBtn}
                   </button>
-                  <button onClick={() => setPhase({ kind: "chooseMeaning", word: phase.word, result: { word: phase.word, language: "", multiplemeanings: true, meanings: [], etymology: "" } })} className="btn-secondary px-5 py-2.5 text-sm">
+                  <button onClick={() => setPhase({ kind: "chooseMeaning", word: phase.word, result: { word: phase.word, language: "", multiplemeanings: true, meanings: [], etymology: { sourceLanguage: "", originalWord: "", breakdown: "", originalMeaning: "" } } })} className="btn-secondary px-5 py-2.5 text-sm">
                     {t.showAllMeanings}
                   </button>
                 </div>
@@ -269,6 +396,11 @@ export default function Home() {
                 t={t}
                 onReset={reset}
                 onShowAll={() => {/* already showing all */}}
+                plan={plan}
+                kidsExplanation={kidsExplanation}
+                kidsLoading={kidsLoading}
+                kidsError={kidsError}
+                onRequestKids={fetchKidsExplanation}
               />
             )}
           </div>
@@ -450,12 +582,17 @@ export default function Home() {
 }
 
 // ── RESULT VIEW ──
-function ResultView({ result, uiDir, t, onReset }: {
+function ResultView({ result, uiDir, t, onReset, plan, kidsExplanation, kidsLoading, kidsError, onRequestKids }: {
   result: WordResult;
   uiDir: "ltr" | "rtl";
   t: ReturnType<typeof useLang>["t"];
   onReset: () => void;
   onShowAll: () => void;
+  plan: "basic" | "clear" | "deep";
+  kidsExplanation: KidsExplanation | null;
+  kidsLoading: boolean;
+  kidsError: string;
+  onRequestKids: (word: string, meaning: string) => void;
 }) {
   const resultLangDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
   const rDir = resultLangDir;
@@ -515,28 +652,105 @@ function ResultView({ result, uiDir, t, onReset }: {
       {/* Etymology */}
       {result.etymology && (
         <div className="gadit-card px-8 py-6">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{t.etymologyLabel}</p>
-          <p className="text-slate-600 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
-            {result.etymology}
-          </p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">{t.etymologyLabel}</p>
+          {typeof result.etymology === "string" ? (
+            <p className="text-slate-600 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
+              {result.etymology}
+            </p>
+          ) : (
+            <div className="space-y-3 text-sm" style={{ lineHeight: lineH }}>
+              {result.etymology.sourceLanguage && (
+                <div className="flex gap-3 items-baseline">
+                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etySourceLanguage}</span>
+                  <span className="text-slate-700 font-medium">{result.etymology.sourceLanguage}</span>
+                </div>
+              )}
+              {result.etymology.breakdown ? (
+                <div className="flex gap-3 items-baseline">
+                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyBreakdown}</span>
+                  <span className="text-slate-700 italic">{result.etymology.breakdown}</span>
+                </div>
+              ) : (
+                result.etymology.originalWord && (
+                  <div className="flex gap-3 items-baseline">
+                    <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyOriginalWord}</span>
+                    <span className="text-slate-700 italic">{result.etymology.originalWord}</span>
+                  </div>
+                )
+              )}
+              {result.etymology.originalMeaning && (
+                <div className="flex gap-3 items-baseline">
+                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyOriginalMeaning}</span>
+                  <span className="text-slate-600">{result.etymology.originalMeaning}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
-      {/* Upsell */}
-      <div className="rounded-3xl px-8 py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
-        <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all" style={{ boxShadow: "var(--shadow-xs)" }}>
-          <span className="text-xl shrink-0">🧒</span>
-          <p className="font-medium text-slate-700 text-sm">{t.upsellKids}</p>
+      {/* Kids explanation (Clear+) or Upsell (Basic) */}
+      {kidsExplanation ? (
+        <div className="rounded-3xl px-8 py-7 space-y-4" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl shrink-0">🧒</span>
+            <p className="text-base font-semibold text-amber-900">{kidsExplanation.intro}</p>
+          </div>
+          <p className="text-slate-700 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
+            {kidsExplanation.explanation}
+          </p>
+          <ul className="space-y-2 pt-2 border-t border-amber-200">
+            {kidsExplanation.examples.map((ex, j) => (
+              <li key={j} className="flex gap-2.5 text-slate-600 text-sm" style={{ lineHeight: lineH }}>
+                <span className="shrink-0 font-semibold mt-0.5 text-amber-600">•</span>
+                <span>{ex}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all" style={{ boxShadow: "var(--shadow-xs)" }}>
-          <span className="text-xl shrink-0">🖼️</span>
-          <p className="font-medium text-slate-700 text-sm">{t.upsellVisual}</p>
+      ) : (
+        <div className="rounded-3xl px-8 py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
+          {plan === "basic" && (
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
+          )}
+          {(() => {
+            const canUseKids = plan === "clear" || plan === "deep";
+            const firstMeaning = result.meanings[0]?.meaning || "";
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  if (canUseKids) {
+                    onRequestKids(result.word, firstMeaning);
+                  } else {
+                    window.location.href = "/pricing";
+                  }
+                }}
+                disabled={kidsLoading}
+                className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all disabled:opacity-60"
+                style={{ boxShadow: "var(--shadow-xs)" }}
+              >
+                <span className="text-xl shrink-0">🧒</span>
+                <p className="font-medium text-slate-700 text-sm">
+                  {kidsLoading ? t.kidsGenerating : (canUseKids ? t.forKids : t.upsellKids)}
+                </p>
+              </button>
+            );
+          })()}
+          {kidsError && (
+            <p className="text-sm text-amber-700 px-1">{kidsError}</p>
+          )}
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all" style={{ boxShadow: "var(--shadow-xs)" }}>
+            <span className="text-xl shrink-0">🖼️</span>
+            <p className="font-medium text-slate-700 text-sm">{t.upsellVisual}</p>
+          </div>
+          {plan === "basic" && (
+            <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block mt-1">
+              {t.upsellBtn}
+            </Link>
+          )}
         </div>
-        <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block mt-1">
-          {t.upsellBtn}
-        </Link>
-      </div>
+      )}
 
       {/* Back */}
       <button onClick={onReset} className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-colors">

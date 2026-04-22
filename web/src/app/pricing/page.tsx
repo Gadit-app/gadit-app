@@ -20,7 +20,7 @@ export default function PricingPage() {
       yearlyPrice: 0,
       monthlyPriceId: null as string | null,
       yearlyPriceId: null as string | null,
-      features: [t.searchesPerDay, t.fullDefinition, t.examples, t.forKidsFeature, t.basicEtymology],
+      features: [t.searchesPerDay, t.fullDefinition, t.examples, t.basicEtymology],
       cta: t.startFree,
       popular: false,
       note: null as string | null,

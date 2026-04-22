@@ -42,10 +42,17 @@ export const T: Record<Lang, {
   definitionsLabel: string;
   examplesLabel: string;
   etymologyLabel: string;
+  etySourceLanguage: string;
+  etyOriginalWord: string;
+  etyOriginalMeaning: string;
+  etyBreakdown: string;
   understandMore: string;
   goDeeper: string;
   moreExamples: string;
   forKids: string;
+  kidsGenerating: string;
+  kidsError: string;
+  kidsUpgradeNeeded: string;
   opposite: string;
   confusable: string;
   register: string;
@@ -191,10 +198,17 @@ export const T: Record<Lang, {
     definitionsLabel: "Meanings",
     examplesLabel: "Examples",
     etymologyLabel: "Origin",
+    etySourceLanguage: "From",
+    etyOriginalWord: "Original",
+    etyOriginalMeaning: "Meant",
+    etyBreakdown: "Parts",
     understandMore: "Understand more ↓",
     goDeeper: "Go deeper ↓",
     moreExamples: "More examples",
     forKids: "Explain like I'm 10",
+    kidsGenerating: "Creating a kid-friendly explanation...",
+    kidsError: "Couldn't create the explanation. Try again.",
+    kidsUpgradeNeeded: "Upgrade to Clear to unlock kid-friendly explanations →",
     opposite: "Opposite",
     confusable: "Don't confuse with",
     register: "Register",
@@ -338,10 +352,17 @@ export const T: Record<Lang, {
     definitionsLabel: "משמעויות",
     examplesLabel: "דוגמאות",
     etymologyLabel: "מקור המילה",
+    etySourceLanguage: "משפה",
+    etyOriginalWord: "מילה מקורית",
+    etyOriginalMeaning: "משמעות מקורית",
+    etyBreakdown: "חלקי מילה",
     understandMore: "הבן יותר ↓",
     goDeeper: "העמק ↓",
     moreExamples: "עוד דוגמאות",
     forKids: "הסבר לילדים",
+    kidsGenerating: "יוצרים הסבר ידידותי לילדים...",
+    kidsError: "לא הצלחנו ליצור את ההסבר. נסה שוב.",
+    kidsUpgradeNeeded: "שדרג ל-Clear כדי לקבל הסברים ידידותיים לילדים ←",
     opposite: "הפך",
     confusable: "לא להתבלבל עם",
     register: "רישום",
@@ -485,10 +506,17 @@ export const T: Record<Lang, {
     definitionsLabel: "المعاني",
     examplesLabel: "أمثلة",
     etymologyLabel: "أصل الكلمة",
+    etySourceLanguage: "من لغة",
+    etyOriginalWord: "الكلمة الأصلية",
+    etyOriginalMeaning: "المعنى الأصلي",
+    etyBreakdown: "أجزاء الكلمة",
     understandMore: "↓ فهم أكثر",
     goDeeper: "↓ تعمق أكثر",
     moreExamples: "مزيد من الأمثلة",
     forKids: "شرح للأطفال",
+    kidsGenerating: "جاري إنشاء شرح ودود للأطفال...",
+    kidsError: "تعذر إنشاء الشرح. حاول مرة أخرى.",
+    kidsUpgradeNeeded: "قم بالترقية إلى Clear لفتح شروح ودودة للأطفال ←",
     opposite: "المعاكس",
     confusable: "لا تخلط مع",
     register: "المستوى اللغوي",
@@ -632,10 +660,17 @@ export const T: Record<Lang, {
     definitionsLabel: "Значения",
     examplesLabel: "Примеры",
     etymologyLabel: "Происхождение",
+    etySourceLanguage: "Из языка",
+    etyOriginalWord: "Исходное слово",
+    etyOriginalMeaning: "Исходный смысл",
+    etyBreakdown: "Части слова",
     understandMore: "Подробнее ↓",
     goDeeper: "Глубже ↓",
     moreExamples: "Ещё примеры",
     forKids: "Объясни как ребёнку",
+    kidsGenerating: "Создаём объяснение для детей...",
+    kidsError: "Не удалось создать объяснение. Попробуй ещё раз.",
+    kidsUpgradeNeeded: "Перейди на Clear, чтобы открыть объяснения для детей →",
     opposite: "Антоним",
     confusable: "Не путать с",
     register: "Регистр",
