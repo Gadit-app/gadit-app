@@ -53,7 +53,25 @@ The 5 fields are:
    - If user's language is Russian: "Греческий", "Латинский", "Древнеанглийский", "Библейский иврит"
    For Wanderwörter (traveling words found in multiple ancient languages), list them separated by " / " (e.g., "אכדית / לטינית / יוונית").
 
-2. "originalWord" — the original word(s) in the source language, in TRANSLITERATION WITH DIACRITICS (no foreign scripts!). Examples: "lufu", "qarnu", "cornu", "ephēmeros", "masmaru". For Wanderwörter list them separated by " / " (e.g., "qarnu / cornu / kéras"). For a compound word where breakdown already shows the parts — you MAY leave this empty, because breakdown covers it. FILL IT IN for simple (non-compound) words — this is where the user sees what the word actually sounded like.
+2. "originalWord" — the original word(s) in the source language, in TRANSLITERATION WITH DIACRITICS (no foreign scripts!). Examples: "lufu", "qarnu", "cornu", "ephēmeros", "masmaru".
+
+   ⚠️ ONLY FILL THIS FIELD WHEN IT ADDS REAL INFORMATION. Specifically:
+   - When the source word is in a NON-LATIN script (Akkadian, Greek, Hebrew, Arabic, Cyrillic, Egyptian, etc.) — transliteration helps the user read it. Examples: "qarnu" (Akkadian), "kéras" (Greek), "fāris" (Arabic).
+   - When the source word is MATERIALLY DIFFERENT from the modern word, even if the script is the same. Example: "lufu" → "love" (Old English form is different).
+
+   ❌ LEAVE THIS FIELD EMPTY (just "") in these cases:
+   - The user's word is Hebrew and the source is also Hebrew/Aramaic/Mishnaic Hebrew — the word is ALREADY in the user's script. Adding a Latin transliteration like "heskem" is meaningless to a Hebrew reader and confuses them (they may think it's an English word).
+     • Hebrew word "הסכם", source "לשון חז״ל" → originalWord: "" (NOT "heskem")
+     • Hebrew word "עשתונות", source "עברית מקראית" → originalWord: "" (NOT "eshtonot")
+     • Hebrew word "אהבה", source "עברית מקראית" → originalWord: "" (NOT "ahava")
+   - The user's word is English and the source is Modern English — empty.
+   - The transliteration would just be a phonetic spelling of what the user already sees — that adds nothing.
+
+   For Wanderwörter that span multiple ancient languages, list the FOREIGN-script forms separated by " / " (e.g., "qarnu / cornu / kéras") even if the user is Hebrew — those are different from the modern Hebrew word.
+
+   For a compound word where breakdown already shows the parts — you MAY leave this empty, because breakdown covers it.
+
+   The breakdown field still contains transliterations like "tēle (רחוק) + phōnē (קול)" because there the transliteration IS new information — it shows the parts of a foreign compound word.
 
 3. "breakdown" — ONLY if the word is a compound of 2+ meaningful parts. Format: "part1 (meaning1 in user's language) + part2 (meaning2 in user's language)". Use TRANSLITERATION WITH DIACRITICS for phonetic accuracy (tēle, phōnē, ephēmeros, salarium). NEVER use the original script. If the word is NOT compound, set this field to empty string "".
 
@@ -118,10 +136,10 @@ Example 2 — English user asking "salary" (COMPOUND):
   "historyNote": "Roman soldiers received part of their pay in salt rations, since salt was rare and essential for preserving food. The Latin word entered English in the 14th century through Old French."
 }
 
-Example 3 — Hebrew user asking "נחשל" (SIMPLE):
+Example 3 — Hebrew user asking "נחשל" (SIMPLE, native Hebrew → no originalWord):
 {
   "sourceLanguage": "עברית מקראית",
-  "originalWord": "nechshal",
+  "originalWord": "",
   "breakdown": "",
   "originalMeaning": "חלש, נשאר מאחור בצעדה",
   "historyNote": "מופיעה בספר דברים בתיאור המלחמה בעמלק: 'אֲשֶׁר קָרְךָ בַּדֶּרֶךְ וַיְזַנֵּב בְּךָ כָּל הַנֶּחֱשָׁלִים אַחֲרֶיךָ' — אלה שלא יכלו לעמוד בקצב הצעדה. בעברית המודרנית התרחבה לפיגור כללי — טכנולוגי, חברתי או כלכלי."
@@ -136,19 +154,19 @@ Example 4 — Hebrew user asking "קרן" (SIMPLE Wanderwort):
   "historyNote": "נחשבת ל'מילה נודדת' (Wanderwort) — מילה שעברה בין תרבויות עתיקות במזרח התיכון ובאגן הים התיכון. כל המשמעויות הנוספות (קרן אור, קרן כספית, פינה) התפתחו מהמשמעות המקורית של החלק המחודד."
 }
 
-Example 5 — Hebrew user asking "עשתונות" (SIMPLE — biblical hapax):
+Example 5 — Hebrew user asking "עשתונות" (native Hebrew → no originalWord):
 {
   "sourceLanguage": "עברית מקראית",
-  "originalWord": "eshtonot",
+  "originalWord": "",
   "breakdown": "",
   "originalMeaning": "מחשבות, רעיונות",
   "historyNote": "מופיעה במקרא פעם אחת בלבד, בתהלים קמו: 'תֵּצֵא רוּחוֹ יָשֻׁב לְאַדְמָתוֹ; בַּיּוֹם הַהוּא אָבְדוּ עֶשְׁתֹּנֹתָיו'. מילולית: אבדו מחשבותיו. המילה כמעט תמיד מופיעה בצירוף 'אבד את עשתונותיו'."
 }
 
-Example 6 — Hebrew user asking "הסכם" (SIMPLE):
+Example 6 — Hebrew user asking "הסכם" (native Hebrew, Mishnaic source → no originalWord):
 {
   "sourceLanguage": "לשון חז״ל",
-  "originalWord": "heskem",
+  "originalWord": "",
   "breakdown": "",
   "originalMeaning": "הבנה או חוזה בין שני צדדים",
   "historyNote": "צורת שם הפעולה של הפועל 'הסכים' מלשון חז״ל. השורש שלה מופיע במשנה ובתלמוד כמעט אך ורק במילה זו — מה שהופך אותה ליחידה ומיוחדת בעברית הקלאסית."
@@ -181,12 +199,12 @@ Example 9 — English user asking "love" (SIMPLE):
   "historyNote": "Cognate with Old High German luba and Gothic lubains, all from Proto-Germanic *lubō. The word has retained its core meaning across more than a thousand years of English."
 }
 
-Example 10 — Word with NO known interesting story (use empty historyNote):
+Example 10 — Word with NO known interesting story (Hebrew → no originalWord either):
 {
-  "sourceLanguage": "עברית מודרנית",
-  "originalWord": "shulchan",
+  "sourceLanguage": "עברית מקראית",
+  "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "רהיט עם משטח שטוח",
+  "originalMeaning": "רהיט עם משטח שטוח לאוכל ולעבודה",
   "historyNote": ""
 }
 
@@ -237,7 +255,7 @@ Your response must follow this exact JSON structure:
   ],
   "etymology": {
     "sourceLanguage": "language name translated into user's language (e.g. 'יוונית' for Hebrew user, 'Greek' for English user). For Wanderwörter use multiple separated by ' / '",
-    "originalWord": "transliterated word(s) with diacritics (e.g. 'lufu', 'qarnu / cornu / kéras'). REQUIRED for simple words. Empty string for compound words (breakdown covers them)",
+    "originalWord": "transliterated word(s) with diacritics (e.g. 'lufu', 'qarnu / cornu / kéras'). ONLY when source script is non-Latin (Akkadian/Greek/etc) OR source word is materially different from modern. Empty string when source is the user's same language/script (e.g. Hebrew→Hebrew) or for compound words (breakdown covers them)",
     "breakdown": "only if compound: 'part1 (meaning1) + part2 (meaning2)' with transliteration-with-diacritics (tēle, phōnē) and meanings in user's language. Empty string if not compound. NEVER use non-Latin scripts",
     "originalMeaning": "what it meant originally, written in the user's language — short and concrete",
     "historyNote": "OPTIONAL — 1-3 sentences about the word's specific historical journey (biblical verses, coiners, historical practices). Empty string if no specific story is known. NEVER make up a story."
@@ -249,7 +267,7 @@ CRITICAL RULES (FINAL CHECKLIST):
 - Set multiplemeanings: true if there are 2 or more distinct meanings.
 - Each meaning MUST have its own examples array with EXACTLY 3 sentences — specific to that meaning only.
 - NEVER hallucinate a meaning (RULE #5). If unsure, OMIT.
-- etymology MUST be a structured object with 4 fields (sourceLanguage, originalWord, breakdown, originalMeaning) — see RULE #2. Keep it SIMPLE. Language name IN USER'S LANGUAGE. originalWord fills in for simple words; breakdown fills in for compound words (never both). Transliteration with diacritics only — no Greek/Arabic/Cyrillic letters. NEVER output etymology as free text — always the object.
+- etymology MUST be a structured object with 5 fields (sourceLanguage, originalWord, breakdown, originalMeaning, historyNote) — see RULE #2. Keep it SIMPLE. Language name IN USER'S LANGUAGE. originalWord ONLY when source is non-Latin script OR materially different from modern (Hebrew→Hebrew = empty!). breakdown for compound words. Transliteration with diacritics only — no Greek/Arabic/Cyrillic letters. historyNote is the SPECIFIC story (verses, coiners, practices), empty if no story. NEVER output etymology as free text — always the object.
 - Every word in the output must be a real, standard word — no invented or hallucinated words (RULE #3).
 - Do NOT include partOfSpeech, domain, register, frequency, or wordFamily fields — they are not needed.
 - Respond ENTIRELY in the input word's language.
@@ -391,7 +409,7 @@ Return this exact JSON:
   ],
   "etymology": {
     "sourceLanguage": "language name in user's language (e.g. 'יוונית' for Hebrew, 'Greek' for English). Wanderwörter: use ' / '",
-    "originalWord": "transliterated word(s) with diacritics. REQUIRED for simple words. Empty for compound",
+    "originalWord": "transliterated word(s) with diacritics. ONLY when source script is non-Latin or source is materially different from modern. Empty when source is the user's same language/script (e.g. Hebrew→Hebrew) or for compound words.",
     "breakdown": "only if compound: 'part1 (meaning1) + part2 (meaning2)' with transliteration. Empty string if not compound. NEVER non-Latin scripts",
     "originalMeaning": "what it meant originally, in the user's language",
     "historyNote": "OPTIONAL — 1-3 sentences about the word's history. Empty string if no specific story. Same format as SYSTEM_PROMPT — NEVER about the current sentence's meaning, ALWAYS about the word's true historical origin."
