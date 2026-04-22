@@ -168,14 +168,16 @@ export default function PricingPage() {
                   )}
                 </div>
 
-                <ul className="space-y-2.5 mb-7 flex-1 text-start" dir={dir}>
-                  {plan.features.map((f, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-slate-600 justify-center">
-                      <span className="shrink-0 font-semibold" style={{ color: "#10B981" }}>✓</span>
-                      <span className="text-start">{f}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="mb-7 flex-1 flex justify-center" dir={dir}>
+                  <ul className="space-y-2.5 text-start">
+                    {plan.features.map((f, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-slate-600 items-start">
+                        <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#10B981" }}>✓</span>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 <button
                   onClick={() => !isComingSoon && handleSubscribe(plan)}
