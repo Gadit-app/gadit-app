@@ -31,6 +31,7 @@ interface Etymology {
   originalWord: string;
   breakdown: string;
   originalMeaning: string;
+  historyNote?: string;
 }
 
 interface WordResult {
@@ -736,6 +737,12 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
                 <div className="flex gap-3 items-baseline">
                   <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyOriginalMeaning}</span>
                   <span className="text-slate-600">{result.etymology.originalMeaning}</span>
+                </div>
+              )}
+              {result.etymology.historyNote && (
+                <div className="flex gap-3 items-baseline pt-2 border-t border-slate-100">
+                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyHistoryNote}</span>
+                  <span className="text-slate-600 leading-relaxed">{result.etymology.historyNote}</span>
                 </div>
               )}
             </div>

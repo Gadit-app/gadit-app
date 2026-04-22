@@ -54,6 +54,7 @@ export const T: Record<Lang, {
   etyOriginalWord: string;
   etyOriginalMeaning: string;
   etyBreakdown: string;
+  etyHistoryNote: string;
   generateImage: string;
   generatingImage: string;
   imageFailed: string;
@@ -227,6 +228,7 @@ export const T: Record<Lang, {
     etyOriginalWord: "Original",
     etyOriginalMeaning: "Meant",
     etyBreakdown: "Parts",
+    etyHistoryNote: "Background",
     generateImage: "Generate image",
     generatingImage: "Creating image…",
     imageFailed: "Couldn't create image. Try again.",
@@ -398,6 +400,7 @@ export const T: Record<Lang, {
     etyOriginalWord: "מילה מקורית",
     etyOriginalMeaning: "משמעות מקורית",
     etyBreakdown: "חלקי מילה",
+    etyHistoryNote: "רקע",
     generateImage: "צור תמונה",
     generatingImage: "יוצרים תמונה…",
     imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
@@ -569,6 +572,7 @@ export const T: Record<Lang, {
     etyOriginalWord: "الكلمة الأصلية",
     etyOriginalMeaning: "المعنى الأصلي",
     etyBreakdown: "أجزاء الكلمة",
+    etyHistoryNote: "خلفية",
     generateImage: "إنشاء صورة",
     generatingImage: "جاري إنشاء الصورة…",
     imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
@@ -740,6 +744,7 @@ export const T: Record<Lang, {
     etyOriginalWord: "Исходное слово",
     etyOriginalMeaning: "Исходный смысл",
     etyBreakdown: "Части слова",
+    etyHistoryNote: "Фон",
     generateImage: "Создать изображение",
     generatingImage: "Создаём изображение…",
     imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
