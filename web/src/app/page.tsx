@@ -7,6 +7,12 @@ import VoiceInput from "@/components/VoiceInput";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
+interface HistoryItem {
+  word: string;
+  uiLang: string;
+  timestamp: string;
+}
+
 interface KidsExplanation {
   // intro is deprecated — the UI now uses a fixed i18n label (t.kidsLabel).
   // Kept optional for backward compatibility with older cached entries.
@@ -84,10 +90,37 @@ export default function Home() {
   const { t, dir: uiDir, lang } = useLang();
   const { user, plan } = useAuth();
   const [kidsMode, setKidsMode] = useKidsMode();
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const isPaidPlan = plan === "clear" || plan === "deep";
   const resultRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useSectionObserver();
+
+  // Load search history when a paid user lands on the page
+  useEffect(() => {
+    if (!user || !isPaidPlan) {
+      setHistory([]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/history", {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as { items?: HistoryItem[] };
+        if (!cancelled) setHistory(data.items ?? []);
+      } catch (e) {
+        console.error("history load:", e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user, isPaidPlan]);
 
   const isIdle = phase.kind === "idle";
   const isLoading = phase.kind === "loading";
@@ -179,10 +212,54 @@ export default function Home() {
       if (!finalResult) throw new Error("Stream ended without final result");
       setPhase({ kind: "result", result: finalResult });
       if (!startedStreaming) scrollToResult();
+
+      // Save to history (paid users only) — fire and forget, optimistic local update
+      if (user && isPaidPlan) {
+        const newItem: HistoryItem = {
+          word: word.trim(),
+          uiLang: lang,
+          timestamp: new Date().toISOString(),
+        };
+        setHistory((prev) => {
+          const filtered = prev.filter(
+            (h) => !(h.word === newItem.word && h.uiLang === newItem.uiLang)
+          );
+          return [newItem, ...filtered].slice(0, 10);
+        });
+        (async () => {
+          try {
+            const idToken = await user.getIdToken();
+            await fetch("/api/history", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${idToken}`,
+              },
+              body: JSON.stringify({ word: newItem.word, uiLang: lang }),
+            });
+          } catch (e) {
+            console.error("history save:", e);
+          }
+        })();
+      }
     } catch (e) {
       console.error("fetchWord error:", e);
       setError("Something went wrong. Please try again.");
       setPhase({ kind: "idle" });
+    }
+  }
+
+  async function clearHistory() {
+    if (!user || !isPaidPlan) return;
+    setHistory([]);
+    try {
+      const idToken = await user.getIdToken();
+      await fetch("/api/history", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+    } catch (e) {
+      console.error("history clear:", e);
     }
   }
 
@@ -346,6 +423,35 @@ export default function Home() {
                     />
                   </span>
                 </button>
+              </div>
+            )}
+
+            {/* Recent searches — paid users only, idle only */}
+            {isIdle && isPaidPlan && history.length > 0 && (
+              <div className="mt-6" dir={uiDir}>
+                <div className="flex items-center justify-between mb-2 px-1">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.historyTitle}</p>
+                  <button
+                    type="button"
+                    onClick={clearHistory}
+                    className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    {t.historyClear}
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {history.map((h) => (
+                    <button
+                      key={`${h.uiLang}|${h.word}|${h.timestamp}`}
+                      type="button"
+                      onClick={() => handleSearch(h.word)}
+                      className="px-3 py-1.5 rounded-full text-sm bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition-all"
+                      style={{ boxShadow: "var(--shadow-xs)" }}
+                    >
+                      {h.word}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -894,19 +1000,38 @@ function MeaningImage({ word, meaning, uiLang, getIdToken, t, lineH }: {
     );
   }
 
+  if (loading) {
+    return (
+      <div
+        className="rounded-3xl relative overflow-hidden"
+        style={{
+          border: "1px solid rgb(226 232 240)",
+          aspectRatio: "1 / 1",
+          background: "linear-gradient(135deg, rgb(241 245 249) 0%, rgb(226 232 240) 50%, rgb(241 245 249) 100%)",
+          backgroundSize: "200% 200%",
+          animation: "gadit-skeleton 2.5s ease-in-out infinite",
+        }}
+      >
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate-400">
+          <span className="text-5xl" style={{ animation: "gadit-pulse 1.6s ease-in-out infinite" }}>🎨</span>
+          <p className="text-sm font-medium" style={{ lineHeight: lineH }}>
+            {t.generatingImage}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <button
         type="button"
         onClick={handleGenerate}
-        disabled={loading}
-        className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all disabled:opacity-60"
+        className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all"
         style={{ boxShadow: "var(--shadow-xs)" }}
       >
         <span className="text-xl shrink-0">🎨</span>
-        <p className="font-medium text-slate-700 text-sm">
-          {loading ? t.generatingImage : t.generateImage}
-        </p>
+        <p className="font-medium text-slate-700 text-sm">{t.generateImage}</p>
       </button>
       {error && (
         <p className="text-sm text-amber-700 px-1 mt-2" style={{ lineHeight: lineH }}>{error}</p>

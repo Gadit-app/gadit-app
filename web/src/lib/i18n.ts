@@ -83,6 +83,10 @@ export const T: Record<Lang, {
   accountLoading: string;
   accountErrorLoading: string;
   accountNav: string;
+  // Search history
+  historyTitle: string;
+  historyClear: string;
+  historyEmpty: string;
   generatingImage: string;
   imageFailed: string;
   imageLimitReached: string;
@@ -283,6 +287,9 @@ export const T: Record<Lang, {
     accountLoading: "Loading…",
     accountErrorLoading: "Couldn't load account info. Try refreshing.",
     accountNav: "Account",
+    historyTitle: "Recent searches",
+    historyClear: "Clear",
+    historyEmpty: "No recent searches yet",
     generatingImage: "Creating image…",
     imageFailed: "Couldn't create image. Try again.",
     imageLimitReached: "Monthly image limit reached. Upgrade to Deep for more.",
@@ -349,7 +356,7 @@ export const T: Record<Lang, {
     searchesPerDay: "20 searches per day",
     fullDefinition: "Full definition",
     examples: "Examples",
-    forKidsFeature: "Kid-friendly explanation",
+    forKidsFeature: "Simple kids explanation",
     basicEtymology: "Word origin",
     allLanguages: "All 10 languages",
     unlimitedSearches: "Unlimited searches",
@@ -481,6 +488,9 @@ export const T: Record<Lang, {
     accountLoading: "טוען…",
     accountErrorLoading: "לא הצלחנו לטעון את פרטי החשבון. נסה לרענן.",
     accountNav: "החשבון שלי",
+    historyTitle: "חיפושים אחרונים",
+    historyClear: "נקה",
+    historyEmpty: "עדיין אין חיפושים",
     generatingImage: "יוצרים תמונה…",
     imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
     imageLimitReached: "הגעת למכסת התמונות החודשית. שדרג ל-Deep למכסה גדולה יותר.",
@@ -547,7 +557,7 @@ export const T: Record<Lang, {
     searchesPerDay: "20 חיפושים ביום",
     fullDefinition: "הגדרה מלאה",
     examples: "דוגמאות",
-    forKidsFeature: "הסבר ידידותי לילדים",
+    forKidsFeature: "הסבר פשוט לילדים",
     basicEtymology: "מקור המילה",
     allLanguages: "כל 10 השפות",
     unlimitedSearches: "חיפושים ללא הגבלה",
@@ -679,6 +689,9 @@ export const T: Record<Lang, {
     accountLoading: "جاري التحميل…",
     accountErrorLoading: "تعذر تحميل معلومات الحساب. حاول التحديث.",
     accountNav: "حسابي",
+    historyTitle: "عمليات البحث الأخيرة",
+    historyClear: "مسح",
+    historyEmpty: "لا توجد عمليات بحث بعد",
     generatingImage: "جاري إنشاء الصورة…",
     imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
     imageLimitReached: "وصلت إلى الحد الشهري للصور. قم بالترقية إلى Deep للحصول على المزيد.",
@@ -745,7 +758,7 @@ export const T: Record<Lang, {
     searchesPerDay: "20 بحثاً يومياً",
     fullDefinition: "تعريف كامل",
     examples: "أمثلة",
-    forKidsFeature: "شرح ودود للأطفال",
+    forKidsFeature: "شرح بسيط للأطفال",
     basicEtymology: "أصل الكلمة",
     allLanguages: "جميع اللغات العشر",
     unlimitedSearches: "بحث غير محدود",
@@ -877,6 +890,9 @@ export const T: Record<Lang, {
     accountLoading: "Загрузка…",
     accountErrorLoading: "Не удалось загрузить информацию об аккаунте.",
     accountNav: "Мой аккаунт",
+    historyTitle: "Недавние запросы",
+    historyClear: "Очистить",
+    historyEmpty: "Пока нет недавних запросов",
     generatingImage: "Создаём изображение…",
     imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
     imageLimitReached: "Достигнут месячный лимит изображений. Перейди на Deep для увеличения.",
@@ -943,7 +959,7 @@ export const T: Record<Lang, {
     searchesPerDay: "20 поисков в день",
     fullDefinition: "Полное определение",
     examples: "Примеры",
-    forKidsFeature: "Объяснение для детей",
+    forKidsFeature: "Простое объяснение для детей",
     basicEtymology: "Происхождение слова",
     allLanguages: "Все 10 языков",
     unlimitedSearches: "Безлимитный поиск",
