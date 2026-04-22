@@ -20,10 +20,11 @@ function cacheKey(word: string, meaning: string, uiLang: string): string {
 }
 
 function buildDallePrompt(word: string, meaning: string): string {
-  // Concise visual prompt: focus on the concept, avoid text/letters.
-  // Meaning is truncated to keep prompt tight.
+  // Goal: a simple, instantly-recognizable photograph of the concept.
+  // We give DALL-E both the word AND the definition to anchor the subject,
+  // and demand a plain, realistic image — not artistic interpretations.
   const trimmedMeaning = meaning.length > 200 ? meaning.slice(0, 200) : meaning;
-  return `A clear, warm, illustrative image representing the concept: "${trimmedMeaning}". Soft lighting, simple composition, educational style. ABSOLUTELY NO text, letters, words, numbers, captions, or written characters anywhere in the image.`;
+  return `A clear, simple, realistic photograph that unambiguously shows: "${word}" — defined as: ${trimmedMeaning}. The image must show the actual everyday thing the word refers to, exactly as a person would recognize it in real life. Plain neutral background, well-lit, the subject is the main focus and clearly identifiable. NOT artistic, NOT abstract, NOT decorative — just a clean recognizable example of the thing itself. ABSOLUTELY NO text, letters, words, numbers, captions, or written characters anywhere in the image.`;
 }
 
 export async function POST(req: NextRequest) {
