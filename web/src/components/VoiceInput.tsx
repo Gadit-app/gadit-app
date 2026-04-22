@@ -125,36 +125,68 @@ export default function VoiceInput({
     else if (state === "idle" || state === "error") startRecording();
   }
 
-  const sizeClass = size === "sm" ? "w-7 h-7 text-xs" : "w-9 h-9 text-sm";
+  const sizeClass = size === "sm" ? "w-8 h-8" : "w-10 h-10";
+  const iconSize = size === "sm" ? 16 : 20;
 
   // Visuals per state
   let bg = "transparent";
   let color = "rgb(100 116 139)";
-  let border = "1px solid rgb(226 232 240)";
-  let icon = "🎤";
+  let border = "none";
   if (state === "recording") {
-    bg = "rgb(254 226 226)";
-    color = "rgb(220 38 38)";
-    border = "1px solid rgb(252 165 165)";
-    icon = "⏹";
+    bg = "rgb(239 68 68)"; // red — visually distinct, classic recording cue
+    color = "white";
   } else if (state === "transcribing") {
     bg = "rgb(239 246 255)";
     color = "rgb(37 99 235)";
-    border = "1px solid rgb(147 197 253)";
-    icon = "…";
   }
+
+  // Material-style mic icon (filled). When recording, show a stop square.
+  // When transcribing, show a small spinner.
+  function renderIcon() {
+    if (state === "transcribing") {
+      return (
+        <svg
+          width={iconSize}
+          height={iconSize}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        >
+          <path d="M21 12a9 9 0 1 1-6.22-8.56" style={{ animation: "spin 0.8s linear infinite", transformOrigin: "center" }} />
+        </svg>
+      );
+    }
+    if (state === "recording") {
+      return (
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="6" width="12" height="12" rx="2" />
+        </svg>
+      );
+    }
+    // Idle: standard microphone icon (Material Design style)
+    return (
+      <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z" />
+        <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.93V20H8a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2h-3v-2.07A7 7 0 0 0 19 11z" />
+      </svg>
+    );
+  }
+
+  const hoverClass = state === "idle" || state === "error" ? "hover:bg-slate-100 hover:text-slate-700" : "";
 
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={state === "transcribing"}
-      className={`${sizeClass} rounded-full flex items-center justify-center shrink-0 transition-all hover:opacity-80 disabled:opacity-60 disabled:cursor-wait`}
+      className={`${sizeClass} rounded-full flex items-center justify-center shrink-0 transition-all ${hoverClass} disabled:opacity-60 disabled:cursor-wait ${state === "recording" ? "animate-pulse" : ""}`}
       style={{ background: bg, color, border }}
       title={errorMsg || title || "Voice input"}
       aria-label="Voice input"
     >
-      <span className={state === "recording" ? "animate-pulse" : ""}>{icon}</span>
+      {renderIcon()}
     </button>
   );
 }
