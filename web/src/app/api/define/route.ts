@@ -171,12 +171,13 @@ const KIDS_ADDON = `
 🟢 ADDITIONAL INSTRUCTION FOR THIS USER (paid plan):
 For EVERY meaning in meanings[], you must ALSO include a "kidsExplanation" field — a simple, warm explanation suitable for a child aged 6-10, WRITTEN IN THE USER'S UI LANGUAGE.
 
-Format of kidsExplanation (inside each meaning item):
+Format of kidsExplanation (inside each meaning item) — EXACTLY TWO FIELDS:
 {
-  "intro": "A warm inviting opening — e.g. 'בואו נסביר את המשמעות הזו לילדים!' / 'Let's explain this meaning like you're 10!' / 'دعونا نشرح هذا المعنى للأطفال!' / 'Давайте объясним это значение ребёнку!'",
   "explanation": "The meaning in very simple words a child understands — 1-2 short sentences. No jargon, no abstraction. Like a parent explaining to their kid.",
   "examples": ["three simple everyday child-friendly examples", "relatable to a child's world — home, toys, pets, school, playground", "concrete and fun"]
 }
+
+DO NOT include an "intro" field — the UI shows a fixed label ("Kids explanation" / "הסבר לילדים" etc.) based on user locale.
 
 CRITICAL RULES for kidsExplanation:
 - The kidsExplanation is SPECIFIC to THIS meaning, not the word in general. If the word "קרן" has the meaning "horn of an animal", the kids explanation talks about animals with horns. If the meaning is "ray of light", it talks about sunlight — not about animals.
@@ -185,7 +186,6 @@ CRITICAL RULES for kidsExplanation:
 
 Example — word "קרן" meaning "ray of light" — Hebrew user:
 "kidsExplanation": {
-  "intro": "בואו נסביר את המשמעות הזו לילדים!",
   "explanation": "קרן אור זה כמו פס דק של אור שבא ממקור כמו השמש או פנס. אפשר לראות אותה כשהאור עובר דרך חור או ערפל.",
   "examples": [
     "בבוקר, קרן שמש נכנסת דרך החלון ומאירה את המיטה שלך.",
@@ -196,7 +196,6 @@ Example — word "קרן" meaning "ray of light" — Hebrew user:
 
 Example — word "ephemeral" — English user:
 "kidsExplanation": {
-  "intro": "Let's explain this like you're 10!",
   "explanation": "Ephemeral means something that only lasts a very short time. Like a soap bubble that pops right after you make it.",
   "examples": [
     "Ice cream on a hot summer day is ephemeral — it melts super fast.",

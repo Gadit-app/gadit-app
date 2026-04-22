@@ -6,7 +6,9 @@ import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
 interface KidsExplanation {
-  intro: string;
+  // intro is deprecated — the UI now uses a fixed i18n label (t.kidsLabel).
+  // Kept optional for backward compatibility with older cached entries.
+  intro?: string;
   explanation: string;
   examples: string[];
 }
@@ -615,7 +617,7 @@ function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang }: {
             <div className="rounded-3xl px-8 py-6 space-y-3" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl shrink-0">🧒</span>
-                <p className="text-base font-semibold text-amber-900">{m.kidsExplanation.intro}</p>
+                <p className="text-base font-semibold text-amber-900">{t.kidsLabel}</p>
               </div>
               <p className="text-slate-700 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
                 {m.kidsExplanation.explanation}

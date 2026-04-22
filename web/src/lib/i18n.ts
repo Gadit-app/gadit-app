@@ -54,6 +54,7 @@ export const T: Record<Lang, {
   goDeeper: string;
   moreExamples: string;
   forKids: string;
+  kidsLabel: string;
   kidsGenerating: string;
   kidsError: string;
   kidsUpgradeNeeded: string;
@@ -216,6 +217,7 @@ export const T: Record<Lang, {
     goDeeper: "Go deeper ↓",
     moreExamples: "More examples",
     forKids: "Explain like I'm 10",
+    kidsLabel: "Kids explanation",
     kidsGenerating: "Creating a kid-friendly explanation...",
     kidsError: "Couldn't create the explanation. Try again.",
     kidsUpgradeNeeded: "Upgrade to Clear to unlock kid-friendly explanations →",
@@ -376,6 +378,7 @@ export const T: Record<Lang, {
     goDeeper: "העמק ↓",
     moreExamples: "עוד דוגמאות",
     forKids: "הסבר לילדים",
+    kidsLabel: "הסבר לילדים",
     kidsGenerating: "יוצרים הסבר ידידותי לילדים...",
     kidsError: "לא הצלחנו ליצור את ההסבר. נסה שוב.",
     kidsUpgradeNeeded: "שדרג ל-Clear כדי לקבל הסברים ידידותיים לילדים ←",
@@ -536,6 +539,7 @@ export const T: Record<Lang, {
     goDeeper: "↓ تعمق أكثر",
     moreExamples: "مزيد من الأمثلة",
     forKids: "شرح للأطفال",
+    kidsLabel: "شرح للأطفال",
     kidsGenerating: "جاري إنشاء شرح ودود للأطفال...",
     kidsError: "تعذر إنشاء الشرح. حاول مرة أخرى.",
     kidsUpgradeNeeded: "قم بالترقية إلى Clear لفتح شروح ودودة للأطفال ←",
@@ -696,6 +700,7 @@ export const T: Record<Lang, {
     goDeeper: "Глубже ↓",
     moreExamples: "Ещё примеры",
     forKids: "Объясни как ребёнку",
+    kidsLabel: "Объяснение для детей",
     kidsGenerating: "Создаём объяснение для детей...",
     kidsError: "Не удалось создать объяснение. Попробуй ещё раз.",
     kidsUpgradeNeeded: "Перейди на Clear, чтобы открыть объяснения для детей →",
