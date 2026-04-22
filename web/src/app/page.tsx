@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { useKidsMode } from "@/lib/kids-mode";
+import VoiceInput from "@/components/VoiceInput";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
@@ -261,17 +262,24 @@ export default function Home() {
               }} />
             )}
             <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} dir={uiDir}>
-              <div className="search-container flex gap-0 p-2">
-                <div className="relative flex-1">
+              <div className="search-container flex gap-0 p-2 items-center">
+                <div className="relative flex-1 flex items-center gap-2 px-3">
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={t.placeholder[0]}
-                    className="w-full px-5 py-3.5 rounded-xl bg-transparent text-slate-800 text-lg focus:outline-none placeholder-slate-300 transition-all"
+                    className="flex-1 py-3.5 bg-transparent text-slate-800 text-lg focus:outline-none placeholder-slate-300 transition-all"
                     dir={uiDir}
                     style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
                     autoFocus={false}
+                  />
+                  <VoiceInput
+                    enabled={plan === "clear" || plan === "deep"}
+                    uiLang={lang}
+                    getIdToken={async () => (user ? await user.getIdToken() : null)}
+                    onResult={(text) => setInput(text)}
+                    size="md"
                   />
                 </div>
                 <button
@@ -287,16 +295,25 @@ export default function Home() {
             {/* Context sentence — optional, always visible */}
             <div className="mt-4" dir={uiDir}>
               <p className="text-xs text-slate-400 mb-1.5 px-1">{t.contextHint}</p>
-              <input
-                type="text"
-                value={contextInput}
-                onChange={(e) => setContextInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(); } }}
-                placeholder={t.contextPlaceholder}
-                className="w-full px-5 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-sm focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
-                dir={uiDir}
-                style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
-              />
+              <div className="w-full bg-white border border-slate-200 rounded-xl flex items-center gap-2 px-3 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+                <input
+                  type="text"
+                  value={contextInput}
+                  onChange={(e) => setContextInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(); } }}
+                  placeholder={t.contextPlaceholder}
+                  className="flex-1 py-3 bg-transparent text-slate-700 text-sm focus:outline-none"
+                  dir={uiDir}
+                  style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
+                />
+                <VoiceInput
+                  enabled={plan === "clear" || plan === "deep"}
+                  uiLang={lang}
+                  getIdToken={async () => (user ? await user.getIdToken() : null)}
+                  onResult={(text) => setContextInput(text)}
+                  size="sm"
+                />
+              </div>
             </div>
 
             {/* Kids mode toggle — paid users only */}
@@ -985,15 +1002,26 @@ function MeaningCompose({ word, meaning, uiLang, getIdToken, t, lineH }: {
         <span className="text-lg shrink-0">✍️</span>
         <p className="font-medium text-slate-700 text-sm">{t.composeSentence}</p>
       </div>
-      <textarea
-        value={sentence}
-        onChange={(e) => setSentence(e.target.value)}
-        placeholder={t.composeSentencePlaceholder}
-        rows={2}
-        disabled={loading || feedback !== null}
-        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all resize-none disabled:bg-slate-50"
-        style={{ lineHeight: lineH }}
-      />
+      <div className="relative">
+        <textarea
+          value={sentence}
+          onChange={(e) => setSentence(e.target.value)}
+          placeholder={t.composeSentencePlaceholder}
+          rows={2}
+          disabled={loading || feedback !== null}
+          className="w-full px-3 py-2.5 pe-12 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all resize-none disabled:bg-slate-50"
+          style={{ lineHeight: lineH }}
+        />
+        <div className="absolute bottom-2 end-2">
+          <VoiceInput
+            enabled={true /* this whole component only renders for Clear+ */}
+            uiLang={uiLang}
+            getIdToken={getIdToken}
+            onResult={(text) => setSentence(text)}
+            size="sm"
+          />
+        </div>
+      </div>
 
       {!feedback && (
         <div className="flex gap-2">
