@@ -850,6 +850,18 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
               lineH={lineH}
             />
           )}
+
+          {/* Quiz (Deep only) */}
+          {plan === "deep" && (
+            <MeaningQuiz
+              word={result.word}
+              meaning={m.meaning}
+              uiLang={uiLang}
+              getIdToken={getIdToken}
+              t={t}
+              lineH={lineH}
+            />
+          )}
         </div>
       ))}
 
@@ -1270,6 +1282,242 @@ function MeaningCompose({ word, meaning, uiLang, getIdToken, t, lineH }: {
           </div>
         );
       })()}
+    </div>
+  );
+}
+
+interface QuizQuestion {
+  type: "A" | "B" | "C" | "D";
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+}
+
+function MeaningQuiz({ word, meaning, uiLang, getIdToken, t, lineH }: {
+  word: string;
+  meaning: string;
+  uiLang: string;
+  getIdToken: () => Promise<string | null>;
+  t: ReturnType<typeof useLang>["t"];
+  lineH: string;
+}) {
+  const [phase, setPhase] = useState<"closed" | "loading" | "playing" | "done" | "error">("closed");
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [current, setCurrent] = useState(0);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [score, setScore] = useState(0);
+
+  async function start() {
+    setPhase("loading");
+    setQuestions([]);
+    setCurrent(0);
+    setPicked(null);
+    setScore(0);
+    try {
+      const idToken = await getIdToken();
+      if (!idToken) {
+        setPhase("error");
+        return;
+      }
+      const res = await fetch("/api/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ word, meaning, uiLang }),
+      });
+      if (!res.ok) {
+        setPhase("error");
+        return;
+      }
+      const data = (await res.json()) as { questions?: QuizQuestion[] };
+      const qs = (data.questions || []).filter(
+        (q) => q && Array.isArray(q.options) && q.options.length === 4 && typeof q.correctIndex === "number"
+      );
+      if (qs.length === 0) {
+        setPhase("error");
+        return;
+      }
+      setQuestions(qs);
+      setPhase("playing");
+      track("quiz_started", { word: word.slice(0, 40), uiLang, count: qs.length });
+    } catch (e) {
+      console.error("quiz fetch:", e);
+      setPhase("error");
+    }
+  }
+
+  function pick(i: number) {
+    if (picked !== null) return;
+    setPicked(i);
+    if (i === questions[current].correctIndex) {
+      setScore((s) => s + 1);
+    }
+  }
+
+  function next() {
+    if (current + 1 >= questions.length) {
+      setPhase("done");
+      track("quiz_finished", {
+        word: word.slice(0, 40),
+        uiLang,
+        score,
+        total: questions.length,
+      });
+      return;
+    }
+    setCurrent((c) => c + 1);
+    setPicked(null);
+  }
+
+  function close() {
+    setPhase("closed");
+  }
+
+  if (phase === "closed") {
+    return (
+      <button
+        type="button"
+        onClick={start}
+        className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all"
+        style={{ boxShadow: "var(--shadow-xs)" }}
+      >
+        <span className="text-xl shrink-0">🎯</span>
+        <p className="font-medium text-slate-700 text-sm">{t.quizStart}</p>
+      </button>
+    );
+  }
+
+  if (phase === "loading") {
+    return (
+      <div className="rounded-2xl bg-white border border-slate-200 p-4 flex items-center gap-3" style={{ boxShadow: "var(--shadow-xs)" }}>
+        <span className="text-xl">🎯</span>
+        <p className="text-slate-500 text-sm">{t.quizLoading}</p>
+      </div>
+    );
+  }
+
+  if (phase === "error") {
+    return (
+      <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex items-center justify-between gap-3">
+        <p className="text-amber-700 text-sm">{t.quizError}</p>
+        <button type="button" onClick={start} className="text-amber-700 text-sm font-medium underline">
+          {t.quizTryAgain}
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === "done") {
+    const pct = Math.round((score / questions.length) * 100);
+    const isWin = pct >= 75;
+    return (
+      <div className="rounded-2xl bg-white border border-slate-200 p-5 space-y-4 text-center" style={{ boxShadow: "var(--shadow-xs)" }}>
+        <div className="text-4xl">{isWin ? "🎉" : "💪"}</div>
+        <div>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.quizScore}</p>
+          <p className="text-3xl font-bold" style={{ color: "#0F172A" }}>
+            {score}/{questions.length}
+          </p>
+        </div>
+        <div className="flex gap-2 justify-center">
+          <button type="button" onClick={start} className="btn-primary px-5 py-2 text-sm rounded-xl">
+            {t.quizTryAgain}
+          </button>
+          <button
+            type="button"
+            onClick={close}
+            className="px-5 py-2 text-sm rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all"
+          >
+            {t.quizClose}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // playing
+  const q = questions[current];
+  const isLast = current + 1 >= questions.length;
+  const showFeedback = picked !== null;
+
+  return (
+    <div className="rounded-2xl bg-white border border-slate-200 p-5 space-y-4" style={{ boxShadow: "var(--shadow-xs)" }}>
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          {t.quizQuestionOf.replace("{n}", String(current + 1)).replace("{total}", String(questions.length))}
+        </span>
+        <button type="button" onClick={close} className="text-slate-400 hover:text-slate-600 text-xs">
+          ✕
+        </button>
+      </div>
+
+      <p className="text-slate-800 font-medium text-sm" style={{ lineHeight: lineH }}>
+        {q.prompt}
+      </p>
+
+      <div className="space-y-2">
+        {q.options.map((opt, i) => {
+          const isCorrect = i === q.correctIndex;
+          const isPicked = i === picked;
+          let bg = "white";
+          let border = "rgb(226 232 240)";
+          let textColor = "rgb(51 65 85)";
+          if (showFeedback) {
+            if (isCorrect) {
+              bg = "rgb(220 252 231)";
+              border = "rgb(134 239 172)";
+              textColor = "rgb(22 101 52)";
+            } else if (isPicked) {
+              bg = "rgb(254 226 226)";
+              border = "rgb(252 165 165)";
+              textColor = "rgb(153 27 27)";
+            } else {
+              bg = "rgb(248 250 252)";
+              border = "rgb(226 232 240)";
+              textColor = "rgb(148 163 184)";
+            }
+          }
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={() => pick(i)}
+              disabled={showFeedback}
+              className="w-full text-start px-4 py-3 rounded-xl text-sm transition-all disabled:cursor-default"
+              style={{
+                background: bg,
+                border: `1.5px solid ${border}`,
+                color: textColor,
+                lineHeight: lineH,
+              }}
+            >
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+
+      {showFeedback && (
+        <div
+          className="rounded-xl p-3 text-sm"
+          style={{
+            background: picked === q.correctIndex ? "rgb(220 252 231)" : "rgb(254 226 226)",
+            color: picked === q.correctIndex ? "rgb(22 101 52)" : "rgb(153 27 27)",
+            lineHeight: lineH,
+          }}
+        >
+          <p className="font-semibold mb-1">
+            {picked === q.correctIndex ? `✅ ${t.quizCorrect}` : `🔴 ${t.quizWrong}`}
+          </p>
+          <p>{q.explanation}</p>
+        </div>
+      )}
+
+      {showFeedback && (
+        <button type="button" onClick={next} className="btn-primary w-full py-2.5 text-sm rounded-xl">
+          {isLast ? t.quizFinish : t.quizNext}
+        </button>
+      )}
     </div>
   );
 }

@@ -89,6 +89,17 @@ export const T: Record<Lang, {
   historyEmpty: string;
   shareWord: string;
   shareCopied: string;
+  quizStart: string;
+  quizLoading: string;
+  quizQuestionOf: string;
+  quizCorrect: string;
+  quizWrong: string;
+  quizNext: string;
+  quizFinish: string;
+  quizScore: string;
+  quizTryAgain: string;
+  quizClose: string;
+  quizError: string;
   generatingImage: string;
   imageFailed: string;
   imageLimitReached: string;
@@ -294,6 +305,17 @@ export const T: Record<Lang, {
     historyEmpty: "No recent searches yet",
     shareWord: "Share",
     shareCopied: "Link copied",
+    quizStart: "Practice this word",
+    quizLoading: "Preparing quiz…",
+    quizQuestionOf: "Question {n} of {total}",
+    quizCorrect: "Correct",
+    quizWrong: "Not quite",
+    quizNext: "Next",
+    quizFinish: "Finish",
+    quizScore: "Your score",
+    quizTryAgain: "Try again",
+    quizClose: "Close",
+    quizError: "Couldn't load the quiz. Try again.",
     generatingImage: "Creating image…",
     imageFailed: "Couldn't create image. Try again.",
     imageLimitReached: "Monthly image limit reached. Upgrade to Deep for more.",
@@ -497,6 +519,17 @@ export const T: Record<Lang, {
     historyEmpty: "עדיין אין חיפושים",
     shareWord: "שתף",
     shareCopied: "הקישור הועתק",
+    quizStart: "תרגל את המילה",
+    quizLoading: "מכין חידון…",
+    quizQuestionOf: "שאלה {n} מתוך {total}",
+    quizCorrect: "נכון",
+    quizWrong: "לא בדיוק",
+    quizNext: "הבא",
+    quizFinish: "סיום",
+    quizScore: "הציון שלך",
+    quizTryAgain: "נסה שוב",
+    quizClose: "סגור",
+    quizError: "לא הצלחנו לטעון את החידון. נסה שוב.",
     generatingImage: "יוצר תמונה…",
     imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
     imageLimitReached: "הגעת למכסת התמונות החודשית. שדרג ל-Deep למכסה גדולה יותר.",
@@ -700,6 +733,17 @@ export const T: Record<Lang, {
     historyEmpty: "لا توجد عمليات بحث بعد",
     shareWord: "مشاركة",
     shareCopied: "تم نسخ الرابط",
+    quizStart: "تدرب على الكلمة",
+    quizLoading: "جاري تحضير الاختبار…",
+    quizQuestionOf: "سؤال {n} من {total}",
+    quizCorrect: "صحيح",
+    quizWrong: "ليس تماماً",
+    quizNext: "التالي",
+    quizFinish: "إنهاء",
+    quizScore: "نتيجتك",
+    quizTryAgain: "حاول مرة أخرى",
+    quizClose: "إغلاق",
+    quizError: "تعذر تحميل الاختبار. حاول مرة أخرى.",
     generatingImage: "جاري إنشاء الصورة…",
     imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
     imageLimitReached: "وصلت إلى الحد الشهري للصور. قم بالترقية إلى Deep للحصول على المزيد.",
@@ -903,6 +947,17 @@ export const T: Record<Lang, {
     historyEmpty: "Пока нет недавних запросов",
     shareWord: "Поделиться",
     shareCopied: "Ссылка скопирована",
+    quizStart: "Потренируй слово",
+    quizLoading: "Готовим тест…",
+    quizQuestionOf: "Вопрос {n} из {total}",
+    quizCorrect: "Верно",
+    quizWrong: "Не совсем",
+    quizNext: "Дальше",
+    quizFinish: "Готово",
+    quizScore: "Твой результат",
+    quizTryAgain: "Попробуй ещё раз",
+    quizClose: "Закрыть",
+    quizError: "Не удалось загрузить тест. Попробуй ещё раз.",
     generatingImage: "Создаётся изображение…",
     imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
     imageLimitReached: "Достигнут месячный лимит изображений. Перейди на Deep для увеличения.",

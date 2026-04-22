@@ -47,7 +47,7 @@ export default function PricingPage() {
       yearlyPrice: 31.99,
       monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? null,
       yearlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY ?? null,
-      features: [t.everythingInClear, t.quizMode, t.wordCollections, t.wordOfDay, t.advancedInsights],
+      features: [t.everythingInClear, t.quizMode],
       cta: t.unlockDeep,
       popular: false,
       note: null,
@@ -119,8 +119,6 @@ export default function PricingPage() {
             const billed = billing === "yearly" && plan.yearlyPrice > 0
               ? `$${plan.yearlyPrice}/year`
               : null;
-            const isComingSoon = plan.id === "deep";
-
             return (
               <div
                 key={plan.id}
@@ -134,7 +132,6 @@ export default function PricingPage() {
                   border: "1px solid rgb(226 232 240 / 0.9)",
                   boxShadow: "0 2px 8px 0 rgb(0 0 0 / 0.05)",
                   padding: "1.75rem",
-                  ...(isComingSoon ? { opacity: 0.85 } : {}),
                 }}
               >
                 {plan.popular && (
@@ -143,19 +140,10 @@ export default function PricingPage() {
                     {t.mostPopular}
                   </div>
                 )}
-                {isComingSoon && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white whitespace-nowrap"
-                    style={{ background: "#64748B", boxShadow: "0 2px 8px rgb(100 116 139 / 0.35)" }}>
-                    {t.comingSoon}
-                  </div>
-                )}
 
                 <div className="mb-5" dir={dir}>
                   <h2 className="text-xl font-bold mb-1" style={{ color: "#0F172A" }}>{plan.name}</h2>
                   <p className="text-slate-400 text-sm leading-relaxed">{plan.description}</p>
-                  {isComingSoon && (
-                    <p className="text-xs text-slate-400 italic mt-2">{t.comingSoonNote}</p>
-                  )}
                 </div>
 
                 <div className="mb-6 pb-6 border-b border-slate-100" dir={dir}>
@@ -180,26 +168,24 @@ export default function PricingPage() {
                 </ul>
 
                 <button
-                  onClick={() => !isComingSoon && handleSubscribe(plan)}
-                  disabled={loading === plan.id || isComingSoon}
+                  onClick={() => handleSubscribe(plan)}
+                  disabled={loading === plan.id}
                   className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
-                    isComingSoon
-                      ? "border border-slate-200 text-slate-400 bg-slate-50 cursor-not-allowed"
-                      : plan.popular
+                    plan.popular
                       ? "text-white hover:opacity-90 disabled:opacity-50"
                       : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 bg-white disabled:opacity-50"
                   }`}
-                  style={isComingSoon ? {} : plan.popular ? {
+                  style={plan.popular ? {
                     background: "#2563EB",
                     boxShadow: "0 4px 14px rgb(37 99 235 / 0.25)",
                   } : {
                     boxShadow: "0 1px 3px rgb(0 0 0 / 0.05)",
                   }}
                 >
-                  {isComingSoon ? t.comingSoon : loading === plan.id ? "…" : plan.cta}
+                  {loading === plan.id ? "…" : plan.cta}
                 </button>
 
-                {plan.note && !isComingSoon && (
+                {plan.note && (
                   <p className="text-center text-xs text-slate-400 mt-2">{plan.note}</p>
                 )}
               </div>
