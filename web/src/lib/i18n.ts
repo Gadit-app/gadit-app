@@ -87,6 +87,8 @@ export const T: Record<Lang, {
   historyTitle: string;
   historyClear: string;
   historyEmpty: string;
+  shareWord: string;
+  shareCopied: string;
   generatingImage: string;
   imageFailed: string;
   imageLimitReached: string;
@@ -290,6 +292,8 @@ export const T: Record<Lang, {
     historyTitle: "Recent searches",
     historyClear: "Clear",
     historyEmpty: "No recent searches yet",
+    shareWord: "Share",
+    shareCopied: "Link copied",
     generatingImage: "Creating image…",
     imageFailed: "Couldn't create image. Try again.",
     imageLimitReached: "Monthly image limit reached. Upgrade to Deep for more.",
@@ -491,6 +495,8 @@ export const T: Record<Lang, {
     historyTitle: "חיפושים אחרונים",
     historyClear: "נקה",
     historyEmpty: "עדיין אין חיפושים",
+    shareWord: "שתף",
+    shareCopied: "הקישור הועתק",
     generatingImage: "יוצר תמונה…",
     imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
     imageLimitReached: "הגעת למכסת התמונות החודשית. שדרג ל-Deep למכסה גדולה יותר.",
@@ -692,6 +698,8 @@ export const T: Record<Lang, {
     historyTitle: "عمليات البحث الأخيرة",
     historyClear: "مسح",
     historyEmpty: "لا توجد عمليات بحث بعد",
+    shareWord: "مشاركة",
+    shareCopied: "تم نسخ الرابط",
     generatingImage: "جاري إنشاء الصورة…",
     imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
     imageLimitReached: "وصلت إلى الحد الشهري للصور. قم بالترقية إلى Deep للحصول على المزيد.",
@@ -893,6 +901,8 @@ export const T: Record<Lang, {
     historyTitle: "Недавние запросы",
     historyClear: "Очистить",
     historyEmpty: "Пока нет недавних запросов",
+    shareWord: "Поделиться",
+    shareCopied: "Ссылка скопирована",
     generatingImage: "Создаётся изображение…",
     imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
     imageLimitReached: "Достигнут месячный лимит изображений. Перейди на Deep для увеличения.",

@@ -743,7 +743,10 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
           <h2 className="font-bold" style={{ color: "#0F172A", fontSize: "clamp(24px, 4vw, 32px)", letterSpacing: rDir === "rtl" ? "0.3px" : "-0.5px" }}>
             {result.word}
           </h2>
-          <span className="text-sm text-slate-400 font-medium shrink-0">{result.language}</span>
+          <div className="flex items-center gap-3 shrink-0">
+            <ShareButton word={result.word} t={t} />
+            <span className="text-sm text-slate-400 font-medium">{result.language}</span>
+          </div>
         </div>
       </div>
 
@@ -1054,6 +1057,58 @@ function MeaningImage({ word, meaning, uiLang, getIdToken, t, lineH }: {
         <p className="text-sm text-amber-700 px-1 mt-2" style={{ lineHeight: lineH }}>{error}</p>
       )}
     </div>
+  );
+}
+
+function ShareButton({ word, t }: { word: string; t: ReturnType<typeof useLang>["t"] }) {
+  const [justCopied, setJustCopied] = useState(false);
+
+  async function handleShare() {
+    const url = `https://www.gadit.app/word/${encodeURIComponent(word)}`;
+    track("share_word", { word: word.slice(0, 40) });
+
+    // Native share if available (mobile)
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: `${word} — Gadit`, url });
+        return;
+      } catch {
+        // User canceled — fall through to clipboard
+      }
+    }
+
+    // Fallback: copy link
+    try {
+      await navigator.clipboard.writeText(url);
+      setJustCopied(true);
+      setTimeout(() => setJustCopied(false), 1800);
+    } catch {
+      console.warn("clipboard failed");
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleShare}
+      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all"
+      style={{
+        background: justCopied ? "rgb(220 252 231)" : "transparent",
+        color: justCopied ? "rgb(22 101 52)" : "rgb(100 116 139)",
+        border: `1px solid ${justCopied ? "rgb(134 239 172)" : "rgb(226 232 240)"}`,
+      }}
+      title={t.shareWord}
+      aria-label={t.shareWord}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+      </svg>
+      <span>{justCopied ? t.shareCopied : t.shareWord}</span>
+    </button>
   );
 }
 
