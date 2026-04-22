@@ -124,12 +124,11 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className="relative bg-white rounded-3xl flex flex-col transition-all duration-200 text-center"
+                className={`relative bg-white rounded-3xl flex flex-col transition-all duration-200 text-center ${plan.popular ? "pricing-popular" : ""}`}
                 dir="ltr"
                 style={plan.popular ? {
                   border: "1.5px solid rgb(147 197 253)",
                   boxShadow: "0 8px 32px 0 rgb(37 99 235 / 0.13), 0 2px 8px 0 rgb(37 99 235 / 0.08)",
-                  transform: "scale(1.025)",
                   padding: "1.75rem",
                 } : {
                   border: "1px solid rgb(226 232 240 / 0.9)",

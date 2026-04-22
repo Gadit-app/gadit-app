@@ -98,6 +98,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   50%      { opacity: 1;    transform: scale(1.08); }
 }
 
+/* ── PRICING: subtle scale on the popular card (desktop only) ── */
+@media (min-width: 768px) {
+  .pricing-popular {
+    transform: scale(1.025);
+  }
+}
+
 .delay-100 { animation-delay: 0.08s; }
 .delay-200 { animation-delay: 0.16s; }
 .delay-300 { animation-delay: 0.24s; }

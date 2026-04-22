@@ -705,7 +705,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
   if (result.suggestedWord) {
     return (
       <div className="space-y-4 animate-fade-in" dir={rDir}>
-        <div className="gadit-card px-8 py-8 text-center space-y-5">
+        <div className="gadit-card px-5 sm:px-8 py-6 sm:py-8 text-center space-y-5">
           <div className="text-4xl">🔍</div>
           <p className="text-slate-500 text-base" style={{ lineHeight: lineH }}>
             {t.wordNotFound.replace("{word}", result.word)}
@@ -738,7 +738,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
     <div className="space-y-4 animate-fade-in" dir={rDir}>
 
       {/* Word header */}
-      <div className="gadit-card px-8 py-6">
+      <div className="gadit-card px-5 sm:px-8 py-5 sm:py-6">
         <div className="flex items-baseline justify-between gap-4">
           <h2 className="font-bold" style={{ color: "#0F172A", fontSize: "clamp(24px, 4vw, 32px)", letterSpacing: rDir === "rtl" ? "0.3px" : "-0.5px" }}>
             {result.word}
@@ -749,7 +749,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
 
       {/* Context note */}
       {result.contextNote && (
-        <div className="px-8 py-5 rounded-3xl" style={{ background: "rgb(239 246 255)", border: "1px solid rgb(147 197 253 / 0.4)" }}>
+        <div className="px-5 sm:px-8 py-4 sm:py-5 rounded-3xl" style={{ background: "rgb(239 246 255)", border: "1px solid rgb(147 197 253 / 0.4)" }}>
           <p className="text-xs font-semibold mb-1" style={{ color: "#2563EB" }}>{t.contextNote}</p>
           <p className="text-slate-600 text-sm leading-relaxed">{result.contextNote}</p>
         </div>
@@ -758,7 +758,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
       {/* Meanings — each with its own examples and (for paid users) kids explanation */}
       {result.meanings?.map((m, i) => (
         <div key={i} className="space-y-3">
-          <div className="gadit-card px-8 py-6 space-y-4">
+          <div className="gadit-card px-5 sm:px-8 py-5 sm:py-6 space-y-4">
             {/* Meaning header */}
             <div className="flex items-start gap-3">
               {result.meanings.length > 1 && (
@@ -803,7 +803,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
 
           {/* Kids explanation for this meaning — only when Kids Mode toggle is ON */}
           {kidsMode && m.kidsExplanation && (
-            <div className="rounded-3xl px-8 py-6 space-y-3" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
+            <div className="rounded-3xl px-5 sm:px-8 py-5 sm:py-6 space-y-3" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl shrink-0">🧒</span>
                 <p className="text-base font-semibold text-amber-900">{t.kidsLabel}</p>
@@ -852,7 +852,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
 
       {/* Etymology */}
       {result.etymology && (
-        <div className="gadit-card px-8 py-6">
+        <div className="gadit-card px-5 sm:px-8 py-5 sm:py-6">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">{t.etymologyLabel}</p>
           {typeof result.etymology === "string" ? (
             <p className="text-slate-600 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
@@ -898,7 +898,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
 
       {/* General idioms — paid users only */}
       {(plan === "clear" || plan === "deep") && result.generalIdioms && result.generalIdioms.length > 0 && (
-        <div className="gadit-card px-8 py-6">
+        <div className="gadit-card px-5 sm:px-8 py-5 sm:py-6">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">{t.generalIdiomsLabel}</p>
           <ul className="space-y-2.5">
             {result.generalIdioms.map((idiom, j) => (
@@ -914,7 +914,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
 
       {/* Upsell — Basic users only (paid users get kids + images inline) */}
       {plan === "basic" && (
-        <div className="rounded-3xl px-8 py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
+        <div className="rounded-3xl px-5 sm:px-8 py-5 sm:py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
           <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
             <span className="text-xl shrink-0">🧒</span>
