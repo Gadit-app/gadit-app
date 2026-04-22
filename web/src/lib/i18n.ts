@@ -65,6 +65,24 @@ export const T: Record<Lang, {
   composeStatusIncorrect: string;
   composeSuggestionLabel: string;
   composeTryAgain: string;
+  // Account page
+  accountTitle: string;
+  accountYourPlan: string;
+  accountFreePlan: string;
+  accountClearPlan: string;
+  accountDeepPlan: string;
+  accountImagesUsage: string;
+  accountImagesUsageNote: string;
+  accountManageSubscription: string;
+  accountUpgrade: string;
+  accountSubscriptionStatus: string;
+  accountStatusActive: string;
+  accountStatusCanceled: string;
+  accountStatusPastDue: string;
+  accountSignedInAs: string;
+  accountLoading: string;
+  accountErrorLoading: string;
+  accountNav: string;
   generatingImage: string;
   imageFailed: string;
   imageLimitReached: string;
@@ -248,6 +266,23 @@ export const T: Record<Lang, {
     composeStatusIncorrect: "Not this meaning",
     composeSuggestionLabel: "Suggested",
     composeTryAgain: "Try another sentence",
+    accountTitle: "Your account",
+    accountYourPlan: "Your plan",
+    accountFreePlan: "Basic — Free",
+    accountClearPlan: "Clear",
+    accountDeepPlan: "Deep",
+    accountImagesUsage: "Images this month",
+    accountImagesUsageNote: "Resets on the 1st of every month",
+    accountManageSubscription: "Manage subscription",
+    accountUpgrade: "Upgrade",
+    accountSubscriptionStatus: "Status",
+    accountStatusActive: "Active",
+    accountStatusCanceled: "Canceled",
+    accountStatusPastDue: "Past due",
+    accountSignedInAs: "Signed in as",
+    accountLoading: "Loading…",
+    accountErrorLoading: "Couldn't load account info. Try refreshing.",
+    accountNav: "Account",
     generatingImage: "Creating image…",
     imageFailed: "Couldn't create image. Try again.",
     imageLimitReached: "Monthly image limit reached. Upgrade to Deep for more.",
@@ -429,6 +464,23 @@ export const T: Record<Lang, {
     composeStatusIncorrect: "לא במשמעות הנכונה",
     composeSuggestionLabel: "הצעה",
     composeTryAgain: "נסה משפט אחר",
+    accountTitle: "החשבון שלך",
+    accountYourPlan: "המנוי שלך",
+    accountFreePlan: "Basic — חינם",
+    accountClearPlan: "Clear",
+    accountDeepPlan: "Deep",
+    accountImagesUsage: "תמונות החודש",
+    accountImagesUsageNote: "מתאפס בכל ה-1 לחודש",
+    accountManageSubscription: "ניהול מנוי",
+    accountUpgrade: "שדרג",
+    accountSubscriptionStatus: "סטטוס",
+    accountStatusActive: "פעיל",
+    accountStatusCanceled: "מבוטל",
+    accountStatusPastDue: "תשלום באיחור",
+    accountSignedInAs: "מחובר כ-",
+    accountLoading: "טוען…",
+    accountErrorLoading: "לא הצלחנו לטעון את פרטי החשבון. נסה לרענן.",
+    accountNav: "החשבון שלי",
     generatingImage: "יוצרים תמונה…",
     imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
     imageLimitReached: "הגעת למכסת התמונות החודשית. שדרג ל-Deep למכסה גדולה יותר.",
@@ -610,6 +662,23 @@ export const T: Record<Lang, {
     composeStatusIncorrect: "ليس هذا المعنى",
     composeSuggestionLabel: "اقتراح",
     composeTryAgain: "جرب جملة أخرى",
+    accountTitle: "حسابك",
+    accountYourPlan: "اشتراكك",
+    accountFreePlan: "Basic — مجاني",
+    accountClearPlan: "Clear",
+    accountDeepPlan: "Deep",
+    accountImagesUsage: "صور هذا الشهر",
+    accountImagesUsageNote: "تتم إعادة التعيين في الأول من كل شهر",
+    accountManageSubscription: "إدارة الاشتراك",
+    accountUpgrade: "ترقية",
+    accountSubscriptionStatus: "الحالة",
+    accountStatusActive: "نشط",
+    accountStatusCanceled: "ملغى",
+    accountStatusPastDue: "دفعة متأخرة",
+    accountSignedInAs: "تسجيل الدخول باسم",
+    accountLoading: "جاري التحميل…",
+    accountErrorLoading: "تعذر تحميل معلومات الحساب. حاول التحديث.",
+    accountNav: "حسابي",
     generatingImage: "جاري إنشاء الصورة…",
     imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
     imageLimitReached: "وصلت إلى الحد الشهري للصور. قم بالترقية إلى Deep للحصول على المزيد.",
@@ -791,6 +860,23 @@ export const T: Record<Lang, {
     composeStatusIncorrect: "Не то значение",
     composeSuggestionLabel: "Совет",
     composeTryAgain: "Попробуй другое предложение",
+    accountTitle: "Твой аккаунт",
+    accountYourPlan: "Твой план",
+    accountFreePlan: "Basic — Бесплатно",
+    accountClearPlan: "Clear",
+    accountDeepPlan: "Deep",
+    accountImagesUsage: "Изображений в этом месяце",
+    accountImagesUsageNote: "Обнуляется 1-го числа каждого месяца",
+    accountManageSubscription: "Управление подпиской",
+    accountUpgrade: "Улучшить",
+    accountSubscriptionStatus: "Статус",
+    accountStatusActive: "Активна",
+    accountStatusCanceled: "Отменена",
+    accountStatusPastDue: "Просрочена",
+    accountSignedInAs: "Вход выполнен как",
+    accountLoading: "Загрузка…",
+    accountErrorLoading: "Не удалось загрузить информацию об аккаунте.",
+    accountNav: "Мой аккаунт",
     generatingImage: "Создаём изображение…",
     imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
     imageLimitReached: "Достигнут месячный лимит изображений. Перейди на Deep для увеличения.",

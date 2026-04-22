@@ -128,6 +128,13 @@ export default function Header() {
                   <div className="px-4 py-2 text-xs text-slate-400 border-b border-slate-100 truncate">
                     {user.displayName ?? user.email}
                   </div>
+                  <Link
+                    href="/account"
+                    onClick={() => setMenuOpen(false)}
+                    className="block w-full text-start px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-all"
+                  >
+                    {t.accountNav}
+                  </Link>
                   <button
                     onClick={() => { logout(); setMenuOpen(false); }}
                     className="w-full text-start px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-all"
