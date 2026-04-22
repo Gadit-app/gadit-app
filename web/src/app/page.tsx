@@ -41,6 +41,7 @@ interface WordResult {
   etymology: Etymology | string;
   generalIdioms?: Idiom[];
   contextNote?: string;
+  suggestedWord?: string;
   fromCache?: boolean;
 }
 
@@ -196,6 +197,12 @@ export default function Home() {
     const query = input.trim();
     if (!query) return;
     await fetchWord(query);
+  }
+
+  async function searchSuggested(suggested: string) {
+    setInput(suggested);
+    setContextInput("");
+    await fetchWord(suggested);
   }
 
   function reset() {
@@ -357,6 +364,7 @@ export default function Home() {
                 t={t}
                 onReset={reset}
                 onShowAll={showAllMeanings}
+                onSuggest={searchSuggested}
                 plan={plan}
                 uiLang={lang}
                 kidsMode={kidsMode}
@@ -542,12 +550,13 @@ export default function Home() {
 }
 
 // ── RESULT VIEW ──
-function ResultView({ result, uiDir, t, onReset, onShowAll, plan, getIdToken, uiLang, kidsMode }: {
+function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, getIdToken, uiLang, kidsMode }: {
   result: WordResult;
   uiDir: "ltr" | "rtl";
   t: ReturnType<typeof useLang>["t"];
   onReset: () => void;
   onShowAll: () => void;
+  onSuggest: (suggestion: string) => void;
   plan: "basic" | "clear" | "deep";
   getIdToken: () => Promise<string | null>;
   uiLang: string;
@@ -556,6 +565,39 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, plan, getIdToken, ui
   const resultLangDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
   const rDir = resultLangDir;
   const lineH = rDir === "rtl" ? "1.7" : "1.6";
+
+  // Word-not-found with a suggestion: show clean focused screen
+  if (result.suggestedWord) {
+    return (
+      <div className="space-y-4 animate-fade-in" dir={rDir}>
+        <div className="gadit-card px-8 py-8 text-center space-y-5">
+          <div className="text-4xl">🔍</div>
+          <p className="text-slate-500 text-base" style={{ lineHeight: lineH }}>
+            {t.wordNotFound.replace("{word}", result.word)}
+          </p>
+          <div>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-3">{t.didYouMean}</p>
+            <button
+              type="button"
+              onClick={() => onSuggest(result.suggestedWord!)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-bold text-lg transition-all hover:scale-105"
+              style={{
+                background: "rgb(239 246 255)",
+                color: "#2563EB",
+                border: "1.5px solid rgb(147 197 253)",
+              }}
+            >
+              <span>{result.suggestedWord}</span>
+              <span className="text-base">{rDir === "rtl" ? "←" : "→"}</span>
+            </button>
+          </div>
+        </div>
+        <button onClick={onReset} className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-colors">
+          {t.searchAnother}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 animate-fade-in" dir={rDir}>

@@ -16,17 +16,18 @@ Treat every input as deliberate when it maps to a real word.
 RULE 1b — If the typed string is NOT a real word at all, but there's an obvious real word the user likely intended (a plausible typo or missing letter), suggest it:
 - "אדיפלי" is NOT a real Hebrew word, but "אדיפאלי" (Oedipal, עם א' נוספת) IS — suggest it.
 - "ההתחברות" IS a real word → don't suggest anything, just define it.
-Return this JSON shape when the exact typed word is not real but a likely-intended word is:
+Return this JSON shape when the exact typed word is not real but a likely-intended word is. The "suggestedWord" field at the root is REQUIRED so the UI can make it clickable:
 {
   "word": "<as typed>",
   "language": "<detected>",
   "multiplemeanings": false,
+  "suggestedWord": "<the correctly-spelled word>",
   "meanings": [{"meaning": "המילה '<typed>' לא נמצאה במילון. אולי התכוונת ל-'<suggested>'?", "examples": ["", "", ""]}],
   "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": ""}
 }
 (adapt the sentence template to the user's UI language; examples: Hebrew "אולי התכוונת ל-X?"; English "Did you mean 'X'?"; Arabic "هل تقصد 'X'؟"; Russian "Возможно, вы имели в виду 'X'?")
 
-RULE 1c — If the typed string is NOT a real word and you have NO good suggestion, return the plain "not found" fallback:
+RULE 1c — If the typed string is NOT a real word and you have NO good suggestion, return the plain "not found" fallback (no "suggestedWord" field):
 {
   "word": "<as typed>",
   "language": "<detected>",

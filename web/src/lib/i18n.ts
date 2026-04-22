@@ -39,6 +39,8 @@ export const T: Record<Lang, {
   contextPlaceholder: string;
   showAllMeaningsBtn: string;
   backToContext: string;
+  wordNotFound: string;
+  didYouMean: string;
   showAllMeanings: string;
   meaningLabel: string;
   contextNote: string;
@@ -211,6 +213,8 @@ export const T: Record<Lang, {
     contextPlaceholder: "The sentence where the word appears…",
     showAllMeaningsBtn: "Show all meanings",
     backToContext: "Back",
+    wordNotFound: "We couldn't find “{word}” in the dictionary.",
+    didYouMean: "Did you mean",
     showAllMeanings: "Show all meanings",
     meaningLabel: "Meaning",
     contextNote: "How does this meaning fit your sentence?",
@@ -380,6 +384,8 @@ export const T: Record<Lang, {
     contextPlaceholder: "המשפט שבו מופיעה המילה…",
     showAllMeaningsBtn: "הצג את כל המשמעויות",
     backToContext: "חזרה",
+    wordNotFound: "לא מצאנו את המילה ״{word}״ במילון.",
+    didYouMean: "אולי התכוונת ל",
     showAllMeanings: "הצג את כל המשמעויות",
     meaningLabel: "משמעות",
     contextNote: "איך המשמעות הזאת מתאימה למשפט שלך?",
@@ -549,6 +555,8 @@ export const T: Record<Lang, {
     contextPlaceholder: "الجملة التي تظهر فيها الكلمة…",
     showAllMeaningsBtn: "عرض جميع المعاني",
     backToContext: "رجوع",
+    wordNotFound: "لم نجد كلمة ”{word}“ في القاموس.",
+    didYouMean: "هل تقصد",
     showAllMeanings: "عرض جميع المعاني",
     meaningLabel: "معنى",
     contextNote: "كيف يناسب هذا المعنى جملتك؟",
@@ -718,6 +726,8 @@ export const T: Record<Lang, {
     contextPlaceholder: "Предложение, в котором встречается слово…",
     showAllMeaningsBtn: "Показать все значения",
     backToContext: "Назад",
+    wordNotFound: "Слово «{word}» не найдено в словаре.",
+    didYouMean: "Возможно, вы имели в виду",
     showAllMeanings: "Показать все значения",
     meaningLabel: "Значение",
     contextNote: "Как это значение подходит к твоему предложению?",
