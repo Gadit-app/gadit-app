@@ -690,6 +690,18 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
             </div>
           )}
 
+          {/* Compose-your-own-sentence (Clear+ only) */}
+          {(plan === "clear" || plan === "deep") && (
+            <MeaningCompose
+              word={result.word}
+              meaning={m.meaning}
+              uiLang={uiLang}
+              getIdToken={getIdToken}
+              t={t}
+              lineH={lineH}
+            />
+          )}
+
           {/* Image generator (Clear+ only) */}
           {(plan === "clear" || plan === "deep") && (
             <MeaningImage
@@ -882,6 +894,152 @@ function MeaningImage({ word, meaning, uiLang, getIdToken, t, lineH }: {
       {error && (
         <p className="text-sm text-amber-700 px-1 mt-2" style={{ lineHeight: lineH }}>{error}</p>
       )}
+    </div>
+  );
+}
+
+type ComposeStatus = "perfect" | "almost" | "incorrect";
+interface ComposeFeedback {
+  status: ComposeStatus;
+  message: string;
+  suggestion: string;
+}
+
+function MeaningCompose({ word, meaning, uiLang, getIdToken, t, lineH }: {
+  word: string;
+  meaning: string;
+  uiLang: string;
+  getIdToken: () => Promise<string | null>;
+  t: ReturnType<typeof useLang>["t"];
+  lineH: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [sentence, setSentence] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<ComposeFeedback | null>(null);
+  const [error, setError] = useState("");
+
+  async function handleCheck() {
+    if (!sentence.trim()) return;
+    setLoading(true);
+    setError("");
+    setFeedback(null);
+    try {
+      const idToken = await getIdToken();
+      if (!idToken) {
+        setError(t.imageFailed);
+        return;
+      }
+      const res = await fetch("/api/check-sentence", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ word, meaning, sentence, uiLang }),
+      });
+      if (!res.ok) {
+        setError(t.imageFailed);
+        return;
+      }
+      const data = (await res.json()) as ComposeFeedback;
+      setFeedback(data);
+    } catch (e) {
+      console.error("check-sentence error:", e);
+      setError(t.imageFailed);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function reset() {
+    setSentence("");
+    setFeedback(null);
+    setError("");
+  }
+
+  // Style per status
+  const statusStyle = (s: ComposeStatus) => {
+    if (s === "perfect") return { bg: "rgb(220 252 231)", border: "rgb(134 239 172)", text: "rgb(22 101 52)", icon: "✅", label: t.composeStatusPerfect };
+    if (s === "almost") return { bg: "rgb(254 249 195)", border: "rgb(253 224 71)", text: "rgb(133 77 14)", icon: "⚠️", label: t.composeStatusAlmost };
+    return { bg: "rgb(254 226 226)", border: "rgb(252 165 165)", text: "rgb(153 27 27)", icon: "🔴", label: t.composeStatusIncorrect };
+  };
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all"
+        style={{ boxShadow: "var(--shadow-xs)" }}
+      >
+        <span className="text-xl shrink-0">✍️</span>
+        <p className="font-medium text-slate-700 text-sm">{t.composeSentence}</p>
+      </button>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl bg-white border border-slate-200 p-4 space-y-3" style={{ boxShadow: "var(--shadow-xs)" }}>
+      <div className="flex items-center gap-2">
+        <span className="text-lg shrink-0">✍️</span>
+        <p className="font-medium text-slate-700 text-sm">{t.composeSentence}</p>
+      </div>
+      <textarea
+        value={sentence}
+        onChange={(e) => setSentence(e.target.value)}
+        placeholder={t.composeSentencePlaceholder}
+        rows={2}
+        disabled={loading || feedback !== null}
+        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-sm focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all resize-none disabled:bg-slate-50"
+        style={{ lineHeight: lineH }}
+      />
+
+      {!feedback && (
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleCheck}
+            disabled={loading || !sentence.trim()}
+            className="btn-primary px-5 py-2 text-sm rounded-xl disabled:opacity-50"
+          >
+            {loading ? t.composeSentenceChecking : t.composeSentenceCheckBtn}
+          </button>
+        </div>
+      )}
+
+      {error && (
+        <p className="text-sm text-amber-700">{error}</p>
+      )}
+
+      {feedback && (() => {
+        const s = statusStyle(feedback.status);
+        return (
+          <div className="rounded-xl p-3 space-y-2" style={{ background: s.bg, border: `1px solid ${s.border}` }}>
+            <div className="flex items-center gap-2">
+              <span>{s.icon}</span>
+              <span className="font-semibold text-sm" style={{ color: s.text }}>{s.label}</span>
+            </div>
+            {feedback.message && (
+              <p className="text-sm" style={{ color: s.text, lineHeight: lineH }}>{feedback.message}</p>
+            )}
+            {feedback.suggestion && (
+              <div className="pt-2 border-t" style={{ borderColor: s.border }}>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: s.text, opacity: 0.7 }}>{t.composeSuggestionLabel}</p>
+                <p className="text-sm italic" style={{ color: s.text, lineHeight: lineH }}>{feedback.suggestion}</p>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={reset}
+              className="text-xs font-medium underline hover:no-underline mt-1"
+              style={{ color: s.text }}
+            >
+              {t.composeTryAgain}
+            </button>
+          </div>
+        );
+      })()}
     </div>
   );
 }

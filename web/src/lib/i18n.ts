@@ -56,6 +56,15 @@ export const T: Record<Lang, {
   etyBreakdown: string;
   etyHistoryNote: string;
   generateImage: string;
+  composeSentence: string;
+  composeSentencePlaceholder: string;
+  composeSentenceCheckBtn: string;
+  composeSentenceChecking: string;
+  composeStatusPerfect: string;
+  composeStatusAlmost: string;
+  composeStatusIncorrect: string;
+  composeSuggestionLabel: string;
+  composeTryAgain: string;
   generatingImage: string;
   imageFailed: string;
   imageLimitReached: string;
@@ -230,6 +239,15 @@ export const T: Record<Lang, {
     etyBreakdown: "Parts",
     etyHistoryNote: "Background",
     generateImage: "Generate image",
+    composeSentence: "Compose your own sentence",
+    composeSentencePlaceholder: "Write a sentence using this meaning…",
+    composeSentenceCheckBtn: "Check",
+    composeSentenceChecking: "Checking…",
+    composeStatusPerfect: "Perfect",
+    composeStatusAlmost: "Almost there",
+    composeStatusIncorrect: "Not this meaning",
+    composeSuggestionLabel: "Suggested",
+    composeTryAgain: "Try another sentence",
     generatingImage: "Creating image…",
     imageFailed: "Couldn't create image. Try again.",
     imageLimitReached: "Monthly image limit reached. Upgrade to Deep for more.",
@@ -306,7 +324,7 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Word family",
     historyFavorites: "History & Favorites",
     quizMode: "Quizzes & practice",
-    useThisWordFeature: "Write sentences + AI feedback",
+    useThisWordFeature: "Compose your own sentence + AI feedback",
     aiImages: "Visual word images",
     wordCollections: "Word collections by topic",
     wordOfDay: "Personal word of the day",
@@ -402,6 +420,15 @@ export const T: Record<Lang, {
     etyBreakdown: "חלקי מילה",
     etyHistoryNote: "רקע",
     generateImage: "צור תמונה",
+    composeSentence: "חבר משפט משלך",
+    composeSentencePlaceholder: "כתוב משפט עם המשמעות הזו…",
+    composeSentenceCheckBtn: "בדוק",
+    composeSentenceChecking: "בודקים…",
+    composeStatusPerfect: "מצוין",
+    composeStatusAlmost: "כמעט",
+    composeStatusIncorrect: "לא במשמעות הנכונה",
+    composeSuggestionLabel: "הצעה",
+    composeTryAgain: "נסה משפט אחר",
     generatingImage: "יוצרים תמונה…",
     imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
     imageLimitReached: "הגעת למכסת התמונות החודשית. שדרג ל-Deep למכסה גדולה יותר.",
@@ -478,7 +505,7 @@ export const T: Record<Lang, {
     wordFamilyFeature: "משפחת המילה",
     historyFavorites: "היסטוריה ומועדפים",
     quizMode: "חידונים ותרגול",
-    useThisWordFeature: "כתוב משפטים + פידבק AI",
+    useThisWordFeature: "חבר משפט משלך + פידבק AI",
     aiImages: "תמונות ויזואליות למילה",
     wordCollections: "אוספי מילים לפי נושא",
     wordOfDay: "מילת היום האישית",
@@ -574,6 +601,15 @@ export const T: Record<Lang, {
     etyBreakdown: "أجزاء الكلمة",
     etyHistoryNote: "خلفية",
     generateImage: "إنشاء صورة",
+    composeSentence: "ألف جملتك",
+    composeSentencePlaceholder: "اكتب جملة باستخدام هذا المعنى…",
+    composeSentenceCheckBtn: "تحقق",
+    composeSentenceChecking: "جاري التحقق…",
+    composeStatusPerfect: "ممتاز",
+    composeStatusAlmost: "تقريباً",
+    composeStatusIncorrect: "ليس هذا المعنى",
+    composeSuggestionLabel: "اقتراح",
+    composeTryAgain: "جرب جملة أخرى",
     generatingImage: "جاري إنشاء الصورة…",
     imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
     imageLimitReached: "وصلت إلى الحد الشهري للصور. قم بالترقية إلى Deep للحصول على المزيد.",
@@ -650,7 +686,7 @@ export const T: Record<Lang, {
     wordFamilyFeature: "عائلة الكلمة",
     historyFavorites: "السجل والمفضلة",
     quizMode: "اختبارات وتدريب",
-    useThisWordFeature: "اكتب جملاً + تغذية راجعة AI",
+    useThisWordFeature: "ألف جملتك + تغذية راجعة AI",
     aiImages: "صور بصرية للكلمة",
     wordCollections: "مجموعات كلمات حسب الموضوع",
     wordOfDay: "كلمة اليوم الشخصية",
@@ -746,6 +782,15 @@ export const T: Record<Lang, {
     etyBreakdown: "Части слова",
     etyHistoryNote: "Фон",
     generateImage: "Создать изображение",
+    composeSentence: "Составь своё предложение",
+    composeSentencePlaceholder: "Напиши предложение с этим значением…",
+    composeSentenceCheckBtn: "Проверить",
+    composeSentenceChecking: "Проверяем…",
+    composeStatusPerfect: "Отлично",
+    composeStatusAlmost: "Почти",
+    composeStatusIncorrect: "Не то значение",
+    composeSuggestionLabel: "Совет",
+    composeTryAgain: "Попробуй другое предложение",
     generatingImage: "Создаём изображение…",
     imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
     imageLimitReached: "Достигнут месячный лимит изображений. Перейди на Deep для увеличения.",
@@ -822,7 +867,7 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Семья слов",
     historyFavorites: "История и избранное",
     quizMode: "Тесты и практика",
-    useThisWordFeature: "Пиши предложения + обратная связь AI",
+    useThisWordFeature: "Составь своё предложение + обратная связь AI",
     aiImages: "Визуальные образы слова",
     wordCollections: "Коллекции слов по темам",
     wordOfDay: "Персональное слово дня",
