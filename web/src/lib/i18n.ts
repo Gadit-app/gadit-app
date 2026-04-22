@@ -42,6 +42,8 @@ export const T: Record<Lang, {
   definitionsLabel: string;
   examplesLabel: string;
   etymologyLabel: string;
+  idiomsLabel: string;
+  generalIdiomsLabel: string;
   etySourceLanguage: string;
   etyOriginalWord: string;
   etyOriginalMeaning: string;
@@ -55,6 +57,7 @@ export const T: Record<Lang, {
   moreExamples: string;
   forKids: string;
   kidsLabel: string;
+  kidsModeToggle: string;
   kidsGenerating: string;
   kidsError: string;
   kidsUpgradeNeeded: string;
@@ -183,6 +186,7 @@ export const T: Record<Lang, {
   footerPrivacy: string;
   footerTerms: string;
   footerContact: string;
+  navSearch: string;
   navHowItWorks: string;
   navFeatures: string;
 }> = {
@@ -205,6 +209,8 @@ export const T: Record<Lang, {
     definitionsLabel: "Meanings",
     examplesLabel: "Examples",
     etymologyLabel: "Origin",
+    idiomsLabel: "Idioms with this meaning",
+    generalIdiomsLabel: "Common expressions",
     etySourceLanguage: "From",
     etyOriginalWord: "Original",
     etyOriginalMeaning: "Meant",
@@ -218,6 +224,7 @@ export const T: Record<Lang, {
     moreExamples: "More examples",
     forKids: "Explain like I'm 10",
     kidsLabel: "Kids explanation",
+    kidsModeToggle: "Kids mode",
     kidsGenerating: "Creating a kid-friendly explanation...",
     kidsError: "Couldn't create the explanation. Try again.",
     kidsUpgradeNeeded: "Upgrade to Clear to unlock kid-friendly explanations →",
@@ -344,6 +351,7 @@ export const T: Record<Lang, {
     footerPrivacy: "Privacy Policy",
     footerTerms: "Terms of Use",
     footerContact: "Contact",
+    navSearch: "Search",
     navHowItWorks: "How it works",
     navFeatures: "Features",
   },
@@ -366,6 +374,8 @@ export const T: Record<Lang, {
     definitionsLabel: "משמעויות",
     examplesLabel: "דוגמאות",
     etymologyLabel: "מקור המילה",
+    idiomsLabel: "ניבים עם משמעות זו",
+    generalIdiomsLabel: "ביטויים נפוצים",
     etySourceLanguage: "משפה",
     etyOriginalWord: "מילה מקורית",
     etyOriginalMeaning: "משמעות מקורית",
@@ -379,6 +389,7 @@ export const T: Record<Lang, {
     moreExamples: "עוד דוגמאות",
     forKids: "הסבר לילדים",
     kidsLabel: "הסבר לילדים",
+    kidsModeToggle: "מצב ילדים",
     kidsGenerating: "יוצרים הסבר ידידותי לילדים...",
     kidsError: "לא הצלחנו ליצור את ההסבר. נסה שוב.",
     kidsUpgradeNeeded: "שדרג ל-Clear כדי לקבל הסברים ידידותיים לילדים ←",
@@ -505,6 +516,7 @@ export const T: Record<Lang, {
     footerPrivacy: "מדיניות פרטיות",
     footerTerms: "תנאי שימוש",
     footerContact: "צור קשר",
+    navSearch: "חיפוש",
     navHowItWorks: "איך זה עובד",
     navFeatures: "פיצ'רים",
   },
@@ -527,6 +539,8 @@ export const T: Record<Lang, {
     definitionsLabel: "المعاني",
     examplesLabel: "أمثلة",
     etymologyLabel: "أصل الكلمة",
+    idiomsLabel: "تعابير بهذا المعنى",
+    generalIdiomsLabel: "تعابير شائعة",
     etySourceLanguage: "من لغة",
     etyOriginalWord: "الكلمة الأصلية",
     etyOriginalMeaning: "المعنى الأصلي",
@@ -540,6 +554,7 @@ export const T: Record<Lang, {
     moreExamples: "مزيد من الأمثلة",
     forKids: "شرح للأطفال",
     kidsLabel: "شرح للأطفال",
+    kidsModeToggle: "وضع الأطفال",
     kidsGenerating: "جاري إنشاء شرح ودود للأطفال...",
     kidsError: "تعذر إنشاء الشرح. حاول مرة أخرى.",
     kidsUpgradeNeeded: "قم بالترقية إلى Clear لفتح شروح ودودة للأطفال ←",
@@ -666,6 +681,7 @@ export const T: Record<Lang, {
     footerPrivacy: "سياسة الخصوصية",
     footerTerms: "شروط الاستخدام",
     footerContact: "اتصل بنا",
+    navSearch: "بحث",
     navHowItWorks: "كيف يعمل",
     navFeatures: "المميزات",
   },
@@ -688,6 +704,8 @@ export const T: Record<Lang, {
     definitionsLabel: "Значения",
     examplesLabel: "Примеры",
     etymologyLabel: "Происхождение",
+    idiomsLabel: "Идиомы с этим значением",
+    generalIdiomsLabel: "Устойчивые выражения",
     etySourceLanguage: "Из языка",
     etyOriginalWord: "Исходное слово",
     etyOriginalMeaning: "Исходный смысл",
@@ -701,6 +719,7 @@ export const T: Record<Lang, {
     moreExamples: "Ещё примеры",
     forKids: "Объясни как ребёнку",
     kidsLabel: "Объяснение для детей",
+    kidsModeToggle: "Режим для детей",
     kidsGenerating: "Создаём объяснение для детей...",
     kidsError: "Не удалось создать объяснение. Попробуй ещё раз.",
     kidsUpgradeNeeded: "Перейди на Clear, чтобы открыть объяснения для детей →",
@@ -827,6 +846,7 @@ export const T: Record<Lang, {
     footerPrivacy: "Политика конфиденциальности",
     footerTerms: "Условия использования",
     footerContact: "Контакты",
+    navSearch: "Поиск",
     navHowItWorks: "Как это работает",
     navFeatures: "Функции",
   },

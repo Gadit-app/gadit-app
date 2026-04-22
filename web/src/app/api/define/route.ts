@@ -202,7 +202,54 @@ Example — word "ephemeral" — English user:
     "A rainbow after rain is ephemeral — it's there for a few minutes, then gone.",
     "The flame on a birthday candle is ephemeral — you blow it out in one second."
   ]
-}`;
+}
+
+🟢 ADDITIONAL INSTRUCTION — IDIOMS (paid plan):
+Add idioms (phrases/expressions) that use this word in two places:
+
+1. MEANING-SPECIFIC idioms — inside each meaning item, as an "idioms" array (0-2 items). These are idioms that use THIS specific meaning of the word. Example: meaning "ray of light" → idiom "קרן השמש הזדקרה" (a figurative use).
+
+2. GENERAL idioms — at the ROOT of the response (alongside "etymology"), as a "generalIdioms" array (0-3 items). These are well-known phrases/expressions that include the word but don't belong to one specific meaning.
+
+Each idiom has EXACTLY this shape:
+{
+  "phrase": "the idiom itself in the original language",
+  "meaning": "what it actually means, in the user's UI language"
+}
+
+CRITICAL RULES for idioms:
+- Only include idioms that are ACTUALLY USED in real speech. Do NOT invent idioms. If you cannot think of genuine idioms for this word, return an empty array [].
+- For Hebrew words, prefer Hebrew idioms. For English words, prefer English idioms.
+- Keep "phrase" in the word's original language. Keep "meaning" in the USER'S UI LANGUAGE.
+- Prefer well-known, common idioms over obscure ones.
+
+Example — word "יד" (hand), Hebrew user:
+meanings[0] (body part: hand):
+  "idioms": [
+    {"phrase": "יד ביד", "meaning": "יחד, בשיתוף פעולה"},
+    {"phrase": "יד על הלב", "meaning": "להישבע שאומרים אמת"}
+  ]
+meanings[1] (monument/memorial):
+  "idioms": []
+Response root:
+  "generalIdioms": [
+    {"phrase": "מיד ליד", "meaning": "מאדם לאדם, דרך התיווך"},
+    {"phrase": "בידיים טובות", "meaning": "בטיפול אמין"}
+  ]
+
+Example — word "eye", English user:
+meanings[0] (body part):
+  "idioms": [
+    {"phrase": "keep an eye on", "meaning": "watch over or monitor something"},
+    {"phrase": "see eye to eye", "meaning": "agree completely with someone"}
+  ]
+Response root:
+  "generalIdioms": [
+    {"phrase": "in the blink of an eye", "meaning": "very quickly"},
+    {"phrase": "an eye for an eye", "meaning": "equal retaliation for a wrong"}
+  ]
+
+If the word has NO genuine idioms at all in that language, return all empty arrays. Do not force idioms.`;
 
 const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 

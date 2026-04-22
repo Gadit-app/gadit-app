@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
+import { useKidsMode } from "@/lib/kids-mode";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
@@ -13,10 +14,16 @@ interface KidsExplanation {
   examples: string[];
 }
 
+interface Idiom {
+  phrase: string;
+  meaning: string;
+}
+
 interface Meaning {
   meaning: string;
   examples: string[];
   kidsExplanation?: KidsExplanation;
+  idioms?: Idiom[];
 }
 
 interface Etymology {
@@ -32,6 +39,7 @@ interface WordResult {
   multiplemeanings: boolean;
   meanings: Meaning[];
   etymology: Etymology | string;
+  generalIdioms?: Idiom[];
   contextNote?: string;
   fromCache?: boolean;
 }
@@ -74,6 +82,7 @@ export default function Home() {
 
   const { t, dir: uiDir, lang } = useLang();
   const { user, plan } = useAuth();
+  const [kidsMode, setKidsMode] = useKidsMode();
   const resultRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -251,8 +260,8 @@ export default function Home() {
                 transform: "scale(1.5)",
               }} />
             )}
-            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
-              <div className="search-container flex gap-0 p-2" style={{ flexDirection: uiDir === "rtl" ? "row-reverse" : "row" }}>
+            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} dir={uiDir}>
+              <div className="search-container flex gap-0 p-2">
                 <div className="relative flex-1">
                   <input
                     type="text"
@@ -274,6 +283,39 @@ export default function Home() {
                 </button>
               </div>
             </form>
+
+            {/* Kids mode toggle — paid users only */}
+            {(plan === "clear" || plan === "deep") && (
+              <div className="flex items-center gap-2 mt-3 px-1" style={{ justifyContent: uiDir === "rtl" ? "flex-start" : "flex-end" }} dir={uiDir}>
+                <button
+                  type="button"
+                  onClick={() => setKidsMode(!kidsMode)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                  style={{
+                    background: kidsMode ? "rgb(254 243 199)" : "rgb(248 250 252)",
+                    border: `1px solid ${kidsMode ? "rgb(253 224 71)" : "rgb(226 232 240)"}`,
+                    color: kidsMode ? "rgb(146 64 14)" : "rgb(100 116 139)",
+                  }}
+                  aria-pressed={kidsMode}
+                >
+                  <span>🧒</span>
+                  <span>{t.kidsModeToggle}</span>
+                  <span
+                    className="inline-block w-7 h-4 rounded-full relative transition-all"
+                    style={{
+                      background: kidsMode ? "rgb(245 158 11)" : "rgb(203 213 225)",
+                    }}
+                  >
+                    <span
+                      className="absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all"
+                      style={{
+                        left: kidsMode ? "14px" : "2px",
+                      }}
+                    />
+                  </span>
+                </button>
+              </div>
+            )}
 
             {/* Chips — idle only, non-paid only */}
             {isIdle && !isPaidUser && (
@@ -365,6 +407,7 @@ export default function Home() {
                 onShowAll={() => {/* already showing all */}}
                 plan={plan}
                 uiLang={lang}
+                kidsMode={kidsMode}
                 getIdToken={async () => (user ? await user.getIdToken() : null)}
               />
             )}
@@ -547,7 +590,7 @@ export default function Home() {
 }
 
 // ── RESULT VIEW ──
-function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang }: {
+function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang, kidsMode }: {
   result: WordResult;
   uiDir: "ltr" | "rtl";
   t: ReturnType<typeof useLang>["t"];
@@ -556,6 +599,7 @@ function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang }: {
   plan: "basic" | "clear" | "deep";
   getIdToken: () => Promise<string | null>;
   uiLang: string;
+  kidsMode: boolean;
 }) {
   const resultLangDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
   const rDir = resultLangDir;
@@ -610,10 +654,26 @@ function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang }: {
                 ))}
               </ul>
             )}
+
+            {/* Meaning-specific idioms — paid users only */}
+            {(plan === "clear" || plan === "deep") && m.idioms && m.idioms.length > 0 && (
+              <div className="pt-3 border-t border-slate-100">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{t.idiomsLabel}</p>
+                <ul className="space-y-2">
+                  {m.idioms.map((idiom, j) => (
+                    <li key={j} className="flex gap-2 text-sm" style={{ lineHeight: lineH }}>
+                      <span className="text-slate-700 font-medium">&ldquo;{idiom.phrase}&rdquo;</span>
+                      <span className="text-slate-400">—</span>
+                      <span className="text-slate-500">{idiom.meaning}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
-          {/* Kids explanation for this meaning — auto-shown when present (paid users) */}
-          {m.kidsExplanation && (
+          {/* Kids explanation for this meaning — only when Kids Mode toggle is ON */}
+          {kidsMode && m.kidsExplanation && (
             <div className="rounded-3xl px-8 py-6 space-y-3" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl shrink-0">🧒</span>
@@ -686,6 +746,22 @@ function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang }: {
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {/* General idioms — paid users only */}
+      {(plan === "clear" || plan === "deep") && result.generalIdioms && result.generalIdioms.length > 0 && (
+        <div className="gadit-card px-8 py-6">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">{t.generalIdiomsLabel}</p>
+          <ul className="space-y-2.5">
+            {result.generalIdioms.map((idiom, j) => (
+              <li key={j} className="flex gap-2 text-sm" style={{ lineHeight: lineH }}>
+                <span className="text-slate-700 font-medium">&ldquo;{idiom.phrase}&rdquo;</span>
+                <span className="text-slate-400">—</span>
+                <span className="text-slate-500">{idiom.meaning}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 

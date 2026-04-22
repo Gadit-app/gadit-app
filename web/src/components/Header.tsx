@@ -34,6 +34,12 @@ export default function Header() {
           style={{ order: 1 }}
           dir={dir}
         >
+          <Link
+            href="/"
+            className="px-3 py-1.5 rounded-lg text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all"
+          >
+            {t.navSearch}
+          </Link>
           <a
             href="/#how-it-works"
             className="px-3 py-1.5 rounded-lg text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all"
