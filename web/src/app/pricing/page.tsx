@@ -148,8 +148,8 @@ export default function PricingPage() {
                   </div>
                 )}
 
-                <div className="mb-5" dir={dir}>
-                  <h2 className="text-xl font-bold mb-1" style={{ color: "#0F172A" }}>{plan.name}</h2>
+                <div className="mb-4" dir={dir}>
+                  <h2 className="text-xs font-semibold tracking-widest uppercase text-slate-500 mb-2">{plan.name}</h2>
                   <p className="text-slate-400 text-sm leading-relaxed">{plan.description}</p>
                   {isComingSoon && (
                     <p className="text-xs text-slate-400 italic mt-2">{t.comingSoonNote}</p>
@@ -158,20 +158,20 @@ export default function PricingPage() {
 
                 <div className="mb-6 pb-6 border-b border-slate-100" dir={dir}>
                   {plan.monthlyPrice === 0 ? (
-                    <span className="text-3xl font-bold" style={{ color: "#0F172A" }}>{t.freeLabel}</span>
+                    <span className="text-5xl font-bold" style={{ color: "#0F172A" }}>{t.freeLabel}</span>
                   ) : (
                     <>
-                      <span className="text-3xl font-bold" style={{ color: "#0F172A" }}>${price}</span>
-                      <span className="text-slate-400 text-sm">{t.perMonth}</span>
-                      {billed && <p className="text-xs text-slate-400 mt-1">{t.billedYearly} {billed}</p>}
+                      <span className="text-5xl font-bold" style={{ color: "#0F172A" }}>${price}</span>
+                      <span className="text-slate-400 text-sm ms-1">{t.perMonth}</span>
+                      {billed && <p className="text-xs text-slate-400 mt-2">{t.billedYearly} {billed}</p>}
                     </>
                   )}
                 </div>
 
-                <ul className="mb-7 flex-1 space-y-2.5 mx-auto w-fit" dir={dir}>
+                <ul className="mb-7 flex-1 space-y-2 mx-auto w-fit" dir={dir}>
                   {plan.features.map((f, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-slate-600 items-start text-start">
-                      <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#10B981" }}>✓</span>
+                    <li key={i} className="flex gap-2 text-sm font-normal text-slate-500 items-start text-start">
+                      <span className="shrink-0 mt-0.5" style={{ color: "#10B981" }}>✓</span>
                       <span>{f}</span>
                     </li>
                   ))}
