@@ -46,6 +46,10 @@ export const T: Record<Lang, {
   etyOriginalWord: string;
   etyOriginalMeaning: string;
   etyBreakdown: string;
+  generateImage: string;
+  generatingImage: string;
+  imageFailed: string;
+  imageLimitReached: string;
   understandMore: string;
   goDeeper: string;
   moreExamples: string;
@@ -94,6 +98,8 @@ export const T: Record<Lang, {
   yearlyBadge: string;
   billedYearly: string;
   mostPopular: string;
+  comingSoon: string;
+  comingSoonNote: string;
   mostPeopleChoose: string;
   cancelAnytime: string;
   startFree: string;
@@ -202,6 +208,10 @@ export const T: Record<Lang, {
     etyOriginalWord: "Original",
     etyOriginalMeaning: "Meant",
     etyBreakdown: "Parts",
+    generateImage: "Generate image",
+    generatingImage: "Creating image…",
+    imageFailed: "Couldn't create image. Try again.",
+    imageLimitReached: "Monthly image limit reached. Upgrade to Deep for more.",
     understandMore: "Understand more ↓",
     goDeeper: "Go deeper ↓",
     moreExamples: "More examples",
@@ -247,6 +257,8 @@ export const T: Record<Lang, {
     yearlyBadge: "Save 33% — 2 months free",
     billedYearly: "Billed",
     mostPopular: "Most popular",
+    comingSoon: "Coming soon",
+    comingSoonNote: "Advanced features in development",
     mostPeopleChoose: "Most people choose this",
     cancelAnytime: "Cancel anytime. No hidden fees. Secure payments by Stripe.",
     startFree: "Start free",
@@ -356,6 +368,10 @@ export const T: Record<Lang, {
     etyOriginalWord: "מילה מקורית",
     etyOriginalMeaning: "משמעות מקורית",
     etyBreakdown: "חלקי מילה",
+    generateImage: "צור תמונה",
+    generatingImage: "יוצרים תמונה…",
+    imageFailed: "לא הצלחנו ליצור תמונה. נסה שוב.",
+    imageLimitReached: "הגעת למכסת התמונות החודשית. שדרג ל-Deep למכסה גדולה יותר.",
     understandMore: "הבן יותר ↓",
     goDeeper: "העמק ↓",
     moreExamples: "עוד דוגמאות",
@@ -401,6 +417,8 @@ export const T: Record<Lang, {
     yearlyBadge: "חסוך 33% — 2 חודשים חינם",
     billedYearly: "מחויב",
     mostPopular: "הכי פופולרי",
+    comingSoon: "בקרוב",
+    comingSoonNote: "פיצ'רים מתקדמים בשלבי פיתוח",
     mostPeopleChoose: "רוב האנשים בוחרים בזה",
     cancelAnytime: "ביטול בכל עת. ללא עמלות נסתרות. תשלום מאובטח דרך Stripe.",
     startFree: "התחל בחינם",
@@ -510,6 +528,10 @@ export const T: Record<Lang, {
     etyOriginalWord: "الكلمة الأصلية",
     etyOriginalMeaning: "المعنى الأصلي",
     etyBreakdown: "أجزاء الكلمة",
+    generateImage: "إنشاء صورة",
+    generatingImage: "جاري إنشاء الصورة…",
+    imageFailed: "تعذر إنشاء الصورة. حاول مرة أخرى.",
+    imageLimitReached: "وصلت إلى الحد الشهري للصور. قم بالترقية إلى Deep للحصول على المزيد.",
     understandMore: "↓ فهم أكثر",
     goDeeper: "↓ تعمق أكثر",
     moreExamples: "مزيد من الأمثلة",
@@ -555,6 +577,8 @@ export const T: Record<Lang, {
     yearlyBadge: "وفر 33% — شهران مجاناً",
     billedYearly: "يُفوتر",
     mostPopular: "الأكثر شعبية",
+    comingSoon: "قريباً",
+    comingSoonNote: "ميزات متقدمة قيد التطوير",
     mostPeopleChoose: "معظم الناس يختارون هذا",
     cancelAnytime: "إلغاء في أي وقت. بدون رسوم خفية. دفع آمن عبر Stripe.",
     startFree: "ابدأ مجاناً",
@@ -664,6 +688,10 @@ export const T: Record<Lang, {
     etyOriginalWord: "Исходное слово",
     etyOriginalMeaning: "Исходный смысл",
     etyBreakdown: "Части слова",
+    generateImage: "Создать изображение",
+    generatingImage: "Создаём изображение…",
+    imageFailed: "Не удалось создать изображение. Попробуй ещё раз.",
+    imageLimitReached: "Достигнут месячный лимит изображений. Перейди на Deep для увеличения.",
     understandMore: "Подробнее ↓",
     goDeeper: "Глубже ↓",
     moreExamples: "Ещё примеры",
@@ -709,6 +737,8 @@ export const T: Record<Lang, {
     yearlyBadge: "Скидка 33% — 2 месяца бесплатно",
     billedYearly: "Оплата",
     mostPopular: "Самый популярный",
+    comingSoon: "Скоро",
+    comingSoonNote: "Продвинутые функции в разработке",
     mostPeopleChoose: "Большинство выбирают это",
     cancelAnytime: "Отмена в любое время. Без скрытых платежей. Безопасная оплата через Stripe.",
     startFree: "Начать бесплатно",

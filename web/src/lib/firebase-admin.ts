@@ -1,6 +1,7 @@
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
+import { getStorage } from "firebase-admin/storage";
 
 let adminApp: App | null = null;
 
@@ -30,6 +31,7 @@ function getAdminApp(): App {
   adminApp = initializeApp({
     credential: cert(parsed),
     projectId: parsed.project_id,
+    storageBucket: `${parsed.project_id}.firebasestorage.app`,
   });
   return adminApp;
 }
@@ -40,6 +42,19 @@ export function getAdminDb() {
 
 export function getAdminAuth() {
   return getAuth(getAdminApp());
+}
+
+export function getAdminStorage() {
+  return getStorage(getAdminApp());
+}
+
+export function getDefaultBucket() {
+  // Explicit bucket name ensures Storage works even if the app was initialized
+  // in a previous call without storageBucket set (e.g. hot reload).
+  const sa = process.env.FIREBASE_SERVICE_ACCOUNT;
+  if (!sa) throw new Error("FIREBASE_SERVICE_ACCOUNT not set");
+  const projectId = JSON.parse(sa).project_id;
+  return getAdminStorage().bucket(`${projectId}.firebasestorage.app`);
 }
 
 export type UserPlan = "basic" | "clear" | "deep";

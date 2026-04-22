@@ -5,15 +5,16 @@ import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
-interface Meaning {
-  meaning: string;
-  examples: string[];
-}
-
 interface KidsExplanation {
   intro: string;
   explanation: string;
   examples: string[];
+}
+
+interface Meaning {
+  meaning: string;
+  examples: string[];
+  kidsExplanation?: KidsExplanation;
 }
 
 interface Etymology {
@@ -68,63 +69,13 @@ export default function Home() {
   const [phase, setPhase] = useState<SearchPhase>({ kind: "idle" });
   const [contextInput, setContextInput] = useState("");
   const [error, setError] = useState("");
-  const [kidsExplanation, setKidsExplanation] = useState<KidsExplanation | null>(null);
-  const [kidsLoading, setKidsLoading] = useState(false);
-  const [kidsError, setKidsError] = useState("");
 
   const { t, dir: uiDir, lang } = useLang();
-  const { user, plan, promptLogin } = useAuth();
+  const { user, plan } = useAuth();
   const resultRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useSectionObserver();
-
-  async function fetchKidsExplanation(word: string, meaning: string) {
-    if (!user) {
-      promptLogin(t.kidsUpgradeNeeded);
-      return;
-    }
-    if (plan === "basic") {
-      setKidsError(t.kidsUpgradeNeeded);
-      return;
-    }
-    setKidsLoading(true);
-    setKidsError("");
-    try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/explain-for-kids", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({ word, meaning, uiLang: lang }),
-      });
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        if (errData.error === "upgrade_required") {
-          setKidsError(t.kidsUpgradeNeeded);
-        } else {
-          setKidsError(t.kidsError);
-        }
-        return;
-      }
-      const data: KidsExplanation = await res.json();
-      setKidsExplanation(data);
-    } catch (e) {
-      console.error("kids fetch error:", e);
-      setKidsError(t.kidsError);
-    } finally {
-      setKidsLoading(false);
-    }
-  }
-
-  // Reset kids explanation whenever phase changes to a new result
-  useEffect(() => {
-    setKidsExplanation(null);
-    setKidsError("");
-    setKidsLoading(false);
-  }, [phase.kind, phase.kind === "result" ? phase.result.word : null]);
 
   const isIdle = phase.kind === "idle";
   const isLoading = phase.kind === "loading";
@@ -138,9 +89,18 @@ export default function Home() {
     setPhase({ kind: "loading" });
     setError("");
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          headers.Authorization = `Bearer ${idToken}`;
+        } catch {
+          // token failed — proceed anonymously, backend will fall back to basic
+        }
+      }
       const res = await fetch("/api/define", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ word, contextSentence, uiLang: lang }),
       });
 
@@ -248,7 +208,10 @@ export default function Home() {
   const WHO = [t.who1, t.who2, t.who3, t.who4, t.who5];
   const WHO_ICONS = ["🎓", "👨‍👩‍👧", "🏫", "🌍", "💡"];
 
-  const showSections = isIdle && !isLoading;
+  const isPaidUser = plan === "clear" || plan === "deep";
+  // Hide marketing landing sections for paid users at all times.
+  // For Basic/anonymous — show them only when idle (no search in progress).
+  const showSections = !isPaidUser && isIdle && !isLoading;
 
   return (
     <main className="min-h-screen bg-[#F8FAFC]" dir={uiDir} data-lang={lang}>
@@ -270,9 +233,11 @@ export default function Home() {
               <p className="font-semibold mb-3" style={{ color: "#0F172A", letterSpacing: uiDir === "rtl" ? "0.2px" : "-0.5px", lineHeight: uiDir === "rtl" ? "1.35" : "1.25", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 600 }}>
                 {t.heroHeadline}
               </p>
-              <p className="text-slate-400 leading-relaxed max-w-md mx-auto" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.7" : "1.6" }}>
-                {t.heroSubline}
-              </p>
+              {!isPaidUser && (
+                <p className="text-slate-400 leading-relaxed max-w-md mx-auto" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.7" : "1.6" }}>
+                  {t.heroSubline}
+                </p>
+              )}
             </div>
           )}
 
@@ -308,8 +273,8 @@ export default function Home() {
               </div>
             </form>
 
-            {/* Chips — idle only */}
-            {isIdle && (
+            {/* Chips — idle only, non-paid only */}
+            {isIdle && !isPaidUser && (
               <div className="flex flex-wrap gap-2 mt-6" style={{ justifyContent: uiDir === "rtl" ? "flex-end" : "flex-start" }}>
                 <span className="text-slate-400 text-sm self-center">{t.tryLabel}</span>
                 {t.chips.map((ex) => (
@@ -318,8 +283,8 @@ export default function Home() {
               </div>
             )}
 
-            {/* Support line */}
-            {isIdle && (
+            {/* Support line — non-paid only */}
+            {isIdle && !isPaidUser && (
               <p className="text-center text-slate-400 text-sm mt-6 italic animate-fade-in delay-400"
                 dangerouslySetInnerHTML={{ __html: t.heroSupport }} />
             )}
@@ -397,10 +362,8 @@ export default function Home() {
                 onReset={reset}
                 onShowAll={() => {/* already showing all */}}
                 plan={plan}
-                kidsExplanation={kidsExplanation}
-                kidsLoading={kidsLoading}
-                kidsError={kidsError}
-                onRequestKids={fetchKidsExplanation}
+                uiLang={lang}
+                getIdToken={async () => (user ? await user.getIdToken() : null)}
               />
             )}
           </div>
@@ -582,17 +545,15 @@ export default function Home() {
 }
 
 // ── RESULT VIEW ──
-function ResultView({ result, uiDir, t, onReset, plan, kidsExplanation, kidsLoading, kidsError, onRequestKids }: {
+function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang }: {
   result: WordResult;
   uiDir: "ltr" | "rtl";
   t: ReturnType<typeof useLang>["t"];
   onReset: () => void;
   onShowAll: () => void;
   plan: "basic" | "clear" | "deep";
-  kidsExplanation: KidsExplanation | null;
-  kidsLoading: boolean;
-  kidsError: string;
-  onRequestKids: (word: string, meaning: string) => void;
+  getIdToken: () => Promise<string | null>;
+  uiLang: string;
 }) {
   const resultLangDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
   const rDir = resultLangDir;
@@ -619,32 +580,69 @@ function ResultView({ result, uiDir, t, onReset, plan, kidsExplanation, kidsLoad
         </div>
       )}
 
-      {/* Meanings — each with its own examples */}
+      {/* Meanings — each with its own examples and (for paid users) kids explanation */}
       {result.meanings?.map((m, i) => (
-        <div key={i} className="gadit-card px-8 py-6 space-y-4">
-          {/* Meaning header */}
-          <div className="flex items-start gap-3">
-            {result.meanings.length > 1 && (
-              <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5"
-                style={{ background: "#2563EB", minWidth: "1.5rem" }}>
-                {i + 1}
-              </span>
+        <div key={i} className="space-y-3">
+          <div className="gadit-card px-8 py-6 space-y-4">
+            {/* Meaning header */}
+            <div className="flex items-start gap-3">
+              {result.meanings.length > 1 && (
+                <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5"
+                  style={{ background: "#2563EB", minWidth: "1.5rem" }}>
+                  {i + 1}
+                </span>
+              )}
+              <p className="text-slate-800 font-medium leading-relaxed" style={{ fontSize: "1.05rem", lineHeight: lineH }}>
+                {m.meaning}
+              </p>
+            </div>
+
+            {/* Examples for this meaning */}
+            {m.examples?.length > 0 && (
+              <ul className="space-y-2 pt-1 border-t border-slate-100">
+                {m.examples.map((ex, j) => (
+                  <li key={j} className="flex gap-2.5 text-slate-500 text-sm" style={{ lineHeight: lineH }}>
+                    <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#2563EB" }}>•</span>
+                    <span className="italic">{ex}</span>
+                  </li>
+                ))}
+              </ul>
             )}
-            <p className="text-slate-800 font-medium leading-relaxed" style={{ fontSize: "1.05rem", lineHeight: lineH }}>
-              {m.meaning}
-            </p>
           </div>
 
-          {/* Examples for this meaning */}
-          {m.examples?.length > 0 && (
-            <ul className="space-y-2 pt-1 border-t border-slate-100">
-              {m.examples.map((ex, j) => (
-                <li key={j} className="flex gap-2.5 text-slate-500 text-sm" style={{ lineHeight: lineH }}>
-                  <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#2563EB" }}>•</span>
-                  <span className="italic">{ex}</span>
-                </li>
-              ))}
-            </ul>
+          {/* Kids explanation for this meaning — auto-shown when present (paid users) */}
+          {m.kidsExplanation && (
+            <div className="rounded-3xl px-8 py-6 space-y-3" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl shrink-0">🧒</span>
+                <p className="text-base font-semibold text-amber-900">{m.kidsExplanation.intro}</p>
+              </div>
+              <p className="text-slate-700 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
+                {m.kidsExplanation.explanation}
+              </p>
+              {m.kidsExplanation.examples?.length > 0 && (
+                <ul className="space-y-2 pt-2 border-t border-amber-200">
+                  {m.kidsExplanation.examples.map((ex, j) => (
+                    <li key={j} className="flex gap-2.5 text-slate-600 text-sm" style={{ lineHeight: lineH }}>
+                      <span className="shrink-0 font-semibold mt-0.5 text-amber-600">•</span>
+                      <span>{ex}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
+          {/* Image generator (Clear+ only) */}
+          {(plan === "clear" || plan === "deep") && (
+            <MeaningImage
+              word={result.word}
+              meaning={m.meaning}
+              uiLang={uiLang}
+              getIdToken={getIdToken}
+              t={t}
+              lineH={lineH}
+            />
           )}
         </div>
       ))}
@@ -689,66 +687,21 @@ function ResultView({ result, uiDir, t, onReset, plan, kidsExplanation, kidsLoad
         </div>
       )}
 
-      {/* Kids explanation (Clear+) or Upsell (Basic) */}
-      {kidsExplanation ? (
-        <div className="rounded-3xl px-8 py-7 space-y-4" style={{ background: "linear-gradient(135deg, rgb(254 249 231) 0%, rgb(254 240 210) 100%)", border: "1px solid rgb(254 215 170)" }}>
-          <div className="flex items-center gap-3">
-            <span className="text-2xl shrink-0">🧒</span>
-            <p className="text-base font-semibold text-amber-900">{kidsExplanation.intro}</p>
-          </div>
-          <p className="text-slate-700 text-sm leading-relaxed" style={{ lineHeight: lineH }}>
-            {kidsExplanation.explanation}
-          </p>
-          <ul className="space-y-2 pt-2 border-t border-amber-200">
-            {kidsExplanation.examples.map((ex, j) => (
-              <li key={j} className="flex gap-2.5 text-slate-600 text-sm" style={{ lineHeight: lineH }}>
-                <span className="shrink-0 font-semibold mt-0.5 text-amber-600">•</span>
-                <span>{ex}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
+      {/* Upsell — Basic users only (paid users get kids + images inline) */}
+      {plan === "basic" && (
         <div className="rounded-3xl px-8 py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
-          {plan === "basic" && (
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
-          )}
-          {(() => {
-            const canUseKids = plan === "clear" || plan === "deep";
-            const firstMeaning = result.meanings[0]?.meaning || "";
-            return (
-              <button
-                type="button"
-                onClick={() => {
-                  if (canUseKids) {
-                    onRequestKids(result.word, firstMeaning);
-                  } else {
-                    window.location.href = "/pricing";
-                  }
-                }}
-                disabled={kidsLoading}
-                className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all disabled:opacity-60"
-                style={{ boxShadow: "var(--shadow-xs)" }}
-              >
-                <span className="text-xl shrink-0">🧒</span>
-                <p className="font-medium text-slate-700 text-sm">
-                  {kidsLoading ? t.kidsGenerating : (canUseKids ? t.forKids : t.upsellKids)}
-                </p>
-              </button>
-            );
-          })()}
-          {kidsError && (
-            <p className="text-sm text-amber-700 px-1">{kidsError}</p>
-          )}
-          <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all" style={{ boxShadow: "var(--shadow-xs)" }}>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
+            <span className="text-xl shrink-0">🧒</span>
+            <p className="font-medium text-slate-700 text-sm">{t.upsellKids}</p>
+          </div>
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
             <span className="text-xl shrink-0">🖼️</span>
             <p className="font-medium text-slate-700 text-sm">{t.upsellVisual}</p>
           </div>
-          {plan === "basic" && (
-            <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block mt-1">
-              {t.upsellBtn}
-            </Link>
-          )}
+          <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block mt-1">
+            {t.upsellBtn}
+          </Link>
         </div>
       )}
 
@@ -756,6 +709,85 @@ function ResultView({ result, uiDir, t, onReset, plan, kidsExplanation, kidsLoad
       <button onClick={onReset} className="w-full py-3 rounded-2xl text-slate-400 text-sm hover:text-blue-500 transition-colors">
         {t.searchAnother}
       </button>
+    </div>
+  );
+}
+
+function MeaningImage({ word, meaning, uiLang, getIdToken, t, lineH }: {
+  word: string;
+  meaning: string;
+  uiLang: string;
+  getIdToken: () => Promise<string | null>;
+  t: ReturnType<typeof useLang>["t"];
+  lineH: string;
+}) {
+  const [url, setUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleGenerate() {
+    setLoading(true);
+    setError("");
+    try {
+      const idToken = await getIdToken();
+      if (!idToken) {
+        setError(t.imageFailed);
+        return;
+      }
+      const res = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ word, meaning, uiLang }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 429) {
+          setError(t.imageLimitReached);
+        } else {
+          setError(t.imageFailed);
+        }
+        console.error("image gen failed:", res.status, data);
+        return;
+      }
+      const data = await res.json();
+      if (data.url) setUrl(data.url);
+      else setError(t.imageFailed);
+    } catch (e) {
+      console.error("image gen error:", e);
+      setError(t.imageFailed);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (url) {
+    return (
+      <div className="rounded-3xl overflow-hidden" style={{ border: "1px solid rgb(226 232 240)" }}>
+        <img src={url} alt={meaning} className="w-full h-auto block" loading="lazy" />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={handleGenerate}
+        disabled={loading}
+        className="flex items-center gap-3 p-4 w-full text-start rounded-2xl bg-white border border-slate-100 cursor-pointer hover:border-blue-200 transition-all disabled:opacity-60"
+        style={{ boxShadow: "var(--shadow-xs)" }}
+      >
+        <span className="text-xl shrink-0">🎨</span>
+        <p className="font-medium text-slate-700 text-sm">
+          {loading ? t.generatingImage : t.generateImage}
+        </p>
+      </button>
+      {error && (
+        <p className="text-sm text-amber-700 px-1 mt-2" style={{ lineHeight: lineH }}>{error}</p>
+      )}
     </div>
   );
 }

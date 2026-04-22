@@ -116,11 +116,13 @@ export default function PricingPage() {
             const billed = billing === "yearly" && plan.yearlyPrice > 0
               ? `$${plan.yearlyPrice}/year`
               : null;
+            const isComingSoon = plan.id === "deep";
 
             return (
               <div
                 key={plan.id}
-                className="relative bg-white rounded-3xl flex flex-col transition-all duration-200"
+                className="relative bg-white rounded-3xl flex flex-col transition-all duration-200 text-center"
+                dir="ltr"
                 style={plan.popular ? {
                   border: "1.5px solid rgb(147 197 253)",
                   boxShadow: "0 8px 32px 0 rgb(37 99 235 / 0.13), 0 2px 8px 0 rgb(37 99 235 / 0.08)",
@@ -130,21 +132,31 @@ export default function PricingPage() {
                   border: "1px solid rgb(226 232 240 / 0.9)",
                   boxShadow: "0 2px 8px 0 rgb(0 0 0 / 0.05)",
                   padding: "1.75rem",
+                  ...(isComingSoon ? { opacity: 0.85 } : {}),
                 }}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white"
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white whitespace-nowrap"
                     style={{ background: "#2563EB", boxShadow: "0 2px 8px rgb(37 99 235 / 0.35)" }}>
                     {t.mostPopular}
                   </div>
                 )}
+                {isComingSoon && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white whitespace-nowrap"
+                    style={{ background: "#64748B", boxShadow: "0 2px 8px rgb(100 116 139 / 0.35)" }}>
+                    {t.comingSoon}
+                  </div>
+                )}
 
-                <div className="mb-5">
+                <div className="mb-5" dir={dir}>
                   <h2 className="text-xl font-bold mb-1" style={{ color: "#0F172A" }}>{plan.name}</h2>
                   <p className="text-slate-400 text-sm leading-relaxed">{plan.description}</p>
+                  {isComingSoon && (
+                    <p className="text-xs text-slate-400 italic mt-2">{t.comingSoonNote}</p>
+                  )}
                 </div>
 
-                <div className="mb-6 pb-6 border-b border-slate-100">
+                <div className="mb-6 pb-6 border-b border-slate-100" dir={dir}>
                   {plan.monthlyPrice === 0 ? (
                     <span className="text-3xl font-bold" style={{ color: "#0F172A" }}>{t.freeLabel}</span>
                   ) : (
@@ -156,33 +168,36 @@ export default function PricingPage() {
                   )}
                 </div>
 
-                <ul className="space-y-2.5 mb-7 flex-1">
+                <ul className="space-y-2.5 mb-7 flex-1 text-start" dir={dir}>
                   {plan.features.map((f, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-slate-600">
-                      <span className="shrink-0 font-semibold" style={{ color: "#10B981" }}>✓</span> {f}
+                    <li key={i} className="flex gap-2 text-sm text-slate-600 justify-center">
+                      <span className="shrink-0 font-semibold" style={{ color: "#10B981" }}>✓</span>
+                      <span className="text-start">{f}</span>
                     </li>
                   ))}
                 </ul>
 
                 <button
-                  onClick={() => handleSubscribe(plan)}
-                  disabled={loading === plan.id}
-                  className={`w-full py-3 rounded-xl font-semibold text-sm disabled:opacity-50 transition-all ${
-                    plan.popular
-                      ? "text-white hover:opacity-90"
-                      : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 bg-white"
+                  onClick={() => !isComingSoon && handleSubscribe(plan)}
+                  disabled={loading === plan.id || isComingSoon}
+                  className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
+                    isComingSoon
+                      ? "border border-slate-200 text-slate-400 bg-slate-50 cursor-not-allowed"
+                      : plan.popular
+                      ? "text-white hover:opacity-90 disabled:opacity-50"
+                      : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 bg-white disabled:opacity-50"
                   }`}
-                  style={plan.popular ? {
+                  style={isComingSoon ? {} : plan.popular ? {
                     background: "#2563EB",
                     boxShadow: "0 4px 14px rgb(37 99 235 / 0.25)",
                   } : {
                     boxShadow: "0 1px 3px rgb(0 0 0 / 0.05)",
                   }}
                 >
-                  {loading === plan.id ? "…" : plan.cta}
+                  {isComingSoon ? t.comingSoon : loading === plan.id ? "…" : plan.cta}
                 </button>
 
-                {plan.note && (
+                {plan.note && !isComingSoon && (
                   <p className="text-center text-xs text-slate-400 mt-2">{plan.note}</p>
                 )}
               </div>

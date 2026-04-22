@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 
 const SYSTEM_PROMPT = `You are Gadit — a word understanding engine. Your job is to guide the user into genuinely understanding a word — not just define it.
 
@@ -164,6 +164,47 @@ CRITICAL RULES (FINAL CHECKLIST):
 - Keep language human, warm, clear. No academic tone. No dictionary phrasing.
 - Examples must feel like real life — sentences a person would actually say or read.`;
 
+// When the user is on Clear/Deep plan, append this instruction to the system prompt.
+// It adds a kidsExplanation object INSIDE each meaning.
+const KIDS_ADDON = `
+
+🟢 ADDITIONAL INSTRUCTION FOR THIS USER (paid plan):
+For EVERY meaning in meanings[], you must ALSO include a "kidsExplanation" field — a simple, warm explanation suitable for a child aged 6-10, WRITTEN IN THE USER'S UI LANGUAGE.
+
+Format of kidsExplanation (inside each meaning item):
+{
+  "intro": "A warm inviting opening — e.g. 'בואו נסביר את המשמעות הזו לילדים!' / 'Let's explain this meaning like you're 10!' / 'دعونا نشرح هذا المعنى للأطفال!' / 'Давайте объясним это значение ребёнку!'",
+  "explanation": "The meaning in very simple words a child understands — 1-2 short sentences. No jargon, no abstraction. Like a parent explaining to their kid.",
+  "examples": ["three simple everyday child-friendly examples", "relatable to a child's world — home, toys, pets, school, playground", "concrete and fun"]
+}
+
+CRITICAL RULES for kidsExplanation:
+- The kidsExplanation is SPECIFIC to THIS meaning, not the word in general. If the word "קרן" has the meaning "horn of an animal", the kids explanation talks about animals with horns. If the meaning is "ray of light", it talks about sunlight — not about animals.
+- Use words a child actually knows. Avoid abstract words like "concept", "tangible", "financial instrument".
+- Each meaning gets its OWN kidsExplanation — never share one between multiple meanings.
+
+Example — word "קרן" meaning "ray of light" — Hebrew user:
+"kidsExplanation": {
+  "intro": "בואו נסביר את המשמעות הזו לילדים!",
+  "explanation": "קרן אור זה כמו פס דק של אור שבא ממקור כמו השמש או פנס. אפשר לראות אותה כשהאור עובר דרך חור או ערפל.",
+  "examples": [
+    "בבוקר, קרן שמש נכנסת דרך החלון ומאירה את המיטה שלך.",
+    "כשאתה מדליק פנס בחושך, יוצאת ממנו קרן אור ארוכה.",
+    "המגדלור שולח קרן אור חזקה שעוזרת לספינות למצוא את הדרך."
+  ]
+}
+
+Example — word "ephemeral" — English user:
+"kidsExplanation": {
+  "intro": "Let's explain this like you're 10!",
+  "explanation": "Ephemeral means something that only lasts a very short time. Like a soap bubble that pops right after you make it.",
+  "examples": [
+    "Ice cream on a hot summer day is ephemeral — it melts super fast.",
+    "A rainbow after rain is ephemeral — it's there for a few minutes, then gone.",
+    "The flame on a birthday candle is ephemeral — you blow it out in one second."
+  ]
+}`;
+
 const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 
 ⚠️ CRITICAL RULE #1 — NEVER AUTOCORRECT THE WORD:
@@ -290,12 +331,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Word is required" }, { status: 400 });
     }
 
+    // Determine user's plan (verified via Firebase ID token). Anonymous/invalid → basic.
+    const authHeader = req.headers.get("Authorization") || "";
+    const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+    const userInfo = idToken ? await verifyUserAndGetPlan(idToken) : null;
+    const plan = userInfo?.plan ?? "basic";
+    const isPaid = plan === "clear" || plan === "deep";
+
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
     const uiLangName = UI_LANG_NAMES[uiLangCode];
 
+    // Cache key includes a "kids" suffix for paid users so they don't share cache with basic users
+    const tierKey = isPaid ? "kids" : "base";
     const cacheKey = contextSentence
-      ? `ctx_${uiLangCode}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
-      : `auto_${uiLangCode}_${word.toLowerCase().trim()}`;
+      ? `ctx_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
+      : `auto_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}`;
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {
@@ -311,10 +361,11 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const systemPrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;
+    const basePrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;
+    const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
-      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (use this for all etymology fields — sourceLanguage, breakdown meanings, originalMeaning): ${uiLangName}`
-      : `Word: ${word}\nUser's UI language (use this for all etymology fields — sourceLanguage, breakdown meanings, originalMeaning): ${uiLangName}`;
+      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (use this for all etymology fields — sourceLanguage, breakdown meanings, originalMeaning, and kidsExplanation if applicable): ${uiLangName}`
+      : `Word: ${word}\nUser's UI language (use this for all etymology fields — sourceLanguage, breakdown meanings, originalMeaning, and kidsExplanation if applicable): ${uiLangName}`;
 
     // Stream from OpenAI
     let openAIResponse: Response;
