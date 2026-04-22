@@ -263,6 +263,13 @@ The user's spelling is intentional. Define the EXACT word they typed, character 
 4. "originalMeaning" — what it meant originally, in the user's language. Simple and clear
 PHILOSOPHY: KEEP IT SIMPLE. No jargon. No foreign scripts. No "שורש"/"root"/"משקל". See SYSTEM_PROMPT for examples.
 
+⚠️ CRITICAL RULE #2.5 — ETYMOLOGY IS OF THE WORD ITSELF, NOT OF THE CURRENT MEANING:
+The etymology describes where THE WORD ORIGINATED HISTORICALLY — not the current sentence's meaning.
+- For Hebrew "קרן" — regardless of whether the sentence uses the "ray of light" or "horn of animal" or "investment fund" meaning, etymology is ALWAYS the same: Akkadian/Latin/Greek (qarnu / cornu / kéras), originally meaning "the hard pointed part on an animal's head".
+- Do NOT say the sourceLanguage is Hebrew just because the word appears in a Hebrew sentence.
+- Do NOT say the originalMeaning is "ray of light" just because that's the meaning in the sentence.
+Give the word's TRUE historical origin — the language it came from, the transliterated original form, and what it meant in antiquity. Identical to what you'd return without a context sentence.
+
 ⚠️ CRITICAL RULE #3 — LINGUISTIC ACCURACY:
 Every word in your response must be a real, standard word in the target language. Do NOT invent words. If unsure about a word, use a simpler one you are sure of.
 

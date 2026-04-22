@@ -62,6 +62,7 @@ while (true) {
 
 console.log("word:", final.word);
 console.log("contextNote:", final.contextNote);
+console.log("etymology:", JSON.stringify(final.etymology, null, 2));
 console.log("meanings count:", final.meanings.length);
 final.meanings.forEach((m, i) => {
   console.log(`  ${i + 1}: ${m.meaning}`);
