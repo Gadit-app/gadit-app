@@ -47,8 +47,6 @@ interface WordResult {
 type SearchPhase =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "chooseMeaning"; word: string; result: WordResult }
-  | { kind: "contextInput"; word: string }
   | { kind: "result"; result: WordResult };
 
 const isRTLLanguage = (lang?: string) =>
@@ -176,15 +174,8 @@ export default function Home() {
       }
 
       if (!finalResult) throw new Error("Stream ended without final result");
-
-      // After streaming completes — if multi-meaning without context, switch to chooser
-      if (finalResult.multiplemeanings && !contextSentence) {
-        setPhase({ kind: "chooseMeaning", word, result: finalResult });
-        scrollToResult();
-      } else {
-        setPhase({ kind: "result", result: finalResult });
-        if (!startedStreaming) scrollToResult();
-      }
+      setPhase({ kind: "result", result: finalResult });
+      if (!startedStreaming) scrollToResult();
     } catch (e) {
       console.error("fetchWord error:", e);
       setError("Something went wrong. Please try again.");
@@ -196,14 +187,15 @@ export default function Home() {
     const query = (wordOverride ?? input).trim();
     if (!query) return;
     if (wordOverride) setInput(wordOverride);
-    await fetchWord(query);
+    const sentence = contextInput.trim();
+    await fetchWord(query, sentence || undefined);
   }
 
-  async function handleContextSubmit() {
-    if (phase.kind !== "contextInput") return;
-    const sentence = contextInput.trim();
-    if (!sentence) return;
-    await fetchWord(phase.word, sentence);
+  async function showAllMeanings() {
+    // Re-run the search without context to get all meanings
+    const query = input.trim();
+    if (!query) return;
+    await fetchWord(query);
   }
 
   function reset() {
@@ -284,6 +276,21 @@ export default function Home() {
               </div>
             </form>
 
+            {/* Context sentence — optional, always visible */}
+            <div className="mt-4" dir={uiDir}>
+              <p className="text-xs text-slate-400 mb-1.5 px-1">{t.contextHint}</p>
+              <input
+                type="text"
+                value={contextInput}
+                onChange={(e) => setContextInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(); } }}
+                placeholder={t.contextPlaceholder}
+                className="w-full px-5 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-sm focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                dir={uiDir}
+                style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
+              />
+            </div>
+
             {/* Kids mode toggle — paid users only */}
             {(plan === "clear" || plan === "deep") && (
               <div className="flex items-center gap-2 mt-3 px-1" style={{ justifyContent: uiDir === "rtl" ? "flex-start" : "flex-end" }} dir={uiDir}>
@@ -342,61 +349,6 @@ export default function Home() {
 
           {/* ── RESULT AREA ── */}
           <div ref={resultRef}>
-
-            {/* Multi-meaning chooser */}
-            {phase.kind === "chooseMeaning" && (
-              <div className="gadit-card px-8 py-8 space-y-5 animate-fade-in">
-                <p className="font-semibold text-slate-700" style={{ fontSize: "1.05rem", lineHeight: uiDir === "rtl" ? "1.6" : "1.5" }}>
-                  {t.multiMeaningPrompt.replace("{word}", phase.word)}
-                </p>
-                <div className="space-y-3">
-                  {/* Option 1: show all */}
-                  <button
-                    onClick={() => setPhase({ kind: "result", result: phase.result })}
-                    className="w-full text-start px-5 py-4 rounded-2xl border-2 font-medium transition-all hover:border-blue-300 hover:bg-blue-50"
-                    style={{ borderColor: "rgb(226 232 240)", color: "#0F172A" }}
-                  >
-                    <span className="text-blue-500 me-2">①</span>
-                    {t.multiMeaningOptionAll}
-                  </button>
-                  {/* Option 2: context */}
-                  <button
-                    onClick={() => setPhase({ kind: "contextInput", word: phase.word })}
-                    className="w-full text-start px-5 py-4 rounded-2xl border-2 font-medium transition-all hover:border-blue-300 hover:bg-blue-50"
-                    style={{ borderColor: "rgb(226 232 240)", color: "#0F172A" }}
-                  >
-                    <span className="text-blue-500 me-2">②</span>
-                    {t.multiMeaningOptionContext}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Context input */}
-            {phase.kind === "contextInput" && (
-              <div className="gadit-card px-8 py-8 space-y-4 animate-fade-in">
-                <p className="font-semibold text-slate-700">{t.multiMeaningContextPlaceholder.replace("{word}", phase.word)}</p>
-                <textarea
-                  value={contextInput}
-                  onChange={(e) => setContextInput(e.target.value)}
-                  placeholder={t.multiMeaningContextPlaceholder.replace("{word}", phase.word)}
-                  rows={3}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-700 text-base focus:outline-none focus:ring-2 focus:border-blue-300 resize-none transition-all"
-                  dir={uiDir}
-                  style={{ textAlign: uiDir === "rtl" ? "right" : "left" }}
-                  autoFocus
-                />
-                <div className="flex gap-3 flex-wrap">
-                  <button onClick={handleContextSubmit} disabled={!contextInput.trim()} className="btn-primary px-6 py-2.5 text-sm disabled:opacity-50">
-                    {t.multiMeaningContextBtn}
-                  </button>
-                  <button onClick={() => setPhase({ kind: "chooseMeaning", word: phase.word, result: { word: phase.word, language: "", multiplemeanings: true, meanings: [], etymology: { sourceLanguage: "", originalWord: "", breakdown: "", originalMeaning: "" } } })} className="btn-secondary px-5 py-2.5 text-sm">
-                    {t.showAllMeanings}
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Full result */}
             {result && (
               <ResultView
@@ -404,7 +356,7 @@ export default function Home() {
                 uiDir={uiDir}
                 t={t}
                 onReset={reset}
-                onShowAll={() => {/* already showing all */}}
+                onShowAll={showAllMeanings}
                 plan={plan}
                 uiLang={lang}
                 kidsMode={kidsMode}
@@ -590,7 +542,7 @@ export default function Home() {
 }
 
 // ── RESULT VIEW ──
-function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang, kidsMode }: {
+function ResultView({ result, uiDir, t, onReset, onShowAll, plan, getIdToken, uiLang, kidsMode }: {
   result: WordResult;
   uiDir: "ltr" | "rtl";
   t: ReturnType<typeof useLang>["t"];
@@ -781,6 +733,21 @@ function ResultView({ result, uiDir, t, onReset, plan, getIdToken, uiLang, kidsM
             {t.upsellBtn}
           </Link>
         </div>
+      )}
+
+      {/* "Show all meanings" — only when a context sentence was used (result has contextNote or single meaning came from context) */}
+      {result.contextNote && (
+        <button
+          onClick={onShowAll}
+          className="w-full py-3 rounded-2xl text-sm font-medium transition-all"
+          style={{
+            background: "rgb(239 246 255)",
+            color: "#2563EB",
+            border: "1px solid rgb(147 197 253)",
+          }}
+        >
+          {t.showAllMeaningsBtn}
+        </button>
       )}
 
       {/* Back */}

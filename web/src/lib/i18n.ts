@@ -35,6 +35,10 @@ export const T: Record<Lang, {
   multiMeaningOptionContext: string;
   multiMeaningContextPlaceholder: string;
   multiMeaningContextBtn: string;
+  contextHint: string;
+  contextPlaceholder: string;
+  showAllMeaningsBtn: string;
+  backToContext: string;
   showAllMeanings: string;
   meaningLabel: string;
   contextNote: string;
@@ -203,6 +207,10 @@ export const T: Record<Lang, {
     multiMeaningOptionContext: "Write a sentence — get the exact meaning",
     multiMeaningContextPlaceholder: "Write a sentence using «{word}»…",
     multiMeaningContextBtn: "Find the meaning",
+    contextHint: "Reading something? Paste the sentence the word appears in (optional)",
+    contextPlaceholder: "The sentence where the word appears…",
+    showAllMeaningsBtn: "Show all meanings",
+    backToContext: "Back",
     showAllMeanings: "Show all meanings",
     meaningLabel: "Meaning",
     contextNote: "Why this meaning fits your sentence",
@@ -368,6 +376,10 @@ export const T: Record<Lang, {
     multiMeaningOptionContext: "כתוב משפט — קבל את המשמעות המדויקת",
     multiMeaningContextPlaceholder: "כתוב משפט עם המילה «{word}»…",
     multiMeaningContextBtn: "מצא את המשמעות",
+    contextHint: "קורא משהו? הדבק את המשפט שבו מופיעה המילה (אופציונלי)",
+    contextPlaceholder: "המשפט שבו מופיעה המילה…",
+    showAllMeaningsBtn: "הצג את כל המשמעויות",
+    backToContext: "חזרה",
     showAllMeanings: "הצג את כל המשמעויות",
     meaningLabel: "משמעות",
     contextNote: "למה המשמעות הזו מתאימה למשפטך",
@@ -533,6 +545,10 @@ export const T: Record<Lang, {
     multiMeaningOptionContext: "اكتب جملة — احصل على المعنى الدقيق",
     multiMeaningContextPlaceholder: "اكتب جملة تستخدم فيها «{word}»…",
     multiMeaningContextBtn: "ابحث عن المعنى",
+    contextHint: "هل تقرأ شيئاً؟ الصق الجملة التي تظهر فيها الكلمة (اختياري)",
+    contextPlaceholder: "الجملة التي تظهر فيها الكلمة…",
+    showAllMeaningsBtn: "عرض جميع المعاني",
+    backToContext: "رجوع",
     showAllMeanings: "عرض جميع المعاني",
     meaningLabel: "معنى",
     contextNote: "لماذا هذا المعنى يناسب جملتك",
@@ -698,6 +714,10 @@ export const T: Record<Lang, {
     multiMeaningOptionContext: "Написать предложение — получить точное значение",
     multiMeaningContextPlaceholder: "Напиши предложение со словом «{word}»…",
     multiMeaningContextBtn: "Найти значение",
+    contextHint: "Читаешь что-то? Вставь предложение со словом (необязательно)",
+    contextPlaceholder: "Предложение, в котором встречается слово…",
+    showAllMeaningsBtn: "Показать все значения",
+    backToContext: "Назад",
     showAllMeanings: "Показать все значения",
     meaningLabel: "Значение",
     contextNote: "Почему это значение подходит к твоему предложению",
