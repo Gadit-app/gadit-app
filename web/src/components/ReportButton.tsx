@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
@@ -16,10 +16,23 @@ type Category =
   | "compare_words"
   | "other";
 
+const ALL_CATEGORIES: ReadonlyArray<{ key: Category; labelKey: string }> = [
+  { key: "definition", labelKey: "reportCatDefinition" },
+  { key: "etymology", labelKey: "reportCatEtymology" },
+  { key: "example", labelKey: "reportCatExample" },
+  { key: "kids_explanation", labelKey: "reportCatKids" },
+  { key: "idioms", labelKey: "reportCatIdioms" },
+  { key: "image", labelKey: "reportCatImage" },
+  { key: "quiz_wrong_answer", labelKey: "reportCatQuiz" },
+  { key: "compose_feedback", labelKey: "reportCatCompose" },
+  { key: "compare_words", labelKey: "reportCatCompare" },
+  { key: "other", labelKey: "reportCatOther" },
+];
+
 export default function ReportButton({
   word,
   contextSnapshot,
-  defaultCategories = [],
+  defaultCategories,
   size = "sm",
   label,
 }: {
@@ -30,31 +43,38 @@ export default function ReportButton({
   label?: string;
 }) {
   const { user } = useAuth();
-  const { t, lang } = useLang();
+  const { t, lang, dir } = useLang();
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [selected, setSelected] = useState<Set<Category>>(
-    new Set(defaultCategories)
-  );
+  const [selected, setSelected] = useState<Set<Category>>(new Set());
   const [details, setDetails] = useState("");
 
-  // Reset on open
+  // Stable reference to defaults so useEffect below doesn't infinitely reset.
+  // We only care about the *contents* of defaultCategories; sort + join → string key.
+  const defaultsKey = useMemo(
+    () => (defaultCategories ?? []).slice().sort().join(","),
+    [defaultCategories]
+  );
+
+  // Reset state when modal opens
   useEffect(() => {
     if (open) {
-      setSelected(new Set(defaultCategories));
+      setSelected(new Set(defaultsKey ? (defaultsKey.split(",") as Category[]) : []));
       setDetails("");
       setSubmitted(false);
       setErrorMsg("");
     }
-  }, [open, defaultCategories]);
+  }, [open, defaultsKey]);
 
   function toggle(cat: Category) {
-    const next = new Set(selected);
-    if (next.has(cat)) next.delete(cat);
-    else next.add(cat);
-    setSelected(next);
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
+      return next;
+    });
   }
 
   async function submit() {
@@ -88,7 +108,6 @@ export default function ReportButton({
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       setSubmitted(true);
-      // Auto-close after 1.5s
       setTimeout(() => setOpen(false), 1800);
     } catch (e) {
       console.error("report submit:", e);
@@ -103,19 +122,6 @@ export default function ReportButton({
       ? "inline-flex items-center gap-1 text-xs text-slate-300 hover:text-slate-500 transition-colors"
       : "inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 transition-colors";
 
-  const ALL_CATEGORIES: { key: Category; labelKey: keyof typeof t }[] = [
-    { key: "definition", labelKey: "reportCatDefinition" },
-    { key: "etymology", labelKey: "reportCatEtymology" },
-    { key: "example", labelKey: "reportCatExample" },
-    { key: "kids_explanation", labelKey: "reportCatKids" },
-    { key: "idioms", labelKey: "reportCatIdioms" },
-    { key: "image", labelKey: "reportCatImage" },
-    { key: "quiz_wrong_answer", labelKey: "reportCatQuiz" },
-    { key: "compose_feedback", labelKey: "reportCatCompose" },
-    { key: "compare_words", labelKey: "reportCatCompare" },
-    { key: "other", labelKey: "reportCatOther" },
-  ];
-
   return (
     <>
       <button
@@ -124,7 +130,7 @@ export default function ReportButton({
         className={triggerClass}
         title={t.reportButton}
       >
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <line x1="4" y1="22" x2="4" y2="15" />
           <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
         </svg>
@@ -136,11 +142,13 @@ export default function ReportButton({
           className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in"
           style={{ background: "rgb(15 23 42 / 0.5)" }}
           onClick={() => !submitting && setOpen(false)}
+          dir={dir}
         >
           <div
             className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 max-h-[85vh] overflow-y-auto"
             style={{ boxShadow: "0 20px 50px rgb(0 0 0 / 0.20)" }}
             onClick={(e) => e.stopPropagation()}
+            dir={dir}
           >
             {submitted ? (
               <div className="text-center py-8">
@@ -161,23 +169,36 @@ export default function ReportButton({
                 <p className="text-xs text-slate-500 mb-5">{t.reportSubtitle}</p>
 
                 {/* Categories */}
-                <div className="space-y-2 mb-5">
-                  {ALL_CATEGORIES.map(({ key, labelKey }) => (
-                    <label
-                      key={key}
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selected.has(key)}
-                        onChange={() => toggle(key)}
-                        className="w-4 h-4 accent-blue-600"
-                      />
-                      <span className="text-sm text-slate-700">
-                        {t[labelKey] as string}
-                      </span>
-                    </label>
-                  ))}
+                <div className="space-y-1 mb-5">
+                  {ALL_CATEGORIES.map(({ key, labelKey }) => {
+                    const isChecked = selected.has(key);
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => toggle(key)}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors text-start"
+                      >
+                        <span
+                          className="shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-all"
+                          style={{
+                            borderColor: isChecked ? "#2563EB" : "rgb(203 213 225)",
+                            background: isChecked ? "#2563EB" : "white",
+                          }}
+                          aria-hidden="true"
+                        >
+                          {isChecked && (
+                            <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+                              <path d="M3 8l3.5 3.5L13 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          )}
+                        </span>
+                        <span className="text-sm text-slate-700">
+                          {(t as unknown as Record<string, string>)[labelKey] ?? labelKey}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Optional details */}
@@ -192,6 +213,7 @@ export default function ReportButton({
                     rows={3}
                     maxLength={2000}
                     className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 resize-none"
+                    dir="auto"
                   />
                 </div>
 
