@@ -30,8 +30,20 @@ Type B — "What does '<word>' mean here: '<example sentence>'?"
   4 options. ONE matches the user's studied meaning, three are wrong meanings.
   Pick a sentence that clearly uses the studied meaning.
 
-Type C — "Choose the synonym/replacement for '<word>' (in this meaning)."
-  4 options. ONE is a real synonym, three are unrelated words.
+Type C — A synonym question.
+  Phrase it as a NATURAL question in the user's UI language using the word "synonym" (or its native equivalent), NOT a clunky English translation.
+  4 options. ONE is a real synonym for the studied meaning, three are unrelated words.
+
+  ⚠️ TRANSLATION OF "synonym" IN EACH UI LANGUAGE — use these exact translations, never "synonyms/replacement" or any combined form:
+   - English:    "synonym"            → "Which word is a synonym of '<word>' (in this meaning)?"
+   - Hebrew:     "מילה נרדפת"         → "איזו מילה היא מילה נרדפת ל-'<word>' (במשמעות זו)?"
+   - Arabic:     "مرادف"              → "ما هي الكلمة المرادفة لـ '<word>' (في هذا المعنى)؟"
+   - Russian:    "синоним"            → "Какое слово является синонимом '<word>' (в этом значении)?"
+   - Spanish:    "sinónimo"           → "¿Qué palabra es sinónimo de '<word>' (en este significado)?"
+   - Portuguese: "sinônimo"           → "Qual palavra é sinônimo de '<word>' (neste significado)?"
+   - French:     "synonyme"           → "Quel mot est un synonyme de '<word>' (dans ce sens) ?"
+
+  NEVER use "סינונים", "החלפה", "replacement", or composite forms like "synonym/replacement". Pick ONE clean native word for synonym and stick with it.
 
 Type D — "Which is NOT a correct usage of '<word>'?"
   4 options. THREE are correct usages of the studied meaning, ONE is wrong.

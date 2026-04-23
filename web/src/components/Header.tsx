@@ -6,7 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function Header() {
-  const { user, logout, promptLogin } = useAuth();
+  const { user, logout, promptLogin, plan } = useAuth();
   const { lang, setLang, t, dir } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -58,6 +58,14 @@ export default function Header() {
           >
             {t.compareBtn}
           </Link>
+          {plan === "deep" && (
+            <Link
+              href="/notebook"
+              className="hidden md:inline-block px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all"
+            >
+              {t.notebookOpen}
+            </Link>
+          )}
           <Link
             href="/pricing"
             className="px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all"

@@ -1165,24 +1165,46 @@ function SaveToNotebookButton({
     }
   }
 
+  // Once the word is saved, turn the chip into a link to /notebook so the
+  // user has an obvious way to "see what just happened".
+  if (saved) {
+    return (
+      <Link
+        href="/notebook"
+        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all hover:opacity-90"
+        style={{
+          background: "rgb(219 234 254)",
+          color: "rgb(29 78 216)",
+          border: "1px solid rgb(147 197 253)",
+        }}
+        title={t.notebookOpen}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span>{t.notebookSaved} →</span>
+      </Link>
+    );
+  }
+
   return (
     <button
       type="button"
       onClick={handleSave}
-      disabled={busy || saved}
+      disabled={busy}
       className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all disabled:cursor-default"
       style={{
-        background: saved ? "rgb(219 234 254)" : "transparent",
-        color: saved ? "rgb(29 78 216)" : "rgb(100 116 139)",
-        border: `1px solid ${saved ? "rgb(147 197 253)" : "rgb(226 232 240)"}`,
+        background: "transparent",
+        color: "rgb(100 116 139)",
+        border: "1px solid rgb(226 232 240)",
       }}
-      title={saved ? t.notebookSaved : t.notebookSaveBtn}
-      aria-label={saved ? t.notebookSaved : t.notebookSaveBtn}
+      title={t.notebookSaveBtn}
+      aria-label={t.notebookSaveBtn}
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
       </svg>
-      <span>{saved ? t.notebookSaved : t.notebookSaveBtn}</span>
+      <span>{t.notebookSaveBtn}</span>
     </button>
   );
 }
