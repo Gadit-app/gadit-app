@@ -34,3 +34,6 @@ web/out/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# admin scripts (local only)
+web/admin-*.mjs

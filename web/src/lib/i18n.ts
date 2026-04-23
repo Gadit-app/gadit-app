@@ -193,6 +193,9 @@ export const T: Record<Lang, {
   quizMode: string;
   useThisWordFeature: string;
   aiImages: string;
+  compareWordsFeature: string;
+  wordNotebookFeature: string;
+  srPracticeFeature: string;
   wordCollections: string;
   wordOfDay: string;
   advancedInsights: string;
@@ -443,6 +446,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Word family",
     historyFavorites: "History & Favorites",
     quizMode: "Quizzes & practice",
+    compareWordsFeature: "Compare confusable words",
+    wordNotebookFeature: "Personal word notebook",
+    srPracticeFeature: "Smart practice (spaced repetition)",
     useThisWordFeature: "Compose your own sentence + AI feedback",
     aiImages: "Visual word images",
     wordCollections: "Word collections by topic",
@@ -695,6 +701,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "משפחת המילה",
     historyFavorites: "היסטוריה ומועדפים",
     quizMode: "חידונים ותרגול",
+    compareWordsFeature: "השוואה בין מילים דומות",
+    wordNotebookFeature: "מחברת מילים אישית",
+    srPracticeFeature: "תרגול חכם עם חזרה מדורגת",
     useThisWordFeature: "חבר משפט משלך + פידבק AI",
     aiImages: "תמונות ויזואליות למילה",
     wordCollections: "אוספי מילים לפי נושא",
@@ -947,6 +956,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "عائلة الكلمة",
     historyFavorites: "السجل والمفضلة",
     quizMode: "اختبارات وتدريب",
+    compareWordsFeature: "مقارنة بين الكلمات المتشابهة",
+    wordNotebookFeature: "دفتر كلمات شخصي",
+    srPracticeFeature: "تدريب ذكي بالمراجعة المتباعدة",
     useThisWordFeature: "ألف جملتك + تغذية راجعة AI",
     aiImages: "صور بصرية للكلمة",
     wordCollections: "مجموعات كلمات حسب الموضوع",
@@ -1199,6 +1211,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Семья слов",
     historyFavorites: "История и избранное",
     quizMode: "Тесты и практика",
+    compareWordsFeature: "Сравнение похожих слов",
+    wordNotebookFeature: "Личный словарик слов",
+    srPracticeFeature: "Умная практика с интервальным повторением",
     useThisWordFeature: "Составь своё предложение + обратная связь AI",
     aiImages: "Визуальные образы слова",
     wordCollections: "Коллекции слов по темам",
@@ -1451,6 +1466,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Familia de palabras",
     historyFavorites: "Historial y favoritos",
     quizMode: "Quizzes y práctica",
+    compareWordsFeature: "Comparar palabras parecidas",
+    wordNotebookFeature: "Cuaderno personal de palabras",
+    srPracticeFeature: "Práctica inteligente con repetición espaciada",
     useThisWordFeature: "Redacta tu propia oración + feedback de IA",
     aiImages: "Imágenes visuales de la palabra",
     wordCollections: "Colecciones de palabras por tema",
@@ -1703,6 +1721,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Família da palavra",
     historyFavorites: "Histórico e favoritos",
     quizMode: "Quizzes e prática",
+    compareWordsFeature: "Comparar palavras parecidas",
+    wordNotebookFeature: "Caderno pessoal de palavras",
+    srPracticeFeature: "Prática inteligente com repetição espaçada",
     useThisWordFeature: "Crie sua própria frase + feedback de IA",
     aiImages: "Imagens visuais da palavra",
     wordCollections: "Coleções de palavras por tema",
@@ -1955,6 +1976,9 @@ export const T: Record<Lang, {
     wordFamilyFeature: "Famille de mots",
     historyFavorites: "Historique & favoris",
     quizMode: "Quiz & entraînement",
+    compareWordsFeature: "Comparer des mots proches",
+    wordNotebookFeature: "Carnet de mots personnel",
+    srPracticeFeature: "Pratique intelligente avec répétition espacée",
     useThisWordFeature: "Composez votre propre phrase + feedback IA",
     aiImages: "Images visuelles du mot",
     wordCollections: "Collections de mots par thème",

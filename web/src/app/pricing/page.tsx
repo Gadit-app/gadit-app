@@ -47,7 +47,7 @@ export default function PricingPage() {
       yearlyPrice: 49.99,
       monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? null,
       yearlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY ?? null,
-      features: [t.everythingInClear, t.quizMode],
+      features: [t.everythingInClear, t.compareWordsFeature, t.wordNotebookFeature, t.srPracticeFeature, t.quizMode],
       cta: t.unlockDeep,
       popular: false,
       note: null,
