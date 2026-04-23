@@ -4,7 +4,7 @@
 //   - HTML pages: network-first, fall back to cache (and finally to /offline.html).
 //   - Everything else (API/dynamic): network only — never cache user data.
 
-const CACHE_VERSION = "gadit-v1";
+const CACHE_VERSION = "gadit-v2";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
