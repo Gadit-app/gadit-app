@@ -59,20 +59,29 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(parseInt(url.searchParams.get("limit") || "200"), 500);
 
     const db = getAdminDb();
-    let q: FirebaseFirestore.Query = db.collection("errorReports");
 
+    // Always order by createdAt only (single-field index that Firestore creates
+    // automatically). Filter by status in-memory afterwards. This avoids needing
+    // a composite index, which is overkill for an admin dashboard that will
+    // never see more than a few thousand reports.
+    const snap = await db
+      .collection("errorReports")
+      .orderBy("createdAt", "desc")
+      .limit(500)
+      .get();
+
+    const allItems = snap.docs.map((d) => ({ id: d.id, ...d.data() } as { id: string; status?: string }));
+
+    let items = allItems;
     if (statusFilter && ALLOWED_STATUSES.includes(statusFilter as ReportStatus)) {
-      q = q.where("status", "==", statusFilter);
+      items = allItems.filter((r) => (r.status ?? "open") === statusFilter);
     }
+    items = items.slice(0, limit);
 
-    const snap = await q.orderBy("createdAt", "desc").limit(limit).get();
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-
-    // Counts per status (cheap aggregation)
-    const allSnap = await db.collection("errorReports").select("status").get();
-    const counts: Record<string, number> = { open: 0, reviewed: 0, fixed: 0, wontfix: 0, total: allSnap.size };
-    for (const doc of allSnap.docs) {
-      const s = (doc.data().status as string) || "open";
+    // Counts per status from the same dataset
+    const counts: Record<string, number> = { open: 0, reviewed: 0, fixed: 0, wontfix: 0, total: allItems.length };
+    for (const r of allItems) {
+      const s = r.status ?? "open";
       if (s in counts) counts[s]++;
     }
 
