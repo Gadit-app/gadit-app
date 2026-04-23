@@ -141,6 +141,7 @@ export const T: Record<Lang, {
   // Upsell
   upsellKids: string;
   upsellVisual: string;
+  upsellCompose: string;
   upsellBtn: string;
   // Auth
   login: string;
@@ -452,6 +453,7 @@ export const T: Record<Lang, {
     wordMastered: "Word mastered ✓",
     upsellKids: "Explain it like I'm 10",
     upsellVisual: "See it visually",
+    upsellCompose: "Write your own sentence and get smart feedback",
     upsellBtn: "Upgrade to Clear →",
     login: "Log in",
     logout: "Log out",
@@ -756,6 +758,7 @@ export const T: Record<Lang, {
     wordMastered: "המילה נרכשה ✓",
     upsellKids: "הסבר לילדים",
     upsellVisual: "ראה את זה ויזואלית",
+    upsellCompose: "כתוב משפט משלך וקבל פידבק חכם",
     upsellBtn: "שדרג ל-Clear ←",
     login: "התחבר",
     logout: "התנתק",
@@ -1060,6 +1063,7 @@ export const T: Record<Lang, {
     wordMastered: "تم إتقان الكلمة ✓",
     upsellKids: "اشرح لطفل في العاشرة",
     upsellVisual: "شاهده بصرياً",
+    upsellCompose: "اكتب جملتك الخاصة واحصل على تغذية راجعة ذكية",
     upsellBtn: "الترقية إلى Clear ←",
     login: "تسجيل الدخول",
     logout: "تسجيل الخروج",
@@ -1364,6 +1368,7 @@ export const T: Record<Lang, {
     wordMastered: "Слово усвоено ✓",
     upsellKids: "Объяснить как ребёнку",
     upsellVisual: "Увидеть визуально",
+    upsellCompose: "Напишите своё предложение и получите умный отзыв",
     upsellBtn: "Перейти на Clear →",
     login: "Войти",
     logout: "Выйти",
@@ -1668,6 +1673,7 @@ export const T: Record<Lang, {
     wordMastered: "Palabra dominada ✓",
     upsellKids: "Explica como si tuviera 10",
     upsellVisual: "Visualízala",
+    upsellCompose: "Escribe tu propia frase y recibe retroalimentación inteligente",
     upsellBtn: "Mejora a Clear →",
     login: "Iniciar sesión",
     logout: "Cerrar sesión",
@@ -1972,6 +1978,7 @@ export const T: Record<Lang, {
     wordMastered: "Palavra dominada ✓",
     upsellKids: "Explicar como se eu tivesse 10",
     upsellVisual: "Ver visualmente",
+    upsellCompose: "Escreva sua própria frase e receba feedback inteligente",
     upsellBtn: "Upgrade para Clear →",
     login: "Entrar",
     logout: "Sair",
@@ -2276,6 +2283,7 @@ export const T: Record<Lang, {
     wordMastered: "Mot maîtrisé ✓",
     upsellKids: "Explique comme à un enfant de 10 ans",
     upsellVisual: "Voir visuellement",
+    upsellCompose: "Écrivez votre propre phrase et recevez un retour intelligent",
     upsellBtn: "Passer à Clear →",
     login: "Se connecter",
     logout: "Se déconnecter",

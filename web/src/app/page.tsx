@@ -907,8 +907,9 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
             </div>
           )}
 
-          {/* Basic users — single upgrade CTA hinting at the Clear features */}
-          {plan === "basic" && <BasicUpgradeHint word={result.word} t={t} />}
+          {/* Basic users see the consolidated upsell card once, after the
+              last meaning — see below. No per-meaning CTA, to keep the
+              layout uncluttered. */}
         </div>
       ))}
 
@@ -974,7 +975,7 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
         </div>
       )}
 
-      {/* Upsell — Basic users only (paid users get kids + images inline) */}
+      {/* Upsell — Basic users only (paid users get kids + images + compose inline) */}
       {plan === "basic" && (
         <div className="rounded-3xl px-5 sm:px-8 py-5 sm:py-7 space-y-3" style={{ background: "rgb(248 250 252)", border: "1px solid rgb(226 232 240)" }}>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.upsellBtn}</p>
@@ -985,6 +986,10 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
           <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
             <span className="text-xl shrink-0">🖼️</span>
             <p className="font-medium text-slate-700 text-sm">{t.upsellVisual}</p>
+          </div>
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100" style={{ boxShadow: "var(--shadow-xs)" }}>
+            <span className="text-xl shrink-0">✍️</span>
+            <p className="font-medium text-slate-700 text-sm">{t.upsellCompose}</p>
           </div>
           <Link href="/pricing" className="btn-primary w-full py-3 text-sm text-center block mt-1">
             {t.upsellBtn}
@@ -1231,39 +1236,6 @@ function ShareButton({ word, t }: { word: string; t: ReturnType<typeof useLang>[
       </svg>
       <span>{justCopied ? t.shareCopied : t.shareWord}</span>
     </button>
-  );
-}
-
-/**
- * For Basic users: a single soft CTA shown beneath each meaning, pointing
- * to the Clear features (illustration, sentence practice) without yelling.
- * Replaces the per-meaning silence Basic users would otherwise see.
- */
-function BasicUpgradeHint({ word, t }: { word: string; t: ReturnType<typeof useLang>["t"] }) {
-  return (
-    <Link
-      href="/pricing"
-      className="block rounded-2xl px-5 py-4 transition-all hover:shadow-md group"
-      style={{
-        background: "linear-gradient(135deg, rgb(239 246 255) 0%, rgb(219 234 254) 100%)",
-        border: "1px dashed rgb(147 197 253)",
-      }}
-    >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <span className="text-xl shrink-0" aria-hidden="true">✨</span>
-          <p className="text-sm text-blue-800 leading-snug">
-            {t.basicUpgradeHint.replace("{word}", word)}
-          </p>
-        </div>
-        <span
-          className="text-xs font-semibold text-blue-700 group-hover:text-blue-900 transition-colors shrink-0"
-          aria-hidden="true"
-        >
-          {t.basicUpgradeCta} →
-        </span>
-      </div>
-    </Link>
   );
 }
 
