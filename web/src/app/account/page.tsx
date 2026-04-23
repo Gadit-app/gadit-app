@@ -11,6 +11,10 @@ interface AccountData {
   stripeCustomerId: string | null;
   subscriptionId: string | null;
   subscriptionStatus: string | null;
+  isTrial: boolean;
+  trialDaysLeft: number;
+  trialEnd: number | null;
+  cancelAtPeriodEnd: boolean;
   images: { used: number; limit: number; monthKey: string };
 }
 
@@ -137,7 +141,14 @@ export default function AccountPage() {
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{t.accountYourPlan}</p>
               <p className="text-2xl font-bold" style={{ color: "#0F172A" }}>{planLabel(data.plan)}</p>
             </div>
-            {status && (
+            {data.isTrial ? (
+              <span
+                className="px-3 py-1 rounded-full text-xs font-semibold"
+                style={{ background: "rgb(219 234 254)", color: "rgb(29 78 216)" }}
+              >
+                {t.accountTrialBadge.replace("{days}", String(data.trialDaysLeft))}
+              </span>
+            ) : status && (
               <span
                 className="px-3 py-1 rounded-full text-xs font-semibold"
                 style={{ background: statusStyles.bg, color: statusStyles.text }}
@@ -146,6 +157,19 @@ export default function AccountPage() {
               </span>
             )}
           </div>
+
+          {data.isTrial && data.trialEnd && (
+            <p className="text-xs text-slate-500 mb-3">
+              {t.accountTrialNote.replace(
+                "{date}",
+                new Date(data.trialEnd * 1000).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              )}
+            </p>
+          )}
 
           <div className="flex flex-wrap gap-2 mt-4">
             {isPaid ? (

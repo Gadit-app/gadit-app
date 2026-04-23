@@ -38,12 +38,24 @@ export async function GET(req: NextRequest) {
         ? MONTHLY_LIMIT_CLEAR
         : 0;
 
+    // Trial info — trialEnd is a unix timestamp (seconds) from Stripe.
+    const trialEndSec =
+      typeof data.trialEnd === "number" && data.trialEnd > 0 ? data.trialEnd : null;
+    const nowSec = Math.floor(Date.now() / 1000);
+    const isTrial =
+      data.subscriptionStatus === "trialing" && trialEndSec !== null && trialEndSec > nowSec;
+    const trialDaysLeft = isTrial && trialEndSec ? Math.ceil((trialEndSec - nowSec) / 86400) : 0;
+
     return NextResponse.json({
       plan: userInfo.plan,
       email: data.email ?? null,
       stripeCustomerId: data.stripeCustomerId ?? null,
       subscriptionId: data.subscriptionId ?? null,
       subscriptionStatus: data.subscriptionStatus ?? null,
+      isTrial,
+      trialDaysLeft,
+      trialEnd: trialEndSec,
+      cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? false,
       images: {
         used: imagesUsed,
         limit: imagesLimit,

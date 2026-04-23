@@ -73,16 +73,26 @@ export async function POST(req: NextRequest) {
 
       // line_items is NOT included by default — load it explicitly
       const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ["line_items"],
+        expand: ["line_items", "subscription"],
       });
       const priceId = fullSession.line_items?.data?.[0]?.price?.id ?? "";
       const plan = getPlanFromPriceId(priceId);
+
+      // If subscription started in trial, capture trial info so the UI can show it
+      const sub =
+        typeof fullSession.subscription === "object" && fullSession.subscription
+          ? fullSession.subscription
+          : null;
+      const trialEnd = sub?.trial_end ?? null;
+      const subscriptionStatus = sub?.status ?? null;
 
       await applyPlanToUser(userId, plan, {
         email: session.customer_details?.email ?? session.customer_email,
         stripeCustomerId: session.customer,
         subscriptionId: session.subscription,
         priceId,
+        ...(subscriptionStatus && { subscriptionStatus }),
+        ...(trialEnd && { trialEnd }),
       });
     }
 
@@ -99,6 +109,9 @@ export async function POST(req: NextRequest) {
           subscriptionId: sub.id,
           subscriptionStatus: sub.status,
           priceId,
+          // trial_end becomes null once the trial converts to paid; clear it then.
+          trialEnd: sub.trial_end ?? null,
+          cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
         });
       }
     }

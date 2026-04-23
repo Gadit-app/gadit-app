@@ -167,27 +167,37 @@ export default function PricingPage() {
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => handleSubscribe(plan)}
-                  disabled={loading === plan.id}
-                  className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
-                    plan.popular
-                      ? "text-white hover:opacity-90 disabled:opacity-50"
-                      : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 bg-white disabled:opacity-50"
-                  }`}
-                  style={plan.popular ? {
-                    background: "#2563EB",
-                    boxShadow: "0 4px 14px rgb(37 99 235 / 0.25)",
-                  } : {
-                    boxShadow: "0 1px 3px rgb(0 0 0 / 0.05)",
-                  }}
-                >
-                  {loading === plan.id ? "…" : plan.cta}
-                </button>
+                {(() => {
+                  const showTrialCta = plan.id === "clear" && billing === "monthly";
+                  const ctaLabel = showTrialCta ? t.pricingTrialCta : plan.cta;
+                  return (
+                    <>
+                      <button
+                        onClick={() => handleSubscribe(plan)}
+                        disabled={loading === plan.id}
+                        className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
+                          plan.popular
+                            ? "text-white hover:opacity-90 disabled:opacity-50"
+                            : "border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 bg-white disabled:opacity-50"
+                        }`}
+                        style={plan.popular ? {
+                          background: "#2563EB",
+                          boxShadow: "0 4px 14px rgb(37 99 235 / 0.25)",
+                        } : {
+                          boxShadow: "0 1px 3px rgb(0 0 0 / 0.05)",
+                        }}
+                      >
+                        {loading === plan.id ? "…" : ctaLabel}
+                      </button>
 
-                {plan.note && (
-                  <p className="text-center text-xs text-slate-400 mt-2">{plan.note}</p>
-                )}
+                      {showTrialCta ? (
+                        <p className="text-center text-xs text-slate-400 mt-2">{t.pricingTrialDisclaimer}</p>
+                      ) : (
+                        plan.note && <p className="text-center text-xs text-slate-400 mt-2">{plan.note}</p>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             );
           })}

@@ -81,6 +81,10 @@ export const T: Record<Lang, {
   accountImagesUsageNote: string;
   accountManageSubscription: string;
   accountUpgrade: string;
+  accountTrialBadge: string;
+  accountTrialNote: string;
+  pricingTrialCta: string;
+  pricingTrialDisclaimer: string;
   accountSubscriptionStatus: string;
   accountStatusActive: string;
   accountStatusCanceled: string;
@@ -298,6 +302,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "Resets on the 1st of every month",
     accountManageSubscription: "Manage subscription",
     accountUpgrade: "Upgrade",
+    accountTrialBadge: "Trial — {days} days left",
+    accountTrialNote: "Your free trial ends on {date}. Cancel anytime before then to avoid being charged.",
+    pricingTrialCta: "Start 14-day free trial",
+    pricingTrialDisclaimer: "No charge during the trial. Cancel anytime.",
     accountSubscriptionStatus: "Status",
     accountStatusActive: "Active",
     accountStatusCanceled: "Canceled",
@@ -512,6 +520,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "מתאפס בכל ה-1 לחודש",
     accountManageSubscription: "ניהול מנוי",
     accountUpgrade: "שדרג",
+    accountTrialBadge: "התנסות — נותרו {days} ימים",
+    accountTrialNote: "תקופת ההתנסות החינמית מסתיימת בתאריך {date}. ניתן לבטל בכל עת לפני כן כדי לא להיות מחויב.",
+    pricingTrialCta: "התחל 14 ימי התנסות חינם",
+    pricingTrialDisclaimer: "ללא חיוב במהלך תקופת ההתנסות. ניתן לבטל בכל עת.",
     accountSubscriptionStatus: "סטטוס",
     accountStatusActive: "פעיל",
     accountStatusCanceled: "מבוטל",
@@ -726,6 +738,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "تتم إعادة التعيين في الأول من كل شهر",
     accountManageSubscription: "إدارة الاشتراك",
     accountUpgrade: "ترقية",
+    accountTrialBadge: "تجربة — متبقي {days} يوم",
+    accountTrialNote: "تنتهي تجربتك المجانية في {date}. يمكنك الإلغاء في أي وقت قبل ذلك لتجنّب أي رسوم.",
+    pricingTrialCta: "ابدأ تجربة مجانية لمدة 14 يومًا",
+    pricingTrialDisclaimer: "بدون أي رسوم خلال فترة التجربة. يمكنك الإلغاء في أي وقت.",
     accountSubscriptionStatus: "الحالة",
     accountStatusActive: "نشط",
     accountStatusCanceled: "ملغى",
@@ -940,6 +956,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "Обнуляется 1-го числа каждого месяца",
     accountManageSubscription: "Управление подпиской",
     accountUpgrade: "Улучшить",
+    accountTrialBadge: "Пробный период — осталось {days} дн.",
+    accountTrialNote: "Бесплатный пробный период заканчивается {date}. Отмените в любой момент до этой даты, чтобы избежать списания.",
+    pricingTrialCta: "Начать 14 дней бесплатно",
+    pricingTrialDisclaimer: "Без оплаты в пробный период. Отменить можно в любой момент.",
     accountSubscriptionStatus: "Статус",
     accountStatusActive: "Активна",
     accountStatusCanceled: "Отменена",
@@ -1154,6 +1174,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "Se reinicia el día 1 de cada mes",
     accountManageSubscription: "Gestionar suscripción",
     accountUpgrade: "Mejorar",
+    accountTrialBadge: "Prueba — quedan {days} días",
+    accountTrialNote: "Tu prueba gratuita termina el {date}. Cancela en cualquier momento antes para no ser cobrado.",
+    pricingTrialCta: "Empezar prueba gratis de 14 días",
+    pricingTrialDisclaimer: "Sin cargos durante la prueba. Cancela cuando quieras.",
     accountSubscriptionStatus: "Estado",
     accountStatusActive: "Activa",
     accountStatusCanceled: "Cancelada",
@@ -1368,6 +1392,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "Reinicia no dia 1 de cada mês",
     accountManageSubscription: "Gerenciar assinatura",
     accountUpgrade: "Fazer upgrade",
+    accountTrialBadge: "Teste — restam {days} dias",
+    accountTrialNote: "Seu teste gratuito termina em {date}. Cancele a qualquer momento antes disso para não ser cobrado.",
+    pricingTrialCta: "Começar teste grátis de 14 dias",
+    pricingTrialDisclaimer: "Sem cobranças durante o teste. Cancele quando quiser.",
     accountSubscriptionStatus: "Status",
     accountStatusActive: "Ativa",
     accountStatusCanceled: "Cancelada",
@@ -1582,6 +1610,10 @@ export const T: Record<Lang, {
     accountImagesUsageNote: "Réinitialisé le 1er de chaque mois",
     accountManageSubscription: "Gérer l'abonnement",
     accountUpgrade: "Passer au supérieur",
+    accountTrialBadge: "Essai — {days} jours restants",
+    accountTrialNote: "Votre essai gratuit se termine le {date}. Vous pouvez annuler à tout moment avant cette date pour ne pas être facturé.",
+    pricingTrialCta: "Commencer l'essai gratuit de 14 jours",
+    pricingTrialDisclaimer: "Aucun débit pendant l'essai. Annulez à tout moment.",
     accountSubscriptionStatus: "Statut",
     accountStatusActive: "Actif",
     accountStatusCanceled: "Annulé",
