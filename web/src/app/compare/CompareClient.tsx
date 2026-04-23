@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { track } from "@/lib/track";
+import ReportButton from "@/components/ReportButton";
 
 interface CompareResult {
   language?: string;
@@ -300,6 +301,15 @@ export default function CompareClient() {
                     </p>
                   </div>
                 )}
+
+                {/* Report a problem */}
+                <div className="flex justify-end pt-2" dir="ltr">
+                  <ReportButton
+                    word={`${result.wordA ?? ""} / ${result.wordB ?? ""}`}
+                    contextSnapshot={result}
+                    defaultCategories={["compare_words"]}
+                  />
+                </div>
               </>
             )}
           </div>

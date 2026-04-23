@@ -7,6 +7,7 @@ import { track } from "@/lib/track";
 import VoiceInput from "@/components/VoiceInput";
 import FAQSection from "@/components/FAQSection";
 import ContactSection from "@/components/ContactSection";
+import ReportButton from "@/components/ReportButton";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
@@ -762,6 +763,13 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
             <ShareButton word={result.word} t={t} />
             <span className="text-sm text-slate-400 font-medium">{result.language}</span>
           </div>
+        </div>
+        {/* Report a problem — small, unobtrusive, but always available */}
+        <div className="mt-3 flex justify-end" dir="ltr">
+          <ReportButton
+            word={result.word}
+            contextSnapshot={result}
+          />
         </div>
       </div>
 
