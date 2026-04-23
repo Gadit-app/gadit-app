@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
 
 interface Report {
   id: string;
@@ -33,6 +34,7 @@ const ADMIN_EMAIL = "gadibenlavi@gmail.com";
 
 export default function AdminReportsClient() {
   const { user, loading: authLoading, promptLogin } = useAuth();
+  const { t, dir } = useLang();
   const [reports, setReports] = useState<Report[]>([]);
   const [counts, setCounts] = useState<Counts | null>(null);
   const [loading, setLoading] = useState(true);
@@ -105,40 +107,69 @@ export default function AdminReportsClient() {
   }
 
   if (authLoading) {
-    return <Frame>Loading…</Frame>;
+    return <Frame dir={dir}>{t.adminLoading}</Frame>;
   }
   if (!user) {
-    return <Frame>Please sign in.</Frame>;
+    return <Frame dir={dir}>{t.adminPleaseSignIn}</Frame>;
   }
   if (!isAdmin) {
-    return <Frame>403 — admin access only.</Frame>;
+    return <Frame dir={dir}>{t.adminForbidden}</Frame>;
   }
   if (errorMsg) {
-    return <Frame>Error: {errorMsg}</Frame>;
+    return <Frame dir={dir}>Error: {errorMsg}</Frame>;
   }
 
+  // Status label per filter tab
+  const tabLabels: Record<typeof filter, string> = {
+    open: t.adminTabOpen,
+    reviewed: t.adminTabReviewed,
+    fixed: t.adminTabFixed,
+    wontfix: t.adminTabWontfix,
+    all: t.adminTabAll,
+  };
+
+  // Status label per badge (lowercased ones used as report.status)
+  const statusLabels: Record<Report["status"], string> = {
+    open: t.adminTabOpen,
+    reviewed: t.adminTabReviewed,
+    fixed: t.adminTabFixed,
+    wontfix: t.adminTabWontfix,
+  };
+
+  // Mark button label per status
+  const markLabels: Record<Report["status"], string> = {
+    open: t.adminMarkOpen,
+    reviewed: t.adminMarkReviewed,
+    fixed: t.adminMarkFixed,
+    wontfix: t.adminMarkWontfix,
+  };
+
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-20 px-4" dir="ltr">
+    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-20 px-4" dir={dir}>
       <div className="max-w-6xl mx-auto">
         <div className="mb-6 flex items-baseline justify-between flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-bold" style={{ color: "#0F172A" }}>
-              Error reports
+              {t.adminReportsTitle}
             </h1>
             <p className="text-sm text-slate-500 mt-1">
-              Logged in as {user.email}
+              {t.adminLoggedInAs} {user.email}
             </p>
           </div>
           {counts && (
             <p className="text-xs text-slate-500">
-              {counts.total} total · {counts.open} open · {counts.reviewed} reviewed ·{" "}
-              {counts.fixed} fixed · {counts.wontfix} won&apos;t fix
+              {t.adminCountsLine
+                .replace("{total}", String(counts.total))
+                .replace("{open}", String(counts.open))
+                .replace("{reviewed}", String(counts.reviewed))
+                .replace("{fixed}", String(counts.fixed))
+                .replace("{wontfix}", String(counts.wontfix))}
             </p>
           )}
         </div>
 
         {/* Filter tabs */}
-        <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 inline-flex border border-slate-200">
+        <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 inline-flex border border-slate-200 flex-wrap">
           {(["open", "reviewed", "fixed", "wontfix", "all"] as const).map((f) => (
             <button
               key={f}
@@ -150,9 +181,9 @@ export default function AdminReportsClient() {
                 fontWeight: filter === f ? 600 : 400,
               }}
             >
-              {f}{" "}
-              {counts && counts[f as keyof Counts] !== undefined && f !== "all" && (
-                <span className="ms-1 opacity-70">({counts[f as keyof Counts]})</span>
+              {tabLabels[f]}{" "}
+              {counts && f !== "all" && counts[f as keyof Omit<Counts, "total">] !== undefined && (
+                <span className="ms-1 opacity-70">({counts[f as keyof Omit<Counts, "total">]})</span>
               )}
             </button>
           ))}
@@ -160,9 +191,9 @@ export default function AdminReportsClient() {
 
         {/* Reports table */}
         {loading ? (
-          <p className="text-sm text-slate-500 py-12 text-center">Loading…</p>
+          <p className="text-sm text-slate-500 py-12 text-center">{t.adminLoading}</p>
         ) : reports.length === 0 ? (
-          <p className="text-sm text-slate-500 py-12 text-center">No reports.</p>
+          <p className="text-sm text-slate-500 py-12 text-center">{t.adminNoReports}</p>
         ) : (
           <div className="space-y-3">
             {reports.map((r) => (
@@ -177,19 +208,19 @@ export default function AdminReportsClient() {
                 <div className="flex items-start justify-between gap-4 mb-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-2">
-                      <StatusBadge status={r.status} />
+                      <StatusBadge status={r.status} label={statusLabels[r.status]} />
                       <span className="text-xs text-slate-400">
                         {new Date(r.createdAt).toLocaleString()}
                       </span>
                       <span className="text-xs text-slate-400">·</span>
                       <span className="text-xs text-slate-500">
-                        {r.userEmail ?? "anonymous"} ({r.userPlan})
+                        {r.userEmail ?? t.adminAnonymous} ({r.userPlan})
                       </span>
                       <span className="text-xs text-slate-400">·</span>
                       <span className="text-xs text-slate-500">{r.uiLang}</span>
                     </div>
                     <p className="text-base font-semibold mb-1" style={{ color: "#0F172A" }}>
-                      Word: <span dir="auto">{r.word || "(none)"}</span>
+                      {t.adminWordLabel}: <span dir="auto">{r.word || "—"}</span>
                     </p>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {r.categories.map((c) => (
@@ -206,7 +237,7 @@ export default function AdminReportsClient() {
                       ))}
                     </div>
                     {r.details && (
-                      <p className="text-sm text-slate-600 mb-2 whitespace-pre-wrap">
+                      <p className="text-sm text-slate-600 mb-2 whitespace-pre-wrap" dir="auto">
                         {r.details}
                       </p>
                     )}
@@ -216,8 +247,9 @@ export default function AdminReportsClient() {
                         target="_blank"
                         rel="noreferrer"
                         className="text-xs text-blue-600 hover:underline"
+                        dir="ltr"
                       >
-                        Open page →
+                        {t.adminOpenPage} →
                       </a>
                     )}
                   </div>
@@ -237,14 +269,14 @@ export default function AdminReportsClient() {
                         border: "1px solid rgb(226 232 240)",
                       }}
                     >
-                      Mark {s}
+                      {markLabels[s]}
                     </button>
                   ))}
                   <button
                     onClick={() => setExpanded(expanded === r.id ? null : r.id)}
                     className="text-xs px-2.5 py-1 ms-auto text-slate-500 hover:text-slate-800"
                   >
-                    {expanded === r.id ? "Hide context" : "Show context"}
+                    {expanded === r.id ? t.adminHideContext : t.adminShowContext}
                   </button>
                 </div>
 
@@ -258,6 +290,7 @@ export default function AdminReportsClient() {
                       maxHeight: "400px",
                       overflowY: "auto",
                     }}
+                    dir="ltr"
                   >
                     {r.contextSnapshot}
                   </pre>
@@ -271,15 +304,15 @@ export default function AdminReportsClient() {
   );
 }
 
-function Frame({ children }: { children: React.ReactNode }) {
+function Frame({ children, dir }: { children: React.ReactNode; dir: "ltr" | "rtl" }) {
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4">
+    <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
       <div className="max-w-2xl mx-auto text-center text-slate-500 text-sm">{children}</div>
     </main>
   );
 }
 
-function StatusBadge({ status }: { status: Report["status"] }) {
+function StatusBadge({ status, label }: { status: Report["status"]; label: string }) {
   const colors: Record<Report["status"], { bg: string; text: string }> = {
     open: { bg: "rgb(254 226 226)", text: "rgb(153 27 27)" },
     reviewed: { bg: "rgb(254 249 195)", text: "rgb(133 77 14)" },
@@ -292,7 +325,7 @@ function StatusBadge({ status }: { status: Report["status"] }) {
       className="text-xs px-2 py-0.5 rounded-full font-semibold"
       style={{ background: c.bg, color: c.text }}
     >
-      {status}
+      {label}
     </span>
   );
 }
