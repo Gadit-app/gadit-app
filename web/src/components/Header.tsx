@@ -53,6 +53,12 @@ export default function Header() {
             {t.navFeatures}
           </a>
           <Link
+            href="/compare"
+            className="hidden md:inline-block px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all"
+          >
+            {t.compareBtn}
+          </Link>
+          <Link
             href="/pricing"
             className="px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all"
           >
