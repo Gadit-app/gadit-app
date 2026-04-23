@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/auth-context";
 import { useKidsMode } from "@/lib/kids-mode";
 import { track } from "@/lib/track";
 import VoiceInput from "@/components/VoiceInput";
+import FAQSection from "@/components/FAQSection";
+import ContactSection from "@/components/ContactSection";
 import Link from "next/link";
 import { parse as parsePartialJson, Allow } from "partial-json";
 
@@ -643,6 +645,10 @@ export default function Home() {
         </section>
       )}
 
+      {showSections && <FAQSection />}
+
+      {showSections && <ContactSection />}
+
       {showSections && (
         <section className="py-28 px-4 relative overflow-hidden" style={{ background: "#2563EB" }}>
           <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgb(255 255 255 / 0.06) 0%, transparent 70%)" }} />
@@ -670,7 +676,7 @@ export default function Home() {
               </span>
               <div className="flex flex-wrap gap-6 text-sm text-slate-400">
                 <Link href="/pricing" className="hover:text-blue-600 transition-colors">{t.pricing}</Link>
-                <a href="mailto:hello@gadit.app" className="hover:text-blue-600 transition-colors">{t.footerContact}</a>
+                <a href="#contact" className="hover:text-blue-600 transition-colors">{t.footerContact}</a>
                 <Link href="/privacy" className="hover:text-blue-600 transition-colors">{t.footerPrivacy}</Link>
                 <Link href="/terms" className="hover:text-blue-600 transition-colors">{t.footerTerms}</Link>
               </div>

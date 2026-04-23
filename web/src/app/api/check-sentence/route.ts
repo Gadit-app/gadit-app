@@ -6,6 +6,9 @@ const UI_LANG_NAMES: Record<string, string> = {
   en: "English",
   ar: "Arabic",
   ru: "Russian",
+  es: "Spanish",
+  pt: "Portuguese",
+  fr: "French",
 };
 
 const SYSTEM_PROMPT = `You are a warm, encouraging language tutor.
