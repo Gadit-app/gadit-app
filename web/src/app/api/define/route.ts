@@ -236,6 +236,50 @@ RULE OF THUMB: If the examples of a single meaning use the word to describe comp
 ⚠️ CRITICAL RULE #5 — NEVER HALLUCINATE MEANINGS:
 Do NOT invent meanings that don't exist in real dictionaries. "קרן" has NO meaning like "foundation for donating to animals" — that's a hallucination from confusing English "foundation" senses. If a meaning sounds odd, borderline, or you're not sure — OMIT IT. Better to return 4 real meanings than 5 with one invented. When in doubt, cross-reference: would a Hebrew speaker actually use this word this way in a real sentence?
 
+⚠️ CRITICAL RULE #6 — NEVER USE THE WORD INSIDE ITS OWN DEFINITION (CIRCULAR DEFINITIONS BAN):
+A definition that contains the word being defined is useless to anyone who doesn't already know the word. This is a CRITICAL failure mode.
+
+The "meaning" field for any meaning MUST NOT contain the word being defined, NOR any obvious morphological variant of it. This applies to all word forms — verb stems, gerunds, plurals, declensions, conjugations, possessives.
+
+Examples of FORBIDDEN circular definitions:
+- Defining "בדיקה" as "פעולה של חיפוש או בדיקה כדי לגלות..." → "בדיקה" appears in its own definition. WRONG.
+- Defining "בדיקה" as "מה שעושים כשבודקים משהו" → "בודקים" is the same root. WRONG.
+- Defining "running" as "the act of running" → WRONG.
+- Defining "decision" as "what is decided" → "decided" is morphological variant. WRONG.
+- Defining "התחברות" as "פעולה של התחברות לשירות" → WRONG.
+
+CORRECT approach — use synonyms, paraphrases, or describe the action/concept without the root:
+- "בדיקה" → "פעולה של בחינה ובירור כדי לגלות אם משהו תקין, נכון, או נוכח". (uses "בחינה" and "בירור" — different roots)
+- "running" → "moving forward at a fast pace using your legs, faster than walking"
+- "decision" → "a choice made between two or more options, often after careful thought"
+- "התחברות" → "תהליך של יצירת קשר או כניסה לרשת/מערכת באמצעות זיהוי"
+
+THE RULE: Before writing each "meaning" field, scan it. If the word being defined (or any form sharing its root/stem) appears in your definition, REWRITE the definition using completely different vocabulary.
+
+This rule applies to:
+- The "meaning" field of every entry in meanings[]
+- The "explanation" field inside kidsExplanation (if present)
+- The "kidsExplanation.examples" should still use the word — examples are meant to demonstrate the word in context. The forbidden self-reference is ONLY in the explanation/definition itself.
+
+⚠️ CRITICAL RULE #7 — ETYMOLOGY OF DERIVED FORMS TRACES BACK TO THE BASE FORM:
+When a user asks about a derived form (a noun derived from a verb, a gerund, a feminine form, a plural that has its own meaning), the etymology should trace the ORIGIN of the underlying base/root word — not invent a separate origin for the derivation.
+
+Specifically for Semitic languages (Hebrew, Arabic):
+- For Hebrew action nouns ("שם פעולה" — בדיקה, ריצה, הליכה, חשיבה, כתיבה, קריאה, אכילה), the etymology should describe the origin of the BASE VERB in masculine singular past tense (בדק, רץ, הלך, חשב, כתב, קרא, אכל) — and note that this is a derived noun form.
+- For Hebrew agent nouns (בודק, רץ, הולך), similar — trace the verbal root.
+- For feminine forms of nouns (מורה ← מורה), only if the feminine has independent meaning.
+
+CORRECT examples:
+- "בדיקה" → sourceLanguage: "עברית מקראית", originalMeaning: "מהשורש ב.ד.ק — לחקור, לחפש בקפידה כדי לאמת או לגלות. בדיקה היא שם הפעולה של 'בדק'.", historyNote: "השורש מופיע במקרא בהקשרים של חיפוש ואימות..."
+- "ריצה" → trace etymology of "רץ"
+- "הליכה" → trace etymology of "הלך"
+
+For English/Romance languages:
+- For English gerunds ("running") trace the verb ("run")
+- For English nouns derived from verbs ("decision" ← "decide") — trace through the verb to the Latin source
+
+THE RULE: If a word is a clear morphological derivation of a more basic verb/root, the etymology MUST start from that base form. Mention the derivation in originalMeaning.
+
 When given a word, detect its language and respond ENTIRELY in that same language.
 
 Your response must follow this exact JSON structure:
@@ -294,25 +338,44 @@ CRITICAL RULES for kidsExplanation:
 - Use words a child actually knows. Avoid abstract words like "concept", "tangible", "financial instrument".
 - Each meaning gets its OWN kidsExplanation — never share one between multiple meanings.
 
+🚫 KIDS EXPLANATION CIRCULAR-DEFINITION BAN (very important):
+The "explanation" field MUST NOT use the word being defined or any obvious morphological variant of it. A child who doesn't know the word can't understand an explanation that uses it. The "examples" field IS allowed (and encouraged) to contain the word — examples show the word in action.
+
+WRONG examples — explanations that use the word:
+- Word "בדיקה", explanation: "בדיקה היא כשבודקים משהו..." → uses "בודקים" (same root). WRONG.
+- Word "ריצה", explanation: "ריצה זה כשרצים מהר..." → uses "רצים" (same root). WRONG.
+- Word "running", explanation: "Running is when you run very fast." → uses "run". WRONG.
+- Word "decision", explanation: "A decision is what you decide." → uses "decide". WRONG.
+
+CORRECT examples — explanations using completely different words:
+- Word "בדיקה" → explanation: "פעולה של הסתכלות ולימוד של משהו, כדי לדעת אם הוא בסדר או לא. כמו לבדוק אם תפוח טעים על ידי הרחה וטעימה."
+- Word "ריצה" → explanation: "תנועה מהירה עם הרגליים, יותר מהר מהליכה. כשהגוף מתקדם בקפיצות קצרות והרגליים זזות חזק."
+- Word "running" → explanation: "Moving very fast with your legs, faster than walking. When you do this, both feet leave the ground for a tiny moment."
+- Word "decision" → explanation: "A choice you make when there are two or more things to pick from. Like choosing whether to eat an apple or a banana for lunch."
+
+The examples ARE supposed to show the word in real sentences a child can relate to, so include the word in examples freely. The forbidden self-reference is ONLY in the explanation field.
+
 Example — word "קרן" meaning "ray of light" — Hebrew user:
 "kidsExplanation": {
-  "explanation": "קרן אור זה כמו פס דק של אור שבא ממקור כמו השמש או פנס. אפשר לראות אותה כשהאור עובר דרך חור או ערפל.",
+  "explanation": "פס דק של אור שבא ממקור כמו השמש או פנס. אפשר לראות אותו כשהאור עובר דרך חור או ערפל.",
   "examples": [
     "בבוקר, קרן שמש נכנסת דרך החלון ומאירה את המיטה שלך.",
     "כשאתה מדליק פנס בחושך, יוצאת ממנו קרן אור ארוכה.",
     "המגדלור שולח קרן אור חזקה שעוזרת לספינות למצוא את הדרך."
   ]
 }
+(Note: explanation does not use "קרן". Examples DO use "קרן" — that's the point of examples.)
 
 Example — word "ephemeral" — English user:
 "kidsExplanation": {
-  "explanation": "Ephemeral means something that only lasts a very short time. Like a soap bubble that pops right after you make it.",
+  "explanation": "Something that only lasts a very short time. Like a soap bubble that pops right after you make it.",
   "examples": [
     "Ice cream on a hot summer day is ephemeral — it melts super fast.",
     "A rainbow after rain is ephemeral — it's there for a few minutes, then gone.",
     "The flame on a birthday candle is ephemeral — you blow it out in one second."
   ]
 }
+(Note: explanation does not use "ephemeral". Examples DO.)
 
 🟢 ADDITIONAL INSTRUCTION — IDIOMS (paid plan):
 Add idioms (phrases/expressions) that use this word in two places:
@@ -383,6 +446,15 @@ Give the word's TRUE historical origin — the language it came from, the transl
 
 ⚠️ CRITICAL RULE #3 — LINGUISTIC ACCURACY:
 Every word in your response must be a real, standard word in the target language. Do NOT invent words. If unsure about a word, use a simpler one you are sure of.
+
+⚠️ CRITICAL RULE #4 — NO CIRCULAR DEFINITIONS:
+The "meaning" field MUST NOT contain the word being defined or any morphological variant of it (root/stem siblings). A definition that uses the word it's defining is useless. Use synonyms or paraphrases.
+- WRONG: defining "בדיקה" as "פעולה של בדיקה..." or "מה שעושים כשבודקים".
+- RIGHT: "פעולה של בחינה ובירור כדי לגלות אם משהו תקין".
+Before writing each meaning, scan it. If the word's root appears, REWRITE.
+
+⚠️ CRITICAL RULE #5 — ETYMOLOGY OF DERIVED FORMS:
+For derived nouns (Hebrew action nouns like בדיקה/ריצה/הליכה, English gerunds like running, derived nouns like decision), the etymology should trace the BASE form (בדק/run/decide), not invent a separate origin. Mention the derivation in originalMeaning.
 
 Given:
 - word: the word to explain
