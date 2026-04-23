@@ -141,6 +141,13 @@ export default function Header() {
                   >
                     {t.accountNav}
                   </Link>
+                  <Link
+                    href="/notebook"
+                    onClick={() => setMenuOpen(false)}
+                    className="block w-full text-start px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-all"
+                  >
+                    {t.notebookOpen}
+                  </Link>
                   <button
                     onClick={() => { logout(); setMenuOpen(false); }}
                     className="w-full text-start px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-all"

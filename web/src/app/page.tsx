@@ -750,6 +750,15 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
             {result.word}
           </h2>
           <div className="flex items-center gap-3 shrink-0">
+            {plan === "deep" && (
+              <SaveToNotebookButton
+                word={result.word}
+                language={result.language}
+                meaning={result.meanings?.[0]?.meaning ?? ""}
+                getIdToken={getIdToken}
+                t={t}
+              />
+            )}
             <ShareButton word={result.word} t={t} />
             <span className="text-sm text-slate-400 font-medium">{result.language}</span>
           </div>
@@ -1075,6 +1084,69 @@ function MeaningImage({ word, meaning, uiLang, getIdToken, t, lineH }: {
         <p className="text-sm text-amber-700 px-1 mt-2" style={{ lineHeight: lineH }}>{error}</p>
       )}
     </div>
+  );
+}
+
+function SaveToNotebookButton({
+  word,
+  language,
+  meaning,
+  getIdToken,
+  t,
+}: {
+  word: string;
+  language: string;
+  meaning: string;
+  getIdToken: () => Promise<string | null>;
+  t: ReturnType<typeof useLang>["t"];
+}) {
+  const [saved, setSaved] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  async function handleSave() {
+    if (saved || busy) return;
+    setBusy(true);
+    try {
+      const idToken = await getIdToken();
+      if (!idToken) return;
+      const res = await fetch("/api/notebook", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ word, language, meaning }),
+      });
+      if (res.ok) {
+        setSaved(true);
+        track("notebook_saved", { word: word.slice(0, 40), language });
+      }
+    } catch (e) {
+      console.error("save notebook:", e);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleSave}
+      disabled={busy || saved}
+      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all disabled:cursor-default"
+      style={{
+        background: saved ? "rgb(219 234 254)" : "transparent",
+        color: saved ? "rgb(29 78 216)" : "rgb(100 116 139)",
+        border: `1px solid ${saved ? "rgb(147 197 253)" : "rgb(226 232 240)"}`,
+      }}
+      title={saved ? t.notebookSaved : t.notebookSaveBtn}
+      aria-label={saved ? t.notebookSaved : t.notebookSaveBtn}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+      </svg>
+      <span>{saved ? t.notebookSaved : t.notebookSaveBtn}</span>
+    </button>
   );
 }
 
