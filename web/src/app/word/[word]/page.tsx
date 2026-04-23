@@ -108,6 +108,17 @@ export async function generateMetadata({
   const title = `${word} — meaning, examples & etymology | Gadit`;
   const url = `https://www.gadit.app/word/${encodeURIComponent(word)}`;
 
+  // Detect the script of the word — that's the natural locale for this entry
+  const wordLocale: "he" | "en" | "ar" | "ru" = /[֐-׿]/.test(word)
+    ? "he"
+    : /[؀-ۿ]/.test(word)
+    ? "ar"
+    : /[Ѐ-ӿ]/.test(word)
+    ? "ru"
+    : "en";
+  const ogLocale =
+    wordLocale === "he" ? "he_IL" : wordLocale === "ar" ? "ar" : wordLocale === "ru" ? "ru_RU" : "en_US";
+
   return {
     title,
     description,
@@ -117,6 +128,7 @@ export async function generateMetadata({
       url,
       siteName: "Gadit",
       type: "article",
+      locale: ogLocale,
     },
     twitter: {
       card: "summary",
@@ -125,6 +137,15 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: url,
+      // The same URL serves the explanation in any of our 4 UI languages
+      // depending on the user's preference. Tell Google explicitly.
+      languages: {
+        en: url,
+        he: url,
+        ar: url,
+        ru: url,
+        "x-default": url,
+      },
     },
   };
 }
@@ -140,13 +161,77 @@ export default async function WordPage({
 
   if (!result) notFound();
 
-  // Pre-rendered SEO content (visible to crawlers and on first paint)
-  // The interactive client component takes over for the live experience.
+  // Build Schema.org structured data so Google can render rich dictionary
+  // results (the meaning shows directly in the search result, not just a link).
+  const wordUrl = `https://www.gadit.app/word/${encodeURIComponent(word)}`;
+  const wordLocale: string =
+    result.language === "Hebrew"
+      ? "he"
+      : result.language === "Arabic"
+      ? "ar"
+      : result.language === "Russian"
+      ? "ru"
+      : "en";
+
+  const ety = typeof result.etymology === "object" ? result.etymology : null;
+  const etymologyText =
+    ety && (ety.sourceLanguage || ety.originalMeaning || ety.historyNote)
+      ? [
+          ety.sourceLanguage ? `From ${ety.sourceLanguage}` : null,
+          ety.originalWord ? ety.originalWord : null,
+          ety.originalMeaning ? `meaning "${ety.originalMeaning}"` : null,
+          ety.historyNote || null,
+        ]
+          .filter(Boolean)
+          .join(". ")
+      : undefined;
+
+  // We model the page as a DefinedTermSet (the headword) containing one
+  // DefinedTerm per meaning. This is Google's preferred shape for dictionary
+  // entries and is what triggers the "Definition" rich result in search.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    "@id": wordUrl,
+    name: word,
+    inLanguage: wordLocale,
+    url: wordUrl,
+    hasDefinedTerm: (result.meanings || []).map((m, i) => ({
+      "@type": "DefinedTerm",
+      "@id": `${wordUrl}#meaning-${i + 1}`,
+      name: word,
+      description: m.meaning,
+      inLanguage: wordLocale,
+      ...(m.examples?.length
+        ? {
+            // Example sentences are not first-class in Schema.org for DefinedTerm,
+            // but Google does ingest "exampleOfWork" or text in description.
+            // We append them to description so they reach the index.
+            description: [m.meaning, ...(m.examples || [])].join(" — "),
+          }
+        : {}),
+    })),
+    ...(etymologyText ? { description: etymologyText } : {}),
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Gadit",
+      url: "https://www.gadit.app",
+    },
+  };
+
   return (
     <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4">
+      {/* Schema.org structured data — Google reads this for rich results */}
+      <script
+        type="application/ld+json"
+        // Safe: jsonLd is built from server-fetched data we control + sanitized strings
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className="max-w-2xl mx-auto">
-        {/* SEO-only block — semantic markup, hidden visually once the
-            client component mounts to avoid duplicate UI */}
+        {/* SEO-only block — semantic markup, screen-reader visible, visually hidden.
+            Doubles up the visible content so crawlers always have it even if JS
+            doesn't run on first paint. */}
         <div className="sr-only" aria-hidden="false">
           <h1>{word}</h1>
           {result.meanings?.map((m, i) => (
@@ -161,11 +246,13 @@ export default async function WordPage({
               ) : null}
             </section>
           ))}
-          {typeof result.etymology === "object" && result.etymology?.originalMeaning ? (
+          {ety && ety.originalMeaning ? (
             <section>
               <h2>Origin</h2>
-              <p>{result.etymology.sourceLanguage} · {result.etymology.originalMeaning}</p>
-              {result.etymology.historyNote ? <p>{result.etymology.historyNote}</p> : null}
+              <p>
+                {ety.sourceLanguage} · {ety.originalMeaning}
+              </p>
+              {ety.historyNote ? <p>{ety.historyNote}</p> : null}
             </section>
           ) : null}
           <p>
@@ -173,7 +260,7 @@ export default async function WordPage({
           </p>
         </div>
 
-        {/* Interactive view — re-uses the live result UI by fetching client-side */}
+        {/* Interactive view */}
         <WordClient word={word} initialResult={result} />
       </div>
     </main>

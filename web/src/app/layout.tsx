@@ -31,14 +31,30 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.gadit.app"),
   title: "Gadit — Every word, understood.",
   description: "Not just a dictionary. Understand any word in any language — instantly.",
+  alternates: {
+    canonical: "https://www.gadit.app",
+    // Tell Google the same page serves multiple language variants based on the
+    // user's chosen UI locale. The URL is the same — the served language is
+    // selected client-side from LangContext + cookie.
+    languages: {
+      en: "https://www.gadit.app",
+      he: "https://www.gadit.app",
+      ar: "https://www.gadit.app",
+      ru: "https://www.gadit.app",
+      "x-default": "https://www.gadit.app",
+    },
+  },
   openGraph: {
     title: "Gadit — Every word, understood.",
     description: "Not just a dictionary. Understand any word in any language — instantly.",
-    url: "https://gadit.app",
+    url: "https://www.gadit.app",
     siteName: "Gadit",
     type: "website",
+    locale: "en_US",
+    alternateLocale: ["he_IL", "ar", "ru_RU"],
   },
   twitter: {
     card: "summary",
