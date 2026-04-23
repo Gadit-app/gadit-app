@@ -95,6 +95,12 @@ export default function Home() {
   const { user, plan } = useAuth();
   const [kidsMode, setKidsMode] = useKidsMode();
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  // Hide example chips after the first search of the session — first-time
+  // visitors get the hint, returning ones don't need it eating screen space.
+  const [hasSearchedThisSession, setHasSearchedThisSession] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.sessionStorage.getItem("gadit_searched") === "1";
+  });
   const isPaidPlan = plan === "clear" || plan === "deep";
   const resultRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -281,6 +287,15 @@ export default function Home() {
     const query = (wordOverride ?? input).trim();
     if (!query) return;
     if (wordOverride) setInput(wordOverride);
+    // Mark that the user has searched at least once → chips hide from now on
+    if (!hasSearchedThisSession) {
+      setHasSearchedThisSession(true);
+      try {
+        window.sessionStorage.setItem("gadit_searched", "1");
+      } catch {
+        /* sessionStorage may be unavailable in private mode */
+      }
+    }
     const sentence = contextInput.trim();
     await fetchWord(query, sentence || undefined);
   }
@@ -469,9 +484,14 @@ export default function Home() {
               </div>
             )}
 
-            {/* Chips — idle only, non-paid only */}
-            {isIdle && !isPaidUser && (
-              <div className="flex flex-wrap gap-2 mt-6" style={{ justifyContent: uiDir === "rtl" ? "flex-end" : "flex-start" }}>
+            {/* Chips — first-time visitors only (until they search once),
+                hidden for paid users entirely. RTL-aware. */}
+            {isIdle && !isPaidUser && !hasSearchedThisSession && (
+              <div
+                className="flex flex-wrap gap-2 mt-6"
+                style={{ justifyContent: uiDir === "rtl" ? "flex-end" : "flex-start" }}
+                dir={uiDir}
+              >
                 <span className="text-slate-400 text-sm self-center">{t.tryLabel}</span>
                 {t.chips.map((ex) => (
                   <button key={ex} onClick={() => handleSearch(ex)} className="gadit-chip">{ex}</button>
@@ -850,41 +870,45 @@ function ResultView({ result, uiDir, t, onReset, onShowAll, onSuggest, plan, get
             </div>
           )}
 
-          {/* Compose-your-own-sentence (Clear+ only) */}
+          {/* Action triggers (Clear+ for compose/image; Deep adds quiz; basic
+              gets a single upgrade CTA). Stacked on mobile, two-up on desktop
+              so the user doesn't have to scroll past three full sections to
+              reach the next meaning. */}
           {(plan === "clear" || plan === "deep") && (
-            <MeaningCompose
-              word={result.word}
-              meaning={m.meaning}
-              uiLang={uiLang}
-              getIdToken={getIdToken}
-              t={t}
-              lineH={lineH}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <MeaningImage
+                word={result.word}
+                meaning={m.meaning}
+                uiLang={uiLang}
+                getIdToken={getIdToken}
+                t={t}
+                lineH={lineH}
+              />
+              <MeaningCompose
+                word={result.word}
+                meaning={m.meaning}
+                uiLang={uiLang}
+                getIdToken={getIdToken}
+                t={t}
+                lineH={lineH}
+              />
+              {plan === "deep" && (
+                <div className="sm:col-span-2">
+                  <MeaningQuiz
+                    word={result.word}
+                    meaning={m.meaning}
+                    uiLang={uiLang}
+                    getIdToken={getIdToken}
+                    t={t}
+                    lineH={lineH}
+                  />
+                </div>
+              )}
+            </div>
           )}
 
-          {/* Image generator (Clear+ only) */}
-          {(plan === "clear" || plan === "deep") && (
-            <MeaningImage
-              word={result.word}
-              meaning={m.meaning}
-              uiLang={uiLang}
-              getIdToken={getIdToken}
-              t={t}
-              lineH={lineH}
-            />
-          )}
-
-          {/* Quiz (Deep only) */}
-          {plan === "deep" && (
-            <MeaningQuiz
-              word={result.word}
-              meaning={m.meaning}
-              uiLang={uiLang}
-              getIdToken={getIdToken}
-              t={t}
-              lineH={lineH}
-            />
-          )}
+          {/* Basic users — single upgrade CTA hinting at the Clear features */}
+          {plan === "basic" && <BasicUpgradeHint word={result.word} t={t} />}
         </div>
       ))}
 
@@ -1207,6 +1231,39 @@ function ShareButton({ word, t }: { word: string; t: ReturnType<typeof useLang>[
       </svg>
       <span>{justCopied ? t.shareCopied : t.shareWord}</span>
     </button>
+  );
+}
+
+/**
+ * For Basic users: a single soft CTA shown beneath each meaning, pointing
+ * to the Clear features (illustration, sentence practice) without yelling.
+ * Replaces the per-meaning silence Basic users would otherwise see.
+ */
+function BasicUpgradeHint({ word, t }: { word: string; t: ReturnType<typeof useLang>["t"] }) {
+  return (
+    <Link
+      href="/pricing"
+      className="block rounded-2xl px-5 py-4 transition-all hover:shadow-md group"
+      style={{
+        background: "linear-gradient(135deg, rgb(239 246 255) 0%, rgb(219 234 254) 100%)",
+        border: "1px dashed rgb(147 197 253)",
+      }}
+    >
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="text-xl shrink-0" aria-hidden="true">✨</span>
+          <p className="text-sm text-blue-800 leading-snug">
+            {t.basicUpgradeHint.replace("{word}", word)}
+          </p>
+        </div>
+        <span
+          className="text-xs font-semibold text-blue-700 group-hover:text-blue-900 transition-colors shrink-0"
+          aria-hidden="true"
+        >
+          {t.basicUpgradeCta} →
+        </span>
+      </div>
+    </Link>
   );
 }
 

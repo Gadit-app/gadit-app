@@ -245,6 +245,9 @@ export const T: Record<Lang, {
   adminCountsReviewedLabel: string;
   adminCountsFixedLabel: string;
   adminCountsWontfixLabel: string;
+  // Basic-tier upsell shown beneath each meaning
+  basicUpgradeHint: string;
+  basicUpgradeCta: string;
   wordCollections: string;
   wordOfDay: string;
   advancedInsights: string;
@@ -545,6 +548,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "reviewed",
     adminCountsFixedLabel: "fixed",
     adminCountsWontfixLabel: "won't fix",
+    basicUpgradeHint: "See \"{word}\" as an image, write your own sentence with it, and get smart feedback.",
+    basicUpgradeCta: "Try Clear free",
     useThisWordFeature: "Compose your own sentence + AI feedback",
     aiImages: "Visual word images",
     wordCollections: "Word collections by topic",
@@ -847,6 +852,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "נבדקו",
     adminCountsFixedLabel: "תוקנו",
     adminCountsWontfixLabel: "לא יטופלו",
+    basicUpgradeHint: "ראו את \"{word}\" כתמונה, כתבו משפט משלכם איתה וקבלו פידבק חכם.",
+    basicUpgradeCta: "נסו את Clear חינם",
     useThisWordFeature: "חבר משפט משלך + פידבק AI",
     aiImages: "תמונות ויזואליות למילה",
     wordCollections: "אוספי מילים לפי נושא",
@@ -1149,6 +1156,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "تمت المراجعة",
     adminCountsFixedLabel: "تم الإصلاح",
     adminCountsWontfixLabel: "لن يتم الإصلاح",
+    basicUpgradeHint: "شاهد \"{word}\" كصورة، اكتب جملة خاصة بك معها واحصل على تغذية راجعة ذكية.",
+    basicUpgradeCta: "جرّب Clear مجانًا",
     useThisWordFeature: "ألف جملتك + تغذية راجعة AI",
     aiImages: "صور بصرية للكلمة",
     wordCollections: "مجموعات كلمات حسب الموضوع",
@@ -1451,6 +1460,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "рассмотрено",
     adminCountsFixedLabel: "исправлено",
     adminCountsWontfixLabel: "не исправлять",
+    basicUpgradeHint: "Увидеть «{word}» как картинку, написать своё предложение с этим словом и получить умный отзыв.",
+    basicUpgradeCta: "Попробовать Clear бесплатно",
     useThisWordFeature: "Составь своё предложение + обратная связь AI",
     aiImages: "Визуальные образы слова",
     wordCollections: "Коллекции слов по темам",
@@ -1753,6 +1764,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "revisados",
     adminCountsFixedLabel: "corregidos",
     adminCountsWontfixLabel: "no se corregirán",
+    basicUpgradeHint: "Mira «{word}» como imagen, escribe tu propia frase con ella y recibe retroalimentación inteligente.",
+    basicUpgradeCta: "Prueba Clear gratis",
     useThisWordFeature: "Redacta tu propia oración + feedback de IA",
     aiImages: "Imágenes visuales de la palabra",
     wordCollections: "Colecciones de palabras por tema",
@@ -2055,6 +2068,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "revisados",
     adminCountsFixedLabel: "corrigidos",
     adminCountsWontfixLabel: "não serão corrigidos",
+    basicUpgradeHint: "Veja \"{word}\" como uma imagem, escreva sua própria frase com ela e receba feedback inteligente.",
+    basicUpgradeCta: "Experimente Clear grátis",
     useThisWordFeature: "Crie sua própria frase + feedback de IA",
     aiImages: "Imagens visuais da palavra",
     wordCollections: "Coleções de palavras por tema",
@@ -2357,6 +2372,8 @@ export const T: Record<Lang, {
     adminCountsReviewedLabel: "examinés",
     adminCountsFixedLabel: "corrigés",
     adminCountsWontfixLabel: "ne seront pas corrigés",
+    basicUpgradeHint: "Voyez «{word}» en image, écrivez votre propre phrase avec ce mot et obtenez un retour intelligent.",
+    basicUpgradeCta: "Essayez Clear gratuitement",
     useThisWordFeature: "Composez votre propre phrase + feedback IA",
     aiImages: "Images visuelles du mot",
     wordCollections: "Collections de mots par thème",

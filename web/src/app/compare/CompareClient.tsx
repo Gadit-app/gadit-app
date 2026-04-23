@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -21,30 +21,62 @@ interface CompareResult {
   invalidWord?: string;
 }
 
+type AccessState =
+  | { kind: "loading" }
+  | { kind: "anonymous" } // not signed in
+  | { kind: "non_deep" } // signed in but not Deep — show upgrade gate
+  | { kind: "deep" }; // signed in as Deep — full access
+
 export default function CompareClient() {
-  const { user, promptLogin } = useAuth();
+  const { user, loading: authLoading, promptLogin } = useAuth();
   const { t, lang, dir } = useLang();
+  const [access, setAccess] = useState<AccessState>({ kind: "loading" });
   const [wordA, setWordA] = useState("");
   const [wordB, setWordB] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CompareResult | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
-  const [needsUpgrade, setNeedsUpgrade] = useState(false);
+
+  // Determine access on mount: hit /api/account to learn the user's plan.
+  // This way we can show the upgrade gate UPFRONT instead of after they
+  // type two words and submit.
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      setAccess({ kind: "anonymous" });
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/account", {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const json = (await res.json()) as { plan: "basic" | "clear" | "deep" };
+        if (cancelled) return;
+        setAccess(json.plan === "deep" ? { kind: "deep" } : { kind: "non_deep" });
+      } catch (e) {
+        console.error("compare access check:", e);
+        // On error, fail closed — show the upgrade gate so we don't accidentally
+        // expose the form to a non-Deep user.
+        if (!cancelled) setAccess({ kind: "non_deep" });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authLoading]);
 
   async function handleCompare(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg("");
-    setNeedsUpgrade(false);
     setResult(null);
 
     const a = wordA.trim();
     const b = wordB.trim();
-    if (!a || !b) return;
-
-    if (!user) {
-      promptLogin("Sign in to compare words");
-      return;
-    }
+    if (!a || !b || !user) return;
 
     setLoading(true);
     try {
@@ -58,12 +90,14 @@ export default function CompareClient() {
         body: JSON.stringify({ wordA: a, wordB: b, uiLang: lang }),
       });
 
+      // If access changed since mount (e.g. plan downgraded mid-session),
+      // re-show the upgrade gate.
       if (res.status === 402) {
-        setNeedsUpgrade(true);
+        setAccess({ kind: "non_deep" });
         return;
       }
       if (res.status === 401) {
-        promptLogin("Sign in to compare words");
+        setAccess({ kind: "anonymous" });
         return;
       }
       if (!res.ok) throw new Error("HTTP " + res.status);
@@ -79,7 +113,6 @@ export default function CompareClient() {
     }
   }
 
-  // Render error states from the API result
   function renderResultError(res: CompareResult) {
     if (res.error === "not_a_real_word") {
       return (
@@ -104,6 +137,74 @@ export default function CompareClient() {
     }
     return null;
   }
+
+  // ── Render guards ──
+
+  if (access.kind === "loading") {
+    return (
+      <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
+        <div className="max-w-2xl mx-auto text-center text-slate-400 text-sm">
+          {t.accountLoading}
+        </div>
+      </main>
+    );
+  }
+
+  if (access.kind === "anonymous" || access.kind === "non_deep") {
+    return (
+      <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
+        <div className="max-w-2xl mx-auto">
+          {/* Page header — same as the Deep version, so the user understands what they're upgrading for */}
+          <div className="text-center mb-8">
+            <h1
+              className="text-3xl sm:text-4xl font-bold mb-3"
+              style={{ color: "#0F172A", letterSpacing: "-0.5px" }}
+            >
+              {t.compareTitle}
+            </h1>
+            <p className="text-slate-500 text-base leading-relaxed max-w-lg mx-auto">
+              {t.compareSubtitle}
+            </p>
+          </div>
+
+          {/* Upgrade card */}
+          <div
+            className="p-6 sm:p-8 rounded-3xl text-center"
+            style={{
+              background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)",
+              boxShadow: "0 8px 32px 0 rgb(37 99 235 / 0.25)",
+            }}
+          >
+            <p className="text-white text-base mb-5 leading-relaxed">{t.compareDeepOnly}</p>
+            {access.kind === "anonymous" ? (
+              <button
+                onClick={() => promptLogin("Sign in to compare words")}
+                className="inline-block px-7 py-3 rounded-xl bg-white text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-all"
+              >
+                {t.login}
+              </button>
+            ) : (
+              <Link
+                href="/pricing"
+                className="inline-block px-7 py-3 rounded-xl bg-white text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-all"
+              >
+                {t.accountUpgrade}
+              </Link>
+            )}
+          </div>
+
+          <Link
+            href="/"
+            className="block text-center mt-10 text-sm text-slate-500 hover:text-blue-600 transition-colors"
+          >
+            ← {t.searchAnother}
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  // ── Deep tier — full UI ──
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
@@ -164,25 +265,6 @@ export default function CompareClient() {
         {errorMsg && (
           <div className="mb-6 px-5 py-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">
             {errorMsg}
-          </div>
-        )}
-
-        {/* Upgrade gate */}
-        {needsUpgrade && (
-          <div
-            className="mb-6 p-6 rounded-3xl text-center"
-            style={{
-              background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)",
-              boxShadow: "0 8px 32px 0 rgb(37 99 235 / 0.25)",
-            }}
-          >
-            <p className="text-white text-base mb-4 leading-relaxed">{t.compareDeepOnly}</p>
-            <Link
-              href="/pricing"
-              className="inline-block px-6 py-2.5 rounded-xl bg-white text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-all"
-            >
-              {t.accountUpgrade}
-            </Link>
           </div>
         )}
 
@@ -315,7 +397,6 @@ export default function CompareClient() {
           </div>
         )}
 
-        {/* Back to home */}
         <Link
           href="/"
           className="block text-center mt-10 text-sm text-slate-500 hover:text-blue-600 transition-colors"
