@@ -148,6 +148,7 @@ export const T: Record<Lang, {
   logout: string;
   welcomeBack: string;
   createAccount: string;
+  orSeparator: string;
   signInToSearch: string;
   dailyLimitReached: string;
   dailyLimitBody: string;
@@ -463,6 +464,7 @@ export const T: Record<Lang, {
     logout: "Log out",
     welcomeBack: "Welcome back",
     createAccount: "Create your account",
+    orSeparator: "or",
     signInToSearch: "Sign in to start searching — it's free.",
     dailyLimitReached: "You've reached today's search limit.",
     dailyLimitBody: "Free accounts can look up 20 new words per day. Your limit resets tomorrow — or upgrade to Clear for unlimited searches.",
@@ -772,6 +774,7 @@ export const T: Record<Lang, {
     logout: "התנתק",
     welcomeBack: "ברוך שובך",
     createAccount: "צור חשבון",
+    orSeparator: "או",
     signInToSearch: "התחבר כדי להתחיל לחפש — זה חינם.",
     dailyLimitReached: "הגעת למכסת החיפושים היומית.",
     dailyLimitBody: "חשבון חינמי כולל 20 חיפושי מילים חדשות ביום. המכסה מתאפסת מחר — או שדרג ל-Clear לחיפושים ללא הגבלה.",
@@ -1081,6 +1084,7 @@ export const T: Record<Lang, {
     logout: "تسجيل الخروج",
     welcomeBack: "مرحباً بعودتك",
     createAccount: "إنشاء حساب",
+    orSeparator: "أو",
     signInToSearch: "سجّل الدخول لتبدأ البحث — مجاناً.",
     dailyLimitReached: "لقد وصلت إلى حد البحث اليومي.",
     dailyLimitBody: "يتضمن الحساب المجاني 20 بحثاً عن كلمات جديدة يومياً. سيتم إعادة ضبط الحد غداً — أو قم بالترقية إلى Clear للبحث غير المحدود.",
@@ -1390,6 +1394,7 @@ export const T: Record<Lang, {
     logout: "Выйти",
     welcomeBack: "С возвращением",
     createAccount: "Создать аккаунт",
+    orSeparator: "или",
     signInToSearch: "Войдите, чтобы начать поиск — это бесплатно.",
     dailyLimitReached: "Вы достигли дневного лимита поиска.",
     dailyLimitBody: "Бесплатный аккаунт включает 20 новых слов в день. Лимит обновится завтра — или перейдите на Clear для неограниченного поиска.",
@@ -1699,6 +1704,7 @@ export const T: Record<Lang, {
     logout: "Cerrar sesión",
     welcomeBack: "Bienvenido de nuevo",
     createAccount: "Crea tu cuenta",
+    orSeparator: "o",
     signInToSearch: "Inicia sesión para empezar a buscar — es gratis.",
     dailyLimitReached: "Has alcanzado el límite diario de búsquedas.",
     dailyLimitBody: "Las cuentas gratuitas incluyen 20 búsquedas de palabras nuevas por día. El límite se reinicia mañana — o actualiza a Clear para búsquedas ilimitadas.",
@@ -2008,6 +2014,7 @@ export const T: Record<Lang, {
     logout: "Sair",
     welcomeBack: "Bem-vindo de volta",
     createAccount: "Crie sua conta",
+    orSeparator: "ou",
     signInToSearch: "Entre para começar a pesquisar — é grátis.",
     dailyLimitReached: "Você atingiu o limite diário de buscas.",
     dailyLimitBody: "Contas gratuitas incluem 20 buscas de palavras novas por dia. O limite é redefinido amanhã — ou faça upgrade para Clear e tenha buscas ilimitadas.",
@@ -2317,6 +2324,7 @@ export const T: Record<Lang, {
     logout: "Se déconnecter",
     welcomeBack: "Bon retour",
     createAccount: "Créez votre compte",
+    orSeparator: "ou",
     signInToSearch: "Connectez-vous pour commencer à chercher — c'est gratuit.",
     dailyLimitReached: "Vous avez atteint la limite quotidienne de recherches.",
     dailyLimitBody: "Les comptes gratuits incluent 20 recherches de mots nouveaux par jour. La limite sera réinitialisée demain — ou passez à Clear pour des recherches illimitées.",

@@ -93,7 +93,7 @@ export default function LoginModal() {
 
         <div className="flex items-center gap-3">
           <div className="flex-1 h-px bg-slate-100" />
-          <span className="text-xs text-slate-400">or</span>
+          <span className="text-xs text-slate-400">{t.orSeparator}</span>
           <div className="flex-1 h-px bg-slate-100" />
         </div>
 
