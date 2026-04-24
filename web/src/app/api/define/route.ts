@@ -1,5 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
+import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+
+const BASIC_DAILY_LIMIT = 20;
+
+function todayUTC(): string {
+  // UTC date in YYYY-MM-DD so the daily counter resets at a consistent global
+  // moment rather than whenever midnight hits the serverless instance.
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Atomically increment today's counter and return the new value.
+// cache hits skip this entirely, so only cache misses (which cost us an OpenAI call)
+// count toward the user's daily quota.
+async function incrementDailyUsage(userId: string): Promise<number> {
+  const db = getAdminDb();
+  const ref = db.collection("dailyUsage").doc(`${userId}_${todayUTC()}`);
+  await ref.set(
+    { count: FieldValue.increment(1), userId, date: todayUTC() },
+    { merge: true }
+  );
+  const snap = await ref.get();
+  return (snap.data()?.count as number) ?? 1;
+}
 
 const SYSTEM_PROMPT = `You are Gadit — a word understanding engine. Your job is to guide the user into genuinely understanding a word — not just define it.
 
@@ -571,11 +594,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Word is required" }, { status: 400 });
     }
 
-    // Determine user's plan (verified via Firebase ID token). Anonymous/invalid → basic.
+    // Determine user's plan (verified via Firebase ID token).
+    // Anonymous users are rejected up-front — Gadit requires a signed-in account
+    // to search. Basic (free) users get a daily quota; paid users are unmetered.
     const authHeader = req.headers.get("Authorization") || "";
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = idToken ? await verifyUserAndGetPlan(idToken) : null;
-    const plan = userInfo?.plan ?? "basic";
+    if (!userInfo) {
+      return NextResponse.json({ error: "login_required" }, { status: 401 });
+    }
+    const plan = userInfo.plan;
     const isPaid = plan === "clear" || plan === "deep";
 
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
@@ -599,6 +627,23 @@ export async function POST(req: NextRequest) {
           Connection: "keep-alive",
         },
       });
+    }
+
+    // Basic users pay a daily quota, but only on cache misses (OpenAI calls).
+    // Cache hits are "free" since they don't cost us anything — this also means
+    // popular words that are already cached never count against quota.
+    if (plan === "basic") {
+      const newCount = await incrementDailyUsage(userInfo.userId);
+      if (newCount > BASIC_DAILY_LIMIT) {
+        return NextResponse.json(
+          {
+            error: "daily_limit_reached",
+            limit: BASIC_DAILY_LIMIT,
+            plan: "basic",
+          },
+          { status: 429 }
+        );
+      }
     }
 
     const basePrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;

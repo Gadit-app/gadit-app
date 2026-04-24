@@ -90,9 +90,10 @@ export default function Home() {
   const [phase, setPhase] = useState<SearchPhase>({ kind: "idle" });
   const [contextInput, setContextInput] = useState("");
   const [error, setError] = useState("");
+  const [quotaReached, setQuotaReached] = useState(false);
 
   const { t, dir: uiDir, lang } = useLang();
-  const { user, plan } = useAuth();
+  const { user, plan, promptLogin } = useAuth();
   const [kidsMode, setKidsMode] = useKidsMode();
   const [history, setHistory] = useState<HistoryItem[]>([]);
   // Hide example chips after the first search of the session — first-time
@@ -143,6 +144,7 @@ export default function Home() {
   async function fetchWord(word: string, contextSentence?: string) {
     setPhase({ kind: "loading" });
     setError("");
+    setQuotaReached(false);
     try {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (user) {
@@ -159,6 +161,18 @@ export default function Home() {
         body: JSON.stringify({ word, contextSentence, uiLang: lang }),
       });
 
+      if (res.status === 401) {
+        // Not signed in — open login modal with a contextual reason and bail.
+        promptLogin(t.signInToSearch);
+        setPhase({ kind: "idle" });
+        return;
+      }
+      if (res.status === 429) {
+        // Basic user hit today's quota — point them at upgrade instead of retry.
+        setQuotaReached(true);
+        setPhase({ kind: "idle" });
+        return;
+      }
       if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
       const reader = res.body.getReader();
@@ -509,6 +523,25 @@ export default function Home() {
           {error && (
             <div className="mt-4 px-5 py-4 rounded-2xl text-sm animate-fade-in" style={{ background: "rgb(254 226 226)", color: "#DC2626" }}>
               {error}
+            </div>
+          )}
+
+          {quotaReached && (
+            <div
+              className="mt-4 px-5 py-5 rounded-2xl animate-fade-in border"
+              style={{ background: "#EFF6FF", borderColor: "#BFDBFE", color: "#1E3A8A" }}
+            >
+              <p className="font-semibold text-base mb-1">{t.dailyLimitReached}</p>
+              <p className="text-sm mb-3" style={{ color: "#1E40AF" }}>
+                {t.dailyLimitBody}
+              </p>
+              <Link
+                href="/pricing"
+                className="inline-block px-5 py-2.5 rounded-xl font-medium text-sm transition-colors"
+                style={{ background: "#2563EB", color: "white" }}
+              >
+                {t.dailyLimitCta}
+              </Link>
             </div>
           )}
 
