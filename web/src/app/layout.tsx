@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Rubik, Cairo } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
@@ -29,6 +29,28 @@ const cairo = Cairo({
   variable: "--font-cairo",
   subsets: ["arabic", "latin"],
   weight: ["400", "500", "600"],
+});
+
+// Display serif for word titles, definitions, and "lexical" moments.
+// opsz axis (9-144) lets a giant word title feel warm, while 20pt serves
+// body text without feeling stiff. Variable weight is required when axes
+// is supplied — Next.js rejects pinned weights alongside axes.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["opsz", "SOFT"],
+  display: "swap",
+});
+
+// Native Naskh shapes for Arabic — chosen over Cairo (which is a Latin
+// font adapted to Arabic) after a native reader flagged Cairo as feeling
+// "not natural". Cairo stays loaded for now to avoid regressions in
+// existing components; new design system uses noto.
+const notoNaskhArabic = Noto_Naskh_Arabic({
+  variable: "--font-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -95,7 +117,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           <LangProvider>
