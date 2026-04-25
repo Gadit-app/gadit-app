@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/account", "/notebook", "/admin"],
+        disallow: ["/api/", "/account", "/notebook", "/admin", "/beta"],
       },
     ],
     sitemap: "https://www.gadit.app/sitemap.xml",

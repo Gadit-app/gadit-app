@@ -4,6 +4,7 @@ import { useLang } from "@/lib/lang-context";
 import { LANGUAGES } from "@/lib/i18n";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { user, logout, promptLogin, plan } = useAuth();
@@ -11,6 +12,12 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const isRTL = dir === "rtl";
+  const pathname = usePathname();
+
+  // Hide the legacy Header on V2 redesign routes — they bring their own
+  // MarketingHeader on the dark canvas. Once V2 is the only path this
+  // whole component retires.
+  if (pathname?.startsWith("/beta")) return null;
 
   return (
     <header
