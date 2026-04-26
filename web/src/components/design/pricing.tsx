@@ -291,22 +291,24 @@ function TierCard({
         the divider, so the price/CTA block above it has identical
         height across cards.
        */}
-      <div className="flex items-baseline justify-between mb-1">
+      {/* Tier name + tagline — centered */}
+      <div className="text-center">
         <div
           className="gd-font-sans-ui font-semibold"
           style={{ fontSize: 22, color: "var(--gd-ink-900)" }}
         >
           {tier.name}
         </div>
-        <span
-          className="gd-font-sans-ui italic"
+        <div
+          className="gd-font-sans-ui italic mt-1"
           style={{ fontSize: 12, color: "oklch(0.5 0.18 250)" }}
         >
           {tier.tagline}
-        </span>
+        </div>
       </div>
+      {/* Pitch — centered */}
       <p
-        className="gd-font-sans-ui mt-3"
+        className="gd-font-sans-ui mt-3 text-center"
         style={{
           fontSize: 13.5,
           lineHeight: 1.5,
@@ -316,8 +318,8 @@ function TierCard({
         {tier.pitch}
       </p>
 
-      {/* Price — directly under the tier name */}
-      <div className="mt-6 flex items-baseline gap-1.5">
+      {/* Price — centered, directly under the tagline/pitch */}
+      <div className="mt-6 flex items-baseline justify-center gap-1.5">
         <span
           className={priceFontClass}
           style={{
@@ -340,16 +342,52 @@ function TierCard({
       </div>
       {subPrice && (
         <div
-          className="gd-font-sans-ui mt-1"
+          className="gd-font-sans-ui mt-1 text-center"
           style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
         >
           {subPrice}
         </div>
       )}
 
-      {/* CTA + trust block — fixed-height so CTAs line up across cards.
-          The trust line is rendered as an empty 18px spacer when absent,
-          which keeps the visual rhythm identical for Basic/Deep too. */}
+      {/* Features — flex-1 grows to fill remaining card height so the
+          CTA block below pins to the same Y across all three cards. */}
+      <ul className="mt-7 space-y-3 flex-1">
+        {tier.features.map((f, i) => (
+          <li
+            key={i}
+            className="flex items-start gap-2.5 gd-font-sans-ui"
+            style={{
+              fontSize: 13.5,
+              lineHeight: 1.5,
+              color: "var(--gd-ink-700)",
+            }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              style={{
+                color: "oklch(0.5 0.18 250)",
+                marginTop: 4,
+                flexShrink: 0,
+              }}
+            >
+              <path
+                d="M3 7.5l2.5 2.5L11 4"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA — anchors to the bottom of the card (features above use
+          flex-1, so this row sits at the same Y across all three). */}
       <button
         type="button"
         onClick={tier.onCta}
@@ -386,47 +424,6 @@ function TierCard({
         {tier.trust ?? " "}
       </div>
 
-      {/* Divider + features — features flex-grow so the card uses any
-          extra height for more bullet space, leaving the CTA block
-          above firmly aligned. */}
-      <div
-        className="mt-5 mb-5"
-        style={{ height: 1, background: "oklch(0 0 0 / 0.08)" }}
-      />
-      <ul className="space-y-3 flex-1">
-        {tier.features.map((f, i) => (
-          <li
-            key={i}
-            className="flex items-start gap-2.5 gd-font-sans-ui"
-            style={{
-              fontSize: 13.5,
-              lineHeight: 1.5,
-              color: "var(--gd-ink-700)",
-            }}
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              style={{
-                color: "oklch(0.5 0.18 250)",
-                marginTop: 4,
-                flexShrink: 0,
-              }}
-            >
-              <path
-                d="M3 7.5l2.5 2.5L11 4"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
