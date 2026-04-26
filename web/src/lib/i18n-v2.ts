@@ -181,6 +181,26 @@ export interface V2Strings {
   quizBackToWord: string;
   quizReviewMistakes: string;
 
+  // ── Compare Page (Screen 7) ─────────────────────────────────
+  compareEyebrow: string;
+  compareTitle: string;
+  compareSubtitle: string;
+  compareWord1Label: string;
+  compareWord2Label: string;
+  compareWord1Placeholder: string;
+  compareWord2Placeholder: string;
+  compareCta: string;
+  compareLoading: string;
+  compareEmpty: string;
+  compareDifferenceLabel: string;
+  compareExamplesLabel: string;
+  compareCommonMistakeLabel: string;
+  // Error keys
+  compareErrNotARealWord: string;
+  compareErrDifferentLanguages: string;
+  compareErrSameWord: string;
+  compareErrGeneric: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -377,6 +397,27 @@ const en: V2Strings = {
   quizBackToWord: "Back to word",
   quizReviewMistakes: "Review the ones I missed",
 
+  // Compare Page (Screen 7)
+  compareEyebrow: "Compare",
+  compareTitle: "Tell similar words apart",
+  compareSubtitle:
+    "affect vs effect, אומנות vs אמנות, principle vs principal — the words that catch even native speakers.",
+  compareWord1Label: "Word 1",
+  compareWord2Label: "Word 2",
+  compareWord1Placeholder: "affect",
+  compareWord2Placeholder: "effect",
+  compareCta: "Compare",
+  compareLoading: "Comparing…",
+  compareEmpty: "Enter two words to compare them",
+  compareDifferenceLabel: "The difference",
+  compareExamplesLabel: "Examples",
+  compareCommonMistakeLabel: "Common mistake",
+  compareErrNotARealWord: "We don't recognize one of those words.",
+  compareErrDifferentLanguages:
+    "These two words seem to be in different languages — try a matched pair.",
+  compareErrSameWord: "These look like the same word — try two different ones.",
+  compareErrGeneric: "Compare unavailable right now.",
+
   origin: "Origin",
   historyNote: "History note",
   throughTime: "Through time",
@@ -572,6 +613,28 @@ const he: V2Strings = {
   quizBackToWord: "חזרה למילה",
   quizReviewMistakes: "סקירת הטעויות",
 
+  // Compare Page (Screen 7)
+  compareEyebrow: "השוואה",
+  compareTitle: "הבחינו בין מילים דומות",
+  compareSubtitle:
+    "אומנות מול אמנות, affect מול effect — המילים שמבלבלות אפילו דוברים שוטפים.",
+  compareWord1Label: "מילה 1",
+  compareWord2Label: "מילה 2",
+  compareWord1Placeholder: "אומנות",
+  compareWord2Placeholder: "אמנות",
+  compareCta: "השוואה",
+  compareLoading: "משווים…",
+  compareEmpty: "הזינו שתי מילים להשוואה",
+  compareDifferenceLabel: "ההבדל",
+  compareExamplesLabel: "דוגמאות",
+  compareCommonMistakeLabel: "טעות נפוצה",
+  compareErrNotARealWord: "אחת מהמילים אינה מוכרת לנו.",
+  compareErrDifferentLanguages:
+    "שתי המילים נראות בשפות שונות — נסו זוג תואם.",
+  compareErrSameWord:
+    "אלו נראות כאותה מילה — נסו שתי מילים שונות.",
+  compareErrGeneric: "ההשוואה אינה זמינה כרגע.",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -764,6 +827,28 @@ const ar: V2Strings = {
   quizPracticeAnotherWord: "تدرَّب على كلمة أخرى",
   quizBackToWord: "العودة إلى الكلمة",
   quizReviewMistakes: "مراجعة الأخطاء",
+
+  // Compare Page (Screen 7)
+  compareEyebrow: "مقارنة",
+  compareTitle: "ميِّز بين الكلمات المتشابهة",
+  compareSubtitle:
+    "ضادّ مقابل ظاء، affect مقابل effect — الكلمات التي تخدع حتى الناطقين الأصليين.",
+  compareWord1Label: "الكلمة 1",
+  compareWord2Label: "الكلمة 2",
+  compareWord1Placeholder: "ضادّ",
+  compareWord2Placeholder: "ظاءّ",
+  compareCta: "قارن",
+  compareLoading: "جاري المقارنة…",
+  compareEmpty: "أدخل كلمتين للمقارنة",
+  compareDifferenceLabel: "الفارق",
+  compareExamplesLabel: "أمثلة",
+  compareCommonMistakeLabel: "خطأ شائع",
+  compareErrNotARealWord: "إحدى الكلمتين غير معروفة.",
+  compareErrDifferentLanguages:
+    "الكلمتان تبدوان من لغتين مختلفتين — جرّب زوجًا متوافقًا.",
+  compareErrSameWord:
+    "تبدوان كأنهما الكلمة نفسها — جرّب كلمتين مختلفتين.",
+  compareErrGeneric: "المقارنة غير متاحة الآن.",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
