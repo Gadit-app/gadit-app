@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { LoginModalV2 } from "./design/LoginModalV2";
 
 export default function LoginModal() {
   const { showLoginModal, setShowLoginModal, loginReason, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
@@ -11,6 +13,13 @@ export default function LoginModal() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const pathname = usePathname();
+
+  // On V2 routes, swap in the redesigned modal. The legacy modal still
+  // serves all production routes until V2 is the only path.
+  if (pathname?.startsWith("/beta")) {
+    return <LoginModalV2 />;
+  }
 
   if (!showLoginModal) return null;
 

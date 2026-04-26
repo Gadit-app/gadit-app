@@ -124,6 +124,32 @@ export interface V2Strings {
   faqQ5: string;
   faqA5: string;
 
+  // ── Login Modal (Screen 4) ──────────────────────────────────
+  loginWelcomeBack: string;
+  loginCreateAccount: string;
+  loginContinueWithGoogle: string;
+  loginOrSeparator: string;
+  loginEmailLabel: string;
+  loginPasswordLabel: string;
+  loginEmailPlaceholder: string;
+  loginPasswordPlaceholder: string;
+  loginSubmitSignIn: string;
+  loginSubmitSignUp: string;
+  loginSwitchToSignUp: string;
+  loginSwitchToSignIn: string;
+  loginShowPassword: string;
+  loginHidePassword: string;
+  loginCloseAria: string;
+  loginSigningIn: string;
+  loginCreatingAccount: string;
+  // Error messages
+  loginErrorWrongCredentials: string;
+  loginErrorEmailInUse: string;
+  loginErrorWeakPassword: string;
+  loginErrorInvalidEmail: string;
+  loginErrorGoogleFailed: string;
+  loginErrorGeneric: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -263,6 +289,31 @@ const en: V2Strings = {
   faqA5:
     "Yes. They're AI-generated with the same care as adult content, reviewed by our content rules. No user-generated child content.",
 
+  // Login Modal (Screen 4)
+  loginWelcomeBack: "Welcome back",
+  loginCreateAccount: "Create your account",
+  loginContinueWithGoogle: "Continue with Google",
+  loginOrSeparator: "or",
+  loginEmailLabel: "Email",
+  loginPasswordLabel: "Password",
+  loginEmailPlaceholder: "you@example.com",
+  loginPasswordPlaceholder: "••••••••",
+  loginSubmitSignIn: "Sign in",
+  loginSubmitSignUp: "Create account",
+  loginSwitchToSignUp: "Don't have an account? Sign up",
+  loginSwitchToSignIn: "Already have an account? Sign in",
+  loginShowPassword: "Show password",
+  loginHidePassword: "Hide password",
+  loginCloseAria: "Close",
+  loginSigningIn: "Signing in…",
+  loginCreatingAccount: "Creating account…",
+  loginErrorWrongCredentials: "Wrong email or password.",
+  loginErrorEmailInUse: "Email already in use. Try logging in.",
+  loginErrorWeakPassword: "Password must be at least 6 characters.",
+  loginErrorInvalidEmail: "Please enter a valid email address.",
+  loginErrorGoogleFailed: "Could not sign in with Google. Try again.",
+  loginErrorGeneric: "Something went wrong. Try again.",
+
   origin: "Origin",
   historyNote: "History note",
   throughTime: "Through time",
@@ -401,6 +452,31 @@ const he: V2Strings = {
   faqA5:
     "כן. הם נוצרים ב־AI באותה זהירות כמו תוכן למבוגרים, ועוברים סקירה לפי כללי התוכן שלנו. אין תוכן ילדים ממשתמשים.",
 
+  // Login Modal (Screen 4)
+  loginWelcomeBack: "ברוכים השבים",
+  loginCreateAccount: "צרו חשבון",
+  loginContinueWithGoogle: "המשיכו עם Google",
+  loginOrSeparator: "או",
+  loginEmailLabel: "אימייל",
+  loginPasswordLabel: "סיסמה",
+  loginEmailPlaceholder: "you@example.com",
+  loginPasswordPlaceholder: "••••••••",
+  loginSubmitSignIn: "התחברות",
+  loginSubmitSignUp: "צרו חשבון",
+  loginSwitchToSignUp: "אין חשבון? הירשמו",
+  loginSwitchToSignIn: "כבר רשומים? התחברו",
+  loginShowPassword: "הצגת סיסמה",
+  loginHidePassword: "הסתרת סיסמה",
+  loginCloseAria: "סגירה",
+  loginSigningIn: "מתחברים…",
+  loginCreatingAccount: "יוצרים חשבון…",
+  loginErrorWrongCredentials: "אימייל או סיסמה שגויים.",
+  loginErrorEmailInUse: "האימייל כבר בשימוש. נסו להתחבר.",
+  loginErrorWeakPassword: "הסיסמה חייבת להכיל לפחות 6 תווים.",
+  loginErrorInvalidEmail: "אנא הזינו כתובת אימייל תקינה.",
+  loginErrorGoogleFailed: "ההתחברות עם Google נכשלה. נסו שוב.",
+  loginErrorGeneric: "משהו השתבש. נסו שוב.",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -536,6 +612,31 @@ const ar: V2Strings = {
   faqQ5: "هل شرح الأطفال آمن؟",
   faqA5:
     "نعم. يُولَّد بالذكاء الاصطناعي بالعناية نفسها للبالغين، ويُراجَع وفق قواعد المحتوى لدينا. لا محتوى أطفال من المستخدمين.",
+
+  // Login Modal (Screen 4)
+  loginWelcomeBack: "أهلًا بعودتك",
+  loginCreateAccount: "أنشئ حسابك",
+  loginContinueWithGoogle: "تابع باستخدام Google",
+  loginOrSeparator: "أو",
+  loginEmailLabel: "البريد الإلكتروني",
+  loginPasswordLabel: "كلمة المرور",
+  loginEmailPlaceholder: "you@example.com",
+  loginPasswordPlaceholder: "••••••••",
+  loginSubmitSignIn: "تسجيل الدخول",
+  loginSubmitSignUp: "أنشئ الحساب",
+  loginSwitchToSignUp: "ليس لديك حساب؟ أنشئ واحدًا",
+  loginSwitchToSignIn: "لديك حساب بالفعل؟ سجّل الدخول",
+  loginShowPassword: "إظهار كلمة المرور",
+  loginHidePassword: "إخفاء كلمة المرور",
+  loginCloseAria: "إغلاق",
+  loginSigningIn: "جاري تسجيل الدخول…",
+  loginCreatingAccount: "جاري إنشاء الحساب…",
+  loginErrorWrongCredentials: "البريد أو كلمة المرور غير صحيحة.",
+  loginErrorEmailInUse: "البريد مستخدم بالفعل. حاول تسجيل الدخول.",
+  loginErrorWeakPassword: "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+  loginErrorInvalidEmail: "يُرجى إدخال بريد إلكتروني صالح.",
+  loginErrorGoogleFailed: "تعذّر تسجيل الدخول عبر Google. حاول مرة أخرى.",
+  loginErrorGeneric: "حدث خطأ. حاول مرة أخرى.",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
