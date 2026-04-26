@@ -201,6 +201,27 @@ export interface V2Strings {
   compareErrSameWord: string;
   compareErrGeneric: string;
 
+  // ── Notebook (Screen 8) ─────────────────────────────────────
+  notebookEyebrow: string;
+  notebookTitle: string;
+  notebookSubtitle: string;
+  /** template: "127 words explored" — number is the only arg */
+  notebookCounterTemplate: Template1;
+  notebookPracticeNow: string;
+  /** template: "5 due today" — number is the only arg */
+  notebookDueTodayTemplate: Template1;
+  notebookListView: string;
+  notebookGalaxyView: string;
+  notebookEmptyTitle: string;
+  notebookEmptyCta: string;
+  notebookRemoveAria: string;
+  notebookMasteredLabel: string;
+  /** template: "Saved Apr 22" or localized equivalent */
+  notebookSavedOnTemplate: Template1;
+  notebookLegendRecent: string;
+  notebookLegendMastered: string;
+  notebookLegendNeedsReview: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -417,6 +438,25 @@ const en: V2Strings = {
     "These two words seem to be in different languages — try a matched pair.",
   compareErrSameWord: "These look like the same word — try two different ones.",
   compareErrGeneric: "Compare unavailable right now.",
+
+  // Notebook (Screen 8)
+  notebookEyebrow: "Notebook",
+  notebookTitle: "Your universe of words",
+  notebookSubtitle:
+    "Every word you've explored — kept, organized, growing.",
+  notebookCounterTemplate: (n) => `${n} words explored`,
+  notebookPracticeNow: "Practice now",
+  notebookDueTodayTemplate: (n) => `${n} due today`,
+  notebookListView: "List",
+  notebookGalaxyView: "Galaxy",
+  notebookEmptyTitle: "Your notebook is empty",
+  notebookEmptyCta: "Search a word to begin",
+  notebookRemoveAria: "Remove",
+  notebookMasteredLabel: "★ Mastered",
+  notebookSavedOnTemplate: (d) => `Saved ${d}`,
+  notebookLegendRecent: "Recently saved",
+  notebookLegendMastered: "Mastered",
+  notebookLegendNeedsReview: "Needs review",
 
   origin: "Origin",
   historyNote: "History note",
@@ -635,6 +675,25 @@ const he: V2Strings = {
     "אלו נראות כאותה מילה — נסו שתי מילים שונות.",
   compareErrGeneric: "ההשוואה אינה זמינה כרגע.",
 
+  // Notebook (Screen 8)
+  notebookEyebrow: "מחברת",
+  notebookTitle: "היקום שלכם של מילים",
+  notebookSubtitle:
+    "כל מילה שלמדתם — נשמרת, מאורגנת, גדלה.",
+  notebookCounterTemplate: (n) => `${n} מילים שנלמדו`,
+  notebookPracticeNow: "תרגול עכשיו",
+  notebookDueTodayTemplate: (n) => `${n} לתרגול היום`,
+  notebookListView: "רשימה",
+  notebookGalaxyView: "גלקסיה",
+  notebookEmptyTitle: "המחברת ריקה",
+  notebookEmptyCta: "חפשו מילה כדי להתחיל",
+  notebookRemoveAria: "הסרה",
+  notebookMasteredLabel: "★ נשלט",
+  notebookSavedOnTemplate: (d) => `נשמר ב־${d}`,
+  notebookLegendRecent: "נשמר לאחרונה",
+  notebookLegendMastered: "נשלט",
+  notebookLegendNeedsReview: "צריך תרגול",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -849,6 +908,25 @@ const ar: V2Strings = {
   compareErrSameWord:
     "تبدوان كأنهما الكلمة نفسها — جرّب كلمتين مختلفتين.",
   compareErrGeneric: "المقارنة غير متاحة الآن.",
+
+  // Notebook (Screen 8)
+  notebookEyebrow: "الدفتر",
+  notebookTitle: "كونك من الكلمات",
+  notebookSubtitle:
+    "كل كلمة استكشفتها — محفوظة، منظَّمة، تنمو.",
+  notebookCounterTemplate: (n) => `${n} كلمة مستكشَفة`,
+  notebookPracticeNow: "ابدأ التدريب",
+  notebookDueTodayTemplate: (n) => `${n} للمراجعة اليوم`,
+  notebookListView: "قائمة",
+  notebookGalaxyView: "مجرّة",
+  notebookEmptyTitle: "دفترك فارغ",
+  notebookEmptyCta: "ابحث عن كلمة لتبدأ",
+  notebookRemoveAria: "إزالة",
+  notebookMasteredLabel: "★ متقَن",
+  notebookSavedOnTemplate: (d) => `حُفظ في ${d}`,
+  notebookLegendRecent: "محفوظ مؤخرًا",
+  notebookLegendMastered: "متقَن",
+  notebookLegendNeedsReview: "يحتاج مراجعة",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
