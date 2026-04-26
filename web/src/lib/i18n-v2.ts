@@ -150,6 +150,22 @@ export interface V2Strings {
   loginErrorGoogleFailed: string;
   loginErrorGeneric: string;
 
+  // ── Compose Modal (Screen 5) ────────────────────────────────
+  composeEyebrow: string;
+  composeTitleTemplate: Template1; // takes the word, returns "Write your own sentence with X"
+  composeSubtitle: string;
+  composePlaceholder: string;
+  composeSubmit: string;
+  composeChecking: string;
+  composeStatusPerfectLabel: string;
+  composeStatusAlmostLabel: string;
+  composeStatusIncorrectLabel: string;
+  composeSuggestionEyebrow: string;
+  composeTryAnother: string;
+  composeBackToWord: string;
+  composeErrorEmpty: string;
+  composeErrorTooShort: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -314,6 +330,23 @@ const en: V2Strings = {
   loginErrorGoogleFailed: "Could not sign in with Google. Try again.",
   loginErrorGeneric: "Something went wrong. Try again.",
 
+  // Compose Modal (Screen 5)
+  composeEyebrow: "Compose",
+  composeTitleTemplate: (w) => `Write your own sentence with ${w}`,
+  composeSubtitle:
+    "Use it in a sentence and get instant feedback on grammar, tone, and fit.",
+  composePlaceholder: "Type your sentence here…",
+  composeSubmit: "Check sentence",
+  composeChecking: "Checking…",
+  composeStatusPerfectLabel: "Perfect",
+  composeStatusAlmostLabel: "Almost there",
+  composeStatusIncorrectLabel: "Not quite",
+  composeSuggestionEyebrow: "Suggested rewrite",
+  composeTryAnother: "Try another sentence",
+  composeBackToWord: "Back to word",
+  composeErrorEmpty: "Please write a sentence first.",
+  composeErrorTooShort: "Please write at least a few words.",
+
   origin: "Origin",
   historyNote: "History note",
   throughTime: "Through time",
@@ -477,6 +510,23 @@ const he: V2Strings = {
   loginErrorGoogleFailed: "ההתחברות עם Google נכשלה. נסו שוב.",
   loginErrorGeneric: "משהו השתבש. נסו שוב.",
 
+  // Compose Modal (Screen 5)
+  composeEyebrow: "כתיבה",
+  composeTitleTemplate: (w) => `כתבו משפט משלכם עם ${w}`,
+  composeSubtitle:
+    "השתמשו במילה במשפט וקבלו משוב מיידי על דקדוק, טון, והתאמה.",
+  composePlaceholder: "כתבו את המשפט שלכם כאן…",
+  composeSubmit: "בדיקת המשפט",
+  composeChecking: "בודק…",
+  composeStatusPerfectLabel: "מצוין",
+  composeStatusAlmostLabel: "כמעט שם",
+  composeStatusIncorrectLabel: "לא מדויק",
+  composeSuggestionEyebrow: "ניסוח מומלץ",
+  composeTryAnother: "ננסה משפט נוסף",
+  composeBackToWord: "חזרה למילה",
+  composeErrorEmpty: "כתבו תחילה משפט.",
+  composeErrorTooShort: "כתבו לפחות כמה מילים.",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -637,6 +687,23 @@ const ar: V2Strings = {
   loginErrorInvalidEmail: "يُرجى إدخال بريد إلكتروني صالح.",
   loginErrorGoogleFailed: "تعذّر تسجيل الدخول عبر Google. حاول مرة أخرى.",
   loginErrorGeneric: "حدث خطأ. حاول مرة أخرى.",
+
+  // Compose Modal (Screen 5)
+  composeEyebrow: "تأليف",
+  composeTitleTemplate: (w) => `اكتب جملتك الخاصة بكلمة ${w}`,
+  composeSubtitle:
+    "استخدمها في جملة واحصل على ملاحظات فورية حول النحو والنبرة والملاءمة.",
+  composePlaceholder: "اكتب جملتك هنا…",
+  composeSubmit: "تحقّق من الجملة",
+  composeChecking: "جاري التحقّق…",
+  composeStatusPerfectLabel: "ممتاز",
+  composeStatusAlmostLabel: "قريب جدًّا",
+  composeStatusIncorrectLabel: "غير مضبوط",
+  composeSuggestionEyebrow: "إعادة صياغة مقترحة",
+  composeTryAnother: "جرّب جملة أخرى",
+  composeBackToWord: "العودة إلى الكلمة",
+  composeErrorEmpty: "اكتب جملة أولًا.",
+  composeErrorTooShort: "اكتب بضع كلمات على الأقل.",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
