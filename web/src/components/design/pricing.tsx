@@ -203,7 +203,6 @@ function TierCard({
   tier: TierData;
 }) {
   const { lang, dir } = useLang();
-  const isRtl = dir === "rtl";
   const script = scriptFor(lang);
   const { mo, yr } = periodSuffixes(lang);
 
@@ -233,6 +232,11 @@ function TierCard({
 
   return (
     <div
+      // Restore the document direction inside each card so Hebrew /
+      // Arabic feature text aligns to the right edge naturally — the
+      // outer grid is `dir="ltr"` to keep the cheap→expensive order
+      // universal, but inside the card we want native RTL flow.
+      dir={dir}
       className={`gd-card relative h-full flex flex-col ${tier.highlight ? "gd-tier-popular" : ""}`}
       style={{
         // gd-card gives us the warm-paper surface + outer shadow; we add
@@ -364,18 +368,22 @@ function TierCard({
 
       {/* Features — flex-1 grows to fill remaining card height so the
           CTA block below pins to the same Y across all three cards.
-          In RTL the check icon leads each row on the visual right;
-          flex-row-reverse handles that. */}
+          The card has dir={dir}, so an RTL document already flips the
+          flex children naturally — the check icon leads each row on
+          the visual right edge in he/ar. Adding flex-row-reverse on
+          top would double-flip back to LTR (the bug beta tester saw:
+          checks on the wrong side). textAlign: start works in both
+          directions without an explicit conditional. */}
       <ul className="mt-7 space-y-3 flex-1">
         {tier.features.map((f, i) => (
           <li
             key={i}
-            className={`flex items-start gap-2.5 gd-font-sans-ui ${isRtl ? "flex-row-reverse" : ""}`}
+            className="flex items-start gap-2.5 gd-font-sans-ui"
             style={{
               fontSize: 13.5,
               lineHeight: 1.5,
               color: "var(--gd-ink-700)",
-              textAlign: isRtl ? "right" : "left",
+              textAlign: "start",
             }}
           >
             <svg
@@ -593,7 +601,18 @@ function PricingTiers({ billing }: { billing: Billing }) {
           "clamp(24px, 2vw, 40px) clamp(16px, 3vw, 24px) clamp(24px, 4vw, 40px)",
       }}
     >
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+      {/* Force LTR on the tier strip so the order is always
+          Free | Clear | Deep (cheap → expensive) regardless of UI
+          locale. This is the universal Pricing convention — every
+          SaaS site keeps tiers in this order even on RTL pages,
+          because the conceptual axis "more value as you go right"
+          is what users expect. Without `dir="ltr"`, an RTL document
+          flipped the grid to Deep | Clear | Free, which beta testers
+          read as backwards. */}
+      <div
+        dir="ltr"
+        className="grid gap-4 grid-cols-1 md:grid-cols-3"
+      >
         {tiers.map((tier) => (
           <TierCard key={tier.name} billing={billing} tier={tier} />
         ))}
