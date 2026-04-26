@@ -222,6 +222,31 @@ export interface V2Strings {
   notebookLegendMastered: string;
   notebookLegendNeedsReview: string;
 
+  // ── Practice / Spaced Repetition (Screen 9) ─────────────────
+  srEyebrow: string;
+  /** template: "Word 2 of 5" — index, total */
+  srWordNofMTemplate: (n: number, m: number) => string;
+  srSkip: string;
+  srClickToReveal: string;
+  srTapToReveal: string;
+  srPrimaryMeaningLabel: string;
+  srExamplesLabel: string;
+  srIForgot: string;
+  srIKnewIt: string;
+  srSchedulingHint: string;
+  srWordsPracticed: string;
+  /** template: "3 you knew · 2 to review again" */
+  srSummaryStatTemplate: (knew: number, forgot: number) => string;
+  srTomorrow: string;
+  /** template: "Next review: Tomorrow (3 words due)" — tomorrow text, count */
+  srNextReviewTemplate: (when: string, count: number) => string;
+  srDoneForToday: string;
+  srPracticeMore: string;
+  srEmptyTitle: string;
+  srEmptyBody: string;
+  srBackToNotebook: string;
+  srLoading: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -457,6 +482,30 @@ const en: V2Strings = {
   notebookLegendRecent: "Recently saved",
   notebookLegendMastered: "Mastered",
   notebookLegendNeedsReview: "Needs review",
+
+  // Practice / Spaced Repetition (Screen 9)
+  srEyebrow: "Practice",
+  srWordNofMTemplate: (n, m) => `Word ${n} of ${m}`,
+  srSkip: "Skip",
+  srClickToReveal: "Click anywhere to reveal",
+  srTapToReveal: "Tap to reveal",
+  srPrimaryMeaningLabel: "Primary meaning",
+  srExamplesLabel: "Examples",
+  srIForgot: "I forgot",
+  srIKnewIt: "I knew it",
+  srSchedulingHint:
+    "I knew it = next review in a few days. I forgot = back to today.",
+  srWordsPracticed: "words practiced",
+  srSummaryStatTemplate: (k, f) => `${k} you knew · ${f} to review again`,
+  srTomorrow: "Tomorrow",
+  srNextReviewTemplate: (when, count) =>
+    `Next review: ${when} (${count} ${count === 1 ? "word" : "words"} due)`,
+  srDoneForToday: "Done for today",
+  srPracticeMore: "Practice more",
+  srEmptyTitle: "Nothing to review today",
+  srEmptyBody: "Well done. Come back tomorrow.",
+  srBackToNotebook: "Back to notebook",
+  srLoading: "Loading your practice…",
 
   origin: "Origin",
   historyNote: "History note",
@@ -694,6 +743,30 @@ const he: V2Strings = {
   notebookLegendMastered: "נשלט",
   notebookLegendNeedsReview: "צריך תרגול",
 
+  // Practice / Spaced Repetition (Screen 9)
+  srEyebrow: "תרגול",
+  srWordNofMTemplate: (n, m) => `מילה ${n} מתוך ${m}`,
+  srSkip: "דילוג",
+  srClickToReveal: "לחצו כדי לראות",
+  srTapToReveal: "הקישו כדי לראות",
+  srPrimaryMeaningLabel: "משמעות עיקרית",
+  srExamplesLabel: "דוגמאות",
+  srIForgot: "שכחתי",
+  srIKnewIt: "ידעתי",
+  srSchedulingHint:
+    "ידעתי = תרגול הבא בעוד כמה ימים. שכחתי = חזרה להיום.",
+  srWordsPracticed: "מילים תרגלתם",
+  srSummaryStatTemplate: (k, f) => `${k} ידעתם · ${f} לתרגול נוסף`,
+  srTomorrow: "מחר",
+  srNextReviewTemplate: (when, count) =>
+    `התרגול הבא: ${when} (${count} מילים)`,
+  srDoneForToday: "סיימתי להיום",
+  srPracticeMore: "תרגול נוסף",
+  srEmptyTitle: "אין מה לתרגל היום",
+  srEmptyBody: "כל הכבוד. חזרו מחר.",
+  srBackToNotebook: "חזרה למחברת",
+  srLoading: "טוענים את התרגול…",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -927,6 +1000,30 @@ const ar: V2Strings = {
   notebookLegendRecent: "محفوظ مؤخرًا",
   notebookLegendMastered: "متقَن",
   notebookLegendNeedsReview: "يحتاج مراجعة",
+
+  // Practice / Spaced Repetition (Screen 9)
+  srEyebrow: "تدريب",
+  srWordNofMTemplate: (n, m) => `الكلمة ${n} من ${m}`,
+  srSkip: "تخطّي",
+  srClickToReveal: "انقر لكشف المعنى",
+  srTapToReveal: "اضغط لكشف المعنى",
+  srPrimaryMeaningLabel: "المعنى الأساسي",
+  srExamplesLabel: "أمثلة",
+  srIForgot: "نسيت",
+  srIKnewIt: "كنت أعرفها",
+  srSchedulingHint:
+    "كنت أعرفها = المراجعة التالية بعد بضعة أيام. نسيت = نعود اليوم.",
+  srWordsPracticed: "كلمات تدرّبت عليها",
+  srSummaryStatTemplate: (k, f) => `${k} عرفتها · ${f} للمراجعة مجددًا`,
+  srTomorrow: "غدًا",
+  srNextReviewTemplate: (when, count) =>
+    `المراجعة التالية: ${when} (${count} كلمات)`,
+  srDoneForToday: "اكتفيت اليوم",
+  srPracticeMore: "تدريب إضافي",
+  srEmptyTitle: "لا شيء للمراجعة اليوم",
+  srEmptyBody: "أحسنت. عُد غدًا.",
+  srBackToNotebook: "العودة إلى الدفتر",
+  srLoading: "جاري تحميل التدريب…",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
