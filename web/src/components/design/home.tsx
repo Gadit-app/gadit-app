@@ -141,7 +141,7 @@ export function HomeHero() {
 // The big homepage search bar — visually distinct from Screen 1's
 // compact persistent search. Glowing electric-blue cradle, suggestion
 // chips below. Signed-out users still see the input but submit opens
-// login; signed-in users navigate straight to /beta/word/[word].
+// login; signed-in users navigate straight to /word/[word].
 export function HomeSearch() {
   const { lang, dir } = useLang();
   const { user, promptLogin } = useAuth();
@@ -164,7 +164,7 @@ export function HomeSearch() {
       promptLogin(v2(lang, "signIn"));
       return;
     }
-    router.push(`/beta/word/${encodeURIComponent(trimmed)}`);
+    router.push(`/word/${encodeURIComponent(trimmed)}`);
   }
 
   function handleExplain() {

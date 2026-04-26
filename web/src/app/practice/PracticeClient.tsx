@@ -1,10 +1,10 @@
 "use client";
 
 /**
- * BetaPracticePage — composes the spaced-repetition practice screen
- * on the dark stage. Identical tier-gating posture to /beta/notebook:
+ * PracticePage — composes the spaced-repetition practice screen on
+ * the dark stage. Tier gating identical to /notebook:
  *   anonymous → login modal
- *   non-Deep → /beta/pricing
+ *   non-Deep → /pricing
  *   Deep → renders PracticeV2
  */
 
@@ -17,7 +17,7 @@ import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { PracticeV2 } from "@/components/design/PracticeV2";
 import { HomeFooter } from "@/components/design/home";
 
-export function BetaPracticePage() {
+export function PracticePage() {
   const { user, plan, loading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
@@ -29,7 +29,7 @@ export function BetaPracticePage() {
       return;
     }
     if (plan !== "deep") {
-      router.replace("/beta/pricing");
+      router.replace("/pricing");
     }
   }, [loading, user, plan, lang, promptLogin, router]);
 

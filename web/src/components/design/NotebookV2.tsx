@@ -8,7 +8,7 @@
  *   • List — practical, default, 3-column grid of word cards.
  *   • Galaxy — atmospheric. Each saved word is a star, scattered
  *     deterministically by hash so the same word always lands in the
- *     same place. Click a star → opens the word at /beta/word/[word].
+ *     same place. Click a star → opens the word at /word/[word].
  *
  * Schema: /api/notebook returns { items: [{ id, word, language,
  * meaning, addedAt, nextReviewAt, intervalDays?, timesReviewed?,
@@ -19,7 +19,7 @@
  *   - reviewQueue count = items where nextReviewAt <= now
  *
  * Tier gating: Notebook is Deep-only. Page wrapper handles the gate
- * (redirects to /beta/pricing if not Deep). This component assumes
+ * (redirects to /pricing if not Deep). This component assumes
  * the user is authorized.
  */
 
@@ -418,7 +418,7 @@ function EmptyState() {
       </h2>
       <button
         type="button"
-        onClick={() => router.push("/beta")}
+        onClick={() => router.push("/")}
         className="mt-6 gd-font-sans-ui font-medium"
         style={{
           fontSize: 14,
@@ -721,7 +721,7 @@ export function NotebookV2() {
         });
         if (!res.ok) {
           if (res.status === 402) {
-            router.push("/beta/pricing");
+            router.push("/pricing");
             return;
           }
           if (cancelled) return;
@@ -766,7 +766,7 @@ export function NotebookV2() {
   }
 
   function handleWordClick(entry: DerivedItem) {
-    router.push(`/beta/word/${encodeURIComponent(entry.word)}`);
+    router.push(`/word/${encodeURIComponent(entry.word)}`);
   }
 
   return (
@@ -843,7 +843,7 @@ export function NotebookV2() {
             {reviewQueue > 0 && (
               <button
                 type="button"
-                onClick={() => router.push("/beta/practice")}
+                onClick={() => router.push("/practice")}
                 className={`gd-font-sans-ui font-medium inline-flex items-center gap-2.5 ${isRtl ? "flex-row-reverse" : ""}`}
                 style={{
                   fontSize: 14,

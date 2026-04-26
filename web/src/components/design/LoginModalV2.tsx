@@ -3,11 +3,10 @@
 /**
  * LoginModalV2 — Screen 4 from the redesign pass.
  *
- * A drop-in replacement for the legacy <LoginModal> on V2 routes.
- * Uses the same auth-context (showLoginModal / setShowLoginModal /
- * loginReason / signInWithGoogle / signInWithEmail / signUpWithEmail)
- * so promptLogin() calls from anywhere in the app trigger this modal
- * when on /beta.
+ * The site-wide login modal. Uses the same auth-context (showLoginModal /
+ * setShowLoginModal / loginReason / signInWithGoogle / signInWithEmail /
+ * signUpWithEmail) so promptLogin() calls from anywhere in the app
+ * trigger this modal.
  *
  * Visual: dark navy backdrop with blur, warm-paper card centered,
  * Wordmark + reason header, Google button, email/password with

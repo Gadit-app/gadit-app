@@ -382,7 +382,7 @@ export function ComposeModalV2({
         // 402 means tier-locked; the V2 surface should bounce them
         // to pricing. Other errors get the generic message.
         if (res.status === 402) {
-          window.location.assign("/beta/pricing");
+          window.location.assign("/pricing");
           return;
         }
         setErrorKey("composeErrorEmpty"); // generic — covers wire failures

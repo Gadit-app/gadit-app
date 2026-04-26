@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import NotebookClient from "./NotebookClient";
+import { NotebookPage } from "./NotebookClient";
 
+/**
+ * /notebook — personal vocabulary library with the Galaxy view (Deep
+ * tier). Authentication + tier gating are handled inside the client.
+ * Indexed: false (private user data).
+ */
 export const metadata: Metadata = {
-  title: "My word notebook — Gadit",
-  description: "Your saved words, ready for review with spaced repetition.",
-  alternates: {
-    canonical: "https://www.gadit.app/notebook",
-  },
+  title: "Notebook — Gadit",
+  robots: { index: false, follow: false },
 };
 
-export default function NotebookPage() {
-  return <NotebookClient />;
+export default function NotebookRoute() {
+  return <NotebookPage />;
 }

@@ -686,7 +686,7 @@ export function PracticeV2() {
         });
         if (!res.ok) {
           if (res.status === 402) {
-            router.push("/beta/pricing");
+            router.push("/pricing");
             return;
           }
           if (cancelled) return;
@@ -805,7 +805,7 @@ export function PracticeV2() {
   }
 
   if (phase.kind === "empty") {
-    return <EmptyState onBack={() => router.push("/beta/notebook")} />;
+    return <EmptyState onBack={() => router.push("/notebook")} />;
   }
 
   if (phase.kind === "summary") {
@@ -813,7 +813,7 @@ export function PracticeV2() {
       <Summary
         knew={results.knew}
         forgot={results.forgot}
-        onDone={() => router.push("/beta/notebook")}
+        onDone={() => router.push("/notebook")}
       />
     );
   }

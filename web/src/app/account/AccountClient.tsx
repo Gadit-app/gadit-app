@@ -1,10 +1,9 @@
 "use client";
 
 /**
- * BetaAccountPage — composes the V2 account dashboard on the dark
- * stage. Anonymous users get the login modal; all signed-in tiers
- * (Basic / Clear / Deep) see the page — they need to view their plan
- * to upgrade.
+ * AccountPage — composes the account dashboard on the dark stage.
+ * Anonymous users get the login modal; all signed-in tiers (Basic /
+ * Clear / Deep) see the page — they need to view their plan to upgrade.
  */
 
 import { useEffect } from "react";
@@ -15,7 +14,7 @@ import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { AccountV2 } from "@/components/design/AccountV2";
 import { HomeFooter } from "@/components/design/home";
 
-export function BetaAccountPage() {
+export function AccountPage() {
   const { user, loading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
 

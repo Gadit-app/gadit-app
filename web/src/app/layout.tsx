@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic } from "ne
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
-import Header from "@/components/Header";
 import LoginModal from "@/components/LoginModal";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { Analytics } from "@vercel/analytics/next";
@@ -122,7 +121,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
           <LangProvider>
             <AuthProvider>
-              <Header />
+              {/* MarketingHeader is rendered per-route from each page's
+                  Client component, so it sits inside the dark canvas
+                  with the rest of the chrome. Header is no longer
+                  global. */}
               <LoginModal />
               {children}
             </AuthProvider>

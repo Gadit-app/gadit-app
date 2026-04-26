@@ -650,16 +650,16 @@ export function AccountV2() {
   }
 
   function handleChangePlan() {
-    router.push("/beta/pricing");
+    router.push("/pricing");
   }
 
   function handleUpgrade() {
-    router.push("/beta/pricing");
+    router.push("/pricing");
   }
 
   async function handleSignOut() {
     await logout();
-    router.push("/beta");
+    router.push("/");
   }
 
   function handleDeleteAccount() {

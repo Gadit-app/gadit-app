@@ -3,7 +3,7 @@
 /**
  * CompareV2 — Screen 7 from the redesign pass.
  *
- * Deep-tier feature at /beta/compare. Two-input form on the navy stage,
+ * Deep-tier feature at /compare. Two-input form on the navy stage,
  * AI comparison rendered on a warm-paper card with four sections:
  *   1. Side-by-side definitions
  *   2. The difference (electric-blue start-edge pull-quote)
@@ -398,7 +398,7 @@ export function CompareV2() {
       return;
     }
     if (plan !== "deep") {
-      window.location.assign("/beta/pricing");
+      window.location.assign("/pricing");
       return;
     }
 
@@ -422,7 +422,7 @@ export function CompareV2() {
       });
       if (!res.ok) {
         if (res.status === 402) {
-          window.location.assign("/beta/pricing");
+          window.location.assign("/pricing");
           return;
         }
         setErrorKey("compareErrGeneric");

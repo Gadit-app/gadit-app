@@ -434,7 +434,7 @@ export function QuizModalV2({
       });
       if (!res.ok) {
         if (res.status === 402) {
-          window.location.assign("/beta/pricing");
+          window.location.assign("/pricing");
           return;
         }
         setErrorMsg("Quiz unavailable right now.");
@@ -566,7 +566,7 @@ export function QuizModalV2({
               .filter((m) => m.missed)
               .map(({ n, summary }) => ({ n, summary }))}
             onPracticeAnother={() => {
-              window.location.assign("/beta");
+              window.location.assign("/");
             }}
             onBackToWord={onClose}
           />

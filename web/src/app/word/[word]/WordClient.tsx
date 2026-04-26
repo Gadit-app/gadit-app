@@ -1,135 +1,506 @@
 "use client";
+
+/**
+ * WordClient — the result page.
+ *
+ * Streams from /api/define and renders with ResultView on the dark
+ * navy stage. Handles:
+ *   - 401 → opens login modal (search requires sign-in)
+ *   - 429 → quota card with Upgrade CTA
+ *   - SSE delta events → progressive partial render (skeleton-friendly)
+ *   - SSE done event → final result + cache flag
+ *
+ * Image generation, save-to-notebook, share, action tile clicks all
+ * wire to existing API endpoints. Compose / Quiz / Report each open a
+ * modal layered above the result.
+ */
+
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { parse as parsePartialJson, Allow } from "partial-json";
 import Link from "next/link";
+
+import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { v2 } from "@/lib/i18n-v2";
+import { track } from "@/lib/track";
 
-interface Meaning {
-  meaning: string;
-  examples: string[];
-}
-interface Etymology {
-  sourceLanguage?: string;
-  originalWord?: string;
-  breakdown?: string;
-  originalMeaning?: string;
-  historyNote?: string;
-}
-interface WordResult {
-  word: string;
-  language: string;
-  multiplemeanings: boolean;
-  meanings: Meaning[];
-  etymology?: Etymology | string;
-}
+import { MarketingHeader } from "@/components/design/MarketingHeader";
+import { HomeFooter } from "@/components/design/home";
+import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
+import { QuizModalV2 } from "@/components/design/QuizModalV2";
+import {
+  ReportModalV2,
+  type ReportContext,
+} from "@/components/design/ReportModalV2";
+import {
+  ResultView,
+  type WordResult,
+  type Plan,
+} from "@/components/design/result";
 
-const isRTLLanguage = (lang?: string) =>
-  ["Hebrew", "Arabic", "Urdu", "Persian"].includes(lang ?? "");
-
-export default function WordClient({
-  word,
-  initialResult,
-}: {
-  word: string;
-  initialResult: WordResult;
-}) {
-  const { t } = useLang();
-  const result = initialResult;
-  const rDir = isRTLLanguage(result.language) ? "rtl" : "ltr";
-  const lineH = rDir === "rtl" ? "1.7" : "1.6";
-  const ety = typeof result.etymology === "object" ? result.etymology : null;
-
+// Skeleton card — shown while the SSE stream is still bringing in data
+// before any meaning has parsed cleanly.
+function SkeletonCard({ height = 120 }: { height?: number }) {
   return (
-    <div className="space-y-4 animate-fade-in" dir={rDir}>
-      {/* Word header */}
-      <div className="gadit-card px-5 sm:px-8 py-5 sm:py-6">
-        <div className="flex items-baseline justify-between gap-4">
-          <h1 className="font-bold" style={{ color: "#0F172A", fontSize: "clamp(24px, 4vw, 32px)" }}>
-            {word}
-          </h1>
-          <span className="text-sm text-slate-400 font-medium shrink-0">{result.language}</span>
-        </div>
+    <div
+      className="gd-card"
+      style={{
+        padding: "32px",
+        opacity: 0.5,
+        minHeight: height,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, oklch(0.95 0.01 85 / 0.6) 50%, transparent 100%)",
+          animation: "gd-drift 1.6s ease-in-out infinite",
+        }}
+      />
+    </div>
+  );
+}
+
+interface SSEDelta {
+  type: "delta";
+  partial: string;
+}
+interface SSEDone {
+  type: "done";
+  result: WordResult & { fromCache?: boolean };
+}
+interface SSEError {
+  type: "error";
+  message: string;
+}
+type SSEEvent = SSEDelta | SSEDone | SSEError;
+
+export function WordClient({ initialWord }: { initialWord: string }) {
+  const { user, plan: authPlan, promptLogin } = useAuth();
+  const { lang, dir } = useLang();
+  const router = useRouter();
+
+  const [result, setResult] = useState<WordResult | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [quotaReached, setQuotaReached] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [composeOpen, setComposeOpen] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [reportContext, setReportContext] = useState<ReportContext | null>(
+    null
+  );
+
+  // Plan as the API gates it: anonymous → "basic", auth-context → server.
+  const plan: Plan = authPlan ?? "basic";
+
+  // Guard against double-firing in dev StrictMode
+  const fetchedFor = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!initialWord) return;
+    if (fetchedFor.current === initialWord) return;
+    fetchedFor.current = initialWord;
+
+    let cancelled = false;
+
+    async function run() {
+      setLoading(true);
+      setQuotaReached(false);
+      setErrorMsg("");
+      setResult(null);
+      setImageUrl(undefined);
+
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          headers.Authorization = `Bearer ${idToken}`;
+        } catch {
+          // anonymous fallback
+        }
+      }
+
+      let res: Response;
+      try {
+        res = await fetch("/api/define", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ word: initialWord, uiLang: lang }),
+        });
+      } catch (e) {
+        if (!cancelled) {
+          setErrorMsg(String(e));
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (cancelled) return;
+
+      if (res.status === 401) {
+        promptLogin(v2(lang, "signIn"));
+        setLoading(false);
+        return;
+      }
+      if (res.status === 429) {
+        setQuotaReached(true);
+        setLoading(false);
+        return;
+      }
+      if (!res.ok || !res.body) {
+        setErrorMsg(`HTTP ${res.status}`);
+        setLoading(false);
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finalResult: (WordResult & { fromCache?: boolean }) | null = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (cancelled) {
+          reader.cancel().catch(() => undefined);
+          return;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("data:")) continue;
+          const payload = trimmed.slice(5).trim();
+          if (!payload) continue;
+
+          let event: SSEEvent;
+          try {
+            event = JSON.parse(payload) as SSEEvent;
+          } catch {
+            continue;
+          }
+
+          if (event.type === "delta") {
+            try {
+              const partial = parsePartialJson(
+                event.partial,
+                Allow.ALL
+              ) as Partial<WordResult>;
+              if (partial && typeof partial === "object") {
+                setResult({
+                  word: partial.word ?? initialWord,
+                  language: partial.language ?? "",
+                  meanings: partial.meanings ?? [],
+                  etymology: partial.etymology ?? "",
+                  generalIdioms: partial.generalIdioms,
+                });
+              }
+            } catch {
+              // partial JSON not yet parseable — keep accumulating
+            }
+          } else if (event.type === "done") {
+            finalResult = event.result;
+          } else if (event.type === "error") {
+            setErrorMsg(event.message);
+          }
+        }
+      }
+
+      if (cancelled) return;
+
+      if (finalResult) {
+        setResult(finalResult);
+        track("search", {
+          word: initialWord.slice(0, 40),
+          uiLang: lang,
+          plan,
+          fromCache: Boolean(finalResult.fromCache),
+          meaningsCount: finalResult.meanings?.length ?? 0,
+          surface: "v2",
+        });
+      } else if (!cancelled) {
+        setErrorMsg("Stream ended without final result");
+      }
+      setLoading(false);
+    }
+
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialWord, lang, user, plan, promptLogin]);
+
+  // ── Action handlers ───────────────────────────────────────────
+  async function handleGenerate() {
+    if (!result || !user) {
+      promptLogin(v2(lang, "generateImage"));
+      return;
+    }
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          word: result.word,
+          meaning: result.meanings[0]?.meaning ?? "",
+          uiLang: lang,
+        }),
+      });
+      if (!res.ok) {
+        if (res.status === 402) {
+          router.push("/pricing");
+          return;
+        }
+        return;
+      }
+      const data = (await res.json()) as { imageUrl?: string };
+      if (data.imageUrl) setImageUrl(data.imageUrl);
+    } catch (e) {
+      console.error("generate-image:", e);
+    }
+  }
+
+  function handleUpgrade() {
+    router.push("/pricing");
+  }
+
+  async function handleSave() {
+    if (!user) {
+      promptLogin(v2(lang, "saveToNotebook"));
+      return;
+    }
+    if (!result) return;
+    if (plan !== "deep") {
+      router.push("/pricing");
+      return;
+    }
+    try {
+      const idToken = await user.getIdToken();
+      await fetch("/api/notebook", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          word: result.word,
+          uiLang: lang,
+          meaning: result.meanings[0]?.meaning ?? "",
+        }),
+      });
+    } catch (e) {
+      console.error("notebook:", e);
+    }
+  }
+
+  function handleShare() {
+    if (typeof navigator === "undefined") return;
+    const nav = navigator as Navigator & {
+      share?: (data: ShareData) => Promise<void>;
+    };
+    const url = window.location.href;
+    if (nav.share) {
+      nav
+        .share({ title: `Gadit — ${result?.word ?? ""}`, url })
+        .catch(() => undefined);
+    } else {
+      nav.clipboard?.writeText(url).catch(() => undefined);
+    }
+  }
+
+  function handleAction(id: "save" | "image" | "compose" | "practice") {
+    if (id === "save") return handleSave();
+    if (id === "image") return handleGenerate();
+    if (id === "compose") {
+      if (!user) {
+        promptLogin(v2(lang, "composeSubmit"));
+        return;
+      }
+      if (plan === "basic") {
+        router.push("/pricing");
+        return;
+      }
+      setComposeOpen(true);
+      return;
+    }
+    if (id === "practice") {
+      if (!user) {
+        promptLogin(v2(lang, "quizEyebrow"));
+        return;
+      }
+      if (plan !== "deep") {
+        router.push("/pricing");
+        return;
+      }
+      setQuizOpen(true);
+      return;
+    }
+  }
+
+  // ── Render ─────────────────────────────────────────────────────
+  return (
+    <div className="gd-stage" style={{ minHeight: "100vh" }} dir={dir}>
+      <div className="gd-stars" />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <MarketingHeader />
+
+        <main
+          style={{
+            maxWidth: 920,
+            margin: "0 auto",
+            padding: "32px 24px 48px",
+          }}
+        >
+          {quotaReached && (
+            <div
+              className="gd-card"
+              style={{
+                padding: "32px",
+                marginBottom: 24,
+                background:
+                  "linear-gradient(180deg, oklch(0.985 0.008 85), oklch(0.97 0.01 85))",
+              }}
+            >
+              <h2
+                className="gd-font-display"
+                style={{
+                  fontSize: 26,
+                  color: "var(--gd-ink-900)",
+                  marginBottom: 8,
+                }}
+              >
+                {/* Reuse legacy quota strings from the V2 i18n one day; for
+                    now lift from page.tsx via a literal so we don't block. */}
+                Daily limit reached
+              </h2>
+              <p
+                className="gd-font-sans-ui"
+                style={{
+                  fontSize: 14,
+                  color: "var(--gd-ink-700)",
+                  marginBottom: 16,
+                }}
+              >
+                Free accounts can search 20 words per day. The limit
+                resets tomorrow — or upgrade to Clear for unlimited
+                searches.
+              </p>
+              <Link
+                href="/pricing"
+                className="gd-font-sans-ui font-medium"
+                style={{
+                  display: "inline-block",
+                  padding: "10px 20px",
+                  borderRadius: 12,
+                  fontSize: 13.5,
+                  color: "white",
+                  background:
+                    "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+                  boxShadow:
+                    "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+                }}
+              >
+                {v2(lang, "upgradeToClear")}
+              </Link>
+            </div>
+          )}
+
+          {errorMsg && !quotaReached && (
+            <div
+              className="gd-card"
+              style={{ padding: "24px", marginBottom: 24 }}
+            >
+              <p
+                className="gd-font-sans-ui"
+                style={{ fontSize: 14, color: "var(--gd-ink-700)" }}
+              >
+                {errorMsg}
+              </p>
+            </div>
+          )}
+
+          {loading && !result && (
+            <div className="flex flex-col gap-6">
+              <SkeletonCard height={180} />
+              <SkeletonCard height={360} />
+              <SkeletonCard height={220} />
+            </div>
+          )}
+
+          {result && (
+            <ResultView
+              result={result}
+              plan={plan}
+              imageUrl={imageUrl}
+              onSave={handleSave}
+              onShare={handleShare}
+              onGenerate={handleGenerate}
+              onUpgrade={handleUpgrade}
+              onRegenerate={handleGenerate}
+              onSaveImage={handleSave}
+              onAction={handleAction}
+              onReport={(section) => {
+                // Map ResultView's section ids to Report Modal default
+                // categories so the user starts with the most-likely
+                // category pre-ticked.
+                const presetMap: Record<string, string> = {
+                  etymology: "etymology",
+                  idioms: "idioms",
+                };
+                const preset = section.startsWith("meaning-")
+                  ? "definition"
+                  : presetMap[section] ?? "";
+                setReportContext({
+                  word: result.word,
+                  contextSnapshot: { section, result },
+                  defaultCategories: preset ? [preset] : [],
+                });
+              }}
+            />
+          )}
+        </main>
+
+        <HomeFooter />
       </div>
 
-      {/* Meanings */}
-      {result.meanings?.map((m, i) => (
-        <div key={i} className="gadit-card px-5 sm:px-8 py-5 sm:py-6 space-y-4">
-          <div className="flex items-start gap-3">
-            {result.meanings.length > 1 && (
-              <span
-                className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5"
-                style={{ background: "#2563EB", minWidth: "1.5rem" }}
-              >
-                {i + 1}
-              </span>
-            )}
-            <p className="text-slate-800 font-medium leading-relaxed" style={{ fontSize: "1.05rem", lineHeight: lineH }}>
-              {m.meaning}
-            </p>
-          </div>
-          {m.examples?.length > 0 && (
-            <ul className="space-y-2 pt-1 border-t border-slate-100">
-              {m.examples.map((ex, j) => (
-                <li key={j} className="flex gap-2.5 text-slate-500 text-sm" style={{ lineHeight: lineH }}>
-                  <span className="shrink-0 font-semibold mt-0.5" style={{ color: "#2563EB" }}>•</span>
-                  <span className="italic">{ex}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
-
-      {/* Etymology */}
-      {ety && (ety.sourceLanguage || ety.originalMeaning || ety.historyNote) && (
-        <div className="gadit-card px-5 sm:px-8 py-5 sm:py-6">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">{t.etymologyLabel}</p>
-          <div className="space-y-3 text-sm" style={{ lineHeight: lineH }}>
-            {ety.sourceLanguage && (
-              <div className="flex gap-3 items-baseline">
-                <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etySourceLanguage}</span>
-                <span className="text-slate-700 font-medium">{ety.sourceLanguage}</span>
-              </div>
-            )}
-            {ety.breakdown ? (
-              <div className="flex gap-3 items-baseline">
-                <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyBreakdown}</span>
-                <span className="text-slate-700 italic">{ety.breakdown}</span>
-              </div>
-            ) : (
-              ety.originalWord && (
-                <div className="flex gap-3 items-baseline">
-                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyOriginalWord}</span>
-                  <span className="text-slate-700 italic">{ety.originalWord}</span>
-                </div>
-              )
-            )}
-            {ety.originalMeaning && (
-              <div className="flex gap-3 items-baseline">
-                <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyOriginalMeaning}</span>
-                <span className="text-slate-600">{ety.originalMeaning}</span>
-              </div>
-            )}
-            {ety.historyNote && (
-              <div className="flex gap-3 items-baseline pt-2 border-t border-slate-100">
-                <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider shrink-0 min-w-[80px]">{t.etyHistoryNote}</span>
-                <span className="text-slate-600 leading-relaxed">{ety.historyNote}</span>
-              </div>
-            )}
-          </div>
-        </div>
+      {result && (
+        <ComposeModalV2
+          open={composeOpen}
+          onClose={() => setComposeOpen(false)}
+          word={result.word}
+          meaning={result.meanings[0]?.meaning ?? ""}
+        />
       )}
 
-      {/* CTA — back to live search */}
-      <Link
-        href={`/?q=${encodeURIComponent(word)}`}
-        className="block w-full py-3 rounded-2xl text-sm font-medium text-center transition-all"
-        style={{
-          background: "rgb(239 246 255)",
-          color: "#2563EB",
-          border: "1px solid rgb(147 197 253)",
-        }}
-      >
-        {t.searchAnother} ←
-      </Link>
+      <ReportModalV2
+        open={reportContext !== null}
+        onClose={() => setReportContext(null)}
+        context={reportContext ?? undefined}
+      />
+
+      {result && (
+        <QuizModalV2
+          open={quizOpen}
+          onClose={() => setQuizOpen(false)}
+          word={result.word}
+          meaning={result.meanings[0]?.meaning ?? ""}
+        />
+      )}
     </div>
   );
 }

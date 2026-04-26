@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
-import CompareClient from "./CompareClient";
+import { ComparePage } from "./CompareClient";
 
+/**
+ * /compare — confusable-word comparison screen (Deep tier).
+ *
+ * Indexed: false. Even though the comparison results are useful
+ * content, they're AI-generated on-demand and cached per-pair, so the
+ * SEO value is low and we'd rather keep crawl budget on the homepage
+ * + pricing.
+ */
 export const metadata: Metadata = {
-  title: "Compare two words — Gadit",
-  description: "See the exact difference between two confusable or similar-looking words, side by side.",
-  alternates: {
-    canonical: "https://www.gadit.app/compare",
-  },
+  title: "Compare — Gadit",
+  robots: { index: false, follow: false },
 };
 
-export default function ComparePage() {
-  return <CompareClient />;
+export default function CompareRoute() {
+  return <ComparePage />;
 }

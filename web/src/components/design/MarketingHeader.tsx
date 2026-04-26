@@ -8,11 +8,11 @@
  *     marketing-funnel surfaces don't need it.
  *   - Signed-in: Wordmark on start, primary nav in the middle
  *     (Search / Compare / Notebook / Pricing), avatar on end with a
- *     link to /beta/account.
+ *     link to /account.
  *
  * Compare and Notebook are tier-gated (Deep-only) but we still render
  * them in the nav for non-Deep users — clicking through bounces them
- * to /beta/pricing, which is consistent with the "promise not wall"
+ * to /pricing, which is consistent with the "promise not wall"
  * pattern from Screen 1 (locked features visible but gated). Hiding
  * them entirely for non-Deep would make the redesign feel inconsistent
  * (Take it further always shows all four actions, even when locked).
@@ -38,19 +38,18 @@ import { Wordmark } from "./primitives";
 type NavItem = { href: string; labelKey: keyof import("@/lib/i18n-v2").V2Strings };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/beta", labelKey: "navSearch" },
-  { href: "/beta/compare", labelKey: "navCompare" },
-  { href: "/beta/notebook", labelKey: "navNotebook" },
-  { href: "/beta/pricing", labelKey: "navPricing" },
+  { href: "/", labelKey: "navSearch" },
+  { href: "/compare", labelKey: "navCompare" },
+  { href: "/notebook", labelKey: "navNotebook" },
+  { href: "/pricing", labelKey: "navPricing" },
 ];
 
 function isActive(currentPath: string | null, itemHref: string) {
   if (!currentPath) return false;
-  if (itemHref === "/beta") {
-    // Search is the homepage — only active on the bare /beta path
-    // (don't highlight it on /beta/word/[w] since that's a sub-state of
-    // search but not the search page itself).
-    return currentPath === "/beta" || currentPath.startsWith("/beta/word");
+  if (itemHref === "/") {
+    // Search is the homepage — active on / and on /word/[w]
+    // (the word route is a sub-state of search).
+    return currentPath === "/" || currentPath.startsWith("/word");
   }
   return currentPath === itemHref || currentPath.startsWith(itemHref + "/");
 }
@@ -122,7 +121,7 @@ export function MarketingHeader() {
         className="flex items-center justify-between gap-6"
         style={{ padding: "20px clamp(20px, 3vw, 32px)" }}
       >
-        <Link href="/beta" className="flex items-center" aria-label="Gadit">
+        <Link href="/" className="flex items-center" aria-label="Gadit">
           <Wordmark />
         </Link>
 
@@ -176,7 +175,7 @@ export function MarketingHeader() {
 
           {user ? (
             <Link
-              href="/beta/account"
+              href="/account"
               aria-label="Account"
               className="inline-flex items-center justify-center transition-shadow hover:shadow-md"
               style={{
