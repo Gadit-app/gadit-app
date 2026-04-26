@@ -9,15 +9,29 @@ import { WordClient } from "./WordClient";
  * and renders the result with all attached modals (Compose / Quiz /
  * Report).
  *
- * Indexed: false — search engines don't gain anything from individual
- * dictionary URLs given the ephemeral, AI-generated nature of the
- * content. Cache-friendly URLs are reachable via internal Notebook
- * links and direct sharing instead.
+ * Indexable: search engines reach individual dictionary URLs and find
+ * them useful long-tail traffic ("affect vs effect", "ephemeral
+ * meaning Hebrew", etc.). Each /word/X is a publicly viewable page —
+ * the first 5 searches are unmetered for any IP, so a Google crawler
+ * picks up real content rather than a sign-up wall. Pre-launch, this
+ * is the single biggest distribution lever we have besides word of
+ * mouth.
  */
-export const metadata: Metadata = {
-  title: "Gadit",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ word: string }>;
+}): Promise<Metadata> {
+  const { word } = await params;
+  const decoded = decodeURIComponent(word);
+  return {
+    title: `${decoded} — Gadit`,
+    description: `Meanings, examples, etymology, and idioms for "${decoded}" — in 7 languages.`,
+    alternates: {
+      canonical: `https://www.gadit.app/word/${encodeURIComponent(decoded)}`,
+    },
+  };
+}
 
 export default async function WordRoute({
   params,

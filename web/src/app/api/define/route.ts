@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 
+// Three-tier daily quota model.
+// ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
+//   run per IP per day before we ask them to sign up. The Aha-moment
+//   research said 5: enough for a real taste of multi-meaning + RTL +
+//   etymology, not so many that the wall feels punitive after value
+//   was already given.
+// BASIC_DAILY_LIMIT: signed-in free users get 4× the anonymous limit
+//   (20/day). Sign-up unlocks the rest of the day plus persistent
+//   notebook + history + first-class profile.
+// Paid (Clear/Deep) is unmetered — handled by an isPaid bypass below.
+const ANON_DAILY_LIMIT = 5;
 const BASIC_DAILY_LIMIT = 20;
 
 function todayUTC(): string {
@@ -10,9 +21,9 @@ function todayUTC(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-// Atomically increment today's counter and return the new value.
-// cache hits skip this entirely, so only cache misses (which cost us an OpenAI call)
-// count toward the user's daily quota.
+// Atomically increment today's counter for a (signed-in) user and return
+// the new value. Cache hits skip this entirely, so only cache misses
+// (which cost us an OpenAI call) count toward the user's daily quota.
 async function incrementDailyUsage(userId: string): Promise<number> {
   const db = getAdminDb();
   const ref = db.collection("dailyUsage").doc(`${userId}_${todayUTC()}`);
@@ -22,6 +33,36 @@ async function incrementDailyUsage(userId: string): Promise<number> {
   );
   const snap = await ref.get();
   return (snap.data()?.count as number) ?? 1;
+}
+
+// Same pattern, keyed by IP for anonymous visitors. We use a separate
+// collection so anon abuse can't pollute the signed-in usage analytics
+// and so we can clean up old anon docs on a different schedule. IPv6
+// addresses contain colons which Firestore handles in doc IDs, but we
+// strip them defensively so the doc path stays simple.
+async function incrementAnonUsage(ip: string): Promise<number> {
+  const db = getAdminDb();
+  const safeIp = ip.replace(/[.:]/g, "_");
+  const ref = db.collection("anonUsage").doc(`${safeIp}_${todayUTC()}`);
+  await ref.set(
+    { count: FieldValue.increment(1), ip, date: todayUTC() },
+    { merge: true }
+  );
+  const snap = await ref.get();
+  return (snap.data()?.count as number) ?? 1;
+}
+
+// Resolve the requester's IP. Vercel sets x-forwarded-for; in dev we
+// fall back to a synthetic key so localhost users don't hammer a
+// real-looking entry. This is best-effort — abuse mitigation, not
+// security. A determined attacker can spoof headers; we accept that
+// in exchange for not requiring CAPTCHA on the marketing path.
+function clientIp(req: NextRequest): string {
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  const real = req.headers.get("x-real-ip");
+  if (real) return real.trim();
+  return "unknown";
 }
 
 const SYSTEM_PROMPT = `You are Gadit — a word understanding engine. Your job is to guide the user into genuinely understanding a word — not just define it.
@@ -594,16 +635,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Word is required" }, { status: 400 });
     }
 
-    // Determine user's plan (verified via Firebase ID token).
-    // Anonymous users are rejected up-front — Gadit requires a signed-in account
-    // to search. Basic (free) users get a daily quota; paid users are unmetered.
+    // Three identity states we handle:
+    //   - paid (Clear/Deep): unmetered, gets all premium prompt features
+    //   - basic (signed-in free): 20/day quota tied to userId
+    //   - anonymous: 5/day quota tied to client IP
+    // We do NOT 401 anon visitors anymore. Forcing signup before the
+    // first search killed SEO + word-of-mouth sharing in beta — both
+    // beta testers got stuck on the wall before seeing a single result.
+    // Now they get 5 free searches; the soft wall in WordClient asks
+    // for signup once the IP quota is consumed.
     const authHeader = req.headers.get("Authorization") || "";
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = idToken ? await verifyUserAndGetPlan(idToken) : null;
-    if (!userInfo) {
-      return NextResponse.json({ error: "login_required" }, { status: 401 });
-    }
-    const plan = userInfo.plan;
+    const plan = userInfo?.plan ?? "anonymous";
     const isPaid = plan === "clear" || plan === "deep";
 
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
@@ -629,20 +673,43 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Basic users pay a daily quota, but only on cache misses (OpenAI calls).
-    // Cache hits are "free" since they don't cost us anything — this also means
-    // popular words that are already cached never count against quota.
-    if (plan === "basic") {
-      const newCount = await incrementDailyUsage(userInfo.userId);
-      if (newCount > BASIC_DAILY_LIMIT) {
-        return NextResponse.json(
-          {
-            error: "daily_limit_reached",
-            limit: BASIC_DAILY_LIMIT,
-            plan: "basic",
-          },
-          { status: 429 }
-        );
+    // Quota enforcement runs only on cache misses — popular words like
+    // "love", "dream", "ephemeral" stay free because they don't cost
+    // an OpenAI call. This also rewards the long-tail SEO play: if
+    // millions of visitors search the same 10K popular words, we pay
+    // close to nothing.
+    if (!isPaid) {
+      if (plan === "anonymous") {
+        const ip = clientIp(req);
+        const newCount = await incrementAnonUsage(ip);
+        if (newCount > ANON_DAILY_LIMIT) {
+          return NextResponse.json(
+            {
+              error: "daily_limit_reached",
+              limit: ANON_DAILY_LIMIT,
+              plan: "anonymous",
+              // Hint to the client: showing a friendly soft-wall page
+              // with a Sign Up CTA makes more sense here than the same
+              // "Upgrade to Clear" pitch we'd show a Basic user.
+              nextStep: "signup",
+            },
+            { status: 429 }
+          );
+        }
+      } else {
+        // plan === "basic" (signed-in free)
+        const newCount = await incrementDailyUsage(userInfo!.userId);
+        if (newCount > BASIC_DAILY_LIMIT) {
+          return NextResponse.json(
+            {
+              error: "daily_limit_reached",
+              limit: BASIC_DAILY_LIMIT,
+              plan: "basic",
+              nextStep: "upgrade",
+            },
+            { status: 429 }
+          );
+        }
       }
     }
 

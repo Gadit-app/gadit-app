@@ -333,6 +333,17 @@ export interface V2Strings {
   unlockWithClear: string;
   upgradeToClear: string;
   clearUnlocksThis: string;
+  // Soft wall — shown when an anonymous visitor or basic user has hit
+  // their daily quota. Two variants: anon (encourage signup, free)
+  // and basic (encourage upgrade to Clear, paid).
+  softWallAnonTitle: string;
+  softWallAnonBody: string;
+  softWallSignupCta: string;
+  softWallBasicTitle: string;
+  softWallBasicBody: string;
+  // Soft banner above the result on search 4-5 of a 5-search anon
+  // window. Tells them the limit is approaching, encourages signup.
+  softBannerSearchesLeft: (n: number) => string;
   visualizeThisWord: string;
   visualBlurb: string;
   visualBlurbLocked: string;
@@ -644,6 +655,17 @@ const en: V2Strings = {
   practiceWordHint: "A short quiz tuned to how you learn.",
   unlockWithClear: "Unlock with Clear",
   upgradeToClear: "Upgrade to Clear",
+  softWallAnonTitle: "You've used your free searches",
+  softWallAnonBody:
+    "Sign up free to keep searching — 20 words a day, your notebook saved across devices, and the rest of Gadit unlocked.",
+  softWallSignupCta: "Sign up — it's free",
+  softWallBasicTitle: "You've reached today's limit",
+  softWallBasicBody:
+    "Free accounts get 20 searches per day. The limit resets tomorrow — or upgrade to Clear for unlimited searches plus images, kids mode, and grammar feedback.",
+  softBannerSearchesLeft: (n) =>
+    Number(n) === 1
+      ? "1 free search left today — sign up free to get 20 a day."
+      : `${n} free searches left today — sign up free to get 20 a day.`,
   clearUnlocksThis: "Clear unlocks this",
   visualizeThisWord: "Visualize",
   visualBlurb:
@@ -961,6 +983,19 @@ const he: V2Strings = {
   practiceWordHint: "שאלון קצר שמותאם לאופן הלמידה שלכם.",
   unlockWithClear: "פתחו עם Clear",
   upgradeToClear: "שדרגו ל־Clear",
+  softWallAnonTitle: "ניצלתם את החיפושים החינמיים",
+  softWallAnonBody:
+    "הירשמו חינם כדי להמשיך — 20 מילים ביום, מחברת אישית שנשמרת בין מכשירים, וכל שאר Gadit פתוח.",
+  softWallSignupCta: "הרשמה חינם",
+  softWallBasicTitle: "הגעתם למכסה היומית",
+  softWallBasicBody:
+    "חשבון חינם כולל 20 חיפושים ביום. המכסה מתאפסת מחר — או שדרגו ל־Clear לחיפושים ללא הגבלה, תמונות, מצב ילדים ומשוב על משפטים.",
+  softBannerSearchesLeft: (n) => {
+    const num = Number(n);
+    return num === 1
+      ? "נשאר חיפוש חינמי אחד היום — הרשמה חינם נותנת 20 ביום."
+      : `נשארו ${num} חיפושים חינמיים היום — הרשמה חינם נותנת 20 ביום.`;
+  },
   clearUnlocksThis: "נפתח עם Clear",
   visualizeThisWord: "ראו את",
   visualBlurb:
@@ -1293,6 +1328,19 @@ const ar: V2Strings = {
   practiceWordHint: "اختبار قصير على مقاس تعلُّمك.",
   unlockWithClear: "افتح بـ Clear",
   upgradeToClear: "ارتقِ إلى Clear",
+  softWallAnonTitle: "استنفدت عمليات البحث المجانية",
+  softWallAnonBody:
+    "اشترك مجانًا للمتابعة — 20 كلمة يوميًا، دفتر شخصي محفوظ بين الأجهزة، وبقية Gadit مفتوح.",
+  softWallSignupCta: "اشتراك مجاني",
+  softWallBasicTitle: "وصلت إلى الحد اليومي",
+  softWallBasicBody:
+    "الحساب المجاني يشمل 20 بحثًا في اليوم. يُعاد تعيين الحد غدًا — أو ارتقِ إلى Clear لبحث بلا حدود مع الصور وشرح الأطفال والمراجعة.",
+  softBannerSearchesLeft: (n) => {
+    const num = Number(n);
+    if (num === 1) return "بقي بحث مجاني واحد اليوم — الاشتراك المجاني يمنحك 20 يوميًا.";
+    if (num === 2) return "بقي بحثان مجانيان اليوم — الاشتراك المجاني يمنحك 20 يوميًا.";
+    return `بقيت ${num} عمليات بحث مجانية اليوم — الاشتراك المجاني يمنحك 20 يوميًا.`;
+  },
   clearUnlocksThis: "تفتحها Clear",
   visualizeThisWord: "تخيّل",
   visualBlurb: "صورة واحدة حيّة من Gadit — مرساة بصرية لشعور الكلمة.",
@@ -1604,6 +1652,19 @@ const ru: Partial<V2Strings> = {
   practiceWordHint: "Короткий тест под ваш стиль.",
   unlockWithClear: "Открыть в Clear",
   upgradeToClear: "Перейти на Clear",
+  softWallAnonTitle: "Вы использовали бесплатные поиски",
+  softWallAnonBody:
+    "Зарегистрируйтесь бесплатно, чтобы продолжить — 20 слов в день, личная тетрадь между устройствами и весь остальной Gadit открыт.",
+  softWallSignupCta: "Бесплатная регистрация",
+  softWallBasicTitle: "Дневной лимит достигнут",
+  softWallBasicBody:
+    "Бесплатный аккаунт даёт 20 поисков в день. Лимит обновится завтра — или перейдите на Clear для безлимитных поисков, картинок, детского режима и разбора предложений.",
+  softBannerSearchesLeft: (n) => {
+    const num = Number(n);
+    const word =
+      num === 1 ? "поиск" : num >= 2 && num <= 4 ? "поиска" : "поисков";
+    return `Осталось ${num} бесплатных ${word} сегодня — регистрация бесплатна и даёт 20 в день.`;
+  },
   clearUnlocksThis: "Доступно в Clear",
   visualizeThisWord: "Увидеть",
   visualBlurb:
@@ -1915,6 +1976,19 @@ const es: Partial<V2Strings> = {
   practiceWordHint: "Una prueba corta a tu medida.",
   unlockWithClear: "Desbloquea con Clear",
   upgradeToClear: "Pasa a Clear",
+  softWallAnonTitle: "Usaste tus búsquedas gratis",
+  softWallAnonBody:
+    "Regístrate gratis para seguir — 20 palabras por día, tu cuaderno guardado entre dispositivos y el resto de Gadit desbloqueado.",
+  softWallSignupCta: "Regístrate gratis",
+  softWallBasicTitle: "Alcanzaste el límite del día",
+  softWallBasicBody:
+    "Las cuentas gratis tienen 20 búsquedas por día. El límite se reinicia mañana — o pasa a Clear para búsquedas ilimitadas, imágenes, modo niños y feedback en oraciones.",
+  softBannerSearchesLeft: (n) => {
+    const num = Number(n);
+    return num === 1
+      ? "Te queda 1 búsqueda gratis hoy — regístrate gratis para tener 20 al día."
+      : `Te quedan ${num} búsquedas gratis hoy — regístrate gratis para tener 20 al día.`;
+  },
   clearUnlocksThis: "Disponible en Clear",
   visualizeThisWord: "Visualiza",
   visualBlurb:
@@ -2226,6 +2300,19 @@ const pt: Partial<V2Strings> = {
   practiceWordHint: "Um quiz curto adaptado a você.",
   unlockWithClear: "Desbloqueie com Clear",
   upgradeToClear: "Passe pro Clear",
+  softWallAnonTitle: "Você usou suas buscas grátis",
+  softWallAnonBody:
+    "Cadastre-se grátis pra continuar — 20 palavras por dia, seu caderno salvo entre dispositivos e o resto do Gadit liberado.",
+  softWallSignupCta: "Cadastrar grátis",
+  softWallBasicTitle: "Você atingiu o limite de hoje",
+  softWallBasicBody:
+    "Contas grátis têm 20 buscas por dia. O limite reinicia amanhã — ou passe pro Clear pra ter buscas ilimitadas, imagens, modo crianças e feedback de frases.",
+  softBannerSearchesLeft: (n) => {
+    const num = Number(n);
+    return num === 1
+      ? "Sobra 1 busca grátis hoje — cadastre-se grátis pra ter 20 por dia."
+      : `Sobram ${num} buscas grátis hoje — cadastre-se grátis pra ter 20 por dia.`;
+  },
   clearUnlocksThis: "Disponível no Clear",
   visualizeThisWord: "Visualizar",
   visualBlurb:
@@ -2537,6 +2624,19 @@ const fr: Partial<V2Strings> = {
   practiceWordHint: "Un quiz court adapté à vous.",
   unlockWithClear: "Débloquer avec Clear",
   upgradeToClear: "Passer à Clear",
+  softWallAnonTitle: "Vous avez utilisé vos recherches gratuites",
+  softWallAnonBody:
+    "Inscrivez-vous gratuitement pour continuer — 20 mots par jour, votre carnet partagé entre appareils, et le reste de Gadit débloqué.",
+  softWallSignupCta: "Inscription gratuite",
+  softWallBasicTitle: "Vous avez atteint la limite du jour",
+  softWallBasicBody:
+    "Les comptes gratuits ont 20 recherches par jour. La limite se réinitialise demain — ou passez à Clear pour des recherches illimitées, des images, le mode enfants et les retours sur phrases.",
+  softBannerSearchesLeft: (n) => {
+    const num = Number(n);
+    return num === 1
+      ? "Il vous reste 1 recherche gratuite aujourd'hui — inscription gratuite pour 20 par jour."
+      : `Il vous reste ${num} recherches gratuites aujourd'hui — inscription gratuite pour 20 par jour.`;
+  },
   clearUnlocksThis: "Disponible dans Clear",
   visualizeThisWord: "Voir",
   visualBlurb:

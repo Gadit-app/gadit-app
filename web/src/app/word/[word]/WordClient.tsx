@@ -39,6 +39,142 @@ import {
   type Plan,
 } from "@/components/design/result";
 
+// ─── Anonymous search counter ──────────────────────────────────
+// Local-only mirror of the server-side IP quota. Pure UX hint —
+// drives the "X searches left today" banner. The server is the
+// source of truth (it'll 429 when the IP cap is hit regardless of
+// what localStorage says); this counter just tells us when to
+// surface the heads-up before that happens.
+//
+// localStorage layout: { date: "2026-04-26", count: 3 }
+// On a UTC date change we reset to 0. Cleared cookies = reset; that's
+// fine, the server still enforces.
+const ANON_COUNTER_KEY = "gadit-anon-searches";
+const ANON_DAILY_LIMIT_CLIENT = 5;
+
+function todayUTC(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function readAnonCounter(): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const raw = window.localStorage.getItem(ANON_COUNTER_KEY);
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw) as { date?: string; count?: number };
+    if (parsed.date !== todayUTC()) return 0;
+    return Number(parsed.count) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+function bumpAnonCounter(): number {
+  if (typeof window === "undefined") return 0;
+  const next = readAnonCounter() + 1;
+  try {
+    window.localStorage.setItem(
+      ANON_COUNTER_KEY,
+      JSON.stringify({ date: todayUTC(), count: next })
+    );
+  } catch {
+    /* localStorage full / blocked — silent */
+  }
+  return next;
+}
+
+// SoftWall — friendly "you've used your free searches" page that
+// replaces the result card when the server returns 429. Variants:
+//   nextStep="signup"  → anonymous visitor; CTA is sign-up (5/day → 20/day)
+//   nextStep="upgrade" → signed-in basic user; CTA is upgrade to Clear
+// Both variants use the same warm-paper card layout + electric-blue
+// CTA so the visual signature stays consistent with the rest of the
+// product — this is intentional: a stranger-feeling page would
+// trigger "wait, is this a paywall trick?" doubt.
+function SoftWall({
+  nextStep,
+  lang,
+  onSignUp,
+}: {
+  nextStep: "signup" | "upgrade";
+  lang: import("@/lib/i18n").Lang;
+  onSignUp: () => void;
+}) {
+  const isSignup = nextStep === "signup";
+  return (
+    <div
+      className="gd-card"
+      style={{
+        padding: "clamp(32px, 4vw, 48px) clamp(28px, 4vw, 44px)",
+        marginBottom: 24,
+        textAlign: "center",
+      }}
+    >
+      <h2
+        className="gd-font-display"
+        style={{
+          fontSize: "clamp(28px, 3.4vw, 36px)",
+          color: "var(--gd-ink-900)",
+          marginBottom: 12,
+          fontVariationSettings: '"opsz" 60',
+          letterSpacing: "-0.015em",
+        }}
+      >
+        {v2(lang, isSignup ? "softWallAnonTitle" : "softWallBasicTitle")}
+      </h2>
+      <p
+        className="gd-font-sans-ui"
+        style={{
+          fontSize: 15,
+          color: "var(--gd-ink-700)",
+          maxWidth: "44ch",
+          margin: "0 auto 24px",
+          lineHeight: 1.5,
+        }}
+      >
+        {v2(lang, isSignup ? "softWallAnonBody" : "softWallBasicBody")}
+      </p>
+      {isSignup ? (
+        <button
+          type="button"
+          onClick={onSignUp}
+          className="gd-font-sans-ui font-medium"
+          style={{
+            padding: "13px 26px",
+            borderRadius: 12,
+            fontSize: 14.5,
+            color: "white",
+            background:
+              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+            boxShadow:
+              "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+          }}
+        >
+          {v2(lang, "softWallSignupCta")}
+        </button>
+      ) : (
+        <Link
+          href="/pricing"
+          className="gd-font-sans-ui font-medium"
+          style={{
+            display: "inline-block",
+            padding: "13px 26px",
+            borderRadius: 12,
+            fontSize: 14.5,
+            color: "white",
+            background:
+              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+            boxShadow:
+              "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+          }}
+        >
+          {v2(lang, "upgradeToClear")}
+        </Link>
+      )}
+    </div>
+  );
+}
+
 // Skeleton card — shown while the SSE stream is still bringing in data
 // before any meaning has parsed cleanly.
 function SkeletonCard({ height = 120 }: { height?: number }) {
@@ -86,8 +222,21 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
-  const [quotaReached, setQuotaReached] = useState(false);
+  // The 429 case carries a "nextStep" hint from the server — anon
+  // visitors see "sign up to keep searching", basic users see
+  // "upgrade to Clear for unlimited". Captures the difference so we
+  // render the right CTA on the soft wall.
+  const [quotaState, setQuotaState] = useState<{
+    reached: boolean;
+    nextStep: "signup" | "upgrade" | null;
+  }>({ reached: false, nextStep: null });
   const [errorMsg, setErrorMsg] = useState<string>("");
+  // Anonymous-only soft banner: when an unsigned visitor has done
+  // their 4th or 5th search of the day (out of a 5/day cap), we
+  // show a small "X free searches left — sign up to keep going"
+  // line above the result. State lives on the client; the actual
+  // counter is in localStorage.
+  const [anonSearchesLeft, setAnonSearchesLeft] = useState<number | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
@@ -116,10 +265,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
     async function run() {
       setLoading(true);
-      setQuotaReached(false);
+      setQuotaState({ reached: false, nextStep: null });
       setErrorMsg("");
       setResult(null);
       setImageUrl(undefined);
+      setAnonSearchesLeft(null);
 
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
@@ -150,22 +300,25 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
       if (cancelled) return;
 
+      // 401 used to be the "anonymous wall" — that wall is gone, so a
+      // 401 now would only mean a corrupt token or an expired session
+      // for a previously-signed-in user. Treat as a generic auth
+      // failure: open sign-in, no special handling.
       if (res.status === 401) {
-        // Open the login modal; once the user authenticates, the
-        // fetchedFor key (which embeds user.uid) changes and this
-        // effect re-fires the fetch. If the user cancels the modal,
-        // the page falls back to a friendly "sign in to search"
-        // notice instead of an infinite skeleton.
-        // Generic prompt — same rationale as MarketingHeader.tsx:
-        // "Sign in" is already the modal title, no need to repeat it
-        // as a reason line.
         promptLogin();
-        setErrorMsg(v2(lang, "signIn"));
         setLoading(false);
         return;
       }
       if (res.status === 429) {
-        setQuotaReached(true);
+        // Parse the hint so the soft-wall component can show the
+        // right CTA (Sign up vs Upgrade to Clear).
+        const body = (await res.json().catch(() => ({}))) as {
+          nextStep?: "signup" | "upgrade";
+        };
+        setQuotaState({
+          reached: true,
+          nextStep: body.nextStep ?? (user ? "upgrade" : "signup"),
+        });
         setLoading(false);
         return;
       }
@@ -243,6 +396,21 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           meaningsCount: finalResult.meanings?.length ?? 0,
           surface: "v2",
         });
+
+        // For anonymous visitors only, bump the local counter and,
+        // if they're at search 4 or 5 (i.e. 1-2 left), surface the
+        // soft banner above the result. Cache hits AND misses count
+        // toward the visible UX counter — beta testers found it
+        // weird that the limit "didn't decrement" on popular words
+        // (the server bypasses cache hits for billing, but UX-wise
+        // the user just made a search either way).
+        if (!user) {
+          const used = bumpAnonCounter();
+          const left = Math.max(0, ANON_DAILY_LIMIT_CLIENT - used);
+          if (left > 0 && left <= 2) {
+            setAnonSearchesLeft(left);
+          }
+        }
       } else if (!cancelled) {
         setErrorMsg("Stream ended without final result");
       }
@@ -381,61 +549,26 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             padding: "32px 24px 48px",
           }}
         >
-          {quotaReached && (
-            <div
-              className="gd-card"
-              style={{
-                padding: "32px",
-                marginBottom: 24,
-                background:
-                  "linear-gradient(180deg, oklch(0.985 0.008 85), oklch(0.97 0.01 85))",
+          {quotaState.reached && (
+            <SoftWall
+              nextStep={quotaState.nextStep ?? "signup"}
+              lang={lang}
+              onSignUp={() => {
+                promptLogin({
+                  mode: "signup",
+                  onSuccess: () => {
+                    // Once they're signed in, retry the original word —
+                    // they've now got the 20/day quota.
+                    setQuotaState({ reached: false, nextStep: null });
+                    fetchedFor.current = null;
+                    setLoading(true);
+                  },
+                });
               }}
-            >
-              <h2
-                className="gd-font-display"
-                style={{
-                  fontSize: 26,
-                  color: "var(--gd-ink-900)",
-                  marginBottom: 8,
-                }}
-              >
-                {/* Reuse legacy quota strings from the V2 i18n one day; for
-                    now lift from page.tsx via a literal so we don't block. */}
-                Daily limit reached
-              </h2>
-              <p
-                className="gd-font-sans-ui"
-                style={{
-                  fontSize: 14,
-                  color: "var(--gd-ink-700)",
-                  marginBottom: 16,
-                }}
-              >
-                Free accounts can search 20 words per day. The limit
-                resets tomorrow — or upgrade to Clear for unlimited
-                searches.
-              </p>
-              <Link
-                href="/pricing"
-                className="gd-font-sans-ui font-medium"
-                style={{
-                  display: "inline-block",
-                  padding: "10px 20px",
-                  borderRadius: 12,
-                  fontSize: 13.5,
-                  color: "white",
-                  background:
-                    "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-                  boxShadow:
-                    "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
-                }}
-              >
-                {v2(lang, "upgradeToClear")}
-              </Link>
-            </div>
+            />
           )}
 
-          {errorMsg && !quotaReached && (
+          {errorMsg && !quotaState.reached && (
             <div
               className="gd-card"
               style={{ padding: "24px", marginBottom: 24 }}
@@ -455,6 +588,28 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               <SkeletonCard height={360} />
               <SkeletonCard height={220} />
             </div>
+          )}
+
+          {/* Soft heads-up for anonymous visitors approaching their
+              5/day cap. Shows above the result on search 4 (2 left)
+              and search 5 (1 left). Click → opens signup modal in
+              context. Doesn't block reading the current result. */}
+          {result && anonSearchesLeft !== null && !user && (
+            <button
+              type="button"
+              onClick={() => promptLogin({ mode: "signup" })}
+              className="w-full text-start mb-4 transition-colors hover:bg-white/10"
+              style={{
+                padding: "12px 16px",
+                borderRadius: 12,
+                background: "oklch(0.72 0.19 245 / 0.12)",
+                boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.35)",
+                color: "oklch(0.92 0.05 245)",
+                fontSize: 13,
+              }}
+            >
+              {v2(lang, "softBannerSearchesLeft", anonSearchesLeft)}
+            </button>
           )}
 
           {result && (
