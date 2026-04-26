@@ -65,7 +65,11 @@ function PricingHero({
   return (
     <section
       style={{
-        paddingBlockStart: "clamp(56px, 9vw, 110px)",
+        // The original 9vw cap pushed the headline halfway down a 32"
+        // monitor at 100% zoom, leaving the toggle just barely visible.
+        // Cap is now 56px so the hero stays in the first viewport-third
+        // on any reasonable display.
+        paddingBlockStart: "clamp(32px, 5vw, 56px)",
         paddingBlockEnd: "clamp(24px, 4vw, 40px)",
       }}
     >
@@ -228,10 +232,13 @@ function TierCard({
 
   return (
     <div
-      className="gd-card relative h-full"
+      className="gd-card relative h-full flex flex-col"
       style={{
         // gd-card gives us the warm-paper surface + outer shadow; we add
         // a stronger blue ring for the highlighted tier on top.
+        // flex-col lets the features <ul> grow to fill remaining space,
+        // which keeps the price row at the same Y across cards even
+        // when feature counts differ.
         padding:
           "clamp(26px, 3vw, 34px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 30px)",
         ...(tier.highlight
@@ -268,6 +275,14 @@ function TierCard({
         </div>
       )}
 
+      {/*
+        Order: name + tagline → pitch → features → divider → price → CTA → trust.
+        Features sit ABOVE the price so they line up at the same vertical
+        position across all three cards (Clear's trust microcopy used to
+        push its features list down ~16px, breaking alignment). Reading
+        order also improves: user sees "what you get" before "what it
+        costs", which is friendlier for conversion.
+       */}
       <div className="flex items-baseline justify-between mb-1">
         <div
           className="gd-font-sans-ui font-semibold"
@@ -293,72 +308,10 @@ function TierCard({
         {tier.pitch}
       </p>
 
-      <div className="mt-6 flex items-baseline gap-1.5">
-        <span
-          className={priceFontClass}
-          style={{
-            fontSize: 48,
-            lineHeight: 1,
-            color: "var(--gd-ink-900)",
-            ...priceFontStyle,
-          }}
-        >
-          {price}
-        </span>
-        {period && (
-          <span
-            className="gd-font-sans-ui"
-            style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
-          >
-            {period}
-          </span>
-        )}
-      </div>
-      {subPrice && (
-        <div
-          className="gd-font-sans-ui mt-1"
-          style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
-        >
-          {subPrice}
-        </div>
-      )}
-
-      <button
-        type="button"
-        onClick={tier.onCta}
-        className="w-full mt-6 gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
-        style={{
-          fontSize: 13.5,
-          padding: "12px 18px",
-          borderRadius: 12,
-          ...(tier.highlight
-            ? {
-                color: "white",
-                background:
-                  "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-                boxShadow:
-                  "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
-              }
-            : {
-                color: "var(--gd-ink-900)",
-                background: "oklch(0 0 0 / 0.04)",
-                boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
-              }),
-        }}
-      >
-        {showYearly ? tier.ctaYearly : tier.cta}
-      </button>
-
-      {tier.trust && (
-        <div
-          className="mt-3 gd-font-sans-ui text-center"
-          style={{ fontSize: 11.5, color: "var(--gd-ink-500)" }}
-        >
-          {tier.trust}
-        </div>
-      )}
-
-      <ul className="mt-7 space-y-3">
+      {/* Features — fixed-height block via flex-grow keeps the price
+          row at the same Y across all three cards regardless of how
+          many bullets each tier has. */}
+      <ul className="mt-6 space-y-3 flex-1">
         {tier.features.map((f, i) => (
           <li
             key={i}
@@ -392,6 +345,79 @@ function TierCard({
           </li>
         ))}
       </ul>
+
+      {/* Divider between value and cost */}
+      <div
+        className="mt-7 mb-5"
+        style={{ height: 1, background: "oklch(0 0 0 / 0.08)" }}
+      />
+
+      {/* Price */}
+      <div className="flex items-baseline gap-1.5">
+        <span
+          className={priceFontClass}
+          style={{
+            fontSize: 48,
+            lineHeight: 1,
+            color: "var(--gd-ink-900)",
+            ...priceFontStyle,
+          }}
+        >
+          {price}
+        </span>
+        {period && (
+          <span
+            className="gd-font-sans-ui"
+            style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
+          >
+            {period}
+          </span>
+        )}
+      </div>
+      {subPrice && (
+        <div
+          className="gd-font-sans-ui mt-1"
+          style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
+        >
+          {subPrice}
+        </div>
+      )}
+
+      {/* CTA */}
+      <button
+        type="button"
+        onClick={tier.onCta}
+        className="w-full mt-5 gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
+        style={{
+          fontSize: 13.5,
+          padding: "12px 18px",
+          borderRadius: 12,
+          ...(tier.highlight
+            ? {
+                color: "white",
+                background:
+                  "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+                boxShadow:
+                  "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+              }
+            : {
+                color: "var(--gd-ink-900)",
+                background: "oklch(0 0 0 / 0.04)",
+                boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
+              }),
+        }}
+      >
+        {showYearly ? tier.ctaYearly : tier.cta}
+      </button>
+
+      {tier.trust && (
+        <div
+          className="mt-3 gd-font-sans-ui text-center"
+          style={{ fontSize: 11.5, color: "var(--gd-ink-500)" }}
+        >
+          {tier.trust}
+        </div>
+      )}
     </div>
   );
 }
