@@ -247,6 +247,39 @@ export interface V2Strings {
   srBackToNotebook: string;
   srLoading: string;
 
+  // ── Account (Screen 10) ─────────────────────────────────────
+  accountEyebrow: string;
+  accountYourSpace: string;
+  /** template: "Lena's space" — first name */
+  accountNamedSpaceTemplate: Template1;
+  // Plan section
+  accountPlanLabel: string;
+  accountOnPlanFree: string;
+  accountNoActiveSubscription: string;
+  accountChooseAPlan: string;
+  /** template: "14-day trial · 6 days remaining" — days */
+  accountTrialBadgeTemplate: Template1;
+  /** template: "Renews Apr 26, 2026" — date string */
+  accountRenewsOnTemplate: Template1;
+  accountCancelsAtPeriodEnd: string;
+  accountManageBilling: string;
+  accountChangePlan: string;
+  accountUpgrade: string;
+  // Usage section
+  accountUsageThisMonth: string;
+  accountImageGeneration: string;
+  accountSearches: string;
+  accountLocked: string;
+  accountUnlimited: string;
+  accountTodaySuffix: string;
+  accountNearingLimit: string;
+  // Account section
+  accountSectionLabel: string;
+  accountEmailLabel: string;
+  accountChangeEmail: string;
+  accountSignOut: string;
+  accountDeleteAccount: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -506,6 +539,34 @@ const en: V2Strings = {
   srEmptyBody: "Well done. Come back tomorrow.",
   srBackToNotebook: "Back to notebook",
   srLoading: "Loading your practice…",
+
+  // Account (Screen 10)
+  accountEyebrow: "Account",
+  accountYourSpace: "Your space",
+  accountNamedSpaceTemplate: (n) => `${n}'s space`,
+  accountPlanLabel: "Plan",
+  accountOnPlanFree: "Free",
+  accountNoActiveSubscription: "No active subscription",
+  accountChooseAPlan: "Choose a plan to get started.",
+  accountTrialBadgeTemplate: (d) =>
+    `14-day trial · ${d} ${Number(d) === 1 ? "day" : "days"} remaining`,
+  accountRenewsOnTemplate: (d) => `Renews ${d}`,
+  accountCancelsAtPeriodEnd: "Cancels at the end of the billing period",
+  accountManageBilling: "Manage billing",
+  accountChangePlan: "Change plan",
+  accountUpgrade: "Upgrade",
+  accountUsageThisMonth: "Usage this month",
+  accountImageGeneration: "Image generation",
+  accountSearches: "Searches",
+  accountLocked: "Locked",
+  accountUnlimited: "unlimited",
+  accountTodaySuffix: "today",
+  accountNearingLimit: "Approaching this month's limit.",
+  accountSectionLabel: "Account",
+  accountEmailLabel: "Email",
+  accountChangeEmail: "Change email",
+  accountSignOut: "Sign out",
+  accountDeleteAccount: "Delete account",
 
   origin: "Origin",
   historyNote: "History note",
@@ -767,6 +828,33 @@ const he: V2Strings = {
   srBackToNotebook: "חזרה למחברת",
   srLoading: "טוענים את התרגול…",
 
+  // Account (Screen 10)
+  accountEyebrow: "חשבון",
+  accountYourSpace: "המרחב שלך",
+  accountNamedSpaceTemplate: (n) => `המרחב של ${n}`,
+  accountPlanLabel: "תוכנית",
+  accountOnPlanFree: "Free",
+  accountNoActiveSubscription: "אין מנוי פעיל",
+  accountChooseAPlan: "בחרו תוכנית כדי להתחיל.",
+  accountTrialBadgeTemplate: (d) => `תקופת ניסיון 14 ימים · ${d} ימים שנותרו`,
+  accountRenewsOnTemplate: (d) => `מתחדש ב־${d}`,
+  accountCancelsAtPeriodEnd: "מבוטל בסוף תקופת החיוב",
+  accountManageBilling: "ניהול חיוב",
+  accountChangePlan: "שינוי תוכנית",
+  accountUpgrade: "שדרוג",
+  accountUsageThisMonth: "שימוש החודש",
+  accountImageGeneration: "יצירת תמונות",
+  accountSearches: "חיפושים",
+  accountLocked: "נעול",
+  accountUnlimited: "ללא הגבלה",
+  accountTodaySuffix: "היום",
+  accountNearingLimit: "מתקרבים לגבול החודשי.",
+  accountSectionLabel: "חשבון",
+  accountEmailLabel: "אימייל",
+  accountChangeEmail: "שינוי אימייל",
+  accountSignOut: "התנתקות",
+  accountDeleteAccount: "מחיקת חשבון",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -1024,6 +1112,33 @@ const ar: V2Strings = {
   srEmptyBody: "أحسنت. عُد غدًا.",
   srBackToNotebook: "العودة إلى الدفتر",
   srLoading: "جاري تحميل التدريب…",
+
+  // Account (Screen 10)
+  accountEyebrow: "الحساب",
+  accountYourSpace: "مساحتك",
+  accountNamedSpaceTemplate: (n) => `مساحة ${n}`,
+  accountPlanLabel: "الخطة",
+  accountOnPlanFree: "Free",
+  accountNoActiveSubscription: "لا يوجد اشتراك نشط",
+  accountChooseAPlan: "اختر خطة لتبدأ.",
+  accountTrialBadgeTemplate: (d) => `تجربة 14 يومًا · بقي ${d} أيام`,
+  accountRenewsOnTemplate: (d) => `يتجدّد في ${d}`,
+  accountCancelsAtPeriodEnd: "يُلغى في نهاية فترة الفوترة",
+  accountManageBilling: "إدارة الفوترة",
+  accountChangePlan: "تغيير الخطة",
+  accountUpgrade: "ترقية",
+  accountUsageThisMonth: "الاستخدام هذا الشهر",
+  accountImageGeneration: "توليد الصور",
+  accountSearches: "عمليات البحث",
+  accountLocked: "مقفول",
+  accountUnlimited: "بلا حدود",
+  accountTodaySuffix: "اليوم",
+  accountNearingLimit: "تقترب من الحد الشهري.",
+  accountSectionLabel: "الحساب",
+  accountEmailLabel: "البريد الإلكتروني",
+  accountChangeEmail: "تغيير البريد",
+  accountSignOut: "تسجيل الخروج",
+  accountDeleteAccount: "حذف الحساب",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
