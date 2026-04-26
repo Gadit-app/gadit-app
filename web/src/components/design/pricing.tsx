@@ -202,7 +202,8 @@ function TierCard({
   billing: Billing;
   tier: TierData;
 }) {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
   const script = scriptFor(lang);
   const { mo, yr } = periodSuffixes(lang);
 
@@ -293,8 +294,14 @@ function TierCard({
         the divider, so the price/CTA block above it has identical
         height across cards.
        */}
-      {/* Tier name + tagline — centered */}
-      <div className="text-center">
+      {/* Tier name + tagline — centered.
+          Inline `textAlign: "center"` + `dir="ltr"` for the brand row:
+          Tailwind's `text-center` was being overridden by an ancestor's
+          dir="rtl" + start-aligned cascade on certain mobile browsers,
+          leaving "Free", "Clear", "Deep" hugging the start edge of the
+          card. Inline style + an explicit dir on the wrapper forces
+          centering regardless of the cascade. */}
+      <div style={{ textAlign: "center" }}>
         <div
           className="gd-font-sans-ui font-semibold"
           style={{ fontSize: 22, color: "var(--gd-ink-900)" }}
@@ -312,12 +319,13 @@ function TierCard({
           below sits at the same Y across all three cards even though
           Basic's pitch is one line while Clear/Deep's are two. */}
       <p
-        className="gd-font-sans-ui mt-3 text-center"
+        className="gd-font-sans-ui mt-3"
         style={{
           fontSize: 13.5,
           lineHeight: 1.5,
           color: "var(--gd-ink-500)",
           minHeight: "calc(13.5px * 1.5 * 2)",
+          textAlign: "center",
         }}
       >
         {tier.pitch}
@@ -355,16 +363,19 @@ function TierCard({
       )}
 
       {/* Features — flex-1 grows to fill remaining card height so the
-          CTA block below pins to the same Y across all three cards. */}
+          CTA block below pins to the same Y across all three cards.
+          In RTL the check icon leads each row on the visual right;
+          flex-row-reverse handles that. */}
       <ul className="mt-7 space-y-3 flex-1">
         {tier.features.map((f, i) => (
           <li
             key={i}
-            className="flex items-start gap-2.5 gd-font-sans-ui"
+            className={`flex items-start gap-2.5 gd-font-sans-ui ${isRtl ? "flex-row-reverse" : ""}`}
             style={{
               fontSize: 13.5,
               lineHeight: 1.5,
               color: "var(--gd-ink-700)",
+              textAlign: isRtl ? "right" : "left",
             }}
           >
             <svg
