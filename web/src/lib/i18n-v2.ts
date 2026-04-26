@@ -78,6 +78,52 @@ export interface V2Strings {
   // ── Marketing header ────────────────────────────────────────
   signIn: string;
 
+  // ── Pricing page (Screen 3) ─────────────────────────────────
+  pricingPageHeadline: string;
+  pricingPageSubline: string;
+  billingMonthly: string;
+  billingYearly: string;
+  billingSave17: string;
+  // tier copy
+  tierBasicTagline: string;
+  tierBasicPitch: string;
+  tierBasicCta: string;
+  tierClearTagline: string;
+  tierClearPitch: string;
+  tierClearBadge: string;
+  tierClearCta: string;
+  tierClearCtaYearly: string;
+  tierClearTrust: string;
+  tierDeepTagline: string;
+  tierDeepPitch: string;
+  tierDeepCta: string;
+  // tier feature lists (joined later by ¶ delimiter; client splits)
+  tierBasicFeatures: string;
+  tierClearFeatures: string;
+  tierDeepFeatures: string;
+  // yearly subprice templates
+  basicEquivalent: string; // empty for free tier — kept for symmetry
+  clearEquivalent: string;
+  deepEquivalent: string;
+  // trust strip (4 lines)
+  trustStripCancel: string;
+  trustStripMoneyBack: string;
+  trustStripDataYours: string;
+  trustStripNoAds: string;
+  // FAQ
+  faqEyebrow: string;
+  faqHeadline: string;
+  faqQ1: string;
+  faqA1: string;
+  faqQ2: string;
+  faqA2: string;
+  faqQ3: string;
+  faqA3: string;
+  faqQ4: string;
+  faqA4: string;
+  faqQ5: string;
+  faqA5: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -159,6 +205,63 @@ const en: V2Strings = {
   footerLanguagesNote: "7 languages",
 
   signIn: "Sign in",
+
+  // Pricing page (Screen 3)
+  pricingPageHeadline: "Three tiers. All with real content.",
+  pricingPageSubline: "Start free. Upgrade when the depth helps you.",
+  billingMonthly: "Monthly",
+  billingYearly: "Yearly",
+  billingSave17: "Save 17%",
+
+  tierBasicTagline: "Understand",
+  tierBasicPitch: "Start with the essentials.",
+  tierBasicCta: "Get started",
+  tierBasicFeatures:
+    "20 word searches per day¶All meanings (not just primary)¶3 examples per meaning¶Basic etymology — origin + history note¶Sign-in required",
+
+  tierClearTagline: "Visualize",
+  tierClearPitch:
+    "Bring words to life with images, kids mode, and feedback.",
+  tierClearBadge: "Most popular",
+  tierClearCta: "Start 14-day free trial",
+  tierClearCtaYearly: "Subscribe yearly",
+  tierClearTrust: "Cancel anytime · No charge during trial",
+  tierClearFeatures:
+    "Everything in Basic¶Unlimited searches¶Kids explanations (child-friendly mode)¶AI-generated images (30/month)¶Compose your own sentence + grammar feedback¶Common idioms across all meanings¶Search history (last 30 days)",
+
+  tierDeepTagline: "Practice",
+  tierDeepPitch:
+    "Build a personal vocabulary library that gets stronger over time.",
+  tierDeepCta: "Subscribe to Deep",
+  tierDeepFeatures:
+    "Everything in Clear¶Practice quizzes (mixed-type, AI-generated)¶Personal notebook (Galaxy view)¶Spaced repetition (smart practice algorithm)¶Compare confusable words (affect/effect)¶AI-generated images (100/month, vs 30 in Clear)",
+
+  basicEquivalent: "",
+  clearEquivalent: "Equivalent to $2.50/mo",
+  deepEquivalent: "Equivalent to $4.17/mo",
+
+  trustStripCancel: "Cancel anytime through Stripe portal",
+  trustStripMoneyBack: "14-day money-back on first purchase",
+  trustStripDataYours: "Your data is yours — export anytime",
+  trustStripNoAds: "No ads, no third-party tracking",
+
+  faqEyebrow: "FAQ",
+  faqHeadline: "Questions, answered",
+  faqQ1: "Can I switch plans?",
+  faqA1:
+    "Yes, upgrade or downgrade anytime. Proration is handled automatically — you only pay the difference.",
+  faqQ2: "What happens if I cancel?",
+  faqA2:
+    "You keep access until the end of your billing period, then revert to Basic. No data is lost.",
+  faqQ3: "Is the trial really free?",
+  faqA3:
+    "Yes. We require a card to prevent abuse, but you're not charged until day 15. Cancel before then = zero cost.",
+  faqQ4: "Why three tiers?",
+  faqA4:
+    "Different users need different depth. We'd rather meet you where you are than upsell a single bloated plan.",
+  faqQ5: "Are kids' explanations safe?",
+  faqA5:
+    "Yes. They're AI-generated with the same care as adult content, reviewed by our content rules. No user-generated child content.",
 
   origin: "Origin",
   historyNote: "History note",
@@ -243,6 +346,61 @@ const he: V2Strings = {
 
   signIn: "התחברות",
 
+  // Pricing page (Screen 3)
+  pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
+  pricingPageSubline: "התחילו חינם. שדרגו כשהעומק מועיל לכם.",
+  billingMonthly: "חודשי",
+  billingYearly: "שנתי",
+  billingSave17: "חסכון 17%",
+
+  tierBasicTagline: "להבין",
+  tierBasicPitch: "התחילו עם היסודות.",
+  tierBasicCta: "יאללה נתחיל",
+  tierBasicFeatures:
+    "20 חיפושי מילים ביום¶כל המשמעויות (לא רק העיקרית)¶3 דוגמאות לכל משמעות¶אטימולוגיה בסיסית — מקור והערה היסטורית¶נדרשת התחברות",
+
+  tierClearTagline: "לראות",
+  tierClearPitch: "הביאו מילים לחיים — תמונות, הסבר לילדים ומשוב.",
+  tierClearBadge: "הכי פופולרי",
+  tierClearCta: "נסיון חינם ל־14 ימים",
+  tierClearCtaYearly: "הרשמה שנתית",
+  tierClearTrust: "ביטול בכל עת · ללא חיוב בתקופת הניסיון",
+  tierClearFeatures:
+    "כל מה שיש ב־Basic¶חיפושים ללא הגבלה¶הסבר לילדים (מצב ידידותי)¶יצירת תמונות AI (30 בחודש)¶חיבור משפטים עם משוב דקדוקי¶ביטויים נפוצים על פני כל המשמעויות¶היסטוריית חיפוש (30 ימים אחרונים)",
+
+  tierDeepTagline: "לתרגל",
+  tierDeepPitch: "בנו אוצר מילים אישי שמתחזק עם הזמן.",
+  tierDeepCta: "הרשמה ל־Deep",
+  tierDeepFeatures:
+    "כל מה שיש ב־Clear¶תרגולים ומבחנים (סוגים שונים, נוצרים ב־AI)¶מחברת אישית (תצוגת גלקסיה)¶חזרה מרווחת (אלגוריתם תרגול חכם)¶השוואת מילים מתבלבלות (אומנות/אמנות)¶יצירת תמונות AI (100 בחודש, לעומת 30 ב־Clear)",
+
+  basicEquivalent: "",
+  clearEquivalent: "שווה ל־$2.50 לחודש",
+  deepEquivalent: "שווה ל־$4.17 לחודש",
+
+  trustStripCancel: "ביטול בכל עת דרך פורטל Stripe",
+  trustStripMoneyBack: "החזר כספי תוך 14 ימים ברכישה ראשונה",
+  trustStripDataYours: "הנתונים שלכם — ייצוא מתי שתרצו",
+  trustStripNoAds: "ללא פרסומות וללא מעקב צד ג׳",
+
+  faqEyebrow: "שאלות שכיחות",
+  faqHeadline: "תשובות לשאלות נפוצות",
+  faqQ1: "אפשר להחליף תוכנית?",
+  faqA1:
+    "כן, אפשר לשדרג או לרדת בכל עת. החיוב היחסי מטופל אוטומטית — תשלמו רק את ההפרש.",
+  faqQ2: "מה קורה אם אני מבטל?",
+  faqA2:
+    "הגישה נשמרת עד סוף תקופת החיוב, ואז חוזרים ל־Basic. שום נתון לא הולך לאיבוד.",
+  faqQ3: "הניסיון באמת חינם?",
+  faqA3:
+    "כן. אנחנו דורשים כרטיס כדי למנוע ניצול, אבל החיוב מתחיל רק ביום ה־15. ביטול לפני כן = אפס עלות.",
+  faqQ4: "למה שלוש רמות?",
+  faqA4:
+    "משתמשים שונים צריכים עומק שונה. עדיף לנו לפגוש אתכם איפה שאתם מאשר למכור תוכנית אחת מנופחת.",
+  faqQ5: "ההסברים לילדים בטוחים?",
+  faqA5:
+    "כן. הם נוצרים ב־AI באותה זהירות כמו תוכן למבוגרים, ועוברים סקירה לפי כללי התוכן שלנו. אין תוכן ילדים ממשתמשים.",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -324,6 +482,60 @@ const ar: V2Strings = {
   footerLanguagesNote: "7 لغات",
 
   signIn: "تسجيل الدخول",
+
+  // Pricing page (Screen 3)
+  pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
+  pricingPageSubline: "ابدأ مجانًا. ارتقِ حين يعينك العمق.",
+  billingMonthly: "شهري",
+  billingYearly: "سنوي",
+  billingSave17: "وفّر 17%",
+
+  tierBasicTagline: "افهم",
+  tierBasicPitch: "ابدأ بالأساسيات.",
+  tierBasicCta: "لنبدأ",
+  tierBasicFeatures:
+    "20 بحثًا في اليوم¶جميع المعاني (لا الأول وحده)¶3 أمثلة لكل معنى¶أصل أساسي — المصدر وملاحظة تاريخية¶يلزم تسجيل الدخول",
+
+  tierClearTagline: "تخيّل",
+  tierClearPitch: "أحيِ الكلمات بالصور وشرح الأطفال والمراجعة.",
+  tierClearBadge: "الأكثر شيوعًا",
+  tierClearCta: "تجربة 14 يومًا مجانًا",
+  tierClearCtaYearly: "اشتراك سنوي",
+  tierClearTrust: "ألغِ في أي وقت · بلا رسوم في فترة التجربة",
+  tierClearFeatures:
+    "كل ما في Basic¶بحث بلا حدود¶شرح الأطفال (وضع ملائم للصغار)¶توليد صور بالذكاء الاصطناعي (30 شهريًا)¶تأليف جملك الخاصة مع مراجعة نحوية¶تعابير شائعة عبر جميع المعاني¶سجلّ البحث (آخر 30 يومًا)",
+
+  tierDeepTagline: "تدرَّب",
+  tierDeepPitch: "ابنِ مكتبة مفردات شخصية تزداد قوّة مع الزمن.",
+  tierDeepCta: "اشترك في Deep",
+  tierDeepFeatures:
+    "كل ما في Clear¶اختبارات تدريب (متنوعة، بالذكاء الاصطناعي)¶دفتر شخصي (تصوير المجرّة)¶مراجعة موزَّعة (خوارزمية تدريب ذكية)¶مقارنة الكلمات المتشابهة (affect/effect)¶توليد صور بالذكاء الاصطناعي (100 شهريًا، مقابل 30 في Clear)",
+
+  basicEquivalent: "",
+  clearEquivalent: "ما يعادل $2.50 شهريًا",
+  deepEquivalent: "ما يعادل $4.17 شهريًا",
+
+  trustStripCancel: "ألغِ في أي وقت عبر بوابة Stripe",
+  trustStripMoneyBack: "استرداد خلال 14 يومًا للشراء الأول",
+  trustStripDataYours: "بياناتك ملكك — تُصدَّر متى شئت",
+  trustStripNoAds: "لا إعلانات ولا تتبّع طرف ثالث",
+
+  faqEyebrow: "أسئلة شائعة",
+  faqHeadline: "إجابات على الأسئلة",
+  faqQ1: "هل يمكنني تغيير الخطة؟",
+  faqA1:
+    "نعم، ارتقِ أو انزل في أي وقت. يُحسَب الفرق آليًّا — تدفع الفارق فقط.",
+  faqQ2: "ماذا لو ألغيت؟",
+  faqA2: "يبقى الوصول حتى نهاية فترة الفوترة، ثم تعود إلى Basic. لا تُفقَد أي بيانات.",
+  faqQ3: "هل التجربة مجانية فعلًا؟",
+  faqA3:
+    "نعم. نطلب البطاقة لمنع الاستغلال، لكن لا تُحاسَب حتى اليوم الخامس عشر. ألغِ قبل ذلك = بلا تكلفة.",
+  faqQ4: "لمَ ثلاثة مستويات؟",
+  faqA4:
+    "يحتاج كل مستخدم عمقًا مختلفًا. نفضّل لقاءك حيث أنت لا بيع خطة واحدة منتفخة.",
+  faqQ5: "هل شرح الأطفال آمن؟",
+  faqA5:
+    "نعم. يُولَّد بالذكاء الاصطناعي بالعناية نفسها للبالغين، ويُراجَع وفق قواعد المحتوى لدينا. لا محتوى أطفال من المستخدمين.",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
