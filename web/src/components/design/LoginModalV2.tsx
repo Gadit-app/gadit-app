@@ -277,8 +277,23 @@ export function LoginModalV2() {
           </svg>
         </button>
 
-        {/* Wordmark */}
-        <div className="mb-3">
+        {/* Wordmark — centered above the title regardless of UI
+            language. Beta tester reported the "G" was clipping out
+            of the card on RTL, where the inline-flow direction
+            collided with the close X positioned at insetInlineEnd.
+            Centering side-steps the collision entirely and reads
+            cleaner — the wordmark belongs to the brand header, not
+            to a side. We force `direction: ltr` on the wrapper so
+            the wordmark image itself stays in its natural
+            left-to-right shape on RTL pages. */}
+        <div
+          className="mb-3"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            direction: "ltr",
+          }}
+        >
           <Wordmark />
         </div>
 

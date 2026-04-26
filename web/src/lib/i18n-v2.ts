@@ -455,7 +455,7 @@ const en: V2Strings = {
     "Yes. They're AI-generated with the same care as adult content, reviewed by our content rules. No user-generated child content.",
 
   // Login Modal (Screen 4)
-  loginWelcomeBack: "Welcome back",
+  loginWelcomeBack: "Sign in",
   loginCreateAccount: "Create your account",
   loginContinueWithGoogle: "Continue with Google",
   loginOrSeparator: "or",
@@ -767,7 +767,7 @@ const he: V2Strings = {
     "כן. הם נוצרים ב־AI באותה זהירות כמו תוכן למבוגרים, ועוברים סקירה לפי כללי התוכן שלנו. אין תוכן ילדים ממשתמשים.",
 
   // Login Modal (Screen 4)
-  loginWelcomeBack: "ברוכים השבים",
+  loginWelcomeBack: "התחברות",
   loginCreateAccount: "צרו חשבון",
   loginContinueWithGoogle: "המשיכו עם Google",
   loginOrSeparator: "או",
@@ -1082,7 +1082,7 @@ const ar: V2Strings = {
     "نعم. يُولَّد بالذكاء الاصطناعي بالعناية نفسها للبالغين، ويُراجَع وفق قواعد المحتوى لدينا. لا محتوى أطفال من المستخدمين.",
 
   // Login Modal (Screen 4)
-  loginWelcomeBack: "أهلًا بعودتك",
+  loginWelcomeBack: "تسجيل الدخول",
   loginCreateAccount: "أنشئ حسابك",
   loginContinueWithGoogle: "تابع باستخدام Google",
   loginOrSeparator: "أو",
@@ -1415,7 +1415,7 @@ const ru: Partial<V2Strings> = {
   faqA5:
     "Да. Они генерируются ИИ с теми же правилами безопасности, что и взрослый контент. Контент создаётся не пользователями.",
 
-  loginWelcomeBack: "С возвращением",
+  loginWelcomeBack: "Войти",
   loginCreateAccount: "Создайте аккаунт",
   loginContinueWithGoogle: "Продолжить с Google",
   loginOrSeparator: "или",
@@ -1728,7 +1728,7 @@ const es: Partial<V2Strings> = {
   faqA5:
     "Sí. Se generan con IA con las mismas reglas de seguridad que el contenido adulto. No hay contenido infantil generado por usuarios.",
 
-  loginWelcomeBack: "Te damos la bienvenida de nuevo",
+  loginWelcomeBack: "Iniciar sesión",
   loginCreateAccount: "Crea tu cuenta",
   loginContinueWithGoogle: "Continuar con Google",
   loginOrSeparator: "o",
@@ -2039,7 +2039,7 @@ const pt: Partial<V2Strings> = {
   faqA5:
     "Sim. São geradas por IA com as mesmas regras de segurança do conteúdo adulto. Sem conteúdo infantil gerado por usuários.",
 
-  loginWelcomeBack: "Que bom te ver de novo",
+  loginWelcomeBack: "Entrar",
   loginCreateAccount: "Crie sua conta",
   loginContinueWithGoogle: "Continuar com Google",
   loginOrSeparator: "ou",
@@ -2350,7 +2350,7 @@ const fr: Partial<V2Strings> = {
   faqA5:
     "Oui. Elles sont générées par IA avec les mêmes règles de sécurité que le contenu adulte. Aucun contenu enfant créé par les utilisateurs.",
 
-  loginWelcomeBack: "Ravi de vous revoir",
+  loginWelcomeBack: "Se connecter",
   loginCreateAccount: "Créez votre compte",
   loginContinueWithGoogle: "Continuer avec Google",
   loginOrSeparator: "ou",

@@ -38,7 +38,24 @@ import { LangSwitcher } from "./LangSwitcher";
 
 type NavItem = { href: string; labelKey: keyof import("@/lib/i18n-v2").V2Strings };
 
-const NAV_ITEMS: NavItem[] = [
+// The minimal nav shown to anonymous visitors and Basic/Clear users.
+// Search is the product's front door; Pricing is the conversion path.
+// Compare and Notebook are tier-locked features (Deep) and were
+// previously surfaced here as "promise not wall" entry points — but
+// in practice they confused anonymous visitors:
+// - "Compare" in a SaaS top nav reads as "compare plans", not
+//   "compare similar words". Total ambiguity loss for new visitors.
+// - "Notebook" is a personal dashboard, not navigation.
+// Both stay reachable inside the result page (TakeItFurther tiles)
+// where an in-flow user gets the right context.
+const NAV_ITEMS_PUBLIC: NavItem[] = [
+  { href: "/", labelKey: "navSearch" },
+  { href: "/pricing", labelKey: "navPricing" },
+];
+
+// Deep subscribers see the full nav — for them, Compare and Notebook
+// are real navigation, not feature-promise tiles.
+const NAV_ITEMS_DEEP: NavItem[] = [
   { href: "/", labelKey: "navSearch" },
   { href: "/compare", labelKey: "navCompare" },
   { href: "/notebook", labelKey: "navNotebook" },
@@ -98,7 +115,7 @@ function NavLink({
 }
 
 export function MarketingHeader() {
-  const { user, promptLogin } = useAuth();
+  const { user, plan, promptLogin } = useAuth();
   const { lang } = useLang();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -107,6 +124,11 @@ export function MarketingHeader() {
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  // Anonymous + Basic + Clear users see the trimmed nav (Search +
+  // Pricing). Only Deep — for whom Compare/Notebook are real working
+  // pages, not aspirational promises — sees the full set.
+  const navItems = plan === "deep" ? NAV_ITEMS_DEEP : NAV_ITEMS_PUBLIC;
 
   const initial = (user?.displayName ?? user?.email ?? "U")[0].toUpperCase();
 
@@ -137,7 +159,7 @@ export function MarketingHeader() {
           style={{ flex: 1, justifyContent: "center" }}
           aria-label="Primary"
         >
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <NavLink
               key={item.href}
               item={item}
@@ -245,7 +267,7 @@ export function MarketingHeader() {
           }}
           aria-label="Primary"
         >
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
