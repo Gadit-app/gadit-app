@@ -845,10 +845,13 @@ export function NotebookV2() {
             sentence at 96px (as the previous version did) made the line
             blow past the hero's width and look visually unbalanced. */}
         {!isEmpty && !loading && (
-          <div
-            className={`mt-8 flex items-end gap-6 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
-          >
-            <div className={isRtl ? "text-right" : "text-left"}>
+          // The flex row inherits direction from <html dir>, so in RTL
+          // the children naturally flow right-to-left without
+          // `flex-row-reverse` (which on top of dir="rtl" would
+          // double-flip and push the whole group to the visual left
+          // edge — opposite of what we want).
+          <div className="mt-8 flex items-end gap-6 flex-wrap">
+            <div style={{ textAlign: isRtl ? "right" : "left" }}>
               <div
                 className="gd-font-display"
                 style={{
@@ -877,7 +880,7 @@ export function NotebookV2() {
               <button
                 type="button"
                 onClick={() => router.push("/practice")}
-                className={`gd-font-sans-ui font-medium inline-flex items-center gap-2.5 ${isRtl ? "flex-row-reverse" : ""}`}
+                className="gd-font-sans-ui font-medium inline-flex items-center gap-2.5"
                 style={{
                   fontSize: 14,
                   padding: "12px 18px",
@@ -918,7 +921,9 @@ export function NotebookV2() {
             margin: "0 auto",
             marginBlockStart: "clamp(24px, 3vw, 36px)",
             display: "flex",
-            justifyContent: isRtl ? "flex-end" : "flex-start",
+            // flex-start respects document direction:
+            // start = right in RTL, left in LTR — exactly what we want.
+            justifyContent: "flex-start",
           }}
         >
           <ViewToggle view={view} onChange={setView} />
