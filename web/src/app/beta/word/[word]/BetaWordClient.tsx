@@ -27,6 +27,7 @@ import { track } from "@/lib/track";
 import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
+import { QuizModalV2 } from "@/components/design/QuizModalV2";
 import {
   ResultView,
   type WordResult,
@@ -84,6 +85,7 @@ export function BetaWordClient({ initialWord }: { initialWord: string }) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [composeOpen, setComposeOpen] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
 
   // Plan as the API gates it: anonymous → "basic", auth-context → server.
   const plan: Plan = authPlan ?? "basic";
@@ -329,7 +331,16 @@ export function BetaWordClient({ initialWord }: { initialWord: string }) {
       return;
     }
     if (id === "practice") {
-      router.push("/notebook");
+      if (!user) {
+        promptLogin(v2(lang, "quizEyebrow"));
+        return;
+      }
+      if (plan !== "deep") {
+        router.push("/beta/pricing");
+        return;
+      }
+      setQuizOpen(true);
+      return;
     }
   }
 
@@ -446,6 +457,15 @@ export function BetaWordClient({ initialWord }: { initialWord: string }) {
         <ComposeModalV2
           open={composeOpen}
           onClose={() => setComposeOpen(false)}
+          word={result.word}
+          meaning={result.meanings[0]?.meaning ?? ""}
+        />
+      )}
+
+      {result && (
+        <QuizModalV2
+          open={quizOpen}
+          onClose={() => setQuizOpen(false)}
           word={result.word}
           meaning={result.meanings[0]?.meaning ?? ""}
         />

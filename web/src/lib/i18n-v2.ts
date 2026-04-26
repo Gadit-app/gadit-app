@@ -166,6 +166,21 @@ export interface V2Strings {
   composeErrorEmpty: string;
   composeErrorTooShort: string;
 
+  // ── Quiz Modal (Screen 6) ───────────────────────────────────
+  quizEyebrow: string;
+  quizTitleTemplate: Template1; // word → "[word] — quiz"
+  quizQuestionNofM: (n: number, m: number) => string;
+  quizSubmit: string;
+  quizNext: string;
+  quizFinish: string;
+  quizYesCorrect: string;
+  quizNotQuite: string;
+  quizLoading: string;
+  quizFinalScoreTemplate: (correct: number, total: number) => string;
+  quizPracticeAnotherWord: string;
+  quizBackToWord: string;
+  quizReviewMistakes: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -347,6 +362,21 @@ const en: V2Strings = {
   composeErrorEmpty: "Please write a sentence first.",
   composeErrorTooShort: "Please write at least a few words.",
 
+  // Quiz Modal (Screen 6)
+  quizEyebrow: "Practice",
+  quizTitleTemplate: (w) => `${w} — quiz`,
+  quizQuestionNofM: (n, m) => `Question ${n} of ${m}`,
+  quizSubmit: "Submit",
+  quizNext: "Next question",
+  quizFinish: "Finish",
+  quizYesCorrect: "Yes — correct",
+  quizNotQuite: "Not quite",
+  quizLoading: "Preparing your quiz…",
+  quizFinalScoreTemplate: (c, t) => `You got ${c} out of ${t} correct.`,
+  quizPracticeAnotherWord: "Practice another word",
+  quizBackToWord: "Back to word",
+  quizReviewMistakes: "Review the ones I missed",
+
   origin: "Origin",
   historyNote: "History note",
   throughTime: "Through time",
@@ -527,6 +557,21 @@ const he: V2Strings = {
   composeErrorEmpty: "כתבו תחילה משפט.",
   composeErrorTooShort: "כתבו לפחות כמה מילים.",
 
+  // Quiz Modal (Screen 6)
+  quizEyebrow: "תרגול",
+  quizTitleTemplate: (w) => `${w} — תרגול`,
+  quizQuestionNofM: (n, m) => `שאלה ${n} מתוך ${m}`,
+  quizSubmit: "בדיקה",
+  quizNext: "שאלה הבאה",
+  quizFinish: "סיום",
+  quizYesCorrect: "נכון — כל הכבוד",
+  quizNotQuite: "לא לגמרי",
+  quizLoading: "מכינים שאלון…",
+  quizFinalScoreTemplate: (c, t) => `ענית נכון על ${c} מתוך ${t}.`,
+  quizPracticeAnotherWord: "תרגול מילה נוספת",
+  quizBackToWord: "חזרה למילה",
+  quizReviewMistakes: "סקירת הטעויות",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -705,6 +750,21 @@ const ar: V2Strings = {
   composeErrorEmpty: "اكتب جملة أولًا.",
   composeErrorTooShort: "اكتب بضع كلمات على الأقل.",
 
+  // Quiz Modal (Screen 6)
+  quizEyebrow: "تدريب",
+  quizTitleTemplate: (w) => `${w} — اختبار`,
+  quizQuestionNofM: (n, m) => `السؤال ${n} من ${m}`,
+  quizSubmit: "تحقّق",
+  quizNext: "السؤال التالي",
+  quizFinish: "إنهاء",
+  quizYesCorrect: "صحيح — أحسنت",
+  quizNotQuite: "غير مضبوط",
+  quizLoading: "جاري إعداد الاختبار…",
+  quizFinalScoreTemplate: (c, t) => `أجبت بشكل صحيح على ${c} من ${t}.`,
+  quizPracticeAnotherWord: "تدرَّب على كلمة أخرى",
+  quizBackToWord: "العودة إلى الكلمة",
+  quizReviewMistakes: "مراجعة الأخطاء",
+
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",
   throughTime: "عبر الزمن",
@@ -805,12 +865,16 @@ const TABLES: Record<Lang, Partial<V2Strings>> = {
 export function v2<K extends keyof V2Strings>(
   lang: Lang,
   key: K,
-  arg?: string | number
+  ...args: Array<string | number>
 ): string {
   const locale = TABLES[lang] ?? {};
   const val = locale[key] ?? en[key];
   if (typeof val === "function") {
-    return (val as Template1)(arg ?? "");
+    // Accept any number of args — Template1 takes one, the multi-arg
+    // templates (quizQuestionNofM, quizFinalScoreTemplate) take two.
+    // Function casts let us call them uniformly without losing types
+    // at the consumer side.
+    return (val as (...a: Array<string | number>) => string)(...args);
   }
   return val as string;
 }
