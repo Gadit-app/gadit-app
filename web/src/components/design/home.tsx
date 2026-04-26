@@ -95,11 +95,18 @@ export function HomeHero() {
           {v2(lang, "homeBadgeLaunching")}
         </div>
 
+        {/* Headline is one line (was two stacked spans). The second
+            phrase is still rendered in electric blue + italic for the
+            Latin scripts so the eye lands on it as the resolution of
+            the verb — but it's inline now so the hero takes ~half the
+            vertical space it used to. Cap is also lower (was 96px,
+            now 72px) to fit "Understand to the end." on a single line
+            at desktop width. */}
         <h1
           className={titleFont}
           style={{
-            fontSize: "clamp(48px, 8vw, 96px)",
-            lineHeight: 1.02,
+            fontSize: "clamp(40px, 6vw, 72px)",
+            lineHeight: 1.05,
             fontWeight: 400,
             color: "oklch(0.97 0.008 265)",
             ...(script === "latin"
@@ -110,12 +117,9 @@ export function HomeHero() {
               : {}),
           }}
         >
-          <span style={{ display: "block" }}>
-            {v2(lang, "homeHeadlineLine1")}
-          </span>
+          {v2(lang, "homeHeadlineLine1")}{" "}
           <span
             style={{
-              display: "block",
               color: "oklch(0.82 0.1 245)",
               fontStyle: script === "latin" ? "italic" : "normal",
             }}

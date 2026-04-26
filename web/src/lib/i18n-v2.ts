@@ -337,7 +337,7 @@ export interface V2Strings {
 const en: V2Strings = {
   homeBadgeLaunching: "Launching May 1",
   homeHeadlineLine1: "Understand",
-  homeHeadlineLine2: "more.",
+  homeHeadlineLine2: "to the end.",
   homeSubline:
     "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 7 languages.",
 
@@ -650,7 +650,7 @@ const en: V2Strings = {
 const he: V2Strings = {
   homeBadgeLaunching: "משיקים 1 במאי",
   homeHeadlineLine1: "להבין",
-  homeHeadlineLine2: "יותר.",
+  homeHeadlineLine2: "עד הסוף.",
   homeSubline:
     "מילון שמבין הקשר — משמעויות, מקור, ביטויים ותמונה חיה, ב־7 שפות.",
 
@@ -950,7 +950,7 @@ const he: V2Strings = {
   unlockWithClear: "פתחו עם Clear",
   upgradeToClear: "שדרגו ל־Clear",
   clearUnlocksThis: "נפתח עם Clear",
-  visualizeThisWord: "דמיינו",
+  visualizeThisWord: "המחישו בתמונה",
   visualBlurb:
     "תמונה אחת חיה, שנוצרה על־ידי Gadit — עוגן ויזואלי לתחושת המילה.",
   visualBlurbLocked:
@@ -961,7 +961,7 @@ const he: V2Strings = {
 const ar: V2Strings = {
   homeBadgeLaunching: "الإطلاق في 1 مايو",
   homeHeadlineLine1: "افهم",
-  homeHeadlineLine2: "أكثر.",
+  homeHeadlineLine2: "حتى النهاية.",
   homeSubline:
     "قاموس يفهم السياق — معانٍ وأصول وتعابير وصورة حيّة، بسبع لغات.",
 
@@ -1260,7 +1260,7 @@ const ar: V2Strings = {
   unlockWithClear: "افتح بـ Clear",
   upgradeToClear: "ارتقِ إلى Clear",
   clearUnlocksThis: "تفتحها Clear",
-  visualizeThisWord: "تخيّل",
+  visualizeThisWord: "صوّر بالصورة",
   visualBlurb: "صورة واحدة حيّة من Gadit — مرساة بصرية لشعور الكلمة.",
   visualBlurbLocked: "أنشئ صورة فريدة لهذه الكلمة — الفهم عبر النظر.",
   reportLabel: "إبلاغ",
@@ -1272,7 +1272,7 @@ const ar: V2Strings = {
 // that DO have native words (signIn, etc.) are translated already.
 const ru: Partial<V2Strings> = {
   homeHeadlineLine1: "Понимать",
-  homeHeadlineLine2: "больше.",
+  homeHeadlineLine2: "до конца.",
   signIn: "Войти",
   navSearch: "Поиск",
   navCompare: "Сравнить",
@@ -1288,7 +1288,7 @@ const ru: Partial<V2Strings> = {
 
 const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
-  homeHeadlineLine2: "más.",
+  homeHeadlineLine2: "hasta el final.",
   signIn: "Iniciar sesión",
   navSearch: "Buscar",
   navCompare: "Comparar",
@@ -1304,7 +1304,7 @@ const es: Partial<V2Strings> = {
 
 const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
-  homeHeadlineLine2: "mais.",
+  homeHeadlineLine2: "até o fim.",
   signIn: "Entrar",
   navSearch: "Pesquisar",
   navCompare: "Comparar",
@@ -1320,7 +1320,7 @@ const pt: Partial<V2Strings> = {
 
 const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
-  homeHeadlineLine2: "plus.",
+  homeHeadlineLine2: "jusqu'au bout.",
   signIn: "Se connecter",
   navSearch: "Rechercher",
   navCompare: "Comparer",

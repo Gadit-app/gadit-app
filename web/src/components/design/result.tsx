@@ -331,9 +331,15 @@ export function ImageSlot({
     <div
       className="relative overflow-hidden gd-drift"
       style={{
+        // Was aspect 4:3 + maxHeight 420 → on a wide card the empty
+        // state ate ~600px of vertical real estate before users got to
+        // the meanings. The teaser only needs to host a CTA + one
+        // sentence, so a 16:9 wide-banner aspect with a hard 220px
+        // ceiling is plenty. Generated images later override this via
+        // the same component but with state=ready.
         borderRadius: 20,
-        aspectRatio: "4 / 3",
-        maxHeight: 420,
+        aspectRatio: "16 / 6",
+        maxHeight: 220,
         background: locked
           ? "linear-gradient(135deg, oklch(0.94 0.01 260) 0%, oklch(0.9 0.015 250) 50%, oklch(0.93 0.012 265) 100%)"
           : "linear-gradient(135deg, oklch(0.93 0.035 250) 0%, oklch(0.88 0.06 245) 45%, oklch(0.92 0.04 260) 100%)",
@@ -342,19 +348,20 @@ export function ImageSlot({
           : "inset 0 0 0 1px oklch(0.78 0.1 245 / 0.4), 0 0 30px oklch(0.72 0.19 245 / 0.15)",
       }}
     >
-      {/* Subtle orbit ring SVG — hints imagery */}
+      {/* Subtle orbit ring SVG — hints imagery. Viewbox is wider/lower
+          than before to match the new 16:6 aspect ratio of the card. */}
       <svg
         className="absolute"
         style={{ inset: 0, width: "100%", height: "100%", opacity: 0.4 }}
-        viewBox="0 0 400 300"
+        viewBox="0 0 400 150"
         preserveAspectRatio="none"
         aria-hidden="true"
       >
         <ellipse
           cx="200"
-          cy="150"
-          rx="140"
-          ry="90"
+          cy="75"
+          rx="160"
+          ry="50"
           stroke={
             locked
               ? "oklch(0.6 0.01 265 / 0.25)"
@@ -365,9 +372,9 @@ export function ImageSlot({
         />
         <ellipse
           cx="200"
-          cy="150"
-          rx="95"
-          ry="60"
+          cy="75"
+          rx="110"
+          ry="32"
           stroke={
             locked
               ? "oklch(0.6 0.01 265 / 0.2)"
@@ -379,7 +386,7 @@ export function ImageSlot({
         />
         <circle
           cx="200"
-          cy="150"
+          cy="75"
           r="1.8"
           fill={
             locked ? "oklch(0.5 0.01 265)" : "oklch(0.72 0.19 245)"
@@ -387,7 +394,7 @@ export function ImageSlot({
         />
       </svg>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
         {locked ? (
           <>
             <div
@@ -409,7 +416,7 @@ export function ImageSlot({
             <div
               className="gd-font-display italic"
               style={{
-                fontSize: "clamp(22px, 3vw, 28px)",
+                fontSize: "clamp(18px, 2.4vw, 22px)",
                 color: "var(--gd-ink-900)",
               }}
             >
@@ -464,7 +471,7 @@ export function ImageSlot({
             <div
               className="gd-font-display italic"
               style={{
-                fontSize: "clamp(24px, 3.4vw, 34px)",
+                fontSize: "clamp(18px, 2.4vw, 24px)",
                 color: "var(--gd-ink-900)",
               }}
             >
