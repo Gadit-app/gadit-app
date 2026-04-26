@@ -25,8 +25,15 @@ import { useLang } from "@/lib/lang-context";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 
 type Variant = "dark" | "muted";
+type Placement = "bottom" | "top";
 
-export function LangSwitcher({ variant = "dark" }: { variant?: Variant }) {
+export function LangSwitcher({
+  variant = "dark",
+  placement = "bottom",
+}: {
+  variant?: Variant;
+  placement?: Placement;
+}) {
   const { lang, setLang } = useLang();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -97,7 +104,18 @@ export function LangSwitcher({ variant = "dark" }: { variant?: Variant }) {
           fill="none"
           aria-hidden="true"
           style={{
-            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            // Chevron points toward the panel: down for placement=bottom
+            // (the default), up for placement=top (footer use). Open
+            // state rotates 180° so the icon flips toward the trigger
+            // once the panel is on screen.
+            transform:
+              placement === "top"
+                ? open
+                  ? "rotate(0deg)"
+                  : "rotate(180deg)"
+                : open
+                  ? "rotate(180deg)"
+                  : "rotate(0deg)",
             transition: "transform .15s",
           }}
         >
@@ -111,7 +129,14 @@ export function LangSwitcher({ variant = "dark" }: { variant?: Variant }) {
           aria-label="Language"
           style={{
             position: "absolute",
-            insetBlockStart: "calc(100% + 8px)",
+            // `placement: "top"` opens the panel ABOVE the trigger —
+            // critical for footer usage on mobile, where opening
+            // downward pushes the panel past the page bottom and the
+            // user can't see it (or worse, it's hidden behind the
+            // browser chrome / address bar).
+            ...(placement === "top"
+              ? { insetBlockEnd: "calc(100% + 8px)" }
+              : { insetBlockStart: "calc(100% + 8px)" }),
             insetInlineEnd: 0,
             minWidth: 180,
             background: "var(--gd-paper-50)",

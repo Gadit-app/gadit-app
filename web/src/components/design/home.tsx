@@ -1040,8 +1040,10 @@ export function HomeFooter() {
         {/* Language picker — duplicated from the header so the user
             who scrolls past the fold without noticing the header still
             has a way to switch, and so search engines see the locale
-            map at the bottom (i18n hygiene). */}
-        <LangSwitcher variant="muted" />
+            map at the bottom (i18n hygiene). placement="top" so the
+            dropdown opens UPWARD — at the footer the panel would
+            otherwise extend below the page edge and clip on mobile. */}
+        <LangSwitcher variant="muted" placement="top" />
         <span>{v2(lang, "footerLanguagesNote")}</span>
       </div>
     </footer>
