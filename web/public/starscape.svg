@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none">
+  <defs>
+    <circle id="mW" r="2" fill="#fff"/>
+    <circle id="mB" r="2" fill="#d8e8ff"/>
+    <circle id="d" r=".75" fill="#fff"/>
+    <filter id="starGlow" x="-40" y="-40" width="80" height="80" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0.25 0 0 0 0.2  0 0.55 0 0 0.55  0 0 1.25 0 1  0 0 0 .85 0" result="blueGlow"/>
+      <feMerge>
+        <feMergeNode in="blueGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <g id="featured" filter="url(#starGlow)">
+      <path d="M0-30L3-5L30 0L3 5L0 30L-3 5L-30 0L-3-5Z" fill="#9fc7ff" opacity=".55"/>
+      <path d="M0-18L1.8-3.5L18 0L1.8 3.5L0 18L-1.8 3.5L-18 0L-1.8-3.5Z" fill="#fff" opacity=".75"/>
+      <circle r="5" fill="#fff"/>
+      <circle r="2.4" fill="#eaf4ff"/>
+    </g>
+  </defs>
+
+  <g opacity=".95">
+    <use href="#featured" transform="translate(92 118) scale(.9)"/>
+    <use href="#featured" transform="translate(745 238) scale(.82) rotate(12)"/>
+    <use href="#featured" transform="translate(1032 462) scale(.72) rotate(-8)"/>
+    <use href="#featured" transform="translate(566 684) scale(.86) rotate(18)"/>
+  </g>
+
+  <g opacity=".9">
+    <use href="#mW" x="36" y="372" opacity=".8"/><use href="#mB" x="68" y="704" opacity=".72"/>
+    <use href="#mW" x="144" y="47" opacity=".86"/><use href="#mB" x="183" y="532" opacity=".78"/>
+    <use href="#mW" x="231" y="188" opacity=".75"/><use href="#mB" x="278" y="768" opacity=".82"/>
+    <use href="#mW" x="318" y="86" opacity=".9"/><use href="#mB" x="352" y="409" opacity=".72"/>
+    <use href="#mW" x="406" y="621" opacity=".84"/><use href="#mB" x="449" y="265" opacity=".78"/>
+    <use href="#mW" x="501" y="151" opacity=".88"/><use href="#mB" x="538" y="498" opacity=".72"/>
+    <use href="#mW" x="612" y="78" opacity=".8"/><use href="#mB" x="653" y="352" opacity=".86"/>
+    <use href="#mW" x="701" y="724" opacity=".74"/><use href="#mB" x="788" y="91" opacity=".8"/>
+    <use href="#mW" x="823" y="603" opacity=".92"/><use href="#mB" x="866" y="318" opacity=".76"/>
+    <use href="#mW" x="914" y="156" opacity=".82"/><use href="#mB" x="956" y="738" opacity=".74"/>
+    <use href="#mW" x="1008" y="62" opacity=".88"/><use href="#mB" x="1074" y="281" opacity=".8"/>
+    <use href="#mW" x="1138" y="514" opacity=".76"/><use href="#mB" x="1182" y="206" opacity=".7"/>
+    <use href="#mW" x="112" y="622" opacity=".9"/><use href="#mB" x="263" y="352" opacity=".75"/>
+    <use href="#mW" x="386" y="724" opacity=".8"/><use href="#mB" x="698" y="528" opacity=".82"/>
+    <use href="#mW" x="989" y="652" opacity=".86"/><use href="#mB" x="1166" y="758" opacity=".72"/>
+  </g>
+
+  <g opacity=".78">
+    <use href="#d" x="18" y="74" opacity=".52"/><use href="#d" x="52" y="610" opacity=".44"/>
+    <use href="#d" x="79" y="262" opacity=".62"/><use href="#d" x="126" y="338" opacity=".48"/>
+    <use href="#d" x="164" y="748" opacity=".56"/><use href="#d" x="201" y="103" opacity=".44"/>
+    <use href="#d" x="239" y="588" opacity=".6"/><use href="#d" x="271" y="34" opacity=".5"/>
+    <use href="#d" x="296" y="460" opacity=".42"/><use href="#d" x="331" y="214" opacity=".58"/>
+    <use href="#d" x="369" y="772" opacity=".46"/><use href="#d" x="397" y="132" opacity=".64"/>
+    <use href="#d" x="428" y="389" opacity=".48"/><use href="#d" x="472" y="706" opacity=".55"/>
+    <use href="#d" x="515" y="39" opacity=".42"/><use href="#d" x="552" y="579" opacity=".6"/>
+    <use href="#d" x="589" y="297" opacity=".5"/><use href="#d" x="636" y="160" opacity=".54"/>
+    <use href="#d" x="671" y="760" opacity=".46"/><use href="#d" x="719" y="388" opacity=".62"/>
+    <use href="#d" x="756" y="667" opacity=".48"/><use href="#d" x="801" y="27" opacity=".58"/>
+    <use href="#d" x="842" y="219" opacity=".44"/><use href="#d" x="879" y="488" opacity=".65"/>
+    <use href="#d" x="921" y="781" opacity=".52"/><use href="#d" x="947" y="377" opacity=".45"/>
+    <use href="#d" x="983" y="103" opacity=".61"/><use href="#d" x="1021" y="588" opacity=".48"/>
+    <use href="#d" x="1058" y="31" opacity=".56"/><use href="#d" x="1096" y="704" opacity=".42"/>
+    <use href="#d" x="1131" y="146" opacity=".6"/><use href="#d" x="1174" y="423" opacity=".5"/>
+    <use href="#d" x="33" y="777" opacity=".45"/><use href="#d" x="188" y="431" opacity=".62"/>
+    <use href="#d" x="342" y="544" opacity=".5"/><use href="#d" x="484" y="211" opacity=".58"/>
+    <use href="#d" x="627" y="642" opacity=".44"/><use href="#d" x="772" y="553" opacity=".6"/>
+    <use href="#d" x="893" y="69" opacity=".46"/><use href="#d" x="1039" y="343" opacity=".64"/>
+    <use href="#d" x="1157" y="653" opacity=".52"/><use href="#d" x="96" y="511" opacity=".48"/>
+    <use href="#d" x="214" y="678" opacity=".58"/><use href="#d" x="456" y="91" opacity=".46"/>
+    <use href="#d" x="578" y="444" opacity=".63"/><use href="#d" x="734" y="124" opacity=".5"/>
+    <use href="#d" x="967" y="513" opacity=".56"/><use href="#d" x="1112" y="786" opacity=".43"/>
+  </g>
+</svg>
