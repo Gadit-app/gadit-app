@@ -66,17 +66,31 @@ export function Wordmark({
 }) {
   const src =
     variant === "full" ? "/wordmark-full.svg" : "/wordmark-compact.svg";
+  // SVG aspect is ~620:240 (≈2.58:1), so a 28px-high mark is ~72px wide.
+  // We compute width explicitly and wrap in a fixed-size, direction:ltr
+  // span — otherwise an RTL ancestor (Hebrew/Arabic LoginModal card) can
+  // mirror the inline-image flow and clip the leading "G".
+  const aspect = 620 / 240;
+  const width = Math.round(height * aspect);
   return (
-    // Use a plain <img> tag so the SVG's filter chains and gradients
-    // render exactly as authored. Inlining the SVG via fetch+dangerouslySet
-    // would give us style hooks but cost a flash of unstyled content; the
-    // SVG is small (~5KB) and gets cached aggressively.
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src}
-      alt="Gadit"
-      style={{ height, width: "auto", display: "block" }}
-    />
+    <span
+      style={{
+        display: "inline-block",
+        width,
+        height,
+        direction: "ltr",
+        flexShrink: 0,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt="Gadit"
+        width={width}
+        height={height}
+        style={{ display: "block", width: "100%", height: "100%" }}
+      />
+    </span>
   );
 }
 

@@ -77,6 +77,11 @@ export interface V2Strings {
 
   // ── Marketing header ────────────────────────────────────────
   signIn: string;
+  // Signed-in primary navigation (in MarketingHeader)
+  navSearch: string;
+  navCompare: string;
+  navNotebook: string;
+  navPricing: string;
 
   // ── Pricing page (Screen 3) ─────────────────────────────────
   pricingPageHeadline: string;
@@ -382,6 +387,10 @@ const en: V2Strings = {
   footerLanguagesNote: "7 languages",
 
   signIn: "Sign in",
+  navSearch: "Search",
+  navCompare: "Compare",
+  navNotebook: "Notebook",
+  navPricing: "Pricing",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "Three tiers. All with real content.",
@@ -691,6 +700,10 @@ const he: V2Strings = {
   footerLanguagesNote: "7 שפות",
 
   signIn: "התחברות",
+  navSearch: "חיפוש",
+  navCompare: "השוואה",
+  navNotebook: "מחברת",
+  navPricing: "תמחור",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
@@ -997,6 +1010,10 @@ const ar: V2Strings = {
   footerLanguagesNote: "7 لغات",
 
   signIn: "تسجيل الدخول",
+  navSearch: "بحث",
+  navCompare: "مقارنة",
+  navNotebook: "الدفتر",
+  navPricing: "الأسعار",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
@@ -1257,6 +1274,10 @@ const ru: Partial<V2Strings> = {
   homeHeadlineLine1: "Понимать",
   homeHeadlineLine2: "больше.",
   signIn: "Войти",
+  navSearch: "Поиск",
+  navCompare: "Сравнить",
+  navNotebook: "Тетрадь",
+  navPricing: "Цены",
   tryLabel: "Попробуйте",
   origin: "Происхождение",
   forKids: "Для детей",
@@ -1269,6 +1290,10 @@ const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "más.",
   signIn: "Iniciar sesión",
+  navSearch: "Buscar",
+  navCompare: "Comparar",
+  navNotebook: "Cuaderno",
+  navPricing: "Precios",
   tryLabel: "Prueba",
   origin: "Origen",
   forKids: "Para niños",
@@ -1281,6 +1306,10 @@ const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "mais.",
   signIn: "Entrar",
+  navSearch: "Pesquisar",
+  navCompare: "Comparar",
+  navNotebook: "Caderno",
+  navPricing: "Preços",
   tryLabel: "Experimente",
   origin: "Origem",
   forKids: "Para crianças",
@@ -1293,6 +1322,10 @@ const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "plus.",
   signIn: "Se connecter",
+  navSearch: "Rechercher",
+  navCompare: "Comparer",
+  navNotebook: "Carnet",
+  navPricing: "Tarifs",
   tryLabel: "Essayez",
   origin: "Origine",
   forKids: "Pour enfants",

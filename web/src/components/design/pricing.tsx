@@ -199,6 +199,7 @@ function TierCard({
   tier: TierData;
 }) {
   const { lang } = useLang();
+  const script = scriptFor(lang);
   const { mo, yr } = periodSuffixes(lang);
 
   const showYearly = billing === "yearly" && tier.priceYearly;
@@ -206,18 +207,42 @@ function TierCard({
   const period = tier.priceMonthly === "$0" ? "" : showYearly ? yr : mo;
   const subPrice = showYearly ? tier.equivalent : null;
 
+  // Price font: Fraunces is gorgeous in Latin but reads ugly when the
+  // surrounding numerals (e.g. "$2.99") are next to Hebrew/Arabic
+  // characters. Switch to Rubik / Noto Naskh Arabic in those locales,
+  // bumped to weight 600 so the number still feels confident.
+  const priceFontClass =
+    script === "he"
+      ? "gd-font-he"
+      : script === "ar"
+        ? "gd-font-ar"
+        : "gd-font-display";
+  const priceFontStyle: React.CSSProperties =
+    script === "latin"
+      ? {
+          fontVariationSettings: '"opsz" 96',
+          letterSpacing: "-0.025em",
+          fontWeight: 400,
+        }
+      : { fontWeight: 600, letterSpacing: "-0.01em" };
+
   return (
     <div
-      className="relative h-full"
+      className="gd-card relative h-full"
       style={{
-        borderRadius: 22,
-        padding: "clamp(26px, 3vw, 34px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 30px)",
-        background: tier.highlight
-          ? "linear-gradient(180deg, oklch(0.24 0.07 260 / 0.9), oklch(0.18 0.06 265 / 0.9))"
-          : "oklch(0.20 0.05 265 / 0.55)",
-        boxShadow: tier.highlight
-          ? "inset 0 0 0 1.5px oklch(0.72 0.19 245 / 0.65), 0 0 0 6px oklch(0.72 0.19 245 / 0.08), 0 24px 48px -16px oklch(0.5 0.2 250 / 0.5)"
-          : "inset 0 0 0 1px oklch(1 0 0 / 0.08), 0 8px 22px -10px oklch(0.08 0.08 260 / 0.35)",
+        // gd-card gives us the warm-paper surface + outer shadow; we add
+        // a stronger blue ring for the highlighted tier on top.
+        padding:
+          "clamp(26px, 3vw, 34px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 30px)",
+        ...(tier.highlight
+          ? {
+              boxShadow:
+                "inset 0 0 0 1.5px oklch(0.72 0.19 245 / 0.65), " +
+                "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
+                "0 24px 60px -24px oklch(0.5 0.2 250 / 0.5), " +
+                "0 8px 22px -10px oklch(0.08 0.08 260 / 0.5)",
+            }
+          : {}),
       }}
     >
       {tier.badge && (
@@ -230,11 +255,11 @@ function TierCard({
             letterSpacing: "0.16em",
             textTransform: "uppercase",
             fontWeight: 700,
-            color: "oklch(0.18 0.06 265)",
+            color: "white",
             padding: "5px 11px",
             borderRadius: 999,
             background:
-              "linear-gradient(180deg, oklch(0.88 0.1 245), oklch(0.78 0.16 245))",
+              "linear-gradient(180deg, oklch(0.62 0.2 250), oklch(0.5 0.22 252))",
             boxShadow:
               "0 0 0 1px oklch(0.5 0.2 250 / 0.5), 0 4px 12px oklch(0.5 0.2 250 / 0.4)",
           }}
@@ -246,13 +271,13 @@ function TierCard({
       <div className="flex items-baseline justify-between mb-1">
         <div
           className="gd-font-sans-ui font-semibold"
-          style={{ fontSize: 16, color: "oklch(0.96 0.008 265)" }}
+          style={{ fontSize: 16, color: "var(--gd-ink-900)" }}
         >
           {tier.name}
         </div>
         <span
           className="gd-font-sans-ui italic"
-          style={{ fontSize: 12, color: "oklch(0.72 0.05 245)" }}
+          style={{ fontSize: 12, color: "oklch(0.5 0.18 250)" }}
         >
           {tier.tagline}
         </span>
@@ -262,7 +287,7 @@ function TierCard({
         style={{
           fontSize: 13.5,
           lineHeight: 1.5,
-          color: "oklch(0.78 0.02 265)",
+          color: "var(--gd-ink-500)",
         }}
       >
         {tier.pitch}
@@ -270,14 +295,12 @@ function TierCard({
 
       <div className="mt-6 flex items-baseline gap-1.5">
         <span
-          className="gd-font-display"
+          className={priceFontClass}
           style={{
             fontSize: 48,
             lineHeight: 1,
-            color: "oklch(0.97 0.008 265)",
-            fontVariationSettings: '"opsz" 96',
-            letterSpacing: "-0.025em",
-            fontWeight: 400,
+            color: "var(--gd-ink-900)",
+            ...priceFontStyle,
           }}
         >
           {price}
@@ -285,7 +308,7 @@ function TierCard({
         {period && (
           <span
             className="gd-font-sans-ui"
-            style={{ fontSize: 14, color: "oklch(0.62 0.02 265)" }}
+            style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
           >
             {period}
           </span>
@@ -294,7 +317,7 @@ function TierCard({
       {subPrice && (
         <div
           className="gd-font-sans-ui mt-1"
-          style={{ fontSize: 11.5, color: "oklch(0.55 0.02 265)" }}
+          style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
         >
           {subPrice}
         </div>
@@ -303,7 +326,7 @@ function TierCard({
       <button
         type="button"
         onClick={tier.onCta}
-        className="w-full mt-6 gd-font-sans-ui font-medium"
+        className="w-full mt-6 gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
         style={{
           fontSize: 13.5,
           padding: "12px 18px",
@@ -317,9 +340,9 @@ function TierCard({
                   "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
               }
             : {
-                color: "oklch(0.95 0.01 265)",
-                background: "oklch(1 0 0 / 0.06)",
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.14)",
+                color: "var(--gd-ink-900)",
+                background: "oklch(0 0 0 / 0.04)",
+                boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
               }),
         }}
       >
@@ -329,7 +352,7 @@ function TierCard({
       {tier.trust && (
         <div
           className="mt-3 gd-font-sans-ui text-center"
-          style={{ fontSize: 11.5, color: "oklch(0.6 0.02 265)" }}
+          style={{ fontSize: 11.5, color: "var(--gd-ink-500)" }}
         >
           {tier.trust}
         </div>
@@ -343,7 +366,7 @@ function TierCard({
             style={{
               fontSize: 13.5,
               lineHeight: 1.5,
-              color: "oklch(0.85 0.015 265)",
+              color: "var(--gd-ink-700)",
             }}
           >
             <svg
@@ -352,7 +375,7 @@ function TierCard({
               viewBox="0 0 14 14"
               fill="none"
               style={{
-                color: "oklch(0.82 0.1 245)",
+                color: "oklch(0.5 0.18 250)",
                 marginTop: 4,
                 flexShrink: 0,
               }}
@@ -360,7 +383,7 @@ function TierCard({
               <path
                 d="M3 7.5l2.5 2.5L11 4"
                 stroke="currentColor"
-                strokeWidth="1.5"
+                strokeWidth="1.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
