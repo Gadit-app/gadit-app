@@ -210,8 +210,13 @@ export interface V2Strings {
   notebookEyebrow: string;
   notebookTitle: string;
   notebookSubtitle: string;
-  /** template: "127 words explored" — number is the only arg */
+  /** template: "127 words explored" — number is the only arg.
+   *  Kept for backward compat; new layouts prefer the split
+   *  numeral + notebookWordsExplored label pair. */
   notebookCounterTemplate: Template1;
+  /** Plain label that follows a giant numeral, e.g. "words explored"
+   *  rendered under "127". Used in the Notebook hero counter. */
+  notebookWordsExplored: string;
   notebookPracticeNow: string;
   /** template: "5 due today" — number is the only arg */
   notebookDueTodayTemplate: Template1;
@@ -533,6 +538,7 @@ const en: V2Strings = {
   notebookSubtitle:
     "Every word you've explored — kept, organized, growing.",
   notebookCounterTemplate: (n) => `${n} words explored`,
+  notebookWordsExplored: "words explored",
   notebookPracticeNow: "Practice now",
   notebookDueTodayTemplate: (n) => `${n} due today`,
   notebookListView: "List",
@@ -845,6 +851,7 @@ const he: V2Strings = {
   notebookSubtitle:
     "כל מילה שלמדתם — נשמרת, מאורגנת, גדלה.",
   notebookCounterTemplate: (n) => `${n} מילים שנלמדו`,
+  notebookWordsExplored: "מילים שנלמדו",
   notebookPracticeNow: "תרגול עכשיו",
   notebookDueTodayTemplate: (n) => `${n} לתרגול היום`,
   notebookListView: "רשימה",
@@ -1159,6 +1166,7 @@ const ar: V2Strings = {
   notebookSubtitle:
     "كل كلمة استكشفتها — تُحفَظ وتُنظَّم، ومع الوقت تتسع مكتبتك.",
   notebookCounterTemplate: (n) => `عدد الكلمات المستكشَفة: ${n}`,
+  notebookWordsExplored: "كلمات استكشفتها",
   notebookPracticeNow: "ابدأ التدريب",
   notebookDueTodayTemplate: (n) => `${n} للمراجعة اليوم`,
   notebookListView: "قائمة",
@@ -1486,6 +1494,7 @@ const ru: Partial<V2Strings> = {
   notebookSubtitle:
     "Каждое слово, которое вы исследовали — сохраняется, упорядочивается, растёт со временем.",
   notebookCounterTemplate: (n) => `Изучено слов: ${n}`,
+  notebookWordsExplored: "изученных слов",
   notebookPracticeNow: "Тренироваться",
   notebookDueTodayTemplate: (n) => `${n} к повторению сегодня`,
   notebookListView: "Список",
@@ -1798,6 +1807,7 @@ const es: Partial<V2Strings> = {
   notebookSubtitle:
     "Cada palabra que has explorado — guardada, organizada, creciendo.",
   notebookCounterTemplate: (n) => `${n} palabras exploradas`,
+  notebookWordsExplored: "palabras exploradas",
   notebookPracticeNow: "Practicar ahora",
   notebookDueTodayTemplate: (n) => `${n} para repasar hoy`,
   notebookListView: "Lista",
@@ -2108,6 +2118,7 @@ const pt: Partial<V2Strings> = {
   notebookSubtitle:
     "Cada palavra que você explorou — guardada, organizada, crescendo.",
   notebookCounterTemplate: (n) => `${n} palavras exploradas`,
+  notebookWordsExplored: "palavras exploradas",
   notebookPracticeNow: "Praticar agora",
   notebookDueTodayTemplate: (n) => `${n} para revisar hoje`,
   notebookListView: "Lista",
@@ -2418,6 +2429,7 @@ const fr: Partial<V2Strings> = {
   notebookSubtitle:
     "Chaque mot exploré — gardé, organisé, qui s'enrichit.",
   notebookCounterTemplate: (n) => `${n} mots explorés`,
+  notebookWordsExplored: "mots explorés",
   notebookPracticeNow: "Pratiquer",
   notebookDueTodayTemplate: (n) => `${n} à revoir aujourd'hui`,
   notebookListView: "Liste",

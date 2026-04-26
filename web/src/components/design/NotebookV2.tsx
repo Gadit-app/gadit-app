@@ -837,27 +837,41 @@ export function NotebookV2() {
           {v2(lang, "notebookSubtitle")}
         </p>
 
-        {/* Counter + practice CTA */}
+        {/* Counter + practice CTA.
+            The counter splits into two layers: a giant numeral (display
+            font, ~96px) and a regular-sized label below it. This reads
+            cleanly in every script — Latin display fonts handle big
+            digits beautifully, but rendering an entire Hebrew/Arabic
+            sentence at 96px (as the previous version did) made the line
+            blow past the hero's width and look visually unbalanced. */}
         {!isEmpty && !loading && (
           <div
             className={`mt-8 flex items-end gap-6 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
           >
-            <div
-              className={fontDisplay(script)}
-              style={{
-                fontSize: "clamp(64px, 9vw, 96px)",
-                lineHeight: 1,
-                color: "oklch(0.97 0.008 265)",
-                ...(script === "latin"
-                  ? {
-                      fontVariationSettings: '"opsz" 144',
-                      fontWeight: 400,
-                      letterSpacing: "-0.04em",
-                    }
-                  : {}),
-              }}
-            >
-              {v2(lang, "notebookCounterTemplate", total)}
+            <div className={isRtl ? "text-right" : "text-left"}>
+              <div
+                className="gd-font-display"
+                style={{
+                  fontSize: "clamp(64px, 9vw, 96px)",
+                  lineHeight: 1,
+                  color: "oklch(0.97 0.008 265)",
+                  fontVariationSettings: '"opsz" 144',
+                  fontWeight: 400,
+                  letterSpacing: "-0.04em",
+                }}
+              >
+                {total}
+              </div>
+              <div
+                className="gd-font-sans-ui mt-2"
+                style={{
+                  fontSize: 14,
+                  color: "oklch(0.72 0.02 265)",
+                  letterSpacing: script === "latin" ? "0.02em" : 0,
+                }}
+              >
+                {v2(lang, "notebookWordsExplored")}
+              </div>
             </div>
             {reviewQueue > 0 && (
               <button
@@ -878,6 +892,7 @@ export function NotebookV2() {
               >
                 {v2(lang, "notebookPracticeNow")}
                 <span
+                  dir="ltr"
                   style={{
                     fontSize: 11,
                     fontWeight: 700,
@@ -887,7 +902,7 @@ export function NotebookV2() {
                     boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.3)",
                   }}
                 >
-                  {v2(lang, "notebookDueTodayTemplate", reviewQueue)}
+                  {reviewQueue}
                 </span>
               </button>
             )}
