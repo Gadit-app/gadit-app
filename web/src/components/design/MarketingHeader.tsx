@@ -34,6 +34,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
 import { Wordmark } from "./primitives";
+import { LangSwitcher } from "./LangSwitcher";
 
 type NavItem = { href: string; labelKey: keyof import("@/lib/i18n-v2").V2Strings };
 
@@ -143,8 +144,19 @@ export function MarketingHeader() {
           </nav>
         )}
 
-        {/* Right side: avatar (signed in) or Sign in (signed out) */}
+        {/* Right side: lang picker + (avatar | Sign in) */}
         <div className="flex items-center gap-2">
+          {/* Language picker — visible to everyone (visitors AND signed-in
+              users), so a French speaker who landed on the EN homepage
+              can switch before they even sign up. Hidden on mobile to
+              save horizontal room; the mobile dropdown menu carries it
+              for signed-in users instead. Signed-out mobile users still
+              have the localStorage auto-detect, plus the footer picker
+              once they scroll. */}
+          <div className="hidden md:block">
+            <LangSwitcher variant="dark" />
+          </div>
+
           {/* Mobile menu trigger — signed-in only */}
           {user && (
             <button
@@ -243,6 +255,9 @@ export function MarketingHeader() {
               {v2(lang, item.labelKey)}
             </Link>
           ))}
+          <div style={{ paddingTop: 12 }}>
+            <LangSwitcher variant="dark" />
+          </div>
         </nav>
       )}
     </header>

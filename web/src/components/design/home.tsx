@@ -32,6 +32,7 @@ import {
   TierBadge,
   Wordmark,
 } from "./primitives";
+import { LangSwitcher } from "./LangSwitcher";
 
 type Script = "latin" | "he" | "ar";
 
@@ -998,7 +999,7 @@ export function HomeFooter() {
         </div>
       </div>
       <div
-        className="mt-10 pt-6 flex items-center justify-between gd-font-sans-ui"
+        className="mt-10 pt-6 flex items-center justify-between gap-4 flex-wrap gd-font-sans-ui"
         style={{
           fontSize: 11,
           color: "oklch(0.5 0.02 265)",
@@ -1006,6 +1007,11 @@ export function HomeFooter() {
         }}
       >
         <span>© 2026 Gadit</span>
+        {/* Language picker — duplicated from the header so the user
+            who scrolls past the fold without noticing the header still
+            has a way to switch, and so search engines see the locale
+            map at the bottom (i18n hygiene). */}
+        <LangSwitcher variant="muted" />
         <span>{v2(lang, "footerLanguagesNote")}</span>
       </div>
     </footer>
