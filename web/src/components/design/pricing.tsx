@@ -239,8 +239,14 @@ function TierCard({
         // flex-col lets the features <ul> grow to fill remaining space,
         // which keeps the price row at the same Y across cards even
         // when feature counts differ.
-        padding:
-          "clamp(26px, 3vw, 34px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 30px)",
+        // The highlighted (Clear) tier also gets a slight scale + extra
+        // vertical padding so it physically rises above its siblings —
+        // matches the "Most popular" treatment Stripe / Linear use.
+        padding: tier.highlight
+          ? "clamp(34px, 4vw, 44px) clamp(24px, 2.6vw, 30px) clamp(36px, 4vw, 40px)"
+          : "clamp(26px, 3vw, 34px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 30px)",
+        transform: tier.highlight ? "scale(1.04)" : "none",
+        zIndex: tier.highlight ? 1 : 0,
         ...(tier.highlight
           ? {
               boxShadow:
@@ -276,17 +282,19 @@ function TierCard({
       )}
 
       {/*
-        Order: name + tagline → pitch → features → divider → price → CTA → trust.
-        Features sit ABOVE the price so they line up at the same vertical
-        position across all three cards (Clear's trust microcopy used to
-        push its features list down ~16px, breaking alignment). Reading
-        order also improves: user sees "what you get" before "what it
-        costs", which is friendlier for conversion.
+        Layout: name+tagline → pitch → price → CTA → trust → features.
+        The price stays directly under the tier name (per design intent),
+        and the FEATURES list is what flexes to fill any leftover height.
+        That keeps the CTAs vertically aligned across all three cards
+        even though Clear has a trust microcopy line that the others
+        don't — the trust line sits in a flex-shrink-0 wrapper above
+        the divider, so the price/CTA block above it has identical
+        height across cards.
        */}
       <div className="flex items-baseline justify-between mb-1">
         <div
           className="gd-font-sans-ui font-semibold"
-          style={{ fontSize: 16, color: "var(--gd-ink-900)" }}
+          style={{ fontSize: 22, color: "var(--gd-ink-900)" }}
         >
           {tier.name}
         </div>
@@ -308,10 +316,84 @@ function TierCard({
         {tier.pitch}
       </p>
 
-      {/* Features — fixed-height block via flex-grow keeps the price
-          row at the same Y across all three cards regardless of how
-          many bullets each tier has. */}
-      <ul className="mt-6 space-y-3 flex-1">
+      {/* Price — directly under the tier name */}
+      <div className="mt-6 flex items-baseline gap-1.5">
+        <span
+          className={priceFontClass}
+          style={{
+            fontSize: 60,
+            lineHeight: 1,
+            color: "var(--gd-ink-900)",
+            ...priceFontStyle,
+          }}
+        >
+          {price}
+        </span>
+        {period && (
+          <span
+            className="gd-font-sans-ui"
+            style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
+          >
+            {period}
+          </span>
+        )}
+      </div>
+      {subPrice && (
+        <div
+          className="gd-font-sans-ui mt-1"
+          style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
+        >
+          {subPrice}
+        </div>
+      )}
+
+      {/* CTA + trust block — fixed-height so CTAs line up across cards.
+          The trust line is rendered as an empty 18px spacer when absent,
+          which keeps the visual rhythm identical for Basic/Deep too. */}
+      <button
+        type="button"
+        onClick={tier.onCta}
+        className="w-full mt-5 gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
+        style={{
+          fontSize: 13.5,
+          padding: "12px 18px",
+          borderRadius: 12,
+          ...(tier.highlight
+            ? {
+                color: "white",
+                background:
+                  "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+                boxShadow:
+                  "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+              }
+            : {
+                color: "var(--gd-ink-900)",
+                background: "oklch(0 0 0 / 0.04)",
+                boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
+              }),
+        }}
+      >
+        {showYearly ? tier.ctaYearly : tier.cta}
+      </button>
+      <div
+        className="mt-3 gd-font-sans-ui text-center"
+        style={{
+          fontSize: 11.5,
+          color: "var(--gd-ink-500)",
+          minHeight: 18,
+        }}
+      >
+        {tier.trust ?? " "}
+      </div>
+
+      {/* Divider + features — features flex-grow so the card uses any
+          extra height for more bullet space, leaving the CTA block
+          above firmly aligned. */}
+      <div
+        className="mt-5 mb-5"
+        style={{ height: 1, background: "oklch(0 0 0 / 0.08)" }}
+      />
+      <ul className="space-y-3 flex-1">
         {tier.features.map((f, i) => (
           <li
             key={i}
@@ -345,79 +427,6 @@ function TierCard({
           </li>
         ))}
       </ul>
-
-      {/* Divider between value and cost */}
-      <div
-        className="mt-7 mb-5"
-        style={{ height: 1, background: "oklch(0 0 0 / 0.08)" }}
-      />
-
-      {/* Price */}
-      <div className="flex items-baseline gap-1.5">
-        <span
-          className={priceFontClass}
-          style={{
-            fontSize: 48,
-            lineHeight: 1,
-            color: "var(--gd-ink-900)",
-            ...priceFontStyle,
-          }}
-        >
-          {price}
-        </span>
-        {period && (
-          <span
-            className="gd-font-sans-ui"
-            style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
-          >
-            {period}
-          </span>
-        )}
-      </div>
-      {subPrice && (
-        <div
-          className="gd-font-sans-ui mt-1"
-          style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
-        >
-          {subPrice}
-        </div>
-      )}
-
-      {/* CTA */}
-      <button
-        type="button"
-        onClick={tier.onCta}
-        className="w-full mt-5 gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
-        style={{
-          fontSize: 13.5,
-          padding: "12px 18px",
-          borderRadius: 12,
-          ...(tier.highlight
-            ? {
-                color: "white",
-                background:
-                  "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-                boxShadow:
-                  "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
-              }
-            : {
-                color: "var(--gd-ink-900)",
-                background: "oklch(0 0 0 / 0.04)",
-                boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
-              }),
-        }}
-      >
-        {showYearly ? tier.ctaYearly : tier.cta}
-      </button>
-
-      {tier.trust && (
-        <div
-          className="mt-3 gd-font-sans-ui text-center"
-          style={{ fontSize: 11.5, color: "var(--gd-ink-500)" }}
-        >
-          {tier.trust}
-        </div>
-      )}
     </div>
   );
 }
