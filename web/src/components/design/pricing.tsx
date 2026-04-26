@@ -445,9 +445,96 @@ function TierCard({
 }
 
 // ─── PricingTiers ────────────────────────────────────────────────
+// Stripe price IDs are public env vars (NEXT_PUBLIC_*) so the
+// browser can name the right SKU when calling /api/create-checkout.
+// The server still verifies the priceId against its own env vars
+// before creating the session, so a tampered client can't pay for a
+// different price.
+const PRICE_CLEAR_MONTHLY =
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY ?? "";
+const PRICE_CLEAR_YEARLY =
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY ?? "";
+const PRICE_DEEP_MONTHLY =
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "";
+const PRICE_DEEP_YEARLY =
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY ?? "";
+
 function PricingTiers({ billing }: { billing: Billing }) {
   const { lang } = useLang();
   const { promptLogin } = useAuth();
+
+  // Common: kick off Stripe Checkout for the given priceId. Used by
+  // both the Clear and Deep CTAs. promptLogin handles the "needs to
+  // sign in first" path automatically — if the user is already
+  // signed in, the modal is skipped and onSuccess fires immediately.
+  async function startCheckout(priceId: string, freshUser: { getIdToken: () => Promise<string> }) {
+    if (!priceId) {
+      console.error("Missing Stripe priceId — env var not set");
+      window.alert("Pricing is misconfigured. Please contact support.");
+      return;
+    }
+    try {
+      const idToken = await freshUser.getIdToken();
+      const res = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ priceId }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+      };
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
+      console.error("Checkout failed:", { status: res.status, body: data });
+      window.alert(
+        lang === "he"
+          ? "לא הצלחנו לפתוח את עמוד התשלום. נסו שוב."
+          : lang === "ar"
+            ? "تعذر فتح صفحة الدفع. حاول مرة أخرى."
+            : "Could not open the checkout page. Please try again."
+      );
+    } catch (err) {
+      console.error("Checkout request failed:", err);
+    }
+  }
+
+  function clickClear() {
+    const priceId =
+      billing === "yearly" ? PRICE_CLEAR_YEARLY : PRICE_CLEAR_MONTHLY;
+    promptLogin({
+      reason: v2(lang, "tierClearCta"),
+      mode: "signup",
+      onSuccess: (u) => startCheckout(priceId, u),
+    });
+  }
+
+  function clickDeep() {
+    const priceId =
+      billing === "yearly" ? PRICE_DEEP_YEARLY : PRICE_DEEP_MONTHLY;
+    promptLogin({
+      reason: v2(lang, "tierDeepCta"),
+      mode: "signup",
+      onSuccess: (u) => startCheckout(priceId, u),
+    });
+  }
+
+  function clickBasic() {
+    // Basic is free — sign-up just gets them an account, then we
+    // bounce them to the homepage to start searching.
+    promptLogin({
+      reason: v2(lang, "tierBasicCta"),
+      mode: "signup",
+      onSuccess: () => {
+        window.location.href = "/";
+      },
+    });
+  }
 
   const tiers: TierData[] = [
     {
@@ -463,7 +550,7 @@ function PricingTiers({ billing }: { billing: Billing }) {
       ctaYearly: v2(lang, "tierBasicCta"),
       trust: null,
       features: v2(lang, "tierBasicFeatures").split("¶"),
-      onCta: () => promptLogin(v2(lang, "tierBasicCta")),
+      onCta: clickBasic,
     },
     {
       name: "Clear",
@@ -478,7 +565,7 @@ function PricingTiers({ billing }: { billing: Billing }) {
       ctaYearly: v2(lang, "tierClearCtaYearly"),
       trust: v2(lang, "tierClearTrust"),
       features: v2(lang, "tierClearFeatures").split("¶"),
-      onCta: () => promptLogin(v2(lang, "tierClearCta")),
+      onCta: clickClear,
     },
     {
       name: "Deep",
@@ -493,7 +580,7 @@ function PricingTiers({ billing }: { billing: Billing }) {
       ctaYearly: v2(lang, "tierDeepCta"),
       trust: null,
       features: v2(lang, "tierDeepFeatures").split("¶"),
-      onCta: () => promptLogin(v2(lang, "tierDeepCta")),
+      onCta: clickDeep,
     },
   ];
 

@@ -127,6 +127,7 @@ export function LoginModalV2() {
     showLoginModal,
     setShowLoginModal,
     loginReason,
+    loginMode,
     signInWithGoogle,
     signInWithEmail,
     signUpWithEmail,
@@ -141,15 +142,19 @@ export function LoginModalV2() {
   const [busy, setBusy] = useState(false);
   const [errorKey, setErrorKey] = useState<string>("");
 
-  // Reset transient state every time the modal opens fresh
+  // Reset transient state every time the modal opens fresh.
+  // Initial mode comes from auth-context (caller-supplied) — pricing
+  // tier CTAs hint "signup" so first-time visitors aren't greeted
+  // with "Welcome BACK", which the beta tester rightly flagged as
+  // confusing for someone who's never visited before.
   useEffect(() => {
     if (showLoginModal) {
-      setMode("signin");
+      setMode(loginMode);
       setBusy(false);
       setErrorKey("");
       setShowPwd(false);
     }
-  }, [showLoginModal]);
+  }, [showLoginModal, loginMode]);
 
   // ESC closes
   useEffect(() => {
