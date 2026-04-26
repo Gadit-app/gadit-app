@@ -280,6 +280,27 @@ export interface V2Strings {
   accountSignOut: string;
   accountDeleteAccount: string;
 
+  // ── Report Modal (Screen 11) ────────────────────────────────
+  reportEyebrow: string;
+  reportTitle: string;
+  reportTellMore: string;
+  reportTellMorePh: string;
+  reportSend: string;
+  reportSending: string;
+  reportThanks: string;
+  reportError: string;
+  // 10 category labels (keys map 1:1 to /api/report-error categories)
+  reportCatIncorrectDefinition: string;
+  reportCatWrongEtymology: string;
+  reportCatBadExample: string;
+  reportCatKidsExplanation: string;
+  reportCatIdiomIssue: string;
+  reportCatWrongImage: string;
+  reportCatQuizWrongAnswer: string;
+  reportCatComposeFeedback: string;
+  reportCatCompareResult: string;
+  reportCatSomethingElse: string;
+
   // ── Result V2: shared labels ────────────────────────────────
   origin: string;
   historyNote: string;
@@ -568,6 +589,26 @@ const en: V2Strings = {
   accountSignOut: "Sign out",
   accountDeleteAccount: "Delete account",
 
+  // Report Modal (Screen 11)
+  reportEyebrow: "Report an issue",
+  reportTitle: "What's wrong?",
+  reportTellMore: "Tell us more",
+  reportTellMorePh: "Optional. The more specific, the faster we can fix it.",
+  reportSend: "Send report",
+  reportSending: "Sending…",
+  reportThanks: "Thanks — we got it.",
+  reportError: "Could not send. Try again in a moment.",
+  reportCatIncorrectDefinition: "Incorrect definition",
+  reportCatWrongEtymology: "Wrong etymology",
+  reportCatBadExample: "Bad example sentence",
+  reportCatKidsExplanation: "Kids explanation issue",
+  reportCatIdiomIssue: "Idiom issue",
+  reportCatWrongImage: "Wrong image",
+  reportCatQuizWrongAnswer: "Quiz: wrong answer marked",
+  reportCatComposeFeedback: "Compose feedback issue",
+  reportCatCompareResult: "Compare result issue",
+  reportCatSomethingElse: "Something else",
+
   origin: "Origin",
   historyNote: "History note",
   throughTime: "Through time",
@@ -855,6 +896,26 @@ const he: V2Strings = {
   accountSignOut: "התנתקות",
   accountDeleteAccount: "מחיקת חשבון",
 
+  // Report Modal (Screen 11)
+  reportEyebrow: "דיווח על בעיה",
+  reportTitle: "מה לא בסדר?",
+  reportTellMore: "ספרו עוד",
+  reportTellMorePh: "אופציונלי. ככל שמפורט יותר, כך נתקן מהר יותר.",
+  reportSend: "שליחת דיווח",
+  reportSending: "שולחים…",
+  reportThanks: "תודה — קיבלנו.",
+  reportError: "לא הצלחנו לשלוח. נסו שוב עוד רגע.",
+  reportCatIncorrectDefinition: "הגדרה שגויה",
+  reportCatWrongEtymology: "אטימולוגיה שגויה",
+  reportCatBadExample: "משפט דוגמה לא טוב",
+  reportCatKidsExplanation: "בעיה בהסבר לילדים",
+  reportCatIdiomIssue: "בעיה בניב",
+  reportCatWrongImage: "תמונה שגויה",
+  reportCatQuizWrongAnswer: "תרגול: סומנה תשובה שגויה",
+  reportCatComposeFeedback: "בעיה במשוב על משפט",
+  reportCatCompareResult: "בעיה בהשוואה",
+  reportCatSomethingElse: "משהו אחר",
+
   origin: "מקור",
   historyNote: "הערה היסטורית",
   throughTime: "דרך הזמן",
@@ -1139,6 +1200,26 @@ const ar: V2Strings = {
   accountChangeEmail: "تغيير البريد",
   accountSignOut: "تسجيل الخروج",
   accountDeleteAccount: "حذف الحساب",
+
+  // Report Modal (Screen 11)
+  reportEyebrow: "الإبلاغ عن مشكلة",
+  reportTitle: "ما الخطأ؟",
+  reportTellMore: "أخبرنا أكثر",
+  reportTellMorePh: "اختياري. كلما زادت التفاصيل، أسرعنا في الإصلاح.",
+  reportSend: "إرسال البلاغ",
+  reportSending: "جاري الإرسال…",
+  reportThanks: "شكرًا — وصلنا.",
+  reportError: "تعذّر الإرسال. حاول مجددًا بعد قليل.",
+  reportCatIncorrectDefinition: "تعريف غير صحيح",
+  reportCatWrongEtymology: "أصل خاطئ",
+  reportCatBadExample: "جملة مثال ضعيفة",
+  reportCatKidsExplanation: "مشكلة في شرح الأطفال",
+  reportCatIdiomIssue: "مشكلة في تعبير",
+  reportCatWrongImage: "صورة غير ملائمة",
+  reportCatQuizWrongAnswer: "اختبار: إجابة صحيحة وُضع عليها خطأ",
+  reportCatComposeFeedback: "مشكلة في تقييم الجملة",
+  reportCatCompareResult: "مشكلة في نتيجة المقارنة",
+  reportCatSomethingElse: "شيء آخر",
 
   origin: "الأصل",
   historyNote: "ملاحظة تاريخية",

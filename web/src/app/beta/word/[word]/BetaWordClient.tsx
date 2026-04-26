@@ -29,6 +29,10 @@ import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
 import {
+  ReportModalV2,
+  type ReportContext,
+} from "@/components/design/ReportModalV2";
+import {
   ResultView,
   type WordResult,
   type Plan,
@@ -86,6 +90,9 @@ export function BetaWordClient({ initialWord }: { initialWord: string }) {
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
+  const [reportContext, setReportContext] = useState<ReportContext | null>(
+    null
+  );
 
   // Plan as the API gates it: anonymous → "basic", auth-context → server.
   const plan: Plan = authPlan ?? "basic";
@@ -446,6 +453,23 @@ export function BetaWordClient({ initialWord }: { initialWord: string }) {
               onRegenerate={handleGenerate}
               onSaveImage={handleSave}
               onAction={handleAction}
+              onReport={(section) => {
+                // Map ResultView's section ids to Report Modal default
+                // categories so the user starts with the most-likely
+                // category pre-ticked.
+                const presetMap: Record<string, string> = {
+                  etymology: "etymology",
+                  idioms: "idioms",
+                };
+                const preset = section.startsWith("meaning-")
+                  ? "definition"
+                  : presetMap[section] ?? "";
+                setReportContext({
+                  word: result.word,
+                  contextSnapshot: { section, result },
+                  defaultCategories: preset ? [preset] : [],
+                });
+              }}
             />
           )}
         </main>
@@ -461,6 +485,12 @@ export function BetaWordClient({ initialWord }: { initialWord: string }) {
           meaning={result.meanings[0]?.meaning ?? ""}
         />
       )}
+
+      <ReportModalV2
+        open={reportContext !== null}
+        onClose={() => setReportContext(null)}
+        context={reportContext ?? undefined}
+      />
 
       {result && (
         <QuizModalV2
