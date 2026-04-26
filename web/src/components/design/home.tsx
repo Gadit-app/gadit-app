@@ -60,8 +60,12 @@ export function HomeHero() {
   return (
     <section
       style={{
-        paddingBlockStart: "clamp(56px, 12vw, 120px)",
-        paddingBlockEnd: "clamp(28px, 6vw, 60px)",
+        // Was 12vw → 120px cap, which left an enormous void above the
+        // headline on a 32" monitor at 100% zoom and pushed Dream
+        // (the preview) below the fold. Tightened so the hero fits in
+        // the first viewport-half on any reasonable display.
+        paddingBlockStart: "clamp(28px, 5vw, 56px)",
+        paddingBlockEnd: "clamp(20px, 3vw, 36px)",
       }}
     >
       <div
@@ -187,17 +191,20 @@ export function HomeSearch() {
           borderRadius: 22,
           padding: 8,
           boxShadow:
-            "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.25), " +
-            "0 0 0 6px oklch(0.72 0.19 245 / 0.06), " +
-            "0 30px 60px -20px oklch(0.5 0.2 250 / 0.4)",
+            "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.4), " +
+            "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
+            "0 30px 60px -20px oklch(0.5 0.2 250 / 0.45)",
           backdropFilter: "blur(18px)",
         }}
       >
+        {/* Inner cradle is warm paper (matches result cards & pricing
+            tiers) so the search field reads as a confident, tactile
+            CTA on the dark canvas instead of disappearing into it. */}
         <div
           className="flex items-center gap-3"
           style={{
             padding: "18px 22px",
-            background: "oklch(0.16 0.05 265 / 0.6)",
+            background: "var(--gd-paper-50)",
             borderRadius: 16,
           }}
         >
@@ -206,7 +213,7 @@ export function HomeSearch() {
             height="22"
             viewBox="0 0 22 22"
             fill="none"
-            style={{ color: "oklch(0.82 0.1 245)", flexShrink: 0 }}
+            style={{ color: "var(--gd-electric-deep)", flexShrink: 0 }}
           >
             <circle
               cx="10"
@@ -224,7 +231,10 @@ export function HomeSearch() {
           </svg>
           <input
             className="flex-1 bg-transparent outline-none gd-font-sans-ui"
-            style={{ color: "white", fontSize: "clamp(16px, 1.6vw, 19px)" }}
+            style={{
+              color: "var(--gd-ink-900)",
+              fontSize: "clamp(16px, 1.6vw, 19px)",
+            }}
             placeholder={v2(lang, "searchPlaceholderHome")}
             dir={isRtl ? "rtl" : "ltr"}
             value={query}
@@ -241,11 +251,11 @@ export function HomeSearch() {
             className="gd-font-sans-ui flex items-center gap-1.5"
             style={{
               fontSize: 12.5,
-              color: "oklch(0.82 0.1 245)",
+              color: "oklch(0.5 0.2 250)",
               padding: "7px 12px",
               borderRadius: 999,
-              background: "oklch(0.72 0.19 245 / 0.14)",
-              boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.25)",
+              background: "oklch(0.72 0.19 245 / 0.1)",
+              boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.35)",
             }}
             onClick={handleExplain}
           >

@@ -19,11 +19,11 @@
     </g>
   </defs>
 
-  <g opacity=".95">
-    <use href="#featured" transform="translate(92 118) scale(.9)"/>
-    <use href="#featured" transform="translate(745 238) scale(.82) rotate(12)"/>
-    <use href="#featured" transform="translate(1032 462) scale(.72) rotate(-8)"/>
-    <use href="#featured" transform="translate(566 684) scale(.86) rotate(18)"/>
+  <g opacity=".55">
+    <use href="#featured" transform="translate(92 118) scale(.55)"/>
+    <use href="#featured" transform="translate(745 238) scale(.5) rotate(12)"/>
+    <use href="#featured" transform="translate(1032 462) scale(.44) rotate(-8)"/>
+    <use href="#featured" transform="translate(566 684) scale(.52) rotate(18)"/>
   </g>
 
   <g opacity=".9">

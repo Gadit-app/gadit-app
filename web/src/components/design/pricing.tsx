@@ -237,14 +237,14 @@ function TierCard({
         // gd-card gives us the warm-paper surface + outer shadow; we add
         // a stronger blue ring for the highlighted tier on top.
         // flex-col lets the features <ul> grow to fill remaining space,
-        // which keeps the price row at the same Y across cards even
+        // which keeps the CTA pinned at the same Y across cards even
         // when feature counts differ.
-        // The highlighted (Clear) tier also gets a slight scale + extra
-        // vertical padding so it physically rises above its siblings —
-        // matches the "Most popular" treatment Stripe / Linear use.
-        padding: tier.highlight
-          ? "clamp(34px, 4vw, 44px) clamp(24px, 2.6vw, 30px) clamp(36px, 4vw, 40px)"
-          : "clamp(26px, 3vw, 34px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 30px)",
+        // All three cards share identical padding so the inner content
+        // grid (name → tagline → pitch → price → features → CTA) lines
+        // up row-by-row across the strip. Clear only differs in scale +
+        // glow ring — this preserves the "Most popular" lift that Stripe
+        // and Linear use without breaking row alignment.
+        padding: "clamp(28px, 3vw, 36px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 32px)",
         transform: tier.highlight ? "scale(1.04)" : "none",
         zIndex: tier.highlight ? 1 : 0,
         ...(tier.highlight
@@ -306,13 +306,16 @@ function TierCard({
           {tier.tagline}
         </div>
       </div>
-      {/* Pitch — centered */}
+      {/* Pitch — centered. Reserved height of 2 lines so the price row
+          below sits at the same Y across all three cards even though
+          Basic's pitch is one line while Clear/Deep's are two. */}
       <p
         className="gd-font-sans-ui mt-3 text-center"
         style={{
           fontSize: 13.5,
           lineHeight: 1.5,
           color: "var(--gd-ink-500)",
+          minHeight: "calc(13.5px * 1.5 * 2)",
         }}
       >
         {tier.pitch}

@@ -642,10 +642,39 @@ export function AccountV2() {
         method: "POST",
         headers: { Authorization: `Bearer ${idToken}` },
       });
-      const json = (await res.json()) as { url?: string };
-      if (json.url) window.location.href = json.url;
-    } catch {
-      // silent — Stripe portal failures are rare; user can retry
+      const json = (await res.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+        message?: string;
+        details?: string;
+      };
+      if (json.url) {
+        window.location.href = json.url;
+        return;
+      }
+      console.error("Portal error:", { status: res.status, body: json });
+      const friendly =
+        json.error === "no_subscription"
+          ? lang === "he"
+            ? "לא נמצא חשבון Stripe פעיל למשתמש הזה."
+            : lang === "ar"
+              ? "لا يوجد حساب Stripe نشط لهذا المستخدم."
+              : "No active Stripe subscription found for this account."
+          : lang === "he"
+            ? "לא הצלחנו לפתוח את עמוד הבילינג. נסה שוב."
+            : lang === "ar"
+              ? "تعذر فتح صفحة الفوترة. حاول مرة أخرى."
+              : "Could not open the billing portal. Please try again.";
+      window.alert(friendly);
+    } catch (err) {
+      console.error("Portal request failed:", err);
+      window.alert(
+        lang === "he"
+          ? "לא הצלחנו לפתוח את עמוד הבילינג. נסה שוב."
+          : lang === "ar"
+            ? "تعذر فتح صفحة الفوترة. حاول مرة أخرى."
+            : "Could not open the billing portal. Please try again."
+      );
     }
   }
 
