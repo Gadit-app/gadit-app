@@ -47,20 +47,36 @@ export function GaditMark({ size = 28 }: { size?: number }) {
 }
 
 // ─── Wordmark ──────────────────────────────────────────────────────
-// GaditMark + the word "Gadit" in Fraunces. Header default.
-// When the new SVG wordmark from the design pass arrives, swap the span
-// for an <svg> import and keep this same export name.
-export function Wordmark() {
+// The Gadit wordmark — open-G + electric-blue "it" + starburst tittle,
+// sourced from web/public/wordmark-{compact,full}.svg.
+//
+// Default variant is "compact": tightened glow filters for crisp
+// rendering at Header sizes (28–40px high). Use variant="full" for
+// hero/marketing surfaces where the heavier glow has room to breathe.
+//
+// Height is the only prop — width auto-scales from the SVG's intrinsic
+// aspect ratio (~620:240). 28px height ≈ 72px wide, which matches the
+// rhythm we had with the legacy GaditMark + Geist text.
+export function Wordmark({
+  variant = "compact",
+  height = 28,
+}: {
+  variant?: "compact" | "full";
+  height?: number;
+}) {
+  const src =
+    variant === "full" ? "/wordmark-full.svg" : "/wordmark-compact.svg";
   return (
-    <div className="flex items-center gap-2.5">
-      <GaditMark size={26} />
-      <span
-        className="gd-font-display tracking-tight"
-        style={{ fontSize: 22, fontWeight: 500 }}
-      >
-        Gadit
-      </span>
-    </div>
+    // Use a plain <img> tag so the SVG's filter chains and gradients
+    // render exactly as authored. Inlining the SVG via fetch+dangerouslySet
+    // would give us style hooks but cost a flash of unstyled content; the
+    // SVG is small (~5KB) and gets cached aggressively.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt="Gadit"
+      style={{ height, width: "auto", display: "block" }}
+    />
   );
 }
 

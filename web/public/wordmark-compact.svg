@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 240" fill="none" role="img" aria-label="Gadit">
+  <defs>
+    <linearGradient id="gd-it-c" x1="0" y1="50" x2="0" y2="195" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="oklch(0.78 0.17 245)"></stop>
+      <stop offset="1" stop-color="oklch(0.62 0.2 250)"></stop>
+    </linearGradient>
+
+    
+    <filter id="gd-glow-white-c" x="-15%" y="-20%" width="130%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b1"></feGaussianBlur>
+      <feColorMatrix in="b1" type="matrix" values="0.85 0 0 0 0.10&#xA;                0.85 0 0 0 0.18&#xA;                0.85 0 0 0 0.45&#xA;                0    0 0 0.7 0" result="cb1"></feColorMatrix>
+      <feMerge>
+        <feMergeNode in="cb1"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+
+    <filter id="gd-glow-blue-c" x="-20%" y="-25%" width="140%" height="150%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.8" result="b1"></feGaussianBlur>
+      <feColorMatrix in="b1" type="matrix" values="0.20 0 0 0 0.15&#xA;                0.40 0 0 0 0.30&#xA;                1.30 0 0 0 0.85&#xA;                0    0 0 0.7 0" result="cb1"></feColorMatrix>
+      <feMerge>
+        <feMergeNode in="cb1"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+
+    <filter id="gd-glow-star-c" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b1"></feGaussianBlur>
+      <feColorMatrix in="b1" type="matrix" values="0.45 0 0 0 0.25&#xA;                0.60 0 0 0 0.45&#xA;                1.50 0 0 0 1.00&#xA;                0    0 0 0.85 0" result="cb1"></feColorMatrix>
+      <feMerge>
+        <feMergeNode in="cb1"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  
+  <g filter="url(#gd-glow-white-c)">
+    <path d="&#xA;        M 138 50&#xA;        C 96 50, 60 86, 60 130&#xA;        C 60 174, 96 210, 138 210&#xA;        C 162 210, 184 198, 198 178&#xA;        L 198 158&#xA;        L 174 158&#xA;        L 174 168&#xA;        C 165 178, 153 184, 138 184&#xA;        C 110 184, 88 161, 88 130&#xA;        C 88 99, 110 76, 138 76&#xA;        C 153 76, 165 82, 174 92&#xA;        L 192 74&#xA;        C 178 60, 159 50, 138 50&#xA;        Z" fill="white"></path>
+    <rect x="174" y="124" width="24" height="38" rx="2" fill="white"></rect>
+
+    <path d="&#xA;        M 270 100&#xA;        C 250 100, 234 116, 234 138&#xA;        C 234 160, 250 176, 270 176&#xA;        C 282 176, 292 170, 298 162&#xA;        L 298 174&#xA;        L 320 174&#xA;        L 320 102&#xA;        L 298 102&#xA;        L 298 114&#xA;        C 292 106, 282 100, 270 100&#xA;        Z&#xA;        M 277 122&#xA;        C 287 122, 296 130, 296 138&#xA;        C 296 146, 287 154, 277 154&#xA;        C 267 154, 258 146, 258 138&#xA;        C 258 130, 267 122, 277 122&#xA;        Z" fill="white" fill-rule="evenodd"></path>
+
+    <path d="&#xA;        M 408 60&#xA;        L 408 114&#xA;        C 402 106, 392 100, 380 100&#xA;        C 360 100, 344 118, 344 138&#xA;        C 344 158, 360 176, 380 176&#xA;        C 392 176, 402 170, 408 162&#xA;        L 408 174&#xA;        L 430 174&#xA;        L 430 60&#xA;        Z&#xA;        M 386 122&#xA;        C 396 122, 406 130, 406 138&#xA;        C 406 146, 396 154, 386 154&#xA;        C 376 154, 367 146, 367 138&#xA;        C 367 130, 376 122, 386 122&#xA;        Z" fill="white" fill-rule="evenodd"></path>
+  </g>
+
+  
+  <g filter="url(#gd-glow-blue-c)">
+    <rect x="464" y="100" width="24" height="74" rx="3" fill="url(#gd-it-c)"></rect>
+    <path d="&#xA;        M 524 76&#xA;        L 548 76&#xA;        L 548 102&#xA;        L 572 102&#xA;        L 572 122&#xA;        L 548 122&#xA;        L 548 152&#xA;        C 548 162, 553 168, 562 168&#xA;        C 566 168, 570 167, 573 165&#xA;        L 580 184&#xA;        C 574 188, 566 191, 556 191&#xA;        C 538 191, 524 178, 524 156&#xA;        L 524 122&#xA;        L 510 122&#xA;        L 510 102&#xA;        L 524 102&#xA;        Z" fill="url(#gd-it-c)"></path>
+  </g>
+
+  
+  <g filter="url(#gd-glow-star-c)" transform="translate(476 64)">
+    <defs>
+      <radialGradient id="gd-star-core-c" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#ffffff"></stop>
+        <stop offset="0.45" stop-color="#e8f0ff"></stop>
+        <stop offset="1" stop-color="oklch(0.78 0.17 245)"></stop>
+      </radialGradient>
+    </defs>
+    <path d="M 0 -30 L 5 0 L 0 30 L -5 0 Z" fill="url(#gd-star-core-c)"></path>
+    <path d="M -30 0 L 0 -5 L 30 0 L 0 5 Z" fill="url(#gd-star-core-c)"></path>
+    <circle r="6" fill="#ffffff"></circle>
+  </g>
+</svg>
