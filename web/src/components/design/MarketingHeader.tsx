@@ -235,7 +235,11 @@ export function MarketingHeader() {
           ) : (
             <button
               type="button"
-              onClick={() => promptLogin(v2(lang, "signIn"))}
+              // No `reason` here — the modal title already says "Sign in",
+              // so passing the same string as a reason would duplicate it.
+              // Reasons are for context-specific prompts ("save to notebook",
+              // "start your trial"), not for generic header sign-in clicks.
+              onClick={() => promptLogin()}
               className="gd-font-sans-ui font-medium transition-colors"
               style={{
                 fontSize: 13,

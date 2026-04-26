@@ -306,15 +306,27 @@ function TierCard({
           card. Inline style + an explicit dir on the wrapper forces
           centering regardless of the cascade. */}
       <div style={{ textAlign: "center" }}>
+        {/* Tier name is the dominant brand element on the card —
+            larger than the price (which is just a number). The tier
+            name is what the user remembers. Was 22px → now ~38px,
+            using the display serif so it carries the same weight as
+            other display headers on the site. */}
         <div
-          className="gd-font-sans-ui font-semibold"
-          style={{ fontSize: 22, color: "var(--gd-ink-900)" }}
+          className="gd-font-display"
+          style={{
+            fontSize: "clamp(32px, 3.6vw, 40px)",
+            lineHeight: 1,
+            color: "var(--gd-ink-900)",
+            fontVariationSettings: '"opsz" 60',
+            fontWeight: 500,
+            letterSpacing: "-0.02em",
+          }}
         >
           {tier.name}
         </div>
         <div
-          className="gd-font-sans-ui italic mt-1"
-          style={{ fontSize: 12, color: "oklch(0.5 0.18 250)" }}
+          className="gd-font-sans-ui italic mt-2"
+          style={{ fontSize: 13, color: "oklch(0.5 0.18 250)" }}
         >
           {tier.tagline}
         </div>
@@ -335,12 +347,15 @@ function TierCard({
         {tier.pitch}
       </p>
 
-      {/* Price — centered, directly under the tagline/pitch */}
+      {/* Price — centered, directly under the tagline/pitch.
+          Was 60px → 36px now that the tier name is the visual lead.
+          The price is supporting info; the user has already decided
+          on tier by the time their eye reaches the number. */}
       <div className="mt-6 flex items-baseline justify-center gap-1.5">
         <span
           className={priceFontClass}
           style={{
-            fontSize: 60,
+            fontSize: 36,
             lineHeight: 1,
             color: "var(--gd-ink-900)",
             ...priceFontStyle,
@@ -808,8 +823,7 @@ function FAQ() {
 // the homepage teaser is one decision (start free? subscribe?), not
 // a full pricing comparison.
 export function HomePricingTeaser() {
-  const { lang, dir } = useLang();
-  const isRtl = dir === "rtl";
+  const { lang } = useLang();
   const script: Script = lang === "he" ? "he" : lang === "ar" ? "ar" : "latin";
   const titleFont = displayFontFor(script);
 
@@ -822,19 +836,23 @@ export function HomePricingTeaser() {
           "clamp(50px, 8vw, 100px) clamp(16px, 3vw, 24px) clamp(40px, 6vw, 80px)",
       }}
     >
-      <div className={`mb-8 ${isRtl ? "text-right" : ""}`}>
+      {/* Centered section header — same convention as ValueProps. */}
+      <div className="mb-12 text-center">
         <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
           {v2(lang, "pricingEyebrow")}
         </Eyebrow>
         <div
           className={titleFont}
           style={{
-            fontSize: "clamp(26px, 3vw, 34px)",
-            color: "oklch(0.95 0.008 265)",
-            marginTop: 6,
+            fontSize: "clamp(34px, 4.4vw, 52px)",
+            lineHeight: 1.12,
+            color: "white",
+            marginTop: 12,
+            maxWidth: 820,
+            marginInline: "auto",
             ...(script === "latin"
               ? {
-                  fontVariationSettings: '"opsz" 48',
+                  fontVariationSettings: '"opsz" 96',
                   fontStyle: "italic",
                 }
               : {}),

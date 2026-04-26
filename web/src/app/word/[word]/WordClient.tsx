@@ -156,7 +156,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         // effect re-fires the fetch. If the user cancels the modal,
         // the page falls back to a friendly "sign in to search"
         // notice instead of an infinite skeleton.
-        promptLogin(v2(lang, "signIn"));
+        // Generic prompt — same rationale as MarketingHeader.tsx:
+        // "Sign in" is already the modal title, no need to repeat it
+        // as a reason line.
+        promptLogin();
         setErrorMsg(v2(lang, "signIn"));
         setLoading(false);
         return;

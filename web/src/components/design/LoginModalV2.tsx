@@ -434,7 +434,13 @@ export function LoginModalV2() {
               disabled={busy}
               className="w-full gd-font-sans-ui outline-none transition-shadow"
               style={{
-                background: "oklch(0 0 0 / 0.025)",
+                // Solid white fill instead of a translucent dark tint.
+                // On the new electric-blue card, the previous near-
+                // transparent input read as "decorative outline only" —
+                // users couldn't tell the field was tappable. Pure white
+                // matches the Google button above and gives the form a
+                // clear "input here" affordance.
+                background: "white",
                 color: "var(--gd-ink-900)",
                 // 16px floor — anything below triggers iOS Safari
                 // auto-zoom, which on a centered modal pushes the
@@ -477,7 +483,8 @@ export function LoginModalV2() {
                 disabled={busy}
                 className="w-full gd-font-sans-ui outline-none transition-shadow"
                 style={{
-                  background: "oklch(0 0 0 / 0.025)",
+                  // Solid white — same rationale as the email input.
+                  background: "white",
                   color: "var(--gd-ink-900)",
                   // 16px floor — see email input above. iOS auto-zoom
                   // hits password fields too.

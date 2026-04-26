@@ -174,7 +174,14 @@ export function HomeSearch() {
     const trimmed = word.trim();
     if (!trimmed) return;
     if (!user) {
-      promptLogin(v2(lang, "signIn"));
+      // Sign-in is required to search; once logged in, send them to
+      // the word page they tried to reach.
+      promptLogin({
+        mode: "signin",
+        onSuccess: () => {
+          router.push(`/word/${encodeURIComponent(trimmed)}`);
+        },
+      });
       return;
     }
     router.push(`/word/${encodeURIComponent(trimmed)}`);
@@ -582,21 +589,26 @@ export function ValueProps() {
           "clamp(64px, 10vw, 130px) clamp(16px, 3vw, 24px) clamp(30px, 5vw, 60px)",
       }}
     >
-      <div className={`mb-10 ${isRtl ? "text-right" : ""}`}>
+      {/* Section header — centered, larger, more presence. Landing-
+          page convention is centered headers (Stripe / Linear /
+          Notion all do this); right-aligned felt off-balance against
+          the centered card grid below. */}
+      <div className="mb-12 text-center">
         <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
           {v2(lang, "valuePropsEyebrow")}
         </Eyebrow>
         <h2
           className={titleFontClass}
           style={{
-            fontSize: "clamp(28px, 3.4vw, 40px)",
-            lineHeight: 1.15,
-            color: "oklch(0.95 0.008 265)",
-            marginTop: 8,
-            maxWidth: 760,
+            fontSize: "clamp(34px, 4.4vw, 52px)",
+            lineHeight: 1.12,
+            color: "white",
+            marginTop: 12,
+            maxWidth: 820,
+            marginInline: "auto",
             ...(script === "latin"
               ? {
-                  fontVariationSettings: '"opsz" 60',
+                  fontVariationSettings: '"opsz" 96',
                   fontStyle: "italic",
                 }
               : {}),
