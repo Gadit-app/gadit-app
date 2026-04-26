@@ -98,13 +98,19 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // Plan as the API gates it: anonymous → "basic", auth-context → server.
   const plan: Plan = authPlan ?? "basic";
 
-  // Guard against double-firing in dev StrictMode
+  // Guard against double-firing in dev StrictMode. Key includes the
+  // user uid so that an anonymous → signed-in transition retriggers
+  // the fetch (otherwise the page sits at a permanent skeleton-with-
+  // login-modal loop: visitor lands on /word/X, /api/define returns
+  // 401, login modal opens, visitor signs in — but nothing fires the
+  // fetch again, so they stare at an empty page).
   const fetchedFor = useRef<string | null>(null);
 
   useEffect(() => {
     if (!initialWord) return;
-    if (fetchedFor.current === initialWord) return;
-    fetchedFor.current = initialWord;
+    const key = `${initialWord}::${user?.uid ?? "anon"}`;
+    if (fetchedFor.current === key) return;
+    fetchedFor.current = key;
 
     let cancelled = false;
 
@@ -145,7 +151,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       if (cancelled) return;
 
       if (res.status === 401) {
+        // Open the login modal; once the user authenticates, the
+        // fetchedFor key (which embeds user.uid) changes and this
+        // effect re-fires the fetch. If the user cancels the modal,
+        // the page falls back to a friendly "sign in to search"
+        // notice instead of an infinite skeleton.
         promptLogin(v2(lang, "signIn"));
+        setErrorMsg(v2(lang, "signIn"));
         setLoading(false);
         return;
       }
