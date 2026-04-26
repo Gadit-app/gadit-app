@@ -21,6 +21,8 @@
  */
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
@@ -138,11 +140,14 @@ export function HomeHero() {
 // ─── HomeSearch ──────────────────────────────────────────────────
 // The big homepage search bar — visually distinct from Screen 1's
 // compact persistent search. Glowing electric-blue cradle, suggestion
-// chips below.
+// chips below. Signed-out users still see the input but submit opens
+// login; signed-in users navigate straight to /beta/word/[word].
 export function HomeSearch() {
   const { lang, dir } = useLang();
-  const { promptLogin } = useAuth();
+  const { user, promptLogin } = useAuth();
+  const router = useRouter();
   const isRtl = dir === "rtl";
+  const [query, setQuery] = useState("");
 
   // Suggestion chips per locale — multilingual receipt by design.
   const suggestions: string[] =
@@ -152,10 +157,23 @@ export function HomeSearch() {
         ? ["حُلم", "حنين", "ephemeral", "serendipity"]
         : ["dream", "ephemeral", "serendipity", "חלום"];
 
+  function go(word: string) {
+    const trimmed = word.trim();
+    if (!trimmed) return;
+    if (!user) {
+      promptLogin(v2(lang, "signIn"));
+      return;
+    }
+    router.push(`/beta/word/${encodeURIComponent(trimmed)}`);
+  }
+
   function handleExplain() {
-    // V2 search is auth-gated like the legacy one — opens login modal.
-    // Once the user signs in, future iterations will route to /word/[w].
-    promptLogin(v2(lang, "explain"));
+    go(query || suggestions[0]);
+  }
+
+  function handleChip(s: string) {
+    setQuery(s);
+    go(s);
   }
 
   return (
@@ -209,8 +227,14 @@ export function HomeSearch() {
             style={{ color: "white", fontSize: "clamp(16px, 1.6vw, 19px)" }}
             placeholder={v2(lang, "searchPlaceholderHome")}
             dir={isRtl ? "rtl" : "ltr"}
-            onClick={() => promptLogin(v2(lang, "signIn"))}
-            readOnly
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleExplain();
+              }
+            }}
           />
           <button
             type="button"
@@ -223,7 +247,7 @@ export function HomeSearch() {
               background: "oklch(0.72 0.19 245 / 0.14)",
               boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.25)",
             }}
-            onClick={() => promptLogin(v2(lang, "signIn"))}
+            onClick={handleExplain}
           >
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
               <path
@@ -285,7 +309,7 @@ export function HomeSearch() {
             <button
               key={s}
               type="button"
-              onClick={() => promptLogin(v2(lang, "signIn"))}
+              onClick={() => handleChip(s)}
               className={`${fontClass} transition-colors hover:bg-white/10`}
               style={{
                 fontSize: 14,
