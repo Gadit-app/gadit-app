@@ -166,11 +166,16 @@ function CardFront({
         <h2
           className={fontDisplay(script)}
           style={{
-            fontSize: "clamp(56px, 9vw, 88px)",
+            // Floor lowered (was 56px) and overflowWrap added so long
+            // compound words don't overflow the practice card on
+            // narrow phones.
+            fontSize: "clamp(40px, 9vw, 88px)",
             lineHeight: 1.05,
             color: "oklch(0.4 0.14 250)",
             fontStyle: script === "latin" ? "italic" : "normal",
             letterSpacing: script === "latin" ? "-0.02em" : 0,
+            overflowWrap: "anywhere",
+            textAlign: "center",
             ...(script === "latin"
               ? {
                   fontVariationSettings: '"opsz" 144, "SOFT" 80',

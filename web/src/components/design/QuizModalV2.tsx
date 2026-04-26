@@ -530,10 +530,11 @@ export function QuizModalV2({
           aria-label={v2(lang, "loginCloseAria")}
           style={{
             position: "absolute",
-            insetBlockStart: 14,
-            insetInlineEnd: 14,
-            width: 30,
-            height: 30,
+            insetBlockStart: 8,
+            insetInlineEnd: 8,
+            // 44×44 hit area for mobile thumb tap.
+            width: 44,
+            height: 44,
             borderRadius: 999,
             display: "inline-flex",
             alignItems: "center",

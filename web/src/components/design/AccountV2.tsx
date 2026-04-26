@@ -542,10 +542,13 @@ function AccountHero({ data }: { data: AccountData }) {
       <h1
         className={fontDisplay(script)}
         style={{
-          fontSize: "clamp(38px, 6vw, 60px)",
+          // Floor lowered (was 38px) so long welcome strings like
+          // "המרחב של gadibenlavi" don't overflow on a 320px viewport.
+          fontSize: "clamp(28px, 6vw, 60px)",
           color: "oklch(0.97 0.008 265)",
           marginTop: 12,
           lineHeight: 1.05,
+          overflowWrap: "anywhere",
           ...(script === "latin"
             ? {
                 fontVariationSettings: '"opsz" 144, "SOFT" 80',

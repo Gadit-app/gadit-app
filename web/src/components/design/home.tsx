@@ -81,8 +81,11 @@ export function HomeHero() {
           className="gd-font-sans-ui inline-flex items-center gap-2 mb-6"
           style={{
             fontSize: 11.5,
-            letterSpacing: "0.16em",
-            textTransform: "uppercase",
+            // Hebrew/Arabic don't have casing; tracking is jarring on
+            // those scripts (creates artificial gaps between letters).
+            // Latin scripts keep the uppercase + tracked treatment.
+            letterSpacing: script === "latin" ? "0.16em" : "0",
+            textTransform: script === "latin" ? "uppercase" : "none",
             color: "oklch(0.85 0.05 245)",
             fontWeight: 600,
             padding: "5px 12px",
@@ -205,8 +208,13 @@ export function HomeSearch() {
         {/* Inner cradle is warm paper (matches result cards & pricing
             tiers) so the search field reads as a confident, tactile
             CTA on the dark canvas instead of disappearing into it. */}
+        {/* Cradle row: icon + input own one row, the two CTAs sit on a
+            second row at <480px so nothing clips on a 320px iPhone SE.
+            Above 480px it's all on one line. flex-wrap + minWidth on
+            the input let the input shrink instead of pushing buttons
+            off-canvas. */}
         <div
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 flex-wrap sm:flex-nowrap"
           style={{
             padding: "18px 22px",
             background: "var(--gd-paper-50)",
@@ -235,9 +243,13 @@ export function HomeSearch() {
             />
           </svg>
           <input
-            className="flex-1 bg-transparent outline-none gd-font-sans-ui"
+            className="bg-transparent outline-none gd-font-sans-ui"
             style={{
+              flex: "1 1 200px",
+              minWidth: 0,
               color: "var(--gd-ink-900)",
+              // 16px floor — prevents iOS Safari from auto-zooming
+              // into the input on focus.
               fontSize: "clamp(16px, 1.6vw, 19px)",
             }}
             placeholder={v2(lang, "searchPlaceholderHome")}
@@ -257,10 +269,11 @@ export function HomeSearch() {
             style={{
               fontSize: 12.5,
               color: "oklch(0.5 0.2 250)",
-              padding: "7px 12px",
+              padding: "10px 14px",
               borderRadius: 999,
               background: "oklch(0.72 0.19 245 / 0.1)",
               boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.35)",
+              flexShrink: 0,
             }}
             onClick={handleExplain}
           >
@@ -287,6 +300,7 @@ export function HomeSearch() {
               color: "white",
               boxShadow:
                 "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+              flexShrink: 0,
             }}
           >
             {v2(lang, "explain")}
@@ -417,7 +431,7 @@ export function ResultTease() {
         className="gd-card relative"
         style={{ padding: "clamp(22px, 3vw, 32px) clamp(22px, 3vw, 36px)" }}
       >
-        <div className="flex items-baseline gap-3 mb-2">
+        <div className="flex items-baseline gap-3 mb-2 flex-wrap">
           <Eyebrow>{sample.langLabel}</Eyebrow>
           <span style={{ color: "var(--gd-ink-300)" }}>·</span>
           <span
@@ -857,9 +871,12 @@ export function TierStrip() {
               {tier.highlight && <TierBadge tier="clear" small />}
             </div>
             <div
-              className="gd-font-display flex items-baseline gap-1"
+              className="gd-font-display flex items-baseline gap-1 flex-wrap"
               style={{
-                fontSize: 38,
+                // Floor lowered (was 38px) so a long Hebrew/Arabic
+                // period suffix like "$2.99/חודש" doesn't overflow
+                // the card on a 320px viewport.
+                fontSize: "clamp(28px, 6vw, 38px)",
                 color: "oklch(0.97 0.008 265)",
                 fontVariationSettings: '"opsz" 96',
                 letterSpacing: "-0.02em",

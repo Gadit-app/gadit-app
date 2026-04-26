@@ -676,7 +676,7 @@ const he: V2Strings = {
   valueProp3Body:
     "מאיפה המילה הגיעה, מסופר כפסקה — כמו שחבר סקרן היה כותב.",
   valueProp4Eyebrow: "7 שפות",
-  valueProp4Title: "עברית וערבית, ילידיות",
+  valueProp4Title: "עברית וערבית כשפות אם",
   valueProp4Body:
     "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים — לא ממשק מתורגם.",
 
@@ -714,12 +714,12 @@ const he: V2Strings = {
 
   tierBasicTagline: "להבין",
   tierBasicPitch: "התחילו עם היסודות.",
-  tierBasicCta: "יאללה נתחיל",
+  tierBasicCta: "התחילו עכשיו",
   tierBasicFeatures:
     "20 חיפושי מילים ביום¶כל המשמעויות (לא רק העיקרית)¶3 דוגמאות לכל משמעות¶אטימולוגיה בסיסית — מקור והערה היסטורית¶נדרשת התחברות",
 
   tierClearTagline: "לראות",
-  tierClearPitch: "הביאו מילים לחיים — תמונות, הסבר לילדים ומשוב.",
+  tierClearPitch: "החיו את המילים — תמונות, הסבר לילדים ומשוב.",
   tierClearBadge: "הכי פופולרי",
   tierClearCta: "נסיון חינם ל־14 ימים",
   tierClearCtaYearly: "הרשמה שנתית",
@@ -734,8 +734,8 @@ const he: V2Strings = {
     "כל מה שיש ב־Clear¶תרגולים ומבחנים (סוגים שונים, נוצרים ב־AI)¶מחברת אישית (תצוגת גלקסיה)¶חזרה מרווחת (אלגוריתם תרגול חכם)¶השוואת מילים מתבלבלות (אומנות/אמנות)¶יצירת תמונות AI (100 בחודש, לעומת 30 ב־Clear)",
 
   basicEquivalent: "",
-  clearEquivalent: "שווה ל־$2.50 לחודש",
-  deepEquivalent: "שווה ל־$4.17 לחודש",
+  clearEquivalent: "$2.50 לחודש בממוצע",
+  deepEquivalent: "$4.17 לחודש בממוצע",
 
   trustStripCancel: "ביטול בכל עת דרך פורטל Stripe",
   trustStripMoneyBack: "החזר כספי תוך 14 ימים ברכישה ראשונה",
@@ -743,7 +743,7 @@ const he: V2Strings = {
   trustStripNoAds: "ללא פרסומות וללא מעקב צד ג׳",
 
   faqEyebrow: "שאלות שכיחות",
-  faqHeadline: "תשובות לשאלות נפוצות",
+  faqHeadline: "שאלות, תשובות.",
   faqQ1: "אפשר להחליף תוכנית?",
   faqA1:
     "כן, אפשר לשדרג או לרדת בכל עת. החיוב היחסי מטופל אוטומטית — תשלמו רק את ההפרש.",
@@ -841,7 +841,7 @@ const he: V2Strings = {
 
   // Notebook (Screen 8)
   notebookEyebrow: "מחברת",
-  notebookTitle: "היקום שלכם של מילים",
+  notebookTitle: "יקום המילים שלכם",
   notebookSubtitle:
     "כל מילה שלמדתם — נשמרת, מאורגנת, גדלה.",
   notebookCounterTemplate: (n) => `${n} מילים שנלמדו`,
@@ -870,11 +870,13 @@ const he: V2Strings = {
   srIKnewIt: "ידעתי",
   srSchedulingHint:
     "ידעתי = תרגול הבא בעוד כמה ימים. שכחתי = חזרה להיום.",
-  srWordsPracticed: "מילים תרגלתם",
-  srSummaryStatTemplate: (k, f) => `${k} ידעתם · ${f} לתרגול נוסף`,
+  srWordsPracticed: "מילים שתרגלתם",
+  srSummaryStatTemplate: (k, f) => `ידעתם ${k} · ${f} לתרגול נוסף`,
   srTomorrow: "מחר",
-  srNextReviewTemplate: (when, count) =>
-    `התרגול הבא: ${when} (${count} מילים)`,
+  srNextReviewTemplate: (when, count) => {
+    const n = Number(count);
+    return `התרגול הבא: ${when} (${n === 1 ? "מילה אחת" : `${n} מילים`})`;
+  },
   srDoneForToday: "סיימתי להיום",
   srPracticeMore: "תרגול נוסף",
   srEmptyTitle: "אין מה לתרגל היום",
@@ -884,13 +886,16 @@ const he: V2Strings = {
 
   // Account (Screen 10)
   accountEyebrow: "חשבון",
-  accountYourSpace: "המרחב שלך",
+  accountYourSpace: "המרחב שלכם",
   accountNamedSpaceTemplate: (n) => `המרחב של ${n}`,
   accountPlanLabel: "תוכנית",
   accountOnPlanFree: "Free",
   accountNoActiveSubscription: "אין מנוי פעיל",
   accountChooseAPlan: "בחרו תוכנית כדי להתחיל.",
-  accountTrialBadgeTemplate: (d) => `תקופת ניסיון 14 ימים · ${d} ימים שנותרו`,
+  accountTrialBadgeTemplate: (d) => {
+    const n = Number(d);
+    return `תקופת ניסיון 14 ימים · ${n === 1 ? "יום אחד" : `${n} ימים`} שנותרו`;
+  },
   accountRenewsOnTemplate: (d) => `מתחדש ב־${d}`,
   accountCancelsAtPeriodEnd: "מבוטל בסוף תקופת החיוב",
   accountManageBilling: "ניהול חיוב",
@@ -950,7 +955,7 @@ const he: V2Strings = {
   unlockWithClear: "פתחו עם Clear",
   upgradeToClear: "שדרגו ל־Clear",
   clearUnlocksThis: "נפתח עם Clear",
-  visualizeThisWord: "המחישו בתמונה",
+  visualizeThisWord: "ראו את",
   visualBlurb:
     "תמונה אחת חיה, שנוצרה על־ידי Gadit — עוגן ויזואלי לתחושת המילה.",
   visualBlurbLocked:
@@ -1030,7 +1035,7 @@ const ar: V2Strings = {
 
   tierClearTagline: "تخيّل",
   tierClearPitch: "أحيِ الكلمات بالصور وشرح الأطفال والمراجعة.",
-  tierClearBadge: "الأكثر شيوعًا",
+  tierClearBadge: "الأكثر شعبية",
   tierClearCta: "تجربة 14 يومًا مجانًا",
   tierClearCtaYearly: "اشتراك سنوي",
   tierClearTrust: "ألغِ في أي وقت · بلا رسوم في فترة التجربة",
@@ -1130,11 +1135,11 @@ const ar: V2Strings = {
   compareEyebrow: "مقارنة",
   compareTitle: "ميِّز بين الكلمات المتشابهة",
   compareSubtitle:
-    "ضادّ مقابل ظاء، affect مقابل effect — الكلمات التي تخدع حتى الناطقين الأصليين.",
+    "ضلّ مقابل ظلّ، affect مقابل effect — الكلمات التي تخدع حتى الناطقين الأصليين.",
   compareWord1Label: "الكلمة 1",
   compareWord2Label: "الكلمة 2",
-  compareWord1Placeholder: "ضادّ",
-  compareWord2Placeholder: "ظاءّ",
+  compareWord1Placeholder: "ضلّ",
+  compareWord2Placeholder: "ظلّ",
   compareCta: "قارن",
   compareLoading: "جاري المقارنة…",
   compareEmpty: "أدخل كلمتين للمقارنة",
@@ -1150,10 +1155,10 @@ const ar: V2Strings = {
 
   // Notebook (Screen 8)
   notebookEyebrow: "الدفتر",
-  notebookTitle: "كونك من الكلمات",
+  notebookTitle: "عالمُك من الكلمات",
   notebookSubtitle:
-    "كل كلمة استكشفتها — محفوظة، منظَّمة، تنمو.",
-  notebookCounterTemplate: (n) => `${n} كلمة مستكشَفة`,
+    "كل كلمة استكشفتها — تُحفَظ وتُنظَّم، ومع الوقت تتسع مكتبتك.",
+  notebookCounterTemplate: (n) => `عدد الكلمات المستكشَفة: ${n}`,
   notebookPracticeNow: "ابدأ التدريب",
   notebookDueTodayTemplate: (n) => `${n} للمراجعة اليوم`,
   notebookListView: "قائمة",
@@ -1182,8 +1187,18 @@ const ar: V2Strings = {
   srWordsPracticed: "كلمات تدرّبت عليها",
   srSummaryStatTemplate: (k, f) => `${k} عرفتها · ${f} للمراجعة مجددًا`,
   srTomorrow: "غدًا",
-  srNextReviewTemplate: (when, count) =>
-    `المراجعة التالية: ${when} (${count} كلمات)`,
+  srNextReviewTemplate: (when, count) => {
+    const n = Number(count);
+    const word =
+      n === 1
+        ? "كلمة واحدة"
+        : n === 2
+          ? "كلمتان"
+          : n >= 3 && n <= 10
+            ? `${n} كلمات`
+            : `${n} كلمة`;
+    return `المراجعة التالية: ${when} (${word})`;
+  },
   srDoneForToday: "اكتفيت اليوم",
   srPracticeMore: "تدريب إضافي",
   srEmptyTitle: "لا شيء للمراجعة اليوم",
@@ -1199,7 +1214,18 @@ const ar: V2Strings = {
   accountOnPlanFree: "Free",
   accountNoActiveSubscription: "لا يوجد اشتراك نشط",
   accountChooseAPlan: "اختر خطة لتبدأ.",
-  accountTrialBadgeTemplate: (d) => `تجربة 14 يومًا · بقي ${d} أيام`,
+  accountTrialBadgeTemplate: (d) => {
+    const n = Number(d);
+    const left =
+      n === 1
+        ? "يوم واحد"
+        : n === 2
+          ? "يومان"
+          : n >= 3 && n <= 10
+            ? `${n} أيام`
+            : `${n} يومًا`;
+    return `تجربة 14 يومًا · بقي ${left}`;
+  },
   accountRenewsOnTemplate: (d) => `يتجدّد في ${d}`,
   accountCancelsAtPeriodEnd: "يُلغى في نهاية فترة الفوترة",
   accountManageBilling: "إدارة الفوترة",
@@ -1260,7 +1286,7 @@ const ar: V2Strings = {
   unlockWithClear: "افتح بـ Clear",
   upgradeToClear: "ارتقِ إلى Clear",
   clearUnlocksThis: "تفتحها Clear",
-  visualizeThisWord: "صوّر بالصورة",
+  visualizeThisWord: "تخيّل",
   visualBlurb: "صورة واحدة حيّة من Gadit — مرساة بصرية لشعور الكلمة.",
   visualBlurbLocked: "أنشئ صورة فريدة لهذه الكلمة — الفهم عبر النظر.",
   reportLabel: "إبلاغ",

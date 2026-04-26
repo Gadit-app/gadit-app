@@ -232,7 +232,7 @@ function TierCard({
 
   return (
     <div
-      className="gd-card relative h-full flex flex-col"
+      className={`gd-card relative h-full flex flex-col ${tier.highlight ? "gd-tier-popular" : ""}`}
       style={{
         // gd-card gives us the warm-paper surface + outer shadow; we add
         // a stronger blue ring for the highlighted tier on top.
@@ -243,9 +243,11 @@ function TierCard({
         // grid (name → tagline → pitch → price → features → CTA) lines
         // up row-by-row across the strip. Clear only differs in scale +
         // glow ring — this preserves the "Most popular" lift that Stripe
-        // and Linear use without breaking row alignment.
+        // and Linear use without breaking row alignment. The scale is
+        // applied via the .gd-tier-popular class which is gated to
+        // ≥768px in globals.css so single-column mobile layout doesn't
+        // overflow the viewport gutter.
         padding: "clamp(28px, 3vw, 36px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 32px)",
-        transform: tier.highlight ? "scale(1.04)" : "none",
         zIndex: tier.highlight ? 1 : 0,
         ...(tier.highlight
           ? {

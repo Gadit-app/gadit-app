@@ -249,10 +249,11 @@ export function LoginModalV2() {
           aria-label={v2(lang, "loginCloseAria")}
           style={{
             position: "absolute",
-            insetBlockStart: 14,
-            insetInlineEnd: 14,
-            width: 30,
-            height: 30,
+            insetBlockStart: 8,
+            insetInlineEnd: 8,
+            // 44×44 hit area; the visible X icon is still small.
+            width: 44,
+            height: 44,
             borderRadius: 999,
             display: "inline-flex",
             alignItems: "center",
@@ -402,7 +403,10 @@ export function LoginModalV2() {
               style={{
                 background: "oklch(0 0 0 / 0.025)",
                 color: "var(--gd-ink-900)",
-                fontSize: 14.5,
+                // 16px floor — anything below triggers iOS Safari
+                // auto-zoom, which on a centered modal pushes the
+                // close X off-screen and traps the user.
+                fontSize: 16,
                 padding: "11px 14px",
                 borderRadius: 10,
                 boxShadow: errorKey
@@ -442,7 +446,9 @@ export function LoginModalV2() {
                 style={{
                   background: "oklch(0 0 0 / 0.025)",
                   color: "var(--gd-ink-900)",
-                  fontSize: 14.5,
+                  // 16px floor — see email input above. iOS auto-zoom
+                  // hits password fields too.
+                  fontSize: 16,
                   padding: isRtl
                     ? "11px 14px 11px 40px"
                     : "11px 40px 11px 14px",

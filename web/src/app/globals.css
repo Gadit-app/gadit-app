@@ -103,6 +103,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .pricing-popular {
     transform: scale(1.025);
   }
+  /* V2 pricing tier — Clear card lift. Mobile keeps scale: none so the
+     1.04 doesn't push the card past the viewport gutter in single-col
+     layout. */
+  .gd-tier-popular {
+    transform: scale(1.04);
+  }
 }
 
 /* ── LEGAL PAGES (Privacy, Terms) ── */
@@ -451,6 +457,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   text-transform: uppercase;
   font-weight: 600;
   color: var(--gd-ink-500);
+}
+
+/* ── ImageSlot empty state: drop rigid aspect ratio on mobile ──
+   Desktop uses 16:6 wide banner with absolute-positioned content. On
+   <640px viewports, 16:6 collapses to ~120px which clips the CTA +
+   blurb. Switch to a min-height-driven box so content dictates size. */
+@media (max-width: 640px) {
+  .gd-image-empty {
+    aspect-ratio: auto !important;
+    max-height: none !important;
+    min-height: 220px;
+  }
+  .gd-image-empty-content {
+    position: relative !important;
+    inset: auto !important;
+    padding-block: 28px !important;
+  }
 }
 
 /* ── Mobile + reduced-motion performance mode ──

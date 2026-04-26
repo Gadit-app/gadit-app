@@ -166,8 +166,10 @@ export function MarketingHeader() {
               aria-label="Menu"
               aria-expanded={mobileOpen}
               style={{
-                width: 36,
-                height: 36,
+                // Apple HIG minimum is 44×44; 36 felt cramped on phones
+                // and is hard to hit with a thumb.
+                width: 44,
+                height: 44,
                 borderRadius: 999,
                 background: "oklch(1 0 0 / 0.06)",
                 boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.12)",
@@ -191,15 +193,16 @@ export function MarketingHeader() {
               aria-label="Account"
               className="inline-flex items-center justify-center transition-shadow hover:shadow-md"
               style={{
-                width: 36,
-                height: 36,
+                // 44×44 — touch target minimum.
+                width: 44,
+                height: 44,
                 borderRadius: 999,
                 background:
                   "linear-gradient(135deg, oklch(0.7 0.08 45), oklch(0.55 0.12 30))",
                 boxShadow: "0 0 0 1px oklch(1 0 0 / 0.08)",
                 color: "white",
                 fontWeight: 600,
-                fontSize: 13,
+                fontSize: 14,
               }}
             >
               {initial}
@@ -211,7 +214,9 @@ export function MarketingHeader() {
               className="gd-font-sans-ui font-medium transition-colors"
               style={{
                 fontSize: 13,
-                padding: "8px 18px",
+                // Was 8px 18px → ~33px tall, below 44 minimum. Bumped
+                // vertical padding so the pill clears 44px.
+                padding: "12px 20px",
                 borderRadius: 999,
                 color: "oklch(0.92 0.01 265)",
                 background: "oklch(1 0 0 / 0.06)",

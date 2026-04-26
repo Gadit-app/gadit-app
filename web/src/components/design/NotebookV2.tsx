@@ -334,10 +334,12 @@ function WordCard({
         aria-label={v2(lang, "notebookRemoveAria")}
         style={{
           position: "absolute",
-          insetBlockStart: 12,
-          insetInlineEnd: 12,
-          width: 24,
-          height: 24,
+          insetBlockStart: 6,
+          insetInlineEnd: 6,
+          // 36×36 hit area — visible icon stays small (10×10 SVG) but
+          // the tap target meets thumb-friendliness on mobile.
+          width: 36,
+          height: 36,
           borderRadius: 999,
           color: "var(--gd-ink-500)",
           background: "oklch(0 0 0 / 0.04)",
@@ -584,15 +586,30 @@ function GalaxyView({
         })}
       </svg>
 
-      {/* Tooltip — positioned in % so it scales with the responsive SVG */}
-      {tooltipStar && (
+      {/* Tooltip — positioned in % so it scales with the responsive SVG.
+          Flips horizontally based on which half the star sits in, so the
+          tooltip never extends past the parent's overflow:hidden edge. */}
+      {tooltipStar && (() => {
+        const isRightHalf = tooltipStar.x > W / 2;
+        // In LTR: right-half stars get tooltip to the LEFT of the star
+        //         (translate -100% - 14px). Left-half: 14px right.
+        // In RTL: mirror the logic.
+        const tx = isRtl
+          ? isRightHalf
+            ? "14px"
+            : "calc(-100% - 14px)"
+          : isRightHalf
+            ? "calc(-100% - 14px)"
+            : "14px";
+        return (
         <div
           style={{
             position: "absolute",
             left: `${(tooltipStar.x / W) * 100}%`,
             top: `${(tooltipStar.y / H) * 100}%`,
-            transform: `translate(${isRtl ? "calc(-100% - 14px)" : "14px"}, -56px)`,
+            transform: `translate(${tx}, -56px)`,
             width: 200,
+            maxWidth: "calc(100vw - 32px)",
             padding: "12px 14px",
             borderRadius: 10,
             background: "oklch(0.97 0.01 265 / 0.97)",
@@ -635,15 +652,17 @@ function GalaxyView({
             {v2(lang, "notebookSavedOnTemplate", tooltipStar.savedDisplay)}
           </div>
         </div>
-      )}
+        );
+      })()}
 
-      {/* Legend */}
+      {/* Legend — hidden below 480px since the chips push past the
+          galaxy boundary on narrow screens; the dot sizes are small
+          enough that most users intuit the recency mapping anyway. */}
       <div
-        className={`absolute gd-font-sans-ui ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`absolute gd-font-sans-ui hidden sm:flex ${isRtl ? "flex-row-reverse" : ""}`}
         style={{
           insetBlockEnd: 16,
           insetInlineStart: 16,
-          display: "flex",
           alignItems: "center",
           gap: 16,
           fontSize: 11,

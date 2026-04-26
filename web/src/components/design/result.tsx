@@ -188,11 +188,15 @@ export function WordHeader({
           <h1
             className={tFont}
             style={{
-              fontSize: "clamp(40px, 6vw, 88px)",
+              // Floor lowered from 40px and overflowWrap added so long
+              // German compound words / Hebrew construct phrases don't
+              // overflow the gd-card on a 320px viewport.
+              fontSize: "clamp(32px, 6vw, 88px)",
               lineHeight: 1.02,
               color: "var(--gd-ink-900)",
               letterSpacing: script === "latin" ? "-0.025em" : 0,
               fontWeight: 400,
+              overflowWrap: "anywhere",
               ...(script === "latin"
                 ? { fontVariationSettings: '"opsz" 144, "SOFT" 60' }
                 : {}),
@@ -329,14 +333,17 @@ export function ImageSlot({
   const locked = state === "empty-locked";
   return (
     <div
-      className="relative overflow-hidden gd-drift"
+      className="relative overflow-hidden gd-drift gd-image-empty"
       style={{
         // Was aspect 4:3 + maxHeight 420 → on a wide card the empty
         // state ate ~600px of vertical real estate before users got to
         // the meanings. The teaser only needs to host a CTA + one
-        // sentence, so a 16:9 wide-banner aspect with a hard 220px
-        // ceiling is plenty. Generated images later override this via
-        // the same component but with state=ready.
+        // sentence, so a wide-banner aspect with a hard 220px ceiling
+        // is plenty on desktop.
+        // On mobile (<640px) the 16:6 ratio collapses to ~120px tall —
+        // not enough to fit lock label + headline + blurb + button —
+        // so .gd-image-empty in globals.css drops the rigid aspect and
+        // gives a min-height instead, letting content set the height.
         borderRadius: 20,
         aspectRatio: "16 / 6",
         maxHeight: 220,
@@ -394,7 +401,7 @@ export function ImageSlot({
         />
       </svg>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
+      <div className="gd-image-empty-content absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 py-5 text-center">
         {locked ? (
           <>
             <div
@@ -1101,7 +1108,10 @@ export function TakeItFurther({
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Single column below 480px so the action tiles' inner content
+          (38px icon + label + hint + locked badge) doesn't overflow
+          the 140px minHeight in cramped 2-col mobile layout. */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {ACTIONS.map((a) => {
           const locked = TIER_RANK[a.tier] > TIER_RANK[plan];
           return (
