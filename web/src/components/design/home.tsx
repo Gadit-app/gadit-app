@@ -212,9 +212,11 @@ export function HomeSearch() {
             second row at <480px so nothing clips on a 320px iPhone SE.
             Above 480px it's all on one line. flex-wrap + minWidth on
             the input let the input shrink instead of pushing buttons
-            off-canvas. */}
+            off-canvas.
+            In RTL the row reverses: search icon leads the input on the
+            right edge, "Add context" + "Explain" trail on the left. */}
         <div
-          className="flex items-center gap-3 flex-wrap sm:flex-nowrap"
+          className={`flex items-center gap-3 flex-wrap sm:flex-nowrap ${isRtl ? "flex-row-reverse" : ""}`}
           style={{
             padding: "18px 22px",
             background: "var(--gd-paper-50)",
@@ -310,7 +312,7 @@ export function HomeSearch() {
 
       <div
         className={`mt-5 flex items-center gap-2 flex-wrap ${
-          isRtl ? "justify-end" : ""
+          isRtl ? "flex-row-reverse justify-start" : ""
         }`}
         style={{ paddingInlineStart: 8 }}
       >
@@ -412,14 +414,14 @@ export function ResultTease() {
       }}
     >
       <div
-        className={`gd-font-sans-ui mb-3 inline-flex items-center gap-2 ${
-          isRtl ? "ms-2" : "ms-2"
+        className={`gd-font-sans-ui mb-3 inline-flex items-center gap-2 ms-2 ${
+          isRtl ? "flex-row-reverse" : ""
         }`}
         style={{
           fontSize: 11,
           color: "oklch(0.62 0.02 265)",
-          letterSpacing: "0.16em",
-          textTransform: "uppercase",
+          letterSpacing: script === "latin" ? "0.16em" : 0,
+          textTransform: script === "latin" ? "uppercase" : "none",
           fontWeight: 600,
         }}
       >
@@ -465,7 +467,9 @@ export function ResultTease() {
         </div>
 
         <div className="mt-5 grid grid-cols-1 gap-4">
-          <div className="flex items-start gap-3">
+          <div
+            className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+          >
             <MeaningBadge n={1} />
             <div className="flex-1 min-w-0">
               <p
@@ -861,7 +865,9 @@ export function TierStrip() {
                 : "inset 0 0 0 1px oklch(1 0 0 / 0.07), 0 4px 18px oklch(0.08 0.08 260 / 0.3)",
             }}
           >
-            <div className="flex items-baseline justify-between mb-4">
+            <div
+              className={`flex items-baseline justify-between mb-4 ${isRtl ? "flex-row-reverse" : ""}`}
+            >
               <div
                 className="gd-font-sans-ui font-semibold"
                 style={{ fontSize: 15, color: "oklch(0.96 0.008 265)" }}
@@ -871,7 +877,7 @@ export function TierStrip() {
               {tier.highlight && <TierBadge tier="clear" small />}
             </div>
             <div
-              className="gd-font-display flex items-baseline gap-1 flex-wrap"
+              className={`gd-font-display flex items-baseline gap-1 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
               style={{
                 // Floor lowered (was 38px) so a long Hebrew/Arabic
                 // period suffix like "$2.99/חודש" doesn't overflow
@@ -894,7 +900,7 @@ export function TierStrip() {
               {tier.bullets.map((b, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-2 gd-font-sans-ui"
+                  className={`flex items-start gap-2 gd-font-sans-ui ${isRtl ? "flex-row-reverse" : ""}`}
                   style={{ fontSize: 13.5, color: "oklch(0.85 0.015 265)" }}
                 >
                   <svg
@@ -943,7 +949,8 @@ export function TierStrip() {
 // ─── HomeFooter ──────────────────────────────────────────────────
 // Minimal: Wordmark + tagline + 2 link columns (Product / Legal).
 export function HomeFooter() {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
 
   const productLinks: Array<{ label: string; href: string }> = [
     { label: v2(lang, "footerCompare"), href: "/compare" },
@@ -958,12 +965,14 @@ export function HomeFooter() {
 
   return (
     <footer
+      dir={dir}
       style={{
         maxWidth: 1120,
         margin: "0 auto",
         padding:
           "clamp(36px, 5vw, 60px) clamp(16px, 3vw, 24px) clamp(28px, 4vw, 36px)",
         borderTop: "1px solid oklch(1 0 0 / 0.06)",
+        textAlign: isRtl ? "right" : "left",
       }}
     >
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">

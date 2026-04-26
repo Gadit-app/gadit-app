@@ -364,7 +364,11 @@ function UsageMeter({
         >
           {label}
         </span>
-        <span className="gd-font-sans-ui" style={{ fontSize: 14 }}>
+        <span
+          className="gd-font-sans-ui"
+          style={{ fontSize: 14 }}
+          dir="ltr"
+        >
           {locked ? (
             <span style={{ color: "var(--gd-ink-500)" }}>
               {v2(lang, "accountLocked")}
@@ -485,6 +489,7 @@ function AccountInfoSection({
               color: "var(--gd-ink-900)",
               wordBreak: "break-all",
             }}
+            dir="ltr"
           >
             {data.email ?? ""}
           </div>

@@ -152,15 +152,16 @@ export function WordHeader({
   onSave?: () => void;
   onShare?: () => void;
 }) {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
   const script = scriptFor(lang);
   const tFont = titleFontClass(script);
 
   return (
     <div className="gd-card" style={{ padding: "clamp(24px, 3vw, 36px) clamp(22px, 3vw, 40px) clamp(20px, 2.6vw, 30px)" }}>
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-6">
+      <div className={`flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-6 ${isRtl ? "md:flex-row-reverse" : ""}`}>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-3 flex-wrap">
+          <div className={`flex items-center gap-2 mb-3 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}>
             <Eyebrow>{language}</Eyebrow>
             <span style={{ color: "var(--gd-ink-300)" }}>·</span>
             <span
@@ -544,7 +545,8 @@ export function MeaningCard({
   meaning: Meaning;
   onReport?: () => void;
 }) {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
   const script = scriptFor(lang);
   const bFont = bodyFontClass(script);
 
@@ -553,10 +555,10 @@ export function MeaningCard({
       className="gd-card relative"
       style={{ padding: "clamp(26px, 3vw, 32px) clamp(24px, 3vw, 40px)" }}
     >
-      <div className="flex items-start gap-4">
+      <div className={`flex items-start gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
         <MeaningBadge n={n} />
         <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-2 mb-2 flex-wrap">
+          <div className={`flex items-baseline gap-2 mb-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}>
             <Eyebrow>{v2(lang, "meaningN", n)}</Eyebrow>
             {meaning.pos && (
               <>
@@ -586,7 +588,10 @@ export function MeaningCard({
 
           <ul className="mt-5 space-y-2.5">
             {meaning.examples.map((ex, i) => (
-              <li key={i} className="flex gap-3">
+              <li
+                key={i}
+                className={`flex gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+              >
                 <span
                   style={{
                     color: "oklch(0.72 0.19 245)",
@@ -622,7 +627,10 @@ export function MeaningCard({
               </Eyebrow>
               <ul className="space-y-2">
                 {meaning.idioms.map((idm, i) => (
-                  <li key={i} className="flex items-baseline gap-3 flex-wrap">
+                  <li
+                    key={i}
+                    className={`flex items-baseline gap-3 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+                  >
                     <span
                       className="gd-font-display italic"
                       style={{
@@ -781,7 +789,8 @@ export function KidsCard({
   locked?: boolean;
   onUpgrade?: () => void;
 }) {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
   const script = scriptFor(lang);
   const bFont = bodyFontClass(script);
 
@@ -805,7 +814,7 @@ export function KidsCard({
           boxShadow: "0 0 10px oklch(0.78 0.12 75 / 0.5)",
         }}
       />
-      <div className="flex items-baseline gap-3 mb-4 ps-2 flex-wrap">
+      <div className={`flex items-baseline gap-3 mb-4 ps-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}>
         <KidsGlyph size={20} />
         <Eyebrow style={{ color: "var(--gd-amber-ink)" }}>
           {v2(lang, "forKids")}
@@ -846,7 +855,10 @@ export function KidsCard({
         {kids.examples && kids.examples.length > 0 && (
           <ul className="mt-5 space-y-2.5">
             {kids.examples.map((b, i) => (
-              <li key={i} className="flex gap-3">
+              <li
+                key={i}
+                className={`flex gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+              >
                 <span
                   style={{
                     color: "oklch(0.78 0.12 75)",
@@ -914,7 +926,8 @@ export function IdiomsCard({
   idioms: Idiom[];
   onReport?: () => void;
 }) {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
   const script = scriptFor(lang);
   const bFont = bodyFontClass(script);
 
@@ -933,7 +946,7 @@ export function IdiomsCard({
         {idioms.map((it, i) => (
           <div
             key={i}
-            className="flex items-baseline gap-3 flex-wrap"
+            className={`flex items-baseline gap-3 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
             style={{
               borderBottom:
                 i < idioms.length - (idioms.length > 2 ? 2 : 1)

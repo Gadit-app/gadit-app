@@ -72,7 +72,8 @@ function FeedbackIndicator({
   status: Status;
   message: string;
 }) {
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
   const isHe = lang === "he";
   const isAr = lang === "ar";
   const bodyFont = isHe
@@ -111,7 +112,10 @@ function FeedbackIndicator({
         };
 
   return (
-    <div className="flex items-start gap-3" style={{ flex: 1 }}>
+    <div
+      className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+      style={{ flex: 1 }}
+    >
       <div
         aria-hidden="true"
         style={{
