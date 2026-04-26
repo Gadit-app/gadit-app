@@ -126,23 +126,26 @@ export function MarketingHeader() {
           <Wordmark />
         </Link>
 
-        {/* Desktop nav — signed-in only */}
-        {user && (
-          <nav
-            className="hidden md:flex items-center gap-7"
-            style={{ flex: 1, justifyContent: "center" }}
-            aria-label="Primary"
-          >
-            {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.href}
-                item={item}
-                active={isActive(pathname, item.href)}
-                lang={lang}
-              />
-            ))}
-          </nav>
-        )}
+        {/* Desktop nav — visible to everyone.
+            Pricing especially needs to be reachable by anonymous
+            visitors (that's where they convert). Compare and Notebook
+            stay in the nav even though they're tier-gated; clicking
+            them as anonymous bounces to /pricing, which is the same
+            "promise not wall" pattern Screen 1 uses. */}
+        <nav
+          className="hidden md:flex items-center gap-7"
+          style={{ flex: 1, justifyContent: "center" }}
+          aria-label="Primary"
+        >
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.href}
+              item={item}
+              active={isActive(pathname, item.href)}
+              lang={lang}
+            />
+          ))}
+        </nav>
 
         {/* Right side: lang picker + (avatar | Sign in) */}
         <div className="flex items-center gap-2">
@@ -157,35 +160,35 @@ export function MarketingHeader() {
             <LangSwitcher variant="dark" />
           </div>
 
-          {/* Mobile menu trigger — signed-in only */}
-          {user && (
-            <button
-              type="button"
-              onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden inline-flex items-center justify-center"
-              aria-label="Menu"
-              aria-expanded={mobileOpen}
-              style={{
-                // Apple HIG minimum is 44×44; 36 felt cramped on phones
-                // and is hard to hit with a thumb.
-                width: 44,
-                height: 44,
-                borderRadius: 999,
-                background: "oklch(1 0 0 / 0.06)",
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.12)",
-                color: "oklch(0.92 0.01 265)",
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path
-                  d="M3 5h12M3 9h12M3 13h12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          )}
+          {/* Mobile menu trigger — shown to everyone now.
+              Anonymous visitors need to reach /pricing too, and the
+              hamburger is the only entrypoint on mobile <768px. */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            className="md:hidden inline-flex items-center justify-center"
+            aria-label="Menu"
+            aria-expanded={mobileOpen}
+            style={{
+              // Apple HIG minimum is 44×44; 36 felt cramped on phones
+              // and is hard to hit with a thumb.
+              width: 44,
+              height: 44,
+              borderRadius: 999,
+              background: "oklch(1 0 0 / 0.06)",
+              boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.12)",
+              color: "oklch(0.92 0.01 265)",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path
+                d="M3 5h12M3 9h12M3 13h12"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
 
           {user ? (
             <Link
@@ -229,8 +232,9 @@ export function MarketingHeader() {
         </div>
       </div>
 
-      {/* Mobile dropdown — signed-in only, only when open */}
-      {user && mobileOpen && (
+      {/* Mobile dropdown — shown to everyone (anon visitors need to
+          reach /pricing too), only when open */}
+      {mobileOpen && (
         <nav
           className="md:hidden flex flex-col"
           style={{
