@@ -522,8 +522,15 @@ export function ResultTease() {
       </div>
 
       <div className="mt-4 flex items-center justify-center">
+        {/* Was linking to /pricing — bait-and-switch: the copy
+            promises "see the full result" but the click landed on a
+            tier comparison instead. Now goes to the actual /word/[X]
+            page so the visitor gets what was promised: all meanings,
+            examples, etymology, idioms. The conversion CTAs (save to
+            notebook, generate image, compose) live inside that page
+            and surface naturally as the user explores. */}
         <Link
-          href="/pricing"
+          href={`/word/${encodeURIComponent(sample.word)}`}
           className="gd-font-sans-ui inline-flex items-center gap-2 hover:text-white transition-colors"
           style={{ fontSize: 12.5, color: "oklch(0.78 0.05 245)" }}
         >

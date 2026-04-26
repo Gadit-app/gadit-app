@@ -408,7 +408,7 @@ const en: V2Strings = {
   tierBasicPitch: "Start with the essentials.",
   tierBasicCta: "Get started",
   tierBasicFeatures:
-    "20 word searches per day¶All meanings (not just primary)¶3 examples per meaning¶Basic etymology — origin + history note¶Sign-in required",
+    "20 word searches per day¶All meanings (not just primary)¶3 examples per meaning¶Etymology and origin¶Sign-in required",
 
   tierClearTagline: "Visualize",
   tierClearPitch:
@@ -418,14 +418,14 @@ const en: V2Strings = {
   tierClearCtaYearly: "Subscribe yearly",
   tierClearTrust: "Cancel anytime · No charge during trial",
   tierClearFeatures:
-    "Everything in Basic¶Unlimited searches¶Kids explanations (child-friendly mode)¶AI-generated images (30/month)¶Compose your own sentence + grammar feedback¶Common idioms across all meanings¶Search history (last 30 days)",
+    "Everything in Basic¶Unlimited searches¶Kids explanations¶Image for every word (30/month)¶Write a sentence and get feedback¶Idioms and expressions¶Search history (last 30 days)",
 
   tierDeepTagline: "Practice",
   tierDeepPitch:
     "Build a personal vocabulary library that gets stronger over time.",
   tierDeepCta: "Subscribe to Deep",
   tierDeepFeatures:
-    "Everything in Clear¶Practice quizzes (mixed-type, AI-generated)¶Personal notebook (Galaxy view)¶Spaced repetition (smart practice algorithm)¶Compare confusable words (affect/effect)¶AI-generated images (100/month, vs 30 in Clear)",
+    "Everything in Clear¶Practice quizzes¶Personal word notebook¶Smart practice for vocabulary that lasts¶Tell similar words apart¶Image for every word (100/month)",
 
   basicEquivalent: "",
   clearEquivalent: "Equivalent to $2.50/mo",
@@ -722,7 +722,7 @@ const he: V2Strings = {
   tierBasicPitch: "התחילו עם היסודות.",
   tierBasicCta: "התחילו עכשיו",
   tierBasicFeatures:
-    "20 חיפושי מילים ביום¶כל המשמעויות (לא רק העיקרית)¶3 דוגמאות לכל משמעות¶אטימולוגיה בסיסית — מקור והערה היסטורית¶נדרשת התחברות",
+    "20 חיפושי מילים ביום¶כל המשמעויות (לא רק העיקרית)¶3 דוגמאות לכל משמעות¶אטימולוגיה ומקור המילה¶נדרשת התחברות",
 
   tierClearTagline: "לראות",
   tierClearPitch: "החיו את המילים — תמונות, הסבר לילדים ומשוב.",
@@ -731,13 +731,13 @@ const he: V2Strings = {
   tierClearCtaYearly: "הרשמה שנתית",
   tierClearTrust: "ביטול בכל עת · ללא חיוב בתקופת הניסיון",
   tierClearFeatures:
-    "כל מה שיש ב־Basic¶חיפושים ללא הגבלה¶הסבר לילדים (מצב ידידותי)¶יצירת תמונות AI (30 בחודש)¶חיבור משפטים עם משוב דקדוקי¶ביטויים נפוצים על פני כל המשמעויות¶היסטוריית חיפוש (30 ימים אחרונים)",
+    "כל מה שיש ב־Basic¶חיפושים ללא הגבלה¶הסבר לילדים¶יצירת תמונות (30 בחודש)¶חיבור משפטים וקבלת משוב¶ביטויים וצירופי מילים¶היסטוריית חיפוש (30 ימים אחרונים)",
 
   tierDeepTagline: "לתרגל",
   tierDeepPitch: "בנו אוצר מילים אישי שמתחזק עם הזמן.",
   tierDeepCta: "הרשמה ל־Deep",
   tierDeepFeatures:
-    "כל מה שיש ב־Clear¶תרגולים ומבחנים (סוגים שונים, נוצרים ב־AI)¶מחברת אישית (תצוגת גלקסיה)¶חזרה מרווחת (אלגוריתם תרגול חכם)¶השוואת מילים מתבלבלות (אומנות/אמנות)¶יצירת תמונות AI (100 בחודש, לעומת 30 ב־Clear)",
+    "כל מה שיש ב־Clear¶תרגולים ומבחנים¶מחברת מילים אישית¶תרגול חכם לאוצר מילים יציב¶הבהרת מילים דומות¶יצירת תמונות (100 בחודש)",
 
   basicEquivalent: "",
   clearEquivalent: "$2.50 לחודש בממוצע",
@@ -1038,7 +1038,7 @@ const ar: V2Strings = {
   tierBasicPitch: "ابدأ بالأساسيات.",
   tierBasicCta: "لنبدأ",
   tierBasicFeatures:
-    "20 بحثًا في اليوم¶جميع المعاني (لا الأول وحده)¶3 أمثلة لكل معنى¶أصل أساسي — المصدر وملاحظة تاريخية¶يلزم تسجيل الدخول",
+    "20 بحثًا في اليوم¶جميع المعاني (لا الأول وحده)¶3 أمثلة لكل معنى¶الأصل والاشتقاق¶يلزم تسجيل الدخول",
 
   tierClearTagline: "تخيّل",
   tierClearPitch: "أحيِ الكلمات بالصور وشرح الأطفال والمراجعة.",
@@ -1047,13 +1047,13 @@ const ar: V2Strings = {
   tierClearCtaYearly: "اشتراك سنوي",
   tierClearTrust: "ألغِ في أي وقت · بلا رسوم في فترة التجربة",
   tierClearFeatures:
-    "كل ما في Basic¶بحث بلا حدود¶شرح الأطفال (وضع ملائم للصغار)¶توليد صور بالذكاء الاصطناعي (30 شهريًا)¶تأليف جملك الخاصة مع مراجعة نحوية¶تعابير شائعة عبر جميع المعاني¶سجلّ البحث (آخر 30 يومًا)",
+    "كل ما في Basic¶بحث بلا حدود¶شرح للأطفال¶صورة لكل كلمة (30 شهريًا)¶اكتب جملة وتلقَّ ملاحظات¶تعابير وعبارات شائعة¶سجلّ البحث (آخر 30 يومًا)",
 
   tierDeepTagline: "تدرَّب",
   tierDeepPitch: "ابنِ مكتبة مفردات شخصية تزداد قوّة مع الزمن.",
   tierDeepCta: "اشترك في Deep",
   tierDeepFeatures:
-    "كل ما في Clear¶اختبارات تدريب (متنوعة، بالذكاء الاصطناعي)¶دفتر شخصي (تصوير المجرّة)¶مراجعة موزَّعة (خوارزمية تدريب ذكية)¶مقارنة الكلمات المتشابهة (affect/effect)¶توليد صور بالذكاء الاصطناعي (100 شهريًا، مقابل 30 في Clear)",
+    "كل ما في Clear¶اختبارات تدريب¶دفتر كلمات شخصي¶تدريب ذكي لمفردات تبقى معك¶تمييز الكلمات المتشابهة¶صورة لكل كلمة (100 شهريًا)",
 
   basicEquivalent: "",
   clearEquivalent: "ما يعادل $2.50 شهريًا",
@@ -1369,7 +1369,7 @@ const ru: Partial<V2Strings> = {
   tierBasicPitch: "Начните с основ.",
   tierBasicCta: "Начать",
   tierBasicFeatures:
-    "20 поисков слов в день¶Все значения (а не только основное)¶3 примера на каждое значение¶Базовая этимология — происхождение и заметка¶Нужен вход",
+    "20 поисков слов в день¶Все значения (а не только основное)¶3 примера на каждое значение¶Этимология и происхождение¶Нужен вход",
 
   tierClearTagline: "Увидеть",
   tierClearPitch:
@@ -1379,14 +1379,14 @@ const ru: Partial<V2Strings> = {
   tierClearCtaYearly: "Подписаться на год",
   tierClearTrust: "Отмена в любое время · Без списаний во время пробного",
   tierClearFeatures:
-    "Всё из Basic¶Поиски без ограничений¶Объяснения для детей (детский режим)¶Картинки от ИИ (30 в месяц)¶Свои предложения с разбором грамматики¶Распространённые идиомы по всем значениям¶История поисков (последние 30 дней)",
+    "Всё из Basic¶Поиски без ограничений¶Объяснения для детей¶Картинка к каждому слову (30 в месяц)¶Напишите своё предложение и получите отзыв¶Идиомы и устойчивые выражения¶История поисков (последние 30 дней)",
 
   tierDeepTagline: "Запомнить",
   tierDeepPitch:
     "Соберите личный словарь, который растёт с вами.",
   tierDeepCta: "Подписаться на Deep",
   tierDeepFeatures:
-    "Всё из Clear¶Тренировки и тесты (разные форматы, от ИИ)¶Личная тетрадь (вид «Галактика»)¶Интервальное повторение (умный алгоритм)¶Сравнение похожих слов (надевать/одевать)¶Картинки от ИИ (100 в месяц вместо 30)",
+    "Всё из Clear¶Тренировки и тесты¶Личная тетрадь слов¶Умная практика — словарь, который остаётся с вами¶Различение похожих слов¶Картинка к каждому слову (100 в месяц)",
 
   basicEquivalent: "",
   clearEquivalent: "В среднем $2,50 в месяц",
@@ -1682,7 +1682,7 @@ const es: Partial<V2Strings> = {
   tierBasicPitch: "Empieza con lo esencial.",
   tierBasicCta: "Empezar",
   tierBasicFeatures:
-    "20 búsquedas por día¶Todos los significados (no solo el principal)¶3 ejemplos por significado¶Etimología básica — origen y nota histórica¶Requiere iniciar sesión",
+    "20 búsquedas por día¶Todos los significados (no solo el principal)¶3 ejemplos por significado¶Etimología y origen¶Requiere iniciar sesión",
 
   tierClearTagline: "Visualizar",
   tierClearPitch:
@@ -1692,14 +1692,14 @@ const es: Partial<V2Strings> = {
   tierClearCtaYearly: "Suscripción anual",
   tierClearTrust: "Cancela cuando quieras · Sin cargo durante la prueba",
   tierClearFeatures:
-    "Todo lo de Basic¶Búsquedas ilimitadas¶Explicaciones para niños (modo amigable)¶Imágenes generadas con IA (30/mes)¶Compón tu propia oración con feedback gramatical¶Modismos comunes en todos los significados¶Historial de búsqueda (últimos 30 días)",
+    "Todo lo de Basic¶Búsquedas ilimitadas¶Explicaciones para niños¶Una imagen por palabra (30/mes)¶Escribe una oración y recibe feedback¶Modismos y expresiones¶Historial de búsqueda (últimos 30 días)",
 
   tierDeepTagline: "Practicar",
   tierDeepPitch:
     "Construye un vocabulario propio que se fortalece con el tiempo.",
   tierDeepCta: "Suscríbete a Deep",
   tierDeepFeatures:
-    "Todo lo de Clear¶Pruebas y exámenes (varios tipos, generados con IA)¶Cuaderno personal (vista Galaxia)¶Repetición espaciada (algoritmo inteligente)¶Comparar palabras confusas (haber/a ver)¶Imágenes con IA (100/mes vs 30 en Clear)",
+    "Todo lo de Clear¶Pruebas y exámenes¶Cuaderno personal de palabras¶Práctica inteligente para vocabulario que perdura¶Distinguir palabras parecidas¶Una imagen por palabra (100/mes)",
 
   basicEquivalent: "",
   clearEquivalent: "Equivalente a $2.50/mes",
@@ -1993,7 +1993,7 @@ const pt: Partial<V2Strings> = {
   tierBasicPitch: "Comece com o essencial.",
   tierBasicCta: "Começar",
   tierBasicFeatures:
-    "20 buscas por dia¶Todos os significados (não só o principal)¶3 exemplos por significado¶Etimologia básica — origem e nota histórica¶Precisa entrar",
+    "20 buscas por dia¶Todos os significados (não só o principal)¶3 exemplos por significado¶Etimologia e origem¶Precisa entrar",
 
   tierClearTagline: "Visualizar",
   tierClearPitch:
@@ -2003,14 +2003,14 @@ const pt: Partial<V2Strings> = {
   tierClearCtaYearly: "Assinar anual",
   tierClearTrust: "Cancele quando quiser · Sem cobrança no teste",
   tierClearFeatures:
-    "Tudo do Basic¶Buscas ilimitadas¶Explicações para crianças (modo amigável)¶Imagens geradas por IA (30/mês)¶Componha sua própria frase com feedback gramatical¶Expressões comuns em todos os significados¶Histórico de buscas (últimos 30 dias)",
+    "Tudo do Basic¶Buscas ilimitadas¶Explicações para crianças¶Uma imagem por palavra (30/mês)¶Escreva uma frase e receba feedback¶Expressões e locuções¶Histórico de buscas (últimos 30 dias)",
 
   tierDeepTagline: "Praticar",
   tierDeepPitch:
     "Construa um vocabulário pessoal que fica mais forte com o tempo.",
   tierDeepCta: "Assinar Deep",
   tierDeepFeatures:
-    "Tudo do Clear¶Quizzes de prática (vários tipos, gerados por IA)¶Caderno pessoal (visualização Galáxia)¶Repetição espaçada (algoritmo inteligente)¶Compare palavras parecidas (mau/mal)¶Imagens com IA (100/mês vs 30 no Clear)",
+    "Tudo do Clear¶Quizzes de prática¶Caderno pessoal de palavras¶Prática inteligente para vocabulário que dura¶Distinguir palavras parecidas¶Uma imagem por palavra (100/mês)",
 
   basicEquivalent: "",
   clearEquivalent: "Equivalente a $2,50/mês",
@@ -2304,7 +2304,7 @@ const fr: Partial<V2Strings> = {
   tierBasicPitch: "Commencez avec l'essentiel.",
   tierBasicCta: "Commencer",
   tierBasicFeatures:
-    "20 recherches par jour¶Tous les sens (pas seulement le principal)¶3 exemples par sens¶Étymologie de base — origine et note historique¶Connexion requise",
+    "20 recherches par jour¶Tous les sens (pas seulement le principal)¶3 exemples par sens¶Étymologie et origine¶Connexion requise",
 
   tierClearTagline: "Visualiser",
   tierClearPitch:
@@ -2314,14 +2314,14 @@ const fr: Partial<V2Strings> = {
   tierClearCtaYearly: "Abonnement annuel",
   tierClearTrust: "Annulez à tout moment · Sans frais pendant l'essai",
   tierClearFeatures:
-    "Tout ce qu'il y a dans Basic¶Recherches illimitées¶Explications pour enfants (mode adapté)¶Images générées par IA (30/mois)¶Composez votre phrase + retour grammatical¶Expressions courantes pour tous les sens¶Historique de recherche (30 derniers jours)",
+    "Tout ce qu'il y a dans Basic¶Recherches illimitées¶Explications pour enfants¶Une image par mot (30/mois)¶Écrivez une phrase et recevez un retour¶Expressions et locutions¶Historique de recherche (30 derniers jours)",
 
   tierDeepTagline: "Pratiquer",
   tierDeepPitch:
     "Construisez un vocabulaire personnel qui se renforce avec le temps.",
   tierDeepCta: "S'abonner à Deep",
   tierDeepFeatures:
-    "Tout ce qu'il y a dans Clear¶Quiz d'entraînement (formats variés, générés par IA)¶Carnet personnel (vue Galaxie)¶Répétition espacée (algorithme intelligent)¶Comparer les mots qui se confondent (a/à)¶Images IA (100/mois vs 30 dans Clear)",
+    "Tout ce qu'il y a dans Clear¶Quiz d'entraînement¶Carnet personnel de mots¶Pratique intelligente pour un vocabulaire durable¶Distinguer les mots qui se ressemblent¶Une image par mot (100/mois)",
 
   basicEquivalent: "",
   clearEquivalent: "Équivalent à 2,50 $/mois",
