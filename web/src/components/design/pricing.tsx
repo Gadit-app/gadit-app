@@ -467,7 +467,7 @@ const PRICE_DEEP_MONTHLY =
 const PRICE_DEEP_YEARLY =
   process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY ?? "";
 
-function PricingTiers({ billing }: { billing: Billing }) {
+export function PricingTiers({ billing }: { billing: Billing }) {
   const { lang } = useLang();
   const { promptLogin } = useAuth();
 
@@ -601,18 +601,17 @@ function PricingTiers({ billing }: { billing: Billing }) {
           "clamp(24px, 2vw, 40px) clamp(16px, 3vw, 24px) clamp(24px, 4vw, 40px)",
       }}
     >
-      {/* Force LTR on the tier strip so the order is always
-          Free | Clear | Deep (cheap → expensive) regardless of UI
-          locale. This is the universal Pricing convention — every
-          SaaS site keeps tiers in this order even on RTL pages,
-          because the conceptual axis "more value as you go right"
-          is what users expect. Without `dir="ltr"`, an RTL document
-          flipped the grid to Deep | Clear | Free, which beta testers
-          read as backwards. */}
-      <div
-        dir="ltr"
-        className="grid gap-4 grid-cols-1 md:grid-cols-3"
-      >
+      {/* Tier order follows document direction:
+          - LTR (en, ru, es, pt, fr): Basic | Clear | Deep (cheap → expensive)
+          - RTL (he, ar):              Basic | Clear | Deep right-to-left,
+                                       which means Basic on the visual right
+                                       (where reading STARTS in RTL) — same
+                                       logical order, mirrored physically.
+          The original force-LTR was a misread of the convention; on RTL
+          pages the cheap-to-expensive axis flows right-to-left like all
+          other content, and beta tester confirmed Basic should lead on
+          the right edge in Hebrew. */}
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
         {tiers.map((tier) => (
           <TierCard key={tier.name} billing={billing} tier={tier} />
         ))}
@@ -797,6 +796,55 @@ function FAQ() {
           );
         })}
       </div>
+    </section>
+  );
+}
+
+// ─── HomePricingTeaser ──────────────────────────────────────────
+// Compact pricing block for the homepage: section eyebrow + headline,
+// then the same TierCards as /pricing (so the CTA wiring, layout,
+// and copy are identical), then a short link to the full page.
+// We deliberately don't include the monthly/yearly toggle here —
+// the homepage teaser is one decision (start free? subscribe?), not
+// a full pricing comparison.
+export function HomePricingTeaser() {
+  const { lang, dir } = useLang();
+  const isRtl = dir === "rtl";
+  const script: Script = lang === "he" ? "he" : lang === "ar" ? "ar" : "latin";
+  const titleFont = displayFontFor(script);
+
+  return (
+    <section
+      style={{
+        maxWidth: 1180,
+        margin: "0 auto",
+        padding:
+          "clamp(50px, 8vw, 100px) clamp(16px, 3vw, 24px) clamp(40px, 6vw, 80px)",
+      }}
+    >
+      <div className={`mb-8 ${isRtl ? "text-right" : ""}`}>
+        <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
+          {v2(lang, "pricingEyebrow")}
+        </Eyebrow>
+        <div
+          className={titleFont}
+          style={{
+            fontSize: "clamp(26px, 3vw, 34px)",
+            color: "oklch(0.95 0.008 265)",
+            marginTop: 6,
+            ...(script === "latin"
+              ? {
+                  fontVariationSettings: '"opsz" 48',
+                  fontStyle: "italic",
+                }
+              : {}),
+          }}
+        >
+          {v2(lang, "pricingTeaserTitle")}
+        </div>
+      </div>
+
+      <PricingTiers billing="monthly" />
     </section>
   );
 }

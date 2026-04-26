@@ -11,9 +11,9 @@ import {
   HomeSearch,
   ResultTease,
   ValueProps,
-  TierStrip,
   HomeFooter,
 } from "@/components/design/home";
+import { HomePricingTeaser } from "@/components/design/pricing";
 import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { useLang } from "@/lib/lang-context";
 
@@ -29,7 +29,11 @@ export function HomePage() {
         <HomeSearch />
         <ResultTease />
         <ValueProps />
-        <TierStrip />
+        {/* HomePricingTeaser uses the same TierCards as /pricing
+            (warm-paper cards, active CTAs that go to Stripe Checkout)
+            instead of the legacy in-page TierStrip teaser, so the
+            homepage can convert directly without a click-through. */}
+        <HomePricingTeaser />
         <HomeFooter />
       </div>
     </div>

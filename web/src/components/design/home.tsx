@@ -9,7 +9,8 @@
  *   <HomeSearch />               big search-as-CTA + suggestion chips
  *   <ResultTease />              tiny "preview" of a result card
  *   <ValueProps />               4-up grid of differentiators
- *   <TierStrip />                3-tier teaser (full pricing is /pricing)
+ *   <HomePricingTeaser />        3-tier strip (lives in pricing.tsx;
+ *                                same TierCards as /pricing)
  *   <HomeFooter />               minimal: Product / Legal columns
  *
  * Designed against the V2 design system: gd-stage canvas, gd-card
@@ -605,6 +606,10 @@ export function ValueProps() {
         </h2>
       </div>
 
+      {/* Cards now share the wordmark's electric-blue palette — same
+          gradient, same ring glow — so the section reads as branded
+          surface rather than the neutral navy of the page. Title and
+          body are pure white for high contrast against the blue. */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 gd-mobile-flat">
         {props.map((p) => (
           <div
@@ -613,13 +618,15 @@ export function ValueProps() {
             style={{
               borderRadius: 18,
               padding: "clamp(22px, 2.6vw, 28px) clamp(22px, 2.8vw, 30px)",
-              background: "oklch(0.21 0.05 265 / 0.55)",
+              background:
+                "linear-gradient(180deg, oklch(0.4 0.18 250) 0%, oklch(0.32 0.16 255) 100%)",
               boxShadow:
-                "inset 0 0 0 1px oklch(1 0 0 / 0.07), 0 4px 18px oklch(0.08 0.08 260 / 0.35)",
-              backdropFilter: "blur(10px)",
+                "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.45), " +
+                "0 0 0 4px oklch(0.72 0.19 245 / 0.06), " +
+                "0 14px 36px -16px oklch(0.08 0.08 260 / 0.55)",
             }}
           >
-            <Eyebrow style={{ color: "oklch(0.82 0.1 245)" }}>
+            <Eyebrow style={{ color: "oklch(0.92 0.05 240)" }}>
               {p.eyebrow}
             </Eyebrow>
             <div
@@ -627,7 +634,7 @@ export function ValueProps() {
               style={{
                 fontSize: "clamp(21px, 2.2vw, 25px)",
                 lineHeight: 1.25,
-                color: "oklch(0.96 0.008 265)",
+                color: "white",
                 marginTop: 10,
                 ...(script === "latin"
                   ? { fontVariationSettings: '"opsz" 32' }
@@ -643,7 +650,7 @@ export function ValueProps() {
               style={{
                 fontSize: "clamp(14px, 1.4vw, 15px)",
                 lineHeight: 1.55,
-                color: "oklch(0.74 0.02 265)",
+                color: "oklch(1 0 0 / 0.85)",
               }}
             >
               {p.body}
@@ -655,296 +662,6 @@ export function ValueProps() {
   );
 }
 
-// ─── TierStrip ───────────────────────────────────────────────────
-// 3-tier teaser (full pricing comparison lives at /pricing).
-// Clear is highlighted with a stronger ring; trust microcopy below.
-type TierTeaser = {
-  name: string;
-  price: string;
-  tag: string;
-  bullets: string[];
-  highlight?: boolean;
-};
-
-function tiersFor(lang: string): TierTeaser[] {
-  // English-rooted; Stripe charges in USD across all locales, so the
-  // numeric price stays the same — only the period suffix is localized.
-  const periodMo =
-    lang === "he" ? "/חודש" : lang === "ar" ? "/شهر" : "/mo";
-
-  if (lang === "he") {
-    return [
-      {
-        name: "Free",
-        price: "$0",
-        tag: "",
-        bullets: [
-          "20 חיפושים ביום",
-          "כל המשמעויות",
-          "3 דוגמאות לכל משמעות",
-          "אטימולוגיה בסיסית",
-        ],
-      },
-      {
-        name: "Clear",
-        price: "$2.99",
-        tag: periodMo,
-        bullets: [
-          "כל מה שיש ב־Free",
-          "חיפושים ללא הגבלה",
-          "הסבר לילדים",
-          "יצירת תמונות AI (30/חודש)",
-          "חיבור משפטים ומשוב",
-          "ביטויים נפוצים",
-          "היסטוריית חיפושים",
-        ],
-        highlight: true,
-      },
-      {
-        name: "Deep",
-        price: "$4.99",
-        tag: periodMo,
-        bullets: [
-          "כל מה שיש ב־Clear",
-          "תרגול ומבחנים",
-          "מחברת אישית (תצוגת גלקסיה)",
-          "חזרה מדורגת",
-          "השוואת מילים",
-          "יצירת תמונות AI (100/חודש)",
-        ],
-      },
-    ];
-  }
-
-  if (lang === "ar") {
-    return [
-      {
-        name: "Free",
-        price: "$0",
-        tag: "",
-        bullets: [
-          "20 بحثًا في اليوم",
-          "جميع المعاني",
-          "3 أمثلة لكل معنى",
-          "أصل الكلمة الأساسي",
-        ],
-      },
-      {
-        name: "Clear",
-        price: "$2.99",
-        tag: periodMo,
-        bullets: [
-          "كل ما في Free",
-          "بحث بلا حدود",
-          "شرح للأطفال",
-          "توليد صور بالذكاء الاصطناعي (30 شهريًا)",
-          "تأليف الجمل مع مراجعة",
-          "تعابير شائعة",
-          "سجلّ البحث",
-        ],
-        highlight: true,
-      },
-      {
-        name: "Deep",
-        price: "$4.99",
-        tag: periodMo,
-        bullets: [
-          "كل ما في Clear",
-          "اختبارات تدريب",
-          "دفتر شخصي (تصوير المجرّة)",
-          "مراجعة موزّعة",
-          "مقارنة الكلمات",
-          "توليد صور بالذكاء الاصطناعي (100 شهريًا)",
-        ],
-      },
-    ];
-  }
-
-  return [
-    {
-      name: "Free",
-      price: "$0",
-      tag: "",
-      bullets: [
-        "20 searches per day",
-        "All meanings (not just primary)",
-        "3 examples per meaning",
-        "Basic etymology",
-      ],
-    },
-    {
-      name: "Clear",
-      price: "$2.99",
-      tag: periodMo,
-      bullets: [
-        "Everything in Free",
-        "Unlimited searches",
-        "Kids explanation",
-        "AI image generation (30/mo)",
-        "Compose sentence with feedback",
-        "Common idioms",
-        "Search history",
-      ],
-      highlight: true,
-    },
-    {
-      name: "Deep",
-      price: "$4.99",
-      tag: periodMo,
-      bullets: [
-        "Everything in Clear",
-        "Practice quizzes",
-        "Personal notebook (galaxy view)",
-        "Spaced repetition",
-        "Word comparisons",
-        "AI image generation (100/mo)",
-      ],
-    },
-  ];
-}
-
-export function TierStrip() {
-  const { lang, dir } = useLang();
-  const isRtl = dir === "rtl";
-  const script = scriptFor(lang);
-
-  const tiers = tiersFor(lang);
-
-  const titleFontClass =
-    script === "latin"
-      ? "gd-font-display"
-      : script === "he"
-        ? "gd-font-he"
-        : "gd-font-ar";
-
-  return (
-    <section
-      style={{
-        maxWidth: 1120,
-        margin: "0 auto",
-        padding:
-          "clamp(50px, 8vw, 100px) clamp(16px, 3vw, 24px) clamp(40px, 6vw, 80px)",
-      }}
-    >
-      <div className={`mb-8 ${isRtl ? "text-right" : ""}`}>
-        <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
-          {v2(lang, "pricingEyebrow")}
-        </Eyebrow>
-        <div
-          className={titleFontClass}
-          style={{
-            fontSize: "clamp(26px, 3vw, 34px)",
-            color: "oklch(0.95 0.008 265)",
-            marginTop: 6,
-            ...(script === "latin"
-              ? {
-                  fontVariationSettings: '"opsz" 48',
-                  fontStyle: "italic",
-                }
-              : {}),
-          }}
-        >
-          {v2(lang, "pricingTeaserTitle")}
-        </div>
-      </div>
-
-      <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-        {tiers.map((tier) => (
-          <Link
-            key={tier.name}
-            href="/pricing"
-            className="block transition-transform hover:translate-y-[-2px]"
-            style={{
-              borderRadius: 18,
-              padding: "clamp(22px, 2.6vw, 28px) clamp(22px, 2.6vw, 26px)",
-              background: tier.highlight
-                ? "linear-gradient(180deg, oklch(0.24 0.07 260 / 0.85), oklch(0.18 0.06 265 / 0.85))"
-                : "oklch(0.20 0.05 265 / 0.55)",
-              boxShadow: tier.highlight
-                ? "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.5), 0 0 0 4px oklch(0.72 0.19 245 / 0.06), 0 16px 36px -12px oklch(0.5 0.2 250 / 0.5)"
-                : "inset 0 0 0 1px oklch(1 0 0 / 0.07), 0 4px 18px oklch(0.08 0.08 260 / 0.3)",
-            }}
-          >
-            <div
-              className={`flex items-baseline justify-between mb-4 ${isRtl ? "flex-row-reverse" : ""}`}
-            >
-              <div
-                className="gd-font-sans-ui font-semibold"
-                style={{ fontSize: 15, color: "oklch(0.96 0.008 265)" }}
-              >
-                {tier.name}
-              </div>
-              {tier.highlight && <TierBadge tier="clear" small />}
-            </div>
-            <div
-              className={`gd-font-display flex items-baseline gap-1 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
-              style={{
-                // Floor lowered (was 38px) so a long Hebrew/Arabic
-                // period suffix like "$2.99/חודש" doesn't overflow
-                // the card on a 320px viewport.
-                fontSize: "clamp(28px, 6vw, 38px)",
-                color: "oklch(0.97 0.008 265)",
-                fontVariationSettings: '"opsz" 96',
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {tier.price}
-              <span
-                className="gd-font-sans-ui"
-                style={{ fontSize: 13, color: "oklch(0.62 0.02 265)" }}
-              >
-                {tier.tag}
-              </span>
-            </div>
-            <ul className="mt-5 space-y-2.5">
-              {tier.bullets.map((b, i) => (
-                <li
-                  key={i}
-                  className={`flex items-start gap-2 gd-font-sans-ui ${isRtl ? "flex-row-reverse" : ""}`}
-                  style={{ fontSize: 13.5, color: "oklch(0.85 0.015 265)" }}
-                >
-                  <svg
-                    width="13"
-                    height="13"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    style={{
-                      color: "oklch(0.82 0.1 245)",
-                      marginTop: 4,
-                      flexShrink: 0,
-                    }}
-                  >
-                    <path
-                      d="M3 7.5l2.5 2.5L11 4"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </Link>
-        ))}
-      </div>
-
-      <div
-        className={`mt-6 gd-font-sans-ui ${
-          isRtl ? "text-right" : "text-center"
-        }`}
-        style={{
-          fontSize: 12,
-          color: "oklch(0.62 0.02 265)",
-          letterSpacing: "0.04em",
-        }}
-      >
-        {v2(lang, "trustMicrocopy")}
-      </div>
-    </section>
-  );
-}
 
 // ─── HomeFooter ──────────────────────────────────────────────────
 // Minimal: Wordmark + tagline + 2 link columns (Product / Legal).
@@ -964,32 +681,46 @@ export function HomeFooter() {
   ];
 
   return (
+    // Footer is forced to LTR layout regardless of UI locale: logo
+    // anchored to the LEFT, nav columns to the RIGHT. This is the
+    // dominant convention across SaaS sites (Notion, Vercel, Stripe,
+    // Apple, GitHub) and gives the brand mark a stable position
+    // when users switch languages mid-session — the wordmark doesn't
+    // visually "jump" sides each time the locale flips. Inside each
+    // nav column the link labels respect the document direction
+    // (textAlign: start) so Hebrew/Arabic labels still right-align
+    // within their column.
     <footer
-      dir={dir}
+      dir="ltr"
       style={{
         maxWidth: 1120,
         margin: "0 auto",
         padding:
           "clamp(36px, 5vw, 60px) clamp(16px, 3vw, 24px) clamp(28px, 4vw, 36px)",
         borderTop: "1px solid oklch(1 0 0 / 0.06)",
-        textAlign: isRtl ? "right" : "left",
       }}
     >
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
         <div style={{ maxWidth: 320 }}>
           <Wordmark />
           <p
+            dir={dir}
             className="mt-3 gd-font-sans-ui"
             style={{
               fontSize: 12.5,
               color: "oklch(0.6 0.02 265)",
               lineHeight: 1.55,
+              textAlign: isRtl ? "right" : "left",
             }}
           >
             {v2(lang, "footerTagline")}
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-6 md:gap-12">
+        <div
+          dir={dir}
+          className="grid grid-cols-2 gap-6 md:gap-12"
+          style={{ textAlign: isRtl ? "right" : "left" }}
+        >
           <div>
             <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
               {v2(lang, "footerProductGroup")}

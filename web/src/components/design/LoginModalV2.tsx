@@ -238,12 +238,25 @@ export function LoginModalV2() {
       dir={dir}
     >
       <div
-        className="gd-card relative"
+        className="relative"
         style={{
           width: "100%",
           maxWidth: 440,
           padding: "clamp(24px, 3vw, 32px) clamp(22px, 3vw, 36px) clamp(26px, 3vw, 34px)",
           textAlign: isRtl ? "right" : "left",
+          // Electric-blue card — high contrast against the dark navy
+          // backdrop AND against the white input fields inside, so
+          // the wordmark + form structure read clearly. The deep
+          // navy-to-blue gradient echoes the wordmark gradient.
+          borderRadius: 20,
+          background:
+            "linear-gradient(180deg, oklch(0.4 0.18 250) 0%, oklch(0.32 0.16 255) 100%)",
+          boxShadow:
+            "0 0 0 1px oklch(0.72 0.19 245 / 0.45), " +
+            "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
+            "0 30px 60px -20px oklch(0.08 0.08 260 / 0.7), " +
+            "0 8px 22px -10px oklch(0.08 0.08 260 / 0.5)",
+          color: "white",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -263,7 +276,7 @@ export function LoginModalV2() {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "var(--gd-ink-500)",
+            color: "oklch(1 0 0 / 0.7)",
             background: "transparent",
           }}
         >
@@ -309,7 +322,7 @@ export function LoginModalV2() {
           style={{
             fontSize: "clamp(24px, 2.6vw, 28px)",
             lineHeight: 1.18,
-            color: "var(--gd-ink-900)",
+            color: "white",
             ...(lang !== "he" && lang !== "ar"
               ? {
                   fontVariationSettings: '"opsz" 36',
@@ -329,7 +342,7 @@ export function LoginModalV2() {
             className="mt-1.5 gd-font-sans-ui"
             style={{
               fontSize: 13.5,
-              color: "var(--gd-ink-500)",
+              color: "oklch(1 0 0 / 0.75)",
               lineHeight: 1.5,
             }}
           >
@@ -361,13 +374,13 @@ export function LoginModalV2() {
         <div className="my-5 flex items-center gap-3">
           <div
             className="flex-1"
-            style={{ height: 1, background: "oklch(0 0 0 / 0.1)" }}
+            style={{ height: 1, background: "oklch(1 0 0 / 0.18)" }}
           />
           <span
             className="gd-font-sans-ui"
             style={{
               fontSize: 11.5,
-              color: "var(--gd-ink-400)",
+              color: "oklch(1 0 0 / 0.6)",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
             }}
@@ -376,7 +389,7 @@ export function LoginModalV2() {
           </span>
           <div
             className="flex-1"
-            style={{ height: 1, background: "oklch(0 0 0 / 0.1)" }}
+            style={{ height: 1, background: "oklch(1 0 0 / 0.18)" }}
           />
         </div>
 
@@ -402,7 +415,7 @@ export function LoginModalV2() {
               className="gd-font-sans-ui mb-1.5"
               style={{
                 fontSize: 11.5,
-                color: "var(--gd-ink-500)",
+                color: "oklch(1 0 0 / 0.85)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -442,7 +455,7 @@ export function LoginModalV2() {
               className="gd-font-sans-ui mb-1.5"
               style={{
                 fontSize: 11.5,
-                color: "var(--gd-ink-500)",
+                color: "oklch(1 0 0 / 0.85)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -534,7 +547,7 @@ export function LoginModalV2() {
         {/* Mode toggle */}
         <div
           className="mt-4 text-center gd-font-sans-ui"
-          style={{ fontSize: 13, color: "var(--gd-ink-500)" }}
+          style={{ fontSize: 13, color: "oklch(1 0 0 / 0.7)" }}
         >
           <button
             type="button"
@@ -543,7 +556,9 @@ export function LoginModalV2() {
               setErrorKey("");
             }}
             style={{
-              color: "oklch(0.5 0.18 250)",
+              color: "white",
+              fontWeight: 500,
+              textDecoration: "underline",
               cursor: "pointer",
               background: "transparent",
             }}
