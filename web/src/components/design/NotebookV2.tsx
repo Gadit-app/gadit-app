@@ -959,7 +959,14 @@ export function NotebookV2() {
         )}
         {!loading && isEmpty && <EmptyState />}
         {!loading && !isEmpty && view === "list" && (
+          // Explicit dir={dir} on the grid: CSS Grid auto-flow respects
+          // the direction property, so on RTL pages the first card
+          // lands in the visual right-hand cell instead of the left.
+          // The ancestor sets dir but the inheritance chain through
+          // the body wrapper was apparently breaking; setting it on
+          // the grid itself is bulletproof.
           <div
+            dir={dir}
             className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           >
             {derived.map((e) => (

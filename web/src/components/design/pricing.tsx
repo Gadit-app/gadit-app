@@ -381,15 +381,19 @@ function TierCard({
         </div>
       )}
 
-      {/* Features — flex-1 grows to fill remaining card height so the
-          CTA block below pins to the same Y across all three cards.
-          The card has dir={dir}, so an RTL document already flips the
-          flex children naturally — the check icon leads each row on
-          the visual right edge in he/ar. Adding flex-row-reverse on
-          top would double-flip back to LTR (the bug beta tester saw:
-          checks on the wrong side). textAlign: start works in both
-          directions without an explicit conditional. */}
-      <ul className="mt-7 space-y-3 flex-1">
+      {/* Features list — visually CENTERED inside the card.
+          The card itself uses textAlign:center for the brand row,
+          tagline, pitch, and price; the features should sit in the
+          same centered column. We achieve that by wrapping the <ul>
+          in a centering flex parent and giving the <ul> a max-width
+          that matches the rest of the centered content. Inside each
+          <li>, the row is still a flex (icon then text) so the check
+          leads the line on the right in RTL and the left in LTR
+          naturally — but the BLOCK itself is centered in the card.
+          flex-1 lets it grow vertically so the CTA below pins at the
+          same Y across all three tiers. */}
+      <div className="mt-7 flex-1 flex justify-center">
+      <ul className="space-y-3" style={{ width: "fit-content" }}>
         {tier.features.map((f, i) => (
           <li
             key={i}
@@ -424,6 +428,7 @@ function TierCard({
           </li>
         ))}
       </ul>
+      </div>
 
       {/* CTA — anchors to the bottom of the card (features above use
           flex-1, so this row sits at the same Y across all three). */}
