@@ -295,6 +295,7 @@ export function ImageSlot({
   state,
   word,
   imageUrl,
+  generating = false,
   onGenerate,
   onUpgrade,
   onRegenerate,
@@ -303,6 +304,7 @@ export function ImageSlot({
   state: "empty-clear" | "empty-locked" | "filled";
   word: string;
   imageUrl?: string;
+  generating?: boolean;
   onGenerate?: () => void;
   onUpgrade?: () => void;
   onRegenerate?: () => void;
@@ -373,204 +375,63 @@ export function ImageSlot({
     );
   }
 
-  // Empty states — locked (Basic) or clear (Clear/Deep, ready to generate)
+  // Empty states — locked (Basic) shows an Upgrade CTA; clear (Clear/Deep)
+  // shows a single Generate button. No headline, no decorative ovals,
+  // no descriptive blurb — the button is enough on its own.
   const locked = state === "empty-locked";
   return (
     <div
-      className="relative overflow-hidden gd-drift gd-image-empty"
+      className="flex items-center justify-center"
       style={{
-        // Empty state is now positioned AFTER meanings + kids (per
-        // beta tester reorder), so its visual weight matters less —
-        // the user has already gotten what they came for. Slimmer
-        // banner: 16:5 with a 160px ceiling so the section announces
-        // "you can also generate an image" without dominating.
-        // On mobile (<640px) .gd-image-empty drops the rigid aspect.
-        borderRadius: 20,
-        aspectRatio: "16 / 5",
-        maxHeight: 160,
-        background: locked
-          ? "linear-gradient(135deg, oklch(0.94 0.01 260) 0%, oklch(0.9 0.015 250) 50%, oklch(0.93 0.012 265) 100%)"
-          : "linear-gradient(135deg, oklch(0.93 0.035 250) 0%, oklch(0.88 0.06 245) 45%, oklch(0.92 0.04 260) 100%)",
-        boxShadow: locked
-          ? "inset 0 0 0 1px oklch(0.82 0.012 265), 0 1px 0 oklch(1 0 0 / 0.4) inset"
-          : "inset 0 0 0 1px oklch(0.78 0.1 245 / 0.4), 0 0 30px oklch(0.72 0.19 245 / 0.15)",
+        padding: "20px 24px",
+        borderRadius: 16,
+        background: "oklch(0 0 0 / 0.02)",
+        boxShadow: "inset 0 0 0 1px oklch(0.86 0.014 85)",
       }}
     >
-      {/* Subtle orbit ring SVG — hints imagery. Viewbox is wider/lower
-          than before to match the new 16:6 aspect ratio of the card. */}
-      <svg
-        className="absolute"
-        style={{ inset: 0, width: "100%", height: "100%", opacity: 0.4 }}
-        viewBox="0 0 400 150"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <ellipse
-          cx="200"
-          cy="75"
-          rx="160"
-          ry="50"
-          stroke={
-            locked
-              ? "oklch(0.6 0.01 265 / 0.25)"
-              : "oklch(0.72 0.19 245 / 0.45)"
-          }
-          strokeWidth="0.7"
-          fill="none"
-        />
-        <ellipse
-          cx="200"
-          cy="75"
-          rx="110"
-          ry="32"
-          stroke={
-            locked
-              ? "oklch(0.6 0.01 265 / 0.2)"
-              : "oklch(0.72 0.19 245 / 0.35)"
-          }
-          strokeWidth="0.6"
-          fill="none"
-          strokeDasharray="2 4"
-        />
-        <circle
-          cx="200"
-          cy="75"
-          r="1.8"
-          fill={
-            locked ? "oklch(0.5 0.01 265)" : "oklch(0.72 0.19 245)"
-          }
-        />
-      </svg>
-
-      <div className="gd-image-empty-content absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 py-5 text-center">
-        {locked ? (
-          <>
-            <div
-              className="flex items-center gap-2"
-              style={{ color: "oklch(0.48 0.08 250)" }}
-            >
-              <LockGlyph size={14} />
-              <span
-                className="gd-font-sans-ui font-semibold"
-                style={{
-                  fontSize: 10.5,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                }}
-              >
-                {v2(lang, "clearUnlocksThis")}
-              </span>
-            </div>
-            <div
-              className="gd-font-display italic"
-              style={{
-                fontSize: "clamp(18px, 2.4vw, 22px)",
-                color: "var(--gd-ink-900)",
-              }}
-            >
-              {v2(lang, "visualizeThisWord")}{" "}
-              <em
-                style={{
-                  color: "oklch(0.56 0.2 250)",
-                  fontStyle: script === "latin" ? "italic" : "normal",
-                }}
-              >
-                {word}
-              </em>
-            </div>
-            <div
-              className="gd-font-sans-ui"
-              style={{
-                fontSize: 13,
-                color: "var(--gd-ink-500)",
-                maxWidth: "32ch",
-              }}
-            >
-              {v2(lang, "visualBlurbLocked")}
-            </div>
-            <button
-              type="button"
-              onClick={onUpgrade}
-              className="mt-1 inline-flex items-center gap-2 gd-font-sans-ui font-medium"
-              style={{
-                padding: "9px 16px",
-                borderRadius: 999,
-                fontSize: 12.5,
-                color: "oklch(0.4 0.12 245)",
-                background: "oklch(1 0 0 / 0.7)",
-                boxShadow:
-                  "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.3), 0 2px 8px oklch(0.4 0.1 245 / 0.08)",
-              }}
-            >
-              {v2(lang, "upgradeToClear")}
-              <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                <path
-                  d="M3 6h6m0 0L6 3m3 3L6 9"
-                  stroke="currentColor"
-                  strokeWidth="1.3"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          </>
-        ) : (
-          <>
-            <Eyebrow>—</Eyebrow>
-            <div
-              className="gd-font-display italic"
-              style={{
-                fontSize: "clamp(18px, 2.4vw, 24px)",
-                color: "var(--gd-ink-900)",
-              }}
-            >
-              {v2(lang, "visualizeThisWord")}{" "}
-              <span
-                style={{
-                  fontStyle: script === "latin" ? "italic" : "normal",
-                  color: "oklch(0.56 0.2 250)",
-                }}
-              >
-                {word}
-              </span>
-            </div>
-            <div
-              className="gd-font-sans-ui"
-              style={{
-                fontSize: 13,
-                color: "var(--gd-ink-500)",
-                maxWidth: "34ch",
-              }}
-            >
-              {v2(lang, "visualBlurb")}
-            </div>
-            <button
-              type="button"
-              onClick={onGenerate}
-              className="mt-1 inline-flex items-center gap-2 gd-font-sans-ui font-medium"
-              style={{
-                padding: "10px 18px",
-                borderRadius: 999,
-                fontSize: 13,
-                color: "white",
-                background:
-                  "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-                boxShadow:
-                  "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 24px oklch(0.5 0.2 250 / 0.35)",
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M7 2v3m0 4v3m-5-5h3m4 0h3m-8.5-3.5l2 2m5 5l2 2m0-9l-2 2m-5 5l-2 2"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {v2(lang, "generateImage")}
-            </button>
-          </>
-        )}
-      </div>
+      {locked ? (
+        <button
+          type="button"
+          onClick={onUpgrade}
+          className="inline-flex items-center gap-2 gd-font-sans-ui font-medium"
+          style={{
+            padding: "11px 22px",
+            borderRadius: 999,
+            fontSize: 13,
+            color: "white",
+            background:
+              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+            boxShadow:
+              "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 24px oklch(0.5 0.2 250 / 0.35)",
+          }}
+        >
+          <LockGlyph size={12} />
+          {v2(lang, "upgradeToClear")}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={onGenerate}
+          disabled={generating}
+          className="gd-font-sans-ui font-medium"
+          style={{
+            padding: "11px 22px",
+            borderRadius: 999,
+            fontSize: 13,
+            color: "white",
+            background:
+              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+            boxShadow:
+              "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 24px oklch(0.5 0.2 250 / 0.35)",
+            opacity: generating ? 0.7 : 1,
+            cursor: generating ? "wait" : "pointer",
+          }}
+        >
+          {generating
+            ? v2(lang, "generatingImage")
+            : v2(lang, "generateImage")}
+        </button>
+      )}
     </div>
   );
 }
@@ -1269,6 +1130,7 @@ export function ResultView({
   result,
   plan,
   imageUrl,
+  imageGenerating = false,
   onSave,
   onShare,
   onGenerate,
@@ -1281,6 +1143,7 @@ export function ResultView({
   result: WordResult;
   plan: Plan;
   imageUrl?: string;
+  imageGenerating?: boolean;
   onSave?: () => void;
   onShare?: () => void;
   onGenerate?: () => void;
@@ -1341,6 +1204,7 @@ export function ResultView({
         state={imageState}
         word={result.word}
         imageUrl={imageUrl}
+        generating={imageGenerating}
         onGenerate={onGenerate}
         onUpgrade={onUpgrade}
         onRegenerate={onRegenerate}

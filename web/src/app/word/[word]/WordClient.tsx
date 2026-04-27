@@ -238,6 +238,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // counter is in localStorage.
   const [anonSearchesLeft, setAnonSearchesLeft] = useState<number | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [imageGenerating, setImageGenerating] = useState(false);
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
   const [reportContext, setReportContext] = useState<ReportContext | null>(
@@ -471,6 +472,8 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       promptLogin(v2(lang, "generateImage"));
       return;
     }
+    if (imageGenerating) return; // guard against double-click
+    setImageGenerating(true);
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/generate-image", {
@@ -492,10 +495,12 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         }
         return;
       }
-      const data = (await res.json()) as { imageUrl?: string };
-      if (data.imageUrl) setImageUrl(data.imageUrl);
+      const data = (await res.json()) as { url?: string };
+      if (data.url) setImageUrl(data.url);
     } catch (e) {
       console.error("generate-image:", e);
+    } finally {
+      setImageGenerating(false);
     }
   }
 
@@ -661,6 +666,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               result={result}
               plan={plan}
               imageUrl={imageUrl}
+              imageGenerating={imageGenerating}
               onSave={handleSave}
               onShare={handleShare}
               onGenerate={handleGenerate}

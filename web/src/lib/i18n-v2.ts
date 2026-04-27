@@ -333,6 +333,7 @@ export interface V2Strings {
   saveToNotebook: string;
   saveToNotebookHint: string;
   generateImage: string;
+  generatingImage: string;
   generateImageHint: string;
   composeSentence: string;
   composeSentenceHint: string;
@@ -660,6 +661,7 @@ const en: V2Strings = {
   saveToNotebook: "Save to notebook",
   saveToNotebookHint: "Return to it later — organized, searchable.",
   generateImage: "Generate image",
+  generatingImage: "Generating…",
   generateImageHint: "A vivid AI-made visual, just for this word.",
   composeSentence: "Compose a sentence",
   composeSentenceHint: "Write your own — Gadit reviews for tone and fit.",
@@ -992,6 +994,7 @@ const he: V2Strings = {
   saveToNotebook: "שמירה למחברת",
   saveToNotebookHint: "חזרו אליה אחר־כך — מאורגנת וזמינה לחיפוש.",
   generateImage: "צרו תמונה",
+  generatingImage: "יוצרים…",
   generateImageHint: "תמונה חיה שנוצרת ב־AI, במיוחד למילה הזו.",
   composeSentence: "חברו משפט",
   composeSentenceHint: "כתבו משלכם — Gadit ייתן משוב על טון והקשר.",
@@ -1340,6 +1343,7 @@ const ar: V2Strings = {
   saveToNotebook: "احفظ في الدفتر",
   saveToNotebookHint: "عُد إليها لاحقًا — منظَّمة وقابلة للبحث.",
   generateImage: "أنشئ صورة",
+  generatingImage: "جارٍ الإنشاء…",
   generateImageHint:
     "صورة بصرية حيّة من الذكاء الاصطناعي، لهذه الكلمة فقط.",
   composeSentence: "اكتب جملة",
@@ -1668,6 +1672,7 @@ const ru: Partial<V2Strings> = {
   saveToNotebook: "В тетрадь",
   saveToNotebookHint: "Вернётесь позже — упорядочено и с поиском.",
   generateImage: "Создать картинку",
+  generatingImage: "Создаём…",
   generateImageHint: "Живая картинка от ИИ — для этого слова.",
   composeSentence: "Составить предложение",
   composeSentenceHint:
@@ -1996,6 +2001,7 @@ const es: Partial<V2Strings> = {
   saveToNotebook: "Guardar en el cuaderno",
   saveToNotebookHint: "Vuelve después — organizado y con búsqueda.",
   generateImage: "Generar imagen",
+  generatingImage: "Generando…",
   generateImageHint: "Una imagen viva hecha con IA, para esta palabra.",
   composeSentence: "Componer una oración",
   composeSentenceHint:
@@ -2324,6 +2330,7 @@ const pt: Partial<V2Strings> = {
   saveToNotebook: "Salvar no caderno",
   saveToNotebookHint: "Volte depois — organizado e com busca.",
   generateImage: "Gerar imagem",
+  generatingImage: "Gerando…",
   generateImageHint: "Uma imagem viva feita por IA, pra esta palavra.",
   composeSentence: "Compor uma frase",
   composeSentenceHint:
@@ -2652,6 +2659,7 @@ const fr: Partial<V2Strings> = {
   saveToNotebook: "Enregistrer dans le carnet",
   saveToNotebookHint: "Vous y revenez plus tard — organisé et cherchable.",
   generateImage: "Générer une image",
+  generatingImage: "Génération…",
   generateImageHint: "Une image vivante par IA, juste pour ce mot.",
   composeSentence: "Composer une phrase",
   composeSentenceHint:
