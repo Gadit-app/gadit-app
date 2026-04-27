@@ -153,11 +153,11 @@ export function HomeHero() {
 // ─── HomeSearch ──────────────────────────────────────────────────
 // The big homepage search bar — visually distinct from Screen 1's
 // compact persistent search. Glowing electric-blue cradle, suggestion
-// chips below. Signed-out users still see the input but submit opens
-// login; signed-in users navigate straight to /word/[word].
+// chips below. Open access — visitors of any auth state navigate
+// straight to /word/[word]; the page itself enforces the 5/day anon
+// quota via /api/define and surfaces the soft wall when needed.
 export function HomeSearch() {
   const { lang, dir } = useLang();
-  const { user, promptLogin } = useAuth();
   const router = useRouter();
   const isRtl = dir === "rtl";
   const [query, setQuery] = useState("");
@@ -173,17 +173,10 @@ export function HomeSearch() {
   function go(word: string) {
     const trimmed = word.trim();
     if (!trimmed) return;
-    if (!user) {
-      // Sign-in is required to search; once logged in, send them to
-      // the word page they tried to reach.
-      promptLogin({
-        mode: "signin",
-        onSuccess: () => {
-          router.push(`/word/${encodeURIComponent(trimmed)}`);
-        },
-      });
-      return;
-    }
+    // Open access: anonymous visitors get up to 5 free searches per
+    // IP per day. The /word/[X] route + /api/define handle the quota
+    // and surface the soft wall once the cap is hit. No login needed
+    // for the first taste — the whole point of the open-access shift.
     router.push(`/word/${encodeURIComponent(trimmed)}`);
   }
 
