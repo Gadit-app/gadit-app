@@ -157,10 +157,34 @@ export function WordHeader({
   const script = scriptFor(lang);
   const tFont = titleFontClass(script);
 
+  // Hide the language eyebrow when the word's language matches the
+  // UI language — beta tester rightly flagged "HE · HEBREW" on a
+  // Hebrew page is pure noise. The eyebrow only earns its keep when
+  // the word is in a DIFFERENT language than the UI (e.g. a Hebrew-
+  // speaking user looking up "ephemeral" should see "ENGLISH" so
+  // they know what they're getting). For same-language searches we
+  // suppress it entirely, plus the "HE · HEBREW" code suffix —
+  // either both show or neither.
+  const uiLanguageNames: Record<string, string[]> = {
+    en: ["english"],
+    he: ["hebrew", "עברית"],
+    ar: ["arabic", "العربية"],
+    ru: ["russian", "русский"],
+    es: ["spanish", "español"],
+    pt: ["portuguese", "português"],
+    fr: ["french", "français"],
+  };
+  const matchesUiLang = (() => {
+    const langName = (language || "").toLowerCase().trim();
+    if (!langName) return true; // empty = don't show
+    return (uiLanguageNames[lang] ?? []).some((n) => langName.includes(n));
+  })();
+  const showLangEyebrow = !matchesUiLang;
+
   // Header card — much tighter than before. Word title was up to
   // 88px display serif, eating ~40% of viewport height on its own.
-  // Cap is now 56px so the meanings + first two examples land above
-  // the fold on a typical laptop. Padding compressed too.
+  // Now capped at 44px so the word lives in a calm, room-of-breath
+  // header instead of dominating the first viewport.
   return (
     // Inner content set to dir={dir} explicitly so flex flows
     // start→end naturally — avoiding the flex-row-reverse trap that
@@ -173,49 +197,44 @@ export function WordHeader({
       style={{ padding: "clamp(18px, 2.4vw, 26px) clamp(20px, 2.6vw, 32px)" }}
       dir={dir}
     >
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-6">
-        {/* Word column — start side. Text-start so title hugs the
-            reading-start edge (right in RTL, left in LTR). */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-6">
+        {/* Word column — start side, vertically centered against the
+            action buttons across from it. */}
         <div className="flex-1 min-w-0" style={{ textAlign: "start" }}>
-          <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <Eyebrow>{language}</Eyebrow>
-            <span style={{ color: "var(--gd-ink-300)" }}>·</span>
-            <span
-              className="gd-font-sans-ui"
-              style={{
-                fontSize: 11,
-                color: "var(--gd-ink-500)",
-                fontWeight: 500,
-              }}
-            >
-              {langCodeFor(lang)}
-            </span>
-            {pos && (
-              <>
+          {/* Eyebrow only when the word's language differs from UI —
+              for HE-on-HE searches we suppress it entirely. POS (when
+              present) lives on its own here too. */}
+          {(showLangEyebrow || pos) && (
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              {showLangEyebrow && <Eyebrow>{language}</Eyebrow>}
+              {showLangEyebrow && pos && (
                 <span style={{ color: "var(--gd-ink-300)" }}>·</span>
+              )}
+              {pos && (
                 <span
                   className="gd-font-sans-ui italic"
                   style={{ fontSize: 11, color: "var(--gd-ink-500)" }}
                 >
                   {pos}
                 </span>
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          )}
           <h1
             className={tFont}
             style={{
-              // Was clamp(32-88px) — beta tester said the word was
-              // visually shouting. Capped at 56px (still display
-              // serif + clearly the page subject, just not absurd).
-              fontSize: "clamp(30px, 4.6vw, 56px)",
+              // Down from clamp(30-56px) — the word is the page
+              // subject, not the page banner. 28-44px reads cleanly
+              // and lets the buttons align comfortably across from
+              // it without dwarfing them.
+              fontSize: "clamp(28px, 3.6vw, 44px)",
               lineHeight: 1.02,
               color: "var(--gd-ink-900)",
               letterSpacing: script === "latin" ? "-0.025em" : 0,
               fontWeight: 400,
               overflowWrap: "anywhere",
               ...(script === "latin"
-                ? { fontVariationSettings: '"opsz" 96', fontStyle: "italic" }
+                ? { fontVariationSettings: '"opsz" 72', fontStyle: "italic" }
                 : {}),
             }}
           >
@@ -223,8 +242,8 @@ export function WordHeader({
           </h1>
           {ipa && (
             <div
-              className="mt-2 gd-font-sans-ui"
-              style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
+              className="mt-1.5 gd-font-sans-ui"
+              style={{ fontSize: 13, color: "var(--gd-ink-500)" }}
             >
               {ipa}
             </div>
