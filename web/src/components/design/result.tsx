@@ -162,9 +162,21 @@ export function WordHeader({
   // Cap is now 56px so the meanings + first two examples land above
   // the fold on a typical laptop. Padding compressed too.
   return (
-    <div className="gd-card" style={{ padding: "clamp(18px, 2.4vw, 26px) clamp(20px, 2.6vw, 32px)" }}>
-      <div className={`flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-6 ${isRtl ? "md:flex-row-reverse" : ""}`}>
-        <div className="flex-1 min-w-0">
+    // Inner content set to dir={dir} explicitly so flex flows
+    // start→end naturally — avoiding the flex-row-reverse trap that
+    // was double-flipping items in RTL. The `text-start` utility on
+    // the word column then aligns the title to the start edge
+    // (right in he/ar, left in en/ru/es/pt/fr) without an explicit
+    // conditional.
+    <div
+      className="gd-card"
+      style={{ padding: "clamp(18px, 2.4vw, 26px) clamp(20px, 2.6vw, 32px)" }}
+      dir={dir}
+    >
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-6">
+        {/* Word column — start side. Text-start so title hugs the
+            reading-start edge (right in RTL, left in LTR). */}
+        <div className="flex-1 min-w-0" style={{ textAlign: "start" }}>
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <Eyebrow>{language}</Eyebrow>
             <span style={{ color: "var(--gd-ink-300)" }}>·</span>
@@ -218,7 +230,11 @@ export function WordHeader({
             </div>
           )}
         </div>
-        <div className="flex flex-row md:flex-col items-start md:items-end gap-3">
+        {/* Action column — end side (left in RTL, right in LTR).
+            justify-between on the parent already pins this to the
+            opposite edge from the word column. flex-shrink-0 so the
+            buttons don't get squeezed when the word is long. */}
+        <div className="flex flex-row md:flex-col items-start md:items-end gap-2 flex-shrink-0">
           {plan !== "basic" && <TierBadge tier={plan} />}
           <div className="flex items-center gap-2">
             <IconButton label={v2(lang, "saveToNotebook")} onClick={onSave}>
@@ -231,14 +247,21 @@ export function WordHeader({
                 />
               </svg>
             </IconButton>
+            {/* Real share icon — the previous SVG was an upload arrow
+                ("export → up"), which read as "download" to beta
+                testers. This one is the iOS-style share glyph: a
+                box with an arrow leaving the top, which is the
+                universal "send/share" affordance. */}
             <IconButton label="Share" onClick={onShare}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <circle cx="3" cy="7" r="1.5" stroke="currentColor" strokeWidth="1.2" />
+                <circle cx="11" cy="3" r="1.5" stroke="currentColor" strokeWidth="1.2" />
+                <circle cx="11" cy="11" r="1.5" stroke="currentColor" strokeWidth="1.2" />
                 <path
-                  d="M7 9V2m0 0L4.5 4.5M7 2l2.5 2.5M3 8.5V12h8V8.5"
+                  d="M4.3 6.3l5.4-2.6M4.3 7.7l5.4 2.6"
                   stroke="currentColor"
                   strokeWidth="1.2"
                   strokeLinecap="round"
-                  strokeLinejoin="round"
                 />
               </svg>
             </IconButton>
