@@ -141,6 +141,14 @@ export function LoginModalV2() {
   const [showPwd, setShowPwd] = useState(false);
   const [busy, setBusy] = useState(false);
   const [errorKey, setErrorKey] = useState<string>("");
+  // Age + terms attestation, signup-only. Beta security review noted
+  // we have no minimum-age check anywhere — kids under 13 could
+  // create accounts unobstructed, which is a COPPA risk for US users
+  // (and a 16-year limit applies under GDPR for some EU countries).
+  // We don't try to verify; we make the user click that they're old
+  // enough and agree to the policies. Self-attestation is the
+  // industry-standard minimum.
+  const [ageAccepted, setAgeAccepted] = useState(false);
 
   // Reset transient state every time the modal opens fresh.
   // Initial mode comes from auth-context (caller-supplied) — pricing
@@ -153,6 +161,7 @@ export function LoginModalV2() {
       setBusy(false);
       setErrorKey("");
       setShowPwd(false);
+      setAgeAccepted(false);
     }
   }, [showLoginModal, loginMode]);
 
@@ -202,6 +211,14 @@ export function LoginModalV2() {
   }
 
   async function handleGoogle() {
+    // Same age gate for Google sign-up. (We can't tell signup vs
+    // signin in advance with Google — Firebase resolves it after the
+    // popup. So we treat any Google flow opened from a "signup"
+    // context as needing the gate, and let the signin path through.)
+    if (mode === "signup" && !ageAccepted) {
+      setErrorKey("loginErrorAgeRequired");
+      return;
+    }
     setBusy(true);
     setErrorKey("");
     try {
@@ -230,6 +247,10 @@ export function LoginModalV2() {
     e.preventDefault();
     setErrorKey("");
     if (mode === "signup") {
+      if (!ageAccepted) {
+        setErrorKey("loginErrorAgeRequired");
+        return;
+      }
       const policyErr = validateSignupPassword(password);
       if (policyErr) {
         setErrorKey(policyErr);
@@ -565,11 +586,56 @@ export function LoginModalV2() {
             </div>
           </label>
 
+          {/* Age + terms attestation — signup only. Self-attestation
+              is the industry-standard minimum for COPPA / GDPR
+              compliance. We don't try to verify age (no public DB
+              would let us); we just make it clear what they're
+              attesting to. */}
+          {mode === "signup" && (
+            <label
+              className="mt-4 flex items-start gap-2.5 cursor-pointer gd-font-sans-ui"
+              style={{ fontSize: 12.5, color: "oklch(1 0 0 / 0.85)", lineHeight: 1.45 }}
+            >
+              <input
+                type="checkbox"
+                checked={ageAccepted}
+                onChange={(e) => setAgeAccepted(e.target.checked)}
+                style={{
+                  marginTop: 3,
+                  width: 16,
+                  height: 16,
+                  flexShrink: 0,
+                  accentColor: "oklch(0.62 0.2 250)",
+                }}
+              />
+              <span>
+                {v2(lang, "loginAgeTermsLine")}{" "}
+                <a
+                  href="/terms"
+                  target="_blank"
+                  style={{ color: "white", textDecoration: "underline" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {v2(lang, "loginTermsLinkLabel")}
+                </a>
+                {" · "}
+                <a
+                  href="/privacy"
+                  target="_blank"
+                  style={{ color: "white", textDecoration: "underline" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {v2(lang, "loginPrivacyLinkLabel")}
+                </a>
+              </span>
+            </label>
+          )}
+
           {/* Submit */}
           <button
             type="submit"
             disabled={busy}
-            className="mt-5 w-full gd-font-sans-ui font-medium inline-flex items-center justify-center gap-2"
+            className="mt-4 w-full gd-font-sans-ui font-medium inline-flex items-center justify-center gap-2"
             style={{
               fontSize: 14.5,
               padding: "13px 18px",

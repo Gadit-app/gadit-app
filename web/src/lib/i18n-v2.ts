@@ -151,6 +151,14 @@ export interface V2Strings {
   loginErrorWrongCredentials: string;
   loginErrorEmailInUse: string;
   loginErrorWeakPassword: string;
+  // Age + terms attestation (signup only). Required to comply with
+  // COPPA (US, 13+) and GDPR (EU, varies by country, 13-16). We
+  // can't verify; users self-attest. The checkbox label embeds the
+  // links to /terms and /privacy.
+  loginAgeTermsLine: string;
+  loginTermsLinkLabel: string;
+  loginPrivacyLinkLabel: string;
+  loginErrorAgeRequired: string;
   loginErrorInvalidEmail: string;
   loginErrorGoogleFailed: string;
   loginErrorGeneric: string;
@@ -486,6 +494,10 @@ const en: V2Strings = {
   loginErrorWrongCredentials: "Wrong email or password.",
   loginErrorEmailInUse: "Email already in use. Try logging in.",
   loginErrorWeakPassword: "Password must be at least 8 characters and include a letter and a number.",
+  loginAgeTermsLine: "I'm 13 or older and I agree to the",
+  loginTermsLinkLabel: "Terms",
+  loginPrivacyLinkLabel: "Privacy Policy",
+  loginErrorAgeRequired: "Please confirm you're 13 or older and agree to the Terms and Privacy Policy.",
   loginErrorInvalidEmail: "Please enter a valid email address.",
   loginErrorGoogleFailed: "Could not sign in with Google. Try again.",
   loginErrorGeneric: "Something went wrong. Try again.",
@@ -809,6 +821,10 @@ const he: V2Strings = {
   loginErrorWrongCredentials: "אימייל או סיסמה שגויים.",
   loginErrorEmailInUse: "האימייל כבר בשימוש. נסו להתחבר.",
   loginErrorWeakPassword: "הסיסמה חייבת להכיל לפחות 8 תווים, אות אחת ומספר אחד.",
+  loginAgeTermsLine: "אני בן/בת 13 ומעלה ומסכים/ה ל",
+  loginTermsLinkLabel: "תנאים",
+  loginPrivacyLinkLabel: "מדיניות פרטיות",
+  loginErrorAgeRequired: "יש לאשר שאתם בני 13 ומעלה ומסכימים לתנאים ולמדיניות הפרטיות.",
   loginErrorInvalidEmail: "אנא הזינו כתובת אימייל תקינה.",
   loginErrorGoogleFailed: "ההתחברות עם Google נכשלה. נסו שוב.",
   loginErrorGeneric: "משהו השתבש. נסו שוב.",
@@ -1137,6 +1153,10 @@ const ar: V2Strings = {
   loginErrorWrongCredentials: "البريد أو كلمة المرور غير صحيحة.",
   loginErrorEmailInUse: "البريد مستخدم بالفعل. حاول تسجيل الدخول.",
   loginErrorWeakPassword: "يجب أن تكون كلمة المرور 8 أحرف على الأقل، وتحتوي على حرف ورقم.",
+  loginAgeTermsLine: "عمري 13 سنة أو أكثر وأوافق على",
+  loginTermsLinkLabel: "الشروط",
+  loginPrivacyLinkLabel: "سياسة الخصوصية",
+  loginErrorAgeRequired: "يرجى تأكيد أنك تبلغ 13 عامًا أو أكثر وأنك توافق على الشروط وسياسة الخصوصية.",
   loginErrorInvalidEmail: "يُرجى إدخال بريد إلكتروني صالح.",
   loginErrorGoogleFailed: "تعذّر تسجيل الدخول عبر Google. حاول مرة أخرى.",
   loginErrorGeneric: "حدث خطأ. حاول مرة أخرى.",
@@ -1483,6 +1503,10 @@ const ru: Partial<V2Strings> = {
   loginErrorWrongCredentials: "Неверный email или пароль.",
   loginErrorEmailInUse: "Этот email уже используется. Попробуйте войти.",
   loginErrorWeakPassword: "Пароль должен быть не короче 8 символов и содержать букву и цифру.",
+  loginAgeTermsLine: "Мне 13 лет или больше, я принимаю",
+  loginTermsLinkLabel: "Условия",
+  loginPrivacyLinkLabel: "Политику конфиденциальности",
+  loginErrorAgeRequired: "Подтвердите, что вам 13 лет или больше и вы принимаете Условия и Политику конфиденциальности.",
   loginErrorInvalidEmail: "Введите корректный email.",
   loginErrorGoogleFailed: "Не удалось войти через Google. Попробуйте ещё раз.",
   loginErrorGeneric: "Что-то пошло не так. Попробуйте снова.",
@@ -1809,6 +1833,10 @@ const es: Partial<V2Strings> = {
   loginErrorWrongCredentials: "Correo o contraseña incorrectos.",
   loginErrorEmailInUse: "Este correo ya está en uso. Intenta iniciar sesión.",
   loginErrorWeakPassword: "La contraseña debe tener al menos 8 caracteres e incluir una letra y un número.",
+  loginAgeTermsLine: "Tengo 13 años o más y acepto los",
+  loginTermsLinkLabel: "Términos",
+  loginPrivacyLinkLabel: "Política de Privacidad",
+  loginErrorAgeRequired: "Confirma que tienes 13 años o más y aceptas los Términos y la Política de Privacidad.",
   loginErrorInvalidEmail: "Ingresa un correo electrónico válido.",
   loginErrorGoogleFailed: "No se pudo iniciar con Google. Intenta de nuevo.",
   loginErrorGeneric: "Algo salió mal. Inténtalo de nuevo.",
@@ -2133,6 +2161,10 @@ const pt: Partial<V2Strings> = {
   loginErrorWrongCredentials: "E-mail ou senha incorretos.",
   loginErrorEmailInUse: "Este e-mail já está em uso. Tente entrar.",
   loginErrorWeakPassword: "A senha precisa ter pelo menos 8 caracteres e incluir uma letra e um número.",
+  loginAgeTermsLine: "Tenho 13 anos ou mais e concordo com os",
+  loginTermsLinkLabel: "Termos",
+  loginPrivacyLinkLabel: "Política de Privacidade",
+  loginErrorAgeRequired: "Confirme que você tem 13 anos ou mais e concorda com os Termos e a Política de Privacidade.",
   loginErrorInvalidEmail: "Digite um e-mail válido.",
   loginErrorGoogleFailed: "Não foi possível entrar com Google. Tente de novo.",
   loginErrorGeneric: "Algo deu errado. Tente de novo.",
@@ -2457,6 +2489,10 @@ const fr: Partial<V2Strings> = {
   loginErrorWrongCredentials: "E-mail ou mot de passe incorrect.",
   loginErrorEmailInUse: "Cet e-mail est déjà utilisé. Essayez de vous connecter.",
   loginErrorWeakPassword: "Le mot de passe doit faire au moins 8 caractères et inclure une lettre et un chiffre.",
+  loginAgeTermsLine: "J'ai 13 ans ou plus et j'accepte les",
+  loginTermsLinkLabel: "Conditions",
+  loginPrivacyLinkLabel: "Politique de confidentialité",
+  loginErrorAgeRequired: "Veuillez confirmer que vous avez 13 ans ou plus et acceptez les Conditions et la Politique de confidentialité.",
   loginErrorInvalidEmail: "Saisissez un e-mail valide.",
   loginErrorGoogleFailed: "Connexion Google impossible. Réessayez.",
   loginErrorGeneric: "Une erreur est survenue. Réessayez.",
