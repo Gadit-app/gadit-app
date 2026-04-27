@@ -247,13 +247,20 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // Plan as the API gates it: anonymous → "basic", auth-context → server.
   const plan: Plan = authPlan ?? "basic";
 
-  // Guard against double-firing in dev StrictMode. Key includes the
-  // user uid so that an anonymous → signed-in transition retriggers
-  // the fetch (otherwise the page sits at a permanent skeleton-with-
-  // login-modal loop: visitor lands on /word/X, /api/define returns
-  // 401, login modal opens, visitor signs in — but nothing fires the
-  // fetch again, so they stare at an empty page).
+  // Guard against double-firing in dev StrictMode AND against
+  // re-fetches caused by unstable deps. Key embeds user.uid so an
+  // anonymous → signed-in transition re-runs the fetch (otherwise
+  // a visitor who signs in mid-skeleton would never see the result).
   const fetchedFor = useRef<string | null>(null);
+
+  // promptLogin is recreated every AuthProvider render, which used to
+  // re-fire the effect each time React's auth state updated. Stash a
+  // ref so the effect's deps stay minimal and the guard actually
+  // works (see effect below).
+  const promptLoginRef = useRef(promptLogin);
+  useEffect(() => {
+    promptLoginRef.current = promptLogin;
+  }, [promptLogin]);
 
   useEffect(() => {
     if (!initialWord) return;
@@ -305,7 +312,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       // for a previously-signed-in user. Treat as a generic auth
       // failure: open sign-in, no special handling.
       if (res.status === 401) {
-        promptLogin();
+        promptLoginRef.current();
         setLoading(false);
         return;
       }
@@ -422,7 +429,15 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     return () => {
       cancelled = true;
     };
-  }, [initialWord, lang, user, plan, promptLogin]);
+    // Deps intentionally minimal: only the inputs that should
+    // *trigger* a re-fetch. plan + promptLogin used to be here and
+    // caused the fetch to re-fire on every auth-context render —
+    // which combined with StrictMode produced 2 in-flight fetches
+    // and a skeleton that never settled (the second fetch's setState
+    // races the first's). plan is read inside run() via the
+    // surrounding closure; promptLogin via promptLoginRef.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialWord, lang, user]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate() {
