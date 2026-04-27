@@ -544,9 +544,12 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
         <main
           style={{
-            maxWidth: 920,
+            // Tightened from 920/32-48 to 880/24-36 so meanings fall
+            // higher on the page — beta tester wanted less scroll
+            // before getting to the actual definitions.
+            maxWidth: 880,
             margin: "0 auto",
-            padding: "32px 24px 48px",
+            padding: "24px 24px 36px",
           }}
         >
           {quotaState.reached && (

@@ -157,11 +157,15 @@ export function WordHeader({
   const script = scriptFor(lang);
   const tFont = titleFontClass(script);
 
+  // Header card — much tighter than before. Word title was up to
+  // 88px display serif, eating ~40% of viewport height on its own.
+  // Cap is now 56px so the meanings + first two examples land above
+  // the fold on a typical laptop. Padding compressed too.
   return (
-    <div className="gd-card" style={{ padding: "clamp(24px, 3vw, 36px) clamp(22px, 3vw, 40px) clamp(20px, 2.6vw, 30px)" }}>
-      <div className={`flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-6 ${isRtl ? "md:flex-row-reverse" : ""}`}>
+    <div className="gd-card" style={{ padding: "clamp(18px, 2.4vw, 26px) clamp(20px, 2.6vw, 32px)" }}>
+      <div className={`flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-6 ${isRtl ? "md:flex-row-reverse" : ""}`}>
         <div className="flex-1 min-w-0">
-          <div className={`flex items-center gap-2 mb-3 flex-wrap `}>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <Eyebrow>{language}</Eyebrow>
             <span style={{ color: "var(--gd-ink-300)" }}>·</span>
             <span
@@ -189,17 +193,17 @@ export function WordHeader({
           <h1
             className={tFont}
             style={{
-              // Floor lowered from 40px and overflowWrap added so long
-              // German compound words / Hebrew construct phrases don't
-              // overflow the gd-card on a 320px viewport.
-              fontSize: "clamp(32px, 6vw, 88px)",
+              // Was clamp(32-88px) — beta tester said the word was
+              // visually shouting. Capped at 56px (still display
+              // serif + clearly the page subject, just not absurd).
+              fontSize: "clamp(30px, 4.6vw, 56px)",
               lineHeight: 1.02,
               color: "var(--gd-ink-900)",
               letterSpacing: script === "latin" ? "-0.025em" : 0,
               fontWeight: 400,
               overflowWrap: "anywhere",
               ...(script === "latin"
-                ? { fontVariationSettings: '"opsz" 144, "SOFT" 60' }
+                ? { fontVariationSettings: '"opsz" 96', fontStyle: "italic" }
                 : {}),
             }}
           >
@@ -336,18 +340,15 @@ export function ImageSlot({
     <div
       className="relative overflow-hidden gd-drift gd-image-empty"
       style={{
-        // Was aspect 4:3 + maxHeight 420 → on a wide card the empty
-        // state ate ~600px of vertical real estate before users got to
-        // the meanings. The teaser only needs to host a CTA + one
-        // sentence, so a wide-banner aspect with a hard 220px ceiling
-        // is plenty on desktop.
-        // On mobile (<640px) the 16:6 ratio collapses to ~120px tall —
-        // not enough to fit lock label + headline + blurb + button —
-        // so .gd-image-empty in globals.css drops the rigid aspect and
-        // gives a min-height instead, letting content set the height.
+        // Empty state is now positioned AFTER meanings + kids (per
+        // beta tester reorder), so its visual weight matters less —
+        // the user has already gotten what they came for. Slimmer
+        // banner: 16:5 with a 160px ceiling so the section announces
+        // "you can also generate an image" without dominating.
+        // On mobile (<640px) .gd-image-empty drops the rigid aspect.
         borderRadius: 20,
-        aspectRatio: "16 / 6",
-        maxHeight: 220,
+        aspectRatio: "16 / 5",
+        maxHeight: 160,
         background: locked
           ? "linear-gradient(135deg, oklch(0.94 0.01 260) 0%, oklch(0.9 0.015 250) 50%, oklch(0.93 0.012 265) 100%)"
           : "linear-gradient(135deg, oklch(0.93 0.035 250) 0%, oklch(0.88 0.06 245) 45%, oklch(0.92 0.04 260) 100%)",
@@ -551,14 +552,17 @@ export function MeaningCard({
   const bFont = bodyFontClass(script);
 
   return (
+    // MeaningCard — denser. Meaning text was 22-26px, examples 15-17;
+    // shrunk one tier so 3-4 meanings fit in the same scroll the
+    // previous version showed 2 in.
     <div
       className="gd-card relative"
-      style={{ padding: "clamp(26px, 3vw, 32px) clamp(24px, 3vw, 40px)" }}
+      style={{ padding: "clamp(20px, 2.4vw, 26px) clamp(22px, 2.6vw, 30px)" }}
     >
-      <div className={`flex items-start gap-4 `}>
+      <div className="flex items-start gap-3">
         <MeaningBadge n={n} />
         <div className="flex-1 min-w-0">
-          <div className={`flex items-baseline gap-2 mb-2 flex-wrap `}>
+          <div className="flex items-baseline gap-2 mb-1.5 flex-wrap">
             <Eyebrow>{v2(lang, "meaningN", n)}</Eyebrow>
             {meaning.pos && (
               <>
@@ -575,28 +579,25 @@ export function MeaningCard({
           <p
             className={bFont}
             style={{
-              fontSize: "clamp(22px, 2.4vw, 26px)",
-              lineHeight: 1.35,
+              fontSize: "clamp(17px, 1.8vw, 20px)",
+              lineHeight: 1.4,
               color: "var(--gd-ink-900)",
               ...(script === "latin"
-                ? { fontVariationSettings: '"opsz" 32' }
+                ? { fontVariationSettings: '"opsz" 28' }
                 : {}),
             }}
           >
             {meaning.meaning}
           </p>
 
-          <ul className="mt-5 space-y-2.5">
+          <ul className="mt-3 space-y-1.5">
             {meaning.examples.map((ex, i) => (
-              <li
-                key={i}
-                className={`flex gap-3 `}
-              >
+              <li key={i} className="flex gap-2.5">
                 <span
                   style={{
                     color: "oklch(0.72 0.19 245)",
-                    fontSize: 20,
-                    lineHeight: "24px",
+                    fontSize: 17,
+                    lineHeight: "22px",
                     flexShrink: 0,
                   }}
                 >
@@ -605,7 +606,7 @@ export function MeaningCard({
                 <span
                   className={bFont}
                   style={{
-                    fontSize: "clamp(15px, 1.6vw, 17px)",
+                    fontSize: "clamp(13.5px, 1.4vw, 14.5px)",
                     lineHeight: 1.55,
                     fontStyle: script === "latin" ? "italic" : "normal",
                     color: "var(--gd-ink-700)",
@@ -1266,7 +1267,16 @@ export function ResultView({
   const kidsAvailable = !!kidsMeaning;
 
   return (
-    <div className="flex flex-col gap-6">
+    // Order is deliberate: definitions first (what every visitor came
+    // for), kids explanation second (still text, still in-flow for
+    // anyone who came with a child), THEN the image (visual flourish
+    // — you've already understood the word, here's the picture).
+    // Idioms + etymology + take-it-further trail behind for users
+    // who want to go deeper. Beta tester rightly flagged that the old
+    // order (image right under the title) was front-loading the
+    // visual flair and forcing readers to scroll past it to reach
+    // what they actually came for.
+    <div className="flex flex-col gap-5">
       <WordHeader
         word={result.word}
         language={result.language}
@@ -1274,16 +1284,6 @@ export function ResultView({
         plan={plan}
         onSave={onSave}
         onShare={onShare}
-      />
-
-      <ImageSlot
-        state={imageState}
-        word={result.word}
-        imageUrl={imageUrl}
-        onGenerate={onGenerate}
-        onUpgrade={onUpgrade}
-        onRegenerate={onRegenerate}
-        onSaveImage={onSaveImage}
       />
 
       {result.meanings.map((m, i) => (
@@ -1295,13 +1295,6 @@ export function ResultView({
         />
       ))}
 
-      {result.etymology && (
-        <EtymologyCard
-          etymology={result.etymology}
-          onReport={() => onReport?.("etymology")}
-        />
-      )}
-
       {kidsAvailable && kidsMeaning?.kidsExplanation && (
         <KidsCard
           kids={kidsMeaning.kidsExplanation}
@@ -1310,10 +1303,27 @@ export function ResultView({
         />
       )}
 
+      <ImageSlot
+        state={imageState}
+        word={result.word}
+        imageUrl={imageUrl}
+        onGenerate={onGenerate}
+        onUpgrade={onUpgrade}
+        onRegenerate={onRegenerate}
+        onSaveImage={onSaveImage}
+      />
+
       {result.generalIdioms && result.generalIdioms.length > 0 && (
         <IdiomsCard
           idioms={result.generalIdioms}
           onReport={() => onReport?.("idioms")}
+        />
+      )}
+
+      {result.etymology && (
+        <EtymologyCard
+          etymology={result.etymology}
+          onReport={() => onReport?.("etymology")}
         />
       )}
 
