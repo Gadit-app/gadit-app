@@ -20,7 +20,7 @@ const EnglishBody = () => (
     </p>
     <p>
       If you have any question, contact us at{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>.
+      <a href="mailto:support@gadit.app">support@gadit.app</a>.
     </p>
 
     <h2>1. Information we collect</h2>
@@ -109,7 +109,7 @@ const EnglishBody = () => (
     </ul>
     <p>
       To exercise any of these rights, email{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>. We will respond within
+      <a href="mailto:support@gadit.app">support@gadit.app</a>. We will respond within
       30 days.
     </p>
 
@@ -143,7 +143,7 @@ const EnglishBody = () => (
     <h2>10. Contact</h2>
     <p>
       Lavi Learning and Training Technologies LLC<br />
-      Email: <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+      Email: <a href="mailto:support@gadit.app">support@gadit.app</a>
     </p>
   </>
 );
@@ -157,7 +157,7 @@ const HebrewBody = () => (
     </p>
     <p>
       לכל שאלה, אפשר לכתוב אלינו ב-{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>.
+      <a href="mailto:support@gadit.app">support@gadit.app</a>.
     </p>
 
     <h2>1. מידע שאנחנו אוספים</h2>
@@ -241,7 +241,7 @@ const HebrewBody = () => (
     </ul>
     <p>
       כדי לממש את אחת הזכויות הללו, כתבו ל-{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>. נחזור אליכם תוך 30 יום.
+      <a href="mailto:support@gadit.app">support@gadit.app</a>. נחזור אליכם תוך 30 יום.
     </p>
 
     <h2>6. אבטחה</h2>
@@ -272,7 +272,7 @@ const HebrewBody = () => (
     <h2>10. יצירת קשר</h2>
     <p>
       Lavi Learning and Training Technologies LLC<br />
-      דוא&rdquo;ל: <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+      דוא&rdquo;ל: <a href="mailto:support@gadit.app">support@gadit.app</a>
     </p>
   </>
 );

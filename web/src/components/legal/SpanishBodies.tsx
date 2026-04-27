@@ -11,7 +11,7 @@ export function PrivacyBodyEs(): ReactElement {
       </p>
       <p>
         Si tiene alguna pregunta, escríbanos a{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>.
+        <a href="mailto:support@gadit.app">support@gadit.app</a>.
       </p>
 
       <h2>1. Información que recopilamos</h2>
@@ -101,7 +101,7 @@ export function PrivacyBodyEs(): ReactElement {
       </ul>
       <p>
         Para ejercer cualquiera de estos derechos, escriba a{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>. Le responderemos en un
+        <a href="mailto:support@gadit.app">support@gadit.app</a>. Le responderemos en un
         plazo de 30 días.
       </p>
 
@@ -137,7 +137,7 @@ export function PrivacyBodyEs(): ReactElement {
       <p>
         Lavi Learning and Training Technologies LLC<br />
         Correo electrónico:{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+        <a href="mailto:support@gadit.app">support@gadit.app</a>
       </p>
     </>
   );
@@ -164,7 +164,7 @@ export function TermsBodyEs(): ReactElement {
       <p>
         Usted es responsable de mantener la confidencialidad de sus credenciales de inicio de sesión y de toda la
         actividad que ocurra bajo su cuenta. Notifíquenos de inmediato a{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> si considera que su cuenta
+        <a href="mailto:support@gadit.app">support@gadit.app</a> si considera que su cuenta
         se ha visto comprometida.
       </p>
 
@@ -191,7 +191,7 @@ export function TermsBodyEs(): ReactElement {
       <p>
         Salvo cuando la ley lo exija, los pagos no son reembolsables. Si considera que se le cobró por error,
         contáctenos en{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> dentro de los 30 días
+        <a href="mailto:support@gadit.app">support@gadit.app</a> dentro de los 30 días
         siguientes al cargo.
       </p>
 
@@ -313,7 +313,7 @@ export function TermsBodyEs(): ReactElement {
       <p>
         Lavi Learning and Training Technologies LLC<br />
         Correo electrónico:{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+        <a href="mailto:support@gadit.app">support@gadit.app</a>
       </p>
     </>
   );

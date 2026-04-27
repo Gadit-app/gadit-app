@@ -8,7 +8,7 @@ export function PrivacyBodyPt() {
       </p>
       <p>
         Se você tiver alguma dúvida, entre em contato pelo e-mail{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>.
+        <a href="mailto:support@gadit.app">support@gadit.app</a>.
       </p>
 
       <h2>1. Informações que coletamos</h2>
@@ -99,7 +99,7 @@ export function PrivacyBodyPt() {
       </ul>
       <p>
         Para exercer qualquer um desses direitos, envie um e-mail para{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>. Responderemos em até 30 dias.
+        <a href="mailto:support@gadit.app">support@gadit.app</a>. Responderemos em até 30 dias.
       </p>
 
       <h2>6. Segurança</h2>
@@ -133,7 +133,7 @@ export function PrivacyBodyPt() {
       <h2>10. Contato</h2>
       <p>
         Lavi Learning and Training Technologies LLC<br />
-        E-mail: <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+        E-mail: <a href="mailto:support@gadit.app">support@gadit.app</a>
       </p>
     </>
   );
@@ -159,7 +159,7 @@ export function TermsBodyPt() {
       <p>
         Você é responsável por manter a confidencialidade das suas credenciais de login e por toda atividade que
         ocorrer sob sua conta. Avise-nos imediatamente pelo e-mail{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> se você acredita que
+        <a href="mailto:support@gadit.app">support@gadit.app</a> se você acredita que
         sua conta foi comprometida.
       </p>
 
@@ -185,7 +185,7 @@ export function TermsBodyPt() {
       <p>
         Exceto quando exigido por lei, os pagamentos não são reembolsáveis. Se você acredita que foi cobrado por
         engano, entre em contato com{" "}
-        <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> em até 30 dias após a
+        <a href="mailto:support@gadit.app">support@gadit.app</a> em até 30 dias após a
         cobrança.
       </p>
 
@@ -305,7 +305,7 @@ export function TermsBodyPt() {
       <h2>15. Contato</h2>
       <p>
         Lavi Learning and Training Technologies LLC<br />
-        E-mail: <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+        E-mail: <a href="mailto:support@gadit.app">support@gadit.app</a>
       </p>
     </>
   );

@@ -30,7 +30,7 @@ const EnglishBody = () => (
     <p>
       You are responsible for maintaining the confidentiality of your login credentials and for all activity that
       occurs under your account. Notify us promptly at{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> if you believe your
+      <a href="mailto:support@gadit.app">support@gadit.app</a> if you believe your
       account has been compromised.
     </p>
 
@@ -55,7 +55,7 @@ const EnglishBody = () => (
     <h3>Refunds</h3>
     <p>
       Except where required by law, payments are non-refundable. If you believe you were charged in error, contact{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> within 30 days of the
+      <a href="mailto:support@gadit.app">support@gadit.app</a> within 30 days of the
       charge.
     </p>
 
@@ -174,7 +174,7 @@ const EnglishBody = () => (
     <h2>15. Contact</h2>
     <p>
       Lavi Learning and Training Technologies LLC<br />
-      Email: <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+      Email: <a href="mailto:support@gadit.app">support@gadit.app</a>
     </p>
   </>
 );
@@ -197,7 +197,7 @@ const HebrewBody = () => (
     <h2>2. החשבון שלכם</h2>
     <p>
       אתם אחראים לשמור על סודיות פרטי ההתחברות שלכם ולכל פעילות שתתבצע תחת חשבונכם. הודיעו לנו מיד לכתובת{" "}
-      <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> אם אתם סבורים שהחשבון
+      <a href="mailto:support@gadit.app">support@gadit.app</a> אם אתם סבורים שהחשבון
       שלכם נפרץ.
     </p>
 
@@ -220,7 +220,7 @@ const HebrewBody = () => (
     <h3>החזרים</h3>
     <p>
       למעט במקרים שבהם החוק מחייב אחרת, התשלומים אינם ניתנים להחזרה. אם אתם סבורים שחויבתם בטעות, פנו אלינו
-      לכתובת <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a> תוך 30 יום
+      לכתובת <a href="mailto:support@gadit.app">support@gadit.app</a> תוך 30 יום
       מהחיוב.
     </p>
 
@@ -329,7 +329,7 @@ const HebrewBody = () => (
     <h2>15. יצירת קשר</h2>
     <p>
       Lavi Learning and Training Technologies LLC<br />
-      דוא&rdquo;ל: <a href="mailto:support@neweducationacademy.com">support@neweducationacademy.com</a>
+      דוא&rdquo;ל: <a href="mailto:support@gadit.app">support@gadit.app</a>
     </p>
   </>
 );

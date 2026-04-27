@@ -3,7 +3,7 @@
 import { useLang } from "@/lib/lang-context";
 import { CONTACT } from "@/lib/contact-i18n";
 
-const SUPPORT_EMAIL = "support@neweducationacademy.com";
+const SUPPORT_EMAIL = "support@gadit.app";
 
 export default function ContactSection() {
   const { lang, dir } = useLang();

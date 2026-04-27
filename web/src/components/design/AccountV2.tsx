@@ -699,20 +699,55 @@ export function AccountV2() {
     router.push("/");
   }
 
-  function handleDeleteAccount() {
-    // Confirmation modal is post-launch; for now require confirm() as a
-    // safety net so accidental clicks don't delete anything in the API.
+  async function handleDeleteAccount() {
+    // Browser native confirm — this is the last line of defense
+    // before an irreversible destructive action. A custom modal
+    // would be prettier but harder to verify on a security review;
+    // confirm() is universal and impossible to skip programmatically
+    // (without explicit user click). Pre-launch we ship this; a
+    // designed flow comes post-launch if needed.
     const ok = window.confirm(
       lang === "he"
-        ? "פעולת מחיקת חשבון אינה הפיכה. להמשיך?"
+        ? "פעולת מחיקת חשבון אינה הפיכה. כל המנויים שלכם יבוטלו וכל הנתונים יימחקו. להמשיך?"
         : lang === "ar"
-          ? "حذف الحساب لا يمكن التراجع عنه. الاستمرار؟"
-          : "Account deletion is permanent. Continue?"
+          ? "حذف الحساب لا يمكن التراجع عنه. سيتم إلغاء جميع اشتراكاتكم وستُحذف كل البيانات. الاستمرار؟"
+          : "Account deletion is permanent. Any active subscriptions will be canceled and all data wiped. Continue?"
     );
-    if (!ok) return;
-    // No /api/account/delete endpoint yet — log and surface a friendly
-    // notice. Wired properly post-launch.
-    console.warn("Delete account requested — endpoint not implemented yet.");
+    if (!ok || !user) return;
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as {
+          message?: string;
+        };
+        window.alert(
+          body.message ??
+            (lang === "he"
+              ? "מחיקת החשבון נכשלה. נסו שוב או פנו לתמיכה."
+              : lang === "ar"
+                ? "فشل حذف الحساب. حاول مرة أخرى أو راسل الدعم."
+                : "Account deletion failed. Please try again or contact support.")
+        );
+        return;
+      }
+      // Sign out locally and bounce home — the auth user is gone,
+      // so any future token request would 401 anyway.
+      await logout();
+      router.push("/");
+    } catch (err) {
+      console.error("Delete account request failed:", err);
+      window.alert(
+        lang === "he"
+          ? "מחיקת החשבון נכשלה. נסו שוב או פנו לתמיכה ב־support@gadit.app."
+          : lang === "ar"
+            ? "فشل حذف الحساب. راسل support@gadit.app للحصول على المساعدة."
+            : "Account deletion failed. Please contact support@gadit.app."
+      );
+    }
   }
 
   if (loading) {
