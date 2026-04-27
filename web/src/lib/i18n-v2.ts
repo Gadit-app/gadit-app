@@ -33,6 +33,7 @@ export interface V2Strings {
 
   // ── Home: search ────────────────────────────────────────────
   searchPlaceholderHome: string;
+  voiceInputTitle: string;
   addContext: string;
   explain: string;
   contextHint: string;
@@ -365,7 +366,8 @@ const en: V2Strings = {
   homeSubline:
     "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 7 languages.",
 
-  searchPlaceholderHome: "Search any word — in any of 7 languages",
+  searchPlaceholderHome: "Type or dictate a word",
+  voiceInputTitle: "Dictate a word",
   addContext: "Add context",
   explain: "Explain",
   contextHint:
@@ -694,7 +696,8 @@ const he: V2Strings = {
   homeSubline:
     "מילון שמבין הקשר — משמעויות, מקור, ביטויים ותמונה חיה, ב־7 שפות.",
 
-  searchPlaceholderHome: "חפשו כל מילה — באחת מ־7 שפות",
+  searchPlaceholderHome: "הקלידו או הכתיבו מילה",
+  voiceInputTitle: "הכתבת מילה",
   addContext: "הוסיפו הקשר",
   explain: "הסבר",
   contextHint:
@@ -1028,7 +1031,8 @@ const ar: V2Strings = {
   homeSubline:
     "قاموس يفهم السياق — معانٍ وأصول وتعابير وصورة حيّة، بسبع لغات.",
 
-  searchPlaceholderHome: "ابحث عن أي كلمة — بإحدى 7 لغات",
+  searchPlaceholderHome: "اكتب أو أملِ كلمة",
+  voiceInputTitle: "إملاء كلمة",
   addContext: "أضف السياق",
   explain: "اشرح",
   contextHint: "تقرأ نصًّا؟ ألصق الجملة ليختار Gadit المعنى الأنسب.",
@@ -1376,7 +1380,8 @@ const ru: Partial<V2Strings> = {
   homeSubline:
     "Словарь, который улавливает контекст — значения, происхождение, идиомы и живой образ, на 7 языках.",
 
-  searchPlaceholderHome: "Найдите любое слово — на любом из 7 языков",
+  searchPlaceholderHome: "Введите или продиктуйте слово",
+  voiceInputTitle: "Продиктовать слово",
   addContext: "Добавить контекст",
   explain: "Объяснить",
   contextHint:
@@ -1706,7 +1711,8 @@ const es: Partial<V2Strings> = {
   homeSubline:
     "Un diccionario que entiende el contexto — significados, origen, expresiones e imagen viva, en 7 idiomas.",
 
-  searchPlaceholderHome: "Busca cualquier palabra — en cualquiera de los 7 idiomas",
+  searchPlaceholderHome: "Escribe o dicta una palabra",
+  voiceInputTitle: "Dictar una palabra",
   addContext: "Agregar contexto",
   explain: "Explicar",
   contextHint:
@@ -2034,7 +2040,8 @@ const pt: Partial<V2Strings> = {
   homeSubline:
     "Um dicionário que entende o contexto — significados, origem, expressões e imagem viva, em 7 idiomas.",
 
-  searchPlaceholderHome: "Pesquise qualquer palavra — em qualquer um dos 7 idiomas",
+  searchPlaceholderHome: "Digite ou dite uma palavra",
+  voiceInputTitle: "Ditar uma palavra",
   addContext: "Adicionar contexto",
   explain: "Explicar",
   contextHint:
@@ -2362,7 +2369,8 @@ const fr: Partial<V2Strings> = {
   homeSubline:
     "Un dictionnaire qui saisit le contexte — sens, origines, expressions et image vivante, en 7 langues.",
 
-  searchPlaceholderHome: "Cherchez n'importe quel mot — dans l'une des 7 langues",
+  searchPlaceholderHome: "Tapez ou dictez un mot",
+  voiceInputTitle: "Dicter un mot",
   addContext: "Ajouter du contexte",
   explain: "Expliquer",
   contextHint:

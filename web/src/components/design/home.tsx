@@ -34,6 +34,7 @@ import {
   Wordmark,
 } from "./primitives";
 import { LangSwitcher } from "./LangSwitcher";
+import VoiceInput from "@/components/VoiceInput";
 
 type Script = "latin" | "he" | "ar";
 
@@ -151,60 +152,67 @@ export function HomeHero() {
 }
 
 // ─── HomeSearch ──────────────────────────────────────────────────
-// The big homepage search bar — visually distinct from Screen 1's
-// compact persistent search. Glowing electric-blue cradle, suggestion
-// chips below. Open access — visitors of any auth state navigate
-// straight to /word/[word]; the page itself enforces the 5/day anon
-// quota via /api/define and surfaces the soft wall when needed.
+// Single Google-style search bar. Magnifying glass on the visual
+// LEFT, voice input on the visual RIGHT — same physical layout as
+// Google in any locale. No suggestion chips, no context hint, no
+// "Try X" eyebrow — beta tester wanted a clean, unambiguous search.
+// Open access: anonymous visitors get 5 searches/day before the
+// soft wall.
 export function HomeSearch() {
   const { lang, dir } = useLang();
+  const { user } = useAuth();
   const router = useRouter();
   const isRtl = dir === "rtl";
   const [query, setQuery] = useState("");
 
-  // Suggestion chips per locale — multilingual receipt by design.
-  const suggestions: string[] =
-    lang === "he"
-      ? ["חלום", "נוסטלגיה", "ephemeral", "serendipity"]
-      : lang === "ar"
-        ? ["حُلم", "حنين", "ephemeral", "serendipity"]
-        : ["dream", "ephemeral", "serendipity", "חלום"];
-
   function go(word: string) {
     const trimmed = word.trim();
     if (!trimmed) return;
-    // Open access: anonymous visitors get up to 5 free searches per
-    // IP per day. The /word/[X] route + /api/define handle the quota
-    // and surface the soft wall once the cap is hit. No login needed
-    // for the first taste — the whole point of the open-access shift.
     router.push(`/word/${encodeURIComponent(trimmed)}`);
   }
 
-  function handleExplain() {
-    go(query || suggestions[0]);
+  function handleSubmit() {
+    if (query.trim()) go(query);
   }
 
-  function handleChip(s: string) {
-    setQuery(s);
-    go(s);
+  // Bridge for VoiceInput → input field. The component handles the
+  // recording/transcription itself; we just receive the text and
+  // either fill the field or jump straight to the result if the
+  // user already had something typed and the voice was an addition.
+  function handleVoiceResult(text: string) {
+    const t = text.trim();
+    if (!t) return;
+    setQuery(t);
+    go(t);
+  }
+
+  // Voice input needs an ID token (paid tiers gated server-side);
+  // for anonymous and Basic users the API still works but rate-
+  // limits — we let the component decide what to surface.
+  async function getIdToken(): Promise<string | null> {
+    if (!user) return null;
+    try {
+      return await user.getIdToken();
+    } catch {
+      return null;
+    }
   }
 
   return (
     <section
-      style={{ maxWidth: 920, margin: "0 auto", padding: "0 24px" }}
+      style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}
     >
-      {/* Clean search bar — Google-style. Just a magnifying-glass
-          icon and an input. No "Explain" button (Enter submits), no
-          "Add context" button (the use case is rare and we'd rather
-          surface it from inside the result page when needed than
-          clutter the homepage hero). Beta tester said the previous
-          two buttons made the search feel cramped and confused;
-          users intuit "magnifying glass + text field = search". */}
+      {/* Clean search bar — Google-style. Hard-coded `dir="ltr"` on
+          the cradle so the layout stays icon-left / mic-right in any
+          UI locale (Google itself does this — even on hebrew.google.com
+          the magnifying glass is on the left). The INPUT element gets
+          dir={dir} so the user's typing flows the right way. */}
       <div
+        dir="ltr"
         className="relative"
         style={{
           background: "var(--gd-paper-50)",
-          borderRadius: 16,
+          borderRadius: 999,
           boxShadow:
             "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.4), " +
             "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
@@ -213,115 +221,71 @@ export function HomeSearch() {
       >
         <div
           className="flex items-center gap-3"
-          style={{ padding: "18px 22px" }}
+          style={{ padding: "12px 18px" }}
         >
+          {/* Magnifying glass — LEFT side, click submits */}
           <button
             type="button"
-            onClick={handleExplain}
+            onClick={handleSubmit}
             aria-label={v2(lang, "explain")}
             style={{
               flexShrink: 0,
               background: "transparent",
-              padding: 0,
+              padding: 6,
               cursor: "pointer",
-              color: "var(--gd-electric-deep)",
+              color: "var(--gd-ink-500)",
               display: "inline-flex",
             }}
           >
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.5" />
-              <path d="m15 15 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+              <circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.6" />
+              <path d="m15 15 4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
           </button>
+          {/* Input fills the middle. dir={dir} on the input itself so
+              Hebrew/Arabic text flows correctly while the cradle stays
+              left-magnifier / right-mic. */}
           <input
             className="bg-transparent outline-none gd-font-sans-ui"
             style={{
-              flex: "1 1 200px",
+              flex: "1 1 0",
               minWidth: 0,
               color: "var(--gd-ink-900)",
               // 16px floor — prevents iOS Safari from auto-zooming
               // into the input on focus.
-              fontSize: "clamp(16px, 1.6vw, 19px)",
+              fontSize: "clamp(16px, 1.5vw, 18px)",
+              textAlign: isRtl ? "right" : "left",
             }}
             placeholder={v2(lang, "searchPlaceholderHome")}
-            dir={isRtl ? "rtl" : "ltr"}
+            dir={dir}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                handleExplain();
+                handleSubmit();
               }
             }}
+          />
+          {/* Voice input — RIGHT side, mirrors Google's mic position.
+              Always enabled (the API itself rate-limits anonymous use
+              if needed). The component handles its own recording UI
+              + Whisper transcription via /api/transcribe. */}
+          <VoiceInput
+            uiLang={lang}
+            getIdToken={getIdToken}
+            onResult={handleVoiceResult}
+            enabled={true}
+            size="sm"
+            title={v2(lang, "voiceInputTitle")}
           />
         </div>
       </div>
 
-      {/* Chips row — bumped contrast so "Try" and the suggestion
-          pills actually read on the dark stage. Previous values
-          (oklch 0.62 / 0.92 with 5% white fill) were near-invisible
-          per beta feedback. Now: TRY label uses electric-blue tint
-          (matches the icon palette), chips have a slightly stronger
-          fill + ring, and the body hint below sits at 78% white. */}
-      <div
-        className={`mt-5 flex items-center gap-2 flex-wrap ${
-          isRtl ? "flex-row-reverse justify-start" : ""
-        }`}
-        style={{ paddingInlineStart: 8 }}
-      >
-        <span
-          className="gd-font-sans-ui"
-          style={{
-            fontSize: 11.5,
-            color: "oklch(0.82 0.1 245)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            fontWeight: 700,
-          }}
-        >
-          {v2(lang, "tryLabel")}
-        </span>
-        {suggestions.map((s) => {
-          const isHe = /[֐-׿]/.test(s);
-          const isAr = /[؀-ۿ]/.test(s);
-          const fontClass = isHe
-            ? "gd-font-he"
-            : isAr
-              ? "gd-font-ar"
-              : "gd-font-display";
-          return (
-            <button
-              key={s}
-              type="button"
-              onClick={() => handleChip(s)}
-              className={`${fontClass} transition-colors hover:bg-white/15`}
-              style={{
-                fontSize: 14,
-                fontStyle: !isHe && !isAr ? "italic" : "normal",
-                color: "white",
-                padding: "5px 13px",
-                borderRadius: 999,
-                background: "oklch(1 0 0 / 0.08)",
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.18)",
-              }}
-            >
-              {s}
-            </button>
-          );
-        })}
-      </div>
-
-      <div
-        className={`mt-3 gd-font-sans-ui ${isRtl ? "text-right" : ""}`}
-        style={{
-          fontSize: 13,
-          color: "oklch(0.78 0.02 265)",
-          paddingInlineStart: 8,
-          lineHeight: 1.5,
-        }}
-      >
-        {v2(lang, "contextHint")}
-      </div>
+      {/* Suggestion chips and context hint were removed per beta
+          feedback — the cradle alone is the entire CTA. The hero
+          headline + subline above it set context; nothing further
+          below is needed. */}
     </section>
   );
 }
