@@ -514,9 +514,23 @@ export function PricingTiers({ billing }: { billing: Billing }) {
       const data = (await res.json().catch(() => ({}))) as {
         url?: string;
         error?: string;
+        message?: string;
       };
       if (data.url) {
         window.location.href = data.url;
+        return;
+      }
+      // 403 with email_not_verified: surface a friendly nudge, not
+      // the same generic "could not open checkout" line. The user
+      // needs a different action (check inbox), not a retry.
+      if (res.status === 403 && data.error === "email_not_verified") {
+        window.alert(
+          lang === "he"
+            ? "כדי לרכוש מנוי, יש לאמת את כתובת המייל. שלחנו לכם קישור אימות בהרשמה — בדקו את תיבת הדואר (וגם תיקיית הספאם)."
+            : lang === "ar"
+              ? "للاشتراك، يلزم تأكيد البريد الإلكتروني. أرسلنا لك رابط التأكيد عند التسجيل — افحص بريدك الوارد (وأيضًا مجلد البريد العشوائي)."
+              : "Please verify your email before subscribing. We sent you a verification link when you signed up — check your inbox (and spam folder)."
+        );
         return;
       }
       console.error("Checkout failed:", { status: res.status, body: data });

@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signOut,
 } from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
@@ -157,7 +158,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signUpWithEmail(email: string, password: string) {
     const auth = getFirebaseAuth();
-    await createUserWithEmailAndPassword(auth, email, password);
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    // Fire-and-forget the verification email. We don't block sign-up
+    // on it succeeding — the network call is unreliable and we'd
+    // rather let the user in and surface the verification UX
+    // separately. They can use the site (search, save, etc.) while
+    // unverified; checkout is what's gated, enforced server-side.
+    sendEmailVerification(cred.user).catch((err) => {
+      console.warn("sendEmailVerification failed (non-blocking):", err);
+    });
     setShowLoginModal(false);
   }
 

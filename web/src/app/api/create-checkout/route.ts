@@ -30,6 +30,24 @@ export async function POST(req: NextRequest) {
     const userId = decoded.uid;
     const userEmail = decoded.email ?? undefined;
 
+    // Gate checkout behind email verification. Beta security review
+    // flagged that the signup flow allowed registering with someone
+    // else's email — at minimum we must prove the buyer controls
+    // the inbox before charging the card. Google sign-ins are
+    // verified by definition; email/password sign-ups have to click
+    // the link Firebase mailed them. They can browse the site and
+    // search words while unverified; only paid actions are blocked.
+    if (decoded.email && !decoded.email_verified) {
+      return NextResponse.json(
+        {
+          error: "email_not_verified",
+          message:
+            "Please verify your email before subscribing. We sent you a verification link when you signed up — check your inbox (and spam folder).",
+        },
+        { status: 403 }
+      );
+    }
+
     const isClearMonthly = !!CLEAR_MONTHLY_PRICE_ID && priceId === CLEAR_MONTHLY_PRICE_ID;
 
     const session = await stripe.checkout.sessions.create({

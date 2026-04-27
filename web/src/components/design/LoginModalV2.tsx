@@ -168,17 +168,35 @@ export function LoginModalV2() {
 
   if (!showLoginModal) return null;
 
-  // Map Firebase auth error codes to translated messages
-  function mapAuthError(msg: string): string {
+  // Map Firebase auth error codes to translated messages.
+  //
+  // Security note: in SIGNUP mode we deliberately collapse
+  // "email-already-in-use" into the generic message. Otherwise the
+  // signup form turns into a user-enumeration oracle: an attacker
+  // can probe `target@example.com` and learn whether that user has
+  // an account, which leaks the existence of the user (a privacy
+  // failure on its own) and lets them target follow-up phishing.
+  // In SIGNIN mode the user has presumably already established that
+  // they have an account, so a clear "wrong email or password" is
+  // OK — and dropping back to a generic message there ruins UX.
+  // (Same call as Stripe / Notion / Linear make.)
+  function mapAuthError(msg: string, mode: Mode): string {
+    if (mode === "signup") {
+      // Generic for everything signup-related — the only exception
+      // is the local-only validation hints we control ourselves
+      // (weak password, invalid email format), where the attacker
+      // can't gain anything by knowing the verdict.
+      if (msg.includes("weak-password")) return "loginErrorWeakPassword";
+      if (msg.includes("invalid-email")) return "loginErrorInvalidEmail";
+      return "loginErrorGeneric";
+    }
+    // Signin path — original behavior.
     if (
       msg.includes("user-not-found") ||
       msg.includes("wrong-password") ||
       msg.includes("invalid-credential")
     )
       return "loginErrorWrongCredentials";
-    if (msg.includes("email-already-in-use"))
-      return "loginErrorEmailInUse";
-    if (msg.includes("weak-password")) return "loginErrorWeakPassword";
     if (msg.includes("invalid-email")) return "loginErrorInvalidEmail";
     return "loginErrorGeneric";
   }
@@ -207,7 +225,7 @@ export function LoginModalV2() {
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
-      setErrorKey(mapAuthError(msg));
+      setErrorKey(mapAuthError(msg, mode));
     } finally {
       setBusy(false);
     }
