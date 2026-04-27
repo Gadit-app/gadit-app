@@ -329,6 +329,19 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         setLoading(false);
         return;
       }
+      if (res.status === 400) {
+        // Server rejected the input as not a plausible word. Surface
+        // the human-readable message instead of a raw HTTP code.
+        const body = (await res.json().catch(() => ({}))) as {
+          message?: string;
+        };
+        setErrorMsg(
+          body.message ??
+            "That doesn't look like a word we can define. Try a single word or a short phrase."
+        );
+        setLoading(false);
+        return;
+      }
       if (!res.ok || !res.body) {
         setErrorMsg(`HTTP ${res.status}`);
         setLoading(false);
