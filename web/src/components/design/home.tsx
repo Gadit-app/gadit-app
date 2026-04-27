@@ -193,58 +193,46 @@ export function HomeSearch() {
     <section
       style={{ maxWidth: 920, margin: "0 auto", padding: "0 24px" }}
     >
+      {/* Clean search bar — Google-style. Just a magnifying-glass
+          icon and an input. No "Explain" button (Enter submits), no
+          "Add context" button (the use case is rare and we'd rather
+          surface it from inside the result page when needed than
+          clutter the homepage hero). Beta tester said the previous
+          two buttons made the search feel cramped and confused;
+          users intuit "magnifying glass + text field = search". */}
       <div
         className="relative"
         style={{
-          background: "oklch(1 0 0 / 0.04)",
-          borderRadius: 22,
-          padding: 8,
+          background: "var(--gd-paper-50)",
+          borderRadius: 16,
           boxShadow:
             "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.4), " +
             "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
             "0 30px 60px -20px oklch(0.5 0.2 250 / 0.45)",
-          backdropFilter: "blur(18px)",
         }}
       >
-        {/* Inner cradle is warm paper (matches result cards & pricing
-            tiers) so the search field reads as a confident, tactile
-            CTA on the dark canvas instead of disappearing into it. */}
-        {/* Cradle row: icon + input own one row, the two CTAs sit on a
-            second row at <480px so nothing clips on a 320px iPhone SE.
-            Above 480px it's all on one line. flex-wrap + minWidth on
-            the input let the input shrink instead of pushing buttons
-            off-canvas.
-            In RTL the row reverses: search icon leads the input on the
-            right edge, "Add context" + "Explain" trail on the left. */}
         <div
-          className={`flex items-center gap-3 flex-wrap sm:flex-nowrap `}
-          style={{
-            padding: "18px 22px",
-            background: "var(--gd-paper-50)",
-            borderRadius: 16,
-          }}
+          className="flex items-center gap-3"
+          style={{ padding: "18px 22px" }}
         >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            style={{ color: "var(--gd-electric-deep)", flexShrink: 0 }}
+          <button
+            type="button"
+            onClick={handleExplain}
+            aria-label={v2(lang, "explain")}
+            style={{
+              flexShrink: 0,
+              background: "transparent",
+              padding: 0,
+              cursor: "pointer",
+              color: "var(--gd-electric-deep)",
+              display: "inline-flex",
+            }}
           >
-            <circle
-              cx="10"
-              cy="10"
-              r="6"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-            <path
-              d="m15 15 4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.5" />
+              <path d="m15 15 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
           <input
             className="bg-transparent outline-none gd-font-sans-ui"
             style={{
@@ -266,51 +254,15 @@ export function HomeSearch() {
               }
             }}
           />
-          <button
-            type="button"
-            className="gd-font-sans-ui flex items-center gap-1.5"
-            style={{
-              fontSize: 12.5,
-              color: "oklch(0.5 0.2 250)",
-              padding: "10px 14px",
-              borderRadius: 999,
-              background: "oklch(0.72 0.19 245 / 0.1)",
-              boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.35)",
-              flexShrink: 0,
-            }}
-            onClick={handleExplain}
-          >
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-              <path
-                d="M6 2v8M2 6h8"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-              />
-            </svg>
-            {v2(lang, "addContext")}
-          </button>
-          <button
-            type="button"
-            onClick={handleExplain}
-            className="gd-font-sans-ui font-medium transition-transform hover:scale-[1.02]"
-            style={{
-              fontSize: 14,
-              padding: "12px 22px",
-              borderRadius: 12,
-              background:
-                "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-              color: "white",
-              boxShadow:
-                "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
-              flexShrink: 0,
-            }}
-          >
-            {v2(lang, "explain")}
-          </button>
         </div>
       </div>
 
+      {/* Chips row — bumped contrast so "Try" and the suggestion
+          pills actually read on the dark stage. Previous values
+          (oklch 0.62 / 0.92 with 5% white fill) were near-invisible
+          per beta feedback. Now: TRY label uses electric-blue tint
+          (matches the icon palette), chips have a slightly stronger
+          fill + ring, and the body hint below sits at 78% white. */}
       <div
         className={`mt-5 flex items-center gap-2 flex-wrap ${
           isRtl ? "flex-row-reverse justify-start" : ""
@@ -321,10 +273,10 @@ export function HomeSearch() {
           className="gd-font-sans-ui"
           style={{
             fontSize: 11.5,
-            color: "oklch(0.62 0.02 265)",
+            color: "oklch(0.82 0.1 245)",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            fontWeight: 600,
+            fontWeight: 700,
           }}
         >
           {v2(lang, "tryLabel")}
@@ -342,15 +294,15 @@ export function HomeSearch() {
               key={s}
               type="button"
               onClick={() => handleChip(s)}
-              className={`${fontClass} transition-colors hover:bg-white/10`}
+              className={`${fontClass} transition-colors hover:bg-white/15`}
               style={{
                 fontSize: 14,
                 fontStyle: !isHe && !isAr ? "italic" : "normal",
-                color: "oklch(0.92 0.01 265)",
+                color: "white",
                 padding: "5px 13px",
                 borderRadius: 999,
-                background: "oklch(1 0 0 / 0.05)",
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.1)",
+                background: "oklch(1 0 0 / 0.08)",
+                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.18)",
               }}
             >
               {s}
@@ -362,9 +314,10 @@ export function HomeSearch() {
       <div
         className={`mt-3 gd-font-sans-ui ${isRtl ? "text-right" : ""}`}
         style={{
-          fontSize: 12,
-          color: "oklch(0.55 0.02 265)",
+          fontSize: 13,
+          color: "oklch(0.78 0.02 265)",
           paddingInlineStart: 8,
+          lineHeight: 1.5,
         }}
       >
         {v2(lang, "contextHint")}
