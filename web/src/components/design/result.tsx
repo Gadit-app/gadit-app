@@ -4,7 +4,7 @@
  * V2 Result Screen components — Screen 1 from the redesign pass.
  *
  * Composition (top → bottom on the dark navy stage):
- *   <WordHeader />     word title + language chip + Save/Share + tier badge
+ *   <WordHeader />     word title + language chip + Save/Share
  *   <ImageSlot />      reserved hero slot (empty CTA / locked / filled)
  *   <MeaningCard />×N  numbered meaning + 3 examples + per-meaning idioms
  *   <EtymologyCard />  origin + historyNote pull-quote
@@ -140,7 +140,6 @@ export function WordHeader({
   language,
   pos,
   ipa,
-  plan,
   onSave,
   onShare,
 }: {
@@ -148,7 +147,6 @@ export function WordHeader({
   language: string;
   pos?: string;
   ipa?: string;
-  plan: Plan;
   onSave?: () => void;
   onShare?: () => void;
 }) {
@@ -254,7 +252,6 @@ export function WordHeader({
             opposite edge from the word column. flex-shrink-0 so the
             buttons don't get squeezed when the word is long. */}
         <div className="flex flex-row md:flex-col items-start md:items-end gap-2 flex-shrink-0">
-          {plan !== "basic" && <TierBadge tier={plan} />}
           <div className="flex items-center gap-2">
             <IconButton label={v2(lang, "saveToNotebook")} onClick={onSave}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -604,20 +601,16 @@ export function MeaningCard({
       <div className="flex items-start gap-3">
         <MeaningBadge n={n} />
         <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-2 mb-1.5 flex-wrap">
-            <Eyebrow>{v2(lang, "meaningN", n)}</Eyebrow>
-            {meaning.pos && (
-              <>
-                <span style={{ color: "var(--gd-ink-300)" }}>·</span>
-                <span
-                  className="gd-font-sans-ui italic tracking-wide"
-                  style={{ fontSize: 10.5, color: "var(--gd-ink-500)" }}
-                >
-                  {meaning.pos}
-                </span>
-              </>
-            )}
-          </div>
+          {meaning.pos && (
+            <div className="mb-1.5">
+              <span
+                className="gd-font-sans-ui italic tracking-wide"
+                style={{ fontSize: 10.5, color: "var(--gd-ink-500)" }}
+              >
+                {meaning.pos}
+              </span>
+            </div>
+          )}
           <p
             className={bFont}
             style={{
@@ -629,11 +622,11 @@ export function MeaningCard({
                 : {}),
             }}
           >
-            {meaning.meaning}
+            {meaning.meaning ?? ""}
           </p>
 
           <ul className="mt-3 space-y-1.5">
-            {meaning.examples.map((ex, i) => (
+            {(meaning.examples ?? []).map((ex, i) => (
               <li key={i} className="flex gap-2.5">
                 <span
                   style={{
@@ -702,7 +695,7 @@ export function MeaningCard({
         </div>
       </div>
       <div className="absolute bottom-4 end-4">
-        <ReportFlag label={v2(lang, "reportLabel")} onClick={onReport} />
+        <ReportFlag tooltip={v2(lang, "reportLabel")} onClick={onReport} />
       </div>
     </div>
   );
@@ -814,7 +807,7 @@ export function EtymologyCard({
       )}
 
       <div className="absolute bottom-4 end-4">
-        <ReportFlag label={v2(lang, "reportLabel")} onClick={onReport} />
+        <ReportFlag tooltip={v2(lang, "reportLabel")} onClick={onReport} />
       </div>
     </div>
   );
@@ -1024,7 +1017,7 @@ export function IdiomsCard({
         ))}
       </div>
       <div className="mt-5 pt-3">
-        <ReportFlag label={v2(lang, "reportLabel")} onClick={onReport} />
+        <ReportFlag tooltip={v2(lang, "reportLabel")} onClick={onReport} />
       </div>
     </div>
   );
@@ -1323,7 +1316,6 @@ export function ResultView({
         word={result.word}
         language={result.language}
         ipa={result.ipa}
-        plan={plan}
         onSave={onSave}
         onShare={onShare}
       />

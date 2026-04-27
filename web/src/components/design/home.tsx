@@ -51,22 +51,19 @@ function fontClassFor(script: Script, latinDefault = "gd-font-display"): string 
 }
 
 // ─── HomeHero ────────────────────────────────────────────────────
-// Two-line tagline (line 1 = white, line 2 = electric blue italic).
-// Above it: a small "Launching May 1" badge with the pulsing tier dot.
+// Centered headline + subline. The "Launching May 1" badge that used
+// to sit above the headline was removed: launch-date marketing belongs
+// in a campaign banner or release email, not as a permanent fixture
+// on the front door.
 export function HomeHero() {
-  const { lang, dir } = useLang();
+  const { lang } = useLang();
   const script = scriptFor(lang);
-  const isRtl = dir === "rtl";
 
   const titleFont = fontClassFor(script);
 
   return (
     <section
       style={{
-        // Was 12vw → 120px cap, which left an enormous void above the
-        // headline on a 32" monitor at 100% zoom and pushed Dream
-        // (the preview) below the fold. Tightened so the hero fits in
-        // the first viewport-half on any reasonable display.
         paddingBlockStart: "clamp(28px, 5vw, 56px)",
         paddingBlockEnd: "clamp(20px, 3vw, 36px)",
       }}
@@ -76,37 +73,9 @@ export function HomeHero() {
           maxWidth: 920,
           margin: "0 auto",
           padding: "0 24px",
-          textAlign: isRtl ? "right" : "left",
+          textAlign: "center",
         }}
       >
-        <div
-          className="gd-font-sans-ui inline-flex items-center gap-2 mb-6"
-          style={{
-            fontSize: 11.5,
-            // Hebrew/Arabic don't have casing; tracking is jarring on
-            // those scripts (creates artificial gaps between letters).
-            // Latin scripts keep the uppercase + tracked treatment.
-            letterSpacing: script === "latin" ? "0.16em" : "0",
-            textTransform: script === "latin" ? "uppercase" : "none",
-            color: "oklch(0.85 0.05 245)",
-            fontWeight: 600,
-            padding: "5px 12px",
-            borderRadius: 999,
-            background: "oklch(0.72 0.19 245 / 0.1)",
-            boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.3)",
-          }}
-        >
-          <span className="gd-tier-dot" />
-          {v2(lang, "homeBadgeLaunching")}
-        </div>
-
-        {/* Headline is one line (was two stacked spans). The second
-            phrase is still rendered in electric blue + italic for the
-            Latin scripts so the eye lands on it as the resolution of
-            the verb — but it's inline now so the hero takes ~half the
-            vertical space it used to. Cap is also lower (was 96px,
-            now 72px) to fit "Understand to the end." on a single line
-            at desktop width. */}
         <h1
           className={titleFont}
           style={{
@@ -137,11 +106,11 @@ export function HomeHero() {
           className="gd-font-sans-ui"
           style={{
             marginTop: 24,
+            marginInline: "auto",
             fontSize: "clamp(16px, 1.6vw, 19px)",
             lineHeight: 1.55,
             color: "oklch(0.78 0.02 265)",
             maxWidth: 620,
-            marginInlineStart: 0,
           }}
         >
           {v2(lang, "homeSubline")}

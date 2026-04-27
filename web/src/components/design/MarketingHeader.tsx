@@ -215,8 +215,21 @@ export function MarketingHeader() {
           {user ? (
             <Link
               href="/account"
-              aria-label="Account"
-              className="inline-flex items-center justify-center transition-shadow hover:shadow-md"
+              aria-label={
+                plan === "deep"
+                  ? "Account · Deep"
+                  : plan === "clear"
+                    ? "Account · Clear"
+                    : "Account"
+              }
+              title={
+                plan === "deep"
+                  ? "Deep"
+                  : plan === "clear"
+                    ? "Clear"
+                    : undefined
+              }
+              className="relative inline-flex items-center justify-center transition-shadow hover:shadow-md"
               style={{
                 // 44×44 — touch target minimum.
                 width: 44,
@@ -231,6 +244,24 @@ export function MarketingHeader() {
               }}
             >
               {initial}
+              {plan !== "basic" && (
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    insetBlockEnd: 1,
+                    insetInlineEnd: 1,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 999,
+                    background: "var(--gd-electric)",
+                    boxShadow:
+                      plan === "deep"
+                        ? "0 0 0 2px oklch(0.16 0.04 265), 0 0 6px var(--gd-electric)"
+                        : "0 0 0 2px oklch(0.16 0.04 265)",
+                  }}
+                />
+              )}
             </Link>
           ) : (
             <button

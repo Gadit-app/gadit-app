@@ -140,23 +140,25 @@ export function TierBadge({
 // ─── ReportFlag ────────────────────────────────────────────────────
 // Small, unobtrusive flag in the corner of content cards. Click handler
 // is wired by the consumer (typically opens the existing ReportButton modal).
-// Note: per UX review, this should NOT appear on Kids cards or other
+// Icon-only with a tooltip — matches Notion/Linear/GitHub convention and
+// keeps content cards quiet. Per UX review, NOT on Kids or other
 // child-facing surfaces.
 export function ReportFlag({
-  label = "Report",
+  tooltip = "Report",
   onClick,
 }: {
-  label?: string;
+  tooltip?: string;
   onClick?: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="gd-flag-btn gd-font-sans-ui inline-flex items-center gap-1.5"
-      style={{ fontSize: 11.5 }}
+      title={tooltip}
+      aria-label={tooltip}
+      className="gd-flag-btn inline-flex items-center justify-center"
     >
-      <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+      <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
         <path
           d="M3 1.5v11M3 2h6.5l-1 2 1 2H3"
           stroke="currentColor"
@@ -165,7 +167,6 @@ export function ReportFlag({
           strokeLinejoin="round"
         />
       </svg>
-      {label}
     </button>
   );
 }

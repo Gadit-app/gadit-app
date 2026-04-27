@@ -950,9 +950,6 @@ export function NotebookV2() {
               className="gd-font-sans-ui"
               style={{ fontSize: 14, color: "oklch(0.65 0.03 265)" }}
             >
-              {v2(lang, "homeBadgeLaunching")
-                ? ""
-                : ""}{" "}
               {/* placeholder — keeps layout stable while loading */}
             </div>
           </div>

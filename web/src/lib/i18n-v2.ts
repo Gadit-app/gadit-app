@@ -26,7 +26,6 @@ type Template1 = (a: string | number) => string;
 
 export interface V2Strings {
   // ── Home: hero ──────────────────────────────────────────────
-  homeBadgeLaunching: string;
   homeHeadlineLine1: string;
   homeHeadlineLine2: string;
   homeSubline: string;
@@ -360,7 +359,6 @@ export interface V2Strings {
 }
 
 const en: V2Strings = {
-  homeBadgeLaunching: "Launching May 1",
   homeHeadlineLine1: "Understand",
   homeHeadlineLine2: "to the end.",
   homeSubline:
@@ -690,7 +688,6 @@ const en: V2Strings = {
 };
 
 const he: V2Strings = {
-  homeBadgeLaunching: "משיקים 1 במאי",
   homeHeadlineLine1: "להבין",
   homeHeadlineLine2: "עד הסוף.",
   homeSubline:
@@ -1025,7 +1022,6 @@ const he: V2Strings = {
 };
 
 const ar: V2Strings = {
-  homeBadgeLaunching: "الإطلاق في 1 مايو",
   homeHeadlineLine1: "افهم",
   homeHeadlineLine2: "حتى النهاية.",
   homeSubline:
@@ -1374,7 +1370,6 @@ const ar: V2Strings = {
 
 // Russian — formal "вы" register throughout (B2C SaaS convention).
 const ru: Partial<V2Strings> = {
-  homeBadgeLaunching: "Запуск 1 мая",
   homeHeadlineLine1: "Понимать",
   homeHeadlineLine2: "до конца.",
   homeSubline:
@@ -1705,7 +1700,6 @@ const ru: Partial<V2Strings> = {
 
 // Spanish — neutral Latin American, "tú" register.
 const es: Partial<V2Strings> = {
-  homeBadgeLaunching: "Lanzamiento 1 de mayo",
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "hasta el final.",
   homeSubline:
@@ -2034,7 +2028,6 @@ const es: Partial<V2Strings> = {
 
 // Portuguese — Brazilian, "você" register.
 const pt: Partial<V2Strings> = {
-  homeBadgeLaunching: "Lançamento em 1 de maio",
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "até o fim.",
   homeSubline:
@@ -2363,7 +2356,6 @@ const pt: Partial<V2Strings> = {
 
 // French — formal "vous" register, neutral (FR + QC).
 const fr: Partial<V2Strings> = {
-  homeBadgeLaunching: "Lancement le 1er mai",
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "jusqu'au bout.",
   homeSubline:

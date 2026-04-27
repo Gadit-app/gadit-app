@@ -20,6 +20,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
+import { track } from "@/lib/track";
 
 const COPY: Record<
   string,
@@ -83,6 +84,12 @@ export default function WordError({
     // Surface to the browser console for triage; in production this
     // also reaches Vercel logs through the runtime error pipe.
     console.error("/word/[word] error boundary tripped:", error);
+    // Telemetry: each trip is a real failed user interaction. The
+    // message + digest land in Vercel Analytics so spikes are visible.
+    track("word_error_boundary", {
+      message: error.message?.slice(0, 200) ?? "",
+      digest: error.digest ?? null,
+    });
   }, [error]);
 
   return (

@@ -385,10 +385,23 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 Allow.ALL
               ) as Partial<WordResult>;
               if (partial && typeof partial === "object") {
+                // Only render meanings that are at least minimally
+                // shaped — partial-json hands us mid-stream rows like
+                // { meaning: "חלום ז" } before examples have arrived,
+                // and the renderer used to crash when examples was
+                // undefined. Defensive rendering inside MeaningCard
+                // catches the rest, but filtering here avoids a flash
+                // of empty cards on screen during the stream.
+                const partialMeanings = Array.isArray(partial.meanings)
+                  ? partial.meanings.filter(
+                      (m): m is NonNullable<typeof m> =>
+                        !!m && typeof m === "object" && typeof m.meaning === "string"
+                    )
+                  : [];
                 setResult({
                   word: partial.word ?? initialWord,
                   language: partial.language ?? "",
-                  meanings: partial.meanings ?? [],
+                  meanings: partialMeanings,
                   etymology: partial.etymology ?? "",
                   generalIdioms: partial.generalIdioms,
                 });
