@@ -230,39 +230,60 @@ function TierCard({
         }
       : { fontWeight: 600, letterSpacing: "-0.01em" };
 
+  // Color ramp depending on whether this card uses the inverted
+  // (navy) treatment or the normal (paper) treatment. Defining once
+  // here so every text element below can pick the right token without
+  // a per-line conditional.
+  const inverted = tier.highlight;
+  const colorTitle = inverted ? "white" : "var(--gd-ink-900)";
+  const colorBody = inverted ? "oklch(1 0 0 / 0.85)" : "var(--gd-ink-700)";
+  const colorMuted = inverted ? "oklch(1 0 0 / 0.65)" : "var(--gd-ink-500)";
+  const colorFaint = inverted ? "oklch(1 0 0 / 0.55)" : "var(--gd-ink-400)";
+  const colorAccent = inverted ? "oklch(0.85 0.1 245)" : "oklch(0.5 0.18 250)";
+
   return (
     <div
-      // Restore the document direction inside each card so Hebrew /
-      // Arabic feature text aligns to the right edge naturally — the
-      // outer grid is `dir="ltr"` to keep the cheap→expensive order
-      // universal, but inside the card we want native RTL flow.
+      // Restore document direction inside each card so RTL flows
+      // naturally; outer grid is dir="ltr" for universal price order.
       dir={dir}
-      className={`gd-card relative h-full flex flex-col ${tier.highlight ? "gd-tier-popular" : ""}`}
+      className={`relative h-full flex flex-col ${tier.highlight ? "gd-tier-popular" : ""}`}
       style={{
-        // gd-card gives us the warm-paper surface + outer shadow; we add
-        // a stronger blue ring for the highlighted tier on top.
-        // flex-col lets the features <ul> grow to fill remaining space,
-        // which keeps the CTA pinned at the same Y across cards even
-        // when feature counts differ.
-        // All three cards share identical padding so the inner content
-        // grid (name → tagline → pitch → price → features → CTA) lines
-        // up row-by-row across the strip. Clear only differs in scale +
-        // glow ring — this preserves the "Most popular" lift that Stripe
-        // and Linear use without breaking row alignment. The scale is
-        // applied via the .gd-tier-popular class which is gated to
-        // ≥768px in globals.css so single-column mobile layout doesn't
-        // overflow the viewport gutter.
+        // INVERTED CONTRAST for the highlighted tier (Clear).
+        // Beta review: with 3 paper cards on navy, the only thing
+        // distinguishing the "most popular" card was a thin blue ring
+        // and a flag. The eye saw three identical cards. Now the
+        // highlighted card flips to a navy gradient with white text —
+        // it's *physically* a different card, not just decorated. The
+        // outer two stay warm paper. Conversion-card hierarchy gets
+        // immediate at-a-glance, which is the whole point of pricing
+        // tier strips.
+        borderRadius: 20,
         padding: "clamp(28px, 3vw, 36px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 32px)",
         zIndex: tier.highlight ? 1 : 0,
         ...(tier.highlight
           ? {
+              // Highlighted: deep navy gradient, white text, electric
+              // outer ring. Reads like a premium brand statement
+              // instead of a mid-grade upgrade prompt.
+              background:
+                "linear-gradient(180deg, oklch(0.22 0.06 265) 0%, oklch(0.16 0.05 265) 100%)",
+              color: "white",
               boxShadow:
-                "inset 0 0 0 1.5px oklch(0.72 0.19 245 / 0.65), " +
+                "0 0 0 1px oklch(0.72 0.19 245 / 0.4), " +
                 "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
-                "0 24px 60px -24px oklch(0.5 0.2 250 / 0.5), " +
+                "0 28px 60px -20px oklch(0.5 0.2 250 / 0.5), " +
                 "0 8px 22px -10px oklch(0.08 0.08 260 / 0.5)",
             }
-          : {}),
+          : {
+              // Non-highlighted: warm paper card.
+              background: "var(--gd-paper-50)",
+              color: "var(--gd-ink-900)",
+              boxShadow:
+                "0 1px 0 0 oklch(1 0 0 / 0.04) inset, " +
+                "0 0 0 1px oklch(1 0 0 / 0.06), " +
+                "0 24px 60px -24px oklch(0.08 0.08 260 / 0.6), " +
+                "0 8px 22px -10px oklch(0.08 0.08 260 / 0.5)",
+            }),
       }}
     >
       {tier.badge && (
@@ -316,7 +337,7 @@ function TierCard({
           style={{
             fontSize: "clamp(32px, 3.6vw, 40px)",
             lineHeight: 1,
-            color: "var(--gd-ink-900)",
+            color: colorTitle,
             fontVariationSettings: '"opsz" 60',
             fontWeight: 500,
             letterSpacing: "-0.02em",
@@ -326,20 +347,19 @@ function TierCard({
         </div>
         <div
           className="gd-font-sans-ui italic mt-2"
-          style={{ fontSize: 13, color: "oklch(0.5 0.18 250)" }}
+          style={{ fontSize: 13, color: colorAccent }}
         >
           {tier.tagline}
         </div>
       </div>
-      {/* Pitch — centered. Reserved height of 2 lines so the price row
-          below sits at the same Y across all three cards even though
-          Basic's pitch is one line while Clear/Deep's are two. */}
+      {/* Pitch — centered, 2-line min-height so price row aligns
+          across all three cards. */}
       <p
         className="gd-font-sans-ui mt-3"
         style={{
           fontSize: 13.5,
           lineHeight: 1.5,
-          color: "var(--gd-ink-500)",
+          color: colorMuted,
           minHeight: "calc(13.5px * 1.5 * 2)",
           textAlign: "center",
         }}
@@ -347,17 +367,14 @@ function TierCard({
         {tier.pitch}
       </p>
 
-      {/* Price — centered, directly under the tagline/pitch.
-          Was 60px → 36px now that the tier name is the visual lead.
-          The price is supporting info; the user has already decided
-          on tier by the time their eye reaches the number. */}
+      {/* Price — centered, supporting role under the tier name. */}
       <div className="mt-6 flex items-baseline justify-center gap-1.5">
         <span
           className={priceFontClass}
           style={{
             fontSize: 36,
             lineHeight: 1,
-            color: "var(--gd-ink-900)",
+            color: colorTitle,
             ...priceFontStyle,
           }}
         >
@@ -366,7 +383,7 @@ function TierCard({
         {period && (
           <span
             className="gd-font-sans-ui"
-            style={{ fontSize: 14, color: "var(--gd-ink-500)" }}
+            style={{ fontSize: 14, color: colorMuted }}
           >
             {period}
           </span>
@@ -375,7 +392,7 @@ function TierCard({
       {subPrice && (
         <div
           className="gd-font-sans-ui mt-1 text-center"
-          style={{ fontSize: 11.5, color: "var(--gd-ink-400)" }}
+          style={{ fontSize: 11.5, color: colorFaint }}
         >
           {subPrice}
         </div>
@@ -401,7 +418,7 @@ function TierCard({
             style={{
               fontSize: 13.5,
               lineHeight: 1.5,
-              color: "var(--gd-ink-700)",
+              color: colorBody,
               textAlign: "start",
             }}
           >
@@ -411,7 +428,7 @@ function TierCard({
               viewBox="0 0 14 14"
               fill="none"
               style={{
-                color: "oklch(0.5 0.18 250)",
+                color: colorAccent,
                 marginTop: 4,
                 flexShrink: 0,
               }}
@@ -440,7 +457,7 @@ function TierCard({
           fontSize: 13.5,
           padding: "12px 18px",
           borderRadius: 12,
-          ...(tier.highlight
+          ...(inverted
             ? {
                 color: "white",
                 background:
@@ -461,7 +478,7 @@ function TierCard({
         className="mt-3 gd-font-sans-ui text-center"
         style={{
           fontSize: 11.5,
-          color: "var(--gd-ink-500)",
+          color: colorMuted,
           minHeight: 18,
         }}
       >
