@@ -287,8 +287,13 @@ export function LoginModalV2() {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
       style={{
-        background: "oklch(0.12 0.04 265 / 0.55)",
-        backdropFilter: "blur(14px)",
+        // Lighter backdrop — was oklch(0.12 0.04 265 / 0.55) which
+        // dimmed the navy stage to almost-black. The new value is
+        // dimmer still on the dark page but more transparent on
+        // light pages, and the blur does the heavy lifting either
+        // way. Reads as "the page is paused" not "the page is gone".
+        background: "oklch(0.12 0.04 265 / 0.4)",
+        backdropFilter: "blur(10px)",
         padding: 16,
       }}
       onClick={() => setShowLoginModal(false)}
@@ -303,19 +308,24 @@ export function LoginModalV2() {
           maxWidth: 440,
           padding: "clamp(24px, 3vw, 32px) clamp(22px, 3vw, 36px) clamp(26px, 3vw, 34px)",
           textAlign: isRtl ? "right" : "left",
-          // Electric-blue card — high contrast against the dark navy
-          // backdrop AND against the white input fields inside, so
-          // the wordmark + form structure read clearly. The deep
-          // navy-to-blue gradient echoes the wordmark gradient.
+          // Floating paper card — was electric-blue gradient with
+          // white text, which beta testers experienced as a "wall"
+          // the moment they hit it. The intent was high contrast
+          // against the navy stage; the effect was a confrontational
+          // popup that announced "you must do something now".
+          //
+          // New approach: warm paper (matches the result/pricing
+          // cards) with a soft electric-blue ring outside it. The
+          // card itself doesn't shout — it floats. Subtle ambient
+          // glow says "branded" without saying "alarm".
           borderRadius: 20,
-          background:
-            "linear-gradient(180deg, oklch(0.4 0.18 250) 0%, oklch(0.32 0.16 255) 100%)",
+          background: "var(--gd-paper-50)",
           boxShadow:
-            "0 0 0 1px oklch(0.72 0.19 245 / 0.45), " +
-            "0 0 0 6px oklch(0.72 0.19 245 / 0.08), " +
-            "0 30px 60px -20px oklch(0.08 0.08 260 / 0.7), " +
-            "0 8px 22px -10px oklch(0.08 0.08 260 / 0.5)",
-          color: "white",
+            "0 0 0 1px oklch(0 0 0 / 0.06), " +
+            "0 0 0 5px oklch(0.72 0.19 245 / 0.06), " +
+            "0 24px 60px -24px oklch(0.08 0.08 260 / 0.55), " +
+            "0 8px 22px -12px oklch(0.08 0.08 260 / 0.4)",
+          color: "var(--gd-ink-900)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -335,7 +345,7 @@ export function LoginModalV2() {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "oklch(1 0 0 / 0.7)",
+            color: "var(--gd-ink-500)",
             background: "transparent",
           }}
         >
@@ -381,7 +391,7 @@ export function LoginModalV2() {
           style={{
             fontSize: "clamp(24px, 2.6vw, 28px)",
             lineHeight: 1.18,
-            color: "white",
+            color: "var(--gd-ink-900)",
             ...(lang !== "he" && lang !== "ar"
               ? {
                   fontVariationSettings: '"opsz" 36',
@@ -401,7 +411,7 @@ export function LoginModalV2() {
             className="mt-1.5 gd-font-sans-ui"
             style={{
               fontSize: 13.5,
-              color: "oklch(1 0 0 / 0.75)",
+              color: "var(--gd-ink-500)",
               lineHeight: 1.5,
             }}
           >
@@ -433,13 +443,13 @@ export function LoginModalV2() {
         <div className="my-5 flex items-center gap-3">
           <div
             className="flex-1"
-            style={{ height: 1, background: "oklch(1 0 0 / 0.18)" }}
+            style={{ height: 1, background: "oklch(0 0 0 / 0.1)" }}
           />
           <span
             className="gd-font-sans-ui"
             style={{
               fontSize: 11.5,
-              color: "oklch(1 0 0 / 0.6)",
+              color: "var(--gd-ink-400)",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
             }}
@@ -448,7 +458,7 @@ export function LoginModalV2() {
           </span>
           <div
             className="flex-1"
-            style={{ height: 1, background: "oklch(1 0 0 / 0.18)" }}
+            style={{ height: 1, background: "oklch(0 0 0 / 0.1)" }}
           />
         </div>
 
@@ -474,7 +484,7 @@ export function LoginModalV2() {
               className="gd-font-sans-ui mb-1.5"
               style={{
                 fontSize: 11.5,
-                color: "oklch(1 0 0 / 0.85)",
+                color: "var(--gd-ink-500)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -493,12 +503,10 @@ export function LoginModalV2() {
               disabled={busy}
               className="w-full gd-font-sans-ui outline-none transition-shadow"
               style={{
-                // Solid white fill instead of a translucent dark tint.
-                // On the new electric-blue card, the previous near-
-                // transparent input read as "decorative outline only" —
-                // users couldn't tell the field was tappable. Pure white
-                // matches the Google button above and gives the form a
-                // clear "input here" affordance.
+                // White fill with a hairline border — sits cleanly
+                // on the warm-paper card. Gave the field a clear
+                // tappable boundary while the card around it stays
+                // soft and quiet.
                 background: "white",
                 color: "var(--gd-ink-900)",
                 // 16px floor — anything below triggers iOS Safari
@@ -520,7 +528,7 @@ export function LoginModalV2() {
               className="gd-font-sans-ui mb-1.5"
               style={{
                 fontSize: 11.5,
-                color: "oklch(1 0 0 / 0.85)",
+                color: "var(--gd-ink-500)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -594,7 +602,11 @@ export function LoginModalV2() {
           {mode === "signup" && (
             <label
               className="mt-4 flex items-start gap-2.5 cursor-pointer gd-font-sans-ui"
-              style={{ fontSize: 12.5, color: "oklch(1 0 0 / 0.85)", lineHeight: 1.45 }}
+              style={{
+                fontSize: 12.5,
+                color: "var(--gd-ink-700)",
+                lineHeight: 1.45,
+              }}
             >
               <input
                 type="checkbox"
@@ -613,7 +625,10 @@ export function LoginModalV2() {
                 <a
                   href="/terms"
                   target="_blank"
-                  style={{ color: "white", textDecoration: "underline" }}
+                  style={{
+                    color: "oklch(0.5 0.18 250)",
+                    textDecoration: "underline",
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   {v2(lang, "loginTermsLinkLabel")}
@@ -622,7 +637,10 @@ export function LoginModalV2() {
                 <a
                   href="/privacy"
                   target="_blank"
-                  style={{ color: "white", textDecoration: "underline" }}
+                  style={{
+                    color: "oklch(0.5 0.18 250)",
+                    textDecoration: "underline",
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   {v2(lang, "loginPrivacyLinkLabel")}
@@ -658,7 +676,7 @@ export function LoginModalV2() {
         {/* Mode toggle */}
         <div
           className="mt-4 text-center gd-font-sans-ui"
-          style={{ fontSize: 13, color: "oklch(1 0 0 / 0.7)" }}
+          style={{ fontSize: 13, color: "var(--gd-ink-500)" }}
         >
           <button
             type="button"
@@ -667,9 +685,8 @@ export function LoginModalV2() {
               setErrorKey("");
             }}
             style={{
-              color: "white",
+              color: "oklch(0.5 0.18 250)",
               fontWeight: 500,
-              textDecoration: "underline",
               cursor: "pointer",
               background: "transparent",
             }}
