@@ -98,10 +98,10 @@ function CardFront({
     >
       {/* Top row: eyebrow · counter | skip */}
       <div
-        className={`flex items-center justify-between ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`flex items-center justify-between `}
       >
         <div
-          className={`flex items-center gap-2.5 ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center gap-2.5 `}
         >
           <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
             {v2(lang, "srEyebrow")}
@@ -190,7 +190,7 @@ function CardFront({
 
       {/* Reveal hint */}
       <div
-        className={`gd-font-sans-ui flex items-center justify-center gap-2 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`gd-font-sans-ui flex items-center justify-center gap-2 `}
         style={{
           fontSize: 12.5,
           color: "var(--gd-ink-500)",
@@ -244,7 +244,7 @@ function CardBack({
     >
       {/* Header row */}
       <div
-        className={`flex items-center gap-2.5 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`flex items-center gap-2.5 `}
       >
         <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
           {v2(lang, "srEyebrow")}
@@ -430,7 +430,7 @@ function Summary({
 
       {/* Big number + label */}
       <div
-        className={`flex items-baseline gap-3 mt-3 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`flex items-baseline gap-3 mt-3 `}
       >
         <span
           className="gd-font-display"
@@ -482,7 +482,7 @@ function Summary({
         }}
       >
         <div
-          className={`flex items-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center gap-3 `}
         >
           <svg
             width="22"

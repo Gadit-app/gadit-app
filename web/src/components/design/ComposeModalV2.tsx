@@ -113,7 +113,7 @@ function FeedbackIndicator({
 
   return (
     <div
-      className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+      className={`flex items-start gap-3 `}
       style={{ flex: 1 }}
     >
       <div
@@ -259,7 +259,7 @@ function ComposeResult({
       )}
 
       <div
-        className={`mt-6 flex items-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`mt-6 flex items-center gap-3 `}
       >
         <button
           type="button"

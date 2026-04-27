@@ -214,7 +214,7 @@ function PlanSection({
             {v2(lang, "accountChooseAPlan")}
           </p>
           <div
-            className={`mt-6 flex gap-3 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`mt-6 flex gap-3 flex-wrap `}
           >
             <PrimaryBtn onClick={onUpgrade}>
               {v2(lang, "accountUpgrade")}
@@ -246,7 +246,7 @@ function PlanSection({
 
           {/* Tier name in display Fraunces */}
           <div
-            className={`flex items-baseline gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`flex items-baseline gap-3 `}
           >
             <h2
               className="gd-font-display"
@@ -297,7 +297,7 @@ function PlanSection({
 
           {/* CTAs */}
           <div
-            className={`mt-6 flex gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`mt-6 flex gap-2 flex-wrap `}
           >
             {plan === "basic" ? (
               <>
@@ -352,7 +352,7 @@ function UsageMeter({
   return (
     <div style={{ marginBlockEnd: 22 }}>
       <div
-        className={`flex items-baseline justify-between mb-2 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`flex items-baseline justify-between mb-2 `}
       >
         <span
           className="gd-font-sans-ui"
@@ -467,7 +467,7 @@ function AccountInfoSection({
       <SectionHeader>{v2(lang, "accountSectionLabel")}</SectionHeader>
 
       <div
-        className={`flex items-baseline justify-between gap-3 mb-5 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`flex items-baseline justify-between gap-3 mb-5 flex-wrap `}
       >
         <div style={{ minWidth: 0, flex: 1 }}>
           <div
@@ -569,7 +569,7 @@ function AccountHero({ data }: { data: AccountData }) {
       </h1>
       {data.email && (
         <div
-          className={`mt-5 flex items-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`mt-5 flex items-center gap-3 `}
         >
           <div
             style={{

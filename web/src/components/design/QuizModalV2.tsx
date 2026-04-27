@@ -324,7 +324,7 @@ function QuizFinal({
       )}
 
       <div
-        className={`mt-7 flex items-center justify-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`mt-7 flex items-center justify-center gap-3 `}
       >
         <button
           type="button"
@@ -624,7 +624,7 @@ export function QuizModalV2({
           <>
             {/* Header row: eyebrow+title vs progress */}
             <div
-              className={`flex items-start ${isRtl ? "flex-row-reverse" : ""} justify-between gap-3`}
+              className={`flex items-start  justify-between gap-3`}
             >
               <div>
                 <Eyebrow style={{ color: "oklch(0.5 0.18 250)" }}>

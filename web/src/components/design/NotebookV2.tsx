@@ -153,7 +153,7 @@ function ViewToggle({
 
   return (
     <div
-      className={`inline-flex items-center gap-1 ${isRtl ? "flex-row-reverse" : ""}`}
+      className={`inline-flex items-center gap-1 `}
       style={{
         padding: 4,
         borderRadius: 12,
@@ -217,7 +217,7 @@ function WordCard({
       }}
     >
       <div
-        className={`flex items-baseline ${isRtl ? "flex-row-reverse" : ""} justify-between`}
+        className={`flex items-baseline  justify-between`}
       >
         <h3
           className={fontDisplay(script)}
@@ -239,7 +239,7 @@ function WordCard({
         </h3>
       </div>
       <div
-        className={`mt-2 flex items-center gap-2 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`mt-2 flex items-center gap-2 `}
       >
         <span
           className="gd-font-sans-ui"
@@ -292,7 +292,7 @@ function WordCard({
       </p>
       {/* mastery dots */}
       <div
-        className={`mt-4 flex items-center gap-1.5 ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`mt-4 flex items-center gap-1.5 `}
       >
         {[0, 1, 2].map((i) => (
           <span
@@ -659,7 +659,7 @@ function GalaxyView({
           galaxy boundary on narrow screens; the dot sizes are small
           enough that most users intuit the recency mapping anyway. */}
       <div
-        className={`absolute gd-font-sans-ui hidden sm:flex ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`absolute gd-font-sans-ui hidden sm:flex `}
         style={{
           insetBlockEnd: 16,
           insetInlineStart: 16,

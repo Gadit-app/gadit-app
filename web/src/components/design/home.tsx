@@ -217,7 +217,7 @@ export function HomeSearch() {
             In RTL the row reverses: search icon leads the input on the
             right edge, "Add context" + "Explain" trail on the left. */}
         <div
-          className={`flex items-center gap-3 flex-wrap sm:flex-nowrap ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center gap-3 flex-wrap sm:flex-nowrap `}
           style={{
             padding: "18px 22px",
             background: "var(--gd-paper-50)",
@@ -415,9 +415,7 @@ export function ResultTease() {
       }}
     >
       <div
-        className={`gd-font-sans-ui mb-3 inline-flex items-center gap-2 ms-2 ${
-          isRtl ? "flex-row-reverse" : ""
-        }`}
+        className="gd-font-sans-ui mb-3 inline-flex items-center gap-2 ms-2"
         style={{
           fontSize: 11,
           color: "oklch(0.62 0.02 265)",
@@ -469,7 +467,7 @@ export function ResultTease() {
 
         <div className="mt-5 grid grid-cols-1 gap-4">
           <div
-            className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`flex items-start gap-3 `}
           >
             <MeaningBadge n={1} />
             <div className="flex-1 min-w-0">
