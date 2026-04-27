@@ -213,10 +213,30 @@ export function LoginModalV2() {
     }
   }
 
+  // Client-side password policy. Firebase's default minimum is 6,
+  // and accepts "111111" — security review caught that as
+  // medium-severity. Bumped to 8 with a letter+digit mix required.
+  // Enforced only on signup; signin must accept legacy 6-char
+  // passwords from accounts already created.
+  function validateSignupPassword(pw: string): string | null {
+    if (pw.length < 8) return "loginErrorWeakPassword";
+    if (!/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw)) {
+      return "loginErrorWeakPassword";
+    }
+    return null;
+  }
+
   async function handleEmail(e: React.FormEvent) {
     e.preventDefault();
-    setBusy(true);
     setErrorKey("");
+    if (mode === "signup") {
+      const policyErr = validateSignupPassword(password);
+      if (policyErr) {
+        setErrorKey(policyErr);
+        return;
+      }
+    }
+    setBusy(true);
     try {
       if (mode === "signin") {
         await signInWithEmail(email, password);
