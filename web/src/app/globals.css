@@ -87,6 +87,1009 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .animate-fade-in    { animation: fadeIn  0.35s ease both; }
 
+/* =========================================================================
+   WORDBOOK — light/cream redesign for /word/[word] (locked April 2026).
+   All rules scoped under `.wordbook` so they coexist with the legacy V2
+   dark canvas (still used by /, /pricing, /notebook, etc.).
+   Source of truth: web/public/gadit-final.html
+   ========================================================================= */
+
+.wordbook {
+  /* Surface — replaced warm cream with a very light cool gray for
+     page chrome, plus pure white for the content card the
+     definitions live inside. Cleaner, modern, less "library-paper". */
+  --paper: #F4F5F8;          /* page bg — very light gray */
+  --paper-deep: #ECEEF3;
+  --surface: #FFFFFF;        /* the content card the definitions sit in */
+
+  /* Ink — slightly darker now that we're on white */
+  --ink: #0B1220;
+  --ink-soft: #3F4856;
+  --ink-muted: #6B7280;
+  --ink-faint: #9CA3AF;
+
+  /* Rules — cool gray to match the new surface, no warm-cream tint */
+  --rule: #E2E5EA;
+  --rule-soft: #EAECF1;
+  --rule-faint: #F1F2F6;
+
+  /* "Alive" palette — brighter, more saturated than the original
+     paper-press tones. The icons are now the show-stoppers (no card
+     backgrounds carrying colour anymore) so each accent has to land
+     on its own at small icon sizes. */
+  --m-deep: #2563EB;   /* meanings — vivid blue (book) */
+  --o-deep: #F97316;   /* origin — warm orange (scroll/history) */
+  --v-deep: #EC4899;   /* visual — pink (image/camera) */
+  --t-deep: #8B5CF6;   /* take-it-further (umbrella accent) */
+  /* Per-tile accents — playful, each distinctive enough that a
+     returning user can scan the row by colour alone. */
+  --acc-compose: #3B82F6;   /* writing — blue */
+  --acc-quiz:    #F59E0B;   /* question — amber */
+  --acc-compare: #10B981;   /* compare — emerald */
+  --acc-kids:    #EC4899;   /* kids — pink */
+
+  /* Action */
+  --teal: #0E7490;
+  --teal-deep: #155E75;
+
+  /* Type stacks */
+  --wb-serif: var(--font-lora), 'Lora', Georgia, serif;
+  --wb-sans:  var(--font-inter), 'Inter', system-ui, sans-serif;
+  --wb-he:    var(--font-rubik), 'Rubik', system-ui, sans-serif;
+  --wb-ar:    var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), system-ui, sans-serif;
+
+  font-family: var(--wb-sans);
+  color: var(--ink);
+  line-height: 1.55;
+  font-feature-settings: 'ss01', 'cv11', 'kern';
+}
+
+/* `.wb-page` is the ResultView wrapper. It sits INSIDE the page
+   shell (which is now light gray). On mobile the content card runs
+   edge-to-edge; on desktop it lifts off the gray as a centered
+   white "table" — that's the contained "framed content" feel Gadi
+   asked for ("מתוחם באיזושהי טבלה ברורה"). */
+.wordbook.wb-page {
+  background: var(--surface);
+  min-height: calc(100vh - 70px);
+  padding-bottom: 96px;
+  padding-top: 8px;
+}
+@media (min-width: 768px) {
+  .wordbook.wb-page {
+    padding-bottom: 40px;
+    max-width: 920px;
+    margin: 24px auto 64px;
+    border-radius: 20px;
+    border: 1px solid var(--rule-soft);
+    box-shadow:
+      0 1px 2px rgba(11, 18, 32, 0.04),
+      0 14px 40px -18px rgba(11, 18, 32, 0.12);
+  }
+}
+
+/* Outer chrome on desktop — soft warm gradient beyond the content column */
+.wordbook .wb-chrome {
+  background: linear-gradient(135deg, #EDE5D2 0%, #E5DBC4 100%);
+  min-height: 100vh;
+}
+
+.wordbook .wb-shell {
+  background: var(--paper);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ── Outer page shell — replaces the navy gd-stage on /word ──── */
+.wordbook.wb-shell-page {
+  background: var(--paper);
+  min-height: 100vh;
+  padding-bottom: 96px;
+}
+@media (min-width: 768px) {
+  .wordbook.wb-shell-page { padding-bottom: 32px; }
+}
+
+/* ── Topbar — cream "magazine masthead" replacing V2 navy header ──
+   Subtle hairline bottom + light backdrop blur lift this off the page
+   without making it heavy. Sticky so the wordmark + actions stay
+   reachable while reading long meanings. */
+.wordbook .wb-shell-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 22px;
+  background: rgba(244, 245, 248, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule-soft);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-shell-topbar {
+    padding: 14px clamp(28px, 4vw, 56px);
+    gap: 24px;
+  }
+}
+.wordbook .wb-wordmark {
+  font-family: var(--wb-serif);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-decoration: none;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.wordbook .wb-wordmark .wb-wordmark-it {
+  color: var(--teal);
+  font-style: italic;
+  font-weight: 400;
+}
+.wordbook .wb-shell-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.wordbook .wb-shell-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--rule);
+  margin: 0 4px;
+}
+/* Sign in is the ONLY coloured button in the masthead — a clear
+   blue CTA so first-time visitors know where to start. Everything
+   else (nav, lang) stays low-contrast so this pops. */
+.wordbook .wb-shell-link {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  background: var(--acc-compose);
+  border: 1px solid var(--acc-compose);
+  border-radius: 999px;
+  padding: 8px 18px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 2px 8px -2px rgba(59, 130, 246, 0.5);
+}
+.wordbook .wb-shell-link:hover {
+  background: #2563EB;
+  border-color: #2563EB;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgba(59, 130, 246, 0.6);
+}
+
+/* Plain text nav links — used between wordmark and the action chips */
+.wordbook .wb-shell-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-shrink: 0;
+}
+.wordbook .wb-shell-nav a {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 6px 0;
+  position: relative;
+  transition: color 120ms ease;
+  white-space: nowrap;
+}
+.wordbook .wb-shell-nav a:hover { color: var(--ink); }
+.wordbook .wb-shell-nav a:hover::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--teal);
+  opacity: 0.6;
+}
+/* Active page indicator — the current section gets a quiet teal underline */
+.wordbook .wb-shell-nav a.is-active {
+  color: var(--ink);
+}
+.wordbook .wb-shell-nav a.is-active::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--teal);
+  border-radius: 1px;
+}
+
+/* Inline language switcher — globe + label + chevron, with dropdown */
+.wordbook .wb-lang-wrap { position: relative; }
+.wordbook .wb-lang-btn {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 7px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 120ms ease;
+}
+.wordbook .wb-lang-btn:hover { background: rgba(0, 0, 0, 0.04); }
+.wordbook .wb-lang-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  inset-inline-end: 0;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px -10px rgba(40, 30, 15, 0.18);
+  padding: 6px;
+  min-width: 160px;
+  z-index: 50;
+}
+.wordbook .wb-lang-panel button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: start;
+  padding: 8px 10px;
+  font-family: var(--wb-sans);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.wordbook .wb-lang-panel button:hover { background: rgba(0, 0, 0, 0.04); }
+.wordbook .wb-lang-panel button.is-active {
+  color: var(--teal-deep);
+  font-weight: 600;
+  background: rgba(14, 116, 144, 0.06);
+}
+
+/* Mobile: hide the inline nav, keep only wordmark + sign-in */
+@media (max-width: 767px) {
+  .wordbook .wb-shell-nav { display: none; }
+}
+
+/* ── Cream-friendly skeleton ───────────────────────────────── */
+.wordbook .wb-skeleton {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 18px;
+  margin: 0 14px 14px;
+  position: relative;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-skeleton {
+    margin: 0 auto 16px;
+    max-width: 760px;
+    border-radius: 14px;
+  }
+}
+.wordbook .wb-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%);
+  animation: wb-drift 1.6s ease-in-out infinite;
+}
+@keyframes wb-drift {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── PROGRESS SIGNAL ───────────────────────────────────────────── */
+.wordbook .wb-progress-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 22px 0;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-progress-wrap { padding: 16px 40px 0; }
+}
+.wordbook .wb-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 6px auto 0;
+  padding: 5px 12px 5px 10px;
+  font-size: 11.5px;
+  color: var(--teal-deep);
+  font-family: var(--wb-serif);
+  font-style: italic;
+  letter-spacing: 0.005em;
+  background: rgba(14, 116, 144, 0.06);
+  border-radius: 999px;
+  width: fit-content;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-progress { font-size: 12.5px; }
+}
+.wordbook .wb-progress svg { opacity: 0.85; }
+
+/* ── WORD HEADER ───────────────────────────────────────────────── */
+.wordbook .wb-word-head {
+  padding: 44px 24px 28px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-word-head {
+    padding: 64px 44px 24px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+}
+.wordbook .wb-word-meta {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+  font-family: var(--wb-serif);
+  font-style: italic;
+}
+.wordbook .wb-meta-dot {
+  width: 3px;
+  height: 3px;
+  background: var(--ink-faint);
+  border-radius: 50%;
+}
+.wordbook .wb-word-title {
+  font-family: var(--wb-serif);
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: -0.032em;
+  color: var(--ink);
+  line-height: 1;
+  margin: 0 0 12px;
+  text-shadow: 0 1px 0 rgba(31, 41, 55, 0.04);
+  overflow-wrap: anywhere;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-word-title {
+    font-size: 52px;
+    letter-spacing: -0.038em;
+    line-height: 1;
+    margin: 4px 0 12px;
+  }
+}
+
+/* Save / Share live HERE — with the word, not in the global masthead.
+   They're "this entry" actions, not site navigation. Quiet pills that
+   don't compete with the word itself. */
+.wordbook .wb-word-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.wordbook .wb-word-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.wordbook .wb-word-act:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--ink);
+}
+.wordbook .wb-word-act.is-saved {
+  color: var(--t-deep);
+  border-color: rgba(90, 68, 144, 0.35);
+  background: rgba(90, 68, 144, 0.06);
+}
+.wordbook .wb-word-act-icon {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.wordbook .wb-word-act-icon:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--ink);
+}
+
+/* ── SECTION EYEBROW (shared) ──────────────────────────────────
+   Text always renders BLACK (var(--ink)) per Gadi's direction —
+   "מקור המילה" / "משמעויות" stay legible and serious. The icon
+   beside the label carries the section's accent colour so the page
+   still has bright per-section identity. */
+.wordbook .wb-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  margin-bottom: 18px;
+  font-family: var(--wb-sans);
+  color: var(--ink) !important;
+}
+.wordbook .wb-eyebrow .wb-eyebrow-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wordbook .wb-eyebrow .wb-eyebrow-icon svg {
+  width: 100%;
+  height: 100%;
+  /* Slight drop-shadow gives a sense the icon is "set into" the
+     paper, like a sticker — adds liveliness without backgrounds. */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+}
+.wordbook .wb-eyebrow .wb-eyebrow-count {
+  margin-inline-start: auto;
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* ── MEANINGS — no card, primary content ──────────────────────── */
+/* Definitions panel — soft sky-blue tinted background lifts the
+   editorial heart of the page off the white content card. Callback
+   to the old V2 "galaxy" feel without the heavy navy: very subtle
+   blue gradient + thin blue hairline, so the definitions read as a
+   distinct zone the eye lands on first. */
+.wordbook .wb-meanings {
+  padding: 20px 22px 8px;
+  margin: 4px 14px 28px;
+  background:
+    linear-gradient(180deg,
+      rgba(219, 234, 254, 0.45) 0%,
+      rgba(239, 246, 255, 0.65) 100%);
+  border: 1px solid rgba(147, 197, 253, 0.45);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meanings {
+    max-width: 720px;
+    margin: 8px auto 44px;
+    padding: 28px 36px 14px;
+    border-radius: 18px;
+  }
+}
+.wordbook .wb-meanings .wb-eyebrow .wb-eyebrow-icon { color: var(--m-deep); }
+
+.wordbook .wb-meaning-row {
+  display: flex;
+  gap: 18px;
+  padding: 18px 0 22px;
+  border-bottom: 1px solid var(--rule-faint);
+}
+.wordbook .wb-meaning-row:first-of-type { padding-top: 8px; }
+.wordbook .wb-meaning-row:last-child {
+  border-bottom: none;
+  padding-bottom: 6px;
+}
+.wordbook .wb-meaning-num {
+  font-family: var(--wb-serif);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.15;
+  width: 22px;
+  flex-shrink: 0;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meaning-num { font-size: 26px; }
+}
+.wordbook .wb-meaning-body { flex: 1; min-width: 0; }
+.wordbook .wb-meaning-def {
+  font-family: var(--wb-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 14px;
+  letter-spacing: -0.005em;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meaning-def { font-size: 18px; line-height: 1.6; }
+}
+.wordbook .wb-meaning-ex {
+  font-family: var(--wb-serif);
+  font-style: italic;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  padding-block: 6px;
+  padding-inline-start: 18px;
+  position: relative;
+  letter-spacing: 0.002em;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meaning-ex { font-size: 16px; }
+}
+.wordbook .wb-meaning-ex::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: calc(0.825em + 6px);
+  width: 10px;
+  height: 1.5px;
+  background: var(--ink-muted);
+  opacity: 0.55;
+  border-radius: 1px;
+}
+
+/* ── SECTIONS (no card surfaces — sit directly on cream) ────────
+   Earlier rounds wrapped each section in a tinted card (rust /
+   mint / lavender). Gadi felt those colour blocks read as "adult /
+   academic". The new direction strips them: every section lives
+   directly on cream paper and gets its identity from a single big
+   colourful icon in the eyebrow + the per-tile accent icons. The
+   page reads as a magazine spread, not a stack of coloured pills. */
+.wordbook .wb-card {
+  padding: 8px 22px 4px;
+  margin: 0 0 28px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  position: relative;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-card {
+    margin: 0 auto 36px;
+    max-width: 760px;
+    padding: 12px 44px 6px;
+  }
+}
+
+/* Origin — accent: warm orange (only via eyebrow icon + accents) */
+.wordbook .wb-origin .wb-eyebrow .wb-eyebrow-icon { color: var(--o-deep); }
+
+.wordbook .wb-origin-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.wordbook .wb-origin-row {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.wordbook .wb-origin-row:last-child { border-bottom: none; }
+.wordbook .wb-origin-label {
+  font-family: var(--wb-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  min-width: 90px;
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-origin-label { min-width: 120px; }
+}
+.wordbook .wb-origin-value {
+  font-family: var(--wb-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-origin-value { font-size: 17px; line-height: 1.55; }
+}
+.wordbook .wb-origin-story {
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--wb-serif);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  font-style: italic;
+  letter-spacing: 0.002em;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-origin-story { font-size: 16.5px; line-height: 1.75; }
+}
+
+/* Visual — accent: pink (eyebrow icon only) */
+.wordbook .wb-visual .wb-eyebrow .wb-eyebrow-icon { color: var(--v-deep); }
+.wordbook .wb-visual-empty {
+  aspect-ratio: 16 / 10;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22px 20px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-visual-empty { aspect-ratio: 16 / 7; }
+}
+.wordbook .wb-visual-art {
+  margin-bottom: 12px;
+  color: var(--v-deep);
+}
+.wordbook .wb-visual-art svg { width: 46px; height: 46px; }
+.wordbook .wb-visual-label {
+  font-family: var(--wb-sans);
+  font-style: normal;
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+/* Generate-image CTA — quiet ghost pill. Almost-transparent pink
+   wash + hairline pink border. Dead-centred icon + label cluster. */
+.wordbook .wb-visual-cta {
+  padding: 9px 20px;
+  background: rgba(236, 72, 153, 0.04);
+  color: #BE185D;
+  border: 1px solid rgba(236, 72, 153, 0.20);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--wb-sans);
+  cursor: pointer;
+  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+  box-shadow: none;
+}
+.wordbook .wb-visual-cta:hover {
+  background: rgba(236, 72, 153, 0.10);
+  border-color: rgba(236, 72, 153, 0.35);
+  color: #9D174D;
+}
+.wordbook .wb-visual-cta:disabled { opacity: 0.55; cursor: wait; }
+.wordbook .wb-visual-cta svg { display: block; flex-shrink: 0; }
+
+.wordbook .wb-visual-filled {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  box-shadow: inset 0 0 0 1px rgba(61, 140, 94, 0.30);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-visual-filled { aspect-ratio: 16 / 7; }
+}
+.wordbook .wb-visual-filled img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.wordbook .wb-visual-overlay {
+  position: absolute;
+  bottom: 10px;
+  inset-inline-end: 10px;
+  display: flex;
+  gap: 6px;
+}
+.wordbook .wb-visual-overlay button {
+  padding: 6px 12px;
+  font-size: 11.5px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  font-family: var(--wb-sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Take it further — accent: purple (eyebrow only); each tile inside
+   carries its own playful per-tile colour for instant scanning. */
+.wordbook .wb-further .wb-eyebrow .wb-eyebrow-icon { color: var(--t-deep); }
+.wordbook .wb-further-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-further-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 11px;
+  }
+}
+/* Tiles — framed feature cards. Centered content with a thin
+   border so each tile reads as its own "thing", with a tier badge
+   (Clear / Deep) under the title when the feature is gated. */
+.wordbook .wb-tile {
+  padding: 18px 14px;
+  border: 1px solid var(--rule-soft);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 124px;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+  font-family: var(--wb-sans);
+  color: var(--ink);
+  border-radius: 14px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-tile { padding: 20px 14px; min-height: 136px; }
+}
+.wordbook .wb-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--rule);
+  box-shadow: 0 6px 18px -8px rgba(11, 18, 32, 0.15);
+}
+.wordbook .wb-tile:hover .wb-tile-icon {
+  transform: scale(1.06);
+}
+
+/* Tier badge — tiny pill under the tile title that tells the user
+   which subscription unlocks this feature. Free tiles get no badge.
+   Colour-matched to the tier (Clear=blue, Deep=purple). */
+.wordbook .wb-tile-tier {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  line-height: 1;
+}
+.wordbook .wb-tile-tier[data-tier="clear"] {
+  background: rgba(37, 99, 235, 0.10);
+  color: #1D4ED8;
+}
+.wordbook .wb-tile-tier[data-tier="deep"] {
+  background: rgba(139, 92, 246, 0.12);
+  color: #6D28D9;
+}
+.wordbook .wb-tile-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 160ms ease;
+}
+.wordbook .wb-tile-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.10));
+}
+
+/* Per-tile icon colours — bright + playful, no boxes behind them */
+.wordbook .wb-tile[data-action="compose"] .wb-tile-icon { color: var(--acc-compose); }
+.wordbook .wb-tile[data-action="practice"] .wb-tile-icon { color: var(--acc-quiz); }
+.wordbook .wb-tile[data-action="compare"] .wb-tile-icon { color: var(--acc-compare); }
+.wordbook .wb-tile[data-action="kids"] .wb-tile-icon { color: var(--acc-kids); }
+.wordbook .wb-tile-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  font-family: var(--wb-sans);
+  letter-spacing: -0.005em;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-tile-title { font-size: 15.5px; }
+}
+
+/* ── ACTION BAR (mobile sticky) ───────────────────────────────── */
+.wordbook .wb-action-bar {
+  position: fixed;
+  bottom: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--rule-soft);
+  padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  z-index: 40;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-action-bar { display: none; }
+}
+.wordbook .wb-save-btn {
+  flex: 1;
+  padding: 14px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-weight: 500;
+  font-family: var(--wb-sans);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: -0.003em;
+  transition: background 120ms ease;
+}
+.wordbook .wb-save-btn:hover { background: var(--teal-deep); }
+.wordbook .wb-save-btn.is-saved { background: var(--t-deep); }
+.wordbook .wb-save-btn.is-saved:hover { background: var(--t-deep); filter: brightness(1.05); }
+.wordbook .wb-secondary-btn {
+  width: 48px;
+  height: 48px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Inline Save / Share / Sign-in chips sitting in the masthead actions.
+   Smaller and less shouty than the previous floating-pill version that
+   sat above the word title. They blend with the lang button and feel
+   like part of the bar, not a separate "action zone". */
+.wordbook .wb-topbar-save {
+  padding: 7px 14px;
+  border: 1px solid var(--teal);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--teal);
+  color: white;
+  font-family: var(--wb-sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.wordbook .wb-topbar-save:hover {
+  background: var(--teal-deep);
+  border-color: var(--teal-deep);
+}
+.wordbook .wb-topbar-save.is-saved {
+  background: transparent;
+  color: var(--t-deep);
+  border-color: rgba(90, 68, 144, 0.35);
+}
+.wordbook .wb-topbar-save.is-saved:hover {
+  background: rgba(90, 68, 144, 0.06);
+}
+.wordbook .wb-topbar-icon-btn {
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+.wordbook .wb-topbar-icon-btn:hover { background: rgba(0, 0, 0, 0.04); }
+
+/* On mobile, nav + Save in topbar are hidden — sticky bottom bar
+   handles Save/Share, and the nav collapses into the hamburger
+   (TODO: hamburger menu in a later iteration). */
+@media (max-width: 767px) {
+  .wordbook .wb-topbar-save { display: none; }
+  .wordbook .wb-shell-divider { display: none; }
+}
+
+/* ── RTL overrides ────────────────────────────────────────────── */
+.wordbook[dir="rtl"] { font-family: var(--wb-he); }
+[lang="ar"] .wordbook,
+.wordbook[lang="ar"] { font-family: var(--wb-ar); }
+
+.wordbook[dir="rtl"] .wb-word-title {
+  font-family: var(--wb-he);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+@media (min-width: 768px) {
+  .wordbook[dir="rtl"] .wb-word-title {
+    font-size: 58px;
+    line-height: 1.05;
+  }
+}
+.wordbook[dir="rtl"] .wb-meaning-num {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-weight: 500;
+}
+.wordbook[dir="rtl"] .wb-meaning-ex {
+  font-family: var(--wb-he);
+  font-style: normal;
+  line-height: 1.7;
+}
+.wordbook[dir="rtl"] .wb-meaning-ex::before {
+  top: calc(0.85em + 6px);
+}
+.wordbook[dir="rtl"] .wb-word-meta {
+  font-family: var(--wb-he);
+  font-style: normal;
+}
+.wordbook[dir="rtl"] .wb-word-meta em { font-style: normal; }
+.wordbook[dir="rtl"] .wb-meaning-def { font-family: var(--wb-he); }
+.wordbook[dir="rtl"] .wb-origin-value,
+.wordbook[dir="rtl"] .wb-origin-story {
+  font-family: var(--wb-he);
+  font-style: normal;
+}
+.wordbook[dir="rtl"] .wb-origin-story { font-weight: 300; }
+.wordbook[dir="rtl"] .wb-origin-label { font-family: var(--wb-he); }
+.wordbook[dir="rtl"] .wb-visual-label {
+  font-family: var(--wb-he);
+  font-style: normal;
+}
+.wordbook[dir="rtl"] .wb-tile-title { font-family: var(--wb-he); }
+.wordbook[dir="rtl"] .wb-progress {
+  font-family: var(--wb-he);
+  font-style: normal;
+}
+.wordbook[dir="rtl"] .wb-save-btn { font-family: var(--wb-he); }
+
 /* ── SKELETON LOADER (used by image generation) ── */
 @keyframes gadit-skeleton {
   0%   { background-position: 0% 50%; }
