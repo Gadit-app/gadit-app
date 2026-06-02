@@ -677,61 +677,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   }
 }
 
-/* Origin — accent: warm orange (only via eyebrow icon + accents) */
-.wordbook .wb-origin .wb-eyebrow .wb-eyebrow-icon { color: var(--o-deep); }
-
-.wordbook .wb-origin-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-.wordbook .wb-origin-row {
-  display: flex;
-  gap: 14px;
-  align-items: baseline;
-  padding: 6px 0;
-  border-bottom: 1px dashed var(--rule);
-}
-.wordbook .wb-origin-row:last-child { border-bottom: none; }
-.wordbook .wb-origin-label {
-  font-family: var(--wb-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink);
-  min-width: 90px;
-  flex-shrink: 0;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-origin-label { min-width: 120px; }
-}
-.wordbook .wb-origin-value {
-  font-family: var(--wb-serif);
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--ink);
-  flex: 1;
-  min-width: 0;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-origin-value { font-size: 17px; line-height: 1.55; }
-}
-.wordbook .wb-origin-story {
-  margin-top: 6px;
-  padding-top: 14px;
-  border-top: 1px solid var(--rule);
-  font-family: var(--wb-serif);
-  font-size: 15.5px;
-  line-height: 1.7;
-  color: var(--ink-soft);
-  font-style: italic;
-  letter-spacing: 0.002em;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-origin-story { font-size: 16.5px; line-height: 1.75; }
-}
+/* Origin — accent applied via icon only. Row/label/value rules now
+   live near the bottom of this file (single source of truth). */
+/* (removed — was the standalone "Background" paragraph; now a wb-origin-row) */
 
 /* Visual — accent: pink (eyebrow icon only) */
 .wordbook .wb-visual .wb-eyebrow .wb-eyebrow-icon { color: var(--v-deep); }
@@ -1072,12 +1020,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-word-meta em { font-style: normal; }
 .wordbook[dir="rtl"] .wb-meaning-def { font-family: var(--wb-he); }
-.wordbook[dir="rtl"] .wb-origin-value,
-.wordbook[dir="rtl"] .wb-origin-story {
+.wordbook[dir="rtl"] .wb-origin-value {
   font-family: var(--wb-he);
   font-style: normal;
 }
-.wordbook[dir="rtl"] .wb-origin-story { font-weight: 300; }
 .wordbook[dir="rtl"] .wb-origin-label { font-family: var(--wb-he); }
 .wordbook[dir="rtl"] .wb-visual-label {
   font-family: var(--wb-he);
@@ -1501,3 +1447,1128 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 @media (prefers-reduced-motion: reduce) {
   .gd-drift { animation: none !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CRISPTECH — Linear/Notion-style aesthetic for /word page.
+   Loaded LAST so it overrides the wordbook base.
+   Single teal accent, hairlines, JetBrains Mono for chrome.
+   Locked palette per Claude Design CrispTech (Direction 2).
+   ═══════════════════════════════════════════════════════════════════ */
+
+.wordbook {
+  /* Palette swap */
+  --paper:      #FAFAFA;
+  --paper-deep: #F4F5F7;
+  --surface:    #FFFFFF;
+  --mist:       #F4F5F7;
+
+  --ink:        #0B0F19;
+  --ink-soft:   #3A3F4B;
+  --ink-muted:  #5C6270;
+  --ink-faint:  #8B91A0;
+
+  --rule:       #E6E8EC;
+  --rule-soft:  #EDEFF2;
+  --rule-faint: #F1F2F6;
+  --border-2:   #D4D7DD;
+
+  /* Single accent — teal #0EA5A5 */
+  --teal:       #0EA5A5;
+  --teal-soft:  #E0F6F4;
+  --teal-edge:  #0B8A8A;
+
+  /* Deep-tier accent — vivid purple, distinct from teal Clear. */
+  --deep-bg:    #EDE9FE;
+  --deep-fg:    #7C3AED;
+  --deep-edge:  #C4B5FD;
+
+  /* Type stacks */
+  --wb-sans:    var(--font-inter), 'Inter', system-ui, sans-serif;
+  --wb-he:      var(--font-heebo), 'Heebo', var(--font-inter), system-ui, sans-serif;
+  --wb-mono:    var(--font-jb-mono), 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Outer shell — uniform light gray, no warm gradient */
+.wordbook.wb-shell-page {
+  background: var(--paper);
+}
+
+/* Topbar — solid white-on-rule, no backdrop blur tint */
+.wordbook .wb-shell-topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.wordbook .wb-wordmark {
+  font-family: var(--wb-sans);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.wordbook .wb-wordmark .wb-wordmark-it {
+  color: var(--teal);
+  font-style: normal;
+  font-weight: 600;
+}
+.wordbook .wb-shell-divider { display: none; }
+.wordbook .wb-shell-link {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 6px;
+  box-shadow: none;
+}
+.wordbook .wb-shell-link:hover {
+  background: #1A1F2B;
+  border-color: #1A1F2B;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Content card — narrow readable column, not full viewport */
+.wordbook.wb-page {
+  background: var(--paper);
+  padding-bottom: 96px;
+  padding-top: 0;
+  min-height: calc(100vh - 60px);
+}
+@media (min-width: 768px) {
+  .wordbook.wb-page {
+    background: var(--paper);
+    max-width: 920px;
+    margin: 0 auto;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    padding-bottom: 64px;
+  }
+}
+
+/* Word header — flex row in natural RTL flow: word on the START
+   (right in RTL), Save/Share on the END (far left in RTL). Vertically
+   centered so the actions share an optical midline with the title. */
+.wordbook .wb-word-head {
+  padding: 20px 20px 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-word-head {
+    padding: 56px 32px 14px;
+    max-width: none;
+  }
+}
+.wordbook .wb-word-head-main {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.wordbook .wb-word-head .wb-word-actions {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+/* word-meta: mono-style, low contrast */
+.wordbook .wb-word-meta {
+  font-family: var(--wb-sans);
+  font-style: normal;
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 14px;
+  letter-spacing: 0;
+}
+.wordbook .wb-word-meta em { font-style: normal; font-weight: 500; color: var(--ink-soft); }
+.wordbook .wb-meta-dot { background: var(--border-2); }
+
+/* Word title — Heebo 700. Sized to lead but not dominate; the
+   definitions start as close as possible to it. */
+.wordbook .wb-word-title {
+  font-family: var(--wb-he);
+  font-weight: 700;
+  font-size: 48px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0 0 6px;
+  text-shadow: none;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-word-title { font-size: 72px; margin-bottom: 8px; }
+  .wordbook[dir="rtl"] .wb-word-title { font-size: 72px; }
+}
+
+/* Save / Share — neutral pills, no purple "saved" treatment */
+.wordbook .wb-word-actions { margin-top: 4px; gap: 8px; }
+.wordbook .wb-word-act {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 14px;
+  border-radius: 8px;
+  letter-spacing: 0;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+.wordbook .wb-word-act:hover {
+  background: var(--mist);
+  color: var(--ink);
+}
+.wordbook .wb-word-act.is-saved {
+  background: var(--teal-soft);
+  border-color: var(--teal);
+  color: var(--teal-edge);
+}
+/* tiny mono "S" kbd hint inside the Save button */
+.wordbook .wb-word-act .wb-kbd {
+  font-family: var(--wb-mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  margin-inline-start: 4px;
+  padding: 1px 5px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--mist);
+}
+.wordbook .wb-word-act-icon {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+.wordbook .wb-word-act-icon:hover { background: var(--mist); }
+
+/* Section eyebrow — small, calm. No big colored icon, no count chip. */
+.wordbook .wb-eyebrow {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--ink);
+  margin-bottom: 16px;
+  gap: 0;
+}
+.wordbook .wb-eyebrow .wb-eyebrow-icon { display: none; }
+.wordbook .wb-eyebrow .wb-eyebrow-count {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-muted);
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-inline-start: 0;
+}
+
+/* Definitions block — strip the sky-blue panel; show 2-col grid of
+   white cards with thick teal left-border. */
+.wordbook .wb-meanings {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0 24px 0;
+  margin-bottom: 36px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meanings {
+    max-width: none;
+    margin: 0 0 44px;
+    padding: 4px 32px 0;
+  }
+}
+.wordbook .wb-meanings .wb-meanings-grid { display: none; }
+
+/* Each meaning is now a white card, not a hairline row */
+.wordbook .wb-meaning-row {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-inline-start: 3px solid var(--teal);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: block;
+  flex-direction: initial;
+  gap: 0;
+}
+.wordbook .wb-meaning-row:first-of-type { padding-top: 18px; }
+.wordbook .wb-meaning-row:last-child {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 18px;
+}
+.wordbook .wb-meaning-num {
+  font-family: var(--wb-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  width: auto;
+  margin-bottom: 8px;
+  text-shadow: none;
+}
+.wordbook .wb-meaning-body { flex: initial; }
+.wordbook .wb-meaning-def {
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meaning-def { font-size: 16px; }
+}
+/* Example block — mist-tinted sub-box with thin border start */
+.wordbook .wb-meaning-ex-wrap {
+  background: var(--mist);
+  border-radius: 6px;
+  border-inline-start: 2px solid var(--border-2);
+  padding: 10px 12px;
+  margin-top: 6px;
+}
+.wordbook .wb-meaning-ex {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.5;
+  padding: 0;
+}
+.wordbook .wb-meaning-ex::before { display: none; }
+.wordbook .wb-meaning-ex + .wb-meaning-ex {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--rule);
+}
+
+/* Generic card — used for Origin / Visual / Take it further */
+.wordbook .wb-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin: 0 24px 24px;
+  box-shadow: none;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-card {
+    margin: 0 32px 24px;
+    max-width: none;
+    padding: 22px 24px;
+  }
+}
+
+/* Strip variant-specific bg gradients */
+.wordbook .wb-origin,
+.wordbook .wb-visual,
+.wordbook .wb-further {
+  background: var(--surface);
+}
+
+/* Origin section — mirrors .wb-meanings: outer wrapper has the
+   eyebrow ABOVE the card, content card hosts the rows. Labels and
+   values share the wb-mdef typography (Heebo 500, ink-dark) so the
+   block reads as one continuous body, like a definition. */
+.wordbook .wb-origin-section {
+  padding: 0 20px 0;
+  margin-bottom: 32px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-origin-section {
+    padding: 0 32px 0;
+    margin-bottom: 44px;
+  }
+}
+
+/* Origin card visually identical to the meaning cards: same teal
+   left rail, same border, same radius, same shadow. They sit on the
+   same X-axis so the eye reads "this belongs to the same family". */
+.wordbook .wb-origin-section .wb-card {
+  margin: 0;
+  padding: 22px 22px 24px;
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--teal);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-origin-section .wb-card { padding: 26px 30px 28px; }
+}
+
+.wordbook .wb-origin-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.wordbook .wb-origin-row {
+  border-bottom: 1px dashed var(--rule);
+  padding: 10px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.wordbook .wb-origin-row:last-child { border-bottom: none; padding-bottom: 0; }
+.wordbook .wb-origin-row:first-child { padding-top: 0; }
+
+/* Labels AND values share font, size, weight, line-height — match
+   wb-mdef exactly. Only color differs: labels are muted, values are
+   dark. The eye sees one continuous body of text with a quiet hue
+   shift marking the label column. */
+.wordbook .wb-origin-label,
+.wordbook .wb-origin-value {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 1;
+}
+.wordbook .wb-origin-label {
+  min-width: 96px;
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+.wordbook .wb-origin-value {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-origin-label { min-width: 110px; }
+}
+
+/* Visual empty state — grid pattern instead of dashed border */
+.wordbook .wb-visual-empty {
+  background:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px),
+    var(--surface);
+  background-size: 32px 32px;
+  background-position: 0 0, 0 0;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  aspect-ratio: 16 / 9;
+  padding: 32px 24px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-visual-empty { aspect-ratio: 16 / 6; }
+}
+.wordbook .wb-visual-art { color: var(--ink-faint); }
+.wordbook .wb-visual-art svg { width: 28px; height: 28px; }
+.wordbook .wb-visual-label {
+  font-family: var(--wb-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.wordbook .wb-visual-cta {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+.wordbook .wb-visual-cta:hover {
+  background: var(--mist);
+  border-color: var(--border-2);
+  color: var(--ink);
+}
+
+/* Take it further — uniform teal tiles, mono number + tier badge */
+.wordbook .wb-further-grid { gap: 12px; }
+@media (min-width: 768px) {
+  .wordbook .wb-further-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+}
+.wordbook .wb-tile {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 16px;
+  gap: 0;
+  min-height: 140px;
+  align-items: stretch;
+  flex-direction: column;
+  position: relative;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  transform: none;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-tile { min-height: 160px; padding: 18px; }
+}
+.wordbook .wb-tile:hover {
+  border-color: var(--teal);
+  background: var(--surface);
+  transform: none;
+  box-shadow: none;
+}
+
+/* All tile icons in uniform teal-soft square */
+.wordbook .wb-tile-icon,
+.wordbook .wb-tile[data-action] .wb-tile-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--teal-soft);
+  color: var(--teal-edge);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 14px;
+}
+.wordbook .wb-tile-icon svg {
+  width: 18px;
+  height: 18px;
+  filter: none;
+}
+
+.wordbook .wb-tile-title {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-tile-title { font-size: 16px; }
+}
+.wordbook .wb-tile-title::after { display: none; }
+
+/* tier badge in tile corner */
+.wordbook .wb-tile-tier {
+  position: absolute;
+  top: 16px;
+  inset-inline-end: 16px;
+  font-family: var(--wb-mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  border: 1px solid;
+}
+.wordbook .wb-tile-tier[data-tier="clear"] {
+  background: var(--teal-soft);
+  color: var(--teal-edge);
+  border-color: #C5E8E5;
+}
+.wordbook .wb-tile-tier[data-tier="deep"] {
+  background: var(--deep-bg);
+  color: var(--deep-fg);
+  border-color: var(--deep-edge);
+}
+
+/* Sticky bottom action bar — clean teal save */
+.wordbook .wb-action-bar {
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 1px solid var(--rule);
+}
+.wordbook .wb-save-btn {
+  background: var(--ink);
+  color: var(--surface);
+  border-radius: 8px;
+}
+.wordbook .wb-save-btn:hover { background: #1A1F2B; }
+.wordbook .wb-save-btn.is-saved {
+  background: var(--teal);
+  color: var(--surface);
+}
+.wordbook .wb-save-btn.is-saved:hover { background: var(--teal-edge); filter: none; }
+.wordbook .wb-secondary-btn {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+
+/* Topbar action: lang switcher chip */
+.wordbook .wb-lang-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  font-family: var(--wb-mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  background: var(--surface);
+  cursor: pointer;
+}
+.wordbook .wb-lang-chip:hover { background: var(--mist); border-color: var(--border-2); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PER-MEANING ARCHITECTURE (Gadi product decision, May 28)
+   Each definition is its own card with a tab row of feature actions
+   that drill DOWN into that meaning specifically. Replaces the
+   global "Take it further" section at page bottom.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Stack meanings vertically — stronger gap so cards feel separated */
+.wordbook .wb-meanings-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-meanings-stack { gap: 28px; }
+}
+
+/* Each meaning card — full width of parent, prominent left rail */
+.wordbook .wb-mcard {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--teal);
+  border-radius: 12px;
+  padding: 22px 22px 24px;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-mcard { padding: 26px 30px 28px; }
+}
+
+/* Meaning card head — number on the start side, Share icon on the
+   end side. Replaces the standalone wb-mnum row. */
+.wordbook .wb-mcard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+.wordbook .wb-mnum {
+  font-family: var(--wb-mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--teal);
+  letter-spacing: 0;
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--teal-soft);
+  border-radius: 6px;
+  line-height: 1.2;
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-mnum { font-size: 24px; }
+}
+.wordbook .wb-mcard-share {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.wordbook .wb-mcard-share:hover {
+  background: var(--mist);
+  color: var(--ink-soft);
+  border-color: var(--border-2);
+}
+
+/* Definition text */
+.wordbook .wb-mdef {
+  font-family: var(--wb-he);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-mdef { font-size: 19px; line-height: 1.6; }
+}
+
+/* Examples block — clean white surface, just a hairline border so
+   the tinted tabs below can be the colourful moment on the card. */
+.wordbook .wb-mexamples {
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-inline-start: 2px solid var(--rule);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.wordbook .wb-mexample {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.55;
+}
+.wordbook .wb-mexample + .wb-mexample {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--rule);
+}
+
+/* Idioms block — labeled list */
+.wordbook .wb-midioms {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--teal-soft);
+}
+.wordbook .wb-midioms-label {
+  font-family: var(--wb-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal-edge);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.wordbook .wb-midiom {
+  font-family: var(--wb-he);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.wordbook .wb-midiom + .wb-midiom {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed rgba(11, 138, 138, 0.18);
+}
+.wordbook .wb-midiom-phrase { font-weight: 600; color: var(--teal-edge); }
+.wordbook .wb-midiom-sep    { color: var(--ink-muted); }
+.wordbook .wb-midiom-meaning { color: var(--ink-soft); }
+
+/* Tab row — single row of compact pills, wraps to 2 rows if needed */
+.wordbook .wb-mtabs {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--rule);
+  padding-top: 16px;
+  margin-top: 4px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-mtabs { gap: 10px; }
+}
+
+/* Each tab is a compact pill — icon + label on ONE line */
+.wordbook .wb-mtab {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px;
+  padding: 7px 11px !important;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--wb-he);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  position: relative;
+  min-height: 0;
+  text-align: start;
+}
+.wordbook .wb-mtab:hover {
+  background: var(--mist);
+  border-color: var(--border-2);
+}
+.wordbook .wb-mtab.is-open {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--surface);
+}
+.wordbook .wb-mtab.is-open .wb-mtab-icon { color: var(--surface); }
+.wordbook .wb-mtab.is-locked {
+  color: var(--ink-faint);
+  background: var(--paper-deep);
+}
+.wordbook .wb-mtab.is-locked:hover {
+  background: var(--mist);
+  color: var(--ink-muted);
+}
+/* Icon — explicit 16×16, no decorative bg */
+.wordbook .wb-mtab .wb-mtab-icon {
+  width: 16px !important;
+  height: 16px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0 !important;
+  color: inherit;
+}
+.wordbook .wb-mtab .wb-mtab-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+  filter: none !important;
+  display: block;
+}
+.wordbook .wb-mtab .wb-mtab-label {
+  line-height: 1;
+  white-space: nowrap;
+  font-family: var(--wb-he);
+}
+.wordbook .wb-mtab .wb-mtab-lock {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 2px;
+  color: var(--ink-faint);
+  width: 12px;
+  height: 12px;
+}
+.wordbook .wb-mtab .wb-mtab-lock svg { width: 12px; height: 12px; }
+
+/* Inline panel — content area that opens below the tab row */
+.wordbook .wb-mpanel {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--mist);
+}
+
+/* Image inside the inline panel */
+.wordbook .wb-mpanel-image {
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--paper);
+}
+.wordbook .wb-mpanel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Empty image state inside the panel */
+.wordbook .wb-mpanel-empty {
+  background:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px),
+    var(--surface);
+  background-size: 28px 28px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+}
+
+/* Kids explanation inline */
+.wordbook .wb-kids-intro {
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.wordbook .wb-kids-body {
+  font-family: var(--wb-he);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.wordbook .wb-kids-ex {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wordbook .wb-kids-ex-item {
+  font-family: var(--wb-he);
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* RTL — the inline-start border on the meaning card should sit on
+   the right edge in Hebrew, which logical properties already handle.
+   Override the legacy .wb-meaning-row block-styling so it doesn't
+   apply to MeaningEntry. */
+.wordbook .wb-meaning-row { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   TIER-COLOURED TABS — each tab carries the tier it unlocks so the
+   user can scan the row by colour: teal = Clear tier, amber = Deep
+   tier. Colour is shown as a tinted icon background + label tint so
+   the tile background stays calm; on hover the entire pill takes on
+   the tier tint; the open state is the full saturated tier colour.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Idle state — full-saturation tinted background + matching icon
+   color so the tier registers AT A GLANCE without hovering. */
+.wordbook .wb-mtab[data-tier="clear"] {
+  background: var(--teal-soft);
+  border-color: #C5E8E5;
+}
+.wordbook .wb-mtab[data-tier="clear"] .wb-mtab-icon {
+  color: var(--teal);
+}
+.wordbook .wb-mtab[data-tier="clear"] .wb-mtab-label { color: var(--teal-edge); font-weight: 600; }
+
+.wordbook .wb-mtab[data-tier="deep"] {
+  background: var(--deep-bg);
+  border-color: var(--deep-edge);
+}
+.wordbook .wb-mtab[data-tier="deep"] .wb-mtab-icon {
+  color: var(--deep-fg);
+}
+.wordbook .wb-mtab[data-tier="deep"] .wb-mtab-label { color: var(--deep-fg); font-weight: 600; }
+
+/* Hover — soft tinted background by tier */
+.wordbook .wb-mtab[data-tier="clear"]:hover {
+  background: var(--teal-soft);
+  border-color: #C5E8E5;
+}
+.wordbook .wb-mtab[data-tier="deep"]:hover {
+  background: var(--deep-bg);
+  border-color: var(--deep-edge);
+}
+
+/* Open state — full saturated tier colour, white text */
+.wordbook .wb-mtab[data-tier="clear"].is-open {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--surface);
+}
+.wordbook .wb-mtab[data-tier="deep"].is-open {
+  background: var(--deep-fg);
+  border-color: var(--deep-fg);
+  color: var(--surface);
+}
+.wordbook .wb-mtab.is-open .wb-mtab-icon { color: var(--surface); }
+
+/* Locked state overrides — keep the lock visual quiet but hint at
+   the tier the user would unlock via the icon tint. */
+.wordbook .wb-mtab.is-locked {
+  background: var(--surface);
+  color: var(--ink-faint);
+}
+.wordbook .wb-mtab.is-locked[data-tier="clear"] .wb-mtab-icon {
+  color: var(--teal-edge);
+  opacity: 0.6;
+}
+.wordbook .wb-mtab.is-locked[data-tier="deep"] .wb-mtab-icon {
+  color: var(--deep-fg);
+  opacity: 0.6;
+}
+.wordbook .wb-mtab.is-locked[data-tier="clear"]:hover {
+  background: var(--teal-soft);
+  color: var(--teal-edge);
+  border-color: #C5E8E5;
+}
+.wordbook .wb-mtab.is-locked[data-tier="clear"]:hover .wb-mtab-icon { opacity: 1; }
+.wordbook .wb-mtab.is-locked[data-tier="deep"]:hover {
+  background: var(--deep-bg);
+  color: var(--deep-fg);
+  border-color: var(--deep-edge);
+}
+.wordbook .wb-mtab.is-locked[data-tier="deep"]:hover .wb-mtab-icon { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   HOMEPAGE — CrispTech hero + search-as-CTA. Shares the wordbook
+   palette and typography with the /word result page, so navigating
+   between them feels like the same product.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.wordbook .wb-shell-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-inline-start: 28px;
+}
+.wordbook .wb-shell-navlink {
+  font-family: var(--wb-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.wordbook .wb-shell-navlink:hover { color: var(--ink); }
+
+.wordbook .wb-home-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 22px 80px;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-home-main { padding: 120px 32px 96px; }
+}
+
+.wordbook .wb-home-hero { margin-bottom: 36px; }
+.wordbook .wb-home-title {
+  font-family: var(--wb-he);
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-home-title { font-size: 88px; margin-bottom: 22px; }
+}
+.wordbook .wb-home-title-1 {
+  display: block;
+}
+.wordbook .wb-home-title-2 {
+  display: block;
+  color: var(--teal);
+}
+.wordbook .wb-home-subline {
+  font-family: var(--wb-he);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0 auto;
+  max-width: 560px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-home-subline { font-size: 17.5px; }
+}
+
+/* Search box — big, prominent, the page's primary action */
+.wordbook .wb-home-search { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.wordbook .wb-home-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 6px 6px 6px 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.wordbook .wb-home-search-box:focus-within {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(14, 165, 165, 0.10);
+}
+.wordbook .wb-home-search-icon { color: var(--ink-faint); flex-shrink: 0; display: flex; }
+.wordbook .wb-home-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--wb-he);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 14px 4px;
+  min-width: 0;
+}
+.wordbook .wb-home-search-input::placeholder { color: var(--ink-faint); font-weight: 400; }
+.wordbook .wb-home-search-go {
+  background: var(--ink);
+  border: none;
+  color: var(--surface);
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+.wordbook .wb-home-search-go:hover { background: #1A1F2B; }
+
+/* Sample word chips */
+.wordbook .wb-home-samples {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.wordbook .wb-home-samples-label {
+  font-family: var(--wb-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-inline-end: 4px;
+}
+.wordbook .wb-home-sample {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.wordbook .wb-home-sample:hover {
+  border-color: var(--teal);
+  color: var(--teal-edge);
+  background: var(--teal-soft);
+}
+
+/* Footer */
+.wordbook .wb-home-footer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--wb-sans);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--rule);
+}
+.wordbook .wb-home-footer a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.wordbook .wb-home-footer a:hover { color: var(--ink); }

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
@@ -60,6 +60,24 @@ const lora = Lora({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+// Heebo — Hebrew sans for CrispTech. Modern, geometric, designed
+// specifically for Hebrew (unlike Rubik which is more rounded/friendly).
+const heebo = Heebo({
+  variable: "--font-heebo",
+  subsets: ["hebrew", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// JetBrains Mono — monospace for code-style chrome (kbd hints, file
+// names, version stamps). Used sparingly; signals "this is technical".
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jb-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -135,7 +153,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           <LangProvider>

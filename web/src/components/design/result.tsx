@@ -99,74 +99,65 @@ function langMatchesUi(language: string, lang: Lang): boolean {
   return (names[lang] ?? []).some((n) => langName.includes(n));
 }
 
-// ─── Multi-coloured illustration icons ─────────────────────────
-// Each icon is a self-contained mini-illustration with 2-4 explicit
-// colours — designed to read as a drawing, not an outline.
-// Per-section colour identity is carried by these colours (they're
-// hardcoded inside each SVG); the surrounding eyebrow-icon `color:`
-// rule no longer controls them. Gives a richer, more "alive" feel.
+// ─── CrispTech icons — 1.5px line family, currentColor only ─────
+// Single visual family. The eyebrow icons are HIDDEN by CSS (we
+// don't want big icons next to section labels anymore); they stay
+// in code only for backward export compatibility.
 
-// Definitions — open book with bookmark + sparkle
 function BookIcon() {
   return (
-    <svg viewBox="0 0 28 28" fill="none">
-      <path
-        d="M4 7c0-.8 2.5-1.5 10-.3C21.5 5.5 24 6.2 24 7v14c0 .8-2.5 1.5-10 .3-7.5 1.2-10 .5-10-.3V7z"
-        fill="#DBEAFE" stroke="#2563EB" strokeWidth="1.5" strokeLinejoin="round"
-      />
-      <path d="M14 6.7v15" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M7 11h4M7 13h4M7 15h3" stroke="#60A5FA" strokeWidth="1.3" strokeLinecap="round" />
-      <path d="M17 11h4M17 13h4M17 15h3" stroke="#60A5FA" strokeWidth="1.3" strokeLinecap="round" />
-      <path d="M19 5v6l1.5-1.5L22 11V5z" fill="#F59E0B" stroke="#B45309" strokeWidth="0.9" strokeLinejoin="round" />
-      <path d="M6 3.5l.5 1.2 1.2.5-1.2.5L6 7l-.5-1.3L4.3 5.2l1.2-.5z" fill="#FBBF24" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 5.5C3 4.7 3.7 4 4.5 4H11v15H4.5C3.7 19 3 18.3 3 17.5V5.5Z" />
+      <path d="M21 5.5C21 4.7 20.3 4 19.5 4H13v15h6.5C20.3 19 21 18.3 21 17.5V5.5Z" />
+      <path d="M6 8h2.5M6 11h2.5M15.5 8H18M15.5 11H18" />
     </svg>
   );
 }
-
-// Word Origin — ancient scroll with wax seal + quill
 function ScrollIcon() {
   return (
-    <svg viewBox="0 0 28 28" fill="none">
-      <path d="M5 6.5C5 5 7 4.5 9 5h12c-1 .5-1 1.5-1 2.5v13c0 1-.5 1.5-1.5 1.5H8c-2 0-3-1-3-2.5V6.5z"
-        fill="#FED7AA" stroke="#C2410C" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M5 6.5c0 1.5 1 2.5 2 2.5h11c1 0 1.5-.5 1.5-1.5V6c0-1 .5-1.5 1.5-1.5"
-        stroke="#9A3412" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M9 12h7M9 15h6M9 18h5" stroke="#C2410C" strokeWidth="1.4" strokeLinecap="round" opacity="0.85" />
-      <circle cx="20" cy="20" r="2.6" fill="#DC2626" stroke="#7F1D1D" strokeWidth="1" />
-      <path d="M18.7 18.7l2.6 2.6M21.3 18.7l-2.6 2.6" stroke="#FCA5A5" strokeWidth="0.9" strokeLinecap="round" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 5h11a2.5 2.5 0 0 1 2.5 2.5V18a2 2 0 0 1-2 2H7" />
+      <path d="M5 5a2 2 0 0 0-2 2v2h2" />
+      <path d="M7 20a2 2 0 0 1-2-2V9" />
+      <path d="M9 9h6M9 12h6M9 15h4" />
     </svg>
   );
 }
-
-// Visual — photo frame with mountain scene + sun
 function VisualEyebrowIcon() {
   return (
-    <svg viewBox="0 0 28 28" fill="none">
-      <rect x="3.5" y="5" width="21" height="17" rx="2.5" fill="#FCE7F3" stroke="#EC4899" strokeWidth="1.5" />
-      <rect x="5.5" y="7" width="17" height="13" rx="1.2" fill="#FFFFFF" />
-      <path d="M5.5 17l4-4.5 3.5 3 3-2.5 6.5 6.5v.5H5.5z" fill="#10B981" />
-      <path d="M5.5 17l4-4.5 3.5 3 3-2.5 6.5 6.5"
-        stroke="#047857" strokeWidth="1.2" strokeLinejoin="round" fill="none" />
-      <circle cx="17" cy="11" r="2" fill="#FBBF24" stroke="#D97706" strokeWidth="0.9" />
-      <path d="M17 7.5v1.5M17 13v1.5M20.5 11h-1.5M15 11h-1.5"
-        stroke="#FBBF24" strokeWidth="1.1" strokeLinecap="round" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="14" rx="1.5" />
+      <circle cx="8" cy="10" r="1.5" />
+      <path d="M3 16.5l4-3.5 4 3 4-4 6 4" />
+    </svg>
+  );
+}
+function CompassIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="m9.5 14.5 1.5-5 5-1.5-1.5 5z" />
+      <circle cx="12" cy="12" r="0.8" fill="currentColor" stroke="none" />
     </svg>
   );
 }
 
-// Take it further — compass with red/white needle + golden ring
-function CompassIcon() {
+// Crosshair — used in the visual empty state
+function CrosshairIcon({ size = 28 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 28 28" fill="none">
-      <circle cx="14" cy="14" r="10" fill="#EDE9FE" stroke="#7C3AED" strokeWidth="1.5" />
-      <circle cx="14" cy="14" r="7.5" fill="#FFFFFF" stroke="#A78BFA" strokeWidth="1" />
-      {/* North needle (red) */}
-      <path d="M14 7.5L15.6 14L14 14.5L12.4 14z" fill="#EF4444" />
-      {/* South needle (white) */}
-      <path d="M14 20.5L15.6 14L14 13.5L12.4 14z" fill="#F3F4F6" stroke="#9CA3AF" strokeWidth="0.6" />
-      <circle cx="14" cy="14" r="1.3" fill="#7C3AED" />
-      {/* N marker */}
-      <text x="14" y="6.5" fill="#7C3AED" fontSize="3.2" fontWeight="700" textAnchor="middle">N</text>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 3v6M12 15v6M3 12h6M15 12h6" />
+    </svg>
+  );
+}
+
+// Lock — used in DEEP tier badge
+function LockIcon({ size = 10 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="11" width="14" height="9" rx="1.5" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
     </svg>
   );
 }
@@ -202,90 +193,43 @@ function PlusIcon({ size = 13 }: { size?: number }) {
   );
 }
 
-// Tile icons — full-colour mini illustrations, each with its own
-// 3-4 colour palette so they read as little drawings on the white tile.
+// CrispTech tile icons — uniform 1.5px line family, currentColor.
+// The teal-soft 36×36 square around the icon is provided by CSS
+// (.wb-tile-icon). Icon itself is just the glyph.
 
-// Compose — yellow notepad with blue lines + a real pencil
 function TileComposeIcon() {
   return (
-    <svg viewBox="0 0 32 32" fill="none">
-      {/* notepad */}
-      <rect x="4" y="5" width="16" height="22" rx="2.5" fill="#FEF3C7" stroke="#B45309" strokeWidth="1.5" />
-      {/* spiral binding */}
-      <path d="M6 5v-1.5M9 5v-1.5M12 5v-1.5M15 5v-1.5M18 5v-1.5"
-        stroke="#B45309" strokeWidth="1.5" strokeLinecap="round" />
-      {/* lines */}
-      <path d="M7 11h10M7 14h10M7 17h7"
-        stroke="#3B82F6" strokeWidth="1.3" strokeLinecap="round" />
-      {/* pencil body */}
-      <path d="M21 12l5 5-3 3-5-5z" fill="#FBBF24" stroke="#92400E" strokeWidth="1.2" strokeLinejoin="round" />
-      {/* eraser */}
-      <path d="M19.5 13.5l-1.5 1.5-1-1 1.5-1.5z" fill="#FB7185" stroke="#9F1239" strokeWidth="1" />
-      {/* tip */}
-      <path d="M26 17l2 2-1.5 1.5-2-2z" fill="#1F2937" stroke="#000" strokeWidth="0.8" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 20h4l10-10-4-4L4 16z" />
+      <path d="M14 6l4 4" />
     </svg>
   );
 }
-
-// Quiz — yellow speech bubble with a colourful question mark
 function TileQuizIcon() {
   return (
-    <svg viewBox="0 0 32 32" fill="none">
-      {/* bubble */}
-      <path
-        d="M5 9a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-7l-4 5v-5H8a3 3 0 0 1-3-3V9z"
-        fill="#FEF3C7" stroke="#D97706" strokeWidth="1.5" strokeLinejoin="round"
-      />
-      {/* question mark stroke */}
-      <path d="M12 12a4 4 0 1 1 5 3.8c-.6.2-1 .7-1 1.3v.4"
-        fill="none" stroke="#DC2626" strokeWidth="2.2" strokeLinecap="round" />
-      {/* question dot */}
-      <circle cx="16" cy="20" r="1.3" fill="#DC2626" />
-      {/* sparkle */}
-      <path d="M25 6l.5 1.2 1.2.5-1.2.5L25 9.5l-.5-1.3-1.2-.5 1.2-.5z" fill="#FBBF24" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9.5a2.5 2.5 0 1 1 4 2c-1 .8-1.5 1.4-1.5 2.5" />
+      <circle cx="12" cy="17.5" r="0.5" fill="currentColor" stroke="none" />
     </svg>
   );
 }
-
-// Compare — two cards side by side with arrows between them
 function TileCompareIcon() {
   return (
-    <svg viewBox="0 0 32 32" fill="none">
-      {/* left card */}
-      <rect x="3" y="5" width="10" height="22" rx="2" fill="#D1FAE5" stroke="#047857" strokeWidth="1.5" />
-      <path d="M5.5 10h5M5.5 13h5M5.5 16h3" stroke="#047857" strokeWidth="1.2" strokeLinecap="round" />
-      {/* right card */}
-      <rect x="19" y="5" width="10" height="22" rx="2" fill="#FEE2E2" stroke="#B91C1C" strokeWidth="1.5" />
-      <path d="M21.5 10h5M21.5 13h5M21.5 16h3" stroke="#B91C1C" strokeWidth="1.2" strokeLinecap="round" />
-      {/* arrows */}
-      <path d="M14 13l2 1.5-2 1.5M18 13l-2 1.5 2 1.5M14 19l2 1.5-2 1.5M18 19l-2 1.5 2 1.5"
-        stroke="#0F766E" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="8" height="14" rx="1" />
+      <rect x="13" y="5" width="8" height="14" rx="1" />
+      <path d="M7 9v6M17 9v6" />
     </svg>
   );
 }
-
-// Kids — friendly smiling sun face
 function TileKidsIcon() {
   return (
-    <svg viewBox="0 0 32 32" fill="none">
-      {/* sun rays */}
-      <g stroke="#FBBF24" strokeWidth="2" strokeLinecap="round">
-        <path d="M16 2v3M16 27v3M2 16h3M27 16h3M6 6l2 2M24 24l2 2M6 26l2-2M24 8l2-2" />
-      </g>
-      {/* face circle */}
-      <circle cx="16" cy="16" r="8" fill="#FDE68A" stroke="#B45309" strokeWidth="1.5" />
-      {/* cheeks */}
-      <circle cx="11" cy="17" r="1.4" fill="#F9A8D4" opacity="0.85" />
-      <circle cx="21" cy="17" r="1.4" fill="#F9A8D4" opacity="0.85" />
-      {/* eyes */}
-      <circle cx="13" cy="14.5" r="1" fill="#1F2937" />
-      <circle cx="19" cy="14.5" r="1" fill="#1F2937" />
-      {/* tiny eye highlights */}
-      <circle cx="13.3" cy="14.2" r="0.35" fill="#FFFFFF" />
-      <circle cx="19.3" cy="14.2" r="0.35" fill="#FFFFFF" />
-      {/* smile */}
-      <path d="M12 18.5c1 1.6 2.4 2.5 4 2.5s3-.9 4-2.5"
-        fill="none" stroke="#B45309" strokeWidth="1.5" strokeLinecap="round" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="9" r="3.5" />
+      <path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6" />
+      <circle cx="10" cy="9" r="0.4" fill="currentColor" stroke="none" />
+      <circle cx="14" cy="9" r="0.4" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -330,14 +274,16 @@ export function WordHeader({
   const showMeta = !!pos || showLang;
   return (
     <div className="wb-word-head">
-      {showMeta && (
-        <div className="wb-word-meta">
-          {pos && <em>{pos}</em>}
-          {pos && showLang && <span className="wb-meta-dot" />}
-          {showLang && <span>{language}</span>}
-        </div>
-      )}
-      <h1 className="wb-word-title">{word}</h1>
+      <div className="wb-word-head-main">
+        {showMeta && (
+          <div className="wb-word-meta">
+            {pos && <em>{pos}</em>}
+            {pos && showLang && <span className="wb-meta-dot" />}
+            {showLang && <span>{language}</span>}
+          </div>
+        )}
+        <h1 className="wb-word-title">{word}</h1>
+      </div>
       {(onSave || onShare) && (
         <div className="wb-word-actions">
           {onSave && (
@@ -366,28 +312,320 @@ export function WordHeader({
   );
 }
 
-// ─── MeaningsBlock ─────────────────────────────────────────────
-export function MeaningsBlock({ meanings }: { meanings: Meaning[] }) {
+// ─── Per-meaning TabRow + inline content panel ─────────────────
+// New architecture (post-launch direction): each meaning carries its
+// own set of features as tabs underneath it. Click a tab → expand
+// inline content below for image/kids; fire modal/route for the
+// interactive flows (compose, compare, quiz).
+
+type TabId = "image" | "kids" | "compose" | "compare" | "quiz";
+
+interface MeaningEntryProps {
+  n: number;
+  meaning: Meaning;
+  plan: Plan;
+  word: string;
+  imageUrl?: string;
+  imageGenerating?: boolean;
+  onGenerate?: () => void;
+  onUpgrade?: () => void;
+  onAction?: (id: ActionId) => void;
+}
+
+function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
+  // Image, kids, compose are Clear+ features.
+  // Compare and quiz are Deep features.
+  // Nothing is Basic-only (Basic users see definitions + idioms only).
+  if (tab === "compare" || tab === "quiz") return "deep";
+  return "clear";
+}
+function tabUnlocked(tab: TabId, plan: Plan): boolean {
+  const need = tierForTab(tab);
+  if (need === "clear") return plan === "clear" || plan === "deep";
+  if (need === "deep") return plan === "deep";
+  return true;
+}
+
+// Compact icon variants for the tab row — explicit 16×16 with no
+// inner detail clutter. Stroke uses currentColor so the active-tab
+// state can flip them white via CSS.
+function TabIcon({ name }: { name: TabId }) {
+  const common = {
+    width: 16,
+    height: 16,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  switch (name) {
+    case "image":
+      return (
+        <svg {...common}>
+          <rect x="3" y="5" width="18" height="14" rx="1.5" />
+          <circle cx="8" cy="10" r="1.4" />
+          <path d="M3 16.5l4-3.5 4 3 4-4 6 4" />
+        </svg>
+      );
+    case "kids":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="9" r="3.2" />
+          <path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6" />
+        </svg>
+      );
+    case "compose":
+      return (
+        <svg {...common}>
+          <path d="M4 20h4l10-10-4-4L4 16z" />
+          <path d="M14 6l4 4" />
+        </svg>
+      );
+    case "compare":
+      return (
+        <svg {...common}>
+          <rect x="3" y="5" width="8" height="14" rx="1" />
+          <rect x="13" y="5" width="8" height="14" rx="1" />
+        </svg>
+      );
+    case "quiz":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M9.5 9.5a2.5 2.5 0 1 1 4 2c-1 .8-1.5 1.4-1.5 2.5" />
+          <circle cx="12" cy="17.5" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      );
+  }
+}
+
+const TAB_DEFS: { id: TabId; label: string }[] = [
+  { id: "image",   label: "תמונה" },
+  { id: "kids",    label: "הסבר לילדים" },
+  { id: "compose", label: "חברו משפט" },
+  { id: "quiz",    label: "חידון" },
+  { id: "compare", label: "השוואת מילים" },
+];
+
+function MeaningEntry({
+  n,
+  meaning,
+  plan,
+  word,
+  imageUrl,
+  imageGenerating,
+  onGenerate,
+  onUpgrade,
+  onAction,
+}: MeaningEntryProps) {
+  // Only image + kids render inline; the others fire callbacks.
+  const [openTab, setOpenTab] = useState<"image" | "kids" | null>(null);
+
+  function handleTabClick(tab: TabId) {
+    const unlocked = tabUnlocked(tab, plan);
+    if (!unlocked) {
+      onUpgrade?.();
+      return;
+    }
+    if (tab === "image") {
+      setOpenTab(openTab === "image" ? null : "image");
+      // Trigger generation on first open if no image yet
+      if (openTab !== "image" && !imageUrl && !imageGenerating) {
+        onGenerate?.();
+      }
+      return;
+    }
+    if (tab === "kids") {
+      setOpenTab(openTab === "kids" ? null : "kids");
+      return;
+    }
+    if (tab === "compose") { onAction?.("compose"); return; }
+    if (tab === "compare") { onAction?.("compare"); return; }
+    if (tab === "quiz") { onAction?.("practice"); return; }
+  }
+
+  // Share THIS specific meaning. Tries native share, falls back to
+  // copying a URL with a #m{n} anchor so the recipient lands on the
+  // right card. We don't have anchor scroll yet — that's Phase 2.
+  function handleShareMeaning() {
+    if (typeof navigator === "undefined" || typeof window === "undefined") return;
+    const url = `${window.location.origin}${window.location.pathname}#m${n}`;
+    const text = meaning.meaning ?? "";
+    const nav = navigator as Navigator & {
+      share?: (data: ShareData) => Promise<void>;
+    };
+    if (nav.share) {
+      nav.share({ title: `Gadit — ${word}`, text, url }).catch(() => undefined);
+    } else {
+      nav.clipboard?.writeText(url).catch(() => undefined);
+    }
+  }
+
+  return (
+    <div className="wb-mcard">
+      <div className="wb-mcard-head">
+        <div className="wb-mnum">{String(n).padStart(2, "0")}</div>
+        <button
+          type="button"
+          className="wb-mcard-share"
+          aria-label="שתפו הגדרה זו"
+          onClick={handleShareMeaning}
+        >
+          <ShareIcon size={14} />
+        </button>
+      </div>
+
+      {meaning.meaning && (
+        <div className="wb-mdef">{meaning.meaning}</div>
+      )}
+
+      {(meaning.examples ?? []).length > 0 && (
+        <div className="wb-mexamples">
+          {(meaning.examples ?? []).map((ex, j) => (
+            <div className="wb-mexample" key={j}>{ex}</div>
+          ))}
+        </div>
+      )}
+
+      {meaning.idioms && meaning.idioms.length > 0 && (
+        <div className="wb-midioms">
+          <div className="wb-midioms-label">ניבים וצירופים</div>
+          {meaning.idioms.map((id, j) => (
+            <div className="wb-midiom" key={j}>
+              <span className="wb-midiom-phrase">{id.phrase}</span>
+              <span className="wb-midiom-sep"> — </span>
+              <span className="wb-midiom-meaning">{id.meaning}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tab row */}
+      <div className="wb-mtabs">
+        {TAB_DEFS.map((t) => {
+          const unlocked = tabUnlocked(t.id, plan);
+          const isOpen = openTab === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              className={`wb-mtab${isOpen ? " is-open" : ""}${unlocked ? "" : " is-locked"}`}
+              data-tier={tierForTab(t.id)}
+              onClick={() => handleTabClick(t.id)}
+              aria-pressed={isOpen}
+            >
+              <span className="wb-mtab-icon"><TabIcon name={t.id} /></span>
+              <span className="wb-mtab-label">{t.label}</span>
+              {!unlocked && (
+                <span className="wb-mtab-lock"><LockIcon size={10} /></span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Inline content panel */}
+      {openTab === "image" && (
+        <div className="wb-mpanel">
+          {imageUrl ? (
+            <div className="wb-mpanel-image">
+              <img src={imageUrl} alt="" />
+            </div>
+          ) : (
+            <div className="wb-mpanel-empty">
+              <div className="wb-visual-art"><CrosshairIcon size={28} /></div>
+              <div className="wb-visual-label">
+                {imageGenerating ? "יוצר תמונה…" : "תמונה תיווצר עבור המשמעות הזו"}
+              </div>
+              {!imageGenerating && (
+                <button
+                  type="button"
+                  className="wb-visual-cta"
+                  onClick={onGenerate}
+                >
+                  <PlusIcon /> צרו תמונה
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {openTab === "kids" && meaning.kidsExplanation && (
+        <div className="wb-mpanel">
+          {meaning.kidsExplanation.intro && (
+            <div className="wb-kids-intro">{meaning.kidsExplanation.intro}</div>
+          )}
+          <div className="wb-kids-body">{meaning.kidsExplanation.explanation}</div>
+          {(meaning.kidsExplanation.examples ?? []).length > 0 && (
+            <div className="wb-kids-ex">
+              {(meaning.kidsExplanation.examples ?? []).map((ex, j) => (
+                <div className="wb-kids-ex-item" key={j}>{ex}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {openTab === "kids" && !meaning.kidsExplanation && (
+        <div className="wb-mpanel">
+          <div className="wb-kids-body">הסבר לילדים יופיע כאן בקרוב.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── MeaningsBlock — vertical stack of MeaningEntry cards ──────
+export function MeaningsBlock({
+  meanings,
+  word = "",
+  plan = "basic",
+  imageUrl,
+  imageGenerating,
+  onGenerate,
+  onUpgrade,
+  onAction,
+}: {
+  meanings: Meaning[];
+  word?: string;
+  plan?: Plan;
+  imageUrl?: string;
+  imageGenerating?: boolean;
+  onGenerate?: () => void;
+  onUpgrade?: () => void;
+  onAction?: (id: ActionId) => void;
+}) {
   const { lang } = useLang();
   if (!meanings || meanings.length === 0) return null;
   return (
     <div className="wb-meanings">
       <div className="wb-eyebrow">
         <span className="wb-eyebrow-icon"><BookIcon /></span>
-        {v2(lang, "meaningsEyebrow")}
-        <span className="wb-eyebrow-count">{meanings.length}</span>
+        <span>
+          {v2(lang, "meaningsEyebrow")}
+          {meanings.length > 1 && (
+            <span className="wb-eyebrow-count"> ({meanings.length})</span>
+          )}
+        </span>
       </div>
-      {meanings.map((m, i) => (
-        <div className="wb-meaning-row" key={i}>
-          <div className="wb-meaning-num">{i + 1}</div>
-          <div className="wb-meaning-body">
-            {m.meaning && <div className="wb-meaning-def">{m.meaning}</div>}
-            {(m.examples ?? []).map((ex, j) => (
-              <div className="wb-meaning-ex" key={j}>{ex}</div>
-            ))}
-          </div>
-        </div>
-      ))}
+      <div className="wb-meanings-stack">
+        {meanings.map((m, i) => (
+          <MeaningEntry
+            key={i}
+            n={i + 1}
+            meaning={m}
+            word={word}
+            plan={plan}
+            imageUrl={imageUrl}
+            imageGenerating={imageGenerating}
+            onGenerate={onGenerate}
+            onUpgrade={onUpgrade}
+            onAction={onAction}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -431,12 +669,12 @@ export function OriginCard({ etymology }: { etymology: Etymology | string | unde
   if (!hasLang && !hasMeant && !hasStory) return null;
 
   return (
-    <div className="wb-card wb-origin">
+    <div className="wb-origin-section">
       <div className="wb-eyebrow">
         <span className="wb-eyebrow-icon"><ScrollIcon /></span>
         {v2(lang, "wordOriginEyebrow")}
       </div>
-      {(hasLang || hasMeant) && (
+      <div className="wb-card wb-origin">
         <div className="wb-origin-fields">
           {hasLang && (
             <div className="wb-origin-row">
@@ -450,9 +688,14 @@ export function OriginCard({ etymology }: { etymology: Etymology | string | unde
               <div className="wb-origin-value">{originalMeaning}</div>
             </div>
           )}
+          {hasStory && (
+            <div className="wb-origin-row wb-origin-row-story">
+              <div className="wb-origin-label">רקע</div>
+              <div className="wb-origin-value">{historyNote}</div>
+            </div>
+          )}
         </div>
-      )}
-      {hasStory && <p className="wb-origin-story">{historyNote}</p>}
+      </div>
     </div>
   );
 }
@@ -511,6 +754,8 @@ export function VisualCard({
         {v2(lang, "visualEyebrow")}
       </div>
       <div className="wb-visual-empty">
+        <div className="wb-visual-art"><CrosshairIcon size={28} /></div>
+        <div className="wb-visual-label">VISUAL · 1600×900</div>
         <button
           type="button"
           className="wb-visual-cta"
@@ -584,7 +829,8 @@ export function TakeItFurther({
             <div className="wb-tile-title">{t.title}</div>
             {t.tier && (
               <span className="wb-tile-tier" data-tier={t.tier}>
-                {t.tier === "clear" ? "Clear" : "Deep"}
+                {t.tier === "deep" && <LockIcon size={10} />}
+                {t.tier === "clear" ? "CLEAR" : "DEEP"}
               </span>
             )}
           </button>
@@ -671,11 +917,12 @@ export function ResultView({
   onReport?: (section: string) => void;
 }) {
   const { dir } = useLang();
-  const imageState: "empty-clear" | "empty-locked" | "filled" = imageUrl
-    ? "filled"
-    : plan === "basic"
-      ? "empty-locked"
-      : "empty-clear";
+  // imageState retained for the legacy <VisualCard /> export; no
+  // longer rendered in this ResultView since image lives inside each
+  // MeaningEntry tab now. The state derivation also feeds onAction
+  // for the inline image generation flow.
+  void imageUrl; void plan; // silence unused warnings on the branches
+  void onRegenerate;
 
   return (
     <div className="wordbook wb-page" dir={dir}>
@@ -690,21 +937,18 @@ export function ResultView({
         onShare={onShare}
       />
 
-      <MeaningsBlock meanings={result.meanings ?? []} />
-
-      <OriginCard etymology={result.etymology} />
-
-      <VisualCard
-        state={imageState}
+      <MeaningsBlock
+        meanings={result.meanings ?? []}
         word={result.word}
+        plan={plan}
         imageUrl={imageUrl}
-        generating={imageGenerating}
+        imageGenerating={imageGenerating}
         onGenerate={onGenerate}
         onUpgrade={onUpgrade}
-        onRegenerate={onRegenerate}
+        onAction={onAction}
       />
 
-      <TakeItFurther onAction={onAction} />
+      <OriginCard etymology={result.etymology} />
 
       <ActionBar isSaved={isSaved} onSave={onSave} onShare={onShare} />
     </div>
