@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 const rubik = Rubik({
   variable: "--font-rubik",
   subsets: ["hebrew", "latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const cairo = Cairo({
