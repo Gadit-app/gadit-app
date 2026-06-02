@@ -325,7 +325,12 @@ export function PricingPageRoute() {
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href="/" className="wb-shell-navlink">{c.search}</Link>
+          <Link href="/" className="wb-shell-navlink wb-shell-navlink-icon" aria-label={c.search}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="m20 20-4-4" />
+            </svg>
+          </Link>
           <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
           <Link href="/pricing" className="wb-shell-navlink is-active">{c.pricing}</Link>
         </nav>
