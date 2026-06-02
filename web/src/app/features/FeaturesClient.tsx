@@ -97,24 +97,15 @@ const COPY: Record<string, {
     signin: "התחברות", pricing: "תמחור", search: "חיפוש", features: "פיצ'רים",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
-      { id: "definitions", icon: "definitions", tier: "basic", title: "כל המשמעויות, לא רק הראשית",
-        body: "מילה אחת – כל ההגדרות שלה מסודרות זו לצד זו, כולל הקשר (פורמלי, עממי, ספרותי). כל הגדרה ב-card משלה." },
-      { id: "examples",    icon: "examples",    tier: "basic", title: "3 דוגמאות חיות לכל הגדרה",
-        body: "לא רק 'משפט אחד מתוך מילון'. דוגמאות מהשפה היומיומית שמראות איך המילה באמת חיה בקונטקסט." },
-      { id: "idioms",      icon: "idioms",      tier: "basic", title: "ניבים וצירופים",
-        body: "אוסף הביטויים שמשתמשים במילה — לדוגמה 'חלום בהקיץ' — עם הסבר תמציתי לכל אחד." },
-      { id: "origin",      icon: "origin",      tier: "basic", title: "מקור המילה",
-        body: "מאיזו שפה המילה הגיעה ומה היא הייתה במקור. סיפור היסטורי קצר ברקע." },
-      { id: "image",       icon: "image",       tier: "clear", title: "תמונה חיה לכל מילה",
-        body: "AI מייצר עבורכם תמונה ייחודית שמתארת את המילה — מעוגן ויזואלי שעוזר לזכור." },
-      { id: "kids",        icon: "kids",        tier: "clear", title: "הסבר לילדים",
-        body: "אותה מילה, בשפה של ילד בן 8. עם דוגמאות מעולמם." },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "חברו משפט וקבלו משוב",
-        body: "כתבו משפט משלכם עם המילה. ה-AI יבדוק טון, דקדוק, ויציע שיפורים. כלי תרגול אישי." },
-      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "חידון מותאם אישית",
-        body: "4 שאלות שמתמקדות במה שעלול לבלבל בדיוק במילה הזאת. תרגול קצר וממוקד." },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "השוואת מילים דומות",
-        body: "מתי 'חופש' ומתי 'דרור'? כלי שמעמיד שתי מילים זו מול זו ומראה את ההבדל המעשי." },
+      { id: "definitions", icon: "definitions", tier: "basic", title: "כל ההגדרות למילה",                              body: "" },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "דוגמאות של משפטים לפי הקשר",                  body: "" },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "ניבים וצירופי מילים",                          body: "" },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "מקור המילה",                                    body: "" },
+      { id: "image",       icon: "image",       tier: "clear", title: "המחשת המילה בתמונה",                          body: "" },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "הסבר לילדים",                                   body: "" },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "חיבור משפט עם המילה וקבלת משוב",            body: "" },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "חידונים מותאמים אישית",                       body: "" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "השוואת מילים דומות",                            body: "" },
     ],
   },
   en: {
@@ -125,24 +116,15 @@ const COPY: Record<string, {
     signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
-      { id: "definitions", icon: "definitions", tier: "basic", title: "Every meaning, not just the primary",
-        body: "One word — all its meanings laid out side by side, with register tags (formal, colloquial, literary). Each meaning in its own card." },
-      { id: "examples",    icon: "examples",    tier: "basic", title: "3 vivid examples per meaning",
-        body: "Not stale dictionary citations. Real-world sentences showing how the word actually lives in context." },
-      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idioms & expressions",
-        body: "A collection of expressions that use the word — with a concise explanation each." },
-      { id: "origin",      icon: "origin",      tier: "basic", title: "Word origin",
-        body: "Which language the word came from and what it originally meant. Short historical background." },
-      { id: "image",       icon: "image",       tier: "clear", title: "Vivid image per word",
-        body: "AI generates a unique image for the word — a visual anchor that helps you remember." },
-      { id: "kids",        icon: "kids",        tier: "clear", title: "Kids' explanation",
-        body: "Same word, in 8-year-old language. With examples from their world." },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "Compose a sentence, get feedback",
-        body: "Write your own sentence with the word. AI checks tone and grammar, suggests improvements. A personal practice tool." },
-      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quiz",
-        body: "4 questions focused on what's commonly confused about this specific word. Short, targeted practice." },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "Compare similar words",
-        body: "When 'freedom' and when 'liberty'? A tool that puts two words side by side and shows the practical difference." },
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Every definition of the word",          body: "" },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Sentence examples by context",         body: "" },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idioms & expressions",                 body: "" },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Word origin",                          body: "" },
+      { id: "image",       icon: "image",       tier: "clear", title: "Word illustrated as an image",         body: "" },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Kids' explanation",                    body: "" },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Compose a sentence and get feedback",  body: "" },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quizzes",                 body: "" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Compare similar words",                body: "" },
     ],
   },
 };
@@ -223,17 +205,12 @@ export function FeaturesPage() {
           {c.list.map((f) => {
             const t = TIER_COLOR[f.tier];
             return (
-              <article key={f.id} className="wb-feature-card">
-                <div className="wb-feature-icon" style={{ background: t.bg, color: t.fg }}>
+              <article key={f.id} className={`wb-feature-card wb-feature-card-${f.tier}`}>
+                <div className="wb-feature-illust" style={{ background: t.bg, color: t.fg }}>
                   <FeatureIcon name={f.icon} color={t.fg} />
                 </div>
-                <div className="wb-feature-body">
-                  <div className="wb-feature-head">
-                    <h3 className="wb-feature-title">{f.title}</h3>
-                    <span className={`wb-tier-pill wb-tier-pill-${f.tier}`}>{c.tierLabel[f.tier]}</span>
-                  </div>
-                  <p className="wb-feature-text">{f.body}</p>
-                </div>
+                <h3 className="wb-feature-title">{f.title}</h3>
+                <span className={`wb-tier-pill wb-tier-pill-${f.tier}`}>{c.tierLabel[f.tier]}</span>
               </article>
             );
           })}
