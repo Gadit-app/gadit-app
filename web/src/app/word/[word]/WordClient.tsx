@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
+import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
 
 import { MarketingHeader } from "@/components/design/MarketingHeader";
@@ -175,6 +176,79 @@ function SoftWall({
   );
 }
 
+// Cream-friendly inline language switcher for the wordbook topbar.
+// LangSwitcher in design/ assumes a dark surface; this one is sized
+// and colored for cream paper. Pure local state, closes on outside click.
+function WordbookLangSwitch() {
+  const { lang, setLang } = useLang();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onClick(e: MouseEvent) {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+
+  return (
+    <div ref={wrapRef} className="wb-lang-wrap">
+      <button
+        type="button"
+        className="wb-lang-btn"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label="Change language"
+      >
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" />
+          <path
+            d="M1.5 7h11M7 1.5c1.7 2 1.7 9 0 11M7 1.5c-1.7 2-1.7 9 0 11"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span>{active.label}</span>
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M2 4l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open && (
+        <div className="wb-lang-panel" role="listbox">
+          {LANGUAGES.map((l) => (
+            <button
+              key={l.code}
+              type="button"
+              role="option"
+              aria-selected={l.code === lang}
+              className={l.code === lang ? "is-active" : ""}
+              onClick={() => {
+                setLang(l.code as Lang);
+                setOpen(false);
+              }}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Skeleton card — shown while the SSE stream is still bringing in data
 // before any meaning has parsed cleanly.
 function SkeletonCard({ height = 120 }: { height?: number }) {
@@ -270,6 +344,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     fetchedFor.current = key;
 
     let cancelled = false;
+    const controller = new AbortController();
 
     async function run() {
       setLoading(true);
@@ -297,12 +372,17 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           method: "POST",
           headers,
           body: JSON.stringify({ word: initialWord, uiLang: lang }),
+          signal: controller.signal,
         });
       } catch (e) {
-        if (!cancelled) {
-          setErrorMsg(String(e));
-          setLoading(false);
+        // AbortError fires when strict-mode cleanup aborts the
+        // duplicate fetch; that's expected and quiet. Anything else
+        // surfaces as a real error.
+        if (cancelled || (e instanceof DOMException && e.name === "AbortError")) {
+          return;
         }
+        setErrorMsg(String(e));
+        setLoading(false);
         return;
       }
 
@@ -455,6 +535,18 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
     return () => {
       cancelled = true;
+      // Actually abort the in-flight HTTP request — without this the
+      // first fetch from Strict Mode's double-mount keeps running on
+      // the OpenAI backend for ~30-100s, blocking the second fetch
+      // behind it via per-key rate limiting and leaving the user on
+      // a stuck skeleton. abort() rejects the fetch with AbortError
+      // which the catch block above quietly swallows.
+      controller.abort();
+      // Reset the guard so the second (real) mount is allowed to
+      // start a fresh fetch — without this the second mount sees the
+      // key match and skips, and since the first fetch was aborted
+      // nothing ever sets result.
+      fetchedFor.current = null;
     };
     // Deps intentionally minimal: only the inputs that should
     // *trigger* a re-fetch. plan + promptLogin used to be here and
@@ -552,7 +644,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     }
   }
 
-  function handleAction(id: "save" | "image" | "compose" | "practice") {
+  function handleAction(id: "save" | "image" | "compose" | "practice" | "compare" | "kids") {
     if (id === "save") return handleSave();
     if (id === "image") return handleGenerate();
     if (id === "compose") {
@@ -579,20 +671,90 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       setQuizOpen(true);
       return;
     }
+    if (id === "compare") {
+      // Compare is a Deep-tier feature (product call — pairs with
+      // quiz/practice as the advanced learning surface, Clear stays
+      // focused on understanding a single word). Anonymous → signup;
+      // basic/clear → pricing; deep → /compare with the word prefilled.
+      if (!user) {
+        promptLogin(v2(lang, "actionCompare"));
+        return;
+      }
+      if (plan !== "deep") {
+        router.push("/pricing");
+        return;
+      }
+      if (result?.word) {
+        router.push(`/compare?w=${encodeURIComponent(result.word)}`);
+      } else {
+        router.push("/compare");
+      }
+      return;
+    }
+    if (id === "kids") {
+      // Kids' explanation gates on Clear+ tier (per existing KidsCard
+      // locked logic). For now, route anonymous → signup, basic → pricing,
+      // clear/deep → no-op (will surface inline kids modal in next iter).
+      if (!user) {
+        promptLogin(v2(lang, "forKids"));
+        return;
+      }
+      if (plan === "basic") {
+        router.push("/pricing");
+        return;
+      }
+      // TODO: open a kids-explanation modal. For now this is a soft
+      // landing — the data exists in result.meanings[i].kidsExplanation
+      // and a dedicated modal will be wired in the next iter.
+      return;
+    }
   }
 
   // ── Render ─────────────────────────────────────────────────────
+  // Wordbook redesign — the entire /word/[word] page lives on cream
+  // paper, no navy stage, no starfield. The V2 MarketingHeader is
+  // intentionally NOT rendered here: it's dark navy chrome that
+  // clashes with the cream surface and adds noise above the word.
+  // A minimal wordmark + home link in `.wb-shell-topbar` takes its
+  // place; Save / Share live inside ResultView's own topbar.
   return (
-    <div className="gd-stage" style={{ minHeight: "100vh" }} dir={dir}>
-      <div className="gd-stars" />
+    <div className="wordbook wb-shell-page" dir={dir}>
       <div style={{ position: "relative", zIndex: 1 }}>
-        <MarketingHeader />
+        <header className="wb-shell-topbar">
+          <Link href="/" className="wb-wordmark" aria-label="Gadit home">
+            Gad<span className="wb-wordmark-it">it</span>
+          </Link>
+          <nav className="wb-shell-nav" aria-label="Primary">
+            <Link href="/">{v2(lang, "navSearch")}</Link>
+            <Link href="/pricing">{v2(lang, "navPricing")}</Link>
+          </nav>
+          <div className="wb-shell-actions">
+            {/* Save + Share moved OUT of the masthead — they're "this
+                entry" actions belonging to the definition, not site
+                navigation. They render alongside the word title inside
+                WordHeader. The masthead stays a calm chrome strip for
+                nav + language + auth. */}
+            <WordbookLangSwitch />
+            {!user && (
+              <button
+                type="button"
+                className="wb-shell-link"
+                onClick={() => promptLogin({ mode: "signin" })}
+              >
+                {v2(lang, "signIn")}
+              </button>
+            )}
+          </div>
+        </header>
 
+        {/* V2 main — holds quota walls, error messages, and the
+            loading skeleton. Once the Wordbook result is loaded, this
+            entire block is unmounted so the cream ResultView below
+            sits flush against the MarketingHeader instead of being
+            pushed offscreen by an empty 60px main wrapper. */}
+        {!result && (
         <main
           style={{
-            // Tightened from 920/32-48 to 880/24-36 so meanings fall
-            // higher on the page — beta tester wanted less scroll
-            // before getting to the actual definitions.
             maxWidth: 880,
             margin: "0 auto",
             padding: "24px 24px 36px",
@@ -632,70 +794,55 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           )}
 
           {loading && !result && (
-            <div className="flex flex-col gap-6">
-              <SkeletonCard height={180} />
-              <SkeletonCard height={360} />
-              <SkeletonCard height={220} />
+            <div style={{ paddingTop: 24 }}>
+              <div className="wb-skeleton" style={{ height: 120 }} />
+              <div className="wb-skeleton" style={{ height: 220 }} />
+              <div className="wb-skeleton" style={{ height: 160 }} />
             </div>
           )}
 
-          {/* Soft heads-up for anonymous visitors approaching their
-              5/day cap. Shows above the result on search 4 (2 left)
-              and search 5 (1 left). Click → opens signup modal in
-              context. Doesn't block reading the current result. */}
-          {result && anonSearchesLeft !== null && !user && (
-            <button
-              type="button"
-              onClick={() => promptLogin({ mode: "signup" })}
-              className="w-full text-start mb-4 transition-colors hover:bg-white/10"
-              style={{
-                padding: "12px 16px",
-                borderRadius: 12,
-                background: "oklch(0.72 0.19 245 / 0.12)",
-                boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.35)",
-                color: "oklch(0.92 0.05 245)",
-                fontSize: 13,
-              }}
-            >
-              {v2(lang, "softBannerSearchesLeft", anonSearchesLeft)}
-            </button>
-          )}
-
-          {result && (
-            <ResultView
-              result={result}
-              plan={plan}
-              imageUrl={imageUrl}
-              imageGenerating={imageGenerating}
-              onSave={handleSave}
-              onShare={handleShare}
-              onGenerate={handleGenerate}
-              onUpgrade={handleUpgrade}
-              onRegenerate={handleGenerate}
-              onSaveImage={handleSave}
-              onAction={handleAction}
-              onReport={(section) => {
-                // Map ResultView's section ids to Report Modal default
-                // categories so the user starts with the most-likely
-                // category pre-ticked.
-                const presetMap: Record<string, string> = {
-                  etymology: "etymology",
-                  idioms: "idioms",
-                };
-                const preset = section.startsWith("meaning-")
-                  ? "definition"
-                  : presetMap[section] ?? "";
-                setReportContext({
-                  word: result.word,
-                  contextSnapshot: { section, result },
-                  defaultCategories: preset ? [preset] : [],
-                });
-              }}
-            />
-          )}
         </main>
+        )}
 
-        <HomeFooter />
+        {/* Wordbook redesign: ResultView renders full-width on its own
+            cream paper, breaking out of the V2 navy `main` constraint
+            above. Loading/error/soft-wall states still render inside
+            the V2 main; once the result is loaded, the cream Wordbook
+            page takes over.  See web/public/gadit-final.html. */}
+        {result && (
+          <ResultView
+            result={result}
+            plan={plan}
+            imageUrl={imageUrl}
+            imageGenerating={imageGenerating}
+            onSave={handleSave}
+            onShare={handleShare}
+            onGenerate={handleGenerate}
+            onUpgrade={handleUpgrade}
+            onRegenerate={handleGenerate}
+            onSaveImage={handleSave}
+            onAction={handleAction}
+            onReport={(section) => {
+              const presetMap: Record<string, string> = {
+                etymology: "etymology",
+                idioms: "idioms",
+              };
+              const preset = section.startsWith("meaning-")
+                ? "definition"
+                : presetMap[section] ?? "";
+              setReportContext({
+                word: result.word,
+                contextSnapshot: { section, result },
+                defaultCategories: preset ? [preset] : [],
+              });
+            }}
+          />
+        )}
+
+        {/* HomeFooter intentionally omitted on /word pages — the V2
+            navy footer clashes with the cream Wordbook surface. A
+            cream-friendly footer (or no footer at all, matching the
+            mockup) will be addressed in the homepage port. */}
       </div>
 
       {result && (

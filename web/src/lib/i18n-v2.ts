@@ -357,6 +357,32 @@ export interface V2Strings {
   visualBlurb: string;
   visualBlurbLocked: string;
   reportLabel: string;
+
+  // ── Wordbook redesign (locked April 2026) ──────────────────
+  // Section eyebrows
+  wordOriginEyebrow: string;
+  visualEyebrow: string;
+  meaningsEyebrow: string;
+  takeItFurtherEyebrow: string;
+  // Word Origin structured rows
+  wordOriginLanguage: string;
+  wordOriginOriginallyMeant: string;
+  // Action tile titles (single-line, no subtitles)
+  actionCompose: string;
+  actionQuiz: string;
+  actionCompare: string;
+  actionKidsExplanation: string;
+  // Word Book save states
+  saveToWordBook: string;
+  savedToWordBook: string;
+  // Visual empty state
+  visualEmptyLabel: string;
+  generateLabel: string;
+  // Progress signal — "Saved · 2 days ago"
+  savedAgoTemplate: Template1;
+  // Aria
+  shareLabel: string;
+  backLabel: string;
 }
 
 const en: V2Strings = {
@@ -687,6 +713,25 @@ const en: V2Strings = {
   visualBlurbLocked:
     "Generate a vivid, one-of-a-kind image for this word — understanding through sight.",
   reportLabel: "Report",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "Word Origin",
+  visualEyebrow: "Visual",
+  meaningsEyebrow: "Definitions",
+  takeItFurtherEyebrow: "Take it further",
+  wordOriginLanguage: "Language",
+  wordOriginOriginallyMeant: "Originally meant",
+  actionCompose: "Compose a sentence",
+  actionQuiz: "Quiz",
+  actionCompare: "Compare words",
+  actionKidsExplanation: "Kids' explanation",
+  saveToWordBook: "Save to Word Book",
+  savedToWordBook: "Saved to Word Book",
+  visualEmptyLabel: "An image will be drawn for this word",
+  generateLabel: "Generate",
+  savedAgoTemplate: (t) => `Saved · ${t}`,
+  shareLabel: "Share",
+  backLabel: "Back",
 };
 
 const he: V2Strings = {
@@ -1022,6 +1067,25 @@ const he: V2Strings = {
   visualBlurbLocked:
     "צרו תמונה ייחודית למילה — הבנה דרך הראייה.",
   reportLabel: "דיווח",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "מקור המילה",
+  visualEyebrow: "תמונה",
+  meaningsEyebrow: "הגדרות",
+  takeItFurtherEyebrow: "קחו את זה הלאה",
+  wordOriginLanguage: "שפה",
+  wordOriginOriginallyMeant: "משמעות מקורית",
+  actionCompose: "חברו משפט",
+  actionQuiz: "חידון",
+  actionCompare: "השוואת מילים",
+  actionKidsExplanation: "הסבר לילדים",
+  saveToWordBook: "שמירה במחברת",
+  savedToWordBook: "נשמר במחברת",
+  visualEmptyLabel: "תמונה תיווצר עבור המילה הזו",
+  generateLabel: "צרו תמונה",
+  savedAgoTemplate: (t) => `נשמר · ${t}`,
+  shareLabel: "שתפו",
+  backLabel: "חזרה",
 };
 
 const ar: V2Strings = {
@@ -1370,6 +1434,25 @@ const ar: V2Strings = {
   visualBlurb: "صورة واحدة حيّة من Gadit — مرساة بصرية لشعور الكلمة.",
   visualBlurbLocked: "أنشئ صورة فريدة لهذه الكلمة — الفهم عبر النظر.",
   reportLabel: "إبلاغ",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "أصل الكلمة",
+  visualEyebrow: "صورة",
+  meaningsEyebrow: "تعريفات",
+  takeItFurtherEyebrow: "تعمَّق أكثر",
+  wordOriginLanguage: "اللغة",
+  wordOriginOriginallyMeant: "المعنى الأصلي",
+  actionCompose: "اكتب جملة",
+  actionQuiz: "اختبار",
+  actionCompare: "قارن الكلمات",
+  actionKidsExplanation: "شرح للأطفال",
+  saveToWordBook: "احفظ في الدفتر",
+  savedToWordBook: "محفوظ في الدفتر",
+  visualEmptyLabel: "ستُرسم صورة لهذه الكلمة",
+  generateLabel: "أنشئ",
+  savedAgoTemplate: (t) => `محفوظ · ${t}`,
+  shareLabel: "مشاركة",
+  backLabel: "رجوع",
 };
 
 // Russian — formal "вы" register throughout (B2C SaaS convention).
@@ -1701,6 +1784,25 @@ const ru: Partial<V2Strings> = {
   visualBlurbLocked:
     "Создайте уникальную картинку для этого слова — понимание через образ.",
   reportLabel: "Сообщить",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "Происхождение слова",
+  visualEyebrow: "Изображение",
+  meaningsEyebrow: "Определения",
+  takeItFurtherEyebrow: "Углубиться",
+  wordOriginLanguage: "Язык",
+  wordOriginOriginallyMeant: "Изначально означало",
+  actionCompose: "Составить предложение",
+  actionQuiz: "Викторина",
+  actionCompare: "Сравнить слова",
+  actionKidsExplanation: "Объяснение для детей",
+  saveToWordBook: "В мою тетрадь",
+  savedToWordBook: "Сохранено в тетради",
+  visualEmptyLabel: "Картинка появится для этого слова",
+  generateLabel: "Создать",
+  savedAgoTemplate: (t) => `Сохранено · ${t}`,
+  shareLabel: "Поделиться",
+  backLabel: "Назад",
 };
 
 // Spanish — neutral Latin American, "tú" register.
@@ -2030,6 +2132,25 @@ const es: Partial<V2Strings> = {
   visualBlurbLocked:
     "Crea una imagen única para esta palabra — entender por la vista.",
   reportLabel: "Reportar",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "Origen de la palabra",
+  visualEyebrow: "Visual",
+  meaningsEyebrow: "Definiciones",
+  takeItFurtherEyebrow: "Profundiza más",
+  wordOriginLanguage: "Idioma",
+  wordOriginOriginallyMeant: "Significaba originalmente",
+  actionCompose: "Componer una oración",
+  actionQuiz: "Cuestionario",
+  actionCompare: "Comparar palabras",
+  actionKidsExplanation: "Explicación para niños",
+  saveToWordBook: "Guardar en el cuaderno",
+  savedToWordBook: "Guardado en el cuaderno",
+  visualEmptyLabel: "Se dibujará una imagen para esta palabra",
+  generateLabel: "Generar",
+  savedAgoTemplate: (t) => `Guardada · ${t}`,
+  shareLabel: "Compartir",
+  backLabel: "Atrás",
 };
 
 // Portuguese — Brazilian, "você" register.
@@ -2359,6 +2480,25 @@ const pt: Partial<V2Strings> = {
   visualBlurbLocked:
     "Crie uma imagem única pra esta palavra — entender pelo olhar.",
   reportLabel: "Reportar",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "Origem da palavra",
+  visualEyebrow: "Visual",
+  meaningsEyebrow: "Definições",
+  takeItFurtherEyebrow: "Vá mais a fundo",
+  wordOriginLanguage: "Idioma",
+  wordOriginOriginallyMeant: "Significava originalmente",
+  actionCompose: "Compor uma frase",
+  actionQuiz: "Quiz",
+  actionCompare: "Comparar palavras",
+  actionKidsExplanation: "Explicação para crianças",
+  saveToWordBook: "Salvar no caderno",
+  savedToWordBook: "Salvo no caderno",
+  visualEmptyLabel: "Uma imagem será criada para esta palavra",
+  generateLabel: "Gerar",
+  savedAgoTemplate: (t) => `Salva · ${t}`,
+  shareLabel: "Compartilhar",
+  backLabel: "Voltar",
 };
 
 // French — formal "vous" register, neutral (FR + QC).
@@ -2688,6 +2828,25 @@ const fr: Partial<V2Strings> = {
   visualBlurbLocked:
     "Créez une image unique pour ce mot — comprendre par l'image.",
   reportLabel: "Signaler",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "Origine du mot",
+  visualEyebrow: "Visuel",
+  meaningsEyebrow: "Définitions",
+  takeItFurtherEyebrow: "Aller plus loin",
+  wordOriginLanguage: "Langue",
+  wordOriginOriginallyMeant: "Signifiait à l'origine",
+  actionCompose: "Composer une phrase",
+  actionQuiz: "Quiz",
+  actionCompare: "Comparer les mots",
+  actionKidsExplanation: "Explication pour enfants",
+  saveToWordBook: "Enregistrer dans le carnet",
+  savedToWordBook: "Enregistré dans le carnet",
+  visualEmptyLabel: "Une image sera créée pour ce mot",
+  generateLabel: "Générer",
+  savedAgoTemplate: (t) => `Enregistré · ${t}`,
+  shareLabel: "Partager",
+  backLabel: "Retour",
 };
 
 const TABLES: Record<Lang, Partial<V2Strings>> = {
