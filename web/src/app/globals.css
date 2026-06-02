@@ -2196,14 +2196,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-mdef { font-size: 19px; line-height: 1.6; }
 }
 
-/* Examples block — clean white surface, just a hairline border so
-   the tinted tabs below can be the colourful moment on the card. */
+/* Examples block — naked, no frame. Sit directly on the card. */
 .wordbook .wb-mexamples {
   background: transparent;
-  border: 1px solid var(--rule);
-  border-inline-start: 2px solid var(--rule);
-  border-radius: 6px;
-  padding: 12px 14px;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 2px;
   margin-bottom: 14px;
 }
 .wordbook .wb-mexample {
@@ -2219,34 +2217,33 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-top: 1px dashed var(--rule);
 }
 
-/* Idioms block — labeled list */
+/* Idioms block — no card surface, just labeled text on the card. */
 .wordbook .wb-midioms {
   margin-bottom: 16px;
-  padding: 12px 14px;
-  border-radius: 6px;
-  background: var(--teal-soft);
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 .wordbook .wb-midioms-label {
-  font-family: var(--wb-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--teal-edge);
+  font-family: var(--wb-he);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-muted);
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .wordbook .wb-midiom {
   font-family: var(--wb-he);
-  font-size: 14.5px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--ink);
+  font-weight: 500;
 }
 .wordbook .wb-midiom + .wb-midiom {
   margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px dashed rgba(11, 138, 138, 0.18);
 }
-.wordbook .wb-midiom-phrase { font-weight: 600; color: var(--teal-edge); }
+.wordbook .wb-midiom-phrase { font-weight: 700; color: var(--ink); }
 .wordbook .wb-midiom-sep    { color: var(--ink-muted); }
 .wordbook .wb-midiom-meaning { color: var(--ink-soft); }
 
