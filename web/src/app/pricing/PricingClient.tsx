@@ -155,6 +155,7 @@ const COPY: Record<string, {
   signin: string;
   pricing: string;
   search: string;
+  features: string;
   tierBasic: { name: string; tagline: string; cta: string; features: string[] };
   tierClear: { name: string; tagline: string; cta: string; badge: string; features: string[] };
   tierDeep:  { name: string; tagline: string; cta: string; features: string[] };
@@ -171,6 +172,7 @@ const COPY: Record<string, {
     signin: "התחברות",
     pricing: "תמחור",
     search: "חיפוש",
+    features: "פיצ'רים",
     mo: "/חודש", yr: "/שנה",
     freeForever: "חינם לתמיד",
     tierBasic: {
@@ -222,6 +224,7 @@ const COPY: Record<string, {
     signin: "Sign in",
     pricing: "Pricing",
     search: "Search",
+    features: "Features",
     mo: "/mo", yr: "/yr",
     freeForever: "Free forever",
     tierBasic: {
@@ -323,6 +326,7 @@ export function PricingPageRoute() {
         </Link>
         <nav className="wb-shell-nav">
           <Link href="/" className="wb-shell-navlink">{c.search}</Link>
+          <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
           <Link href="/pricing" className="wb-shell-navlink is-active">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
