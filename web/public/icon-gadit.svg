@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background: teal squircle (iOS-style rounded square) -->
+  <rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="#0EA5A5"/>
+  <!-- Subtle inner highlight to give the tile depth -->
+  <rect x="0" y="0" width="512" height="256" rx="112" ry="112" fill="url(#gloss)" opacity="0.10"/>
+  <defs>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Bold uppercase G — Inter-style geometric sans, centered -->
+  <text
+    x="50%"
+    y="50%"
+    text-anchor="middle"
+    dominant-baseline="central"
+    fill="#FFFFFF"
+    font-family="'Inter', 'Heebo', system-ui, sans-serif"
+    font-weight="700"
+    font-size="320"
+    letter-spacing="-12">G</text>
+</svg>
