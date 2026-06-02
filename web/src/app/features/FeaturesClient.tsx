@@ -90,7 +90,7 @@ const COPY: Record<string, {
   list: Feature[];
 }> = {
   he: {
-    heroTitle: "מה גדית נותן לכם:",
+    heroTitle: "מה Gadit נותן לכם:",
     heroSub: "",
     ctaPrimary: "נסו עכשיו חינם",
     ctaSecondary: "",
@@ -145,7 +145,7 @@ function FeatureIcon({ name, color }: { name: Feature["icon"]; color: string }) 
 }
 
 const TIER_COLOR: Record<Tier, { fg: string; bg: string }> = {
-  basic: { fg: "var(--ink-faint)", bg: "rgba(11, 15, 25, 0.06)" },
+  basic: { fg: "var(--basic-fg)",  bg: "var(--basic-bg)" },
   clear: { fg: "var(--teal-edge)", bg: "var(--teal-soft)" },
   deep:  { fg: "var(--deep-fg)",   bg: "var(--deep-bg)" },
 };
