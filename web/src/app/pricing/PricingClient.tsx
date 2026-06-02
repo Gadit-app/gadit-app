@@ -163,8 +163,8 @@ const COPY: Record<string, {
   trustClear?: string;
 }> = {
   he: {
-    heroTitle: "תמחור פשוט.",
-    heroSub: "התחילו חינם. שדרגו רק כשתרצו עומק.",
+    heroTitle: "התחילו חינם",
+    heroSub: "שדרגו כשתרצו להעמיק.",
     monthly: "חודשי", yearly: "שנתי",
     save: "חיסכון 17%",
     signin: "התחברות",
@@ -174,7 +174,7 @@ const COPY: Record<string, {
     tierBasic: {
       name: "Basic",
       tagline: "להתחיל ולהבין מילים.",
-      cta: "התחילו עכשיו",
+      cta: "התחילו חינם",
       features: [
         "20 חיפושי מילים ליום",
         "כל המשמעויות (לא רק העיקרית)",
