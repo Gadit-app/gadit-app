@@ -336,9 +336,9 @@ function QuizFinal({
             borderRadius: 12,
             color: "white",
             background:
-              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+              "#0EA5A5",
             boxShadow:
-              "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+              "0 0 0 1px rgba(14,165,165,0.6), 0 8px 22px rgba(14,165,165,0.4)",
           }}
         >
           {v2(lang, "quizPracticeAnotherWord")}
@@ -815,7 +815,7 @@ export function QuizModalV2({
                   color: submitDisabled ? "var(--gd-ink-400)" : "white",
                   boxShadow: submitDisabled
                     ? "inset 0 0 0 1px oklch(0 0 0 / 0.08)"
-                    : "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+                    : "0 0 0 1px rgba(14,165,165,0.6), 0 8px 22px rgba(14,165,165,0.4)",
                   cursor: submitDisabled ? "not-allowed" : "pointer",
                 }}
               >

@@ -154,7 +154,14 @@ export function HomePage() {
         <div className="wb-shell-actions">
           <LangSwitch />
           {user ? (
-            <Link href="/notebook" className="wb-shell-link">{lang === "he" ? "המחברת" : "Notebook"}</Link>
+            <Link href="/account" className="wb-avatar" aria-label="Account">
+              {user.photoURL ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={user.photoURL} alt="" />
+              ) : (
+                <span>{(user.email?.[0] || "G").toUpperCase()}</span>
+              )}
+            </Link>
           ) : (
             <button
               type="button"

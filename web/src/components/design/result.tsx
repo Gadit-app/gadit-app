@@ -538,18 +538,10 @@ function MeaningEntry({
           ) : (
             <div className="wb-mpanel-empty">
               <div className="wb-visual-art"><CrosshairIcon size={28} /></div>
-              <div className="wb-visual-label">
-                {imageGenerating ? "יוצר תמונה…" : "תמונה תיווצר עבור המשמעות הזו"}
+              <div className="wb-visual-label">יוצר תמונה…</div>
+              <div className="wb-loader-dots" aria-hidden="true">
+                <span /><span /><span />
               </div>
-              {!imageGenerating && (
-                <button
-                  type="button"
-                  className="wb-visual-cta"
-                  onClick={onGenerate}
-                >
-                  <PlusIcon /> צרו תמונה
-                </button>
-              )}
             </div>
           )}
         </div>

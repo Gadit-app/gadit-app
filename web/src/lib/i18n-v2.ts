@@ -902,7 +902,7 @@ const he: V2Strings = {
   quizFinish: "סיום",
   quizYesCorrect: "נכון — כל הכבוד",
   quizNotQuite: "לא לגמרי",
-  quizLoading: "מכינים שאלון…",
+  quizLoading: "מכינים חידון…",
   quizFinalScoreTemplate: (c, t) => `ענית נכון על ${c} מתוך ${t}.`,
   quizPracticeAnotherWord: "תרגול מילה נוספת",
   quizBackToWord: "חזרה למילה",
