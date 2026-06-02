@@ -466,7 +466,6 @@ function MeaningEntry({
   return (
     <div className="wb-mcard">
       <div className="wb-mcard-head">
-        <div className="wb-mnum">{String(n).padStart(2, "0")}</div>
         <button
           type="button"
           className="wb-mcard-share"
@@ -478,7 +477,10 @@ function MeaningEntry({
       </div>
 
       {meaning.meaning && (
-        <div className="wb-mdef">{meaning.meaning}</div>
+        <div className="wb-mdef-row">
+          <span className="wb-mnum">{n}</span>
+          <span className="wb-mdef">{meaning.meaning}</span>
+        </div>
       )}
 
       {(meaning.examples ?? []).length > 0 && (

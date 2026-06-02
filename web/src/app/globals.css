@@ -1488,10 +1488,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --wb-mono:    var(--font-jb-mono), 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* Outer shell — uniform light gray, no warm gradient */
+/* Outer shell — uniform light gray, no warm gradient. Flex column
+   so the footer can stick to the viewport bottom regardless of
+   page content height. */
 .wordbook.wb-shell-page {
   background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+.wordbook.wb-shell-page > .wb-shell-topbar { flex-shrink: 0; }
+.wordbook.wb-shell-page > .wb-home-main { flex: 1; }
+.wordbook.wb-shell-page > .wb-home-footer { flex-shrink: 0; margin-top: auto; }
 
 /* Topbar — solid white-on-rule, no backdrop blur tint */
 .wordbook .wb-shell-topbar {
@@ -1513,8 +1521,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-shell-divider { display: none; }
 .wordbook .wb-shell-link {
-  background: var(--ink);
-  border-color: var(--ink);
+  background: var(--teal);
+  border-color: var(--teal);
   color: var(--surface);
   font-size: 13px;
   font-weight: 500;
@@ -1523,8 +1531,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   box-shadow: none;
 }
 .wordbook .wb-shell-link:hover {
-  background: #1A1F2B;
-  border-color: #1A1F2B;
+  background: var(--teal-edge);
+  border-color: var(--teal-edge);
   transform: none;
   box-shadow: none;
 }
@@ -2050,31 +2058,37 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-mcard { padding: 26px 30px 28px; }
 }
 
-/* Meaning card head — number on the start side, Share icon on the
-   end side. Replaces the standalone wb-mnum row. */
+/* Meaning card head — now holds ONLY the Share icon (number moved
+   inline with the definition row below). */
 .wordbook .wb-mcard-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
+  justify-content: flex-end;
+  margin-bottom: 6px;
   gap: 8px;
+}
+/* Number prefix — sits on the same baseline as the definition text */
+.wordbook .wb-mdef-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 .wordbook .wb-mnum {
   font-family: var(--wb-mono);
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 600;
   color: var(--teal);
   letter-spacing: 0;
-  display: inline-block;
-  padding: 2px 10px;
-  background: var(--teal-soft);
-  border-radius: 6px;
-  line-height: 1.2;
+  flex-shrink: 0;
+  line-height: 1.55;
   margin: 0;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-mnum { font-size: 24px; }
+  .wordbook .wb-mnum { font-size: 19px; }
 }
+/* Override the older wb-mdef margin-bottom (now lives on the row) */
+.wordbook .wb-mdef-row .wb-mdef { margin-bottom: 0; }
 .wordbook .wb-mcard-share {
   width: 30px;
   height: 30px;
@@ -2426,88 +2440,142 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-shell-navlink:hover { color: var(--ink); }
 
+/* Google-style: content positioned in the upper third, NOT centered.
+   Compact spacing throughout, tight Google-like proportions. */
 .wordbook .wb-home-main {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 64px 22px 80px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 22px 32px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-home-main { padding: 120px 32px 48px; }
+}
+.wordbook .wb-home-center {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
-@media (min-width: 768px) {
-  .wordbook .wb-home-main { padding: 120px 32px 96px; }
-}
 
-.wordbook .wb-home-hero { margin-bottom: 36px; }
-.wordbook .wb-home-title {
-  font-family: var(--wb-he);
-  font-weight: 700;
-  font-size: 56px;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
+/* Logo — Google's wordmark is ~92px optical height; we match that */
+.wordbook .wb-home-logo {
+  font-family: var(--wb-sans);
+  font-weight: 600;
+  font-size: 64px;
+  letter-spacing: -0.035em;
   color: var(--ink);
-  margin: 0 0 18px;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-home-title { font-size: 88px; margin-bottom: 22px; }
+  .wordbook .wb-home-logo { font-size: 80px; margin-bottom: 8px; }
 }
-.wordbook .wb-home-title-1 {
-  display: block;
-}
-.wordbook .wb-home-title-2 {
-  display: block;
+.wordbook .wb-home-logo-it {
   color: var(--teal);
-}
-.wordbook .wb-home-subline {
-  font-family: var(--wb-he);
-  font-size: 16px;
+  font-style: italic;
   font-weight: 500;
-  color: var(--ink-soft);
-  line-height: 1.55;
-  margin: 0 auto;
-  max-width: 560px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-home-subline { font-size: 17.5px; }
 }
 
-/* Search box — big, prominent, the page's primary action */
-.wordbook .wb-home-search { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+/* Tagline — small, tight */
+.wordbook .wb-home-tagline {
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin: 0 0 24px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-home-tagline { font-size: 15px; margin-bottom: 28px; }
+}
+
+/* Search form — pill style, Google proportions */
+.wordbook .wb-home-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
 .wordbook .wb-home-search-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-radius: 14px;
-  padding: 6px 6px 6px 16px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  border-radius: 999px;
+  padding: 0 8px 0 16px;
+  box-shadow: 0 1px 6px rgba(15, 23, 42, 0.08);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  height: 46px;
 }
+
+/* Decorative magnifying glass — Google places one at the start of the
+   input. Click does nothing; the form submits on Enter. */
+.wordbook .wb-home-search-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+.wordbook .wb-home-search-box:hover { box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12); border-color: var(--border-2); }
 .wordbook .wb-home-search-box:focus-within {
   border-color: var(--teal);
-  box-shadow: 0 0 0 4px rgba(14, 165, 165, 0.10);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);
 }
-.wordbook .wb-home-search-icon { color: var(--ink-faint); flex-shrink: 0; display: flex; }
 .wordbook .wb-home-search-input {
   flex: 1;
   background: transparent;
   border: none;
   outline: none;
   font-family: var(--wb-he);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--ink);
-  padding: 14px 4px;
+  padding: 0 6px;
   min-width: 0;
+  height: 100%;
 }
 .wordbook .wb-home-search-input::placeholder { color: var(--ink-faint); font-weight: 400; }
+
+/* Right group — mic (passthrough from VoiceInput) + submit */
+.wordbook .wb-home-search-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.wordbook .wb-home-search-mic { display: inline-flex; }
+.wordbook .wb-home-search-mic button {
+  border-radius: 999px !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: transparent !important;
+  color: var(--ink-soft) !important;
+  border: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.wordbook .wb-home-search-mic button:hover {
+  background: var(--mist) !important;
+  color: var(--ink) !important;
+}
+.wordbook .wb-home-search-mic svg { width: 18px; height: 18px; }
 .wordbook .wb-home-search-go {
-  background: var(--ink);
+  background: var(--teal);
   border: none;
   color: var(--surface);
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2515,45 +2583,335 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   flex-shrink: 0;
   transition: background 0.15s ease;
 }
-.wordbook .wb-home-search-go:hover { background: #1A1F2B; }
+.wordbook .wb-home-search-go:hover { background: var(--teal-edge); }
+.wordbook .wb-home-search-go svg { width: 16px; height: 16px; }
 
-/* Sample word chips */
+/* Sample word chips — sit on the same line as the "לדוגמה" label,
+   sized to match, with a barely-there background so they recede
+   visually relative to the search bar. */
 .wordbook .wb-home-samples {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
 }
 .wordbook .wb-home-samples-label {
-  font-family: var(--wb-mono);
-  font-size: 11px;
+  font-family: var(--wb-he);
+  font-size: 13px;
+  font-weight: 500;
   color: var(--ink-faint);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   margin-inline-end: 4px;
 }
 .wordbook .wb-home-sample {
   display: inline-flex;
   align-items: center;
-  padding: 6px 12px;
-  border: 1px solid var(--rule);
+  padding: 3px 10px;
+  border: 1px solid transparent;
   border-radius: 999px;
-  background: var(--surface);
+  background: rgba(11, 15, 25, 0.04);
   font-family: var(--wb-he);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--ink-soft);
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  line-height: 1.4;
 }
 .wordbook .wb-home-sample:hover {
-  border-color: var(--teal);
-  color: var(--teal-edge);
   background: var(--teal-soft);
+  color: var(--teal-edge);
+  border-color: transparent;
 }
 
-/* Footer */
+/* ═══════════════════════════════════════════════════════════════════
+   PRICING — 3 tier cards, each painted in its tier colour.
+   Basic = neutral. Clear = teal (#0EA5A5). Deep = purple (#7C3AED).
+   Shares the wordbook palette + masthead with / and /word.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.wordbook .wb-pricing-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 22px 56px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-pricing-main { padding: 56px 32px 80px; }
+}
+
+.wordbook .wb-pricing-hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-pricing-hero { margin-bottom: 48px; }
+}
+.wordbook .wb-pricing-title {
+  font-family: var(--wb-he);
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-pricing-title { font-size: 52px; margin-bottom: 14px; }
+}
+.wordbook .wb-pricing-sub {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin: 0 auto 24px;
+  max-width: 520px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-pricing-sub { font-size: 17px; margin-bottom: 32px; }
+}
+
+/* Monthly/Yearly pill toggle */
+.wordbook .wb-pricing-toggle {
+  display: inline-flex;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  gap: 2px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.wordbook .wb-pricing-toggle button {
+  background: transparent;
+  border: none;
+  font-family: var(--wb-he);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.wordbook .wb-pricing-toggle button:hover { color: var(--ink); }
+.wordbook .wb-pricing-toggle button.is-active {
+  background: var(--ink);
+  color: var(--surface);
+}
+.wordbook .wb-pricing-save {
+  font-family: var(--wb-mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--teal-soft);
+  color: var(--teal-edge);
+  letter-spacing: 0.02em;
+}
+.wordbook .wb-pricing-toggle button.is-active .wb-pricing-save {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Tier card grid */
+.wordbook .wb-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+}
+
+/* Tier card — shared shape, per-tier accent stripe and CTA color */
+.wordbook .wb-tier-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 26px 24px 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-tier-card { padding: 30px 26px 32px; }
+}
+
+/* Per-tier accent strip across the top */
+.wordbook .wb-tier-card::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  top: 0;
+  height: 4px;
+  border-radius: 16px 16px 0 0;
+}
+.wordbook .wb-tier-basic::before { background: var(--ink-faint); }
+.wordbook .wb-tier-clear::before { background: var(--teal); }
+.wordbook .wb-tier-deep::before  { background: var(--deep-fg); }
+
+/* "Most popular" badge — only Clear */
+.wordbook .wb-tier-badge {
+  position: absolute;
+  top: -12px;
+  inset-inline-start: 24px;
+  font-family: var(--wb-he);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: var(--surface);
+  box-shadow: 0 2px 8px rgba(14, 165, 165, 0.35);
+}
+
+/* Tier name */
+.wordbook .wb-tier-name {
+  font-family: var(--wb-sans);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.wordbook .wb-tier-basic .wb-tier-name { color: var(--ink); }
+.wordbook .wb-tier-clear .wb-tier-name { color: var(--teal); }
+.wordbook .wb-tier-deep  .wb-tier-name { color: var(--deep-fg); }
+
+/* Tagline */
+.wordbook .wb-tier-tagline {
+  font-family: var(--wb-he);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+  min-height: 44px;
+}
+
+/* Price */
+.wordbook .wb-tier-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.wordbook .wb-tier-price {
+  font-family: var(--wb-sans);
+  font-weight: 700;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+}
+.wordbook .wb-tier-period {
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+/* Always present, even when empty, so CTAs across the 3 cards
+   sit on the exact same baseline. */
+.wordbook .wb-tier-subprice {
+  font-family: var(--wb-he);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  margin-bottom: 18px;
+  min-height: 18px;
+  line-height: 1.4;
+}
+
+/* CTA — each tier in its colour */
+.wordbook .wb-tier-cta {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.wordbook .wb-tier-basic .wb-tier-cta {
+  background: var(--ink-faint);
+  color: var(--surface);
+  border: none;
+}
+.wordbook .wb-tier-basic .wb-tier-cta:hover {
+  background: var(--ink-muted);
+}
+.wordbook .wb-tier-clear .wb-tier-cta {
+  background: var(--teal);
+  color: var(--surface);
+}
+.wordbook .wb-tier-clear .wb-tier-cta:hover { background: var(--teal-edge); }
+.wordbook .wb-tier-deep .wb-tier-cta {
+  background: var(--deep-fg);
+  color: var(--surface);
+}
+.wordbook .wb-tier-deep .wb-tier-cta:hover { background: #6D28D9; }
+.wordbook .wb-tier-cta-sub {
+  font-family: var(--wb-he);
+  font-size: 12px;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Divider between CTA and features */
+.wordbook .wb-tier-sep {
+  height: 1px;
+  background: var(--rule);
+  margin: 24px 0 20px;
+}
+
+/* Features list */
+.wordbook .wb-tier-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wordbook .wb-tier-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.wordbook .wb-tier-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.wordbook .wb-tier-basic .wb-tier-check { background: rgba(11, 15, 25, 0.08); color: var(--ink-soft); }
+.wordbook .wb-tier-clear .wb-tier-check { background: var(--teal-soft); color: var(--teal); }
+.wordbook .wb-tier-deep  .wb-tier-check { background: var(--deep-bg);  color: var(--deep-fg); }
+
+/* Footer (shared with home) */
 .wordbook .wb-home-footer {
   max-width: 720px;
   margin: 0 auto;

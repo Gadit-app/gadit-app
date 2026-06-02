@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
+import VoiceInput from "@/components/VoiceInput";
 
 const LANGS = [
   { code: "he", label: "עברית" },
@@ -95,31 +96,15 @@ const SAMPLES_BY_LANG: Record<string, string[]> = {
 
 const COPY: Record<
   string,
-  { tagline1: string; tagline2: string; subline: string; placeholder: string; tryLabel: string; signin: string; pricing: string }
+  { tagline: string; placeholder: string; tryLabel: string; signin: string; pricing: string }
 > = {
-  he: {
-    tagline1: "להבין",
-    tagline2: "עד הסוף.",
-    subline: "מילון רב-לשוני שעובד לעומק — משמעויות, ניבים, רקע ותמונה. בעברית, באנגלית, וב-7 שפות.",
-    placeholder: "הקלידו מילה…",
-    tryLabel: "לדוגמה",
-    signin: "התחברות",
-    pricing: "תמחור",
-  },
-  en: {
-    tagline1: "Understand",
-    tagline2: "to the end.",
-    subline: "A dictionary that meets you in context — meanings, idioms, origins and a vivid image, in 7 languages.",
-    placeholder: "Type a word…",
-    tryLabel: "Try",
-    signin: "Sign in",
-    pricing: "Pricing",
-  },
-  ar: { tagline1: "افهم", tagline2: "حتى النهاية.", subline: "قاموس متعدد اللغات يجيبك بعمق — معانٍ، أصول، تعابير وصورة.", placeholder: "اكتب كلمة…", tryLabel: "جرّب", signin: "تسجيل دخول", pricing: "الأسعار" },
-  ru: { tagline1: "Понять", tagline2: "до конца.", subline: "Словарь с глубиной — значения, идиомы, происхождение и образ.", placeholder: "Введите слово…", tryLabel: "Пример", signin: "Войти", pricing: "Цены" },
-  es: { tagline1: "Entender", tagline2: "hasta el final.", subline: "Un diccionario que va a fondo — significados, modismos, origen e imagen.", placeholder: "Escribe una palabra…", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios" },
-  pt: { tagline1: "Entender", tagline2: "até o fim.", subline: "Um dicionário que vai a fundo — significados, expressões, origem e imagem.", placeholder: "Escreva uma palavra…", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços" },
-  fr: { tagline1: "Comprendre", tagline2: "jusqu'au bout.", subline: "Un dictionnaire qui va au fond — sens, expressions, origine et image.", placeholder: "Tapez un mot…", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs" },
+  he: { tagline: "להבין מילים עד הסוף.", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור" },
+  en: { tagline: "Understand words to the end.", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing" },
+  ar: { tagline: "افهم الكلمات حتى النهاية.", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار" },
+  ru: { tagline: "Понять слова до конца.",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены" },
+  es: { tagline: "Entender palabras hasta el final.", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios" },
+  pt: { tagline: "Entender palavras até o fim.", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços" },
+  fr: { tagline: "Comprendre les mots jusqu'au bout.", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs" },
 };
 
 function SearchIcon({ size = 16 }: { size?: number }) {
@@ -139,6 +124,11 @@ export function HomePage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const c = COPY[lang] ?? COPY.en;
   const samples = SAMPLES_BY_LANG[lang] ?? SAMPLES_BY_LANG.en;
+
+  async function getIdToken(): Promise<string | null> {
+    if (!user) return null;
+    try { return await user.getIdToken(); } catch { return null; }
+  }
 
   function go(word: string) {
     const trimmed = word.trim();
@@ -177,45 +167,56 @@ export function HomePage() {
       </header>
 
       <main className="wb-home-main">
-        <div className="wb-home-hero">
-          <h1 className="wb-home-title">
-            <span className="wb-home-title-1">{c.tagline1}</span>
-            <span className="wb-home-title-2">{c.tagline2}</span>
-          </h1>
-          <p className="wb-home-subline">{c.subline}</p>
-        </div>
+        <div className="wb-home-center">
+          <div className="wb-home-logo">
+            Gad<span className="wb-home-logo-it">it</span>
+          </div>
+          <p className="wb-home-tagline">{c.tagline}</p>
 
-        <form className="wb-home-search" onSubmit={onSubmit}>
-          <div className="wb-home-search-box">
-            <span className="wb-home-search-icon"><SearchIcon size={18} /></span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={c.placeholder}
-              autoFocus
-              className="wb-home-search-input"
-              aria-label={c.placeholder}
-            />
-            <button type="submit" className="wb-home-search-go" aria-label="Search">
-              <SearchIcon size={16} />
-            </button>
-          </div>
-          <div className="wb-home-samples">
-            <span className="wb-home-samples-label">{c.tryLabel}</span>
-            {samples.map((s) => (
-              <button
-                key={s}
-                type="button"
-                className="wb-home-sample"
-                onClick={() => go(s)}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </form>
+          <form className="wb-home-search" onSubmit={onSubmit}>
+            <div className="wb-home-search-box">
+              <span className="wb-home-search-glyph" aria-hidden="true">
+                <SearchIcon size={18} />
+              </span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={c.placeholder}
+                autoFocus
+                className="wb-home-search-input"
+                aria-label={c.placeholder}
+              />
+              <div className="wb-home-search-mic">
+                <VoiceInput
+                  uiLang={lang}
+                  getIdToken={getIdToken}
+                  onResult={(text) => {
+                    setQuery(text);
+                    go(text);
+                  }}
+                  enabled={true}
+                  title="חיפוש קולי"
+                  size="sm"
+                />
+              </div>
+            </div>
+            <div className="wb-home-samples">
+              <span className="wb-home-samples-label">{c.tryLabel}</span>
+              {samples.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className="wb-home-sample"
+                  onClick={() => go(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </form>
+        </div>
       </main>
 
       <footer className="wb-home-footer">
