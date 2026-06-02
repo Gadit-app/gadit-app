@@ -1819,16 +1819,38 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    eyebrow ABOVE the card, content card hosts the rows. Labels and
    values share the wb-mdef typography (Heebo 500, ink-dark) so the
    block reads as one continuous body, like a definition. */
-.wordbook .wb-origin-section {
+.wordbook .wb-origin-section,
+.wordbook .wb-idioms-section {
   padding: 0 20px 0;
   margin-bottom: 32px;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-origin-section {
+  .wordbook .wb-origin-section,
+  .wordbook .wb-idioms-section {
     padding: 0 32px 0;
     margin-bottom: 44px;
   }
 }
+
+/* Idioms standalone card — matches Origin: teal rail + white card */
+.wordbook .wb-idioms-section .wb-card {
+  margin: 0;
+  padding: 22px 22px 24px;
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--teal);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+@media (min-width: 768px) {
+  .wordbook .wb-idioms-section .wb-card { padding: 26px 30px 28px; }
+}
+.wordbook .wb-idioms-card .wb-midiom {
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.wordbook .wb-idioms-card .wb-midiom:first-child { padding-top: 0; }
+.wordbook .wb-idioms-card .wb-midiom:last-child  { padding-bottom: 0; border-bottom: none; }
+.wordbook .wb-idioms-card .wb-midiom + .wb-midiom { margin-top: 0; }
 
 /* Origin card visually identical to the meaning cards: same teal
    left rail, same border, same radius, same shadow. They sit on the

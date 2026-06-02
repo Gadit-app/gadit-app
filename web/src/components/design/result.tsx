@@ -493,18 +493,10 @@ function MeaningEntry({
         </div>
       )}
 
-      {meaning.idioms && meaning.idioms.length > 0 && (
-        <div className="wb-midioms">
-          <div className="wb-midioms-label">ניבים וצירופים</div>
-          {meaning.idioms.map((id, j) => (
-            <div className="wb-midiom" key={j}>
-              <span className="wb-midiom-phrase">{id.phrase}</span>
-              <span className="wb-midiom-sep"> — </span>
-              <span className="wb-midiom-meaning">{id.meaning}</span>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Idioms have moved OUT of the meaning card. They render as
+          a standalone section after all meanings, before Word Origin
+          (Gadi product decision — keeps the card focused on the
+          definition itself, gives idioms their own breathing room). */}
 
       {/* Tab row */}
       <div className="wb-mtabs">
@@ -648,6 +640,55 @@ export function MeaningCard({ n, meaning }: { n: number; meaning: Meaning; onRep
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── IdiomsSection — collects per-meaning + general idioms ──────
+// Renders as a standalone section between Meanings and Origin, mirroring
+// the Meanings/Origin pattern (eyebrow OUTSIDE the card).
+export function IdiomsSection({
+  meanings,
+  generalIdioms,
+}: {
+  meanings: Meaning[];
+  generalIdioms?: Idiom[];
+}) {
+  // Combine all idioms — per-meaning first (preserving order), then
+  // any general ones at the end. De-dupe by phrase so we don't show
+  // the same idiom twice if the model surfaced it in both places.
+  const seen = new Set<string>();
+  const all: Idiom[] = [];
+  for (const m of meanings ?? []) {
+    for (const i of m.idioms ?? []) {
+      const key = i.phrase?.trim();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      all.push(i);
+    }
+  }
+  for (const i of generalIdioms ?? []) {
+    const key = i.phrase?.trim();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    all.push(i);
+  }
+  if (all.length === 0) return null;
+
+  return (
+    <div className="wb-idioms-section">
+      <div className="wb-eyebrow">
+        <span>ניבים וצירופים</span>
+      </div>
+      <div className="wb-card wb-idioms-card">
+        {all.map((id, j) => (
+          <div className="wb-midiom" key={j}>
+            <span className="wb-midiom-phrase">{id.phrase}</span>
+            <span className="wb-midiom-sep"> — </span>
+            <span className="wb-midiom-meaning">{id.meaning}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -950,6 +991,11 @@ export function ResultView({
         onGenerate={onGenerate}
         onUpgrade={onUpgrade}
         onAction={onAction}
+      />
+
+      <IdiomsSection
+        meanings={result.meanings ?? []}
+        generalIdioms={result.generalIdioms}
       />
 
       <OriginCard etymology={result.etymology} />
