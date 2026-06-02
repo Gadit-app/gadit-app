@@ -205,7 +205,7 @@ const COPY: Record<string, {
     tierDeep: {
       name: "Deep",
       tagline: "להעמיק — חידון, השוואה, תרגול.",
-      cta: "התחילו עם Deep",
+      cta: "נסו 14 יום חינם",
       features: [
         "כל מה שיש ב-Clear",
         "חידון מותאם אישית",
@@ -257,7 +257,7 @@ const COPY: Record<string, {
     tierDeep: {
       name: "Deep",
       tagline: "Go deeper — quiz, compare, practice.",
-      cta: "Start with Deep",
+      cta: "Try 14 days free",
       features: [
         "Everything in Clear",
         "Personalized quizzes",

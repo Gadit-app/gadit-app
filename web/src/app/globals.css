@@ -2878,19 +2878,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   }
 }
 
-/* Tier card — shared shape, per-tier accent stripe and CTA color */
+/* Tier card — shared shape, per-tier accent stripe and CTA color.
+   overflow: hidden so the coloured stripe at top clips to the card's
+   rounded corners cleanly (no straight "horns" overshooting the
+   curve). The popular badge is repositioned to live INSIDE the card. */
 .wordbook .wb-tier-card {
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 16px;
-  padding: 26px 24px 28px;
+  padding: 38px 24px 28px;
   position: relative;
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-tier-card { padding: 30px 26px 32px; }
+  .wordbook .wb-tier-card { padding: 42px 26px 32px; }
 }
 
 /* Per-tier accent strip across the top + matching thin border around
@@ -2922,20 +2926,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-tier-clear::before { background: var(--teal); }
 .wordbook .wb-tier-deep::before  { background: var(--deep-fg); }
 
-/* "Most popular" badge — only Clear */
+/* "Most popular" badge — only Clear. Lives INSIDE the card now
+   (card has overflow:hidden), sitting just below the top stripe. */
 .wordbook .wb-tier-badge {
   position: absolute;
-  top: -12px;
+  top: 14px;
   inset-inline-start: 24px;
   font-family: var(--wb-he);
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 5px 12px;
+  padding: 4px 11px;
   border-radius: 999px;
   background: var(--teal);
   color: var(--surface);
-  box-shadow: 0 2px 8px rgba(14, 165, 165, 0.35);
+  box-shadow: 0 2px 8px rgba(14, 165, 165, 0.25);
 }
 
 /* Tier name */

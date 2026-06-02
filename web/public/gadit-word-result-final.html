@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadit · Word Result · Final Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=DM+Sans:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Gadit · Word Result Page — Final Mockup (Variant B, locked)
+   One page, two views: Mobile EN "ephemeral" + Desktop HE "חלום"
+   ============================================================ */
+
+:root {
+  /* ── Page surface ─────────────────────────────────────── */
+  --page-bg:        #F6F1E7;   /* warm off-white, vellum */
+  --page-bg-deep:   #ECE5D5;   /* presentation chrome */
+  --page-bg-edge:   #E3DBC8;   /* frame outer */
+
+  /* ── Ink ──────────────────────────────────────────────── */
+  --ink:            #1E1A14;   /* warm near-black */
+  --ink-2:          #4B443A;   /* secondary */
+  --ink-3:          #7E7669;   /* tertiary, captions */
+  --ink-4:          #B5AD9D;   /* hairline rules */
+  --ink-5:          #D6CFBE;   /* faintest */
+
+  /* ── Section colors — low-saturation, temperature-led ─── */
+
+  /* Meanings · dusty blue */
+  --m-surf:         #E5EBF1;
+  --m-surf-deep:    #D8E0E9;
+  --m-rule:         #BCC6D2;
+  --m-accent:       #4B6580;
+  --m-accent-soft:  #7C92A8;
+
+  /* Origin Story · warm rust */
+  --o-surf:         #F0E4DA;
+  --o-surf-deep:    #E6D4C5;
+  --o-rule:         #D2B9A4;
+  --o-accent:       #8C5A40;
+  --o-accent-soft:  #B58974;
+
+  /* Visual · vellum oat */
+  --v-surf:         #ECE6D5;
+  --v-surf-deep:    #E0D8C0;
+  --v-rule:         #C8BFA4;
+  --v-accent:       #87795A;
+  --v-accent-soft:  #B0A484;
+
+  /* In Simple Terms · dusty rose */
+  --s-surf:         #F0E3E1;
+  --s-surf-deep:    #E5D2CF;
+  --s-rule:         #D5B7B4;
+  --s-accent:       #91605E;
+  --s-accent-soft:  #B58A89;
+
+  /* Take It Further · inkwell indigo */
+  --f-surf:         #E5E5ED;
+  --f-surf-deep:    #D7D7E2;
+  --f-rule:         #BBBBCB;
+  --f-accent:       #4A4D6E;
+  --f-accent-soft:  #7B7E9C;
+
+  /* ── Typography ───────────────────────────────────────── */
+  --serif:          'Fraunces', 'Georgia', serif;
+  --sans:           'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --he-serif:       'Frank Ruhl Libre', 'Times New Roman', serif;
+  --he-sans:        'Heebo', 'Arial Hebrew', sans-serif;
+
+  /* ── Geometry ─────────────────────────────────────────── */
+  --r-card:         18px;
+  --r-card-d:       22px;   /* desktop, slightly larger */
+  --r-pill:         999px;
+}
+
+/* ── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--page-bg-deep); color: var(--ink); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: var(--sans); }
+body { min-height: 100vh; padding: 56px 24px 96px; }
+img, svg { display: block; max-width: 100%; }
+button { border: none; background: transparent; font: inherit; color: inherit; cursor: pointer; }
+ul, ol { list-style: none; }
+
+/* ── Presentation chrome ───────────────────────────────── */
+.presentation { max-width: 1280px; margin: 0 auto; }
+
+.presentation-header { text-align: center; margin-bottom: 64px; }
+.presentation-header h1 {
+  font-family: var(--serif);
+  font-weight: 350;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 60;
+}
+.presentation-header p {
+  color: var(--ink-3);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  margin-top: 6px;
+}
+
+.frame-section { margin-bottom: 72px; }
+.frame-label {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  max-width: 1180px;
+  margin: 0 auto 18px;
+  padding: 0 6px;
+  color: var(--ink-3);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.frame-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--ink-2);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.frame-label-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--ink-4);
+  opacity: 0.5;
+}
+
+.presentation-footer {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--ink-3);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   MOBILE SHELL · 390pt
+   ============================================================ */
+
+.mobile-shell {
+  width: 390px;
+  margin: 0 auto;
+  background: var(--page-bg);
+  border-radius: 38px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 0 0 1px rgba(30, 26, 20, 0.06),
+    0 32px 64px -28px rgba(30, 26, 20, 0.18),
+    0 8px 18px -10px rgba(30, 26, 20, 0.08);
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Soft top notch suggestion — almost invisible */
+.mobile-shell::before {
+  content: "";
+  position: absolute;
+  top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 96px; height: 4px;
+  background: rgba(30, 26, 20, 0.08);
+  border-radius: 999px;
+  z-index: 5;
+}
+
+.page-en {
+  padding: 28px 22px 130px;
+  font-family: var(--sans);
+}
+
+/* Top nav · mobile */
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 26px;
+}
+.icon-btn {
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  color: var(--ink-2);
+  transition: background 200ms ease;
+}
+.icon-btn:hover { background: rgba(30, 26, 20, 0.05); }
+.icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Eyebrow · the quietest possible */
+.progression {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+/* Word title block */
+.word-title {
+  font-family: var(--serif);
+  font-weight: 350;
+  font-size: 56px;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 96;
+}
+.word-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 28px;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+.word-pron {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
+  font-variation-settings: "opsz" 18;
+}
+.audio-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  background: rgba(30, 26, 20, 0.045);
+  color: var(--ink-2);
+}
+.audio-btn:hover { background: rgba(30, 26, 20, 0.08); }
+.audio-btn svg { width: 12px; height: 12px; stroke: none; fill: currentColor; }
+.word-pos {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 350;
+  color: var(--ink-3);
+  font-size: 14px;
+  font-variation-settings: "opsz" 18;
+}
+.word-divider {
+  color: var(--ink-4);
+  font-size: 12px;
+}
+
+/* ── Card primitives ───────────────────────────────────── */
+.card {
+  position: relative;
+  border-radius: var(--r-card);
+  padding: 22px 22px 24px;
+  margin-bottom: 16px;
+}
+.card-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.card-eyebrow svg {
+  width: 18px; height: 18px;
+  stroke-width: 1.3;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Card · Meanings (heaviest, primary) ───────────────── */
+.card-meanings {
+  background: var(--m-surf);
+  padding: 28px 24px 30px;   /* deeper than other cards */
+}
+.card-meanings .card-eyebrow { color: var(--m-accent); }
+
+.meaning {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.meaning-num {
+  font-family: var(--serif);
+  font-weight: 350;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--m-accent);
+  font-variation-settings: "opsz" 48;
+  margin-top: -2px;
+  font-feature-settings: "lnum";
+}
+.meaning-tag {
+  display: inline-block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--m-accent-soft);
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+  font-variation-settings: "opsz" 16;
+}
+.meaning-def {
+  font-size: 16.5px;
+  line-height: 1.45;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-weight: 400;
+}
+.meaning-examples {
+  margin-top: 14px;
+  padding-left: 14px;
+  border-left: 1px solid var(--m-rule);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.meaning-examples li {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-variation-settings: "opsz" 18;
+  letter-spacing: 0.005em;
+}
+
+.meaning-divider {
+  height: 1px;
+  background: var(--m-rule);
+  border: none;
+  margin: 22px 0 22px 46px;
+  opacity: 0.7;
+}
+
+/* ── Card · Origin Story ───────────────────────────────── */
+.card-origin {
+  background: var(--o-surf);
+  padding: 24px 22px 24px;
+}
+.card-origin .card-eyebrow { color: var(--o-accent); }
+
+.origin-body {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  letter-spacing: 0.005em;
+  font-variation-settings: "opsz" 18;
+}
+.origin-body em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--o-accent);
+}
+.dropcap {
+  float: left;
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 350;
+  font-size: 56px;
+  line-height: 0.92;
+  color: var(--o-accent);
+  margin: 4px 8px -4px 0;
+  font-variation-settings: "opsz" 144;
+  letter-spacing: -0.02em;
+}
+
+/* ── Card · Visual ─────────────────────────────────────── */
+.card-visual {
+  background: var(--v-surf);
+}
+.card-visual .card-eyebrow { color: var(--v-accent); }
+
+.visual-frame {
+  position: relative;
+  background: var(--page-bg);
+  border-radius: 12px;
+  height: 188px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(135, 121, 90, 0.18);
+}
+.visual-frame svg.visual-empty {
+  width: 100%;
+  height: 100%;
+  color: var(--v-accent);
+}
+.visual-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(135, 121, 90, 0.1);
+  color: var(--v-accent);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  transition: background 200ms ease;
+}
+.visual-action:hover { background: rgba(135, 121, 90, 0.18); }
+.visual-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Card · In Simple Terms ────────────────────────────── */
+.card-simple {
+  background: var(--s-surf);
+}
+.card-simple .card-eyebrow { color: var(--s-accent); }
+
+.simple-body {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: -0.003em;
+}
+
+/* ── Card · Take It Further ────────────────────────────── */
+.card-further {
+  background: var(--f-surf);
+  padding: 22px 8px 14px 22px;
+}
+.card-further .card-eyebrow { color: var(--f-accent); margin-left: 0; }
+.card-further .card-eyebrow { padding-right: 14px; }
+
+.further-list {
+  display: flex;
+  flex-direction: column;
+}
+.further-list li {
+  display: grid;
+  grid-template-columns: 28px 1fr 18px;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 14px 13px 0;
+  border-top: 1px solid var(--f-rule);
+  cursor: pointer;
+  transition: background 180ms ease;
+  border-radius: 8px;
+}
+.further-list li:first-child { border-top: none; }
+.further-list li:hover { background: rgba(74, 77, 110, 0.05); }
+.further-icon {
+  width: 22px; height: 22px;
+  color: var(--f-accent);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.further-title {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.003em;
+}
+.further-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-top: 1px;
+  font-variation-settings: "opsz" 16;
+  letter-spacing: 0.005em;
+}
+.chevron-right {
+  width: 14px; height: 14px;
+  color: var(--f-accent-soft);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Action bar · mobile ───────────────────────────────── */
+.action-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 22px 28px;
+  background: linear-gradient(180deg,
+    rgba(246, 241, 231, 0) 0%,
+    rgba(246, 241, 231, 0.92) 30%,
+    rgba(246, 241, 231, 1) 60%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 4;
+}
+.primary-action {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px 20px;
+  background: var(--ink);
+  color: var(--page-bg);
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  transition: background 200ms ease, transform 200ms ease;
+  box-shadow: 0 8px 22px -10px rgba(30, 26, 20, 0.4);
+}
+.primary-action:hover { background: #2A241B; transform: translateY(-1px); }
+.primary-action svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.overflow-btn {
+  width: 46px; height: 46px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(30, 26, 20, 0.06);
+  color: var(--ink-2);
+}
+.overflow-btn:hover { background: rgba(30, 26, 20, 0.1); }
+.overflow-btn svg { width: 18px; height: 18px; }
+
+/* ============================================================
+   DESKTOP SHELL · Hebrew · RTL
+   ============================================================ */
+
+.desktop-shell {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  background: var(--page-bg);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 1px rgba(30, 26, 20, 0.06),
+    0 32px 64px -28px rgba(30, 26, 20, 0.16),
+    0 8px 20px -12px rgba(30, 26, 20, 0.08);
+  overflow: hidden;
+}
+
+.page-he {
+  padding: 36px 64px 64px;
+  font-family: var(--he-sans);
+  direction: rtl;
+}
+
+/* Top nav · desktop */
+.topnav-d {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 56px;
+}
+.brand {
+  font-family: var(--he-serif);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+}
+.topnav-d-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primary-action-d {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--ink);
+  color: var(--page-bg);
+  border-radius: 999px;
+  font-family: var(--he-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  transition: background 200ms ease;
+}
+.primary-action-d:hover { background: #2A241B; }
+.primary-action-d svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.overflow-btn-d {
+  width: 38px; height: 38px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--ink-2);
+  transition: background 200ms ease;
+}
+.overflow-btn-d:hover { background: rgba(30, 26, 20, 0.06); }
+.overflow-btn-d svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Word block · desktop Hebrew */
+.progression-he {
+  font-size: 12px;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin-bottom: 18px;
+  font-family: var(--he-sans);
+}
+
+.word-title-he {
+  font-family: var(--he-serif);
+  font-weight: 700;
+  font-size: 124px;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.word-meta-he {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+  color: var(--ink-2);
+  font-size: 17px;
+  font-family: var(--he-sans);
+  font-weight: 400;
+}
+.word-pron-he {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 19px;
+  color: var(--ink-2);
+  font-variation-settings: "opsz" 24;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.word-pos-he {
+  color: var(--ink-3);
+  font-size: 15px;
+  font-weight: 400;
+}
+.word-divider-he {
+  color: var(--ink-4);
+}
+
+.word-block-he-rule {
+  height: 1px;
+  background: var(--ink-4);
+  opacity: 0.4;
+  margin: 44px 0 36px;
+}
+
+/* Magazine spread grid */
+.spread {
+  display: grid;
+  grid-template-columns: 1.42fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.spread-right { display: contents; }
+.spread-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Card sizing · desktop */
+.card-d {
+  border-radius: var(--r-card-d);
+  padding: 32px 36px 36px;
+}
+.card-d.card-meanings { padding: 38px 40px 40px; }
+.card-d.card-further { padding: 28px 36px 14px; }
+
+.card-eyebrow-he {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--he-sans);
+}
+.card-eyebrow-he svg {
+  width: 18px; height: 18px;
+  stroke-width: 1.3;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Hebrew Meanings */
+.meaning-he {
+  display: grid;
+  grid-template-columns: 1fr 38px;   /* number on right (RTL), text takes flex */
+  gap: 18px;
+  align-items: start;
+}
+.meaning-num-he {
+  font-family: var(--he-serif);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1;
+  color: var(--m-accent);
+  text-align: center;
+}
+.meaning-def-he {
+  font-family: var(--he-sans);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.meaning-tag-he {
+  display: inline-block;
+  font-family: var(--he-sans);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--m-accent-soft);
+  margin-bottom: 6px;
+  letter-spacing: 0;
+}
+.meaning-examples-he {
+  margin-top: 16px;
+  padding-right: 16px;
+  border-right: 1px solid var(--m-rule);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.meaning-examples-he li {
+  font-family: var(--he-serif);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  letter-spacing: 0.005em;
+}
+.meaning-divider-he {
+  height: 1px;
+  background: var(--m-rule);
+  border: none;
+  margin: 26px 56px 26px 0;
+  opacity: 0.7;
+}
+
+/* Hebrew Origin Story */
+.origin-body-he {
+  font-family: var(--he-serif);
+  font-weight: 400;
+  font-size: 17.5px;
+  line-height: 1.65;
+  color: var(--ink);
+  letter-spacing: 0.005em;
+}
+.origin-body-he strong {
+  font-weight: 700;
+  color: var(--o-accent);
+}
+.dropcap-he {
+  float: right;
+  font-family: var(--he-serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 0.9;
+  color: var(--o-accent);
+  margin: 6px 0 -2px 12px;
+  letter-spacing: -0.02em;
+}
+
+/* Hebrew Visual */
+.visual-frame-he {
+  position: relative;
+  background: var(--page-bg);
+  border-radius: 12px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(135, 121, 90, 0.18);
+}
+.visual-action-he {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(135, 121, 90, 0.1);
+  color: var(--v-accent);
+  font-family: var(--he-sans);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 200ms ease;
+}
+.visual-action-he:hover { background: rgba(135, 121, 90, 0.18); }
+.visual-action-he svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Hebrew Simple Terms */
+.simple-body-he {
+  font-family: var(--he-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+/* Hebrew Take It Further · desktop · 4 rows in 2 columns */
+.further-list-he {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4px;
+  margin-top: 4px;
+}
+.further-list-he li {
+  display: grid;
+  grid-template-columns: 28px 1fr 18px;
+  align-items: center;
+  gap: 16px;
+  padding: 17px 0 17px 16px;
+  border-top: 1px solid var(--f-rule);
+  cursor: pointer;
+  transition: background 180ms ease;
+  border-radius: 8px;
+}
+.further-list-he li:nth-child(1),
+.further-list-he li:nth-child(2) { border-top: none; }
+.further-list-he li:hover { background: rgba(74, 77, 110, 0.05); }
+.further-list-he li > svg.further-icon-he {
+  grid-column: 1;
+}
+.further-list-he li > .further-text-he {
+  grid-column: 2;
+}
+.further-list-he li > svg.chevron-left {
+  grid-column: 3;
+}
+.further-icon-he {
+  width: 22px; height: 22px;
+  color: var(--f-accent);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.further-title-he {
+  font-family: var(--he-sans);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.further-sub-he {
+  font-family: var(--he-serif);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  letter-spacing: 0.005em;
+}
+.chevron-left {
+  width: 14px; height: 14px;
+  color: var(--f-accent-soft);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Coordinated load animation ───────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-en > *,
+.page-he > * { animation: fadeUp 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.page-en > *:nth-child(1) { animation-delay: 0ms; }
+.page-en > *:nth-child(2) { animation-delay: 60ms; }
+.page-en > *:nth-child(3) { animation-delay: 100ms; }
+.page-en > *:nth-child(4) { animation-delay: 140ms; }
+.page-en > *:nth-child(5) { animation-delay: 180ms; }
+.page-en > *:nth-child(6) { animation-delay: 220ms; }
+.page-en > *:nth-child(7) { animation-delay: 260ms; }
+.page-en > *:nth-child(8) { animation-delay: 300ms; }
+.page-en > *:nth-child(9) { animation-delay: 340ms; }
+
+.page-he > *:nth-child(1) { animation-delay: 0ms; }
+.page-he > *:nth-child(2) { animation-delay: 60ms; }
+.page-he > *:nth-child(3) { animation-delay: 100ms; }
+.page-he > *:nth-child(4) { animation-delay: 140ms; }
+.page-he > *:nth-child(5) { animation-delay: 200ms; }
+.page-he > *:nth-child(6) { animation-delay: 260ms; }
+.page-he > *:nth-child(7) { animation-delay: 320ms; }
+
+/* ── Responsiveness for the desktop frame on smaller screens ── */
+@media (max-width: 900px) {
+  .desktop-shell { transform: scale(0.8); transform-origin: top center; }
+}
+@media (max-width: 720px) {
+  .desktop-shell { transform: scale(0.55); }
+}
+</style>
+</head>
+<body>
+
+<!-- ──────────────────────────────────────────────────────────
+     Reusable inline SVG icon defs
+     ────────────────────────────────────────────────────────── -->
+<svg width="0" height="0" style="position: absolute;" aria-hidden="true">
+  <defs>
+    <!-- Open book · Meanings -->
+    <symbol id="ic-book" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 5.2c2.4-.7 5-.7 8 .9 3-1.6 5.6-1.6 8-.9v11.5c-2.4-.7-5-.7-8 .9-3-1.6-5.6-1.6-8-.9V5.2Z"/>
+      <path d="M11 6.1v11.5"/>
+    </symbol>
+
+    <!-- Leaf · Origin Story -->
+    <symbol id="ic-leaf" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18.5 3.5c.5 6.3-2 12.6-7.7 14.2-3 .8-5.6-.4-6.7-2.7-1-2.4 0-5.6 2.5-7.6C9.6 5 14.2 4 18.5 3.5Z"/>
+      <path d="M5 17 18 4"/>
+    </symbol>
+
+    <!-- Oval frame · Visual -->
+    <symbol id="ic-oval" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="11" cy="11" rx="6.5" ry="8"/>
+      <ellipse cx="11" cy="11" rx="4" ry="5.5" opacity="0.5"/>
+    </symbol>
+
+    <!-- Quote / kernel · In Simple Terms -->
+    <symbol id="ic-kernel" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5.5 8.5c0-1.7 1.3-3 3-3 .7 0 1.3.2 1.8.6-.6.5-1 1.2-1 2 0 1.4 1.1 2.5 2.5 2.5.4 0 .8-.1 1.2-.3-.5 2-2.3 3.5-4.5 3.5-1.7 0-3-1.3-3-3v-2.3Z"/>
+      <path d="M14 8.5c0-1.7 1.3-3 3-3 .3 0 .6 0 .8.1-.4.4-.8 1-.8 1.7 0 1.4 1.1 2.5 2.5 2.5h.2c-.4 1.7-2 3-3.7 3-1.7 0-3-1.3-3-3v-1.3Z" opacity="0.55"/>
+    </symbol>
+
+    <!-- Compass rose · Take It Further -->
+    <symbol id="ic-compass" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7.2"/>
+      <path d="M11 5v2M11 15v2M5 11h2M15 11h2"/>
+      <path d="M11 11 13.5 7.5M11 11 7.5 14.5"/>
+    </symbol>
+
+    <!-- Synonyms / antonyms — opposing arrows -->
+    <symbol id="ic-arrows" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 8h12M13 5l3 3-3 3"/>
+      <path d="M18 14H6M9 17l-3-3 3-3"/>
+    </symbol>
+
+    <!-- In a poem — quotation -->
+    <symbol id="ic-quote" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 14c-1.7 0-3-1.3-3-3 0-3.5 2.5-5.8 5-6.5"/>
+      <path d="M14 14c-1.7 0-3-1.3-3-3 0-3.5 2.5-5.8 5-6.5"/>
+    </symbol>
+
+    <!-- Word family — branching tree -->
+    <symbol id="ic-tree" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 18V8"/>
+      <path d="M11 12 6 7M11 12l5-5"/>
+      <circle cx="11" cy="6" r="1.4"/>
+      <circle cx="6" cy="7" r="1.2"/>
+      <circle cx="16" cy="7" r="1.2"/>
+    </symbol>
+
+    <!-- Quiz — question in soft frame -->
+    <symbol id="ic-quiz" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="4" width="14" height="14" rx="3.2"/>
+      <path d="M9 9.5c0-1.4 1-2.5 2.2-2.5 1.2 0 2.2 1 2.2 2.2 0 .9-.5 1.5-1.4 1.9-.6.3-.8.7-.8 1.4"/>
+      <circle cx="11.2" cy="14.6" r="0.6" fill="currentColor" stroke="none"/>
+    </symbol>
+
+    <!-- Chevron right -->
+    <symbol id="ic-chev-r" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 3 4 4-4 4"/>
+    </symbol>
+
+    <!-- Chevron left -->
+    <symbol id="ic-chev-l" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m9 3-4 4 4 4"/>
+    </symbol>
+
+    <!-- Back arrow -->
+    <symbol id="ic-back" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 5l-6 6 6 6"/>
+    </symbol>
+
+    <!-- Three-dot overflow -->
+    <symbol id="ic-dots" viewBox="0 0 22 22">
+      <circle cx="5" cy="11" r="1.2" fill="currentColor"/>
+      <circle cx="11" cy="11" r="1.2" fill="currentColor"/>
+      <circle cx="17" cy="11" r="1.2" fill="currentColor"/>
+    </symbol>
+
+    <!-- Save / bookmark -->
+    <symbol id="ic-save" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 4h10v15l-5-3.4L6 19V4Z"/>
+    </symbol>
+
+    <!-- Speaker -->
+    <symbol id="ic-sound" viewBox="0 0 14 14">
+      <path d="M3 5.2v3.6h2L8 11V3L5 5.2H3Z" fill="currentColor"/>
+      <path d="M9.6 5c.5.5.8 1.2.8 2s-.3 1.5-.8 2" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- Spark / generate -->
+    <symbol id="ic-spark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 1.5v3M7 9.5v3M1.5 7h3M9.5 7h3M3 3l2 2M9 9l2 2M11 3 9 5M5 9l-2 2"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<main class="presentation">
+
+  <header class="presentation-header">
+    <h1>Gadit · Word Result Page</h1>
+    <p>Final mockup, locked direction · One page, two views</p>
+  </header>
+
+  <!-- ────────────────────────────────────────────────────
+       FRAME 01 · MOBILE · ENGLISH · "ephemeral"
+       ──────────────────────────────────────────────────── -->
+  <section class="frame-section">
+    <div class="frame-label">
+      <span class="frame-num">01</span>
+      <span>Mobile · English · "ephemeral"</span>
+      <span class="frame-label-rule"></span>
+      <span>390pt · iOS / Android</span>
+    </div>
+
+    <div class="mobile-shell">
+      <article class="page-en" lang="en">
+
+        <!-- Top nav -->
+        <nav class="topnav" aria-label="navigation">
+          <button class="icon-btn" aria-label="Back">
+            <svg><use href="#ic-back"/></svg>
+          </button>
+          <button class="icon-btn" aria-label="More">
+            <svg><use href="#ic-dots"/></svg>
+          </button>
+        </nav>
+
+        <!-- Quietest progression line -->
+        <p class="progression">You've explored this word</p>
+
+        <!-- Word title -->
+        <h1 class="word-title">ephemeral</h1>
+        <div class="word-meta">
+          <span class="word-pron">/ɪˈfɛm.ər.əl/</span>
+          <button class="audio-btn" aria-label="Pronounce">
+            <svg><use href="#ic-sound"/></svg>
+          </button>
+          <span class="word-divider">·</span>
+          <span class="word-pos">adjective</span>
+        </div>
+
+        <!-- Card · Meanings -->
+        <section class="card card-meanings" aria-labelledby="m1">
+          <header class="card-eyebrow" id="m1">
+            <svg><use href="#ic-book"/></svg>
+            <span>Meanings</span>
+          </header>
+
+          <div class="meaning">
+            <div class="meaning-num">1</div>
+            <div>
+              <p class="meaning-def">Lasting for a very short time — present briefly, then gone.</p>
+              <ul class="meaning-examples">
+                <li>The beauty of cherry blossoms is famously ephemeral, lasting only a week each spring.</li>
+                <li>He learned that fame is ephemeral, but craft endures.</li>
+              </ul>
+            </div>
+          </div>
+
+          <hr class="meaning-divider">
+
+          <div class="meaning">
+            <div class="meaning-num">2</div>
+            <div>
+              <span class="meaning-tag">poetic · biology</span>
+              <p class="meaning-def">Of plants or insects with a very short life cycle — the mayfly, the desert bloom.</p>
+              <ul class="meaning-examples">
+                <li>After the first rain in seven years, the desert bloomed with ephemeral flowers.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Card · Origin Story -->
+        <section class="card card-origin" aria-labelledby="o1">
+          <header class="card-eyebrow" id="o1">
+            <svg><use href="#ic-leaf"/></svg>
+            <span>Origin Story</span>
+          </header>
+          <p class="origin-body">
+            <span class="dropcap">F</span>rom the Greek <em>ephēmeros</em>, "lasting only a day" — from <em>epi-</em> (upon) and <em>hēmera</em> (day). Ancient physicians used it for fevers that came and went within a single day. By the 16th century, English writers had borrowed it for anything fleeting — flowers, beauty, life itself.
+          </p>
+        </section>
+
+        <!-- Card · Visual -->
+        <section class="card card-visual" aria-labelledby="v1">
+          <header class="card-eyebrow" id="v1">
+            <svg><use href="#ic-oval"/></svg>
+            <span>Visual</span>
+          </header>
+          <div class="visual-frame" role="img" aria-label="Image not yet generated">
+            <svg class="visual-empty" viewBox="0 0 280 188" xmlns="http://www.w3.org/2000/svg">
+              <!-- Daguerreotype oval frame, drawn quietly -->
+              <ellipse cx="140" cy="94" rx="106" ry="68" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.55"/>
+              <ellipse cx="140" cy="94" rx="100" ry="62" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+              <!-- Clip the petals to the inner ellipse -->
+              <defs>
+                <clipPath id="ovalClip">
+                  <ellipse cx="140" cy="94" rx="100" ry="62"/>
+                </clipPath>
+              </defs>
+              <g clip-path="url(#ovalClip)" opacity="0.22" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round">
+                <!-- A few falling petal forms, varied sizes and rotations -->
+                <path d="M 95 60 Q 100 54 106 60 Q 100 70 95 60 Z" transform="rotate(8 100 60)"/>
+                <path d="M 130 78 Q 138 71 145 79 Q 138 90 130 78 Z" transform="rotate(22 138 79)"/>
+                <path d="M 165 98 Q 174 91 182 100 Q 174 111 165 98 Z" transform="rotate(-12 174 99)"/>
+                <path d="M 110 118 Q 118 112 125 120 Q 118 130 110 118 Z" transform="rotate(38 118 119)"/>
+                <path d="M 188 70 Q 195 64 201 71 Q 195 79 188 70 Z" transform="rotate(-8 195 70)"/>
+                <path d="M 88 110 Q 96 104 103 112 Q 96 122 88 110 Z" transform="rotate(58 96 111)"/>
+                <path d="M 152 132 Q 159 126 165 133 Q 159 141 152 132 Z" transform="rotate(15 159 132)"/>
+              </g>
+            </svg>
+          </div>
+          <button class="visual-action">
+            <svg><use href="#ic-spark"/></svg>
+            <span>Generate image</span>
+          </button>
+        </section>
+
+        <!-- Card · In Simple Terms -->
+        <section class="card card-simple" aria-labelledby="s1">
+          <header class="card-eyebrow" id="s1">
+            <svg><use href="#ic-kernel"/></svg>
+            <span>In Simple Terms</span>
+          </header>
+          <p class="simple-body">
+            Something ephemeral doesn't last long. A soap bubble, a sunset, a song stuck in your head for a morning — they're all here, and then they're gone.
+          </p>
+        </section>
+
+        <!-- Card · Take It Further -->
+        <section class="card card-further" aria-labelledby="f1">
+          <header class="card-eyebrow" id="f1">
+            <svg><use href="#ic-compass"/></svg>
+            <span>Take It Further</span>
+          </header>
+          <ul class="further-list">
+            <li>
+              <svg class="further-icon"><use href="#ic-arrows"/></svg>
+              <div>
+                <p class="further-title">Synonyms &amp; antonyms</p>
+                <p class="further-sub">Fleeting, transient · enduring, lasting</p>
+              </div>
+              <svg class="chevron-right"><use href="#ic-chev-r"/></svg>
+            </li>
+            <li>
+              <svg class="further-icon"><use href="#ic-quote"/></svg>
+              <div>
+                <p class="further-title">In a poem</p>
+                <p class="further-sub">Where this word was used beautifully</p>
+              </div>
+              <svg class="chevron-right"><use href="#ic-chev-r"/></svg>
+            </li>
+            <li>
+              <svg class="further-icon"><use href="#ic-tree"/></svg>
+              <div>
+                <p class="further-title">Word family</p>
+                <p class="further-sub">Ephemera, ephemerality</p>
+              </div>
+              <svg class="chevron-right"><use href="#ic-chev-r"/></svg>
+            </li>
+            <li>
+              <svg class="further-icon"><use href="#ic-quiz"/></svg>
+              <div>
+                <p class="further-title">Quiz yourself</p>
+                <p class="further-sub">Three short questions</p>
+              </div>
+              <svg class="chevron-right"><use href="#ic-chev-r"/></svg>
+            </li>
+          </ul>
+        </section>
+
+      </article>
+
+      <!-- Sticky action bar (visually pinned to mobile shell bottom) -->
+      <div class="action-bar">
+        <button class="primary-action">
+          <svg><use href="#ic-save"/></svg>
+          <span>Save to Word Book</span>
+        </button>
+        <button class="overflow-btn" aria-label="More actions">
+          <svg><use href="#ic-dots"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────
+       FRAME 02 · DESKTOP · HEBREW · RTL · "חלום"
+       ──────────────────────────────────────────────────── -->
+  <section class="frame-section">
+    <div class="frame-label">
+      <span class="frame-num">02</span>
+      <span>Desktop · Hebrew · "חלום"</span>
+      <span class="frame-label-rule"></span>
+      <span>RTL · Magazine spread</span>
+    </div>
+
+    <div class="desktop-shell">
+      <article class="page-he" lang="he" dir="rtl">
+
+        <!-- Top nav -->
+        <nav class="topnav-d" aria-label="ניווט">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="overflow-btn-d" aria-label="חזרה" style="transform: scaleX(-1);">
+              <svg><use href="#ic-back"/></svg>
+            </button>
+            <span class="brand">גדית</span>
+          </div>
+          <div class="topnav-d-actions">
+            <button class="primary-action-d">
+              <svg><use href="#ic-save"/></svg>
+              <span>שמרו בפנקס המילים</span>
+            </button>
+            <button class="overflow-btn-d" aria-label="עוד">
+              <svg><use href="#ic-dots"/></svg>
+            </button>
+          </div>
+        </nav>
+
+        <!-- Word block -->
+        <p class="progression-he">חקרת את המילה הזאת</p>
+        <h1 class="word-title-he">חֲלוֹם</h1>
+        <div class="word-meta-he">
+          <span class="word-pron-he">/χaˈlom/</span>
+          <button class="audio-btn" aria-label="הקראה" style="background: rgba(30,26,20,0.045);">
+            <svg><use href="#ic-sound"/></svg>
+          </button>
+          <span class="word-divider-he">·</span>
+          <span class="word-pos-he">שם עצם · זכר</span>
+          <span class="word-divider-he">·</span>
+          <span class="word-pos-he">ר' חֲלוֹמוֹת</span>
+          <span class="word-divider-he">·</span>
+          <span class="word-pos-he">שורש: ח.ל.מ</span>
+        </div>
+
+        <hr class="word-block-he-rule">
+
+        <!-- Magazine spread: Meanings on the right (primary in RTL),
+             supporting cards stacked on the left -->
+        <div class="spread">
+
+          <!-- RIGHT (primary) — Meanings -->
+          <section class="card card-d card-meanings" aria-labelledby="m2">
+            <header class="card-eyebrow card-eyebrow-he" id="m2" style="color: var(--m-accent);">
+              <svg><use href="#ic-book"/></svg>
+              <span>משמעויות</span>
+            </header>
+
+            <div class="meaning-he">
+              <div>
+                <p class="meaning-def-he">רצף של תמונות, מחשבות או רגשות שמופיעים בנפש בזמן שינה.</p>
+                <ul class="meaning-examples-he">
+                  <li>היה לי חלום מוזר על בית עם דלת בלתי נגמרת.</li>
+                  <li>היא התעוררה מחלום והרגישה שהוא ניסה לומר לה משהו.</li>
+                </ul>
+              </div>
+              <div class="meaning-num-he">1</div>
+            </div>
+
+            <hr class="meaning-divider-he">
+
+            <div class="meaning-he">
+              <div>
+                <p class="meaning-def-he">שאיפה או משאלה שמכוונת לעתיד — מטרה רחוקה.</p>
+                <ul class="meaning-examples-he">
+                  <li>זה היה החלום שלו מאז שהיה ילד — לכתוב ספר.</li>
+                </ul>
+              </div>
+              <div class="meaning-num-he">2</div>
+            </div>
+
+            <hr class="meaning-divider-he">
+
+            <div class="meaning-he">
+              <div>
+                <span class="meaning-tag-he">שימוש מושאל</span>
+                <p class="meaning-def-he">משהו לא ממשי או חולף, רחוק מהמציאות.</p>
+                <ul class="meaning-examples-he">
+                  <li>הקיץ ההוא נראה היום כמו חלום.</li>
+                </ul>
+              </div>
+              <div class="meaning-num-he">3</div>
+            </div>
+          </section>
+
+          <!-- LEFT (side column) -->
+          <div class="spread-side">
+
+            <!-- Origin Story -->
+            <section class="card card-d card-origin" aria-labelledby="o2">
+              <header class="card-eyebrow card-eyebrow-he" id="o2" style="color: var(--o-accent);">
+                <svg><use href="#ic-leaf"/></svg>
+                <span>מקור המילה</span>
+              </header>
+              <p class="origin-body-he">
+                <span class="dropcap-he">ה</span>שורש <strong>ח.ל.מ</strong> במקרא קשור גם לבריאות וחוזק (כמו "החלמה"). חלום נתפס בעולם העתיק כמסר — מהאלים, מהנפש, מהעתיד. מהמקרא ועד היום המילה נושאת את שני הקצוות: ראיית הלילה, וגם השאיפה הגדולה ביותר.
+              </p>
+            </section>
+
+            <!-- Visual -->
+            <section class="card card-d card-visual" aria-labelledby="v2">
+              <header class="card-eyebrow card-eyebrow-he" id="v2" style="color: var(--v-accent);">
+                <svg><use href="#ic-oval"/></svg>
+                <span>ויזואל</span>
+              </header>
+              <div class="visual-frame-he" role="img" aria-label="תמונה עוד לא נוצרה">
+                <svg class="visual-empty" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color:var(--v-accent);">
+                  <ellipse cx="160" cy="110" rx="124" ry="80" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.55"/>
+                  <ellipse cx="160" cy="110" rx="116" ry="73" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+                  <defs>
+                    <clipPath id="ovalClipHe">
+                      <ellipse cx="160" cy="110" rx="116" ry="73"/>
+                    </clipPath>
+                  </defs>
+                  <g clip-path="url(#ovalClipHe)" opacity="0.2" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round">
+                    <!-- A few floating crescents, suggesting dream/night -->
+                    <path d="M 80 70 q 8 -8 18 -2 q -6 14 -18 8 z" transform="rotate(-15 90 75)"/>
+                    <path d="M 150 80 q 10 -10 22 -3 q -8 17 -22 10 z" transform="rotate(20 161 84)"/>
+                    <path d="M 220 110 q 9 -9 20 -3 q -7 16 -20 9 z" transform="rotate(-8 230 113)"/>
+                    <path d="M 110 140 q 8 -8 18 -2 q -6 14 -18 8 z" transform="rotate(45 119 144)"/>
+                    <path d="M 200 150 q 7 -7 16 -2 q -5 13 -16 7 z" transform="rotate(-30 208 154)"/>
+                    <!-- Tiny stars -->
+                    <circle cx="100" cy="50" r="1.4"/>
+                    <circle cx="250" cy="70" r="1"/>
+                    <circle cx="240" cy="160" r="1.4"/>
+                    <circle cx="80" cy="160" r="1"/>
+                  </g>
+                </svg>
+              </div>
+              <button class="visual-action-he">
+                <svg><use href="#ic-spark"/></svg>
+                <span>צרו תמונה</span>
+              </button>
+            </section>
+
+            <!-- In Simple Terms -->
+            <section class="card card-d card-simple" aria-labelledby="s2">
+              <header class="card-eyebrow card-eyebrow-he" id="s2" style="color: var(--s-accent);">
+                <svg><use href="#ic-kernel"/></svg>
+                <span>בפשטות</span>
+              </header>
+              <p class="simple-body-he">
+                חלום הוא משהו שקורה בראש שלכם כשאתם ישנים — תמונות, סיפורים, תחושות. ויש גם סוג שני של חלום: כשאתם ערים ורוצים משהו רחוק מאוד, משהו שמוביל אתכם קדימה.
+              </p>
+            </section>
+
+          </div>
+        </div>
+
+        <!-- Take It Further · full-width below the spread -->
+        <section class="card card-d card-further" aria-labelledby="f2" style="margin-top: 28px;">
+          <header class="card-eyebrow card-eyebrow-he" id="f2" style="color: var(--f-accent);">
+            <svg><use href="#ic-compass"/></svg>
+            <span>לקחת את זה הלאה</span>
+          </header>
+          <ul class="further-list-he">
+            <li>
+              <svg class="further-icon-he"><use href="#ic-arrows"/></svg>
+              <div class="further-text-he">
+                <p class="further-title-he">מילים נרדפות וניגודים</p>
+                <p class="further-sub-he">חזון, הזיה · מציאות, ערות</p>
+              </div>
+              <svg class="chevron-left"><use href="#ic-chev-l"/></svg>
+            </li>
+            <li>
+              <svg class="further-icon-he"><use href="#ic-quote"/></svg>
+              <div class="further-text-he">
+                <p class="further-title-he">בשירה</p>
+                <p class="further-sub-he">איפה המילה הופיעה יפה</p>
+              </div>
+              <svg class="chevron-left"><use href="#ic-chev-l"/></svg>
+            </li>
+            <li>
+              <svg class="further-icon-he"><use href="#ic-tree"/></svg>
+              <div class="further-text-he">
+                <p class="further-title-he">משפחת המילים</p>
+                <p class="further-sub-he">חולם, חלימה, להחלים</p>
+              </div>
+              <svg class="chevron-left"><use href="#ic-chev-l"/></svg>
+            </li>
+            <li>
+              <svg class="further-icon-he"><use href="#ic-quiz"/></svg>
+              <div class="further-text-he">
+                <p class="further-title-he">בחנו את עצמכם</p>
+                <p class="further-sub-he">שלוש שאלות קצרות</p>
+              </div>
+              <svg class="chevron-left"><use href="#ic-chev-l"/></svg>
+            </li>
+          </ul>
+        </section>
+
+      </article>
+    </div>
+  </section>
+
+  <footer class="presentation-footer">
+    <p>Variant B · Locked direction · Ready for build</p>
+  </footer>
+
+</main>
+
+</body>
+</html>

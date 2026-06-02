@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gadit — Wordmark</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    body { margin: 0; font-family: 'Geist', system-ui, sans-serif; background: oklch(0.18 0.04 265); color: oklch(0.85 0.02 265); min-height: 100vh; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 60px 40px 100px; position: relative; z-index: 1; }
+    .row { margin-top: 56px; }
+    .label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.65 0.02 265); margin-bottom: 14px; font-weight: 600; }
+    .panel { padding: 28px 36px; border-radius: 18px; background: oklch(0.16 0.04 265); box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.06); display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+    .panel.light { background: oklch(0.97 0.005 90); }
+    .size-stack { display: flex; align-items: center; gap: 36px; flex-wrap: wrap; }
+    .size-stack .size-tag { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.55 0.02 265); margin-top: 6px; text-align: center; }
+    h1 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 38px; color: oklch(0.95 0.008 265); letter-spacing: -0.01em; margin: 0 0 8px; font-variation-settings: '"opsz" 60'; }
+    p.lede { font-size: 15px; line-height: 1.55; color: oklch(0.72 0.02 265); max-width: 600px; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="gd-stage" style="position: fixed; inset: 0;"><div class="gd-stars"></div></div>
+  <div class="wrap">
+    <h1>Gadit wordmark</h1>
+    <p class="lede">Production SVG mark — pure paths, no raster. Two variants: full glow for marketing surfaces, dialed-back glow for the app header.</p>
+
+    <div class="row">
+      <div class="label">Wordmark · Full · on dark</div>
+      <div class="panel"><img src="../assets/wordmark-full.svg" width="500" height="194" alt="Gadit"/></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Wordmark · Full · on light</div>
+      <div class="panel light"><img src="../assets/wordmark-full.svg" width="500" height="194" alt="Gadit"/></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Wordmark · Compact · scaling stack</div>
+      <div class="panel size-stack" style="align-items: flex-end;">
+        <div><img src="../assets/wordmark-compact.svg" width="600" height="232" alt="Gadit"/><div class="size-tag">600px</div></div>
+        <div><img src="../assets/wordmark-compact.svg" width="280" height="108" alt="Gadit"/><div class="size-tag">280px</div></div>
+        <div><img src="../assets/wordmark-compact.svg" width="120" height="46" alt="Gadit"/><div class="size-tag">120px</div></div>
+        <div><img src="../assets/wordmark-compact.svg" width="80" height="31" alt="Gadit"/><div class="size-tag">80px · header</div></div>
+        <div><img src="../assets/wordmark-compact.svg" width="48" height="19" alt="Gadit"/><div class="size-tag">48px</div></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label">In context · header bar</div>
+      <div class="panel" style="padding: 18px 24px;">
+        <img src="../assets/wordmark-compact.svg" width="100" height="39" alt="Gadit"/>
+        <div style="flex: 1;"></div>
+        <button style="font-size: 12.5px; padding: 7px 14px; border-radius: 999px; background: oklch(0.72 0.19 245 / 0.14); color: oklch(0.82 0.1 245); border: none; box-shadow: inset 0 0 0 1px oklch(0.72 0.19 245 / 0.25);">Sign in</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

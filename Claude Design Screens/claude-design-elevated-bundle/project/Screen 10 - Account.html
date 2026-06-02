@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gadit — Screen 10 · Account</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Geist:wght@300;400;500;600;700&family=Rubik:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body style="margin:0; font-family: 'Geist', system-ui, sans-serif;">
+  <div id="root"></div>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="i18n.jsx"></script>
+  <script type="text/babel" src="primitives.jsx"></script>
+  <script type="text/babel" src="account-screen.jsx"></script>
+
+  <script type="text/babel">
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection id="primary" title="Screen 10 — Account / Profile"
+                     subtitle="Calm subscription dashboard. Three sections: Plan · Usage · Account. NOT a settings panel.">
+            <DCArtboard id="desktop-clear-trial" label="Desktop · EN · Clear (trial day 5, canonical)"
+                        width={1280} height={1280}>
+              <AccountScreen data={ACCOUNT_STATES.clearTrial} locale="en" mobile={false}
+                             label="10 Account · Clear trial · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="desktop-free" label="Desktop · EN · Free (no trial, locked images)"
+                        width={1280} height={1280}>
+              <AccountScreen data={ACCOUNT_STATES.free} locale="en" mobile={false}
+                             label="10 Account · Free · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="desktop-deep" label="Desktop · EN · Deep (47/100 images, unlimited search)"
+                        width={1280} height={1280}>
+              <AccountScreen data={ACCOUNT_STATES.deep} locale="en" mobile={false}
+                             label="10 Account · Deep · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="empty-no-sub" label="Desktop · EN · No active subscription"
+                        width={1280} height={1280}>
+              <AccountScreen data={ACCOUNT_STATES.noSub} locale="en" mobile={false}
+                             label="10 Account · No subscription · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="mobile-clear" label="Mobile 375 · EN · Clear trial"
+                        width={375} height={1500}>
+              <AccountScreen data={ACCOUNT_STATES.clearTrial} locale="en" mobile={true}
+                             label="10 Account · Clear trial · mobile EN" />
+            </DCArtboard>
+
+            <DCArtboard id="rtl-he-clear" label="RTL · Hebrew · Clear trial"
+                        width={1280} height={1280}>
+              <AccountScreen data={ACCOUNT_STATES.clearHe} locale="he" mobile={false}
+                             label="10 Account · Clear trial · HE" />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

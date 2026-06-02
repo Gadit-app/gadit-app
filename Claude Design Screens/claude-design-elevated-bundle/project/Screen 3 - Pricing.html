@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gadit — Screen 3 · Pricing</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Geist:wght@300;400;500;600;700&family=Rubik:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body style="margin:0; font-family: 'Geist', system-ui, sans-serif;">
+  <div id="root"></div>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="i18n.jsx"></script>
+  <script type="text/babel" src="primitives.jsx"></script>
+  <script type="text/babel" src="home-screen.jsx"></script>
+  <script type="text/babel" src="pricing-screen.jsx"></script>
+
+  <script type="text/babel">
+    function PricingPage({ locale = 'en', mobile = false, defaultBilling = 'monthly' }) {
+      const meta = LOCALE_META[locale];
+      const rtl = meta.dir === 'rtl';
+      const [billing, setBilling] = React.useState(defaultBilling);
+      return (
+        <div dir={meta.dir}
+             data-screen-label={`03 Pricing · ${locale.toUpperCase()} · ${mobile ? 'mobile' : 'desktop'} · ${billing}`}
+             className="gd-stage" style={{ minHeight: '100%' }}>
+          <div className="gd-stars" />
+          <div className="relative" style={{ zIndex: 1 }}>
+            {mobile ? <MobileHeader /> : <MarketingHeader locale={locale} rtl={rtl} />}
+            <div style={{ paddingInline: mobile ? 16 : 28 }}>
+              <PricingHero locale={locale} mobile={mobile} rtl={rtl} billing={billing} setBilling={setBilling} />
+              <PricingTiers locale={locale} mobile={mobile} rtl={rtl} billing={billing} />
+              <TrustStrip locale={locale} mobile={mobile} rtl={rtl} />
+              <FAQ locale={locale} mobile={mobile} rtl={rtl} />
+              <HomeFooter locale={locale} rtl={rtl} mobile={mobile} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection id="primary" title="Screen 3 — Pricing"
+                     subtitle="3-tier comparison · monthly/yearly toggle · trust strip · FAQ. USD prices, localized period suffix.">
+            <DCArtboard id="desktop-en" label="Desktop · English · Monthly (canonical)"
+                        width={1280} height={2050}>
+              <PricingPage locale="en" />
+            </DCArtboard>
+            <DCArtboard id="desktop-en-yearly" label="Desktop · English · Yearly toggled"
+                        width={1280} height={2050}>
+              <PricingPage locale="en" defaultBilling="yearly" />
+            </DCArtboard>
+            <DCArtboard id="mobile-en" label="Mobile 375 · English"
+                        width={375} height={2900}>
+              <PricingPage locale="en" mobile />
+            </DCArtboard>
+            <DCArtboard id="rtl-he" label="RTL · Hebrew · Rubik"
+                        width={1280} height={2050}>
+              <PricingPage locale="he" />
+            </DCArtboard>
+            <DCArtboard id="rtl-ar" label="RTL · Arabic · Noto Naskh"
+                        width={1280} height={2050}>
+              <PricingPage locale="ar" />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

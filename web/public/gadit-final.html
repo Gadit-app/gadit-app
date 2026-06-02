@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadit · Word Result · Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Surface */
+  --paper:#FAF6EE;
+  --paper-deep:#F4ECD9;
+
+  /* Ink */
+  --ink:#1F2937;
+  --ink-soft:#3F4856;
+  --ink-muted:#6B7280;
+  --ink-faint:#9CA3AF;
+
+  /* Rules */
+  --rule:#E4D9BF;
+  --rule-soft:#EDE3CD;
+  --rule-faint:#F0E7D2;
+
+  /* Functional palette - lifted to ~18-22% saturation.
+     This is louder than the AI advisors recommended, but
+     they were designing against an unseen ghost of "kids
+     app pastel" — the actual cards now read as quiet but
+     present color, the way a hardback's endpaper sits
+     against cream stock. */
+  --m-deep:#2E6BA8;   --m-soft:#C4D8EC;
+  --o-deep:#B5511E;   --o-soft:#F4C9A4;
+  --v-deep:#3D8C5E;   --v-soft:#BFE0CB;
+  --t-deep:#5A4490;   --t-soft:#D6CAEA;
+
+  /* Action */
+  --teal:#0E7490;
+  --teal-deep:#155E75;
+
+  /* Typography */
+  --serif:'Lora',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --he:'Rubik',system-ui,sans-serif;
+  --he-disp:'Rubik',system-ui,sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  font-family:var(--sans);
+  background:linear-gradient(135deg,#EDE5D2 0%,#E5DBC4 100%);
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  font-feature-settings:'ss01','cv11','kern';
+}
+
+/* ===================== DOC SHELL ===================== */
+
+.doc-hero{
+  background:#1F2937;
+  color:#FAF6EE;
+  padding:56px 40px 44px;
+}
+.doc-hero-inner{max-width:1280px;margin:0 auto;}
+.doc-eyebrow{
+  font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:#A29980;margin-bottom:14px;
+}
+.doc-title{
+  font-family:var(--serif);font-size:46px;font-weight:400;
+  letter-spacing:-0.025em;line-height:1.06;margin-bottom:14px;
+}
+.doc-title em{font-style:italic;color:#87B5D9;font-weight:300;}
+.doc-lede{
+  font-size:15px;color:#C5BFB0;max-width:640px;line-height:1.65;
+}
+.doc-meta{
+  display:flex;gap:32px;margin-top:28px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.08);
+  flex-wrap:wrap;
+}
+.doc-meta-item{font-size:12px;color:#A29980;}
+.doc-meta-item strong{display:block;color:#FAF6EE;font-weight:500;font-size:13px;margin-bottom:2px;letter-spacing:0;}
+
+.frames-section{
+  padding:60px 40px 80px;
+  background:transparent;
+}
+.frames-row{
+  max-width:1320px;margin:0 auto;
+  display:flex;gap:48px;align-items:flex-start;
+  flex-wrap:wrap;justify-content:center;
+}
+.frame-wrap{display:flex;flex-direction:column;}
+.frame-label{
+  text-align:center;
+  font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+  color:#5C5240;margin-top:18px;font-weight:500;
+}
+
+/* ===================== PHONE ===================== */
+
+.phone-frame{
+  width:380px;height:820px;
+  background:#1A1410;
+  border-radius:48px;
+  padding:6px;
+  box-shadow:
+    0 30px 60px -20px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,0,0,0.5);
+  flex-shrink:0;
+}
+.phone-frame > .word-page{
+  width:100%;height:100%;
+  border-radius:42px;
+  overflow:hidden;overflow-y:auto;
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.phone-frame .word-page::-webkit-scrollbar{width:0;}
+
+.status-bar{
+  height:34px;
+  background:var(--paper);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 28px 0;
+  font-size:13px;font-weight:600;color:var(--ink);
+  font-family:var(--sans);
+  flex-shrink:0;
+  position:sticky;top:0;z-index:10;
+}
+
+/* ===================== DESKTOP ===================== */
+
+.desktop-frame{
+  width:920px;
+  background:var(--paper);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:
+    0 30px 60px -20px rgba(0,0,0,0.25),
+    0 0 0 1px rgba(0,0,0,0.05);
+  flex-shrink:0;
+}
+.desktop-chrome{
+  height:38px;
+  background:#ECE5D2;
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;
+  padding:0 14px;gap:7px;
+}
+.desktop-chrome span{
+  width:11px;height:11px;border-radius:50%;
+  background:#D5C9A8;
+}
+.desktop-chrome .url{
+  margin-left:auto;
+  font-size:11px;color:var(--ink-muted);
+  background:#FAF6EE;padding:5px 16px;
+  border-radius:8px;border:1px solid var(--rule-soft);
+  font-family:var(--sans);
+}
+
+/* ===================== WORD PAGE ===================== */
+
+.word-page{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+}
+
+/* TOP BAR mobile */
+.topbar-m{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 12px;
+  background:var(--paper);
+}
+.topbar-m button{
+  width:44px;height:44px;
+  background:transparent;border:none;
+  color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  border-radius:12px;
+}
+.topbar-m .actions{display:flex;gap:0;}
+
+/* TOP BAR desktop */
+.topbar-d{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 44px;
+  background:var(--paper);
+  border-bottom:1px solid var(--rule-soft);
+}
+.crumb{
+  font-size:13px;color:var(--ink-muted);
+  font-family:var(--serif);font-style:italic;
+}
+.crumb a{color:var(--ink-muted);text-decoration:none;}
+.crumb-sep{margin:0 10px;color:var(--rule);font-style:normal;}
+.topbar-d .actions{display:flex;gap:8px;}
+.topbar-d .actions button{
+  padding:9px 16px;
+  border:1px solid var(--rule);border-radius:999px;
+  font-size:12.5px;font-weight:500;
+  background:var(--paper);color:var(--ink-soft);
+  font-family:var(--sans);
+  display:inline-flex;align-items:center;gap:7px;
+  cursor:pointer;
+}
+.topbar-d .actions .save-btn{
+  background:var(--teal);color:white;border-color:var(--teal);
+}
+
+.gadit-mark{
+  font-family:var(--serif);font-size:18px;font-weight:500;
+  letter-spacing:-0.022em;color:var(--ink);
+}
+.gadit-mark .it{color:var(--teal);font-style:italic;font-weight:400;}
+
+/* PROGRESS SIGNAL - small chip with a gentle teal glow */
+.progress-signal{
+  display:inline-flex;align-items:center;gap:7px;
+  margin:6px auto 0;
+  padding:5px 12px 5px 10px;
+  font-size:11.5px;
+  color:var(--teal-deep);
+  font-family:var(--serif);font-style:italic;
+  letter-spacing:0.005em;
+  background:rgba(14,116,144,0.06);
+  border-radius:999px;
+  width:fit-content;
+}
+.progress-signal-wrap{
+  display:flex;justify-content:center;
+  padding:8px 22px 0;
+}
+.progress-signal svg{opacity:0.85;}
+
+.progress-signal-d{
+  padding:16px 40px 0;
+}
+.progress-signal-d .progress-signal{font-size:12.5px;}
+
+/* WORD HEADER */
+.word-head-m{padding:6px 24px 28px;}
+.word-meta{
+  display:flex;gap:9px;align-items:center;
+  font-size:13px;color:var(--ink-muted);
+  margin-bottom:10px;
+  font-family:var(--serif);font-style:italic;
+}
+.meta-dot{width:3px;height:3px;background:var(--ink-faint);border-radius:50%;}
+
+.word-headline-m{
+  font-family:var(--serif);font-size:54px;font-weight:400;
+  letter-spacing:-0.032em;color:var(--ink);
+  line-height:1;margin-bottom:14px;
+  text-shadow:0 1px 0 rgba(31,41,55,0.04);
+}
+.word-pron{
+  font-family:var(--serif);font-style:italic;
+  font-size:15px;color:var(--ink-muted);
+}
+
+.word-head-d{
+  padding:32px 44px 24px;
+  max-width:760px;margin:0 auto;
+}
+.word-headline-d{
+  font-family:var(--serif);font-size:96px;font-weight:400;
+  letter-spacing:-0.038em;color:var(--ink);
+  line-height:0.98;margin:10px 0 16px;
+  text-shadow:0 1px 0 rgba(31,41,55,0.04);
+}
+
+/* ===================== MEANINGS — no card, primary content ===================== */
+
+.meanings-block{
+  padding:0 24px 4px;
+  margin-bottom:32px;
+}
+.meanings-block.is-desktop{
+  max-width:760px;margin:0 auto 44px;padding:0 44px 4px;
+}
+
+.section-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:500;
+  letter-spacing:0.16em;text-transform:uppercase;
+  margin-bottom:22px;
+}
+.section-eyebrow .icon{
+  width:20px;height:20px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.section-eyebrow .icon svg{width:100%;height:100%;}
+.section-eyebrow .count{
+  margin-left:auto;
+  font-size:10.5px;
+  color:var(--ink-faint);
+  letter-spacing:0.12em;
+  font-weight:400;
+}
+.meanings-block .section-eyebrow{color:var(--m-deep);}
+
+.meaning-row{
+  display:flex;gap:18px;
+  padding:18px 0 22px;
+  border-bottom:1px solid var(--rule-faint);
+}
+.meaning-row:first-of-type{padding-top:8px;}
+.meaning-row:last-child{border-bottom:none;padding-bottom:6px;}
+
+.meaning-num{
+  font-family:var(--serif);font-style:italic;
+  font-size:34px;font-weight:300;
+  line-height:1;width:28px;flex-shrink:0;
+  padding-top:0;
+  color:var(--m-deep);
+  letter-spacing:-0.02em;
+  /* Tiny text-shadow to feel like ink soaked into paper */
+  text-shadow:0 1px 0 rgba(46,107,168,0.08);
+}
+.meaning-body{flex:1;}
+.meaning-pos{
+  font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-muted);font-weight:500;
+  margin-bottom:8px;font-family:var(--sans);
+}
+.meaning-def{
+  font-family:var(--sans);font-size:17px;
+  line-height:1.55;color:var(--ink);
+  margin-bottom:14px;
+  letter-spacing:-0.005em;
+}
+.meaning-ex{
+  font-family:var(--serif);font-style:italic;
+  font-size:15.5px;line-height:1.65;
+  color:var(--ink-soft);
+  padding:6px 0 6px 18px;
+  position:relative;
+  letter-spacing:0.002em;
+}
+/* The little dash before each example. We anchor it to the
+   first line's optical center via top equal to half the
+   line-box, not a hard pixel — so the dash always lines up
+   with whatever script (Latin, Hebrew, Arabic) is rendered. */
+.meaning-ex::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:calc(0.825em + 6px);
+  width:10px;height:1.5px;
+  background:var(--m-deep);
+  opacity:0.55;
+  border-radius:1px;
+}
+
+/* desktop meaning sizing */
+.is-desktop .meaning-def{font-size:18px;line-height:1.6;}
+.is-desktop .meaning-ex{font-size:16px;line-height:1.65;}
+.is-desktop .meaning-num{font-size:42px;}
+
+/* ===================== CARD MODULES (Origin, Visual, Take Further) ===================== */
+
+.section-card{
+  border-radius:22px;
+  padding:26px 22px 28px;
+  margin:0 14px 16px;
+  border:1px solid transparent;
+  position:relative;
+  /* Layered depth: a soft rim of light at the top + a quiet
+     drop below. This is what stops the cards from feeling like
+     flat colored paper and makes them feel like a real object
+     resting on the page. */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.6),
+    inset 0 -1px 0 rgba(0,0,0,0.025),
+    0 1px 2px rgba(40,30,15,0.04),
+    0 8px 18px -10px rgba(40,30,15,0.10);
+}
+.is-desktop .section-card{
+  margin:0 auto 18px;
+  max-width:760px;
+  padding:34px 38px 36px;
+  border-radius:18px;
+}
+
+/* Origin · warm rust, softened so body text stays readable.
+   Gradient stays gentle: bright cream at the top-left, a
+   whisper of clay at the bottom-right — never overpowering
+   the dark ink that has to live on top. */
+.origin-card{
+  background:linear-gradient(135deg,
+    #FBEEDF 0%,
+    #F7E2CB 60%,
+    #F0D2B5 100%);
+  border-color:rgba(181,81,30,0.22);
+}
+.origin-card .section-eyebrow{color:var(--o-deep);}
+
+/* Visual · mint, kept light so any image or button
+   contained inside reads cleanly. */
+.visual-card{
+  background:linear-gradient(135deg,
+    #E8F2EB 0%,
+    #DCEBE0 60%,
+    #C9DDD0 100%);
+  border-color:rgba(61,140,94,0.22);
+}
+.visual-card .section-eyebrow{color:var(--v-deep);}
+
+/* Take it further · lavender, also softened to keep
+   white tile contents readable. */
+.further-card{
+  background:linear-gradient(135deg,
+    #ECE3F4 0%,
+    #DFD4ED 60%,
+    #CCBEE3 100%);
+  border-color:rgba(90,68,144,0.22);
+}
+.further-card .section-eyebrow{color:var(--t-deep);}
+
+/* ORIGIN — structured: language → original → meaning → optional story */
+.origin-fields{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:16px;
+}
+.origin-row{
+  display:flex;gap:14px;align-items:baseline;
+  padding:6px 0;
+  border-bottom:1px dashed rgba(181,81,30,0.18);
+}
+.origin-row:last-child{border-bottom:none;}
+.origin-row-label{
+  font-family:var(--sans);
+  font-size:10.5px;font-weight:600;
+  letter-spacing:0.13em;
+  text-transform:uppercase;
+  color:var(--o-deep);
+  min-width:90px;flex-shrink:0;
+  opacity:0.85;
+}
+.is-desktop .origin-row-label{min-width:120px;}
+.origin-row-value{
+  font-family:var(--serif);font-size:16px;
+  line-height:1.5;color:var(--ink);
+  flex:1;
+}
+.origin-row-value em{
+  font-style:italic;color:var(--o-deep);
+  font-weight:500;
+}
+.is-desktop .origin-row-value{font-size:17px;line-height:1.55;}
+
+.origin-story{
+  margin-top:6px;
+  padding-top:14px;
+  border-top:1px solid rgba(181,81,30,0.20);
+  font-family:var(--serif);font-size:15.5px;
+  line-height:1.7;color:var(--ink-soft);
+  font-style:italic;
+  letter-spacing:0.002em;
+}
+.is-desktop .origin-story{font-size:16.5px;line-height:1.75;}
+.origin-story em{
+  font-style:italic;color:var(--o-deep);
+  font-weight:500;
+}
+
+
+/* VISUAL CARD */
+.visual-empty{
+  aspect-ratio:16/10;
+  background:rgba(255,255,255,0.55);
+  border:1px dashed rgba(61,140,94,0.40);
+  border-radius:12px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:22px 20px;
+}
+.is-desktop .visual-empty{aspect-ratio:16/7;}
+
+.visual-empty .frame-art{margin-bottom:12px;color:var(--v-deep);}
+.visual-empty .frame-art svg{width:46px;height:46px;}
+.visual-empty .label{
+  font-family:var(--serif);font-style:italic;
+  font-size:14px;margin-bottom:14px;line-height:1.4;
+  color:var(--v-deep);
+}
+.visual-cta{
+  padding:11px 22px;
+  background:var(--teal);color:white;
+  border:none;border-radius:999px;
+  font-size:13px;font-weight:500;
+  font-family:var(--sans);cursor:pointer;
+  letter-spacing:0.01em;
+  display:inline-flex;align-items:center;gap:7px;
+}
+
+/* TAKE FURTHER */
+.further-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.is-desktop .further-grid{
+  grid-template-columns:repeat(4,1fr);
+  gap:11px;
+}
+.further-tile{
+  padding:14px 14px 16px;
+  border:1px solid rgba(90,68,144,0.22);
+  border-radius:14px;
+  background:linear-gradient(180deg,
+    rgba(255,255,255,0.88) 0%,
+    rgba(255,255,255,0.55) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    0 1px 2px rgba(90,68,144,0.08);
+  display:flex;flex-direction:column;gap:10px;
+  cursor:pointer;text-align:start;
+  align-items:flex-start;
+  min-height:72px;
+  transition:transform 120ms ease, box-shadow 120ms ease;
+  font-family:inherit;
+}
+.is-desktop .further-tile{padding:16px 16px 18px;min-height:84px;}
+
+.further-tile:hover{
+  transform:translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.85),
+    0 4px 10px -2px rgba(90,68,144,0.22);
+}
+
+.further-tile-icon{
+  width:22px;height:22px;
+  color:var(--t-deep);
+}
+.further-tile-icon svg{width:100%;height:100%;}
+.further-tile-title{
+  font-size:13px;font-weight:500;
+  color:var(--ink);line-height:1.32;
+  font-family:var(--sans);
+  letter-spacing:-0.003em;
+}
+.is-desktop .further-tile-title{font-size:14px;}
+
+.further-tile-sub{
+  font-family:var(--serif);font-style:italic;
+  font-size:12px;color:var(--ink-muted);
+  line-height:1.4;
+}
+
+/* ACTION BAR mobile */
+.action-bar{
+  background:rgba(250,246,238,0.96);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--rule-soft);
+  padding:10px 16px 18px;
+  display:flex;gap:10px;
+  margin-top:auto;
+  position:sticky;bottom:0;
+}
+.action-bar .save{
+  flex:1;
+  padding:14px;
+  background:var(--teal);color:white;
+  border:none;border-radius:14px;
+  font-size:14.5px;font-weight:500;
+  font-family:var(--sans);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  letter-spacing:-0.003em;
+}
+.action-bar .save.saved{
+  background:var(--t-deep);
+}
+.action-bar .secondary{
+  width:48px;height:48px;
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:14px;
+  color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+
+/* ===================== RTL ===================== */
+
+.rtl{direction:rtl;}
+.rtl .word-page{font-family:var(--he);}
+
+.rtl .word-headline-m,
+.rtl .word-headline-d{
+  font-family:var(--he-disp);
+  font-weight:500;
+  letter-spacing:-0.005em;
+}
+.rtl .word-headline-d{font-size:108px;line-height:1.05;}
+
+.rtl .meaning-num{font-family:var(--he-disp);font-style:normal;font-weight:500;}
+.rtl .meaning-ex{
+  font-family:var(--he);font-style:normal;
+  padding:6px 18px 6px 0;
+  line-height:1.7;
+}
+.rtl .meaning-ex::before{
+  left:auto;right:0;
+  top:calc(0.85em + 6px);
+}
+
+.rtl .word-meta{font-family:var(--he);font-style:normal;}
+.rtl .word-meta em{font-style:normal;}
+
+.rtl .meaning-def,
+.rtl .meaning-pos{font-family:var(--he);}
+
+.rtl .origin-body{
+  font-family:var(--he);font-style:normal;
+  line-height:1.85;font-size:17px;
+}
+.rtl .origin-body em{font-family:var(--he);font-style:normal;font-weight:500;}
+
+.rtl .origin-row-value,
+.rtl .origin-story{font-family:var(--he);font-style:normal;}
+.rtl .origin-row-value em,
+.rtl .origin-story em{font-family:var(--he);font-style:normal;font-weight:700;}
+.rtl .origin-row-label{font-family:var(--he);}
+.rtl .origin-story{font-style:normal;font-weight:300;}
+
+.rtl .visual-empty .label{font-family:var(--he);font-style:normal;}
+.rtl .further-tile-title{font-family:var(--he);}
+.rtl .further-tile-sub{font-family:var(--he);font-style:normal;}
+.rtl .word-pron{font-family:'SF Mono',Menlo,monospace;font-style:normal;font-size:14px;}
+.rtl .crumb{font-family:var(--he);font-style:normal;}
+.rtl .action-bar .save{font-family:var(--he);font-weight:500;}
+
+.rtl .further-grid{direction:rtl;}
+.rtl .section-eyebrow .count{margin-left:0;margin-right:auto;}
+.rtl .progress-signal{font-family:var(--he);font-style:normal;}
+
+/* ===================== CLOSING ===================== */
+
+.closing{
+  background:#1F2937;color:#FAF6EE;
+  padding:56px 40px;
+}
+.closing-inner{max-width:880px;margin:0 auto;}
+.closing h2{
+  font-family:var(--serif);font-size:26px;font-weight:400;
+  line-height:1.35;letter-spacing:-0.012em;
+  margin-bottom:20px;
+}
+.closing h2 em{color:#87B5D9;font-style:italic;font-weight:300;}
+.closing p{
+  font-size:14.5px;color:#C5BFB0;line-height:1.7;
+  margin-bottom:14px;
+}
+.closing strong{color:#FAF6EE;font-weight:500;}
+.closing .grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;
+  margin-top:28px;padding-top:24px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.closing .grid-item{font-size:13px;color:#A29980;line-height:1.55;}
+.closing .grid-item strong{display:block;color:#FAF6EE;margin-bottom:6px;font-weight:500;font-size:13px;}
+
+@media (max-width:1100px){
+  .frames-row{gap:32px;}
+  .closing .grid{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+
+<div class="doc-hero">
+  <div class="doc-hero-inner">
+    <div class="doc-eyebrow">Final · Variant B · Word result page</div>
+    <h1 class="doc-title">A page that adds itself<br>to your <em>Word Book.</em></h1>
+    <p class="doc-lede">Refined Variant B with the agreed adjustments. <strong style="color:#FAF6EE;">Meanings lifted off the card system</strong> to claim primary visual hierarchy. Word Origin restructured as a clear etymology entry — language, source word, breakdown, original meaning — followed by an optional historical note. Renamed sections. Subtle progression signal. No paper texture, no skeuomorphism — the digital-reading-object feel comes from typography and rhythm alone.</p>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong>Sample words</strong>ephemeral · חלום</div>
+      <div class="doc-meta-item"><strong>Mobile primary</strong>380px · iOS-style</div>
+      <div class="doc-meta-item"><strong>Desktop primary</strong>920px · NYT reading view</div>
+      <div class="doc-meta-item"><strong>Saturation</strong>5–9% across all surfaces</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FRAMES ===================== -->
+
+<div class="frames-section">
+<div class="frames-row">
+
+<!-- ============== MOBILE EN · ephemeral ============== -->
+<div class="frame-wrap">
+<div class="phone-frame">
+<div class="word-page">
+
+<div class="status-bar">
+  <span>9:41</span>
+  <span style="display:flex;gap:5px;align-items:center;">
+    <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M0 9h2v2H0zM4 7h2v4H4zM8 4h2v7H8zM12 1h2v10h-2z"/></svg>
+    <svg width="22" height="11" viewBox="0 0 22 11"><rect x="0.5" y="0.5" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><rect x="2" y="2" width="14" height="7" rx="1" fill="currentColor"/><rect x="19.5" y="3.5" width="1.5" height="4" rx="0.5" fill="currentColor" opacity="0.5"/></svg>
+  </span>
+</div>
+
+<div class="topbar-m">
+  <button aria-label="Back">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <span class="gadit-mark">Gad<span class="it">it</span></span>
+  <div class="actions">
+    <button aria-label="Share">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="progress-signal-wrap">
+  <div class="progress-signal">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    Saved to your Word Book · 2 days ago
+  </div>
+</div>
+
+<div class="word-head-m">
+  <div class="word-meta"><em>adjective</em><span class="meta-dot"></span>English</div>
+  <h1 class="word-headline-m">ephemeral</h1>
+</div>
+
+<!-- MEANINGS — primary, no card -->
+<div class="meanings-block">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+    Meanings
+    <span class="count">2</span>
+  </div>
+
+  <div class="meaning-row">
+    <div class="meaning-num">1</div>
+    <div class="meaning-body">
+      <div class="meaning-def">Lasting for a very short time — present briefly, then gone.</div>
+      <div class="meaning-ex">The beauty of cherry blossoms is famously ephemeral, lasting only a week each spring.</div>
+      <div class="meaning-ex">He learned that fame is ephemeral, but craft endures.</div>
+    </div>
+  </div>
+
+  <div class="meaning-row">
+    <div class="meaning-num">2</div>
+    <div class="meaning-body">
+      <div class="meaning-def">Of plants or insects with a very short life cycle — the mayfly, the desert bloom.</div>
+      <div class="meaning-ex">After the first rain in seven years, the desert bloomed with ephemeral flowers.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ORIGIN — structured: source language, original word, breakdown, original meaning -->
+<div class="section-card origin-card">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5 C 5 4, 7 3.5, 9 4 L 17 4 C 19 4, 19 6, 17 6 L 9 6 C 7 6.5, 5 6, 5 5 Z" fill="rgba(181,81,30,0.13)"/><path d="M9 6 L 9 18 C 9 19, 7 20, 5 19"/><path d="M9 6 L 17 6 L 17 18 C 17 19.5, 15 20, 13 19 L 5 19"/><path d="M11 10 H 15 M11 13 H 15"/></svg></span>
+    Word Origin
+  </div>
+  <div class="origin-fields">
+    <div class="origin-row">
+      <div class="origin-row-label">Language</div>
+      <div class="origin-row-value">Ancient Greek</div>
+    </div>
+    <div class="origin-row">
+      <div class="origin-row-label">Originally meant</div>
+      <div class="origin-row-value">"lasting only a day"</div>
+    </div>
+  </div>
+  <p class="origin-story">Ancient physicians used the word for fevers that came and went within a single day. By the 16th century, English writers had borrowed it for anything fleeting — flowers, beauty, life itself.</p>
+</div>
+
+<!-- VISUAL -->
+<div class="section-card visual-card">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5" fill="rgba(61,140,94,0.13)"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.7" fill="currentColor" stroke="none"/></svg></span>
+    Visual
+  </div>
+  <div class="visual-empty">
+    <div class="frame-art">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg>
+    </div>
+    <div class="label">An image will be drawn for this word</div>
+    <button class="visual-cta">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Generate
+    </button>
+  </div>
+</div>
+
+<!-- TAKE IT FURTHER -->
+<div class="section-card further-card">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9" fill="rgba(90,68,144,0.13)"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.7"/><circle cx="12" cy="12" r="1" fill="rgba(226,219,236,1)" stroke="none"/></svg></span>
+    Take it further
+  </div>
+  <div class="further-grid">
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+      <div class="further-tile-title">Compose a sentence</div>
+    </div>
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+      <div class="further-tile-title">Quiz</div>
+    </div>
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+      <div class="further-tile-title">Compare words</div>
+    </div>
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 12 L 11 15 L 16 9"/></svg></span>
+      <div class="further-tile-title">Kids' explanation</div>
+    </div>
+  </div>
+</div>
+
+<div style="height:14px;"></div>
+
+<div class="action-bar">
+  <button class="save saved">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    Saved to Word Book
+  </button>
+  <button class="secondary" aria-label="Share">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+  </button>
+</div>
+
+</div>
+</div>
+<div class="frame-label">Mobile · ephemeral · English</div>
+</div>
+
+<!-- ============== DESKTOP HE · חלום ============== -->
+<div class="frame-wrap">
+<div class="desktop-frame">
+<div class="desktop-chrome"><span></span><span></span><span></span><span class="url">gadit.app/word/חלום</span></div>
+<div class="word-page is-desktop rtl">
+
+<div class="topbar-d">
+  <span class="gadit-mark" style="font-size:22px;">Gad<span class="it">it</span></span>
+  <div class="crumb"><a href="#">חיפוש</a><span class="crumb-sep">/</span>עברית<span class="crumb-sep">/</span>חלום</div>
+  <div class="actions">
+    <button class="save-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      שמור במחברת
+    </button>
+    <button>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="progress-signal-wrap progress-signal-d">
+  <div class="progress-signal">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    נשמר במחברת המילים · לפני יומיים
+  </div>
+</div>
+
+<div class="word-head-d">
+  <div class="word-meta"><em>שם עצם</em><span class="meta-dot"></span>עברית</div>
+  <h1 class="word-headline-d">חלום</h1>
+</div>
+
+<!-- MEANINGS -->
+<div class="meanings-block is-desktop">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+    משמעויות
+    <span class="count">3</span>
+  </div>
+
+  <div class="meaning-row">
+    <div class="meaning-num">1</div>
+    <div class="meaning-body">
+      <div class="meaning-def">רצף תמונות, מחשבות או רגשות שמופיעים בנפש בזמן שינה.</div>
+      <div class="meaning-ex">התעוררתי מחלום מוזר על עיר שצפה מעל הים.</div>
+      <div class="meaning-ex">פרויד טען שהחלום הוא הדרך המלכותית אל הלא־מודע.</div>
+    </div>
+  </div>
+
+  <div class="meaning-row">
+    <div class="meaning-num">2</div>
+    <div class="meaning-body">
+      <div class="meaning-def">שאיפה או משאלה שמכוונת לעתיד — מטרה רחוקה.</div>
+      <div class="meaning-ex">החלום שלו היה לפתוח חנות ספרים בעיר קטנה בגליל.</div>
+      <div class="meaning-ex">"יש לי חלום," אמר מרטין לותר קינג, וקבע איך נשמעת תקווה.</div>
+    </div>
+  </div>
+
+  <div class="meaning-row">
+    <div class="meaning-num">3</div>
+    <div class="meaning-body">
+      <div class="meaning-def">משהו לא ממשי או חולף, רחוק מהמציאות.</div>
+      <div class="meaning-ex">הקיץ ההוא בכפר נשאר בזיכרון כמו חלום.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ORIGIN — structured: source language, root, breakdown, original meaning -->
+<div class="section-card origin-card">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5 C 5 4, 7 3.5, 9 4 L 17 4 C 19 4, 19 6, 17 6 L 9 6 C 7 6.5, 5 6, 5 5 Z" fill="rgba(181,81,30,0.13)"/><path d="M9 6 L 9 18 C 9 19, 7 20, 5 19"/><path d="M9 6 L 17 6 L 17 18 C 17 19.5, 15 20, 13 19 L 5 19"/><path d="M11 10 H 15 M11 13 H 15"/></svg></span>
+    מקור המילה
+  </div>
+  <div class="origin-fields">
+    <div class="origin-row">
+      <div class="origin-row-label">שפה</div>
+      <div class="origin-row-value">עברית מקראית</div>
+    </div>
+    <div class="origin-row">
+      <div class="origin-row-label">משמעות מקורית</div>
+      <div class="origin-row-value">חוזק, איתנות, בריאות</div>
+    </div>
+  </div>
+  <p class="origin-story">המילה מופיעה במקרא ובעולם העתיק נתפסה כמסר — מהאלים, מהנפש, מהעתיד. מאז ועד היום המילה נושאת את שני הקצוות: ראיית הלילה, וגם השאיפה הגדולה ביותר.</p>
+</div>
+
+<!-- VISUAL -->
+<div class="section-card visual-card">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5" fill="rgba(61,140,94,0.13)"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.7" fill="currentColor" stroke="none"/></svg></span>
+    תמונה
+  </div>
+  <div class="visual-empty">
+    <div class="frame-art">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg>
+    </div>
+    <div class="label">תמונה תיווצר עבור המילה הזו</div>
+    <button class="visual-cta">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      צרו תמונה
+    </button>
+  </div>
+</div>
+
+<!-- TAKE FURTHER -->
+<div class="section-card further-card" style="margin-bottom:36px;">
+  <div class="section-eyebrow">
+    <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9" fill="rgba(90,68,144,0.13)"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.7"/></svg></span>
+    קחו את זה הלאה
+  </div>
+  <div class="further-grid">
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+      <div class="further-tile-title">חברו משפט</div>
+    </div>
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+      <div class="further-tile-title">חידון</div>
+    </div>
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+      <div class="further-tile-title">השוואת מילים</div>
+    </div>
+    <div class="further-tile">
+      <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 12 L 11 15 L 16 9"/></svg></span>
+      <div class="further-tile-title">הסבר לילדים</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+<div class="frame-label">Desktop · חלום · עברית · RTL</div>
+</div>
+
+</div>
+</div>
+
+<!-- ===================== CLOSING ===================== -->
+
+<div class="closing">
+<div class="closing-inner">
+  <div class="doc-eyebrow" style="margin-bottom:18px;">Notes for the next step</div>
+  <h2>The hierarchy is now <em>typographic, not chromatic.</em></h2>
+  <p>The page reads in two voices: <strong>Meanings is the dictionary entry</strong> — black ink on warm cream, no card, no decoration, the way a Penguin Classics page would treat the primary text. <strong>Word Origin · Visual · Take it further</strong> are the marginalia — colored stations beneath the main column, the way a printed reference book uses sidebars and footnote color. A returning user gets both: instant scan-to-color for the support sections, and undisturbed reading for the core meaning.</p>
+  <p>The Word Origin block is now a structured etymology entry, not a paragraph: language, source form, breakdown into meaningful parts, original meaning. A short historical note follows when one is worth telling. This is the order our community of language teachers actually wants the information in — they ask <em style="color:#E1E4ED;font-style:italic;">"where did this word come from"</em> before they ask <em style="color:#E1E4ED;font-style:italic;">"what's its story."</em></p>
+  <p>Three small choices that have been resolved in this final pass:</p>
+  <div class="grid">
+    <div class="grid-item"><strong>1 · In Simple Terms</strong>Lives as a tile inside <em>Take it further</em>. On mobile, the first scroll stays focused on Meanings + Word Origin + Visual. Anyone who needs a simpler explanation taps in.</div>
+    <div class="grid-item"><strong>2 · Progress signal</strong>Both views show a quiet "Saved · 2 days ago" line at the top when the word is already in the user's Word Book. Functional history, never a count or a streak. Hidden entirely on first read.</div>
+    <div class="grid-item"><strong>3 · Desktop action placement</strong>No sticky bottom bar on desktop. The Save button lives top-right of the header — the way a long-form magazine puts <em>Subscribe</em> there. Mobile keeps the thumb-zone bar.</div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

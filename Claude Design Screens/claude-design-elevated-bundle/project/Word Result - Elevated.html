@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gadit — Word Result · Elevated · 3 variants</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Inter:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="elevated.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    body { margin: 0; }
+    /* Notes artboard styling — designer's reflection card */
+    .notes-board {
+      background: #FFFEF7;
+      border: 1px solid #F0E9C8;
+      padding: 36px 40px;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #1F2937;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.1);
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .notes-board h2 {
+      font-family: 'Lora', serif;
+      font-style: italic; font-weight: 500;
+      font-size: 28px; margin: 0 0 6px;
+      letter-spacing: -0.01em;
+    }
+    .notes-board .feeling {
+      font-family: 'Lora', serif;
+      font-size: 17px; line-height: 1.55;
+      color: #4B5563;
+      margin: 0 0 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px dashed #E5E7EB;
+    }
+    .notes-board h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #94A3B8;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    .notes-board ul {
+      list-style: none; padding: 0; margin: 0 0 28px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .notes-board li {
+      font-size: 14.5px; line-height: 1.55;
+      color: #374151;
+      display: flex; gap: 10px;
+    }
+    .notes-board li::before {
+      content: '·'; color: #94A3B8; font-size: 18px; line-height: 1;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .notes-board .rejected {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      border-radius: 10px;
+      padding: 18px 20px;
+      font-size: 13.5px; line-height: 1.55;
+      color: #78350F;
+    }
+    .notes-board .rejected strong {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A16207;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="elevated-icons.jsx"></script>
+  <script type="text/babel" src="elevated-result.jsx"></script>
+
+  <script type="text/babel">
+    function Notes({ title, feeling, changes, rejected }) {
+      return (
+        <div className="notes-board">
+          <h2>{title}</h2>
+          <p className="feeling">{feeling}</p>
+          <h3>Changes from baseline</h3>
+          <ul>{changes.map((c, i) => <li key={i}>{c}</li>)}</ul>
+          <div className="rejected">
+            <strong>Considered but rejected</strong>
+            {rejected}
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas>
+          {/* ─── VARIANT A ──────────────────────────────── */}
+          <DCSection
+            id="variant-a"
+            title="Variant A — Editorial"
+            subtitle="Magazine-clean. A literary spread. The reader is the focus; nothing competes with the word."
+          >
+            <DCArtboard id="vA-notes" label="Designer notes" width={520} height={900}>
+              <Notes
+                title="Editorial"
+                feeling="Quiet, considered, like a literary magazine. The word is the photograph; everything else is the caption."
+                changes={[
+                  'Eyebrow rule + small-caps Latin/Hebrew (\u201cמילון · LEXICON\u201d) above the word — establishes the dictionary genre without yelling it.',
+                  'Hand-drawn pencil swoop under the word (the unexpected detail) — soft indigo, single SVG curve, asymmetric so it reads as drawn-by-hand.',
+                  'Word title is heavier (86px Rubik 500 / Lora display) for a stronger first beat; meta line moved BELOW the swoop in muted gray.',
+                  'Icons redrawn as a single-weight 1.5px line family — no fills, no shadows. Section accent lives only in stroke color.',
+                  'Save/Share next to title, kept where the spec locked them; hover deepens border + lifts the icon 1px.',
+                  'Tile hover: icon scales 1.06 with spring easing (cubic-bezier(0.34, 1.56, 0.64, 1)) — the only thing that moves, calm but distinct.',
+                  'Card shadow is a single soft drop, no inner light — pure editorial restraint.',
+                ]}
+                rejected={
+                  'Initial sketch had a thin gold rule above the meta line (a touch of \u201cleather-bound\u201d). Rejected — felt antiquarian. Encyclopedias dress this way, and the brief specifically said NOT encyclopedia. The pencil swoop alone carries the warmth.'
+                }
+              />
+            </DCArtboard>
+            <DCArtboard id="vA-desktop" label="Desktop · 1440 · חלום" width={1440} height={2200}>
+              <ResultPage variant="A" mobile={false} />
+            </DCArtboard>
+            <DCArtboard id="vA-mobile" label="Mobile · 390 · חלום" width={390} height={1800}>
+              <ResultPage variant="A" mobile={true} />
+            </DCArtboard>
+          </DCSection>
+
+          {/* ─── VARIANT B ──────────────────────────────── */}
+          <DCSection
+            id="variant-b"
+            title="Variant B — Luminous"
+            subtitle="A page lit from above. Subtle paper material; the wordmark's starburst becomes a recurring grace note."
+          >
+            <DCArtboard id="vB-notes" label="Designer notes" width={520} height={900}>
+              <Notes
+                title="Luminous"
+                feeling="A reading object on a desk under a soft lamp. The card has weight; the page has air; light has a direction."
+                changes={[
+                  'Faint SVG paper-grain noise behind the card (45% opacity, multiply blend) — gives the page material without going skeuomorphic.',
+                  'Card itself gets a top-left radial-gradient highlight + inset top-rim light — reads as ambient light source from upper-left.',
+                  'Title eyebrow: a tiny 4-point starburst (the wordmark\u2019s signature mark, miniaturized to 12px) sits beside the caps meta line. ONE unexpected detail.',
+                  'Word title softly embossed: 1px white inset highlight + an 8px indigo glow below — printed-on-paper feel without skeuomorphism.',
+                  'Icons get gradient fills (top-to-bottom, same hue family per icon) and a hairline stroke — they all share one light source.',
+                  'Empty Visual state shows a constellation: 3 starburst marks scattered inside a dashed orbit — atmospheric without being literal.',
+                  'Tile hover: background gradient REPOSITIONS (radial moves to top-left) instead of translateY — light shifts, the tile doesn\u2019t move.',
+                  'Save button hover: a thin gradient \u201cink\u201d line wipes in beneath the label (scaleX 0.4 → 1) — premium without being precious.',
+                ]}
+                rejected={
+                  'Considered a Ken Burns–style subtle parallax on the card (gentle drift on mouse-move). Rejected — too much for a reading object. The user is reading, not browsing. Motion belongs in hover, not in idle state.'
+                }
+              />
+            </DCArtboard>
+            <DCArtboard id="vB-desktop" label="Desktop · 1440 · חלום" width={1440} height={2200}>
+              <ResultPage variant="B" mobile={false} />
+            </DCArtboard>
+            <DCArtboard id="vB-mobile" label="Mobile · 390 · חלום" width={390} height={1800}>
+              <ResultPage variant="B" mobile={true} />
+            </DCArtboard>
+          </DCSection>
+
+          {/* ─── VARIANT C ──────────────────────────────── */}
+          <DCSection
+            id="variant-c"
+            title="Variant C — Marginalia"
+            subtitle="A scholar's annotated notebook — modern, calm, considered. The kind of artifact you keep on a shelf, not a tab."
+          >
+            <DCArtboard id="vC-notes" label="Designer notes" width={520} height={900}>
+              <Notes
+                title="Marginalia"
+                feeling="The notebook of someone who reads carefully. Faint baseline grid, small ornaments, italic numerals — a working object, not a marketing page."
+                changes={[
+                  'Card has a very faint horizontal baseline grid (1px lines at 24px intervals, 32% opacity) — invisible at a glance, felt subliminally.',
+                  'Eyebrow uses Japanese-style 「corner brackets」 around the meta line — a typographer\u2019s gesture, neutral across LTR/RTL.',
+                  'Meaning numerals (1, 2) are italic Lora in the section-accent blue — they read like a hand-set serif folio, not a chip.',
+                  'A small fleuron (❦-style ornament) sits between the word and the actions — the unexpected detail. ONE typographic mark, well-placed.',
+                  'Icons rendered as solid silhouettes with a single inner highlight notch — engraved-feel, family-coherent.',
+                  'Empty Visual state uses a larger fleuron centered above the Create-Image button — typography over illustration.',
+                  'Tile hover: a 24px ink underline grows from the center beneath the label — a margin annotator\u2019s underline.',
+                  'Save button hover: card pushes up 1px + grows a 2px stacked drop-shadow (like a card resting on another card) — paper, not air.',
+                ]}
+                rejected={
+                  'I considered bracketing the meaning numerals as ⟨1⟩ ⟨2⟩ to push the marginalia language further. Rejected — kids aged 8 don\u2019t read that as \u201cscholarly,\u201d they read it as \u201cstrange.\u201d Italic numerals in the section color carry the same gesture without coding age-up.'
+                }
+              />
+            </DCArtboard>
+            <DCArtboard id="vC-desktop" label="Desktop · 1440 · חלום" width={1440} height={2200}>
+              <ResultPage variant="C" mobile={false} />
+            </DCArtboard>
+            <DCArtboard id="vC-mobile" label="Mobile · 390 · חלום" width={390} height={1800}>
+              <ResultPage variant="C" mobile={true} />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

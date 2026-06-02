@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gadit — Screen 4 · Login Modal</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Geist:wght@300;400;500;600;700&family=Rubik:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body style="margin:0; font-family: 'Geist', system-ui, sans-serif;">
+  <div id="root"></div>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="i18n.jsx"></script>
+  <script type="text/babel" src="primitives.jsx"></script>
+  <script type="text/babel" src="login-screen.jsx"></script>
+
+  <script type="text/babel">
+    function App() {
+      const tEN = makeT('en');
+      const tHE = makeT('he');
+      const tAR = makeT('ar');
+
+      return (
+        <DesignCanvas>
+          <DCSection id="primary" title="Screen 4 — Login Modal"
+                     subtitle="Centered modal · backdrop-blur over caller surface · empty + error states · 7-locale labels.">
+            <DCArtboard id="desktop-en-empty" label="Desktop · English · Empty (from homepage)"
+                        width={1280} height={820}>
+              <ModalScene t={tEN} locale="en" modalProps={{ mode: 'signin', reasonKey: 'reasonHomepage', state: 'empty' }} />
+            </DCArtboard>
+            <DCArtboard id="desktop-en-error" label="Desktop · English · Error (locked feature)"
+                        width={1280} height={820}>
+              <ModalScene t={tEN} locale="en" modalProps={{ mode: 'signin', reasonKey: 'reasonNotebook', state: 'error', errorKey: 'errWrongCreds', prefilledEmail: 'sam@example.com' }} />
+            </DCArtboard>
+            <DCArtboard id="desktop-en-signup-loading" label="Desktop · English · Sign-up · Loading"
+                        width={1280} height={820}>
+              <ModalScene t={tEN} locale="en" modalProps={{ mode: 'signup', reasonKey: 'reasonImage', state: 'loading', prefilledEmail: 'new@user.com' }} />
+            </DCArtboard>
+            <DCArtboard id="mobile-en" label="Mobile 375 · English · Empty"
+                        width={375} height={720}>
+              <ModalScene t={tEN} locale="en" mobile modalProps={{ mode: 'signin', reasonKey: 'reasonHomepage' }} />
+            </DCArtboard>
+            <DCArtboard id="rtl-he" label="RTL · Hebrew · Empty"
+                        width={1280} height={820}>
+              <ModalScene t={tHE} locale="he" rtl modalProps={{ mode: 'signin', reasonKey: 'reasonHomepage' }} />
+            </DCArtboard>
+            <DCArtboard id="rtl-ar" label="RTL · Arabic · Error"
+                        width={1280} height={820}>
+              <ModalScene t={tAR} locale="ar" rtl modalProps={{ mode: 'signin', reasonKey: 'reasonCompare', state: 'error', errorKey: 'errInvalidEmail', prefilledEmail: 'not-an-email' }} />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

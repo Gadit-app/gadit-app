@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gadit — Screen 9 · Spaced Repetition Practice</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Geist:wght@300;400;500;600;700&family=Rubik:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    .sr-fade { animation: sr-fade-in 150ms ease-out both; }
+    @keyframes sr-fade-in { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body style="margin:0; font-family: 'Geist', system-ui, sans-serif;">
+  <div id="root"></div>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="i18n.jsx"></script>
+  <script type="text/babel" src="primitives.jsx"></script>
+  <script type="text/babel" src="spaced-repetition-screen.jsx"></script>
+
+  <script type="text/babel">
+    // --- Snapshots: each artboard renders a fixed phase, no interactivity needed ---
+
+    function FrontSnapshot({ locale, mobile, wordIndex = 0, total = 5, label }) {
+      const t = makeT(locale);
+      const queue = SR_QUEUE[locale] || SR_QUEUE.en;
+      const entry = queue[wordIndex % queue.length];
+      return (
+        <SRFrame locale={locale} mobile={mobile} label={label}>
+          <SRFront entry={entry} index={wordIndex} total={total}
+                   onReveal={() => {}} onSkip={() => {}}
+                   locale={locale} mobile={mobile} t={t}/>
+        </SRFrame>
+      );
+    }
+
+    function BackSnapshot({ locale, mobile, wordIndex = 1, total = 5, label }) {
+      const t = makeT(locale);
+      const queue = SR_QUEUE[locale] || SR_QUEUE.en;
+      const entry = queue[wordIndex % queue.length];
+      return (
+        <SRFrame locale={locale} mobile={mobile} label={label}>
+          <div className="sr-fade" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <SRBack entry={entry} index={wordIndex} total={total}
+                    onKnew={() => {}} onForgot={() => {}}
+                    locale={locale} mobile={mobile} t={t}/>
+          </div>
+        </SRFrame>
+      );
+    }
+
+    function SummarySnapshot({ locale, mobile, label }) {
+      const t = makeT(locale);
+      return (
+        <SRFrame locale={locale} mobile={mobile} label={label}>
+          <SRSummary knew={3} forgot={2} locale={locale} mobile={mobile} t={t}
+                     onDone={() => {}} onMore={() => {}}/>
+        </SRFrame>
+      );
+    }
+
+    function EmptySnapshot({ locale, mobile, label }) {
+      const t = makeT(locale);
+      return (
+        <SRFrame locale={locale} mobile={mobile} label={label}>
+          <SREmpty locale={locale} mobile={mobile} t={t} onBack={() => {}}/>
+        </SRFrame>
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection id="primary" title="Screen 9 — Spaced Repetition Practice"
+                     subtitle="Flashcard, calm, mature. Front → Back → Summary. Self-reported recall, no streaks/points/confetti.">
+            <DCArtboard id="desktop-en-back" label="Desktop · EN · Phase 2 — back of card (canonical)"
+                        width={1280} height={900}>
+              <BackSnapshot locale="en" mobile={false} wordIndex={1} total={5}
+                            label="09 Practice · Phase 2 back · ephemeral · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="desktop-en-front" label="Desktop · EN · Phase 1 — front (serendipity)"
+                        width={1280} height={900}>
+              <FrontSnapshot locale="en" mobile={false} wordIndex={0} total={5}
+                             label="09 Practice · Phase 1 front · serendipity · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="desktop-en-summary" label="Desktop · EN · Phase 3 — summary"
+                        width={1280} height={900}>
+              <SummarySnapshot locale="en" mobile={false}
+                               label="09 Practice · Phase 3 summary · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="desktop-en-empty" label="Desktop · EN · Empty state"
+                        width={1280} height={900}>
+              <EmptySnapshot locale="en" mobile={false}
+                             label="09 Practice · Empty · EN" />
+            </DCArtboard>
+
+            <DCArtboard id="mobile-en-back" label="Mobile 375 · EN · Phase 2"
+                        width={375} height={780}>
+              <BackSnapshot locale="en" mobile={true} wordIndex={1} total={5}
+                            label="09 Practice · Phase 2 back · mobile EN" />
+            </DCArtboard>
+
+            <DCArtboard id="rtl-he-back" label="RTL · Hebrew · Phase 2 (חלום)"
+                        width={1280} height={900}>
+              <BackSnapshot locale="he" mobile={false} wordIndex={0} total={5}
+                            label="09 Practice · Phase 2 back · חלום · HE" />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

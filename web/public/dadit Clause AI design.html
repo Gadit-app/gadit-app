@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadit · Word Result · Round 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=Rubik:wght@300;400;500;600&family=Frank+Ruhl+Libre:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF6EE;
+  --paper-deep:#F4ECD9;
+  --card:#FFFFFF;
+  --card-warm:#FDF9F0;
+
+  --ink:#1F2937;
+  --ink-soft:#4B5563;
+  --ink-muted:#6B7280;
+  --ink-faint:#9CA3AF;
+
+  --rule:#E4D9BF;
+  --rule-soft:#EDE3CD;
+
+  --m-deep:#4A6B8A; --m-soft:#E8ECF1; --m-mid:#C8D2DE;
+  --e-deep:#8C4F2D; --e-soft:#F1E6D8; --e-mid:#DBC8B0;
+  --i-deep:#5A6B47; --i-soft:#E8ECDF; --i-mid:#C9D1B7;
+  --img-deep:#7A6B47; --img-soft:#F0E9DA; --img-mid:#D9CDA8;
+  --k-deep:#8C5C5C; --k-soft:#F1E6E2; --k-mid:#DCC9C2;
+  --f-deep:#3D4A78; --f-soft:#E1E4ED; --f-mid:#C8CCD9;
+
+  --teal:#0E7490;
+  --teal-deep:#155E75;
+  --amber-warn:#B7791F;
+
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --he:'Rubik',system-ui,sans-serif;
+  --he-disp:'Frank Ruhl Libre','Rubik',serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:var(--sans);
+  background:#DDD3BB;
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:'ss01','cv11';
+}
+
+/* ===================== DOC SHELL ===================== */
+
+.doc-hero{
+  background:#1F2937;
+  color:#FAF6EE;
+  padding:64px 40px 48px;
+}
+.doc-hero-inner{max-width:1280px;margin:0 auto;}
+.doc-eyebrow{
+  font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:#A29980;margin-bottom:16px;
+}
+.doc-title{
+  font-family:var(--serif);font-size:52px;font-weight:400;
+  letter-spacing:-0.025em;line-height:1.05;margin-bottom:18px;
+}
+.doc-title em{font-style:italic;color:#87B5D9;font-weight:300;}
+.doc-lede{
+  font-size:16px;color:#C5BFB0;max-width:680px;line-height:1.65;
+}
+.doc-meta{
+  display:flex;gap:32px;margin-top:32px;
+  padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);
+}
+.doc-meta-item{font-size:12px;color:#A29980;}
+.doc-meta-item strong{display:block;color:#FAF6EE;font-weight:500;font-size:13px;margin-bottom:2px;}
+
+.variant-section{
+  padding:48px 40px 64px;
+  background:#DDD3BB;
+}
+.variant-section:nth-child(odd){background:#E2D8C0;}
+.variant-section-inner{max-width:1280px;margin:0 auto;}
+
+.variant-header{
+  border-top:1px solid #A8966C;
+  padding-top:28px;margin-bottom:36px;
+  display:grid;
+  grid-template-columns:auto 1fr 1.4fr;
+  gap:32px;
+  align-items:baseline;
+}
+.variant-num{
+  font-family:var(--serif);font-style:italic;
+  font-size:64px;font-weight:300;
+  color:var(--ink);line-height:1;
+}
+.variant-name-stack{}
+.variant-tag{
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ink-muted);margin-bottom:6px;
+}
+.variant-name{
+  font-family:var(--serif);font-size:32px;font-weight:400;
+  letter-spacing:-0.015em;color:var(--ink);line-height:1.15;
+}
+.variant-name em{font-style:italic;font-weight:300;}
+.variant-rationale{
+  font-size:14px;color:var(--ink-soft);line-height:1.65;
+}
+.variant-rationale strong{color:var(--ink);font-weight:500;}
+
+.frames-row{
+  display:flex;gap:32px;align-items:flex-start;
+  flex-wrap:wrap;justify-content:center;
+}
+.frame-label{
+  text-align:center;
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ink-muted);margin-top:14px;font-weight:500;
+}
+.frame-wrap{display:flex;flex-direction:column;}
+
+/* ===================== PHONE FRAME ===================== */
+
+.phone-frame{
+  width:380px;height:780px;
+  background:#1A1410;
+  border-radius:42px;
+  padding:6px;
+  box-shadow:0 24px 48px -16px rgba(0,0,0,0.35);
+  flex-shrink:0;
+}
+.phone-frame > .word-page{
+  width:100%;height:100%;
+  border-radius:36px;
+  overflow:hidden;overflow-y:auto;
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.phone-frame .word-page::-webkit-scrollbar{width:0;}
+.status-bar{
+  height:32px;
+  background:var(--paper);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 26px 0;
+  font-size:13px;font-weight:600;color:var(--ink);
+  font-family:var(--sans);
+  flex-shrink:0;
+}
+.status-bar svg{display:block;}
+
+/* ===================== DESKTOP FRAME ===================== */
+
+.desktop-frame{
+  width:840px;
+  background:var(--paper);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 24px 48px -16px rgba(0,0,0,0.22);
+  flex-shrink:0;
+}
+.desktop-chrome{
+  height:36px;
+  background:#ECE5D2;
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;
+  padding:0 14px;gap:7px;
+}
+.desktop-chrome span{
+  width:11px;height:11px;border-radius:50%;
+  background:#D5C9A8;
+}
+.desktop-chrome .url{
+  margin-left:auto;
+  font-size:11px;color:var(--ink-muted);
+  background:#FAF6EE;padding:4px 14px;
+  border-radius:8px;border:1px solid var(--rule-soft);
+}
+
+/* ===================== WORD PAGE BASE ===================== */
+
+.word-page{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+}
+
+/* TOP BAR mobile */
+.topbar-m{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;
+  background:var(--paper);
+}
+.topbar-m button{
+  width:44px;height:44px;
+  background:transparent;border:none;
+  color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.topbar-m .actions{display:flex;gap:0;}
+
+/* TOP BAR desktop */
+.topbar-d{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 40px;
+  background:var(--paper);
+  border-bottom:1px solid var(--rule-soft);
+}
+.crumb{font-size:13px;color:var(--ink-muted);font-family:var(--serif);font-style:italic;}
+.crumb a{color:var(--ink-muted);text-decoration:none;}
+.crumb-sep{margin:0 8px;color:var(--rule);font-style:normal;}
+.topbar-d .actions{display:flex;gap:8px;}
+.topbar-d .actions button{
+  padding:8px 14px;
+  border:1px solid var(--rule);border-radius:999px;
+  font-size:12px;font-weight:500;
+  background:var(--card-warm);color:var(--ink-soft);
+  font-family:var(--sans);
+  display:inline-flex;align-items:center;gap:6px;
+  cursor:pointer;
+}
+
+.gadit-mark{
+  font-family:var(--serif);font-size:18px;font-weight:500;
+  letter-spacing:-0.02em;color:var(--ink);
+}
+.gadit-mark .it{color:var(--teal);font-style:italic;}
+
+/* WORD HEADER */
+.word-head-m{padding:8px 22px 24px;}
+.word-meta{
+  display:flex;gap:8px;align-items:center;
+  font-size:13px;color:var(--ink-muted);
+  margin-bottom:10px;
+  font-family:var(--serif);font-style:italic;
+}
+.meta-dot{width:3px;height:3px;background:var(--ink-faint);border-radius:50%;}
+
+.word-headline-m{
+  font-family:var(--serif);font-size:52px;font-weight:400;
+  letter-spacing:-0.03em;color:var(--ink);
+  line-height:1;margin-bottom:14px;
+}
+.word-pron{
+  font-family:var(--serif);font-style:italic;
+  font-size:15px;color:var(--ink-muted);
+}
+
+.word-head-d{padding:36px 40px 28px;max-width:780px;margin:0 auto;}
+.word-headline-d{
+  font-family:var(--serif);font-size:88px;font-weight:400;
+  letter-spacing:-0.035em;color:var(--ink);
+  line-height:1;margin:8px 0 14px;
+}
+
+/* ===================== SHARED CARD CONTENT ===================== */
+
+.section-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:500;
+  letter-spacing:0.16em;text-transform:uppercase;
+  margin-bottom:18px;
+}
+.section-eyebrow .icon{
+  width:22px;height:22px;flex-shrink:0;
+}
+.section-eyebrow .icon svg{width:100%;height:100%;}
+.section-eyebrow .count{
+  margin-left:auto;
+  font-size:10.5px;
+  color:var(--ink-faint);
+  letter-spacing:0.12em;
+  font-weight:400;
+}
+
+/* MEANINGS */
+.meaning-row{
+  display:flex;gap:16px;
+  padding:16px 0;
+  border-bottom:1px solid;
+  border-color:var(--rule-soft);
+}
+.meaning-row:first-of-type{padding-top:6px;}
+.meaning-row:last-child{border-bottom:none;padding-bottom:2px;}
+.meaning-num{
+  font-family:var(--serif);font-style:italic;
+  font-size:24px;font-weight:400;
+  line-height:1;width:24px;flex-shrink:0;
+  padding-top:1px;
+}
+.meaning-body{flex:1;}
+.meaning-pos{
+  font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-muted);font-weight:500;
+  margin-bottom:8px;font-family:var(--sans);
+}
+.meaning-def{
+  font-family:var(--sans);font-size:16px;
+  line-height:1.55;color:var(--ink);
+  margin-bottom:14px;
+}
+.meaning-ex{
+  font-family:var(--serif);font-style:italic;
+  font-size:14.5px;line-height:1.6;
+  color:var(--ink-soft);
+  padding:5px 0 5px 16px;
+  position:relative;
+}
+.meaning-ex::before{
+  content:'';
+  position:absolute;
+  left:0;top:13px;
+  width:8px;height:1px;
+  background:currentColor;
+  opacity:0.5;
+}
+
+/* ETYMOLOGY */
+.etymology-body{
+  font-family:var(--serif);font-size:16px;
+  line-height:1.7;color:var(--ink);
+}
+.etymology-body em{font-style:italic;color:var(--e-deep);}
+
+/* IMAGE */
+.image-empty{
+  aspect-ratio:16/10;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  border-radius:12px;padding:24px 20px;
+}
+.image-empty .frame-art{margin-bottom:12px;}
+.image-empty .frame-art svg{width:48px;height:48px;}
+.image-empty .label{
+  font-family:var(--serif);font-style:italic;
+  font-size:14px;margin-bottom:14px;line-height:1.4;
+}
+.image-cta{
+  padding:11px 20px;
+  background:var(--teal);color:white;
+  border:none;border-radius:999px;
+  font-size:13px;font-weight:500;
+  font-family:var(--sans);cursor:pointer;
+  letter-spacing:0.01em;
+}
+
+/* TAKE FURTHER */
+.further-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.further-tile{
+  padding:14px;
+  border:1px solid var(--rule);
+  border-radius:14px;
+  background:var(--card);
+  display:flex;flex-direction:column;gap:8px;
+  cursor:pointer;text-align:left;
+  min-height:88px;
+}
+.further-tile-icon{
+  width:22px;height:22px;
+  color:var(--f-deep);
+}
+.further-tile-icon svg{width:100%;height:100%;}
+.further-tile-title{
+  font-size:13px;font-weight:500;
+  color:var(--ink);line-height:1.3;
+  font-family:var(--sans);
+}
+.further-tile-sub{
+  font-family:var(--serif);font-style:italic;
+  font-size:12px;color:var(--ink-muted);
+  line-height:1.4;
+}
+
+/* ACTION BAR mobile */
+.action-bar{
+  background:rgba(250,246,238,0.96);
+  backdrop-filter:blur(8px);
+  border-top:1px solid var(--rule-soft);
+  padding:10px 16px 18px;
+  display:flex;gap:10px;
+  margin-top:auto;
+}
+.action-bar .save{
+  flex:1;
+  padding:14px;
+  background:var(--teal);color:white;
+  border:none;border-radius:14px;
+  font-size:14.5px;font-weight:500;
+  font-family:var(--sans);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  letter-spacing:0.005em;
+}
+.action-bar .secondary{
+  width:48px;height:48px;
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:14px;
+  color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+
+/* ===================== VARIANT A ===================== */
+
+.va .section-card{
+  background:var(--card);
+  border:1px solid var(--rule-soft);
+  border-radius:18px;
+  padding:22px 22px 24px;
+  margin:0 14px 12px;
+}
+.va.is-desktop .section-card{
+  margin:0 auto 18px;
+  max-width:780px;
+  padding:30px 36px;
+  border-radius:14px;
+}
+.va .meanings-card .section-eyebrow,
+.va .meanings-card .meaning-num{color:var(--m-deep);}
+.va .meanings-card .meaning-ex::before{background:var(--m-deep);opacity:0.65;}
+.va .etymology-card .section-eyebrow{color:var(--e-deep);}
+.va .image-card .section-eyebrow{color:var(--img-deep);}
+.va .further-card .section-eyebrow{color:var(--f-deep);}
+
+.va .image-empty{
+  background:var(--card-warm);
+  border:1px dashed var(--rule);
+}
+.va .image-empty .frame-art,
+.va .image-empty .label{color:var(--img-deep);}
+
+/* ===================== VARIANT B ===================== */
+
+.vb .section-card{
+  border-radius:20px;
+  padding:24px 22px 26px;
+  margin:0 14px 12px;
+  border:1px solid transparent;
+}
+.vb.is-desktop .section-card{
+  margin:0 auto 16px;
+  max-width:780px;
+  padding:32px 36px;
+  border-radius:16px;
+}
+
+.vb .meanings-card{background:var(--m-soft);border-color:var(--m-mid);}
+.vb .etymology-card{background:var(--e-soft);border-color:var(--e-mid);}
+.vb .image-card{background:var(--img-soft);border-color:var(--img-mid);}
+.vb .idioms-card{background:var(--i-soft);border-color:var(--i-mid);}
+.vb .kids-card{background:var(--k-soft);border-color:var(--k-mid);}
+.vb .further-card{background:var(--f-soft);border-color:var(--f-mid);}
+
+.vb .meanings-card .section-eyebrow,
+.vb .meanings-card .meaning-num{color:var(--m-deep);}
+.vb .meanings-card .meaning-ex::before{background:var(--m-deep);}
+.vb .meanings-card .meaning-row{border-color:rgba(74,107,138,0.2);}
+
+.vb .etymology-card .section-eyebrow{color:var(--e-deep);}
+.vb .image-card .section-eyebrow{color:var(--img-deep);}
+.vb .further-card .section-eyebrow{color:var(--f-deep);}
+
+.vb .image-empty{
+  background:rgba(255,255,255,0.55);
+  border:1px dashed rgba(122,107,71,0.35);
+}
+.vb .image-empty .frame-art,
+.vb .image-empty .label{color:var(--img-deep);}
+
+.vb .further-tile{
+  background:rgba(255,255,255,0.55);
+  border-color:rgba(61,74,120,0.18);
+}
+.vb .further-tile-icon{color:var(--f-deep);}
+
+/* ===================== VARIANT C ===================== */
+
+.vc .word-page-inner{position:relative;}
+.vc .word-page-inner::before{
+  content:'';
+  position:absolute;
+  left:32px;
+  top:0;bottom:80px;
+  width:1px;
+  background:linear-gradient(to bottom, transparent 4%, var(--rule) 8%, var(--rule) 92%, transparent 96%);
+}
+.vc.is-desktop .word-page-inner::before{
+  left:calc(50% - 358px);
+  top:120px;bottom:48px;
+}
+
+.vc .section-card{
+  margin:0 22px 28px;
+  padding:0 0 0 22px;
+  background:transparent;
+  border:none;
+  position:relative;
+}
+.vc.is-desktop .section-card{
+  max-width:740px;
+  margin:0 auto 38px;
+  padding:0 0 0 28px;
+  margin-left:calc(50% - 360px);
+}
+.vc .section-card::before{
+  content:'';
+  position:absolute;
+  left:-3px;
+  top:8px;
+  width:9px;height:9px;
+  background:var(--paper);
+  border:2px solid;
+  border-radius:50%;
+}
+.vc .meanings-card::before{border-color:var(--m-deep);}
+.vc .etymology-card::before{border-color:var(--e-deep);}
+.vc .image-card::before{border-color:var(--img-deep);}
+.vc .idioms-card::before{border-color:var(--i-deep);}
+.vc .kids-card::before{border-color:var(--k-deep);}
+.vc .further-card::before{border-color:var(--f-deep);}
+
+.vc .roman{
+  font-family:var(--serif);font-style:italic;
+  font-size:13px;color:var(--ink-muted);
+  letter-spacing:0.14em;
+  margin-right:10px;
+}
+
+.vc .meanings-card .section-eyebrow,
+.vc .meanings-card .meaning-num{color:var(--m-deep);}
+.vc .meanings-card .meaning-ex::before{background:var(--m-deep);opacity:0.7;}
+.vc .etymology-card .section-eyebrow{color:var(--e-deep);}
+.vc .image-card .section-eyebrow{color:var(--img-deep);}
+.vc .further-card .section-eyebrow{color:var(--f-deep);}
+
+.vc .meaning-row{border-color:var(--rule-soft);}
+
+.vc .image-empty{
+  background:transparent;
+  border:1px solid var(--rule);
+}
+.vc .image-empty .frame-art,
+.vc .image-empty .label{color:var(--img-deep);}
+
+.vc .further-tile{
+  background:transparent;
+  border-color:var(--rule);
+}
+.vc .further-tile-icon{color:var(--f-deep);}
+
+/* ===================== RTL ===================== */
+
+.rtl{direction:rtl;}
+.rtl .word-page{font-family:var(--he);}
+.rtl .word-headline-m,
+.rtl .word-headline-d{
+  font-family:var(--he-disp);
+  font-weight:500;
+  letter-spacing:-0.005em;
+}
+.rtl .meaning-num{font-family:var(--he-disp);}
+.rtl .meaning-ex{
+  font-family:var(--he);font-style:normal;
+  padding:5px 16px 5px 0;
+}
+.rtl .meaning-ex::before{left:auto;right:0;}
+.rtl .word-meta{font-family:var(--he);font-style:normal;}
+.rtl .word-meta em{font-style:normal;}
+.rtl .meaning-def,
+.rtl .meaning-pos{font-family:var(--he);}
+.rtl .etymology-body{font-family:var(--he);font-style:normal;line-height:1.8;}
+.rtl .etymology-body em{font-family:var(--he);font-style:normal;font-weight:500;}
+.rtl .image-empty .label{font-family:var(--he);font-style:normal;}
+.rtl .further-tile-title{font-family:var(--he);}
+.rtl .further-tile-sub{font-family:var(--he);font-style:normal;}
+.rtl .word-pron{font-family:'SF Mono',Menlo,monospace;font-style:normal;font-size:14px;}
+.rtl .crumb{font-family:var(--he);font-style:normal;}
+.rtl .action-bar .save{font-family:var(--he);font-weight:500;}
+.rtl .further-grid{direction:rtl;}
+.rtl .section-eyebrow .count{margin-left:0;margin-right:auto;}
+
+/* RTL · variant C - flip thread */
+.rtl .vc .section-card{padding:0 22px 0 0;}
+.rtl .vc.is-desktop .section-card{padding:0 28px 0 0;margin-left:auto;margin-right:calc(50% - 360px);}
+.rtl .vc .section-card::before{left:auto;right:-3px;}
+.rtl .vc .word-page-inner::before{left:auto;right:32px;}
+.rtl .vc.is-desktop .word-page-inner::before{left:auto;right:calc(50% - 358px);}
+
+</style>
+</head>
+<body>
+
+<!-- ===================== DOC HERO ===================== -->
+
+<div class="doc-hero">
+  <div class="doc-hero-inner">
+    <div class="doc-eyebrow">Round 2 · Word result page only · v0.1</div>
+    <h1 class="doc-title">A page that feels<br>like <em>a page in your book.</em></h1>
+    <p class="doc-lede">Three explorations of the word-result page. Each variant takes the same brief — warm paper, functional color coding, mobile-first, dignified-not-childish — and answers one question differently: <em style="color:#87B5D9;">where does the color actually live?</em></p>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong>Sample words</strong>ephemeral · חלום</div>
+      <div class="doc-meta-item"><strong>Primary device</strong>Mobile · 380px</div>
+      <div class="doc-meta-item"><strong>Type</strong>Fraunces · Inter · Rubik · Frank Ruhl Libre</div>
+      <div class="doc-meta-item"><strong>Frames</strong>6 total · 3 variants</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== VARIANT A ===================== -->
+
+<div class="variant-section">
+<div class="variant-section-inner">
+  <div class="variant-header">
+    <div class="variant-num">A</div>
+    <div class="variant-name-stack">
+      <div class="variant-tag">Restrained</div>
+      <div class="variant-name">The <em>printed book.</em></div>
+    </div>
+    <p class="variant-rationale"><strong>Color appears only as a signal:</strong> a colored dot in the eyebrow, the icon stroke, and the meaning numerals. The cards themselves are clean white-on-cream — typography does the work. Closest to <strong>Stripe Press / Penguin Classics / Things 3.</strong> The risk: it can feel "flat" to a user who doesn't read typography as a language. The reward: the most adult, the most timeless, the least likely to look dated in three years.</p>
+  </div>
+
+  <div class="frames-row">
+
+    <!-- A · Mobile · ephemeral · EN -->
+    <div class="frame-wrap">
+    <div class="phone-frame va">
+    <div class="word-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="display:flex;gap:5px;align-items:center;">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M0 9h2v2H0zM4 7h2v4H4zM8 4h2v7H8zM12 1h2v10h-2z"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="0.5" y="0.5" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><rect x="2" y="2" width="14" height="7" rx="1" fill="currentColor"/><rect x="19.5" y="3.5" width="1.5" height="4" rx="0.5" fill="currentColor" opacity="0.5"/></svg>
+        </span>
+      </div>
+
+      <div class="topbar-m">
+        <button>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span class="gadit-mark">Gad<span class="it">it</span></span>
+        <div class="actions">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="word-head-m">
+        <div class="word-meta"><em>adjective</em><span class="meta-dot"></span>English</div>
+        <h1 class="word-headline-m">ephemeral</h1>
+        <div class="word-pron">/əˈfemərəl/</div>
+      </div>
+
+      <div class="section-card meanings-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+          Meanings
+          <span class="count">2</span>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">1</div>
+          <div class="meaning-body">
+            <div class="meaning-def">Lasting for a very short time — present briefly, then gone.</div>
+            <div class="meaning-ex">The beauty of cherry blossoms is famously ephemeral, lasting only a week each spring.</div>
+            <div class="meaning-ex">He learned that fame is ephemeral, but craft endures.</div>
+          </div>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">2</div>
+          <div class="meaning-body">
+            <div class="meaning-pos">poetic · biology</div>
+            <div class="meaning-def">Of plants or insects with a very short life cycle — the mayfly, the desert bloom.</div>
+            <div class="meaning-ex">After the first rain in seven years, the desert bloomed with ephemeral flowers.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card etymology-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 7 6, 6 12, 8 18 C 13 17, 16 12, 17 7 C 15 4, 13 3, 12 3 Z"/><path d="M12 4 C 11.5 9, 10.5 13, 9 17"/><path d="M12 4 L 14 8 M11 9 L 13.5 11"/></svg></span>
+          Etymology
+        </div>
+        <p class="etymology-body">From the Greek <em>ephēmeros</em>, "lasting only a day" — from <em>epi-</em> (upon) and <em>hēmera</em> (day). Ancient physicians used it for fevers that came and went within a single day. By the 16th century, English writers had borrowed it for anything fleeting — flowers, beauty, life itself.</p>
+      </div>
+
+      <div class="section-card image-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+          Generated image
+        </div>
+        <div class="image-empty">
+          <div class="frame-art">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg>
+          </div>
+          <div class="label">An image will be drawn for this word</div>
+          <button class="image-cta">Generate image</button>
+        </div>
+      </div>
+
+      <div class="section-card further-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.8"/><circle cx="12" cy="12" r="1" fill="var(--paper)" stroke="none"/></svg></span>
+          Take it further
+        </div>
+        <div class="further-grid">
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+            <div class="further-tile-title">Compose a sentence</div>
+            <div class="further-tile-sub">write &amp; get feedback</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+            <div class="further-tile-title">Quiz me</div>
+            <div class="further-tile-sub">3 short questions</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/><path d="M7 9h0M7 13h0" stroke-width="1"/></svg></span>
+            <div class="further-tile-title">Compare similar word</div>
+            <div class="further-tile-sub">fleeting · transient</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 4 L15 4 L17 8 L7 8 Z"/><path d="M12 8 V18"/><path d="M9 18 L15 18"/></svg></span>
+            <div class="further-tile-title">Kids' explanation</div>
+            <div class="further-tile-sub">simpler language</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="save">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Save to Word Book
+        </button>
+        <button class="secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+        </button>
+      </div>
+    </div>
+    </div>
+    <div class="frame-label">A · mobile · ephemeral</div>
+    </div>
+
+    <!-- A · Desktop · ephemeral · EN -->
+    <div class="frame-wrap">
+    <div class="desktop-frame">
+      <div class="desktop-chrome"><span></span><span></span><span></span><span class="url">gadit.app/word/ephemeral</span></div>
+      <div class="word-page va is-desktop">
+      <div class="topbar-d">
+        <span class="gadit-mark" style="font-size:22px;">Gad<span class="it">it</span></span>
+        <div class="crumb"><a href="#">Search</a><span class="crumb-sep">/</span>English<span class="crumb-sep">/</span>ephemeral</div>
+        <div class="actions">
+          <button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            Save to Word Book
+          </button>
+          <button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="word-head-d">
+        <div class="word-meta"><em>adjective</em><span class="meta-dot"></span>English<span class="meta-dot"></span><em>uncountable</em></div>
+        <h1 class="word-headline-d">ephemeral</h1>
+        <div class="word-pron">/əˈfemərəl/</div>
+      </div>
+
+      <div class="section-card meanings-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+          Meanings <span class="count">2</span>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">1</div>
+          <div class="meaning-body">
+            <div class="meaning-def">Lasting for a very short time — present briefly, then gone.</div>
+            <div class="meaning-ex">The beauty of cherry blossoms is famously ephemeral, lasting only a week each spring.</div>
+            <div class="meaning-ex">He learned that fame is ephemeral, but craft endures.</div>
+            <div class="meaning-ex">Their conversation was brief and ephemeral, lost in the noise of the platform.</div>
+          </div>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">2</div>
+          <div class="meaning-body">
+            <div class="meaning-pos">poetic · biology</div>
+            <div class="meaning-def">Of plants or insects with a very short life cycle — the mayfly, the desert bloom.</div>
+            <div class="meaning-ex">After the first rain in seven years, the desert bloomed with ephemeral flowers.</div>
+            <div class="meaning-ex">The mayfly's ephemeral life — a single afternoon — has fascinated poets for centuries.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card etymology-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 7 6, 6 12, 8 18 C 13 17, 16 12, 17 7 C 15 4, 13 3, 12 3 Z"/><path d="M12 4 C 11.5 9, 10.5 13, 9 17"/><path d="M12 4 L 14 8 M11 9 L 13.5 11"/></svg></span>
+          Etymology
+        </div>
+        <p class="etymology-body">From the Greek <em>ephēmeros</em>, "lasting only a day" — from <em>epi-</em> (upon) and <em>hēmera</em> (day). Ancient physicians used the word for fevers that came and went within a single day. By the 16th century, English writers had borrowed it for anything fleeting — flowers, beauty, life itself. The mayfly's scientific name, <em>Ephemeroptera</em>, still preserves the original sense: born in the morning, gone by night.</p>
+      </div>
+
+      <div class="section-card image-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+          Generated image
+        </div>
+        <div class="image-empty" style="aspect-ratio:16/7;">
+          <div class="frame-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg></div>
+          <div class="label">An image will be drawn for this word</div>
+          <button class="image-cta">Generate image</button>
+        </div>
+      </div>
+
+      <div class="section-card further-card" style="margin-bottom:36px;">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.8"/></svg></span>
+          Take it further
+        </div>
+        <div class="further-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+            <div class="further-tile-title">Compose a sentence</div>
+            <div class="further-tile-sub">write &amp; get feedback</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+            <div class="further-tile-title">Quiz me</div>
+            <div class="further-tile-sub">3 short questions</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+            <div class="further-tile-title">Compare similar word</div>
+            <div class="further-tile-sub">fleeting · transient</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 4 L15 4 L17 8 L7 8 Z"/><path d="M12 8 V18"/><path d="M9 18 L15 18"/></svg></span>
+            <div class="further-tile-title">Kids' explanation</div>
+            <div class="further-tile-sub">simpler language</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="frame-label">A · desktop · ephemeral</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ===================== VARIANT B ===================== -->
+
+<div class="variant-section">
+<div class="variant-section-inner">
+  <div class="variant-header">
+    <div class="variant-num">B</div>
+    <div class="variant-name-stack">
+      <div class="variant-tag">Warmer · illustrated</div>
+      <div class="variant-name">A <em>postcard from each chapter.</em></div>
+    </div>
+    <p class="variant-rationale"><strong>Each card is a low-saturation colored surface</strong> — meanings on dusty blue, etymology on terracotta, image on vellum, take-it-further on indigo wash. The colors aren't pastels; they're the muted hues of <strong>old book ribbon, herbarium pages, faded velvet.</strong> The cards stack like postcards from different chapters of a journey. Risk: with four colored cards in a row, the page can tip from "art book" toward "pastel dashboard" if any saturation creeps up. We held it under 8%. Reward: instant scannability for returning users — color is the navigation.</p>
+  </div>
+
+  <div class="frames-row">
+
+    <!-- B · Mobile · ephemeral · EN -->
+    <div class="frame-wrap">
+    <div class="phone-frame vb">
+    <div class="word-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="display:flex;gap:5px;align-items:center;">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M0 9h2v2H0zM4 7h2v4H4zM8 4h2v7H8zM12 1h2v10h-2z"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="0.5" y="0.5" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><rect x="2" y="2" width="14" height="7" rx="1" fill="currentColor"/><rect x="19.5" y="3.5" width="1.5" height="4" rx="0.5" fill="currentColor" opacity="0.5"/></svg>
+        </span>
+      </div>
+
+      <div class="topbar-m">
+        <button>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span class="gadit-mark">Gad<span class="it">it</span></span>
+        <div class="actions">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="word-head-m">
+        <div class="word-meta"><em>adjective</em><span class="meta-dot"></span>English</div>
+        <h1 class="word-headline-m">ephemeral</h1>
+        <div class="word-pron">/əˈfemərəl/</div>
+      </div>
+
+      <div class="section-card meanings-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z" fill="rgba(74,107,138,0.1)"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+          Meanings
+          <span class="count">2</span>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">1</div>
+          <div class="meaning-body">
+            <div class="meaning-def">Lasting for a very short time — present briefly, then gone.</div>
+            <div class="meaning-ex">The beauty of cherry blossoms is famously ephemeral, lasting only a week each spring.</div>
+            <div class="meaning-ex">He learned that fame is ephemeral, but craft endures.</div>
+          </div>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">2</div>
+          <div class="meaning-body">
+            <div class="meaning-pos">poetic · biology</div>
+            <div class="meaning-def">Of plants or insects with a very short life cycle — the mayfly, the desert bloom.</div>
+            <div class="meaning-ex">After the first rain in seven years, the desert bloomed with ephemeral flowers.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card etymology-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 7 6, 6 12, 8 18 C 13 17, 16 12, 17 7 C 15 4, 13 3, 12 3 Z" fill="rgba(140,79,45,0.1)"/><path d="M12 4 C 11.5 9, 10.5 13, 9 17"/><path d="M12 4 L 14 8 M11 9 L 13.5 11"/></svg></span>
+          Etymology
+        </div>
+        <p class="etymology-body">From the Greek <em>ephēmeros</em>, "lasting only a day" — from <em>epi-</em> (upon) and <em>hēmera</em> (day). Ancient physicians used it for fevers that came and went within a single day. By the 16th century, English writers had borrowed it for anything fleeting — flowers, beauty, life itself.</p>
+      </div>
+
+      <div class="section-card image-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5" fill="rgba(122,107,71,0.1)"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+          Generated image
+        </div>
+        <div class="image-empty">
+          <div class="frame-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg></div>
+          <div class="label">An image will be drawn for this word</div>
+          <button class="image-cta">Generate image</button>
+        </div>
+      </div>
+
+      <div class="section-card further-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9" fill="rgba(61,74,120,0.1)"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.8"/></svg></span>
+          Take it further
+        </div>
+        <div class="further-grid">
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+            <div class="further-tile-title">Compose a sentence</div>
+            <div class="further-tile-sub">write &amp; get feedback</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+            <div class="further-tile-title">Quiz me</div>
+            <div class="further-tile-sub">3 short questions</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+            <div class="further-tile-title">Compare similar word</div>
+            <div class="further-tile-sub">fleeting · transient</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 4 L15 4 L17 8 L7 8 Z"/><path d="M12 8 V18"/><path d="M9 18 L15 18"/></svg></span>
+            <div class="further-tile-title">Kids' explanation</div>
+            <div class="further-tile-sub">simpler language</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="save">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Save to Word Book
+        </button>
+        <button class="secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    </div>
+    <div class="frame-label">B · mobile · ephemeral</div>
+    </div>
+
+    <!-- B · Mobile · חלום · HE RTL -->
+    <div class="frame-wrap">
+    <div class="phone-frame vb rtl">
+    <div class="word-page">
+      <div class="status-bar" style="direction:ltr;">
+        <span>9:41</span>
+        <span style="display:flex;gap:5px;align-items:center;">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M0 9h2v2H0zM4 7h2v4H4zM8 4h2v7H8zM12 1h2v10h-2z"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="0.5" y="0.5" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><rect x="2" y="2" width="14" height="7" rx="1" fill="currentColor"/><rect x="19.5" y="3.5" width="1.5" height="4" rx="0.5" fill="currentColor" opacity="0.5"/></svg>
+        </span>
+      </div>
+
+      <div class="topbar-m">
+        <button>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="transform:scaleX(-1);"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span class="gadit-mark">Gad<span class="it">it</span></span>
+        <div class="actions">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="word-head-m">
+        <div class="word-meta"><em>שם עצם</em><span class="meta-dot"></span>עברית</div>
+        <h1 class="word-headline-m">חלום</h1>
+        <div class="word-pron">/χaˈlom/</div>
+      </div>
+
+      <div class="section-card meanings-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z" fill="rgba(74,107,138,0.1)"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+          משמעויות
+          <span class="count">2</span>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">1</div>
+          <div class="meaning-body">
+            <div class="meaning-def">רצף של דימויים, תחושות ומחשבות שמופיעים בתודעה בזמן השינה.</div>
+            <div class="meaning-ex">התעוררתי מחלום מוזר על עיר שצפה מעל הים.</div>
+            <div class="meaning-ex">פרויד טען שהחלום הוא הדרך המלכותית אל הלא־מודע.</div>
+          </div>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">2</div>
+          <div class="meaning-body">
+            <div class="meaning-pos">בהשאלה</div>
+            <div class="meaning-def">שאיפה רחוקה, מטרה שאדם מקווה להגשים — גם אם היא נראית בלתי אפשרית.</div>
+            <div class="meaning-ex">החלום שלו היה לפתוח חנות ספרים בעיר קטנה בגליל.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card etymology-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 7 6, 6 12, 8 18 C 13 17, 16 12, 17 7 C 15 4, 13 3, 12 3 Z" fill="rgba(140,79,45,0.1)"/><path d="M12 4 C 11.5 9, 10.5 13, 9 17"/><path d="M12 4 L 14 8 M11 9 L 13.5 11"/></svg></span>
+          אטימולוגיה
+        </div>
+        <p class="etymology-body">השורש <em>ח־ל־ם</em> משותף לכל השפות השמיות. בעברית המקראית, החלום היה ערוץ תקשורת לגיטימי עם האלוהי — יוסף וירמיהו פירשו חלומות, דניאל פתר אותם למלכים. המעבר למשמעות של "שאיפה" הוא מודרני יחסית, ומופיע בעברית הספרותית של תחילת המאה ה-20.</p>
+      </div>
+
+      <div class="section-card image-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5" fill="rgba(122,107,71,0.1)"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+          תמונה מיוצרת
+        </div>
+        <div class="image-empty">
+          <div class="frame-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg></div>
+          <div class="label">תמונה תיווצר עבור המילה הזו</div>
+          <button class="image-cta">צרו תמונה</button>
+        </div>
+      </div>
+
+      <div class="section-card further-card">
+        <div class="section-eyebrow">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9" fill="rgba(61,74,120,0.1)"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.8"/></svg></span>
+          קחו את זה הלאה
+        </div>
+        <div class="further-grid">
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+            <div class="further-tile-title">חיברו משפט</div>
+            <div class="further-tile-sub">כתבו וקבלו משוב</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+            <div class="further-tile-title">בחנו אותי</div>
+            <div class="further-tile-sub">3 שאלות קצרות</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+            <div class="further-tile-title">השוו למילה דומה</div>
+            <div class="further-tile-sub">חזיון · הזיה</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 4 L15 4 L17 8 L7 8 Z"/><path d="M12 8 V18"/><path d="M9 18 L15 18"/></svg></span>
+            <div class="further-tile-title">הסבר לילדים</div>
+            <div class="further-tile-sub">בשפה פשוטה</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="save">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          שמרו במחברת המילים
+        </button>
+        <button class="secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    </div>
+    <div class="frame-label">B · mobile · חלום (RTL)</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ===================== VARIANT C ===================== -->
+
+<div class="variant-section">
+<div class="variant-section-inner">
+  <div class="variant-header">
+    <div class="variant-num">C</div>
+    <div class="variant-name-stack">
+      <div class="variant-tag">Wildcard · editorial</div>
+      <div class="variant-name">One <em>continuous monograph.</em></div>
+    </div>
+    <p class="variant-rationale"><strong>No cards.</strong> Every section sits along a single editorial thread that runs down the page like a margin rule in a printed essay. Each section is anchored to the thread by a small colored dot — that's where the color lives. Above each section sits a Roman numeral and an italic eyebrow in the section's color. <strong>The whole page reads as one typeset essay, not a stack of UI.</strong> Risk: less "scannable at a glance" than the card variants — a returning user has to read the eyebrow, not just the surface color. Reward: the most distinctive identity in the field; the one design that nothing else in the dictionary space looks like; the most adult.</p>
+  </div>
+
+  <div class="frames-row">
+
+    <!-- C · Mobile · ephemeral · EN -->
+    <div class="frame-wrap">
+    <div class="phone-frame vc">
+    <div class="word-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="display:flex;gap:5px;align-items:center;">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M0 9h2v2H0zM4 7h2v4H4zM8 4h2v7H8zM12 1h2v10h-2z"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="0.5" y="0.5" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><rect x="2" y="2" width="14" height="7" rx="1" fill="currentColor"/><rect x="19.5" y="3.5" width="1.5" height="4" rx="0.5" fill="currentColor" opacity="0.5"/></svg>
+        </span>
+      </div>
+
+      <div class="topbar-m">
+        <button>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span class="gadit-mark">Gad<span class="it">it</span></span>
+        <div class="actions">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="word-head-m" style="padding-left:48px;">
+        <div class="word-meta"><em>adjective</em><span class="meta-dot"></span>English</div>
+        <h1 class="word-headline-m">ephemeral</h1>
+        <div class="word-pron">/əˈfemərəl/</div>
+      </div>
+
+      <div class="word-page-inner" style="padding-bottom:0;">
+
+      <div class="section-card meanings-card">
+        <div class="section-eyebrow">
+          <span class="roman">I.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+          Meanings
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">1</div>
+          <div class="meaning-body">
+            <div class="meaning-def">Lasting for a very short time — present briefly, then gone.</div>
+            <div class="meaning-ex">The beauty of cherry blossoms is famously ephemeral, lasting only a week each spring.</div>
+            <div class="meaning-ex">He learned that fame is ephemeral, but craft endures.</div>
+          </div>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">2</div>
+          <div class="meaning-body">
+            <div class="meaning-pos">poetic · biology</div>
+            <div class="meaning-def">Of plants or insects with a very short life cycle — the mayfly, the desert bloom.</div>
+            <div class="meaning-ex">After the first rain in seven years, the desert bloomed with ephemeral flowers.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card etymology-card">
+        <div class="section-eyebrow">
+          <span class="roman">II.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 7 6, 6 12, 8 18 C 13 17, 16 12, 17 7 C 15 4, 13 3, 12 3 Z"/><path d="M12 4 C 11.5 9, 10.5 13, 9 17"/><path d="M12 4 L 14 8 M11 9 L 13.5 11"/></svg></span>
+          Etymology
+        </div>
+        <p class="etymology-body">From the Greek <em>ephēmeros</em>, "lasting only a day" — from <em>epi-</em> (upon) and <em>hēmera</em> (day). Ancient physicians used it for fevers that came and went within a single day. By the 16th century, English writers had borrowed it for anything fleeting.</p>
+      </div>
+
+      <div class="section-card image-card">
+        <div class="section-eyebrow">
+          <span class="roman">III.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+          Generated image
+        </div>
+        <div class="image-empty">
+          <div class="frame-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg></div>
+          <div class="label">An image will be drawn for this word</div>
+          <button class="image-cta">Generate image</button>
+        </div>
+      </div>
+
+      <div class="section-card further-card">
+        <div class="section-eyebrow">
+          <span class="roman">IV.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.8"/></svg></span>
+          Take it further
+        </div>
+        <div class="further-grid">
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+            <div class="further-tile-title">Compose a sentence</div>
+            <div class="further-tile-sub">write &amp; get feedback</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+            <div class="further-tile-title">Quiz me</div>
+            <div class="further-tile-sub">3 short questions</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+            <div class="further-tile-title">Compare similar word</div>
+            <div class="further-tile-sub">fleeting · transient</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 4 L15 4 L17 8 L7 8 Z"/><path d="M12 8 V18"/><path d="M9 18 L15 18"/></svg></span>
+            <div class="further-tile-title">Kids' explanation</div>
+            <div class="further-tile-sub">simpler language</div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <div class="action-bar">
+        <button class="save">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Save to Word Book
+        </button>
+        <button class="secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    </div>
+    <div class="frame-label">C · mobile · ephemeral</div>
+    </div>
+
+    <!-- C · Desktop · חלום · HE RTL -->
+    <div class="frame-wrap">
+    <div class="desktop-frame">
+      <div class="desktop-chrome"><span></span><span></span><span></span><span class="url">gadit.app/word/חלום</span></div>
+      <div class="word-page vc is-desktop rtl">
+      <div class="topbar-d">
+        <span class="gadit-mark" style="font-size:22px;">Gad<span class="it">it</span></span>
+        <div class="crumb"><a href="#">חיפוש</a><span class="crumb-sep">/</span>עברית<span class="crumb-sep">/</span>חלום</div>
+        <div class="actions">
+          <button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            שמרו במחברת
+          </button>
+          <button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="word-head-d">
+        <div class="word-meta"><em>שם עצם</em><span class="meta-dot"></span>עברית</div>
+        <h1 class="word-headline-d">חלום</h1>
+        <div class="word-pron">/χaˈlom/</div>
+      </div>
+
+      <div class="word-page-inner" style="padding-bottom:36px;">
+
+      <div class="section-card meanings-card">
+        <div class="section-eyebrow">
+          <span class="roman">I.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5C3 5 7 4 12 5C17 4 21 5 21 5.5V18.5C21 19 17 18 12 19C7 18 3 19 3 18.5V5.5Z"/><path d="M12 5V19"/><path d="M5.5 9 H9.5 M5.5 11 H9.5 M14.5 9 H18.5 M14.5 11 H18.5"/></svg></span>
+          משמעויות
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">1</div>
+          <div class="meaning-body">
+            <div class="meaning-def">רצף של דימויים, תחושות ומחשבות שמופיעים בתודעה בזמן השינה — לעיתים מסודר, לעיתים פרוע, תמיד מספר משהו על מי שחולם.</div>
+            <div class="meaning-ex">התעוררתי מחלום מוזר על עיר שצפה מעל הים.</div>
+            <div class="meaning-ex">פרויד טען שהחלום הוא הדרך המלכותית אל הלא־מודע.</div>
+            <div class="meaning-ex">החלום נשבר ברגע שהשעון צלצל.</div>
+          </div>
+        </div>
+        <div class="meaning-row">
+          <div class="meaning-num">2</div>
+          <div class="meaning-body">
+            <div class="meaning-pos">בהשאלה</div>
+            <div class="meaning-def">שאיפה רחוקה, מטרה שאדם מקווה להגשים — דבר שנראה רחוק מהמציאות אך מנחה את הצעדים.</div>
+            <div class="meaning-ex">החלום שלו היה לפתוח חנות ספרים בעיר קטנה בגליל.</div>
+            <div class="meaning-ex">"יש לי חלום," אמר מרטין לותר קינג, וקבע איך נשמעת תקווה.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card etymology-card">
+        <div class="section-eyebrow">
+          <span class="roman">II.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 7 6, 6 12, 8 18 C 13 17, 16 12, 17 7 C 15 4, 13 3, 12 3 Z"/><path d="M12 4 C 11.5 9, 10.5 13, 9 17"/><path d="M12 4 L 14 8 M11 9 L 13.5 11"/></svg></span>
+          אטימולוגיה
+        </div>
+        <p class="etymology-body">השורש <em>ח־ל־ם</em> משותף לכל השפות השמיות — ערבית حُلْم, ארמית חֶלְמָא. בעברית המקראית, החלום היה ערוץ תקשורת לגיטימי עם האלוהי — יוסף וירמיהו פירשו חלומות, דניאל פתר אותם למלכים. בלשון חז"ל הופיעה לראשונה ההבחנה בין "חלום אמת" ל"חלום שווא". המעבר למשמעות המודרנית — "שאיפה" — מופיע בעברית הספרותית של תחילת המאה ה-20, כנראה בהשפעת <em>Traum</em> הגרמני שכבר נשא את שתי המשמעויות.</p>
+      </div>
+
+      <div class="section-card image-card">
+        <div class="section-eyebrow">
+          <span class="roman">III.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="6.5" ry="8.5"/><ellipse cx="12" cy="12" rx="8" ry="10" opacity="0.5"/><path d="M9 14.5 Q 11 12, 13 13.5 Q 14 12.5, 15 13.5" stroke-width="1" fill="none"/><circle cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+          תמונה מיוצרת
+        </div>
+        <div class="image-empty" style="aspect-ratio:16/7;">
+          <div class="frame-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="24" cy="24" rx="13" ry="17"/><ellipse cx="24" cy="24" rx="16" ry="20" opacity="0.4"/><path d="M16 30 Q 21 23, 26 28 Q 30 25, 33 28" stroke-width="1"/></svg></div>
+          <div class="label">תמונה תיווצר עבור המילה הזו</div>
+          <button class="image-cta">צרו תמונה</button>
+        </div>
+      </div>
+
+      <div class="section-card further-card">
+        <div class="section-eyebrow">
+          <span class="roman">IV.</span>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 4 L 13.2 12 L 12 20 L 10.8 12 Z" fill="currentColor" stroke="none"/><path d="M4 12 L 12 13.2 L 20 12 L 12 10.8 Z" stroke-width="0.8"/></svg></span>
+          קחו את זה הלאה
+        </div>
+        <div class="further-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 6L17 6M5 12L19 12M5 18L13 18"/><circle cx="20" cy="18" r="2"/></svg></span>
+            <div class="further-tile-title">חיברו משפט</div>
+            <div class="further-tile-sub">כתבו וקבלו משוב</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9 a3 3 0 1 1 4 2.5 V14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg></span>
+            <div class="further-tile-title">בחנו אותי</div>
+            <div class="further-tile-sub">3 שאלות קצרות</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg></span>
+            <div class="further-tile-title">השוו למילה דומה</div>
+            <div class="further-tile-sub">חזיון · הזיה</div>
+          </div>
+          <div class="further-tile">
+            <span class="further-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 4 L15 4 L17 8 L7 8 Z"/><path d="M12 8 V18"/><path d="M9 18 L15 18"/></svg></span>
+            <div class="further-tile-title">הסבר לילדים</div>
+            <div class="further-tile-sub">בשפה פשוטה</div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+      </div>
+    </div>
+    <div class="frame-label">C · desktop · חלום (RTL)</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ===================== CLOSING NOTES ===================== -->
+
+<div style="background:#1F2937;color:#FAF6EE;padding:56px 40px;">
+<div style="max-width:880px;margin:0 auto;">
+  <div class="doc-eyebrow" style="margin-bottom:20px;">Notes for the next round</div>
+  <div style="font-family:var(--serif);font-size:24px;font-weight:400;line-height:1.4;letter-spacing:-0.01em;margin-bottom:24px;">
+    My recommendation: <em style="color:#87B5D9;">B for the launch, C if you have nerve.</em>
+  </div>
+  <p style="font-size:15px;color:#C5BFB0;line-height:1.7;margin-bottom:14px;">
+    <strong style="color:#FAF6EE;font-weight:500;">Variant B</strong> is the safest path that still has identity. The colored cards do real work — a returning user looking for "where did the etymology go" finds the rust-colored block in half a second. It's warmer than A, more conventional than C, and it scales cleanly to the rest of the app (pricing tiers, notebook entries, account screens) without major reinvention.
+  </p>
+  <p style="font-size:15px;color:#C5BFB0;line-height:1.7;margin-bottom:14px;">
+    <strong style="color:#FAF6EE;font-weight:500;">Variant C</strong> is the design that wins press and gets shared on Twitter. The vertical thread + Roman numerals + colored anchor dots is genuinely unlike anything in the dictionary space. The risk is real: returning users may find it harder to "scan to a section" because the color signal is smaller. But the brand differentiation is unmatched — and the same system extends beautifully to the Word Book (imagine 100 saved words, each a numbered entry on the same vertical thread).
+  </p>
+  <p style="font-size:15px;color:#C5BFB0;line-height:1.7;margin-bottom:24px;">
+    <strong style="color:#FAF6EE;font-weight:500;">Variant A</strong> is correct, calm, and forgettable. I built it because the brief asked for a restrained pole — but I'd push back on shipping it. With Fraunces + Inter on cream, "restrained" is one bad CSS day away from "blank." I think it loses the children entirely — there's nothing on the page that makes an 11-year-old lean forward.
+  </p>
+  <p style="font-size:14px;color:#A29980;line-height:1.65;border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;">
+    Three open questions for you: <em>(1)</em> Should the kids card and idioms card be visible by default on mobile, or collapsed behind a "show more" tap to keep the first scroll focused? <em>(2)</em> The "Save to Word Book" button is teal across all variants — should it shift to the indigo of "take it further" instead, to reinforce that saving is a take-action gesture? <em>(3)</em> For the Word Book screen (next round), do we keep the same color-per-section system, or does the Word Book get its own monochrome treatment so it reads as "the archive" vs. "the encounter"?
+  </p>
+</div>
+</div>
+
+</body>
+</html>
