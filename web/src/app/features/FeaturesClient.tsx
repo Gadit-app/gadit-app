@@ -90,10 +90,10 @@ const COPY: Record<string, {
   list: Feature[];
 }> = {
   he: {
-    heroTitle: "להבין מילים\nעד הסוף",
+    heroTitle: "להבין מילים עד הסוף",
     heroSub: "",
-    ctaPrimary: "נסו עכשיו",
-    ctaSecondary: "לראות את התמחור",
+    ctaPrimary: "נסו עכשיו חינם",
+    ctaSecondary: "",
     signin: "התחברות", pricing: "תמחור", search: "חיפוש", features: "פיצ'רים",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
@@ -118,7 +118,7 @@ const COPY: Record<string, {
     ],
   },
   en: {
-    heroTitle: "Understand words\nto the end",
+    heroTitle: "Understand words to the end",
     heroSub: "",
     ctaPrimary: "Try it now",
     ctaSecondary: "See pricing",
@@ -216,7 +216,6 @@ export function FeaturesPage() {
           <h1 className="wb-features-title">{c.heroTitle}</h1>
           <div className="wb-features-cta-row">
             <Link href="/" className="wb-features-cta-primary">{c.ctaPrimary}</Link>
-            <Link href="/pricing" className="wb-features-cta-secondary">{c.ctaSecondary}</Link>
           </div>
         </div>
 
@@ -240,10 +239,6 @@ export function FeaturesPage() {
           })}
         </div>
 
-        <div className="wb-features-cta-bottom">
-          <Link href="/" className="wb-features-cta-primary">{c.ctaPrimary}</Link>
-          <Link href="/pricing" className="wb-features-cta-secondary">{c.ctaSecondary}</Link>
-        </div>
       </main>
 
       <footer className="wb-home-footer">
