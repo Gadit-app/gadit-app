@@ -90,7 +90,7 @@ const COPY: Record<string, {
   list: Feature[];
 }> = {
   he: {
-    heroTitle: "להבין מילים עד הסוף.",
+    heroTitle: "להבין מילים עד הסוף",
     heroSub: "מילון שכולל הגדרות, דוגמאות, ניבים, מקור המילה, המחשה בתמונה, הסבר לילדים, חידונים מותאמים אישית והשוואת מילים דומות.",
     ctaPrimary: "נסו עכשיו",
     ctaSecondary: "לראות את התמחור",
@@ -118,7 +118,7 @@ const COPY: Record<string, {
     ],
   },
   en: {
-    heroTitle: "Understand words to the end.",
+    heroTitle: "Understand words to the end",
     heroSub: "A dictionary that includes definitions, examples, idioms, word origin, visual illustration, kids' explanation, personalized quizzes, and similar-word comparison.",
     ctaPrimary: "Try it now",
     ctaSecondary: "See pricing",
