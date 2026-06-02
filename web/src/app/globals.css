@@ -3100,21 +3100,20 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Tagline — sized to match the Gadit logo width above. Heebo letters
    are visually narrower than Inter, so the tagline needs ~55-60% of
    the logo's font-size to span the same width. */
-/* Tagline — sized to fit under the Gadit wordmark in a lighter ink.
-   The pair (logo + tagline) is a single brand block. Negative margin-
-   top pulls the tagline up against the logo's baseline so they read
-   tight; a wider margin-bottom gives the CTA its own breathing room. */
+/* Section heading "What Gadit gives you:" — sits below the logo
+   as a clear section opener (not a brand tagline). Dark ink, bold,
+   centered, with a comfortable gap before the feature list. */
 .wordbook .wb-features-title {
   font-family: var(--wb-he);
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 20px;
   letter-spacing: -0.005em;
-  line-height: 1.1;
-  color: var(--ink-muted);
-  margin: -8px 0 40px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 14px 0 24px;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-features-title { font-size: 22px; margin: -10px 0 56px; }
+  .wordbook .wb-features-title { font-size: 24px; margin: 20px 0 32px; }
 }
 .wordbook .wb-features-sub {
   font-family: var(--wb-he);
@@ -3138,9 +3137,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-features-cta-bottom {
   display: flex;
-  margin-top: 44px;
-  padding-top: 32px;
-  border-top: 1px solid var(--rule);
+  justify-content: center;
+  margin-top: 36px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-features-cta-bottom { margin-top: 48px; }
+}
+.wordbook .wb-features-cta-bottom .wb-features-cta-primary {
+  font-size: 16px;
+  padding: 13px 28px;
 }
 .wordbook .wb-features-cta-primary {
   font-family: var(--wb-he);

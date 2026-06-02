@@ -90,7 +90,7 @@ const COPY: Record<string, {
   list: Feature[];
 }> = {
   he: {
-    heroTitle: "להבין מילים עד הסוף",
+    heroTitle: "מה גדית נותן לכם:",
     heroSub: "",
     ctaPrimary: "נסו עכשיו חינם",
     ctaSecondary: "",
@@ -109,7 +109,7 @@ const COPY: Record<string, {
     ],
   },
   en: {
-    heroTitle: "Understand words to the end",
+    heroTitle: "What Gadit gives you:",
     heroSub: "",
     ctaPrimary: "Try it now",
     ctaSecondary: "See pricing",
@@ -196,9 +196,6 @@ export function FeaturesPage() {
             Gad<span className="wb-features-logo-it">it</span>
           </div>
           <h1 className="wb-features-title">{c.heroTitle}</h1>
-          <div className="wb-features-cta-row">
-            <Link href="/" className="wb-features-cta-primary">{c.ctaPrimary}</Link>
-          </div>
         </div>
 
         <div className="wb-features-grid">
@@ -216,6 +213,9 @@ export function FeaturesPage() {
           })}
         </div>
 
+        <div className="wb-features-cta-bottom">
+          <Link href="/" className="wb-features-cta-primary">{c.ctaPrimary}</Link>
+        </div>
       </main>
 
       <footer className="wb-home-footer">
