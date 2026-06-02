@@ -420,8 +420,8 @@ function MeaningEntry({
   onUpgrade,
   onAction,
 }: MeaningEntryProps) {
-  // Only image + kids render inline; the others fire callbacks.
-  const [openTab, setOpenTab] = useState<"image" | "kids" | null>(null);
+  // image + kids + compare render inline; compose + quiz fire modals.
+  const [openTab, setOpenTab] = useState<"image" | "kids" | "compare" | null>(null);
 
   function handleTabClick(tab: TabId) {
     const unlocked = tabUnlocked(tab, plan);
@@ -431,7 +431,6 @@ function MeaningEntry({
     }
     if (tab === "image") {
       setOpenTab(openTab === "image" ? null : "image");
-      // Trigger generation on first open if no image yet
       if (openTab !== "image" && !imageUrl && !imageGenerating) {
         onGenerate?.();
       }
@@ -441,8 +440,11 @@ function MeaningEntry({
       setOpenTab(openTab === "kids" ? null : "kids");
       return;
     }
+    if (tab === "compare") {
+      setOpenTab(openTab === "compare" ? null : "compare");
+      return;
+    }
     if (tab === "compose") { onAction?.("compose"); return; }
-    if (tab === "compare") { onAction?.("compare"); return; }
     if (tab === "quiz") { onAction?.("practice"); return; }
   }
 
@@ -565,6 +567,14 @@ function MeaningEntry({
       {openTab === "kids" && !meaning.kidsExplanation && (
         <div className="wb-mpanel">
           <div className="wb-kids-body">הסבר לילדים יופיע כאן בקרוב.</div>
+        </div>
+      )}
+
+      {openTab === "compare" && (
+        <div className="wb-mpanel">
+          <div className="wb-kids-body">
+            כלי השוואת מילים בעיצוב חדש — בקרוב.
+          </div>
         </div>
       )}
     </div>
