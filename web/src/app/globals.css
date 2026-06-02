@@ -3100,19 +3100,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Tagline — sized to match the Gadit logo width above. Heebo letters
    are visually narrower than Inter, so the tagline needs ~55-60% of
    the logo's font-size to span the same width. */
-/* Tagline — small one-liner under the Gadit logo (mirrors the
-   homepage tagline size/style for consistency). */
+/* Tagline — bold, sized so its rendered width visually matches the
+   Gadit wordmark above (Heebo letters span less width per em than
+   Inter, so the tagline needs ~30-35% of the logo's size). Sits
+   tight against the logo (margin-top 0) so they read as one lockup. */
 .wordbook .wb-features-title {
   font-family: var(--wb-he);
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 1.4;
-  color: var(--ink-muted);
-  margin: 4px 0 24px;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--ink-soft);
+  margin: 0 0 22px;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-features-title { font-size: 18px; margin: 6px 0 28px; }
+  .wordbook .wb-features-title { font-size: 28px; margin-bottom: 28px; }
 }
 .wordbook .wb-features-sub {
   font-family: var(--wb-he);
