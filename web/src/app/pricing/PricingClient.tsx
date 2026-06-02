@@ -154,6 +154,7 @@ const COPY: Record<string, {
   save: string;
   signin: string;
   pricing: string;
+  search: string;
   tierBasic: { name: string; tagline: string; cta: string; features: string[] };
   tierClear: { name: string; tagline: string; cta: string; badge: string; features: string[] };
   tierDeep:  { name: string; tagline: string; cta: string; features: string[] };
@@ -169,6 +170,7 @@ const COPY: Record<string, {
     save: "חיסכון 17%",
     signin: "התחברות",
     pricing: "תמחור",
+    search: "חיפוש",
     mo: "/חודש", yr: "/שנה",
     freeForever: "חינם לתמיד",
     tierBasic: {
@@ -213,12 +215,13 @@ const COPY: Record<string, {
     },
   },
   en: {
-    heroTitle: "Simple pricing.",
-    heroSub: "Start free. Upgrade only when you want depth.",
+    heroTitle: "Start free.",
+    heroSub: "Upgrade only when you want depth.",
     monthly: "Monthly", yearly: "Yearly",
     save: "Save 17%",
     signin: "Sign in",
     pricing: "Pricing",
+    search: "Search",
     mo: "/mo", yr: "/yr",
     freeForever: "Free forever",
     tierBasic: {
@@ -319,7 +322,8 @@ export function PricingPageRoute() {
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
+          <Link href="/" className="wb-shell-navlink">{c.search}</Link>
+          <Link href="/pricing" className="wb-shell-navlink is-active">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
           <LangSwitch />

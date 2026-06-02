@@ -836,16 +836,39 @@ export async function POST(req: NextRequest) {
             }
           }
 
-          // Stream ended ג€” parse final JSON and cache
+          // Stream ended — parse final JSON and cache
           try {
             const finalResult = JSON.parse(accumulated);
-            if (!usingFallback) {
-              setCachedResult(cacheKey, finalResult).catch((e) =>
-                console.error("Cache write failed:", e)
-              );
+
+            // Degenerate-output guard. Some OpenAI calls (especially
+            // gpt-4o-mini fallback) get stuck emitting the same short
+            // typographic sequence over and over (e.g. "©™'¨" repeated
+            // hundreds of times). Detect and reject so we never cache
+            // or return that garbage to the user. Heuristic: any single
+            // example longer than 600 chars is treated as degenerate.
+            type MaybeMeaning = { examples?: unknown };
+            const meanings = (finalResult as { meanings?: MaybeMeaning[] }).meanings ?? [];
+            let degenerate = false;
+            for (const m of meanings) {
+              const exs = Array.isArray(m?.examples) ? m.examples : [];
+              for (const ex of exs) {
+                if (typeof ex === "string" && ex.length > 600) { degenerate = true; break; }
+              }
+              if (degenerate) break;
             }
-            const doneEvent = `data: ${JSON.stringify({ type: "done", result: finalResult })}\n\n`;
-            safeEnqueue(encoder.encode(doneEvent));
+            if (degenerate) {
+              console.error("Degenerate OpenAI output detected — rejecting (not caching)");
+              const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
+              safeEnqueue(encoder.encode(errorEvent));
+            } else {
+              if (!usingFallback) {
+                setCachedResult(cacheKey, finalResult).catch((e) =>
+                  console.error("Cache write failed:", e)
+                );
+              }
+              const doneEvent = `data: ${JSON.stringify({ type: "done", result: finalResult })}\n\n`;
+              safeEnqueue(encoder.encode(doneEvent));
+            }
           } catch (e) {
             console.error("Final JSON parse failed:", e, "accumulated:", accumulated.slice(0, 500));
             const errorEvent = `data: ${JSON.stringify({ type: "error", message: "Invalid response" })}\n\n`;

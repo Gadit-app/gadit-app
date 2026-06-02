@@ -96,15 +96,15 @@ const SAMPLES_BY_LANG: Record<string, string[]> = {
 
 const COPY: Record<
   string,
-  { tagline: string; placeholder: string; tryLabel: string; signin: string; pricing: string }
+  { tagline: string; placeholder: string; tryLabel: string; signin: string; pricing: string; search: string }
 > = {
-  he: { tagline: "להבין מילים עד הסוף.", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור" },
-  en: { tagline: "Understand words to the end.", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing" },
-  ar: { tagline: "افهم الكلمات حتى النهاية.", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار" },
-  ru: { tagline: "Понять слова до конца.",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены" },
-  es: { tagline: "Entender palabras hasta el final.", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios" },
-  pt: { tagline: "Entender palavras até o fim.", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços" },
-  fr: { tagline: "Comprendre les mots jusqu'au bout.", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs" },
+  he: { tagline: "להבין מילים עד הסוף.", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור", search: "חיפוש" },
+  en: { tagline: "Understand words to the end.", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing", search: "Search" },
+  ar: { tagline: "افهم الكلمات حتى النهاية.", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار", search: "بحث" },
+  ru: { tagline: "Понять слова до конца.",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены", search: "Поиск" },
+  es: { tagline: "Entender palabras hasta el final.", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios", search: "Búsqueda" },
+  pt: { tagline: "Entender palavras até o fim.", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços", search: "Buscar" },
+  fr: { tagline: "Comprendre les mots jusqu'au bout.", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche" },
 };
 
 function SearchIcon({ size = 16 }: { size?: number }) {
@@ -148,6 +148,7 @@ export function HomePage() {
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
+          <Link href="/" className="wb-shell-navlink is-active">{c.search}</Link>
           <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
