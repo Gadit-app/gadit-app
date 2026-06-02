@@ -90,8 +90,8 @@ const COPY: Record<string, {
   list: Feature[];
 }> = {
   he: {
-    heroTitle: "כל מה ש-Gadit יודע על מילים.",
-    heroSub: "מילון רב-לשוני שמתחיל בהגדרה ולא נעצר שם — דוגמאות, ניבים, מקור היסטורי, תמונה חיה, הסבר לילדים, חידון מותאם אישית והשוואת מילים דומות.",
+    heroTitle: "להבין מילים עד הסוף.",
+    heroSub: "מילון שכולל הגדרות, דוגמאות, ניבים, מקור המילה, המחשה בתמונה, הסבר לילדים, חידונים מותאמים אישית והשוואת מילים דומות.",
     ctaPrimary: "נסו עכשיו",
     ctaSecondary: "לראות את התמחור",
     signin: "התחברות", pricing: "תמחור", search: "חיפוש", features: "פיצ'רים",
@@ -118,8 +118,8 @@ const COPY: Record<string, {
     ],
   },
   en: {
-    heroTitle: "Everything Gadit knows about words.",
-    heroSub: "A multilingual dictionary that starts with the definition and doesn't stop there — examples, idioms, etymology, a vivid image, kids' explanation, personalized quizzes, and similar-word comparison.",
+    heroTitle: "Understand words to the end.",
+    heroSub: "A dictionary that includes definitions, examples, idioms, word origin, visual illustration, kids' explanation, personalized quizzes, and similar-word comparison.",
     ctaPrimary: "Try it now",
     ctaSecondary: "See pricing",
     signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features",
@@ -205,6 +205,9 @@ export function FeaturesPage() {
 
       <main className="wb-features-main">
         <div className="wb-features-hero">
+          <div className="wb-features-logo">
+            Gad<span className="wb-features-logo-it">it</span>
+          </div>
           <h1 className="wb-features-title">{c.heroTitle}</h1>
           <p className="wb-features-sub">{c.heroSub}</p>
           <div className="wb-features-cta-row">
