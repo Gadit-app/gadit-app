@@ -865,24 +865,73 @@ export async function POST(req: NextRequest) {
           try {
             const finalResult = JSON.parse(accumulated);
 
-            // Degenerate-output guard. Some OpenAI calls (especially
-            // gpt-4o-mini fallback) get stuck emitting the same short
-            // typographic sequence over and over (e.g. "©™'¨" repeated
-            // hundreds of times). Detect and reject so we never cache
-            // or return that garbage to the user. Heuristic: any single
-            // example longer than 600 chars is treated as degenerate.
-            type MaybeMeaning = { examples?: unknown };
-            const meanings = (finalResult as { meanings?: MaybeMeaning[] }).meanings ?? [];
+            // Degenerate-output guard. OpenAI calls occasionally emit
+            // garbage: the same short typographic sequence repeated
+            // hundreds of times, or pure mojibake like "×™™'×'''"
+            // when the underlying Unicode pipeline collapses. Detect
+            // and reject so we never cache or return that to the user.
+            //
+            // Three heuristics:
+            //  (1) any single example longer than 600 chars
+            //      → stuck in a typographic loop
+            //  (2) the echoed word in finalResult.word is mostly
+            //      typographic characters (×, ™, ©, '', '')
+            //      → mojibake of UTF-8 bytes via cp1252
+            //  (3) when the input word contains letters from a target
+            //      script (Hebrew, Arabic, Cyrillic), and NO meaning
+            //      contains a single character from that script
+            //      → model failed to produce the right language at all
+            type MaybeMeaning = { meaning?: unknown; examples?: unknown };
+            const fr = finalResult as { word?: unknown; meanings?: MaybeMeaning[] };
+            const meanings = fr.meanings ?? [];
             let degenerate = false;
+            let reason = "";
+
             for (const m of meanings) {
               const exs = Array.isArray(m?.examples) ? m.examples : [];
               for (const ex of exs) {
-                if (typeof ex === "string" && ex.length > 600) { degenerate = true; break; }
+                if (typeof ex === "string" && ex.length > 600) {
+                  degenerate = true;
+                  reason = "example exceeds 600 chars (repetition loop)";
+                  break;
+                }
               }
               if (degenerate) break;
             }
+
+            const MOJIBAKE_CHARS = /[×™©¨'']/g;
+            if (!degenerate && typeof fr.word === "string") {
+              const ws = fr.word;
+              const mojibakeCount = (ws.match(MOJIBAKE_CHARS) ?? []).length;
+              if (ws.length > 0 && mojibakeCount / ws.length > 0.4) {
+                degenerate = true;
+                reason = "echoed word is mostly mojibake typographic chars";
+              }
+            }
+
+            if (!degenerate) {
+              // Script-presence check. Each script range covers the
+              // Unicode block for the language family.
+              const HEBREW  = /[֐-׿]/;
+              const ARABIC  = /[؀-ۿ]/;
+              const CYRILLIC = /[Ѐ-ӿ]/;
+              const scriptForInput =
+                HEBREW.test(word) ? { name: "Hebrew",   rx: HEBREW }   :
+                ARABIC.test(word) ? { name: "Arabic",   rx: ARABIC }   :
+                CYRILLIC.test(word) ? { name: "Cyrillic", rx: CYRILLIC } :
+                null;
+              if (scriptForInput && meanings.length > 0) {
+                const anyHit = meanings.some((m) =>
+                  typeof m?.meaning === "string" && scriptForInput.rx.test(m.meaning)
+                );
+                if (!anyHit) {
+                  degenerate = true;
+                  reason = `input was ${scriptForInput.name} but no definition contains any ${scriptForInput.name} character`;
+                }
+              }
+            }
             if (degenerate) {
-              console.error("Degenerate OpenAI output detected — rejecting (not caching)");
+              console.error("Degenerate OpenAI output detected — rejecting (not caching). Reason:", reason);
               const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
               safeEnqueue(encoder.encode(errorEvent));
             } else {
