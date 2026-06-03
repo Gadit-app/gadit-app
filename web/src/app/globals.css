@@ -2935,17 +2935,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-tier-clear::before { background: var(--teal); }
 .wordbook .wb-tier-deep::before  { background: var(--deep-fg); }
 
-/* "Most popular" — classic diagonal corner banner on the top-left
-   of the Clear card. Rotated -45° so it cuts across the corner;
-   the ends extend past the card's bounding box and get clipped by
-   overflow:hidden, leaving a clean triangle whose edges align with
-   the rounded corner. Soft teal-tinted shadow gives it a touch of
-   lift so it reads as a banner pinned ON the card, not a flat
-   sticker. */
+/* "Most popular" — classic diagonal corner banner. Positioned on
+   the leading-side top corner (RTL → physical left, LTR → physical
+   right) so it never collides with the tier name, which always sits
+   on the trailing edge of the card. Rotation flips with direction
+   too so the banner always tucks INTO the corner instead of away. */
 .wordbook .wb-tier-badge {
   position: absolute;
   top: 22px;
-  left: -38px;
   width: 150px;
   padding: 5px 0;
   text-align: center;
@@ -2955,20 +2952,24 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
-  transform: rotate(-45deg);
   transform-origin: center center;
-  inset-inline-start: -38px;
-  inset-inline-end: auto;
   border-radius: 0;
   box-shadow: 0 2px 6px rgba(14, 165, 165, 0.28);
   z-index: 2;
   pointer-events: none;
+  /* LTR default: ribbon on the visual right corner, rotated +45° */
+  inset-inline-start: auto;
+  inset-inline-end: -38px;
+  transform: rotate(45deg);
+}
+.wordbook[dir="rtl"] .wb-tier-badge {
+  /* RTL: ribbon on the visual left corner, rotated the other way */
+  transform: rotate(-45deg);
 }
 @media (min-width: 768px) {
   .wordbook .wb-tier-badge {
     top: 24px;
-    left: -40px;
-    inset-inline-start: -40px;
+    inset-inline-end: -40px;
     width: 160px;
     font-size: 12px;
     padding: 6px 0;
