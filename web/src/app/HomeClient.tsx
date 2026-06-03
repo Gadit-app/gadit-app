@@ -254,6 +254,16 @@ export function HomePage() {
                   className="wb-home-sentence-input"
                   aria-label={c.sentencePlaceholder}
                 />
+                <button
+                  type="button"
+                  className="wb-home-sentence-close"
+                  onClick={() => { setSentenceOpen(false); setSentence(""); }}
+                  aria-label={lang === "he" ? "סגור" : lang === "ar" ? "إغلاق" : lang === "ru" ? "Закрыть" : "Close"}
+                >
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                    <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
+                </button>
               </div>
             ) : (
               <button
