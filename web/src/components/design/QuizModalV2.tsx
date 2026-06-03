@@ -102,7 +102,7 @@ function QuizOption({
     },
     selected: {
       background: "oklch(0.98 0.01 80)",
-      ring: "inset 0 0 0 1.5px oklch(0.72 0.19 245 / 0.65), 0 0 0 5px oklch(0.72 0.19 245 / 0.1)",
+      ring: "inset 0 0 0 1.5px rgba(14, 165, 165, 0.65), 0 0 0 5px rgba(14, 165, 165, 0.1)",
       color: "var(--gd-ink-900)",
       opacity: 1,
     },
@@ -158,13 +158,13 @@ function QuizOption({
               : state === "wrong"
                 ? "oklch(0.58 0.2 35)"
                 : state === "selected"
-                  ? "oklch(0.72 0.19 245)"
+                  ? "#0EA5A5"
                   : "transparent",
           boxShadow:
             state === "idle" || state === "dim"
               ? "inset 0 0 0 1.5px oklch(0 0 0 / 0.18)"
               : state === "selected"
-                ? "0 0 0 4px oklch(0.72 0.19 245 / 0.18)"
+                ? "0 0 0 4px rgba(14, 165, 165, 0.18)"
                 : "none",
           color: "white",
           display: "inline-flex",
@@ -244,7 +244,7 @@ function QuizFinal({
 
   return (
     <div style={{ textAlign: "center", paddingBlock: 30 }}>
-      <Eyebrow style={{ color: "oklch(0.5 0.18 250)" }}>
+      <Eyebrow style={{ color: "#0B8A8A" }}>
         {v2(lang, "quizEyebrow")}
       </Eyebrow>
       <div
@@ -259,7 +259,7 @@ function QuizFinal({
           fontWeight: 400,
         }}
       >
-        <span style={{ color: "oklch(0.5 0.18 250)" }}>{correct}</span>
+        <span style={{ color: "#0B8A8A" }}>{correct}</span>
         <span style={{ color: "var(--gd-ink-300)", margin: "0 0.05em" }}>
           /
         </span>
@@ -298,7 +298,7 @@ function QuizFinal({
         >
           <summary
             className="gd-font-sans-ui cursor-pointer"
-            style={{ fontSize: 13, color: "oklch(0.5 0.18 250)" }}
+            style={{ fontSize: 13, color: "#0B8A8A" }}
           >
             {v2(lang, "quizReviewMistakes")}
           </summary>
@@ -627,7 +627,7 @@ export function QuizModalV2({
               className={`flex items-start  justify-between gap-3`}
             >
               <div>
-                <Eyebrow style={{ color: "oklch(0.5 0.18 250)" }}>
+                <Eyebrow style={{ color: "#0B8A8A" }}>
                   {v2(lang, "quizEyebrow")}
                 </Eyebrow>
                 <h2
@@ -648,7 +648,7 @@ export function QuizModalV2({
                   {titleParts[0]}
                   <em
                     style={{
-                      color: "oklch(0.5 0.18 250)",
+                      color: "#0B8A8A",
                       fontStyle: !isHe && !isAr ? "italic" : "normal",
                       ...(!isHe && !isAr
                         ? { fontVariationSettings: '"opsz" 60' }
@@ -696,9 +696,9 @@ export function QuizModalV2({
                         borderRadius: 999,
                         background:
                           i < qIndex
-                            ? "oklch(0.5 0.18 250 / 0.7)"
+                            ? "rgba(11, 138, 138, 0.7)"
                             : i === qIndex
-                              ? "oklch(0.5 0.18 250)"
+                              ? "#0B8A8A"
                               : "oklch(0 0 0 / 0.12)",
                         transition: "all 0.2s",
                       }}
@@ -811,7 +811,7 @@ export function QuizModalV2({
                   borderRadius: 12,
                   background: submitDisabled
                     ? "oklch(0 0 0 / 0.06)"
-                    : "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+                    : "linear-gradient(180deg, #0EA5A5, #0B8A8A)",
                   color: submitDisabled ? "var(--gd-ink-400)" : "white",
                   boxShadow: submitDisabled
                     ? "inset 0 0 0 1px oklch(0 0 0 / 0.08)"

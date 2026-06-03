@@ -246,7 +246,7 @@ function ComposeResult({
               lineHeight: 1.45,
               color: "var(--gd-ink-900)",
               fontStyle: !isHe && !isAr ? "italic" : "normal",
-              borderInlineStart: "3px solid oklch(0.72 0.19 245 / 0.7)",
+              borderInlineStart: "3px solid rgba(14, 165, 165, 0.7)",
               paddingInlineStart: 14,
               ...(!isHe && !isAr
                 ? { fontVariationSettings: '"opsz" 32' }
@@ -271,7 +271,7 @@ function ComposeResult({
             borderRadius: 10,
             color: "white",
             background:
-              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+              "linear-gradient(180deg, #0EA5A5, #0B8A8A)",
             boxShadow:
               "0 0 0 1px oklch(0.5 0.2 250 / 0.5), 0 6px 16px oklch(0.5 0.2 250 / 0.3)",
           }}
@@ -469,7 +469,7 @@ export function ComposeModalV2({
           </svg>
         </button>
 
-        <Eyebrow style={{ color: "oklch(0.5 0.18 250)" }}>
+        <Eyebrow style={{ color: "#0B8A8A" }}>
           {v2(lang, "composeEyebrow")}
         </Eyebrow>
 
@@ -491,7 +491,7 @@ export function ComposeModalV2({
           {titleParts[0]}
           <em
             style={{
-              color: "oklch(0.5 0.18 250)",
+              color: "#0B8A8A",
               fontStyle: !isHe && !isAr ? "italic" : "normal",
               ...(!isHe && !isAr
                 ? { fontVariationSettings: '"opsz" 60' }
@@ -587,7 +587,7 @@ export function ComposeModalV2({
                 borderRadius: 12,
                 background: busy
                   ? "linear-gradient(180deg, oklch(0.62 0.1 245), oklch(0.5 0.12 250))"
-                  : "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+                  : "linear-gradient(180deg, #0EA5A5, #0B8A8A)",
                 color: "white",
                 boxShadow:
                   "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",

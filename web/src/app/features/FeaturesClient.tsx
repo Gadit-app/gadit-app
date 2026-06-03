@@ -106,7 +106,7 @@ const COPY: Record<string, {
       { id: "notebook",    icon: "notebook",    tier: "clear", title: "מחברת מילים אישית",                            body: "" },
       { id: "compose",     icon: "compose",     tier: "clear", title: "חיבור משפט עם המילה וקבלת משוב",            body: "" },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "חידונים מותאמים אישית",                       body: "" },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "השוואת מילים דומות",                            body: "" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "משחקי מילים",                                  body: "" },
     ],
   },
   en: {
@@ -126,7 +126,7 @@ const COPY: Record<string, {
       { id: "notebook",    icon: "notebook",    tier: "clear", title: "Personal word notebook",               body: "" },
       { id: "compose",     icon: "compose",     tier: "clear", title: "Compose a sentence and get feedback",  body: "" },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quizzes",                 body: "" },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "Compare similar words",                body: "" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Word games",                           body: "" },
     ],
   },
 };
@@ -156,7 +156,7 @@ function FeatureIcon({ name, color }: { name: Feature["icon"]; color: string }) 
     case "kids":        return <svg {...common}><circle cx="12" cy="8" r="3.5" /><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7" /></svg>;
     case "compose":     return <svg {...common}><path d="M14 4l6 6L8 22H2v-6z" /><path d="M13 5l6 6" /></svg>;
     case "quiz":        return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1.5 1-1.5 2.2" /><circle cx="12" cy="17" r="0.7" fill={color} stroke="none" /></svg>;
-    case "compare":     return <svg {...common}><rect x="3" y="4" width="7" height="16" rx="1.5" /><rect x="14" y="4" width="7" height="16" rx="1.5" /><path d="M12 4v16" strokeDasharray="2 2" /></svg>;
+    case "compare":     return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" /></svg>;
   }
 }
 

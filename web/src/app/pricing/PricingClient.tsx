@@ -209,7 +209,7 @@ const COPY: Record<string, {
       features: [
         "כל מה שיש ב-Clear",
         "חידונים מותאמים אישית",
-        "השוואת מילים דומות",
+        "משחקי מילים",
         "תרגול ולמידה לטווח ארוך",
         "ייצוא תוכן",
       ],
@@ -260,7 +260,7 @@ const COPY: Record<string, {
       features: [
         "Everything in Clear",
         "Personalized quizzes",
-        "Compare similar words",
+        "Word games",
         "Long-term practice & retention",
         "Export content",
       ],

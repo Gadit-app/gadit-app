@@ -384,10 +384,11 @@ function TabIcon({ name }: { name: TabId }) {
         </svg>
       );
     case "compare":
+      // Repurposed as Word Games — 3×3 puzzle grid icon
       return (
         <svg {...common}>
-          <rect x="3" y="5" width="8" height="14" rx="1" />
-          <rect x="13" y="5" width="8" height="14" rx="1" />
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
         </svg>
       );
     case "quiz":
@@ -401,14 +402,19 @@ function TabIcon({ name }: { name: TabId }) {
   }
 }
 
+// 'compare' tab repurposed as 'games' — the compare-words angle had
+// limited surface (most words don't have meaningful comparisons),
+// so the slot is now a word-games panel. The TabId stays 'compare'
+// for now to avoid a wide rename across the result/i18n/unlock
+// tables; only the visible label and the panel body change.
 const TAB_LABELS: Record<string, Record<TabId, string>> = {
-  he: { image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "השוואת מילים" },
-  en: { image: "Image",       kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Compare words" },
-  ar: { image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "مقارنة الكلمات" },
-  ru: { image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Сравнить слова" },
-  es: { image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Comparar palabras" },
-  pt: { image: "Imagem",       kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Comparar palavras" },
-  fr: { image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Comparer mots" },
+  he: { image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "משחקי מילים" },
+  en: { image: "Image",       kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Word games" },
+  ar: { image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "ألعاب كلمات" },
+  ru: { image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Игры со словами" },
+  es: { image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Juegos de palabras" },
+  pt: { image: "Imagem",       kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Jogos com palavras" },
+  fr: { image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
 };
 const TAB_IDS: TabId[] = ["image", "kids", "compose", "quiz", "compare"];
 
