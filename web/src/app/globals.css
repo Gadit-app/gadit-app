@@ -2634,10 +2634,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 500;
   color: var(--ink-muted);
   line-height: 1.4;
-  margin: 0 0 24px;
+  margin: 14px 0 14px;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-home-tagline { font-size: 18px; margin-bottom: 28px; }
+  .wordbook .wb-home-tagline { font-size: 18px; margin: 16px 0 16px; }
 }
 
 /* Search form — pill style, Google proportions */
@@ -3337,6 +3337,59 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   text-decoration: none;
 }
 .wordbook .wb-home-footer a:hover { color: var(--ink); }
+
+/* Optional context-sentence input on home — collapsed by default as
+   a small "+" link, opens into a soft outlined textarea below the
+   search bar. Passes ?sentence=... through to /word, which then
+   feeds /api/define as contextSentence and gets the meaning that
+   matches the user's sentence specifically. */
+.wordbook .wb-home-sentence-toggle {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--wb-he);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.wordbook .wb-home-sentence-toggle:hover {
+  color: var(--teal);
+  background: var(--teal-soft);
+}
+.wordbook .wb-home-sentence-wrap {
+  width: 100%;
+  max-width: 560px;
+  margin: 4px auto 0;
+}
+.wordbook .wb-home-sentence-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+  line-height: 1.5;
+  min-height: 64px;
+}
+.wordbook .wb-home-sentence-input::placeholder { color: var(--ink-faint); }
+.wordbook .wb-home-sentence-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);
+}
 
 /* ===================================================================
    Login modal — CrispTech aesthetic. Clean white card, teal accent,

@@ -96,15 +96,25 @@ const SAMPLES_BY_LANG: Record<string, string[]> = {
 
 const COPY: Record<
   string,
-  { tagline: string; placeholder: string; tryLabel: string; signin: string; pricing: string; search: string; features: string }
+  {
+    tagline: string;
+    placeholder: string;
+    tryLabel: string;
+    signin: string;
+    pricing: string;
+    search: string;
+    features: string;
+    addSentence: string;
+    sentencePlaceholder: string;
+  }
 > = {
-  he: { tagline: "להבין מילים עד הסוף.", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור", search: "חיפוש", features: "פיצ'רים" },
-  en: { tagline: "Understand words to the end.", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features" },
-  ar: { tagline: "افهم الكلمات حتى النهاية.", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار", search: "بحث", features: "المزايا" },
-  ru: { tagline: "Понять слова до конца.",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены", search: "Поиск", features: "Возможности" },
-  es: { tagline: "Entender palabras hasta el final.", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios", search: "Búsqueda", features: "Funciones" },
-  pt: { tagline: "Entender palavras até o fim.", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços", search: "Buscar", features: "Recursos" },
-  fr: { tagline: "Comprendre les mots jusqu'au bout.", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités" },
+  he: { tagline: "להבין מילים עד הסוף", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור", search: "חיפוש", features: "פיצ'רים", addSentence: "הוסיפו משפט שבו המילה מופיעה (אופציונלי)", sentencePlaceholder: "הקלידו את המשפט שבו המילה מופיעה" },
+  en: { tagline: "Understand words to the end", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features", addSentence: "Add the sentence where the word appears (optional)", sentencePlaceholder: "Type the sentence where the word appears" },
+  ar: { tagline: "افهم الكلمات حتى النهاية", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار", search: "بحث", features: "المزايا", addSentence: "أضف الجملة التي تظهر فيها الكلمة (اختياري)", sentencePlaceholder: "اكتب الجملة التي تظهر فيها الكلمة" },
+  ru: { tagline: "Понять слова до конца",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены", search: "Поиск", features: "Возможности", addSentence: "Добавьте предложение со словом (необязательно)", sentencePlaceholder: "Введите предложение, в котором встречается слово" },
+  es: { tagline: "Entender palabras hasta el final", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios", search: "Búsqueda", features: "Funciones", addSentence: "Añade la frase donde aparece la palabra (opcional)", sentencePlaceholder: "Escribe la frase donde aparece la palabra" },
+  pt: { tagline: "Entender palavras até o fim", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços", search: "Buscar", features: "Recursos", addSentence: "Adicione a frase onde a palavra aparece (opcional)", sentencePlaceholder: "Escreva a frase onde a palavra aparece" },
+  fr: { tagline: "Comprendre les mots jusqu'au bout", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités", addSentence: "Ajoutez la phrase où le mot apparaît (optionnel)", sentencePlaceholder: "Tapez la phrase où le mot apparaît" },
 };
 
 function SearchIcon({ size = 16 }: { size?: number }) {
@@ -121,6 +131,8 @@ export function HomePage() {
   const { user, promptLogin } = useAuth();
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [sentence, setSentence] = useState("");
+  const [sentenceOpen, setSentenceOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const c = COPY[lang] ?? COPY.en;
   const samples = SAMPLES_BY_LANG[lang] ?? SAMPLES_BY_LANG.en;
@@ -130,10 +142,12 @@ export function HomePage() {
     try { return await user.getIdToken(); } catch { return null; }
   }
 
-  function go(word: string) {
+  function go(word: string, ctxSentence?: string) {
     const trimmed = word.trim();
     if (!trimmed) return;
-    router.push(`/word/${encodeURIComponent(trimmed)}`);
+    const ctx = (ctxSentence ?? sentence).trim();
+    const qs = ctx ? `?sentence=${encodeURIComponent(ctx)}` : "";
+    router.push(`/word/${encodeURIComponent(trimmed)}${qs}`);
   }
 
   function onSubmit(e: React.FormEvent) {
@@ -229,6 +243,30 @@ export function HomePage() {
                 </button>
               ))}
             </div>
+
+            {sentenceOpen ? (
+              <div className="wb-home-sentence-wrap">
+                <textarea
+                  value={sentence}
+                  onChange={(e) => setSentence(e.target.value)}
+                  placeholder={c.sentencePlaceholder}
+                  rows={2}
+                  className="wb-home-sentence-input"
+                  aria-label={c.sentencePlaceholder}
+                />
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="wb-home-sentence-toggle"
+                onClick={() => setSentenceOpen(true)}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                <span>{c.addSentence}</span>
+              </button>
+            )}
           </form>
         </div>
       </main>

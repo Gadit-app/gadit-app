@@ -16,7 +16,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { parse as parsePartialJson, Allow } from "partial-json";
 import Link from "next/link";
 
@@ -293,6 +293,8 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const { user, plan: authPlan, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const contextSentence = searchParams?.get("sentence")?.trim() || "";
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -371,7 +373,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         res = await fetch("/api/define", {
           method: "POST",
           headers,
-          body: JSON.stringify({ word: initialWord, uiLang: lang }),
+          body: JSON.stringify({
+            word: initialWord,
+            uiLang: lang,
+            ...(contextSentence ? { contextSentence } : {}),
+          }),
           signal: controller.signal,
         });
       } catch (e) {
@@ -556,7 +562,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user]);
+  }, [initialWord, lang, user, contextSentence]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate() {
