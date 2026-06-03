@@ -599,6 +599,173 @@ async function setCachedResult(key: string, data: object) {
   }
 }
 
+async function deleteCachedResult(key: string) {
+  try {
+    await getAdminDb().collection("cache").doc(key).delete();
+  } catch (e) {
+    console.error("Firestore deleteCache error:", e);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Degenerate-output guard. OpenAI sometimes returns garbage:
+//   1. A short typographic sequence repeated 100s of times
+//   2. Mojibake on the echoed word ('×™™'×''') — UTF-8 bytes
+//      decoded as cp1252 inside the model itself
+//   3. A response in the wrong script entirely (Hebrew word →
+//      Latin-only definitions, or pure typographic junk)
+// Same guard runs on stream-end, cache-read, and every retry
+// attempt so a single corrupted result never reaches the user.
+type GuardResult = { degenerate: false } | { degenerate: true; reason: string };
+
+const MOJIBAKE_CHARS = /[×™©¨'']/g;
+const HEBREW_RX   = /[֐-׿]/;
+const ARABIC_RX   = /[؀-ۿ]/;
+const CYRILLIC_RX = /[Ѐ-ӿ]/;
+
+function isDegenerate(result: unknown, inputWord: string): GuardResult {
+  if (!result || typeof result !== "object") {
+    return { degenerate: true, reason: "result is not an object" };
+  }
+  const fr = result as {
+    word?: unknown;
+    meanings?: Array<{ meaning?: unknown; examples?: unknown }>;
+  };
+  const meanings = Array.isArray(fr.meanings) ? fr.meanings : [];
+
+  // (1) Repetition loop
+  for (const m of meanings) {
+    const exs = Array.isArray(m?.examples) ? m.examples : [];
+    for (const ex of exs) {
+      if (typeof ex === "string" && ex.length > 600) {
+        return { degenerate: true, reason: "example exceeds 600 chars" };
+      }
+    }
+  }
+
+  // (2) Mojibake on echoed word
+  if (typeof fr.word === "string") {
+    const ws = fr.word;
+    const mojibakeCount = (ws.match(MOJIBAKE_CHARS) ?? []).length;
+    if (ws.length > 0 && mojibakeCount / ws.length > 0.4) {
+      return { degenerate: true, reason: "echoed word is mostly mojibake chars" };
+    }
+  }
+
+  // (3) Wrong-script for non-Latin inputs
+  const scriptForInput =
+    HEBREW_RX.test(inputWord)   ? { name: "Hebrew",   rx: HEBREW_RX }   :
+    ARABIC_RX.test(inputWord)   ? { name: "Arabic",   rx: ARABIC_RX }   :
+    CYRILLIC_RX.test(inputWord) ? { name: "Cyrillic", rx: CYRILLIC_RX } :
+    null;
+  if (scriptForInput && meanings.length > 0) {
+    const anyHit = meanings.some((m) =>
+      typeof m?.meaning === "string" && scriptForInput.rx.test(m.meaning),
+    );
+    if (!anyHit) {
+      return {
+        degenerate: true,
+        reason: `input was ${scriptForInput.name} but no definition has ${scriptForInput.name} chars`,
+      };
+    }
+  }
+
+  return { degenerate: false };
+}
+
+// Loose JSON schema for OpenAI Structured Outputs. The current prompt
+// already produces this exact shape; the schema acts as a hard
+// guardrail so the model can't drift into half-formed JSON during
+// the streaming run that the guard would then have to catch. Strict
+// mode requires every field in `required` (no optionals), so fields
+// that may be empty are typed as nullable / can carry empty values.
+const RESPONSE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    word:     { type: "string" },
+    language: { type: "string" },
+    // ipa and contextNote aren't always produced (ipa is silently
+    // skipped by the current prompt; contextNote is only for the
+    // CONTEXT mode). Allow null so the model can comply with strict
+    // mode without us forcing the prompt to invent a value.
+    ipa:      { type: ["string", "null"] },
+    meanings: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          meaning:  { type: "string" },
+          examples: { type: "array", items: { type: "string" } },
+          idioms: {
+            type: "array",
+            items: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                phrase:  { type: "string" },
+                meaning: { type: "string" },
+              },
+              required: ["phrase", "meaning"],
+            },
+          },
+          kidsExplanation: {
+            anyOf: [
+              {
+                type: "object",
+                additionalProperties: false,
+                properties: {
+                  explanation: { type: "string" },
+                  examples:    { type: "array", items: { type: "string" } },
+                },
+                required: ["explanation", "examples"],
+              },
+              { type: "null" },
+            ],
+          },
+        },
+        required: ["meaning", "examples", "idioms", "kidsExplanation"],
+      },
+    },
+    etymology: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        sourceLanguage:  { type: "string" },
+        originalWord:    { type: "string" },
+        breakdown:       { type: "string" },
+        originalMeaning: { type: "string" },
+        historyNote:     { type: "string" },
+      },
+      required: ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote"],
+    },
+    generalIdioms: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          phrase:  { type: "string" },
+          meaning: { type: "string" },
+        },
+        required: ["phrase", "meaning"],
+      },
+    },
+    contextNote: { type: ["string", "null"] },
+  },
+  required: ["word", "language", "ipa", "meanings", "etymology", "generalIdioms", "contextNote"],
+} as const;
+
+const STRUCTURED_RESPONSE_FORMAT = {
+  type: "json_schema",
+  json_schema: {
+    name: "gadit_word_result",
+    strict: true,
+    schema: RESPONSE_SCHEMA,
+  },
+} as const;
+
 async function callOpenAI(model: string, systemPrompt: string, userContent: string): Promise<object> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -608,7 +775,10 @@ async function callOpenAI(model: string, systemPrompt: string, userContent: stri
     },
     body: JSON.stringify({
       model,
-      response_format: { type: "json_object" },
+      // Structured Outputs: model is forced to match the schema,
+      // which cuts the per-call probability of broken JSON / wrong
+      // shape near to zero.
+      response_format: STRUCTURED_RESPONSE_FORMAT,
       temperature: 0.2,
       messages: [
         { role: "system", content: systemPrompt },
@@ -632,7 +802,7 @@ async function openAIStream(model: string, systemPrompt: string, userContent: st
     },
     body: JSON.stringify({
       model,
-      response_format: { type: "json_object" },
+      response_format: STRUCTURED_RESPONSE_FORMAT,
       temperature: 0.2,
       stream: true,
       messages: [
@@ -641,6 +811,34 @@ async function openAIStream(model: string, systemPrompt: string, userContent: st
       ],
     }),
   });
+}
+
+// Auto-retry wrapper for the non-streaming generation path. Used both
+// as a retry after a degenerate streaming response, AND as a clean
+// fallback when the cache hit turns out to be corrupted. Retries up
+// to MAX_ATTEMPTS times with gpt-4o (NOT gpt-4o-mini — mini is the
+// biggest source of mojibake in production). Returns a clean result
+// or null if every attempt failed the guard.
+async function generateValidated(
+  systemPrompt: string,
+  userContent: string,
+  inputWord: string,
+  startAttempt = 1,
+  maxAttempts = 3,
+): Promise<{ result: object; attemptsUsed: number } | null> {
+  for (let attempt = startAttempt; attempt <= maxAttempts; attempt++) {
+    try {
+      const result = await callOpenAI("gpt-4o", systemPrompt, userContent);
+      const verdict = isDegenerate(result, inputWord);
+      if (!verdict.degenerate) {
+        return { result, attemptsUsed: attempt };
+      }
+      console.warn(`generateValidated attempt ${attempt} rejected: ${verdict.reason}`);
+    } catch (e) {
+      console.error(`generateValidated attempt ${attempt} threw:`, e);
+    }
+  }
+  return null;
 }
 
 const UI_LANG_NAMES: Record<string, string> = {
@@ -728,16 +926,27 @@ export async function POST(req: NextRequest) {
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {
-      // Cached response ג€” send as a single SSE event so the client can use one code path
-      const payload = { ...cached, fromCache: true };
-      const body = `data: ${JSON.stringify({ type: "done", result: payload })}\n\n`;
-      return new Response(body, {
-        headers: {
-          "Content-Type": "text/event-stream; charset=utf-8",
-          "Cache-Control": "no-cache, no-transform",
-          Connection: "keep-alive",
-        },
-      });
+      // Validate cached result against the same guard we apply to
+      // fresh generations. Cache entries written before the guard
+      // existed (or before guard heuristics were tightened) may carry
+      // mojibake. If so, drop the corrupted entry and fall through to
+      // the live-generation path so the user gets a clean result.
+      const cachedVerdict = isDegenerate(cached, word);
+      if (cachedVerdict.degenerate) {
+        console.warn(`Dropping corrupted cache entry [${cacheKey}]: ${cachedVerdict.reason}`);
+        await deleteCachedResult(cacheKey);
+      } else {
+        // Cached response — send as a single SSE event so the client can use one code path
+        const payload = { ...cached, fromCache: true };
+        const body = `data: ${JSON.stringify({ type: "done", result: payload })}\n\n`;
+        return new Response(body, {
+          headers: {
+            "Content-Type": "text/event-stream; charset=utf-8",
+            "Cache-Control": "no-cache, no-transform",
+            Connection: "keep-alive",
+          },
+        });
+      }
     }
 
     // Quota enforcement runs only on cache misses ג€” popular words like
@@ -861,91 +1070,49 @@ export async function POST(req: NextRequest) {
             }
           }
 
-          // Stream ended — parse final JSON and cache
+          // Stream ended — parse final JSON, validate, retry if degenerate
+          let acceptedResult: object | null = null;
+          let parsedOk = false;
           try {
-            const finalResult = JSON.parse(accumulated);
-
-            // Degenerate-output guard. OpenAI calls occasionally emit
-            // garbage: the same short typographic sequence repeated
-            // hundreds of times, or pure mojibake like "×™™'×'''"
-            // when the underlying Unicode pipeline collapses. Detect
-            // and reject so we never cache or return that to the user.
-            //
-            // Three heuristics:
-            //  (1) any single example longer than 600 chars
-            //      → stuck in a typographic loop
-            //  (2) the echoed word in finalResult.word is mostly
-            //      typographic characters (×, ™, ©, '', '')
-            //      → mojibake of UTF-8 bytes via cp1252
-            //  (3) when the input word contains letters from a target
-            //      script (Hebrew, Arabic, Cyrillic), and NO meaning
-            //      contains a single character from that script
-            //      → model failed to produce the right language at all
-            type MaybeMeaning = { meaning?: unknown; examples?: unknown };
-            const fr = finalResult as { word?: unknown; meanings?: MaybeMeaning[] };
-            const meanings = fr.meanings ?? [];
-            let degenerate = false;
-            let reason = "";
-
-            for (const m of meanings) {
-              const exs = Array.isArray(m?.examples) ? m.examples : [];
-              for (const ex of exs) {
-                if (typeof ex === "string" && ex.length > 600) {
-                  degenerate = true;
-                  reason = "example exceeds 600 chars (repetition loop)";
-                  break;
-                }
-              }
-              if (degenerate) break;
-            }
-
-            const MOJIBAKE_CHARS = /[×™©¨'']/g;
-            if (!degenerate && typeof fr.word === "string") {
-              const ws = fr.word;
-              const mojibakeCount = (ws.match(MOJIBAKE_CHARS) ?? []).length;
-              if (ws.length > 0 && mojibakeCount / ws.length > 0.4) {
-                degenerate = true;
-                reason = "echoed word is mostly mojibake typographic chars";
-              }
-            }
-
-            if (!degenerate) {
-              // Script-presence check. Each script range covers the
-              // Unicode block for the language family.
-              const HEBREW  = /[֐-׿]/;
-              const ARABIC  = /[؀-ۿ]/;
-              const CYRILLIC = /[Ѐ-ӿ]/;
-              const scriptForInput =
-                HEBREW.test(word) ? { name: "Hebrew",   rx: HEBREW }   :
-                ARABIC.test(word) ? { name: "Arabic",   rx: ARABIC }   :
-                CYRILLIC.test(word) ? { name: "Cyrillic", rx: CYRILLIC } :
-                null;
-              if (scriptForInput && meanings.length > 0) {
-                const anyHit = meanings.some((m) =>
-                  typeof m?.meaning === "string" && scriptForInput.rx.test(m.meaning)
-                );
-                if (!anyHit) {
-                  degenerate = true;
-                  reason = `input was ${scriptForInput.name} but no definition contains any ${scriptForInput.name} character`;
-                }
-              }
-            }
-            if (degenerate) {
-              console.error("Degenerate OpenAI output detected — rejecting (not caching). Reason:", reason);
-              const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
-              safeEnqueue(encoder.encode(errorEvent));
+            const parsed = JSON.parse(accumulated);
+            parsedOk = true;
+            const verdict = isDegenerate(parsed, word);
+            if (verdict.degenerate) {
+              console.warn(`First-attempt rejected (streaming): ${verdict.reason}`);
             } else {
-              if (!usingFallback) {
-                setCachedResult(cacheKey, finalResult).catch((e) =>
-                  console.error("Cache write failed:", e)
-                );
-              }
-              const doneEvent = `data: ${JSON.stringify({ type: "done", result: finalResult })}\n\n`;
-              safeEnqueue(encoder.encode(doneEvent));
+              acceptedResult = parsed;
             }
           } catch (e) {
-            console.error("Final JSON parse failed:", e, "accumulated:", accumulated.slice(0, 500));
-            const errorEvent = `data: ${JSON.stringify({ type: "error", message: "Invalid response" })}\n\n`;
+            console.error("Final JSON parse failed on streamed attempt:", e, "head:", accumulated.slice(0, 200));
+          }
+
+          // If the streamed first attempt failed (parse error OR guard
+          // rejection), retry up to 2 more times non-streaming with
+          // gpt-4o. This is what stops the user from ever seeing
+          // mojibake: even when OpenAI flakes on one call, the next
+          // call almost always produces a clean result.
+          if (!acceptedResult) {
+            void parsedOk; // surface log already emitted above
+            const retry = await generateValidated(systemPrompt, userContent, word, 2, 3);
+            if (retry) {
+              console.info(`Recovered via retry on attempt ${retry.attemptsUsed}`);
+              acceptedResult = retry.result;
+            }
+          }
+
+          if (acceptedResult) {
+            // Cache the validated result regardless of whether it was
+            // the streamed attempt or a retry — both produced the same
+            // shape and quality bar.
+            void usingFallback;
+            setCachedResult(cacheKey, acceptedResult).catch((e) =>
+              console.error("Cache write failed:", e),
+            );
+            const doneEvent = `data: ${JSON.stringify({ type: "done", result: acceptedResult })}\n\n`;
+            safeEnqueue(encoder.encode(doneEvent));
+          } else {
+            console.error("All attempts (1 streamed + 2 retries) failed validation — surfacing error");
+            const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
             safeEnqueue(encoder.encode(errorEvent));
           }
         } catch (e) {
