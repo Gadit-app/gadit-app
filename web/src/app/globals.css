@@ -1860,22 +1860,28 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 @media (min-width: 768px) {
   .wordbook .wb-origin-section,
   .wordbook .wb-idioms-section {
-    padding: 0 32px 0;
+    /* Matched to .wb-meanings (20px) so all three section cards
+       sit on the same left/right edges. */
+    padding: 0 20px 0;
     margin-bottom: 44px;
   }
 }
 
-/* Idioms standalone card — matches Origin: teal rail + white card */
+/* Origin + Idioms cards — explicitly zero outer margin so they sit
+   on the section's 20px padding, matching the meaning cards above
+   exactly. Same teal rail + white surface treatment as .wb-mcard. */
+.wordbook .wb-origin-section .wb-card,
 .wordbook .wb-idioms-section .wb-card {
   margin: 0;
-  padding: 22px 22px 24px;
+  padding: 16px 18px 18px;
   border: 1px solid var(--rule);
   border-inline-start: 4px solid var(--teal);
   border-radius: 12px;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 @media (min-width: 768px) {
-  .wordbook .wb-idioms-section .wb-card { padding: 26px 30px 28px; }
+  .wordbook .wb-origin-section .wb-card,
+  .wordbook .wb-idioms-section .wb-card { padding: 18px 22px 20px; }
 }
 .wordbook .wb-idioms-card .wb-midiom {
   padding: 9px 0;
@@ -1923,15 +1929,17 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-origin-value {
   font-family: var(--wb-he);
   font-style: normal;
-  font-size: 15px;
+  /* Compact: 13.5px instead of 15px so Word Origin reads as a
+     metadata panel beneath the definitions, not another full body. */
+  font-size: 13.5px;
   font-weight: 500;
-  line-height: 1.55;
+  line-height: 1.5;
   letter-spacing: 0;
   text-transform: none;
   opacity: 1;
 }
 .wordbook .wb-origin-label {
-  min-width: 96px;
+  min-width: 84px;
   flex-shrink: 0;
   color: var(--ink-muted);
 }
@@ -1941,7 +1949,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--ink);
 }
 @media (min-width: 768px) {
-  .wordbook .wb-origin-label { min-width: 110px; }
+  .wordbook .wb-origin-label,
+  .wordbook .wb-origin-value { font-size: 14px; }
+  .wordbook .wb-origin-label { min-width: 96px; }
 }
 
 /* Visual empty state — grid pattern instead of dashed border */
@@ -2287,25 +2297,29 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 400;
   color: var(--ink-soft);
   line-height: 1.55;
-  position: relative;
-  padding-inline-start: 16px;
+  /* Flex with align-items:center puts the bullet on the same
+     baseline as the first line of each example, consistently across
+     rows. The previous absolute-positioned ::before drifted whenever
+     the row had different padding-top (e.g. dashed-separator rows). */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-/* Teal bullet matching the green '1' definition number — small dot
-   in front of each example so they're visibly a parallel list. */
 .wordbook .wb-mexample::before {
   content: '';
-  position: absolute;
-  inset-inline-start: 2px;
-  top: 0.65em;
+  display: block;
   width: 6px;
   height: 6px;
   border-radius: 999px;
   background: var(--teal);
+  flex-shrink: 0;
 }
+/* Plain spacing between examples — the previous dashed separator
+   forced each row to sit at a different vertical offset (padding-top)
+   and visually nudged bullets off-center. Examples now sit naturally
+   with a clean gap; no separator after the last one. */
 .wordbook .wb-mexample + .wb-mexample {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px dashed var(--rule);
+  margin-top: 8px;
 }
 
 /* Idioms block — no card surface, just labeled text on the card. */

@@ -369,6 +369,8 @@ export interface V2Strings {
   wordOriginLanguage: string;
   wordOriginOriginallyMeant: string;
   wordOriginBackgroundLabel: string;
+  wordOriginOriginalWord: string;
+  wordOriginBreakdown: string;
   // Empty/loading panels on the result page
   imageGeneratingLabel: string;
   kidsComingSoon: string;
@@ -725,6 +727,8 @@ const en: V2Strings = {
   wordOriginEyebrow: "Word Origin",
   idiomsEyebrow: "Idioms & expressions",
   wordOriginBackgroundLabel: "Background",
+  wordOriginOriginalWord: "Original word",
+  wordOriginBreakdown: "Word parts",
   imageGeneratingLabel: "Generating image…",
   kidsComingSoon: "Kids' explanation coming soon.",
   compareComingSoon: "Word games coming soon.",
@@ -1085,6 +1089,8 @@ const he: V2Strings = {
   wordOriginEyebrow: "מקור המילה",
   idiomsEyebrow: "ניבים וצירופים",
   wordOriginBackgroundLabel: "רקע",
+  wordOriginOriginalWord: "מילה מקורית",
+  wordOriginBreakdown: "חלקי מילה",
   imageGeneratingLabel: "יוצר תמונה…",
   kidsComingSoon: "הסבר לילדים יופיע כאן בקרוב.",
   compareComingSoon: "משחקי מילים בקרוב.",
@@ -1458,6 +1464,8 @@ const ar: V2Strings = {
   wordOriginEyebrow: "أصل الكلمة",
   idiomsEyebrow: "تعابير وعبارات",
   wordOriginBackgroundLabel: "خلفية",
+  wordOriginOriginalWord: "الكلمة الأصلية",
+  wordOriginBreakdown: "أجزاء الكلمة",
   imageGeneratingLabel: "جارٍ إنشاء الصورة…",
   kidsComingSoon: "شرح للأطفال سيظهر هنا قريبًا.",
   compareComingSoon: "ألعاب الكلمات قريبًا.",
@@ -1814,6 +1822,8 @@ const ru: Partial<V2Strings> = {
   wordOriginEyebrow: "Происхождение слова",
   idiomsEyebrow: "Идиомы и выражения",
   wordOriginBackgroundLabel: "Контекст",
+  wordOriginOriginalWord: "Исходное слово",
+  wordOriginBreakdown: "Части слова",
   imageGeneratingLabel: "Создаём изображение…",
   kidsComingSoon: "Объяснение для детей появится здесь скоро.",
   compareComingSoon: "Игры со словами — скоро.",
@@ -2170,6 +2180,8 @@ const es: Partial<V2Strings> = {
   meaningsEyebrow: "Definiciones",
   idiomsEyebrow: "Modismos y expresiones",
   wordOriginBackgroundLabel: "Contexto",
+  wordOriginOriginalWord: "Palabra original",
+  wordOriginBreakdown: "Partes de la palabra",
   imageGeneratingLabel: "Generando imagen…",
   kidsComingSoon: "Explicación para niños llegará pronto.",
   compareComingSoon: "Juegos de palabras pronto.",
@@ -2524,6 +2536,8 @@ const pt: Partial<V2Strings> = {
   meaningsEyebrow: "Definições",
   idiomsEyebrow: "Expressões idiomáticas",
   wordOriginBackgroundLabel: "Contexto",
+  wordOriginOriginalWord: "Palavra original",
+  wordOriginBreakdown: "Partes da palavra",
   imageGeneratingLabel: "Gerando imagem…",
   kidsComingSoon: "Explicação para crianças em breve.",
   compareComingSoon: "Jogos com palavras em breve.",
@@ -2878,6 +2892,8 @@ const fr: Partial<V2Strings> = {
   meaningsEyebrow: "Définitions",
   idiomsEyebrow: "Idiomes et expressions",
   wordOriginBackgroundLabel: "Contexte",
+  wordOriginOriginalWord: "Mot original",
+  wordOriginBreakdown: "Parties du mot",
   imageGeneratingLabel: "Génération de l'image…",
   kidsComingSoon: "L'explication pour enfants arrive bientôt.",
   compareComingSoon: "Jeux de mots bientôt disponibles.",

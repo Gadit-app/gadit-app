@@ -325,6 +325,15 @@ This rule applies to:
 - The "explanation" field inside kidsExplanation (if present)
 - The "kidsExplanation.examples" should still use the word ג€” examples are meant to demonstrate the word in context. The forbidden self-reference is ONLY in the explanation/definition itself.
 
+ג ן¸ ALSO FORBIDDEN ג€” RESTATING-THE-HEADWORD OPENERS:
+The "meaning" field must NOT start with "[word] is...", "[word] is also...", "[word] describes...", "[word] also describes..." or any equivalent ("X ׳”׳•׳...", "X ׳”׳•׳ ׳’׳...", "X ׳׳×׳׳¨...", "X ׳׳×׳׳¨ ׳’׳..."). The field renders right after a numbered headword in the UI, so any restating reads as duplication. Write the meaning directly:
+- WRONG: "׳©׳§׳¢ ׳”׳•׳ ׳׳•׳ ׳— ׳—׳©׳׳׳™ ׳©׳׳×׳׳¨ ׳׳× ׳”׳׳§׳•׳ ׳©׳‘׳• ׳׳—׳‘׳¨׳™׳ ׳×׳§׳¢."
+- RIGHT: "׳׳•׳ ׳— ׳—׳©׳׳׳™ ׳”׳׳×׳׳¨ ׳׳× ׳”׳׳§׳•׳ ׳©׳‘׳• ׳׳—׳‘׳¨׳™׳ ׳×׳§׳¢."
+- WRONG: "׳©׳§׳¢ ׳׳×׳׳¨ ׳’׳ ׳׳¦׳‘ ׳©׳‘׳• ׳׳©׳”׳• ׳™׳•׳¨׳“ ׳׳• ׳©׳•׳§׳¢."
+- RIGHT: "׳׳¦׳‘ ׳©׳‘׳• ׳׳©׳”׳• ׳™׳•׳¨׳“ ׳׳• ׳©׳•׳§׳¢, ׳›׳׳• ׳׳™׳ ׳׳• ׳©׳׳©."
+- WRONG: "Dream is a series of thoughts during sleep."
+- RIGHT: "A series of thoughts, images, or emotions occurring during sleep."
+
 ג ן¸ CRITICAL RULE #7 ג€” ETYMOLOGY OF DERIVED FORMS TRACES BACK TO THE BASE FORM:
 When a user asks about a derived form (a noun derived from a verb, a gerund, a feminine form, a plural that has its own meaning), the etymology should trace the ORIGIN of the underlying base/root word ג€” not invent a separate origin for the derivation.
 

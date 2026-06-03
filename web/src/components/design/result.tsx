@@ -715,15 +715,19 @@ export function OriginCard({ etymology }: { etymology: Etymology | string | unde
   // story paragraph below an empty fields block.
   const isStructured = typeof etymology === "object";
   const sourceLanguage = isStructured ? etymology.sourceLanguage?.trim() : "";
+  const originalWord = isStructured ? etymology.originalWord?.trim() : "";
+  const breakdown = isStructured ? etymology.breakdown?.trim() : "";
   const originalMeaning = isStructured ? etymology.originalMeaning?.trim() : "";
   const historyNote = isStructured
     ? etymology.historyNote?.trim()
     : (etymology as string).trim();
 
   const hasLang = !!sourceLanguage;
+  const hasOriginal = !!originalWord;
+  const hasBreakdown = !!breakdown;
   const hasMeant = !!originalMeaning;
   const hasStory = !!historyNote;
-  if (!hasLang && !hasMeant && !hasStory) return null;
+  if (!hasLang && !hasOriginal && !hasBreakdown && !hasMeant && !hasStory) return null;
 
   return (
     <div className="wb-origin-section">
@@ -737,6 +741,18 @@ export function OriginCard({ etymology }: { etymology: Etymology | string | unde
             <div className="wb-origin-row">
               <div className="wb-origin-label">{v2(lang, "wordOriginLanguage")}</div>
               <div className="wb-origin-value">{sourceLanguage}</div>
+            </div>
+          )}
+          {hasOriginal && (
+            <div className="wb-origin-row">
+              <div className="wb-origin-label">{v2(lang, "wordOriginOriginalWord")}</div>
+              <div className="wb-origin-value">{originalWord}</div>
+            </div>
+          )}
+          {hasBreakdown && (
+            <div className="wb-origin-row">
+              <div className="wb-origin-label">{v2(lang, "wordOriginBreakdown")}</div>
+              <div className="wb-origin-value">{breakdown}</div>
             </div>
           )}
           {hasMeant && (
