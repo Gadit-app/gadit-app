@@ -401,13 +401,16 @@ function TabIcon({ name }: { name: TabId }) {
   }
 }
 
-const TAB_DEFS: { id: TabId; label: string }[] = [
-  { id: "image",   label: "תמונה" },
-  { id: "kids",    label: "הסבר לילדים" },
-  { id: "compose", label: "חברו משפט" },
-  { id: "quiz",    label: "חידון" },
-  { id: "compare", label: "השוואת מילים" },
-];
+const TAB_LABELS: Record<string, Record<TabId, string>> = {
+  he: { image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "השוואת מילים" },
+  en: { image: "Image",       kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Compare words" },
+  ar: { image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "مقارنة الكلمات" },
+  ru: { image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Сравнить слова" },
+  es: { image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Comparar palabras" },
+  pt: { image: "Imagem",       kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Comparar palavras" },
+  fr: { image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Comparer mots" },
+};
+const TAB_IDS: TabId[] = ["image", "kids", "compose", "quiz", "compare"];
 
 function MeaningEntry({
   n,
@@ -420,6 +423,8 @@ function MeaningEntry({
   onUpgrade,
   onAction,
 }: MeaningEntryProps) {
+  const { lang } = useLang();
+  const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
   // image + kids + compare render inline; compose + quiz fire modals.
   const [openTab, setOpenTab] = useState<"image" | "kids" | "compare" | null>(null);
 
@@ -500,20 +505,20 @@ function MeaningEntry({
 
       {/* Tab row */}
       <div className="wb-mtabs">
-        {TAB_DEFS.map((t) => {
-          const unlocked = tabUnlocked(t.id, plan);
-          const isOpen = openTab === t.id;
+        {TAB_IDS.map((id) => {
+          const unlocked = tabUnlocked(id, plan);
+          const isOpen = openTab === id;
           return (
             <button
-              key={t.id}
+              key={id}
               type="button"
               className={`wb-mtab${isOpen ? " is-open" : ""}${unlocked ? "" : " is-locked"}`}
-              data-tier={tierForTab(t.id)}
-              onClick={() => handleTabClick(t.id)}
+              data-tier={tierForTab(id)}
+              onClick={() => handleTabClick(id)}
               aria-pressed={isOpen}
             >
-              <span className="wb-mtab-icon"><TabIcon name={t.id} /></span>
-              <span className="wb-mtab-label">{t.label}</span>
+              <span className="wb-mtab-icon"><TabIcon name={id} /></span>
+              <span className="wb-mtab-label">{tabLabels[id]}</span>
               {!unlocked && (
                 <span className="wb-mtab-lock"><LockIcon size={10} /></span>
               )}
@@ -999,8 +1004,6 @@ export function ResultView({
       />
 
       <OriginCard etymology={result.etymology} />
-
-      <ActionBar isSaved={isSaved} onSave={onSave} onShare={onShare} />
     </div>
   );
 }
