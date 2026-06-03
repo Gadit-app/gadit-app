@@ -184,7 +184,6 @@ const COPY: Record<string, {
         "כל המשמעויות (לא רק העיקרית)",
         "3 דוגמאות לכל משמעות",
         "מקור המילה ורקע היסטורי",
-        "מחברת אישית",
       ],
     },
     tierClear: {
@@ -195,10 +194,10 @@ const COPY: Record<string, {
       features: [
         "כל מה שיש ב-Basic",
         "חיפושים ללא הגבלה",
-        "תמונה חיה לכל מילה",
         "הסבר לילדים",
+        "תמונה חיה לכל מילה",
+        "מחברת מילים אישית",
         "חברו משפט עם משוב",
-        "ניבים וצירופי מילים",
         "היסטוריית חיפוש מלאה",
       ],
     },
@@ -236,7 +235,6 @@ const COPY: Record<string, {
         "All meanings (not just the primary)",
         "3 examples per meaning",
         "Word origin & history",
-        "Personal notebook",
       ],
     },
     tierClear: {
@@ -247,10 +245,10 @@ const COPY: Record<string, {
       features: [
         "Everything in Basic",
         "Unlimited searches",
-        "AI-generated image per word",
         "Kids' explanation",
+        "AI-generated image per word",
+        "Personal word notebook",
         "Compose-a-sentence with feedback",
-        "Idioms & expressions",
         "Full search history",
       ],
     },
