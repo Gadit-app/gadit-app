@@ -464,10 +464,18 @@ Each idiom has EXACTLY this shape:
 }
 
 CRITICAL RULES for idioms:
-- Only include idioms that are ACTUALLY USED in real speech. Do NOT invent idioms. If you cannot think of genuine idioms for this word, return an empty array [].
-- For Hebrew words, prefer Hebrew idioms. For English words, prefer English idioms.
+- INCLUDE BOTH strict idioms AND well-known COLLOCATIONS / set phrases. A "set phrase" is a multi-word combination that a speaker recognizes as a fixed expression with a recognizable meaning beyond the literal sum of its words ג€” it does NOT have to be a fully figurative idiom. If a Hebrew/Arabic/Russian/etc. speaker would recognize the phrase as a real expression, include it.
+- For Hebrew specifically: the language is collocation-rich rather than idiom-rich. Many words have well-known set phrases (׳¦׳™׳¨׳•׳₪׳™׳ ׳׳™׳“׳•׳¢׳™׳) even when "pure" idioms are rare. INCLUDE them. Use the user's intuition test: would a Hebrew speaker say "ah yes, ׳”׳¢׳•׳׳ ׳”׳×׳—׳×׳•׳, that's a thing"? If yes ג€” include it.
+- Examples of phrases that QUALIFY for "׳×׳—׳×׳•׳":
+  ג€¢ "׳”׳¢׳•׳׳ ׳”׳×׳—׳×׳•׳" (the underworld / criminal world)
+  ג€¢ "׳™׳“׳• ׳¢׳ ׳”׳×׳—׳×׳•׳ ׳”" (he's losing / on the weaker side)
+  ג€¢ "׳‘׳’׳“ ׳×׳—׳×׳•׳" (undergarment ג€” set phrase)
+  ג€¢ "׳”׳—׳§ ׳”׳×׳—׳×׳•׳" (the lower jaw ג€” set phrase)
+- ONLY skip a phrase if it relies on a vocabulary word so obscure that the average user won't understand it (e.g. "׳¢׳“ ׳”׳“׳™׳•׳˜׳” ׳”׳×׳—׳×׳•׳ ׳”" ג€” skip because "׳“׳™׳•׳˜׳”" is obscure).
+- DO NOT invent phrases that no speaker actually uses. The bar is "recognized in the wild", not "famous nationally".
+- For Hebrew words, prefer Hebrew idioms/collocations. For English words, prefer English ones.
 - Keep "phrase" in the word's original language. Keep "meaning" in the USER'S UI LANGUAGE.
-- Prefer well-known, common idioms over obscure ones.
+- Prefer well-known, common phrases over obscure ones, but err on the side of INCLUDING when in doubt.
 
 Example ג€” word "׳™׳“" (hand), Hebrew user:
 meanings[0] (body part: hand):
@@ -495,7 +503,15 @@ Response root:
     {"phrase": "an eye for an eye", "meaning": "equal retaliation for a wrong"}
   ]
 
-If the word has NO genuine idioms at all in that language, return all empty arrays. Do not force idioms.`;
+Example ג€” word "׳×׳—׳×׳•׳", Hebrew user (illustrating COLLOCATIONS, not just strict idioms):
+Response root:
+  "generalIdioms": [
+    {"phrase": "׳”׳¢׳•׳׳ ׳”׳×׳—׳×׳•׳", "meaning": "׳—׳‘׳¨׳× ׳”׳₪׳©׳¢ ׳•׳”׳₪׳©׳™׳¢׳•׳× ׳”׳׳¨׳’׳ ׳ ׳×"},
+    {"phrase": "׳™׳“׳• ׳¢׳ ׳”׳×׳—׳×׳•׳ ׳”", "meaning": "׳ ׳™׳¦׳‘׳™׳× ׳‘׳—׳™׳™׳ ׳/׳‘׳׳• ׳ ׳—׳׳©׳”, ׳‘׳¦׳“ ׳”׳׳₪׳¡׳™׳“"},
+    {"phrase": "׳”׳—׳§ ׳”׳×׳—׳×׳•׳", "meaning": "׳—׳§ ׳”׳₪׳” ׳”׳ ׳× ׳ ׳—׳× ׳©׳ ׳•׳©׳ ׳©׳™׳ ׳™׳ ׳©׳ ׳׳˜׳”"}
+  ]
+
+If the word has NO genuine idioms or recognized set phrases at all in that language, return all empty arrays. Do not force or invent.`;
 
 const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 

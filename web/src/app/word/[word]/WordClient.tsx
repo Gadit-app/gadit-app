@@ -298,6 +298,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
+  // Brief toast above the topbar confirming a save worked. The button
+  // label also flips to "Saved" but the toast gives an explicit ack.
+  const [saveFlash, setSaveFlash] = useState(false);
   // The 429 case carries a "nextStep" hint from the server — anon
   // visitors see "sign up to keep searching", basic users see
   // "upgrade to Clear for unlimited". Captures the difference so we
@@ -612,13 +616,15 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       return;
     }
     if (!result) return;
-    if (plan !== "deep") {
+    // Notebook is a Clear-tier feature (Basic free plan does not
+    // include it). Anything below Clear gets routed to /pricing.
+    if (plan === "basic") {
       router.push("/pricing");
       return;
     }
     try {
       const idToken = await user.getIdToken();
-      await fetch("/api/notebook", {
+      const res = await fetch("/api/notebook", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -630,6 +636,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           meaning: result.meanings[0]?.meaning ?? "",
         }),
       });
+      if (res.ok) {
+        setIsSaved(true);
+        setSaveFlash(true);
+        window.setTimeout(() => setSaveFlash(false), 2400);
+      }
     } catch (e) {
       console.error("notebook:", e);
     }
@@ -725,6 +736,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // place; Save / Share live inside ResultView's own topbar.
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
+      {saveFlash && (
+        <div className="wb-save-toast" role="status">
+          {v2(lang, "savedToWordBook")}
+        </div>
+      )}
       <div style={{ position: "relative", zIndex: 1 }}>
         <header className="wb-shell-topbar">
           <Link href="/" className="wb-wordmark" aria-label="Gadit home">
@@ -732,6 +748,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           </Link>
           <nav className="wb-shell-nav" aria-label="Primary">
             <Link href="/">{v2(lang, "navSearch")}</Link>
+            {user && (
+              <Link href="/notebook">{v2(lang, "navNotebook")}</Link>
+            )}
             <Link href="/pricing">{v2(lang, "navPricing")}</Link>
           </nav>
           <div className="wb-shell-actions">
@@ -830,6 +849,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             plan={plan}
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
+            isSaved={isSaved}
             onSave={handleSave}
             onShare={handleShare}
             onGenerate={handleGenerate}
