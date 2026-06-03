@@ -3340,7 +3340,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    no electric-blue gradients. Mirrors the home / pricing visual
    language so signing in feels like part of the same product.
    =================================================================== */
-.wordbook .wb-login-backdrop {
+.wordbook.wb-login-backdrop {
   position: fixed;
   inset: 0;
   z-index: 50;
