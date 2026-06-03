@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { isDegenerate } from "@/lib/define-guard";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -605,72 +606,6 @@ async function deleteCachedResult(key: string) {
   } catch (e) {
     console.error("Firestore deleteCache error:", e);
   }
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Degenerate-output guard. OpenAI sometimes returns garbage:
-//   1. A short typographic sequence repeated 100s of times
-//   2. Mojibake on the echoed word ('×™™'×''') — UTF-8 bytes
-//      decoded as cp1252 inside the model itself
-//   3. A response in the wrong script entirely (Hebrew word →
-//      Latin-only definitions, or pure typographic junk)
-// Same guard runs on stream-end, cache-read, and every retry
-// attempt so a single corrupted result never reaches the user.
-type GuardResult = { degenerate: false } | { degenerate: true; reason: string };
-
-const MOJIBAKE_CHARS = /[×™©¨'']/g;
-const HEBREW_RX   = /[֐-׿]/;
-const ARABIC_RX   = /[؀-ۿ]/;
-const CYRILLIC_RX = /[Ѐ-ӿ]/;
-
-function isDegenerate(result: unknown, inputWord: string): GuardResult {
-  if (!result || typeof result !== "object") {
-    return { degenerate: true, reason: "result is not an object" };
-  }
-  const fr = result as {
-    word?: unknown;
-    meanings?: Array<{ meaning?: unknown; examples?: unknown }>;
-  };
-  const meanings = Array.isArray(fr.meanings) ? fr.meanings : [];
-
-  // (1) Repetition loop
-  for (const m of meanings) {
-    const exs = Array.isArray(m?.examples) ? m.examples : [];
-    for (const ex of exs) {
-      if (typeof ex === "string" && ex.length > 600) {
-        return { degenerate: true, reason: "example exceeds 600 chars" };
-      }
-    }
-  }
-
-  // (2) Mojibake on echoed word
-  if (typeof fr.word === "string") {
-    const ws = fr.word;
-    const mojibakeCount = (ws.match(MOJIBAKE_CHARS) ?? []).length;
-    if (ws.length > 0 && mojibakeCount / ws.length > 0.4) {
-      return { degenerate: true, reason: "echoed word is mostly mojibake chars" };
-    }
-  }
-
-  // (3) Wrong-script for non-Latin inputs
-  const scriptForInput =
-    HEBREW_RX.test(inputWord)   ? { name: "Hebrew",   rx: HEBREW_RX }   :
-    ARABIC_RX.test(inputWord)   ? { name: "Arabic",   rx: ARABIC_RX }   :
-    CYRILLIC_RX.test(inputWord) ? { name: "Cyrillic", rx: CYRILLIC_RX } :
-    null;
-  if (scriptForInput && meanings.length > 0) {
-    const anyHit = meanings.some((m) =>
-      typeof m?.meaning === "string" && scriptForInput.rx.test(m.meaning),
-    );
-    if (!anyHit) {
-      return {
-        degenerate: true,
-        reason: `input was ${scriptForInput.name} but no definition has ${scriptForInput.name} chars`,
-      };
-    }
-  }
-
-  return { degenerate: false };
 }
 
 // Loose JSON schema for OpenAI Structured Outputs. The current prompt
