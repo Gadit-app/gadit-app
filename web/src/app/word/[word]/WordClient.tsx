@@ -741,7 +741,16 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 WordHeader. The masthead stays a calm chrome strip for
                 nav + language + auth. */}
             <WordbookLangSwitch />
-            {!user && (
+            {user ? (
+              <Link href="/account" className="wb-avatar" aria-label="Account">
+                {user.photoURL ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={user.photoURL} alt="" />
+                ) : (
+                  <span>{(user.email?.[0] || "G").toUpperCase()}</span>
+                )}
+              </Link>
+            ) : (
               <button
                 type="button"
                 className="wb-shell-link"
