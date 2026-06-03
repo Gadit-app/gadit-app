@@ -3334,3 +3334,244 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   text-decoration: none;
 }
 .wordbook .wb-home-footer a:hover { color: var(--ink); }
+
+/* ===================================================================
+   Login modal — CrispTech aesthetic. Clean white card, teal accent,
+   no electric-blue gradients. Mirrors the home / pricing visual
+   language so signing in feels like part of the same product.
+   =================================================================== */
+.wordbook .wb-login-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.32);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.wordbook .wb-login-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 28px 28px 26px;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    0 20px 50px -16px rgba(15, 23, 42, 0.25);
+  color: var(--ink);
+}
+.wordbook .wb-login-close {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--ink-faint);
+  border: none;
+  cursor: pointer;
+}
+.wordbook .wb-login-close:hover {
+  background: var(--rule-faint);
+  color: var(--ink-muted);
+}
+.wordbook .wb-login-logo {
+  font-family: var(--wb-sans);
+  font-weight: 600;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 14px;
+  direction: ltr;
+}
+.wordbook .wb-login-logo-it {
+  color: var(--teal);
+  font-style: italic;
+  font-weight: 500;
+}
+.wordbook .wb-login-title {
+  font-family: var(--wb-he);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+  margin: 0 0 4px;
+}
+.wordbook .wb-login-reason {
+  font-family: var(--wb-he);
+  font-size: 13px;
+  color: var(--ink-muted);
+  text-align: center;
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+.wordbook .wb-login-google {
+  width: 100%;
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--wb-he);
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.wordbook .wb-login-google:hover {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.10);
+}
+.wordbook .wb-login-google:disabled { opacity: 0.6; cursor: default; }
+.wordbook .wb-login-sep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+.wordbook .wb-login-sep::before,
+.wordbook .wb-login-sep::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.wordbook .wb-login-sep span {
+  font-family: var(--wb-he);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.wordbook .wb-login-label {
+  font-family: var(--wb-he);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+.wordbook .wb-login-input,
+.wordbook .wb-login-input-pwd {
+  width: 100%;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.wordbook .wb-login-input:focus,
+.wordbook .wb-login-input-pwd:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);
+}
+.wordbook .wb-login-input.is-error,
+.wordbook .wb-login-input-pwd.is-error {
+  border-color: #DC2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10);
+}
+.wordbook .wb-login-pwd-wrap { position: relative; }
+.wordbook .wb-login-pwd-toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-end: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--ink-faint);
+  border: none;
+  cursor: pointer;
+}
+.wordbook .wb-login-pwd-toggle:hover { color: var(--ink-muted); }
+.wordbook .wb-login-submit {
+  width: 100%;
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: var(--teal);
+  color: var(--surface);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.wordbook .wb-login-submit:hover { background: var(--teal-edge); }
+.wordbook .wb-login-submit:disabled { opacity: 0.8; cursor: default; }
+.wordbook .wb-login-error {
+  font-family: var(--wb-he);
+  font-size: 13px;
+  color: #B91C1C;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.wordbook .wb-login-toggle {
+  margin-top: 16px;
+  text-align: center;
+  font-family: var(--wb-he);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.wordbook .wb-login-toggle button {
+  color: var(--teal);
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.wordbook .wb-login-toggle button:hover { color: var(--teal-edge); text-decoration: underline; }
+.wordbook .wb-login-age {
+  margin-top: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--wb-he);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  cursor: pointer;
+}
+.wordbook .wb-login-age input[type="checkbox"] {
+  margin-top: 3px;
+  width: 15px;
+  height: 15px;
+  accent-color: var(--teal);
+  flex-shrink: 0;
+}
+.wordbook .wb-login-age a {
+  color: var(--teal);
+  text-decoration: underline;
+}
+.wordbook .wb-login-field + .wb-login-field { margin-top: 12px; }
