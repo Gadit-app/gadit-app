@@ -275,11 +275,15 @@ export function PricingPageRoute() {
   const c = COPY[lang] ?? COPY.en;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
     function onClick(e: MouseEvent) {
-      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
+      const target = e.target as Node;
+      if (menuRef.current?.contains(target)) return;
+      if (burgerRef.current?.contains(target)) return;
+      setMenuOpen(false);
     }
     function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
     document.addEventListener("mousedown", onClick);
@@ -366,11 +370,11 @@ export function PricingPageRoute() {
           )}
         </div>
         <button
+          ref={burgerRef}
           type="button"
           className="wb-shell-burger"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
-          onMouseDown={(e) => e.stopPropagation()}
           onClick={() => setMenuOpen((v) => !v)}
         >
           {menuOpen ? (

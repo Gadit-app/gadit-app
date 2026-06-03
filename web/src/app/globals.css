@@ -1504,7 +1504,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: var(--paper);
   display: flex;
   flex-direction: column;
+  /* 100vh on mobile includes the address bar area, so the page
+     becomes taller than the actual visible viewport and the
+     auto-margin footer ends up below the fold. 100dvh tracks the
+     actual dynamic viewport and keeps the footer visible. */
   min-height: 100vh;
+  min-height: 100dvh;
 }
 .wordbook.wb-shell-page > .wb-shell-topbar { flex-shrink: 0; }
 .wordbook.wb-shell-page > .wb-home-main { flex: 1; }
