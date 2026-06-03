@@ -3312,14 +3312,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-feature-title { font-size: 18px; padding: 20px 24px; }
 }
 
-/* Tier pill positioned at the top-end corner */
+/* Tier pill vertically centered against the icon and title so all
+   three elements share one center line across the row. */
 .wordbook .wb-feature-card .wb-tier-pill {
   position: absolute;
-  top: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   inset-inline-end: 14px;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-feature-card .wb-tier-pill { top: 14px; inset-inline-end: 16px; }
+  .wordbook .wb-feature-card .wb-tier-pill { inset-inline-end: 16px; }
 }
 
 /* Tier pill on feature card — modernized: pill-shape, Inter sans
