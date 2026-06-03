@@ -74,7 +74,7 @@ interface Feature {
   title: string;
   body: string;
   tier: Tier;
-  icon: "definitions" | "examples" | "idioms" | "origin" | "image" | "kids" | "compose" | "quiz" | "compare";
+  icon: "definitions" | "examples" | "idioms" | "origin" | "notebook" | "image" | "kids" | "compose" | "quiz" | "compare";
 }
 
 const COPY: Record<string, {
@@ -101,6 +101,7 @@ const COPY: Record<string, {
       { id: "examples",    icon: "examples",    tier: "basic", title: "דוגמאות של משפטים לפי הקשר",                  body: "" },
       { id: "idioms",      icon: "idioms",      tier: "basic", title: "ניבים וצירופי מילים",                          body: "" },
       { id: "origin",      icon: "origin",      tier: "basic", title: "מקור המילה",                                    body: "" },
+      { id: "notebook",    icon: "notebook",    tier: "basic", title: "מחברת מילים אישית",                            body: "" },
       { id: "image",       icon: "image",       tier: "clear", title: "המחשת המילה בתמונה",                          body: "" },
       { id: "kids",        icon: "kids",        tier: "clear", title: "הסבר לילדים",                                   body: "" },
       { id: "compose",     icon: "compose",     tier: "clear", title: "חיבור משפט עם המילה וקבלת משוב",            body: "" },
@@ -120,6 +121,7 @@ const COPY: Record<string, {
       { id: "examples",    icon: "examples",    tier: "basic", title: "Sentence examples by context",         body: "" },
       { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idioms & expressions",                 body: "" },
       { id: "origin",      icon: "origin",      tier: "basic", title: "Word origin",                          body: "" },
+      { id: "notebook",    icon: "notebook",    tier: "basic", title: "Personal word notebook",               body: "" },
       { id: "image",       icon: "image",       tier: "clear", title: "Word illustrated as an image",         body: "" },
       { id: "kids",        icon: "kids",        tier: "clear", title: "Kids' explanation",                    body: "" },
       { id: "compose",     icon: "compose",     tier: "clear", title: "Compose a sentence and get feedback",  body: "" },
@@ -130,17 +132,31 @@ const COPY: Record<string, {
 };
 
 function FeatureIcon({ name, color }: { name: Feature["icon"]; color: string }) {
-  const common = { width: 22, height: 22, viewBox: "0 0 24 24", fill: "none", stroke: color, strokeWidth: 1.6, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  // Crisper, more geometric icon set (lucide-inspired). 1.75 stroke
+  // keeps the lines clearly visible at 38-48px without looking heavy,
+  // square caps + miter joins replace the previous rounded "sketchy"
+  // feel with something more precise + modern.
+  const common = {
+    width: 22,
+    height: 22,
+    viewBox: "0 0 24 24",
+    fill: "none" as const,
+    stroke: color,
+    strokeWidth: 1.75,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
   switch (name) {
-    case "definitions": return <svg {...common}><path d="M3 5.5C3 4.7 3.7 4 4.5 4H11v15H4.5C3.7 19 3 18.3 3 17.5V5.5Z" /><path d="M21 5.5C21 4.7 20.3 4 19.5 4H13v15h6.5C20.3 19 21 18.3 21 17.5V5.5Z" /><path d="M6 8h2.5M6 11h2.5M15.5 8H18M15.5 11H18" /></svg>;
-    case "examples":    return <svg {...common}><path d="M5 6h14M5 12h14M5 18h10" /></svg>;
-    case "idioms":      return <svg {...common}><path d="M21 11.5a8 8 0 1 1-3.4-6.6L21 4l-1 4" /><path d="M8 13h.01M12 13h.01M16 13h.01" /></svg>;
-    case "origin":      return <svg {...common}><path d="M5 5h11a2.5 2.5 0 0 1 2.5 2.5V18a2 2 0 0 1-2 2H7" /><path d="M5 5a2 2 0 0 0-2 2v2h2" /><path d="M7 20a2 2 0 0 1-2-2V9" /><path d="M9 9h6M9 12h6M9 15h4" /></svg>;
-    case "image":       return <svg {...common}><rect x="3" y="5" width="18" height="14" rx="1.5" /><circle cx="8" cy="10" r="1.5" /><path d="M3 16.5l4-3.5 4 3 4-4 6 4" /></svg>;
-    case "kids":        return <svg {...common}><circle cx="12" cy="9" r="3.2" /><path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6" /></svg>;
-    case "compose":     return <svg {...common}><path d="M4 20h4l10-10-4-4L4 16z" /><path d="M14 6l4 4" /></svg>;
-    case "quiz":        return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 4 2c-1 .8-1.5 1.4-1.5 2.5" /><circle cx="12" cy="17.5" r="0.6" fill={color} stroke="none" /></svg>;
-    case "compare":     return <svg {...common}><rect x="3" y="5" width="8" height="14" rx="1" /><rect x="13" y="5" width="8" height="14" rx="1" /><path d="M7 9v6M17 9v6" /></svg>;
+    case "definitions": return <svg {...common}><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z" /><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z" /></svg>;
+    case "examples":    return <svg {...common}><path d="M4 6h16" /><path d="M4 12h16" /><path d="M4 18h10" /><circle cx="3" cy="6" r="0.6" fill={color} stroke="none" /><circle cx="3" cy="12" r="0.6" fill={color} stroke="none" /><circle cx="3" cy="18" r="0.6" fill={color} stroke="none" /></svg>;
+    case "idioms":      return <svg {...common}><path d="M21 12a8 8 0 1 1-2.5-5.8L21 5v4h-4" /><path d="M9 13h.01M12 13h.01M15 13h.01" /></svg>;
+    case "origin":      return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a14 14 0 0 1 4 9 14 14 0 0 1-4 9 14 14 0 0 1-4-9 14 14 0 0 1 4-9z" /></svg>;
+    case "notebook":    return <svg {...common}><path d="M6 4h12a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /><path d="M9 4v17" /><path d="M12 9h4M12 13h4" /></svg>;
+    case "image":       return <svg {...common}><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="8.5" cy="9.5" r="1.5" /><path d="m21 16-4-4-8 8" /></svg>;
+    case "kids":        return <svg {...common}><circle cx="12" cy="8" r="3.5" /><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7" /></svg>;
+    case "compose":     return <svg {...common}><path d="M14 4l6 6L8 22H2v-6z" /><path d="M13 5l6 6" /></svg>;
+    case "quiz":        return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1.5 1-1.5 2.2" /><circle cx="12" cy="17" r="0.7" fill={color} stroke="none" /></svg>;
+    case "compare":     return <svg {...common}><rect x="3" y="4" width="7" height="16" rx="1.5" /><rect x="14" y="4" width="7" height="16" rx="1.5" /><path d="M12 4v16" strokeDasharray="2 2" /></svg>;
   }
 }
 
@@ -151,9 +167,25 @@ const TIER_COLOR: Record<Tier, { fg: string; bg: string }> = {
 };
 
 export function FeaturesPage() {
-  const { lang, dir } = useLang();
+  const { lang, dir, setLang } = useLang();
   const { user, promptLogin } = useAuth();
   const c = COPY[lang] ?? COPY.en;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onClick(e: MouseEvent) {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -188,6 +220,62 @@ export function FeaturesPage() {
             </button>
           )}
         </div>
+        <button
+          type="button"
+          className="wb-shell-burger"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          )}
+        </button>
+        {menuOpen && (
+          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
+            <Link href="/" className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {c.search}
+            </Link>
+            <Link href="/features" className="wb-shell-mobile-link is-active" onClick={() => setMenuOpen(false)}>
+              {c.features}
+            </Link>
+            <Link href="/pricing" className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {c.pricing}
+            </Link>
+            <div className="wb-shell-mobile-menu-sep" />
+            <div className="wb-shell-mobile-langs">
+              {LANGS.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  className={l.code === lang ? "is-active" : ""}
+                  onClick={() => { setLang(l.code); setMenuOpen(false); }}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+            <div className="wb-shell-mobile-menu-sep" />
+            {user ? (
+              <Link href="/account" onClick={() => setMenuOpen(false)}>
+                {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => { setMenuOpen(false); promptLogin({ mode: "signin" }); }}
+              >
+                {c.signin}
+              </button>
+            )}
+          </div>
+        )}
       </header>
 
       <main className="wb-features-main">
