@@ -364,9 +364,16 @@ export interface V2Strings {
   visualEyebrow: string;
   meaningsEyebrow: string;
   takeItFurtherEyebrow: string;
+  idiomsEyebrow: string;
   // Word Origin structured rows
   wordOriginLanguage: string;
   wordOriginOriginallyMeant: string;
+  wordOriginBackgroundLabel: string;
+  // Empty/loading panels on the result page
+  imageGeneratingLabel: string;
+  kidsComingSoon: string;
+  compareComingSoon: string;
+  shareDefinitionAria: string;
   // Action tile titles (single-line, no subtitles)
   actionCompose: string;
   actionQuiz: string;
@@ -716,6 +723,12 @@ const en: V2Strings = {
 
   // ── Wordbook redesign ───────────────────────────────────────
   wordOriginEyebrow: "Word Origin",
+  idiomsEyebrow: "Idioms & expressions",
+  wordOriginBackgroundLabel: "Background",
+  imageGeneratingLabel: "Generating image…",
+  kidsComingSoon: "Kids' explanation coming soon.",
+  compareComingSoon: "New compare-words tool coming soon.",
+  shareDefinitionAria: "Share this definition",
   visualEyebrow: "Visual",
   meaningsEyebrow: "Definitions",
   takeItFurtherEyebrow: "Take it further",
@@ -1070,6 +1083,12 @@ const he: V2Strings = {
 
   // ── Wordbook redesign ───────────────────────────────────────
   wordOriginEyebrow: "מקור המילה",
+  idiomsEyebrow: "ניבים וצירופים",
+  wordOriginBackgroundLabel: "רקע",
+  imageGeneratingLabel: "יוצר תמונה…",
+  kidsComingSoon: "הסבר לילדים יופיע כאן בקרוב.",
+  compareComingSoon: "כלי השוואת מילים בעיצוב חדש — בקרוב.",
+  shareDefinitionAria: "שתפו הגדרה זו",
   visualEyebrow: "תמונה",
   meaningsEyebrow: "הגדרות",
   takeItFurtherEyebrow: "קחו את זה הלאה",
@@ -1437,6 +1456,12 @@ const ar: V2Strings = {
 
   // ── Wordbook redesign ───────────────────────────────────────
   wordOriginEyebrow: "أصل الكلمة",
+  idiomsEyebrow: "تعابير وعبارات",
+  wordOriginBackgroundLabel: "خلفية",
+  imageGeneratingLabel: "جارٍ إنشاء الصورة…",
+  kidsComingSoon: "شرح للأطفال سيظهر هنا قريبًا.",
+  compareComingSoon: "أداة جديدة لمقارنة الكلمات قريبًا.",
+  shareDefinitionAria: "شارك هذا التعريف",
   visualEyebrow: "صورة",
   meaningsEyebrow: "تعريفات",
   takeItFurtherEyebrow: "تعمَّق أكثر",
@@ -1787,6 +1812,12 @@ const ru: Partial<V2Strings> = {
 
   // ── Wordbook redesign ───────────────────────────────────────
   wordOriginEyebrow: "Происхождение слова",
+  idiomsEyebrow: "Идиомы и выражения",
+  wordOriginBackgroundLabel: "Контекст",
+  imageGeneratingLabel: "Создаём изображение…",
+  kidsComingSoon: "Объяснение для детей появится здесь скоро.",
+  compareComingSoon: "Новый инструмент сравнения слов — скоро.",
+  shareDefinitionAria: "Поделиться этим определением",
   visualEyebrow: "Изображение",
   meaningsEyebrow: "Определения",
   takeItFurtherEyebrow: "Углубиться",
@@ -2137,6 +2168,12 @@ const es: Partial<V2Strings> = {
   wordOriginEyebrow: "Origen de la palabra",
   visualEyebrow: "Visual",
   meaningsEyebrow: "Definiciones",
+  idiomsEyebrow: "Modismos y expresiones",
+  wordOriginBackgroundLabel: "Contexto",
+  imageGeneratingLabel: "Generando imagen…",
+  kidsComingSoon: "Explicación para niños llegará pronto.",
+  compareComingSoon: "Nueva herramienta de comparación llegará pronto.",
+  shareDefinitionAria: "Compartir esta definición",
   takeItFurtherEyebrow: "Profundiza más",
   wordOriginLanguage: "Idioma",
   wordOriginOriginallyMeant: "Significaba originalmente",
@@ -2485,6 +2522,12 @@ const pt: Partial<V2Strings> = {
   wordOriginEyebrow: "Origem da palavra",
   visualEyebrow: "Visual",
   meaningsEyebrow: "Definições",
+  idiomsEyebrow: "Expressões idiomáticas",
+  wordOriginBackgroundLabel: "Contexto",
+  imageGeneratingLabel: "Gerando imagem…",
+  kidsComingSoon: "Explicação para crianças em breve.",
+  compareComingSoon: "Nova ferramenta de comparação em breve.",
+  shareDefinitionAria: "Compartilhar esta definição",
   takeItFurtherEyebrow: "Vá mais a fundo",
   wordOriginLanguage: "Idioma",
   wordOriginOriginallyMeant: "Significava originalmente",
@@ -2833,6 +2876,12 @@ const fr: Partial<V2Strings> = {
   wordOriginEyebrow: "Origine du mot",
   visualEyebrow: "Visuel",
   meaningsEyebrow: "Définitions",
+  idiomsEyebrow: "Idiomes et expressions",
+  wordOriginBackgroundLabel: "Contexte",
+  imageGeneratingLabel: "Génération de l'image…",
+  kidsComingSoon: "L'explication pour enfants arrive bientôt.",
+  compareComingSoon: "Nouvel outil de comparaison à venir.",
+  shareDefinitionAria: "Partager cette définition",
   takeItFurtherEyebrow: "Aller plus loin",
   wordOriginLanguage: "Langue",
   wordOriginOriginallyMeant: "Signifiait à l'origine",

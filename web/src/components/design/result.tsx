@@ -476,7 +476,7 @@ function MeaningEntry({
         <button
           type="button"
           className="wb-mcard-share"
-          aria-label="שתפו הגדרה זו"
+          aria-label={v2(lang, "shareDefinitionAria")}
           onClick={handleShareMeaning}
         >
           <ShareIcon size={14} />
@@ -537,7 +537,7 @@ function MeaningEntry({
           ) : (
             <div className="wb-mpanel-empty">
               <div className="wb-visual-art"><CrosshairIcon size={28} /></div>
-              <div className="wb-visual-label">יוצר תמונה…</div>
+              <div className="wb-visual-label">{v2(lang, "imageGeneratingLabel")}</div>
               <div className="wb-loader-dots" aria-hidden="true">
                 <span /><span /><span />
               </div>
@@ -563,14 +563,14 @@ function MeaningEntry({
       )}
       {openTab === "kids" && !meaning.kidsExplanation && (
         <div className="wb-mpanel">
-          <div className="wb-kids-body">הסבר לילדים יופיע כאן בקרוב.</div>
+          <div className="wb-kids-body">{v2(lang, "kidsComingSoon")}</div>
         </div>
       )}
 
       {openTab === "compare" && (
         <div className="wb-mpanel">
           <div className="wb-kids-body">
-            כלי השוואת מילים בעיצוב חדש — בקרוב.
+            {v2(lang, "compareComingSoon")}
           </div>
         </div>
       )}
@@ -660,6 +660,7 @@ export function IdiomsSection({
   meanings: Meaning[];
   generalIdioms?: Idiom[];
 }) {
+  const { lang } = useLang();
   // Combine all idioms — per-meaning first (preserving order), then
   // any general ones at the end. De-dupe by phrase so we don't show
   // the same idiom twice if the model surfaced it in both places.
@@ -684,7 +685,7 @@ export function IdiomsSection({
   return (
     <div className="wb-idioms-section">
       <div className="wb-eyebrow">
-        <span>ניבים וצירופים</span>
+        <span>{v2(lang, "idiomsEyebrow")}</span>
       </div>
       <div className="wb-card wb-idioms-card">
         {all.map((id, j) => (
@@ -740,7 +741,7 @@ export function OriginCard({ etymology }: { etymology: Etymology | string | unde
           )}
           {hasStory && (
             <div className="wb-origin-row wb-origin-row-story">
-              <div className="wb-origin-label">רקע</div>
+              <div className="wb-origin-label">{v2(lang, "wordOriginBackgroundLabel")}</div>
               <div className="wb-origin-value">{historyNote}</div>
             </div>
           )}
