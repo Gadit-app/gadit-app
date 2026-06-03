@@ -225,6 +225,7 @@ export function FeaturesPage() {
           className="wb-shell-burger"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
+          onMouseDown={(e) => e.stopPropagation()}
           onClick={() => setMenuOpen((v) => !v)}
         >
           {menuOpen ? (
