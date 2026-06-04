@@ -36,9 +36,9 @@ export async function GET(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
-    if (userInfo.plan !== "deep") {
+    if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
       return NextResponse.json(
-        { error: "upgrade_required", requiredPlan: "deep" },
+        { error: "upgrade_required", requiredPlan: "clear" },
         { status: 402 }
       );
     }
@@ -81,9 +81,9 @@ export async function POST(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
-    if (userInfo.plan !== "deep") {
+    if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
       return NextResponse.json(
-        { error: "upgrade_required", requiredPlan: "deep" },
+        { error: "upgrade_required", requiredPlan: "clear" },
         { status: 402 }
       );
     }
@@ -133,9 +133,9 @@ export async function DELETE(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
-    if (userInfo.plan !== "deep") {
+    if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
       return NextResponse.json(
-        { error: "upgrade_required", requiredPlan: "deep" },
+        { error: "upgrade_required", requiredPlan: "clear" },
         { status: 402 }
       );
     }

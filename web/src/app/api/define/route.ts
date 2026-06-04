@@ -14,7 +14,7 @@ import { isDegenerate } from "@/lib/define-guard";
 //   notebook + history + first-class profile.
 // Paid (Clear/Deep) is unmetered ג€” handled by an isPaid bypass below.
 const ANON_DAILY_LIMIT = 5;
-const BASIC_DAILY_LIMIT = 20;
+const BASIC_DAILY_LIMIT = 10;
 
 function todayUTC(): string {
   // UTC date in YYYY-MM-DD so the daily counter resets at a consistent global
@@ -845,7 +845,7 @@ export async function POST(req: NextRequest) {
 
     // Three identity states we handle:
     //   - paid (Clear/Deep): unmetered, gets all premium prompt features
-    //   - basic (signed-in free): 20/day quota tied to userId
+    //   - basic (signed-in free): 10/day quota tied to userId
     //   - anonymous: 5/day quota tied to client IP
     // We do NOT 401 anon visitors anymore. Forcing signup before the
     // first search killed SEO + word-of-mouth sharing in beta ג€” both

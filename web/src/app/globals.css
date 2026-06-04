@@ -3457,6 +3457,169 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-home-footer a:hover { color: var(--ink); }
 
+/* Notebook page — CrispTech grid. White cards, teal word, language
+   pill in muted gray. Replaces the V2 navy starscape design. */
+.wordbook .wb-notebook-main {
+  flex: 1;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 22px 60px;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-notebook-main { padding: 32px 32px 80px; }
+}
+.wordbook .wb-notebook-hero { text-align: center; margin-bottom: 28px; }
+.wordbook .wb-notebook-title {
+  font-family: var(--wb-he);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-notebook-title { font-size: 44px; }
+}
+.wordbook .wb-notebook-sub {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  color: var(--ink-muted);
+  margin: 0 auto;
+  max-width: 540px;
+}
+.wordbook .wb-notebook-loading,
+.wordbook .wb-notebook-error {
+  text-align: center;
+  font-family: var(--wb-he);
+  color: var(--ink-muted);
+  padding: 28px;
+}
+.wordbook .wb-notebook-error { color: #B91C1C; }
+.wordbook .wb-notebook-empty {
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 40px 24px;
+  margin: 12px auto;
+  max-width: 480px;
+}
+.wordbook .wb-notebook-empty p {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.wordbook .wb-notebook-empty-hint { color: var(--ink-muted); font-size: 13.5px; }
+.wordbook .wb-notebook-cta {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 18px;
+  background: var(--teal);
+  color: var(--surface);
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.wordbook .wb-notebook-cta:hover { background: var(--teal-edge); }
+.wordbook .wb-notebook-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-notebook-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .wordbook .wb-notebook-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.wordbook .wb-notebook-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--teal);
+  border-radius: 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.wordbook .wb-notebook-card:hover {
+  box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.14);
+  transform: translateY(-1px);
+}
+.wordbook .wb-notebook-card-link {
+  display: block;
+  padding: 14px 16px 14px;
+  text-decoration: none;
+  color: inherit;
+}
+.wordbook .wb-notebook-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.wordbook .wb-notebook-card-word {
+  font-family: var(--wb-he);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--teal);
+  line-height: 1.2;
+}
+.wordbook .wb-notebook-card-lang {
+  font-family: var(--wb-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--rule-faint);
+  padding: 3px 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.wordbook .wb-notebook-card-meaning {
+  font-family: var(--wb-he);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* "Showing results for X" banner — appears when the wrong-keyboard
+   auto-correct kicks in (e.g. user typed 'nxnr' on English keyboard
+   meaning to type 'מסמר'). Soft teal-tinted pill, sits above the
+   meaning card with a calm tone — no error, no alarm. */
+.wordbook .wb-typo-banner {
+  margin: 0 20px 14px;
+  padding: 10px 14px;
+  background: var(--teal-soft);
+  border: 1px solid var(--teal);
+  border-radius: 10px;
+  font-family: var(--wb-he);
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.wordbook .wb-typo-banner strong { font-weight: 700; }
+.wordbook .wb-typo-banner a {
+  color: var(--teal-edge);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.wordbook .wb-typo-banner a:hover { color: var(--teal); }
+
 /* Save toast — small pill that fades in at the top of the page when
    a word is saved to the notebook. Sits above the topbar (z>30) so
    it's visible even on long pages where the topbar is sticky. */

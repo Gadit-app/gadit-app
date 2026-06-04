@@ -22,6 +22,7 @@ import Link from "next/link";
 
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
@@ -295,10 +296,31 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const contextSentence = searchParams?.get("sentence")?.trim() || "";
+  // When wrong-keyboard auto-correct fires, the original mis-typed
+  // word is preserved in ?from=… so we can show a banner that lets
+  // the user override and search the original anyway. ?stay=1 is
+  // set by that override link to skip the redirect on re-entry.
+  const typedOriginal = searchParams?.get("from")?.trim() || "";
+  const stayOnInput = searchParams?.get("stay") === "1";
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+
+  // Wrong-keyboard rescue: if a Hebrew user types 'nxnr' (the physical
+  // keys for מסמר with English keyboard on), or vice-versa, silently
+  // redirect to the corrected word. The replaced URL keeps the typo
+  // in ?from= so the result page can offer a "search instead for…"
+  // override link. ?stay=1 short-circuits the detection on re-entry.
+  useEffect(() => {
+    if (stayOnInput) return;
+    const corrected = detectWrongKeyboard(initialWord, lang);
+    if (corrected && corrected !== initialWord) {
+      router.replace(
+        `/word/${encodeURIComponent(corrected)}?from=${encodeURIComponent(initialWord)}`,
+      );
+    }
+  }, [initialWord, lang, router, stayOnInput]);
   // Brief toast above the topbar confirming a save worked. The button
   // label also flips to "Saved" but the toast gives an explicit ack.
   const [saveFlash, setSaveFlash] = useState(false);
@@ -843,6 +865,43 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             above. Loading/error/soft-wall states still render inside
             the V2 main; once the result is loaded, the cream Wordbook
             page takes over.  See web/public/gadit-final.html. */}
+        {result && typedOriginal && typedOriginal !== result.word && (
+          <div className="wb-typo-banner" role="status">
+            {lang === "he" ? (
+              <>
+                מציג תוצאות עבור <strong>{result.word}</strong>
+                {" · "}
+                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
+                  חפש בכל זאת את &ldquo;{typedOriginal}&rdquo;
+                </Link>
+              </>
+            ) : lang === "ar" ? (
+              <>
+                عرض نتائج لـ <strong>{result.word}</strong>
+                {" · "}
+                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
+                  ابحث بدلاً من ذلك عن &ldquo;{typedOriginal}&rdquo;
+                </Link>
+              </>
+            ) : lang === "ru" ? (
+              <>
+                Результаты для <strong>{result.word}</strong>
+                {" · "}
+                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
+                  Искать вместо этого &ldquo;{typedOriginal}&rdquo;
+                </Link>
+              </>
+            ) : (
+              <>
+                Showing results for <strong>{result.word}</strong>
+                {" · "}
+                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
+                  Search instead for &ldquo;{typedOriginal}&rdquo;
+                </Link>
+              </>
+            )}
+          </div>
+        )}
         {result && (
           <ResultView
             result={result}
