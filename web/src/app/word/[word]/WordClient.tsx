@@ -830,7 +830,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             <Link href="/features" className="wb-shell-navlink">
               {v2(lang, "navFeatures")}
             </Link>
-            {user && (
+            {user && (plan === "clear" || plan === "deep") && (
               <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
             )}
             <Link href="/pricing" className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>

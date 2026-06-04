@@ -284,32 +284,29 @@ export function WordHeader({
         )}
         <h1 className="wb-word-title">{word}</h1>
       </div>
-      {onSave && (
+      {(onSave || onShare) && (
         <div className="wb-word-actions">
-          <button
-            type="button"
-            className={`wb-word-act ${isSaved ? "is-saved" : ""}`}
-            onClick={onSave}
-          >
-            <BookmarkFillIcon size={13} />
-            {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
-          </button>
+          {onSave && (
+            <button
+              type="button"
+              className={`wb-word-act ${isSaved ? "is-saved" : ""}`}
+              onClick={onSave}
+            >
+              <BookmarkFillIcon size={13} />
+              {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
+            </button>
+          )}
+          {onShare && (
+            <button
+              type="button"
+              className="wb-word-act-icon"
+              aria-label={v2(lang, "shareLabel")}
+              onClick={onShare}
+            >
+              <ShareIcon size={14} />
+            </button>
+          )}
         </div>
-      )}
-      {/* Share lives in the top-end corner of the header, positioned
-          absolutely — same coordinates as the per-meaning .wb-mcard-head
-          share. The two icons line up on the same vertical column,
-          giving the page a consistent share-icon spine on the leading
-          edge of every section the user can share. */}
-      {onShare && (
-        <button
-          type="button"
-          className="wb-word-act-icon wb-word-share-corner"
-          aria-label={v2(lang, "shareLabel")}
-          onClick={onShare}
-        >
-          <ShareIcon size={14} />
-        </button>
       )}
     </div>
   );

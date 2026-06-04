@@ -130,7 +130,7 @@ function SearchIcon({ size = 16 }: { size?: number }) {
 
 export function HomePage() {
   const { lang, dir, setLang } = useLang();
-  const { user, promptLogin } = useAuth();
+  const { user, plan, promptLogin } = useAuth();
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [sentence, setSentence] = useState("");
@@ -191,7 +191,7 @@ export function HomePage() {
             </svg>
           </Link>
           <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
-          {user && (
+          {user && (plan === "clear" || plan === "deep") && (
             <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
           )}
           <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>

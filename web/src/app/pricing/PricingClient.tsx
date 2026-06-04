@@ -535,7 +535,7 @@ const COPY: Record<string, {
 
 export function PricingPageRoute() {
   const { lang, dir, setLang } = useLang();
-  const { user, promptLogin } = useAuth();
+  const { user, plan, promptLogin } = useAuth();
   const [billing, setBilling] = useState<Billing>("monthly");
   const c = COPY[lang] ?? COPY.en;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -615,7 +615,7 @@ export function PricingPageRoute() {
             </svg>
           </Link>
           <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
-          {user && (
+          {user && (plan === "clear" || plan === "deep") && (
             <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
           )}
           <Link href="/pricing" className="wb-shell-navlink is-active">{c.pricing}</Link>

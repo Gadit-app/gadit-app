@@ -170,7 +170,7 @@ const TIER_COLOR: Record<Tier, { fg: string; bg: string }> = {
 
 export function FeaturesPage() {
   const { lang, dir, setLang } = useLang();
-  const { user, promptLogin } = useAuth();
+  const { user, plan, promptLogin } = useAuth();
   const c = COPY[lang] ?? COPY.en;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -207,7 +207,7 @@ export function FeaturesPage() {
             </svg>
           </Link>
           <Link href="/features" className="wb-shell-navlink is-active">{c.features}</Link>
-          {user && (
+          {user && (plan === "clear" || plan === "deep") && (
             <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
           )}
           <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
