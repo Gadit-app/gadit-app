@@ -1608,27 +1608,24 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    (right in RTL), Save/Share on the END (far left in RTL). Vertically
    centered so the actions share an optical midline with the title. */
 .wordbook .wb-word-head {
-  padding: 20px 20px 12px;
+  padding: 16px 20px 10px;
   display: flex;
-  /* Stack on mobile so the word title isn't squeezed into a narrow
-     slot by the Save/Share row — long English words like 'dream'
-     were wrapping mid-word. Row layout returns on tablet+. */
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  /* Row layout at every breakpoint so the Save/Share pills sit next
+     to the word title instead of stacking below it (which pushed
+     definitions off the first screen on mobile). Title can flex-shrink
+     so longer English words don't blow out the row. */
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
 }
 @media (min-width: 768px) {
   .wordbook .wb-word-head {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    /* Side padding matches .wb-meanings / .wb-origin-section / .wb-idioms-section
+       (20px) so the word sits on the same left edge as the section
+       eyebrows below it. */
+    padding: 40px 20px 14px;
     gap: 16px;
-  }
-}
-@media (min-width: 768px) {
-  .wordbook .wb-word-head {
-    padding: 56px 32px 14px;
     max-width: none;
   }
 }
@@ -1658,7 +1655,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-word-title {
   font-family: var(--wb-he);
   font-weight: 700;
-  font-size: 40px;
+  font-size: 34px;
   letter-spacing: -0.02em;
   line-height: 1;
   margin: 0 0 6px;
@@ -1667,8 +1664,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   overflow-wrap: normal;
 }
 @media (min-width: 768px) {
-  .wordbook .wb-word-title { font-size: 72px; margin-bottom: 8px; }
-  .wordbook[dir="rtl"] .wb-word-title { font-size: 72px; }
+  .wordbook .wb-word-title { font-size: 56px; margin-bottom: 8px; }
+  .wordbook[dir="rtl"] .wb-word-title { font-size: 56px; }
 }
 
 /* Save / Share — neutral pills, no purple "saved" treatment */
@@ -1746,16 +1743,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border: none;
   box-shadow: none;
   border-radius: 0;
-  /* Aligned with .wb-origin-section / .wb-idioms-section padding so
-     all three sections share the same left edge — was 24px/32px,
-     dropped to match the 20px wrapper of the sections below. */
   padding: 0 20px 0;
-  margin-bottom: 36px;
+  /* Tightened section spacing so the user reaches Origin without
+     a long scroll. Was 36/44px between sections; now 20/24px. */
+  margin-bottom: 20px;
 }
 @media (min-width: 768px) {
   .wordbook .wb-meanings {
     max-width: none;
-    margin: 0 0 44px;
+    margin: 0 0 24px;
     padding: 4px 20px 0;
   }
 }
@@ -1855,15 +1851,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-origin-section,
 .wordbook .wb-idioms-section {
   padding: 0 20px 0;
-  margin-bottom: 32px;
+  /* Tighter so the user doesn't scroll forever to get to Origin. */
+  margin-bottom: 18px;
 }
 @media (min-width: 768px) {
   .wordbook .wb-origin-section,
   .wordbook .wb-idioms-section {
-    /* Matched to .wb-meanings (20px) so all three section cards
-       sit on the same left/right edges. */
     padding: 0 20px 0;
-    margin-bottom: 44px;
+    margin-bottom: 24px;
   }
 }
 
@@ -1913,7 +1908,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-origin-row {
   border-bottom: 1px dashed var(--rule);
-  padding: 10px 0;
+  padding: 7px 0;
   display: flex;
   align-items: flex-start;
   gap: 18px;
@@ -2302,7 +2297,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
      rows. The previous absolute-positioned ::before drifted whenever
      the row had different padding-top (e.g. dashed-separator rows). */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 .wordbook .wb-mexample::before {
@@ -2313,6 +2308,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-radius: 999px;
   background: var(--teal);
   flex-shrink: 0;
+  /* Sits on the optical center of the FIRST line. With align-items
+     flex-start above, the dot would otherwise stick at the very top
+     of the element; the margin pushes it down so it lines up with
+     the first text line on multi-line wraps (mobile) and stays on
+     the single line (desktop). */
+  margin-top: 0.55em;
 }
 /* Plain spacing between examples — the previous dashed separator
    forced each row to sit at a different vertical offset (padding-top)

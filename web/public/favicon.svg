@@ -1,6 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="#0EA5A5"></rect><rect x="0" y="0" width="512" height="256" rx="112" ry="112" fill="url(#gloss)" opacity="0.10"></rect><defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" ry="112" fill="#0EA5A5"/>
+  <rect width="512" height="256" rx="112" ry="112" fill="url(#gloss)" opacity="0.10"/>
+  <defs>
     <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FFFFFF"></stop>
-      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop>
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
-  </defs><text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="#FFFFFF" font-family="'Inter', 'Heebo', system-ui, sans-serif" font-weight="700" font-size="320" letter-spacing="-12">G</text></svg>
+  </defs>
+  <!--
+    Custom geometric G drawn as a stroked path instead of relying on
+    a font's "G" glyph. Two benefits:
+      1. Heavier stroke (72px) gives the icon more presence at small
+         sizes than Inter 700 did.
+      2. Path is centered manually so it doesn't drift right inside
+         the squircle the way the font-rendered G did.
+    The path: arc clockwise from upper-right opening, around through
+    the left, down to lower-right opening; then the G's hook — a
+    vertical bar up to the center, then a horizontal bar inward.
+  -->
+  <g transform="translate(248, 256)">
+    <path d="M 132 -88 A 158 158 0 1 0 132 88 L 132 4 L 20 4"
+          fill="none" stroke="#FFFFFF" stroke-width="72"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
