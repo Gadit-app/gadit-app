@@ -25,6 +25,7 @@ import { useLang } from "@/lib/lang-context";
 import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
 
@@ -307,6 +308,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+  // Upgrade modal — open with the feature + tier the user just tried.
+  // Null = no modal showing.
+  const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
 
   // Wrong-keyboard rescue: if a Hebrew user types 'nxnr' (the physical
   // keys for מסמר with English keyboard on), or vice-versa, silently
@@ -629,7 +633,14 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     }
   }
 
-  function handleUpgrade() {
+  function handleUpgrade(tab?: string, tier?: "clear" | "deep") {
+    // If we know the feature + tier (locked-tab click flow), show the
+    // contextual modal. Otherwise (e.g. SoftWall upgrade button, quota
+    // wall) fall through to the pricing page directly.
+    if (tab && tier && (tab === "image" || tab === "kids" || tab === "compose" || tab === "quiz" || tab === "compare")) {
+      setUpgradeTrigger({ feature: tab, tier });
+      return;
+    }
     router.push("/pricing");
   }
 
@@ -980,6 +991,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           meaning={result.meanings[0]?.meaning ?? ""}
         />
       )}
+
+      <UpgradeModal
+        trigger={upgradeTrigger}
+        lang={lang as "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr"}
+        dir={dir}
+        onClose={() => setUpgradeTrigger(null)}
+      />
     </div>
   );
 }

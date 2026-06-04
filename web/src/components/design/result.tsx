@@ -328,7 +328,7 @@ interface MeaningEntryProps {
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
-  onUpgrade?: () => void;
+  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
 }
 
@@ -437,7 +437,7 @@ function MeaningEntry({
   function handleTabClick(tab: TabId) {
     const unlocked = tabUnlocked(tab, plan);
     if (!unlocked) {
-      onUpgrade?.();
+      onUpgrade?.(tab, tierForTab(tab) as "clear" | "deep");
       return;
     }
     if (tab === "image") {
@@ -601,7 +601,7 @@ export function MeaningsBlock({
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
-  onUpgrade?: () => void;
+  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
 }) {
   const { lang } = useLang();
@@ -793,7 +793,7 @@ export function VisualCard({
   imageUrl?: string;
   generating?: boolean;
   onGenerate?: () => void;
-  onUpgrade?: () => void;
+  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onRegenerate?: () => void;
 }) {
   const { lang } = useLang();
@@ -832,7 +832,7 @@ export function VisualCard({
         <button
           type="button"
           className="wb-visual-cta"
-          onClick={isLocked ? onUpgrade : onGenerate}
+          onClick={isLocked ? () => onUpgrade?.("image", "clear") : onGenerate}
           disabled={generating}
         >
           <PlusIcon /> {generating ? "…" : v2(lang, "generateLabel")}
@@ -849,7 +849,7 @@ export function ImageSlot(props: {
   imageUrl?: string;
   generating?: boolean;
   onGenerate?: () => void;
-  onUpgrade?: () => void;
+  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onRegenerate?: () => void;
   onSaveImage?: () => void;
 }) {
@@ -983,7 +983,7 @@ export function ResultView({
   onSave?: () => void;
   onShare?: () => void;
   onGenerate?: () => void;
-  onUpgrade?: () => void;
+  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onRegenerate?: () => void;
   onSaveImage?: () => void;
   onAction?: (id: ActionId) => void;
