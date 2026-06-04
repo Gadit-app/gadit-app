@@ -1744,9 +1744,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   box-shadow: none;
   border-radius: 0;
   padding: 0 20px 0;
-  /* Tightened section spacing so the user reaches Origin without
-     a long scroll. Was 36/44px between sections; now 20/24px. */
-  margin-bottom: 20px;
+  /* Earlier .wb-meanings rule (legacy CrispTech panel) set a
+     horizontal margin of 14px that the original override forgot to
+     reset, so the meanings section was sitting 14px more inset than
+     the eyebrow / origin / idioms sections in RTL. Explicit
+     'margin: 0 0 ...' here zeroes the horizontal margin again. */
+  margin: 0 0 20px;
 }
 @media (min-width: 768px) {
   .wordbook .wb-meanings {

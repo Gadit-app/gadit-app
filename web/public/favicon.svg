@@ -6,21 +6,33 @@
       <stop offset="0" stop-color="#FFFFFF"/>
       <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
+    <!-- Soft radial glow used as the "spark" inside the G hollow.
+         At small sizes (16-32 favicon) the glow blends with the G
+         and reads as just a slightly brighter inner edge — so the
+         icon doesn't get noisy. At large sizes (192+) it becomes
+         a visible warm light hint without breaking the brand. -->
+    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.85"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
   </defs>
   <!--
-    Custom geometric G drawn as a stroked path instead of relying on
-    a font's "G" glyph. Two benefits:
-      1. Heavier stroke (72px) gives the icon more presence at small
-         sizes than Inter 700 did.
-      2. Path is centered manually so it doesn't drift right inside
-         the squircle the way the font-rendered G did.
-    The path: arc clockwise from upper-right opening, around through
-    the left, down to lower-right opening; then the G's hook — a
-    vertical bar up to the center, then a horizontal bar inward.
+    Geometric G as a stroked path, tuned to read close to the Inter G
+    that the 'Gadit' wordmark uses. The earlier version was a heavy
+    industrial G; this iteration narrows the stroke slightly (64) and
+    widens the opening so the proportions match the wordmark.
+    Centered at translate(265, 256): the path's natural visual centre
+    sits ~9 units left of origin (because the arc extends further left
+    than the hook end extends right), so the translate compensates.
   -->
-  <g transform="translate(248, 256)">
-    <path d="M 132 -88 A 158 158 0 1 0 132 88 L 132 4 L 20 4"
-          fill="none" stroke="#FFFFFF" stroke-width="72"
+  <g transform="translate(265, 256)">
+    <!-- Spark inside the G hollow — sits behind the strokes so the G
+         glyph itself is never obscured. -->
+    <circle cx="0" cy="0" r="60" fill="url(#spark)"/>
+    <!-- The G itself: arc + hook -->
+    <path d="M 134 -94 A 158 158 0 1 0 134 94 L 134 0 L 12 0"
+          fill="none" stroke="#FFFFFF" stroke-width="64"
           stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
