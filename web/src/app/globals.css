@@ -1639,6 +1639,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  /* relative so the absolute-positioned share-corner button below
+     anchors to the header, not the page. */
+  position: relative;
 }
 @media (min-width: 768px) {
   .wordbook .wb-word-head {
@@ -1648,6 +1651,22 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     padding: 40px 20px 14px;
     gap: 16px;
     max-width: none;
+  }
+}
+/* Share-corner — pulled out of the actions row so its X-coordinate
+   matches the per-meaning .wb-mcard-head share icon (top:14, inset-
+   inline-end:14 from the section's 20px wrapper). The two share
+   buttons sit on the same vertical column down the leading edge,
+   reading as a consistent "share-this-block" spine. */
+.wordbook .wb-word-share-corner {
+  position: absolute;
+  top: 14px;
+  inset-inline-end: 14px;
+  z-index: 1;
+}
+@media (min-width: 768px) {
+  .wordbook .wb-word-share-corner {
+    top: 38px;
   }
 }
 .wordbook .wb-word-head-main {

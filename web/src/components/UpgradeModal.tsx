@@ -24,8 +24,8 @@ import { track } from "@/lib/track";
 
 export type UpgradeTier = "clear" | "deep";
 export type UpgradeFeature =
-  | "image" | "kids" | "compose"   // Clear
-  | "quiz" | "compare";            // Deep
+  | "image" | "kids" | "compose" | "notebook"   // Clear
+  | "quiz" | "compare";                         // Deep
 export type UpgradeTrigger = { feature: UpgradeFeature; tier: UpgradeTier };
 
 type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr";
@@ -48,6 +48,7 @@ const COPY: Record<Lang, Copy> = {
       image: "המחשת המילה בתמונה",
       kids: "הסבר לילדים",
       compose: "חיבור משפט וקבלת משוב",
+      notebook: "מחברת מילים אישית",
       quiz: "חידונים מותאמים אישית",
       compare: "משחקי מילים",
     },
@@ -55,6 +56,7 @@ const COPY: Record<Lang, Copy> = {
       image: "יצירת תמונה ייחודית לכל מילה.",
       kids: "הסבר פשוט שכל ילד מבין עם דוגמאות מהחיים שלו.",
       compose: "חברו משפט משלכם עם המילה וקבלו משוב מיידי בגרסה משופרת.",
+      notebook: "אספו את המילים שלמדתם למחברת אישית — לחזרה, תרגול וזכירה לטווח הארוך.",
       quiz: "חידון אישי שעוזר לכם להטמיע את המילה ולזכור אותה לטווח הארוך.",
       compare: "משחקי מילים מותאמים שמטמיעים את המילה בזיכרון תוך כדי הנאה.",
     },
@@ -71,6 +73,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Illustrate the word",
       kids: "Kids' explanation",
       compose: "Compose a sentence and get feedback",
+      notebook: "Personal word notebook",
       quiz: "Personalized quizzes",
       compare: "Word games",
     },
@@ -78,6 +81,7 @@ const COPY: Record<Lang, Copy> = {
       image: "A unique image generated for every word.",
       kids: "A simple explanation any child gets with examples from their world.",
       compose: "Write your own sentence with the word and get instant feedback in a polished version.",
+      notebook: "Collect the words you've learned into a personal notebook — for review, practice, and long-term recall.",
       quiz: "A personal quiz that helps you embed each word and remember it long-term.",
       compare: "Personalized word games that embed each word in memory while you have fun.",
     },
@@ -94,6 +98,7 @@ const COPY: Record<Lang, Copy> = {
       image: "تصوير الكلمة",
       kids: "شرح للأطفال",
       compose: "اكتب جملة واحصل على ملاحظات",
+      notebook: "دفتر كلمات شخصي",
       quiz: "اختبارات مخصصة",
       compare: "ألعاب كلمات",
     },
@@ -101,6 +106,7 @@ const COPY: Record<Lang, Copy> = {
       image: "صورة فريدة لكل كلمة.",
       kids: "شرح بسيط يفهمه كل طفل مع أمثلة من عالمه.",
       compose: "اكتب جملتك مع الكلمة وتلقَّ ملاحظات فورية في نسخة محسّنة.",
+      notebook: "اجمع الكلمات التي تعلمتها في دفتر شخصي — للمراجعة والتمرين والتذكر طويل المدى.",
       quiz: "اختبار شخصي يساعدك على ترسيخ الكلمة وتذكرها على المدى الطويل.",
       compare: "ألعاب كلمات مخصصة ترسّخ الكلمة في الذاكرة بمتعة.",
     },
@@ -117,6 +123,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Иллюстрация слова",
       kids: "Объяснение для детей",
       compose: "Составить фразу и получить отзыв",
+      notebook: "Личная тетрадь слов",
       quiz: "Персональные викторины",
       compare: "Игры со словами",
     },
@@ -124,6 +131,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Уникальная картинка для каждого слова.",
       kids: "Простое объяснение, которое поймёт любой ребёнок, с примерами из его мира.",
       compose: "Напишите свою фразу со словом и получите мгновенный отзыв в улучшенной версии.",
+      notebook: "Собирайте выученные слова в личную тетрадь — для повторения, практики и долгого запоминания.",
       quiz: "Персональный квиз, который помогает закрепить слово и запомнить его надолго.",
       compare: "Персональные игры со словами, которые закрепляют слово в памяти, пока вы развлекаетесь.",
     },
@@ -140,6 +148,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Ilustrar la palabra",
       kids: "Explicación para niños",
       compose: "Componer una frase y recibir feedback",
+      notebook: "Cuaderno personal de palabras",
       quiz: "Pruebas personalizadas",
       compare: "Juegos de palabras",
     },
@@ -147,6 +156,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Una imagen única para cada palabra.",
       kids: "Una explicación simple que cualquier niño entiende con ejemplos de su mundo.",
       compose: "Escribe tu propia frase con la palabra y recibe feedback inmediato en una versión pulida.",
+      notebook: "Reúne las palabras que has aprendido en un cuaderno personal — para repaso, práctica y memoria a largo plazo.",
       quiz: "Un quiz personal que te ayuda a interiorizar la palabra y recordarla a largo plazo.",
       compare: "Juegos de palabras personalizados que fijan la palabra en la memoria mientras te diviertes.",
     },
@@ -163,6 +173,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Ilustrar a palavra",
       kids: "Explicação para crianças",
       compose: "Compor uma frase e receber feedback",
+      notebook: "Caderno pessoal de palavras",
       quiz: "Quizzes personalizados",
       compare: "Jogos com palavras",
     },
@@ -170,6 +181,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Uma imagem única para cada palavra.",
       kids: "Uma explicação simples que qualquer criança entende com exemplos do mundo dela.",
       compose: "Escreva sua própria frase com a palavra e receba feedback instantâneo em uma versão polida.",
+      notebook: "Reúna as palavras que você aprendeu em um caderno pessoal — para revisão, prática e memória de longo prazo.",
       quiz: "Um quiz pessoal que ajuda você a fixar a palavra e lembrá-la a longo prazo.",
       compare: "Jogos com palavras personalizados que fixam a palavra na memória enquanto você se diverte.",
     },
@@ -186,6 +198,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Illustrer le mot",
       kids: "Explication pour enfants",
       compose: "Composer une phrase et recevoir un retour",
+      notebook: "Carnet personnel de mots",
       quiz: "Quiz personnalisés",
       compare: "Jeux de mots",
     },
@@ -193,6 +206,7 @@ const COPY: Record<Lang, Copy> = {
       image: "Une image unique pour chaque mot.",
       kids: "Une explication simple que tout enfant comprend avec des exemples de son monde.",
       compose: "Écrivez votre propre phrase avec le mot et recevez un retour instantané dans une version améliorée.",
+      notebook: "Rassemblez les mots que vous avez appris dans un carnet personnel — pour la révision, la pratique et la mémoire à long terme.",
       quiz: "Un quiz personnel qui vous aide à ancrer le mot et à le retenir à long terme.",
       compare: "Des jeux de mots personnalisés qui ancrent le mot dans la mémoire tout en s'amusant.",
     },

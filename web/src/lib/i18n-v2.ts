@@ -82,6 +82,7 @@ export interface V2Strings {
   navCompare: string;
   navNotebook: string;
   navPricing: string;
+  navFeatures: string;
 
   // ── Pricing page (Screen 3) ─────────────────────────────────
   pricingPageHeadline: string;
@@ -455,6 +456,7 @@ const en: V2Strings = {
   navCompare: "Compare",
   navNotebook: "Notebook",
   navPricing: "Pricing",
+  navFeatures: "Features",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "Three tiers. All with real content.",
@@ -816,6 +818,7 @@ const he: V2Strings = {
   navCompare: "השוואה",
   navNotebook: "מחברת",
   navPricing: "תמחור",
+  navFeatures: "פיצ'רים",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
@@ -1181,6 +1184,7 @@ const ar: V2Strings = {
   navCompare: "مقارنة",
   navNotebook: "الدفتر",
   navPricing: "الأسعار",
+  navFeatures: "المزايا",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
@@ -1562,6 +1566,7 @@ const ru: Partial<V2Strings> = {
   navCompare: "Сравнить",
   navNotebook: "Тетрадь",
   navPricing: "Тарифы",
+  navFeatures: "Возможности",
 
   pricingPageHeadline: "Три уровня. Все с настоящим контентом.",
   pricingPageSubline: "Начните бесплатно. Перейдите глубже, когда понадобится.",
@@ -1924,6 +1929,7 @@ const es: Partial<V2Strings> = {
   navCompare: "Comparar",
   navNotebook: "Cuaderno",
   navPricing: "Precios",
+  navFeatures: "Funciones",
 
   pricingPageHeadline: "Tres niveles. Todos con contenido real.",
   pricingPageSubline: "Empieza gratis. Sube de plan cuando la profundidad te ayude.",
@@ -2284,6 +2290,7 @@ const pt: Partial<V2Strings> = {
   navCompare: "Comparar",
   navNotebook: "Caderno",
   navPricing: "Preços",
+  navFeatures: "Recursos",
 
   pricingPageHeadline: "Três níveis. Todos com conteúdo de verdade.",
   pricingPageSubline: "Comece grátis. Faça upgrade quando a profundidade ajudar.",
@@ -2644,6 +2651,7 @@ const fr: Partial<V2Strings> = {
   navCompare: "Comparer",
   navNotebook: "Carnet",
   navPricing: "Tarifs",
+  navFeatures: "Fonctionnalités",
 
   pricingPageHeadline: "Trois niveaux. Tous avec du vrai contenu.",
   pricingPageSubline: "Commencez gratuitement. Passez à un plan supérieur quand la profondeur sert.",

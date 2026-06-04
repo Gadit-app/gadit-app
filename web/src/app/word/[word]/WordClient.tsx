@@ -658,11 +658,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     // upgrade modal instead of a silent /pricing redirect — exactly
     // the same UX as locked tabs (image/kids/quiz/etc).
     if (plan === "basic") {
-      setUpgradeTrigger({ feature: "kids", tier: "clear" });
-      // Reusing "kids" feature copy because notebook is Clear-tier
-      // and the copy table doesn't have a notebook key yet. The user
-      // still sees the right tier badge + price. Notebook-specific
-      // copy can be added later.
+      setUpgradeTrigger({ feature: "notebook", tier: "clear" });
       return;
     }
     try {
@@ -831,10 +827,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 <path d="m20 20-4-4" />
               </svg>
             </Link>
+            <Link href="/features" className="wb-shell-navlink">
+              {v2(lang, "navFeatures")}
+            </Link>
             {user && (
-              <Link href="/notebook">{v2(lang, "navNotebook")}</Link>
+              <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
             )}
-            <Link href="/pricing">{v2(lang, "navPricing")}</Link>
+            <Link href="/pricing" className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
           </nav>
           <div className="wb-shell-actions">
             {/* Save + Share moved OUT of the masthead — they're "this
