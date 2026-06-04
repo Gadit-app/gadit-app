@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
@@ -75,6 +76,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
+  sendPasswordReset: (email: string) => Promise<void>;
   logout: () => Promise<void>;
   showLoginModal: boolean;
   setShowLoginModal: (v: boolean) => void;
@@ -170,6 +172,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setShowLoginModal(false);
   }
 
+  async function sendPasswordReset(email: string) {
+    const auth = getFirebaseAuth();
+    // Firebase sends the reset email to whatever address we pass —
+    // even one that's not registered, with NO error (intentional
+    // anti-enumeration default). Caller gets a generic "if an account
+    // exists with this email, a reset link is on the way" message.
+    await sendPasswordResetEmail(auth, email);
+  }
+
   async function logout() {
     const auth = getFirebaseAuth();
     await signOut(auth);
@@ -199,7 +210,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={{
       user, loading, plan,
-      signInWithGoogle, signInWithEmail, signUpWithEmail, logout,
+      signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,
     }}>

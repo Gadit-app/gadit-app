@@ -4311,6 +4311,29 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-bottom: 12px;
   line-height: 1.4;
 }
+/* Same component, success colour for the 'reset link sent' state */
+.wordbook .wb-login-error.is-success { color: var(--teal-edge); }
+
+/* Forgot-password link — small, lives between the submit button and
+   the signup-toggle. Sits flush right (or flush start in RTL) and
+   reads as 'subdued action', not a primary CTA. */
+.wordbook .wb-login-forgot {
+  margin-top: 10px;
+  text-align: end;
+}
+.wordbook .wb-login-forgot-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 2px;
+  font-family: var(--wb-he);
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.wordbook .wb-login-forgot-btn:hover:not(:disabled) { color: var(--teal); }
+.wordbook .wb-login-forgot-btn:disabled { opacity: 0.55; cursor: default; }
 .wordbook .wb-login-toggle {
   margin-top: 16px;
   text-align: center;

@@ -59,6 +59,7 @@ export function LoginModalV2() {
     signInWithGoogle,
     signInWithEmail,
     signUpWithEmail,
+    sendPasswordReset,
   } = useAuth();
   const { lang, dir } = useLang();
   const isRtl = dir === "rtl";
@@ -224,7 +225,10 @@ export function LoginModalV2() {
 
         <form onSubmit={handleEmail} noValidate>
           {errorKey && (
-            <div className="wb-login-error" role="alert">
+            <div
+              className={`wb-login-error ${errorKey === "loginResetSent" ? "is-success" : ""}`}
+              role="alert"
+            >
               {v2(lang, errorKey as never)}
             </div>
           )}
@@ -300,6 +304,42 @@ export function LoginModalV2() {
             {v2(lang, submitKey)}
           </button>
         </form>
+
+        {/* Forgot-password link — signin mode only. Tapping it triggers
+            Firebase's password-reset email to whatever's in the email
+            field. The success message is intentionally generic ('if
+            an account exists') so we don't leak which addresses are
+            registered. If the email field is empty we just nudge the
+            user to fill it first instead of sending a malformed
+            request. */}
+        {mode === "signin" && (
+          <div className="wb-login-forgot">
+            <button
+              type="button"
+              className="wb-login-forgot-btn"
+              disabled={busy}
+              onClick={async () => {
+                if (!email.trim()) {
+                  setErrorKey("loginForgotPasswordEnterEmail");
+                  return;
+                }
+                setBusy(true);
+                setErrorKey("");
+                try {
+                  await sendPasswordReset(email.trim());
+                  setErrorKey("loginResetSent");
+                } catch (err) {
+                  console.error("[auth] password-reset error:", err);
+                  setErrorKey("loginResetError");
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {v2(lang, "loginForgotPassword")}
+            </button>
+          </div>
+        )}
 
         <div className="wb-login-toggle">
           <button

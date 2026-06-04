@@ -141,6 +141,10 @@ export interface V2Strings {
   loginSubmitSignIn: string;
   loginSubmitSignUp: string;
   loginSwitchToSignUp: string;
+  loginForgotPassword: string;
+  loginForgotPasswordEnterEmail: string;
+  loginResetSent: string;
+  loginResetError: string;
   loginSwitchToSignIn: string;
   loginShowPassword: string;
   loginHidePassword: string;
@@ -521,6 +525,10 @@ const en: V2Strings = {
   loginSubmitSignIn: "Sign in",
   loginSubmitSignUp: "Create account",
   loginSwitchToSignUp: "Don't have an account? Sign up",
+  loginForgotPassword: "Forgot password?",
+  loginForgotPasswordEnterEmail: "Enter your email above first, then tap here.",
+  loginResetSent: "If an account exists for that email, a reset link is on its way.",
+  loginResetError: "Couldn't send the reset email. Try again.",
   loginSwitchToSignIn: "Already have an account? Sign in",
   loginShowPassword: "Show password",
   loginHidePassword: "Hide password",
@@ -876,6 +884,10 @@ const he: V2Strings = {
   loginSubmitSignIn: "התחברות",
   loginSubmitSignUp: "צרו חשבון",
   loginSwitchToSignUp: "אין חשבון? הירשמו",
+  loginForgotPassword: "שכחתם סיסמה?",
+  loginForgotPasswordEnterEmail: "הקלידו את האימייל למעלה תחילה, ואז לחצו כאן.",
+  loginResetSent: "אם קיים חשבון עם המייל הזה, נשלח אליו קישור לאיפוס סיסמה.",
+  loginResetError: "לא הצלחנו לשלוח את מייל האיפוס. נסו שוב.",
   loginSwitchToSignIn: "כבר רשומים? התחברו",
   loginShowPassword: "הצגת סיסמה",
   loginHidePassword: "הסתרת סיסמה",
@@ -1236,6 +1248,10 @@ const ar: V2Strings = {
   loginSubmitSignIn: "تسجيل الدخول",
   loginSubmitSignUp: "أنشئ الحساب",
   loginSwitchToSignUp: "ليس لديك حساب؟ أنشئ واحدًا",
+  loginForgotPassword: "نسيت كلمة المرور؟",
+  loginForgotPasswordEnterEmail: "اكتب بريدك الإلكتروني أعلاه أولًا، ثم اضغط هنا.",
+  loginResetSent: "إذا كان هناك حساب بهذا البريد، فستصلك رسالة لإعادة تعيين كلمة المرور.",
+  loginResetError: "تعذر إرسال بريد إعادة التعيين. حاول مرة أخرى.",
   loginSwitchToSignIn: "لديك حساب بالفعل؟ سجّل الدخول",
   loginShowPassword: "إظهار كلمة المرور",
   loginHidePassword: "إخفاء كلمة المرور",
@@ -1614,6 +1630,10 @@ const ru: Partial<V2Strings> = {
   loginSubmitSignIn: "Войти",
   loginSubmitSignUp: "Создать аккаунт",
   loginSwitchToSignUp: "Нет аккаунта? Зарегистрируйтесь",
+  loginForgotPassword: "Забыли пароль?",
+  loginForgotPasswordEnterEmail: "Сначала введите email выше, потом нажмите сюда.",
+  loginResetSent: "Если аккаунт с таким email существует, ссылка для сброса уже отправлена.",
+  loginResetError: "Не удалось отправить письмо для сброса. Попробуйте снова.",
   loginSwitchToSignIn: "Уже есть аккаунт? Войдите",
   loginShowPassword: "Показать пароль",
   loginHidePassword: "Скрыть пароль",
@@ -1972,6 +1992,10 @@ const es: Partial<V2Strings> = {
   loginSubmitSignIn: "Iniciar sesión",
   loginSubmitSignUp: "Crear cuenta",
   loginSwitchToSignUp: "¿No tienes cuenta? Regístrate",
+  loginForgotPassword: "¿Olvidaste tu contraseña?",
+  loginForgotPasswordEnterEmail: "Escribe tu correo arriba primero, luego toca aquí.",
+  loginResetSent: "Si existe una cuenta con ese correo, te enviamos un enlace para restablecer.",
+  loginResetError: "No pudimos enviar el correo. Inténtalo de nuevo.",
   loginSwitchToSignIn: "¿Ya tienes cuenta? Inicia sesión",
   loginShowPassword: "Mostrar contraseña",
   loginHidePassword: "Ocultar contraseña",
@@ -2328,6 +2352,10 @@ const pt: Partial<V2Strings> = {
   loginSubmitSignIn: "Entrar",
   loginSubmitSignUp: "Criar conta",
   loginSwitchToSignUp: "Não tem conta? Cadastre-se",
+  loginForgotPassword: "Esqueceu a senha?",
+  loginForgotPasswordEnterEmail: "Digite seu e-mail acima primeiro, depois toque aqui.",
+  loginResetSent: "Se existe uma conta com esse e-mail, enviamos um link de redefinição.",
+  loginResetError: "Não conseguimos enviar o e-mail. Tente novamente.",
   loginSwitchToSignIn: "Já tem conta? Entre",
   loginShowPassword: "Mostrar senha",
   loginHidePassword: "Ocultar senha",
@@ -2684,6 +2712,10 @@ const fr: Partial<V2Strings> = {
   loginSubmitSignIn: "Se connecter",
   loginSubmitSignUp: "Créer un compte",
   loginSwitchToSignUp: "Pas de compte ? Inscrivez-vous",
+  loginForgotPassword: "Mot de passe oublié ?",
+  loginForgotPasswordEnterEmail: "Saisissez d'abord votre e-mail ci-dessus, puis touchez ici.",
+  loginResetSent: "Si un compte existe pour cet e-mail, un lien de réinitialisation est en route.",
+  loginResetError: "Impossible d'envoyer l'e-mail. Réessayez.",
   loginSwitchToSignIn: "Déjà un compte ? Connectez-vous",
   loginShowPassword: "Afficher le mot de passe",
   loginHidePassword: "Masquer le mot de passe",
