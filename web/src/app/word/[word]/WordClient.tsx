@@ -781,7 +781,21 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             Gad<span className="wb-wordmark-it">it</span>
           </Link>
           <nav className="wb-shell-nav" aria-label="Primary">
-            <Link href="/">{v2(lang, "navSearch")}</Link>
+            {/* Search renders as a magnifying-glass icon (not the word
+                "Search"), matching the homepage. The icon is the
+                consistent affordance across the masthead — text is
+                reserved for content nav (Notebook, Pricing). */}
+            <Link
+              href="/"
+              className="wb-shell-navlink wb-shell-navlink-icon"
+              aria-label={v2(lang, "navSearch")}
+              title={v2(lang, "navSearch")}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m20 20-4-4" />
+              </svg>
+            </Link>
             {user && (
               <Link href="/notebook">{v2(lang, "navNotebook")}</Link>
             )}

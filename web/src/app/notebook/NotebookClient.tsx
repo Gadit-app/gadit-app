@@ -186,8 +186,16 @@ export function NotebookPage() {
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href="/" className="wb-shell-navlink">
-            {v2(lang, "navSearch")}
+          <Link
+            href="/"
+            className="wb-shell-navlink wb-shell-navlink-icon"
+            aria-label={v2(lang, "navSearch")}
+            title={v2(lang, "navSearch")}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="m20 20-4-4" />
+            </svg>
           </Link>
           <Link href="/notebook" className="wb-shell-navlink is-active">
             {v2(lang, "navNotebook")}
