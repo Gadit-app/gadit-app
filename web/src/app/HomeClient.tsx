@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
+import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 import VoiceInput from "@/components/VoiceInput";
 
