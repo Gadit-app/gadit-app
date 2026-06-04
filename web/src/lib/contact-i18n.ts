@@ -291,4 +291,82 @@ export const CONTACT: Record<Lang, ContactContent> = {
       },
     ],
   },
+  de: {
+    pageTitle: "Contact & FAQ",
+    pageSubtitle: "Common questions, and how to reach us if you can't find what you're looking for.",
+    faqHeading: "Frequently asked questions",
+    stillNeedHelpHeading: "Still need help?",
+    stillNeedHelpBody: "If your question isn't answered here, email us directly. We read every message.",
+    emailButton: "Email support",
+    responseTime: "We usually reply within 24 to 48 hours.",
+    faq: [
+      {
+        q: "What is Gadit?",
+        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real life examples, etymology (the origin of the word), idioms and expressions, kids explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+      },
+      {
+        q: "Which languages does Gadit support?",
+        a: "The interface currently supports English, Hebrew, Arabic, Russian, Spanish, Portuguese, and French, with more on the way.",
+      },
+      {
+        q: "How is Gadit different from a regular dictionary?",
+        a: "A regular dictionary gives you a definition and a few example sentences. With Gadit you can illustrate the word with an image, you can write a full sentence with the word and get exactly the meaning that fits the context, you can practice the word by writing your own sentence and get feedback, and at the end you can also take a short quiz to lock it in.",
+      },
+      {
+        q: "What subscription plans are available?",
+        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
+      },
+      {
+        q: "Can I cancel my subscription at any time?",
+        a: "Yes. You can cancel your subscription at any time from your account area. Access to the paid plan remains until the end of the current billing period.",
+      },
+      {
+        q: "How accurate are Gadit's definitions?",
+        a: "Definitions are written to be clear, useful, and faithful to how words are actually used.",
+      },
+      {
+        q: "What happens to my data and search history?",
+        a: "Your account data, search history (up to the 10 most recent words), and generated images are stored securely. We never sell your data. For full details, see our Privacy Policy.",
+      },
+    ],
+  },
+  cs: {
+    pageTitle: "Contact & FAQ",
+    pageSubtitle: "Common questions, and how to reach us if you can't find what you're looking for.",
+    faqHeading: "Frequently asked questions",
+    stillNeedHelpHeading: "Still need help?",
+    stillNeedHelpBody: "If your question isn't answered here, email us directly. We read every message.",
+    emailButton: "Email support",
+    responseTime: "We usually reply within 24 to 48 hours.",
+    faq: [
+      {
+        q: "What is Gadit?",
+        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real life examples, etymology (the origin of the word), idioms and expressions, kids explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+      },
+      {
+        q: "Which languages does Gadit support?",
+        a: "The interface currently supports English, Hebrew, Arabic, Russian, Spanish, Portuguese, and French, with more on the way.",
+      },
+      {
+        q: "How is Gadit different from a regular dictionary?",
+        a: "A regular dictionary gives you a definition and a few example sentences. With Gadit you can illustrate the word with an image, you can write a full sentence with the word and get exactly the meaning that fits the context, you can practice the word by writing your own sentence and get feedback, and at the end you can also take a short quiz to lock it in.",
+      },
+      {
+        q: "What subscription plans are available?",
+        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
+      },
+      {
+        q: "Can I cancel my subscription at any time?",
+        a: "Yes. You can cancel your subscription at any time from your account area. Access to the paid plan remains until the end of the current billing period.",
+      },
+      {
+        q: "How accurate are Gadit's definitions?",
+        a: "Definitions are written to be clear, useful, and faithful to how words are actually used.",
+      },
+      {
+        q: "What happens to my data and search history?",
+        a: "Your account data, search history (up to the 10 most recent words), and generated images are stored securely. We never sell your data. For full details, see our Privacy Policy.",
+      },
+    ],
+  },
 };

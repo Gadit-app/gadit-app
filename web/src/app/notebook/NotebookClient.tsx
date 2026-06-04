@@ -25,6 +25,8 @@ const LANGS = [
   { code: "es", label: "Español" },
   { code: "pt", label: "Português" },
   { code: "fr", label: "Français" },
+  { code: "de", label: "Deutsch" },
+  { code: "cs", label: "Čeština" },
 ] as const;
 
 type NotebookItem = {
@@ -90,6 +92,20 @@ const COPY: Record<string, {
     empty: "Votre carnet est vide.",
     emptyHint: "Trouvez un mot et touchez 'Enregistrer dans le carnet'.",
     goSearch: "Retour à la recherche",
+  },
+  de: {
+    title: "Mein Notizbuch",
+    subtitle: "Alle Wörter, die du gesammelt hast — gespeichert und geordnet.",
+    empty: "Dein Notizbuch ist leer.",
+    emptyHint: "Such ein Wort und tippe auf 'Im Notizbuch speichern'.",
+    goSearch: "Zurück zur Suche",
+  },
+  cs: {
+    title: "Můj sešit",
+    subtitle: "Všechna slova, která jsi nasbíral — uložená a uspořádaná.",
+    empty: "Tvůj sešit je prázdný.",
+    emptyHint: "Najdi slovo a klepni na 'Uložit do sešitu'.",
+    goSearch: "Zpět na vyhledávání",
   },
 };
 

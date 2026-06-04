@@ -25,6 +25,8 @@ const LANGS = [
   { code: "es", label: "Español" },
   { code: "pt", label: "Português" },
   { code: "fr", label: "Français" },
+  { code: "de", label: "Deutsch" },
+  { code: "cs", label: "Čeština" },
 ] as const;
 
 function LangSwitch() {
@@ -94,6 +96,8 @@ const SAMPLES_BY_LANG: Record<string, string[]> = {
   es: ["sueño", "verdad", "esperanza"],
   pt: ["sonho", "verdade", "esperança"],
   fr: ["rêve", "vérité", "espoir"],
+  de: ["Traum", "Wahrheit", "Hoffnung"],
+  cs: ["sen", "pravda", "naděje"],
 };
 
 const COPY: Record<
@@ -117,6 +121,8 @@ const COPY: Record<
   es: { tagline: "Entender palabras hasta el final", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios", search: "Búsqueda", features: "Funciones", addSentence: "Añade la frase donde aparece la palabra para obtener una definición precisa", sentencePlaceholder: "Escribe la frase donde aparece la palabra para obtener una definición precisa" },
   pt: { tagline: "Entender palavras até o fim", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços", search: "Buscar", features: "Recursos", addSentence: "Adicione a frase onde a palavra aparece para obter uma definição precisa", sentencePlaceholder: "Escreva a frase onde a palavra aparece para obter uma definição precisa" },
   fr: { tagline: "Comprendre les mots jusqu'au bout", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités", addSentence: "Ajoutez la phrase où le mot apparaît pour obtenir une définition précise", sentencePlaceholder: "Tapez la phrase où le mot apparaît pour obtenir une définition précise" },
+  de: { tagline: "Wörter bis zum Ende verstehen", placeholder: "Wort eingeben", tryLabel: "Beispiel", signin: "Anmelden", pricing: "Preise", search: "Suche", features: "Funktionen", addSentence: "Füge den Satz hinzu, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", sentencePlaceholder: "Tippe den Satz ein, in dem das Wort vorkommt, um eine genaue Definition zu erhalten" },
+  cs: { tagline: "Pochopit slova až do konce", placeholder: "Napiš slovo", tryLabel: "Příklad", signin: "Přihlásit se", pricing: "Ceník", search: "Hledat", features: "Funkce", addSentence: "Přidej větu, ve které se slovo objevuje, abys získal přesnou definici", sentencePlaceholder: "Napiš větu, ve které se slovo objevuje, abys získal jednu přesnou definici" },
 };
 
 function SearchIcon({ size = 16 }: { size?: number }) {

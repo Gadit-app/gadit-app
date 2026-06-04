@@ -149,4 +149,16 @@ export const APP_SHARE_COPY: Record<
     shareLabel: "Partager Gadit",
     copiedLabel: "Lien copié",
   },
+  de: {
+    title: "Gadit — Intelligentes digitales Wörterbuch",
+    text: "Ich habe ein neues digitales Wörterbuch entdeckt, das Wörter erklärt und für jede Definition Beispiele zeigt, dazu Redewendungen und Ausdrücke sowie die Herkunft jedes Wortes. Kostenlos, mit sehr günstigen Upgrade-Optionen. Einen Versuch wert:",
+    shareLabel: "Gadit teilen",
+    copiedLabel: "Link kopiert",
+  },
+  cs: {
+    title: "Gadit — Chytrý digitální slovník",
+    text: "Objevil jsem nový digitální slovník, který vysvětluje slova a ukazuje příklady pro každou definici, idiomy a fráze, a také původ každého slova a odkud pochází. Zdarma s velmi levnými možnostmi vylepšení. Stojí za vyzkoušení:",
+    shareLabel: "Sdílet Gadit",
+    copiedLabel: "Odkaz zkopírován",
+  },
 };

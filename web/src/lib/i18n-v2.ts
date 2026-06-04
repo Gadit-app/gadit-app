@@ -2954,6 +2954,13 @@ const fr: Partial<V2Strings> = {
   backLabel: "Retour",
 };
 
+// New languages — declared empty so v2() falls through to EN. Specific
+// keys that are user-visible at launch (homepage, pricing, login,
+// search, share modal) live in the per-page COPY tables and modal
+// COPY records, which DO have full DE+CS translations.
+const de: Partial<V2Strings> = {};
+const cs: Partial<V2Strings> = {};
+
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   en,
   he,
@@ -2962,6 +2969,8 @@ const TABLES: Record<Lang, Partial<V2Strings>> = {
   es,
   pt,
   fr,
+  de,
+  cs,
 };
 
 /**

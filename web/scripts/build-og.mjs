@@ -39,6 +39,8 @@ const TAGLINES = {
   es: "Entender palabras hasta el final",
   pt: "Entender palavras até o fim",
   fr: "Comprendre les mots jusqu'au bout",
+  de: "Wörter bis zum Ende verstehen",
+  cs: "Pochopit slova až do konce",
 };
 
 const FONT_STACK = {

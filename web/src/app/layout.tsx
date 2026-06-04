@@ -133,6 +133,18 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "Descobri um novo dicionário digital que explica palavras e mostra exemplos para cada definição, expressões idiomáticas, e também a origem de cada palavra e de onde ela veio. É grátis com opções de upgrade a um custo muito baixo. Vale a pena experimentar.",
     locale: "pt_BR",
   },
+  de: {
+    title: "Gadit — Intelligentes digitales Wörterbuch",
+    description:
+      "Ich habe ein neues digitales Wörterbuch entdeckt, das Wörter erklärt und für jede Definition Beispiele zeigt, dazu Redewendungen und Ausdrücke sowie die Herkunft jedes Wortes. Kostenlos, mit sehr günstigen Upgrade-Optionen. Einen Versuch wert.",
+    locale: "de_DE",
+  },
+  cs: {
+    title: "Gadit — Chytrý digitální slovník",
+    description:
+      "Objevil jsem nový digitální slovník, který vysvětluje slova a ukazuje příklady pro každou definici, idiomy a fráze, a také původ každého slova a odkud pochází. Zdarma s velmi levnými možnostmi vylepšení. Stojí za vyzkoušení.",
+    locale: "cs_CZ",
+  },
   fr: {
     title: "Gadit — Dictionnaire numérique intelligent",
     description:
@@ -141,7 +153,7 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
   },
 };
 
-const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr"];
+const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs"];
 
 export async function generateMetadata(): Promise<Metadata> {
   // Resolve language for this request, exactly the same chain the
@@ -227,7 +239,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr"];
+const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs"];
 
 export default async function RootLayout({
   children,

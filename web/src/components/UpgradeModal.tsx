@@ -28,7 +28,7 @@ export type UpgradeFeature =
   | "quiz" | "compare";                         // Deep
 export type UpgradeTrigger = { feature: UpgradeFeature; tier: UpgradeTier };
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs";
 
 interface Copy {
   featureNames: Record<UpgradeFeature, string>;
@@ -217,6 +217,56 @@ const COPY: Record<Lang, Copy> = {
     primaryCta: "Essayez 14 jours gratuits",
     secondaryCta: "Peut-être plus tard",
     closeAria: "Fermer",
+  },
+  de: {
+    featureNames: {
+      image: "Wort als Bild",
+      kids: "Erklärung für Kinder",
+      compose: "Satz schreiben und Feedback erhalten",
+      notebook: "Persönliches Wörter-Notizbuch",
+      quiz: "Personalisierte Quizze",
+      compare: "Wortspiele",
+    },
+    featureBlurbs: {
+      image: "Ein einzigartiges Bild für jedes Wort.",
+      kids: "Eine einfache Erklärung, die jedes Kind versteht, mit Beispielen aus seiner Welt.",
+      compose: "Schreibe deinen eigenen Satz mit dem Wort und erhalte sofort Feedback in einer verbesserten Version.",
+      notebook: "Sammle die Wörter, die du gelernt hast, in einem persönlichen digitalen Notizbuch, das dir überall zur Verfügung steht.",
+      quiz: "Ein persönliches Quiz, das dir hilft, jedes Wort fest zu verankern und es langfristig zu behalten.",
+      compare: "Personalisierte Wortspiele, die jedes Wort spielerisch im Gedächtnis verankern.",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "ist eine Clear-Funktion", deep: "ist eine Deep-Funktion" },
+    pricePerMonth: { clear: "2,99 $ / Monat", deep: "4,99 $ / Monat" },
+    trialNote: "14 Tage kostenlos · jederzeit kündbar",
+    primaryCta: "14 Tage kostenlos testen",
+    secondaryCta: "Vielleicht später",
+    closeAria: "Schließen",
+  },
+  cs: {
+    featureNames: {
+      image: "Slovo jako obrázek",
+      kids: "Vysvětlení pro děti",
+      compose: "Napiš větu a získej zpětnou vazbu",
+      notebook: "Osobní sešit slov",
+      quiz: "Personalizované kvízy",
+      compare: "Slovní hry",
+    },
+    featureBlurbs: {
+      image: "Unikátní obrázek pro každé slovo.",
+      kids: "Jednoduché vysvětlení, kterému rozumí každé dítě, s příklady z jeho světa.",
+      compose: "Napiš svou vlastní větu se slovem a získej okamžitou zpětnou vazbu ve vylepšené verzi.",
+      notebook: "Sbírej slova, která ses naučil, do osobního digitálního sešitu, který máš k dispozici kdekoli.",
+      quiz: "Osobní kvíz, který ti pomáhá ukotvit slovo a zapamatovat si ho dlouhodobě.",
+      compare: "Personalizované slovní hry, které ti slova zakotví v paměti, zatímco se bavíš.",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "je funkce balíčku Clear", deep: "je funkce balíčku Deep" },
+    pricePerMonth: { clear: "$2,99 / měsíc", deep: "$4,99 / měsíc" },
+    trialNote: "14 dní zdarma · zrušíš kdykoli",
+    primaryCta: "Vyzkoušej 14 dní zdarma",
+    secondaryCta: "Možná jindy",
+    closeAria: "Zavřít",
   },
 };
 
