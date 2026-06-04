@@ -97,6 +97,14 @@ function LangSwitch() {
   );
 }
 
+/** Bold + tier-coloured highlight for the new "layer" word in a
+ *  tier tagline (e.g. 'see' in Clear, 'remember forever' in Deep).
+ *  The actual colour is inherited from the parent tier card via
+ *  .wb-tier-clear / .wb-tier-deep selectors in globals.css. */
+function Hl({ children }: { children: React.ReactNode }) {
+  return <span className="wb-tier-tagline-hl">{children}</span>;
+}
+
 function CheckIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -111,7 +119,7 @@ interface TierCardProps {
   price: string;
   period: string;
   subPrice?: string;
-  tagline: string;
+  tagline: React.ReactNode;
   features: string[];
   cta: string;
   ctaSub?: string;
@@ -157,9 +165,9 @@ const COPY: Record<string, {
   pricing: string;
   search: string;
   features: string;
-  tierBasic: { name: string; tagline: string; cta: string; features: string[] };
-  tierClear: { name: string; tagline: string; cta: string; badge: string; features: string[] };
-  tierDeep:  { name: string; tagline: string; cta: string; features: string[] };
+  tierBasic: { name: string; tagline: React.ReactNode; cta: string; features: string[] };
+  tierClear: { name: string; tagline: React.ReactNode; cta: string; badge: string; features: string[] };
+  tierDeep:  { name: string; tagline: React.ReactNode; cta: string; features: string[] };
   mo: string; yr: string;
   freeForever: string;
   saveTrustBasic?: string;
@@ -178,7 +186,7 @@ const COPY: Record<string, {
     freeForever: "חינם לתמיד",
     tierBasic: {
       name: "Basic",
-      tagline: "להתחיל ולהבין מילים.",
+      tagline: "להבין את המילה",
       cta: "התחילו חינם",
       features: [
         "20 חיפושי מילים ליום",
@@ -190,7 +198,7 @@ const COPY: Record<string, {
     },
     tierClear: {
       name: "Clear",
-      tagline: "להבין באמת — תמונה, ילדים, מחברת.",
+      tagline: <>להבין ו<Hl>לראות</Hl> את המילה</>,
       cta: "נסו 14 יום חינם",
       badge: "הכי פופולרי",
       features: [
@@ -205,7 +213,7 @@ const COPY: Record<string, {
     },
     tierDeep: {
       name: "Deep",
-      tagline: "להעמיק — חידון, השוואה, תרגול.",
+      tagline: <>להבין, לראות ו<Hl>לזכור לתמיד</Hl></>,
       cta: "נסו 14 יום חינם",
       features: [
         "כל מה שיש ב-Clear",
@@ -229,7 +237,7 @@ const COPY: Record<string, {
     freeForever: "Free forever",
     tierBasic: {
       name: "Basic",
-      tagline: "Get started, understand words.",
+      tagline: "Understand the word",
       cta: "Start now",
       features: [
         "20 word searches per day",
@@ -241,7 +249,7 @@ const COPY: Record<string, {
     },
     tierClear: {
       name: "Clear",
-      tagline: "Really understand — image, kids, notebook.",
+      tagline: <>Understand and <Hl>see</Hl> the word</>,
       cta: "Try 14 days free",
       badge: "Most popular",
       features: [
@@ -256,7 +264,7 @@ const COPY: Record<string, {
     },
     tierDeep: {
       name: "Deep",
-      tagline: "Go deeper — quiz, compare, practice.",
+      tagline: <>Understand, see, and <Hl>remember forever</Hl></>,
       cta: "Try 14 days free",
       features: [
         "Everything in Clear",
@@ -264,6 +272,261 @@ const COPY: Record<string, {
         "Word games",
         "Long-term practice & retention",
         "Export content",
+      ],
+    },
+  },
+  ar: {
+    heroTitle: "ابدأ مجانًا.",
+    heroSub: "ارتقِ متى أردت التعمّق.",
+    monthly: "شهري", yearly: "سنوي",
+    save: "وفّر 17%",
+    signin: "تسجيل دخول",
+    pricing: "الأسعار",
+    search: "بحث",
+    features: "المزايا",
+    mo: "/شهر", yr: "/سنة",
+    freeForever: "مجاني للأبد",
+    tierBasic: {
+      name: "Basic",
+      tagline: "فهم الكلمة",
+      cta: "ابدأ مجانًا",
+      features: [
+        "20 عملية بحث يوميًا",
+        "كل تعريفات الكلمة",
+        "أمثلة جمل حسب السياق",
+        "تعابير وعبارات",
+        "أصل الكلمة",
+      ],
+    },
+    tierClear: {
+      name: "Clear",
+      tagline: <>فهم و<Hl>رؤية</Hl> الكلمة</>,
+      cta: "جرّب 14 يومًا مجانًا",
+      badge: "الأكثر شيوعًا",
+      features: [
+        "كل ما في Basic",
+        "عمليات بحث بلا حدود",
+        "شرح للأطفال",
+        "صورة توضيحية للكلمة",
+        "دفتر كلمات شخصي",
+        "اكتب جملة وتلقَّ تعليقًا",
+        "سجل بحث كامل",
+      ],
+    },
+    tierDeep: {
+      name: "Deep",
+      tagline: <>فهم ورؤية و<Hl>تذكّر للأبد</Hl></>,
+      cta: "جرّب 14 يومًا مجانًا",
+      features: [
+        "كل ما في Clear",
+        "اختبارات مخصصة",
+        "ألعاب كلمات",
+        "تمرين وحفظ طويل المدى",
+        "تصدير المحتوى",
+      ],
+    },
+  },
+  ru: {
+    heroTitle: "Начните бесплатно.",
+    heroSub: "Обновите подписку, когда захотите углубиться.",
+    monthly: "Ежемесячно", yearly: "Ежегодно",
+    save: "Экономия 17%",
+    signin: "Войти",
+    pricing: "Цены",
+    search: "Поиск",
+    features: "Возможности",
+    mo: "/мес", yr: "/год",
+    freeForever: "Бесплатно навсегда",
+    tierBasic: {
+      name: "Basic",
+      tagline: "Понять слово",
+      cta: "Начать бесплатно",
+      features: [
+        "20 поисков слов в день",
+        "Все определения слова",
+        "Примеры предложений по контексту",
+        "Идиомы и выражения",
+        "Происхождение слова",
+      ],
+    },
+    tierClear: {
+      name: "Clear",
+      tagline: <>Понять и <Hl>увидеть</Hl> слово</>,
+      cta: "Пробовать 14 дней",
+      badge: "Самый популярный",
+      features: [
+        "Всё из Basic",
+        "Безлимитные поиски",
+        "Объяснение для детей",
+        "Иллюстрация слова",
+        "Личная тетрадь слов",
+        "Составить фразу и получить отзыв",
+        "Полная история поиска",
+      ],
+    },
+    tierDeep: {
+      name: "Deep",
+      tagline: <>Понять, увидеть и <Hl>запомнить навсегда</Hl></>,
+      cta: "Пробовать 14 дней",
+      features: [
+        "Всё из Clear",
+        "Персональные викторины",
+        "Игры со словами",
+        "Долгосрочная практика и запоминание",
+        "Экспорт контента",
+      ],
+    },
+  },
+  es: {
+    heroTitle: "Empieza gratis.",
+    heroSub: "Actualiza solo cuando quieras profundizar.",
+    monthly: "Mensual", yearly: "Anual",
+    save: "Ahorra 17%",
+    signin: "Iniciar sesión",
+    pricing: "Precios",
+    search: "Búsqueda",
+    features: "Funciones",
+    mo: "/mes", yr: "/año",
+    freeForever: "Gratis para siempre",
+    tierBasic: {
+      name: "Basic",
+      tagline: "Entender la palabra",
+      cta: "Empezar gratis",
+      features: [
+        "20 búsquedas por día",
+        "Todas las definiciones de la palabra",
+        "Ejemplos según contexto",
+        "Modismos y expresiones",
+        "Origen de la palabra",
+      ],
+    },
+    tierClear: {
+      name: "Clear",
+      tagline: <>Entender y <Hl>ver</Hl> la palabra</>,
+      cta: "Prueba 14 días gratis",
+      badge: "Más popular",
+      features: [
+        "Todo lo de Basic",
+        "Búsquedas ilimitadas",
+        "Explicación para niños",
+        "Ilustración de la palabra",
+        "Cuaderno personal de palabras",
+        "Compón una frase y recibe feedback",
+        "Historial de búsqueda completo",
+      ],
+    },
+    tierDeep: {
+      name: "Deep",
+      tagline: <>Entender, ver y <Hl>recordar para siempre</Hl></>,
+      cta: "Prueba 14 días gratis",
+      features: [
+        "Todo lo de Clear",
+        "Pruebas personalizadas",
+        "Juegos de palabras",
+        "Práctica y retención a largo plazo",
+        "Exportar contenido",
+      ],
+    },
+  },
+  pt: {
+    heroTitle: "Comece grátis.",
+    heroSub: "Atualize só quando quiser aprofundar.",
+    monthly: "Mensal", yearly: "Anual",
+    save: "Economize 17%",
+    signin: "Entrar",
+    pricing: "Preços",
+    search: "Buscar",
+    features: "Recursos",
+    mo: "/mês", yr: "/ano",
+    freeForever: "Grátis para sempre",
+    tierBasic: {
+      name: "Basic",
+      tagline: "Entender a palavra",
+      cta: "Começar grátis",
+      features: [
+        "20 buscas de palavras por dia",
+        "Todas as definições da palavra",
+        "Exemplos por contexto",
+        "Expressões idiomáticas",
+        "Origem da palavra",
+      ],
+    },
+    tierClear: {
+      name: "Clear",
+      tagline: <>Entender e <Hl>ver</Hl> a palavra</>,
+      cta: "Experimente 14 dias grátis",
+      badge: "Mais popular",
+      features: [
+        "Tudo do Basic",
+        "Buscas ilimitadas",
+        "Explicação para crianças",
+        "Ilustração da palavra",
+        "Caderno pessoal de palavras",
+        "Componha uma frase e receba feedback",
+        "Histórico completo de busca",
+      ],
+    },
+    tierDeep: {
+      name: "Deep",
+      tagline: <>Entender, ver e <Hl>lembrar para sempre</Hl></>,
+      cta: "Experimente 14 dias grátis",
+      features: [
+        "Tudo do Clear",
+        "Quizzes personalizados",
+        "Jogos com palavras",
+        "Prática e retenção a longo prazo",
+        "Exportar conteúdo",
+      ],
+    },
+  },
+  fr: {
+    heroTitle: "Commencez gratuitement.",
+    heroSub: "Passez au supérieur seulement quand vous voulez approfondir.",
+    monthly: "Mensuel", yearly: "Annuel",
+    save: "Économisez 17%",
+    signin: "Connexion",
+    pricing: "Tarifs",
+    search: "Recherche",
+    features: "Fonctionnalités",
+    mo: "/mois", yr: "/an",
+    freeForever: "Gratuit pour toujours",
+    tierBasic: {
+      name: "Basic",
+      tagline: "Comprendre le mot",
+      cta: "Commencer gratuitement",
+      features: [
+        "20 recherches de mots par jour",
+        "Toutes les définitions du mot",
+        "Exemples selon le contexte",
+        "Idiomes et expressions",
+        "Origine du mot",
+      ],
+    },
+    tierClear: {
+      name: "Clear",
+      tagline: <>Comprendre et <Hl>voir</Hl> le mot</>,
+      cta: "Essayez 14 jours gratuits",
+      badge: "Le plus populaire",
+      features: [
+        "Tout du Basic",
+        "Recherches illimitées",
+        "Explication pour enfants",
+        "Illustration du mot",
+        "Carnet personnel de mots",
+        "Composez une phrase et recevez un retour",
+        "Historique de recherche complet",
+      ],
+    },
+    tierDeep: {
+      name: "Deep",
+      tagline: <>Comprendre, voir et <Hl>retenir à jamais</Hl></>,
+      cta: "Essayez 14 jours gratuits",
+      features: [
+        "Tout du Clear",
+        "Quiz personnalisés",
+        "Jeux de mots",
+        "Pratique et mémorisation à long terme",
+        "Exporter du contenu",
       ],
     },
   },

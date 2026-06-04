@@ -3134,6 +3134,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   line-height: 1.5;
   min-height: 44px;
 }
+/* Bold + tier-coloured highlight on the new "layer" word in the
+   Clear and Deep taglines. Basic stays plain — it's the base layer.
+   The colour resolves to whichever tier card wraps the span. */
+.wordbook .wb-tier-tagline-hl { font-weight: 700; }
+.wordbook .wb-tier-clear .wb-tier-tagline-hl { color: var(--teal); }
+.wordbook .wb-tier-deep  .wb-tier-tagline-hl { color: var(--deep-fg); }
 
 /* Price */
 .wordbook .wb-tier-price-row {
