@@ -765,7 +765,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       )}
       <div style={{ position: "relative", zIndex: 1 }}>
         <header className="wb-shell-topbar">
-          <Link href="/" className="wb-wordmark" aria-label="Gadit home">
+          <Link href="/" className="wb-wordmark" dir="ltr" aria-label="Gadit home">
             Gad<span className="wb-wordmark-it">it</span>
           </Link>
           <nav className="wb-shell-nav" aria-label="Primary">
