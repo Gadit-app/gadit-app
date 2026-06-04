@@ -24,6 +24,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
 
@@ -781,6 +782,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 navigation. They render alongside the word title inside
                 WordHeader. The masthead stays a calm chrome strip for
                 nav + language + auth. */}
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).text}
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
             <WordbookLangSwitch />
             {user ? (
               <Link href="/account" className="wb-avatar" aria-label="Account">

@@ -3678,6 +3678,48 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-typo-banner a:hover { color: var(--teal); }
 
+/* Topbar share button — small icon-only pill matching the lang
+   switcher's visual weight. Sits in .wb-shell-actions next to the
+   language chip / avatar. */
+.wordbook .wb-shell-share {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.wordbook .wb-shell-share:hover {
+  background: var(--teal-soft);
+  color: var(--teal);
+  border-color: var(--teal);
+}
+/* "Link copied" toast — same animation as wb-save-toast but in the
+   neutral CrispTech tone so it's clearly an info ack not a save
+   confirmation. Brief 1.8s fade. */
+.wordbook .wb-share-toast {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  background: var(--ink);
+  color: var(--surface);
+  font-family: var(--wb-he);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 9px 16px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25);
+  animation: wb-save-toast-in 0.22s ease-out;
+  pointer-events: none;
+}
+
 /* Save toast — small pill that fades in at the top of the page when
    a word is saved to the notebook. Sits above the topbar (z>30) so
    it's visible even on long pages where the topbar is sticky. */

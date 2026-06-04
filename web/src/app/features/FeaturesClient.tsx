@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { useAuth } from "@/lib/auth-context";
 
 const LANGS = [
@@ -212,6 +213,13 @@ export function FeaturesPage() {
           <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
+          <ShareButton
+            url="https://www.gadit.app/"
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).text}
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
           <LangSwitch />
           {user ? (
             <Link href="/account" className="wb-avatar" aria-label="Account">
