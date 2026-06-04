@@ -32,7 +32,17 @@ export function middleware(req: NextRequest) {
   const rewriteUrl = req.nextUrl.clone();
   rewriteUrl.pathname = remainder ? `/${remainder}` : "/";
 
-  const res = NextResponse.rewrite(rewriteUrl);
+  // Pass the lang as a request header so layout's generateMetadata
+  // can read it during SSR — important for OG-image / og:description
+  // generation when a social-card crawler fetches a /he/… URL with
+  // no cookie. Cookie is also set for the user's subsequent
+  // (in-browser) requests so the client-side LangProvider picks it up.
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-gadit-lang", first);
+
+  const res = NextResponse.rewrite(rewriteUrl, {
+    request: { headers: requestHeaders },
+  });
   res.cookies.set("gadit-lang", first, {
     maxAge: 60 * 60 * 24 * 365,
     sameSite: "lax",

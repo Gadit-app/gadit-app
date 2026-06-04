@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
@@ -91,55 +91,134 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://www.gadit.app"),
-  title: "Gadit — Every word, understood.",
-  description: "Not just a dictionary. Understand any word in any language — instantly.",
-  applicationName: "Gadit",
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Gadit",
+// Per-language metadata strings used by generateMetadata below. The
+// description is the same first-person share blurb that ShareButton
+// uses for the Web Share API, so the social-card preview that gets
+// posted on WhatsApp / Twitter / Telegram says the same thing as
+// when a user invokes the in-app share. Title is third-person.
+const META: Record<Lang, { title: string; description: string; locale: string }> = {
+  he: {
+    title: "Gadit — מילון דיגיטלי חכם",
+    description:
+      "גיליתי מילון דיגיטלי חדש שמפרש מילים ומראה דוגמאות לכל הגדרה, ניבים וצירופי מילים וגם המקור של המילה ומאיפה היא הגיעה. זה חינמי עם אפשרויות לשדרג בעלות נמוכה מאוד. שווה לנסות.",
+    locale: "he_IL",
   },
-  icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico" },
-      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-  },
-  alternates: {
-    canonical: "https://www.gadit.app",
-    languages: {
-      en: "https://www.gadit.app",
-      he: "https://www.gadit.app",
-      ar: "https://www.gadit.app",
-      ru: "https://www.gadit.app",
-      es: "https://www.gadit.app",
-      pt: "https://www.gadit.app",
-      fr: "https://www.gadit.app",
-      "x-default": "https://www.gadit.app",
-    },
-  },
-  openGraph: {
-    title: "Gadit — Every word, understood.",
-    description: "Not just a dictionary. Understand any word in any language — instantly.",
-    url: "https://www.gadit.app",
-    siteName: "Gadit",
-    type: "website",
+  en: {
+    title: "Gadit — Smart digital dictionary",
+    description:
+      "I discovered a new digital dictionary that explains words and shows examples for every definition, idioms and expressions, and the origin of each word and where it came from. It's free with very low-cost upgrade options. Worth a try.",
     locale: "en_US",
-    alternateLocale: ["he_IL", "ar", "ru_RU", "es_ES", "pt_BR", "fr_FR"],
   },
-  twitter: {
-    card: "summary",
-    title: "Gadit — Every word, understood.",
-    description: "Not just a dictionary. Understand any word in any language — instantly.",
+  ar: {
+    title: "Gadit — قاموس رقمي ذكي",
+    description:
+      "اكتشفت قاموسًا رقميًا جديدًا يشرح الكلمات ويعرض أمثلة لكل تعريف، تعابير وعبارات، وكذلك أصل الكلمة ومن أين جاءت. مجاني مع خيارات ترقية بتكلفة منخفضة جدًا. يستحق التجربة.",
+    locale: "ar",
+  },
+  ru: {
+    title: "Gadit — Умный цифровой словарь",
+    description:
+      "Нашёл новый цифровой словарь, который объясняет слова и показывает примеры для каждого определения, идиомы и выражения, а также происхождение слова и откуда оно взялось. Бесплатно, с очень дешёвой опцией апгрейда. Стоит попробовать.",
+    locale: "ru_RU",
+  },
+  es: {
+    title: "Gadit — Diccionario digital inteligente",
+    description:
+      "Descubrí un nuevo diccionario digital que explica las palabras y muestra ejemplos para cada definición, modismos y expresiones, y también el origen de cada palabra y de dónde viene. Es gratis con opciones de actualización a muy bajo costo. Vale la pena probar.",
+    locale: "es_ES",
+  },
+  pt: {
+    title: "Gadit — Dicionário digital inteligente",
+    description:
+      "Descobri um novo dicionário digital que explica palavras e mostra exemplos para cada definição, expressões idiomáticas, e também a origem de cada palavra e de onde ela veio. É grátis com opções de upgrade a um custo muito baixo. Vale a pena experimentar.",
+    locale: "pt_BR",
+  },
+  fr: {
+    title: "Gadit — Dictionnaire numérique intelligent",
+    description:
+      "J'ai découvert un nouveau dictionnaire numérique qui explique les mots et montre des exemples pour chaque définition, des idiomes et expressions, et aussi l'origine de chaque mot et d'où il vient. C'est gratuit avec des options de mise à niveau à très bas coût. Ça vaut le coup d'essayer.",
+    locale: "fr_FR",
   },
 };
+
+const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr"];
+
+export async function generateMetadata(): Promise<Metadata> {
+  // Resolve language for this request, exactly the same chain the
+  // RootLayout uses below: URL-prefix header set by middleware first
+  // (so /he/pricing gets HE metadata even on a cookieless OG fetcher),
+  // then the persisted gadit-lang cookie, then EN default.
+  const headersList = await headers();
+  const cookieStore = await cookies();
+  const headerLang  = headersList.get("x-gadit-lang") as Lang | null;
+  const cookieLang  = cookieStore.get("gadit-lang")?.value as Lang | undefined;
+  const lang: Lang =
+    (headerLang && ALL_LANGS.includes(headerLang) && headerLang) ||
+    (cookieLang && ALL_LANGS.includes(cookieLang) && cookieLang) ||
+    "en";
+
+  const m = META[lang];
+  const ogImage = `/og/${lang}.png`;
+
+  return {
+    metadataBase: new URL("https://www.gadit.app"),
+    title: m.title,
+    description: m.description,
+    applicationName: "Gadit",
+    manifest: "/manifest.json",
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "black-translucent",
+      title: "Gadit",
+    },
+    icons: {
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon.ico" },
+        { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+        { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    },
+    alternates: {
+      canonical: "https://www.gadit.app",
+      languages: {
+        en: "https://www.gadit.app",
+        he: "https://www.gadit.app/he",
+        ar: "https://www.gadit.app/ar",
+        ru: "https://www.gadit.app/ru",
+        es: "https://www.gadit.app/es",
+        pt: "https://www.gadit.app/pt",
+        fr: "https://www.gadit.app/fr",
+        "x-default": "https://www.gadit.app",
+      },
+    },
+    openGraph: {
+      title: m.title,
+      description: m.description,
+      url: "https://www.gadit.app",
+      siteName: "Gadit",
+      type: "website",
+      locale: m.locale,
+      alternateLocale: ALL_LANGS.filter((l) => l !== lang).map((l) => META[l].locale),
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: m.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: m.title,
+      description: m.description,
+      images: [ogImage],
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0EA5A5",
@@ -155,15 +234,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Read the lang cookie set by LangProvider.setLang on the client. When
-  // present, we know the user's chosen language at SSR time — so the
-  // first HTML painted by the browser is already in the right language
-  // and direction, no English flash before the React hydration switch.
+  // Resolve initial lang: URL-prefix header (set by middleware for
+  // /he/, /en/ etc.) first, so the very first HTML painted matches
+  // the URL the user shared. Then cookie. Then English default.
   const cookieStore = await cookies();
-  const cookieLang = cookieStore.get("gadit-lang")?.value as Lang | undefined;
-  const initialLang: Lang = cookieLang && SUPPORTED_LANGS.includes(cookieLang)
-    ? cookieLang
-    : "en";
+  const headersList = await headers();
+  const headerLang  = headersList.get("x-gadit-lang") as Lang | null;
+  const cookieLang  = cookieStore.get("gadit-lang")?.value as Lang | undefined;
+  const initialLang: Lang =
+    (headerLang && SUPPORTED_LANGS.includes(headerLang) && headerLang) ||
+    (cookieLang && SUPPORTED_LANGS.includes(cookieLang) && cookieLang) ||
+    "en";
   const initialDir: "ltr" | "rtl" =
     initialLang === "he" || initialLang === "ar" ? "rtl" : "ltr";
 
