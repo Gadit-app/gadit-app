@@ -216,7 +216,7 @@ export function FeaturesPage() {
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-            text={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).text}
+            text=""
             shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
             copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
           />
@@ -240,7 +240,7 @@ export function FeaturesPage() {
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-            text={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).text}
+            text=""
             shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
             copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
           />

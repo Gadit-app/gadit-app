@@ -33,7 +33,20 @@ export function ShareButton({
   const [flash, setFlash] = useState(false);
 
   async function handleShare() {
-    const data = { title, text, url };
+    // Only pass title + url, NOT text. When text is passed, WhatsApp
+    // (and Telegram, Messenger, etc.) show it as a separate message
+    // line above the URL — which then duplicates the og:description
+    // that already appears inside the rich preview card. Passing
+    // only title + url lets the destination app generate the rich
+    // card on its own from our OG meta and show no redundant text.
+    //
+    // We still accept a `text` prop for callers that explicitly want
+    // it (e.g. per-word share that may need a custom blurb), but for
+    // the app-wide topbar share, ShareButton renders with text=""
+    // by convention.
+    const data: ShareData = text
+      ? { title, text, url }
+      : { title, url };
     const nav = navigator as Navigator & {
       share?: (data: ShareData) => Promise<void>;
     };
