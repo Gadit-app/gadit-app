@@ -44,11 +44,24 @@ export function LangProvider({
       localStorage.setItem("gadit-lang", l);
     } catch { /* private mode / blocked */ }
     // Cookie persists across reloads and lets the server read the lang
-    // during SSR so /word and /home don't flash English first. 1 year
-    // TTL, SameSite=Lax so it survives normal nav without breaking
-    // cross-origin contexts.
+    // during SSR so /word and /home don't flash English first.
     try {
       document.cookie = `gadit-lang=${l}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch { /* ignore */ }
+    // Update the URL to carry the new lang prefix so the page can be
+    // shared in this language. Middleware accepts /he/pricing,
+    // /en/word/X, etc. — we just swap the leading segment.
+    try {
+      const supported = new Set(["he", "en", "ar", "ru", "es", "pt", "fr"]);
+      const url = new URL(window.location.href);
+      const segs = url.pathname.split("/").filter(Boolean);
+      if (segs.length > 0 && supported.has(segs[0])) {
+        segs[0] = l;
+      } else {
+        segs.unshift(l);
+      }
+      url.pathname = "/" + segs.join("/");
+      window.history.replaceState({}, "", url.toString());
     } catch { /* ignore */ }
   }
 
