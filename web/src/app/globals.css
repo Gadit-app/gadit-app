@@ -1537,11 +1537,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 600;
   font-size: 24px;
   letter-spacing: -0.015em;
-  /* Same RTL fix as wb-home-logo — Latin 'Gadit' must always read LTR
-     regardless of page direction, or the topbar wordmark flips to
-     'itGad' in HE/AR. */
+  /* Force LTR for the Latin 'Gadit' wordmark inside RTL pages, but
+     without making the element a flex container (the previous
+     attempt used inline-flex which nudged the inline 'it' span out
+     of the baseline). unicode-bidi:isolate creates a bidi-isolation
+     boundary so direction:ltr applies cleanly to the children
+     without touching the line-box geometry. */
   direction: ltr;
-  display: inline-flex;
+  unicode-bidi: isolate;
 }
 @media (min-width: 768px) {
   .wordbook .wb-wordmark { font-size: 26px; }
@@ -2716,10 +2719,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   line-height: 1;
   margin-bottom: 2px;
   /* Latin wordmark inside an RTL page — without an explicit direction
-     override, the inline children ('Gad' + <span>it</span>) flow
-     right-to-left and the wordmark visually reads 'itGad'. Force LTR
-     so the wordmark always reads 'Gadit', whatever the page direction. */
+     override the inline children flow right-to-left and the wordmark
+     visually reads 'itGad'. direction:ltr + unicode-bidi:isolate
+     forces LTR for the children without disturbing line metrics. */
   direction: ltr;
+  unicode-bidi: isolate;
   height: 64px;
   display: flex;
   align-items: center;
