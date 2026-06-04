@@ -674,8 +674,12 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({
+          // /api/notebook expects { word, language, meaning } — the
+          // earlier 'uiLang' typo here matched no field on the server
+          // and silently 400'd, which is why every save looked like
+          // a no-op until the red error toast was added.
           word: result.word,
-          uiLang: lang,
+          language: result.language,
           meaning: result.meanings[0]?.meaning ?? "",
         }),
       });

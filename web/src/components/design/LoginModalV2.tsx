@@ -94,12 +94,18 @@ export function LoginModalV2() {
 
   if (!showLoginModal) return null;
 
-  // Signup-mode error mapping deliberately collapses "email-already-in-use"
-  // into a generic message — otherwise the signup form is a user-enumeration
-  // oracle. Signin can be specific since the user already established they
-  // have an account.
+  // Signup-mode error mapping. The earlier version collapsed
+  // 'email-already-in-use' into the generic message to avoid the
+  // signup form becoming an enumeration oracle. In practice that
+  // pattern caused real users (e.g. someone signing up their
+  // spouse) to get stuck on 'Something went wrong' when the actual
+  // issue was simply that they'd already tried with that email.
+  // Surfacing the specific case here (with a 'try signing in'
+  // hint) gives them a way out; the enumeration risk is the same
+  // as the signin error already exposing 'wrong email or password'.
   function mapAuthError(msg: string, mode: Mode): string {
     if (mode === "signup") {
+      if (msg.includes("email-already-in-use")) return "loginErrorEmailInUse";
       if (msg.includes("weak-password")) return "loginErrorWeakPassword";
       if (msg.includes("invalid-email")) return "loginErrorInvalidEmail";
       return "loginErrorGeneric";
@@ -154,6 +160,10 @@ export function LoginModalV2() {
       else await signUpWithEmail(email, password);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
+      // Log the raw Firebase error to the console so we can debug
+      // production sign-up failures by asking the user to share their
+      // browser console — without exposing the raw text in the UI.
+      console.error("[auth] mode=" + mode + " error:", msg);
       setErrorKey(mapAuthError(msg, mode));
     } finally {
       setBusy(false);
