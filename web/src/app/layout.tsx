@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
+import type { Lang } from "@/lib/i18n";
 import LoginModal from "@/components/LoginModal";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { Analytics } from "@vercel/analytics/next";
@@ -146,18 +148,33 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr"];
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Read the lang cookie set by LangProvider.setLang on the client. When
+  // present, we know the user's chosen language at SSR time — so the
+  // first HTML painted by the browser is already in the right language
+  // and direction, no English flash before the React hydration switch.
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get("gadit-lang")?.value as Lang | undefined;
+  const initialLang: Lang = cookieLang && SUPPORTED_LANGS.includes(cookieLang)
+    ? cookieLang
+    : "en";
+  const initialDir: "ltr" | "rtl" =
+    initialLang === "he" || initialLang === "ar" ? "rtl" : "ltr";
+
   return (
     <html
-      lang="en"
+      lang={initialLang}
+      dir={initialDir}
       className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-          <LangProvider>
+          <LangProvider initialLang={initialLang}>
             <AuthProvider>
               {/* MarketingHeader is rendered per-route from each page's
                   Client component, so it sits inside the dark canvas

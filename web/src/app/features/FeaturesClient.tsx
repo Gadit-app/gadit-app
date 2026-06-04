@@ -10,6 +10,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
+import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 
 const LANGS = [
@@ -205,6 +206,9 @@ export function FeaturesPage() {
             </svg>
           </Link>
           <Link href="/features" className="wb-shell-navlink is-active">{c.features}</Link>
+          {user && (
+            <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
+          )}
           <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">

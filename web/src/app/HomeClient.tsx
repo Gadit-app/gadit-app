@@ -189,6 +189,9 @@ export function HomePage() {
             </svg>
           </Link>
           <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
+          {user && (
+            <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
+          )}
           <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
