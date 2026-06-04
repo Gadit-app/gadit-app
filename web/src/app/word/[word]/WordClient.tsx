@@ -644,16 +644,25 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     router.push("/pricing");
   }
 
+  // Tracks why save failed so we can show the right toast/text.
+  // null = either succeeded or hasn't been attempted this turn.
+  const [saveError, setSaveError] = useState<string>("");
+
   async function handleSave() {
     if (!user) {
       promptLogin(v2(lang, "saveToNotebook"));
       return;
     }
     if (!result) return;
-    // Notebook is a Clear-tier feature (Basic free plan does not
-    // include it). Anything below Clear gets routed to /pricing.
+    // Notebook is a Clear-tier feature. Basic users get the contextual
+    // upgrade modal instead of a silent /pricing redirect — exactly
+    // the same UX as locked tabs (image/kids/quiz/etc).
     if (plan === "basic") {
-      router.push("/pricing");
+      setUpgradeTrigger({ feature: "kids", tier: "clear" });
+      // Reusing "kids" feature copy because notebook is Clear-tier
+      // and the copy table doesn't have a notebook key yet. The user
+      // still sees the right tier badge + price. Notebook-specific
+      // copy can be added later.
       return;
     }
     try {
@@ -672,11 +681,22 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       });
       if (res.ok) {
         setIsSaved(true);
+        setSaveError("");
         setSaveFlash(true);
         window.setTimeout(() => setSaveFlash(false), 2400);
+      } else {
+        // Server rejected — surface an error toast so the click feels
+        // acknowledged even on failure.
+        console.error("notebook POST failed:", res.status, await res.text());
+        setSaveError(`HTTP ${res.status}`);
+        setSaveFlash(true);
+        window.setTimeout(() => { setSaveFlash(false); setSaveError(""); }, 3000);
       }
     } catch (e) {
       console.error("notebook:", e);
+      setSaveError(String(e));
+      setSaveFlash(true);
+      window.setTimeout(() => { setSaveFlash(false); setSaveError(""); }, 3000);
     }
   }
 
@@ -771,8 +791,19 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
       {saveFlash && (
-        <div className="wb-save-toast" role="status">
-          {v2(lang, "savedToWordBook")}
+        <div
+          className={`wb-save-toast ${saveError ? "is-error" : ""}`}
+          role="status"
+        >
+          {saveError
+            ? (lang === "he" ? "השמירה נכשלה — נסו שוב" :
+               lang === "ar" ? "فشل الحفظ — حاول مرة أخرى" :
+               lang === "ru" ? "Не удалось сохранить — попробуйте снова" :
+               lang === "es" ? "Error al guardar — inténtalo de nuevo" :
+               lang === "pt" ? "Falha ao salvar — tente novamente" :
+               lang === "fr" ? "Échec de l'enregistrement — réessayez" :
+               "Save failed — try again")
+            : v2(lang, "savedToWordBook")}
         </div>
       )}
       <div style={{ position: "relative", zIndex: 1 }}>
