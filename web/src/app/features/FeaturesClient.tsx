@@ -236,7 +236,16 @@ export function FeaturesPage() {
             </button>
           )}
         </div>
-        <button
+        <div className="wb-shell-share-mobile-wrap">
+          <ShareButton
+            url="https://www.gadit.app/"
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).text}
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
+        </div>
+                <button
           ref={burgerRef}
           type="button"
           className="wb-shell-burger"

@@ -3678,6 +3678,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-typo-banner a:hover { color: var(--teal); }
 
+/* Mobile-only wrapper for an extra ShareButton instance that sits
+   next to the hamburger. .wb-shell-actions is display:none below
+   720px (replaced by the hamburger menu) which would hide the
+   share too — so we render the button a second time outside actions
+   and show only the wrapper appropriate for the breakpoint. */
+.wordbook .wb-shell-share-mobile-wrap { display: none; }
+
 /* Topbar share button — small icon-only pill matching the lang
    switcher's visual weight. Sits in .wb-shell-actions next to the
    language chip / avatar. */
@@ -3779,6 +3786,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-shell-nav,
   .wordbook .wb-shell-actions {
     display: none;
+  }
+  .wordbook .wb-shell-share-mobile-wrap {
+    display: inline-flex;
+    align-items: center;
   }
   .wordbook .wb-shell-burger {
     display: inline-flex;
