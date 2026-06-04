@@ -144,7 +144,15 @@ The 5 fields are:
    - Hebrew user: "׳¦׳׳™׳ ׳׳׳¨׳—׳§", "׳—׳™׳‘׳” ׳•׳¨׳¦׳•׳", "׳”׳—׳׳§ ׳”׳§׳©׳” ׳”׳׳—׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳—׳™׳”"
    - English user: "sound from far away", "affection and desire", "the hard pointed part on an animal's head"
 
-5. "historyNote" ג€” OPTIONAL but ENCOURAGED. A short story (1-3 sentences) about the word's specific historical journey, written IN THE USER'S LANGUAGE. This is what makes etymology come alive ג€” it's the difference between "from Hebrew" and "appears in the Bible only once, in Psalms 146: '׳׳‘׳“׳• ׳¢׳©׳×ײ¹ײ¼׳ ײ¹׳×׳™׳•'".
+5. "historyNote" ג€” STRONGLY REQUIRED for Semitic words, otherwise ENCOURAGED. A 2-4 sentence story about the word's specific historical journey, written IN THE USER'S LANGUAGE.
+
+   ג ן¸ HEBREW / ARABIC RULE ג€” the historyNote on a Semitic-language word IS the etymology, because the sourceLanguage is the same as the user's language and originalWord stays empty. So for HE/AR words you MUST cover THREE angles inside historyNote:
+   1. THE ROOT (׳”׳©׳•׳¨׳©) ג€” name the triliteral root explicitly in dotted form (e.g. "׳.׳”.׳‘", "׳§.׳¨.׳", "׳—.׳©.׳‘") and say briefly what action / concept that root carries.
+   2. THE FIRST APPEARANCE ג€” where the word first appears (Tanakh book + chapter, Mishnah, Talmud), a famous verse if there is one, or who coined it (Eliezer Ben-Yehuda for modern coinages).
+   3. SEMITIC COGNATES ג€” when there is a clear cognate in 1-2 sister languages (Aramaic, Arabic, Akkadian, Ugaritic), name it briefly with a TRANSLITERATION (no foreign scripts). Skip this leg if no clear cognate exists.
+   Fold all three into 2-4 flowing sentences, NOT a list. If one of the three isn't known, omit just that one. Never invent.
+
+   A short story (1-3 sentences) about the word's specific historical journey, written IN THE USER'S LANGUAGE. This is what makes etymology come alive ג€” it's the difference between "from Hebrew" and "appears in the Bible only once, in Psalms 146: '׳׳‘׳“׳• ׳¢׳©׳×ײ¹ײ¼׳ ײ¹׳×׳™׳•'".
    What makes a GOOD historyNote:
    - Specific verses, books, or texts where the word first appeared
    - Concrete historical events that shaped the word's use
