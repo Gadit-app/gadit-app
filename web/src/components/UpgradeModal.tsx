@@ -20,6 +20,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/track";
 
 export type UpgradeTier = "clear" | "deep";
 export type UpgradeFeature =
@@ -228,6 +229,21 @@ export function UpgradeModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [trigger, onClose]);
 
+  // Fire an analytics event the moment the modal opens — one event
+  // per unique (feature, tier) pair the user attempts. This is the
+  // top of the upgrade funnel: every "upgrade_prompt_shown" represents
+  // a Basic user who tried a paid feature. Compare to
+  // "upgrade_prompt_clicked" (cta tapped) and the downstream Stripe
+  // checkout completion to compute conversion rate.
+  useEffect(() => {
+    if (!trigger) return;
+    track("upgrade_prompt_shown", {
+      feature: trigger.feature,
+      tier: trigger.tier,
+      lang,
+    });
+  }, [trigger, lang]);
+
   if (!trigger) return null;
 
   const c = COPY[lang] ?? COPY.en;
@@ -280,6 +296,7 @@ export function UpgradeModal({
           type="button"
           className={`wb-upgrade-cta wb-upgrade-cta-${tier}`}
           onClick={() => {
+            track("upgrade_prompt_clicked", { feature, tier, lang });
             onClose();
             router.push("/pricing");
           }}
@@ -290,7 +307,10 @@ export function UpgradeModal({
         <button
           type="button"
           className="wb-upgrade-secondary"
-          onClick={onClose}
+          onClick={() => {
+            track("upgrade_prompt_dismissed", { feature, tier, lang });
+            onClose();
+          }}
         >
           {c.secondaryCta}
         </button>
