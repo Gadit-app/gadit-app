@@ -25,6 +25,7 @@ import { useLang } from "@/lib/lang-context";
 import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
@@ -850,14 +851,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             />
             <WordbookLangSwitch />
             {user ? (
-              <Link href="/account" className="wb-avatar" aria-label="Account">
-                {user.photoURL ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={user.photoURL} alt="" />
-                ) : (
-                  <span>{(user.email?.[0] || "G").toUpperCase()}</span>
-                )}
-              </Link>
+              <WbUserMenu />
             ) : (
               <button
                 type="button"

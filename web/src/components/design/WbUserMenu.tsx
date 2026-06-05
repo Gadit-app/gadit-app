@@ -1,0 +1,199 @@
+"use client";
+
+/**
+ * WbUserMenu — avatar button that opens a small popover with account
+ * actions ("Account details", "Sign out").
+ *
+ * Replaces the bare <Link href="/account"> on .wb-avatar across every
+ * CrispTech-design page (Home / Pricing / Features / Notebook / Word /
+ * Account). The old single-link behavior forced users into the Account
+ * page just to log out, which is a multi-tap dead-end — especially
+ * confusing for someone who signed in by mistake (e.g. on a household
+ * shared device) and just wants out.
+ *
+ * Behavior:
+ *   - Avatar is a button. Tap → dropdown opens below.
+ *   - Two actions: "Account details" (→ /account) and "Sign out"
+ *     (calls auth-context.logout()).
+ *   - Closes on outside click, Escape, or option selection.
+ *   - Positions on the start side or end side depending on the page's
+ *     dir attribute so it stays within the viewport in both LTR and RTL.
+ *
+ * Visual: matches .wb-avatar (teal disk / 34px / first-letter or photo).
+ * Dropdown is a small white card with rounded corners and soft shadow,
+ * tracking the rest of the wordbook surface chrome.
+ */
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
+import type { Lang } from "@/lib/i18n";
+
+type Copy = { account: string; signOut: string; openMenu: string };
+
+const COPY: Record<Lang, Copy> = {
+  en: { account: "Account",            signOut: "Sign out",    openMenu: "Open account menu" },
+  he: { account: "החשבון שלי",          signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
+  ar: { account: "حسابي",               signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
+  ru: { account: "Аккаунт",             signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
+  es: { account: "Cuenta",              signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
+  pt: { account: "Conta",               signOut: "Sair",        openMenu: "Abrir menu da conta" },
+  fr: { account: "Compte",              signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
+  de: { account: "Konto",               signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
+  cs: { account: "Účet",                signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
+};
+
+export function WbUserMenu() {
+  const { user, logout } = useAuth();
+  const { lang, dir } = useLang();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  // Close on outside click + Escape
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (e: PointerEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  if (!user) return null;
+
+  const c = COPY[lang] ?? COPY.en;
+  const initial = (user.email?.[0] || user.displayName?.[0] || "G").toUpperCase();
+
+  const onSignOut = async () => {
+    setOpen(false);
+    try {
+      await logout();
+      // After logout, route to home so the now-anonymous user lands
+      // somewhere coherent rather than staying on /account (which
+      // would just bounce them back to a login modal).
+      router.push("/");
+    } catch (err) {
+      console.error("logout failed:", err);
+    }
+  };
+
+  // RTL languages: dropdown opens to the start (right). LTR: to the end (right too in
+  // visual terms, but using insetInlineEnd keeps it logical).
+  const sideOffset: React.CSSProperties =
+    dir === "rtl" ? { insetInlineStart: 0 } : { insetInlineEnd: 0 };
+
+  return (
+    <div ref={wrapRef} style={{ position: "relative", display: "inline-flex" }}>
+      <button
+        type="button"
+        className="wb-avatar"
+        aria-label={c.openMenu}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        style={{ border: "none", padding: 0, cursor: "pointer" }}
+      >
+        {user.photoURL ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={user.photoURL} alt="" />
+        ) : (
+          <span>{initial}</span>
+        )}
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          style={{
+            position: "absolute",
+            insetBlockStart: "calc(100% + 8px)",
+            ...sideOffset,
+            minWidth: 200,
+            background: "var(--surface, #FFFFFF)",
+            color: "var(--ink, #111827)",
+            border: "1px solid var(--hairline, #E5E7EB)",
+            borderRadius: 12,
+            boxShadow: "0 12px 32px rgba(13, 22, 38, 0.10), 0 2px 6px rgba(13, 22, 38, 0.06)",
+            padding: 6,
+            zIndex: 100,
+            fontFamily: "var(--wb-sans, Inter, system-ui, sans-serif)",
+            // Match page direction so menu text aligns correctly
+            direction: dir,
+          }}
+        >
+          {/* Email row — read-only context so the user knows which
+              account they're about to act on. Important when several
+              family members share a device. */}
+          {user.email && (
+            <div
+              style={{
+                padding: "8px 12px 10px",
+                fontSize: 12,
+                color: "var(--muted, #6B7280)",
+                borderBottom: "1px solid var(--hairline, #F3F4F6)",
+                marginBottom: 4,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+              title={user.email}
+            >
+              {user.email}
+            </div>
+          )}
+          <Link
+            role="menuitem"
+            href="/account"
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "10px 12px",
+              borderRadius: 8,
+              color: "var(--ink, #111827)",
+              textDecoration: "none",
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {c.account}
+          </Link>
+          <button
+            role="menuitem"
+            type="button"
+            onClick={onSignOut}
+            style={{
+              display: "block",
+              width: "100%",
+              textAlign: dir === "rtl" ? "right" : "left",
+              padding: "10px 12px",
+              borderRadius: 8,
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "var(--ink, #111827)",
+              fontSize: 14,
+              fontWeight: 500,
+              fontFamily: "inherit",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {c.signOut}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
