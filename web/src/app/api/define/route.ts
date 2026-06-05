@@ -344,6 +344,27 @@ The "meaning" field must NOT start with "[word] is...", "[word] is also...", "[w
 - WRONG: "Dream is a series of thoughts during sleep."
 - RIGHT: "A series of thoughts, images, or emotions occurring during sleep."
 
+ג ן¸ EVERY MEANING IS STANDALONE ג€” NO CROSS-REFERENCES TO OTHER MEANINGS:
+Each entry in meanings[] must read as its own complete definition with NO awareness of the previous entries. The UI shows each meaning in its own card; a reader landing on meaning #2 must understand it without having read meaning #1.
+
+This means the 2nd, 3rd, 4th, ... entries must NOT start with "also", "another", "similarly", "additionally" or any wording that implies a relationship to a prior meaning:
+- ׳—׳׳•׳ץ ("׳—׳׳•׳ ׳–׳” ׳’׳...", "׳’׳ ׳©׳ ׳״׳, ׳‘׳ ׳•׳¡׳£ ׳׳›׳ ׳—׳׳•׳ ׳‘׳™׳× ׳ ׳™׳×׳ ׳’׳..."),
+- EN ("Also, X means...", "Another sense: ...", "In addition, X can refer to...", "Similarly, ..."),
+- AR ("׳›׳²׳ז׳"׳"׳• ׳™׳¢׳ ׳™ X...", "׳"׳›׳²׳ ׳™×´׳×´ X..."),
+- RU ("׀ ׀æ׀ª׀ª׀µ ׀×ÊÊ ׀×ÒÊ׀ª׀µ׀×...", "׀×Êa ׀´׀¾׀¶׀×ÊÊ׀´׀×Êa..."),
+- ES ("Tambiֳ©n significa..."),
+- PT ("Tambֳ©m significa..."),
+- FR ("Signifie aussi..."),
+- DE ("Bedeutet auch..."),
+- CS ("Znamenֳ¡ tak׳©...").
+
+WRONG (meaning #2): "׳—׳׳•׳ ׳–׳” ׳’׳ ׳׳©׳”׳• ׳©׳—׳•׳׳׳™׳ ׳‘׳׳™׳׳”."
+WRONG (meaning #3): "׳‘׳ ׳•׳¡׳£, ׳—׳׳•׳ ׳™׳›׳•׳ ׳׳”׳™׳•׳× ׳©׳׳™׳₪׳× ׳¨׳ ׳™׳× ׳©׳ ׳©׳׳™׳₪׳× ׳™׳“."
+RIGHT (meaning #2): "׳׳©׳׳׳× ׳׳•(... ׳—׳•׳•׳™׳™׳, ׳¨׳¢׳™׳•׳ ׳•׳× ׳•׳×׳—׳•׳©׳•׳× ׳©׳ ׳—׳•׳ ׳× ׳‘׳©׳™׳ ׳”."
+RIGHT (meaning #3): "׳©׳׳™׳₪׳× ׳¨׳ ׳™׳× ׳§׳¦׳¨׳” ׳©׳ ׳׳™׳©׳”׳• ׳ ׳—׳©׳•׳."
+
+The same RIGHT examples for English: "A series of thoughts, images, or emotions occurring during sleep." / "A brief glimpse of someone." ג€” no "also", no "another sense".
+
 ג ן¸ CRITICAL RULE #7 ג€” ETYMOLOGY OF DERIVED FORMS TRACES BACK TO THE BASE FORM:
 When a user asks about a derived form (a noun derived from a verb, a gerund, a feminine form, a plural that has its own meaning), the etymology should trace the ORIGIN of the underlying base/root word ג€” not invent a separate origin for the derivation.
 
