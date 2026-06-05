@@ -203,6 +203,8 @@ export async function generateMetadata(): Promise<Metadata> {
         es: "https://www.gadit.app/es",
         pt: "https://www.gadit.app/pt",
         fr: "https://www.gadit.app/fr",
+        de: "https://www.gadit.app/de",
+        cs: "https://www.gadit.app/cs",
         "x-default": "https://www.gadit.app",
       },
     },

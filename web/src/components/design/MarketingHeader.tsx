@@ -31,6 +31,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
 import { Wordmark } from "./primitives";
@@ -83,9 +84,10 @@ function NavLink({
   lang: Lang;
   onClick?: () => void;
 }) {
+  const href = useHref();
   return (
     <Link
-      href={item.href}
+      href={href(item.href)}
       onClick={onClick}
       className="gd-font-sans-ui transition-colors relative"
       style={{
@@ -129,6 +131,7 @@ export function MarketingHeader() {
   // Pricing). Only Deep — for whom Compare/Notebook are real working
   // pages, not aspirational promises — sees the full set.
   const navItems = plan === "deep" ? NAV_ITEMS_DEEP : NAV_ITEMS_PUBLIC;
+  const href = useHref();
 
   const initial = (user?.displayName ?? user?.email ?? "U")[0].toUpperCase();
 
@@ -144,7 +147,7 @@ export function MarketingHeader() {
         className="flex items-center justify-between gap-6"
         style={{ padding: "20px clamp(20px, 3vw, 32px)" }}
       >
-        <Link href="/" className="flex items-center" aria-label="Gadit">
+        <Link href={href("/")} className="flex items-center" aria-label="Gadit">
           <Wordmark />
         </Link>
 
@@ -214,7 +217,7 @@ export function MarketingHeader() {
 
           {user ? (
             <Link
-              href="/account"
+              href={href("/account")}
               aria-label={
                 plan === "deep"
                   ? "Account · Deep"

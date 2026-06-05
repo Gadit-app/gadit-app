@@ -27,6 +27,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { useHref } from "@/lib/href";
 
 type Plan = "basic" | "clear" | "deep";
 
@@ -139,6 +140,7 @@ export function AccountPage() {
   const { user, loading: authLoading, promptLogin, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
+  const href = useHref();
 
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -204,7 +206,7 @@ export function AccountPage() {
 
   async function handleSignOut() {
     await logout();
-    router.push("/");
+    router.push(href("/"));
   }
 
   async function handleDeleteAccount() {
@@ -231,7 +233,7 @@ export function AccountPage() {
         return;
       }
       await logout();
-      router.push("/");
+      router.push(href("/"));
     } catch (err) {
       console.error("Delete account failed:", err);
     }
@@ -274,17 +276,17 @@ export function AccountPage() {
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
       <header className="wb-shell-topbar">
-        <Link href="/" className="wb-wordmark" dir="ltr">
+        <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href="/" className="wb-shell-navlink wb-shell-navlink-icon" aria-label={v2(lang, "navSearch")} title={v2(lang, "navSearch")}>
+          <Link href={href("/")} className="wb-shell-navlink wb-shell-navlink-icon" aria-label={v2(lang, "navSearch")} title={v2(lang, "navSearch")}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="6.5" />
               <path d="m20 20-4-4" />
             </svg>
           </Link>
-          <Link href="/pricing" className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
+          <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
         </nav>
         <div className="wb-shell-actions">
           <ShareButton
@@ -364,8 +366,8 @@ export function AccountPage() {
                 data={data}
                 renewalDate={renewalDate}
                 onManageBilling={handleManageBilling}
-                onUpgrade={() => router.push("/pricing")}
-                onChangePlan={() => router.push("/pricing")}
+                onUpgrade={() => router.push(href("/pricing"))}
+                onChangePlan={() => router.push(href("/pricing"))}
               />
               <Divider />
               <UsageSection data={data} />
@@ -383,9 +385,9 @@ export function AccountPage() {
 
       <footer className="wb-home-footer">
         <div className="wb-home-footer-inner">
-          <Link href="/" className="wb-home-footer-link">{v2(lang, "navSearch")}</Link>
-          <Link href="/pricing" className="wb-home-footer-link">{v2(lang, "navPricing")}</Link>
-          <Link href="/features" className="wb-home-footer-link">{v2(lang, "navFeatures")}</Link>
+          <Link href={href("/")} className="wb-home-footer-link">{v2(lang, "navSearch")}</Link>
+          <Link href={href("/pricing")} className="wb-home-footer-link">{v2(lang, "navPricing")}</Link>
+          <Link href={href("/features")} className="wb-home-footer-link">{v2(lang, "navFeatures")}</Link>
         </div>
       </footer>
     </div>

@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 
 type Mode = "signin" | "signup";
@@ -62,6 +63,7 @@ export function LoginModalV2() {
     sendPasswordReset,
   } = useAuth();
   const { lang, dir } = useLang();
+  const href = useHref();
   const isRtl = dir === "rtl";
 
   const [mode, setMode] = useState<Mode>("signin");
@@ -284,11 +286,11 @@ export function LoginModalV2() {
               />
               <span>
                 {v2(lang, "loginAgeTermsLine")}{" "}
-                <a href="/terms" target="_blank" onClick={(e) => e.stopPropagation()}>
+                <a href={href("/terms")} target="_blank" onClick={(e) => e.stopPropagation()}>
                   {v2(lang, "loginTermsLinkLabel")}
                 </a>
                 {" · "}
-                <a href="/privacy" target="_blank" onClick={(e) => e.stopPropagation()}>
+                <a href={href("/privacy")} target="_blank" onClick={(e) => e.stopPropagation()}>
                   {v2(lang, "loginPrivacyLinkLabel")}
                 </a>
               </span>

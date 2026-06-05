@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
+import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
@@ -139,6 +140,7 @@ export function HomePage() {
   const { lang, dir, setLang } = useLang();
   const { user, plan, promptLogin } = useAuth();
   const router = useRouter();
+  const href = useHref();
   const [query, setQuery] = useState("");
   const [sentence, setSentence] = useState("");
   const [sentenceOpen, setSentenceOpen] = useState(false);
@@ -176,7 +178,7 @@ export function HomePage() {
     if (!trimmed) return;
     const ctx = (ctxSentence ?? sentence).trim();
     const qs = ctx ? `?sentence=${encodeURIComponent(ctx)}` : "";
-    router.push(`/word/${encodeURIComponent(trimmed)}${qs}`);
+    router.push(href(`/word/${encodeURIComponent(trimmed)}${qs}`));
   }
 
   function onSubmit(e: React.FormEvent) {
@@ -187,21 +189,21 @@ export function HomePage() {
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
       <header className="wb-shell-topbar">
-        <Link href="/" className="wb-wordmark" dir="ltr">
+        <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href="/" className="wb-shell-navlink wb-shell-navlink-icon is-active" aria-label={c.search}>
+          <Link href={href("/")} className="wb-shell-navlink wb-shell-navlink-icon is-active" aria-label={c.search}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="6.5" />
               <path d="m20 20-4-4" />
             </svg>
           </Link>
-          <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
+          <Link href={href("/features")} className="wb-shell-navlink">{c.features}</Link>
           {user && (plan === "clear" || plan === "deep") && (
-            <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
+            <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
           )}
-          <Link href="/pricing" className="wb-shell-navlink">{c.pricing}</Link>
+          <Link href={href("/pricing")} className="wb-shell-navlink">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
           <ShareButton
@@ -253,10 +255,10 @@ export function HomePage() {
         </button>
         {menuOpen && (
           <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
-            <Link href="/features" className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {c.features}
             </Link>
-            <Link href="/pricing" className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {c.pricing}
             </Link>
             <div className="wb-shell-mobile-menu-sep" />
@@ -274,7 +276,7 @@ export function HomePage() {
             </div>
             <div className="wb-shell-mobile-menu-sep" />
             {user ? (
-              <Link href="/account" onClick={() => setMenuOpen(false)}>
+              <Link href={href("/account")} onClick={() => setMenuOpen(false)}>
                 {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
               </Link>
             ) : (
@@ -379,11 +381,11 @@ export function HomePage() {
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
         <span>·</span>
-        <Link href="/pricing">{c.pricing}</Link>
+        <Link href={href("/pricing")}>{c.pricing}</Link>
         <span>·</span>
-        <Link href="/privacy">Privacy</Link>
+        <Link href={href("/privacy")}>Privacy</Link>
         <span>·</span>
-        <Link href="/terms">Terms</Link>
+        <Link href={href("/terms")}>Terms</Link>
       </footer>
     </div>
   );

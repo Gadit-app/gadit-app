@@ -29,6 +29,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { useHref } from "@/lib/href";
 import type { Lang } from "@/lib/i18n";
 
 type Copy = { account: string; signOut: string; openMenu: string };
@@ -60,6 +61,7 @@ export function WbUserMenu() {
   const { user, plan, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
+  const href = useHref();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
@@ -89,10 +91,11 @@ export function WbUserMenu() {
     setOpen(false);
     try {
       await logout();
-      // After logout, route to home so the now-anonymous user lands
-      // somewhere coherent rather than staying on /account (which
-      // would just bounce them back to a login modal).
-      router.push("/");
+      // After logout, route to home in the user's current language so
+      // the now-anonymous user lands somewhere coherent rather than
+      // staying on /account (which would just bounce them back to a
+      // login modal).
+      router.push(href("/"));
     } catch (err) {
       console.error("logout failed:", err);
     }
@@ -212,7 +215,7 @@ export function WbUserMenu() {
           )}
           <Link
             role="menuitem"
-            href="/account"
+            href={href("/account")}
             onClick={() => setOpen(false)}
             style={{
               display: "block",

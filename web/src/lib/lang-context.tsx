@@ -52,15 +52,23 @@ export function LangProvider({
     // shared in this language. Middleware accepts /he/pricing,
     // /en/word/X, etc. — we just swap the leading segment.
     try {
-      const supported = new Set(["he", "en", "ar", "ru", "es", "pt", "fr"]);
+      // English is the canonical brand surface — no prefix.
+      // Every other supported language carries a /<lang>/ prefix so
+      // the URL the user is on stays shareable in that language.
+      // Keep this set in sync with middleware.ts SUPPORTED_LANGS.
+      const supported = new Set([
+        "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs",
+      ]);
       const url = new URL(window.location.href);
       const segs = url.pathname.split("/").filter(Boolean);
+      // Strip any existing lang prefix so we don't end up with
+      // /fr/de/pricing when switching from German to French.
       if (segs.length > 0 && supported.has(segs[0])) {
-        segs[0] = l;
-      } else {
-        segs.unshift(l);
+        segs.shift();
       }
-      url.pathname = "/" + segs.join("/");
+      // Re-add the new prefix only for non-default langs.
+      if (l !== "en") segs.unshift(l);
+      url.pathname = segs.length ? "/" + segs.join("/") : "/";
       window.history.replaceState({}, "", url.toString());
     } catch { /* ignore */ }
   }

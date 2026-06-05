@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
+import { useHref } from "@/lib/href";
 import { Lang, LANGUAGES, getLangDir } from "@/lib/i18n";
 
 type LocaleContent = { title: string; body: React.ReactNode };
@@ -86,6 +87,7 @@ export default function LegalPage({
   lastUpdated: string;
 }) {
   const { lang: uiLang } = useLang();
+  const href = useHref();
 
   // Prefer the UI language, otherwise English
   const initial: Lang = locales[uiLang] ? uiLang : "en";
@@ -158,7 +160,7 @@ export default function LegalPage({
         </article>
 
         <Link
-          href="/"
+          href={href("/")}
           className="block text-center mt-8 text-sm text-slate-500 hover:text-blue-600 transition-colors"
         >
           {BACK_LABEL[locale]}

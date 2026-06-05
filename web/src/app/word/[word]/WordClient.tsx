@@ -26,6 +26,7 @@ import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { useHref } from "@/lib/href";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
@@ -105,6 +106,7 @@ function SoftWall({
   lang: import("@/lib/i18n").Lang;
   onSignUp: () => void;
 }) {
+  const href = useHref();
   const isSignup = nextStep === "signup";
   return (
     <div
@@ -159,7 +161,7 @@ function SoftWall({
         </button>
       ) : (
         <Link
-          href="/pricing"
+          href={href("/pricing")}
           className="gd-font-sans-ui font-medium"
           style={{
             display: "inline-block",
@@ -297,6 +299,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const { user, plan: authPlan, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
+  const href = useHref();
   const searchParams = useSearchParams();
   const contextSentence = searchParams?.get("sentence")?.trim() || "";
   // When wrong-keyboard auto-correct fires, the original mis-typed
@@ -809,7 +812,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       )}
       <div style={{ position: "relative", zIndex: 1 }}>
         <header className="wb-shell-topbar">
-          <Link href="/" className="wb-wordmark" dir="ltr" aria-label="Gadit home">
+          <Link href={href("/")} className="wb-wordmark" dir="ltr" aria-label="Gadit home">
             Gad<span className="wb-wordmark-it">it</span>
           </Link>
           <nav className="wb-shell-nav" aria-label="Primary">
@@ -818,7 +821,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 consistent affordance across the masthead — text is
                 reserved for content nav (Notebook, Pricing). */}
             <Link
-              href="/"
+              href={href("/")}
               className="wb-shell-navlink wb-shell-navlink-icon"
               aria-label={v2(lang, "navSearch")}
               title={v2(lang, "navSearch")}
@@ -828,13 +831,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 <path d="m20 20-4-4" />
               </svg>
             </Link>
-            <Link href="/features" className="wb-shell-navlink">
+            <Link href={href("/features")} className="wb-shell-navlink">
               {v2(lang, "navFeatures")}
             </Link>
             {user && (plan === "clear" || plan === "deep") && (
-              <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
+              <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
             )}
-            <Link href="/pricing" className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
+            <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
           </nav>
           <div className="wb-shell-actions">
             {/* Save + Share moved OUT of the masthead — they're "this

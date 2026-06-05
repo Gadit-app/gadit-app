@@ -22,6 +22,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
+import { useHref } from "@/lib/href";
 
 type Billing = "monthly" | "yearly";
 
@@ -641,6 +642,7 @@ const COPY: Record<string, {
 export function PricingPageRoute() {
   const { lang, dir, setLang } = useLang();
   const { user, plan, promptLogin } = useAuth();
+  const href = useHref();
   const [billing, setBilling] = useState<Billing>("monthly");
   const c = COPY[lang] ?? COPY.en;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -709,21 +711,21 @@ export function PricingPageRoute() {
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
       <header className="wb-shell-topbar">
-        <Link href="/" className="wb-wordmark" dir="ltr">
+        <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href="/" className="wb-shell-navlink wb-shell-navlink-icon" aria-label={c.search}>
+          <Link href={href("/")} className="wb-shell-navlink wb-shell-navlink-icon" aria-label={c.search}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="6.5" />
               <path d="m20 20-4-4" />
             </svg>
           </Link>
-          <Link href="/features" className="wb-shell-navlink">{c.features}</Link>
+          <Link href={href("/features")} className="wb-shell-navlink">{c.features}</Link>
           {user && (plan === "clear" || plan === "deep") && (
-            <Link href="/notebook" className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
+            <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
           )}
-          <Link href="/pricing" className="wb-shell-navlink is-active">{c.pricing}</Link>
+          <Link href={href("/pricing")} className="wb-shell-navlink is-active">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">
           <ShareButton
@@ -771,9 +773,9 @@ export function PricingPageRoute() {
         </button>
         {menuOpen && (
           <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
-            <Link href="/" onClick={() => setMenuOpen(false)}>{c.search}</Link>
-            <Link href="/features" onClick={() => setMenuOpen(false)}>{c.features}</Link>
-            <Link href="/pricing" className="is-active" onClick={() => setMenuOpen(false)}>{c.pricing}</Link>
+            <Link href={href("/")} onClick={() => setMenuOpen(false)}>{c.search}</Link>
+            <Link href={href("/features")} onClick={() => setMenuOpen(false)}>{c.features}</Link>
+            <Link href={href("/pricing")} className="is-active" onClick={() => setMenuOpen(false)}>{c.pricing}</Link>
             <div className="wb-shell-mobile-menu-sep" />
             <div className="wb-shell-mobile-langs">
               {LANGS.map((l) => (
@@ -789,7 +791,7 @@ export function PricingPageRoute() {
             </div>
             <div className="wb-shell-mobile-menu-sep" />
             {user ? (
-              <Link href="/account" onClick={() => setMenuOpen(false)}>
+              <Link href={href("/account")} onClick={() => setMenuOpen(false)}>
                 {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
               </Link>
             ) : (
@@ -868,11 +870,11 @@ export function PricingPageRoute() {
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
         <span>·</span>
-        <Link href="/">{lang === "he" ? "בית" : "Home"}</Link>
+        <Link href={href("/")}>{lang === "he" ? "בית" : "Home"}</Link>
         <span>·</span>
-        <Link href="/privacy">Privacy</Link>
+        <Link href={href("/privacy")}>Privacy</Link>
         <span>·</span>
-        <Link href="/terms">Terms</Link>
+        <Link href={href("/terms")}>Terms</Link>
       </footer>
     </div>
   );
