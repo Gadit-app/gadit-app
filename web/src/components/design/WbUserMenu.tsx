@@ -45,8 +45,19 @@ const COPY: Record<Lang, Copy> = {
   cs: { account: "Účet",                signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
 };
 
+// Tier chip colors. Mirrors the same scheme used on /account and
+// /pricing — Basic gray, Clear teal, Deep purple — so a signed-in user
+// recognises their plan badge across every surface.
+function tierStyle(plan: "basic" | "clear" | "deep"): {
+  label: string; bg: string; fg: string;
+} {
+  if (plan === "deep")  return { label: "Deep",  bg: "#F3EEFF", fg: "#7C3AED" };
+  if (plan === "clear") return { label: "Clear", bg: "#E0F6F4", fg: "#0E7490" };
+  return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
+}
+
 export function WbUserMenu() {
-  const { user, logout } = useAuth();
+  const { user, plan, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -96,8 +107,47 @@ export function WbUserMenu() {
   // the avatar sat in the top-left (its visual position in RTL).
   const sideOffset: React.CSSProperties = { insetInlineEnd: 0 };
 
+  const tier = tierStyle(plan);
+
   return (
-    <div ref={wrapRef} style={{ position: "relative", display: "inline-flex" }}>
+    <div
+      ref={wrapRef}
+      style={{
+        position: "relative",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
+      {/* Plan chip — clicking it opens the same menu as clicking the
+          avatar, so the entire grouping reads as one control. Hidden
+          on very narrow viewports to keep the topbar from wrapping. */}
+      <button
+        type="button"
+        aria-label={c.openMenu}
+        onClick={() => setOpen((v) => !v)}
+        className="wb-tier-chip"
+        style={{
+          padding: "4px 10px",
+          borderRadius: 999,
+          background: tier.bg,
+          color: tier.fg,
+          border: "none",
+          cursor: "pointer",
+          fontFamily:
+            lang === "he" ? "var(--wb-he)"
+              : lang === "ar" ? "var(--wb-ar)"
+                : "var(--wb-sans)",
+          fontSize: 11.5,
+          fontWeight: 700,
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          lineHeight: 1.4,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {tier.label}
+      </button>
       <button
         type="button"
         className="wb-avatar"

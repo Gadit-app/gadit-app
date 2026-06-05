@@ -1606,6 +1606,17 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-radius: 999px;
 }
 
+/* Tier chip — sits beside the avatar via WbUserMenu, surfaces the user's
+   plan (Basic / Clear / Deep) on every signed-in surface. Hidden on
+   narrow phones so the topbar's avatar + lang + share row doesn't wrap. */
+.wordbook .wb-tier-chip {
+  display: inline-flex;
+  align-items: center;
+}
+@media (max-width: 480px) {
+  .wordbook .wb-tier-chip { display: none; }
+}
+
 /* Content card — narrow readable column, not full viewport */
 .wordbook.wb-page {
   background: var(--paper);

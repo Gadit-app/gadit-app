@@ -421,12 +421,13 @@ function PlanSection({
 }) {
   const { lang } = useLang();
   const plan = data.plan;
-  const noSubscription = !data.stripeCustomerId && plan === "basic";
 
-  const tierName =
-    plan === "deep" ? "Deep" :
-    plan === "clear" ? "Clear" :
-    v2(lang, "accountOnPlanFree");
+  // Every signed-in user is on a plan — Basic is the free baseline, not
+  // an absence of subscription. The earlier "No active subscription" empty
+  // state confused first-time signed-in users into thinking something
+  // was wrong; now we always show the plan name with a context-appropriate
+  // CTA below.
+  const tierName = plan === "deep" ? "Deep" : plan === "clear" ? "Clear" : "Basic";
 
   const tColor = tierColor(plan);
   const tBg = tierBg(plan);
@@ -435,38 +436,7 @@ function PlanSection({
     <section>
       <SectionLabel>{v2(lang, "accountPlanLabel")}</SectionLabel>
 
-      {noSubscription ? (
-        <>
-          <h2
-            style={{
-              fontFamily: fontDisplay(lang),
-              fontStyle: displayItalic(lang),
-              fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
-              fontSize: "clamp(28px, 4vw, 40px)",
-              lineHeight: 1.1,
-              color: "var(--ink)",
-              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
-            }}
-          >
-            {v2(lang, "accountNoActiveSubscription")}
-          </h2>
-          <p
-            style={{
-              marginTop: 8,
-              color: "var(--ink-muted, #6B7280)",
-              fontSize: 14.5,
-              lineHeight: 1.5,
-              fontFamily: fontBody(lang),
-            }}
-          >
-            {v2(lang, "accountChooseAPlan")}
-          </p>
-          <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
-            <PrimaryBtn onClick={onUpgrade}>{v2(lang, "accountUpgrade")}</PrimaryBtn>
-          </div>
-        </>
-      ) : (
-        <>
+      <>
           {data.isTrial && data.trialDaysLeft > 0 && (
             <div
               style={{
@@ -527,7 +497,6 @@ function PlanSection({
             )}
           </div>
         </>
-      )}
     </section>
   );
 }
