@@ -257,11 +257,19 @@ export function AccountPage() {
     } catch { return null; }
   })();
 
-  // Pull first name from whichever email source we have. /api/account's
-  // email is null for free users without a Firestore doc, so we also
-  // honour the Firebase Auth email surfaced by useAuth().
+  // Pull first name. Prefer Firebase Auth displayName because Google sign-in
+  // provides the real "Sharon Ben Lavi" with spaces, which splits cleanly
+  // on whitespace. Fall back to the email local part (split on . _ -) for
+  // email/password users who don't have a displayName. Capitalize the
+  // first letter so "sharon" → "Sharon" in the hero.
   const effectiveEmail = data?.email ?? user?.email ?? null;
-  const firstName = effectiveEmail ? effectiveEmail.split("@")[0].split(/[._-]/)[0] : "";
+  const rawFirst =
+    user?.displayName?.split(/\s+/)[0] ||
+    effectiveEmail?.split("@")[0].split(/[._-]/)[0] ||
+    "";
+  const firstName = rawFirst
+    ? rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1)
+    : "";
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -711,6 +719,10 @@ function AccountSection({
 }
 
 // ─── Buttons ───────────────────────────────────────────────
+// A minWidth so single-word labels like "Upgrade" and "Sign out" render
+// at identical sizes — the same uniformity Gadi flagged when the two
+// buttons looked visually different even though they live in the same
+// primary tier.
 function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   const { lang } = useLang();
   return (
@@ -718,7 +730,8 @@ function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?
       type="button"
       onClick={onClick}
       style={{
-        padding: "11px 22px",
+        minWidth: 160,
+        padding: "12px 24px",
         borderRadius: 12,
         background: "var(--teal, #0EA5A5)",
         color: "white",
