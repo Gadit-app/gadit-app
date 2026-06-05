@@ -289,9 +289,9 @@ export function AccountPage() {
 
       <main
         style={{
-          maxWidth: 960,
+          maxWidth: 1080,
           margin: "0 auto",
-          padding: "clamp(28px, 5vw, 56px) clamp(20px, 4vw, 32px)",
+          padding: "clamp(28px, 5vw, 56px) clamp(24px, 5vw, 56px)",
           minHeight: "calc(100vh - 220px)",
         }}
       >
@@ -333,8 +333,8 @@ export function AccountPage() {
           style={{
             background: "var(--surface)",
             border: "1px solid var(--hairline, #E5E7EB)",
-            borderRadius: 18,
-            padding: "clamp(24px, 4vw, 40px)",
+            borderRadius: 20,
+            padding: "clamp(32px, 5vw, 56px) clamp(28px, 5vw, 64px)",
             boxShadow: "0 1px 2px rgba(13,22,38,0.04), 0 12px 32px rgba(13,22,38,0.06)",
           }}
         >
@@ -461,10 +461,11 @@ function PlanSection({
               fontFamily: fontDisplay(lang),
               fontStyle: displayItalic(lang),
               fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
-              fontSize: "clamp(48px, 7vw, 72px)",
-              lineHeight: 1,
+              fontSize: "clamp(28px, 3.5vw, 44px)",
+              lineHeight: 1.1,
               color: tColor,
-              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.025em",
+              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
+              margin: 0,
             }}
           >
             {tierName}
