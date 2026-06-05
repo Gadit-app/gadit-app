@@ -19,6 +19,39 @@ const HEBREW_RX   = /[֐-׿]/;
 const ARABIC_RX   = /[؀-ۿ]/;
 const CYRILLIC_RX = /[Ѐ-ӿ]/;
 
+// Hebrew cantillation / niqqud / punctuation block — these are valid
+// Unicode characters used in Torah & poetic Hebrew, but when GPT
+// degenerates on a Hebrew etymology it sometimes emits strings made
+// almost entirely of these instead of real words. Same shape, different
+// mojibake-like signature than the cp1252 one above.
+const HEBREW_DECORATIVE_RX = /[֑-ֽֿׁ-ׇ׳״]/g;
+
+// Heuristic: a text is degenerate if fewer than 20% of its non-space
+// characters are actual letters in *any* script. This catches the
+// "screen of punctuation" failure mode (the one in Gadi's screenshot
+// where 'שפה / חלקי מילה / משמעות מקורית / רקע' were all rendered as
+// dense streams of cantillation marks and quote symbols).
+function isPunctuationSoup(text: string): boolean {
+  if (typeof text !== "string") return false;
+  const stripped = text.replace(/\s+/g, "");
+  if (stripped.length < 12) return false; // too short to judge
+  // \p{L} = any kind of letter from any language (Unicode property).
+  const letterCount = (stripped.match(/\p{L}/gu) ?? []).length;
+  return letterCount / stripped.length < 0.2;
+}
+
+// Helper — scan a string for either of the two mojibake signatures we
+// know about (cp1252 misdecode + Hebrew-decorative spam) above a
+// density threshold.
+function hasMojibakeDensity(text: string, threshold = 0.4): boolean {
+  if (typeof text !== "string" || text.length === 0) return false;
+  const cp1252Count = (text.match(MOJIBAKE_CHARS) ?? []).length;
+  if (cp1252Count / text.length > threshold) return true;
+  const decorCount = (text.match(HEBREW_DECORATIVE_RX) ?? []).length;
+  if (decorCount / text.length > threshold) return true;
+  return false;
+}
+
 export function isDegenerate(result: unknown, inputWord: string): GuardResult {
   if (!result || typeof result !== "object") {
     return { degenerate: true, reason: "result is not an object" };
@@ -26,6 +59,12 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
   const fr = result as {
     word?: unknown;
     meanings?: Array<{ meaning?: unknown; examples?: unknown }>;
+    etymology?: {
+      sourceLanguage?: unknown;
+      originalWord?: unknown;
+      breakdown?: unknown;
+      originalMeaning?: unknown;
+    };
   };
   const meanings = Array.isArray(fr.meanings) ? fr.meanings : [];
 
@@ -41,9 +80,7 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
 
   // (2) Mojibake on the echoed word — UTF-8 bytes mis-decoded as cp1252
   if (typeof fr.word === "string") {
-    const ws = fr.word;
-    const mojibakeCount = (ws.match(MOJIBAKE_CHARS) ?? []).length;
-    if (ws.length > 0 && mojibakeCount / ws.length > 0.4) {
+    if (hasMojibakeDensity(fr.word)) {
       return { degenerate: true, reason: "echoed word is mostly mojibake chars" };
     }
   }
@@ -63,6 +100,25 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
         degenerate: true,
         reason: `input was ${scriptForInput.name} but no definition has ${scriptForInput.name} chars`,
       };
+    }
+  }
+
+  // (4) Etymology fields — these aren't validated in the legacy guard but
+  // a recent gpt-4o failure mode emits the etymology block as dense
+  // streams of cantillation marks / quote symbols with zero real letters.
+  // Check each of the four etymology fields for either mojibake density
+  // or "punctuation soup".
+  if (fr.etymology && typeof fr.etymology === "object") {
+    const fields = ["sourceLanguage", "originalWord", "breakdown", "originalMeaning"] as const;
+    for (const f of fields) {
+      const raw = (fr.etymology as Record<string, unknown>)[f];
+      if (typeof raw !== "string" || raw.length === 0) continue;
+      if (hasMojibakeDensity(raw)) {
+        return { degenerate: true, reason: `etymology.${f} is mojibake` };
+      }
+      if (isPunctuationSoup(raw)) {
+        return { degenerate: true, reason: `etymology.${f} is punctuation soup (no real letters)` };
+      }
     }
   }
 

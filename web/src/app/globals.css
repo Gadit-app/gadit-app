@@ -477,18 +477,24 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   overflow-wrap: anywhere;
 }
 
-/* Title row: word + listen button sit on one baseline-aligned line
-   so the speaker chip reads as part of the title, not a separate
-   action. align-items:flex-end keeps the icon close to the word's
-   baseline rather than floating in the descender space. */
+/* Title row: word + listen button sit on one baseline-aligned line so
+   the speaker chip reads as part of the title, not a separate action.
+   inline-flex shrink-wraps the row so the parent header's space-between
+   layout still places this block on the start side. align-items:flex-end
+   plants the icon at the bottom of the word's body so it visually sits
+   on the baseline.
+   Critically: NO flex-wrap. On mobile the row used to wrap the button
+   onto its own line, pushing the speaker visually above the word and
+   making it look like a floating header chip instead of a title-row
+   action. */
 .wordbook .wb-word-title-row {
-  display: flex;
+  display: inline-flex;
   align-items: flex-end;
-  gap: 14px;
-  flex-wrap: wrap;
+  gap: 12px;
+  flex-wrap: nowrap;
   margin-bottom: 12px;
 }
-.wordbook .wb-word-title-row > .wb-word-title { margin-bottom: 0; }
+.wordbook .wb-word-title-row > .wb-word-title { margin: 0; }
 
 /* Listen button — outlined teal disc, ~36px so it doesn't compete
    with the word display type. Pulses on .is-playing while audio
@@ -496,8 +502,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    happening (especially helpful with the Web Speech API where the
    audio sometimes lags behind the click by a beat). */
 .wordbook .wb-word-listen-btn {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
   border: 1px solid var(--hairline, #E5E7EB);
   background: var(--surface, #fff);
@@ -506,8 +512,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin-bottom: 8px;
   flex-shrink: 0;
+  /* Lift slightly off the bottom edge of the row so it visually rests
+     on the word's baseline rather than dropping into descender space. */
+  margin-bottom: 6px;
   transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
 }
 .wordbook .wb-word-listen-btn:hover {
