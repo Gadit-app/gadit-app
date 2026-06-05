@@ -10,6 +10,7 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   signOut,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -145,10 +146,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsub;
   }, [user]);
 
+  // Ping the server to email Gadi about a new signup. Server-side
+  // dedupe via notifiedSignup flag means duplicate calls are harmless;
+  // we just need to fire it after any auth event that could be a first
+  // signup. Fire-and-forget — email delivery must never block the UI.
+  async function notifySignupSafely(u: User) {
+    try {
+      const token = await u.getIdToken();
+      await fetch("/api/notify-signup", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
+      console.warn("notify-signup failed (non-blocking):", err);
+    }
+  }
+
   async function signInWithGoogle() {
     const auth = getFirebaseAuth();
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const cred = await signInWithPopup(auth, provider);
+    // Google popup serves both first-time signups AND returning logins.
+    // additionalUserInfo.isNewUser disambiguates — only fire the notify
+    // call when Firebase confirms this is the user's first auth event.
+    const extra = getAdditionalUserInfo(cred);
+    if (extra?.isNewUser) {
+      void notifySignupSafely(cred.user);
+    }
     setShowLoginModal(false);
   }
 
@@ -169,6 +193,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     sendEmailVerification(cred.user).catch((err) => {
       console.warn("sendEmailVerification failed (non-blocking):", err);
     });
+    void notifySignupSafely(cred.user);
     setShowLoginModal(false);
   }
 
