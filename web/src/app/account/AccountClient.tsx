@@ -475,10 +475,26 @@ function PlanSection({
           >
             {tierName}
           </h2>
+          {/* One-line summary of the tier, sourced from the same string
+              shown on /pricing so the user reads consistent copy across
+              both pages. */}
+          <p
+            style={{
+              marginTop: 10,
+              color: "var(--ink-muted, #6B7280)",
+              fontSize: 15,
+              lineHeight: 1.5,
+              fontFamily: fontBody(lang),
+            }}
+          >
+            {plan === "deep"  ? v2(lang, "tierDeepPitch")
+              : plan === "clear" ? v2(lang, "tierClearPitch")
+              :                    v2(lang, "tierBasicPitch")}
+          </p>
           {(data.cancelAtPeriodEnd || renewalDate) && (
             <p
               style={{
-                marginTop: 12,
+                marginTop: 8,
                 color: "var(--ink-muted, #6B7280)",
                 fontSize: 14,
                 fontFamily: fontBody(lang),
@@ -491,10 +507,10 @@ function PlanSection({
           )}
           <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
             {plan === "basic" ? (
-              <>
-                <PrimaryBtn onClick={onUpgrade}>{v2(lang, "accountUpgrade")}</PrimaryBtn>
-                <GhostBtn onClick={onChangePlan}>{v2(lang, "accountChangePlan")}</GhostBtn>
-              </>
+              // Basic only has one direction to go: up. A "Change plan"
+              // ghost button next to Upgrade was redundant (both routed
+              // to /pricing) and read as ambiguous ("change to what?").
+              <PrimaryBtn onClick={onUpgrade}>{v2(lang, "accountUpgrade")}</PrimaryBtn>
             ) : (
               <>
                 <GhostBtn onClick={onManageBilling}>{v2(lang, "accountManageBilling")}</GhostBtn>
@@ -618,35 +634,50 @@ function AccountSection({
   onDeleteAccount: () => void;
 }) {
   const { lang } = useLang();
+  const email = data.email ?? emailFallback ?? "";
   return (
     <section>
-      <SectionLabel>{v2(lang, "accountSectionLabel")}</SectionLabel>
+      {/* Section header dropped — 'חשבון / Account' inside the
+          'Your space' page read as redundant and didn't help anyone
+          parse what's below. Email + sign-out + delete are now an
+          unlabelled utility row at the bottom of the card. */}
 
-      <div style={{ marginBottom: 20 }}>
-        <div
+      {/* Email row — label and value on the same line so they read as
+          one fact. The address itself is wrapped in unicode-bidi:isolate
+          so its Latin characters stay LTR even on RTL pages, but the
+          row's text-align follows the parent direction, which puts the
+          whole row on the start side. */}
+      <div
+        style={{
+          marginBottom: 24,
+          fontFamily: fontBody(lang),
+          fontSize: 15,
+          color: "var(--ink)",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "baseline",
+          gap: "0.6em",
+        }}
+      >
+        <span
           style={{
-            fontFamily: fontBody(lang),
             fontSize: 11.5,
             color: "var(--ink-muted, #6B7280)",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             fontWeight: 600,
-            marginBottom: 6,
           }}
         >
           {v2(lang, "accountEmailLabel")}
-        </div>
-        <div
-          dir="ltr"
+        </span>
+        <span
           style={{
-            fontFamily: fontBody(lang),
-            fontSize: 15,
-            color: "var(--ink)",
+            unicodeBidi: "isolate",
             wordBreak: "break-all",
           }}
         >
-          {data.email ?? emailFallback ?? ""}
-        </div>
+          {email}
+        </span>
       </div>
 
       <PrimaryBtn onClick={onSignOut}>{v2(lang, "accountSignOut")}</PrimaryBtn>
