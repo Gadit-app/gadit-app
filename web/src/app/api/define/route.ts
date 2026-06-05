@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { isDegenerate } from "@/lib/define-guard";
+import { recordUserActivity } from "@/lib/user-activity";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -859,6 +860,16 @@ export async function POST(req: NextRequest) {
     const userInfo = idToken ? await verifyUserAndGetPlan(idToken) : null;
     const plan = userInfo?.plan ?? "anonymous";
     const isPaid = plan === "clear" || plan === "deep";
+
+    // Touch the user doc so the admin dashboard sees a fresh lastSeenAt,
+    // captures their country from Vercel's edge header, and bumps the
+    // running searchCount. Fire-and-forget — function swallows errors.
+    if (userInfo) {
+      void recordUserActivity(userInfo.userId, {
+        headers: req.headers,
+        search: true,
+      });
+    }
 
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
     const uiLangName = UI_LANG_NAMES[uiLangCode];
