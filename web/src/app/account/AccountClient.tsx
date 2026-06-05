@@ -30,6 +30,27 @@ import { LANGUAGES, type Lang } from "@/lib/i18n";
 
 type Plan = "basic" | "clear" | "deep";
 
+// Per-language font stacks. The wordbook surface inherits Inter as
+// default; Hebrew and Arabic explicitly switch to the Rubik / Noto
+// Naskh families so neither display nor body text falls back to a
+// system Hebrew font (which read flat against the rest of the design).
+function fontDisplay(lang: Lang): string {
+  if (lang === "he") return "var(--wb-he)";
+  if (lang === "ar") return "var(--wb-ar)";
+  return "var(--wb-serif)";
+}
+function fontBody(lang: Lang): string {
+  if (lang === "he") return "var(--wb-he)";
+  if (lang === "ar") return "var(--wb-ar)";
+  return "var(--wb-sans)";
+}
+// Italic is a Latin-only typographic device. Hebrew and Arabic don't
+// have italic forms — applying font-style:italic just slants the glyphs
+// crudely, which looks worse than upright. Suppress italic for both.
+function displayItalic(lang: Lang): "italic" | "normal" {
+  return lang === "he" || lang === "ar" ? "normal" : "italic";
+}
+
 interface AccountData {
   plan: Plan;
   email: string | null;
@@ -102,7 +123,7 @@ function LangSwitch() {
                 cursor: "pointer",
                 color: "var(--ink)",
                 fontSize: 14,
-                fontFamily: "var(--wb-sans)",
+                fontFamily: fontBody(lang),
               }}
             >
               {l.label}
@@ -268,7 +289,7 @@ export function AccountPage() {
 
       <main
         style={{
-          maxWidth: 720,
+          maxWidth: 960,
           margin: "0 auto",
           padding: "clamp(28px, 5vw, 56px) clamp(20px, 4vw, 32px)",
           minHeight: "calc(100vh - 220px)",
@@ -278,7 +299,7 @@ export function AccountPage() {
         <div style={{ marginBottom: "clamp(24px, 4vw, 40px)" }}>
           <div
             style={{
-              fontFamily: "var(--wb-sans)",
+              fontFamily: fontBody(lang),
               fontSize: 12,
               fontWeight: 600,
               letterSpacing: "0.12em",
@@ -290,12 +311,12 @@ export function AccountPage() {
           </div>
           <h1
             style={{
-              fontFamily: "var(--wb-serif)",
-              fontStyle: "italic",
-              fontWeight: 400,
+              fontFamily: fontDisplay(lang),
+              fontStyle: displayItalic(lang),
+              fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
               fontSize: "clamp(32px, 6vw, 56px)",
               lineHeight: 1.05,
-              letterSpacing: "-0.02em",
+              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
               color: "var(--ink)",
               marginTop: 12,
               overflowWrap: "anywhere",
@@ -371,10 +392,11 @@ function Divider() {
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
+  const { lang } = useLang();
   return (
     <div
       style={{
-        fontFamily: "var(--wb-sans)",
+        fontFamily: fontBody(lang),
         fontSize: 11.5,
         fontWeight: 600,
         letterSpacing: "0.12em",
@@ -417,13 +439,13 @@ function PlanSection({
         <>
           <h2
             style={{
-              fontFamily: "var(--wb-serif)",
-              fontStyle: "italic",
-              fontWeight: 400,
+              fontFamily: fontDisplay(lang),
+              fontStyle: displayItalic(lang),
+              fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
               fontSize: "clamp(28px, 4vw, 40px)",
               lineHeight: 1.1,
               color: "var(--ink)",
-              letterSpacing: "-0.02em",
+              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
             }}
           >
             {v2(lang, "accountNoActiveSubscription")}
@@ -434,7 +456,7 @@ function PlanSection({
               color: "var(--ink-muted, #6B7280)",
               fontSize: 14.5,
               lineHeight: 1.5,
-              fontFamily: "var(--wb-sans)",
+              fontFamily: fontBody(lang),
             }}
           >
             {v2(lang, "accountChooseAPlan")}
@@ -453,7 +475,7 @@ function PlanSection({
                 borderRadius: 999,
                 background: tBg,
                 color: tColor,
-                fontFamily: "var(--wb-sans)",
+                fontFamily: fontBody(lang),
                 fontSize: 11.5,
                 fontWeight: 700,
                 letterSpacing: "0.08em",
@@ -466,13 +488,13 @@ function PlanSection({
           )}
           <h2
             style={{
-              fontFamily: "var(--wb-serif)",
-              fontStyle: "italic",
-              fontWeight: 400,
+              fontFamily: fontDisplay(lang),
+              fontStyle: displayItalic(lang),
+              fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
               fontSize: "clamp(48px, 7vw, 72px)",
               lineHeight: 1,
               color: tColor,
-              letterSpacing: "-0.025em",
+              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.025em",
             }}
           >
             {tierName}
@@ -483,7 +505,7 @@ function PlanSection({
                 marginTop: 12,
                 color: "var(--ink-muted, #6B7280)",
                 fontSize: 14,
-                fontFamily: "var(--wb-sans)",
+                fontFamily: fontBody(lang),
               }}
             >
               {data.cancelAtPeriodEnd
@@ -557,7 +579,7 @@ function Meter({
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
         <span
           style={{
-            fontFamily: "var(--wb-sans)",
+            fontFamily: fontBody(lang),
             fontSize: 14,
             fontWeight: 500,
             color: "var(--ink)",
@@ -566,7 +588,7 @@ function Meter({
           {label}
         </span>
         <span
-          style={{ fontFamily: "var(--wb-sans)", fontSize: 14 }}
+          style={{ fontFamily: fontBody(lang), fontSize: 14 }}
           dir="ltr"
         >
           {locked ? (
@@ -624,7 +646,7 @@ function AccountSection({
       <div style={{ marginBottom: 20 }}>
         <div
           style={{
-            fontFamily: "var(--wb-sans)",
+            fontFamily: fontBody(lang),
             fontSize: 11.5,
             color: "var(--ink-muted, #6B7280)",
             letterSpacing: "0.06em",
@@ -638,7 +660,7 @@ function AccountSection({
         <div
           dir="ltr"
           style={{
-            fontFamily: "var(--wb-sans)",
+            fontFamily: fontBody(lang),
             fontSize: 15,
             color: "var(--ink)",
             wordBreak: "break-all",
@@ -667,7 +689,7 @@ function AccountSection({
             color: "var(--ink-muted, #6B7280)",
             fontSize: 12,
             cursor: "pointer",
-            fontFamily: "var(--wb-sans)",
+            fontFamily: fontBody(lang),
             textDecoration: "underline",
           }}
         >
@@ -680,6 +702,7 @@ function AccountSection({
 
 // ─── Buttons ───────────────────────────────────────────────
 function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  const { lang } = useLang();
   return (
     <button
       type="button"
@@ -691,7 +714,7 @@ function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?
         color: "white",
         border: "none",
         cursor: "pointer",
-        fontFamily: "var(--wb-sans)",
+        fontFamily: fontBody(lang),
         fontSize: 14,
         fontWeight: 600,
         boxShadow: "0 1px 2px rgba(11,138,138,0.2), 0 4px 12px rgba(11,138,138,0.15)",
@@ -703,6 +726,7 @@ function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?
 }
 
 function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  const { lang } = useLang();
   return (
     <button
       type="button"
@@ -714,7 +738,7 @@ function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick?: 
         color: "var(--ink)",
         border: "1px solid var(--hairline, #E5E7EB)",
         cursor: "pointer",
-        fontFamily: "var(--wb-sans)",
+        fontFamily: fontBody(lang),
         fontSize: 14,
         fontWeight: 500,
       }}

@@ -87,10 +87,14 @@ export function WbUserMenu() {
     }
   };
 
-  // RTL languages: dropdown opens to the start (right). LTR: to the end (right too in
-  // visual terms, but using insetInlineEnd keeps it logical).
-  const sideOffset: React.CSSProperties =
-    dir === "rtl" ? { insetInlineStart: 0 } : { insetInlineEnd: 0 };
+  // Always pin the dropdown to the end side of the wrapper so it
+  // extends toward the page interior — never off-screen. In LTR this
+  // means its right edge aligns with the avatar's right edge (dropdown
+  // grows leftward); in RTL its left edge aligns with the avatar's
+  // left edge (dropdown grows rightward). The earlier insetInlineStart
+  // fallback for RTL pushed the menu off the left of the viewport when
+  // the avatar sat in the top-left (its visual position in RTL).
+  const sideOffset: React.CSSProperties = { insetInlineEnd: 0 };
 
   return (
     <div ref={wrapRef} style={{ position: "relative", display: "inline-flex" }}>
@@ -126,7 +130,12 @@ export function WbUserMenu() {
             boxShadow: "0 12px 32px rgba(13, 22, 38, 0.10), 0 2px 6px rgba(13, 22, 38, 0.06)",
             padding: 6,
             zIndex: 100,
-            fontFamily: "var(--wb-sans, Inter, system-ui, sans-serif)",
+            fontFamily:
+              lang === "he"
+                ? "var(--wb-he, Rubik, system-ui, sans-serif)"
+                : lang === "ar"
+                ? "var(--wb-ar, 'Noto Naskh Arabic', system-ui, sans-serif)"
+                : "var(--wb-sans, Inter, system-ui, sans-serif)",
             // Match page direction so menu text aligns correctly
             direction: dir,
           }}
