@@ -257,7 +257,11 @@ export function AccountPage() {
     } catch { return null; }
   })();
 
-  const firstName = data?.email ? data.email.split("@")[0].split(/[._-]/)[0] : "";
+  // Pull first name from whichever email source we have. /api/account's
+  // email is null for free users without a Firestore doc, so we also
+  // honour the Firebase Auth email surfaced by useAuth().
+  const effectiveEmail = data?.email ?? user?.email ?? null;
+  const firstName = effectiveEmail ? effectiveEmail.split("@")[0].split(/[._-]/)[0] : "";
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -289,7 +293,7 @@ export function AccountPage() {
 
       <main
         style={{
-          maxWidth: 1080,
+          maxWidth: 1280,
           margin: "0 auto",
           padding: "clamp(28px, 5vw, 56px) clamp(24px, 5vw, 56px)",
           minHeight: "calc(100vh - 220px)",
@@ -360,6 +364,7 @@ export function AccountPage() {
               <Divider />
               <AccountSection
                 data={data}
+                emailFallback={user?.email ?? null}
                 onSignOut={handleSignOut}
                 onDeleteAccount={handleDeleteAccount}
               />
@@ -602,9 +607,13 @@ function Meter({
 }
 
 function AccountSection({
-  data, onSignOut, onDeleteAccount,
+  data, emailFallback, onSignOut, onDeleteAccount,
 }: {
   data: AccountData;
+  /** Firebase Auth email — used when /api/account returns null because
+   *  the user has no Firestore doc yet (free Basic users created without
+   *  a Stripe webhook). Without this fallback the row renders blank. */
+  emailFallback: string | null;
   onSignOut: () => void;
   onDeleteAccount: () => void;
 }) {
@@ -636,7 +645,7 @@ function AccountSection({
             wordBreak: "break-all",
           }}
         >
-          {data.email ?? ""}
+          {data.email ?? emailFallback ?? ""}
         </div>
       </div>
 

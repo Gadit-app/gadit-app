@@ -138,9 +138,9 @@ export function WbUserMenu() {
             lang === "he" ? "var(--wb-he)"
               : lang === "ar" ? "var(--wb-ar)"
                 : "var(--wb-sans)",
-          fontSize: 11.5,
-          fontWeight: 700,
-          letterSpacing: "0.06em",
+          fontSize: 11,
+          fontWeight: 500,
+          letterSpacing: "0.08em",
           textTransform: "uppercase",
           lineHeight: 1.4,
           whiteSpace: "nowrap",
