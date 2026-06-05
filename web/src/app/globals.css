@@ -1791,6 +1791,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-color: var(--teal);
   color: var(--teal-edge);
 }
+/* Pinned-for-offline pill — purple (Deep-tier accent) so it visually
+   distinguishes from Save (teal). Two adjacent actions in the same
+   color would read as one control; the user needs to see them as
+   distinct affordances. */
+.wordbook .wb-word-act.is-pinned {
+  background: #F3EEFF;
+  border-color: #7C3AED;
+  color: #6D28D9;
+}
 /* tiny mono "S" kbd hint inside the Save button */
 .wordbook .wb-word-act .wb-kbd {
   font-family: var(--wb-mono);

@@ -27,7 +27,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useHref } from "@/lib/href";
-import { getCachedWord, setCachedWord } from "@/lib/offline-db";
+import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
@@ -313,6 +313,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+  // Offline pin state: true means the user has explicitly downloaded
+  // this word for offline study (vs the implicit auto-cache that all
+  // Clear/Deep users get on view). Loaded from IDB once the result
+  // lands; toggled by the Pin button in WordHeader.
+  const [isPinned, setIsPinned] = useState(false);
   // Upgrade modal — open with the feature + tier the user just tried.
   // Null = no modal showing.
   const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
@@ -744,6 +749,40 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     }
   }
 
+  // Toggle the IDB pinned flag for the current word. Pin = user has
+  // explicitly downloaded this entry for offline study, so it's
+  // protected from any future auto-prune logic. The underlying
+  // record is the one setCachedWord already wrote on render; we
+  // only flip the pinned boolean here, not the result body.
+  async function handlePin() {
+    if (!result) return;
+    const next = !isPinned;
+    setIsPinned(next);
+    try {
+      await setPinnedDb(lang, initialWord, next);
+    } catch (e) {
+      console.warn("[pin] failed:", e);
+      // Revert UI on failure so the user doesn't get a false-positive
+      // 'saved' state when the underlying store rejected the write.
+      setIsPinned(!next);
+    }
+  }
+
+  // Whenever a fresh result lands AND the user is on Clear/Deep, read
+  // back the IDB record to surface the existing pinned state on the
+  // button. (Auto-cache write fires from inside run(); we only need
+  // to read after it settles.)
+  useEffect(() => {
+    if (!result) return;
+    if (plan !== "clear" && plan !== "deep") return;
+    let cancelled = false;
+    (async () => {
+      const entry = await getCachedWord(lang, initialWord);
+      if (!cancelled) setIsPinned(Boolean(entry?.pinned));
+    })();
+    return () => { cancelled = true; };
+  }, [result, plan, lang, initialWord]);
+
   function handleAction(id: "save" | "image" | "compose" | "practice" | "compare" | "kids") {
     if (id === "save") return handleSave();
     if (id === "image") return handleGenerate();
@@ -1010,6 +1049,8 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             isSaved={isSaved}
             onSave={handleSave}
             onShare={handleShare}
+            isPinned={isPinned}
+            onPin={plan === "clear" || plan === "deep" ? handlePin : undefined}
             onGenerate={handleGenerate}
             onUpgrade={handleUpgrade}
             onRegenerate={handleGenerate}

@@ -28,7 +28,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
-import { countCached } from "@/lib/offline-db";
+import { countCached, setCachedWord } from "@/lib/offline-db";
 
 type Plan = "basic" | "clear" | "deep";
 
@@ -149,10 +149,46 @@ export function AccountPage() {
   // How many word definitions the user has cached for offline use.
   // Only meaningful for Clear/Deep — Basic never writes to the cache.
   const [offlineCount, setOfflineCount] = useState<number | null>(null);
+  // Pack-download state: "idle" → "downloading" → "done"; errors get
+  // surfaced via packError so the user knows the action didn't silently
+  // fail (e.g. an offline → tap → still offline situation).
+  const [packState, setPackState] = useState<"idle" | "downloading" | "done">("idle");
+  const [packError, setPackError] = useState<string | null>(null);
   useEffect(() => {
     if (!user) return;
     void countCached().then((n) => setOfflineCount(n));
   }, [user]);
+
+  async function handleDownloadPack() {
+    if (!user) return;
+    setPackState("downloading");
+    setPackError(null);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch(`/api/popular-words?lang=${encodeURIComponent(lang)}&limit=500`, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) {
+        const j = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
+        throw new Error(j.message ?? j.error ?? `HTTP ${res.status}`);
+      }
+      const data = (await res.json()) as {
+        words: Array<{ word: string; result: unknown }>;
+      };
+      // Write every word to IDB. Pinned=true so they survive any future
+      // auto-prune — the user explicitly opted into having these.
+      for (const w of data.words) {
+        await setCachedWord(lang, w.word, w.result, { pinned: true });
+      }
+      const fresh = await countCached();
+      setOfflineCount(fresh);
+      setPackState("done");
+    } catch (e) {
+      console.warn("[pack] download failed:", e);
+      setPackError(String(e instanceof Error ? e.message : e));
+      setPackState("idle");
+    }
+  }
 
   // Prompt login if not signed in
   useEffect(() => {
@@ -378,7 +414,13 @@ export function AccountPage() {
                 onChangePlan={() => router.push(href("/pricing"))}
               />
               <Divider />
-              <UsageSection data={data} offlineCount={offlineCount} />
+              <UsageSection
+                data={data}
+                offlineCount={offlineCount}
+                packState={packState}
+                packError={packError}
+                onDownloadPack={handleDownloadPack}
+              />
               <Divider />
               <AccountSection
                 data={data}
@@ -544,9 +586,15 @@ function PlanSection({
 function UsageSection({
   data,
   offlineCount,
+  packState,
+  packError,
+  onDownloadPack,
 }: {
   data: AccountData;
   offlineCount: number | null;
+  packState: "idle" | "downloading" | "done";
+  packError: string | null;
+  onDownloadPack: () => void;
 }) {
   const { lang } = useLang();
   return (
@@ -607,6 +655,53 @@ function UsageSection({
               : lang === "cs" ? "slov"
               : "words"}
           </span>
+        </div>
+      )}
+      {/* "Download offline pack" — Clear/Deep only. Pre-loads ~500 of
+          the most-cached words in the user's language so a brand-new
+          subscriber gets broad offline coverage immediately, instead
+          of waiting for their own usage to fill the cache one word at
+          a time. */}
+      {data.plan !== "basic" && (
+        <div
+          style={{
+            marginTop: 12,
+            padding: "16px",
+            background: "var(--surface, #FFFFFF)",
+            border: "1px solid var(--hairline, #E5E7EB)",
+            borderRadius: 12,
+            fontFamily: fontBody(lang),
+          }}
+        >
+          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)", marginBottom: 4 }}>
+            {v2(lang, "offlinePackHeader")}
+          </div>
+          <div style={{ fontSize: 13, color: "var(--ink-muted, #6B7280)", marginBottom: 12, lineHeight: 1.4 }}>
+            {v2(lang, "offlinePackDescription")}
+          </div>
+          {packError && (
+            <div style={{ fontSize: 12, color: "#B91C1C", marginBottom: 8 }}>{packError}</div>
+          )}
+          <button
+            type="button"
+            onClick={onDownloadPack}
+            disabled={packState === "downloading"}
+            style={{
+              padding: "9px 18px",
+              borderRadius: 10,
+              background: packState === "downloading" ? "var(--ink-muted, #9CA3AF)" : tierColor(data.plan),
+              color: "white",
+              border: "none",
+              cursor: packState === "downloading" ? "default" : "pointer",
+              fontFamily: fontBody(lang),
+              fontSize: 13,
+              fontWeight: 600,
+            }}
+          >
+            {packState === "downloading"
+              ? v2(lang, "offlineDownloadingPack")
+              : v2(lang, "offlineDownloadPack")}
+          </button>
         </div>
       )}
     </section>

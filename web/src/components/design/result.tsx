@@ -200,6 +200,18 @@ function BookmarkFillIcon({ size = 18 }: { size?: number }) {
     </svg>
   );
 }
+function PinIcon({ size = 18, filled = false }: { size?: number; filled?: boolean }) {
+  // Cloud-down arrow — the visual metaphor users recognise from
+  // streaming services for 'download for offline'. Filled state =
+  // already downloaded; outline state = tap to download.
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9" />
+      <path d="M12 12v9" fill="none" />
+      <path d="m16 17-4 4-4-4" fill="none" />
+    </svg>
+  );
+}
 function PlusIcon({ size = 13 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -270,6 +282,8 @@ export function WordHeader({
   isSaved = false,
   onSave,
   onShare,
+  isPinned = false,
+  onPin,
   // ipa accepted for API stability — not rendered in this design.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ipa: _ipa,
@@ -281,6 +295,11 @@ export function WordHeader({
   isSaved?: boolean;
   onSave?: () => void;
   onShare?: () => void;
+  /** Pinned = explicitly downloaded for offline study. Visual chip
+   *  changes label/icon based on state. Hidden entirely when onPin
+   *  isn't passed (Basic users + signed-out visitors). */
+  isPinned?: boolean;
+  onPin?: () => void;
 }) {
   const { lang } = useLang();
   const showLang = !langMatchesUi(language, lang);
@@ -311,7 +330,7 @@ export function WordHeader({
           />
         </div>
       </div>
-      {(onSave || onShare) && (
+      {(onSave || onShare || onPin) && (
         <div className="wb-word-actions">
           {onSave && (
             <button
@@ -321,6 +340,17 @@ export function WordHeader({
             >
               <BookmarkFillIcon size={13} />
               {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
+            </button>
+          )}
+          {onPin && (
+            <button
+              type="button"
+              className={`wb-word-act ${isPinned ? "is-pinned" : ""}`}
+              onClick={onPin}
+              title={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
+            >
+              <PinIcon size={13} filled={isPinned} />
+              {isPinned ? v2(lang, "offlinePinned") : v2(lang, "offlinePin")}
             </button>
           )}
           {onShare && (
@@ -998,6 +1028,8 @@ export function ResultView({
   savedAgo,
   onSave,
   onShare,
+  isPinned = false,
+  onPin,
   onGenerate,
   onUpgrade,
   onRegenerate,
@@ -1011,6 +1043,8 @@ export function ResultView({
   savedAgo?: string;
   onSave?: () => void;
   onShare?: () => void;
+  isPinned?: boolean;
+  onPin?: () => void;
   onGenerate?: () => void;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onRegenerate?: () => void;
@@ -1037,6 +1071,8 @@ export function ResultView({
         isSaved={isSaved}
         onSave={onSave}
         onShare={onShare}
+        isPinned={isPinned}
+        onPin={onPin}
       />
 
       <MeaningsBlock
