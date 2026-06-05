@@ -1,10 +1,17 @@
 // Gadit service worker — minimal, install-friendly.
 // Strategy:
 //   - Static assets (icons, manifest, fonts via google): cache-first.
-//   - HTML pages: network-first, fall back to cache (and finally to /offline.html).
-//   - Everything else (API/dynamic): network only — never cache user data.
+//   - HTML pages: network-first, fall back to cache.
+//   - /api/: never touched — word definitions are cached in IndexedDB
+//     (see src/lib/offline-db.ts) which the WordClient reads on its own.
+//
+// The offline word lookup itself happens in the React layer, NOT here:
+// when fetch('/api/define') fails, WordClient.run() falls back to the
+// IDB-backed offline cache and renders from there. Service worker's
+// only job is to keep the app shell installable and the page-load
+// network-fallback chain.
 
-const CACHE_VERSION = "gadit-v2";
+const CACHE_VERSION = "gadit-v3";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 

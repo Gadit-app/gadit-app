@@ -27,6 +27,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useHref } from "@/lib/href";
+import { getCachedWord, setCachedWord } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
@@ -422,6 +423,22 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         if (cancelled || (e instanceof DOMException && e.name === "AbortError")) {
           return;
         }
+        // Network failure (offline, DNS, etc.). Before surfacing an
+        // error, look the word up in the offline IDB cache — if the
+        // user is a Clear/Deep subscriber and has previously viewed
+        // this word, we can still render it without any network.
+        if (plan === "clear" || plan === "deep") {
+          try {
+            const cached = await getCachedWord(lang, initialWord);
+            if (cached && !cancelled) {
+              setResult(cached.result as WordResult);
+              setLoading(false);
+              return;
+            }
+          } catch {
+            // IDB miss / unsupported — fall through to the error path.
+          }
+        }
         setErrorMsg(String(e));
         setLoading(false);
         return;
@@ -543,6 +560,14 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
       if (finalResult) {
         setResult(finalResult);
+        // Offline cache write — Clear/Deep only. Every successful
+        // result gets persisted to IndexedDB so the same lookup works
+        // from any device the user has installed the PWA on, even
+        // with no network later (school WiFi blocked, plane, etc.).
+        // Fire-and-forget; failure here must never break the render.
+        if (plan === "clear" || plan === "deep") {
+          void setCachedWord(lang, initialWord, finalResult);
+        }
         track("search", {
           word: initialWord.slice(0, 40),
           uiLang: lang,

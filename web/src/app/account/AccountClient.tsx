@@ -28,6 +28,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
+import { countCached } from "@/lib/offline-db";
 
 type Plan = "basic" | "clear" | "deep";
 
@@ -145,6 +146,13 @@ export function AccountPage() {
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  // How many word definitions the user has cached for offline use.
+  // Only meaningful for Clear/Deep — Basic never writes to the cache.
+  const [offlineCount, setOfflineCount] = useState<number | null>(null);
+  useEffect(() => {
+    if (!user) return;
+    void countCached().then((n) => setOfflineCount(n));
+  }, [user]);
 
   // Prompt login if not signed in
   useEffect(() => {
@@ -370,7 +378,7 @@ export function AccountPage() {
                 onChangePlan={() => router.push(href("/pricing"))}
               />
               <Divider />
-              <UsageSection data={data} />
+              <UsageSection data={data} offlineCount={offlineCount} />
               <Divider />
               <AccountSection
                 data={data}
@@ -533,7 +541,13 @@ function PlanSection({
   );
 }
 
-function UsageSection({ data }: { data: AccountData }) {
+function UsageSection({
+  data,
+  offlineCount,
+}: {
+  data: AccountData;
+  offlineCount: number | null;
+}) {
   const { lang } = useLang();
   return (
     <section>
@@ -552,6 +566,48 @@ function UsageSection({ data }: { data: AccountData }) {
           limit={null}
           plan={data.plan}
         />
+      )}
+      {/* Offline availability — Clear/Deep only. Surfaces how many
+          words the user already has cached locally and will work
+          without WiFi (lectures, planes, school networks). */}
+      {data.plan !== "basic" && offlineCount !== null && (
+        <div
+          style={{
+            marginTop: 24,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 16px",
+            background: "var(--paper, #F9FAFB)",
+            borderRadius: 10,
+            fontFamily: fontBody(lang),
+          }}
+        >
+          <span style={{ fontSize: 14, color: "var(--ink)", fontWeight: 500 }}>
+            {lang === "he" ? "זמין אופליין"
+              : lang === "ar" ? "متاح بدون إنترنت"
+              : lang === "ru" ? "Доступно офлайн"
+              : lang === "es" ? "Disponible sin conexión"
+              : lang === "pt" ? "Disponível offline"
+              : lang === "fr" ? "Disponible hors ligne"
+              : lang === "de" ? "Offline verfügbar"
+              : lang === "cs" ? "Dostupné offline"
+              : "Available offline"}
+          </span>
+          <span style={{ fontSize: 14, color: tierColor(data.plan), fontWeight: 600 }}>
+            {offlineCount.toLocaleString()}
+            {" "}
+            {lang === "he" ? "מילים"
+              : lang === "ar" ? "كلمات"
+              : lang === "ru" ? "слов"
+              : lang === "es" ? "palabras"
+              : lang === "pt" ? "palavras"
+              : lang === "fr" ? "mots"
+              : lang === "de" ? "Wörter"
+              : lang === "cs" ? "slov"
+              : "words"}
+          </span>
+        </div>
       )}
     </section>
   );
