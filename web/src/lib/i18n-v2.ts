@@ -389,6 +389,8 @@ export interface V2Strings {
   // Word Book save states
   saveToWordBook: string;
   savedToWordBook: string;
+  // Listen / TTS
+  listenToWord: string;
   // Visual empty state
   visualEmptyLabel: string;
   generateLabel: string;
@@ -754,6 +756,7 @@ const en: V2Strings = {
   actionKidsExplanation: "Kids' explanation",
   saveToWordBook: "Save to Notebook",
   savedToWordBook: "Saved to Notebook",
+  listenToWord: "Listen",
   visualEmptyLabel: "An image will be drawn for this word",
   generateLabel: "Generate",
   savedAgoTemplate: (t) => `Saved · ${t}`,
@@ -1121,6 +1124,7 @@ const he: V2Strings = {
   actionKidsExplanation: "הסבר לילדים",
   saveToWordBook: "שמירה במחברת",
   savedToWordBook: "נשמר במחברת",
+  listenToWord: "האזנה",
   visualEmptyLabel: "תמונה תיווצר עבור המילה הזו",
   generateLabel: "צרו תמונה",
   savedAgoTemplate: (t) => `נשמר · ${t}`,
@@ -1501,6 +1505,7 @@ const ar: V2Strings = {
   actionKidsExplanation: "شرح للأطفال",
   saveToWordBook: "احفظ في الدفتر",
   savedToWordBook: "محفوظ في الدفتر",
+  listenToWord: "استمع",
   visualEmptyLabel: "ستُرسم صورة لهذه الكلمة",
   generateLabel: "أنشئ",
   savedAgoTemplate: (t) => `محفوظ · ${t}`,
@@ -1864,6 +1869,7 @@ const ru: Partial<V2Strings> = {
   actionKidsExplanation: "Объяснение для детей",
   saveToWordBook: "В мою тетрадь",
   savedToWordBook: "Сохранено в тетради",
+  listenToWord: "Прослушать",
   visualEmptyLabel: "Картинка появится для этого слова",
   generateLabel: "Создать",
   savedAgoTemplate: (t) => `Сохранено · ${t}`,
@@ -2225,6 +2231,7 @@ const es: Partial<V2Strings> = {
   actionKidsExplanation: "Explicación para niños",
   saveToWordBook: "Guardar en el cuaderno",
   savedToWordBook: "Guardado en el cuaderno",
+  listenToWord: "Escuchar",
   visualEmptyLabel: "Se dibujará una imagen para esta palabra",
   generateLabel: "Generar",
   savedAgoTemplate: (t) => `Guardada · ${t}`,
@@ -2586,6 +2593,7 @@ const pt: Partial<V2Strings> = {
   actionKidsExplanation: "Explicação para crianças",
   saveToWordBook: "Salvar no caderno",
   savedToWordBook: "Salvo no caderno",
+  listenToWord: "Ouvir",
   visualEmptyLabel: "Uma imagem será criada para esta palavra",
   generateLabel: "Gerar",
   savedAgoTemplate: (t) => `Salva · ${t}`,
@@ -2947,6 +2955,7 @@ const fr: Partial<V2Strings> = {
   actionKidsExplanation: "Explication pour enfants",
   saveToWordBook: "Enregistrer dans le carnet",
   savedToWordBook: "Enregistré dans le carnet",
+  listenToWord: "Écouter",
   visualEmptyLabel: "Une image sera créée pour ce mot",
   generateLabel: "Générer",
   savedAgoTemplate: (t) => `Enregistré · ${t}`,

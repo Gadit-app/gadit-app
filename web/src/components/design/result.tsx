@@ -38,6 +38,7 @@ import { useState, type ReactNode } from "react";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
+import { TTSButton } from "@/components/design/TTSButton";
 
 // ─── Types matching the live /api/define schema ────────────────
 export type Plan = "basic" | "clear" | "deep";
@@ -84,19 +85,33 @@ export interface WordResult {
 export type ActionId = "save" | "image" | "compose" | "practice" | "compare" | "kids";
 
 // ─── Helpers ───────────────────────────────────────────────────
+const LANG_NAMES: Record<string, string[]> = {
+  en: ["english"],
+  he: ["hebrew", "עברית"],
+  ar: ["arabic", "العربية"],
+  ru: ["russian", "русский"],
+  es: ["spanish", "español"],
+  pt: ["portuguese", "português"],
+  fr: ["french", "français"],
+  de: ["german", "deutsch"],
+  cs: ["czech", "čeština", "cestina"],
+};
+
 function langMatchesUi(language: string, lang: Lang): boolean {
-  const names: Record<string, string[]> = {
-    en: ["english"],
-    he: ["hebrew", "עברית"],
-    ar: ["arabic", "العربية"],
-    ru: ["russian", "русский"],
-    es: ["spanish", "español"],
-    pt: ["portuguese", "português"],
-    fr: ["french", "français"],
-  };
   const langName = (language || "").toLowerCase().trim();
   if (!langName) return true;
-  return (names[lang] ?? []).some((n) => langName.includes(n));
+  return (LANG_NAMES[lang] ?? []).some((n) => langName.includes(n));
+}
+
+// Reverse: take the language label /api/define returns ("English",
+// "German", "Čeština", "العربية") and return our 2-letter Lang code.
+// Used to pick the right TTS voice locale for the speaker button.
+function detectWordLang(language: string): string {
+  const langName = (language || "").toLowerCase().trim();
+  for (const [code, names] of Object.entries(LANG_NAMES)) {
+    if (names.some((n) => langName.includes(n))) return code;
+  }
+  return "en";
 }
 
 // ─── CrispTech icons — 1.5px line family, currentColor only ─────
@@ -272,6 +287,10 @@ export function WordHeader({
   // word-meta: "pos · language" — both italicized in Latin, plain in HE/AR.
   // Hide entire row if neither is shown.
   const showMeta = !!pos || showLang;
+  // BCP-47 lang tag for TTS — driven by the WORD's language, not the
+  // UI. An English word should be pronounced in English even when
+  // the user is browsing in Hebrew.
+  const audioLang = detectWordLang(language);
   return (
     <div className="wb-word-head">
       <div className="wb-word-head-main">
@@ -282,7 +301,15 @@ export function WordHeader({
             {showLang && <span>{language}</span>}
           </div>
         )}
-        <h1 className="wb-word-title">{word}</h1>
+        <div className="wb-word-title-row">
+          <h1 className="wb-word-title">{word}</h1>
+          <TTSButton
+            text={word}
+            audioLang={audioLang}
+            ariaLabel={v2(lang, "listenToWord")}
+            className="wb-word-listen-btn"
+          />
+        </div>
       </div>
       {(onSave || onShare) && (
         <div className="wb-word-actions">
