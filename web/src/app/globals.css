@@ -2789,14 +2789,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   text-align: center;
 }
 
-/* Logo — Google's wordmark is ~92px optical height; we match that */
+/* Logo — Google's wordmark is ~92px optical height; we match that.
+   No flexbox here: 'Gad' and the inline italic 'it' span must share a
+   single text baseline so the bottoms of the letters land on the same
+   horizontal line. The earlier display:flex + align-items:center turned
+   each text node into its own flex item, each centered independently;
+   the italic 'it' has a slightly different optical center than 'Gad' in
+   the roman cut, so the two halves drifted off-baseline. Pure inline
+   text + line-height for vertical sizing keeps the baselines glued. */
 .wordbook .wb-home-logo {
   font-family: var(--wb-sans);
   font-weight: 600;
   font-size: 64px;
   letter-spacing: -0.035em;
   color: var(--ink);
-  line-height: 1;
+  line-height: 64px;
   margin-bottom: 2px;
   /* Latin wordmark inside an RTL page — without an explicit direction
      override the inline children flow right-to-left and the wordmark
@@ -2804,16 +2811,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
      forces LTR for the children without disturbing line metrics. */
   direction: ltr;
   unicode-bidi: isolate;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 @media (min-width: 768px) {
   .wordbook .wb-home-logo {
     font-size: 80px;
+    line-height: 80px;
     margin-bottom: 4px;
-    height: 80px;
   }
 }
 .wordbook .wb-home-logo-it {
