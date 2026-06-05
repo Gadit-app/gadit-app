@@ -72,13 +72,13 @@ export default function AdminUsersClient() {
   const [sortBy, setSortBy] = useState<"createdAt" | "lastSeenAt" | "searchCount" | "plan" | "country">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
-  // Bootstrap secret from sessionStorage. set-state-in-effect is flagged
+  // Bootstrap secret from localStorage. set-state-in-effect is flagged
   // by react-hooks but this is the textbook pattern: server-render with
   // null, hydrate, then upgrade to the persisted value once we know
-  // sessionStorage exists.
+  // localStorage exists.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const stored = sessionStorage.getItem(SECRET_KEY);
+    const stored = localStorage.getItem(SECRET_KEY);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (stored) setSecret(stored);
   }, []);
@@ -92,7 +92,7 @@ export default function AdminUsersClient() {
     fetch(`/api/admin/users?secret=${encodeURIComponent(secret)}`)
       .then(async (r) => {
         if (r.status === 401) {
-          sessionStorage.removeItem(SECRET_KEY);
+          localStorage.removeItem(SECRET_KEY);
           setSecret(null);
           throw new Error("Wrong secret.");
         }
@@ -113,7 +113,7 @@ export default function AdminUsersClient() {
     const input = form.elements.namedItem("secret") as HTMLInputElement | null;
     const value = input?.value.trim();
     if (!value) return;
-    sessionStorage.setItem(SECRET_KEY, value);
+    localStorage.setItem(SECRET_KEY, value);
     setSecret(value);
   };
 
@@ -147,11 +147,29 @@ export default function AdminUsersClient() {
           <p style={{ color: "#6B7280", fontSize: 14, marginBottom: 24 }}>
             Enter ADMIN_SECRET to view the user dashboard.
           </p>
-          <form onSubmit={handleSecretSubmit}>
+          {/* A hidden username field gives the browser's password manager
+              the (origin + username + password) triple it needs to offer
+              autofill. Without a username field most password managers
+              skip the save prompt entirely. The value 'gadit-admin' is a
+              constant identifier — it isn't displayed, only used so the
+              browser can distinguish this credential from other Gadit
+              accounts saved at the same origin. */}
+          <form onSubmit={handleSecretSubmit} autoComplete="on">
+            <input
+              type="text"
+              name="username"
+              value="gadit-admin"
+              autoComplete="username"
+              readOnly
+              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              tabIndex={-1}
+              aria-hidden="true"
+            />
             <input
               type="password"
               name="secret"
               autoFocus
+              autoComplete="current-password"
               placeholder="ADMIN_SECRET"
               style={inputStyle}
             />
@@ -175,7 +193,7 @@ export default function AdminUsersClient() {
           </div>
           <button
             onClick={() => {
-              sessionStorage.removeItem(SECRET_KEY);
+              localStorage.removeItem(SECRET_KEY);
               setSecret(null);
               setData(null);
             }}
