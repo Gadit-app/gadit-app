@@ -434,27 +434,19 @@ function TabIcon({ name }: { name: TabId }) {
         </svg>
       );
     case "kids":
-      // Child silhouette — big head (relative to body) + a small hair
-      // tuft is the most universal 'kid' icon. Smiley face inside reads
-      // as the warmth of the kids-explanation tone we want users to
-      // associate with this tab. Avoids gender-coded markers (no
-      // pigtails / bows).
+      // Child silhouette — three strokes only, because the icon renders
+      // at 16px and any face details (eyes, smile) collapse into noise
+      // at that size. The 'child' read comes from two proportions: a
+      // large head relative to the body, and a single hair tuft on top.
+      // Avoids gender-coded markers (no pigtails / bows).
       return (
         <svg {...common}>
-          {/* Head — larger than the previous icon and pulled higher so
-              the child-vs-adult proportion is unambiguous. */}
-          <circle cx="12" cy="8" r="4" />
-          {/* Hair tuft / cowlick — universal "this is a kid" cue. */}
-          <path d="M11.6 4 c0.4 -1 1.2 -1 1.6 0" />
-          {/* Eyes — tiny dots filled so they read at 16px without
-              becoming pure noise. */}
-          <circle cx="10.6" cy="7.8" r="0.55" fill="currentColor" stroke="none" />
-          <circle cx="13.4" cy="7.8" r="0.55" fill="currentColor" stroke="none" />
-          {/* Smile */}
-          <path d="M10.8 9.5 q1.2 1.0 2.4 0" />
-          {/* Compact, rounded body — short next to the big head so the
-              child proportions stay legible at small sizes. */}
-          <path d="M6.5 21 v-3.5 a5.5 5.5 0 0 1 11 0 v3.5" />
+          {/* Larger head than the adult silhouette — child proportion */}
+          <circle cx="12" cy="9" r="3.8" />
+          {/* Single curved hair tuft on top — universal 'kid' cue */}
+          <path d="M11.5 5.5 c0.4 -1.4 1.4 -1.4 1.8 0" />
+          {/* Compact rounded body */}
+          <path d="M6.5 21 v-3 a5.5 5.5 0 0 1 11 0 v3" />
         </svg>
       );
     case "compose":
