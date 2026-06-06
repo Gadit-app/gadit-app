@@ -21,6 +21,7 @@ secrets/
 # next.js
 web/.next/
 web/out/
+.next/
 
 # vercel
 .vercel
