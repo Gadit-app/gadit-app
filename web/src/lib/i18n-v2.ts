@@ -3032,8 +3032,69 @@ const fr: Partial<V2Strings> = {
 // keys that are user-visible at launch (homepage, pricing, login,
 // search, share modal) live in the per-page COPY tables and modal
 // COPY records, which DO have full DE+CS translations.
-const de: Partial<V2Strings> = {};
-const cs: Partial<V2Strings> = {};
+// DE / CS: most strings used to live in per-page COPY tables and modal
+// records (those already have full DE+CS coverage). The chrome strings
+// that result.tsx pulls via v2() were left to fall back to EN — which
+// looked broken on a Czech word page where the surrounding UI was
+// already Czech. Translated all result-page-visible chrome here so
+// 'every language shows everything in that language' actually holds.
+const de: Partial<V2Strings> = {
+  // Section eyebrows on the result page
+  meaningsEyebrow: "Definitionen",
+  idiomsEyebrow: "Redewendungen & Ausdrücke",
+  wordOriginEyebrow: "Wortursprung",
+  visualEyebrow: "Bild",
+  takeItFurtherEyebrow: "Mach mehr daraus",
+  // Word origin structured rows
+  wordOriginLanguage: "Sprache",
+  wordOriginOriginallyMeant: "Ursprüngliche Bedeutung",
+  wordOriginBackgroundLabel: "Hintergrund",
+  wordOriginOriginalWord: "Ursprüngliches Wort",
+  wordOriginBreakdown: "Wortteile",
+  // Meaning-level action labels
+  actionCompose: "Satz schreiben",
+  actionQuiz: "Quiz",
+  actionCompare: "Wörter vergleichen",
+  actionKidsExplanation: "Erklärung für Kinder",
+  // Visual / image gen
+  visualEmptyLabel: "Für dieses Wort wird ein Bild erstellt",
+  generateLabel: "Erstellen",
+  compareComingSoon: "Wortspiele kommen bald.",
+  // Share / save / listen on the result page
+  shareLabel: "Teilen",
+  backLabel: "Zurück",
+  shareDefinitionAria: "Diese Definition teilen",
+  savedAgoTemplate: (t) => `Gespeichert · ${t}`,
+};
+
+const cs: Partial<V2Strings> = {
+  // Section eyebrows on the result page
+  meaningsEyebrow: "Definice",
+  idiomsEyebrow: "Idiomy a výrazy",
+  wordOriginEyebrow: "Původ slova",
+  visualEyebrow: "Obraz",
+  takeItFurtherEyebrow: "Jdi dál",
+  // Word origin structured rows
+  wordOriginLanguage: "Jazyk",
+  wordOriginOriginallyMeant: "Původně znamenalo",
+  wordOriginBackgroundLabel: "Pozadí",
+  wordOriginOriginalWord: "Původní slovo",
+  wordOriginBreakdown: "Části slova",
+  // Meaning-level action labels
+  actionCompose: "Napsat větu",
+  actionQuiz: "Kvíz",
+  actionCompare: "Porovnat slova",
+  actionKidsExplanation: "Vysvětlení pro děti",
+  // Visual / image gen
+  visualEmptyLabel: "Pro toto slovo bude vytvořen obrázek",
+  generateLabel: "Vytvořit",
+  compareComingSoon: "Slovní hry už brzy.",
+  // Share / save / listen on the result page
+  shareLabel: "Sdílet",
+  backLabel: "Zpět",
+  shareDefinitionAria: "Sdílet tuto definici",
+  savedAgoTemplate: (t) => `Uloženo · ${t}`,
+};
 
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   en,

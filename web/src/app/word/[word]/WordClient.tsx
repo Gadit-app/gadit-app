@@ -361,6 +361,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const [anonSearchesLeft, setAnonSearchesLeft] = useState<number | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [imageGenerating, setImageGenerating] = useState(false);
+  // Surface image-gen failures to the user — previously the handler
+  // swallowed any non-402 error and the user saw 'loading → nothing',
+  // with no signal that anything had gone wrong. A Czech beta tester
+  // hit a quota error and could not tell why the button did nothing.
+  const [imageError, setImageError] = useState<string | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
   const [reportContext, setReportContext] = useState<ReportContext | null>(
@@ -642,6 +647,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     }
     if (imageGenerating) return; // guard against double-click
     setImageGenerating(true);
+    setImageError(null);
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/generate-image", {
@@ -661,12 +667,54 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           router.push("/pricing");
           return;
         }
+        // Parse the body for a known error code and surface a
+        // language-appropriate message instead of failing silently.
+        let bodyJson: { error?: string; used?: number; limit?: number } = {};
+        try { bodyJson = await res.json(); } catch { /* not json */ }
+        const code = bodyJson.error ?? `http_${res.status}`;
+        const localised =
+          code === "monthly_limit_reached"
+            ? (lang === "he" ? `הגעת למגבלת התמונות החודשית (${bodyJson.used}/${bodyJson.limit}). מתאפס בתחילת החודש הבא.`
+              : lang === "ar" ? `وصلت إلى حد الصور الشهري (${bodyJson.used}/${bodyJson.limit}). يُعاد ضبطه في بداية الشهر القادم.`
+              : lang === "ru" ? `Месячный лимит изображений исчерпан (${bodyJson.used}/${bodyJson.limit}). Сбрасывается в начале следующего месяца.`
+              : lang === "es" ? `Has alcanzado el límite mensual de imágenes (${bodyJson.used}/${bodyJson.limit}). Se reinicia el próximo mes.`
+              : lang === "pt" ? `Você atingiu o limite mensal de imagens (${bodyJson.used}/${bodyJson.limit}). Reinicia no próximo mês.`
+              : lang === "fr" ? `Vous avez atteint la limite mensuelle d'images (${bodyJson.used}/${bodyJson.limit}). Réinitialisation au mois prochain.`
+              : lang === "de" ? `Du hast das monatliche Bildlimit erreicht (${bodyJson.used}/${bodyJson.limit}). Wird zum Monatsanfang zurückgesetzt.`
+              : lang === "cs" ? `Dosáhl jsi měsíčního limitu obrázků (${bodyJson.used}/${bodyJson.limit}). Resetuje se začátkem dalšího měsíce.`
+              : `You've used your monthly image quota (${bodyJson.used}/${bodyJson.limit}). Resets at the start of next month.`)
+            : code === "image_generation_failed" || code === "no_image_returned"
+            ? (lang === "he" ? "התמונה נכשלה ביצירה. נסו שוב בעוד רגע."
+              : lang === "ar" ? "فشل إنشاء الصورة. حاول مرة أخرى بعد قليل."
+              : lang === "ru" ? "Не удалось создать изображение. Попробуйте ещё раз."
+              : lang === "es" ? "No se pudo crear la imagen. Inténtalo de nuevo."
+              : lang === "pt" ? "Não foi possível gerar a imagem. Tente novamente."
+              : lang === "fr" ? "L'image n'a pas pu être créée. Réessayez."
+              : lang === "de" ? "Bild konnte nicht erstellt werden. Versuche es noch einmal."
+              : lang === "cs" ? "Obrázek se nepodařilo vytvořit. Zkus to znovu."
+              : "Could not create the image. Try again in a moment.")
+            : (lang === "he" ? "משהו השתבש. נסו שוב."
+              : lang === "ar" ? "حدث خطأ ما. حاول مرة أخرى."
+              : lang === "ru" ? "Что-то пошло не так. Попробуйте ещё раз."
+              : lang === "es" ? "Algo salió mal. Inténtalo de nuevo."
+              : lang === "pt" ? "Algo deu errado. Tente novamente."
+              : lang === "fr" ? "Une erreur s'est produite. Réessayez."
+              : lang === "de" ? "Etwas ist schiefgelaufen. Versuche es erneut."
+              : lang === "cs" ? "Něco se pokazilo. Zkus to znovu."
+              : "Something went wrong. Try again.");
+        setImageError(localised);
+        console.error("[generate-image] failed:", res.status, bodyJson);
         return;
       }
       const data = (await res.json()) as { url?: string };
       if (data.url) setImageUrl(data.url);
     } catch (e) {
       console.error("generate-image:", e);
+      setImageError(
+        lang === "he" ? "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב."
+        : lang === "cs" ? "Ztratilo se připojení k internetu. Zkontroluj síť a zkus to znovu."
+        : "Lost network connection. Check your internet and try again."
+      );
     } finally {
       setImageGenerating(false);
     }
@@ -1068,6 +1116,24 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 <strong>{backWord}</strong>
               </span>
             </Link>
+          </div>
+        )}
+        {/* Inline image-gen error — surfaces the quota / failure /
+            network error the silent path used to swallow. Self-
+            dismissing close button so users can clear it once they've
+            seen it. */}
+        {result && imageError && (
+          <div className="wb-image-error-banner" role="alert">
+            <span>{imageError}</span>
+            <button
+              type="button"
+              onClick={() => setImageError(null)}
+              aria-label={lang === "he" ? "סגור" : lang === "cs" ? "Zavřít" : "Close"}
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
           </div>
         )}
         {result && (
