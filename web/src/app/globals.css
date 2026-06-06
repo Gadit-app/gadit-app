@@ -4709,6 +4709,66 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: rgba(146, 64, 14, 0.08);
 }
 
+/* Active 'image generating' panel — distinct from the static empty
+   state so the user can tell something is actually happening. A teal-
+   tinted skeleton with a pulse, an SVG spinner rotating inside, and a
+   two-line label (action + time hint). */
+.wordbook .wb-mpanel-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 36px 24px;
+  text-align: center;
+}
+.wordbook .wb-image-skeleton {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--teal-soft, #E0F6F4) 0%, rgba(14, 165, 165, 0.06) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal, #0EA5A5);
+  animation: wb-image-skeleton-pulse 2.2s ease-in-out infinite;
+  margin-bottom: 8px;
+}
+@keyframes wb-image-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+.wordbook .wb-image-spinner {
+  animation: wb-image-spinner 0.9s linear infinite;
+}
+@keyframes wb-image-spinner {
+  to { transform: rotate(360deg); }
+}
+.wordbook .wb-image-loading-label {
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink, #0B1220);
+  line-height: 1.3;
+}
+.wordbook[dir="rtl"] .wb-image-loading-label { font-family: var(--wb-he); }
+.wordbook .wb-image-loading-hint {
+  font-family: var(--wb-sans);
+  font-size: 13.5px;
+  color: var(--ink-muted, #6B7280);
+  line-height: 1.4;
+}
+.wordbook[dir="rtl"] .wb-image-loading-hint { font-family: var(--wb-he); }
+
+/* Reduced motion: drop the spin + pulse, keep colors */
+@media (prefers-reduced-motion: reduce) {
+  .wordbook .wb-image-skeleton,
+  .wordbook .wb-image-spinner {
+    animation: none;
+  }
+}
+
 /* ────────────────────────────────────────────────────────────────
    Features page — V2 redesign
    ────────────────────────────────────────────────────────────────

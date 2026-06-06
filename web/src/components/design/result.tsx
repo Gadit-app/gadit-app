@@ -648,13 +648,28 @@ function MeaningEntry({
             <div className="wb-mpanel-image">
               <img src={imageUrl} alt="" />
             </div>
+          ) : imageGenerating ? (
+            // ACTIVE generating state — distinct from the static empty
+            // state below so the user can tell something is actually
+            // happening. Pulsing skeleton + spinner + time-hint label.
+            <div className="wb-mpanel-loading" aria-busy="true" aria-live="polite">
+              <div className="wb-image-skeleton">
+                <svg className="wb-image-spinner" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="3" />
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="28 84" />
+                </svg>
+              </div>
+              <div className="wb-image-loading-label">{v2(lang, "imageGeneratingLabel")}</div>
+              <div className="wb-image-loading-hint">{v2(lang, "imageGeneratingHint")}</div>
+            </div>
           ) : (
+            // Truly empty — no image and not currently generating. This
+            // is the state after a failed attempt (the error banner at
+            // the top tells the user why). Showing the 'generating' UI
+            // here would lie to them.
             <div className="wb-mpanel-empty">
               <div className="wb-visual-art"><CrosshairIcon size={28} /></div>
               <div className="wb-visual-label">{v2(lang, "imageGeneratingLabel")}</div>
-              <div className="wb-loader-dots" aria-hidden="true">
-                <span /><span /><span />
-              </div>
             </div>
           )}
         </div>
