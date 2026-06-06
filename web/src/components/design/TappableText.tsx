@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * TappableText — renders a string with every word individually long-
- * pressable, opening a WordPopover with a quick definition.
+ * TappableText — renders a string with every word individually tappable,
+ * opening a WordPopover with a quick definition.
  *
  * Use this in place of plain text wherever you want users to be able to
  * 'look up' an unfamiliar word inside a longer paragraph — e.g. the
@@ -15,7 +15,6 @@
 
 import { useMemo, useState } from "react";
 import { useLang } from "@/lib/lang-context";
-import { useLongPress } from "@/lib/use-long-press";
 import { WordPopover } from "./WordPopover";
 import type { Lang } from "@/lib/i18n";
 
@@ -115,19 +114,28 @@ function TappableWord({
   onOpen: (anchor: HTMLElement) => void;
 }) {
   void lang;
-  const handlers = useLongPress<HTMLSpanElement>((anchor) => onOpen(anchor));
   return (
     <span
-      {...handlers}
       className="wb-tappable-word"
       tabIndex={0}
       role="button"
-      // The aria-haspopup hint lets screen readers tell the user this
-      // word is interactive (not just text).
       aria-haspopup="dialog"
+      // Click on desktop = open. Tap on touch also produces a click,
+      // so this single handler covers both inputs. (The earlier
+      // long-press-only path was unintuitive — users hovered, saw the
+      // underline affordance, clicked, and nothing happened.)
+      onClick={(e) => {
+        e.stopPropagation();
+        onOpen(e.currentTarget);
+      }}
+      onContextMenu={(e) => {
+        // Right-click also opens the popover, suppressing the native
+        // browser context menu so 'look up word' replaces it cleanly.
+        e.preventDefault();
+        onOpen(e.currentTarget);
+      }}
       onKeyDown={(e) => {
-        // Keyboard parity: Shift+Enter on a focused word opens the popover.
-        if (e.key === "Enter" && e.shiftKey) {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onOpen(e.currentTarget);
         }

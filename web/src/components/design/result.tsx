@@ -598,7 +598,13 @@ function MeaningEntry({
         <div className="wb-mexamples">
           {(meaning.examples ?? []).map((ex, j) => (
             <div className="wb-mexample" key={j}>
-              <TappableText text={ex} skipWord={word} />
+              {/* The example row is a flex container with a 10px gap so
+                  the leading bullet pseudo-element sits cleanly against
+                  the text. Wrapping TappableText inside ONE <span> means
+                  all its per-word spans collapse to a single flex child,
+                  so the gap fires once (between bullet and text) instead
+                  of once between every word. */}
+              <span><TappableText text={ex} skipWord={word} /></span>
             </div>
           ))}
         </div>
