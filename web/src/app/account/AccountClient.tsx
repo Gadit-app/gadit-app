@@ -426,26 +426,27 @@ export function AccountPage() {
           </h1>
         </div>
 
-        {/* CARD */}
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--hairline, #E5E7EB)",
-            borderRadius: 20,
-            padding: "clamp(32px, 5vw, 56px) clamp(28px, 5vw, 64px)",
-            boxShadow: "0 1px 2px rgba(13,22,38,0.04), 0 12px 32px rgba(13,22,38,0.06)",
-          }}
-        >
-          {loading ? (
-            <div style={{ textAlign: "center", padding: "40px 0", color: "var(--ink-muted)" }}>
+        {/* Each topic group lives in its own bordered card. The earlier
+            single-outer-card layout grouped everything visually but
+            users couldn't see WHERE plan ended and usage began without
+            tracing the hairline divider with their eyes. One card per
+            topic ('plan', 'usage', 'offline', 'account') makes the
+            boundaries unmistakable. */}
+        {loading ? (
+          <SectionCard>
+            <div style={{ textAlign: "center", padding: "32px 0", color: "var(--ink-muted)" }}>
               {v2(lang, "srLoading")}
             </div>
-          ) : errorMsg || !data ? (
-            <div style={{ textAlign: "center", padding: "40px 0", color: "var(--ink-muted)" }}>
+          </SectionCard>
+        ) : errorMsg || !data ? (
+          <SectionCard>
+            <div style={{ textAlign: "center", padding: "32px 0", color: "var(--ink-muted)" }}>
               {errorMsg || "—"}
             </div>
-          ) : (
-            <>
+          </SectionCard>
+        ) : (
+          <>
+            <SectionCard>
               <PlanSection
                 data={data}
                 renewalDate={renewalDate}
@@ -453,28 +454,33 @@ export function AccountPage() {
                 onUpgrade={() => router.push(href("/pricing"))}
                 onChangePlan={() => router.push(href("/pricing"))}
               />
-              <Divider />
+            </SectionCard>
+            <SectionCard>
               <UsageSection
                 data={data}
                 offlineCount={offlineCount}
               />
-              {data.plan !== "basic" && <Divider />}
-              <OfflinePackSection
-                data={data}
-                packState={packState}
-                packError={packError}
-                onDownloadPack={handleDownloadPack}
-              />
-              <Divider />
+            </SectionCard>
+            {data.plan !== "basic" && (
+              <SectionCard>
+                <OfflinePackSection
+                  data={data}
+                  packState={packState}
+                  packError={packError}
+                  onDownloadPack={handleDownloadPack}
+                />
+              </SectionCard>
+            )}
+            <SectionCard>
               <AccountSection
                 data={data}
                 emailFallback={user?.email ?? null}
                 onSignOut={handleSignOut}
                 onDeleteAccount={handleDeleteAccount}
               />
-            </>
-          )}
-        </div>
+            </SectionCard>
+          </>
+        )}
       </main>
 
       <footer className="wb-home-footer">
@@ -488,19 +494,27 @@ export function AccountPage() {
   );
 }
 
-function Divider() {
-  // Bigger vertical margin so the eye reads each card section as a
-  // distinct topic rather than a continuous flow. Earlier 32px gap +
-  // hairline rule felt too crowded; 48px gives the page breathing
-  // room without losing the structural cue.
+/**
+ * One bordered tile per topic group. The whole reason this exists is
+ * the scan-ability test: a user opening /account should be able to
+ * answer "where do I change my plan?" / "where do I sign out?" by
+ * pattern-matching distinct rectangles, not by reading paragraph
+ * headings inside one long card.
+ */
+function SectionCard({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{
-        height: 1,
-        background: "var(--hairline, #E5E7EB)",
-        margin: "44px 0",
+        background: "var(--surface)",
+        border: "1px solid var(--hairline, #E5E7EB)",
+        borderRadius: 18,
+        padding: "clamp(24px, 4vw, 36px)",
+        boxShadow: "0 1px 2px rgba(13,22,38,0.04), 0 6px 18px rgba(13,22,38,0.04)",
+        marginBottom: 16,
       }}
-    />
+    >
+      {children}
+    </div>
   );
 }
 
