@@ -3824,6 +3824,44 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-radius: 12px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
+
+/* Per-card 'available offline' chip — shows when the word is cached
+   locally and will load even without network. Teal so it visually
+   matches the offline brand (teal = Clear tier = the offline feature). */
+.wordbook .wb-notebook-card-offline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--teal-soft, #E0F6F4);
+  color: var(--teal-edge, #0B8A8A);
+  font-family: var(--wb-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Offline banner — full-width strip above the topbar that appears
+   whenever the browser flips to offline. Teal tint so 'offline' reads
+   as a calm status, not an error. */
+.wordbook .wb-offline-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--teal, #0EA5A5);
+  color: white;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
 .wordbook .wb-notebook-card:hover {
   box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.14);
   transform: translateY(-1px);

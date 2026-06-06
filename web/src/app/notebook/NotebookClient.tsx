@@ -18,6 +18,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useHref } from "@/lib/href";
+import { listRecentCached } from "@/lib/offline-db";
 
 const LANGS = [
   { code: "he", label: "עברית" },
@@ -160,6 +161,37 @@ export function NotebookPage() {
   const c = COPY[lang] ?? COPY.en;
 
   const [items, setItems] = useState<NotebookItem[] | null>(null);
+  // Lowercase set of every word the user has cached locally — drives
+  // the per-card 'available offline' badge below. Recomputed on mount;
+  // V3 doesn't auto-refresh after new caches (next mount is enough).
+  const [offlineWords, setOfflineWords] = useState<Set<string>>(new Set());
+  // Network status — drives the 'you're offline' banner at the top.
+  // Initialised from navigator.onLine and kept fresh via the online /
+  // offline events the browser fires.
+  const [online, setOnline] = useState<boolean>(
+    typeof navigator === "undefined" ? true : navigator.onLine,
+  );
+  useEffect(() => {
+    const onOnline = () => setOnline(true);
+    const onOffline = () => setOnline(false);
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, []);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const cached = await listRecentCached(2000);
+        if (cancelled) return;
+        setOfflineWords(new Set(cached.map((c) => c.word.toLowerCase())));
+      } catch { /* ignore — best-effort badge */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
   const [fetchError, setFetchError] = useState<string>("");
 
   // Auth + tier gate
@@ -200,6 +232,30 @@ export function NotebookPage() {
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
+      {/* Offline banner — top-of-page strip that appears whenever the
+          browser thinks the network is down. Tells the user how many
+          words they have available locally so 'offline' doesn't feel
+          like 'broken'. Hidden the moment we're back online. */}
+      {!online && (
+        <div className="wb-offline-banner" role="status" aria-live="polite">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M16 16h.01" />
+            <path d="M8.5 16.5a5 5 0 0 1 7 0" />
+            <path d="M5 13a10 10 0 0 1 14 0" />
+            <path d="M1.5 9.5a15 15 0 0 1 21 0" />
+            <line x1="2" y1="2" x2="22" y2="22" />
+          </svg>
+          {lang === "he" ? `אין חיבור לאינטרנט · ${offlineWords.size} מילים זמינות`
+            : lang === "ar" ? `لا يوجد اتصال · ${offlineWords.size} كلمات متاحة بدون إنترنت`
+            : lang === "ru" ? `Нет интернета · ${offlineWords.size} слов доступны офлайн`
+            : lang === "es" ? `Sin conexión · ${offlineWords.size} palabras disponibles offline`
+            : lang === "pt" ? `Sem conexão · ${offlineWords.size} palavras disponíveis offline`
+            : lang === "fr" ? `Hors ligne · ${offlineWords.size} mots disponibles`
+            : lang === "de" ? `Offline · ${offlineWords.size} Wörter verfügbar`
+            : lang === "cs" ? `Bez připojení · ${offlineWords.size} slov dostupných offline`
+            : `You're offline · ${offlineWords.size} words available`}
+        </div>
+      )}
       <header className="wb-shell-topbar">
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
@@ -272,22 +328,41 @@ export function NotebookPage() {
 
         {items && items.length > 0 && (
           <ul className="wb-notebook-grid">
-            {items.map((item) => (
-              <li key={item.id} className="wb-notebook-card">
-                <Link
-                  href={`/word/${encodeURIComponent(item.word)}`}
-                  className="wb-notebook-card-link"
-                >
-                  <div className="wb-notebook-card-head">
-                    <span className="wb-notebook-card-word">{item.word}</span>
-                    <span className="wb-notebook-card-lang">{item.language}</span>
-                  </div>
-                  {item.meaning && (
-                    <p className="wb-notebook-card-meaning">{item.meaning}</p>
-                  )}
-                </Link>
-              </li>
-            ))}
+            {items.map((item) => {
+              const offline = offlineWords.has(item.word.toLowerCase());
+              return (
+                <li key={item.id} className="wb-notebook-card">
+                  <Link
+                    href={href(`/word/${encodeURIComponent(item.word)}`)}
+                    className="wb-notebook-card-link"
+                  >
+                    <div className="wb-notebook-card-head">
+                      <span className="wb-notebook-card-word">{item.word}</span>
+                      <span className="wb-notebook-card-lang">{item.language}</span>
+                    </div>
+                    {item.meaning && (
+                      <p className="wb-notebook-card-meaning">{item.meaning}</p>
+                    )}
+                    {offline && (
+                      <div className="wb-notebook-card-offline" aria-label="Available offline">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        {lang === "he" ? "זמין אופליין"
+                          : lang === "ar" ? "متاح بدون إنترنت"
+                          : lang === "ru" ? "Доступно офлайн"
+                          : lang === "es" ? "Sin conexión"
+                          : lang === "pt" ? "Offline"
+                          : lang === "fr" ? "Hors ligne"
+                          : lang === "de" ? "Offline"
+                          : lang === "cs" ? "Offline"
+                          : "Offline"}
+                      </div>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         )}
       </main>
