@@ -337,9 +337,13 @@ export function WordHeader({
               type="button"
               className={`wb-word-act ${isSaved ? "is-saved" : ""}`}
               onClick={onSave}
+              title={isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
+              aria-label={isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
             >
               <BookmarkFillIcon size={13} />
-              {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
+              <span className="wb-word-act-label">
+                {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
+              </span>
             </button>
           )}
           {onPin && (
@@ -348,9 +352,12 @@ export function WordHeader({
               className={`wb-word-act ${isPinned ? "is-pinned" : ""}`}
               onClick={onPin}
               title={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
+              aria-label={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
             >
               <PinIcon size={13} filled={isPinned} />
-              {isPinned ? v2(lang, "offlinePinned") : v2(lang, "offlinePin")}
+              <span className="wb-word-act-label">
+                {isPinned ? v2(lang, "offlinePinned") : v2(lang, "offlinePin")}
+              </span>
             </button>
           )}
           {onShare && (
@@ -581,6 +588,8 @@ function MeaningEntry({
               data-tier={tierForTab(id)}
               onClick={() => handleTabClick(id)}
               aria-pressed={isOpen}
+              title={tabLabels[id]}
+              aria-label={tabLabels[id]}
             >
               <span className="wb-mtab-icon"><TabIcon name={id} /></span>
               <span className="wb-mtab-label">{tabLabels[id]}</span>

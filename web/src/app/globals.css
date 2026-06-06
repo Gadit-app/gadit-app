@@ -1800,6 +1800,33 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-color: #7C3AED;
   color: #6D28D9;
 }
+
+/* ── Mobile collapse: icon-only action pills ───────────────────
+   On phones (≤640px) the labelled pills (Save / Save offline) and
+   the meaning-card tab labels (Image / Kids / Compose / Quiz / Games)
+   no longer fit on a single row alongside the word title or inside
+   the narrow meaning card. Hiding the text and falling back to an
+   icon-only chip with a `title` tooltip restores horizontal room
+   without removing any affordances. Each button keeps its full text
+   in `title` + `aria-label` so long-press surfaces it on mobile and
+   screen readers continue to read the right thing. */
+@media (max-width: 640px) {
+  .wordbook .wb-word-act-label,
+  .wordbook .wb-mtab-label {
+    display: none;
+  }
+  .wordbook .wb-word-act {
+    padding: 8px 10px;
+    gap: 0;
+  }
+  /* Tighter tab chips so 5 of them fit comfortably on a narrow row */
+  .wordbook .wb-mtab {
+    padding: 7px 11px;
+    gap: 0;
+    min-width: 36px;
+    justify-content: center;
+  }
+}
 /* tiny mono "S" kbd hint inside the Save button */
 .wordbook .wb-word-act .wb-kbd {
   font-family: var(--wb-mono);
