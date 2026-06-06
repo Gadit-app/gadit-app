@@ -23,6 +23,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import {
   loadPlayWords,
+  hydrateExamples,
   MIN_WORDS_FOR_GAME,
   type GameId,
   type PlayWord,
@@ -81,7 +82,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "מוכן?",
     speedGo: "צא!",
     speedSeconds: (n) => n === 1 ? "מילה אחת!" : `${n} מילים!`,
-    memoryFlipPrompt: "הפוך שני קלפים והתאם זוג",
+    memoryFlipPrompt: "התאם כל מילה עם ההגדרה שלה — הפוך 2 קלפים בכל פעם",
     memoryMoves: (n) => n === 1 ? "מהלך אחד" : `${n} מהלכים`,
     resultPerfect: "מושלם!",
     resultGreat: "נהדר!",
@@ -123,7 +124,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Get ready",
     speedGo: "Go!",
     speedSeconds: (n) => n === 1 ? "1 word!" : `${n} words!`,
-    memoryFlipPrompt: "Flip two cards to find a pair",
+    memoryFlipPrompt: "Match each word with its meaning — flip 2 cards at a time",
     memoryMoves: (n) => n === 1 ? "1 move" : `${n} moves`,
     resultPerfect: "Perfect!",
     resultGreat: "Great job!",
@@ -165,7 +166,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "استعد",
     speedGo: "هيا!",
     speedSeconds: (n) => `${n} كلمة!`,
-    memoryFlipPrompt: "اقلب بطاقتين لإيجاد زوج",
+    memoryFlipPrompt: "اربط كل كلمة بمعناها — اقلب بطاقتين في كل مرة",
     memoryMoves: (n) => `${n} حركة`,
     resultPerfect: "مثالي!",
     resultGreat: "أحسنت!",
@@ -207,7 +208,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Готов?",
     speedGo: "Старт!",
     speedSeconds: (n) => `${n} слов!`,
-    memoryFlipPrompt: "Переверни две карты, найди пару",
+    memoryFlipPrompt: "Сопоставь слово с значением — переворачивай по 2 карты",
     memoryMoves: (n) => `${n} ходов`,
     resultPerfect: "Идеально!",
     resultGreat: "Отлично!",
@@ -249,7 +250,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Prepárate",
     speedGo: "¡Ya!",
     speedSeconds: (n) => `¡${n} palabras!`,
-    memoryFlipPrompt: "Voltea dos cartas y encuentra un par",
+    memoryFlipPrompt: "Empareja cada palabra con su significado — voltea 2 cartas",
     memoryMoves: (n) => `${n} movimientos`,
     resultPerfect: "¡Perfecto!",
     resultGreat: "¡Muy bien!",
@@ -291,7 +292,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Prepare-se",
     speedGo: "Vai!",
     speedSeconds: (n) => `${n} palavras!`,
-    memoryFlipPrompt: "Vire duas cartas e ache um par",
+    memoryFlipPrompt: "Combine cada palavra ao significado — vire 2 cartas",
     memoryMoves: (n) => `${n} jogadas`,
     resultPerfect: "Perfeito!",
     resultGreat: "Ótimo!",
@@ -333,7 +334,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Prêt ?",
     speedGo: "Go !",
     speedSeconds: (n) => `${n} mots !`,
-    memoryFlipPrompt: "Retournez deux cartes pour faire une paire",
+    memoryFlipPrompt: "Associez chaque mot à son sens — retournez 2 cartes",
     memoryMoves: (n) => `${n} coups`,
     resultPerfect: "Parfait !",
     resultGreat: "Excellent !",
@@ -375,7 +376,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Bereit?",
     speedGo: "Los!",
     speedSeconds: (n) => `${n} Wörter!`,
-    memoryFlipPrompt: "Dreh zwei Karten und finde ein Paar",
+    memoryFlipPrompt: "Verbinde Wort mit Bedeutung — dreh 2 Karten",
     memoryMoves: (n) => `${n} Züge`,
     resultPerfect: "Perfekt!",
     resultGreat: "Klasse!",
@@ -417,7 +418,7 @@ const COPY: Record<string, PlayT> = {
     speedReady: "Připraven?",
     speedGo: "Start!",
     speedSeconds: (n) => `${n} slov!`,
-    memoryFlipPrompt: "Otoč dvě karty a najdi pár",
+    memoryFlipPrompt: "Spáruj slovo s významem — otoč 2 karty",
     memoryMoves: (n) => `${n} tahů`,
     resultPerfect: "Dokonalé!",
     resultGreat: "Skvělé!",
@@ -485,26 +486,44 @@ export function PlayPage() {
   const [streak, setStreak] = useState(() => getStreak());
 
   // Auth + tier gate — Deep only.
+  //
+  // The redirect uses explicit "basic" / "clear" checks (not `plan !== "deep"`)
+  // because plan can be undefined for a tick after route navigation while
+  // the auth context is rehydrating — `!== "deep"` would bounce a Deep
+  // user straight to /pricing in that window. Match Notebook's pattern.
   useEffect(() => {
     if (loading) return;
     if (!user) {
       promptLogin(t.menuTitle);
       return;
     }
-    if (plan !== "deep") {
+    if (plan === "basic" || plan === "clear") {
       router.replace(href("/pricing"));
     }
   }, [loading, user, plan, t.menuTitle, promptLogin, router, href]);
 
   // Load notebook + hydrate from IDB.
+  //
+  // Two-stage hydration: (1) sync from IDB so the menu can paint with
+  // whatever the user has cached locally; (2) async top-up from the
+  // Firestore popular-words cache via /api/quick-define so the Fill-blank
+  // game eventually unlocks for users whose notebook came from the
+  // popular pack. Stage 2 mutates pool when it returns — fill-blank
+  // disabled state in the menu flips to enabled with no user action.
   useEffect(() => {
-    if (loading || !user || plan !== "deep") return;
+    if (loading || !user) return;
+    if (plan === "basic" || plan === "clear") return;
     let cancelled = false;
     (async () => {
       try {
         const idToken = await user.getIdToken();
         const words = await loadPlayWords(idToken, lang);
-        if (!cancelled) setPool(words);
+        if (cancelled) return;
+        setPool(words);
+        // Stage 2: fill in missing examples from Firestore cache.
+        // Read-only, no OpenAI calls. Runs after first paint.
+        const hydrated = await hydrateExamples(words);
+        if (!cancelled) setPool(hydrated);
       } catch (e) {
         if (!cancelled) setFetchError(String(e));
       }

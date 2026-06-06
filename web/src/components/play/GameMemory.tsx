@@ -55,11 +55,14 @@ export function GameMemory({
           setTimeout(() => setDone(true), 600);
         }
       } else {
+        // Give the user enough time to actually read both cards before
+        // they close — 800ms felt rushed in the beta. ~1.4s for two
+        // short labels is the standard for this kind of memory game.
         lockRef.current = true;
         setTimeout(() => {
           setFlipped([]);
           lockRef.current = false;
-        }, 800);
+        }, 1400);
       }
     }
   }

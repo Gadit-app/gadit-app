@@ -77,7 +77,9 @@ export function pickOne<T>(arr: readonly T[]): T {
  * Load notebook + hydrate each entry with the offline cache.
  *
  * Returns the pool with `examples: []` for entries we couldn't hydrate;
- * fill-blank filters those out at game start.
+ * fill-blank filters those out at game start. A second pass via
+ * `hydrateExamples` can fill in some of those gaps from the Firestore
+ * popular-words cache without ever calling OpenAI.
  */
 export async function loadPlayWords(
   idToken: string,
@@ -108,6 +110,61 @@ export async function loadPlayWords(
   );
 
   return hydrated;
+}
+
+/**
+ * Second-pass hydration via /api/quick-define for entries that didn't
+ * have a local IDB cache hit. This is the main path that unlocks the
+ * Fill-the-blank game for users who came via the popular-words pack
+ * (their entries are in Firestore cache but never made it into IDB).
+ *
+ * - Read-only call against the Firestore `cache` collection — no OpenAI.
+ * - Capped at TARGET hydrated entries so we don't fan out 500 calls for
+ *   a freshly-loaded popular pack.
+ * - Skips entries that already have examples.
+ * - Best-effort: any individual fetch failure just leaves that entry
+ *   alone; the surrounding game logic already handles examples=[].
+ *
+ * Call site: PlayClient kicks this off after the first paint so the
+ * menu shows immediately, then fill-blank unlocks when the pool updates.
+ */
+const TARGET_HYDRATED = 16;
+
+export async function hydrateExamples(pool: PlayWord[]): Promise<PlayWord[]> {
+  const alreadyHydrated = pool.filter((p) => p.examples.length > 0).length;
+  if (alreadyHydrated >= TARGET_HYDRATED) return pool;
+  const needed = TARGET_HYDRATED - alreadyHydrated;
+
+  const missing = pool.filter((p) => p.examples.length === 0).slice(0, needed * 2);
+  if (missing.length === 0) return pool;
+
+  const wordToExample = new Map<string, string>();
+  const CHUNK = 8;
+  for (let i = 0; i < missing.length && wordToExample.size < needed; i += CHUNK) {
+    const slice = missing.slice(i, i + CHUNK);
+    const results = await Promise.all(
+      slice.map(async (w) => {
+        try {
+          const url = `/api/quick-define?word=${encodeURIComponent(w.word)}&lang=${encodeURIComponent(w.uiLang)}`;
+          const res = await fetch(url);
+          if (!res.ok) return null;
+          const data = (await res.json()) as { example?: string };
+          const ex = typeof data.example === "string" ? data.example.trim() : "";
+          return ex.length > 4 ? { word: w.word, example: ex } : null;
+        } catch {
+          return null;
+        }
+      }),
+    );
+    results.filter(Boolean).forEach((r) => wordToExample.set(r!.word, r!.example));
+  }
+
+  if (wordToExample.size === 0) return pool;
+  return pool.map((p) => {
+    if (p.examples.length > 0) return p;
+    const ex = wordToExample.get(p.word);
+    return ex ? { ...p, examples: [ex] } : p;
+  });
 }
 
 // ─── Quiz: definition match (bidirectional) ─────────────────────
