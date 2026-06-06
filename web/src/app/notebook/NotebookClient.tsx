@@ -275,6 +275,11 @@ export function NotebookPage() {
           <Link href={href("/notebook")} className="wb-shell-navlink is-active">
             {v2(lang, "navNotebook")}
           </Link>
+          {plan === "deep" && (
+            <Link href={href("/play")} className="wb-shell-navlink">
+              {v2(lang, "navPlay")}
+            </Link>
+          )}
           <Link href={href("/pricing")} className="wb-shell-navlink">
             {v2(lang, "navPricing")}
           </Link>

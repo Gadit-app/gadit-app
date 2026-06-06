@@ -203,6 +203,9 @@ export function HomePage() {
           {user && (plan === "clear" || plan === "deep") && (
             <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
           )}
+          {user && plan === "deep" && (
+            <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
+          )}
           <Link href={href("/pricing")} className="wb-shell-navlink">{c.pricing}</Link>
         </nav>
         <div className="wb-shell-actions">

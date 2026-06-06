@@ -83,6 +83,7 @@ export interface V2Strings {
   navNotebook: string;
   navPricing: string;
   navFeatures: string;
+  navPlay: string;
 
   // ── Pricing page (Screen 3) ─────────────────────────────────
   pricingPageHeadline: string;
@@ -470,6 +471,7 @@ const en: V2Strings = {
   navNotebook: "Notebook",
   navPricing: "Pricing",
   navFeatures: "Features",
+  navPlay: "Play",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "Three tiers. All with real content.",
@@ -843,6 +845,7 @@ const he: V2Strings = {
   navNotebook: "מחברת",
   navPricing: "תמחור",
   navFeatures: "פיצ'רים",
+  navPlay: "משחקים",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
@@ -1220,6 +1223,7 @@ const ar: V2Strings = {
   navNotebook: "الدفتر",
   navPricing: "الأسعار",
   navFeatures: "المزايا",
+  navPlay: "ألعاب",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
@@ -1613,6 +1617,7 @@ const ru: Partial<V2Strings> = {
   navNotebook: "Тетрадь",
   navPricing: "Тарифы",
   navFeatures: "Возможности",
+  navPlay: "Игры",
 
   pricingPageHeadline: "Три уровня. Все с настоящим контентом.",
   pricingPageSubline: "Начните бесплатно. Перейдите глубже, когда понадобится.",
@@ -1987,6 +1992,7 @@ const es: Partial<V2Strings> = {
   navNotebook: "Cuaderno",
   navPricing: "Precios",
   navFeatures: "Funciones",
+  navPlay: "Jugar",
 
   pricingPageHeadline: "Tres niveles. Todos con contenido real.",
   pricingPageSubline: "Empieza gratis. Sube de plan cuando la profundidad te ayude.",
@@ -2359,6 +2365,7 @@ const pt: Partial<V2Strings> = {
   navNotebook: "Caderno",
   navPricing: "Preços",
   navFeatures: "Recursos",
+  navPlay: "Jogar",
 
   pricingPageHeadline: "Três níveis. Todos com conteúdo de verdade.",
   pricingPageSubline: "Comece grátis. Faça upgrade quando a profundidade ajudar.",
@@ -2731,6 +2738,7 @@ const fr: Partial<V2Strings> = {
   navNotebook: "Carnet",
   navPricing: "Tarifs",
   navFeatures: "Fonctionnalités",
+  navPlay: "Jeux",
 
   pricingPageHeadline: "Trois niveaux. Tous avec du vrai contenu.",
   pricingPageSubline: "Commencez gratuitement. Passez à un plan supérieur quand la profondeur sert.",
@@ -3079,6 +3087,7 @@ const de: Partial<V2Strings> = {
   imageGeneratingHint: "Das dauert normalerweise 10 bis 15 Sekunden.",
   imageOpenFullAria: "Bild in voller Größe öffnen",
   compareComingSoon: "Wortspiele kommen bald.",
+  navPlay: "Spielen",
   // Share / save / listen on the result page
   shareLabel: "Teilen",
   backLabel: "Zurück",
@@ -3111,6 +3120,7 @@ const cs: Partial<V2Strings> = {
   imageGeneratingHint: "Obvykle to trvá 10 až 15 sekund.",
   imageOpenFullAria: "Otevřít obrázek v plné velikosti",
   compareComingSoon: "Slovní hry už brzy.",
+  navPlay: "Hrát",
   // Share / save / listen on the result page
   shareLabel: "Sdílet",
   backLabel: "Zpět",

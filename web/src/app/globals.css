@@ -5226,3 +5226,678 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     transform: none;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+ * /play — Word Games hub (Deep tier)
+ * Five games share one canvas. Cards use 5 accent hues at ~18%
+ * saturation so the family reads together, not as a rainbow.
+ * ───────────────────────────────────────────────────────────── */
+
+.wordbook .wb-play-page {
+  background: var(--wb-canvas);
+}
+
+.wordbook .wb-play-main {
+  max-width: 880px;
+  margin-inline: auto;
+  padding: 56px 24px 80px;
+}
+
+.wordbook .wb-play-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.wordbook .wb-play-title {
+  font-family: var(--wb-font-display);
+  font-size: clamp(32px, 5vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  color: var(--wb-ink);
+}
+.wordbook .wb-play-lede {
+  font-size: 15px;
+  color: var(--wb-ink-soft);
+  margin: 0 0 20px;
+}
+
+.wordbook .wb-play-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  color: rgb(180, 83, 9);
+  font-size: 13px;
+  font-weight: 600;
+}
+.wordbook .wb-play-streak-best {
+  margin-inline-start: 6px;
+  padding-inline-start: 10px;
+  border-inline-start: 1px solid rgba(245, 158, 11, 0.25);
+  color: rgb(146, 64, 14);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.wordbook .wb-play-loading,
+.wordbook .wb-play-error {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--wb-ink-soft);
+}
+
+.wordbook .wb-play-empty {
+  text-align: center;
+  padding: 48px 24px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 16px;
+  max-width: 480px;
+  margin-inline: auto;
+}
+.wordbook .wb-play-empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin-bottom: 8px;
+}
+.wordbook .wb-play-empty-hint {
+  font-size: 14px;
+  color: var(--wb-ink-soft);
+  margin: 0 0 20px;
+}
+.wordbook .wb-play-empty-cta {
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgb(14, 165, 165);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background 160ms;
+}
+.wordbook .wb-play-empty-cta:hover { background: rgb(13, 148, 148); }
+.wordbook .wb-play-empty-cta:active { transform: scale(0.97); }
+
+.wordbook .wb-play-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.wordbook .wb-play-grid li { margin: 0; }
+
+.wordbook .wb-play-card {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 16px;
+  text-align: start;
+  cursor: pointer;
+  position: relative;
+  transition:
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 200ms;
+  min-height: 96px;
+  color: inherit;
+}
+.wordbook .wb-play-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+  border-color: rgba(15, 23, 42, 0.12);
+}
+.wordbook .wb-play-card:active { transform: translateY(0) scale(0.99); }
+.wordbook .wb-play-card.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.wordbook .wb-play-card.is-disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--wb-border);
+}
+
+.wordbook .wb-play-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.wordbook .wb-play-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.wordbook .wb-play-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  line-height: 1.3;
+}
+.wordbook .wb-play-card-desc {
+  font-size: 13px;
+  color: var(--wb-ink-soft);
+  line-height: 1.45;
+}
+.wordbook .wb-play-card-locked {
+  position: absolute;
+  top: 14px;
+  inset-inline-end: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 999px;
+  color: var(--wb-ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.wordbook .wb-play-card-teal   .wb-play-card-icon { background: rgba(14, 165, 165, 0.10); color: rgb(13, 148, 148); }
+.wordbook .wb-play-card-indigo .wb-play-card-icon { background: rgba(79, 70, 229, 0.10);  color: rgb(67, 56, 202); }
+.wordbook .wb-play-card-purple .wb-play-card-icon { background: rgba(124, 58, 237, 0.10); color: rgb(109, 40, 217); }
+.wordbook .wb-play-card-amber  .wb-play-card-icon { background: rgba(245, 158, 11, 0.12); color: rgb(180, 83, 9); }
+.wordbook .wb-play-card-rose   .wb-play-card-icon { background: rgba(225, 29, 72, 0.10);  color: rgb(190, 18, 60); }
+
+.wordbook .wb-play-stage {
+  max-width: 640px;
+  margin-inline: auto;
+  padding: 24px 20px 80px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.wordbook .wb-play-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+.wordbook .wb-play-exit {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--wb-border);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wb-ink-soft);
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background 160ms;
+  flex-shrink: 0;
+}
+.wordbook .wb-play-exit:hover { background: rgba(15, 23, 42, 0.04); }
+.wordbook .wb-play-exit:active { transform: scale(0.95); }
+.wordbook .wb-play-exit-corner {
+  position: absolute;
+  top: 20px;
+  inset-inline-end: 20px;
+}
+.wordbook .wb-play-header-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  flex: 1;
+  text-align: center;
+}
+.wordbook .wb-play-header-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--wb-ink-soft);
+}
+.wordbook .wb-play-progress { font-weight: 500; }
+.wordbook .wb-play-timer {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(14, 165, 165, 0.10);
+  color: rgb(13, 148, 148);
+  font-weight: 600;
+  transition: background 200ms;
+}
+.wordbook .wb-play-timer.is-urgent {
+  background: rgba(225, 29, 72, 0.12);
+  color: rgb(190, 18, 60);
+  animation: wbPlayPulse 700ms ease-in-out infinite;
+}
+@keyframes wbPlayPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.wordbook .wb-play-score {
+  font-weight: 700;
+  color: var(--wb-ink);
+}
+
+.wordbook .wb-play-question {
+  text-align: center;
+  padding: 32px 16px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 16px;
+}
+.wordbook .wb-play-question-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wb-ink-soft);
+  margin-bottom: 16px;
+}
+.wordbook .wb-play-prompt {
+  font-family: var(--wb-font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--wb-ink);
+  line-height: 1.25;
+}
+.wordbook .wb-play-prompt-word { font-size: clamp(32px, 6vw, 44px); }
+.wordbook .wb-play-prompt-meaning { font-size: clamp(18px, 3vw, 22px); }
+
+.wordbook .wb-play-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wordbook .wb-play-option {
+  width: 100%;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 14px;
+  text-align: start;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--wb-ink);
+  cursor: pointer;
+  min-height: 56px;
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 200ms,
+    background 200ms,
+    color 200ms,
+    opacity 200ms;
+}
+.wordbook .wb-play-option:hover:not(:disabled) {
+  border-color: rgba(14, 165, 165, 0.4);
+  background: rgba(14, 165, 165, 0.03);
+}
+.wordbook .wb-play-option:active:not(:disabled) { transform: scale(0.98); }
+.wordbook .wb-play-option:disabled { cursor: default; }
+.wordbook .wb-play-option.is-correct {
+  background: rgba(16, 185, 129, 0.10);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: rgb(5, 150, 105);
+  font-weight: 600;
+}
+.wordbook .wb-play-option.is-wrong {
+  background: rgba(225, 29, 72, 0.08);
+  border-color: rgba(225, 29, 72, 0.4);
+  color: rgb(190, 18, 60);
+}
+.wordbook .wb-play-option.is-dimmed { opacity: 0.45; }
+.wordbook .wb-play-option-compact { font-size: 14px; padding: 12px 16px; min-height: 48px; }
+
+.wordbook .wb-play-sentence {
+  font-family: var(--wb-font-display);
+  font-size: clamp(18px, 3vw, 22px);
+  line-height: 1.5;
+  color: var(--wb-ink);
+}
+.wordbook .wb-play-blank {
+  display: inline-block;
+  min-width: 80px;
+  padding: 0 8px;
+  margin: 0 2px;
+  border-radius: 6px;
+  background: rgba(79, 70, 229, 0.08);
+  border-bottom: 2px solid rgba(79, 70, 229, 0.4);
+  color: rgb(67, 56, 202);
+  font-weight: 600;
+  transition: background 250ms, color 250ms;
+}
+.wordbook .wb-play-blank.is-revealed {
+  background: rgba(16, 185, 129, 0.10);
+  border-bottom-color: rgba(16, 185, 129, 0.5);
+  color: rgb(5, 150, 105);
+}
+
+.wordbook .wb-play-memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 520px) {
+  .wordbook .wb-play-memory-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.wordbook .wb-play-memcard {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--wb-ink);
+  transition:
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 250ms,
+    background 250ms;
+  perspective: 800px;
+}
+.wordbook .wb-play-memcard:hover:not(.is-open):not(:disabled) {
+  transform: translateY(-2px);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+.wordbook .wb-play-memcard:active { transform: scale(0.97); }
+.wordbook .wb-play-memcard-back,
+.wordbook .wb-play-memcard-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  transition: transform 350ms cubic-bezier(0.77, 0, 0.175, 1);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.wordbook .wb-play-memcard-back {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.04));
+  color: rgba(124, 58, 237, 0.6);
+}
+.wordbook .wb-play-memcard-face {
+  background: #fff;
+  transform: rotateY(180deg);
+  color: var(--wb-ink);
+  font-weight: 500;
+}
+.wordbook .wb-play-memcard.is-open .wb-play-memcard-back { transform: rotateY(180deg); }
+.wordbook .wb-play-memcard.is-open .wb-play-memcard-face { transform: rotateY(0); }
+.wordbook .wb-play-memcard.is-matched {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+.wordbook .wb-play-memcard.is-matched .wb-play-memcard-face {
+  background: rgba(16, 185, 129, 0.06);
+  color: rgb(5, 150, 105);
+}
+.wordbook .wb-play-memcard-word .wb-play-memcard-face {
+  font-family: var(--wb-font-display);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.wordbook .wb-play-anagram-hint {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--wb-ink-soft);
+}
+.wordbook .wb-play-anagram-hint-label { font-weight: 600; margin-inline-end: 6px; }
+.wordbook .wb-play-anagram-hint-text { color: var(--wb-ink); }
+
+.wordbook .wb-play-anagram-slots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 14px;
+  transition: border-color 200ms, background 200ms;
+}
+.wordbook .wb-play-anagram-slots.is-correct {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.06);
+}
+.wordbook .wb-play-anagram-slots.is-wrong {
+  border-color: rgba(225, 29, 72, 0.4);
+  background: rgba(225, 29, 72, 0.04);
+  animation: wbPlayShake 220ms ease-in-out;
+}
+@keyframes wbPlayShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.wordbook .wb-play-anagram-slot {
+  width: 44px;
+  height: 52px;
+  border-radius: 10px;
+  border: 1.5px dashed rgba(15, 23, 42, 0.15);
+  background: transparent;
+  font-family: var(--wb-font-display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, background 200ms;
+}
+.wordbook .wb-play-anagram-slot.is-filled {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
+}
+.wordbook .wb-play-anagram-slot:active:not(:disabled) { transform: scale(0.95); }
+.wordbook .wb-play-anagram-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 12px;
+}
+.wordbook .wb-play-anagram-tile {
+  width: 44px;
+  height: 52px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  font-family: var(--wb-font-display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, background 200ms;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.wordbook .wb-play-anagram-tile:hover:not(:disabled) {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.04);
+}
+.wordbook .wb-play-anagram-tile:active:not(:disabled) { transform: scale(0.93); }
+.wordbook .wb-play-anagram-reset {
+  align-self: center;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--wb-border);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--wb-ink-soft);
+  cursor: pointer;
+  transition: background 160ms, transform 160ms;
+}
+.wordbook .wb-play-anagram-reset:hover:not(:disabled) { background: rgba(15, 23, 42, 0.04); }
+.wordbook .wb-play-anagram-reset:active:not(:disabled) { transform: scale(0.97); }
+
+.wordbook .wb-play-countdown {
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.wordbook .wb-play-countdown-eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wb-ink-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.wordbook .wb-play-countdown-num {
+  font-family: var(--wb-font-display);
+  font-size: clamp(96px, 18vw, 160px);
+  font-weight: 700;
+  color: rgb(190, 18, 60);
+  line-height: 1;
+  animation: wbPlayCountdown 700ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes wbPlayCountdown {
+  0% { opacity: 0; transform: scale(1.5); }
+  40% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0.95; transform: scale(0.95); }
+}
+
+.wordbook .wb-play-result {
+  align-items: center;
+  text-align: center;
+  padding-top: 60px;
+}
+.wordbook .wb-play-result-headline {
+  font-family: var(--wb-font-display);
+  font-size: clamp(28px, 5vw, 36px);
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.wordbook .wb-play-result-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--wb-font-display);
+  margin: 20px 0 12px;
+}
+.wordbook .wb-play-result-score-num {
+  font-size: clamp(80px, 14vw, 120px);
+  font-weight: 700;
+  color: rgb(13, 148, 148);
+  line-height: 1;
+}
+.wordbook .wb-play-result-score-denom {
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 500;
+  color: var(--wb-ink-soft);
+}
+.wordbook .wb-play-result-sub {
+  font-size: 13px;
+  color: var(--wb-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+
+.wordbook .wb-play-result-missed {
+  width: 100%;
+  max-width: 480px;
+  margin: 12px auto 28px;
+  background: #fff;
+  border: 1px solid var(--wb-border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  text-align: start;
+}
+.wordbook .wb-play-result-missed-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wb-ink-soft);
+  margin-bottom: 10px;
+}
+.wordbook .wb-play-result-missed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wordbook .wb-play-result-missed-list li {
+  font-size: 14px;
+  color: var(--wb-ink);
+  line-height: 1.45;
+}
+.wordbook .wb-play-result-missed-word { font-weight: 600; }
+.wordbook .wb-play-result-missed-sep { color: var(--wb-ink-soft); margin: 0 8px; }
+.wordbook .wb-play-result-missed-mean { color: var(--wb-ink-soft); }
+
+.wordbook .wb-play-result-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.wordbook .wb-play-cta-primary {
+  padding: 12px 28px;
+  background: rgb(14, 165, 165);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wordbook .wb-play-cta-primary:hover { background: rgb(13, 148, 148); }
+.wordbook .wb-play-cta-primary:active { transform: scale(0.97); }
+.wordbook .wb-play-cta-ghost {
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--wb-ink);
+  border: 1px solid var(--wb-border);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 160ms, transform 160ms;
+}
+.wordbook .wb-play-cta-ghost:hover { background: rgba(15, 23, 42, 0.04); }
+.wordbook .wb-play-cta-ghost:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wordbook .wb-play-card,
+  .wordbook .wb-play-option,
+  .wordbook .wb-play-memcard,
+  .wordbook .wb-play-memcard-back,
+  .wordbook .wb-play-memcard-face,
+  .wordbook .wb-play-anagram-slot,
+  .wordbook .wb-play-anagram-tile,
+  .wordbook .wb-play-cta-primary,
+  .wordbook .wb-play-cta-ghost,
+  .wordbook .wb-play-exit {
+    transition: none;
+  }
+  .wordbook .wb-play-timer.is-urgent,
+  .wordbook .wb-play-countdown-num,
+  .wordbook .wb-play-anagram-slots.is-wrong {
+    animation: none;
+  }
+}

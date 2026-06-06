@@ -138,7 +138,7 @@ function LangSwitch() {
 }
 
 export function AccountPage() {
-  const { user, loading: authLoading, promptLogin, logout } = useAuth();
+  const { user, plan, loading: authLoading, promptLogin, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -363,6 +363,9 @@ export function AccountPage() {
               <path d="m20 20-4-4" />
             </svg>
           </Link>
+          {plan === "deep" && (
+            <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
+          )}
           <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
         </nav>
         <div className="wb-shell-actions">
