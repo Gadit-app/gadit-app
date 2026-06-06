@@ -508,8 +508,8 @@ function MeaningEntry({
 }: MeaningEntryProps) {
   const { lang } = useLang();
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
-  // image + kids + compare render inline; compose + quiz fire modals.
-  const [openTab, setOpenTab] = useState<"image" | "kids" | "compare" | null>(null);
+  // image + kids render inline; compose + quiz + compare fire route/modal.
+  const [openTab, setOpenTab] = useState<"image" | "kids" | null>(null);
   // Lightbox state — opens when the user taps the generated image
   // inside this meaning's image tab.
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -531,10 +531,7 @@ function MeaningEntry({
       setOpenTab(openTab === "kids" ? null : "kids");
       return;
     }
-    if (tab === "compare") {
-      setOpenTab(openTab === "compare" ? null : "compare");
-      return;
-    }
+    if (tab === "compare") { onAction?.("compare"); return; }
     if (tab === "compose") { onAction?.("compose"); return; }
     if (tab === "quiz") { onAction?.("practice"); return; }
   }
@@ -716,13 +713,6 @@ function MeaningEntry({
         </div>
       )}
 
-      {openTab === "compare" && (
-        <div className="wb-mpanel">
-          <div className="wb-kids-body">
-            {v2(lang, "compareComingSoon")}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

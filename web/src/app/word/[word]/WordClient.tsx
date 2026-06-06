@@ -864,23 +864,18 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       return;
     }
     if (id === "compare") {
-      // Compare is a Deep-tier feature (product call — pairs with
-      // quiz/practice as the advanced learning surface, Clear stays
-      // focused on understanding a single word). Anonymous → signup;
-      // basic/clear → pricing; deep → /compare with the word prefilled.
+      // "Word games" entry point — Deep-tier feature. Routes to the
+      // /play hub where the actual five game modes live. Anonymous →
+      // signup; basic/clear → pricing; deep → /play.
       if (!user) {
         promptLogin(v2(lang, "actionCompare"));
         return;
       }
       if (plan !== "deep") {
-        router.push("/pricing");
+        router.push(href("/pricing"));
         return;
       }
-      if (result?.word) {
-        router.push(`/compare?w=${encodeURIComponent(result.word)}`);
-      } else {
-        router.push("/compare");
-      }
+      router.push(href("/play"));
       return;
     }
     if (id === "kids") {
