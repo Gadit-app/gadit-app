@@ -4612,6 +4612,19 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   line-height: 1.45;
   cursor: pointer;
 }
+/* Top-of-form variant: subtle teal-tinted background so the gate
+   reads as a 'please check this first' panel rather than a quiet
+   afterthought tucked beneath the password field. Padding gives it
+   the visual weight to register as the first action a signing-up
+   user has to take. */
+.wordbook .wb-login-age-top {
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: var(--teal-soft, #E0F6F4);
+  border: 1px solid rgba(14, 165, 165, 0.25);
+  border-radius: 10px;
+}
 .wordbook .wb-login-age input[type="checkbox"] {
   margin-top: 3px;
   width: 15px;

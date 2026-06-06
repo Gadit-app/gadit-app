@@ -211,11 +211,41 @@ export function LoginModalV2() {
 
         {loginReason && <p className="wb-login-reason">{loginReason}</p>}
 
+        {/* Age + terms gate — promoted ABOVE the auth buttons in signup
+            mode. The previous layout had it tucked at the bottom of the
+            email form, so a user who clicked the Google button first
+            (the natural visual order) got bounced with an opaque
+            'please accept terms' error pointing at a control they
+            hadn't seen yet. With the checkbox up here it's the first
+            thing a signing-up user reads, and both auth paths visibly
+            depend on it (the Google button + email submit both show
+            their disabled state until it's checked). */}
+        {mode === "signup" && (
+          <label className="wb-login-age wb-login-age-top">
+            <input
+              type="checkbox"
+              checked={ageAccepted}
+              onChange={(e) => setAgeAccepted(e.target.checked)}
+            />
+            <span>
+              {v2(lang, "loginAgeTermsLine")}{" "}
+              <a href={href("/terms")} target="_blank" onClick={(e) => e.stopPropagation()}>
+                {v2(lang, "loginTermsLinkLabel")}
+              </a>
+              {" · "}
+              <a href={href("/privacy")} target="_blank" onClick={(e) => e.stopPropagation()}>
+                {v2(lang, "loginPrivacyLinkLabel")}
+              </a>
+            </span>
+          </label>
+        )}
+
         <button
           type="button"
           onClick={handleGoogle}
-          disabled={busy}
+          disabled={busy || (mode === "signup" && !ageAccepted)}
           className="wb-login-google"
+          title={mode === "signup" && !ageAccepted ? v2(lang, "loginErrorAgeRequired") : undefined}
         >
           <GoogleG />
           <span>{v2(lang, "loginContinueWithGoogle")}</span>
@@ -277,29 +307,14 @@ export function LoginModalV2() {
             </div>
           </div>
 
-          {mode === "signup" && (
-            <label className="wb-login-age">
-              <input
-                type="checkbox"
-                checked={ageAccepted}
-                onChange={(e) => setAgeAccepted(e.target.checked)}
-              />
-              <span>
-                {v2(lang, "loginAgeTermsLine")}{" "}
-                <a href={href("/terms")} target="_blank" onClick={(e) => e.stopPropagation()}>
-                  {v2(lang, "loginTermsLinkLabel")}
-                </a>
-                {" · "}
-                <a href={href("/privacy")} target="_blank" onClick={(e) => e.stopPropagation()}>
-                  {v2(lang, "loginPrivacyLinkLabel")}
-                </a>
-              </span>
-            </label>
-          )}
-
+          {/* Age + terms checkbox now lives ABOVE the Google button —
+              not inside this form — so a user who started a signup by
+              clicking Google sees and accepts the gate before they get
+              an error. Both signup paths use the same shared ageAccepted
+              state, including the disable below. */}
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || (mode === "signup" && !ageAccepted)}
             className="wb-login-submit"
           >
             {busy && <Spinner />}
