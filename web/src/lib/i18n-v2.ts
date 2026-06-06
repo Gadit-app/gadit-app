@@ -379,6 +379,7 @@ export interface V2Strings {
   // Empty/loading panels on the result page
   imageGeneratingLabel: string;
   imageGeneratingHint: string;
+  imageOpenFullAria: string;
   kidsComingSoon: string;
   compareComingSoon: string;
   shareDefinitionAria: string;
@@ -753,6 +754,7 @@ const en: V2Strings = {
   wordOriginBreakdown: "Word parts",
   imageGeneratingLabel: "Generating image…",
   imageGeneratingHint: "This usually takes 10 to 15 seconds.",
+  imageOpenFullAria: "Open image full size",
   kidsComingSoon: "Kids' explanation coming soon.",
   compareComingSoon: "Word games coming soon.",
   shareDefinitionAria: "Share this definition",
@@ -1130,6 +1132,7 @@ const he: V2Strings = {
   wordOriginBreakdown: "חלקי מילה",
   imageGeneratingLabel: "יוצר תמונה…",
   imageGeneratingHint: "זה לוקח בדרך כלל 10 עד 15 שניות.",
+  imageOpenFullAria: "פתחו את התמונה בגודל מלא",
   kidsComingSoon: "הסבר לילדים יופיע כאן בקרוב.",
   compareComingSoon: "משחקי מילים בקרוב.",
   shareDefinitionAria: "שתפו הגדרה זו",
@@ -1520,6 +1523,7 @@ const ar: V2Strings = {
   wordOriginBreakdown: "أجزاء الكلمة",
   imageGeneratingLabel: "جارٍ إنشاء الصورة…",
   imageGeneratingHint: "يستغرق هذا عادة من 10 إلى 15 ثانية.",
+  imageOpenFullAria: "افتح الصورة بالحجم الكامل",
   kidsComingSoon: "شرح للأطفال سيظهر هنا قريبًا.",
   compareComingSoon: "ألعاب الكلمات قريبًا.",
   shareDefinitionAria: "شارك هذا التعريف",
@@ -1893,6 +1897,7 @@ const ru: Partial<V2Strings> = {
   wordOriginBreakdown: "Части слова",
   imageGeneratingLabel: "Создаём изображение…",
   imageGeneratingHint: "Обычно это занимает 10–15 секунд.",
+  imageOpenFullAria: "Открыть изображение в полный размер",
   kidsComingSoon: "Объяснение для детей появится здесь скоро.",
   compareComingSoon: "Игры со словами — скоро.",
   shareDefinitionAria: "Поделиться этим определением",
@@ -2266,6 +2271,7 @@ const es: Partial<V2Strings> = {
   wordOriginBreakdown: "Partes de la palabra",
   imageGeneratingLabel: "Generando imagen…",
   imageGeneratingHint: "Suele tardar entre 10 y 15 segundos.",
+  imageOpenFullAria: "Abrir imagen a tamaño completo",
   kidsComingSoon: "Explicación para niños llegará pronto.",
   compareComingSoon: "Juegos de palabras pronto.",
   shareDefinitionAria: "Compartir esta definición",
@@ -2637,6 +2643,7 @@ const pt: Partial<V2Strings> = {
   wordOriginBreakdown: "Partes da palavra",
   imageGeneratingLabel: "Gerando imagem…",
   imageGeneratingHint: "Geralmente leva de 10 a 15 segundos.",
+  imageOpenFullAria: "Abrir imagem em tamanho completo",
   kidsComingSoon: "Explicação para crianças em breve.",
   compareComingSoon: "Jogos com palavras em breve.",
   shareDefinitionAria: "Compartilhar esta definição",
@@ -3008,6 +3015,7 @@ const fr: Partial<V2Strings> = {
   wordOriginBreakdown: "Parties du mot",
   imageGeneratingLabel: "Génération de l'image…",
   imageGeneratingHint: "Cela prend généralement 10 à 15 secondes.",
+  imageOpenFullAria: "Ouvrir l'image en taille réelle",
   kidsComingSoon: "L'explication pour enfants arrive bientôt.",
   compareComingSoon: "Jeux de mots bientôt disponibles.",
   shareDefinitionAria: "Partager cette définition",
@@ -3069,6 +3077,7 @@ const de: Partial<V2Strings> = {
   generateLabel: "Erstellen",
   imageGeneratingLabel: "Bild wird erstellt…",
   imageGeneratingHint: "Das dauert normalerweise 10 bis 15 Sekunden.",
+  imageOpenFullAria: "Bild in voller Größe öffnen",
   compareComingSoon: "Wortspiele kommen bald.",
   // Share / save / listen on the result page
   shareLabel: "Teilen",
@@ -3100,6 +3109,7 @@ const cs: Partial<V2Strings> = {
   generateLabel: "Vytvořit",
   imageGeneratingLabel: "Vytvářím obrázek…",
   imageGeneratingHint: "Obvykle to trvá 10 až 15 sekund.",
+  imageOpenFullAria: "Otevřít obrázek v plné velikosti",
   compareComingSoon: "Slovní hry už brzy.",
   // Share / save / listen on the result page
   shareLabel: "Sdílet",

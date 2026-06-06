@@ -40,6 +40,7 @@ import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
 import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
+import { ImageLightbox } from "@/components/design/ImageLightbox";
 
 // ─── Types matching the live /api/define schema ────────────────
 export type Plan = "basic" | "clear" | "deep";
@@ -509,6 +510,9 @@ function MeaningEntry({
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
   // image + kids + compare render inline; compose + quiz fire modals.
   const [openTab, setOpenTab] = useState<"image" | "kids" | "compare" | null>(null);
+  // Lightbox state — opens when the user taps the generated image
+  // inside this meaning's image tab.
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   function handleTabClick(tab: TabId) {
     const unlocked = tabUnlocked(tab, plan);
@@ -646,7 +650,23 @@ function MeaningEntry({
         <div className="wb-mpanel">
           {imageUrl ? (
             <div className="wb-mpanel-image">
-              <img src={imageUrl} alt="" />
+              <button
+                type="button"
+                className="wb-mpanel-image-btn"
+                onClick={() => setLightboxOpen(true)}
+                aria-label={v2(lang, "imageOpenFullAria")}
+                title={v2(lang, "imageOpenFullAria")}
+              >
+                <img src={imageUrl} alt={word} />
+              </button>
+              {lightboxOpen && (
+                <ImageLightbox
+                  src={imageUrl}
+                  alt={word}
+                  closeLabel={v2(lang, "backLabel")}
+                  onClose={() => setLightboxOpen(false)}
+                />
+              )}
             </div>
           ) : imageGenerating ? (
             // ACTIVE generating state — distinct from the static empty
