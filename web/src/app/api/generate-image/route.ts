@@ -20,11 +20,19 @@ function cacheKey(word: string, meaning: string, uiLang: string): string {
 }
 
 function buildDallePrompt(word: string, meaning: string): string {
-  // Goal: a simple, instantly-recognizable photograph of the concept.
-  // We give DALL-E both the word AND the definition to anchor the subject,
-  // and demand a plain, realistic image — not artistic interpretations.
-  const trimmedMeaning = meaning.length > 200 ? meaning.slice(0, 200) : meaning;
-  return `A clear, simple, realistic photograph that unambiguously shows: "${word}" — defined as: ${trimmedMeaning}. The image must show the actual everyday thing the word refers to, exactly as a person would recognize it in real life. Plain neutral background, well-lit, the subject is the main focus and clearly identifiable. NOT artistic, NOT abstract, NOT decorative — just a clean recognizable example of the thing itself. ABSOLUTELY NO text, letters, words, numbers, captions, or written characters anywhere in the image.`;
+  // V2 prompt — rewritten after Andrea (CZ beta) hit a consistent
+  // 'image_generation_failed' on Czech words. The old prompt stacked
+  // four double-negatives ('NOT artistic, NOT abstract, NOT decorative,
+  // ABSOLUTELY NO text') which DALL-E sometimes treats as a safety
+  // signal and refuses outright. We also wrapped the headword in
+  // straight quotes, and a Czech meaning that happens to contain its
+  // OWN quotes ('např. "košile"') broke the sentence boundary.
+  //
+  // New approach: positive instructions only, no quote-wrapped headword,
+  // meaning truncated tight, single instruction about text.
+  const trimmedMeaning = meaning.length > 180 ? meaning.slice(0, 180).replace(/[“”"]+/g, "") : meaning.replace(/[“”"]+/g, "");
+  const cleanWord = word.replace(/[“”"]+/g, "");
+  return `A clean, realistic photograph of ${cleanWord}. Context: ${trimmedMeaning}. Show the actual everyday object or scene, well-lit, with a plain neutral background. The subject fills the frame and is instantly recognizable. The image contains no text, no letters, no numbers, and no written characters.`;
 }
 
 export async function POST(req: NextRequest) {
@@ -72,28 +80,60 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate image via DALL-E 3
+    // Generate image via DALL-E 3. If the rich prompt is refused by
+    // the safety filter (content_policy_violation) we retry once with
+    // a minimal prompt that strips the meaning down to just the
+    // headword — safer for the filter, still useful as an
+    // illustration.
+    async function callDalle(prompt: string) {
+      return fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "dall-e-3",
+          prompt,
+          n: 1,
+          size: "1024x1024",
+          quality: "standard",
+          response_format: "b64_json",
+        }),
+      });
+    }
     const dallePrompt = buildDallePrompt(word, meaning);
-    const dalleRes = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "dall-e-3",
-        prompt: dallePrompt,
-        n: 1,
-        size: "1024x1024",
-        quality: "standard",
-        response_format: "b64_json",
-      }),
-    });
+    let dalleRes = await callDalle(dallePrompt);
 
     if (!dalleRes.ok) {
       const errText = await dalleRes.text();
-      console.error("DALL-E error:", dalleRes.status, errText);
-      return NextResponse.json({ error: "image_generation_failed", details: errText.slice(0, 300) }, { status: 502 });
+      console.error("DALL-E error (attempt 1):", dalleRes.status, errText.slice(0, 400));
+      // Content-policy refusal — retry with a minimal, photo-only prompt
+      // that omits the meaning entirely. This recovers cases where the
+      // meaning carried a sensitive token (medical, anatomical, etc.)
+      // without dropping the user's request.
+      const isPolicyRefusal =
+        errText.includes("content_policy_violation") ||
+        errText.includes("safety system") ||
+        dalleRes.status === 400;
+      if (isPolicyRefusal) {
+        const cleanWord = word.replace(/[“”"]+/g, "");
+        const minimalPrompt = `A clean realistic photograph of ${cleanWord}. Plain neutral background. The subject fills the frame. No text in the image.`;
+        dalleRes = await callDalle(minimalPrompt);
+        if (!dalleRes.ok) {
+          const errText2 = await dalleRes.text();
+          console.error("DALL-E error (attempt 2):", dalleRes.status, errText2.slice(0, 400));
+          return NextResponse.json(
+            { error: "image_generation_failed", details: errText2.slice(0, 300) },
+            { status: 502 },
+          );
+        }
+      } else {
+        return NextResponse.json(
+          { error: "image_generation_failed", details: errText.slice(0, 300) },
+          { status: 502 },
+        );
+      }
     }
 
     const dalleData = await dalleRes.json();
