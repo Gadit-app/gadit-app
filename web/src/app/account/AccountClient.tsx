@@ -173,12 +173,45 @@ export function AccountPage() {
         throw new Error(j.message ?? j.error ?? `HTTP ${res.status}`);
       }
       const data = (await res.json()) as {
-        words: Array<{ word: string; result: unknown }>;
+        words: Array<{
+          word: string;
+          language: string;
+          result: { meanings?: Array<{ meaning?: string }> } & Record<string, unknown>;
+        }>;
       };
-      // Write every word to IDB. Pinned=true so they survive any future
-      // auto-prune — the user explicitly opted into having these.
+      // Two writes per word:
+      // 1. IndexedDB so the full result is available offline (pinned=true
+      //    protects it from any future auto-prune).
+      // 2. The user's Firestore Notebook so the words actually SHOW UP
+      //    somewhere the user can browse them — without this they would
+      //    sit invisibly in IDB with no UI surface.
+      const notebookEntries: Array<{ word: string; language: string; meaning: string }> = [];
       for (const w of data.words) {
         await setCachedWord(lang, w.word, w.result, { pinned: true });
+        // Short meaning for the Notebook card — use the first meaning
+        // line, trimmed. Same shape the per-word save path uses.
+        const firstMeaning = w.result?.meanings?.[0]?.meaning ?? "";
+        if (firstMeaning) {
+          notebookEntries.push({
+            word: w.word,
+            language: w.language || "",
+            meaning: firstMeaning,
+          });
+        }
+      }
+      // Bulk-add to the Notebook via PUT /api/notebook. Chunked to 500
+      // to match the endpoint's per-request cap (it'll reject larger).
+      const CHUNK = 500;
+      for (let i = 0; i < notebookEntries.length; i += CHUNK) {
+        const slice = notebookEntries.slice(i, i + CHUNK);
+        await fetch("/api/notebook", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({ entries: slice }),
+        });
       }
       const fresh = await countCached();
       setOfflineCount(fresh);
@@ -347,9 +380,9 @@ export function AccountPage() {
 
       <main
         style={{
-          maxWidth: 1280,
+          maxWidth: 880,
           margin: "0 auto",
-          padding: "clamp(28px, 5vw, 56px) clamp(24px, 5vw, 56px)",
+          padding: "clamp(28px, 5vw, 56px) clamp(24px, 5vw, 32px)",
           minHeight: "calc(100vh - 220px)",
         }}
       >
@@ -597,6 +630,7 @@ function UsageSection({
   onDownloadPack: () => void;
 }) {
   const { lang } = useLang();
+  const href = useHref();
   return (
     <section>
       <SectionLabel>{v2(lang, "accountUsageThisMonth")}</SectionLabel>
@@ -682,26 +716,65 @@ function UsageSection({
           {packError && (
             <div style={{ fontSize: 12, color: "#B91C1C", marginBottom: 8 }}>{packError}</div>
           )}
-          <button
-            type="button"
-            onClick={onDownloadPack}
-            disabled={packState === "downloading"}
-            style={{
-              padding: "9px 18px",
-              borderRadius: 10,
-              background: packState === "downloading" ? "var(--ink-muted, #9CA3AF)" : tierColor(data.plan),
-              color: "white",
-              border: "none",
-              cursor: packState === "downloading" ? "default" : "pointer",
-              fontFamily: fontBody(lang),
-              fontSize: 13,
-              fontWeight: 600,
-            }}
-          >
-            {packState === "downloading"
-              ? v2(lang, "offlineDownloadingPack")
-              : v2(lang, "offlineDownloadPack")}
-          </button>
+          {packState === "done" ? (
+            // After a successful download, swap the button for a confirmation
+            // line + a direct link to /notebook so the user sees where the
+            // words actually went. The whole 'download offline pack' flow
+            // is meaningless without this hand-off — the user just spent a
+            // tap on something and needs the payoff visible.
+            <div style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.5 }}>
+              <div style={{ color: tierColor(data.plan), fontWeight: 600, marginBottom: 6 }}>
+                {lang === "he" ? "✓ נוסף למחברת שלכם"
+                  : lang === "ar" ? "✓ تمت الإضافة إلى دفترك"
+                  : lang === "ru" ? "✓ Добавлено в тетрадь"
+                  : lang === "es" ? "✓ Añadido a tu cuaderno"
+                  : lang === "pt" ? "✓ Adicionado ao seu caderno"
+                  : lang === "fr" ? "✓ Ajouté à votre carnet"
+                  : lang === "de" ? "✓ Zum Notizbuch hinzugefügt"
+                  : lang === "cs" ? "✓ Přidáno do sešitu"
+                  : "✓ Added to your Notebook"}
+              </div>
+              <a
+                href={href("/notebook")}
+                style={{
+                  color: tierColor(data.plan),
+                  textDecoration: "underline",
+                  fontWeight: 500,
+                }}
+              >
+                {lang === "he" ? "פתח את המחברת ←"
+                  : lang === "ar" ? "← افتح الدفتر"
+                  : lang === "ru" ? "Открыть тетрадь →"
+                  : lang === "es" ? "Abrir cuaderno →"
+                  : lang === "pt" ? "Abrir caderno →"
+                  : lang === "fr" ? "Ouvrir le carnet →"
+                  : lang === "de" ? "Notizbuch öffnen →"
+                  : lang === "cs" ? "Otevřít sešit →"
+                  : "Open Notebook →"}
+              </a>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onDownloadPack}
+              disabled={packState === "downloading"}
+              style={{
+                padding: "9px 18px",
+                borderRadius: 10,
+                background: packState === "downloading" ? "var(--ink-muted, #9CA3AF)" : tierColor(data.plan),
+                color: "white",
+                border: "none",
+                cursor: packState === "downloading" ? "default" : "pointer",
+                fontFamily: fontBody(lang),
+                fontSize: 13,
+                fontWeight: 600,
+              }}
+            >
+              {packState === "downloading"
+                ? v2(lang, "offlineDownloadingPack")
+                : v2(lang, "offlineDownloadPack")}
+            </button>
+          )}
         </div>
       )}
     </section>

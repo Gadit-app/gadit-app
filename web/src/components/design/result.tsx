@@ -434,10 +434,27 @@ function TabIcon({ name }: { name: TabId }) {
         </svg>
       );
     case "kids":
+      // Child silhouette — big head (relative to body) + a small hair
+      // tuft is the most universal 'kid' icon. Smiley face inside reads
+      // as the warmth of the kids-explanation tone we want users to
+      // associate with this tab. Avoids gender-coded markers (no
+      // pigtails / bows).
       return (
         <svg {...common}>
-          <circle cx="12" cy="9" r="3.2" />
-          <path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6" />
+          {/* Head — larger than the previous icon and pulled higher so
+              the child-vs-adult proportion is unambiguous. */}
+          <circle cx="12" cy="8" r="4" />
+          {/* Hair tuft / cowlick — universal "this is a kid" cue. */}
+          <path d="M11.6 4 c0.4 -1 1.2 -1 1.6 0" />
+          {/* Eyes — tiny dots filled so they read at 16px without
+              becoming pure noise. */}
+          <circle cx="10.6" cy="7.8" r="0.55" fill="currentColor" stroke="none" />
+          <circle cx="13.4" cy="7.8" r="0.55" fill="currentColor" stroke="none" />
+          {/* Smile */}
+          <path d="M10.8 9.5 q1.2 1.0 2.4 0" />
+          {/* Compact, rounded body — short next to the big head so the
+              child proportions stay legible at small sizes. */}
+          <path d="M6.5 21 v-3.5 a5.5 5.5 0 0 1 11 0 v3.5" />
         </svg>
       );
     case "compose":
