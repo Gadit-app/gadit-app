@@ -5912,3 +5912,398 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     animation: none;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+ * WordGameModal — per-word mini Word-Games session
+ *
+ * Opens from the "משחקי מילים" tab on a meaning card. Same accent
+ * vocabulary as /play (purple+amber) but framed as an overlay over
+ * the word page rather than a route. Two rounds max: anagram +
+ * fill-blank, both anchored to THIS word.
+ * ───────────────────────────────────────────────────────────── */
+
+.wb-wgm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: wbWgmOverlayIn 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes wbWgmOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.wb-wgm-sheet {
+  background: #fff;
+  width: 100%;
+  max-width: 640px;
+  border-radius: 24px 24px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 96dvh;
+  animation: wbWgmSheetIn 320ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes wbWgmSheetIn {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@media (min-width: 640px) {
+  .wb-wgm-overlay { align-items: center; padding: 24px; }
+  .wb-wgm-sheet { border-radius: 24px; max-height: 88dvh; }
+}
+
+.wb-wgm-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  flex-shrink: 0;
+}
+.wb-wgm-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(15, 23, 42, 0.6);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wb-wgm-close:hover { background: rgba(15, 23, 42, 0.04); }
+.wb-wgm-close:active { transform: scale(0.95); }
+.wb-wgm-header-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+  flex: 1;
+  text-align: center;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+.wb-wgm-header-word {
+  font-weight: 500;
+  color: rgba(15, 23, 42, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wb-wgm-header-spacer { width: 36px; flex-shrink: 0; }
+
+.wb-wgm-body {
+  padding: 28px 24px 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.wb-wgm-loading { text-align: center; padding: 40px 0; color: rgba(15, 23, 42, 0.55); }
+
+.wb-wgm-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.55);
+  text-align: center;
+}
+.wb-wgm-hint {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(15, 23, 42, 0.7);
+  padding: 14px 16px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.16);
+  border-radius: 12px;
+}
+.wb-wgm-hint-label { font-weight: 600; margin-inline-end: 6px; color: rgb(146, 64, 14); }
+.wb-wgm-hint-text { color: rgb(15, 23, 42); }
+
+/* Anagram slots + tray */
+.wb-wgm-slots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px 12px;
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.16);
+  border-radius: 14px;
+  transition: border-color 200ms, background 200ms;
+}
+.wb-wgm-slots.is-correct {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.06);
+}
+.wb-wgm-slots.is-wrong {
+  border-color: rgba(225, 29, 72, 0.4);
+  background: rgba(225, 29, 72, 0.04);
+  animation: wbWgmShake 220ms ease-in-out;
+}
+@keyframes wbWgmShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.wb-wgm-slot {
+  width: 44px;
+  height: 52px;
+  border-radius: 10px;
+  border: 1.5px dashed rgba(15, 23, 42, 0.18);
+  background: transparent;
+  font-family: var(--wb-font-display, inherit);
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, background 200ms;
+}
+.wb-wgm-slot.is-filled {
+  background: #fff;
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.wb-wgm-slot:active:not(:disabled) { transform: scale(0.95); }
+
+.wb-wgm-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 4px;
+  min-height: 56px;
+}
+.wb-wgm-tile {
+  width: 44px;
+  height: 52px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  font-family: var(--wb-font-display, inherit);
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, background 200ms;
+}
+.wb-wgm-tile:hover:not(:disabled) {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.04);
+}
+.wb-wgm-tile:active:not(:disabled) { transform: scale(0.93); }
+.wb-wgm-reset {
+  align-self: center;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 999px;
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.55);
+  cursor: pointer;
+  transition: background 160ms, transform 160ms;
+}
+.wb-wgm-reset:hover:not(:disabled) { background: rgba(15, 23, 42, 0.04); }
+.wb-wgm-reset:active:not(:disabled) { transform: scale(0.97); }
+
+/* Fill-blank */
+.wb-wgm-prompt {
+  text-align: center;
+  font-size: 15px;
+  color: rgba(15, 23, 42, 0.7);
+}
+.wb-wgm-sentence {
+  font-family: var(--wb-font-display, inherit);
+  font-size: clamp(17px, 2.5vw, 20px);
+  line-height: 1.55;
+  text-align: center;
+  padding: 18px 14px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  color: rgb(15, 23, 42);
+}
+.wb-wgm-blank {
+  display: inline-block;
+  min-width: 72px;
+  padding: 0 8px;
+  margin: 0 2px;
+  border-radius: 6px;
+  background: rgba(79, 70, 229, 0.08);
+  border-bottom: 2px solid rgba(79, 70, 229, 0.4);
+  color: rgb(67, 56, 202);
+  font-weight: 600;
+  transition: background 250ms, color 250ms;
+}
+.wb-wgm-blank.is-revealed {
+  background: rgba(16, 185, 129, 0.10);
+  border-bottom-color: rgba(16, 185, 129, 0.5);
+  color: rgb(5, 150, 105);
+}
+.wb-wgm-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wb-wgm-option {
+  width: 100%;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 12px;
+  text-align: start;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(15, 23, 42);
+  cursor: pointer;
+  min-height: 50px;
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 200ms,
+    background 200ms,
+    opacity 200ms;
+}
+.wb-wgm-option:hover:not(:disabled) {
+  border-color: rgba(14, 165, 165, 0.4);
+  background: rgba(14, 165, 165, 0.03);
+}
+.wb-wgm-option:active:not(:disabled) { transform: scale(0.98); }
+.wb-wgm-option:disabled { cursor: default; }
+.wb-wgm-option.is-correct {
+  background: rgba(16, 185, 129, 0.10);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: rgb(5, 150, 105);
+  font-weight: 600;
+}
+.wb-wgm-option.is-wrong {
+  background: rgba(225, 29, 72, 0.08);
+  border-color: rgba(225, 29, 72, 0.4);
+  color: rgb(190, 18, 60);
+}
+.wb-wgm-option.is-dimmed { opacity: 0.45; }
+
+/* Result */
+.wb-wgm-result {
+  text-align: center;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.wb-wgm-result-headline {
+  font-family: var(--wb-font-display, inherit);
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+  letter-spacing: -0.01em;
+}
+.wb-wgm-result-score {
+  font-family: var(--wb-font-display, inherit);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  margin: 8px 0 4px;
+}
+.wb-wgm-result-num {
+  font-size: clamp(64px, 12vw, 96px);
+  font-weight: 700;
+  color: rgb(13, 148, 148);
+  line-height: 1;
+}
+.wb-wgm-result-denom {
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 500;
+  color: rgba(15, 23, 42, 0.55);
+}
+.wb-wgm-result-line {
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.wb-wgm-result-notice {
+  width: 100%;
+  max-width: 440px;
+  margin: 12px 0;
+  padding: 14px 16px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: 12px;
+  text-align: start;
+}
+.wb-wgm-result-notice-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(146, 64, 14);
+  margin-bottom: 4px;
+}
+.wb-wgm-result-notice-hint {
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.7);
+  line-height: 1.45;
+}
+.wb-wgm-result-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.wb-wgm-cta-primary {
+  padding: 12px 26px;
+  background: rgb(14, 165, 165);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 46px;
+  transition: background 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wb-wgm-cta-primary:hover { background: rgb(13, 148, 148); }
+.wb-wgm-cta-primary:active { transform: scale(0.97); }
+.wb-wgm-cta-ghost {
+  padding: 12px 26px;
+  background: transparent;
+  color: rgb(15, 23, 42);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 46px;
+  transition: background 160ms, transform 160ms;
+}
+.wb-wgm-cta-ghost:hover { background: rgba(15, 23, 42, 0.04); }
+.wb-wgm-cta-ghost:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-wgm-overlay,
+  .wb-wgm-sheet { animation: none; }
+  .wb-wgm-slots.is-wrong { animation: none; }
+  .wb-wgm-close,
+  .wb-wgm-slot,
+  .wb-wgm-tile,
+  .wb-wgm-option,
+  .wb-wgm-cta-primary,
+  .wb-wgm-cta-ghost { transition: none; }
+}

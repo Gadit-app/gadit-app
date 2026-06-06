@@ -36,6 +36,7 @@ import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
+import { WordGameModal } from "@/components/design/WordGameModal";
 import {
   ReportModalV2,
   type ReportContext,
@@ -368,6 +369,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const [imageError, setImageError] = useState<string | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
+  const [wordGameOpen, setWordGameOpen] = useState(false);
   const [reportContext, setReportContext] = useState<ReportContext | null>(
     null
   );
@@ -864,9 +866,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       return;
     }
     if (id === "compare") {
-      // "Word games" entry point — Deep-tier feature. Routes to the
-      // /play hub where the actual five game modes live. Anonymous →
-      // signup; basic/clear → pricing; deep → /play.
+      // "Word games" entry point — Deep-tier feature. Opens the
+      // WordGameModal which runs a mini-session anchored to THIS word
+      // (anagram + fill-blank). The hub at /play stays as the broad
+      // multi-word session. Anonymous → signup; basic/clear → pricing;
+      // deep → modal.
       if (!user) {
         promptLogin(v2(lang, "actionCompare"));
         return;
@@ -875,7 +879,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         router.push(href("/pricing"));
         return;
       }
-      router.push(href("/play"));
+      setWordGameOpen(true);
       return;
     }
     if (id === "kids") {
@@ -1194,6 +1198,17 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           onClose={() => setQuizOpen(false)}
           word={result.word}
           meaning={result.meanings[0]?.meaning ?? ""}
+        />
+      )}
+
+      {result && (
+        <WordGameModal
+          open={wordGameOpen}
+          onClose={() => setWordGameOpen(false)}
+          word={result.word}
+          language={result.language}
+          meaning={result.meanings[0]?.meaning ?? ""}
+          examples={result.meanings.flatMap((m) => m.examples ?? []).filter((s) => typeof s === "string" && s.trim().length > 4)}
         />
       )}
 
