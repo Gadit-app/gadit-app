@@ -595,11 +595,19 @@ function PlanSection({
               fontFamily: fontDisplay(lang),
               fontStyle: displayItalic(lang),
               fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
-              fontSize: "clamp(28px, 3.5vw, 44px)",
-              lineHeight: 1.1,
+              // Slightly smaller than before — 'Deep' / 'Clear' is a
+              // proper noun at this point, not a hero heading, so it
+              // doesn't need display-sized treatment to feel right.
+              fontSize: "clamp(22px, 2.8vw, 34px)",
+              lineHeight: 1,
               color: tColor,
               letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
-              margin: 0,
+              // Negative top margin pulls it back toward the 'Plan'
+              // SectionLabel above. The label has 24px below it by
+              // default; this brings the tier name about 12px closer
+              // so the pair reads as 'label: value' rather than two
+              // separate floating pieces of type.
+              margin: "-12px 0 0",
             }}
           >
             {tierName}
@@ -736,20 +744,20 @@ function OfflinePackSection({
   const href = useHref();
   if (data.plan === "basic") return null;
   return (
-    <section>
+    <section style={{ fontFamily: fontBody(lang) }}>
       <SectionLabel>{v2(lang, "offlinePackHeader")}</SectionLabel>
-      <div
-        style={{
-          fontFamily: fontBody(lang),
-        }}
-      >
-          <div style={{ fontSize: 14, color: "var(--ink-muted, #6B7280)", marginBottom: 16, lineHeight: 1.5 }}>
-            {v2(lang, "offlinePackDescription")}
-          </div>
-          {packError && (
-            <div style={{ fontSize: 12, color: "#B91C1C", marginBottom: 8 }}>{packError}</div>
-          )}
-          {packState === "done" ? (
+      <div style={{ fontSize: 14, color: "var(--ink-muted, #6B7280)", marginBottom: 16, lineHeight: 1.5 }}>
+        {v2(lang, "offlinePackDescription")}
+      </div>
+      {packError && (
+        <div style={{ fontSize: 12, color: "#B91C1C", marginBottom: 8 }}>{packError}</div>
+      )}
+      {/* The CTA sits in a flex row aligned to the section's inline-start
+          so it lines up with the SectionLabel and description text above
+          it. Without an explicit alignment cue the inline-block button
+          drifted off-axis on some viewports. */}
+      <div style={{ display: "flex", justifyContent: "flex-start" }}>
+        {packState === "done" ? (
             // After a successful download, swap the button for a confirmation
             // line + a direct link to /notebook so the user sees where the
             // words actually went. The whole 'download offline pack' flow
@@ -909,10 +917,12 @@ function AccountSection({
   const email = data.email ?? emailFallback ?? "";
   return (
     <section>
-      {/* Section header dropped — 'חשבון / Account' inside the
-          'Your space' page read as redundant and didn't help anyone
-          parse what's below. Email + sign-out + delete are now an
-          unlabelled utility row at the bottom of the card. */}
+      {/* Section header restored — once each topic lives in its own
+          card, having a label per card is the consistency cue users
+          expect (the previous 'no header at the bottom' looked like
+          someone forgot to label this card). 'חשבון / Account' here
+          refers to login + email, not the page as a whole. */}
+      <SectionLabel>{v2(lang, "accountSectionLabel")}</SectionLabel>
 
       {/* Email row — label and value on the same line so they read as
           one fact. The address itself is wrapped in unicode-bidi:isolate
