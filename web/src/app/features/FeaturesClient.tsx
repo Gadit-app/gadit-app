@@ -84,6 +84,7 @@ interface Feature {
 }
 
 const COPY: Record<string, {
+  heroEyebrow: string;
   heroTitle: string;
   heroSub: string;
   ctaPrimary: string;
@@ -92,87 +93,111 @@ const COPY: Record<string, {
   pricing: string;
   search: string;
   features: string;
+  sectionLabel: string;
+  finalCtaTitle: string;
+  finalCtaSub: string;
+  finalCtaBtn: string;
   tierLabel: { basic: string; clear: string; deep: string };
   list: Feature[];
 }> = {
   he: {
-    heroTitle: "מה Gadit נותן לכם:",
-    heroSub: "",
-    ctaPrimary: "נסו עכשיו חינם",
-    ctaSecondary: "",
+    heroEyebrow: "פיצ'רים",
+    heroTitle: "כל מה שמילון אמור היה לעשות מזמן.",
+    heroSub: "Gadit מבין כל מילה עד הסוף. הוא לא רק נותן הגדרה אחת ותו לא, הוא מציג כל משמעות, דוגמאות לפי הקשר, ניבים, מקור היסטורי, ומה שמילון רגיל פשוט לא ידע איך לתת.",
+    ctaPrimary: "התחילו חינם",
+    ctaSecondary: "צפו בתמחור",
     signin: "התחברות", pricing: "תמחור", search: "חיפוש", features: "פיצ'רים",
+    sectionLabel: "מה תקבלו",
+    finalCtaTitle: "מוכנים לנסות?",
+    finalCtaSub: "התחילו עם Basic לגמרי חינם. שדרוג בשבריר שניה, רק כשתרצו לראות יותר.",
+    finalCtaBtn: "התחילו עכשיו",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
-      { id: "definitions", icon: "definitions", tier: "basic", title: "כל ההגדרות למילה",                              body: "" },
-      { id: "examples",    icon: "examples",    tier: "basic", title: "דוגמאות של משפטים לפי הקשר",                  body: "" },
-      { id: "idioms",      icon: "idioms",      tier: "basic", title: "ניבים וצירופי מילים",                          body: "" },
-      { id: "origin",      icon: "origin",      tier: "basic", title: "מקור המילה",                                    body: "" },
-      { id: "kids",        icon: "kids",        tier: "clear", title: "הסבר לילדים",                                   body: "" },
-      { id: "image",       icon: "image",       tier: "clear", title: "המחשת המילה בתמונה",                          body: "" },
-      { id: "notebook",    icon: "notebook",    tier: "clear", title: "מחברת מילים אישית",                            body: "" },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "חיבור משפט עם המילה וקבלת משוב",            body: "" },
-      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "חידונים מותאמים אישית",                       body: "" },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "משחקי מילים",                                  body: "" },
+      { id: "definitions", icon: "definitions", tier: "basic", title: "כל ההגדרות למילה",                  body: "כל המשמעויות של המילה, גם הנדירות, מסודרות לפי שכיחות שימוש." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "דוגמאות לפי הקשר",                  body: "שלושה משפטים אמיתיים לכל הגדרה, שעוזרים לתפוס את ההקשר במכה." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "ניבים וצירופי מילים",               body: "ביטויים שהמילה חלק מהם, יחד עם פירוש הביטוי כולו." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "מקור המילה",                        body: "מאיזו שפה הגיעה המילה, ומה היא במקור הייתה." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "הסבר לילדים",                       body: "הסבר פשוט וברור, בשפה שילד יבין בלי מונחים מסובכים." },
+      { id: "image",       icon: "image",       tier: "clear", title: "המחשת המילה בתמונה",                body: "תמונה ייחודית לכל מילה, נוצרת ב-AI לפי המשמעות וההקשר." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "מחברת מילים אישית",                 body: "שמרו מילים שאתם רוצים לזכור. זמינות גם בלי חיבור לאינטרנט." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "חיברו משפט וקבלו משוב",             body: "כתבו משפט משלכם עם המילה, וקבלו תיקון ומשוב מיידי." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "חידונים מותאמים אישית",             body: "חידון יומי על המילים שלמדתם, כדי שהן יישארו אצלכם לזמן ארוך." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "משחקי מילים",                       body: "משחקים שבונים אוצר מילים: שיוך, ניחוש, יצירת קשרים בין מילים." },
     ],
   },
   en: {
-    heroTitle: "What Gadit gives you:",
-    heroSub: "",
-    ctaPrimary: "Try it now",
+    heroEyebrow: "Features",
+    heroTitle: "What a dictionary should have been doing all along.",
+    heroSub: "Gadit understands a word all the way through. Not one definition and done. Every meaning, real sentences in context, idioms, origin, and the parts a regular dictionary just never knew how to show.",
+    ctaPrimary: "Start free",
     ctaSecondary: "See pricing",
     signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features",
+    sectionLabel: "What you get",
+    finalCtaTitle: "Ready to try it?",
+    finalCtaSub: "Start with Basic, completely free. Upgrade in a tap, only when you want more.",
+    finalCtaBtn: "Start now",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
-      { id: "definitions", icon: "definitions", tier: "basic", title: "Every definition of the word",          body: "" },
-      { id: "examples",    icon: "examples",    tier: "basic", title: "Sentence examples by context",         body: "" },
-      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idioms & expressions",                 body: "" },
-      { id: "origin",      icon: "origin",      tier: "basic", title: "Word origin",                          body: "" },
-      { id: "kids",        icon: "kids",        tier: "clear", title: "Kids' explanation",                    body: "" },
-      { id: "image",       icon: "image",       tier: "clear", title: "Word illustrated as an image",         body: "" },
-      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Personal word notebook",               body: "" },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "Compose a sentence and get feedback",  body: "" },
-      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quizzes",                 body: "" },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "Word games",                           body: "" },
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Every definition",                 body: "All meanings of the word, even the rare ones, ordered by how often they're used." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Real sentences in context",        body: "Three real sentences per meaning, so the context lands immediately." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idioms and expressions",           body: "Every expression the word is part of, with the full meaning of the phrase." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Where the word came from",         body: "The language the word started in, and what it originally meant." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Kids' explanation",                body: "A clear, simple version a child can read without any jargon." },
+      { id: "image",       icon: "image",       tier: "clear", title: "The word as an image",             body: "A unique AI image for the word, generated from its meaning and context." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Personal word notebook",           body: "Save the words you want to remember. Available even without internet." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Write a sentence, get feedback",   body: "Compose your own sentence with the word and get instant correction and feedback." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quizzes",             body: "A daily quiz on the words you learned, so they stay with you for the long run." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Word games",                       body: "Games that grow your vocabulary: matching, guessing, building connections between words." },
     ],
   },
   de: {
-    heroTitle: "Was Gadit dir bietet:",
-    heroSub: "",
-    ctaPrimary: "Jetzt kostenlos testen",
+    heroEyebrow: "Funktionen",
+    heroTitle: "Was ein Wörterbuch längst tun sollte.",
+    heroSub: "Gadit versteht ein Wort bis zum Ende. Nicht nur eine Definition. Jede Bedeutung, echte Beispielsätze im Kontext, Redewendungen, Herkunft und alles, was ein normales Wörterbuch nie zeigen konnte.",
+    ctaPrimary: "Kostenlos starten",
     ctaSecondary: "Preise ansehen",
     signin: "Anmelden", pricing: "Preise", search: "Suche", features: "Funktionen",
+    sectionLabel: "Das bekommst du",
+    finalCtaTitle: "Bereit, es zu testen?",
+    finalCtaSub: "Beginne mit Basic, völlig kostenlos. Upgrade in einem Tipp, sobald du mehr willst.",
+    finalCtaBtn: "Jetzt starten",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
-      { id: "definitions", icon: "definitions", tier: "basic", title: "Jede Definition des Wortes",            body: "" },
-      { id: "examples",    icon: "examples",    tier: "basic", title: "Beispielsätze im Kontext",              body: "" },
-      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Redewendungen & Ausdrücke",             body: "" },
-      { id: "origin",      icon: "origin",      tier: "basic", title: "Wortursprung",                          body: "" },
-      { id: "kids",        icon: "kids",        tier: "clear", title: "Erklärung für Kinder",                  body: "" },
-      { id: "image",       icon: "image",       tier: "clear", title: "Wort als Bild dargestellt",             body: "" },
-      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Persönliches Wörter-Notizbuch",         body: "" },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "Satz schreiben und Feedback erhalten",  body: "" },
-      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalisierte Quizze",                body: "" },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "Wortspiele",                            body: "" },
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Jede Definition",                   body: "Alle Bedeutungen eines Wortes, auch die seltenen, geordnet nach Häufigkeit." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Echte Sätze im Kontext",            body: "Drei echte Beispielsätze pro Bedeutung, damit der Kontext sofort sitzt." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Redewendungen und Ausdrücke",       body: "Jeder Ausdruck, in dem das Wort vorkommt, samt vollständiger Bedeutung der Phrase." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Woher das Wort stammt",             body: "Die Ursprungssprache des Wortes und seine ursprüngliche Bedeutung." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Erklärung für Kinder",              body: "Eine klare, einfache Version, die ein Kind ohne Fachjargon lesen kann." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Das Wort als Bild",                 body: "Ein einzigartiges KI-Bild zum Wort, generiert aus Bedeutung und Kontext." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Persönliches Wörter-Notizbuch",     body: "Speichere Wörter, die du dir merken willst. Auch ohne Internet verfügbar." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Satz schreiben, Feedback erhalten", body: "Schreibe deinen eigenen Satz mit dem Wort und erhalte sofort Korrektur und Feedback." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalisierte Quizze",            body: "Ein tägliches Quiz zu den Wörtern, die du gelernt hast, damit sie bleiben." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Wortspiele",                        body: "Spiele, die deinen Wortschatz aufbauen: Zuordnen, Raten, Verbindungen knüpfen." },
     ],
   },
   cs: {
-    heroTitle: "Co ti Gadit dává:",
-    heroSub: "",
-    ctaPrimary: "Vyzkoušej zdarma",
-    ctaSecondary: "Ceník",
+    heroEyebrow: "Funkce",
+    heroTitle: "Co měl slovník dělat odjakživa.",
+    heroSub: "Gadit rozumí slovu úplně. Ne jen jedna definice a hotovo. Každý význam, skutečné věty v kontextu, idiomy, původ a to, co běžný slovník nikdy neuměl ukázat.",
+    ctaPrimary: "Začni zdarma",
+    ctaSecondary: "Zobrazit ceník",
     signin: "Přihlásit se", pricing: "Ceník", search: "Hledat", features: "Funkce",
+    sectionLabel: "Co získáš",
+    finalCtaTitle: "Připraven to zkusit?",
+    finalCtaSub: "Začni s Basicem úplně zdarma. Upgrade jediným ťuknutím, jakmile budeš chtít víc.",
+    finalCtaBtn: "Začni teď",
     tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
     list: [
-      { id: "definitions", icon: "definitions", tier: "basic", title: "Každá definice slova",                  body: "" },
-      { id: "examples",    icon: "examples",    tier: "basic", title: "Příklady vět podle kontextu",           body: "" },
-      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idiomy a slovní spojení",               body: "" },
-      { id: "origin",      icon: "origin",      tier: "basic", title: "Původ slova",                           body: "" },
-      { id: "kids",        icon: "kids",        tier: "clear", title: "Vysvětlení pro děti",                   body: "" },
-      { id: "image",       icon: "image",       tier: "clear", title: "Slovo znázorněné obrázkem",             body: "" },
-      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Osobní sešit slov",                     body: "" },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "Napiš větu a získej zpětnou vazbu",     body: "" },
-      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalizované kvízy",                 body: "" },
-      { id: "compare",     icon: "compare",     tier: "deep",  title: "Slovní hry",                            body: "" },
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Každá definice",                     body: "Všechny významy slova, i ty vzácné, seřazené podle frekvence použití." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Skutečné věty v kontextu",           body: "Tři skutečné věty pro každý význam, abys kontext pochopil hned." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idiomy a slovní spojení",            body: "Každý výraz, v němž se slovo vyskytuje, i s plným významem celé fráze." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Odkud slovo pochází",                body: "Z jakého jazyka slovo přišlo a co původně znamenalo." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Vysvětlení pro děti",                body: "Jasná, jednoduchá verze, kterou dítě přečte bez složitých pojmů." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Slovo jako obrázek",                 body: "Jedinečný obrázek od AI ke slovu, vytvořený podle jeho významu a kontextu." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Osobní sešit slov",                  body: "Ulož si slova, která si chceš zapamatovat. Dostupné i bez internetu." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Napiš větu, dostaň zpětnou vazbu",   body: "Sestav vlastní větu se slovem a okamžitě dostaň opravu a zpětnou vazbu." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalizované kvízy",              body: "Denní kvíz na slova, která ses naučil, aby ti zůstala nadlouho." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Slovní hry",                         body: "Hry, které rozšiřují slovní zásobu: přiřazování, hádání, propojování slov." },
     ],
   },
 };
@@ -342,32 +367,59 @@ export function FeaturesPage() {
         )}
       </header>
 
-      <main className="wb-features-main">
-        <div className="wb-features-hero">
-          <div className="wb-features-logo">
-            Gad<span className="wb-features-logo-it">it</span>
+      <main className="wb-feat-main">
+        {/* Hero — eyebrow + Lora-italic display + supporting text + two
+            CTAs. Generous top spacing so the headline gets vertical room
+            to breathe; the eye should land on it first, not the nav. */}
+        <section className="wb-feat-hero">
+          <div className="wb-feat-eyebrow">{c.heroEyebrow}</div>
+          <h1 className="wb-feat-display">{c.heroTitle}</h1>
+          <p className="wb-feat-lede">{c.heroSub}</p>
+          <div className="wb-feat-cta-row">
+            <Link href={href("/")} className="wb-feat-cta-primary">{c.ctaPrimary}</Link>
+            <Link href={href("/pricing")} className="wb-feat-cta-ghost">{c.ctaSecondary}</Link>
           </div>
-          <h1 className="wb-features-title">{c.heroTitle}</h1>
-        </div>
+        </section>
 
-        <div className="wb-features-grid">
-          {c.list.map((f) => {
-            const t = TIER_COLOR[f.tier];
-            return (
-              <article key={f.id} className={`wb-feature-card wb-feature-card-${f.tier}`}>
-                <div className="wb-feature-illust" style={{ background: t.bg, color: t.fg }}>
-                  <FeatureIcon name={f.icon} color={t.fg} />
-                </div>
-                <h3 className="wb-feature-title">{f.title}</h3>
-                <span className={`wb-tier-pill wb-tier-pill-${f.tier}`}>{c.tierLabel[f.tier]}</span>
-              </article>
-            );
-          })}
-        </div>
+        {/* Bento grid — first card spans two columns on desktop so the
+            'every definition' feature (the product's core promise) lands
+            as the heaviest visual weight. Other features sit at equal
+            weight in single-column cards. Stagger animation on initial
+            load, gated by prefers-reduced-motion. */}
+        <section className="wb-feat-section">
+          <div className="wb-feat-section-label">{c.sectionLabel}</div>
+          <div className="wb-feat-bento">
+            {c.list.map((f, i) => {
+              const t = TIER_COLOR[f.tier];
+              return (
+                <article
+                  key={f.id}
+                  className={`wb-feat-card${i === 0 ? " is-featured" : ""}`}
+                  style={{ ["--wb-stagger" as string]: `${i * 45}ms` }}
+                >
+                  <div className="wb-feat-card-head">
+                    <div className="wb-feat-card-icon" style={{ background: t.bg, color: t.fg }}>
+                      <FeatureIcon name={f.icon} color={t.fg} />
+                    </div>
+                    <span className={`wb-feat-tier-chip wb-feat-tier-chip-${f.tier}`}>{c.tierLabel[f.tier]}</span>
+                  </div>
+                  <h3 className="wb-feat-card-title">{f.title}</h3>
+                  {f.body && <p className="wb-feat-card-body">{f.body}</p>}
+                </article>
+              );
+            })}
+          </div>
+        </section>
 
-        <div className="wb-features-cta-bottom">
-          <Link href={href("/")} className="wb-features-cta-primary">{c.ctaPrimary}</Link>
-        </div>
+        {/* Final CTA — single full-width card that recaps the value
+            proposition in one sentence and gives one big primary action.
+            No competing secondary link here; the page's whole job has
+            been to make the user want to click this. */}
+        <section className="wb-feat-final">
+          <h2 className="wb-feat-final-title">{c.finalCtaTitle}</h2>
+          <p className="wb-feat-final-sub">{c.finalCtaSub}</p>
+          <Link href={href("/")} className="wb-feat-final-btn">{c.finalCtaBtn}</Link>
+        </section>
       </main>
 
       <footer className="wb-home-footer">
