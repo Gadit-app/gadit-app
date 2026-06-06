@@ -28,6 +28,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "@/lib/auth-context";
 
 type Props = {
   /** Text to pronounce. Single word for now; designed to accept
@@ -124,12 +125,26 @@ export function TTSButton({
     window.speechSynthesis.speak(u);
   }, [text, audioLang]);
 
+  const { user } = useAuth();
   const playOpenAITTS = useCallback(async () => {
     setState("loading");
     try {
+      // /api/tts is tier-gated to Clear/Deep, so we need to send the
+      // signed-in user's Firebase ID token. If there's no user we fall
+      // back to Web Speech immediately rather than triggering an
+      // inevitable 401.
+      if (!user) {
+        setState("idle");
+        playWebSpeech();
+        return;
+      }
+      const idToken = await user.getIdToken();
       const res = await fetch("/api/tts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
         body: JSON.stringify({ text, lang: audioLang }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

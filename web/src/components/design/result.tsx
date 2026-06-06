@@ -552,9 +552,29 @@ function MeaningEntry({
     }
   }
 
+  // Per-meaning TTS — natural AI voice for Clear/Deep, free Web Speech
+  // for everyone else. Reads the meaning text + the first example so
+  // the user hears the definition in context, not just a bare phrase.
+  const ttsText = [
+    meaning.meaning ?? "",
+    ...(meaning.examples ?? []).slice(0, 1),
+  ]
+    .filter(Boolean)
+    .join(". ");
+  const ttsUseAI = plan === "clear" || plan === "deep";
+
   return (
     <div className="wb-mcard">
       <div className="wb-mcard-head">
+        {ttsText && (
+          <TTSButton
+            text={ttsText}
+            audioLang={lang}
+            useOpenAI={ttsUseAI}
+            ariaLabel={v2(lang, "listenToWord")}
+            className="wb-mcard-listen"
+          />
+        )}
         <button
           type="button"
           className="wb-mcard-share"
