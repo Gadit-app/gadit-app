@@ -27,13 +27,17 @@ type Props = {
   anchor: HTMLElement;
   /** UI language — drives the API call and localized chrome. */
   lang: Lang;
+  /** The HEADWORD of the page the popover was opened from. Becomes a
+   *  ?from=<fromWord> query param on the 'Open full definition' link
+   *  so the destination page can render a 'back to <fromWord>' chip. */
+  fromWord?: string;
   /** Close-on-outside-click / Escape / link-tap. */
   onClose: () => void;
 };
 
 type QuickDef =
   | { status: "loading" }
-  | { status: "ready"; meaning: string; language: string }
+  | { status: "ready"; meaning: string; example: string; language: string }
   | { status: "not-cached" }
   | { status: "error" };
 
@@ -49,7 +53,7 @@ const COPY: Record<Lang, { openFull: string; loading: string; noPreview: string 
   cs: { openFull: "Otevřít celou definici",  loading: "Načítání…",   noPreview: "Klepněte níže pro plnou definici." },
 };
 
-export function WordPopover({ word, anchor, lang, onClose }: Props) {
+export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
   const { dir } = useLang();
   const href = useHref();
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
@@ -74,10 +78,11 @@ export function WordPopover({ word, anchor, lang, onClose }: Props) {
           setDef({ status: "error" });
           return;
         }
-        const json = (await res.json()) as { meaning?: string; language?: string };
+        const json = (await res.json()) as { meaning?: string; example?: string; language?: string };
         setDef({
           status: "ready",
           meaning: json.meaning ?? "",
+          example: json.example ?? "",
           language: json.language ?? "",
         });
       } catch {
@@ -170,12 +175,15 @@ export function WordPopover({ word, anchor, lang, onClose }: Props) {
       >
         {word}
       </div>
+      {/* Meaning — full first definition. This is the answer the user
+          is here for; the open-full link below is for the cases where
+          they want examples + etymology + idioms. */}
       <div
         style={{
           fontSize: 14,
-          color: "var(--ink-muted, #6B7280)",
-          lineHeight: 1.5,
-          marginBottom: 12,
+          color: "var(--ink, #0B1220)",
+          lineHeight: 1.55,
+          marginBottom: def.status === "ready" && def.example ? 10 : 14,
         }}
       >
         {def.status === "loading"
@@ -184,8 +192,30 @@ export function WordPopover({ word, anchor, lang, onClose }: Props) {
             ? def.meaning || c.noPreview
             : c.noPreview}
       </div>
+      {/* First example — gives the meaning some context. Italic and
+          muted so it doesn't fight with the meaning above. Hidden if
+          the API didn't return one. */}
+      {def.status === "ready" && def.example && (
+        <div
+          style={{
+            fontSize: 13,
+            color: "var(--ink-muted, #6B7280)",
+            lineHeight: 1.5,
+            marginBottom: 14,
+            paddingInlineStart: 10,
+            borderInlineStart: "2px solid var(--hairline, #E5E7EB)",
+            fontStyle: lang === "he" || lang === "ar" ? "normal" : "italic",
+          }}
+        >
+          {def.example}
+        </div>
+      )}
       <Link
-        href={href(`/word/${encodeURIComponent(word)}`)}
+        href={
+          fromWord
+            ? href(`/word/${encodeURIComponent(word)}?back=${encodeURIComponent(fromWord)}`)
+            : href(`/word/${encodeURIComponent(word)}`)
+        }
         onClick={onClose}
         style={{
           display: "inline-flex",

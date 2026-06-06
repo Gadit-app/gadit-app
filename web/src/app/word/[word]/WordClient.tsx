@@ -309,6 +309,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // set by that override link to skip the redirect on re-entry.
   const typedOriginal = searchParams?.get("from")?.trim() || "";
   const stayOnInput = searchParams?.get("stay") === "1";
+  // ?back=<word> set by the WordPopover when the user opens a tapped
+  // word's full definition. Surfaces a 'back to <word>' chip at the
+  // top of the result so the user can return to the original
+  // definition they were reading without losing their place.
+  const backWord = searchParams?.get("back")?.trim() || "";
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1038,6 +1043,31 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 </Link>
               </>
             )}
+          </div>
+        )}
+        {/* 'Back to <previous word>' chip — appears whenever the user
+            landed on this page via the WordPopover's 'Open full
+            definition' button (which appends ?back=<originalWord> so
+            the destination knows where the reader came from). Clicking
+            returns to the original word's page. Hidden in the normal
+            search flow when there's no back context. */}
+        {result && backWord && backWord.toLowerCase() !== result.word.toLowerCase() && (
+          <div className="wb-back-chip-wrap">
+            <Link href={href(`/word/${encodeURIComponent(backWord)}`)} className="wb-back-chip">
+              <span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span>
+              <span>
+                {lang === "he" ? "חזרה אל " :
+                 lang === "ar" ? "العودة إلى " :
+                 lang === "ru" ? "Назад к " :
+                 lang === "es" ? "Volver a " :
+                 lang === "pt" ? "Voltar a " :
+                 lang === "fr" ? "Retour à " :
+                 lang === "de" ? "Zurück zu " :
+                 lang === "cs" ? "Zpět na " :
+                 "Back to "}
+                <strong>{backWord}</strong>
+              </span>
+            </Link>
           </div>
         )}
         {result && (

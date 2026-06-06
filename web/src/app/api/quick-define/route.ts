@@ -70,18 +70,23 @@ export async function GET(req: NextRequest) {
       | {
           word?: string;
           language?: string;
-          meanings?: Array<{ meaning?: string }>;
+          meanings?: Array<{ meaning?: string; examples?: string[] }>;
         }
       | undefined;
     const meanings = Array.isArray(data?.meanings) ? data!.meanings : [];
     const firstMeaning =
       typeof meanings[0]?.meaning === "string" ? meanings[0].meaning : "";
+    const firstExample =
+      Array.isArray(meanings[0]?.examples) && typeof meanings[0]!.examples![0] === "string"
+        ? meanings[0]!.examples![0]
+        : "";
 
     return NextResponse.json(
       {
         word: data?.word ?? word,
         language: data?.language ?? "",
         meaning: firstMeaning,
+        example: firstExample,
         hasMore: meanings.length > 1,
       },
       {

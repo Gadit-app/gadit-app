@@ -97,6 +97,7 @@ export function TappableText({ text, skipWord }: Props) {
           word={popover.word}
           anchor={popover.anchor}
           lang={lang}
+          fromWord={skipWord}
           onClose={() => setPopover(null)}
         />
       )}
