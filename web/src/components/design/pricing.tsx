@@ -537,19 +537,12 @@ export function PricingTiers({ billing }: { billing: Billing }) {
         window.location.href = data.url;
         return;
       }
-      // 403 with email_not_verified: surface a friendly nudge, not
-      // the same generic "could not open checkout" line. The user
-      // needs a different action (check inbox), not a retry.
-      if (res.status === 403 && data.error === "email_not_verified") {
-        window.alert(
-          lang === "he"
-            ? "כדי לרכוש מנוי, יש לאמת את כתובת המייל. שלחנו לכם קישור אימות בהרשמה — בדקו את תיבת הדואר (וגם תיקיית הספאם)."
-            : lang === "ar"
-              ? "للاشتراك، يلزم تأكيد البريد الإلكتروني. أرسلنا لك رابط التأكيد عند التسجيل — افحص بريدك الوارد (وأيضًا مجلد البريد العشوائي)."
-              : "Please verify your email before subscribing. We sent you a verification link when you signed up — check your inbox (and spam folder)."
-        );
-        return;
-      }
+      // (Removed) 'email_not_verified' branch. The server no longer
+      // blocks unverified emails at checkout — Stripe's card-level
+      // verification is the canonical 'this is a real human' check
+      // and the verification-email round-trip was blackholed by
+      // half the world's spam filters anyway, locking testers in
+      // CZ / DE / GMail-default-spam-policy regions out of the trial.
       console.error("Checkout failed:", { status: res.status, body: data });
       window.alert(
         lang === "he"

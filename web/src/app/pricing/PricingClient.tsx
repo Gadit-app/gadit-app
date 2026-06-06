@@ -681,10 +681,9 @@ export function PricingPageRoute() {
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
       if (data.url) { window.location.href = data.url; return; }
-      if (res.status === 403 && data.error === "email_not_verified") {
-        window.alert(lang === "he" ? "אנא אמתו את כתובת המייל. שלחנו לכם לינק אימות בהרשמה." : "Please verify your email before subscribing.");
-        return;
-      }
+      // 'email_not_verified' branch removed in concert with the server-
+      // side gate — the API no longer returns it. The only remaining
+      // failure on this path is a generic 'something went wrong'.
       window.alert(lang === "he" ? "לא הצלחנו לפתוח את הצ'קאאוט. נסו שוב." : "Could not open checkout. Please try again.");
     } catch (e) {
       console.error("Checkout error:", e);
