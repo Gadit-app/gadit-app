@@ -2377,6 +2377,44 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 /* Override the older wb-mdef margin-bottom (now lives on the row) */
 .wordbook .wb-mdef-row .wb-mdef { margin-bottom: 0; }
+
+/* ── Tappable words inside definitions and examples ───────────────
+   Long-press (touch) or right-click (mouse) on any word opens a
+   WordPopover with a quick definition. The visual affordance is a
+   subtle dotted underline on hover — discoverable without making
+   every word in a paragraph look like a hyperlink.
+   - Inherits font, size, and color from the surrounding text so the
+     paragraph still reads naturally.
+   - touch-action: manipulation suppresses the iOS magnifying-glass
+     selection callout that would otherwise trigger on long-press.
+   - user-select: none prevents accidental text selection during the
+     500ms hold (the press is meant as a tap-and-hold gesture, not the
+     start of a copy). Keyboard / screen-reader users still get focus
+     and aria-haspopup. */
+.wordbook .wb-tappable-word {
+  display: inline;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 2px;
+  margin: 0 -2px;
+  transition: background 0.12s ease, border-color 0.12s ease;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Dotted underline shows only on hover/focus — keeps paragraphs
+     calm at rest, telegraphs interactivity once the user mouses over. */
+  text-decoration: none;
+}
+.wordbook .wb-tappable-word:hover,
+.wordbook .wb-tappable-word:focus-visible {
+  background: var(--teal-soft, #E0F6F4);
+  outline: none;
+  text-decoration: underline dotted var(--teal, #0EA5A5);
+  text-underline-offset: 3px;
+}
+.wordbook .wb-tappable-word:active {
+  background: rgba(14, 165, 165, 0.15);
+}
 .wordbook .wb-mcard-share {
   width: 30px;
   height: 30px;

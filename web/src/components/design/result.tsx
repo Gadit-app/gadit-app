@@ -39,6 +39,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
 import { TTSButton } from "@/components/design/TTSButton";
+import { TappableText } from "@/components/design/TappableText";
 
 // ─── Types matching the live /api/define schema ────────────────
 export type Plan = "basic" | "clear" | "deep";
@@ -567,14 +568,18 @@ function MeaningEntry({
       {meaning.meaning && (
         <div className="wb-mdef-row">
           <span className="wb-mnum">{n}</span>
-          <span className="wb-mdef">{meaning.meaning}</span>
+          <span className="wb-mdef">
+            <TappableText text={meaning.meaning} skipWord={word} />
+          </span>
         </div>
       )}
 
       {(meaning.examples ?? []).length > 0 && (
         <div className="wb-mexamples">
           {(meaning.examples ?? []).map((ex, j) => (
-            <div className="wb-mexample" key={j}>{ex}</div>
+            <div className="wb-mexample" key={j}>
+              <TappableText text={ex} skipWord={word} />
+            </div>
           ))}
         </div>
       )}
