@@ -86,6 +86,13 @@ export async function POST(req: NextRequest) {
     // headword — safer for the filter, still useful as an
     // illustration.
     async function callDalle(prompt: string) {
+      // OpenAI removed support for the `response_format` parameter on
+      // this endpoint (Vercel logs showed:
+      // 'Unknown parameter: response_format. invalid_request_error').
+      // We now send the minimal request and accept whichever shape
+      // comes back — recent dall-e-3 responses include both a `url`
+      // field and a `b64_json` field on the result object, and our
+      // consumer below already handles both.
       return fetch("https://api.openai.com/v1/images/generations", {
         method: "POST",
         headers: {
@@ -98,7 +105,6 @@ export async function POST(req: NextRequest) {
           n: 1,
           size: "1024x1024",
           quality: "standard",
-          response_format: "b64_json",
         }),
       });
     }
@@ -137,13 +143,26 @@ export async function POST(req: NextRequest) {
     }
 
     const dalleData = await dalleRes.json();
-    const b64 = dalleData.data?.[0]?.b64_json;
-    if (!b64) {
+    // The API now returns either a base64 payload OR a hosted URL,
+    // depending on the model/endpoint version. Handle both.
+    const result = dalleData.data?.[0] as { b64_json?: string; url?: string } | undefined;
+    let buffer: Buffer;
+    if (result?.b64_json) {
+      buffer = Buffer.from(result.b64_json, "base64");
+    } else if (result?.url) {
+      // Hosted URL path — download the bytes once so we can re-host on
+      // Firebase Storage (OpenAI hosted URLs expire after ~1 hour).
+      const imgRes = await fetch(result.url);
+      if (!imgRes.ok) {
+        return NextResponse.json({ error: "image_fetch_failed", details: `${imgRes.status}` }, { status: 502 });
+      }
+      buffer = Buffer.from(await imgRes.arrayBuffer());
+    } else {
+      console.error("[generate-image] OpenAI response missing both b64_json and url:", JSON.stringify(dalleData).slice(0, 400));
       return NextResponse.json({ error: "no_image_returned" }, { status: 502 });
     }
 
     // Upload to Firebase Storage
-    const buffer = Buffer.from(b64, "base64");
     const storagePath = `word-images/${cKey}.png`;
     const bucket = getDefaultBucket();
     const file = bucket.file(storagePath);
