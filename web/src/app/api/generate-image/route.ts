@@ -86,13 +86,17 @@ export async function POST(req: NextRequest) {
     // headword — safer for the filter, still useful as an
     // illustration.
     async function callDalle(prompt: string) {
-      // OpenAI removed support for the `response_format` parameter on
-      // this endpoint (Vercel logs showed:
-      // 'Unknown parameter: response_format. invalid_request_error').
-      // We now send the minimal request and accept whichever shape
-      // comes back — recent dall-e-3 responses include both a `url`
-      // field and a `b64_json` field on the result object, and our
-      // consumer below already handles both.
+      // V3 fix — Vercel logs:
+      //   'The model dall-e-3 does not exist.'
+      // OpenAI deprecated dall-e-3 in their public API and replaced it
+      // with gpt-image-1. The new model uses a different quality enum
+      // ('low' / 'medium' / 'high' / 'auto'), returns b64_json by
+      // default (no response_format needed), and supports the same
+      // 1024-square output.
+      // Picked 'medium' as the floor: dictionary illustration only
+      // needs the object to be recognizable, not photo-realistic art.
+      // 'medium' is ~$0.07/image, 'low' ~$0.02/image. The cache means
+      // the per-popular-word amortized cost is well below either.
       return fetch("https://api.openai.com/v1/images/generations", {
         method: "POST",
         headers: {
@@ -100,11 +104,11 @@ export async function POST(req: NextRequest) {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "dall-e-3",
+          model: "gpt-image-1",
           prompt,
           n: 1,
           size: "1024x1024",
-          quality: "standard",
+          quality: "medium",
         }),
       });
     }
