@@ -566,31 +566,37 @@ function MeaningEntry({
 
   return (
     <div className="wb-mcard">
-      <div className="wb-mcard-head">
-        {ttsText && (
-          <TTSButton
-            text={ttsText}
-            audioLang={lang}
-            useOpenAI={ttsUseAI}
-            ariaLabel={v2(lang, "listenToWord")}
-            className="wb-mcard-listen"
-          />
-        )}
-        <button
-          type="button"
-          className="wb-mcard-share"
-          aria-label={v2(lang, "shareDefinitionAria")}
-          onClick={handleShareMeaning}
-        >
-          <ShareIcon size={14} />
-        </button>
-      </div>
-
       {meaning.meaning && (
         <div className="wb-mdef-row">
           <span className="wb-mnum">{n}</span>
           <span className="wb-mdef">
             <TappableText text={meaning.meaning} skipWord={word} />
+            {/* Listen + share — inline at the end of the definition
+                text, after the closing punctuation. They visually
+                attach to the sentence they act on, instead of
+                floating in the corner and overlapping the text on
+                narrow viewports. Use a non-breaking space so the
+                first icon never gets stranded on its own line. */}
+            <span className="wb-mdef-tools">
+              {" "}
+              {ttsText && (
+                <TTSButton
+                  text={ttsText}
+                  audioLang={lang}
+                  useOpenAI={ttsUseAI}
+                  ariaLabel={v2(lang, "listenToWord")}
+                  className="wb-mdef-tool wb-mdef-tool-listen"
+                />
+              )}
+              <button
+                type="button"
+                className="wb-mdef-tool"
+                aria-label={v2(lang, "shareDefinitionAria")}
+                onClick={handleShareMeaning}
+              >
+                <ShareIcon size={12} />
+              </button>
+            </span>
           </span>
         </div>
       )}
