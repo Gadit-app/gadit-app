@@ -386,8 +386,15 @@ export function AccountPage() {
           minHeight: "calc(100vh - 220px)",
         }}
       >
-        {/* HERO */}
-        <div style={{ marginBottom: "clamp(24px, 4vw, 40px)" }}>
+        {/* HERO — centered above the card so the user's name sits
+            optically over the page, not anchored to the start edge.
+            The card below can still span the full main width. */}
+        <div
+          style={{
+            marginBottom: "clamp(28px, 5vw, 48px)",
+            textAlign: "center",
+          }}
+        >
           <div
             style={{
               fontFamily: fontBody(lang),
@@ -450,6 +457,10 @@ export function AccountPage() {
               <UsageSection
                 data={data}
                 offlineCount={offlineCount}
+              />
+              {data.plan !== "basic" && <Divider />}
+              <OfflinePackSection
+                data={data}
                 packState={packState}
                 packError={packError}
                 onDownloadPack={handleDownloadPack}
@@ -478,12 +489,16 @@ export function AccountPage() {
 }
 
 function Divider() {
+  // Bigger vertical margin so the eye reads each card section as a
+  // distinct topic rather than a continuous flow. Earlier 32px gap +
+  // hairline rule felt too crowded; 48px gives the page breathing
+  // room without losing the structural cue.
   return (
     <div
       style={{
         height: 1,
         background: "var(--hairline, #E5E7EB)",
-        margin: "32px 0",
+        margin: "44px 0",
       }}
     />
   );
@@ -491,20 +506,27 @@ function Divider() {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   const { lang } = useLang();
+  // Section headings used to render as a tiny 11.5px tracked-out
+  // uppercase eyebrow — easy to miss, hard to use as a scan anchor.
+  // Now: 16px, bold, lower-case, in the body font with extra space
+  // below so each section's content reads as 'belonging to' the
+  // heading. This is the line the user is meant to scan to find
+  // 'plan' vs 'usage' vs 'account'.
   return (
-    <div
+    <h2
       style={{
         fontFamily: fontBody(lang),
-        fontSize: 11.5,
-        fontWeight: 600,
-        letterSpacing: "0.12em",
-        textTransform: "uppercase",
-        color: "var(--ink-muted, #6B7280)",
-        marginBottom: 16,
+        fontSize: 16,
+        fontWeight: 700,
+        letterSpacing: 0,
+        textTransform: "none",
+        color: "var(--ink)",
+        margin: "0 0 24px",
+        lineHeight: 1.2,
       }}
     >
       {children}
-    </div>
+    </h2>
   );
 }
 
@@ -619,18 +641,11 @@ function PlanSection({
 function UsageSection({
   data,
   offlineCount,
-  packState,
-  packError,
-  onDownloadPack,
 }: {
   data: AccountData;
   offlineCount: number | null;
-  packState: "idle" | "downloading" | "done";
-  packError: string | null;
-  onDownloadPack: () => void;
 }) {
   const { lang } = useLang();
-  const href = useHref();
   return (
     <section>
       <SectionLabel>{v2(lang, "accountUsageThisMonth")}</SectionLabel>
@@ -649,19 +664,16 @@ function UsageSection({
           plan={data.plan}
         />
       )}
-      {/* Offline availability — Clear/Deep only. Surfaces how many
-          words the user already has cached locally and will work
-          without WiFi (lectures, planes, school networks). */}
+      {/* Offline availability — Clear/Deep only. Same label/value row
+          shape as the meters above so the three usage stats read as
+          one coherent group, not a boxed 'extra'. */}
       {data.plan !== "basic" && offlineCount !== null && (
         <div
           style={{
-            marginTop: 24,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "12px 16px",
-            background: "var(--paper, #F9FAFB)",
-            borderRadius: 10,
+            marginBottom: 4,
             fontFamily: fontBody(lang),
           }}
         >
@@ -691,26 +703,33 @@ function UsageSection({
           </span>
         </div>
       )}
-      {/* "Download offline pack" — Clear/Deep only. Pre-loads ~500 of
-          the most-cached words in the user's language so a brand-new
-          subscriber gets broad offline coverage immediately, instead
-          of waiting for their own usage to fill the cache one word at
-          a time. */}
-      {data.plan !== "basic" && (
-        <div
-          style={{
-            marginTop: 12,
-            padding: "16px",
-            background: "var(--surface, #FFFFFF)",
-            border: "1px solid var(--hairline, #E5E7EB)",
-            borderRadius: 12,
-            fontFamily: fontBody(lang),
-          }}
-        >
-          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)", marginBottom: 4 }}>
-            {v2(lang, "offlinePackHeader")}
-          </div>
-          <div style={{ fontSize: 13, color: "var(--ink-muted, #6B7280)", marginBottom: 12, lineHeight: 1.4 }}>
+    </section>
+  );
+}
+
+function OfflinePackSection({
+  data,
+  packState,
+  packError,
+  onDownloadPack,
+}: {
+  data: AccountData;
+  packState: "idle" | "downloading" | "done";
+  packError: string | null;
+  onDownloadPack: () => void;
+}) {
+  const { lang } = useLang();
+  const href = useHref();
+  if (data.plan === "basic") return null;
+  return (
+    <section>
+      <SectionLabel>{v2(lang, "offlinePackHeader")}</SectionLabel>
+      <div
+        style={{
+          fontFamily: fontBody(lang),
+        }}
+      >
+          <div style={{ fontSize: 14, color: "var(--ink-muted, #6B7280)", marginBottom: 16, lineHeight: 1.5 }}>
             {v2(lang, "offlinePackDescription")}
           </div>
           {packError && (
@@ -775,8 +794,7 @@ function UsageSection({
                 : v2(lang, "offlineDownloadPack")}
             </button>
           )}
-        </div>
-      )}
+      </div>
     </section>
   );
 }
@@ -818,11 +836,17 @@ function Meter({
         >
           {locked ? (
             <span style={{ color: "var(--ink-muted, #6B7280)" }}>{v2(lang, "accountLocked")}</span>
+          ) : isUnlimited ? (
+            // For uncapped meters, surfacing '0 / unlimited' read as
+            // a half-broken counter to several beta testers. Show just
+            // the word 'unlimited' instead — the meter bar itself is
+            // a soft hint that there's no ceiling.
+            <span style={{ color: "var(--ink-muted, #6B7280)" }}>{v2(lang, "accountUnlimited")}</span>
           ) : (
             <>
               <span style={{ color: "var(--ink)" }}>{used}</span>
               <span style={{ color: "var(--ink-muted, #6B7280)" }}>
-                {" / "}{isUnlimited ? v2(lang, "accountUnlimited") : limit}
+                {" / "}{limit}
               </span>
             </>
           )}
