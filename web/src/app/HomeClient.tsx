@@ -300,23 +300,6 @@ export function HomePage() {
 
           <form className="wb-home-search" onSubmit={onSubmit}>
             <div className="wb-home-search-box">
-              {/* Submit button replaces the previous decorative magnifying-
-                  glass span. Beta testers were typing a word and then not
-                  knowing what to tap — the search icon read as a passive
-                  label, not an interactive control. Now it's a real teal
-                  pill labelled with the user's language word for 'Search'
-                  so the next-step action is unmistakable, especially on
-                  mobile where hitting Enter on a virtual keyboard isn't
-                  the obvious move. */}
-              <button
-                type="submit"
-                className="wb-home-search-submit"
-                aria-label={c.search}
-                title={c.search}
-              >
-                <SearchIcon size={16} />
-                <span className="wb-home-search-submit-label">{c.search}</span>
-              </button>
               <input
                 ref={inputRef}
                 type="text"
@@ -340,6 +323,23 @@ export function HomePage() {
                   size="sm"
                 />
               </div>
+              {/* Submit pill — sits at the END of the row so it always
+                  appears on the side opposite to where the user starts
+                  typing. LTR English: types left → finishes near the
+                  right → the green Search button is on the right.
+                  RTL Hebrew/Arabic: types right → finishes near the
+                  left → the button is on the left. Enter still submits;
+                  the button just makes the same action discoverable
+                  visually. */}
+              <button
+                type="submit"
+                className="wb-home-search-submit"
+                aria-label={c.search}
+                title={c.search}
+              >
+                <SearchIcon size={16} />
+                <span className="wb-home-search-submit-label">{c.search}</span>
+              </button>
             </div>
             <div className="wb-home-samples">
               <span className="wb-home-samples-label">{c.tryLabel}</span>
