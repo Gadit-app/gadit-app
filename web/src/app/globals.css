@@ -7144,6 +7144,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     text-align: center;
   }
   .wordbook .wb-aff-cta-primary-compact {
+    /* Compact mid-page CTAs stay narrow (auto width) so they don't
+       balloon to the same size as the hero/final CTA. The parent
+       rule's 100% width gets overridden here. */
+    width: auto;
+    max-width: none;
     padding: 12px 20px;
     font-size: 14px;
   }

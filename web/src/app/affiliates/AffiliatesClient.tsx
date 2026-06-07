@@ -572,6 +572,10 @@ function EarningsCalculator({ c, lang }: { c: Copy; lang: Lang }) {
         aria-valuemin={1}
         aria-valuemax={50}
         aria-valuenow={subs}
+        // CSS uses var(--val) to colour the filled portion of the
+        // track. Without this style prop the gradient is frozen at
+        // 10 (the default) regardless of the slider position.
+        style={{ ["--val" as string]: subs } as React.CSSProperties}
       />
       <div className="wb-aff-calc-outputs">
         <div className="wb-aff-calc-output">
