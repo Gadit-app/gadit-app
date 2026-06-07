@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!--
+    Affonso portal avatar — circular teal disc with a centered white G.
+    Designed for the round avatar slot in the affiliate portal preview.
+    The G is path-based (not text) so it renders identically wherever
+    the SVG is consumed — Affonso's preview, the live portal, or any
+    PNG conversion downstream — regardless of which fonts the host has.
+    Mirrors the geometry of favicon.svg / icon-gadit.svg so the brand
+    reads consistently across surfaces.
+  -->
+  <defs>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.85"/>
+      <stop offset="40%"  stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Teal disc -->
+  <circle cx="256" cy="256" r="256" fill="#0EA5A5"/>
+
+  <!-- Subtle top-half gloss so the disc has gentle depth, not flat -->
+  <path d="M 0 256 A 256 256 0 0 1 512 256 L 512 0 L 0 0 Z"
+        fill="url(#gloss)" opacity="0.10"/>
+
+  <!-- Geometric G — arc + hook, path-based, no text dependency.
+       translate(265, 256) centres the optical mass of the glyph; the
+       arc reaches further left than the hook extends right, so we
+       shift right by 9 to compensate. Same composition the favicon
+       uses, scaled to 512. -->
+  <g transform="translate(265, 256)">
+    <circle cx="0" cy="0" r="60" fill="url(#spark)"/>
+    <path d="M 134 -94 A 158 158 0 1 0 134 94 L 134 0 L 12 0"
+          fill="none" stroke="#FFFFFF" stroke-width="64"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
