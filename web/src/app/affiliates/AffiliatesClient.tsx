@@ -626,10 +626,36 @@ function EarningsTable({ c, lang }: { c: Copy; lang: Lang }) {
 }
 
 export function AffiliatesPage() {
-  const { user, plan } = useAuth();
-  const { lang, dir } = useLang();
+  const { user, plan, promptLogin } = useAuth();
+  const { lang, dir, setLang } = useLang();
   const href = useHref();
   const c = COPY[lang as Lang] ?? COPY.en;
+
+  // Mobile burger menu — mirrors the pattern used by every other shell
+  // (HomeClient, FeaturesClient, ...). On screens below 720px the
+  // desktop .wb-shell-nav + .wb-shell-actions are hidden by globals.css;
+  // without this menu the topbar would have zero interactive elements
+  // on mobile and a visitor would be stuck on the page.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onClick(e: MouseEvent) {
+      const target = e.target as Node;
+      if (menuRef.current?.contains(target)) return;
+      if (burgerRef.current?.contains(target)) return;
+      setMenuOpen(false);
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   return (
     <div className="wordbook wb-shell-page wb-aff-page" dir={dir}>
@@ -688,6 +714,99 @@ export function AffiliatesPage() {
           <LangSwitch />
           {user ? <WbUserMenu /> : null}
         </div>
+
+        {/* Mobile-only — share button + burger. Both hidden on desktop
+            via globals.css. */}
+        <div className="wb-shell-share-mobile-wrap">
+          <ShareButton
+            url="https://www.gadit.app/"
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text=""
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
+        </div>
+        <button
+          ref={burgerRef}
+          type="button"
+          className="wb-shell-burger"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          )}
+        </button>
+        {menuOpen && (
+          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
+            <Link href={href("/")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navSearch")}
+            </Link>
+            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navFeatures")}
+            </Link>
+            {user && (plan === "clear" || plan === "deep") && (
+              <Link href={href("/notebook")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navNotebook")}
+              </Link>
+            )}
+            {user && plan === "deep" && (
+              <Link href={href("/play")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navPlay")}
+              </Link>
+            )}
+            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navPricing")}
+            </Link>
+            <Link href={href("/affiliates")} className="wb-shell-mobile-link is-active" onClick={() => setMenuOpen(false)}>
+              {c.navAffiliates}
+            </Link>
+            <div className="wb-shell-mobile-menu-sep" />
+            <a
+              href={AFFONSO_PORTAL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wb-shell-mobile-link"
+              onClick={() => setMenuOpen(false)}
+            >
+              {c.topbarSignIn}
+            </a>
+            <div className="wb-shell-mobile-menu-sep" />
+            <div className="wb-shell-mobile-langs">
+              {LANGS.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  className={l.code === lang ? "is-active" : ""}
+                  onClick={() => { setLang(l.code); setMenuOpen(false); }}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+            <div className="wb-shell-mobile-menu-sep" />
+            {user ? (
+              <Link href={href("/account")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className="wb-shell-mobile-link"
+                onClick={() => { setMenuOpen(false); promptLogin({ mode: "signin" }); }}
+              >
+                {v2(lang, "signIn")}
+              </button>
+            )}
+          </div>
+        )}
       </header>
 
       <main className="wb-aff-main">
