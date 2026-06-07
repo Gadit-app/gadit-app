@@ -65,15 +65,21 @@ export async function GET(req: NextRequest) {
     2000,
   );
 
-  // Cache doc IDs look like `auto_<lang>_<tier>_<word>` and
-  // `ctx_<lang>_<tier>_<word>_<snippet>`. We want the auto_<lang>_base_*
+  // Cache doc IDs look like `auto2_<lang>_<tier>_<word>` and
+  // `ctx2_<lang>_<tier>_<word>_<snippet>`. We want the auto2_<lang>_base_*
   // family: they're general-purpose results (no specific sentence
   // context) and they're what the user gets from a normal search.
   // Firestore doesn't support prefix queries directly, but a range query
   // on the document key does the same thing: ">=" prefix and "<" prefix + "￿"
   // catches every key that starts with the prefix.
+  //
+  // Prefix moved from auto_ to auto2_ on 2026-06-07 in lockstep with
+  // /api/define to invalidate cross-language wrong-language entries.
+  // For a few days the offline pack will be slim while auto2_ fills up;
+  // the pack is a Clear/Deep feature so users can re-download once the
+  // cache rebuilds (popular words re-cache themselves on first hit).
   const db = getAdminDb();
-  const prefix = `auto_${lang}_base_`;
+  const prefix = `auto2_${lang}_base_`;
   const upper = prefix + "￿";
 
   try {

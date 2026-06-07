@@ -128,16 +128,21 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
 /**
  * Extract the input word from a cache document id.
  *
- * Key formats produced by /api/define/route.ts:
- *   - "auto_<lang>_<tier>_<word>"
- *   - "ctx_<lang>_<tier>_<word>_<sentenceSnippet>"
+ * Key formats produced by /api/define/route.ts (current and legacy):
+ *   - "auto2_<lang>_<tier>_<word>"            current
+ *   - "ctx2_<lang>_<tier>_<word>_<snippet>"   current
+ *   - "auto_<lang>_<tier>_<word>"             legacy pre-2026-06-07
+ *   - "ctx_<lang>_<tier>_<word>_<snippet>"    legacy pre-2026-06-07
  *
- * The word always sits at index 3 (zero-based) after splitting on "_".
- * Returns null for any key that doesn't follow the expected shape.
+ * Admin cleanup runs on the full collection — both prefix families
+ * still sit in Firestore until the legacy entries age out. The word
+ * always sits at index 3 (zero-based) after splitting on "_". Returns
+ * null for any key that doesn't follow the expected shape.
  */
 export function wordFromCacheKey(key: string): string | null {
   const parts = key.split("_");
-  if (parts[0] !== "auto" && parts[0] !== "ctx") return null;
+  const head = parts[0];
+  if (head !== "auto" && head !== "ctx" && head !== "auto2" && head !== "ctx2") return null;
   if (parts.length < 4) return null;
   const word = parts[3];
   return word && word.length > 0 ? word : null;

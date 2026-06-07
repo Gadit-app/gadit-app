@@ -384,7 +384,14 @@ For English/Romance languages:
 
 THE RULE: If a word is a clear morphological derivation of a more basic verb/root, the etymology MUST start from that base form. Mention the derivation in originalMeaning.
 
-When given a word, detect its language and respond ENTIRELY in that same language.
+CRITICAL — RESPONSE LANGUAGE:
+Respond ENTIRELY in the user's UI language (the language is passed at the end of the user message as "User's UI language: <LANG>"). This applies to EVERY piece of text you generate:
+  - meaning text
+  - example sentences
+  - sourceLanguage / breakdown / originalMeaning / historyNote
+  - kidsExplanation
+  - idiom meanings
+The headword and the original-script forms (originalWord) stay in their native script. Example sentences are written in the UI language but they MAY include the headword inline in its original script when it reads naturally (e.g. for a Hebrew user searching "love", the examples are written in Hebrew and use "love" inline). If the input word's detected language differs from the UI language, IGNORE the input word's language for output purposes — always use the UI language.
 
 Your response must follow this exact JSON structure:
 {
@@ -418,7 +425,7 @@ CRITICAL RULES (FINAL CHECKLIST):
 - etymology MUST be a structured object with 5 fields (sourceLanguage, originalWord, breakdown, originalMeaning, historyNote) ג€” see RULE #2. Keep it SIMPLE. Language name IN USER'S LANGUAGE. originalWord ONLY when source is non-Latin script OR materially different from modern (Hebrewג†’Hebrew = empty!). breakdown for compound words. Transliteration with diacritics only ג€” no Greek/Arabic/Cyrillic letters. historyNote is the SPECIFIC story (verses, coiners, practices), empty if no story. NEVER output etymology as free text ג€” always the object.
 - Every word in the output must be a real, standard word ג€” no invented or hallucinated words (RULE #3).
 - Do NOT include partOfSpeech, domain, register, frequency, or wordFamily fields ג€” they are not needed.
-- Respond ENTIRELY in the input word's language.
+- Respond ENTIRELY in the user's UI language passed in the user message. NEVER in the input word's language when they differ — UI language always wins for definitions, examples, etymology fields, and kids explanation. The headword and original-script forms stay native; everything else uses UI language.
 - Keep language human, warm, clear. No academic tone. No dictionary phrasing.
 - Examples must feel like real life ג€” sentences a person would actually say or read.`;
 
@@ -582,7 +589,7 @@ Given:
 
 Your job: identify which meaning of the word is being used in this sentence, and explain ONLY that meaning.
 
-Respond ENTIRELY in the same language as the input word.
+Respond ENTIRELY in the user's UI language (passed in the user message as "User's UI language: <LANG>"). This applies to meaning, examples, etymology fields, and contextNote. Headword + originalWord stay in their native script. If the input word's language differs from the UI language, the UI language ALWAYS wins for output text.
 
 Return this exact JSON:
 {
@@ -895,11 +902,20 @@ export async function POST(req: NextRequest) {
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
     const uiLangName = UI_LANG_NAMES[uiLangCode];
 
-    // Cache key includes a "kids" suffix for paid users so they don't share cache with basic users
+    // Cache key includes a "kids" suffix for paid users so they don't share cache with basic users.
+    //
+    // Prefix bumped from auto_/ctx_ to auto2_/ctx2_ on 2026-06-07 to invalidate
+    // every entry generated under the previous "respond in input word's language"
+    // prompt. That rule caused cross-language searches (e.g. Spanish-UI user
+    // searching an English word) to return English text — a regression Dafna
+    // flagged during beta. The new prompt forces UI-language output for all
+    // text, but cached entries from the old version would otherwise keep
+    // serving the wrong-language response forever. Cost of full regen is
+    // bounded (~one OpenAI call per popular word, ~$0.005 each).
     const tierKey = isPaid ? "kids" : "base";
     const cacheKey = contextSentence
-      ? `ctx_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
-      : `auto_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}`;
+      ? `ctx2_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
+      : `auto2_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}`;
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {
@@ -969,8 +985,8 @@ export async function POST(req: NextRequest) {
     const basePrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;
     const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
-      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (use this for all etymology fields ג€” sourceLanguage, breakdown meanings, originalMeaning, and kidsExplanation if applicable): ${uiLangName}`
-      : `Word: ${word}\nUser's UI language (use this for all etymology fields ג€” sourceLanguage, breakdown meanings, originalMeaning, and kidsExplanation if applicable): ${uiLangName}`;
+      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language — meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
+      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language — meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`;
 
     // Stream from OpenAI
     let openAIResponse: Response;

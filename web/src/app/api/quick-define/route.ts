@@ -47,11 +47,18 @@ export async function GET(req: NextRequest) {
   }
 
   // The main /api/define route builds cache keys as either
-  //   `auto_<lang>_<tier>_<word>`  (no context sentence)
-  //   `ctx_<lang>_<tier>_<word>_<snippet>`  (with context sentence)
-  // We only check the auto_ family, base tier — that's the most general
+  //   `auto2_<lang>_<tier>_<word>`  (no context sentence)
+  //   `ctx2_<lang>_<tier>_<word>_<snippet>`  (with context sentence)
+  // We only check the auto2_ family, base tier — that's the most general
   // result, identical for free and paid users at first-meaning level.
-  const key = `auto_${lang}_base_${word.toLowerCase()}`;
+  //
+  // Prefix moved from auto_ to auto2_ on 2026-06-07 in lockstep with
+  // /api/define to invalidate cross-language wrong-language entries.
+  // While the auto2_ cache is filling up popovers will return 404 for
+  // recently-defined words; the WordPopover gracefully falls back to
+  // routing through /api/define for the full result, so the UX
+  // degradation is one extra click, not a broken state.
+  const key = `auto2_${lang}_base_${word.toLowerCase()}`;
 
   try {
     const snap = await getAdminDb().collection("cache").doc(key).get();
