@@ -1,12 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <!--
     Affonso portal avatar — circular teal disc with a centered white G.
-    Designed for the round avatar slot in the affiliate portal preview.
+    Sized for the round avatar slot in the affiliate portal preview.
     The G is path-based (not text) so it renders identically wherever
-    the SVG is consumed — Affonso's preview, the live portal, or any
-    PNG conversion downstream — regardless of which fonts the host has.
-    Mirrors the geometry of favicon.svg / icon-gadit.svg so the brand
-    reads consistently across surfaces.
+    the SVG is consumed.
+
+    V2 sizing: shrunk the G to ~50% of the disc diameter (was ~62%)
+    so the brand has breathing room inside the circle. The previous
+    version filled too much of the disc and read as "ungainly" in
+    Gadi's review. Stroke also narrowed (44 from 64) so the G feels
+    elegant, not bulky. Inner spark dimmed and shrunk to match.
+
+    Visual centering: the arc reaches further left than the hook
+    extends right, so the path's geometric mass sits ~10 units left
+    of origin. translate(266, 256) shifts the group right by 10 to
+    put the optical center on the disc center, not the path origin.
   -->
   <defs>
     <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
@@ -14,8 +22,8 @@
       <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
     <radialGradient id="spark" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.85"/>
-      <stop offset="40%"  stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.50"/>
+      <stop offset="40%"  stop-color="#FFFFFF" stop-opacity="0.20"/>
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
   </defs>
@@ -25,17 +33,13 @@
 
   <!-- Subtle top-half gloss so the disc has gentle depth, not flat -->
   <path d="M 0 256 A 256 256 0 0 1 512 256 L 512 0 L 0 0 Z"
-        fill="url(#gloss)" opacity="0.10"/>
+        fill="url(#gloss)" opacity="0.08"/>
 
-  <!-- Geometric G — arc + hook, path-based, no text dependency.
-       translate(265, 256) centres the optical mass of the glyph; the
-       arc reaches further left than the hook extends right, so we
-       shift right by 9 to compensate. Same composition the favicon
-       uses, scaled to 512. -->
-  <g transform="translate(265, 256)">
-    <circle cx="0" cy="0" r="60" fill="url(#spark)"/>
-    <path d="M 134 -94 A 158 158 0 1 0 134 94 L 134 0 L 12 0"
-          fill="none" stroke="#FFFFFF" stroke-width="64"
+  <!-- Geometric G — arc + hook, smaller than V1 with proper optical centering -->
+  <g transform="translate(266, 256)">
+    <circle cx="0" cy="0" r="35" fill="url(#spark)"/>
+    <path d="M 85 -62 A 105 105 0 1 0 85 62 L 85 0 L 8 0"
+          fill="none" stroke="#FFFFFF" stroke-width="44"
           stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
