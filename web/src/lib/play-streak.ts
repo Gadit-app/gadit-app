@@ -3,21 +3,26 @@
 /**
  * Daily streak tracker for Word Games.
  *
- * LocalStorage-backed for V1 — per-device, no Firestore. Cross-device
- * sync can be added later by mirroring to /users/{uid}/playStats. For
- * a beta this is enough to get the dopamine loop running.
+ * Storage strategy: LocalStorage as the synchronous source of truth
+ * (so the menu can paint instantly) + Firestore as the authoritative
+ * cross-device store via /api/play/streak. The two reconcile by taking
+ * MAX(local.current, remote.current) on read, so a device that ran
+ * ahead while offline never gets demoted.
  *
- * Streak rule: playing on consecutive UTC dates extends the streak.
- * Skipping a day resets it to 1 on the next play. Playing multiple
- * times in one day keeps the streak unchanged.
+ * Streak rule (consistent client + server):
+ *   - same UTC day        → current unchanged
+ *   - exactly +1 day      → current +1
+ *   - otherwise           → current resets to 1
  */
+
+import type { User } from "firebase/auth";
 
 const KEY = "gadit-play-streak";
 
 export type PlayStreak = {
-  current: number;       // consecutive days including today (0 if never played)
-  best: number;          // all-time max
-  lastPlayedYmd: string; // "YYYY-MM-DD" in UTC, or ""
+  current: number;
+  best: number;
+  lastPlayedYmd: string;
   totalSessions: number;
 };
 
@@ -39,30 +44,84 @@ function daysBetween(a: string, b: string): number {
   return Math.round((db - da) / 86_400_000);
 }
 
-export function getStreak(): PlayStreak {
+function readLocal(): PlayStreak {
   if (typeof window === "undefined") return empty;
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return empty;
-    const parsed = JSON.parse(raw) as PlayStreak;
-    return { ...empty, ...parsed };
+    return { ...empty, ...(JSON.parse(raw) as PlayStreak) };
   } catch {
     return empty;
   }
 }
 
-/** Call this whenever the user FINISHES a game session (any of the five). */
-export function recordPlay(): PlayStreak {
+function writeLocal(s: PlayStreak): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(s));
+  } catch { /* quota — ignore */ }
+}
+
+/**
+ * Synchronous read — used by the menu's first paint. May be stale if
+ * the user just played on another device; `syncFromServer` refreshes
+ * it asynchronously.
+ */
+export function getStreak(): PlayStreak {
+  return readLocal();
+}
+
+/**
+ * Pull from Firestore and merge with the local snapshot. The merged
+ * record (highest current, highest best, latest lastPlayedYmd, summed-
+ * but-clamped sessions) is written back to LocalStorage for the next
+ * synchronous read.
+ *
+ * Safe to call on every /play mount — single GET, cheap.
+ */
+export async function syncFromServer(user: User | null): Promise<PlayStreak> {
+  if (!user) return readLocal();
+  try {
+    const idToken = await user.getIdToken();
+    const res = await fetch("/api/play/streak", {
+      headers: { Authorization: `Bearer ${idToken}` },
+    });
+    if (!res.ok) return readLocal();
+    const remote = (await res.json()) as PlayStreak;
+    const local = readLocal();
+    const merged: PlayStreak = {
+      current: Math.max(remote.current ?? 0, local.current ?? 0),
+      best: Math.max(remote.best ?? 0, local.best ?? 0),
+      lastPlayedYmd:
+        (remote.lastPlayedYmd ?? "") > (local.lastPlayedYmd ?? "")
+          ? remote.lastPlayedYmd
+          : local.lastPlayedYmd,
+      totalSessions: Math.max(
+        remote.totalSessions ?? 0,
+        local.totalSessions ?? 0,
+      ),
+    };
+    writeLocal(merged);
+    return merged;
+  } catch {
+    return readLocal();
+  }
+}
+
+/**
+ * Record a completed session. Updates LocalStorage immediately so the
+ * UI feels instant, then fires the Firestore mutation in the
+ * background (best-effort; offline play still counts locally and will
+ * sync on the next online play).
+ */
+export function recordPlay(user?: User | null): PlayStreak {
   if (typeof window === "undefined") return empty;
   const today = ymd(new Date());
-  const prev = getStreak();
+  const prev = readLocal();
   let current = prev.current;
-  if (prev.lastPlayedYmd === today) {
-    // Already played today — keep streak, just bump session count.
-  } else {
+  if (prev.lastPlayedYmd !== today) {
     const gap = daysBetween(prev.lastPlayedYmd, today);
-    if (gap === 1) current = prev.current + 1;
-    else current = 1; // reset (or first time)
+    current = gap === 1 ? prev.current + 1 : 1;
   }
   const next: PlayStreak = {
     current,
@@ -70,8 +129,27 @@ export function recordPlay(): PlayStreak {
     lastPlayedYmd: today,
     totalSessions: prev.totalSessions + 1,
   };
-  try {
-    window.localStorage.setItem(KEY, JSON.stringify(next));
-  } catch { /* quota — ignore */ }
+  writeLocal(next);
+
+  // Fire-and-forget Firestore sync. We don't await — UI shouldn't
+  // block on the network for a streak bump.
+  if (user) {
+    user
+      .getIdToken()
+      .then((idToken) =>
+        fetch("/api/play/streak", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            localCurrent: next.current,
+            localBest: next.best,
+          }),
+        }),
+      )
+      .catch(() => { /* offline — local copy is authoritative until next sync */ });
+  }
   return next;
 }

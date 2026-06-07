@@ -12,6 +12,7 @@
  */
 
 import { useEffect } from "react";
+import { useAuth } from "@/lib/auth-context";
 import { recordPlay } from "@/lib/play-streak";
 import type { PlayT } from "./GameQuiz";
 
@@ -39,8 +40,13 @@ export function GameResult({
   lang: string;
   t: PlayT;
 }) {
+  const { user } = useAuth();
   useEffect(() => {
-    recordPlay();
+    recordPlay(user);
+    // user is intentionally omitted from deps — we only want to record
+    // once on mount; if auth pops in mid-result-screen we'd otherwise
+    // double-record.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const pct = data.total > 0 ? data.score / data.total : 0;

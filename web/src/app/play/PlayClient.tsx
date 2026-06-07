@@ -28,7 +28,7 @@ import {
   type GameId,
   type PlayWord,
 } from "@/lib/play-engine";
-import { getStreak } from "@/lib/play-streak";
+import { getStreak, syncFromServer } from "@/lib/play-streak";
 import { GameQuiz, type PlayT } from "@/components/play/GameQuiz";
 import { GameFillBlank } from "@/components/play/GameFillBlank";
 import { GameMemory } from "@/components/play/GameMemory";
@@ -532,9 +532,16 @@ export function PlayPage() {
   }, [loading, user, plan, lang]);
 
   // Refresh streak when returning to menu (after a game finishes).
+  // Local read is synchronous + instant; the Firestore sync runs in
+  // the background and updates state again if the cross-device value
+  // is higher than what this device has.
   useEffect(() => {
-    if (stage.kind === "menu") setStreak(getStreak());
-  }, [stage.kind]);
+    if (stage.kind !== "menu") return;
+    setStreak(getStreak());
+    if (user) {
+      syncFromServer(user).then(setStreak).catch(() => undefined);
+    }
+  }, [stage.kind, user]);
 
   const poolWithExamples = useMemo(
     () => (pool ?? []).filter((p) => p.examples.length > 0).length,
