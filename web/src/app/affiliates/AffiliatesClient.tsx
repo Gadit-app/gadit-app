@@ -216,13 +216,13 @@ const COPY: Record<Lang, Copy> = {
 
     howEyebrow: "איך זה עובד",
     howTitle: "שלושה צעדים, בלי שום ידע טכני",
-    how1Title: "1. הרשמה לתוכנית",
+    how1Title: "הרשמה לתוכנית",
     how1Desc:
       "טופס קצר. תוך דקה אתם מקבלים אישור אוטומטי, קישור אישי, וגישה לאזור האישי.",
-    how2Title: "2. שיתוף הקישור",
+    how2Title: "שיתוף הקישור",
     how2Desc:
       "בוואטסאפ של ההורים, במייל לרשימה, בסטורי באינסטגרם, בבלוג, או באישית — בכל מקום שמתאים לקהל שלכם.",
-    how3Title: "3. תגמול שגדל איתכם",
+    how3Title: "תגמול שגדל איתכם",
     how3Desc:
       "30% עמלה חוזרת ל-12 חודש על כל לקוח שמצטרף דרך הקישור. כשתביאו 10 לקוחות פעילים תהפכו ל-Active Partner ותפתחו תוספת של 10% עמלה חוזרת לכל החיים — על כל הלקוחות שלכם, מהחודש ה-13 והלאה.",
     midCta1: "התחילו עכשיו — לוקח דקה",
@@ -357,13 +357,13 @@ const COPY: Record<Lang, Copy> = {
 
     howEyebrow: "How it works",
     howTitle: "Three steps, no technical skills",
-    how1Title: "1. Sign up to the program",
+    how1Title: "Sign up to the program",
     how1Desc:
       "Short form. Within a minute you're approved automatically with a personal link and a dashboard.",
-    how2Title: "2. Share your link",
+    how2Title: "Share your link",
     how2Desc:
       "In a parent WhatsApp, in a mailing list, in an Instagram story, on a blog, or in person — wherever fits your audience.",
-    how3Title: "3. Rewards that grow with you",
+    how3Title: "Rewards that grow with you",
     how3Desc:
       "30% recurring commission for 12 months on every customer who signs up through your link. Bring 10 active customers and you become an Active Partner — unlocking an additional 10% lifetime commission on all your customers, from month 13 onward.",
     midCta1: "Start now — takes a minute",
