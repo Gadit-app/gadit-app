@@ -6335,12 +6335,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 .wordbook .wb-aff-page {
   background: var(--wb-canvas);
+  /* Belt-and-suspenders against horizontal overflow on mobile —
+     if any descendant accidentally exceeds 100vw (long Hebrew CTA
+     wrapping in a flex row, a stray pre/table/image), the whole
+     viewport stays the same width instead of triggering a horizontal
+     scroll bar that hides half the page until the user pinches out. */
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 .wordbook .wb-aff-main {
   max-width: 1080px;
   margin-inline: auto;
   padding-inline: 24px;
+  /* Same protection at the content layer — every section sits inside
+     this container, so a section that goes wide is bounded here too. */
+  max-width: min(1080px, 100vw);
+  box-sizing: border-box;
 }
 
 /* ── Eyebrow / section heading vocabulary ───────────────────── */
@@ -6764,13 +6775,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 /* Generic 3-column card grid used by Why-recommend AND Who-it's-for.
    They share the same visual treatment because they share the same
-   role on the page: a row of three reasons / personas. */
+   role on the page: a row of three reasons / personas.
+   minmax uses `min(260px, 100%)` instead of plain `260px` so the
+   grid never demands a column wider than the container — that was
+   the source of the horizontal overflow on narrow phones. */
 .wordbook .wb-aff-grid-3 {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: 20px;
 }
 .wordbook .wb-aff-feature-card {
@@ -6782,6 +6796,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   flex-direction: column;
   gap: 12px;
   transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms, border-color 220ms;
+  box-sizing: border-box;
+  /* Long Hebrew / German compound words shouldn't push the card wider
+     than its grid cell on narrow phones. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .wordbook .wb-aff-feature-card:hover {
   transform: translateY(-2px);
@@ -6821,7 +6840,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 16px;
   max-width: 880px;
   margin-inline: auto;
@@ -6988,7 +7007,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 /* Scenario table — concrete examples around the slider. Keeps the
    data readable across mobile (where the slider becomes the primary
-   interaction) and desktop (where the table reads at a glance). */
+   interaction) and desktop (where the table reads at a glance).
+   Fixed layout so cells share the width evenly and a long header
+   doesn't push the table beyond 100% on narrow phones. */
 .wordbook .wb-aff-earn-table {
   width: 100%;
   max-width: 560px;
@@ -7000,6 +7021,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-radius: 14px;
   overflow: hidden;
   font-variant-numeric: tabular-nums;
+  table-layout: fixed;
 }
 .wordbook .wb-aff-earn-table th,
 .wordbook .wb-aff-earn-table td {
