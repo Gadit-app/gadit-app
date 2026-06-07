@@ -178,7 +178,7 @@ const COPY: Record<Lang, Copy> = {
     navAffiliates: "שותפים",
     topbarSignIn: "כבר שותפים? כניסה",
 
-    heroEyebrow: "תוכנית השותפים של Gadit",
+    heroEyebrow: "תוכנית השותפים",
     heroTitle: "הפכו את ההמלצה שלכם להכנסה חודשית",
     heroSubtitle:
       "אתם משתפים את הקישור האישי שלכם, ואנחנו מתגמלים אתכם 30% עמלה חוזרת בשנה הראשונה — ו-10% לכל החיים כשתהפכו ל-Active Partner.",
@@ -254,7 +254,7 @@ const COPY: Record<Lang, Copy> = {
     calcUnitSuffix: "מנויים",
     tableHeaderSubs: "כמות מנויים",
     tableHeaderMonthly: "תגמול חודשי",
-    tableHeaderYearly: "סך הכל ב-12 חודש",
+    tableHeaderYearly: "ב-12 חודש",
     earnNote:
       "החישוב מבוסס על מנוי Deep ($4.99/חודש) ועל 30% עמלה בשנה הראשונה. מהחודש ה-13, Active Partners מקבלים תוספת של 10% עמלה לכל החיים על אותם לקוחות. תגמולים משתחררים אחרי תקופת המתנה של 30 יום, ותשלום מתבצע כשהצטברו $50 (סף תשלום מינימלי — לא תקרה).",
     midCta2: "מוכנים להתחיל? קבלו את הקישור שלכם",
@@ -319,7 +319,7 @@ const COPY: Record<Lang, Copy> = {
     navAffiliates: "Affiliates",
     topbarSignIn: "Already a partner? Sign in",
 
-    heroEyebrow: "The Gadit Partner Program",
+    heroEyebrow: "Partner Program",
     heroTitle: "Turn your recommendation into monthly income",
     heroSubtitle:
       "You share your personal link, and we reward you 30% recurring commission in year one — and 10% for life once you become an Active Partner.",
@@ -395,7 +395,7 @@ const COPY: Record<Lang, Copy> = {
     calcUnitSuffix: "subscribers",
     tableHeaderSubs: "Subscribers",
     tableHeaderMonthly: "Monthly reward",
-    tableHeaderYearly: "Total over 12 months",
+    tableHeaderYearly: "Over 12 months",
     earnNote:
       "Calculation based on Deep subscription ($4.99/month) and 30% commission in year one. From month 13, Active Partners earn an additional 10% lifetime commission on those same customers. Rewards release after a 30-day hold, and payouts happen once $50 has accumulated ($50 is the minimum payout threshold — not a ceiling).",
     midCta2: "Ready to start? Get your link",
