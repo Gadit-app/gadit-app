@@ -161,6 +161,8 @@ type Copy = {
   faq9A: string;
   faq10Q: string;
   faq10A: string;
+  faq11Q: string;
+  faq11A: string;
 
   // Final CTA
   finalTitle: string;
@@ -176,29 +178,29 @@ const COPY: Record<Lang, Copy> = {
     navAffiliates: "שותפים",
     topbarSignIn: "כבר שותפים? כניסה",
 
-    heroEyebrow: "תוכנית השותפים של גדית",
+    heroEyebrow: "תוכנית השותפים של Gadit",
     heroTitle: "הפכו את ההמלצה שלכם להכנסה חודשית",
     heroSubtitle:
-      "אתם משתפים את הקישור האישי שלכם, ואנחנו מתגמלים אתכם על כל מנוי שמצטרף דרככם — בלי צורך להיות משווקים.",
+      "אתם משתפים את הקישור האישי שלכם, ואנחנו מתגמלים אתכם 30% עמלה חוזרת בשנה הראשונה — ו-10% לכל החיים כשתהפכו ל-Active Partner.",
     heroCtaPrimary: "קבלו את הקישור האישי שלכם — בחינם",
-    heroProofA: "30% עמלה חוזרת",
-    heroProofB: "12 חודש לכל מנוי",
-    heroProofC: "אישור תוך 24 שעות",
-    heroProofD: "בלי צורך להיות משווקים",
+    heroProofA: "30% בשנה הראשונה",
+    heroProofB: "10% לכל החיים (Active Partner)",
+    heroProofC: "קישור מיידי",
+    heroProofD: "פתוח לכולם",
 
     whyEyebrow: "לפני הכסף",
-    whyTitle: "למה גדית שווה המלצה",
+    whyTitle: "למה Gadit שווה המלצה",
     whySubtitle:
       "אתם תמליצו רק על משהו שאתם מאמינים בו. אז הנה מה שהקהל שלכם יקבל — ולמה הוא יודה לכם.",
     why1Title: "מילון אמיתי, לא תרגום יבש",
     why1Desc:
-      "כל המשמעויות של מילה, דוגמאות אמיתיות לכל אחת, ניבים, מקור היסטורי ותמונה. גדית מסביר מילה כמו שצריך, לא כמו שכל מילון רגיל עושה.",
+      "כל המשמעויות של מילה, דוגמאות אמיתיות לכל אחת, ניבים, מקור היסטורי ותמונה. Gadit מסביר מילה כמו שצריך, לא כמו שכל מילון רגיל עושה.",
     why2Title: "ב-9 שפות, כולל עברית RTL מלאה",
     why2Desc:
       "עברית, אנגלית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית וצ'כית. מתאים גם לדוברי עברית וגם להורים של ילדים שלומדים שפה זרה.",
     why3Title: "תוכנן עבור הורים, מורים ולומדים",
     why3Desc:
-      "הסבר לילדים, חידונים, משחקי מילים ומחברת אישית. גדית לא בנוי לאקדמאים — הוא בנוי לבית, לכיתה ולקבוצת הוואטסאפ.",
+      "הסבר לילדים, חידונים, משחקי מילים ומחברת אישית. Gadit לא בנוי לאקדמאים — הוא בנוי לבית, לכיתה ולקבוצת הוואטסאפ.",
 
     whoEyebrow: "למי זה מתאים",
     whoTitle: "אנשים שיש להם קהילה שסומכת עליהם",
@@ -214,15 +216,15 @@ const COPY: Record<Lang, Copy> = {
 
     howEyebrow: "איך זה עובד",
     howTitle: "שלושה צעדים, בלי שום ידע טכני",
-    how1Title: "1. הרשמה למחזיק קישור",
+    how1Title: "1. הרשמה לתוכנית",
     how1Desc:
-      "טופס קצר. תוך 24 שעות אתם מקבלים אישור, קישור אישי, וגישה לאזור האישי.",
+      "טופס קצר. תוך דקה אתם מקבלים אישור אוטומטי, קישור אישי, וגישה לאזור האישי.",
     how2Title: "2. שיתוף הקישור",
     how2Desc:
       "בוואטסאפ של ההורים, במייל לרשימה, בסטורי באינסטגרם, בבלוג, או באישית — בכל מקום שמתאים לקהל שלכם.",
-    how3Title: "3. תגמול על כל מנוי",
+    how3Title: "3. תגמול שגדל איתכם",
     how3Desc:
-      "כל אחד שמצטרף דרך הקישור ומשדרג לתוכנית בתשלום מזכה אתכם בעמלה — אוטומטית, בלי לעקוב, בלי לדווח. הכל נראה באזור האישי.",
+      "30% עמלה חוזרת ל-12 חודש על כל לקוח שמצטרף דרך הקישור. כשתביאו 10 לקוחות פעילים תהפכו ל-Active Partner ותפתחו תוספת של 10% עמלה חוזרת לכל החיים — על כל הלקוחות שלכם, מהחודש ה-13 והלאה.",
     midCta1: "התחילו עכשיו — לוקח דקה",
 
     getEyebrow: "מה תקבלו",
@@ -254,15 +256,15 @@ const COPY: Record<Lang, Copy> = {
     tableHeaderMonthly: "תגמול חודשי",
     tableHeaderYearly: "סך הכל ב-12 חודש",
     earnNote:
-      "החישוב מבוסס על מנוי Deep ($4.99/חודש) ועל 30% עמלה. תגמולים משתחררים אחרי תקופת המתנה של 30 יום, ותשלום מתבצע כשהצטברו $50 (סף תשלום מינימלי — לא תקרה).",
+      "החישוב מבוסס על מנוי Deep ($4.99/חודש) ועל 30% עמלה בשנה הראשונה. מהחודש ה-13, Active Partners מקבלים תוספת של 10% עמלה לכל החיים על אותם לקוחות. תגמולים משתחררים אחרי תקופת המתנה של 30 יום, ותשלום מתבצע כשהצטברו $50 (סף תשלום מינימלי — לא תקרה).",
     midCta2: "מוכנים להתחיל? קבלו את הקישור שלכם",
 
     trustEyebrow: "למה לסמוך",
     trustTitle: "תוכנית מייסדים בשלביה הראשונים",
     founderHeading: "פסקה ממני, גדי",
     founderBody:
-      "בניתי את גדית כי לקח לי שנים להבין שמילה היא לא רק תרגום — היא סיפור שלם. רציתי לתת לכל אדם בעולם את הכלי שאני הייתי רוצה כשלמדתי. תוכנית השותפים פתוחה עכשיו לקבוצה ראשונה של אנשים שמתחברים לרעיון הזה. אם זה אתם — אשמח אם תצטרפו.",
-    founderSign: "— גדי בן לביא, מייסד גדית",
+      "בניתי את Gadit כי לקח לי שנים להבין שמילה היא לא רק תרגום — היא סיפור שלם. רציתי לתת לכל אדם בעולם את הכלי שאני הייתי רוצה כשלמדתי. תוכנית השותפים פתוחה עכשיו לקבוצה ראשונה של אנשים שמתחברים לרעיון הזה. אם זה אתם — אשמח אם תצטרפו.",
+    founderSign: "— גדי בן לביא, מייסד Gadit",
     stat1Num: "9",
     stat1Label: "שפות ממשק נתמכות",
     stat2Num: "30%",
@@ -274,7 +276,7 @@ const COPY: Record<Lang, Copy> = {
     faqTitle: "מה כדאי לדעת",
     faq1Q: "האם אני צריך להיות משווק?",
     faq1A:
-      "לא. רוב השותפים שלנו הם הורים, מורים ובלוגרים שמעולם לא שיווקו דבר. כל מה שצריך זה לשתף את הקישור עם אנשים שיכולים להפיק מגדית.",
+      "לא. רוב השותפים שלנו הם הורים, מורים ובלוגרים שמעולם לא שיווקו דבר. כל מה שצריך זה לשתף את הקישור עם אנשים שיכולים להפיק מ-Gadit.",
     faq2Q: "האם מותר לשתף בקבוצות וואטסאפ או פייסבוק?",
     faq2A:
       "כן — וזה אחד הערוצים הטובים ביותר לקהל שלנו. הורים שואלים זה את זה על כלים בקבוצות, ושם ההמלצה שלכם הכי משפיעה.",
@@ -286,7 +288,7 @@ const COPY: Record<Lang, Copy> = {
       "תקבלו עמלה רק על החודשים שהלקוח שילם בפועל. אם הוא ביטל אחרי 4 חודשים — קיבלתם 4 חודשים של תגמול. הוגן לשני הצדדים.",
     faq5Q: "האם יש מגבלה על כמות לקוחות?",
     faq5A:
-      "בכלל לא. תוכלו להביא כמה לקוחות שתרצו, מכל מקום בעולם, בכל אחת מ-9 השפות שגדית תומך בהן.",
+      "בכלל לא. תוכלו להביא כמה לקוחות שתרצו, מכל מקום בעולם, בכל אחת מ-9 השפות ש-Gadit תומך בהן.",
     faq6Q: "מה הקישור עושה אם מישהו לא נרשם מיד?",
     faq6A:
       "הקישור זוכר אתכם ל-60 יום. אם מישהו לחץ עליו, התלבט שבועיים, וחזר לרכוש מנוי — ההרשמה עדיין נחשבת שלכם.",
@@ -298,10 +300,13 @@ const COPY: Record<Lang, Copy> = {
       "כן. תוכלו להעתיק טקסטים מוכנים לוואטסאפ, מייל להורים, פוסטים לפייסבוק וטיוטות לסטורי. אם תרצו משהו ספציפי — תפנו ואנחנו נכין.",
     faq9Q: "האם מותר לפרסם מודעות ממומנות בגוגל או פייסבוק?",
     faq9A:
-      "מודעות אורגניות לקהל שלכם — כן. אבל אסור לקנות מודעות ממומנות על המילה 'גדית' או 'Gadit' עצמן (זה נקרא brand bidding ומגן עלינו ועליכם). הכללים המלאים מופיעים באזור האישי.",
+      "מודעות אורגניות לקהל שלכם — כן. אבל אסור לקנות מודעות ממומנות על המילה 'Gadit' עצמה (זה נקרא brand bidding ומגן עלינו ועליכם). הכללים המלאים מופיעים באזור האישי.",
     faq10Q: "האם אני חייב לקנות מנוי כדי להיות שותף?",
     faq10A:
       "לא. אתם יכולים להיות שותפים בלי לרכוש דבר. ההצטרפות חינמית לחלוטין.",
+    faq11Q: "מה זה Active Partner ואיך מגיעים לזה?",
+    faq11A:
+      "כשהבאתם 10 לקוחות משלמים פעילים, אתם הופכים אוטומטית ל-Active Partner — סטטוס שפותח לכם תוספת של 10% עמלה חוזרת לכל החיים, על כל הלקוחות שלכם (גם הקיימים, מהחודש ה-13 והלאה). זה אומר שגם אחרי שנתיים, שלוש או חמש שנים — אם הלקוחות שלכם עדיין מנויים, אתם עדיין מקבלים תגמול.",
 
     finalTitle: "מוכנים להתחיל?",
     finalSubtitle:
@@ -317,12 +322,12 @@ const COPY: Record<Lang, Copy> = {
     heroEyebrow: "The Gadit Partner Program",
     heroTitle: "Turn your recommendation into monthly income",
     heroSubtitle:
-      "You share your personal link, and we reward you for every subscriber who joins through it — no marketing experience needed.",
+      "You share your personal link, and we reward you 30% recurring commission in year one — and 10% for life once you become an Active Partner.",
     heroCtaPrimary: "Get your personal link — free",
-    heroProofA: "30% recurring commission",
-    heroProofB: "12 months per referral",
-    heroProofC: "Approval in 24 hours",
-    heroProofD: "No marketing experience needed",
+    heroProofA: "30% in year one",
+    heroProofB: "10% lifetime (Active Partner)",
+    heroProofC: "Instant link",
+    heroProofD: "Open to everyone",
 
     whyEyebrow: "Before the money",
     whyTitle: "Why Gadit is worth recommending",
@@ -352,15 +357,15 @@ const COPY: Record<Lang, Copy> = {
 
     howEyebrow: "How it works",
     howTitle: "Three steps, no technical skills",
-    how1Title: "1. Sign up as a partner",
+    how1Title: "1. Sign up to the program",
     how1Desc:
-      "Short form. Within 24 hours you'll be approved and have a personal link plus a dashboard.",
+      "Short form. Within a minute you're approved automatically with a personal link and a dashboard.",
     how2Title: "2. Share your link",
     how2Desc:
       "In a parent WhatsApp, in a mailing list, in an Instagram story, on a blog, or in person — wherever fits your audience.",
-    how3Title: "3. Earn on every subscription",
+    how3Title: "3. Rewards that grow with you",
     how3Desc:
-      "Anyone who signs up through your link and upgrades to a paid plan earns you a commission — automatically, no tracking or reporting needed. Everything visible in your dashboard.",
+      "30% recurring commission for 12 months on every customer who signs up through your link. Bring 10 active customers and you become an Active Partner — unlocking an additional 10% lifetime commission on all your customers, from month 13 onward.",
     midCta1: "Start now — takes a minute",
 
     getEyebrow: "What you get",
@@ -392,7 +397,7 @@ const COPY: Record<Lang, Copy> = {
     tableHeaderMonthly: "Monthly reward",
     tableHeaderYearly: "Total over 12 months",
     earnNote:
-      "Calculation based on Deep subscription ($4.99/month) and 30% commission. Rewards release after a 30-day hold, and payouts happen once $50 has accumulated ($50 is the minimum payout threshold — not a ceiling).",
+      "Calculation based on Deep subscription ($4.99/month) and 30% commission in year one. From month 13, Active Partners earn an additional 10% lifetime commission on those same customers. Rewards release after a 30-day hold, and payouts happen once $50 has accumulated ($50 is the minimum payout threshold — not a ceiling).",
     midCta2: "Ready to start? Get your link",
 
     trustEyebrow: "Why trust us",
@@ -440,6 +445,9 @@ const COPY: Record<Lang, Copy> = {
     faq10Q: "Do I have to buy a subscription to be a partner?",
     faq10A:
       "No. You can be a partner without buying anything. Joining is completely free.",
+    faq11Q: "What is an Active Partner and how do I become one?",
+    faq11A:
+      "Once you've referred 10 active paying customers, you automatically become an Active Partner — a status that unlocks an additional 10% recurring lifetime commission on all your customers (including existing ones, from month 13 onward). That means even two, three, or five years later — as long as your customers stay subscribed, you keep earning.",
 
     finalTitle: "Ready to start?",
     finalSubtitle:
@@ -1024,6 +1032,7 @@ export function AffiliatesPage() {
               [c.faq8Q, c.faq8A],
               [c.faq9Q, c.faq9A],
               [c.faq10Q, c.faq10A],
+              [c.faq11Q, c.faq11A],
             ].map(([q, a], i) => (
               <li key={i} className="wb-aff-faq-item">
                 <h3 className="wb-aff-faq-q">{q}</h3>
