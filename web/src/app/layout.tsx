@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
@@ -282,6 +283,20 @@ export default async function RootLayout({
           <ServiceWorkerRegister />
           <Analytics />
           <SpeedInsights />
+          {/* Affonso affiliate-tracking pixel — sets a 30-day
+              affonso_referral cookie when a visitor lands with
+              ?ref=CODE in the URL. Captured at checkout time and
+              attributed via Stripe metadata. afterInteractive is the
+              App Router-safe strategy for third-party tracking: it
+              still fires early enough to catch the ?ref= param on
+              the first navigation, while keeping initial paint
+              snappy. */}
+          <Script
+            src="https://cdn.affonso.io/js/pixel.min.js"
+            strategy="afterInteractive"
+            data-affonso="cmq3oz349000p11r2lloq0xb2"
+            data-cookie_duration="30"
+          />
         </body>
     </html>
   );
