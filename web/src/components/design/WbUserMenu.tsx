@@ -32,18 +32,18 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import type { Lang } from "@/lib/i18n";
 
-type Copy = { account: string; signOut: string; openMenu: string };
+type Copy = { account: string; dashboard: string; signOut: string; openMenu: string };
 
 const COPY: Record<Lang, Copy> = {
-  en: { account: "Account",            signOut: "Sign out",    openMenu: "Open account menu" },
-  he: { account: "החשבון שלי",          signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
-  ar: { account: "حسابي",               signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
-  ru: { account: "Аккаунт",             signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
-  es: { account: "Cuenta",              signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
-  pt: { account: "Conta",               signOut: "Sair",        openMenu: "Abrir menu da conta" },
-  fr: { account: "Compte",              signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
-  de: { account: "Konto",               signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
-  cs: { account: "Účet",                signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
+  en: { account: "Account",            dashboard: "Affiliate dashboard",  signOut: "Sign out",    openMenu: "Open account menu" },
+  he: { account: "החשבון שלי",          dashboard: "הדשבורד של השותף",     signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
+  ar: { account: "حسابي",               dashboard: "لوحة الشريك",           signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
+  ru: { account: "Аккаунт",             dashboard: "Панель партнёра",       signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
+  es: { account: "Cuenta",              dashboard: "Panel de socio",        signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
+  pt: { account: "Conta",               dashboard: "Painel do parceiro",    signOut: "Sair",        openMenu: "Abrir menu da conta" },
+  fr: { account: "Compte",              dashboard: "Tableau du partenaire", signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
+  de: { account: "Konto",               dashboard: "Partner-Dashboard",     signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
+  cs: { account: "Účet",                dashboard: "Přehled partnera",      signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
 };
 
 // Tier chip colors. Mirrors the same scheme used on /account and
@@ -230,6 +230,24 @@ export function WbUserMenu() {
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             {c.account}
+          </Link>
+          <Link
+            role="menuitem"
+            href={href("/affiliate/dashboard")}
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "10px 12px",
+              borderRadius: 8,
+              color: "var(--ink, #111827)",
+              textDecoration: "none",
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {c.dashboard}
           </Link>
           <button
             role="menuitem"

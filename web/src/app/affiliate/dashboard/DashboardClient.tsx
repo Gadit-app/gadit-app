@@ -1,0 +1,406 @@
+"use client";
+
+/**
+ * /affiliate/dashboard — embedded Affonso partner dashboard.
+ *
+ * The page exists so signed-in Gadit users never have to leave the
+ * domain to see their referral stats. We fetch a short-lived embed
+ * token from /api/affiliate/embed-token (server-side, using the
+ * private AFFONSO_API_KEY), then drop the token into the Affonso
+ * iframe. The iframe handles everything else — referral link, QR
+ * code, stats, payouts, settings.
+ *
+ * Language mapping: Affonso supports 14 UI languages but Hebrew and
+ * Czech aren't among them. He/cs users fall back to English so the
+ * iframe still renders something sane instead of a broken locale.
+ *
+ * Auth gate: anonymous → prompt login. Plan gate: we DON'T require
+ * Clear/Deep — anyone with a Gadit account can be a partner, the
+ * tier is a customer-side concept, not a partner-side one.
+ */
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
+import { v2 } from "@/lib/i18n-v2";
+import { useHref } from "@/lib/href";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { WbUserMenu } from "@/components/design/WbUserMenu";
+
+// Languages Affonso's embedded dashboard supports. Hebrew and Czech
+// aren't on the list; the UI fall back below maps them to English.
+const AFFONSO_LANGS = new Set([
+  "en", "de", "fr", "es", "it", "pt", "nl", "pl", "tr", "ja", "zh", "ko", "ru", "ar",
+]);
+
+// Localized strings — inline so this single page doesn't add 9 entries
+// to i18n-v2 for what amounts to a loading state and an error message.
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs";
+const COPY: Record<Lang, {
+  title: string;
+  loadingTitle: string;
+  loadingHint: string;
+  notConfiguredTitle: string;
+  notConfiguredBody: string;
+  errorTitle: string;
+  errorBody: string;
+  signInTitle: string;
+  signInBody: string;
+  marketingLink: string;
+}> = {
+  he: {
+    title: "הדשבורד שלי",
+    loadingTitle: "טוען את הדשבורד שלך…",
+    loadingHint: "זה לוקח כמה שניות בפעם הראשונה.",
+    notConfiguredTitle: "הדשבורד עוד לא הופעל",
+    notConfiguredBody:
+      "אנחנו עדיין מסיימים להגדיר את האינטגרציה. בינתיים תוכל לגשת לדשבורד שלך ישירות בפורטל החיצוני.",
+    errorTitle: "משהו השתבש",
+    errorBody:
+      "לא הצלחנו לטעון את הדשבורד שלך. נסה לרענן את הדף, ואם הבעיה ממשיכה — תיכנס לפורטל החיצוני.",
+    signInTitle: "הדשבורד שמור לשותפים מחוברים",
+    signInBody: "תתחבר עם החשבון שלך כדי לראות את הקישור האישי, הסטטיסטיקות והעמלות שלך.",
+    marketingLink: "מה זאת התוכנית?",
+  },
+  en: {
+    title: "My Dashboard",
+    loadingTitle: "Loading your dashboard…",
+    loadingHint: "This takes a few seconds the first time.",
+    notConfiguredTitle: "Dashboard not configured yet",
+    notConfiguredBody:
+      "We're still finishing the integration. In the meantime you can access your dashboard directly in the external portal.",
+    errorTitle: "Something went wrong",
+    errorBody:
+      "We couldn't load your dashboard. Try refreshing the page, or if the problem persists, sign in to the external portal.",
+    signInTitle: "Sign in to see your dashboard",
+    signInBody:
+      "Sign in to your Gadit account to see your personal link, statistics, and commissions.",
+    marketingLink: "What is the program?",
+  },
+  ar: {
+    title: "لوحة التحكم الخاصة بي",
+    loadingTitle: "جارٍ تحميل لوحة التحكم…",
+    loadingHint: "تستغرق بضع ثوانٍ في المرة الأولى.",
+    notConfiguredTitle: "لوحة التحكم غير مهيأة بعد",
+    notConfiguredBody:
+      "ما زلنا ننهي إعداد التكامل. يمكنك في هذه الأثناء الوصول إلى لوحة التحكم من البوابة الخارجية.",
+    errorTitle: "حدث خطأ",
+    errorBody:
+      "لم نتمكن من تحميل لوحة التحكم. حاول تحديث الصفحة، وإذا استمرت المشكلة، سجّل الدخول إلى البوابة الخارجية.",
+    signInTitle: "سجّل الدخول لرؤية لوحة التحكم",
+    signInBody: "سجّل الدخول إلى حساب Gadit لرؤية الرابط الشخصي والإحصاءات والعمولات.",
+    marketingLink: "ما هو البرنامج؟",
+  },
+  ru: {
+    title: "Моя панель",
+    loadingTitle: "Загрузка панели…",
+    loadingHint: "В первый раз это занимает несколько секунд.",
+    notConfiguredTitle: "Панель ещё не настроена",
+    notConfiguredBody:
+      "Мы дорабатываем интеграцию. А пока вы можете открыть панель в внешнем портале.",
+    errorTitle: "Что-то пошло не так",
+    errorBody:
+      "Не удалось загрузить панель. Обновите страницу, а если проблема не уйдёт, войдите во внешний портал.",
+    signInTitle: "Войдите, чтобы увидеть панель",
+    signInBody:
+      "Войдите в аккаунт Gadit, чтобы увидеть свою ссылку, статистику и комиссии.",
+    marketingLink: "Что за программа?",
+  },
+  es: {
+    title: "Mi panel",
+    loadingTitle: "Cargando tu panel…",
+    loadingHint: "Tarda unos segundos la primera vez.",
+    notConfiguredTitle: "Panel aún no configurado",
+    notConfiguredBody:
+      "Estamos terminando la integración. Mientras tanto puedes acceder al panel en el portal externo.",
+    errorTitle: "Algo salió mal",
+    errorBody:
+      "No pudimos cargar tu panel. Intenta recargar la página, y si el problema persiste, ingresa al portal externo.",
+    signInTitle: "Inicia sesión para ver tu panel",
+    signInBody: "Inicia sesión en tu cuenta de Gadit para ver tu enlace, estadísticas y comisiones.",
+    marketingLink: "¿Qué es el programa?",
+  },
+  pt: {
+    title: "Meu painel",
+    loadingTitle: "Carregando seu painel…",
+    loadingHint: "Leva alguns segundos na primeira vez.",
+    notConfiguredTitle: "Painel ainda não configurado",
+    notConfiguredBody:
+      "Estamos terminando a integração. Enquanto isso, você pode acessar o painel no portal externo.",
+    errorTitle: "Algo deu errado",
+    errorBody:
+      "Não conseguimos carregar seu painel. Tente recarregar a página, e se o problema continuar, acesse o portal externo.",
+    signInTitle: "Entre para ver seu painel",
+    signInBody: "Entre na sua conta Gadit para ver seu link, estatísticas e comissões.",
+    marketingLink: "O que é o programa?",
+  },
+  fr: {
+    title: "Mon tableau de bord",
+    loadingTitle: "Chargement de votre tableau de bord…",
+    loadingHint: "Cela prend quelques secondes la première fois.",
+    notConfiguredTitle: "Tableau de bord pas encore configuré",
+    notConfiguredBody:
+      "Nous terminons l'intégration. En attendant, vous pouvez accéder au tableau de bord depuis le portail externe.",
+    errorTitle: "Une erreur s'est produite",
+    errorBody:
+      "Nous n'avons pas pu charger votre tableau de bord. Essayez d'actualiser la page, et si le problème persiste, connectez-vous au portail externe.",
+    signInTitle: "Connectez-vous pour voir votre tableau de bord",
+    signInBody: "Connectez-vous à votre compte Gadit pour voir votre lien, vos statistiques et vos commissions.",
+    marketingLink: "C'est quoi le programme ?",
+  },
+  de: {
+    title: "Mein Dashboard",
+    loadingTitle: "Dashboard wird geladen…",
+    loadingHint: "Beim ersten Mal dauert es ein paar Sekunden.",
+    notConfiguredTitle: "Dashboard noch nicht konfiguriert",
+    notConfiguredBody:
+      "Wir schließen die Integration noch ab. Du kannst dein Dashboard inzwischen im externen Portal aufrufen.",
+    errorTitle: "Etwas ist schiefgelaufen",
+    errorBody:
+      "Wir konnten dein Dashboard nicht laden. Versuche die Seite neu zu laden — wenn das Problem bleibt, melde dich im externen Portal an.",
+    signInTitle: "Melde dich an, um dein Dashboard zu sehen",
+    signInBody: "Melde dich bei deinem Gadit-Konto an, um deinen Link, deine Statistiken und Provisionen zu sehen.",
+    marketingLink: "Was ist das Programm?",
+  },
+  cs: {
+    title: "Můj přehled",
+    loadingTitle: "Načítání přehledu…",
+    loadingHint: "Poprvé to trvá pár vteřin.",
+    notConfiguredTitle: "Přehled zatím není nastaven",
+    notConfiguredBody:
+      "Dokončujeme integraci. Mezitím si přehled můžete otevřít v externím portálu.",
+    errorTitle: "Něco se pokazilo",
+    errorBody:
+      "Přehled se nepodařilo načíst. Zkuste stránku obnovit, a pokud problém přetrvá, přihlaste se v externím portálu.",
+    signInTitle: "Přihlaste se, abyste viděli přehled",
+    signInBody: "Přihlaste se ke svému účtu Gadit a uvidíte svůj odkaz, statistiky a provize.",
+    marketingLink: "Co je to za program?",
+  },
+};
+
+export function DashboardPage() {
+  const { user, loading, promptLogin } = useAuth();
+  const { lang, dir } = useLang();
+  const href = useHref();
+  const c = COPY[lang as Lang] ?? COPY.en;
+
+  type Stage =
+    | { kind: "init" }
+    | { kind: "fetching" }
+    | { kind: "ready"; token: string }
+    | { kind: "not_configured" }
+    | { kind: "error"; message: string };
+  const [stage, setStage] = useState<Stage>({ kind: "init" });
+
+  // Affonso lang param. He/cs fall back to English because Affonso
+  // doesn't ship those locales yet.
+  const affonsoLang = useMemo(
+    () => (AFFONSO_LANGS.has(lang) ? lang : "en"),
+    [lang],
+  );
+
+  // Auth gate.
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
+      promptLogin(c.title);
+    }
+  }, [loading, user, c.title, promptLogin]);
+
+  // Token fetch.
+  useEffect(() => {
+    if (loading || !user) return;
+    if (stage.kind !== "init") return;
+    let cancelled = false;
+    setStage({ kind: "fetching" });
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/affiliate/embed-token", {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (cancelled) return;
+        if (res.status === 503) {
+          setStage({ kind: "not_configured" });
+          return;
+        }
+        if (!res.ok) {
+          setStage({ kind: "error", message: `HTTP ${res.status}` });
+          return;
+        }
+        const data = (await res.json()) as { token?: string; error?: string };
+        if (!data.token) {
+          setStage({ kind: "error", message: data.error ?? "no_token" });
+          return;
+        }
+        setStage({ kind: "ready", token: data.token });
+      } catch (err) {
+        if (!cancelled) setStage({ kind: "error", message: String(err) });
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [loading, user, stage.kind]);
+
+  // Mobile burger menu mirrors the pattern used in /play, /affiliates,
+  // /features. Without it the topbar has zero interactive elements
+  // below 720px and the user is stuck.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const { setLang } = useLang();
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onClick(e: MouseEvent) {
+      const target = e.target as Node;
+      if (menuRef.current?.contains(target)) return;
+      if (burgerRef.current?.contains(target)) return;
+      setMenuOpen(false);
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  return (
+    <div className="wordbook wb-shell-page wb-affdash-page" dir={dir}>
+      <header className="wb-shell-topbar">
+        <Link href={href("/")} className="wb-wordmark" dir="ltr">
+          Gad<span className="wb-wordmark-it">it</span>
+        </Link>
+        <nav className="wb-shell-nav">
+          <Link
+            href={href("/")}
+            className="wb-shell-navlink wb-shell-navlink-icon"
+            aria-label={v2(lang, "navSearch")}
+            title={v2(lang, "navSearch")}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="m20 20-4-4" />
+            </svg>
+          </Link>
+          <Link href={href("/features")} className="wb-shell-navlink">
+            {v2(lang, "navFeatures")}
+          </Link>
+          <Link href={href("/pricing")} className="wb-shell-navlink">
+            {v2(lang, "navPricing")}
+          </Link>
+          <Link href={href("/affiliates")} className="wb-shell-navlink">
+            {v2(lang, "navAffiliates")}
+          </Link>
+        </nav>
+        <div className="wb-shell-actions">
+          <ShareButton
+            url="https://www.gadit.app/"
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text=""
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
+          {user ? <WbUserMenu /> : null}
+        </div>
+        <button
+          ref={burgerRef}
+          type="button"
+          className="wb-shell-burger"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          )}
+        </button>
+        {menuOpen && (
+          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
+            <Link href={href("/")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navSearch")}
+            </Link>
+            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navFeatures")}
+            </Link>
+            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navPricing")}
+            </Link>
+            <Link href={href("/affiliates")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navAffiliates")}
+            </Link>
+          </div>
+        )}
+      </header>
+
+      <main className="wb-affdash-main">
+        {!user && !loading && (
+          <div className="wb-affdash-state">
+            <h1 className="wb-affdash-state-title">{c.signInTitle}</h1>
+            <p className="wb-affdash-state-body">{c.signInBody}</p>
+            <Link href={href("/affiliates")} className="wb-affdash-state-link">
+              {c.marketingLink}
+            </Link>
+          </div>
+        )}
+
+        {user && (stage.kind === "init" || stage.kind === "fetching") && (
+          <div className="wb-affdash-state">
+            <div className="wb-affdash-spinner" aria-hidden="true" />
+            <h1 className="wb-affdash-state-title">{c.loadingTitle}</h1>
+            <p className="wb-affdash-state-body">{c.loadingHint}</p>
+          </div>
+        )}
+
+        {user && stage.kind === "not_configured" && (
+          <div className="wb-affdash-state">
+            <h1 className="wb-affdash-state-title">{c.notConfiguredTitle}</h1>
+            <p className="wb-affdash-state-body">{c.notConfiguredBody}</p>
+            <a
+              href="https://gaditapp.affonso.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wb-affdash-state-link"
+            >
+              gaditapp.affonso.io →
+            </a>
+          </div>
+        )}
+
+        {user && stage.kind === "error" && (
+          <div className="wb-affdash-state">
+            <h1 className="wb-affdash-state-title">{c.errorTitle}</h1>
+            <p className="wb-affdash-state-body">{c.errorBody}</p>
+            <a
+              href="https://gaditapp.affonso.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wb-affdash-state-link"
+            >
+              gaditapp.affonso.io →
+            </a>
+          </div>
+        )}
+
+        {user && stage.kind === "ready" && (
+          <iframe
+            // padding=false because the wb-affdash-main container
+            // already handles spacing; the Affonso embed would
+            // double-pad otherwise.
+            src={`https://affonso.io/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&padding=false`}
+            className="wb-affdash-iframe"
+            allow="clipboard-write"
+            title="Affiliate Dashboard"
+          />
+        )}
+      </main>
+    </div>
+  );
+}
