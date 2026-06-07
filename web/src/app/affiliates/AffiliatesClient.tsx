@@ -448,27 +448,20 @@ const COPY: Record<Lang, Copy> = {
     termsLink: "Partner program terms",
   },
 
-  ar: shortenedFor("ar"),
-  ru: shortenedFor("ru"),
-  es: shortenedFor("es"),
-  pt: shortenedFor("pt"),
-  fr: shortenedFor("fr"),
-  de: shortenedFor("de"),
-  cs: shortenedFor("cs"),
+  // Seven non-primary languages temporarily fall back to English copy
+  // with only the nav label localized. Better than shipping machine
+  // translations in all 9. The spread reads COPY.en — which is fully
+  // initialized by the time these property initializers run because
+  // object literal properties evaluate in source order, top-down.
+  ar: undefined as unknown as Copy,
+  ru: undefined as unknown as Copy,
+  es: undefined as unknown as Copy,
+  pt: undefined as unknown as Copy,
+  fr: undefined as unknown as Copy,
+  de: undefined as unknown as Copy,
+  cs: undefined as unknown as Copy,
 };
 
-// For the seven non-primary languages, fall back to English as a
-// placeholder until proper translations land. Better to ship the page
-// in 2 langs polished + 7 langs in EN than to ship clunky machine
-// translations in all 9. Each fallback inherits English COPY with the
-// nav label translated.
-function shortenedFor(_l: Lang): Copy {
-  return COPY?.en ?? ({} as Copy);
-}
-
-// Build the COPY object such that the seven fallback languages each
-// override only their nav label. We do this after the literal is
-// declared because shortenedFor needs COPY.en to exist.
 const NAV_FALLBACKS: Record<Exclude<Lang, "he" | "en">, { navAffiliates: string; topbarSignIn: string }> = {
   ar: { navAffiliates: "الشركاء", topbarSignIn: "شريك بالفعل؟ تسجيل دخول" },
   ru: { navAffiliates: "Партнёры", topbarSignIn: "Уже партнёр? Войти" },
