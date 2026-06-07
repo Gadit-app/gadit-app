@@ -2345,56 +2345,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    definition's first line shares the same horizontal line as the
    share icon. The card has the matching padding-inline-end +
    padding-top so the def-row text never runs under the icon. */
-/* Legacy — kept neutralized while old callers still pass through;
-   the per-meaning toolbar now lives inline at the end of the
-   definition via .wb-mdef-tools. */
-.wordbook .wb-mcard-head { display: none; }
-
-/* Inline listen + share, attached to the end of the definition text.
-   They flow with the text so they sit after the closing punctuation
-   on the last line instead of overlapping the first line as the
-   previous absolute-positioned corner toolbar did on mobile. */
-.wordbook .wb-mdef-tools {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-inline-start: 6px;
-  /* Keep the whole cluster from being broken across lines mid-cluster;
-     either it fits with the last word or it wraps to the next line as
-     a unit. */
-  white-space: nowrap;
-  vertical-align: middle;
-}
-.wordbook .wb-mdef-tool {
-  /* Slightly smaller than the legacy 30px corner buttons because they
-     now sit in-line with body text; matching the cap height of the
-     definition feels more like part of the sentence than two big chips
-     sticking out of it. */
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: transparent;
-  border: 1px solid var(--rule);
-  color: var(--teal);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
-}
-.wordbook .wb-mdef-tool:hover {
-  background: var(--teal-soft);
-  color: var(--teal-edge);
-  border-color: var(--teal);
-}
-.wordbook .wb-mdef-tool:active { transform: scale(0.94); }
-.wordbook .wb-mdef-tool-listen.is-playing {
-  background: var(--teal);
-  color: var(--surface);
-  border-color: var(--teal);
-  animation: wb-tts-pulse 1.4s ease-in-out infinite;
+/* Per-meaning listen + share — anchored to the top-end corner of the
+   card and stacked vertically (listen on top, share underneath). Beta
+   feedback was that the inline-end-of-text placement broke reading
+   flow; corner is back, but the column form takes half the inline
+   space of the old row form, and .wb-mcard now reserves padding on
+   the end side so the definition text never runs under it. */
+.wordbook .wb-mcard-head {
+  position: absolute;
+  top: 14px;
+  inset-inline-end: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  z-index: 1;
 }
 /* Number prefix — sits on the same baseline as the definition text */
 .wordbook .wb-mdef-row {
