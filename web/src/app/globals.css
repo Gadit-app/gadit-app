@@ -6318,3 +6318,812 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wb-wgm-cta-primary,
   .wb-wgm-cta-ghost { transition: none; }
 }
+
+/* ─────────────────────────────────────────────────────────────
+ * /affiliates — public marketing page for the Partner Program
+ *
+ * Mission-led hero, three audience pillars, three-step process,
+ * worked earnings example, FAQ, final CTA. CrispTech aesthetic:
+ * white canvas, teal accents, generous whitespace, AA contrast.
+ *
+ * All entrance animations use strong ease-out
+ * cubic-bezier(0.23, 1, 0.32, 1) and never start from scale(0)
+ * (always 0.96 minimum so elements never appear out of nothing).
+ * Reduced-motion strips all entrance animation while keeping
+ * opacity changes for visual feedback.
+ * ───────────────────────────────────────────────────────────── */
+
+.wordbook .wb-aff-page {
+  background: var(--wb-canvas);
+}
+
+.wordbook .wb-aff-main {
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* ── Eyebrow / section heading vocabulary ───────────────────── */
+.wordbook .wb-aff-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(13, 148, 148);
+}
+
+.wordbook .wb-aff-section-head {
+  text-align: center;
+  max-width: 680px;
+  margin-inline: auto;
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wordbook .wb-aff-section-title {
+  font-family: var(--wb-font-display);
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--wb-ink);
+  line-height: 1.2;
+  margin: 0;
+}
+.wordbook .wb-aff-section-sub {
+  font-size: 16px;
+  color: var(--wb-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.wordbook .wb-aff-section {
+  padding: 64px 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.05);
+}
+.wordbook .wb-aff-section:first-of-type { border-top: none; }
+@media (min-width: 768px) {
+  .wordbook .wb-aff-section { padding: 80px 0; }
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.wordbook .wb-aff-hero {
+  padding: 72px 0 80px;
+  text-align: center;
+  max-width: 760px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: wbAffFadeIn 600ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes wbAffFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.wordbook .wb-aff-title {
+  font-family: var(--wb-font-display);
+  font-size: clamp(34px, 6vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--wb-ink);
+  margin: 0;
+  line-height: 1.1;
+}
+.wordbook .wb-aff-lede {
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: var(--wb-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 620px;
+}
+
+/* ── CTAs ───────────────────────────────────────────────────── */
+.wordbook .wb-aff-cta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
+}
+.wordbook .wb-aff-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: rgb(14, 165, 165);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  min-height: 48px;
+  cursor: pointer;
+  transition:
+    background 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 200ms;
+  box-shadow: 0 2px 8px rgba(14, 165, 165, 0.25);
+}
+.wordbook .wb-aff-cta-primary:hover {
+  background: rgb(13, 148, 148);
+  box-shadow: 0 6px 18px rgba(14, 165, 165, 0.35);
+}
+.wordbook .wb-aff-cta-primary:active { transform: scale(0.97); }
+.wordbook .wb-aff-cta-primary svg {
+  flex-shrink: 0;
+  /* Flip arrow in RTL so it always points "forward" toward action */
+}
+.wordbook[dir="rtl"] .wb-aff-cta-primary svg { transform: scaleX(-1); }
+
+.wordbook .wb-aff-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--wb-ink);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  min-height: 48px;
+  cursor: pointer;
+  transition: background 160ms, border-color 160ms, transform 160ms;
+}
+.wordbook .wb-aff-cta-ghost:hover {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.22);
+}
+.wordbook .wb-aff-cta-ghost:active { transform: scale(0.97); }
+
+/* ── Proof chips (under hero) ───────────────────────────────── */
+.wordbook .wb-aff-proofs {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.wordbook .wb-aff-proofs li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wb-ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.wordbook .wb-aff-proofs svg {
+  color: rgb(13, 148, 148);
+  flex-shrink: 0;
+}
+
+/* ── Who it's for — 3-card grid ─────────────────────────────── */
+.wordbook .wb-aff-who-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.wordbook .wb-aff-who-card {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms, border-color 220ms;
+}
+.wordbook .wb-aff-who-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border-color: rgba(14, 165, 165, 0.25);
+}
+.wordbook .wb-aff-who-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(14, 165, 165, 0.08);
+  color: rgb(13, 148, 148);
+  margin-bottom: 4px;
+}
+.wordbook .wb-aff-who-title {
+  font-family: var(--wb-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin: 0;
+  line-height: 1.3;
+}
+.wordbook .wb-aff-who-desc {
+  font-size: 14.5px;
+  color: var(--wb-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── How it works — numbered 3-step grid ────────────────────── */
+.wordbook .wb-aff-how-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  counter-reset: aff-step;
+}
+.wordbook .wb-aff-how-step {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 28px 26px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wordbook .wb-aff-how-num {
+  position: absolute;
+  top: 22px;
+  inset-inline-end: 22px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(14, 165, 165, 0.10);
+  color: rgb(13, 148, 148);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--wb-font-display);
+  font-weight: 700;
+  font-size: 14px;
+}
+.wordbook .wb-aff-how-title {
+  font-family: var(--wb-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin: 0;
+  padding-inline-end: 40px;
+  line-height: 1.35;
+}
+.wordbook .wb-aff-how-desc {
+  font-size: 14.5px;
+  color: var(--wb-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Earnings example ───────────────────────────────────────── */
+.wordbook .wb-aff-earn-card {
+  max-width: 560px;
+  margin-inline: auto;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 30px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+.wordbook .wb-aff-earn-heading {
+  font-family: var(--wb-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--wb-ink);
+}
+.wordbook .wb-aff-earn-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 15px;
+  color: var(--wb-ink-soft);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+.wordbook .wb-aff-earn-total {
+  font-family: var(--wb-font-display);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: rgb(13, 148, 148);
+  padding-top: 16px;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  letter-spacing: -0.01em;
+}
+.wordbook .wb-aff-earn-note {
+  max-width: 560px;
+  margin: 18px auto 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--wb-ink-soft);
+  opacity: 0.85;
+  text-align: center;
+}
+
+/* ── FAQ list ───────────────────────────────────────────────── */
+.wordbook .wb-aff-faq-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 720px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wordbook .wb-aff-faq-item {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  padding: 22px 24px;
+  transition: border-color 200ms;
+}
+.wordbook .wb-aff-faq-item:hover {
+  border-color: rgba(14, 165, 165, 0.20);
+}
+.wordbook .wb-aff-faq-q {
+  font-family: var(--wb-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+.wordbook .wb-aff-faq-a {
+  font-size: 14.5px;
+  color: var(--wb-ink-soft);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Final CTA section ─────────────────────────────────────── */
+.wordbook .wb-aff-final {
+  text-align: center;
+  padding: 72px 0 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid rgba(15, 23, 42, 0.05);
+  background: linear-gradient(180deg, transparent, rgba(14, 165, 165, 0.04));
+}
+.wordbook .wb-aff-final-title {
+  font-family: var(--wb-font-display);
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--wb-ink);
+  margin: 0;
+  line-height: 1.2;
+}
+.wordbook .wb-aff-final-sub {
+  font-size: 16px;
+  color: var(--wb-ink-soft);
+  margin: 0;
+  max-width: 540px;
+  line-height: 1.6;
+}
+
+/* ─── New sections for the v2 affiliates page ──────────────── */
+
+/* Topbar sign-in: small text link, NOT a button (one dominant CTA
+   per page — reviewer consensus across all 5 AIs). */
+.wordbook .wb-aff-topbar-signin {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--wb-ink-soft);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 160ms, background 160ms;
+  white-space: nowrap;
+}
+.wordbook .wb-aff-topbar-signin:hover {
+  color: var(--wb-ink);
+  background: rgba(15, 23, 42, 0.04);
+}
+@media (max-width: 640px) {
+  .wordbook .wb-aff-topbar-signin { display: none; }
+}
+
+/* Mid-page CTA — smaller variant of the primary button, sits inside
+   a wrapper that centers it horizontally. Used between sections to
+   reinforce the action without overwhelming the page. */
+.wordbook .wb-aff-mid-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.wordbook .wb-aff-cta-primary-compact {
+  padding: 11px 22px;
+  font-size: 14px;
+  min-height: 42px;
+}
+
+/* Generic 3-column card grid used by Why-recommend AND Who-it's-for.
+   They share the same visual treatment because they share the same
+   role on the page: a row of three reasons / personas. */
+.wordbook .wb-aff-grid-3 {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.wordbook .wb-aff-feature-card {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms, border-color 220ms;
+}
+.wordbook .wb-aff-feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border-color: rgba(14, 165, 165, 0.25);
+}
+.wordbook .wb-aff-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(14, 165, 165, 0.08);
+  color: rgb(13, 148, 148);
+  margin-bottom: 4px;
+}
+.wordbook .wb-aff-feature-title {
+  font-family: var(--wb-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin: 0;
+  line-height: 1.3;
+}
+.wordbook .wb-aff-feature-desc {
+  font-size: 14.5px;
+  color: var(--wb-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* What-you-get — 2×2 grid of smaller, denser cards so all four "we
+   give you this" items read together as a kit, not a feature list. */
+.wordbook .wb-aff-get-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  max-width: 880px;
+  margin-inline: auto;
+}
+.wordbook .wb-aff-get-card {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.wordbook .wb-aff-get-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(14, 165, 165, 0.08);
+  color: rgb(13, 148, 148);
+  flex-shrink: 0;
+}
+.wordbook .wb-aff-get-title {
+  font-family: var(--wb-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  margin: 0 0 6px;
+  line-height: 1.35;
+}
+.wordbook .wb-aff-get-desc {
+  font-size: 14px;
+  color: var(--wb-ink-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ─── Interactive earnings calculator ──────────────────────── */
+.wordbook .wb-aff-calc {
+  max-width: 640px;
+  margin: 0 auto 32px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 28px 30px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+.wordbook .wb-aff-calc-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.wordbook .wb-aff-calc-label {
+  font-size: 14px;
+  color: var(--wb-ink-soft);
+  font-weight: 500;
+}
+.wordbook .wb-aff-calc-value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.wordbook .wb-aff-calc-num {
+  font-family: var(--wb-font-display);
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  color: rgb(13, 148, 148);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.wordbook .wb-aff-calc-unit {
+  font-size: 14px;
+  color: var(--wb-ink-soft);
+  font-weight: 500;
+}
+
+/* Range slider — custom track + thumb so the control reads as part
+   of the brand, not a default OS chrome. WebKit + Firefox parallel
+   declarations because the cross-browser story is still split. */
+.wordbook .wb-aff-calc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    rgb(14, 165, 165) 0%,
+    rgb(14, 165, 165) calc((var(--val, 10) - 1) / 49 * 100%),
+    rgba(15, 23, 42, 0.10) calc((var(--val, 10) - 1) / 49 * 100%),
+    rgba(15, 23, 42, 0.10) 100%
+  );
+  outline: none;
+  cursor: pointer;
+  margin: 0 0 24px;
+  transition: background 60ms linear;
+}
+.wordbook .wb-aff-calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid rgb(13, 148, 148);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  cursor: grab;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wordbook .wb-aff-calc-slider::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+  cursor: grabbing;
+}
+.wordbook .wb-aff-calc-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid rgb(13, 148, 148);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  cursor: grab;
+}
+.wordbook .wb-aff-calc-slider:focus-visible {
+  outline: 2px solid rgb(14, 165, 165);
+  outline-offset: 4px;
+}
+
+.wordbook .wb-aff-calc-outputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.wordbook .wb-aff-calc-output {
+  background: rgba(14, 165, 165, 0.04);
+  border: 1px solid rgba(14, 165, 165, 0.12);
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-align: center;
+}
+.wordbook .wb-aff-calc-output-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--wb-ink-soft);
+  margin-bottom: 6px;
+}
+.wordbook .wb-aff-calc-output-value {
+  font-family: var(--wb-font-display);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: var(--wb-ink);
+  font-variant-numeric: tabular-nums;
+}
+.wordbook .wb-aff-calc-output-value.is-emphasis {
+  color: rgb(13, 148, 148);
+}
+
+/* Scenario table — concrete examples around the slider. Keeps the
+   data readable across mobile (where the slider becomes the primary
+   interaction) and desktop (where the table reads at a glance). */
+.wordbook .wb-aff-earn-table {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto 24px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+.wordbook .wb-aff-earn-table th,
+.wordbook .wb-aff-earn-table td {
+  padding: 12px 18px;
+  text-align: start;
+  font-size: 14px;
+}
+.wordbook .wb-aff-earn-table th {
+  background: rgba(14, 165, 165, 0.05);
+  color: var(--wb-ink-soft);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+.wordbook .wb-aff-earn-table td {
+  color: var(--wb-ink);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+}
+.wordbook .wb-aff-earn-table tr:last-child td { border-bottom: none; }
+.wordbook .wb-aff-earn-table td:last-child {
+  font-weight: 600;
+  color: rgb(13, 148, 148);
+}
+
+/* ─── Trust section: founder note + product stats ──────────── */
+.wordbook .wb-aff-trust-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 28px;
+  max-width: 980px;
+  margin-inline: auto;
+}
+@media (max-width: 760px) {
+  .wordbook .wb-aff-trust-grid { grid-template-columns: 1fr; }
+}
+.wordbook .wb-aff-founder {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 30px 32px;
+}
+.wordbook .wb-aff-founder-heading {
+  font-family: var(--wb-font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(13, 148, 148);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+}
+.wordbook .wb-aff-founder-body {
+  font-size: 16px;
+  color: var(--wb-ink);
+  line-height: 1.7;
+  margin: 0 0 16px;
+  font-family: var(--wb-font-display);
+  font-weight: 400;
+}
+.wordbook .wb-aff-founder-sign {
+  font-size: 13.5px;
+  color: var(--wb-ink-soft);
+  font-style: italic;
+}
+
+.wordbook .wb-aff-stats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+}
+@media (max-width: 760px) {
+  .wordbook .wb-aff-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+.wordbook .wb-aff-stats li {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+@media (max-width: 760px) {
+  .wordbook .wb-aff-stats li { flex: 1 1 30%; min-width: 0; }
+}
+.wordbook .wb-aff-stat-num {
+  font-family: var(--wb-font-display);
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  color: rgb(13, 148, 148);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.wordbook .wb-aff-stat-label {
+  font-size: 13px;
+  color: var(--wb-ink-soft);
+  line-height: 1.4;
+}
+
+/* ── Reduced-motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .wordbook .wb-aff-hero { animation: none; }
+  .wordbook .wb-aff-who-card,
+  .wordbook .wb-aff-feature-card,
+  .wordbook .wb-aff-cta-primary,
+  .wordbook .wb-aff-cta-ghost,
+  .wordbook .wb-aff-faq-item,
+  .wordbook .wb-aff-calc-slider::-webkit-slider-thumb {
+    transition: none;
+  }
+  .wordbook .wb-aff-who-card:hover,
+  .wordbook .wb-aff-feature-card:hover,
+  .wordbook .wb-aff-cta-primary:hover,
+  .wordbook .wb-aff-cta-primary:active,
+  .wordbook .wb-aff-cta-ghost:active {
+    transform: none;
+  }
+}

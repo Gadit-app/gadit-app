@@ -84,6 +84,7 @@ export interface V2Strings {
   navPricing: string;
   navFeatures: string;
   navPlay: string;
+  navAffiliates: string;
 
   // ── Pricing page (Screen 3) ─────────────────────────────────
   pricingPageHeadline: string;
@@ -472,6 +473,7 @@ const en: V2Strings = {
   navPricing: "Pricing",
   navFeatures: "Features",
   navPlay: "Play",
+  navAffiliates: "Affiliates",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "Three tiers. All with real content.",
@@ -846,6 +848,7 @@ const he: V2Strings = {
   navPricing: "תמחור",
   navFeatures: "פיצ'רים",
   navPlay: "משחקים",
+  navAffiliates: "שותפים",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
@@ -1224,6 +1227,7 @@ const ar: V2Strings = {
   navPricing: "الأسعار",
   navFeatures: "المزايا",
   navPlay: "ألعاب",
+  navAffiliates: "الشركاء",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
@@ -1618,6 +1622,7 @@ const ru: Partial<V2Strings> = {
   navPricing: "Тарифы",
   navFeatures: "Возможности",
   navPlay: "Игры",
+  navAffiliates: "Партнёры",
 
   pricingPageHeadline: "Три уровня. Все с настоящим контентом.",
   pricingPageSubline: "Начните бесплатно. Перейдите глубже, когда понадобится.",
@@ -1993,6 +1998,7 @@ const es: Partial<V2Strings> = {
   navPricing: "Precios",
   navFeatures: "Funciones",
   navPlay: "Jugar",
+  navAffiliates: "Afiliados",
 
   pricingPageHeadline: "Tres niveles. Todos con contenido real.",
   pricingPageSubline: "Empieza gratis. Sube de plan cuando la profundidad te ayude.",
@@ -2366,6 +2372,7 @@ const pt: Partial<V2Strings> = {
   navPricing: "Preços",
   navFeatures: "Recursos",
   navPlay: "Jogar",
+  navAffiliates: "Afiliados",
 
   pricingPageHeadline: "Três níveis. Todos com conteúdo de verdade.",
   pricingPageSubline: "Comece grátis. Faça upgrade quando a profundidade ajudar.",
@@ -2739,6 +2746,7 @@ const fr: Partial<V2Strings> = {
   navPricing: "Tarifs",
   navFeatures: "Fonctionnalités",
   navPlay: "Jeux",
+  navAffiliates: "Affiliés",
 
   pricingPageHeadline: "Trois niveaux. Tous avec du vrai contenu.",
   pricingPageSubline: "Commencez gratuitement. Passez à un plan supérieur quand la profondeur sert.",
@@ -3088,6 +3096,7 @@ const de: Partial<V2Strings> = {
   imageOpenFullAria: "Bild in voller Größe öffnen",
   compareComingSoon: "Wortspiele kommen bald.",
   navPlay: "Spielen",
+  navAffiliates: "Affiliates",
   // Share / save / listen on the result page
   shareLabel: "Teilen",
   backLabel: "Zurück",
@@ -3121,6 +3130,7 @@ const cs: Partial<V2Strings> = {
   imageOpenFullAria: "Otevřít obrázek v plné velikosti",
   compareComingSoon: "Slovní hry už brzy.",
   navPlay: "Hrát",
+  navAffiliates: "Partneři",
   // Share / save / listen on the result page
   shareLabel: "Sdílet",
   backLabel: "Zpět",

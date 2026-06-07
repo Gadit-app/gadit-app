@@ -367,6 +367,7 @@ export function AccountPage() {
             <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
           )}
           <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
+          <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
         </nav>
         <div className="wb-shell-actions">
           <ShareButton
