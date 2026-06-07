@@ -661,6 +661,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         body: JSON.stringify({
           word: result.word,
           meaning: result.meanings[0]?.meaning ?? "",
+          // First example sentence anchors the image prompt to a real
+          // scene — biggest win for abstract words ("חוויה", "תקווה")
+          // that have no everyday object to photograph. See
+          // buildDallePrompt comment for the why.
+          example: result.meanings[0]?.examples?.[0] ?? "",
           uiLang: lang,
         }),
       });

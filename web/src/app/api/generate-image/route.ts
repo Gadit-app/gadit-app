@@ -19,29 +19,52 @@ function cacheKey(word: string, meaning: string, uiLang: string): string {
   return `img_${uiLang}_${hash}`;
 }
 
-function buildDallePrompt(word: string, meaning: string): string {
-  // V2 prompt — rewritten after Andrea (CZ beta) hit a consistent
-  // 'image_generation_failed' on Czech words. The old prompt stacked
-  // four double-negatives ('NOT artistic, NOT abstract, NOT decorative,
-  // ABSOLUTELY NO text') which DALL-E sometimes treats as a safety
-  // signal and refuses outright. We also wrapped the headword in
-  // straight quotes, and a Czech meaning that happens to contain its
-  // OWN quotes ('např. "košile"') broke the sentence boundary.
+function clean(s: string): string {
+  return s.replace(/[“”"]+/g, "");
+}
+
+function buildDallePrompt(word: string, meaning: string, example?: string): string {
+  // V3 prompt — scene-based when we have an example sentence.
   //
-  // New approach: positive instructions only, no quote-wrapped headword,
-  // meaning truncated tight, single instruction about text.
-  const trimmedMeaning = meaning.length > 180 ? meaning.slice(0, 180).replace(/[“”"]+/g, "") : meaning.replace(/[“”"]+/g, "");
-  const cleanWord = word.replace(/[“”"]+/g, "");
-  return `A clean, realistic photograph of ${cleanWord}. Context: ${trimmedMeaning}. Show the actual everyday object or scene, well-lit, with a plain neutral background. The subject fills the frame and is instantly recognizable. The image contains no text, no letters, no numbers, and no written characters.`;
+  // Why: gpt-image-1 at quality:medium does fine on concrete nouns
+  // ("גשם" → recognizable rain photo) but consistently mis-fires on
+  // abstract concepts ("חוויה" / "experience" → ambiguous arms-raised
+  // figures that don't read as the concept). Telling the model to
+  // "show the object" only works when an object exists. Telling it
+  // to "illustrate the scene described in this sentence" works for
+  // both: the example sentence is already a concrete scenario that
+  // exemplifies the word — concrete words get a contextual photo
+  // (rain on a street), abstract words get a meaningful moment
+  // (a memorable trip in Egypt).
+  //
+  // V2 history we keep: positive instructions only (no stacks of
+  // double-negatives — they read as safety signals); no quote-wrapped
+  // headword; meaning truncated and stripped of curly quotes.
+  const cleanWord = clean(word);
+  const cleanMeaning = clean(meaning.length > 180 ? meaning.slice(0, 180) : meaning);
+  const cleanExample = example ? clean(example.length > 180 ? example.slice(0, 180) : example) : "";
+
+  if (cleanExample) {
+    return [
+      `A clean, realistic photograph of the real-world moment described in this scene: ${cleanExample}.`,
+      `The scene depicts the meaning of the word ${cleanWord} — specifically: ${cleanMeaning}.`,
+      `Natural lighting, plain neutral background, the key elements of the scene fill the frame and are instantly recognizable.`,
+      `The image contains no text, no letters, no numbers, and no written characters.`,
+    ].join(" ");
+  }
+  // Fallback (no example): the V2 object-first prompt. Still works
+  // fine for concrete nouns; abstract words just won't be great.
+  return `A clean, realistic photograph of ${cleanWord}. Context: ${cleanMeaning}. Show the actual everyday object or scene, well-lit, with a plain neutral background. The subject fills the frame and is instantly recognizable. The image contains no text, no letters, no numbers, and no written characters.`;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang } = await req.json();
+    const { word, meaning, uiLang, example } = await req.json();
 
     if (!word?.trim() || !meaning?.trim()) {
       return NextResponse.json({ error: "word and meaning required" }, { status: 400 });
     }
+    const safeExample = typeof example === "string" ? example.trim() : "";
 
     // Auth check
     const authHeader = req.headers.get("Authorization") || "";
@@ -112,7 +135,7 @@ export async function POST(req: NextRequest) {
         }),
       });
     }
-    const dallePrompt = buildDallePrompt(word, meaning);
+    const dallePrompt = buildDallePrompt(word, meaning, safeExample || undefined);
     let dalleRes = await callDalle(dallePrompt);
 
     if (!dalleRes.ok) {
