@@ -195,7 +195,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "מילון אמיתי, לא תרגום יבש",
     why1Desc:
       "כל המשמעויות של מילה, דוגמאות אמיתיות לכל אחת, ניבים, מקור היסטורי ותמונה. Gadit מסביר מילה כמו שצריך, לא כמו שכל מילון רגיל עושה.",
-    why2Title: "ב-9 שפות, כולל עברית RTL מלאה",
+    why2Title: "עובד ב-9 שפות, כולל עברית מלאה",
     why2Desc:
       "עברית, אנגלית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית וצ'כית. מתאים גם לדוברי עברית וגם להורים של ילדים שלומדים שפה זרה.",
     why3Title: "תוכנן עבור הורים, מורים ולומדים",
@@ -300,7 +300,7 @@ const COPY: Record<Lang, Copy> = {
       "כן. תוכלו להעתיק טקסטים מוכנים לוואטסאפ, מייל להורים, פוסטים לפייסבוק וטיוטות לסטורי. אם תרצו משהו ספציפי — תפנו ואנחנו נכין.",
     faq9Q: "האם מותר לפרסם מודעות ממומנות בגוגל או פייסבוק?",
     faq9A:
-      "מודעות אורגניות לקהל שלכם — כן. אבל אסור לקנות מודעות ממומנות על המילה 'Gadit' עצמה (זה נקרא brand bidding ומגן עלינו ועליכם). הכללים המלאים מופיעים באזור האישי.",
+      "מודעות אורגניות לקהל שלכם — כן. אבל אסור לקנות מודעות בגוגל או פייסבוק על המילה 'Gadit' עצמה — אנחנו לא רוצים שתתחרו באתר הראשי על אותה תנועה. כללים מלאים באזור האישי.",
     faq10Q: "האם אני חייב לקנות מנוי כדי להיות שותף?",
     faq10A:
       "לא. אתם יכולים להיות שותפים בלי לרכוש דבר. ההצטרפות חינמית לחלוטין.",
@@ -310,7 +310,7 @@ const COPY: Record<Lang, Copy> = {
 
     finalTitle: "מוכנים להתחיל?",
     finalSubtitle:
-      "ההרשמה לוקחת דקה. האישור תוך 24 שעות. הקישור מוכן באותו יום.",
+      "ההרשמה לוקחת דקה. אישור אוטומטי. הקישור מוכן מיד.",
     finalCta: "קבלו את הקישור האישי שלכם — בחינם",
     termsLink: "תנאי תוכנית השותפים",
   },
@@ -336,9 +336,9 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "A real dictionary, not just translation",
     why1Desc:
       "Every meaning of a word, real examples for each, idioms, historical origin, and an image. Gadit explains a word properly — not like a regular dictionary.",
-    why2Title: "9 languages, full RTL support",
+    why2Title: "Works in 9 languages",
     why2Desc:
-      "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German and Czech. Works for native speakers and for parents of kids learning a second language.",
+      "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German and Czech — including full right-to-left support for Hebrew and Arabic. Works for native speakers and for parents of kids learning a second language.",
     why3Title: "Designed for parents, teachers and learners",
     why3Desc:
       "Kid-friendly explanations, quizzes, word games and a personal notebook. Gadit isn't for academics — it's for the home, the classroom and the WhatsApp group.",
@@ -441,7 +441,7 @@ const COPY: Record<Lang, Copy> = {
       "Yes. You can copy ready-to-use texts for WhatsApp, a parent email, Facebook posts and Instagram story drafts. If you need something specific — ask, and we'll prepare it.",
     faq9Q: "Can I run paid ads on Google or Facebook?",
     faq9A:
-      "Organic posts to your own audience — yes. But you can't buy paid ads on the word 'Gadit' itself (this is called brand bidding and protects both us and you). The full rules are in your dashboard.",
+      "Organic posts to your own audience — yes. But you can't buy paid ads on Google or Facebook for the word 'Gadit' itself — we don't want you competing with the main site for the same traffic. The full rules are in your dashboard.",
     faq10Q: "Do I have to buy a subscription to be a partner?",
     faq10A:
       "No. You can be a partner without buying anything. Joining is completely free.",
@@ -451,7 +451,7 @@ const COPY: Record<Lang, Copy> = {
 
     finalTitle: "Ready to start?",
     finalSubtitle:
-      "Signup takes a minute. Approval is within 24 hours. Your link is ready the same day.",
+      "Signup takes a minute. Auto-approval. Your link is ready instantly.",
     finalCta: "Get your personal link — free",
     termsLink: "Partner program terms",
   },
