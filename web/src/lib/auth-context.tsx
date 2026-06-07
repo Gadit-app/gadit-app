@@ -162,6 +162,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  // Affonso affiliate-attribution call — must fire AFTER Firebase
+  // confirms a brand-new user (returning logins should not create a
+  // duplicate lead in Affonso's books). The pixel sets an
+  // affonso_referral cookie on URLs that include ?ref=CODE; this call
+  // pairs that cookie with the user we just provisioned, so a future
+  // Stripe sale on this account gets attributed to the right affiliate.
+  //
+  // Retry loop covers the case where the pixel's afterInteractive
+  // strategy hasn't finished loading by the time auth resolves —
+  // typical on slow networks. Five attempts at 500ms = up to 2.5s
+  // window, after which we give up silently (attribution is
+  // best-effort, never blocks UX).
+  function trackAffonsoSignup(u: User) {
+    if (typeof window === "undefined") return;
+    type AffonsoApi = {
+      signup: (
+        data: { email?: string; externalUserId?: string; name?: string },
+      ) => void;
+    };
+    const fire = (attempt: number): void => {
+      const Affonso = (window as Window & { Affonso?: AffonsoApi }).Affonso;
+      if (Affonso?.signup) {
+        try {
+          Affonso.signup({
+            email: u.email ?? undefined,
+            externalUserId: u.uid,
+            name: u.displayName ?? undefined,
+          });
+        } catch (err) {
+          console.warn("Affonso.signup failed (non-blocking):", err);
+        }
+        return;
+      }
+      if (attempt >= 5) return;
+      window.setTimeout(() => fire(attempt + 1), 500);
+    };
+    fire(0);
+  }
+
   async function signInWithGoogle() {
     const auth = getFirebaseAuth();
     const provider = new GoogleAuthProvider();
@@ -172,6 +211,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const extra = getAdditionalUserInfo(cred);
     if (extra?.isNewUser) {
       void notifySignupSafely(cred.user);
+      trackAffonsoSignup(cred.user);
     }
     setShowLoginModal(false);
   }
@@ -194,6 +234,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.warn("sendEmailVerification failed (non-blocking):", err);
     });
     void notifySignupSafely(cred.user);
+    trackAffonsoSignup(cred.user);
     setShowLoginModal(false);
   }
 
