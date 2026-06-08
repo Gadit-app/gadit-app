@@ -3139,6 +3139,85 @@ const cs: Partial<V2Strings> = {
 };
 
 const it: Partial<V2Strings> = {
+  // Homepage hero
+  homeHeadlineLine1: "Capisci",
+  homeHeadlineLine2: "fino in fondo.",
+  homeSubline:
+    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 11 lingue.",
+  searchPlaceholderHome: "Scrivi o detta una parola",
+  voiceInputTitle: "Detta una parola",
+  addContext: "Aggiungi contesto",
+  explain: "Spiega",
+  contextHint: "Stai leggendo qualcosa? Incolla la frase per chiarire il significato.",
+  tryLabel: "Prova",
+
+  // Value props (Screen 1)
+  valuePropsEyebrow: "Cosa fa Gadit di diverso",
+  valuePropsTitle: "Più di una definizione: un modo di vivere una parola.",
+  valueProp1Eyebrow: "Sensibile al contesto",
+  valueProp1Title: "Il significato giusto, ogni volta",
+  valueProp1Body: "Incolla una frase. Gadit sceglie il senso che si adatta, non solo quello più comune.",
+  valueProp2Eyebrow: "Visivo",
+  valueProp2Title: "Un'immagine vivida, solo per questa parola",
+  valueProp2Body: "Generata per ogni voce. Un'ancora visiva per come si sente una parola, non una foto stock.",
+  valueProp3Eyebrow: "Etimologia",
+  valueProp3Title: "Una nota storica, non un dump di Wikipedia",
+  valueProp3Body: "Da dove viene la parola, raccontato come un paragrafo, come lo scriverebbe un amico curioso.",
+  valueProp4Eyebrow: "11 lingue",
+  valueProp4Title: "Ebraico e arabo, completamente nativi",
+  valueProp4Body: "RTL vero, font veri, modi di dire veri. Non un'interfaccia tradotta posticcia.",
+
+  previewLabel: "Anteprima",
+  seeFullResult: "Vedi il risultato completo",
+
+  pricingEyebrow: "Prezzi",
+  pricingTeaserTitle: "Tre piani. Tutti con contenuti veri.",
+  trustMicrocopy: "Annulla in qualsiasi momento · Prova di 14 giorni su Clear mensile · Nessun addebito fino al termine della prova",
+
+  // Footer
+  footerProductGroup: "Prodotto",
+  footerLegalGroup: "Legale",
+  footerCompare: "Confronta",
+  footerNotebook: "Quaderno",
+  footerPricing: "Prezzi",
+  footerPrivacy: "Privacy",
+  footerTerms: "Termini",
+  footerContact: "Contatti",
+  footerTagline: "Un dizionario intelligente per 11 lingue. Costruito per la lettura vera.",
+  footerLanguagesNote: "11 lingue",
+
+  // Nav
+  signIn: "Accedi",
+  navSearch: "Cerca",
+  navCompare: "Confronta",
+  navNotebook: "Quaderno",
+  navPricing: "Prezzi",
+  navFeatures: "Funzionalità",
+
+  // Pricing page
+  pricingPageHeadline: "Tre piani. Tutti con contenuti veri.",
+  pricingPageSubline: "Inizia gratis. Fai upgrade quando la profondità ti aiuta.",
+  billingMonthly: "Mensile",
+  billingYearly: "Annuale",
+  billingSave17: "Risparmi 17%",
+
+  tierBasicTagline: "Capisci",
+  tierBasicPitch: "Inizia con l'essenziale.",
+  tierBasicCta: "Inizia",
+  tierClearTagline: "Visualizza",
+  tierClearPitch: "Porta le parole alla vita con immagini, modalità bambini e feedback.",
+  tierClearBadge: "Più popolare",
+  tierClearCta: "Inizia la prova gratuita di 14 giorni",
+  tierClearCtaYearly: "Abbonati annuale",
+  tierClearTrust: "Annulla quando vuoi · Nessun addebito durante la prova",
+  tierDeepTagline: "Esercitati",
+  tierDeepPitch: "Costruisci una libreria personale di vocaboli che diventa più forte nel tempo.",
+  tierDeepCta: "Abbonati a Deep",
+
+  basicEquivalent: "",
+  clearEquivalent: "Equivale a $2,50/mese",
+  deepEquivalent: "Equivale a $4,17/mese",
+
   // Section eyebrows on the result page
   meaningsEyebrow: "Definizioni",
   idiomsEyebrow: "Modi di dire ed espressioni",
@@ -3173,6 +3252,85 @@ const it: Partial<V2Strings> = {
 };
 
 const ja: Partial<V2Strings> = {
+  // Homepage hero
+  homeHeadlineLine1: "理解する",
+  homeHeadlineLine2: "最後まで。",
+  homeSubline:
+    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、11言語で。",
+  searchPlaceholderHome: "単語を入力するか発音してください",
+  voiceInputTitle: "単語を発音する",
+  addContext: "文脈を追加",
+  explain: "解説する",
+  contextHint: "何か読んでいますか？ 文を貼り付けると意味がはっきりします。",
+  tryLabel: "例",
+
+  // Value props (Screen 1)
+  valuePropsEyebrow: "Gadit が違うところ",
+  valuePropsTitle: "定義を超えて。単語と共に暮らす方法。",
+  valueProp1Eyebrow: "文脈を読む",
+  valueProp1Title: "毎回、ぴったりの意味を",
+  valueProp1Body: "文を貼り付けてください。Gadit は最も一般的な意味ではなく、合う意味を選びます。",
+  valueProp2Eyebrow: "視覚的",
+  valueProp2Title: "この単語のためだけの、鮮やかな一枚",
+  valueProp2Body: "各エントリーごとに生成。ストック写真ではなく、単語の感触を視覚で捉える錨。",
+  valueProp3Eyebrow: "語源",
+  valueProp3Title: "Wikipedia の貼り付けではなく、語られる歴史",
+  valueProp3Body: "その単語がどこから来たのか、好奇心ある友人が書くような一段落で。",
+  valueProp4Eyebrow: "11 言語",
+  valueProp4Title: "ヘブライ語とアラビア語も完全ネイティブ",
+  valueProp4Body: "本物の RTL、本物のフォント、本物のイディオム。後付けの翻訳UIではありません。",
+
+  previewLabel: "プレビュー",
+  seeFullResult: "完全な結果を見る",
+
+  pricingEyebrow: "料金",
+  pricingTeaserTitle: "3つのプラン。すべてに本物のコンテンツ。",
+  trustMicrocopy: "いつでもキャンセル可能 · Clear 月額プランで14日間お試し · お試し期間中は課金なし",
+
+  // Footer
+  footerProductGroup: "プロダクト",
+  footerLegalGroup: "リーガル",
+  footerCompare: "比較",
+  footerNotebook: "ノート",
+  footerPricing: "料金",
+  footerPrivacy: "プライバシー",
+  footerTerms: "利用規約",
+  footerContact: "お問い合わせ",
+  footerTagline: "11言語のためのスマートな辞書。本物の読書のために作られた。",
+  footerLanguagesNote: "11 言語",
+
+  // Nav
+  signIn: "ログイン",
+  navSearch: "検索",
+  navCompare: "比較",
+  navNotebook: "ノート",
+  navPricing: "料金",
+  navFeatures: "機能",
+
+  // Pricing page
+  pricingPageHeadline: "3つのプラン。すべてに本物のコンテンツ。",
+  pricingPageSubline: "無料で始める。深さが役に立つときにアップグレード。",
+  billingMonthly: "月額",
+  billingYearly: "年額",
+  billingSave17: "17% お得",
+
+  tierBasicTagline: "理解する",
+  tierBasicPitch: "基本から始める。",
+  tierBasicCta: "始める",
+  tierClearTagline: "見える化",
+  tierClearPitch: "画像、子どもモード、フィードバックで単語に命を吹き込む。",
+  tierClearBadge: "一番人気",
+  tierClearCta: "14日間の無料お試しを始める",
+  tierClearCtaYearly: "年額で登録",
+  tierClearTrust: "いつでもキャンセル可 · お試し期間中は課金なし",
+  tierDeepTagline: "練習する",
+  tierDeepPitch: "時間とともに強くなる、あなただけの語彙ライブラリを築く。",
+  tierDeepCta: "Deep に登録",
+
+  basicEquivalent: "",
+  clearEquivalent: "月額 $2.50 相当",
+  deepEquivalent: "月額 $4.17 相当",
+
   // Section eyebrows on the result page
   meaningsEyebrow: "意味",
   idiomsEyebrow: "イディオムと表現",
