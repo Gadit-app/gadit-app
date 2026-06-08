@@ -319,10 +319,20 @@ export function DashboardPage() {
     [lang],
   );
 
-  // Auth gate.
+  // Auth gate — auto-prompt the login modal exactly once per visit
+  // when the page loads without a signed-in user. If the visitor
+  // dismisses the modal (X / Escape / backdrop click), we DON'T re-open
+  // it; instead the page falls through to the "Sign in to see your
+  // dashboard" copy below, which gives them a marketing link back to
+  // /affiliates and a "Sign in" button they can use whenever they're
+  // ready. Without the ref guard, dismissing the modal triggered a
+  // re-render that re-ran this effect and reopened it immediately —
+  // the dialog looked uncloseable.
+  const autoPromptedRef = useRef(false);
   useEffect(() => {
     if (loading) return;
-    if (!user) {
+    if (!user && !autoPromptedRef.current) {
+      autoPromptedRef.current = true;
       promptLogin(c.title);
     }
   }, [loading, user, c.title, promptLogin]);
@@ -498,6 +508,13 @@ export function DashboardPage() {
           <div className="wb-affdash-state">
             <h1 className="wb-affdash-state-title">{c.signInTitle}</h1>
             <p className="wb-affdash-state-body">{c.signInBody}</p>
+            <button
+              type="button"
+              onClick={() => promptLogin(c.title)}
+              className="wb-affdash-state-cta"
+            >
+              {v2(lang, "signIn")}
+            </button>
             <Link href={href("/affiliates")} className="wb-affdash-state-link">
               {c.marketingLink}
             </Link>
