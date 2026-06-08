@@ -551,29 +551,6 @@ Response root:
 
 If the word has NO genuine idioms or recognized set phrases at all in that language, return all empty arrays. Do not force or invent.`;
 
-// KIDS_MODE_OVERRIDE — appended when the caller has the global "Kids
-// mode" toggle on (Clear/Deep only). Unlike KIDS_ADDON which ADDS a
-// per-meaning kidsExplanation alongside the adult-language definition,
-// this override REPLACES the entire response with kid-friendly
-// language: the meaning text itself, the examples, the etymology
-// background and the idiom meanings all get rewritten in vocabulary an
-// 8-10 year-old reader understands. Parents who toggle this on are
-// reading the dictionary WITH their child, not summarising it for them.
-const KIDS_MODE_OVERRIDE = `
-
-🧒 KIDS MODE — APPLIES TO EVERY FIELD IN THE RESPONSE:
-The user has flipped the global Kids Mode toggle. From now on, every text field you produce — meaning, examples, etymology fields, idiom meanings, kidsExplanation — must be written in language that a 8-10 year-old child reads comfortably.
-
-Rules:
-- Vocabulary: only words a 4th-grader knows. Replace abstract or academic words ("concept", "tangible", "abstraction", "phenomenon", "context") with concrete everyday words.
-- Sentence length: short. One idea per sentence.
-- Examples: come from a child's world — home, family, friends, school, playground, pets, food, weather, toys, sports, cartoons, weekends. Not workplace, finance, philosophy.
-- Etymology: tell it like a short story. Not "From Latin X, meaning Y" but "A long time ago in Italy, people said the word X. It meant Y. Over the years it changed into the word we use today."
-- Idioms: explain the IMAGE behind the expression in simple words.
-- Stay accurate: don't change the meaning of the word, just make the way you explain it kid-friendly.
-- Headword and original-script forms (etymology.originalWord) stay native. Only the explanatory text changes.
-- The kidsExplanation field still exists per the schema above, and is still kid-friendly — but in Kids Mode it can be even more playful, since the rest of the entry is now also at a child's level.`;
-
 const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 
 ג ן¸ CRITICAL RULE #1 ג€” NEVER AUTOCORRECT THE WORD:
@@ -970,12 +947,15 @@ function buildGaditEasterEgg(uiLangCode: string): object {
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, contextSentence, uiLang, kidsMode: kidsModeRaw } = await req.json();
-    // Whether the caller (a parent) has the Kids Mode toggle on. We
-    // only honor it for Clear/Deep users — the gating decision is
-    // re-checked below once plan is resolved so a Basic user who flips
-    // a flag in DevTools doesn't get the upgraded behavior.
-    const kidsModeRequested = kidsModeRaw === true;
+    const { word, contextSentence, uiLang } = await req.json();
+    // NOTE on Kids Mode: the global toggle is intentionally a CLIENT
+    // render-time decision now, not a server prompt change. The same
+    // cached response carries both the adult "meaning" + "examples"
+    // and the per-meaning "kidsExplanation" object; when Kids Mode is
+    // on the client just promotes the kids fields to the main slot.
+    // That keeps one cache entry per word (no doubled storage) and
+    // reuses the quality bar of the existing kidsExplanation prompt
+    // instead of rewriting every field through a second prompt.
     if (!word?.trim()) {
       return NextResponse.json({ error: "Word is required" }, { status: 400 });
     }
@@ -1046,14 +1026,9 @@ export async function POST(req: NextRequest) {
     // serving the wrong-language response forever. Cost of full regen is
     // bounded (~one OpenAI call per popular word, ~$0.005 each).
     const tierKey = isPaid ? "kids" : "base";
-    // Honor kidsMode only for paid users — the toggle is gated client
-    // side too, but a Basic user who pokes at the network tab can't
-    // upgrade their cache key here.
-    const kidsActive = isPaid && kidsModeRequested;
-    const modeKey = kidsActive ? "k" : "d";
     const cacheKey = contextSentence
-      ? `ctx2_${uiLangCode}_${tierKey}_${modeKey}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
-      : `auto2_${uiLangCode}_${tierKey}_${modeKey}_${word.toLowerCase().trim()}`;
+      ? `ctx2_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
+      : `auto2_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}`;
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {
@@ -1121,9 +1096,7 @@ export async function POST(req: NextRequest) {
     }
 
     const basePrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;
-    const systemPrompt = isPaid
-      ? basePrompt + KIDS_ADDON + (kidsActive ? KIDS_MODE_OVERRIDE : "")
-      : basePrompt;
+    const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
       ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language — meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
       : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language — meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`;

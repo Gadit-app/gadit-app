@@ -41,6 +41,7 @@ import type { Lang } from "@/lib/i18n";
 import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
 import { ImageLightbox } from "@/components/design/ImageLightbox";
+import { useKidsMode } from "@/lib/use-kids-mode";
 
 // ─── Types matching the live /api/define schema ────────────────
 export type Plan = "basic" | "clear" | "deep";
@@ -510,6 +511,21 @@ function MeaningEntry({
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
   // image + kids render inline; compose + quiz + compare fire route/modal.
   const [openTab, setOpenTab] = useState<"image" | "kids" | null>(null);
+
+  // Kids Mode swap: when the parent has the global toggle on AND this
+  // meaning has a kidsExplanation (always true for Clear/Deep), promote
+  // the kid-friendly text + examples to the main definition slot. The
+  // adult "meaning" + "examples" stay in the data so toggling back off
+  // is a free re-render, no re-fetch. Same cached server response
+  // carries both versions — see route.ts for the rationale.
+  const [kidsOn] = useKidsMode();
+  const showKids = kidsOn && meaning.kidsExplanation;
+  const effectiveMeaning = showKids
+    ? meaning.kidsExplanation!.explanation
+    : meaning.meaning;
+  const effectiveExamples = showKids
+    ? meaning.kidsExplanation!.examples
+    : meaning.examples;
   // Lightbox state — opens when the user taps the generated image
   // inside this meaning's image tab.
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -556,9 +572,11 @@ function MeaningEntry({
   // Per-meaning TTS — natural AI voice for Clear/Deep, free Web Speech
   // for everyone else. Reads the meaning text + the first example so
   // the user hears the definition in context, not just a bare phrase.
+  // Uses the effective (mode-swapped) fields so TTS in Kids Mode reads
+  // the kids text aloud, not the adult one.
   const ttsText = [
-    meaning.meaning ?? "",
-    ...(meaning.examples ?? []).slice(0, 1),
+    effectiveMeaning ?? "",
+    ...(effectiveExamples ?? []).slice(0, 1),
   ]
     .filter(Boolean)
     .join(". ");
@@ -586,18 +604,18 @@ function MeaningEntry({
         </button>
       </div>
 
-      {meaning.meaning && (
+      {effectiveMeaning && (
         <div className="wb-mdef-row">
           <span className="wb-mnum">{n}</span>
           <span className="wb-mdef">
-            <TappableText text={meaning.meaning} skipWord={word} />
+            <TappableText text={effectiveMeaning} skipWord={word} />
           </span>
         </div>
       )}
 
-      {(meaning.examples ?? []).length > 0 && (
+      {(effectiveExamples ?? []).length > 0 && (
         <div className="wb-mexamples">
-          {(meaning.examples ?? []).map((ex, j) => (
+          {(effectiveExamples ?? []).map((ex, j) => (
             <div className="wb-mexample" key={j}>
               {/* The example row is a flex container with a 10px gap so
                   the leading bullet pseudo-element sits cleanly against
@@ -616,9 +634,12 @@ function MeaningEntry({
           (Gadi product decision — keeps the card focused on the
           definition itself, gives idioms their own breathing room). */}
 
-      {/* Tab row */}
+      {/* Tab row — in Kids Mode the "Kids' explanation" tab is hidden
+          since the kids-friendly content IS now the main definition
+          shown above. Showing the tab would be redundant and confusing
+          ("explain like a kid" → already done). */}
       <div className="wb-mtabs">
-        {TAB_IDS.map((id) => {
+        {TAB_IDS.filter((id) => !(showKids && id === "kids")).map((id) => {
           const unlocked = tabUnlocked(id, plan);
           const isOpen = openTab === id;
           return (

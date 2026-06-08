@@ -436,10 +436,6 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             word: initialWord,
             uiLang: lang,
             ...(contextSentence ? { contextSentence } : {}),
-            // The /api/define route honors kidsMode only for Clear/Deep
-            // users; sending the flag from any tier is safe — Basic
-            // users get a default-mode response regardless.
-            kidsMode,
           }),
           signal: controller.signal,
         });
@@ -649,7 +645,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user, contextSentence, kidsMode]);
+  }, [initialWord, lang, user, contextSentence]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate() {
