@@ -261,10 +261,10 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "למה לסמוך",
     trustTitle: "תוכנית מייסדים בשלביה הראשונים",
-    founderHeading: "פסקה ממני, גדי",
+    founderHeading: "מסר אישי מגדי",
     founderBody:
-      "בניתי את Gadit כי לקח לי שנים להבין שמילה היא לא רק תרגום. היא סיפור שלם. רציתי לתת לכל אדם בעולם את הכלי שאני הייתי רוצה כשלמדתי. אנחנו קוראים לזה לעשות GAD למילה, להבין אותה עד הסוף. תוכנית השותפים פתוחה עכשיו לקבוצה ראשונה של אנשים שמתחברים לרעיון הזה. אם זה אתם, אשמח אם תצטרפו.",
-    founderSign: "— גדי בן לביא, מייסד Gadit",
+      "השליחות שלי תמיד הייתה אחת: לעזור לאנשים להבין דברים עד הסוף. כי כשמבינים באמת, אפשר ליישם. וכשאפשר ליישם, אפשר להשיג כל מה שרוצים.\n\nבמהלך השנים ראיתי אנשים חכמים, מוכשרים, שרצו להבין משהו ולא הצליחו. הם חשבו שהם פשוט \"לא מבינים בזה\". אבל זה לא היה הם. זאת הייתה מילה אחת בדרך.\n\nבניתי את Gadit כדי להסיר את המחסום הזה. לא עוד מילון. לא סתם תרגום. כלי שמסביר כל מילה עד הסוף, בפשטות, עם דוגמאות, עם הקשר ועם תמונה שמחיה אותה. אנחנו קוראים לזה לעשות GAD למילה.\n\nתוכנית השותפים פתוחה עכשיו לאנשים שמתחברים לרעיון הזה ורוצים להפיץ אותו הלאה. אם זה אתם, אשמח אם תצטרפו.",
+    founderSign: "גדי בן לביא, מייסד Gadit",
     stat1Num: "9",
     stat1Label: "שפות ממשק נתמכות",
     stat2Num: "30%",
@@ -404,8 +404,8 @@ const COPY: Record<Lang, Copy> = {
     trustTitle: "A founding partners program in its early days",
     founderHeading: "A note from me, Gadi",
     founderBody:
-      "I built Gadit because it took me years to realise a word isn't just a translation. It's a whole story. I wanted to give every person in the world the tool I wished I'd had while learning. We call it GAD-ing a word: getting it all the way through. The partner program is now open to a first group of people who connect with this idea. If that's you, I'd be glad to have you.",
-    founderSign: "— Gadi Ben Lavi, founder of Gadit",
+      "My mission has always been one thing: to help people understand things all the way through. Because when you really understand, you can apply. And when you can apply, you can achieve anything you want.\n\nOver the years I've seen smart, talented people who wanted to understand something and couldn't. They thought they just \"weren't built for it.\" But it wasn't them. It was one word along the way.\n\nI built Gadit to remove that barrier. Not another dictionary. Not just a translation. A tool that explains every word all the way through — simply, with examples, with context, and with an image that brings it to life. We call it GAD-ing a word.\n\nThe partner program is now open to people who connect with this idea and want to help spread it further. If that's you, I'd be glad to have you join.",
+    founderSign: "Gadi Ben Lavi, founder of Gadit",
     stat1Num: "9",
     stat1Label: "UI languages supported",
     stat2Num: "30%",
@@ -1000,7 +1000,11 @@ export function AffiliatesPage() {
           <div className="wb-aff-trust-grid">
             <article className="wb-aff-founder">
               <h3 className="wb-aff-founder-heading">{c.founderHeading}</h3>
-              <p className="wb-aff-founder-body">{c.founderBody}</p>
+              <div className="wb-aff-founder-body">
+                {c.founderBody.split("\n\n").map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
               <div className="wb-aff-founder-sign">{c.founderSign}</div>
             </article>
             <ul className="wb-aff-stats">
