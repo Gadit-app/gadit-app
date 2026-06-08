@@ -26,7 +26,7 @@ export async function generateMetadata({
   const decoded = decodeURIComponent(word);
   return {
     title: `${decoded} — Gadit`,
-    description: `Meanings, examples, etymology, and idioms for "${decoded}" — in 7 languages.`,
+    description: `Meanings, examples, etymology, and idioms for "${decoded}" — in 11 languages.`,
     alternates: {
       canonical: `https://www.gadit.app/word/${encodeURIComponent(decoded)}`,
     },

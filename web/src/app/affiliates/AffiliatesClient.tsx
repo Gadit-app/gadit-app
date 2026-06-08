@@ -195,9 +195,9 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "מילון אמיתי, לא תרגום יבש",
     why1Desc:
       "כל המשמעויות של מילה, דוגמאות אמיתיות לכל אחת, ניבים, מקור היסטורי ותמונה. Gadit מסביר מילה כמו שצריך, לא כמו שכל מילון רגיל עושה.",
-    why2Title: "עובד ב-9 שפות, כולל עברית מלאה",
+    why2Title: "עובד ב-11 שפות, כולל עברית מלאה",
     why2Desc:
-      "עברית, אנגלית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית וצ'כית. מתאים גם לדוברי עברית וגם להורים של ילדים שלומדים שפה זרה.",
+      "עברית, אנגלית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, איטלקית ויפנית. מתאים גם לדוברי עברית וגם להורים של ילדים שלומדים שפה זרה.",
     why3Title: "תוכנן עבור הורים, מורים ולומדים",
     why3Desc:
       "הסבר לילדים, חידונים, משחקי מילים ומחברת אישית. Gadit לא בנוי לאקדמאים — הוא בנוי לבית, לכיתה ולקבוצת הוואטסאפ.",
@@ -336,9 +336,9 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "A real dictionary, not just translation",
     why1Desc:
       "Every meaning of a word, real examples for each, idioms, historical origin, and an image. Gadit explains a word properly — not like a regular dictionary.",
-    why2Title: "Works in 9 languages",
+    why2Title: "Works in 11 languages",
     why2Desc:
-      "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German and Czech — including full right-to-left support for Hebrew and Arabic. Works for native speakers and for parents of kids learning a second language.",
+      "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Italian and Japanese — including full right-to-left support for Hebrew and Arabic. Works for native speakers and for parents of kids learning a second language.",
     why3Title: "Designed for parents, teachers and learners",
     why3Desc:
       "Kid-friendly explanations, quizzes, word games and a personal notebook. Gadit isn't for academics — it's for the home, the classroom and the WhatsApp group.",
@@ -429,7 +429,7 @@ const COPY: Record<Lang, Copy> = {
       "You earn only for the months the customer actually paid. If they cancel after 4 months, you've earned 4 months of reward. Fair to both sides.",
     faq5Q: "Is there a limit on how many customers I can refer?",
     faq5A:
-      "No limit. You can refer as many customers as you like, from anywhere in the world, in any of the 9 languages Gadit supports.",
+      "No limit. You can refer as many customers as you like, from anywhere in the world, in any of the 11 languages Gadit supports.",
     faq6Q: "What does the link do if someone doesn't sign up right away?",
     faq6A:
       "The link remembers you for 60 days. If someone clicks it, hesitates for two weeks, then comes back and subscribes — the signup still credits to you.",

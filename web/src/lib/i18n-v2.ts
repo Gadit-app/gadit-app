@@ -418,7 +418,7 @@ const en: V2Strings = {
   homeHeadlineLine1: "Understand",
   homeHeadlineLine2: "to the end.",
   homeSubline:
-    "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 7 languages.",
+    "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 11 languages.",
 
   searchPlaceholderHome: "Type or dictate a word",
   voiceInputTitle: "Dictate a word",
@@ -442,7 +442,7 @@ const en: V2Strings = {
   valueProp3Title: "A history note, not a Wikipedia dump",
   valueProp3Body:
     "Where the word came from, told as a paragraph — the kind a curious friend would write.",
-  valueProp4Eyebrow: "7 languages",
+  valueProp4Eyebrow: "11 languages",
   valueProp4Title: "Hebrew & Arabic, fully native",
   valueProp4Body:
     "Real RTL, real fonts, real idioms — not a translated UI bolted on.",
@@ -463,8 +463,8 @@ const en: V2Strings = {
   footerPrivacy: "Privacy",
   footerTerms: "Terms",
   footerContact: "Contact",
-  footerTagline: "A smart dictionary for 7 languages. Built for real reading.",
-  footerLanguagesNote: "7 languages",
+  footerTagline: "A smart dictionary for 11 languages. Built for real reading.",
+  footerLanguagesNote: "11 languages",
 
   signIn: "Sign in",
   navSearch: "Search",
@@ -793,7 +793,7 @@ const he: V2Strings = {
   homeHeadlineLine1: "להבין",
   homeHeadlineLine2: "עד הסוף.",
   homeSubline:
-    "מילון שמבין הקשר — הגדרות, מקור, ביטויים ותמונה חיה, ב־7 שפות.",
+    "מילון שמבין הקשר — הגדרות, מקור, ביטויים ותמונה חיה, ב־11 שפות.",
 
   searchPlaceholderHome: "הקלידו או הכתיבו מילה",
   voiceInputTitle: "הכתבת מילה",
@@ -817,7 +817,7 @@ const he: V2Strings = {
   valueProp3Title: "הערה היסטורית, לא ויקיפדיה",
   valueProp3Body:
     "מאיפה המילה הגיעה, מסופר כפסקה — כמו שחבר סקרן היה כותב.",
-  valueProp4Eyebrow: "7 שפות",
+  valueProp4Eyebrow: "11 שפות",
   valueProp4Title: "עברית וערבית כשפות אם",
   valueProp4Body:
     "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים — לא ממשק מתורגם.",
@@ -838,8 +838,8 @@ const he: V2Strings = {
   footerPrivacy: "פרטיות",
   footerTerms: "תנאים",
   footerContact: "צור קשר",
-  footerTagline: "מילון חכם ל־7 שפות. בנוי לקריאה אמיתית.",
-  footerLanguagesNote: "7 שפות",
+  footerTagline: "מילון חכם ל־11 שפות. בנוי לקריאה אמיתית.",
+  footerLanguagesNote: "11 שפות",
 
   signIn: "התחברות",
   navSearch: "חיפוש",
@@ -1196,7 +1196,7 @@ const ar: V2Strings = {
   valueProp3Title: "ملاحظة تاريخية، لا مدخل ويكيبيديا",
   valueProp3Body:
     "من أين أتت الكلمة، يُروى كفقرة — كما يكتب صديق فضولي.",
-  valueProp4Eyebrow: "7 لغات",
+  valueProp4Eyebrow: "11 لغة",
   valueProp4Title: "العربية والعبرية، بكامل أصالتهما",
   valueProp4Body:
     "RTL حقيقي، خطوط حقيقية، تعابير حقيقية — لا واجهة مترجمة.",
@@ -1218,7 +1218,7 @@ const ar: V2Strings = {
   footerTerms: "الشروط",
   footerContact: "تواصل",
   footerTagline: "قاموس ذكي بسبع لغات. مبنيّ للقراءة الحقيقية.",
-  footerLanguagesNote: "7 لغات",
+  footerLanguagesNote: "11 لغة",
 
   signIn: "تسجيل الدخول",
   navSearch: "بحث",
@@ -1591,7 +1591,7 @@ const ru: Partial<V2Strings> = {
   valueProp3Title: "Краткая история, а не статья из Википедии",
   valueProp3Body:
     "Откуда пришло слово — рассказано как абзац, без сухих фактов.",
-  valueProp4Eyebrow: "7 языков",
+  valueProp4Eyebrow: "11 языков",
   valueProp4Title: "Иврит и арабский — как родные",
   valueProp4Body:
     "Настоящий RTL, настоящие шрифты, настоящие идиомы — а не переведённый интерфейс.",
@@ -1613,7 +1613,7 @@ const ru: Partial<V2Strings> = {
   footerTerms: "Условия",
   footerContact: "Связаться",
   footerTagline: "Умный словарь на 7 языках. Создан для настоящего чтения.",
-  footerLanguagesNote: "7 языков",
+  footerLanguagesNote: "11 языков",
 
   signIn: "Войти",
   navSearch: "Поиск",
@@ -1943,7 +1943,7 @@ const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "hasta el final.",
   homeSubline:
-    "Un diccionario que entiende el contexto — significados, origen, expresiones e imagen viva, en 7 idiomas.",
+    "Un diccionario que entiende el contexto — significados, origen, expresiones e imagen viva, en 11 idiomas.",
 
   searchPlaceholderHome: "Escribe o dicta una palabra",
   voiceInputTitle: "Dictar una palabra",
@@ -1967,7 +1967,7 @@ const es: Partial<V2Strings> = {
   valueProp3Title: "Una nota de origen, no un volcado de Wikipedia",
   valueProp3Body:
     "De dónde viene la palabra, contado como un párrafo — el que escribiría un amigo curioso.",
-  valueProp4Eyebrow: "7 idiomas",
+  valueProp4Eyebrow: "11 idiomas",
   valueProp4Title: "Hebreo y árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fuentes reales, modismos reales — no una interfaz traducida a la fuerza.",
@@ -1988,8 +1988,8 @@ const es: Partial<V2Strings> = {
   footerPrivacy: "Privacidad",
   footerTerms: "Términos",
   footerContact: "Contacto",
-  footerTagline: "Un diccionario inteligente para 7 idiomas. Hecho para lectura real.",
-  footerLanguagesNote: "7 idiomas",
+  footerTagline: "Un diccionario inteligente para 11 idiomas. Hecho para lectura real.",
+  footerLanguagesNote: "11 idiomas",
 
   signIn: "Iniciar sesión",
   navSearch: "Buscar",
@@ -2317,7 +2317,7 @@ const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "até o fim.",
   homeSubline:
-    "Um dicionário que entende o contexto — significados, origem, expressões e imagem viva, em 7 idiomas.",
+    "Um dicionário que entende o contexto — significados, origem, expressões e imagem viva, em 11 idiomas.",
 
   searchPlaceholderHome: "Digite ou dite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
@@ -2341,7 +2341,7 @@ const pt: Partial<V2Strings> = {
   valueProp3Title: "Uma nota histórica, não despejo de Wikipédia",
   valueProp3Body:
     "De onde a palavra veio, contado em parágrafo — do jeito que um amigo curioso escreveria.",
-  valueProp4Eyebrow: "7 idiomas",
+  valueProp4Eyebrow: "11 idiomas",
   valueProp4Title: "Hebraico e árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fontes reais, expressões reais — não interface traduzida na pressa.",
@@ -2362,8 +2362,8 @@ const pt: Partial<V2Strings> = {
   footerPrivacy: "Privacidade",
   footerTerms: "Termos",
   footerContact: "Contato",
-  footerTagline: "Um dicionário inteligente em 7 idiomas. Feito pra leitura de verdade.",
-  footerLanguagesNote: "7 idiomas",
+  footerTagline: "Um dicionário inteligente em 11 idiomas. Feito pra leitura de verdade.",
+  footerLanguagesNote: "11 idiomas",
 
   signIn: "Entrar",
   navSearch: "Pesquisar",
@@ -2691,7 +2691,7 @@ const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "jusqu'au bout.",
   homeSubline:
-    "Un dictionnaire qui saisit le contexte — sens, origines, expressions et image vivante, en 7 langues.",
+    "Un dictionnaire qui saisit le contexte — sens, origines, expressions et image vivante, en 11 langues.",
 
   searchPlaceholderHome: "Tapez ou dictez un mot",
   voiceInputTitle: "Dicter un mot",
@@ -2715,7 +2715,7 @@ const fr: Partial<V2Strings> = {
   valueProp3Title: "Une note d'origine, pas un copier-coller de Wikipédia",
   valueProp3Body:
     "D'où vient le mot, raconté en un paragraphe — comme un ami curieux l'écrirait.",
-  valueProp4Eyebrow: "7 langues",
+  valueProp4Eyebrow: "11 langues",
   valueProp4Title: "Hébreu et arabe, vraiment natifs",
   valueProp4Body:
     "Vrai RTL, vraies polices, vraies expressions — pas une interface traduite à la va-vite.",
@@ -2736,8 +2736,8 @@ const fr: Partial<V2Strings> = {
   footerPrivacy: "Confidentialité",
   footerTerms: "Conditions",
   footerContact: "Contact",
-  footerTagline: "Un dictionnaire intelligent en 7 langues. Conçu pour vraiment lire.",
-  footerLanguagesNote: "7 langues",
+  footerTagline: "Un dictionnaire intelligent en 11 langues. Conçu pour vraiment lire.",
+  footerLanguagesNote: "11 langues",
 
   signIn: "Se connecter",
   navSearch: "Rechercher",

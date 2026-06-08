@@ -10,7 +10,7 @@ import { HomePage } from "./HomeClient";
 export const metadata: Metadata = {
   title: "Gadit — Every word, understood.",
   description:
-    "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 7 languages.",
+    "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 11 languages.",
 };
 
 export default function Home() {
