@@ -31,8 +31,72 @@ import { getAdminDb } from "@/lib/firebase-admin";
 export const maxDuration = 10;
 
 const SUPPORTED_LANGS = new Set([
-  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs",
+  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "it", "ja",
 ]);
+
+const UI_LANG_NAMES: Record<string, string> = {
+  he: "Hebrew",
+  en: "English",
+  ar: "Arabic",
+  ru: "Russian",
+  es: "Spanish",
+  pt: "Portuguese",
+  fr: "French",
+  de: "German",
+  cs: "Czech",
+  it: "Italian",
+  ja: "Japanese",
+};
+
+// On-the-fly micro-definition for popovers when the cache misses.
+// Uses gpt-4o-mini (cheap, fast) and asks for nothing more than a
+// short meaning + a one-sentence example. Capped to ~80 tokens out
+// per call. The result is NOT written back to the main /api/define
+// cache — that cache demands a full schema (etymology, idioms, kids
+// explanation, etc.) and this stripped reply would corrupt it.
+// Future improvement: a separate "preview" cache collection.
+async function generatePreview(
+  word: string,
+  langCode: string,
+): Promise<{ meaning: string; example: string } | null> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+  const langName = UI_LANG_NAMES[langCode] ?? "English";
+  const systemPrompt = `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word"}. Write BOTH fields in ${langName}. Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `Word: ${word}` },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.3,
+        max_tokens: 160,
+      }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+    const raw = data.choices?.[0]?.message?.content ?? "";
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { meaning?: string; example?: string };
+    return {
+      meaning: typeof parsed.meaning === "string" ? parsed.meaning : "",
+      example: typeof parsed.example === "string" ? parsed.example : "",
+    };
+  } catch (e) {
+    console.warn("[quick-define] live generation failed:", e);
+    return null;
+  }
+}
 
 export async function GET(req: NextRequest) {
   const url = req.nextUrl;
@@ -63,12 +127,31 @@ export async function GET(req: NextRequest) {
   try {
     const snap = await getAdminDb().collection("cache").doc(key).get();
     if (!snap.exists) {
+      // Cache miss: fall through to a cheap on-the-fly micro-definition
+      // so the popover never shows up empty. Earlier this returned 404
+      // and the popover surfaced an awkward "Tap below to see the full
+      // definition" — a real user (Eyal, June 2026) read it as a bug
+      // because the popover was supposed to BE the definition. The
+      // generated reply is intentionally short (no etymology, idioms,
+      // examples > 1) — anyone wanting depth taps "Open full".
+      const preview = await generatePreview(word, lang);
+      if (preview && (preview.meaning || preview.example)) {
+        return NextResponse.json(
+          {
+            word,
+            language: "",
+            meaning: preview.meaning,
+            example: preview.example,
+            hasMore: false,
+            generated: true,
+          },
+          { headers: { "Cache-Control": "public, max-age=300" } },
+        );
+      }
       return NextResponse.json(
         { error: "not_cached" },
         {
           status: 404,
-          // 1-minute browser cache so a flicker of taps on the same word
-          // doesn't re-hit Firestore for the same 404.
           headers: { "Cache-Control": "public, max-age=60" },
         },
       );

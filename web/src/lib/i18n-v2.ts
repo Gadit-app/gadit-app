@@ -94,6 +94,12 @@ export interface V2Strings {
   kidsModeTooltipOn: string;
   kidsModeBasicGate: string;
 
+  // Floating welcome toast shown briefly after a brand-new signup so
+  // the user has a clear "yes, your account is ready" signal instead
+  // of the modal silently closing into a page that doesn't change.
+  signupWelcomeTitle: string;
+  signupWelcomeBody: string;
+
   // ── Pricing page (Screen 3) ─────────────────────────────────
   pricingPageHeadline: string;
   pricingPageSubline: string;
@@ -488,6 +494,9 @@ const en: V2Strings = {
   kidsModeTooltipOn: "Kids mode is on — every definition will be written for a child. Tap to turn off.",
   kidsModeBasicGate: "Kids mode is a Clear feature. Upgrade to use it.",
 
+  signupWelcomeTitle: "Welcome to Gadit!",
+  signupWelcomeBody: "Your account is ready. Start by searching any word.",
+
   // Pricing page (Screen 3)
   pricingPageHeadline: "Three tiers. All with real content.",
   pricingPageSubline: "Start free. Upgrade when the depth helps you.",
@@ -867,6 +876,9 @@ const he: V2Strings = {
   kidsModeTooltipOff: "לחצו כדי שכל מילה תוסבר כמו שהורה היה מסביר לילד.",
   kidsModeTooltipOn: "מצב ילדים פעיל. כל הגדרה תיכתב לילד. לחצו לכיבוי.",
   kidsModeBasicGate: "מצב ילדים הוא פיצ'ר של Clear. שדרגו כדי להשתמש בו.",
+
+  signupWelcomeTitle: "ברוכים הבאים ל-Gadit!",
+  signupWelcomeBody: "החשבון שלכם מוכן. התחילו עם חיפוש של כל מילה.",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
@@ -1251,6 +1263,9 @@ const ar: V2Strings = {
   kidsModeTooltipOff: "اضغط ليُشرح كل كلمة كما يشرحها الأب لطفله.",
   kidsModeTooltipOn: "وضع الأطفال مفعّل. كل تعريف سيُكتب لطفل. اضغط لإيقافه.",
   kidsModeBasicGate: "وضع الأطفال ميزة في Clear. ارتقِ لاستخدامها.",
+
+  signupWelcomeTitle: "أهلاً بك في Gadit!",
+  signupWelcomeBody: "حسابك جاهز. ابدأ بالبحث عن أي كلمة.",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
@@ -1652,6 +1667,9 @@ const ru: Partial<V2Strings> = {
   kidsModeTooltipOn: "Детский режим включён. Каждое определение будет написано для ребёнка. Нажмите, чтобы выключить.",
   kidsModeBasicGate: "Детский режим — функция Clear. Перейдите на тариф, чтобы пользоваться.",
 
+  signupWelcomeTitle: "Добро пожаловать в Gadit!",
+  signupWelcomeBody: "Аккаунт готов. Начните с поиска любого слова.",
+
   pricingPageHeadline: "Три уровня. Все с настоящим контентом.",
   pricingPageSubline: "Начните бесплатно. Перейдите глубже, когда понадобится.",
   billingMonthly: "Ежемесячно",
@@ -2033,6 +2051,9 @@ const es: Partial<V2Strings> = {
   kidsModeTooltipOn: "Modo niños activado. Cada definición se escribirá para un niño. Toca para desactivar.",
   kidsModeBasicGate: "El modo niños es una función de Clear. Mejora para usarlo.",
 
+  signupWelcomeTitle: "¡Bienvenido a Gadit!",
+  signupWelcomeBody: "Tu cuenta está lista. Empieza buscando cualquier palabra.",
+
   pricingPageHeadline: "Tres niveles. Todos con contenido real.",
   pricingPageSubline: "Empieza gratis. Sube de plan cuando la profundidad te ayude.",
   billingMonthly: "Mensual",
@@ -2412,6 +2433,9 @@ const pt: Partial<V2Strings> = {
   kidsModeTooltipOn: "Modo crianças ativado. Cada definição será escrita para uma criança. Toque para desativar.",
   kidsModeBasicGate: "O modo crianças é uma função do Clear. Faça upgrade para usar.",
 
+  signupWelcomeTitle: "Bem-vindo ao Gadit!",
+  signupWelcomeBody: "Sua conta está pronta. Comece buscando qualquer palavra.",
+
   pricingPageHeadline: "Três níveis. Todos com conteúdo de verdade.",
   pricingPageSubline: "Comece grátis. Faça upgrade quando a profundidade ajudar.",
   billingMonthly: "Mensal",
@@ -2790,6 +2814,9 @@ const fr: Partial<V2Strings> = {
   kidsModeTooltipOff: "Touchez pour que chaque mot soit expliqué comme un parent l'expliquerait à son enfant.",
   kidsModeTooltipOn: "Mode enfants activé. Chaque définition sera écrite pour un enfant. Touchez pour désactiver.",
   kidsModeBasicGate: "Le mode enfants est une fonctionnalité de Clear. Passez au plan supérieur pour l'utiliser.",
+
+  signupWelcomeTitle: "Bienvenue sur Gadit !",
+  signupWelcomeBody: "Votre compte est prêt. Commencez en cherchant un mot.",
 
   pricingPageHeadline: "Trois niveaux. Tous avec du vrai contenu.",
   pricingPageSubline: "Commencez gratuitement. Passez à un plan supérieur quand la profondeur sert.",
@@ -3173,6 +3200,9 @@ const de: V2Strings = {
   kidsModeTooltipOn: "Kindermodus an. Jede Definition wird für ein Kind geschrieben. Tippe zum Ausschalten.",
   kidsModeBasicGate: "Kindermodus ist eine Clear-Funktion. Upgrade, um sie zu nutzen.",
 
+  signupWelcomeTitle: "Willkommen bei Gadit!",
+  signupWelcomeBody: "Dein Konto ist bereit. Such direkt ein Wort.",
+
   pricingPageHeadline: "Drei Stufen. Alle mit echten Inhalten.",
   pricingPageSubline: "Kostenlos starten. Upgrade, wenn die Tiefe dir hilft.",
   billingMonthly: "Monatlich",
@@ -3523,6 +3553,9 @@ const cs: V2Strings = {
   kidsModeTooltipOff: "Klepni, aby každé slovo bylo vysvětleno tak, jak by ho rodič vysvětlil dítěti.",
   kidsModeTooltipOn: "Dětský režim je zapnutý. Každá definice bude napsána pro dítě. Klepni pro vypnutí.",
   kidsModeBasicGate: "Dětský režim je funkce Clearu. Přejdi na vyšší plán, abys ho mohl používat.",
+
+  signupWelcomeTitle: "Vítej v Gaditu!",
+  signupWelcomeBody: "Tvůj účet je připraven. Začni hledáním jakéhokoli slova.",
 
   pricingPageHeadline: "Tři úrovně. Všechny s opravdovým obsahem.",
   pricingPageSubline: "Začni zdarma. Upgraduj, když ti hloubka pomůže.",
@@ -3936,6 +3969,9 @@ const it: Partial<V2Strings> = {
   kidsModeTooltipOn: "Modalità bambini attiva. Ogni definizione sarà scritta per un bambino. Tocca per disattivare.",
   kidsModeBasicGate: "La modalità bambini è una funzione di Clear. Fai upgrade per usarla.",
 
+  signupWelcomeTitle: "Benvenuto su Gadit!",
+  signupWelcomeBody: "Il tuo account è pronto. Inizia cercando una parola qualsiasi.",
+
   // Share / save / listen on the result page
   shareLabel: "Condividi",
   backLabel: "Indietro",
@@ -4309,6 +4345,9 @@ const ja: Partial<V2Strings> = {
   kidsModeTooltipOff: "タップすると、すべての単語が親が子に説明するように解説されます。",
   kidsModeTooltipOn: "子どもモードがオンです。すべての定義が子ども向けに書かれます。タップでオフにできます。",
   kidsModeBasicGate: "子どもモードは Clear の機能です。アップグレードしてご利用ください。",
+
+  signupWelcomeTitle: "Gadit へようこそ！",
+  signupWelcomeBody: "アカウントが用意できました。気になる単語を検索してみましょう。",
 
   // Share / save / listen on the result page
   shareLabel: "シェア",

@@ -104,6 +104,8 @@ const SAMPLES_BY_LANG: Record<string, string[]> = {
   fr: ["rêve", "vérité", "espoir"],
   de: ["Traum", "Wahrheit", "Hoffnung"],
   cs: ["sen", "pravda", "naděje"],
+  it: ["sogno", "verità", "speranza"],
+  ja: ["夢", "真実", "希望"],
 };
 
 const COPY: Record<
@@ -438,9 +440,9 @@ export function HomePage() {
         <span>·</span>
         <Link href={href("/pricing")}>{c.pricing}</Link>
         <span>·</span>
-        <Link href={href("/privacy")}>Privacy</Link>
+        <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
-        <Link href={href("/terms")}>Terms</Link>
+        <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
       </footer>
     </div>
   );

@@ -100,6 +100,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
+  // A non-blocking welcome banner shown briefly after a brand-new
+  // signup. Real users (Eyal, June 2026) finished the signup form and
+  // weren't sure anything had happened — the login modal closed
+  // silently and the page didn't change. A 5-second confirmation pill
+  // at the top of the viewport fills that gap without adding a new
+  // navigation step.
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  function showWelcome() {
+    setWelcomeOpen(true);
+    setTimeout(() => setWelcomeOpen(false), 6000);
+  }
   // Pending action runs once after the next successful auth event.
   // Stored in a ref so React state churn during the auth flow doesn't
   // race the firing condition.
@@ -212,6 +223,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (extra?.isNewUser) {
       void notifySignupSafely(cred.user);
       trackAffonsoSignup(cred.user);
+      showWelcome();
     }
     setShowLoginModal(false);
   }
@@ -236,6 +248,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void notifySignupSafely(cred.user);
     trackAffonsoSignup(cred.user);
     setShowLoginModal(false);
+    showWelcome();
   }
 
   async function sendPasswordReset(email: string) {
@@ -281,7 +294,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       loginReason, loginMode, promptLogin,
     }}>
       {children}
+      {welcomeOpen && (
+        <SignupWelcomeToast onClose={() => setWelcomeOpen(false)} />
+      )}
     </AuthContext.Provider>
+  );
+}
+
+/**
+ * Floating "Welcome to Gadit!" pill rendered briefly after a brand-new
+ * signup. Pinned to the top-centre of the viewport so it lands inside
+ * the user's existing focus area (right where the login modal just
+ * closed). Auto-dismisses after 6 seconds; the close button lets a
+ * user dismiss it sooner if they want to jump straight into searching.
+ */
+function SignupWelcomeToast({ onClose }: { onClose: () => void }) {
+  // Read the UI language and the just-signed-up display name (if
+  // Firebase populated it, e.g. via Google) so we can personalise
+  // the greeting without leaking name pieces from elsewhere.
+  // useLang lives in a different module — we import lazily to avoid
+  // a circular dependency on the lang provider mounting before auth.
+  // The strings come from the existing v2 table.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useLang } = require("@/lib/lang-context") as typeof import("@/lib/lang-context");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { v2 } = require("@/lib/i18n-v2") as typeof import("@/lib/i18n-v2");
+  const { lang, dir } = useLang();
+  return (
+    <div className="wb-welcome-toast" role="status" aria-live="polite" dir={dir}>
+      <span className="wb-welcome-toast-icon">🎉</span>
+      <div className="wb-welcome-toast-text">
+        <strong>{v2(lang, "signupWelcomeTitle")}</strong>
+        <span>{v2(lang, "signupWelcomeBody")}</span>
+      </div>
+      <button
+        type="button"
+        className="wb-welcome-toast-close"
+        aria-label={v2(lang, "loginCloseAria")}
+        onClick={onClose}
+      >
+        ×
+      </button>
+    </div>
   );
 }
 

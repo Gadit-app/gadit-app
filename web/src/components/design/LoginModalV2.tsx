@@ -107,15 +107,40 @@ export function LoginModalV2() {
   // hint) gives them a way out; the enumeration risk is the same
   // as the signin error already exposing 'wrong email or password'.
   function mapAuthError(msg: string, mode: Mode): string {
+    // Lowercase the haystack so we catch both the new SDK kebab-case
+    // ('auth/invalid-credential') and the legacy REST UPPER_SNAKE
+    // ('INVALID_LOGIN_CREDENTIALS', 'EMAIL_NOT_FOUND', 'INVALID_PASSWORD').
+    // Firebase v10 ships an enumeration-protected unified error code
+    // for wrong-password + user-not-found that earlier versions
+    // distinguished — both must funnel to "Wrong email or password".
+    const m = msg.toLowerCase();
     if (mode === "signup") {
-      if (msg.includes("email-already-in-use")) return "loginErrorEmailInUse";
-      if (msg.includes("weak-password")) return "loginErrorWeakPassword";
-      if (msg.includes("invalid-email")) return "loginErrorInvalidEmail";
+      if (m.includes("email-already-in-use") || m.includes("email_exists")) return "loginErrorEmailInUse";
+      if (m.includes("weak-password") || m.includes("weak_password")) return "loginErrorWeakPassword";
+      if (m.includes("invalid-email") || m.includes("invalid_email")) return "loginErrorInvalidEmail";
       return "loginErrorGeneric";
     }
-    if (msg.includes("user-not-found") || msg.includes("wrong-password") || msg.includes("invalid-credential"))
+    if (
+      m.includes("user-not-found") ||
+      m.includes("user_not_found") ||
+      m.includes("wrong-password") ||
+      m.includes("wrong_password") ||
+      m.includes("invalid-credential") ||
+      m.includes("invalid_credential") ||
+      m.includes("invalid-login-credentials") ||
+      m.includes("invalid_login_credentials") ||
+      m.includes("email-not-found") ||
+      m.includes("email_not_found") ||
+      m.includes("invalid-password") ||
+      m.includes("invalid_password") ||
+      m.includes("missing-password") ||
+      m.includes("missing_password")
+    ) {
       return "loginErrorWrongCredentials";
-    if (msg.includes("invalid-email")) return "loginErrorInvalidEmail";
+    }
+    if (m.includes("invalid-email") || m.includes("invalid_email")) return "loginErrorInvalidEmail";
+    if (m.includes("too-many-requests") || m.includes("too_many_attempts")) return "loginErrorGeneric";
+    if (m.includes("network-request-failed") || m.includes("network_error")) return "loginErrorGeneric";
     return "loginErrorGeneric";
   }
 
