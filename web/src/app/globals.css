@@ -7343,6 +7343,61 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: #fff;
   box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
 }
+/* Payout-method guided callout above the embed. Frames the in-iframe
+   Affonso "Payment method required" banner as part of the Gadit
+   onboarding so the step doesn't feel like a foreign element. */
+.wordbook .wb-affdash-payout-guide {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E0F6F4 0%, #F3FBFA 100%);
+  border: 1px solid rgba(14, 116, 144, 0.16);
+  color: var(--ink, #111827);
+}
+.wordbook .wb-affdash-payout-guide-body {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.wordbook .wb-affdash-payout-guide-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--teal-deep, #155E75);
+}
+.wordbook .wb-affdash-payout-guide-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink, #111827);
+}
+.wordbook .wb-affdash-payout-guide-dismiss {
+  flex: 0 0 auto;
+  background: #FFFFFF;
+  color: var(--teal-deep, #155E75);
+  border: 1px solid rgba(14, 116, 144, 0.24);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.wordbook .wb-affdash-payout-guide-dismiss:hover {
+  background: #F0FAF9;
+}
+@media (max-width: 720px) {
+  .wordbook .wb-affdash-payout-guide {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .wordbook .wb-affdash-payout-guide-dismiss {
+    width: 100%;
+  }
+}
 
 /* Loading / error / signed-out states share the same centered
    card-ish layout. Keeps the page from looking blank while the

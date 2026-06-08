@@ -55,6 +55,12 @@ const COPY: Record<Lang, {
   upgradeTitle: string;
   upgradeBody: string;
   upgradeCta: string;
+  // Guided message above the embedded dashboard, framing the
+  // one-time external-feeling step (Affonso's payout-method banner) as
+  // a final native-feeling onboarding step. Dismissible.
+  payoutGuideTitle: string;
+  payoutGuideBody: string;
+  payoutGuideDismiss: string;
 }> = {
   he: {
     title: "הדשבורד שלי",
@@ -71,8 +77,11 @@ const COPY: Record<Lang, {
     marketingLink: "מה זאת התוכנית?",
     upgradeTitle: "תוכנית השותפים שמורה למנויי Clear ו-Deep",
     upgradeBody:
-      "מי שממליץ על Gadit צריך להכיר אותו מבפנים. שדרג ל-Clear או Deep — ותקבל גם מילון מלא בלי הגבלה, וגם גישה לתוכנית השותפים עם 30% עמלה לכל לקוח.",
+      "מי שממליץ על Gadit צריך להכיר אותו מבפנים. שדרג ל-Clear או Deep, ותקבל גם מילון מלא בלי הגבלה, וגם גישה לתוכנית השותפים עם 30% עמלה לכל לקוח.",
     upgradeCta: "שדרוג למסלול בתשלום",
+    payoutGuideTitle: "צעד אחרון: איך תרצו לקבל תשלום",
+    payoutGuideBody: "כדי שנוכל להעביר לכם את העמלות שלכם, יש להגדיר פעם אחת איך תרצו לקבל תשלום. סמנו את האפשרות בבאנר הצהוב למטה. זה לוקח דקה.",
+    payoutGuideDismiss: "הבנתי, סגרו",
   },
   en: {
     title: "My Dashboard",
@@ -92,6 +101,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "The best recommendations come from real use. Upgrade to Clear or Deep, get the full Gadit experience, and unlock the partner program with 30% commission on every customer you refer.",
     upgradeCta: "Upgrade to a paid plan",
+    payoutGuideTitle: "One last step: how you'd like to be paid",
+    payoutGuideBody: "Before we can send you your commissions, choose your payout method once. You'll see the option in the yellow banner inside your dashboard below. Takes about a minute.",
+    payoutGuideDismiss: "Got it",
   },
   ar: {
     title: "لوحة التحكم الخاصة بي",
@@ -110,6 +122,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "لا يمكنك التوصية بمنتج لا تستخدمه فعلاً. ارتقِ إلى Clear أو Deep — ستحصل على القاموس الكامل بدون قيود وعلى الوصول إلى برنامج الشركاء بعمولة 30% لكل عميل تجلبه.",
     upgradeCta: "الترقية إلى خطة مدفوعة",
+    payoutGuideTitle: "خطوة أخيرة: كيف تودّ تلقّي مدفوعاتك",
+    payoutGuideBody: "قبل أن نتمكّن من إرسال عمولاتك، اختر طريقة الدفع مرة واحدة. ستراها في الشريط الأصفر داخل لوحتك أدناه. تستغرق دقيقة.",
+    payoutGuideDismiss: "فهمت",
   },
   ru: {
     title: "Моя панель",
@@ -129,6 +144,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Нельзя честно рекомендовать продукт, которым сам не пользуешься. Перейдите на Clear или Deep — вы получите полный словарь Gadit без ограничений и доступ к партнёрской программе с 30% комиссии с каждого приведённого клиента.",
     upgradeCta: "Перейти на платный тариф",
+    payoutGuideTitle: "Последний шаг: как вы хотите получать оплату",
+    payoutGuideBody: "Чтобы мы могли отправлять вам комиссии, выберите способ выплаты — один раз. Вы увидите его в жёлтой полоске внутри панели ниже. Это займёт минуту.",
+    payoutGuideDismiss: "Понял",
   },
   es: {
     title: "Mi panel",
@@ -147,6 +165,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Solo puedes recomendar un producto que realmente uses. Pásate a Clear o Deep — tendrás el diccionario completo sin límites y acceso al programa de socios con 30% de comisión por cada cliente que traigas.",
     upgradeCta: "Pasar a un plan de pago",
+    payoutGuideTitle: "Un último paso: cómo quieres recibir el pago",
+    payoutGuideBody: "Para poder enviarte tus comisiones, elige tu método de cobro una vez. Lo verás en la barra amarilla dentro de tu panel abajo. Toma un minuto.",
+    payoutGuideDismiss: "Entendido",
   },
   pt: {
     title: "Meu painel",
@@ -165,6 +186,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Você só pode recomendar um produto que realmente usa. Faça upgrade para Clear ou Deep — você ganha o dicionário completo sem limites e acesso ao programa de parceiros com 30% de comissão por cada cliente que indicar.",
     upgradeCta: "Fazer upgrade para um plano pago",
+    payoutGuideTitle: "Um último passo: como você quer receber",
+    payoutGuideBody: "Para podermos enviar suas comissões, escolha seu método de pagamento uma vez. Você verá no aviso amarelo dentro do seu painel abaixo. Leva um minuto.",
+    payoutGuideDismiss: "Entendi",
   },
   fr: {
     title: "Mon tableau de bord",
@@ -183,6 +207,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "On ne peut recommander qu'un produit qu'on utilise vraiment. Passez à Clear ou Deep — vous obtenez le dictionnaire Gadit complet sans limite et l'accès au programme partenaires avec 30% de commission sur chaque client recommandé.",
     upgradeCta: "Passer à une formule payante",
+    payoutGuideTitle: "Une dernière étape : comment être payé",
+    payoutGuideBody: "Pour que nous puissions vous envoyer vos commissions, choisissez votre méthode de paiement une seule fois. Vous la verrez dans la barre jaune à l'intérieur de votre tableau de bord ci-dessous. Ça prend une minute.",
+    payoutGuideDismiss: "Compris",
   },
   de: {
     title: "Mein Dashboard",
@@ -201,6 +228,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Du kannst nur ein Produkt empfehlen, das du selbst benutzt. Upgrade auf Clear oder Deep — du bekommst das vollständige Gadit-Wörterbuch ohne Limit plus Zugang zum Partnerprogramm mit 30% Provision pro geworbenem Kunden.",
     upgradeCta: "Auf einen kostenpflichtigen Plan upgraden",
+    payoutGuideTitle: "Letzter Schritt: Wie du bezahlt werden möchtest",
+    payoutGuideBody: "Damit wir deine Provisionen senden können, wähle einmalig deine Zahlungsmethode. Du siehst sie im gelben Banner in deinem Dashboard unten. Dauert eine Minute.",
+    payoutGuideDismiss: "Verstanden",
   },
   cs: {
     title: "Můj přehled",
@@ -219,6 +249,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Můžete doporučovat jen produkt, který sami používáte. Přejděte na Clear nebo Deep — získáte celý slovník Gadit bez omezení a přístup k partnerskému programu s 30% provizí za každého přivedeného zákazníka.",
     upgradeCta: "Přejít na placený plán",
+    payoutGuideTitle: "Poslední krok: jak chceš dostávat platby",
+    payoutGuideBody: "Než ti budeme moci posílat provize, vyber si jednou způsob výplaty. Najdeš ho ve žlutém pruhu uvnitř svého přehledu níže. Trvá to minutu.",
+    payoutGuideDismiss: "Rozumím",
   },
   it: {
     title: "La mia dashboard",
@@ -237,6 +270,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Puoi consigliare solo un prodotto che usi davvero. Passa a Clear o Deep — avrai il dizionario Gadit completo senza limiti e l'accesso al programma partner con il 30% di commissione su ogni cliente che porti.",
     upgradeCta: "Passa a un piano a pagamento",
+    payoutGuideTitle: "Un ultimo passo: come vuoi essere pagato",
+    payoutGuideBody: "Per poterti inviare le commissioni, scegli una volta il tuo metodo di pagamento. Lo trovi nella barra gialla all'interno della tua dashboard qui sotto. Ci vuole un minuto.",
+    payoutGuideDismiss: "Capito",
   },
   ja: {
     title: "マイダッシュボード",
@@ -255,6 +291,9 @@ const COPY: Record<Lang, {
     upgradeBody:
       "自分が使っていない商品を本気で勧めることはできません。ClearまたはDeepにアップグレードすると、Gaditの完全な辞書が制限なく使えるうえ、紹介した顧客ごとに30%のコミッションが得られるパートナープログラムにも参加できます。",
     upgradeCta: "有料プランにアップグレード",
+    payoutGuideTitle: "最後のひとつ：受け取り方の設定",
+    payoutGuideBody: "コミッションをお送りするために、お支払い方法を一度だけ選んでください。下のダッシュボード内、黄色いバナーから設定できます。1分ほどで完了します。",
+    payoutGuideDismiss: "わかりました",
   },
 };
 
@@ -334,6 +373,27 @@ export function DashboardPage() {
       }
     })();
   }, [loading, user]);
+
+  // Payout-method guide above the embed. Affonso ships an in-iframe
+  // yellow banner asking partners to set their payout method before we
+  // can wire them money; we frame that banner with a branded card in
+  // our own chrome so the step feels like part of the Gadit onboarding
+  // rather than a foreign call-out. Dismissed state persists in
+  // localStorage so it doesn't nag returning visitors. Long-term plan:
+  // ask Affonso for a payouts-scoped embed token (or write API), then
+  // build a native payout form inside /account and drop this card.
+  const [payoutGuideOpen, setPayoutGuideOpen] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (localStorage.getItem("gadit-affiliate-payout-guide-dismissed") === "1") return;
+    setPayoutGuideOpen(true);
+  }, []);
+  const dismissPayoutGuide = () => {
+    setPayoutGuideOpen(false);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("gadit-affiliate-payout-guide-dismissed", "1");
+    }
+  };
 
   // Mobile burger menu mirrors the pattern used in /play, /affiliates,
   // /features. Without it the topbar has zero interactive elements
@@ -493,15 +553,32 @@ export function DashboardPage() {
         )}
 
         {user && stage.kind === "ready" && (
-          <iframe
-            // padding=false because the wb-affdash-main container
-            // already handles spacing; the Affonso embed would
-            // double-pad otherwise.
-            src={`https://affonso.io/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&padding=false`}
-            className="wb-affdash-iframe"
-            allow="clipboard-write"
-            title="Affiliate Dashboard"
-          />
+          <>
+            {payoutGuideOpen && (
+              <div className="wb-affdash-payout-guide" role="note">
+                <div className="wb-affdash-payout-guide-body">
+                  <h2 className="wb-affdash-payout-guide-title">{c.payoutGuideTitle}</h2>
+                  <p className="wb-affdash-payout-guide-text">{c.payoutGuideBody}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={dismissPayoutGuide}
+                  className="wb-affdash-payout-guide-dismiss"
+                >
+                  {c.payoutGuideDismiss}
+                </button>
+              </div>
+            )}
+            <iframe
+              // padding=false because the wb-affdash-main container
+              // already handles spacing; the Affonso embed would
+              // double-pad otherwise.
+              src={`https://affonso.io/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&padding=false`}
+              className="wb-affdash-iframe"
+              allow="clipboard-write"
+              title="Affiliate Dashboard"
+            />
+          </>
         )}
       </main>
     </div>

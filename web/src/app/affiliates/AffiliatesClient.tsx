@@ -714,14 +714,13 @@ export function AffiliatesPage() {
           </Link>
         </nav>
         <div className="wb-shell-actions">
-          <a
-            href={AFFONSO_PORTAL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wb-aff-topbar-signin"
-          >
-            {c.topbarSignIn}
-          </a>
+          {/* The old "Already a partner? Sign in" link to the external
+              Affonso portal lived here. Removed June 2026: every Gadit
+              affiliate is by definition a Clear or Deep subscriber and
+              already has a Gadit account, so they reach the partner
+              dashboard from the user menu (Account → Affiliate
+              dashboard) — no need to send them off-site for a separate
+              sign-in. */}
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
@@ -786,16 +785,6 @@ export function AffiliatesPage() {
             <Link href={href("/affiliates")} className="wb-shell-mobile-link is-active" onClick={() => setMenuOpen(false)}>
               {c.navAffiliates}
             </Link>
-            <div className="wb-shell-mobile-menu-sep" />
-            <a
-              href={AFFONSO_PORTAL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="wb-shell-mobile-link"
-              onClick={() => setMenuOpen(false)}
-            >
-              {c.topbarSignIn}
-            </a>
             <div className="wb-shell-mobile-menu-sep" />
             <div className="wb-shell-mobile-langs">
               {LANGS.map((l) => (
