@@ -450,6 +450,12 @@ export function DashboardPage() {
           <Link href={href("/features")} className="wb-shell-navlink">
             {v2(lang, "navFeatures")}
           </Link>
+          <Link href={href("/notebook")} className="wb-shell-navlink">
+            {v2(lang, "navNotebook")}
+          </Link>
+          <Link href={href("/play")} className="wb-shell-navlink">
+            {v2(lang, "navPlay")}
+          </Link>
           <Link href={href("/pricing")} className="wb-shell-navlink">
             {v2(lang, "navPricing")}
           </Link>

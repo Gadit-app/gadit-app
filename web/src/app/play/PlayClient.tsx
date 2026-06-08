@@ -36,17 +36,17 @@ import { GameAnagram } from "@/components/play/GameAnagram";
 import { GameSpeed } from "@/components/play/GameSpeed";
 
 const LANGS = [
-  { code: "he", label: "עברית" },
-  { code: "en", label: "English" },
-  { code: "ar", label: "العربية" },
-  { code: "ru", label: "Русский" },
-  { code: "es", label: "Español" },
-  { code: "pt", label: "Português" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "cs", label: "Čeština" },
-  { code: "it", label: "Italiano" },
-  { code: "ja", label: "日本語" },
+  { code: "he", label: "עברית", flag: "🇮🇱" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt", label: "Português", flag: "🇵🇹" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "cs", label: "Čeština", flag: "🇨🇿" },
+  { code: "it", label: "Italiano", flag: "🇮🇹" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
 ] as const;
 
 // Localized strings — kept inline rather than added to i18n-v2 to keep
@@ -464,7 +464,7 @@ function LangSwitch() {
                 className={l.code === lang ? "is-active" : ""}
                 onClick={() => { setLang(l.code); setOpen(false); }}
               >
-                {l.label}
+                <span className="wb-lang-flag" aria-hidden="true">{l.flag}</span>{l.label}
               </button>
             </li>
           ))}
@@ -664,14 +664,20 @@ export function PlayPage() {
               <path d="m20 20-4-4" />
             </svg>
           </Link>
+          <Link href={href("/features")} className="wb-shell-navlink">
+            {v2(lang, "navFeatures")}
+          </Link>
           <Link href={href("/notebook")} className="wb-shell-navlink">
             {v2(lang, "navNotebook")}
           </Link>
           <Link href={href("/play")} className="wb-shell-navlink is-active">
-            {t.menuTitle}
+            {v2(lang, "navPlay")}
           </Link>
           <Link href={href("/pricing")} className="wb-shell-navlink">
             {v2(lang, "navPricing")}
+          </Link>
+          <Link href={href("/affiliates")} className="wb-shell-navlink">
+            {v2(lang, "navAffiliates")}
           </Link>
         </nav>
         <div className="wb-shell-actions">

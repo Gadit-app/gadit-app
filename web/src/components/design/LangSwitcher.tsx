@@ -189,7 +189,10 @@ export function LangSwitcher({
                   }
                 }}
               >
-                <span>{l.label}</span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+                  <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>{l.flag}</span>
+                  <span>{l.label}</span>
+                </span>
                 {selected && (
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path

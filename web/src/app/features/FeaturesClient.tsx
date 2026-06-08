@@ -17,17 +17,17 @@ import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 
 const LANGS = [
-  { code: "he", label: "עברית" },
-  { code: "en", label: "English" },
-  { code: "ar", label: "العربية" },
-  { code: "ru", label: "Русский" },
-  { code: "es", label: "Español" },
-  { code: "pt", label: "Português" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "cs", label: "Čeština" },
-  { code: "it", label: "Italiano" },
-  { code: "ja", label: "日本語" },
+  { code: "he", label: "עברית", flag: "🇮🇱" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt", label: "Português", flag: "🇵🇹" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "cs", label: "Čeština", flag: "🇨🇿" },
+  { code: "it", label: "Italiano", flag: "🇮🇹" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
 ] as const;
 
 function LangSwitch() {
@@ -65,7 +65,7 @@ function LangSwitch() {
           {LANGS.map((l) => (
             <li key={l.code}>
               <button type="button" className={l.code === lang ? "is-active" : ""} onClick={() => { setLang(l.code); setOpen(false); }}>
-                {l.label}
+                <span className="wb-lang-flag" aria-hidden="true">{l.flag}</span>{l.label}
               </button>
             </li>
           ))}
@@ -352,7 +352,7 @@ export function FeaturesPage() {
                   className={l.code === lang ? "is-active" : ""}
                   onClick={() => { setLang(l.code); setMenuOpen(false); }}
                 >
-                  {l.label}
+                  <span className="wb-lang-flag" aria-hidden="true">{l.flag}</span>{l.label}
                 </button>
               ))}
             </div>

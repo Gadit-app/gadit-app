@@ -1,17 +1,26 @@
 export type Lang = "en" | "he" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
 
-export const LANGUAGES: { code: Lang; label: string; dir: "ltr" | "rtl" }[] = [
-  { code: "en", label: "English", dir: "ltr" },
-  { code: "he", label: "עברית", dir: "rtl" },
-  { code: "ar", label: "العربية", dir: "rtl" },
-  { code: "ru", label: "Русский", dir: "ltr" },
-  { code: "es", label: "Español", dir: "ltr" },
-  { code: "pt", label: "Português", dir: "ltr" },
-  { code: "fr", label: "Français", dir: "ltr" },
-  { code: "de", label: "Deutsch", dir: "ltr" },
-  { code: "cs", label: "Čeština", dir: "ltr" },
-  { code: "it", label: "Italiano", dir: "ltr" },
-  { code: "ja", label: "日本語", dir: "ltr" },
+/**
+ * The single source of truth for every supported UI language. `flag`
+ * is the Unicode regional-indicator emoji rendered next to the label
+ * in the language switcher — added so visitors can spot their language
+ * at a glance instead of scanning native-script text in 11 fonts.
+ * Arabic falls back to the Saudi flag and Portuguese to the Portuguese
+ * (vs Brazilian) flag — a pragmatic choice; we can split later if we
+ * add regional variants.
+ */
+export const LANGUAGES: { code: Lang; label: string; dir: "ltr" | "rtl"; flag: string }[] = [
+  { code: "en", label: "English",   dir: "ltr", flag: "🇬🇧" },
+  { code: "he", label: "עברית",      dir: "rtl", flag: "🇮🇱" },
+  { code: "ar", label: "العربية",    dir: "rtl", flag: "🇸🇦" },
+  { code: "ru", label: "Русский",   dir: "ltr", flag: "🇷🇺" },
+  { code: "es", label: "Español",   dir: "ltr", flag: "🇪🇸" },
+  { code: "pt", label: "Português", dir: "ltr", flag: "🇵🇹" },
+  { code: "fr", label: "Français",  dir: "ltr", flag: "🇫🇷" },
+  { code: "de", label: "Deutsch",   dir: "ltr", flag: "🇩🇪" },
+  { code: "cs", label: "Čeština",   dir: "ltr", flag: "🇨🇿" },
+  { code: "it", label: "Italiano",  dir: "ltr", flag: "🇮🇹" },
+  { code: "ja", label: "日本語",      dir: "ltr", flag: "🇯🇵" },
 ];
 
 export function getLangDir(lang: Lang) {
