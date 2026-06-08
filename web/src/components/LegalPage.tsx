@@ -53,6 +53,16 @@ const FALLBACK_NOTICE: Record<Lang, { prefix: string; link: string; suffix: stri
     link: "anglická verze",
     suffix: ".",
   },
+  it: {
+    prefix: "Questa traduzione è fornita solo per comodità. In caso di conflitto tra la versione tradotta e quella in inglese, prevarrà ",
+    link: "la versione in inglese",
+    suffix: ".",
+  },
+  ja: {
+    prefix: "この翻訳は便宜上の参考訳です。翻訳版と英語版に相違がある場合は、",
+    link: "英語版",
+    suffix: "が優先されます。",
+  },
 };
 
 const LAST_UPDATED_LABEL: Record<Lang, string> = {
@@ -65,6 +75,8 @@ const LAST_UPDATED_LABEL: Record<Lang, string> = {
   fr: "Dernière mise à jour : ",
   de: "Zuletzt aktualisiert: ",
   cs: "Naposledy aktualizováno: ",
+  it: "Ultimo aggiornamento: ",
+  ja: "最終更新: ",
 };
 
 const BACK_LABEL: Record<Lang, string> = {
@@ -77,6 +89,8 @@ const BACK_LABEL: Record<Lang, string> = {
   fr: "← Retour à Gadit",
   de: "← Zurück zu Gadit",
   cs: "← Zpět do Gaditu",
+  it: "← Torna a Gadit",
+  ja: "← Gaditに戻る",
 };
 
 export default function LegalPage({

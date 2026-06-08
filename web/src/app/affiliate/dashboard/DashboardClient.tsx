@@ -40,7 +40,7 @@ const AFFONSO_LANGS = new Set([
 
 // Localized strings — inline so this single page doesn't add 9 entries
 // to i18n-v2 for what amounts to a loading state and an error message.
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
 const COPY: Record<Lang, {
   title: string;
   loadingTitle: string;
@@ -219,6 +219,42 @@ const COPY: Record<Lang, {
     upgradeBody:
       "Můžete doporučovat jen produkt, který sami používáte. Přejděte na Clear nebo Deep — získáte celý slovník Gadit bez omezení a přístup k partnerskému programu s 30% provizí za každého přivedeného zákazníka.",
     upgradeCta: "Přejít na placený plán",
+  },
+  it: {
+    title: "La mia dashboard",
+    loadingTitle: "Caricamento della dashboard…",
+    loadingHint: "La prima volta richiede qualche secondo.",
+    notConfiguredTitle: "Dashboard non ancora configurata",
+    notConfiguredBody:
+      "Stiamo finendo l'integrazione. Nel frattempo puoi accedere alla tua dashboard direttamente sul portale esterno.",
+    errorTitle: "Qualcosa è andato storto",
+    errorBody:
+      "Non siamo riusciti a caricare la tua dashboard. Prova a ricaricare la pagina; se il problema persiste, accedi al portale esterno.",
+    signInTitle: "Accedi per vedere la tua dashboard",
+    signInBody: "Accedi al tuo account Gadit per vedere il tuo link, le statistiche e le commissioni.",
+    marketingLink: "Cos'è il programma?",
+    upgradeTitle: "Il programma partner è riservato ai membri Clear e Deep",
+    upgradeBody:
+      "Puoi consigliare solo un prodotto che usi davvero. Passa a Clear o Deep — avrai il dizionario Gadit completo senza limiti e l'accesso al programma partner con il 30% di commissione su ogni cliente che porti.",
+    upgradeCta: "Passa a un piano a pagamento",
+  },
+  ja: {
+    title: "マイダッシュボード",
+    loadingTitle: "ダッシュボードを読み込んでいます…",
+    loadingHint: "初回は数秒かかります。",
+    notConfiguredTitle: "ダッシュボードはまだ設定されていません",
+    notConfiguredBody:
+      "統合作業を仕上げているところです。それまでは外部ポータルから直接ダッシュボードにアクセスできます。",
+    errorTitle: "問題が発生しました",
+    errorBody:
+      "ダッシュボードを読み込めませんでした。ページを更新してみてください。問題が続く場合は外部ポータルからログインしてください。",
+    signInTitle: "ダッシュボードを見るにはログインしてください",
+    signInBody: "Gaditアカウントにログインして、自分のリンク・統計・コミッションを確認しましょう。",
+    marketingLink: "プログラムとは？",
+    upgradeTitle: "パートナープログラムはClearとDeepのメンバー限定です",
+    upgradeBody:
+      "自分が使っていない商品を本気で勧めることはできません。ClearまたはDeepにアップグレードすると、Gaditの完全な辞書が制限なく使えるうえ、紹介した顧客ごとに30%のコミッションが得られるパートナープログラムにも参加できます。",
+    upgradeCta: "有料プランにアップグレード",
   },
 };
 

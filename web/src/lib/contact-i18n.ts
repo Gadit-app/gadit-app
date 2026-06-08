@@ -11,7 +11,8 @@ export type ContactContent = {
   faq: { q: string; a: string }[];
 };
 
-export const CONTACT: Record<Lang, ContactContent> = {
+export const CONTACT = {} as Record<Lang, ContactContent>;
+Object.assign(CONTACT, {
   en: {
     pageTitle: "Contact & FAQ",
     pageSubtitle: "Common questions, and how to reach us if you can't find what you're looking for.",
@@ -369,4 +370,11 @@ export const CONTACT: Record<Lang, ContactContent> = {
       },
     ],
   },
-};
+});
+
+// Italian + Japanese reuse the English content for now — the cs block
+// above already does the same. Translating the full FAQ block is a
+// separate sweep; this keeps the type complete and the build green so
+// it/ja users at least see a populated Contact page instead of a 404.
+CONTACT.it = CONTACT.en;
+CONTACT.ja = CONTACT.en;

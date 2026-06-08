@@ -50,7 +50,7 @@ const AFFONSO_PORTAL = "https://gaditapp.affonso.io";
 const COMMISSION_RATE = 0.30;
 const DEEP_PRICE = 4.99;
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
 
 type Copy = {
   navAffiliates: string;
@@ -468,6 +468,8 @@ const COPY: Record<Lang, Copy> = {
   fr: undefined as unknown as Copy,
   de: undefined as unknown as Copy,
   cs: undefined as unknown as Copy,
+  it: undefined as unknown as Copy,
+  ja: undefined as unknown as Copy,
 };
 
 const NAV_FALLBACKS: Record<Exclude<Lang, "he" | "en">, { navAffiliates: string; topbarSignIn: string }> = {
@@ -478,6 +480,8 @@ const NAV_FALLBACKS: Record<Exclude<Lang, "he" | "en">, { navAffiliates: string;
   fr: { navAffiliates: "Affiliés", topbarSignIn: "Déjà partenaire ? Se connecter" },
   de: { navAffiliates: "Affiliates", topbarSignIn: "Schon Partner? Anmelden" },
   cs: { navAffiliates: "Partneři", topbarSignIn: "Už jste partner? Přihlášení" },
+  it: { navAffiliates: "Affiliati", topbarSignIn: "Già partner? Accedi" },
+  ja: { navAffiliates: "パートナー", topbarSignIn: "すでにパートナーですか？ ログイン" },
 };
 (Object.keys(NAV_FALLBACKS) as Array<Exclude<Lang, "he" | "en">>).forEach((l) => {
   COPY[l] = { ...COPY.en, ...NAV_FALLBACKS[l] };
@@ -493,6 +497,8 @@ const LANGS = [
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
   { code: "cs", label: "Čeština" },
+  { code: "it", label: "Italiano" },
+  { code: "ja", label: "日本語" },
 ] as const;
 
 function LangSwitch() {

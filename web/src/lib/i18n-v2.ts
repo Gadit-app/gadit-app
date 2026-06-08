@@ -3138,6 +3138,74 @@ const cs: Partial<V2Strings> = {
   savedAgoTemplate: (t) => `Uloženo · ${t}`,
 };
 
+const it: Partial<V2Strings> = {
+  // Section eyebrows on the result page
+  meaningsEyebrow: "Definizioni",
+  idiomsEyebrow: "Modi di dire ed espressioni",
+  wordOriginEyebrow: "Origine della parola",
+  visualEyebrow: "Immagine",
+  takeItFurtherEyebrow: "Vai oltre",
+  // Word origin structured rows
+  wordOriginLanguage: "Lingua",
+  wordOriginOriginallyMeant: "Significato originale",
+  wordOriginBackgroundLabel: "Contesto",
+  wordOriginOriginalWord: "Parola originale",
+  wordOriginBreakdown: "Parti della parola",
+  // Meaning-level action labels
+  actionCompose: "Scrivi una frase",
+  actionQuiz: "Quiz",
+  actionCompare: "Confronta parole",
+  actionKidsExplanation: "Spiegazione per bambini",
+  // Visual / image gen
+  visualEmptyLabel: "Verrà generata un'immagine per questa parola",
+  generateLabel: "Genera",
+  imageGeneratingLabel: "Generazione dell'immagine…",
+  imageGeneratingHint: "Di solito richiede 10–15 secondi.",
+  imageOpenFullAria: "Apri l'immagine a tutta grandezza",
+  compareComingSoon: "I giochi di parole arrivano presto.",
+  navPlay: "Giochi",
+  navAffiliates: "Affiliati",
+  // Share / save / listen on the result page
+  shareLabel: "Condividi",
+  backLabel: "Indietro",
+  shareDefinitionAria: "Condividi questa definizione",
+  savedAgoTemplate: (t) => `Salvato · ${t}`,
+};
+
+const ja: Partial<V2Strings> = {
+  // Section eyebrows on the result page
+  meaningsEyebrow: "意味",
+  idiomsEyebrow: "イディオムと表現",
+  wordOriginEyebrow: "語源",
+  visualEyebrow: "イメージ",
+  takeItFurtherEyebrow: "もっと深く",
+  // Word origin structured rows
+  wordOriginLanguage: "言語",
+  wordOriginOriginallyMeant: "もともとの意味",
+  wordOriginBackgroundLabel: "背景",
+  wordOriginOriginalWord: "もとの単語",
+  wordOriginBreakdown: "単語の構成",
+  // Meaning-level action labels
+  actionCompose: "文を書く",
+  actionQuiz: "クイズ",
+  actionCompare: "単語を比べる",
+  actionKidsExplanation: "子ども向け説明",
+  // Visual / image gen
+  visualEmptyLabel: "この単語のイメージを生成します",
+  generateLabel: "生成",
+  imageGeneratingLabel: "画像を生成中…",
+  imageGeneratingHint: "通常は10〜15秒ほどかかります。",
+  imageOpenFullAria: "画像を全画面で開く",
+  compareComingSoon: "ワードゲームは近日公開。",
+  navPlay: "ゲーム",
+  navAffiliates: "パートナー",
+  // Share / save / listen on the result page
+  shareLabel: "シェア",
+  backLabel: "戻る",
+  shareDefinitionAria: "この意味をシェア",
+  savedAgoTemplate: (t) => `保存済み · ${t}`,
+};
+
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   en,
   he,
@@ -3148,6 +3216,8 @@ const TABLES: Record<Lang, Partial<V2Strings>> = {
   fr,
   de,
   cs,
+  it,
+  ja,
 };
 
 /**

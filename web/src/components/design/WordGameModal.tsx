@@ -29,7 +29,7 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
 
 interface NotebookItem {
   word: string;
@@ -266,6 +266,50 @@ const COPY: Record<Lang, {
     backToWord: "Zpět ke slovu",
     notEnough: "Ulož víc slov do sešitu, ať se otevřou všechna kola",
     notEnoughHint: "Otevři 2-3 další slova v sešitu a kolo se odemkne.",
+  },
+  it: {
+    title: "Giochi con questa parola",
+    loading: "Caricamento…",
+    anagramEyebrow: "Riordina le lettere",
+    anagramHintLabel: "Indizio:",
+    anagramReset: "Reset",
+    fillblankEyebrow: "Completa la frase",
+    fillblankPrompt: "Quale parola completa la frase?",
+    next: "Avanti",
+    finish: "Finito",
+    close: "Chiudi",
+    correct: "Corretto!",
+    wrong: "Quasi",
+    resultGreat: "Ottimo!",
+    resultGood: "Ben fatto.",
+    resultTryAgain: "Un altro giro.",
+    scoreLine: (s, t) => `${s} su ${t}`,
+    playAgain: "Gioca ancora",
+    backToWord: "Torna alla parola",
+    notEnough: "Salva più parole nel quaderno per sbloccare tutti i giochi",
+    notEnoughHint: "Apri 2-3 altre parole nel quaderno e questo gioco si sblocca.",
+  },
+  ja: {
+    title: "この単語のゲーム",
+    loading: "読み込み中…",
+    anagramEyebrow: "文字を並べ替える",
+    anagramHintLabel: "ヒント:",
+    anagramReset: "リセット",
+    fillblankEyebrow: "文を完成させる",
+    fillblankPrompt: "どの単語が文を完成させますか？",
+    next: "次へ",
+    finish: "終了",
+    close: "閉じる",
+    correct: "正解！",
+    wrong: "おしい",
+    resultGreat: "素晴らしい！",
+    resultGood: "よくできました。",
+    resultTryAgain: "もう一度挑戦。",
+    scoreLine: (s, t) => `${t} 中 ${s}`,
+    playAgain: "もう一度",
+    backToWord: "単語に戻る",
+    notEnough: "ノートにもっと単語を保存して、すべてのゲームを解放しましょう",
+    notEnoughHint: "ノートにあと2〜3語追加するとこのゲームが解放されます。",
   },
 };
 

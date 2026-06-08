@@ -45,6 +45,8 @@ const LANGS = [
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
   { code: "cs", label: "Čeština" },
+  { code: "it", label: "Italiano" },
+  { code: "ja", label: "日本語" },
 ] as const;
 
 // Localized strings — kept inline rather than added to i18n-v2 to keep

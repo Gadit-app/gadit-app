@@ -28,7 +28,7 @@ export type UpgradeFeature =
   | "quiz" | "compare";                         // Deep
 export type UpgradeTrigger = { feature: UpgradeFeature; tier: UpgradeTier };
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
 
 interface Copy {
   featureNames: Record<UpgradeFeature, string>;
@@ -267,6 +267,56 @@ const COPY: Record<Lang, Copy> = {
     primaryCta: "Vyzkoušej 14 dní zdarma",
     secondaryCta: "Možná jindy",
     closeAria: "Zavřít",
+  },
+  it: {
+    featureNames: {
+      image: "La parola come immagine",
+      kids: "Spiegazione per bambini",
+      compose: "Scrivi una frase e ricevi feedback",
+      notebook: "Quaderno personale di parole",
+      quiz: "Quiz personalizzati",
+      compare: "Giochi di parole",
+    },
+    featureBlurbs: {
+      image: "Un'immagine unica per ogni parola.",
+      kids: "Una spiegazione semplice che ogni bambino capisce, con esempi del suo mondo.",
+      compose: "Scrivi la tua frase con la parola e ricevi un feedback immediato nella versione potenziata.",
+      notebook: "Raccogli le parole imparate in un quaderno digitale personale, disponibile ovunque.",
+      quiz: "Un quiz personale che ti aiuta a fissare la parola e ricordarla a lungo.",
+      compare: "Giochi di parole personalizzati che ti fanno memorizzare divertendoti.",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "è una funzione del piano Clear", deep: "è una funzione del piano Deep" },
+    pricePerMonth: { clear: "$2,99 / mese", deep: "$4,99 / mese" },
+    trialNote: "14 giorni gratis · cancella quando vuoi",
+    primaryCta: "Prova 14 giorni gratis",
+    secondaryCta: "Forse più tardi",
+    closeAria: "Chiudi",
+  },
+  ja: {
+    featureNames: {
+      image: "単語をイメージで",
+      kids: "子ども向け説明",
+      compose: "文を書いてフィードバックをもらう",
+      notebook: "あなただけの単語ノート",
+      quiz: "パーソナライズドクイズ",
+      compare: "ワードゲーム",
+    },
+    featureBlurbs: {
+      image: "それぞれの単語にユニークな画像を。",
+      kids: "どの子でも理解できる、シンプルで身近な例を使った説明。",
+      compose: "自分で文を書くと、強化版で即座にフィードバックがもらえます。",
+      notebook: "学んだ単語をどこからでも開ける、あなただけのデジタルノートに集めましょう。",
+      quiz: "単語をしっかり定着させ、長く覚えておくためのあなた専用クイズ。",
+      compare: "楽しみながら単語を記憶に焼きつける、パーソナライズドなワードゲーム。",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "はClearプランの機能です", deep: "はDeepプランの機能です" },
+    pricePerMonth: { clear: "月額 $2.99", deep: "月額 $4.99" },
+    trialNote: "14日間無料 · いつでもキャンセル可",
+    primaryCta: "14日間無料で試す",
+    secondaryCta: "また今度",
+    closeAria: "閉じる",
   },
 };
 

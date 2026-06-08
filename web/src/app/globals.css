@@ -137,6 +137,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --wb-sans:  var(--font-inter), 'Inter', system-ui, sans-serif;
   --wb-he:    var(--font-rubik), 'Rubik', system-ui, sans-serif;
   --wb-ar:    var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), system-ui, sans-serif;
+  --wb-jp:    var(--font-noto-jp), 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
 
   font-family: var(--wb-sans);
   color: var(--ink);
@@ -1067,6 +1068,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[dir="rtl"] { font-family: var(--wb-he); }
 [lang="ar"] .wordbook,
 .wordbook[lang="ar"] { font-family: var(--wb-ar); }
+[lang="ja"] .wordbook,
+.wordbook[lang="ja"] { font-family: var(--wb-jp); }
 
 .wordbook[dir="rtl"] .wb-word-title {
   font-family: var(--wb-he);

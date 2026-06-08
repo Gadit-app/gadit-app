@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
-import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
@@ -92,6 +92,18 @@ const inter = Inter({
   display: "swap",
 });
 
+// Noto Sans JP — Japanese body/display sans. Pulled in for the ja UI
+// locale. Inter/Heebo/Cairo render Japanese glyphs from system fallback
+// which is inconsistent across OSes; Noto Sans JP ships a self-contained
+// Japanese glyph set so the experience is stable on Windows, macOS,
+// Android and ChromeOS alike.
+const notoSansJp = Noto_Sans_JP({
+  variable: "--font-noto-jp",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 // Per-language metadata strings used by generateMetadata below. The
 // description is the same first-person share blurb that ShareButton
 // uses for the Web Share API, so the social-card preview that gets
@@ -152,9 +164,21 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "J'ai découvert un nouveau dictionnaire numérique qui explique les mots et montre des exemples pour chaque définition, des idiomes et expressions, et aussi l'origine de chaque mot et d'où il vient. C'est gratuit avec des options de mise à niveau à très bas coût. Ça vaut le coup d'essayer.",
     locale: "fr_FR",
   },
+  it: {
+    title: "Gadit — Dizionario digitale intelligente",
+    description:
+      "Ho scoperto un nuovo dizionario digitale che spiega le parole e mostra esempi per ogni definizione, modi di dire ed espressioni, e anche l'origine di ogni parola. Gratis con opzioni di aggiornamento a bassissimo costo. Vale la pena provarlo.",
+    locale: "it_IT",
+  },
+  ja: {
+    title: "Gadit — 賢いデジタル辞書",
+    description:
+      "言葉を解説し、意味ごとに例文・イディオム・表現・語源まで見せてくれる新しいデジタル辞書を見つけました。無料で使えて、有料プランも非常に手頃。一度試す価値があります。",
+    locale: "ja_JP",
+  },
 };
 
-const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs"];
+const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "it", "ja"];
 
 export async function generateMetadata(): Promise<Metadata> {
   // Resolve language for this request, exactly the same chain the
@@ -242,7 +266,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs"];
+const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "it", "ja"];
 
 export default async function RootLayout({
   children,
@@ -267,7 +291,7 @@ export default async function RootLayout({
     <html
       lang={initialLang}
       dir={initialDir}
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           <LangProvider initialLang={initialLang}>

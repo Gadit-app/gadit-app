@@ -41,6 +41,8 @@ const LANGS = [
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
   { code: "cs", label: "Čeština" },
+  { code: "it", label: "Italiano" },
+  { code: "ja", label: "日本語" },
 ] as const;
 
 function LangSwitch() {
