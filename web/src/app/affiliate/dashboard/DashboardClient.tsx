@@ -208,11 +208,20 @@ export function DashboardPage() {
     }
   }, [loading, user, c.title, promptLogin]);
 
-  // Token fetch.
+  // Token fetch — runs exactly once after auth resolves, never re-runs
+  // when stage changes. The previous version had stage.kind in the dep
+  // array, which meant React re-ran the effect the moment we flipped
+  // from "init" → "fetching", which fired the cleanup from the first
+  // run, which set cancelled=true on the original async closure, which
+  // made the resolved fetch silently early-out instead of moving stage
+  // to "ready" — so the spinner spun forever even though the API had
+  // returned a token in <1s. The ref guard replaces the kind-based
+  // guard so the effect can safely depend on only loading + user.
+  const fetchStartedRef = useRef(false);
   useEffect(() => {
     if (loading || !user) return;
-    if (stage.kind !== "init") return;
-    let cancelled = false;
+    if (fetchStartedRef.current) return;
+    fetchStartedRef.current = true;
     setStage({ kind: "fetching" });
     (async () => {
       try {
@@ -220,7 +229,6 @@ export function DashboardPage() {
         const res = await fetch("/api/affiliate/embed-token", {
           headers: { Authorization: `Bearer ${idToken}` },
         });
-        if (cancelled) return;
         if (res.status === 503) {
           setStage({ kind: "not_configured" });
           return;
@@ -236,11 +244,10 @@ export function DashboardPage() {
         }
         setStage({ kind: "ready", token: data.token });
       } catch (err) {
-        if (!cancelled) setStage({ kind: "error", message: String(err) });
+        setStage({ kind: "error", message: String(err) });
       }
     })();
-    return () => { cancelled = true; };
-  }, [loading, user, stage.kind]);
+  }, [loading, user]);
 
   // Mobile burger menu mirrors the pattern used in /play, /affiliates,
   // /features. Without it the topbar has zero interactive elements
