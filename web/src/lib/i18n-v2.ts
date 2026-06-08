@@ -86,6 +86,14 @@ export interface V2Strings {
   navPlay: string;
   navAffiliates: string;
 
+  // Kids Mode toggle — a global "render every definition like a parent
+  // would explain it to a child" switch. Persists in localStorage.
+  // Clear/Deep only; Basic users see an UpgradeModal when they tap it.
+  kidsModeLabel: string;
+  kidsModeTooltipOff: string;
+  kidsModeTooltipOn: string;
+  kidsModeBasicGate: string;
+
   // ── Pricing page (Screen 3) ─────────────────────────────────
   pricingPageHeadline: string;
   pricingPageSubline: string;
@@ -475,6 +483,11 @@ const en: V2Strings = {
   navPlay: "Play",
   navAffiliates: "Affiliates",
 
+  kidsModeLabel: "Kids mode",
+  kidsModeTooltipOff: "Tap to explain every word like a parent would to a child.",
+  kidsModeTooltipOn: "Kids mode is on — every definition will be written for a child. Tap to turn off.",
+  kidsModeBasicGate: "Kids mode is a Clear feature. Upgrade to use it.",
+
   // Pricing page (Screen 3)
   pricingPageHeadline: "Three tiers. All with real content.",
   pricingPageSubline: "Start free. Upgrade when the depth helps you.",
@@ -849,6 +862,11 @@ const he: V2Strings = {
   navFeatures: "פיצ'רים",
   navPlay: "משחקים",
   navAffiliates: "שותפים",
+
+  kidsModeLabel: "מצב ילדים",
+  kidsModeTooltipOff: "לחצו כדי שכל מילה תוסבר כמו שהורה היה מסביר לילד.",
+  kidsModeTooltipOn: "מצב ילדים פעיל. כל הגדרה תיכתב לילד. לחצו לכיבוי.",
+  kidsModeBasicGate: "מצב ילדים הוא פיצ'ר של Clear. שדרגו כדי להשתמש בו.",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "שלוש רמות. כולן עם תוכן אמיתי.",
@@ -1228,6 +1246,11 @@ const ar: V2Strings = {
   navFeatures: "المزايا",
   navPlay: "ألعاب",
   navAffiliates: "الشركاء",
+
+  kidsModeLabel: "وضع الأطفال",
+  kidsModeTooltipOff: "اضغط ليُشرح كل كلمة كما يشرحها الأب لطفله.",
+  kidsModeTooltipOn: "وضع الأطفال مفعّل. كل تعريف سيُكتب لطفل. اضغط لإيقافه.",
+  kidsModeBasicGate: "وضع الأطفال ميزة في Clear. ارتقِ لاستخدامها.",
 
   // Pricing page (Screen 3)
   pricingPageHeadline: "ثلاثة مستويات. كلّها بمحتوى حقيقي.",
@@ -1624,6 +1647,11 @@ const ru: Partial<V2Strings> = {
   navPlay: "Игры",
   navAffiliates: "Партнёры",
 
+  kidsModeLabel: "Детский режим",
+  kidsModeTooltipOff: "Нажмите, чтобы каждое слово объяснялось так, как родитель объяснил бы ребёнку.",
+  kidsModeTooltipOn: "Детский режим включён. Каждое определение будет написано для ребёнка. Нажмите, чтобы выключить.",
+  kidsModeBasicGate: "Детский режим — функция Clear. Перейдите на тариф, чтобы пользоваться.",
+
   pricingPageHeadline: "Три уровня. Все с настоящим контентом.",
   pricingPageSubline: "Начните бесплатно. Перейдите глубже, когда понадобится.",
   billingMonthly: "Ежемесячно",
@@ -2000,6 +2028,11 @@ const es: Partial<V2Strings> = {
   navPlay: "Jugar",
   navAffiliates: "Afiliados",
 
+  kidsModeLabel: "Modo niños",
+  kidsModeTooltipOff: "Toca para que cada palabra se explique como un padre se la explicaría a un niño.",
+  kidsModeTooltipOn: "Modo niños activado. Cada definición se escribirá para un niño. Toca para desactivar.",
+  kidsModeBasicGate: "El modo niños es una función de Clear. Mejora para usarlo.",
+
   pricingPageHeadline: "Tres niveles. Todos con contenido real.",
   pricingPageSubline: "Empieza gratis. Sube de plan cuando la profundidad te ayude.",
   billingMonthly: "Mensual",
@@ -2374,6 +2407,11 @@ const pt: Partial<V2Strings> = {
   navPlay: "Jogar",
   navAffiliates: "Afiliados",
 
+  kidsModeLabel: "Modo crianças",
+  kidsModeTooltipOff: "Toque para que cada palavra seja explicada como um pai explicaria a uma criança.",
+  kidsModeTooltipOn: "Modo crianças ativado. Cada definição será escrita para uma criança. Toque para desativar.",
+  kidsModeBasicGate: "O modo crianças é uma função do Clear. Faça upgrade para usar.",
+
   pricingPageHeadline: "Três níveis. Todos com conteúdo de verdade.",
   pricingPageSubline: "Comece grátis. Faça upgrade quando a profundidade ajudar.",
   billingMonthly: "Mensal",
@@ -2747,6 +2785,11 @@ const fr: Partial<V2Strings> = {
   navFeatures: "Fonctionnalités",
   navPlay: "Jeux",
   navAffiliates: "Affiliés",
+
+  kidsModeLabel: "Mode enfants",
+  kidsModeTooltipOff: "Touchez pour que chaque mot soit expliqué comme un parent l'expliquerait à son enfant.",
+  kidsModeTooltipOn: "Mode enfants activé. Chaque définition sera écrite pour un enfant. Touchez pour désactiver.",
+  kidsModeBasicGate: "Le mode enfants est une fonctionnalité de Clear. Passez au plan supérieur pour l'utiliser.",
 
   pricingPageHeadline: "Trois niveaux. Tous avec du vrai contenu.",
   pricingPageSubline: "Commencez gratuitement. Passez à un plan supérieur quand la profondeur sert.",
@@ -3125,6 +3168,11 @@ const de: V2Strings = {
   navPlay: "Spielen",
   navAffiliates: "Affiliates",
 
+  kidsModeLabel: "Kindermodus",
+  kidsModeTooltipOff: "Tippe, damit jedes Wort so erklärt wird, wie ein Elternteil es einem Kind erklären würde.",
+  kidsModeTooltipOn: "Kindermodus an. Jede Definition wird für ein Kind geschrieben. Tippe zum Ausschalten.",
+  kidsModeBasicGate: "Kindermodus ist eine Clear-Funktion. Upgrade, um sie zu nutzen.",
+
   pricingPageHeadline: "Drei Stufen. Alle mit echten Inhalten.",
   pricingPageSubline: "Kostenlos starten. Upgrade, wenn die Tiefe dir hilft.",
   billingMonthly: "Monatlich",
@@ -3470,6 +3518,11 @@ const cs: V2Strings = {
   navFeatures: "Funkce",
   navPlay: "Hrát",
   navAffiliates: "Partneři",
+
+  kidsModeLabel: "Dětský režim",
+  kidsModeTooltipOff: "Klepni, aby každé slovo bylo vysvětleno tak, jak by ho rodič vysvětlil dítěti.",
+  kidsModeTooltipOn: "Dětský režim je zapnutý. Každá definice bude napsána pro dítě. Klepni pro vypnutí.",
+  kidsModeBasicGate: "Dětský režim je funkce Clearu. Přejdi na vyšší plán, abys ho mohl používat.",
 
   pricingPageHeadline: "Tři úrovně. Všechny s opravdovým obsahem.",
   pricingPageSubline: "Začni zdarma. Upgraduj, když ti hloubka pomůže.",
@@ -3877,6 +3930,12 @@ const it: Partial<V2Strings> = {
   compareComingSoon: "I giochi di parole arrivano presto.",
   navPlay: "Giochi",
   navAffiliates: "Affiliati",
+
+  kidsModeLabel: "Modalità bambini",
+  kidsModeTooltipOff: "Tocca per spiegare ogni parola come un genitore la spiegherebbe a un bambino.",
+  kidsModeTooltipOn: "Modalità bambini attiva. Ogni definizione sarà scritta per un bambino. Tocca per disattivare.",
+  kidsModeBasicGate: "La modalità bambini è una funzione di Clear. Fai upgrade per usarla.",
+
   // Share / save / listen on the result page
   shareLabel: "Condividi",
   backLabel: "Indietro",
@@ -4245,6 +4304,12 @@ const ja: Partial<V2Strings> = {
   compareComingSoon: "ワードゲームは近日公開。",
   navPlay: "ゲーム",
   navAffiliates: "パートナー",
+
+  kidsModeLabel: "子どもモード",
+  kidsModeTooltipOff: "タップすると、すべての単語が親が子に説明するように解説されます。",
+  kidsModeTooltipOn: "子どもモードがオンです。すべての定義が子ども向けに書かれます。タップでオフにできます。",
+  kidsModeBasicGate: "子どもモードは Clear の機能です。アップグレードしてご利用ください。",
+
   // Share / save / listen on the result page
   shareLabel: "シェア",
   backLabel: "戻る",

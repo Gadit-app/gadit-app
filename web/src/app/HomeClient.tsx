@@ -18,6 +18,8 @@ import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
+import { KidsModeToggle } from "@/components/KidsModeToggle";
+import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 
 const LANGS = [
   { code: "he", label: "עברית" },
@@ -150,6 +152,7 @@ export function HomePage() {
   const [query, setQuery] = useState("");
   const [sentence, setSentence] = useState("");
   const [sentenceOpen, setSentenceOpen] = useState(false);
+  const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -365,6 +368,22 @@ export function HomePage() {
               ))}
             </div>
 
+            <div className="wb-home-kids-row">
+              <KidsModeToggle
+                plan={plan}
+                onBasicGate={() => {
+                  // Anonymous: nudge to sign up first; Basic: show the
+                  // existing UpgradeModal with the kids pitch (the
+                  // modal already ships a feature="kids" pitch in 11
+                  // languages, so we get it for free).
+                  if (!user) {
+                    promptLogin(v2(lang, "kidsModeBasicGate"));
+                    return;
+                  }
+                  setUpgradeTrigger({ feature: "kids", tier: "clear" });
+                }}
+              /></div>
+
             {sentenceOpen ? (
               <div className="wb-home-sentence-wrap">
                 <textarea
@@ -401,6 +420,13 @@ export function HomePage() {
           </form>
         </div>
       </main>
+
+      <UpgradeModal
+        trigger={upgradeTrigger}
+        lang={lang as "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja"}
+        dir={dir}
+        onClose={() => setUpgradeTrigger(null)}
+      />
 
       <aside className="wb-home-founder" aria-label={c.founderSign}>
         <p className="wb-home-founder-note">{c.founderNote}</p>

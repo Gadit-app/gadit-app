@@ -26,11 +26,13 @@ import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useHref } from "@/lib/href";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
+import { useKidsMode } from "@/lib/use-kids-mode";
 
 import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { HomeFooter } from "@/components/design/home";
@@ -304,6 +306,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   const href = useHref();
   const searchParams = useSearchParams();
   const contextSentence = searchParams?.get("sentence")?.trim() || "";
+  // Kids Mode subscription: when the user flips the toggle in the
+  // masthead, the effect below picks up the new value and re-fetches
+  // the entry under the new prompt + cache key.
+  const [kidsMode] = useKidsMode();
   // When wrong-keyboard auto-correct fires, the original mis-typed
   // word is preserved in ?from=… so we can show a banner that lets
   // the user override and search the original anyway. ?stay=1 is
@@ -430,6 +436,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             word: initialWord,
             uiLang: lang,
             ...(contextSentence ? { contextSentence } : {}),
+            // The /api/define route honors kidsMode only for Clear/Deep
+            // users; sending the flag from any tier is safe — Basic
+            // users get a default-mode response regardless.
+            kidsMode,
           }),
           signal: controller.signal,
         });
@@ -639,7 +649,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user, contextSentence]);
+  }, [initialWord, lang, user, contextSentence, kidsMode]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate() {
@@ -970,6 +980,16 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 navigation. They render alongside the word title inside
                 WordHeader. The masthead stays a calm chrome strip for
                 nav + language + auth. */}
+            <KidsModeToggle
+              plan={plan}
+              onBasicGate={() => {
+                if (!user) {
+                  promptLogin(v2(lang, "kidsModeBasicGate"));
+                  return;
+                }
+                setUpgradeTrigger({ feature: "kids", tier: "clear" });
+              }}
+            />
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
