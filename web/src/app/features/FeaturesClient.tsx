@@ -122,7 +122,7 @@ const COPY: Record<string, {
       { id: "kids",        icon: "kids",        tier: "clear", title: "הסבר לילדים",                       body: "הסבר פשוט וברור, בשפה שילד יבין בלי מונחים מסובכים." },
       { id: "image",       icon: "image",       tier: "clear", title: "המחשת המילה בתמונה",                body: "תמונה ייחודית לכל מילה, נוצרת ב-AI לפי המשמעות וההקשר." },
       { id: "notebook",    icon: "notebook",    tier: "clear", title: "מחברת מילים אישית",                 body: "שמרו מילים שאתם רוצים לזכור. זמינות גם בלי חיבור לאינטרנט." },
-      { id: "compose",     icon: "compose",     tier: "clear", title: "חיברו משפט וקבלו משוב",             body: "כתבו משפט משלכם עם המילה, וקבלו תיקון ומשוב מיידי." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "כתבו משפט וקבלו משוב",             body: "כתבו משפט משלכם עם המילה, וקבלו תיקון ומשוב מיידי." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "חידונים מותאמים אישית",             body: "חידון יומי על המילים שלמדתם, כדי שהן יישארו אצלכם לזמן ארוך." },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "משחקי מילים",                       body: "משחקים שבונים אוצר מילים: שיוך, ניחוש, יצירת קשרים בין מילים." },
     ],

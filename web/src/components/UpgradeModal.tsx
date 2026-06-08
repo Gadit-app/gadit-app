@@ -47,7 +47,7 @@ const COPY: Record<Lang, Copy> = {
     featureNames: {
       image: "המחשת המילה בתמונה",
       kids: "הסבר לילדים",
-      compose: "חיבור משפט וקבלת משוב",
+      compose: "כתבו משפט וקבלו משוב",
       notebook: "מחברת מילים אישית",
       quiz: "חידונים מותאמים אישית",
       compare: "משחקי מילים",
@@ -55,7 +55,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "יצירת תמונה ייחודית לכל מילה.",
       kids: "הסבר פשוט שכל ילד מבין עם דוגמאות מהחיים שלו.",
-      compose: "חברו משפט משלכם עם המילה וקבלו משוב מיידי בגרסה משופרת.",
+      compose: "כתבו משפט משלכם עם המילה וקבלו משוב מיידי על איך השתמשתם בה.",
       notebook: "אספו את המילים שלמדתם למחברת אישית דיגיטלית שזמינה לכם בכל מקום.",
       quiz: "חידון אישי שעוזר לכם להטמיע את המילה ולזכור אותה לטווח הארוך.",
       compare: "משחקי מילים מותאמים שמטמיעים את המילה בזיכרון תוך כדי הנאה.",
@@ -80,7 +80,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "A unique image generated for every word.",
       kids: "A simple explanation any child gets with examples from their world.",
-      compose: "Write your own sentence with the word and get instant feedback in a polished version.",
+      compose: "Write your own sentence with the word and get instant feedback on how you used it.",
       notebook: "Collect the words you've learned into a personal digital notebook, available to you anywhere.",
       quiz: "A personal quiz that helps you embed each word and remember it long-term.",
       compare: "Personalized word games that embed each word in memory while you have fun.",
@@ -105,7 +105,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "صورة فريدة لكل كلمة.",
       kids: "شرح بسيط يفهمه كل طفل مع أمثلة من عالمه.",
-      compose: "اكتب جملتك مع الكلمة وتلقَّ ملاحظات فورية في نسخة محسّنة.",
+      compose: "اكتب جملتك مع الكلمة وتلقَّ ملاحظات فورية على طريقة استخدامك لها.",
       notebook: "اجمع الكلمات التي تعلمتها في دفتر شخصي رقمي متاح لك في أي مكان.",
       quiz: "اختبار شخصي يساعدك على ترسيخ الكلمة وتذكرها على المدى الطويل.",
       compare: "ألعاب كلمات مخصصة ترسّخ الكلمة في الذاكرة بمتعة.",
@@ -130,7 +130,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Уникальная картинка для каждого слова.",
       kids: "Простое объяснение, которое поймёт любой ребёнок, с примерами из его мира.",
-      compose: "Напишите свою фразу со словом и получите мгновенный отзыв в улучшенной версии.",
+      compose: "Напишите свою фразу со словом и получите мгновенный отзыв о том, как вы её использовали.",
       notebook: "Собирайте выученные слова в личную цифровую тетрадь, доступную где угодно.",
       quiz: "Персональный квиз, который помогает закрепить слово и запомнить его надолго.",
       compare: "Персональные игры со словами, которые закрепляют слово в памяти, пока вы развлекаетесь.",
@@ -155,7 +155,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Una imagen única para cada palabra.",
       kids: "Una explicación simple que cualquier niño entiende con ejemplos de su mundo.",
-      compose: "Escribe tu propia frase con la palabra y recibe feedback inmediato en una versión pulida.",
+      compose: "Escribe tu propia frase con la palabra y recibe feedback inmediato sobre cómo la usaste.",
       notebook: "Reúne las palabras que has aprendido en un cuaderno digital personal, disponible donde sea.",
       quiz: "Un quiz personal que te ayuda a interiorizar la palabra y recordarla a largo plazo.",
       compare: "Juegos de palabras personalizados que fijan la palabra en la memoria mientras te diviertes.",
@@ -180,7 +180,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Uma imagem única para cada palavra.",
       kids: "Uma explicação simples que qualquer criança entende com exemplos do mundo dela.",
-      compose: "Escreva sua própria frase com a palavra e receba feedback instantâneo em uma versão polida.",
+      compose: "Escreva sua própria frase com a palavra e receba feedback instantâneo sobre como você a usou.",
       notebook: "Reúna as palavras que você aprendeu em um caderno digital pessoal, disponível em qualquer lugar.",
       quiz: "Um quiz pessoal que ajuda você a fixar a palavra e lembrá-la a longo prazo.",
       compare: "Jogos com palavras personalizados que fixam a palavra na memória enquanto você se diverte.",
@@ -205,7 +205,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Une image unique pour chaque mot.",
       kids: "Une explication simple que tout enfant comprend avec des exemples de son monde.",
-      compose: "Écrivez votre propre phrase avec le mot et recevez un retour instantané dans une version améliorée.",
+      compose: "Écrivez votre propre phrase avec le mot et recevez un retour instantané sur la façon dont vous l'avez utilisé.",
       notebook: "Rassemblez les mots que vous avez appris dans un carnet numérique personnel, disponible partout.",
       quiz: "Un quiz personnel qui vous aide à ancrer le mot et à le retenir à long terme.",
       compare: "Des jeux de mots personnalisés qui ancrent le mot dans la mémoire tout en s'amusant.",
@@ -230,7 +230,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Ein einzigartiges Bild für jedes Wort.",
       kids: "Eine einfache Erklärung, die jedes Kind versteht, mit Beispielen aus seiner Welt.",
-      compose: "Schreibe deinen eigenen Satz mit dem Wort und erhalte sofort Feedback in einer verbesserten Version.",
+      compose: "Schreibe deinen eigenen Satz mit dem Wort und erhalte sofort Feedback dazu, wie du es verwendet hast.",
       notebook: "Sammle die Wörter, die du gelernt hast, in einem persönlichen digitalen Notizbuch, das dir überall zur Verfügung steht.",
       quiz: "Ein persönliches Quiz, das dir hilft, jedes Wort fest zu verankern und es langfristig zu behalten.",
       compare: "Personalisierte Wortspiele, die jedes Wort spielerisch im Gedächtnis verankern.",
@@ -255,7 +255,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Unikátní obrázek pro každé slovo.",
       kids: "Jednoduché vysvětlení, kterému rozumí každé dítě, s příklady z jeho světa.",
-      compose: "Napiš svou vlastní větu se slovem a získej okamžitou zpětnou vazbu ve vylepšené verzi.",
+      compose: "Napiš svou vlastní větu se slovem a získej okamžitou zpětnou vazbu na to, jak jsi slovo použil.",
       notebook: "Sbírej slova, která ses naučil, do osobního digitálního sešitu, který máš k dispozici kdekoli.",
       quiz: "Osobní kvíz, který ti pomáhá ukotvit slovo a zapamatovat si ho dlouhodobě.",
       compare: "Personalizované slovní hry, které ti slova zakotví v paměti, zatímco se bavíš.",
@@ -280,7 +280,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "Un'immagine unica per ogni parola.",
       kids: "Una spiegazione semplice che ogni bambino capisce, con esempi del suo mondo.",
-      compose: "Scrivi la tua frase con la parola e ricevi un feedback immediato nella versione potenziata.",
+      compose: "Scrivi la tua frase con la parola e ricevi un feedback immediato su come l'hai usata.",
       notebook: "Raccogli le parole imparate in un quaderno digitale personale, disponibile ovunque.",
       quiz: "Un quiz personale che ti aiuta a fissare la parola e ricordarla a lungo.",
       compare: "Giochi di parole personalizzati che ti fanno memorizzare divertendoti.",
@@ -305,7 +305,7 @@ const COPY: Record<Lang, Copy> = {
     featureBlurbs: {
       image: "それぞれの単語にユニークな画像を。",
       kids: "どの子でも理解できる、シンプルで身近な例を使った説明。",
-      compose: "自分で文を書くと、強化版で即座にフィードバックがもらえます。",
+      compose: "自分で文を書くと、その使い方について即座にフィードバックがもらえます。",
       notebook: "学んだ単語をどこからでも開ける、あなただけのデジタルノートに集めましょう。",
       quiz: "単語をしっかり定着させ、長く覚えておくためのあなた専用クイズ。",
       compare: "楽しみながら単語を記憶に焼きつける、パーソナライズドなワードゲーム。",

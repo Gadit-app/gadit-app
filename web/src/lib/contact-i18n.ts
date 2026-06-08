@@ -24,7 +24,7 @@ Object.assign(CONTACT, {
     faq: [
       {
         q: "What is Gadit?",
-        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real life examples, etymology (the origin of the word), idioms and expressions, kids explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real-life examples, etymology (the origin of the word), idioms and expressions, kids' explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
       },
       {
         q: "Which languages does Gadit support?",
@@ -36,7 +36,7 @@ Object.assign(CONTACT, {
       },
       {
         q: "What subscription plans are available?",
-        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
+        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids' explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
       },
       {
         q: "Can I cancel my subscription at any time?",
@@ -303,7 +303,7 @@ Object.assign(CONTACT, {
     faq: [
       {
         q: "What is Gadit?",
-        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real life examples, etymology (the origin of the word), idioms and expressions, kids explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real-life examples, etymology (the origin of the word), idioms and expressions, kids' explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
       },
       {
         q: "Which languages does Gadit support?",
@@ -315,7 +315,7 @@ Object.assign(CONTACT, {
       },
       {
         q: "What subscription plans are available?",
-        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
+        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids' explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
       },
       {
         q: "Can I cancel my subscription at any time?",
@@ -342,7 +342,7 @@ Object.assign(CONTACT, {
     faq: [
       {
         q: "What is Gadit?",
-        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real life examples, etymology (the origin of the word), idioms and expressions, kids explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real-life examples, etymology (the origin of the word), idioms and expressions, kids' explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
       },
       {
         q: "Which languages does Gadit support?",
@@ -354,7 +354,7 @@ Object.assign(CONTACT, {
       },
       {
         q: "What subscription plans are available?",
-        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
+        a: "There are three. Basic is free, requires no signup, and includes definitions, examples, and etymology (the origin of the word). Clear adds kids' explanations, idioms and expressions, illustrations, voice input, sentence practice with feedback, and search history, with 14 free trial days. Deep adds interactive quizzes that help you really lock in what you learned.",
       },
       {
         q: "Can I cancel my subscription at any time?",
