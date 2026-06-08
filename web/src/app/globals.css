@@ -3149,56 +3149,59 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Sample word chips — sit on the same line as the "לדוגמה" label,
    sized to match, with a barely-there background so they recede
    visually relative to the search bar. */
-/* Kids Mode toggle — a soft chip placed near the search input. Off
-   state: light grey pill with a friendly child-face icon. On state:
-   teal-filled pill with a small dot in the corner so a parent across
-   the room can see at a glance that the dictionary is now rendering
-   for their kid. */
+/* Kids Mode toggle — warm amber/orange pill so it reads as "child"
+   rather than "another teal action button". Off state: soft cream
+   tint with an amber-hinted border; on state: saturated amber-orange
+   with a small white dot in the corner so a parent across the room
+   can see at a glance that the dictionary is now rendering for
+   their kid. Colour family chosen so the toggle still sits in
+   harmony with the teal CTAs elsewhere without competing for the
+   primary-action role. */
 .wordbook .wb-kids-toggle {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 14px 7px 12px;
+  padding: 6px 14px 6px 10px;
   border-radius: 999px;
-  border: 1px solid var(--rule, #E5E7EB);
-  background: var(--surface, #FFFFFF);
-  color: var(--ink-muted, #4B5563);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  background: rgba(255, 247, 230, 0.85);
+  color: rgb(180, 83, 9);
   font-family: var(--wb-sans);
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.005em;
   cursor: pointer;
   transition: background 160ms, color 160ms, border-color 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
 }
 .wordbook .wb-kids-toggle:hover {
-  background: var(--paper, #F9FAFB);
-  color: var(--ink, #111827);
-  border-color: rgba(14, 165, 165, 0.35);
+  background: rgba(254, 240, 207, 1);
+  color: rgb(146, 64, 14);
+  border-color: rgba(245, 158, 11, 0.55);
 }
 .wordbook .wb-kids-toggle:active { transform: scale(0.97); }
 .wordbook .wb-kids-toggle.is-on {
-  background: rgb(14, 165, 165);
+  background: rgb(245, 158, 11);
   color: #FFFFFF;
-  border-color: rgb(14, 165, 165);
+  border-color: rgb(245, 158, 11);
 }
 .wordbook .wb-kids-toggle.is-on:hover {
-  background: rgb(13, 148, 148);
+  background: rgb(217, 119, 6);
   color: #FFFFFF;
-  border-color: rgb(13, 148, 148);
+  border-color: rgb(217, 119, 6);
 }
 /* Tiny dot in the top-right when the mode is on — a glanceable signal
    beyond the colour change. */
 .wordbook .wb-kids-toggle.is-on::after {
   content: "";
   position: absolute;
-  top: 6px;
-  inset-inline-end: 6px;
+  top: 5px;
+  inset-inline-end: 5px;
   width: 6px;
   height: 6px;
   border-radius: 999px;
   background: #FFFFFF;
-  box-shadow: 0 0 0 1.5px rgb(14, 165, 165);
+  box-shadow: 0 0 0 1.5px rgb(245, 158, 11);
 }
 
 /* Row that holds the KidsModeToggle below the search samples on the
@@ -4799,12 +4802,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 /* Persistent in-page search bar on the word result page. Sits between
    the masthead and the word title so a reader can launch another
-   search without hunting for an icon (Eyal feedback, June 2026). The
-   container holds a single full-width input + a teal submit pill. */
+   search without hunting for an icon (Eyal feedback, June 2026).
+   Horizontal padding 44px = 24px (page) + 20px (.wb-meanings inset)
+   so the pill aligns edge-for-edge with the definition cards below;
+   earlier 24px-only padding let the bar overhang the cards by ~40px,
+   visually orphaning it from the rest of the page. Top padding 32px
+   adds breathing room from the masthead chrome. */
 .wordbook .wb-word-searchbar-wrap {
   max-width: 880px;
   margin: 0 auto;
-  padding: 14px 24px 0;
+  padding: 32px 44px 0;
 }
 .wordbook .wb-word-searchbar {
   display: flex;
@@ -4842,8 +4849,22 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-word-searchbar-input::placeholder {
   color: var(--ink-faint, #9CA3AF);
 }
+/* Voice input slot — sits next to the submit button, matches the mic
+   chip on the homepage but scaled down to fit the inline pill. */
+.wordbook .wb-word-searchbar-mic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-inline-end: 2px;
+}
 .wordbook .wb-word-searchbar-submit {
   flex-shrink: 0;
+  /* Always full teal — earlier the button greyed itself out via
+     opacity 0.45 when the input was empty, which real users read as
+     "this button is broken / unclickable" (Eyal, June 2026). Now the
+     resting state is always the saturated teal pill; only the cursor
+     and a tiny opacity shift signal disabled. */
   background: rgb(14, 165, 165);
   color: #FFFFFF;
   border: none;
@@ -4862,12 +4883,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transform: scale(0.97);
 }
 .wordbook .wb-word-searchbar-submit:disabled {
-  opacity: 0.45;
+  /* Disabled state stays VISUALLY teal but with a soft opacity drop;
+     anyone seeing the button still reads it as "the action button" —
+     they just realise (on hover) that they need to type first. */
+  opacity: 0.78;
   cursor: not-allowed;
 }
 @media (max-width: 560px) {
   .wordbook .wb-word-searchbar-wrap {
-    padding: 10px 14px 0;
+    padding: 18px 14px 0;
   }
   .wordbook .wb-word-searchbar {
     padding: 4px 5px 4px 12px;

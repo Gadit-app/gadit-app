@@ -30,7 +30,7 @@ interface Props {
   onBasicGate?: () => void;
 }
 
-function KidIcon({ size = 16 }: { size?: number }) {
+function KidIcon({ size = 18 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -38,16 +38,20 @@ function KidIcon({ size = 16 }: { size?: number }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.6"
+      strokeWidth="1.7"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {/* Friendly face — small head with a smile and a tuft of hair */}
-      <circle cx="12" cy="13" r="6.5" />
-      <path d="M8.5 11.5h.01M15.5 11.5h.01" strokeWidth="2" />
-      <path d="M9.5 15.5c.7.6 1.6 1 2.5 1s1.8-.4 2.5-1" />
-      <path d="M6.5 8.5c1-2 2.5-3 5.5-3s4.5 1 5.5 3" />
+      {/* Big bright smiley — wider head, oversized smile that arcs
+          deep enough to read as a grin from across the room, plus two
+          tall oval eyes for kid-clarity. Earlier 16px head + thin
+          smile read as a generic emoji silhouette; this is friendly
+          and obvious. */}
+      <circle cx="12" cy="12" r="9.25" />
+      <ellipse cx="8.5" cy="10" rx="0.9" ry="1.35" fill="currentColor" stroke="none" />
+      <ellipse cx="15.5" cy="10" rx="0.9" ry="1.35" fill="currentColor" stroke="none" />
+      <path d="M7.5 14c1.2 2 2.7 3 4.5 3s3.3-1 4.5-3" strokeWidth="1.8" />
     </svg>
   );
 }

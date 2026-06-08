@@ -27,6 +27,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
+import VoiceInput from "@/components/VoiceInput";
 import { useHref } from "@/lib/href";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
@@ -1058,6 +1059,22 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               autoComplete="off"
               spellCheck={false}
             />
+            <div className="wb-word-searchbar-mic">
+              <VoiceInput
+                uiLang={lang}
+                getIdToken={async () => {
+                  if (!user) return null;
+                  try { return await user.getIdToken(); } catch { return null; }
+                }}
+                onResult={(text) => {
+                  setHeaderQuery(text);
+                  router.push(href(`/word/${encodeURIComponent(text.trim())}`));
+                }}
+                enabled={true}
+                title={v2(lang, "voiceInputTitle")}
+                size="sm"
+              />
+            </div>
             <button
               type="submit"
               className="wb-word-searchbar-submit"
