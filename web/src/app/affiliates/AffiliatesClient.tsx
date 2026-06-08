@@ -2073,17 +2073,15 @@ export function AffiliatesPage() {
           <div className="wb-aff-eyebrow">{c.heroEyebrow}</div>
           <h1 className="wb-aff-title">{c.heroTitle}</h1>
           <p className="wb-aff-lede">{c.heroSubtitle}</p>
-          <a
-            href={AFFONSO_PORTAL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={href("/affiliate/dashboard")}
             className="wb-aff-cta-primary"
           >
             {c.heroCtaPrimary}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 5l7 7-7 7" />
             </svg>
-          </a>
+          </Link>
           <ul className="wb-aff-proofs" aria-label={c.heroEyebrow}>
             <li><ProofIcon variant="commission" /><span>{c.heroProofA}</span></li>
             <li><ProofIcon variant="calendar" /><span>{c.heroProofB}</span></li>
@@ -2167,14 +2165,12 @@ export function AffiliatesPage() {
             </li>
           </ol>
           <div className="wb-aff-mid-cta">
-            <a
-              href={AFFONSO_PORTAL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={href("/affiliate/dashboard")}
               className="wb-aff-cta-primary wb-aff-cta-primary-compact"
             >
               {c.midCta1}
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -2220,14 +2216,12 @@ export function AffiliatesPage() {
           <EarningsTable c={c} lang={lang as Lang} />
           <p className="wb-aff-earn-note">{c.earnNote}</p>
           <div className="wb-aff-mid-cta">
-            <a
-              href={AFFONSO_PORTAL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={href("/affiliate/dashboard")}
               className="wb-aff-cta-primary wb-aff-cta-primary-compact"
             >
               {c.midCta2}
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -2296,17 +2290,15 @@ export function AffiliatesPage() {
         <section className="wb-aff-final">
           <h2 className="wb-aff-final-title">{c.finalTitle}</h2>
           <p className="wb-aff-final-sub">{c.finalSubtitle}</p>
-          <a
-            href={AFFONSO_PORTAL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={href("/affiliate/dashboard")}
             className="wb-aff-cta-primary"
           >
             {c.finalCta}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 5l7 7-7 7" />
             </svg>
-          </a>
+          </Link>
         </section>
       </main>
 
