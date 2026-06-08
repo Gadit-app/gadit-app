@@ -6424,6 +6424,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--wb-ink);
   margin: 0;
   line-height: 1.1;
+  white-space: pre-line;
 }
 .wordbook .wb-aff-lede {
   font-size: clamp(16px, 1.8vw, 19px);
@@ -6596,7 +6597,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-aff-how-num {
   position: absolute;
   top: 22px;
-  inset-inline-end: 22px;
+  inset-inline-start: 22px;
   width: 32px;
   height: 32px;
   border-radius: 999px;
@@ -6615,7 +6616,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 600;
   color: var(--wb-ink);
   margin: 0;
-  padding-inline-end: 40px;
+  padding-inline-start: 40px;
   line-height: 1.35;
 }
 .wordbook .wb-aff-how-desc {
@@ -6843,10 +6844,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  /* Desktop: 2x2 — visually balanced for exactly 4 cards.
+     Below ~720px each card collapses to its own row via the media
+     query in the mobile block (single-column there). */
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  max-width: 880px;
+  max-width: 760px;
   margin-inline: auto;
+}
+@media (max-width: 720px) {
+  .wordbook .wb-aff-get-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .wordbook .wb-aff-get-card {
   background: #fff;
@@ -7023,7 +7032,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    doesn't push the table beyond 100% on narrow phones. */
 .wordbook .wb-aff-earn-table {
   width: 100%;
-  max-width: 560px;
+  /* Match the calculator card width (640px) above for visual rhythm. */
+  max-width: 640px;
   margin: 0 auto 24px;
   border-collapse: separate;
   border-spacing: 0;

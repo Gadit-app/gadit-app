@@ -179,9 +179,9 @@ const COPY: Record<Lang, Copy> = {
     topbarSignIn: "כבר שותפים? כניסה",
 
     heroEyebrow: "תוכנית השותפים",
-    heroTitle: "המליצו על Gadit. קבלו הכנסה חודשית.",
+    heroTitle: "המליצו על Gadit.\nקבלו הכנסה חודשית.",
     heroSubtitle:
-      "אתם משתפים את הקישור האישי שלכם, ואנחנו מתגמלים אתכם 30% עמלה חוזרת בשנה הראשונה. עוד 10% לכל החיים כשתביאו 10 לקוחות פעילים ותהפכו ל-Active Partner.",
+      "אתם משתפים את הקישור האישי שלכם, ואנחנו מתגמלים אתכם 30% עמלה חוזרת בשנה הראשונה. הביאו 10 לקוחות פעילים, הפכו ל-Active Partner וקבלו 10% לכל החיים.",
     heroCtaPrimary: "קבלו את הקישור האישי שלכם, בחינם",
     heroProofA: "30% בשנה הראשונה",
     heroProofB: "10% לכל החיים (Active Partner)",
@@ -320,9 +320,9 @@ const COPY: Record<Lang, Copy> = {
     topbarSignIn: "Already a partner? Sign in",
 
     heroEyebrow: "Partner Program",
-    heroTitle: "Recommend Gadit. Earn monthly.",
+    heroTitle: "Recommend Gadit.\nEarn monthly.",
     heroSubtitle:
-      "You share your personal link, and we reward you 30% recurring commission in year one — and 10% for life once you become an Active Partner.",
+      "You share your personal link, and we reward you with 30% recurring commission in year one. Bring 10 active customers, become an Active Partner, and earn 10% for life.",
     heroCtaPrimary: "Get your personal link — free",
     heroProofA: "30% in year one",
     heroProofB: "10% lifetime (Active Partner)",
