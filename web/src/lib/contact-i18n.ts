@@ -24,7 +24,7 @@ Object.assign(CONTACT, {
     faq: [
       {
         q: "What is Gadit?",
-        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real-life examples, etymology (the origin of the word), idioms and expressions, kids' explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+        a: "Gadit is a dictionary for truly understanding a word. You get meanings, real-life examples, etymology, idioms and expressions, kids' explanations, an image, sentence practice with feedback, and short quizzes. All in one place.",
       },
       {
         q: "Which languages does Gadit support?",
@@ -32,7 +32,7 @@ Object.assign(CONTACT, {
       },
       {
         q: "How is Gadit different from a regular dictionary?",
-        a: "A regular dictionary gives you a definition and a few example sentences. With Gadit you can illustrate the word with an image, you can write a full sentence with the word and get exactly the meaning that fits the context, you can practice the word by writing your own sentence and get feedback, and at the end you can also take a short quiz to lock it in.",
+        a: "A regular dictionary gives you a definition. Gadit helps you GAD the word: see every meaning, get the meaning that fits your sentence, view the word as an image, write your own sentence and get feedback, and quiz yourself until it sticks.",
       },
       {
         q: "What subscription plans are available?",
@@ -303,7 +303,7 @@ Object.assign(CONTACT, {
     faq: [
       {
         q: "What is Gadit?",
-        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real-life examples, etymology (the origin of the word), idioms and expressions, kids' explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+        a: "Gadit is a dictionary for truly understanding a word. You get meanings, real-life examples, etymology, idioms and expressions, kids' explanations, an image, sentence practice with feedback, and short quizzes. All in one place.",
       },
       {
         q: "Which languages does Gadit support?",
@@ -311,7 +311,7 @@ Object.assign(CONTACT, {
       },
       {
         q: "How is Gadit different from a regular dictionary?",
-        a: "A regular dictionary gives you a definition and a few example sentences. With Gadit you can illustrate the word with an image, you can write a full sentence with the word and get exactly the meaning that fits the context, you can practice the word by writing your own sentence and get feedback, and at the end you can also take a short quiz to lock it in.",
+        a: "A regular dictionary gives you a definition. Gadit helps you GAD the word: see every meaning, get the meaning that fits your sentence, view the word as an image, write your own sentence and get feedback, and quiz yourself until it sticks.",
       },
       {
         q: "What subscription plans are available?",
@@ -342,7 +342,7 @@ Object.assign(CONTACT, {
     faq: [
       {
         q: "What is Gadit?",
-        a: "Gadit is a smart dictionary that goes far beyond a regular definition. You get clear meanings, real-life examples, etymology (the origin of the word), idioms and expressions, kids' explanations, illustrations, sentence practice with feedback, and short quizzes. New features are added all the time to make sure everyone really understands words.",
+        a: "Gadit is a dictionary for truly understanding a word. You get meanings, real-life examples, etymology, idioms and expressions, kids' explanations, an image, sentence practice with feedback, and short quizzes. All in one place.",
       },
       {
         q: "Which languages does Gadit support?",
@@ -350,7 +350,7 @@ Object.assign(CONTACT, {
       },
       {
         q: "How is Gadit different from a regular dictionary?",
-        a: "A regular dictionary gives you a definition and a few example sentences. With Gadit you can illustrate the word with an image, you can write a full sentence with the word and get exactly the meaning that fits the context, you can practice the word by writing your own sentence and get feedback, and at the end you can also take a short quiz to lock it in.",
+        a: "A regular dictionary gives you a definition. Gadit helps you GAD the word: see every meaning, get the meaning that fits your sentence, view the word as an image, write your own sentence and get feedback, and quiz yourself until it sticks.",
       },
       {
         q: "What subscription plans are available?",

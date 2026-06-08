@@ -179,7 +179,7 @@ const COPY: Record<Lang, Copy> = {
     topbarSignIn: "כבר שותפים? כניסה",
 
     heroEyebrow: "תוכנית השותפים",
-    heroTitle: "הפכו את ההמלצה שלכם להכנסה חודשית",
+    heroTitle: "המליצו על Gadit. קבלו הכנסה חודשית.",
     heroSubtitle:
       "אתם משתפים את הקישור האישי שלכם, ואנחנו מתגמלים אתכם 30% עמלה חוזרת בשנה הראשונה. עוד 10% לכל החיים כשתביאו 10 לקוחות פעילים ותהפכו ל-Active Partner.",
     heroCtaPrimary: "קבלו את הקישור האישי שלכם, בחינם",
@@ -188,7 +188,7 @@ const COPY: Record<Lang, Copy> = {
     heroProofC: "קישור מיידי",
     heroProofD: "למנויי Clear ו-Deep",
 
-    whyEyebrow: "לפני הכסף",
+    whyEyebrow: "קודם כול המוצר",
     whyTitle: "למה Gadit שווה המלצה",
     whySubtitle:
       "אתם תמליצו רק על משהו שאתם מאמינים בו. אז הנה מה שהקהל שלכם יקבל, ולמה הוא יודה לכם.",
@@ -320,7 +320,7 @@ const COPY: Record<Lang, Copy> = {
     topbarSignIn: "Already a partner? Sign in",
 
     heroEyebrow: "Partner Program",
-    heroTitle: "Turn your recommendation into monthly income",
+    heroTitle: "Recommend Gadit. Earn monthly.",
     heroSubtitle:
       "You share your personal link, and we reward you 30% recurring commission in year one — and 10% for life once you become an Active Partner.",
     heroCtaPrimary: "Get your personal link — free",

@@ -88,9 +88,9 @@ const COPY: Record<Lang, {
     signInBody:
       "Sign in to your Gadit account to see your personal link, statistics, and commissions.",
     marketingLink: "What is the program?",
-    upgradeTitle: "Partner program is for Clear and Deep members only",
+    upgradeTitle: "The partner program is for Clear and Deep members",
     upgradeBody:
-      "You can only recommend a product you actually use. Upgrade to Clear or Deep — you'll get the full Gadit dictionary plus access to the partner program with 30% commission on every customer you refer.",
+      "The best recommendations come from real use. Upgrade to Clear or Deep, get the full Gadit experience, and unlock the partner program with 30% commission on every customer you refer.",
     upgradeCta: "Upgrade to a paid plan",
   },
   ar: {
