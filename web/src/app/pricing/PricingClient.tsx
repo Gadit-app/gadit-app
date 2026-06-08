@@ -32,17 +32,17 @@ const PRICE_DEEP_MONTHLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY  ?
 const PRICE_DEEP_YEARLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY   ?? "";
 
 const LANGS = [
-  { code: "he", label: "עברית", flag: "🇮🇱" },
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "ar", label: "العربية", flag: "🇸🇦" },
-  { code: "ru", label: "Русский", flag: "🇷🇺" },
-  { code: "es", label: "Español", flag: "🇪🇸" },
-  { code: "pt", label: "Português", flag: "🇵🇹" },
-  { code: "fr", label: "Français", flag: "🇫🇷" },
-  { code: "de", label: "Deutsch", flag: "🇩🇪" },
-  { code: "cs", label: "Čeština", flag: "🇨🇿" },
-  { code: "it", label: "Italiano", flag: "🇮🇹" },
-  { code: "ja", label: "日本語", flag: "🇯🇵" },
+  { code: "he", label: "עברית", flag: "il" },
+  { code: "en", label: "English", flag: "gb" },
+  { code: "ar", label: "العربية", flag: "sa" },
+  { code: "ru", label: "Русский", flag: "ru" },
+  { code: "es", label: "Español", flag: "es" },
+  { code: "pt", label: "Português", flag: "pt" },
+  { code: "fr", label: "Français", flag: "fr" },
+  { code: "de", label: "Deutsch", flag: "de" },
+  { code: "cs", label: "Čeština", flag: "cz" },
+  { code: "it", label: "Italiano", flag: "it" },
+  { code: "ja", label: "日本語", flag: "jp" },
 ] as const;
 
 function LangSwitch() {
@@ -94,7 +94,7 @@ function LangSwitch() {
                 className={l.code === lang ? "is-active" : ""}
                 onClick={() => { setLang(l.code); setOpen(false); }}
               >
-                <span className="wb-lang-flag" aria-hidden="true">{l.flag}</span>{l.label}
+                <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
               </button>
             </li>
           ))}
@@ -790,7 +790,7 @@ export function PricingPageRoute() {
                   className={l.code === lang ? "is-active" : ""}
                   onClick={() => { setLang(l.code); setMenuOpen(false); }}
                 >
-                  <span className="wb-lang-flag" aria-hidden="true">{l.flag}</span>{l.label}
+                  <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
                 </button>
               ))}
             </div>

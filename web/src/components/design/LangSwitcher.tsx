@@ -190,7 +190,15 @@ export function LangSwitcher({
                 }}
               >
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-                  <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>{l.flag}</span>
+                  <img
+                    src={`https://flagcdn.com/40x30/${l.flag}.png`}
+                    srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`}
+                    width={20}
+                    height={15}
+                    alt=""
+                    loading="lazy"
+                    style={{ borderRadius: 2, display: "block" }}
+                  />
                   <span>{l.label}</span>
                 </span>
                 {selected && (

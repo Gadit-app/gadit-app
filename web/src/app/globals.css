@@ -2308,19 +2308,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--teal-edge);
   font-weight: 600;
 }
-/* Flag emoji rendered before each language label — gives visitors a
-   glanceable visual anchor instead of forcing them to read 11 native
-   scripts in dropdown order. The flag font-size is intentionally one
-   notch above the label so it reads as a leading icon. */
+/* Flag image rendered before each language label — switched from
+   emoji to PNG via flagcdn.com because Windows/Linux fonts strip
+   regional-indicator emojis to ASCII letter pairs (a real visitor on
+   Windows reported seeing "IL", "GB", etc. instead of flags). PNG
+   gives us a real coloured flag on every platform with no font fuss. */
 .wordbook .wb-lang-flag {
-  display: inline-block;
-  font-size: 15px;
-  line-height: 1;
-  vertical-align: -1px;
+  width: 20px;
+  height: 15px;
   margin-inline-end: 10px;
-  /* Force the OS to pick its colour emoji font rather than a black-
-     glyph fallback (some Linux setups otherwise show ↻/□). */
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", system-ui, sans-serif;
+  vertical-align: -3px;
+  border-radius: 2px;
+  /* A 1px hairline ring distinguishes white-heavy flags (Japan, Italy)
+     from the menu background without competing visually. */
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.06);
+  object-fit: cover;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
