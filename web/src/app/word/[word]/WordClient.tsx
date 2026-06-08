@@ -115,33 +115,39 @@ function SoftWall({
   const isSignup = nextStep === "signup";
   return (
     <div
-      className="gd-card"
+      className="wb-softwall"
       style={{
         padding: "clamp(32px, 4vw, 48px) clamp(28px, 4vw, 44px)",
         marginBottom: 24,
         textAlign: "center",
+        background: "#FFFFFF",
+        border: "1px solid var(--rule, #E5E7EB)",
+        borderRadius: 16,
+        boxShadow: "0 1px 2px rgba(15, 23, 42, 0.04)",
+        fontFamily: "var(--wb-sans)",
       }}
     >
       <h2
-        className="gd-font-display"
         style={{
-          fontSize: "clamp(28px, 3.4vw, 36px)",
-          color: "var(--gd-ink-900)",
+          fontFamily: "var(--wb-sans)",
+          fontSize: "clamp(24px, 3vw, 30px)",
+          fontWeight: 700,
+          color: "var(--ink, #111827)",
           marginBottom: 12,
-          fontVariationSettings: '"opsz" 60',
-          letterSpacing: "-0.015em",
+          letterSpacing: "-0.01em",
+          lineHeight: 1.25,
         }}
       >
         {v2(lang, isSignup ? "softWallAnonTitle" : "softWallBasicTitle")}
       </h2>
       <p
-        className="gd-font-sans-ui"
         style={{
+          fontFamily: "var(--wb-sans)",
           fontSize: 15,
-          color: "var(--gd-ink-700)",
+          color: "var(--ink-muted, #4B5563)",
           maxWidth: "44ch",
           margin: "0 auto 24px",
-          lineHeight: 1.5,
+          lineHeight: 1.55,
         }}
       >
         {v2(lang, isSignup ? "softWallAnonBody" : "softWallBasicBody")}
@@ -150,34 +156,36 @@ function SoftWall({
         <button
           type="button"
           onClick={onSignUp}
-          className="gd-font-sans-ui font-medium"
           style={{
-            padding: "13px 26px",
-            borderRadius: 12,
+            fontFamily: "var(--wb-sans)",
+            padding: "12px 28px",
+            borderRadius: 999,
             fontSize: 14.5,
+            fontWeight: 600,
             color: "white",
-            background:
-              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-            boxShadow:
-              "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+            background: "rgb(14, 165, 165)",
+            border: "none",
+            cursor: "pointer",
+            transition: "background 160ms",
           }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgb(13, 148, 148)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgb(14, 165, 165)"; }}
         >
           {v2(lang, "softWallSignupCta")}
         </button>
       ) : (
         <Link
           href={href("/pricing")}
-          className="gd-font-sans-ui font-medium"
           style={{
+            fontFamily: "var(--wb-sans)",
             display: "inline-block",
-            padding: "13px 26px",
-            borderRadius: 12,
+            padding: "12px 28px",
+            borderRadius: 999,
             fontSize: 14.5,
+            fontWeight: 600,
             color: "white",
-            background:
-              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-            boxShadow:
-              "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+            textDecoration: "none",
+            background: "rgb(14, 165, 165)",
           }}
         >
           {v2(lang, "upgradeToClear")}

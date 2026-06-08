@@ -755,7 +755,7 @@ const en: V2Strings = {
   upgradeToClear: "Upgrade to Clear",
   softWallAnonTitle: "You've used your free searches",
   softWallAnonBody:
-    "Sign up free to keep searching — 20 words a day, your notebook saved across devices, and the rest of Gadit unlocked.",
+    "Sign up free to search up to 20 words a day, with full definitions, examples, idioms and word origin.",
   softWallSignupCta: "Sign up — it's free",
   softWallBasicTitle: "You've reached today's limit",
   softWallBasicBody:
@@ -1141,7 +1141,7 @@ const he: V2Strings = {
   upgradeToClear: "שדרגו ל־Clear",
   softWallAnonTitle: "ניצלתם את החיפושים החינמיים",
   softWallAnonBody:
-    "הירשמו חינם כדי להמשיך — 20 מילים ביום, מחברת אישית שנשמרת בין מכשירים, וכל שאר Gadit פתוח.",
+    "הירשמו חינם וחפשו עד 20 מילים ביום, עם הגדרות מלאות, דוגמאות, ניבים ומקור המילה.",
   softWallSignupCta: "הרשמה חינם",
   softWallBasicTitle: "הגעתם למכסה היומית",
   softWallBasicBody:
@@ -1544,7 +1544,7 @@ const ar: V2Strings = {
   upgradeToClear: "ارتقِ إلى Clear",
   softWallAnonTitle: "استنفدت عمليات البحث المجانية",
   softWallAnonBody:
-    "اشترك مجانًا للمتابعة — 20 كلمة يوميًا، دفتر شخصي محفوظ بين الأجهزة، وبقية Gadit مفتوح.",
+    "سجّل مجانًا للبحث عن 20 كلمة يوميًا، مع تعريفات كاملة، أمثلة، تعابير، وأصل الكلمة.",
   softWallSignupCta: "اشتراك مجاني",
   softWallBasicTitle: "وصلت إلى الحد اليومي",
   softWallBasicBody:
@@ -1926,7 +1926,7 @@ const ru: Partial<V2Strings> = {
   upgradeToClear: "Перейти на Clear",
   softWallAnonTitle: "Вы использовали бесплатные поиски",
   softWallAnonBody:
-    "Зарегистрируйтесь бесплатно, чтобы продолжить — 20 слов в день, личная тетрадь между устройствами и весь остальной Gadit открыт.",
+    "Зарегистрируйтесь бесплатно, чтобы искать до 20 слов в день — с полными определениями, примерами, идиомами и происхождением слова.",
   softWallSignupCta: "Бесплатная регистрация",
   softWallBasicTitle: "Дневной лимит достигнут",
   softWallBasicBody:
@@ -2308,7 +2308,7 @@ const es: Partial<V2Strings> = {
   upgradeToClear: "Pasa a Clear",
   softWallAnonTitle: "Usaste tus búsquedas gratis",
   softWallAnonBody:
-    "Regístrate gratis para seguir — 20 palabras por día, tu cuaderno guardado entre dispositivos y el resto de Gadit desbloqueado.",
+    "Regístrate gratis para buscar hasta 20 palabras al día, con definiciones completas, ejemplos, expresiones y origen de la palabra.",
   softWallSignupCta: "Regístrate gratis",
   softWallBasicTitle: "Alcanzaste el límite del día",
   softWallBasicBody:
@@ -2690,7 +2690,7 @@ const pt: Partial<V2Strings> = {
   upgradeToClear: "Passe pro Clear",
   softWallAnonTitle: "Você usou suas buscas grátis",
   softWallAnonBody:
-    "Cadastre-se grátis pra continuar — 20 palavras por dia, seu caderno salvo entre dispositivos e o resto do Gadit liberado.",
+    "Cadastre-se grátis pra buscar até 20 palavras por dia, com definições completas, exemplos, expressões e a origem da palavra.",
   softWallSignupCta: "Cadastrar grátis",
   softWallBasicTitle: "Você atingiu o limite de hoje",
   softWallBasicBody:
@@ -3072,7 +3072,7 @@ const fr: Partial<V2Strings> = {
   upgradeToClear: "Passer à Clear",
   softWallAnonTitle: "Vous avez utilisé vos recherches gratuites",
   softWallAnonBody:
-    "Inscrivez-vous gratuitement pour continuer — 20 mots par jour, votre carnet partagé entre appareils, et le reste de Gadit débloqué.",
+    "Inscrivez-vous gratuitement pour chercher jusqu'à 20 mots par jour, avec définitions complètes, exemples, expressions et origine du mot.",
   softWallSignupCta: "Inscription gratuite",
   softWallBasicTitle: "Vous avez atteint la limite du jour",
   softWallBasicBody:
@@ -3441,7 +3441,7 @@ const de: V2Strings = {
   upgradeToClear: "Auf Clear upgraden",
   softWallAnonTitle: "Du hast deine kostenlosen Suchen verbraucht",
   softWallAnonBody:
-    "Registriere dich kostenlos, um weiterzusuchen: 20 Wörter am Tag, dein Notizbuch geräteübergreifend gespeichert und der Rest von Gadit freigeschaltet.",
+    "Registriere dich kostenlos, um bis zu 20 Wörter am Tag zu suchen — mit vollständigen Definitionen, Beispielen, Redewendungen und Wortherkunft.",
   softWallSignupCta: "Registrieren, kostenlos",
   softWallBasicTitle: "Du hast das heutige Limit erreicht",
   softWallBasicBody:
@@ -3795,7 +3795,7 @@ const cs: V2Strings = {
   upgradeToClear: "Upgradovat na Clear",
   softWallAnonTitle: "Vyčerpal jsi svá hledání zdarma",
   softWallAnonBody:
-    "Zaregistruj se zdarma a pokračuj: 20 slov denně, sešit napříč zařízeními a zbytek Gaditu odemčený.",
+    "Zaregistruj se zdarma a hledej až 20 slov denně, s úplnými definicemi, příklady, idiomy a původem slova.",
   softWallSignupCta: "Registrace zdarma",
   softWallBasicTitle: "Dosáhl jsi dnešního limitu",
   softWallBasicBody:
@@ -4196,7 +4196,7 @@ const it: Partial<V2Strings> = {
   upgradeToClear: "Passa a Clear",
   softWallAnonTitle: "Hai usato le tue ricerche gratuite",
   softWallAnonBody:
-    "Registrati gratis per continuare a cercare: 20 parole al giorno, il tuo quaderno salvato su tutti i dispositivi e il resto di Gadit sbloccato.",
+    "Registrati gratis per cercare fino a 20 parole al giorno, con definizioni complete, esempi, modi di dire e origine della parola.",
   softWallSignupCta: "Registrati, è gratis",
   softWallBasicTitle: "Hai raggiunto il limite di oggi",
   softWallBasicBody:
@@ -4571,7 +4571,7 @@ const ja: Partial<V2Strings> = {
   upgradeToClear: "Clear にアップグレード",
   softWallAnonTitle: "無料検索を使い切りました",
   softWallAnonBody:
-    "無料登録で検索を続けられます。1日20語、デバイスをまたぐノート、Gadit の他の機能も解放されます。",
+    "無料登録で1日最大20語を検索できます。完全な定義、例文、イディオム、語源つき。",
   softWallSignupCta: "無料登録",
   softWallBasicTitle: "今日の上限に達しました",
   softWallBasicBody:
