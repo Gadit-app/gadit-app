@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminAuth } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
 /**
  * /api/affiliate/embed-token — exchange a Firebase ID token for an
@@ -44,9 +44,10 @@ export async function GET(req: NextRequest) {
     }
 
     // Decode the Firebase ID token to get the caller's email + name.
-    // We can't use verifyUserAndGetPlan here because it only returns
-    // { userId, plan } — we need the decoded.email / decoded.name
-    // fields that Firebase puts on the token claims.
+    // verifyUserAndGetPlan only returns { userId, plan } so we keep the
+    // direct verifyIdToken call for the email/name claims, then look up
+    // the plan separately from the same /users/{uid} doc the helper
+    // reads.
     const decoded = await getAdminAuth().verifyIdToken(idToken);
     const email = decoded.email;
     const name =
@@ -58,6 +59,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(
         { error: "email_required", details: "Firebase user has no email" },
         { status: 400 },
+      );
+    }
+
+    // Plan gate: only paying subscribers (Clear / Deep) can be partners.
+    // If you didn't buy it for yourself, you can't sell it to others —
+    // that's the trust contract with the people you'd refer.
+    const userDoc = await getAdminDb().collection("users").doc(decoded.uid).get();
+    const plan = (userDoc.data()?.plan as "basic" | "clear" | "deep" | undefined) ?? "basic";
+    if (plan === "basic") {
+      return NextResponse.json(
+        { error: "requires_subscription" },
+        { status: 403 },
       );
     }
 

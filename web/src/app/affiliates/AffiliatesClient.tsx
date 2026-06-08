@@ -186,7 +186,7 @@ const COPY: Record<Lang, Copy> = {
     heroProofA: "30% בשנה הראשונה",
     heroProofB: "10% לכל החיים (Active Partner)",
     heroProofC: "קישור מיידי",
-    heroProofD: "פתוח לכולם",
+    heroProofD: "למנויי Clear ו-Deep",
 
     whyEyebrow: "לפני הכסף",
     whyTitle: "למה Gadit שווה המלצה",
@@ -301,9 +301,9 @@ const COPY: Record<Lang, Copy> = {
     faq9Q: "האם מותר לפרסם מודעות ממומנות בגוגל או פייסבוק?",
     faq9A:
       "מודעות אורגניות לקהל שלכם — כן. אבל אסור לקנות מודעות בגוגל או פייסבוק על המילה 'Gadit' עצמה — אנחנו לא רוצים שתתחרו באתר הראשי על אותה תנועה. כללים מלאים באזור האישי.",
-    faq10Q: "האם אני חייב לקנות מנוי כדי להיות שותף?",
+    faq10Q: "האם אני חייב להיות מנוי בתשלום כדי להיות שותף?",
     faq10A:
-      "לא. אתם יכולים להיות שותפים בלי לרכוש דבר. ההצטרפות חינמית לחלוטין.",
+      "כן. תוכנית השותפים פתוחה רק למנויי Clear ו-Deep. הסיבה פשוטה — אי אפשר באמת להמליץ על מוצר שאתה לא משתמש בו בעצמך. אם אתם עוד במסלול Basic — שדרגו ל-Clear או Deep מתוך המסך 'מחירים', ותקבלו גם את המילון המלא וגם גישה לתוכנית.",
     faq11Q: "מה זה Active Partner ואיך מגיעים לזה?",
     faq11A:
       "כשהבאתם 10 לקוחות משלמים פעילים, אתם הופכים אוטומטית ל-Active Partner — סטטוס שפותח לכם תוספת של 10% עמלה חוזרת לכל החיים, על כל הלקוחות שלכם (גם הקיימים, מהחודש ה-13 והלאה). זה אומר שגם אחרי שנתיים, שלוש או חמש שנים — אם הלקוחות שלכם עדיין מנויים, אתם עדיין מקבלים תגמול.",
@@ -327,7 +327,7 @@ const COPY: Record<Lang, Copy> = {
     heroProofA: "30% in year one",
     heroProofB: "10% lifetime (Active Partner)",
     heroProofC: "Instant link",
-    heroProofD: "Open to everyone",
+    heroProofD: "Clear & Deep subscribers",
 
     whyEyebrow: "Before the money",
     whyTitle: "Why Gadit is worth recommending",
@@ -442,9 +442,9 @@ const COPY: Record<Lang, Copy> = {
     faq9Q: "Can I run paid ads on Google or Facebook?",
     faq9A:
       "Organic posts to your own audience — yes. But you can't buy paid ads on Google or Facebook for the word 'Gadit' itself — we don't want you competing with the main site for the same traffic. The full rules are in your dashboard.",
-    faq10Q: "Do I have to buy a subscription to be a partner?",
+    faq10Q: "Do I need to be a paying subscriber to be a partner?",
     faq10A:
-      "No. You can be a partner without buying anything. Joining is completely free.",
+      "Yes. The partner program is open to Clear and Deep subscribers only. The reason is simple — you can't credibly recommend a product you don't use yourself. If you're on Basic, upgrade to Clear or Deep from the Pricing page and you'll get both the full dictionary and access to the partner program.",
     faq11Q: "What is an Active Partner and how do I become one?",
     faq11A:
       "Once you've referred 10 active paying customers, you automatically become an Active Partner — a status that unlocks an additional 10% recurring lifetime commission on all your customers (including existing ones, from month 13 onward). That means even two, three, or five years later — as long as your customers stay subscribed, you keep earning.",

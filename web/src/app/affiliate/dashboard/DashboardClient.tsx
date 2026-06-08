@@ -14,9 +14,13 @@
  * Czech aren't among them. He/cs users fall back to English so the
  * iframe still renders something sane instead of a broken locale.
  *
- * Auth gate: anonymous → prompt login. Plan gate: we DON'T require
- * Clear/Deep — anyone with a Gadit account can be a partner, the
- * tier is a customer-side concept, not a partner-side one.
+ * Auth gate: anonymous → prompt login. Plan gate: only Clear / Deep
+ * subscribers can be partners. The trust rule is that you can't
+ * credibly recommend a product you didn't pay for yourself, so Basic
+ * users see an upgrade card instead of the embedded dashboard. The
+ * server enforces this too — /api/affiliate/embed-token returns 403
+ * with error="requires_subscription" for Basic users so the gate
+ * can't be bypassed by hitting the API directly.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -48,6 +52,9 @@ const COPY: Record<Lang, {
   signInTitle: string;
   signInBody: string;
   marketingLink: string;
+  upgradeTitle: string;
+  upgradeBody: string;
+  upgradeCta: string;
 }> = {
   he: {
     title: "הדשבורד שלי",
@@ -62,6 +69,10 @@ const COPY: Record<Lang, {
     signInTitle: "הדשבורד שמור לשותפים מחוברים",
     signInBody: "תתחבר עם החשבון שלך כדי לראות את הקישור האישי, הסטטיסטיקות והעמלות שלך.",
     marketingLink: "מה זאת התוכנית?",
+    upgradeTitle: "תוכנית השותפים שמורה למנויי Clear ו-Deep",
+    upgradeBody:
+      "מי שממליץ על Gadit צריך להכיר אותו מבפנים. שדרג ל-Clear או Deep — ותקבל גם מילון מלא בלי הגבלה, וגם גישה לתוכנית השותפים עם 30% עמלה לכל לקוח.",
+    upgradeCta: "שדרוג למסלול בתשלום",
   },
   en: {
     title: "My Dashboard",
@@ -77,6 +88,10 @@ const COPY: Record<Lang, {
     signInBody:
       "Sign in to your Gadit account to see your personal link, statistics, and commissions.",
     marketingLink: "What is the program?",
+    upgradeTitle: "Partner program is for Clear and Deep members only",
+    upgradeBody:
+      "You can only recommend a product you actually use. Upgrade to Clear or Deep — you'll get the full Gadit dictionary plus access to the partner program with 30% commission on every customer you refer.",
+    upgradeCta: "Upgrade to a paid plan",
   },
   ar: {
     title: "لوحة التحكم الخاصة بي",
@@ -91,6 +106,10 @@ const COPY: Record<Lang, {
     signInTitle: "سجّل الدخول لرؤية لوحة التحكم",
     signInBody: "سجّل الدخول إلى حساب Gadit لرؤية الرابط الشخصي والإحصاءات والعمولات.",
     marketingLink: "ما هو البرنامج؟",
+    upgradeTitle: "برنامج الشركاء متاح فقط لأعضاء Clear و Deep",
+    upgradeBody:
+      "لا يمكنك التوصية بمنتج لا تستخدمه فعلاً. ارتقِ إلى Clear أو Deep — ستحصل على القاموس الكامل بدون قيود وعلى الوصول إلى برنامج الشركاء بعمولة 30% لكل عميل تجلبه.",
+    upgradeCta: "الترقية إلى خطة مدفوعة",
   },
   ru: {
     title: "Моя панель",
@@ -106,6 +125,10 @@ const COPY: Record<Lang, {
     signInBody:
       "Войдите в аккаунт Gadit, чтобы увидеть свою ссылку, статистику и комиссии.",
     marketingLink: "Что за программа?",
+    upgradeTitle: "Партнёрская программа доступна только участникам Clear и Deep",
+    upgradeBody:
+      "Нельзя честно рекомендовать продукт, которым сам не пользуешься. Перейдите на Clear или Deep — вы получите полный словарь Gadit без ограничений и доступ к партнёрской программе с 30% комиссии с каждого приведённого клиента.",
+    upgradeCta: "Перейти на платный тариф",
   },
   es: {
     title: "Mi panel",
@@ -120,6 +143,10 @@ const COPY: Record<Lang, {
     signInTitle: "Inicia sesión para ver tu panel",
     signInBody: "Inicia sesión en tu cuenta de Gadit para ver tu enlace, estadísticas y comisiones.",
     marketingLink: "¿Qué es el programa?",
+    upgradeTitle: "El programa de socios es solo para miembros Clear y Deep",
+    upgradeBody:
+      "Solo puedes recomendar un producto que realmente uses. Pásate a Clear o Deep — tendrás el diccionario completo sin límites y acceso al programa de socios con 30% de comisión por cada cliente que traigas.",
+    upgradeCta: "Pasar a un plan de pago",
   },
   pt: {
     title: "Meu painel",
@@ -134,6 +161,10 @@ const COPY: Record<Lang, {
     signInTitle: "Entre para ver seu painel",
     signInBody: "Entre na sua conta Gadit para ver seu link, estatísticas e comissões.",
     marketingLink: "O que é o programa?",
+    upgradeTitle: "O programa de parceiros é só para membros Clear e Deep",
+    upgradeBody:
+      "Você só pode recomendar um produto que realmente usa. Faça upgrade para Clear ou Deep — você ganha o dicionário completo sem limites e acesso ao programa de parceiros com 30% de comissão por cada cliente que indicar.",
+    upgradeCta: "Fazer upgrade para um plano pago",
   },
   fr: {
     title: "Mon tableau de bord",
@@ -148,6 +179,10 @@ const COPY: Record<Lang, {
     signInTitle: "Connectez-vous pour voir votre tableau de bord",
     signInBody: "Connectez-vous à votre compte Gadit pour voir votre lien, vos statistiques et vos commissions.",
     marketingLink: "C'est quoi le programme ?",
+    upgradeTitle: "Le programme partenaires est réservé aux membres Clear et Deep",
+    upgradeBody:
+      "On ne peut recommander qu'un produit qu'on utilise vraiment. Passez à Clear ou Deep — vous obtenez le dictionnaire Gadit complet sans limite et l'accès au programme partenaires avec 30% de commission sur chaque client recommandé.",
+    upgradeCta: "Passer à une formule payante",
   },
   de: {
     title: "Mein Dashboard",
@@ -162,6 +197,10 @@ const COPY: Record<Lang, {
     signInTitle: "Melde dich an, um dein Dashboard zu sehen",
     signInBody: "Melde dich bei deinem Gadit-Konto an, um deinen Link, deine Statistiken und Provisionen zu sehen.",
     marketingLink: "Was ist das Programm?",
+    upgradeTitle: "Das Partnerprogramm ist nur für Clear- und Deep-Mitglieder",
+    upgradeBody:
+      "Du kannst nur ein Produkt empfehlen, das du selbst benutzt. Upgrade auf Clear oder Deep — du bekommst das vollständige Gadit-Wörterbuch ohne Limit plus Zugang zum Partnerprogramm mit 30% Provision pro geworbenem Kunden.",
+    upgradeCta: "Auf einen kostenpflichtigen Plan upgraden",
   },
   cs: {
     title: "Můj přehled",
@@ -176,6 +215,10 @@ const COPY: Record<Lang, {
     signInTitle: "Přihlaste se, abyste viděli přehled",
     signInBody: "Přihlaste se ke svému účtu Gadit a uvidíte svůj odkaz, statistiky a provize.",
     marketingLink: "Co je to za program?",
+    upgradeTitle: "Partnerský program je jen pro členy Clear a Deep",
+    upgradeBody:
+      "Můžete doporučovat jen produkt, který sami používáte. Přejděte na Clear nebo Deep — získáte celý slovník Gadit bez omezení a přístup k partnerskému programu s 30% provizí za každého přivedeného zákazníka.",
+    upgradeCta: "Přejít na placený plán",
   },
 };
 
@@ -190,6 +233,7 @@ export function DashboardPage() {
     | { kind: "fetching" }
     | { kind: "ready"; token: string }
     | { kind: "not_configured" }
+    | { kind: "requires_subscription" }
     | { kind: "error"; message: string };
   const [stage, setStage] = useState<Stage>({ kind: "init" });
 
@@ -231,6 +275,12 @@ export function DashboardPage() {
         });
         if (res.status === 503) {
           setStage({ kind: "not_configured" });
+          return;
+        }
+        if (res.status === 403) {
+          // Basic users hit this — they need to upgrade to Clear or
+          // Deep to access the partner program.
+          setStage({ kind: "requires_subscription" });
           return;
         }
         if (!res.ok) {
@@ -378,6 +428,16 @@ export function DashboardPage() {
             >
               gaditapp.affonso.io →
             </a>
+          </div>
+        )}
+
+        {user && stage.kind === "requires_subscription" && (
+          <div className="wb-affdash-state">
+            <h1 className="wb-affdash-state-title">{c.upgradeTitle}</h1>
+            <p className="wb-affdash-state-body">{c.upgradeBody}</p>
+            <Link href={href("/pricing")} className="wb-affdash-state-link">
+              {c.upgradeCta} →
+            </Link>
           </div>
         )}
 
