@@ -310,6 +310,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // masthead, the effect below picks up the new value and re-fetches
   // the entry under the new prompt + cache key.
   const [kidsMode] = useKidsMode();
+  // Persistent search bar sitting between the masthead and the result.
+  // Lives in WordClient (not chrome) so the input doesn't reset every
+  // time the masthead re-renders for share/lang/menu toggles.
+  const [headerQuery, setHeaderQuery] = useState("");
   // When wrong-keyboard auto-correct fires, the original mis-typed
   // word is preserved in ?from=… so we can show a banner that lets
   // the user override and search the original anyway. ?stay=1 is
@@ -1017,6 +1021,53 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         </div>
 
         </header>
+
+        {/* Persistent search bar — Eyal (June 2026) flagged that
+            launching a second search from a result page meant hunting
+            for the magnifying-glass icon in the masthead. Many real
+            dictionaries surface a full input bar above the word so a
+            reader can chain lookups without breaking flow. We do the
+            same: a single text field + submit that reuses the
+            existing /word/[word] route. The input lives BETWEEN the
+            chrome and the result body so the word title still anchors
+            the page. */}
+        <div className="wb-word-searchbar-wrap">
+          <form
+            className="wb-word-searchbar"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const q = headerQuery.trim();
+              if (!q) return;
+              setHeaderQuery("");
+              router.push(href(`/word/${encodeURIComponent(q)}`));
+            }}
+          >
+            <span className="wb-word-searchbar-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m20 20-4-4" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              className="wb-word-searchbar-input"
+              value={headerQuery}
+              onChange={(e) => setHeaderQuery(e.target.value)}
+              placeholder={v2(lang, "searchPlaceholderHome")}
+              aria-label={v2(lang, "navSearch")}
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button
+              type="submit"
+              className="wb-word-searchbar-submit"
+              aria-label={v2(lang, "navSearch")}
+              disabled={!headerQuery.trim()}
+            >
+              {v2(lang, "navSearch")}
+            </button>
+          </form>
+        </div>
 
         {/* V2 main — holds quota walls, error messages, and the
             loading skeleton. Once the Wordbook result is loaded, this
