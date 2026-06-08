@@ -263,7 +263,7 @@ const COPY: Record<Lang, Copy> = {
     trustTitle: "תוכנית מייסדים בשלביה הראשונים",
     founderHeading: "פסקה ממני, גדי",
     founderBody:
-      "בניתי את Gadit כי לקח לי שנים להבין שמילה היא לא רק תרגום. היא סיפור שלם. רציתי לתת לכל אדם בעולם את הכלי שאני הייתי רוצה כשלמדתי. תוכנית השותפים פתוחה עכשיו לקבוצה ראשונה של אנשים שמתחברים לרעיון הזה. אם זה אתם, אשמח אם תצטרפו.",
+      "בניתי את Gadit כי לקח לי שנים להבין שמילה היא לא רק תרגום. היא סיפור שלם. רציתי לתת לכל אדם בעולם את הכלי שאני הייתי רוצה כשלמדתי. אנחנו קוראים לזה לעשות GAD למילה, להבין אותה עד הסוף. תוכנית השותפים פתוחה עכשיו לקבוצה ראשונה של אנשים שמתחברים לרעיון הזה. אם זה אתם, אשמח אם תצטרפו.",
     founderSign: "— גדי בן לביא, מייסד Gadit",
     stat1Num: "9",
     stat1Label: "שפות ממשק נתמכות",
@@ -404,7 +404,7 @@ const COPY: Record<Lang, Copy> = {
     trustTitle: "A founding partners program in its early days",
     founderHeading: "A note from me, Gadi",
     founderBody:
-      "I built Gadit because it took me years to realise a word isn't just a translation — it's a whole story. I wanted to give every person in the world the tool I wished I'd had while learning. The partner program is now open to a first group of people who connect with this idea. If that's you — I'd be glad to have you.",
+      "I built Gadit because it took me years to realise a word isn't just a translation. It's a whole story. I wanted to give every person in the world the tool I wished I'd had while learning. We call it GAD-ing a word: getting it all the way through. The partner program is now open to a first group of people who connect with this idea. If that's you, I'd be glad to have you.",
     founderSign: "— Gadi Ben Lavi, founder of Gadit",
     stat1Num: "9",
     stat1Label: "UI languages supported",

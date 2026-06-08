@@ -105,7 +105,7 @@ const COPY: Record<string, {
   he: {
     heroEyebrow: "פיצ'רים",
     heroTitle: "סוף סוף מילון שלא עוצר בהגדרה.",
-    heroSub: "Gadit מבין כל מילה עד הסוף. לא הגדרה אחת ודי, אלא כל המשמעויות, דוגמאות בהקשר, ניבים, מקור היסטורי ותרגול. עד שהמילה באמת ברורה.",
+    heroSub: "Gadit מבין כל מילה עד הסוף. כל המשמעויות, דוגמאות בהקשר, ניבים, מקור היסטורי ותרגול. עד שהמילה באמת ברורה. אנחנו קוראים לזה לעשות GAD למילה.",
     ctaPrimary: "התחילו חינם",
     ctaSecondary: "צפו בתמחור",
     signin: "התחברות", pricing: "תמחור", search: "חיפוש", features: "פיצ'רים",
@@ -130,7 +130,7 @@ const COPY: Record<string, {
   en: {
     heroEyebrow: "Features",
     heroTitle: "A dictionary that doesn't stop at the definition.",
-    heroSub: "Gadit understands a word all the way through. Not one definition and done. Every meaning, real sentences in context, idioms, origin and practice. Until the word actually clicks.",
+    heroSub: "Gadit understands a word all the way through. Every meaning, real sentences in context, idioms, origin and practice. Until the word actually clicks. That's what we call GAD-ing a word.",
     ctaPrimary: "Start free",
     ctaSecondary: "See pricing",
     signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features",
