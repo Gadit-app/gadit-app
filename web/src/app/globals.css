@@ -3764,6 +3764,31 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 
 /* Footer (shared with home) */
+/* Homepage founder aside — a small personal note between the search
+   block and the footer. Restrained: italic, soft color, centered, no
+   chrome. The homepage is search-first; this is meant to feel like a
+   glimpse, not an essay. */
+.wordbook .wb-home-founder {
+  max-width: 560px;
+  margin: 32px auto 0;
+  padding: 0 22px 8px;
+  text-align: center;
+  font-family: var(--wb-sans);
+}
+.wordbook .wb-home-founder-note {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+.wordbook .wb-home-founder-sign {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink-faint);
+}
+
 .wordbook .wb-home-footer {
   max-width: 720px;
   margin: 0 auto;

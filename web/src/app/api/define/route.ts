@@ -857,6 +857,94 @@ function looksLikeWord(input: string): boolean {
   return true;
 }
 
+/**
+ * Gadit easter egg — synthetic /api/define result shown when a visitor
+ * types "Gadit" into the search bar. Returns the brand name as if it
+ * were a normal dictionary entry, but the meanings introduce the
+ * coined verb "to GAD" + the product itself. HE and EN get full native
+ * copy; every other UI language falls back to EN so the joke lands
+ * without dragging the brand sweep across all 11 locales (which would
+ * dilute the translation quality bar elsewhere).
+ *
+ * The shape matches WordResult from src/components/design/result.tsx
+ * so the existing render path treats it like a normal cached entry.
+ */
+function buildGaditEasterEgg(uiLangCode: string): object {
+  if (uiLangCode === "he") {
+    return {
+      word: "Gadit",
+      language: "עברית",
+      meanings: [
+        {
+          meaning:
+            "(פועל) לעשות GAD למילה: להבין אותה עד הסוף. לא לקרוא אותה, לא להבין אותה ׳בערך׳, אלא לתפוס כל שכבה במשמעות שלה עד שהיא באמת שלך.",
+          pos: "פועל",
+          examples: [
+            "לא ממש ידעתי מה זה ׳אקלקטי׳, אז עשיתי GAD למילה.",
+            "תפסיקו לנחש מה המילים אומרות. GAD אותן.",
+            "ברגע שעשית GAD למילה, היא נשארת איתך.",
+          ],
+        },
+        {
+          meaning:
+            "(שם עצם, מותג) מילון חכם רב-לשוני שנבנה סביב הפעולה הזאת — מסביר כל מילה עם משמעויות, דוגמאות, אטימולוגיה, ניבים ותמונה, ב-11 שפות.",
+          pos: "שם עצם",
+          examples: [
+            "Gadit הוא המקום שבו עושים GAD למילה.",
+            "אני משתמשת ב-Gadit עם הילדים שלי בכל פעם שהם שואלים ׳מה זה?׳.",
+            "Gadit מסביר מילים כמו שמילון תמיד היה צריך להסביר.",
+          ],
+        },
+      ],
+      etymology: {
+        sourceLanguage: "אנגלית (ניאולוגיזם)",
+        originalWord: "to GAD",
+        originalMeaning: "להבין במאה אחוז",
+        breakdown:
+          "פועל מומצא. לעשות GAD למשהו זה לקחת מילה או רעיון, ולהבין אותם עד הסוף, עד שהם הופכים לחלק ממך.",
+        historyNote:
+          "נטבע ב-2026 על ידי גדי בן לביא, מייסד Gadit, אחרי שנים של עבודה עם אנשים שגילה שכמעט כל דבר שלא הצליחו להבין מתחיל ממילה אחת שלא עשו לה GAD.",
+      },
+    };
+  }
+  // EN canonical (and fallback for every other UI language).
+  return {
+    word: "Gadit",
+    language: "English",
+    meanings: [
+      {
+        meaning:
+          "(verb) To GAD a word: to understand it all the way through. Not to read it, not to \"kind of\" get it, but to grasp every layer of its meaning until the word is truly yours.",
+        pos: "verb",
+        examples: [
+          "I didn't really know what \"ephemeral\" meant, so I GADed it.",
+          "Stop guessing what these words mean. GAD them.",
+          "Once you've GADed a word, it stays with you.",
+        ],
+      },
+      {
+        meaning:
+          "(noun, brand) A smart multilingual dictionary built around the act of GADing — it explains every word with meanings, examples, etymology, idioms and an image, in 11 languages.",
+        pos: "noun",
+        examples: [
+          "Gadit is the place where you GAD a word.",
+          "I use Gadit with my kids every time they ask, \"what does that word mean?\"",
+          "Gadit explains words the way a dictionary should have all along.",
+        ],
+      },
+    ],
+    etymology: {
+      sourceLanguage: "English (neologism)",
+      originalWord: "to GAD",
+      originalMeaning: "to fully understand",
+      breakdown:
+        "Coined verb. To GAD something is to take a word or idea and understand it all the way through, until it becomes a part of you.",
+      historyNote:
+        "Coined in 2026 by Gadi Ben Lavi, founder of Gadit, after years of working with people and noticing that almost everything they didn't understand came down to one word they hadn't GADed.",
+    },
+  };
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { word, contextSentence, uiLang } = await req.json();
@@ -901,6 +989,23 @@ export async function POST(req: NextRequest) {
 
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
     const uiLangName = UI_LANG_NAMES[uiLangCode];
+
+    // Easter egg: looking up the brand name itself returns a custom
+    // meta-definition that introduces the "to GAD" verb to the visitor.
+    // No OpenAI call, no cache lookup, no quota cost — the moment is
+    // playful and instant. Doesn't bypass auth (anon visitors get it
+    // too) because the goal is to surprise them, not to gate the bit.
+    if (word.trim().toLowerCase() === "gadit") {
+      const result = buildGaditEasterEgg(uiLangCode);
+      const body = `data: ${JSON.stringify({ type: "done", result })}\n\n`;
+      return new Response(body, {
+        headers: {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          Connection: "keep-alive",
+        },
+      });
+    }
 
     // Cache key includes a "kids" suffix for paid users so they don't share cache with basic users.
     //
