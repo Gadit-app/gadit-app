@@ -3167,72 +3167,101 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Sample word chips — sit on the same line as the "לדוגמה" label,
    sized to match, with a barely-there background so they recede
    visually relative to the search bar. */
-/* Kids Mode toggle — warm amber/orange pill so it reads as "child"
-   rather than "another teal action button". Off state: soft cream
-   tint with an amber-hinted border; on state: saturated amber-orange
-   with a small white dot in the corner so a parent across the room
-   can see at a glance that the dictionary is now rendering for
-   their kid. Colour family chosen so the toggle still sits in
-   harmony with the teal CTAs elsewhere without competing for the
-   primary-action role. */
+/* Kids Mode toggle — iOS-style switch. Quiet by default so it doesn't
+   compete with the search bar, primary CTAs, or the brand teal; the
+   label reads as neutral chrome and the track is a near-invisible grey
+   pill. When flipped on the track fills with amber and the thumb
+   slides over — the colour shift alone signals state, no icon swap,
+   no extra dot. The metaphor (an OS settings switch) is something a
+   parent already knows by muscle memory, so the affordance is obvious
+   without explanation. */
 .wordbook .wb-kids-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px 6px 10px;
+  gap: 9px;
+  padding: 6px 4px 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(245, 158, 11, 0.32);
-  background: rgba(255, 247, 230, 0.85);
-  color: rgb(180, 83, 9);
+  border: none;
+  background: transparent;
   font-family: var(--wb-sans);
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.005em;
+  color: #6B7280;
   cursor: pointer;
-  transition: background 160ms, color 160ms, border-color 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition: color 160ms;
+}
+.wordbook[dir="rtl"] .wb-kids-toggle {
+  padding: 6px 10px 6px 4px;
+}
+.wordbook .wb-kids-toggle:hover { color: #374151; }
+.wordbook .wb-kids-toggle-label {
+  white-space: nowrap;
+}
+.wordbook .wb-kids-toggle-track {
   position: relative;
-}
-.wordbook .wb-kids-toggle:hover {
-  background: rgba(254, 240, 207, 1);
-  color: rgb(146, 64, 14);
-  border-color: rgba(245, 158, 11, 0.55);
-}
-.wordbook .wb-kids-toggle:active { transform: scale(0.97); }
-.wordbook .wb-kids-toggle.is-on {
-  background: rgb(245, 158, 11);
-  color: #FFFFFF;
-  border-color: rgb(245, 158, 11);
-}
-.wordbook .wb-kids-toggle.is-on:hover {
-  background: rgb(217, 119, 6);
-  color: #FFFFFF;
-  border-color: rgb(217, 119, 6);
-}
-/* Tiny dot in the top-right when the mode is on — a glanceable signal
-   beyond the colour change. */
-.wordbook .wb-kids-toggle.is-on::after {
-  content: "";
-  position: absolute;
-  top: 5px;
-  inset-inline-end: 5px;
-  width: 6px;
-  height: 6px;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  background: #E5E7EB;
   border-radius: 999px;
-  background: #FFFFFF;
-  box-shadow: 0 0 0 1.5px rgb(245, 158, 11);
+  flex-shrink: 0;
+  transition: background 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-/* On phones the topbar gets crowded — wordmark + Kids toggle + burger
-   share a single 320–390px row. Shrink the toggle to icon + abbreviated
-   text so it still reads "kids" but doesn't push the burger off screen. */
+.wordbook .wb-kids-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #FFFFFF;
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18), 0 0 0 0.5px rgba(15, 23, 42, 0.04);
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wordbook[dir="rtl"] .wb-kids-toggle-thumb {
+  /* RTL: thumb starts on the right when off, slides left when on. */
+  left: auto;
+  right: 2px;
+}
+.wordbook .wb-kids-toggle.is-on .wb-kids-toggle-track {
+  background: rgb(245, 158, 11);
+}
+.wordbook .wb-kids-toggle.is-on .wb-kids-toggle-thumb {
+  transform: translateX(14px);
+}
+.wordbook[dir="rtl"] .wb-kids-toggle.is-on .wb-kids-toggle-thumb {
+  transform: translateX(-14px);
+}
+.wordbook .wb-kids-toggle.is-on .wb-kids-toggle-label {
+  color: rgb(146, 64, 14);
+  font-weight: 600;
+}
+.wordbook .wb-kids-toggle:active .wb-kids-toggle-track {
+  transform: scale(0.97);
+}
 @media (max-width: 560px) {
   .wordbook .wb-kids-toggle {
-    padding: 5px 11px 5px 8px;
     font-size: 11.5px;
-    gap: 6px;
+    gap: 7px;
+    padding: 6px 4px 6px 8px;
   }
-  .wordbook .wb-kids-toggle svg {
-    width: 16px;
-    height: 16px;
+  .wordbook[dir="rtl"] .wb-kids-toggle {
+    padding: 6px 8px 6px 4px;
+  }
+  .wordbook .wb-kids-toggle-track {
+    width: 30px;
+    height: 18px;
+  }
+  .wordbook .wb-kids-toggle-thumb {
+    width: 14px;
+    height: 14px;
+  }
+  .wordbook .wb-kids-toggle.is-on .wb-kids-toggle-thumb {
+    transform: translateX(12px);
+  }
+  .wordbook[dir="rtl"] .wb-kids-toggle.is-on .wb-kids-toggle-thumb {
+    transform: translateX(-12px);
   }
 }
 
@@ -3242,7 +3271,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-home-kids-row {
   display: flex;
   justify-content: center;
-  margin-top: 18px;
+  margin-top: 10px;
 }
 
 .wordbook .wb-home-samples {
@@ -4379,6 +4408,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-shell-share-mobile-wrap {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
   }
   .wordbook .wb-shell-burger {
     display: inline-flex;

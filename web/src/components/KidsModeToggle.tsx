@@ -1,24 +1,24 @@
 "use client";
 
 /**
- * KidsModeToggle — a small chip that switches the whole dictionary
- * into kid-friendly rendering. Persisted via useKidsMode in
- * localStorage; the /api/define route picks the flag up from each
- * search request and adjusts the prompt accordingly.
+ * KidsModeToggle — iOS-style switch that flips the dictionary into
+ * kid-friendly rendering. Persisted via useKidsMode in localStorage;
+ * /api/define and the per-meaning render swap pick up the flag.
  *
  * Gating:
- *   - anonymous / Basic: tap fires onBasicGate() (the caller usually
- *     wires this to open UpgradeModal with feature="kids"). The toggle
- *     never enters the "on" state for these users — we only commit the
- *     localStorage write when the upgrade actually happens.
+ *   - anonymous / Basic: tap fires onBasicGate() (caller usually opens
+ *     UpgradeModal with feature="kids"). The toggle never enters the
+ *     "on" state for these users — we only commit the localStorage
+ *     write when the upgrade actually happens.
  *   - Clear / Deep: tap flips the boolean.
  *
  * Visual:
- *   - off: soft pill, neutral grey, friendly child-face icon.
- *   - on: filled teal pill with the same icon in white; small dot in
- *     the corner signals the active state. Subtle enough that it
- *     doesn't compete with the search bar above; obvious enough that
- *     a parent across the room can see whether it's lit.
+ *   - off: muted grey track + label in neutral ink. Quiet enough that
+ *     it sits beside Share/Lang without competing for attention.
+ *   - on: amber-filled track, thumb slides to the active side, label
+ *     darkens. The track colour alone signals state — no extra dot,
+ *     no icon-driven mood. Reads exactly like the iOS Settings toggle
+ *     a parent already knows by muscle memory.
  */
 
 import { useLang } from "@/lib/lang-context";
@@ -30,32 +30,6 @@ interface Props {
   onBasicGate?: () => void;
 }
 
-function KidIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {/* Big bright smiley — wider head, oversized smile that arcs
-          deep enough to read as a grin from across the room, plus two
-          tall oval eyes for kid-clarity. Earlier 16px head + thin
-          smile read as a generic emoji silhouette; this is friendly
-          and obvious. */}
-      <circle cx="12" cy="12" r="9.25" />
-      <ellipse cx="8.5" cy="10" rx="0.9" ry="1.35" fill="currentColor" stroke="none" />
-      <ellipse cx="15.5" cy="10" rx="0.9" ry="1.35" fill="currentColor" stroke="none" />
-      <path d="M7.5 14c1.2 2 2.7 3 4.5 3s3.3-1 4.5-3" strokeWidth="1.8" />
-    </svg>
-  );
-}
-
 export function KidsModeToggle({ plan, onBasicGate }: Props) {
   const { lang } = useLang();
   const [on, setOn] = useKidsMode();
@@ -64,8 +38,6 @@ export function KidsModeToggle({ plan, onBasicGate }: Props) {
 
   const handleClick = () => {
     if (!isPaid) {
-      // Bounce Basic + anonymous through the upgrade flow instead of
-      // letting them flip a flag whose effect they'll never see.
       onBasicGate?.();
       return;
     }
@@ -83,10 +55,15 @@ export function KidsModeToggle({ plan, onBasicGate }: Props) {
       title={tooltip}
       aria-label={tooltip}
       aria-pressed={on}
+      role="switch"
       className={`wb-kids-toggle${on ? " is-on" : ""}`}
     >
-      <KidIcon size={16} />
-      <span>{v2(lang, "kidsModeLabel")}</span>
+      <span className="wb-kids-toggle-label">
+        {v2(lang, "kidsModeLabel")}
+      </span>
+      <span className="wb-kids-toggle-track" aria-hidden="true">
+        <span className="wb-kids-toggle-thumb" />
+      </span>
     </button>
   );
 }

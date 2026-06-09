@@ -983,23 +983,17 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
             <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
           </nav>
-          {/* Kids Mode toggle is a sibling of .wb-shell-actions (not a
-              child) so it stays visible on mobile, where actions
-              collapse to a burger. A parent reading a definition on
-              their phone still needs to flip the kid-friendly render
-              mid-read — burying the toggle in a dropdown defeats the
-              feature. */}
-          <KidsModeToggle
-            plan={plan}
-            onBasicGate={() => {
-              if (!user) {
-                promptLogin(v2(lang, "kidsModeBasicGate"));
-                return;
-              }
-              setUpgradeTrigger({ feature: "kids", tier: "clear" });
-            }}
-          />
           <div className="wb-shell-actions">
+            <KidsModeToggle
+              plan={plan}
+              onBasicGate={() => {
+                if (!user) {
+                  promptLogin(v2(lang, "kidsModeBasicGate"));
+                  return;
+                }
+                setUpgradeTrigger({ feature: "kids", tier: "clear" });
+              }}
+            />
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
@@ -1021,6 +1015,20 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             )}
           </div>
         <div className="wb-shell-share-mobile-wrap">
+          {/* Mobile mirror of the Kids toggle. The desktop toggle lives
+              inside .wb-shell-actions (hidden under 767px), so without
+              this mirror a parent on a phone could not flip the mode
+              mid-read. */}
+          <KidsModeToggle
+            plan={plan}
+            onBasicGate={() => {
+              if (!user) {
+                promptLogin(v2(lang, "kidsModeBasicGate"));
+                return;
+              }
+              setUpgradeTrigger({ feature: "kids", tier: "clear" });
+            }}
+          />
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
