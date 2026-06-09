@@ -3221,6 +3221,20 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: #FFFFFF;
   box-shadow: 0 0 0 1.5px rgb(245, 158, 11);
 }
+/* On phones the topbar gets crowded — wordmark + Kids toggle + burger
+   share a single 320–390px row. Shrink the toggle to icon + abbreviated
+   text so it still reads "kids" but doesn't push the burger off screen. */
+@media (max-width: 560px) {
+  .wordbook .wb-kids-toggle {
+    padding: 5px 11px 5px 8px;
+    font-size: 11.5px;
+    gap: 6px;
+  }
+  .wordbook .wb-kids-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+}
 
 /* Row that holds the KidsModeToggle below the search samples on the
    homepage. Centred + a touch of top space so the toggle reads as a
@@ -4758,7 +4772,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    competing with whatever's on the page below. */
 .wb-welcome-toast {
   position: fixed;
-  top: 24px;
+  top: calc(24px + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 90;
