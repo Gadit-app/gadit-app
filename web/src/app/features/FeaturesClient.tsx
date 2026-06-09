@@ -15,6 +15,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
+import { GaditDemoAnimation } from "@/components/design/GaditDemoAnimation";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -412,6 +413,11 @@ export function FeaturesPage() {
             <Link href={href("/pricing")} className="wb-feat-cta-ghost">{c.ctaSecondary}</Link>
           </div>
         </section>
+
+        {/* Auto-cycling demo tour — walks the visitor through what each
+            tier unlocks plus the partner program. See
+            GaditDemoAnimation.tsx for the scene state machine. */}
+        <GaditDemoAnimation />
 
         {/* Bento grid — first card spans two columns on desktop so the
             'every definition' feature (the product's core promise) lands
