@@ -42,7 +42,7 @@ const SCENE_DURATION_MS: Record<Scene, number> = {
   basic: 8000,
   clear: 8000,
   deep: 6500,
-  partner: 6000,
+  partner: 8500,
 };
 
 interface DemoContent {
@@ -65,6 +65,8 @@ interface DemoContent {
   compareWords: string;
   compareNote: string;
   // Partner
+  partnerHeroTitle: string;
+  partnerHeroBody: string;
   partnerLink: string;
   partnerEarnings: string;
   partnerSubs: string;
@@ -144,6 +146,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "amerd",
     compareWords: "dream vs. ambition",
     compareNote: "Both about wanting something — see the exact difference.",
+    partnerHeroTitle: "Spread Gadit. Earn with us.",
+    partnerHeroBody: "Love Gadit? Share your personal link with parents, students, language learners — and earn 30% on every subscription, for the first year. Hit 10 active subscribers and you unlock 10% lifetime commission on all of them.",
     partnerLink: "gadit.app/?ref=alex",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -220,6 +224,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "םוחל",
     compareWords: "חלום מול שאיפה",
     compareNote: "שתיהן על רצון להשיג — ראו את ההבדל המדויק.",
+    partnerHeroTitle: "הפיצו את Gadit. תרוויחו איתנו.",
+    partnerHeroBody: "אוהבים את Gadit? שתפו את הלינק האישי שלכם עם הורים, סטודנטים, לומדי שפות — וקבלו 30% מכל מנוי בשנה הראשונה. הגעתם ל-10 מנויים פעילים? פתחתם 10% עמלה לכל החיים על כולם.",
     partnerLink: "gadit.app/?ref=anna",
     partnerEarnings: "₪175",
     partnerSubs: "18",
@@ -296,6 +302,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "ملح",
     compareWords: "حلم مقابل طموح",
     compareNote: "كلاهما عن الرغبة في شيء — شاهد الفرق الدقيق.",
+    partnerHeroTitle: "انشر Gadit. اربح معنا.",
+    partnerHeroBody: "تحب Gadit؟ شارك رابطك الشخصي مع الأهل والطلاب ومتعلمي اللغات — واحصل على 30% من كل اشتراك في السنة الأولى. وعندما تصل إلى 10 مشتركين نشطين، تفتح 10% عمولة مدى الحياة على جميعهم.",
     partnerLink: "gadit.app/?ref=layla",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -372,6 +380,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "тачме",
     compareWords: "мечта vs. цель",
     compareNote: "Обе о желаниях — посмотрите точное различие.",
+    partnerHeroTitle: "Расскажите о Gadit. Зарабатывайте с нами.",
+    partnerHeroBody: "Любите Gadit? Поделитесь личной ссылкой с родителями, студентами, изучающими языки — и получайте 30% с каждой подписки в течение первого года. Приведите 10 активных подписчиков — откроется 10% пожизненная комиссия на всех.",
     partnerLink: "gadit.app/?ref=ivan",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -448,6 +458,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "oñues",
     compareWords: "sueño vs. ambición",
     compareNote: "Ambos sobre desear algo — observa la diferencia exacta.",
+    partnerHeroTitle: "Difunde Gadit. Gana con nosotros.",
+    partnerHeroBody: "¿Te encanta Gadit? Comparte tu enlace personal con padres, estudiantes y aprendices de idiomas — y gana el 30% de cada suscripción durante el primer año. Alcanza 10 suscriptores activos y desbloqueas el 10% de comisión de por vida sobre todos ellos.",
     partnerLink: "gadit.app/?ref=maria",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -524,6 +536,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "ohnos",
     compareWords: "sonho vs. ambição",
     compareNote: "Ambos sobre querer algo — veja a diferença exata.",
+    partnerHeroTitle: "Divulgue o Gadit. Ganhe com a gente.",
+    partnerHeroBody: "Ama o Gadit? Compartilhe seu link pessoal com pais, estudantes e aprendizes de idiomas — e ganhe 30% de cada assinatura no primeiro ano. Chegue a 10 assinantes ativos e desbloqueie 10% de comissão vitalícia em todos eles.",
     partnerLink: "gadit.app/?ref=joao",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -600,6 +614,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "êver",
     compareWords: "rêve vs. ambition",
     compareNote: "Les deux concernent un désir — observez la différence précise.",
+    partnerHeroTitle: "Faites connaître Gadit. Gagnez avec nous.",
+    partnerHeroBody: "Vous adorez Gadit ? Partagez votre lien personnel avec parents, étudiants, apprenants de langues — et gagnez 30 % sur chaque abonnement la première année. Atteignez 10 abonnés actifs et débloquez 10 % de commission à vie sur tous.",
     partnerLink: "gadit.app/?ref=marie",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -676,6 +692,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "marTu",
     compareWords: "Traum vs. Ziel",
     compareNote: "Beide drehen sich um Wünsche — sieh den genauen Unterschied.",
+    partnerHeroTitle: "Verbreite Gadit. Verdiene mit uns.",
+    partnerHeroBody: "Du liebst Gadit? Teile deinen persönlichen Link mit Eltern, Schülerinnen, Sprachlernenden — und verdiene im ersten Jahr 30 % auf jedes Abonnement. Erreichst du 10 aktive Abonnenten, schaltest du 10 % Lebenslang-Provision auf alle frei.",
     partnerLink: "gadit.app/?ref=lena",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -752,6 +770,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "nse",
     compareWords: "sen vs. cíl",
     compareNote: "Obojí o touze — podívej se na přesný rozdíl.",
+    partnerHeroTitle: "Šiř Gadit. Vydělávej s námi.",
+    partnerHeroBody: "Miluješ Gadit? Sdílej svůj osobní odkaz s rodiči, studenty a těmi, kdo se učí jazyk — a vydělej 30 % z každého předplatného v prvním roce. Dosáhneš 10 aktivních předplatitelů a odemkneš 10 % doživotní provize na všechny.",
     partnerLink: "gadit.app/?ref=andrea",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -828,6 +848,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "nse",
     compareWords: "sen vs. cieľ",
     compareNote: "Oboje o túžbe — pozri sa na presný rozdiel.",
+    partnerHeroTitle: "Šír Gadit. Zarábaj s nami.",
+    partnerHeroBody: "Miluješ Gadit? Zdieľaj svoj osobný odkaz s rodičmi, študentmi a tými, ktorí sa učia jazyk — a zaroby 30 % z každého predplatného v prvom roku. Dosiahneš 10 aktívnych predplatiteľov a odomkneš 10 % doživotnú províziu na všetkých.",
     partnerLink: "gadit.app/?ref=zuzana",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -904,6 +926,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "ognso",
     compareWords: "sogno vs. ambizione",
     compareNote: "Entrambi parlano di desiderio — guarda la differenza precisa.",
+    partnerHeroTitle: "Diffondi Gadit. Guadagna con noi.",
+    partnerHeroBody: "Adori Gadit? Condividi il tuo link personale con genitori, studenti, chi impara una lingua — e guadagna il 30 % su ogni abbonamento nel primo anno. Raggiungi 10 abbonati attivi e sblocchi il 10 % di commissione a vita su tutti loro.",
     partnerLink: "gadit.app/?ref=luca",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -980,6 +1004,8 @@ const DEMO: Record<Lang, DemoContent> = {
     anagramLetters: "夢",
     compareWords: "夢 と 目標",
     compareNote: "どちらも望みについて — 正確な違いを見てみよう。",
+    partnerHeroTitle: "Gadit を広めよう。一緒に稼ごう。",
+    partnerHeroBody: "Gadit がお気に入りなら、あなたの個人リンクを保護者・生徒・語学学習者にシェアしてみませんか。初年度はサブスクごとに 30% の報酬。アクティブな購読者が10人になると、全員に対して 10% の生涯コミッションがアンロックされます。",
     partnerLink: "gadit.app/?ref=yuki",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -1286,32 +1312,42 @@ function DeepScene({ d, c }: { d: DemoContent; c: DemoContent["l"] }) {
 function PartnerScene({ d, c }: { d: DemoContent; c: DemoContent["l"] }) {
   return (
     <div className="wb-demo-anim-scene">
-      <div className="wb-demo-anim-dash-title" style={{ animationDelay: "0ms" }}>
+      {/* Lead with the WHY before the dashboard. The earlier version
+          opened straight on "Partner dashboard" which read as "wait,
+          why am I looking at this?" to visitors who hadn't even heard
+          of the partner program yet. Now the title + body frame it as
+          an invitation; the dashboard preview comes after as proof. */}
+      <div className="wb-demo-anim-partner-hero" style={{ animationDelay: "0ms" }}>
+        <h3 className="wb-demo-anim-partner-hero-title">{d.partnerHeroTitle}</h3>
+        <p className="wb-demo-anim-partner-hero-body">{d.partnerHeroBody}</p>
+      </div>
+
+      <div className="wb-demo-anim-section-label" style={{ animationDelay: "400ms" }}>
         {c.dashTitle}
       </div>
 
-      <div className="wb-demo-anim-link" style={{ animationDelay: "250ms" }}>
+      <div className="wb-demo-anim-link" style={{ animationDelay: "550ms" }}>
         <div className="wb-demo-anim-mini-eyebrow">{c.linkLabel}</div>
         <div className="wb-demo-anim-link-value">{d.partnerLink}</div>
       </div>
 
       <div className="wb-demo-anim-stats">
-        <div className="wb-demo-anim-stat" style={{ animationDelay: "600ms" }}>
+        <div className="wb-demo-anim-stat" style={{ animationDelay: "900ms" }}>
           <div className="wb-demo-anim-stat-label">{c.earningsLabel}</div>
           <div className="wb-demo-anim-stat-value">{d.partnerEarnings}</div>
         </div>
-        <div className="wb-demo-anim-stat" style={{ animationDelay: "900ms" }}>
+        <div className="wb-demo-anim-stat" style={{ animationDelay: "1200ms" }}>
           <div className="wb-demo-anim-stat-label">{c.subsLabel}</div>
           <div className="wb-demo-anim-stat-value">{d.partnerSubs}</div>
         </div>
       </div>
 
-      <div className="wb-demo-anim-rate" style={{ animationDelay: "1300ms" }}>
+      <div className="wb-demo-anim-rate" style={{ animationDelay: "1500ms" }}>
         <div className="wb-demo-anim-mini-eyebrow">{c.rateLabel}</div>
         <div className="wb-demo-anim-rate-value">{d.partnerRate}</div>
       </div>
 
-      <div className="wb-demo-anim-status" style={{ animationDelay: "1800ms" }}>
+      <div className="wb-demo-anim-status" style={{ animationDelay: "1900ms" }}>
         {d.partnerStatus}
       </div>
     </div>

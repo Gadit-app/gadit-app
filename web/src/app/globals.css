@@ -5375,12 +5375,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-feat-section { margin-bottom: clamp(48px, 7vw, 80px); }
 .wordbook .wb-feat-section-label {
   font-family: var(--wb-sans);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-muted);
+  color: var(--teal-deep, #0E7490);
   text-align: center;
+  margin-top: 56px;
   margin-bottom: 28px;
 }
 .wordbook[dir="rtl"] .wb-feat-section-label { font-family: var(--wb-he); }
@@ -7895,7 +7896,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --wb-demo-amber: #F59E0B;
   --wb-demo-gold: #D97706;
   max-width: 1080px;
-  margin: 56px auto 8px;
+  margin: 64px auto 80px;
   padding-inline: 24px;
 }
 .wordbook .wb-demo-anim-headstrip {
@@ -8538,6 +8539,34 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-family: var(--wb-sans);
   font-size: 13px;
   color: var(--wb-demo-ink);
+}
+
+/* Partner-scene hero — sits above the dashboard preview and frames
+   the WHY. Without this lead block, the dashboard preview reads as
+   "wait, what is this?" to a visitor who hasn't heard of the partner
+   program yet. The hero makes it an invitation, not a non-sequitur. */
+.wordbook .wb-demo-anim-partner-hero {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.06), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(217, 119, 6, 0.18);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+.wordbook .wb-demo-anim-partner-hero-title {
+  font-family: var(--wb-sans);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--wb-demo-gold);
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+.wordbook .wb-demo-anim-partner-hero-body {
+  font-family: var(--wb-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--wb-demo-ink-soft);
+  margin: 0;
 }
 
 /* Affiliate scene specifics */
