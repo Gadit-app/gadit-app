@@ -370,22 +370,6 @@ export function HomePage() {
               ))}
             </div>
 
-            <div className="wb-home-kids-row">
-              <KidsModeToggle
-                plan={plan}
-                onBasicGate={() => {
-                  // Anonymous: nudge to sign up first; Basic: show the
-                  // existing UpgradeModal with the kids pitch (the
-                  // modal already ships a feature="kids" pitch in 11
-                  // languages, so we get it for free).
-                  if (!user) {
-                    promptLogin(v2(lang, "kidsModeBasicGate"));
-                    return;
-                  }
-                  setUpgradeTrigger({ feature: "kids", tier: "clear" });
-                }}
-              /></div>
-
             {sentenceOpen ? (
               <div className="wb-home-sentence-wrap">
                 <textarea
@@ -419,6 +403,23 @@ export function HomePage() {
                 <span>{c.addSentence}</span>
               </button>
             )}
+
+            <div className="wb-home-kids-row">
+              <KidsModeToggle
+                plan={plan}
+                onBasicGate={() => {
+                  // Anonymous: nudge to sign up first; Basic: show the
+                  // existing UpgradeModal with the kids pitch (the
+                  // modal already ships a feature="kids" pitch in 11
+                  // languages, so we get it for free).
+                  if (!user) {
+                    promptLogin(v2(lang, "kidsModeBasicGate"));
+                    return;
+                  }
+                  setUpgradeTrigger({ feature: "kids", tier: "clear" });
+                }}
+              />
+            </div>
           </form>
         </div>
       </main>
