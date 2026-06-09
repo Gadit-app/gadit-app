@@ -50,7 +50,7 @@ const AFFONSO_PORTAL = "https://gaditapp.affonso.io";
 const COMMISSION_RATE = 0.30;
 const DEEP_PRICE = 4.99;
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
 
 type Copy = {
   navAffiliates: string;
@@ -1438,6 +1438,146 @@ const COPY: Record<Lang, Copy> = {
     finalCta: "Získej svůj osobní odkaz, zdarma",
     termsLink: "Podmínky partnerského programu",
   },
+  sk: {
+    navAffiliates: "Partneri",
+    topbarSignIn: "Už ste partner? Prihlásenie",
+
+    heroEyebrow: "Partnerský program",
+    heroTitle: "Odporúč Gadit.\nZarábaj každý mesiac.",
+    heroSubtitle:
+      "Zdieľaš svoj osobný odkaz a my ťa odmeňujeme 30% opakovanou províziou v prvom roku. Priveď 10 aktívnych zákazníkov, staň sa Active Partner a zarábaj 10% navždy.",
+    heroCtaPrimary: "Získaj svoj osobný odkaz, zadarmo",
+    heroProofA: "30% v prvom roku",
+    heroProofB: "10% navždy (Active Partner)",
+    heroProofC: "Okamžitý odkaz",
+    heroProofD: "Pre predplatiteľov Clear a Deep",
+
+    whyEyebrow: "Najprv produkt",
+    whyTitle: "Prečo stojí za to Gadit odporúčať",
+    whySubtitle:
+      "Odporučíš len to, čomu veríš. Tu je, čo tvoje publikum dostane, a prečo ti poďakuje.",
+    why1Title: "Skutočný slovník, nie suchý preklad",
+    why1Desc:
+      "Všetky významy slova, skutočné príklady ku každému, idiómy, historický pôvod a obrázok. Gadit vysvetľuje slovo tak, ako má, nie ako bežný slovník.",
+    why2Title: "Funguje v 11 jazykoch",
+    why2Desc:
+      "Hebrejsky, anglicky, arabsky, rusky, španielsky, portugalsky, francúzsky, nemecky, česky, slovensky, taliansky a japonsky. Vhodné pre rodených hovoriacich aj pre rodičov detí, ktoré sa učia druhý jazyk.",
+    why3Title: "Navrhnutý pre rodičov, učiteľov a študentov",
+    why3Desc:
+      "Vysvetlenia pre deti, kvízy, slovné hry a osobný zošit. Gadit nie je stavaný pre akademikov. Je stavaný pre domov, triedu a WhatsApp skupinu.",
+
+    whoEyebrow: "Pre koho to je",
+    whoTitle: "Ľudia s komunitou, ktorá im verí",
+    who1Title: "Tvorcovia obsahu a blogeri o vzdelávaní",
+    who1Desc:
+      "Ak píšeš, natáčaš alebo zdieľaš obsah o jazyku, učení alebo vzdelávaní, tvoje publikum tvojím odporúčaniam už verí.",
+    who2Title: "Učitelia, terapeuti a pedagógovia",
+    who2Desc:
+      "Ak pracuješ so študentmi a rodičmi, tvoje odporúčanie vzdelávacieho nástroja prichádza z miesta profesionálnej dôvery.",
+    who3Title: "Aktívni rodičia v komunitách",
+    who3Desc:
+      "Rodičovské skupiny, triedne chaty, mailing listy: všade tam, kde sa rodičia pýtajú jeden druhého na nástroje, ktoré pomáhajú ich deťom.",
+
+    howEyebrow: "Ako to funguje",
+    howTitle: "Tri kroky, bez žiadnych technických znalostí",
+    how1Title: "Registrácia do programu",
+    how1Desc:
+      "Krátky formulár. Počas minúty dostaneš automatické schválenie, osobný odkaz a prístup do svojho prehľadu.",
+    how2Title: "Zdieľanie odkazu",
+    how2Desc:
+      "Na rodičovskom WhatsApp, v e-maile pre svoj zoznam, v story na Instagrame, na blogu alebo osobne. Tam, kde to sedí tvojmu publiku.",
+    how3Title: "Odmena, ktorá rastie s tebou",
+    how3Desc:
+      "30% opakovaná provízia po dobu 12 mesiacov za každého zákazníka, ktorý sa prihlási cez tvoj odkaz. Keď privedieš 10 aktívnych zákazníkov, staneš sa Active Partner a odomkneš ďalších 10% opakovanej provízie navždy na všetkých tvojich zákazníkov, od 13. mesiaca ďalej.",
+    midCta1: "Začni teraz. Trvá to minútu.",
+
+    getEyebrow: "Čo dostaneš",
+    getTitle: "Nenecháme ťa v tom samého",
+    getSubtitle:
+      "Ak si v živote nikdy nič nepredával, nevadí. Všetko máme pripravené.",
+    get1Title: "Tvoj vlastný osobný odkaz",
+    get1Desc:
+      "Krátky, jedinečný odkaz, ktorý môžeš zdieľať kdekoľvek. Aj keď naň niekto klikne a vráti sa až za 60 dní, registrácia je stále tvoja.",
+    get2Title: "Hotové texty na zdieľanie",
+    get2Desc:
+      "Pripravené príspevky pre WhatsApp a Facebook, e-mail pre rodičov a nápady na Instagram stories. Len skopíruj a zdieľaj.",
+    get3Title: "Prehľadný osobný priestor",
+    get3Desc:
+      "Vidíš v reálnom čase: koľko ľudí kliklo na odkaz, koľko sa zaregistrovalo, koľko si zaplatilo vyšší plán a koľko dostávaš. Všetko transparentné.",
+    get4Title: "Osobná podpora",
+    get4Desc:
+      "Otázka k programu? Problém s odkazom? Je tu niekto, na koho sa môžeš obrátiť. Odpovedáme do jedného pracovného dňa.",
+
+    earnEyebrow: "Koľko sa dá zarobiť",
+    earnTitle: "Posuň posuvník a uvidíš",
+    earnSubtitle:
+      "Čísla závisia od tvojho publika a toho, čo zdieľaš. Takto sa to sčíta. Nič nesľubujeme, ale toto je rád veľkosti.",
+    calcSubsLabel: "Aktívni Deep predplatitelia mesačne",
+    calcMonthly: "Mesačná odmena",
+    calcYearly: "Za 12 mesiacov",
+    calcUnitSuffix: "predplatiteľov",
+    tableHeaderSubs: "Predplatitelia",
+    tableHeaderMonthly: "Mesačná odmena",
+    tableHeaderYearly: "Za 12 mesiacov",
+    earnNote:
+      "Výpočet je založený na predplatnom Deep ($4.99/mesiac) a 30% provízii v prvom roku. Od 13. mesiaca dostávajú Active Partners ďalších 10% navždy na rovnakých zákazníkov. Odmeny sa uvoľňujú po čakacej dobe 30 dní, výplata prebieha pri dosiahnutí $50 (minimálny prah výplaty, nie strop).",
+    midCta2: "Pripravený začať? Získaj svoj odkaz",
+
+    trustEyebrow: "Prečo dôverovať",
+    trustTitle: "Zakladateľský program v svojich začiatkoch",
+    founderHeading: "Osobný odkaz odo mňa, Gadiho",
+    founderBody:
+      "Moje poslanie bolo vždy jedno: pomáhať ľuďom rozumieť veciam až do konca. Pretože keď naozaj rozumieš, môžeš to uplatniť. A keď to môžeš uplatniť, môžeš dosiahnuť všetko, čo chceš.\n\nPočas rokov som videl bystrých, talentovaných ľudí, ktorí chceli niečomu porozumieť a nedarilo sa im to. Mysleli si, že na to jednoducho \"nemajú\". Ale neboli to oni. Bolo to jedno slovo v ceste.\n\nPostavil som Gadit, aby som túto prekážku odstránil. Nie ďalší slovník. Nie len preklad. Nástroj, ktorý vysvetlí každé slovo až do konca, jednoducho, s príkladmi, s kontextom a s obrázkom, ktorý ho oživí. Hovoríme tomu urobiť slovu GAD.\n\nPartnerský program je teraz otvorený ľuďom, ktorí sa s touto myšlienkou stotožňujú a chcú ju niesť ďalej. Ak si to ty, budem rád, keď sa pridáš.",
+    founderSign: "Gadi Ben Lavi, zakladateľ Gaditu",
+    stat1Num: "9",
+    stat1Label: "podporovaných jazykov rozhrania",
+    stat2Num: "30%",
+    stat2Label: "opakovaná provízia po 12 mesiacov",
+    stat3Num: "60",
+    stat3Label: "dní: okno pamäte odkazu",
+
+    faqEyebrow: "Časté otázky",
+    faqTitle: "Čo je dobré vedieť",
+    faq1Q: "Musím byť profesionálny marketér?",
+    faq1A:
+      "Nie. Väčšina našich partnerov sú rodičia, učitelia a blogeri, ktorí nikdy nič nepredávali. Všetko, čo potrebuješ, je zdieľať odkaz s ľuďmi, ktorí môžu z Gaditu ťažiť.",
+    faq2Q: "Môžem zdieľať vo WhatsApp alebo Facebook skupinách?",
+    faq2A:
+      "Áno, a je to jeden z najlepších kanálov pre naše publikum. Rodičia sa v skupinách pýtajú jeden druhého na nástroje, a práve tam má tvoje odporúčanie najväčší dopad.",
+    faq3Q: "Kedy dostanem výplatu?",
+    faq3A:
+      "Mesačná výplata na konci každého mesiaca, akonáhle sa nasčíta $50. Prah $50 je minimum pre výplatu, nie strop. Môžeš zarobiť oveľa viac, len peniaze fakticky dostávaš v momente, keď ten prah prekročíš.",
+    faq4Q: "Čo sa stane, keď môj zákazník zruší?",
+    faq4A:
+      "Províziu dostaneš len za mesiace, ktoré zákazník skutočne zaplatil. Ak zruší po 4 mesiacoch, dostal si 4 mesiace odmeny. Spravodlivé pre obe strany.",
+    faq5Q: "Existuje limit na počet zákazníkov?",
+    faq5A:
+      "Vôbec nie. Môžeš priviesť koľko chceš zákazníkov, odkiaľkoľvek na svete, v akomkoľvek z 11 jazykov, ktoré Gadit podporuje.",
+    faq6Q: "Čo robí odkaz, keď sa niekto neprihlási hneď?",
+    faq6A:
+      "Odkaz si ťa pamätá 60 dní. Ak niekto klikne, dva týždne váha a vráti sa kúpiť predplatné, registrácia stále patrí tebe.",
+    faq7Q: "A čo ročné predplatné?",
+    faq7A:
+      "Za ročné predplatné dostaneš jednorazovú odmenu 15% z prvej platby (namiesto 30% mesačne celý rok). Je to spravodlivá rovnováha vzhľadom na zľavu, ktorú na ročnej platbe dávame.",
+    faq8Q: "Dostanem hotové marketingové materiály?",
+    faq8A:
+      "Áno. Môžeš skopírovať hotové texty pre WhatsApp, e-mail pre rodičov, príspevky pre Facebook a koncepty stories. Ak chceš niečo konkrétne, napíš nám a my to pripravíme.",
+    faq9Q: "Môžem robiť platenú reklamu na Googli alebo Facebooku?",
+    faq9A:
+      "Organické príspevky pre tvoje publikum: áno. Ale nesmieš kupovať reklamy na Googli alebo Facebooku na samotné slovo 'Gadit'. Nechceme, aby si konkuroval hlavnej stránke o rovnakú prevádzku. Celé pravidlá sú v tvojom prehľade.",
+    faq10Q: "Musím byť platiaci predplatiteľ, aby som mohol byť partner?",
+    faq10A:
+      "Áno. Partnerský program je otvorený len pre predplatiteľov Clear a Deep. Dobré odporúčanie začína pri produkte, ktorý sám poznáš. Ak si ešte v Basic, prejdi na Clear alebo Deep z obrazovky 'Cenník', a získaš ako kompletný slovník, tak prístup k programu.",
+    faq11Q: "Čo je Active Partner a ako sa k tomu dostať?",
+    faq11A:
+      "Keď privedieš 10 aktívnych platiacich zákazníkov, staneš sa automaticky Active Partner. Tento status odomkne ďalších 10% opakovanej provízie navždy na všetkých tvojich zákazníkov (aj existujúcich, od 13. mesiaca). Znamená to, že aj po dvoch, troch alebo piatich rokoch, ak sú tvoji zákazníci stále predplatení, ty stále dostávaš odmenu.",
+
+    finalTitle: "Pripravený začať?",
+    finalSubtitle:
+      "Registrácia trvá minútu. Automatické schválenie. Odkaz je hneď hotový.",
+    finalCta: "Získaj svoj osobný odkaz, zadarmo",
+    termsLink: "Podmienky partnerského programu",
+  },
   it: {
     navAffiliates: "Affiliati",
     topbarSignIn: "Già partner? Accedi",
@@ -1727,6 +1867,7 @@ const NAV_FALLBACKS: Record<Exclude<Lang, "he" | "en">, { navAffiliates: string;
   fr: { navAffiliates: "Affiliés", topbarSignIn: "Déjà partenaire ? Se connecter" },
   de: { navAffiliates: "Affiliates", topbarSignIn: "Schon Partner? Anmelden" },
   cs: { navAffiliates: "Partneři", topbarSignIn: "Už jste partner? Přihlášení" },
+  sk: { navAffiliates: "Partneri", topbarSignIn: "Už ste partner? Prihlásenie" },
   it: { navAffiliates: "Affiliati", topbarSignIn: "Già partner? Accedi" },
   ja: { navAffiliates: "パートナー", topbarSignIn: "すでにパートナーですか？ ログイン" },
 };
@@ -1748,6 +1889,7 @@ const LANGS = [
   { code: "fr", label: "Français", flag: "fr" },
   { code: "de", label: "Deutsch", flag: "de" },
   { code: "cs", label: "Čeština", flag: "cz" },
+  { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
 ] as const;

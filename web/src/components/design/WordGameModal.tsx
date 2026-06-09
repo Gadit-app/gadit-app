@@ -29,7 +29,7 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
 
 interface NotebookItem {
   word: string;
@@ -266,6 +266,28 @@ const COPY: Record<Lang, {
     backToWord: "Zpět ke slovu",
     notEnough: "Ulož víc slov do sešitu, ať se otevřou všechna kola",
     notEnoughHint: "Otevři 2-3 další slova v sešitu a kolo se odemkne.",
+  },
+  sk: {
+    title: "Hry s týmto slovom",
+    loading: "Načítavam…",
+    anagramEyebrow: "Usporiadaj písmená",
+    anagramHintLabel: "Pomôcka:",
+    anagramReset: "Reset",
+    fillblankEyebrow: "Doplň vetu",
+    fillblankPrompt: "Ktoré slovo doplňuje vetu?",
+    next: "Ďalej",
+    finish: "Hotovo",
+    close: "Zavrieť",
+    correct: "Správne!",
+    wrong: "Takmer",
+    resultGreat: "Skvelé!",
+    resultGood: "Pekne.",
+    resultTryAgain: "Ďalšie kolo.",
+    scoreLine: (s, t) => `${s} z ${t}`,
+    playAgain: "Hrať znova",
+    backToWord: "Späť k slovu",
+    notEnough: "Ulož viac slov do zošita, nech sa otvoria všetky kolá",
+    notEnoughHint: "Otvor 2-3 ďalšie slová v zošite a kolo sa odomkne.",
   },
   it: {
     title: "Giochi con questa parola",

@@ -98,6 +98,7 @@ const LANG_NAMES: Record<string, string[]> = {
   fr: ["french", "français"],
   de: ["german", "deutsch"],
   cs: ["czech", "čeština", "cestina"],
+  sk: ["slovak", "slovenčina", "slovencina"],
 };
 
 function langMatchesUi(language: string, lang: Lang): boolean {
@@ -493,6 +494,7 @@ const TAB_LABELS: Record<string, Record<TabId, string>> = {
   fr: { image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
   de: { image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
   cs: { image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
+  sk: { image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
 };
 const TAB_IDS: TabId[] = ["image", "kids", "compose", "quiz", "compare"];
 

@@ -51,6 +51,7 @@ const COPY: Record<Lang, { openFull: string; loading: string; noPreview: string 
   fr: { openFull: "Voir la définition",      loading: "Chargement…", noPreview: "Appuyez ci-dessous pour voir la définition." },
   de: { openFull: "Volle Definition öffnen", loading: "Lädt…",       noPreview: "Tippe unten für die vollständige Definition." },
   cs: { openFull: "Otevřít celou definici",  loading: "Načítání…",   noPreview: "Klepněte níže pro plnou definici." },
+  sk: { openFull: "Otvoriť celú definíciu",  loading: "Načítavam…",  noPreview: "Klikni nižšie pre plnú definíciu." },
   it: { openFull: "Apri la definizione completa", loading: "Caricamento…", noPreview: "Tocca sotto per la definizione completa." },
   ja: { openFull: "完全な定義を開く",         loading: "読み込み中…",    noPreview: "下をタップして完全な定義を表示。" },
 };

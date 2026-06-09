@@ -30,6 +30,7 @@ const LANGS = [
   { code: "fr", label: "Français", flag: "fr" },
   { code: "de", label: "Deutsch", flag: "de" },
   { code: "cs", label: "Čeština", flag: "cz" },
+  { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
 ] as const;
@@ -111,6 +112,13 @@ const COPY: Record<string, {
     empty: "Tvůj sešit je prázdný.",
     emptyHint: "Najdi slovo a klepni na 'Uložit do sešitu'.",
     goSearch: "Zpět na vyhledávání",
+  },
+  sk: {
+    title: "Môj zošit",
+    subtitle: "Všetky slová, ktoré si nazbieral — uložené a usporiadané.",
+    empty: "Tvoj zošit je prázdny.",
+    emptyHint: "Nájdi slovo a klikni na 'Uložiť do zošita'.",
+    goSearch: "Späť na vyhľadávanie",
   },
 };
 

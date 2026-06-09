@@ -44,6 +44,7 @@ const COPY: Record<Lang, Copy> = {
   fr: { account: "Compte",              dashboard: "Tableau du partenaire", signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
   de: { account: "Konto",               dashboard: "Partner-Dashboard",     signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
   cs: { account: "Účet",                dashboard: "Přehled partnera",      signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
+  sk: { account: "Účet",                dashboard: "Prehľad partnera",      signOut: "Odhlásiť sa", openMenu: "Otvoriť menu účtu" },
   it: { account: "Account",             dashboard: "Dashboard partner",     signOut: "Esci",        openMenu: "Apri menu account" },
   ja: { account: "アカウント",            dashboard: "パートナーダッシュボード", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
 };

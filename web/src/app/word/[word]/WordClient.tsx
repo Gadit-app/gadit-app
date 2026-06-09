@@ -708,6 +708,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               : lang === "fr" ? `Vous avez atteint la limite mensuelle d'images (${bodyJson.used}/${bodyJson.limit}). Réinitialisation au mois prochain.`
               : lang === "de" ? `Du hast das monatliche Bildlimit erreicht (${bodyJson.used}/${bodyJson.limit}). Wird zum Monatsanfang zurückgesetzt.`
               : lang === "cs" ? `Dosáhl jsi měsíčního limitu obrázků (${bodyJson.used}/${bodyJson.limit}). Resetuje se začátkem dalšího měsíce.`
+              : lang === "sk" ? `Dosiahol si mesačný limit obrázkov (${bodyJson.used}/${bodyJson.limit}). Resetuje sa začiatkom ďalšieho mesiaca.`
               : `You've used your monthly image quota (${bodyJson.used}/${bodyJson.limit}). Resets at the start of next month.`)
             : code === "image_generation_failed" || code === "no_image_returned"
             ? (lang === "he" ? "התמונה נכשלה ביצירה. נסו שוב בעוד רגע."
@@ -718,6 +719,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               : lang === "fr" ? "L'image n'a pas pu être créée. Réessayez."
               : lang === "de" ? "Bild konnte nicht erstellt werden. Versuche es noch einmal."
               : lang === "cs" ? "Obrázek se nepodařilo vytvořit. Zkus to znovu."
+              : lang === "sk" ? "Obrázok sa nepodarilo vytvoriť. Skús to znova."
               : "Could not create the image. Try again in a moment.")
             : (lang === "he" ? "משהו השתבש. נסו שוב."
               : lang === "ar" ? "حدث خطأ ما. حاول مرة أخرى."
@@ -727,6 +729,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               : lang === "fr" ? "Une erreur s'est produite. Réessayez."
               : lang === "de" ? "Etwas ist schiefgelaufen. Versuche es erneut."
               : lang === "cs" ? "Něco se pokazilo. Zkus to znovu."
+              : lang === "sk" ? "Niečo sa pokazilo. Skús to znova."
               : "Something went wrong. Try again.");
         setImageError(localised);
         console.error("[generate-image] failed:", res.status, bodyJson);
@@ -739,6 +742,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       setImageError(
         lang === "he" ? "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב."
         : lang === "cs" ? "Ztratilo se připojení k internetu. Zkontroluj síť a zkus to znovu."
+        : lang === "sk" ? "Stratilo sa pripojenie k internetu. Skontroluj sieť a skús to znova."
         : "Lost network connection. Check your internet and try again."
       );
     } finally {
@@ -1221,6 +1225,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                  lang === "fr" ? "Retour à " :
                  lang === "de" ? "Zurück zu " :
                  lang === "cs" ? "Zpět na " :
+                 lang === "sk" ? "Späť na " :
                  "Back to "}
                 <strong>{backWord}</strong>
               </span>
@@ -1237,7 +1242,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             <button
               type="button"
               onClick={() => setImageError(null)}
-              aria-label={lang === "he" ? "סגור" : lang === "cs" ? "Zavřít" : "Close"}
+              aria-label={lang === "he" ? "סגור" : lang === "cs" ? "Zavřít" : lang === "sk" ? "Zavrieť" : "Close"}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />

@@ -378,3 +378,4 @@ Object.assign(CONTACT, {
 // it/ja users at least see a populated Contact page instead of a 404.
 CONTACT.it = CONTACT.en;
 CONTACT.ja = CONTACT.en;
+CONTACT.sk = CONTACT.en;

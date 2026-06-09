@@ -161,4 +161,10 @@ export const APP_SHARE_COPY: Record<
     shareLabel: "Sdílet Gadit",
     copiedLabel: "Odkaz zkopírován",
   },
+  sk: {
+    title: "Gadit — Inteligentný digitálny slovník",
+    text: "Objavil som nový digitálny slovník, ktorý vysvetľuje slová a ukazuje príklady pre každý význam, idiómy a frázy, a tiež pôvod každého slova a odkiaľ pochádza. Zadarmo s veľmi lacnými možnosťami vylepšenia. Stojí za vyskúšanie:",
+    shareLabel: "Zdieľať Gadit",
+    copiedLabel: "Odkaz skopírovaný",
+  },
 };

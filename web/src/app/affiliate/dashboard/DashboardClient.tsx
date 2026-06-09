@@ -40,7 +40,7 @@ const AFFONSO_LANGS = new Set([
 
 // Localized strings — inline so this single page doesn't add 9 entries
 // to i18n-v2 for what amounts to a loading state and an error message.
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
 const COPY: Record<Lang, {
   title: string;
   loadingTitle: string;
@@ -252,6 +252,27 @@ const COPY: Record<Lang, {
     payoutGuideTitle: "Poslední krok: jak chceš dostávat platby",
     payoutGuideBody: "Než ti budeme moci posílat provize, vyber si jednou způsob výplaty. Najdeš ho ve žlutém pruhu uvnitř svého přehledu níže. Trvá to minutu.",
     payoutGuideDismiss: "Rozumím",
+  },
+  sk: {
+    title: "Môj prehľad",
+    loadingTitle: "Načítavam prehľad…",
+    loadingHint: "Prvýkrát to trvá pár sekúnd.",
+    notConfiguredTitle: "Prehľad ešte nie je nastavený",
+    notConfiguredBody:
+      "Dokončujeme integráciu. Medzitým si prehľad môžete otvoriť v externom portáli.",
+    errorTitle: "Niečo sa pokazilo",
+    errorBody:
+      "Prehľad sa nepodarilo načítať. Skúste stránku obnoviť, a ak problém pretrváva, prihláste sa v externom portáli.",
+    signInTitle: "Prihláste sa, aby ste videli prehľad",
+    signInBody: "Prihláste sa k svojmu účtu Gadit a uvidíte svoj odkaz, štatistiky a provízie.",
+    marketingLink: "Čo je to za program?",
+    upgradeTitle: "Partnerský program je len pre členov Clear a Deep",
+    upgradeBody:
+      "Môžete odporúčať len produkt, ktorý sami používate. Prejdite na Clear alebo Deep — získate celý slovník Gadit bez obmedzení a prístup k partnerskému programu s 30% províziou za každého privedeného zákazníka.",
+    upgradeCta: "Prejsť na platený plán",
+    payoutGuideTitle: "Posledný krok: ako chceš dostávať platby",
+    payoutGuideBody: "Skôr ako ti budeme môcť posielať provízie, vyber si jedenkrát spôsob výplaty. Nájdeš ho v žltom pruhu vnútri svojho prehľadu nižšie. Trvá to minútu.",
+    payoutGuideDismiss: "Rozumiem",
   },
   it: {
     title: "La mia dashboard",

@@ -31,6 +31,7 @@ const LANGS = [
   { code: "fr", label: "Français", flag: "fr" },
   { code: "de", label: "Deutsch", flag: "de" },
   { code: "cs", label: "Čeština", flag: "cz" },
+  { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
 ] as const;
@@ -104,6 +105,7 @@ const SAMPLES_BY_LANG: Record<string, string[]> = {
   fr: ["rêve", "vérité", "espoir"],
   de: ["Traum", "Wahrheit", "Hoffnung"],
   cs: ["sen", "pravda", "naděje"],
+  sk: ["sen", "pravda", "nádej"],
   it: ["sogno", "verità", "speranza"],
   ja: ["夢", "真実", "希望"],
 };
@@ -133,6 +135,7 @@ const COPY: Record<
   fr: { tagline: "Comprendre les mots jusqu'au bout", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités", addSentence: "Ajoutez la phrase où le mot apparaît pour obtenir une définition précise", sentencePlaceholder: "Tapez la phrase où le mot apparaît pour obtenir une définition précise", founderNote: "Chaque fois que quelque chose ne tilte pas, il y a un mot sur le chemin. Saisissez-le, et tout s'ouvre.", founderSign: "Gadi, fondateur de Gadit" },
   de: { tagline: "Wörter bis zum Ende verstehen", placeholder: "Wort eingeben", tryLabel: "Beispiel", signin: "Anmelden", pricing: "Preise", search: "Suche", features: "Funktionen", addSentence: "Füge den Satz hinzu, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", sentencePlaceholder: "Tippe den Satz ein, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", founderNote: "Jedes Mal, wenn etwas nicht klickt, steht ein Wort im Weg. Fang es ein, und alles öffnet sich.", founderSign: "Gadi, Gründer von Gadit" },
   cs: { tagline: "Pochopit slova až do konce", placeholder: "Napiš slovo", tryLabel: "Příklad", signin: "Přihlásit se", pricing: "Ceník", search: "Hledat", features: "Funkce", addSentence: "Přidej větu, ve které se slovo objevuje, abys získal přesnou definici", sentencePlaceholder: "Napiš větu, ve které se slovo objevuje, abys získal jednu přesnou definici", founderNote: "Pokaždé, když něco nedává smysl, je v cestě jedno slovo. Zachyť ho, a všechno se otevře.", founderSign: "Gadi, zakladatel Gaditu" },
+  sk: { tagline: "Pochopiť slová až do konca", placeholder: "Napíš slovo", tryLabel: "Príklad", signin: "Prihlásiť sa", pricing: "Cenník", search: "Hľadať", features: "Funkcie", addSentence: "Pridaj vetu, v ktorej sa slovo nachádza, aby si získal presnú definíciu", sentencePlaceholder: "Napíš vetu, v ktorej sa slovo nachádza, aby si získal jednu presnú definíciu", founderNote: "Zakaždým, keď niečo nedáva zmysel, stojí v ceste jedno slovo. Zachyť ho, a všetko sa otvorí.", founderSign: "Gadi, zakladateľ Gaditu" },
   it: { tagline: "Capire le parole fino in fondo", placeholder: "Scrivi una parola", tryLabel: "Prova", signin: "Accedi", pricing: "Prezzi", search: "Cerca", features: "Funzionalità", addSentence: "Aggiungi la frase in cui appare la parola per ottenere una definizione precisa", sentencePlaceholder: "Scrivi la frase in cui appare la parola per ottenere una definizione precisa", founderNote: "Ogni volta che qualcosa non torna, c'è una parola sulla strada. Coglila, e tutto si apre.", founderSign: "Gadi, fondatore di Gadit" },
   ja: { tagline: "言葉を最後まで理解する", placeholder: "単語を入力", tryLabel: "例", signin: "ログイン", pricing: "料金", search: "検索", features: "機能", addSentence: "単語が出てくる文を追加すると、ぴったりの意味が一つだけ表示されます", sentencePlaceholder: "単語が出てくる文を入力すると、ぴったりの意味が一つだけ表示されます", founderNote: "何かがしっくりこないとき、必ず一つの言葉が間にある。それを掴めば、すべてが開く。", founderSign: "ガディ、Gadit 創業者" },
 };
@@ -426,7 +429,7 @@ export function HomePage() {
 
       <UpgradeModal
         trigger={upgradeTrigger}
-        lang={lang as "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja"}
+        lang={lang as "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja"}
         dir={dir}
         onClose={() => setUpgradeTrigger(null)}
       />

@@ -67,6 +67,7 @@ function toBcp47(audioLang: string | undefined): string {
     fr: "fr-FR",
     de: "de-DE",
     cs: "cs-CZ",
+    sk: "sk-SK",
   };
   const short = audioLang.split("-")[0].toLowerCase();
   return map[short] ?? audioLang;

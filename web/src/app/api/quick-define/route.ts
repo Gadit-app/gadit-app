@@ -31,7 +31,7 @@ import { getAdminDb } from "@/lib/firebase-admin";
 export const maxDuration = 10;
 
 const SUPPORTED_LANGS = new Set([
-  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "it", "ja",
+  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja",
 ]);
 
 const UI_LANG_NAMES: Record<string, string> = {
@@ -44,6 +44,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   fr: "French",
   de: "German",
   cs: "Czech",
+  sk: "Slovak",
   it: "Italian",
   ja: "Japanese",
 };

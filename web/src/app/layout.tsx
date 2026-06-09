@@ -158,6 +158,12 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "Objevil jsem nový digitální slovník, který vysvětluje slova a ukazuje příklady pro každou definici, idiomy a fráze, a také původ každého slova a odkud pochází. Zdarma s velmi levnými možnostmi vylepšení. Stojí za vyzkoušení.",
     locale: "cs_CZ",
   },
+  sk: {
+    title: "Gadit — Inteligentný digitálny slovník",
+    description:
+      "Objavil som nový digitálny slovník, ktorý vysvetľuje slová a ukazuje príklady pre každý význam, idiómy a frázy, a tiež pôvod každého slova a odkiaľ pochádza. Zadarmo s veľmi lacnými možnosťami vylepšenia. Stojí za vyskúšanie.",
+    locale: "sk_SK",
+  },
   fr: {
     title: "Gadit — Dictionnaire numérique intelligent",
     description:
@@ -178,7 +184,7 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
   },
 };
 
-const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "it", "ja"];
+const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
 
 export async function generateMetadata(): Promise<Metadata> {
   // Resolve language for this request, exactly the same chain the
@@ -230,6 +236,7 @@ export async function generateMetadata(): Promise<Metadata> {
         fr: "https://www.gadit.app/fr",
         de: "https://www.gadit.app/de",
         cs: "https://www.gadit.app/cs",
+        sk: "https://www.gadit.app/sk",
         "x-default": "https://www.gadit.app",
       },
     },
@@ -266,7 +273,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "it", "ja"];
+const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
 
 export default async function RootLayout({
   children,

@@ -56,6 +56,7 @@ function pickVoice(lang: string | undefined): string {
     case "fr": return "shimmer";
     case "de": return "onyx";
     case "cs": return "alloy";
+    case "sk": return "alloy";
     case "en":
     default:   return "alloy";
   }

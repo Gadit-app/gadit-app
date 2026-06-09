@@ -327,6 +327,7 @@ export function AccountPage() {
         lang === "ru" ? "ru-RU" :
         lang === "de" ? "de-DE" :
         lang === "cs" ? "cs-CZ" :
+        lang === "sk" ? "sk-SK" :
         lang === "es" ? "es-ES" :
         lang === "pt" ? "pt-BR" :
         lang === "fr" ? "fr-FR" : "en-US";
@@ -712,6 +713,7 @@ function UsageSection({
               : lang === "fr" ? "Disponible hors ligne"
               : lang === "de" ? "Offline verfügbar"
               : lang === "cs" ? "Dostupné offline"
+              : lang === "sk" ? "Dostupné offline"
               : "Available offline"}
           </span>
           <span style={{ fontSize: 14, color: tierColor(data.plan), fontWeight: 600 }}>
@@ -725,6 +727,7 @@ function UsageSection({
               : lang === "fr" ? "mots"
               : lang === "de" ? "Wörter"
               : lang === "cs" ? "slov"
+              : lang === "sk" ? "slov"
               : "words"}
           </span>
         </div>
@@ -777,6 +780,7 @@ function OfflinePackSection({
                   : lang === "fr" ? "✓ Ajouté à votre carnet"
                   : lang === "de" ? "✓ Zum Notizbuch hinzugefügt"
                   : lang === "cs" ? "✓ Přidáno do sešitu"
+                  : lang === "sk" ? "✓ Pridané do zošita"
                   : "✓ Added to your Notebook"}
               </div>
               <a
@@ -795,6 +799,7 @@ function OfflinePackSection({
                   : lang === "fr" ? "Ouvrir le carnet →"
                   : lang === "de" ? "Notizbuch öffnen →"
                   : lang === "cs" ? "Otevřít sešit →"
+                  : lang === "sk" ? "Otvoriť zošit →"
                   : "Open Notebook →"}
               </a>
             </div>

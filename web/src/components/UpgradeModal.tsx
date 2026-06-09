@@ -28,7 +28,7 @@ export type UpgradeFeature =
   | "quiz" | "compare";                         // Deep
 export type UpgradeTrigger = { feature: UpgradeFeature; tier: UpgradeTier };
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
 
 interface Copy {
   featureNames: Record<UpgradeFeature, string>;
@@ -267,6 +267,31 @@ const COPY: Record<Lang, Copy> = {
     primaryCta: "Vyzkoušej 14 dní zdarma",
     secondaryCta: "Možná jindy",
     closeAria: "Zavřít",
+  },
+  sk: {
+    featureNames: {
+      image: "Slovo ako obrázok",
+      kids: "Vysvetlenie pre deti",
+      compose: "Napíš vetu a získaj spätnú väzbu",
+      notebook: "Osobný zošit slov",
+      quiz: "Personalizované kvízy",
+      compare: "Slovné hry",
+    },
+    featureBlurbs: {
+      image: "Unikátny obrázok pre každé slovo.",
+      kids: "Jednoduché vysvetlenie, ktorému rozumie každé dieťa, s príkladmi z jeho sveta.",
+      compose: "Napíš svoju vlastnú vetu so slovom a získaj okamžitú spätnú väzbu na to, ako si slovo použil.",
+      notebook: "Zbieraj slová, ktoré si sa naučil, do osobného digitálneho zošita, ktorý máš k dispozícii kdekoľvek.",
+      quiz: "Osobný kvíz, ktorý ti pomáha ukotviť slovo a zapamätať si ho dlhodobo.",
+      compare: "Personalizované slovné hry, ktoré ti slová zakotvia v pamäti, kým sa bavíš.",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "je funkcia balíka Clear", deep: "je funkcia balíka Deep" },
+    pricePerMonth: { clear: "$2,99 / mesiac", deep: "$4,99 / mesiac" },
+    trialNote: "14 dní zadarmo · zrušíš kedykoľvek",
+    primaryCta: "Vyskúšaj 14 dní zadarmo",
+    secondaryCta: "Možno inokedy",
+    closeAria: "Zavrieť",
   },
   it: {
     featureNames: {
