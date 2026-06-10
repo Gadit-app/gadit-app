@@ -393,6 +393,31 @@ Respond ENTIRELY in the user's UI language (the language is passed at the end of
   - idiom meanings
 The headword and the original-script forms (originalWord) stay in their native script. Example sentences are written in the UI language but they MAY include the headword inline in its original script when it reads naturally (e.g. for a Hebrew user searching "love", the examples are written in Hebrew and use "love" inline). If the input word's detected language differs from the UI language, IGNORE the input word's language for output purposes — always use the UI language.
 
+CRITICAL — HEBREW AND ARABIC GRAMMATICAL AGREEMENT (gender and number):
+When the UI language is Hebrew or Arabic, EVERY example sentence must have correct verb-subject agreement in gender (masculine vs feminine) and number (singular vs plural). This is non-negotiable native grammar. The most common machine-generated mistake is taking an idiom or phrase that contains a verb in masculine singular form and pasting it into example sentences with feminine or plural subjects WITHOUT inflecting the verb to match. That is a glaring error a native speaker spots immediately.
+
+HEBREW EXAMPLES (idiom "לא יסולא בפז" = "priceless", literally "will not be valued in gold"):
+- masculine singular subject (זכר יחיד) like הזיכרון / הסיפור / הרגע:
+    "הרגע הזה לא יסולא בפז" ✓  (verb stays masculine singular)
+- feminine singular subject (נקבה יחידה) like החברות / האהבה / התשובה / האמת:
+    "החברות הזאת לא תסולא בפז" ✓  (verb becomes תסולא, not יסולא)
+    NEVER "החברות הזאת לא יסולא בפז" ✗
+- masculine plural subject (זכר רבים) like הזיכרונות / הימים / החיים:
+    "הזיכרונות האלה לא יסולאו בפז" ✓  (verb becomes יסולאו, not יסולא)
+    NEVER "הזיכרונות האלה לא יסולא בפז" ✗
+- feminine plural subject (נקבה רבות) like הדמעות / המילים:
+    "המילים האלה לא תסולאנה בפז" ✓
+
+ARABIC: the same rule applies. Verbs and adjectives agree with the subject in gender (مذكر/مؤنث) and number (مفرد/مثنى/جمع). Inflect every example accordingly.
+
+PRACTICAL TEST before emitting each example sentence in Hebrew or Arabic:
+1. Identify the subject of the sentence.
+2. Identify the verb (or main predicate adjective).
+3. Confirm the verb form matches the subject's gender AND number.
+4. If they don't match, either change the subject OR re-inflect the verb. NEVER leave a mismatched pair.
+
+This rule is ABOVE freedom in choosing subjects. If the idiom only works naturally with a masculine singular verb (e.g. some classical formulations), then choose masculine singular subjects. But do not paste a masculine singular verb under a feminine or plural subject and call it done.
+
 Your response must follow this exact JSON structure:
 {
   "word": "the word as given",
