@@ -153,6 +153,32 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
       if (hasQuoteScatter(raw)) {
         return { degenerate: true, reason: `etymology.${f} has ASCII quote / geresh scatter pattern` };
       }
+      // Belt-and-suspenders for sourceLanguage specifically. The value
+      // is always a short clean language name like "Hebrew", "Old
+      // English", "עברית", "ערבית קלאסית", "ארמית / יוונית". It NEVER
+      // contains apostrophes, double-quotes, Hebrew geresh, or Hebrew
+      // gershayim in valid output. So a single one of those characters
+      // in sourceLanguage is degenerate by definition, no density
+      // threshold needed.
+      if (f === "sourceLanguage" && /['"׳״]/.test(raw)) {
+        return {
+          degenerate: true,
+          reason: `etymology.sourceLanguage contains a quote / geresh character (never valid for a language name)`,
+        };
+      }
+      // Three-letters-with-marks-between pattern: A character class
+      // letter, one or more mark characters (quote / geresh / niqqud),
+      // another letter, more marks, a third letter. Real Hebrew never
+      // produces this shape outside extremely unusual abbreviations.
+      // Biblical citations like כ"ח cluster their gershayim (letter +
+      // mark + letter, one pair) rather than scattering them between
+      // every letter (letter + mark + letter + mark + letter).
+      if (/[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}]/u.test(raw)) {
+        return {
+          degenerate: true,
+          reason: `etymology.${f} has interspersed letter-mark-letter-mark-letter pattern`,
+        };
+      }
     }
   }
 
