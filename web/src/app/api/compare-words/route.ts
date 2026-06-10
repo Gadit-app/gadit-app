@@ -9,6 +9,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   es: "Spanish",
   pt: "Portuguese",
   fr: "French",
+  de: "German",
+  cs: "Czech",
+  sk: "Slovak",
+  it: "Italian",
+  ja: "Japanese",
 };
 
 const SYSTEM_PROMPT = `You are Gadit's word comparison engine. The user gives you two words that look or sound similar (or are easy to confuse), and you explain the difference clearly.

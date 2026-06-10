@@ -9,6 +9,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   es: "Spanish",
   pt: "Portuguese",
   fr: "French",
+  de: "German",
+  cs: "Czech",
+  sk: "Slovak",
+  it: "Italian",
+  ja: "Japanese",
 };
 
 const SYSTEM_PROMPT = `You are a warm, encouraging language tutor.
