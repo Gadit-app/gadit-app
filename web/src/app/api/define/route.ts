@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { isDegenerate } from "@/lib/define-guard";
+import { isDegenerate, sanitizeDegenerateEtymology } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
 
 // Three-tier daily quota model.
@@ -1245,9 +1245,40 @@ export async function POST(req: NextRequest) {
             const doneEvent = `data: ${JSON.stringify({ type: "done", result: acceptedResult })}\n\n`;
             safeEnqueue(encoder.encode(doneEvent));
           } else {
-            console.error("All attempts (1 streamed + 2 retries) failed validation — surfacing error");
-            const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
-            safeEnqueue(encoder.encode(errorEvent));
+            // All retries failed validation. Before giving up, try one
+            // last salvage: parse the streamed attempt (we kept it in
+            // `accumulated`), and if the meanings/examples/idioms are
+            // clean but only the etymology block is degenerate, blank
+            // the etymology and serve the clean parts. This handles
+            // the "gpt-4o is stuck degenerating a single sub-field for
+            // a particular word" pattern that surfaced on the idiom
+            // "יסולא בפז" — meanings + examples + idioms came back
+            // perfect, every etymology field gibberish, every retry the
+            // same. Returning a generic error there is worse UX than
+            // serving the clean 90% of the result.
+            let salvaged: object | null = null;
+            try {
+              const parsed = JSON.parse(accumulated) as Record<string, unknown>;
+              const sanitised = sanitizeDegenerateEtymology(parsed);
+              const reVerdict = isDegenerate(sanitised, word);
+              if (!reVerdict.degenerate) {
+                salvaged = sanitised as object;
+                console.warn(`Salvaged result by clearing degenerate etymology fields`);
+              }
+            } catch {
+              // accumulated wasn't parseable JSON — no salvage possible
+            }
+            if (salvaged) {
+              setCachedResult(cacheKey, salvaged).catch((e) =>
+                console.error("Cache write failed:", e),
+              );
+              const doneEvent = `data: ${JSON.stringify({ type: "done", result: salvaged })}\n\n`;
+              safeEnqueue(encoder.encode(doneEvent));
+            } else {
+              console.error("All attempts (1 streamed + 2 retries) failed validation — surfacing error");
+              const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
+              safeEnqueue(encoder.encode(errorEvent));
+            }
           }
         } catch (e) {
           console.error("Stream reading error:", e);

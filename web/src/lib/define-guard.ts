@@ -186,6 +186,52 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
 }
 
 /**
+ * Field-level sanitiser for etymology. Walks each of the five etymology
+ * sub-fields and clears any that fail the per-field guard checks.
+ *
+ * Used as a last-resort fallback: when gpt-4o has degenerated on the
+ * etymology block in every retry attempt for a specific word (the
+ * pattern Gadi's wife saw on the idiom "יסולא בפז"), the route would
+ * either keep retrying forever or surface a generic generation error.
+ * Neither is great UX when the meanings/examples/idioms are perfectly
+ * clean and the only damaged block is the small etymology card at the
+ * bottom of the page.
+ *
+ * The pragmatic fix: keep the clean parts, blank the broken parts.
+ * The result page already handles empty etymology gracefully (skips
+ * the rows or shows the "no origin available" label per locale).
+ *
+ * Returns a SHALLOW copy of the input — does not mutate the original
+ * (callers may pass cached objects we must not edit in place).
+ */
+export function sanitizeDegenerateEtymology(result: unknown): unknown {
+  if (!result || typeof result !== "object") return result;
+  const r = result as Record<string, unknown>;
+  const ety = r.etymology;
+  if (!ety || typeof ety !== "object") return result;
+
+  const e = ety as Record<string, unknown>;
+  const fields = ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote"] as const;
+  const cleaned: Record<string, unknown> = {};
+  for (const f of fields) {
+    const raw = e[f];
+    if (typeof raw !== "string" || raw.length === 0) {
+      cleaned[f] = "";
+      continue;
+    }
+    const bad =
+      hasMojibakeDensity(raw) ||
+      isPunctuationSoup(raw) ||
+      hasQuoteScatter(raw) ||
+      (f === "sourceLanguage" && /['"׳״]/.test(raw)) ||
+      /[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}]/u.test(raw);
+    cleaned[f] = bad ? "" : raw;
+  }
+
+  return { ...r, etymology: cleaned };
+}
+
+/**
  * Extract the input word from a cache document id.
  *
  * Key formats produced by /api/define/route.ts (current and legacy):
