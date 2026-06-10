@@ -7898,6 +7898,262 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 
 /* ════════════════════════════════════════════════════════════════
+   Help Center — /contact page
+   Categorised troubleshooting + FAQ rendered as native <details>
+   accordions. No client JS for open/close, no state shipped — the
+   browser handles it. We just style the [open] state and the chevron
+   rotation in CSS. Visual language matches /features and /pricing:
+   warm paper card surface, teal accents, generous breathing room.
+   ════════════════════════════════════════════════════════════════ */
+.wb-help {
+  --wb-help-paper: #FFFFFF;
+  --wb-help-ink: #1F2937;
+  --wb-help-ink-soft: #4B5563;
+  --wb-help-ink-faint: #6B7280;
+  --wb-help-rule: #E5E7EB;
+  --wb-help-rule-soft: #F1F2F4;
+  --wb-help-teal: #0EA5A5;
+  --wb-help-teal-deep: #0E7490;
+  --wb-help-bg-tint: rgba(14, 116, 144, 0.04);
+  font-family: var(--wb-sans, Inter, system-ui, sans-serif);
+}
+
+.wb-help-head {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.wb-help-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wb-help-teal-deep);
+  margin-bottom: 12px;
+}
+.wb-help-title {
+  font-family: var(--wb-sans);
+  font-size: clamp(28px, 3.6vw, 38px);
+  font-weight: 700;
+  color: var(--wb-help-ink);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 14px;
+}
+.wb-help-lede {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--wb-help-ink-soft);
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+.wb-help-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Each category gets a scrollMarginTop so that deep-links like
+   /contact#billing land below the sticky topbar, not under it. */
+.wb-help-cat {
+  scroll-margin-top: 88px;
+}
+.wb-help-cat-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--wb-help-ink);
+  letter-spacing: -0.015em;
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--wb-help-rule);
+}
+.wb-help-cat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.wb-help-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Each Q&A is a native <details>. The chevron rotates 180° when
+   [open] via a CSS-only transition. Hover lifts the surface very
+   slightly — same micro-motion the rest of the product uses. */
+.wb-help-item {
+  background: var(--wb-help-paper);
+  border: 1px solid var(--wb-help-rule);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  scroll-margin-top: 88px;
+}
+.wb-help-item:hover {
+  border-color: rgba(14, 116, 144, 0.25);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+.wb-help-item[open] {
+  border-color: rgba(14, 116, 144, 0.35);
+  background: linear-gradient(180deg, var(--wb-help-bg-tint), var(--wb-help-paper) 80px);
+}
+
+.wb-help-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--wb-help-ink);
+  line-height: 1.4;
+  /* Remove default Safari arrow */
+  -webkit-appearance: none;
+  appearance: none;
+}
+.wb-help-q::-webkit-details-marker {
+  display: none;
+}
+.wb-help-q::marker {
+  display: none;
+  content: "";
+}
+.wb-help-q-text {
+  flex: 1;
+}
+.wb-help-q-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--wb-help-rule-soft);
+  color: var(--wb-help-ink-faint);
+  flex-shrink: 0;
+  transition: transform 240ms cubic-bezier(0.23, 1, 0.32, 1),
+              background 160ms cubic-bezier(0.23, 1, 0.32, 1),
+              color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wb-help-item[open] .wb-help-q-chevron {
+  transform: rotate(180deg);
+  background: rgba(14, 165, 165, 0.12);
+  color: var(--wb-help-teal-deep);
+}
+
+.wb-help-a {
+  padding: 4px 20px 20px;
+  border-top: 1px solid var(--wb-help-rule-soft);
+  /* Subtle slide-in on first open. Re-runs on every open which is
+     fine — the duration is short. */
+  animation: wb-help-a-in 260ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes wb-help-a-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.wb-help-a-p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--wb-help-ink-soft);
+  margin: 12px 0 0;
+}
+.wb-help-a-p:first-child { margin-top: 8px; }
+
+/* Footer — "still stuck?" email block. Distinct surface so it reads
+   as the explicit fallback, not just another FAQ item. */
+.wb-help-footer {
+  margin-top: 64px;
+  padding: 36px 32px;
+  background: linear-gradient(180deg, rgba(14, 165, 165, 0.06), rgba(14, 116, 144, 0.04));
+  border: 1px solid rgba(14, 116, 144, 0.18);
+  border-radius: 16px;
+  text-align: center;
+}
+.wb-help-footer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--wb-help-ink);
+  letter-spacing: -0.015em;
+  margin: 0 0 8px;
+}
+.wb-help-footer-body {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--wb-help-ink-soft);
+  max-width: 44ch;
+  margin: 0 auto 20px;
+}
+.wb-help-email-cta {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: var(--wb-help-teal);
+  color: #FFFFFF;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 160ms cubic-bezier(0.23, 1, 0.32, 1),
+              transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.wb-help-email-cta:hover {
+  background: var(--wb-help-teal-deep);
+}
+.wb-help-email-cta:active {
+  transform: scale(0.97);
+}
+.wb-help-response-time {
+  font-size: 12.5px;
+  color: var(--wb-help-ink-faint);
+  margin: 14px 0 4px;
+}
+.wb-help-email-line {
+  font-size: 12.5px;
+  color: var(--wb-help-ink-faint);
+  margin: 0;
+}
+.wb-help-email-line a {
+  color: var(--wb-help-teal-deep);
+  text-decoration: none;
+}
+.wb-help-email-line a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .wb-help-head { margin-bottom: 36px; }
+  .wb-help-categories { gap: 28px; }
+  .wb-help-cat-title { font-size: 18px; }
+  .wb-help-q { padding: 14px 16px; font-size: 14.5px; }
+  .wb-help-a { padding: 4px 16px 16px; }
+  .wb-help-a-p { font-size: 14px; }
+  .wb-help-footer { padding: 28px 22px; margin-top: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-help-item,
+  .wb-help-q-chevron,
+  .wb-help-email-cta {
+    transition: none;
+  }
+  .wb-help-a {
+    animation: none;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
    Gadit Demo Animation — auto-cycling tour on /features.
    See web/src/components/design/GaditDemoAnimation.tsx for the
    matching React component. Visual language matches the broader

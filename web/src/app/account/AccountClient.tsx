@@ -559,7 +559,29 @@ function PlanSection({
   onChangePlan: () => void;
 }) {
   const { lang } = useLang();
+  const href = useHref();
   const plan = data.plan;
+
+  // Help-link text for the "Need help with billing?" deep-link to
+  // /contact#billing. We add this for paying users because that's
+  // where billing issues hit (wrong card, refund question, can't
+  // open the portal) — inlined here rather than added to v2 so we
+  // can ship without a 12-locale translation pass. Locales that
+  // aren't covered fall through to the EN string, which is fine
+  // for a small contextual link.
+  const billingHelp =
+    lang === "he" ? "בעיה? המדריך לחיוב ›" :
+    lang === "ar" ? "مشكلة؟ دليل الفوترة ›" :
+    lang === "ru" ? "Нужна помощь? Руководство по оплате ›" :
+    lang === "es" ? "¿Problemas? Guía de facturación ›" :
+    lang === "pt" ? "Problema? Guia de faturamento ›" :
+    lang === "fr" ? "Un souci ? Guide de facturation ›" :
+    lang === "de" ? "Probleme? Hilfe zur Abrechnung ›" :
+    lang === "cs" ? "Problém? Návod k fakturaci ›" :
+    lang === "sk" ? "Problém? Návod k fakturácii ›" :
+    lang === "it" ? "Problemi? Guida alla fatturazione ›" :
+    lang === "ja" ? "お困りですか? 請求の手引き ›" :
+    "Need help with billing? See the guide ›";
 
   // Every signed-in user is on a plan — Basic is the free baseline, not
   // an absence of subscription. The earlier "No active subscription" empty
@@ -659,6 +681,27 @@ function PlanSection({
                 <GhostBtn onClick={onChangePlan}>{v2(lang, "accountChangePlan")}</GhostBtn>
               </>
             )}
+          </div>
+          {/* Contextual self-service link to the billing section of the
+              Help Center. Shown to anyone — Basic gets it for "how do
+              I upgrade / what plans / can I trial" type questions,
+              paying users for "wrong card / cancel / refund" cases.
+              Deep-link via #billing hits the right Help Center section
+              directly; scroll-margin-top in CSS keeps it below the
+              sticky topbar. */}
+          <div style={{ marginTop: 14 }}>
+            <Link
+              href={href("/contact") + "#billing"}
+              style={{
+                fontFamily: fontBody(lang),
+                fontSize: 13,
+                color: "var(--teal-deep, #0E7490)",
+                textDecoration: "none",
+                fontWeight: 500,
+              }}
+            >
+              {billingHelp}
+            </Link>
           </div>
         </>
     </section>
