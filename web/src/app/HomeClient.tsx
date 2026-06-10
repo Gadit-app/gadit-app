@@ -444,6 +444,8 @@ export function HomePage() {
         <span>·</span>
         <Link href={href("/pricing")}>{c.pricing}</Link>
         <span>·</span>
+        <Link href={href("/contact")}>{v2(lang, "footerContact")}</Link>
+        <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
