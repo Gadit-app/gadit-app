@@ -810,6 +810,122 @@ async function openAIStream(model: string, systemPrompt: string, userContent: st
   });
 }
 
+// Dedicated etymology-only fallback. Used when the main generation
+// has produced clean meanings/examples/idioms but degenerate
+// etymology fields, and the standard retries have exhausted with the
+// same defect (the "gpt-4o is deterministically stuck" pattern
+// observed on the idiom 'יסולא' on June 10 2026).
+//
+// Strategy to escape the degenerate loop:
+//   1. Different prompt — short, focused, etymology-only. The full
+//      define prompt is huge; a smaller one gives the model less to
+//      latch onto.
+//   2. Different temperature — 0.8 instead of 0.2. The main route runs
+//      cold (0.2) for determinism, which is exactly what locks the
+//      model into the bad output. A warmer call breaks the seed.
+//   3. Different schema — json_object instead of the full structured
+//      output, so the model isn't trying to satisfy a 5-field nested
+//      schema while also being reasonable.
+//   4. Model ladder — gpt-4o first (clean text on most things), then
+//      gpt-4o-mini as last resort (cheap, fast, may succeed where 4o
+//      degenerates because it has a different training-data slice).
+//
+// Returns a clean etymology object or null. Caller merges into the
+// main result.
+interface EtymologyShape {
+  sourceLanguage: string;
+  originalWord: string;
+  breakdown: string;
+  originalMeaning: string;
+  historyNote: string;
+}
+
+async function generateEtymologyFallback(
+  word: string,
+  uiLangName: string,
+): Promise<EtymologyShape | null> {
+  const systemPrompt = `You are a careful etymologist. For the given word, return a JSON object with the word's etymology. Output JSON only, no markdown.
+
+All TEXT fields are written in ${uiLangName}. The schema:
+{
+  "sourceLanguage": "Name of the source language IN ${uiLangName}. Examples for a Hebrew UI: 'עברית מקראית', 'יוונית עתיקה', 'ארמית'. For an English UI: 'Biblical Hebrew', 'Ancient Greek', 'Aramaic'. JUST the name. No quotes, no apostrophes, no other marks.",
+  "originalWord": "Transliterated original form WITH Latin diacritics like ē, ī, ū, ó (e.g. 'lufu', 'somnium', 'ephḗmeros'). ONLY when source script is non-Latin or materially different. Empty string when source = current language (Hebrew word from Hebrew root) or for compound words.",
+  "breakdown": "Only if the word is a compound: 'part1 (meaning1) + part2 (meaning2)' with Latin transliteration and meanings in ${uiLangName}. Empty string otherwise.",
+  "originalMeaning": "What the word originally meant, written in ${uiLangName}. Short and concrete. One sentence.",
+  "historyNote": "Optional 1–3 sentence specific history: biblical verse cite (e.g. 'איוב כ\\\"ח, י\\\"ז'), coiner, historical practice. Empty string if no specific story is known. Never invent."
+}
+
+ABSOLUTE BANS (the most common machine-translation failure mode for Hebrew):
+- NEVER add Hebrew niqqud (vowel marks) ֱֲֳֵֶַָָֹֻׁׂ to any word.
+- NEVER add Hebrew geresh ׳ or gershayim ״ EXCEPT inside a historyNote chapter-verse citation like כ"ח (which is fine).
+- NEVER scatter ASCII apostrophes (') or double-quotes (") between letters.
+- The sourceLanguage value especially must be plain letters and spaces only.
+
+If you find yourself emitting more than two quote-like marks in any field, you are doing it wrong. Restart the field as plain letters.
+
+Output ONLY the JSON object.`;
+
+  const userMessage = `Word: "${word}"\nUI language: ${uiLangName}`;
+
+  // Two models, two temperatures — the goal is variance, not redundancy.
+  // gpt-4o gets first try because main-result text quality on idioms
+  // and rare words is reliably better than mini. Mini gets the second
+  // try because if 4o is stuck on a degeneracy basin for THIS word,
+  // mini's different parameters often produce clean output.
+  const attempts: Array<{ model: string; temperature: number }> = [
+    { model: "gpt-4o", temperature: 0.8 },
+    { model: "gpt-4o-mini", temperature: 0.7 },
+  ];
+
+  for (const attempt of attempts) {
+    try {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: attempt.model,
+          response_format: { type: "json_object" },
+          temperature: attempt.temperature,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userMessage },
+          ],
+        }),
+      });
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content;
+      if (typeof content !== "string") continue;
+      const parsed = JSON.parse(content) as Partial<EtymologyShape>;
+
+      const sourceLanguage = typeof parsed.sourceLanguage === "string" ? parsed.sourceLanguage : "";
+      const originalWord = typeof parsed.originalWord === "string" ? parsed.originalWord : "";
+      const breakdown = typeof parsed.breakdown === "string" ? parsed.breakdown : "";
+      const originalMeaning = typeof parsed.originalMeaning === "string" ? parsed.originalMeaning : "";
+      const historyNote = typeof parsed.historyNote === "string" ? parsed.historyNote : "";
+
+      // Validate using the same guard the main path uses. Wrap in a
+      // minimal shape because isDegenerate expects a top-level object
+      // with an etymology subfield.
+      const verdict = isDegenerate(
+        { etymology: { sourceLanguage, originalWord, breakdown, originalMeaning, historyNote } },
+        word,
+      );
+      if (verdict.degenerate) {
+        console.warn(`Etymology fallback (${attempt.model}, t=${attempt.temperature}) rejected: ${verdict.reason}`);
+        continue;
+      }
+      console.info(`Etymology fallback succeeded via ${attempt.model} at t=${attempt.temperature}`);
+      return { sourceLanguage, originalWord, breakdown, originalMeaning, historyNote };
+    } catch (e) {
+      console.error(`Etymology fallback (${attempt.model}) threw:`, e);
+    }
+  }
+  return null;
+}
+
 // Auto-retry wrapper for the non-streaming generation path. Used both
 // as a retry after a degenerate streaming response, AND as a clean
 // fallback when the cache hit turns out to be corrupted. Retries up
@@ -1245,29 +1361,55 @@ export async function POST(req: NextRequest) {
             const doneEvent = `data: ${JSON.stringify({ type: "done", result: acceptedResult })}\n\n`;
             safeEnqueue(encoder.encode(doneEvent));
           } else {
-            // All retries failed validation. Before giving up, try one
-            // last salvage: parse the streamed attempt (we kept it in
-            // `accumulated`), and if the meanings/examples/idioms are
-            // clean but only the etymology block is degenerate, blank
-            // the etymology and serve the clean parts. This handles
-            // the "gpt-4o is stuck degenerating a single sub-field for
-            // a particular word" pattern that surfaced on the idiom
-            // "יסולא בפז" — meanings + examples + idioms came back
-            // perfect, every etymology field gibberish, every retry the
-            // same. Returning a generic error there is worse UX than
-            // serving the clean 90% of the result.
+            // All main retries failed validation. Three-step salvage,
+            // each step more aggressive than the last:
+            //   (a) Try a dedicated etymology-only API call. Different
+            //       prompt, higher temperature, model ladder — designed
+            //       to escape the degenerate basin the main call is
+            //       stuck in. If it returns clean etymology, merge it
+            //       into the parsed result and serve the whole thing.
+            //       This is the path that keeps the user's promise: a
+            //       Gadit result always has etymology.
+            //   (b) If the etymology fallback also fails, sanitise the
+            //       result by clearing the broken etymology subfields
+            //       and serve meanings/examples/idioms with an empty
+            //       etymology card. Better than gibberish, worse than
+            //       a real etymology — but at least nothing on screen
+            //       is broken.
+            //   (c) If the parsed result is so broken that even after
+            //       sanitisation it doesn't pass the guard (meaning the
+            //       meanings or examples themselves are bad), surface
+            //       the generic error.
             let salvaged: object | null = null;
+            let parsedResult: Record<string, unknown> | null = null;
             try {
-              const parsed = JSON.parse(accumulated) as Record<string, unknown>;
-              const sanitised = sanitizeDegenerateEtymology(parsed);
-              const reVerdict = isDegenerate(sanitised, word);
-              if (!reVerdict.degenerate) {
-                salvaged = sanitised as object;
-                console.warn(`Salvaged result by clearing degenerate etymology fields`);
-              }
+              parsedResult = JSON.parse(accumulated) as Record<string, unknown>;
             } catch {
               // accumulated wasn't parseable JSON — no salvage possible
             }
+
+            if (parsedResult) {
+              // (a) Etymology fallback call.
+              const fallbackEty = await generateEtymologyFallback(word, uiLangName);
+              if (fallbackEty) {
+                const merged = { ...parsedResult, etymology: fallbackEty };
+                const mergedVerdict = isDegenerate(merged, word);
+                if (!mergedVerdict.degenerate) {
+                  salvaged = merged;
+                  console.info(`Salvaged result via dedicated etymology fallback call`);
+                }
+              }
+              // (b) Sanitisation fallback.
+              if (!salvaged) {
+                const sanitised = sanitizeDegenerateEtymology(parsedResult);
+                const reVerdict = isDegenerate(sanitised, word);
+                if (!reVerdict.degenerate) {
+                  salvaged = sanitised as object;
+                  console.warn(`Salvaged result by clearing degenerate etymology fields`);
+                }
+              }
+            }
+
             if (salvaged) {
               setCachedResult(cacheKey, salvaged).catch((e) =>
                 console.error("Cache write failed:", e),
@@ -1275,7 +1417,7 @@ export async function POST(req: NextRequest) {
               const doneEvent = `data: ${JSON.stringify({ type: "done", result: salvaged })}\n\n`;
               safeEnqueue(encoder.encode(doneEvent));
             } else {
-              console.error("All attempts (1 streamed + 2 retries) failed validation — surfacing error");
+              console.error("All attempts (1 streamed + 2 retries + etymology fallback + sanitise) failed — surfacing error");
               const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
               safeEnqueue(encoder.encode(errorEvent));
             }
