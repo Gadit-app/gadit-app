@@ -64,6 +64,7 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
       originalWord?: unknown;
       breakdown?: unknown;
       originalMeaning?: unknown;
+      historyNote?: unknown;
     };
   };
   const meanings = Array.isArray(fr.meanings) ? fr.meanings : [];
@@ -106,10 +107,18 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
   // (4) Etymology fields — these aren't validated in the legacy guard but
   // a recent gpt-4o failure mode emits the etymology block as dense
   // streams of cantillation marks / quote symbols with zero real letters.
-  // Check each of the four etymology fields for either mojibake density
-  // or "punctuation soup".
+  // Check all five etymology fields for either mojibake density or
+  // "punctuation soup".
+  //
+  // historyNote was missing from this list until June 10 2026 — Gadi
+  // and his wife saw the "רקע" field (= historyNote in the schema)
+  // rendered as cantillation-mark soup for the idiom "יסולא בפז" while
+  // every other field on the page was fine. The guard had been blind
+  // to historyNote, so the bad response not only reached the user but
+  // got cached for future requests. Including it here lets the guard
+  // both reject fresh generations and discard infected cache entries.
   if (fr.etymology && typeof fr.etymology === "object") {
-    const fields = ["sourceLanguage", "originalWord", "breakdown", "originalMeaning"] as const;
+    const fields = ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote"] as const;
     for (const f of fields) {
       const raw = (fr.etymology as Record<string, unknown>)[f];
       if (typeof raw !== "string" || raw.length === 0) continue;
