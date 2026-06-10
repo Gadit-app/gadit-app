@@ -22,14 +22,13 @@
 import { useLang } from "@/lib/lang-context";
 import { HELP } from "@/lib/help-i18n";
 
-// The only mailbox actually wired up in Namecheap forwarding right now
-// is gadi@gadit.app (set up June 9 2026). A `support@gadit.app` alias is
-// referenced in legal docs (Privacy, Terms) by convention but isn't
-// receiving mail yet — if/when that forwarder is added, switch this
-// constant. For now the Help Center "email me" CTA goes straight to
-// Gadi's working address, which also matches the first-person founder
-// voice the Help Center uses throughout ("I read every message myself").
-const SUPPORT_EMAIL = "gadi@gadit.app";
+// Customer-service address for Help Center contacts. Wired up in
+// Namecheap as a forwarder (support@gadit.app → gadibenlavi@gmail.com,
+// added June 10 2026 alongside gadi@gadit.app). Using "support@"
+// rather than the founder's personal "gadi@" because help-center
+// volume reads more credible from a dedicated support mailbox, and
+// it matches what the Privacy / Terms / legal pages already cite.
+const SUPPORT_EMAIL = "support@gadit.app";
 
 export function HelpCenter() {
   const { lang, dir } = useLang();
