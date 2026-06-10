@@ -52,6 +52,28 @@ function hasMojibakeDensity(text: string, threshold = 0.4): boolean {
   return false;
 }
 
+// gpt-4o's Hebrew degeneration often emits ASCII apostrophes (')
+// and double-quotes (") interleaved with Hebrew geresh (׳) and
+// gershayim (״). Real Hebrew letters get sprinkled between them just
+// often enough that the overall letter ratio sits in the 25–30% band,
+// which slips past both isPunctuationSoup (< 20%) and
+// hasMojibakeDensity (Hebrew-block decorative > 40% — and ASCII
+// quotes aren't in that block). The June 10 2026 "יסולא" lookup
+// shipped a sourceLanguage field literally rendering as
+// 'ע'״ֹב׳״רֹ׳״ת' ׳״ת׳״״׳״ת׳״ׁ"... before this check existed.
+//
+// A legit Hebrew etymology with biblical citations does use gershayim
+// (e.g. "כ\"ח, י\"ז" for chapter and verse numbers) and quoted phrases,
+// but the natural density of those marks is well under 15%. Real
+// sourceLanguage values (עברית / English / Greek) carry zero. So
+// 15% is a safe trip line for any etymology subfield.
+const QUOTE_SCATTER_RX = /['"׳״]/g;
+function hasQuoteScatter(text: string, threshold = 0.15): boolean {
+  if (typeof text !== "string" || text.length < 8) return false;
+  const count = (text.match(QUOTE_SCATTER_RX) ?? []).length;
+  return count / text.length > threshold;
+}
+
 export function isDegenerate(result: unknown, inputWord: string): GuardResult {
   if (!result || typeof result !== "object") {
     return { degenerate: true, reason: "result is not an object" };
@@ -127,6 +149,9 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
       }
       if (isPunctuationSoup(raw)) {
         return { degenerate: true, reason: `etymology.${f} is punctuation soup (no real letters)` };
+      }
+      if (hasQuoteScatter(raw)) {
+        return { degenerate: true, reason: `etymology.${f} has ASCII quote / geresh scatter pattern` };
       }
     }
   }
