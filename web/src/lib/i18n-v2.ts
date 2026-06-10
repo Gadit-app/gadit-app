@@ -476,7 +476,7 @@ const en: V2Strings = {
   footerPricing: "Pricing",
   footerPrivacy: "Privacy",
   footerTerms: "Terms",
-  footerContact: "Contact",
+  footerContact: "Help",
   footerTagline: "A smart dictionary for 11 languages. Built for real reading.",
   footerLanguagesNote: "11 languages",
 
@@ -859,7 +859,7 @@ const he: V2Strings = {
   footerPricing: "תמחור",
   footerPrivacy: "פרטיות",
   footerTerms: "תנאים",
-  footerContact: "צור קשר",
+  footerContact: "עזרה",
   footerTagline: "מילון חכם ל־11 שפות. בנוי לקריאה אמיתית.",
   footerLanguagesNote: "11 שפות",
 
@@ -1246,7 +1246,7 @@ const ar: V2Strings = {
   footerPricing: "الأسعار",
   footerPrivacy: "الخصوصية",
   footerTerms: "الشروط",
-  footerContact: "تواصل",
+  footerContact: "مساعدة",
   footerTagline: "قاموس ذكي بسبع لغات. مبنيّ للقراءة الحقيقية.",
   footerLanguagesNote: "11 لغة",
 
@@ -1649,7 +1649,7 @@ const ru: Partial<V2Strings> = {
   footerPricing: "Тарифы",
   footerPrivacy: "Конфиденциальность",
   footerTerms: "Условия",
-  footerContact: "Связаться",
+  footerContact: "Помощь",
   footerTagline: "Умный словарь на 7 языках. Создан для настоящего чтения.",
   footerLanguagesNote: "11 языков",
 
@@ -2033,7 +2033,7 @@ const es: Partial<V2Strings> = {
   footerPricing: "Precios",
   footerPrivacy: "Privacidad",
   footerTerms: "Términos",
-  footerContact: "Contacto",
+  footerContact: "Ayuda",
   footerTagline: "Un diccionario inteligente para 11 idiomas. Hecho para lectura real.",
   footerLanguagesNote: "11 idiomas",
 
@@ -2415,7 +2415,7 @@ const pt: Partial<V2Strings> = {
   footerPricing: "Preços",
   footerPrivacy: "Privacidade",
   footerTerms: "Termos",
-  footerContact: "Contato",
+  footerContact: "Ajuda",
   footerTagline: "Um dicionário inteligente em 11 idiomas. Feito pra leitura de verdade.",
   footerLanguagesNote: "11 idiomas",
 
@@ -2797,7 +2797,7 @@ const fr: Partial<V2Strings> = {
   footerPricing: "Tarifs",
   footerPrivacy: "Confidentialité",
   footerTerms: "Conditions",
-  footerContact: "Contact",
+  footerContact: "Aide",
   footerTagline: "Un dictionnaire intelligent en 11 langues. Conçu pour vraiment lire.",
   footerLanguagesNote: "11 langues",
 
@@ -3182,7 +3182,7 @@ const de: V2Strings = {
   footerPricing: "Preise",
   footerPrivacy: "Datenschutz",
   footerTerms: "AGB",
-  footerContact: "Kontakt",
+  footerContact: "Hilfe",
   footerTagline: "Ein intelligentes Wörterbuch für 11 Sprachen. Gemacht fürs echte Lesen.",
   footerLanguagesNote: "11 Sprachen",
 
@@ -3536,7 +3536,7 @@ const cs: V2Strings = {
   footerPricing: "Ceník",
   footerPrivacy: "Soukromí",
   footerTerms: "Podmínky",
-  footerContact: "Kontakt",
+  footerContact: "Nápověda",
   footerTagline: "Chytrý slovník pro 11 jazyků. Stavěn pro skutečné čtení.",
   footerLanguagesNote: "11 jazyků",
 
@@ -3897,7 +3897,7 @@ const sk: V2Strings = {
   footerPricing: "Cenník",
   footerPrivacy: "Súkromie",
   footerTerms: "Podmienky",
-  footerContact: "Kontakt",
+  footerContact: "Pomoc",
   footerTagline: "Inteligentný slovník pre 11 jazykov. Stavaný pre skutočné čítanie.",
   footerLanguagesNote: "11 jazykov",
 
@@ -4254,7 +4254,7 @@ const it: Partial<V2Strings> = {
   footerPricing: "Prezzi",
   footerPrivacy: "Privacy",
   footerTerms: "Termini",
-  footerContact: "Contatti",
+  footerContact: "Aiuto",
   footerTagline: "Un dizionario intelligente per 11 lingue. Costruito per la lettura vera.",
   footerLanguagesNote: "11 lingue",
 
@@ -4631,7 +4631,7 @@ const ja: Partial<V2Strings> = {
   footerPricing: "料金",
   footerPrivacy: "プライバシー",
   footerTerms: "利用規約",
-  footerContact: "お問い合わせ",
+  footerContact: "ヘルプ",
   footerTagline: "11言語のためのスマートな辞書。本物の読書のために作られた。",
   footerLanguagesNote: "11 言語",
 
