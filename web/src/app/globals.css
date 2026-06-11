@@ -2578,6 +2578,59 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: #B45309;
   border-color: rgba(180, 83, 9, 0.32);
 }
+
+/* CSS-only hover tooltip for the report flags. The plain `title`
+   attribute browsers render is slow (~600ms native delay) and styled
+   like an OS bubble; users on the live site didn't realise the flag
+   was clickable. A custom tooltip with the right label fires
+   instantly on hover and reads in the page's typography.
+
+   Usage: any element with class wb-flag-tip + data-tip="<label>".
+   The tooltip renders above the element via ::after, with a small
+   arrow via ::before. */
+.wordbook .wb-flag-tip {
+  position: relative;
+}
+.wordbook .wb-flag-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 5px 10px;
+  background: rgba(17, 24, 39, 0.92);
+  color: #FFFFFF;
+  font-family: var(--wb-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 50;
+}
+.wordbook .wb-flag-tip::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  border: 4px solid transparent;
+  border-top-color: rgba(17, 24, 39, 0.92);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 50;
+}
+.wordbook .wb-flag-tip:hover::after,
+.wordbook .wb-flag-tip:focus-visible::after,
+.wordbook .wb-flag-tip:hover::before,
+.wordbook .wb-flag-tip:focus-visible::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 /* Per-meaning listen button — same square pill as share so the two
    actions read as a pair. Pulses while audio is playing. */
 .wordbook .wb-mcard-listen {

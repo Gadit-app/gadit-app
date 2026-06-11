@@ -96,26 +96,32 @@ function ReportCheckbox({
   const { dir } = useLang();
   const isRtl = dir === "rtl";
 
+  // Earlier code used flexDirection:row-reverse in RTL which double-
+  // flipped (the page direction already reverses visual order, so
+  // row-reverse on top of RTL put the checkbox back on the LEFT in
+  // Hebrew — the opposite of what we want). Letting the parent dir
+  // do the work is enough: in RTL the natural row order puts the
+  // checkbox visually on the right; in LTR on the left.
   return (
     <button
       type="button"
       onClick={onClick}
       className="gd-font-sans-ui transition-all"
       style={{
-        textAlign: isRtl ? "right" : "left",
+        textAlign: "start",
         padding: "12px 14px",
         borderRadius: 12,
-        background: selected ? "oklch(0.72 0.19 245 / 0.08)" : "transparent",
+        background: selected ? "rgba(14, 165, 165, 0.08)" : "transparent",
         boxShadow: selected
-          ? "inset 0 0 0 1.5px oklch(0.5 0.18 250), 0 0 0 4px oklch(0.5 0.18 250 / 0.08)"
+          ? "inset 0 0 0 1.5px #0EA5A5, 0 0 0 4px rgba(14, 165, 165, 0.08)"
           : "inset 0 0 0 1px oklch(0.85 0.005 265)",
         display: "flex",
         alignItems: "center",
         gap: 10,
-        flexDirection: isRtl ? "row-reverse" : "row",
         cursor: "pointer",
       }}
       aria-pressed={selected}
+      dir={isRtl ? "rtl" : "ltr"}
     >
       <span
         style={{
@@ -123,7 +129,7 @@ function ReportCheckbox({
           height: 18,
           borderRadius: 6,
           flexShrink: 0,
-          background: selected ? "oklch(0.5 0.18 250)" : "transparent",
+          background: selected ? "#0EA5A5" : "transparent",
           boxShadow: selected
             ? "none"
             : "inset 0 0 0 1.5px oklch(0.78 0.005 265)",
@@ -387,7 +393,7 @@ export function ReportModalV2({
           </div>
         ) : (
           <>
-            <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
+            <Eyebrow style={{ color: "#0E7490" }}>
               {v2(lang, "reportEyebrow")}
             </Eyebrow>
             <h2
@@ -489,12 +495,12 @@ export function ReportModalV2({
                 padding: "13px 18px",
                 borderRadius: 12,
                 background: hasSelection
-                  ? "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))"
-                  : "linear-gradient(180deg, oklch(0.85 0.05 245 / 0.5), oklch(0.7 0.08 250 / 0.5))",
+                  ? "linear-gradient(180deg, #14B8B8, #0E7490)"
+                  : "linear-gradient(180deg, rgba(14, 165, 165, 0.35), rgba(14, 116, 144, 0.35))",
                 color: "white",
                 fontSize: 14.5,
                 boxShadow: hasSelection
-                  ? "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)"
+                  ? "0 0 0 1px rgba(14, 116, 144, 0.6), 0 8px 22px rgba(14, 165, 165, 0.4)"
                   : "none",
                 opacity: hasSelection ? 1 : 0.6,
                 cursor:

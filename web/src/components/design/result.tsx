@@ -619,9 +619,9 @@ function MeaningEntry({
         {onReport && (
           <button
             type="button"
-            className="wb-mcard-flag"
+            className="wb-mcard-flag wb-flag-tip"
             aria-label={v2(lang, "reportLabel")}
-            title={v2(lang, "reportLabel")}
+            data-tip={v2(lang, "reportLabel")}
             onClick={() => onReport(`meaning-${n}`)}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -882,9 +882,9 @@ export function IdiomsSection({
         {onReport && (
           <button
             type="button"
-            className="wb-section-flag"
+            className="wb-section-flag wb-flag-tip"
             aria-label={v2(lang, "reportLabel")}
-            title={v2(lang, "reportLabel")}
+            data-tip={v2(lang, "reportLabel")}
             onClick={() => onReport("idioms")}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -940,9 +940,9 @@ export function OriginCard({ etymology, onReport }: { etymology: Etymology | str
         {onReport && (
           <button
             type="button"
-            className="wb-section-flag"
+            className="wb-section-flag wb-flag-tip"
             aria-label={v2(lang, "reportLabel")}
-            title={v2(lang, "reportLabel")}
+            data-tip={v2(lang, "reportLabel")}
             onClick={() => onReport("etymology")}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
