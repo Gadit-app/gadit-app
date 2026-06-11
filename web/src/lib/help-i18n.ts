@@ -99,7 +99,7 @@ Object.assign(HELP, {
             q: "How do I switch from Clear to Deep (or the other way)?",
             a: [
               "Account, then Manage billing, then Update subscription. Pick the new plan.",
-              "Stripe calculates the price difference automatically (pro-rated to the day). If you're upgrading, you'll be charged just the difference for the rest of the current period. If you're downgrading, the credit applies to your next bill.",
+              "Stripe calculates the price difference automatically, pro-rated by the days remaining in the current period. If you're upgrading, you'll be charged just the difference for the rest of the period. If you're switching to a lower tier, the credit applies to your next bill.",
             ],
           },
           {
@@ -112,9 +112,9 @@ Object.assign(HELP, {
           },
           {
             id: "portal-error",
-            q: "I clicked \"Manage billing\" but got an error. What now?",
+            q: "I clicked Manage billing but got an error. What now?",
             a: [
-              "Two common causes. First, your account doesn't have an active Stripe subscription. Second, your subscription is on a card that was never confirmed in your Stripe customer record.",
+              "Two common causes. First, your account doesn't have an active Stripe subscription. Second, Stripe may not have a complete billing profile for your account yet.",
               "Easy first check: sign out, sign back in with the email you used at checkout, and try again. If it still fails, write me with your account email and I'll fix it from my side in a minute.",
             ],
           },
@@ -138,8 +138,25 @@ Object.assign(HELP, {
             id: "unknown-charge",
             q: "I see a charge I don't recognise.",
             a: [
-              "Charges appear as \"GADIT\" or \"GADIT.APP\" with $2.99 (Clear monthly), $4.99 (Deep monthly), $29.99 (Clear yearly), or $49.99 (Deep yearly). If it doesn't match, it might be from a different service.",
-              "If you're certain it's not yours, don't dispute through your bank yet. Write me directly first with the date and amount. I'll find it, explain what it is, and refund if needed. A bank dispute permanently flags your email, so resolving it through me is faster and safer.",
+              "Charges appear as GADIT or GADIT.APP with $2.99 (Clear monthly), $4.99 (Deep monthly), $29.99 (Clear yearly), or $49.99 (Deep yearly). If it doesn't match, it might be from a different service.",
+              "If you're certain it's not yours, don't dispute through your bank yet. Write me directly first with the date and amount. I'll find it, explain what it is, and refund if needed. A bank dispute can make future billing harder, so resolving it through me is usually faster and safer.",
+            ],
+          },
+          {
+            id: "failed-payment",
+            q: "My payment failed. What should I do?",
+            a: [
+              "Stripe automatically retries failed payments a few times over the following days. Most failures resolve on their own once the bank releases the hold or the card has enough balance.",
+              "If you want to fix it right away, go to Account → Manage billing → Add payment method, enter a working card, and set it as Default. Stripe will retry the failed charge immediately on the new card. If your subscription has already lapsed to Basic, you can resubscribe from Pricing and your notebook stays intact.",
+            ],
+          },
+          {
+            id: "plan-comparison",
+            q: "What's the difference between Basic, Clear, and Deep?",
+            a: [
+              "Basic (free): up to 20 word lookups a day, every meaning, examples per meaning, idioms, and word origin. No signup required for basic searches.",
+              "Clear ($2.99/month or $29.99/year): unlimited lookups, kid-friendly explanations, an AI image per word (30/month), compose-your-own-sentence with feedback, idioms detail, and 30 days of search history.",
+              "Deep ($4.99/month or $49.99/year): everything in Clear, plus practice quizzes, the personal notebook with smart spaced-repetition practice, distinguishing similar words, and a larger image quota (100/month).",
             ],
           },
         ],
@@ -201,8 +218,16 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Can my partner or child share my account?",
             a: [
-              "One signed-in user per account at a time. Kids mode lets a single Clear or Deep account serve a parent and child. Flip the toggle and definitions render kid-friendly without separate logins.",
-              "For two adults who both want separate notebooks and progress, take two accounts. Clear is $2.99 a month each, still cheap.",
+              "One signed-in user per account at a time. Kids mode lets a single Clear or Deep account serve a parent and child: flip the toggle and definitions render kid-friendly without separate logins.",
+              "For two adults who both want separate notebooks and progress, create two accounts. Clear is $2.99 a month per account.",
+            ],
+          },
+          {
+            id: "multiple-accounts",
+            q: "I think I have two accounts by mistake. What now?",
+            a: [
+              "This usually happens when someone signs up once with Google and once with email and password using the same address, or when you sign up twice with different email addresses. Each signup creates a separate Gadit account with its own notebook, history, and subscription state.",
+              "Write me with both email addresses (or UIDs from the Account page) and which one you'd like to keep. I'll merge the notebooks and history onto the account you choose, then close the other one cleanly. No data lost.",
             ],
           },
         ],
@@ -232,8 +257,8 @@ Object.assign(HELP, {
             id: "voice-fails",
             q: "Voice search doesn't work.",
             a: [
-              "Voice search needs microphone permission. Most browsers ask once per site. If you accidentally said \"Block\", you'll need to flip it back manually: click the lock or info icon next to gadit.app in the address bar, then Site settings, then Microphone, then Allow.",
-              "On Safari iOS, microphone access requires a Settings, Safari, Microphone toggle as well. Voice is currently a Clear or Deep feature. Basic users see the mic but get a sign-in prompt.",
+              "Voice search needs microphone permission. Most browsers ask once per site. If you accidentally clicked Block, you'll need to flip it back manually: click the lock or info icon next to gadit.app in the address bar, then Site settings, then Microphone, then Allow.",
+              "On Safari iOS, microphone access also requires a Settings → Safari → Microphone toggle. Voice is currently a Clear and Deep feature: Basic users see an upgrade prompt, signed-out visitors see a sign-in prompt.",
             ],
           },
           {
@@ -248,8 +273,8 @@ Object.assign(HELP, {
             id: "save-word",
             q: "How do I save a word to my notebook?",
             a: [
-              "On any word result page, tap \"Save to notebook\" near the title. The notebook is a Clear or Deep feature where you can review saved words later, see them on a galaxy view, and run smart-practice sessions (Deep).",
-              "Anything you save is available offline once you've opened the word once. The offline pack also caches the most popular words in your language.",
+              "On any word result page, tap Save to notebook near the title. The notebook is a Clear and Deep feature where you can review saved words later, see them on a galaxy view, and run smart-practice sessions (Deep).",
+              "Words you've saved and opened at least once are available offline from the local cache. The offline pack also caches the most popular words in your language so you're ready without internet.",
             ],
           },
           {
@@ -257,15 +282,31 @@ Object.assign(HELP, {
             q: "How does offline mode work?",
             a: [
               "Words you've already viewed are cached locally. Open them again without internet and they load instantly. The full offline pack (top words in your language) downloads on demand from the notebook page.",
-              "Searching for a brand-new word still requires connectivity (we have to ask the AI to define it). The offline cache is for words you've already explored.",
+              "Searching for a brand-new word still requires connectivity, because Gadit has to ask the AI to define it. The offline cache is for words you've already explored.",
             ],
           },
           {
             id: "slow",
             q: "The app feels slow.",
             a: [
-              "The first lookup of a word is the slowest because we generate the full result fresh from AI, usually 4 to 8 seconds. Subsequent lookups of the same word are instant (served from cache).",
-              "If everything feels slow, try refreshing the page (cmd or ctrl plus shift plus R for a hard refresh). Persistent slowness across pages: please email me with your country and browser so I can check the route to our servers from there.",
+              "The first lookup of a word is the slowest because Gadit generates the full result fresh from AI: usually a few seconds, sometimes longer for complex words. Subsequent lookups of the same word are instant, served from cache.",
+              "If everything feels slow, try a hard refresh: Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows. If the slowness persists across pages, please email me with your country and browser so I can check the network route to our servers from your region.",
+            ],
+          },
+          {
+            id: "word-not-found",
+            q: "I searched a word and didn't get a result. What's going on?",
+            a: [
+              "First, check the spelling. Gadit handles minor typos most of the time, but a wrong vowel or missing letter can throw it off. Try the suggested correction if one appears.",
+              "Beyond that: very rare or slang words might not return a confident result. If you're sure the word is real, click the Report button on the result page (or on the error screen) and tell me. I review every report and feed real misses back into the system.",
+            ],
+          },
+          {
+            id: "change-language",
+            q: "How do I change the UI language?",
+            a: [
+              "Top right of any page, you'll see a small flag icon (or your current language name). Tap it and pick from 12 languages: English, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese.",
+              "Your choice is saved on this device. Everything reloads in the new language: the interface, the menus, future word definitions, examples, kid explanations, even the etymology. Already-cached results in the old language stay until you search those words again.",
             ],
           },
         ],
@@ -287,16 +328,16 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "How are commissions calculated?",
             a: [
-              "30% of every subscription paid via your link, every month, for the first 12 months. After 12 months the rate drops to 0% for everyone, unless you've hit Active Partner status (10 paying subscribers active). In that case you keep 10% lifetime on all of your subscribers.",
-              "Annual subscriptions get a one-time 15% bonus on the first payment, instead of 30% monthly.",
+              "Standard partners earn 30% of every subscription paid via their link, every month, for the first 12 months of each subscriber. After 12 months that drops to 0%. If you've hit Active Partner status (10 paying subscribers active at once), you keep 10% lifetime commission on all of your subscribers, even after the first 12 months are up.",
+              "Annual subscriptions get a one-time 15% commission on the first payment, instead of the 30% monthly rate spread across the year.",
             ],
           },
           {
             id: "payout",
             q: "When do I get paid?",
             a: [
-              "Monthly, once your balance crosses $50. We use the payout method you set in the dashboard (bank transfer, PayPal, and so on). $50 is the minimum threshold, not a cap. You can earn far more, you just receive when you cross.",
-              "Earnings clear 30 days after the subscription payment to allow for refund windows. So a January subscription pays you in early February (cleared) and shows up in your next $50 or more cycle.",
+              "Monthly, once your balance crosses $50. We use the payout method you set in the partner dashboard (bank transfer, PayPal, and so on). $50 is the minimum threshold, not a cap. You can earn far more, you just receive the payout when you cross the threshold.",
+              "Commissions release 30 days after the subscription payment, to allow for the refund window. So a January subscription releases in early February and lands in your next payout once your balance crosses $50.",
             ],
           },
           {
@@ -305,6 +346,22 @@ Object.assign(HELP, {
             a: [
               "Stats show after the first click on your link. Empty just means nobody's clicked yet. Go share the link. The dashboard updates in near real time once activity starts.",
               "If you've shared and someone's signed up but the dashboard isn't reflecting it, write me with the rough time of signup and I'll check the attribution.",
+            ],
+          },
+          {
+            id: "attribution-window",
+            q: "How long does my referral link keep tracking a visitor?",
+            a: [
+              "Sixty days. When a visitor clicks your link, we set a cookie identifying you as the referrer. If they sign up and subscribe any time in the next 60 days (even if they leave the site and come back later through a Google search), the attribution still credits you.",
+              "Cookie clearance: if the visitor clears their cookies or switches browser/device before they sign up, attribution can be lost. There's no workaround for that, but 60 days is a generous window compared to most partner programs.",
+            ],
+          },
+          {
+            id: "missing-commission",
+            q: "Someone signed up through my link but I don't see the commission.",
+            a: [
+              "Most often this is timing: the signup shows up in the dashboard within minutes, but the commission only books once the subscription is actually paid (which can be days later if they're on a free trial). Check back after the trial ends.",
+              "If the subscription paid but you still don't see the commission after 48 hours, write me with the rough signup time and the email or rough name of the subscriber if you know it. I'll dig into the attribution chain and fix any miss manually.",
             ],
           },
         ],
@@ -318,8 +375,8 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "What is Gadit?",
             a: [
-              "A multilingual dictionary built to make a word click, not just give a one-line definition. Every word opens with all its meanings, real examples per meaning, idioms, etymology, an optional AI image, and (with Clear or Deep) a kid-friendly explanation, compose-your-own-sentence with feedback, and quizzes.",
-              "Currently 12 UI languages. The verb \"to GAD a word\" means to understand it all the way through.",
+              "A multilingual dictionary built to make a word click, not just give a one-line definition. Every word opens with all its meanings, real examples per meaning, idioms, etymology, an optional AI image, and (with Clear and Deep) a kid-friendly explanation, compose-your-own-sentence with feedback, and quizzes.",
+              "Currently 12 UI languages. Internally I call it GAD a word: to understand a word all the way through, not just translate it.",
             ],
           },
           {
@@ -334,15 +391,15 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Is Gadit safe for kids?",
             a: [
-              "Yes. Kids mode runs every definition and example through the same AI we use for adult content, with explicit instructions to keep the explanation simple, concrete, and age-appropriate (5 to 10 year old level). No user-generated content is ever shown to kids.",
-              "Account ownership is 13 and up by COPPA and GDPR-K compliance. The standard model is a parent's account that the parent uses with their kid, which is exactly what Kids mode is built for.",
+              "Gadit is designed for a parent to use safely alongside a child. Kids mode produces explanations that are simple, concrete, and age-appropriate (around the 5 to 10 year old level), running the same AI we use for adult content with explicit instructions to simplify. No user-generated content is ever shown to kids.",
+              "In line with our policies and child-privacy rules around the world, independent account ownership is 13 and up. The standard pattern is a parent's account that the parent uses together with their kid, which is exactly what Kids mode is built for.",
             ],
           },
           {
             id: "data",
             q: "Where is my data stored? Do you sell it?",
             a: [
-              "Account, history, notebook, and generated images are stored securely (Firebase, encrypted at rest). We don't sell or share your data with anyone. Full details in the Privacy Policy.",
+              "Account, history, notebook, and generated images are stored securely in Firebase, encrypted in storage. We don't sell your data to anyone. We only share what's needed to run Gadit (storage, payments, AI providers), as spelled out in the Privacy Policy.",
               "You can export your notebook or delete your account at any time from the Account page.",
             ],
           },
@@ -351,7 +408,7 @@ Object.assign(HELP, {
             q: "How do I reach you directly?",
             a: [
               "Use the email button at the bottom of this page. It goes straight to my inbox. I read every message myself and reply within 24 to 48 hours (often faster).",
-              "I prefer email over chat because it gives me a chance to read carefully and reply thoughtfully. Phone support I don't offer yet.",
+              "I prefer email over chat because it gives me a chance to read carefully and reply thoughtfully. I don't offer phone support yet.",
             ],
           },
         ],
@@ -395,7 +452,7 @@ Object.assign(HELP, {
             q: "איך עוברים מ-Clear ל-Deep (או הפוך)?",
             a: [
               "חשבון, ואז ניהול חיוב, ואז Update subscription. בחרו את המסלול החדש.",
-              "Stripe מחשב את ההפרש אוטומטית (pro-rata לפי הימים שנותרו). אם משדרגים, תחויבו רק על ההפרש לתקופה הנוכחית. אם משנמכים, הקרדיט יחול על החיוב הבא.",
+              "Stripe מחשב את ההפרש אוטומטית, לפי הימים שנותרו בתקופת החיוב. אם משדרגים, תחויבו רק על ההפרש לתקופה הנוכחית. אם עוברים למסלול נמוך יותר, הקרדיט יחול על החיוב הבא.",
             ],
           },
           {
@@ -408,9 +465,9 @@ Object.assign(HELP, {
           },
           {
             id: "portal-error",
-            q: "לחצתי על \"ניהול חיוב\" וקיבלתי שגיאה. מה לעשות?",
+            q: "לחצתי על ניהול חיוב וקיבלתי שגיאה. מה לעשות?",
             a: [
-              "שתי סיבות נפוצות. ראשית, לחשבון שלכם אין מנוי Stripe פעיל. שנית, המנוי שלכם על כרטיס שלא אומת ברשומת ה-customer ב-Stripe.",
+              "שתי סיבות נפוצות. ראשית, לחשבון שלכם אין מנוי Stripe פעיל. שנית, ייתכן שפרופיל הלקוח שלכם ב-Stripe לא נוצר או לא הושלם כמו שצריך.",
               "בדיקה ראשונה פשוטה: צאו, היכנסו שוב עם האימייל שבו רכשתם, ונסו שוב. אם זה עדיין לא עובד, תכתבו לי עם האימייל של החשבון ואני אסדר את זה מהצד שלי בדקה.",
             ],
           },
@@ -434,8 +491,25 @@ Object.assign(HELP, {
             id: "unknown-charge",
             q: "אני רואה חיוב שאני לא מזהה.",
             a: [
-              "חיובים מופיעים כ-\"GADIT\" או \"GADIT.APP\" עם $2.99 (Clear חודשי), $4.99 (Deep חודשי), $29.99 (Clear שנתי), או $49.99 (Deep שנתי). אם זה לא תואם, זה כנראה משירות אחר.",
-              "אם אתם בטוחים שזה לא שלכם, אל תפנו לבנק עם מחלוקת עדיין. תכתבו לי קודם עם התאריך והסכום. אני אמצא, אסביר מה זה, ואחזיר אם צריך. מחלוקת בבנק מסמנת את האימייל שלכם לתמיד, אז דרכי זה מהיר ובטוח יותר.",
+              "חיובים מופיעים כ-GADIT או GADIT.APP עם $2.99 (Clear חודשי), $4.99 (Deep חודשי), $29.99 (Clear שנתי), או $49.99 (Deep שנתי). אם זה לא תואם, זה כנראה משירות אחר.",
+              "אם אתם בטוחים שזה לא שלכם, אל תפנו לבנק עם מחלוקת עדיין. תכתבו לי קודם עם התאריך והסכום. אני אמצא, אסביר מה זה, ואחזיר אם צריך. פתיחת מחלוקת דרך הבנק עלולה לסבך את החיוב ואת החשבון שלכם בהמשך, לכן פנייה אליי היא מהירה ובטוחה יותר.",
+            ],
+          },
+          {
+            id: "failed-payment",
+            q: "התשלום שלי נכשל. מה לעשות?",
+            a: [
+              "Stripe מנסה אוטומטית לחייב מחדש כמה פעמים בימים שלאחר הכישלון. רוב הכשלים מסתדרים מעצמם ברגע שהבנק משחרר את ההקפאה או שהכרטיס חוזר ליתרה חיובית.",
+              "אם תרצו לתקן מיד, היכנסו לחשבון → ניהול חיוב → Add payment method, הוסיפו כרטיס תקין וסמנו אותו כברירת מחדל. Stripe ינסה לחייב את החיוב הכושל מיד בכרטיס החדש. אם המנוי כבר ירד ל-Basic, אפשר לחדש מחדש מעמוד המחירים, והמחברת שלכם נשארת שלמה.",
+            ],
+          },
+          {
+            id: "plan-comparison",
+            q: "מה ההבדל בין Basic, Clear ו-Deep?",
+            a: [
+              "Basic (חינם): עד 20 חיפושי מילים ביום, כל המשמעויות, דוגמאות לכל משמעות, ניבים, ומקור המילה. לא נדרשת הרשמה לחיפושים בסיסיים.",
+              "Clear ($2.99 לחודש או $29.99 לשנה): חיפושים ללא הגבלה, הסברים ידידותיים לילדים, תמונת AI לכל מילה (30 בחודש), חיבור משפט משלכם עם פידבק, פירוט ניבים, ו-30 ימי היסטוריית חיפושים.",
+              "Deep ($4.99 לחודש או $49.99 לשנה): כל מה ש-Clear כולל, ובנוסף חידוני תרגול, המחברת האישית עם תרגול חכם בשיטת חזרה מרווחת, השוואה בין מילים דומות, ומכסה גדולה יותר של תמונות (100 בחודש).",
             ],
           },
         ],
@@ -497,8 +571,16 @@ Object.assign(HELP, {
             id: "share-account",
             q: "בן הזוג או הילד שלי יכולים לחלוק את החשבון שלי?",
             a: [
-              "משתמש מחובר אחד לחשבון בכל רגע. מצב ילדים מאפשר לחשבון Clear או Deep אחד לשרת הורה וילד. לוחצים על הטוגל וההגדרות מוצגות באופן ידידותי לילד בלי לוגין נפרד.",
-              "לשני מבוגרים שרוצים מחברות ופרוגרס נפרדים, קחו שני חשבונות. Clear עולה $2.99 לחודש לכל אחד, עדיין זול.",
+              "משתמש מחובר אחד לחשבון בכל רגע. מצב ילדים מאפשר לחשבון Clear או Deep אחד לשרת הורה וילד יחד: לוחצים על הטוגל וההגדרות מוצגות באופן ידידותי לילד בלי לוגין נפרד.",
+              "לשני מבוגרים שרוצים מחברות והתקדמות נפרדות, פתחו שני חשבונות. Clear עולה $2.99 לחודש לכל חשבון.",
+            ],
+          },
+          {
+            id: "multiple-accounts",
+            q: "נראה שיש לי שני חשבונות בטעות. מה עושים?",
+            a: [
+              "זה קורה בדרך כלל כשמישהו נרשם פעם אחת עם Google ופעם נוספת עם אימייל וסיסמה לאותה הכתובת, או כשנרשמים פעמיים בכתובות שונות. כל הרשמה יוצרת חשבון נפרד ב-Gadit עם מחברת, היסטוריה ומנוי משלו.",
+              "כתבו לי עם שני האימיילים (או ה-UID של כל חשבון מעמוד החשבון) ועם איזה חשבון תרצו להשאיר. אני אאחד את המחברת וההיסטוריה אל החשבון שבחרתם, ואסגור את השני בצורה נקייה. שום מידע לא יאבד.",
             ],
           },
         ],
@@ -528,8 +610,8 @@ Object.assign(HELP, {
             id: "voice-fails",
             q: "חיפוש קולי לא עובד.",
             a: [
-              "חיפוש קולי דורש הרשאת מיקרופון. רוב הדפדפנים שואלים פעם אחת לאתר. אם בטעות אמרתם \"חסום\", צריך להחזיר ידנית: לחצו על אייקון המנעול או המידע ליד gadit.app בשורת הכתובת, אחר כך Site settings, אחר כך Microphone, אחר כך Allow.",
-              "ב-Safari iOS, גישה למיקרופון דורשת גם הגדרה ב-Settings, Safari, Microphone. חיפוש קולי הוא כרגע פיצ'ר של Clear או Deep. משתמשי Basic רואים את המיקרופון אבל מקבלים בקשה להירשם.",
+              "חיפוש קולי דורש הרשאת מיקרופון. רוב הדפדפנים שואלים פעם אחת לאתר. אם בטעות אמרתם חסום, צריך להחזיר ידנית: לחצו על אייקון המנעול או המידע ליד gadit.app בשורת הכתובת, אחר כך Site settings, אחר כך Microphone, אחר כך Allow.",
+              "ב-Safari iOS, גישה למיקרופון דורשת גם הגדרה ב-Settings → Safari → Microphone. חיפוש קולי הוא כרגע פיצ'ר של Clear ו-Deep: משתמשי Basic יראו בקשה לשדרג מסלול, אורחים לא מחוברים יראו בקשה להירשם.",
             ],
           },
           {
@@ -544,24 +626,40 @@ Object.assign(HELP, {
             id: "save-word",
             q: "איך שומרים מילה במחברת?",
             a: [
-              "בכל עמוד תוצאת מילה, לחצו על \"שמור במחברת\" ליד הכותרת. המחברת היא פיצ'ר של Clear או Deep שבו תוכלו לסקור מילים שמורות מאוחר יותר, לראות אותן בתצוגת גלקסיה, ולהריץ אימוני חזרה חכמה (Deep).",
-              "כל מה שאתם שומרים זמין offline אחרי שפתחתם את המילה פעם אחת. ההופליין pack גם שומר במטמון את המילים הפופולריות בשפה שלכם.",
+              "בכל עמוד תוצאת מילה, לחצו על שמור במחברת ליד הכותרת. המחברת היא פיצ'ר של Clear ו-Deep, שבו תוכלו לסקור מילים שמורות מאוחר יותר, לראות אותן בתצוגת גלקסיה, ולהריץ אימוני חזרה חכמה (Deep).",
+              "מילים ששמרתם ופתחתם לפחות פעם אחת זמינות במצב לא־מקוון. בנוסף, חבילת האופליין שומרת במטמון את המילים הפופולריות בשפה שלכם, כדי שתהיו מוכנים גם בלי אינטרנט.",
             ],
           },
           {
             id: "offline",
-            q: "איך עובד מצב offline?",
+            q: "איך עובד המצב הלא־מקוון?",
             a: [
-              "מילים שראיתם כבר נשמרות במטמון מקומי. פתחו אותן שוב בלי אינטרנט והן יטענו מיידית. ההופליין pack המלא (מילים מובילות בשפה שלכם) מוריד on-demand מעמוד המחברת.",
-              "חיפוש מילה חדשה לחלוטין עדיין דורש חיבור (חייבים לבקש מה-AI להגדיר). המטמון offline הוא למילים שכבר חקרתם.",
+              "מילים שראיתם כבר נשמרות במטמון מקומי. פתחו אותן שוב בלי אינטרנט והן יטענו מיידית. חבילת האופליין המלאה (מילים מובילות בשפה שלכם) יורדת לבקשתכם מעמוד המחברת.",
+              "חיפוש מילה חדשה לחלוטין עדיין דורש חיבור לאינטרנט, כי המערכת צריכה לבקש מה-AI להגדיר אותה. המטמון הלא־מקוון הוא למילים שכבר חקרתם.",
             ],
           },
           {
             id: "slow",
             q: "האפליקציה מרגישה אטית.",
             a: [
-              "החיפוש הראשון של מילה הוא האטי ביותר כי אנחנו מייצרים את התוצאה המלאה מ-AI. בדרך כלל 4 עד 8 שניות. חיפושים חוזרים של אותה המילה מיידיים (מגיעים מהמטמון).",
-              "אם הכל מרגיש אטי, נסו לרענן את הדף (cmd או ctrl ועוד shift ועוד R לרענון קשה). איטיות מתמשכת בכל העמודים: אנא שלחו לי מייל עם המדינה והדפדפן שלכם כדי שאוכל לבדוק את הראוט לשרתים מהצד שלכם.",
+              "החיפוש הראשון של מילה הוא האטי ביותר, כי המערכת מייצרת את התוצאה המלאה מ-AI. לרוב מדובר בכמה שניות, לפעמים יותר על מילים מורכבות. חיפושים חוזרים של אותה המילה מיידיים, כי הם מגיעים מהמטמון.",
+              "אם הכל מרגיש אטי, נסו לרענן את הדף ברענון קשה: Cmd+Shift+R במק, או Ctrl+Shift+R בווינדוס. אם האיטיות נמשכת בכל העמודים, שלחו לי מייל עם המדינה והדפדפן שלכם, כדי שאוכל לבדוק אם יש בעיית ניתוב מהאזור שלכם לשרתים.",
+            ],
+          },
+          {
+            id: "word-not-found",
+            q: "חיפשתי מילה ולא קיבלתי תוצאה. מה קורה?",
+            a: [
+              "קודם כל בדקו את הכתיב. Gadit מסתדר עם רוב טעויות הקלדה קטנות, אבל אות חסרה או תנועה לא נכונה יכולות לבלבל את המערכת. אם מופיעה הצעת תיקון, נסו אותה.",
+              "מעבר לזה, מילים נדירות מאוד או סלנג לא תמיד מצליחות לחזור עם תשובה בטוחה. אם אתם בטוחים שהמילה תקינה, לחצו על כפתור הדיווח בעמוד התוצאה (או במסך השגיאה) וכתבו לי. אני בודק כל דיווח ומחזיר את החזרות האמיתיות חזרה למערכת.",
+            ],
+          },
+          {
+            id: "change-language",
+            q: "איך משנים את שפת הממשק?",
+            a: [
+              "בפינה הימנית-עליונה של כל עמוד תראו אייקון קטן של דגל (או את שם השפה הנוכחית). לחצו עליו ובחרו מתוך 12 שפות: עברית, אנגלית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, סלובקית, איטלקית, יפנית.",
+              "הבחירה נשמרת על המכשיר. הכל ייטען מחדש בשפה החדשה: הממשק, התפריטים, הגדרות מילים עתידיות, הדוגמאות, ההסבר לילדים ואפילו האטימולוגיה. תוצאות שכבר נשמרו במטמון בשפה הישנה יישארו כך עד שתחפשו אותן שוב.",
             ],
           },
         ],
@@ -583,24 +681,40 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "איך מחושבות העמלות?",
             a: [
-              "30% מכל מנוי ששולם דרך הלינק שלכם, כל חודש, ב-12 החודשים הראשונים. אחרי 12 חודשים הריבית יורדת ל-0% לכולם, אלא אם הגעתם לסטטוס Active Partner (10 מנויים פעילים). במקרה הזה אתם שומרים על 10% לכל החיים מכל המנויים שלכם.",
-              "מנויים שנתיים מקבלים בונוס חד פעמי של 15% על התשלום הראשון, במקום 30% חודשי.",
+              "שותפים רגילים מקבלים 30% מכל מנוי ששולם דרך הלינק שלכם, כל חודש, ב-12 החודשים הראשונים. אחרי 12 חודשים העמלה יורדת ל-0%. אם הגעתם לסטטוס Active Partner (10 מנויים פעילים), אתם ממשיכים לקבל 10% עמלה לכל החיים מכל המנויים שלכם, גם אחרי 12 החודשים.",
+              "במנויים שנתיים מקבלים עמלה חד פעמית של 15% על התשלום הראשון, במקום 30% חודשי לאורך השנה.",
             ],
           },
           {
             id: "payout",
             q: "מתי אני מקבל את הכסף?",
             a: [
-              "חודשית, ברגע שהיתרה עוברת $50. אנחנו משתמשים בשיטת התשלום שהגדרתם בדאשבורד (העברה בנקאית, PayPal וכו'). $50 הוא הסף המינימלי, לא תקרה. אתם יכולים להרוויח הרבה יותר, פשוט מקבלים כשעוברים את הסף.",
-              "ההכנסות מנוקות 30 ימים אחרי תשלום המנוי כדי לאפשר חלון להחזרים. אז מנוי מינואר משלם לכם בתחילת פברואר (מנוקה) ומופיע במחזור $50 ומעלה הבא שלכם.",
+              "חודשית, ברגע שהיתרה עוברת $50. אנחנו משתמשים בשיטת התשלום שהגדרתם בלוח השותפים (העברה בנקאית, PayPal וכו'). $50 הוא הסף המינימלי, לא תקרה. אתם יכולים להרוויח הרבה יותר, פשוט מקבלים את התשלום כשעוברים את הסף.",
+              "העמלות משתחררות 30 יום אחרי תשלום המנוי, כדי לאפשר חלון להחזרים. אז מנוי מינואר משוחרר בתחילת פברואר, וייכנס לתשלום הבא כשהיתרה שלכם עוברת $50.",
             ],
           },
           {
             id: "empty-dashboard",
-            q: "נרשמתי אבל הדאשבורד שלי ריק.",
+            q: "נרשמתי אבל לוח השותפים שלי ריק.",
             a: [
-              "הסטטיסטיקות מופיעות אחרי הקליק הראשון על הלינק שלכם. ריק פירושו פשוט שאף אחד לא לחץ עדיין. צאו ושתפו את הלינק. הדאשבורד מתעדכן כמעט בזמן אמת ברגע שמתחילה פעילות.",
-              "אם שיתפתם ומישהו נרשם אבל הדאשבורד לא משקף את זה, תכתבו לי עם הזמן המשוער של ההרשמה ואני אבדוק את ההצטרפות.",
+              "הסטטיסטיקות מופיעות אחרי הקליק הראשון על הלינק שלכם. ריק פירושו פשוט שאף אחד לא לחץ עדיין. צאו ושתפו את הלינק. לוח השותפים מתעדכן כמעט בזמן אמת ברגע שמתחילה פעילות.",
+              "אם שיתפתם ומישהו נרשם אבל לוח השותפים לא משקף את זה, תכתבו לי עם הזמן המשוער שבו הוא נרשם, ואני אבדוק את השיוך.",
+            ],
+          },
+          {
+            id: "attribution-window",
+            q: "כמה זמן לינק ההפניה שלי ממשיך לעקוב אחרי מבקרים?",
+            a: [
+              "60 ימים. כשמבקר לוחץ על הלינק שלכם, אנחנו שותלים cookie שמזהה אתכם כמפנים. אם הוא ירשם או יקנה מנוי בכל זמן ב-60 הימים הבאים, גם אם הוא יצא מהאתר וחזר מאוחר יותר דרך חיפוש בגוגל, השיוך עדיין יתייחס אליכם.",
+              "אם המבקר מנקה cookies או עובר דפדפן או מכשיר לפני שהוא נרשם, השיוך יכול לאבד. אין דרך לעקוף את זה, אבל 60 ימים זה חלון נדיב יחסית לרוב תוכניות השותפים בשוק.",
+            ],
+          },
+          {
+            id: "missing-commission",
+            q: "מישהו נרשם דרך הלינק שלי אבל אני לא רואה עמלה.",
+            a: [
+              "ברוב המקרים זה עניין של תזמון: הרישום מופיע בלוח השותפים תוך דקות, אבל העמלה נרשמת רק כשהמנוי משלם בפועל, וזה יכול להיות כמה ימים אחר כך אם הוא בתקופת ניסיון. תבדקו שוב אחרי שתקופת הניסיון נגמרת.",
+              "אם המנוי שילם ועדיין אין עמלה אחרי 48 שעות, כתבו לי עם הזמן המשוער של ההרשמה ועם האימייל או השם המשוער של הנרשם, אם אתם יודעים. אני אבדוק את שרשרת השיוך ואתקן ידנית כל פספוס.",
             ],
           },
         ],
@@ -614,8 +728,8 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "מה זה Gadit?",
             a: [
-              "מילון רב לשוני שבנוי כדי לגרום למילה להיתפס, לא רק לתת הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים, אטימולוגיה, תמונת AI אופציונלית, ו(עם Clear או Deep) הסבר ידידותי לילד, חיבור משפט משלכם עם פידבק, וחידונים.",
-              "כרגע 12 שפות ממשק. הפועל \"לעשות לי GAD למילה\" משמעו להבין אותה עד הסוף.",
+              "מילון רב־לשוני שבנוי כדי לגרום למילה להיתפס, לא רק לתת הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים, אטימולוגיה, תמונת AI אופציונלית, ו(עם Clear ו-Deep) הסבר ידידותי לילדים, חיבור משפט משלכם עם פידבק, וחידונים.",
+              "כרגע 12 שפות ממשק. אצלנו אומרים לעשות GAD למילה, כלומר להבין אותה עד הסוף, לא רק לתרגם אותה.",
             ],
           },
           {
@@ -630,15 +744,15 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Gadit בטוח לילדים?",
             a: [
-              "כן. מצב ילדים מעביר כל הגדרה ודוגמה דרך אותו AI שאנחנו משתמשים בו לתוכן מבוגרים, עם הוראות מפורשות לשמור על ההסבר פשוט, קונקרטי ומתאים לגיל (רמת 5 עד 10 שנים). אף תוכן שמשתמשים יוצרים לא מוצג לילדים.",
-              "בעלות על חשבון היא 13 ומעלה לפי תאימות COPPA ו-GDPR-K. המודל הסטנדרטי הוא חשבון של ההורה שההורה משתמש בו עם הילד, וזה בדיוק מה שמצב ילדים בנוי לזה.",
+              "Gadit נבנה כך שהורה יוכל להשתמש בו עם הילד בצורה בטוחה ומבוקרת. מצב ילדים מייצר הסברים פשוטים, קונקרטיים ומתאימים לגיל (רמת 5 עד 10 שנים), עם אותו AI שמייצר את התוכן למבוגרים, רק עם הוראות מפורשות לפישוט. אף תוכן שמשתמשים יוצרים לא מוצג לילדים.",
+              "בהתאם למדיניות שלנו ולכללי פרטיות ילדים בעולם, חשבון עצמאי מיועד לגיל 13 ומעלה. המודל הסטנדרטי הוא חשבון של ההורה שמשמש את ההורה יחד עם הילד, וזה בדיוק מה שמצב ילדים נועד לאפשר.",
             ],
           },
           {
             id: "data",
             q: "איפה הנתונים שלי שמורים? אתם מוכרים אותם?",
             a: [
-              "חשבון, היסטוריה, מחברת ותמונות שנוצרו נשמרים באופן מאובטח (Firebase, מוצפן במנוחה). אנחנו לא מוכרים או חולקים את הנתונים שלכם עם אף אחד. פרטים מלאים במדיניות הפרטיות.",
+              "חשבון, היסטוריה, מחברת ותמונות שנוצרו נשמרים באופן מאובטח אצל Firebase, מוצפנים באחסון. אנחנו לא מוכרים את הנתונים שלכם לאיש. אנחנו משתפים מידע רק עם השירותים שמפעילים את Gadit (אחסון, תשלומים, ספקי AI), בדיוק כפי שמפורט במדיניות הפרטיות.",
               "אפשר לייצא את המחברת או למחוק חשבון בכל רגע מעמוד החשבון.",
             ],
           },
@@ -647,7 +761,7 @@ Object.assign(HELP, {
             q: "איך אני יכול להגיע אליכם ישירות?",
             a: [
               "השתמשו בכפתור המייל בתחתית העמוד. הוא מגיע ישירות אליי. אני קורא כל הודעה בעצמי ועונה תוך 24 עד 48 שעות (לרוב מהר יותר).",
-              "אני מעדיף מייל על פני צ'אט כי זה נותן לי הזדמנות לקרוא בעיון ולענות בעיון. תמיכה טלפונית אני עדיין לא מציע.",
+              "אני מעדיף מייל על פני צ'אט, כי כך אני יכול לקרוא את הפנייה בעיון ולענות במחשבה. אני עדיין לא מציע תמיכה טלפונית.",
             ],
           },
         ],
