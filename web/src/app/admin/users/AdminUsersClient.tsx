@@ -158,11 +158,32 @@ type ApiResponse = {
 
 const SECRET_KEY = "gadit_admin_secret_v1";
 
-function formatRelative(iso: string | null): string {
+// Locale chosen so dates read naturally in whichever language the
+// admin has selected. The previous English-only formatting produced
+// strings like "10 Jun 2026" which the RTL layout then visually
+// reversed into "Jun 2026 10" — the fix is to format dates IN Hebrew
+// when in Hebrew mode so the string is RTL-native and renders correctly.
+function formatRelative(iso: string | null, lang: AdminLang): string {
   if (!iso) return "—";
   const d = new Date(iso);
   const today = new Date();
   const diff = today.getTime() - d.getTime();
+  if (lang === "he") {
+    if (diff < 60_000) return "כעת";
+    if (diff < 3600_000) {
+      const n = Math.floor(diff / 60_000);
+      return `לפני ${n} ${n === 1 ? "דקה" : "דקות"}`;
+    }
+    if (diff < 86_400_000) {
+      const n = Math.floor(diff / 3600_000);
+      return `לפני ${n} ${n === 1 ? "שעה" : "שעות"}`;
+    }
+    if (diff < 7 * 86_400_000) {
+      const n = Math.floor(diff / 86_400_000);
+      return `לפני ${n} ${n === 1 ? "יום" : "ימים"}`;
+    }
+    return d.toLocaleDateString("he-IL", { day: "numeric", month: "short", year: "2-digit" });
+  }
   if (diff < 60_000) return "now";
   if (diff < 3600_000) return `${Math.floor(diff / 60_000)}m ago`;
   if (diff < 86_400_000) return `${Math.floor(diff / 3600_000)}h ago`;
@@ -177,16 +198,21 @@ function formatRelative(iso: string | null): string {
 // We render BOTH: the absolute date as the primary value (visible at a
 // glance, sortable, copyable), and the relative form as a smaller
 // secondary line below.
-function formatAbsoluteDate(iso: string | null): string {
+function formatAbsoluteDate(iso: string | null, lang: AdminLang): string {
   if (!iso) return "—";
   const d = new Date(iso);
+  if (lang === "he") {
+    // "10 ביוני 2026" — RTL-native, reads correctly under dir=rtl.
+    return d.toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" });
+  }
   return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-function formatAbsoluteTooltip(iso: string | null): string {
+function formatAbsoluteTooltip(iso: string | null, lang: AdminLang): string {
   if (!iso) return "";
   const d = new Date(iso);
-  return d.toLocaleString("en-GB", {
+  const locale = lang === "he" ? "he-IL" : "en-GB";
+  return d.toLocaleString(locale, {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -538,24 +564,24 @@ export default function AdminUsersClient() {
                       </td>
                       <td
                         style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap" }}
-                        title={formatAbsoluteTooltip(u.createdAt)}
+                        title={formatAbsoluteTooltip(u.createdAt, adminLang)}
                       >
                         <div style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
-                          {formatAbsoluteDate(u.createdAt)}
+                          {formatAbsoluteDate(u.createdAt, adminLang)}
                         </div>
                         <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>
-                          {formatRelative(u.createdAt)}
+                          {formatRelative(u.createdAt, adminLang)}
                         </div>
                       </td>
                       <td
                         style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap" }}
-                        title={formatAbsoluteTooltip(u.lastSeenAt ?? u.lastSignInAt)}
+                        title={formatAbsoluteTooltip(u.lastSeenAt ?? u.lastSignInAt, adminLang)}
                       >
                         <div style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
-                          {formatAbsoluteDate(u.lastSeenAt ?? u.lastSignInAt)}
+                          {formatAbsoluteDate(u.lastSeenAt ?? u.lastSignInAt, adminLang)}
                         </div>
                         <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>
-                          {formatRelative(u.lastSeenAt ?? u.lastSignInAt)}
+                          {formatRelative(u.lastSeenAt ?? u.lastSignInAt, adminLang)}
                         </div>
                       </td>
                       <td style={{ padding: "12px 16px", color: "#374151", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
