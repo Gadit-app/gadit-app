@@ -398,6 +398,11 @@ interface MeaningEntryProps {
   onGenerate?: () => void;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
+  /** Fires when the user taps the small flag icon next to the share /
+      listen controls on a meaning card. The section id (e.g.
+      "meaning-1") is passed through so the parent can pre-fill the
+      report modal with the correct category. */
+  onReport?: (section: string) => void;
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
@@ -508,6 +513,7 @@ function MeaningEntry({
   onGenerate,
   onUpgrade,
   onAction,
+  onReport,
 }: MeaningEntryProps) {
   const { lang } = useLang();
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
@@ -604,6 +610,26 @@ function MeaningEntry({
         >
           <ShareIcon size={14} />
         </button>
+        {/* Small flag icon for per-meaning error reporting. Same
+            visual weight as share / TTS so it reads as another quiet
+            chrome control, not a primary action. Tapping bubbles up
+            to the parent's onReport with this meaning's section id;
+            WordClient catches that, pre-selects the "definition"
+            category, and opens ReportModalV2. */}
+        {onReport && (
+          <button
+            type="button"
+            className="wb-mcard-flag"
+            aria-label={v2(lang, "reportLabel")}
+            title={v2(lang, "reportLabel")}
+            onClick={() => onReport(`meaning-${n}`)}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="4" y1="22" x2="4" y2="15" />
+              <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+            </svg>
+          </button>
+        )}
       </div>
 
       {effectiveMeaning && (
@@ -750,6 +776,7 @@ export function MeaningsBlock({
   onGenerate,
   onUpgrade,
   onAction,
+  onReport,
 }: {
   meanings: Meaning[];
   word?: string;
@@ -759,6 +786,7 @@ export function MeaningsBlock({
   onGenerate?: () => void;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
+  onReport?: (section: string) => void;
 }) {
   const { lang } = useLang();
   if (!meanings || meanings.length === 0) return null;
@@ -786,6 +814,7 @@ export function MeaningsBlock({
             onGenerate={onGenerate}
             onUpgrade={onUpgrade}
             onAction={onAction}
+            onReport={onReport}
           />
         ))}
       </div>
@@ -818,9 +847,11 @@ export function MeaningCard({ n, meaning }: { n: number; meaning: Meaning; onRep
 export function IdiomsSection({
   meanings,
   generalIdioms,
+  onReport,
 }: {
   meanings: Meaning[];
   generalIdioms?: Idiom[];
+  onReport?: (section: string) => void;
 }) {
   const { lang } = useLang();
   // Combine all idioms — per-meaning first (preserving order), then
@@ -846,8 +877,22 @@ export function IdiomsSection({
 
   return (
     <div className="wb-idioms-section">
-      <div className="wb-eyebrow">
+      <div className="wb-eyebrow wb-eyebrow-with-flag">
         <span>{v2(lang, "idiomsEyebrow")}</span>
+        {onReport && (
+          <button
+            type="button"
+            className="wb-section-flag"
+            aria-label={v2(lang, "reportLabel")}
+            title={v2(lang, "reportLabel")}
+            onClick={() => onReport("idioms")}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="4" y1="22" x2="4" y2="15" />
+              <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+            </svg>
+          </button>
+        )}
       </div>
       <div className="wb-card wb-idioms-card">
         {all.map((id, j) => (
@@ -863,7 +908,7 @@ export function IdiomsSection({
 }
 
 // ─── OriginCard (renamed from EtymologyCard) ───────────────────
-export function OriginCard({ etymology }: { etymology: Etymology | string | undefined }) {
+export function OriginCard({ etymology, onReport }: { etymology: Etymology | string | undefined; onReport?: (section: string) => void }) {
   const { lang } = useLang();
   if (!etymology) return null;
 
@@ -887,9 +932,25 @@ export function OriginCard({ etymology }: { etymology: Etymology | string | unde
 
   return (
     <div className="wb-origin-section">
-      <div className="wb-eyebrow">
-        <span className="wb-eyebrow-icon"><ScrollIcon /></span>
-        {v2(lang, "wordOriginEyebrow")}
+      <div className="wb-eyebrow wb-eyebrow-with-flag">
+        <span>
+          <span className="wb-eyebrow-icon"><ScrollIcon /></span>
+          {v2(lang, "wordOriginEyebrow")}
+        </span>
+        {onReport && (
+          <button
+            type="button"
+            className="wb-section-flag"
+            aria-label={v2(lang, "reportLabel")}
+            title={v2(lang, "reportLabel")}
+            onClick={() => onReport("etymology")}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="4" y1="22" x2="4" y2="15" />
+              <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+            </svg>
+          </button>
+        )}
       </div>
       <div className="wb-card wb-origin">
         <div className="wb-origin-fields">
@@ -1131,6 +1192,7 @@ export function ResultView({
   onUpgrade,
   onRegenerate,
   onAction,
+  onReport,
 }: {
   result: WordResult;
   plan: Plan;
@@ -1181,14 +1243,16 @@ export function ResultView({
         onGenerate={onGenerate}
         onUpgrade={onUpgrade}
         onAction={onAction}
+        onReport={onReport}
       />
 
       <IdiomsSection
         meanings={result.meanings ?? []}
         generalIdioms={result.generalIdioms}
+        onReport={onReport}
       />
 
-      <OriginCard etymology={result.etymology} />
+      <OriginCard etymology={result.etymology} onReport={onReport} />
     </div>
   );
 }

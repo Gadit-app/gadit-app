@@ -2527,6 +2527,57 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--teal-edge);
   border-color: var(--teal);
 }
+/* Per-meaning report flag — same square pill geometry as share/listen
+   so the trio reads as one cluster of chrome controls, but the colour
+   stays muted slate (not teal) so it doesn't compete with the primary
+   share affordance. Quiet by default, slight tint on hover. */
+.wordbook .wb-mcard-flag {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint, #9CA3AF);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.wordbook .wb-mcard-flag:hover {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: rgba(180, 83, 9, 0.32);
+}
+
+/* Section-level flag (idioms, etymology). Lives inside the eyebrow row,
+   so it's tiny and aligned with the eyebrow's typography. Same colour
+   treatment as the per-meaning flag for visual consistency. */
+.wordbook .wb-eyebrow.wb-eyebrow-with-flag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.wordbook .wb-section-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint, #9CA3AF);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+.wordbook .wb-section-flag:hover {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: rgba(180, 83, 9, 0.32);
+}
 /* Per-meaning listen button — same square pill as share so the two
    actions read as a pair. Pulses while audio is playing. */
 .wordbook .wb-mcard-listen {
