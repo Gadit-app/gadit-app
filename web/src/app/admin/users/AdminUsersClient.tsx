@@ -35,7 +35,7 @@ type ApiResponse = {
 
 const SECRET_KEY = "gadit_admin_secret_v1";
 
-function formatDate(iso: string | null): string {
+function formatRelative(iso: string | null): string {
   if (!iso) return "—";
   const d = new Date(iso);
   const today = new Date();
@@ -44,7 +44,32 @@ function formatDate(iso: string | null): string {
   if (diff < 3600_000) return `${Math.floor(diff / 60_000)}m ago`;
   if (diff < 86_400_000) return `${Math.floor(diff / 3600_000)}h ago`;
   if (diff < 7 * 86_400_000) return `${Math.floor(diff / 86_400_000)}d ago`;
-  return d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "2-digit" });
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit" });
+}
+
+// Absolute calendar date for the table cells. Gadi specifically asked
+// to see real dates rather than "1d ago" labels — "1d ago" reads fast
+// for recent activity but becomes useless when you want to know WHICH
+// day someone signed up, especially for monthly cohort analysis.
+// We render BOTH: the absolute date as the primary value (visible at a
+// glance, sortable, copyable), and the relative form as a smaller
+// secondary line below.
+function formatAbsoluteDate(iso: string | null): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function formatAbsoluteTooltip(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function planBadge(plan: Plan): { label: string; bg: string; fg: string } {
@@ -71,6 +96,11 @@ export default function AdminUsersClient() {
   const [countryFilter, setCountryFilter] = useState<string>("");
   const [sortBy, setSortBy] = useState<"createdAt" | "lastSeenAt" | "searchCount" | "plan" | "country">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  // Date range filter: how many days back to include. Default "all".
+  // Operates on the signup date (createdAt), which matches the way Gadi
+  // tends to read this dashboard — "show me everyone who joined in the
+  // last 7/30/90 days" is the common cohort cut.
+  const [dateRange, setDateRange] = useState<"" | "7d" | "30d" | "90d">("");
 
   // Bootstrap secret from localStorage. set-state-in-effect is flagged
   // by react-hooks but this is the textbook pattern: server-render with
@@ -120,23 +150,39 @@ export default function AdminUsersClient() {
   const filteredSorted = useMemo(() => {
     if (!data) return [];
     const q = search.trim().toLowerCase();
+    const rangeMs: number | null =
+      dateRange === "7d" ? 7 * 86_400_000 :
+      dateRange === "30d" ? 30 * 86_400_000 :
+      dateRange === "90d" ? 90 * 86_400_000 :
+      null;
+    const cutoff = rangeMs ? Date.now() - rangeMs : 0;
     let rows = data.users.filter((r) => {
       if (q && !(r.email ?? "").toLowerCase().includes(q) && !r.uid.toLowerCase().includes(q)) return false;
       if (planFilter && r.plan !== planFilter) return false;
       if (countryFilter && (r.country ?? "") !== countryFilter) return false;
+      if (rangeMs) {
+        if (!r.createdAt) return false;
+        if (new Date(r.createdAt).getTime() < cutoff) return false;
+      }
       return true;
     });
     rows = [...rows].sort((a, b) => {
       const dir = sortDir === "asc" ? 1 : -1;
       if (sortBy === "searchCount") return dir * (a.searchCount - b.searchCount);
-      if (sortBy === "plan") return dir * a.plan.localeCompare(b.plan);
+      if (sortBy === "plan") {
+        // Plan sort: order tiers semantically (basic < clear < deep)
+        // rather than alphabetically. Reading "deep first when sorted
+        // desc" matches the expectation.
+        const rank = { basic: 0, clear: 1, deep: 2 };
+        return dir * (rank[a.plan] - rank[b.plan]);
+      }
       if (sortBy === "country") return dir * ((a.country ?? "zz").localeCompare(b.country ?? "zz"));
       const av = a[sortBy] ?? "";
       const bv = b[sortBy] ?? "";
       return dir * (av < bv ? -1 : av > bv ? 1 : 0);
     });
     return rows;
-  }, [data, search, planFilter, countryFilter, sortBy, sortDir]);
+  }, [data, search, planFilter, countryFilter, sortBy, sortDir, dateRange]);
 
   // ---------- Login gate ----------
   if (!secret) {
@@ -181,8 +227,14 @@ export default function AdminUsersClient() {
   }
 
   // ---------- Dashboard ----------
+  // Force LTR on the entire admin page regardless of the browser locale.
+  // Without this, a Hebrew/Arabic browser flipped the table layout —
+  // the "Searches" right-aligned numeric column landed under the "Email"
+  // header, etc. (Gadi spotted the visual misalignment on June 11.)
+  // The admin page is English-only by design; forcing LTR fixes the
+  // header-to-column alignment in one line.
   return (
-    <main style={pageStyle}>
+    <main style={pageStyle} dir="ltr">
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "32px 24px" }}>
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
           <div>
@@ -271,6 +323,17 @@ export default function AdminUsersClient() {
             <option value="clear">Clear</option>
             <option value="deep">Deep</option>
           </select>
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value as "" | "7d" | "30d" | "90d")}
+            style={{ ...inputStyle, width: "auto", marginBottom: 0 }}
+            title="Filter by signup date range"
+          >
+            <option value="">All time</option>
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+            <option value="90d">Last 90 days</option>
+          </select>
           {countryFilter && (
             <button
               onClick={() => setCountryFilter("")}
@@ -317,8 +380,28 @@ export default function AdminUsersClient() {
                           <span style={{ color: "#D1D5DB" }}>—</span>
                         )}
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#6B7280" }}>{formatDate(u.createdAt)}</td>
-                      <td style={{ padding: "12px 16px", color: "#6B7280" }}>{formatDate(u.lastSeenAt ?? u.lastSignInAt)}</td>
+                      <td
+                        style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap" }}
+                        title={formatAbsoluteTooltip(u.createdAt)}
+                      >
+                        <div style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
+                          {formatAbsoluteDate(u.createdAt)}
+                        </div>
+                        <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>
+                          {formatRelative(u.createdAt)}
+                        </div>
+                      </td>
+                      <td
+                        style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap" }}
+                        title={formatAbsoluteTooltip(u.lastSeenAt ?? u.lastSignInAt)}
+                      >
+                        <div style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
+                          {formatAbsoluteDate(u.lastSeenAt ?? u.lastSignInAt)}
+                        </div>
+                        <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>
+                          {formatRelative(u.lastSeenAt ?? u.lastSignInAt)}
+                        </div>
+                      </td>
                       <td style={{ padding: "12px 16px", color: "#374151", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                         {u.searchCount}
                       </td>
