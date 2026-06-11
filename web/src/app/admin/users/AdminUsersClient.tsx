@@ -539,29 +539,31 @@ export default function AdminUsersClient() {
                   const badge = planBadge(u.plan);
                   return (
                     <tr key={u.uid} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                      <td style={{ padding: "12px 16px", color: "#111827" }}>
+                      {/* Every cell now sets textAlign:"start" explicitly.
+                          'start' is the logical CSS value that resolves to
+                          left in LTR and right in RTL — leaving it implicit
+                          let some browsers fall back to literal "left" for
+                          table cells, which is why the Hebrew rendering
+                          kept stacking everything against the left edge.
+                          Now the data follows the headers correctly:
+                          start-aligned in both languages. */}
+                      <td style={{ padding: "12px 16px", color: "#111827", textAlign: "start" }}>
                         {u.displayName && (
                           <div style={{ fontWeight: 600, color: "#111827", marginBottom: 2 }}>
                             {u.displayName}
                           </div>
                         )}
-                        {/* Email + uid stay as ASCII strings; the browser
-                            renders them LTR even inside an RTL container
-                            because their characters are strong-LTR. No need
-                            for an explicit dir override here — and removing
-                            it lets the cell's start-edge align follow the
-                            page direction (right in HE, left in EN). */}
                         <div style={{ fontWeight: u.displayName ? 400 : 500, color: u.displayName ? "#4B5563" : "#111827" }}>
                           {u.email ?? "(no email)"}
                         </div>
                         <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>{u.uid.slice(0, 16)}…</div>
                       </td>
-                      <td style={{ padding: "12px 16px" }}>
+                      <td style={{ padding: "12px 16px", textAlign: "start" }}>
                         <span style={{ background: badge.bg, color: badge.fg, padding: "2px 8px", borderRadius: 4, fontSize: 12, fontWeight: 600 }}>
                           {badge.label}
                         </span>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#374151" }}>
+                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "start" }}>
                         {u.country ? (
                           <span>{countryFlag(u.country)} {u.country}</span>
                         ) : (
@@ -569,7 +571,7 @@ export default function AdminUsersClient() {
                         )}
                       </td>
                       <td
-                        style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap" }}
+                        style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap", textAlign: "start" }}
                         title={formatAbsoluteTooltip(u.createdAt, adminLang)}
                       >
                         <div style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
@@ -580,7 +582,7 @@ export default function AdminUsersClient() {
                         </div>
                       </td>
                       <td
-                        style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap" }}
+                        style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap", textAlign: "start" }}
                         title={formatAbsoluteTooltip(u.lastSeenAt ?? u.lastSignInAt, adminLang)}
                       >
                         <div style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
@@ -593,7 +595,7 @@ export default function AdminUsersClient() {
                       <td style={{ padding: "12px 16px", color: "#374151", textAlign: "end", fontVariantNumeric: "tabular-nums" }}>
                         {u.searchCount}
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#6B7280", fontSize: 12 }}>
+                      <td style={{ padding: "12px 16px", color: "#6B7280", fontSize: 12, textAlign: "start" }}>
                         {u.providers.map((p) => p.replace(".com", "").replace("password", "email")).join(", ")}
                       </td>
                     </tr>
