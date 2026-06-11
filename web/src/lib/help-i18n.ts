@@ -8,7 +8,9 @@
  *   - **No em-dashes (—) or en-dashes (–) anywhere.** They read as
  *     "AI wrote this" and break the founder voice. Use periods,
  *     commas, or restructure. See [[feedback_no_em_dashes]].
- *   - First-person voice. "I read every message", not "we'll get back".
+ *   - Startup-collective voice. "We read every message", not "I'll get back".
+ *     Never use "I"/"me"/"my" — Gadit is a team, not one founder. Never
+ *     mention "AI" — the mechanism is irrelevant to the user.
  *   - Every answer ends with a concrete next step.
  *   - Email address shown in the footer is the canonical contact;
  *     answers don't need to repeat "email me at <address>" since the
@@ -65,10 +67,10 @@ Object.assign(HELP, {
   en: {
     eyebrow: "Help Center",
     heading: "Find an answer, fast.",
-    lede: "Common questions and step by step fixes, organised by area. If you don't see your issue, write me directly at the bottom.",
+    lede: "Common questions and step by step fixes, organised by area. If you don't see your issue, get in touch with the team at the bottom.",
     stillNeedHelpHeading: "Still stuck?",
-    stillNeedHelpBody: "Write me directly. I read every message myself and reply within a day or two.",
-    emailCta: "Email me",
+    stillNeedHelpBody: "Write to us directly. Every message gets read by the team and a reply within a day or two.",
+    emailCta: "Email us",
     responseTime: "Typical reply: within 24 to 48 hours.",
     categories: [
       {
@@ -115,7 +117,7 @@ Object.assign(HELP, {
             q: "I clicked Manage billing but got an error. What now?",
             a: [
               "Two common causes. First, your account doesn't have an active Stripe subscription. Second, Stripe may not have a complete billing profile for your account yet.",
-              "Easy first check: sign out, sign back in with the email you used at checkout, and try again. If it still fails, write me with your account email and I'll fix it from my side in a minute.",
+              "Easy first check: sign out, sign back in with the email you used at checkout, and try again. If it still fails, contact us with your account email and the team will fix it from our side in a minute.",
             ],
           },
           {
@@ -130,8 +132,8 @@ Object.assign(HELP, {
             id: "refund",
             q: "Can I get a refund?",
             a: [
-              "Yes. If you bought less than 14 days ago and you didn't use the service much, write me with your account email and a short note about why. I refund those without a fight.",
-              "If it's been more than 14 days, I'll handle it case by case. Cancel the subscription so it doesn't keep renewing, and email me.",
+              "Yes. If the purchase was less than 14 days ago and the service hasn't been used much, write to us with your account email and a short note about why. Those refunds get approved without a fight.",
+              "If it's been more than 14 days, the team handles it case by case. Cancel the subscription so it doesn't keep renewing, and email us.",
             ],
           },
           {
@@ -139,7 +141,7 @@ Object.assign(HELP, {
             q: "I see a charge I don't recognise.",
             a: [
               "Charges appear as GADIT or GADIT.APP with $2.99 (Clear monthly), $4.99 (Deep monthly), $29.99 (Clear yearly), or $49.99 (Deep yearly). If it doesn't match, it might be from a different service.",
-              "If you're certain it's not yours, don't dispute through your bank yet. Write me directly first with the date and amount. I'll find it, explain what it is, and refund if needed. A bank dispute can make future billing harder, so resolving it through me is usually faster and safer.",
+              "If you're certain it's not yours, don't dispute through your bank yet. Write to us directly first with the date and amount. The team will find it, explain what it is, and refund if needed. A bank dispute can make future billing harder, so resolving it through support is usually faster and safer.",
             ],
           },
           {
@@ -155,7 +157,7 @@ Object.assign(HELP, {
             q: "What's the difference between Basic, Clear, and Deep?",
             a: [
               "Basic (free): up to 20 word lookups a day, every meaning, examples per meaning, idioms, and word origin. No signup required for basic searches.",
-              "Clear ($2.99/month or $29.99/year): unlimited lookups, kid-friendly explanations, an AI image per word (30/month), compose-your-own-sentence with feedback, idioms detail, and 30 days of search history.",
+              "Clear ($2.99/month or $29.99/year): unlimited lookups, kid-friendly explanations, an image per word (30/month), compose-your-own-sentence with feedback, idioms detail, and 30 days of search history.",
               "Deep ($4.99/month or $49.99/year): everything in Clear, plus practice quizzes, the personal notebook with smart spaced-repetition practice, distinguishing similar words, and a larger image quota (100/month).",
             ],
           },
@@ -227,7 +229,7 @@ Object.assign(HELP, {
             q: "I think I have two accounts by mistake. What now?",
             a: [
               "This usually happens when someone signs up once with Google and once with email and password using the same address, or when you sign up twice with different email addresses. Each signup creates a separate Gadit account with its own notebook, history, and subscription state.",
-              "Write me with both email addresses (or UIDs from the Account page) and which one you'd like to keep. I'll merge the notebooks and history onto the account you choose, then close the other one cleanly. No data lost.",
+              "Write to us with both email addresses (or UIDs from the Account page) and which one you'd like to keep. The team will merge the notebooks and history onto the account you choose, then close the other one cleanly. No data lost.",
             ],
           },
         ],
@@ -241,7 +243,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "I think the definition is wrong. What do I do?",
             a: [
-              "Every result page has a small \"Report\" button at the bottom. Tap it, pick a category (definition, etymology, example, idiom, kids explanation, and so on) and write a short note. It comes straight to me and I review every report.",
+              "Every result page has a small \"Report\" button at the bottom. Tap it, pick a category (definition, etymology, example, idiom, kids explanation, and so on) and write a short note. It comes straight to the team and every report gets reviewed.",
               "Don't worry about being too picky. The dictionary improves from this feedback faster than from anything else.",
             ],
           },
@@ -282,15 +284,15 @@ Object.assign(HELP, {
             q: "How does offline mode work?",
             a: [
               "Words you've already viewed are cached locally. Open them again without internet and they load instantly. The full offline pack (top words in your language) downloads on demand from the notebook page.",
-              "Searching for a brand-new word still requires connectivity, because Gadit has to ask the AI to define it. The offline cache is for words you've already explored.",
+              "Searching for a brand-new word still requires connectivity, because Gadit has to generate the definition from scratch. The offline cache is for words you've already explored.",
             ],
           },
           {
             id: "slow",
             q: "The app feels slow.",
             a: [
-              "The first lookup of a word is the slowest because Gadit generates the full result fresh from AI: usually a few seconds, sometimes longer for complex words. Subsequent lookups of the same word are instant, served from cache.",
-              "If everything feels slow, try a hard refresh: Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows. If the slowness persists across pages, please email me with your country and browser so I can check the network route to our servers from your region.",
+              "The first lookup of a word is the slowest because Gadit generates the full result from scratch: usually a few seconds, sometimes longer for complex words. Subsequent lookups of the same word are instant, served from cache.",
+              "If everything feels slow, try a hard refresh: Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows. If the slowness persists across pages, please email us with your country and browser so the team can check the network route to our servers from your region.",
             ],
           },
           {
@@ -298,7 +300,7 @@ Object.assign(HELP, {
             q: "I searched a word and didn't get a result. What's going on?",
             a: [
               "First, check the spelling. Gadit handles minor typos most of the time, but a wrong vowel or missing letter can throw it off. Try the suggested correction if one appears.",
-              "Beyond that: very rare or slang words might not return a confident result. If you're sure the word is real, click the Report button on the result page (or on the error screen) and tell me. I review every report and feed real misses back into the system.",
+              "Beyond that: very rare or slang words might not return a confident result. If you're sure the word is real, click the Report button on the result page (or on the error screen) and let us know. Every report gets reviewed and real misses get fed back into the system.",
             ],
           },
           {
@@ -345,7 +347,7 @@ Object.assign(HELP, {
             q: "I joined but my dashboard is empty.",
             a: [
               "Stats show after the first click on your link. Empty just means nobody's clicked yet. Go share the link. The dashboard updates in near real time once activity starts.",
-              "If you've shared and someone's signed up but the dashboard isn't reflecting it, write me with the rough time of signup and I'll check the attribution.",
+              "If you've shared and someone's signed up but the dashboard isn't reflecting it, write to us with the rough time of signup and the team will check the attribution.",
             ],
           },
           {
@@ -361,7 +363,7 @@ Object.assign(HELP, {
             q: "Someone signed up through my link but I don't see the commission.",
             a: [
               "Most often this is timing: the signup shows up in the dashboard within minutes, but the commission only books once the subscription is actually paid (which can be days later if they're on a free trial). Check back after the trial ends.",
-              "If the subscription paid but you still don't see the commission after 48 hours, write me with the rough signup time and the email or rough name of the subscriber if you know it. I'll dig into the attribution chain and fix any miss manually.",
+              "If the subscription paid but you still don't see the commission after 48 hours, write to us with the rough signup time and the email or rough name of the subscriber if you know it. The team will dig into the attribution chain and fix any miss manually.",
             ],
           },
         ],
@@ -375,8 +377,8 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "What is Gadit?",
             a: [
-              "A multilingual dictionary built to make a word click, not just give a one-line definition. Every word opens with all its meanings, real examples per meaning, idioms, etymology, an optional AI image, and (with Clear and Deep) a kid-friendly explanation, compose-your-own-sentence with feedback, and quizzes.",
-              "Currently 12 UI languages. Internally I call it GAD a word: to understand a word all the way through, not just translate it.",
+              "A multilingual dictionary built to make a word click, not just give a one-line definition. Every word opens with all its meanings, real examples per meaning, idioms, etymology, an optional image, and (with Clear and Deep) a kid-friendly explanation, compose-your-own-sentence with feedback, and quizzes.",
+              "Currently 12 UI languages. Internally the team calls it GAD a word: to understand a word all the way through, not just translate it.",
             ],
           },
           {
@@ -391,7 +393,7 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Is Gadit safe for kids?",
             a: [
-              "Gadit is designed for a parent to use safely alongside a child. Kids mode produces explanations that are simple, concrete, and age-appropriate (around the 5 to 10 year old level), running the same AI we use for adult content with explicit instructions to simplify. No user-generated content is ever shown to kids.",
+              "Gadit is designed for a parent to use safely alongside a child. Kids mode produces explanations that are simple, concrete, and age-appropriate (around the 5 to 10 year old level), using the same engine that powers adult content with explicit instructions to simplify. No user-generated content is ever shown to kids.",
               "In line with our policies and child-privacy rules around the world, independent account ownership is 13 and up. The standard pattern is a parent's account that the parent uses together with their kid, which is exactly what Kids mode is built for.",
             ],
           },
@@ -399,7 +401,7 @@ Object.assign(HELP, {
             id: "data",
             q: "Where is my data stored? Do you sell it?",
             a: [
-              "Account, history, notebook, and generated images are stored securely in Firebase, encrypted in storage. We don't sell your data to anyone. We only share what's needed to run Gadit (storage, payments, AI providers), as spelled out in the Privacy Policy.",
+              "Account, history, notebook, and generated images are stored securely in Firebase, encrypted in storage. We don't sell your data to anyone. We only share what's needed to run Gadit (storage, payments, content providers), as spelled out in the Privacy Policy.",
               "You can export your notebook or delete your account at any time from the Account page.",
             ],
           },
@@ -407,8 +409,8 @@ Object.assign(HELP, {
             id: "contact-direct",
             q: "How do I reach you directly?",
             a: [
-              "Use the email button at the bottom of this page. It goes straight to my inbox. I read every message myself and reply within 24 to 48 hours (often faster).",
-              "I prefer email over chat because it gives me a chance to read carefully and reply thoughtfully. I don't offer phone support yet.",
+              "Use the email button at the bottom of this page. It goes straight to the team inbox. Every message gets read and a reply within 24 to 48 hours (often faster).",
+              "Email beats chat for support: it gives the team a chance to read carefully and reply thoughtfully. Phone support isn't offered yet.",
             ],
           },
         ],
@@ -418,10 +420,10 @@ Object.assign(HELP, {
   he: {
     eyebrow: "מרכז עזרה",
     heading: "מצאו תשובה. מהר.",
-    lede: "שאלות נפוצות ופתרונות שלב שלב, מסודרים לפי תחום. לא רואים את הבעיה שלכם? תכתבו לי ישירות למטה.",
+    lede: "שאלות נפוצות ופתרונות שלב שלב, מסודרים לפי תחום. לא רואים את הבעיה שלכם? אפשר לפנות אלינו ישירות למטה.",
     stillNeedHelpHeading: "עדיין תקועים?",
-    stillNeedHelpBody: "תכתבו לי ישירות. אני קורא כל הודעה בעצמי ועונה תוך יום או יומיים.",
-    emailCta: "שלחו לי מייל",
+    stillNeedHelpBody: "כתבו לנו ישירות. כל הודעה נקראת על ידי הצוות, ותגובה תגיע תוך יום או יומיים.",
+    emailCta: "שלחו לנו מייל",
     responseTime: "זמן תגובה אופייני: עד 48 שעות.",
     categories: [
       {
@@ -468,7 +470,7 @@ Object.assign(HELP, {
             q: "לחצתי על ניהול חיוב וקיבלתי שגיאה. מה לעשות?",
             a: [
               "שתי סיבות נפוצות. ראשית, לחשבון שלכם אין מנוי Stripe פעיל. שנית, ייתכן שפרופיל הלקוח שלכם ב-Stripe לא נוצר או לא הושלם כמו שצריך.",
-              "בדיקה ראשונה פשוטה: צאו, היכנסו שוב עם האימייל שבו רכשתם, ונסו שוב. אם זה עדיין לא עובד, תכתבו לי עם האימייל של החשבון ואני אסדר את זה מהצד שלי בדקה.",
+              "בדיקה ראשונה פשוטה: צאו, היכנסו שוב עם האימייל שבו רכשתם, ונסו שוב. אם זה עדיין לא עובד, כתבו לנו עם האימייל של החשבון והצוות יסדר את זה מהצד שלנו בדקה.",
             ],
           },
           {
@@ -483,8 +485,8 @@ Object.assign(HELP, {
             id: "refund",
             q: "אפשר לקבל החזר כספי?",
             a: [
-              "כן. אם רכשתם לפני פחות מ-14 ימים ולא השתמשתם בשירות הרבה, תכתבו לי עם האימייל של החשבון והסבר קצר. אני מאשר אותם בלי להתעקש.",
-              "אם עבר יותר מ-14 ימים, אטפל מקרה מקרה. בטלו את המנוי כדי שלא יתחדש, ושלחו לי מייל.",
+              "כן. אם רכשתם לפני פחות מ-14 ימים ולא השתמשתם בשירות הרבה, כתבו לנו עם האימייל של החשבון והסבר קצר. החזרים כאלה מאושרים בלי להתעקש.",
+              "אם עבר יותר מ-14 ימים, הצוות יטפל מקרה מקרה. בטלו את המנוי כדי שלא יתחדש, ושלחו לנו מייל.",
             ],
           },
           {
@@ -492,7 +494,7 @@ Object.assign(HELP, {
             q: "אני רואה חיוב שאני לא מזהה.",
             a: [
               "חיובים מופיעים כ-GADIT או GADIT.APP עם $2.99 (Clear חודשי), $4.99 (Deep חודשי), $29.99 (Clear שנתי), או $49.99 (Deep שנתי). אם זה לא תואם, זה כנראה משירות אחר.",
-              "אם אתם בטוחים שזה לא שלכם, אל תפנו לבנק עם מחלוקת עדיין. תכתבו לי קודם עם התאריך והסכום. אני אמצא, אסביר מה זה, ואחזיר אם צריך. פתיחת מחלוקת דרך הבנק עלולה לסבך את החיוב ואת החשבון שלכם בהמשך, לכן פנייה אליי היא מהירה ובטוחה יותר.",
+              "אם אתם בטוחים שזה לא שלכם, אל תפנו לבנק עם מחלוקת עדיין. כתבו לנו קודם עם התאריך והסכום. הצוות ימצא, יסביר מה זה, ויחזיר אם צריך. פתיחת מחלוקת דרך הבנק עלולה לסבך את החיוב ואת החשבון שלכם בהמשך, לכן פנייה לתמיכה היא מהירה ובטוחה יותר.",
             ],
           },
           {
@@ -508,7 +510,7 @@ Object.assign(HELP, {
             q: "מה ההבדל בין Basic, Clear ו-Deep?",
             a: [
               "Basic (חינם): עד 20 חיפושי מילים ביום, כל המשמעויות, דוגמאות לכל משמעות, ניבים, ומקור המילה. לא נדרשת הרשמה לחיפושים בסיסיים.",
-              "Clear ($2.99 לחודש או $29.99 לשנה): חיפושים ללא הגבלה, הסברים ידידותיים לילדים, תמונת AI לכל מילה (30 בחודש), חיבור משפט משלכם עם פידבק, פירוט ניבים, ו-30 ימי היסטוריית חיפושים.",
+              "Clear ($2.99 לחודש או $29.99 לשנה): חיפושים ללא הגבלה, הסברים ידידותיים לילדים, תמונה לכל מילה (30 בחודש), חיבור משפט משלכם עם פידבק, פירוט ניבים, ו-30 ימי היסטוריית חיפושים.",
               "Deep ($4.99 לחודש או $49.99 לשנה): כל מה ש-Clear כולל, ובנוסף חידוני תרגול, המחברת האישית עם תרגול חכם בשיטת חזרה מרווחת, השוואה בין מילים דומות, ומכסה גדולה יותר של תמונות (100 בחודש).",
             ],
           },
@@ -580,7 +582,7 @@ Object.assign(HELP, {
             q: "נראה שיש לי שני חשבונות בטעות. מה עושים?",
             a: [
               "זה קורה בדרך כלל כשמישהו נרשם פעם אחת עם Google ופעם נוספת עם אימייל וסיסמה לאותה הכתובת, או כשנרשמים פעמיים בכתובות שונות. כל הרשמה יוצרת חשבון נפרד ב-Gadit עם מחברת, היסטוריה ומנוי משלו.",
-              "כתבו לי עם שני האימיילים (או ה-UID של כל חשבון מעמוד החשבון) ועם איזה חשבון תרצו להשאיר. אני אאחד את המחברת וההיסטוריה אל החשבון שבחרתם, ואסגור את השני בצורה נקייה. שום מידע לא יאבד.",
+              "כתבו לנו עם שני האימיילים (או ה-UID של כל חשבון מעמוד החשבון) ועם איזה חשבון תרצו להשאיר. הצוות יאחד את המחברת וההיסטוריה אל החשבון שבחרתם, ויסגור את השני בצורה נקייה. שום מידע לא יאבד.",
             ],
           },
         ],
@@ -594,7 +596,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "ההגדרה לא נכונה. מה לעשות?",
             a: [
-              "בכל עמוד תוצאה יש כפתור \"דיווח\" קטן בתחתית. לחצו עליו, בחרו קטגוריה (הגדרה, אטימולוגיה, דוגמה, ניב, הסבר לילדים וכו') וכתבו הערה קצרה. זה מגיע ישירות אליי ואני בודק כל דיווח.",
+              "בכל עמוד תוצאה יש כפתור \"דיווח\" קטן בתחתית. לחצו עליו, בחרו קטגוריה (הגדרה, אטימולוגיה, דוגמה, ניב, הסבר לילדים וכו') וכתבו הערה קצרה. זה מגיע ישירות לצוות וכל דיווח נבדק.",
               "אל תדאגו להיות יותר מדי קפדנים. המילון משתפר מהפידבק הזה מהר יותר מכל דבר אחר.",
             ],
           },
@@ -635,15 +637,15 @@ Object.assign(HELP, {
             q: "איך עובד המצב הלא־מקוון?",
             a: [
               "מילים שראיתם כבר נשמרות במטמון מקומי. פתחו אותן שוב בלי אינטרנט והן יטענו מיידית. חבילת האופליין המלאה (מילים מובילות בשפה שלכם) יורדת לבקשתכם מעמוד המחברת.",
-              "חיפוש מילה חדשה לחלוטין עדיין דורש חיבור לאינטרנט, כי המערכת צריכה לבקש מה-AI להגדיר אותה. המטמון הלא־מקוון הוא למילים שכבר חקרתם.",
+              "חיפוש מילה חדשה לחלוטין עדיין דורש חיבור לאינטרנט, כי המערכת צריכה לייצר את ההגדרה מאפס. המטמון הלא־מקוון הוא למילים שכבר חקרתם.",
             ],
           },
           {
             id: "slow",
             q: "האפליקציה מרגישה אטית.",
             a: [
-              "החיפוש הראשון של מילה הוא האטי ביותר, כי המערכת מייצרת את התוצאה המלאה מ-AI. לרוב מדובר בכמה שניות, לפעמים יותר על מילים מורכבות. חיפושים חוזרים של אותה המילה מיידיים, כי הם מגיעים מהמטמון.",
-              "אם הכל מרגיש אטי, נסו לרענן את הדף ברענון קשה: Cmd+Shift+R במק, או Ctrl+Shift+R בווינדוס. אם האיטיות נמשכת בכל העמודים, שלחו לי מייל עם המדינה והדפדפן שלכם, כדי שאוכל לבדוק אם יש בעיית ניתוב מהאזור שלכם לשרתים.",
+              "החיפוש הראשון של מילה הוא האטי ביותר, כי המערכת מייצרת את התוצאה המלאה מאפס. לרוב מדובר בכמה שניות, לפעמים יותר על מילים מורכבות. חיפושים חוזרים של אותה המילה מיידיים, כי הם מגיעים מהמטמון.",
+              "אם הכל מרגיש אטי, נסו לרענן את הדף ברענון קשה: Cmd+Shift+R במק, או Ctrl+Shift+R בווינדוס. אם האיטיות נמשכת בכל העמודים, שלחו לנו מייל עם המדינה והדפדפן שלכם, כדי שהצוות יוכל לבדוק אם יש בעיית ניתוב מהאזור שלכם לשרתים.",
             ],
           },
           {
@@ -651,7 +653,7 @@ Object.assign(HELP, {
             q: "חיפשתי מילה ולא קיבלתי תוצאה. מה קורה?",
             a: [
               "קודם כל בדקו את הכתיב. Gadit מסתדר עם רוב טעויות הקלדה קטנות, אבל אות חסרה או תנועה לא נכונה יכולות לבלבל את המערכת. אם מופיעה הצעת תיקון, נסו אותה.",
-              "מעבר לזה, מילים נדירות מאוד או סלנג לא תמיד מצליחות לחזור עם תשובה בטוחה. אם אתם בטוחים שהמילה תקינה, לחצו על כפתור הדיווח בעמוד התוצאה (או במסך השגיאה) וכתבו לי. אני בודק כל דיווח ומחזיר את החזרות האמיתיות חזרה למערכת.",
+              "מעבר לזה, מילים נדירות מאוד או סלנג לא תמיד מצליחות לחזור עם תשובה בטוחה. אם אתם בטוחים שהמילה תקינה, לחצו על כפתור הדיווח בעמוד התוצאה (או במסך השגיאה) ושלחו לנו. כל דיווח נבדק, ופספוסים אמיתיים מוחזרים למערכת.",
             ],
           },
           {
@@ -698,7 +700,7 @@ Object.assign(HELP, {
             q: "נרשמתי אבל לוח השותפים שלי ריק.",
             a: [
               "הסטטיסטיקות מופיעות אחרי הקליק הראשון על הלינק שלכם. ריק פירושו פשוט שאף אחד לא לחץ עדיין. צאו ושתפו את הלינק. לוח השותפים מתעדכן כמעט בזמן אמת ברגע שמתחילה פעילות.",
-              "אם שיתפתם ומישהו נרשם אבל לוח השותפים לא משקף את זה, תכתבו לי עם הזמן המשוער שבו הוא נרשם, ואני אבדוק את השיוך.",
+              "אם שיתפתם ומישהו נרשם אבל לוח השותפים לא משקף את זה, כתבו לנו עם הזמן המשוער שבו הוא נרשם, והצוות יבדוק את השיוך.",
             ],
           },
           {
@@ -714,7 +716,7 @@ Object.assign(HELP, {
             q: "מישהו נרשם דרך הלינק שלי אבל אני לא רואה עמלה.",
             a: [
               "ברוב המקרים זה עניין של תזמון: הרישום מופיע בלוח השותפים תוך דקות, אבל העמלה נרשמת רק כשהמנוי משלם בפועל, וזה יכול להיות כמה ימים אחר כך אם הוא בתקופת ניסיון. תבדקו שוב אחרי שתקופת הניסיון נגמרת.",
-              "אם המנוי שילם ועדיין אין עמלה אחרי 48 שעות, כתבו לי עם הזמן המשוער של ההרשמה ועם האימייל או השם המשוער של הנרשם, אם אתם יודעים. אני אבדוק את שרשרת השיוך ואתקן ידנית כל פספוס.",
+              "אם המנוי שילם ועדיין אין עמלה אחרי 48 שעות, כתבו לנו עם הזמן המשוער של ההרשמה ועם האימייל או השם המשוער של הנרשם, אם אתם יודעים. הצוות יבדוק את שרשרת השיוך ויתקן ידנית כל פספוס.",
             ],
           },
         ],
@@ -728,7 +730,7 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "מה זה Gadit?",
             a: [
-              "מילון רב־לשוני שבנוי כדי לגרום למילה להיתפס, לא רק לתת הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים, אטימולוגיה, תמונת AI אופציונלית, ו(עם Clear ו-Deep) הסבר ידידותי לילדים, חיבור משפט משלכם עם פידבק, וחידונים.",
+              "מילון רב־לשוני שבנוי כדי לגרום למילה להיתפס, לא רק לתת הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים, אטימולוגיה, תמונה אופציונלית, ו(עם Clear ו-Deep) הסבר ידידותי לילדים, חיבור משפט משלכם עם פידבק, וחידונים.",
               "כרגע 12 שפות ממשק. אצלנו אומרים לעשות GAD למילה, כלומר להבין אותה עד הסוף, לא רק לתרגם אותה.",
             ],
           },
@@ -744,7 +746,7 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Gadit בטוח לילדים?",
             a: [
-              "Gadit נבנה כך שהורה יוכל להשתמש בו עם הילד בצורה בטוחה ומבוקרת. מצב ילדים מייצר הסברים פשוטים, קונקרטיים ומתאימים לגיל (רמת 5 עד 10 שנים), עם אותו AI שמייצר את התוכן למבוגרים, רק עם הוראות מפורשות לפישוט. אף תוכן שמשתמשים יוצרים לא מוצג לילדים.",
+              "Gadit נבנה כך שהורה יוכל להשתמש בו עם הילד בצורה בטוחה ומבוקרת. מצב ילדים מייצר הסברים פשוטים, קונקרטיים ומתאימים לגיל (רמת 5 עד 10 שנים), עם אותו מנוע שמייצר את התוכן למבוגרים, רק עם הוראות מפורשות לפישוט. אף תוכן שמשתמשים יוצרים לא מוצג לילדים.",
               "בהתאם למדיניות שלנו ולכללי פרטיות ילדים בעולם, חשבון עצמאי מיועד לגיל 13 ומעלה. המודל הסטנדרטי הוא חשבון של ההורה שמשמש את ההורה יחד עם הילד, וזה בדיוק מה שמצב ילדים נועד לאפשר.",
             ],
           },
@@ -752,16 +754,16 @@ Object.assign(HELP, {
             id: "data",
             q: "איפה הנתונים שלי שמורים? אתם מוכרים אותם?",
             a: [
-              "חשבון, היסטוריה, מחברת ותמונות שנוצרו נשמרים באופן מאובטח אצל Firebase, מוצפנים באחסון. אנחנו לא מוכרים את הנתונים שלכם לאיש. אנחנו משתפים מידע רק עם השירותים שמפעילים את Gadit (אחסון, תשלומים, ספקי AI), בדיוק כפי שמפורט במדיניות הפרטיות.",
+              "חשבון, היסטוריה, מחברת ותמונות שנוצרו נשמרים באופן מאובטח אצל Firebase, מוצפנים באחסון. אנחנו לא מוכרים את הנתונים שלכם לאיש. אנחנו משתפים מידע רק עם השירותים שמפעילים את Gadit (אחסון, תשלומים, ספקי תוכן), בדיוק כפי שמפורט במדיניות הפרטיות.",
               "אפשר לייצא את המחברת או למחוק חשבון בכל רגע מעמוד החשבון.",
             ],
           },
           {
             id: "contact-direct",
-            q: "איך אני יכול להגיע אליכם ישירות?",
+            q: "איך אפשר להגיע אליכם ישירות?",
             a: [
-              "השתמשו בכפתור המייל בתחתית העמוד. הוא מגיע ישירות אליי. אני קורא כל הודעה בעצמי ועונה תוך 24 עד 48 שעות (לרוב מהר יותר).",
-              "אני מעדיף מייל על פני צ'אט, כי כך אני יכול לקרוא את הפנייה בעיון ולענות במחשבה. אני עדיין לא מציע תמיכה טלפונית.",
+              "השתמשו בכפתור המייל בתחתית העמוד. הוא מגיע ישירות לצוות. כל הודעה נקראת ומקבלת מענה תוך 24 עד 48 שעות (לרוב מהר יותר).",
+              "מייל עדיף על צ'אט בתמיכה: הוא נותן לצוות לקרוא בעיון ולענות במחשבה. תמיכה טלפונית עדיין לא מוצעת.",
             ],
           },
         ],
