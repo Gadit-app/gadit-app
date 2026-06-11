@@ -198,14 +198,17 @@ function formatRelative(iso: string | null, lang: AdminLang): string {
 // We render BOTH: the absolute date as the primary value (visible at a
 // glance, sortable, copyable), and the relative form as a smaller
 // secondary line below.
-function formatAbsoluteDate(iso: string | null, lang: AdminLang): string {
+function formatAbsoluteDate(iso: string | null, _lang: AdminLang): string {
   if (!iso) return "—";
   const d = new Date(iso);
-  if (lang === "he") {
-    // "10 ביוני 2026" — RTL-native, reads correctly under dir=rtl.
-    return d.toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" });
-  }
-  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  // Numeric slash format (10/06/2026) reads identically in both languages
+  // — it's just digits and separators, no locale-specific words, no bidi
+  // reordering. Gadi asked for this format explicitly after the long
+  // Hebrew form "10 ביוני 2026" felt too verbose for a scannable table.
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  return `${dd}/${mm}/${yyyy}`;
 }
 
 function formatAbsoluteTooltip(iso: string | null, lang: AdminLang): string {
@@ -227,12 +230,24 @@ function planBadge(plan: Plan): { label: string; bg: string; fg: string } {
   return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
 
-function countryFlag(iso2: string | null): string {
-  if (!iso2 || iso2.length !== 2) return "🌐";
-  // Convert ISO 3166-1 alpha-2 to regional-indicator flag emoji.
-  const A = 0x1f1e6;
-  const codePoints = [...iso2.toUpperCase()].map((c) => A + (c.charCodeAt(0) - 65));
-  return String.fromCodePoint(...codePoints);
+// flagcdn.com returns real flag PNGs that render the same on Windows,
+// Mac, Linux, iOS, Android. The original regional-indicator emoji
+// approach only rendered as a flag on systems with emoji-flag glyphs
+// (mostly Mac/iOS); on Windows it fell back to two lowercase ASCII
+// letters ('il'), which is what Gadi saw next to the country code
+// 'IL' — looking like "il IL" duplicated.
+function FlagImg({ iso2 }: { iso2: string }) {
+  return (
+    <img
+      src={`https://flagcdn.com/40x30/${iso2.toLowerCase()}.png`}
+      srcSet={`https://flagcdn.com/80x60/${iso2.toLowerCase()}.png 2x`}
+      width={18}
+      height={13}
+      alt=""
+      loading="lazy"
+      style={{ borderRadius: 2, display: "inline-block", verticalAlign: "middle", boxShadow: "0 0 0 0.5px rgba(15,23,42,0.18)" }}
+    />
+  );
 }
 
 export default function AdminUsersClient() {
@@ -470,7 +485,7 @@ export default function AdminUsersClient() {
                     alignItems: "center",
                   }}
                 >
-                  <span>{countryFlag(cc === "?" ? null : cc)}</span>
+                  {cc === "?" ? <span>🌐</span> : <FlagImg iso2={cc} />}
                   <span style={{ fontWeight: 500 }}>{cc}</span>
                   <span style={{ color: "#9CA3AF" }}>·</span>
                   <span style={{ color: "#6B7280" }}>{n}</span>
@@ -523,15 +538,30 @@ export default function AdminUsersClient() {
         <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, overflow: "hidden" }}>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+              {/* Column widths: User gets a sensible max so it stops
+                  auto-expanding to fill the whole row (which created
+                  the huge gap between user and plan Gadi flagged).
+                  Plan / Country / Searches stay narrow with centered
+                  content. Dates get enough room for a dd/mm/yyyy +
+                  relative line. Provider is narrow. */}
+              <colgroup>
+                <col style={{ width: "30%" }} />
+                <col style={{ width: 110 }} />
+                <col style={{ width: 110 }} />
+                <col style={{ width: 130 }} />
+                <col style={{ width: 130 }} />
+                <col style={{ width: 100 }} />
+                <col style={{ width: 100 }} />
+              </colgroup>
               <thead style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
                 <tr>
                   <Th label={t.colUser} />
-                  <Th label={t.colPlan}      onClick={() => toggleSort("plan", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "plan"} dir={sortDir} />
-                  <Th label={t.colCountry}   onClick={() => toggleSort("country", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "country"} dir={sortDir} />
+                  <Th label={t.colPlan}      onClick={() => toggleSort("plan", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "plan"} dir={sortDir} align="center" />
+                  <Th label={t.colCountry}   onClick={() => toggleSort("country", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "country"} dir={sortDir} align="center" />
                   <Th label={t.colSignedUp}  onClick={() => toggleSort("createdAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "createdAt"} dir={sortDir} />
                   <Th label={t.colLastSeen}  onClick={() => toggleSort("lastSeenAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "lastSeenAt"} dir={sortDir} />
-                  <Th label={t.colSearches}  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="end" />
-                  <Th label={t.colProvider} />
+                  <Th label={t.colSearches}  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="center" />
+                  <Th label={t.colProvider} align="center" />
                 </tr>
               </thead>
               <tbody>
@@ -558,14 +588,23 @@ export default function AdminUsersClient() {
                         </div>
                         <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>{u.uid.slice(0, 16)}…</div>
                       </td>
-                      <td style={{ padding: "12px 16px", textAlign: "start" }}>
+                      <td style={{ padding: "12px 16px", textAlign: "center" }}>
                         <span style={{ background: badge.bg, color: badge.fg, padding: "2px 8px", borderRadius: 4, fontSize: 12, fontWeight: 600 }}>
                           {badge.label}
                         </span>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "start" }}>
+                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "center" }}>
+                        {/* Country: real flag image + ISO code once.
+                            The earlier 'emoji flag + code' rendered as
+                            'il IL' on Windows (no emoji-flag glyph,
+                            fell back to regional-indicator letters).
+                            Now it's a clean flagcdn PNG followed by
+                            the code. */}
                         {u.country ? (
-                          <span>{countryFlag(u.country)} {u.country}</span>
+                          <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+                            <FlagImg iso2={u.country} />
+                            <span>{u.country}</span>
+                          </span>
                         ) : (
                           <span style={{ color: "#D1D5DB" }}>—</span>
                         )}
@@ -592,10 +631,10 @@ export default function AdminUsersClient() {
                           {formatRelative(u.lastSeenAt ?? u.lastSignInAt, adminLang)}
                         </div>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "end", fontVariantNumeric: "tabular-nums" }}>
+                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "center", fontVariantNumeric: "tabular-nums" }}>
                         {u.searchCount}
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#6B7280", fontSize: 12, textAlign: "start" }}>
+                      <td style={{ padding: "12px 16px", color: "#6B7280", fontSize: 12, textAlign: "center" }}>
                         {u.providers.map((p) => p.replace(".com", "").replace("password", "email")).join(", ")}
                       </td>
                     </tr>
@@ -634,7 +673,7 @@ function Th({
   onClick?: () => void;
   active?: boolean;
   dir?: "asc" | "desc";
-  align?: "end";
+  align?: "end" | "center";
 }) {
   return (
     <th
