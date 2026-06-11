@@ -7,6 +7,7 @@ type Plan = "basic" | "clear" | "deep";
 type AdminUserRow = {
   uid: string;
   email: string | null;
+  displayName: string | null;
   createdAt: string | null;
   lastSignInAt: string | null;
   providers: string[];
@@ -19,6 +20,128 @@ type AdminUserRow = {
   lastSearchAt: string | null;
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+};
+
+type AdminLang = "en" | "he";
+const ADMIN_LANG_KEY = "gadit_admin_lang_v1";
+
+// All admin-dashboard strings live in one dictionary so adding a third
+// language (or tweaking copy) is a single-file edit. Keys mirror the
+// English label so reading the JSX still tells you what's on screen.
+const STRINGS: Record<AdminLang, {
+  title: string;
+  totalUsersFooter: (n: number) => string;
+  loading: string;
+  signOut: string;
+  langToggle: string;
+  statTotalUsers: string;
+  statSignups7: string;
+  statSignups30: string;
+  statBasic: string;
+  statClear: string;
+  statDeep: string;
+  byCountry: string;
+  searchPlaceholder: string;
+  allPlans: string;
+  basic: string;
+  clear: string;
+  deep: string;
+  allTime: string;
+  last7: string;
+  last30: string;
+  last90: string;
+  dateRangeTitle: string;
+  colUser: string;
+  colPlan: string;
+  colCountry: string;
+  colSignedUp: string;
+  colLastSeen: string;
+  colSearches: string;
+  colProvider: string;
+  noUsers: string;
+  showingFooter: (n: number, total: number) => string;
+  countryFooterNote: string;
+  unlockTitle: string;
+  unlockBody: string;
+  unlockCta: string;
+  unlockPlaceholder: string;
+}> = {
+  en: {
+    title: "Gadit · Users",
+    totalUsersFooter: (n) => `${n} total users`,
+    loading: "Loading…",
+    signOut: "Sign out",
+    langToggle: "עברית",
+    statTotalUsers: "Total users",
+    statSignups7: "Signups · 7 days",
+    statSignups30: "Signups · 30 days",
+    statBasic: "Basic",
+    statClear: "Clear",
+    statDeep: "Deep",
+    byCountry: "BY COUNTRY",
+    searchPlaceholder: "Search email or uid…",
+    allPlans: "All plans",
+    basic: "Basic",
+    clear: "Clear",
+    deep: "Deep",
+    allTime: "All time",
+    last7: "Last 7 days",
+    last30: "Last 30 days",
+    last90: "Last 90 days",
+    dateRangeTitle: "Filter by signup date range",
+    colUser: "User",
+    colPlan: "Plan",
+    colCountry: "Country",
+    colSignedUp: "Signed up",
+    colLastSeen: "Last seen",
+    colSearches: "Searches",
+    colProvider: "Provider",
+    noUsers: "No matching users.",
+    showingFooter: (n, total) => `Showing ${n} of ${total}.`,
+    countryFooterNote: "Country is captured automatically on each authenticated API hit via Vercel edge geolocation; users who haven't returned since this feature shipped won't have a country yet.",
+    unlockTitle: "Admin · Users",
+    unlockBody: "Enter ADMIN_SECRET to view the user dashboard.",
+    unlockCta: "Unlock",
+    unlockPlaceholder: "ADMIN_SECRET",
+  },
+  he: {
+    title: "Gadit · משתמשים",
+    totalUsersFooter: (n) => `סך הכל ${n} משתמשים`,
+    loading: "טוען…",
+    signOut: "התנתקות",
+    langToggle: "English",
+    statTotalUsers: "סך משתמשים",
+    statSignups7: "הרשמות · 7 ימים",
+    statSignups30: "הרשמות · 30 ימים",
+    statBasic: "Basic",
+    statClear: "Clear",
+    statDeep: "Deep",
+    byCountry: "לפי מדינה",
+    searchPlaceholder: "חיפוש לפי אימייל או מזהה…",
+    allPlans: "כל המסלולים",
+    basic: "Basic",
+    clear: "Clear",
+    deep: "Deep",
+    allTime: "כל הזמן",
+    last7: "7 ימים אחרונים",
+    last30: "30 ימים אחרונים",
+    last90: "90 ימים אחרונים",
+    dateRangeTitle: "סנן לפי טווח תאריכי הצטרפות",
+    colUser: "משתמש",
+    colPlan: "מסלול",
+    colCountry: "מדינה",
+    colSignedUp: "תאריך הצטרפות",
+    colLastSeen: "פעילות אחרונה",
+    colSearches: "חיפושים",
+    colProvider: "ספק",
+    noUsers: "אין משתמשים תואמים.",
+    showingFooter: (n, total) => `מציג ${n} מתוך ${total}.`,
+    countryFooterNote: "המדינה נלכדת אוטומטית בכל קריאת API מאומתת באמצעות Vercel edge geolocation. משתמשים שלא חזרו מאז שהפיצ'ר הזה עלה לא יציגו מדינה.",
+    unlockTitle: "ניהול · משתמשים",
+    unlockBody: "הכנס ADMIN_SECRET כדי לראות את דף הניהול.",
+    unlockCta: "פתח",
+    unlockPlaceholder: "ADMIN_SECRET",
+  },
 };
 
 type ApiResponse = {
@@ -101,6 +224,12 @@ export default function AdminUsersClient() {
   // tends to read this dashboard — "show me everyone who joined in the
   // last 7/30/90 days" is the common cohort cut.
   const [dateRange, setDateRange] = useState<"" | "7d" | "30d" | "90d">("");
+  // Language toggle. Defaults to English (the admin dashboard's original
+  // language); switch persisted in localStorage so Gadi's preference
+  // sticks between visits. Hebrew mode flips the page to RTL via the
+  // `dir` attribute on the main element below.
+  const [adminLang, setAdminLang] = useState<AdminLang>("en");
+  const t = STRINGS[adminLang];
 
   // Bootstrap secret from localStorage. set-state-in-effect is flagged
   // by react-hooks but this is the textbook pattern: server-render with
@@ -111,7 +240,16 @@ export default function AdminUsersClient() {
     const stored = localStorage.getItem(SECRET_KEY);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (stored) setSecret(stored);
+    const storedLang = localStorage.getItem(ADMIN_LANG_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (storedLang === "he" || storedLang === "en") setAdminLang(storedLang);
   }, []);
+
+  const toggleLang = () => {
+    const next: AdminLang = adminLang === "en" ? "he" : "en";
+    setAdminLang(next);
+    if (typeof window !== "undefined") localStorage.setItem(ADMIN_LANG_KEY, next);
+  };
 
   // Fetch whenever we have a secret
   useEffect(() => {
@@ -185,14 +323,13 @@ export default function AdminUsersClient() {
   }, [data, search, planFilter, countryFilter, sortBy, sortDir, dateRange]);
 
   // ---------- Login gate ----------
+  const pageDir = adminLang === "he" ? "rtl" : "ltr";
   if (!secret) {
     return (
-      <main style={pageStyle}>
+      <main style={pageStyle} dir={pageDir}>
         <div style={cardStyle}>
-          <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: "#111827" }}>Admin · Users</h1>
-          <p style={{ color: "#6B7280", fontSize: 14, marginBottom: 24 }}>
-            Enter ADMIN_SECRET to view the user dashboard.
-          </p>
+          <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: "#111827" }}>{t.unlockTitle}</h1>
+          <p style={{ color: "#6B7280", fontSize: 14, marginBottom: 24 }}>{t.unlockBody}</p>
           {/* A hidden username field gives the browser's password manager
               the (origin + username + password) triple it needs to offer
               autofill. Without a username field most password managers
@@ -216,10 +353,11 @@ export default function AdminUsersClient() {
               name="secret"
               autoFocus
               autoComplete="current-password"
-              placeholder="ADMIN_SECRET"
+              placeholder={t.unlockPlaceholder}
               style={inputStyle}
+              dir="ltr"
             />
-            <button type="submit" style={buttonStyle}>Unlock</button>
+            <button type="submit" style={buttonStyle}>{t.unlockCta}</button>
           </form>
         </div>
       </main>
@@ -227,32 +365,39 @@ export default function AdminUsersClient() {
   }
 
   // ---------- Dashboard ----------
-  // Force LTR on the entire admin page regardless of the browser locale.
-  // Without this, a Hebrew/Arabic browser flipped the table layout —
-  // the "Searches" right-aligned numeric column landed under the "Email"
-  // header, etc. (Gadi spotted the visual misalignment on June 11.)
-  // The admin page is English-only by design; forcing LTR fixes the
-  // header-to-column alignment in one line.
+  // Direction follows the chosen admin language: LTR in EN, RTL in HE.
+  // The forced-LTR setup we had earlier was specifically to defeat the
+  // visitor browser's locale; now that language is an explicit toggle
+  // we want the page to actually flip in Hebrew mode.
   return (
-    <main style={pageStyle} dir="ltr">
+    <main style={pageStyle} dir={pageDir}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "32px 24px" }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827" }}>Gadit · Users</h1>
+            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
             <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
-              {data ? `${data.counts.total} total users` : loading ? "Loading…" : ""}
+              {data ? t.totalUsersFooter(data.counts.total) : loading ? t.loading : ""}
             </p>
           </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem(SECRET_KEY);
-              setSecret(null);
-              setData(null);
-            }}
-            style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
-          >
-            Sign out
-          </button>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              onClick={toggleLang}
+              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
+              title={adminLang === "en" ? "Switch to Hebrew" : "Switch to English"}
+            >
+              {t.langToggle}
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem(SECRET_KEY);
+                setSecret(null);
+                setData(null);
+              }}
+              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
+            >
+              {t.signOut}
+            </button>
+          </div>
         </header>
 
         {error && (
@@ -261,22 +406,26 @@ export default function AdminUsersClient() {
           </div>
         )}
 
-        {/* Stat cards */}
+        {/* Stat cards — labels and big numbers centered inside each card
+            (Gadi's June 11 ask). Pulls the eye to the value first and
+            balances the row visually regardless of label length, which
+            matters in Hebrew where "סך משתמשים" and "הרשמות · 30 ימים"
+            measure very differently. */}
         {data && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
-            <StatCard label="Total users" value={data.counts.total} />
-            <StatCard label="Signups · 7 days" value={data.counts.signupsLast7Days} />
-            <StatCard label="Signups · 30 days" value={data.counts.signupsLast30Days} />
-            <StatCard label="Basic" value={data.counts.byPlan.basic} accent="#9CA3AF" />
-            <StatCard label="Clear" value={data.counts.byPlan.clear} accent="#0EA5A5" />
-            <StatCard label="Deep" value={data.counts.byPlan.deep} accent="#7C3AED" />
+            <StatCard label={t.statTotalUsers} value={data.counts.total} />
+            <StatCard label={t.statSignups7} value={data.counts.signupsLast7Days} />
+            <StatCard label={t.statSignups30} value={data.counts.signupsLast30Days} />
+            <StatCard label={t.statBasic} value={data.counts.byPlan.basic} accent="#9CA3AF" />
+            <StatCard label={t.statClear} value={data.counts.byPlan.clear} accent="#0EA5A5" />
+            <StatCard label={t.statDeep} value={data.counts.byPlan.deep} accent="#7C3AED" />
           </div>
         )}
 
         {/* Country breakdown */}
         {data && Object.keys(data.counts.byCountry).length > 0 && (
           <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", marginBottom: 12, letterSpacing: 0.5 }}>BY COUNTRY</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", marginBottom: 12, letterSpacing: 0.5, textTransform: "uppercase" }}>{t.byCountry}</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {Object.entries(data.counts.byCountry).slice(0, 30).map(([cc, n]) => (
                 <button
@@ -310,7 +459,7 @@ export default function AdminUsersClient() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search email or uid…"
+            placeholder={t.searchPlaceholder}
             style={{ ...inputStyle, flex: "1 1 220px", marginBottom: 0 }}
           />
           <select
@@ -318,21 +467,21 @@ export default function AdminUsersClient() {
             onChange={(e) => setPlanFilter(e.target.value as "" | Plan)}
             style={{ ...inputStyle, width: "auto", marginBottom: 0 }}
           >
-            <option value="">All plans</option>
-            <option value="basic">Basic</option>
-            <option value="clear">Clear</option>
-            <option value="deep">Deep</option>
+            <option value="">{t.allPlans}</option>
+            <option value="basic">{t.basic}</option>
+            <option value="clear">{t.clear}</option>
+            <option value="deep">{t.deep}</option>
           </select>
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value as "" | "7d" | "30d" | "90d")}
             style={{ ...inputStyle, width: "auto", marginBottom: 0 }}
-            title="Filter by signup date range"
+            title={t.dateRangeTitle}
           >
-            <option value="">All time</option>
-            <option value="7d">Last 7 days</option>
-            <option value="30d">Last 30 days</option>
-            <option value="90d">Last 90 days</option>
+            <option value="">{t.allTime}</option>
+            <option value="7d">{t.last7}</option>
+            <option value="30d">{t.last30}</option>
+            <option value="90d">{t.last90}</option>
           </select>
           {countryFilter && (
             <button
@@ -350,13 +499,13 @@ export default function AdminUsersClient() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
               <thead style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
                 <tr>
-                  <Th label="Email" />
-                  <Th label="Plan"      onClick={() => toggleSort("plan", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "plan"} dir={sortDir} />
-                  <Th label="Country"   onClick={() => toggleSort("country", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "country"} dir={sortDir} />
-                  <Th label="Signed up" onClick={() => toggleSort("createdAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "createdAt"} dir={sortDir} />
-                  <Th label="Last seen" onClick={() => toggleSort("lastSeenAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "lastSeenAt"} dir={sortDir} />
-                  <Th label="Searches"  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="right" />
-                  <Th label="Provider" />
+                  <Th label={t.colUser} />
+                  <Th label={t.colPlan}      onClick={() => toggleSort("plan", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "plan"} dir={sortDir} />
+                  <Th label={t.colCountry}   onClick={() => toggleSort("country", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "country"} dir={sortDir} />
+                  <Th label={t.colSignedUp}  onClick={() => toggleSort("createdAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "createdAt"} dir={sortDir} />
+                  <Th label={t.colLastSeen}  onClick={() => toggleSort("lastSeenAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "lastSeenAt"} dir={sortDir} />
+                  <Th label={t.colSearches}  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="right" />
+                  <Th label={t.colProvider} />
                 </tr>
               </thead>
               <tbody>
@@ -364,8 +513,15 @@ export default function AdminUsersClient() {
                   const badge = planBadge(u.plan);
                   return (
                     <tr key={u.uid} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                      <td style={{ padding: "12px 16px", color: "#111827" }}>
-                        <div style={{ fontWeight: 500 }}>{u.email ?? "(no email)"}</div>
+                      <td style={{ padding: "12px 16px", color: "#111827" }} dir="ltr">
+                        {u.displayName && (
+                          <div style={{ fontWeight: 600, color: "#111827", marginBottom: 2 }}>
+                            {u.displayName}
+                          </div>
+                        )}
+                        <div style={{ fontWeight: u.displayName ? 400 : 500, color: u.displayName ? "#4B5563" : "#111827" }}>
+                          {u.email ?? "(no email)"}
+                        </div>
                         <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>{u.uid.slice(0, 16)}…</div>
                       </td>
                       <td style={{ padding: "12px 16px" }}>
@@ -414,7 +570,7 @@ export default function AdminUsersClient() {
                 {filteredSorted.length === 0 && !loading && (
                   <tr>
                     <td colSpan={7} style={{ padding: 48, textAlign: "center", color: "#9CA3AF" }}>
-                      {data ? "No matching users." : "Loading…"}
+                      {data ? t.noUsers : t.loading}
                     </td>
                   </tr>
                 )}
@@ -425,7 +581,7 @@ export default function AdminUsersClient() {
 
         {data && (
           <p style={{ marginTop: 12, fontSize: 12, color: "#9CA3AF" }}>
-            Showing {filteredSorted.length} of {data.counts.total}. Country is captured automatically on each authenticated API hit via Vercel edge geolocation; users who have never returned since this feature shipped won&apos;t have a country yet.
+            {t.showingFooter(filteredSorted.length, data.counts.total)} {t.countryFooterNote}
           </p>
         )}
       </div>
@@ -470,11 +626,11 @@ function Th({
 
 function StatCard({ label, value, accent }: { label: string; value: number; accent?: string }) {
   return (
-    <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16 }}>
+    <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}>
       <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", letterSpacing: 0.5, textTransform: "uppercase" }}>
         {label}
       </div>
-      <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", marginTop: 4 }}>
+      <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>
         {value.toLocaleString()}
       </div>
     </div>

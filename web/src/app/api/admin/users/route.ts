@@ -41,6 +41,7 @@ type Plan = "basic" | "clear" | "deep";
 type AdminUserRow = {
   uid: string;
   email: string | null;
+  displayName: string | null;      // Firebase Auth displayName ("First Last")
   createdAt: string | null;        // ISO
   lastSignInAt: string | null;     // ISO
   providers: string[];
@@ -119,9 +120,19 @@ export async function GET(req: NextRequest) {
   // ---------- 3) Project + filter ----------
   const rows: AdminUserRow[] = authUsers.map((u) => {
     const d = userDocs.get(u.uid) ?? {};
+    // displayName comes from Firebase Auth (set automatically on Google
+    // signup, optionally on email signup). If Auth doesn't have it,
+    // fall back to a `displayName` / `name` field on the Firestore
+    // /users/{uid} doc — some older accounts have it stored there only.
+    const displayName =
+      (typeof u.displayName === "string" && u.displayName.trim()) ? u.displayName.trim() :
+      (typeof d.displayName === "string" && d.displayName.trim()) ? (d.displayName as string).trim() :
+      (typeof d.name === "string" && (d.name as string).trim()) ? (d.name as string).trim() :
+      null;
     return {
       uid: u.uid,
       email: u.email ?? null,
+      displayName,
       createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : null,
       lastSignInAt: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime).toISOString() : null,
       providers: u.providerData.map((p) => p.providerId),
