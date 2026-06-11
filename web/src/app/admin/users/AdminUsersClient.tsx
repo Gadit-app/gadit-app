@@ -530,7 +530,7 @@ export default function AdminUsersClient() {
                   <Th label={t.colCountry}   onClick={() => toggleSort("country", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "country"} dir={sortDir} />
                   <Th label={t.colSignedUp}  onClick={() => toggleSort("createdAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "createdAt"} dir={sortDir} />
                   <Th label={t.colLastSeen}  onClick={() => toggleSort("lastSeenAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "lastSeenAt"} dir={sortDir} />
-                  <Th label={t.colSearches}  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="right" />
+                  <Th label={t.colSearches}  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="end" />
                   <Th label={t.colProvider} />
                 </tr>
               </thead>
@@ -539,12 +539,18 @@ export default function AdminUsersClient() {
                   const badge = planBadge(u.plan);
                   return (
                     <tr key={u.uid} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                      <td style={{ padding: "12px 16px", color: "#111827" }} dir="ltr">
+                      <td style={{ padding: "12px 16px", color: "#111827" }}>
                         {u.displayName && (
                           <div style={{ fontWeight: 600, color: "#111827", marginBottom: 2 }}>
                             {u.displayName}
                           </div>
                         )}
+                        {/* Email + uid stay as ASCII strings; the browser
+                            renders them LTR even inside an RTL container
+                            because their characters are strong-LTR. No need
+                            for an explicit dir override here — and removing
+                            it lets the cell's start-edge align follow the
+                            page direction (right in HE, left in EN). */}
                         <div style={{ fontWeight: u.displayName ? 400 : 500, color: u.displayName ? "#4B5563" : "#111827" }}>
                           {u.email ?? "(no email)"}
                         </div>
@@ -584,7 +590,7 @@ export default function AdminUsersClient() {
                           {formatRelative(u.lastSeenAt ?? u.lastSignInAt, adminLang)}
                         </div>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
+                      <td style={{ padding: "12px 16px", color: "#374151", textAlign: "end", fontVariantNumeric: "tabular-nums" }}>
                         {u.searchCount}
                       </td>
                       <td style={{ padding: "12px 16px", color: "#6B7280", fontSize: 12 }}>
@@ -626,13 +632,20 @@ function Th({
   onClick?: () => void;
   active?: boolean;
   dir?: "asc" | "desc";
-  align?: "right";
+  align?: "end";
 }) {
   return (
     <th
       onClick={onClick}
       style={{
-        textAlign: align ?? "left",
+        // textAlign: "start" / "end" respect the page direction, so
+        // headers right-align in RTL (Hebrew) and left-align in LTR
+        // (English) automatically without a per-language branch.
+        // Earlier hardcoded "left"/"right" was the source of the
+        // Hebrew-mode misalignment — headers appeared on the LEFT
+        // (literal left) of their columns instead of on the RIGHT
+        // (RTL row-start) where they belong.
+        textAlign: align ?? "start",
         padding: "12px 16px",
         fontSize: 11,
         fontWeight: 600,
