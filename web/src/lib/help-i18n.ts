@@ -80,7 +80,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "change-card",
-            q: "I want to change the credit card on my subscription. How?",
+            q: "How do I change the credit card on my subscription?",
             a: [
               "You can switch to a new card in under a minute without cancelling. Your current subscription keeps running, just on the new card.",
               "1. Sign in at gadit.app and open your Account page (top right). 2. Click \"Manage billing\". 3. A secure Stripe page opens. Click \"Add payment method\", enter the new card, and mark it as Default. 4. Optionally remove the old card.",
@@ -433,7 +433,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "change-card",
-            q: "אני רוצה להחליף כרטיס אשראי לחיוב המנוי שלי. איך?",
+            q: "איך אני מחליף כרטיס אשראי לחיוב המנוי שלי?",
             a: [
               "אפשר להחליף לכרטיס חדש בפחות מדקה, בלי לבטל. המנוי הנוכחי שלכם ממשיך, פשוט עם הכרטיס החדש.",
               "1. היכנסו ל-gadit.app ופתחו את עמוד החשבון (פינה ימנית עליונה). 2. לחצו על \"ניהול חיוב\". 3. ייפתח מסך מאובטח של Stripe. לחצו \"Add payment method\", הכניסו את הכרטיס החדש, וסמנו אותו כברירת מחדל. 4. אופציונלי, מחקו את הכרטיס הישן.",

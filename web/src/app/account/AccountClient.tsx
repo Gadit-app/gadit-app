@@ -1056,15 +1056,14 @@ function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?
       type="button"
       onClick={onClick}
       style={{
-        minWidth: 160,
-        padding: "12px 24px",
-        borderRadius: 12,
+        padding: "9px 18px",
+        borderRadius: 10,
         background: "var(--teal, #0EA5A5)",
         color: "white",
         border: "none",
         cursor: "pointer",
         fontFamily: fontBody(lang),
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 600,
         boxShadow: "0 1px 2px rgba(11,138,138,0.2), 0 4px 12px rgba(11,138,138,0.15)",
       }}
