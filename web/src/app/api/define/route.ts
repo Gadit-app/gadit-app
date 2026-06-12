@@ -307,6 +307,35 @@ Each meanings[] item must describe ONE single concept. If you find yourself writ
 
 RULE OF THUMB: If the examples of a single meaning use the word to describe completely different physical things (an animal's head vs. sunlight, a musical instrument vs. a street corner, a financial fund vs. an animal horn), that meaning MUST be split. Examples inside ONE meaning should all refer to ONE physical/conceptual thing.
 
+⚠️ CRITICAL RULE #4b — CONTEMPORARY MEANING TAKES PRIORITY OVER LITERAL/HISTORICAL:
+Many words and phrases have a LITERAL/ORIGINAL meaning that is rarely used in modern speech, AND a CONTEMPORARY/FIGURATIVE meaning that everyone actually uses today. You MUST include BOTH, and you MUST place the contemporary one FIRST in the meanings[] array.
+
+This rule applies to BOTH single words AND multi-word phrases (the user can search for either).
+
+Examples (Hebrew) — the contemporary meaning is what people MEAN when they say the word/phrase today; the literal/historical meaning is what the parts originally referred to. Both belong in meanings[]:
+
+- "קנה מידה":
+  - Contemporary (LIST FIRST): scope/scale/magnitude, used figuratively (אירוע בקנה מידה עולמי, פרויקט בקנה מידה גדול).
+  - Literal/Historical (LIST SECOND): a measuring rod/ruler — a physical reed (קנה) used for measurement (מידה) in antiquity.
+- "אבן דרך":
+  - Contemporary FIRST: a significant achievement or turning point in a process (אבן דרך בקריירה).
+  - Literal SECOND: a physical stone marker placed along an ancient road.
+- "ראש פתוח":
+  - Contemporary FIRST: open-minded, flexible in thinking.
+  - Literal SECOND: head that is physically open (almost never used — but lists it for completeness).
+- "יד ימין":
+  - Contemporary FIRST: a trusted right-hand assistant/deputy.
+  - Literal SECOND: the right hand of the body.
+
+The failure mode this rule prevents: a user searches "קנה מידה" expecting the contemporary "scale/magnitude" sense, and the system returns ONLY the literal measuring-rod meaning. That makes the dictionary useless for that lookup. The literal sense is still valuable (especially next to etymology), but it MUST follow the contemporary sense, not replace it.
+
+Single-word examples where the figurative/contemporary sense must lead:
+- "גשר": #1 a connection/link between things (figurative — most common today); #2 a physical bridge.
+- "שורש": #1 the origin or core of something (figurative); #2 the root of a plant; #3 the root of a Hebrew word (linguistic).
+- "מסלול": #1 path/route in life (career path, life path); #2 racetrack/runway/road; #3 orbital path in astronomy.
+
+ORDERING PRINCIPLE: meanings[0] is what a typical contemporary speaker FIRST thinks of when they hear the word out of context. Only after that come literal, historical, technical, or rare senses.
+
 ג ן¸ CRITICAL RULE #5 ג€” NEVER HALLUCINATE MEANINGS:
 Do NOT invent meanings that don't exist in real dictionaries. "׳§׳¨׳" has NO meaning like "foundation for donating to animals" ג€” that's a hallucination from confusing English "foundation" senses. If a meaning sounds odd, borderline, or you're not sure ג€” OMIT IT. Better to return 4 real meanings than 5 with one invented. When in doubt, cross-reference: would a Hebrew speaker actually use this word this way in a real sentence?
 
