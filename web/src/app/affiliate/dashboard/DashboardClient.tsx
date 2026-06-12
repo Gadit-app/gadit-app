@@ -10,9 +10,9 @@
  * iframe. The iframe handles everything else — referral link, QR
  * code, stats, payouts, settings.
  *
- * Language mapping: Affonso supports 14 UI languages but Hebrew and
- * Czech aren't among them. He/cs users fall back to English so the
- * iframe still renders something sane instead of a broken locale.
+ * Language mapping: Affonso supports 16 UI languages including Hebrew
+ * and Czech (added 2026-06-13). Slovak is still missing; sk users
+ * fall back to English so the iframe still renders something sane.
  *
  * Auth gate: anonymous → prompt login. Plan gate: only Clear / Deep
  * subscribers can be partners. The trust rule is that you can't
@@ -33,9 +33,10 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 
 // Languages Affonso's embedded dashboard supports. Hebrew and Czech
-// aren't on the list; the UI fall back below maps them to English.
+// went live 2026-06-13. Slovak is still missing — falls back to English.
 const AFFONSO_LANGS = new Set([
   "en", "de", "fr", "es", "it", "pt", "nl", "pl", "tr", "ja", "zh", "ko", "ru", "ar",
+  "he", "cs",
 ]);
 
 // Localized strings — inline so this single page doesn't add 9 entries
