@@ -327,12 +327,22 @@ export default async function RootLayout({
               Affonso dashboard (Tracking & Coupons → Cookie Lifetime).
               60 days matches the consumer audience: parents, teachers
               and bloggers decide slowly — a referred reader who comes
-              back two weeks later still attributes to the affiliate. */}
+              back two weeks later still attributes to the affiliate.
+
+              First-party delivery: src points at /r/pixel.js (proxied
+              to cdn.affonso.io via next.config.ts rewrites) and
+              data-api-base="/r" tells the pixel to call /r/track and
+              /r/signups instead of api.affonso.io directly. This
+              defeats ad blockers and privacy guards that block known
+              tracker domains, so referral attribution doesn't silently
+              leak ~20-30% of conversions. Setup per
+              https://affonso.io/help/installation-guides/overview/first-party-delivery */}
           <Script
-            src="https://cdn.affonso.io/js/pixel.min.js"
+            src="/r/pixel.js"
             strategy="afterInteractive"
             data-affonso="cmq3oz349000p11r2lloq0xb2"
             data-cookie_duration="60"
+            data-api-base="/r"
           />
         </body>
     </html>

@@ -618,7 +618,13 @@ export function DashboardPage() {
               // padding=false because the wb-affdash-main container
               // already handles spacing; the Affonso embed would
               // double-pad otherwise.
-              src={`https://affonso.io/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&padding=false`}
+              //
+              // First-party delivery: /r/embed/* is proxied to
+              // affonso.io/embed/* via next.config.ts rewrites so the
+              // iframe loads from a same-origin path that ad blockers
+              // and privacy guards don't touch. See layout.tsx pixel
+              // tag for the broader rationale.
+              src={`/r/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&padding=false`}
               className="wb-affdash-iframe"
               allow="clipboard-write"
               title="Affiliate Dashboard"
