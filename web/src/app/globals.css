@@ -4997,7 +4997,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    visually orphaning it from the rest of the page. Top padding 32px
    adds breathing room from the masthead chrome. */
 .wordbook .wb-word-searchbar-wrap {
-  max-width: 880px;
+  /* 760px matches .wb-word-head and the meaning cards below, so the
+     pill aligns edge-for-edge instead of overhanging the content. */
+  max-width: 760px;
   margin: 0 auto;
   padding: 32px 44px 0;
 }

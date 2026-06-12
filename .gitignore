@@ -38,3 +38,7 @@ yarn-error.log*
 
 # admin scripts (local only)
 web/admin-*.mjs
+
+# Firebase service account JSONs accidentally placed at repo root
+gadit-app-firebase-adminsdk-*.json
+*-firebase-adminsdk-*.json

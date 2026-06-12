@@ -819,7 +819,7 @@ const he: V2Strings = {
   homeSubline:
     "מילון שמבין הקשר — הגדרות, מקור, ביטויים ותמונה חיה, ב־11 שפות.",
 
-  searchPlaceholderHome: "הקלידו או הכתיבו מילה",
+  searchPlaceholderHome: "הקלידו מילה",
   voiceInputTitle: "הכתבת מילה",
   addContext: "הוסיפו הקשר",
   explain: "הסבר",
