@@ -489,11 +489,11 @@ export function AccountPage() {
       </main>
 
       <footer className="wb-home-footer">
-        <div className="wb-home-footer-inner">
-          <Link href={href("/")} className="wb-home-footer-link">{v2(lang, "navSearch")}</Link>
-          <Link href={href("/pricing")} className="wb-home-footer-link">{v2(lang, "navPricing")}</Link>
-          <Link href={href("/features")} className="wb-home-footer-link">{v2(lang, "navFeatures")}</Link>
-        </div>
+        <Link href={href("/")}>{v2(lang, "navSearch")}</Link>
+        <span>·</span>
+        <Link href={href("/pricing")}>{v2(lang, "navPricing")}</Link>
+        <span>·</span>
+        <Link href={href("/features")}>{v2(lang, "navFeatures")}</Link>
       </footer>
     </div>
   );
