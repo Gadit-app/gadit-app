@@ -303,14 +303,19 @@ export function ComposeModalV2({
   open,
   onClose,
   word,
-  meaning,
+  meanings,
+  initialMeaningIndex = 0,
 }: {
   open: boolean;
   onClose: () => void;
   word: string;
-  /** The specific meaning the user is practicing — passed to the API
-   *  so feedback evaluates the right sense, not just any usage. */
-  meaning: string;
+  /** All meanings of the word. The modal renders a picker when there's
+   *  more than one, so the API evaluates against the meaning the user
+   *  actually intends to practice (Ziv: writing for meaning #2 and
+   *  getting marked wrong because the API defaulted to meaning #1). */
+  meanings: string[];
+  /** Which meaning is selected when the modal opens. Defaults to 0. */
+  initialMeaningIndex?: number;
 }) {
   const { user, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -322,6 +327,7 @@ export function ComposeModalV2({
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<CheckResponse | null>(null);
   const [errorKey, setErrorKey] = useState<string>("");
+  const [meaningIndex, setMeaningIndex] = useState(initialMeaningIndex);
 
   // Reset on open
   useEffect(() => {
@@ -330,8 +336,11 @@ export function ComposeModalV2({
       setBusy(false);
       setResult(null);
       setErrorKey("");
+      setMeaningIndex(initialMeaningIndex);
     }
-  }, [open]);
+  }, [open, initialMeaningIndex]);
+
+  const meaning = meanings[meaningIndex] ?? meanings[0] ?? "";
 
   // ESC closes
   useEffect(() => {
@@ -513,6 +522,79 @@ export function ComposeModalV2({
         >
           {v2(lang, "composeSubtitle")}
         </p>
+
+        {meanings.length > 1 && (
+          <div className="mt-4">
+            <div
+              className="gd-font-sans-ui"
+              style={{
+                fontSize: 11.5,
+                color: "var(--gd-ink-500)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                fontWeight: 600,
+                marginBottom: 8,
+              }}
+            >
+              {v2(lang, "composeMeaningPickerLabel")}
+            </div>
+            <div
+              role="radiogroup"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+              }}
+            >
+              {meanings.map((m, i) => {
+                const active = i === meaningIndex;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    disabled={busy}
+                    onClick={() => {
+                      if (busy) return;
+                      setMeaningIndex(i);
+                      setResult(null);
+                    }}
+                    className={bodyFont}
+                    style={{
+                      textAlign: isRtl ? "right" : "left",
+                      padding: "10px 14px",
+                      borderRadius: 10,
+                      background: active
+                        ? "oklch(0.95 0.04 195 / 0.6)"
+                        : "oklch(0 0 0 / 0.025)",
+                      boxShadow: active
+                        ? "inset 0 0 0 1.5px #0EA5A5"
+                        : "inset 0 0 0 1px oklch(0 0 0 / 0.1)",
+                      color: "var(--gd-ink-900)",
+                      fontSize: "clamp(13.5px, 1.4vw, 14.5px)",
+                      lineHeight: 1.45,
+                      cursor: busy ? "default" : "pointer",
+                      opacity: busy ? 0.6 : 1,
+                      transition: "background 0.15s ease, box-shadow 0.15s ease",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: active ? "#0B8A8A" : "var(--gd-ink-500)",
+                        fontWeight: 600,
+                        marginInlineEnd: 8,
+                      }}
+                    >
+                      {i + 1}.
+                    </span>
+                    {m}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="mt-5 relative">

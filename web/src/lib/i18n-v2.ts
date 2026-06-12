@@ -188,6 +188,7 @@ export interface V2Strings {
   composeEyebrow: string;
   composeTitleTemplate: Template1; // takes the word, returns "Write your own sentence with X"
   composeSubtitle: string;
+  composeMeaningPickerLabel: string;
   composePlaceholder: string;
   composeSubmit: string;
   composeChecking: string;
@@ -592,6 +593,7 @@ const en: V2Strings = {
   composeTitleTemplate: (w) => `Write your own sentence with ${w}`,
   composeSubtitle:
     "Use it in a sentence and get instant feedback on grammar, tone, and fit.",
+  composeMeaningPickerLabel: "Pick the meaning you're practicing",
   composePlaceholder: "Type your sentence here…",
   composeSubmit: "Check sentence",
   composeChecking: "Checking…",
@@ -973,6 +975,7 @@ const he: V2Strings = {
   composeTitleTemplate: (w) => `כתבו משפט משלכם עם ${w}`,
   composeSubtitle:
     "השתמשו במילה במשפט וקבלו משוב מיידי על דקדוק, טון, והתאמה.",
+  composeMeaningPickerLabel: "בחרו את המשמעות שאתם מתאמנים עליה",
   composePlaceholder: "כתבו את המשפט שלכם כאן…",
   composeSubmit: "בדיקת המשפט",
   composeChecking: "בודק…",
@@ -1359,6 +1362,7 @@ const ar: V2Strings = {
   composeTitleTemplate: (w) => `اكتب جملتك الخاصة بكلمة ${w}`,
   composeSubtitle:
     "استخدمها في جملة واحصل على ملاحظات فورية حول النحو والنبرة والملاءمة.",
+  composeMeaningPickerLabel: "اختر المعنى الذي تتدرّب عليه",
   composePlaceholder: "اكتب جملتك هنا…",
   composeSubmit: "تحقّق من الجملة",
   composeChecking: "جاري التحقّق…",
@@ -1762,6 +1766,7 @@ const ru: Partial<V2Strings> = {
   composeTitleTemplate: (w) => `Напишите своё предложение со словом ${w}`,
   composeSubtitle:
     "Используйте слово в предложении — получите разбор грамматики, тона и уместности.",
+  composeMeaningPickerLabel: "Выберите значение, которое отрабатываете",
   composePlaceholder: "Напишите предложение здесь…",
   composeSubmit: "Проверить",
   composeChecking: "Проверяем…",
@@ -2146,6 +2151,7 @@ const es: Partial<V2Strings> = {
   composeTitleTemplate: (w) => `Escribe tu propia oración con ${w}`,
   composeSubtitle:
     "Úsala en una oración y recibe feedback al instante sobre gramática, tono y uso.",
+  composeMeaningPickerLabel: "Elige el significado que estás practicando",
   composePlaceholder: "Escribe tu oración aquí…",
   composeSubmit: "Revisar",
   composeChecking: "Revisando…",
@@ -2528,6 +2534,7 @@ const pt: Partial<V2Strings> = {
   composeTitleTemplate: (w) => `Escreva sua própria frase com ${w}`,
   composeSubtitle:
     "Use a palavra numa frase e receba feedback na hora sobre gramática, tom e encaixe.",
+  composeMeaningPickerLabel: "Escolha o significado que está praticando",
   composePlaceholder: "Escreva sua frase aqui…",
   composeSubmit: "Verificar",
   composeChecking: "Verificando…",
@@ -2910,6 +2917,7 @@ const fr: Partial<V2Strings> = {
   composeTitleTemplate: (w) => `Écrivez votre propre phrase avec ${w}`,
   composeSubtitle:
     "Utilisez le mot dans une phrase et recevez un retour instantané sur la grammaire, le ton et l'emploi.",
+  composeMeaningPickerLabel: "Choisissez le sens que vous travaillez",
   composePlaceholder: "Tapez votre phrase ici…",
   composeSubmit: "Vérifier",
   composeChecking: "Vérification…",
@@ -3287,6 +3295,7 @@ const de: V2Strings = {
   composeEyebrow: "Schreiben",
   composeTitleTemplate: (w) => `Schreibe deinen eigenen Satz mit ${w}`,
   composeSubtitle: "Nutze es in einem Satz und erhalte sofort Feedback zu Grammatik, Ton und Passung.",
+  composeMeaningPickerLabel: "Wähle die Bedeutung, die du übst",
   composePlaceholder: "Tippe deinen Satz hier…",
   composeSubmit: "Satz prüfen",
   composeChecking: "Prüfe…",
@@ -3641,6 +3650,7 @@ const cs: V2Strings = {
   composeEyebrow: "Napsat",
   composeTitleTemplate: (w) => `Napiš svou větu se slovem ${w}`,
   composeSubtitle: "Použij ho ve větě a získej okamžitou zpětnou vazbu na gramatiku, tón a vhodnost.",
+  composeMeaningPickerLabel: "Vyber význam, který procvičuješ",
   composePlaceholder: "Napiš svou větu sem…",
   composeSubmit: "Zkontrolovat větu",
   composeChecking: "Kontroluji…",
@@ -4002,6 +4012,7 @@ const sk: V2Strings = {
   composeEyebrow: "Napísať",
   composeTitleTemplate: (w) => `Napíš svoju vetu so slovom ${w}`,
   composeSubtitle: "Použi ho vo vete a získaj okamžitú spätnú väzbu na gramatiku, tón a vhodnosť.",
+  composeMeaningPickerLabel: "Vyber význam, ktorý si precvičuješ",
   composePlaceholder: "Napíš svoju vetu sem…",
   composeSubmit: "Skontrolovať vetu",
   composeChecking: "Kontrolujem…",
@@ -4395,6 +4406,7 @@ const it: Partial<V2Strings> = {
   composeEyebrow: "Scrivi",
   composeTitleTemplate: (w) => `Scrivi la tua frase con ${w}`,
   composeSubtitle: "Usala in una frase e ricevi un feedback immediato su grammatica, tono e adattamento.",
+  composeMeaningPickerLabel: "Scegli il significato che stai esercitando",
   composePlaceholder: "Scrivi qui la tua frase…",
   composeSubmit: "Verifica la frase",
   composeChecking: "Verifica in corso…",
@@ -4772,6 +4784,7 @@ const ja: Partial<V2Strings> = {
   composeEyebrow: "書く",
   composeTitleTemplate: (w) => `「${w}」を使って自分の文を書く`,
   composeSubtitle: "文の中で使い、文法・トーン・適切さについて即座にフィードバックを受け取れます。",
+  composeMeaningPickerLabel: "練習している意味を選んでください",
   composePlaceholder: "ここに文を入力…",
   composeSubmit: "文をチェック",
   composeChecking: "チェック中…",

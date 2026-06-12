@@ -1294,7 +1294,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           open={composeOpen}
           onClose={() => setComposeOpen(false)}
           word={result.word}
-          meaning={result.meanings[0]?.meaning ?? ""}
+          meanings={result.meanings.map((m) => m.meaning)}
         />
       )}
 
