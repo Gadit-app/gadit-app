@@ -133,7 +133,7 @@ function QuizOption({
       type="button"
       onClick={interactive ? onClick : undefined}
       disabled={!interactive}
-      className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse text-right" : ""} w-full transition-all`}
+      className={`flex items-start gap-3 ${isRtl ? "text-right" : ""} w-full transition-all`}
       style={{
         padding: "16px 18px",
         borderRadius: 12,

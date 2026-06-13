@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 
+// gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
+// can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
+// serverless cap so we don't kill a request that would have succeeded.
+export const maxDuration = 60;
+
 const MONTHLY_LIMIT_CLEAR = 30;
 const MONTHLY_LIMIT_DEEP = 100;
 
@@ -109,17 +114,18 @@ export async function POST(req: NextRequest) {
     // headword — safer for the filter, still useful as an
     // illustration.
     async function callDalle(prompt: string) {
-      // V3 fix — Vercel logs:
-      //   'The model dall-e-3 does not exist.'
-      // OpenAI deprecated dall-e-3 in their public API and replaced it
-      // with gpt-image-1. The new model uses a different quality enum
-      // ('low' / 'medium' / 'high' / 'auto'), returns b64_json by
-      // default (no response_format needed), and supports the same
-      // 1024-square output.
-      // Picked 'medium' as the floor: dictionary illustration only
-      // needs the object to be recognizable, not photo-realistic art.
-      // 'medium' is ~$0.07/image, 'low' ~$0.02/image. The cache means
-      // the per-popular-word amortized cost is well below either.
+      // gpt-image-1 replaced dall-e-3 in OpenAI's public API. The new
+      // model uses quality enum 'low' / 'medium' / 'high' / 'auto',
+      // returns b64_json by default (no response_format needed), and
+      // supports the same 1024-square output.
+      //
+      // Picked 'low' for speed (Gadi user feedback 2026-06-13: 'תמונות
+      // לוקחות הרבה זמן'). Low is roughly 3x faster than medium
+      // (~5-15s vs ~10-30s+) and 3x cheaper (~$0.02/image vs ~$0.07).
+      // For a dictionary illustration we just need the subject to be
+      // recognizable, not photo-realistic — 'low' clears that bar.
+      // Cache means the per-popular-word amortized cost is well below
+      // either tier.
       return fetch("https://api.openai.com/v1/images/generations", {
         method: "POST",
         headers: {
@@ -131,7 +137,7 @@ export async function POST(req: NextRequest) {
           prompt,
           n: 1,
           size: "1024x1024",
-          quality: "medium",
+          quality: "low",
         }),
       });
     }
