@@ -334,12 +334,20 @@ export function DashboardPage() {
     | { kind: "error"; message: string };
   const [stage, setStage] = useState<Stage>({ kind: "init" });
 
-  // Affonso lang param. He/cs fall back to English because Affonso
-  // doesn't ship those locales yet.
+  // Affonso lang param. Slovak still falls back to English because
+  // Affonso hasn't shipped it yet (Hebrew and Czech went live 2026-06-13).
   const affonsoLang = useMemo(
     () => (AFFONSO_LANGS.has(lang) ? lang : "en"),
     [lang],
   );
+
+  // RTL hint for the embedded iframe. Affonso doesn't document a `dir`
+  // URL param yet, but most embeddable widgets honour one when present,
+  // and it costs nothing if they don't. Hebrew and Arabic are the only
+  // RTL languages we ship. If Affonso ignores this, the proper fix is
+  // server-side on their end (set `<html dir="rtl">` when lang=he|ar);
+  // tracked in the email thread with Silvestro.
+  const affonsoDir = lang === "he" || lang === "ar" ? "rtl" : "ltr";
 
   // Auth gate — auto-prompt the login modal exactly once per visit
   // when the page loads without a signed-in user. If the visitor
@@ -624,7 +632,7 @@ export function DashboardPage() {
               // iframe loads from a same-origin path that ad blockers
               // and privacy guards don't touch. See layout.tsx pixel
               // tag for the broader rationale.
-              src={`/r/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&padding=false`}
+              src={`/r/embed/referrals?token=${encodeURIComponent(stage.token)}&theme=light&lang=${affonsoLang}&dir=${affonsoDir}&padding=false`}
               className="wb-affdash-iframe"
               allow="clipboard-write"
               title="Affiliate Dashboard"
