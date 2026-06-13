@@ -58,6 +58,11 @@ const STRINGS: Record<AdminLang, {
   colLastSeen: string;
   colSearches: string;
   colProvider: string;
+  colActions: string;
+  deleteUserLabel: string;
+  deleteConfirm: (email: string) => string;
+  deleteSuccess: (email: string) => string;
+  deleteError: (msg: string) => string;
   noUsers: string;
   showingFooter: (n: number, total: number) => string;
   countryFooterNote: string;
@@ -96,6 +101,11 @@ const STRINGS: Record<AdminLang, {
     colLastSeen: "Last seen",
     colSearches: "Searches",
     colProvider: "Provider",
+    colActions: "Actions",
+    deleteUserLabel: "Delete user",
+    deleteConfirm: (email) => `Delete ${email}?\n\nThis removes the Firebase Auth account, the user document, and the entire notebook subtree. The email can sign up again afterwards.\n\nThis cannot be undone.`,
+    deleteSuccess: (email) => `Deleted ${email}.`,
+    deleteError: (msg) => `Delete failed: ${msg}`,
     noUsers: "No matching users.",
     showingFooter: (n, total) => `Showing ${n} of ${total}.`,
     countryFooterNote: "Country is captured automatically on each authenticated API hit via Vercel edge geolocation; users who haven't returned since this feature shipped won't have a country yet.",
@@ -134,6 +144,11 @@ const STRINGS: Record<AdminLang, {
     colLastSeen: "פעילות אחרונה",
     colSearches: "חיפושים",
     colProvider: "ספק",
+    colActions: "פעולות",
+    deleteUserLabel: "מחיקת משתמש",
+    deleteConfirm: (email) => `למחוק את ${email}?\n\nהפעולה מוחקת את חשבון Firebase Auth, את מסמך המשתמש, ואת כל המחברת שלו. האימייל יוכל להירשם שוב לאחר מכן.\n\nאי אפשר לבטל את הפעולה.`,
+    deleteSuccess: (email) => `${email} נמחק.`,
+    deleteError: (msg) => `המחיקה נכשלה: ${msg}`,
     noUsers: "אין משתמשים תואמים.",
     showingFooter: (n, total) => `מציג ${n} מתוך ${total}.`,
     countryFooterNote: "המדינה נלכדת אוטומטית בכל קריאת API מאומתת באמצעות Vercel edge geolocation. משתמשים שלא חזרו מאז שהפיצ'ר הזה עלה לא יציגו מדינה.",
@@ -265,6 +280,10 @@ export default function AdminUsersClient() {
   // tends to read this dashboard — "show me everyone who joined in the
   // last 7/30/90 days" is the common cohort cut.
   const [dateRange, setDateRange] = useState<"" | "7d" | "30d" | "90d">("");
+  // UIDs currently being deleted — the row's trash button stays
+  // disabled and shows a spinner until the API responds. Set, not
+  // boolean, so concurrent deletes don't fight over one flag.
+  const [deletingUids, setDeletingUids] = useState<Set<string>>(new Set());
   // Language toggle. Defaults to English (the admin dashboard's original
   // language); switch persisted in localStorage so Gadi's preference
   // sticks between visits. Hebrew mode flips the page to RTL via the
@@ -290,6 +309,62 @@ export default function AdminUsersClient() {
     const next: AdminLang = adminLang === "en" ? "he" : "en";
     setAdminLang(next);
     if (typeof window !== "undefined") localStorage.setItem(ADMIN_LANG_KEY, next);
+  };
+
+  // Delete a user via /api/admin/delete-user. The endpoint nukes the
+  // Firebase Auth account, the /users/{uid} doc, and the entire
+  // notebook subcollection in one shot. On success we splice the row
+  // out of local state instead of refetching the whole list — snappier
+  // and avoids the loading spinner flash.
+  const handleDeleteUser = async (u: AdminUserRow) => {
+    if (!u.email) {
+      alert(t.deleteError("user has no email"));
+      return;
+    }
+    if (!secret) return;
+    if (!window.confirm(t.deleteConfirm(u.email))) return;
+
+    setDeletingUids((s) => {
+      const next = new Set(s);
+      next.add(u.uid);
+      return next;
+    });
+
+    try {
+      const res = await fetch(
+        `/api/admin/delete-user?secret=${encodeURIComponent(secret)}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: u.email }),
+        },
+      );
+      const json = (await res.json().catch(() => null)) as
+        | { error?: string; deletedAuthUser?: boolean }
+        | null;
+      if (!res.ok) {
+        alert(t.deleteError(json?.error ?? `HTTP ${res.status}`));
+        return;
+      }
+      // Splice the deleted row out of local state.
+      setData((d) =>
+        d
+          ? {
+              ...d,
+              users: d.users.filter((row) => row.uid !== u.uid),
+              counts: { ...d.counts, total: Math.max(0, d.counts.total - 1) },
+            }
+          : d,
+      );
+    } catch (e) {
+      alert(t.deleteError(String(e instanceof Error ? e.message : e)));
+    } finally {
+      setDeletingUids((s) => {
+        const next = new Set(s);
+        next.delete(u.uid);
+        return next;
+      });
+    }
   };
 
   // Fetch whenever we have a secret
@@ -552,6 +627,7 @@ export default function AdminUsersClient() {
                 <col style={{ width: 130 }} />
                 <col style={{ width: 100 }} />
                 <col style={{ width: 100 }} />
+                <col style={{ width: 60 }} />
               </colgroup>
               <thead style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
                 <tr>
@@ -562,6 +638,7 @@ export default function AdminUsersClient() {
                   <Th label={t.colLastSeen}  onClick={() => toggleSort("lastSeenAt", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "lastSeenAt"} dir={sortDir} />
                   <Th label={t.colSearches}  onClick={() => toggleSort("searchCount", sortBy, sortDir, setSortBy, setSortDir)} active={sortBy === "searchCount"} dir={sortDir} align="center" />
                   <Th label={t.colProvider} align="center" />
+                  <Th label={t.colActions} align="center" />
                 </tr>
               </thead>
               <tbody>
@@ -637,12 +714,45 @@ export default function AdminUsersClient() {
                       <td style={{ padding: "12px 16px", color: "#6B7280", fontSize: 12, textAlign: "center" }}>
                         {u.providers.map((p) => p.replace(".com", "").replace("password", "email")).join(", ")}
                       </td>
+                      <td style={{ padding: "12px 8px", textAlign: "center" }}>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteUser(u)}
+                          disabled={deletingUids.has(u.uid)}
+                          title={t.deleteUserLabel}
+                          aria-label={t.deleteUserLabel}
+                          style={{
+                            background: "transparent",
+                            border: "1px solid #FCA5A5",
+                            color: deletingUids.has(u.uid) ? "#9CA3AF" : "#DC2626",
+                            borderRadius: 6,
+                            padding: "5px 8px",
+                            cursor: deletingUids.has(u.uid) ? "wait" : "pointer",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            opacity: deletingUids.has(u.uid) ? 0.6 : 1,
+                          }}
+                        >
+                          {deletingUids.has(u.uid) ? (
+                            <span style={{ fontSize: 11 }}>…</span>
+                          ) : (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <path d="M3 6h18" />
+                              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                              <path d="M10 11v6" />
+                              <path d="M14 11v6" />
+                            </svg>
+                          )}
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
                 {filteredSorted.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={7} style={{ padding: 48, textAlign: "center", color: "#9CA3AF" }}>
+                    <td colSpan={8} style={{ padding: 48, textAlign: "center", color: "#9CA3AF" }}>
                       {data ? t.noUsers : t.loading}
                     </td>
                   </tr>
