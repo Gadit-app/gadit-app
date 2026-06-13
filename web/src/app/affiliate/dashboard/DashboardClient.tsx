@@ -422,18 +422,10 @@ export function DashboardPage() {
   // localStorage so it doesn't nag returning visitors. Long-term plan:
   // ask Affonso for a payouts-scoped embed token (or write API), then
   // build a native payout form inside /account and drop this card.
-  const [payoutGuideOpen, setPayoutGuideOpen] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (localStorage.getItem("gadit-affiliate-payout-guide-dismissed") === "1") return;
-    setPayoutGuideOpen(true);
-  }, []);
-  const dismissPayoutGuide = () => {
-    setPayoutGuideOpen(false);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("gadit-affiliate-payout-guide-dismissed", "1");
-    }
-  };
+  // Payout guide state removed 2026-06-13 along with the banner render.
+  // See the comment in the JSX render for full context. To re-enable,
+  // restore both blocks; localStorage key "gadit-affiliate-payout-guide-
+  // dismissed" was the dismiss flag.
 
   // Mobile burger menu mirrors the pattern used in /play, /affiliates,
   // /features. Without it the topbar has zero interactive elements
@@ -607,21 +599,17 @@ export function DashboardPage() {
 
         {user && stage.kind === "ready" && (
           <>
-            {payoutGuideOpen && (
-              <div className="wb-affdash-payout-guide" role="note">
-                <div className="wb-affdash-payout-guide-body">
-                  <h2 className="wb-affdash-payout-guide-title">{c.payoutGuideTitle}</h2>
-                  <p className="wb-affdash-payout-guide-text">{c.payoutGuideBody}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={dismissPayoutGuide}
-                  className="wb-affdash-payout-guide-dismiss"
-                >
-                  {c.payoutGuideDismiss}
-                </button>
-              </div>
-            )}
+            {/* Payout-method guide banner removed 2026-06-13. The copy
+                referenced "the yellow banner inside your dashboard
+                below", but Affonso doesn't actually render a payout
+                banner today — Silvestro confirmed by email the payout-
+                method onboarding is still on the roadmap with no ship
+                date. Pointing at a banner that doesn't exist confuses
+                affiliates more than it helps. The i18n strings
+                (payoutGuideTitle/Body/Dismiss) and state hooks are
+                intentionally kept so we can re-render this block once
+                Affonso ships the feature; copy may need to be revised
+                to match whatever they ship. */}
             <iframe
               // padding=false because the wb-affdash-main container
               // already handles spacing; the Affonso embed would
