@@ -112,7 +112,14 @@ export async function POST(req: NextRequest) {
     const subject = `🎉 New Gadit signup: ${email ?? "(no email)"} ${flagEmoji}`;
 
     const result = await resend.emails.send({
-      from: "Gadit <onboarding@resend.dev>",
+      // Verified sender on gadit.app domain (Resend verified the domain
+      // 2026-06-12). The `notify@` mailbox is admin-only so we can
+      // separate it from `welcome@`, `support@`, etc. when sequenced
+      // emails ship. Note: there's no real mailbox at notify@; replies
+      // to this address aren't read. That's intentional — these are
+      // outbound-only system notifications. Use support@gadit.app for
+      // anything customer-facing that expects a reply.
+      from: "Gadit <notify@gadit.app>",
       to: notifyTo,
       subject,
       html,
