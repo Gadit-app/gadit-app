@@ -2849,18 +2849,50 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: var(--mist);
 }
 
-/* Image inside the inline panel */
+/* Image inside the inline panel. The generated image is square
+   (1024x1024). We size the container to the image's natural ratio
+   instead of forcing 16:9, so the full image is visible inline. The
+   user clicks for the lightbox if they want a closer look (the
+   zoom-in cursor + corner badge below telegraph that affordance). */
 .wordbook .wb-mpanel-image {
+  position: relative;
   border-radius: 6px;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
   background: var(--paper);
 }
 .wordbook .wb-mpanel-image img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   display: block;
+}
+/* Corner badge hinting that the image expands to full-screen on tap.
+   Sits in the start-side top corner (right in RTL, left in LTR) so
+   it doesn't collide with the lightbox close button which lives at
+   end-side top. Subtle by default, fades up on hover. On touch
+   devices it stays visible (no hover state) so first-time mobile
+   users see the affordance too. */
+.wordbook .wb-mpanel-image-zoom-hint {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 160ms ease, background 160ms ease;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.wordbook .wb-mpanel-image-btn:hover .wb-mpanel-image-zoom-hint {
+  opacity: 1;
+  background: rgba(15, 23, 42, 0.7);
 }
 
 /* Empty image state inside the panel */
