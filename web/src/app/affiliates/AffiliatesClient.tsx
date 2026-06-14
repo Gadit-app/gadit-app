@@ -2108,22 +2108,33 @@ export function AffiliatesPage() {
           </Link>
         </nav>
         <div className="wb-shell-actions">
-          {/* The old "Already a partner? Sign in" link to the external
-              Affonso portal lived here. Removed June 2026: every Gadit
-              affiliate is by definition a Clear or Deep subscriber and
-              already has a Gadit account, so they reach the partner
-              dashboard from the user menu (Account → Affiliate
-              dashboard) — no need to send them off-site for a separate
-              sign-in. */}
-          <ShareButton
-            url="https://www.gadit.app/"
-            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-            text=""
-            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
-            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
-          />
+          {/* Share button only shown to signed-in users — non-members
+              probably aren't going to share before they've tried the
+              product themselves. */}
+          {user && (
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+          )}
           <LangSwitch />
-          {user ? <WbUserMenu /> : <StartFreeCTA />}
+          {user ? (
+            <WbUserMenu />
+          ) : (
+            <>
+              <StartFreeCTA />
+              <button
+                type="button"
+                className="wb-shell-link"
+                onClick={() => promptLogin({ mode: "signin" })}
+              >
+                {v2(lang, "signIn")}
+              </button>
+            </>
+          )}
         </div>
 
         <div className="wb-shell-mobile-cta">
@@ -2132,13 +2143,15 @@ export function AffiliatesPage() {
         {/* Mobile-only — share button + burger. Both hidden on desktop
             via globals.css. */}
         <div className="wb-shell-share-mobile-wrap">
-          <ShareButton
-            url="https://www.gadit.app/"
-            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-            text=""
-            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
-            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
-          />
+          {user && (
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+          )}
         </div>
         <button
           ref={burgerRef}

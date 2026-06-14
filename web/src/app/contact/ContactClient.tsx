@@ -103,16 +103,20 @@ export function ContactClient() {
             <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
           )}
           <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
-          <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
+          {user && (plan === "clear" || plan === "deep") && (
+            <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
+          )}
         </nav>
         <div className="wb-shell-actions">
-          <ShareButton
-            url="https://www.gadit.app/"
-            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-            text=""
-            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
-            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
-          />
+          {user && (
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+          )}
           <LangSwitch />
           {user ? (
             <WbUserMenu />

@@ -7,11 +7,14 @@
  * up?" — the only auth entry was "Sign in" hidden inside the burger
  * menu, which doesn't read as "create new account" to first-timers.
  *
- * This button is the fix. It renders ONLY for non-logged-in users,
- * visible on both mobile and desktop, and clicks straight into the
- * Google sign-up popup (no modal intermediary). Returning users who
- * prefer email/password can still reach the email form via the
- * existing "Sign in" entry in the burger menu.
+ * Click opens the signup-mode LoginModalV2 — same modal as Sign in
+ * but defaults to the "create account" view. Inside the modal both
+ * options are visible (Continue with Google + email/password form),
+ * so users who can't or won't use Google have an obvious fallback.
+ * An earlier version called signInWithGoogle() directly; that worked
+ * but offered no choice and Gadi's feedback (2026-06-14) was that
+ * the desktop modal flow felt more inviting and gave parity with
+ * how Sign in already behaves.
  *
  * Translates to all 12 UI languages via the `startFree` key in
  * i18n-v2. Hebrew uses "התחילו חינם" (plural imperative, gender-
@@ -23,27 +26,15 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 
 export function StartFreeCTA() {
-  const { user, signInWithGoogle } = useAuth();
+  const { user, promptLogin } = useAuth();
   const { lang } = useLang();
 
   if (user) return null;
 
-  const handleClick = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (e) {
-      // Google popup blocked, user dismissed, or network failed.
-      // Silent — the auth layer already logs the specific error and
-      // a follow-up click is cheap. Surfacing a toast here would
-      // clutter every page that mounts this CTA.
-      console.warn("[start-free] signInWithGoogle failed:", e);
-    }
-  };
-
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={() => promptLogin({ mode: "signup" })}
       className="wb-shell-startfree"
       aria-label={v2(lang, "startFree")}
     >
