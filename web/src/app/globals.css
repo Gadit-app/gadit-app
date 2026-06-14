@@ -4553,6 +4553,42 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-shell-burger { display: none; }
 .wordbook .wb-shell-mobile-menu { display: none; }
 
+/* StartFreeCTA — visible signup button on every topbar.
+   Gadi's friend couldn't find signup on mobile; this CTA sits next to
+   the burger so first-timers see "Start free" without tapping anything.
+   Filled teal pill, ~36px tall, visible on both desktop and mobile. */
+.wordbook .wb-shell-startfree {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: var(--teal, #0EA5A5);
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(11, 138, 138, 0.18), 0 4px 12px rgba(11, 138, 138, 0.12);
+  transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+.wordbook .wb-shell-startfree:hover {
+  background: #0B8A8A;
+  box-shadow: 0 1px 2px rgba(11, 138, 138, 0.24), 0 6px 16px rgba(11, 138, 138, 0.18);
+}
+.wordbook .wb-shell-startfree:active {
+  transform: scale(0.97);
+}
+@media (max-width: 720px) {
+  .wordbook .wb-shell-startfree {
+    padding: 7px 12px;
+    font-size: 12.5px;
+  }
+}
+
 @media (max-width: 720px) {
   .wordbook .wb-shell-topbar {
     padding: 10px 16px;

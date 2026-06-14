@@ -25,6 +25,7 @@ import { useLang } from "@/lib/lang-context";
 import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import VoiceInput from "@/components/VoiceInput";
@@ -1009,16 +1010,20 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             {user ? (
               <WbUserMenu />
             ) : (
-              <button
-                type="button"
-                className="wb-shell-link"
-                onClick={() => promptLogin({ mode: "signin" })}
-              >
-                {v2(lang, "signIn")}
-              </button>
+              <>
+                <StartFreeCTA />
+                <button
+                  type="button"
+                  className="wb-shell-link"
+                  onClick={() => promptLogin({ mode: "signin" })}
+                >
+                  {v2(lang, "signIn")}
+                </button>
+              </>
             )}
           </div>
         <div className="wb-shell-share-mobile-wrap">
+          <StartFreeCTA />
           {/* Mobile mirror of the Kids toggle. The desktop toggle lives
               inside .wb-shell-actions (hidden under 767px), so without
               this mirror a parent on a phone could not flip the mode

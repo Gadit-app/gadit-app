@@ -40,6 +40,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 
 const AFFONSO_PORTAL = "https://gaditapp.affonso.io";
@@ -2122,12 +2123,13 @@ export function AffiliatesPage() {
             copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
           />
           <LangSwitch />
-          {user ? <WbUserMenu /> : null}
+          {user ? <WbUserMenu /> : <StartFreeCTA />}
         </div>
 
         {/* Mobile-only — share button + burger. Both hidden on desktop
             via globals.css. */}
         <div className="wb-shell-share-mobile-wrap">
+          <StartFreeCTA />
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}

@@ -77,6 +77,7 @@ export interface V2Strings {
 
   // ── Marketing header ────────────────────────────────────────
   signIn: string;
+  startFree: string;
   // Signed-in primary navigation (in MarketingHeader)
   navSearch: string;
   navCompare: string;
@@ -482,6 +483,7 @@ const en: V2Strings = {
   footerLanguagesNote: "11 languages",
 
   signIn: "Sign in",
+  startFree: "Start free",
   navSearch: "Search",
   navCompare: "Compare",
   navNotebook: "Notebook",
@@ -866,6 +868,7 @@ const he: V2Strings = {
   footerLanguagesNote: "11 שפות",
 
   signIn: "התחברות",
+  startFree: "התחילו חינם",
   navSearch: "חיפוש",
   navCompare: "השוואה",
   navNotebook: "מחברת",
@@ -1254,6 +1257,7 @@ const ar: V2Strings = {
   footerLanguagesNote: "11 لغة",
 
   signIn: "تسجيل الدخول",
+  startFree: "ابدأ مجانًا",
   navSearch: "بحث",
   navCompare: "مقارنة",
   navNotebook: "الدفتر",
@@ -1658,6 +1662,7 @@ const ru: Partial<V2Strings> = {
   footerLanguagesNote: "11 языков",
 
   signIn: "Войти",
+  startFree: "Начать бесплатно",
   navSearch: "Поиск",
   navCompare: "Сравнить",
   navNotebook: "Тетрадь",
@@ -2043,6 +2048,7 @@ const es: Partial<V2Strings> = {
   footerLanguagesNote: "11 idiomas",
 
   signIn: "Iniciar sesión",
+  startFree: "Empezar gratis",
   navSearch: "Buscar",
   navCompare: "Comparar",
   navNotebook: "Cuaderno",
@@ -2426,6 +2432,7 @@ const pt: Partial<V2Strings> = {
   footerLanguagesNote: "11 idiomas",
 
   signIn: "Entrar",
+  startFree: "Começar grátis",
   navSearch: "Pesquisar",
   navCompare: "Comparar",
   navNotebook: "Caderno",
@@ -2809,6 +2816,7 @@ const fr: Partial<V2Strings> = {
   footerLanguagesNote: "11 langues",
 
   signIn: "Se connecter",
+  startFree: "Commencer gratuit",
   navSearch: "Rechercher",
   navCompare: "Comparer",
   navNotebook: "Carnet",
@@ -3195,6 +3203,7 @@ const de: V2Strings = {
   footerLanguagesNote: "11 Sprachen",
 
   signIn: "Anmelden",
+  startFree: "Kostenlos starten",
   navSearch: "Suche",
   navCompare: "Vergleichen",
   navNotebook: "Notizbuch",
@@ -3550,6 +3559,7 @@ const cs: V2Strings = {
   footerLanguagesNote: "11 jazyků",
 
   signIn: "Přihlásit se",
+  startFree: "Začít zdarma",
   navSearch: "Hledat",
   navCompare: "Porovnat",
   navNotebook: "Sešit",
@@ -3912,6 +3922,7 @@ const sk: V2Strings = {
   footerLanguagesNote: "11 jazykov",
 
   signIn: "Prihlásiť sa",
+  startFree: "Začať zdarma",
   navSearch: "Hľadať",
   navCompare: "Porovnať",
   navNotebook: "Zošit",
@@ -4271,6 +4282,7 @@ const it: Partial<V2Strings> = {
 
   // Nav
   signIn: "Accedi",
+  startFree: "Inizia gratis",
   navSearch: "Cerca",
   navCompare: "Confronta",
   navNotebook: "Quaderno",
@@ -4649,6 +4661,7 @@ const ja: Partial<V2Strings> = {
 
   // Nav
   signIn: "ログイン",
+  startFree: "無料で始める",
   navSearch: "検索",
   navCompare: "比較",
   navNotebook: "ノート",

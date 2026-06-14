@@ -21,6 +21,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { HelpCenter } from "@/components/HelpCenter";
@@ -116,13 +117,16 @@ export function ContactClient() {
           {user ? (
             <WbUserMenu />
           ) : (
-            <button
-              type="button"
-              className="wb-shell-link"
-              onClick={() => promptLogin({ mode: "signin" })}
-            >
-              {v2(lang, "signIn")}
-            </button>
+            <>
+              <StartFreeCTA />
+              <button
+                type="button"
+                className="wb-shell-link"
+                onClick={() => promptLogin({ mode: "signin" })}
+              >
+                {v2(lang, "signIn")}
+              </button>
+            </>
           )}
         </div>
       </header>

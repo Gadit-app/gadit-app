@@ -16,6 +16,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
@@ -235,16 +236,20 @@ export function HomePage() {
           {user ? (
             <WbUserMenu />
           ) : (
-            <button
-              type="button"
-              className="wb-shell-link"
-              onClick={() => promptLogin({ mode: "signin" })}
-            >
-              {c.signin}
-            </button>
+            <>
+              <StartFreeCTA />
+              <button
+                type="button"
+                className="wb-shell-link"
+                onClick={() => promptLogin({ mode: "signin" })}
+              >
+                {c.signin}
+              </button>
+            </>
           )}
         </div>
         <div className="wb-shell-share-mobile-wrap">
+          <StartFreeCTA />
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
