@@ -43,3 +43,6 @@ web/admin-*.mjs
 gadit-app-firebase-adminsdk-*.json
 *-firebase-adminsdk-*.json
 env.txt
+
+# Word lock files (created when a .md/.txt is open in Word)
+~$*
