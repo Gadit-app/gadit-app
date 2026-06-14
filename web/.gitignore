@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Word lock files (created when a .md/.txt is open in Word)
+~$*
