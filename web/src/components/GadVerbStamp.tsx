@@ -34,40 +34,24 @@ export function GadVerbStamp() {
       aria-label="Gad — to understand a word, fully"
       dir="ltr"
     >
-      <div className="wb-verb-stamp-head">
-        <span className="wb-verb-stamp-icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <circle
-              cx="12"
-              cy="12"
-              r="10.5"
-              stroke="currentColor"
-              strokeWidth="1.1"
-            />
-            <circle
-              cx="12"
-              cy="10"
-              r="3.2"
-              stroke="currentColor"
-              strokeWidth="1.1"
-            />
-            <path
-              d="M 5.5 19.5 Q 12 14.5 18.5 19.5"
-              stroke="currentColor"
-              strokeWidth="1.1"
-              strokeLinecap="round"
-              fill="none"
-            />
-          </svg>
-        </span>
-        <span className="wb-verb-stamp-headword">Gad</span>
-        <span className="wb-verb-stamp-ipa">/ɡæd/</span>
-        <span className="wb-verb-stamp-pos">v.</span>
-      </div>
-      <p className="wb-verb-stamp-def" lang={lang}>
-        {v2(lang, "verbStampDef")}.
-      </p>
-      <p className="wb-verb-stamp-example">&ldquo;Now I Gad it.&rdquo;</p>
+      <span className="wb-verb-stamp-icon" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10.5" stroke="currentColor" strokeWidth="1.1" />
+          <circle cx="12" cy="10" r="3.2" stroke="currentColor" strokeWidth="1.1" />
+          <path
+            d="M 5.5 19.5 Q 12 14.5 18.5 19.5"
+            stroke="currentColor"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            fill="none"
+          />
+        </svg>
+      </span>
+      <span className="wb-verb-stamp-headword">Gad</span>
+      <span className="wb-verb-stamp-ipa">/ɡæd/</span>
+      <span className="wb-verb-stamp-pos">v.</span>
+      <span className="wb-verb-stamp-dash" aria-hidden="true">·</span>
+      <span className="wb-verb-stamp-def" lang={lang}>{v2(lang, "verbStampDef")}</span>
     </aside>
   );
 }
