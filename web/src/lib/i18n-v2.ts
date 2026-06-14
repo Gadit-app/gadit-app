@@ -78,6 +78,9 @@ export interface V2Strings {
   // ── Marketing header ────────────────────────────────────────
   signIn: string;
   startFree: string;
+  /** Short definition shown on the "Gad" verb stamp in the footer.
+      Reads like a dictionary gloss: "to understand a word, fully". */
+  verbStampDef: string;
   // Signed-in primary navigation (in MarketingHeader)
   navSearch: string;
   navCompare: string;
@@ -484,6 +487,7 @@ const en: V2Strings = {
 
   signIn: "Sign in",
   startFree: "Start free",
+  verbStampDef: "to understand a word, fully",
   navSearch: "Search",
   navCompare: "Compare",
   navNotebook: "Notebook",
@@ -869,6 +873,7 @@ const he: V2Strings = {
 
   signIn: "התחברות",
   startFree: "התחילו חינם",
+  verbStampDef: "להבין מילה עד הסוף",
   navSearch: "חיפוש",
   navCompare: "השוואה",
   navNotebook: "מחברת",
@@ -1258,6 +1263,7 @@ const ar: V2Strings = {
 
   signIn: "تسجيل الدخول",
   startFree: "ابدأ مجانًا",
+  verbStampDef: "أن تفهم الكلمة حتى عمقها",
   navSearch: "بحث",
   navCompare: "مقارنة",
   navNotebook: "الدفتر",
@@ -1663,6 +1669,7 @@ const ru: Partial<V2Strings> = {
 
   signIn: "Войти",
   startFree: "Начать бесплатно",
+  verbStampDef: "понять слово до конца",
   navSearch: "Поиск",
   navCompare: "Сравнить",
   navNotebook: "Тетрадь",
@@ -2049,6 +2056,7 @@ const es: Partial<V2Strings> = {
 
   signIn: "Iniciar sesión",
   startFree: "Empezar gratis",
+  verbStampDef: "entender una palabra hasta el fondo",
   navSearch: "Buscar",
   navCompare: "Comparar",
   navNotebook: "Cuaderno",
@@ -2433,6 +2441,7 @@ const pt: Partial<V2Strings> = {
 
   signIn: "Entrar",
   startFree: "Começar grátis",
+  verbStampDef: "entender uma palavra até o fim",
   navSearch: "Pesquisar",
   navCompare: "Comparar",
   navNotebook: "Caderno",
@@ -2817,6 +2826,7 @@ const fr: Partial<V2Strings> = {
 
   signIn: "Se connecter",
   startFree: "Commencer gratuit",
+  verbStampDef: "comprendre un mot jusqu'au bout",
   navSearch: "Rechercher",
   navCompare: "Comparer",
   navNotebook: "Carnet",
@@ -3204,6 +3214,7 @@ const de: V2Strings = {
 
   signIn: "Anmelden",
   startFree: "Kostenlos starten",
+  verbStampDef: "ein Wort bis zum Ende verstehen",
   navSearch: "Suche",
   navCompare: "Vergleichen",
   navNotebook: "Notizbuch",
@@ -3560,6 +3571,7 @@ const cs: V2Strings = {
 
   signIn: "Přihlásit se",
   startFree: "Začít zdarma",
+  verbStampDef: "pochopit slovo až do konce",
   navSearch: "Hledat",
   navCompare: "Porovnat",
   navNotebook: "Sešit",
@@ -3923,6 +3935,7 @@ const sk: V2Strings = {
 
   signIn: "Prihlásiť sa",
   startFree: "Začať zdarma",
+  verbStampDef: "pochopiť slovo až do konca",
   navSearch: "Hľadať",
   navCompare: "Porovnať",
   navNotebook: "Zošit",
@@ -4283,6 +4296,7 @@ const it: Partial<V2Strings> = {
   // Nav
   signIn: "Accedi",
   startFree: "Inizia gratis",
+  verbStampDef: "capire una parola fino in fondo",
   navSearch: "Cerca",
   navCompare: "Confronta",
   navNotebook: "Quaderno",
@@ -4662,6 +4676,7 @@ const ja: Partial<V2Strings> = {
   // Nav
   signIn: "ログイン",
   startFree: "無料で始める",
+  verbStampDef: "言葉を完全に理解する",
   navSearch: "検索",
   navCompare: "比較",
   navNotebook: "ノート",

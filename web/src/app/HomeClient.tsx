@@ -17,6 +17,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
@@ -451,6 +452,8 @@ export function HomePage() {
         <p className="wb-home-founder-note">{c.founderNote}</p>
         <p className="wb-home-founder-sign">{c.founderSign}</p>
       </aside>
+
+      <GadVerbStamp />
 
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
