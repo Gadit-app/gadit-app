@@ -805,8 +805,10 @@ export function PricingPageRoute() {
             </>
           )}
         </div>
-        <div className="wb-shell-share-mobile-wrap">
+        <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
+        </div>
+        <div className="wb-shell-share-mobile-wrap">
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}

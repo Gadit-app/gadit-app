@@ -1022,8 +1022,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               </>
             )}
           </div>
-        <div className="wb-shell-share-mobile-wrap">
+        <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
+        </div>
+        <div className="wb-shell-share-mobile-wrap">
           {/* Mobile mirror of the Kids toggle. The desktop toggle lives
               inside .wb-shell-actions (hidden under 767px), so without
               this mirror a parent on a phone could not flip the mode

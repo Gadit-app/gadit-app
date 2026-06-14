@@ -129,6 +129,9 @@ export function ContactClient() {
             </>
           )}
         </div>
+        <div className="wb-shell-mobile-cta">
+          <StartFreeCTA />
+        </div>
       </header>
 
       <main
