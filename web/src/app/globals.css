@@ -4237,6 +4237,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
   font-weight: 500 !important;
   font-style: italic !important;
+  /* Same line-height reset as the hero logo's 'it' span — without this
+     the topbar wordmark's line-box inflates from 26px to ~44px due to
+     the global Hebrew 1.7 multiplier. */
+  line-height: 1 !important;
 }
 .wordbook[dir="rtl"] .wb-home-logo,
 .wordbook[lang="he"] .wb-home-logo,
@@ -4267,6 +4271,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
   font-weight: 500 !important;
   font-style: italic !important;
+  /* CRITICAL: the "it" span inherits the global :lang(he) line-height
+     of 1.7 unless we reset it. When the line-box is computed for the
+     wb-home-logo block, the max line-height of all inline children
+     wins — so "Gad" at line-height:1 (= 80px) loses to "it" inheriting
+     1.7 (= 136px). The block then renders at ~136px tall, dropping the
+     baseline of "Gadit" ~56px below where it sits on LTR pages. Forcing
+     line-height:1 on the span equalises both inline pieces and the
+     block collapses back to font-size height. Gadi diagnosed this via
+     DevTools Computed showing height: 135.99px on /he. */
+  line-height: 1 !important;
 }
 
 .wordbook .wb-home-footer {
