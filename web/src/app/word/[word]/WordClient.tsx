@@ -26,6 +26,7 @@ import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import VoiceInput from "@/components/VoiceInput";
@@ -1300,6 +1301,8 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             navy footer clashes with the cream Wordbook surface. A
             cream-friendly footer (or no footer at all, matching the
             mockup) will be addressed in the homepage port. */}
+
+        <GadVerbStamp />
       </div>
 
       {result && (

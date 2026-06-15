@@ -21,6 +21,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
@@ -936,6 +937,8 @@ export function PricingPageRoute() {
           />
         </div>
       </main>
+
+      <GadVerbStamp />
 
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
