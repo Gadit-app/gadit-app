@@ -4194,17 +4194,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    renders identically across all 12 UI languages. The base classes
    (without [dir="rtl"]) already set the same values; these
    overrides exist solely to defeat the global RTL cascade. */
-/* Force the topbar to clip any content that overflows its 64px height
-   so the bottom edge stays exactly at y=64. The Hebrew/Arabic cascade
-   (line-height: 1.7 on the body) leaks down into the topbar's inline
-   children — wordmark text, nav links — and their line boxes computed
-   ~44px tall, which overflows the 36px content area of a 64px box
-   with 14px vertical padding. The overflow renders DOWNWARD past the
-   bottom border, visually pushing the logo below it appear further
-   from the topbar than on LTR pages, which Gadi saw as misaligned. */
-.wordbook .wb-shell-topbar {
-  overflow: hidden;
-}
+/* Earlier attempt added overflow:hidden to .wb-shell-topbar to clip
+   any inline content that overflowed the 64px box. That worked for
+   the alignment issue but had a side effect: the language switcher's
+   dropdown panel, which lives inside the topbar's flex row and opens
+   downward, got clipped at the topbar's bottom edge. Removed the
+   overflow rule once the root cause (line-height inheritance on the
+   .wb-home-logo-it and .wb-wordmark-it spans, fixed below) was
+   addressed — the topbar contents now fit inside 64px naturally and
+   no clipping safety net is needed. */
 .wordbook[dir="rtl"] .wb-wordmark,
 .wordbook[lang="he"] .wb-wordmark,
 .wordbook[lang="ar"] .wb-wordmark,
