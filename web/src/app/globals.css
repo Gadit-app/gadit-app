@@ -4184,47 +4184,63 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Hebrew/Arabic pages: the cascade at the top of the file sets the
    document font to Rubik/Cairo for the whole RTL body, which leaks
    into the Latin wordmarks below and renders them visibly smaller
-   and lighter than the Inter version used on LTR pages. Force Inter
-   on both the topbar wordmark and the hero logo so they match LTR
-   metrics regardless of UI language. */
+   and lighter than the Inter version used on LTR pages. Even with a
+   matched-specificity override, line-height inheritance (the global
+   `[dir="rtl"] { line-height: 1.7 }` rule) and font fallbacks were
+   still producing a visibly thinner, smaller, and lower-positioned
+   wordmark in HE/AR than in the Inter-default LTR locales.
+   `!important` on the four critical properties (family, weight,
+   size, line-height) is the safe way to lock the lockup so it
+   renders identically across all 12 UI languages. The base classes
+   (without [dir="rtl"]) already set the same values; these
+   overrides exist solely to defeat the global RTL cascade. */
 .wordbook[dir="rtl"] .wb-wordmark,
 .wordbook[lang="he"] .wb-wordmark,
-.wordbook[lang="ar"] .wb-wordmark {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  font-weight: 600;
+.wordbook[lang="ar"] .wb-wordmark,
+.wordbook:lang(he) .wb-wordmark,
+.wordbook:lang(ar) .wb-wordmark {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
 }
 .wordbook[dir="rtl"] .wb-wordmark .wb-wordmark-it,
 .wordbook[lang="he"] .wb-wordmark .wb-wordmark-it,
-.wordbook[lang="ar"] .wb-wordmark .wb-wordmark-it {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  font-weight: 500;
-  font-style: italic;
+.wordbook[lang="ar"] .wb-wordmark .wb-wordmark-it,
+.wordbook:lang(he) .wb-wordmark .wb-wordmark-it,
+.wordbook:lang(ar) .wb-wordmark .wb-wordmark-it {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
 }
 .wordbook[dir="rtl"] .wb-home-logo,
 .wordbook[lang="he"] .wb-home-logo,
-.wordbook[lang="ar"] .wb-home-logo {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 64px;
-  line-height: 64px;
-  letter-spacing: -0.035em;
+.wordbook[lang="ar"] .wb-home-logo,
+.wordbook:lang(he) .wb-home-logo,
+.wordbook:lang(ar) .wb-home-logo {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 64px !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
 }
 @media (min-width: 768px) {
   .wordbook[dir="rtl"] .wb-home-logo,
   .wordbook[lang="he"] .wb-home-logo,
-  .wordbook[lang="ar"] .wb-home-logo {
-    font-size: 80px;
-    line-height: 80px;
+  .wordbook[lang="ar"] .wb-home-logo,
+  .wordbook:lang(he) .wb-home-logo,
+  .wordbook:lang(ar) .wb-home-logo {
+    font-size: 80px !important;
+    line-height: 1 !important;
   }
 }
-/* Same lockup for the italic "it" half — explicit font-family so the
-   italic glyphs don't fall back to the Hebrew/Arabic body font. */
 .wordbook[dir="rtl"] .wb-home-logo-it,
 .wordbook[lang="he"] .wb-home-logo-it,
-.wordbook[lang="ar"] .wb-home-logo-it {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  font-weight: 500;
-  font-style: italic;
+.wordbook[lang="ar"] .wb-home-logo-it,
+.wordbook:lang(he) .wb-home-logo-it,
+.wordbook:lang(ar) .wb-home-logo-it {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
 }
 
 .wordbook .wb-home-footer {
