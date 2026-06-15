@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none" role="img" aria-label="Gadit">
+  <style>
+    .gad { font-family: 'Inter', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif; font-weight: 600; letter-spacing: -7px; fill: #0B1220; }
+    .it  { font-family: 'Inter', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif; font-weight: 500; font-style: italic; letter-spacing: -7px; fill: #0EA5A5; }
+  </style>
+  <text x="350" y="210" font-size="200">
+    <tspan class="gad">Gad</tspan><tspan class="it">it</tspan>
+  </text>
+</svg>
