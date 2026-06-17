@@ -111,75 +111,75 @@ const notoSansJp = Noto_Sans_JP({
 // when a user invokes the in-app share. Title is third-person.
 const META: Record<Lang, { title: string; description: string; locale: string }> = {
   he: {
-    title: "Gadit — מילון דיגיטלי חכם",
+    title: "Gadit — להבין מילים עד הסוף",
     description:
-      "גיליתי מילון דיגיטלי חדש שמפרש מילים ומראה דוגמאות לכל הגדרה, ניבים וצירופי מילים וגם המקור של המילה ומאיפה היא הגיעה. זה חינמי עם אפשרויות לשדרג בעלות נמוכה מאוד. שווה לנסות.",
+      "כלי חדש שעוזר להבין כל מילה באמת. כל המשמעויות, דוגמאות, ניבים, ומקור המילה. חינמי להתחיל, שדרוג בעלות מאוד נמוכה. שווה לנסות.",
     locale: "he_IL",
   },
   en: {
-    title: "Gadit — Smart digital dictionary",
+    title: "Gadit — Understand words to the end",
     description:
-      "I discovered a new digital dictionary that explains words and shows examples for every definition, idioms and expressions, and the origin of each word and where it came from. It's free with very low-cost upgrade options. Worth a try.",
+      "A new tool that helps you really understand every word. All the meanings, examples, idioms, and where the word comes from. Free to start, very low-cost upgrade. Worth a try.",
     locale: "en_US",
   },
   ar: {
-    title: "Gadit — قاموس رقمي ذكي",
+    title: "Gadit — لفهم الكلمات حتى النهاية",
     description:
-      "اكتشفت قاموسًا رقميًا جديدًا يشرح الكلمات ويعرض أمثلة لكل تعريف، تعابير وعبارات، وكذلك أصل الكلمة ومن أين جاءت. مجاني مع خيارات ترقية بتكلفة منخفضة جدًا. يستحق التجربة.",
+      "أداة جديدة تساعدك على فهم كل كلمة حقًا. كل المعاني، أمثلة، تعابير، وأصل الكلمة. مجاني للبدء، ترقية بتكلفة منخفضة جدًا. تستحق التجربة.",
     locale: "ar",
   },
   ru: {
-    title: "Gadit — Умный цифровой словарь",
+    title: "Gadit — Понять слова до конца",
     description:
-      "Нашёл новый цифровой словарь, который объясняет слова и показывает примеры для каждого определения, идиомы и выражения, а также происхождение слова и откуда оно взялось. Бесплатно, с очень дешёвой опцией апгрейда. Стоит попробовать.",
+      "Новый инструмент, который помогает по-настоящему понять каждое слово. Все значения, примеры, идиомы и происхождение слова. Бесплатно для начала, апгрейд по очень низкой цене. Стоит попробовать.",
     locale: "ru_RU",
   },
   es: {
-    title: "Gadit — Diccionario digital inteligente",
+    title: "Gadit — Entender las palabras hasta el final",
     description:
-      "Descubrí un nuevo diccionario digital que explica las palabras y muestra ejemplos para cada definición, modismos y expresiones, y también el origen de cada palabra y de dónde viene. Es gratis con opciones de actualización a muy bajo costo. Vale la pena probar.",
+      "Una nueva herramienta que te ayuda a entender de verdad cada palabra. Todos los significados, ejemplos, modismos y el origen de la palabra. Gratis para empezar, upgrade a muy bajo costo. Vale la pena probar.",
     locale: "es_ES",
   },
   pt: {
-    title: "Gadit — Dicionário digital inteligente",
+    title: "Gadit — Entender as palavras até o fim",
     description:
-      "Descobri um novo dicionário digital que explica palavras e mostra exemplos para cada definição, expressões idiomáticas, e também a origem de cada palavra e de onde ela veio. É grátis com opções de upgrade a um custo muito baixo. Vale a pena experimentar.",
+      "Uma nova ferramenta que ajuda a entender de verdade cada palavra. Todos os significados, exemplos, expressões idiomáticas e a origem da palavra. Grátis para começar, upgrade com custo muito baixo. Vale a pena experimentar.",
     locale: "pt_BR",
   },
   de: {
-    title: "Gadit — Intelligentes digitales Wörterbuch",
+    title: "Gadit — Wörter bis zum Ende verstehen",
     description:
-      "Ich habe ein neues digitales Wörterbuch entdeckt, das Wörter erklärt und für jede Definition Beispiele zeigt, dazu Redewendungen und Ausdrücke sowie die Herkunft jedes Wortes. Kostenlos, mit sehr günstigen Upgrade-Optionen. Einen Versuch wert.",
+      "Ein neues Tool, das dir hilft, jedes Wort wirklich zu verstehen. Alle Bedeutungen, Beispiele, Redewendungen und die Herkunft des Wortes. Kostenlos zum Starten, Upgrade zu sehr günstigen Preisen. Einen Versuch wert.",
     locale: "de_DE",
   },
   cs: {
-    title: "Gadit — Chytrý digitální slovník",
+    title: "Gadit — Pochopit slova do konce",
     description:
-      "Objevil jsem nový digitální slovník, který vysvětluje slova a ukazuje příklady pro každou definici, idiomy a fráze, a také původ každého slova a odkud pochází. Zdarma s velmi levnými možnostmi vylepšení. Stojí za vyzkoušení.",
+      "Nový nástroj, který vám pomůže opravdu pochopit každé slovo. Všechny významy, příklady, idiomy a původ slova. Zdarma na začátek, vylepšení za velmi nízkou cenu. Stojí za vyzkoušení.",
     locale: "cs_CZ",
   },
   sk: {
-    title: "Gadit — Inteligentný digitálny slovník",
+    title: "Gadit — Pochopiť slová do konca",
     description:
-      "Objavil som nový digitálny slovník, ktorý vysvetľuje slová a ukazuje príklady pre každý význam, idiómy a frázy, a tiež pôvod každého slova a odkiaľ pochádza. Zadarmo s veľmi lacnými možnosťami vylepšenia. Stojí za vyskúšanie.",
+      "Nový nástroj, ktorý vám pomôže naozaj pochopiť každé slovo. Všetky významy, príklady, idiómy a pôvod slova. Zadarmo na začiatok, vylepšenie za veľmi nízku cenu. Stojí za vyskúšanie.",
     locale: "sk_SK",
   },
   fr: {
-    title: "Gadit — Dictionnaire numérique intelligent",
+    title: "Gadit — Comprendre les mots jusqu'au bout",
     description:
-      "J'ai découvert un nouveau dictionnaire numérique qui explique les mots et montre des exemples pour chaque définition, des idiomes et expressions, et aussi l'origine de chaque mot et d'où il vient. C'est gratuit avec des options de mise à niveau à très bas coût. Ça vaut le coup d'essayer.",
+      "Un nouvel outil qui aide à vraiment comprendre chaque mot. Tous les sens, exemples, expressions et l'origine du mot. Gratuit pour commencer, mise à niveau à très bas prix. Ça vaut le coup d'essayer.",
     locale: "fr_FR",
   },
   it: {
-    title: "Gadit — Dizionario digitale intelligente",
+    title: "Gadit — Capire le parole fino in fondo",
     description:
-      "Ho scoperto un nuovo dizionario digitale che spiega le parole e mostra esempi per ogni definizione, modi di dire ed espressioni, e anche l'origine di ogni parola. Gratis con opzioni di aggiornamento a bassissimo costo. Vale la pena provarlo.",
+      "Un nuovo strumento che aiuta a capire davvero ogni parola. Tutti i significati, esempi, modi di dire e l'origine della parola. Gratis per iniziare, upgrade a costo molto basso. Vale la pena provarlo.",
     locale: "it_IT",
   },
   ja: {
-    title: "Gadit — 賢いデジタル辞書",
+    title: "Gadit — 言葉を最後まで理解する",
     description:
-      "言葉を解説し、意味ごとに例文・イディオム・表現・語源まで見せてくれる新しいデジタル辞書を見つけました。無料で使えて、有料プランも非常に手頃。一度試す価値があります。",
+      "すべての言葉を本当に理解できる新しいツール。すべての意味、例文、イディオム、語源まで。無料で始められて、有料プランも非常に手頃。試す価値があります。",
     locale: "ja_JP",
   },
 };
