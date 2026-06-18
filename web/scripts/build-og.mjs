@@ -7,21 +7,22 @@
  *
  * Run from web/ workspace:    node scripts/build-og.mjs
  *
- * Layout per image:
- *   · Teal background (#0EA5A5)
- *   · 'Gadit' wordmark, large, centered upper area
- *   · Tagline in the relevant language, smaller, centered below
- *   · Subtle decorative G icon mark bottom-right
+ * Layout per image (matches the Wordbook shell wordmark visually):
+ *   · Paper background (#F4F5F8) — same surface used across all chrome
+ *   · 'Gad' in ink (#0B1220) + 'it' in teal italic (#0E7490) — the
+ *     wordmark, same color split as the topbar
+ *   · Tagline in slate (#3F4856) below
+ *   · 'GADIT.APP' watermark at the bottom in faint ink
  *
  * Rendering uses sharp via SVG. Fonts are not embedded — sharp falls
  * back to whatever fonts the rendering environment has (we render on
- * Gadi's local machine before committing). Hebrew / Arabic fall back
- * to system Noto / Arial Unicode, which is acceptable for a static
- * OG image — the visual is dominated by the Latin 'Gadit' anyway.
+ * Gadi's local machine before committing). Hebrew / Arabic / Japanese
+ * fall back to system Noto / Arial Unicode, which is acceptable for a
+ * static OG image — the visual is dominated by the Latin 'Gadit'.
  */
 
 import sharp from "sharp";
-import { writeFile, mkdir } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
@@ -31,35 +32,52 @@ const outDir    = resolve(webRoot, "public/og");
 
 await mkdir(outDir, { recursive: true });
 
+// Taglines — these must match the META titles in src/app/layout.tsx
+// (minus the "Gadit — " prefix) so the social-card wording is
+// consistent with the OpenGraph <meta> the same scrapers pull.
 const TAGLINES = {
   he: "להבין מילים עד הסוף",
   en: "Understand words to the end",
-  ar: "افهم الكلمات حتى النهاية",
+  ar: "لفهم الكلمات حتى النهاية",
   ru: "Понять слова до конца",
-  es: "Entender palabras hasta el final",
-  pt: "Entender palavras até o fim",
+  es: "Entender las palabras hasta el final",
+  pt: "Entender as palavras até o fim",
   fr: "Comprendre les mots jusqu'au bout",
   de: "Wörter bis zum Ende verstehen",
-  cs: "Pochopit slova až do konce",
+  cs: "Pochopit slova do konce",
+  sk: "Pochopiť slová do konca",
+  it: "Capire le parole fino in fondo",
+  ja: "言葉を最後まで理解する",
+};
+
+// Pulled from globals.css :root tokens so the OG looks like an
+// extension of the in-app chrome rather than a separate brand asset.
+const COLORS = {
+  paper: "#F4F5F8",   // --paper
+  ink:   "#0B1220",   // --ink (Gad)
+  teal:  "#0E7490",   // --teal (it)
+  slate: "#3F4856",   // --ink-soft (tagline)
+  faint: "#9CA3AF",   // --ink-faint (GADIT.APP watermark)
 };
 
 const FONT_STACK = {
-  // Latin scripts use the modern sans default; HE/AR fall back to a
-  // wider stack so the system can pick whatever's installed.
+  // Latin scripts use a system stack with Inter first (used in-app);
+  // sharp/libvips will fall back to whatever the rendering machine has.
   latin: "'Inter', 'Helvetica Neue', 'Arial', sans-serif",
   he: "'Rubik', 'Heebo', 'Arial Hebrew', 'Arial', sans-serif",
   ar: "'Cairo', 'Noto Naskh Arabic', 'Arial', sans-serif",
+  ja: "'Noto Sans JP', 'Yu Gothic', 'Hiragino Sans', sans-serif",
 };
 
 function fontFor(lang) {
   if (lang === "he") return FONT_STACK.he;
   if (lang === "ar") return FONT_STACK.ar;
+  if (lang === "ja") return FONT_STACK.ja;
   return FONT_STACK.latin;
 }
 
-// Hebrew/Arabic need RTL direction on the text element. The text is
-// already in logical order in the source string, but the SVG must
-// declare direction so the renderer doesn't reverse it.
+// Hebrew/Arabic need RTL direction. Japanese reads LTR for our short
+// taglines (vertical writing would look strange on a 16:9 card).
 function dirFor(lang) {
   return lang === "he" || lang === "ar" ? "rtl" : "ltr";
 }
@@ -69,43 +87,50 @@ function makeSvg(lang) {
   const direction = dirFor(lang);
   const font = fontFor(lang);
 
+  // Tagline length varies a lot across languages; the longest (es/fr)
+  // need a slightly smaller font size to fit one line at 1200px wide
+  // with breathing room. Quick heuristic: shrink past 28 chars.
+  const tagSize = tagline.length > 30 ? 52 : 60;
+
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-    <!-- Solid teal background, with a soft top gradient for depth -->
-    <rect width="1200" height="630" fill="#0EA5A5"/>
-    <rect width="1200" height="315" fill="url(#topGloss)" opacity="0.10"/>
+    <!-- Paper background, same surface token used in-app -->
+    <rect width="1200" height="630" fill="${COLORS.paper}"/>
+
+    <!-- Subtle gradient overlay top→bottom for a hint of depth without
+         making it look like a marketing banner. -->
     <defs>
-      <linearGradient id="topGloss" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#FFFFFF"/>
+      <linearGradient id="depth" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
         <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
       </linearGradient>
     </defs>
+    <rect width="1200" height="630" fill="url(#depth)"/>
 
-    <!-- Gadit wordmark — Latin always, so direction stays LTR and
-         font is Inter from the latin stack. 'it' tinted slightly
-         off-white to echo the in-app teal italic 'it' on white. -->
-    <text x="600" y="305"
+    <!-- Gadit wordmark — ink 'Gad' + teal italic 'it', same color
+         split the topbar uses everywhere. Always LTR. -->
+    <text x="600" y="310"
           font-family="${FONT_STACK.latin}"
-          font-size="180" font-weight="700"
-          letter-spacing="-8"
+          font-size="220" font-weight="600"
+          letter-spacing="-6"
           text-anchor="middle"
-          fill="#FFFFFF"
-          direction="ltr">Gad<tspan font-style="italic" font-weight="500" fill="#CDEFEA">it</tspan></text>
+          fill="${COLORS.ink}"
+          direction="ltr">Gad<tspan font-style="italic" font-weight="500" fill="${COLORS.teal}">it</tspan></text>
 
-    <!-- Tagline — language-specific. RTL for HE/AR. -->
-    <text x="600" y="410"
+    <!-- Tagline in slate, language-specific. RTL for HE/AR. -->
+    <text x="600" y="420"
           font-family="${font}"
-          font-size="46" font-weight="500"
+          font-size="${tagSize}" font-weight="500"
           text-anchor="middle"
-          fill="rgba(255,255,255,0.92)"
+          fill="${COLORS.slate}"
           direction="${direction}">${tagline}</text>
 
-    <!-- Small ‘gadit.app’ host line at the bottom, low-key, LTR. -->
-    <text x="600" y="560"
+    <!-- GADIT.APP watermark at the bottom, low-contrast, LTR. -->
+    <text x="600" y="565"
           font-family="${FONT_STACK.latin}"
-          font-size="22" font-weight="500"
-          letter-spacing="2"
+          font-size="22" font-weight="600"
+          letter-spacing="3"
           text-anchor="middle"
-          fill="rgba(255,255,255,0.55)"
+          fill="${COLORS.faint}"
           direction="ltr">GADIT.APP</text>
   </svg>`;
 }
@@ -115,17 +140,16 @@ for (const lang of Object.keys(TAGLINES)) {
   const out = resolve(outDir, `${lang}.png`);
   const svg = makeSvg(lang);
   await sharp(Buffer.from(svg), { density: 200 })
-    .resize(1200, 630, { fit: "contain", background: { r: 14, g: 165, b: 165, alpha: 1 } })
+    .resize(1200, 630, { fit: "contain", background: { r: 244, g: 245, b: 248, alpha: 1 } })
     .png({ compressionLevel: 9 })
     .toFile(out);
   console.log(`  wrote ${out}`);
 }
 
-// Also write a default `default.png` = the English one — used as the
-// fallback OG when the page can't determine a specific language.
+// Default fallback = English. Used when language can't be resolved.
 const enSvg = makeSvg("en");
 await sharp(Buffer.from(enSvg), { density: 200 })
-  .resize(1200, 630, { fit: "contain", background: { r: 14, g: 165, b: 165, alpha: 1 } })
+  .resize(1200, 630, { fit: "contain", background: { r: 244, g: 245, b: 248, alpha: 1 } })
   .png({ compressionLevel: 9 })
   .toFile(resolve(outDir, "default.png"));
 console.log(`  wrote default.png (= en)`);
