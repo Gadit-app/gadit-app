@@ -5,25 +5,31 @@
  *
  * Outputs: web/public/og/<lang>.png  ·  1200 × 630, one per language.
  *
+ * Source of truth: scripts/og-source.png
+ *   The canonical design lives in this single file. To refresh the
+ *   look, replace scripts/og-source.png with a new PNG (any size,
+ *   1.91:1 aspect or close to it) and rerun this script. We keep the
+ *   source PNG in scripts/ rather than public/ so it's not served
+ *   to the web — only the rendered /og/<lang>.png files ship.
+ *
  * Run from web/ workspace:    node scripts/build-og.mjs
  *
- * Layout (Gadi locked it on 2026-06-18):
- *   · Solid soft-mint background (#E8F5F0) — pale, calm, hints at the
- *     teal brand colour without competing with the wordmark
- *   · 'Gad' in ink (#0B1220) + 'it' in teal italic (#0E7490), big,
- *     centered in the 630-square middle so WhatsApp's square crop
- *     catches it cleanly
- *   · NO tagline, NO domain — the wordmark IS the card. The reason:
- *     WhatsApp crops landscape OG images to a square thumbnail, and
- *     anything sitting below the wordmark gets clipped mid-letter,
- *     which looked messy. Per-language tagline lives in the META
- *     title/description that scrapers also pull, so language signal
- *     isn't lost.
+ * Current design (2026-06-18, locked by Gadi via ChatGPT image-gen):
+ *   · Warm cream / off-white background with a faint vignette
+ *   · 'Gad' in deep navy + 'it' italic in dark teal
+ *   · A subtle teal arc in the bottom-right corner for depth
+ *   · No tagline, no domain — wordmark only, so language-specific
+ *     copy can live entirely in the meta description
  *
- * Because nothing in the image is language-specific anymore, every
+ * Because nothing in the image is language-specific, every
  * /og/<lang>.png is byte-identical — we keep one file per lang anyway
- * so layout.tsx can stay pointing at /og/<lang>.png without a special
- * fallback rule.
+ * so layout.tsx can stay pointing at /og/<lang>.png without a
+ * special fallback rule.
+ *
+ * WhatsApp note: WhatsApp crops landscape OG images to a square
+ * thumbnail (center 630×630 of the 1200×630 canvas). The source PNG
+ * has the wordmark inside that center region with breathing room,
+ * so the square crop reads cleanly.
  */
 
 import sharp from "sharp";
@@ -33,47 +39,33 @@ import { dirname, resolve } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const webRoot   = resolve(__dirname, "..");
+const sourcePath = resolve(webRoot, "scripts/og-source.png");
 const outDir    = resolve(webRoot, "public/og");
 
 await mkdir(outDir, { recursive: true });
 
 const LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
 
-const BG   = "#E8F5F0";  // soft mint paper
-const INK  = "#0B1220";  // 'Gad'
-const TEAL = "#0E7490";  // 'it' italic
+console.log(`Rendering OG cards from ${sourcePath} …`);
 
-const FONT = "'Inter', 'Helvetica Neue', 'Arial', sans-serif";
+// Resize once into a buffer, then write 13 identical files (12 langs + default).
+// `fit: "cover"` would crop if the source aspect drifted; `fit: "inside"` would
+// letterbox. The source is exactly 1.904:1 (target 1.905:1) so the values are
+// effectively equivalent — using "cover" so any small future aspect drift in a
+// hand-replaced source crops cleanly instead of leaving paper-coloured bars.
+const buf = await sharp(sourcePath)
+  .resize(1200, 630, { fit: "cover", position: "center" })
+  .png({ compressionLevel: 9 })
+  .toBuffer();
 
-function makeSvg() {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-    <rect width="1200" height="630" fill="${BG}"/>
-    <text x="600" y="380"
-          font-family="${FONT}"
-          font-size="280" font-weight="600"
-          letter-spacing="-8"
-          text-anchor="middle"
-          fill="${INK}"
-          direction="ltr">Gad<tspan font-style="italic" font-weight="500" fill="${TEAL}">it</tspan></text>
-  </svg>`;
-}
-
-const svg = makeSvg();
-const buf = Buffer.from(svg);
-
-// Render once, then write 12 identical files (one per lang) + default.
-console.log("Rendering OG card …");
-async function renderTo(outFile) {
-  await sharp(buf, { density: 200 })
-    .resize(1200, 630, { fit: "contain", background: { r: 232, g: 245, b: 240, alpha: 1 } })
-    .png({ compressionLevel: 9 })
-    .toFile(outFile);
+async function writeTo(outFile) {
+  await sharp(buf).png({ compressionLevel: 9 }).toFile(outFile);
   console.log(`  wrote ${outFile}`);
 }
 
 for (const lang of LANGS) {
-  await renderTo(resolve(outDir, `${lang}.png`));
+  await writeTo(resolve(outDir, `${lang}.png`));
 }
-await renderTo(resolve(outDir, "default.png"));
+await writeTo(resolve(outDir, "default.png"));
 
 console.log("Done.");
