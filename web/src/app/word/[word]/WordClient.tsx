@@ -598,6 +598,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
       if (finalResult) {
         setResult(finalResult);
+        // Mark first-successful-search so the PWA install prompt can
+        // wake up. Idempotent; safe to set on every successful result.
+        try {
+          if (typeof window !== "undefined") {
+            localStorage.setItem("gadit_first_search_done", "1");
+          }
+        } catch { /* private mode etc. — silently ignore */ }
         // Offline cache write — Clear/Deep only. Every successful
         // result gets persisted to IndexedDB so the same lookup works
         // from any device the user has installed the PWA on, even
