@@ -202,7 +202,10 @@ export async function generateMetadata(): Promise<Metadata> {
     "en";
 
   const m = META[lang];
-  const ogImage = `/og/${lang}.png`;
+  // .jpg, not .png — WhatsApp's OG scraper silently dropped the
+  // gradient-heavy 928 KB PNG in our 2026-06-18 launch test. Same
+  // pixels at JPEG q85 are ~25 KB and scrape reliably.
+  const ogImage = `/og/${lang}.jpg`;
 
   return {
     metadataBase: new URL("https://www.gadit.app"),
