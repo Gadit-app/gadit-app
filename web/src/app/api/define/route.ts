@@ -3,6 +3,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { isDegenerate, sanitizeDegenerateEtymology } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
+import { recordWordSearch } from "@/lib/word-search-log";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -1202,6 +1203,12 @@ export async function POST(req: NextRequest) {
     const cacheKey = contextSentence
       ? `ctx2_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}_${contextSentence.toLowerCase().trim().slice(0, 60)}`
       : `auto2_${uiLangCode}_${tierKey}_${word.toLowerCase().trim()}`;
+
+    // Per-word search counter for the /admin/searches dashboard.
+    // Fires for both cache hits AND live generations so popularity
+    // reflects real demand, not OpenAI cost. Easter-egg "gadit" is
+    // excluded above; invalid inputs short-circuit before this.
+    void recordWordSearch({ word, lang: uiLangCode });
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {

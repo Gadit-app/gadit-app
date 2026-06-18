@@ -496,6 +496,12 @@ export default function AdminUsersClient() {
             </p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
+            <a
+              href="/admin/searches"
+              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+            >
+              {adminLang === "he" ? "חיפושים" : "Searches"}
+            </a>
             <button
               onClick={toggleLang}
               style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}

@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Word lock files (created when a .md/.txt is open in Word)
 ~$*
+
+# One-time analytics dumps from scripts/dump-searches.mjs — local only,
+# may contain user-typed words we don't want in the repo
+/scripts/out/
