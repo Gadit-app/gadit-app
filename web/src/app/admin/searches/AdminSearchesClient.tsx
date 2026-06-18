@@ -65,6 +65,9 @@ const STRINGS: Record<AdminLang, {
   colLastSeen: string;
   emptyState: string;
   downloadCsv: string;
+  historicCsv: string;
+  historicLoading: string;
+  historicHint: string;
   searchPlaceholder: string;
   showingFooter: (n: number, total: number) => string;
 }> = {
@@ -86,7 +89,10 @@ const STRINGS: Record<AdminLang, {
     colCount: "Searches",
     colLastSeen: "Last search",
     emptyState: "No searches recorded yet. The counter starts on the next /api/define hit after this code deploys.",
-    downloadCsv: "Download CSV",
+    downloadCsv: "Download CSV (with counts)",
+    historicCsv: "Download historic CSV (all-time, no counts)",
+    historicLoading: "Loading historic…",
+    historicHint: "Historic = every word ever cached (anyone-ever-searched), no popularity. Counter-based table above is for searches made since the counter shipped.",
     searchPlaceholder: "Filter words…",
     showingFooter: (n, total) => `Showing ${n} of ${total} words.`,
   },
@@ -108,7 +114,10 @@ const STRINGS: Record<AdminLang, {
     colCount: "חיפושים",
     colLastSeen: "חיפוש אחרון",
     emptyState: "אין עדיין חיפושים. המונה מתחיל בחיפוש הבא לאחר שהקוד יעלה לפרודקשן.",
-    downloadCsv: "הורד CSV",
+    downloadCsv: "הורד CSV (עם ספירות)",
+    historicCsv: "הורד CSV היסטורי (כל הזמן, בלי ספירות)",
+    historicLoading: "טוען היסטוריה…",
+    historicHint: "היסטורי = כל מילה שאי פעם נשמרה במטמון (מישהו פעם חיפש), ללא פופולריות. הטבלה עם הספירות למעלה היא רק מהרגע שהמונה עלה.",
     searchPlaceholder: "סנן מילים…",
     showingFooter: (n, total) => `מציג ${n} מתוך ${total} מילים.`,
   },
@@ -170,6 +179,7 @@ export default function AdminSearchesClient() {
   const [adminLang, setAdminLang] = useState<AdminLang>("en");
   const [activeLang, setActiveLang] = useState<string>("he");
   const [filter, setFilter] = useState("");
+  const [historicLoading, setHistoricLoading] = useState(false);
   const t = STRINGS[adminLang];
 
   useEffect(() => {
@@ -233,6 +243,27 @@ export default function AdminSearchesClient() {
     if (!value) return;
     localStorage.setItem(SECRET_KEY, value);
     setSecret(value);
+  };
+
+  const handleHistoricDownload = async () => {
+    if (!secret || historicLoading) return;
+    setHistoricLoading(true);
+    try {
+      const r = await fetch(`/api/admin/searches/historic?secret=${encodeURIComponent(secret)}`);
+      if (!r.ok) {
+        const j = (await r.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(j?.error ?? `HTTP ${r.status}`);
+      }
+      const json = (await r.json()) as { byLang: Record<string, string[]> };
+      const words = json.byLang[activeLang] ?? [];
+      const lines = ["word"];
+      for (const w of words) lines.push(csvEscape(w));
+      downloadCsv(`gadit-searches-historic-${activeLang}.csv`, lines.join("\n") + "\n");
+    } catch (e) {
+      alert(String(e instanceof Error ? e.message : e));
+    } finally {
+      setHistoricLoading(false);
+    }
   };
 
   const tabs = useMemo(() => {
@@ -377,8 +408,8 @@ export default function AdminSearchesClient() {
               })}
             </div>
 
-            {/* Filter + download */}
-            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+            {/* Filter + downloads */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
               <input
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
@@ -392,7 +423,17 @@ export default function AdminSearchesClient() {
               >
                 {t.downloadCsv}
               </button>
+              <button
+                onClick={handleHistoricDownload}
+                style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "10px 16px" }}
+                disabled={historicLoading}
+              >
+                {historicLoading ? t.historicLoading : t.historicCsv}
+              </button>
             </div>
+            <p style={{ color: "#9CA3AF", fontSize: 12, marginBottom: 16 }}>
+              {t.historicHint}
+            </p>
 
             {rows.length === 0 ? (
               <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 32, textAlign: "center", color: "#6B7280", fontSize: 14 }}>
