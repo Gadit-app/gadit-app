@@ -337,7 +337,33 @@ Single-word examples where the figurative/contemporary sense must lead:
 
 ORDERING PRINCIPLE: meanings[0] is what a typical contemporary speaker FIRST thinks of when they hear the word out of context. Only after that come literal, historical, technical, or rare senses.
 
-ג ן¸ CRITICAL RULE #5 — NEVER HALLUCINATE MEANINGS:
+ג ן¸ 
+
+⚠️ CRITICAL RULE #4d — TECHNICAL / SCIENTIFIC LOANWORDS HAVE MULTIPLE SPECIALIZED SENSES:
+Words borrowed into the target language from Latin/Greek/English as technical terms almost always carry MULTIPLE established meanings, one per scientific or professional field. Each field-specific sense is a DISTINCT meaning entry. Do NOT collapse them into a single generic catchall like "deviation from the norm" or "a difference in physical or scientific phenomena" — that under-serves the user and matches a print dictionary's job poorly.
+
+Example — Hebrew "אברציה" should list 5-7 distinct meanings, in this kind of order:
+1. General contemporary: סטייה או חריגה מהנורמה, מהמסלול או מהצפוי.
+2. אסטרונומיה: סטייה בין מקום הימצאו של כוכב לבין מקומו הנראה לעין מהארץ, שמקורה במהירות האור ובתנועת כדור הארץ (stellar aberration).
+3. אופטיקה: סטיית קרני אור העוברות בעדשה מנקודת המוקד, בגלל הצורה הכדורית של העדשה או שבירת אורכי גל שונים (spherical / chromatic aberration).
+4. צילום: ליקוי אופטי במבנה העדשה הפוגם בחדות התמונה (lens aberration in photography).
+5. ביולוגיה: תכונה חריגה בצמח או בעל-חיים שאינה תורשתית אלא נובעת מתנאי סביבה מיוחדים.
+6. רפואה וגנטיקה: סטייה מהנורמה הביולוגית, למשל סטייה כרומוזומלית (chromosomal aberration).
+7. (אופציונלי) פסיכולוגיה / סוציולוגיה: חריגה התנהגותית מהמקובל.
+
+Similarly for other Hebrew scientific loanwords:
+- "אנומליה" — general / astronomical / magnetic / medical / statistical / geological senses.
+- "אינטרפרנציה" — physics (wave interference) / biology (genetic interference) / general (interference between things).
+- "אנטרופיה" — thermodynamics / information theory / general disorder.
+- "מוטציה" — biology (genetic) / general (sudden change) / linguistics (sound mutation).
+
+DETECTION HEURISTIC: Hebrew loanwords ending in -ציה, -יום, -ולוגיה, -מטיה (Greek/Latin scientific suffixes) almost always carry multiple specialized meanings. Pause and enumerate per field.
+
+CROSS-REFERENCE TEST: If the user looked the word up in a Hebrew dictionary like רב מילים, אבן שושן, or אבניון, would they find more meanings than you're returning? If yes — add them.
+
+The same principle applies in every UI language. English "aberration", Spanish "aberración", Russian "аберрация" all carry the same multi-field meaning cluster. List each field's sense as its own entry, do not summarise into one generic line.
+
+⚠️ CRITICAL RULE #5 — NEVER HALLUCINATE MEANINGS:
 Do NOT invent meanings that don't exist in real dictionaries. If a meaning sounds odd, borderline, or you're not sure — OMIT IT. Better to return 1 real meaning than 2 with one invented. When in doubt, cross-reference: would a native speaker actually use this word this way in a real sentence?
 
 ⚠️ Documented hallucinations — NEVER repeat these:
