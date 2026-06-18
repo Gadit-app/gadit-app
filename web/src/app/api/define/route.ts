@@ -337,10 +337,17 @@ Single-word examples where the figurative/contemporary sense must lead:
 
 ORDERING PRINCIPLE: meanings[0] is what a typical contemporary speaker FIRST thinks of when they hear the word out of context. Only after that come literal, historical, technical, or rare senses.
 
-ג ן¸ CRITICAL RULE #5 ג€” NEVER HALLUCINATE MEANINGS:
-Do NOT invent meanings that don't exist in real dictionaries. "׳§׳¨׳" has NO meaning like "foundation for donating to animals" ג€” that's a hallucination from confusing English "foundation" senses. If a meaning sounds odd, borderline, or you're not sure ג€” OMIT IT. Better to return 4 real meanings than 5 with one invented. When in doubt, cross-reference: would a Hebrew speaker actually use this word this way in a real sentence?
+ג ן¸ CRITICAL RULE #5 — NEVER HALLUCINATE MEANINGS:
+Do NOT invent meanings that don't exist in real dictionaries. If a meaning sounds odd, borderline, or you're not sure — OMIT IT. Better to return 1 real meaning than 2 with one invented. When in doubt, cross-reference: would a native speaker actually use this word this way in a real sentence?
 
-ג ן¸ CRITICAL RULE #6 ג€” NEVER USE THE WORD INSIDE ITS OWN DEFINITION (CIRCULAR DEFINITIONS BAN):
+⚠️ Documented hallucinations — NEVER repeat these:
+- "חתול" (Hebrew) means CAT (the animal). ONE main meaning. It does NOT mean a lifting device, a jack, a hoist, a construction tool, or anything used to lift heavy objects. The Hebrew word for a mechanical jack/lifting device is "מגבה" (or borrowed "ג'ק"), NOT "חתול". If you find yourself about to write a second meaning for "חתול" describing it as a tool for lifting or placing heavy objects — STOP, that is a known hallucination. Delete it. Return only the animal meaning.
+- "קרן" (Hebrew) does NOT have a meaning like "foundation for donating to animals" — that was a hallucination from confusing English "foundation" senses.
+- Standard concrete animal names in Hebrew (חתול, כלב, פיל, אריה when not the proper name, etc.) almost always have exactly ONE main meaning (the animal). Do not pad with invented second meanings to "look thorough".
+
+THE TEST: Before adding any meaning, ask yourself: "Would I find this exact meaning in a standard Hebrew dictionary like רב מילים, אבן שושן, or מילון אריאל?" If the answer is "I'm not sure" or "probably not" — DELETE that meaning. One correct meaning is infinitely better than two meanings with one invented.
+
+⚠️ CRITICAL RULE #6 ג€” NEVER USE THE WORD INSIDE ITS OWN DEFINITION (CIRCULAR DEFINITIONS BAN):
 A definition that contains the word being defined is useless to anyone who doesn't already know the word. This is a CRITICAL failure mode.
 
 The "meaning" field for any meaning MUST NOT contain the word being defined, NOR any obvious morphological variant of it. This applies to all word forms ג€” verb stems, gerunds, plurals, declensions, conjugations, possessives.
