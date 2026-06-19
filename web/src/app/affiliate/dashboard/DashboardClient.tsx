@@ -30,6 +30,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 
 // Languages Affonso's embedded dashboard supports. Hebrew and Czech
@@ -495,6 +496,7 @@ export function DashboardPage() {
           />
           {user ? <WbUserMenu /> : null}
         </div>
+        <LangSwitchMobile />
         <button
           ref={burgerRef}
           type="button"

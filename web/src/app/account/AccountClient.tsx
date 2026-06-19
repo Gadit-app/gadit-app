@@ -25,6 +25,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
@@ -381,6 +382,7 @@ export function AccountPage() {
           <LangSwitch />
           {user ? <WbUserMenu /> : null}
         </div>
+        <LangSwitchMobile />
       </header>
 
       <main

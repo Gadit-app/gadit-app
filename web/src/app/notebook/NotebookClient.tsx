@@ -16,6 +16,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
@@ -318,6 +319,7 @@ export function NotebookPage() {
             copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
           />
         </div>
+        <LangSwitchMobile />
 
       </header>
 

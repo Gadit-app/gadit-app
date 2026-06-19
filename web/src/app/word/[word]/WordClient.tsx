@@ -25,6 +25,7 @@ import { useLang } from "@/lib/lang-context";
 import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
@@ -1062,6 +1063,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             />
           )}
         </div>
+        <LangSwitchMobile />
 
         </header>
 

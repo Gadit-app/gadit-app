@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
@@ -824,6 +825,7 @@ export function PricingPageRoute() {
             />
           )}
         </div>
+        <LangSwitchMobile />
                 <button
           ref={burgerRef}
           type="button"
@@ -847,19 +849,6 @@ export function PricingPageRoute() {
             <Link href={href("/")} onClick={() => setMenuOpen(false)}>{c.search}</Link>
             <Link href={href("/features")} onClick={() => setMenuOpen(false)}>{c.features}</Link>
             <Link href={href("/pricing")} className="is-active" onClick={() => setMenuOpen(false)}>{c.pricing}</Link>
-            <div className="wb-shell-mobile-menu-sep" />
-            <div className="wb-shell-mobile-langs">
-              {LANGS.map((l) => (
-                <button
-                  key={l.code}
-                  type="button"
-                  className={l.code === lang ? "is-active" : ""}
-                  onClick={() => { setLang(l.code); setMenuOpen(false); }}
-                >
-                  <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
-                </button>
-              ))}
-            </div>
             <div className="wb-shell-mobile-menu-sep" />
             {user ? (
               <Link href={href("/account")} onClick={() => setMenuOpen(false)}>

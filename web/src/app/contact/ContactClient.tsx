@@ -26,6 +26,7 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { HelpCenter } from "@/components/HelpCenter";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 
 function LangSwitch() {
   const { lang, setLang } = useLang();
@@ -137,6 +138,7 @@ export function ContactClient() {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
+        <LangSwitchMobile />
       </header>
 
       <main

@@ -22,6 +22,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -267,6 +268,7 @@ export function HomePage() {
             />
           )}
         </div>
+        <LangSwitchMobile />
                 <button
           ref={burgerRef}
           type="button"
@@ -293,19 +295,6 @@ export function HomePage() {
             <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {c.pricing}
             </Link>
-            <div className="wb-shell-mobile-menu-sep" />
-            <div className="wb-shell-mobile-langs">
-              {LANGS.map((l) => (
-                <button
-                  key={l.code}
-                  type="button"
-                  className={l.code === lang ? "is-active" : ""}
-                  onClick={() => { setLang(l.code); setMenuOpen(false); }}
-                >
-                  <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
-                </button>
-              ))}
-            </div>
             <div className="wb-shell-mobile-menu-sep" />
             {user ? (
               <Link href={href("/account")} onClick={() => setMenuOpen(false)}>
