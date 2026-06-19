@@ -15,17 +15,50 @@ function currentMonthKey(): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
-function cacheKey(word: string, meaning: string, uiLang: string): string {
+function cacheKey(word: string, meaning: string, uiLang: string, kidsMode = false): string {
   const hash = crypto
     .createHash("sha256")
     .update(`${uiLang}|${word.trim().toLowerCase()}|${meaning.trim().toLowerCase()}`)
     .digest("hex")
     .slice(0, 24);
-  return `img_${uiLang}_${hash}`;
+  // Kids-mode images use a separate cache namespace so a kid-friendly
+  // flat illustration never gets returned to an adult who searches the
+  // same word, and vice versa. Existing adult cache keys (img_<lang>_*)
+  // are preserved exactly — only kids get the new `img_kids_<lang>_*`
+  // shape, so we don't accidentally invalidate the corpus we've already
+  // paid to generate.
+  return kidsMode ? `img_kids_${uiLang}_${hash}` : `img_${uiLang}_${hash}`;
 }
 
 function clean(s: string): string {
   return s.replace(/[“”"]+/g, "");
+}
+
+/**
+ * Kids-mode prompt builder — locked to Style B (Modern flat illustration,
+ * Duolingo / Khan Academy Kids aesthetic) after a 4-style A/B test on
+ * 5 sample words (חתול, אהבה, חלום, גשם, מלאך) on 2026-06-19. Gadi
+ * picked B as the cleanest cross-age look (5-12), fast to read for a
+ * child mid-search and warm enough for parents to feel good about it.
+ *
+ * We deliberately DON'T use the example-sentence prompt variant the
+ * adult path uses. For kids the priority is "one clear object filling
+ * the frame" over "a faithful illustration of this sentence". Abstract
+ * words still work because the meaning text anchors what to draw.
+ *
+ * Safety language ("no scary or dark imagery") is in the prompt itself,
+ * NOT a stack of negations — OpenAI's filter treats long negation lists
+ * as risk signals and refuses borderline-fine requests.
+ */
+function buildKidsPrompt(word: string, meaning: string): string {
+  const cleanWord = clean(word);
+  const cleanMeaning = clean(meaning.length > 180 ? meaning.slice(0, 180) : meaning);
+  return [
+    `A modern flat illustration of ${cleanWord} (${cleanMeaning}), for a children's educational app.`,
+    `Bright cheerful colors, simple geometric shapes, friendly cartoon style with soft outlines, clean white background.`,
+    `Designed for kids ages 5-12. The subject fills the frame and is instantly recognizable.`,
+    `No text, no letters, no numbers, no scary or dark imagery.`,
+  ].join(" ");
 }
 
 function buildDallePrompt(word: string, meaning: string, example?: string): string {
@@ -64,12 +97,13 @@ function buildDallePrompt(word: string, meaning: string, example?: string): stri
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang, example } = await req.json();
+    const { word, meaning, uiLang, example, kidsMode } = await req.json();
 
     if (!word?.trim() || !meaning?.trim()) {
       return NextResponse.json({ error: "word and meaning required" }, { status: 400 });
     }
     const safeExample = typeof example === "string" ? example.trim() : "";
+    const isKidsMode = kidsMode === true;
 
     // Auth check
     const authHeader = req.headers.get("Authorization") || "";
@@ -83,7 +117,7 @@ export async function POST(req: NextRequest) {
     }
 
     const uiLangCode = typeof uiLang === "string" ? uiLang : "en";
-    const cKey = cacheKey(word, meaning, uiLangCode);
+    const cKey = cacheKey(word, meaning, uiLangCode, isKidsMode);
     const db = getAdminDb();
 
     // Check cache
@@ -141,23 +175,29 @@ export async function POST(req: NextRequest) {
         }),
       });
     }
-    const dallePrompt = buildDallePrompt(word, meaning, safeExample || undefined);
+    const dallePrompt = isKidsMode
+      ? buildKidsPrompt(word, meaning)
+      : buildDallePrompt(word, meaning, safeExample || undefined);
     let dalleRes = await callDalle(dallePrompt);
 
     if (!dalleRes.ok) {
       const errText = await dalleRes.text();
       console.error("DALL-E error (attempt 1):", dalleRes.status, errText.slice(0, 400));
-      // Content-policy refusal — retry with a minimal, photo-only prompt
-      // that omits the meaning entirely. This recovers cases where the
-      // meaning carried a sensitive token (medical, anatomical, etc.)
-      // without dropping the user's request.
+      // Content-policy refusal — retry with a minimal prompt that omits
+      // the meaning entirely. This recovers cases where the meaning
+      // carried a sensitive token (medical, anatomical, etc.) without
+      // dropping the user's request. Kids-mode fallback stays in the
+      // flat-illustration aesthetic; adult fallback uses the photo
+      // wording the rest of the surface expects.
       const isPolicyRefusal =
         errText.includes("content_policy_violation") ||
         errText.includes("safety system") ||
         dalleRes.status === 400;
       if (isPolicyRefusal) {
         const cleanWord = word.replace(/[“”"]+/g, "");
-        const minimalPrompt = `A clean realistic photograph of ${cleanWord}. Plain neutral background. The subject fills the frame. No text in the image.`;
+        const minimalPrompt = isKidsMode
+          ? `A simple modern flat illustration of ${cleanWord} for a children's book. Bright cheerful colors, clean white background, friendly cartoon style. No text, no letters, no scary imagery.`
+          : `A clean realistic photograph of ${cleanWord}. Plain neutral background. The subject fills the frame. No text in the image.`;
         dalleRes = await callDalle(minimalPrompt);
         if (!dalleRes.ok) {
           const errText2 = await dalleRes.text();

@@ -696,6 +696,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           // buildDallePrompt comment for the why.
           example: result.meanings[0]?.examples?.[0] ?? "",
           uiLang: lang,
+          // Kids Mode → server swaps to the modern-flat illustration
+          // prompt (Style B, locked 2026-06-19) and stores the result
+          // in a separate img_kids_<lang>_* cache namespace so adult
+          // and kid users of the same word each get the right look.
+          kidsMode,
         }),
       });
       if (!res.ok) {

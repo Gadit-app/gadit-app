@@ -46,3 +46,7 @@ next-env.d.ts
 # One-time analytics dumps from scripts/dump-searches.mjs — local only,
 # may contain user-typed words we don't want in the repo
 /scripts/out/
+
+# Throwaway A/B-test outputs from scripts/kids-style-test.mjs etc.
+# (PNGs, dozens of MB; kept locally for visual review only)
+/scripts/kids-style-test/
