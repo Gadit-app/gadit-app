@@ -759,6 +759,13 @@ const RESPONSE_SCHEMA = {
         additionalProperties: false,
         properties: {
           meaning:  { type: "string" },
+          // pos — English part-of-speech token for THIS specific
+          // meaning, used by the Grammar Mode badge in the UI. Allow
+          // null because rare entries (proper-name lookups, partial
+          // matches, the gadit easter egg, etc.) don't have a
+          // canonical POS. The render side renders nothing when
+          // pos is null/empty.
+          pos:      { type: ["string", "null"] },
           examples: { type: "array", items: { type: "string" } },
           idioms: {
             type: "array",
@@ -787,7 +794,7 @@ const RESPONSE_SCHEMA = {
             ],
           },
         },
-        required: ["meaning", "examples", "idioms", "kidsExplanation"],
+        required: ["meaning", "pos", "examples", "idioms", "kidsExplanation"],
       },
     },
     etymology: {
