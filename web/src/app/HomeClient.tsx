@@ -98,21 +98,6 @@ function LangSwitch() {
   );
 }
 
-const SAMPLES_BY_LANG: Record<string, string[]> = {
-  he: ["חלום", "אמת", "תקווה"],
-  en: ["ephemeral", "serendipity", "ineffable"],
-  ar: ["حلم", "أمل", "حقيقة"],
-  ru: ["мечта", "истина", "надежда"],
-  es: ["sueño", "verdad", "esperanza"],
-  pt: ["sonho", "verdade", "esperança"],
-  fr: ["rêve", "vérité", "espoir"],
-  de: ["Traum", "Wahrheit", "Hoffnung"],
-  cs: ["sen", "pravda", "naděje"],
-  sk: ["sen", "pravda", "nádej"],
-  it: ["sogno", "verità", "speranza"],
-  ja: ["夢", "真実", "希望"],
-};
-
 const COPY: Record<
   string,
   {
@@ -166,7 +151,6 @@ export function HomePage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLButtonElement>(null);
   const c = COPY[lang] ?? COPY.en;
-  const samples = SAMPLES_BY_LANG[lang] ?? SAMPLES_BY_LANG.en;
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -362,20 +346,6 @@ export function HomePage() {
                 <span className="wb-home-search-submit-label">{c.search}</span>
               </button>
             </div>
-            <div className="wb-home-samples">
-              <span className="wb-home-samples-label">{c.tryLabel}</span>
-              {samples.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  className="wb-home-sample"
-                  onClick={() => go(s)}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-
             {sentenceOpen ? (
               <div className="wb-home-sentence-wrap">
                 <textarea
