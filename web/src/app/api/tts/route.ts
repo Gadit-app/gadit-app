@@ -105,7 +105,16 @@ export async function POST(req: NextRequest) {
   }
 
   const voice = requestedVoice ?? pickVoice(lang);
-  const model = "tts-1"; // 'tts-1-hd' is higher quality but 2x cost
+  // gpt-4o-mini-tts replaces tts-1. The older model gave Christopher
+  // (early tester, 2026-06-19) the "robot with asthma" sound he
+  // flagged on WhatsApp — flat affect, hard consonants on Hebrew,
+  // mechanical pacing. The 4o-mini-tts model is markedly more
+  // natural across HE/AR/RU/EN and accepts an `instructions` param
+  // so we can steer it toward a warm dictionary-reader tone instead
+  // of a default assistant register. Bumping the model is also a
+  // cache-key change, so every prior cached MP3 effectively becomes
+  // stale; common words re-cache within hours of normal traffic.
+  const model = "gpt-4o-mini-tts";
   const hash = contentHash(text, voice, model);
   const cachePath = `tts-cache/${hash}.mp3`;
 
@@ -144,6 +153,16 @@ export async function POST(req: NextRequest) {
         { status: 503 },
       );
     }
+    // Voice instructions — the steering prompt that makes the new
+    // gpt-4o-mini-tts model sound warm and human instead of flat.
+    // Generic enough to work for every dictionary entry in every
+    // language; the model uses the input text's natural pacing
+    // (commas, periods, dashes) to phrase, so we don't try to
+    // micromanage prosody here.
+    const ttsInstructions =
+      "Speak naturally and warmly, like a thoughtful friend reading a dictionary entry aloud. " +
+      "Clear, calm, conversational tone — not robotic, not announcer-style. " +
+      "Pronounce every word accurately in the source language, including any non-English words.";
     const ttsResp = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: {
@@ -154,6 +173,7 @@ export async function POST(req: NextRequest) {
         model,
         voice,
         input: text,
+        instructions: ttsInstructions,
         response_format: "mp3",
       }),
     });
