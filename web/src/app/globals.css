@@ -619,6 +619,26 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-color: rgba(90, 68, 144, 0.35);
   background: rgba(90, 68, 144, 0.06);
 }
+/* Save offline (the pin button at the top of WordHeader) is a
+   Clear-tier feature. Gadi 2026-06-20: "האייקון של השמירה offline ...
+   צריך להיות פיצ'ר של קליר בלבד" — wear the teal Clear colour so
+   the user can read the tier at a glance, the same way the per-
+   meaning Save tab does inline below. */
+.wordbook .wb-word-act[data-tier="clear"] {
+  background: var(--teal-soft);
+  border-color: #C5E8E5;
+  color: var(--teal-edge);
+}
+.wordbook .wb-word-act[data-tier="clear"]:hover {
+  background: var(--teal-soft);
+  border-color: var(--teal);
+  color: var(--teal);
+}
+.wordbook .wb-word-act.is-pinned[data-tier="clear"] {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--surface);
+}
 .wordbook .wb-word-act-icon {
   width: 34px;
   height: 34px;
@@ -1870,11 +1890,22 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     padding: 8px 10px;
     gap: 0;
   }
-  /* Tighter tab chips so 5 of them fit comfortably on a narrow row */
+  /* Tab chips — Gadi 2026-06-20 added a sixth tile (save), and now
+     the row has 6 chips: image / kids / compose / save / quiz /
+     games. Tightened so the full row stays on ONE line on a 360px
+     phone instead of wrapping the last tile to a second row. Gap
+     tightened to 5px; per-chip horizontal padding cut to 7px;
+     min-width to 32px. 6*(16+14) + 5*5 = 205px, comfortable inside
+     the meaning card's ~280px content width on a narrow phone. */
+  .wordbook .wb-mtabs {
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
   .wordbook .wb-mtab {
-    padding: 7px 11px;
+    padding: 7px 7px;
     gap: 0;
-    min-width: 36px;
+    min-width: 32px;
+    flex-shrink: 0;
     justify-content: center;
   }
 }
@@ -5560,11 +5591,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    visually orphaning it from the rest of the page. Top padding 32px
    adds breathing room from the masthead chrome. */
 .wordbook .wb-word-searchbar-wrap {
-  /* 760px matches .wb-word-head and the meaning cards below, so the
-     pill aligns edge-for-edge instead of overhanging the content. */
-  max-width: 760px;
+  /* Match the page container (.wb-page is max-width 920px) and use
+     the same 20px horizontal padding as .wb-meanings below, so the
+     pill aligns edge-for-edge with the meaning cards instead of
+     sitting in a narrower 760px column above them. Gadi 2026-06-20:
+     "תגדיל את השורה הזאת שתהיה מתאימה לגודל של החלונות של ההגדרות". */
+  max-width: 920px;
   margin: 0 auto;
-  padding: 32px 44px 0;
+  padding: 32px 20px 0;
 }
 .wordbook .wb-word-searchbar {
   display: flex;

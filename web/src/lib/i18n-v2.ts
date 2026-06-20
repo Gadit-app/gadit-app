@@ -439,7 +439,7 @@ const en: V2Strings = {
   homeSubline:
     "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 11 languages.",
 
-  searchPlaceholderHome: "Type or dictate a word",
+  searchPlaceholderHome: "Type a word",
   voiceInputTitle: "Dictate a word",
   addContext: "Add context",
   explain: "Explain",
@@ -1216,7 +1216,7 @@ const ar: V2Strings = {
   homeSubline:
     "قاموس يفهم السياق — معانٍ وأصول وتعابير وصورة حيّة، بسبع لغات.",
 
-  searchPlaceholderHome: "اكتب أو أملِ كلمة",
+  searchPlaceholderHome: "اكتب كلمة",
   voiceInputTitle: "إملاء كلمة",
   addContext: "أضف السياق",
   explain: "اشرح",
@@ -1621,7 +1621,7 @@ const ru: Partial<V2Strings> = {
   homeSubline:
     "Словарь, который улавливает контекст — значения, происхождение, идиомы и живой образ, на 7 языках.",
 
-  searchPlaceholderHome: "Введите или продиктуйте слово",
+  searchPlaceholderHome: "Введите слово",
   voiceInputTitle: "Продиктовать слово",
   addContext: "Добавить контекст",
   explain: "Объяснить",
@@ -2008,7 +2008,7 @@ const es: Partial<V2Strings> = {
   homeSubline:
     "Un diccionario que entiende el contexto — significados, origen, expresiones e imagen viva, en 11 idiomas.",
 
-  searchPlaceholderHome: "Escribe o dicta una palabra",
+  searchPlaceholderHome: "Escribe una palabra",
   voiceInputTitle: "Dictar una palabra",
   addContext: "Agregar contexto",
   explain: "Explicar",
@@ -2393,7 +2393,7 @@ const pt: Partial<V2Strings> = {
   homeSubline:
     "Um dicionário que entende o contexto — significados, origem, expressões e imagem viva, em 11 idiomas.",
 
-  searchPlaceholderHome: "Digite ou dite uma palavra",
+  searchPlaceholderHome: "Digite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
   addContext: "Adicionar contexto",
   explain: "Explicar",
@@ -2778,7 +2778,7 @@ const fr: Partial<V2Strings> = {
   homeSubline:
     "Un dictionnaire qui saisit le contexte — sens, origines, expressions et image vivante, en 11 langues.",
 
-  searchPlaceholderHome: "Tapez ou dictez un mot",
+  searchPlaceholderHome: "Tapez un mot",
   voiceInputTitle: "Dicter un mot",
   addContext: "Ajouter du contexte",
   explain: "Expliquer",
@@ -3171,7 +3171,7 @@ const de: V2Strings = {
   homeHeadlineLine2: "bis zum Ende.",
   homeSubline:
     "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 11 Sprachen.",
-  searchPlaceholderHome: "Tippe oder diktiere ein Wort",
+  searchPlaceholderHome: "Tippe ein Wort",
   voiceInputTitle: "Wort diktieren",
   addContext: "Kontext hinzufügen",
   explain: "Erklären",
@@ -3529,7 +3529,7 @@ const cs: V2Strings = {
   homeHeadlineLine2: "až do konce.",
   homeSubline:
     "Slovník, který tě potkává v kontextu: významy, původ, idiomy a živý obraz, v 11 jazycích.",
-  searchPlaceholderHome: "Napiš nebo nadiktuj slovo",
+  searchPlaceholderHome: "Napiš slovo",
   voiceInputTitle: "Nadiktovat slovo",
   addContext: "Přidat kontext",
   explain: "Vysvětlit",
@@ -3893,7 +3893,7 @@ const sk: V2Strings = {
   homeHeadlineLine2: "až do konca.",
   homeSubline:
     "Slovník, ktorý ťa stretáva v kontexte: významy, pôvod, idiómy a živý obraz, v 11 jazykoch.",
-  searchPlaceholderHome: "Napíš alebo nadiktuj slovo",
+  searchPlaceholderHome: "Napíš slovo",
   voiceInputTitle: "Nadiktovať slovo",
   addContext: "Pridať kontext",
   explain: "Vysvetliť",
@@ -4251,7 +4251,7 @@ const it: Partial<V2Strings> = {
   homeHeadlineLine2: "fino in fondo.",
   homeSubline:
     "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 11 lingue.",
-  searchPlaceholderHome: "Scrivi o detta una parola",
+  searchPlaceholderHome: "Scrivi una parola",
   voiceInputTitle: "Detta una parola",
   addContext: "Aggiungi contesto",
   explain: "Spiega",
@@ -4631,7 +4631,7 @@ const ja: Partial<V2Strings> = {
   homeHeadlineLine2: "最後まで。",
   homeSubline:
     "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、11言語で。",
-  searchPlaceholderHome: "単語を入力するか発音してください",
+  searchPlaceholderHome: "単語を入力",
   voiceInputTitle: "単語を発音する",
   addContext: "文脈を追加",
   explain: "解説する",

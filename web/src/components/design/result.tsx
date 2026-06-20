@@ -355,6 +355,7 @@ export function WordHeader({
             <button
               type="button"
               className={`wb-word-act ${isPinned ? "is-pinned" : ""}`}
+              data-tier="clear"
               onClick={onPin}
               title={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
               aria-label={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
@@ -449,12 +450,15 @@ function TabIcon({ name }: { name: TabId }) {
   };
   switch (name) {
     case "save":
-      // Bookmark — the same affordance the WordHeader save button uses.
-      // Stroke-only so the active "saved" state can fill it via CSS
-      // (currentColor matches the data-tier=clear teal).
+      // Notebook — bookmark icon was too abstract on mobile (Gadi
+      // 2026-06-20: "אחריות לא מבינים מה זה האייקון הזה"). A small
+      // lined notebook reads as "your notebook" instantly.
       return (
         <svg {...common}>
-          <path d="M6 4h12v17l-6-4-6 4z" />
+          <rect x="5" y="3" width="14" height="18" rx="1.5" />
+          <line x1="8" y1="8" x2="16" y2="8" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+          <line x1="8" y1="16" x2="13" y2="16" />
         </svg>
       );
     case "image":
@@ -524,12 +528,14 @@ const TAB_LABELS: Record<string, Record<TabId, string>> = {
   cs: { save: "Do sešitu",      image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
   sk: { save: "Do zošita",      image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
 };
-// Save goes FIRST in the row so the primary action (build your
-// personal vocabulary) sits visually adjacent to the definition it
-// applies to. Gadi 2026-06-20: per-meaning placement makes the
-// Clear-tier ownership of the feature obvious from its colour
-// (data-tier="clear" → teal), without occupying topbar real estate.
-const TAB_IDS: TabId[] = ["save", "image", "kids", "compose", "quiz", "compare"];
+// Order — Gadi 2026-06-20 second pass: Save goes FOURTH, after
+// Compose a sentence, so the row reads (left→right in LTR, mirrored
+// in RTL): "look at the image, read the kids version, write your
+// own sentence, save it to your notebook, take a quiz, play games".
+// The action escalates from passive to active, with save sitting as
+// the "commit it to memory" beat between active practice (compose)
+// and assessment (quiz/games).
+const TAB_IDS: TabId[] = ["image", "kids", "compose", "save", "quiz", "compare"];
 
 function MeaningEntry({
   n,
