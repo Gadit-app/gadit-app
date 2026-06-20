@@ -23,7 +23,21 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Belt-and-suspenders against horizontal overflow on mobile.
+     Gadi (2026-06-19): "המסך זז מצד לצד" — the page shifted a few
+     millimetres side-to-side on his phone. Some element was eclipsing
+     the viewport width (likely the topbar row when KidsMode toggle +
+     share + LangSwitchMobile + wordmark all fight for space at
+     <380px). `overflow-x: clip` snaps any descendant back to viewport
+     width without creating a horizontal scrollbar, and unlike
+     `overflow: hidden` it doesn't break position: sticky descendants.
+     Backed by max-width: 100% on both html and body so a stray
+     `position: fixed; width: 100vw` element can't push past either. */
+  overflow-x: clip;
+  max-width: 100%;
+}
 
 /* ── BASE FONT ── */
 body {
@@ -34,6 +48,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 /* ── HEBREW ── Rubik */
