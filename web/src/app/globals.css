@@ -3350,6 +3350,47 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
      mic visually belongs to the actions group, not the input. */
   margin-inline-end: -4px;
 }
+/* Kids toggle slot inside the search pill — Gadi 2026-06-20 moved
+   the toggle here so the flow reads "type word → flip Kids → press
+   Search" without dropping out of the pill. The slot tightens the
+   KidsModeToggle (which is built for a standalone row) to fit between
+   the mic and the submit button without crowding the input. */
+.wordbook .wb-home-search-kids {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.wordbook .wb-home-search-kids .wb-kids-toggle {
+  padding: 4px 6px;
+  gap: 6px;
+  font-size: 12px;
+}
+.wordbook[dir="rtl"] .wb-home-search-kids .wb-kids-toggle {
+  padding: 4px 6px;
+}
+.wordbook .wb-home-search-kids .wb-kids-toggle-track {
+  width: 28px;
+  height: 16px;
+}
+.wordbook .wb-home-search-kids .wb-kids-toggle-thumb {
+  width: 12px;
+  height: 12px;
+}
+.wordbook .wb-home-search-kids .wb-kids-toggle.is-on .wb-kids-toggle-thumb {
+  transform: translateX(12px);
+}
+.wordbook[dir="rtl"] .wb-home-search-kids .wb-kids-toggle.is-on .wb-kids-toggle-thumb {
+  transform: translateX(-12px);
+}
+@media (max-width: 560px) {
+  /* On narrow phones the pill is already tight; collapse the "Kids"
+     label and lean on the colored track as the affordance. Touch
+     target stays comfortable because the track is still ~28×16
+     wrapped in a 4px hit padding. */
+  .wordbook .wb-home-search-kids .wb-kids-toggle-label {
+    display: none;
+  }
+}
 .wordbook .wb-home-search-mic button {
   border-radius: 999px !important;
   width: 36px !important;
@@ -5283,7 +5324,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   line-height: 1.5;
   min-height: 92px;
 }
-.wordbook .wb-home-sentence-input::placeholder { color: var(--ink-faint); }
+/* Sentence textarea placeholder — Gadi 2026-06-20: "טיפה נוריד את
+   הגוון שלו שהוא לא ייקח יותר מדי תשומת לב מהשדה הראשי שלנו".
+   The optional sentence field shouldn't pull weight from the main
+   "Type a word" pill above it. Both at --ink-faint read at similar
+   prominence; nudged this one to a lower-opacity slate so the main
+   pill placeholder stays primary on first glance. */
+.wordbook .wb-home-sentence-input::placeholder {
+  color: rgba(15, 23, 42, 0.32);
+  font-weight: 400;
+}
 .wordbook .wb-home-sentence-input:focus {
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);

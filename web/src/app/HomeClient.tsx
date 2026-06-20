@@ -336,6 +336,25 @@ export function HomePage() {
                   size="sm"
                 />
               </div>
+              {/* Kids toggle — moved into the search pill (Gadi
+                  2026-06-20). The intended flow is "type word → flip
+                  kids → press Search", so the toggle now sits exactly
+                  between the mic and the Search button instead of
+                  living in a separate row below. Same KidsModeToggle
+                  component, wrapped in a slot div so we can tighten
+                  its sizing without forking the component. */}
+              <div className="wb-home-search-kids">
+                <KidsModeToggle
+                  plan={plan}
+                  onBasicGate={() => {
+                    if (!user) {
+                      promptLogin(v2(lang, "kidsModeBasicGate"));
+                      return;
+                    }
+                    setUpgradeTrigger({ feature: "kids", tier: "clear" });
+                  }}
+                />
+              </div>
               {/* Submit pill — sits at the END of the row so it always
                   appears on the side opposite to where the user starts
                   typing. LTR English: types left → finishes near the
@@ -367,23 +386,6 @@ export function HomePage() {
                 rows={2}
                 className="wb-home-sentence-input"
                 aria-label={c.sentencePlaceholder}
-              />
-            </div>
-
-            <div className="wb-home-kids-row">
-              <KidsModeToggle
-                plan={plan}
-                onBasicGate={() => {
-                  // Anonymous: nudge to sign up first; Basic: show the
-                  // existing UpgradeModal with the kids pitch (the
-                  // modal already ships a feature="kids" pitch in 11
-                  // languages, so we get it for free).
-                  if (!user) {
-                    promptLogin(v2(lang, "kidsModeBasicGate"));
-                    return;
-                  }
-                  setUpgradeTrigger({ feature: "kids", tier: "clear" });
-                }}
               />
             </div>
           </form>
