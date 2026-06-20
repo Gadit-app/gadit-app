@@ -2829,21 +2829,26 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-mtabs { gap: 10px; }
 }
 
-/* Each tab is a compact pill — icon + label on ONE line */
+/* Each tab is a compact pill — icon + label on ONE line.
+   Sized to be quieter than the definition+examples above (Gadi feedback
+   2026-06-20: "האזור של התוספות של קליר ודיפ קצת גדולות מדי ביחס להגדרה").
+   Font 12px / icon 14px / padding 5px 9px keeps the chips legible but
+   pulls visual weight off the action row so the eye lands on the
+   meaning text first. Mobile (≤640px) collapses to icon-only chips. */
 .wordbook .wb-mtab {
   display: inline-flex !important;
   flex-direction: row !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  gap: 6px;
-  padding: 7px 11px !important;
+  gap: 5px;
+  padding: 5px 9px !important;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 8px;
   color: var(--ink);
   cursor: pointer;
   font-family: var(--wb-he);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
@@ -2881,10 +2886,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: var(--mist);
   color: var(--ink-muted);
 }
-/* Icon — explicit 16×16, no decorative bg */
+/* Icon — explicit 14×14, no decorative bg. Was 16×16; shrunk
+   2026-06-20 alongside the chip body so the action row sits lighter
+   under the meaning text. Mobile gets the icon-only chip layout via
+   the @media (max-width: 640px) block above, which keeps the icon
+   itself at this same 14×14. */
 .wordbook .wb-mtab .wb-mtab-icon {
-  width: 16px !important;
-  height: 16px !important;
+  width: 14px !important;
+  height: 14px !important;
   background: transparent !important;
   border-radius: 0 !important;
   display: inline-flex !important;
@@ -2895,8 +2904,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: inherit;
 }
 .wordbook .wb-mtab .wb-mtab-icon svg {
-  width: 16px !important;
-  height: 16px !important;
+  width: 14px !important;
+  height: 14px !important;
   filter: none !important;
   display: block;
 }
