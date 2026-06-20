@@ -111,22 +111,23 @@ const COPY: Record<
     features: string;
     addSentence: string;
     sentencePlaceholder: string;
+    optional: string;
     founderNote: string;
     founderSign: string;
   }
 > = {
-  he: { tagline: "להבין מילים עד הסוף", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור", search: "חיפוש", features: "פיצ'רים", addSentence: "הוסיפו את המשפט שבו מופיעה המילה כדי לקבל הגדרה אחת מדויקת", sentencePlaceholder: "הקלידו את המשפט שבו מופיעה המילה כדי לקבל הגדרה אחת מדויקת", founderNote: "בכל פעם שמשהו לא ברור, יש שם מילה אחת. תפסת אותה, הבנת הכל.", founderSign: "גדי, מייסד Gadit" },
-  en: { tagline: "Understand words to the end", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features", addSentence: "Add the sentence where the word appears to get one precise definition", sentencePlaceholder: "Type the sentence where the word appears to get one precise definition", founderNote: "Every time something doesn't click, there's one word in the way. Catch it, and everything opens.", founderSign: "Gadi, founder of Gadit" },
-  ar: { tagline: "افهم الكلمات حتى النهاية", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار", search: "بحث", features: "المزايا", addSentence: "أضف الجملة التي تظهر فيها الكلمة للحصول على تعريف واحد دقيق", sentencePlaceholder: "اكتب الجملة التي تظهر فيها الكلمة للحصول على تعريف واحد دقيق", founderNote: "في كل مرة لا يتضح فيها شيء، هناك كلمة واحدة في الطريق. التقطها، وكل شيء ينفتح.", founderSign: "غادي، مؤسس Gadit" },
-  ru: { tagline: "Понять слова до конца",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены", search: "Поиск", features: "Возможности", addSentence: "Добавьте предложение со словом, чтобы получить одно точное определение", sentencePlaceholder: "Введите предложение со словом, чтобы получить одно точное определение", founderNote: "Каждый раз, когда что-то не складывается, на пути есть одно слово. Найди его, и всё открывается.", founderSign: "Гади, основатель Gadit" },
-  es: { tagline: "Entender palabras hasta el final", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios", search: "Búsqueda", features: "Funciones", addSentence: "Añade la frase donde aparece la palabra para obtener una definición precisa", sentencePlaceholder: "Escribe la frase donde aparece la palabra para obtener una definición precisa", founderNote: "Cada vez que algo no encaja, hay una palabra en el camino. Atrápala, y todo se abre.", founderSign: "Gadi, fundador de Gadit" },
-  pt: { tagline: "Entender palavras até o fim", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços", search: "Buscar", features: "Recursos", addSentence: "Adicione a frase onde a palavra aparece para obter uma definição precisa", sentencePlaceholder: "Escreva a frase onde a palavra aparece para obter uma definição precisa", founderNote: "Toda vez que algo não faz sentido, há uma palavra no caminho. Pegue-a, e tudo se abre.", founderSign: "Gadi, fundador do Gadit" },
-  fr: { tagline: "Comprendre les mots jusqu'au bout", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités", addSentence: "Ajoutez la phrase où le mot apparaît pour obtenir une définition précise", sentencePlaceholder: "Tapez la phrase où le mot apparaît pour obtenir une définition précise", founderNote: "Chaque fois que quelque chose ne tilte pas, il y a un mot sur le chemin. Saisissez-le, et tout s'ouvre.", founderSign: "Gadi, fondateur de Gadit" },
-  de: { tagline: "Wörter bis zum Ende verstehen", placeholder: "Wort eingeben", tryLabel: "Beispiel", signin: "Anmelden", pricing: "Preise", search: "Suche", features: "Funktionen", addSentence: "Füge den Satz hinzu, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", sentencePlaceholder: "Tippe den Satz ein, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", founderNote: "Jedes Mal, wenn etwas nicht klickt, steht ein Wort im Weg. Fang es ein, und alles öffnet sich.", founderSign: "Gadi, Gründer von Gadit" },
-  cs: { tagline: "Pochopit slova až do konce", placeholder: "Napiš slovo", tryLabel: "Příklad", signin: "Přihlásit se", pricing: "Ceník", search: "Hledat", features: "Funkce", addSentence: "Přidej větu, ve které se slovo objevuje, abys získal přesnou definici", sentencePlaceholder: "Napiš větu, ve které se slovo objevuje, abys získal jednu přesnou definici", founderNote: "Pokaždé, když něco nedává smysl, je v cestě jedno slovo. Zachyť ho, a všechno se otevře.", founderSign: "Gadi, zakladatel Gaditu" },
-  sk: { tagline: "Pochopiť slová až do konca", placeholder: "Napíš slovo", tryLabel: "Príklad", signin: "Prihlásiť sa", pricing: "Cenník", search: "Hľadať", features: "Funkcie", addSentence: "Pridaj vetu, v ktorej sa slovo nachádza, aby si získal presnú definíciu", sentencePlaceholder: "Napíš vetu, v ktorej sa slovo nachádza, aby si získal jednu presnú definíciu", founderNote: "Zakaždým, keď niečo nedáva zmysel, stojí v ceste jedno slovo. Zachyť ho, a všetko sa otvorí.", founderSign: "Gadi, zakladateľ Gaditu" },
-  it: { tagline: "Capire le parole fino in fondo", placeholder: "Scrivi una parola", tryLabel: "Prova", signin: "Accedi", pricing: "Prezzi", search: "Cerca", features: "Funzionalità", addSentence: "Aggiungi la frase in cui appare la parola per ottenere una definizione precisa", sentencePlaceholder: "Scrivi la frase in cui appare la parola per ottenere una definizione precisa", founderNote: "Ogni volta che qualcosa non torna, c'è una parola sulla strada. Coglila, e tutto si apre.", founderSign: "Gadi, fondatore di Gadit" },
-  ja: { tagline: "言葉を最後まで理解する", placeholder: "単語を入力", tryLabel: "例", signin: "ログイン", pricing: "料金", search: "検索", features: "機能", addSentence: "単語が出てくる文を追加すると、ぴったりの意味が一つだけ表示されます", sentencePlaceholder: "単語が出てくる文を入力すると、ぴったりの意味が一つだけ表示されます", founderNote: "何かがしっくりこないとき、必ず一つの言葉が間にある。それを掴めば、すべてが開く。", founderSign: "ガディ、Gadit 創業者" },
+  he: { tagline: "להבין מילים עד הסוף", placeholder: "הקלידו מילה",       tryLabel: "לדוגמה", signin: "התחברות",     pricing: "תמחור", search: "חיפוש", features: "פיצ'רים", addSentence: "הוסיפו את המשפט שבו מופיעה המילה כדי לקבל הגדרה אחת מדויקת", sentencePlaceholder: "הקלידו את המשפט שבו מופיעה המילה כדי לקבל הגדרה אחת מדויקת", optional: "אופציונלי", founderNote: "בכל פעם שמשהו לא ברור, יש שם מילה אחת. תפסת אותה, הבנת הכל.", founderSign: "גדי, מייסד Gadit" },
+  en: { tagline: "Understand words to the end", placeholder: "Type a word", tryLabel: "Try", signin: "Sign in", pricing: "Pricing", search: "Search", features: "Features", addSentence: "Add the sentence where the word appears to get one precise definition", sentencePlaceholder: "Type the sentence where the word appears to get one precise definition", optional: "Optional", founderNote: "Every time something doesn't click, there's one word in the way. Catch it, and everything opens.", founderSign: "Gadi, founder of Gadit" },
+  ar: { tagline: "افهم الكلمات حتى النهاية", placeholder: "اكتب كلمة",     tryLabel: "جرّب", signin: "تسجيل دخول",  pricing: "الأسعار", search: "بحث", features: "المزايا", addSentence: "أضف الجملة التي تظهر فيها الكلمة للحصول على تعريف واحد دقيق", sentencePlaceholder: "اكتب الجملة التي تظهر فيها الكلمة للحصول على تعريف واحد دقيق", optional: "اختياري", founderNote: "في كل مرة لا يتضح فيها شيء، هناك كلمة واحدة في الطريق. التقطها، وكل شيء ينفتح.", founderSign: "غادي، مؤسس Gadit" },
+  ru: { tagline: "Понять слова до конца",   placeholder: "Введите слово", tryLabel: "Пример", signin: "Войти",     pricing: "Цены", search: "Поиск", features: "Возможности", addSentence: "Добавьте предложение со словом, чтобы получить одно точное определение", sentencePlaceholder: "Введите предложение со словом, чтобы получить одно точное определение", optional: "Необязательно", founderNote: "Каждый раз, когда что-то не складывается, на пути есть одно слово. Найди его, и всё открывается.", founderSign: "Гади, основатель Gadit" },
+  es: { tagline: "Entender palabras hasta el final", placeholder: "Escribe una palabra", tryLabel: "Prueba", signin: "Iniciar sesión", pricing: "Precios", search: "Búsqueda", features: "Funciones", addSentence: "Añade la frase donde aparece la palabra para obtener una definición precisa", sentencePlaceholder: "Escribe la frase donde aparece la palabra para obtener una definición precisa", optional: "Opcional", founderNote: "Cada vez que algo no encaja, hay una palabra en el camino. Atrápala, y todo se abre.", founderSign: "Gadi, fundador de Gadit" },
+  pt: { tagline: "Entender palavras até o fim", placeholder: "Escreva uma palavra", tryLabel: "Exemplo", signin: "Entrar", pricing: "Preços", search: "Buscar", features: "Recursos", addSentence: "Adicione a frase onde a palavra aparece para obter uma definição precisa", sentencePlaceholder: "Escreva a frase onde a palavra aparece para obter uma definição precisa", optional: "Opcional", founderNote: "Toda vez que algo não faz sentido, há uma palavra no caminho. Pegue-a, e tudo se abre.", founderSign: "Gadi, fundador do Gadit" },
+  fr: { tagline: "Comprendre les mots jusqu'au bout", placeholder: "Tapez un mot", tryLabel: "Essayez", signin: "Connexion", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités", addSentence: "Ajoutez la phrase où le mot apparaît pour obtenir une définition précise", sentencePlaceholder: "Tapez la phrase où le mot apparaît pour obtenir une définition précise", optional: "Optionnel", founderNote: "Chaque fois que quelque chose ne tilte pas, il y a un mot sur le chemin. Saisissez-le, et tout s'ouvre.", founderSign: "Gadi, fondateur de Gadit" },
+  de: { tagline: "Wörter bis zum Ende verstehen", placeholder: "Wort eingeben", tryLabel: "Beispiel", signin: "Anmelden", pricing: "Preise", search: "Suche", features: "Funktionen", addSentence: "Füge den Satz hinzu, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", sentencePlaceholder: "Tippe den Satz ein, in dem das Wort vorkommt, um eine genaue Definition zu erhalten", optional: "Optional", founderNote: "Jedes Mal, wenn etwas nicht klickt, steht ein Wort im Weg. Fang es ein, und alles öffnet sich.", founderSign: "Gadi, Gründer von Gadit" },
+  cs: { tagline: "Pochopit slova až do konce", placeholder: "Napiš slovo", tryLabel: "Příklad", signin: "Přihlásit se", pricing: "Ceník", search: "Hledat", features: "Funkce", addSentence: "Přidej větu, ve které se slovo objevuje, abys získal přesnou definici", sentencePlaceholder: "Napiš větu, ve které se slovo objevuje, abys získal jednu přesnou definici", optional: "Volitelné", founderNote: "Pokaždé, když něco nedává smysl, je v cestě jedno slovo. Zachyť ho, a všechno se otevře.", founderSign: "Gadi, zakladatel Gaditu" },
+  sk: { tagline: "Pochopiť slová až do konca", placeholder: "Napíš slovo", tryLabel: "Príklad", signin: "Prihlásiť sa", pricing: "Cenník", search: "Hľadať", features: "Funkcie", addSentence: "Pridaj vetu, v ktorej sa slovo nachádza, aby si získal presnú definíciu", sentencePlaceholder: "Napíš vetu, v ktorej sa slovo nachádza, aby si získal jednu presnú definíciu", optional: "Voliteľné", founderNote: "Zakaždým, keď niečo nedáva zmysel, stojí v ceste jedno slovo. Zachyť ho, a všetko sa otvorí.", founderSign: "Gadi, zakladateľ Gaditu" },
+  it: { tagline: "Capire le parole fino in fondo", placeholder: "Scrivi una parola", tryLabel: "Prova", signin: "Accedi", pricing: "Prezzi", search: "Cerca", features: "Funzionalità", addSentence: "Aggiungi la frase in cui appare la parola per ottenere una definizione precisa", sentencePlaceholder: "Scrivi la frase in cui appare la parola per ottenere una definizione precisa", optional: "Opzionale", founderNote: "Ogni volta che qualcosa non torna, c'è una parola sulla strada. Coglila, e tutto si apre.", founderSign: "Gadi, fondatore di Gadit" },
+  ja: { tagline: "言葉を最後まで理解する", placeholder: "単語を入力", tryLabel: "例", signin: "ログイン", pricing: "料金", search: "検索", features: "機能", addSentence: "単語が出てくる文を追加すると、ぴったりの意味が一つだけ表示されます", sentencePlaceholder: "単語が出てくる文を入力すると、ぴったりの意味が一つだけ表示されます", optional: "任意", founderNote: "何かがしっくりこないとき、必ず一つの言葉が間にある。それを掴めば、すべてが開く。", founderSign: "ガディ、Gadit 創業者" },
 };
 
 function SearchIcon({ size = 16 }: { size?: number }) {
@@ -145,7 +146,6 @@ export function HomePage() {
   const href = useHref();
   const [query, setQuery] = useState("");
   const [sentence, setSentence] = useState("");
-  const [sentenceOpen, setSentenceOpen] = useState(false);
   const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -355,39 +355,22 @@ export function HomePage() {
                 <span className="wb-home-search-submit-label">{c.search}</span>
               </button>
             </div>
-            {sentenceOpen ? (
-              <div className="wb-home-sentence-wrap">
-                <textarea
-                  value={sentence}
-                  onChange={(e) => setSentence(e.target.value)}
-                  placeholder={c.sentencePlaceholder}
-                  rows={2}
-                  className="wb-home-sentence-input"
-                  aria-label={c.sentencePlaceholder}
-                />
-                <button
-                  type="button"
-                  className="wb-home-sentence-close"
-                  onClick={() => { setSentenceOpen(false); setSentence(""); }}
-                  aria-label={lang === "he" ? "סגור" : lang === "ar" ? "إغلاق" : lang === "ru" ? "Закрыть" : "Close"}
-                >
-                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                    <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                  </svg>
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                className="wb-home-sentence-toggle"
-                onClick={() => setSentenceOpen(true)}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-                <span>{c.addSentence}</span>
-              </button>
-            )}
+            {/* Sentence input — Gadi 2026-06-19: always visible, no
+                "+ Add" toggle, with a small "Optional" eyebrow above
+                so people know they can skip it. The textarea uses a
+                softer 22px radius that still reads as the same family
+                as the search pill above. */}
+            <div className="wb-home-sentence-wrap">
+              <div className="wb-home-sentence-eyebrow">{c.optional}</div>
+              <textarea
+                value={sentence}
+                onChange={(e) => setSentence(e.target.value)}
+                placeholder={c.sentencePlaceholder}
+                rows={2}
+                className="wb-home-sentence-input"
+                aria-label={c.sentencePlaceholder}
+              />
+            </div>
 
             <div className="wb-home-kids-row">
               <KidsModeToggle

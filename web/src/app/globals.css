@@ -5182,6 +5182,22 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin: 4px 0 0;
   position: relative;
 }
+/* Eyebrow above the always-on sentence textarea — Gadi 2026-06-19
+   replaced the "+ Add the sentence…" toggle with this small subtitle
+   that tells people the field is optional without forcing a click. */
+.wordbook .wb-home-sentence-eyebrow {
+  font-family: var(--wb-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 6px 4px 4px;
+}
+.wordbook[dir="rtl"] .wb-home-sentence-eyebrow {
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
 .wordbook .wb-home-sentence-close {
   position: absolute;
   top: 8px;
@@ -5206,10 +5222,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--rule);
-  /* Search box is height:46px with a 999px pill radius. The textarea
-     is roughly 2× tall (~92px) — a softer 16px radius reads
-     comfortably for multi-line input. */
-  border-radius: 16px;
+  /* Search box above is a full pill (999px). The textarea is roughly
+     2× tall (~92px), so the radius can't go full pill, but bumping
+     it from 16px to 22px puts the corners in the same visual family
+     as the search pill — Gadi 2026-06-19 "תנסה לעשות שהשדות האלה
+     זהים בעיצוב מבחינת הגלוליות". */
+  border-radius: 22px;
   padding: 14px 18px;
   font-family: var(--wb-he);
   font-size: 15px;
