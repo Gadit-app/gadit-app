@@ -382,7 +382,22 @@ export function AccountPage() {
           <LangSwitch />
           {user ? <WbUserMenu /> : null}
         </div>
-        <LangSwitchMobile />
+        {/* Mobile identity cluster — 2026-06-19 redesign. */}
+        {user && (
+          <div className="wb-shell-mobile-identity">
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+            <WbUserMenu />
+          </div>
+        )}
+        <div className="wb-shell-mobile-menu-cluster">
+          <LangSwitchMobile />
+        </div>
       </header>
 
       <main

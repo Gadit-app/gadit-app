@@ -2142,10 +2142,10 @@ export function AffiliatesPage() {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
-        {/* Mobile-only — share button + burger. Both hidden on desktop
-            via globals.css. */}
-        <div className="wb-shell-share-mobile-wrap">
-          {user && (
+        {/* Mobile identity cluster — Share + Avatar inline next to the
+            wordmark. Mirrors Home + Word; 2026-06-19 redesign. */}
+        {user && (
+          <div className="wb-shell-mobile-identity">
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
@@ -2153,8 +2153,10 @@ export function AffiliatesPage() {
               shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
               copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
             />
-          )}
-        </div>
+            <WbUserMenu />
+          </div>
+        )}
+        <div className="wb-shell-mobile-menu-cluster">
         <LangSwitchMobile />
         <button
           ref={burgerRef}
@@ -2174,6 +2176,7 @@ export function AffiliatesPage() {
             </svg>
           )}
         </button>
+        </div>
         {menuOpen && (
           <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
             <Link href={href("/")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
