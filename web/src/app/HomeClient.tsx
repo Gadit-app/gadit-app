@@ -437,11 +437,6 @@ export function HomePage() {
         onClose={() => setUpgradeTrigger(null)}
       />
 
-      <aside className="wb-home-founder" aria-label={c.founderSign}>
-        <p className="wb-home-founder-note">{c.founderNote}</p>
-        <p className="wb-home-founder-sign">{c.founderSign}</p>
-      </aside>
-
       <GadVerbStamp />
 
       <footer className="wb-home-footer">
