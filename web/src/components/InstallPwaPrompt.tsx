@@ -340,15 +340,22 @@ export function InstallPwaPrompt() {
 
     // iOS Safari: we can show even without a deferred prompt (we'll
     // route Install → instructions sheet).
-    // Android / Desktop Chrome: only show once we have a deferred
-    // prompt — otherwise the Install button has nothing to fire.
+    // Android Chrome: only show once we have a deferred prompt —
+    // otherwise the Install button has nothing to fire.
+    //
+    // Desktop is intentionally excluded: the prompt copy says "Add
+    // Gadit to your phone" / "הוסיפו את Gadit לטלפון", which reads
+    // wrong on a laptop, and desktop users who want a PWA install
+    // already know to use the browser's address-bar install button.
+    // Gadi flagged this when the card popped up during his own
+    // desktop test on 2026-06-19.
     //
     // Other browsers (Firefox iOS, Brave, Edge mobile etc.) won't get
     // either signal — skip them rather than show a button that does
     // nothing.
     const eligible =
       (platform === "ios" && isSafari()) ||
-      ((platform === "android" || platform === "desktop") && deferred);
+      (platform === "android" && deferred);
     if (!eligible) return;
 
     const checkSignal = () =>
