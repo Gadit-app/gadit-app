@@ -1043,6 +1043,23 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
+        {/* Mobile identity cluster — Share + Avatar live inline next to
+            the wordmark so the corner reads as "you, signed in" the way
+            Google's mobile chrome does. Pulled out of the old
+            wb-shell-share-mobile-wrap (which now holds only the Kids
+            toggle). 2026-06-19 Gadi feedback. */}
+        {user && (
+          <div className="wb-shell-mobile-identity">
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+            <WbUserMenu />
+          </div>
+        )}
         <div className="wb-shell-share-mobile-wrap">
           {/* Mobile mirror of the Kids toggle. The desktop toggle lives
               inside .wb-shell-actions (hidden under 767px), so without
@@ -1058,17 +1075,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               setUpgradeTrigger({ feature: "kids", tier: "clear" });
             }}
           />
-          {user && (
-            <ShareButton
-              url="https://www.gadit.app/"
-              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-              text=""
-              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
-              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
-            />
-          )}
         </div>
-        <LangSwitchMobile />
+        <div className="wb-shell-mobile-menu-cluster">
+          <LangSwitchMobile />
+        </div>
 
         </header>
 

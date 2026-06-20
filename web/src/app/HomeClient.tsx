@@ -241,8 +241,13 @@ export function HomePage() {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
-        <div className="wb-shell-share-mobile-wrap">
-          {user && (
+        {/* Mobile identity cluster — sits inline next to the wordmark
+            so the share button visually attaches to the Gadit logo
+            (Gadi's 2026-06-19 ask: "את הכופתור שיתוף הייתי שם טיפה
+            יותר ימינה צמוד לגדית, ללוגו"), and the avatar lives in
+            the natural corner exactly like Google's mobile chrome. */}
+        {user && (
+          <div className="wb-shell-mobile-identity">
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
@@ -250,8 +255,10 @@ export function HomePage() {
               shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
               copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
             />
-          )}
-        </div>
+            <WbUserMenu />
+          </div>
+        )}
+        <div className="wb-shell-mobile-menu-cluster">
         <LangSwitchMobile />
                 <button
           ref={burgerRef}
@@ -271,6 +278,7 @@ export function HomePage() {
             </svg>
           )}
         </button>
+        </div>
         {menuOpen && (
           <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
             <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
