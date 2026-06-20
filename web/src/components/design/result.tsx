@@ -387,7 +387,7 @@ export function WordHeader({
 // inline content below for image/kids; fire modal/route for the
 // interactive flows (compose, compare, quiz).
 
-type TabId = "image" | "kids" | "compose" | "compare" | "quiz";
+type TabId = "save" | "image" | "kids" | "compose" | "compare" | "quiz";
 
 interface MeaningEntryProps {
   n: number;
@@ -400,6 +400,13 @@ interface MeaningEntryProps {
   totalMeanings: number;
   plan: Plan;
   word: string;
+  /** Whether this word is in the user's notebook. Drives the
+      "save" tab's saved-vs-unsaved visual (filled bookmark, label
+      flip to "Saved" / "נשמר"). The save tab itself only renders
+      when onSave is defined, mirroring the optional pattern of the
+      other action handlers. */
+  isSaved?: boolean;
+  onSave?: () => void;
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
@@ -413,7 +420,7 @@ interface MeaningEntryProps {
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
-  // Image, kids, compose are Clear+ features.
+  // Save, image, kids, compose are Clear+ features.
   // Compare and quiz are Deep features.
   // Nothing is Basic-only (Basic users see definitions + idioms only).
   if (tab === "compare" || tab === "quiz") return "deep";
@@ -441,6 +448,15 @@ function TabIcon({ name }: { name: TabId }) {
     strokeLinejoin: "round" as const,
   };
   switch (name) {
+    case "save":
+      // Bookmark — the same affordance the WordHeader save button uses.
+      // Stroke-only so the active "saved" state can fill it via CSS
+      // (currentColor matches the data-tier=clear teal).
+      return (
+        <svg {...common}>
+          <path d="M6 4h12v17l-6-4-6 4z" />
+        </svg>
+      );
     case "image":
       return (
         <svg {...common}>
@@ -497,18 +513,23 @@ function TabIcon({ name }: { name: TabId }) {
 // for now to avoid a wide rename across the result/i18n/unlock
 // tables; only the visible label and the panel body change.
 const TAB_LABELS: Record<string, Record<TabId, string>> = {
-  he: { image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "משחקי מילים" },
-  en: { image: "Image",       kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Word games" },
-  ar: { image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "ألعاب كلمات" },
-  ru: { image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Игры со словами" },
-  es: { image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Juegos de palabras" },
-  pt: { image: "Imagem",       kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Jogos com palavras" },
-  fr: { image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
-  de: { image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
-  cs: { image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
-  sk: { image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
+  he: { save: "שמירה במחברת",  image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "משחקי מילים" },
+  en: { save: "Save to Notebook", image: "Image",   kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Word games" },
+  ar: { save: "حفظ في الدفتر",  image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "ألعاب كلمات" },
+  ru: { save: "В блокнот",      image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Игры со словами" },
+  es: { save: "A mi cuaderno",  image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Juegos de palabras" },
+  pt: { save: "Salvar no caderno", image: "Imagem",   kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Jogos com palavras" },
+  fr: { save: "Carnet",         image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
+  de: { save: "Ins Heft",       image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
+  cs: { save: "Do sešitu",      image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
+  sk: { save: "Do zošita",      image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
 };
-const TAB_IDS: TabId[] = ["image", "kids", "compose", "quiz", "compare"];
+// Save goes FIRST in the row so the primary action (build your
+// personal vocabulary) sits visually adjacent to the definition it
+// applies to. Gadi 2026-06-20: per-meaning placement makes the
+// Clear-tier ownership of the feature obvious from its colour
+// (data-tier="clear" → teal), without occupying topbar real estate.
+const TAB_IDS: TabId[] = ["save", "image", "kids", "compose", "quiz", "compare"];
 
 function MeaningEntry({
   n,
@@ -516,6 +537,8 @@ function MeaningEntry({
   totalMeanings,
   plan,
   word,
+  isSaved = false,
+  onSave,
   imageUrl,
   imageGenerating,
   onGenerate,
@@ -542,13 +565,18 @@ function MeaningEntry({
   // category error). Translated into the UI language by formatPos so
   // a Hebrew reader sees "שם עצם" not "noun".
   //
-  // Single-meaning suppression — when there's only ONE meaning for
-  // the word, the badge often reads as redundant ("apple" already
-  // looks like a noun), so we omit it. The moment a word has 2+
-  // senses the badge becomes load-bearing again because it tells
-  // the reader which sense they're scanning.
+  // Hidden in:
+  //   1. Kids Mode — Gadi 2026-06-20: "במצב ילדים זה לא אמור להופיע
+  //      כדי לא לסבך את הילדים". A 7-year-old doesn't need to read
+  //      "noun" before they read what the word means.
+  //   2. Single-meaning words — "apple" with one obvious noun reads
+  //      as noise next to the meaning text. The moment a word has 2+
+  //      senses the badge becomes load-bearing again because it tells
+  //      the reader which sense they're scanning.
   const posLabel =
-    meaning.pos && totalMeanings > 1 ? formatPos(meaning.pos, lang) : "";
+    !showKids && meaning.pos && totalMeanings > 1
+      ? formatPos(meaning.pos, lang)
+      : "";
   const effectiveMeaning = showKids
     ? meaning.kidsExplanation!.explanation
     : meaning.meaning;
@@ -565,6 +593,7 @@ function MeaningEntry({
       onUpgrade?.(tab, tierForTab(tab) as "clear" | "deep");
       return;
     }
+    if (tab === "save") { onSave?.(); return; }
     if (tab === "image") {
       setOpenTab(openTab === "image" ? null : "image");
       if (openTab !== "image" && !imageUrl && !imageGenerating) {
@@ -689,22 +718,42 @@ function MeaningEntry({
           shown above. Showing the tab would be redundant and confusing
           ("explain like a kid" → already done). */}
       <div className="wb-mtabs">
-        {TAB_IDS.filter((id) => !(showKids && id === "kids")).map((id) => {
+        {TAB_IDS
+          // Hide the kids tab in Kids Mode (kids content IS the main
+          // definition). Hide the save tab when no onSave wired (e.g.
+          // the legacy MeaningCard export, or contexts that don't
+          // bind notebook actions).
+          .filter((id) => !(showKids && id === "kids"))
+          .filter((id) => !(id === "save" && !onSave))
+          .map((id) => {
           const unlocked = tabUnlocked(id, plan);
           const isOpen = openTab === id;
+          const isSaveTab = id === "save";
+          const showSavedState = isSaveTab && isSaved;
+          // For the save tab, the "engaged" look comes from the
+          // saved state (filled bookmark) not the openTab state, so
+          // we route is-on through a different class so the styling
+          // can pick it up cleanly.
+          const classes = [
+            "wb-mtab",
+            isOpen ? "is-open" : "",
+            unlocked ? "" : "is-locked",
+            showSavedState ? "is-saved" : "",
+          ].filter(Boolean).join(" ");
+          const label = showSavedState ? v2(lang, "savedToWordBook") : tabLabels[id];
           return (
             <button
               key={id}
               type="button"
-              className={`wb-mtab${isOpen ? " is-open" : ""}${unlocked ? "" : " is-locked"}`}
+              className={classes}
               data-tier={tierForTab(id)}
               onClick={() => handleTabClick(id)}
-              aria-pressed={isOpen}
-              title={tabLabels[id]}
-              aria-label={tabLabels[id]}
+              aria-pressed={isOpen || showSavedState}
+              title={label}
+              aria-label={label}
             >
               <span className="wb-mtab-icon"><TabIcon name={id} /></span>
-              <span className="wb-mtab-label">{tabLabels[id]}</span>
+              <span className="wb-mtab-label">{label}</span>
               {!unlocked && (
                 <span className="wb-mtab-lock"><LockIcon size={10} /></span>
               )}
@@ -804,6 +853,8 @@ export function MeaningsBlock({
   meanings,
   word = "",
   plan = "basic",
+  isSaved = false,
+  onSave,
   imageUrl,
   imageGenerating,
   onGenerate,
@@ -814,6 +865,8 @@ export function MeaningsBlock({
   meanings: Meaning[];
   word?: string;
   plan?: Plan;
+  isSaved?: boolean;
+  onSave?: () => void;
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
@@ -843,6 +896,8 @@ export function MeaningsBlock({
             totalMeanings={meanings.length}
             word={word}
             plan={plan}
+            isSaved={isSaved}
+            onSave={onSave}
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
             onGenerate={onGenerate}
@@ -1257,12 +1312,15 @@ export function ResultView({
     <div className="wordbook wb-page" dir={dir}>
       {isSaved && savedAgo && <ProgressSignal savedAgo={savedAgo} />}
 
+      {/* WordHeader no longer renders the Save button — Gadi 2026-06-20
+          moved Save to Notebook into the per-meaning action row so it
+          carries Clear-tier teal colouring and reads as a feature of
+          each definition. WordHeader keeps offline-pin + share. */}
       <WordHeader
         word={result.word}
         language={result.language}
         ipa={result.ipa}
         isSaved={isSaved}
-        onSave={onSave}
         onShare={onShare}
         isPinned={isPinned}
         onPin={onPin}
@@ -1272,6 +1330,8 @@ export function ResultView({
         meanings={result.meanings ?? []}
         word={result.word}
         plan={plan}
+        isSaved={isSaved}
+        onSave={onSave}
         imageUrl={imageUrl}
         imageGenerating={imageGenerating}
         onGenerate={onGenerate}

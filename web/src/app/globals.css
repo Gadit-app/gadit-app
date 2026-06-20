@@ -2819,6 +2819,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--surface);
 }
 .wordbook .wb-mtab.is-open .wb-mtab-icon { color: var(--surface); }
+/* Save tab — "saved" state mirrors the open-tab teal so the word
+   visibly carries its notebook flag. Added 2026-06-20 when Save
+   moved from the WordHeader into the per-meaning action row. The
+   bookmark SVG fills via currentColor, so when the tab is saved
+   the icon body fills too. */
+.wordbook .wb-mtab.is-saved {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--surface);
+}
+.wordbook .wb-mtab.is-saved .wb-mtab-icon { color: var(--surface); fill: var(--surface); }
+.wordbook .wb-mtab.is-saved .wb-mtab-icon svg path { fill: currentColor; }
 .wordbook .wb-mtab.is-locked {
   color: var(--ink-faint);
   background: var(--paper-deep);
