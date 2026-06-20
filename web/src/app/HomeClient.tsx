@@ -22,6 +22,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
+import { GrammarModeToggle } from "@/components/GrammarModeToggle";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 
 const LANGS = [
@@ -403,6 +404,7 @@ export function HomePage() {
                   setUpgradeTrigger({ feature: "kids", tier: "clear" });
                 }}
               />
+              <GrammarModeToggle />
             </div>
           </form>
         </div>

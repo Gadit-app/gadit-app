@@ -42,6 +42,8 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
 import { ImageLightbox } from "@/components/design/ImageLightbox";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { useGrammarMode } from "@/lib/use-grammar-mode";
+import { formatPos } from "@/lib/format-pos";
 
 // ─── Types matching the live /api/define schema ────────────────
 export type Plan = "basic" | "clear" | "deep";
@@ -527,7 +529,12 @@ function MeaningEntry({
   // is a free re-render, no re-fetch. Same cached server response
   // carries both versions — see route.ts for the rationale.
   const [kidsOn] = useKidsMode();
+  const [grammarOn] = useGrammarMode();
   const showKids = kidsOn && meaning.kidsExplanation;
+  // POS badge shows only when Grammar Mode is on AND the model gave us
+  // a pos value for this meaning. Translated into the UI language by
+  // formatPos so a Hebrew reader sees "שם עצם" not "noun".
+  const posLabel = grammarOn && meaning.pos ? formatPos(meaning.pos, lang) : "";
   const effectiveMeaning = showKids
     ? meaning.kidsExplanation!.explanation
     : meaning.meaning;
@@ -636,6 +643,7 @@ function MeaningEntry({
         <div className="wb-mdef-row">
           <span className="wb-mnum">{n}</span>
           <span className="wb-mdef">
+            {posLabel && <span className="wb-mpos" aria-label={posLabel}>{posLabel}</span>}
             <TappableText text={effectiveMeaning} skipWord={word} />
           </span>
         </div>
