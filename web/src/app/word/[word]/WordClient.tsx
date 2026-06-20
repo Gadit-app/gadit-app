@@ -30,7 +30,6 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
-import { GrammarModeToggle } from "@/components/GrammarModeToggle";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref } from "@/lib/href";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
@@ -1016,7 +1015,6 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 setUpgradeTrigger({ feature: "kids", tier: "clear" });
               }}
             />
-            <GrammarModeToggle />
             {user && (
               <ShareButton
                 url="https://www.gadit.app/"
@@ -1077,7 +1075,6 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               setUpgradeTrigger({ feature: "kids", tier: "clear" });
             }}
           />
-          <GrammarModeToggle />
         </div>
         <div className="wb-shell-mobile-menu-cluster">
           <LangSwitchMobile />

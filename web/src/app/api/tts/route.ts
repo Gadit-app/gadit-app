@@ -62,10 +62,23 @@ function pickVoice(lang: string | undefined): string {
   }
 }
 
-function contentHash(text: string, voice: string, model: string): string {
+// Audio format we ask OpenAI to produce. Christopher (early tester,
+// 2026-06-20, WhatsApp) reported the voice "sounded broken" on Chrome
+// 149+ and Brave (both Chromium), while Safari played the same audio
+// cleanly. The MP3 stream coming out of gpt-4o-mini-tts is what
+// triggered it — Chromium's MP3 decoder has been getting stricter
+// release-over-release and chokes on edge-case framing the new model
+// occasionally produces. AAC is the universal podcast standard,
+// natively supported in every modern browser, and the same model
+// produces it cleanly. Cost is identical.
+const AUDIO_FORMAT = "aac" as const;
+const AUDIO_EXT = "aac";
+const AUDIO_MIME = "audio/aac";
+
+function contentHash(text: string, voice: string, model: string, format: string): string {
   return crypto
     .createHash("sha256")
-    .update(`${model}|${voice}|${text}`)
+    .update(`${model}|${voice}|${format}|${text}`)
     .digest("hex");
 }
 
@@ -115,8 +128,8 @@ export async function POST(req: NextRequest) {
   // cache-key change, so every prior cached MP3 effectively becomes
   // stale; common words re-cache within hours of normal traffic.
   const model = "gpt-4o-mini-tts";
-  const hash = contentHash(text, voice, model);
-  const cachePath = `tts-cache/${hash}.mp3`;
+  const hash = contentHash(text, voice, model, AUDIO_FORMAT);
+  const cachePath = `tts-cache/${hash}.${AUDIO_EXT}`;
 
   // Check Firebase Storage cache
   try {
@@ -127,7 +140,7 @@ export async function POST(req: NextRequest) {
       const [buffer] = await file.download();
       return new Response(buffer as unknown as BodyInit, {
         headers: {
-          "Content-Type": "audio/mpeg",
+          "Content-Type": AUDIO_MIME,
           // Content-addressed: same hash always means same audio, so
           // it's safe to cache forever. immutable tells the browser
           // not to even revalidate.
@@ -174,7 +187,7 @@ export async function POST(req: NextRequest) {
         voice,
         input: text,
         instructions: ttsInstructions,
-        response_format: "mp3",
+        response_format: AUDIO_FORMAT,
       }),
     });
     if (!ttsResp.ok) {
@@ -194,12 +207,13 @@ export async function POST(req: NextRequest) {
       try {
         const bucket = getDefaultBucket();
         await bucket.file(cachePath).save(buffer, {
-          contentType: "audio/mpeg",
+          contentType: AUDIO_MIME,
           metadata: {
             cacheControl: "public, max-age=31536000, immutable",
             metadata: {
               voice,
               model,
+              format: AUDIO_FORMAT,
               lang: lang ?? "",
               textPreview: text.slice(0, 100),
             },
@@ -212,7 +226,7 @@ export async function POST(req: NextRequest) {
 
     return new Response(buffer as unknown as BodyInit, {
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": AUDIO_MIME,
         "Cache-Control": "public, max-age=31536000, immutable",
         ETag: `"${hash}"`,
         "X-Gadit-TTS-Cache": "MISS",

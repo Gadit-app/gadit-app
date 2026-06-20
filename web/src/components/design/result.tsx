@@ -42,7 +42,6 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
 import { ImageLightbox } from "@/components/design/ImageLightbox";
 import { useKidsMode } from "@/lib/use-kids-mode";
-import { useGrammarMode } from "@/lib/use-grammar-mode";
 import { formatPos } from "@/lib/format-pos";
 
 // ─── Types matching the live /api/define schema ────────────────
@@ -393,6 +392,12 @@ type TabId = "image" | "kids" | "compose" | "compare" | "quiz";
 interface MeaningEntryProps {
   n: number;
   meaning: Meaning;
+  /** Total number of meanings in this word — used by the POS badge
+      logic so we suppress the badge when there is only ONE meaning
+      (the Outsider's caveat from the 2026-06-20 LLM Council: for
+      "apple", "tree", "car" the small 'noun' chip just reads as
+      noise next to a definition the reader already understands). */
+  totalMeanings: number;
   plan: Plan;
   word: string;
   imageUrl?: string;
@@ -508,6 +513,7 @@ const TAB_IDS: TabId[] = ["image", "kids", "compose", "quiz", "compare"];
 function MeaningEntry({
   n,
   meaning,
+  totalMeanings,
   plan,
   word,
   imageUrl,
@@ -529,12 +535,20 @@ function MeaningEntry({
   // is a free re-render, no re-fetch. Same cached server response
   // carries both versions — see route.ts for the rationale.
   const [kidsOn] = useKidsMode();
-  const [grammarOn] = useGrammarMode();
   const showKids = kidsOn && meaning.kidsExplanation;
-  // POS badge shows only when Grammar Mode is on AND the model gave us
-  // a pos value for this meaning. Translated into the UI language by
-  // formatPos so a Hebrew reader sees "שם עצם" not "noun".
-  const posLabel = grammarOn && meaning.pos ? formatPos(meaning.pos, lang) : "";
+  // POS badge — shown by default on every meaning that has a pos value
+  // (the LLM Council 2026-06-20 ruled: it's not a configuration, it's
+  // part of what a dictionary entry IS, so the opt-in toggle was a
+  // category error). Translated into the UI language by formatPos so
+  // a Hebrew reader sees "שם עצם" not "noun".
+  //
+  // Single-meaning suppression — when there's only ONE meaning for
+  // the word, the badge often reads as redundant ("apple" already
+  // looks like a noun), so we omit it. The moment a word has 2+
+  // senses the badge becomes load-bearing again because it tells
+  // the reader which sense they're scanning.
+  const posLabel =
+    meaning.pos && totalMeanings > 1 ? formatPos(meaning.pos, lang) : "";
   const effectiveMeaning = showKids
     ? meaning.kidsExplanation!.explanation
     : meaning.meaning;
@@ -826,6 +840,7 @@ export function MeaningsBlock({
             key={i}
             n={i + 1}
             meaning={m}
+            totalMeanings={meanings.length}
             word={word}
             plan={plan}
             imageUrl={imageUrl}
