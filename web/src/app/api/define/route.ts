@@ -191,7 +191,24 @@ PHILOSOPHY: GADIT takes the complex and makes it simple. The user should look at
 - Transliteration without diacritics when accuracy is lost: use "tִ“le" not "tele", "ephִ“meros" not "ephemeros"
 - The source language name written in English when user's language is different (e.g., writing "Greek" when user's language is Hebrew ג€” must be "׳™׳•׳•׳ ׳™׳×")
 
-ג… REQUIRED ג€” exact examples of correct etymology objects (all 5 fields):
+ג… REQUIRED ג€” DOCUMENTED ETYMOLOGY HALLUCINATIONS — NEVER REPEAT THESE:
+A compound word's roots have ONE correct origin. When tempted to swap a real root for a familiar near-neighbour ("scio" -> "science", "logos" -> "logic"), STOP and pick the actual root.
+
+- "Scientology" / "סיינטולוגיה" / "Сайентология" / "Scientologie" / "Cienciología" / "Cienciologia" / "Scientologia" / "Scientológia" / "サイエントロジー" / etc.
+  CORRECT etymology:
+    sourceLanguage: "Latin + Greek" (translate into the user's UI language - e.g. "לטינית + יוונית", "латынь + греческий", "latín + griego", "latim + grego", "latin + grec", "Latein + Griechisch", "latina + řečtina", "latinčina + gréčtina", "latino + greco", "ラテン語＋ギリシャ語")
+    originalWord: ""
+    breakdown: "scio (Latin: to know in the fullest sense) + logos (Greek: study of)" - translate the parenthetical glosses into the user's UI language.
+    originalMeaning: "knowing how to know" or "the study of knowing" - translate into the user's UI language.
+    historyNote: L. Ron Hubbard coined the word in the early 1950s for his new system of beliefs, combining the Latin verb root "scio" with the Greek suffix "logos / -logy". Write this in the user's UI language.
+  FORBIDDEN (documented hallucinations):
+    - Calling "scio" Greek. NO - scio is LATIN. Only "-logy / logos" is Greek.
+    - Saying the word comes from "science" / "scientia". NO - although scientia later derived from the same Latin verb scio, Scientology was coined directly from scio, not from science.
+    - Saying it is English "science" + "-ology". NO - that is an after-the-fact lay reading.
+
+THE COMPOUND-WORD TEST: For any -logy / -logia / -ology / -ולוגיה / -ология compound, the suffix is ALWAYS Greek (logos = study of, word, reason). The PREFIX is the variable root - write the EXACT root, not the modern English word that descended from it. Biology = bios (Greek life), psychology = psyche (Greek soul), Scientology = scio (Latin to know) - different prefix languages are normal.
+
+REQUIRED - exact examples of correct etymology objects (all 5 fields):
 
 Example 1 ג€” English user asking "ephemeral" (COMPOUND):
 {
