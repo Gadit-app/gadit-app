@@ -351,21 +351,10 @@ export function WordHeader({
               </span>
             </button>
           )}
-          {onPin && (
-            <button
-              type="button"
-              className={`wb-word-act ${isPinned ? "is-pinned" : ""}`}
-              data-tier="clear"
-              onClick={onPin}
-              title={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
-              aria-label={isPinned ? v2(lang, "offlinePinnedTitle") : v2(lang, "offlinePinTitle")}
-            >
-              <PinIcon size={13} filled={isPinned} />
-              <span className="wb-word-act-label">
-                {isPinned ? v2(lang, "offlinePinned") : v2(lang, "offlinePin")}
-              </span>
-            </button>
-          )}
+          {/* Offline pin moved into the per-meaning Clear-tier row
+              of tabs 2026-06-20 (Gadi). Old WordHeader pin button
+              JSX intentionally removed; isPinned still threads
+              through to result.tsx for the new pin chip below. */}
           {onShare && (
             <button
               type="button"
@@ -388,7 +377,7 @@ export function WordHeader({
 // inline content below for image/kids; fire modal/route for the
 // interactive flows (compose, compare, quiz).
 
-type TabId = "save" | "image" | "kids" | "compose" | "compare" | "quiz";
+type TabId = "save" | "pin" | "image" | "kids" | "compose" | "compare" | "quiz";
 
 interface MeaningEntryProps {
   n: number;
@@ -408,6 +397,11 @@ interface MeaningEntryProps {
       other action handlers. */
   isSaved?: boolean;
   onSave?: () => void;
+  /** Whether the word is pinned for offline use (cached in
+      IndexedDB). Drives the "pin" tab's pinned-vs-unpinned visual.
+      The pin tab only renders when onPin is defined. */
+  isPinned?: boolean;
+  onPin?: () => void;
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
@@ -421,7 +415,7 @@ interface MeaningEntryProps {
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
-  // Save, image, kids, compose are Clear+ features.
+  // Save, pin, image, kids, compose are Clear+ features.
   // Compare and quiz are Deep features.
   // Nothing is Basic-only (Basic users see definitions + idioms only).
   if (tab === "compare" || tab === "quiz") return "deep";
@@ -459,6 +453,18 @@ function TabIcon({ name }: { name: TabId }) {
           <line x1="8" y1="8" x2="16" y2="8" />
           <line x1="8" y1="12" x2="16" y2="12" />
           <line x1="8" y1="16" x2="13" y2="16" />
+        </svg>
+      );
+    case "pin":
+      // Download-to-device glyph — the offline pin used to live in
+      // the WordHeader's action row as a download-arrow chip; moved
+      // here 2026-06-20 to keep all Clear-tier features (image,
+      // kids, compose, save, pin) on the same row.
+      return (
+        <svg {...common}>
+          <path d="M12 3v12" />
+          <path d="M7 10l5 5 5-5" />
+          <path d="M5 19h14" />
         </svg>
       );
     case "image":
@@ -517,25 +523,24 @@ function TabIcon({ name }: { name: TabId }) {
 // for now to avoid a wide rename across the result/i18n/unlock
 // tables; only the visible label and the panel body change.
 const TAB_LABELS: Record<string, Record<TabId, string>> = {
-  he: { save: "שמירה במחברת",  image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "משחקי מילים" },
-  en: { save: "Save to Notebook", image: "Image",   kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Word games" },
-  ar: { save: "حفظ في الدفتر",  image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "ألعاب كلمات" },
-  ru: { save: "В блокнот",      image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Игры со словами" },
-  es: { save: "A mi cuaderno",  image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Juegos de palabras" },
-  pt: { save: "Salvar no caderno", image: "Imagem",   kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Jogos com palavras" },
-  fr: { save: "Carnet",         image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
-  de: { save: "Ins Heft",       image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
-  cs: { save: "Do sešitu",      image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
-  sk: { save: "Do zošita",      image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
+  he: { save: "שמירה במחברת",  pin: "שמירה אופליין",  image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "משחקי מילים" },
+  en: { save: "Save to Notebook", pin: "Save offline", image: "Image",   kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Word games" },
+  ar: { save: "حفظ في الدفتر",  pin: "حفظ بدون اتصال", image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "ألعاب كلمات" },
+  ru: { save: "В блокнот",      pin: "Офлайн",         image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Игры со словами" },
+  es: { save: "A mi cuaderno",  pin: "Sin conexión",   image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Juegos de palabras" },
+  pt: { save: "Salvar no caderno", pin: "Offline",     image: "Imagem",       kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Jogos com palavras" },
+  fr: { save: "Carnet",         pin: "Hors-ligne",     image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
+  de: { save: "Ins Heft",       pin: "Offline",        image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
+  cs: { save: "Do sešitu",      pin: "Offline",        image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
+  sk: { save: "Do zošita",      pin: "Offline",        image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
 };
-// Order — Gadi 2026-06-20 second pass: Save goes FOURTH, after
-// Compose a sentence, so the row reads (left→right in LTR, mirrored
-// in RTL): "look at the image, read the kids version, write your
-// own sentence, save it to your notebook, take a quiz, play games".
-// The action escalates from passive to active, with save sitting as
-// the "commit it to memory" beat between active practice (compose)
-// and assessment (quiz/games).
-const TAB_IDS: TabId[] = ["image", "kids", "compose", "save", "quiz", "compare"];
+// Split by tier 2026-06-20 (Gadi): on mobile the wb-mtabs container
+// renders one row per tier so the Clear-tier features (teal) stay
+// together and the Deep-tier features (purple) stay together. Read
+// CLEAR_TAB_IDS + DEEP_TAB_IDS instead of a single flat list.
+const CLEAR_TAB_IDS: TabId[] = ["image", "kids", "compose", "save", "pin"];
+const DEEP_TAB_IDS:  TabId[] = ["quiz", "compare"];
+const TAB_IDS: TabId[] = [...CLEAR_TAB_IDS, ...DEEP_TAB_IDS];
 
 function MeaningEntry({
   n,
@@ -545,6 +550,8 @@ function MeaningEntry({
   word,
   isSaved = false,
   onSave,
+  isPinned = false,
+  onPin,
   imageUrl,
   imageGenerating,
   onGenerate,
@@ -593,6 +600,42 @@ function MeaningEntry({
   // inside this meaning's image tab.
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
+  // Local renderer so the two tier-grouped tab rows (Clear + Deep)
+  // can share the same chip JSX without duplicating it.
+  function renderTab(id: TabId) {
+    const unlocked = tabUnlocked(id, plan);
+    const isOpen = openTab === id;
+    const showSavedState = id === "save" && isSaved;
+    const showPinnedState = id === "pin" && isPinned;
+    const classes = [
+      "wb-mtab",
+      isOpen ? "is-open" : "",
+      unlocked ? "" : "is-locked",
+      showSavedState || showPinnedState ? "is-saved" : "",
+    ].filter(Boolean).join(" ");
+    let label = tabLabels[id];
+    if (showSavedState) label = v2(lang, "savedToWordBook");
+    else if (showPinnedState) label = v2(lang, "offlinePinned");
+    return (
+      <button
+        key={id}
+        type="button"
+        className={classes}
+        data-tier={tierForTab(id)}
+        onClick={() => handleTabClick(id)}
+        aria-pressed={isOpen || showSavedState || showPinnedState}
+        title={label}
+        aria-label={label}
+      >
+        <span className="wb-mtab-icon"><TabIcon name={id} /></span>
+        <span className="wb-mtab-label">{label}</span>
+        {!unlocked && (
+          <span className="wb-mtab-lock"><LockIcon size={10} /></span>
+        )}
+      </button>
+    );
+  }
+
   function handleTabClick(tab: TabId) {
     const unlocked = tabUnlocked(tab, plan);
     if (!unlocked) {
@@ -600,6 +643,7 @@ function MeaningEntry({
       return;
     }
     if (tab === "save") { onSave?.(); return; }
+    if (tab === "pin") { onPin?.(); return; }
     if (tab === "image") {
       setOpenTab(openTab === "image" ? null : "image");
       if (openTab !== "image" && !imageUrl && !imageGenerating) {
@@ -723,49 +767,21 @@ function MeaningEntry({
           since the kids-friendly content IS now the main definition
           shown above. Showing the tab would be redundant and confusing
           ("explain like a kid" → already done). */}
-      <div className="wb-mtabs">
-        {TAB_IDS
-          // Hide the kids tab in Kids Mode (kids content IS the main
-          // definition). Hide the save tab when no onSave wired (e.g.
-          // the legacy MeaningCard export, or contexts that don't
-          // bind notebook actions).
+      {/* Tabs split by tier (Gadi 2026-06-20) — Clear features render
+          on row 1 (teal), Deep features on row 2 (purple). On a wide
+          desktop the two rows sit on one line because each row is
+          inline-flex; on mobile they stack into two distinct rows so
+          a parent can read the tier at a glance from the colour of
+          the row, not just the chip. */}
+      <div className="wb-mtabs wb-mtabs-tier">
+        {CLEAR_TAB_IDS
           .filter((id) => !(showKids && id === "kids"))
           .filter((id) => !(id === "save" && !onSave))
-          .map((id) => {
-          const unlocked = tabUnlocked(id, plan);
-          const isOpen = openTab === id;
-          const isSaveTab = id === "save";
-          const showSavedState = isSaveTab && isSaved;
-          // For the save tab, the "engaged" look comes from the
-          // saved state (filled bookmark) not the openTab state, so
-          // we route is-on through a different class so the styling
-          // can pick it up cleanly.
-          const classes = [
-            "wb-mtab",
-            isOpen ? "is-open" : "",
-            unlocked ? "" : "is-locked",
-            showSavedState ? "is-saved" : "",
-          ].filter(Boolean).join(" ");
-          const label = showSavedState ? v2(lang, "savedToWordBook") : tabLabels[id];
-          return (
-            <button
-              key={id}
-              type="button"
-              className={classes}
-              data-tier={tierForTab(id)}
-              onClick={() => handleTabClick(id)}
-              aria-pressed={isOpen || showSavedState}
-              title={label}
-              aria-label={label}
-            >
-              <span className="wb-mtab-icon"><TabIcon name={id} /></span>
-              <span className="wb-mtab-label">{label}</span>
-              {!unlocked && (
-                <span className="wb-mtab-lock"><LockIcon size={10} /></span>
-              )}
-            </button>
-          );
-        })}
+          .filter((id) => !(id === "pin" && !onPin))
+          .map((id) => renderTab(id))}
+      </div>
+      <div className="wb-mtabs wb-mtabs-tier">
+        {DEEP_TAB_IDS.map((id) => renderTab(id))}
       </div>
 
       {/* Inline content panel */}
@@ -861,6 +877,8 @@ export function MeaningsBlock({
   plan = "basic",
   isSaved = false,
   onSave,
+  isPinned = false,
+  onPin,
   imageUrl,
   imageGenerating,
   onGenerate,
@@ -873,6 +891,8 @@ export function MeaningsBlock({
   plan?: Plan;
   isSaved?: boolean;
   onSave?: () => void;
+  isPinned?: boolean;
+  onPin?: () => void;
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
@@ -904,6 +924,8 @@ export function MeaningsBlock({
             plan={plan}
             isSaved={isSaved}
             onSave={onSave}
+            isPinned={isPinned}
+            onPin={onPin}
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
             onGenerate={onGenerate}
@@ -1338,6 +1360,8 @@ export function ResultView({
         plan={plan}
         isSaved={isSaved}
         onSave={onSave}
+        isPinned={isPinned}
+        onPin={onPin}
         imageUrl={imageUrl}
         imageGenerating={imageGenerating}
         onGenerate={onGenerate}

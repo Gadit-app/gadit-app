@@ -1102,12 +1102,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               router.push(href(`/word/${encodeURIComponent(q)}`));
             }}
           >
-            <span className="wb-word-searchbar-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="6.5" />
-                <path d="m20 20-4-4" />
-              </svg>
-            </span>
+            {/* Convention layout — same recipe the homepage pill follows
+                (LLM Council R3 2026-06-20): input at the START edge,
+                action cluster (mic + magnifier-submit) at the END.
+                Dropped the leading decorative magnifier and the labelled
+                "Search" button; the trailing magnifier IS the submit
+                now. Enter still submits. RTL auto-mirrors via the
+                wordbook[dir] cascade. */}
             <input
               type="text"
               className="wb-word-searchbar-input"
@@ -1138,9 +1139,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               type="submit"
               className="wb-word-searchbar-submit"
               aria-label={v2(lang, "navSearch")}
+              title={v2(lang, "navSearch")}
               disabled={!headerQuery.trim()}
             >
-              {v2(lang, "navSearch")}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m20 20-4-4" />
+              </svg>
             </button>
           </form>
         </div>
