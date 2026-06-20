@@ -496,7 +496,7 @@ const en: V2Strings = {
   navPlay: "Play",
   navAffiliates: "Affiliates",
 
-  kidsModeLabel: "Kids mode",
+  kidsModeLabel: "Kids",
   kidsModeTooltipOff: "Tap to explain every word like a parent would to a child.",
   kidsModeTooltipOn: "Kids mode is on — every definition will be written for a child. Tap to turn off.",
   kidsModeBasicGate: "Kids mode is a Clear feature. Upgrade to use it.",
@@ -882,7 +882,7 @@ const he: V2Strings = {
   navPlay: "משחקים",
   navAffiliates: "שותפים",
 
-  kidsModeLabel: "מצב ילדים",
+  kidsModeLabel: "ילדים",
   kidsModeTooltipOff: "לחצו כדי שכל מילה תוסבר כמו שהורה היה מסביר לילד.",
   kidsModeTooltipOn: "מצב ילדים פעיל. כל הגדרה תיכתב לילד. לחצו לכיבוי.",
   kidsModeBasicGate: "מצב ילדים הוא פיצ'ר של Clear. שדרגו כדי להשתמש בו.",
@@ -1272,7 +1272,7 @@ const ar: V2Strings = {
   navPlay: "ألعاب",
   navAffiliates: "الشركاء",
 
-  kidsModeLabel: "وضع الأطفال",
+  kidsModeLabel: "أطفال",
   kidsModeTooltipOff: "اضغط ليُشرح كل كلمة كما يشرحها الأب لطفله.",
   kidsModeTooltipOn: "وضع الأطفال مفعّل. كل تعريف سيُكتب لطفل. اضغط لإيقافه.",
   kidsModeBasicGate: "وضع الأطفال ميزة في Clear. ارتقِ لاستخدامها.",
@@ -1678,7 +1678,7 @@ const ru: Partial<V2Strings> = {
   navPlay: "Игры",
   navAffiliates: "Партнёры",
 
-  kidsModeLabel: "Детский режим",
+  kidsModeLabel: "Дети",
   kidsModeTooltipOff: "Нажмите, чтобы каждое слово объяснялось так, как родитель объяснил бы ребёнку.",
   kidsModeTooltipOn: "Детский режим включён. Каждое определение будет написано для ребёнка. Нажмите, чтобы выключить.",
   kidsModeBasicGate: "Детский режим — функция Clear. Перейдите на тариф, чтобы пользоваться.",
@@ -2065,7 +2065,7 @@ const es: Partial<V2Strings> = {
   navPlay: "Jugar",
   navAffiliates: "Afiliados",
 
-  kidsModeLabel: "Modo niños",
+  kidsModeLabel: "Niños",
   kidsModeTooltipOff: "Toca para que cada palabra se explique como un padre se la explicaría a un niño.",
   kidsModeTooltipOn: "Modo niños activado. Cada definición se escribirá para un niño. Toca para desactivar.",
   kidsModeBasicGate: "El modo niños es una función de Clear. Mejora para usarlo.",
@@ -2450,7 +2450,7 @@ const pt: Partial<V2Strings> = {
   navPlay: "Jogar",
   navAffiliates: "Afiliados",
 
-  kidsModeLabel: "Modo crianças",
+  kidsModeLabel: "Crianças",
   kidsModeTooltipOff: "Toque para que cada palavra seja explicada como um pai explicaria a uma criança.",
   kidsModeTooltipOn: "Modo crianças ativado. Cada definição será escrita para uma criança. Toque para desativar.",
   kidsModeBasicGate: "O modo crianças é uma função do Clear. Faça upgrade para usar.",
@@ -2835,7 +2835,7 @@ const fr: Partial<V2Strings> = {
   navPlay: "Jeux",
   navAffiliates: "Affiliés",
 
-  kidsModeLabel: "Mode enfants",
+  kidsModeLabel: "Enfants",
   kidsModeTooltipOff: "Touchez pour que chaque mot soit expliqué comme un parent l'expliquerait à son enfant.",
   kidsModeTooltipOn: "Mode enfants activé. Chaque définition sera écrite pour un enfant. Touchez pour désactiver.",
   kidsModeBasicGate: "Le mode enfants est une fonctionnalité de Clear. Passez au plan supérieur pour l'utiliser.",
@@ -3223,7 +3223,7 @@ const de: V2Strings = {
   navPlay: "Spielen",
   navAffiliates: "Affiliates",
 
-  kidsModeLabel: "Kindermodus",
+  kidsModeLabel: "Kinder",
   kidsModeTooltipOff: "Tippe, damit jedes Wort so erklärt wird, wie ein Elternteil es einem Kind erklären würde.",
   kidsModeTooltipOn: "Kindermodus an. Jede Definition wird für ein Kind geschrieben. Tippe zum Ausschalten.",
   kidsModeBasicGate: "Kindermodus ist eine Clear-Funktion. Upgrade, um sie zu nutzen.",
@@ -3580,7 +3580,7 @@ const cs: V2Strings = {
   navPlay: "Hrát",
   navAffiliates: "Partneři",
 
-  kidsModeLabel: "Dětský režim",
+  kidsModeLabel: "Děti",
   kidsModeTooltipOff: "Klepni, aby každé slovo bylo vysvětleno tak, jak by ho rodič vysvětlil dítěti.",
   kidsModeTooltipOn: "Dětský režim je zapnutý. Každá definice bude napsána pro dítě. Klepni pro vypnutí.",
   kidsModeBasicGate: "Dětský režim je funkce Clearu. Přejdi na vyšší plán, abys ho mohl používat.",
@@ -3944,7 +3944,7 @@ const sk: V2Strings = {
   navPlay: "Hrať",
   navAffiliates: "Partneri",
 
-  kidsModeLabel: "Detský režim",
+  kidsModeLabel: "Deti",
   kidsModeTooltipOff: "Klikni, aby každé slovo bolo vysvetlené tak, ako by ho rodič vysvetlil dieťaťu.",
   kidsModeTooltipOn: "Detský režim je zapnutý. Každá definícia bude napísaná pre dieťa. Klikni pre vypnutie.",
   kidsModeBasicGate: "Detský režim je funkcia Clearu. Prejdi na vyšší plán, aby si ho mohol používať.",
@@ -4361,7 +4361,7 @@ const it: Partial<V2Strings> = {
   navPlay: "Giochi",
   navAffiliates: "Affiliati",
 
-  kidsModeLabel: "Modalità bambini",
+  kidsModeLabel: "Bambini",
   kidsModeTooltipOff: "Tocca per spiegare ogni parola come un genitore la spiegherebbe a un bambino.",
   kidsModeTooltipOn: "Modalità bambini attiva. Ogni definizione sarà scritta per un bambino. Tocca per disattivare.",
   kidsModeBasicGate: "La modalità bambini è una funzione di Clear. Fai upgrade per usarla.",
@@ -4741,7 +4741,7 @@ const ja: Partial<V2Strings> = {
   navPlay: "ゲーム",
   navAffiliates: "パートナー",
 
-  kidsModeLabel: "子どもモード",
+  kidsModeLabel: "子ども",
   kidsModeTooltipOff: "タップすると、すべての単語が親が子に説明するように解説されます。",
   kidsModeTooltipOn: "子どもモードがオンです。すべての定義が子ども向けに書かれます。タップでオフにできます。",
   kidsModeBasicGate: "子どもモードは Clear の機能です。アップグレードしてご利用ください。",

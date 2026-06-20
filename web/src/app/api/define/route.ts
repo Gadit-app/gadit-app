@@ -488,10 +488,11 @@ Your response must follow this exact JSON structure:
   "multiplemeanings": true or false,
   "meanings": [
     {
-      "meaning": "clear, simple explanation of this specific meaning ג€” human language, no dictionary tone",
+      "meaning": "clear, simple explanation of this specific meaning — human language, no dictionary tone",
+      "pos": "noun | verb | adjective | adverb | preposition | conjunction | pronoun | interjection | determiner | article | auxiliary | particle | numeral | proper noun | phrase | idiom",
       "examples": [
         "natural everyday sentence for THIS specific meaning",
-        "another sentence for THIS meaning ג€” different context",
+        "another sentence for THIS meaning — different context",
         "a third sentence showing THIS meaning in use"
       ]
     }
@@ -512,7 +513,8 @@ CRITICAL RULES (FINAL CHECKLIST):
 - NEVER hallucinate a meaning (RULE #5). If unsure, OMIT.
 - etymology MUST be a structured object with 5 fields (sourceLanguage, originalWord, breakdown, originalMeaning, historyNote) ג€” see RULE #2. Keep it SIMPLE. Language name IN USER'S LANGUAGE. originalWord ONLY when source is non-Latin script OR materially different from modern (Hebrewג†’Hebrew = empty!). breakdown for compound words. Transliteration with diacritics only ג€” no Greek/Arabic/Cyrillic letters. historyNote is the SPECIFIC story (verses, coiners, practices), empty if no story. NEVER output etymology as free text ג€” always the object.
 - Every word in the output must be a real, standard word ג€” no invented or hallucinated words (RULE #3).
-- Do NOT include partOfSpeech, domain, register, frequency, or wordFamily fields ג€” they are not needed.
+- Every meaning MUST have a "pos" field — the part of speech for THAT specific meaning, given as a single English token from this exact set: noun, verb, adjective, adverb, preposition, conjunction, pronoun, interjection, determiner, article, auxiliary, particle, numeral, proper noun, phrase, idiom. ALWAYS English (the UI translates it to the reader's language). When a word has different meanings with different parts of speech, EACH meaning carries its own pos (e.g. "dream" meaning 1 noun, meaning 2 noun, meaning 3 verb).
+- Do NOT include domain, register, frequency, or wordFamily fields — they are not needed.
 - Respond ENTIRELY in the user's UI language passed in the user message. NEVER in the input word's language when they differ — UI language always wins for definitions, examples, etymology fields, and kids explanation. The headword and original-script forms stay native; everything else uses UI language.
 - Keep language human, warm, clear. No academic tone. No dictionary phrasing.
 - Examples must feel like real life ג€” sentences a person would actually say or read.`;

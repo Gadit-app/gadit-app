@@ -3421,12 +3421,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 @media (max-width: 560px) {
   .wordbook .wb-kids-toggle {
-    font-size: 11.5px;
-    gap: 7px;
-    padding: 6px 4px 6px 8px;
+    font-size: 11px;
+    gap: 5px;
+    padding: 4px 2px 4px 6px;
   }
   .wordbook[dir="rtl"] .wb-kids-toggle {
-    padding: 6px 8px 6px 4px;
+    padding: 4px 6px 4px 2px;
   }
   .wordbook .wb-kids-toggle-track {
     width: 30px;
@@ -3513,12 +3513,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 @media (max-width: 560px) {
   .wordbook .wb-grammar-toggle {
-    font-size: 11.5px;
-    gap: 7px;
-    padding: 6px 4px 6px 8px;
+    font-size: 11px;
+    gap: 5px;
+    padding: 4px 2px 4px 6px;
   }
   .wordbook[dir="rtl"] .wb-grammar-toggle {
-    padding: 6px 8px 6px 4px;
+    padding: 4px 6px 4px 2px;
   }
   .wordbook .wb-grammar-toggle-track { width: 30px; height: 18px; }
   .wordbook .wb-grammar-toggle-thumb { width: 14px; height: 14px; }
