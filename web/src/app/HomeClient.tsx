@@ -313,16 +313,35 @@ export function HomePage() {
 
           <form className="wb-home-search" onSubmit={onSubmit}>
             <div className="wb-home-search-box">
-              <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={c.placeholder}
-                autoFocus
-                className="wb-home-search-input"
-                aria-label={c.placeholder}
-              />
+              {/* Search submit — the magnifying glass IS the button
+                  now (Gadi 2026-06-20). No separate "Search" label;
+                  the universal magnifier glyph carries the affordance
+                  and Enter still submits via form onSubmit. Sits at
+                  the START of the row (left in LTR, right in RTL),
+                  with the Kids toggle and mic clustered next to it on
+                  the same side — Gadi explicitly: "צריך שיהיה את
+                  הזכוכית מגדלת בצד ימין, ליד זה את הקידסמות שיהיה
+                  רשום קידס, וליד זה מיקרופון". */}
+              <button
+                type="submit"
+                className="wb-home-search-submit"
+                aria-label={c.search}
+                title={c.search}
+              >
+                <SearchIcon size={18} />
+              </button>
+              <div className="wb-home-search-kids">
+                <KidsModeToggle
+                  plan={plan}
+                  onBasicGate={() => {
+                    if (!user) {
+                      promptLogin(v2(lang, "kidsModeBasicGate"));
+                      return;
+                    }
+                    setUpgradeTrigger({ feature: "kids", tier: "clear" });
+                  }}
+                />
+              </div>
               <div className="wb-home-search-mic">
                 <VoiceInput
                   uiLang={lang}
@@ -336,42 +355,16 @@ export function HomePage() {
                   size="sm"
                 />
               </div>
-              {/* Kids toggle — moved into the search pill (Gadi
-                  2026-06-20). The intended flow is "type word → flip
-                  kids → press Search", so the toggle now sits exactly
-                  between the mic and the Search button instead of
-                  living in a separate row below. Same KidsModeToggle
-                  component, wrapped in a slot div so we can tighten
-                  its sizing without forking the component. */}
-              <div className="wb-home-search-kids">
-                <KidsModeToggle
-                  plan={plan}
-                  onBasicGate={() => {
-                    if (!user) {
-                      promptLogin(v2(lang, "kidsModeBasicGate"));
-                      return;
-                    }
-                    setUpgradeTrigger({ feature: "kids", tier: "clear" });
-                  }}
-                />
-              </div>
-              {/* Submit pill — sits at the END of the row so it always
-                  appears on the side opposite to where the user starts
-                  typing. LTR English: types left → finishes near the
-                  right → the green Search button is on the right.
-                  RTL Hebrew/Arabic: types right → finishes near the
-                  left → the button is on the left. Enter still submits;
-                  the button just makes the same action discoverable
-                  visually. */}
-              <button
-                type="submit"
-                className="wb-home-search-submit"
-                aria-label={c.search}
-                title={c.search}
-              >
-                <SearchIcon size={16} />
-                <span className="wb-home-search-submit-label">{c.search}</span>
-              </button>
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={c.placeholder}
+                autoFocus
+                className="wb-home-search-input"
+                aria-label={c.placeholder}
+              />
             </div>
             {/* Sentence input — Gadi 2026-06-19 v2: the OPTIONAL cue
                 lives INSIDE the field now (prepended to the
