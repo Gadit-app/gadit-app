@@ -17,6 +17,9 @@ node_modules
 *SECRET*.md
 **/STRIPE*.txt
 secrets/
+*KEYS*.txt
+*KEYS*.md
+*API*KEY*.txt
 
 # next.js
 web/.next/

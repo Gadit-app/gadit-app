@@ -3270,18 +3270,22 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-home-search-box {
   display: flex;
   align-items: center;
-  gap: 6px;
+  /* Tight 2px gap between flex children — Gadi feedback 2026-06-20:
+     "טיפה לצמצם את הרווחים בין המצב ילדים מיקרופון והזכוכית מגדלת
+     שיהיה טיפה יותר מקום למילה". Every px we shave off this gap goes
+     directly to the input's flex: 1 — typing real estate grew by ~12px. */
+  gap: 2px;
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 999px;
   /* Padding restored to convention (LLM Council R3 2026-06-20):
      16px breathing room on the START side where the input cursor
-     sits, 6px on the END side where the action cluster (Kids, mic,
+     sits, 4px on the END side where the action cluster (Kids, mic,
      magnifier submit) parks. Matches Google / YouTube / Bing / etc. */
   padding-block: 0;
   padding-inline-start: 16px;
-  padding-inline-end: 6px;
+  padding-inline-end: 4px;
   box-shadow: 0 1px 6px rgba(15, 23, 42, 0.08);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   height: 46px;
@@ -3352,8 +3356,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   display: inline-flex;
   /* Nudge the mic toward the submit button — beta feedback that the
      default flex gap (10px) read as "the mic is floating midway"; the
-     mic visually belongs to the actions group, not the input. */
-  margin-inline-end: -4px;
+     mic visually belongs to the actions group, not the input. Pulled
+     in further (2026-06-20) to glue mic and magnifier into one unit. */
+  margin-inline-end: -6px;
 }
 /* Kids toggle slot inside the search pill — Gadi 2026-06-20 moved
    the toggle here so the flow reads "type word → flip Kids → press
@@ -3366,12 +3371,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   flex-shrink: 0;
 }
 .wordbook .wb-home-search-kids .wb-kids-toggle {
-  padding: 4px 6px;
-  gap: 6px;
+  padding: 4px 4px;
+  gap: 4px;
   font-size: 12px;
 }
 .wordbook[dir="rtl"] .wb-home-search-kids .wb-kids-toggle {
-  padding: 4px 6px;
+  padding: 4px 4px;
 }
 .wordbook .wb-home-search-kids .wb-kids-toggle-track {
   width: 28px;
@@ -5661,17 +5666,19 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-word-searchbar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  /* Tight 2px gap — same logic as the homepage pill; every px shaved
+     here goes to the input's flex: 1 for more visible word real estate. */
+  gap: 2px;
   background: #FFFFFF;
   border: 1px solid var(--rule, #E5E7EB);
   border-radius: 999px;
   /* Logical padding matches the homepage pill exactly (2026-06-20):
-     16px on the START side for the caret's breathing room, 5px on
+     16px on the START side for the caret's breathing room, 4px on
      the END side where the mic + magnifier-submit cluster. RTL
      auto-mirrors through padding-inline-* — no manual override. */
   padding-block: 0;
   padding-inline-start: 16px;
-  padding-inline-end: 5px;
+  padding-inline-end: 4px;
   height: 46px;
   transition: border-color 160ms, box-shadow 160ms;
 }
@@ -5705,7 +5712,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-inline-end: 2px;
+  /* Pull mic toward the magnifier-submit so the cluster reads as one
+     unit (mirrors the homepage `.wb-home-search-mic` treatment). */
+  margin-inline-end: -6px;
 }
 .wordbook .wb-word-searchbar-submit {
   /* Magnifier-icon submit — Gadi 2026-06-20: same shape and pattern
