@@ -264,7 +264,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "למה לסמוך",
     trustTitle: "תוכנית מייסדים בשלביה הראשונים",
-    founderHeading: "מסר אישי מגדי",
+    founderHeading: "למה יצרתי את Gadit?",
     founderBody:
       "השליחות שלי תמיד הייתה אחת: לעזור לאנשים להבין דברים עד הסוף. כי כשמבינים באמת, אפשר ליישם. וכשאפשר ליישם, אפשר להשיג כל מה שרוצים.\n\nבמהלך השנים ראיתי אנשים חכמים, מוכשרים, שרצו להבין משהו ולא הצליחו. הם חשבו שהם פשוט \"לא מבינים בזה\". אבל זה לא היה הם. זאת הייתה מילה אחת בדרך.\n\nבניתי את Gadit כדי להסיר את המחסום הזה. לא עוד מילון. לא סתם תרגום. כלי שמסביר כל מילה עד הסוף, בפשטות, עם דוגמאות, עם הקשר ועם תמונה שמחיה אותה. אנחנו קוראים לזה לעשות GAD למילה.\n\nתוכנית השותפים פתוחה עכשיו לאנשים שמתחברים לרעיון הזה ורוצים להפיץ אותו הלאה. אם זה אתם, אשמח אם תצטרפו.",
     founderSign: "גדי בן לביא, מייסד Gadit",
@@ -405,7 +405,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Why trust us",
     trustTitle: "A founding partners program in its early days",
-    founderHeading: "A note from me, Gadi",
+    founderHeading: "Why I created Gadit?",
     founderBody:
       "My mission has always been one thing: to help people understand things all the way through. Because when you really understand, you can apply. And when you can apply, you can achieve anything you want.\n\nOver the years I've seen smart, talented people who wanted to understand something and couldn't. They thought they just \"weren't built for it.\" But it wasn't them. It was one word along the way.\n\nI built Gadit to remove that barrier. Not another dictionary. Not just a translation. A tool that explains every word all the way through — simply, with examples, with context, and with an image that brings it to life. We call it GAD-ing a word.\n\nThe partner program is now open to people who connect with this idea and want to help spread it further. If that's you, I'd be glad to have you join.",
     founderSign: "Gadi Ben Lavi, founder of Gadit",
@@ -551,7 +551,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "لماذا الثقة",
     trustTitle: "برنامج مؤسس في مراحله الأولى",
-    founderHeading: "رسالة شخصية من غادي",
+    founderHeading: "لماذا أنشأت Gadit؟",
     founderBody:
       "مهمتي كانت دائماً واحدة: مساعدة الناس على فهم الأشياء حتى النهاية. لأنه عندما تفهم حقاً، يمكنك التطبيق. وعندما يمكنك التطبيق، يمكنك تحقيق كل ما تريد.\n\nخلال السنوات رأيت أناساً أذكياء وموهوبين أرادوا فهم شيء ولم يستطيعوا. ظنوا أنهم ببساطة \"لا يفهمون هذا\". لكن لم تكن المشكلة فيهم. كانت كلمة واحدة في الطريق.\n\nبنيت Gadit لإزالة هذه العقبة. ليس قاموساً آخر. ليس مجرد ترجمة. أداة تشرح كل كلمة حتى النهاية، ببساطة، بأمثلة، بسياق وبصورة تنبضها بالحياة. نحن نسمي ذلك القيام بـ GAD لكلمة.\n\nبرنامج الشركاء مفتوح الآن لأناس يتصلون بهذه الفكرة ويريدون نشرها أكثر. إذا كان هذا أنت، يسعدني أن تنضم.",
     founderSign: "غادي بن لافي، مؤسس Gadit",
@@ -690,7 +690,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Почему стоит доверять",
     trustTitle: "Основательская программа на ранней стадии",
-    founderHeading: "Личная записка от меня, Гади",
+    founderHeading: "Почему я создал Gadit?",
     founderBody:
       "Моя миссия всегда была одна: помогать людям понимать вещи до конца. Потому что когда понимаешь по-настоящему, можно применить. А когда можно применить, можно достичь всего, чего хочешь.\n\nЗа годы я видел умных, талантливых людей, которые хотели что-то понять и не могли. Они думали, что просто «не врубаются». Но дело было не в них. Дело было в одном слове на пути.\n\nЯ построил Gadit, чтобы убрать этот барьер. Не ещё один словарь. Не просто перевод. Инструмент, который объясняет каждое слово до конца — просто, с примерами, с контекстом и с картинкой, которая оживляет его. Мы называем это сделать GAD слову.\n\nПартнёрская программа открыта сейчас для людей, которые откликаются на эту идею и хотят нести её дальше. Если это ты, я буду рад, если ты присоединишься.",
     founderSign: "Гади Бен Лави, основатель Gadit",
@@ -830,7 +830,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Por qué confiar",
     trustTitle: "Programa fundacional en sus primeras etapas",
-    founderHeading: "Una nota de mí, Gadi",
+    founderHeading: "¿Por qué creé Gadit?",
     founderBody:
       "Mi misión siempre fue una: ayudar a las personas a entender las cosas hasta el final. Porque cuando entiendes de verdad, puedes aplicar. Y cuando puedes aplicar, puedes conseguir lo que te propongas.\n\nDurante años vi a personas inteligentes y talentosas que querían entender algo y no podían. Pensaban que simplemente \"no se les daba\". Pero no eran ellas. Era una palabra en el camino.\n\nConstruí Gadit para eliminar esa barrera. No un diccionario más. No solo una traducción. Una herramienta que explica cada palabra hasta el final, con sencillez, con ejemplos, con contexto y con una imagen que la trae a la vida. A esto lo llamamos hacer GAD a una palabra.\n\nEl programa de afiliados está abierto ahora a personas que conectan con esta idea y quieren ayudar a llevarla más lejos. Si eres tú, me encantaría tenerte dentro.",
     founderSign: "Gadi Ben Lavi, fundador de Gadit",
@@ -970,7 +970,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Por que confiar",
     trustTitle: "Programa fundador em seus primeiros estágios",
-    founderHeading: "Uma nota minha, Gadi",
+    founderHeading: "Por que criei o Gadit?",
     founderBody:
       "Minha missão sempre foi uma: ajudar pessoas a entender as coisas até o fim. Porque quando você entende de verdade, dá para aplicar. E quando dá para aplicar, dá para alcançar qualquer coisa.\n\nAo longo dos anos vi pessoas inteligentes, talentosas, que queriam entender algo e não conseguiam. Achavam que simplesmente \"não eram boas nisso\". Mas não era isso. Era uma palavra no caminho.\n\nConstruí o Gadit para tirar essa barreira. Não mais um dicionário. Não só uma tradução. Uma ferramenta que explica cada palavra até o fim, com simplicidade, com exemplos, com contexto e com uma imagem que dá vida a ela. A gente chama isso de fazer GAD numa palavra.\n\nO programa de afiliados está aberto agora para pessoas que se conectam com essa ideia e querem levá-la adiante. Se for você, vou adorar te ter dentro.",
     founderSign: "Gadi Ben Lavi, fundador do Gadit",
@@ -1109,7 +1109,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Pourquoi faire confiance",
     trustTitle: "Programme fondateur à ses débuts",
-    founderHeading: "Une note de moi, Gadi",
+    founderHeading: "Pourquoi j’ai créé Gadit ?",
     founderBody:
       "Ma mission a toujours été la même : aider les gens à comprendre les choses jusqu'au bout. Parce que quand on comprend vraiment, on peut appliquer. Et quand on peut appliquer, on peut atteindre tout ce qu'on veut.\n\nAu fil des années, j'ai vu des personnes intelligentes, talentueuses, qui voulaient comprendre quelque chose et qui n'y arrivaient pas. Elles pensaient qu'elles « n'étaient pas faites pour ça ». Mais ce n'était pas elles. C'était un mot sur le chemin.\n\nJ'ai construit Gadit pour enlever cette barrière. Pas un dictionnaire de plus. Pas juste une traduction. Un outil qui explique chaque mot jusqu'au bout, simplement, avec des exemples, avec du contexte et avec une image qui le fait vivre. On appelle ça faire GAD à un mot.\n\nLe programme partenaires est ouvert maintenant à des personnes qui se reconnaissent dans cette idée et veulent la porter plus loin. Si c'est vous, je serais ravi de vous compter parmi nous.",
     founderSign: "Gadi Ben Lavi, fondateur de Gadit",
@@ -1248,7 +1248,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Warum vertrauen",
     trustTitle: "Gründerprogramm in den ersten Phasen",
-    founderHeading: "Eine persönliche Notiz von mir, Gadi",
+    founderHeading: "Warum habe ich Gadit erstellt?",
     founderBody:
       "Meine Mission war immer eine: Menschen zu helfen, Dinge bis zum Ende zu verstehen. Denn wenn man wirklich versteht, kann man umsetzen. Und wenn man umsetzen kann, kann man alles erreichen, was man will.\n\nÜber die Jahre habe ich kluge, talentierte Menschen gesehen, die etwas verstehen wollten und es nicht konnten. Sie dachten, sie wären einfach \"nicht dafür gemacht\". Aber sie waren es nicht. Es war ein Wort auf dem Weg.\n\nIch habe Gadit gebaut, um diese Hürde zu beseitigen. Nicht noch ein Wörterbuch. Nicht nur eine Übersetzung. Ein Werkzeug, das jedes Wort bis zum Ende erklärt, einfach, mit Beispielen, mit Kontext und mit einem Bild, das es lebendig macht. Wir nennen das ein Wort GADen.\n\nDas Partnerprogramm ist jetzt offen für Menschen, die sich mit dieser Idee verbinden und sie weitertragen möchten. Wenn das du bist, freue ich mich, wenn du dabei bist.",
     founderSign: "Gadi Ben Lavi, Gründer von Gadit",
@@ -1388,7 +1388,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Proč důvěřovat",
     trustTitle: "Zakladatelský program ve svých počátcích",
-    founderHeading: "Osobní vzkaz ode mě, Gadiho",
+    founderHeading: "Proč jsem vytvořil Gadit?",
     founderBody:
       "Moje poslání bylo vždy jedno: pomáhat lidem rozumět věcem až do konce. Protože když opravdu rozumíš, můžeš to uplatnit. A když to můžeš uplatnit, můžeš dosáhnout všeho, co chceš.\n\nBěhem let jsem viděl chytré, talentované lidi, kteří chtěli něčemu porozumět a nedařilo se jim to. Mysleli si, že na to prostě \"nemají\". Ale nebyli to oni. Bylo to jedno slovo v cestě.\n\nPostavil jsem Gadit, abych tuhle překážku odstranil. Ne další slovník. Ne jen překlad. Nástroj, který vysvětlí každé slovo až do konce, jednoduše, s příklady, s kontextem a s obrázkem, který ho oživí. Říkáme tomu udělat slovu GAD.\n\nPartnerský program je teď otevřený lidem, kteří se s touto myšlenkou ztotožňují a chtějí ji nést dál. Pokud jsi to ty, budu rád, když se přidáš.",
     founderSign: "Gadi Ben Lavi, zakladatel Gaditu",
@@ -1528,7 +1528,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Prečo dôverovať",
     trustTitle: "Zakladateľský program v svojich začiatkoch",
-    founderHeading: "Osobný odkaz odo mňa, Gadiho",
+    founderHeading: "Prečo som vytvoril Gadit?",
     founderBody:
       "Moje poslanie bolo vždy jedno: pomáhať ľuďom rozumieť veciam až do konca. Pretože keď naozaj rozumieš, môžeš to uplatniť. A keď to môžeš uplatniť, môžeš dosiahnuť všetko, čo chceš.\n\nPočas rokov som videl bystrých, talentovaných ľudí, ktorí chceli niečomu porozumieť a nedarilo sa im to. Mysleli si, že na to jednoducho \"nemajú\". Ale neboli to oni. Bolo to jedno slovo v ceste.\n\nPostavil som Gadit, aby som túto prekážku odstránil. Nie ďalší slovník. Nie len preklad. Nástroj, ktorý vysvetlí každé slovo až do konca, jednoducho, s príkladmi, s kontextom a s obrázkom, ktorý ho oživí. Hovoríme tomu urobiť slovu GAD.\n\nPartnerský program je teraz otvorený ľuďom, ktorí sa s touto myšlienkou stotožňujú a chcú ju niesť ďalej. Ak si to ty, budem rád, keď sa pridáš.",
     founderSign: "Gadi Ben Lavi, zakladateľ Gaditu",
@@ -1668,7 +1668,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "Perché fidarsi",
     trustTitle: "Programma fondatore alle sue prime fasi",
-    founderHeading: "Una nota personale da me, Gadi",
+    founderHeading: "Perché ho creato Gadit?",
     founderBody:
       "La mia missione è sempre stata una: aiutare le persone a capire le cose fino in fondo. Perché quando capisci davvero, puoi applicare. E quando puoi applicare, puoi raggiungere qualsiasi cosa tu voglia.\n\nNel corso degli anni ho visto persone intelligenti, talentuose, che volevano capire qualcosa e non ci riuscivano. Pensavano di essere semplicemente \"non portate per quello\". Ma non erano loro. Era una parola sulla strada.\n\nHo costruito Gadit per togliere quella barriera. Non un altro dizionario. Non solo una traduzione. Uno strumento che spiega ogni parola fino in fondo, con semplicità, con esempi, con contesto e con un'immagine che la fa vivere. Lo chiamiamo fare GAD a una parola.\n\nIl programma partner è ora aperto a persone che si riconoscono in questa idea e vogliono portarla avanti. Se sei tu, sarò felice di averti dentro.",
     founderSign: "Gadi Ben Lavi, fondatore di Gadit",
@@ -1808,7 +1808,7 @@ const COPY: Record<Lang, Copy> = {
 
     trustEyebrow: "信頼できる理由",
     trustTitle: "創業初期のファウンダープログラム",
-    founderHeading: "ガディからの個人的なメッセージ",
+    founderHeading: "なぜ Gadit を作ったのか？",
     founderBody:
       "私のミッションはずっと一つでした：人々が物事を最後まで理解できるよう手伝うこと。本当に理解できれば、応用できる。応用できれば、望むものすべてを達成できる。\n\n長年にわたり、何かを理解したいのに理解できない、賢く才能ある人たちを見てきました。彼らは自分たちが「これが向いていない」だけだと思っていました。でもそれは彼らの問題ではありませんでした。途中にあった一つの言葉のせいでした。\n\nその障壁を取り除くために Gadit を作りました。もう一つの辞書ではありません。ただの翻訳でもありません。すべての単語を最後まで説明するツールです。シンプルに、例とともに、文脈とともに、そして単語を生き生きと見せる画像とともに。私たちはこれを単語に GAD する、と呼んでいます。\n\nパートナープログラムは今、この考えに共鳴し、それをさらに広めたい方々に開かれています。あなたがそうなら、参加していただけるとうれしいです。",
     founderSign: "ガディ・ベン・ラビ、Gadit 創業者",
