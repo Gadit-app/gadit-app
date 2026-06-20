@@ -313,23 +313,29 @@ export function HomePage() {
 
           <form className="wb-home-search" onSubmit={onSubmit}>
             <div className="wb-home-search-box">
-              {/* Search submit — the magnifying glass IS the button
-                  now (Gadi 2026-06-20). No separate "Search" label;
-                  the universal magnifier glyph carries the affordance
-                  and Enter still submits via form onSubmit. Sits at
-                  the START of the row (left in LTR, right in RTL),
-                  with the Kids toggle and mic clustered next to it on
-                  the same side — Gadi explicitly: "צריך שיהיה את
-                  הזכוכית מגדלת בצד ימין, ליד זה את הקידסמות שיהיה
-                  רשום קידס, וליד זה מיקרופון". */}
-              <button
-                type="submit"
-                className="wb-home-search-submit"
-                aria-label={c.search}
-                title={c.search}
-              >
-                <SearchIcon size={18} />
-              </button>
+              {/* Convention layout — LLM Council R3 2026-06-20 ruled
+                  4-of-5 that input lives on the START edge (where the
+                  caret lands when reading begins) and the magnifier
+                  submit lives on the END edge (where the search
+                  terminates). The mic is an alternative submit (auto-
+                  fires go() on transcription), so it sits adjacent to
+                  the magnifier in the END cluster. Kids stays inline
+                  between input and the submit cluster — it modifies
+                  the lookup the user is about to fire.
+                  Pattern matches Google / YouTube / Bing / Wikipedia
+                  / Amazon / DuckDuckGo / Spotify / ChatGPT. RTL
+                  auto-mirrors via the wordbook[dir] cascade — no
+                  manual swap. */}
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={c.placeholder}
+                autoFocus
+                className="wb-home-search-input"
+                aria-label={c.placeholder}
+              />
               <div className="wb-home-search-kids">
                 <KidsModeToggle
                   plan={plan}
@@ -355,16 +361,14 @@ export function HomePage() {
                   size="sm"
                 />
               </div>
-              <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={c.placeholder}
-                autoFocus
-                className="wb-home-search-input"
-                aria-label={c.placeholder}
-              />
+              <button
+                type="submit"
+                className="wb-home-search-submit"
+                aria-label={c.search}
+                title={c.search}
+              >
+                <SearchIcon size={18} />
+              </button>
             </div>
             {/* Sentence input — Gadi 2026-06-19 v2: the OPTIONAL cue
                 lives INSIDE the field now (prepended to the
