@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
+import { detectInAppBrowser } from "@/lib/in-app-browser";
 
 type Mode = "signin" | "signup";
 
@@ -75,6 +76,18 @@ export function LoginModalV2() {
   // COPPA / GDPR self-attestation — we can't verify age, but we make
   // the user click that they're old enough. Industry-standard minimum.
   const [ageAccepted, setAgeAccepted] = useState(false);
+  // Instagram/Facebook/TikTok in-app webview detection. Google's OAuth
+  // refuses to authorise embedded user-agents, and the popup is
+  // blocked anyway, so a "Continue with Google" button in this context
+  // sends the user into a dead-end loop. We hide it and show an
+  // explainer pointing the user at email signup or "open in browser".
+  // SSR-safe: stays null until first client render so the server-side
+  // markup matches the initial client render. Once detected, it sticks.
+  const [inAppName, setInAppName] = useState<string | null>(null);
+
+  useEffect(() => {
+    setInAppName(detectInAppBrowser());
+  }, []);
 
   useEffect(() => {
     if (showLoginModal) {
@@ -265,20 +278,33 @@ export function LoginModalV2() {
           </label>
         )}
 
-        <button
-          type="button"
-          onClick={handleGoogle}
-          disabled={busy || (mode === "signup" && !ageAccepted)}
-          className="wb-login-google"
-          title={mode === "signup" && !ageAccepted ? v2(lang, "loginErrorAgeRequired") : undefined}
-        >
-          <GoogleG />
-          <span>{v2(lang, "loginContinueWithGoogle")}</span>
-        </button>
+        {inAppName ? (
+          // Inside an in-app webview (Instagram, Facebook, TikTok, …).
+          // Hide the Google button entirely; Google blocks OAuth here
+          // and showing a non-functional button confuses users. Tell
+          // them to either use email below or open the page in a real
+          // browser to get the Google option back.
+          <div className="wb-login-inapp-notice" role="note">
+            {v2(lang, "loginInAppNotice").replace("{app}", inAppName)}
+          </div>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={handleGoogle}
+              disabled={busy || (mode === "signup" && !ageAccepted)}
+              className="wb-login-google"
+              title={mode === "signup" && !ageAccepted ? v2(lang, "loginErrorAgeRequired") : undefined}
+            >
+              <GoogleG />
+              <span>{v2(lang, "loginContinueWithGoogle")}</span>
+            </button>
 
-        <div className="wb-login-sep">
-          <span>{v2(lang, "loginOrSeparator")}</span>
-        </div>
+            <div className="wb-login-sep">
+              <span>{v2(lang, "loginOrSeparator")}</span>
+            </div>
+          </>
+        )}
 
         <form onSubmit={handleEmail} noValidate>
           {errorKey && (

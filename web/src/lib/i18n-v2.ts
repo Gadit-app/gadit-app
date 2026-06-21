@@ -154,6 +154,7 @@ export interface V2Strings {
   loginWelcomeBack: string;
   loginCreateAccount: string;
   loginContinueWithGoogle: string;
+  loginInAppNotice: string;
   loginOrSeparator: string;
   loginEmailLabel: string;
   loginPasswordLabel: string;
@@ -565,6 +566,7 @@ const en: V2Strings = {
   loginWelcomeBack: "Sign in",
   loginCreateAccount: "Create your account",
   loginContinueWithGoogle: "Continue with Google",
+  loginInAppNotice: "Inside {app}, sign in with email below. For the Google option, open this link in your browser.",
   loginOrSeparator: "or",
   loginEmailLabel: "Email",
   loginPasswordLabel: "Password",
@@ -949,6 +951,7 @@ const he: V2Strings = {
   loginWelcomeBack: "התחברות",
   loginCreateAccount: "צרו חשבון",
   loginContinueWithGoogle: "המשיכו עם Google",
+  loginInAppNotice: "בתוך {app} אפשר להירשם דרך אימייל למטה. כדי לקבל את אפשרות Google, פותחים את הקישור בדפדפן.",
   loginOrSeparator: "או",
   loginEmailLabel: "אימייל",
   loginPasswordLabel: "סיסמה",
@@ -1338,6 +1341,7 @@ const ar: V2Strings = {
   loginWelcomeBack: "تسجيل الدخول",
   loginCreateAccount: "أنشئ حسابك",
   loginContinueWithGoogle: "تابع باستخدام Google",
+  loginInAppNotice: "داخل {app}، سجّل الدخول بالبريد الإلكتروني أدناه. للحصول على خيار Google، افتح الرابط في المتصفح.",
   loginOrSeparator: "أو",
   loginEmailLabel: "البريد الإلكتروني",
   loginPasswordLabel: "كلمة المرور",
@@ -1745,6 +1749,7 @@ const ru: Partial<V2Strings> = {
   loginWelcomeBack: "Войти",
   loginCreateAccount: "Создайте аккаунт",
   loginContinueWithGoogle: "Продолжить с Google",
+  loginInAppNotice: "Внутри {app} войдите по электронной почте ниже. Для входа через Google откройте ссылку в браузере.",
   loginOrSeparator: "или",
   loginEmailLabel: "Эл. почта",
   loginPasswordLabel: "Пароль",
@@ -2132,6 +2137,7 @@ const es: Partial<V2Strings> = {
   loginWelcomeBack: "Iniciar sesión",
   loginCreateAccount: "Crea tu cuenta",
   loginContinueWithGoogle: "Continuar con Google",
+  loginInAppNotice: "Dentro de {app}, inicia sesión con correo abajo. Para la opción de Google, abre el enlace en el navegador.",
   loginOrSeparator: "o",
   loginEmailLabel: "Correo electrónico",
   loginPasswordLabel: "Contraseña",
@@ -2517,6 +2523,7 @@ const pt: Partial<V2Strings> = {
   loginWelcomeBack: "Entrar",
   loginCreateAccount: "Crie sua conta",
   loginContinueWithGoogle: "Continuar com Google",
+  loginInAppNotice: "Dentro do {app}, entre com email abaixo. Para a opção do Google, abra o link no navegador.",
   loginOrSeparator: "ou",
   loginEmailLabel: "E-mail",
   loginPasswordLabel: "Senha",
@@ -2902,6 +2909,7 @@ const fr: Partial<V2Strings> = {
   loginWelcomeBack: "Se connecter",
   loginCreateAccount: "Créez votre compte",
   loginContinueWithGoogle: "Continuer avec Google",
+  loginInAppNotice: "Dans {app}, connectez-vous par e-mail ci-dessous. Pour l'option Google, ouvrez le lien dans le navigateur.",
   loginOrSeparator: "ou",
   loginEmailLabel: "E-mail",
   loginPasswordLabel: "Mot de passe",
@@ -3283,6 +3291,7 @@ const de: V2Strings = {
   loginWelcomeBack: "Anmelden",
   loginCreateAccount: "Konto erstellen",
   loginContinueWithGoogle: "Mit Google fortfahren",
+  loginInAppNotice: "In {app} unten mit E-Mail anmelden. Für die Google-Option den Link im Browser öffnen.",
   loginOrSeparator: "oder",
   loginEmailLabel: "E-Mail",
   loginPasswordLabel: "Passwort",
@@ -3640,6 +3649,7 @@ const cs: V2Strings = {
   loginWelcomeBack: "Přihlásit se",
   loginCreateAccount: "Vytvořit účet",
   loginContinueWithGoogle: "Pokračovat přes Google",
+  loginInAppNotice: "V aplikaci {app} se přihlaste e-mailem níže. Pro variantu Google otevřete odkaz v prohlížeči.",
   loginOrSeparator: "nebo",
   loginEmailLabel: "E-mail",
   loginPasswordLabel: "Heslo",
@@ -4004,6 +4014,7 @@ const sk: V2Strings = {
   loginWelcomeBack: "Prihlásiť sa",
   loginCreateAccount: "Vytvoriť účet",
   loginContinueWithGoogle: "Pokračovať cez Google",
+  loginInAppNotice: "V aplikácii {app} sa prihláste e-mailom nižšie. Pre možnosť Google otvorte odkaz v prehliadači.",
   loginOrSeparator: "alebo",
   loginEmailLabel: "E-mail",
   loginPasswordLabel: "Heslo",
@@ -4399,6 +4410,7 @@ const it: Partial<V2Strings> = {
   loginWelcomeBack: "Accedi",
   loginCreateAccount: "Crea il tuo account",
   loginContinueWithGoogle: "Continua con Google",
+  loginInAppNotice: "Dentro {app}, accedi con email qui sotto. Per l'opzione Google, apri il link nel browser.",
   loginOrSeparator: "o",
   loginEmailLabel: "Email",
   loginPasswordLabel: "Password",
@@ -4779,6 +4791,7 @@ const ja: Partial<V2Strings> = {
   loginWelcomeBack: "ログイン",
   loginCreateAccount: "アカウントを作成",
   loginContinueWithGoogle: "Google で続行",
+  loginInAppNotice: "{app} 内では下のメールでサインインしてください。Google サインインを使うにはリンクをブラウザで開きます。",
   loginOrSeparator: "または",
   loginEmailLabel: "メールアドレス",
   loginPasswordLabel: "パスワード",

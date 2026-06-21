@@ -5484,6 +5484,22 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+/* In-app webview notice — shown instead of the Google button when the
+   page is loaded inside Instagram/Facebook/TikTok's embedded webview,
+   where Google blocks OAuth. Sized to read as a calm helper note, not
+   an alarming error. */
+.wordbook .wb-login-inapp-notice {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  background: var(--teal-soft);
+  border: 1px solid rgba(14, 165, 165, 0.25);
+  border-radius: 8px;
+  color: var(--teal-edge, #0B8A8A);
+  font-family: var(--wb-he);
+  font-size: 12.5px;
+  line-height: 1.45;
+  text-align: start;
+}
 .wordbook .wb-login-label {
   font-family: var(--wb-he);
   font-size: 11.5px;
