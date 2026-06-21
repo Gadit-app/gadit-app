@@ -5373,9 +5373,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: rgba(15, 23, 42, 0.32);
   backdrop-filter: blur(8px);
   display: flex;
-  align-items: center;
+  /* flex-start (not center) so when the soft keyboard pops up on
+     mobile and shrinks the visible viewport, the card stays anchored
+     near the top instead of being pushed under the keyboard. Gadi
+     2026-06-21: typing the email in IG webview, the keyboard's
+     autofill chip ("gadibenlavi@gmail.com") covered the focused field
+     because the centered modal had no room to scroll. */
+  align-items: flex-start;
   justify-content: center;
-  padding: 16px;
+  /* Backdrop itself scrolls — lets the user nudge the card up if the
+     keyboard hides the bottom field. */
+  overflow-y: auto;
+  /* Top breathing room so the card doesn't kiss the masthead. The
+     viewport unit is dynamic-viewport (dvh) so the value tracks the
+     actual visible area, including the soft keyboard. Fallback to vh
+     for older browsers. */
+  padding: 5vh 16px 16px;
+  padding-block-start: 5dvh;
 }
 .wordbook .wb-login-card {
   position: relative;
@@ -5522,6 +5536,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border: 1px solid var(--rule);
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  /* When focused on mobile, the browser auto-scrolls the input into
+     view. Adding generous scroll-margin pushes the input above the
+     keyboard's autofill chip (typically ~80px above the keyboard top)
+     instead of leaving it covered. Gadi 2026-06-21 IG webview bug. */
+  scroll-margin-block: 120px;
 }
 .wordbook .wb-login-input:focus,
 .wordbook .wb-login-input-pwd:focus {
