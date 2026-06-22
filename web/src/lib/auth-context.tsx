@@ -116,6 +116,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // race the firing condition.
   const pendingActionRef = useRef<AuthAction | null>(null);
 
+  // Capture UTM params on first page load — feeds /admin/campaigns
+  // attribution. First-touch attribution policy lives inside captureUtm:
+  // a fresh UTM-bearing visit only overwrites a stored value after the
+  // previous one has expired (30 days).
+  useEffect(() => {
+    // Async-import keeps the helper out of the auth bundle for users
+    // who arrive without any UTM params (the common case).
+    void import("./utm").then((m) => m.captureUtmFromUrl());
+  }, []);
+
   useEffect(() => {
     const auth = getFirebaseAuth();
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -161,13 +171,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // dedupe via notifiedSignup flag means duplicate calls are harmless;
   // we just need to fire it after any auth event that could be a first
   // signup. Fire-and-forget — email delivery must never block the UI.
+  //
+  // Also passes through any UTM params we captured on landing — the
+  // server attaches them to /users/{uid} so /admin/campaigns can
+  // attribute the signup to its source.
   async function notifySignupSafely(u: User) {
     try {
       const token = await u.getIdToken();
+      const { getStoredUtms, clearStoredUtms } = await import("./utm");
+      const utm = getStoredUtms();
       await fetch("/api/notify-signup", {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: utm ? JSON.stringify({ utm }) : undefined,
       });
+      // Clear after a successful attribution — second signup on the
+      // same device should re-capture from the next campaign click.
+      if (utm) clearStoredUtms();
     } catch (err) {
       console.warn("notify-signup failed (non-blocking):", err);
     }

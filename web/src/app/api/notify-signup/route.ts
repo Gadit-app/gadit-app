@@ -37,13 +37,64 @@ export async function POST(req: NextRequest) {
     const uid = decoded.uid;
     const email = decoded.email ?? null;
 
+    // Optional UTM payload from the client — first-touch attribution
+    // captured at landing (gadit.app/he?utm_source=instagram&...).
+    // Persisted on the user doc so /admin/campaigns can attribute the
+    // signup to its source. Body is JSON; client may also send no body
+    // (older clients), so parse defensively.
+    let utm: {
+      source?: string; medium?: string; campaign?: string;
+      term?: string; content?: string; landingPath?: string;
+    } | null = null;
+    try {
+      const body = await req.json().catch(() => null);
+      if (body && typeof body === "object" && body.utm) {
+        const u = body.utm as Record<string, unknown>;
+        const pick = (k: string): string | undefined =>
+          typeof u[k] === "string" && (u[k] as string).length > 0
+            ? (u[k] as string).slice(0, 100)
+            : undefined;
+        utm = {
+          source: pick("source"),
+          medium: pick("medium"),
+          campaign: pick("campaign"),
+          term: pick("term"),
+          content: pick("content"),
+          landingPath: pick("landingPath"),
+        };
+        // If every field is empty, treat as no UTM at all.
+        if (!utm.source && !utm.medium && !utm.campaign) utm = null;
+      }
+    } catch {
+      utm = null;
+    }
+
     const db = getAdminDb();
     const userRef = db.collection("users").doc(uid);
     const userSnap = await userRef.get();
     const data = userSnap.data() ?? {};
 
+    // Persist UTM (first-touch) even if we've already notified — the
+    // client only sends one in the first ~30 days post-signup anyway,
+    // and writing once is idempotent. Use setWhereMissing semantics so
+    // we don't overwrite existing attribution data from a later visit.
+    if (utm && !data.utmSource) {
+      await userRef.set(
+        {
+          ...(utm.source ? { utmSource: utm.source } : {}),
+          ...(utm.medium ? { utmMedium: utm.medium } : {}),
+          ...(utm.campaign ? { utmCampaign: utm.campaign } : {}),
+          ...(utm.term ? { utmTerm: utm.term } : {}),
+          ...(utm.content ? { utmContent: utm.content } : {}),
+          ...(utm.landingPath ? { utmLandingPath: utm.landingPath } : {}),
+          utmCapturedAt: FieldValue.serverTimestamp(),
+        },
+        { merge: true },
+      );
+    }
+
     if (data.notifiedSignup === true) {
-      return NextResponse.json({ sent: false, reason: "already_notified" });
+      return NextResponse.json({ sent: false, reason: "already_notified", utmStored: !!utm });
     }
 
     // Look up the Firebase Auth metadata for richer detail in the email.
