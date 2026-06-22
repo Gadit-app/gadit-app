@@ -73,7 +73,7 @@ const STRINGS: Record<AdminLang, {
   showingFooter: (n: number, total: number) => string;
 }> = {
   en: {
-    title: "Gadit · Searches",
+    title: "Activity",
     loading: "Loading…",
     signOut: "Sign out",
     langToggle: "עברית",
@@ -98,7 +98,7 @@ const STRINGS: Record<AdminLang, {
     showingFooter: (n, total) => `Showing ${n} of ${total} words.`,
   },
   he: {
-    title: "Gadit · חיפושים",
+    title: "פעילות",
     loading: "טוען…",
     signOut: "התנתקות",
     langToggle: "English",
@@ -265,7 +265,7 @@ export default function AdminSearchesClient() {
   return (
     <>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
         <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
           {loading ? t.loading : data ? `${data.totals.uniqueWords.toLocaleString()} ${adminLang === "he" ? "מילים ייחודיות" : "unique words"}` : ""}
         </p>

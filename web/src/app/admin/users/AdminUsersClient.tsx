@@ -73,7 +73,7 @@ const STRINGS: Record<AdminLang, {
   unlockPlaceholder: string;
 }> = {
   en: {
-    title: "Gadit · Users",
+    title: "Users",
     totalUsersFooter: (n) => `${n} total users`,
     loading: "Loading…",
     signOut: "Sign out",
@@ -116,7 +116,7 @@ const STRINGS: Record<AdminLang, {
     unlockPlaceholder: "ADMIN_SECRET",
   },
   he: {
-    title: "Gadit · משתמשים",
+    title: "משתמשים",
     totalUsersFooter: (n) => `סך הכל ${n} משתמשים`,
     loading: "טוען…",
     signOut: "התנתקות",
@@ -420,7 +420,7 @@ export default function AdminUsersClient() {
   return (
     <>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
         <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
           {data ? t.totalUsersFooter(data.counts.total) : loading ? t.loading : ""}
         </p>

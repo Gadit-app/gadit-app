@@ -152,8 +152,14 @@ export default function AdminReportsClient() {
       <div>
         <div className="mb-6 flex items-baseline justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: "#0F172A" }}>
-              {t.adminReportsTitle}
+            {/* Title hardcoded to mirror the sidebar nav label exactly
+                ("דיווחים" / "Reports") — Gadi 2026-06-22 ask for
+                visual consistency across all admin pages. The i18n
+                key t.adminReportsTitle is "Error reports" / "דיווחי
+                שגיאות" which is more descriptive but doesn't match
+                the sidebar word-for-word. */}
+            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>
+              {dir === "rtl" ? "דיווחים" : "Reports"}
             </h1>
             <p className="text-sm text-slate-500 mt-1">
               {t.adminLoggedInAs} {user.email}

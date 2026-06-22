@@ -47,6 +47,11 @@ type Overview = {
   };
 };
 
+// Page titles deliberately mirror the sidebar nav labels word-for-word
+// (Gadi 2026-06-22) — consistency cue that says "this is the page you
+// clicked, in the same words". One source of truth would be cleaner but
+// duplicating into each page's STRINGS keeps the per-page i18n dict
+// self-contained.
 const STRINGS = {
   en: {
     title: "Overview",
@@ -145,7 +150,7 @@ export default function AdminOverviewClient() {
   return (
     <>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
         {data && (
           <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 4 }}>
             {t.generatedAtLabel} · {updatedTime}

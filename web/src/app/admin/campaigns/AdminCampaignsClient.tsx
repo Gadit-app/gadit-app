@@ -144,7 +144,7 @@ export default function AdminCampaignsClient() {
   return (
     <>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
         {data && (
           <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 4 }}>
             {t.sinceLabel} {new Date(data.since).toLocaleDateString(lang === "he" ? "he-IL" : "en-GB", { day: "numeric", month: "short", year: "numeric" })}
