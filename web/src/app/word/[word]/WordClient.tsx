@@ -520,8 +520,26 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         setLoading(false);
         return;
       }
+      if (res.status === 503) {
+        // Upstream (OpenAI) is unavailable — quota, outage, transient
+        // 5xx. Show a calm "try again shortly" instead of "HTTP 503"
+        // so users don't think the app itself is broken. Gadi
+        // 2026-06-22 incident: OpenAI quota ran out and a subscriber
+        // saw a raw "HTTP 500".
+        const body = (await res.json().catch(() => ({}))) as {
+          message?: string;
+        };
+        setErrorMsg(
+          body.message ??
+            "Our definition engine is temporarily unavailable. Please try again in a few minutes."
+        );
+        setLoading(false);
+        return;
+      }
       if (!res.ok || !res.body) {
-        setErrorMsg(`HTTP ${res.status}`);
+        // Generic last-resort fallback for any unexpected non-2xx —
+        // still less scary than "HTTP 500".
+        setErrorMsg("Something went wrong. Please try again in a moment.");
         setLoading(false);
         return;
       }

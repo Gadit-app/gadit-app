@@ -1351,7 +1351,27 @@ export async function POST(req: NextRequest) {
       openAIResponse = await openAIStream("gpt-4o-mini", systemPrompt, userContent);
       usingFallback = true;
       if (!openAIResponse.ok || !openAIResponse.body) {
-        return NextResponse.json({ error: "Both models failed" }, { status: 500 });
+        // Both models failed. The most common cause is upstream — an
+        // OpenAI quota/billing issue, an outage, or a transient 5xx —
+        // not anything the user did. Return 503 (Service Unavailable)
+        // so the client can render a calm "try again in a moment"
+        // message instead of the scary "HTTP 500" that signals a bug
+        // on our side. Gadi 2026-06-22: a paid subscriber hit this
+        // when the OpenAI account ran out of quota; she pinged him
+        // worried the app was broken when in fact it was a billing
+        // issue. The body carries a stable error code the client
+        // matches on, plus a UI-language-aware fallback string.
+        const upstreamCode = openAIResponse.status;
+        console.error(`[define] both models down — upstream code ${upstreamCode}`);
+        return NextResponse.json(
+          {
+            error: "service_unavailable",
+            upstreamStatus: upstreamCode,
+            message:
+              "Our definition engine is temporarily unavailable. Please try again in a few minutes.",
+          },
+          { status: 503 }
+        );
       }
     }
 
