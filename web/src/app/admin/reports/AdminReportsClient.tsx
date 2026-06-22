@@ -145,8 +145,11 @@ export default function AdminReportsClient() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-20 px-4" dir={dir}>
-      <div className="max-w-6xl mx-auto">
+    // Rendered inside the AdminShell layout, which already provides
+    // background, padding and centering. Just a fragment + the inner
+    // content here — no extra <main> wrapper.
+    <div dir={dir}>
+      <div>
         <div className="mb-6 flex items-baseline justify-between flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-bold" style={{ color: "#0F172A" }}>
@@ -300,15 +303,15 @@ export default function AdminReportsClient() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 
 function Frame({ children, dir }: { children: React.ReactNode; dir: "ltr" | "rtl" }) {
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
+    <div dir={dir} style={{ padding: 24 }}>
       <div className="max-w-2xl mx-auto text-center text-slate-500 text-sm">{children}</div>
-    </main>
+    </div>
   );
 }
 

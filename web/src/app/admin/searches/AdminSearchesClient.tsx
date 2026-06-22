@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAdminContext } from "../admin-context";
 
 type WordRow = {
   word: string;
@@ -172,36 +173,29 @@ function downloadCsv(filename: string, content: string) {
 }
 
 export default function AdminSearchesClient() {
-  const [secret, setSecret] = useState<string | null>(null);
+  // Secret + lang come from the AdminShell context (layout.tsx). The
+  // shell renders the unlock gate, sidebar, lang toggle, and sign-out;
+  // this page just consumes the values and fetches its data.
+  const { secret, lang: adminLang } = useAdminContext();
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [adminLang, setAdminLang] = useState<AdminLang>("en");
   const [activeLang, setActiveLang] = useState<string>("he");
   const [filter, setFilter] = useState("");
   const [historicLoading, setHistoricLoading] = useState(false);
   const t = STRINGS[adminLang];
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem(SECRET_KEY);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (stored) setSecret(stored);
-    const storedLang = localStorage.getItem(ADMIN_LANG_KEY);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (storedLang === "he" || storedLang === "en") setAdminLang(storedLang);
-  }, []);
-
-  useEffect(() => {
-    if (!secret) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(null);
     fetch(`/api/admin/searches?secret=${encodeURIComponent(secret)}&limit=500`)
       .then(async (r) => {
         if (r.status === 401) {
-          localStorage.removeItem(SECRET_KEY);
-          setSecret(null);
+          if (typeof window !== "undefined") {
+            localStorage.removeItem(SECRET_KEY);
+            window.location.reload();
+          }
           throw new Error("Wrong secret.");
         }
         if (!r.ok) {
@@ -228,22 +222,6 @@ export default function AdminSearchesClient() {
     // activeLang excluded from deps — switching tabs shouldn't refetch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secret]);
-
-  const toggleLang = () => {
-    const next: AdminLang = adminLang === "en" ? "he" : "en";
-    setAdminLang(next);
-    if (typeof window !== "undefined") localStorage.setItem(ADMIN_LANG_KEY, next);
-  };
-
-  const handleSecretSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const input = form.elements.namedItem("secret") as HTMLInputElement | null;
-    const value = input?.value.trim();
-    if (!value) return;
-    localStorage.setItem(SECRET_KEY, value);
-    setSecret(value);
-  };
 
   const handleHistoricDownload = async () => {
     if (!secret || historicLoading) return;
@@ -281,78 +259,18 @@ export default function AdminSearchesClient() {
     return rows.filter((r) => r.word.toLowerCase().includes(q));
   }, [rows, filter]);
 
-  const pageDir = adminLang === "he" ? "rtl" : "ltr";
-
-  // ---------- Login gate ----------
-  if (!secret) {
-    return (
-      <main style={pageStyle} dir={pageDir}>
-        <div style={cardStyle}>
-          <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: "#111827" }}>{t.unlockTitle}</h1>
-          <p style={{ color: "#6B7280", fontSize: 14, marginBottom: 24 }}>{t.unlockBody}</p>
-          <form onSubmit={handleSecretSubmit} autoComplete="on">
-            <input
-              type="text"
-              name="username"
-              value="gadit-admin"
-              autoComplete="username"
-              readOnly
-              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
-              tabIndex={-1}
-              aria-hidden="true"
-            />
-            <input
-              type="password"
-              name="secret"
-              autoFocus
-              autoComplete="current-password"
-              placeholder={t.unlockPlaceholder}
-              style={inputStyle}
-              dir="ltr"
-            />
-            <button type="submit" style={buttonStyle}>{t.unlockCta}</button>
-          </form>
-        </div>
-      </main>
-    );
-  }
-
+  // ---------- Dashboard ----------
+  // No secret gate or chrome — the shared AdminShell (layout.tsx) owns
+  // those. This page just renders content.
   return (
-    <main style={pageStyle} dir={pageDir}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, gap: 12 }}>
-          <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
-            <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
-              {loading ? t.loading : data ? `${data.totals.uniqueWords.toLocaleString()} ${adminLang === "he" ? "מילים ייחודיות" : "unique words"}` : ""}
-            </p>
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            <a
-              href="/admin/users"
-              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
-            >
-              {adminLang === "he" ? "משתמשים" : "Users"}
-            </a>
-            <button
-              onClick={toggleLang}
-              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
-            >
-              {t.langToggle}
-            </button>
-            <button
-              onClick={() => {
-                localStorage.removeItem(SECRET_KEY);
-                setSecret(null);
-                setData(null);
-              }}
-              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
-            >
-              {t.signOut}
-            </button>
-          </div>
-        </header>
-
+    <>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
+          {loading ? t.loading : data ? `${data.totals.uniqueWords.toLocaleString()} ${adminLang === "he" ? "מילים ייחודיות" : "unique words"}` : ""}
+        </p>
+      </div>
+      <div>
         {error && (
           <div style={{ background: "#FEF2F2", color: "#991B1B", padding: 12, borderRadius: 8, marginBottom: 16, fontSize: 14 }}>
             {error}
@@ -477,7 +395,7 @@ export default function AdminSearchesClient() {
           </>
         )}
       </div>
-    </main>
+    </>
   );
 }
 

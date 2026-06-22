@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAdminContext } from "../admin-context";
 
 type Plan = "basic" | "clear" | "deep";
 
@@ -266,7 +267,10 @@ function FlagImg({ iso2 }: { iso2: string }) {
 }
 
 export default function AdminUsersClient() {
-  const [secret, setSecret] = useState<string | null>(null);
+  // Secret + lang come from AdminContext now (the layout's AdminShell
+  // handles the unlock gate + lang toggle + sidebar). This page just
+  // reads them and gets on with its job.
+  const { secret, lang: adminLang } = useAdminContext();
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -284,32 +288,7 @@ export default function AdminUsersClient() {
   // disabled and shows a spinner until the API responds. Set, not
   // boolean, so concurrent deletes don't fight over one flag.
   const [deletingUids, setDeletingUids] = useState<Set<string>>(new Set());
-  // Language toggle. Defaults to English (the admin dashboard's original
-  // language); switch persisted in localStorage so Gadi's preference
-  // sticks between visits. Hebrew mode flips the page to RTL via the
-  // `dir` attribute on the main element below.
-  const [adminLang, setAdminLang] = useState<AdminLang>("en");
   const t = STRINGS[adminLang];
-
-  // Bootstrap secret from localStorage. set-state-in-effect is flagged
-  // by react-hooks but this is the textbook pattern: server-render with
-  // null, hydrate, then upgrade to the persisted value once we know
-  // localStorage exists.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem(SECRET_KEY);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (stored) setSecret(stored);
-    const storedLang = localStorage.getItem(ADMIN_LANG_KEY);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (storedLang === "he" || storedLang === "en") setAdminLang(storedLang);
-  }, []);
-
-  const toggleLang = () => {
-    const next: AdminLang = adminLang === "en" ? "he" : "en";
-    setAdminLang(next);
-    if (typeof window !== "undefined") localStorage.setItem(ADMIN_LANG_KEY, next);
-  };
 
   // Delete a user via /api/admin/delete-user. The endpoint nukes the
   // Firebase Auth account, the /users/{uid} doc, and the entire
@@ -367,7 +346,9 @@ export default function AdminUsersClient() {
     }
   };
 
-  // Fetch whenever we have a secret
+  // Fetch whenever we have a secret. On 401 we wipe the secret so the
+  // shell shows the unlock prompt again — the shell reads SECRET_KEY
+  // from the same localStorage key, so removing it forces the gate.
   useEffect(() => {
     if (!secret) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -376,8 +357,12 @@ export default function AdminUsersClient() {
     fetch(`/api/admin/users?secret=${encodeURIComponent(secret)}`)
       .then(async (r) => {
         if (r.status === 401) {
-          localStorage.removeItem(SECRET_KEY);
-          setSecret(null);
+          if (typeof window !== "undefined") {
+            localStorage.removeItem(SECRET_KEY);
+            // Hard reload — simplest way to make the shell re-evaluate
+            // the gate state without wiring a setter through context.
+            window.location.reload();
+          }
           throw new Error("Wrong secret.");
         }
         if (!r.ok) {
@@ -390,16 +375,6 @@ export default function AdminUsersClient() {
       .catch((e) => setError(String(e instanceof Error ? e.message : e)))
       .finally(() => setLoading(false));
   }, [secret]);
-
-  const handleSecretSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const input = form.elements.namedItem("secret") as HTMLInputElement | null;
-    const value = input?.value.trim();
-    if (!value) return;
-    localStorage.setItem(SECRET_KEY, value);
-    setSecret(value);
-  };
 
   const filteredSorted = useMemo(() => {
     if (!data) return [];
@@ -438,90 +413,19 @@ export default function AdminUsersClient() {
     return rows;
   }, [data, search, planFilter, countryFilter, sortBy, sortDir, dateRange]);
 
-  // ---------- Login gate ----------
-  const pageDir = adminLang === "he" ? "rtl" : "ltr";
-  if (!secret) {
-    return (
-      <main style={pageStyle} dir={pageDir}>
-        <div style={cardStyle}>
-          <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: "#111827" }}>{t.unlockTitle}</h1>
-          <p style={{ color: "#6B7280", fontSize: 14, marginBottom: 24 }}>{t.unlockBody}</p>
-          {/* A hidden username field gives the browser's password manager
-              the (origin + username + password) triple it needs to offer
-              autofill. Without a username field most password managers
-              skip the save prompt entirely. The value 'gadit-admin' is a
-              constant identifier — it isn't displayed, only used so the
-              browser can distinguish this credential from other Gadit
-              accounts saved at the same origin. */}
-          <form onSubmit={handleSecretSubmit} autoComplete="on">
-            <input
-              type="text"
-              name="username"
-              value="gadit-admin"
-              autoComplete="username"
-              readOnly
-              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
-              tabIndex={-1}
-              aria-hidden="true"
-            />
-            <input
-              type="password"
-              name="secret"
-              autoFocus
-              autoComplete="current-password"
-              placeholder={t.unlockPlaceholder}
-              style={inputStyle}
-              dir="ltr"
-            />
-            <button type="submit" style={buttonStyle}>{t.unlockCta}</button>
-          </form>
-        </div>
-      </main>
-    );
-  }
-
   // ---------- Dashboard ----------
-  // Direction follows the chosen admin language: LTR in EN, RTL in HE.
-  // The forced-LTR setup we had earlier was specifically to defeat the
-  // visitor browser's locale; now that language is an explicit toggle
-  // we want the page to actually flip in Hebrew mode.
+  // No secret gate or chrome here — the shared AdminShell (layout.tsx)
+  // owns the gate, sidebar, lang toggle and sign-out. This page just
+  // renders the page-specific content as a fragment.
   return (
-    <main style={pageStyle} dir={pageDir}>
-      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "32px 24px" }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, gap: 12 }}>
-          <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
-            <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
-              {data ? t.totalUsersFooter(data.counts.total) : loading ? t.loading : ""}
-            </p>
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            <a
-              href="/admin/searches"
-              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
-            >
-              {adminLang === "he" ? "חיפושים" : "Searches"}
-            </a>
-            <button
-              onClick={toggleLang}
-              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
-              title={adminLang === "en" ? "Switch to Hebrew" : "Switch to English"}
-            >
-              {t.langToggle}
-            </button>
-            <button
-              onClick={() => {
-                localStorage.removeItem(SECRET_KEY);
-                setSecret(null);
-                setData(null);
-              }}
-              style={{ ...buttonStyle, background: "#F3F4F6", color: "#374151", width: "auto", padding: "8px 16px" }}
-            >
-              {t.signOut}
-            </button>
-          </div>
-        </header>
-
+    <>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
+          {data ? t.totalUsersFooter(data.counts.total) : loading ? t.loading : ""}
+        </p>
+      </div>
+      <div>
         {error && (
           <div style={{ background: "#FEF2F2", color: "#991B1B", padding: 12, borderRadius: 8, marginBottom: 16, fontSize: 14 }}>
             {error}
@@ -774,7 +678,7 @@ export default function AdminUsersClient() {
           </p>
         )}
       </div>
-    </main>
+    </>
   );
 }
 
