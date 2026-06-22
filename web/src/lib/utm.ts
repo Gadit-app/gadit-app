@@ -21,6 +21,8 @@
  * never sent on any request the user didn't initiate.
  */
 
+import { detectInAppBrowser } from "./in-app-browser";
+
 const UTM_STORAGE_KEY = "gadit_utm_v1";
 const UTM_TTL_MS = 30 * 86_400_000; // 30 days
 
@@ -43,6 +45,26 @@ const FIELDS: Array<keyof Omit<UtmData, "capturedAt" | "landingPath">> = [
  * present. Idempotent — call from a top-level useEffect on every page
  * load; only the first UTM-bearing visit in any 30-day window actually
  * writes.
+ *
+ * Two-stage capture:
+ *   1. URL params (utm_source, utm_medium, …) — the precise case, used
+ *      when the visitor came in via a properly tagged campaign link.
+ *   2. In-app webview detection fallback — used when the visitor came
+ *      via Instagram / Facebook / TikTok / Messenger etc. but the host
+ *      app stripped the URL's path + query string before opening it.
+ *      Facebook Messenger does this aggressively: a shared link that
+ *      points to /he?utm_source=facebook&utm_medium=bio can arrive at
+ *      our origin as just "/" with no params attached. Without the
+ *      fallback, that visit looks like Direct traffic even though we
+ *      know full-well it came from Facebook (their User-Agent token
+ *      gives them away). Gadi flagged this 2026-06-22 when his FB
+ *      webview signup test landed in /admin/users but never appeared
+ *      in /admin/campaigns.
+ *
+ * The fallback only fires when no URL params were captured, so a real
+ * UTM-bearing link still wins. The fallback captures source + medium
+ * ("instagram"+"webview", "facebook"+"webview", …) but never a
+ * campaign tag — the visitor didn't go through a campaign-tagged link.
  */
 export function captureUtmFromUrl(): void {
   if (typeof window === "undefined") return;
@@ -59,7 +81,16 @@ export function captureUtmFromUrl(): void {
         any = true;
       }
     }
-    if (!any) return;
+
+    // No URL params — try the in-app webview UA fallback so we don't
+    // lose the (typical) FB/IG-stripped-the-query case.
+    if (!any) {
+      const appName = detectInAppBrowser();
+      if (!appName) return;
+      captured.source = appName.toLowerCase();
+      captured.medium = "webview";
+      any = true;
+    }
 
     // First-touch — don't overwrite a fresh existing record.
     const existing = getStoredUtms();
