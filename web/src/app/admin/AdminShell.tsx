@@ -199,7 +199,15 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         }}
       >
         <div style={{ display: "flex", minHeight: "100vh" }}>
-          {/* Sidebar — fixed width, sticky to the start edge */}
+          {/* Sidebar — fixed width, sticky to the start edge.
+              `align-self: stretch` + `height: 100vh` makes the dark
+              background reach all the way to the viewport bottom even
+              when the content area is short (Gadi 2026-06-22: the
+              previous flex-start layout left the sidebar floating at
+              its own intrinsic height with the gray bg showing under
+              it). A 3px teal stripe on the inner edge (RTL: left, LTR:
+              right) is the brand accent that ties the chrome to the
+              Gadit wordmark's italic-teal "it". */}
           <aside
             style={{
               width: 220,
@@ -212,9 +220,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               gap: 6,
               position: "sticky",
               top: 0,
-              alignSelf: "flex-start",
-              maxHeight: "100vh",
+              alignSelf: "stretch",
+              height: "100vh",
               overflowY: "auto",
+              borderInlineEnd: "3px solid #0EA5A5",
             }}
           >
             {/* Logo */}
