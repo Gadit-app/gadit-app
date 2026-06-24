@@ -367,7 +367,7 @@ export function HomePage() {
                 aria-label={c.search}
                 title={c.search}
               >
-                <SearchIcon size={22} />
+                <SearchIcon size={24} />
               </button>
             </div>
             {/* Sentence input — Gadi 2026-06-19 v2: the OPTIONAL cue

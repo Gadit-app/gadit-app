@@ -3315,18 +3315,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    buys back the horizontal real estate the labelled pill was eating
    on mobile. */
 .wordbook .wb-home-search-submit {
-  /* Bumped to 40px / 22px icon (Gadi 2026-06-24) so the magnifier
-     reads as a clear primary affordance on mobile — matches the
-     persistent searchbar on /word. Previous 36px/18px was too quiet
-     against the white pill on iOS Safari, especially next to the
-     denser mic + Kids cluster. */
+  /* 44px button with always-on teal-soft ground (Gadi 2026-06-24
+     round 2). The solid mic glyph beside it visually dominates an
+     outlined teal magnifier, so the soft pill background gives the
+     magnifier matching weight. Matches the persistent searchbar on
+     /word exactly. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  color: var(--teal);
+  width: 44px;
+  height: 44px;
+  background: var(--teal-soft);
+  color: var(--teal-edge, #0B8A8A);
   border: none;
   border-radius: 999px;
   padding: 0;
@@ -3335,7 +3335,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
 }
 .wordbook .wb-home-search-submit:hover {
-  background: var(--teal-soft);
+  background: rgba(14, 165, 165, 0.22);
   color: var(--teal-edge, #0B8A8A);
 }
 .wordbook .wb-home-search-submit:active { transform: scale(0.94); }
@@ -5766,23 +5766,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-inline-end: -6px;
 }
 .wordbook .wb-word-searchbar-submit {
-  /* Magnifier-icon submit. Sized larger than the matching mic button
-     so the search action reads as the primary affordance. Gadi
-     2026-06-24: at 36px/18px-icon/teal with disabled-opacity 0.45
-     the magnifier was nearly invisible against white on iOS Safari
-     (especially on the result page when the input is empty and the
-     button is in its disabled state). Bumped the button to 40px and
-     the SVG to 22px with a 2.2 stroke for visual weight; replaced
-     the half-transparent disabled state with a solid mid-gray so the
-     glyph is always clearly visible — color transitions to teal only
-     once the field has text to submit. */
+  /* Magnifier-icon submit. Round 44px button with an always-on
+     teal-soft background — so the glyph reads as a real button, not
+     a floating outline. The mic next to it is a solid filled icon
+     and was visually dominating the outline magnifier; the soft
+     background gives the magnifier matching visual weight. Color
+     darkens on hover, scales down on press.
+     Gadi 2026-06-24 round 2: previous attempt (40px/22px no
+     background) still read as small because the mic's filled glyph
+     is naturally heavier than an outlined magnifier. Background
+     fixes it. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  color: var(--teal);
+  width: 44px;
+  height: 44px;
+  background: var(--teal-soft);
+  color: var(--teal-edge, #0B8A8A);
   border: none;
   border-radius: 999px;
   padding: 0;
@@ -5791,13 +5791,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
 }
 .wordbook .wb-word-searchbar-submit:hover:not(:disabled) {
-  background: var(--teal-soft);
+  background: rgba(14, 165, 165, 0.22);
   color: var(--teal-edge, #0B8A8A);
 }
 .wordbook .wb-word-searchbar-submit:active:not(:disabled) {
   transform: scale(0.94);
 }
 .wordbook .wb-word-searchbar-submit:disabled {
+  /* Even disabled, keep the colored ground so the button stays
+     visually present. Just dim the glyph slightly to signal "not
+     yet". */
   color: #6B7280;
   cursor: not-allowed;
 }
