@@ -195,6 +195,63 @@ export async function POST(req: NextRequest) {
       { merge: true },
     );
 
+    // Welcome (day 0) email to the user themselves. The rest of the
+    // drip (days 2/5/9/14) is sent by /api/cron/email-drip. We send
+    // the welcome here rather than waiting for the cron because new
+    // users expect a confirmation in their inbox within seconds, not
+    // up to 24 hours.
+    //
+    // Language gate: today only Hebrew is shipped. Use country=IL as
+    // the proxy for "Hebrew speaker" since the auth flow doesn't
+    // expose UI language. English drip is the next file to land.
+    const dripLang: "he" | "en" =
+      country?.toUpperCase() === "IL" || (data.uiLang as string | undefined) === "he"
+        ? "he"
+        : "en";
+
+    if (dripLang === "he" && email && !((data.dripSent as Record<string, unknown> | undefined)?.["welcome-he"])) {
+      try {
+        const { HE_DRIP, buildUnsubUrl } = await import("@/lib/email-drip/registry");
+        const { sendDripEmail } = await import("@/lib/email-drip/send");
+        const welcome = HE_DRIP.find((m) => m.key === "welcome-he");
+        if (welcome) {
+          const built = welcome.build({
+            displayName:
+              (typeof authUser.displayName === "string" && authUser.displayName.trim()) ||
+              undefined,
+            unsubscribeUrl: buildUnsubUrl(uid),
+          });
+          const sent = await sendDripEmail({
+            to: email,
+            subject: built.subject,
+            html: built.html,
+          });
+          if (sent.ok) {
+            await userRef.set(
+              {
+                dripLang: "he",
+                dripSent: {
+                  "welcome-he": {
+                    sentAt: FieldValue.serverTimestamp(),
+                    messageId: sent.id ?? null,
+                  },
+                },
+              },
+              { merge: true },
+            );
+          } else {
+            console.warn("[notify-signup] welcome send failed:", sent.reason);
+          }
+        }
+      } catch (err) {
+        console.warn("[notify-signup] welcome send threw:", err);
+      }
+    } else if (dripLang === "en") {
+      // Remember the lang choice on the doc so the future English
+      // drip picks them up when it ships.
+      await userRef.set({ dripLang: "en" }, { merge: true });
+    }
+
     return NextResponse.json({ sent: true });
   } catch (e) {
     console.error("[notify-signup] failed:", e);
