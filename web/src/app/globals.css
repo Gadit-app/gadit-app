@@ -3315,16 +3315,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    buys back the horizontal real estate the labelled pill was eating
    on mobile. */
 .wordbook .wb-home-search-submit {
-  /* 44px button with always-on teal-soft ground (Gadi 2026-06-24
-     round 2). The solid mic glyph beside it visually dominates an
-     outlined teal magnifier, so the soft pill background gives the
-     magnifier matching weight. Matches the persistent searchbar on
-     /word exactly. */
+  /* 36px button with always-on teal-soft ground — matched to the
+     persistent /word searchbar exactly. Gadi 2026-06-24 round 3:
+     the round-2 44px size crowded the 46px pill; 36px restores
+     ~5px of bar breathing around the button on top and bottom. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   background: var(--teal-soft);
   color: var(--teal-edge, #0B8A8A);
   border: none;
@@ -5766,21 +5765,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-inline-end: -6px;
 }
 .wordbook .wb-word-searchbar-submit {
-  /* Magnifier-icon submit. Round 44px button with an always-on
-     teal-soft background — so the glyph reads as a real button, not
-     a floating outline. The mic next to it is a solid filled icon
-     and was visually dominating the outline magnifier; the soft
-     background gives the magnifier matching visual weight. Color
-     darkens on hover, scales down on press.
-     Gadi 2026-06-24 round 2: previous attempt (40px/22px no
-     background) still read as small because the mic's filled glyph
-     is naturally heavier than an outlined magnifier. Background
-     fixes it. */
+  /* Magnifier-icon submit — round soft-teal button with breathing
+     room inside the pill. Gadi 2026-06-24 round 3: the round-2
+     44px button was almost the full 46px of the bar (1px padding)
+     and looked crammed. Pulled back to 36px so there are ~5px of
+     visible bar around it on top and bottom — the button still
+     reads as a button thanks to the teal-soft ground, just isn't
+     fighting the bar for vertical real estate. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   background: var(--teal-soft);
   color: var(--teal-edge, #0B8A8A);
   border: none;
