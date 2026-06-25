@@ -20,11 +20,11 @@ export function meaningsHe(opts: { displayName?: string; unsubscribeUrl: string 
 
   const signature = `
     <p style="margin:0 0 12px;">גדי</p>
-    <p style="margin:0;color:#6B7280;font-size:14px;line-height:1.6;">P.S. כשמצאת משמעות מפתיעה, יש כפתור שיתוף לידה. שווה לשלוח אותה למישהו שיעריך.</p>
+    <p style="margin:0;color:#6B7280;font-size:14px;line-height:1.6;">נ.ב. כשמצאת משמעות מפתיעה, יש כפתור שיתוף לידה. שווה לשלוח אותה למישהו שיעריך.</p>
   `;
 
   return {
-    subject: "מילה אחת, שש משמעויות",
+    subject: "מילה אחת, שכבות שלא ראית בה",
     preheader: "רוב המילונים נותנים הגדרה אחת. אני רוצה לתת את כולן.",
     html: layoutHe({
       preheader: "רוב המילונים נותנים הגדרה אחת. אני רוצה לתת את כולן.",
