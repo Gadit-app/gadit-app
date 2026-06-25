@@ -15,8 +15,8 @@ export function summaryEn(opts: { displayName?: string; unsubscribeUrl: string }
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 16px;">Over the past two weeks we've gotten to know the different sides of a word. All its meanings, and its history.</p>
     <p style="margin:0 0 16px;">Alongside that, we've gotten to know the features that make Gadit a tool for deeper understanding: Kids Mode, and generating an image for a word.</p>
-    <p style="margin:0 0 16px;">Some of these features are open to every user, and some unlock with Clear and Deep. There you'll find unlimited searches, images, sentence composition, and smart practice through quizzes and word games. If Gadit has become part of your daily routine, these are the features that make the difference.</p>
-    <p style="margin:0 0 16px;">And Clear and Deep subscribers also get a personal link that earns you a commission on every signup that comes through it. A convenient way to share something you love, and earn along the way.</p>
+    <p style="margin:0 0 16px;">Some of these features are open to every user, and some unlock with <strong>Clear</strong> and <strong>Deep</strong>. There you'll find unlimited searches, images, sentence composition, and smart practice through quizzes and word games. If Gadit has become part of your daily routine, these are the features that make the difference.</p>
+    <p style="margin:0 0 16px;">And <strong>Clear</strong> and <strong>Deep</strong> subscribers also get a personal link that earns you a commission on every signup that comes through it. A convenient way to share something you love, and earn along the way.</p>
   `;
 
   const signature = `
