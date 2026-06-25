@@ -4,6 +4,11 @@ import { meaningsHe } from "./mail-2-meanings-he";
 import { etymologyHe } from "./mail-3-etymology-he";
 import { visualHe } from "./mail-4-visual-he";
 import { summaryHe } from "./mail-5-summary-he";
+import { welcomeEn } from "./mail-1-welcome-en";
+import { meaningsEn } from "./mail-2-meanings-en";
+import { etymologyEn } from "./mail-3-etymology-en";
+import { visualEn } from "./mail-4-visual-en";
+import { summaryEn } from "./mail-5-summary-en";
 
 /**
  * Drip-sequence registry. Adding a new mail = add an entry here and
@@ -49,9 +54,17 @@ export const HE_DRIP: DripMail[] = [
   { key: "summary-he",    dayOffset: 14, build: summaryHe },
 ];
 
+export const EN_DRIP: DripMail[] = [
+  { key: "welcome-en",    dayOffset: 0,  build: welcomeEn },
+  { key: "meanings-en",   dayOffset: 2,  build: meaningsEn },
+  { key: "etymology-en",  dayOffset: 5,  build: etymologyEn },
+  { key: "visual-en",     dayOffset: 9,  build: visualEn },
+  { key: "summary-en",    dayOffset: 14, build: summaryEn },
+];
+
 export function getDripForLang(lang: DripLang): DripMail[] {
-  // English templates will land here later — same shape, -en suffix.
   if (lang === "he") return HE_DRIP;
+  if (lang === "en") return EN_DRIP;
   return [];
 }
 

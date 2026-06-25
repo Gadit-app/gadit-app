@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { HE_DRIP, buildUnsubUrl } from "@/lib/email-drip/registry";
+import { HE_DRIP, EN_DRIP, buildUnsubUrl } from "@/lib/email-drip/registry";
 import { sendDripEmail } from "@/lib/email-drip/send";
 
 /**
@@ -42,11 +42,17 @@ export async function GET(req: NextRequest) {
 
   const to = (req.nextUrl.searchParams.get("to") || DEFAULT_TO).trim();
   const onlyKey = req.nextUrl.searchParams.get("key") || "";
+  const langParam = (req.nextUrl.searchParams.get("lang") || "he").toLowerCase();
   const name = req.nextUrl.searchParams.get("name") || undefined;
 
+  // Default to Hebrew set; ?lang=en switches to the English mails.
+  // A direct ?key=<key> override searches across both sets so a single
+  // mail can be previewed by its unique key without needing &lang too.
+  const baseSet = langParam === "en" ? EN_DRIP : HE_DRIP;
+  const allKnown = [...HE_DRIP, ...EN_DRIP];
   const targets = onlyKey
-    ? HE_DRIP.filter((m) => m.key === onlyKey)
-    : HE_DRIP;
+    ? allKnown.filter((m) => m.key === onlyKey)
+    : baseSet;
 
   if (targets.length === 0) {
     return NextResponse.json(

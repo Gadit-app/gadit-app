@@ -209,11 +209,18 @@ export async function POST(req: NextRequest) {
         ? "he"
         : "en";
 
-    if (dripLang === "he" && email && !((data.dripSent as Record<string, unknown> | undefined)?.["welcome-he"])) {
+    // Pick the right welcome by user's drip language and fire it now
+    // rather than waiting for the daily cron — first-impression cost
+    // of a 24-hour delay is too high.
+    const welcomeKey = dripLang === "he" ? "welcome-he" : "welcome-en";
+    const alreadySent = (data.dripSent as Record<string, unknown> | undefined)?.[welcomeKey];
+
+    if (email && !alreadySent) {
       try {
-        const { HE_DRIP, buildUnsubUrl } = await import("@/lib/email-drip/registry");
+        const { HE_DRIP, EN_DRIP, buildUnsubUrl } = await import("@/lib/email-drip/registry");
         const { sendDripEmail } = await import("@/lib/email-drip/send");
-        const welcome = HE_DRIP.find((m) => m.key === "welcome-he");
+        const drip = dripLang === "he" ? HE_DRIP : EN_DRIP;
+        const welcome = drip.find((m) => m.key === welcomeKey);
         if (welcome) {
           const built = welcome.build({
             displayName:
@@ -229,9 +236,9 @@ export async function POST(req: NextRequest) {
           if (sent.ok) {
             await userRef.set(
               {
-                dripLang: "he",
+                dripLang,
                 dripSent: {
-                  "welcome-he": {
+                  [welcomeKey]: {
                     sentAt: FieldValue.serverTimestamp(),
                     messageId: sent.id ?? null,
                   },
@@ -246,10 +253,10 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         console.warn("[notify-signup] welcome send threw:", err);
       }
-    } else if (dripLang === "en") {
-      // Remember the lang choice on the doc so the future English
-      // drip picks them up when it ships.
-      await userRef.set({ dripLang: "en" }, { merge: true });
+    } else {
+      // No email or already sent — still record the chosen language
+      // so the cron picks the right drip from day 2 onwards.
+      await userRef.set({ dripLang }, { merge: true });
     }
 
     return NextResponse.json({ sent: true });

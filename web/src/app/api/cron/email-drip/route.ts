@@ -108,7 +108,6 @@ export async function GET(req: NextRequest) {
         : d.uiLang === "he" || d.country === "IL"
           ? "he"
           : "en";
-    if (lang !== "he") continue; // English drip not yet built
 
     const drip = getDripForLang(lang);
     if (drip.length === 0) continue;
