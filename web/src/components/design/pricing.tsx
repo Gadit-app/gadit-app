@@ -154,18 +154,24 @@ function PricingHero({
             })}
           </div>
           {billing === "yearly" && (
+            // Save badge: bumped from 11.5 → 13.5px font and from a
+            // muted blue (0.12 alpha) to a teal-soft fill so the
+            // savings number actually anchors the decision. Gadi
+            // 2026-06-26 audit fix A4: yearly savings is a
+            // conversion-critical signifier; at 11.5px it was reading
+            // as a footnote, not a reason to switch.
             <span
               className="gd-font-sans-ui inline-flex items-center gap-1.5"
               style={{
-                fontSize: 11.5,
-                fontWeight: 600,
-                letterSpacing: "0.1em",
+                fontSize: 13.5,
+                fontWeight: 700,
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "oklch(0.82 0.1 245)",
-                padding: "5px 11px",
+                color: "#0B8A8A",
+                padding: "6px 14px",
                 borderRadius: 999,
-                background: "oklch(0.72 0.19 245 / 0.12)",
-                boxShadow: "inset 0 0 0 1px oklch(0.72 0.19 245 / 0.35)",
+                background: "rgba(14, 165, 165, 0.16)",
+                boxShadow: "inset 0 0 0 1px rgba(14, 165, 165, 0.45)",
               }}
             >
               <span className="gd-tier-dot" />
@@ -260,6 +266,13 @@ function TierCard({
         borderRadius: 20,
         padding: "clamp(28px, 3vw, 36px) clamp(24px, 2.6vw, 30px) clamp(28px, 3vw, 32px)",
         zIndex: tier.highlight ? 1 : 0,
+        // Gadi 2026-06-26 audit A3: physically lift the recommended
+        // tier above the others so the eye lands on it first. 1.04x
+        // is enough to break the perfect-three-equal-cards illusion
+        // without making the highlighted card feel detached. Skipped
+        // on small viewports where vertical stacking handles
+        // hierarchy on its own.
+        transform: tier.highlight ? "translateY(-8px)" : "none",
         ...(tier.highlight
           ? {
               // Highlighted: deep navy gradient, white text, electric
