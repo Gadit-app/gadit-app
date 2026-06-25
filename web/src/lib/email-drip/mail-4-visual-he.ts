@@ -19,7 +19,10 @@ export function visualHe(opts: { displayName?: string; unsubscribeUrl: string })
     <p style="margin:0 0 16px;">אם יש ילד בסביבה, כדאי לשבת איתו דקה, להפעיל את מצב הילדים, לחפש מילה יחד וליצור עבורה תמונה. ככה נראה הרגע שבו ההבנה מושגת בקלות.</p>
   `;
 
-  const signature = `<p style="margin:0;">גדי</p>`;
+  const signature = `
+    <p style="margin:0;">שלך,</p>
+    <p style="margin:0;">גדי</p>
+  `;
 
   return {
     subject: "מילה בגובה העיניים",

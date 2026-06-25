@@ -19,6 +19,7 @@ export function meaningsHe(opts: { displayName?: string; unsubscribeUrl: string 
   `;
 
   const signature = `
+    <p style="margin:0;">שלך,</p>
     <p style="margin:0 0 12px;">גדי</p>
     <p style="margin:0;color:#6B7280;font-size:14px;line-height:1.6;">נ.ב. כשמצאת משמעות מפתיעה, יש כפתור שיתוף לידה. שווה לשלוח אותה למישהו שיעריך.</p>
   `;

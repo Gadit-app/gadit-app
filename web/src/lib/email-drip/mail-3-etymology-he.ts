@@ -19,7 +19,10 @@ export function etymologyHe(opts: { displayName?: string; unsubscribeUrl: string
     <p style="margin:0 0 16px;">ב-Gadit, מתחת להגדרות של כל מילה יש חלק שמסביר את המקור שלה. הרקע ההיסטורי, מאיפה היא הגיעה. זה מה שהופך מילון מרשימה של הגדרות לסיפור.</p>
   `;
 
-  const signature = `<p style="margin:0;">גדי</p>`;
+  const signature = `
+    <p style="margin:0;">שלך,</p>
+    <p style="margin:0;">גדי</p>
+  `;
 
   return {
     subject: "מאיפה מילה באמת באה",

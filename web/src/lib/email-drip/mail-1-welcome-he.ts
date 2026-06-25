@@ -18,6 +18,7 @@ export function welcomeHe(opts: { displayName?: string; unsubscribeUrl: string }
   `;
 
   const signature = `
+    <p style="margin:0;">שלך,</p>
     <p style="margin:0;">גדי</p>
     <p style="margin:0;color:#6B7280;font-size:14px;">מייסד, Gadit</p>
   `;
