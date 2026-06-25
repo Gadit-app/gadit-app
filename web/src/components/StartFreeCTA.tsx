@@ -26,10 +26,19 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 
 export function StartFreeCTA() {
-  const { user, promptLogin } = useAuth();
+  const { user, loading, promptLogin } = useAuth();
   const { lang } = useLang();
 
-  if (user) return null;
+  // Hide while auth is still resolving. Firebase takes ~1-2s to verify
+  // the session from the cookie / IndexedDB on cold load — during that
+  // window `user` is null even for signed-in returning visitors. If we
+  // render the CTA in that window it appears, then snaps to null when
+  // auth resolves. Gadi 2026-06-25 flagged the visible side effect: on
+  // mobile the absolute-centered CTA briefly overlapped the language
+  // switcher because both were trying to live in the same px range.
+  // Waiting for loading === false eliminates the flash and the overlap
+  // it caused.
+  if (loading || user) return null;
 
   return (
     <button
