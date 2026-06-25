@@ -342,12 +342,13 @@ export function DashboardPage() {
     [lang],
   );
 
-  // RTL hint for the embedded iframe. Affonso doesn't document a `dir`
-  // URL param yet, but most embeddable widgets honour one when present,
-  // and it costs nothing if they don't. Hebrew and Arabic are the only
-  // RTL languages we ship. If Affonso ignores this, the proper fix is
-  // server-side on their end (set `<html dir="rtl">` when lang=he|ar);
-  // tracked in the email thread with Silvestro.
+  // RTL hint for the embedded iframe. Silvestro at Affonso confirmed
+  // 2026-06-25 that the dashboard + embed now render natively in RTL
+  // when &dir=rtl is on the URL — sidebar mirrors to the start edge,
+  // icons follow, text aligns right. Before that the param was a
+  // hopeful no-op while we waited on their server-side
+  // <html dir="rtl"> fix. Hebrew and Arabic are the only RTL UI
+  // languages Gadit ships.
   const affonsoDir = lang === "he" || lang === "ar" ? "rtl" : "ltr";
 
   // Auth gate — auto-prompt the login modal exactly once per visit
