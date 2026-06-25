@@ -1109,6 +1109,10 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             existing /word/[word] route. The input lives BETWEEN the
             chrome and the result body so the word title still anchors
             the page. */}
+        {/* The searchbar wrap is wrapped in a sticky stage so the input
+            stays in view as the reader scrolls past long etymology +
+            idiom sections. Gadi 2026-06-26 audit fix M1. */}
+        <div className="wb-word-searchbar-stage">
         <div className="wb-word-searchbar-wrap">
           <form
             className="wb-word-searchbar"
@@ -1166,6 +1170,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               </svg>
             </button>
           </form>
+        </div>
         </div>
 
         {/* V2 main — holds quota walls, error messages, and the

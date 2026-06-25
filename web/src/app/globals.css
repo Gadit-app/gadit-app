@@ -5765,6 +5765,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin: 0 auto;
   padding: 32px 20px 0;
 }
+/* Sticky persistent search bar on /word — Gadi 2026-06-26 audit M1.
+   A reader scrolling through long etymology + idioms can re-search a
+   word without first scrolling back to the top. Sticks 64px below
+   the top of the viewport (clears the masthead) and gets a
+   white-fading backdrop so the input stays readable as content
+   scrolls behind it. */
+.wordbook .wb-word-searchbar-stage {
+  position: sticky;
+  top: 64px;
+  z-index: 25;
+  background: linear-gradient(to bottom, #F9FAFB 0%, #F9FAFB 70%, rgba(249, 250, 251, 0) 100%);
+  padding-bottom: 12px;
+  transition: box-shadow 160ms ease;
+}
+.wordbook .wb-word-searchbar-stage.is-stuck {
+  box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.18);
+}
 .wordbook .wb-word-searchbar {
   display: flex;
   align-items: center;

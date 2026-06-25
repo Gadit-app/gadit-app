@@ -28,6 +28,25 @@ export type UpgradeFeature =
   | "quiz" | "compare";                         // Deep
 export type UpgradeTrigger = { feature: UpgradeFeature; tier: UpgradeTier };
 
+/**
+ * Returns true if the user dismissed the modal for THIS feature
+ * within the last 24h. Callers use it to skip opening the modal so a
+ * user who said "maybe later" isn't asked again on every tap that
+ * same day. Gadi 2026-06-26 audit fix M5.
+ */
+export function isUpgradeSnoozed(feature: UpgradeFeature): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const raw = localStorage.getItem(`gadit_upgrade_snooze_${feature}`);
+    if (!raw) return false;
+    const at = Number(raw);
+    if (!Number.isFinite(at)) return false;
+    return Date.now() - at < 24 * 60 * 60 * 1000;
+  } catch {
+    return false;
+  }
+}
+
 type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
 
 interface Copy {
@@ -448,6 +467,19 @@ export function UpgradeModal({
           className="wb-upgrade-secondary"
           onClick={() => {
             track("upgrade_prompt_dismissed", { feature, tier, lang });
+            // 24-hour snooze: a user who dismissed within a day
+            // shouldn't see the same modal again on every tap, so the
+            // caller can read this flag and skip opening the modal.
+            // Per-feature key so dismissing image doesn't suppress a
+            // first-tap on kids. Gadi 2026-06-26 audit fix M5.
+            try {
+              if (typeof window !== "undefined") {
+                localStorage.setItem(
+                  `gadit_upgrade_snooze_${feature}`,
+                  String(Date.now()),
+                );
+              }
+            } catch { /* ignore quota/private-mode */ }
             onClose();
           }}
         >
