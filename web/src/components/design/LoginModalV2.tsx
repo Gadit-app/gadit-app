@@ -9,7 +9,7 @@
  * gradients. Matches the home / pricing / features chrome.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -70,6 +70,12 @@ export function LoginModalV2() {
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // Refs for focus management on validation errors. When submit fails
+  // due to an invalid field we move focus to that field so a keyboard
+  // user (or a screen reader) can see and correct the problem without
+  // hunting. Gadi 2026-06-26 audit fix A2.
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [showPwd, setShowPwd] = useState(false);
   const [busy, setBusy] = useState(false);
   const [errorKey, setErrorKey] = useState<string>("");
@@ -107,6 +113,29 @@ export function LoginModalV2() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [showLoginModal, setShowLoginModal]);
+
+  // After a validation/server error, move focus to the right input so
+  // keyboard + screen-reader users find the problem instantly. Gadi
+  // 2026-06-26 audit fix A2: WCAG focus-on-error.
+  useEffect(() => {
+    if (!errorKey) return;
+    // Password-policy + wrong-credentials live on the password field;
+    // wrong-email + email-already-in-use live on the email field; the
+    // catch-all generic errors go to email (which is the entry point
+    // a recovering user usually wants to edit first).
+    if (
+      errorKey === "loginErrorWeakPassword" ||
+      errorKey === "loginErrorWrongCredentials"
+    ) {
+      passwordRef.current?.focus();
+    } else if (
+      errorKey === "loginErrorInvalidEmail" ||
+      errorKey === "loginErrorEmailInUse" ||
+      errorKey === "loginErrorGeneric"
+    ) {
+      emailRef.current?.focus();
+    }
+  }, [errorKey]);
 
   if (!showLoginModal) return null;
 
@@ -319,6 +348,7 @@ export function LoginModalV2() {
           <div className="wb-login-field">
             <label className="wb-login-label">{v2(lang, "loginEmailLabel")}</label>
             <input
+              ref={emailRef}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -335,11 +365,15 @@ export function LoginModalV2() {
             <label className="wb-login-label">{v2(lang, "loginPasswordLabel")}</label>
             <div className="wb-login-pwd-wrap">
               <input
+                ref={passwordRef}
                 type={showPwd ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                spellCheck={false}
+                autoCapitalize="off"
+                autoCorrect="off"
                 dir="ltr"
                 placeholder={v2(lang, "loginPasswordPlaceholder")}
                 disabled={busy}
@@ -350,6 +384,7 @@ export function LoginModalV2() {
                 type="button"
                 onClick={() => setShowPwd((v) => !v)}
                 aria-label={showPwd ? v2(lang, "loginHidePassword") : v2(lang, "loginShowPassword")}
+                aria-pressed={showPwd}
                 tabIndex={-1}
                 className="wb-login-pwd-toggle"
               >
