@@ -251,13 +251,13 @@ const COPY: Record<string, {
     family: {
       name: "Family",
       eyebrow: "מנוי משפחתי",
-      tagline: <>כל בני המשפחה תחת מנוי אחד, <Hl>ללא הגבלת ילדים</Hl></>,
+      tagline: <>כל בני המשפחה תחת מנוי אחד, <Hl>עד 5 ילדים</Hl></>,
       cta: "נסו 14 יום חינם",
       features: [
         "פרופיל נפרד לכל ילד עם מחברת מילים, היסטוריה, ורצף ימי למידה אישי",
         "כל ילד מקבל את כל הפיצ'רים המתקדמים: חידונים, משחקי מילים, מצב ילדים, ותמונה לכל מילה",
         "לוח בקרה להורה, רואים את כל המילים שכל ילד חיפש ומתי",
-        "ללא הגבלה על מספר הילדים, הוסיפו כמה שאתם רוצים",
+        "עד 5 ילדים תחת אותו מנוי משפחתי",
         "חיבור הטלפון של הילד בסריקת QR פשוטה, נשאר מחובר לתמיד",
       ],
     },
@@ -315,13 +315,13 @@ const COPY: Record<string, {
     family: {
       name: "Family",
       eyebrow: "Family plan",
-      tagline: <>The whole family on one subscription, <Hl>unlimited children</Hl></>,
+      tagline: <>The whole family on one subscription, <Hl>up to 5 children</Hl></>,
       cta: "Try 14 days free",
       features: [
         "Each child gets their own profile with personal word notebook, history, and learning streak",
         "Every child gets all the advanced features: quizzes, word games, kids mode, and image-per-word",
         "Parent dashboard, see every word each child looked up and when",
-        "No limit on the number of children, add as many as you'd like",
+        "Up to 5 children under the same family subscription",
         "Pair your child's phone in seconds with a QR scan, stays connected forever",
       ],
     },
@@ -1032,18 +1032,18 @@ export function PricingPageRoute() {
                   </div>
                   <div className="wb-family-subprice">
                     {billing === "yearly" ? `≈ $5.75 ${c.mo} · ` : ""}
-                    {lang === "he" ? "ללא הגבלת משתמשים"
-                      : lang === "ar" ? "بلا حد لعدد المستخدمين"
-                      : lang === "ru" ? "Без ограничения пользователей"
-                      : lang === "es" ? "Usuarios ilimitados"
-                      : lang === "pt" ? "Usuários ilimitados"
-                      : lang === "fr" ? "Utilisateurs illimités"
-                      : lang === "de" ? "Unbegrenzte Benutzer"
-                      : lang === "cs" ? "Neomezený počet uživatelů"
-                      : lang === "sk" ? "Neobmedzený počet používateľov"
-                      : lang === "it" ? "Utenti illimitati"
-                      : lang === "ja" ? "ユーザー数無制限"
-                      : "For unlimited users"}
+                    {lang === "he" ? "עד 5 ילדים"
+                      : lang === "ar" ? "حتى 5 أطفال"
+                      : lang === "ru" ? "До 5 детей"
+                      : lang === "es" ? "Hasta 5 niños"
+                      : lang === "pt" ? "Até 5 crianças"
+                      : lang === "fr" ? "Jusqu'à 5 enfants"
+                      : lang === "de" ? "Bis zu 5 Kindern"
+                      : lang === "cs" ? "Až 5 dětí"
+                      : lang === "sk" ? "Až 5 detí"
+                      : lang === "it" ? "Fino a 5 bambini"
+                      : lang === "ja" ? "最大5人の子供"
+                      : "Up to 5 children"}
                   </div>
                   <button type="button" className="wb-family-cta" onClick={clickFamily}>
                     {f.cta}

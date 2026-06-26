@@ -31,6 +31,7 @@ import {
   Family,
   isParentRole,
   memberColorFor,
+  MAX_KIDS_PER_FAMILY,
 } from "@/lib/family";
 
 const COPY: Record<string, {
@@ -48,6 +49,7 @@ const COPY: Record<string, {
   goPricing: string;
   welcome: string;
   back: string;
+  capReached: string;
 }> = {
   he: {
     title: "המשפחה שלכם",
@@ -64,6 +66,7 @@ const COPY: Record<string, {
     goPricing: "לתמחור",
     welcome: "ברוכים הבאים ל-Family! הוסיפו את חברי המשפחה כדי להתחיל.",
     back: "→ חזרה",
+    capReached: `הגעתם למקסימום של ${MAX_KIDS_PER_FAMILY} ילדים במנוי המשפחתי.`,
   },
   en: {
     title: "Your Family",
@@ -80,6 +83,7 @@ const COPY: Record<string, {
     goPricing: "See pricing",
     welcome: "Welcome to Family! Add your members to get started.",
     back: "← Back",
+    capReached: `You've reached the cap of ${MAX_KIDS_PER_FAMILY} children on the Family plan.`,
   },
 };
 
@@ -219,6 +223,7 @@ export function FamilyClient() {
 
   const parents = members.filter((m) => isParentRole(m.role));
   const children = members.filter((m) => !isParentRole(m.role));
+  const atCap = children.length >= MAX_KIDS_PER_FAMILY;
 
   return (
     <div className="wordbook wb-family-page" dir={dir}>
@@ -229,7 +234,11 @@ export function FamilyClient() {
           <h1 className="wb-family-title">{c.title}</h1>
           <p className="wb-family-sub">{c.sub}</p>
           {isWelcome && <div className="wb-family-welcome-pill">{c.welcome}</div>}
-          <Link href={href("/family/add")} className="wb-family-add-btn">{c.add}</Link>
+          {atCap ? (
+            <div className="wb-family-cap-pill">{c.capReached}</div>
+          ) : (
+            <Link href={href("/family/add")} className="wb-family-add-btn">{c.add}</Link>
+          )}
         </header>
 
         {members.length === 0 ? (

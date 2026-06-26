@@ -72,6 +72,12 @@ export function generateSixDigitCode(): string {
 /** Pairing codes are valid for 15 minutes — mirrors Yooniz. */
 export const PAIRING_CODE_TTL_MS = 15 * 60 * 1000;
 
+/** Cap on number of children per Family subscription. Parents don't
+ *  count toward this cap. Set to 5 (Gadi 2026-06-26) — high enough to
+ *  cover real families but low enough that someone can't share one
+ *  $6.99 plan across an extended group. */
+export const MAX_KIDS_PER_FAMILY = 5;
+
 /** Synthetic uid format used for paired members. familyId === ownerUid. */
 export function syntheticUidFor(familyId: string, memberId: string): string {
   return `${familyId}_${memberId}`;

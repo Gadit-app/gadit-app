@@ -10120,7 +10120,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-size: clamp(30px, 3.8vw, 42px);
   line-height: 1.05;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  /* Tier-coloured wordmark to match Basic (warm), Clear (teal), Deep
+     (purple). Family wears royal blue, the same hex as the accent
+     strip + CTA + tier border, so the colour reads as one signature. */
+  color: #1E40AF;
   margin: 0 0 12px;
 }
 .wordbook .wb-family-tagline {
@@ -10301,6 +10304,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-bottom: 16px;
 }
 .wordbook[dir="rtl"] .wb-family-welcome-pill { font-family: var(--wb-he); }
+/* Shown when the family already has 5 children — the cap on the Family
+   plan. Replaces the "+ Add" button at the cap so the parent can't
+   start an add flow that will fail. */
+.wordbook .wb-family-cap-pill {
+  display: inline-block;
+  padding: 10px 16px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  font-family: var(--wb-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #B91C1C;
+  margin-bottom: 16px;
+  max-width: 480px;
+}
+.wordbook[dir="rtl"] .wb-family-cap-pill { font-family: var(--wb-he); }
 .wordbook .wb-family-add-btn {
   display: inline-flex;
   align-items: center;
@@ -10524,6 +10544,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   justify-content: flex-end;
   gap: 10px;
 }
+/* Family-section CTAs use the same 10px radius as the /pricing tier
+   CTAs so every "blue Family button" across the product (pricing,
+   /family, /family/add, /join) reads as one shape. */
 .wordbook .wb-family-cta,
 .wordbook .wb-family-cta-ghost {
   display: inline-flex;
@@ -10531,7 +10554,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   justify-content: center;
   min-height: 44px;
   padding: 0 22px;
-  border-radius: 999px;
+  border-radius: 10px;
   font-family: var(--wb-sans);
   font-size: 14.5px;
   font-weight: 600;

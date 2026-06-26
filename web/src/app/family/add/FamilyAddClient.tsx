@@ -16,15 +16,15 @@
  *     (same flow as kids, role claim differs).
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { db } from "@/lib/firebase";
-import { MemberRole, MEMBER_COLORS } from "@/lib/family";
+import { MemberRole, MEMBER_COLORS, MAX_KIDS_PER_FAMILY, isParentRole } from "@/lib/family";
 
 const COPY: Record<string, {
   title: string;
@@ -41,6 +41,7 @@ const COPY: Record<string, {
   cancel: string;
   add: string;
   adding: string;
+  capReached: string;
 }> = {
   he: {
     title: "מי מצטרף למשפחה?",
@@ -57,6 +58,7 @@ const COPY: Record<string, {
     cancel: "ביטול",
     add: "הוסף למשפחה",
     adding: "מוסיף...",
+    capReached: `מנוי Family מוגבל ל-${MAX_KIDS_PER_FAMILY} ילדים. לא ניתן להוסיף עוד ילדים, אבל אפשר עדיין להוסיף הורה.`,
   },
   en: {
     title: "Who's joining the family?",
@@ -73,6 +75,7 @@ const COPY: Record<string, {
     cancel: "Cancel",
     add: "Add to family",
     adding: "Adding...",
+    capReached: `Family is limited to ${MAX_KIDS_PER_FAMILY} children. You can't add more children, but you can still add a parent.`,
   },
 };
 
@@ -98,9 +101,31 @@ export function FamilyAddClient() {
   const [name, setName] = useState("");
   const [colorIndex, setColorIndex] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [childCount, setChildCount] = useState<number | null>(null);
+
+  // Snapshot the family's current child count once on mount. This is the
+  // gate that prevents the parent from adding a 6th child on the Family
+  // plan. Picking up here instead of subscribing because the parent flow
+  // is short-lived: pick role -> add -> redirect.
+  useEffect(() => {
+    if (!user) return;
+    void (async () => {
+      try {
+        const snap = await getDocs(collection(db, "families", user.uid, "members"));
+        const kids = snap.docs.filter((d) => !isParentRole(d.data().role)).length;
+        setChildCount(kids);
+      } catch {
+        setChildCount(0);
+      }
+    })();
+  }, [user]);
+
+  const atKidCap =
+    role !== null && !isParentRole(role) && childCount !== null && childCount >= MAX_KIDS_PER_FAMILY;
 
   async function addMember() {
     if (!user || !role) return;
+    if (atKidCap) return;
     setSaving(true);
     try {
       const ref = await addDoc(collection(db, "families", user.uid, "members"), {
@@ -154,6 +179,11 @@ export function FamilyAddClient() {
           </div>
         ) : (
           <div className="wb-family-add-form">
+            {atKidCap && (
+              <div className="wb-family-cap-pill" style={{ alignSelf: "stretch" }}>
+                {c.capReached}
+              </div>
+            )}
             <label className="wb-family-field">
               <span className="wb-family-field-label">{c.nameLabel}</span>
               <input
@@ -195,7 +225,7 @@ export function FamilyAddClient() {
                 type="button"
                 className="wb-family-cta"
                 onClick={addMember}
-                disabled={saving}
+                disabled={saving || atKidCap}
               >
                 {saving ? c.adding : c.add}
               </button>
