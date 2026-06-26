@@ -119,14 +119,25 @@ const FEATURE_GROUPS: Record<GroupKey, Feature["id"][]> = {
 interface GroupCopy {
   groupTitles: Record<GroupKey, string>;
   groupSubs: Record<GroupKey, string>;
+  // Family is structurally different from the three feature tiers
+  // (it's a multi-seat SKU on top of Deep), so it gets its own
+  // section after the three feature groups - not a 4th group.
+  family: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    bullets: string[];
+  };
   // Each tieback row is rendered as `<colored name>, <body>` so the
-  // brand name picks up its tier colour (Clear -> teal, Deep -> purple)
-  // inside the sentence itself, not just on the chip on the left.
+  // brand name picks up its tier colour (Clear -> teal, Deep -> purple,
+  // Family -> royal blue) inside the sentence itself, not just on the
+  // chip on the left.
   tieback: {
     title: string;
-    basic: { name: string; body: string };
-    clear: { name: string; body: string };
-    deep:  { name: string; body: string };
+    basic:  { name: string; body: string };
+    clear:  { name: string; body: string };
+    deep:   { name: string; body: string };
+    family: { name: string; body: string };
   };
   bubble: string;
 }
@@ -146,11 +157,23 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
       master:
         "חידונים מותאמים אישית ומשחקי מילים שמטמיעים את המילה לטווח ארוך.",
     },
+    family: {
+      eyebrow: "מנוי משפחתי",
+      title: "Family — לכל בני המשפחה",
+      sub: "מנוי אחד שנותן לכל בן משפחה חשבון משלו, עם כל הפיצ'רים המתקדמים. עד 5 ילדים.",
+      bullets: [
+        "פרופיל נפרד לכל בן משפחה, עם מחברת מילים והיסטוריית חיפושים אישית",
+        "חיבור הטלפון של הילד עם קוד QR בלחיצה אחת, נשאר מחובר לתמיד",
+        "לוח בקרה להורה, רואים את כל המילים שכל ילד חיפש ומתי",
+        "עד 5 ילדים תחת אותו מנוי, כל אחד עם כל פיצ'רי Deep",
+      ],
+    },
     tieback: {
       title: "מה כל מסלול נותן",
-      basic: { name: "Basic", body: "להבין את המילה. חינם תמיד." },
-      clear: { name: "Clear", body: "להבין ולראות את המילה." },
-      deep:  { name: "Deep",  body: "להבין, לראות ולזכור את המילה לתמיד." },
+      basic:  { name: "Basic",  body: "להבין את המילה. חינם תמיד." },
+      clear:  { name: "Clear",  body: "להבין ולראות את המילה." },
+      deep:   { name: "Deep",   body: "להבין, לראות ולזכור את המילה לתמיד." },
+      family: { name: "Family", body: "אותו דבר, לכל בני המשפחה, עד 5 ילדים." },
     },
     // Brand pun stays in Latin in every language - like the Gadit
     // wordmark itself. See feedback_brand_name_english memory.
@@ -170,11 +193,23 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
       master:
         "Personalized quizzes and word games that lock the word in for the long run.",
     },
+    family: {
+      eyebrow: "Family plan",
+      title: "Family — for everyone in the family",
+      sub: "One subscription gives every family member their own account, with all the advanced features. Up to 5 children.",
+      bullets: [
+        "A separate profile for each family member, with their own word notebook and search history",
+        "Pair your child's phone with a QR code in one tap, stays connected forever",
+        "Parent dashboard, see every word each child looked up and when",
+        "Up to 5 children under one subscription, each with full Deep features",
+      ],
+    },
     tieback: {
       title: "What each tier adds",
-      basic: { name: "Basic", body: "understand the word. Free forever." },
-      clear: { name: "Clear", body: "understand and see the word." },
-      deep:  { name: "Deep",  body: "understand, see, and remember the word forever." },
+      basic:  { name: "Basic",  body: "understand the word. Free forever." },
+      clear:  { name: "Clear",  body: "understand and see the word." },
+      deep:   { name: "Deep",   body: "understand, see, and remember the word forever." },
+      family: { name: "Family", body: "the same, for the whole family, up to 5 children." },
     },
     bubble: "Now I gad it!",
   },
@@ -565,6 +600,33 @@ export function FeaturesPage() {
           })}
         </section>
 
+        {/* Family section, sits below the three feature groups because
+            Family is structurally a different SKU (multi-seat on top
+            of Deep), not a 4th feature tier. Royal-blue accent matches
+            the Family card on /pricing so visitors recognise the same
+            colour family between the two pages. */}
+        <section className="wb-feat-family-section">
+          <div className="wb-feat-family-section-head">
+            <span className="wb-feat-tier-chip wb-feat-tier-chip-family">
+              {gc.family.eyebrow}
+            </span>
+            <h2 className="wb-feat-family-section-title">{gc.family.title}</h2>
+            <p className="wb-feat-family-section-sub">{gc.family.sub}</p>
+          </div>
+          <ul className="wb-feat-family-bullets">
+            {gc.family.bullets.map((b, i) => (
+              <li key={i}>
+                <span className="wb-feat-family-check">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         {/* Tier tie-back, names what each tier adds in one line so
             the pricing decision feels like a continuation of the
             story, not a separate page. */}
@@ -593,6 +655,14 @@ export function FeaturesPage() {
                 <strong className="wb-feat-tier-name wb-feat-tier-name-deep">{gc.tieback.deep.name}</strong>
                 {", "}
                 {gc.tieback.deep.body}
+              </span>
+            </div>
+            <div className="wb-feat-tiertie-row">
+              <span className="wb-feat-tier-chip wb-feat-tier-chip-family">Family</span>
+              <span>
+                <strong className="wb-feat-tier-name wb-feat-tier-name-family">{gc.tieback.family.name}</strong>
+                {", "}
+                {gc.tieback.family.body}
               </span>
             </div>
           </div>
