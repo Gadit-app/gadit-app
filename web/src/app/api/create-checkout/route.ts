@@ -54,6 +54,10 @@ export async function POST(req: NextRequest) {
     // for purchase.
 
     const isClearMonthly = !!CLEAR_MONTHLY_PRICE_ID && priceId === CLEAR_MONTHLY_PRICE_ID;
+    // Family monthly also gets the 14-day trial so the CTA "Try 14 days
+    // free" reads honestly. Yearly stays non-trial like Clear yearly.
+    const isFamilyMonthly = !!FAMILY_MONTHLY_PRICE_ID && priceId === FAMILY_MONTHLY_PRICE_ID;
+    const grantsTrial = isClearMonthly || isFamilyMonthly;
 
     const isFamily = isFamilyPriceId(priceId);
 
@@ -73,7 +77,7 @@ export async function POST(req: NextRequest) {
       success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}${isFamily ? "/family?welcome=1" : "/?success=1"}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}/?canceled=1`,
       metadata: { userId, ...(isFamily && { isFamily: "1" }) },
-      ...(isClearMonthly && {
+      ...(grantsTrial && {
         subscription_data: {
           trial_period_days: TRIAL_DAYS,
           // If user cancels during trial → keep access until trial end (Stripe handles this).

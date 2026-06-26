@@ -252,7 +252,7 @@ const COPY: Record<string, {
       name: "Family",
       eyebrow: "מנוי משפחתי",
       tagline: <>כל בני המשפחה תחת מנוי אחד, <Hl>ללא הגבלת ילדים</Hl></>,
-      cta: "התחילו עם Family",
+      cta: "נסו 14 יום חינם",
       features: [
         "פרופיל נפרד לכל ילד עם מחברת מילים, היסטוריה, ורצף ימי למידה אישי",
         "כל ילד מקבל את כל הפיצ'רים המתקדמים: חידונים, משחקי מילים, מצב ילדים, ותמונה לכל מילה",
@@ -316,7 +316,7 @@ const COPY: Record<string, {
       name: "Family",
       eyebrow: "Family plan",
       tagline: <>The whole family on one subscription, <Hl>unlimited children</Hl></>,
-      cta: "Start Family",
+      cta: "Try 14 days free",
       features: [
         "Each child gets their own profile with personal word notebook, history, and learning streak",
         "Every child gets all the advanced features: quizzes, word games, kids mode, and image-per-word",
@@ -807,8 +807,8 @@ export function PricingPageRoute() {
   const clearYearly   = "$29.99";
   const deepMonthly   = "$4.99";
   const deepYearly    = "$49.99";
-  const familyMonthly = "$7.99";
-  const familyYearly  = "$79";
+  const familyMonthly = "$6.99";
+  const familyYearly  = "$69";
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -1030,9 +1030,21 @@ export function PricingPageRoute() {
                       {billing === "yearly" ? c.yr : c.mo}
                     </span>
                   </div>
-                  {billing === "yearly" && (
-                    <div className="wb-family-subprice">≈ $6.58 {c.mo}</div>
-                  )}
+                  <div className="wb-family-subprice">
+                    {billing === "yearly" ? `≈ $5.75 ${c.mo} · ` : ""}
+                    {lang === "he" ? "ללא הגבלת משתמשים"
+                      : lang === "ar" ? "بلا حد لعدد المستخدمين"
+                      : lang === "ru" ? "Без ограничения пользователей"
+                      : lang === "es" ? "Usuarios ilimitados"
+                      : lang === "pt" ? "Usuários ilimitados"
+                      : lang === "fr" ? "Utilisateurs illimités"
+                      : lang === "de" ? "Unbegrenzte Benutzer"
+                      : lang === "cs" ? "Neomezený počet uživatelů"
+                      : lang === "sk" ? "Neobmedzený počet používateľov"
+                      : lang === "it" ? "Utenti illimitati"
+                      : lang === "ja" ? "ユーザー数無制限"
+                      : "For unlimited users"}
+                  </div>
                   <button type="button" className="wb-family-cta" onClick={clickFamily}>
                     {f.cta}
                   </button>
