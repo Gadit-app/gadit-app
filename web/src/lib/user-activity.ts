@@ -23,7 +23,7 @@ import { getAdminDb } from "./firebase-admin";
 export async function recordUserActivity(
   userId: string,
   opts: {
-    /** the incoming request — used to pull edge-geo header */
+    /** the incoming request, used to pull edge-geo header */
     headers: Headers;
     /** the user's email (only relevant for first-time doc creation) */
     email?: string | null;

@@ -278,7 +278,7 @@ export function LoginModalV2() {
 
         {loginReason && <p className="wb-login-reason">{loginReason}</p>}
 
-        {/* Age + terms gate — promoted ABOVE the auth buttons in signup
+        {/* Age + terms gate, promoted ABOVE the auth buttons in signup
             mode. The previous layout had it tucked at the bottom of the
             email form, so a user who clicked the Google button first
             (the natural visual order) got bounced with an opaque
@@ -393,7 +393,7 @@ export function LoginModalV2() {
             </div>
           </div>
 
-          {/* Age + terms checkbox now lives ABOVE the Google button —
+          {/* Age + terms checkbox now lives ABOVE the Google button , 
               not inside this form — so a user who started a signup by
               clicking Google sees and accepts the gate before they get
               an error. Both signup paths use the same shared ageAccepted
@@ -408,7 +408,7 @@ export function LoginModalV2() {
           </button>
         </form>
 
-        {/* Forgot-password link — signin mode only. Tapping it triggers
+        {/* Forgot-password link, signin mode only. Tapping it triggers
             Firebase's password-reset email to whatever's in the email
             field. The success message is intentionally generic ('if
             an account exists') so we don't leak which addresses are

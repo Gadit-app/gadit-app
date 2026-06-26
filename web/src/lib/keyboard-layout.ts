@@ -44,7 +44,7 @@ export function enToHebrew(input: string): string {
     .join("");
 }
 
-/** Reverse direction — useful for English UI users who typed in Hebrew. */
+/** Reverse direction, useful for English UI users who typed in Hebrew. */
 export function hebrewToEn(input: string): string {
   return input
     .split("")

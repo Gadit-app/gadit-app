@@ -8,7 +8,7 @@ import { AccountPage } from "./AccountClient";
  * Indexed: false — no value to search engines.
  */
 export const metadata: Metadata = {
-  title: "Account — Gadit",
+  title: "Account, Gadit",
   robots: { index: false, follow: false },
 };
 

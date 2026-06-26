@@ -20,7 +20,7 @@ import { createPortal } from "react-dom";
 type Props = {
   src: string;
   alt: string;
-  /** Optional caption — used for screen-reader context only. */
+  /** Optional caption, used for screen-reader context only. */
   closeLabel?: string;
   onClose: () => void;
 };

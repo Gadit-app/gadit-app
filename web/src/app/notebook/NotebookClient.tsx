@@ -53,70 +53,70 @@ const COPY: Record<string, {
 }> = {
   he: {
     title: "המחברת שלי",
-    subtitle: "כל המילים שאספת — שמורות ומסודרות.",
+    subtitle: "כל המילים שאספת, שמורות ומסודרות.",
     empty: "המחברת שלך עדיין ריקה.",
     emptyHint: "מצא מילה וחפש את הכפתור 'שמירה במחברת'.",
     goSearch: "חזרה לחיפוש",
   },
   en: {
     title: "My Notebook",
-    subtitle: "Every word you've collected — saved and organized.",
+    subtitle: "Every word you've collected, saved and organized.",
     empty: "Your notebook is empty.",
     emptyHint: "Find a word and tap 'Save to Notebook'.",
     goSearch: "Back to search",
   },
   ar: {
     title: "دفتر كلماتي",
-    subtitle: "كل الكلمات التي جمعتها — محفوظة ومنظمة.",
+    subtitle: "كل الكلمات التي جمعتها, محفوظة ومنظمة.",
     empty: "دفترك فارغ.",
     emptyHint: "ابحث عن كلمة واضغط على 'احفظ في الدفتر'.",
     goSearch: "العودة إلى البحث",
   },
   ru: {
     title: "Моя тетрадь",
-    subtitle: "Все слова, которые вы собрали — сохранены и упорядочены.",
+    subtitle: "Все слова, которые вы собрали, сохранены и упорядочены.",
     empty: "Ваша тетрадь пуста.",
     emptyHint: "Найдите слово и нажмите 'В мою тетрадь'.",
     goSearch: "Вернуться к поиску",
   },
   es: {
     title: "Mi cuaderno",
-    subtitle: "Todas las palabras que has recopilado — guardadas y organizadas.",
+    subtitle: "Todas las palabras que has recopilado, guardadas y organizadas.",
     empty: "Tu cuaderno está vacío.",
     emptyHint: "Busca una palabra y pulsa 'Guardar en el cuaderno'.",
     goSearch: "Volver a buscar",
   },
   pt: {
     title: "Meu caderno",
-    subtitle: "Todas as palavras que você coletou — salvas e organizadas.",
+    subtitle: "Todas as palavras que você coletou, salvas e organizadas.",
     empty: "Seu caderno está vazio.",
     emptyHint: "Encontre uma palavra e toque em 'Salvar no caderno'.",
     goSearch: "Voltar à busca",
   },
   fr: {
     title: "Mon carnet",
-    subtitle: "Tous les mots que vous avez collectés — enregistrés et organisés.",
+    subtitle: "Tous les mots que vous avez collectés, enregistrés et organisés.",
     empty: "Votre carnet est vide.",
     emptyHint: "Trouvez un mot et touchez 'Enregistrer dans le carnet'.",
     goSearch: "Retour à la recherche",
   },
   de: {
     title: "Mein Notizbuch",
-    subtitle: "Alle Wörter, die du gesammelt hast — gespeichert und geordnet.",
+    subtitle: "Alle Wörter, die du gesammelt hast, gespeichert und geordnet.",
     empty: "Dein Notizbuch ist leer.",
     emptyHint: "Such ein Wort und tippe auf 'Im Notizbuch speichern'.",
     goSearch: "Zurück zur Suche",
   },
   cs: {
     title: "Můj sešit",
-    subtitle: "Všechna slova, která jsi nasbíral — uložená a uspořádaná.",
+    subtitle: "Všechna slova, která jsi nasbíral, uložená a uspořádaná.",
     empty: "Tvůj sešit je prázdný.",
     emptyHint: "Najdi slovo a klepni na 'Uložit do sešitu'.",
     goSearch: "Zpět na vyhledávání",
   },
   sk: {
     title: "Môj zošit",
-    subtitle: "Všetky slová, ktoré si nazbieral — uložené a usporiadané.",
+    subtitle: "Všetky slová, ktoré si nazbieral, uložené a usporiadané.",
     empty: "Tvoj zošit je prázdny.",
     emptyHint: "Nájdi slovo a klikni na 'Uložiť do zošita'.",
     goSearch: "Späť na vyhľadávanie",
@@ -199,7 +199,7 @@ export function NotebookPage() {
         const cached = await listRecentCached(2000);
         if (cancelled) return;
         setOfflineWords(new Set(cached.map((c) => c.word.toLowerCase())));
-      } catch { /* ignore — best-effort badge */ }
+      } catch { /* ignore, best-effort badge */ }
     })();
     return () => { cancelled = true; };
   }, []);
@@ -243,7 +243,7 @@ export function NotebookPage() {
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
-      {/* Offline banner — top-of-page strip that appears whenever the
+      {/* Offline banner, top-of-page strip that appears whenever the
           browser thinks the network is down. Tells the user how many
           words they have available locally so 'offline' doesn't feel
           like 'broken'. Hidden the moment we're back online. */}
@@ -310,7 +310,7 @@ export function NotebookPage() {
           <LangSwitch />
           {user ? <WbUserMenu /> : null}
         </div>
-        {/* Mobile identity cluster — 2026-06-19 redesign. Notebook is
+        {/* Mobile identity cluster, 2026-06-19 redesign. Notebook is
             an authenticated-only surface so user is always defined. */}
         {user && (
           <div className="wb-shell-mobile-identity">

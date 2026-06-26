@@ -408,7 +408,7 @@ export function AccountPage() {
           minHeight: "calc(100vh - 220px)",
         }}
       >
-        {/* HERO — centered above the card so the user's name sits
+        {/* HERO, centered above the card so the user's name sits
             optically over the page, not anchored to the start edge.
             The card below can still span the full main width. */}
         <div
@@ -463,7 +463,7 @@ export function AccountPage() {
         ) : errorMsg || !data ? (
           <SectionCard>
             <div style={{ textAlign: "center", padding: "32px 0", color: "var(--ink-muted)" }}>
-              {errorMsg || "—"}
+              {errorMsg || ", "}
             </div>
           </SectionCard>
         ) : (
@@ -751,7 +751,7 @@ function UsageSection({
           plan={data.plan}
         />
       )}
-      {/* Offline availability — Clear/Deep only. Same label/value row
+      {/* Offline availability, Clear/Deep only. Same label/value row
           shape as the meters above so the three usage stats read as
           one coherent group, not a boxed 'extra'. */}
       {data.plan !== "basic" && offlineCount !== null && (
@@ -975,7 +975,7 @@ function AccountSection({
   data, emailFallback, onSignOut, onDeleteAccount,
 }: {
   data: AccountData;
-  /** Firebase Auth email — used when /api/account returns null because
+  /** Firebase Auth email, used when /api/account returns null because
    *  the user has no Firestore doc yet (free Basic users created without
    *  a Stripe webhook). Without this fallback the row renders blank. */
   emailFallback: string | null;
@@ -986,14 +986,14 @@ function AccountSection({
   const email = data.email ?? emailFallback ?? "";
   return (
     <section>
-      {/* Section header restored — once each topic lives in its own
+      {/* Section header restored, once each topic lives in its own
           card, having a label per card is the consistency cue users
           expect (the previous 'no header at the bottom' looked like
           someone forgot to label this card). 'חשבון / Account' here
           refers to login + email, not the page as a whole. */}
       <SectionLabel>{v2(lang, "accountSectionLabel")}</SectionLabel>
 
-      {/* Email row — label and value on the same line so they read as
+      {/* Email row, label and value on the same line so they read as
           one fact. The address itself is wrapped in unicode-bidi:isolate
           so its Latin characters stay LTR even on RTL pages, but the
           row's text-align follows the parent direction, which puts the

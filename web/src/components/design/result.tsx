@@ -382,7 +382,7 @@ type TabId = "save" | "pin" | "image" | "kids" | "compose" | "compare" | "quiz";
 interface MeaningEntryProps {
   n: number;
   meaning: Meaning;
-  /** Total number of meanings in this word — used by the POS badge
+  /** Total number of meanings in this word, used by the POS badge
       logic so we suppress the badge when there is only ONE meaning
       (the Outsider's caveat from the 2026-06-20 LLM Council: for
       "apple", "tree", "car" the small 'noun' chip just reads as
@@ -671,7 +671,7 @@ function MeaningEntry({
       share?: (data: ShareData) => Promise<void>;
     };
     if (nav.share) {
-      nav.share({ title: `Gadit — ${word}`, text, url }).catch(() => undefined);
+      nav.share({ title: `Gadit, ${word}`, text, url }).catch(() => undefined);
     } else {
       nav.clipboard?.writeText(url).catch(() => undefined);
     }
@@ -763,11 +763,11 @@ function MeaningEntry({
           (Gadi product decision — keeps the card focused on the
           definition itself, gives idioms their own breathing room). */}
 
-      {/* Tab row — in Kids Mode the "Kids' explanation" tab is hidden
+      {/* Tab row, in Kids Mode the "Kids' explanation" tab is hidden
           since the kids-friendly content IS now the main definition
           shown above. Showing the tab would be redundant and confusing
           ("explain like a kid" → already done). */}
-      {/* Tabs split by tier (Gadi 2026-06-20) — Clear features render
+      {/* Tabs split by tier (Gadi 2026-06-20), Clear features render
           on row 1 (teal), Deep features on row 2 (purple). On a wide
           desktop the two rows sit on one line because each row is
           inline-flex; on mobile they stack into two distinct rows so
@@ -1015,7 +1015,7 @@ export function IdiomsSection({
         {all.map((id, j) => (
           <div className="wb-midiom" key={j}>
             <span className="wb-midiom-phrase">{id.phrase}</span>
-            <span className="wb-midiom-sep"> — </span>
+            <span className="wb-midiom-sep">, </span>
             <span className="wb-midiom-meaning">{id.meaning}</span>
           </div>
         ))}
@@ -1340,7 +1340,7 @@ export function ResultView({
     <div className="wordbook wb-page" dir={dir}>
       {isSaved && savedAgo && <ProgressSignal savedAgo={savedAgo} />}
 
-      {/* WordHeader no longer renders the Save button — Gadi 2026-06-20
+      {/* WordHeader no longer renders the Save button, Gadi 2026-06-20
           moved Save to Notebook into the per-meaning action row so it
           carries Clear-tier teal colouring and reads as a feature of
           each definition. WordHeader keeps offline-pin + share. */}

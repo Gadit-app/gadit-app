@@ -229,7 +229,7 @@ export default function AdminReportsClient() {
                       <span className="text-xs text-slate-500">{r.uiLang}</span>
                     </div>
                     <p className="text-base font-semibold mb-1" style={{ color: "#0F172A" }}>
-                      {t.adminWordLabel}: <span dir="auto">{r.word || "—"}</span>
+                      {t.adminWordLabel}: <span dir="auto">{r.word || ", "}</span>
                     </p>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {r.categories.map((c) => (

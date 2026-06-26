@@ -586,7 +586,7 @@ function GalaxyView({
         })}
       </svg>
 
-      {/* Tooltip — positioned in % so it scales with the responsive SVG.
+      {/* Tooltip, positioned in % so it scales with the responsive SVG.
           Flips horizontally based on which half the star sits in, so the
           tooltip never extends past the parent's overflow:hidden edge. */}
       {tooltipStar && (() => {
@@ -655,7 +655,7 @@ function GalaxyView({
         );
       })()}
 
-      {/* Legend — hidden below 480px since the chips push past the
+      {/* Legend, hidden below 480px since the chips push past the
           galaxy boundary on narrow screens; the dot sizes are small
           enough that most users intuit the recency mapping anyway. */}
       <div

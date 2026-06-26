@@ -92,7 +92,7 @@ function bumpAnonCounter(): number {
       JSON.stringify({ date: todayUTC(), count: next })
     );
   } catch {
-    /* localStorage full / blocked — silent */
+    /* localStorage full / blocked, silent */
   }
   return next;
 }
@@ -623,7 +623,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           if (typeof window !== "undefined") {
             localStorage.setItem("gadit_first_search_done", "1");
           }
-        } catch { /* private mode etc. — silently ignore */ }
+        } catch { /* private mode etc., silently ignore */ }
         // Offline cache write — Clear/Deep only. Every successful
         // result gets persisted to IndexedDB so the same lookup works
         // from any device the user has installed the PWA on, even
@@ -858,7 +858,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     const url = window.location.href;
     if (nav.share) {
       nav
-        .share({ title: `Gadit — ${result?.word ?? ""}`, url })
+        .share({ title: `Gadit, ${result?.word ?? ""}`, url })
         .catch(() => undefined);
     } else {
       nav.clipboard?.writeText(url).catch(() => undefined);
@@ -977,13 +977,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           role="status"
         >
           {saveError
-            ? (lang === "he" ? "השמירה נכשלה — נסו שוב" :
-               lang === "ar" ? "فشل الحفظ — حاول مرة أخرى" :
-               lang === "ru" ? "Не удалось сохранить — попробуйте снова" :
-               lang === "es" ? "Error al guardar — inténtalo de nuevo" :
-               lang === "pt" ? "Falha ao salvar — tente novamente" :
-               lang === "fr" ? "Échec de l'enregistrement — réessayez" :
-               "Save failed — try again")
+            ? (lang === "he" ? "השמירה נכשלה, נסו שוב" :
+               lang === "ar" ? "فشل الحفظ, حاول مرة أخرى" :
+               lang === "ru" ? "Не удалось сохранить, попробуйте снова" :
+               lang === "es" ? "Error al guardar, inténtalo de nuevo" :
+               lang === "pt" ? "Falha ao salvar, tente novamente" :
+               lang === "fr" ? "Échec de l'enregistrement, réessayez" :
+               "Save failed, try again")
             : v2(lang, "savedToWordBook")}
         </div>
       )}
@@ -1061,7 +1061,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
-        {/* Mobile identity cluster — Share + Avatar live inline next to
+        {/* Mobile identity cluster, Share + Avatar live inline next to
             the wordmark so the corner reads as "you, signed in" the way
             Google's mobile chrome does. Pulled out of the old
             wb-shell-share-mobile-wrap (which now holds only the Kids
@@ -1100,7 +1100,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
 
         </header>
 
-        {/* Persistent search bar — Eyal (June 2026) flagged that
+        {/* Persistent search bar, Eyal (June 2026) flagged that
             launching a second search from a result page meant hunting
             for the magnifying-glass icon in the masthead. Many real
             dictionaries surface a full input bar above the word so a
@@ -1124,7 +1124,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               router.push(href(`/word/${encodeURIComponent(q)}`));
             }}
           >
-            {/* Convention layout — same recipe the homepage pill follows
+            {/* Convention layout, same recipe the homepage pill follows
                 (LLM Council R3 2026-06-20): input at the START edge,
                 action cluster (mic + magnifier-submit) at the END.
                 Dropped the leading decorative magnifier and the labelled
@@ -1173,7 +1173,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         </div>
         </div>
 
-        {/* V2 main — holds quota walls, error messages, and the
+        {/* V2 main, holds quota walls, error messages, and the
             loading skeleton. Once the Wordbook result is loaded, this
             entire block is unmounted so the cream ResultView below
             sits flush against the MarketingHeader instead of being
@@ -1272,7 +1272,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             )}
           </div>
         )}
-        {/* 'Back to <previous word>' chip — appears whenever the user
+        {/* 'Back to <previous word>' chip, appears whenever the user
             landed on this page via the WordPopover's 'Open full
             definition' button (which appends ?back=<originalWord> so
             the destination knows where the reader came from). Clicking
@@ -1298,7 +1298,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             </Link>
           </div>
         )}
-        {/* Inline image-gen error — surfaces the quota / failure /
+        {/* Inline image-gen error, surfaces the quota / failure /
             network error the silent path used to swallow. Self-
             dismissing close button so users can clear it once they've
             seen it. */}
@@ -1349,7 +1349,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           />
         )}
 
-        {/* HomeFooter intentionally omitted on /word pages — the V2
+        {/* HomeFooter intentionally omitted on /word pages, the V2
             navy footer clashes with the cream Wordbook surface. A
             cream-friendly footer (or no footer at all, matching the
             mockup) will be addressed in the homepage port. */}

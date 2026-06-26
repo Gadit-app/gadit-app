@@ -125,7 +125,7 @@ export function WbUserMenu() {
         gap: 8,
       }}
     >
-      {/* Plan chip — clicking it opens the same menu as clicking the
+      {/* Plan chip, clicking it opens the same menu as clicking the
           avatar, so the entire grouping reads as one control. Hidden
           on very narrow viewports to keep the topbar from wrapping. */}
       <button
@@ -196,7 +196,7 @@ export function WbUserMenu() {
             direction: dir,
           }}
         >
-          {/* Email row — read-only context so the user knows which
+          {/* Email row, read-only context so the user knows which
               account they're about to act on. Important when several
               family members share a device. */}
           {user.email && (

@@ -66,20 +66,20 @@ export function PrivacyBodyFr() {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong> — traite les mots et les phrases que vous soumettez afin de générer des
+          <strong>OpenAI</strong>, traite les mots et les phrases que vous soumettez afin de générer des
           définitions, des retours sur phrases, des quiz et la transcription vocale (Whisper), et génère des
           images (DALL·E 3). Les données envoyées à OpenAI sont régies par la politique d&rsquo;utilisation des
           données de l&rsquo;API d&rsquo;OpenAI.
         </li>
         <li>
-          <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage) — stocke votre compte, votre
+          <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), stocke votre compte, votre
           profil, l&rsquo;état de votre abonnement, votre historique de recherche et les images générées.
         </li>
         <li>
-          <strong>Stripe</strong> — gère les paiements, les abonnements et le portail de facturation.
+          <strong>Stripe</strong>, gère les paiements, les abonnements et le portail de facturation.
         </li>
         <li>
-          <strong>Vercel</strong> — héberge et sert le site web et fournit des analyses anonymisées et la mesure
+          <strong>Vercel</strong>, héberge et sert le site web et fournit des analyses anonymisées et la mesure
           des performances.
         </li>
       </ul>
@@ -111,8 +111,8 @@ export function PrivacyBodyFr() {
 
       <h2>6. Sécurité</h2>
       <p>
-        Nous appliquons des mesures de protection conformes aux standards du secteur — connexions chiffrées
-        (HTTPS), API authentifiées et contrôles d&rsquo;accès — pour protéger vos informations. Aucune méthode
+        Nous appliquons des mesures de protection conformes aux standards du secteur, connexions chiffrées
+        (HTTPS), API authentifiées et contrôles d&rsquo;accès, pour protéger vos informations. Aucune méthode
         de transmission ou de stockage sur Internet n&rsquo;est sûre à 100&nbsp;%, nous ne pouvons donc pas
         garantir une sécurité absolue, mais nous travaillons en permanence à en réduire les risques.
       </p>

@@ -85,7 +85,7 @@ interface AuthContextType {
   /** Initial mode the LoginModal should open in. The modal itself
    *  still lets the user toggle. */
   loginMode: AuthMode;
-  /** Open the login modal — or, if the user is already signed in,
+  /** Open the login modal, or, if the user is already signed in,
    *  skip the modal and run `opts.onSuccess` directly. The string
    *  shorthand is preserved for the existing "just open it" callers. */
   promptLogin: (opts?: PromptLoginOpts | string) => void;

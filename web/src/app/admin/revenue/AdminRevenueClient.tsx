@@ -56,7 +56,7 @@ const STRINGS = {
     atRiskTitle: "At-risk subscriptions",
     recentlyCanceledTitle: "Recently canceled (30 days)",
     emptyActive: "No active subscribers yet.",
-    emptyAtRisk: "No at-risk subscriptions — clean books.",
+    emptyAtRisk: "No at-risk subscriptions, clean books.",
     emptyCanceled: "No cancellations in the last 30 days.",
     colCustomer: "Customer",
     colPlan: "Plan",
@@ -68,7 +68,7 @@ const STRINGS = {
     openInStripe: "Open",
     billingMonthly: "Monthly",
     billingYearly: "Yearly",
-    billingUnknown: "—",
+    billingUnknown: ", ",
     willCancel: "Cancels at period end",
   },
   he: {
@@ -99,7 +99,7 @@ const STRINGS = {
     openInStripe: "פתח",
     billingMonthly: "חודשי",
     billingYearly: "שנתי",
-    billingUnknown: "—",
+    billingUnknown: ", ",
     willCancel: "מבוטל בסוף התקופה",
   },
 } as const;
@@ -122,7 +122,7 @@ function planBadge(plan: Plan) {
 }
 
 function formatDate(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso);
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -236,7 +236,7 @@ function SubscriberTable({
                 return (
                   <tr key={r.uid} style={{ borderBottom: "1px solid #F3F4F6" }}>
                     <td style={{ padding: "10px 12px", textAlign: "start", color: "#111827" }}>
-                      {r.email ?? "—"}
+                      {r.email ?? ", "}
                       {r.country && (
                         <span style={{ marginInlineStart: 6, display: "inline-flex", verticalAlign: "middle" }}>
                           <FlagImg iso2={r.country} />
@@ -250,11 +250,11 @@ function SubscriberTable({
                     </td>
                     <td style={{ padding: "10px 12px", textAlign: "center", color: "#374151" }}>{billingLabel}</td>
                     <td style={{ padding: "10px 12px", textAlign: "center", color: "#111827", fontWeight: 600 }}>
-                      {r.monthlyUsd > 0 ? `$${r.monthlyUsd.toFixed(2)}` : "—"}
+                      {r.monthlyUsd > 0 ? `$${r.monthlyUsd.toFixed(2)}` : ", "}
                     </td>
                     <td style={{ padding: "10px 12px", textAlign: "center" }}>
                       <span style={{ fontSize: 11, color: r.status === "active" || r.status === "trialing" ? "#0E7490" : "#DC2626", textTransform: "capitalize", fontWeight: 600 }}>
-                        {r.status || "—"}
+                        {r.status || ", "}
                       </span>
                       {r.cancelAtPeriodEnd && (
                         <div style={{ fontSize: 10, color: "#DC2626", marginTop: 2 }}>{t.willCancel}</div>
@@ -266,7 +266,7 @@ function SubscriberTable({
                         <a href={`https://dashboard.stripe.com/customers/${r.stripeCustomerId}`} target="_blank" rel="noopener noreferrer" style={{ color: "#7C3AED", fontSize: 12, fontWeight: 600, textDecoration: "none" }}>
                           {t.openInStripe} ↗
                         </a>
-                      ) : "—"}
+                      ) : ", "}
                     </td>
                   </tr>
                 );

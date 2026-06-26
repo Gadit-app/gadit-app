@@ -16,13 +16,13 @@ import { AffiliatesPage } from "./AffiliatesClient";
  * and the portal handles the actual mechanics.
  */
 export const metadata: Metadata = {
-  title: "Gadit — Affiliate Program",
+  title: "Gadit, Affiliate Program",
   description:
-    "Help people around the world understand words deeply — earn 30% recurring commission for 12 months on every paid Gadit subscription you refer.",
+    "Help people around the world understand words deeply, earn 30% recurring commission for 12 months on every paid Gadit subscription you refer.",
   openGraph: {
-    title: "Gadit — Affiliate Program",
+    title: "Gadit, Affiliate Program",
     description:
-      "Help people around the world understand words deeply — earn 30% recurring commission for 12 months on every paid subscription you refer.",
+      "Help people around the world understand words deeply, earn 30% recurring commission for 12 months on every paid subscription you refer.",
   },
 };
 

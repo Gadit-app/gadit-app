@@ -136,10 +136,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Old English",
       original: "drēam",
-      meant: "joy, music — the night-vision sense emerged in Middle English",
+      meant: "joy, music, the night-vision sense emerged in Middle English",
     },
     kidsExplanation:
-      "When you sleep, your brain plays little movies in your head — those are dreams. A dream can also be something amazing you really want to happen one day.",
+      "When you sleep, your brain plays little movies in your head, those are dreams. A dream can also be something amazing you really want to happen one day.",
     composeSentence: "Her dream of becoming a doctor finally came true.",
     composeStatus: "Perfect ✓",
     imageDescription: "dream",
@@ -148,9 +148,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "amerd",
     compareWords: "dream vs. ambition",
-    compareNote: "Both about wanting something — see the exact difference.",
+    compareNote: "Both about wanting something, see the exact difference.",
     partnerHeroTitle: "Spread Gadit. Earn with us.",
-    partnerHeroBody: "Love Gadit? Share your personal link with parents, students, language learners — and earn 30% on every subscription, for the first year. Hit 10 active subscribers and you unlock 10% lifetime commission on all of them.",
+    partnerHeroBody: "Love Gadit? Share your personal link with parents, students, language learners, and earn 30% on every subscription, for the first year. Hit 10 active subscribers and you unlock 10% lifetime commission on all of them.",
     partnerLink: "gadit.app/?ref=alex",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -158,7 +158,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Watch Gadit",
-      watchTitle: "See how every word opens — tier by tier.",
+      watchTitle: "See how every word opens, tier by tier.",
       watchLede: "A live walkthrough of a real word, in your language. Hover to pause.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -214,10 +214,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "עברית מקראית",
       original: "ח־ל־ם",
-      meant: "חזון, מראה ליל — שורש המופיע בסיפורי יוסף ודניאל",
+      meant: "חזון, מראה ליל, שורש המופיע בסיפורי יוסף ודניאל",
     },
     kidsExplanation:
-      "כשאתם ישנים בלילה, המוח שלכם מציג סרטונים קטנים בראש — אלה נקראים חלומות. חלום זה גם משהו ממש נפלא שאתם רוצים שיקרה יום אחד.",
+      "כשאתם ישנים בלילה, המוח שלכם מציג סרטונים קטנים בראש, אלה נקראים חלומות. חלום זה גם משהו ממש נפלא שאתם רוצים שיקרה יום אחד.",
     composeSentence: "החלום שלה להיות רופאה סוף סוף התגשם.",
     composeStatus: "מושלם ✓",
     imageDescription: "חלום",
@@ -226,9 +226,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "םוחל",
     compareWords: "חלום מול שאיפה",
-    compareNote: "שתיהן על רצון להשיג — ראו את ההבדל המדויק.",
+    compareNote: "שתיהן על רצון להשיג, ראו את ההבדל המדויק.",
     partnerHeroTitle: "הפיצו את Gadit. תרוויחו איתנו.",
-    partnerHeroBody: "אוהבים את Gadit? שתפו את הלינק האישי שלכם עם הורים, סטודנטים, לומדי שפות — וקבלו 30% מכל מנוי בשנה הראשונה. הגעתם ל-10 מנויים פעילים? פתחתם 10% עמלה לכל החיים על כולם.",
+    partnerHeroBody: "אוהבים את Gadit? שתפו את הלינק האישי שלכם עם הורים, סטודנטים, לומדי שפות, וקבלו 30% מכל מנוי בשנה הראשונה. הגעתם ל-10 מנויים פעילים? פתחתם 10% עמלה לכל החיים על כולם.",
     partnerLink: "gadit.app/?ref=anna",
     partnerEarnings: "₪175",
     partnerSubs: "18",
@@ -236,7 +236,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "צפו ב-Gadit",
-      watchTitle: "ראו איך כל מילה נפתחת — מסלול אחרי מסלול.",
+      watchTitle: "ראו איך כל מילה נפתחת, מסלול אחרי מסלול.",
       watchLede: "סיור חי על מילה אמיתית, בשפה שלכם. ריחפו כדי לעצור.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -295,7 +295,7 @@ const DEMO: Record<Lang, DemoContent> = {
       meant: "رؤيا في النوم؛ وكذلك الأناة والصبر في معنى آخر",
     },
     kidsExplanation:
-      "حين تنام في الليل، يعرض دماغك أفلامًا صغيرة في رأسك — هذه تسمى أحلام. والحلم أيضًا شيء جميل جدًا تتمنى أن يتحقق يومًا ما.",
+      "حين تنام في الليل، يعرض دماغك أفلامًا صغيرة في رأسك, هذه تسمى أحلام. والحلم أيضًا شيء جميل جدًا تتمنى أن يتحقق يومًا ما.",
     composeSentence: "تحقق حلمها أخيرًا في أن تصبح طبيبة.",
     composeStatus: "ممتاز ✓",
     imageDescription: "حلم",
@@ -304,9 +304,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "ملح",
     compareWords: "حلم مقابل طموح",
-    compareNote: "كلاهما عن الرغبة في شيء — شاهد الفرق الدقيق.",
+    compareNote: "كلاهما عن الرغبة في شيء, شاهد الفرق الدقيق.",
     partnerHeroTitle: "انشر Gadit. اربح معنا.",
-    partnerHeroBody: "تحب Gadit؟ شارك رابطك الشخصي مع الأهل والطلاب ومتعلمي اللغات — واحصل على 30% من كل اشتراك في السنة الأولى. وعندما تصل إلى 10 مشتركين نشطين، تفتح 10% عمولة مدى الحياة على جميعهم.",
+    partnerHeroBody: "تحب Gadit؟ شارك رابطك الشخصي مع الأهل والطلاب ومتعلمي اللغات, واحصل على 30% من كل اشتراك في السنة الأولى. وعندما تصل إلى 10 مشتركين نشطين، تفتح 10% عمولة مدى الحياة على جميعهم.",
     partnerLink: "gadit.app/?ref=layla",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -314,7 +314,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "شاهد Gadit",
-      watchTitle: "شاهد كيف تنفتح كل كلمة — طبقة بعد طبقة.",
+      watchTitle: "شاهد كيف تنفتح كل كلمة, طبقة بعد طبقة.",
       watchLede: "جولة حية على كلمة حقيقية بلغتك. مرر للإيقاف.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -352,7 +352,7 @@ const DEMO: Record<Lang, DemoContent> = {
       {
         definition: "Заветное желание, стремление, идеал, к которому человек стремится.",
         examples: [
-          "Её мечта — стать писательницей.",
+          "Её мечта, стать писательницей.",
           "Он много работал, чтобы осуществить свою мечту.",
           "Никогда не отказывайся от своей мечты.",
         ],
@@ -361,7 +361,7 @@ const DEMO: Record<Lang, DemoContent> = {
         definition: "Образ чего-то желанного, рисуемый воображением (нередко далёкий от реальности).",
         examples: [
           "Это была мечта о тихой жизни у моря.",
-          "Дом её мечты — небольшая хижина в горах.",
+          "Дом её мечты, небольшая хижина в горах.",
           "Он лелеял мечту о путешествии в Японию.",
         ],
       },
@@ -370,10 +370,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Старославянский",
       original: "мьчьта",
-      meant: "видение, грёза — изначально связано с воображением, а не со сном",
+      meant: "видение, грёза, изначально связано с воображением, а не со сном",
     },
     kidsExplanation:
-      "Мечта — это что-то очень-очень хорошее, чего ты сильно хочешь, чтобы случилось. Например, стать космонавтом или иметь собаку.",
+      "Мечта, это что-то очень-очень хорошее, чего ты сильно хочешь, чтобы случилось. Например, стать космонавтом или иметь собаку.",
     composeSentence: "Её мечта стать врачом наконец сбылась.",
     composeStatus: "Отлично ✓",
     imageDescription: "мечта",
@@ -382,9 +382,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "тачме",
     compareWords: "мечта vs. цель",
-    compareNote: "Обе о желаниях — посмотрите точное различие.",
+    compareNote: "Обе о желаниях, посмотрите точное различие.",
     partnerHeroTitle: "Расскажите о Gadit. Зарабатывайте с нами.",
-    partnerHeroBody: "Любите Gadit? Поделитесь личной ссылкой с родителями, студентами, изучающими языки — и получайте 30% с каждой подписки в течение первого года. Приведите 10 активных подписчиков — откроется 10% пожизненная комиссия на всех.",
+    partnerHeroBody: "Любите Gadit? Поделитесь личной ссылкой с родителями, студентами, изучающими языки, и получайте 30% с каждой подписки в течение первого года. Приведите 10 активных подписчиков, откроется 10% пожизненная комиссия на всех.",
     partnerLink: "gadit.app/?ref=ivan",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -392,7 +392,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Посмотрите Gadit",
-      watchTitle: "Как раскрывается каждое слово — уровень за уровнем.",
+      watchTitle: "Как раскрывается каждое слово, уровень за уровнем.",
       watchLede: "Живая прогулка по реальному слову на вашем языке. Наведите курсор, чтобы остановить.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -448,10 +448,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Latín",
       original: "somnium",
-      meant: "visión durante el sueño — emparentado con somnus, dormir",
+      meant: "visión durante el sueño, emparentado con somnus, dormir",
     },
     kidsExplanation:
-      "Cuando duermes, tu cerebro proyecta pequeñas películas en tu cabeza — son los sueños. Un sueño también puede ser algo maravilloso que quieres que pase algún día.",
+      "Cuando duermes, tu cerebro proyecta pequeñas películas en tu cabeza, son los sueños. Un sueño también puede ser algo maravilloso que quieres que pase algún día.",
     composeSentence: "Su sueño de ser doctora por fin se cumplió.",
     composeStatus: "Perfecto ✓",
     imageDescription: "sueño",
@@ -460,9 +460,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "oñues",
     compareWords: "sueño vs. ambición",
-    compareNote: "Ambos sobre desear algo — observa la diferencia exacta.",
+    compareNote: "Ambos sobre desear algo, observa la diferencia exacta.",
     partnerHeroTitle: "Difunde Gadit. Gana con nosotros.",
-    partnerHeroBody: "¿Te encanta Gadit? Comparte tu enlace personal con padres, estudiantes y aprendices de idiomas — y gana el 30% de cada suscripción durante el primer año. Alcanza 10 suscriptores activos y desbloqueas el 10% de comisión de por vida sobre todos ellos.",
+    partnerHeroBody: "¿Te encanta Gadit? Comparte tu enlace personal con padres, estudiantes y aprendices de idiomas, y gana el 30% de cada suscripción durante el primer año. Alcanza 10 suscriptores activos y desbloqueas el 10% de comisión de por vida sobre todos ellos.",
     partnerLink: "gadit.app/?ref=maria",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -470,7 +470,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Mira Gadit",
-      watchTitle: "Mira cómo se abre cada palabra — plan por plan.",
+      watchTitle: "Mira cómo se abre cada palabra, plan por plan.",
       watchLede: "Un recorrido en vivo de una palabra real, en tu idioma. Pasa el cursor para pausar.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -526,10 +526,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Latim",
       original: "somnium",
-      meant: "visão durante o sono — da mesma raiz que somnus, dormir",
+      meant: "visão durante o sono, da mesma raiz que somnus, dormir",
     },
     kidsExplanation:
-      "Quando você dorme, seu cérebro mostra pequenos filmes na sua cabeça — esses são os sonhos. Um sonho também pode ser algo muito legal que você quer que aconteça um dia.",
+      "Quando você dorme, seu cérebro mostra pequenos filmes na sua cabeça, esses são os sonhos. Um sonho também pode ser algo muito legal que você quer que aconteça um dia.",
     composeSentence: "Seu sonho de ser médica finalmente se realizou.",
     composeStatus: "Perfeito ✓",
     imageDescription: "sonho",
@@ -538,9 +538,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "ohnos",
     compareWords: "sonho vs. ambição",
-    compareNote: "Ambos sobre querer algo — veja a diferença exata.",
+    compareNote: "Ambos sobre querer algo, veja a diferença exata.",
     partnerHeroTitle: "Divulgue o Gadit. Ganhe com a gente.",
-    partnerHeroBody: "Ama o Gadit? Compartilhe seu link pessoal com pais, estudantes e aprendizes de idiomas — e ganhe 30% de cada assinatura no primeiro ano. Chegue a 10 assinantes ativos e desbloqueie 10% de comissão vitalícia em todos eles.",
+    partnerHeroBody: "Ama o Gadit? Compartilhe seu link pessoal com pais, estudantes e aprendizes de idiomas, e ganhe 30% de cada assinatura no primeiro ano. Chegue a 10 assinantes ativos e desbloqueie 10% de comissão vitalícia em todos eles.",
     partnerLink: "gadit.app/?ref=joao",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -548,7 +548,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Veja o Gadit",
-      watchTitle: "Veja como cada palavra se abre — plano a plano.",
+      watchTitle: "Veja como cada palavra se abre, plano a plano.",
       watchLede: "Um passeio ao vivo por uma palavra real, no seu idioma. Passe o mouse para pausar.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -604,10 +604,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Ancien français",
       original: "resver",
-      meant: "divaguer, errer — le sens onirique apparaît au XVIIe siècle",
+      meant: "divaguer, errer, le sens onirique apparaît au XVIIe siècle",
     },
     kidsExplanation:
-      "Quand tu dors la nuit, ton cerveau passe de petits films dans ta tête — ce sont les rêves. Un rêve, c'est aussi quelque chose de merveilleux que tu veux voir arriver un jour.",
+      "Quand tu dors la nuit, ton cerveau passe de petits films dans ta tête, ce sont les rêves. Un rêve, c'est aussi quelque chose de merveilleux que tu veux voir arriver un jour.",
     composeSentence: "Son rêve de devenir médecin s'est enfin réalisé.",
     composeStatus: "Parfait ✓",
     imageDescription: "rêve",
@@ -616,9 +616,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "êver",
     compareWords: "rêve vs. ambition",
-    compareNote: "Les deux concernent un désir — observez la différence précise.",
+    compareNote: "Les deux concernent un désir, observez la différence précise.",
     partnerHeroTitle: "Faites connaître Gadit. Gagnez avec nous.",
-    partnerHeroBody: "Vous adorez Gadit ? Partagez votre lien personnel avec parents, étudiants, apprenants de langues — et gagnez 30 % sur chaque abonnement la première année. Atteignez 10 abonnés actifs et débloquez 10 % de commission à vie sur tous.",
+    partnerHeroBody: "Vous adorez Gadit ? Partagez votre lien personnel avec parents, étudiants, apprenants de langues, et gagnez 30 % sur chaque abonnement la première année. Atteignez 10 abonnés actifs et débloquez 10 % de commission à vie sur tous.",
     partnerLink: "gadit.app/?ref=marie",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -626,7 +626,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Regardez Gadit",
-      watchTitle: "Comment chaque mot s'ouvre — palier par palier.",
+      watchTitle: "Comment chaque mot s'ouvre, palier par palier.",
       watchLede: "Une visite en direct d'un vrai mot, dans votre langue. Survolez pour mettre en pause.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -682,10 +682,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Althochdeutsch",
       original: "troum",
-      meant: "Trugbild, Vision im Schlaf — verwandt mit altenglisch dréam (Freude, Musik)",
+      meant: "Trugbild, Vision im Schlaf, verwandt mit altenglisch dréam (Freude, Musik)",
     },
     kidsExplanation:
-      "Wenn du nachts schläfst, spielt dein Gehirn kleine Filme in deinem Kopf ab — das sind Träume. Ein Traum kann auch etwas Wunderbares sein, das du dir für dein Leben wünschst.",
+      "Wenn du nachts schläfst, spielt dein Gehirn kleine Filme in deinem Kopf ab, das sind Träume. Ein Traum kann auch etwas Wunderbares sein, das du dir für dein Leben wünschst.",
     composeSentence: "Ihr Traum, Ärztin zu werden, ging endlich in Erfüllung.",
     composeStatus: "Perfekt ✓",
     imageDescription: "Traum",
@@ -694,9 +694,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "marTu",
     compareWords: "Traum vs. Ziel",
-    compareNote: "Beide drehen sich um Wünsche — sieh den genauen Unterschied.",
+    compareNote: "Beide drehen sich um Wünsche, sieh den genauen Unterschied.",
     partnerHeroTitle: "Verbreite Gadit. Verdiene mit uns.",
-    partnerHeroBody: "Du liebst Gadit? Teile deinen persönlichen Link mit Eltern, Schülerinnen, Sprachlernenden — und verdiene im ersten Jahr 30 % auf jedes Abonnement. Erreichst du 10 aktive Abonnenten, schaltest du 10 % Lebenslang-Provision auf alle frei.",
+    partnerHeroBody: "Du liebst Gadit? Teile deinen persönlichen Link mit Eltern, Schülerinnen, Sprachlernenden, und verdiene im ersten Jahr 30 % auf jedes Abonnement. Erreichst du 10 aktive Abonnenten, schaltest du 10 % Lebenslang-Provision auf alle frei.",
     partnerLink: "gadit.app/?ref=lena",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -704,7 +704,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Schau Gadit",
-      watchTitle: "Wie sich jedes Wort öffnet — Stufe für Stufe.",
+      watchTitle: "Wie sich jedes Wort öffnet, Stufe für Stufe.",
       watchLede: "Eine Live-Tour durch ein echtes Wort, in deiner Sprache. Hover zum Pausieren.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -760,10 +760,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Praslovanština",
       original: "sъnъ",
-      meant: "spánek a obrazy ve spánku — společné s ruským сон a polským sen",
+      meant: "spánek a obrazy ve spánku, společné s ruským сон a polským sen",
     },
     kidsExplanation:
-      "Když v noci spíš, tvůj mozek ti v hlavě pouští krátké filmy — tomu se říká sen. Sen je taky něco moc krásného, co bys chtěl, aby se ti jednou splnilo.",
+      "Když v noci spíš, tvůj mozek ti v hlavě pouští krátké filmy, tomu se říká sen. Sen je taky něco moc krásného, co bys chtěl, aby se ti jednou splnilo.",
     composeSentence: "Její sen stát se lékařkou se konečně splnil.",
     composeStatus: "Skvělé ✓",
     imageDescription: "sen",
@@ -772,9 +772,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "nse",
     compareWords: "sen vs. cíl",
-    compareNote: "Obojí o touze — podívej se na přesný rozdíl.",
+    compareNote: "Obojí o touze, podívej se na přesný rozdíl.",
     partnerHeroTitle: "Šiř Gadit. Vydělávej s námi.",
-    partnerHeroBody: "Miluješ Gadit? Sdílej svůj osobní odkaz s rodiči, studenty a těmi, kdo se učí jazyk — a vydělej 30 % z každého předplatného v prvním roce. Dosáhneš 10 aktivních předplatitelů a odemkneš 10 % doživotní provize na všechny.",
+    partnerHeroBody: "Miluješ Gadit? Sdílej svůj osobní odkaz s rodiči, studenty a těmi, kdo se učí jazyk, a vydělej 30 % z každého předplatného v prvním roce. Dosáhneš 10 aktivních předplatitelů a odemkneš 10 % doživotní provize na všechny.",
     partnerLink: "gadit.app/?ref=andrea",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -782,7 +782,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Podívej se na Gadit",
-      watchTitle: "Jak se otevírá každé slovo — úroveň po úrovni.",
+      watchTitle: "Jak se otevírá každé slovo, úroveň po úrovni.",
       watchLede: "Živá ukázka skutečného slova ve tvém jazyce. Najeď myší pro pauzu.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -838,10 +838,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Praslovančina",
       original: "sъnъ",
-      meant: "spánok a obrazy v spánku — spoločné s ruským сон a poľským sen",
+      meant: "spánok a obrazy v spánku, spoločné s ruským сон a poľským sen",
     },
     kidsExplanation:
-      "Keď v noci spíš, tvoj mozog ti v hlave púšťa krátke filmy — to sa nazýva sen. Sen je tiež niečo veľmi pekné, čo by si chcel, aby sa ti raz splnilo.",
+      "Keď v noci spíš, tvoj mozog ti v hlave púšťa krátke filmy, to sa nazýva sen. Sen je tiež niečo veľmi pekné, čo by si chcel, aby sa ti raz splnilo.",
     composeSentence: "Jej sen stať sa lekárkou sa konečne splnil.",
     composeStatus: "Skvelé ✓",
     imageDescription: "sen",
@@ -850,9 +850,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "nse",
     compareWords: "sen vs. cieľ",
-    compareNote: "Oboje o túžbe — pozri sa na presný rozdiel.",
+    compareNote: "Oboje o túžbe, pozri sa na presný rozdiel.",
     partnerHeroTitle: "Šír Gadit. Zarábaj s nami.",
-    partnerHeroBody: "Miluješ Gadit? Zdieľaj svoj osobný odkaz s rodičmi, študentmi a tými, ktorí sa učia jazyk — a zaroby 30 % z každého predplatného v prvom roku. Dosiahneš 10 aktívnych predplatiteľov a odomkneš 10 % doživotnú províziu na všetkých.",
+    partnerHeroBody: "Miluješ Gadit? Zdieľaj svoj osobný odkaz s rodičmi, študentmi a tými, ktorí sa učia jazyk, a zaroby 30 % z každého predplatného v prvom roku. Dosiahneš 10 aktívnych predplatiteľov a odomkneš 10 % doživotnú províziu na všetkých.",
     partnerLink: "gadit.app/?ref=zuzana",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -860,7 +860,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Pozri si Gadit",
-      watchTitle: "Ako sa otvára každé slovo — úroveň za úrovňou.",
+      watchTitle: "Ako sa otvára každé slovo, úroveň za úrovňou.",
       watchLede: "Živá ukážka skutočného slova v tvojom jazyku. Nájazd myšou pre pauzu.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -916,10 +916,10 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "Latino",
       original: "somnium",
-      meant: "visione nel sonno — dalla stessa radice di somnus, dormire",
+      meant: "visione nel sonno, dalla stessa radice di somnus, dormire",
     },
     kidsExplanation:
-      "Quando dormi la notte, il tuo cervello ti fa vedere piccoli film nella testa — quelli sono i sogni. Un sogno può anche essere qualcosa di bellissimo che vuoi che accada un giorno.",
+      "Quando dormi la notte, il tuo cervello ti fa vedere piccoli film nella testa, quelli sono i sogni. Un sogno può anche essere qualcosa di bellissimo che vuoi che accada un giorno.",
     composeSentence: "Il suo sogno di diventare medico si è finalmente avverato.",
     composeStatus: "Perfetto ✓",
     imageDescription: "sogno",
@@ -928,9 +928,9 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "ognso",
     compareWords: "sogno vs. ambizione",
-    compareNote: "Entrambi parlano di desiderio — guarda la differenza precisa.",
+    compareNote: "Entrambi parlano di desiderio, guarda la differenza precisa.",
     partnerHeroTitle: "Diffondi Gadit. Guadagna con noi.",
-    partnerHeroBody: "Adori Gadit? Condividi il tuo link personale con genitori, studenti, chi impara una lingua — e guadagna il 30 % su ogni abbonamento nel primo anno. Raggiungi 10 abbonati attivi e sblocchi il 10 % di commissione a vita su tutti loro.",
+    partnerHeroBody: "Adori Gadit? Condividi il tuo link personale con genitori, studenti, chi impara una lingua, e guadagna il 30 % su ogni abbonamento nel primo anno. Raggiungi 10 abbonati attivi e sblocchi il 10 % di commissione a vita su tutti loro.",
     partnerLink: "gadit.app/?ref=luca",
     partnerEarnings: "$47.30",
     partnerSubs: "18",
@@ -938,7 +938,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Guarda Gadit",
-      watchTitle: "Come si apre ogni parola — piano per piano.",
+      watchTitle: "Come si apre ogni parola, piano per piano.",
       watchLede: "Un tour dal vivo di una vera parola, nella tua lingua. Passa il mouse per mettere in pausa.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -994,7 +994,7 @@ const DEMO: Record<Lang, DemoContent> = {
     etymology: {
       from: "古代日本語",
       original: "いめ",
-      meant: "寝目（いめ）— 「寝ているときに見るもの」が語源。後に「願い」の意味も加わった",
+      meant: "寝目（いめ）,  「寝ているときに見るもの」が語源。後に「願い」の意味も加わった",
     },
     kidsExplanation:
       "夜にねむると、頭の中で小さな映画みたいなものが流れるんだ。それが「夢」。夢は、いつかかなえたい大きな願いのことでもあるよ。",
@@ -1006,7 +1006,7 @@ const DEMO: Record<Lang, DemoContent> = {
     quizCorrect: 1,
     anagramLetters: "夢",
     compareWords: "夢 と 目標",
-    compareNote: "どちらも望みについて — 正確な違いを見てみよう。",
+    compareNote: "どちらも望みについて, 正確な違いを見てみよう。",
     partnerHeroTitle: "Gadit を広めよう。一緒に稼ごう。",
     partnerHeroBody: "Gadit がお気に入りなら、あなたの個人リンクを保護者・生徒・語学学習者にシェアしてみませんか。初年度はサブスクごとに 30% の報酬。アクティブな購読者が10人になると、全員に対して 10% の生涯コミッションがアンロックされます。",
     partnerLink: "gadit.app/?ref=yuki",
@@ -1016,7 +1016,7 @@ const DEMO: Record<Lang, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit を見る",
-      watchTitle: "ひとつの単語がどう開かれるか — プランごとに。",
+      watchTitle: "ひとつの単語がどう開かれるか, プランごとに。",
       watchLede: "あなたの言語で、実際の単語のライブツアー。ホバーで一時停止。",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1099,7 +1099,7 @@ export function GaditDemoAnimation() {
           </div>
         </div>
 
-        {/* Search bar — always visible except on the partner scene,
+        {/* Search bar, always visible except on the partner scene,
             because the partner scene reframes the chrome as a dashboard
             rather than a lookup. The input shows the word "typed" so
             the visitor sees the connection between search → result. */}
@@ -1233,7 +1233,7 @@ function ClearScene({ d, c }: { d: DemoContent; c: DemoContent["l"] }) {
       </div>
 
       <div className="wb-demo-anim-clear-grid">
-        {/* Image preview — a gradient swatch as a stand-in for a real
+        {/* Image preview, a gradient swatch as a stand-in for a real
             Gadit-generated illustration. We deliberately do NOT load an
             actual image: the demo card already weighs a lot and a real
             image would hurt LCP on /features. The gradient + sparkle

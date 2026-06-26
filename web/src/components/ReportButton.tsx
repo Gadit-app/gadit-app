@@ -91,7 +91,7 @@ export default function ReportButton({
           const idToken = await user.getIdToken();
           headers.Authorization = `Bearer ${idToken}`;
         } catch {
-          /* not fatal — anonymous report */
+          /* not fatal, anonymous report */
         }
       }
       const res = await fetch("/api/report-error", {

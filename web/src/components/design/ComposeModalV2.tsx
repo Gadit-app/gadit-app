@@ -398,7 +398,7 @@ export function ComposeModalV2({
           window.location.assign("/pricing");
           return;
         }
-        setErrorKey("composeErrorEmpty"); // generic — covers wire failures
+        setErrorKey("composeErrorEmpty"); // generic, covers wire failures
         return;
       }
       const data = (await res.json()) as CheckResponse;

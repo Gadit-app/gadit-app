@@ -21,25 +21,25 @@ const SYSTEM_PROMPT = `You are creating a short quiz to help a learner cement th
 You will receive:
 - word: the word being practiced
 - meaning: the SPECIFIC meaning the user just studied
-- uiLang: the user's UI language — write all questions and options in this language
+- uiLang: the user's UI language, write all questions and options in this language
 
 Generate EXACTLY 4 multiple-choice questions, mixing types:
 
-Type A — "Which sentence uses '<word>' correctly to mean '<meaning>'?"
+Type A, "Which sentence uses '<word>' correctly to mean '<meaning>'?"
   4 options. ONE correct, three plausibly wrong:
   - one uses a different real meaning of the word (the most useful distractor)
   - one uses the word in nonsense context
   - one uses a similar-sounding word incorrectly
 
-Type B — "What does '<word>' mean here: '<example sentence>'?"
+Type B, "What does '<word>' mean here: '<example sentence>'?"
   4 options. ONE matches the user's studied meaning, three are wrong meanings.
   Pick a sentence that clearly uses the studied meaning.
 
-Type C — A synonym question.
+Type C, A synonym question.
   Phrase it as a NATURAL question in the user's UI language using the word "synonym" (or its native equivalent), NOT a clunky English translation.
   4 options. ONE is a real synonym for the studied meaning, three are unrelated words.
 
-  ⚠️ TRANSLATION OF "synonym" IN EACH UI LANGUAGE — use these exact translations, never "synonyms/replacement" or any combined form:
+  ⚠️ TRANSLATION OF "synonym" IN EACH UI LANGUAGE, use these exact translations, never "synonyms/replacement" or any combined form:
    - English:    "synonym"            → "Which word is a synonym of '<word>' (in this meaning)?"
    - Hebrew:     "מילה נרדפת"         → "איזו מילה היא מילה נרדפת ל-'<word>' (במשמעות זו)?"
    - Arabic:     "مرادف"              → "ما هي الكلمة المرادفة لـ '<word>' (في هذا المعنى)؟"
@@ -50,10 +50,10 @@ Type C — A synonym question.
 
   NEVER use "סינונים", "החלפה", "replacement", or composite forms like "synonym/replacement". Pick ONE clean native word for synonym and stick with it.
 
-Type D — "Which is NOT a correct usage of '<word>'?"
+Type D, "Which is NOT a correct usage of '<word>'?"
   4 options. THREE are correct usages of the studied meaning, ONE is wrong.
 
-You may pick any 4 of these types (mix them — don't use all the same type). Aim for variety. Stay strictly within the studied meaning — do not test other meanings of the word.
+You may pick any 4 of these types (mix them, don't use all the same type). Aim for variety. Stay strictly within the studied meaning, do not test other meanings of the word.
 
 Return ONLY valid JSON in this exact shape:
 {
@@ -69,11 +69,11 @@ Return ONLY valid JSON in this exact shape:
 }
 
 CRITICAL RULES:
-- Each question's options must be DISTINCT and shuffled — don't always put the right answer first.
+- Each question's options must be DISTINCT and shuffled, don't always put the right answer first.
 - Distractors must be PLAUSIBLE, not obviously wrong. A bad quiz is one where the right answer is the only sensible-looking option.
 - All text in the user's UI language, EXCEPT the studied word itself which must remain in its original spelling.
 - Keep prompts concise. No more than 2 lines per option.
-- Use real, idiomatic sentences — not robotic textbook examples.`;
+- Use real, idiomatic sentences, not robotic textbook examples.`;
 
 export async function POST(req: NextRequest) {
   try {

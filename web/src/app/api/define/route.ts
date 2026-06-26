@@ -76,13 +76,13 @@ Two rules work together:
 
 RULE 1a ג€” Do NOT silently swap real words for other real words:
 If the user's spelling is ALSO a real word (even if less common), define EXACTLY what they typed.
-- "׳ ׳—׳©׳" (with ׳—) IS a real Hebrew word meaning backward/weak/lagging. Define THAT. Do NOT swap it for "׳ ׳›׳©׳" (with ׳›, failed).
+- "׳ ׳, ׳©׳" (with ׳, ) IS a real Hebrew word meaning backward/weak/lagging. Define THAT. Do NOT swap it for "׳ ׳›׳©׳" (with ׳›, failed).
 - "׳₪׳¨׳©" ג€” define ׳₪׳¨׳© (horseman/withdrew/spread). Do NOT swap for "׳₪׳¨׳¡" or "׳₪׳™׳¨׳©".
 Treat every input as deliberate when it maps to a real word.
 
 RULE 1b ג€” If the typed string is NOT a real word at all, but there's an obvious real word the user likely intended (a plausible typo or missing letter), suggest it:
 - "׳׳“׳™׳₪׳׳™" is NOT a real Hebrew word, but "׳׳“׳™׳₪׳׳׳™" (Oedipal, ׳¢׳ ׳' ׳ ׳•׳¡׳₪׳×) IS ג€” suggest it.
-- "׳”׳”׳×׳—׳‘׳¨׳•׳×" IS a real word ג†’ don't suggest anything, just define it.
+- "׳”׳”׳×׳, ׳‘׳¨׳•׳×" IS a real word ג†’ don't suggest anything, just define it.
 Return this JSON shape when the exact typed word is not real but a likely-intended word is. The "suggestedWord" field at the root is REQUIRED so the UI can make it clickable:
 {
   "word": "<as typed>",
@@ -99,7 +99,7 @@ RULE 1c ג€” If the typed string is NOT a real word and you have NO good sug
   "word": "<as typed>",
   "language": "<detected>",
   "multiplemeanings": false,
-  "meanings": [{"meaning": "׳׳™׳׳” ׳–׳• ׳׳ ׳ ׳׳¦׳׳” ׳‘׳׳™׳׳•׳.", "examples": ["", "", ""]}],
+  "meanings": [{"meaning": "׳׳™׳׳” ׳, ׳• ׳׳ ׳ ׳׳¦׳׳” ׳‘׳׳™׳׳•׳.", "examples": ["", "", ""]}],
   "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": ""}
 }
 
@@ -114,7 +114,7 @@ The "etymology" field is a structured object with 5 fields. The philosophy: KEEP
 The 5 fields are:
 
 1. "sourceLanguage" ג€” the name of the source language, TRANSLATED INTO THE USER'S LANGUAGE. Examples:
-   - If user's language is Hebrew: "׳™׳•׳•׳ ׳™׳×", "׳׳˜׳™׳ ׳™׳×", "׳׳ ׳’׳׳™׳× ׳¢׳×׳™׳§׳”", "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×", "׳׳¨׳׳™׳×", "׳׳›׳“׳™׳×", "׳₪׳¨׳¡׳™׳× ׳¢׳×׳™׳§׳”", "׳׳©׳•׳ ׳—׳–׳´׳", "׳¢׳‘׳¨׳™׳× ׳׳•׳“׳¨׳ ׳™׳×"
+   - If user's language is Hebrew: "׳™׳•׳•׳ ׳™׳×", "׳׳˜׳™׳ ׳™׳×", "׳׳ ׳’׳׳™׳× ׳¢׳×׳™׳§׳”", "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×", "׳׳¨׳׳™׳×", "׳׳›׳“׳™׳×", "׳₪׳¨׳¡׳™׳× ׳¢׳×׳™׳§׳”", "׳׳©׳•׳ ׳, ׳, ׳´׳", "׳¢׳‘׳¨׳™׳× ׳׳•׳“׳¨׳ ׳™׳×"
    - If user's language is English: "Greek", "Latin", "Old English", "Biblical Hebrew", "Aramaic", "Akkadian", "Old Persian", "Mishnaic Hebrew", "Modern Hebrew"
    - If user's language is Arabic: "״§„ˆ†״§†״©", "״§„„״§״×†״©", "״§„״¥†״¬„״²״© ״§„‚״¯…״©", "״§„״¹״¨״±״© ״§„״×ˆ״±״§״×״©", "״§„״¢״±״§…״©"
    - If user's language is Russian: "׀“ׁ€׀µׁ‡׀µׁ׀÷׀¸׀¹", "׀›׀°ׁ‚׀¸׀½ׁ׀÷׀¸׀¹", "׀”ׁ€׀µ׀²׀½׀µ׀°׀½׀³׀»׀¸׀¹ׁ׀÷׀¸׀¹", "׀‘׀¸׀±׀»׀µ׀¹ׁ׀÷׀¸׀¹ ׀¸׀²ׁ€׀¸ׁ‚"
@@ -128,7 +128,7 @@ The 5 fields are:
 
    ג LEAVE THIS FIELD EMPTY (just "") in these cases:
    - The user's word is Hebrew and the source is also Hebrew/Aramaic/Mishnaic Hebrew ג€” the word is ALREADY in the user's script. Adding a Latin transliteration like "heskem" is meaningless to a Hebrew reader and confuses them (they may think it's an English word).
-     ג€¢ Hebrew word "׳”׳¡׳›׳", source "׳׳©׳•׳ ׳—׳–׳´׳" ג†’ originalWord: "" (NOT "heskem")
+     ג€¢ Hebrew word "׳”׳¡׳›׳", source "׳׳©׳•׳ ׳, ׳, ׳´׳" ג†’ originalWord: "" (NOT "heskem")
      ג€¢ Hebrew word "׳¢׳©׳×׳•׳ ׳•׳×", source "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×" ג†’ originalWord: "" (NOT "eshtonot")
      ג€¢ Hebrew word "׳׳”׳‘׳”", source "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×" ג†’ originalWord: "" (NOT "ahava")
    - The user's word is English and the source is Modern English ג€” empty.
@@ -138,18 +138,18 @@ The 5 fields are:
 
    For a compound word where breakdown already shows the parts ג€” you MAY leave this empty, because breakdown covers it.
 
-   The breakdown field still contains transliterations like "tִ“le (׳¨׳—׳•׳§) + phֵnִ“ (׳§׳•׳)" because there the transliteration IS new information ג€” it shows the parts of a foreign compound word.
+   The breakdown field still contains transliterations like "tִ“le (׳¨׳, ׳•׳§) + phֵnִ“ (׳§׳•׳)" because there the transliteration IS new information ג€” it shows the parts of a foreign compound word.
 
 3. "breakdown" ג€” ONLY if the word is a compound of 2+ meaningful parts. Format: "part1 (meaning1 in user's language) + part2 (meaning2 in user's language)". Use TRANSLITERATION WITH DIACRITICS for phonetic accuracy (tִ“le, phֵnִ“, ephִ“meros, salarium). NEVER use the original script. If the word is NOT compound, set this field to empty string "".
 
 4. "originalMeaning" ג€” what the word originally meant, written IN THE USER'S LANGUAGE. Short, concrete, simple. No jargon. Examples:
-   - Hebrew user: "׳¦׳׳™׳ ׳׳׳¨׳—׳§", "׳—׳™׳‘׳” ׳•׳¨׳¦׳•׳", "׳”׳—׳׳§ ׳”׳§׳©׳” ׳”׳׳—׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳—׳™׳”"
+   - Hebrew user: "׳¦׳׳™׳ ׳׳׳¨׳, ׳§", "׳, ׳™׳‘׳” ׳•׳¨׳¦׳•׳", "׳”׳, ׳׳§ ׳”׳§׳©׳” ׳”׳׳, ׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳, ׳™׳”"
    - English user: "sound from far away", "affection and desire", "the hard pointed part on an animal's head"
 
 5. "historyNote" ג€” STRONGLY REQUIRED for Semitic words, otherwise ENCOURAGED. A 2-4 sentence story about the word's specific historical journey, written IN THE USER'S LANGUAGE.
 
    ג ן¸ HEBREW / ARABIC RULE ג€” the historyNote on a Semitic-language word IS the etymology, because the sourceLanguage is the same as the user's language and originalWord stays empty. So for HE/AR words you MUST cover THREE angles inside historyNote:
-   1. THE ROOT (׳”׳©׳•׳¨׳©) ג€” name the triliteral root explicitly in dotted form (e.g. "׳.׳”.׳‘", "׳§.׳¨.׳", "׳—.׳©.׳‘") and say briefly what action / concept that root carries.
+   1. THE ROOT (׳”׳©׳•׳¨׳©) ג€” name the triliteral root explicitly in dotted form (e.g. "׳.׳”.׳‘", "׳§.׳¨.׳", "׳, .׳©.׳‘") and say briefly what action / concept that root carries.
    2. THE FIRST APPEARANCE ג€” where the word first appears (Tanakh book + chapter, Mishnah, Talmud), a famous verse if there is one, or who coined it (Eliezer Ben-Yehuda for modern coinages).
    3. SEMITIC COGNATES ג€” when there is a clear cognate in 1-2 sister languages (Aramaic, Arabic, Akkadian, Ugaritic), name it briefly with a TRANSLITERATION (no foreign scripts). Skip this leg if no clear cognate exists.
    Fold all three into 2-4 flowing sentences, NOT a list. If one of the three isn't known, omit just that one. Never invent.
@@ -168,12 +168,12 @@ The 5 fields are:
    If you have NO specific story to tell, return an empty string "" ג€” do NOT make up a story.
 
 GOOD historyNote examples:
-- Hebrew "׳¢׳©׳×׳•׳ ׳•׳×": "׳׳•׳₪׳™׳¢׳” ׳‘׳׳§׳¨׳ ׳₪׳¢׳ ׳׳—׳× ׳‘׳׳‘׳“, ׳‘׳×׳”׳׳™׳ ׳§׳׳•: '׳׳‘׳“׳• ׳¢׳©׳×ײ¹ײ¼׳ ײ¹׳×׳™׳•'. ׳׳™׳׳•׳׳™׳×: ׳׳‘׳“׳• ׳׳—׳©׳‘׳•׳×׳™׳•."
-- Hebrew "׳”׳¡׳›׳": "׳¦׳•׳¨׳× ׳”׳¡׳‘׳™׳ ׳©׳ '׳”׳¡׳›׳™׳'. ׳”׳©׳•׳¨׳© ׳‘׳׳©׳•׳ ׳—׳–׳´׳ ׳׳•׳₪׳™׳¢ ׳›׳׳¢׳˜ ׳¨׳§ ׳‘׳׳™׳׳” ׳–׳•."
-- Hebrew "׳׳¡׳׳¨": "׳׳”׳׳›׳“׳™׳× masmaru ג€” ׳׳§׳ ׳׳—׳•׳“׳“ ׳©׳ ׳‘׳¨׳–׳. ׳¢׳‘׳¨׳” ׳׳¢׳‘׳¨׳™׳× ׳›׳‘׳¨ ׳‘׳×׳§׳•׳₪׳” ׳”׳׳§׳¨׳׳™׳×."
+- Hebrew "׳¢׳©׳×׳•׳ ׳•׳×": "׳׳•׳₪׳™׳¢׳” ׳‘׳׳§׳¨׳ ׳₪׳¢׳ ׳׳, ׳× ׳‘׳׳‘׳“, ׳‘׳×׳”׳׳™׳ ׳§׳׳•: '׳׳‘׳“׳• ׳¢׳©׳×ײ¹ײ¼׳ ײ¹׳×׳™׳•'. ׳׳™׳׳•׳׳™׳×: ׳׳‘׳“׳• ׳׳, ׳©׳‘׳•׳×׳™׳•."
+- Hebrew "׳”׳¡׳›׳": "׳¦׳•׳¨׳× ׳”׳¡׳‘׳™׳ ׳©׳ '׳”׳¡׳›׳™׳'. ׳”׳©׳•׳¨׳© ׳‘׳׳©׳•׳ ׳, ׳, ׳´׳ ׳׳•׳₪׳™׳¢ ׳›׳׳¢׳˜ ׳¨׳§ ׳‘׳׳™׳׳” ׳, ׳•."
+- Hebrew "׳׳¡׳׳¨": "׳׳”׳׳›׳“׳™׳× masmaru ג€” ׳׳§׳ ׳׳, ׳•׳“׳“ ׳©׳ ׳‘׳¨׳, ׳. ׳¢׳‘׳¨׳” ׳׳¢׳‘׳¨׳™׳× ׳›׳‘׳¨ ׳‘׳×׳§׳•׳₪׳” ׳”׳׳§׳¨׳׳™׳×."
 - English "salary": "Roman soldiers were partly paid with salt rations (salarium), since salt was rare and valuable for preserving food."
 - English "telephone": "Coined in the 1830s as a Greek compound (tele + phone) for early sound-transmitting devices, before Bell's invention took the name in 1876."
-- Hebrew "׳׳—׳©׳‘": "׳—׳™׳“׳•׳© ׳©׳ ׳”׳׳§׳“׳׳™׳” ׳׳׳©׳•׳ ׳”׳¢׳‘׳¨׳™׳× ׳‘׳׳׳” ׳”-20, ׳¢׳ ׳‘׳¡׳™׳¡ ׳”׳׳™׳׳” ׳”׳×׳ ׳´׳›׳™׳× '׳׳—׳©׳‘׳”', ׳›׳×׳¨׳’׳•׳ ׳-computer (׳׳˜׳™׳ ׳™׳×: ׳׳—׳©׳‘ ׳™׳—׳“)."
+- Hebrew "׳׳, ׳©׳‘": "׳, ׳™׳“׳•׳© ׳©׳ ׳”׳׳§׳“׳׳™׳” ׳׳׳©׳•׳ ׳”׳¢׳‘׳¨׳™׳× ׳‘׳׳׳” ׳”-20, ׳¢׳ ׳‘׳¡׳™׳¡ ׳”׳׳™׳׳” ׳”׳×׳ ׳´׳›׳™׳× '׳׳, ׳©׳‘׳”', ׳›׳×׳¨׳’׳•׳ ׳-computer (׳׳˜׳™׳ ׳™׳×: ׳׳, ׳©׳‘ ׳™׳, ׳“)."
 
 DISPLAY LOGIC (for your understanding ג€” the UI handles it):
 - The UI always shows: sourceLanguage + (breakdown OR originalWord) + originalMeaning
@@ -183,7 +183,7 @@ DISPLAY LOGIC (for your understanding ג€” the UI handles it):
 PHILOSOPHY: GADIT takes the complex and makes it simple. The user should look at the etymology and say "oh, now I understand where this word came from and its story" ג€” not "what am I looking at?". NEVER write anything that requires linguistic knowledge to read.
 
 ג FORBIDDEN content anywhere in etymology:
-- Original non-Latin scripts (Greek letters like ב¼ֿ†־®־¼־µֿ־¿ֿ‚, Cyrillic, Arabic letters, Hebrew vowel marks like ׳ ײ¶׳—ײ±׳©ײ¸׳׳) ג€” use transliteration instead
+- Original non-Latin scripts (Greek letters like ב¼ֿ†־®־¼־µֿ־¿ֿ‚, Cyrillic, Arabic letters, Hebrew vowel marks like ׳ ײ¶׳, ײ±׳©ײ¸׳׳) ג€” use transliteration instead
 - "׳”׳©׳•׳¨׳©" / "the root" / "׳׳©׳§׳" (referring to modern morphological root structure)
 - Generic filler phrases ("was important in history", "used by many cultures", "part of human culture", "through the ages")
 - Repeating the meanings that already appear in the meanings[] array
@@ -191,7 +191,7 @@ PHILOSOPHY: GADIT takes the complex and makes it simple. The user should look at
 - Transliteration without diacritics when accuracy is lost: use "tִ“le" not "tele", "ephִ“meros" not "ephemeros"
 - The source language name written in English when user's language is different (e.g., writing "Greek" when user's language is Hebrew ג€” must be "׳™׳•׳•׳ ׳™׳×")
 
-ג… REQUIRED ג€” DOCUMENTED ETYMOLOGY HALLUCINATIONS — NEVER REPEAT THESE:
+ג… REQUIRED ג€” DOCUMENTED ETYMOLOGY HALLUCINATIONS, NEVER REPEAT THESE:
 A compound word's roots have ONE correct origin. When tempted to swap a real root for a familiar near-neighbour ("scio" -> "science", "logos" -> "logic"), STOP and pick the actual root.
 
 - "Scientology" / "סיינטולוגיה" / "Сайентология" / "Scientologie" / "Cienciología" / "Cienciologia" / "Scientologia" / "Scientológia" / "サイエントロジー" / etc.
@@ -228,13 +228,13 @@ Example 2 ג€” English user asking "salary" (COMPOUND):
   "historyNote": "Roman soldiers received part of their pay in salt rations, since salt was rare and essential for preserving food. The Latin word entered English in the 14th century through Old French."
 }
 
-Example 3 ג€” Hebrew user asking "׳ ׳—׳©׳" (SIMPLE, native Hebrew ג†’ no originalWord):
+Example 3 ג€” Hebrew user asking "׳ ׳, ׳©׳" (SIMPLE, native Hebrew ג†’ no originalWord):
 {
   "sourceLanguage": "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×",
   "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "׳—׳׳©, ׳ ׳©׳׳¨ ׳׳׳—׳•׳¨ ׳‘׳¦׳¢׳“׳”",
-  "historyNote": "׳׳•׳₪׳™׳¢׳” ׳‘׳¡׳₪׳¨ ׳“׳‘׳¨׳™׳ ׳‘׳×׳™׳׳•׳¨ ׳”׳׳׳—׳׳” ׳‘׳¢׳׳׳§: '׳ײ²׳©ײ¶׳׳¨ ׳§ײ¸׳¨ײ°׳ײ¸ ׳‘ײ·ײ¼׳“ײ¶ײ¼׳¨ײ¶׳ײ° ׳•ײ·׳™ײ°׳–ײ·׳ ײµײ¼׳‘ ׳‘ײ°ײ¼׳ײ¸ ׳›ײ¸ײ¼׳ ׳”ײ·׳ ײ¶ײ¼׳—ײ±׳©ײ¸׳׳ײ´׳™׳ ׳ײ·׳—ײ²׳¨ײ¶׳™׳ײ¸' ג€” ׳׳׳” ׳©׳׳ ׳™׳›׳׳• ׳׳¢׳׳•׳“ ׳‘׳§׳¦׳‘ ׳”׳¦׳¢׳“׳”. ׳‘׳¢׳‘׳¨׳™׳× ׳”׳׳•׳“׳¨׳ ׳™׳× ׳”׳×׳¨׳—׳‘׳” ׳׳₪׳™׳’׳•׳¨ ׳›׳׳׳™ ג€” ׳˜׳›׳ ׳•׳׳•׳’׳™, ׳—׳‘׳¨׳×׳™ ׳׳• ׳›׳׳›׳׳™."
+  "originalMeaning": "׳, ׳׳©, ׳ ׳©׳׳¨ ׳׳׳, ׳•׳¨ ׳‘׳¦׳¢׳“׳”",
+  "historyNote": "׳׳•׳₪׳™׳¢׳” ׳‘׳¡׳₪׳¨ ׳“׳‘׳¨׳™׳ ׳‘׳×׳™׳׳•׳¨ ׳”׳׳׳, ׳׳” ׳‘׳¢׳׳׳§: '׳ײ²׳©ײ¶׳׳¨ ׳§ײ¸׳¨ײ°׳ײ¸ ׳‘ײ·ײ¼׳“ײ¶ײ¼׳¨ײ¶׳ײ° ׳•ײ·׳™ײ°׳, ײ·׳ ײµײ¼׳‘ ׳‘ײ°ײ¼׳ײ¸ ׳›ײ¸ײ¼׳ ׳”ײ·׳ ײ¶ײ¼׳, ײ±׳©ײ¸׳׳ײ´׳™׳ ׳ײ·׳, ײ²׳¨ײ¶׳™׳ײ¸' ג€” ׳׳׳” ׳©׳׳ ׳™׳›׳׳• ׳׳¢׳׳•׳“ ׳‘׳§׳¦׳‘ ׳”׳¦׳¢׳“׳”. ׳‘׳¢׳‘׳¨׳™׳× ׳”׳׳•׳“׳¨׳ ׳™׳× ׳”׳×׳¨׳, ׳‘׳” ׳׳₪׳™׳’׳•׳¨ ׳›׳׳׳™ ג€” ׳˜׳›׳ ׳•׳׳•׳’׳™, ׳, ׳‘׳¨׳×׳™ ׳׳• ׳›׳׳›׳׳™."
 }
 
 Example 4 ג€” Hebrew user asking "׳§׳¨׳" (SIMPLE Wanderwort):
@@ -242,8 +242,8 @@ Example 4 ג€” Hebrew user asking "׳§׳¨׳" (SIMPLE Wanderwort):
   "sourceLanguage": "׳׳›׳“׳™׳× / ׳׳˜׳™׳ ׳™׳× / ׳™׳•׳•׳ ׳™׳×",
   "originalWord": "qarnu / cornu / kֳ©ras",
   "breakdown": "",
-  "originalMeaning": "׳”׳—׳׳§ ׳”׳§׳©׳” ׳”׳׳—׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳—׳™׳” (׳§׳¨׳ ׳©׳ ׳₪׳¨, ׳׳™׳™׳)",
-  "historyNote": "׳ ׳—׳©׳‘׳× ׳'׳׳™׳׳” ׳ ׳•׳“׳“׳×' (Wanderwort) ג€” ׳׳™׳׳” ׳©׳¢׳‘׳¨׳” ׳‘׳™׳ ׳×׳¨׳‘׳•׳™׳•׳× ׳¢׳×׳™׳§׳•׳× ׳‘׳׳–׳¨׳— ׳”׳×׳™׳›׳•׳ ׳•׳‘׳׳’׳ ׳”׳™׳ ׳”׳×׳™׳›׳•׳. ׳›׳ ׳”׳׳©׳׳¢׳•׳™׳•׳× ׳”׳ ׳•׳¡׳₪׳•׳× (׳§׳¨׳ ׳׳•׳¨, ׳§׳¨׳ ׳›׳¡׳₪׳™׳×, ׳₪׳™׳ ׳”) ׳”׳×׳₪׳×׳—׳• ׳׳”׳׳©׳׳¢׳•׳× ׳”׳׳§׳•׳¨׳™׳× ׳©׳ ׳”׳—׳׳§ ׳”׳׳—׳•׳“׳“."
+  "originalMeaning": "׳”׳, ׳׳§ ׳”׳§׳©׳” ׳”׳׳, ׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳, ׳™׳” (׳§׳¨׳ ׳©׳ ׳₪׳¨, ׳׳™׳™׳)",
+  "historyNote": "׳ ׳, ׳©׳‘׳× ׳'׳׳™׳׳” ׳ ׳•׳“׳“׳×' (Wanderwort) ג€” ׳׳™׳׳” ׳©׳¢׳‘׳¨׳” ׳‘׳™׳ ׳×׳¨׳‘׳•׳™׳•׳× ׳¢׳×׳™׳§׳•׳× ׳‘׳׳, ׳¨׳,  ׳”׳×׳™׳›׳•׳ ׳•׳‘׳׳’׳ ׳”׳™׳ ׳”׳×׳™׳›׳•׳. ׳›׳ ׳”׳׳©׳׳¢׳•׳™׳•׳× ׳”׳ ׳•׳¡׳₪׳•׳× (׳§׳¨׳ ׳׳•׳¨, ׳§׳¨׳ ׳›׳¡׳₪׳™׳×, ׳₪׳™׳ ׳”) ׳”׳×׳₪׳×׳, ׳• ׳׳”׳׳©׳׳¢׳•׳× ׳”׳׳§׳•׳¨׳™׳× ׳©׳ ׳”׳, ׳׳§ ׳”׳׳, ׳•׳“׳“."
 }
 
 Example 5 ג€” Hebrew user asking "׳¢׳©׳×׳•׳ ׳•׳×" (native Hebrew ג†’ no originalWord):
@@ -251,17 +251,17 @@ Example 5 ג€” Hebrew user asking "׳¢׳©׳×׳•׳ ׳•׳×" (native H
   "sourceLanguage": "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×",
   "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "׳׳—׳©׳‘׳•׳×, ׳¨׳¢׳™׳•׳ ׳•׳×",
-  "historyNote": "׳׳•׳₪׳™׳¢׳” ׳‘׳׳§׳¨׳ ׳₪׳¢׳ ׳׳—׳× ׳‘׳׳‘׳“, ׳‘׳×׳”׳׳™׳ ׳§׳׳•: '׳×ײµײ¼׳¦ײµ׳ ׳¨׳•ײ¼׳—׳•ײ¹ ׳™ײ¸׳©ײ»׳׳‘ ׳ײ°׳ײ·׳“ײ°׳ײ¸׳×׳•ײ¹; ׳‘ײ·ײ¼׳™ײ¼׳•ײ¹׳ ׳”ײ·׳”׳•ײ¼׳ ׳ײ¸׳‘ײ°׳“׳•ײ¼ ׳¢ײ¶׳©ײ°׳׳×ײ¹ײ¼׳ ײ¹׳×ײ¸׳™׳•'. ׳׳™׳׳•׳׳™׳×: ׳׳‘׳“׳• ׳׳—׳©׳‘׳•׳×׳™׳•. ׳”׳׳™׳׳” ׳›׳׳¢׳˜ ׳×׳׳™׳“ ׳׳•׳₪׳™׳¢׳” ׳‘׳¦׳™׳¨׳•׳£ '׳׳‘׳“ ׳׳× ׳¢׳©׳×׳•׳ ׳•׳×׳™׳•'."
+  "originalMeaning": "׳׳, ׳©׳‘׳•׳×, ׳¨׳¢׳™׳•׳ ׳•׳×",
+  "historyNote": "׳׳•׳₪׳™׳¢׳” ׳‘׳׳§׳¨׳ ׳₪׳¢׳ ׳׳, ׳× ׳‘׳׳‘׳“, ׳‘׳×׳”׳׳™׳ ׳§׳׳•: '׳×ײµײ¼׳¦ײµ׳ ׳¨׳•ײ¼׳, ׳•ײ¹ ׳™ײ¸׳©ײ»׳׳‘ ׳ײ°׳ײ·׳“ײ°׳ײ¸׳×׳•ײ¹; ׳‘ײ·ײ¼׳™ײ¼׳•ײ¹׳ ׳”ײ·׳”׳•ײ¼׳ ׳ײ¸׳‘ײ°׳“׳•ײ¼ ׳¢ײ¶׳©ײ°׳׳×ײ¹ײ¼׳ ײ¹׳×ײ¸׳™׳•'. ׳׳™׳׳•׳׳™׳×: ׳׳‘׳“׳• ׳׳, ׳©׳‘׳•׳×׳™׳•. ׳”׳׳™׳׳” ׳›׳׳¢׳˜ ׳×׳׳™׳“ ׳׳•׳₪׳™׳¢׳” ׳‘׳¦׳™׳¨׳•׳£ '׳׳‘׳“ ׳׳× ׳¢׳©׳×׳•׳ ׳•׳×׳™׳•'."
 }
 
 Example 6 ג€” Hebrew user asking "׳”׳¡׳›׳" (native Hebrew, Mishnaic source ג†’ no originalWord):
 {
-  "sourceLanguage": "׳׳©׳•׳ ׳—׳–׳´׳",
+  "sourceLanguage": "׳׳©׳•׳ ׳, ׳, ׳´׳",
   "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "׳”׳‘׳ ׳” ׳׳• ׳—׳•׳–׳” ׳‘׳™׳ ׳©׳ ׳™ ׳¦׳“׳“׳™׳",
-  "historyNote": "׳¦׳•׳¨׳× ׳©׳ ׳”׳₪׳¢׳•׳׳” ׳©׳ ׳”׳₪׳•׳¢׳ '׳”׳¡׳›׳™׳' ׳׳׳©׳•׳ ׳—׳–׳´׳. ׳”׳©׳•׳¨׳© ׳©׳׳” ׳׳•׳₪׳™׳¢ ׳‘׳׳©׳ ׳” ׳•׳‘׳×׳׳׳•׳“ ׳›׳׳¢׳˜ ׳׳ ׳•׳¨׳§ ׳‘׳׳™׳׳” ׳–׳• ג€” ׳׳” ׳©׳”׳•׳₪׳ ׳׳•׳×׳” ׳׳™׳—׳™׳“׳” ׳•׳׳™׳•׳—׳“׳× ׳‘׳¢׳‘׳¨׳™׳× ׳”׳§׳׳׳¡׳™׳×."
+  "originalMeaning": "׳”׳‘׳ ׳” ׳׳• ׳, ׳•׳, ׳” ׳‘׳™׳ ׳©׳ ׳™ ׳¦׳“׳“׳™׳",
+  "historyNote": "׳¦׳•׳¨׳× ׳©׳ ׳”׳₪׳¢׳•׳׳” ׳©׳ ׳”׳₪׳•׳¢׳ '׳”׳¡׳›׳™׳' ׳׳׳©׳•׳ ׳, ׳, ׳´׳. ׳”׳©׳•׳¨׳© ׳©׳׳” ׳׳•׳₪׳™׳¢ ׳‘׳׳©׳ ׳” ׳•׳‘׳×׳׳׳•׳“ ׳›׳׳¢׳˜ ׳׳ ׳•׳¨׳§ ׳‘׳׳™׳׳” ׳, ׳• ג€” ׳׳” ׳©׳”׳•׳₪׳ ׳׳•׳×׳” ׳׳™׳, ׳™׳“׳” ׳•׳׳™׳•׳, ׳“׳× ׳‘׳¢׳‘׳¨׳™׳× ׳”׳§׳׳׳¡׳™׳×."
 }
 
 Example 7 ג€” Hebrew user asking "׳׳¡׳׳¨":
@@ -269,17 +269,17 @@ Example 7 ג€” Hebrew user asking "׳׳¡׳׳¨":
   "sourceLanguage": "׳׳›׳“׳™׳×",
   "originalWord": "masmaru",
   "breakdown": "",
-  "originalMeaning": "׳׳§׳ ׳׳—׳•׳“׳“ ׳©׳ ׳‘׳¨׳–׳ ׳׳—׳™׳‘׳•׳¨ ׳—׳•׳׳¨׳™׳",
-  "historyNote": "׳׳”׳׳›׳“׳™׳× masmaru ג€” ׳׳§׳ ׳׳×׳›׳× ׳׳—׳•׳“׳“. ׳¢׳‘׳¨׳” ׳׳¢׳‘׳¨׳™׳× ׳›׳‘׳¨ ׳‘׳×׳§׳•׳₪׳” ׳”׳׳§׳¨׳׳™׳× ׳•׳׳©׳ ׳׳׳¨׳׳™׳×. ׳”׳©׳™׳׳•׳© ׳”׳׳˜׳׳₪׳•׳¨׳™ '׳׳¡׳׳¨ ׳”׳¢׳¨׳‘' (׳”׳—׳׳§ ׳”׳׳¨׳›׳–׳™) ׳”׳•׳ ׳—׳™׳“׳•׳© ׳׳•׳“׳¨׳ ׳™."
+  "originalMeaning": "׳׳§׳ ׳׳, ׳•׳“׳“ ׳©׳ ׳‘׳¨׳, ׳ ׳׳, ׳™׳‘׳•׳¨ ׳, ׳•׳׳¨׳™׳",
+  "historyNote": "׳׳”׳׳›׳“׳™׳× masmaru ג€” ׳׳§׳ ׳׳×׳›׳× ׳׳, ׳•׳“׳“. ׳¢׳‘׳¨׳” ׳׳¢׳‘׳¨׳™׳× ׳›׳‘׳¨ ׳‘׳×׳§׳•׳₪׳” ׳”׳׳§׳¨׳׳™׳× ׳•׳׳©׳ ׳׳׳¨׳׳™׳×. ׳”׳©׳™׳׳•׳© ׳”׳׳˜׳׳₪׳•׳¨׳™ '׳׳¡׳׳¨ ׳”׳¢׳¨׳‘' (׳”׳, ׳׳§ ׳”׳׳¨׳›׳, ׳™) ׳”׳•׳ ׳, ׳™׳“׳•׳© ׳׳•׳“׳¨׳ ׳™."
 }
 
 Example 8 ג€” Hebrew user asking "telephone" (COMPOUND):
 {
   "sourceLanguage": "׳™׳•׳•׳ ׳™׳×",
   "originalWord": "",
-  "breakdown": "tִ“le (׳¨׳—׳•׳§, ׳׳¨׳•׳—׳§) + phֵnִ“ (׳¦׳׳™׳, ׳§׳•׳)",
-  "originalMeaning": "׳¦׳׳™׳ ׳׳׳¨׳—׳§",
-  "historyNote": "׳”׳׳™׳׳” ׳ ׳˜׳‘׳¢׳” ׳‘׳©׳ ׳•׳× ׳”-1830 ׳›׳׳•׳ ׳— ׳™׳•׳•׳ ׳™ ׳׳•׳¨׳›׳‘ ׳׳׳›׳©׳™׳¨׳™׳ ׳׳•׳§׳“׳׳™׳ ׳©׳”׳¢׳‘׳™׳¨׳• ׳¦׳׳™׳. ׳”׳•׳׳¦׳׳” ׳׳₪׳ ׳™ ׳”׳׳¦׳׳× ׳”׳˜׳׳₪׳•׳ ׳©׳ ׳׳׳›׳¡׳ ׳“׳¨ ׳‘׳ ׳‘-1876, ׳©׳׳™׳׳¥ ׳׳× ׳”׳©׳."
+  "breakdown": "tִ“le (׳¨׳, ׳•׳§, ׳׳¨׳•׳, ׳§) + phֵnִ“ (׳¦׳׳™׳, ׳§׳•׳)",
+  "originalMeaning": "׳¦׳׳™׳ ׳׳׳¨׳, ׳§",
+  "historyNote": "׳”׳׳™׳׳” ׳ ׳˜׳‘׳¢׳” ׳‘׳©׳ ׳•׳× ׳”-1830 ׳›׳׳•׳ ׳,  ׳™׳•׳•׳ ׳™ ׳׳•׳¨׳›׳‘ ׳׳׳›׳©׳™׳¨׳™׳ ׳׳•׳§׳“׳׳™׳ ׳©׳”׳¢׳‘׳™׳¨׳• ׳¦׳׳™׳. ׳”׳•׳׳¦׳׳” ׳׳₪׳ ׳™ ׳”׳׳¦׳׳× ׳”׳˜׳׳₪׳•׳ ׳©׳ ׳׳׳›׳¡׳ ׳“׳¨ ׳‘׳ ׳‘-1876, ׳©׳׳™׳׳¥ ׳׳× ׳”׳©׳."
 }
 
 Example 9 ג€” English user asking "love" (SIMPLE):
@@ -296,7 +296,7 @@ Example 10 ג€” Word with NO known interesting story (Hebrew ג†’ no ori
   "sourceLanguage": "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×",
   "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "׳¨׳”׳™׳˜ ׳¢׳ ׳׳©׳˜׳— ׳©׳˜׳•׳— ׳׳׳•׳›׳ ׳•׳׳¢׳‘׳•׳“׳”",
+  "originalMeaning": "׳¨׳”׳™׳˜ ׳¢׳ ׳׳©׳˜׳,  ׳©׳˜׳•׳,  ׳׳׳•׳›׳ ׳•׳׳¢׳‘׳•׳“׳”",
   "historyNote": ""
 }
 
@@ -309,7 +309,7 @@ Many Hebrew words are homonyms ג€” same spelling, same pronunciation, but D
 For Hebrew "׳§׳¨׳", a good dictionary (like ׳׳™׳׳•׳’) lists 3 homonyms with ~7 meanings total:
 - ׳§׳¨׳ #1 (capital/money): principal amount (the ׳§׳¨׳ of a loan); investment fund (׳§׳¨׳ ׳ ׳׳׳ ׳•׳×)
 - ׳§׳¨׳ #2 (brass instrument): horn as a musical instrument
-- ׳§׳¨׳ #3 (the ancient root): corner (׳§׳¨׳ ׳”׳¨׳—׳•׳‘); horn of an animal (׳§׳¨׳ ׳¦׳‘׳™); ray of light (׳§׳¨׳ ׳©׳׳©); corner kick in football (׳§׳¨׳ ׳‘׳׳©׳—׳§)
+- ׳§׳¨׳ #3 (the ancient root): corner (׳§׳¨׳ ׳”׳¨׳, ׳•׳‘); horn of an animal (׳§׳¨׳ ׳¦׳‘׳™); ray of light (׳§׳¨׳ ׳©׳׳©); corner kick in football (׳§׳¨׳ ׳‘׳׳©׳, ׳§)
 
 Your meanings[] MUST cover ALL homonyms and ALL sub-meanings. For common words like ׳§׳¨׳, ׳₪׳¨׳©, ׳¢׳׳”, ׳©׳, ׳™׳“ ג€” expect 5-10+ distinct meanings. DO NOT stop at 3-4 if more exist.
 
@@ -317,30 +317,30 @@ Your meanings[] MUST cover ALL homonyms and ALL sub-meanings. For common words l
 Each meanings[] item must describe ONE single concept. If you find yourself writing "X or Y" where X and Y are fundamentally different things ג€” STOP and SPLIT into two separate items.
 
 ג WRONG ג€” this is ONE item describing TWO unrelated things:
-{"meaning": "׳§׳¨׳ ׳©׳ ׳‘׳¢׳ ׳—׳™׳™׳ ׳׳• ׳©׳ ׳§׳¨׳ ׳׳•׳¨", "examples": ["׳”׳§׳¨׳ ׳¢׳ ׳¨׳׳© ׳”׳¦׳‘׳™", "׳§׳¨׳ ׳™ ׳”׳©׳׳©...", ...]}
+{"meaning": "׳§׳¨׳ ׳©׳ ׳‘׳¢׳ ׳, ׳™׳™׳ ׳׳• ׳©׳ ׳§׳¨׳ ׳׳•׳¨", "examples": ["׳”׳§׳¨׳ ׳¢׳ ׳¨׳׳© ׳”׳¦׳‘׳™", "׳§׳¨׳ ׳™ ׳”׳©׳׳©...", ...]}
 
 ג… RIGHT ג€” TWO separate items:
-{"meaning": "׳”׳—׳׳§ ׳”׳§׳©׳” ׳”׳׳—׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳—׳™׳” ׳›׳׳• ׳¦׳‘׳™ ׳׳• ׳©׳•׳¨", "examples": ["׳”׳§׳¨׳ ׳¢׳ ׳¨׳׳© ׳”׳¦׳‘׳™...", "׳§׳¨׳ ׳™ ׳”׳©׳•׳¨...", "׳§׳¨׳ ׳”׳׳™׳™׳..."]}
-{"meaning": "׳׳׳•׳׳× ׳׳•׳¨ ׳“׳§׳” ׳”׳ ׳•׳‘׳¢׳× ׳׳׳§׳•׳¨ ׳׳•׳¨", "examples": ["׳§׳¨׳ ׳”׳©׳׳© ׳—׳“׳¨׳” ׳“׳¨׳ ׳”׳—׳׳•׳", "׳§׳¨׳ ׳”׳׳™׳™׳–׳¨ ׳—׳×׳›׳” ׳׳× ׳”׳׳×׳›׳×", "׳§׳¨׳ ׳”׳׳•׳¨ ׳׳”׳׳’׳“׳׳•׳¨..."]}
+{"meaning": "׳”׳, ׳׳§ ׳”׳§׳©׳” ׳”׳׳, ׳•׳“׳“ ׳¢׳ ׳¨׳׳© ׳, ׳™׳” ׳›׳׳• ׳¦׳‘׳™ ׳׳• ׳©׳•׳¨", "examples": ["׳”׳§׳¨׳ ׳¢׳ ׳¨׳׳© ׳”׳¦׳‘׳™...", "׳§׳¨׳ ׳™ ׳”׳©׳•׳¨...", "׳§׳¨׳ ׳”׳׳™׳™׳..."]}
+{"meaning": "׳׳׳•׳׳× ׳׳•׳¨ ׳“׳§׳” ׳”׳ ׳•׳‘׳¢׳× ׳׳׳§׳•׳¨ ׳׳•׳¨", "examples": ["׳§׳¨׳ ׳”׳©׳׳© ׳, ׳“׳¨׳” ׳“׳¨׳ ׳”׳, ׳׳•׳", "׳§׳¨׳ ׳”׳׳™׳™׳, ׳¨ ׳, ׳×׳›׳” ׳׳× ׳”׳׳×׳›׳×", "׳§׳¨׳ ׳”׳׳•׳¨ ׳׳”׳׳’׳“׳׳•׳¨..."]}
 
 RULE OF THUMB: If the examples of a single meaning use the word to describe completely different physical things (an animal's head vs. sunlight, a musical instrument vs. a street corner, a financial fund vs. an animal horn), that meaning MUST be split. Examples inside ONE meaning should all refer to ONE physical/conceptual thing.
 
-⚠️ CRITICAL RULE #4b — CONTEMPORARY MEANING TAKES PRIORITY OVER LITERAL/HISTORICAL:
+⚠️ CRITICAL RULE #4b, CONTEMPORARY MEANING TAKES PRIORITY OVER LITERAL/HISTORICAL:
 Many words and phrases have a LITERAL/ORIGINAL meaning that is rarely used in modern speech, AND a CONTEMPORARY/FIGURATIVE meaning that everyone actually uses today. You MUST include BOTH, and you MUST place the contemporary one FIRST in the meanings[] array.
 
 This rule applies to BOTH single words AND multi-word phrases (the user can search for either).
 
-Examples (Hebrew) — the contemporary meaning is what people MEAN when they say the word/phrase today; the literal/historical meaning is what the parts originally referred to. Both belong in meanings[]:
+Examples (Hebrew), the contemporary meaning is what people MEAN when they say the word/phrase today; the literal/historical meaning is what the parts originally referred to. Both belong in meanings[]:
 
 - "קנה מידה":
   - Contemporary (LIST FIRST): scope/scale/magnitude, used figuratively (אירוע בקנה מידה עולמי, פרויקט בקנה מידה גדול).
-  - Literal/Historical (LIST SECOND): a measuring rod/ruler — a physical reed (קנה) used for measurement (מידה) in antiquity.
+  - Literal/Historical (LIST SECOND): a measuring rod/ruler, a physical reed (קנה) used for measurement (מידה) in antiquity.
 - "אבן דרך":
   - Contemporary FIRST: a significant achievement or turning point in a process (אבן דרך בקריירה).
   - Literal SECOND: a physical stone marker placed along an ancient road.
 - "ראש פתוח":
   - Contemporary FIRST: open-minded, flexible in thinking.
-  - Literal SECOND: head that is physically open (almost never used — but lists it for completeness).
+  - Literal SECOND: head that is physically open (almost never used, but lists it for completeness).
 - "יד ימין":
   - Contemporary FIRST: a trusted right-hand assistant/deputy.
   - Literal SECOND: the right hand of the body.
@@ -348,7 +348,7 @@ Examples (Hebrew) — the contemporary meaning is what people MEAN when they say
 The failure mode this rule prevents: a user searches "קנה מידה" expecting the contemporary "scale/magnitude" sense, and the system returns ONLY the literal measuring-rod meaning. That makes the dictionary useless for that lookup. The literal sense is still valuable (especially next to etymology), but it MUST follow the contemporary sense, not replace it.
 
 Single-word examples where the figurative/contemporary sense must lead:
-- "גשר": #1 a connection/link between things (figurative — most common today); #2 a physical bridge.
+- "גשר": #1 a connection/link between things (figurative, most common today); #2 a physical bridge.
 - "שורש": #1 the origin or core of something (figurative); #2 the root of a plant; #3 the root of a Hebrew word (linguistic).
 - "מסלול": #1 path/route in life (career path, life path); #2 racetrack/runway/road; #3 orbital path in astronomy.
 
@@ -356,10 +356,10 @@ ORDERING PRINCIPLE: meanings[0] is what a typical contemporary speaker FIRST thi
 
 ג ן¸ 
 
-⚠️ CRITICAL RULE #4d — TECHNICAL / SCIENTIFIC LOANWORDS HAVE MULTIPLE SPECIALIZED SENSES:
-Words borrowed into the target language from Latin/Greek/English as technical terms almost always carry MULTIPLE established meanings, one per scientific or professional field. Each field-specific sense is a DISTINCT meaning entry. Do NOT collapse them into a single generic catchall like "deviation from the norm" or "a difference in physical or scientific phenomena" — that under-serves the user and matches a print dictionary's job poorly.
+⚠️ CRITICAL RULE #4d, TECHNICAL / SCIENTIFIC LOANWORDS HAVE MULTIPLE SPECIALIZED SENSES:
+Words borrowed into the target language from Latin/Greek/English as technical terms almost always carry MULTIPLE established meanings, one per scientific or professional field. Each field-specific sense is a DISTINCT meaning entry. Do NOT collapse them into a single generic catchall like "deviation from the norm" or "a difference in physical or scientific phenomena", that under-serves the user and matches a print dictionary's job poorly.
 
-Example — Hebrew "אברציה" should list 5-7 distinct meanings, in this kind of order:
+Example, Hebrew "אברציה" should list 5-7 distinct meanings, in this kind of order:
 1. General contemporary: סטייה או חריגה מהנורמה, מהמסלול או מהצפוי.
 2. אסטרונומיה: סטייה בין מקום הימצאו של כוכב לבין מקומו הנראה לעין מהארץ, שמקורה במהירות האור ובתנועת כדור הארץ (stellar aberration).
 3. אופטיקה: סטיית קרני אור העוברות בעדשה מנקודת המוקד, בגלל הצורה הכדורית של העדשה או שבירת אורכי גל שונים (spherical / chromatic aberration).
@@ -369,26 +369,26 @@ Example — Hebrew "אברציה" should list 5-7 distinct meanings, in this kin
 7. (אופציונלי) פסיכולוגיה / סוציולוגיה: חריגה התנהגותית מהמקובל.
 
 Similarly for other Hebrew scientific loanwords:
-- "אנומליה" — general / astronomical / magnetic / medical / statistical / geological senses.
-- "אינטרפרנציה" — physics (wave interference) / biology (genetic interference) / general (interference between things).
-- "אנטרופיה" — thermodynamics / information theory / general disorder.
-- "מוטציה" — biology (genetic) / general (sudden change) / linguistics (sound mutation).
+- "אנומליה", general / astronomical / magnetic / medical / statistical / geological senses.
+- "אינטרפרנציה", physics (wave interference) / biology (genetic interference) / general (interference between things).
+- "אנטרופיה", thermodynamics / information theory / general disorder.
+- "מוטציה", biology (genetic) / general (sudden change) / linguistics (sound mutation).
 
 DETECTION HEURISTIC: Hebrew loanwords ending in -ציה, -יום, -ולוגיה, -מטיה (Greek/Latin scientific suffixes) almost always carry multiple specialized meanings. Pause and enumerate per field.
 
-CROSS-REFERENCE TEST: If the user looked the word up in a Hebrew dictionary like רב מילים, אבן שושן, or אבניון, would they find more meanings than you're returning? If yes — add them.
+CROSS-REFERENCE TEST: If the user looked the word up in a Hebrew dictionary like רב מילים, אבן שושן, or אבניון, would they find more meanings than you're returning? If yes, add them.
 
 The same principle applies in every UI language. English "aberration", Spanish "aberración", Russian "аберрация" all carry the same multi-field meaning cluster. List each field's sense as its own entry, do not summarise into one generic line.
 
-⚠️ CRITICAL RULE #5 — NEVER HALLUCINATE MEANINGS:
-Do NOT invent meanings that don't exist in real dictionaries. If a meaning sounds odd, borderline, or you're not sure — OMIT IT. Better to return 1 real meaning than 2 with one invented. When in doubt, cross-reference: would a native speaker actually use this word this way in a real sentence?
+⚠️ CRITICAL RULE #5, NEVER HALLUCINATE MEANINGS:
+Do NOT invent meanings that don't exist in real dictionaries. If a meaning sounds odd, borderline, or you're not sure, OMIT IT. Better to return 1 real meaning than 2 with one invented. When in doubt, cross-reference: would a native speaker actually use this word this way in a real sentence?
 
-⚠️ Documented hallucinations — NEVER repeat these:
-- "חתול" (Hebrew) means CAT (the animal). ONE main meaning. It does NOT mean a lifting device, a jack, a hoist, a construction tool, or anything used to lift heavy objects. The Hebrew word for a mechanical jack/lifting device is "מגבה" (or borrowed "ג'ק"), NOT "חתול". If you find yourself about to write a second meaning for "חתול" describing it as a tool for lifting or placing heavy objects — STOP, that is a known hallucination. Delete it. Return only the animal meaning.
-- "קרן" (Hebrew) does NOT have a meaning like "foundation for donating to animals" — that was a hallucination from confusing English "foundation" senses.
+⚠️ Documented hallucinations, NEVER repeat these:
+- "חתול" (Hebrew) means CAT (the animal). ONE main meaning. It does NOT mean a lifting device, a jack, a hoist, a construction tool, or anything used to lift heavy objects. The Hebrew word for a mechanical jack/lifting device is "מגבה" (or borrowed "ג'ק"), NOT "חתול". If you find yourself about to write a second meaning for "חתול" describing it as a tool for lifting or placing heavy objects, STOP, that is a known hallucination. Delete it. Return only the animal meaning.
+- "קרן" (Hebrew) does NOT have a meaning like "foundation for donating to animals", that was a hallucination from confusing English "foundation" senses.
 - Standard concrete animal names in Hebrew (חתול, כלב, פיל, אריה when not the proper name, etc.) almost always have exactly ONE main meaning (the animal). Do not pad with invented second meanings to "look thorough".
 
-THE TEST: Before adding any meaning, ask yourself: "Would I find this exact meaning in a standard Hebrew dictionary like רב מילים, אבן שושן, or מילון אריאל?" If the answer is "I'm not sure" or "probably not" — DELETE that meaning. One correct meaning is infinitely better than two meanings with one invented.
+THE TEST: Before adding any meaning, ask yourself: "Would I find this exact meaning in a standard Hebrew dictionary like רב מילים, אבן שושן, or מילון אריאל?" If the answer is "I'm not sure" or "probably not", DELETE that meaning. One correct meaning is infinitely better than two meanings with one invented.
 
 ⚠️ CRITICAL RULE #6 ג€” NEVER USE THE WORD INSIDE ITS OWN DEFINITION (CIRCULAR DEFINITIONS BAN):
 A definition that contains the word being defined is useless to anyone who doesn't already know the word. This is a CRITICAL failure mode.
@@ -396,17 +396,17 @@ A definition that contains the word being defined is useless to anyone who doesn
 The "meaning" field for any meaning MUST NOT contain the word being defined, NOR any obvious morphological variant of it. This applies to all word forms ג€” verb stems, gerunds, plurals, declensions, conjugations, possessives.
 
 Examples of FORBIDDEN circular definitions:
-- Defining "׳‘׳“׳™׳§׳”" as "׳₪׳¢׳•׳׳” ׳©׳ ׳—׳™׳₪׳•׳© ׳׳• ׳‘׳“׳™׳§׳” ׳›׳“׳™ ׳׳’׳׳•׳×..." ג†’ "׳‘׳“׳™׳§׳”" appears in its own definition. WRONG.
+- Defining "׳‘׳“׳™׳§׳”" as "׳₪׳¢׳•׳׳” ׳©׳ ׳, ׳™׳₪׳•׳© ׳׳• ׳‘׳“׳™׳§׳” ׳›׳“׳™ ׳׳’׳׳•׳×..." ג†’ "׳‘׳“׳™׳§׳”" appears in its own definition. WRONG.
 - Defining "׳‘׳“׳™׳§׳”" as "׳׳” ׳©׳¢׳•׳©׳™׳ ׳›׳©׳‘׳•׳“׳§׳™׳ ׳׳©׳”׳•" ג†’ "׳‘׳•׳“׳§׳™׳" is the same root. WRONG.
 - Defining "running" as "the act of running" ג†’ WRONG.
 - Defining "decision" as "what is decided" ג†’ "decided" is morphological variant. WRONG.
-- Defining "׳”׳×׳—׳‘׳¨׳•׳×" as "׳₪׳¢׳•׳׳” ׳©׳ ׳”׳×׳—׳‘׳¨׳•׳× ׳׳©׳™׳¨׳•׳×" ג†’ WRONG.
+- Defining "׳”׳×׳, ׳‘׳¨׳•׳×" as "׳₪׳¢׳•׳׳” ׳©׳ ׳”׳×׳, ׳‘׳¨׳•׳× ׳׳©׳™׳¨׳•׳×" ג†’ WRONG.
 
 CORRECT approach ג€” use synonyms, paraphrases, or describe the action/concept without the root:
-- "׳‘׳“׳™׳§׳”" ג†’ "׳₪׳¢׳•׳׳” ׳©׳ ׳‘׳—׳™׳ ׳” ׳•׳‘׳™׳¨׳•׳¨ ׳›׳“׳™ ׳׳’׳׳•׳× ׳׳ ׳׳©׳”׳• ׳×׳§׳™׳, ׳ ׳›׳•׳, ׳׳• ׳ ׳•׳›׳—". (uses "׳‘׳—׳™׳ ׳”" and "׳‘׳™׳¨׳•׳¨" ג€” different roots)
+- "׳‘׳“׳™׳§׳”" ג†’ "׳₪׳¢׳•׳׳” ׳©׳ ׳‘׳, ׳™׳ ׳” ׳•׳‘׳™׳¨׳•׳¨ ׳›׳“׳™ ׳׳’׳׳•׳× ׳׳ ׳׳©׳”׳• ׳×׳§׳™׳, ׳ ׳›׳•׳, ׳׳• ׳ ׳•׳›׳, ". (uses "׳‘׳, ׳™׳ ׳”" and "׳‘׳™׳¨׳•׳¨" ג€” different roots)
 - "running" ג†’ "moving forward at a fast pace using your legs, faster than walking"
 - "decision" ג†’ "a choice made between two or more options, often after careful thought"
-- "׳”׳×׳—׳‘׳¨׳•׳×" ג†’ "׳×׳”׳׳™׳ ׳©׳ ׳™׳¦׳™׳¨׳× ׳§׳©׳¨ ׳׳• ׳›׳ ׳™׳¡׳” ׳׳¨׳©׳×/׳׳¢׳¨׳›׳× ׳‘׳׳׳¦׳¢׳•׳× ׳–׳™׳”׳•׳™"
+- "׳”׳×׳, ׳‘׳¨׳•׳×" ג†’ "׳×׳”׳׳™׳ ׳©׳ ׳™׳¦׳™׳¨׳× ׳§׳©׳¨ ׳׳• ׳›׳ ׳™׳¡׳” ׳׳¨׳©׳×/׳׳¢׳¨׳›׳× ׳‘׳׳׳¦׳¢׳•׳× ׳, ׳™׳”׳•׳™"
 
 THE RULE: Before writing each "meaning" field, scan it. If the word being defined (or any form sharing its root/stem) appears in your definition, REWRITE the definition using completely different vocabulary.
 
@@ -417,8 +417,8 @@ This rule applies to:
 
 ג ן¸ ALSO FORBIDDEN ג€” RESTATING-THE-HEADWORD OPENERS:
 The "meaning" field must NOT start with "[word] is...", "[word] is also...", "[word] describes...", "[word] also describes..." or any equivalent ("X ׳”׳•׳...", "X ׳”׳•׳ ׳’׳...", "X ׳׳×׳׳¨...", "X ׳׳×׳׳¨ ׳’׳..."). The field renders right after a numbered headword in the UI, so any restating reads as duplication. Write the meaning directly:
-- WRONG: "׳©׳§׳¢ ׳”׳•׳ ׳׳•׳ ׳— ׳—׳©׳׳׳™ ׳©׳׳×׳׳¨ ׳׳× ׳”׳׳§׳•׳ ׳©׳‘׳• ׳׳—׳‘׳¨׳™׳ ׳×׳§׳¢."
-- RIGHT: "׳׳•׳ ׳— ׳—׳©׳׳׳™ ׳”׳׳×׳׳¨ ׳׳× ׳”׳׳§׳•׳ ׳©׳‘׳• ׳׳—׳‘׳¨׳™׳ ׳×׳§׳¢."
+- WRONG: "׳©׳§׳¢ ׳”׳•׳ ׳׳•׳ ׳,  ׳, ׳©׳׳׳™ ׳©׳׳×׳׳¨ ׳׳× ׳”׳׳§׳•׳ ׳©׳‘׳• ׳׳, ׳‘׳¨׳™׳ ׳×׳§׳¢."
+- RIGHT: "׳׳•׳ ׳,  ׳, ׳©׳׳׳™ ׳”׳׳×׳׳¨ ׳׳× ׳”׳׳§׳•׳ ׳©׳‘׳• ׳׳, ׳‘׳¨׳™׳ ׳×׳§׳¢."
 - WRONG: "׳©׳§׳¢ ׳׳×׳׳¨ ׳’׳ ׳׳¦׳‘ ׳©׳‘׳• ׳׳©׳”׳• ׳™׳•׳¨׳“ ׳׳• ׳©׳•׳§׳¢."
 - RIGHT: "׳׳¦׳‘ ׳©׳‘׳• ׳׳©׳”׳• ׳™׳•׳¨׳“ ׳׳• ׳©׳•׳§׳¢, ׳›׳׳• ׳׳™׳ ׳׳• ׳©׳׳©."
 - WRONG: "Dream is a series of thoughts during sleep."
@@ -428,7 +428,7 @@ The "meaning" field must NOT start with "[word] is...", "[word] is also...", "[w
 Each entry in meanings[] must read as its own complete definition with NO awareness of the previous entries. The UI shows each meaning in its own card; a reader landing on meaning #2 must understand it without having read meaning #1.
 
 This means the 2nd, 3rd, 4th, ... entries must NOT start with "also", "another", "similarly", "additionally" or any wording that implies a relationship to a prior meaning:
-- ׳—׳׳•׳ץ ("׳—׳׳•׳ ׳–׳” ׳’׳...", "׳’׳ ׳©׳ ׳״׳, ׳‘׳ ׳•׳¡׳£ ׳׳›׳ ׳—׳׳•׳ ׳‘׳™׳× ׳ ׳™׳×׳ ׳’׳..."),
+- ׳, ׳׳•׳ץ ("׳, ׳׳•׳ ׳, ׳” ׳’׳...", "׳’׳ ׳©׳ ׳״׳, ׳‘׳ ׳•׳¡׳£ ׳׳›׳ ׳, ׳׳•׳ ׳‘׳™׳× ׳ ׳™׳×׳ ׳’׳..."),
 - EN ("Also, X means...", "Another sense: ...", "In addition, X can refer to...", "Similarly, ..."),
 - AR ("׳›׳²׳ז׳"׳"׳• ׳™׳¢׳ ׳™ X...", "׳"׳›׳²׳ ׳™×´׳×´ X..."),
 - RU ("׀ ׀æ׀ª׀ª׀µ ׀×ÊÊ ׀×ÒÊ׀ª׀µ׀×...", "׀×Êa ׀´׀¾׀¶׀×ÊÊ׀´׀×Êa..."),
@@ -438,10 +438,10 @@ This means the 2nd, 3rd, 4th, ... entries must NOT start with "also", "another",
 - DE ("Bedeutet auch..."),
 - CS ("Znamenֳ¡ tak׳©...").
 
-WRONG (meaning #2): "׳—׳׳•׳ ׳–׳” ׳’׳ ׳׳©׳”׳• ׳©׳—׳•׳׳׳™׳ ׳‘׳׳™׳׳”."
-WRONG (meaning #3): "׳‘׳ ׳•׳¡׳£, ׳—׳׳•׳ ׳™׳›׳•׳ ׳׳”׳™׳•׳× ׳©׳׳™׳₪׳× ׳¨׳ ׳™׳× ׳©׳ ׳©׳׳™׳₪׳× ׳™׳“."
-RIGHT (meaning #2): "׳׳©׳׳׳× ׳׳•(... ׳—׳•׳•׳™׳™׳, ׳¨׳¢׳™׳•׳ ׳•׳× ׳•׳×׳—׳•׳©׳•׳× ׳©׳ ׳—׳•׳ ׳× ׳‘׳©׳™׳ ׳”."
-RIGHT (meaning #3): "׳©׳׳™׳₪׳× ׳¨׳ ׳™׳× ׳§׳¦׳¨׳” ׳©׳ ׳׳™׳©׳”׳• ׳ ׳—׳©׳•׳."
+WRONG (meaning #2): "׳, ׳׳•׳ ׳, ׳” ׳’׳ ׳׳©׳”׳• ׳©׳, ׳•׳׳׳™׳ ׳‘׳׳™׳׳”."
+WRONG (meaning #3): "׳‘׳ ׳•׳¡׳£, ׳, ׳׳•׳ ׳™׳›׳•׳ ׳׳”׳™׳•׳× ׳©׳׳™׳₪׳× ׳¨׳ ׳™׳× ׳©׳ ׳©׳׳™׳₪׳× ׳™׳“."
+RIGHT (meaning #2): "׳׳©׳׳׳× ׳׳•(... ׳, ׳•׳•׳™׳™׳, ׳¨׳¢׳™׳•׳ ׳•׳× ׳•׳×׳, ׳•׳©׳•׳× ׳©׳ ׳, ׳•׳ ׳× ׳‘׳©׳™׳ ׳”."
+RIGHT (meaning #3): "׳©׳׳™׳₪׳× ׳¨׳ ׳™׳× ׳§׳¦׳¨׳” ׳©׳ ׳׳™׳©׳”׳• ׳ ׳, ׳©׳•׳."
 
 The same RIGHT examples for English: "A series of thoughts, images, or emotions occurring during sleep." / "A brief glimpse of someone." ג€” no "also", no "another sense".
 
@@ -449,12 +449,12 @@ The same RIGHT examples for English: "A series of thoughts, images, or emotions 
 When a user asks about a derived form (a noun derived from a verb, a gerund, a feminine form, a plural that has its own meaning), the etymology should trace the ORIGIN of the underlying base/root word ג€” not invent a separate origin for the derivation.
 
 Specifically for Semitic languages (Hebrew, Arabic):
-- For Hebrew action nouns ("׳©׳ ׳₪׳¢׳•׳׳”" ג€” ׳‘׳“׳™׳§׳”, ׳¨׳™׳¦׳”, ׳”׳׳™׳›׳”, ׳—׳©׳™׳‘׳”, ׳›׳×׳™׳‘׳”, ׳§׳¨׳™׳׳”, ׳׳›׳™׳׳”), the etymology should describe the origin of the BASE VERB in masculine singular past tense (׳‘׳“׳§, ׳¨׳¥, ׳”׳׳, ׳—׳©׳‘, ׳›׳×׳‘, ׳§׳¨׳, ׳׳›׳) ג€” and note that this is a derived noun form.
+- For Hebrew action nouns ("׳©׳ ׳₪׳¢׳•׳׳”" ג€” ׳‘׳“׳™׳§׳”, ׳¨׳™׳¦׳”, ׳”׳׳™׳›׳”, ׳, ׳©׳™׳‘׳”, ׳›׳×׳™׳‘׳”, ׳§׳¨׳™׳׳”, ׳׳›׳™׳׳”), the etymology should describe the origin of the BASE VERB in masculine singular past tense (׳‘׳“׳§, ׳¨׳¥, ׳”׳׳, ׳, ׳©׳‘, ׳›׳×׳‘, ׳§׳¨׳, ׳׳›׳) ג€” and note that this is a derived noun form.
 - For Hebrew agent nouns (׳‘׳•׳“׳§, ׳¨׳¥, ׳”׳•׳׳), similar ג€” trace the verbal root.
 - For feminine forms of nouns (׳׳•׳¨׳” ג† ׳׳•׳¨׳”), only if the feminine has independent meaning.
 
 CORRECT examples:
-- "׳‘׳“׳™׳§׳”" ג†’ sourceLanguage: "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×", originalMeaning: "׳׳”׳©׳•׳¨׳© ׳‘.׳“.׳§ ג€” ׳׳—׳§׳•׳¨, ׳׳—׳₪׳© ׳‘׳§׳₪׳™׳“׳” ׳›׳“׳™ ׳׳׳׳× ׳׳• ׳׳’׳׳•׳×. ׳‘׳“׳™׳§׳” ׳”׳™׳ ׳©׳ ׳”׳₪׳¢׳•׳׳” ׳©׳ '׳‘׳“׳§'.", historyNote: "׳”׳©׳•׳¨׳© ׳׳•׳₪׳™׳¢ ׳‘׳׳§׳¨׳ ׳‘׳”׳§׳©׳¨׳™׳ ׳©׳ ׳—׳™׳₪׳•׳© ׳•׳׳™׳׳•׳×..."
+- "׳‘׳“׳™׳§׳”" ג†’ sourceLanguage: "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×", originalMeaning: "׳׳”׳©׳•׳¨׳© ׳‘.׳“.׳§ ג€” ׳׳, ׳§׳•׳¨, ׳׳, ׳₪׳© ׳‘׳§׳₪׳™׳“׳” ׳›׳“׳™ ׳׳׳׳× ׳׳• ׳׳’׳׳•׳×. ׳‘׳“׳™׳§׳” ׳”׳™׳ ׳©׳ ׳”׳₪׳¢׳•׳׳” ׳©׳ '׳‘׳“׳§'.", historyNote: "׳”׳©׳•׳¨׳© ׳׳•׳₪׳™׳¢ ׳‘׳׳§׳¨׳ ׳‘׳”׳§׳©׳¨׳™׳ ׳©׳ ׳, ׳™׳₪׳•׳© ׳•׳׳™׳׳•׳×..."
 - "׳¨׳™׳¦׳”" ג†’ trace etymology of "׳¨׳¥"
 - "׳”׳׳™׳›׳”" ג†’ trace etymology of "׳”׳׳"
 
@@ -464,16 +464,16 @@ For English/Romance languages:
 
 THE RULE: If a word is a clear morphological derivation of a more basic verb/root, the etymology MUST start from that base form. Mention the derivation in originalMeaning.
 
-CRITICAL — RESPONSE LANGUAGE:
+CRITICAL, RESPONSE LANGUAGE:
 Respond ENTIRELY in the user's UI language (the language is passed at the end of the user message as "User's UI language: <LANG>"). This applies to EVERY piece of text you generate:
   - meaning text
   - example sentences
   - sourceLanguage / breakdown / originalMeaning / historyNote
   - kidsExplanation
   - idiom meanings
-The headword and the original-script forms (originalWord) stay in their native script. Example sentences are written in the UI language but they MAY include the headword inline in its original script when it reads naturally (e.g. for a Hebrew user searching "love", the examples are written in Hebrew and use "love" inline). If the input word's detected language differs from the UI language, IGNORE the input word's language for output purposes — always use the UI language.
+The headword and the original-script forms (originalWord) stay in their native script. Example sentences are written in the UI language but they MAY include the headword inline in its original script when it reads naturally (e.g. for a Hebrew user searching "love", the examples are written in Hebrew and use "love" inline). If the input word's detected language differs from the UI language, IGNORE the input word's language for output purposes, always use the UI language.
 
-CRITICAL — HEBREW AND ARABIC GRAMMATICAL AGREEMENT (gender and number):
+CRITICAL, HEBREW AND ARABIC GRAMMATICAL AGREEMENT (gender and number):
 When the UI language is Hebrew or Arabic, EVERY example sentence must have correct verb-subject agreement in gender (masculine vs feminine) and number (singular vs plural). This is non-negotiable native grammar. The most common machine-generated mistake is taking an idiom or phrase that contains a verb in masculine singular form and pasting it into example sentences with feminine or plural subjects WITHOUT inflecting the verb to match. That is a glaring error a native speaker spots immediately.
 
 HEBREW EXAMPLES (idiom "לא יסולא בפז" = "priceless", literally "will not be valued in gold"):
@@ -505,11 +505,11 @@ Your response must follow this exact JSON structure:
   "multiplemeanings": true or false,
   "meanings": [
     {
-      "meaning": "clear, simple explanation of this specific meaning — human language, no dictionary tone",
+      "meaning": "clear, simple explanation of this specific meaning, human language, no dictionary tone",
       "pos": "noun | verb | adjective | adverb | preposition | conjunction | pronoun | interjection | determiner | article | auxiliary | particle | numeral | proper noun | phrase | idiom",
       "examples": [
         "natural everyday sentence for THIS specific meaning",
-        "another sentence for THIS meaning — different context",
+        "another sentence for THIS meaning, different context",
         "a third sentence showing THIS meaning in use"
       ]
     }
@@ -530,9 +530,9 @@ CRITICAL RULES (FINAL CHECKLIST):
 - NEVER hallucinate a meaning (RULE #5). If unsure, OMIT.
 - etymology MUST be a structured object with 5 fields (sourceLanguage, originalWord, breakdown, originalMeaning, historyNote) ג€” see RULE #2. Keep it SIMPLE. Language name IN USER'S LANGUAGE. originalWord ONLY when source is non-Latin script OR materially different from modern (Hebrewג†’Hebrew = empty!). breakdown for compound words. Transliteration with diacritics only ג€” no Greek/Arabic/Cyrillic letters. historyNote is the SPECIFIC story (verses, coiners, practices), empty if no story. NEVER output etymology as free text ג€” always the object.
 - Every word in the output must be a real, standard word ג€” no invented or hallucinated words (RULE #3).
-- Every meaning MUST have a "pos" field — the part of speech for THAT specific meaning, given as a single English token from this exact set: noun, verb, adjective, adverb, preposition, conjunction, pronoun, interjection, determiner, article, auxiliary, particle, numeral, proper noun, phrase, idiom. ALWAYS English (the UI translates it to the reader's language). When a word has different meanings with different parts of speech, EACH meaning carries its own pos (e.g. "dream" meaning 1 noun, meaning 2 noun, meaning 3 verb).
-- Do NOT include domain, register, frequency, or wordFamily fields — they are not needed.
-- Respond ENTIRELY in the user's UI language passed in the user message. NEVER in the input word's language when they differ — UI language always wins for definitions, examples, etymology fields, and kids explanation. The headword and original-script forms stay native; everything else uses UI language.
+- Every meaning MUST have a "pos" field, the part of speech for THAT specific meaning, given as a single English token from this exact set: noun, verb, adjective, adverb, preposition, conjunction, pronoun, interjection, determiner, article, auxiliary, particle, numeral, proper noun, phrase, idiom. ALWAYS English (the UI translates it to the reader's language). When a word has different meanings with different parts of speech, EACH meaning carries its own pos (e.g. "dream" meaning 1 noun, meaning 2 noun, meaning 3 verb).
+- Do NOT include domain, register, frequency, or wordFamily fields, they are not needed.
+- Respond ENTIRELY in the user's UI language passed in the user message. NEVER in the input word's language when they differ, UI language always wins for definitions, examples, etymology fields, and kids explanation. The headword and original-script forms stay native; everything else uses UI language.
 - Keep language human, warm, clear. No academic tone. No dictionary phrasing.
 - Examples must feel like real life ג€” sentences a person would actually say or read.`;
 
@@ -561,13 +561,13 @@ The "explanation" field MUST NOT use the word being defined or any obvious morph
 
 WRONG examples ג€” explanations that use the word:
 - Word "׳‘׳“׳™׳§׳”", explanation: "׳‘׳“׳™׳§׳” ׳”׳™׳ ׳›׳©׳‘׳•׳“׳§׳™׳ ׳׳©׳”׳•..." ג†’ uses "׳‘׳•׳“׳§׳™׳" (same root). WRONG.
-- Word "׳¨׳™׳¦׳”", explanation: "׳¨׳™׳¦׳” ׳–׳” ׳›׳©׳¨׳¦׳™׳ ׳׳”׳¨..." ג†’ uses "׳¨׳¦׳™׳" (same root). WRONG.
+- Word "׳¨׳™׳¦׳”", explanation: "׳¨׳™׳¦׳” ׳, ׳” ׳›׳©׳¨׳¦׳™׳ ׳׳”׳¨..." ג†’ uses "׳¨׳¦׳™׳" (same root). WRONG.
 - Word "running", explanation: "Running is when you run very fast." ג†’ uses "run". WRONG.
 - Word "decision", explanation: "A decision is what you decide." ג†’ uses "decide". WRONG.
 
 CORRECT examples ג€” explanations using completely different words:
-- Word "׳‘׳“׳™׳§׳”" ג†’ explanation: "׳₪׳¢׳•׳׳” ׳©׳ ׳”׳¡׳×׳›׳׳•׳× ׳•׳׳™׳׳•׳“ ׳©׳ ׳׳©׳”׳•, ׳›׳“׳™ ׳׳“׳¢׳× ׳׳ ׳”׳•׳ ׳‘׳¡׳“׳¨ ׳׳• ׳׳. ׳›׳׳• ׳׳‘׳“׳•׳§ ׳׳ ׳×׳₪׳•׳— ׳˜׳¢׳™׳ ׳¢׳ ׳™׳“׳™ ׳”׳¨׳—׳” ׳•׳˜׳¢׳™׳׳”."
-- Word "׳¨׳™׳¦׳”" ג†’ explanation: "׳×׳ ׳•׳¢׳” ׳׳”׳™׳¨׳” ׳¢׳ ׳”׳¨׳’׳׳™׳™׳, ׳™׳•׳×׳¨ ׳׳”׳¨ ׳׳”׳׳™׳›׳”. ׳›׳©׳”׳’׳•׳£ ׳׳×׳§׳“׳ ׳‘׳§׳₪׳™׳¦׳•׳× ׳§׳¦׳¨׳•׳× ׳•׳”׳¨׳’׳׳™׳™׳ ׳–׳–׳•׳× ׳—׳–׳§."
+- Word "׳‘׳“׳™׳§׳”" ג†’ explanation: "׳₪׳¢׳•׳׳” ׳©׳ ׳”׳¡׳×׳›׳׳•׳× ׳•׳׳™׳׳•׳“ ׳©׳ ׳׳©׳”׳•, ׳›׳“׳™ ׳׳“׳¢׳× ׳׳ ׳”׳•׳ ׳‘׳¡׳“׳¨ ׳׳• ׳׳. ׳›׳׳• ׳׳‘׳“׳•׳§ ׳׳ ׳×׳₪׳•׳,  ׳˜׳¢׳™׳ ׳¢׳ ׳™׳“׳™ ׳”׳¨׳, ׳” ׳•׳˜׳¢׳™׳׳”."
+- Word "׳¨׳™׳¦׳”" ג†’ explanation: "׳×׳ ׳•׳¢׳” ׳׳”׳™׳¨׳” ׳¢׳ ׳”׳¨׳’׳׳™׳™׳, ׳™׳•׳×׳¨ ׳׳”׳¨ ׳׳”׳׳™׳›׳”. ׳›׳©׳”׳’׳•׳£ ׳׳×׳§׳“׳ ׳‘׳§׳₪׳™׳¦׳•׳× ׳§׳¦׳¨׳•׳× ׳•׳”׳¨׳’׳׳™׳™׳ ׳, ׳, ׳•׳× ׳, ׳, ׳§."
 - Word "running" ג†’ explanation: "Moving very fast with your legs, faster than walking. When you do this, both feet leave the ground for a tiny moment."
 - Word "decision" ג†’ explanation: "A choice you make when there are two or more things to pick from. Like choosing whether to eat an apple or a banana for lunch."
 
@@ -575,11 +575,11 @@ The examples ARE supposed to show the word in real sentences a child can relate 
 
 Example ג€” word "׳§׳¨׳" meaning "ray of light" ג€” Hebrew user:
 "kidsExplanation": {
-  "explanation": "׳₪׳¡ ׳“׳§ ׳©׳ ׳׳•׳¨ ׳©׳‘׳ ׳׳׳§׳•׳¨ ׳›׳׳• ׳”׳©׳׳© ׳׳• ׳₪׳ ׳¡. ׳׳₪׳©׳¨ ׳׳¨׳׳•׳× ׳׳•׳×׳• ׳›׳©׳”׳׳•׳¨ ׳¢׳•׳‘׳¨ ׳“׳¨׳ ׳—׳•׳¨ ׳׳• ׳¢׳¨׳₪׳.",
+  "explanation": "׳₪׳¡ ׳“׳§ ׳©׳ ׳׳•׳¨ ׳©׳‘׳ ׳׳׳§׳•׳¨ ׳›׳׳• ׳”׳©׳׳© ׳׳• ׳₪׳ ׳¡. ׳׳₪׳©׳¨ ׳׳¨׳׳•׳× ׳׳•׳×׳• ׳›׳©׳”׳׳•׳¨ ׳¢׳•׳‘׳¨ ׳“׳¨׳ ׳, ׳•׳¨ ׳׳• ׳¢׳¨׳₪׳.",
   "examples": [
-    "׳‘׳‘׳•׳§׳¨, ׳§׳¨׳ ׳©׳׳© ׳ ׳›׳ ׳¡׳× ׳“׳¨׳ ׳”׳—׳׳•׳ ׳•׳׳׳™׳¨׳” ׳׳× ׳”׳׳™׳˜׳” ׳©׳׳.",
-    "׳›׳©׳׳×׳” ׳׳“׳׳™׳§ ׳₪׳ ׳¡ ׳‘׳—׳•׳©׳, ׳™׳•׳¦׳׳× ׳׳׳ ׳• ׳§׳¨׳ ׳׳•׳¨ ׳׳¨׳•׳›׳”.",
-    "׳”׳׳’׳“׳׳•׳¨ ׳©׳•׳׳— ׳§׳¨׳ ׳׳•׳¨ ׳—׳–׳§׳” ׳©׳¢׳•׳–׳¨׳× ׳׳¡׳₪׳™׳ ׳•׳× ׳׳׳¦׳•׳ ׳׳× ׳”׳“׳¨׳."
+    "׳‘׳‘׳•׳§׳¨, ׳§׳¨׳ ׳©׳׳© ׳ ׳›׳ ׳¡׳× ׳“׳¨׳ ׳”׳, ׳׳•׳ ׳•׳׳׳™׳¨׳” ׳׳× ׳”׳׳™׳˜׳” ׳©׳׳.",
+    "׳›׳©׳׳×׳” ׳׳“׳׳™׳§ ׳₪׳ ׳¡ ׳‘׳, ׳•׳©׳, ׳™׳•׳¦׳׳× ׳׳׳ ׳• ׳§׳¨׳ ׳׳•׳¨ ׳׳¨׳•׳›׳”.",
+    "׳”׳׳’׳“׳׳•׳¨ ׳©׳•׳׳,  ׳§׳¨׳ ׳׳•׳¨ ׳, ׳, ׳§׳” ׳©׳¢׳•׳, ׳¨׳× ׳׳¡׳₪׳™׳ ׳•׳× ׳׳׳¦׳•׳ ׳׳× ׳”׳“׳¨׳."
   ]
 }
 (Note: explanation does not use "׳§׳¨׳". Examples DO use "׳§׳¨׳" ג€” that's the point of examples.)
@@ -598,7 +598,7 @@ Example ג€” word "ephemeral" ג€” English user:
 נ¢ ADDITIONAL INSTRUCTION ג€” IDIOMS (paid plan):
 Add idioms (phrases/expressions) that use this word in two places:
 
-1. MEANING-SPECIFIC idioms ג€” inside each meaning item, as an "idioms" array (0-2 items). These are idioms that use THIS specific meaning of the word. Example: meaning "ray of light" ג†’ idiom "׳§׳¨׳ ׳”׳©׳׳© ׳”׳–׳“׳§׳¨׳”" (a figurative use).
+1. MEANING-SPECIFIC idioms ג€” inside each meaning item, as an "idioms" array (0-2 items). These are idioms that use THIS specific meaning of the word. Example: meaning "ray of light" ג†’ idiom "׳§׳¨׳ ׳”׳©׳׳© ׳”׳, ׳“׳§׳¨׳”" (a figurative use).
 
 2. GENERAL idioms ג€” at the ROOT of the response (alongside "etymology"), as a "generalIdioms" array (0-3 items). These are well-known phrases/expressions that include the word but don't belong to one specific meaning.
 
@@ -610,13 +610,13 @@ Each idiom has EXACTLY this shape:
 
 CRITICAL RULES for idioms:
 - INCLUDE BOTH strict idioms AND well-known COLLOCATIONS / set phrases. A "set phrase" is a multi-word combination that a speaker recognizes as a fixed expression with a recognizable meaning beyond the literal sum of its words ג€” it does NOT have to be a fully figurative idiom. If a Hebrew/Arabic/Russian/etc. speaker would recognize the phrase as a real expression, include it.
-- For Hebrew specifically: the language is collocation-rich rather than idiom-rich. Many words have well-known set phrases (׳¦׳™׳¨׳•׳₪׳™׳ ׳׳™׳“׳•׳¢׳™׳) even when "pure" idioms are rare. INCLUDE them. Use the user's intuition test: would a Hebrew speaker say "ah yes, ׳”׳¢׳•׳׳ ׳”׳×׳—׳×׳•׳, that's a thing"? If yes ג€” include it.
-- Examples of phrases that QUALIFY for "׳×׳—׳×׳•׳":
-  ג€¢ "׳”׳¢׳•׳׳ ׳”׳×׳—׳×׳•׳" (the underworld / criminal world)
-  ג€¢ "׳™׳“׳• ׳¢׳ ׳”׳×׳—׳×׳•׳ ׳”" (he's losing / on the weaker side)
-  ג€¢ "׳‘׳’׳“ ׳×׳—׳×׳•׳" (undergarment ג€” set phrase)
-  ג€¢ "׳”׳—׳§ ׳”׳×׳—׳×׳•׳" (the lower jaw ג€” set phrase)
-- ONLY skip a phrase if it relies on a vocabulary word so obscure that the average user won't understand it (e.g. "׳¢׳“ ׳”׳“׳™׳•׳˜׳” ׳”׳×׳—׳×׳•׳ ׳”" ג€” skip because "׳“׳™׳•׳˜׳”" is obscure).
+- For Hebrew specifically: the language is collocation-rich rather than idiom-rich. Many words have well-known set phrases (׳¦׳™׳¨׳•׳₪׳™׳ ׳׳™׳“׳•׳¢׳™׳) even when "pure" idioms are rare. INCLUDE them. Use the user's intuition test: would a Hebrew speaker say "ah yes, ׳”׳¢׳•׳׳ ׳”׳×׳, ׳×׳•׳, that's a thing"? If yes ג€” include it.
+- Examples of phrases that QUALIFY for "׳×׳, ׳×׳•׳":
+  ג€¢ "׳”׳¢׳•׳׳ ׳”׳×׳, ׳×׳•׳" (the underworld / criminal world)
+  ג€¢ "׳™׳“׳• ׳¢׳ ׳”׳×׳, ׳×׳•׳ ׳”" (he's losing / on the weaker side)
+  ג€¢ "׳‘׳’׳“ ׳×׳, ׳×׳•׳" (undergarment ג€” set phrase)
+  ג€¢ "׳”׳, ׳§ ׳”׳×׳, ׳×׳•׳" (the lower jaw ג€” set phrase)
+- ONLY skip a phrase if it relies on a vocabulary word so obscure that the average user won't understand it (e.g. "׳¢׳“ ׳”׳“׳™׳•׳˜׳” ׳”׳×׳, ׳×׳•׳ ׳”" ג€” skip because "׳“׳™׳•׳˜׳”" is obscure).
 - DO NOT invent phrases that no speaker actually uses. The bar is "recognized in the wild", not "famous nationally".
 - For Hebrew words, prefer Hebrew idioms/collocations. For English words, prefer English ones.
 - Keep "phrase" in the word's original language. Keep "meaning" in the USER'S UI LANGUAGE.
@@ -625,7 +625,7 @@ CRITICAL RULES for idioms:
 Example ג€” word "׳™׳“" (hand), Hebrew user:
 meanings[0] (body part: hand):
   "idioms": [
-    {"phrase": "׳™׳“ ׳‘׳™׳“", "meaning": "׳™׳—׳“, ׳‘׳©׳™׳×׳•׳£ ׳₪׳¢׳•׳׳”"},
+    {"phrase": "׳™׳“ ׳‘׳™׳“", "meaning": "׳™׳, ׳“, ׳‘׳©׳™׳×׳•׳£ ׳₪׳¢׳•׳׳”"},
     {"phrase": "׳™׳“ ׳¢׳ ׳”׳׳‘", "meaning": "׳׳”׳™׳©׳‘׳¢ ׳©׳׳•׳׳¨׳™׳ ׳׳׳×"}
   ]
 meanings[1] (monument/memorial):
@@ -648,12 +648,12 @@ Response root:
     {"phrase": "an eye for an eye", "meaning": "equal retaliation for a wrong"}
   ]
 
-Example ג€” word "׳×׳—׳×׳•׳", Hebrew user (illustrating COLLOCATIONS, not just strict idioms):
+Example ג€” word "׳×׳, ׳×׳•׳", Hebrew user (illustrating COLLOCATIONS, not just strict idioms):
 Response root:
   "generalIdioms": [
-    {"phrase": "׳”׳¢׳•׳׳ ׳”׳×׳—׳×׳•׳", "meaning": "׳—׳‘׳¨׳× ׳”׳₪׳©׳¢ ׳•׳”׳₪׳©׳™׳¢׳•׳× ׳”׳׳¨׳’׳ ׳ ׳×"},
-    {"phrase": "׳™׳“׳• ׳¢׳ ׳”׳×׳—׳×׳•׳ ׳”", "meaning": "׳ ׳™׳¦׳‘׳™׳× ׳‘׳—׳™׳™׳ ׳/׳‘׳׳• ׳ ׳—׳׳©׳”, ׳‘׳¦׳“ ׳”׳׳₪׳¡׳™׳“"},
-    {"phrase": "׳”׳—׳§ ׳”׳×׳—׳×׳•׳", "meaning": "׳—׳§ ׳”׳₪׳” ׳”׳ ׳× ׳ ׳—׳× ׳©׳ ׳•׳©׳ ׳©׳™׳ ׳™׳ ׳©׳ ׳׳˜׳”"}
+    {"phrase": "׳”׳¢׳•׳׳ ׳”׳×׳, ׳×׳•׳", "meaning": "׳, ׳‘׳¨׳× ׳”׳₪׳©׳¢ ׳•׳”׳₪׳©׳™׳¢׳•׳× ׳”׳׳¨׳’׳ ׳ ׳×"},
+    {"phrase": "׳™׳“׳• ׳¢׳ ׳”׳×׳, ׳×׳•׳ ׳”", "meaning": "׳ ׳™׳¦׳‘׳™׳× ׳‘׳, ׳™׳™׳ ׳/׳‘׳׳• ׳ ׳, ׳׳©׳”, ׳‘׳¦׳“ ׳”׳׳₪׳¡׳™׳“"},
+    {"phrase": "׳”׳, ׳§ ׳”׳×׳, ׳×׳•׳", "meaning": "׳, ׳§ ׳”׳₪׳” ׳”׳ ׳× ׳ ׳, ׳× ׳©׳ ׳•׳©׳ ׳©׳™׳ ׳™׳ ׳©׳ ׳׳˜׳”"}
   ]
 
 If the word has NO genuine idioms or recognized set phrases at all in that language, return all empty arrays. Do not force or invent.`;
@@ -661,7 +661,7 @@ If the word has NO genuine idioms or recognized set phrases at all in that langu
 const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 
 ג ן¸ CRITICAL RULE #1 ג€” NEVER AUTOCORRECT THE WORD:
-The user's spelling is intentional. Define the EXACT word they typed, character by character. Do NOT swap ׳ ׳—׳©׳ for ׳ ׳›׳©׳, ׳₪׳¨׳© for ׳₪׳¨׳¡, etc. If the spelling is rare or unusual, that's deliberate.
+The user's spelling is intentional. Define the EXACT word they typed, character by character. Do NOT swap ׳ ׳, ׳©׳ for ׳ ׳›׳©׳, ׳₪׳¨׳© for ׳₪׳¨׳¡, etc. If the spelling is rare or unusual, that's deliberate.
 
 ג ן¸ CRITICAL RULE #2 ג€” ETYMOLOGY IS A 5-FIELD OBJECT (same as SYSTEM_PROMPT):
 1. "sourceLanguage" ג€” language name IN USER'S LANGUAGE (e.g., Hebrew user: "׳™׳•׳•׳ ׳™׳×". English user: "Greek"). Wanderwֳ¶rter: " / " separator
@@ -684,7 +684,7 @@ Every word in your response must be a real, standard word in the target language
 ג ן¸ CRITICAL RULE #4 ג€” NO CIRCULAR DEFINITIONS:
 The "meaning" field MUST NOT contain the word being defined or any morphological variant of it (root/stem siblings). A definition that uses the word it's defining is useless. Use synonyms or paraphrases.
 - WRONG: defining "׳‘׳“׳™׳§׳”" as "׳₪׳¢׳•׳׳” ׳©׳ ׳‘׳“׳™׳§׳”..." or "׳׳” ׳©׳¢׳•׳©׳™׳ ׳›׳©׳‘׳•׳“׳§׳™׳".
-- RIGHT: "׳₪׳¢׳•׳׳” ׳©׳ ׳‘׳—׳™׳ ׳” ׳•׳‘׳™׳¨׳•׳¨ ׳›׳“׳™ ׳׳’׳׳•׳× ׳׳ ׳׳©׳”׳• ׳×׳§׳™׳".
+- RIGHT: "׳₪׳¢׳•׳׳” ׳©׳ ׳‘׳, ׳™׳ ׳” ׳•׳‘׳™׳¨׳•׳¨ ׳›׳“׳™ ׳׳’׳׳•׳× ׳׳ ׳׳©׳”׳• ׳×׳§׳™׳".
 Before writing each meaning, scan it. If the word's root appears, REWRITE.
 
 ג ן¸ CRITICAL RULE #5 ג€” ETYMOLOGY OF DERIVED FORMS:
@@ -941,7 +941,7 @@ All TEXT fields are written in ${uiLangName}. The schema:
   "originalWord": "Transliterated original form WITH Latin diacritics like ē, ī, ū, ó (e.g. 'lufu', 'somnium', 'ephḗmeros'). ONLY when source script is non-Latin or materially different. Empty string when source = current language (Hebrew word from Hebrew root) or for compound words.",
   "breakdown": "Only if the word is a compound: 'part1 (meaning1) + part2 (meaning2)' with Latin transliteration and meanings in ${uiLangName}. Empty string otherwise.",
   "originalMeaning": "What the word originally meant, written in ${uiLangName}. Short and concrete. One sentence.",
-  "historyNote": "Optional 1–3 sentence specific history: biblical verse cite (e.g. 'איוב כ\\\"ח, י\\\"ז'), coiner, historical practice. Empty string if no specific story is known. Never invent."
+  "historyNote": "Optional 1, 3 sentence specific history: biblical verse cite (e.g. 'איוב כ\\\"ח, י\\\"ז'), coiner, historical practice. Empty string if no specific story is known. Never invent."
 }
 
 ABSOLUTE BANS (the most common machine-translation failure mode for Hebrew):
@@ -1120,7 +1120,7 @@ function buildGaditEasterEgg(uiLangCode: string): object {
         },
         {
           meaning:
-            "(שם עצם, מותג) מילון חכם רב-לשוני שנבנה סביב הפעולה הזאת — מסביר כל מילה עם משמעויות, דוגמאות, אטימולוגיה, ניבים ותמונה, ב-11 שפות.",
+            "(שם עצם, מותג) מילון חכם רב-לשוני שנבנה סביב הפעולה הזאת, מסביר כל מילה עם משמעויות, דוגמאות, אטימולוגיה, ניבים ותמונה, ב-11 שפות.",
           pos: "שם עצם",
           examples: [
             "Gadit הוא המקום שבו עושים GAD למילה.",
@@ -1157,7 +1157,7 @@ function buildGaditEasterEgg(uiLangCode: string): object {
       },
       {
         meaning:
-          "(noun, brand) A smart multilingual dictionary built around the act of GADing — it explains every word with meanings, examples, etymology, idioms and an image, in 11 languages.",
+          "(noun, brand) A smart multilingual dictionary built around the act of GADing, it explains every word with meanings, examples, etymology, idioms and an image, in 11 languages.",
         pos: "noun",
         examples: [
           "Gadit is the place where you GAD a word.",
@@ -1337,8 +1337,8 @@ export async function POST(req: NextRequest) {
     const basePrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;
     const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
-      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language — meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
-      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language — meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`;
+      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
+      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`;
 
     // Stream from OpenAI
     let openAIResponse: Response;
@@ -1362,7 +1362,7 @@ export async function POST(req: NextRequest) {
         // issue. The body carries a stable error code the client
         // matches on, plus a UI-language-aware fallback string.
         const upstreamCode = openAIResponse.status;
-        console.error(`[define] both models down — upstream code ${upstreamCode}`);
+        console.error(`[define] both models down, upstream code ${upstreamCode}`);
         return NextResponse.json(
           {
             error: "service_unavailable",
@@ -1532,7 +1532,7 @@ export async function POST(req: NextRequest) {
               const doneEvent = `data: ${JSON.stringify({ type: "done", result: salvaged })}\n\n`;
               safeEnqueue(encoder.encode(doneEvent));
             } else {
-              console.error("All attempts (1 streamed + 2 retries + etymology fallback + sanitise) failed — surfacing error");
+              console.error("All attempts (1 streamed + 2 retries + etymology fallback + sanitise) failed, surfacing error");
               const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
               safeEnqueue(encoder.encode(errorEvent));
             }

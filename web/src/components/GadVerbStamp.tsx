@@ -31,7 +31,7 @@ export function GadVerbStamp() {
     <aside
       className="wb-verb-stamp"
       role="note"
-      aria-label="Gad — to understand a word, fully"
+      aria-label="Gad, to understand a word, fully"
       dir="ltr"
     >
       <span className="wb-verb-stamp-icon" aria-hidden="true">

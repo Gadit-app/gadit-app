@@ -12,7 +12,7 @@ import { DashboardPage } from "./DashboardClient";
  * visitors via the auth context.
  */
 export const metadata: Metadata = {
-  title: "Affiliate Dashboard — Gadit",
+  title: "Affiliate Dashboard, Gadit",
   robots: { index: false, follow: false },
 };
 

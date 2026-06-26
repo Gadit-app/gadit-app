@@ -171,7 +171,7 @@ export function HomeSearch() {
     <section
       style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}
     >
-      {/* Clean search bar — Google-style. Hard-coded `dir="ltr"` on
+      {/* Clean search bar, Google-style. Hard-coded `dir="ltr"` on
           the cradle so the layout stays icon-left / mic-right in any
           UI locale (Google itself does this — even on hebrew.google.com
           the magnifying glass is on the left). The INPUT element gets
@@ -236,7 +236,7 @@ export function HomeSearch() {
               }
             }}
           />
-          {/* Voice input — RIGHT side, mirrors Google's mic position.
+          {/* Voice input, RIGHT side, mirrors Google's mic position.
               Always enabled (the API itself rate-limits anonymous use
               if needed). The component handles its own recording UI
               + Whisper transcription via /api/transcribe. */}
@@ -399,7 +399,7 @@ export function ResultTease() {
       </div>
 
       <div className="mt-4 flex items-center justify-center">
-        {/* Was linking to /pricing — bait-and-switch: the copy
+        {/* Was linking to /pricing, bait-and-switch: the copy
             promises "see the full result" but the click landed on a
             tier comparison instead. Now goes to the actual /word/[X]
             page so the visitor gets what was promised: all meanings,
@@ -473,7 +473,7 @@ export function ValueProps() {
           "clamp(64px, 10vw, 130px) clamp(16px, 3vw, 24px) clamp(30px, 5vw, 60px)",
       }}
     >
-      {/* Section header — centered, larger, more presence. Landing-
+      {/* Section header, centered, larger, more presence. Landing-
           page convention is centered headers (Stripe / Linear /
           Notion all do this); right-aligned felt off-balance against
           the centered card grid below. */}
@@ -502,7 +502,7 @@ export function ValueProps() {
         </h2>
       </div>
 
-      {/* Cards now share the wordmark's electric-blue palette — same
+      {/* Cards now share the wordmark's electric-blue palette, same
           gradient, same ring glow — so the section reads as branded
           surface rather than the neutral navy of the page. Title and
           body are pure white for high contrast against the blue. */}
@@ -664,7 +664,7 @@ export function HomeFooter() {
         }}
       >
         <span>© 2026 Gadit</span>
-        {/* Language picker — duplicated from the header so the user
+        {/* Language picker, duplicated from the header so the user
             who scrolls past the fold without noticing the header still
             has a way to switch, and so search engines see the locale
             map at the bottom (i18n hygiene). placement="top" so the

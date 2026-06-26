@@ -112,73 +112,73 @@ const notoSansJp = Noto_Sans_JP({
 // when a user invokes the in-app share. Title is third-person.
 const META: Record<Lang, { title: string; description: string; locale: string }> = {
   he: {
-    title: "Gadit — להבין מילים עד הסוף",
+    title: "Gadit, להבין מילים עד הסוף",
     description:
       "כלי חדש שעוזר להבין כל מילה באמת. כל המשמעויות, דוגמאות, ניבים, ומקור המילה. חינמי להתחיל, שדרוג בעלות מאוד נמוכה. שווה לנסות.",
     locale: "he_IL",
   },
   en: {
-    title: "Gadit — Understand words to the end",
+    title: "Gadit, Understand words to the end",
     description:
       "A new tool that helps you really understand every word. All the meanings, examples, idioms, and where the word comes from. Free to start, very low-cost upgrade. Worth a try.",
     locale: "en_US",
   },
   ar: {
-    title: "Gadit — لفهم الكلمات حتى النهاية",
+    title: "Gadit, لفهم الكلمات حتى النهاية",
     description:
       "أداة جديدة تساعدك على فهم كل كلمة حقًا. كل المعاني، أمثلة، تعابير، وأصل الكلمة. مجاني للبدء، ترقية بتكلفة منخفضة جدًا. تستحق التجربة.",
     locale: "ar",
   },
   ru: {
-    title: "Gadit — Понять слова до конца",
+    title: "Gadit, Понять слова до конца",
     description:
       "Новый инструмент, который помогает по-настоящему понять каждое слово. Все значения, примеры, идиомы и происхождение слова. Бесплатно для начала, апгрейд по очень низкой цене. Стоит попробовать.",
     locale: "ru_RU",
   },
   es: {
-    title: "Gadit — Entender las palabras hasta el final",
+    title: "Gadit, Entender las palabras hasta el final",
     description:
       "Una nueva herramienta que te ayuda a entender de verdad cada palabra. Todos los significados, ejemplos, modismos y el origen de la palabra. Gratis para empezar, upgrade a muy bajo costo. Vale la pena probar.",
     locale: "es_ES",
   },
   pt: {
-    title: "Gadit — Entender as palavras até o fim",
+    title: "Gadit, Entender as palavras até o fim",
     description:
       "Uma nova ferramenta que ajuda a entender de verdade cada palavra. Todos os significados, exemplos, expressões idiomáticas e a origem da palavra. Grátis para começar, upgrade com custo muito baixo. Vale a pena experimentar.",
     locale: "pt_BR",
   },
   de: {
-    title: "Gadit — Wörter bis zum Ende verstehen",
+    title: "Gadit, Wörter bis zum Ende verstehen",
     description:
       "Ein neues Tool, das dir hilft, jedes Wort wirklich zu verstehen. Alle Bedeutungen, Beispiele, Redewendungen und die Herkunft des Wortes. Kostenlos zum Starten, Upgrade zu sehr günstigen Preisen. Einen Versuch wert.",
     locale: "de_DE",
   },
   cs: {
-    title: "Gadit — Pochopit slova do konce",
+    title: "Gadit, Pochopit slova do konce",
     description:
       "Nový nástroj, který vám pomůže opravdu pochopit každé slovo. Všechny významy, příklady, idiomy a původ slova. Zdarma na začátek, vylepšení za velmi nízkou cenu. Stojí za vyzkoušení.",
     locale: "cs_CZ",
   },
   sk: {
-    title: "Gadit — Pochopiť slová do konca",
+    title: "Gadit, Pochopiť slová do konca",
     description:
       "Nový nástroj, ktorý vám pomôže naozaj pochopiť každé slovo. Všetky významy, príklady, idiómy a pôvod slova. Zadarmo na začiatok, vylepšenie za veľmi nízku cenu. Stojí za vyskúšanie.",
     locale: "sk_SK",
   },
   fr: {
-    title: "Gadit — Comprendre les mots jusqu'au bout",
+    title: "Gadit, Comprendre les mots jusqu'au bout",
     description:
       "Un nouvel outil qui aide à vraiment comprendre chaque mot. Tous les sens, exemples, expressions et l'origine du mot. Gratuit pour commencer, mise à niveau à très bas prix. Ça vaut le coup d'essayer.",
     locale: "fr_FR",
   },
   it: {
-    title: "Gadit — Capire le parole fino in fondo",
+    title: "Gadit, Capire le parole fino in fondo",
     description:
       "Un nuovo strumento che aiuta a capire davvero ogni parola. Tutti i significati, esempi, modi di dire e l'origine della parola. Gratis per iniziare, upgrade a costo molto basso. Vale la pena provarlo.",
     locale: "it_IT",
   },
   ja: {
-    title: "Gadit — 言葉を最後まで理解する",
+    title: "Gadit, 言葉を最後まで理解する",
     description:
       "すべての言葉を本当に理解できる新しいツール。すべての意味、例文、イディオム、語源まで。無料で始められて、有料プランも非常に手頃。試す価値があります。",
     locale: "ja_JP",
@@ -319,7 +319,7 @@ export default async function RootLayout({
           <ServiceWorkerRegister />
           <Analytics />
           <SpeedInsights />
-          {/* Affonso affiliate-tracking pixel — sets a 60-day
+          {/* Affonso affiliate-tracking pixel, sets a 60-day
               affonso_referral cookie when a visitor lands with
               ?ref=CODE in the URL. Captured at checkout time and
               attributed via Stripe metadata. afterInteractive is the

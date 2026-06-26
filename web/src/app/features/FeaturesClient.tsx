@@ -142,9 +142,9 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
     },
     tieback: {
       title: "מה כל מסלול נותן",
-      basic: "Basic — להבין את המילה. חינם תמיד.",
-      clear: "Clear — להבין ולראות את המילה.",
-      deep: "Deep — להבין, לראות ולזכור את המילה לתמיד.",
+      basic: "Basic, להבין את המילה. חינם תמיד.",
+      clear: "Clear, להבין ולראות את המילה.",
+      deep: "Deep, להבין, לראות ולזכור את המילה לתמיד.",
     },
     // Brand pun stays in Latin in every language - like the Gadit
     // wordmark itself. See feedback_brand_name_english memory.
@@ -166,9 +166,9 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
     },
     tieback: {
       title: "What each tier adds",
-      basic: "Basic — understand the word. Free forever.",
-      clear: "Clear — understand and see the word.",
-      deep: "Deep — understand, see, and remember the word forever.",
+      basic: "Basic, understand the word. Free forever.",
+      clear: "Clear, understand and see the word.",
+      deep: "Deep, understand, see, and remember the word forever.",
     },
     bubble: "Now I gad it!",
   },
@@ -497,7 +497,7 @@ export function FeaturesPage() {
       </header>
 
       <main className="wb-feat-main">
-        {/* Hero — same eyebrow / italic display / two-CTA shape as
+        {/* Hero, same eyebrow / italic display / two-CTA shape as
             before. The "it" character only appears at the very end now;
             anchoring it here floated awkwardly between the topbar and
             the title and didn't pay off the metaphor. */}
@@ -511,12 +511,12 @@ export function FeaturesPage() {
           </div>
         </section>
 
-        {/* Auto-cycling demo tour — walks the visitor through what each
+        {/* Auto-cycling demo tour, walks the visitor through what each
             tier unlocks plus the partner program. See
             GaditDemoAnimation.tsx for the scene state machine. */}
         <GaditDemoAnimation />
 
-        {/* Three feature groups — Understand -> Learn -> Master.
+        {/* Three feature groups, Understand -> Learn -> Master.
             Each group is one Basic / Clear / Deep tier respectively,
             so the visual journey IS the pricing ladder. Within each
             group the cards keep the original visual treatment from
@@ -559,7 +559,7 @@ export function FeaturesPage() {
           })}
         </section>
 
-        {/* Tier tie-back — names what each tier adds in one line so
+        {/* Tier tie-back, names what each tier adds in one line so
             the pricing decision feels like a continuation of the
             story, not a separate page. */}
         <section className="wb-feat-tiertie">
@@ -580,7 +580,7 @@ export function FeaturesPage() {
           </div>
         </section>
 
-        {/* Final CTA — character + speech bubble + one big button.
+        {/* Final CTA, character + speech bubble + one big button.
             The bubble carries the brand verb ("Now I gad it!") so the
             page closes on the same metaphor it opened with. */}
         <section className="wb-feat-final">

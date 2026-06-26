@@ -332,7 +332,7 @@ function TierCard({
         the divider, so the price/CTA block above it has identical
         height across cards.
        */}
-      {/* Tier name + tagline — centered.
+      {/* Tier name + tagline, centered.
           Inline `textAlign: "center"` + `dir="ltr"` for the brand row:
           Tailwind's `text-center` was being overridden by an ancestor's
           dir="rtl" + start-aligned cascade on certain mobile browsers,
@@ -340,7 +340,7 @@ function TierCard({
           card. Inline style + an explicit dir on the wrapper forces
           centering regardless of the cascade. */}
       <div style={{ textAlign: "center" }}>
-        {/* Tier name is the dominant brand element on the card —
+        {/* Tier name is the dominant brand element on the card , 
             larger than the price (which is just a number). The tier
             name is what the user remembers. Was 22px → now ~38px,
             using the display serif so it carries the same weight as
@@ -365,7 +365,7 @@ function TierCard({
           {tier.tagline}
         </div>
       </div>
-      {/* Pitch — centered, 2-line min-height so price row aligns
+      {/* Pitch, centered, 2-line min-height so price row aligns
           across all three cards. */}
       <p
         className="gd-font-sans-ui mt-3"
@@ -411,7 +411,7 @@ function TierCard({
         </div>
       )}
 
-      {/* Features list — visually CENTERED inside the card.
+      {/* Features list, visually CENTERED inside the card.
           The card itself uses textAlign:center for the brand row,
           tagline, pitch, and price; the features should sit in the
           same centered column. We achieve that by wrapping the <ul>
@@ -460,7 +460,7 @@ function TierCard({
       </ul>
       </div>
 
-      {/* CTA — anchors to the bottom of the card (features above use
+      {/* CTA, anchors to the bottom of the card (features above use
           flex-1, so this row sits at the same Y across all three). */}
       <button
         type="button"
@@ -527,7 +527,7 @@ export function PricingTiers({ billing }: { billing: Billing }) {
   // signed in, the modal is skipped and onSuccess fires immediately.
   async function startCheckout(priceId: string, freshUser: { getIdToken: () => Promise<string> }) {
     if (!priceId) {
-      console.error("Missing Stripe priceId — env var not set");
+      console.error("Missing Stripe priceId, env var not set");
       window.alert("Pricing is misconfigured. Please contact support.");
       return;
     }

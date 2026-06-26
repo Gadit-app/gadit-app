@@ -46,7 +46,7 @@ const STRINGS = {
     colPaid: "Paid",
     colConversion: "Conversion",
     recentTitle: "Recent attributed signups",
-    recentEmpty: "No UTM-attributed signups yet — share a bio link and they'll appear here.",
+    recentEmpty: "No UTM-attributed signups yet, share a bio link and they'll appear here.",
     colWhen: "When",
     colWho: "Who",
     colSrc: "Source",
@@ -102,7 +102,7 @@ function planBadge(plan: Plan) {
 }
 
 function formatRelative(iso: string | null, lang: "en" | "he"): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
   if (lang === "he") {
@@ -190,7 +190,7 @@ export default function AdminCampaignsClient() {
                       <td style={{ padding: "10px 12px", textAlign: "center", color: "#374151", fontWeight: 600 }}>{s.signups}</td>
                       <td style={{ padding: "10px 12px", textAlign: "center", color: s.paid > 0 ? "#0E7490" : "#9CA3AF", fontWeight: 600 }}>{s.paid}</td>
                       <td style={{ padding: "10px 12px", textAlign: "center", color: "#111827" }}>
-                        {s.signups > 0 ? `${s.conversionPct}%` : "—"}
+                        {s.signups > 0 ? `${s.conversionPct}%` : ", "}
                       </td>
                     </tr>
                   );
@@ -223,16 +223,16 @@ export default function AdminCampaignsClient() {
                         <tr key={row.uid} style={{ borderBottom: "1px solid #F3F4F6" }}>
                           <td style={{ padding: "10px 12px", textAlign: "start", color: "#6B7280", fontSize: 12 }}>{formatRelative(row.createdAt, lang)}</td>
                           <td style={{ padding: "10px 12px", textAlign: "start", color: "#111827" }}>
-                            {row.email ?? "—"}
+                            {row.email ?? ", "}
                             {row.country && (
                               <span style={{ marginInlineStart: 6, display: "inline-flex", verticalAlign: "middle" }}>
                                 <FlagImg iso2={row.country} />
                               </span>
                             )}
                           </td>
-                          <td style={{ padding: "10px 12px", textAlign: "start", color: "#374151", textTransform: "capitalize" }}>{row.source ?? "—"}</td>
-                          <td style={{ padding: "10px 12px", textAlign: "start", color: "#374151" }}>{row.medium ?? "—"}</td>
-                          <td style={{ padding: "10px 12px", textAlign: "start", color: "#374151" }}>{row.campaign ?? "—"}</td>
+                          <td style={{ padding: "10px 12px", textAlign: "start", color: "#374151", textTransform: "capitalize" }}>{row.source ?? ", "}</td>
+                          <td style={{ padding: "10px 12px", textAlign: "start", color: "#374151" }}>{row.medium ?? ", "}</td>
+                          <td style={{ padding: "10px 12px", textAlign: "start", color: "#374151" }}>{row.campaign ?? ", "}</td>
                           <td style={{ padding: "10px 12px", textAlign: "center" }}>
                             <span style={{ background: badge.bg, color: badge.fg, padding: "2px 8px", borderRadius: 4, fontSize: 11, fontWeight: 600 }}>
                               {badge.label}

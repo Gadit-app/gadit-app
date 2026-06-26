@@ -125,7 +125,7 @@ const STRINGS: Record<AdminLang, {
 };
 
 function formatRelative(iso: string | null, lang: AdminLang): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
   if (diff < 60_000) return lang === "he" ? "עכשיו" : "now";

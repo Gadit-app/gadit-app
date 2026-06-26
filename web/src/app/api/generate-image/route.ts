@@ -85,7 +85,7 @@ function buildDallePrompt(word: string, meaning: string, example?: string): stri
   if (cleanExample) {
     return [
       `A clean, realistic photograph of the real-world moment described in this scene: ${cleanExample}.`,
-      `The scene depicts the meaning of the word ${cleanWord} — specifically: ${cleanMeaning}.`,
+      `The scene depicts the meaning of the word ${cleanWord}, specifically: ${cleanMeaning}.`,
       `Natural lighting, plain neutral background, the key elements of the scene fill the frame and are instantly recognizable.`,
       `The image contains no text, no letters, no numbers, and no written characters.`,
     ].join(" ");

@@ -7,7 +7,7 @@ import { NotebookPage } from "./NotebookClient";
  * Indexed: false (private user data).
  */
 export const metadata: Metadata = {
-  title: "Notebook — Gadit",
+  title: "Notebook, Gadit",
   robots: { index: false, follow: false },
 };
 

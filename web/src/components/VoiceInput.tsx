@@ -133,7 +133,7 @@ export default function VoiceInput({
   let color = "rgb(100 116 139)";
   let border = "none";
   if (state === "recording") {
-    bg = "rgb(239 68 68)"; // red — visually distinct, classic recording cue
+    bg = "rgb(239 68 68)"; // red, visually distinct, classic recording cue
     color = "white";
   } else if (state === "transcribing") {
     bg = "rgb(239 246 255)";

@@ -105,7 +105,7 @@ export function GameSpeed({
         data={{
           title: t.speedTitle,
           score,
-          total: 0, // no denominator — count is the metric
+          total: 0, // no denominator, count is the metric
           headline: t.speedSeconds(score),
         }}
         onExit={onExit}

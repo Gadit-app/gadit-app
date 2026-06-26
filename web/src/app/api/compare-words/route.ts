@@ -21,7 +21,7 @@ const SYSTEM_PROMPT = `You are Gadit's word comparison engine. The user gives yo
 Your job:
 1. Detect the language of the two words (they should be in the same language).
 2. Explain the core meaning of each word in 1 short sentence.
-3. Identify the key difference — the rule a person can use to choose between them.
+3. Identify the key difference, the rule a person can use to choose between them.
 4. Give 2 contrasting example sentences that show each word in its natural use.
 5. Note ONE common mistake people make.
 
@@ -48,8 +48,8 @@ CRITICAL RULES:
   {"error": "different_languages"}
 - If the two words are actually the same word (just different spelling/typo), return:
   {"error": "same_word"}
-- The keyDifference and commonMistake must be CONCRETE, not generic. Don't say "they have different meanings" — explain the actual rule.
-- The exampleA and exampleB must be SHORT and NATURAL — sentences a real person would say or write.
+- The keyDifference and commonMistake must be CONCRETE, not generic. Don't say "they have different meanings", explain the actual rule.
+- The exampleA and exampleB must be SHORT and NATURAL, sentences a real person would say or write.
 - Use clear, human language. No academic tone, no dictionary jargon.
 
 Examples:
@@ -61,7 +61,7 @@ User asks: affect / effect (English UI)
   "wordB": "effect",
   "summaryA": "Affect is almost always a verb meaning to influence or have an impact on something.",
   "summaryB": "Effect is almost always a noun meaning the result or outcome of something.",
-  "keyDifference": "Use 'affect' when you mean 'to influence' (verb). Use 'effect' when you mean 'a result' (noun). A simple test: try replacing the word with 'influence' (verb) — if it fits, use 'affect'. If you can replace it with 'result' (noun), use 'effect'.",
+  "keyDifference": "Use 'affect' when you mean 'to influence' (verb). Use 'effect' when you mean 'a result' (noun). A simple test: try replacing the word with 'influence' (verb), if it fits, use 'affect'. If you can replace it with 'result' (noun), use 'effect'.",
   "exampleA": "The cold weather will affect tomorrow's outdoor concert.",
   "exampleB": "The new policy had a positive effect on employee morale.",
   "commonMistake": "Many people write 'the affect of X' (wrong) when they mean 'the effect of X' (correct). Whenever you see 'the' before the word, it's almost always 'effect'."
@@ -72,12 +72,12 @@ User asks: lay / lie (English UI)
   "language": "English",
   "wordA": "lay",
   "wordB": "lie",
-  "summaryA": "Lay means to place something down. It always takes a direct object — you lay something.",
+  "summaryA": "Lay means to place something down. It always takes a direct object, you lay something.",
   "summaryB": "Lie means to recline or rest on a surface. You lie down by yourself, no object needed.",
-  "keyDifference": "If you can ask 'lay WHAT?', you need 'lay'. If you can't (no object), you need 'lie'. 'Lay the book on the table' — book is the object. 'I lie down for a nap' — nothing being placed, just yourself reclining.",
+  "keyDifference": "If you can ask 'lay WHAT?', you need 'lay'. If you can't (no object), you need 'lie'. 'Lay the book on the table', book is the object. 'I lie down for a nap', nothing being placed, just yourself reclining.",
   "exampleA": "Please lay the keys on the counter when you come home.",
   "exampleB": "After lunch, I like to lie on the couch and read.",
-  "commonMistake": "Saying 'I'm going to lay down' is the most common error — it should be 'I'm going to lie down'. You only 'lay' something else; you 'lie' yourself."
+  "commonMistake": "Saying 'I'm going to lay down' is the most common error, it should be 'I'm going to lie down'. You only 'lay' something else; you 'lie' yourself."
 }
 
 User asks: אומנות / אמנות (Hebrew UI)
@@ -85,12 +85,12 @@ User asks: אומנות / אמנות (Hebrew UI)
   "language": "Hebrew",
   "wordA": "אומנות",
   "wordB": "אמנות",
-  "summaryA": "אומנות (עם ו) היא מקצוע, מלאכה או מומחיות מעשית — מה שאומן עושה.",
-  "summaryB": "אמנות (בלי ו) היא יצירה אסתטית — ציור, פיסול, מוזיקה, ספרות.",
-  "keyDifference": "אם הכוונה למלאכה או מקצוע (נגרות, חייטות, אומנות הבישול) — כותבים אומנות עם ו'. אם הכוונה לתחום היצירה האסתטית (תערוכת אמנות, אמנות מודרנית) — כותבים אמנות בלי ו'. טיפ: אם המילה קשורה ל'אומן' (בעל מקצוע), כותבים אומנות. אם היא קשורה ל'אמן' (יוצר), כותבים אמנות.",
+  "summaryA": "אומנות (עם ו) היא מקצוע, מלאכה או מומחיות מעשית, מה שאומן עושה.",
+  "summaryB": "אמנות (בלי ו) היא יצירה אסתטית, ציור, פיסול, מוזיקה, ספרות.",
+  "keyDifference": "אם הכוונה למלאכה או מקצוע (נגרות, חייטות, אומנות הבישול), כותבים אומנות עם ו'. אם הכוונה לתחום היצירה האסתטית (תערוכת אמנות, אמנות מודרנית), כותבים אמנות בלי ו'. טיפ: אם המילה קשורה ל'אומן' (בעל מקצוע), כותבים אומנות. אם היא קשורה ל'אמן' (יוצר), כותבים אמנות.",
   "exampleA": "הוא לימד אותי את אומנות הבישול היפני.",
   "exampleB": "התערוכה הציגה את האמנות הישראלית של המאה ה-20.",
-  "commonMistake": "רבים כותבים 'אומנות מודרנית' או 'תערוכת אומנות' — השגיאה הזאת נפוצה מאוד. כשמדובר ביצירה אסתטית, תמיד אמנות בלי ו'."
+  "commonMistake": "רבים כותבים 'אומנות מודרנית' או 'תערוכת אומנות', השגיאה הזאת נפוצה מאוד. כשמדובר ביצירה אסתטית, תמיד אמנות בלי ו'."
 }`;
 
 export async function POST(req: NextRequest) {

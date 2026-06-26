@@ -37,7 +37,7 @@ type Props = {
   /** BCP-47 lang tag for voice selection. Maps to the WORD's language,
    *  NOT the UI language. */
   audioLang?: string;
-  /** Force OpenAI TTS path (paid tier feature). Default false — uses
+  /** Force OpenAI TTS path (paid tier feature). Default false, uses
    *  Web Speech for free, instant playback. */
   useOpenAI?: boolean;
   /** Accessible label for the speaker icon. */

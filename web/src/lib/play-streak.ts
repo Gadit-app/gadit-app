@@ -59,7 +59,7 @@ function writeLocal(s: PlayStreak): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(s));
-  } catch { /* quota — ignore */ }
+  } catch { /* quota, ignore */ }
 }
 
 /**
@@ -149,7 +149,7 @@ export function recordPlay(user?: User | null): PlayStreak {
           }),
         }),
       )
-      .catch(() => { /* offline — local copy is authoritative until next sync */ });
+      .catch(() => { /* offline, local copy is authoritative until next sync */ });
   }
   return next;
 }

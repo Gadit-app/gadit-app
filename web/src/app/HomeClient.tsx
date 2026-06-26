@@ -241,7 +241,7 @@ export function HomePage() {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
-        {/* Mobile identity cluster — sits inline next to the wordmark
+        {/* Mobile identity cluster, sits inline next to the wordmark
             so the share button visually attaches to the Gadit logo
             (Gadi's 2026-06-19 ask: "את הכופתור שיתוף הייתי שם טיפה
             יותר ימינה צמוד לגדית, ללוגו"), and the avatar lives in
@@ -313,7 +313,7 @@ export function HomePage() {
 
           <form className="wb-home-search" onSubmit={onSubmit}>
             <div className="wb-home-search-box">
-              {/* Convention layout — LLM Council R3 2026-06-20 ruled
+              {/* Convention layout, LLM Council R3 2026-06-20 ruled
                   4-of-5 that input lives on the START edge (where the
                   caret lands when reading begins) and the magnifier
                   submit lives on the END edge (where the search
@@ -370,7 +370,7 @@ export function HomePage() {
                 <SearchIcon size={20} />
               </button>
             </div>
-            {/* Sentence input — Gadi 2026-06-19 v2: the OPTIONAL cue
+            {/* Sentence input, Gadi 2026-06-19 v2: the OPTIONAL cue
                 lives INSIDE the field now (prepended to the
                 placeholder in parens) so the marker disappears the
                 moment the user starts typing — no separate eyebrow

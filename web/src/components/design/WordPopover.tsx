@@ -25,7 +25,7 @@ type Props = {
   word: string;
   /** The DOM element to anchor the popover to (the tapped word span). */
   anchor: HTMLElement;
-  /** UI language — drives the API call and localized chrome. */
+  /** UI language, drives the API call and localized chrome. */
   lang: Lang;
   /** The HEADWORD of the page the popover was opened from. Becomes a
    *  ?from=<fromWord> query param on the 'Open full definition' link
@@ -178,7 +178,7 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
       >
         {word}
       </div>
-      {/* Meaning — full first definition. This is the answer the user
+      {/* Meaning, full first definition. This is the answer the user
           is here for; the open-full link below is for the cases where
           they want examples + etymology + idioms. */}
       <div
@@ -195,7 +195,7 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
             ? def.meaning || c.noPreview
             : c.noPreview}
       </div>
-      {/* First example — gives the meaning some context. Italic and
+      {/* First example, gives the meaning some context. Italic and
           muted so it doesn't fight with the meaning above. Hidden if
           the API didn't return one. */}
       {def.status === "ready" && def.example && (

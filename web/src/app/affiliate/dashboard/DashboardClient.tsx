@@ -73,7 +73,7 @@ const COPY: Record<Lang, {
       "אנחנו עדיין מסיימים להגדיר את האינטגרציה. בינתיים תוכל לגשת לדשבורד שלך ישירות בפורטל החיצוני.",
     errorTitle: "משהו השתבש",
     errorBody:
-      "לא הצלחנו לטעון את הדשבורד שלך. נסה לרענן את הדף, ואם הבעיה ממשיכה — תיכנס לפורטל החיצוני.",
+      "לא הצלחנו לטעון את הדשבורד שלך. נסה לרענן את הדף, ואם הבעיה ממשיכה, תיכנס לפורטל החיצוני.",
     signInTitle: "הדשבורד שמור לשותפים מחוברים",
     signInBody: "תתחבר עם החשבון שלך כדי לראות את הקישור האישי, הסטטיסטיקות והעמלות שלך.",
     marketingLink: "מה זאת התוכנית?",
@@ -122,7 +122,7 @@ const COPY: Record<Lang, {
     marketingLink: "ما هو البرنامج؟",
     upgradeTitle: "برنامج الشركاء متاح فقط لأعضاء Clear و Deep",
     upgradeBody:
-      "لا يمكنك التوصية بمنتج لا تستخدمه فعلاً. ارتقِ إلى Clear أو Deep — ستحصل على القاموس الكامل بدون قيود وعلى الوصول إلى برنامج الشركاء بعمولة 30% لكل عميل تجلبه.",
+      "لا يمكنك التوصية بمنتج لا تستخدمه فعلاً. ارتقِ إلى Clear أو Deep, ستحصل على القاموس الكامل بدون قيود وعلى الوصول إلى برنامج الشركاء بعمولة 30% لكل عميل تجلبه.",
     upgradeCta: "الترقية إلى خطة مدفوعة",
     payoutGuideTitle: "خطوة أخيرة: كيف تودّ تلقّي مدفوعاتك",
     payoutGuideBody: "قبل أن نتمكّن من إرسال عمولاتك، اختر طريقة الدفع مرة واحدة. ستراها في الشريط الأصفر داخل لوحتك أدناه. تستغرق دقيقة.",
@@ -144,10 +144,10 @@ const COPY: Record<Lang, {
     marketingLink: "Что за программа?",
     upgradeTitle: "Партнёрская программа доступна только участникам Clear и Deep",
     upgradeBody:
-      "Нельзя честно рекомендовать продукт, которым сам не пользуешься. Перейдите на Clear или Deep — вы получите полный словарь Gadit без ограничений и доступ к партнёрской программе с 30% комиссии с каждого приведённого клиента.",
+      "Нельзя честно рекомендовать продукт, которым сам не пользуешься. Перейдите на Clear или Deep, вы получите полный словарь Gadit без ограничений и доступ к партнёрской программе с 30% комиссии с каждого приведённого клиента.",
     upgradeCta: "Перейти на платный тариф",
     payoutGuideTitle: "Последний шаг: как вы хотите получать оплату",
-    payoutGuideBody: "Чтобы мы могли отправлять вам комиссии, выберите способ выплаты — один раз. Вы увидите его в жёлтой полоске внутри панели ниже. Это займёт минуту.",
+    payoutGuideBody: "Чтобы мы могли отправлять вам комиссии, выберите способ выплаты, один раз. Вы увидите его в жёлтой полоске внутри панели ниже. Это займёт минуту.",
     payoutGuideDismiss: "Понял",
   },
   es: {
@@ -165,7 +165,7 @@ const COPY: Record<Lang, {
     marketingLink: "¿Qué es el programa?",
     upgradeTitle: "El programa de socios es solo para miembros Clear y Deep",
     upgradeBody:
-      "Solo puedes recomendar un producto que realmente uses. Pásate a Clear o Deep — tendrás el diccionario completo sin límites y acceso al programa de socios con 30% de comisión por cada cliente que traigas.",
+      "Solo puedes recomendar un producto que realmente uses. Pásate a Clear o Deep, tendrás el diccionario completo sin límites y acceso al programa de socios con 30% de comisión por cada cliente que traigas.",
     upgradeCta: "Pasar a un plan de pago",
     payoutGuideTitle: "Un último paso: cómo quieres recibir el pago",
     payoutGuideBody: "Para poder enviarte tus comisiones, elige tu método de cobro una vez. Lo verás en la barra amarilla dentro de tu panel abajo. Toma un minuto.",
@@ -186,7 +186,7 @@ const COPY: Record<Lang, {
     marketingLink: "O que é o programa?",
     upgradeTitle: "O programa de parceiros é só para membros Clear e Deep",
     upgradeBody:
-      "Você só pode recomendar um produto que realmente usa. Faça upgrade para Clear ou Deep — você ganha o dicionário completo sem limites e acesso ao programa de parceiros com 30% de comissão por cada cliente que indicar.",
+      "Você só pode recomendar um produto que realmente usa. Faça upgrade para Clear ou Deep, você ganha o dicionário completo sem limites e acesso ao programa de parceiros com 30% de comissão por cada cliente que indicar.",
     upgradeCta: "Fazer upgrade para um plano pago",
     payoutGuideTitle: "Um último passo: como você quer receber",
     payoutGuideBody: "Para podermos enviar suas comissões, escolha seu método de pagamento uma vez. Você verá no aviso amarelo dentro do seu painel abaixo. Leva um minuto.",
@@ -207,7 +207,7 @@ const COPY: Record<Lang, {
     marketingLink: "C'est quoi le programme ?",
     upgradeTitle: "Le programme partenaires est réservé aux membres Clear et Deep",
     upgradeBody:
-      "On ne peut recommander qu'un produit qu'on utilise vraiment. Passez à Clear ou Deep — vous obtenez le dictionnaire Gadit complet sans limite et l'accès au programme partenaires avec 30% de commission sur chaque client recommandé.",
+      "On ne peut recommander qu'un produit qu'on utilise vraiment. Passez à Clear ou Deep, vous obtenez le dictionnaire Gadit complet sans limite et l'accès au programme partenaires avec 30% de commission sur chaque client recommandé.",
     upgradeCta: "Passer à une formule payante",
     payoutGuideTitle: "Une dernière étape : comment être payé",
     payoutGuideBody: "Pour que nous puissions vous envoyer vos commissions, choisissez votre méthode de paiement une seule fois. Vous la verrez dans la barre jaune à l'intérieur de votre tableau de bord ci-dessous. Ça prend une minute.",
@@ -222,13 +222,13 @@ const COPY: Record<Lang, {
       "Wir schließen die Integration noch ab. Du kannst dein Dashboard inzwischen im externen Portal aufrufen.",
     errorTitle: "Etwas ist schiefgelaufen",
     errorBody:
-      "Wir konnten dein Dashboard nicht laden. Versuche die Seite neu zu laden — wenn das Problem bleibt, melde dich im externen Portal an.",
+      "Wir konnten dein Dashboard nicht laden. Versuche die Seite neu zu laden, wenn das Problem bleibt, melde dich im externen Portal an.",
     signInTitle: "Melde dich an, um dein Dashboard zu sehen",
     signInBody: "Melde dich bei deinem Gadit-Konto an, um deinen Link, deine Statistiken und Provisionen zu sehen.",
     marketingLink: "Was ist das Programm?",
     upgradeTitle: "Das Partnerprogramm ist nur für Clear- und Deep-Mitglieder",
     upgradeBody:
-      "Du kannst nur ein Produkt empfehlen, das du selbst benutzt. Upgrade auf Clear oder Deep — du bekommst das vollständige Gadit-Wörterbuch ohne Limit plus Zugang zum Partnerprogramm mit 30% Provision pro geworbenem Kunden.",
+      "Du kannst nur ein Produkt empfehlen, das du selbst benutzt. Upgrade auf Clear oder Deep, du bekommst das vollständige Gadit-Wörterbuch ohne Limit plus Zugang zum Partnerprogramm mit 30% Provision pro geworbenem Kunden.",
     upgradeCta: "Auf einen kostenpflichtigen Plan upgraden",
     payoutGuideTitle: "Letzter Schritt: Wie du bezahlt werden möchtest",
     payoutGuideBody: "Damit wir deine Provisionen senden können, wähle einmalig deine Zahlungsmethode. Du siehst sie im gelben Banner in deinem Dashboard unten. Dauert eine Minute.",
@@ -249,7 +249,7 @@ const COPY: Record<Lang, {
     marketingLink: "Co je to za program?",
     upgradeTitle: "Partnerský program je jen pro členy Clear a Deep",
     upgradeBody:
-      "Můžete doporučovat jen produkt, který sami používáte. Přejděte na Clear nebo Deep — získáte celý slovník Gadit bez omezení a přístup k partnerskému programu s 30% provizí za každého přivedeného zákazníka.",
+      "Můžete doporučovat jen produkt, který sami používáte. Přejděte na Clear nebo Deep, získáte celý slovník Gadit bez omezení a přístup k partnerskému programu s 30% provizí za každého přivedeného zákazníka.",
     upgradeCta: "Přejít na placený plán",
     payoutGuideTitle: "Poslední krok: jak chceš dostávat platby",
     payoutGuideBody: "Než ti budeme moci posílat provize, vyber si jednou způsob výplaty. Najdeš ho ve žlutém pruhu uvnitř svého přehledu níže. Trvá to minutu.",
@@ -270,7 +270,7 @@ const COPY: Record<Lang, {
     marketingLink: "Čo je to za program?",
     upgradeTitle: "Partnerský program je len pre členov Clear a Deep",
     upgradeBody:
-      "Môžete odporúčať len produkt, ktorý sami používate. Prejdite na Clear alebo Deep — získate celý slovník Gadit bez obmedzení a prístup k partnerskému programu s 30% províziou za každého privedeného zákazníka.",
+      "Môžete odporúčať len produkt, ktorý sami používate. Prejdite na Clear alebo Deep, získate celý slovník Gadit bez obmedzení a prístup k partnerskému programu s 30% províziou za každého privedeného zákazníka.",
     upgradeCta: "Prejsť na platený plán",
     payoutGuideTitle: "Posledný krok: ako chceš dostávať platby",
     payoutGuideBody: "Skôr ako ti budeme môcť posielať provízie, vyber si jedenkrát spôsob výplaty. Nájdeš ho v žltom pruhu vnútri svojho prehľadu nižšie. Trvá to minútu.",
@@ -291,7 +291,7 @@ const COPY: Record<Lang, {
     marketingLink: "Cos'è il programma?",
     upgradeTitle: "Il programma partner è riservato ai membri Clear e Deep",
     upgradeBody:
-      "Puoi consigliare solo un prodotto che usi davvero. Passa a Clear o Deep — avrai il dizionario Gadit completo senza limiti e l'accesso al programma partner con il 30% di commissione su ogni cliente che porti.",
+      "Puoi consigliare solo un prodotto che usi davvero. Passa a Clear o Deep, avrai il dizionario Gadit completo senza limiti e l'accesso al programma partner con il 30% di commissione su ogni cliente che porti.",
     upgradeCta: "Passa a un piano a pagamento",
     payoutGuideTitle: "Un ultimo passo: come vuoi essere pagato",
     payoutGuideBody: "Per poterti inviare le commissioni, scegli una volta il tuo metodo di pagamento. Lo trovi nella barra gialla all'interno della tua dashboard qui sotto. Ci vuole un minuto.",

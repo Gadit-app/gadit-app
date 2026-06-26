@@ -10,7 +10,7 @@ import { PlayPage } from "./PlayClient";
  * for Basic/Clear on /api/notebook anyway.
  */
 export const metadata: Metadata = {
-  title: "Word Games — Gadit",
+  title: "Word Games, Gadit",
   robots: { index: false, follow: false },
 };
 

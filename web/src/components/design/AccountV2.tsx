@@ -789,7 +789,7 @@ export function AccountV2() {
           className="gd-font-sans-ui"
           style={{ fontSize: 14, color: "var(--gd-ink-700)" }}
         >
-          {errorMsg || "—"}
+          {errorMsg || ", "}
         </span>
       </div>
     );

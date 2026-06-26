@@ -5,8 +5,8 @@ import { TermsBodyPt } from "@/components/legal/PortugueseBodies";
 import { TermsBodyFr } from "@/components/legal/FrenchBodies";
 
 export const metadata: Metadata = {
-  title: "Terms of Use — Gadit",
-  description: "The rules for using Gadit — subscriptions, acceptable use, and disclaimers.",
+  title: "Terms of Use, Gadit",
+  description: "The rules for using Gadit, subscriptions, acceptable use, and disclaimers.",
 };
 
 const LAST_UPDATED = "April 23, 2026";

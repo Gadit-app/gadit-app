@@ -180,7 +180,7 @@ const SECRET_KEY = "gadit_admin_secret_v1";
 // reversed into "Jun 2026 10" — the fix is to format dates IN Hebrew
 // when in Hebrew mode so the string is RTL-native and renders correctly.
 function formatRelative(iso: string | null, lang: AdminLang): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso);
   const today = new Date();
   const diff = today.getTime() - d.getTime();
@@ -215,7 +215,7 @@ function formatRelative(iso: string | null, lang: AdminLang): string {
 // glance, sortable, copyable), and the relative form as a smaller
 // secondary line below.
 function formatAbsoluteDate(iso: string | null, _lang: AdminLang): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso);
   // Numeric slash format (10/06/2026) reads identically in both languages
   // — it's just digits and separators, no locale-specific words, no bidi
@@ -432,7 +432,7 @@ export default function AdminUsersClient() {
           </div>
         )}
 
-        {/* Stat cards — labels and big numbers centered inside each card
+        {/* Stat cards, labels and big numbers centered inside each card
             (Gadi's June 11 ask). Pulls the eye to the value first and
             balances the row visually regardless of label length, which
             matters in Hebrew where "סך משתמשים" and "הרשמות · 30 ימים"
@@ -593,7 +593,7 @@ export default function AdminUsersClient() {
                             <span>{u.country}</span>
                           </span>
                         ) : (
-                          <span style={{ color: "#D1D5DB" }}>—</span>
+                          <span style={{ color: "#D1D5DB" }}>, </span>
                         )}
                       </td>
                       <td

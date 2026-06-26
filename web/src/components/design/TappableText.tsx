@@ -21,7 +21,7 @@ import type { Lang } from "@/lib/i18n";
 type Props = {
   /** The string to render. */
   text: string;
-  /** The headword being defined on this card — we skip it from being
+  /** The headword being defined on this card, we skip it from being
    *  tappable because tapping the same word that's already the entry
    *  would just navigate to where you already are. */
   skipWord?: string;

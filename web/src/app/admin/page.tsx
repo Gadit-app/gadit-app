@@ -10,7 +10,7 @@ import AdminOverviewClient from "./AdminOverviewClient";
  * Not indexed.
  */
 export const metadata = {
-  title: "Admin · Overview — Gadit",
+  title: "Admin · Overview, Gadit",
   robots: { index: false, follow: false },
 };
 

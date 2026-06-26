@@ -155,7 +155,7 @@ const COPY: Record<Lang, {
     playAgain: "Ещё раз",
     backToWord: "К слову",
     notEnough: "Сохрани ещё пару слов, чтобы открыть все раунды",
-    notEnoughHint: "Открой 2-3 слова в тетради — этот раунд откроется.",
+    notEnoughHint: "Открой 2-3 слова в тетради, этот раунд откроется.",
   },
   es: {
     title: "Juegos con esta palabra",

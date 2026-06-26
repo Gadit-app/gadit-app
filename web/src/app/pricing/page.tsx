@@ -8,7 +8,7 @@ import { PricingPageRoute } from "./PricingClient";
  * indexable since pricing transparency helps SEO and conversions.
  */
 export const metadata: Metadata = {
-  title: "Pricing — Gadit",
+  title: "Pricing, Gadit",
   description:
     "Three tiers. All with real content. Start free; upgrade when the depth helps you.",
 };

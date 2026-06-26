@@ -5,7 +5,7 @@ import AdminCampaignsClient from "./AdminCampaignsClient";
  * sibling admin pages.
  */
 export const metadata = {
-  title: "Admin · Campaigns — Gadit",
+  title: "Admin · Campaigns, Gadit",
   robots: { index: false, follow: false },
 };
 

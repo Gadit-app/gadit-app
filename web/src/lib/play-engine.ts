@@ -37,7 +37,7 @@ type NotebookItem = {
 /** Minimum entries needed per game for the menu to enable them. */
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   quiz: 4,
-  fillblank: 4, // and we need examples — checked separately
+  fillblank: 4, // and we need examples, checked separately
   memory: 4,
   anagram: 1,
   speed: 4,

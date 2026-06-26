@@ -29,7 +29,7 @@ type SourceRow = {
   source: string;
   signups: number;
   paid: number;
-  conversionPct: number;   // % of signups that became paid, 0.0–100.0
+  conversionPct: number;   // % of signups that became paid, 0.0, 100.0
   byMedium: Record<string, number>;
   byCampaign: Record<string, number>;
 };
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
   const expected = process.env.ADMIN_SECRET;
   if (!expected) {
     return NextResponse.json(
-      { error: "ADMIN_SECRET env var not configured — refusing to run" },
+      { error: "ADMIN_SECRET env var not configured, refusing to run" },
       { status: 503 },
     );
   }

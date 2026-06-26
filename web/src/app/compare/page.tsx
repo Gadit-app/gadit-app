@@ -10,7 +10,7 @@ import { ComparePage } from "./CompareClient";
  * + pricing.
  */
 export const metadata: Metadata = {
-  title: "Compare — Gadit",
+  title: "Compare, Gadit",
   robots: { index: false, follow: false },
 };
 

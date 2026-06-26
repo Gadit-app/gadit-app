@@ -518,7 +518,7 @@ export function ReportModalV2({
         )}
       </div>
 
-      {/* Two-column layout above 480px viewport — inline media query
+      {/* Two-column layout above 480px viewport, inline media query
           via a tiny scoped style block since this is the only place it
           appears. */}
       <style>{`

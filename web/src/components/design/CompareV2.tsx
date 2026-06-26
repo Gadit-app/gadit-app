@@ -294,7 +294,7 @@ function CompareResult({
         </div>
       )}
 
-      {/* 3. Examples — single example per side from this API. We render
+      {/* 3. Examples, single example per side from this API. We render
          them as a 2-col grid even though there's one each, to keep the
          visual rhythm of "left = word A / right = word B". */}
       {(data.exampleA || data.exampleB) && (

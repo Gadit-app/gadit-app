@@ -199,7 +199,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         }}
       >
         <div style={{ display: "flex", minHeight: "100vh" }}>
-          {/* Sidebar — fixed width, sticky to the start edge.
+          {/* Sidebar, fixed width, sticky to the start edge.
               `align-self: stretch` + `height: 100vh` makes the dark
               background reach all the way to the viewport bottom even
               when the content area is short (Gadi 2026-06-22: the
@@ -296,7 +296,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               })}
             </nav>
 
-            {/* Bottom — back to app + sign out, pinned to the bottom
+            {/* Bottom, back to app + sign out, pinned to the bottom
                 so they're always reachable without scroll. */}
             <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #1F2937", display: "flex", flexDirection: "column", gap: 2 }}>
               <a

@@ -61,7 +61,7 @@ type Copy = {
 const COPY: Record<string, Copy> = {
   he: {
     title: "הוסיפו את Gadit לטלפון",
-    bodyAndroid: "התקנה בלחיצה אחת — Gadit יפתח כמו אפליקציה ממסך הבית.",
+    bodyAndroid: "התקנה בלחיצה אחת, Gadit יפתח כמו אפליקציה ממסך הבית.",
     bodyIos: "הפכו את Gadit לאפליקציה אמיתית במסך הבית של האייפון.",
     install: "התקן",
     later: "אחר כך",
@@ -76,7 +76,7 @@ const COPY: Record<string, Copy> = {
   },
   en: {
     title: "Add Gadit to your phone",
-    bodyAndroid: "One-tap install — Gadit opens like a real app from your home screen.",
+    bodyAndroid: "One-tap install, Gadit opens like a real app from your home screen.",
     bodyIos: "Turn Gadit into a real app on your iPhone home screen.",
     install: "Install",
     later: "Later",
@@ -91,7 +91,7 @@ const COPY: Record<string, Copy> = {
   },
   ar: {
     title: "أضف Gadit إلى هاتفك",
-    bodyAndroid: "تثبيت بضغطة واحدة — يفتح Gadit كتطبيق حقيقي من شاشتك الرئيسية.",
+    bodyAndroid: "تثبيت بضغطة واحدة, يفتح Gadit كتطبيق حقيقي من شاشتك الرئيسية.",
     bodyIos: "حوّل Gadit إلى تطبيق حقيقي على شاشة آيفون الرئيسية.",
     install: "تثبيت",
     later: "لاحقًا",
@@ -106,7 +106,7 @@ const COPY: Record<string, Copy> = {
   },
   ru: {
     title: "Добавьте Gadit на телефон",
-    bodyAndroid: "Установка в один тап — Gadit откроется как настоящее приложение с домашнего экрана.",
+    bodyAndroid: "Установка в один тап, Gadit откроется как настоящее приложение с домашнего экрана.",
     bodyIos: "Превратите Gadit в настоящее приложение на главном экране iPhone.",
     install: "Установить",
     later: "Позже",
@@ -121,7 +121,7 @@ const COPY: Record<string, Copy> = {
   },
   es: {
     title: "Añade Gadit a tu teléfono",
-    bodyAndroid: "Instalación en un toque — Gadit se abre como una app real desde tu pantalla de inicio.",
+    bodyAndroid: "Instalación en un toque, Gadit se abre como una app real desde tu pantalla de inicio.",
     bodyIos: "Convierte Gadit en una app real en la pantalla de inicio de tu iPhone.",
     install: "Instalar",
     later: "Más tarde",
@@ -136,7 +136,7 @@ const COPY: Record<string, Copy> = {
   },
   pt: {
     title: "Adicione o Gadit ao seu telefone",
-    bodyAndroid: "Instalação em um toque — o Gadit abre como um app real a partir da tela inicial.",
+    bodyAndroid: "Instalação em um toque, o Gadit abre como um app real a partir da tela inicial.",
     bodyIos: "Transforme o Gadit em um app real na tela inicial do seu iPhone.",
     install: "Instalar",
     later: "Depois",
@@ -151,7 +151,7 @@ const COPY: Record<string, Copy> = {
   },
   fr: {
     title: "Ajoute Gadit à ton téléphone",
-    bodyAndroid: "Installation en un toucher — Gadit s'ouvre comme une vraie app depuis ton écran d'accueil.",
+    bodyAndroid: "Installation en un toucher, Gadit s'ouvre comme une vraie app depuis ton écran d'accueil.",
     bodyIos: "Transforme Gadit en une vraie app sur l'écran d'accueil de ton iPhone.",
     install: "Installer",
     later: "Plus tard",
@@ -166,7 +166,7 @@ const COPY: Record<string, Copy> = {
   },
   de: {
     title: "Füge Gadit zum Handy hinzu",
-    bodyAndroid: "Ein-Klick-Installation — Gadit öffnet sich wie eine echte App vom Startbildschirm.",
+    bodyAndroid: "Ein-Klick-Installation, Gadit öffnet sich wie eine echte App vom Startbildschirm.",
     bodyIos: "Mache Gadit zu einer echten App auf deinem iPhone-Startbildschirm.",
     install: "Installieren",
     later: "Später",
@@ -181,7 +181,7 @@ const COPY: Record<string, Copy> = {
   },
   cs: {
     title: "Přidejte Gadit do telefonu",
-    bodyAndroid: "Instalace jedním klepnutím — Gadit se otevře jako skutečná aplikace z plochy.",
+    bodyAndroid: "Instalace jedním klepnutím, Gadit se otevře jako skutečná aplikace z plochy.",
     bodyIos: "Proměňte Gadit v opravdovou aplikaci na ploše iPhonu.",
     install: "Instalovat",
     later: "Později",
@@ -196,7 +196,7 @@ const COPY: Record<string, Copy> = {
   },
   sk: {
     title: "Pridajte Gadit do telefónu",
-    bodyAndroid: "Inštalácia jedným klepnutím — Gadit sa otvorí ako skutočná aplikácia z plochy.",
+    bodyAndroid: "Inštalácia jedným klepnutím, Gadit sa otvorí ako skutočná aplikácia z plochy.",
     bodyIos: "Premeňte Gadit na skutočnú aplikáciu na ploche iPhonu.",
     install: "Inštalovať",
     later: "Neskôr",
@@ -211,7 +211,7 @@ const COPY: Record<string, Copy> = {
   },
   it: {
     title: "Aggiungi Gadit al telefono",
-    bodyAndroid: "Installazione con un tocco — Gadit si apre come un'app vera dalla schermata Home.",
+    bodyAndroid: "Installazione con un tocco, Gadit si apre come un'app vera dalla schermata Home.",
     bodyIos: "Trasforma Gadit in un'app vera sulla schermata Home dell'iPhone.",
     install: "Installa",
     later: "Più tardi",
@@ -226,7 +226,7 @@ const COPY: Record<string, Copy> = {
   },
   ja: {
     title: "Gadit をスマホに追加",
-    bodyAndroid: "ワンタップでインストール — ホーム画面から本物のアプリのように起動します。",
+    bodyAndroid: "ワンタップでインストール, ホーム画面から本物のアプリのように起動します。",
     bodyIos: "Gadit を iPhone のホーム画面に本物のアプリとして追加。",
     install: "インストール",
     later: "あとで",

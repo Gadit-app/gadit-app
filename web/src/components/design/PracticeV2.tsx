@@ -206,7 +206,7 @@ function CardFront({
             strokeLinejoin="round"
           />
         </svg>
-        {/* Use a single string for both — feature detection on touch is
+        {/* Use a single string for both, feature detection on touch is
             unreliable in SSR; "Click anywhere" works on touch too. */}
         {v2(lang, "srClickToReveal")}
       </div>
@@ -308,7 +308,7 @@ function CardBack({
         </p>
       </div>
 
-      {/* Examples — render only when the item carries them. The notebook
+      {/* Examples, render only when the item carries them. The notebook
          schema doesn't always save examples; treat the list as optional. */}
       {entry.examples && entry.examples.length > 0 && (
         <div className="mt-6">

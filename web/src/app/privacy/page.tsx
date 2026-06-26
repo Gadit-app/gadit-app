@@ -5,7 +5,7 @@ import { PrivacyBodyPt } from "@/components/legal/PortugueseBodies";
 import { PrivacyBodyFr } from "@/components/legal/FrenchBodies";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Gadit",
+  title: "Privacy Policy, Gadit",
   description: "How Gadit collects, uses, and protects your information.",
 };
 
@@ -71,19 +71,19 @@ const EnglishBody = () => (
     </p>
     <ul>
       <li>
-        <strong>OpenAI</strong> — processes the words and sentences you submit to generate definitions, sentence
+        <strong>OpenAI</strong>, processes the words and sentences you submit to generate definitions, sentence
         feedback, quizzes, and voice transcription (Whisper), and generates images (DALL·E 3). Data sent to OpenAI
         is governed by OpenAI&rsquo;s API data usage policy.
       </li>
       <li>
-        <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage) — stores your account, profile,
+        <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), stores your account, profile,
         subscription status, search history, and generated images.
       </li>
       <li>
-        <strong>Stripe</strong> — handles payments, subscriptions, and billing portal.
+        <strong>Stripe</strong>, handles payments, subscriptions, and billing portal.
       </li>
       <li>
-        <strong>Vercel</strong> — hosts and serves the website, and provides anonymized analytics and performance
+        <strong>Vercel</strong>, hosts and serves the website, and provides anonymized analytics and performance
         measurement.
       </li>
     </ul>
@@ -115,7 +115,7 @@ const EnglishBody = () => (
 
     <h2>6. Security</h2>
     <p>
-      We use industry-standard safeguards — encrypted connections (HTTPS), authenticated APIs, and access controls —
+      We use industry-standard safeguards, encrypted connections (HTTPS), authenticated APIs, and access controls , 
       to protect your information. No method of transmission or storage on the internet is 100% secure, so we cannot
       guarantee absolute security, but we work continuously to reduce risk.
     </p>
@@ -163,7 +163,7 @@ const HebrewBody = () => (
     <h2>1. מידע שאנחנו אוספים</h2>
     <h3>מידע על החשבון</h3>
     <p>
-      כשאתם יוצרים חשבון, אנחנו אוספים את כתובת הדוא&rdquo;ל שלכם, ואם אתם מתחברים דרך Google — את פרטי הפרופיל
+      כשאתם יוצרים חשבון, אנחנו אוספים את כתובת הדוא&rdquo;ל שלכם, ואם אתם מתחברים דרך Google, את פרטי הפרופיל
       הבסיסיים ש-Google מספקת (שם תצוגה, תמונת פרופיל). אנחנו <strong>לא</strong> מקבלים את סיסמת ה-Google שלכם.
     </p>
     <h3>מידע על השימוש</h3>
@@ -172,7 +172,7 @@ const HebrewBody = () => (
       <li>את המילים והמשפטים (אופציונליים) שאתם מחפשים;</li>
       <li>תמונות שנוצרו לבקשתכם;</li>
       <li>מצב המנוי שלכם וסטטוס התשלום;</li>
-      <li>היסטוריית חיפושים אחרונה (למשתמשים בתשלום — עד 10 מילים אחרונות), נשמרת כדי שתוכלו לחזור אליה;</li>
+      <li>היסטוריית חיפושים אחרונה (למשתמשים בתשלום, עד 10 מילים אחרונות), נשמרת כדי שתוכלו לחזור אליה;</li>
       <li>מכסות חודשיות (למשל, כמה תמונות יצרתם בתקופת החיוב הנוכחית).</li>
     </ul>
     <h3>מידע טכני ואנליטי</h3>
@@ -205,18 +205,18 @@ const HebrewBody = () => (
     </p>
     <ul>
       <li>
-        <strong>OpenAI</strong> — מעבד את המילים והמשפטים שאתם שולחים, כדי ליצור הגדרות, פידבק על משפטים, חידונים,
+        <strong>OpenAI</strong>, מעבד את המילים והמשפטים שאתם שולחים, כדי ליצור הגדרות, פידבק על משפטים, חידונים,
         ותמלול קולי (Whisper), וכן יוצר תמונות (DALL·E 3). המידע שנשלח ל-OpenAI כפוף למדיניות השימוש של OpenAI ב-API.
       </li>
       <li>
-        <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage) — שומר את החשבון, הפרופיל,
+        <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), שומר את החשבון, הפרופיל,
         סטטוס המנוי, היסטוריית החיפוש, והתמונות שנוצרו.
       </li>
       <li>
-        <strong>Stripe</strong> — מטפל בתשלומים, מנויים, ופורטל החיוב.
+        <strong>Stripe</strong>, מטפל בתשלומים, מנויים, ופורטל החיוב.
       </li>
       <li>
-        <strong>Vercel</strong> — מארח את האתר ומספק אנליטיקה ומדידת ביצועים אנונימית.
+        <strong>Vercel</strong>, מארח את האתר ומספק אנליטיקה ומדידת ביצועים אנונימית.
       </li>
     </ul>
 
@@ -246,7 +246,7 @@ const HebrewBody = () => (
 
     <h2>6. אבטחה</h2>
     <p>
-      אנחנו משתמשים בשיטות אבטחה מקובלות בתעשייה — חיבורים מוצפנים (HTTPS), APIs מאומתים, ובקרות גישה — כדי להגן
+      אנחנו משתמשים בשיטות אבטחה מקובלות בתעשייה, חיבורים מוצפנים (HTTPS), APIs מאומתים, ובקרות גישה, כדי להגן
       על המידע שלכם. אף שיטה של העברה או אחסון באינטרנט אינה 100% מאובטחת, ולכן איננו יכולים להבטיח אבטחה מוחלטת,
       אך אנחנו פועלים באופן רציף להפחתת סיכונים.
     </p>

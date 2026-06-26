@@ -326,7 +326,7 @@ const COPY: Record<Lang, Copy> = {
     heroTitle: "Recommend Gadit.\nEarn monthly.",
     heroSubtitle:
       "You share your personal link, and we reward you with 30% recurring commission in year one. Bring 10 active customers, become an Active Partner, and earn 10% for life.",
-    heroCtaPrimary: "Get your personal link — free",
+    heroCtaPrimary: "Get your personal link, free",
     heroProofA: "30% in year one",
     heroProofB: "10% lifetime (Active Partner)",
     heroProofC: "Instant link",
@@ -335,16 +335,16 @@ const COPY: Record<Lang, Copy> = {
     whyEyebrow: "Before the money",
     whyTitle: "Why Gadit is worth recommending",
     whySubtitle:
-      "You'll only recommend something you believe in. Here's what your audience actually gets — and why they'll thank you.",
+      "You'll only recommend something you believe in. Here's what your audience actually gets, and why they'll thank you.",
     why1Title: "A real dictionary, not just translation",
     why1Desc:
-      "Every meaning of a word, real examples for each, idioms, historical origin, and an image. Gadit explains a word properly — not like a regular dictionary.",
+      "Every meaning of a word, real examples for each, idioms, historical origin, and an image. Gadit explains a word properly, not like a regular dictionary.",
     why2Title: "Works in 11 languages",
     why2Desc:
-      "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Italian and Japanese — including full right-to-left support for Hebrew and Arabic. Works for native speakers and for parents of kids learning a second language.",
+      "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Italian and Japanese, including full right-to-left support for Hebrew and Arabic. Works for native speakers and for parents of kids learning a second language.",
     why3Title: "Designed for parents, teachers and learners",
     why3Desc:
-      "Kid-friendly explanations, quizzes, word games and a personal notebook. Gadit isn't for academics — it's for the home, the classroom and the WhatsApp group.",
+      "Kid-friendly explanations, quizzes, word games and a personal notebook. Gadit isn't for academics, it's for the home, the classroom and the WhatsApp group.",
 
     whoEyebrow: "Who it's for",
     whoTitle: "People whose community trusts them",
@@ -353,10 +353,10 @@ const COPY: Record<Lang, Copy> = {
       "If you write, film, or share content about language, learning, or education, your audience already trusts your recommendations.",
     who2Title: "Teachers, tutors and speech therapists",
     who2Desc:
-      "If you work with students and parents — your recommendation of an educational tool carries professional weight.",
+      "If you work with students and parents, your recommendation of an educational tool carries professional weight.",
     who3Title: "Active community parents",
     who3Desc:
-      "Parent groups, class chats, mailing lists — anywhere parents ask each other about tools that help their kids.",
+      "Parent groups, class chats, mailing lists, anywhere parents ask each other about tools that help their kids.",
 
     howEyebrow: "How it works",
     howTitle: "Three steps, no technical skills",
@@ -365,19 +365,19 @@ const COPY: Record<Lang, Copy> = {
       "Short form. Within a minute you're approved automatically with a personal link and a dashboard.",
     how2Title: "Share your link",
     how2Desc:
-      "In a parent WhatsApp, in a mailing list, in an Instagram story, on a blog, or in person — wherever fits your audience.",
+      "In a parent WhatsApp, in a mailing list, in an Instagram story, on a blog, or in person, wherever fits your audience.",
     how3Title: "Rewards that grow with you",
     how3Desc:
-      "30% recurring commission for 12 months on every customer who signs up through your link. Bring 10 active customers and you become an Active Partner — unlocking an additional 10% lifetime commission on all your customers, from month 13 onward.",
-    midCta1: "Start now — takes a minute",
+      "30% recurring commission for 12 months on every customer who signs up through your link. Bring 10 active customers and you become an Active Partner, unlocking an additional 10% lifetime commission on all your customers, from month 13 onward.",
+    midCta1: "Start now, takes a minute",
 
     getEyebrow: "What you get",
     getTitle: "We don't leave you on your own",
     getSubtitle:
-      "If you've never marketed anything in your life — that's fine. Everything is ready for you.",
+      "If you've never marketed anything in your life, that's fine. Everything is ready for you.",
     get1Title: "Your personal link",
     get1Desc:
-      "A short, unique link you can share anywhere. Even if someone clicks it and comes back 60 days later — the signup still credits to you.",
+      "A short, unique link you can share anywhere. Even if someone clicks it and comes back 60 days later, the signup still credits to you.",
     get2Title: "Ready-to-use copy",
     get2Desc:
       "Pre-written posts for WhatsApp and Facebook, a parent email, Instagram story ideas. Just copy and share.",
@@ -391,7 +391,7 @@ const COPY: Record<Lang, Copy> = {
     earnEyebrow: "What you can earn",
     earnTitle: "Move the slider and see",
     earnSubtitle:
-      "Numbers depend on your audience and what you share. Here's how it adds up — we don't promise a specific amount, but the order of magnitude is real.",
+      "Numbers depend on your audience and what you share. Here's how it adds up, we don't promise a specific amount, but the order of magnitude is real.",
     calcSubsLabel: "Active Deep subscribers per month",
     calcMonthly: "Monthly reward",
     calcYearly: "Over 12 months",
@@ -400,14 +400,14 @@ const COPY: Record<Lang, Copy> = {
     tableHeaderMonthly: "Monthly reward",
     tableHeaderYearly: "Over 12 months",
     earnNote:
-      "Calculation based on Deep subscription ($4.99/month) and 30% commission in year one. From month 13, Active Partners earn an additional 10% lifetime commission on those same customers. Rewards release after a 30-day hold, and payouts happen once $50 has accumulated ($50 is the minimum payout threshold — not a ceiling).",
+      "Calculation based on Deep subscription ($4.99/month) and 30% commission in year one. From month 13, Active Partners earn an additional 10% lifetime commission on those same customers. Rewards release after a 30-day hold, and payouts happen once $50 has accumulated ($50 is the minimum payout threshold, not a ceiling).",
     midCta2: "Ready to start? Get your link",
 
     trustEyebrow: "Why trust us",
     trustTitle: "A founding partners program in its early days",
     founderHeading: "Why I created Gadit?",
     founderBody:
-      "My mission has always been one thing: to help people understand things all the way through. Because when you really understand, you can apply. And when you can apply, you can achieve anything you want.\n\nOver the years I've seen smart, talented people who wanted to understand something and couldn't. They thought they just \"weren't built for it.\" But it wasn't them. It was one word along the way.\n\nI built Gadit to remove that barrier. Not another dictionary. Not just a translation. A tool that explains every word all the way through — simply, with examples, with context, and with an image that brings it to life. We call it GAD-ing a word.\n\nThe partner program is now open to people who connect with this idea and want to help spread it further. If that's you, I'd be glad to have you join.",
+      "My mission has always been one thing: to help people understand things all the way through. Because when you really understand, you can apply. And when you can apply, you can achieve anything you want.\n\nOver the years I've seen smart, talented people who wanted to understand something and couldn't. They thought they just \"weren't built for it.\" But it wasn't them. It was one word along the way.\n\nI built Gadit to remove that barrier. Not another dictionary. Not just a translation. A tool that explains every word all the way through, simply, with examples, with context, and with an image that brings it to life. We call it GAD-ing a word.\n\nThe partner program is now open to people who connect with this idea and want to help spread it further. If that's you, I'd be glad to have you join.",
     founderSign: "Gadi Ben Lavi, founder of Gadit",
     stat1Num: "9",
     stat1Label: "UI languages supported",
@@ -423,10 +423,10 @@ const COPY: Record<Lang, Copy> = {
       "No. Most of our partners are parents, teachers and bloggers who have never marketed anything. All you need is to share the link with people who'd benefit from Gadit.",
     faq2Q: "Can I share in WhatsApp or Facebook groups?",
     faq2A:
-      "Yes — and that's one of the best channels for our audience. Parents ask each other about tools in groups, and that's where your recommendation carries the most weight.",
+      "Yes, and that's one of the best channels for our audience. Parents ask each other about tools in groups, and that's where your recommendation carries the most weight.",
     faq3Q: "When do I get paid?",
     faq3A:
-      "Monthly payouts at the end of each month, once $50 has accumulated. The $50 is a minimum payout threshold — not a ceiling. You can earn much more than that; you just receive the actual payout once you cross the threshold.",
+      "Monthly payouts at the end of each month, once $50 has accumulated. The $50 is a minimum payout threshold, not a ceiling. You can earn much more than that; you just receive the actual payout once you cross the threshold.",
     faq4Q: "What if my referred customer cancels?",
     faq4A:
       "You earn only for the months the customer actually paid. If they cancel after 4 months, you've earned 4 months of reward. Fair to both sides.",
@@ -435,27 +435,27 @@ const COPY: Record<Lang, Copy> = {
       "No limit. You can refer as many customers as you like, from anywhere in the world, in any of the 11 languages Gadit supports.",
     faq6Q: "What does the link do if someone doesn't sign up right away?",
     faq6A:
-      "The link remembers you for 60 days. If someone clicks it, hesitates for two weeks, then comes back and subscribes — the signup still credits to you.",
+      "The link remembers you for 60 days. If someone clicks it, hesitates for two weeks, then comes back and subscribes, the signup still credits to you.",
     faq7Q: "What about yearly subscriptions?",
     faq7A:
       "Yearly plans pay a 15% one-time reward on the first payment (instead of 30% monthly for 12 months). This balances the discount we offer on the yearly price.",
     faq8Q: "Will I get ready-made marketing materials?",
     faq8A:
-      "Yes. You can copy ready-to-use texts for WhatsApp, a parent email, Facebook posts and Instagram story drafts. If you need something specific — ask, and we'll prepare it.",
+      "Yes. You can copy ready-to-use texts for WhatsApp, a parent email, Facebook posts and Instagram story drafts. If you need something specific, ask, and we'll prepare it.",
     faq9Q: "Can I run paid ads on Google or Facebook?",
     faq9A:
-      "Organic posts to your own audience — yes. But you can't buy paid ads on Google or Facebook for the word 'Gadit' itself — we don't want you competing with the main site for the same traffic. The full rules are in your dashboard.",
+      "Organic posts to your own audience, yes. But you can't buy paid ads on Google or Facebook for the word 'Gadit' itself, we don't want you competing with the main site for the same traffic. The full rules are in your dashboard.",
     faq10Q: "Do I need to be a paying subscriber to be a partner?",
     faq10A:
-      "Yes. The partner program is open to Clear and Deep subscribers only. The reason is simple — you can't credibly recommend a product you don't use yourself. If you're on Basic, upgrade to Clear or Deep from the Pricing page and you'll get both the full dictionary and access to the partner program.",
+      "Yes. The partner program is open to Clear and Deep subscribers only. The reason is simple, you can't credibly recommend a product you don't use yourself. If you're on Basic, upgrade to Clear or Deep from the Pricing page and you'll get both the full dictionary and access to the partner program.",
     faq11Q: "What is an Active Partner and how do I become one?",
     faq11A:
-      "Once you've referred 10 active paying customers, you automatically become an Active Partner — a status that unlocks an additional 10% recurring lifetime commission on all your customers (including existing ones, from month 13 onward). That means even two, three, or five years later — as long as your customers stay subscribed, you keep earning.",
+      "Once you've referred 10 active paying customers, you automatically become an Active Partner, a status that unlocks an additional 10% recurring lifetime commission on all your customers (including existing ones, from month 13 onward). That means even two, three, or five years later, as long as your customers stay subscribed, you keep earning.",
 
     finalTitle: "Ready to start?",
     finalSubtitle:
       "Signup takes a minute. Auto-approval. Your link is ready instantly.",
-    finalCta: "Get your personal link — free",
+    finalCta: "Get your personal link, free",
     termsLink: "Partner program terms",
   },
 
@@ -653,7 +653,7 @@ const COPY: Record<Lang, Copy> = {
       "В родительском WhatsApp, в письме к своему списку, в Stories Instagram, в блоге или лично. Везде, где это подходит твоей аудитории.",
     how3Title: "Награда, которая растёт вместе с тобой",
     how3Desc:
-      "30% повторяющейся комиссии в течение 12 месяцев за каждого клиента, оформившего подписку по твоей ссылке. Когда приведёшь 10 активных клиентов, ты становишься Active Partner и открываешь дополнительные 10% повторяющейся комиссии пожизненно — на всех своих клиентов, начиная с 13-го месяца.",
+      "30% повторяющейся комиссии в течение 12 месяцев за каждого клиента, оформившего подписку по твоей ссылке. Когда приведёшь 10 активных клиентов, ты становишься Active Partner и открываешь дополнительные 10% повторяющейся комиссии пожизненно, на всех своих клиентов, начиная с 13-го месяца.",
     midCta1: "Начни сейчас. Это занимает минуту.",
 
     getEyebrow: "Что ты получаешь",
@@ -692,7 +692,7 @@ const COPY: Record<Lang, Copy> = {
     trustTitle: "Основательская программа на ранней стадии",
     founderHeading: "Почему я создал Gadit?",
     founderBody:
-      "Моя миссия всегда была одна: помогать людям понимать вещи до конца. Потому что когда понимаешь по-настоящему, можно применить. А когда можно применить, можно достичь всего, чего хочешь.\n\nЗа годы я видел умных, талантливых людей, которые хотели что-то понять и не могли. Они думали, что просто «не врубаются». Но дело было не в них. Дело было в одном слове на пути.\n\nЯ построил Gadit, чтобы убрать этот барьер. Не ещё один словарь. Не просто перевод. Инструмент, который объясняет каждое слово до конца — просто, с примерами, с контекстом и с картинкой, которая оживляет его. Мы называем это сделать GAD слову.\n\nПартнёрская программа открыта сейчас для людей, которые откликаются на эту идею и хотят нести её дальше. Если это ты, я буду рад, если ты присоединишься.",
+      "Моя миссия всегда была одна: помогать людям понимать вещи до конца. Потому что когда понимаешь по-настоящему, можно применить. А когда можно применить, можно достичь всего, чего хочешь.\n\nЗа годы я видел умных, талантливых людей, которые хотели что-то понять и не могли. Они думали, что просто «не врубаются». Но дело было не в них. Дело было в одном слове на пути.\n\nЯ построил Gadit, чтобы убрать этот барьер. Не ещё один словарь. Не просто перевод. Инструмент, который объясняет каждое слово до конца, просто, с примерами, с контекстом и с картинкой, которая оживляет его. Мы называем это сделать GAD слову.\n\nПартнёрская программа открыта сейчас для людей, которые откликаются на эту идею и хотят нести её дальше. Если это ты, я буду рад, если ты присоединишься.",
     founderSign: "Гади Бен Лави, основатель Gadit",
     stat1Num: "9",
     stat1Label: "поддерживаемых языков интерфейса",
@@ -705,16 +705,16 @@ const COPY: Record<Lang, Copy> = {
     faqTitle: "Что стоит знать",
     faq1Q: "Нужно ли быть маркетологом?",
     faq1A:
-      "Нет. Большинство наших партнёров — это родители, учителя и блогеры, которые никогда ничего не продвигали. Всё, что нужно, — поделиться ссылкой с людьми, которым может быть полезен Gadit.",
+      "Нет. Большинство наших партнёров, это родители, учителя и блогеры, которые никогда ничего не продвигали. Всё, что нужно,, поделиться ссылкой с людьми, которым может быть полезен Gadit.",
     faq2Q: "Можно ли делиться в группах WhatsApp или Facebook?",
     faq2A:
       "Да, и это один из лучших каналов для нашей аудитории. Родители спрашивают друг друга об инструментах в группах, и именно там твоя рекомендация имеет самый сильный эффект.",
     faq3Q: "Когда я получаю выплату?",
     faq3A:
-      "Ежемесячная выплата в конце каждого месяца, после накопления $50. Порог $50 — это минимум для выплаты, не потолок. Можно заработать гораздо больше — просто фактически получаешь деньги в тот момент, когда переходишь этот порог.",
+      "Ежемесячная выплата в конце каждого месяца, после накопления $50. Порог $50, это минимум для выплаты, не потолок. Можно заработать гораздо больше, просто фактически получаешь деньги в тот момент, когда переходишь этот порог.",
     faq4Q: "Что если мой клиент отменит подписку?",
     faq4A:
-      "Ты получишь комиссию только за месяцы, которые клиент фактически оплатил. Если он отменил после 4 месяцев — ты получил 4 месяца награды. Честно для обеих сторон.",
+      "Ты получишь комиссию только за месяцы, которые клиент фактически оплатил. Если он отменил после 4 месяцев, ты получил 4 месяца награды. Честно для обеих сторон.",
     faq5Q: "Есть ли ограничение по количеству клиентов?",
     faq5A:
       "Совсем нет. Можешь привести сколько угодно клиентов, из любой точки мира, на любом из 11 языков, которые поддерживает Gadit.",
@@ -726,16 +726,16 @@ const COPY: Record<Lang, Copy> = {
       "За годовую подписку ты получаешь разовую награду 15% от первого платежа (вместо 30% ежемесячно в течение года). Это справедливый баланс с учётом скидки, которую мы даём на годовой платёж.",
     faq8Q: "Получу ли я готовые маркетинговые материалы?",
     faq8A:
-      "Да. Можно скопировать готовые тексты для WhatsApp, письмо для родителей, посты для Facebook и черновики Stories. Если нужно что-то конкретное — напиши, и мы подготовим.",
+      "Да. Можно скопировать готовые тексты для WhatsApp, письмо для родителей, посты для Facebook и черновики Stories. Если нужно что-то конкретное, напиши, и мы подготовим.",
     faq9Q: "Можно ли делать платную рекламу в Google или Facebook?",
     faq9A:
-      "Органические посты для своей аудитории — да. Но нельзя покупать рекламу в Google или Facebook по слову «Gadit». Мы не хотим, чтобы ты конкурировал с основным сайтом за тот же трафик. Полные правила — в личном кабинете.",
+      "Органические посты для своей аудитории, да. Но нельзя покупать рекламу в Google или Facebook по слову «Gadit». Мы не хотим, чтобы ты конкурировал с основным сайтом за тот же трафик. Полные правила, в личном кабинете.",
     faq10Q: "Нужно ли быть платным подписчиком, чтобы быть партнёром?",
     faq10A:
       "Да. Партнёрская программа открыта только для подписчиков Clear и Deep. Хорошая рекомендация начинается с продукта, который знаешь сам. Если ты ещё на Basic, перейди на Clear или Deep с экрана «Цены», и ты получишь и полный словарь, и доступ к программе.",
     faq11Q: "Что такое Active Partner и как им стать?",
     faq11A:
-      "Когда ты приведёшь 10 активных платящих клиентов, ты автоматически становишься Active Partner. Этот статус открывает дополнительные 10% повторяющейся комиссии пожизненно — на всех твоих клиентов (включая существующих, начиная с 13-го месяца). Это значит, что даже через два, три или пять лет, если твои клиенты всё ещё подписаны, ты всё ещё получаешь награду.",
+      "Когда ты приведёшь 10 активных платящих клиентов, ты автоматически становишься Active Partner. Этот статус открывает дополнительные 10% повторяющейся комиссии пожизненно, на всех твоих клиентов (включая существующих, начиная с 13-го месяца). Это значит, что даже через два, три или пять лет, если твои клиенты всё ещё подписаны, ты всё ещё получаешь награду.",
 
     finalTitle: "Готов начать?",
     finalSubtitle:
@@ -2110,7 +2110,7 @@ export function AffiliatesPage() {
           </Link>
         </nav>
         <div className="wb-shell-actions">
-          {/* Share button only shown to signed-in users — non-members
+          {/* Share button only shown to signed-in users, non-members
               probably aren't going to share before they've tried the
               product themselves. */}
           {user && (
@@ -2142,7 +2142,7 @@ export function AffiliatesPage() {
         <div className="wb-shell-mobile-cta">
           <StartFreeCTA />
         </div>
-        {/* Mobile identity cluster — Share + Avatar inline next to the
+        {/* Mobile identity cluster, Share + Avatar inline next to the
             wordmark. Mirrors Home + Word; 2026-06-19 redesign. */}
         {user && (
           <div className="wb-shell-mobile-identity">

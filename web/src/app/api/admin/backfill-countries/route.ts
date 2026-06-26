@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
   const expected = process.env.ADMIN_SECRET;
   if (!expected) {
     return NextResponse.json(
-      { error: "ADMIN_SECRET env var not configured — refusing to run" },
+      { error: "ADMIN_SECRET env var not configured, refusing to run" },
       { status: 503 },
     );
   }

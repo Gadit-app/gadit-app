@@ -12,7 +12,7 @@ import AdminUsersClient from "./AdminUsersClient";
  * a 401, not data.
  */
 export const metadata = {
-  title: "Admin · Users — Gadit",
+  title: "Admin · Users, Gadit",
   robots: { index: false, follow: false },
 };
 

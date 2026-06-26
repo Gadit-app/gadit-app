@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
     const resendKey = process.env.RESEND_API_KEY;
     const notifyTo  = process.env.NOTIFY_EMAIL;
     if (!resendKey || !notifyTo) {
-      console.warn("[notify-signup] missing RESEND_API_KEY or NOTIFY_EMAIL — skipping");
+      console.warn("[notify-signup] missing RESEND_API_KEY or NOTIFY_EMAIL, skipping");
       return NextResponse.json({ sent: false, reason: "not_configured" });
     }
 

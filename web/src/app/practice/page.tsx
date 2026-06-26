@@ -9,7 +9,7 @@ import { PracticePage } from "./PracticeClient";
  * false (private user data + ephemeral practice state).
  */
 export const metadata: Metadata = {
-  title: "Practice — Gadit",
+  title: "Practice, Gadit",
   robots: { index: false, follow: false },
 };
 

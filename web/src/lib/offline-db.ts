@@ -31,7 +31,7 @@ export type CachedWordResult = {
   /** Composite key: `${lang}:${word.toLowerCase()}`. Stored as the
    *  IDB primary key for direct lookup. */
   key: string;
-  /** The user's UI language at time of caching — used to scope a
+  /** The user's UI language at time of caching, used to scope a
    *  per-lang cache so "love" defined in English ≠ "love" defined in
    *  Spanish. */
   lang: string;
@@ -44,7 +44,7 @@ export type CachedWordResult = {
   /** When this entry was first written. Used to age out entries if
    *  we ever add a max-age policy. */
   savedAt: number;
-  /** Last time this entry was opened — used to surface a recent-list
+  /** Last time this entry was opened, used to surface a recent-list
    *  in the offline study UI. */
   lastViewedAt: number;
   /** Was this word explicitly "downloaded for study", or did it just

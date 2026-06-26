@@ -128,7 +128,7 @@ export interface V2Strings {
   tierClearFeatures: string;
   tierDeepFeatures: string;
   // yearly subprice templates
-  basicEquivalent: string; // empty for free tier — kept for symmetry
+  basicEquivalent: string; // empty for free tier, kept for symmetry
   clearEquivalent: string;
   deepEquivalent: string;
   // trust strip (4 lines)
@@ -208,7 +208,7 @@ export interface V2Strings {
 
   // ── Quiz Modal (Screen 6) ───────────────────────────────────
   quizEyebrow: string;
-  quizTitleTemplate: Template1; // word → "[word] — quiz"
+  quizTitleTemplate: Template1; // word → "[word], quiz"
   quizQuestionNofM: (n: number, m: number) => string;
   quizSubmit: string;
   quizNext: string;
@@ -245,7 +245,7 @@ export interface V2Strings {
   notebookEyebrow: string;
   notebookTitle: string;
   notebookSubtitle: string;
-  /** template: "127 words explored" — number is the only arg.
+  /** template: "127 words explored", number is the only arg.
    *  Kept for backward compat; new layouts prefer the split
    *  numeral + notebookWordsExplored label pair. */
   notebookCounterTemplate: Template1;
@@ -253,7 +253,7 @@ export interface V2Strings {
    *  rendered under "127". Used in the Notebook hero counter. */
   notebookWordsExplored: string;
   notebookPracticeNow: string;
-  /** template: "5 due today" — number is the only arg */
+  /** template: "5 due today", number is the only arg */
   notebookDueTodayTemplate: Template1;
   notebookListView: string;
   notebookGalaxyView: string;
@@ -269,7 +269,7 @@ export interface V2Strings {
 
   // ── Practice / Spaced Repetition (Screen 9) ─────────────────
   srEyebrow: string;
-  /** template: "Word 2 of 5" — index, total */
+  /** template: "Word 2 of 5", index, total */
   srWordNofMTemplate: (n: number, m: number) => string;
   srSkip: string;
   srClickToReveal: string;
@@ -283,7 +283,7 @@ export interface V2Strings {
   /** template: "3 you knew · 2 to review again" */
   srSummaryStatTemplate: (knew: number, forgot: number) => string;
   srTomorrow: string;
-  /** template: "Next review: Tomorrow (3 words due)" — tomorrow text, count */
+  /** template: "Next review: Tomorrow (3 words due)", tomorrow text, count */
   srNextReviewTemplate: (when: string, count: number) => string;
   srDoneForToday: string;
   srPracticeMore: string;
@@ -295,16 +295,16 @@ export interface V2Strings {
   // ── Account (Screen 10) ─────────────────────────────────────
   accountEyebrow: string;
   accountYourSpace: string;
-  /** template: "Lena's space" — first name */
+  /** template: "Lena's space", first name */
   accountNamedSpaceTemplate: Template1;
   // Plan section
   accountPlanLabel: string;
   accountOnPlanFree: string;
   accountNoActiveSubscription: string;
   accountChooseAPlan: string;
-  /** template: "14-day trial · 6 days remaining" — days */
+  /** template: "14-day trial · 6 days remaining", days */
   accountTrialBadgeTemplate: Template1;
-  /** template: "Renews Apr 26, 2026" — date string */
+  /** template: "Renews Apr 26, 2026", date string */
   accountRenewsOnTemplate: Template1;
   accountCancelsAtPeriodEnd: string;
   accountManageBilling: string;
@@ -438,7 +438,7 @@ const en: V2Strings = {
   homeHeadlineLine1: "Understand",
   homeHeadlineLine2: "to the end.",
   homeSubline:
-    "A dictionary that meets you in context — meanings, origins, idioms, and a vivid image, in 11 languages.",
+    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 11 languages.",
 
   searchPlaceholderHome: "Type a word",
   voiceInputTitle: "Dictate a word",
@@ -449,23 +449,23 @@ const en: V2Strings = {
   tryLabel: "Try",
 
   valuePropsEyebrow: "What Gadit does differently",
-  valuePropsTitle: "More than a definition — a way to live with a word.",
+  valuePropsTitle: "More than a definition, a way to live with a word.",
   valueProp1Eyebrow: "Context-aware",
   valueProp1Title: "The right meaning, every time",
   valueProp1Body:
-    "Paste a sentence — Gadit picks the sense that fits, not just the most common one.",
+    "Paste a sentence, Gadit picks the sense that fits, not just the most common one.",
   valueProp2Eyebrow: "Visual",
   valueProp2Title: "A vivid image, just for this word",
   valueProp2Body:
-    "Generated for each entry. A visual anchor for how a word feels — not a stock photo.",
+    "Generated for each entry. A visual anchor for how a word feels, not a stock photo.",
   valueProp3Eyebrow: "Etymology",
   valueProp3Title: "A history note, not a Wikipedia dump",
   valueProp3Body:
-    "Where the word came from, told as a paragraph — the kind a curious friend would write.",
+    "Where the word came from, told as a paragraph, the kind a curious friend would write.",
   valueProp4Eyebrow: "11 languages",
   valueProp4Title: "Hebrew & Arabic, fully native",
   valueProp4Body:
-    "Real RTL, real fonts, real idioms — not a translated UI bolted on.",
+    "Real RTL, real fonts, real idioms, not a translated UI bolted on.",
 
   previewLabel: "Preview",
   seeFullResult: "See the full result",
@@ -499,7 +499,7 @@ const en: V2Strings = {
 
   kidsModeLabel: "Kids",
   kidsModeTooltipOff: "Tap to explain every word like a parent would to a child.",
-  kidsModeTooltipOn: "Kids mode is on — every definition will be written for a child. Tap to turn off.",
+  kidsModeTooltipOn: "Kids mode is on, every definition will be written for a child. Tap to turn off.",
   kidsModeBasicGate: "Kids mode is a Clear feature. Upgrade to use it.",
 
   signupWelcomeTitle: "Welcome to Gadit!",
@@ -541,14 +541,14 @@ const en: V2Strings = {
 
   trustStripCancel: "Cancel anytime through Stripe portal",
   trustStripMoneyBack: "14-day money-back on first purchase",
-  trustStripDataYours: "Your data is yours — export anytime",
+  trustStripDataYours: "Your data is yours, export anytime",
   trustStripNoAds: "No ads, no third-party tracking",
 
   faqEyebrow: "FAQ",
   faqHeadline: "Questions, answered",
   faqQ1: "Can I switch plans?",
   faqA1:
-    "Yes, upgrade or downgrade anytime. Proration is handled automatically — you only pay the difference.",
+    "Yes, upgrade or downgrade anytime. Proration is handled automatically, you only pay the difference.",
   faqQ2: "What happens if I cancel?",
   faqA2:
     "You keep access until the end of your billing period, then revert to Basic. No data is lost.",
@@ -616,12 +616,12 @@ const en: V2Strings = {
 
   // Quiz Modal (Screen 6)
   quizEyebrow: "Practice",
-  quizTitleTemplate: (w) => `${w} — quiz`,
+  quizTitleTemplate: (w) => `${w}, quiz`,
   quizQuestionNofM: (n, m) => `Question ${n} of ${m}`,
   quizSubmit: "Submit",
   quizNext: "Next question",
   quizFinish: "Finish",
-  quizYesCorrect: "Yes — correct",
+  quizYesCorrect: "Yes, correct",
   quizNotQuite: "Not quite",
   quizLoading: "Preparing your quiz…",
   quizFinalScoreTemplate: (c, t) => `You got ${c} out of ${t} correct.`,
@@ -633,7 +633,7 @@ const en: V2Strings = {
   compareEyebrow: "Compare",
   compareTitle: "Tell similar words apart",
   compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal — the words that catch even native speakers.",
+    "affect vs effect, אומנות vs אמנות, principle vs principal, the words that catch even native speakers.",
   compareWord1Label: "Word 1",
   compareWord2Label: "Word 2",
   compareWord1Placeholder: "affect",
@@ -646,15 +646,15 @@ const en: V2Strings = {
   compareCommonMistakeLabel: "Common mistake",
   compareErrNotARealWord: "We don't recognize one of those words.",
   compareErrDifferentLanguages:
-    "These two words seem to be in different languages — try a matched pair.",
-  compareErrSameWord: "These look like the same word — try two different ones.",
+    "These two words seem to be in different languages, try a matched pair.",
+  compareErrSameWord: "These look like the same word, try two different ones.",
   compareErrGeneric: "Compare unavailable right now.",
 
   // Notebook (Screen 8)
   notebookEyebrow: "Notebook",
   notebookTitle: "Your universe of words",
   notebookSubtitle:
-    "Every word you've explored — kept, organized, growing.",
+    "Every word you've explored, kept, organized, growing.",
   notebookCounterTemplate: (n) => `${n} words explored`,
   notebookWordsExplored: "words explored",
   notebookPracticeNow: "Practice now",
@@ -729,7 +729,7 @@ const en: V2Strings = {
   reportTellMorePh: "Optional. The more specific, the faster we can fix it.",
   reportSend: "Send report",
   reportSending: "Sending…",
-  reportThanks: "Thanks — we got it.",
+  reportThanks: "Thanks, we got it.",
   reportError: "Could not send. Try again in a moment.",
   reportCatIncorrectDefinition: "Incorrect definition",
   reportCatWrongEtymology: "Wrong etymology",
@@ -753,12 +753,12 @@ const en: V2Strings = {
   takeItFurther: "Take it further",
   doMoreWith: (w) => `Do more with ${w}`,
   saveToNotebook: "Save to notebook",
-  saveToNotebookHint: "Return to it later — organized, searchable.",
+  saveToNotebookHint: "Return to it later, organized, searchable.",
   generateImage: "Generate image",
   generatingImage: "Generating…",
   generateImageHint: "A vivid AI-made visual, just for this word.",
   composeSentence: "Compose a sentence",
-  composeSentenceHint: "Write your own — Gadit reviews for tone and fit.",
+  composeSentenceHint: "Write your own, Gadit reviews for tone and fit.",
   practiceWord: "Practice this word",
   practiceWordHint: "A short quiz tuned to how you learn.",
   unlockWithClear: "Unlock with Clear",
@@ -766,20 +766,20 @@ const en: V2Strings = {
   softWallAnonTitle: "You've used your free searches",
   softWallAnonBody:
     "Sign up free to search up to 20 words a day, with full definitions, examples, idioms and word origin.",
-  softWallSignupCta: "Sign up — it's free",
+  softWallSignupCta: "Sign up, it's free",
   softWallBasicTitle: "You've reached today's limit",
   softWallBasicBody:
-    "Free accounts get 20 searches per day. The limit resets tomorrow — or upgrade to Clear for unlimited searches plus images, kids mode, and grammar feedback.",
+    "Free accounts get 20 searches per day. The limit resets tomorrow, or upgrade to Clear for unlimited searches plus images, kids mode, and grammar feedback.",
   softBannerSearchesLeft: (n) =>
     Number(n) === 1
-      ? "1 free search left today — sign up free to get 20 a day."
-      : `${n} free searches left today — sign up free to get 20 a day.`,
+      ? "1 free search left today, sign up free to get 20 a day."
+      : `${n} free searches left today, sign up free to get 20 a day.`,
   clearUnlocksThis: "Clear unlocks this",
   visualizeThisWord: "Visualize",
   visualBlurb:
-    "One vivid image, generated by Gadit — a visual anchor for how this word feels.",
+    "One vivid image, generated by Gadit, a visual anchor for how this word feels.",
   visualBlurbLocked:
-    "Generate a vivid, one-of-a-kind image for this word — understanding through sight.",
+    "Generate a vivid, one-of-a-kind image for this word, understanding through sight.",
   reportLabel: "Report an error",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -809,11 +809,11 @@ const en: V2Strings = {
   offlinePin: "Save offline",
   offlinePinned: "Saved offline",
   offlinePinTitle: "Save this word for offline study",
-  offlinePinnedTitle: "Saved — available without WiFi",
+  offlinePinnedTitle: "Saved, available without WiFi",
   offlineDownloadPack: "Download offline pack",
   offlineDownloadingPack: "Downloading…",
   offlinePackHeader: "Offline pack",
-  offlinePackDescription: "Adds the most-searched words in your language to your Notebook — and keeps them available without WiFi for offline study.",
+  offlinePackDescription: "Adds the most-searched words in your language to your Notebook, and keeps them available without WiFi for offline study.",
   visualEmptyLabel: "An image will be drawn for this word",
   generateLabel: "Generate",
   savedAgoTemplate: (t) => `Saved · ${t}`,
@@ -825,34 +825,34 @@ const he: V2Strings = {
   homeHeadlineLine1: "להבין",
   homeHeadlineLine2: "עד הסוף.",
   homeSubline:
-    "מילון שמבין הקשר — הגדרות, מקור, ביטויים ותמונה חיה, ב־11 שפות.",
+    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־11 שפות.",
 
   searchPlaceholderHome: "הקלידו מילה",
   voiceInputTitle: "הכתבת מילה",
   addContext: "הוסיפו הקשר",
   explain: "הסבר",
   contextHint:
-    "קוראים משהו? הדביקו את המשפט שהמילה מופיעה בו — Gadit יבחר את המשמעות הנכונה.",
+    "קוראים משהו? הדביקו את המשפט שהמילה מופיעה בו, Gadit יבחר את המשמעות הנכונה.",
   tryLabel: "נסו",
 
   valuePropsEyebrow: "מה Gadit עושה אחרת",
-  valuePropsTitle: "יותר מהגדרה — דרך לחיות עם המילה.",
+  valuePropsTitle: "יותר מהגדרה, דרך לחיות עם המילה.",
   valueProp1Eyebrow: "מודע להקשר",
   valueProp1Title: "המשמעות הנכונה, בכל פעם",
   valueProp1Body:
-    "הדביקו משפט — Gadit יבחר את המשמעות שמתאימה, לא רק את הנפוצה.",
+    "הדביקו משפט, Gadit יבחר את המשמעות שמתאימה, לא רק את הנפוצה.",
   valueProp2Eyebrow: "ויזואלי",
   valueProp2Title: "תמונה חיה, במיוחד למילה הזו",
   valueProp2Body:
-    "נוצרת לכל ערך. עוגן ויזואלי לתחושת המילה — לא תמונת סטוק.",
+    "נוצרת לכל ערך. עוגן ויזואלי לתחושת המילה, לא תמונת סטוק.",
   valueProp3Eyebrow: "אטימולוגיה",
   valueProp3Title: "הערה היסטורית, לא ויקיפדיה",
   valueProp3Body:
-    "מאיפה המילה הגיעה, מסופר כפסקה — כמו שחבר סקרן היה כותב.",
+    "מאיפה המילה הגיעה, מסופר כפסקה, כמו שחבר סקרן היה כותב.",
   valueProp4Eyebrow: "11 שפות",
   valueProp4Title: "עברית וערבית כשפות אם",
   valueProp4Body:
-    "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים — לא ממשק מתורגם.",
+    "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים, לא ממשק מתורגם.",
 
   previewLabel: "תצוגה מקדימה",
   seeFullResult: "ראו תוצאה מלאה",
@@ -906,7 +906,7 @@ const he: V2Strings = {
     "20 חיפושי מילים ביום¶כל ההגדרות למילה¶דוגמאות של משפטים לפי הקשר¶ניבים וצירופי מילים¶מקור המילה",
 
   tierClearTagline: "לראות",
-  tierClearPitch: "החיו את המילים — תמונות, הסבר לילדים ומשוב.",
+  tierClearPitch: "החיו את המילים, תמונות, הסבר לילדים ומשוב.",
   tierClearBadge: "הכי פופולרי",
   tierClearCta: "נסיון חינם ל־14 ימים",
   tierClearCtaYearly: "הרשמה שנתית",
@@ -926,14 +926,14 @@ const he: V2Strings = {
 
   trustStripCancel: "ביטול בכל עת דרך פורטל Stripe",
   trustStripMoneyBack: "החזר כספי תוך 14 ימים ברכישה ראשונה",
-  trustStripDataYours: "הנתונים שלכם — ייצוא מתי שתרצו",
+  trustStripDataYours: "הנתונים שלכם, ייצוא מתי שתרצו",
   trustStripNoAds: "ללא פרסומות וללא מעקב צד ג׳",
 
   faqEyebrow: "שאלות שכיחות",
   faqHeadline: "שאלות, תשובות.",
   faqQ1: "אפשר להחליף תוכנית?",
   faqA1:
-    "כן, אפשר לשדרג או לרדת בכל עת. החיוב היחסי מטופל אוטומטית — תשלמו רק את ההפרש.",
+    "כן, אפשר לשדרג או לרדת בכל עת. החיוב היחסי מטופל אוטומטית, תשלמו רק את ההפרש.",
   faqQ2: "מה קורה אם אני מבטל?",
   faqA2:
     "הגישה נשמרת עד סוף תקופת החיוב, ואז חוזרים ל־Basic. שום נתון לא הולך לאיבוד.",
@@ -1001,12 +1001,12 @@ const he: V2Strings = {
 
   // Quiz Modal (Screen 6)
   quizEyebrow: "תרגול",
-  quizTitleTemplate: (w) => `${w} — תרגול`,
+  quizTitleTemplate: (w) => `${w}, תרגול`,
   quizQuestionNofM: (n, m) => `שאלה ${n} מתוך ${m}`,
   quizSubmit: "בדיקה",
   quizNext: "שאלה הבאה",
   quizFinish: "סיום",
-  quizYesCorrect: "נכון — כל הכבוד",
+  quizYesCorrect: "נכון, כל הכבוד",
   quizNotQuite: "לא לגמרי",
   quizLoading: "מכינים חידון…",
   quizFinalScoreTemplate: (c, t) => `ענית נכון על ${c} מתוך ${t}.`,
@@ -1018,7 +1018,7 @@ const he: V2Strings = {
   compareEyebrow: "השוואה",
   compareTitle: "הבחינו בין מילים דומות",
   compareSubtitle:
-    "אומנות מול אמנות, affect מול effect — המילים שמבלבלות אפילו דוברים שוטפים.",
+    "אומנות מול אמנות, affect מול effect, המילים שמבלבלות אפילו דוברים שוטפים.",
   compareWord1Label: "מילה 1",
   compareWord2Label: "מילה 2",
   compareWord1Placeholder: "אומנות",
@@ -1031,16 +1031,16 @@ const he: V2Strings = {
   compareCommonMistakeLabel: "טעות נפוצה",
   compareErrNotARealWord: "אחת מהמילים אינה מוכרת לנו.",
   compareErrDifferentLanguages:
-    "שתי המילים נראות בשפות שונות — נסו זוג תואם.",
+    "שתי המילים נראות בשפות שונות, נסו זוג תואם.",
   compareErrSameWord:
-    "אלו נראות כאותה מילה — נסו שתי מילים שונות.",
+    "אלו נראות כאותה מילה, נסו שתי מילים שונות.",
   compareErrGeneric: "ההשוואה אינה זמינה כרגע.",
 
   // Notebook (Screen 8)
   notebookEyebrow: "מחברת",
   notebookTitle: "יקום המילים שלכם",
   notebookSubtitle:
-    "כל מילה שלמדתם — נשמרת, מאורגנת, גדלה.",
+    "כל מילה שלמדתם, נשמרת, מאורגנת, גדלה.",
   notebookCounterTemplate: (n) => `${n} מילים שנלמדו`,
   notebookWordsExplored: "מילים שנלמדו",
   notebookPracticeNow: "תרגול עכשיו",
@@ -1119,7 +1119,7 @@ const he: V2Strings = {
   reportTellMorePh: "אופציונלי. ככל שמפורט יותר, כך נתקן מהר יותר.",
   reportSend: "שליחת דיווח",
   reportSending: "שולחים…",
-  reportThanks: "תודה — קיבלנו.",
+  reportThanks: "תודה, קיבלנו.",
   reportError: "לא הצלחנו לשלוח. נסו שוב עוד רגע.",
   reportCatIncorrectDefinition: "הגדרה שגויה",
   reportCatWrongEtymology: "אטימולוגיה שגויה",
@@ -1143,12 +1143,12 @@ const he: V2Strings = {
   takeItFurther: "להעמיק",
   doMoreWith: (w) => `עוד עם ${w}`,
   saveToNotebook: "שמירה למחברת",
-  saveToNotebookHint: "חזרו אליה אחר־כך — מאורגנת וזמינה לחיפוש.",
+  saveToNotebookHint: "חזרו אליה אחר־כך, מאורגנת וזמינה לחיפוש.",
   generateImage: "צרו תמונה",
   generatingImage: "יוצרים…",
   generateImageHint: "תמונה חיה שנוצרת ב־AI, במיוחד למילה הזו.",
   composeSentence: "חברו משפט",
-  composeSentenceHint: "כתבו משלכם — Gadit ייתן משוב על טון והקשר.",
+  composeSentenceHint: "כתבו משלכם, Gadit ייתן משוב על טון והקשר.",
   practiceWord: "תרגלו את המילה",
   practiceWordHint: "שאלון קצר שמותאם לאופן הלמידה שלכם.",
   unlockWithClear: "פתחו עם Clear",
@@ -1159,19 +1159,19 @@ const he: V2Strings = {
   softWallSignupCta: "הרשמה חינם",
   softWallBasicTitle: "הגעתם למכסה היומית",
   softWallBasicBody:
-    "חשבון חינם כולל 20 חיפושים ביום. המכסה מתאפסת מחר — או שדרגו ל־Clear לחיפושים ללא הגבלה, תמונות, מצב ילדים ומשוב על משפטים.",
+    "חשבון חינם כולל 20 חיפושים ביום. המכסה מתאפסת מחר, או שדרגו ל־Clear לחיפושים ללא הגבלה, תמונות, מצב ילדים ומשוב על משפטים.",
   softBannerSearchesLeft: (n) => {
     const num = Number(n);
     return num === 1
-      ? "נשאר חיפוש חינמי אחד היום — הרשמה חינם נותנת 20 ביום."
-      : `נשארו ${num} חיפושים חינמיים היום — הרשמה חינם נותנת 20 ביום.`;
+      ? "נשאר חיפוש חינמי אחד היום, הרשמה חינם נותנת 20 ביום."
+      : `נשארו ${num} חיפושים חינמיים היום, הרשמה חינם נותנת 20 ביום.`;
   },
   clearUnlocksThis: "נפתח עם Clear",
   visualizeThisWord: "ראו את",
   visualBlurb:
-    "תמונה אחת חיה, שנוצרה על־ידי Gadit — עוגן ויזואלי לתחושת המילה.",
+    "תמונה אחת חיה, שנוצרה על־ידי Gadit, עוגן ויזואלי לתחושת המילה.",
   visualBlurbLocked:
-    "צרו תמונה ייחודית למילה — הבנה דרך הראייה.",
+    "צרו תמונה ייחודית למילה, הבנה דרך הראייה.",
   reportLabel: "דווח על שגיאה",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -1201,11 +1201,11 @@ const he: V2Strings = {
   offlinePin: "שמירה אופליין",
   offlinePinned: "נשמר אופליין",
   offlinePinTitle: "שמרו את המילה ללימוד אופליין",
-  offlinePinnedTitle: "נשמר — זמין גם בלי אינטרנט",
+  offlinePinnedTitle: "נשמר, זמין גם בלי אינטרנט",
   offlineDownloadPack: "הורדת חבילת אופליין",
   offlineDownloadingPack: "מוריד...",
   offlinePackHeader: "חבילת אופליין",
-  offlinePackDescription: "מוסיף את המילים הנפוצות ביותר בשפה שלכם למחברת — וזמינות גם בלי אינטרנט ללימוד אופליין.",
+  offlinePackDescription: "מוסיף את המילים הנפוצות ביותר בשפה שלכם למחברת, וזמינות גם בלי אינטרנט ללימוד אופליין.",
   visualEmptyLabel: "תמונה תיווצר עבור המילה הזו",
   generateLabel: "צרו תמונה",
   savedAgoTemplate: (t) => `נשמר · ${t}`,
@@ -1217,7 +1217,7 @@ const ar: V2Strings = {
   homeHeadlineLine1: "افهم",
   homeHeadlineLine2: "حتى النهاية.",
   homeSubline:
-    "قاموس يفهم السياق — معانٍ وأصول وتعابير وصورة حيّة، بسبع لغات.",
+    "قاموس يفهم السياق, معانٍ وأصول وتعابير وصورة حيّة، بسبع لغات.",
 
   searchPlaceholderHome: "اكتب كلمة",
   voiceInputTitle: "إملاء كلمة",
@@ -1227,23 +1227,23 @@ const ar: V2Strings = {
   tryLabel: "جرّب",
 
   valuePropsEyebrow: "ما الذي يفعله Gadit بشكل مختلف",
-  valuePropsTitle: "أكثر من تعريف — طريقة للعيش مع الكلمة.",
+  valuePropsTitle: "أكثر من تعريف, طريقة للعيش مع الكلمة.",
   valueProp1Eyebrow: "مدرك للسياق",
   valueProp1Title: "المعنى الصحيح في كل مرة",
   valueProp1Body:
-    "ألصق الجملة — يختار Gadit المعنى الملائم لا الأكثر شيوعًا.",
+    "ألصق الجملة, يختار Gadit المعنى الملائم لا الأكثر شيوعًا.",
   valueProp2Eyebrow: "بصري",
   valueProp2Title: "صورة حيّة لهذه الكلمة",
   valueProp2Body:
-    "تُنشَأ لكل مدخل. مرساة بصرية لشعور الكلمة — لا صورة جاهزة.",
+    "تُنشَأ لكل مدخل. مرساة بصرية لشعور الكلمة, لا صورة جاهزة.",
   valueProp3Eyebrow: "الأصل",
   valueProp3Title: "ملاحظة تاريخية، لا مدخل ويكيبيديا",
   valueProp3Body:
-    "من أين أتت الكلمة، يُروى كفقرة — كما يكتب صديق فضولي.",
+    "من أين أتت الكلمة، يُروى كفقرة, كما يكتب صديق فضولي.",
   valueProp4Eyebrow: "11 لغة",
   valueProp4Title: "العربية والعبرية، بكامل أصالتهما",
   valueProp4Body:
-    "RTL حقيقي، خطوط حقيقية، تعابير حقيقية — لا واجهة مترجمة.",
+    "RTL حقيقي، خطوط حقيقية، تعابير حقيقية, لا واجهة مترجمة.",
 
   previewLabel: "معاينة",
   seeFullResult: "انظر النتيجة الكاملة",
@@ -1317,14 +1317,14 @@ const ar: V2Strings = {
 
   trustStripCancel: "ألغِ في أي وقت عبر بوابة Stripe",
   trustStripMoneyBack: "استرداد خلال 14 يومًا للشراء الأول",
-  trustStripDataYours: "بياناتك ملكك — تُصدَّر متى شئت",
+  trustStripDataYours: "بياناتك ملكك, تُصدَّر متى شئت",
   trustStripNoAds: "لا إعلانات ولا تتبّع طرف ثالث",
 
   faqEyebrow: "أسئلة شائعة",
   faqHeadline: "إجابات على الأسئلة",
   faqQ1: "هل يمكنني تغيير الخطة؟",
   faqA1:
-    "نعم، ارتقِ أو انزل في أي وقت. يُحسَب الفرق آليًّا — تدفع الفارق فقط.",
+    "نعم، ارتقِ أو انزل في أي وقت. يُحسَب الفرق آليًّا, تدفع الفارق فقط.",
   faqQ2: "ماذا لو ألغيت؟",
   faqA2: "يبقى الوصول حتى نهاية فترة الفوترة، ثم تعود إلى Basic. لا تُفقَد أي بيانات.",
   faqQ3: "هل التجربة مجانية فعلًا؟",
@@ -1391,12 +1391,12 @@ const ar: V2Strings = {
 
   // Quiz Modal (Screen 6)
   quizEyebrow: "تدريب",
-  quizTitleTemplate: (w) => `${w} — اختبار`,
+  quizTitleTemplate: (w) => `${w}, اختبار`,
   quizQuestionNofM: (n, m) => `السؤال ${n} من ${m}`,
   quizSubmit: "تحقّق",
   quizNext: "السؤال التالي",
   quizFinish: "إنهاء",
-  quizYesCorrect: "صحيح — أحسنت",
+  quizYesCorrect: "صحيح, أحسنت",
   quizNotQuite: "غير مضبوط",
   quizLoading: "جاري إعداد الاختبار…",
   quizFinalScoreTemplate: (c, t) => `أجبت بشكل صحيح على ${c} من ${t}.`,
@@ -1408,7 +1408,7 @@ const ar: V2Strings = {
   compareEyebrow: "مقارنة",
   compareTitle: "ميِّز بين الكلمات المتشابهة",
   compareSubtitle:
-    "ضلّ مقابل ظلّ، affect مقابل effect — الكلمات التي تخدع حتى الناطقين الأصليين.",
+    "ضلّ مقابل ظلّ، affect مقابل effect, الكلمات التي تخدع حتى الناطقين الأصليين.",
   compareWord1Label: "الكلمة 1",
   compareWord2Label: "الكلمة 2",
   compareWord1Placeholder: "ضلّ",
@@ -1421,16 +1421,16 @@ const ar: V2Strings = {
   compareCommonMistakeLabel: "خطأ شائع",
   compareErrNotARealWord: "إحدى الكلمتين غير معروفة.",
   compareErrDifferentLanguages:
-    "الكلمتان تبدوان من لغتين مختلفتين — جرّب زوجًا متوافقًا.",
+    "الكلمتان تبدوان من لغتين مختلفتين, جرّب زوجًا متوافقًا.",
   compareErrSameWord:
-    "تبدوان كأنهما الكلمة نفسها — جرّب كلمتين مختلفتين.",
+    "تبدوان كأنهما الكلمة نفسها, جرّب كلمتين مختلفتين.",
   compareErrGeneric: "المقارنة غير متاحة الآن.",
 
   // Notebook (Screen 8)
   notebookEyebrow: "الدفتر",
   notebookTitle: "عالمُك من الكلمات",
   notebookSubtitle:
-    "كل كلمة استكشفتها — تُحفَظ وتُنظَّم، ومع الوقت تتسع مكتبتك.",
+    "كل كلمة استكشفتها, تُحفَظ وتُنظَّم، ومع الوقت تتسع مكتبتك.",
   notebookCounterTemplate: (n) => `عدد الكلمات المستكشَفة: ${n}`,
   notebookWordsExplored: "كلمات استكشفتها",
   notebookPracticeNow: "ابدأ التدريب",
@@ -1525,7 +1525,7 @@ const ar: V2Strings = {
   reportTellMorePh: "اختياري. كلما زادت التفاصيل، أسرعنا في الإصلاح.",
   reportSend: "إرسال البلاغ",
   reportSending: "جاري الإرسال…",
-  reportThanks: "شكرًا — وصلنا.",
+  reportThanks: "شكرًا, وصلنا.",
   reportError: "تعذّر الإرسال. حاول مجددًا بعد قليل.",
   reportCatIncorrectDefinition: "تعريف غير صحيح",
   reportCatWrongEtymology: "أصل خاطئ",
@@ -1549,13 +1549,13 @@ const ar: V2Strings = {
   takeItFurther: "تعمَّق أكثر",
   doMoreWith: (w) => `المزيد مع ${w}`,
   saveToNotebook: "احفظ في الدفتر",
-  saveToNotebookHint: "عُد إليها لاحقًا — منظَّمة وقابلة للبحث.",
+  saveToNotebookHint: "عُد إليها لاحقًا, منظَّمة وقابلة للبحث.",
   generateImage: "أنشئ صورة",
   generatingImage: "جارٍ الإنشاء…",
   generateImageHint:
     "صورة بصرية حيّة من الذكاء الاصطناعي، لهذه الكلمة فقط.",
   composeSentence: "اكتب جملة",
-  composeSentenceHint: "اكتب جملتك — يراجعها Gadit للنبرة والملاءمة.",
+  composeSentenceHint: "اكتب جملتك, يراجعها Gadit للنبرة والملاءمة.",
   practiceWord: "تدرَّب على هذه الكلمة",
   practiceWordHint: "اختبار قصير على مقاس تعلُّمك.",
   unlockWithClear: "افتح بـ Clear",
@@ -1566,17 +1566,17 @@ const ar: V2Strings = {
   softWallSignupCta: "اشتراك مجاني",
   softWallBasicTitle: "وصلت إلى الحد اليومي",
   softWallBasicBody:
-    "الحساب المجاني يشمل 20 بحثًا في اليوم. يُعاد تعيين الحد غدًا — أو ارتقِ إلى Clear لبحث بلا حدود مع الصور وشرح الأطفال والمراجعة.",
+    "الحساب المجاني يشمل 20 بحثًا في اليوم. يُعاد تعيين الحد غدًا, أو ارتقِ إلى Clear لبحث بلا حدود مع الصور وشرح الأطفال والمراجعة.",
   softBannerSearchesLeft: (n) => {
     const num = Number(n);
-    if (num === 1) return "بقي بحث مجاني واحد اليوم — الاشتراك المجاني يمنحك 20 يوميًا.";
-    if (num === 2) return "بقي بحثان مجانيان اليوم — الاشتراك المجاني يمنحك 20 يوميًا.";
-    return `بقيت ${num} عمليات بحث مجانية اليوم — الاشتراك المجاني يمنحك 20 يوميًا.`;
+    if (num === 1) return "بقي بحث مجاني واحد اليوم, الاشتراك المجاني يمنحك 20 يوميًا.";
+    if (num === 2) return "بقي بحثان مجانيان اليوم, الاشتراك المجاني يمنحك 20 يوميًا.";
+    return `بقيت ${num} عمليات بحث مجانية اليوم, الاشتراك المجاني يمنحك 20 يوميًا.`;
   },
   clearUnlocksThis: "تفتحها Clear",
   visualizeThisWord: "تخيّل",
-  visualBlurb: "صورة واحدة حيّة من Gadit — مرساة بصرية لشعور الكلمة.",
-  visualBlurbLocked: "أنشئ صورة فريدة لهذه الكلمة — الفهم عبر النظر.",
+  visualBlurb: "صورة واحدة حيّة من Gadit, مرساة بصرية لشعور الكلمة.",
+  visualBlurbLocked: "أنشئ صورة فريدة لهذه الكلمة, الفهم عبر النظر.",
   reportLabel: "بلّغ عن خطأ",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -1606,11 +1606,11 @@ const ar: V2Strings = {
   offlinePin: "حفظ بلا إنترنت",
   offlinePinned: "محفوظ بلا إنترنت",
   offlinePinTitle: "احفظ هذه الكلمة للدراسة بلا إنترنت",
-  offlinePinnedTitle: "محفوظ — متاح بلا إنترنت",
+  offlinePinnedTitle: "محفوظ, متاح بلا إنترنت",
   offlineDownloadPack: "تنزيل حزمة بلا إنترنت",
   offlineDownloadingPack: "جارٍ التنزيل…",
   offlinePackHeader: "حزمة بلا إنترنت",
-  offlinePackDescription: "تُضاف الكلمات الأكثر بحثًا بلغتك إلى دفترك — متاحة أيضًا بدون إنترنت للدراسة بلا واي فاي.",
+  offlinePackDescription: "تُضاف الكلمات الأكثر بحثًا بلغتك إلى دفترك, متاحة أيضًا بدون إنترنت للدراسة بلا واي فاي.",
   visualEmptyLabel: "ستُرسم صورة لهذه الكلمة",
   generateLabel: "أنشئ",
   savedAgoTemplate: (t) => `محفوظ · ${t}`,
@@ -1623,34 +1623,34 @@ const ru: Partial<V2Strings> = {
   homeHeadlineLine1: "Понимать",
   homeHeadlineLine2: "до конца.",
   homeSubline:
-    "Словарь, который улавливает контекст — значения, происхождение, идиомы и живой образ, на 7 языках.",
+    "Словарь, который улавливает контекст, значения, происхождение, идиомы и живой образ, на 7 языках.",
 
   searchPlaceholderHome: "Введите слово",
   voiceInputTitle: "Продиктовать слово",
   addContext: "Добавить контекст",
   explain: "Объяснить",
   contextHint:
-    "Что-то читаете? Вставьте предложение — мы выберем нужное значение.",
+    "Что-то читаете? Вставьте предложение, мы выберем нужное значение.",
   tryLabel: "Попробуйте",
 
   valuePropsEyebrow: "Чем Gadit отличается",
-  valuePropsTitle: "Больше, чем определение — это способ жить со словом.",
+  valuePropsTitle: "Больше, чем определение, это способ жить со словом.",
   valueProp1Eyebrow: "Контекст",
   valueProp1Title: "Нужное значение, каждый раз",
   valueProp1Body:
-    "Вставьте предложение — Gadit выберет тот смысл, что подходит, а не самый частый.",
+    "Вставьте предложение, Gadit выберет тот смысл, что подходит, а не самый частый.",
   valueProp2Eyebrow: "Образ",
   valueProp2Title: "Живая картинка для каждого слова",
   valueProp2Body:
-    "Создаётся для каждого запроса. Визуальный якорь — а не сток-фото.",
+    "Создаётся для каждого запроса. Визуальный якорь, а не сток-фото.",
   valueProp3Eyebrow: "Этимология",
   valueProp3Title: "Краткая история, а не статья из Википедии",
   valueProp3Body:
-    "Откуда пришло слово — рассказано как абзац, без сухих фактов.",
+    "Откуда пришло слово, рассказано как абзац, без сухих фактов.",
   valueProp4Eyebrow: "11 языков",
-  valueProp4Title: "Иврит и арабский — как родные",
+  valueProp4Title: "Иврит и арабский, как родные",
   valueProp4Body:
-    "Настоящий RTL, настоящие шрифты, настоящие идиомы — а не переведённый интерфейс.",
+    "Настоящий RTL, настоящие шрифты, настоящие идиомы, а не переведённый интерфейс.",
 
   previewLabel: "Превью",
   seeFullResult: "Открыть полную версию",
@@ -1685,7 +1685,7 @@ const ru: Partial<V2Strings> = {
   kidsModeLabel: "Дети",
   kidsModeTooltipOff: "Нажмите, чтобы каждое слово объяснялось так, как родитель объяснил бы ребёнку.",
   kidsModeTooltipOn: "Детский режим включён. Каждое определение будет написано для ребёнка. Нажмите, чтобы выключить.",
-  kidsModeBasicGate: "Детский режим — функция Clear. Перейдите на тариф, чтобы пользоваться.",
+  kidsModeBasicGate: "Детский режим, функция Clear. Перейдите на тариф, чтобы пользоваться.",
 
   signupWelcomeTitle: "Добро пожаловать в Gadit!",
   signupWelcomeBody: "Аккаунт готов. Начните с поиска любого слова.",
@@ -1704,7 +1704,7 @@ const ru: Partial<V2Strings> = {
 
   tierClearTagline: "Увидеть",
   tierClearPitch:
-    "Оживите слова — картинками, детским режимом и обратной связью.",
+    "Оживите слова, картинками, детским режимом и обратной связью.",
   tierClearBadge: "Самый популярный",
   tierClearCta: "Начать 14-дневный пробный",
   tierClearCtaYearly: "Подписаться на год",
@@ -1717,7 +1717,7 @@ const ru: Partial<V2Strings> = {
     "Соберите личный словарь, который растёт с вами.",
   tierDeepCta: "Подписаться на Deep",
   tierDeepFeatures:
-    "Всё из Clear¶Тренировки и тесты¶Личная тетрадь слов¶Умная практика — словарь, который остаётся с вами¶Различение похожих слов¶Картинка к каждому слову (100 в месяц)",
+    "Всё из Clear¶Тренировки и тесты¶Личная тетрадь слов¶Умная практика, словарь, который остаётся с вами¶Различение похожих слов¶Картинка к каждому слову (100 в месяц)",
 
   basicEquivalent: "",
   clearEquivalent: "В среднем $2,50 в месяц",
@@ -1725,20 +1725,20 @@ const ru: Partial<V2Strings> = {
 
   trustStripCancel: "Отмена в любое время через портал Stripe",
   trustStripMoneyBack: "Возврат денег за 14 дней при первой покупке",
-  trustStripDataYours: "Ваши данные — ваши, экспорт в любой момент",
+  trustStripDataYours: "Ваши данные, ваши, экспорт в любой момент",
   trustStripNoAds: "Без рекламы и сторонних трекеров",
 
   faqEyebrow: "Вопросы",
   faqHeadline: "Ответы на главные вопросы",
   faqQ1: "Можно сменить тариф?",
   faqA1:
-    "Да, повышение или понижение в любое время. Перерасчёт автоматический — вы платите только разницу.",
+    "Да, повышение или понижение в любое время. Перерасчёт автоматический, вы платите только разницу.",
   faqQ2: "Что если я отменю?",
   faqA2:
     "Доступ сохраняется до конца оплаченного периода, потом возвращаетесь на Basic. Данные не теряются.",
   faqQ3: "Пробный действительно бесплатный?",
   faqA3:
-    "Да. Карта нужна для защиты от злоупотреблений, но списание происходит только на 15-й день. Отмените раньше — ничего не платите.",
+    "Да. Карта нужна для защиты от злоупотреблений, но списание происходит только на 15-й день. Отмените раньше, ничего не платите.",
   faqQ4: "Почему три тарифа?",
   faqA4:
     "Разным людям нужна разная глубина. Лучше встретить вас там, где вы есть, чем продавать один универсальный план.",
@@ -1782,7 +1782,7 @@ const ru: Partial<V2Strings> = {
   composeEyebrow: "Составить",
   composeTitleTemplate: (w) => `Напишите своё предложение со словом ${w}`,
   composeSubtitle:
-    "Используйте слово в предложении — получите разбор грамматики, тона и уместности.",
+    "Используйте слово в предложении, получите разбор грамматики, тона и уместности.",
   composeMeaningPickerLabel: "Выберите значение, которое отрабатываете",
   composePlaceholder: "Напишите предложение здесь…",
   composeSubmit: "Проверить",
@@ -1797,7 +1797,7 @@ const ru: Partial<V2Strings> = {
   composeErrorTooShort: "Напишите хотя бы несколько слов.",
 
   quizEyebrow: "Тренировка",
-  quizTitleTemplate: (w) => `${w} — тест`,
+  quizTitleTemplate: (w) => `${w}, тест`,
   quizQuestionNofM: (n, m) => `Вопрос ${n} из ${m}`,
   quizSubmit: "Ответить",
   quizNext: "Следующий",
@@ -1813,7 +1813,7 @@ const ru: Partial<V2Strings> = {
   compareEyebrow: "Сравнить",
   compareTitle: "Различайте похожие слова",
   compareSubtitle:
-    "одеть vs надеть, affect vs effect — слова, на которых ошибаются даже носители.",
+    "одеть vs надеть, affect vs effect, слова, на которых ошибаются даже носители.",
   compareWord1Label: "Слово 1",
   compareWord2Label: "Слово 2",
   compareWord1Placeholder: "одеть",
@@ -1826,14 +1826,14 @@ const ru: Partial<V2Strings> = {
   compareCommonMistakeLabel: "Частая ошибка",
   compareErrNotARealWord: "Одно из слов нам не знакомо.",
   compareErrDifferentLanguages:
-    "Эти слова, кажется, на разных языках — попробуйте пару из одного языка.",
-  compareErrSameWord: "Это одно и то же слово — попробуйте два разных.",
+    "Эти слова, кажется, на разных языках, попробуйте пару из одного языка.",
+  compareErrSameWord: "Это одно и то же слово, попробуйте два разных.",
   compareErrGeneric: "Сравнение временно недоступно.",
 
   notebookEyebrow: "Тетрадь",
   notebookTitle: "Ваша вселенная слов",
   notebookSubtitle:
-    "Каждое слово, которое вы исследовали — сохраняется, упорядочивается, растёт со временем.",
+    "Каждое слово, которое вы исследовали, сохраняется, упорядочивается, растёт со временем.",
   notebookCounterTemplate: (n) => `Изучено слов: ${n}`,
   notebookWordsExplored: "изученных слов",
   notebookPracticeNow: "Тренироваться",
@@ -1911,7 +1911,7 @@ const ru: Partial<V2Strings> = {
   reportTellMorePh: "По желанию. Чем конкретнее, тем быстрее исправим.",
   reportSend: "Отправить",
   reportSending: "Отправляем…",
-  reportThanks: "Спасибо — получили.",
+  reportThanks: "Спасибо, получили.",
   reportError: "Не удалось отправить. Попробуйте ещё раз.",
   reportCatIncorrectDefinition: "Неверное определение",
   reportCatWrongEtymology: "Неверная этимология",
@@ -1935,36 +1935,36 @@ const ru: Partial<V2Strings> = {
   takeItFurther: "Углубиться",
   doMoreWith: (w) => `Больше со словом ${w}`,
   saveToNotebook: "В тетрадь",
-  saveToNotebookHint: "Вернётесь позже — упорядочено и с поиском.",
+  saveToNotebookHint: "Вернётесь позже, упорядочено и с поиском.",
   generateImage: "Создать картинку",
   generatingImage: "Создаём…",
-  generateImageHint: "Живая картинка от ИИ — для этого слова.",
+  generateImageHint: "Живая картинка от ИИ, для этого слова.",
   composeSentence: "Составить предложение",
   composeSentenceHint:
-    "Напишите своё — Gadit разберёт тон и уместность.",
+    "Напишите своё, Gadit разберёт тон и уместность.",
   practiceWord: "Тренировать слово",
   practiceWordHint: "Короткий тест под ваш стиль.",
   unlockWithClear: "Открыть в Clear",
   upgradeToClear: "Перейти на Clear",
   softWallAnonTitle: "Вы использовали бесплатные поиски",
   softWallAnonBody:
-    "Зарегистрируйтесь бесплатно, чтобы искать до 20 слов в день — с полными определениями, примерами, идиомами и происхождением слова.",
+    "Зарегистрируйтесь бесплатно, чтобы искать до 20 слов в день, с полными определениями, примерами, идиомами и происхождением слова.",
   softWallSignupCta: "Бесплатная регистрация",
   softWallBasicTitle: "Дневной лимит достигнут",
   softWallBasicBody:
-    "Бесплатный аккаунт даёт 20 поисков в день. Лимит обновится завтра — или перейдите на Clear для безлимитных поисков, картинок, детского режима и разбора предложений.",
+    "Бесплатный аккаунт даёт 20 поисков в день. Лимит обновится завтра, или перейдите на Clear для безлимитных поисков, картинок, детского режима и разбора предложений.",
   softBannerSearchesLeft: (n) => {
     const num = Number(n);
     const word =
       num === 1 ? "поиск" : num >= 2 && num <= 4 ? "поиска" : "поисков";
-    return `Осталось ${num} бесплатных ${word} сегодня — регистрация бесплатна и даёт 20 в день.`;
+    return `Осталось ${num} бесплатных ${word} сегодня, регистрация бесплатна и даёт 20 в день.`;
   },
   clearUnlocksThis: "Доступно в Clear",
   visualizeThisWord: "Увидеть",
   visualBlurb:
-    "Одна живая картинка от Gadit — визуальный якорь для этого слова.",
+    "Одна живая картинка от Gadit, визуальный якорь для этого слова.",
   visualBlurbLocked:
-    "Создайте уникальную картинку для этого слова — понимание через образ.",
+    "Создайте уникальную картинку для этого слова, понимание через образ.",
   reportLabel: "Сообщить об ошибке",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -1974,10 +1974,10 @@ const ru: Partial<V2Strings> = {
   wordOriginOriginalWord: "Исходное слово",
   wordOriginBreakdown: "Части слова",
   imageGeneratingLabel: "Создаём изображение…",
-  imageGeneratingHint: "Обычно это занимает 10–15 секунд.",
+  imageGeneratingHint: "Обычно это занимает от 10 до 15 секунд.",
   imageOpenFullAria: "Открыть изображение в полный размер",
   kidsComingSoon: "Объяснение для детей появится здесь скоро.",
-  compareComingSoon: "Игры со словами — скоро.",
+  compareComingSoon: "Игры со словами, скоро.",
   shareDefinitionAria: "Поделиться этим определением",
   visualEyebrow: "Изображение",
   meaningsEyebrow: "Определения",
@@ -1994,11 +1994,11 @@ const ru: Partial<V2Strings> = {
   offlinePin: "Сохранить офлайн",
   offlinePinned: "Сохранено офлайн",
   offlinePinTitle: "Сохранить слово для изучения без интернета",
-  offlinePinnedTitle: "Сохранено — доступно без Wi-Fi",
+  offlinePinnedTitle: "Сохранено, доступно без Wi-Fi",
   offlineDownloadPack: "Скачать офлайн-пакет",
   offlineDownloadingPack: "Скачиваем…",
   offlinePackHeader: "Офлайн-пакет",
-  offlinePackDescription: "Добавляет самые популярные слова вашего языка в тетрадь — и делает их доступными без интернета.",
+  offlinePackDescription: "Добавляет самые популярные слова вашего языка в тетрадь, и делает их доступными без интернета.",
   visualEmptyLabel: "Картинка появится для этого слова",
   generateLabel: "Создать",
   savedAgoTemplate: (t) => `Сохранено · ${t}`,
@@ -2011,7 +2011,7 @@ const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "hasta el final.",
   homeSubline:
-    "Un diccionario que entiende el contexto — significados, origen, expresiones e imagen viva, en 11 idiomas.",
+    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 11 idiomas.",
 
   searchPlaceholderHome: "Escribe una palabra",
   voiceInputTitle: "Dictar una palabra",
@@ -2022,23 +2022,23 @@ const es: Partial<V2Strings> = {
   tryLabel: "Prueba",
 
   valuePropsEyebrow: "Lo que Gadit hace diferente",
-  valuePropsTitle: "Más que una definición — una forma de vivir con la palabra.",
+  valuePropsTitle: "Más que una definición, una forma de vivir con la palabra.",
   valueProp1Eyebrow: "Con contexto",
   valueProp1Title: "El significado correcto, siempre",
   valueProp1Body:
-    "Pega una oración — Gadit elige el sentido que encaja, no el más común.",
+    "Pega una oración, Gadit elige el sentido que encaja, no el más común.",
   valueProp2Eyebrow: "Visual",
   valueProp2Title: "Una imagen viva, solo para esta palabra",
   valueProp2Body:
-    "Generada para cada entrada. Un ancla visual — no una foto de stock.",
+    "Generada para cada entrada. Un ancla visual, no una foto de stock.",
   valueProp3Eyebrow: "Etimología",
   valueProp3Title: "Una nota de origen, no un volcado de Wikipedia",
   valueProp3Body:
-    "De dónde viene la palabra, contado como un párrafo — el que escribiría un amigo curioso.",
+    "De dónde viene la palabra, contado como un párrafo, el que escribiría un amigo curioso.",
   valueProp4Eyebrow: "11 idiomas",
   valueProp4Title: "Hebreo y árabe, totalmente nativos",
   valueProp4Body:
-    "RTL real, fuentes reales, modismos reales — no una interfaz traducida a la fuerza.",
+    "RTL real, fuentes reales, modismos reales, no una interfaz traducida a la fuerza.",
 
   previewLabel: "Vista previa",
   seeFullResult: "Ver el resultado completo",
@@ -2092,7 +2092,7 @@ const es: Partial<V2Strings> = {
 
   tierClearTagline: "Visualizar",
   tierClearPitch:
-    "Dale vida a las palabras — imágenes, modo niños y feedback.",
+    "Dale vida a las palabras, imágenes, modo niños y feedback.",
   tierClearBadge: "Más popular",
   tierClearCta: "Empezar prueba gratis de 14 días",
   tierClearCtaYearly: "Suscripción anual",
@@ -2113,14 +2113,14 @@ const es: Partial<V2Strings> = {
 
   trustStripCancel: "Cancela cuando quieras desde el portal de Stripe",
   trustStripMoneyBack: "Devolución de 14 días en la primera compra",
-  trustStripDataYours: "Tus datos son tuyos — exporta cuando quieras",
+  trustStripDataYours: "Tus datos son tuyos, exporta cuando quieras",
   trustStripNoAds: "Sin publicidad ni rastreo de terceros",
 
   faqEyebrow: "Preguntas frecuentes",
   faqHeadline: "Preguntas, respondidas",
   faqQ1: "¿Puedo cambiar de plan?",
   faqA1:
-    "Sí, puedes subir o bajar de plan en cualquier momento. El prorrateo es automático — solo pagas la diferencia.",
+    "Sí, puedes subir o bajar de plan en cualquier momento. El prorrateo es automático, solo pagas la diferencia.",
   faqQ2: "¿Qué pasa si cancelo?",
   faqA2:
     "Mantienes acceso hasta el fin de tu período pagado, luego vuelves a Basic. No se pierden datos.",
@@ -2185,7 +2185,7 @@ const es: Partial<V2Strings> = {
   composeErrorTooShort: "Escribe al menos unas palabras.",
 
   quizEyebrow: "Práctica",
-  quizTitleTemplate: (w) => `${w} — examen`,
+  quizTitleTemplate: (w) => `${w}, examen`,
   quizQuestionNofM: (n, m) => `Pregunta ${n} de ${m}`,
   quizSubmit: "Enviar",
   quizNext: "Siguiente",
@@ -2201,7 +2201,7 @@ const es: Partial<V2Strings> = {
   compareEyebrow: "Comparar",
   compareTitle: "Distingue palabras parecidas",
   compareSubtitle:
-    "haber vs a ver, affect vs effect — palabras que confunden incluso a hablantes nativos.",
+    "haber vs a ver, affect vs effect, palabras que confunden incluso a hablantes nativos.",
   compareWord1Label: "Palabra 1",
   compareWord2Label: "Palabra 2",
   compareWord1Placeholder: "haber",
@@ -2214,14 +2214,14 @@ const es: Partial<V2Strings> = {
   compareCommonMistakeLabel: "Error común",
   compareErrNotARealWord: "No reconocemos una de esas palabras.",
   compareErrDifferentLanguages:
-    "Estas palabras parecen estar en idiomas distintos — prueba con un par del mismo idioma.",
-  compareErrSameWord: "Parecen ser la misma palabra — prueba con dos distintas.",
+    "Estas palabras parecen estar en idiomas distintos, prueba con un par del mismo idioma.",
+  compareErrSameWord: "Parecen ser la misma palabra, prueba con dos distintas.",
   compareErrGeneric: "Comparación no disponible ahora.",
 
   notebookEyebrow: "Cuaderno",
   notebookTitle: "Tu universo de palabras",
   notebookSubtitle:
-    "Cada palabra que has explorado — guardada, organizada, creciendo.",
+    "Cada palabra que has explorado, guardada, organizada, creciendo.",
   notebookCounterTemplate: (n) => `${n} palabras exploradas`,
   notebookWordsExplored: "palabras exploradas",
   notebookPracticeNow: "Practicar ahora",
@@ -2297,7 +2297,7 @@ const es: Partial<V2Strings> = {
   reportTellMorePh: "Opcional. Cuanto más específico, más rápido lo arreglamos.",
   reportSend: "Enviar reporte",
   reportSending: "Enviando…",
-  reportThanks: "Gracias — lo recibimos.",
+  reportThanks: "Gracias, lo recibimos.",
   reportError: "No se pudo enviar. Intenta en un momento.",
   reportCatIncorrectDefinition: "Definición incorrecta",
   reportCatWrongEtymology: "Etimología incorrecta",
@@ -2321,13 +2321,13 @@ const es: Partial<V2Strings> = {
   takeItFurther: "Profundiza más",
   doMoreWith: (w) => `Haz más con ${w}`,
   saveToNotebook: "Guardar en el cuaderno",
-  saveToNotebookHint: "Vuelve después — organizado y con búsqueda.",
+  saveToNotebookHint: "Vuelve después, organizado y con búsqueda.",
   generateImage: "Generar imagen",
   generatingImage: "Generando…",
   generateImageHint: "Una imagen viva hecha con IA, para esta palabra.",
   composeSentence: "Componer una oración",
   composeSentenceHint:
-    "Escribe la tuya — Gadit revisa el tono y el encaje.",
+    "Escribe la tuya, Gadit revisa el tono y el encaje.",
   practiceWord: "Practicar esta palabra",
   practiceWordHint: "Una prueba corta a tu medida.",
   unlockWithClear: "Desbloquea con Clear",
@@ -2338,19 +2338,19 @@ const es: Partial<V2Strings> = {
   softWallSignupCta: "Regístrate gratis",
   softWallBasicTitle: "Alcanzaste el límite del día",
   softWallBasicBody:
-    "Las cuentas gratis tienen 20 búsquedas por día. El límite se reinicia mañana — o pasa a Clear para búsquedas ilimitadas, imágenes, modo niños y feedback en oraciones.",
+    "Las cuentas gratis tienen 20 búsquedas por día. El límite se reinicia mañana, o pasa a Clear para búsquedas ilimitadas, imágenes, modo niños y feedback en oraciones.",
   softBannerSearchesLeft: (n) => {
     const num = Number(n);
     return num === 1
-      ? "Te queda 1 búsqueda gratis hoy — regístrate gratis para tener 20 al día."
-      : `Te quedan ${num} búsquedas gratis hoy — regístrate gratis para tener 20 al día.`;
+      ? "Te queda 1 búsqueda gratis hoy, regístrate gratis para tener 20 al día."
+      : `Te quedan ${num} búsquedas gratis hoy, regístrate gratis para tener 20 al día.`;
   },
   clearUnlocksThis: "Disponible en Clear",
   visualizeThisWord: "Visualiza",
   visualBlurb:
-    "Una imagen viva, generada por Gadit — un ancla visual para esta palabra.",
+    "Una imagen viva, generada por Gadit, un ancla visual para esta palabra.",
   visualBlurbLocked:
-    "Crea una imagen única para esta palabra — entender por la vista.",
+    "Crea una imagen única para esta palabra, entender por la vista.",
   reportLabel: "Reportar un error",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -2380,11 +2380,11 @@ const es: Partial<V2Strings> = {
   offlinePin: "Guardar sin conexión",
   offlinePinned: "Guardado sin conexión",
   offlinePinTitle: "Guardar esta palabra para estudiar sin conexión",
-  offlinePinnedTitle: "Guardada — disponible sin WiFi",
+  offlinePinnedTitle: "Guardada, disponible sin WiFi",
   offlineDownloadPack: "Descargar paquete sin conexión",
   offlineDownloadingPack: "Descargando…",
   offlinePackHeader: "Paquete sin conexión",
-  offlinePackDescription: "Añade las palabras más buscadas en tu idioma a tu cuaderno — y las mantiene disponibles sin WiFi para estudiar sin conexión.",
+  offlinePackDescription: "Añade las palabras más buscadas en tu idioma a tu cuaderno, y las mantiene disponibles sin WiFi para estudiar sin conexión.",
   visualEmptyLabel: "Se dibujará una imagen para esta palabra",
   generateLabel: "Generar",
   savedAgoTemplate: (t) => `Guardada · ${t}`,
@@ -2397,7 +2397,7 @@ const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "até o fim.",
   homeSubline:
-    "Um dicionário que entende o contexto — significados, origem, expressões e imagem viva, em 11 idiomas.",
+    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 11 idiomas.",
 
   searchPlaceholderHome: "Digite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
@@ -2408,23 +2408,23 @@ const pt: Partial<V2Strings> = {
   tryLabel: "Experimente",
 
   valuePropsEyebrow: "O que o Gadit faz diferente",
-  valuePropsTitle: "Mais que uma definição — um jeito de viver com a palavra.",
+  valuePropsTitle: "Mais que uma definição, um jeito de viver com a palavra.",
   valueProp1Eyebrow: "Com contexto",
   valueProp1Title: "O significado certo, sempre",
   valueProp1Body:
-    "Cole uma frase — o Gadit escolhe o sentido que se encaixa, não só o mais comum.",
+    "Cole uma frase, o Gadit escolhe o sentido que se encaixa, não só o mais comum.",
   valueProp2Eyebrow: "Visual",
   valueProp2Title: "Uma imagem viva, só pra esta palavra",
   valueProp2Body:
-    "Gerada pra cada entrada. Uma âncora visual — não foto de banco.",
+    "Gerada pra cada entrada. Uma âncora visual, não foto de banco.",
   valueProp3Eyebrow: "Etimologia",
   valueProp3Title: "Uma nota histórica, não despejo de Wikipédia",
   valueProp3Body:
-    "De onde a palavra veio, contado em parágrafo — do jeito que um amigo curioso escreveria.",
+    "De onde a palavra veio, contado em parágrafo, do jeito que um amigo curioso escreveria.",
   valueProp4Eyebrow: "11 idiomas",
   valueProp4Title: "Hebraico e árabe, totalmente nativos",
   valueProp4Body:
-    "RTL real, fontes reais, expressões reais — não interface traduzida na pressa.",
+    "RTL real, fontes reais, expressões reais, não interface traduzida na pressa.",
 
   previewLabel: "Prévia",
   seeFullResult: "Ver o resultado completo",
@@ -2478,7 +2478,7 @@ const pt: Partial<V2Strings> = {
 
   tierClearTagline: "Visualizar",
   tierClearPitch:
-    "Dê vida às palavras — imagens, modo crianças e feedback.",
+    "Dê vida às palavras, imagens, modo crianças e feedback.",
   tierClearBadge: "Mais popular",
   tierClearCta: "Começar teste grátis de 14 dias",
   tierClearCtaYearly: "Assinar anual",
@@ -2499,14 +2499,14 @@ const pt: Partial<V2Strings> = {
 
   trustStripCancel: "Cancele quando quiser pelo portal Stripe",
   trustStripMoneyBack: "Reembolso de 14 dias na primeira compra",
-  trustStripDataYours: "Seus dados são seus — exporte quando quiser",
+  trustStripDataYours: "Seus dados são seus, exporte quando quiser",
   trustStripNoAds: "Sem anúncios, sem rastreamento de terceiros",
 
   faqEyebrow: "Perguntas frequentes",
   faqHeadline: "Perguntas, respondidas",
   faqQ1: "Posso trocar de plano?",
   faqA1:
-    "Sim, faça upgrade ou downgrade quando quiser. O ajuste proporcional é automático — você só paga a diferença.",
+    "Sim, faça upgrade ou downgrade quando quiser. O ajuste proporcional é automático, você só paga a diferença.",
   faqQ2: "O que acontece se eu cancelar?",
   faqA2:
     "Você mantém acesso até o fim do período pago, depois volta pro Basic. Nenhum dado é perdido.",
@@ -2571,7 +2571,7 @@ const pt: Partial<V2Strings> = {
   composeErrorTooShort: "Escreva pelo menos algumas palavras.",
 
   quizEyebrow: "Prática",
-  quizTitleTemplate: (w) => `${w} — quiz`,
+  quizTitleTemplate: (w) => `${w}, quiz`,
   quizQuestionNofM: (n, m) => `Pergunta ${n} de ${m}`,
   quizSubmit: "Enviar",
   quizNext: "Próxima",
@@ -2587,7 +2587,7 @@ const pt: Partial<V2Strings> = {
   compareEyebrow: "Comparar",
   compareTitle: "Diferencie palavras parecidas",
   compareSubtitle:
-    "mau vs mal, affect vs effect — palavras que confundem até nativos.",
+    "mau vs mal, affect vs effect, palavras que confundem até nativos.",
   compareWord1Label: "Palavra 1",
   compareWord2Label: "Palavra 2",
   compareWord1Placeholder: "mau",
@@ -2600,14 +2600,14 @@ const pt: Partial<V2Strings> = {
   compareCommonMistakeLabel: "Erro comum",
   compareErrNotARealWord: "Não reconhecemos uma dessas palavras.",
   compareErrDifferentLanguages:
-    "Estas palavras parecem estar em idiomas diferentes — tente um par no mesmo idioma.",
-  compareErrSameWord: "Parecem ser a mesma palavra — tente duas diferentes.",
+    "Estas palavras parecem estar em idiomas diferentes, tente um par no mesmo idioma.",
+  compareErrSameWord: "Parecem ser a mesma palavra, tente duas diferentes.",
   compareErrGeneric: "Comparação indisponível agora.",
 
   notebookEyebrow: "Caderno",
   notebookTitle: "Seu universo de palavras",
   notebookSubtitle:
-    "Cada palavra que você explorou — guardada, organizada, crescendo.",
+    "Cada palavra que você explorou, guardada, organizada, crescendo.",
   notebookCounterTemplate: (n) => `${n} palavras exploradas`,
   notebookWordsExplored: "palavras exploradas",
   notebookPracticeNow: "Praticar agora",
@@ -2683,7 +2683,7 @@ const pt: Partial<V2Strings> = {
   reportTellMorePh: "Opcional. Quanto mais específico, mais rápido a gente conserta.",
   reportSend: "Enviar",
   reportSending: "Enviando…",
-  reportThanks: "Valeu — recebemos.",
+  reportThanks: "Valeu, recebemos.",
   reportError: "Não foi possível enviar. Tente daqui a pouco.",
   reportCatIncorrectDefinition: "Definição incorreta",
   reportCatWrongEtymology: "Etimologia errada",
@@ -2707,13 +2707,13 @@ const pt: Partial<V2Strings> = {
   takeItFurther: "Vá mais a fundo",
   doMoreWith: (w) => `Faça mais com ${w}`,
   saveToNotebook: "Salvar no caderno",
-  saveToNotebookHint: "Volte depois — organizado e com busca.",
+  saveToNotebookHint: "Volte depois, organizado e com busca.",
   generateImage: "Gerar imagem",
   generatingImage: "Gerando…",
   generateImageHint: "Uma imagem viva feita por IA, pra esta palavra.",
   composeSentence: "Compor uma frase",
   composeSentenceHint:
-    "Escreva a sua — o Gadit revisa o tom e o encaixe.",
+    "Escreva a sua, o Gadit revisa o tom e o encaixe.",
   practiceWord: "Praticar esta palavra",
   practiceWordHint: "Um quiz curto adaptado a você.",
   unlockWithClear: "Desbloqueie com Clear",
@@ -2724,19 +2724,19 @@ const pt: Partial<V2Strings> = {
   softWallSignupCta: "Cadastrar grátis",
   softWallBasicTitle: "Você atingiu o limite de hoje",
   softWallBasicBody:
-    "Contas grátis têm 20 buscas por dia. O limite reinicia amanhã — ou passe pro Clear pra ter buscas ilimitadas, imagens, modo crianças e feedback de frases.",
+    "Contas grátis têm 20 buscas por dia. O limite reinicia amanhã, ou passe pro Clear pra ter buscas ilimitadas, imagens, modo crianças e feedback de frases.",
   softBannerSearchesLeft: (n) => {
     const num = Number(n);
     return num === 1
-      ? "Sobra 1 busca grátis hoje — cadastre-se grátis pra ter 20 por dia."
-      : `Sobram ${num} buscas grátis hoje — cadastre-se grátis pra ter 20 por dia.`;
+      ? "Sobra 1 busca grátis hoje, cadastre-se grátis pra ter 20 por dia."
+      : `Sobram ${num} buscas grátis hoje, cadastre-se grátis pra ter 20 por dia.`;
   },
   clearUnlocksThis: "Disponível no Clear",
   visualizeThisWord: "Visualizar",
   visualBlurb:
-    "Uma imagem viva, gerada pelo Gadit — uma âncora visual pra esta palavra.",
+    "Uma imagem viva, gerada pelo Gadit, uma âncora visual pra esta palavra.",
   visualBlurbLocked:
-    "Crie uma imagem única pra esta palavra — entender pelo olhar.",
+    "Crie uma imagem única pra esta palavra, entender pelo olhar.",
   reportLabel: "Reportar erro",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -2766,11 +2766,11 @@ const pt: Partial<V2Strings> = {
   offlinePin: "Salvar offline",
   offlinePinned: "Salvo offline",
   offlinePinTitle: "Salvar esta palavra para estudar offline",
-  offlinePinnedTitle: "Salvo — disponível sem WiFi",
+  offlinePinnedTitle: "Salvo, disponível sem WiFi",
   offlineDownloadPack: "Baixar pacote offline",
   offlineDownloadingPack: "Baixando…",
   offlinePackHeader: "Pacote offline",
-  offlinePackDescription: "Adiciona as palavras mais buscadas no seu idioma ao seu caderno — disponíveis também sem WiFi para estudar offline.",
+  offlinePackDescription: "Adiciona as palavras mais buscadas no seu idioma ao seu caderno, disponíveis também sem WiFi para estudar offline.",
   visualEmptyLabel: "Uma imagem será criada para esta palavra",
   generateLabel: "Gerar",
   savedAgoTemplate: (t) => `Salva · ${t}`,
@@ -2783,7 +2783,7 @@ const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "jusqu'au bout.",
   homeSubline:
-    "Un dictionnaire qui saisit le contexte — sens, origines, expressions et image vivante, en 11 langues.",
+    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 11 langues.",
 
   searchPlaceholderHome: "Tapez un mot",
   voiceInputTitle: "Dicter un mot",
@@ -2794,23 +2794,23 @@ const fr: Partial<V2Strings> = {
   tryLabel: "Essayez",
 
   valuePropsEyebrow: "Ce que Gadit fait différemment",
-  valuePropsTitle: "Plus qu'une définition — une façon de vivre avec le mot.",
+  valuePropsTitle: "Plus qu'une définition, une façon de vivre avec le mot.",
   valueProp1Eyebrow: "Contextuel",
   valueProp1Title: "Le bon sens, à chaque fois",
   valueProp1Body:
-    "Collez une phrase — Gadit choisit le sens qui convient, pas seulement le plus courant.",
+    "Collez une phrase, Gadit choisit le sens qui convient, pas seulement le plus courant.",
   valueProp2Eyebrow: "Visuel",
   valueProp2Title: "Une image vivante, juste pour ce mot",
   valueProp2Body:
-    "Générée pour chaque entrée. Un ancrage visuel — pas une photo de banque d'images.",
+    "Générée pour chaque entrée. Un ancrage visuel, pas une photo de banque d'images.",
   valueProp3Eyebrow: "Étymologie",
   valueProp3Title: "Une note d'origine, pas un copier-coller de Wikipédia",
   valueProp3Body:
-    "D'où vient le mot, raconté en un paragraphe — comme un ami curieux l'écrirait.",
+    "D'où vient le mot, raconté en un paragraphe, comme un ami curieux l'écrirait.",
   valueProp4Eyebrow: "11 langues",
   valueProp4Title: "Hébreu et arabe, vraiment natifs",
   valueProp4Body:
-    "Vrai RTL, vraies polices, vraies expressions — pas une interface traduite à la va-vite.",
+    "Vrai RTL, vraies polices, vraies expressions, pas une interface traduite à la va-vite.",
 
   previewLabel: "Aperçu",
   seeFullResult: "Voir le résultat complet",
@@ -2864,7 +2864,7 @@ const fr: Partial<V2Strings> = {
 
   tierClearTagline: "Visualiser",
   tierClearPitch:
-    "Donnez vie aux mots — images, mode enfants et retours.",
+    "Donnez vie aux mots, images, mode enfants et retours.",
   tierClearBadge: "Le plus populaire",
   tierClearCta: "Commencer l'essai 14 jours",
   tierClearCtaYearly: "Abonnement annuel",
@@ -2885,14 +2885,14 @@ const fr: Partial<V2Strings> = {
 
   trustStripCancel: "Annulez à tout moment via le portail Stripe",
   trustStripMoneyBack: "Remboursement 14 jours sur le premier achat",
-  trustStripDataYours: "Vos données vous appartiennent — exportables à tout moment",
+  trustStripDataYours: "Vos données vous appartiennent, exportables à tout moment",
   trustStripNoAds: "Pas de pub, pas de pistage tiers",
 
   faqEyebrow: "Questions fréquentes",
   faqHeadline: "Questions, réponses",
   faqQ1: "Puis-je changer de plan ?",
   faqA1:
-    "Oui, vous pouvez monter ou descendre à tout moment. Le calcul au prorata est automatique — vous ne payez que la différence.",
+    "Oui, vous pouvez monter ou descendre à tout moment. Le calcul au prorata est automatique, vous ne payez que la différence.",
   faqQ2: "Que se passe-t-il si j'annule ?",
   faqA2:
     "Vous gardez l'accès jusqu'à la fin de la période payée, puis revenez à Basic. Aucune donnée n'est perdue.",
@@ -2957,7 +2957,7 @@ const fr: Partial<V2Strings> = {
   composeErrorTooShort: "Écrivez au moins quelques mots.",
 
   quizEyebrow: "Pratique",
-  quizTitleTemplate: (w) => `${w} — quiz`,
+  quizTitleTemplate: (w) => `${w}, quiz`,
   quizQuestionNofM: (n, m) => `Question ${n} sur ${m}`,
   quizSubmit: "Envoyer",
   quizNext: "Suivante",
@@ -2973,7 +2973,7 @@ const fr: Partial<V2Strings> = {
   compareEyebrow: "Comparer",
   compareTitle: "Distinguez les mots qui se ressemblent",
   compareSubtitle:
-    "a vs à, affect vs effect — les mots qui piègent même les locuteurs natifs.",
+    "a vs à, affect vs effect, les mots qui piègent même les locuteurs natifs.",
   compareWord1Label: "Mot 1",
   compareWord2Label: "Mot 2",
   compareWord1Placeholder: "a",
@@ -2986,14 +2986,14 @@ const fr: Partial<V2Strings> = {
   compareCommonMistakeLabel: "Erreur fréquente",
   compareErrNotARealWord: "L'un de ces mots n'est pas reconnu.",
   compareErrDifferentLanguages:
-    "Ces deux mots semblent être dans des langues différentes — essayez une paire dans la même langue.",
-  compareErrSameWord: "On dirait le même mot — essayez deux mots différents.",
+    "Ces deux mots semblent être dans des langues différentes, essayez une paire dans la même langue.",
+  compareErrSameWord: "On dirait le même mot, essayez deux mots différents.",
   compareErrGeneric: "Comparaison indisponible pour le moment.",
 
   notebookEyebrow: "Carnet",
   notebookTitle: "Votre univers de mots",
   notebookSubtitle:
-    "Chaque mot exploré — gardé, organisé, qui s'enrichit.",
+    "Chaque mot exploré, gardé, organisé, qui s'enrichit.",
   notebookCounterTemplate: (n) => `${n} mots explorés`,
   notebookWordsExplored: "mots explorés",
   notebookPracticeNow: "Pratiquer",
@@ -3069,7 +3069,7 @@ const fr: Partial<V2Strings> = {
   reportTellMorePh: "Facultatif. Plus c'est précis, plus vite on corrige.",
   reportSend: "Envoyer",
   reportSending: "Envoi…",
-  reportThanks: "Merci — bien reçu.",
+  reportThanks: "Merci, bien reçu.",
   reportError: "L'envoi a échoué. Réessayez dans un instant.",
   reportCatIncorrectDefinition: "Définition incorrecte",
   reportCatWrongEtymology: "Étymologie erronée",
@@ -3093,13 +3093,13 @@ const fr: Partial<V2Strings> = {
   takeItFurther: "Aller plus loin",
   doMoreWith: (w) => `Aller plus loin avec ${w}`,
   saveToNotebook: "Enregistrer dans le carnet",
-  saveToNotebookHint: "Vous y revenez plus tard — organisé et cherchable.",
+  saveToNotebookHint: "Vous y revenez plus tard, organisé et cherchable.",
   generateImage: "Générer une image",
   generatingImage: "Génération…",
   generateImageHint: "Une image vivante par IA, juste pour ce mot.",
   composeSentence: "Composer une phrase",
   composeSentenceHint:
-    "Écrivez la vôtre — Gadit relit le ton et l'emploi.",
+    "Écrivez la vôtre, Gadit relit le ton et l'emploi.",
   practiceWord: "Pratiquer ce mot",
   practiceWordHint: "Un quiz court adapté à vous.",
   unlockWithClear: "Débloquer avec Clear",
@@ -3110,19 +3110,19 @@ const fr: Partial<V2Strings> = {
   softWallSignupCta: "Inscription gratuite",
   softWallBasicTitle: "Vous avez atteint la limite du jour",
   softWallBasicBody:
-    "Les comptes gratuits ont 20 recherches par jour. La limite se réinitialise demain — ou passez à Clear pour des recherches illimitées, des images, le mode enfants et les retours sur phrases.",
+    "Les comptes gratuits ont 20 recherches par jour. La limite se réinitialise demain, ou passez à Clear pour des recherches illimitées, des images, le mode enfants et les retours sur phrases.",
   softBannerSearchesLeft: (n) => {
     const num = Number(n);
     return num === 1
-      ? "Il vous reste 1 recherche gratuite aujourd'hui — inscription gratuite pour 20 par jour."
-      : `Il vous reste ${num} recherches gratuites aujourd'hui — inscription gratuite pour 20 par jour.`;
+      ? "Il vous reste 1 recherche gratuite aujourd'hui, inscription gratuite pour 20 par jour."
+      : `Il vous reste ${num} recherches gratuites aujourd'hui, inscription gratuite pour 20 par jour.`;
   },
   clearUnlocksThis: "Disponible dans Clear",
   visualizeThisWord: "Voir",
   visualBlurb:
-    "Une image vivante, générée par Gadit — un ancrage visuel pour ce mot.",
+    "Une image vivante, générée par Gadit, un ancrage visuel pour ce mot.",
   visualBlurbLocked:
-    "Créez une image unique pour ce mot — comprendre par l'image.",
+    "Créez une image unique pour ce mot, comprendre par l'image.",
   reportLabel: "Signaler une erreur",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -3152,11 +3152,11 @@ const fr: Partial<V2Strings> = {
   offlinePin: "Enregistrer hors ligne",
   offlinePinned: "Enregistré hors ligne",
   offlinePinTitle: "Enregistrer ce mot pour l'étudier hors ligne",
-  offlinePinnedTitle: "Enregistré — disponible sans WiFi",
+  offlinePinnedTitle: "Enregistré, disponible sans WiFi",
   offlineDownloadPack: "Télécharger le pack hors ligne",
   offlineDownloadingPack: "Téléchargement…",
   offlinePackHeader: "Pack hors ligne",
-  offlinePackDescription: "Ajoute les mots les plus recherchés dans votre langue à votre carnet — disponibles aussi sans WiFi pour étudier hors ligne.",
+  offlinePackDescription: "Ajoute les mots les plus recherchés dans votre langue à votre carnet, disponibles aussi sans WiFi pour étudier hors ligne.",
   visualEmptyLabel: "Une image sera créée pour ce mot",
   generateLabel: "Générer",
   savedAgoTemplate: (t) => `Enregistré · ${t}`,
@@ -3338,7 +3338,7 @@ const de: V2Strings = {
   composeErrorTooShort: "Bitte schreibe mindestens ein paar Wörter.",
 
   quizEyebrow: "Üben",
-  quizTitleTemplate: (w) => `${w} – Quiz`,
+  quizTitleTemplate: (w) => `${w}, Quiz`,
   quizQuestionNofM: (n, m) => `Frage ${n} von ${m}`,
   quizSubmit: "Senden",
   quizNext: "Nächste Frage",
@@ -3354,7 +3354,7 @@ const de: V2Strings = {
   compareEyebrow: "Vergleichen",
   compareTitle: "Ähnliche Wörter unterscheiden",
   compareSubtitle:
-    "wie vs als, das vs dass, leihen vs verleihen – die Wörter, bei denen selbst Muttersprachler stolpern.",
+    "wie vs als, das vs dass, leihen vs verleihen, die Wörter, bei denen selbst Muttersprachler stolpern.",
   compareWord1Label: "Wort 1",
   compareWord2Label: "Wort 2",
   compareWord1Placeholder: "wie",
@@ -3479,19 +3479,19 @@ const de: V2Strings = {
   upgradeToClear: "Auf Clear upgraden",
   softWallAnonTitle: "Du hast deine kostenlosen Suchen verbraucht",
   softWallAnonBody:
-    "Registriere dich kostenlos, um bis zu 20 Wörter am Tag zu suchen — mit vollständigen Definitionen, Beispielen, Redewendungen und Wortherkunft.",
+    "Registriere dich kostenlos, um bis zu 20 Wörter am Tag zu suchen, mit vollständigen Definitionen, Beispielen, Redewendungen und Wortherkunft.",
   softWallSignupCta: "Registrieren, kostenlos",
   softWallBasicTitle: "Du hast das heutige Limit erreicht",
   softWallBasicBody:
     "Kostenlose Konten haben 20 Suchen pro Tag. Das Limit setzt sich morgen zurück, oder upgrade auf Clear für unbegrenzte Suchen plus Bilder, Kindermodus und Grammatik-Feedback.",
   softBannerSearchesLeft: (n) =>
     Number(n) === 1
-      ? "1 kostenlose Suche heute übrig – registriere dich kostenlos für 20 am Tag."
-      : `${n} kostenlose Suchen heute übrig – registriere dich kostenlos für 20 am Tag.`,
+      ? "1 kostenlose Suche heute übrig, registriere dich kostenlos für 20 am Tag."
+      : `${n} kostenlose Suchen heute übrig, registriere dich kostenlos für 20 am Tag.`,
   clearUnlocksThis: "Clear schaltet das frei",
   visualizeThisWord: "Visualisieren",
-  visualBlurb: "Ein lebendiges Bild, von Gadit erstellt – ein visueller Anker für das Gefühl dieses Wortes.",
-  visualBlurbLocked: "Erstelle ein lebendiges, einzigartiges Bild für dieses Wort – Verstehen durchs Sehen.",
+  visualBlurb: "Ein lebendiges Bild, von Gadit erstellt, ein visueller Anker für das Gefühl dieses Wortes.",
+  visualBlurbLocked: "Erstelle ein lebendiges, einzigartiges Bild für dieses Wort, Verstehen durchs Sehen.",
   reportLabel: "Fehler melden",
 
   wordOriginEyebrow: "Wortursprung",
@@ -3525,7 +3525,7 @@ const de: V2Strings = {
   offlineDownloadingPack: "Lädt…",
   offlinePackHeader: "Offline-Paket",
   offlinePackDescription:
-    "Fügt die meistgesuchten Wörter in deiner Sprache zu deinem Notizbuch hinzu – und hält sie ohne WLAN zum Offline-Lernen bereit.",
+    "Fügt die meistgesuchten Wörter in deiner Sprache zu deinem Notizbuch hinzu, und hält sie ohne WLAN zum Offline-Lernen bereit.",
   visualEmptyLabel: "Für dieses Wort wird ein Bild gezeichnet",
   generateLabel: "Erstellen",
   savedAgoTemplate: (t) => `Gespeichert · ${t}`,
@@ -3696,7 +3696,7 @@ const cs: V2Strings = {
   composeErrorTooShort: "Napiš prosím alespoň pár slov.",
 
   quizEyebrow: "Procvičit",
-  quizTitleTemplate: (w) => `${w} – kvíz`,
+  quizTitleTemplate: (w) => `${w}, kvíz`,
   quizQuestionNofM: (n, m) => `Otázka ${n} z ${m}`,
   quizSubmit: "Odeslat",
   quizNext: "Další otázka",
@@ -3712,7 +3712,7 @@ const cs: V2Strings = {
   compareEyebrow: "Porovnat",
   compareTitle: "Rozliš podobná slova",
   compareSubtitle:
-    "stejný vs samý, mě vs mně, princip vs principál – slova, na kterých klopýtají i rodilí mluvčí.",
+    "stejný vs samý, mě vs mně, princip vs principál, slova, na kterých klopýtají i rodilí mluvčí.",
   compareWord1Label: "Slovo 1",
   compareWord2Label: "Slovo 2",
   compareWord1Placeholder: "stejný",
@@ -3844,12 +3844,12 @@ const cs: V2Strings = {
     "Účty zdarma mají 20 hledání denně. Limit se zítra resetuje, nebo upgraduj na Clear pro neomezené hledání plus obrázky, dětský režim a zpětnou vazbu ke gramatice.",
   softBannerSearchesLeft: (n) =>
     Number(n) === 1
-      ? "Dnes zbývá 1 hledání zdarma – zaregistruj se zdarma pro 20 denně."
-      : `Dnes zbývá ${n} hledání zdarma – zaregistruj se zdarma pro 20 denně.`,
+      ? "Dnes zbývá 1 hledání zdarma, zaregistruj se zdarma pro 20 denně."
+      : `Dnes zbývá ${n} hledání zdarma, zaregistruj se zdarma pro 20 denně.`,
   clearUnlocksThis: "Clear toto odemkne",
   visualizeThisWord: "Vizualizovat",
-  visualBlurb: "Jeden živý obrázek, vytvořený Gaditem – vizuální kotva pro to, jak slovo působí.",
-  visualBlurbLocked: "Vytvoř živý, jedinečný obrázek pro toto slovo – porozumění zrakem.",
+  visualBlurb: "Jeden živý obrázek, vytvořený Gaditem, vizuální kotva pro to, jak slovo působí.",
+  visualBlurbLocked: "Vytvoř živý, jedinečný obrázek pro toto slovo, porozumění zrakem.",
   reportLabel: "Nahlásit chybu",
 
   wordOriginEyebrow: "Původ slova",
@@ -3883,7 +3883,7 @@ const cs: V2Strings = {
   offlineDownloadingPack: "Stahuji…",
   offlinePackHeader: "Offline balíček",
   offlinePackDescription:
-    "Přidá nejhledanější slova ve tvém jazyce do sešitu – a udržuje je dostupná bez Wi-Fi pro offline studium.",
+    "Přidá nejhledanější slova ve tvém jazyce do sešitu, a udržuje je dostupná bez Wi-Fi pro offline studium.",
   visualEmptyLabel: "Pro toto slovo bude vytvořen obrázek",
   generateLabel: "Vytvořit",
   // Share / save / listen on the result page
@@ -4061,7 +4061,7 @@ const sk: V2Strings = {
   composeErrorTooShort: "Napíš prosím aspoň pár slov.",
 
   quizEyebrow: "Precvičiť",
-  quizTitleTemplate: (w) => `${w} – kvíz`,
+  quizTitleTemplate: (w) => `${w}, kvíz`,
   quizQuestionNofM: (n, m) => `Otázka ${n} z ${m}`,
   quizSubmit: "Odoslať",
   quizNext: "Ďalšia otázka",
@@ -4077,7 +4077,7 @@ const sk: V2Strings = {
   compareEyebrow: "Porovnať",
   compareTitle: "Rozlíš podobné slová",
   compareSubtitle:
-    "rovnaký vs ten istý, mi vs ma, princíp vs principál – slová, na ktorých sa potknú aj rodení hovoriaci.",
+    "rovnaký vs ten istý, mi vs ma, princíp vs principál, slová, na ktorých sa potknú aj rodení hovoriaci.",
   compareWord1Label: "Slovo 1",
   compareWord2Label: "Slovo 2",
   compareWord1Placeholder: "rovnaký",
@@ -4209,12 +4209,12 @@ const sk: V2Strings = {
     "Účty zadarmo majú 20 vyhľadávaní denne. Limit sa zajtra resetuje, alebo upgraduj na Clear pre neobmedzené hľadanie plus obrázky, detský režim a spätnú väzbu ku gramatike.",
   softBannerSearchesLeft: (n) =>
     Number(n) === 1
-      ? "Dnes zostáva 1 vyhľadávanie zadarmo – zaregistruj sa zadarmo pre 20 denne."
-      : `Dnes zostávajú ${n} vyhľadávania zadarmo – zaregistruj sa zadarmo pre 20 denne.`,
+      ? "Dnes zostáva 1 vyhľadávanie zadarmo, zaregistruj sa zadarmo pre 20 denne."
+      : `Dnes zostávajú ${n} vyhľadávania zadarmo, zaregistruj sa zadarmo pre 20 denne.`,
   clearUnlocksThis: "Clear toto odomkne",
   visualizeThisWord: "Vizualizovať",
-  visualBlurb: "Jeden živý obrázok, vytvorený Gaditom – vizuálna kotva pre to, ako slovo pôsobí.",
-  visualBlurbLocked: "Vytvor živý, jedinečný obrázok pre toto slovo – porozumenie zrakom.",
+  visualBlurb: "Jeden živý obrázok, vytvorený Gaditom, vizuálna kotva pre to, ako slovo pôsobí.",
+  visualBlurbLocked: "Vytvor živý, jedinečný obrázok pre toto slovo, porozumenie zrakom.",
   reportLabel: "Nahlásiť chybu",
 
   wordOriginEyebrow: "Pôvod slova",
@@ -4248,7 +4248,7 @@ const sk: V2Strings = {
   offlineDownloadingPack: "Sťahujem…",
   offlinePackHeader: "Offline balík",
   offlinePackDescription:
-    "Pridá najhľadanejšie slová v tvojom jazyku do zošita – a udržuje ich dostupné bez Wi-Fi pre offline štúdium.",
+    "Pridá najhľadanejšie slová v tvojom jazyku do zošita, a udržuje ich dostupné bez Wi-Fi pre offline štúdium.",
   visualEmptyLabel: "Pre toto slovo bude vytvorený obrázok",
   generateLabel: "Vytvoriť",
   shareLabel: "Zdieľať",
@@ -4366,7 +4366,7 @@ const it: Partial<V2Strings> = {
   visualEmptyLabel: "Verrà generata un'immagine per questa parola",
   generateLabel: "Genera",
   imageGeneratingLabel: "Generazione dell'immagine…",
-  imageGeneratingHint: "Di solito richiede 10–15 secondi.",
+  imageGeneratingHint: "Di solito richiede dai 10 ai 15 secondi.",
   imageOpenFullAria: "Apri l'immagine a tutta grandezza",
   compareComingSoon: "I giochi di parole arrivano presto.",
   navPlay: "Giochi",
@@ -4459,7 +4459,7 @@ const it: Partial<V2Strings> = {
 
   // Quiz modal
   quizEyebrow: "Esercitati",
-  quizTitleTemplate: (w) => `${w} — quiz`,
+  quizTitleTemplate: (w) => `${w}, quiz`,
   quizQuestionNofM: (n, m) => `Domanda ${n} di ${m}`,
   quizSubmit: "Invia",
   quizNext: "Domanda successiva",
@@ -4476,7 +4476,7 @@ const it: Partial<V2Strings> = {
   compareEyebrow: "Confronta",
   compareTitle: "Distinguere parole simili",
   compareSubtitle:
-    "a vs ha, e vs è, qual è vs qual'è — le parole che fanno inciampare anche i madrelingua.",
+    "a vs ha, e vs è, qual è vs qual'è, le parole che fanno inciampare anche i madrelingua.",
   compareWord1Label: "Parola 1",
   compareWord2Label: "Parola 2",
   compareWord1Placeholder: "a",
@@ -4613,12 +4613,12 @@ const it: Partial<V2Strings> = {
     "Gli account gratuiti hanno 20 ricerche al giorno. Il limite si azzera domani, oppure passa a Clear per ricerche illimitate più immagini, modalità bambini e feedback grammaticale.",
   softBannerSearchesLeft: (n) =>
     Number(n) === 1
-      ? "1 ricerca gratuita rimasta oggi — registrati gratis per averne 20 al giorno."
-      : `${n} ricerche gratuite rimaste oggi — registrati gratis per averne 20 al giorno.`,
+      ? "1 ricerca gratuita rimasta oggi, registrati gratis per averne 20 al giorno."
+      : `${n} ricerche gratuite rimaste oggi, registrati gratis per averne 20 al giorno.`,
   clearUnlocksThis: "Clear sblocca questo",
   visualizeThisWord: "Visualizza",
-  visualBlurb: "Un'immagine vivida, generata da Gadit — un'ancora visiva per come si sente questa parola.",
-  visualBlurbLocked: "Genera un'immagine vivida e unica per questa parola — comprensione attraverso la vista.",
+  visualBlurb: "Un'immagine vivida, generata da Gadit, un'ancora visiva per come si sente questa parola.",
+  visualBlurbLocked: "Genera un'immagine vivida e unica per questa parola, comprensione attraverso la vista.",
   reportLabel: "Segnala un errore",
 
   // Misc result/save/listen
@@ -4857,7 +4857,7 @@ const ja: Partial<V2Strings> = {
   compareEyebrow: "比較",
   compareTitle: "似た単語を見分ける",
   compareSubtitle:
-    "affect と effect、暑い と熱い、principle と principal — ネイティブでもつまずく単語。",
+    "affect と effect、暑い と熱い、principle と principal, ネイティブでもつまずく単語。",
   compareWord1Label: "単語 1",
   compareWord2Label: "単語 2",
   compareWord1Placeholder: "affect",
@@ -4997,7 +4997,7 @@ const ja: Partial<V2Strings> = {
   clearUnlocksThis: "Clear がこれを解放します",
   visualizeThisWord: "ビジュアル化",
   visualBlurb: "Gadit が生成した鮮やかな一枚。この単語の感触のための視覚的なアンカー。",
-  visualBlurbLocked: "この単語のための鮮やかな唯一無二の画像を生成 — 視覚で理解する。",
+  visualBlurbLocked: "この単語のための鮮やかな唯一無二の画像を生成, 視覚で理解する。",
   reportLabel: "エラーを報告",
 
   // Result misc

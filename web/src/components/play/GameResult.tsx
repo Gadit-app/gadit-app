@@ -20,7 +20,7 @@ export type GameResultData = {
   title: string;
   score: number;
   total: number;
-  /** Words the user got wrong — shown as a study list. Optional, some
+  /** Words the user got wrong, shown as a study list. Optional, some
    *  games (speed) skip it because there's no "wrong" per se. */
   missed?: Array<{ word: string; meaning: string }>;
   /** Custom headline override (Speed game uses this for "X words!"). */

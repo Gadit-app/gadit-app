@@ -1,7 +1,7 @@
 import AdminRevenueClient from "./AdminRevenueClient";
 
 export const metadata = {
-  title: "Admin · Revenue — Gadit",
+  title: "Admin · Revenue, Gadit",
   robots: { index: false, follow: false },
 };
 

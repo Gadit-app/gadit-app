@@ -151,7 +151,7 @@ export function MarketingHeader() {
           <Wordmark />
         </Link>
 
-        {/* Desktop nav — visible to everyone.
+        {/* Desktop nav, visible to everyone.
             Pricing especially needs to be reachable by anonymous
             visitors (that's where they convert). Compare and Notebook
             stay in the nav even though they're tier-gated; clicking
@@ -174,7 +174,7 @@ export function MarketingHeader() {
 
         {/* Right side: lang picker + (avatar | Sign in) */}
         <div className="flex items-center gap-2">
-          {/* Language picker — visible to everyone (visitors AND signed-in
+          {/* Language picker, visible to everyone (visitors AND signed-in
               users), so a French speaker who landed on the EN homepage
               can switch before they even sign up. Hidden on mobile to
               save horizontal room; the mobile dropdown menu carries it
@@ -185,7 +185,7 @@ export function MarketingHeader() {
             <LangSwitcher variant="dark" />
           </div>
 
-          {/* Mobile menu trigger — shown to everyone now.
+          {/* Mobile menu trigger, shown to everyone now.
               Anonymous visitors need to reach /pricing too, and the
               hamburger is the only entrypoint on mobile <768px. */}
           <button
@@ -292,7 +292,7 @@ export function MarketingHeader() {
         </div>
       </div>
 
-      {/* Mobile dropdown — shown to everyone (anon visitors need to
+      {/* Mobile dropdown, shown to everyone (anon visitors need to
           reach /pricing too), only when open */}
       {mobileOpen && (
         <nav

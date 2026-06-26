@@ -11,7 +11,7 @@ import { ContactClient } from "./ContactClient";
  * link, hence this thin landing.
  */
 export const metadata: Metadata = {
-  title: "Contact — Gadit",
+  title: "Contact, Gadit",
   description: "Contact Gadit support.",
 };
 

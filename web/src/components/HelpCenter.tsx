@@ -68,7 +68,7 @@ export function HelpCenter() {
                   <summary className="wb-help-q">
                     <span className="wb-help-q-text">{item.q}</span>
                     <span className="wb-help-q-chevron" aria-hidden="true">
-                      {/* Pure-CSS rotation via [open] state on parent — see
+                      {/* Pure-CSS rotation via [open] state on parent, see
                           globals.css. The svg path is the same in both
                           states; only the rotation changes, so the
                           element shows as a downward chevron when closed
