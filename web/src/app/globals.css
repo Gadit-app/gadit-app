@@ -10062,11 +10062,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    to the inline-end so the value props read from the start edge
    first. */
 /* The Family card lives inside .wb-pricing-main (max-width: 1100px),
-   so the wrap just spans 100% with no extra padding — it aligns
-   edge-to-edge with the 3-tier grid above it. The accent colour is
-   burnt sienna (council pick 2026-06-26): warm-earth signature for
-   United Family Ltd's product portfolio, distinct from Basic's amber,
-   Clear's teal, and Deep's purple. */
+   so the wrap spans 100% with no extra padding — edge-aligns with
+   the 3-tier grid above. Accent colour: royal blue #1E40AF
+   (2026-06-26). The first burnt-sienna attempt collided with Basic's
+   amber on the same row, so we moved to the cool side: blue completes
+   the palette (Basic warm + Clear teal + Deep purple + Family blue),
+   sits clearly between Clear and Deep without reading as either, and
+   matches the global SaaS convention for "family plan" colour
+   (Google Family Link, Apple Family Sharing, Microsoft Family). */
 .wordbook .wb-family-card-wrap {
   width: 100%;
   margin: clamp(28px, 4vw, 44px) 0 0;
@@ -10081,7 +10084,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border: 1px solid var(--rule);
   border-radius: 28px;
   position: relative;
-  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02), 0 16px 40px -16px rgba(194, 65, 12, 0.22);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02), 0 16px 40px -16px rgba(30, 64, 175, 0.22);
 }
 .wordbook .wb-family-card::before {
   content: "";
@@ -10091,7 +10094,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   top: 0;
   height: 4px;
   border-radius: 0 0 4px 4px;
-  background: #C2410C;
+  background: #1E40AF;
 }
 .wordbook .wb-family-eyebrow {
   font-family: var(--wb-sans);
@@ -10099,7 +10102,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #9A3412;
+  color: #1E3A8A;
   margin-bottom: 8px;
 }
 .wordbook[dir="rtl"] .wb-family-eyebrow { font-family: var(--wb-he); letter-spacing: 0.06em; }
@@ -10121,7 +10124,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-family-tagline { font-family: var(--wb-he); }
 .wordbook .wb-family-tagline .wb-tier-tagline-hl {
-  color: #C2410C;
+  color: #1E40AF;
   font-weight: 700;
 }
 .wordbook .wb-family-features {
@@ -10143,7 +10146,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-family-features li { font-family: var(--wb-he); }
 .wordbook .wb-family-check {
-  color: #C2410C;
+  color: #1E40AF;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -10186,7 +10189,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   justify-content: center;
   min-height: 48px;
   padding: 0 24px;
-  background: #C2410C;
+  background: #1E40AF;
   color: #FFFFFF;
   border: 0;
   border-radius: 999px;
@@ -10195,15 +10198,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 600;
   cursor: pointer;
   transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
-  box-shadow: 0 1px 2px rgba(194, 65, 12, 0.3), 0 8px 24px -8px rgba(194, 65, 12, 0.45);
+  box-shadow: 0 1px 2px rgba(30, 64, 175, 0.3), 0 8px 24px -8px rgba(30, 64, 175, 0.45);
 }
 .wordbook[dir="rtl"] .wb-family-cta { font-family: var(--wb-he); }
 .wordbook .wb-family-cta:hover {
-  background: #9A3412;
+  background: #1E3A8A;
 }
 .wordbook .wb-family-cta:active { transform: scale(0.97); }
 .wordbook .wb-family-cta:focus-visible {
-  outline: 2px solid #9A3412;
+  outline: 2px solid #1E3A8A;
   outline-offset: 3px;
 }
 
