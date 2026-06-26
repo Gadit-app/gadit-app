@@ -6524,9 +6524,24 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border-radius: 0 0 3px 3px;
   background: var(--wb-group-accent, var(--rule));
 }
-.wordbook .wb-feat-group-basic { --wb-group-accent: #6B7280; }
-.wordbook .wb-feat-group-clear { --wb-group-accent: #0EA5A5; }
-.wordbook .wb-feat-group-deep  { --wb-group-accent: #7C3AED; }
+.wordbook .wb-feat-group-basic  { --wb-group-accent: #6B7280; --wb-group-hl: #6B7280; }
+.wordbook .wb-feat-group-clear  { --wb-group-accent: #0EA5A5; --wb-group-hl: #0EA5A5; }
+.wordbook .wb-feat-group-deep   { --wb-group-accent: #7C3AED; --wb-group-hl: #7C3AED; }
+.wordbook .wb-feat-group-family { --wb-group-accent: #1E40AF; --wb-group-hl: #1E40AF; }
+
+/* Highlight span inside group titles. Inherits the tier's hue from
+   --wb-group-hl above so each group's "new word" lights up its own
+   colour (Clear -> teal, Deep -> purple, Family -> royal blue). */
+.wordbook .wb-feat-group-title-hl {
+  color: var(--wb-group-hl, var(--ink));
+  font-weight: inherit;
+}
+
+/* Family group uses the same blue tier border as the Family card on
+   /pricing so the colour signature stays consistent across pages. */
+.wordbook .wb-feat-group-family {
+  border-color: #93C5FD;
+}
 
 .wordbook .wb-feat-group-head {
   text-align: center;
@@ -10671,84 +10686,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-family-join-success { font-family: var(--wb-he); }
 
-/* ─── /features Family section ────────────────────────────────────
-   Sits below the Understand / Learn / Master groups. Uses the same
-   card chrome as a feat-group, but with the royal-blue accent rather
-   than a tier colour, plus a single-column bullet list (the per-tier
-   groups use a 2-up card grid). Mirrors the Family card on /pricing
-   so visitors get the same colour signature on both pages. */
-.wordbook .wb-feat-family-section {
-  border-radius: 20px;
-  padding: clamp(22px, 3vw, 32px);
-  background: var(--surface);
-  border: 1px solid #93C5FD;
-  position: relative;
-  margin-bottom: clamp(32px, 4.5vw, 52px);
-  overflow: hidden;
-}
-.wordbook .wb-feat-family-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  inset-inline: 0;
-  height: 3px;
-  border-radius: 20px 20px 0 0;
-  background: #1E40AF;
-}
-.wordbook .wb-feat-family-section-head {
-  text-align: center;
-  max-width: 640px;
-  margin: 0 auto clamp(20px, 2.5vw, 28px);
-}
-.wordbook .wb-feat-family-section-head .wb-feat-tier-chip {
-  margin-bottom: 12px;
-}
-.wordbook .wb-feat-family-section-title {
-  font-family: var(--wb-serif);
-  font-weight: 700;
-  font-size: clamp(24px, 3.2vw, 32px);
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  margin: 0 0 10px;
-}
-.wordbook[dir="rtl"] .wb-feat-family-section-title { letter-spacing: 0; }
-.wordbook .wb-feat-family-section-sub {
-  font-family: var(--wb-sans);
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--ink-soft);
-  margin: 0;
-}
-.wordbook[dir="rtl"] .wb-feat-family-section-sub { font-family: var(--wb-he); }
-.wordbook .wb-feat-family-bullets {
-  list-style: none;
-  padding: 0;
-  margin: 0 auto;
-  max-width: 720px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.wordbook .wb-feat-family-bullets li {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-family: var(--wb-sans);
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--ink-soft);
-}
-.wordbook[dir="rtl"] .wb-feat-family-bullets li { font-family: var(--wb-he); }
-.wordbook .wb-feat-family-check {
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
-  background: #DBEAFE;
-  color: #1E40AF;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
+/* The Family group now renders inside the same .wb-feat-groups wrapper
+   as Basic/Clear/Deep above (just on its own row). We add a small
+   top margin so it sits a bit below the three-group block instead of
+   abutting it. */
+.wordbook .wb-feat-groups-family {
+  margin-top: clamp(20px, 3vw, 32px);
 }

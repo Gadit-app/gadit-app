@@ -80,14 +80,20 @@ function LangSwitch() {
   );
 }
 
-type Tier = "basic" | "clear" | "deep";
+type Tier = "basic" | "clear" | "deep" | "family";
+
+type FeatureIconName =
+  | "definitions" | "examples" | "idioms" | "origin"
+  | "notebook" | "image" | "kids" | "compose"
+  | "quiz" | "compare"
+  | "profile" | "qr" | "dashboard" | "people";
 
 interface Feature {
   id: string;
   title: string;
   body: string;
   tier: Tier;
-  icon: "definitions" | "examples" | "idioms" | "origin" | "notebook" | "image" | "kids" | "compose" | "quiz" | "compare";
+  icon: FeatureIconName;
 }
 
 /**
@@ -117,16 +123,25 @@ const FEATURE_GROUPS: Record<GroupKey, Feature["id"][]> = {
 };
 
 interface GroupCopy {
-  groupTitles: Record<GroupKey, string>;
+  // ReactNode so Clear / Deep / Family titles can wrap the new word
+  // in a tier-coloured <Hl> highlight, matching the /pricing tagline
+  // pattern. Each title's NEW addition over the tier below picks up
+  // the tier accent so the visual journey reads at a glance.
+  groupTitles: Record<GroupKey, React.ReactNode>;
   groupSubs: Record<GroupKey, string>;
-  // Family is structurally different from the three feature tiers
-  // (it's a multi-seat SKU on top of Deep), so it gets its own
-  // section after the three feature groups - not a 4th group.
+  // Family renders as a 4th group on /features with the same card-
+  // grid chrome as Basic / Clear / Deep above. Each feature carries
+  // its own icon + title + body, identical shape to Feature in the
+  // c.list array used by the three tier groups.
   family: {
-    eyebrow: string;
-    title: string;
+    title: React.ReactNode;
     sub: string;
-    bullets: string[];
+    features: Array<{
+      id: string;
+      icon: FeatureIconName;
+      title: string;
+      body: string;
+    }>;
   };
   // Each tieback row is rendered as `<colored name>, <body>` so the
   // brand name picks up its tier colour (Clear -> teal, Deep -> purple,
@@ -142,12 +157,20 @@ interface GroupCopy {
   bubble: string;
 }
 
+/** Tier-coloured highlight span used inside the group titles. Colour
+ *  is inherited from the parent .wb-feat-group-{tier} class via
+ *  globals.css so the same component lights up the correct hue per
+ *  tier without prop-drilling. */
+function Hl({ children }: { children: React.ReactNode }) {
+  return <span className="wb-feat-group-title-hl">{children}</span>;
+}
+
 const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
   he: {
     groupTitles: {
       understand: "להבין את המילה",
-      learn: "להבין ולראות את המילה",
-      master: "להבין, לראות ולזכור את המילה לתמיד",
+      learn: <>להבין <Hl>ולראות</Hl> את המילה</>,
+      master: <>להבין, לראות <Hl>ולזכור את המילה לתמיד</Hl></>,
     },
     groupSubs: {
       understand:
@@ -158,14 +181,33 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
         "חידונים מותאמים אישית ומשחקי מילים שמטמיעים את המילה לטווח ארוך.",
     },
     family: {
-      eyebrow: "מנוי משפחתי",
-      title: "Family — לכל בני המשפחה",
+      title: <>להבין, לראות, לזכור <Hl>לכל בני המשפחה</Hl></>,
       sub: "מנוי אחד שנותן לכל בן משפחה חשבון משלו, עם כל הפיצ'רים המתקדמים. עד 5 ילדים.",
-      bullets: [
-        "פרופיל נפרד לכל בן משפחה, עם מחברת מילים והיסטוריית חיפושים אישית",
-        "חיבור הטלפון של הילד עם קוד QR בלחיצה אחת, נשאר מחובר לתמיד",
-        "לוח בקרה להורה, רואים את כל המילים שכל ילד חיפש ומתי",
-        "עד 5 ילדים תחת אותו מנוי, כל אחד עם כל פיצ'רי Deep",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "פרופיל נפרד לכל בן משפחה",
+          body: "מחברת מילים, היסטוריית חיפושים, ורצף ימי למידה אישי לכל ילד והורה.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "חיבור מכשיר בקוד QR",
+          body: "הילד מצלם QR בטלפון שלו ונכנס לחשבון, נשאר מחובר לתמיד בלי סיסמה.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "לוח בקרה להורה",
+          body: "רואים את כל המילים שכל ילד חיפש ומתי, ועוקבים אחרי הקצב של כל אחד.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "עד 5 ילדים תחת אותו מנוי",
+          body: "כל ילד מקבל את כל פיצ'רי Deep, ההורה משלם פעם אחת על כל המשפחה.",
+        },
       ],
     },
     tieback: {
@@ -182,8 +224,8 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
   en: {
     groupTitles: {
       understand: "Understand the word",
-      learn: "Understand and see the word",
-      master: "Understand, see, and remember the word forever",
+      learn: <>Understand and <Hl>see</Hl> the word</>,
+      master: <>Understand, see, and <Hl>remember the word forever</Hl></>,
     },
     groupSubs: {
       understand:
@@ -194,14 +236,33 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
         "Personalized quizzes and word games that lock the word in for the long run.",
     },
     family: {
-      eyebrow: "Family plan",
-      title: "Family — for everyone in the family",
+      title: <>Understand, see, remember <Hl>for the whole family</Hl></>,
       sub: "One subscription gives every family member their own account, with all the advanced features. Up to 5 children.",
-      bullets: [
-        "A separate profile for each family member, with their own word notebook and search history",
-        "Pair your child's phone with a QR code in one tap, stays connected forever",
-        "Parent dashboard, see every word each child looked up and when",
-        "Up to 5 children under one subscription, each with full Deep features",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "A separate profile per family member",
+          body: "Word notebook, search history, and personal learning streak for every child and parent.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Pair a device with a QR code",
+          body: "Your child scans a QR on their phone and signs in. Stays paired forever, no password.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Parent dashboard",
+          body: "See every word each child looked up and when, follow their pace at a glance.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Up to 5 children on one subscription",
+          body: "Every child gets full Deep features. Parent pays once for the whole family.",
+        },
       ],
     },
     tieback: {
@@ -389,13 +450,18 @@ function FeatureIcon({ name, color }: { name: Feature["icon"]; color: string }) 
     case "compose":     return <svg {...common}><path d="M14 4l6 6L8 22H2v-6z" /><path d="M13 5l6 6" /></svg>;
     case "quiz":        return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1.5 1-1.5 2.2" /><circle cx="12" cy="17" r="0.7" fill={color} stroke="none" /></svg>;
     case "compare":     return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" /></svg>;
+    case "profile":     return <svg {...common}><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>;
+    case "qr":          return <svg {...common}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3M14 21h3M21 14v7M17 17h4" /></svg>;
+    case "dashboard":   return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></svg>;
+    case "people":      return <svg {...common}><circle cx="9" cy="9" r="3" /><circle cx="17" cy="10" r="2.5" /><path d="M3 20a6 6 0 0 1 12 0" /><path d="M14 20a5 5 0 0 1 7-4" /></svg>;
   }
 }
 
 const TIER_COLOR: Record<Tier, { fg: string; bg: string }> = {
-  basic: { fg: "var(--basic-fg)",  bg: "var(--basic-bg)" },
-  clear: { fg: "var(--teal-edge)", bg: "var(--teal-soft)" },
-  deep:  { fg: "var(--deep-fg)",   bg: "var(--deep-bg)" },
+  basic:  { fg: "var(--basic-fg)",  bg: "var(--basic-bg)" },
+  clear:  { fg: "var(--teal-edge)", bg: "var(--teal-soft)" },
+  deep:   { fg: "var(--deep-fg)",   bg: "var(--deep-bg)" },
+  family: { fg: "#1E40AF",          bg: "#DBEAFE" },
 };
 
 export function FeaturesPage() {
@@ -600,31 +666,35 @@ export function FeaturesPage() {
           })}
         </section>
 
-        {/* Family section, sits below the three feature groups because
-            Family is structurally a different SKU (multi-seat on top
-            of Deep), not a 4th feature tier. Royal-blue accent matches
-            the Family card on /pricing so visitors recognise the same
-            colour family between the two pages. */}
-        <section className="wb-feat-family-section">
-          <div className="wb-feat-family-section-head">
-            <span className="wb-feat-tier-chip wb-feat-tier-chip-family">
-              {gc.family.eyebrow}
-            </span>
-            <h2 className="wb-feat-family-section-title">{gc.family.title}</h2>
-            <p className="wb-feat-family-section-sub">{gc.family.sub}</p>
+        {/* Family, rendered as a 4th group with the same card-grid
+            chrome as Basic / Clear / Deep above so the visual rhythm
+            stays consistent. Royal-blue accent (matches /pricing). */}
+        <section className="wb-feat-groups wb-feat-groups-family">
+          <div className="wb-feat-group wb-feat-group-family">
+            <div className="wb-feat-group-head">
+              <span className="wb-feat-tier-chip wb-feat-tier-chip-family">
+                Family
+              </span>
+              <h2 className="wb-feat-group-title">{gc.family.title}</h2>
+              <p className="wb-feat-group-sub">{gc.family.sub}</p>
+            </div>
+            <div className="wb-feat-group-cards">
+              {gc.family.features.map((f) => {
+                const t = TIER_COLOR.family;
+                return (
+                  <article key={f.id} className="wb-feat-card">
+                    <div className="wb-feat-card-head">
+                      <div className="wb-feat-card-icon" style={{ background: t.bg, color: t.fg }}>
+                        <FeatureIcon name={f.icon} color={t.fg} />
+                      </div>
+                    </div>
+                    <h3 className="wb-feat-card-title">{f.title}</h3>
+                    {f.body && <p className="wb-feat-card-body">{f.body}</p>}
+                  </article>
+                );
+              })}
+            </div>
           </div>
-          <ul className="wb-feat-family-bullets">
-            {gc.family.bullets.map((b, i) => (
-              <li key={i}>
-                <span className="wb-feat-family-check">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
         </section>
 
         {/* Tier tie-back, names what each tier adds in one line so
