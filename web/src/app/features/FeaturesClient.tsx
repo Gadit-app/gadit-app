@@ -90,6 +90,101 @@ interface Feature {
   icon: "definitions" | "examples" | "idioms" | "origin" | "notebook" | "image" | "kids" | "compose" | "quiz" | "compare";
 }
 
+/**
+ * Gadi 2026-06-26 transformation: the page used to be a flat 10-card
+ * bento (a feature list). Now it tells a story.
+ *
+ *   1. Hero (problem the visitor recognizes)
+ *   2. Demo animation (carries through from before)
+ *   3. Three GROUPED feature sections that mirror the user's journey:
+ *      Understand -> Learn -> Master. Tier color also walks the
+ *      Basic -> Clear -> Deep ladder, so the visual hierarchy IS the
+ *      pricing tie-back.
+ *   4. Tier tie-back micro-section that names what each tier adds.
+ *   5. Final CTA with the "Now I gad it!" character.
+ *
+ * Adding new fields to all 12 languages would explode this file; we
+ * keep proper HE + EN translations and fall back to EN for the other
+ * 10 langs (whose existing 10-feature list still works as before -
+ * only the page-shell copy switches).
+ */
+type GroupKey = "understand" | "learn" | "master";
+
+const FEATURE_GROUPS: Record<GroupKey, Feature["id"][]> = {
+  understand: ["definitions", "examples", "idioms", "origin"],
+  learn:      ["kids", "image", "notebook", "compose"],
+  master:     ["quiz", "compare"],
+};
+
+interface GroupCopy {
+  problemKicker: string;
+  problemTitle: string;
+  problemBody: string;
+  groupTitles: Record<GroupKey, string>;
+  groupSubs: Record<GroupKey, string>;
+  tieback: { title: string; basic: string; clear: string; deep: string };
+  bubble: string;
+}
+
+const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
+  he: {
+    problemKicker: "אנחנו מכירים את הרגע הזה",
+    problemTitle: "הגדרה אחת לא מספיקה.",
+    problemBody:
+      "המילון הרגיל נותן לך שורה אחת, ואתה ממשיך מבולבל. רוב המילים נושאות שכבות, היסטוריה והקשרים. בלי כל אלה, המילה נשארת חצי שלך.",
+    groupTitles: {
+      understand: "להבין",
+      learn: "ללמוד באמת",
+      master: "לשלוט במילה",
+    },
+    groupSubs: {
+      understand:
+        "כל הצדדים של המילה: המשמעויות שלה, הדוגמאות בהקשר, הניבים שהיא חיה בהם, והמקור ההיסטורי שלה.",
+      learn:
+        "הופכים את ההבנה לזיכרון: מצב ילדים בשפה פשוטה, תמונה למילה, מחברת אישית, וכתיבת משפט עם משוב.",
+      master:
+        "המילה הופכת לחלק ממך: חידונים מותאמים אישית ומשחקי מילים שמטמיעים אותה לטווח ארוך.",
+    },
+    tieback: {
+      title: "מה כל מסלול נותן",
+      basic: "Basic נותן את ההבנה במלואה, חינם תמיד.",
+      clear: "Clear מוסיף את הכלים שהופכים את ההבנה ללמידה.",
+      deep: "Deep מוסיף את התרגול והשליטה ארוכת-הטווח.",
+    },
+    bubble: "עכשיו זה ברור!",
+  },
+  en: {
+    problemKicker: "You know the feeling",
+    problemTitle: "One definition isn't enough.",
+    problemBody:
+      "A normal dictionary gives you one line, and you walk away half-confused. Most words carry layers, history and context. Without those, the word is only half yours.",
+    groupTitles: {
+      understand: "Understand",
+      learn: "Learn it for real",
+      master: "Master it",
+    },
+    groupSubs: {
+      understand:
+        "Every side of the word: all the meanings, real sentences in context, the idioms it lives in, and where it came from.",
+      learn:
+        "Turn understanding into memory: a kid-friendly version, an image for the word, a personal notebook, and a sentence you write with feedback.",
+      master:
+        "Make the word yours: personalized quizzes and word games that lock it in for the long run.",
+    },
+    tieback: {
+      title: "What each tier adds",
+      basic: "Basic gives you the full understanding, free forever.",
+      clear: "Clear adds the tools that turn understanding into learning.",
+      deep: "Deep adds the practice and long-term mastery layer.",
+    },
+    bubble: "Now I gad it!",
+  },
+};
+
+function pickGroupCopy(lang: string): GroupCopy {
+  return lang === "he" ? GROUP_COPY.he : GROUP_COPY.en;
+}
+
 const COPY: Record<string, {
   heroEyebrow: string;
   heroTitle: string;
@@ -274,6 +369,7 @@ export function FeaturesPage() {
   const { user, plan, promptLogin } = useAuth();
   const href = useHref();
   const c = COPY[lang] ?? COPY.en;
+  const gc = pickGroupCopy(lang);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLButtonElement>(null);
@@ -408,10 +504,21 @@ export function FeaturesPage() {
       </header>
 
       <main className="wb-feat-main">
-        {/* Hero — eyebrow + Lora-italic display + supporting text + two
-            CTAs. Generous top spacing so the headline gets vertical room
-            to breathe; the eye should land on it first, not the nav. */}
+        {/* Hero — same eyebrow / italic display / two-CTA shape as
+            before, with the new "it" character floating as a faded
+            watermark on the start edge. Aria-hidden because it's
+            decorative. */}
         <section className="wb-feat-hero">
+          <img
+            src="/gad-it-character.png"
+            alt=""
+            aria-hidden="true"
+            className="wb-feat-hero-character"
+            width={320}
+            height={320}
+            loading="eager"
+            decoding="async"
+          />
           <div className="wb-feat-eyebrow">{c.heroEyebrow}</div>
           <h1 className="wb-feat-display">{c.heroTitle}</h1>
           <p className="wb-feat-lede">{c.heroSub}</p>
@@ -421,46 +528,100 @@ export function FeaturesPage() {
           </div>
         </section>
 
+        {/* Problem section — the visitor recognizes the moment before
+            we sell anything. Three-line frame: kicker / headline /
+            body. The page becomes proof of the solution from here on. */}
+        <section className="wb-feat-problem">
+          <div className="wb-feat-problem-kicker">{gc.problemKicker}</div>
+          <h2 className="wb-feat-problem-title">{gc.problemTitle}</h2>
+          <p className="wb-feat-problem-body">{gc.problemBody}</p>
+        </section>
+
         {/* Auto-cycling demo tour — walks the visitor through what each
             tier unlocks plus the partner program. See
             GaditDemoAnimation.tsx for the scene state machine. */}
         <GaditDemoAnimation />
 
-        {/* Bento grid — first card spans two columns on desktop so the
-            'every definition' feature (the product's core promise) lands
-            as the heaviest visual weight. Other features sit at equal
-            weight in single-column cards. Stagger animation on initial
-            load, gated by prefers-reduced-motion. */}
-        <section className="wb-feat-section">
-          <div className="wb-feat-section-label">{c.sectionLabel}</div>
-          <div className="wb-feat-bento">
-            {c.list.map((f, i) => {
-              const t = TIER_COLOR[f.tier];
-              return (
-                <article
-                  key={f.id}
-                  className={`wb-feat-card${i === 0 ? " is-featured" : ""}`}
-                  style={{ ["--wb-stagger" as string]: `${i * 45}ms` }}
-                >
-                  <div className="wb-feat-card-head">
-                    <div className="wb-feat-card-icon" style={{ background: t.bg, color: t.fg }}>
-                      <FeatureIcon name={f.icon} color={t.fg} />
-                    </div>
-                    <span className={`wb-feat-tier-chip wb-feat-tier-chip-${f.tier}`}>{c.tierLabel[f.tier]}</span>
-                  </div>
-                  <h3 className="wb-feat-card-title">{f.title}</h3>
-                  {f.body && <p className="wb-feat-card-body">{f.body}</p>}
-                </article>
-              );
-            })}
+        {/* Three feature groups — Understand -> Learn -> Master.
+            Each group is one Basic / Clear / Deep tier respectively,
+            so the visual journey IS the pricing ladder. Within each
+            group the cards keep the original visual treatment from
+            the bento grid, just smaller (always equal weight inside
+            the group). */}
+        <section className="wb-feat-groups">
+          {(Object.keys(FEATURE_GROUPS) as GroupKey[]).map((groupKey) => {
+            const ids = FEATURE_GROUPS[groupKey];
+            const groupFeatures = c.list.filter((f) => ids.includes(f.id));
+            if (groupFeatures.length === 0) return null;
+            const groupTier: Tier =
+              groupKey === "understand" ? "basic" : groupKey === "learn" ? "clear" : "deep";
+            return (
+              <div key={groupKey} className={`wb-feat-group wb-feat-group-${groupTier}`}>
+                <div className="wb-feat-group-head">
+                  <span className={`wb-feat-tier-chip wb-feat-tier-chip-${groupTier}`}>
+                    {c.tierLabel[groupTier]}
+                  </span>
+                  <h2 className="wb-feat-group-title">{gc.groupTitles[groupKey]}</h2>
+                  <p className="wb-feat-group-sub">{gc.groupSubs[groupKey]}</p>
+                </div>
+                <div className="wb-feat-group-cards">
+                  {groupFeatures.map((f) => {
+                    const t = TIER_COLOR[f.tier];
+                    return (
+                      <article key={f.id} className="wb-feat-card">
+                        <div className="wb-feat-card-head">
+                          <div className="wb-feat-card-icon" style={{ background: t.bg, color: t.fg }}>
+                            <FeatureIcon name={f.icon} color={t.fg} />
+                          </div>
+                        </div>
+                        <h3 className="wb-feat-card-title">{f.title}</h3>
+                        {f.body && <p className="wb-feat-card-body">{f.body}</p>}
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </section>
+
+        {/* Tier tie-back — names what each tier adds in one line so
+            the pricing decision feels like a continuation of the
+            story, not a separate page. */}
+        <section className="wb-feat-tiertie">
+          <h2 className="wb-feat-tiertie-title">{gc.tieback.title}</h2>
+          <div className="wb-feat-tiertie-rows">
+            <div className="wb-feat-tiertie-row">
+              <span className="wb-feat-tier-chip wb-feat-tier-chip-basic">{c.tierLabel.basic}</span>
+              <span>{gc.tieback.basic}</span>
+            </div>
+            <div className="wb-feat-tiertie-row">
+              <span className="wb-feat-tier-chip wb-feat-tier-chip-clear">{c.tierLabel.clear}</span>
+              <span>{gc.tieback.clear}</span>
+            </div>
+            <div className="wb-feat-tiertie-row">
+              <span className="wb-feat-tier-chip wb-feat-tier-chip-deep">{c.tierLabel.deep}</span>
+              <span>{gc.tieback.deep}</span>
+            </div>
           </div>
         </section>
 
-        {/* Final CTA — single full-width card that recaps the value
-            proposition in one sentence and gives one big primary action.
-            No competing secondary link here; the page's whole job has
-            been to make the user want to click this. */}
+        {/* Final CTA — character + speech bubble + one big button.
+            The bubble carries the brand verb ("Now I gad it!") so the
+            page closes on the same metaphor it opened with. */}
         <section className="wb-feat-final">
+          <div className="wb-feat-final-character">
+            <div className="wb-feat-final-bubble">{gc.bubble}</div>
+            <img
+              src="/gad-it-character.png"
+              alt=""
+              aria-hidden="true"
+              width={180}
+              height={180}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
           <h2 className="wb-feat-final-title">{c.finalCtaTitle}</h2>
           <p className="wb-feat-final-sub">{c.finalCtaSub}</p>
           <Link href={href("/")} className="wb-feat-final-btn">{c.finalCtaBtn}</Link>

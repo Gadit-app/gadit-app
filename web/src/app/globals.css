@@ -6503,6 +6503,265 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   outline-offset: 3px;
 }
 
+/* ─── Hero character watermark ─────────────────────────────────────
+   The italic "it" character floats faded behind the hero copy on the
+   start edge of the page. Desktop only — on mobile the hero is too
+   tight to give the character its own column without crowding text. */
+.wordbook .wb-feat-hero { position: relative; }
+.wordbook .wb-feat-hero-character {
+  position: absolute;
+  inset-inline-start: -40px;
+  top: -10px;
+  width: 200px;
+  height: 200px;
+  opacity: 0.14;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+.wordbook .wb-feat-hero > * { position: relative; z-index: 1; }
+@media (max-width: 768px) {
+  .wordbook .wb-feat-hero-character { display: none; }
+}
+@media (min-width: 1100px) {
+  .wordbook .wb-feat-hero-character {
+    inset-inline-start: -120px;
+    top: -20px;
+    width: 240px;
+    height: 240px;
+    opacity: 0.16;
+  }
+}
+
+/* ─── Problem section ──────────────────────────────────────────────
+   Three-line frame between hero and demo: kicker / italic problem
+   title / supporting body. Sets up the "one definition isn't enough"
+   tension that everything below answers. */
+.wordbook .wb-feat-problem {
+  text-align: center;
+  max-width: 720px;
+  margin: clamp(40px, 6vw, 64px) auto clamp(48px, 7vw, 80px);
+}
+.wordbook .wb-feat-problem-kicker {
+  font-family: var(--wb-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+.wordbook[dir="rtl"] .wb-feat-problem-kicker { font-family: var(--wb-he); letter-spacing: 0.06em; }
+.wordbook .wb-feat-problem-title {
+  font-family: var(--wb-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(26px, 3.8vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+.wordbook[dir="rtl"] .wb-feat-problem-title {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+[lang="ar"].wordbook .wb-feat-problem-title,
+.wordbook[lang="ar"] .wb-feat-problem-title { font-family: var(--wb-ar); }
+.wordbook .wb-feat-problem-body {
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0 auto;
+  max-width: 560px;
+}
+.wordbook[dir="rtl"] .wb-feat-problem-body { font-family: var(--wb-he); }
+[lang="ar"].wordbook .wb-feat-problem-body,
+.wordbook[lang="ar"] .wb-feat-problem-body { font-family: var(--wb-ar); }
+
+/* ─── Three groups (Understand / Learn / Master) ──────────────────
+   Each group is a tier-coloured section. Header is centered (chip +
+   italic title + sub). Cards below are 2-up on desktop, 1-up mobile.
+   The tier accent ties each group back to the pricing colour. */
+.wordbook .wb-feat-groups {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 6vw, 72px);
+  margin-bottom: clamp(48px, 7vw, 80px);
+}
+.wordbook .wb-feat-group {
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 44px);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  position: relative;
+}
+.wordbook .wb-feat-group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: clamp(28px, 4vw, 44px);
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--wb-group-accent, var(--rule));
+}
+.wordbook .wb-feat-group-basic { --wb-group-accent: #6B7280; }
+.wordbook .wb-feat-group-clear { --wb-group-accent: #0EA5A5; }
+.wordbook .wb-feat-group-deep  { --wb-group-accent: #7C3AED; }
+
+.wordbook .wb-feat-group-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto clamp(24px, 3vw, 36px);
+}
+.wordbook .wb-feat-group-head .wb-feat-tier-chip {
+  margin-bottom: 14px;
+}
+.wordbook .wb-feat-group-title {
+  font-family: var(--wb-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(26px, 3.6vw, 36px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.wordbook[dir="rtl"] .wb-feat-group-title {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+[lang="ar"].wordbook .wb-feat-group-title,
+.wordbook[lang="ar"] .wb-feat-group-title { font-family: var(--wb-ar); }
+.wordbook .wb-feat-group-sub {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.wordbook[dir="rtl"] .wb-feat-group-sub { font-family: var(--wb-he); }
+[lang="ar"].wordbook .wb-feat-group-sub,
+.wordbook[lang="ar"] .wb-feat-group-sub { font-family: var(--wb-ar); }
+
+.wordbook .wb-feat-group-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 720px) {
+  .wordbook .wb-feat-group-cards { grid-template-columns: 1fr 1fr; }
+}
+.wordbook .wb-feat-group .wb-feat-card {
+  background: var(--wb-canvas);
+}
+
+/* ─── Tier tie-back ───────────────────────────────────────────────
+   One-liners that name what each tier adds. Compact list, generous
+   inline gap. This is the bridge between "here are the features" and
+   "here is the pricing." */
+.wordbook .wb-feat-tiertie {
+  max-width: 760px;
+  margin: 0 auto clamp(48px, 6vw, 72px);
+  text-align: center;
+}
+.wordbook .wb-feat-tiertie-title {
+  font-family: var(--wb-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 clamp(20px, 2.5vw, 28px);
+}
+.wordbook[dir="rtl"] .wb-feat-tiertie-title {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+[lang="ar"].wordbook .wb-feat-tiertie-title,
+.wordbook[lang="ar"] .wb-feat-tiertie-title { font-family: var(--wb-ar); }
+.wordbook .wb-feat-tiertie-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wordbook .wb-feat-tiertie-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-align: start;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+}
+.wordbook[dir="rtl"] .wb-feat-tiertie-row { font-family: var(--wb-he); }
+[lang="ar"].wordbook .wb-feat-tiertie-row,
+.wordbook[lang="ar"] .wb-feat-tiertie-row { font-family: var(--wb-ar); }
+.wordbook .wb-feat-tiertie-row .wb-feat-tier-chip { flex-shrink: 0; }
+
+/* ─── Final CTA character + bubble ────────────────────────────────
+   The character returns at the very end with a speech bubble carrying
+   the brand verb ("Now I gad it!"). Closes the page on the same
+   metaphor it opened with. */
+.wordbook .wb-feat-final-character {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 18px;
+  padding-top: 8px;
+}
+.wordbook .wb-feat-final-character img {
+  width: 140px;
+  height: 140px;
+  display: block;
+}
+.wordbook .wb-feat-final-bubble {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 10px 16px;
+  font-family: var(--wb-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--teal-edge);
+  box-shadow: 0 4px 16px -6px rgba(15, 23, 42, 0.12);
+  margin-bottom: 12px;
+}
+.wordbook[dir="rtl"] .wb-feat-final-bubble {
+  font-family: var(--wb-he);
+  font-style: normal;
+  font-weight: 700;
+}
+.wordbook .wb-feat-final-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: var(--surface);
+  border-inline-end: 1px solid var(--rule);
+  border-block-end: 1px solid var(--rule);
+}
+
 /* ─── Reduced motion ──────────────────────────────────────────────
    Remove all transforms and entry animations; keep opacity changes
    so the design still has gentle visual feedback without movement
