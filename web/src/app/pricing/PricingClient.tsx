@@ -256,6 +256,7 @@ const COPY: Record<string, {
       features: [
         "פרופיל נפרד לכל ילד עם מחברת מילים, היסטוריה, ורצף ימי למידה אישי",
         "כל ילד מקבל את כל הפיצ'רים המתקדמים: חידונים, משחקי מילים, מצב ילדים, ותמונה לכל מילה",
+        "לוח בקרה להורה, רואים את כל המילים שכל ילד חיפש ומתי",
         "ללא הגבלה על מספר הילדים, הוסיפו כמה שאתם רוצים",
         "חיבור הטלפון של הילד בסריקת QR פשוטה, נשאר מחובר לתמיד",
       ],
@@ -319,6 +320,7 @@ const COPY: Record<string, {
       features: [
         "Each child gets their own profile with personal word notebook, history, and learning streak",
         "Every child gets all the advanced features: quizzes, word games, kids mode, and image-per-word",
+        "Parent dashboard, see every word each child looked up and when",
         "No limit on the number of children, add as many as you'd like",
         "Pair your child's phone in seconds with a QR scan, stays connected forever",
       ],
