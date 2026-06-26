@@ -6190,7 +6190,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* ─── Hero ────────────────────────────────────────────────────── */
 .wordbook .wb-feat-hero {
   text-align: center;
-  margin-bottom: clamp(48px, 8vw, 96px);
+  margin-bottom: clamp(28px, 4vw, 44px);
   max-width: 820px;
   margin-inline: auto;
 }
@@ -6503,44 +6503,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   outline-offset: 3px;
 }
 
-/* ─── Hero character watermark ─────────────────────────────────────
-   The italic "it" character floats faded behind the hero copy on the
-   start edge of the page. Desktop only — on mobile the hero is too
-   tight to give the character its own column without crowding text. */
-.wordbook .wb-feat-hero { position: relative; }
-.wordbook .wb-feat-hero-character {
-  position: absolute;
-  inset-inline-start: -40px;
-  top: -10px;
-  width: 200px;
-  height: 200px;
-  opacity: 0.14;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-.wordbook .wb-feat-hero > * { position: relative; z-index: 1; }
-@media (max-width: 768px) {
-  .wordbook .wb-feat-hero-character { display: none; }
-}
-@media (min-width: 1100px) {
-  .wordbook .wb-feat-hero-character {
-    inset-inline-start: -120px;
-    top: -20px;
-    width: 240px;
-    height: 240px;
-    opacity: 0.16;
-  }
-}
-
 /* ─── Problem section ──────────────────────────────────────────────
    Three-line frame between hero and demo: kicker / italic problem
    title / supporting body. Sets up the "one definition isn't enough"
-   tension that everything below answers. */
+   tension that everything below answers. Tight vertical rhythm so the
+   whole page fits closer to one viewport on a wide monitor. */
 .wordbook .wb-feat-problem {
   text-align: center;
   max-width: 720px;
-  margin: clamp(40px, 6vw, 64px) auto clamp(48px, 7vw, 80px);
+  margin: clamp(28px, 4vw, 44px) auto clamp(32px, 4.5vw, 52px);
 }
 .wordbook .wb-feat-problem-kicker {
   font-family: var(--wb-sans);
@@ -6589,12 +6560,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-feat-groups {
   display: flex;
   flex-direction: column;
-  gap: clamp(48px, 6vw, 72px);
-  margin-bottom: clamp(48px, 7vw, 80px);
+  gap: clamp(24px, 3vw, 36px);
+  margin-bottom: clamp(32px, 4.5vw, 52px);
 }
 .wordbook .wb-feat-group {
-  border-radius: 24px;
-  padding: clamp(28px, 4vw, 44px);
+  border-radius: 20px;
+  padding: clamp(22px, 3vw, 32px);
   background: var(--surface);
   border: 1px solid var(--rule);
   position: relative;
@@ -6603,7 +6574,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   content: "";
   position: absolute;
   top: 0;
-  inset-inline: clamp(28px, 4vw, 44px);
+  inset-inline: clamp(22px, 3vw, 32px);
   height: 3px;
   border-radius: 0 0 3px 3px;
   background: var(--wb-group-accent, var(--rule));
@@ -6615,20 +6586,20 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-feat-group-head {
   text-align: center;
   max-width: 640px;
-  margin: 0 auto clamp(24px, 3vw, 36px);
+  margin: 0 auto clamp(18px, 2.2vw, 26px);
 }
 .wordbook .wb-feat-group-head .wb-feat-tier-chip {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 .wordbook .wb-feat-group-title {
   font-family: var(--wb-serif);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(26px, 3.6vw, 36px);
+  font-size: clamp(22px, 3vw, 30px);
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--ink);
-  margin: 0 0 12px;
+  margin: 0 0 8px;
 }
 .wordbook[dir="rtl"] .wb-feat-group-title {
   font-family: var(--wb-he);
@@ -6640,8 +6611,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[lang="ar"] .wb-feat-group-title { font-family: var(--wb-ar); }
 .wordbook .wb-feat-group-sub {
   font-family: var(--wb-sans);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 14.5px;
+  line-height: 1.55;
   color: var(--ink-soft);
   margin: 0;
 }
@@ -6652,7 +6623,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-feat-group-cards {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 @media (min-width: 720px) {
   .wordbook .wb-feat-group-cards { grid-template-columns: 1fr 1fr; }
@@ -6667,18 +6638,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    "here is the pricing." */
 .wordbook .wb-feat-tiertie {
   max-width: 760px;
-  margin: 0 auto clamp(48px, 6vw, 72px);
+  margin: 0 auto clamp(32px, 4vw, 52px);
   text-align: center;
 }
 .wordbook .wb-feat-tiertie-title {
   font-family: var(--wb-serif);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(22px, 3vw, 30px);
+  font-size: clamp(20px, 2.6vw, 26px);
   line-height: 1.2;
   letter-spacing: -0.015em;
   color: var(--ink);
-  margin: 0 0 clamp(20px, 2.5vw, 28px);
+  margin: 0 0 clamp(14px, 1.8vw, 20px);
 }
 .wordbook[dir="rtl"] .wb-feat-tiertie-title {
   font-family: var(--wb-he);
@@ -6691,21 +6662,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-feat-tiertie-rows {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 .wordbook .wb-feat-tiertie-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   font-family: var(--wb-sans);
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 14.5px;
+  line-height: 1.5;
   color: var(--ink-soft);
   text-align: start;
-  padding: 14px 18px;
+  padding: 10px 14px;
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 12px;
 }
 .wordbook[dir="rtl"] .wb-feat-tiertie-row { font-family: var(--wb-he); }
 [lang="ar"].wordbook .wb-feat-tiertie-row,
@@ -6729,8 +6700,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   height: 140px;
   display: block;
 }
+/* Bubble text is always English ("Now I gad it!") in every language -
+   the brand pun stays Latin like the Gadit wordmark. Force LTR and
+   serif italic regardless of page dir. */
 .wordbook .wb-feat-final-bubble {
   position: relative;
+  direction: ltr;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 16px;
@@ -6743,11 +6718,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--teal-edge);
   box-shadow: 0 4px 16px -6px rgba(15, 23, 42, 0.12);
   margin-bottom: 12px;
-}
-.wordbook[dir="rtl"] .wb-feat-final-bubble {
-  font-family: var(--wb-he);
-  font-style: normal;
-  font-weight: 700;
 }
 .wordbook .wb-feat-final-bubble::after {
   content: "";

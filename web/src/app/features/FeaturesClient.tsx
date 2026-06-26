@@ -151,7 +151,9 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
       clear: "Clear מוסיף את הכלים שהופכים את ההבנה ללמידה.",
       deep: "Deep מוסיף את התרגול והשליטה ארוכת-הטווח.",
     },
-    bubble: "עכשיו זה ברור!",
+    // Brand pun stays in Latin in every language - like the Gadit
+    // wordmark itself. See feedback_brand_name_english memory.
+    bubble: "Now I gad it!",
   },
   en: {
     problemKicker: "You know the feeling",
@@ -505,20 +507,10 @@ export function FeaturesPage() {
 
       <main className="wb-feat-main">
         {/* Hero — same eyebrow / italic display / two-CTA shape as
-            before, with the new "it" character floating as a faded
-            watermark on the start edge. Aria-hidden because it's
-            decorative. */}
+            before. The "it" character only appears at the very end now;
+            anchoring it here floated awkwardly between the topbar and
+            the title and didn't pay off the metaphor. */}
         <section className="wb-feat-hero">
-          <img
-            src="/gad-it-character.png"
-            alt=""
-            aria-hidden="true"
-            className="wb-feat-hero-character"
-            width={320}
-            height={320}
-            loading="eager"
-            decoding="async"
-          />
           <div className="wb-feat-eyebrow">{c.heroEyebrow}</div>
           <h1 className="wb-feat-display">{c.heroTitle}</h1>
           <p className="wb-feat-lede">{c.heroSub}</p>
