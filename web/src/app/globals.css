@@ -10089,11 +10089,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-family-card::before {
   content: "";
   position: absolute;
-  inset-inline-start: clamp(32px, 4vw, 52px);
-  inset-inline-end: clamp(32px, 4vw, 52px);
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   top: 0;
   height: 4px;
-  border-radius: 0 0 4px 4px;
+  border-radius: 28px 28px 0 0;
   background: #1E40AF;
 }
 .wordbook .wb-family-eyebrow {
@@ -10183,16 +10183,19 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   text-align: center;
 }
 .wordbook[dir="rtl"] .wb-family-subprice { font-family: var(--wb-he); }
+/* CTA matches the wb-tier-cta shape on the 3 personal tier cards so
+   the whole pricing block reads as one family of buttons. Same
+   border-radius (10px), same padding rhythm, just royal blue. */
 .wordbook .wb-family-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
-  padding: 0 24px;
+  width: 100%;
+  padding: 11px 18px;
   background: #1E40AF;
   color: #FFFFFF;
   border: 0;
-  border-radius: 999px;
+  border-radius: 10px;
   font-family: var(--wb-sans);
   font-size: 15px;
   font-weight: 600;
@@ -10267,11 +10270,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-family-welcome-pill {
   display: inline-block;
   padding: 8px 14px;
-  background: rgba(14, 165, 165, 0.1);
+  background: rgba(30, 64, 175, 0.1);
   border-radius: 999px;
   font-family: var(--wb-sans);
   font-size: 13px;
-  color: #0B8A8A;
+  color: #1E3A8A;
   margin-bottom: 16px;
 }
 .wordbook[dir="rtl"] .wb-family-welcome-pill { font-family: var(--wb-he); }
@@ -10281,18 +10284,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   justify-content: center;
   min-height: 44px;
   padding: 0 22px;
-  background: #0EA5A5;
+  background: #1E40AF;
   color: #FFFFFF;
   border-radius: 999px;
   font-family: var(--wb-sans);
   font-size: 14.5px;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
+  box-shadow: 0 1px 2px rgba(30, 64, 175, 0.3), 0 8px 24px -8px rgba(30, 64, 175, 0.45);
   transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out);
 }
 .wordbook[dir="rtl"] .wb-family-add-btn { font-family: var(--wb-he); }
-.wordbook .wb-family-add-btn:hover { background: #0B8A8A; }
+.wordbook .wb-family-add-btn:hover { background: #1E3A8A; }
 .wordbook .wb-family-add-btn:active { transform: scale(0.97); }
 
 .wordbook .wb-family-section { margin-bottom: clamp(24px, 4vw, 36px); }
@@ -10471,7 +10474,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-family-field-input { font-family: var(--wb-he); }
 .wordbook .wb-family-field-input:focus {
-  outline: 2px solid #0EA5A5;
+  outline: 2px solid #1E40AF;
   outline-offset: 1px;
   border-color: transparent;
 }
@@ -10517,11 +10520,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[dir="rtl"] .wb-family-cta,
 .wordbook[dir="rtl"] .wb-family-cta-ghost { font-family: var(--wb-he); }
 .wordbook .wb-family-cta {
-  background: #0EA5A5;
+  background: #1E40AF;
   color: #FFFFFF;
-  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
+  box-shadow: 0 1px 2px rgba(30, 64, 175, 0.3), 0 8px 24px -8px rgba(30, 64, 175, 0.45);
 }
-.wordbook .wb-family-cta:hover { background: #0B8A8A; }
+.wordbook .wb-family-cta:hover { background: #1E3A8A; }
 .wordbook .wb-family-cta:active { transform: scale(0.97); }
 .wordbook .wb-family-cta:disabled {
   opacity: 0.5;
@@ -10598,7 +10601,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   width: 100%;
 }
 .wordbook .wb-family-code-input:focus {
-  outline: 2px solid #0EA5A5;
+  outline: 2px solid #1E40AF;
   outline-offset: 1px;
   border-color: transparent;
 }
