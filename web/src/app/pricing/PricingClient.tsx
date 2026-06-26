@@ -29,10 +29,12 @@ import { useHref } from "@/lib/href";
 
 type Billing = "monthly" | "yearly";
 
-const PRICE_CLEAR_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY ?? "";
-const PRICE_CLEAR_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY  ?? "";
-const PRICE_DEEP_MONTHLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY  ?? "";
-const PRICE_DEEP_YEARLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY   ?? "";
+const PRICE_CLEAR_MONTHLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY  ?? "";
+const PRICE_CLEAR_YEARLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY   ?? "";
+const PRICE_DEEP_MONTHLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY   ?? "";
+const PRICE_DEEP_YEARLY    = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY    ?? "";
+const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
+const PRICE_FAMILY_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY  ?? "";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -166,6 +168,17 @@ function TierCard({ id, name, price, period, subPrice, tagline, features, cta, c
   );
 }
 
+// Family copy fields are optional on the type so we only need to keep
+// HE + EN proper. The JSX falls back to EN for any lang that doesn't
+// supply its own family strings. Add per-language ones over time.
+interface FamilyCopy {
+  name: string;
+  eyebrow: string;
+  tagline: React.ReactNode;
+  cta: string;
+  features: string[];
+}
+
 const COPY: Record<string, {
   heroTitle: string;
   heroSub: string;
@@ -179,6 +192,7 @@ const COPY: Record<string, {
   tierBasic: { name: string; tagline: React.ReactNode; cta: string; features: string[] };
   tierClear: { name: string; tagline: React.ReactNode; cta: string; badge: string; features: string[] };
   tierDeep:  { name: string; tagline: React.ReactNode; cta: string; features: string[] };
+  family?: FamilyCopy;
   mo: string; yr: string;
   freeForever: string;
   saveTrustBasic?: string;
@@ -234,6 +248,18 @@ const COPY: Record<string, {
         "ייצוא תוכן",
       ],
     },
+    family: {
+      name: "Family",
+      eyebrow: "מנוי משפחתי",
+      tagline: <>כל המשפחה, <Hl>ללא הגבלת ילדים</Hl>, כל פיצ'רי Deep לכל ילד</>,
+      cta: "התחילו עם Family",
+      features: [
+        "ללא הגבלת ילדים",
+        "אזור משלו לכל ילד: מחברת, היסטוריה ו-Streaks",
+        "כל פיצ'רי Deep לכל אחד מבני המשפחה",
+        "חיבור מכשיר עם QR בלחיצה אחת",
+      ],
+    },
   },
   en: {
     heroTitle: "Start free.",
@@ -283,6 +309,18 @@ const COPY: Record<string, {
         "Word games",
         "Long-term practice & retention",
         "Export content",
+      ],
+    },
+    family: {
+      name: "Family",
+      eyebrow: "Family plan",
+      tagline: <>The whole family, <Hl>unlimited kids</Hl>, full Deep features for every child</>,
+      cta: "Start Family",
+      features: [
+        "Unlimited children",
+        "Own space per child: notebook, history, streaks",
+        "Full Deep features for every family member",
+        "One-tap device pairing with QR code",
       ],
     },
   },
@@ -758,11 +796,17 @@ export function PricingPageRoute() {
     const priceId = billing === "yearly" ? PRICE_DEEP_YEARLY : PRICE_DEEP_MONTHLY;
     promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
   }
+  function clickFamily() {
+    const priceId = billing === "yearly" ? PRICE_FAMILY_YEARLY : PRICE_FAMILY_MONTHLY;
+    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+  }
 
-  const clearMonthly = "$2.99";
-  const clearYearly  = "$29.99";
-  const deepMonthly  = "$4.99";
-  const deepYearly   = "$49.99";
+  const clearMonthly  = "$2.99";
+  const clearYearly   = "$29.99";
+  const deepMonthly   = "$4.99";
+  const deepYearly    = "$49.99";
+  const familyMonthly = "$8.99";
+  const familyYearly  = "$79";
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -929,6 +973,49 @@ export function PricingPageRoute() {
             onCta={clickDeep}
           />
         </div>
+
+        {/* Family — a single horizontal card below the three personal tiers.
+            This is the volume play: one no-brainer price for the whole
+            household. Falls back to EN copy for any UI language that
+            hasn't supplied its own family strings yet. */}
+        {(() => {
+          const f = c.family ?? COPY.en.family!;
+          return (
+            <div className="wb-family-card-wrap">
+              <div className="wb-family-card">
+                <div className="wb-family-card-head">
+                  <div className="wb-family-eyebrow">{f.eyebrow}</div>
+                  <h3 className="wb-family-name">{f.name}</h3>
+                  <p className="wb-family-tagline">{f.tagline}</p>
+                </div>
+                <ul className="wb-family-features">
+                  {f.features.map((feat, i) => (
+                    <li key={i}>
+                      <span className="wb-family-check"><CheckIcon /></span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="wb-family-cta-col">
+                  <div className="wb-family-price-row">
+                    <span className="wb-family-price">
+                      {billing === "yearly" ? familyYearly : familyMonthly}
+                    </span>
+                    <span className="wb-family-period">
+                      {billing === "yearly" ? c.yr : c.mo}
+                    </span>
+                  </div>
+                  {billing === "yearly" && (
+                    <div className="wb-family-subprice">≈ $6.58 {c.mo}</div>
+                  )}
+                  <button type="button" className="wb-family-cta" onClick={clickFamily}>
+                    {f.cta}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </main>
 
       <GadVerbStamp />

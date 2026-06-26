@@ -10053,3 +10053,557 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-demo-anim-dash-title { font-size: 16px; }
   .wordbook .wb-demo-anim-stat-value { font-size: 18px; }
 }
+
+/* ─── Family pricing card ─────────────────────────────────────────
+   A single horizontal card that sits below the three personal-tier
+   cards on /pricing. Visual hierarchy: this is the "household" play,
+   so we lean wide rather than tall. Teal-edge accent, slightly
+   raised, with the price + CTA pinned to the inline-end so the
+   value props read from the start edge first. */
+.wordbook .wb-family-card-wrap {
+  max-width: 1100px;
+  margin: clamp(24px, 3vw, 36px) auto 0;
+  padding: 0 16px;
+}
+.wordbook .wb-family-card {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr auto;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+  padding: clamp(24px, 3vw, 36px);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 24px;
+  position: relative;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02), 0 12px 32px -16px rgba(14, 165, 165, 0.18);
+}
+.wordbook .wb-family-card::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: clamp(24px, 3vw, 36px);
+  inset-inline-end: clamp(24px, 3vw, 36px);
+  top: 0;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: #0EA5A5;
+}
+.wordbook .wb-family-eyebrow {
+  font-family: var(--wb-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0B8A8A;
+  margin-bottom: 8px;
+}
+.wordbook[dir="rtl"] .wb-family-eyebrow { font-family: var(--wb-he); letter-spacing: 0.06em; }
+.wordbook .wb-family-name {
+  font-family: var(--wb-serif);
+  font-weight: 700;
+  font-size: clamp(26px, 3.4vw, 36px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.wordbook .wb-family-tagline {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.wordbook[dir="rtl"] .wb-family-tagline { font-family: var(--wb-he); }
+.wordbook .wb-family-tagline .wb-tier-tagline-hl {
+  color: #0EA5A5;
+  font-weight: 700;
+}
+.wordbook .wb-family-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.wordbook .wb-family-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-family-features li { font-family: var(--wb-he); }
+.wordbook .wb-family-check {
+  color: #0EA5A5;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.wordbook .wb-family-cta-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 200px;
+}
+.wordbook .wb-family-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  justify-content: center;
+}
+.wordbook .wb-family-price {
+  font-family: var(--wb-serif);
+  font-weight: 700;
+  font-size: clamp(34px, 4vw, 44px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.wordbook .wb-family-period {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-family-period { font-family: var(--wb-he); }
+.wordbook .wb-family-subprice {
+  font-family: var(--wb-sans);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  text-align: center;
+}
+.wordbook[dir="rtl"] .wb-family-subprice { font-family: var(--wb-he); }
+.wordbook .wb-family-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  background: #0EA5A5;
+  color: #FFFFFF;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
+  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
+}
+.wordbook[dir="rtl"] .wb-family-cta { font-family: var(--wb-he); }
+.wordbook .wb-family-cta:hover {
+  background: #0B8A8A;
+}
+.wordbook .wb-family-cta:active { transform: scale(0.97); }
+.wordbook .wb-family-cta:focus-visible {
+  outline: 2px solid #0B8A8A;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .wordbook .wb-family-card {
+    grid-template-columns: 1fr;
+    text-align: start;
+    gap: 20px;
+  }
+  .wordbook .wb-family-cta-col { min-width: 0; }
+}
+
+/* ─── Family dashboard / add / pair / join ────────────────────────
+   Owner-facing pages for the Family subscription. Visual rhythm
+   matches /pricing - same shell, same colors, with member chips and
+   a QR display block for pairing. */
+.wordbook.wb-family-page {
+  background: var(--wb-canvas);
+  min-height: 100dvh;
+  padding: clamp(24px, 4vw, 48px) 0;
+}
+.wordbook .wb-family-main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 28px);
+}
+.wordbook .wb-family-back {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+.wordbook[dir="rtl"] .wb-family-back { font-family: var(--wb-he); }
+.wordbook .wb-family-back:hover { color: var(--ink); }
+.wordbook .wb-family-header { margin-bottom: clamp(28px, 4vw, 48px); }
+.wordbook .wb-family-title {
+  font-family: var(--wb-serif);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.wordbook[dir="rtl"] .wb-family-title { letter-spacing: 0; }
+.wordbook .wb-family-sub {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0 0 18px;
+  max-width: 600px;
+}
+.wordbook[dir="rtl"] .wb-family-sub { font-family: var(--wb-he); }
+.wordbook .wb-family-welcome-pill {
+  display: inline-block;
+  padding: 8px 14px;
+  background: rgba(14, 165, 165, 0.1);
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: #0B8A8A;
+  margin-bottom: 16px;
+}
+.wordbook[dir="rtl"] .wb-family-welcome-pill { font-family: var(--wb-he); }
+.wordbook .wb-family-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  background: #0EA5A5;
+  color: #FFFFFF;
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
+  transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out);
+}
+.wordbook[dir="rtl"] .wb-family-add-btn { font-family: var(--wb-he); }
+.wordbook .wb-family-add-btn:hover { background: #0B8A8A; }
+.wordbook .wb-family-add-btn:active { transform: scale(0.97); }
+
+.wordbook .wb-family-section { margin-bottom: clamp(24px, 4vw, 36px); }
+.wordbook .wb-family-section-title {
+  font-family: var(--wb-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 12px;
+}
+.wordbook[dir="rtl"] .wb-family-section-title { font-family: var(--wb-he); letter-spacing: 0.06em; }
+
+.wordbook .wb-family-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 720px) {
+  .wordbook .wb-family-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.wordbook .wb-family-member-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.wordbook .wb-family-member-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-family: var(--wb-serif);
+  font-weight: 700;
+  font-size: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.wordbook .wb-family-member-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.wordbook .wb-family-member-name {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-family-member-name { font-family: var(--wb-he); }
+.wordbook .wb-family-member-role {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-family-member-role { font-family: var(--wb-he); }
+.wordbook .wb-family-member-paired-dot { color: #10B981; }
+.wordbook .wb-family-member-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.wordbook .wb-family-member-pair,
+.wordbook .wb-family-member-revoke {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.wordbook[dir="rtl"] .wb-family-member-pair,
+.wordbook[dir="rtl"] .wb-family-member-revoke { font-family: var(--wb-he); }
+.wordbook .wb-family-member-pair:hover { background: var(--mist); }
+.wordbook .wb-family-member-revoke { color: #EF4444; border-color: rgba(239, 68, 68, 0.3); }
+.wordbook .wb-family-member-revoke:hover { background: rgba(239, 68, 68, 0.06); }
+
+.wordbook .wb-family-empty-state {
+  text-align: center;
+  padding: clamp(32px, 5vw, 48px);
+  background: var(--surface);
+  border: 1px dashed var(--rule);
+  border-radius: 20px;
+}
+.wordbook .wb-family-empty-state p {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin: 0 0 16px;
+}
+.wordbook[dir="rtl"] .wb-family-empty-state p { font-family: var(--wb-he); }
+
+/* Role picker - mirrors Yooniz's 2x2 grid of role cards */
+.wordbook .wb-family-role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.wordbook .wb-family-role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 16px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform 160ms var(--wb-ease-out), border-color 160ms;
+}
+.wordbook .wb-family-role-card:hover {
+  border-color: var(--border-2);
+  transform: translateY(-2px);
+}
+.wordbook .wb-family-role-card:active { transform: scale(0.98); }
+.wordbook .wb-family-role-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wordbook .wb-family-role-label {
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-family-role-label { font-family: var(--wb-he); }
+
+/* Add-form: name + color picker */
+.wordbook .wb-family-add-form {
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+}
+.wordbook .wb-family-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wordbook .wb-family-field-label {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-family-field-label { font-family: var(--wb-he); }
+.wordbook .wb-family-field-input {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  padding: 10px 14px;
+  background: var(--wb-canvas);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-family-field-input { font-family: var(--wb-he); }
+.wordbook .wb-family-field-input:focus {
+  outline: 2px solid #0EA5A5;
+  outline-offset: 1px;
+  border-color: transparent;
+}
+.wordbook .wb-family-color-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.wordbook .wb-family-color-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 160ms var(--wb-ease-out);
+}
+.wordbook .wb-family-color-dot:hover { transform: scale(1.08); }
+.wordbook .wb-family-color-dot.is-selected {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px var(--wb-canvas);
+}
+.wordbook .wb-family-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.wordbook .wb-family-cta,
+.wordbook .wb-family-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out);
+  border: 0;
+}
+.wordbook[dir="rtl"] .wb-family-cta,
+.wordbook[dir="rtl"] .wb-family-cta-ghost { font-family: var(--wb-he); }
+.wordbook .wb-family-cta {
+  background: #0EA5A5;
+  color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
+}
+.wordbook .wb-family-cta:hover { background: #0B8A8A; }
+.wordbook .wb-family-cta:active { transform: scale(0.97); }
+.wordbook .wb-family-cta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.wordbook .wb-family-cta-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+.wordbook .wb-family-cta-ghost:hover { background: var(--mist); }
+
+/* Pair page: QR + 6-digit code display */
+.wordbook .wb-family-pair-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 440px;
+  margin: 0 auto;
+  text-align: center;
+}
+.wordbook .wb-family-qr-frame {
+  padding: 16px;
+  background: #FFFFFF;
+  border-radius: 14px;
+  border: 1px solid var(--rule);
+}
+.wordbook .wb-family-code-label {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.wordbook[dir="rtl"] .wb-family-code-label { font-family: var(--wb-he); letter-spacing: 0; }
+.wordbook .wb-family-code {
+  font-family: var(--wb-mono, "Courier New", monospace);
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+.wordbook .wb-family-code-ttl {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+.wordbook[dir="rtl"] .wb-family-code-ttl { font-family: var(--wb-he); }
+.wordbook .wb-family-code-expired {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: #EF4444;
+  padding: 12px 0;
+}
+.wordbook[dir="rtl"] .wb-family-code-expired { font-family: var(--wb-he); }
+
+/* Join page: 6-digit input */
+.wordbook .wb-family-code-input {
+  font-family: var(--wb-mono, "Courier New", monospace);
+  font-size: 32px;
+  letter-spacing: 0.2em;
+  text-align: center;
+  padding: 16px;
+  background: var(--wb-canvas);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  color: var(--ink);
+  width: 100%;
+}
+.wordbook .wb-family-code-input:focus {
+  outline: 2px solid #0EA5A5;
+  outline-offset: 1px;
+  border-color: transparent;
+}
+.wordbook .wb-family-error {
+  font-family: var(--wb-sans);
+  font-size: 13.5px;
+  color: #EF4444;
+}
+.wordbook[dir="rtl"] .wb-family-error { font-family: var(--wb-he); }
+.wordbook .wb-family-join-success {
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  color: #10B981;
+  font-weight: 600;
+  padding: 20px 0;
+}
+.wordbook[dir="rtl"] .wb-family-join-success { font-family: var(--wb-he); }

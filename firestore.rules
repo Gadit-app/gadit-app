@@ -1,0 +1,83 @@
+// Firestore rules for Gadit.
+// COPY THIS WHOLE FILE INTO Firebase Console → Firestore → Rules
+// then click "Publish". Gadit's deploy pipeline doesn't ship rules
+// automatically, so this is the source of truth — keep this file
+// in sync with what's actually live in the console.
+//
+// Last updated: 2026-06-26 — added Family + pairing model.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isUser(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    function isOwnerOf(familyId) {
+      // Family owner has uid === familyId.
+      return isSignedIn() && request.auth.uid == familyId;
+    }
+    function isMemberOf(familyId) {
+      // Custom-token-signed members (kids + secondary parents) carry a
+      // `familyId` claim matching the family they were paired to.
+      return isSignedIn() && request.auth.token.familyId == familyId;
+    }
+    function isParentInFamily(familyId) {
+      return isOwnerOf(familyId)
+        || (isMemberOf(familyId) && request.auth.token.role == "parent");
+    }
+
+    // ─── users/{uid} ────────────────────────────────────────────────
+    // Per-user state: plan, stripe data, notebook subcollection, etc.
+    // Each member (including synthetic uids for paired kids) gets their
+    // own users doc so existing per-uid code (notebook, history, image
+    // cache) keeps working unchanged.
+    match /users/{uid} {
+      allow read, write: if isUser(uid);
+
+      // Subcollections (notebook, history, kidsModePref, etc.) inherit
+      // the per-uid scope.
+      match /{document=**} {
+        allow read, write: if isUser(uid);
+      }
+    }
+
+    // ─── families/{familyId} ────────────────────────────────────────
+    // Owner has full control. Paired members can read the family doc
+    // (so they can show their family identity in the UI) but not write.
+    match /families/{familyId} {
+      allow read: if isOwnerOf(familyId) || isMemberOf(familyId);
+      allow create, update: if isOwnerOf(familyId);
+      allow delete: if false;
+
+      // families/{familyId}/members/{memberId}
+      // Owner: full CRUD on every member.
+      // Member (kid/parent): can read their own member doc.
+      // Member (parent): can read all member docs in the family.
+      match /members/{memberId} {
+        allow read: if isOwnerOf(familyId)
+          || (isMemberOf(familyId) && request.auth.token.role == "parent")
+          || (isMemberOf(familyId) && request.auth.token.memberId == memberId);
+        allow create, update, delete: if isOwnerOf(familyId);
+      }
+    }
+
+    // ─── pairingCodes/{code} ────────────────────────────────────────
+    // Top-level collection used by the pair-create / pair-redeem API
+    // routes. Only the Firebase Admin SDK should ever touch these
+    // documents — never the client. The 6-digit code IS the secret.
+    match /pairingCodes/{code} {
+      allow read, write: if false;
+    }
+
+    // ─── Existing collections (keep whatever was already deployed) ──
+    // If your console has additional rules for searches, popular-words,
+    // reports, admin, etc., preserve them by pasting them ABOVE this
+    // closing brace.
+  }
+}

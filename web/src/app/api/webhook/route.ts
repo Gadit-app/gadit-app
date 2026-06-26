@@ -4,14 +4,57 @@ import { getAdminDb } from "@/lib/firebase-admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
+// Feature-level plan. Family billing translates to "deep" features for
+// every paired member, so existing feature gates (notebook, images, kids
+// mode, quizzes) all work unchanged. The "Family" identity lives in
+// `users/{uid}.familyId` + `families/{familyId}`, not in the plan field.
 function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
   const map: Record<string, "basic" | "clear" | "deep"> = {
     [process.env.STRIPE_PRICE_CLEAR_MONTHLY!]: "clear",
     [process.env.STRIPE_PRICE_CLEAR_YEARLY!]: "clear",
     [process.env.STRIPE_PRICE_DEEP_MONTHLY!]: "deep",
     [process.env.STRIPE_PRICE_DEEP_YEARLY!]: "deep",
+    [process.env.STRIPE_PRICE_FAMILY_MONTHLY!]: "deep",
+    [process.env.STRIPE_PRICE_FAMILY_YEARLY!]: "deep",
   };
   return map[priceId] ?? "basic";
+}
+
+function isFamilyPriceId(priceId: string): boolean {
+  return (
+    priceId === process.env.STRIPE_PRICE_FAMILY_MONTHLY ||
+    priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY
+  );
+}
+
+// Bootstrap the family doc + the owner's member record on the very first
+// Family checkout. Idempotent: re-runs no-op via merge. Owner's role is
+// "father" by default; user can change it on /family afterwards. familyId
+// is the owner's Firebase Auth uid (mirrors Yooniz).
+async function bootstrapFamily(ownerUid: string, plan: "monthly" | "yearly") {
+  const db = getAdminDb();
+  const familyRef = db.collection("families").doc(ownerUid);
+  const familySnap = await familyRef.get();
+  if (!familySnap.exists) {
+    await familyRef.set({
+      ownerUid,
+      plan,
+      createdAt: new Date().toISOString(),
+    });
+    // Owner's own member doc — they're a full user inside their own family.
+    await familyRef.collection("members").doc(ownerUid).set({
+      id: ownerUid,
+      role: "father",
+      name: "",
+      colorIndex: 0,
+      isOwner: true,
+      userId: ownerUid,
+      createdAt: new Date().toISOString(),
+    });
+    console.log(`[webhook] family bootstrapped: ${ownerUid}`);
+  } else {
+    await familyRef.set({ plan, updatedAt: new Date().toISOString() }, { merge: true });
+  }
 }
 
 async function applyPlanToUser(
@@ -86,14 +129,23 @@ export async function POST(req: NextRequest) {
       const trialEnd = sub?.trial_end ?? null;
       const subscriptionStatus = sub?.status ?? null;
 
+      const family = isFamilyPriceId(priceId);
+      const billingCycle: "monthly" | "yearly" =
+        priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ? "yearly" : "monthly";
+
       await applyPlanToUser(userId, plan, {
         email: session.customer_details?.email ?? session.customer_email,
         stripeCustomerId: session.customer,
         subscriptionId: session.subscription,
         priceId,
+        ...(family && { familyId: userId }),
         ...(subscriptionStatus && { subscriptionStatus }),
         ...(trialEnd && { trialEnd }),
       });
+
+      if (family) {
+        await bootstrapFamily(userId, billingCycle);
+      }
     }
 
     if (event.type === "customer.subscription.updated") {

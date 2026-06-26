@@ -7,6 +7,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 // Only Clear MONTHLY gets a free trial. Clear yearly and Deep do not.
 const TRIAL_DAYS = 14;
 const CLEAR_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_CLEAR_MONTHLY ?? "";
+const FAMILY_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_MONTHLY ?? "";
+const FAMILY_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_YEARLY ?? "";
+
+function isFamilyPriceId(priceId: string): boolean {
+  return (
+    (!!FAMILY_MONTHLY_PRICE_ID && priceId === FAMILY_MONTHLY_PRICE_ID) ||
+    (!!FAMILY_YEARLY_PRICE_ID && priceId === FAMILY_YEARLY_PRICE_ID)
+  );
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -46,15 +55,24 @@ export async function POST(req: NextRequest) {
 
     const isClearMonthly = !!CLEAR_MONTHLY_PRICE_ID && priceId === CLEAR_MONTHLY_PRICE_ID;
 
+    const isFamily = isFamilyPriceId(priceId);
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: userEmail,
       client_reference_id: userId,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}/?success=1`,
+      // Enable promotion codes so Gadi can ship one-off "first month free"
+      // coupons to specific people (school principals, family/friend gifts,
+      // launch partners) without having to manually provision their
+      // accounts. Coupon codes are created in the Stripe dashboard.
+      allow_promotion_codes: true,
+      // On Family checkout, success route lands on /family so the parent
+      // immediately sees the "add your kids" empty state.
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}${isFamily ? "/family?welcome=1" : "/?success=1"}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}/?canceled=1`,
-      metadata: { userId },
+      metadata: { userId, ...(isFamily && { isFamily: "1" }) },
       ...(isClearMonthly && {
         subscription_data: {
           trial_period_days: TRIAL_DAYS,
