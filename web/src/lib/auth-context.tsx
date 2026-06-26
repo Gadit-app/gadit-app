@@ -74,6 +74,10 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   plan: UserPlan;
+  /** Owner of a Family subscription has this set to their own uid.
+   *  Paired members (kids + secondary parents) have it set to the
+   *  family owner's uid. null means no Family membership at all. */
+  familyId: string | null;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -97,6 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [plan, setPlan] = useState<UserPlan>("basic");
+  const [familyId, setFamilyId] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -149,6 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!user) {
       setPlan("basic");
+      setFamilyId(null);
       return;
     }
     const db = getFirebaseDb();
@@ -158,10 +164,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const data = snap.data();
         const p = (data?.plan as UserPlan) || "basic";
         setPlan(p);
+        setFamilyId((data?.familyId as string) ?? null);
       },
       () => {
         // If we can't read (e.g. security rules block it), default to basic
         setPlan("basic");
+        setFamilyId(null);
       }
     );
     return unsub;
@@ -311,7 +319,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan,
+      user, loading, plan, familyId,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,

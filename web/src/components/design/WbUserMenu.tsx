@@ -32,21 +32,27 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import type { Lang } from "@/lib/i18n";
 
-type Copy = { account: string; dashboard: string; signOut: string; openMenu: string };
+type Copy = {
+  account: string;
+  family: string;
+  dashboard: string;
+  signOut: string;
+  openMenu: string;
+};
 
 const COPY: Record<Lang, Copy> = {
-  en: { account: "Account",            dashboard: "Affiliate dashboard",  signOut: "Sign out",    openMenu: "Open account menu" },
-  he: { account: "החשבון שלי",          dashboard: "הדשבורד של השותף",     signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
-  ar: { account: "حسابي",               dashboard: "لوحة الشريك",           signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
-  ru: { account: "Аккаунт",             dashboard: "Панель партнёра",       signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
-  es: { account: "Cuenta",              dashboard: "Panel de socio",        signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
-  pt: { account: "Conta",               dashboard: "Painel do parceiro",    signOut: "Sair",        openMenu: "Abrir menu da conta" },
-  fr: { account: "Compte",              dashboard: "Tableau du partenaire", signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
-  de: { account: "Konto",               dashboard: "Partner-Dashboard",     signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
-  cs: { account: "Účet",                dashboard: "Přehled partnera",      signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
-  sk: { account: "Účet",                dashboard: "Prehľad partnera",      signOut: "Odhlásiť sa", openMenu: "Otvoriť menu účtu" },
-  it: { account: "Account",             dashboard: "Dashboard partner",     signOut: "Esci",        openMenu: "Apri menu account" },
-  ja: { account: "アカウント",            dashboard: "パートナーダッシュボード", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
+  en: { account: "Account",            family: "My family",         dashboard: "Partner area",  signOut: "Sign out",    openMenu: "Open account menu" },
+  he: { account: "החשבון שלי",          family: "המשפחה שלי",        dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
+  ar: { account: "حسابي",               family: "عائلتي",           dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
+  ru: { account: "Аккаунт",             family: "Моя семья",         dashboard: "Партнёрам",     signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
+  es: { account: "Cuenta",              family: "Mi familia",        dashboard: "Área de socios", signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
+  pt: { account: "Conta",               family: "Minha família",     dashboard: "Área de parceiros", signOut: "Sair",        openMenu: "Abrir menu da conta" },
+  fr: { account: "Compte",              family: "Ma famille",        dashboard: "Espace partenaires", signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
+  de: { account: "Konto",               family: "Meine Familie",     dashboard: "Partnerbereich", signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
+  cs: { account: "Účet",                family: "Moje rodina",       dashboard: "Pro partnery",  signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
+  sk: { account: "Účet",                family: "Moja rodina",       dashboard: "Pre partnerov", signOut: "Odhlásiť sa", openMenu: "Otvoriť menu účtu" },
+  it: { account: "Account",             family: "La mia famiglia",   dashboard: "Area partner",  signOut: "Esci",        openMenu: "Apri menu account" },
+  ja: { account: "アカウント",            family: "私の家族",            dashboard: "パートナーエリア", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
 };
 
 // Tier chip colors. Mirrors the same scheme used on /account and
@@ -61,7 +67,7 @@ function tierStyle(plan: "basic" | "clear" | "deep"): {
 }
 
 export function WbUserMenu() {
-  const { user, plan, logout } = useAuth();
+  const { user, plan, familyId, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -234,6 +240,29 @@ export function WbUserMenu() {
           >
             {c.account}
           </Link>
+          {/* Family menu item appears only for owners of a Family
+              subscription (familyId === own uid). Paired members (kids
+              + secondary parents) don't need to manage the family. */}
+          {familyId && user.uid === familyId && (
+            <Link
+              role="menuitem"
+              href={href("/family")}
+              onClick={() => setOpen(false)}
+              style={{
+                display: "block",
+                padding: "10px 12px",
+                borderRadius: 8,
+                color: "var(--ink, #111827)",
+                textDecoration: "none",
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {c.family}
+            </Link>
+          )}
           <Link
             role="menuitem"
             href={href("/affiliate/dashboard")}

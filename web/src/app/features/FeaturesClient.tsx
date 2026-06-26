@@ -143,17 +143,6 @@ interface GroupCopy {
       body: string;
     }>;
   };
-  // Each tieback row is rendered as `<colored name>, <body>` so the
-  // brand name picks up its tier colour (Clear -> teal, Deep -> purple,
-  // Family -> royal blue) inside the sentence itself, not just on the
-  // chip on the left.
-  tieback: {
-    title: string;
-    basic:  { name: string; body: string };
-    clear:  { name: string; body: string };
-    deep:   { name: string; body: string };
-    family: { name: string; body: string };
-  };
   bubble: string;
 }
 
@@ -210,13 +199,6 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
         },
       ],
     },
-    tieback: {
-      title: "מה כל מסלול נותן",
-      basic:  { name: "Basic",  body: "להבין את המילה. חינם תמיד." },
-      clear:  { name: "Clear",  body: "להבין ולראות את המילה." },
-      deep:   { name: "Deep",   body: "להבין, לראות ולזכור את המילה לתמיד." },
-      family: { name: "Family", body: "אותו דבר, לכל בני המשפחה, עד 5 ילדים." },
-    },
     // Brand pun stays in Latin in every language - like the Gadit
     // wordmark itself. See feedback_brand_name_english memory.
     bubble: "Now I gad it!",
@@ -264,13 +246,6 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
           body: "Every child gets full Deep features. Parent pays once for the whole family.",
         },
       ],
-    },
-    tieback: {
-      title: "What each tier adds",
-      basic:  { name: "Basic",  body: "understand the word. Free forever." },
-      clear:  { name: "Clear",  body: "understand and see the word." },
-      deep:   { name: "Deep",   body: "understand, see, and remember the word forever." },
-      family: { name: "Family", body: "the same, for the whole family, up to 5 children." },
     },
     bubble: "Now I gad it!",
   },
@@ -693,47 +668,6 @@ export function FeaturesPage() {
                   </article>
                 );
               })}
-            </div>
-          </div>
-        </section>
-
-        {/* Tier tie-back, names what each tier adds in one line so
-            the pricing decision feels like a continuation of the
-            story, not a separate page. */}
-        <section className="wb-feat-tiertie">
-          <h2 className="wb-feat-tiertie-title">{gc.tieback.title}</h2>
-          <div className="wb-feat-tiertie-rows">
-            <div className="wb-feat-tiertie-row">
-              <span className="wb-feat-tier-chip wb-feat-tier-chip-basic">{c.tierLabel.basic}</span>
-              <span>
-                <strong className="wb-feat-tier-name wb-feat-tier-name-basic">{gc.tieback.basic.name}</strong>
-                {", "}
-                {gc.tieback.basic.body}
-              </span>
-            </div>
-            <div className="wb-feat-tiertie-row">
-              <span className="wb-feat-tier-chip wb-feat-tier-chip-clear">{c.tierLabel.clear}</span>
-              <span>
-                <strong className="wb-feat-tier-name wb-feat-tier-name-clear">{gc.tieback.clear.name}</strong>
-                {", "}
-                {gc.tieback.clear.body}
-              </span>
-            </div>
-            <div className="wb-feat-tiertie-row">
-              <span className="wb-feat-tier-chip wb-feat-tier-chip-deep">{c.tierLabel.deep}</span>
-              <span>
-                <strong className="wb-feat-tier-name wb-feat-tier-name-deep">{gc.tieback.deep.name}</strong>
-                {", "}
-                {gc.tieback.deep.body}
-              </span>
-            </div>
-            <div className="wb-feat-tiertie-row">
-              <span className="wb-feat-tier-chip wb-feat-tier-chip-family">Family</span>
-              <span>
-                <strong className="wb-feat-tier-name wb-feat-tier-name-family">{gc.tieback.family.name}</strong>
-                {", "}
-                {gc.tieback.family.body}
-              </span>
             </div>
           </div>
         </section>
