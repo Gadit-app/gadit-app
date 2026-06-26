@@ -24,8 +24,11 @@
  *                   sentence with a "Perfect ✓"
  *   deep      6.5s — quiz card with correct-answer pulse, anagram
  *                   letters, compare-two-words preview
- *   partner   6.0s — dashboard with personal link, earnings, active
- *                   subs, commission, Active Partner badge
+ *
+ * The partner scene was removed 2026-06-26 — /features should sell the
+ * product, not the affiliate program. The Partner content + PartnerScene
+ * stay in the file as dead code so we can re-enable it cheaply by adding
+ * "partner" back to SCENE_ORDER if we ever want it.
  *
  * Reduced-motion freezes on the active scene with everything visible.
  * Hover pauses. Click a dot to jump.
@@ -37,7 +40,7 @@ import type { Lang } from "@/lib/i18n";
 
 type Scene = "basic" | "clear" | "deep" | "partner";
 
-const SCENE_ORDER: Scene[] = ["basic", "clear", "deep", "partner"];
+const SCENE_ORDER: Scene[] = ["basic", "clear", "deep"];
 const SCENE_DURATION_MS: Record<Scene, number> = {
   basic: 8000,
   clear: 8000,

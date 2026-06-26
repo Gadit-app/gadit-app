@@ -209,7 +209,7 @@ const COPY: Record<string, {
     },
     tierClear: {
       name: "Clear",
-      tagline: <>להבין, לראות ו<Hl>לתרגל</Hl> את המילה</>,
+      tagline: <>להבין <Hl>ולראות</Hl> את המילה</>,
       cta: "נסו 14 יום חינם",
       badge: "הכי פופולרי",
       features: [
@@ -224,7 +224,7 @@ const COPY: Record<string, {
     },
     tierDeep: {
       name: "Deep",
-      tagline: <>להבין, לראות, ו<Hl>שהיא תהיה שלכם</Hl></>,
+      tagline: <>להבין, לראות <Hl>ולזכור את המילה לתמיד</Hl></>,
       cta: "נסו 14 יום חינם",
       features: [
         "כל מה שיש ב-Clear",
@@ -260,7 +260,7 @@ const COPY: Record<string, {
     },
     tierClear: {
       name: "Clear",
-      tagline: <>Understand, see, and <Hl>practice</Hl> the word</>,
+      tagline: <>Understand and <Hl>see</Hl> the word</>,
       cta: "Try 14 days free",
       badge: "Most popular",
       features: [
@@ -275,7 +275,7 @@ const COPY: Record<string, {
     },
     tierDeep: {
       name: "Deep",
-      tagline: <>Understand, see, and <Hl>make it yours</Hl></>,
+      tagline: <>Understand, see, and <Hl>remember the word forever</Hl></>,
       cta: "Try 14 days free",
       features: [
         "Everything in Clear",

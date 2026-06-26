@@ -117,67 +117,58 @@ const FEATURE_GROUPS: Record<GroupKey, Feature["id"][]> = {
 };
 
 interface GroupCopy {
-  problemKicker: string;
-  problemTitle: string;
-  problemBody: string;
   groupTitles: Record<GroupKey, string>;
   groupSubs: Record<GroupKey, string>;
   tieback: { title: string; basic: string; clear: string; deep: string };
   bubble: string;
 }
 
+// Tieback strings reuse the EXACT tier taglines from /pricing so the
+// promise reads the same on both pages. Update both files together.
 const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
   he: {
-    problemKicker: "אנחנו מכירים את הרגע הזה",
-    problemTitle: "הגדרה אחת לא מספיקה.",
-    problemBody:
-      "המילון הרגיל נותן לך שורה אחת, ואתה ממשיך מבולבל. רוב המילים נושאות שכבות, היסטוריה והקשרים. בלי כל אלה, המילה נשארת חצי שלך.",
     groupTitles: {
-      understand: "להבין",
-      learn: "ללמוד באמת",
-      master: "לשלוט במילה",
+      understand: "להבין את המילה",
+      learn: "להבין ולראות את המילה",
+      master: "להבין, לראות ולזכור את המילה לתמיד",
     },
     groupSubs: {
       understand:
-        "כל הצדדים של המילה: המשמעויות שלה, הדוגמאות בהקשר, הניבים שהיא חיה בהם, והמקור ההיסטורי שלה.",
+        "כל המשמעויות, דוגמאות בהקשר, ניבים שהיא חיה בהם, והמקור ההיסטורי שלה.",
       learn:
-        "הופכים את ההבנה לזיכרון: מצב ילדים בשפה פשוטה, תמונה למילה, מחברת אישית, וכתיבת משפט עם משוב.",
+        "תמונה למילה, מצב ילדים בשפה פשוטה, מחברת אישית, וכתיבת משפט עם משוב.",
       master:
-        "המילה הופכת לחלק ממך: חידונים מותאמים אישית ומשחקי מילים שמטמיעים אותה לטווח ארוך.",
+        "חידונים מותאמים אישית ומשחקי מילים שמטמיעים את המילה לטווח ארוך.",
     },
     tieback: {
       title: "מה כל מסלול נותן",
-      basic: "Basic נותן את ההבנה במלואה, חינם תמיד.",
-      clear: "Clear מוסיף את הכלים שהופכים את ההבנה ללמידה.",
-      deep: "Deep מוסיף את התרגול והשליטה ארוכת-הטווח.",
+      basic: "Basic — להבין את המילה. חינם תמיד.",
+      clear: "Clear — להבין ולראות את המילה.",
+      deep: "Deep — להבין, לראות ולזכור את המילה לתמיד.",
     },
     // Brand pun stays in Latin in every language - like the Gadit
     // wordmark itself. See feedback_brand_name_english memory.
     bubble: "Now I gad it!",
   },
   en: {
-    problemKicker: "You know the feeling",
-    problemTitle: "One definition isn't enough.",
-    problemBody:
-      "A normal dictionary gives you one line, and you walk away half-confused. Most words carry layers, history and context. Without those, the word is only half yours.",
     groupTitles: {
-      understand: "Understand",
-      learn: "Learn it for real",
-      master: "Master it",
+      understand: "Understand the word",
+      learn: "Understand and see the word",
+      master: "Understand, see, and remember the word forever",
     },
     groupSubs: {
       understand:
-        "Every side of the word: all the meanings, real sentences in context, the idioms it lives in, and where it came from.",
+        "Every meaning, real sentences in context, the idioms it lives in, and where it came from.",
       learn:
-        "Turn understanding into memory: a kid-friendly version, an image for the word, a personal notebook, and a sentence you write with feedback.",
+        "An image for the word, a kid-friendly version, a personal notebook, and a sentence you write with feedback.",
       master:
-        "Make the word yours: personalized quizzes and word games that lock it in for the long run.",
+        "Personalized quizzes and word games that lock the word in for the long run.",
     },
     tieback: {
       title: "What each tier adds",
-      basic: "Basic gives you the full understanding, free forever.",
-      clear: "Clear adds the tools that turn understanding into learning.",
-      deep: "Deep adds the practice and long-term mastery layer.",
+      basic: "Basic — understand the word. Free forever.",
+      clear: "Clear — understand and see the word.",
+      deep: "Deep — understand, see, and remember the word forever.",
     },
     bubble: "Now I gad it!",
   },
@@ -518,15 +509,6 @@ export function FeaturesPage() {
             <Link href={href("/")} className="wb-feat-cta-primary">{c.ctaPrimary}</Link>
             <Link href={href("/pricing")} className="wb-feat-cta-ghost">{c.ctaSecondary}</Link>
           </div>
-        </section>
-
-        {/* Problem section — the visitor recognizes the moment before
-            we sell anything. Three-line frame: kicker / headline /
-            body. The page becomes proof of the solution from here on. */}
-        <section className="wb-feat-problem">
-          <div className="wb-feat-problem-kicker">{gc.problemKicker}</div>
-          <h2 className="wb-feat-problem-title">{gc.problemTitle}</h2>
-          <p className="wb-feat-problem-body">{gc.problemBody}</p>
         </section>
 
         {/* Auto-cycling demo tour — walks the visitor through what each
