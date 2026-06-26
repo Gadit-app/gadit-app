@@ -251,13 +251,13 @@ const COPY: Record<string, {
     family: {
       name: "Family",
       eyebrow: "מנוי משפחתי",
-      tagline: <>כל המשפחה, <Hl>ללא הגבלת ילדים</Hl>, כל פיצ'רי Deep לכל ילד</>,
+      tagline: <>כל בני המשפחה תחת מנוי אחד, <Hl>ללא הגבלת ילדים</Hl></>,
       cta: "התחילו עם Family",
       features: [
-        "ללא הגבלת ילדים",
-        "אזור משלו לכל ילד: מחברת, היסטוריה ו-Streaks",
-        "כל פיצ'רי Deep לכל אחד מבני המשפחה",
-        "חיבור מכשיר עם QR בלחיצה אחת",
+        "פרופיל נפרד לכל ילד עם מחברת מילים, היסטוריה, ורצף ימי למידה אישי",
+        "כל ילד מקבל את כל הפיצ'רים המתקדמים: חידונים, משחקי מילים, מצב ילדים, ותמונה לכל מילה",
+        "ללא הגבלה על מספר הילדים, הוסיפו כמה שאתם רוצים",
+        "חיבור הטלפון של הילד בסריקת QR פשוטה, נשאר מחובר לתמיד",
       ],
     },
   },
@@ -314,13 +314,13 @@ const COPY: Record<string, {
     family: {
       name: "Family",
       eyebrow: "Family plan",
-      tagline: <>The whole family, <Hl>unlimited kids</Hl>, full Deep features for every child</>,
+      tagline: <>The whole family on one subscription, <Hl>unlimited children</Hl></>,
       cta: "Start Family",
       features: [
-        "Unlimited children",
-        "Own space per child: notebook, history, streaks",
-        "Full Deep features for every family member",
-        "One-tap device pairing with QR code",
+        "Each child gets their own profile with personal word notebook, history, and learning streak",
+        "Every child gets all the advanced features: quizzes, word games, kids mode, and image-per-word",
+        "No limit on the number of children, add as many as you'd like",
+        "Pair your child's phone in seconds with a QR scan, stays connected forever",
       ],
     },
   },
@@ -805,7 +805,7 @@ export function PricingPageRoute() {
   const clearYearly   = "$29.99";
   const deepMonthly   = "$4.99";
   const deepYearly    = "$49.99";
-  const familyMonthly = "$8.99";
+  const familyMonthly = "$7.99";
   const familyYearly  = "$79";
 
   return (
@@ -937,42 +937,65 @@ export function PricingPageRoute() {
           </div>
         </div>
 
-        <div className="wb-pricing-grid">
-          <TierCard
-            id="basic"
-            name={c.tierBasic.name}
-            tagline={c.tierBasic.tagline}
-            price={"$0"}
-            period={""}
-            subPrice={c.freeForever}
-            features={c.tierBasic.features}
-            cta={c.tierBasic.cta}
-            onCta={clickBasic}
-          />
-          <TierCard
-            id="clear"
-            name={c.tierClear.name}
-            tagline={c.tierClear.tagline}
-            price={billing === "yearly" ? clearYearly : clearMonthly}
-            period={billing === "yearly" ? c.yr : c.mo}
-            subPrice={billing === "yearly" ? `≈ $2.49 ${c.mo}` : undefined}
-            badge={c.tierClear.badge}
-            features={c.tierClear.features}
-            cta={c.tierClear.cta}
-            onCta={clickClear}
-          />
-          <TierCard
-            id="deep"
-            name={c.tierDeep.name}
-            tagline={c.tierDeep.tagline}
-            price={billing === "yearly" ? deepYearly : deepMonthly}
-            period={billing === "yearly" ? c.yr : c.mo}
-            subPrice={billing === "yearly" ? `≈ $4.16 ${c.mo}` : undefined}
-            features={c.tierDeep.features}
-            cta={c.tierDeep.cta}
-            onCta={clickDeep}
-          />
-        </div>
+        {(() => {
+          // "Single user" reminder under each personal-tier price so the
+          // contrast with Family (unlimited kids) reads at a glance.
+          // Falls back to EN if a lang doesn't define its own string.
+          const singleUser =
+            lang === "he" ? "למשתמש בודד"
+            : lang === "ar" ? "لمستخدم واحد"
+            : lang === "ru" ? "Для одного пользователя"
+            : lang === "es" ? "Para un usuario"
+            : lang === "pt" ? "Para um usuário"
+            : lang === "fr" ? "Pour un utilisateur"
+            : lang === "de" ? "Für einen Benutzer"
+            : lang === "cs" ? "Pro jednoho uživatele"
+            : lang === "sk" ? "Pre jedného používateľa"
+            : lang === "it" ? "Per un utente"
+            : lang === "ja" ? "1ユーザーあたり"
+            : "For one user";
+          const basicSub = `${c.freeForever} · ${singleUser}`;
+          const clearSub = billing === "yearly" ? `≈ $2.49 ${c.mo} · ${singleUser}` : singleUser;
+          const deepSub  = billing === "yearly" ? `≈ $4.16 ${c.mo} · ${singleUser}` : singleUser;
+          return (
+            <div className="wb-pricing-grid">
+              <TierCard
+                id="basic"
+                name={c.tierBasic.name}
+                tagline={c.tierBasic.tagline}
+                price={"$0"}
+                period={""}
+                subPrice={basicSub}
+                features={c.tierBasic.features}
+                cta={c.tierBasic.cta}
+                onCta={clickBasic}
+              />
+              <TierCard
+                id="clear"
+                name={c.tierClear.name}
+                tagline={c.tierClear.tagline}
+                price={billing === "yearly" ? clearYearly : clearMonthly}
+                period={billing === "yearly" ? c.yr : c.mo}
+                subPrice={clearSub}
+                badge={c.tierClear.badge}
+                features={c.tierClear.features}
+                cta={c.tierClear.cta}
+                onCta={clickClear}
+              />
+              <TierCard
+                id="deep"
+                name={c.tierDeep.name}
+                tagline={c.tierDeep.tagline}
+                price={billing === "yearly" ? deepYearly : deepMonthly}
+                period={billing === "yearly" ? c.yr : c.mo}
+                subPrice={deepSub}
+                features={c.tierDeep.features}
+                cta={c.tierDeep.cta}
+                onCta={clickDeep}
+              />
+            </div>
+          );
+        })()}
 
         {/* Family — a single horizontal card below the three personal tiers.
             This is the volume play: one no-brainer price for the whole
