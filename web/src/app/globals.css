@@ -149,7 +149,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --teal-deep: #155E75;
 
   /* Type stacks */
-  --wb-serif: var(--font-lora), 'Lora', Georgia, serif;
+  /* --wb-serif used to be Lora italic — kept the token name to avoid
+     touching 13 rules, but the value is now Rubik so English display
+     headlines match the Hebrew treatment (Rubik bold/italic across every
+     language). One typeface family, one brand voice. */
+  --wb-serif: var(--font-rubik), 'Rubik', system-ui, sans-serif;
   --wb-sans:  var(--font-inter), 'Inter', system-ui, sans-serif;
   --wb-he:    var(--font-rubik), 'Rubik', system-ui, sans-serif;
   --wb-ar:    var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), system-ui, sans-serif;
@@ -6649,6 +6653,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   width: 140px;
   height: 140px;
   display: block;
+  /* The source PNG has a near-white background instead of true alpha
+     transparency. Multiply makes any pixel >= the card background drop
+     out (white * white = white), so only the teal character remains
+     visible. Cheaper than re-exporting the asset. */
+  mix-blend-mode: multiply;
 }
 /* Bubble text is always English ("Now I gad it!") in every language -
    the brand pun stays Latin like the Gadit wordmark. Force LTR and

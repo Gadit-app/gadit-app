@@ -26,6 +26,10 @@ const rubik = Rubik({
   variable: "--font-rubik",
   subsets: ["hebrew", "latin"],
   weight: ["400", "500", "600", "700"],
+  // Italic loaded so the wordmark's "it" and the few italic display
+  // rules render a real italic glyph rather than browser-synthesized
+  // skew. The token used to be Lora; now everything routes through Rubik.
+  style: ["normal", "italic"],
 });
 
 const cairo = Cairo({
