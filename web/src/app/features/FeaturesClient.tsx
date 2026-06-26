@@ -119,12 +119,18 @@ const FEATURE_GROUPS: Record<GroupKey, Feature["id"][]> = {
 interface GroupCopy {
   groupTitles: Record<GroupKey, string>;
   groupSubs: Record<GroupKey, string>;
-  tieback: { title: string; basic: string; clear: string; deep: string };
+  // Each tieback row is rendered as `<colored name>, <body>` so the
+  // brand name picks up its tier colour (Clear -> teal, Deep -> purple)
+  // inside the sentence itself, not just on the chip on the left.
+  tieback: {
+    title: string;
+    basic: { name: string; body: string };
+    clear: { name: string; body: string };
+    deep:  { name: string; body: string };
+  };
   bubble: string;
 }
 
-// Tieback strings reuse the EXACT tier taglines from /pricing so the
-// promise reads the same on both pages. Update both files together.
 const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
   he: {
     groupTitles: {
@@ -142,9 +148,9 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
     },
     tieback: {
       title: "מה כל מסלול נותן",
-      basic: "Basic, להבין את המילה. חינם תמיד.",
-      clear: "Clear, להבין ולראות את המילה.",
-      deep: "Deep, להבין, לראות ולזכור את המילה לתמיד.",
+      basic: { name: "Basic", body: "להבין את המילה. חינם תמיד." },
+      clear: { name: "Clear", body: "להבין ולראות את המילה." },
+      deep:  { name: "Deep",  body: "להבין, לראות ולזכור את המילה לתמיד." },
     },
     // Brand pun stays in Latin in every language - like the Gadit
     // wordmark itself. See feedback_brand_name_english memory.
@@ -166,9 +172,9 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
     },
     tieback: {
       title: "What each tier adds",
-      basic: "Basic, understand the word. Free forever.",
-      clear: "Clear, understand and see the word.",
-      deep: "Deep, understand, see, and remember the word forever.",
+      basic: { name: "Basic", body: "understand the word. Free forever." },
+      clear: { name: "Clear", body: "understand and see the word." },
+      deep:  { name: "Deep",  body: "understand, see, and remember the word forever." },
     },
     bubble: "Now I gad it!",
   },
@@ -567,15 +573,27 @@ export function FeaturesPage() {
           <div className="wb-feat-tiertie-rows">
             <div className="wb-feat-tiertie-row">
               <span className="wb-feat-tier-chip wb-feat-tier-chip-basic">{c.tierLabel.basic}</span>
-              <span>{gc.tieback.basic}</span>
+              <span>
+                <strong className="wb-feat-tier-name wb-feat-tier-name-basic">{gc.tieback.basic.name}</strong>
+                {", "}
+                {gc.tieback.basic.body}
+              </span>
             </div>
             <div className="wb-feat-tiertie-row">
               <span className="wb-feat-tier-chip wb-feat-tier-chip-clear">{c.tierLabel.clear}</span>
-              <span>{gc.tieback.clear}</span>
+              <span>
+                <strong className="wb-feat-tier-name wb-feat-tier-name-clear">{gc.tieback.clear.name}</strong>
+                {", "}
+                {gc.tieback.clear.body}
+              </span>
             </div>
             <div className="wb-feat-tiertie-row">
               <span className="wb-feat-tier-chip wb-feat-tier-chip-deep">{c.tierLabel.deep}</span>
-              <span>{gc.tieback.deep}</span>
+              <span>
+                <strong className="wb-feat-tier-name wb-feat-tier-name-deep">{gc.tieback.deep.name}</strong>
+                {", "}
+                {gc.tieback.deep.body}
+              </span>
             </div>
           </div>
         </section>
