@@ -40,18 +40,23 @@ type Plan = "basic" | "clear" | "deep";
 function fontDisplay(lang: Lang): string {
   if (lang === "he") return "var(--wb-he)";
   if (lang === "ar") return "var(--wb-ar)";
+  if (lang === "ja") return "var(--wb-jp)";
+  if (lang === "hi") return "var(--wb-hi)";
   return "var(--wb-serif)";
 }
 function fontBody(lang: Lang): string {
   if (lang === "he") return "var(--wb-he)";
   if (lang === "ar") return "var(--wb-ar)";
+  if (lang === "ja") return "var(--wb-jp)";
+  if (lang === "hi") return "var(--wb-hi)";
   return "var(--wb-sans)";
 }
-// Italic is a Latin-only typographic device. Hebrew and Arabic don't
-// have italic forms — applying font-style:italic just slants the glyphs
-// crudely, which looks worse than upright. Suppress italic for both.
+// Italic is a Latin-only typographic device. Hebrew, Arabic, Japanese
+// and Devanagari (Hindi) don't have italic forms — applying italic just
+// slants the glyphs crudely, which reads worse than upright. Suppress
+// italic for every non-Latin script.
 function displayItalic(lang: Lang): "italic" | "normal" {
-  return lang === "he" || lang === "ar" ? "normal" : "italic";
+  return lang === "he" || lang === "ar" || lang === "ja" || lang === "hi" ? "normal" : "italic";
 }
 
 interface AccountData {
@@ -272,9 +277,11 @@ export function AccountPage() {
         json.error === "no_subscription"
           ? lang === "he" ? "לא נמצא חשבון Stripe פעיל." :
             lang === "ar" ? "لا يوجد حساب Stripe نشط." :
+            lang === "hi" ? "कोई सक्रिय Stripe सब्सक्रिप्शन नहीं मिला।" :
             "No active Stripe subscription found."
           : lang === "he" ? "לא הצלחנו לפתוח את עמוד הבילינג." :
             lang === "ar" ? "تعذر فتح صفحة الفوترة." :
+            lang === "hi" ? "बिलिंग पोर्टल नहीं खुल पाया।" :
             "Could not open the billing portal.";
       window.alert(friendly);
     } catch (err) {
@@ -293,6 +300,8 @@ export function AccountPage() {
         ? "פעולת מחיקת חשבון אינה הפיכה. כל המנויים שלכם יבוטלו וכל הנתונים יימחקו. להמשיך?"
         : lang === "ar"
         ? "حذف الحساب لا يمكن التراجع عنه. سيتم إلغاء جميع اشتراكاتكم وستُحذف كل البيانات. الاستمرار؟"
+        : lang === "hi"
+        ? "खाता हटाना स्थायी है। आपके सभी सक्रिय सब्सक्रिप्शन रद्द हो जाएँगे और सारा डेटा मिट जाएगा। जारी रखें?"
         : "Account deletion is permanent. Any active subscriptions will be canceled and all data wiped. Continue?"
     );
     if (!ok || !user) return;
@@ -306,6 +315,7 @@ export function AccountPage() {
         window.alert(
           lang === "he" ? "מחיקת החשבון נכשלה." :
           lang === "ar" ? "فشل حذف الحساب." :
+          lang === "hi" ? "खाता हटाना असफल रहा।" :
           "Account deletion failed."
         );
         return;
@@ -331,7 +341,10 @@ export function AccountPage() {
         lang === "sk" ? "sk-SK" :
         lang === "es" ? "es-ES" :
         lang === "pt" ? "pt-BR" :
-        lang === "fr" ? "fr-FR" : "en-US";
+        lang === "fr" ? "fr-FR" :
+        lang === "it" ? "it-IT" :
+        lang === "ja" ? "ja-JP" :
+        lang === "hi" ? "hi-IN" : "en-US";
       return new Intl.DateTimeFormat(localeId, {
         year: "numeric", month: "short", day: "numeric",
       }).format(d);
@@ -598,6 +611,7 @@ function PlanSection({
     lang === "sk" ? "Problém? Návod k fakturácii ›" :
     lang === "it" ? "Problemi? Guida alla fatturazione ›" :
     lang === "ja" ? "お困りですか? 請求の手引き ›" :
+    lang === "hi" ? "बिलिंग में मदद चाहिए? गाइड देखें ›" :
     "Need help with billing? See the guide ›";
 
   // Every signed-in user is on a plan — Basic is the free baseline, not
@@ -774,6 +788,9 @@ function UsageSection({
               : lang === "de" ? "Offline verfügbar"
               : lang === "cs" ? "Dostupné offline"
               : lang === "sk" ? "Dostupné offline"
+              : lang === "it" ? "Disponibile offline"
+              : lang === "ja" ? "オフラインで利用可"
+              : lang === "hi" ? "ऑफ़लाइन उपलब्ध"
               : "Available offline"}
           </span>
           <span style={{ fontSize: 14, color: tierColor(data.plan), fontWeight: 600 }}>
@@ -788,6 +805,9 @@ function UsageSection({
               : lang === "de" ? "Wörter"
               : lang === "cs" ? "slov"
               : lang === "sk" ? "slov"
+              : lang === "it" ? "parole"
+              : lang === "ja" ? "語"
+              : lang === "hi" ? "शब्द"
               : "words"}
           </span>
         </div>
@@ -841,6 +861,9 @@ function OfflinePackSection({
                   : lang === "de" ? "✓ Zum Notizbuch hinzugefügt"
                   : lang === "cs" ? "✓ Přidáno do sešitu"
                   : lang === "sk" ? "✓ Pridané do zošita"
+                  : lang === "it" ? "✓ Aggiunto al tuo quaderno"
+                  : lang === "ja" ? "✓ ノートに追加されました"
+                  : lang === "hi" ? "✓ आपकी नोटबुक में जोड़ा गया"
                   : "✓ Added to your Notebook"}
               </div>
               <a
@@ -860,6 +883,9 @@ function OfflinePackSection({
                   : lang === "de" ? "Notizbuch öffnen →"
                   : lang === "cs" ? "Otevřít sešit →"
                   : lang === "sk" ? "Otvoriť zošit →"
+                  : lang === "it" ? "Apri il quaderno →"
+                  : lang === "ja" ? "ノートを開く →"
+                  : lang === "hi" ? "नोटबुक खोलें →"
                   : "Open Notebook →"}
               </a>
             </div>

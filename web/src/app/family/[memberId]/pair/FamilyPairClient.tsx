@@ -71,6 +71,21 @@ const COPY: Record<string, {
     back: "← Back",
     qrAlt: "QR pairing code",
   },
+  hi: {
+    title: "डिवाइस जोड़ें",
+    sub: "अपने सदस्य के डिवाइस से QR स्कैन करें, या gadit.app/join पर यह कोड डालें",
+    yourCode: "आपका कोड",
+    ttlPrefix: "समाप्ति में",
+    ttlSuffix: "मिनट",
+    expired: "कोड समाप्त। नया कोड बनाएँ।",
+    newCode: "नया कोड",
+    generating: "बना रहे हैं...",
+    pairedTitle: "डिवाइस जुड़ गया ✓",
+    pairedSub: "यह डिवाइस अब इस सदस्य के खाते से हमेशा के लिए जुड़ा है।",
+    done: "← परिवार पर वापस",
+    back: "← वापस",
+    qrAlt: "QR जोड़ने का कोड",
+  },
 };
 
 function formatMs(ms: number): string {

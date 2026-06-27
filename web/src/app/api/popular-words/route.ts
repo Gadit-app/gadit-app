@@ -34,7 +34,7 @@ import { getAdminDb } from "@/lib/firebase-admin";
 export const maxDuration = 60;
 
 const SUPPORTED_LANGS = new Set([
-  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk",
+  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi",
 ]);
 
 export async function GET(req: NextRequest) {

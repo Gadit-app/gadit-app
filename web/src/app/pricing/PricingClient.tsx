@@ -49,6 +49,7 @@ const LANGS = [
   { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
+  { code: "hi", label: "हिन्दी", flag: "in" },
 ] as const;
 
 function LangSwitch() {
@@ -734,6 +735,70 @@ const COPY: Record<string, {
       ],
     },
   },
+  hi: {
+    heroTitle: "मुफ्त शुरू करें।",
+    heroSub: "अपग्रेड सिर्फ़ तब करें जब आप गहराई चाहें।",
+    monthly: "मासिक", yearly: "सालाना",
+    save: "17% बचत",
+    signin: "साइन इन",
+    pricing: "क़ीमत",
+    search: "खोज",
+    features: "सुविधाएँ",
+    mo: "/महीना", yr: "/साल",
+    freeForever: "हमेशा के लिए मुफ्त",
+    tierBasic: {
+      name: "Basic",
+      tagline: "शब्द को समझें",
+      cta: "अभी शुरू करें",
+      features: [
+        "रोज़ 20 शब्द खोजें",
+        "शब्द की हर परिभाषा",
+        "संदर्भ के अनुसार उदाहरण वाक्य",
+        "मुहावरे और अभिव्यक्तियाँ",
+        "शब्द की उत्पत्ति",
+      ],
+    },
+    tierClear: {
+      name: "Clear",
+      tagline: <>शब्द को समझें और <Hl>देखें</Hl></>,
+      cta: "14 दिन मुफ्त आज़माएँ",
+      badge: "सबसे लोकप्रिय",
+      features: [
+        "Basic की हर सुविधा",
+        "असीमित खोज",
+        "बच्चों के लिए समझ",
+        "शब्द एक तस्वीर में",
+        "व्यक्तिगत शब्द-नोटबुक",
+        "वाक्य लिखें और फ़ीडबैक पाएँ",
+        "पूरा खोज इतिहास",
+      ],
+    },
+    tierDeep: {
+      name: "Deep",
+      tagline: <>समझें, देखें और <Hl>हमेशा के लिए शब्द को याद रखें</Hl></>,
+      cta: "14 दिन मुफ्त आज़माएँ",
+      features: [
+        "Clear की हर सुविधा",
+        "व्यक्तिगत क्विज़",
+        "शब्द खेल",
+        "लम्बे समय का अभ्यास और याद रखना",
+        "कंटेंट निर्यात",
+      ],
+    },
+    family: {
+      name: "Family",
+      eyebrow: "पारिवारिक प्लान",
+      tagline: <>एक सब्सक्रिप्शन में पूरा परिवार, <Hl>5 बच्चों तक</Hl></>,
+      cta: "14 दिन मुफ्त आज़माएँ",
+      features: [
+        "हर बच्चे का अपना प्रोफ़ाइल, व्यक्तिगत शब्द-नोटबुक, इतिहास और सीखने का सिलसिला",
+        "हर बच्चे को सभी उन्नत सुविधाएँ: क्विज़, शब्द-खेल, बच्चों का मोड और हर शब्द के लिए तस्वीर",
+        "माता-पिता का डैशबोर्ड, देखें कि किस बच्चे ने कौन सा शब्द कब खोजा",
+        "एक ही पारिवारिक सब्सक्रिप्शन में 5 बच्चों तक",
+        "QR स्कैन से सेकंडों में बच्चे का फ़ोन जोड़ें, हमेशा जुड़ा रहता है",
+      ],
+    },
+  },
 };
 
 export function PricingPageRoute() {
@@ -955,6 +1020,7 @@ export function PricingPageRoute() {
             : lang === "sk" ? "Pre jedného používateľa"
             : lang === "it" ? "Per un utente"
             : lang === "ja" ? "1ユーザーあたり"
+            : lang === "hi" ? "एक यूज़र के लिए"
             : "For one user";
           const basicSub = `${c.freeForever} · ${singleUser}`;
           const clearSub = billing === "yearly" ? `≈ $2.49 ${c.mo} · ${singleUser}` : singleUser;
@@ -1043,6 +1109,7 @@ export function PricingPageRoute() {
                       : lang === "sk" ? "Až 5 detí"
                       : lang === "it" ? "Fino a 5 bambini"
                       : lang === "ja" ? "最大5人の子供"
+                      : lang === "hi" ? "5 बच्चों तक"
                       : "Up to 5 children"}
                   </div>
                   <button type="button" className="wb-family-cta" onClick={clickFamily}>

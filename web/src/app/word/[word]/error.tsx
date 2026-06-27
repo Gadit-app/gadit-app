@@ -68,6 +68,12 @@ const COPY: Record<
     retry: "Réessayer",
     home: "Retour à l'accueil",
   },
+  hi: {
+    title: "कुछ ग़लत हुआ",
+    body: "हम यह शब्द लोड नहीं कर पाए। शायद कोई अस्थायी गड़बड़ी है, कृपया फिर से कोशिश करें।",
+    retry: "फिर से कोशिश करें",
+    home: "होम पर वापस",
+  },
 };
 
 export default function WordError({

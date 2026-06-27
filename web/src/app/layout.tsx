@@ -300,7 +300,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
+const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi"];
 
 export default async function RootLayout({
   children,

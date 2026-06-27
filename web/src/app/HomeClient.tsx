@@ -37,6 +37,7 @@ const LANGS = [
   { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
+  { code: "hi", label: "हिन्दी", flag: "in" },
 ] as const;
 
 function LangSwitch() {

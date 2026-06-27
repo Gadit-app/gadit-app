@@ -742,6 +742,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               : lang === "de" ? `Du hast das monatliche Bildlimit erreicht (${bodyJson.used}/${bodyJson.limit}). Wird zum Monatsanfang zurückgesetzt.`
               : lang === "cs" ? `Dosáhl jsi měsíčního limitu obrázků (${bodyJson.used}/${bodyJson.limit}). Resetuje se začátkem dalšího měsíce.`
               : lang === "sk" ? `Dosiahol si mesačný limit obrázkov (${bodyJson.used}/${bodyJson.limit}). Resetuje sa začiatkom ďalšieho mesiaca.`
+              : lang === "it" ? `Hai raggiunto il limite mensile di immagini (${bodyJson.used}/${bodyJson.limit}). Si resetta all'inizio del prossimo mese.`
+              : lang === "ja" ? `今月の画像枚数の上限に達しました (${bodyJson.used}/${bodyJson.limit})。来月初めにリセットされます。`
+              : lang === "hi" ? `आप इस महीने की तस्वीर सीमा तक पहुँच गए (${bodyJson.used}/${bodyJson.limit})। अगले महीने की शुरुआत में रीसेट होगी।`
               : `You've used your monthly image quota (${bodyJson.used}/${bodyJson.limit}). Resets at the start of next month.`)
             : code === "image_generation_failed" || code === "no_image_returned"
             ? (lang === "he" ? "התמונה נכשלה ביצירה. נסו שוב בעוד רגע."
@@ -753,6 +756,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               : lang === "de" ? "Bild konnte nicht erstellt werden. Versuche es noch einmal."
               : lang === "cs" ? "Obrázek se nepodařilo vytvořit. Zkus to znovu."
               : lang === "sk" ? "Obrázok sa nepodarilo vytvoriť. Skús to znova."
+              : lang === "it" ? "Impossibile creare l'immagine. Riprova tra un momento."
+              : lang === "ja" ? "画像を生成できませんでした。少し待ってもう一度お試しください。"
+              : lang === "hi" ? "तस्वीर नहीं बन पाई। कुछ देर में फिर कोशिश करें।"
               : "Could not create the image. Try again in a moment.")
             : (lang === "he" ? "משהו השתבש. נסו שוב."
               : lang === "ar" ? "حدث خطأ ما. حاول مرة أخرى."
@@ -763,6 +769,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               : lang === "de" ? "Etwas ist schiefgelaufen. Versuche es erneut."
               : lang === "cs" ? "Něco se pokazilo. Zkus to znovu."
               : lang === "sk" ? "Niečo sa pokazilo. Skús to znova."
+              : lang === "it" ? "Qualcosa è andato storto. Riprova."
+              : lang === "ja" ? "問題が発生しました。もう一度お試しください。"
+              : lang === "hi" ? "कुछ ग़लत हुआ। फिर से कोशिश करें।"
               : "Something went wrong. Try again.");
         setImageError(localised);
         console.error("[generate-image] failed:", res.status, bodyJson);
@@ -776,6 +785,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         lang === "he" ? "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב."
         : lang === "cs" ? "Ztratilo se připojení k internetu. Zkontroluj síť a zkus to znovu."
         : lang === "sk" ? "Stratilo sa pripojenie k internetu. Skontroluj sieť a skús to znova."
+        : lang === "it" ? "Connessione internet persa. Controlla la rete e riprova."
+        : lang === "ja" ? "インターネット接続が切れました。ネットワークを確認してやり直してください。"
+        : lang === "hi" ? "इंटरनेट कनेक्शन टूट गया। नेटवर्क जाँचें और फिर कोशिश करें।"
         : "Lost network connection. Check your internet and try again."
       );
     } finally {
@@ -983,6 +995,12 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                lang === "es" ? "Error al guardar, inténtalo de nuevo" :
                lang === "pt" ? "Falha ao salvar, tente novamente" :
                lang === "fr" ? "Échec de l'enregistrement, réessayez" :
+               lang === "de" ? "Speichern fehlgeschlagen, erneut versuchen" :
+               lang === "cs" ? "Uložení selhalo, zkuste to znovu" :
+               lang === "sk" ? "Uloženie zlyhalo, skús to znova" :
+               lang === "it" ? "Salvataggio fallito, riprova" :
+               lang === "ja" ? "保存に失敗しました。もう一度お試しください" :
+               lang === "hi" ? "सहेजना असफल, फिर से कोशिश करें" :
                "Save failed, try again")
             : v2(lang, "savedToWordBook")}
         </div>
@@ -1261,6 +1279,14 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                   Искать вместо этого &ldquo;{typedOriginal}&rdquo;
                 </Link>
               </>
+            ) : lang === "hi" ? (
+              <>
+                <strong>{result.word}</strong> के परिणाम दिखा रहे हैं
+                {" · "}
+                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
+                  इसके बजाय &ldquo;{typedOriginal}&rdquo; खोजें
+                </Link>
+              </>
             ) : (
               <>
                 Showing results for <strong>{result.word}</strong>
@@ -1292,6 +1318,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                  lang === "de" ? "Zurück zu " :
                  lang === "cs" ? "Zpět na " :
                  lang === "sk" ? "Späť na " :
+                 lang === "it" ? "Torna a " :
+                 lang === "ja" ? " に戻る "  :
+                 lang === "hi" ? " पर वापस " :
                  "Back to "}
                 <strong>{backWord}</strong>
               </span>
@@ -1308,7 +1337,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
             <button
               type="button"
               onClick={() => setImageError(null)}
-              aria-label={lang === "he" ? "סגור" : lang === "cs" ? "Zavřít" : lang === "sk" ? "Zavrieť" : "Close"}
+              aria-label={lang === "he" ? "סגור" : lang === "cs" ? "Zavřít" : lang === "sk" ? "Zavrieť" : lang === "hi" ? "बंद करें" : lang === "ja" ? "閉じる" : "Close"}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />

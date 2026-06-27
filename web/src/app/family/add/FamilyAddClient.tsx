@@ -77,6 +77,23 @@ const COPY: Record<string, {
     adding: "Adding...",
     capReached: `Family is limited to ${MAX_KIDS_PER_FAMILY} children. You can't add more children, but you can still add a parent.`,
   },
+  hi: {
+    title: "परिवार में कौन जुड़ रहा है?",
+    step1: "भूमिका चुनें",
+    step2: "नाम और रंग",
+    father: "पापा",
+    mother: "मम्मी",
+    boy: "बेटा",
+    girl: "बेटी",
+    nameLabel: "नाम",
+    namePlaceholder: "आर्या",
+    colorLabel: "अवतार का रंग",
+    back: "← वापस",
+    cancel: "रद्द करें",
+    add: "परिवार में जोड़ें",
+    adding: "जोड़ रहे हैं...",
+    capReached: `Family ${MAX_KIDS_PER_FAMILY} बच्चों तक सीमित है। और बच्चे नहीं जोड़ सकते, पर माता-पिता अब भी जोड़ सकते हैं।`,
+  },
 };
 
 const ROLE_DEFS: Array<{ role: MemberRole; iconViewBox: string; iconPath: string }> = [

@@ -56,6 +56,18 @@ const COPY: Record<string, {
     errNotFound: "Code not found",
     errGeneric: "Something went wrong. Please try again.",
   },
+  hi: {
+    title: "परिवार में जुड़ें",
+    sub: "अपने माता-पिता का बनाया 6-अंकों का कोड डालें",
+    inputLabel: "6-अंकों का कोड",
+    submit: "आगे बढ़ें",
+    joining: "जुड़ रहे हैं...",
+    success: "जुड़ गए! Gadit पर ले जा रहे हैं...",
+    errInvalid: "कोड में 6 अंक होने चाहिए",
+    errExpired: "कोड समाप्त। अपने माता-पिता से नया कोड बनवाएँ।",
+    errNotFound: "कोड नहीं मिला",
+    errGeneric: "कुछ ग़लत हुआ। फिर से कोशिश करें।",
+  },
 };
 
 export function JoinClient() {

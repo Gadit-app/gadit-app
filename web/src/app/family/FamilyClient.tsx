@@ -85,11 +85,29 @@ const COPY: Record<string, {
     back: "← Back",
     capReached: `You've reached the cap of ${MAX_KIDS_PER_FAMILY} children on the Family plan.`,
   },
+  hi: {
+    title: "आपका परिवार",
+    sub: "हर सदस्य का अपना खाता है, अपनी नोटबुक और इतिहास के साथ।",
+    add: "+ जोड़ें",
+    parents: "माता-पिता",
+    children: "बच्चे",
+    empty: "अभी कोई परिवारजन नहीं। पहले बच्चे को जोड़ने से शुरू करें।",
+    pair: "डिवाइस जोड़ें",
+    revoke: "अलग करें",
+    paired: "जुड़ा हुआ",
+    owner: "मुख्य",
+    notReady: "सदस्यों को प्रबंधित करने के लिए Family सब्सक्रिप्शन ज़रूरी है।",
+    goPricing: "क़ीमत देखें",
+    welcome: "Family में स्वागत है! शुरू करने के लिए अपने सदस्य जोड़ें।",
+    back: "← वापस",
+    capReached: `आप Family प्लान में ${MAX_KIDS_PER_FAMILY} बच्चों की सीमा तक पहुँच गए हैं।`,
+  },
 };
 
 const ROLE_LABEL: Record<string, Record<"father" | "mother" | "boy" | "girl", string>> = {
   he: { father: "אבא", mother: "אמא", boy: "בן", girl: "בת" },
   en: { father: "Dad", mother: "Mom", boy: "Son", girl: "Daughter" },
+  hi: { father: "पापा", mother: "मम्मी", boy: "बेटा", girl: "बेटी" },
 };
 
 function MemberCard({

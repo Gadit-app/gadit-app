@@ -33,6 +33,7 @@ const LANGS = [
   { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
+  { code: "hi", label: "हिन्दी", flag: "in" },
 ] as const;
 
 function LangSwitch() {
@@ -154,7 +155,7 @@ function Hl({ children }: { children: React.ReactNode }) {
   return <span className="wb-feat-group-title-hl">{children}</span>;
 }
 
-const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
+const GROUP_COPY: Record<"he" | "en" | "hi", GroupCopy> = {
   he: {
     groupTitles: {
       understand: "להבין את המילה",
@@ -249,10 +250,58 @@ const GROUP_COPY: Record<"he" | "en", GroupCopy> = {
     },
     bubble: "Now I gad it!",
   },
+  hi: {
+    groupTitles: {
+      understand: "शब्द को समझें",
+      learn: <>शब्द को समझें और <Hl>देखें</Hl></>,
+      master: <>समझें, देखें और <Hl>हमेशा के लिए शब्द को याद रखें</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "हर अर्थ, संदर्भ में असली वाक्य, मुहावरे जिनमें यह शब्द जीता है, और यह कहाँ से आया।",
+      learn:
+        "शब्द की एक तस्वीर, बच्चों के लिए सरल समझ, व्यक्तिगत नोटबुक, और एक वाक्य जो आप लिखें और फ़ीडबैक पाएँ।",
+      master:
+        "व्यक्तिगत क्विज़ और शब्द-खेल जो शब्द को लम्बे समय तक पक्का करते हैं।",
+    },
+    family: {
+      title: <>समझें, देखें, याद रखें <Hl>पूरे परिवार के लिए</Hl></>,
+      sub: "एक सब्सक्रिप्शन हर बच्चे को अपना अलग खाता देता है, सभी उन्नत सुविधाओं के साथ। 5 बच्चों तक।",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "हर बच्चे के लिए अलग प्रोफ़ाइल",
+          body: "शब्द-नोटबुक, खोज इतिहास और हर बच्चे और माता-पिता के लिए व्यक्तिगत सीखने का सिलसिला।",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "QR कोड से डिवाइस जोड़ें",
+          body: "आपका बच्चा अपने फ़ोन पर QR स्कैन करे और साइन इन हो जाए। हमेशा जुड़ा रहता है, बिना पासवर्ड।",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "माता-पिता का डैशबोर्ड",
+          body: "देखें हर बच्चे ने कौन-सा शब्द कब खोजा। एक नज़र में हर एक की रफ़्तार समझें।",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "एक सब्सक्रिप्शन में 5 बच्चे तक",
+          body: "हर बच्चे को Deep की पूरी सुविधाएँ। माता-पिता एक बार पूरे परिवार के लिए भुगतान करें।",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
 };
 
 function pickGroupCopy(lang: string): GroupCopy {
-  return lang === "he" ? GROUP_COPY.he : GROUP_COPY.en;
+  if (lang === "he") return GROUP_COPY.he;
+  if (lang === "hi") return GROUP_COPY.hi;
+  return GROUP_COPY.en;
 }
 
 const COPY: Record<string, {
@@ -395,6 +444,31 @@ const COPY: Record<string, {
       { id: "compose",     icon: "compose",     tier: "clear", title: "Napíš vetu, dostaň spätnú väzbu",    body: "Zostav vlastnú vetu so slovom a okamžite dostaň opravu a spätnú väzbu." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalizované kvízy",              body: "Denný kvíz na slová, ktoré si sa naučil, aby ti zostali nadlho." },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "Slovné hry",                         body: "Hry, ktoré rozširujú slovnú zásobu: priraďovanie, hádanie, prepájanie slov." },
+    ],
+  },
+  hi: {
+    heroEyebrow: "सुविधाएँ",
+    heroTitle: "एक शब्दकोश जो परिभाषा पर नहीं रुकता।",
+    heroSub: "Gadit हर शब्द को पूरी तरह समझता है। हर अर्थ, संदर्भ में असली वाक्य, मुहावरे, उत्पत्ति और अभ्यास। जब तक शब्द सच में क्लिक न कर जाए। इसी को हम शब्द को GAD करना कहते हैं।",
+    ctaPrimary: "मुफ्त शुरू करें",
+    ctaSecondary: "क़ीमत देखें",
+    signin: "साइन इन", pricing: "क़ीमत", search: "खोज", features: "सुविधाएँ",
+    sectionLabel: "आपको क्या मिलता है",
+    finalCtaTitle: "आज़माने को तैयार?",
+    finalCtaSub: "Basic से बिल्कुल मुफ्त शुरू करें। एक टैप में अपग्रेड करें, सिर्फ़ तब जब और चाहिए।",
+    finalCtaBtn: "अभी शुरू करें",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "हर परिभाषा",                       body: "शब्द के सभी अर्थ, यहाँ तक कि दुर्लभ भी, उपयोग की आवृत्ति के क्रम में।" },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "संदर्भ में असली वाक्य",              body: "हर अर्थ के लिए तीन असली वाक्य, ताकि संदर्भ तुरंत समझ आए।" },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "मुहावरे और अभिव्यक्तियाँ",          body: "हर अभिव्यक्ति जिसमें यह शब्द आता है, पूरे मुहावरे के अर्थ के साथ।" },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "शब्द कहाँ से आया",                  body: "जिस भाषा से शब्द शुरू हुआ, और मूल रूप से उसका अर्थ क्या था।" },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "बच्चों के लिए समझ",                 body: "एक साफ़, सरल संस्करण जिसे बच्चा बिना भारी शब्दों के पढ़ सके।" },
+      { id: "image",       icon: "image",       tier: "clear", title: "शब्द एक तस्वीर में",                body: "हर शब्द के लिए एक अनोखी तस्वीर, उसी अर्थ से मेल खाती जो आप पढ़ रहे हैं।" },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "व्यक्तिगत शब्द-नोटबुक",             body: "वे शब्द सहेजें जो आप याद रखना चाहते हैं। बिना इंटरनेट भी उपलब्ध।" },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "वाक्य लिखें, फ़ीडबैक पाएँ",          body: "शब्द के साथ अपना वाक्य बनाएँ और तुरंत सुधार और फ़ीडबैक पाएँ।" },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "व्यक्तिगत क्विज़",                    body: "आपके सीखे हुए शब्दों पर रोज़ की क्विज़, ताकि वे आपके साथ लम्बे समय तक रहें।" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "शब्द खेल",                          body: "ऐसे खेल जो आपकी शब्दावली बढ़ाते हैं: मिलान, अनुमान, शब्दों के बीच कनेक्शन बनाना।" },
     ],
   },
 };

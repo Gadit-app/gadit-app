@@ -34,6 +34,7 @@ const LANGS = [
   { code: "sk", label: "Slovenčina", flag: "sk" },
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
+  { code: "hi", label: "हिन्दी", flag: "in" },
 ] as const;
 
 type NotebookItem = {
@@ -120,6 +121,13 @@ const COPY: Record<string, {
     empty: "Tvoj zošit je prázdny.",
     emptyHint: "Nájdi slovo a klikni na 'Uložiť do zošita'.",
     goSearch: "Späť na vyhľadávanie",
+  },
+  hi: {
+    title: "मेरी नोटबुक",
+    subtitle: "हर शब्द जो आपने सहेजा, संगठित और तैयार।",
+    empty: "आपकी नोटबुक ख़ाली है।",
+    emptyHint: "कोई शब्द ढूँढें और 'नोटबुक में सहेजें' दबाएँ।",
+    goSearch: "खोज पर वापस",
   },
 };
 
@@ -264,6 +272,10 @@ export function NotebookPage() {
             : lang === "fr" ? `Hors ligne · ${offlineWords.size} mots disponibles`
             : lang === "de" ? `Offline · ${offlineWords.size} Wörter verfügbar`
             : lang === "cs" ? `Bez připojení · ${offlineWords.size} slov dostupných offline`
+            : lang === "sk" ? `Bez pripojenia · ${offlineWords.size} slov dostupných offline`
+            : lang === "it" ? `Offline · ${offlineWords.size} parole disponibili`
+            : lang === "ja" ? `オフライン · ${offlineWords.size} 語が利用可能`
+            : lang === "hi" ? `ऑफ़लाइन · ${offlineWords.size} शब्द उपलब्ध`
             : `You're offline · ${offlineWords.size} words available`}
         </div>
       )}
@@ -384,6 +396,10 @@ export function NotebookPage() {
                           : lang === "fr" ? "Hors ligne"
                           : lang === "de" ? "Offline"
                           : lang === "cs" ? "Offline"
+                          : lang === "sk" ? "Offline"
+                          : lang === "it" ? "Offline"
+                          : lang === "ja" ? "オフライン"
+                          : lang === "hi" ? "ऑफ़लाइन"
                           : "Offline"}
                       </div>
                     )}
