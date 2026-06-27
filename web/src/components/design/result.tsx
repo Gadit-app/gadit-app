@@ -533,6 +533,9 @@ const TAB_LABELS: Record<string, Record<TabId, string>> = {
   de: { save: "Ins Heft",       pin: "Offline",        image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
   cs: { save: "Do sešitu",      pin: "Offline",        image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
   sk: { save: "Do zošita",      pin: "Offline",        image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
+  it: { save: "Quaderno",       pin: "Offline",        image: "Immagine",      kids: "Per bambini",        compose: "Scrivi una frase",    quiz: "Quiz",         compare: "Giochi di parole" },
+  ja: { save: "ノートに保存",    pin: "オフライン保存",  image: "画像",          kids: "子ども向け説明",      compose: "文を書く",            quiz: "クイズ",       compare: "単語ゲーム" },
+  hi: { save: "नोटबुक में सहेजें", pin: "ऑफ़लाइन सहेजें",  image: "तस्वीर",       kids: "बच्चों के लिए समझ", compose: "वाक्य लिखें",         quiz: "क्विज़",        compare: "शब्द खेल" },
 };
 // Split by tier 2026-06-20 (Gadi): on mobile the wb-mtabs container
 // renders one row per tier so the Clear-tier features (teal) stay
