@@ -35,25 +35,26 @@ import type { Lang } from "@/lib/i18n";
 type Copy = {
   account: string;
   family: string;
+  school: string;
   dashboard: string;
   signOut: string;
   openMenu: string;
 };
 
 const COPY: Record<Lang, Copy> = {
-  en: { account: "Account",            family: "My family",         dashboard: "Partner area",  signOut: "Sign out",    openMenu: "Open account menu" },
-  he: { account: "החשבון שלי",          family: "המשפחה שלי",        dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
-  ar: { account: "حسابي",               family: "عائلتي",           dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
-  ru: { account: "Аккаунт",             family: "Моя семья",         dashboard: "Партнёрам",     signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
-  es: { account: "Cuenta",              family: "Mi familia",        dashboard: "Área de socios", signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
-  pt: { account: "Conta",               family: "Minha família",     dashboard: "Área de parceiros", signOut: "Sair",        openMenu: "Abrir menu da conta" },
-  fr: { account: "Compte",              family: "Ma famille",        dashboard: "Espace partenaires", signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
-  de: { account: "Konto",               family: "Meine Familie",     dashboard: "Partnerbereich", signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
-  cs: { account: "Účet",                family: "Moje rodina",       dashboard: "Pro partnery",  signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
-  sk: { account: "Účet",                family: "Moja rodina",       dashboard: "Pre partnerov", signOut: "Odhlásiť sa", openMenu: "Otvoriť menu účtu" },
-  it: { account: "Account",             family: "La mia famiglia",   dashboard: "Area partner",  signOut: "Esci",        openMenu: "Apri menu account" },
-  ja: { account: "アカウント",            family: "私の家族",            dashboard: "パートナーエリア", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
-  hi: { account: "खाता",                 family: "मेरा परिवार",       dashboard: "पार्टनर क्षेत्र", signOut: "साइन आउट",    openMenu: "खाता मेनू खोलें" },
+  en: { account: "Account",            family: "My family",         school: "My school",         dashboard: "Partner area",  signOut: "Sign out",    openMenu: "Open account menu" },
+  he: { account: "החשבון שלי",          family: "המשפחה שלי",        school: "בית הספר שלי",      dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
+  ar: { account: "حسابي",               family: "عائلتي",           school: "مدرستي",            dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
+  ru: { account: "Аккаунт",             family: "Моя семья",         school: "Моя школа",         dashboard: "Партнёрам",     signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
+  es: { account: "Cuenta",              family: "Mi familia",        school: "Mi escuela",        dashboard: "Área de socios", signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
+  pt: { account: "Conta",               family: "Minha família",     school: "Minha escola",      dashboard: "Área de parceiros", signOut: "Sair",        openMenu: "Abrir menu da conta" },
+  fr: { account: "Compte",              family: "Ma famille",        school: "Mon école",         dashboard: "Espace partenaires", signOut: "Déconnexion", openMenu: "Ouvrir le menu du compte" },
+  de: { account: "Konto",               family: "Meine Familie",     school: "Meine Schule",      dashboard: "Partnerbereich", signOut: "Abmelden",    openMenu: "Kontomenü öffnen" },
+  cs: { account: "Účet",                family: "Moje rodina",       school: "Moje škola",        dashboard: "Pro partnery",  signOut: "Odhlásit se", openMenu: "Otevřít menu účtu" },
+  sk: { account: "Účet",                family: "Moja rodina",       school: "Moja škola",        dashboard: "Pre partnerov", signOut: "Odhlásiť sa", openMenu: "Otvoriť menu účtu" },
+  it: { account: "Account",             family: "La mia famiglia",   school: "La mia scuola",     dashboard: "Area partner",  signOut: "Esci",        openMenu: "Apri menu account" },
+  ja: { account: "アカウント",            family: "私の家族",            school: "私の学校",            dashboard: "パートナーエリア", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
+  hi: { account: "खाता",                 family: "मेरा परिवार",       school: "मेरा स्कूल",         dashboard: "पार्टनर क्षेत्र", signOut: "साइन आउट",    openMenu: "खाता मेनू खोलें" },
 };
 
 // Tier chip colors. Mirrors the same scheme used on /account and
@@ -68,7 +69,7 @@ function tierStyle(plan: "basic" | "clear" | "deep"): {
 }
 
 export function WbUserMenu() {
-  const { user, plan, familyId, logout } = useAuth();
+  const { user, plan, familyId, schoolId, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -262,6 +263,31 @@ export function WbUserMenu() {
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {c.family}
+            </Link>
+          )}
+          {/* My school menu item appears only for owners of a Schools
+              subscription (schoolId === own uid). The principal lands
+              on /schools to manage classrooms + see weekly word
+              digests. Teachers (when we add a teacher seat in V2)
+              would route somewhere else. */}
+          {schoolId && user.uid === schoolId && (
+            <Link
+              role="menuitem"
+              href={href("/schools")}
+              onClick={() => setOpen(false)}
+              style={{
+                display: "block",
+                padding: "10px 12px",
+                borderRadius: 8,
+                color: "var(--ink, #111827)",
+                textDecoration: "none",
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {c.school}
             </Link>
           )}
           <Link

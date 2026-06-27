@@ -10695,3 +10695,275 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-feat-groups-family {
   margin-top: clamp(20px, 3vw, 32px);
 }
+
+/* ─── Schools pricing card ──────────────────────────────────────────
+   Fifth tier on /pricing, sitting below the Family card. Mustard
+   wordmark + accent (#CA8A04) chosen for its semantic resonance with
+   classrooms (chalk-on-blackboard era, school crest gilt edges) and
+   because it's the most distinct hue from the existing four tiers
+   (Basic warm gray, Clear teal, Deep purple, Family royal blue). The
+   shape mirrors the Family card exactly so the pricing block reads
+   as one coherent design system, not five disconnected tiles. */
+.wordbook .wb-school-card-wrap {
+  width: 100%;
+  margin: clamp(28px, 4vw, 44px) 0 0;
+}
+.wordbook .wb-school-card {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  padding: clamp(32px, 4vw, 52px);
+  background: var(--surface);
+  border: 1px solid #FCD34D;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(202, 138, 4, 0.08), 0 16px 40px -16px rgba(202, 138, 4, 0.22);
+}
+.wordbook .wb-school-card::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  top: 0;
+  height: 4px;
+  border-radius: 28px 28px 0 0;
+  background: #CA8A04;
+}
+.wordbook .wb-school-eyebrow {
+  font-family: var(--wb-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A16207;
+  margin-bottom: 8px;
+}
+.wordbook[dir="rtl"] .wb-school-eyebrow { font-family: var(--wb-he); letter-spacing: 0.06em; }
+.wordbook .wb-school-name {
+  font-family: var(--wb-serif);
+  font-weight: 700;
+  font-size: clamp(30px, 3.8vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #CA8A04;
+  margin: 0 0 12px;
+}
+.wordbook .wb-school-tagline {
+  font-family: var(--wb-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.wordbook[dir="rtl"] .wb-school-tagline { font-family: var(--wb-he); }
+.wordbook .wb-school-tagline .wb-tier-tagline-hl {
+  color: #CA8A04;
+  font-weight: 700;
+}
+.wordbook .wb-school-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.wordbook .wb-school-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-school-features li { font-family: var(--wb-he); }
+.wordbook .wb-school-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #FEF3C7;
+  color: #A16207;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.wordbook .wb-school-cta-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  min-width: 0;
+}
+.wordbook .wb-school-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  justify-content: center;
+}
+.wordbook .wb-school-price {
+  font-family: var(--wb-sans);
+  font-weight: 700;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+}
+.wordbook .wb-school-period {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-school-period { font-family: var(--wb-he); }
+.wordbook .wb-school-subprice {
+  font-family: var(--wb-sans);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  text-align: center;
+}
+.wordbook[dir="rtl"] .wb-school-subprice { font-family: var(--wb-he); }
+.wordbook .wb-school-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 11px 18px;
+  background: #CA8A04;
+  color: #FFFFFF;
+  border: 0;
+  border-radius: 10px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
+  box-shadow: 0 1px 2px rgba(202, 138, 4, 0.3), 0 8px 24px -8px rgba(202, 138, 4, 0.45);
+}
+.wordbook[dir="rtl"] .wb-school-cta { font-family: var(--wb-he); }
+.wordbook .wb-school-cta:hover { background: #A16207; }
+.wordbook .wb-school-cta:active { transform: scale(0.97); }
+.wordbook .wb-school-cta:focus-visible {
+  outline: 2px solid #A16207;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .wordbook .wb-school-card {
+    grid-template-columns: 1fr;
+    text-align: start;
+    gap: 20px;
+  }
+  .wordbook .wb-school-cta-col { min-width: 0; }
+}
+
+/* ─── Schools features-page group ───────────────────────────────────
+   Mirror of .wb-feat-groups-family. Sits below the Family group with
+   the same top margin so the rhythm is consistent. The Hl highlight
+   inside the group title picks up the mustard accent automatically
+   via the shared --wb-group-hl var (set on the wrapper). */
+.wordbook .wb-feat-groups-school {
+  margin-top: clamp(20px, 3vw, 32px);
+}
+.wordbook .wb-feat-group-school {
+  --wb-group-accent: #CA8A04;
+  --wb-group-hl: #CA8A04;
+  border-color: #FCD34D;
+}
+
+/* ─── Schools owner dashboard ───────────────────────────────────────
+   The page the principal lands on after checkout. Mirrors the family
+   dashboard but with mustard accents, classroom rows instead of
+   member chips, and a school-logo upload slot at the top. */
+.wordbook.wb-school-page {
+  background: var(--wb-canvas);
+  min-height: 100dvh;
+  padding: clamp(24px, 4vw, 48px) 0;
+}
+.wordbook .wb-school-main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 28px);
+}
+.wordbook .wb-school-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+.wordbook .wb-school-logo-slot {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: #FEF3C7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #FCD34D;
+  overflow: hidden;
+}
+.wordbook .wb-school-logo-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wordbook .wb-school-title {
+  font-family: var(--wb-serif);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.wordbook[dir="rtl"] .wb-school-title { letter-spacing: 0; }
+.wordbook .wb-school-sub {
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-school-sub { font-family: var(--wb-he); }
+.wordbook .wb-classroom-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  transition: border-color 180ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
+}
+.wordbook .wb-classroom-row:hover {
+  border-color: #FCD34D;
+  box-shadow: 0 4px 12px -4px rgba(202, 138, 4, 0.18);
+}
+.wordbook .wb-classroom-code {
+  font-family: var(--wb-mono, ui-monospace, monospace);
+  font-size: 18px;
+  font-weight: 700;
+  color: #CA8A04;
+  letter-spacing: 0.08em;
+  padding: 6px 10px;
+  background: #FEF3C7;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.wordbook .wb-classroom-name {
+  font-family: var(--wb-sans);
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+}
+.wordbook[dir="rtl"] .wb-classroom-name { font-family: var(--wb-he); }
+.wordbook .wb-classroom-count {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}

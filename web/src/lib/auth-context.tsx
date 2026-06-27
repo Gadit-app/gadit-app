@@ -78,6 +78,11 @@ interface AuthContextType {
    *  Paired members (kids + secondary parents) have it set to the
    *  family owner's uid. null means no Family membership at all. */
   familyId: string | null;
+  /** Owner of a Schools subscription has this set to their own uid.
+   *  Schools doesn't pair students — kids reach their classroom via
+   *  a code at /c/<CODE> without authenticating — so this is set on
+   *  the principal/coordinator account only. null = no Schools sub. */
+  schoolId: string | null;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -102,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [plan, setPlan] = useState<UserPlan>("basic");
   const [familyId, setFamilyId] = useState<string | null>(null);
+  const [schoolId, setSchoolId] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -155,6 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!user) {
       setPlan("basic");
       setFamilyId(null);
+      setSchoolId(null);
       return;
     }
     const db = getFirebaseDb();
@@ -165,11 +172,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const p = (data?.plan as UserPlan) || "basic";
         setPlan(p);
         setFamilyId((data?.familyId as string) ?? null);
+        setSchoolId((data?.schoolId as string) ?? null);
       },
       () => {
         // If we can't read (e.g. security rules block it), default to basic
         setPlan("basic");
         setFamilyId(null);
+        setSchoolId(null);
       }
     );
     return unsub;
@@ -319,7 +328,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, familyId,
+      user, loading, plan, familyId, schoolId,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,

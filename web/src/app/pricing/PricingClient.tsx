@@ -35,6 +35,8 @@ const PRICE_DEEP_MONTHLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY  
 const PRICE_DEEP_YEARLY    = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY    ?? "";
 const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const PRICE_FAMILY_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY  ?? "";
+const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
+const PRICE_SCHOOLS_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY  ?? "";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -169,10 +171,17 @@ function TierCard({ id, name, price, period, subPrice, tagline, features, cta, c
   );
 }
 
-// Family copy fields are optional on the type so we only need to keep
-// HE + EN proper. The JSX falls back to EN for any lang that doesn't
-// supply its own family strings. Add per-language ones over time.
+// Family and Schools copy fields are optional on the type so we only
+// need to keep HE + EN proper. The JSX falls back to EN for any lang
+// that doesn't supply its own strings. Add per-language ones over time.
 interface FamilyCopy {
+  name: string;
+  eyebrow: string;
+  tagline: React.ReactNode;
+  cta: string;
+  features: string[];
+}
+interface SchoolCopy {
   name: string;
   eyebrow: string;
   tagline: React.ReactNode;
@@ -194,6 +203,7 @@ const COPY: Record<string, {
   tierClear: { name: string; tagline: React.ReactNode; cta: string; badge: string; features: string[] };
   tierDeep:  { name: string; tagline: React.ReactNode; cta: string; features: string[] };
   family?: FamilyCopy;
+  school?: SchoolCopy;
   mo: string; yr: string;
   freeForever: string;
   saveTrustBasic?: string;
@@ -262,6 +272,20 @@ const COPY: Record<string, {
         "חיבור הטלפון של הילד בסריקת QR פשוטה, נשאר מחובר לתמיד",
       ],
     },
+    school: {
+      name: "Schools",
+      eyebrow: "מנוי לבית ספר",
+      tagline: <>כל הכיתות, כל המורות, כל הילדים, <Hl>ללא הגבלה</Hl></>,
+      cta: "נסו 14 יום חינם",
+      features: [
+        "ללא הגבלת כיתות, מורות וילדים",
+        "קוד כיתה פשוט בן 6 תווים, הילדים פותחים את הלינק במחשב הכיתה בלי שם משתמש או סיסמה",
+        "כל ילד מקבל את כל הפיצ'רים המתקדמים: הסבר לילדים, תמונה לכל מילה, ניבים, מקור היסטורי",
+        "המורה רואה את כל המילים שהכיתה שלה חיפשה היום",
+        "לוגו של בית הספר על מסך הילדים, מרגיש כמו חלק מבית הספר",
+        "חשבונית מס שאפשר להגיש להנהלת בית הספר",
+      ],
+    },
   },
   en: {
     heroTitle: "Start free.",
@@ -311,6 +335,20 @@ const COPY: Record<string, {
         "Word games",
         "Long-term practice & retention",
         "Export content",
+      ],
+    },
+    school: {
+      name: "Schools",
+      eyebrow: "Schools plan",
+      tagline: <>Every classroom, every teacher, every kid, <Hl>unlimited</Hl></>,
+      cta: "Try 14 days free",
+      features: [
+        "Unlimited classrooms, teachers, and students",
+        "Simple 6-character class code, kids open the link on the classroom computer with no username or password",
+        "Every child gets all the advanced features: kids' explanation, image per word, idioms, etymology",
+        "The teacher sees every word her class searched today",
+        "Your school logo on the kid screen, feels like a part of your school",
+        "Invoice you can hand to school administration",
       ],
     },
     family: {
@@ -798,6 +836,20 @@ const COPY: Record<string, {
         "QR स्कैन से सेकंडों में बच्चे का फ़ोन जोड़ें, हमेशा जुड़ा रहता है",
       ],
     },
+    school: {
+      name: "Schools",
+      eyebrow: "स्कूल प्लान",
+      tagline: <>हर कक्षा, हर शिक्षक, हर बच्चा, <Hl>बिना सीमा</Hl></>,
+      cta: "14 दिन मुफ्त आज़माएँ",
+      features: [
+        "बिना सीमा कक्षाएँ, शिक्षक और बच्चे",
+        "6 अक्षरों का सरल कक्षा कोड, बच्चे क्लास के कंप्यूटर पर लिंक खोलते हैं, बिना यूज़रनेम या पासवर्ड",
+        "हर बच्चे को सभी उन्नत सुविधाएँ: बच्चों के लिए समझ, हर शब्द की तस्वीर, मुहावरे, उत्पत्ति",
+        "शिक्षक देखती है कि उसकी कक्षा ने आज कौन से शब्द खोजे",
+        "बच्चों की स्क्रीन पर आपके स्कूल का लोगो, स्कूल का अपना हिस्सा महसूस होता है",
+        "स्कूल प्रशासन को देने योग्य बिल",
+      ],
+    },
   },
 };
 
@@ -867,13 +919,19 @@ export function PricingPageRoute() {
     const priceId = billing === "yearly" ? PRICE_FAMILY_YEARLY : PRICE_FAMILY_MONTHLY;
     promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
   }
+  function clickSchools() {
+    const priceId = billing === "yearly" ? PRICE_SCHOOLS_YEARLY : PRICE_SCHOOLS_MONTHLY;
+    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+  }
 
-  const clearMonthly  = "$2.99";
-  const clearYearly   = "$29.99";
-  const deepMonthly   = "$4.99";
-  const deepYearly    = "$49.99";
-  const familyMonthly = "$6.99";
-  const familyYearly  = "$69";
+  const clearMonthly   = "$2.99";
+  const clearYearly    = "$29.99";
+  const deepMonthly    = "$4.99";
+  const deepYearly     = "$49.99";
+  const familyMonthly  = "$6.99";
+  const familyYearly   = "$69";
+  const schoolsMonthly = "$69";
+  const schoolsYearly  = "$690";
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -1114,6 +1172,64 @@ export function PricingPageRoute() {
                   </div>
                   <button type="button" className="wb-family-cta" onClick={clickFamily}>
                     {f.cta}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Schools — fifth tier, sits below Family. Mustard accent
+            (#CA8A04) deliberately distant from the four tiers above
+            (Basic gray / Clear teal / Deep purple / Family blue) so a
+            principal scanning the page lands on it without color
+            confusion. Falls back to EN copy for languages that haven't
+            supplied their own school strings yet. */}
+        {(() => {
+          const s = c.school ?? COPY.en.school!;
+          return (
+            <div className="wb-school-card-wrap">
+              <div className="wb-school-card">
+                <div className="wb-school-card-head">
+                  <div className="wb-school-eyebrow">{s.eyebrow}</div>
+                  <h3 className="wb-school-name">{s.name}</h3>
+                  <p className="wb-school-tagline">{s.tagline}</p>
+                </div>
+                <ul className="wb-school-features">
+                  {s.features.map((feat, i) => (
+                    <li key={i}>
+                      <span className="wb-school-check"><CheckIcon /></span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="wb-school-cta-col">
+                  <div className="wb-school-price-row">
+                    <span className="wb-school-price">
+                      {billing === "yearly" ? schoolsYearly : schoolsMonthly}
+                    </span>
+                    <span className="wb-school-period">
+                      {billing === "yearly" ? c.yr : c.mo}
+                    </span>
+                  </div>
+                  <div className="wb-school-subprice">
+                    {billing === "yearly" ? `≈ $57.50 ${c.mo} · ` : ""}
+                    {lang === "he" ? "כל בית הספר"
+                      : lang === "ar" ? "المدرسة بأكملها"
+                      : lang === "ru" ? "Вся школа"
+                      : lang === "es" ? "Toda la escuela"
+                      : lang === "pt" ? "A escola inteira"
+                      : lang === "fr" ? "Toute l'école"
+                      : lang === "de" ? "Die ganze Schule"
+                      : lang === "cs" ? "Celá škola"
+                      : lang === "sk" ? "Celá škola"
+                      : lang === "it" ? "Tutta la scuola"
+                      : lang === "ja" ? "学校全体"
+                      : lang === "hi" ? "पूरा स्कूल"
+                      : "The whole school"}
+                  </div>
+                  <button type="button" className="wb-school-cta" onClick={clickSchools}>
+                    {s.cta}
                   </button>
                 </div>
               </div>

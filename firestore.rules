@@ -4,7 +4,7 @@
 // automatically, so this is the source of truth — keep this file
 // in sync with what's actually live in the console.
 //
-// Last updated: 2026-06-26 — added Family + pairing model.
+// Last updated: 2026-06-27 — added Schools + classroomCodes model.
 
 rules_version = '2';
 
@@ -72,6 +72,51 @@ service cloud.firestore {
     // routes. Only the Firebase Admin SDK should ever touch these
     // documents — never the client. The 6-digit code IS the secret.
     match /pairingCodes/{code} {
+      allow read, write: if false;
+    }
+
+    // ─── schools/{schoolId} ─────────────────────────────────────────
+    // The school owner (principal/coordinator) has uid === schoolId.
+    // Schools don't pair students — kids reach /c/<CODE> WITHOUT auth.
+    // So only the owner gets read/write on the school doc + every
+    // classroom + every search log. Clients writing classroom + log
+    // docs go through server endpoints (Admin SDK) so we can keep this
+    // strict.
+    match /schools/{schoolId} {
+      allow read: if isOwnerOf(schoolId);
+      allow create, update: if isOwnerOf(schoolId);
+      allow delete: if false;
+
+      // Classrooms: owner reads, owner can edit name/grade/teacherName
+      // client-side. Creation MUST go through /api/schools/create-classroom
+      // because that endpoint generates a unique code + the lookup doc
+      // atomically. Deleting classrooms requires a server endpoint too
+      // (to remove the matching classroomCodes doc), so client write
+      // is locked to merge-updates only.
+      match /classrooms/{classroomId} {
+        allow read: if isOwnerOf(schoolId);
+        allow update: if isOwnerOf(schoolId);
+        allow create, delete: if false;
+
+        // Search logs: owner reads (this is the teacher view at
+        // /classroom/{id}). All writes happen through the Admin SDK
+        // via /api/classroom/log-search (anonymous kid POST). No
+        // direct client writes — kids aren't authenticated.
+        match /searches/{searchId} {
+          allow read: if isOwnerOf(schoolId);
+          allow write: if false;
+        }
+      }
+    }
+
+    // ─── classroomCodes/{code} ──────────────────────────────────────
+    // Top-level lookup table mapping 6-char class code → {schoolId,
+    // classroomId}. Read by /api/classroom/lookup so a kid landing on
+    // /c/<CODE> can resolve to a school+classroom without scanning
+    // every school. Writes are server-only (Admin SDK via
+    // /api/schools/create-classroom) because the lookup doc must be
+    // written atomically with the classroom doc.
+    match /classroomCodes/{code} {
       allow read, write: if false;
     }
 

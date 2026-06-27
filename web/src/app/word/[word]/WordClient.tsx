@@ -337,6 +337,11 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // top of the result so the user can return to the original
   // definition they were reading without losing their place.
   const backWord = searchParams?.get("back")?.trim() || "";
+  // ?cls=<CODE> set by the /c/<CODE> kid landing page. When present,
+  // this search came from a classroom — fire-and-forget log it to the
+  // classroom's search log so the teacher can see what their class
+  // looked up today. No personal data is logged, only the word + lang.
+  const classroomCode = searchParams?.get("cls")?.trim() || "";
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -413,6 +418,22 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   useEffect(() => {
     promptLoginRef.current = promptLogin;
   }, [promptLogin]);
+
+  // Classroom search logging. Fires once per (code, word) combo when
+  // the user arrived from /c/<CODE>. Server-side this writes an entry
+  // to schools/{schoolId}/classrooms/{classroomId}/searches/ + bumps
+  // the running classroom searchCount. Fire-and-forget — a failed log
+  // is silent because the user has nothing to do about it.
+  useEffect(() => {
+    if (!classroomCode || !initialWord) return;
+    fetch("/api/classroom/log-search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: classroomCode, word: initialWord, lang }),
+    }).catch(() => {
+      // Silent. Logging is best-effort, never blocks the result.
+    });
+  }, [classroomCode, initialWord, lang]);
 
   useEffect(() => {
     if (!initialWord) return;

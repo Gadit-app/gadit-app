@@ -4,10 +4,11 @@ import { getAdminDb } from "@/lib/firebase-admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// Feature-level plan. Family billing translates to "deep" features for
-// every paired member, so existing feature gates (notebook, images, kids
-// mode, quizzes) all work unchanged. The "Family" identity lives in
-// `users/{uid}.familyId` + `families/{familyId}`, not in the plan field.
+// Feature-level plan. Family and Schools billing both translate to "deep"
+// features for every paired member or classroom kid, so existing feature
+// gates (notebook, images, kids mode, quizzes) all work unchanged. The
+// "Family" identity lives in `users/{uid}.familyId` + `families/{familyId}`;
+// the "Schools" identity in `users/{uid}.schoolId` + `schools/{schoolId}`.
 function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
   const map: Record<string, "basic" | "clear" | "deep"> = {
     [process.env.STRIPE_PRICE_CLEAR_MONTHLY!]: "clear",
@@ -16,6 +17,8 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
     [process.env.STRIPE_PRICE_DEEP_YEARLY!]: "deep",
     [process.env.STRIPE_PRICE_FAMILY_MONTHLY!]: "deep",
     [process.env.STRIPE_PRICE_FAMILY_YEARLY!]: "deep",
+    [process.env.STRIPE_PRICE_SCHOOLS_MONTHLY!]: "deep",
+    [process.env.STRIPE_PRICE_SCHOOLS_YEARLY!]: "deep",
   };
   return map[priceId] ?? "basic";
 }
@@ -24,6 +27,13 @@ function isFamilyPriceId(priceId: string): boolean {
   return (
     priceId === process.env.STRIPE_PRICE_FAMILY_MONTHLY ||
     priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY
+  );
+}
+
+function isSchoolsPriceId(priceId: string): boolean {
+  return (
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_MONTHLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY
   );
 }
 
@@ -54,6 +64,30 @@ async function bootstrapFamily(ownerUid: string, plan: "monthly" | "yearly") {
     console.log(`[webhook] family bootstrapped: ${ownerUid}`);
   } else {
     await familyRef.set({ plan, updatedAt: new Date().toISOString() }, { merge: true });
+  }
+}
+
+// Bootstrap the school doc on the very first Schools checkout. Idempotent:
+// re-runs no-op via merge. schoolId is the owner's Firebase Auth uid
+// (mirrors families/). The school starts with no classrooms — the principal
+// adds them from /schools after landing on the welcome state. School name
+// is blank until the principal sets it in the dashboard.
+async function bootstrapSchool(ownerUid: string, plan: "monthly" | "yearly", email: string | null) {
+  const db = getAdminDb();
+  const schoolRef = db.collection("schools").doc(ownerUid);
+  const schoolSnap = await schoolRef.get();
+  if (!schoolSnap.exists) {
+    await schoolRef.set({
+      ownerUid,
+      plan,
+      name: "",
+      logoUrl: null,
+      contactEmail: email,
+      createdAt: new Date().toISOString(),
+    });
+    console.log(`[webhook] school bootstrapped: ${ownerUid}`);
+  } else {
+    await schoolRef.set({ plan, updatedAt: new Date().toISOString() }, { merge: true });
   }
 }
 
@@ -130,21 +164,30 @@ export async function POST(req: NextRequest) {
       const subscriptionStatus = sub?.status ?? null;
 
       const family = isFamilyPriceId(priceId);
+      const schools = isSchoolsPriceId(priceId);
       const billingCycle: "monthly" | "yearly" =
-        priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ? "yearly" : "monthly";
+        priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
+        priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY
+          ? "yearly"
+          : "monthly";
+      const customerEmail = session.customer_details?.email ?? session.customer_email ?? null;
 
       await applyPlanToUser(userId, plan, {
-        email: session.customer_details?.email ?? session.customer_email,
+        email: customerEmail,
         stripeCustomerId: session.customer,
         subscriptionId: session.subscription,
         priceId,
         ...(family && { familyId: userId }),
+        ...(schools && { schoolId: userId }),
         ...(subscriptionStatus && { subscriptionStatus }),
         ...(trialEnd && { trialEnd }),
       });
 
       if (family) {
         await bootstrapFamily(userId, billingCycle);
+      }
+      if (schools) {
+        await bootstrapSchool(userId, billingCycle, customerEmail);
       }
     }
 

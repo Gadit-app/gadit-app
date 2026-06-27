@@ -14,11 +14,20 @@ const CLEAR_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_CLEAR_MONTHLY ?? "";
 const DEEP_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_DEEP_MONTHLY ?? "";
 const FAMILY_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const FAMILY_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_YEARLY ?? "";
+const SCHOOLS_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
+const SCHOOLS_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_SCHOOLS_YEARLY ?? "";
 
 function isFamilyPriceId(priceId: string): boolean {
   return (
     (!!FAMILY_MONTHLY_PRICE_ID && priceId === FAMILY_MONTHLY_PRICE_ID) ||
     (!!FAMILY_YEARLY_PRICE_ID && priceId === FAMILY_YEARLY_PRICE_ID)
+  );
+}
+
+function isSchoolsPriceId(priceId: string): boolean {
+  return (
+    (!!SCHOOLS_MONTHLY_PRICE_ID && priceId === SCHOOLS_MONTHLY_PRICE_ID) ||
+    (!!SCHOOLS_YEARLY_PRICE_ID && priceId === SCHOOLS_YEARLY_PRICE_ID)
   );
 }
 
@@ -61,10 +70,22 @@ export async function POST(req: NextRequest) {
     const isClearMonthly = !!CLEAR_MONTHLY_PRICE_ID && priceId === CLEAR_MONTHLY_PRICE_ID;
     const isDeepMonthly = !!DEEP_MONTHLY_PRICE_ID && priceId === DEEP_MONTHLY_PRICE_ID;
     const isFamilyMonthly = !!FAMILY_MONTHLY_PRICE_ID && priceId === FAMILY_MONTHLY_PRICE_ID;
-    // All three paid monthly tiers honour the "Try 14 days free" CTA.
-    const grantsTrial = isClearMonthly || isDeepMonthly || isFamilyMonthly;
+    const isSchoolsMonthly = !!SCHOOLS_MONTHLY_PRICE_ID && priceId === SCHOOLS_MONTHLY_PRICE_ID;
+    // All four paid monthly tiers honour the "Try 14 days free" CTA.
+    const grantsTrial = isClearMonthly || isDeepMonthly || isFamilyMonthly || isSchoolsMonthly;
 
     const isFamily = isFamilyPriceId(priceId);
+    const isSchools = isSchoolsPriceId(priceId);
+
+    // Success URL routes the buyer to the right post-checkout home:
+    //   Family   → /family?welcome=1     (parent sees the "add your kids" state)
+    //   Schools  → /schools?welcome=1    (principal sees the "add your classes" state)
+    //   Other    → /?success=1           (single-user checkout, lands on home)
+    const successPath = isSchools
+      ? "/schools?welcome=1"
+      : isFamily
+        ? "/family?welcome=1"
+        : "/?success=1";
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -77,11 +98,13 @@ export async function POST(req: NextRequest) {
       // launch partners) without having to manually provision their
       // accounts. Coupon codes are created in the Stripe dashboard.
       allow_promotion_codes: true,
-      // On Family checkout, success route lands on /family so the parent
-      // immediately sees the "add your kids" empty state.
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}${isFamily ? "/family?welcome=1" : "/?success=1"}`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}${successPath}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}/?canceled=1`,
-      metadata: { userId, ...(isFamily && { isFamily: "1" }) },
+      metadata: {
+        userId,
+        ...(isFamily && { isFamily: "1" }),
+        ...(isSchools && { isSchools: "1" }),
+      },
       ...(grantsTrial && {
         subscription_data: {
           trial_period_days: TRIAL_DAYS,
