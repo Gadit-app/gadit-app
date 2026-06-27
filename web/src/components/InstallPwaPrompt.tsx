@@ -239,6 +239,21 @@ const COPY: Record<string, Copy> = {
     iosClose: "わかりました",
     closeLabel: "閉じる",
   },
+  hi: {
+    title: "Gadit अपने फ़ोन में जोड़ें",
+    bodyAndroid: "एक टैप में इंस्टॉल करें, होम स्क्रीन से असली ऐप की तरह खोलें।",
+    bodyIos: "Gadit को अपने iPhone की होम स्क्रीन में असली ऐप की तरह जोड़ें।",
+    install: "इंस्टॉल करें",
+    later: "बाद में",
+    iosTitle: "Gadit इंस्टॉल कैसे करें",
+    iosLead: "3 टैप में पूरा हुआ:",
+    iosStep1: "शेयर बटन दबाएँ",
+    iosStep1Hint: "(Safari में नीचे का चौकोर बटन जिसमें ऊपर तीर है)",
+    iosStep2: "स्क्रॉल करके \"होम स्क्रीन में जोड़ें\" चुनें",
+    iosStep3: "ऊपर दाएँ \"जोड़ें\" दबाएँ",
+    iosClose: "समझ गया",
+    closeLabel: "बंद करें",
+  },
 };
 
 interface BeforeInstallPromptEvent extends Event {

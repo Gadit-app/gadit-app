@@ -29,7 +29,7 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
 
 interface NotebookItem {
   word: string;
@@ -332,6 +332,28 @@ const COPY: Record<Lang, {
     backToWord: "単語に戻る",
     notEnough: "ノートにもっと単語を保存して、すべてのゲームを解放しましょう",
     notEnoughHint: "ノートにあと2〜3語追加するとこのゲームが解放されます。",
+  },
+  hi: {
+    title: "इस शब्द के लिए खेल",
+    loading: "लोड हो रहा है…",
+    anagramEyebrow: "अक्षर पुनः क्रमित करें",
+    anagramHintLabel: "संकेत:",
+    anagramReset: "रीसेट",
+    fillblankEyebrow: "वाक्य पूरा करें",
+    fillblankPrompt: "वाक्य को कौन सा शब्द पूरा करता है?",
+    next: "अगला",
+    finish: "ख़त्म",
+    close: "बंद करें",
+    correct: "सही!",
+    wrong: "थोड़ा सा चूक गए",
+    resultGreat: "शानदार!",
+    resultGood: "बढ़िया।",
+    resultTryAgain: "फिर से कोशिश करें।",
+    scoreLine: (s, t) => `${t} में से ${s}`,
+    playAgain: "फिर से खेलें",
+    backToWord: "शब्द पर वापस",
+    notEnough: "सभी खेल खोलने के लिए अपनी नोटबुक में और शब्द सहेजें",
+    notEnoughHint: "अपनी नोटबुक में 2-3 शब्द और जोड़ें और यह खेल खुल जाएगा।",
   },
 };
 

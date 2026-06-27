@@ -14,6 +14,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   sk: "Slovak",
   it: "Italian",
   ja: "Japanese",
+  hi: "Hindi",
 };
 
 const SYSTEM_PROMPT = `You are creating a short quiz to help a learner cement their understanding of a specific word and meaning.

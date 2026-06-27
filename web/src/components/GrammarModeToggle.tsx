@@ -29,6 +29,7 @@ const LABEL: Record<string, string> = {
   sk: "Gramatika",
   it: "Grammatica",
   ja: "文法モード",
+  hi: "व्याकरण",
 };
 
 const TOOLTIP_ON: Record<string, string> = {
@@ -44,6 +45,7 @@ const TOOLTIP_ON: Record<string, string> = {
   sk: "Skryť gramatické značky",
   it: "Nascondi etichette grammaticali",
   ja: "文法ラベルを非表示",
+  hi: "व्याकरण लेबल छिपाएँ",
 };
 
 const TOOLTIP_OFF: Record<string, string> = {
@@ -59,6 +61,7 @@ const TOOLTIP_OFF: Record<string, string> = {
   sk: "Zobraziť gramatické značky (podst. m. / sloveso / príd. m.)",
   it: "Mostra etichette grammaticali (sostantivo / verbo / aggettivo)",
   ja: "文法ラベルを表示（名詞 / 動詞 / 形容詞）",
+  hi: "व्याकरण लेबल दिखाएँ (संज्ञा / क्रिया / विशेषण)",
 };
 
 export function GrammarModeToggle() {

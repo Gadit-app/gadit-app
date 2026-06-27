@@ -47,7 +47,7 @@ export function isUpgradeSnoozed(feature: UpgradeFeature): boolean {
   }
 }
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
 
 interface Copy {
   featureNames: Record<UpgradeFeature, string>;
@@ -361,6 +361,31 @@ const COPY: Record<Lang, Copy> = {
     primaryCta: "14日間無料で試す",
     secondaryCta: "また今度",
     closeAria: "閉じる",
+  },
+  hi: {
+    featureNames: {
+      image: "तस्वीर में शब्द",
+      kids: "बच्चों के लिए समझ",
+      compose: "अपना वाक्य लिखें और फ़ीडबैक पाएँ",
+      notebook: "व्यक्तिगत शब्द-नोटबुक",
+      quiz: "व्यक्तिगत क्विज़",
+      compare: "शब्द खेल",
+    },
+    featureBlurbs: {
+      image: "हर शब्द के लिए एक अनोखी तस्वीर।",
+      kids: "हर बच्चे के लिए साफ़, सरल और जान-पहचान के उदाहरणों के साथ समझ।",
+      compose: "अपना वाक्य लिखें और उसी समय फ़ीडबैक पाएँ कि शब्द का उपयोग कैसे हुआ।",
+      notebook: "जो शब्द आपने सीखे हैं, उन्हें अपनी डिजिटल नोटबुक में सहेजें, कहीं भी खोलें।",
+      quiz: "व्यक्तिगत क्विज़ ताकि शब्द लम्बे समय तक याद रहें।",
+      compare: "मज़ेदार शब्द खेल जो शब्दों को आपकी याददाश्त में पक्का करते हैं।",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "Clear प्लान की सुविधा है", deep: "Deep प्लान की सुविधा है" },
+    pricePerMonth: { clear: "$2.99/महीना", deep: "$4.99/महीना" },
+    trialNote: "14 दिन मुफ्त · कभी भी रद्द करें",
+    primaryCta: "14 दिन मुफ्त आज़माएँ",
+    secondaryCta: "शायद बाद में",
+    closeAria: "बंद करें",
   },
 };
 

@@ -45,6 +45,7 @@ const LANG_LABEL: Record<string, string> = {
   sk: "Slovenčina",
   it: "Italiano",
   ja: "日本語",
+  hi: "हिन्दी",
 };
 
 const STRINGS: Record<AdminLang, {

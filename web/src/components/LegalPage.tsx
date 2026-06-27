@@ -68,6 +68,11 @@ const FALLBACK_NOTICE: Record<Lang, { prefix: string; link: string; suffix: stri
     link: "英語版",
     suffix: "が優先されます。",
   },
+  hi: {
+    prefix: "यह अनुवाद सिर्फ़ सुविधा के लिए दिया गया है। अनुवादित और अंग्रेज़ी संस्करण में अंतर होने पर ",
+    link: "अंग्रेज़ी संस्करण",
+    suffix: " मान्य होगा।",
+  },
 };
 
 const LAST_UPDATED_LABEL: Record<Lang, string> = {
@@ -83,6 +88,7 @@ const LAST_UPDATED_LABEL: Record<Lang, string> = {
   sk: "Naposledy aktualizované: ",
   it: "Ultimo aggiornamento: ",
   ja: "最終更新: ",
+  hi: "आख़िरी बार अपडेट: ",
 };
 
 const BACK_LABEL: Record<Lang, string> = {
@@ -98,6 +104,7 @@ const BACK_LABEL: Record<Lang, string> = {
   sk: "← Späť do Gaditu",
   it: "← Torna a Gadit",
   ja: "← Gaditに戻る",
+  hi: "← Gadit पर वापस",
 };
 
 export default function LegalPage({

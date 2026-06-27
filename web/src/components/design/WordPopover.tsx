@@ -54,6 +54,7 @@ const COPY: Record<Lang, { openFull: string; loading: string; noPreview: string 
   sk: { openFull: "Otvoriť celú definíciu",  loading: "Načítavam…",  noPreview: "Klikni nižšie pre plnú definíciu." },
   it: { openFull: "Apri la definizione completa", loading: "Caricamento…", noPreview: "Tocca sotto per la definizione completa." },
   ja: { openFull: "完全な定義を開く",         loading: "読み込み中…",    noPreview: "下をタップして完全な定義を表示。" },
+  hi: { openFull: "पूरी परिभाषा खोलें",      loading: "लोड हो रहा है…", noPreview: "पूरी परिभाषा देखने के लिए नीचे दबाएँ।" },
 };
 
 export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
@@ -164,7 +165,9 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
         fontFamily:
           lang === "he" ? "var(--wb-he)"
             : lang === "ar" ? "var(--wb-ar)"
-              : "var(--wb-sans, Inter, system-ui, sans-serif)",
+              : lang === "ja" ? "var(--wb-jp)"
+                : lang === "hi" ? "var(--wb-hi)"
+                  : "var(--wb-sans, Inter, system-ui, sans-serif)",
       }}
     >
       <div

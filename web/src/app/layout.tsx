@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
-import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
@@ -109,6 +109,19 @@ const notoSansJp = Noto_Sans_JP({
   display: "swap",
 });
 
+// Noto Sans Devanagari — Hindi body/display sans. Inter/Heebo/Cairo
+// render Devanagari glyphs from system fallback which is inconsistent
+// across OSes (Windows ships Mangal, Android Roboto's Devanagari subset,
+// older macOS has no native fallback at all). Noto Sans Devanagari ships
+// a complete Devanagari glyph set so the experience is stable on every
+// platform, matching the same pattern used for Noto Sans JP.
+const notoSansDevanagari = Noto_Sans_Devanagari({
+  variable: "--font-noto-hi",
+  subsets: ["latin", "devanagari"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 // Per-language metadata strings used by generateMetadata below. The
 // description is the same first-person share blurb that ShareButton
 // uses for the Web Share API, so the social-card preview that gets
@@ -187,9 +200,15 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "すべての言葉を本当に理解できる新しいツール。すべての意味、例文、イディオム、語源まで。無料で始められて、有料プランも非常に手頃。試す価値があります。",
     locale: "ja_JP",
   },
+  hi: {
+    title: "Gadit, हर शब्द को पूरी तरह समझें",
+    description:
+      "हर शब्द को सच में समझने का नया तरीका। हर अर्थ, असली वाक्य, मुहावरे और शब्द का इतिहास, सब एक जगह। मुफ्त शुरू करें, बहुत किफायती दामों पर अपग्रेड करें। आज़माने लायक।",
+    locale: "hi_IN",
+  },
 };
 
-const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
+const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi"];
 
 export async function generateMetadata(): Promise<Metadata> {
   // Resolve language for this request, exactly the same chain the
@@ -306,7 +325,7 @@ export default async function RootLayout({
     <html
       lang={initialLang}
       dir={initialDir}
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           <LangProvider initialLang={initialLang}>

@@ -53,6 +53,7 @@ const COPY: Record<Lang, Copy> = {
   sk: { account: "Účet",                family: "Moja rodina",       dashboard: "Pre partnerov", signOut: "Odhlásiť sa", openMenu: "Otvoriť menu účtu" },
   it: { account: "Account",             family: "La mia famiglia",   dashboard: "Area partner",  signOut: "Esci",        openMenu: "Apri menu account" },
   ja: { account: "アカウント",            family: "私の家族",            dashboard: "パートナーエリア", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
+  hi: { account: "खाता",                 family: "मेरा परिवार",       dashboard: "पार्टनर क्षेत्र", signOut: "साइन आउट",    openMenu: "खाता मेनू खोलें" },
 };
 
 // Tier chip colors. Mirrors the same scheme used on /account and

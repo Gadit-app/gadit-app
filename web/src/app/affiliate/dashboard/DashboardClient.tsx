@@ -42,7 +42,7 @@ const AFFONSO_LANGS = new Set([
 
 // Localized strings — inline so this single page doesn't add 9 entries
 // to i18n-v2 for what amounts to a loading state and an error message.
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
 const COPY: Record<Lang, {
   title: string;
   loadingTitle: string;
@@ -317,6 +317,27 @@ const COPY: Record<Lang, {
     payoutGuideTitle: "最後のひとつ：受け取り方の設定",
     payoutGuideBody: "コミッションをお送りするために、お支払い方法を一度だけ選んでください。下のダッシュボード内、黄色いバナーから設定できます。1分ほどで完了します。",
     payoutGuideDismiss: "わかりました",
+  },
+  hi: {
+    title: "मेरा डैशबोर्ड",
+    loadingTitle: "आपका डैशबोर्ड लोड हो रहा है…",
+    loadingHint: "पहली बार में कुछ सेकंड लग सकते हैं।",
+    notConfiguredTitle: "डैशबोर्ड अभी सेट नहीं हुआ है",
+    notConfiguredBody:
+      "हम इंटीग्रेशन पर आख़िरी हाथ लगा रहे हैं। तब तक आप अपना डैशबोर्ड बाहरी पोर्टल से सीधे एक्सेस कर सकते हैं।",
+    errorTitle: "कुछ ग़लत हुआ",
+    errorBody:
+      "हम आपका डैशबोर्ड लोड नहीं कर पाए। पेज रीफ़्रेश करें। समस्या रहे तो बाहरी पोर्टल से साइन इन करें।",
+    signInTitle: "अपना डैशबोर्ड देखने के लिए साइन इन करें",
+    signInBody: "अपने लिंक, आँकड़े और कमीशन देखने के लिए अपने Gadit खाते से साइन इन करें।",
+    marketingLink: "प्रोग्राम क्या है?",
+    upgradeTitle: "पार्टनर प्रोग्राम Clear और Deep मेंबरों के लिए है",
+    upgradeBody:
+      "जिस उत्पाद का आप ख़ुद इस्तेमाल नहीं करते, उसे सच्चे दिल से नहीं बेच सकते। Clear या Deep पर अपग्रेड करें, बिना सीमा का पूरा Gadit शब्दकोश और पार्टनर प्रोग्राम मिलेगा, जहाँ हर रेफ़र किए ग्राहक पर 30% कमीशन है।",
+    upgradeCta: "पेड प्लान पर अपग्रेड करें",
+    payoutGuideTitle: "आख़िरी क़दम: भुगतान कैसे चाहिए",
+    payoutGuideBody: "हमें आपको कमीशन भेजने के लिए, अपना भुगतान का तरीक़ा एक बार चुनें। नीचे डैशबोर्ड के अंदर पीले बैनर में मिलेगा। एक मिनट लगता है।",
+    payoutGuideDismiss: "समझ गया",
   },
 };
 

@@ -103,6 +103,13 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "助動詞", "particle": "助詞", "numeral": "数詞",
     "proper noun": "固有名詞", "phrase": "句", "idiom": "慣用句",
   },
+  hi: {
+    "noun": "संज्ञा", "verb": "क्रिया", "adjective": "विशेषण", "adverb": "क्रिया-विशेषण",
+    "preposition": "पूर्वसर्ग", "conjunction": "संयोजक", "pronoun": "सर्वनाम",
+    "interjection": "विस्मयादिबोधक", "determiner": "निर्धारक", "article": "उपपद",
+    "auxiliary": "सहायक क्रिया", "particle": "अव्यय", "numeral": "अंक",
+    "proper noun": "व्यक्तिवाचक संज्ञा", "phrase": "पदबंध", "idiom": "मुहावरा",
+  },
 };
 
 export function formatPos(pos: string | null | undefined, lang: Lang): string {
