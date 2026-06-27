@@ -4,9 +4,14 @@ import { getAdminAuth } from "@/lib/firebase-admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// Only Clear MONTHLY gets a free trial. Clear yearly and Deep do not.
+// Every MONTHLY paid tier (Clear, Deep, Family) grants a 14-day trial.
+// Yearly plans never get a trial — they're committing 12 months up
+// front and the savings already incentivise the buy. The CTA text on
+// /pricing for all three monthly tiers reads "Try 14 days free" so
+// the checkout behaviour has to honour that promise.
 const TRIAL_DAYS = 14;
 const CLEAR_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_CLEAR_MONTHLY ?? "";
+const DEEP_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_DEEP_MONTHLY ?? "";
 const FAMILY_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const FAMILY_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_YEARLY ?? "";
 
@@ -54,10 +59,10 @@ export async function POST(req: NextRequest) {
     // for purchase.
 
     const isClearMonthly = !!CLEAR_MONTHLY_PRICE_ID && priceId === CLEAR_MONTHLY_PRICE_ID;
-    // Family monthly also gets the 14-day trial so the CTA "Try 14 days
-    // free" reads honestly. Yearly stays non-trial like Clear yearly.
+    const isDeepMonthly = !!DEEP_MONTHLY_PRICE_ID && priceId === DEEP_MONTHLY_PRICE_ID;
     const isFamilyMonthly = !!FAMILY_MONTHLY_PRICE_ID && priceId === FAMILY_MONTHLY_PRICE_ID;
-    const grantsTrial = isClearMonthly || isFamilyMonthly;
+    // All three paid monthly tiers honour the "Try 14 days free" CTA.
+    const grantsTrial = isClearMonthly || isDeepMonthly || isFamilyMonthly;
 
     const isFamily = isFamilyPriceId(priceId);
 
