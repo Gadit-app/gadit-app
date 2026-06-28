@@ -6819,25 +6819,51 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-play-empty-cta:hover { background: rgb(13, 148, 148); }
 .wordbook .wb-play-empty-cta:active { transform: scale(0.97); }
 
+/* Section: one per category (notebook / origin / precision / structure).
+   Each section gets a small heading + its own grid. Sections stack
+   vertically with comfortable but not lavish spacing. */
+.wordbook .wb-play-section {
+  margin-top: 28px;
+}
+.wordbook .wb-play-section:first-of-type { margin-top: 0; }
+.wordbook .wb-play-section-heading {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wb-ink-soft);
+  margin: 0 0 12px;
+  padding-inline-start: 4px;
+}
+
 .wordbook .wb-play-grid {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  /* Mobile: 2 columns. Tablet+: auto-fills 3-4 with 200px minimum so the
+     whole catalogue is visible on a laptop without scrolling much. */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-play-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
 }
 .wordbook .wb-play-grid li { margin: 0; }
 
 .wordbook .wb-play-card {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
-  padding: 20px;
+  gap: 8px;
+  padding: 14px;
   background: #fff;
   border: 1px solid var(--wb-border);
-  border-radius: 16px;
+  border-radius: 14px;
   text-align: start;
   cursor: pointer;
   position: relative;
@@ -6845,8 +6871,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
     box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
     border-color 200ms;
-  min-height: 96px;
+  min-height: 110px;
   color: inherit;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-play-card {
+    padding: 16px;
+    gap: 10px;
+    min-height: 124px;
+  }
 }
 .wordbook .wb-play-card:hover {
   transform: translateY(-2px);
@@ -6868,28 +6901,41 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   flex-shrink: 0;
 }
 .wordbook .wb-play-card-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
   flex: 1;
 }
 .wordbook .wb-play-card-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--wb-ink);
-  line-height: 1.3;
+  line-height: 1.25;
 }
 .wordbook .wb-play-card-desc {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--wb-ink-soft);
-  line-height: 1.45;
+  line-height: 1.4;
+  /* Cap to 2 lines on mobile so cards don't grow unevenly in a row */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-play-card-icon { width: 38px; height: 38px; border-radius: 11px; }
+  .wordbook .wb-play-card-title { font-size: 15px; }
+  .wordbook .wb-play-card-desc {
+    font-size: 13px;
+    -webkit-line-clamp: 3;
+  }
 }
 .wordbook .wb-play-card-locked {
   position: absolute;

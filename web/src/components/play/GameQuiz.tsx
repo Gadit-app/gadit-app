@@ -203,6 +203,11 @@ export type PlayT = {
   artistTitle: string;
   artistDesc: string;
   artistPrompt: string;
+  // Category headings (game groupings on the menu)
+  catNotebook: string;
+  catOrigin: string;
+  catPrecision: string;
+  catStructure: string;
   // Game UI
   exit: string;
   quizPromptWord: string;

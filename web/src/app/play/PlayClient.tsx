@@ -122,6 +122,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "אמן אטימולוגיה",
     artistDesc: "תרגום מילולי של שורש עתיק. מה המילה המודרנית?",
     artistPrompt: "השורש העתיק הזה נתן לנו איזו מילה מודרנית?",
+    catNotebook: "מהמחברת שלך",
+    catOrigin: "מקור והיסטוריה",
+    catPrecision: "דיוק במילים",
+    catStructure: "מבנה ומשמעות",
     exit: "סגירה",
     quizPromptWord: "מה המשמעות של המילה",
     quizPromptMeaning: "איזו מילה מתאימה להגדרה",
@@ -200,6 +204,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Etymology Artist",
     artistDesc: "Literal translation of an ancient root. Modern word?",
     artistPrompt: "Which modern English word grew from this ancient root?",
+    catNotebook: "From your notebook",
+    catOrigin: "Origin & History",
+    catPrecision: "Precision & Confusables",
+    catStructure: "Structure & Sense",
     exit: "Close",
     quizPromptWord: "What does this word mean?",
     quizPromptMeaning: "Which word fits this meaning?",
@@ -278,6 +286,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "فنان الاشتقاق",
     artistDesc: "ترجمة حرفية لجذر قديم. الكلمة الحديثة؟",
     artistPrompt: "أي كلمة إنجليزية حديثة نمت من هذا الجذر القديم؟",
+    catNotebook: "من دفترك",
+    catOrigin: "الأصل والتاريخ",
+    catPrecision: "الدقة في الكلمات",
+    catStructure: "البنية والمعنى",
     exit: "إغلاق",
     quizPromptWord: "ما معنى هذه الكلمة؟",
     quizPromptMeaning: "أي كلمة تطابق هذا المعنى؟",
@@ -356,6 +368,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Этимолог-художник",
     artistDesc: "Буквальный перевод древнего корня. Современное слово?",
     artistPrompt: "Какое современное слово выросло из этого корня?",
+    catNotebook: "Из твоего блокнота",
+    catOrigin: "Происхождение и история",
+    catPrecision: "Точность в словах",
+    catStructure: "Структура и смысл",
     exit: "Закрыть",
     quizPromptWord: "Что означает это слово?",
     quizPromptMeaning: "Какое слово подходит?",
@@ -434,6 +450,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Artista Etimológico",
     artistDesc: "Traducción literal de una raíz antigua. ¿Palabra moderna?",
     artistPrompt: "¿Qué palabra moderna nació de esta raíz antigua?",
+    catNotebook: "De tu cuaderno",
+    catOrigin: "Origen e Historia",
+    catPrecision: "Precisión y Trampas",
+    catStructure: "Estructura y Sentido",
     exit: "Cerrar",
     quizPromptWord: "¿Qué significa esta palabra?",
     quizPromptMeaning: "¿Qué palabra encaja?",
@@ -512,6 +532,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Artista da Etimologia",
     artistDesc: "Tradução literal de uma raiz antiga. Palavra moderna?",
     artistPrompt: "Que palavra moderna nasceu desta raiz antiga?",
+    catNotebook: "Do seu caderno",
+    catOrigin: "Origem e História",
+    catPrecision: "Precisão e Armadilhas",
+    catStructure: "Estrutura e Sentido",
     exit: "Fechar",
     quizPromptWord: "O que esta palavra significa?",
     quizPromptMeaning: "Qual palavra encaixa?",
@@ -590,6 +614,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Artiste d'Étymologie",
     artistDesc: "Traduction littérale d'une racine ancienne. Mot moderne ?",
     artistPrompt: "Quel mot moderne est né de cette racine ancienne ?",
+    catNotebook: "Depuis ton cahier",
+    catOrigin: "Origine et Histoire",
+    catPrecision: "Précision et Pièges",
+    catStructure: "Structure et Sens",
     exit: "Fermer",
     quizPromptWord: "Que signifie ce mot ?",
     quizPromptMeaning: "Quel mot convient ?",
@@ -668,6 +696,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Etymologie-Künstler",
     artistDesc: "Wörtliche Übersetzung einer alten Wurzel. Modernes Wort?",
     artistPrompt: "Welches moderne Wort ist aus dieser alten Wurzel gewachsen?",
+    catNotebook: "Aus deinem Heft",
+    catOrigin: "Ursprung und Geschichte",
+    catPrecision: "Präzision und Fallen",
+    catStructure: "Struktur und Sinn",
     exit: "Schließen",
     quizPromptWord: "Was bedeutet dieses Wort?",
     quizPromptMeaning: "Welches Wort passt?",
@@ -746,6 +778,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Etymologický umělec",
     artistDesc: "Doslovný překlad starého kořene. Moderní slovo?",
     artistPrompt: "Jaké moderní slovo vyrostlo z tohoto starého kořene?",
+    catNotebook: "Z tvého sešitu",
+    catOrigin: "Původ a historie",
+    catPrecision: "Přesnost a pasti",
+    catStructure: "Stavba a význam",
     exit: "Zavřít",
     quizPromptWord: "Co znamená toto slovo?",
     quizPromptMeaning: "Které slovo sedí?",
@@ -824,6 +860,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "Etymologický umelec",
     artistDesc: "Doslovný preklad starého koreňa. Moderné slovo?",
     artistPrompt: "Aké moderné slovo vyrástlo z tohto starého koreňa?",
+    catNotebook: "Z tvojho zošita",
+    catOrigin: "Pôvod a história",
+    catPrecision: "Presnosť a pasce",
+    catStructure: "Stavba a význam",
     exit: "Zavrieť",
     quizPromptWord: "Čo znamená toto slovo?",
     quizPromptMeaning: "Ktoré slovo sedí?",
@@ -902,6 +942,10 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "व्युत्पत्ति कलाकार",
     artistDesc: "प्राचीन मूल का शाब्दिक अनुवाद. आधुनिक शब्द?",
     artistPrompt: "इस प्राचीन मूल से कौन सा आधुनिक शब्द निकला?",
+    catNotebook: "आपकी नोटबुक से",
+    catOrigin: "उत्पत्ति और इतिहास",
+    catPrecision: "सटीकता और जाल",
+    catStructure: "संरचना और अर्थ",
     exit: "बंद करें",
     quizPromptWord: "इस शब्द का क्या अर्थ है?",
     quizPromptMeaning: "कौन सा शब्द इस अर्थ से मेल खाता है?",
@@ -1043,6 +1087,13 @@ export function PlayPage() {
     [pool],
   );
 
+  // Game catalogue — grouped on the menu by category. Order within
+  // each category matters: notebook games go first (familiar), then
+  // origin/history (the etymology hook), then precision (single-pick
+  // multi-choice fast games), then structure (the build/lens/idiom
+  // assembly-style games). Each game has a single `category` that
+  // drives which section it renders under on the menu.
+  type GameCategory = "notebook" | "origin" | "precision" | "structure";
   const games: Array<{
     id: GameId;
     title: string;
@@ -1050,6 +1101,7 @@ export function PlayPage() {
     enabled: boolean;
     icon: React.ReactNode;
     accent: string;
+    category: GameCategory;
   }> = [
     {
       id: "quiz",
@@ -1057,6 +1109,7 @@ export function PlayPage() {
       desc: t.quizDesc,
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.quiz,
       accent: "teal",
+      category: "notebook",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="9" />
@@ -1071,6 +1124,7 @@ export function PlayPage() {
       desc: t.fillblankDesc,
       enabled: poolWithExamples >= MIN_WORDS_FOR_GAME.fillblank,
       accent: "indigo",
+      category: "notebook",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 7h7" />
@@ -1085,6 +1139,7 @@ export function PlayPage() {
       desc: t.memoryDesc,
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.memory,
       accent: "purple",
+      category: "notebook",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="8" height="8" rx="1.5" />
@@ -1100,6 +1155,7 @@ export function PlayPage() {
       desc: t.anagramDesc,
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.anagram,
       accent: "amber",
+      category: "notebook",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 6h16" />
@@ -1115,6 +1171,7 @@ export function PlayPage() {
       desc: t.speedDesc,
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.speed,
       accent: "rose",
+      category: "notebook",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
@@ -1128,6 +1185,7 @@ export function PlayPage() {
       desc: t.twinDesc,
       enabled: true,
       accent: "sky",
+      category: "precision",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="8" cy="12" r="4" />
@@ -1141,6 +1199,7 @@ export function PlayPage() {
       desc: t.timeDesc,
       enabled: true,
       accent: "emerald",
+      category: "origin",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="9" />
@@ -1154,6 +1213,7 @@ export function PlayPage() {
       desc: t.passportDesc,
       enabled: true,
       accent: "violet",
+      category: "origin",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="9" />
@@ -1167,6 +1227,7 @@ export function PlayPage() {
       desc: t.friendsDesc,
       enabled: true,
       accent: "coral",
+      category: "precision",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 12c2.2 0 4-2 4-4.5S11.2 3 9 3 5 5 5 7.5 6.8 12 9 12Z" />
@@ -1180,6 +1241,7 @@ export function PlayPage() {
       desc: t.rootDesc,
       enabled: true,
       accent: "lime",
+      category: "origin",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3v18" />
@@ -1196,6 +1258,7 @@ export function PlayPage() {
       desc: t.shadeDesc,
       enabled: true,
       accent: "amber",
+      category: "precision",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 18h18" />
@@ -1209,6 +1272,7 @@ export function PlayPage() {
       desc: t.buildDesc,
       enabled: true,
       accent: "indigo",
+      category: "structure",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="9" width="5" height="6" rx="1.5" />
@@ -1223,6 +1287,7 @@ export function PlayPage() {
       desc: t.idiomDesc,
       enabled: true,
       accent: "fuchsia",
+      category: "structure",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
@@ -1235,6 +1300,7 @@ export function PlayPage() {
       desc: t.lensDesc,
       enabled: true,
       accent: "cyan",
+      category: "structure",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="7" />
@@ -1248,6 +1314,7 @@ export function PlayPage() {
       desc: t.artistDesc,
       enabled: true,
       accent: "pink",
+      category: "origin",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2v6m0 0 3-3m-3 3-3-3" />
@@ -1449,29 +1516,54 @@ export function PlayPage() {
           </div>
         )}
 
-        {pool && pool.length >= 4 && (
-          <ul className="wb-play-grid">
-            {games.map((g) => (
-              <li key={g.id}>
-                <button
-                  type="button"
-                  className={`wb-play-card wb-play-card-${g.accent} ${g.enabled ? "" : "is-disabled"}`}
-                  onClick={() => g.enabled && setStage({ kind: "playing", game: g.id })}
-                  disabled={!g.enabled}
-                >
-                  <span className="wb-play-card-icon">{g.icon}</span>
-                  <span className="wb-play-card-text">
-                    <span className="wb-play-card-title">{g.title}</span>
-                    <span className="wb-play-card-desc">{g.desc}</span>
-                  </span>
-                  {!g.enabled && (
-                    <span className="wb-play-card-locked">{t.comingSoon}</span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Games rendered as grouped grids by category. We render each
+            category as its own grid so the section heading sits cleanly
+            above its games. Notebook games hide entirely when the user
+            doesn't have 4+ words; the other three categories are
+            curated-content and always show. */}
+        {(() => {
+          const sections: Array<{ id: GameCategory; label: string }> = [
+            { id: "notebook", label: t.catNotebook },
+            { id: "origin", label: t.catOrigin },
+            { id: "precision", label: t.catPrecision },
+            { id: "structure", label: t.catStructure },
+          ];
+          const hasEnoughForNotebook = (pool?.length ?? 0) >= 4;
+          return sections.map((section) => {
+            const sectionGames = games.filter((g) => g.category === section.id);
+            if (sectionGames.length === 0) return null;
+            // Hide the notebook section entirely when the user doesn't
+            // have enough words yet — the "not enough words" empty state
+            // above already handles that case.
+            if (section.id === "notebook" && !hasEnoughForNotebook) return null;
+            return (
+              <section key={section.id} className="wb-play-section">
+                <h2 className="wb-play-section-heading">{section.label}</h2>
+                <ul className="wb-play-grid">
+                  {sectionGames.map((g) => (
+                    <li key={g.id}>
+                      <button
+                        type="button"
+                        className={`wb-play-card wb-play-card-${g.accent} ${g.enabled ? "" : "is-disabled"}`}
+                        onClick={() => g.enabled && setStage({ kind: "playing", game: g.id })}
+                        disabled={!g.enabled}
+                      >
+                        <span className="wb-play-card-icon">{g.icon}</span>
+                        <span className="wb-play-card-text">
+                          <span className="wb-play-card-title">{g.title}</span>
+                          <span className="wb-play-card-desc">{g.desc}</span>
+                        </span>
+                        {!g.enabled && (
+                          <span className="wb-play-card-locked">{t.comingSoon}</span>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          });
+        })()}
       </main>
 
       <footer className="wb-home-footer">
