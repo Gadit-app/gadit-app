@@ -37,6 +37,8 @@ const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY
 const PRICE_FAMILY_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY  ?? "";
 const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
 const PRICE_SCHOOLS_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY  ?? "";
+const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
+const PRICE_SCHOOLS_LARGE_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY  ?? "";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -923,15 +925,21 @@ export function PricingPageRoute() {
     const priceId = billing === "yearly" ? PRICE_SCHOOLS_YEARLY : PRICE_SCHOOLS_MONTHLY;
     promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
   }
+  function clickSchoolsLarge() {
+    const priceId = billing === "yearly" ? PRICE_SCHOOLS_LARGE_YEARLY : PRICE_SCHOOLS_LARGE_MONTHLY;
+    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+  }
 
   const clearMonthly   = "$2.99";
   const clearYearly    = "$29.99";
   const deepMonthly    = "$4.99";
   const deepYearly     = "$49.99";
-  const familyMonthly  = "$6.99";
-  const familyYearly   = "$69";
-  const schoolsMonthly = "$69";
-  const schoolsYearly  = "$690";
+  const familyMonthly  = "$8.99";
+  const familyYearly   = "$89";
+  const schoolsMonthly       = "$69";
+  const schoolsYearly        = "$690";
+  const schoolsLargeMonthly  = "$149";
+  const schoolsLargeYearly   = "$1,490";
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
@@ -1155,7 +1163,7 @@ export function PricingPageRoute() {
                     </span>
                   </div>
                   <div className="wb-family-subprice">
-                    {billing === "yearly" ? `≈ $5.75 ${c.mo} · ` : ""}
+                    {billing === "yearly" ? `≈ $7.42 ${c.mo} · ` : ""}
                     {lang === "he" ? "עד 5 ילדים"
                       : lang === "ar" ? "حتى 5 أطفال"
                       : lang === "ru" ? "До 5 детей"
@@ -1214,19 +1222,19 @@ export function PricingPageRoute() {
                   </div>
                   <div className="wb-school-subprice">
                     {billing === "yearly" ? `≈ $57.50 ${c.mo} · ` : ""}
-                    {lang === "he" ? "כל בית הספר"
-                      : lang === "ar" ? "المدرسة بأكملها"
-                      : lang === "ru" ? "Вся школа"
-                      : lang === "es" ? "Toda la escuela"
-                      : lang === "pt" ? "A escola inteira"
-                      : lang === "fr" ? "Toute l'école"
-                      : lang === "de" ? "Die ganze Schule"
-                      : lang === "cs" ? "Celá škola"
-                      : lang === "sk" ? "Celá škola"
-                      : lang === "it" ? "Tutta la scuola"
-                      : lang === "ja" ? "学校全体"
-                      : lang === "hi" ? "पूरा स्कूल"
-                      : "The whole school"}
+                    {lang === "he" ? "עד 100 תלמידים"
+                      : lang === "ar" ? "حتى 100 طالب"
+                      : lang === "ru" ? "До 100 учеников"
+                      : lang === "es" ? "Hasta 100 alumnos"
+                      : lang === "pt" ? "Até 100 alunos"
+                      : lang === "fr" ? "Jusqu'à 100 élèves"
+                      : lang === "de" ? "Bis zu 100 Schüler"
+                      : lang === "cs" ? "Až 100 studentů"
+                      : lang === "sk" ? "Až 100 študentov"
+                      : lang === "it" ? "Fino a 100 studenti"
+                      : lang === "ja" ? "最大100人の生徒"
+                      : lang === "hi" ? "100 छात्रों तक"
+                      : "Up to 100 students"}
                   </div>
                   <button type="button" className="wb-school-cta" onClick={clickSchools}>
                     {s.cta}
@@ -1236,6 +1244,141 @@ export function PricingPageRoute() {
             </div>
           );
         })()}
+
+        {/* Schools Large — same card shape, doubled-tier institutional
+            pricing. Sits below Schools (Small). Built 2026-06-28 after
+            the multi-AI pricing audit (Gadi council) flagged the flat
+            $69/unlimited as a strategic giveaway: a school with 500
+            students paid the same as a school with 30. Tiered now. */}
+        {(() => {
+          const s = c.school ?? COPY.en.school!;
+          return (
+            <div className="wb-school-card-wrap">
+              <div className="wb-school-card">
+                <div className="wb-school-card-head">
+                  <div className="wb-school-eyebrow">{s.eyebrow}</div>
+                  <h3 className="wb-school-name">
+                    {s.name}{" "}
+                    <span style={{ fontSize: "0.65em", fontWeight: 600, color: "#A16207" }}>
+                      {lang === "he" ? "Large"
+                        : lang === "hi" ? "Large"
+                        : "Large"}
+                    </span>
+                  </h3>
+                  <p className="wb-school-tagline">{s.tagline}</p>
+                </div>
+                <ul className="wb-school-features">
+                  {s.features.map((feat, i) => (
+                    <li key={i}>
+                      <span className="wb-school-check"><CheckIcon /></span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="wb-school-cta-col">
+                  <div className="wb-school-price-row">
+                    <span className="wb-school-price">
+                      {billing === "yearly" ? schoolsLargeYearly : schoolsLargeMonthly}
+                    </span>
+                    <span className="wb-school-period">
+                      {billing === "yearly" ? c.yr : c.mo}
+                    </span>
+                  </div>
+                  <div className="wb-school-subprice">
+                    {billing === "yearly" ? `≈ $124 ${c.mo} · ` : ""}
+                    {lang === "he" ? "עד 500 תלמידים"
+                      : lang === "ar" ? "حتى 500 طالب"
+                      : lang === "ru" ? "До 500 учеников"
+                      : lang === "es" ? "Hasta 500 alumnos"
+                      : lang === "pt" ? "Até 500 alunos"
+                      : lang === "fr" ? "Jusqu'à 500 élèves"
+                      : lang === "de" ? "Bis zu 500 Schüler"
+                      : lang === "cs" ? "Až 500 studentů"
+                      : lang === "sk" ? "Až 500 študentov"
+                      : lang === "it" ? "Fino a 500 studenti"
+                      : lang === "ja" ? "最大500人の生徒"
+                      : lang === "hi" ? "500 छात्रों तक"
+                      : "Up to 500 students"}
+                  </div>
+                  <button type="button" className="wb-school-cta" onClick={clickSchoolsLarge}>
+                    {s.cta}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Enterprise — 500+ students. No Stripe price, just a
+            mailto: with prefilled subject. Lives as a single line
+            under the two school cards so the principal of a large
+            district sees the path without us cluttering the page
+            with a full third card. */}
+        <div
+          style={{
+            textAlign: "center",
+            margin: "clamp(20px, 3vw, 32px) 0 0",
+            fontFamily: lang === "he" || lang === "ar" ? "var(--wb-he)" : "var(--wb-sans)",
+            fontSize: 14,
+            color: "var(--ink-soft, #6B7280)",
+          }}
+        >
+          {lang === "he"
+            ? "מעל 500 תלמידים? "
+            : lang === "hi"
+            ? "500 से ज़्यादा छात्र? "
+            : lang === "ar"
+            ? "أكثر من 500 طالب؟ "
+            : lang === "ru"
+            ? "Более 500 учеников? "
+            : lang === "es"
+            ? "¿Más de 500 alumnos? "
+            : lang === "pt"
+            ? "Mais de 500 alunos? "
+            : lang === "fr"
+            ? "Plus de 500 élèves ? "
+            : lang === "de"
+            ? "Mehr als 500 Schüler? "
+            : lang === "cs"
+            ? "Více než 500 studentů? "
+            : lang === "sk"
+            ? "Viac ako 500 študentov? "
+            : lang === "it"
+            ? "Più di 500 studenti? "
+            : lang === "ja"
+            ? "500人を超える生徒? "
+            : "More than 500 students? "}
+          <a
+            href="mailto:support@gadit.app?subject=Gadit Schools Enterprise"
+            style={{ color: "#CA8A04", fontWeight: 600, textDecoration: "underline" }}
+          >
+            {lang === "he"
+              ? "צרו קשר לקבלת הצעת מחיר"
+              : lang === "hi"
+              ? "क़ीमत के लिए संपर्क करें"
+              : lang === "ar"
+              ? "تواصلوا معنا للحصول على عرض"
+              : lang === "ru"
+              ? "Свяжитесь с нами"
+              : lang === "es"
+              ? "Contáctanos para un presupuesto"
+              : lang === "pt"
+              ? "Fale conosco para um orçamento"
+              : lang === "fr"
+              ? "Contactez-nous pour un devis"
+              : lang === "de"
+              ? "Kontaktieren Sie uns für ein Angebot"
+              : lang === "cs"
+              ? "Kontaktujte nás pro nabídku"
+              : lang === "sk"
+              ? "Kontaktujte nás pre cenovú ponuku"
+              : lang === "it"
+              ? "Contattaci per un preventivo"
+              : lang === "ja"
+              ? "お問い合わせください"
+              : "Contact us for a quote"}
+          </a>
+        </div>
       </main>
 
       <GadVerbStamp />

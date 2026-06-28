@@ -11,11 +11,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 // the checkout behaviour has to honour that promise.
 const TRIAL_DAYS = 14;
 const CLEAR_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_CLEAR_MONTHLY ?? "";
+const CLEAR_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_CLEAR_YEARLY ?? "";
 const DEEP_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_DEEP_MONTHLY ?? "";
+const DEEP_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_DEEP_YEARLY ?? "";
 const FAMILY_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const FAMILY_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_FAMILY_YEARLY ?? "";
 const SCHOOLS_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
 const SCHOOLS_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_SCHOOLS_YEARLY ?? "";
+const SCHOOLS_LARGE_MONTHLY_PRICE_ID = process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
+const SCHOOLS_LARGE_YEARLY_PRICE_ID = process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ?? "";
 
 function isFamilyPriceId(priceId: string): boolean {
   return (
@@ -27,9 +31,32 @@ function isFamilyPriceId(priceId: string): boolean {
 function isSchoolsPriceId(priceId: string): boolean {
   return (
     (!!SCHOOLS_MONTHLY_PRICE_ID && priceId === SCHOOLS_MONTHLY_PRICE_ID) ||
-    (!!SCHOOLS_YEARLY_PRICE_ID && priceId === SCHOOLS_YEARLY_PRICE_ID)
+    (!!SCHOOLS_YEARLY_PRICE_ID && priceId === SCHOOLS_YEARLY_PRICE_ID) ||
+    (!!SCHOOLS_LARGE_MONTHLY_PRICE_ID && priceId === SCHOOLS_LARGE_MONTHLY_PRICE_ID) ||
+    (!!SCHOOLS_LARGE_YEARLY_PRICE_ID && priceId === SCHOOLS_LARGE_YEARLY_PRICE_ID)
   );
 }
+
+// Every paid price (monthly OR yearly) grants the 14-day trial.
+// Gadi 2026-06-28 audit (pricing council) flagged the previous
+// monthly-only trial as backwards: yearly plans are higher commitment
+// and need MORE trust, not less. Yearly buyers now get the same 14
+// days to bail before the card charges, which removes the friction
+// of "should I risk $89 now or take the safer $8.99/mo." path.
+const ALL_PAID_PRICE_IDS = new Set(
+  [
+    CLEAR_MONTHLY_PRICE_ID,
+    CLEAR_YEARLY_PRICE_ID,
+    DEEP_MONTHLY_PRICE_ID,
+    DEEP_YEARLY_PRICE_ID,
+    FAMILY_MONTHLY_PRICE_ID,
+    FAMILY_YEARLY_PRICE_ID,
+    SCHOOLS_MONTHLY_PRICE_ID,
+    SCHOOLS_YEARLY_PRICE_ID,
+    SCHOOLS_LARGE_MONTHLY_PRICE_ID,
+    SCHOOLS_LARGE_YEARLY_PRICE_ID,
+  ].filter(Boolean),
+);
 
 export async function POST(req: NextRequest) {
   try {
@@ -67,12 +94,11 @@ export async function POST(req: NextRequest) {
     // password resets and receipts — but it's no longer load-bearing
     // for purchase.
 
-    const isClearMonthly = !!CLEAR_MONTHLY_PRICE_ID && priceId === CLEAR_MONTHLY_PRICE_ID;
-    const isDeepMonthly = !!DEEP_MONTHLY_PRICE_ID && priceId === DEEP_MONTHLY_PRICE_ID;
-    const isFamilyMonthly = !!FAMILY_MONTHLY_PRICE_ID && priceId === FAMILY_MONTHLY_PRICE_ID;
-    const isSchoolsMonthly = !!SCHOOLS_MONTHLY_PRICE_ID && priceId === SCHOOLS_MONTHLY_PRICE_ID;
-    // All four paid monthly tiers honour the "Try 14 days free" CTA.
-    const grantsTrial = isClearMonthly || isDeepMonthly || isFamilyMonthly || isSchoolsMonthly;
+    // Every paid price (Clear / Deep / Family / Schools, monthly or
+    // yearly, Small or Large) grants the 14-day trial. The earlier
+    // "monthly only" rule was reversed in the 2026-06-28 pricing
+    // audit — see ALL_PAID_PRICE_IDS comment above.
+    const grantsTrial = ALL_PAID_PRICE_IDS.has(priceId);
 
     const isFamily = isFamilyPriceId(priceId);
     const isSchools = isSchoolsPriceId(priceId);

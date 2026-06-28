@@ -19,6 +19,8 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
     [process.env.STRIPE_PRICE_FAMILY_YEARLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_MONTHLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_YEARLY!]: "deep",
+    [process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY!]: "deep",
+    [process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY!]: "deep",
   };
   return map[priceId] ?? "basic";
 }
@@ -33,7 +35,9 @@ function isFamilyPriceId(priceId: string): boolean {
 function isSchoolsPriceId(priceId: string): boolean {
   return (
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MONTHLY ||
-    priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
   );
 }
 
@@ -167,7 +171,8 @@ export async function POST(req: NextRequest) {
       const schools = isSchoolsPriceId(priceId);
       const billingCycle: "monthly" | "yearly" =
         priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
-        priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY
+        priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
+        priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
           ? "yearly"
           : "monthly";
       const customerEmail = session.customer_details?.email ?? session.customer_email ?? null;
