@@ -29,7 +29,12 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
-import { ALLOWED_LOGO_MIMES, MAX_LOGO_BYTES } from "@/lib/school";
+import {
+  ALLOWED_LOGO_MIMES,
+  CLASSROOM_COLORS,
+  MAX_LOGO_BYTES,
+  classroomColorFor,
+} from "@/lib/school";
 
 const COPY: Record<string, {
   title: string;
@@ -44,7 +49,11 @@ const COPY: Record<string, {
   logoUploading: string;
   classroomsHeading: string;
   addClassroom: string;
+  classroomNameLabel: string;
   classroomNamePh: string;
+  teacherNameLabel: string;
+  teacherNamePh: string;
+  colorLabel: string;
   empty: string;
   open: string;
   codeLabel: string;
@@ -69,7 +78,11 @@ const COPY: Record<string, {
     logoUploading: "מעלה...",
     classroomsHeading: "כיתות",
     addClassroom: "+ הוספת כיתה",
-    classroomNamePh: "ז'1 — שרה",
+    classroomNameLabel: "שם הכיתה",
+    classroomNamePh: "ז'1",
+    teacherNameLabel: "שם המחנכת (אופציונלי)",
+    teacherNamePh: "שרה כהן",
+    colorLabel: "צבע הכיתה",
     empty: "עדיין לא הוספתם כיתות. הוסיפו את הראשונה.",
     open: "פתח",
     codeLabel: "קוד",
@@ -94,7 +107,11 @@ const COPY: Record<string, {
     logoUploading: "Uploading…",
     classroomsHeading: "Classrooms",
     addClassroom: "+ Add classroom",
-    classroomNamePh: "7B — Sara",
+    classroomNameLabel: "Classroom name",
+    classroomNamePh: "7B",
+    teacherNameLabel: "Teacher's name (optional)",
+    teacherNamePh: "Sara Cohen",
+    colorLabel: "Classroom color",
     empty: "No classrooms yet. Add your first.",
     open: "Open",
     codeLabel: "Code",
@@ -119,7 +136,11 @@ const COPY: Record<string, {
     logoUploading: "अपलोड हो रहा है…",
     classroomsHeading: "कक्षाएँ",
     addClassroom: "+ कक्षा जोड़ें",
-    classroomNamePh: "7B — सारा",
+    classroomNameLabel: "कक्षा का नाम",
+    classroomNamePh: "7B",
+    teacherNameLabel: "शिक्षक का नाम (वैकल्पिक)",
+    teacherNamePh: "सारा कोहेन",
+    colorLabel: "कक्षा का रंग",
     empty: "अभी कोई कक्षा नहीं। पहली जोड़ें।",
     open: "खोलें",
     codeLabel: "कोड",
@@ -147,6 +168,8 @@ export function SchoolsClient() {
   const [nameDraft, setNameDraft] = useState("");
   const [nameSaving, setNameSaving] = useState(false);
   const [newClassroomName, setNewClassroomName] = useState("");
+  const [newTeacherName, setNewTeacherName] = useState("");
+  const [newColorIndex, setNewColorIndex] = useState(0);
   const [creating, setCreating] = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
@@ -253,16 +276,23 @@ export function SchoolsClient() {
 
   async function createClassroom() {
     if (!user || creating) return;
+    if (!newClassroomName.trim()) return; // name is required now
     setCreating(true);
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/schools/create-classroom", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ name: newClassroomName.trim() }),
+        body: JSON.stringify({
+          name: newClassroomName.trim(),
+          teacherName: newTeacherName.trim(),
+          colorIndex: newColorIndex,
+        }),
       });
       if (res.ok) {
         setNewClassroomName("");
+        setNewTeacherName("");
+        setNewColorIndex(0);
       } else {
         console.error("create classroom failed:", await res.text());
       }
@@ -479,6 +509,19 @@ export function SchoolsClient() {
             <div style={{ marginBottom: 20 }}>
               {classrooms.map((cls) => (
                 <div key={cls.id} className="wb-classroom-row">
+                  {/* Color dot. Lets a principal scan 30 classrooms
+                      and spot one by colour. Sits in the inline-start
+                      gutter next to the mustard code chip. */}
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: 999,
+                      background: classroomColorFor(cls),
+                      flexShrink: 0,
+                    }}
+                  />
                   <span className="wb-classroom-code">{cls.code}</span>
                   {editingId === cls.id ? (
                     <input
@@ -535,34 +578,145 @@ export function SchoolsClient() {
             </div>
           )}
 
-          {/* Inline add-classroom form. The classroom name is optional —
-              if blank the row shows the code-only label. */}
-          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <input
-              type="text"
-              value={newClassroomName}
-              placeholder={c.classroomNamePh}
-              onChange={(e) => setNewClassroomName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") createClassroom(); }}
-              disabled={creating}
-              style={{
-                flex: 1,
-                padding: "10px 14px",
-                border: "1px solid var(--hairline)",
-                borderRadius: 10,
-                background: "var(--surface)",
-                fontFamily: "var(--wb-sans)",
-                fontSize: 15,
-                color: "var(--ink)",
-                outline: "none",
-              }}
-            />
+          {/* Inline add-classroom form. Three stacked fields plus a
+              row of color swatches so a principal can spot a class
+              at a glance from the dashboard. Gadi (2026-06-28)
+              flagged the previous single-input form as too thin:
+              "צריך להיות שם הכיתה, שם המחנכת אם רלוונטי, וצבע
+              לזיהוי מהיר". Name is required; teacher and color are
+              optional. */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              padding: 18,
+              background: "var(--surface)",
+              border: "1px solid var(--hairline)",
+              borderRadius: 14,
+            }}
+          >
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#A16207",
+                  marginBottom: 6,
+                }}
+              >
+                {c.classroomNameLabel}
+              </label>
+              <input
+                type="text"
+                value={newClassroomName}
+                placeholder={c.classroomNamePh}
+                onChange={(e) => setNewClassroomName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") createClassroom(); }}
+                disabled={creating}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: 10,
+                  background: "var(--surface)",
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 15,
+                  color: "var(--ink)",
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#A16207",
+                  marginBottom: 6,
+                }}
+              >
+                {c.teacherNameLabel}
+              </label>
+              <input
+                type="text"
+                value={newTeacherName}
+                placeholder={c.teacherNamePh}
+                onChange={(e) => setNewTeacherName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") createClassroom(); }}
+                disabled={creating}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: 10,
+                  background: "var(--surface)",
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 15,
+                  color: "var(--ink)",
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#A16207",
+                  marginBottom: 6,
+                }}
+              >
+                {c.colorLabel}
+              </label>
+              <div style={{ display: "flex", gap: 10 }}>
+                {CLASSROOM_COLORS.map((hex, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setNewColorIndex(i)}
+                    aria-label={hex}
+                    aria-pressed={newColorIndex === i}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 999,
+                      background: hex,
+                      border: newColorIndex === i ? "3px solid var(--ink)" : "2px solid transparent",
+                      boxShadow: newColorIndex === i ? "0 0 0 2px var(--surface)" : "none",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
             <button
               type="button"
               className="wb-school-cta"
               onClick={createClassroom}
-              disabled={creating}
-              style={{ width: "auto", padding: "10px 18px" }}
+              disabled={creating || !newClassroomName.trim()}
+              style={{
+                width: "auto",
+                alignSelf: "flex-start",
+                padding: "10px 22px",
+                opacity: !newClassroomName.trim() ? 0.5 : 1,
+              }}
             >
               {creating ? c.creating : c.addClassroom}
             </button>

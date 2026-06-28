@@ -57,13 +57,21 @@ export async function POST(req: NextRequest) {
   }
 
   // Parse body
-  let body: { name?: string } = {};
+  let body: { name?: string; teacherName?: string; colorIndex?: number } = {};
   try {
-    body = (await req.json()) as { name?: string };
+    body = (await req.json()) as {
+      name?: string;
+      teacherName?: string;
+      colorIndex?: number;
+    };
   } catch {
     // empty body is fine — name is optional
   }
   const name = (body.name ?? "").trim().slice(0, 60);
+  const teacherName = (body.teacherName ?? "").trim().slice(0, 60);
+  const colorIndex = typeof body.colorIndex === "number"
+    ? Math.max(0, Math.min(5, body.colorIndex)) // 6 colors in CLASSROOM_COLORS
+    : 0;
 
   // Generate a unique code. Try up to 8 times; the alphabet has 30^6 =
   // 729M combinations, so collisions are astronomically rare even at
@@ -90,7 +98,8 @@ export async function POST(req: NextRequest) {
       code,
       name,
       grade: null,
-      teacherName: null,
+      teacherName: teacherName || null,
+      colorIndex,
       searchCount: 0,
       createdAt: new Date().toISOString(),
     });

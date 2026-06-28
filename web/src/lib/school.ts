@@ -54,10 +54,31 @@ export interface Classroom {
   grade?: string | null;
   /** Optional teacher display name. */
   teacherName?: string | null;
+  /** Index into CLASSROOM_COLORS. Renders as a colored chip next to
+   *  the code so a principal scanning 30 classrooms can spot a class
+   *  by colour at a glance. 0..(CLASSROOM_COLORS.length-1). */
+  colorIndex?: number;
   /** Total searches ever, kept on the doc so the schools list page can
    *  show "37 words this week" without a separate aggregation. */
   searchCount: number;
   createdAt: string;
+}
+
+/** Six classroom-row colors. Picked to be visually distinct on the
+ *  mustard /schools background but not overpowering. The principal
+ *  uses these as a visual ID; kids never see them on /c/<CODE>. */
+export const CLASSROOM_COLORS = [
+  "#CA8A04", // mustard (default, matches the SKU brand)
+  "#0EA5A5", // teal
+  "#7C3AED", // purple
+  "#EC4899", // pink
+  "#10B981", // green
+  "#3B82F6", // blue
+] as const;
+
+export function classroomColorFor(c: { colorIndex?: number }): string {
+  const i = typeof c.colorIndex === "number" ? c.colorIndex : 0;
+  return CLASSROOM_COLORS[Math.max(0, Math.min(CLASSROOM_COLORS.length - 1, i))];
 }
 
 /** Generate a 6-character alphanumeric class code. Excludes characters
