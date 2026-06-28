@@ -191,6 +191,11 @@ export function SchoolsClient() {
   const [newTeacherName, setNewTeacherName] = useState("");
   const [newColorIndex, setNewColorIndex] = useState(0);
   const [creating, setCreating] = useState(false);
+  // Whether the "+ Add classroom" form is expanded. Default false so
+  // the principal only sees one open form at a time (theirs OR an
+  // edit-in-progress). Gadi (2026-06-28) flagged the always-open form
+  // at the bottom as visual clutter while editing a classroom above.
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
@@ -309,6 +314,14 @@ export function SchoolsClient() {
     setEditingNameDraft(cls.name ?? "");
     setEditingTeacherDraft(cls.teacherName ?? "");
     setEditingColorDraft(typeof cls.colorIndex === "number" ? cls.colorIndex : 0);
+    // Mutually exclusive with the create form.
+    setShowCreateForm(false);
+  }
+
+  function openCreateForm() {
+    setShowCreateForm(true);
+    // Mutually exclusive with any open edit.
+    setEditingId(null);
   }
 
   async function deleteClassroom(classroomId: string) {
@@ -347,6 +360,7 @@ export function SchoolsClient() {
         setNewClassroomName("");
         setNewTeacherName("");
         setNewColorIndex(0);
+        setShowCreateForm(false);
       } else {
         console.error("create classroom failed:", await res.text());
       }
@@ -809,13 +823,22 @@ export function SchoolsClient() {
             </div>
           )}
 
-          {/* Inline add-classroom form. Three stacked fields plus a
-              row of color swatches so a principal can spot a class
-              at a glance from the dashboard. Gadi (2026-06-28)
-              flagged the previous single-input form as too thin:
-              "צריך להיות שם הכיתה, שם המחנכת אם רלוונטי, וצבע
-              לזיהוי מהיר". Name is required; teacher and color are
-              optional. */}
+          {/* Add-classroom affordance. Collapsed by default to a
+              single "+ Add classroom" button so the dashboard reads
+              clean. Click expands the full three-field form below
+              the classroom list. Mutually exclusive with any open
+              edit (opening one closes the other). */}
+          {!showCreateForm && (
+            <button
+              type="button"
+              className="wb-school-cta"
+              onClick={openCreateForm}
+              style={{ width: "auto", padding: "12px 24px" }}
+            >
+              {c.addClassroom}
+            </button>
+          )}
+          {showCreateForm && (
           <div
             style={{
               display: "flex",
@@ -937,21 +960,44 @@ export function SchoolsClient() {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="wb-school-cta"
-              onClick={createClassroom}
-              disabled={creating || !newClassroomName.trim()}
-              style={{
-                width: "auto",
-                alignSelf: "flex-start",
-                padding: "10px 22px",
-                opacity: !newClassroomName.trim() ? 0.5 : 1,
-              }}
-            >
-              {creating ? c.creating : c.addClassroom}
-            </button>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                type="button"
+                className="wb-school-cta"
+                onClick={createClassroom}
+                disabled={creating || !newClassroomName.trim()}
+                style={{
+                  width: "auto",
+                  padding: "10px 22px",
+                  opacity: !newClassroomName.trim() ? 0.5 : 1,
+                }}
+              >
+                {creating ? c.creating : c.addClassroom}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCreateForm(false);
+                  setNewClassroomName("");
+                  setNewTeacherName("");
+                  setNewColorIndex(0);
+                }}
+                style={{
+                  padding: "10px 22px",
+                  background: "transparent",
+                  border: "1px solid var(--hairline, #E5E7EB)",
+                  borderRadius: 10,
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 15,
+                  color: "var(--ink-soft, #6B7280)",
+                  cursor: "pointer",
+                }}
+              >
+                {c.cancelBtn}
+              </button>
+            </div>
           </div>
+          )}
         </section>
       </main>
     </div>
