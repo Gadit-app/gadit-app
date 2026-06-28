@@ -13,12 +13,11 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickWordPassportRounds,
-  LANG_LABEL,
+  getLangLabel,
   type OriginCountry,
-  type WordPassportRound,
 } from "@/lib/play-content/word-passport";
 
 type RuntimeRound = {
@@ -28,19 +27,23 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickWordPassportRounds(SESSION_SIZE.passport).map((r): RuntimeRound => {
-    const correctCountry = r.options[r.correctIdx];
-    const order = shuffle(r.options.slice()) as OriginCountry[];
-    const [a, b, c, d] = order;
-    const displayed: [OriginCountry, OriginCountry, OriginCountry, OriginCountry] = [a, b, c, d];
-    return {
-      word: r.word,
-      displayed,
-      correctIdx: displayed.indexOf(correctCountry) as 0 | 1 | 2 | 3,
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickWordPassportRounds(SESSION_SIZE.passport, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctCountry = r.options[r.correctIdx];
+      const order = shuffle(r.options.slice()) as OriginCountry[];
+      const [a, b, c, d] = order;
+      const displayed: [OriginCountry, OriginCountry, OriginCountry, OriginCountry] = [a, b, c, d];
+      return {
+        word: r.word,
+        displayed,
+        correctIdx: displayed.indexOf(correctCountry) as 0 | 1 | 2 | 3,
+        story: r.story,
+      };
+    }),
+  };
 }
 
 export function GameWordPassport({
@@ -52,7 +55,10 @@ export function GameWordPassport({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -90,7 +96,7 @@ export function GameWordPassport({
       total: rounds.length,
       missed: missed.map((r) => ({
         word: r.word,
-        meaning: `${LANG_LABEL[r.displayed[r.correctIdx]]} — ${r.story}`,
+        meaning: `${getLangLabel(r.displayed[r.correctIdx], contentLang)} — ${r.story}`,
       })),
     };
     return (
@@ -116,7 +122,7 @@ export function GameWordPassport({
       />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.passportPrompt}</div>
-        <div className="wb-play-prompt wb-play-prompt-word" lang="en" dir="ltr">
+        <div className="wb-play-prompt wb-play-prompt-word" lang={contentLang} dir={contentDir}>
           {r.word}
         </div>
       </div>
@@ -147,13 +153,13 @@ export function GameWordPassport({
                 width="32"
                 height="24"
               />
-              <span lang="en" dir="ltr">{LANG_LABEL[country]}</span>
+              <span lang={contentLang} dir={contentDir}>{getLangLabel(country, contentLang)}</span>
             </button>
           );
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

@@ -13,7 +13,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickIdiomDecoderRounds,
   type IdiomDecoderRound,
@@ -27,20 +27,24 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickIdiomDecoderRounds(SESSION_SIZE.idiom).map((r): RuntimeRound => {
-    const correctOption = r.options[r.correctIdx];
-    const order = shuffle(r.options.slice()) as string[];
-    const [a, b, c, d] = order;
-    const displayed: [string, string, string, string] = [a, b, c, d];
-    return {
-      idiom: r.idiom,
-      literal: r.literal,
-      displayed,
-      correctIdx: displayed.indexOf(correctOption) as 0 | 1 | 2 | 3,
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickIdiomDecoderRounds(SESSION_SIZE.idiom, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctOption = r.options[r.correctIdx];
+      const order = shuffle(r.options.slice()) as string[];
+      const [a, b, c, d] = order;
+      const displayed: [string, string, string, string] = [a, b, c, d];
+      return {
+        idiom: r.idiom,
+        literal: r.literal,
+        displayed,
+        correctIdx: displayed.indexOf(correctOption) as 0 | 1 | 2 | 3,
+        story: r.story,
+      };
+    }),
+  };
 }
 
 export function GameIdiomDecoder({
@@ -52,7 +56,10 @@ export function GameIdiomDecoder({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -116,11 +123,11 @@ export function GameIdiomDecoder({
       />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.idiomPrompt}</div>
-        <div className="wb-play-idiom-literal" lang="en" dir="ltr">
+        <div className="wb-play-idiom-literal" lang={contentLang} dir={contentDir}>
           {r.literal}
         </div>
         {picked !== null && (
-          <div className="wb-play-idiom-reveal" lang="en" dir="ltr">
+          <div className="wb-play-idiom-reveal" lang={contentLang} dir={contentDir}>
             &ldquo;{r.idiom}&rdquo;
           </div>
         )}
@@ -151,7 +158,7 @@ export function GameIdiomDecoder({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

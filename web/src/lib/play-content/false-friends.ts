@@ -29,7 +29,7 @@ export type FalseFriendsRound = {
   story: string;
 };
 
-export const FALSE_FRIENDS_ROUNDS: FalseFriendsRound[] = [
+const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
   {
     foreignWord: "embarazada",
     foreignFlag: "es",
@@ -232,11 +232,149 @@ export const FALSE_FRIENDS_ROUNDS: FalseFriendsRound[] = [
   },
 ];
 
-export function pickFalseFriendsRounds(count: number): FalseFriendsRound[] {
-  const shuffled = FALSE_FRIENDS_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Cross-language traps relevant to a Hebrew speaker. We pick words that
+// (a) a Hebrew speaker would recognise from English/European tourism,
+// (b) have surprising or embarrassing mistranslations, (c) are educational
+// rather than just funny.
+const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
+  {
+    foreignWord: "embarazada",
+    foreignFlag: "es",
+    foreignLang: "ספרדית",
+    englishTwin: "נבוך",
+    isReal: false,
+    story: "זה אומר 'בהריון'. דובר ספרדית שתגיד לו אתה 'embarazada' תקבל מבט מאוד מבולבל.",
+  },
+  {
+    foreignWord: "Gift",
+    foreignFlag: "de",
+    foreignLang: "גרמנית",
+    englishTwin: "מתנה",
+    isReal: false,
+    story: "בגרמנית Gift = רעל. מתנה בגרמנית = Geschenk. תיזהר מה אתה מציע בברלין.",
+  },
+  {
+    foreignWord: "preservativo",
+    foreignFlag: "it",
+    foreignLang: "איטלקית",
+    englishTwin: "חומר משמר",
+    isReal: false,
+    story: "באיטלקית preservativo = קונדום. כשתקרא תוויות מזון ברומא, חפש 'conservante'.",
+  },
+  {
+    foreignWord: "constipado",
+    foreignFlag: "es",
+    foreignLang: "ספרדית",
+    englishTwin: "סובל מעצירות",
+    isReal: false,
+    story: "estar constipado = להצטנן (להיות עם אף סתום). 'עצירות' בספרדית היא 'estreñido'.",
+  },
+  {
+    foreignWord: "familia",
+    foreignFlag: "es",
+    foreignLang: "ספרדית",
+    englishTwin: "משפחה",
+    isReal: true,
+    story: "תאום אמיתי. מאותה לטינית familia (משק בית). שלושה אלפי שנים והמשמעות זהה.",
+  },
+  {
+    foreignWord: "Kind",
+    foreignFlag: "de",
+    foreignLang: "גרמנית",
+    englishTwin: "אדיב",
+    isReal: false,
+    story: "בגרמנית Kind = ילד. 'אדיב' בגרמנית הוא 'nett' או 'freundlich'.",
+  },
+  {
+    foreignWord: "Chef",
+    foreignFlag: "de",
+    foreignLang: "גרמנית",
+    englishTwin: "שף",
+    isReal: false,
+    story: "בגרמנית Chef = בוס (האחראי). השף שמבשל הוא 'Koch'. שתי המילים מצרפתית chef (ראש), אבל התפצלו.",
+  },
+  {
+    foreignWord: "burro",
+    foreignFlag: "it",
+    foreignLang: "איטלקית",
+    englishTwin: "חמור (כמו בספרדית)",
+    isReal: false,
+    story: "באיטלקית burro = חמאה. בספרדית burro = חמור. אותן אותיות, שתי חוות שונות לגמרי.",
+  },
+  {
+    foreignWord: "librairie",
+    foreignFlag: "fr",
+    foreignLang: "צרפתית",
+    englishTwin: "ספריה",
+    isReal: false,
+    story: "בצרפתית librairie = חנות ספרים. הספרייה היא 'bibliothèque'. תייר עברי בפריז מתבלבל פעם אחת ולעולם לא יותר.",
+  },
+  {
+    foreignWord: "musica",
+    foreignFlag: "it",
+    foreignLang: "איטלקית",
+    englishTwin: "מוסיקה",
+    isReal: true,
+    story: "תאום אמיתי. מהיוונית mousike (אמנות המוזות). אותה מילה בכל אירופה, אותה משמעות. נקייה.",
+  },
+  {
+    foreignWord: "actual",
+    foreignFlag: "es",
+    foreignLang: "ספרדית",
+    englishTwin: "ממשי (כמו באנגלית 'actual')",
+    isReal: false,
+    story: "בספרדית actual = עכשווי. 'actualmente' זה 'כיום', לא 'באמת'. הצרפתית לקחה אותו כיוון.",
+  },
+  {
+    foreignWord: "fabrik",
+    foreignFlag: "de",
+    foreignLang: "גרמנית",
+    englishTwin: "בד (כמו 'fabric' באנגלית)",
+    isReal: false,
+    story: "בגרמנית Fabrik = מפעל. הבד הוא 'Stoff'. שתי המילים מלטינית fabrica (סדנה), התפצלו.",
+  },
+  {
+    foreignWord: "intelligente",
+    foreignFlag: "it",
+    foreignLang: "איטלקית",
+    englishTwin: "אינטליגנטי",
+    isReal: true,
+    story: "תאום אמיתי. מלטינית intelligere (להבין). המסלול הקלאסי: לטינית → איטלקית → אירופה כולה.",
+  },
+  {
+    foreignWord: "auto",
+    foreignFlag: "de",
+    foreignLang: "גרמנית",
+    englishTwin: "אוטו (מכונית)",
+    isReal: true,
+    story: "תאום אמיתי. קיצור של automobil בשתי השפות, מיוונית auto (עצמי) + לטינית mobilis (נע). תקיף ומדויק.",
+  },
+  {
+    foreignWord: "doctor",
+    foreignFlag: "es",
+    foreignLang: "ספרדית",
+    englishTwin: "דוקטור / רופא",
+    isReal: true,
+    story: "תאום אמיתי. מלטינית doctor (מורה). הרפואה הצטרפה למשמעות אחרי. תואר אקדמי וכלי רפואי באים מאותו מקום.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, FalseFriendsRound[]> = {
+  en: FALSE_FRIENDS_ROUNDS_EN,
+  he: FALSE_FRIENDS_ROUNDS_HE,
+};
+
+export function pickFalseFriendsRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: FalseFriendsRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

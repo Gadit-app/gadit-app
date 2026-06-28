@@ -18,7 +18,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickRootRushRounds,
   type RootRushRound,
@@ -38,18 +38,22 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickRootRushRounds(SESSION_SIZE.root).map((r): RuntimeRound => {
-    const correctTiles: Tile[] = r.correct.map((w) => ({ word: w, isCorrect: true }));
-    const distractorTiles: Tile[] = r.distractors.map((w) => ({ word: w, isCorrect: false }));
-    return {
-      root: r.root,
-      origin: r.origin,
-      meaning: r.meaning,
-      tiles: shuffle([...correctTiles, ...distractorTiles]),
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickRootRushRounds(SESSION_SIZE.root, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctTiles: Tile[] = r.correct.map((w) => ({ word: w, isCorrect: true }));
+      const distractorTiles: Tile[] = r.distractors.map((w) => ({ word: w, isCorrect: false }));
+      return {
+        root: r.root,
+        origin: r.origin,
+        meaning: r.meaning,
+        tiles: shuffle([...correctTiles, ...distractorTiles]),
+        story: r.story,
+      };
+    }),
+  };
 }
 
 /** Soft cap on taps per round. Stops a player from spamming all 6
@@ -65,7 +69,10 @@ export function GameRootRush({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   /** Indices of tiles tapped this round. Each entry: correct or wrong. */
   const [taps, setTaps] = useState<Array<{ tileIdx: number; correct: boolean }>>([]);
@@ -163,9 +170,9 @@ export function GameRootRush({
       <div className="wb-play-question wb-play-question-root">
         <div className="wb-play-question-eyebrow">{t.rootPrompt}</div>
         <div className="wb-play-root-card">
-          <div className="wb-play-root-glyph" lang="en" dir="ltr">{r.root}</div>
+          <div className="wb-play-root-glyph" lang={contentLang} dir={contentDir}>{r.root}</div>
           <div className="wb-play-root-origin">{r.origin}</div>
-          <div className="wb-play-root-meaning" lang="en" dir="ltr">
+          <div className="wb-play-root-meaning" lang={contentLang} dir={contentDir}>
             &ldquo;{r.meaning}&rdquo;
           </div>
         </div>
@@ -181,15 +188,15 @@ export function GameRootRush({
             className={tileClass(i)}
             onClick={() => tap(i)}
             disabled={roundOver || taps.some((t) => t.tileIdx === i)}
-            lang="en"
-            dir="ltr"
+            lang={contentLang}
+            dir={contentDir}
           >
             {tile.word}
           </button>
         ))}
       </div>
       {roundOver && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

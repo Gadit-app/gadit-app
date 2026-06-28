@@ -14,7 +14,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE } from "@/lib/play-engine";
+import { SESSION_SIZE, dirForLang } from "@/lib/play-engine";
 import {
   pickFalseFriendsRounds,
   type FalseFriendsRound,
@@ -29,10 +29,13 @@ export function GameFalseFriends({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(
-    () => pickFalseFriendsRounds(SESSION_SIZE.friends),
-    [],
+  const built = useMemo(
+    () => pickFalseFriendsRounds(SESSION_SIZE.friends, lang),
+    [lang],
   );
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   /** Picked: 0 = TRUE button, 1 = FALSE button, null = not yet. */
   const [picked, setPicked] = useState<number | null>(null);
@@ -115,12 +118,14 @@ export function GameFalseFriends({
               height="24"
             />
             <div className="wb-play-friends-foreign-text">
-              <div className="wb-play-friends-word" lang="en" dir="ltr">{r.foreignWord}</div>
+              {/* The foreign word is ALWAYS Latin-script (embarazada, Gift,
+                  fabrik...) so we force LTR regardless of content lang. */}
+              <div className="wb-play-friends-word" dir="ltr">{r.foreignWord}</div>
               <div className="wb-play-friends-lang">{r.foreignLang}</div>
             </div>
           </div>
           <div className="wb-play-friends-arrow" aria-hidden="true">≈</div>
-          <div className="wb-play-friends-english" lang="en" dir="ltr">
+          <div className="wb-play-friends-english" lang={contentLang} dir={contentDir}>
             {r.englishTwin}
           </div>
         </div>
@@ -149,7 +154,7 @@ export function GameFalseFriends({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

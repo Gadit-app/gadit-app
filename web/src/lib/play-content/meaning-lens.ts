@@ -27,7 +27,7 @@ export type MeaningLensRound = {
   story: string;
 };
 
-export const MEANING_LENS_ROUNDS: MeaningLensRound[] = [
+const MEANING_LENS_ROUNDS_EN: MeaningLensRound[] = [
   {
     word: "bat",
     sentence: "She swung the bat hard at the curveball.",
@@ -186,11 +186,173 @@ export const MEANING_LENS_ROUNDS: MeaningLensRound[] = [
   },
 ];
 
-export function pickMeaningLensRounds(count: number): MeaningLensRound[] {
-  const shuffled = MEANING_LENS_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew has surprisingly rich polysemy. The 3-letter root system
+// means that one written form can carry 4-5 distinct senses depending
+// on context. עין = eye, spring, sight, opinion. ספר = book, count,
+// border. The game teaches context locks meaning, instantly.
+const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
+  {
+    word: "עין",
+    sentence: "מי שתיית האדמה זרמו מן העין שבמדבר.",
+    options: [
+      "איבר הראייה",
+      "מעיין מים",
+      "מבט או השקפה",
+      "טבעת על הצוואר",
+    ],
+    correctIdx: 1,
+    story: "'מי' + 'אדמה' + 'במדבר' = מקור מים. עין במקרא היא גם איבר וגם מעיין — שני שורשים שהתאחדו במילה אחת.",
+  },
+  {
+    word: "ספר",
+    sentence: "קראתי ספר מרתק כל הלילה.",
+    options: [
+      "פעולת ספירה",
+      "אזור גבול",
+      "אובייקט עם דפים לקריאה",
+      "סופר או סופרת",
+    ],
+    correctIdx: 2,
+    story: "'קראתי' + 'כל הלילה' = פעילות קריאה. ספר באותיות זהות הוא ספרא (קצב), ספירה, וגם גבול ('עיר הספר').",
+  },
+  {
+    word: "ספר",
+    sentence: "הגענו לעיר הספר ליד הגבול הצפוני.",
+    options: [
+      "אובייקט עם דפים לקריאה",
+      "פעולת ספירה",
+      "אזור גבול של מדינה",
+      "סופר שמייצר ספרות",
+    ],
+    correctIdx: 2,
+    story: "'עיר' + 'גבול' = רמז מפורש. עיר הספר = יישוב על קצה הארץ, מהשורש ס.פ.ר. שמשמעו גבול / קץ. תנ\"כי.",
+  },
+  {
+    word: "אדם",
+    sentence: "אדם הראשון נברא ביום השישי.",
+    options: [
+      "צבע אדמדם",
+      "שם אדם פרטי במקרא",
+      "כל אדם, מין האנושות",
+      "שטח חקלאי",
+    ],
+    correctIdx: 1,
+    story: "'הראשון' + 'נברא' מפנה לשם הפרטי. עברית עתיקה השתמשה ב'אדם' גם לכל אדם וגם לראשון בפרט. הפרשנות משתנה.",
+  },
+  {
+    word: "ים",
+    sentence: "ים של אנשים הגיע לכנס.",
+    options: [
+      "גוף מים גדול",
+      "כיוון מערב במקרא",
+      "ריבוי עצום של משהו",
+      "כלי גדול במקדש",
+    ],
+    correctIdx: 2,
+    story: "'אנשים' + 'הגיע לכנס' מפנה למטאפורה. 'ים של' = כמות גדולה מאוד. ביטוי שגרתי, בלי גוף מים אמיתי.",
+  },
+  {
+    word: "חיים",
+    sentence: "החיים שלי השתנו אחרי המסע ההוא.",
+    options: [
+      "מצב היפך מהמוות",
+      "שם משפחה",
+      "אופן ההתנהלות והחוויה",
+      "פרק זמן ביולוגי",
+    ],
+    correctIdx: 2,
+    story: "'שלי' + 'השתנו אחרי' = החוויה האישית. בעברית 'חיים' הוא גם זמן ביולוגי וגם אופן ההוויה. הקונטקסט מבדיל.",
+  },
+  {
+    word: "פנים",
+    sentence: "פני הספר היו מקושטים בזהב.",
+    options: [
+      "הצד הקדמי של הראש",
+      "כיוון, פנייה",
+      "החלק החיצוני של חפץ",
+      "התוכן הפנימי",
+    ],
+    correctIdx: 2,
+    story: "'פני' = הצד החיצוני של הספר. פנים מקראי הוא גם פני אדם, גם פני שמיים, וגם פני הספר. כיסוי חיצון, לא חזית.",
+  },
+  {
+    word: "פנים",
+    sentence: "המורה ראה את פני התלמיד והבין שיש בעיה.",
+    options: [
+      "הצד החיצון של חפץ",
+      "ביטוי הפנים של אדם",
+      "תוכן פנימי",
+      "כיוון מסוים",
+    ],
+    correctIdx: 1,
+    story: "'תלמיד' + 'הבין שיש בעיה' מצביע על קריאת הבעת פנים. כאן פנים = הפן הרגשי שנראה על הראש.",
+  },
+  {
+    word: "רוח",
+    sentence: "רוח חזקה נשבה מן הים.",
+    options: [
+      "תנועת אוויר באטמוספירה",
+      "נשמה או רוחניות",
+      "חלק רביעי של מצפן",
+      "אופי או טמפרמנט",
+    ],
+    correctIdx: 0,
+    story: "'נשבה' + 'מן הים' = תנועת אוויר. אבל 'רוח' עברית מכילה את כל ארבע המשמעויות. הקונטקסט עושה את העבודה.",
+  },
+  {
+    word: "רוח",
+    sentence: "רוח הצעירים בארץ עברה דרמטית מאז.",
+    options: [
+      "תנועת אוויר",
+      "ההלך הרוח הקולקטיבי, אופי",
+      "המוות והנשמה שעוזבת",
+      "כיוון רוחב",
+    ],
+    correctIdx: 1,
+    story: "'הצעירים בארץ' + 'מאז' = הקולקטיב הרוחני. בעברית 'רוח' = נטייה כללית של תקופה. פושטת בכל השפות.",
+  },
+  {
+    word: "לב",
+    sentence: "לב העיר מלא בקפה והומה אדם.",
+    options: [
+      "האיבר השואב דם",
+      "המרכז של מקום",
+      "ההרגשה, האהבה",
+      "הסבלנות והאומץ",
+    ],
+    correctIdx: 1,
+    story: "'העיר' + 'מלא בקפה' = המרכז העירוני. כל המשמעויות של לב מקיימות מטאפורה: מרכז של דבר, מקור החיים.",
+  },
+  {
+    word: "אבן",
+    sentence: "באר זו היא אבן יסוד של הקהילה.",
+    options: [
+      "סלע קטן",
+      "תכשיט יקר",
+      "יסוד או בסיס מטאפורי",
+      "אבן דרך באומנות",
+    ],
+    correctIdx: 2,
+    story: "'באר זו' + 'יסוד של הקהילה' = מטאפורה. אבן יסוד = הבסיס המכונן. ביטוי מקראי-תלמודי שעבר לבניין אזרחי מודרני.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, MeaningLensRound[]> = {
+  en: MEANING_LENS_ROUNDS_EN,
+  he: MEANING_LENS_ROUNDS_HE,
+};
+
+export function pickMeaningLensRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: MeaningLensRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

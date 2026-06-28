@@ -19,7 +19,7 @@ export type ShadeSliderRound = {
   story: string;
 };
 
-export const SHADE_SLIDER_ROUNDS: ShadeSliderRound[] = [
+const SHADE_SLIDER_ROUNDS_EN: ShadeSliderRound[] = [
   {
     axis: "happiness",
     ladder: ["content", "pleased", "glad", "joyful", "ecstatic"],
@@ -112,11 +112,88 @@ export const SHADE_SLIDER_ROUNDS: ShadeSliderRound[] = [
   },
 ];
 
-export function pickShadeSliderRounds(count: number): ShadeSliderRound[] {
-  const shuffled = SHADE_SLIDER_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew has rich synonym ladders. Same as English, the magic is in
+// the gradient — שמח is one notch, מתפעם is at the peak. Each ladder
+// teaches register and intensity together.
+const SHADE_SLIDER_ROUNDS_HE: ShadeSliderRound[] = [
+  {
+    axis: "שמחה",
+    ladder: ["מרוצה", "שמח", "צוהל", "מאושר", "מתפעם"],
+    story: "מרוצה זה מרוצה. מתפעם זה גופני, חיצוני, על-גדותיו. ההפרש בין רמות זה ההפרש בין סיפור חיים לאירוע אחד.",
+  },
+  {
+    axis: "כעס",
+    ladder: ["מצוברח", "רגוז", "כועס", "זועם", "משתולל"],
+    story: "מצוברח זה לרגע. משתולל זה אופציה לאשפוז. עברית עשירה במונחי כעס כי תרבות המקרא תיעדה אותם בקפידה.",
+  },
+  {
+    axis: "צער",
+    ladder: ["עצוב", "מצוברח", "מדוכא", "אומלל", "שבור"],
+    story: "עצוב זה רגש שבא והולך. שבור זה שלמות שאיבדה את התפר. עברית מכבדת את הצער בלא מעט רמות.",
+  },
+  {
+    axis: "רעב",
+    ladder: ["חצי שבע", "רעב", "רעב מאוד", "גווע", "מורעב"],
+    story: "מורעב הוא רעב כרוני, מצב גוף ולא תחושה. גווע זה תקופת רעב או רגע פיזיולוגי. עברית מבדילה ביניהם.",
+  },
+  {
+    axis: "עייפות",
+    ladder: ["מנומנם", "עייף", "מותש", "תשוש", "שבור"],
+    story: "מנומנם זה מעט שינה חסרה. שבור זה הגוף נכנע. בכל רגע אנחנו על אחת מהמדרגות, אבל לא תמיד שמים לב.",
+  },
+  {
+    axis: "גודל (גדול)",
+    ladder: ["לא קטן", "גדול", "ענק", "עצום", "מפלצתי"],
+    story: "כל המילים כאן אומרות 'גדול מהרגיל'. מפלצתי כבר רומז שזה גדול עד כדי הפרעה. הסקלה הזו מעוצבת על-ידי המעצב.",
+  },
+  {
+    axis: "חום",
+    ladder: ["נעים", "חם", "לוהט", "רותח", "מתלקח"],
+    story: "נעים זה רעיון של חוף. מתלקח כבר במצב סכנת בריאות. המילים האלה גם פיזיות גם מטאפוריות (וויכוח לוהט/רותח).",
+  },
+  {
+    axis: "קור",
+    ladder: ["צונן", "קריר", "קר", "קופא", "מקפיא"],
+    story: "צונן זה משקה. מקפיא זה כפור. הזוג קר/קופא הוא הקלאסי, אבל קופא יותר אישי (אני קופא), מקפיא חיצוני (מזג אוויר).",
+  },
+  {
+    axis: "יופי",
+    ladder: ["נחמד", "יפה", "יפהפה", "מהמם", "עוצר נשימה"],
+    story: "נחמד זה מחמאה זהירה. עוצר נשימה זה תיאור פיזיולוגי שהמילה הפכה להיות שגרתית. ככל שעולים, הקומפלימנט הופך לתיאור.",
+  },
+  {
+    axis: "תבונה",
+    ladder: ["נבון", "חכם", "מבריק", "גאון", "גאון על-טבעי"],
+    story: "נבון זה בעל שיקול דעת. גאון על-טבעי זה דרישת שלום ליצירתיות אכזרית. עברית מאפשרת ניואנסים עדינים.",
+  },
+  {
+    axis: "מהירות",
+    ladder: ["מתון", "מהיר", "זריז", "דוהר", "מהיר ברק"],
+    story: "מתון זה איטי במכוון. מהיר ברק זה מילה מעלה רף. במציאות אנחנו רוב הזמן בין מהיר לזריז ולא יודעים מאיפה הקצב עולה.",
+  },
+  {
+    axis: "פחד",
+    ladder: ["מחושש", "מודאג", "מפחד", "מבועת", "משותק"],
+    story: "מחושש זה בלב. משותק זה בגוף — פחד עוצר את היכולת להזיז שריר. עברית מקראית הכירה את הקשת הזו היטב.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, ShadeSliderRound[]> = {
+  en: SHADE_SLIDER_ROUNDS_EN,
+  he: SHADE_SLIDER_ROUNDS_HE,
+};
+
+export function pickShadeSliderRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: ShadeSliderRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

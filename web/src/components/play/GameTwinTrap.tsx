@@ -16,7 +16,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickTwinTrapRounds,
   type TwinTrapRound,
@@ -32,18 +32,22 @@ type RuntimeRound = {
   explain: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickTwinTrapRounds(SESSION_SIZE.twin).map((r): RuntimeRound => {
-    const correctWord = r.options[r.correctIdx];
-    const wrongWord = r.options[r.correctIdx === 0 ? 1 : 0];
-    const [a, b] = shuffle([correctWord, wrongWord]) as [string, string];
-    return {
-      sentence: r.sentence,
-      displayed: [a, b],
-      correctIdx: a === correctWord ? 0 : 1,
-      explain: r.explain,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickTwinTrapRounds(SESSION_SIZE.twin, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctWord = r.options[r.correctIdx];
+      const wrongWord = r.options[r.correctIdx === 0 ? 1 : 0];
+      const [a, b] = shuffle([correctWord, wrongWord]) as [string, string];
+      return {
+        sentence: r.sentence,
+        displayed: [a, b],
+        correctIdx: a === correctWord ? 0 : 1,
+        explain: r.explain,
+      };
+    }),
+  };
 }
 
 export function GameTwinTrap({
@@ -55,7 +59,10 @@ export function GameTwinTrap({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -136,8 +143,8 @@ export function GameTwinTrap({
         <div className="wb-play-question-eyebrow">{t.twinPrompt}</div>
         <div
           className="wb-play-prompt wb-play-prompt-sentence"
-          lang="en"
-          dir="ltr"
+          lang={contentLang}
+          dir={contentDir}
         >
           {parts.map((part, i) => (
             <span key={i}>
@@ -175,7 +182,7 @@ export function GameTwinTrap({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.explain}
         </div>
       )}

@@ -24,7 +24,7 @@ export type EtymologyArtistRound = {
   story: string;
 };
 
-export const ETYMOLOGY_ARTIST_ROUNDS: EtymologyArtistRound[] = [
+const ETYMOLOGY_ARTIST_ROUNDS_EN: EtymologyArtistRound[] = [
   {
     literal: "river horse",
     origin: "Greek hippos + potamos",
@@ -118,11 +118,120 @@ export const ETYMOLOGY_ARTIST_ROUNDS: EtymologyArtistRound[] = [
   },
 ];
 
-export function pickEtymologyArtistRounds(count: number): EtymologyArtistRound[] {
-  const shuffled = ETYMOLOGY_ARTIST_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew etymology surprises even native speakers. Words from Greek,
+// Latin, Persian, Arabic — but also pure Hebrew compounds whose
+// literal meaning is hidden under everyday use. Each round reveals
+// a small archaeological discovery in the language.
+const ETYMOLOGY_ARTIST_ROUNDS_HE: EtymologyArtistRound[] = [
+  {
+    literal: "סוס נהר",
+    origin: "יוונית hippos + potamos",
+    options: ["היפופוטם", "תנין", "סוסי ים", "תמסח"],
+    correctIdx: 0,
+    story: "היוונים העתיקים ראו את הבהמה השמנה במים, וקראו לו 'סוס נהר'. השם נדבק בלי שינוי דרך הלטינית עד לעברית.",
+  },
+  {
+    literal: "מלאך הים",
+    origin: "פיניקית milgah + yam",
+    options: ["שיוט", "מלח (איש ים)", "אונייה", "ספן"],
+    correctIdx: 1,
+    story: "המלח באנייה היה במקור 'מלאך הים' — מי שמטעם הים. המילה התקצרה לאות אחת ולמלך הים שאיבד את כתרו.",
+  },
+  {
+    literal: "אדמה בארץ זהב",
+    origin: "פיניקית aurum + terra",
+    options: ["דרום", "אמריקה", "אוסטרליה", "אוצר"],
+    correctIdx: 1,
+    story: "אֲמֵרִיגוּ וֵסְפּוּצִ'י נתן את שמו ליבשת. ה'אמריקה' הזה הוא צירוף איטלקי, לא 'ארץ זהב' — סתיר את הביטוי.",
+  },
+  {
+    literal: "מי כובס",
+    origin: "פרסית jameh + ab",
+    options: ["מכבסה", "סבון", "מטליות", "תליות"],
+    correctIdx: 0,
+    story: "מאהֶ'בּ הפרסי = מי כביסה. נכנס לעברית התלמודית. הפך לרחיצה, אחר כך למקום, אחר כך למכבסה המודרנית.",
+  },
+  {
+    literal: "אש בשמיים",
+    origin: "יוונית astron + nautes",
+    options: ["אסטרונאוט", "אסטרונום", "אאוטו-פיילוט", "טייס"],
+    correctIdx: 0,
+    story: "אסטרון = כוכב, נאוטס = מלח. 'מלח של כוכבים'. נטבע ב-1929, שנים לפני שיגור אדם לחלל. החזון קדם להמצאה.",
+  },
+  {
+    literal: "אצל הלוויתן",
+    origin: "ארמית leviatan",
+    options: ["לוויתן", "כריש", "תמנון", "דולפין"],
+    correctIdx: 0,
+    story: "לוויתן הוא בעל החיים המקראי הענק. השורש 'לוי' (להתלוות / לחבר), כי הגוף השאיר אחריו מסעות אדירים.",
+  },
+  {
+    literal: "כיסא של המלך",
+    origin: "אכדית kussu + שׁ",
+    options: ["כס המלוכה", "כסא", "מלכודת", "מלצר"],
+    correctIdx: 0,
+    story: "כיסא = שורש אכדי kussu. 'כס מלכות' = ביטוי קלאסי לכסא ההגמוני. נכנס לעברית מהשפות השמיות.",
+  },
+  {
+    literal: "מי שכותב על-פה",
+    origin: "ארמית תנא (לחזור)",
+    options: ["תנא", "סופר", "פילוסוף", "רב"],
+    correctIdx: 0,
+    story: "תנא = מי שמכיר על-פה את המסורת ושנה אותה לתלמידיו. השורש הארמי שׁנ״י = לחזור, ללמד שוב ושוב.",
+  },
+  {
+    literal: "הולך אל מבול",
+    origin: "אכדית abubu",
+    options: ["מבול", "סופה", "גשם", "ים"],
+    correctIdx: 0,
+    story: "מבול נכנס מהמיתוס המסופוטמי. abubu האכדי = מבול אסון. נכנס לעברית כשם פרטי לאירוע ההיסטורי-מיתי של נח.",
+  },
+  {
+    literal: "ידיד הגרגרים",
+    origin: "ארמית פילוקרון",
+    options: ["פילוסוף", "פילולוג", "פילנתרופ", "פילגש"],
+    correctIdx: 1,
+    story: "מהיוונית philos (אוהב) + logos (מילה). 'אוהב מילים'. פילולוג = חוקר השפה. הגרגרים מטאפורה לדברי אומנות מילים.",
+  },
+  {
+    literal: "סופג מים מהאדמה",
+    origin: "ארמית ספג",
+    options: ["ספוג", "סבוגה", "סדק", "טפיל"],
+    correctIdx: 0,
+    story: "ספג בארמית = שתי, ספיגה. נכנס לעברית התלמודית. הצורה הביולוגית של ספוג ים הגיעה אחר כך, כשהתחילו ללקטו.",
+  },
+  {
+    literal: "אוכל הכל",
+    origin: "יוונית pan + phagein",
+    options: ["טבעוני", "צמחוני", "אוכל-כל", "צרכן"],
+    correctIdx: 2,
+    story: "פאן = הכל, פגיין = לאכול. 'אוכל הכל'. ביטוי שעבר לטינית גם לאנגלית כ omnivore. בעברית 'אוכל-כל' המנדה הוא חידוש.",
+  },
+  {
+    literal: "ילד הים",
+    origin: "ארמית ים + ילד",
+    options: ["ים-בני", "ים-תלמיד", "ים-של-שלמה", "תלמיד-חכם"],
+    correctIdx: 2,
+    story: "'ים של שלמה' = ספר תלמודי הכולל יסודות הים של חכמה. ים = כמות גדולה, שלמה = שלמות. ילד הים = מקור הידע.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, EtymologyArtistRound[]> = {
+  en: ETYMOLOGY_ARTIST_ROUNDS_EN,
+  he: ETYMOLOGY_ARTIST_ROUNDS_HE,
+};
+
+export function pickEtymologyArtistRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: EtymologyArtistRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

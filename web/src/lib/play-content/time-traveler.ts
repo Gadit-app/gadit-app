@@ -27,7 +27,7 @@ export type TimeTravelerRound = {
   era: string;
 };
 
-export const TIME_TRAVELER_ROUNDS: TimeTravelerRound[] = [
+const TIME_TRAVELER_ROUNDS_EN: TimeTravelerRound[] = [
   {
     oldMeaning: "Foolish, ignorant, or simple-minded.",
     options: ["nice", "wise", "mean"],
@@ -184,12 +184,128 @@ export const TIME_TRAVELER_ROUNDS: TimeTravelerRound[] = [
   },
 ];
 
-/** Pick N rounds for a session. Caller randomises option display order. */
-export function pickTimeTravelerRounds(count: number): TimeTravelerRound[] {
-  const shuffled = TIME_TRAVELER_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew etymology shifts. The Tanakh and Mishna give us a rich
+// archaeological record of how Hebrew words have drifted — sometimes
+// dramatically — over 3,000 years. Each story is a tiny piece of
+// Hebrew linguistic history.
+const TIME_TRAVELER_ROUNDS_HE: TimeTravelerRound[] = [
+  {
+    oldMeaning: "אדם בעל מנוחה ויישוב — עשיר, בעל הון.",
+    options: ["מסכן", "עני", "אביון"],
+    correctIdx: 0,
+    story: "מ-מ׳ + שכן (יישוב, מנוחה). פעם 'מסכן' היה מי שיש לו ישוב יציב. דרך לטינית miser (אומלל) המשמעות התהפכה.",
+    era: "תקופת המקרא",
+  },
+  {
+    oldMeaning: "ידיד קרוב או בן ברית.",
+    options: ["אלוף", "חבר", "רֵעַ"],
+    correctIdx: 0,
+    story: "במקרא 'אלוף' = ידיד נאמן ('אלופנו עזבנו' — חברנו עזבנו). המשמעות 'מנצח / ראש שבט' היא מאוחרת.",
+    era: "תקופת המקרא",
+  },
+  {
+    oldMeaning: "פעולה של רעש או טלטול.",
+    options: ["נער", "ילד", "צעיר"],
+    correctIdx: 0,
+    story: "מהשורש נ.ע.ר (לנער, להתנער). 'נער' פעם היה כל מי שמרעיש, ילד או משרת. המשמעות 'צעיר' לבדה התגבשה מאוחר יותר.",
+    era: "תנ״כית",
+  },
+  {
+    oldMeaning: "אצל, ליד — מילת מקום.",
+    options: ["איתו", "אצלו", "עמו"],
+    correctIdx: 1,
+    story: "בעברית מקראית 'אצל' היה רק מקומי ('אצל הבאר'). המשמעות 'בבעלות / בידיעת' היא חידוש של ימי הביניים.",
+    era: "ימי הביניים",
+  },
+  {
+    oldMeaning: "פעולת הריגה והשמדה.",
+    options: ["אוכל", "טורף", "אופה"],
+    correctIdx: 0,
+    story: "'אש אוכלת' = אש משמידה. 'חרב אוכלת' = חרב הורגת. רק במאות האחרונות 'אוכל' התמקד במזון אדם.",
+    era: "תנ״כית",
+  },
+  {
+    oldMeaning: "חלל שאליו נכנסים — חודרים אליו.",
+    options: ["חדר", "בית", "אולם"],
+    correctIdx: 0,
+    story: "מהשורש ח.ד.ר (לחדור, להיכנס פנימה). פעם 'חדר' היה הפעולה. אחר כך הפך לשם המקום שחודרים אליו.",
+    era: "מקראית מאוחרת",
+  },
+  {
+    oldMeaning: "אדם שאינו זר — בן הארץ.",
+    options: ["אזרח", "תושב", "ילדיד"],
+    correctIdx: 0,
+    story: "'אזרח' במקרא = 'ילד הארץ' לעומת 'גר'. השפה החדשה אימצה את המילה למעמד פוליטי-משפטי.",
+    era: "תקופת המקרא",
+  },
+  {
+    oldMeaning: "להאיר, להבריק (פועל).",
+    options: ["צוהר", "שחר", "כוכב"],
+    correctIdx: 1,
+    story: "בעברית עתיקה 'שחר' היה פועל (לדרוש, לחפש מוקדם בבוקר). המשמעות 'הוד הבוקר' היא של תהילים.",
+    era: "מקראית מוקדמת",
+  },
+  {
+    oldMeaning: "אישה שנותנת חלב מבית אביה — אינה אם.",
+    options: ["שפחה", "מינקת", "אומנת"],
+    correctIdx: 1,
+    story: "במקרא 'מינקת' היא אישה שמינקת את התינוק עבור משפחה אחרת. תפקיד מקצועי לא רק ביולוגי.",
+    era: "תקופת המקרא",
+  },
+  {
+    oldMeaning: "מי שמלמד דבריו על-פה.",
+    options: ["משנן", "מורה", "תנא"],
+    correctIdx: 2,
+    story: "'תנא' מהשורש שנ״י (לחזור, לשנן). תנא במשנה = מי שמכיר את הטקסטים על-פה. הפך למלומד היסטורי.",
+    era: "תקופת המשנה",
+  },
+  {
+    oldMeaning: "חלק, גורל, חבל ארץ.",
+    options: ["חבל", "גזרה", "מנה"],
+    correctIdx: 1,
+    story: "'גזרה' פעם הייתה חבל ארץ ('גזרה לבת ים'). הפך אחר כך ל'גזרת דין', 'גזרת חוק', וגם 'גזרת אישה'.",
+    era: "תנ״כית-תלמודית",
+  },
+  {
+    oldMeaning: "כלי גדול לאחסון תבואה.",
+    options: ["מטמון", "אסם", "אוצר"],
+    correctIdx: 2,
+    story: "'אוצר' במקרא = מחסן פיזי לתבואה או מטבעות. המשמעות הפיגורטיבית ('אוצר בלום') מאוחרת.",
+    era: "תקופת המקרא",
+  },
+  {
+    oldMeaning: "פלא, נס שמיימי.",
+    options: ["מופת", "אות", "ניסי"],
+    correctIdx: 0,
+    story: "'מופת' במקרא = פלא של ממש ('עשיתי בה את אותותיי ואת מופתיי'). היום נשתמש בו ל'דוגמה לחיקוי'.",
+    era: "תקופת המקרא",
+  },
+  {
+    oldMeaning: "מקום שבו מתאספים לעבודה משותפת.",
+    options: ["יער", "בית", "חצר"],
+    correctIdx: 2,
+    story: "'חצר' במקרא = שטח פתוח לאספה, מרכז חיים. רק מאוחר התכווצה למשמעות 'שטח קטן בין בתים'.",
+    era: "תקופת המקרא",
+  },
+];
+
+// ─── Per-language router ───────────────────────────────────────
+const ROUNDS_BY_LANG: Record<string, TimeTravelerRound[]> = {
+  en: TIME_TRAVELER_ROUNDS_EN,
+  he: TIME_TRAVELER_ROUNDS_HE,
+};
+
+export function pickTimeTravelerRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: TimeTravelerRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

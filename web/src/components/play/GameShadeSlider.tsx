@@ -17,7 +17,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickShadeSliderRounds,
   type ShadeSliderRound,
@@ -32,23 +32,25 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickShadeSliderRounds(SESSION_SIZE.shade).map((r): RuntimeRound => {
-    let pool = shuffle(r.ladder.slice());
-    // Avoid the trivial case where the scramble accidentally matches
-    // the canonical order — the player would think the game is broken.
-    let attempts = 0;
-    while (pool.join("|") === r.ladder.join("|") && attempts < 5) {
-      pool = shuffle(r.ladder.slice());
-      attempts++;
-    }
-    return {
-      axis: r.axis,
-      canonical: r.ladder,
-      pool,
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickShadeSliderRounds(SESSION_SIZE.shade, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      let pool = shuffle(r.ladder.slice());
+      let attempts = 0;
+      while (pool.join("|") === r.ladder.join("|") && attempts < 5) {
+        pool = shuffle(r.ladder.slice());
+        attempts++;
+      }
+      return {
+        axis: r.axis,
+        canonical: r.ladder,
+        pool,
+        story: r.story,
+      };
+    }),
+  };
 }
 
 export function GameShadeSlider({
@@ -60,7 +62,10 @@ export function GameShadeSlider({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   /** Order the player has placed so far, mildest → strongest. */
   const [placed, setPlaced] = useState<string[]>([]);
@@ -143,7 +148,7 @@ export function GameShadeSlider({
       />
       <div className="wb-play-question wb-play-question-shade">
         <div className="wb-play-question-eyebrow">{t.shadePrompt}</div>
-        <div className="wb-play-shade-axis" lang="en" dir="ltr">
+        <div className="wb-play-shade-axis" lang={contentLang} dir={contentDir}>
           {r.axis}
         </div>
         <div className="wb-play-shade-axis-labels">
@@ -208,7 +213,7 @@ export function GameShadeSlider({
       </div>
       {revealed && (
         <>
-          <div className="wb-play-shade-canonical" lang="en" dir="ltr">
+          <div className="wb-play-shade-canonical" lang={contentLang} dir={contentDir}>
             <span className="wb-play-question-eyebrow">{t.shadeReveal}</span>
             <div className="wb-play-shade-canonical-row">
               {r.canonical.map((w, i) => (
@@ -219,7 +224,7 @@ export function GameShadeSlider({
               ))}
             </div>
           </div>
-          <div className="wb-play-explain" lang="en" dir="ltr">
+          <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
             {r.story}
           </div>
         </>

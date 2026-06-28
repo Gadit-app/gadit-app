@@ -94,6 +94,17 @@ export const SESSION_SIZE: Record<GameId, number> = {
   artist: 6,   // 6 literal-translations; standard 4-choice
 };
 
+// ─── Direction helpers for per-language curated content ─────────
+
+/** Returns the text direction for content rendered in the given language.
+ *  Used by the curated games so Hebrew/Arabic rounds render RTL while
+ *  Latin-script rounds render LTR. Components pass the `contentLang`
+ *  (returned from each picker) here, not the UI lang — they only differ
+ *  when we fall back to English content. */
+export function dirForLang(lang: string): "rtl" | "ltr" {
+  return lang === "he" || lang === "ar" ? "rtl" : "ltr";
+}
+
 // ─── Random utilities ──────────────────────────────────────────
 
 export function shuffle<T>(arr: readonly T[]): T[] {

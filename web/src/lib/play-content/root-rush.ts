@@ -31,7 +31,7 @@ export type RootRushRound = {
   story: string;
 };
 
-export const ROOT_RUSH_ROUNDS: RootRushRound[] = [
+const ROOT_RUSH_ROUNDS_EN: RootRushRound[] = [
   {
     root: "SPECT",
     origin: "Latin",
@@ -146,11 +146,125 @@ export const ROOT_RUSH_ROUNDS: RootRushRound[] = [
   },
 ];
 
-export function pickRootRushRounds(count: number): RootRushRound[] {
-  const shuffled = ROOT_RUSH_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew is BUILT on a 3-letter root system. Every native speaker
+// knows this intuitively. This game makes it explicit — and showcases
+// the deep structural beauty of the language. Distractors are words
+// that LOOK like they share a root but actually come from elsewhere.
+const ROOT_RUSH_ROUNDS_HE: RootRushRound[] = [
+  {
+    root: "ש.מ.ר",
+    origin: "עברית",
+    meaning: "לשמור, להגן, לעקוב",
+    correct: ["שומר", "משמרת", "שמירה"],
+    distractors: ["שמן", "שמיים", "שמט"],
+    story: "שמר נמצא בכל מקום: שומר, מִשמר, מַשמרת, שמרנות. הסחות 'שמן' מ-שׁ.מ.נ. ו'שמיים' מ-שׁ.מ.י.מ.",
+  },
+  {
+    root: "כ.ת.ב",
+    origin: "עברית",
+    meaning: "לכתוב, לרשום",
+    correct: ["כתב", "מכתב", "כתבן"],
+    distractors: ["כתם", "כיתה", "כפר"],
+    story: "השורש המקראי שעבר את כל ההיסטוריה. 'כתם' מ-כ.ת.מ., 'כיתה' מ-כ.ת.ת. (לחלק לחלקים), שורשים שונים לגמרי.",
+  },
+  {
+    root: "ל.מ.ד",
+    origin: "עברית",
+    meaning: "ללמוד, להוראה",
+    correct: ["לומד", "מלמד", "תלמיד"],
+    distractors: ["להב", "ילד", "ימים"],
+    story: "מ-ל.מ.ד נגזרו לומד (פעיל), מלמד (פיעל), תלמיד (משקל), תלמוד (משקל). 'ילד' למרות הצליל הוא מ-י.ל.ד.",
+  },
+  {
+    root: "ש.פ.ט",
+    origin: "עברית",
+    meaning: "לדון, לקבוע משפט",
+    correct: ["שופט", "משפט", "שפיטה"],
+    distractors: ["שפן", "שפתיים", "שפע"],
+    story: "השורש של דיני התורה: שופט, משפט, נשפט, שפיטה. השפן הוא מ-ש.פ.נ., השפתיים מ-ש.פ.ה. (מילה דו-הברתית).",
+  },
+  {
+    root: "ק.ר.א",
+    origin: "עברית",
+    meaning: "לקרוא בקול, לחנן בשם",
+    correct: ["קורא", "מקרא", "קריאה"],
+    distractors: ["קרוב", "קר", "קרקע"],
+    story: "ק.ר.א הוא לקרוא טקסט בקול וגם להעניק שם. הסחות: 'קרוב' מ-ק.ר.ב., 'קר' שורש ק.ר.ר., 'קרקע' מ-ק.ר.ק.",
+  },
+  {
+    root: "ה.ל.כ",
+    origin: "עברית",
+    meaning: "ללכת, להתקדם",
+    correct: ["הולך", "מהלך", "הליכה"],
+    distractors: ["הר", "היום", "הוד"],
+    story: "ה.ל.כ הוא שורש התנועה בעברית. בנוסף נגזרו הלך (פעיל), מתהלך (התפעל), נילך, להלן. הסחות הם שורשים שונים.",
+  },
+  {
+    root: "ר.צ.ה",
+    origin: "עברית",
+    meaning: "לרצות, לאוות",
+    correct: ["רצון", "מרוצה", "רצונות"],
+    distractors: ["רץ", "רצח", "רצף"],
+    story: "ר.צ.ה. (רוצה, מתרצה, רצוי). הסחות: 'רץ' מ-ר.ו.צ., 'רצח' שורש ר.צ.ח. ו'רצף' שורש ר.צ.פ. שלושה שורשים שונים.",
+  },
+  {
+    root: "ע.ב.ד",
+    origin: "עברית",
+    meaning: "לעבוד, לשרת",
+    correct: ["עובד", "עבדות", "מעבד"],
+    distractors: ["עברית", "עבי", "עין"],
+    story: "ע.ב.ד הוא עבד (עובד), מעבדה, עבדות. הסחות: 'עברית' מ-ע.ב.ר., 'עבי' תואר השם של עבה (ע.ב.ה.), 'עין' מ-ע.י.נ.",
+  },
+  {
+    root: "ד.ב.ר",
+    origin: "עברית",
+    meaning: "לדבר, לאמור",
+    correct: ["דובר", "דיבור", "מדבר"],
+    distractors: ["דבש", "דבק", "דקה"],
+    story: "ד.ב.ר נמצא בכל הזיקוקים של עברית: דובר, דברן, להגיד דבר. הסחות: 'דבש' מ-ד.ב.ש., 'דבק' מ-ד.ב.ק.",
+  },
+  {
+    root: "א.כ.ל",
+    origin: "עברית",
+    meaning: "לאכול, לכלות",
+    correct: ["אוכל", "מאכל", "אכילה"],
+    distractors: ["אומר", "אדם", "אש"],
+    story: "א.כ.ל הוא שורש המזון: אוכל, מאכל, נאכל, מאכל, אכלן. הסחות הם שורשים שונים לגמרי לפי האות השנייה.",
+  },
+  {
+    root: "ר.א.ה",
+    origin: "עברית",
+    meaning: "לראות, להבחין",
+    correct: ["רואה", "מראה", "ראייה"],
+    distractors: ["ראש", "רחב", "רעב"],
+    story: "ר.א.ה (רואה, מראה, ראייה, מורא, ראוי). הסחות: 'ראש' מ-ר.א.ש., 'רחב' מ-ר.ח.ב., 'רעב' מ-ר.ע.ב.",
+  },
+  {
+    root: "ג.ד.ל",
+    origin: "עברית",
+    meaning: "לגדול, להתפתח",
+    correct: ["גדול", "גידול", "מגדל"],
+    distractors: ["גג", "גזע", "גלגל"],
+    story: "ג.ד.ל הוא שורש ההתפתחות בעברית. גדל, מגדל, גדולה, התגדל. הסחות הם שורשים אחרים לחלוטין: ג.ג.ג., ג.ז.ע., ג.ל.ג.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, RootRushRound[]> = {
+  en: ROOT_RUSH_ROUNDS_EN,
+  he: ROOT_RUSH_ROUNDS_HE,
+};
+
+export function pickRootRushRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: RootRushRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

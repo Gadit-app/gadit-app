@@ -18,7 +18,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickTimeTravelerRounds,
   type TimeTravelerRound,
@@ -32,20 +32,24 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickTimeTravelerRounds(SESSION_SIZE.time).map((r): RuntimeRound => {
-    const correctWord = r.options[r.correctIdx];
-    const [a, b, c] = shuffle(r.options.slice()) as [string, string, string];
-    const displayed: [string, string, string] = [a, b, c];
-    const correctIdx = displayed.indexOf(correctWord) as 0 | 1 | 2;
-    return {
-      oldMeaning: r.oldMeaning,
-      era: r.era,
-      displayed,
-      correctIdx,
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickTimeTravelerRounds(SESSION_SIZE.time, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctWord = r.options[r.correctIdx];
+      const [a, b, c] = shuffle(r.options.slice()) as [string, string, string];
+      const displayed: [string, string, string] = [a, b, c];
+      const correctIdx = displayed.indexOf(correctWord) as 0 | 1 | 2;
+      return {
+        oldMeaning: r.oldMeaning,
+        era: r.era,
+        displayed,
+        correctIdx,
+        story: r.story,
+      };
+    }),
+  };
 }
 
 export function GameTimeTraveler({
@@ -57,7 +61,10 @@ export function GameTimeTraveler({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -122,7 +129,7 @@ export function GameTimeTraveler({
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.timePrompt}</div>
         <div className="wb-play-era">{r.era}</div>
-        <div className="wb-play-old-meaning" lang="en" dir="ltr">
+        <div className="wb-play-old-meaning" lang={contentLang} dir={contentDir}>
           &ldquo;{r.oldMeaning}&rdquo;
         </div>
       </div>
@@ -152,7 +159,7 @@ export function GameTimeTraveler({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

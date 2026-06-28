@@ -25,7 +25,7 @@ export type IdiomDecoderRound = {
   story: string;
 };
 
-export const IDIOM_DECODER_ROUNDS: IdiomDecoderRound[] = [
+const IDIOM_DECODER_ROUNDS_EN: IdiomDecoderRound[] = [
   {
     idiom: "spill the beans",
     literal: "Someone tips a glass jar of dried beans onto the floor. Beans bounce everywhere. They cannot be quietly put back.",
@@ -184,11 +184,172 @@ export const IDIOM_DECODER_ROUNDS: IdiomDecoderRound[] = [
   },
 ];
 
-export function pickIdiomDecoderRounds(count: number): IdiomDecoderRound[] {
-  const shuffled = IDIOM_DECODER_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew idioms cover 3,000 years — from the Tanakh through the
+// Talmud to modern slang. The literal description is the funny part;
+// the real meaning is often surprising even for native speakers.
+const IDIOM_DECODER_ROUNDS_HE: IdiomDecoderRound[] = [
+  {
+    idiom: "ירד לטמיון",
+    literal: "מישהו מחפש אוצר, מוצא רק קופה ריקה. המטמון שהיה שם בעבר נעלם לחלוטין.",
+    options: [
+      "התעשר במהירות",
+      "אבד או הלך לאיבוד לגמרי",
+      "מצא משהו יקר",
+      "התעייף מהמסע",
+    ],
+    correctIdx: 1,
+    story: "טמיון = מטמון או קופת מלך ביוונית-לטינית. 'ירד לטמיון' = ירד אל הקופה שכבר ריקה. הביטוי מקראי-תלמודי.",
+  },
+  {
+    idiom: "נפל בפח",
+    literal: "אדם הולך בשדה ונופל לתוך גומה עמוקה שצדים בה חיות. נשאר תקוע ומאוכזב.",
+    options: [
+      "מצא הזדמנות עסקית",
+      "התרגל לסביבה חדשה",
+      "נכנס למלכודת או נרמה",
+      "הצליח אחרי מאמצים",
+    ],
+    correctIdx: 2,
+    story: "מתוך תהלים: 'הצדיק לא יִפֹּל בפח'. פח כאן = מלכודת לציפורים. מילולית 3,000 שנה לפני 'נפל בפח' המודרני.",
+  },
+  {
+    idiom: "שבר את הראש",
+    literal: "אדם יושב מעל ספר עבה, נושך את ציפורניו, מנער את ראשו עד שצוואר כואב. שעות עוברות.",
+    options: [
+      "התרגז במיוחד",
+      "חשב מאוד קשה על משהו",
+      "אבד את ההכרה",
+      "סיים תרגיל גופני",
+    ],
+    correctIdx: 1,
+    story: "ביטוי תלמודי. גם בארמית: 'תבר רישא' (לשבור ראש = לחשוב). בעברית מודרנית עוצמת המאמץ מהדהדת מהמילה 'שבר'.",
+  },
+  {
+    idiom: "אכל את הכובע",
+    literal: "אדם תוקע את הכובע שלו לתוך הפה ולועס. סביבו אנשים מסתכלים בהפתעה.",
+    options: [
+      "התחרט קשה על טעות",
+      "אכל ארוחה גדולה",
+      "התלבש בצורה משונה",
+      "התנהג בחוסר נימוס",
+    ],
+    correctIdx: 0,
+    story: "תרגום מאנגלית 'eat one's hat', ביטוי מהמאה ה-19. בעברית מודרנית, מודה בטעות חמורה, מבטא חרטה.",
+  },
+  {
+    idiom: "תפס את השור בקרניו",
+    literal: "אדם רץ אל שור גדול וכועס, אוחז ישירות בקרניים. ללא חשש, ללא היסוס.",
+    options: [
+      "ברח ממצב מסוכן",
+      "התעמת ישירות עם הבעיה",
+      "ניסה לשכנע באמצעות שיחה",
+      "התבייש להתחיל משימה",
+    ],
+    correctIdx: 1,
+    story: "ביטוי לטיני 'tauros prendere cornibus'. בכל השפות אומר אותו דבר: מתמודד באומץ עם הקשה ביותר במצב.",
+  },
+  {
+    idiom: "פתח דלת חדשה",
+    literal: "אדם עומד מול קיר. פתאום מופיעה דלת במקום שלא הייתה. הוא פותח ונכנס למקום חדש לגמרי.",
+    options: [
+      "מצא הזדמנות או פתרון",
+      "נכנס לבית של מישהו",
+      "התחיל לבנות בית",
+      "סיים פרויקט קודם",
+    ],
+    correctIdx: 0,
+    story: "ביטוי מודרני, חידוש עברי. השתרש לאחרונה בעקבות תהליכי שינוי קריירה ויזמות בישראל של המאה ה-21.",
+  },
+  {
+    idiom: "נגע ללב",
+    literal: "מסר או מילה עוברים מהאוויר ישירות אל הלב. הלב מגיב, רוקד, מתפעם.",
+    options: [
+      "הזיק לבריאות",
+      "עורר רגש חזק",
+      "פגע פיזית",
+      "גרם להתעלפות",
+    ],
+    correctIdx: 1,
+    story: "ביטוי קלאסי, תרגום של 'touch the heart'. אבל גם בעברית עתיקה הלב היה מקור הרגש (לבי מתחמם, לבי בוכה).",
+  },
+  {
+    idiom: "פתח את הפה",
+    literal: "אדם פותח את הפה בצורה דרמטית, נראה כאילו עומד לבלוע משהו ענקי. או לדבר.",
+    options: [
+      "אכל ארוחה",
+      "התחיל לזמר",
+      "אמר משהו שלא היה צריך לומר",
+      "צעק מכאב",
+    ],
+    correctIdx: 2,
+    story: "ביטוי שלילי בעברית. 'פתח את הפה' = דיבר כשלא היה צריך. הקשור בקרוב ל'סתום את הפה'. רגיש לקונטקסט.",
+  },
+  {
+    idiom: "טס באוויר",
+    literal: "אדם רץ במהירות כל כך גדולה שרגליו לא נוגעות באדמה. הוא ממש טס כמו ציפור.",
+    options: [
+      "התעלף מסחרחורת",
+      "רץ ונסע מהר מאוד",
+      "הגיע לטיסה",
+      "ראה חלום",
+    ],
+    correctIdx: 1,
+    story: "ביטוי מודרני. בעברית המודרנית 'טס' = רץ במהירות גבוהה. גם 'טס במכונית', 'טס למסיבה' = מגיע מהר.",
+  },
+  {
+    idiom: "אבד עליו הכלח",
+    literal: "אדם זקן רואה כלי עבודה שהיה בשימוש לפני שבעים שנה. הכלי עדיין שלם אבל כבר אין מי שיכיר אותו.",
+    options: [
+      "נשבר ולא ניתן לתיקון",
+      "התיישן, איבד מהרלוונטיות",
+      "נמכר במחיר גבוה",
+      "נגנב מהבית",
+    ],
+    correctIdx: 1,
+    story: "מקראי. כלח = זקנה, יום החיים בסוף. 'אבד עליו הכלח' = הזמן עבר עליו, אינו רלוונטי. תרגום נוסטלגי לאלגנטית.",
+  },
+  {
+    idiom: "מקרי לחלוטין",
+    literal: "אדם הולך ברחוב, ופוגש בדיוק את האדם שעליו דיבר אתמול. שני הצדדים נדהמים מהמקריות הענקית.",
+    options: [
+      "תוצאה של תכנון",
+      "אירוע צפוי מראש",
+      "צירוף מקרים מיוחד",
+      "תוצאה של חוקים",
+    ],
+    correctIdx: 2,
+    story: "ביטוי שגרתי. בעברית 'מקרי' = ללא תכנון. ההפך מ'מתוכנן' או 'מכוון'. ביטוי מודרני שדגל ב'יד המקרה'.",
+  },
+  {
+    idiom: "הרים את הראש",
+    literal: "אדם שהיה מכופף שנים, פתאום מזדקף ומבליט את הראש בגאווה. הוא מסתכל לעולם בעיניים.",
+    options: [
+      "התעורר מהשינה",
+      "התמרד נגד דיכוי",
+      "התחיל לתת עצות",
+      "הצליח לעלות בדרגה",
+    ],
+    correctIdx: 1,
+    story: "מקראי וגם מודרני. 'נשא ראשו' מציין שחרור משעבוד או דיכוי. בעברית של היום: שינוי גורף במצב נחיתות.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, IdiomDecoderRound[]> = {
+  en: IDIOM_DECODER_ROUNDS_EN,
+  he: IDIOM_DECODER_ROUNDS_HE,
+};
+
+export function pickIdiomDecoderRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: IdiomDecoderRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

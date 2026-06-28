@@ -39,8 +39,10 @@ export type OriginCountry =
   | "ng"   // West African languages
   | "ca";  // Inuit / Algonquian (Canada)
 
-/** Human-readable language name shown to the player. */
-export const LANG_LABEL: Record<OriginCountry, string> = {
+/** Per-language flag labels. We look up by contentLang first, then
+ *  fall back to English. Hebrew/Arabic/Russian players see native
+ *  language names; everyone else gets English. */
+const LANG_LABEL_EN: Record<OriginCountry, string> = {
   sa: "Arabic",
   in: "Hindi / Sanskrit",
   cn: "Chinese",
@@ -65,6 +67,44 @@ export const LANG_LABEL: Record<OriginCountry, string> = {
   ca: "Inuit / Algonquian",
 };
 
+const LANG_LABEL_HE: Record<OriginCountry, string> = {
+  sa: "ערבית",
+  in: "הינדית / סנסקריט",
+  cn: "סינית",
+  jp: "יפנית",
+  de: "גרמנית",
+  fr: "צרפתית",
+  es: "ספרדית",
+  it: "איטלקית",
+  nl: "הולנדית",
+  ru: "רוסית",
+  cz: "צ׳כית",
+  ir: "פרסית",
+  tr: "טורקית",
+  gr: "יוונית",
+  va: "לטינית",
+  no: "נורדית עתיקה",
+  is: "איסלנדית",
+  mx: "נחואטל (אצטקית)",
+  au: "אבוריג׳ינית",
+  ke: "סוואהילי",
+  ng: "מערב אפריקאית",
+  ca: "אינואיט / אלגונקווין",
+};
+
+const LANG_LABEL_BY_CONTENT_LANG: Record<string, Record<OriginCountry, string>> = {
+  en: LANG_LABEL_EN,
+  he: LANG_LABEL_HE,
+};
+
+export function getLangLabel(country: OriginCountry, contentLang: string): string {
+  const map = LANG_LABEL_BY_CONTENT_LANG[contentLang] ?? LANG_LABEL_EN;
+  return map[country];
+}
+
+// Kept for backwards-compat with the original API. Defaults to English.
+export const LANG_LABEL = LANG_LABEL_EN;
+
 export type WordPassportRound = {
   /** The English word being shown. */
   word: string;
@@ -76,7 +116,7 @@ export type WordPassportRound = {
   story: string;
 };
 
-export const WORD_PASSPORT_ROUNDS: WordPassportRound[] = [
+const WORD_PASSPORT_ROUNDS_EN: WordPassportRound[] = [
   {
     word: "alcohol",
     options: ["sa", "va", "fr", "gr"],
@@ -229,11 +269,120 @@ export const WORD_PASSPORT_ROUNDS: WordPassportRound[] = [
   },
 ];
 
-export function pickWordPassportRounds(count: number): WordPassportRound[] {
-  const shuffled = WORD_PASSPORT_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew is full of loanwords — Greek (the Hellenistic period),
+// Aramaic (Talmud), Arabic (Andalusia, the medieval rabbis), German
+// (Yiddish via Eastern Europe), and modern Anglo-American. Each
+// round reveals the surprising origin of a word people use daily.
+const WORD_PASSPORT_ROUNDS_HE: WordPassportRound[] = [
+  {
+    word: "סנדל",
+    options: ["gr", "sa", "va", "ir"],
+    correctIdx: 0,
+    story: "מיוונית sandalion (סנדל קל). נכנסה לעברית דרך הלשון המקראית והתלמודית, מתקופת הכיבוש היווני של ארץ ישראל.",
+  },
+  {
+    word: "אכסניה",
+    options: ["va", "gr", "fr", "de"],
+    correctIdx: 1,
+    story: "מיוונית xenia (הכנסת אורחים). המילה התלמודית 'אכסניה' שמרה את המשמעות של מקום אירוח אורחים שבאו ממרחק.",
+  },
+  {
+    word: "פרוזדור",
+    options: ["va", "gr", "ir", "sa"],
+    correctIdx: 0,
+    story: "מלטינית prosdorium (קדם-מבוא). הגיעה לעברית מהיוונית בתקופה התלמודית, נושאת איתה תרבות הכניסה הרומית.",
+  },
+  {
+    word: "כיסא",
+    options: ["sa", "va", "gr", "ir"],
+    correctIdx: 0,
+    story: "מאכדית kussu, דרך הארמית כורסיא. נדדה אל הערבית (כורסי) ובחזרה אל העברית. שתי שפות אחיות, מילה אחת.",
+  },
+  {
+    word: "תפוז",
+    options: ["sa", "ir", "in", "it"],
+    correctIdx: 2,
+    story: "מהינדי / סנסקריט naranga, דרך הפרסית והערבית (نارنج). 'תפוז' = תפוח־זהב, חידוש עברי שעוטף שורש הודי עתיק.",
+  },
+  {
+    word: "תאטרון",
+    options: ["gr", "va", "fr", "it"],
+    correctIdx: 0,
+    story: "מיוונית theatron (מקום ראייה). נכנסה לעברית התלמודית בתקופת בית שני, חזרה דרך הצרפתית לעברית המודרנית.",
+  },
+  {
+    word: "פיג'מה",
+    options: ["fr", "ir", "in", "tr"],
+    correctIdx: 1,
+    story: "מפרסית pae jameh (בגד-רגל). דרך הינדית והאנגלית הקולוניאלית הגיעה לעברית של ראשית המאה ה-20.",
+  },
+  {
+    word: "מטריה",
+    options: ["va", "gr", "fr", "it"],
+    correctIdx: 1,
+    story: "מיוונית matron (אם), במשמעות 'אם כל הצללים'. נדדה למילה הצרפתית-עברית. הצל הוא ה'אמא' של ההגנה מגשם.",
+  },
+  {
+    word: "אטליז",
+    options: ["va", "gr", "de", "it"],
+    correctIdx: 2,
+    story: "מאיטלקית atlante (אטלנט הנושא משא) דרך לאדינו. ביוון העתיקה איש האטלנט שחט בעלי חיים בכניסה למקדש.",
+  },
+  {
+    word: "אדיוט",
+    options: ["va", "gr", "ru", "de"],
+    correctIdx: 1,
+    story: "מיוונית idiotes (אדם פרטי, שאינו פוליטיקאי). הפך לעלבון רק בעת החדשה. המקור היה ניטרלי לגמרי.",
+  },
+  {
+    word: "טלפון",
+    options: ["va", "gr", "fr", "de"],
+    correctIdx: 1,
+    story: "מיוונית tele (רחוק) + phone (קול). מהמצאת 1876 של אלכסנדר גרהם בל. השם נשאר זהה בכל השפות.",
+  },
+  {
+    word: "אנציקלופדיה",
+    options: ["va", "gr", "fr", "it"],
+    correctIdx: 1,
+    story: "מיוונית enkyklios paideia (חינוך מקיף). אבל גם הצרפתית קיבעה את המילה במאה ה-18. דרך כפולה לעברית.",
+  },
+  {
+    word: "כורסה",
+    options: ["sa", "ir", "tr", "ru"],
+    correctIdx: 2,
+    story: "מהטורקית koltuk (משענת זרוע), דרך השפות הסלאביות וביידיש. הגיעה לעברית עם עליות מזרח אירופה.",
+  },
+  {
+    word: "ז'קט",
+    options: ["fr", "it", "de", "ru"],
+    correctIdx: 0,
+    story: "מצרפתית jaquette, מתקופת לואי ה-15. דרך הכובע 'ז'אק' שלבשו האיכרים בשם זה. אצולת הלבוש הצרפתית באה לעברית.",
+  },
+  {
+    word: "אבטיח",
+    options: ["sa", "va", "gr", "ir"],
+    correctIdx: 0,
+    story: "מערבית בִּטֵּ'יחַ (פרי הקיץ). הגיעה לעברית התלמודית דרך הסחר הערבי. אל״ף בתחילה היא חידוש עברי.",
+  },
+];
+
+// ─── Per-language router ───────────────────────────────────────
+const ROUNDS_BY_LANG: Record<string, WordPassportRound[]> = {
+  en: WORD_PASSPORT_ROUNDS_EN,
+  he: WORD_PASSPORT_ROUNDS_HE,
+};
+
+export function pickWordPassportRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: WordPassportRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

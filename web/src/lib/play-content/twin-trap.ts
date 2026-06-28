@@ -4,16 +4,15 @@
  * Each round shows a sentence with one word missing and two confusable
  * options. Pick the right one. Reveal explains the difference.
  *
- * Why curated: confusables are a closed set of well-known pairs. Generating
- * them at runtime via OpenAI would (a) cost money per play, (b) risk
- * inconsistent quality, (c) sometimes invent fake pairs. Curated content
- * stays sharp.
+ * Per-language content: this game is fundamentally about the language
+ * the player is learning, so each UI language gets its own native
+ * confusable set. Hebrew speakers see Hebrew confusables (של/שאל),
+ * Arabic speakers see Arabic confusables, etc. If we don't have content
+ * for a UI language, we fall back to English (better than nothing).
  *
- * Content is English-only for now. The UI chrome (header, buttons,
- * "correct!"/"wrong" feedback) is localized per UI lang via PlayT, but
- * the sentences and explanations are English because the words being
- * learned are English. Matches Gadit's general "EN content, localized
- * chrome" pattern.
+ * Why curated: confusables are a closed set of well-known pairs.
+ * Generating them at runtime via OpenAI would (a) cost money per play,
+ * (b) risk inconsistent quality, (c) sometimes invent fake pairs.
  */
 
 export type TwinTrapRound = {
@@ -27,11 +26,8 @@ export type TwinTrapRound = {
   explain: string;
 };
 
-/** Picked for: (a) frequency in real adult/teen writing, (b) genuine
- *  confusion (not just spelling typos), (c) clear contrast in meaning.
- *  Order randomised at runtime — sequence here is purely for our editing
- *  convenience, NOT presented to the player. */
-export const TWIN_TRAP_ROUNDS: TwinTrapRound[] = [
+// ─── English content ───────────────────────────────────────────
+const TWIN_TRAP_ROUNDS_EN: TwinTrapRound[] = [
   // ─── Effect / Affect — the classic ──────────────────────────
   {
     sentence: "The new medicine had a strange ____ on me.",
@@ -319,11 +315,153 @@ export const TWIN_TRAP_ROUNDS: TwinTrapRound[] = [
 
 /** Pick N random rounds from the curated set. Used per session.
  *  Caller is responsible for randomising the displayed option order. */
-export function pickTwinTrapRounds(count: number): TwinTrapRound[] {
-  const shuffled = TWIN_TRAP_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew confusables: word pairs that native and advanced Hebrew
+// speakers actually mix up. Focus is on (a) grammatical pairs that
+// differ by one letter (של/שאל), (b) gender/number agreement
+// (אחד/אחת, שני/שתי), (c) homophones that change meaning entirely.
+const TWIN_TRAP_ROUNDS_HE: TwinTrapRound[] = [
+  {
+    sentence: "הספר הזה הוא ____ אבא שלי.",
+    options: ["של", "שאל"],
+    correctIdx: 0,
+    explain: "של מציין שייכות. שאל הוא פועל בעבר (לבקש מידע).",
+  },
+  {
+    sentence: "הוא ____ אותי מתי החתונה.",
+    options: ["של", "שאל"],
+    correctIdx: 1,
+    explain: "שאל = הציג שאלה. של = שייכות.",
+  },
+  {
+    sentence: "____ תרצה, נצא לטיול.",
+    options: ["עם", "אם"],
+    correctIdx: 1,
+    explain: "אם פותח תנאי. עם הוא מילת יחס שמחברת לאדם או דבר.",
+  },
+  {
+    sentence: "אני בא ____ דניאל לסרט.",
+    options: ["עם", "אם"],
+    correctIdx: 0,
+    explain: "עם = ביחד עם. אם = תנאי או אמא.",
+  },
+  {
+    sentence: "יש לי ילד ____ ויפה.",
+    options: ["אחד", "אחת"],
+    correctIdx: 0,
+    explain: "אחד מתאים לזכר. ילדה אחת — לנקבה.",
+  },
+  {
+    sentence: "יש לי ילדה ____ ויפה.",
+    options: ["אחד", "אחת"],
+    correctIdx: 1,
+    explain: "אחת לנקבה, אחד לזכר. ההתאמה במין היא יסוד הדקדוק העברי.",
+  },
+  {
+    sentence: "ראיתי ____ ילדים במגרש.",
+    options: ["שני", "שתי"],
+    correctIdx: 0,
+    explain: "שני לזכר רבים. שתי לנקבה רבות. ההפרש הוא רק במין.",
+  },
+  {
+    sentence: "פגשתי ____ נשים נחמדות.",
+    options: ["שני", "שתי"],
+    correctIdx: 1,
+    explain: "שתי לנקבה. שני לזכר. כמו שני אחים מול שתי אחיות.",
+  },
+  {
+    sentence: "יש על השולחן ____ ספרים.",
+    options: ["שני", "שניים"],
+    correctIdx: 0,
+    explain: "שני בא לפני שם עצם (תואר מספר). שניים עומד לבד.",
+  },
+  {
+    sentence: "כמה ילדים יש לכם? יש לנו ____.",
+    options: ["שני", "שניים"],
+    correctIdx: 1,
+    explain: "שניים בא ללא שם עצם. אם היה ספר עצם היה הופך לשני.",
+  },
+  {
+    sentence: "הוא ____ הביתה אחרי העבודה.",
+    options: ["בא", "בה"],
+    correctIdx: 0,
+    explain: "בא = פועל הגעה. בה = מילת יחס (ב+ה), כמו בה תלינו תקווה.",
+  },
+  {
+    sentence: "תלינו ב____ תקווה רבה.",
+    options: ["בא", "בה"],
+    correctIdx: 1,
+    explain: "בה = בתוכה (ב + נטיית הגוף). בא = פועל ההגעה.",
+  },
+  {
+    sentence: "תן ____ את הספר, בבקשה.",
+    options: ["לי", "שלי"],
+    correctIdx: 0,
+    explain: "לי = אל אני. שלי = שייך לי. תן לי מול הספר שלי.",
+  },
+  {
+    sentence: "הספר הזה הוא ____, אל תיקח.",
+    options: ["לי", "שלי"],
+    correctIdx: 1,
+    explain: "שלי מציין בעלות. לי הוא מילת יחס שמכוונת אליי.",
+  },
+  {
+    sentence: "____ הוא הגיע, התחלנו לאכול.",
+    options: ["אז", "אש"],
+    correctIdx: 0,
+    explain: "אז = ציר זמן (אחר כך). אש = להבה. שתי מילים שונות לחלוטין.",
+  },
+  {
+    sentence: "ב____ ירוקה ניזון הצמח.",
+    options: ["אז", "אש"],
+    correctIdx: 1,
+    explain: "אש = להבה / חום. אז = מילת זמן (אז־אחרי כן). אל תתבלבל באותיות הדומות.",
+  },
+  {
+    sentence: "ראיתי את הסרט ____ הוא נגמר.",
+    options: ["לפני", "בפני"],
+    correctIdx: 0,
+    explain: "לפני = קודם בזמן. בפני = מול אדם או בנוכחות.",
+  },
+  {
+    sentence: "עמדתי ____ קהל גדול והתרגשתי.",
+    options: ["לפני", "בפני"],
+    correctIdx: 1,
+    explain: "בפני = מול / בנוכחות. לפני = קודם. שניהם נכונים אבל בהקשרים שונים.",
+  },
+  {
+    sentence: "אני לא יודע, ולא ____ דווקא.",
+    options: ["לא", "לאו"],
+    correctIdx: 1,
+    explain: "לאו דווקא = ביטוי קבוע. לא לבד מציין שלילה פשוטה.",
+  },
+  {
+    sentence: "אבל לא ____ עליתי לבד, אלא עם חבר.",
+    options: ["דווקא", "לאו דווקא"],
+    correctIdx: 0,
+    explain: "דווקא מחזק את ההפך. לאו דווקא מרכך טענה קודמת. הקשר משפטי שונה.",
+  },
+];
+
+// ─── Per-language router ───────────────────────────────────────
+const ROUNDS_BY_LANG: Record<string, TwinTrapRound[]> = {
+  en: TWIN_TRAP_ROUNDS_EN,
+  he: TWIN_TRAP_ROUNDS_HE,
+};
+
+export function pickTwinTrapRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: TwinTrapRound[]; contentLang: string } {
+  // Fall back to English if we don't have content for this UI lang yet.
+  // Other locales will join over the next few weeks; until then a Russian
+  // user gets English Twin Trap which is still useful for English learners.
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

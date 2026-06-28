@@ -18,7 +18,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickEtymologyArtistRounds,
   type EtymologyArtistRound,
@@ -32,20 +32,24 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickEtymologyArtistRounds(SESSION_SIZE.artist).map((r): RuntimeRound => {
-    const correctWord = r.options[r.correctIdx];
-    const order = shuffle(r.options.slice()) as string[];
-    const [a, b, c, d] = order;
-    const displayed: [string, string, string, string] = [a, b, c, d];
-    return {
-      literal: r.literal,
-      origin: r.origin,
-      displayed,
-      correctIdx: displayed.indexOf(correctWord) as 0 | 1 | 2 | 3,
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickEtymologyArtistRounds(SESSION_SIZE.artist, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctWord = r.options[r.correctIdx];
+      const order = shuffle(r.options.slice()) as string[];
+      const [a, b, c, d] = order;
+      const displayed: [string, string, string, string] = [a, b, c, d];
+      return {
+        literal: r.literal,
+        origin: r.origin,
+        displayed,
+        correctIdx: displayed.indexOf(correctWord) as 0 | 1 | 2 | 3,
+        story: r.story,
+      };
+    }),
+  };
 }
 
 export function GameEtymologyArtist({
@@ -57,7 +61,10 @@ export function GameEtymologyArtist({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -131,7 +138,7 @@ export function GameEtymologyArtist({
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.artistPrompt}</div>
         <div className="wb-play-artist-origin">{r.origin}</div>
-        <div className="wb-play-artist-literal" lang="en" dir="ltr">
+        <div className="wb-play-artist-literal" lang={contentLang} dir={contentDir}>
           &ldquo;{r.literal}&rdquo;
         </div>
       </div>
@@ -161,7 +168,7 @@ export function GameEtymologyArtist({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

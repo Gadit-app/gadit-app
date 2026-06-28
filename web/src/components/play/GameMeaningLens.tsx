@@ -13,7 +13,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickMeaningLensRounds,
   type MeaningLensRound,
@@ -27,20 +27,24 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickMeaningLensRounds(SESSION_SIZE.lens).map((r): RuntimeRound => {
-    const correctOption = r.options[r.correctIdx];
-    const order = shuffle(r.options.slice()) as string[];
-    const [a, b, c, d] = order;
-    const displayed: [string, string, string, string] = [a, b, c, d];
-    return {
-      word: r.word,
-      sentence: r.sentence,
-      displayed,
-      correctIdx: displayed.indexOf(correctOption) as 0 | 1 | 2 | 3,
-      story: r.story,
-    };
-  });
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickMeaningLensRounds(SESSION_SIZE.lens, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => {
+      const correctOption = r.options[r.correctIdx];
+      const order = shuffle(r.options.slice()) as string[];
+      const [a, b, c, d] = order;
+      const displayed: [string, string, string, string] = [a, b, c, d];
+      return {
+        word: r.word,
+        sentence: r.sentence,
+        displayed,
+        correctIdx: displayed.indexOf(correctOption) as 0 | 1 | 2 | 3,
+        story: r.story,
+      };
+    }),
+  };
 }
 
 export function GameMeaningLens({
@@ -52,7 +56,10 @@ export function GameMeaningLens({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -125,10 +132,10 @@ export function GameMeaningLens({
       />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.lensPrompt}</div>
-        <div className="wb-play-lens-word" lang="en" dir="ltr">
+        <div className="wb-play-lens-word" lang={contentLang} dir={contentDir}>
           {r.word}
         </div>
-        <div className="wb-play-lens-sentence" lang="en" dir="ltr">
+        <div className="wb-play-lens-sentence" lang={contentLang} dir={contentDir}>
           {r.sentence}
         </div>
       </div>
@@ -158,7 +165,7 @@ export function GameMeaningLens({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}

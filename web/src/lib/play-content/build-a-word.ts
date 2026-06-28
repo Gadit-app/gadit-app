@@ -26,7 +26,7 @@ export type BuildAWordRound = {
   story: string;
 };
 
-export const BUILD_A_WORD_ROUNDS: BuildAWordRound[] = [
+const BUILD_A_WORD_ROUNDS_EN: BuildAWordRound[] = [
   {
     target: "unbreakable",
     clue: "not able to be broken",
@@ -134,11 +134,99 @@ export const BUILD_A_WORD_ROUNDS: BuildAWordRound[] = [
   },
 ];
 
-export function pickBuildAWordRounds(count: number): BuildAWordRound[] {
-  const shuffled = BUILD_A_WORD_ROUNDS.slice();
+// ─── Hebrew content ────────────────────────────────────────────
+// Hebrew morphology is built on root + binyan/mishkal templates.
+// For this game we adapted to a Hebrew-friendly model: assemble
+// a word from prefix + root + suffix. Beginners learn the building
+// blocks; native speakers see the structure they use unconsciously.
+const BUILD_A_WORD_ROUNDS_HE: BuildAWordRound[] = [
+  {
+    target: "מכתב",
+    clue: "כלי לתקשורת בכתב, נשלח בדואר",
+    correct: ["מ", "כתב"],
+    pool: ["מ", "ה", "כתב", "תב", "ים", "ה"],
+    story: "מ + כתב. הקידומת 'מ' מציינת כלי או מקום שעוסקים בו (מ-קום, מ-קרר). כתב = כותב או מסר. ביחד: כלי לתקשורת.",
+  },
+  {
+    target: "תלמיד",
+    clue: "מי שלומד",
+    correct: ["ת", "למד", "יד"],
+    pool: ["ת", "מ", "למד", "מד", "יד", "ון"],
+    story: "ת + למד + י (סוף משקל). הקידומת 'ת' עם משקל תַלמיד מציינת מי שעושה את הפעולה. השורש למד נמצא במרכז.",
+  },
+  {
+    target: "ספריה",
+    clue: "מקום שמרכז ספרים לקריאה",
+    correct: ["ספר", "יה"],
+    pool: ["ספר", "ה", "יה", "ות", "ית", "ים"],
+    story: "ספר + יה. הסיומת '-יה' מציינת מקום (פיצוצ-יה, ספרי-ה, מאפי-ה). שורש ספר עם סיומת מקום = ספריה.",
+  },
+  {
+    target: "סופר",
+    clue: "מי שכותב ספרים",
+    correct: ["סופ", "ר"],
+    pool: ["סופ", "כתב", "ר", "ה", "מ", "ים"],
+    story: "ס + ו + פ + ר. משקל פּוֹעֵל (החזק במלאי) מציין מי שעושה. כותב, שומר, סופר. השורש המסתורי 'ספ.ר' הוא לספור ולספר.",
+  },
+  {
+    target: "מורה",
+    clue: "מי שמלמד",
+    correct: ["מ", "ור", "ה"],
+    pool: ["מ", "ה", "ור", "מד", "ה", "ים"],
+    story: "מ + ור + ה. השורש י.ר.ה (להורות, להראות את הדרך) במשקל מַ-ורֶה. הקידומת 'מ' מבצעת את התפקיד שהיא תמיד עושה.",
+  },
+  {
+    target: "מנהל",
+    clue: "מי שעומד בראש ארגון",
+    correct: ["מ", "נהל"],
+    pool: ["מ", "ה", "נהל", "מנה", "ים", "ה"],
+    story: "מ + נהל. השורש נ.ה.ל. (להוביל, לכוון) במשקל מ-נהל. כמו מ-נהיג, מ-נהיגות. הקידומת מ בעברית = מבצע פעולה.",
+  },
+  {
+    target: "ילדות",
+    clue: "תקופת החיים בה אדם הוא ילד",
+    correct: ["ילד", "ות"],
+    pool: ["ילד", "ה", "ות", "ות", "ים", "ת"],
+    story: "ילד + ות. הסיומת '-ות' מציינת תכונה מופשטת או תקופה (ילד-ות, הוֹר-ות, בְּגר-ות). השורש י.ל.ד הוא הגרעין.",
+  },
+  {
+    target: "מסעדה",
+    clue: "מקום בו אוכלים ארוחות מבושלות",
+    correct: ["מ", "סעד", "ה"],
+    pool: ["מ", "ה", "סעד", "אכ", "ה", "ים"],
+    story: "מ + סעד + ה. השורש ס.ע.ד (לתמוך, להחזיק) מקבל את הקידומת מ (מקום) והסיומת -ה (נקבה). יחד: מקום נשיא.",
+  },
+  {
+    target: "כתיבה",
+    clue: "פעולת רישום על הנייר",
+    correct: ["כתיב", "ה"],
+    pool: ["כתיב", "כתב", "ה", "ון", "ה", "ות"],
+    story: "כתיב + ה. השם הפעולה במשקל קְטִילָה. כתיבה, קריאה, שירה, אכילה — כולם משקל הפעלים כשם פעולה.",
+  },
+  {
+    target: "מערכה",
+    clue: "אוסף של דברים שמסודרים בסדר",
+    correct: ["מ", "ערכ", "ה"],
+    pool: ["מ", "ה", "ערכ", "סדר", "ה", "ות"],
+    story: "מ + ערכ + ה. השורש ע.ר.כ (לסדר, לערוך) במשקל מַ-עְרָכָה. כמו מַ-עְרָכֶת, מַ-עֲרָכִי. הקידומת מ מציינת קבוצה.",
+  },
+];
+
+const ROUNDS_BY_LANG: Record<string, BuildAWordRound[]> = {
+  en: BUILD_A_WORD_ROUNDS_EN,
+  he: BUILD_A_WORD_ROUNDS_HE,
+};
+
+export function pickBuildAWordRounds(
+  count: number,
+  lang: string = "en",
+): { rounds: BuildAWordRound[]; contentLang: string } {
+  const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
+  const pool = ROUNDS_BY_LANG[contentLang];
+  const shuffled = pool.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, count);
+  return { rounds: shuffled.slice(0, count), contentLang };
 }

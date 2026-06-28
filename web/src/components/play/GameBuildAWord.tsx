@@ -18,7 +18,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
-import { SESSION_SIZE, shuffle } from "@/lib/play-engine";
+import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
 import {
   pickBuildAWordRounds,
   type BuildAWordRound,
@@ -32,16 +32,18 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(): RuntimeRound[] {
-  return pickBuildAWordRounds(SESSION_SIZE.build).map((r): RuntimeRound => {
-    return {
+function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickBuildAWordRounds(SESSION_SIZE.build, uiLang);
+  return {
+    contentLang,
+    rounds: source.map((r): RuntimeRound => ({
       target: r.target,
       clue: r.clue,
       correct: r.correct,
       pool: shuffle(r.pool.slice()),
       story: r.story,
-    };
-  });
+    })),
+  };
 }
 
 export function GameBuildAWord({
@@ -53,7 +55,10 @@ export function GameBuildAWord({
   lang: string;
   t: PlayT;
 }) {
-  const rounds = useMemo(buildRuntimeRounds, []);
+  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const rounds = built.rounds;
+  const contentLang = built.contentLang;
+  const contentDir = dirForLang(contentLang);
   const [idx, setIdx] = useState(0);
   /** Morphemes the player has placed in order. */
   const [placed, setPlaced] = useState<string[]>([]);
@@ -139,7 +144,7 @@ export function GameBuildAWord({
       />
       <div className="wb-play-question wb-play-question-build">
         <div className="wb-play-question-eyebrow">{t.buildPrompt}</div>
-        <div className="wb-play-build-clue" lang="en" dir="ltr">
+        <div className="wb-play-build-clue" lang={contentLang} dir={contentDir}>
           &ldquo;{r.clue}&rdquo;
         </div>
       </div>
@@ -177,7 +182,7 @@ export function GameBuildAWord({
         })}
       </div>
       {revealed && (
-        <div className={`wb-play-build-result ${isCorrect ? "is-correct" : "is-wrong"}`} lang="en" dir="ltr">
+        <div className={`wb-play-build-result ${isCorrect ? "is-correct" : "is-wrong"}`} lang={contentLang} dir={contentDir}>
           {builtWord === r.target ? r.target : `${builtWord} ≠ ${r.target}`}
         </div>
       )}
@@ -203,7 +208,7 @@ export function GameBuildAWord({
         })}
       </div>
       {revealed && (
-        <div className="wb-play-explain" lang="en" dir="ltr">
+        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
           {r.story}
         </div>
       )}
