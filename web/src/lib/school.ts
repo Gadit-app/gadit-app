@@ -61,6 +61,13 @@ export interface Classroom {
   /** Total searches ever, kept on the doc so the schools list page can
    *  show "37 words this week" without a separate aggregation. */
   searchCount: number;
+  /** Optional roster of student first-names. When set, the kid view at
+   *  /c/<CODE> shows a "pick your name" picker on first visit instead
+   *  of going straight to the search box. Picked name persists in
+   *  localStorage on the kid's device + tags every search log so the
+   *  teacher can see "who searched what". Anonymous classrooms leave
+   *  this empty. Added 2026-06-28 for the planned leaderboard feature.*/
+  students?: string[];
   createdAt: string;
 }
 

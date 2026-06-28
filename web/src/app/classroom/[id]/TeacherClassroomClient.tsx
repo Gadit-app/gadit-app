@@ -41,6 +41,7 @@ interface SearchEntry {
   word: string;
   lang: string;
   at: string;
+  studentName?: string;
 }
 
 const COPY: Record<string, {
@@ -54,6 +55,12 @@ const COPY: Record<string, {
   back: string;
   loading: string;
   notFound: string;
+  studentsLabel: string;
+  studentsHint: string;
+  addStudentPh: string;
+  addStudentBtn: string;
+  removeStudentAria: string;
+  anonymousLabel: string;
 }> = {
   he: {
     title: "כיתה",
@@ -66,6 +73,12 @@ const COPY: Record<string, {
     back: "→ חזרה לבית הספר",
     loading: "טוען...",
     notFound: "כיתה לא נמצאה.",
+    studentsLabel: "תלמידי הכיתה",
+    studentsHint: "הוסיפו את שמות התלמידים והם יבחרו את עצמם כשייכנסו לקוד.",
+    addStudentPh: "שם פרטי (לדוגמה: מאיה)",
+    addStudentBtn: "+ הוסף",
+    removeStudentAria: "הסר תלמיד",
+    anonymousLabel: "אנונימי",
   },
   en: {
     title: "Classroom",
@@ -78,6 +91,12 @@ const COPY: Record<string, {
     back: "← Back to school",
     loading: "Loading…",
     notFound: "Classroom not found.",
+    studentsLabel: "Class roster",
+    studentsHint: "Add your students' names and they'll pick themselves when they open the code.",
+    addStudentPh: "First name (e.g. Maya)",
+    addStudentBtn: "+ Add",
+    removeStudentAria: "Remove student",
+    anonymousLabel: "Anonymous",
   },
   hi: {
     title: "कक्षा",
@@ -90,6 +109,12 @@ const COPY: Record<string, {
     back: "← स्कूल पर वापस",
     loading: "लोड हो रहा है…",
     notFound: "कक्षा नहीं मिली।",
+    studentsLabel: "कक्षा की सूची",
+    studentsHint: "अपने छात्रों के नाम जोड़ें, वे कोड खोलने पर अपना नाम चुनेंगे।",
+    addStudentPh: "पहला नाम (जैसे आर्या)",
+    addStudentBtn: "+ जोड़ें",
+    removeStudentAria: "छात्र हटाएँ",
+    anonymousLabel: "अनाम",
   },
 };
 
@@ -104,6 +129,48 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
   const [classroomChecked, setClassroomChecked] = useState(false);
   const [searches, setSearches] = useState<SearchEntry[]>([]);
   const [copied, setCopied] = useState(false);
+  // New-student-name draft + busy flag. The teacher types a first
+  // name and hits Enter or "+ Add" to append to the classroom roster.
+  // Server-side dedupes so adding the same name twice is a no-op.
+  const [newStudentName, setNewStudentName] = useState("");
+  const [addingStudent, setAddingStudent] = useState(false);
+
+  async function addStudent() {
+    if (!user || addingStudent) return;
+    const name = newStudentName.trim();
+    if (!name) return;
+    setAddingStudent(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/schools/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ classroomId, name }),
+      });
+      if (res.ok) {
+        setNewStudentName("");
+      } else {
+        console.error("add student failed:", await res.text());
+      }
+    } catch (err) {
+      console.error("add student failed:", err);
+    } finally {
+      setAddingStudent(false);
+    }
+  }
+
+  async function removeStudent(name: string) {
+    if (!user) return;
+    try {
+      const idToken = await user.getIdToken();
+      await fetch(`/api/schools/students?classroomId=${encodeURIComponent(classroomId)}&name=${encodeURIComponent(name)}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+    } catch (err) {
+      console.error("remove student failed:", err);
+    }
+  }
 
   useEffect(() => {
     if (!user || !schoolId) return;
@@ -198,12 +265,117 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
         {/* Code chip + kids-link section removed 2026-06-28. Both
             now live on /schools (the code as a mustard pill in each
             row, the kids link as a copy button next to the action
-            icons). The teacher view is now focused exclusively on
-            the search log — Gadi's instinct: "פה צריך להיות רק
-            מילים שתלמידים חיפשו לאחרונה וזהו". */}
+            icons). The teacher view is now focused on the search log
+            and the class roster. */}
 
-        {/* Recent searches list. Newest first. No student attribution —
-            this list is by design anonymous (no student data exists). */}
+        {/* Class roster. Teacher pre-loads first names; when set,
+            the kid view at /c/<CODE> shows a "pick your name"
+            picker on first visit so each search log gets tagged.
+            Empty roster = anonymous mode (no picker, no name tag). */}
+        <section style={{ marginBottom: 32 }}>
+          <h2
+            style={{
+              fontFamily: "var(--wb-serif)",
+              fontWeight: 700,
+              fontSize: 20,
+              color: "var(--ink)",
+              margin: "0 0 6px",
+            }}
+          >
+            {c.studentsLabel}
+          </h2>
+          <p
+            style={{
+              fontFamily: "var(--wb-sans)",
+              fontSize: 13,
+              color: "var(--ink-soft, #6B7280)",
+              margin: "0 0 14px",
+            }}
+          >
+            {c.studentsHint}
+          </p>
+          {(classroom.students ?? []).length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
+              {(classroom.students ?? []).map((sn) => (
+                <span
+                  key={sn}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "6px 12px",
+                    background: "#FEF3C7",
+                    border: "1px solid #FCD34D",
+                    borderRadius: 999,
+                    fontFamily: "var(--wb-sans)",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: "#A16207",
+                  }}
+                >
+                  {sn}
+                  <button
+                    type="button"
+                    onClick={() => removeStudent(sn)}
+                    aria-label={c.removeStudentAria}
+                    title={c.removeStudentAria}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "#A16207",
+                      padding: 0,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      fontSize: 14,
+                      lineHeight: 1,
+                    }}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          <div style={{ display: "flex", gap: 10 }}>
+            <input
+              type="text"
+              value={newStudentName}
+              placeholder={c.addStudentPh}
+              onChange={(e) => setNewStudentName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") addStudent(); }}
+              disabled={addingStudent}
+              style={{
+                flex: 1,
+                padding: "10px 14px",
+                border: "1.5px solid #D6D3D1",
+                borderRadius: 10,
+                background: "#FFFFFF",
+                fontFamily: "var(--wb-sans)",
+                fontSize: 15,
+                color: "var(--ink)",
+                outline: "none",
+              }}
+            />
+            <button
+              type="button"
+              className="wb-school-cta"
+              onClick={addStudent}
+              disabled={addingStudent || !newStudentName.trim()}
+              style={{
+                width: "auto",
+                padding: "10px 18px",
+                opacity: !newStudentName.trim() ? 0.5 : 1,
+              }}
+            >
+              {c.addStudentBtn}
+            </button>
+          </div>
+        </section>
+
+        {/* Recent searches list. Newest first. Each row carries the
+            student name (when the roster picker was used) so the
+            teacher can see who searched what. */}
         <section>
           <h2 style={{
             fontFamily: "var(--wb-serif)",
@@ -245,6 +417,17 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
                   >
                     {s.word}
                   </Link>
+                  <span
+                    style={{
+                      fontFamily: "var(--wb-sans)",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: s.studentName ? "#A16207" : "var(--ink-faint, #9CA3AF)",
+                      fontStyle: s.studentName ? "normal" : "italic",
+                    }}
+                  >
+                    {s.studentName || c.anonymousLabel}
+                  </span>
                   <span style={{
                     fontFamily: "var(--wb-sans)",
                     fontSize: 12,

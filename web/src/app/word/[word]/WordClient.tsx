@@ -340,8 +340,13 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // ?cls=<CODE> set by the /c/<CODE> kid landing page. When present,
   // this search came from a classroom — fire-and-forget log it to the
   // classroom's search log so the teacher can see what their class
-  // looked up today. No personal data is logged, only the word + lang.
+  // looked up today. No personal data is logged, only the word + lang
+  // (+ first name only when the roster picker was used).
   const classroomCode = searchParams?.get("cls")?.trim() || "";
+  // ?sn=<first-name> set by the /c/<CODE> roster picker. Carries
+  // forward through the persistent search bar so a kid who chains
+  // multiple lookups stays attributed. Empty string == anonymous.
+  const classroomStudentName = searchParams?.get("sn")?.trim() || "";
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -429,11 +434,16 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     fetch("/api/classroom/log-search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: classroomCode, word: initialWord, lang }),
+      body: JSON.stringify({
+        code: classroomCode,
+        word: initialWord,
+        lang,
+        ...(classroomStudentName && { studentName: classroomStudentName }),
+      }),
     }).catch(() => {
       // Silent. Logging is best-effort, never blocks the result.
     });
-  }, [classroomCode, initialWord, lang]);
+  }, [classroomCode, classroomStudentName, initialWord, lang]);
 
   useEffect(() => {
     if (!initialWord) return;
@@ -1182,7 +1192,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               // ?cls= side-effect. Without this, a kid who types a
               // second word into the persistent bar loses the
               // classroom branding and the log entry.
-              const clsParam = classroomCode ? `?cls=${encodeURIComponent(classroomCode)}` : "";
+              const clsParam = classroomCode
+                ? `?cls=${encodeURIComponent(classroomCode)}${classroomStudentName ? `&sn=${encodeURIComponent(classroomStudentName)}` : ""}`
+                : "";
               router.push(href(`/word/${encodeURIComponent(q)}${clsParam}`));
             }}
           >
@@ -1212,7 +1224,9 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 }}
                 onResult={(text) => {
                   setHeaderQuery(text);
-                  const clsParam = classroomCode ? `?cls=${encodeURIComponent(classroomCode)}` : "";
+                  const clsParam = classroomCode
+                ? `?cls=${encodeURIComponent(classroomCode)}${classroomStudentName ? `&sn=${encodeURIComponent(classroomStudentName)}` : ""}`
+                : "";
                   router.push(href(`/word/${encodeURIComponent(text.trim())}${clsParam}`));
                 }}
                 enabled={true}

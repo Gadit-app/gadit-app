@@ -28,6 +28,7 @@ type LookupOk = {
   schoolName: string;
   schoolLogoUrl: string | null;
   classroomName: string;
+  students: string[];
 };
 type LookupState =
   | { kind: "loading" }
@@ -36,6 +37,9 @@ type LookupState =
 
 const COPY: Record<string, {
   welcomeTo: string;
+  greetingPrefix: string;
+  switchUser: string;
+  pickName: string;
   classroomDefault: string;
   searchPh: string;
   searchBtn: string;
@@ -45,6 +49,9 @@ const COPY: Record<string, {
 }> = {
   he: {
     welcomeTo: "ברוכים הבאים",
+    greetingPrefix: "שלום,",
+    switchUser: "(לא אני)",
+    pickName: "שלום! בחרו את השם שלכם",
     classroomDefault: "כיתה",
     searchPh: "הקלידו מילה",
     searchBtn: "חיפוש",
@@ -54,6 +61,9 @@ const COPY: Record<string, {
   },
   en: {
     welcomeTo: "Welcome to",
+    greetingPrefix: "Hi,",
+    switchUser: "(not me)",
+    pickName: "Hi! Pick your name",
     classroomDefault: "Classroom",
     searchPh: "Type a word",
     searchBtn: "Look up",
@@ -63,6 +73,9 @@ const COPY: Record<string, {
   },
   hi: {
     welcomeTo: "स्वागत है",
+    greetingPrefix: "नमस्ते,",
+    switchUser: "(मैं नहीं)",
+    pickName: "नमस्ते! अपना नाम चुनें",
     classroomDefault: "कक्षा",
     searchPh: "कोई शब्द लिखें",
     searchBtn: "खोजें",
@@ -80,6 +93,36 @@ export function ClassroomKidClient({ code }: { code: string }) {
   const [state, setState] = useState<LookupState>({ kind: "loading" });
   const [word, setWord] = useState("");
   const [sentence, setSentence] = useState("");
+  // Persisted student identity. localStorage key is scoped to the
+  // class code so the same browser used in two classrooms keeps two
+  // independent identities. Anonymous kids leave this empty and the
+  // search log gets stored without a studentName.
+  const [studentName, setStudentName] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(`gadit-student-${code}`);
+    if (saved) setStudentName(saved);
+  }, [code]);
+
+  function pickStudent(name: string) {
+    setStudentName(name);
+    try {
+      window.localStorage.setItem(`gadit-student-${code}`, name);
+    } catch {
+      // private mode or storage disabled — name lives in memory only,
+      // will be lost on refresh but the search bar still works.
+    }
+  }
+
+  function clearStudent() {
+    setStudentName("");
+    try {
+      window.localStorage.removeItem(`gadit-student-${code}`);
+    } catch {
+      // ignore
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -108,9 +151,12 @@ export function ClassroomKidClient({ code }: { code: string }) {
     // Pass the optional context sentence through as ?sentence=… so the
     // word page picks the right meaning when the word is multi-sense.
     // Mirrors the homepage's optional-sentence input, restored after
-    // Gadi (2026-06-28) noticed the kid view was missing it.
+    // Gadi (2026-06-28) noticed the kid view was missing it. Also pass
+    // the picked student name as ?sn= so the log-search call from the
+    // word page can tag the entry with who searched.
     const sentenceParam = sent ? `&sentence=${encodeURIComponent(sent)}` : "";
-    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}${sentenceParam}`));
+    const studentParam = studentName ? `&sn=${encodeURIComponent(studentName)}` : "";
+    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}${sentenceParam}${studentParam}`));
   }
 
   if (state.kind === "loading") {
@@ -230,16 +276,90 @@ export function ClassroomKidClient({ code }: { code: string }) {
             margin: 0,
             textAlign: "center",
           }}>
-            {c.welcomeTo} {data.classroomName || c.classroomDefault}
+            {studentName
+              ? `${c.greetingPrefix} ${studentName}`
+              : `${c.welcomeTo} ${data.classroomName || c.classroomDefault}`}
           </h1>
+          {studentName && (
+            <button
+              type="button"
+              onClick={clearStudent}
+              style={{
+                marginTop: 8,
+                background: "transparent",
+                border: "none",
+                color: "var(--ink-soft, #6B7280)",
+                fontFamily: "var(--wb-sans)",
+                fontSize: 13,
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              {c.switchUser}
+            </button>
+          )}
         </div>
+
+        {/* Student picker — shows ONLY when the classroom has a roster
+            AND the kid hasn't picked their identity yet (or just hit
+            "not me"). Click a name → name persists in localStorage on
+            this device + every search this session tags the log with
+            the name so the teacher can see who searched what. */}
+        {data.students.length > 0 && !studentName && (
+          <div style={{ maxWidth: 560, margin: "0 auto 16px" }}>
+            <p
+              style={{
+                fontFamily: "var(--wb-sans)",
+                fontSize: 16,
+                fontWeight: 600,
+                color: "#A16207",
+                textAlign: "center",
+                marginBottom: 16,
+              }}
+            >
+              {c.pickName}
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 10,
+                justifyContent: "center",
+              }}
+            >
+              {data.students.map((sn) => (
+                <button
+                  key={sn}
+                  type="button"
+                  onClick={() => pickStudent(sn)}
+                  style={{
+                    padding: "10px 20px",
+                    background: "#FEF3C7",
+                    border: "1.5px solid #FCD34D",
+                    borderRadius: 999,
+                    fontFamily: "var(--wb-sans)",
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: "#A16207",
+                    cursor: "pointer",
+                    transition: "background 180ms, transform 120ms",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "#FCD34D")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "#FEF3C7")}
+                >
+                  {sn}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* The search box. Word input + submit on one row, optional
             sentence input on a second row underneath so the kid can
             disambiguate a multi-sense word the way the homepage lets
-            adults do. The submit button sits with the word input so a
-            kid who never enters a sentence still has the same single-
-            row flow as before. */}
+            adults do. Search box hidden when a roster picker is open
+            so the kid focuses on identifying themselves first. */}
+        {(data.students.length === 0 || studentName) && (
         <form onSubmit={onSubmit} style={{
           display: "flex",
           flexDirection: "column",
@@ -293,6 +413,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
             }}
           />
         </form>
+        )}
       </main>
     </div>
   );

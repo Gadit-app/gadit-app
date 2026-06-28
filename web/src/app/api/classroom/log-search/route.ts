@@ -24,15 +24,21 @@ import { normalizeClassCode } from "@/lib/school";
  */
 
 export async function POST(req: NextRequest) {
-  let body: { code?: string; word?: string; lang?: string } = {};
+  let body: { code?: string; word?: string; lang?: string; studentName?: string } = {};
   try {
-    body = (await req.json()) as { code?: string; word?: string; lang?: string };
+    body = (await req.json()) as {
+      code?: string;
+      word?: string;
+      lang?: string;
+      studentName?: string;
+    };
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }
   const code = normalizeClassCode(body.code ?? "");
   const word = (body.word ?? "").trim().slice(0, 120);
   const lang = (body.lang ?? "en").slice(0, 5);
+  const studentName = (body.studentName ?? "").trim().slice(0, 40);
   if (!code) {
     return NextResponse.json({ error: "bad_code" }, { status: 400 });
   }
@@ -65,6 +71,7 @@ export async function POST(req: NextRequest) {
       word,
       lang,
       at: new Date().toISOString(),
+      ...(studentName && { studentName }),
     }),
     classroomRef.set({ searchCount: FieldValue.increment(1) }, { merge: true }),
   ]);

@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
   }
 
   const school = schoolSnap.data() as { name?: string; logoUrl?: string | null };
-  const classroom = classroomSnap.data() as { name?: string };
+  const classroom = classroomSnap.data() as { name?: string; students?: string[] };
 
   return NextResponse.json({
     schoolId: codeData.schoolId,
@@ -58,5 +58,6 @@ export async function GET(req: NextRequest) {
     schoolName: school.name ?? "",
     schoolLogoUrl: school.logoUrl ?? null,
     classroomName: classroom.name ?? "",
+    students: classroom.students ?? [],
   });
 }
