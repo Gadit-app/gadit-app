@@ -196,6 +196,11 @@ export function SchoolsClient() {
   // edit-in-progress). Gadi (2026-06-28) flagged the always-open form
   // at the bottom as visual clutter while editing a classroom above.
   const [showCreateForm, setShowCreateForm] = useState(false);
+  // Editing the school name in place. The h1 is now the editable
+  // title (click to edit) so we don't show both a heading AND a
+  // "School name" label below it. Gadi (2026-06-28) called the
+  // duplication out: when the name is set, it IS the page title.
+  const [editingSchoolName, setEditingSchoolName] = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
@@ -407,6 +412,37 @@ export function SchoolsClient() {
 
   return (
     <div className="wordbook wb-school-page" dir={dir}>
+      {/* Minimal Gadit wordmark in the inline-start corner. Gadi
+          (2026-06-28) flagged that the /schools dashboard had no
+          Gadit brand mark at all after we stripped the regular
+          masthead. The mark is dimmed mustard on cream so it doesn't
+          compete with the school logo + title below; a link back to
+          the homepage in case the principal lands here and wants to
+          poke around the consumer side. */}
+      <div
+        style={{
+          position: "absolute",
+          top: 16,
+          insetInlineStart: 20,
+          zIndex: 1,
+        }}
+      >
+        <Link
+          href={href("/")}
+          aria-label="Gadit"
+          dir="ltr"
+          style={{
+            fontFamily: "var(--wb-serif), serif",
+            fontWeight: 700,
+            fontSize: 18,
+            color: "#A16207",
+            textDecoration: "none",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
+        </Link>
+      </div>
       <main className="wb-school-main">
         <Link href={href("/")} className="wb-family-back">{c.back}</Link>
 
@@ -488,8 +524,64 @@ export function SchoolsClient() {
             hidden
           />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <h1 className="wb-school-title">{c.title}</h1>
+            {/* Editable in place. When name is set, it IS the page
+                title (click pencil-ish hover or the text itself to
+                edit). When empty, an input field with placeholder
+                takes over. Gadi (2026-06-28) flagged the previous
+                separate-label-and-field-below-the-title pattern as
+                redundant: "ברגע שהוא כותב את שם בית הספר, זה השם
+                של בית הספר". */}
+            {editingSchoolName || !school.name ? (
+              <input
+                type="text"
+                value={nameDraft}
+                placeholder={c.schoolNamePh}
+                autoFocus={editingSchoolName}
+                onChange={(e) => setNameDraft(e.target.value)}
+                onBlur={() => {
+                  saveSchoolName(nameDraft.trim());
+                  setEditingSchoolName(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    saveSchoolName(nameDraft.trim());
+                    setEditingSchoolName(false);
+                  } else if (e.key === "Escape") {
+                    setNameDraft(school.name);
+                    setEditingSchoolName(false);
+                  }
+                }}
+                style={{
+                  width: "100%",
+                  padding: "8px 12px",
+                  border: "1.5px solid #D6D3D1",
+                  borderRadius: 10,
+                  background: "#FFFFFF",
+                  fontFamily: "var(--wb-serif)",
+                  fontWeight: 700,
+                  fontSize: "clamp(24px, 3.6vw, 36px)",
+                  color: "var(--ink)",
+                  outline: "none",
+                  marginBottom: 6,
+                }}
+              />
+            ) : (
+              <h1
+                className="wb-school-title"
+                onClick={() => {
+                  setNameDraft(school.name);
+                  setEditingSchoolName(true);
+                }}
+                title={c.schoolNameLabel}
+                style={{ cursor: "pointer" }}
+              >
+                {school.name}
+              </h1>
+            )}
             <p className="wb-school-sub">{c.sub}</p>
+            {nameSaving && (
+              <div className="wb-school-sub" style={{ marginTop: 4, fontSize: 12 }}>{c.saving}</div>
+            )}
           </div>
         </header>
 
@@ -516,46 +608,6 @@ export function SchoolsClient() {
             {c.welcome}
           </div>
         )}
-
-        {/* School name editable in-place. Save on blur — no save button
-            needed. updatedAt is bumped server-side via updateDoc. */}
-        <section style={{ marginBottom: 32 }}>
-          <label
-            style={{
-              display: "block",
-              fontFamily: "var(--wb-sans)",
-              fontSize: 12,
-              fontWeight: 600,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "#A16207",
-              marginBottom: 8,
-            }}
-          >
-            {c.schoolNameLabel}
-          </label>
-          <input
-            type="text"
-            value={nameDraft}
-            placeholder={c.schoolNamePh}
-            onChange={(e) => setNameDraft(e.target.value)}
-            onBlur={() => saveSchoolName(nameDraft.trim())}
-            style={{
-              width: "100%",
-              padding: "10px 14px",
-              border: "1px solid var(--hairline)",
-              borderRadius: 10,
-              background: "var(--surface)",
-              fontFamily: "var(--wb-sans)",
-              fontSize: 16,
-              color: "var(--ink)",
-              outline: "none",
-            }}
-          />
-          {nameSaving && (
-            <div className="wb-school-sub" style={{ marginTop: 6 }}>{c.saving}</div>
-          )}
-        </section>
 
         {/* Classrooms list */}
         <section>
