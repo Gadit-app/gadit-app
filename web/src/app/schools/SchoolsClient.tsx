@@ -651,7 +651,11 @@ export function SchoolsClient() {
             <p className="wb-school-sub" style={{ marginBottom: 16 }}>{c.empty}</p>
           ) : (
             <div style={{ marginBottom: 20 }}>
-              {classrooms.map((cls) => editingId === cls.id ? (
+              {classrooms.map((cls) => {
+                const kidsLink = typeof window !== "undefined"
+                  ? `${window.location.origin}/c/${cls.code}`
+                  : `https://www.gadit.app/c/${cls.code}`;
+                return editingId === cls.id ? (
                 // Expanded edit form REPLACES the row. Same three
                 // fields as the create form so the principal can
                 // rename, reassign teacher, and recolor in one place.
@@ -811,7 +815,25 @@ export function SchoolsClient() {
                   </div>
                 </div>
               ) : (
-                <div key={cls.id} className="wb-classroom-row">
+                // Two-row layout per classroom: action row on top,
+                // visible kids-link row underneath. Gadi (2026-06-28)
+                // flagged the chain-icon-only copy button as opaque
+                // ("לא ברור מה זה") — surfacing the actual URL as
+                // text plus a copy affordance makes the link real.
+                <div
+                  key={cls.id}
+                  style={{
+                    background: "var(--surface)",
+                    border: "1px solid var(--hairline)",
+                    borderRadius: 14,
+                    marginBottom: 10,
+                    transition: "border-color 180ms var(--wb-ease-out)",
+                  }}
+                >
+                  <div
+                    className="wb-classroom-row"
+                    style={{ marginBottom: 0, border: "none", borderRadius: 0, background: "transparent" }}
+                  >
                   {/* Color dot. Lets a principal scan 30 classrooms
                       and spot one by colour. Sits in the inline-start
                       gutter next to the mustard code chip. */}
@@ -832,44 +854,6 @@ export function SchoolsClient() {
                   <span className="wb-classroom-count">
                     {cls.searchCount ?? 0} {c.wordsLabel}
                   </span>
-                  {/* Copy kids link. Click writes `${origin}/c/<CODE>`
-                      to the clipboard so the teacher can paste it
-                      into a WhatsApp group or a printable handout
-                      without having to navigate into the classroom
-                      view. The button flashes green for 1.5s after
-                      copy as feedback. Gadi (2026-06-28) wanted the
-                      link available from the main dashboard, not
-                      buried inside /classroom/<id>. */}
-                  <button
-                    type="button"
-                    onClick={() => copyKidsLink(cls)}
-                    aria-label={c.copyLinkAria}
-                    title={c.copyLinkAria}
-                    style={{
-                      width: 30,
-                      height: 30,
-                      borderRadius: 999,
-                      background: copiedId === cls.id ? "#10B981" : "transparent",
-                      border: copiedId === cls.id ? "1px solid #10B981" : "1px solid var(--hairline, #E5E7EB)",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: copiedId === cls.id ? "#FFFFFF" : "var(--ink-soft, #6B7280)",
-                      transition: "background 200ms, color 200ms, border-color 200ms",
-                    }}
-                  >
-                    {copiedId === cls.id ? (
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    ) : (
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 1 0-7-7l-1.5 1.5" />
-                        <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 1 0 7 7l1.5-1.5" />
-                      </svg>
-                    )}
-                  </button>
                   {/* Edit pencil opens the full expanded form above
                       (name + teacher + colour). Gadi (2026-06-28)
                       flagged the previous name-only edit as useless
@@ -932,8 +916,91 @@ export function SchoolsClient() {
                   >
                     {c.open}
                   </Link>
+                  </div>
+                  {/* Kids-link row — the actual URL is visible so a
+                      teacher knows what they're about to copy. Click
+                      anywhere on the link row to copy. The button +
+                      URL both turn green for 1.5s after copy. */}
+                  <button
+                    type="button"
+                    onClick={() => copyKidsLink(cls)}
+                    aria-label={c.copyLinkAria}
+                    title={c.copyLinkAria}
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "10px 18px",
+                      borderTop: "1px dashed var(--hairline, #E5E7EB)",
+                      background: "transparent",
+                      cursor: "pointer",
+                      textAlign: dir === "rtl" ? "right" : "left",
+                      borderInline: 0,
+                      borderBottom: 0,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#A16207",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {lang === "he" ? "לינק לילדים" : lang === "hi" ? "बच्चों का लिंक" : "Kids link"}
+                    </span>
+                    <span
+                      dir="ltr"
+                      style={{
+                        fontFamily: "ui-monospace, monospace",
+                        fontSize: 13,
+                        color: copiedId === cls.id ? "#10B981" : "var(--ink, #111827)",
+                        flex: 1,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        transition: "color 200ms",
+                      }}
+                    >
+                      {kidsLink}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: copiedId === cls.id ? "#10B981" : "var(--ink-soft, #6B7280)",
+                        flexShrink: 0,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      {copiedId === cls.id ? (
+                        <>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          {c.copiedBadge}
+                        </>
+                      ) : (
+                        <>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                          </svg>
+                          {lang === "he" ? "העתק" : lang === "hi" ? "कॉपी" : "Copy"}
+                        </>
+                      )}
+                    </span>
+                  </button>
                 </div>
-              ))}
+              );
+              })}
             </div>
           )}
 

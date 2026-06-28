@@ -187,12 +187,13 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
       <main className="wb-school-main">
         <Link href={href("/schools")} className="wb-family-back">{c.back}</Link>
 
-        <h1 className="wb-school-title" style={{ marginBottom: 4 }}>
+        <h1 className="wb-school-title" style={{ marginBottom: 32 }}>
           {classroom.name || c.title}
         </h1>
-        <p className="wb-school-sub" style={{ marginBottom: 32 }}>
-          {classroom.searchCount ?? 0} {lang === "he" ? "מילים נחפשו" : lang === "hi" ? "शब्द खोजे गए" : "words searched"}
-        </p>
+        {/* "X מילים נחפשו" subtitle removed 2026-06-28: redundant
+            with the count surfaced inside the "מילים שחיפשו לאחרונה"
+            heading below, AND was grammatically awkward in Hebrew
+            (singular "1 מילה" vs plural "X מילים" needed branching). */}
 
         {/* Code chip + kids-link section removed 2026-06-28. Both
             now live on /schools (the code as a mustard pill in each
