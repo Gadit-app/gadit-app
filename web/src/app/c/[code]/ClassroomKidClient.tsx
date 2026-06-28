@@ -38,6 +38,7 @@ const COPY: Record<string, {
   classroomDefault: string;
   searchPh: string;
   searchBtn: string;
+  sentencePh: string;
   errorTitle: string;
   errorBody: string;
 }> = {
@@ -46,6 +47,7 @@ const COPY: Record<string, {
     classroomDefault: "כיתה",
     searchPh: "הקלידו מילה",
     searchBtn: "חיפוש",
+    sentencePh: "(אופציונלי) הקלידו את המשפט שבו מופיעה המילה כדי לקבל הגדרה מדויקת אחת",
     errorTitle: "הקוד לא תקין",
     errorBody: "בקשו מהמורה את הלינק שוב.",
   },
@@ -54,6 +56,7 @@ const COPY: Record<string, {
     classroomDefault: "Classroom",
     searchPh: "Type a word",
     searchBtn: "Look up",
+    sentencePh: "(Optional) Type the sentence where the word appears to get one precise definition",
     errorTitle: "Code not valid",
     errorBody: "Ask your teacher for the link again.",
   },
@@ -62,6 +65,7 @@ const COPY: Record<string, {
     classroomDefault: "कक्षा",
     searchPh: "कोई शब्द लिखें",
     searchBtn: "खोजें",
+    sentencePh: "(वैकल्पिक) वह वाक्य लिखें जिसमें शब्द आया है, सटीक एक परिभाषा मिलेगी",
     errorTitle: "कोड मान्य नहीं है",
     errorBody: "अपने शिक्षक से लिंक फिर से माँगें।",
   },
@@ -74,6 +78,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
   const c = COPY[lang] ?? COPY.en;
   const [state, setState] = useState<LookupState>({ kind: "loading" });
   const [word, setWord] = useState("");
+  const [sentence, setSentence] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -98,7 +103,13 @@ export function ClassroomKidClient({ code }: { code: string }) {
     e.preventDefault();
     const trimmed = word.trim();
     if (!trimmed) return;
-    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}`));
+    const sent = sentence.trim();
+    // Pass the optional context sentence through as ?sentence=… so the
+    // word page picks the right meaning when the word is multi-sense.
+    // Mirrors the homepage's optional-sentence input, restored after
+    // Gadi (2026-06-28) noticed the kid view was missing it.
+    const sentenceParam = sent ? `&sentence=${encodeURIComponent(sent)}` : "";
+    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}${sentenceParam}`));
   }
 
   if (state.kind === "loading") {
@@ -177,38 +188,64 @@ export function ClassroomKidClient({ code }: { code: string }) {
           </h1>
         </div>
 
-        {/* The search box. One job. No nav, no extras. */}
+        {/* The search box. Word input + submit on one row, optional
+            sentence input on a second row underneath so the kid can
+            disambiguate a multi-sense word the way the homepage lets
+            adults do. The submit button sits with the word input so a
+            kid who never enters a sentence still has the same single-
+            row flow as before. */}
         <form onSubmit={onSubmit} style={{
           display: "flex",
-          gap: 10,
+          flexDirection: "column",
+          gap: 12,
           maxWidth: 560,
           margin: "0 auto",
         }}>
-          <input
-            type="text"
-            value={word}
-            onChange={(e) => setWord(e.target.value)}
-            placeholder={c.searchPh}
-            autoFocus
+          <div style={{ display: "flex", gap: 10 }}>
+            <input
+              type="text"
+              value={word}
+              onChange={(e) => setWord(e.target.value)}
+              placeholder={c.searchPh}
+              autoFocus
+              style={{
+                flex: 1,
+                padding: "14px 18px",
+                border: "1px solid var(--hairline)",
+                borderRadius: 14,
+                background: "var(--surface)",
+                fontFamily: "var(--wb-sans)",
+                fontSize: 18,
+                color: "var(--ink)",
+                outline: "none",
+              }}
+            />
+            <button
+              type="submit"
+              className="wb-school-cta"
+              style={{ width: "auto", padding: "14px 24px", fontSize: 16 }}
+            >
+              {c.searchBtn}
+            </button>
+          </div>
+          <textarea
+            value={sentence}
+            onChange={(e) => setSentence(e.target.value)}
+            placeholder={c.sentencePh}
+            rows={2}
             style={{
-              flex: 1,
-              padding: "14px 18px",
+              padding: "12px 16px",
               border: "1px solid var(--hairline)",
               borderRadius: 14,
               background: "var(--surface)",
               fontFamily: "var(--wb-sans)",
-              fontSize: 18,
+              fontSize: 15,
               color: "var(--ink)",
               outline: "none",
+              resize: "vertical",
+              minHeight: 60,
             }}
           />
-          <button
-            type="submit"
-            className="wb-school-cta"
-            style={{ width: "auto", padding: "14px 24px", fontSize: 16 }}
-          >
-            {c.searchBtn}
-          </button>
         </form>
       </main>
     </div>

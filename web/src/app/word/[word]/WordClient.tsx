@@ -1027,6 +1027,46 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         </div>
       )}
       <div style={{ position: "relative", zIndex: 1 }}>
+        {/* Classroom mode hides the full Gadit chrome (logo, nav, plan
+            badge, lang switch, share, account menu) so a kid landing
+            from /c/<CODE> sees only the classroom context. Gadi
+            (2026-06-28) called this out: the regular topbar surfaces
+            "DEEP" plan badges and account links that have no business
+            on a kid's classroom computer. The minimal replacement
+            below carries just a "back to classroom" link so the kid
+            can search another word without scrolling through the
+            regular Gadit footer. */}
+        {classroomCode ? (
+          <header
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: dir === "rtl" ? "flex-end" : "flex-start",
+              padding: "16px 24px",
+              borderBottom: "1px solid #FCD34D",
+              background: "#FEF3C7",
+            }}
+          >
+            <Link
+              href={href(`/c/${classroomCode}`)}
+              style={{
+                fontFamily: "var(--wb-sans)",
+                fontSize: 14,
+                fontWeight: 600,
+                color: "#A16207",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              {dir === "rtl" ? "→" : "←"}{" "}
+              {lang === "he" ? "חיפוש מילה אחרת"
+                : lang === "hi" ? "दूसरा शब्द खोजें"
+                : "Search another word"}
+            </Link>
+          </header>
+        ) : (
         <header className="wb-shell-topbar">
           <Link href={href("/")} className="wb-wordmark" dir="ltr" aria-label="Gadit home">
             Gad<span className="wb-wordmark-it">it</span>
@@ -1138,6 +1178,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         </div>
 
         </header>
+        )}
 
         {/* Persistent search bar, Eyal (June 2026) flagged that
             launching a second search from a result page meant hunting

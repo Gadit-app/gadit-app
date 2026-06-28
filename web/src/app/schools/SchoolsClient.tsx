@@ -151,6 +151,12 @@ export function SchoolsClient() {
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
+  // Per-row classroom-name edit. We track which row is in edit mode +
+  // its draft string so a click on a name turns the span into an
+  // input, save on blur or Enter. Gadi (2026-06-28) reported he had
+  // no way to rename a classroom after creating it.
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingDraft, setEditingDraft] = useState("");
 
   const isWelcome = search.get("welcome") === "1";
 
@@ -229,6 +235,19 @@ export function SchoolsClient() {
       console.error("save school name failed:", err);
     } finally {
       setNameSaving(false);
+    }
+  }
+
+  async function saveClassroomName(classroomId: string, next: string) {
+    if (!user) return;
+    setEditingId(null);
+    try {
+      await updateDoc(
+        doc(db, "schools", user.uid, "classrooms", classroomId),
+        { name: next.trim() }
+      );
+    } catch (err) {
+      console.error("save classroom name failed:", err);
     }
   }
 
@@ -461,9 +480,46 @@ export function SchoolsClient() {
               {classrooms.map((cls) => (
                 <div key={cls.id} className="wb-classroom-row">
                   <span className="wb-classroom-code">{cls.code}</span>
-                  <span className="wb-classroom-name">
-                    {cls.name || c.classroomsHeading}
-                  </span>
+                  {editingId === cls.id ? (
+                    <input
+                      type="text"
+                      value={editingDraft}
+                      autoFocus
+                      onChange={(e) => setEditingDraft(e.target.value)}
+                      onBlur={() => saveClassroomName(cls.id, editingDraft)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          saveClassroomName(cls.id, editingDraft);
+                        } else if (e.key === "Escape") {
+                          setEditingId(null);
+                        }
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: "6px 10px",
+                        border: "1px solid #FCD34D",
+                        borderRadius: 8,
+                        background: "var(--surface)",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 15.5,
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                        outline: "none",
+                      }}
+                    />
+                  ) : (
+                    <span
+                      className="wb-classroom-name"
+                      onClick={() => {
+                        setEditingId(cls.id);
+                        setEditingDraft(cls.name ?? "");
+                      }}
+                      title={lang === "he" ? "לחץ לעריכת שם הכיתה" : "Click to edit classroom name"}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {cls.name || c.classroomsHeading}
+                    </span>
+                  )}
                   <span className="wb-classroom-count">
                     {cls.searchCount ?? 0} {c.wordsLabel}
                   </span>
