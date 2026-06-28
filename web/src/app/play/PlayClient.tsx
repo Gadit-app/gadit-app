@@ -40,6 +40,11 @@ import { GameTimeTraveler } from "@/components/play/GameTimeTraveler";
 import { GameWordPassport } from "@/components/play/GameWordPassport";
 import { GameFalseFriends } from "@/components/play/GameFalseFriends";
 import { GameRootRush } from "@/components/play/GameRootRush";
+import { GameShadeSlider } from "@/components/play/GameShadeSlider";
+import { GameBuildAWord } from "@/components/play/GameBuildAWord";
+import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
+import { GameMeaningLens } from "@/components/play/GameMeaningLens";
+import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -99,6 +104,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "מצא 3 מילים שצמחו מאותו שורש",
     rootPrompt: "השורש הזה ילד שלוש מילים מודרניות",
     rootProgress: (n) => n === 0 ? "מצא 3 מילים" : n === 3 ? "כל השלוש נמצאו!" : `${n}/3 נמצאו`,
+    shadeTitle: "סולם עוצמה",
+    shadeDesc: "סדר 5 מילים מעדין לעוצמתי",
+    shadePrompt: "מהמתון לחזק ביותר. לחץ לפי הסדר.",
+    shadeMild: "מתון",
+    shadeStrong: "חזק",
+    shadeReveal: "הסדר הנכון",
+    buildTitle: "בנה מילה",
+    buildDesc: "הרכב מילה מקידומת, שורש וסיומת",
+    buildPrompt: "בנה את המילה שמתאימה לרמז",
+    idiomTitle: "מפענח ניבים",
+    idiomDesc: "תיאור מילולי של ניב, מה הוא באמת אומר?",
+    idiomPrompt: "אם נקח את הניב מילולית. מה הוא באמת אומר?",
+    lensTitle: "עדשת משמעות",
+    lensDesc: "אותה מילה, ארבע משמעויות, איזו במשפט?",
+    lensPrompt: "באיזו משמעות המילה משמשת כאן?",
+    artistTitle: "אמן אטימולוגיה",
+    artistDesc: "תרגום מילולי של שורש עתיק. מה המילה המודרנית?",
+    artistPrompt: "השורש העתיק הזה נתן לנו איזו מילה מודרנית?",
     exit: "סגירה",
     quizPromptWord: "מה המשמעות של המילה",
     quizPromptMeaning: "איזו מילה מתאימה להגדרה",
@@ -159,6 +182,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Find the 3 words from this ancient root",
     rootPrompt: "This root grew into three modern words. Find them.",
     rootProgress: (n) => n === 0 ? "Find 3 words" : n === 3 ? "All three found!" : `${n}/3 found`,
+    shadeTitle: "Shade Slider",
+    shadeDesc: "Order 5 words from mildest to strongest",
+    shadePrompt: "Tap the cards in order, mildest first.",
+    shadeMild: "Mild",
+    shadeStrong: "Intense",
+    shadeReveal: "Correct order",
+    buildTitle: "Build-a-Word",
+    buildDesc: "Snap together a word from prefix + root + suffix",
+    buildPrompt: "Build the word that matches the clue",
+    idiomTitle: "Idiom Decoder",
+    idiomDesc: "The literal scene. What does it really mean?",
+    idiomPrompt: "If we took this idiom at face value... what does it actually mean?",
+    lensTitle: "Meaning Lens",
+    lensDesc: "Same word, four meanings. Which one fits?",
+    lensPrompt: "Which sense of this word does the sentence use?",
+    artistTitle: "Etymology Artist",
+    artistDesc: "Literal translation of an ancient root. Modern word?",
+    artistPrompt: "Which modern English word grew from this ancient root?",
     exit: "Close",
     quizPromptWord: "What does this word mean?",
     quizPromptMeaning: "Which word fits this meaning?",
@@ -219,6 +260,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "اعثر على ٣ كلمات من جذر واحد",
     rootPrompt: "هذا الجذر أنجب ثلاث كلمات حديثة. اعثر عليها.",
     rootProgress: (n) => n === 0 ? "اعثر على ٣ كلمات" : n === 3 ? "وجدت الثلاثة!" : `${n}/3`,
+    shadeTitle: "منزلق الشدة",
+    shadeDesc: "رتب ٥ كلمات من اللطيف إلى الأقوى",
+    shadePrompt: "اضغط البطاقات بالترتيب من اللطيف",
+    shadeMild: "لطيف",
+    shadeStrong: "شديد",
+    shadeReveal: "الترتيب الصحيح",
+    buildTitle: "ابنِ كلمة",
+    buildDesc: "ركّب كلمة من بادئة وجذر ولاحقة",
+    buildPrompt: "ابنِ الكلمة المطابقة للتلميح",
+    idiomTitle: "فك التعابير",
+    idiomDesc: "المشهد الحرفي. ما المعنى الحقيقي؟",
+    idiomPrompt: "إذا أخذنا التعبير حرفياً، ماذا يعني فعلاً؟",
+    lensTitle: "عدسة المعنى",
+    lensDesc: "نفس الكلمة، أربع معاني. أيها يناسب؟",
+    lensPrompt: "بأي معنى تستخدم الكلمة هنا؟",
+    artistTitle: "فنان الاشتقاق",
+    artistDesc: "ترجمة حرفية لجذر قديم. الكلمة الحديثة؟",
+    artistPrompt: "أي كلمة إنجليزية حديثة نمت من هذا الجذر القديم؟",
     exit: "إغلاق",
     quizPromptWord: "ما معنى هذه الكلمة؟",
     quizPromptMeaning: "أي كلمة تطابق هذا المعنى؟",
@@ -279,6 +338,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Найди 3 слова с одним корнем",
     rootPrompt: "От этого корня выросли три современных слова. Найди их.",
     rootProgress: (n) => n === 0 ? "Найди 3 слова" : n === 3 ? "Все три!" : `${n}/3`,
+    shadeTitle: "Шкала оттенков",
+    shadeDesc: "Расположи 5 слов от слабого к сильному",
+    shadePrompt: "Нажимай карточки по порядку, от слабого",
+    shadeMild: "Мягко",
+    shadeStrong: "Сильно",
+    shadeReveal: "Правильный порядок",
+    buildTitle: "Собери слово",
+    buildDesc: "Собери слово из приставки, корня и суффикса",
+    buildPrompt: "Собери слово, подходящее к подсказке",
+    idiomTitle: "Декодер идиом",
+    idiomDesc: "Буквальная сцена. Что значит на самом деле?",
+    idiomPrompt: "Если понимать идиому буквально, что она значит?",
+    lensTitle: "Линза смысла",
+    lensDesc: "Одно слово, четыре смысла. Какой подходит?",
+    lensPrompt: "В каком значении использовано слово здесь?",
+    artistTitle: "Этимолог-художник",
+    artistDesc: "Буквальный перевод древнего корня. Современное слово?",
+    artistPrompt: "Какое современное слово выросло из этого корня?",
     exit: "Закрыть",
     quizPromptWord: "Что означает это слово?",
     quizPromptMeaning: "Какое слово подходит?",
@@ -339,6 +416,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Encuentra 3 palabras de la misma raíz",
     rootPrompt: "Esta raíz dio tres palabras modernas. Encuéntralas.",
     rootProgress: (n) => n === 0 ? "Encuentra 3" : n === 3 ? "¡Las tres!" : `${n}/3`,
+    shadeTitle: "Escala de Intensidad",
+    shadeDesc: "Ordena 5 palabras de suave a intensa",
+    shadePrompt: "Toca las cartas en orden, de la más suave",
+    shadeMild: "Suave",
+    shadeStrong: "Intenso",
+    shadeReveal: "Orden correcto",
+    buildTitle: "Construye una Palabra",
+    buildDesc: "Arma una palabra con prefijo, raíz y sufijo",
+    buildPrompt: "Construye la palabra que coincide con la pista",
+    idiomTitle: "Decodificador de Modismos",
+    idiomDesc: "La escena literal. ¿Qué significa de verdad?",
+    idiomPrompt: "Si tomamos el modismo al pie de la letra, ¿qué significa?",
+    lensTitle: "Lente de Significado",
+    lensDesc: "Misma palabra, cuatro sentidos. ¿Cuál encaja?",
+    lensPrompt: "¿En qué sentido se usa la palabra aquí?",
+    artistTitle: "Artista Etimológico",
+    artistDesc: "Traducción literal de una raíz antigua. ¿Palabra moderna?",
+    artistPrompt: "¿Qué palabra moderna nació de esta raíz antigua?",
     exit: "Cerrar",
     quizPromptWord: "¿Qué significa esta palabra?",
     quizPromptMeaning: "¿Qué palabra encaja?",
@@ -399,6 +494,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Encontre 3 palavras da mesma raiz",
     rootPrompt: "Esta raiz deu três palavras modernas. Encontre-as.",
     rootProgress: (n) => n === 0 ? "Encontre 3" : n === 3 ? "Todas as três!" : `${n}/3`,
+    shadeTitle: "Escala de Intensidade",
+    shadeDesc: "Ordene 5 palavras de suave a intensa",
+    shadePrompt: "Toque as cartas em ordem, da mais suave",
+    shadeMild: "Suave",
+    shadeStrong: "Intenso",
+    shadeReveal: "Ordem correta",
+    buildTitle: "Construa uma Palavra",
+    buildDesc: "Monte uma palavra com prefixo, raiz e sufixo",
+    buildPrompt: "Construa a palavra que combina com a pista",
+    idiomTitle: "Decodificador de Expressões",
+    idiomDesc: "A cena literal. O que realmente significa?",
+    idiomPrompt: "Se levarmos a expressão ao pé da letra, o que ela quer dizer?",
+    lensTitle: "Lente de Significado",
+    lensDesc: "Mesma palavra, quatro sentidos. Qual cabe?",
+    lensPrompt: "Em que sentido a palavra é usada aqui?",
+    artistTitle: "Artista da Etimologia",
+    artistDesc: "Tradução literal de uma raiz antiga. Palavra moderna?",
+    artistPrompt: "Que palavra moderna nasceu desta raiz antiga?",
     exit: "Fechar",
     quizPromptWord: "O que esta palavra significa?",
     quizPromptMeaning: "Qual palavra encaixa?",
@@ -459,6 +572,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Trouve 3 mots issus de la même racine",
     rootPrompt: "Cette racine a donné trois mots modernes. Trouve-les.",
     rootProgress: (n) => n === 0 ? "Trouve 3 mots" : n === 3 ? "Les trois !" : `${n}/3`,
+    shadeTitle: "Curseur d'Intensité",
+    shadeDesc: "Range 5 mots du plus doux au plus intense",
+    shadePrompt: "Touche les cartes dans l'ordre, du plus doux",
+    shadeMild: "Doux",
+    shadeStrong: "Intense",
+    shadeReveal: "Bon ordre",
+    buildTitle: "Construis un Mot",
+    buildDesc: "Assemble un mot avec préfixe, racine et suffixe",
+    buildPrompt: "Construis le mot qui correspond à l'indice",
+    idiomTitle: "Décodeur d'Expressions",
+    idiomDesc: "La scène littérale. Que veut dire l'expression ?",
+    idiomPrompt: "Si on prend l'expression au pied de la lettre, que veut-elle dire ?",
+    lensTitle: "Lentille de Sens",
+    lensDesc: "Même mot, quatre sens. Lequel convient ?",
+    lensPrompt: "Dans quel sens le mot est-il utilisé ici ?",
+    artistTitle: "Artiste d'Étymologie",
+    artistDesc: "Traduction littérale d'une racine ancienne. Mot moderne ?",
+    artistPrompt: "Quel mot moderne est né de cette racine ancienne ?",
     exit: "Fermer",
     quizPromptWord: "Que signifie ce mot ?",
     quizPromptMeaning: "Quel mot convient ?",
@@ -519,6 +650,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Finde 3 Wörter aus derselben Wurzel",
     rootPrompt: "Diese Wurzel gab drei moderne Wörter. Finde sie.",
     rootProgress: (n) => n === 0 ? "Finde 3" : n === 3 ? "Alle drei!" : `${n}/3`,
+    shadeTitle: "Intensitätsskala",
+    shadeDesc: "Sortiere 5 Wörter von mild zu stark",
+    shadePrompt: "Tippe die Karten in der richtigen Reihenfolge",
+    shadeMild: "Mild",
+    shadeStrong: "Intensiv",
+    shadeReveal: "Richtige Reihenfolge",
+    buildTitle: "Wort-Baukasten",
+    buildDesc: "Setze ein Wort aus Vorsilbe, Stamm und Endung zusammen",
+    buildPrompt: "Baue das Wort, das zum Hinweis passt",
+    idiomTitle: "Redewendungs-Decoder",
+    idiomDesc: "Die wörtliche Szene. Was meint sie wirklich?",
+    idiomPrompt: "Wörtlich genommen, was bedeutet die Redewendung wirklich?",
+    lensTitle: "Bedeutungslinse",
+    lensDesc: "Selbes Wort, vier Bedeutungen. Welche passt?",
+    lensPrompt: "In welcher Bedeutung wird das Wort hier benutzt?",
+    artistTitle: "Etymologie-Künstler",
+    artistDesc: "Wörtliche Übersetzung einer alten Wurzel. Modernes Wort?",
+    artistPrompt: "Welches moderne Wort ist aus dieser alten Wurzel gewachsen?",
     exit: "Schließen",
     quizPromptWord: "Was bedeutet dieses Wort?",
     quizPromptMeaning: "Welches Wort passt?",
@@ -579,6 +728,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Najdi 3 slova ze stejného kořene",
     rootPrompt: "Tento kořen dal tři moderní slova. Najdi je.",
     rootProgress: (n) => n === 0 ? "Najdi 3" : n === 3 ? "Všechna tři!" : `${n}/3`,
+    shadeTitle: "Stupnice intenzity",
+    shadeDesc: "Seřaď 5 slov od mírného po silné",
+    shadePrompt: "Klepej na karty v pořadí, od nejmírnějšího",
+    shadeMild: "Mírné",
+    shadeStrong: "Silné",
+    shadeReveal: "Správné pořadí",
+    buildTitle: "Postav slovo",
+    buildDesc: "Slož slovo z předpony, kořene a přípony",
+    buildPrompt: "Postav slovo odpovídající nápovědě",
+    idiomTitle: "Dekodér frází",
+    idiomDesc: "Doslovná scéna. Co to skutečně znamená?",
+    idiomPrompt: "Kdybychom vzali frázi doslova, co skutečně znamená?",
+    lensTitle: "Čočka významu",
+    lensDesc: "Stejné slovo, čtyři významy. Který sedí?",
+    lensPrompt: "V jakém významu je slovo použito zde?",
+    artistTitle: "Etymologický umělec",
+    artistDesc: "Doslovný překlad starého kořene. Moderní slovo?",
+    artistPrompt: "Jaké moderní slovo vyrostlo z tohoto starého kořene?",
     exit: "Zavřít",
     quizPromptWord: "Co znamená toto slovo?",
     quizPromptMeaning: "Které slovo sedí?",
@@ -639,6 +806,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "Nájdi 3 slová z toho istého koreňa",
     rootPrompt: "Tento koreň dal tri moderné slová. Nájdi ich.",
     rootProgress: (n) => n === 0 ? "Nájdi 3" : n === 3 ? "Všetky tri!" : `${n}/3`,
+    shadeTitle: "Stupnica intenzity",
+    shadeDesc: "Zoraď 5 slov od jemného po silné",
+    shadePrompt: "Klepkaj na karty v poradí, od najjemnejšieho",
+    shadeMild: "Jemné",
+    shadeStrong: "Silné",
+    shadeReveal: "Správne poradie",
+    buildTitle: "Postav slovo",
+    buildDesc: "Zlož slovo z predpony, koreňa a prípony",
+    buildPrompt: "Postav slovo zodpovedajúce nápovede",
+    idiomTitle: "Dekodér fráz",
+    idiomDesc: "Doslovná scéna. Čo to skutočne znamená?",
+    idiomPrompt: "Keby sme vzali frázu doslova, čo skutočne znamená?",
+    lensTitle: "Šošovka významu",
+    lensDesc: "To isté slovo, štyri významy. Ktorý sedí?",
+    lensPrompt: "V akom význame je slovo použité tu?",
+    artistTitle: "Etymologický umelec",
+    artistDesc: "Doslovný preklad starého koreňa. Moderné slovo?",
+    artistPrompt: "Aké moderné slovo vyrástlo z tohto starého koreňa?",
     exit: "Zavrieť",
     quizPromptWord: "Čo znamená toto slovo?",
     quizPromptMeaning: "Ktoré slovo sedí?",
@@ -699,6 +884,24 @@ const COPY: Record<string, PlayT> = {
     rootDesc: "एक ही जड़ के 3 शब्द ढूंढें",
     rootPrompt: "इस जड़ से तीन आधुनिक शब्द निकले. उन्हें ढूंढें.",
     rootProgress: (n) => n === 0 ? "3 शब्द ढूंढें" : n === 3 ? "तीनों मिले!" : `${n}/3`,
+    shadeTitle: "तीव्रता स्लाइडर",
+    shadeDesc: "5 शब्दों को हल्के से तीव्र तक क्रम में रखें",
+    shadePrompt: "कार्ड्स को क्रम से टैप करें, हल्के से शुरू करें",
+    shadeMild: "हल्का",
+    shadeStrong: "तीव्र",
+    shadeReveal: "सही क्रम",
+    buildTitle: "शब्द बनाएँ",
+    buildDesc: "उपसर्ग, मूल और प्रत्यय से शब्द बनाएँ",
+    buildPrompt: "संकेत से मेल खाता शब्द बनाएँ",
+    idiomTitle: "मुहावरा डिकोडर",
+    idiomDesc: "शाब्दिक दृश्य. असली मतलब क्या है?",
+    idiomPrompt: "अगर मुहावरे को शाब्दिक रूप से लें, तो असली अर्थ क्या है?",
+    lensTitle: "अर्थ लेंस",
+    lensDesc: "एक ही शब्द, चार अर्थ. कौन फिट है?",
+    lensPrompt: "यहाँ शब्द किस अर्थ में प्रयोग हुआ है?",
+    artistTitle: "व्युत्पत्ति कलाकार",
+    artistDesc: "प्राचीन मूल का शाब्दिक अनुवाद. आधुनिक शब्द?",
+    artistPrompt: "इस प्राचीन मूल से कौन सा आधुनिक शब्द निकला?",
     exit: "बंद करें",
     quizPromptWord: "इस शब्द का क्या अर्थ है?",
     quizPromptMeaning: "कौन सा शब्द इस अर्थ से मेल खाता है?",
@@ -987,6 +1190,72 @@ export function PlayPage() {
         </svg>
       ),
     },
+    {
+      id: "shade",
+      title: t.shadeTitle,
+      desc: t.shadeDesc,
+      enabled: true,
+      accent: "amber",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 18h18" />
+          <path d="M5 14l3-4 4 6 4-9 3 7" />
+        </svg>
+      ),
+    },
+    {
+      id: "build",
+      title: t.buildTitle,
+      desc: t.buildDesc,
+      enabled: true,
+      accent: "indigo",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="9" width="5" height="6" rx="1.5" />
+          <rect x="9.5" y="9" width="5" height="6" rx="1.5" />
+          <rect x="16" y="9" width="5" height="6" rx="1.5" />
+        </svg>
+      ),
+    },
+    {
+      id: "idiom",
+      title: t.idiomTitle,
+      desc: t.idiomDesc,
+      enabled: true,
+      accent: "fuchsia",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+        </svg>
+      ),
+    },
+    {
+      id: "lens",
+      title: t.lensTitle,
+      desc: t.lensDesc,
+      enabled: true,
+      accent: "cyan",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+      ),
+    },
+    {
+      id: "artist",
+      title: t.artistTitle,
+      desc: t.artistDesc,
+      enabled: true,
+      accent: "pink",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2v6m0 0 3-3m-3 3-3-3" />
+          <path d="M5 14a7 7 0 0 0 14 0" />
+          <path d="M12 21v-7" />
+        </svg>
+      ),
+    },
   ];
 
   // ─── Active game stage ─────────────────────────────────────────
@@ -1028,6 +1297,41 @@ export function PlayPage() {
       return (
         <div className="wordbook wb-play-page" dir={dir}>
           <GameRootRush {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "shade") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameShadeSlider {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "build") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameBuildAWord {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "idiom") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameIdiomDecoder {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "lens") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameMeaningLens {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "artist") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameEtymologyArtist {...curatedProps} />
         </div>
       );
     }

@@ -29,7 +29,12 @@ export type GameId =
   | "time"      // Time Traveler: pick the modern word whose meaning has drifted
   | "passport"  // Word Passport: guess the origin language of an English word
   | "friends"   // False Friends: real cognate or cross-language trap?
-  | "root";     // Root Rush: tap the 3 words that share a Latin/Greek root
+  | "root"      // Root Rush: tap the 3 words that share a Latin/Greek root
+  | "shade"     // Shade Slider: order 5 synonyms from mildest to strongest
+  | "build"     // Build-a-Word: assemble prefix+root+suffix to match a clue
+  | "idiom"     // Idiom Decoder: literal description → real idiom meaning
+  | "lens"      // Meaning Lens: pick which sense a sentence uses
+  | "artist";   // Etymology Artist: literal root translation → modern word
 
 /** One entry the engine can build games from. `examples` is only present
  *  when we found a full IDB cache hit. */
@@ -62,6 +67,11 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   passport: 0,
   friends: 0,
   root: 0,
+  shade: 0,
+  build: 0,
+  idiom: 0,
+  lens: 0,
+  artist: 0,
 };
 
 /** How many rounds per session. Curated games pick from their content
@@ -77,6 +87,11 @@ export const SESSION_SIZE: Record<GameId, number> = {
   passport: 6, // 6 origin guesses; each reveal is a story
   friends: 7,  // 7 binary picks; faster mechanic so we can fit more
   root: 5,     // 5 root families; each round = 3 correct + revealed distractors
+  shade: 5,    // 5 ladders; ordering 5 cards each is slower than tap-once games
+  build: 6,    // 6 morpheme assemblies; reveal-then-advance loop
+  idiom: 6,    // 6 idioms; the literal description is the reveal hook
+  lens: 6,     // 6 polysemy disambiguations; standard 4-choice
+  artist: 6,   // 6 literal-translations; standard 4-choice
 };
 
 // ─── Random utilities ──────────────────────────────────────────

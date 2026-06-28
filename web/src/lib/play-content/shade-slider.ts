@@ -1,0 +1,122 @@
+/**
+ * Shade Slider — synonym intensity ordering game content.
+ *
+ * Each round shows 5 near-synonyms scrambled. The player taps them in
+ * order from mildest to most intense. Teaches the thing learners crave
+ * most: nuance. The difference between "content" and "ecstatic".
+ *
+ * Order is canonical: index 0 = mildest, index 4 = most intense.
+ */
+
+export type ShadeSliderRound = {
+  /** What is being graded — for the prompt eyebrow.
+   *  e.g. "happiness", "anger", "size". Plain English. */
+  axis: string;
+  /** Five synonyms in CANONICAL order: 0 = mildest, 4 = strongest.
+   *  Displayed scrambled to the player. */
+  ladder: [string, string, string, string, string];
+  /** Reveal line shown after the round. ≤180 chars. */
+  story: string;
+};
+
+export const SHADE_SLIDER_ROUNDS: ShadeSliderRound[] = [
+  {
+    axis: "happiness",
+    ladder: ["content", "pleased", "glad", "joyful", "ecstatic"],
+    story: "Content is quiet satisfaction. Ecstatic is overflowing. The ladder between them is what makes writing land.",
+  },
+  {
+    axis: "anger",
+    ladder: ["annoyed", "irritated", "angry", "furious", "livid"],
+    story: "Annoyed wears off in minutes. Livid leaves a mark. Picking the right rung makes the difference between a complaint and a scene.",
+  },
+  {
+    axis: "sadness",
+    ladder: ["down", "glum", "sad", "miserable", "devastated"],
+    story: "Down is having a low day. Devastated is a life event. Knowing where you are on the ladder is half of telling someone you need help.",
+  },
+  {
+    axis: "hunger",
+    ladder: ["peckish", "hungry", "starving", "famished", "ravenous"],
+    story: "Peckish is a snack will do. Ravenous is eat the menu. English packs surprisingly precise calibration for one biological state.",
+  },
+  {
+    axis: "tiredness",
+    ladder: ["drowsy", "tired", "exhausted", "drained", "spent"],
+    story: "Drowsy = couch nap. Spent = ran out of fuel. The ladder doubles as a self-check — where am I really at right now?",
+  },
+  {
+    axis: "size (large)",
+    ladder: ["sizable", "big", "large", "huge", "enormous"],
+    story: "All five mean 'bigger than average', but writers and salespeople pick carefully. Enormous makes you imagine; big makes you nod.",
+  },
+  {
+    axis: "size (small)",
+    ladder: ["small", "tiny", "minute", "miniscule", "microscopic"],
+    story: "Small fits in a hand. Microscopic needs a lens. The ladder is finer at the bottom because tiny things have lots of varieties.",
+  },
+  {
+    axis: "heat",
+    ladder: ["warm", "hot", "boiling", "scorching", "blistering"],
+    story: "Warm invites you in. Blistering makes you reconsider going outside. Weather forecasters earn their salaries picking the right rung.",
+  },
+  {
+    axis: "cold",
+    ladder: ["cool", "chilly", "cold", "freezing", "arctic"],
+    story: "Cool is welcome on a hot day. Arctic is the kind of cold that hurts. Five rungs because we need them — humans care a lot about cold.",
+  },
+  {
+    axis: "beauty",
+    ladder: ["cute", "pretty", "beautiful", "gorgeous", "stunning"],
+    story: "Cute is friendly. Stunning stops the room. The ladder is also a register — choose by occasion, not just intensity.",
+  },
+  {
+    axis: "intelligence",
+    ladder: ["clever", "smart", "bright", "brilliant", "genius"],
+    story: "Clever solves the puzzle. Genius designs new puzzles. The middle rungs (smart, bright) are the most contested compliments.",
+  },
+  {
+    axis: "speed (fast)",
+    ladder: ["quick", "fast", "speedy", "rapid", "blazing"],
+    story: "Quick is short. Blazing is sustained. Sportscasters and tech demos burn through this ladder faster than any other.",
+  },
+  {
+    axis: "fear",
+    ladder: ["nervous", "worried", "scared", "terrified", "petrified"],
+    story: "Nervous is butterflies. Petrified is locked in place. Literally — petrified means turned to stone. The ladder doubles as a body cue.",
+  },
+  {
+    axis: "surprise",
+    ladder: ["surprised", "astonished", "amazed", "stunned", "flabbergasted"],
+    story: "Surprised raises an eyebrow. Flabbergasted means actual jaw-drop. English borrows from Latin, Greek, and pure 1700s nonsense.",
+  },
+  {
+    axis: "quality (good)",
+    ladder: ["fine", "good", "great", "excellent", "outstanding"],
+    story: "Fine is acceptable. Outstanding wins awards. School report cards live entirely on this ladder, ranked carefully by anxious teachers.",
+  },
+  {
+    axis: "quality (bad)",
+    ladder: ["subpar", "bad", "terrible", "awful", "horrendous"],
+    story: "Subpar means below average. Horrendous means I need to go lie down. Movie reviewers depend on the lower rungs.",
+  },
+  {
+    axis: "wetness",
+    ladder: ["damp", "wet", "soaked", "drenched", "saturated"],
+    story: "Damp is towel territory. Saturated cannot hold another drop. Each rung is calibrated to one notch more water than the last.",
+  },
+  {
+    axis: "dirtiness",
+    ladder: ["grubby", "dirty", "filthy", "grimy", "squalid"],
+    story: "Grubby is kid-hands. Squalid is a public health concern. The middle rungs blur — say filthy or grimy and you'll spark a debate.",
+  },
+];
+
+export function pickShadeSliderRounds(count: number): ShadeSliderRound[] {
+  const shuffled = SHADE_SLIDER_ROUNDS.slice();
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, count);
+}

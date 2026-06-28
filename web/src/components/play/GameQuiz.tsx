@@ -185,6 +185,24 @@ export type PlayT = {
   rootDesc: string;
   rootPrompt: string;
   rootProgress: (found: number) => string;
+  shadeTitle: string;
+  shadeDesc: string;
+  shadePrompt: string;
+  shadeMild: string;
+  shadeStrong: string;
+  shadeReveal: string;
+  buildTitle: string;
+  buildDesc: string;
+  buildPrompt: string;
+  idiomTitle: string;
+  idiomDesc: string;
+  idiomPrompt: string;
+  lensTitle: string;
+  lensDesc: string;
+  lensPrompt: string;
+  artistTitle: string;
+  artistDesc: string;
+  artistPrompt: string;
   // Game UI
   exit: string;
   quizPromptWord: string;
