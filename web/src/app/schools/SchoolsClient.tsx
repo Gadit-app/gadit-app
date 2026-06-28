@@ -294,25 +294,62 @@ export function SchoolsClient() {
         <Link href={href("/")} className="wb-family-back">{c.back}</Link>
 
         <header className="wb-school-header">
-          <button
-            type="button"
-            className="wb-school-logo-slot"
-            onClick={() => logoInputRef.current?.click()}
-            title={school.logoUrl ? c.logoReplace : c.logoCta}
-            aria-label={school.logoUrl ? c.logoReplace : c.logoCta}
-            style={{ border: "1px solid #FCD34D", cursor: "pointer" }}
-          >
-            {school.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={school.logoUrl} alt="" />
-            ) : (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 7l9-4 9 4-9 4-9-4z" />
-                <path d="M21 10v6" />
-                <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
+          {/* Logo slot. Universal "click to upload image" pattern:
+              the slot itself shows the current logo (or a placeholder
+              icon), AND a small camera badge in the bottom-end corner
+              signals it's an upload target. Replaces the previous
+              ambiguous design where the graduation cap looked like
+              decoration; tested user (Gadi 2026-06-28) didn't realise
+              he could click. */}
+          <div style={{ position: "relative", flexShrink: 0 }}>
+            <button
+              type="button"
+              className="wb-school-logo-slot"
+              onClick={() => logoInputRef.current?.click()}
+              title={school.logoUrl ? c.logoReplace : c.logoCta}
+              aria-label={school.logoUrl ? c.logoReplace : c.logoCta}
+              style={{ border: "1px solid #FCD34D", cursor: "pointer" }}
+            >
+              {school.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={school.logoUrl} alt="" />
+              ) : (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 7l9-4 9 4-9 4-9-4z" />
+                  <path d="M21 10v6" />
+                  <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
+                </svg>
+              )}
+            </button>
+            {/* Camera badge. Sits half-on, half-off the slot's bottom-
+                end corner. White circle with mustard camera glyph so
+                the click target reads instantly. Pointer events go
+                through to the underlying button so a click on the
+                badge ALSO opens the file picker. */}
+            <span
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                bottom: -4,
+                insetInlineEnd: -4,
+                width: 24,
+                height: 24,
+                borderRadius: 999,
+                background: "#CA8A04",
+                border: "2px solid var(--surface, #FFFFFF)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                pointerEvents: "none",
+                boxShadow: "0 2px 4px rgba(202, 138, 4, 0.35)",
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
               </svg>
-            )}
-          </button>
+            </span>
+          </div>
           <input
             ref={logoInputRef}
             type="file"
