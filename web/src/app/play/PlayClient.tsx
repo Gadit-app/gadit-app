@@ -35,6 +35,8 @@ import { GameFillBlank } from "@/components/play/GameFillBlank";
 import { GameMemory } from "@/components/play/GameMemory";
 import { GameAnagram } from "@/components/play/GameAnagram";
 import { GameSpeed } from "@/components/play/GameSpeed";
+import { GameTwinTrap } from "@/components/play/GameTwinTrap";
+import { GameTimeTraveler } from "@/components/play/GameTimeTraveler";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -76,6 +78,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "סדר את האותיות לפי הרמז",
     speedTitle: "חידון מהיר",
     speedDesc: "כמה מילים תזהה ב-60 שניות?",
+    twinTitle: "מלכודת תאומים",
+    twinDesc: "effect או affect? lay או lie?",
+    twinPrompt: "בחר את המילה המתאימה",
+    timeTitle: "מסע בזמן",
+    timeDesc: "מה המילה הזו הייתה אומרת פעם?",
+    timePrompt: "פעם זו הייתה המשמעות:",
     exit: "סגירה",
     quizPromptWord: "מה המשמעות של המילה",
     quizPromptMeaning: "איזו מילה מתאימה להגדרה",
@@ -118,6 +126,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Unscramble the word from the hint",
     speedTitle: "Speed Round",
     speedDesc: "How many words can you nail in 60 seconds?",
+    twinTitle: "Twin Trap",
+    twinDesc: "Effect or affect? Lay or lie?",
+    twinPrompt: "Pick the right word",
+    timeTitle: "Time Traveler",
+    timeDesc: "What did this word USED to mean?",
+    timePrompt: "Centuries ago, this word meant:",
     exit: "Close",
     quizPromptWord: "What does this word mean?",
     quizPromptMeaning: "Which word fits this meaning?",
@@ -160,6 +174,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "رتب الحروف من خلال التلميح",
     speedTitle: "الجولة السريعة",
     speedDesc: "كم كلمة تعرف خلال 60 ثانية؟",
+    twinTitle: "فخ التوائم",
+    twinDesc: "كلمتان متشابهتان — أيهما الصواب؟",
+    twinPrompt: "اختر الكلمة المناسبة",
+    timeTitle: "السفر عبر الزمن",
+    timeDesc: "ماذا كانت هذه الكلمة تعني قبل قرون؟",
+    timePrompt: "قبل قرون، كانت هذه الكلمة تعني:",
     exit: "إغلاق",
     quizPromptWord: "ما معنى هذه الكلمة؟",
     quizPromptMeaning: "أي كلمة تطابق هذا المعنى؟",
@@ -202,6 +222,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Собери слово по подсказке",
     speedTitle: "Спринт",
     speedDesc: "Сколько слов узнаешь за 60 секунд?",
+    twinTitle: "Двойная ловушка",
+    twinDesc: "Слова-близнецы — какое верное?",
+    twinPrompt: "Выбери правильное слово",
+    timeTitle: "Машина времени",
+    timeDesc: "Что это слово значило раньше?",
+    timePrompt: "Когда-то это слово значило:",
     exit: "Закрыть",
     quizPromptWord: "Что означает это слово?",
     quizPromptMeaning: "Какое слово подходит?",
@@ -244,6 +270,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Ordena las letras con la pista",
     speedTitle: "Ronda Rápida",
     speedDesc: "¿Cuántas palabras en 60 segundos?",
+    twinTitle: "Trampa Gemela",
+    twinDesc: "Palabras casi gemelas — ¿cuál es la correcta?",
+    twinPrompt: "Elige la palabra correcta",
+    timeTitle: "Viajero del Tiempo",
+    timeDesc: "¿Qué significaba esta palabra hace siglos?",
+    timePrompt: "Hace siglos, esta palabra significaba:",
     exit: "Cerrar",
     quizPromptWord: "¿Qué significa esta palabra?",
     quizPromptMeaning: "¿Qué palabra encaja?",
@@ -286,6 +318,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Ordene as letras com a dica",
     speedTitle: "Rodada Rápida",
     speedDesc: "Quantas palavras em 60 segundos?",
+    twinTitle: "Armadilha Gêmea",
+    twinDesc: "Palavras quase iguais — qual é a certa?",
+    twinPrompt: "Escolha a palavra certa",
+    timeTitle: "Viajante do Tempo",
+    timeDesc: "O que essa palavra significava há séculos?",
+    timePrompt: "Há séculos, esta palavra significava:",
     exit: "Fechar",
     quizPromptWord: "O que esta palavra significa?",
     quizPromptMeaning: "Qual palavra encaixa?",
@@ -328,6 +366,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Remettez les lettres dans l'ordre",
     speedTitle: "Manche Éclair",
     speedDesc: "Combien de mots en 60 secondes ?",
+    twinTitle: "Piège Jumeau",
+    twinDesc: "Deux mots presque identiques. Lequel ?",
+    twinPrompt: "Choisis le bon mot",
+    timeTitle: "Voyageur du Temps",
+    timeDesc: "Que voulait dire ce mot autrefois ?",
+    timePrompt: "Autrefois, ce mot signifiait :",
     exit: "Fermer",
     quizPromptWord: "Que signifie ce mot ?",
     quizPromptMeaning: "Quel mot convient ?",
@@ -370,6 +414,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Ordne die Buchstaben mit dem Hinweis",
     speedTitle: "Speed-Runde",
     speedDesc: "Wie viele Wörter in 60 Sekunden?",
+    twinTitle: "Zwillingsfalle",
+    twinDesc: "Zwei fast gleiche Wörter. Welches ist richtig?",
+    twinPrompt: "Wähle das richtige Wort",
+    timeTitle: "Zeitreisender",
+    timeDesc: "Was bedeutete dieses Wort einst?",
+    timePrompt: "Vor Jahrhunderten bedeutete dieses Wort:",
     exit: "Schließen",
     quizPromptWord: "Was bedeutet dieses Wort?",
     quizPromptMeaning: "Welches Wort passt?",
@@ -412,6 +462,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Sestav slovo podle nápovědy",
     speedTitle: "Rychlé kolo",
     speedDesc: "Kolik slov za 60 sekund?",
+    twinTitle: "Dvojitá past",
+    twinDesc: "Skoro stejná slova. Které je správné?",
+    twinPrompt: "Vyber správné slovo",
+    timeTitle: "Cestovatel časem",
+    timeDesc: "Co to slovo znamenalo před staletími?",
+    timePrompt: "Před staletími toto slovo znamenalo:",
     exit: "Zavřít",
     quizPromptWord: "Co znamená toto slovo?",
     quizPromptMeaning: "Které slovo sedí?",
@@ -454,6 +510,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "Zostav slovo podľa pomôcky",
     speedTitle: "Rýchle kolo",
     speedDesc: "Koľko slov za 60 sekúnd?",
+    twinTitle: "Dvojitá pasca",
+    twinDesc: "Takmer rovnaké slová. Ktoré je správne?",
+    twinPrompt: "Vyber správne slovo",
+    timeTitle: "Cestovateľ časom",
+    timeDesc: "Čo toto slovo znamenalo pred storočiami?",
+    timePrompt: "Pred storočiami toto slovo znamenalo:",
     exit: "Zavrieť",
     quizPromptWord: "Čo znamená toto slovo?",
     quizPromptMeaning: "Ktoré slovo sedí?",
@@ -496,6 +558,12 @@ const COPY: Record<string, PlayT> = {
     anagramDesc: "संकेत से शब्द बनाएँ",
     speedTitle: "तेज़ राउंड",
     speedDesc: "60 सेकंड में कितने शब्द?",
+    twinTitle: "जुड़वां जाल",
+    twinDesc: "लगभग समान शब्द. कौन सा सही है?",
+    twinPrompt: "सही शब्द चुनें",
+    timeTitle: "समय यात्री",
+    timeDesc: "सदियों पहले इस शब्द का क्या मतलब था?",
+    timePrompt: "सदियों पहले इस शब्द का मतलब था:",
     exit: "बंद करें",
     quizPromptWord: "इस शब्द का क्या अर्थ है?",
     quizPromptMeaning: "कौन सा शब्द इस अर्थ से मेल खाता है?",
@@ -715,11 +783,57 @@ export function PlayPage() {
         </svg>
       ),
     },
+    // ─── Curated-content games (always enabled, no notebook needed) ──
+    {
+      id: "twin",
+      title: t.twinTitle,
+      desc: t.twinDesc,
+      enabled: true,
+      accent: "sky",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="8" cy="12" r="4" />
+          <circle cx="16" cy="12" r="4" />
+        </svg>
+      ),
+    },
+    {
+      id: "time",
+      title: t.timeTitle,
+      desc: t.timeDesc,
+      enabled: true,
+      accent: "emerald",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </svg>
+      ),
+    },
   ];
 
   // ─── Active game stage ─────────────────────────────────────────
-  if (stage.kind === "playing" && pool) {
+  // Curated games (twin, time) don't depend on the notebook pool, so they
+  // render even when pool is still null. Notebook games gate on `pool` to
+  // avoid passing undefined to their builders.
+  if (stage.kind === "playing") {
     const exit = () => setStage({ kind: "menu" });
+    const curatedProps = { onExit: exit, lang, t };
+    if (stage.game === "twin") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameTwinTrap {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "time") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameTimeTraveler {...curatedProps} />
+        </div>
+      );
+    }
+    if (!pool) return null;
     const props = { pool, onExit: exit, lang, t };
     return (
       <div className="wordbook wb-play-page" dir={dir}>

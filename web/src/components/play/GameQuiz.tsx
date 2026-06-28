@@ -167,6 +167,12 @@ export type PlayT = {
   anagramDesc: string;
   speedTitle: string;
   speedDesc: string;
+  twinTitle: string;
+  twinDesc: string;
+  twinPrompt: string;
+  timeTitle: string;
+  timeDesc: string;
+  timePrompt: string;
   // Game UI
   exit: string;
   quizPromptWord: string;

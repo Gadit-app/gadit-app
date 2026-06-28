@@ -15,7 +15,18 @@
 import { getCachedWord } from "@/lib/offline-db";
 import type { WordResult } from "@/components/design/result";
 
-export type GameId = "quiz" | "fillblank" | "memory" | "anagram" | "speed";
+export type GameId =
+  | "quiz"
+  | "fillblank"
+  | "memory"
+  | "anagram"
+  | "speed"
+  // ─── Curated-content games (no notebook dependency) ─────────
+  // These run on hand-picked content from web/src/lib/play-content/
+  // rather than the user's notebook. Always enabled — never gated on
+  // pool size — because the content ships with the app.
+  | "twin"      // Twin Trap: confusable word pairs (effect/affect, lay/lie)
+  | "time";     // Time Traveler: pick the modern word whose meaning has drifted
 
 /** One entry the engine can build games from. `examples` is only present
  *  when we found a full IDB cache hit. */
@@ -34,22 +45,29 @@ type NotebookItem = {
   meaning: string;
 };
 
-/** Minimum entries needed per game for the menu to enable them. */
+/** Minimum entries needed per game for the menu to enable them.
+ *  Curated-content games (twin, time) use 0 — they ship with their own
+ *  content and don't depend on the notebook. */
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   quiz: 4,
   fillblank: 4, // and we need examples, checked separately
   memory: 4,
   anagram: 1,
   speed: 4,
+  twin: 0,
+  time: 0,
 };
 
-/** How many words per session (target). Games scale down if pool < target. */
+/** How many rounds per session. Curated games pick from their content
+ *  pool; notebook games scale down if the pool is smaller. */
 export const SESSION_SIZE: Record<GameId, number> = {
   quiz: 5,
   fillblank: 5,
   memory: 4, // 4 pairs = 8 cards
   anagram: 5,
   speed: 999, // continuous until timer
+  twin: 8,   // 8 confusable rounds keeps the session under 2 minutes
+  time: 6,   // 6 etymology shifts; each reveal slows the pace naturally
 };
 
 // ─── Random utilities ──────────────────────────────────────────
