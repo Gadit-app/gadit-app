@@ -61,6 +61,8 @@ const COPY: Record<string, {
   editAria: string;
   deleteAria: string;
   deleteConfirm: string;
+  saveBtn: string;
+  cancelBtn: string;
   notReady: string;
   goPricing: string;
   welcome: string;
@@ -90,9 +92,11 @@ const COPY: Record<string, {
     open: "פתח",
     codeLabel: "קוד",
     wordsLabel: "מילים",
-    editAria: "עריכת שם הכיתה",
+    editAria: "עריכת הכיתה",
     deleteAria: "מחיקת כיתה",
     deleteConfirm: "למחוק את הכיתה הזו לתמיד? כל היסטוריית החיפושים שלה תאבד.",
+    saveBtn: "שמירה",
+    cancelBtn: "ביטול",
     notReady: "כדי לנהל בית ספר אתם צריכים את מנוי Schools.",
     goPricing: "לתמחור",
     welcome: "ברוכים הבאים ל-Schools! הוסיפו כיתה ראשונה כדי להתחיל.",
@@ -122,9 +126,11 @@ const COPY: Record<string, {
     open: "Open",
     codeLabel: "Code",
     wordsLabel: "words",
-    editAria: "Edit classroom name",
+    editAria: "Edit classroom",
     deleteAria: "Delete classroom",
     deleteConfirm: "Delete this classroom forever? All its search history will be lost.",
+    saveBtn: "Save",
+    cancelBtn: "Cancel",
     notReady: "Schools subscription is required to manage classrooms.",
     goPricing: "See pricing",
     welcome: "Welcome to Schools! Add your first classroom to get started.",
@@ -154,9 +160,11 @@ const COPY: Record<string, {
     open: "खोलें",
     codeLabel: "कोड",
     wordsLabel: "शब्द",
-    editAria: "कक्षा का नाम बदलें",
+    editAria: "कक्षा संपादित करें",
     deleteAria: "कक्षा हटाएँ",
     deleteConfirm: "इस कक्षा को हमेशा के लिए हटाएँ? सारा खोज इतिहास खो जाएगा।",
+    saveBtn: "सहेजें",
+    cancelBtn: "रद्द करें",
     notReady: "कक्षाएँ प्रबंधित करने के लिए Schools सब्सक्रिप्शन ज़रूरी है।",
     goPricing: "क़ीमत देखें",
     welcome: "Schools में स्वागत है! शुरू करने के लिए पहली कक्षा जोड़ें।",
@@ -186,12 +194,15 @@ export function SchoolsClient() {
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
-  // Per-row classroom-name edit. We track which row is in edit mode +
-  // its draft string so a click on a name turns the span into an
-  // input, save on blur or Enter. Gadi (2026-06-28) reported he had
-  // no way to rename a classroom after creating it.
+  // Per-row classroom edit. The pencil button on a row opens a full
+  // expanded form (name + teacher + color) so the principal can
+  // change every editable property in one place, not just the name.
+  // Gadi (2026-06-28) flagged that the previous name-only edit was
+  // useless if he wanted to change the teacher or colour.
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingDraft, setEditingDraft] = useState("");
+  const [editingNameDraft, setEditingNameDraft] = useState("");
+  const [editingTeacherDraft, setEditingTeacherDraft] = useState("");
+  const [editingColorDraft, setEditingColorDraft] = useState(0);
 
   const isWelcome = search.get("welcome") === "1";
 
@@ -273,17 +284,31 @@ export function SchoolsClient() {
     }
   }
 
-  async function saveClassroomName(classroomId: string, next: string) {
+  async function saveClassroomEdit(classroomId: string) {
     if (!user) return;
+    const name = editingNameDraft.trim();
+    const teacherName = editingTeacherDraft.trim();
+    const colorIndex = editingColorDraft;
     setEditingId(null);
     try {
       await updateDoc(
         doc(db, "schools", user.uid, "classrooms", classroomId),
-        { name: next.trim() }
+        {
+          name,
+          teacherName: teacherName || null,
+          colorIndex,
+        }
       );
     } catch (err) {
-      console.error("save classroom name failed:", err);
+      console.error("save classroom edit failed:", err);
     }
+  }
+
+  function openEdit(cls: Classroom) {
+    setEditingId(cls.id);
+    setEditingNameDraft(cls.name ?? "");
+    setEditingTeacherDraft(cls.teacherName ?? "");
+    setEditingColorDraft(typeof cls.colorIndex === "number" ? cls.colorIndex : 0);
   }
 
   async function deleteClassroom(classroomId: string) {
@@ -536,7 +561,166 @@ export function SchoolsClient() {
             <p className="wb-school-sub" style={{ marginBottom: 16 }}>{c.empty}</p>
           ) : (
             <div style={{ marginBottom: 20 }}>
-              {classrooms.map((cls) => (
+              {classrooms.map((cls) => editingId === cls.id ? (
+                // Expanded edit form REPLACES the row. Same three
+                // fields as the create form so the principal can
+                // rename, reassign teacher, and recolor in one place.
+                <div
+                  key={cls.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 12,
+                    padding: 18,
+                    background: "var(--surface)",
+                    border: "1.5px solid #CA8A04",
+                    borderRadius: 14,
+                    marginBottom: 10,
+                  }}
+                >
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#A16207",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {c.classroomNameLabel}
+                    </label>
+                    <input
+                      type="text"
+                      value={editingNameDraft}
+                      autoFocus
+                      onChange={(e) => setEditingNameDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveClassroomEdit(cls.id);
+                        if (e.key === "Escape") setEditingId(null);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "10px 14px",
+                        border: "1.5px solid #D6D3D1",
+                        borderRadius: 10,
+                        background: "#FFFFFF",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 15,
+                        color: "var(--ink)",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#A16207",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {c.teacherNameLabel}
+                    </label>
+                    <input
+                      type="text"
+                      value={editingTeacherDraft}
+                      onChange={(e) => setEditingTeacherDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveClassroomEdit(cls.id);
+                        if (e.key === "Escape") setEditingId(null);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "10px 14px",
+                        border: "1.5px solid #D6D3D1",
+                        borderRadius: 10,
+                        background: "#FFFFFF",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 15,
+                        color: "var(--ink)",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#A16207",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {c.colorLabel}
+                    </label>
+                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                      {CLASSROOM_COLORS.map((hex, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setEditingColorDraft(i)}
+                          aria-label={hex}
+                          aria-pressed={editingColorDraft === i}
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            background: hex,
+                            border: editingColorDraft === i ? "3px solid var(--ink)" : "2px solid transparent",
+                            boxShadow: editingColorDraft === i ? "0 0 0 2px var(--surface)" : "none",
+                            cursor: "pointer",
+                            padding: 0,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button
+                      type="button"
+                      className="wb-school-cta"
+                      onClick={() => saveClassroomEdit(cls.id)}
+                      disabled={!editingNameDraft.trim()}
+                      style={{
+                        width: "auto",
+                        padding: "10px 22px",
+                        opacity: !editingNameDraft.trim() ? 0.5 : 1,
+                      }}
+                    >
+                      {c.saveBtn}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditingId(null)}
+                      style={{
+                        padding: "10px 22px",
+                        background: "transparent",
+                        border: "1px solid var(--hairline, #E5E7EB)",
+                        borderRadius: 10,
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 15,
+                        color: "var(--ink-soft, #6B7280)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {c.cancelBtn}
+                    </button>
+                  </div>
+                </div>
+              ) : (
                 <div key={cls.id} className="wb-classroom-row">
                   {/* Color dot. Lets a principal scan 30 classrooms
                       and spot one by colour. Sits in the inline-start
@@ -552,59 +736,19 @@ export function SchoolsClient() {
                     }}
                   />
                   <span className="wb-classroom-code">{cls.code}</span>
-                  {editingId === cls.id ? (
-                    <input
-                      type="text"
-                      value={editingDraft}
-                      autoFocus
-                      onChange={(e) => setEditingDraft(e.target.value)}
-                      onBlur={() => saveClassroomName(cls.id, editingDraft)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          saveClassroomName(cls.id, editingDraft);
-                        } else if (e.key === "Escape") {
-                          setEditingId(null);
-                        }
-                      }}
-                      style={{
-                        flex: 1,
-                        padding: "6px 10px",
-                        border: "1px solid #FCD34D",
-                        borderRadius: 8,
-                        background: "var(--surface)",
-                        fontFamily: "var(--wb-sans)",
-                        fontSize: 15.5,
-                        fontWeight: 600,
-                        color: "var(--ink)",
-                        outline: "none",
-                      }}
-                    />
-                  ) : (
-                    <span
-                      className="wb-classroom-name"
-                      onClick={() => {
-                        setEditingId(cls.id);
-                        setEditingDraft(cls.name ?? "");
-                      }}
-                      title={lang === "he" ? "לחץ לעריכת שם הכיתה" : "Click to edit classroom name"}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {cls.name || c.classroomsHeading}
-                    </span>
-                  )}
+                  <span className="wb-classroom-name">
+                    {cls.name || c.classroomsHeading}
+                  </span>
                   <span className="wb-classroom-count">
                     {cls.searchCount ?? 0} {c.wordsLabel}
                   </span>
-                  {/* Edit pencil. Discoverable affordance for renaming;
-                      Gadi (2026-06-28) found the click-the-span pattern
-                      undiscoverable. The pencil sits in a circular
-                      ghost button so it reads as an action target. */}
+                  {/* Edit pencil opens the full expanded form above
+                      (name + teacher + colour). Gadi (2026-06-28)
+                      flagged the previous name-only edit as useless
+                      if he wanted to change teacher or colour. */}
                   <button
                     type="button"
-                    onClick={() => {
-                      setEditingId(cls.id);
-                      setEditingDraft(cls.name ?? "");
-                    }}
+                    onClick={() => openEdit(cls)}
                     aria-label={c.editAria}
                     title={c.editAria}
                     style={{

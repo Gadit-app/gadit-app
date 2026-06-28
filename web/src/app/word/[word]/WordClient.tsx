@@ -1027,46 +1027,14 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         </div>
       )}
       <div style={{ position: "relative", zIndex: 1 }}>
-        {/* Classroom mode hides the full Gadit chrome (logo, nav, plan
-            badge, lang switch, share, account menu) so a kid landing
-            from /c/<CODE> sees only the classroom context. Gadi
-            (2026-06-28) called this out: the regular topbar surfaces
-            "DEEP" plan badges and account links that have no business
-            on a kid's classroom computer. The minimal replacement
-            below carries just a "back to classroom" link so the kid
-            can search another word without scrolling through the
-            regular Gadit footer. */}
-        {classroomCode ? (
-          <header
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: dir === "rtl" ? "flex-end" : "flex-start",
-              padding: "16px 24px",
-              borderBottom: "1px solid #FCD34D",
-              background: "#FEF3C7",
-            }}
-          >
-            <Link
-              href={href(`/c/${classroomCode}`)}
-              style={{
-                fontFamily: "var(--wb-sans)",
-                fontSize: 14,
-                fontWeight: 600,
-                color: "#A16207",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              {dir === "rtl" ? "→" : "←"}{" "}
-              {lang === "he" ? "חיפוש מילה אחרת"
-                : lang === "hi" ? "दूसरा शब्द खोजें"
-                : "Search another word"}
-            </Link>
-          </header>
-        ) : (
+        {/* Classroom mode hides the full Gadit chrome entirely (logo,
+            nav, plan badge, lang switch, share, account menu). Gadi
+            (2026-06-28) also removed the minimal mustard "back to
+            classroom" strip after the persistent search bar below
+            turned out to do the same job — typing a new word in the
+            persistent bar now preserves the ?cls= param so the kid
+            stays in classroom mode and the search keeps logging. */}
+        {!classroomCode && (
         <header className="wb-shell-topbar">
           <Link href={href("/")} className="wb-wordmark" dir="ltr" aria-label="Gadit home">
             Gad<span className="wb-wordmark-it">it</span>
@@ -1181,6 +1149,12 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         )}
 
         {/* Persistent search bar, Eyal (June 2026) flagged that
+            — in classroom mode this bar fully replaces the regular
+            topbar's search functionality (the bar's onSubmit
+            preserves the ?cls= param so subsequent searches still
+            log to the classroom). */}
+        {/* (placeholder anchor — same comment block continues below) */}
+        {/* Persistent search bar, Eyal (June 2026) flagged that
             launching a second search from a result page meant hunting
             for the magnifying-glass icon in the masthead. Many real
             dictionaries surface a full input bar above the word so a
@@ -1201,7 +1175,15 @@ export function WordClient({ initialWord }: { initialWord: string }) {
               const q = headerQuery.trim();
               if (!q) return;
               setHeaderQuery("");
-              router.push(href(`/word/${encodeURIComponent(q)}`));
+              // Preserve the classroom context when the persistent
+              // search bar is used inside a classroom session — the
+              // kid stays in classroom mode AND the new word gets
+              // logged to the class search log via the existing
+              // ?cls= side-effect. Without this, a kid who types a
+              // second word into the persistent bar loses the
+              // classroom branding and the log entry.
+              const clsParam = classroomCode ? `?cls=${encodeURIComponent(classroomCode)}` : "";
+              router.push(href(`/word/${encodeURIComponent(q)}${clsParam}`));
             }}
           >
             {/* Convention layout, same recipe the homepage pill follows
@@ -1230,7 +1212,8 @@ export function WordClient({ initialWord }: { initialWord: string }) {
                 }}
                 onResult={(text) => {
                   setHeaderQuery(text);
-                  router.push(href(`/word/${encodeURIComponent(text.trim())}`));
+                  const clsParam = classroomCode ? `?cls=${encodeURIComponent(classroomCode)}` : "";
+                  router.push(href(`/word/${encodeURIComponent(text.trim())}${clsParam}`));
                 }}
                 enabled={true}
                 title={v2(lang, "voiceInputTitle")}

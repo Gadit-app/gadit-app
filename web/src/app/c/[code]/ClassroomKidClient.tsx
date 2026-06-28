@@ -17,6 +17,7 @@
  */
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -145,13 +146,58 @@ export function ClassroomKidClient({ code }: { code: string }) {
   const { data } = state;
   return (
     <div className="wordbook wb-school-page" dir={dir}>
+      {/* Minimal Gadit wordmark in the inline-start corner. Gadi
+          (2026-06-28) flagged that the kid view had no Gadit brand
+          mark at all — earlier we stripped the full Gadit topbar so
+          the kid landing felt school-branded, but a tiny wordmark
+          in the corner is required so users (and the eventual app-
+          review reviewer) know what product they're inside. The
+          mark is dimmed (#CA8A04 on cream) so it doesn't compete
+          with the school branding directly below. */}
+      <div
+        style={{
+          position: "absolute",
+          top: 16,
+          insetInlineStart: 20,
+          zIndex: 1,
+        }}
+      >
+        <Link
+          href={href("/")}
+          aria-label="Gadit"
+          dir="ltr"
+          style={{
+            fontFamily: "var(--wb-serif), serif",
+            fontWeight: 700,
+            fontSize: 18,
+            color: "#A16207",
+            textDecoration: "none",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
+        </Link>
+      </div>
+
       <main className="wb-school-main" style={{ paddingTop: "clamp(40px, 8vh, 80px)" }}>
         {/* School logo + name. The mustard chip falls back to a school
             crest icon when no logo is uploaded. */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 32 }}>
           <div
             className="wb-school-logo-slot"
-            style={{ width: 96, height: 96, marginBottom: 16 }}
+            style={{
+              width: 96,
+              height: 96,
+              marginBottom: 16,
+              // Match the /schools dashboard fix: white background when
+              // a logo is uploaded so transparent-PNG logos don't show
+              // mustard bleed-through. Mustard placeholder kept for
+              // the empty (no-logo-yet) state.
+              ...(data.schoolLogoUrl ? {
+                background: "#FFFFFF",
+                border: "1px solid var(--hairline, #E5E7EB)",
+              } : {}),
+            }}
           >
             {data.schoolLogoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
