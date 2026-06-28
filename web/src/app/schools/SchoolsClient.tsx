@@ -308,7 +308,17 @@ export function SchoolsClient() {
               onClick={() => logoInputRef.current?.click()}
               title={school.logoUrl ? c.logoReplace : c.logoCta}
               aria-label={school.logoUrl ? c.logoReplace : c.logoCta}
-              style={{ border: "1px solid #FCD34D", cursor: "pointer" }}
+              style={{
+                // When a logo is uploaded the mustard fill becomes
+                // visual noise behind any transparent-PNG logo (the
+                // user-uploaded "computer + cap" logo had its
+                // background showing through in V1). Swap to white in
+                // the with-logo state so the user's logo reads clean;
+                // keep mustard for the empty placeholder state.
+                background: school.logoUrl ? "#FFFFFF" : undefined,
+                border: school.logoUrl ? "1px solid var(--hairline, #E5E7EB)" : "1px solid #FCD34D",
+                cursor: "pointer",
+              }}
             >
               {school.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -321,11 +331,14 @@ export function SchoolsClient() {
                 </svg>
               )}
             </button>
-            {/* Camera badge. Sits half-on, half-off the slot's bottom-
-                end corner. White circle with mustard camera glyph so
-                the click target reads instantly. Pointer events go
-                through to the underlying button so a click on the
-                badge ALSO opens the file picker. */}
+            {/* Edit pencil badge. Sits half-on, half-off the slot's
+                bottom-end corner. Mustard pill with a white pencil
+                glyph — Gadi (2026-06-28) found the camera icon
+                ambiguous; a pencil reads as "edit" immediately. The
+                glyph is sized so it fits comfortably inside the
+                circle without overflow. Pointer events pass through
+                to the underlying button so a click on the badge ALSO
+                opens the file picker. */}
             <span
               aria-hidden="true"
               style={{
@@ -344,9 +357,9 @@ export function SchoolsClient() {
                 boxShadow: "0 2px 4px rgba(202, 138, 4, 0.35)",
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                <circle cx="12" cy="13" r="4" />
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
               </svg>
             </span>
           </div>

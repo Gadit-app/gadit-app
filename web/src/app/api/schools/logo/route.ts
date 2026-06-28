@@ -74,7 +74,14 @@ export async function POST(req: NextRequest) {
   // token would work too but is more code, and a public logo is not
   // sensitive (it's already on the school's website).
   await obj.makePublic();
-  const logoUrl = `https://storage.googleapis.com/${bucket.name}/${objectPath}`;
+  // Append a cache-bust query param so a replaced logo loads fresh
+  // instead of showing the previously-cached image. The Storage
+  // object overwrites the previous one at the same path, so the
+  // canonical URL is identical; without ?v= the browser keeps
+  // serving the old image for up to 24h (the cacheControl header).
+  // Tested 2026-06-28: Gadi uploaded a new logo and saw the old one
+  // until cache eviction.
+  const logoUrl = `https://storage.googleapis.com/${bucket.name}/${objectPath}?v=${Date.now()}`;
 
   await db.collection("schools").doc(userId).set(
     {
