@@ -1200,7 +1200,24 @@ export function PricingPageRoute() {
               <div className="wb-school-card">
                 <div className="wb-school-card-head">
                   <div className="wb-school-eyebrow">{s.eyebrow}</div>
-                  <h3 className="wb-school-name">{s.name}</h3>
+                  <h3 className="wb-school-name">
+                    {s.name}{" "}
+                    <span style={{ fontSize: "0.55em", fontWeight: 600, color: "#A16207", whiteSpace: "nowrap" }}>
+                      {lang === "he" ? "עד 100 תלמידים"
+                        : lang === "ar" ? "حتى 100 طالب"
+                        : lang === "ru" ? "до 100 учеников"
+                        : lang === "es" ? "hasta 100 alumnos"
+                        : lang === "pt" ? "até 100 alunos"
+                        : lang === "fr" ? "jusqu'à 100 élèves"
+                        : lang === "de" ? "bis 100 Schüler"
+                        : lang === "cs" ? "až 100 studentů"
+                        : lang === "sk" ? "až 100 študentov"
+                        : lang === "it" ? "fino a 100 studenti"
+                        : lang === "ja" ? "最大100人"
+                        : lang === "hi" ? "100 छात्रों तक"
+                        : "up to 100 students"}
+                    </span>
+                  </h3>
                   <p className="wb-school-tagline">{s.tagline}</p>
                 </div>
                 <ul className="wb-school-features">
@@ -1258,11 +1275,21 @@ export function PricingPageRoute() {
                 <div className="wb-school-card-head">
                   <div className="wb-school-eyebrow">{s.eyebrow}</div>
                   <h3 className="wb-school-name">
-                    {s.name}{" "}
-                    <span style={{ fontSize: "0.65em", fontWeight: 600, color: "#A16207" }}>
-                      {lang === "he" ? "Large"
-                        : lang === "hi" ? "Large"
-                        : "Large"}
+                    {s.name} <span style={{ fontSize: "0.65em", fontWeight: 600, color: "#A16207" }}>Large</span>{" "}
+                    <span style={{ fontSize: "0.55em", fontWeight: 600, color: "#A16207", whiteSpace: "nowrap" }}>
+                      {lang === "he" ? "עד 500 תלמידים"
+                        : lang === "ar" ? "حتى 500 طالب"
+                        : lang === "ru" ? "до 500 учеников"
+                        : lang === "es" ? "hasta 500 alumnos"
+                        : lang === "pt" ? "até 500 alunos"
+                        : lang === "fr" ? "jusqu'à 500 élèves"
+                        : lang === "de" ? "bis 500 Schüler"
+                        : lang === "cs" ? "až 500 studentů"
+                        : lang === "sk" ? "až 500 študentov"
+                        : lang === "it" ? "fino a 500 studenti"
+                        : lang === "ja" ? "最大500人"
+                        : lang === "hi" ? "500 छात्रों तक"
+                        : "up to 500 students"}
                     </span>
                   </h3>
                   <p className="wb-school-tagline">{s.tagline}</p>
