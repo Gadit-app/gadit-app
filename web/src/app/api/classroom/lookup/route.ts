@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { normalizeClassCode } from "@/lib/school";
+import {
+  DEFAULT_SCHOOL_HOURS,
+  isClassroomInSession,
+  normalizeClassCode,
+  type ActiveHours,
+} from "@/lib/school";
 
 /**
  * GET /api/classroom/lookup?code=XYZ123
@@ -49,8 +54,23 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
   }
 
-  const school = schoolSnap.data() as { name?: string; logoUrl?: string | null };
+  const school = schoolSnap.data() as {
+    name?: string;
+    logoUrl?: string | null;
+    activeHours?: ActiveHours;
+  };
   const classroom = classroomSnap.data() as { name?: string; students?: string[] };
+
+  // Resolve whether RIGHT NOW falls inside the school's active hours.
+  // Schools that haven't customised inherit the Israeli school-week
+  // default (Sun-Thu 7:30-15:00 Asia/Jerusalem). The kid view uses
+  // this flag to decide whether to unlock the extended classroom
+  // features (image / kids' explanation / a single classroom game) on
+  // top of the always-on basic dictionary. Outside the window, /c/<CODE>
+  // still works but only as a Basic-tier dictionary plus a soft hint
+  // that "Want full Gadit at home? Try Family."
+  const schedule = school.activeHours ?? DEFAULT_SCHOOL_HOURS;
+  const inSession = isClassroomInSession(new Date(), schedule);
 
   return NextResponse.json({
     schoolId: codeData.schoolId,
@@ -59,5 +79,7 @@ export async function GET(req: NextRequest) {
     schoolLogoUrl: school.logoUrl ?? null,
     classroomName: classroom.name ?? "",
     students: classroom.students ?? [],
+    inSession,
+    schedule,
   });
 }

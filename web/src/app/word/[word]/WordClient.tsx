@@ -347,6 +347,14 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // forward through the persistent search bar so a kid who chains
   // multiple lookups stays attributed. Empty string == anonymous.
   const classroomStudentName = searchParams?.get("sn")?.trim() || "";
+  // ?in=1 set by /c/<CODE> only when the school's classroom window is
+  // currently active (default Sun-Thu 7:30-15:00 Asia/Jerusalem). When
+  // true, the word page unlocks the extended classroom features
+  // (image, kids' explanation, classroom game) on top of the always-
+  // on basic dictionary. Outside the window the kid keeps the search
+  // but those extras go dark — the kid view shows a soft "Want full
+  // Gadit at home? Family" hint instead.
+  const classroomInSession = searchParams?.get("in") === "1";
 
   const [result, setResult] = useState<WordResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1408,6 +1416,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
           <ResultView
             result={result}
             plan={plan}
+            classroomInSession={classroomInSession}
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
             isSaved={isSaved}

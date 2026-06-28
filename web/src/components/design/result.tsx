@@ -389,6 +389,12 @@ interface MeaningEntryProps {
       noise next to a definition the reader already understands). */
   totalMeanings: number;
   plan: Plan;
+  /** When true (set from /word page when the visitor came from
+   *  /c/<CODE> during the school's active hours), unlock the
+   *  classroom-mode subset of features even though the visitor isn't
+   *  signed in to a paid account. See tabUnlocked() for the exact
+   *  per-tab rules. */
+  classroomInSession?: boolean;
   word: string;
   /** Whether this word is in the user's notebook. Drives the
       "save" tab's saved-vs-unsaved visual (filled bookmark, label
@@ -421,8 +427,21 @@ function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
   if (tab === "compare" || tab === "quiz") return "deep";
   return "clear";
 }
-function tabUnlocked(tab: TabId, plan: Plan): boolean {
+function tabUnlocked(tab: TabId, plan: Plan, classroomInSession = false): boolean {
   const need = tierForTab(tab);
+  // Classroom-in-session override: a kid on /c/<CODE> during the
+  // school's active hours gets the same subset of features that any
+  // Clear customer gets, PLUS the games tab specifically (so the
+  // school gets at least one game in class — Letter Scramble inside
+  // the Word Games modal). We deliberately do NOT unlock compose,
+  // save (notebook) or pin (offline) — those require a real per-user
+  // account to be meaningful. Gadi 2026-06-29 product decision.
+  if (classroomInSession) {
+    if (tab === "image" || tab === "kids") return true;
+    if (tab === "compare") return true; // "compare" maps to word games
+    if (tab === "save" || tab === "pin" || tab === "compose") return false;
+    if (tab === "quiz") return false; // personalised quizzes need account
+  }
   if (need === "clear") return plan === "clear" || plan === "deep";
   if (need === "deep") return plan === "deep";
   return true;
@@ -550,6 +569,7 @@ function MeaningEntry({
   meaning,
   totalMeanings,
   plan,
+  classroomInSession = false,
   word,
   isSaved = false,
   onSave,
@@ -606,7 +626,7 @@ function MeaningEntry({
   // Local renderer so the two tier-grouped tab rows (Clear + Deep)
   // can share the same chip JSX without duplicating it.
   function renderTab(id: TabId) {
-    const unlocked = tabUnlocked(id, plan);
+    const unlocked = tabUnlocked(id, plan, classroomInSession);
     const isOpen = openTab === id;
     const showSavedState = id === "save" && isSaved;
     const showPinnedState = id === "pin" && isPinned;
@@ -878,6 +898,7 @@ export function MeaningsBlock({
   meanings,
   word = "",
   plan = "basic",
+  classroomInSession = false,
   isSaved = false,
   onSave,
   isPinned = false,
@@ -892,6 +913,7 @@ export function MeaningsBlock({
   meanings: Meaning[];
   word?: string;
   plan?: Plan;
+  classroomInSession?: boolean;
   isSaved?: boolean;
   onSave?: () => void;
   isPinned?: boolean;
@@ -925,6 +947,7 @@ export function MeaningsBlock({
             totalMeanings={meanings.length}
             word={word}
             plan={plan}
+            classroomInSession={classroomInSession}
             isSaved={isSaved}
             onSave={onSave}
             isPinned={isPinned}
@@ -1300,6 +1323,7 @@ function ActionBar({
 export function ResultView({
   result,
   plan,
+  classroomInSession = false,
   imageUrl,
   imageGenerating = false,
   isSaved = false,
@@ -1316,6 +1340,11 @@ export function ResultView({
 }: {
   result: WordResult;
   plan: Plan;
+  /** True when this result is being rendered as part of an active
+   *  /c/<CODE> classroom session (school hours window open). Unlocks
+   *  image / kids' explanation / word games for an anonymous kid the
+   *  same way Clear+ would unlock them for a paying customer. */
+  classroomInSession?: boolean;
   imageUrl?: string;
   imageGenerating?: boolean;
   isSaved?: boolean;
@@ -1361,6 +1390,7 @@ export function ResultView({
         meanings={result.meanings ?? []}
         word={result.word}
         plan={plan}
+        classroomInSession={classroomInSession}
         isSaved={isSaved}
         onSave={onSave}
         isPinned={isPinned}

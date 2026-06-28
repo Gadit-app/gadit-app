@@ -39,8 +39,86 @@ export interface School {
    *  URL stored here. Displayed on the kid-facing /c/<CODE> page so the
    *  classroom feels like part of the school, not a third-party site. */
   logoUrl?: string | null;
+  /** When is the classroom code "in session" — i.e. when does it
+   *  unlock the extended classroom features (kids' explanation, AI
+   *  image, classroom games) on top of the always-on basic dictionary?
+   *  Outside these hours, /c/<CODE> still works but only as a basic
+   *  dictionary, with a "Want full Gadit at home? Try Family" hint.
+   *  This is the anti-cannibalisation gate: it prevents a kid taking
+   *  the school code home and getting a free Family-equivalent
+   *  experience 24/7. Default if unset: Israel school week
+   *  (Sun-Thu, 7:30-15:00, Asia/Jerusalem). */
+  activeHours?: ActiveHours;
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface ActiveHours {
+  /** Minutes since midnight (school's local time), 0..1440. */
+  startMinute: number;
+  /** Minutes since midnight (school's local time). */
+  endMinute: number;
+  /** Days of the week the classroom is active, 0=Sunday..6=Saturday. */
+  days: number[];
+  /** IANA timezone identifier for resolving local time. */
+  timezone: string;
+}
+
+/** Default classroom hours when a school hasn't customised its
+ *  schedule. Sunday-Thursday 7:30-15:00, Asia/Jerusalem — matches the
+ *  Israeli school week which is the founder's home market. Schools
+ *  outside Israel can override later via the /schools dashboard. */
+export const DEFAULT_SCHOOL_HOURS: ActiveHours = {
+  startMinute: 7 * 60 + 30,    // 7:30 AM
+  endMinute: 15 * 60,           // 3:00 PM
+  days: [0, 1, 2, 3, 4],        // Sun, Mon, Tue, Wed, Thu
+  timezone: "Asia/Jerusalem",
+};
+
+/** Resolves the given moment to the day-of-week and minute-of-day in
+ *  the supplied IANA timezone. Uses Intl.DateTimeFormat so the
+ *  conversion is correct across DST transitions without a date-fns
+ *  dependency. */
+function getLocalDayAndMinutes(date: Date, timezone: string): { day: number; minutes: number } {
+  try {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      weekday: "long",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+    const parts = fmt.formatToParts(date);
+    const weekday = parts.find(p => p.type === "weekday")?.value || "";
+    const hour = parseInt(parts.find(p => p.type === "hour")?.value || "0", 10);
+    const minute = parseInt(parts.find(p => p.type === "minute")?.value || "0", 10);
+    const dayMap: Record<string, number> = {
+      Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3,
+      Thursday: 4, Friday: 5, Saturday: 6,
+    };
+    return {
+      day: dayMap[weekday] ?? 0,
+      minutes: hour * 60 + minute,
+    };
+  } catch {
+    // Bad timezone string falls back to UTC. Schools that hit this
+    // would have to fix the timezone in their /schools doc, but at
+    // least the code doesn't crash.
+    return {
+      day: date.getUTCDay(),
+      minutes: date.getUTCHours() * 60 + date.getUTCMinutes(),
+    };
+  }
+}
+
+/** True if the given moment is inside the school's active-hours
+ *  window. Used by /api/classroom/lookup to decide whether to grant
+ *  extended classroom features (image, kids' explanation, game) on
+ *  top of always-on basic dictionary. */
+export function isClassroomInSession(date: Date, schedule: ActiveHours = DEFAULT_SCHOOL_HOURS): boolean {
+  const { day, minutes } = getLocalDayAndMinutes(date, schedule.timezone);
+  if (!schedule.days.includes(day)) return false;
+  return minutes >= schedule.startMinute && minutes <= schedule.endMinute;
 }
 
 export interface Classroom {

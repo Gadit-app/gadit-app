@@ -29,6 +29,13 @@ type LookupOk = {
   schoolLogoUrl: string | null;
   classroomName: string;
   students: string[];
+  inSession: boolean;
+  schedule: {
+    startMinute: number;
+    endMinute: number;
+    days: number[];
+    timezone: string;
+  };
 };
 type LookupState =
   | { kind: "loading" }
@@ -82,6 +89,29 @@ const COPY: Record<string, {
     sentencePh: "(वैकल्पिक) वह वाक्य लिखें जिसमें शब्द आया है, सटीक एक परिभाषा मिलेगी",
     errorTitle: "कोड मान्य नहीं है",
     errorBody: "अपने शिक्षक से लिंक फिर से माँगें।",
+  },
+};
+
+/** Off-hours hint copy. Shown at the bottom of the kid view when the
+ *  classroom code is reached outside the school's active-hours window.
+ *  The search still works (basic dictionary) but image / kids'
+ *  explanation / classroom game are off. The hint upsells to Family
+ *  so a kid asking their parent gets pointed at the right product. */
+const OFFHOURS_HINT: Record<string, { line1: string; cta: string; link: string }> = {
+  he: {
+    line1: "מחוץ לשעות הכיתה. מוצא מילים בלי תמונה והסבר לילדים.",
+    cta: "רוצה את כל גדית בבית? המנוי המשפחתי",
+    link: "/pricing",
+  },
+  en: {
+    line1: "Outside class hours — looking words up without images and kids' explanation.",
+    cta: "Want full Gadit at home? Family plan",
+    link: "/pricing",
+  },
+  hi: {
+    line1: "कक्षा के समय के बाहर — बिना तस्वीर और बच्चों की समझ के शब्द खोज रहे हैं।",
+    cta: "घर पर पूरा Gadit चाहिए? Family प्लान",
+    link: "/pricing",
   },
 };
 
@@ -147,16 +177,22 @@ export function ClassroomKidClient({ code }: { code: string }) {
     e.preventDefault();
     const trimmed = word.trim();
     if (!trimmed) return;
+    if (state.kind !== "ok") return;
     const sent = sentence.trim();
     // Pass the optional context sentence through as ?sentence=… so the
     // word page picks the right meaning when the word is multi-sense.
     // Mirrors the homepage's optional-sentence input, restored after
     // Gadi (2026-06-28) noticed the kid view was missing it. Also pass
     // the picked student name as ?sn= so the log-search call from the
-    // word page can tag the entry with who searched.
+    // word page can tag the entry with who searched. And pass `&in=1`
+    // when the classroom is currently in-session so the word page
+    // unlocks image / kids' explanation / classroom game — those
+    // features are gated to active classroom hours to prevent the
+    // school code from becoming a free Family substitute at home.
     const sentenceParam = sent ? `&sentence=${encodeURIComponent(sent)}` : "";
     const studentParam = studentName ? `&sn=${encodeURIComponent(studentName)}` : "";
-    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}${sentenceParam}${studentParam}`));
+    const sessionParam = state.data.inSession ? `&in=1` : "";
+    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}${sentenceParam}${studentParam}${sessionParam}`));
   }
 
   if (state.kind === "loading") {
@@ -413,6 +449,42 @@ export function ClassroomKidClient({ code }: { code: string }) {
             }}
           />
         </form>
+        )}
+
+        {/* Off-hours soft hint. Render only when the classroom code is
+            reached outside the school's active window. The kid keeps
+            full search capability, just without image/kids' explanation
+            /game; the hint pushes the parent to Family for the rich
+            experience at home. */}
+        {!data.inSession && (
+          <div
+            style={{
+              maxWidth: 560,
+              margin: "32px auto 0",
+              padding: "14px 18px",
+              background: "#FEF3C7",
+              border: "1px solid #FCD34D",
+              borderRadius: 14,
+              fontFamily: "var(--wb-sans)",
+              fontSize: 14,
+              color: "#A16207",
+              textAlign: "center",
+            }}
+          >
+            <div style={{ marginBottom: 6 }}>
+              {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).line1}
+            </div>
+            <Link
+              href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
+              style={{
+                fontWeight: 700,
+                color: "#A16207",
+                textDecoration: "underline",
+              }}
+            >
+              {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).cta} →
+            </Link>
+          </div>
         )}
       </main>
     </div>
