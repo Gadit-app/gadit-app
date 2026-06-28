@@ -26,7 +26,10 @@ export type GameId =
   // rather than the user's notebook. Always enabled — never gated on
   // pool size — because the content ships with the app.
   | "twin"      // Twin Trap: confusable word pairs (effect/affect, lay/lie)
-  | "time";     // Time Traveler: pick the modern word whose meaning has drifted
+  | "time"      // Time Traveler: pick the modern word whose meaning has drifted
+  | "passport"  // Word Passport: guess the origin language of an English word
+  | "friends"   // False Friends: real cognate or cross-language trap?
+  | "root";     // Root Rush: tap the 3 words that share a Latin/Greek root
 
 /** One entry the engine can build games from. `examples` is only present
  *  when we found a full IDB cache hit. */
@@ -56,6 +59,9 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   speed: 4,
   twin: 0,
   time: 0,
+  passport: 0,
+  friends: 0,
+  root: 0,
 };
 
 /** How many rounds per session. Curated games pick from their content
@@ -68,6 +74,9 @@ export const SESSION_SIZE: Record<GameId, number> = {
   speed: 999, // continuous until timer
   twin: 8,   // 8 confusable rounds keeps the session under 2 minutes
   time: 6,   // 6 etymology shifts; each reveal slows the pace naturally
+  passport: 6, // 6 origin guesses; each reveal is a story
+  friends: 7,  // 7 binary picks; faster mechanic so we can fit more
+  root: 5,     // 5 root families; each round = 3 correct + revealed distractors
 };
 
 // ─── Random utilities ──────────────────────────────────────────

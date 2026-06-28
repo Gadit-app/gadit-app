@@ -173,6 +173,18 @@ export type PlayT = {
   timeTitle: string;
   timeDesc: string;
   timePrompt: string;
+  passportTitle: string;
+  passportDesc: string;
+  passportPrompt: string;
+  friendsTitle: string;
+  friendsDesc: string;
+  friendsPrompt: string;
+  friendsTrue: string;
+  friendsFalse: string;
+  rootTitle: string;
+  rootDesc: string;
+  rootPrompt: string;
+  rootProgress: (found: number) => string;
   // Game UI
   exit: string;
   quizPromptWord: string;

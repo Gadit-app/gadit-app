@@ -37,6 +37,9 @@ import { GameAnagram } from "@/components/play/GameAnagram";
 import { GameSpeed } from "@/components/play/GameSpeed";
 import { GameTwinTrap } from "@/components/play/GameTwinTrap";
 import { GameTimeTraveler } from "@/components/play/GameTimeTraveler";
+import { GameWordPassport } from "@/components/play/GameWordPassport";
+import { GameFalseFriends } from "@/components/play/GameFalseFriends";
+import { GameRootRush } from "@/components/play/GameRootRush";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -84,6 +87,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "מסע בזמן",
     timeDesc: "מה המילה הזו הייתה אומרת פעם?",
     timePrompt: "פעם זו הייתה המשמעות:",
+    passportTitle: "דרכון מילים",
+    passportDesc: "מאיזו שפה הגיעה המילה?",
+    passportPrompt: "מאיפה המילה הזו במקור?",
+    friendsTitle: "חברים מזויפים",
+    friendsDesc: "מילה אמיתית או מלכודת בין-לשונית?",
+    friendsPrompt: "האם המילים האלה אומרות אותו דבר?",
+    friendsTrue: "אמיתי",
+    friendsFalse: "מלכודת",
+    rootTitle: "ציד שורשים",
+    rootDesc: "מצא 3 מילים שצמחו מאותו שורש",
+    rootPrompt: "השורש הזה ילד שלוש מילים מודרניות",
+    rootProgress: (n) => n === 0 ? "מצא 3 מילים" : n === 3 ? "כל השלוש נמצאו!" : `${n}/3 נמצאו`,
     exit: "סגירה",
     quizPromptWord: "מה המשמעות של המילה",
     quizPromptMeaning: "איזו מילה מתאימה להגדרה",
@@ -132,6 +147,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Time Traveler",
     timeDesc: "What did this word USED to mean?",
     timePrompt: "Centuries ago, this word meant:",
+    passportTitle: "Word Passport",
+    passportDesc: "Guess where the word was born",
+    passportPrompt: "Which language did this word come from?",
+    friendsTitle: "False Friends",
+    friendsDesc: "Real cognate or cross-language trap?",
+    friendsPrompt: "Do these two words mean the same thing?",
+    friendsTrue: "Real twin",
+    friendsFalse: "Trap",
+    rootTitle: "Root Rush",
+    rootDesc: "Find the 3 words from this ancient root",
+    rootPrompt: "This root grew into three modern words. Find them.",
+    rootProgress: (n) => n === 0 ? "Find 3 words" : n === 3 ? "All three found!" : `${n}/3 found`,
     exit: "Close",
     quizPromptWord: "What does this word mean?",
     quizPromptMeaning: "Which word fits this meaning?",
@@ -180,6 +207,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "السفر عبر الزمن",
     timeDesc: "ماذا كانت هذه الكلمة تعني قبل قرون؟",
     timePrompt: "قبل قرون، كانت هذه الكلمة تعني:",
+    passportTitle: "جواز سفر الكلمات",
+    passportDesc: "خمن من أي لغة جاءت الكلمة",
+    passportPrompt: "من أي لغة جاءت هذه الكلمة؟",
+    friendsTitle: "أصدقاء كاذبون",
+    friendsDesc: "تطابق حقيقي أم فخ بين اللغات؟",
+    friendsPrompt: "هل الكلمتان تعنيان نفس الشيء؟",
+    friendsTrue: "توأم حقيقي",
+    friendsFalse: "فخ",
+    rootTitle: "صيد الجذور",
+    rootDesc: "اعثر على ٣ كلمات من جذر واحد",
+    rootPrompt: "هذا الجذر أنجب ثلاث كلمات حديثة. اعثر عليها.",
+    rootProgress: (n) => n === 0 ? "اعثر على ٣ كلمات" : n === 3 ? "وجدت الثلاثة!" : `${n}/3`,
     exit: "إغلاق",
     quizPromptWord: "ما معنى هذه الكلمة؟",
     quizPromptMeaning: "أي كلمة تطابق هذا المعنى؟",
@@ -228,6 +267,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Машина времени",
     timeDesc: "Что это слово значило раньше?",
     timePrompt: "Когда-то это слово значило:",
+    passportTitle: "Паспорт слова",
+    passportDesc: "Угадай язык происхождения слова",
+    passportPrompt: "Из какого языка пришло это слово?",
+    friendsTitle: "Ложные друзья",
+    friendsDesc: "Настоящее родство или языковая ловушка?",
+    friendsPrompt: "Эти два слова значат одно и то же?",
+    friendsTrue: "Настоящий брат",
+    friendsFalse: "Ловушка",
+    rootTitle: "Охота за корнями",
+    rootDesc: "Найди 3 слова с одним корнем",
+    rootPrompt: "От этого корня выросли три современных слова. Найди их.",
+    rootProgress: (n) => n === 0 ? "Найди 3 слова" : n === 3 ? "Все три!" : `${n}/3`,
     exit: "Закрыть",
     quizPromptWord: "Что означает это слово?",
     quizPromptMeaning: "Какое слово подходит?",
@@ -276,6 +327,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Viajero del Tiempo",
     timeDesc: "¿Qué significaba esta palabra hace siglos?",
     timePrompt: "Hace siglos, esta palabra significaba:",
+    passportTitle: "Pasaporte de Palabras",
+    passportDesc: "Adivina de qué idioma nació la palabra",
+    passportPrompt: "¿De qué idioma viene esta palabra?",
+    friendsTitle: "Falsos Amigos",
+    friendsDesc: "¿Cognado real o trampa entre lenguas?",
+    friendsPrompt: "¿Estas dos palabras significan lo mismo?",
+    friendsTrue: "Gemelo real",
+    friendsFalse: "Trampa",
+    rootTitle: "Caza de Raíces",
+    rootDesc: "Encuentra 3 palabras de la misma raíz",
+    rootPrompt: "Esta raíz dio tres palabras modernas. Encuéntralas.",
+    rootProgress: (n) => n === 0 ? "Encuentra 3" : n === 3 ? "¡Las tres!" : `${n}/3`,
     exit: "Cerrar",
     quizPromptWord: "¿Qué significa esta palabra?",
     quizPromptMeaning: "¿Qué palabra encaja?",
@@ -324,6 +387,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Viajante do Tempo",
     timeDesc: "O que essa palavra significava há séculos?",
     timePrompt: "Há séculos, esta palavra significava:",
+    passportTitle: "Passaporte de Palavras",
+    passportDesc: "Adivinhe de que idioma nasceu a palavra",
+    passportPrompt: "De que idioma veio essa palavra?",
+    friendsTitle: "Falsos Amigos",
+    friendsDesc: "Cognato real ou armadilha entre línguas?",
+    friendsPrompt: "Essas duas palavras significam o mesmo?",
+    friendsTrue: "Gêmeo real",
+    friendsFalse: "Armadilha",
+    rootTitle: "Caça às Raízes",
+    rootDesc: "Encontre 3 palavras da mesma raiz",
+    rootPrompt: "Esta raiz deu três palavras modernas. Encontre-as.",
+    rootProgress: (n) => n === 0 ? "Encontre 3" : n === 3 ? "Todas as três!" : `${n}/3`,
     exit: "Fechar",
     quizPromptWord: "O que esta palavra significa?",
     quizPromptMeaning: "Qual palavra encaixa?",
@@ -372,6 +447,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Voyageur du Temps",
     timeDesc: "Que voulait dire ce mot autrefois ?",
     timePrompt: "Autrefois, ce mot signifiait :",
+    passportTitle: "Passeport des Mots",
+    passportDesc: "Devine la langue d'origine du mot",
+    passportPrompt: "De quelle langue vient ce mot ?",
+    friendsTitle: "Faux Amis",
+    friendsDesc: "Vrai cognat ou piège entre langues ?",
+    friendsPrompt: "Ces deux mots veulent-ils dire la même chose ?",
+    friendsTrue: "Vrai jumeau",
+    friendsFalse: "Piège",
+    rootTitle: "Chasse aux Racines",
+    rootDesc: "Trouve 3 mots issus de la même racine",
+    rootPrompt: "Cette racine a donné trois mots modernes. Trouve-les.",
+    rootProgress: (n) => n === 0 ? "Trouve 3 mots" : n === 3 ? "Les trois !" : `${n}/3`,
     exit: "Fermer",
     quizPromptWord: "Que signifie ce mot ?",
     quizPromptMeaning: "Quel mot convient ?",
@@ -420,6 +507,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Zeitreisender",
     timeDesc: "Was bedeutete dieses Wort einst?",
     timePrompt: "Vor Jahrhunderten bedeutete dieses Wort:",
+    passportTitle: "Wort-Pass",
+    passportDesc: "Errate die Ursprungssprache des Wortes",
+    passportPrompt: "Aus welcher Sprache stammt dieses Wort?",
+    friendsTitle: "Falsche Freunde",
+    friendsDesc: "Echter Verwandter oder Sprachfalle?",
+    friendsPrompt: "Bedeuten diese zwei Wörter dasselbe?",
+    friendsTrue: "Echter Zwilling",
+    friendsFalse: "Falle",
+    rootTitle: "Wurzeljagd",
+    rootDesc: "Finde 3 Wörter aus derselben Wurzel",
+    rootPrompt: "Diese Wurzel gab drei moderne Wörter. Finde sie.",
+    rootProgress: (n) => n === 0 ? "Finde 3" : n === 3 ? "Alle drei!" : `${n}/3`,
     exit: "Schließen",
     quizPromptWord: "Was bedeutet dieses Wort?",
     quizPromptMeaning: "Welches Wort passt?",
@@ -468,6 +567,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Cestovatel časem",
     timeDesc: "Co to slovo znamenalo před staletími?",
     timePrompt: "Před staletími toto slovo znamenalo:",
+    passportTitle: "Pas slov",
+    passportDesc: "Uhodni jazyk původu slova",
+    passportPrompt: "Z jakého jazyka pochází toto slovo?",
+    friendsTitle: "Falešní přátelé",
+    friendsDesc: "Skutečný příbuzný nebo jazyková past?",
+    friendsPrompt: "Znamenají tato dvě slova totéž?",
+    friendsTrue: "Skutečné dvojče",
+    friendsFalse: "Past",
+    rootTitle: "Hon na kořeny",
+    rootDesc: "Najdi 3 slova ze stejného kořene",
+    rootPrompt: "Tento kořen dal tři moderní slova. Najdi je.",
+    rootProgress: (n) => n === 0 ? "Najdi 3" : n === 3 ? "Všechna tři!" : `${n}/3`,
     exit: "Zavřít",
     quizPromptWord: "Co znamená toto slovo?",
     quizPromptMeaning: "Které slovo sedí?",
@@ -516,6 +627,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "Cestovateľ časom",
     timeDesc: "Čo toto slovo znamenalo pred storočiami?",
     timePrompt: "Pred storočiami toto slovo znamenalo:",
+    passportTitle: "Pas slov",
+    passportDesc: "Uhádni jazyk pôvodu slova",
+    passportPrompt: "Z akého jazyka pochádza toto slovo?",
+    friendsTitle: "Falošní priatelia",
+    friendsDesc: "Skutočný príbuzný alebo jazyková pasca?",
+    friendsPrompt: "Znamenajú tieto dve slová to isté?",
+    friendsTrue: "Skutočné dvojča",
+    friendsFalse: "Pasca",
+    rootTitle: "Lov koreňov",
+    rootDesc: "Nájdi 3 slová z toho istého koreňa",
+    rootPrompt: "Tento koreň dal tri moderné slová. Nájdi ich.",
+    rootProgress: (n) => n === 0 ? "Nájdi 3" : n === 3 ? "Všetky tri!" : `${n}/3`,
     exit: "Zavrieť",
     quizPromptWord: "Čo znamená toto slovo?",
     quizPromptMeaning: "Ktoré slovo sedí?",
@@ -564,6 +687,18 @@ const COPY: Record<string, PlayT> = {
     timeTitle: "समय यात्री",
     timeDesc: "सदियों पहले इस शब्द का क्या मतलब था?",
     timePrompt: "सदियों पहले इस शब्द का मतलब था:",
+    passportTitle: "शब्द पासपोर्ट",
+    passportDesc: "अनुमान लगाएँ कि शब्द किस भाषा से आया",
+    passportPrompt: "यह शब्द किस भाषा से आया है?",
+    friendsTitle: "झूठे दोस्त",
+    friendsDesc: "सच्चा रिश्ता या भाषाओं के बीच जाल?",
+    friendsPrompt: "क्या ये दोनों शब्द एक ही चीज़ कहते हैं?",
+    friendsTrue: "सच्चा जुड़वां",
+    friendsFalse: "जाल",
+    rootTitle: "जड़ शिकार",
+    rootDesc: "एक ही जड़ के 3 शब्द ढूंढें",
+    rootPrompt: "इस जड़ से तीन आधुनिक शब्द निकले. उन्हें ढूंढें.",
+    rootProgress: (n) => n === 0 ? "3 शब्द ढूंढें" : n === 3 ? "तीनों मिले!" : `${n}/3`,
     exit: "बंद करें",
     quizPromptWord: "इस शब्द का क्या अर्थ है?",
     quizPromptMeaning: "कौन सा शब्द इस अर्थ से मेल खाता है?",
@@ -810,6 +945,48 @@ export function PlayPage() {
         </svg>
       ),
     },
+    {
+      id: "passport",
+      title: t.passportTitle,
+      desc: t.passportDesc,
+      enabled: true,
+      accent: "violet",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
+        </svg>
+      ),
+    },
+    {
+      id: "friends",
+      title: t.friendsTitle,
+      desc: t.friendsDesc,
+      enabled: true,
+      accent: "coral",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 12c2.2 0 4-2 4-4.5S11.2 3 9 3 5 5 5 7.5 6.8 12 9 12Z" />
+          <path d="M15 21c2.2 0 4-2 4-4.5S17.2 12 15 12s-4 2-4 4.5S12.8 21 15 21Z" />
+        </svg>
+      ),
+    },
+    {
+      id: "root",
+      title: t.rootTitle,
+      desc: t.rootDesc,
+      enabled: true,
+      accent: "lime",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3v18" />
+          <path d="M12 13c-3-2-6-2-9 0" />
+          <path d="M12 13c3-2 6-2 9 0" />
+          <path d="M12 21c-2-1-4-1-6 0" />
+          <path d="M12 21c2-1 4-1 6 0" />
+        </svg>
+      ),
+    },
   ];
 
   // ─── Active game stage ─────────────────────────────────────────
@@ -830,6 +1007,27 @@ export function PlayPage() {
       return (
         <div className="wordbook wb-play-page" dir={dir}>
           <GameTimeTraveler {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "passport") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameWordPassport {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "friends") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameFalseFriends {...curatedProps} />
+        </div>
+      );
+    }
+    if (stage.game === "root") {
+      return (
+        <div className="wordbook wb-play-page" dir={dir}>
+          <GameRootRush {...curatedProps} />
         </div>
       );
     }
