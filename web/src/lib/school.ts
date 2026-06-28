@@ -64,8 +64,12 @@ export interface Classroom {
   createdAt: string;
 }
 
-/** Six classroom-row colors. Picked to be visually distinct on the
- *  mustard /schools background but not overpowering. The principal
+/** Twelve classroom-row colors. Expanded from the original 6 after
+ *  Gadi (2026-06-28) pointed out that a school with 50 classrooms
+ *  would exhaust 6 swatches immediately. 12 × the natural grade
+ *  groupings (ז'/ח'/ט'/...) gives enough unique combinations for any
+ *  real school. Picked to be visually distinct from each other AND
+ *  legible against the mustard /schools background. The principal
  *  uses these as a visual ID; kids never see them on /c/<CODE>. */
 export const CLASSROOM_COLORS = [
   "#CA8A04", // mustard (default, matches the SKU brand)
@@ -74,6 +78,12 @@ export const CLASSROOM_COLORS = [
   "#EC4899", // pink
   "#10B981", // green
   "#3B82F6", // blue
+  "#EF4444", // red
+  "#F59E0B", // amber
+  "#8B5CF6", // violet
+  "#06B6D4", // cyan
+  "#84CC16", // lime
+  "#64748B", // slate
 ] as const;
 
 export function classroomColorFor(c: { colorIndex?: number }): string {

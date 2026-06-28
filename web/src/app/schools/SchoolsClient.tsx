@@ -58,6 +58,9 @@ const COPY: Record<string, {
   open: string;
   codeLabel: string;
   wordsLabel: string;
+  editAria: string;
+  deleteAria: string;
+  deleteConfirm: string;
   notReady: string;
   goPricing: string;
   welcome: string;
@@ -87,6 +90,9 @@ const COPY: Record<string, {
     open: "פתח",
     codeLabel: "קוד",
     wordsLabel: "מילים",
+    editAria: "עריכת שם הכיתה",
+    deleteAria: "מחיקת כיתה",
+    deleteConfirm: "למחוק את הכיתה הזו לתמיד? כל היסטוריית החיפושים שלה תאבד.",
     notReady: "כדי לנהל בית ספר אתם צריכים את מנוי Schools.",
     goPricing: "לתמחור",
     welcome: "ברוכים הבאים ל-Schools! הוסיפו כיתה ראשונה כדי להתחיל.",
@@ -116,6 +122,9 @@ const COPY: Record<string, {
     open: "Open",
     codeLabel: "Code",
     wordsLabel: "words",
+    editAria: "Edit classroom name",
+    deleteAria: "Delete classroom",
+    deleteConfirm: "Delete this classroom forever? All its search history will be lost.",
     notReady: "Schools subscription is required to manage classrooms.",
     goPricing: "See pricing",
     welcome: "Welcome to Schools! Add your first classroom to get started.",
@@ -145,6 +154,9 @@ const COPY: Record<string, {
     open: "खोलें",
     codeLabel: "कोड",
     wordsLabel: "शब्द",
+    editAria: "कक्षा का नाम बदलें",
+    deleteAria: "कक्षा हटाएँ",
+    deleteConfirm: "इस कक्षा को हमेशा के लिए हटाएँ? सारा खोज इतिहास खो जाएगा।",
     notReady: "कक्षाएँ प्रबंधित करने के लिए Schools सब्सक्रिप्शन ज़रूरी है।",
     goPricing: "क़ीमत देखें",
     welcome: "Schools में स्वागत है! शुरू करने के लिए पहली कक्षा जोड़ें।",
@@ -271,6 +283,23 @@ export function SchoolsClient() {
       );
     } catch (err) {
       console.error("save classroom name failed:", err);
+    }
+  }
+
+  async function deleteClassroom(classroomId: string) {
+    if (!user) return;
+    if (!window.confirm(c.deleteConfirm)) return;
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch(`/api/schools/delete-classroom?id=${encodeURIComponent(classroomId)}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) {
+        console.error("delete classroom failed:", await res.text());
+      }
+    } catch (err) {
+      console.error("delete classroom failed:", err);
     }
   }
 
@@ -566,6 +595,64 @@ export function SchoolsClient() {
                   <span className="wb-classroom-count">
                     {cls.searchCount ?? 0} {c.wordsLabel}
                   </span>
+                  {/* Edit pencil. Discoverable affordance for renaming;
+                      Gadi (2026-06-28) found the click-the-span pattern
+                      undiscoverable. The pencil sits in a circular
+                      ghost button so it reads as an action target. */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingId(cls.id);
+                      setEditingDraft(cls.name ?? "");
+                    }}
+                    aria-label={c.editAria}
+                    title={c.editAria}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 999,
+                      background: "transparent",
+                      border: "1px solid var(--hairline, #E5E7EB)",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "var(--ink-soft, #6B7280)",
+                    }}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                    </svg>
+                  </button>
+                  {/* Delete trash. window.confirm() before the destructive
+                      call. Server endpoint removes the classroom doc AND
+                      the matching classroomCodes lookup so the code can
+                      be reused by a future classroom. */}
+                  <button
+                    type="button"
+                    onClick={() => deleteClassroom(cls.id)}
+                    aria-label={c.deleteAria}
+                    title={c.deleteAria}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 999,
+                      background: "transparent",
+                      border: "1px solid var(--hairline, #E5E7EB)",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#B91C1C",
+                    }}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6" />
+                      <path d="M10 11v6M14 11v6" />
+                    </svg>
+                  </button>
                   <Link
                     href={href(`/classroom/${cls.id}`)}
                     className="wb-school-cta"
@@ -621,9 +708,9 @@ export function SchoolsClient() {
                 style={{
                   width: "100%",
                   padding: "10px 14px",
-                  border: "1px solid var(--hairline)",
+                  border: "1.5px solid #D6D3D1",
                   borderRadius: 10,
-                  background: "var(--surface)",
+                  background: "#FFFFFF",
                   fontFamily: "var(--wb-sans)",
                   fontSize: 15,
                   color: "var(--ink)",
@@ -657,9 +744,9 @@ export function SchoolsClient() {
                 style={{
                   width: "100%",
                   padding: "10px 14px",
-                  border: "1px solid var(--hairline)",
+                  border: "1.5px solid #D6D3D1",
                   borderRadius: 10,
-                  background: "var(--surface)",
+                  background: "#FFFFFF",
                   fontFamily: "var(--wb-sans)",
                   fontSize: 15,
                   color: "var(--ink)",
