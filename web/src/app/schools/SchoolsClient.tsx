@@ -60,6 +60,8 @@ const COPY: Record<string, {
   wordsLabel: string;
   editAria: string;
   deleteAria: string;
+  copyLinkAria: string;
+  copiedBadge: string;
   deleteConfirm: string;
   saveBtn: string;
   cancelBtn: string;
@@ -94,6 +96,8 @@ const COPY: Record<string, {
     wordsLabel: "מילים",
     editAria: "עריכת הכיתה",
     deleteAria: "מחיקת כיתה",
+    copyLinkAria: "העתקת לינק לילדים",
+    copiedBadge: "הועתק",
     deleteConfirm: "למחוק את הכיתה הזו לתמיד? כל היסטוריית החיפושים שלה תאבד.",
     saveBtn: "שמירה",
     cancelBtn: "ביטול",
@@ -128,6 +132,8 @@ const COPY: Record<string, {
     wordsLabel: "words",
     editAria: "Edit classroom",
     deleteAria: "Delete classroom",
+    copyLinkAria: "Copy kids link",
+    copiedBadge: "Copied",
     deleteConfirm: "Delete this classroom forever? All its search history will be lost.",
     saveBtn: "Save",
     cancelBtn: "Cancel",
@@ -162,6 +168,8 @@ const COPY: Record<string, {
     wordsLabel: "शब्द",
     editAria: "कक्षा संपादित करें",
     deleteAria: "कक्षा हटाएँ",
+    copyLinkAria: "बच्चों का लिंक कॉपी करें",
+    copiedBadge: "कॉपी हो गया",
     deleteConfirm: "इस कक्षा को हमेशा के लिए हटाएँ? सारा खोज इतिहास खो जाएगा।",
     saveBtn: "सहेजें",
     cancelBtn: "रद्द करें",
@@ -201,6 +209,22 @@ export function SchoolsClient() {
   // "School name" label below it. Gadi (2026-06-28) called the
   // duplication out: when the name is set, it IS the page title.
   const [editingSchoolName, setEditingSchoolName] = useState(false);
+  // Which classroom row most recently had its kids link copied, so
+  // we can flash the copy button green for a moment as feedback.
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  async function copyKidsLink(cls: Classroom) {
+    if (typeof window === "undefined") return;
+    const link = `${window.location.origin}/c/${cls.code}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopiedId(cls.id);
+      setTimeout(() => setCopiedId((curr) => curr === cls.id ? null : curr), 1500);
+    } catch {
+      // Some browsers without secure context. Silent — the link is
+      // also surfaced inside /classroom/<id> for manual copy.
+    }
+  }
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
@@ -808,6 +832,44 @@ export function SchoolsClient() {
                   <span className="wb-classroom-count">
                     {cls.searchCount ?? 0} {c.wordsLabel}
                   </span>
+                  {/* Copy kids link. Click writes `${origin}/c/<CODE>`
+                      to the clipboard so the teacher can paste it
+                      into a WhatsApp group or a printable handout
+                      without having to navigate into the classroom
+                      view. The button flashes green for 1.5s after
+                      copy as feedback. Gadi (2026-06-28) wanted the
+                      link available from the main dashboard, not
+                      buried inside /classroom/<id>. */}
+                  <button
+                    type="button"
+                    onClick={() => copyKidsLink(cls)}
+                    aria-label={c.copyLinkAria}
+                    title={c.copyLinkAria}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 999,
+                      background: copiedId === cls.id ? "#10B981" : "transparent",
+                      border: copiedId === cls.id ? "1px solid #10B981" : "1px solid var(--hairline, #E5E7EB)",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: copiedId === cls.id ? "#FFFFFF" : "var(--ink-soft, #6B7280)",
+                      transition: "background 200ms, color 200ms, border-color 200ms",
+                    }}
+                  >
+                    {copiedId === cls.id ? (
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    ) : (
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 1 0-7-7l-1.5 1.5" />
+                        <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 1 0 7 7l1.5-1.5" />
+                      </svg>
+                    )}
+                  </button>
                   {/* Edit pencil opens the full expanded form above
                       (name + teacher + colour). Gadi (2026-06-28)
                       flagged the previous name-only edit as useless

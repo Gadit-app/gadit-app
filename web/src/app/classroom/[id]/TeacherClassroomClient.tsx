@@ -194,78 +194,12 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
           {classroom.searchCount ?? 0} {lang === "he" ? "מילים נחפשו" : lang === "hi" ? "शब्द खोजे गए" : "words searched"}
         </p>
 
-        {/* Big classroom code chip — the visual centerpiece. A teacher
-            can read it off the screen to the class. Same code is
-            embedded in the shareable link below. */}
-        <section style={{ marginBottom: 32 }}>
-          <div style={{
-            fontFamily: "var(--wb-sans)",
-            fontSize: 12,
-            fontWeight: 600,
-            letterSpacing: "0.16em",
-            textTransform: "uppercase",
-            color: "#A16207",
-            marginBottom: 10,
-          }}>
-            {c.classroomCodeLabel}
-          </div>
-          <div style={{
-            fontFamily: "ui-monospace, monospace",
-            fontSize: "clamp(48px, 8vw, 72px)",
-            fontWeight: 700,
-            color: "#CA8A04",
-            letterSpacing: "0.12em",
-            background: "#FEF3C7",
-            border: "1px solid #FCD34D",
-            padding: "20px 28px",
-            borderRadius: 18,
-            display: "inline-block",
-          }}>
-            {classroom.code}
-          </div>
-        </section>
-
-        {/* Copyable link the teacher can paste into a parent group or
-            print on a handout. */}
-        <section style={{ marginBottom: 40 }}>
-          <div style={{
-            fontFamily: "var(--wb-sans)",
-            fontSize: 12,
-            fontWeight: 600,
-            letterSpacing: "0.16em",
-            textTransform: "uppercase",
-            color: "#A16207",
-            marginBottom: 10,
-          }}>
-            {c.shareLinkLabel}
-          </div>
-          <div style={{ display: "flex", gap: 8, alignItems: "stretch" }}>
-            <input
-              type="text"
-              value={kidsLink}
-              readOnly
-              onFocus={(e) => e.currentTarget.select()}
-              style={{
-                flex: 1,
-                padding: "10px 14px",
-                border: "1px solid var(--hairline)",
-                borderRadius: 10,
-                background: "var(--surface)",
-                fontFamily: "ui-monospace, monospace",
-                fontSize: 14,
-                color: "var(--ink)",
-              }}
-            />
-            <button
-              type="button"
-              className="wb-school-cta"
-              onClick={copyLink}
-              style={{ width: "auto", padding: "10px 18px" }}
-            >
-              {copied ? c.copied : c.copyLinkBtn}
-            </button>
-          </div>
-        </section>
+        {/* Code chip + kids-link section removed 2026-06-28. Both
+            now live on /schools (the code as a mustard pill in each
+            row, the kids link as a copy button next to the action
+            icons). The teacher view is now focused exclusively on
+            the search log — Gadi's instinct: "פה צריך להיות רק
+            מילים שתלמידים חיפשו לאחרונה וזהו". */}
 
         {/* Recent searches list. Newest first. No student attribution —
             this list is by design anonymous (no student data exists). */}
