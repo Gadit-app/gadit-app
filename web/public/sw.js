@@ -11,7 +11,12 @@
 // only job is to keep the app shell installable and the page-load
 // network-fallback chain.
 
-const CACHE_VERSION = "gadit-v3";
+// Bump the version to nuke client caches when a previously-served
+// bundle has a bug. Gary (2026-06-29, iPhone 13 Pro / iOS 16.1.1)
+// reported the search, sign-in, and burger menu all silently failing —
+// classic stale-JS-in-SW symptom. v3 → v4 forces every browser to
+// wipe its v3 caches and refetch fresh JS on the next visit.
+const CACHE_VERSION = "gadit-v4";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
