@@ -391,6 +391,21 @@ export function HomePage() {
                 className="wb-home-search-submit"
                 aria-label={c.search}
                 title={c.search}
+                onClick={(e) => {
+                  // iOS Safari fallback. When the keyboard is open and
+                  // the user taps the round submit button, iOS sometimes
+                  // routes the touch as a blur on the input instead of
+                  // a click on the button, eating the form's onSubmit
+                  // entirely. A friend pilot-testing on iPhone reported
+                  // typing "Supply", hitting search, and the page going
+                  // blank (input cleared, no navigation). By calling
+                  // go() directly here we guarantee navigation. The
+                  // preventDefault stops a duplicate submission if the
+                  // form's onSubmit DOES fire. Keyboard "Go" path stays
+                  // unaffected — it bypasses the button entirely.
+                  e.preventDefault();
+                  go(query);
+                }}
               >
                 <SearchIcon size={20} />
               </button>
