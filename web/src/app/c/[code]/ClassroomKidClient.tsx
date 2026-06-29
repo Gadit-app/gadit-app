@@ -283,7 +283,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={data.schoolLogoUrl} alt="" />
             ) : (
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 7l9-4 9 4-9 4-9-4z" />
                 <path d="M21 10v6" />
                 <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
@@ -295,7 +295,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
               fontFamily: "var(--wb-sans)",
               fontSize: 14,
               fontWeight: 600,
-              color: "#A16207",
+              color: "#0EA5A5",
               letterSpacing: "0.04em",
               marginBottom: 4,
             }}>
@@ -346,7 +346,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
                 fontFamily: "var(--wb-sans)",
                 fontSize: 16,
                 fontWeight: 600,
-                color: "#A16207",
+                color: "#0EA5A5",
                 textAlign: "center",
                 marginBottom: 16,
               }}
@@ -368,18 +368,18 @@ export function ClassroomKidClient({ code }: { code: string }) {
                   onClick={() => pickStudent(sn)}
                   style={{
                     padding: "10px 20px",
-                    background: "#FEF3C7",
-                    border: "1.5px solid #FCD34D",
+                    background: "rgba(14, 165, 165, 0.08)",
+                    border: "1.5px solid rgba(14, 165, 165, 0.4)",
                     borderRadius: 999,
                     fontFamily: "var(--wb-sans)",
                     fontSize: 16,
                     fontWeight: 600,
-                    color: "#A16207",
+                    color: "#0EA5A5",
                     cursor: "pointer",
                     transition: "background 180ms, transform 120ms",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "#FCD34D")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "#FEF3C7")}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(14, 165, 165, 0.18)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(14, 165, 165, 0.08)")}
                 >
                   {sn}
                 </button>
@@ -460,12 +460,12 @@ export function ClassroomKidClient({ code }: { code: string }) {
               maxWidth: 560,
               margin: "32px auto 0",
               padding: "14px 18px",
-              background: "#FEF3C7",
-              border: "1px solid #FCD34D",
+              background: "rgba(14, 165, 165, 0.08)",
+              border: "1px solid rgba(14, 165, 165, 0.3)",
               borderRadius: 14,
               fontFamily: "var(--wb-sans)",
               fontSize: 14,
-              color: "#A16207",
+              color: "#0EA5A5",
               textAlign: "center",
             }}
           >
@@ -476,7 +476,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
               href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
               style={{
                 fontWeight: 700,
-                color: "#A16207",
+                color: "#0EA5A5",
                 textDecoration: "underline",
               }}
             >

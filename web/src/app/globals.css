@@ -11602,21 +11602,32 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
 }
 
-/* Override mustard school CTA to use Gadit teal inside the classroom
-   interface. The school chip stays (it's the school's identity space),
-   but interactive Gadit elements use the brand teal. */
+/* Override mustard school CTA to use Gadit teal inside the kid view.
+   The /c/<CODE> kid view is "inside Gadit" per the brand spec — teal
+   only. The /schools dashboard (separate surface) keeps mustard since
+   that's the school-admin context.
+   !important + box-shadow override because the base .wb-school-cta has
+   a heavy 4-layer drop shadow tuned to mustard; without overriding it
+   the button keeps a yellow halo even when the body is teal. */
 .wordbook .wb-school-page .wb-school-cta {
-  background: #0EA5A5;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  font-family: var(--wb-sans);
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 180ms var(--wb-ease-out), transform 120ms;
+  background: #0EA5A5 !important;
+  color: #fff !important;
+  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45) !important;
 }
-.wordbook .wb-school-page .wb-school-cta:hover { background: rgb(13, 148, 148); }
-.wordbook .wb-school-page .wb-school-cta:active { transform: scale(0.97); }
+.wordbook .wb-school-page .wb-school-cta:hover { background: rgb(13, 148, 148) !important; }
+.wordbook .wb-school-page .wb-school-cta:focus-visible {
+  outline: 2px solid #0EA5A5 !important;
+}
+
+/* Logo slot inside the kid view — replace the mustard placeholder
+   background with a neutral white surface so the slot looks like a
+   regular Gadit chip, not a school-branded one. Per Gadi's spec, the
+   /c/<CODE> surface is Gadit's surface; only the school NAME/LOGO
+   itself represents the school. */
+.wordbook .wb-school-page .wb-school-logo-slot {
+  background: #FFFFFF;
+  border: 1px solid var(--hairline);
+}
 
 /* Classroom notebook list — aggregated class-wide search history */
 .wordbook .wb-classroom-notebook-filter {
