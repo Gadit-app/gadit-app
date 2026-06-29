@@ -12008,3 +12008,725 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--ink-soft);
   flex-shrink: 0;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   SCHOOLS LANDING PAGE — /schools (public marketing)
+   8 sections: hero, problem, how-it-works, teacher-view, privacy,
+   pricing, faq, final-cta. Pure CSS mockups (no real screenshots).
+   Council-vetted June 2026.
+   ═══════════════════════════════════════════════════════════════ */
+
+.wordbook.wb-schools-landing { background: var(--wb-canvas); }
+
+.wordbook .wb-schools-section {
+  padding: clamp(48px, 7vw, 96px) clamp(20px, 4vw, 56px);
+}
+.wordbook .wb-schools-section-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.wordbook .wb-schools-tag {
+  display: inline-block;
+  font-family: var(--wb-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0EA5A5;
+  background: rgba(14, 165, 165, 0.10);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.wordbook .wb-schools-h2 {
+  font-family: var(--wb-serif);
+  font-size: clamp(26px, 3.6vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 14px;
+  max-width: 760px;
+}
+.wordbook[dir="rtl"] .wb-schools-h2 { letter-spacing: 0; }
+
+.wordbook .wb-schools-body,
+.wordbook .wb-schools-section-sub {
+  font-family: var(--wb-sans);
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+  max-width: 680px;
+}
+.wordbook[dir="rtl"] .wb-schools-body,
+.wordbook[dir="rtl"] .wb-schools-section-sub { font-family: var(--wb-he); }
+
+/* ─── 1. HERO ──────────────────────────────────────────────── */
+.wordbook .wb-schools-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 56px) clamp(60px, 8vw, 100px);
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .wordbook .wb-schools-hero {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 56px;
+  }
+}
+
+.wordbook .wb-schools-pricechip {
+  display: inline-block;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: #0EA5A5;
+  background: rgba(14, 165, 165, 0.10);
+  border: 1px solid rgba(14, 165, 165, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.wordbook .wb-schools-h1 {
+  font-family: var(--wb-serif);
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.wordbook[dir="rtl"] .wb-schools-h1 { letter-spacing: 0; }
+
+.wordbook .wb-schools-sub {
+  font-family: var(--wb-sans);
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0 0 28px;
+  max-width: 560px;
+}
+.wordbook[dir="rtl"] .wb-schools-sub { font-family: var(--wb-he); }
+
+.wordbook .wb-schools-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.wordbook .wb-schools-hero-trust {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.wordbook .wb-schools-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 26px;
+  background: #0EA5A5;
+  color: #fff;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform 160ms var(--wb-ease-out), background 180ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
+  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
+}
+.wordbook .wb-schools-cta:hover {
+  background: rgb(13, 148, 148);
+  transform: translateY(-1px);
+}
+.wordbook .wb-schools-cta:active { transform: scale(0.98); }
+.wordbook .wb-schools-cta-block {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+}
+.wordbook .wb-schools-cta-big {
+  padding: 18px 40px;
+  font-size: 17px;
+}
+
+/* Hero visual — split mockup */
+.wordbook .wb-schools-hero-visual {
+  position: relative;
+  min-height: 360px;
+}
+.wordbook .wb-schools-mockup {
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px -20px rgba(15, 23, 42, 0.18);
+  font-family: var(--wb-sans);
+}
+.wordbook .wb-schools-mockup-window {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #F7F7F8;
+  border-bottom: 1px solid var(--hairline);
+}
+.wordbook .wb-schools-mockup-dots { display: flex; gap: 5px; }
+.wordbook .wb-schools-mockup-dots span {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #D6D3D1;
+}
+.wordbook .wb-schools-mockup-title {
+  font-family: var(--wb-mono, ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-inline-start: 6px;
+}
+.wordbook .wb-schools-mockup-body { padding: 16px; }
+.wordbook .wb-schools-mockup-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+.wordbook .wb-schools-mockup-eyebrow-2 { margin-top: 18px; }
+.wordbook .wb-schools-mockup-search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  font-size: 13px;
+}
+.wordbook .wb-schools-mockup-search-row:last-of-type { border-bottom: none; }
+.wordbook .wb-schools-mockup-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.wordbook .wb-schools-mockup-dot-1 { background: #0EA5A5; }
+.wordbook .wb-schools-mockup-dot-2 { background: #7C3AED; }
+.wordbook .wb-schools-mockup-dot-3 { background: #F59E0B; }
+.wordbook .wb-schools-mockup-search-text {
+  flex: 1;
+  color: var(--ink);
+  font-weight: 500;
+}
+.wordbook .wb-schools-mockup-time {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.wordbook .wb-schools-mockup-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wordbook .wb-schools-mockup-bar {
+  position: relative;
+  background: rgba(14, 165, 165, 0.06);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+  overflow: hidden;
+}
+.wordbook .wb-schools-mockup-bar span {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: rgba(14, 165, 165, 0.18);
+}
+.wordbook .wb-schools-mockup-bar em {
+  position: relative;
+  font-style: normal;
+  font-weight: 700;
+  color: #0EA5A5;
+  margin-inline-start: 8px;
+}
+
+.wordbook .wb-schools-mockup-teacher { position: relative; z-index: 2; }
+.wordbook .wb-schools-mockup-student {
+  position: absolute;
+  inset-inline-end: -8px;
+  inset-block-end: -28px;
+  width: 70%;
+  z-index: 3;
+  transform: rotate(2deg);
+}
+@media (max-width: 900px) {
+  .wordbook .wb-schools-mockup-student {
+    position: static;
+    width: 100%;
+    transform: none;
+    margin-top: 12px;
+  }
+}
+
+.wordbook .wb-schools-mockup-word {
+  font-family: var(--wb-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.wordbook .wb-schools-mockup-meaning {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.wordbook .wb-schools-mockup-meaning-label {
+  color: #0EA5A5;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+.wordbook .wb-schools-mockup-meaning-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.wordbook .wb-schools-mockup-example {
+  padding: 10px 12px;
+  background: rgba(14, 165, 165, 0.05);
+  border-radius: 8px;
+  border-inline-start: 3px solid #0EA5A5;
+}
+.wordbook .wb-schools-mockup-example-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0EA5A5;
+  margin-bottom: 4px;
+}
+.wordbook .wb-schools-mockup-example-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  font-style: italic;
+}
+
+/* ─── 2. PROBLEM ──────────────────────────────────────────── */
+.wordbook .wb-schools-problem {
+  background: #F7F8FA;
+  border-block: 1px solid var(--hairline);
+}
+.wordbook .wb-schools-callout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+@media (min-width: 720px) {
+  .wordbook .wb-schools-callout-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+.wordbook .wb-schools-callout {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+}
+.wordbook .wb-schools-callout-num {
+  font-family: var(--wb-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #0EA5A5;
+  margin-bottom: 8px;
+}
+.wordbook .wb-schools-callout-title {
+  font-family: var(--wb-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.wordbook .wb-schools-callout-body {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-schools-callout-body { font-family: var(--wb-he); }
+
+/* ─── 3. HOW IT WORKS ──────────────────────────────────────── */
+.wordbook .wb-schools-how { background: #fff; }
+.wordbook .wb-schools-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 36px;
+}
+@media (min-width: 800px) {
+  .wordbook .wb-schools-steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+}
+.wordbook .wb-schools-step {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+}
+.wordbook .wb-schools-step-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 165, 165, 0.08);
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+.wordbook .wb-schools-code-chip {
+  font-family: var(--wb-mono, ui-monospace, monospace);
+  font-size: 15px;
+  font-weight: 700;
+  color: #0EA5A5;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px solid rgba(14, 165, 165, 0.3);
+  border-radius: 6px;
+}
+.wordbook .wb-schools-step-num {
+  font-family: var(--wb-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0EA5A5;
+  margin-bottom: 6px;
+}
+.wordbook .wb-schools-step-title {
+  font-family: var(--wb-serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.wordbook .wb-schools-step-body {
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-schools-step-body { font-family: var(--wb-he); }
+
+/* ─── 4. TEACHER VIEW ──────────────────────────────────────── */
+.wordbook .wb-schools-teacher {
+  background: #F7F8FA;
+  border-block: 1px solid var(--hairline);
+}
+.wordbook .wb-schools-teacher-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .wordbook .wb-schools-teacher-grid {
+    grid-template-columns: 1fr 1.1fr;
+    gap: 56px;
+  }
+}
+.wordbook .wb-schools-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wordbook .wb-schools-bullets li {
+  position: relative;
+  padding-inline-start: 28px;
+  font-family: var(--wb-sans);
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-schools-bullets li { font-family: var(--wb-he); }
+.wordbook .wb-schools-bullets li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 4px;
+  top: 10px;
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230EA5A5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5L20 7'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.wordbook .wb-schools-mockup-big {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ─── 5. PRIVACY ──────────────────────────────────────────── */
+.wordbook .wb-schools-privacy { background: #fff; }
+.wordbook .wb-schools-privacy-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 28px;
+}
+@media (min-width: 720px) {
+  .wordbook .wb-schools-privacy-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+@media (min-width: 1000px) {
+  .wordbook .wb-schools-privacy-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.wordbook .wb-schools-privacy-card {
+  padding: 22px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wordbook .wb-schools-privacy-text {
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-schools-privacy-text { font-family: var(--wb-he); }
+.wordbook .wb-schools-privacy-kahoot {
+  margin-top: 28px;
+  padding: 16px 22px;
+  background: rgba(14, 165, 165, 0.06);
+  border: 1px solid rgba(14, 165, 165, 0.18);
+  border-radius: 12px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink);
+  text-align: center;
+}
+.wordbook[dir="rtl"] .wb-schools-privacy-kahoot { font-family: var(--wb-he); }
+
+/* ─── 6. PRICING ──────────────────────────────────────────── */
+.wordbook .wb-schools-pricing {
+  background: #F7F8FA;
+  border-block: 1px solid var(--hairline);
+}
+.wordbook .wb-schools-price-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 32px;
+  max-width: 720px;
+}
+@media (min-width: 720px) {
+  .wordbook .wb-schools-price-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+.wordbook .wb-schools-price-card {
+  padding: 28px;
+  background: #fff;
+  border: 1.5px solid var(--hairline);
+  border-radius: 16px;
+  transition: border-color 200ms var(--wb-ease-out), box-shadow 200ms var(--wb-ease-out);
+}
+.wordbook .wb-schools-price-card:hover {
+  border-color: rgba(14, 165, 165, 0.5);
+  box-shadow: 0 12px 32px -12px rgba(14, 165, 165, 0.25);
+}
+.wordbook .wb-schools-price-card-large {
+  border-color: rgba(14, 165, 165, 0.4);
+  background: linear-gradient(180deg, rgba(14, 165, 165, 0.03), #fff 80%);
+}
+.wordbook .wb-schools-price-name {
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0EA5A5;
+  margin-bottom: 14px;
+}
+.wordbook .wb-schools-price-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.wordbook .wb-schools-price-amount-num {
+  font-family: var(--wb-serif);
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.wordbook .wb-schools-price-amount-period {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.wordbook .wb-schools-price-students {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-schools-price-students { font-family: var(--wb-he); }
+.wordbook .wb-schools-includes {
+  margin-top: 32px;
+  padding: 20px 24px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+}
+.wordbook .wb-schools-includes-title {
+  font-family: var(--wb-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+.wordbook .wb-schools-includes-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-schools-includes-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .wordbook .wb-schools-includes-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.wordbook .wb-schools-includes-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-schools-includes-item { font-family: var(--wb-he); }
+.wordbook .wb-schools-price-larger {
+  margin-top: 20px;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ─── 7. FAQ ──────────────────────────────────────────────── */
+.wordbook .wb-schools-faq { background: #fff; }
+.wordbook .wb-schools-faq-list {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wordbook .wb-schools-faq-item {
+  width: 100%;
+  text-align: start;
+  padding: 18px 22px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 180ms var(--wb-ease-out);
+}
+.wordbook .wb-schools-faq-item:hover {
+  border-color: rgba(14, 165, 165, 0.35);
+}
+.wordbook .wb-schools-faq-item.is-open {
+  border-color: rgba(14, 165, 165, 0.5);
+  background: rgba(14, 165, 165, 0.03);
+}
+.wordbook .wb-schools-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--wb-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.wordbook[dir="rtl"] .wb-schools-faq-q { font-family: var(--wb-he-display, var(--wb-he)); }
+.wordbook .wb-schools-faq-chevron {
+  color: var(--ink-soft);
+  flex-shrink: 0;
+  transition: transform 180ms var(--wb-ease-out);
+}
+.wordbook .wb-schools-faq-item.is-open .wb-schools-faq-chevron {
+  transform: rotate(180deg);
+}
+.wordbook .wb-schools-faq-a {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.wordbook[dir="rtl"] .wb-schools-faq-a { font-family: var(--wb-he); }
+
+/* ─── 8. FINAL CTA ─────────────────────────────────────────── */
+.wordbook .wb-schools-final {
+  background: linear-gradient(180deg, #F7F8FA, #fff);
+  border-block: 1px solid var(--hairline);
+}
+.wordbook .wb-schools-final-inner {
+  text-align: center;
+  max-width: 680px;
+}
+.wordbook .wb-schools-final-h2 {
+  max-width: none;
+  margin-inline: auto;
+}
+.wordbook .wb-schools-final-body {
+  font-family: var(--wb-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0 auto 28px;
+  max-width: 560px;
+}
+.wordbook[dir="rtl"] .wb-schools-final-body { font-family: var(--wb-he); }
+.wordbook .wb-schools-final-note {
+  margin-top: 16px;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
