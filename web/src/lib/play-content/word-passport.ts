@@ -117,10 +117,36 @@ const LANG_LABEL_AR: Record<OriginCountry, string> = {
   ca: "الإنويت / الألغونكوية",
 };
 
+const LANG_LABEL_RU: Record<OriginCountry, string> = {
+  sa: "арабский",
+  in: "хинди / санскрит",
+  cn: "китайский",
+  jp: "японский",
+  de: "немецкий",
+  fr: "французский",
+  es: "испанский",
+  it: "итальянский",
+  nl: "нидерландский",
+  ru: "русский",
+  cz: "чешский",
+  ir: "персидский",
+  tr: "турецкий",
+  gr: "греческий",
+  va: "латинский",
+  no: "древнескандинавский",
+  is: "исландский",
+  mx: "науатль (ацтекский)",
+  au: "австралийские аборигены",
+  ke: "суахили",
+  ng: "западноафриканский",
+  ca: "инуктитут / алгонкинский",
+};
+
 const LANG_LABEL_BY_CONTENT_LANG: Record<string, Record<OriginCountry, string>> = {
   en: LANG_LABEL_EN,
   he: LANG_LABEL_HE,
   ar: LANG_LABEL_AR,
+  ru: LANG_LABEL_RU,
 };
 
 export function getLangLabel(country: OriginCountry, contentLang: string): string {
@@ -473,11 +499,98 @@ const WORD_PASSPORT_ROUNDS_AR: WordPassportRound[] = [
   },
 ];
 
+// ─── Russian content ───────────────────────────────────────────
+// Russian absorbed words from Greek (the Byzantine connection),
+// French (Peter the Great and the aristocracy), German (Saxon
+// traders and Catherine II), Turkic (steppe contacts), and modern
+// English. Each round uncovers the migrant past of a daily word.
+const WORD_PASSPORT_ROUNDS_RU: WordPassportRound[] = [
+  {
+    word: "галстук",
+    options: ["de", "fr", "it", "tr"],
+    correctIdx: 0,
+    story: "От немецкого Halstuch — «шейный платок». Пришло в Россию в эпоху Петра I вместе с европейским костюмом и стало неотъемлемой частью русской одежды.",
+  },
+  {
+    word: "картофель",
+    options: ["de", "es", "fr", "it"],
+    correctIdx: 0,
+    story: "От немецкого Kartoffel, заимствованного из итальянского tartufolo (трюфель). Подобие формы дало картошке её имя в Германии, а оттуда — в Россию.",
+  },
+  {
+    word: "бутерброд",
+    options: ["nl", "de", "fr", "es"],
+    correctIdx: 1,
+    story: "От немецкого Butterbrot — «хлеб с маслом». Заимствовано в 19 веке. В немецком звучит почти так же, как в русском.",
+  },
+  {
+    word: "сахар",
+    options: ["sa", "in", "gr", "ir"],
+    correctIdx: 0,
+    story: "Через арабский sukkar, восходящий к санскритскому шаркара (песок, крупинка). Кристаллы напоминали восточным купцам мелкий песок.",
+  },
+  {
+    word: "кофе",
+    options: ["sa", "tr", "fr", "it"],
+    correctIdx: 0,
+    story: "Через турецкий kahve из арабского qahwa. В Россию пришло вместе с самим напитком при Петре I, который заставлял бояр пить кофе.",
+  },
+  {
+    word: "балкон",
+    options: ["it", "fr", "es", "de"],
+    correctIdx: 0,
+    story: "От итальянского balcone — выступ дома. Слово пришло в русский в 18 веке вместе с европейской архитектурой и итальянскими мастерами.",
+  },
+  {
+    word: "макароны",
+    options: ["it", "fr", "gr", "es"],
+    correctIdx: 0,
+    story: "От итальянского maccheroni. В Россию проникло в 18 веке. Имя блюда сохранилось почти неизменным во всех языках мира.",
+  },
+  {
+    word: "багаж",
+    options: ["fr", "it", "de", "nl"],
+    correctIdx: 0,
+    story: "От французского bagage — «то, что несут в мешке». Пришло в эпоху Екатерины II, когда французский был языком русского дворянства.",
+  },
+  {
+    word: "этаж",
+    options: ["fr", "it", "de", "nl"],
+    correctIdx: 0,
+    story: "От французского étage — «уровень здания». Заимствовано в 18 веке вместе с многоэтажной архитектурой европейского образца.",
+  },
+  {
+    word: "ангел",
+    options: ["va", "gr", "sa", "ir"],
+    correctIdx: 1,
+    story: "От греческого ἄγγελος — «вестник». Пришло в русский через церковнославянский язык с принятием христианства в 988 году.",
+  },
+  {
+    word: "лошадь",
+    options: ["tr", "ir", "de", "gr"],
+    correctIdx: 0,
+    story: "От тюркского alasha — лошадь, особенно низкорослая. Заимствовано в эпоху татаро-монгольского ига, когда контакты со степью были постоянными.",
+  },
+  {
+    word: "школа",
+    options: ["va", "gr", "fr", "de"],
+    correctIdx: 1,
+    story: "От греческого scholé — «досуг», «свободное время для учёбы». Античные греки считали, что только свободный человек может учиться.",
+  },
+  {
+    word: "шоколад",
+    options: ["es", "mx", "fr", "it"],
+    correctIdx: 0,
+    story: "От испанского chocolate, заимствованного из ацтекского xocolātl — «горькая вода». В Россию пришло через Европу в 18 веке.",
+  },
+];
+
 // ─── Per-language router ───────────────────────────────────────
 const ROUNDS_BY_LANG: Record<string, WordPassportRound[]> = {
   en: WORD_PASSPORT_ROUNDS_EN,
   he: WORD_PASSPORT_ROUNDS_HE,
   ar: WORD_PASSPORT_ROUNDS_AR,
+  ru: WORD_PASSPORT_ROUNDS_RU,
 };
 
 export function pickWordPassportRounds(

@@ -463,10 +463,115 @@ const FALSE_FRIENDS_ROUNDS_AR: FalseFriendsRound[] = [
   },
 ];
 
+// ─── Russian content ───────────────────────────────────────────
+// Cross-language traps for a Russian speaker. Many false friends
+// involve English or other European languages that look similar to
+// Russian internationalisms but mean something different. Mix of
+// real cognates (~40%) and traps (~60%) so the game stays unpredictable.
+const FALSE_FRIENDS_ROUNDS_RU: FalseFriendsRound[] = [
+  {
+    foreignWord: "embarazada",
+    foreignFlag: "es",
+    foreignLang: "испанский",
+    englishTwin: "смущённая",
+    isReal: false,
+    story: "По-испански значит беременная. Скажи испанке, что ты embarazada — она вряд ли подумает о смущении.",
+  },
+  {
+    foreignWord: "Gift",
+    foreignFlag: "de",
+    foreignLang: "немецкий",
+    englishTwin: "подарок",
+    isReal: false,
+    story: "По-немецки Gift означает яд. Подарок по-немецки — Geschenk. Будь осторожен с тем, что предлагаешь в Берлине.",
+  },
+  {
+    foreignWord: "magasin",
+    foreignFlag: "fr",
+    foreignLang: "французский",
+    englishTwin: "журнал (magazine)",
+    isReal: false,
+    story: "По-французски magasin — это магазин. Журнал во французском — revue. Тот же корень, разные смыслы.",
+  },
+  {
+    foreignWord: "familia",
+    foreignFlag: "es",
+    foreignLang: "испанский",
+    englishTwin: "семья",
+    isReal: true,
+    story: "Настоящий близнец. Оба слова из латинского familia (домашние). Одно слово, один смысл через тысячелетия.",
+  },
+  {
+    foreignWord: "Kind",
+    foreignFlag: "de",
+    foreignLang: "немецкий",
+    englishTwin: "добрый (kind)",
+    isReal: false,
+    story: "По-немецки Kind — это ребёнок. Добрый по-немецки — nett. Две похожие буквы, два разных понятия.",
+  },
+  {
+    foreignWord: "Chef",
+    foreignFlag: "de",
+    foreignLang: "немецкий",
+    englishTwin: "повар (chef)",
+    isReal: false,
+    story: "По-немецки Chef — начальник. Повар — Koch. Оба слова от французского chef (глава), но разошлись по смыслам.",
+  },
+  {
+    foreignWord: "burro",
+    foreignFlag: "it",
+    foreignLang: "итальянский",
+    englishTwin: "осёл (как в испанском burro)",
+    isReal: false,
+    story: "По-итальянски burro — это масло. По-испански burro — осёл. Одно слово, две разные фермы.",
+  },
+  {
+    foreignWord: "preservativo",
+    foreignFlag: "it",
+    foreignLang: "итальянский",
+    englishTwin: "консервант",
+    isReal: false,
+    story: "По-итальянски preservativo — это презерватив. Пищевой консервант — conservante. Будь внимателен с этикетками.",
+  },
+  {
+    foreignWord: "actual",
+    foreignFlag: "es",
+    foreignLang: "испанский",
+    englishTwin: "актуальный",
+    isReal: true,
+    story: "Настоящий близнец. Оба слова от латинского actualis (действующий, текущий). Русский «актуальный» взял именно это значение.",
+  },
+  {
+    foreignWord: "intelligent",
+    foreignFlag: "fr",
+    foreignLang: "французский",
+    englishTwin: "интеллигентный",
+    isReal: false,
+    story: "По-французски intelligent — просто умный. Русский «интеллигентный» означает образованного и культурного. Семантика разошлась в 19 веке.",
+  },
+  {
+    foreignWord: "doctor",
+    foreignFlag: "es",
+    foreignLang: "испанский",
+    englishTwin: "доктор / врач",
+    isReal: true,
+    story: "Настоящий близнец. От латинского doctor (учитель). Медицинский смысл пришёл позже, но сохранился во всех европейских языках.",
+  },
+  {
+    foreignWord: "lecture",
+    foreignFlag: "fr",
+    foreignLang: "французский",
+    englishTwin: "лекция",
+    isReal: false,
+    story: "По-французски lecture — это чтение. Лекция по-французски — conférence. Распространённая ошибка изучающих французский.",
+  },
+];
+
 const ROUNDS_BY_LANG: Record<string, FalseFriendsRound[]> = {
   en: FALSE_FRIENDS_ROUNDS_EN,
   he: FALSE_FRIENDS_ROUNDS_HE,
   ar: FALSE_FRIENDS_ROUNDS_AR,
+  ru: FALSE_FRIENDS_ROUNDS_RU,
 };
 
 export function pickFalseFriendsRounds(
