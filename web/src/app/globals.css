@@ -11431,7 +11431,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   justify-content: center;
   width: 100%;
   padding: 11px 18px;
-  background: #CA8A04;
+  background: #0EA5A5;
   color: #FFFFFF;
   border: 0;
   border-radius: 10px;
@@ -11440,13 +11440,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 600;
   cursor: pointer;
   transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
-  box-shadow: 0 1px 2px rgba(202, 138, 4, 0.3), 0 8px 24px -8px rgba(202, 138, 4, 0.45);
+  box-shadow: 0 1px 2px rgba(14, 165, 165, 0.3), 0 8px 24px -8px rgba(14, 165, 165, 0.45);
 }
 .wordbook[dir="rtl"] .wb-school-cta { font-family: var(--wb-he); }
-.wordbook .wb-school-cta:hover { background: #A16207; }
+.wordbook .wb-school-cta:hover { background: rgb(13, 148, 148); }
 .wordbook .wb-school-cta:active { transform: scale(0.97); }
 .wordbook .wb-school-cta:focus-visible {
-  outline: 2px solid #A16207;
+  outline: 2px solid #0EA5A5;
   outline-offset: 3px;
 }
 
@@ -11939,12 +11939,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   width: 64px;
   height: 64px;
   border-radius: 12px;
-  background: #FEF3C7;
+  background: rgba(14, 165, 165, 0.10);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 1px solid #FCD34D;
+  border: 1px solid rgba(14, 165, 165, 0.3);
   overflow: hidden;
 }
 .wordbook .wb-school-logo-slot img {
@@ -11980,17 +11980,17 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: border-color 180ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
 }
 .wordbook .wb-classroom-row:hover {
-  border-color: #FCD34D;
-  box-shadow: 0 4px 12px -4px rgba(202, 138, 4, 0.18);
+  border-color: rgba(14, 165, 165, 0.4);
+  box-shadow: 0 4px 12px -4px rgba(14, 165, 165, 0.18);
 }
 .wordbook .wb-classroom-code {
   font-family: var(--wb-mono, ui-monospace, monospace);
   font-size: 18px;
   font-weight: 700;
-  color: #CA8A04;
+  color: #0EA5A5;
   letter-spacing: 0.08em;
   padding: 6px 10px;
-  background: #FEF3C7;
+  background: rgba(14, 165, 165, 0.10);
   border-radius: 8px;
   flex-shrink: 0;
 }
