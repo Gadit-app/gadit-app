@@ -1781,12 +1781,27 @@ export function SchoolsLandingClient() {
             <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {v2(lang, "navFeatures") || "Features"}
             </Link>
+            {user && (plan === "clear" || plan === "deep") && (
+              <Link href={href("/notebook")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navNotebook")}
+              </Link>
+            )}
+            {user && plan === "deep" && (
+              <Link href={href("/play")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navPlay")}
+              </Link>
+            )}
             <Link href={href("/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               Schools
             </Link>
             <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {v2(lang, "navPricing") || "Pricing"}
             </Link>
+            {user && (plan === "clear" || plan === "deep") && (
+              <Link href={href("/affiliates")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navAffiliates")}
+              </Link>
+            )}
             <div className="wb-shell-mobile-menu-sep" />
             {user ? (
               <Link href={href("/account")} onClick={() => setMenuOpen(false)}>

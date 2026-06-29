@@ -284,12 +284,34 @@ export function HomePage() {
         </div>
         {menuOpen && (
           <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
+            {/* Mirror the desktop nav exactly — same links, same plan
+                gating. Gadi (2026-06-29) flagged that the mobile burger
+                was missing Notebook/Play/Schools/Affiliates so a paying
+                user couldn't even reach their own surfaces on a phone. */}
             <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {c.features}
+            </Link>
+            {user && (plan === "clear" || plan === "deep") && (
+              <Link href={href("/notebook")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navNotebook")}
+              </Link>
+            )}
+            {user && plan === "deep" && (
+              <Link href={href("/play")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navPlay")}
+              </Link>
+            )}
+            <Link href={href("/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              Schools
             </Link>
             <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {c.pricing}
             </Link>
+            {user && (plan === "clear" || plan === "deep") && (
+              <Link href={href("/affiliates")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+                {v2(lang, "navAffiliates")}
+              </Link>
+            )}
             <div className="wb-shell-mobile-menu-sep" />
             {user ? (
               <Link href={href("/account")} onClick={() => setMenuOpen(false)}>
