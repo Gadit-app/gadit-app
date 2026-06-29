@@ -142,7 +142,7 @@ function SearchIcon({ size = 16 }: { size?: number }) {
 
 export function HomePage() {
   const { lang, dir, setLang } = useLang();
-  const { user, plan, promptLogin } = useAuth();
+  const { user, plan, schoolId, promptLogin } = useAuth();
   const router = useRouter();
   const href = useHref();
   const [query, setQuery] = useState("");
@@ -209,7 +209,7 @@ export function HomePage() {
           {user && plan === "deep" && (
             <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
           )}
-          <Link href={href("/schools")} className="wb-shell-navlink">Schools</Link>
+          <Link href={href(schoolId ? "/schools/manage" : "/schools")} className="wb-shell-navlink">Schools</Link>
           <Link href={href("/pricing")} className="wb-shell-navlink">{c.pricing}</Link>
           {user && (plan === "clear" || plan === "deep") && (
             <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>

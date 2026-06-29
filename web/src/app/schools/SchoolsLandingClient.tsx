@@ -12,14 +12,81 @@
  * users see the marketing page.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { v2 } from "@/lib/i18n-v2";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { StartFreeCTA } from "@/components/StartFreeCTA";
+
+// Same languages as HomeClient — duplicated rather than refactored so
+// the topbar on /schools mirrors the homepage exactly without coupling
+// the two files.
+const LANGS = [
+  { code: "he", label: "עברית", flag: "il" },
+  { code: "en", label: "English", flag: "gb" },
+  { code: "ar", label: "العربية", flag: "sa" },
+  { code: "ru", label: "Русский", flag: "ru" },
+  { code: "es", label: "Español", flag: "es" },
+  { code: "pt", label: "Português", flag: "pt" },
+  { code: "fr", label: "Français", flag: "fr" },
+  { code: "de", label: "Deutsch", flag: "de" },
+  { code: "cs", label: "Čeština", flag: "cz" },
+  { code: "sk", label: "Slovenčina", flag: "sk" },
+  { code: "it", label: "Italiano", flag: "it" },
+  { code: "ja", label: "日本語", flag: "jp" },
+  { code: "hi", label: "हिन्दी", flag: "in" },
+] as const;
+
+function LangSwitch() {
+  const { lang, setLang } = useLang();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    function onClick(e: MouseEvent) {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setOpen(false); }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const active = LANGS.find((l) => l.code === lang) ?? LANGS[1];
+  return (
+    <div ref={wrapRef} className="wb-lang-chip-wrap">
+      <button type="button" className="wb-lang-chip" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
+        </svg>
+        {active.label}
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+      {open && (
+        <ul className="wb-lang-menu" role="listbox">
+          {LANGS.map((l) => (
+            <li key={l.code}>
+              <button type="button" role="option" aria-selected={l.code === lang} className={l.code === lang ? "is-active" : ""} onClick={() => { setLang(l.code); setOpen(false); }}>
+                <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 type T = {
   // Hero
@@ -766,53 +833,163 @@ const COPY: Record<string, T> = {
 };
 
 export function SchoolsLandingClient() {
-  const { user, plan, loading } = useAuth();
+  const { user, plan, schoolId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
   const t = COPY[lang] ?? COPY.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const burgerRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
-  // School owners get bounced to their dashboard. We detect that via
-  // schoolId on the user doc (set by the webhook OR our manual grant).
-  // Plan="deep" + schoolId === uid is the canonical "Schools owner" check.
+  // Close mobile menu on outside-click + Escape
   useEffect(() => {
-    if (loading || !user) return;
-    void (async () => {
-      try {
-        const { getFirestore, doc, getDoc } = await import("firebase/firestore");
-        const { getApps } = await import("firebase/app");
-        if (getApps().length === 0) return;
-        const db = getFirestore();
-        const snap = await getDoc(doc(db, "users", user.uid));
-        const data = snap.data() as { schoolId?: string } | undefined;
-        if (data?.schoolId && data.schoolId === user.uid) {
-          router.replace(href("/schools/manage"));
-        }
-      } catch {
-        // Network or permission error means we just render the landing.
-        // The user can still navigate to /schools/manage manually.
-      }
-    })();
-  }, [loading, user, plan, router, href]);
+    if (!menuOpen) return;
+    function onClick(e: MouseEvent) {
+      const target = e.target as Node;
+      if (menuRef.current?.contains(target)) return;
+      if (burgerRef.current?.contains(target)) return;
+      setMenuOpen(false);
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  // Auto-redirect for school owners REMOVED (2026-06-29): Gadi wants
+  // school owners to be able to see the landing too, e.g. for QA or to
+  // share the URL with a colleague. The "Schools" link in the main
+  // topbar is now smart on its own (HomeClient routes school owners
+  // straight to /schools/manage), so direct visitors to /schools who
+  // are school owners are intentional and should see the page.
+  void router; // keep router available for future use without lint complaint
 
   return (
     <div className="wordbook wb-shell-page wb-schools-landing" dir={dir}>
-      {/* Minimal topbar — just wordmark + lang + (if logged in) avatar.
-          Schools landing intentionally hides the main-nav links so cold
-          visitors stay focused on the trial CTA. */}
-      <header className="wb-shell-topbar">
-        <Link href={href("/")} className="wb-shell-wordmark" dir="ltr">
-          Gad<span className="wb-shell-wordmark-it">it</span>
+      {/* Full Gadit topbar — identical to the homepage so brand chrome
+          stays consistent across surfaces. "Schools" is highlighted as
+          the active page. Smart routing: for users who already own a
+          schools subscription, the Schools link points at their
+          dashboard so they don't get bounced from the marketing copy. */}
+      <header className={`wb-shell-topbar ${menuOpen ? "is-menu-open" : ""}`}>
+        <Link href={href("/")} className="wb-wordmark" dir="ltr">
+          Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <nav className="wb-shell-nav">
-          <Link href={href("/pricing")} className="wb-shell-navlink">Pricing</Link>
-          <Link href={href("/features")} className="wb-shell-navlink">Features</Link>
+          <Link href={href("/")} className="wb-shell-navlink wb-shell-navlink-icon" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="m20 20-4-4" />
+            </svg>
+          </Link>
+          <Link href={href("/features")} className="wb-shell-navlink">{v2(lang, "navFeatures") || "Features"}</Link>
+          {user && (plan === "clear" || plan === "deep") && (
+            <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
+          )}
+          {user && plan === "deep" && (
+            <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
+          )}
+          <Link
+            href={href(schoolId ? "/schools/manage" : "/schools")}
+            className="wb-shell-navlink is-active"
+          >
+            Schools
+          </Link>
+          <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing") || "Pricing"}</Link>
+          {user && (plan === "clear" || plan === "deep") && (
+            <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
+          )}
         </nav>
         <div className="wb-shell-actions">
-          <LangSwitchMobile />
-          {user && <WbUserMenu />}
+          {user && (
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+          )}
+          <LangSwitch />
+          {user ? (
+            <WbUserMenu />
+          ) : (
+            <>
+              <StartFreeCTA />
+              <button
+                type="button"
+                className="wb-shell-link"
+                onClick={() => promptLogin({ mode: "signin" })}
+              >
+                Sign in
+              </button>
+            </>
+          )}
         </div>
+        <div className="wb-shell-mobile-cta">
+          <StartFreeCTA />
+        </div>
+        {user && (
+          <div className="wb-shell-mobile-identity">
+            <ShareButton
+              url="https://www.gadit.app/"
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+            <WbUserMenu />
+          </div>
+        )}
+        <div className="wb-shell-mobile-menu-cluster">
+          <LangSwitchMobile />
+          <button
+            ref={burgerRef}
+            type="button"
+            className="wb-shell-burger"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+        {menuOpen && (
+          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
+            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navFeatures") || "Features"}
+            </Link>
+            <Link href={href(schoolId ? "/schools/manage" : "/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              Schools
+            </Link>
+            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+              {v2(lang, "navPricing") || "Pricing"}
+            </Link>
+            <div className="wb-shell-mobile-menu-sep" />
+            {user ? (
+              <Link href={href("/account")} onClick={() => setMenuOpen(false)}>
+                {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
+              </Link>
+            ) : (
+              <button type="button" onClick={() => { setMenuOpen(false); promptLogin({ mode: "signin" }); }}>
+                Sign in
+              </button>
+            )}
+          </div>
+        )}
       </header>
 
       {/* ─── 1. HERO ─────────────────────────────────────────────── */}
