@@ -443,10 +443,108 @@ const TWIN_TRAP_ROUNDS_HE: TwinTrapRound[] = [
   },
 ];
 
+// ─── Arabic content (MSA) ──────────────────────────────────────
+// Modern Standard Arabic confusables. Focuses on (a) prepositional
+// confusions (إلى/على, بعد/بعض), (b) homophone traps (شيء/سيء,
+// مال/ماء), (c) particles that learners blur (إنّ/أنّ, متى/حتى).
+const TWIN_TRAP_ROUNDS_AR: TwinTrapRound[] = [
+  {
+    sentence: "ذهبتُ ____ المدرسة في الصباح.",
+    options: ["إلى", "على"],
+    correctIdx: 0,
+    explain: "إلى تشير إلى الاتجاه. على تشير إلى الموقع فوق شيء.",
+  },
+  {
+    sentence: "وضعتُ الكتاب ____ الطاولة.",
+    options: ["إلى", "على"],
+    correctIdx: 1,
+    explain: "على تعني فوق سطح. إلى تعني الانتقال نحو غاية.",
+  },
+  {
+    sentence: "____ الناس يفضّلون القراءة في المساء.",
+    options: ["بعد", "بعض"],
+    correctIdx: 1,
+    explain: "بعض = جزء من مجموع. بعد = ظرف للزمن أو المكان اللاحق.",
+  },
+  {
+    sentence: "وصل القطار ____ ساعةٍ من الانتظار.",
+    options: ["بعد", "بعض"],
+    correctIdx: 0,
+    explain: "بعد ظرف زمان. بعض اسم للجزء. التشابه في الكتابة يخدع الكثيرين.",
+  },
+  {
+    sentence: "____ ستأتي إلى الحفلة؟",
+    options: ["متى", "حتى"],
+    correctIdx: 0,
+    explain: "متى أداة استفهام عن الزمن. حتى حرف جر يعني الغاية أو الانتهاء.",
+  },
+  {
+    sentence: "سننتظركم ____ المساء.",
+    options: ["متى", "حتى"],
+    correctIdx: 1,
+    explain: "حتى تدل على نهاية مدة. متى تسأل عن الزمن.",
+  },
+  {
+    sentence: "هذا ____ جميل يستحق المشاهدة.",
+    options: ["شيء", "سيء"],
+    correctIdx: 0,
+    explain: "شيء = أيّ موجود. سيء = صفة سلبية. الفرق همزة.",
+  },
+  {
+    sentence: "كان الفيلم ____ ولم يعجبني.",
+    options: ["شيء", "سيء"],
+    correctIdx: 1,
+    explain: "سيء صفة الذمّ. شيء اسم محايد. الهمزة الواحدة تغيّر المعنى.",
+  },
+  {
+    sentence: "اشتريتُ كأسًا من ____ البارد.",
+    options: ["مال", "ماء"],
+    correctIdx: 1,
+    explain: "ماء = السائل. مال = النقود. اختلاف الهمزة عن اللام يقلب المعنى.",
+  },
+  {
+    sentence: "لا تنفق كل ____ في يومٍ واحد.",
+    options: ["مال", "ماء"],
+    correctIdx: 0,
+    explain: "مال يعني الثروة والنقود. ماء يعني السائل. اللام بدل الهمزة.",
+  },
+  {
+    sentence: "قال المعلم ____ الجو جميل اليوم.",
+    options: ["إنّ", "أنّ"],
+    correctIdx: 0,
+    explain: "إنّ تأتي في بداية الجملة، خاصة بعد قال. أنّ تأتي بعد أفعال أخرى.",
+  },
+  {
+    sentence: "أعتقدُ ____ الامتحان سيكون سهلاً.",
+    options: ["إنّ", "أنّ"],
+    correctIdx: 1,
+    explain: "أنّ بعد أفعال القلوب (أعتقد، أظن). إنّ بعد القول.",
+  },
+  {
+    sentence: "أحبّ ____ الناس الطيبين.",
+    options: ["كل", "كلّ"],
+    correctIdx: 1,
+    explain: "كلّ بالشدّة تعني جميع. كل بدونها فعل من فعل (تَعِبَ).",
+  },
+  {
+    sentence: "____ الكتاب مكتوبٌ بخط جميل.",
+    options: ["هذا", "هاذا"],
+    correctIdx: 0,
+    explain: "هذا الصواب. هاذا بألف خطأ شائع. اسم الإشارة بدون مد.",
+  },
+  {
+    sentence: "الطالب ____ نجح بتفوق.",
+    options: ["الذي", "اللذي"],
+    correctIdx: 0,
+    explain: "الذي بلام واحدة هو الصواب. اللذي بلامين خطأ إملائي.",
+  },
+];
+
 // ─── Per-language router ───────────────────────────────────────
 const ROUNDS_BY_LANG: Record<string, TwinTrapRound[]> = {
   en: TWIN_TRAP_ROUNDS_EN,
   he: TWIN_TRAP_ROUNDS_HE,
+  ar: TWIN_TRAP_ROUNDS_AR,
 };
 
 export function pickTwinTrapRounds(

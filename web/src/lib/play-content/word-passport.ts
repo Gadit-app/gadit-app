@@ -92,9 +92,35 @@ const LANG_LABEL_HE: Record<OriginCountry, string> = {
   ca: "אינואיט / אלגונקווין",
 };
 
+const LANG_LABEL_AR: Record<OriginCountry, string> = {
+  sa: "العربية",
+  in: "الهندية / السنسكريتية",
+  cn: "الصينية",
+  jp: "اليابانية",
+  de: "الألمانية",
+  fr: "الفرنسية",
+  es: "الإسبانية",
+  it: "الإيطالية",
+  nl: "الهولندية",
+  ru: "الروسية",
+  cz: "التشيكية",
+  ir: "الفارسية",
+  tr: "التركية",
+  gr: "اليونانية",
+  va: "اللاتينية",
+  no: "الإسكندنافية القديمة",
+  is: "الأيسلندية",
+  mx: "الناهواتل (الأزتكية)",
+  au: "لغات أبوريجين أستراليا",
+  ke: "السواحيلية",
+  ng: "لغات غرب أفريقيا",
+  ca: "الإنويت / الألغونكوية",
+};
+
 const LANG_LABEL_BY_CONTENT_LANG: Record<string, Record<OriginCountry, string>> = {
   en: LANG_LABEL_EN,
   he: LANG_LABEL_HE,
+  ar: LANG_LABEL_AR,
 };
 
 export function getLangLabel(country: OriginCountry, contentLang: string): string {
@@ -367,10 +393,91 @@ const WORD_PASSPORT_ROUNDS_HE: WordPassportRound[] = [
   },
 ];
 
+// ─── Arabic content (MSA) ──────────────────────────────────────
+// Arabic absorbed words from Persian (the great cultural neighbour),
+// Turkish (the Ottoman administrative legacy), Greek and Latin (science
+// and philosophy), and modern European languages. Each round reveals
+// a daily word's hidden journey.
+const WORD_PASSPORT_ROUNDS_AR: WordPassportRound[] = [
+  {
+    word: "بَنَفسج",
+    options: ["ir", "gr", "sa", "in"],
+    correctIdx: 0,
+    story: "من الفارسية بَنَفشَه. دخلت العربية في العصر العبّاسي عبر التبادل الثقافي مع بلاد فارس. اسم الزهرة لم يتغيّر.",
+  },
+  {
+    word: "بُرْتُقال",
+    options: ["ir", "it", "es", "gr"],
+    correctIdx: 1,
+    story: "من Portogallo الإيطالية، اسم البلد البرتغال. كان البرتغاليون أول من جلب البرتقال الحلو من الصين عبر طريق التجارة.",
+  },
+  {
+    word: "كَنَبة",
+    options: ["fr", "tr", "ir", "gr"],
+    correctIdx: 1,
+    story: "من التركية kanepe، التي أخذتها من الفرنسية canapé. دخلت العربية مع العصر العثماني وأثاث المنازل الأوروبي.",
+  },
+  {
+    word: "خِيار",
+    options: ["sa", "ir", "tr", "gr"],
+    correctIdx: 1,
+    story: "من الفارسية خِيار (الاسم نفسه). يدلّ في الفارسية على الخضار المعروف. عبر طريق التجارة الفارسي.",
+  },
+  {
+    word: "شَطرَنج",
+    options: ["in", "ir", "cn", "gr"],
+    correctIdx: 1,
+    story: "من الفارسية چترنگ، وأصلها السنسكريتية تشاتورانغا (الأربعة الأركان). لعبة هندية الأصل وصلت العرب عبر الفُرس.",
+  },
+  {
+    word: "تِلِفون",
+    options: ["va", "gr", "fr", "de"],
+    correctIdx: 1,
+    story: "من اليونانية tele (بعيد) + phone (صوت). اخترعه ألكسندر غراهام بيل عام 1876، واسمه ظلّ كما هو في كلّ اللغات.",
+  },
+  {
+    word: "فَلسَفة",
+    options: ["va", "gr", "ir", "in"],
+    correctIdx: 1,
+    story: "من اليونانية philosophía (حُبّ الحِكمة). دخلت العربية في العصر العبّاسي مع ترجمات بيت الحكمة في بغداد.",
+  },
+  {
+    word: "ديوان",
+    options: ["sa", "ir", "tr", "in"],
+    correctIdx: 1,
+    story: "من الفارسية دیوان. كانت تعني السجلّ الإداري لدى الفرس. أخذها العرب لتعني مجموعة الشعر أو مجلس الحكم.",
+  },
+  {
+    word: "بَنطَلون",
+    options: ["fr", "it", "de", "tr"],
+    correctIdx: 0,
+    story: "من الفرنسية pantalon. دخلت العربية في القرن التاسع عشر مع الموضة الأوروبية. الاسم الأصلي شخصية كوميديا إيطالية.",
+  },
+  {
+    word: "قَهوة",
+    options: ["sa", "ir", "ke", "in"],
+    correctIdx: 0,
+    story: "أصلها عربيّ من الجذر ق.هـ.و. (يُذهب الشهية للنوم). البنّ من إثيوبيا (عبر اليمن)، لكن الاسم عربي خالص.",
+  },
+  {
+    word: "نَرجِس",
+    options: ["ir", "gr", "sa", "in"],
+    correctIdx: 1,
+    story: "من اليونانية نَركيسوس (شخصية الميثولوجيا اليونانية). دخلت العربية في العصر العبّاسي مع شعر الورد والطبيعة.",
+  },
+  {
+    word: "كِتاب",
+    options: ["sa", "ir", "gr", "va"],
+    correctIdx: 0,
+    story: "كلمة عربية خالصة من الجذر ك.ت.ب. صدّرتها العربية إلى الفارسية والتركية والأوردية. لا تقع في فخّ الاقتراض.",
+  },
+];
+
 // ─── Per-language router ───────────────────────────────────────
 const ROUNDS_BY_LANG: Record<string, WordPassportRound[]> = {
   en: WORD_PASSPORT_ROUNDS_EN,
   he: WORD_PASSPORT_ROUNDS_HE,
+  ar: WORD_PASSPORT_ROUNDS_AR,
 };
 
 export function pickWordPassportRounds(

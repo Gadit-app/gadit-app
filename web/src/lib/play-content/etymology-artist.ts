@@ -217,9 +217,88 @@ const ETYMOLOGY_ARTIST_ROUNDS_HE: EtymologyArtistRound[] = [
   },
 ];
 
+// ─── Arabic content (MSA) ──────────────────────────────────────
+// Arabic etymology offers surprises in two directions: foreign loans
+// whose literal meaning is hidden (شطرنج = four corners in Sanskrit),
+// and native Arabic compounds whose root meaning is forgotten under
+// daily use (مفتاح = the thing that opens).
+const ETYMOLOGY_ARTIST_ROUNDS_AR: EtymologyArtistRound[] = [
+  {
+    literal: "الأركان الأربعة",
+    origin: "السنسكريتية تشاتورانغا",
+    options: ["شطرنج", "نَرد", "بَطاقة", "ميدالية"],
+    correctIdx: 0,
+    story: "تشاتورانغا = الأركان الأربعة (الفيلة، الخيل، العَربات، المُشاة). دخلت العربية عبر الفارسية وصارت شطرنج.",
+  },
+  {
+    literal: "ما يَفتح",
+    origin: "العربية فَتَح",
+    options: ["باب", "مفتاح", "نافذة", "قُفل"],
+    correctIdx: 1,
+    story: "من الجذر ف.ت.ح على وزن مِفعال للأداة. مفتاح حرفيًّا = الشيء الذي به نَفتح. اللغة العربية تَكشف هندستها.",
+  },
+  {
+    literal: "حُبّ الحِكمة",
+    origin: "اليونانية philos + sophia",
+    options: ["فَلسَفة", "حِكمة", "عِلم", "بَلاغة"],
+    correctIdx: 0,
+    story: "philos = حبّ، sophia = حكمة. الفيلسوف حرفيًّا = محبّ الحكمة. دخلت العربية عبر ترجمات بيت الحكمة العبّاسي.",
+  },
+  {
+    literal: "البَيت الواسع",
+    origin: "العربية مَنزَل",
+    options: ["دار", "منزل", "قَصر", "غُرفة"],
+    correctIdx: 1,
+    story: "منزل من ن.ز.ل = موضع النزول. حرفيًّا = المكان الذي يَنزل فيه الناس بعد سفرٍ أو يومٍ طويل. مفهوم البَدَوي.",
+  },
+  {
+    literal: "آلة التبريد بالثلج",
+    origin: "العربية ثَلج",
+    options: ["مكيّف", "مِروَحة", "ثلّاجة", "بَرّاد"],
+    correctIdx: 2,
+    story: "ثَلّاجة من الفعل أَثلَجَ (جَعل باردًا كالثلج). الاسم مُعَدّ في القرن العشرين بالعربية الفصحى الحديثة.",
+  },
+  {
+    literal: "البَحر المَكتوب",
+    origin: "اليونانية ωκεανός",
+    options: ["قاموس", "مَوسوعة", "خَريطة", "أطلس"],
+    correctIdx: 0,
+    story: "أوكيانوس عند الإغريق = المحيط الذي يَدور حول الأرض. صارت قاموس بمعنى محيط واسع من المعرفة المكتوبة.",
+  },
+  {
+    literal: "حامِل الكواكب",
+    origin: "اليونانية Άτλας",
+    options: ["جُغرافيا", "خَريطة", "أطلس", "مِنطاد"],
+    correctIdx: 2,
+    story: "أطلس البطل الإغريقي الذي حَمل الكُرة الأرضية على كَتفيه. في القرن السادس عشر اشترى جيرارد ميركاتور الاسم لكتاب خَرائطه.",
+  },
+  {
+    literal: "نَجم البَحر",
+    origin: "العربية نَجم + بَحر",
+    options: ["نَجمة البَحر", "قِنديل البحر", "حورية", "صَدف"],
+    correctIdx: 0,
+    story: "تركيب عربي خالص. نجم + بحر = الكائن الذي يَنتمي إلى الفئتين. كثير من الترجمات العلمية اعتمدت هذا النمط.",
+  },
+  {
+    literal: "بَيت العِلم",
+    origin: "العربية بَيت + عِلم",
+    options: ["مَكتبة", "مَدرسة", "بَيت الحِكمة", "جامِعة"],
+    correctIdx: 2,
+    story: "بيت الحكمة كان أعظم مؤسّسة علميّة في القرون الذهبية. أسّسه هارون الرشيد، طوّره المأمون. كل ترجمات اليونان مرّت منه.",
+  },
+  {
+    literal: "ما يُقدَّم للضيف",
+    origin: "العربية ضَيافة",
+    options: ["مأدبة", "حَفلة", "ضِيافة", "كَرَم"],
+    correctIdx: 2,
+    story: "ضِيافة من ض.ي.ف = استقبال الضيف. أصبحت تَشمل كل ما يُقدّم للزائر من طعام وراحة. قيمة عربيّة جوهريّة.",
+  },
+];
+
 const ROUNDS_BY_LANG: Record<string, EtymologyArtistRound[]> = {
   en: ETYMOLOGY_ARTIST_ROUNDS_EN,
   he: ETYMOLOGY_ARTIST_ROUNDS_HE,
+  ar: ETYMOLOGY_ARTIST_ROUNDS_AR,
 };
 
 export function pickEtymologyArtistRounds(

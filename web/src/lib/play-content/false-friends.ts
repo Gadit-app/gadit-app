@@ -360,9 +360,113 @@ const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
   },
 ];
 
+// ─── Arabic content (MSA) ──────────────────────────────────────
+// Cross-language traps for an Arabic-speaking learner. Focus on English
+// and European words an Arab tourist or learner would encounter that
+// look familiar but mean something else entirely.
+const FALSE_FRIENDS_ROUNDS_AR: FalseFriendsRound[] = [
+  {
+    foreignWord: "embarazada",
+    foreignFlag: "es",
+    foreignLang: "الإسبانية",
+    englishTwin: "مُحرَج (مثل embarrassed بالإنجليزية)",
+    isReal: false,
+    story: "في الإسبانية تعني حامل (في الحمل). تخيّل أن تقول لإسبانية أنّك embarazada فتفاجأ بنظرتها.",
+  },
+  {
+    foreignWord: "Gift",
+    foreignFlag: "de",
+    foreignLang: "الألمانية",
+    englishTwin: "هدية",
+    isReal: false,
+    story: "في الألمانية Gift تعني سُمّ. الهدية بالألمانية Geschenk. لا تقدّم لألماني Gift دون انتباه.",
+  },
+  {
+    foreignWord: "librairie",
+    foreignFlag: "fr",
+    foreignLang: "الفرنسية",
+    englishTwin: "مكتبة",
+    isReal: false,
+    story: "في الفرنسية librairie تعني المكتبة التي تبيع الكتب. المكتبة العامة هي bibliothèque. خطأ شائع للسائحين.",
+  },
+  {
+    foreignWord: "familia",
+    foreignFlag: "es",
+    foreignLang: "الإسبانية",
+    englishTwin: "عائلة",
+    isReal: true,
+    story: "توأم حقيقي. كلتا الكلمتين من اللاتينية familia (الأسرة). نفس الجذر، نفس المعنى عبر القرون.",
+  },
+  {
+    foreignWord: "sensible",
+    foreignFlag: "fr",
+    foreignLang: "الفرنسية",
+    englishTwin: "عاقل / حكيم",
+    isReal: false,
+    story: "في الفرنسية sensible تعني حسّاس عاطفيًا. العاقل بالفرنسية raisonnable. التشابه في الكتابة خادع.",
+  },
+  {
+    foreignWord: "Kind",
+    foreignFlag: "de",
+    foreignLang: "الألمانية",
+    englishTwin: "لطيف",
+    isReal: false,
+    story: "في الألمانية Kind تعني طفل. اللطيف بالألمانية nett أو freundlich. كلمتان متشابهتان بمعنيين مختلفين تمامًا.",
+  },
+  {
+    foreignWord: "burro",
+    foreignFlag: "it",
+    foreignLang: "الإيطالية",
+    englishTwin: "حمار (مثل بالإسبانية)",
+    isReal: false,
+    story: "في الإيطالية burro تعني زبدة. في الإسبانية الحرف نفسه burro يعني الحمار. لغتان أختان، معنيان متباعدان.",
+  },
+  {
+    foreignWord: "preservativo",
+    foreignFlag: "it",
+    foreignLang: "الإيطالية",
+    englishTwin: "مادة حافظة للطعام",
+    isReal: false,
+    story: "في الإيطالية preservativo تعني واقي ذكري. مادة الحفظ الغذائية بالإيطالية هي conservante. انتبه لقراءة المُلصقات.",
+  },
+  {
+    foreignWord: "musica",
+    foreignFlag: "it",
+    foreignLang: "الإيطالية",
+    englishTwin: "موسيقى",
+    isReal: true,
+    story: "توأم حقيقي. من اليونانية mousiké (فنّ الموزات). نفس الكلمة في كلّ اللغات الأوروبية، ووصلت العربية كذلك.",
+  },
+  {
+    foreignWord: "actual",
+    foreignFlag: "es",
+    foreignLang: "الإسبانية",
+    englishTwin: "فعلي / حقيقي (مثل actual بالإنجليزية)",
+    isReal: false,
+    story: "في الإسبانية actual تعني حالي / معاصر. الفعلي بالإسبانية real. الصلة بالإنجليزية actual مضلّلة تمامًا.",
+  },
+  {
+    foreignWord: "doctor",
+    foreignFlag: "es",
+    foreignLang: "الإسبانية",
+    englishTwin: "طبيب",
+    isReal: true,
+    story: "توأم حقيقي. من اللاتينية doctor (المعلّم). الطبيب والمحاضر الجامعي يحملان نفس اللقب في كثير من اللغات.",
+  },
+  {
+    foreignWord: "lecture",
+    foreignFlag: "fr",
+    foreignLang: "الفرنسية",
+    englishTwin: "محاضرة",
+    isReal: false,
+    story: "في الفرنسية lecture تعني القراءة. المحاضرة هي conférence أو cours. خطأ شائع لمن يتعلّم الفرنسية من الإنجليزية.",
+  },
+];
+
 const ROUNDS_BY_LANG: Record<string, FalseFriendsRound[]> = {
   en: FALSE_FRIENDS_ROUNDS_EN,
   he: FALSE_FRIENDS_ROUNDS_HE,
+  ar: FALSE_FRIENDS_ROUNDS_AR,
 };
 
 export function pickFalseFriendsRounds(
