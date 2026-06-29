@@ -1646,8 +1646,40 @@ export function SchoolsLandingClient() {
   // are school owners are intentional and should see the page.
   void router; // keep router available for future use without lint complaint
 
+  // Localized "you already have Schools" banner copy. Shown to logged-in
+  // school owners so they have a one-click path to their dashboard
+  // without losing access to the landing page itself.
+  const ownerBannerCopy: Record<string, { text: string; cta: string }> = {
+    en: { text: "You're on the Schools plan.", cta: "Go to my dashboard →" },
+    he: { text: "המנוי Schools פעיל אצלך.", cta: "מעבר לדשבורד →" },
+    ar: { text: "خطة Schools نشطة لديك.", cta: "إلى لوحة التحكم ←" },
+    ru: { text: "У вас активен тариф Schools.", cta: "В мою панель →" },
+    cs: { text: "Máte aktivní tarif Schools.", cta: "Přejít na panel →" },
+    sk: { text: "Máte aktívny tarif Schools.", cta: "Prejsť na panel →" },
+    hi: { text: "आपके पास Schools प्लान सक्रिय है।", cta: "मेरे डैशबोर्ड पर जाएँ →" },
+    es: { text: "Tienes el plan Schools activo.", cta: "Ir a mi panel →" },
+    pt: { text: "Você tem o plano Schools ativo.", cta: "Ir ao meu painel →" },
+    fr: { text: "Vous êtes sur le plan Schools.", cta: "Aller à mon tableau de bord →" },
+    de: { text: "Sie haben den Schools-Tarif aktiv.", cta: "Zum Dashboard →" },
+    it: { text: "Hai il piano Schools attivo.", cta: "Vai alla mia dashboard →" },
+    ja: { text: "Schoolsプランがアクティブです。", cta: "ダッシュボードへ →" },
+  };
+  const banner = ownerBannerCopy[lang] ?? ownerBannerCopy.en;
+
   return (
     <div className="wordbook wb-shell-page wb-schools-landing" dir={dir}>
+      {/* Owner banner — shown only to users with an active Schools sub.
+          Visible just below the topbar, above the hero, so the path to
+          their dashboard is one click away without forcing a redirect. */}
+      {schoolId && (
+        <div className="wb-schools-owner-banner">
+          <span>{banner.text}</span>
+          <Link href={href("/schools/manage")} className="wb-schools-owner-banner-cta">
+            {banner.cta}
+          </Link>
+        </div>
+      )}
+
       {/* Full Gadit topbar — identical to the homepage so brand chrome
           stays consistent across surfaces. "Schools" is highlighted as
           the active page. Smart routing: for users who already own a
@@ -1672,7 +1704,7 @@ export function SchoolsLandingClient() {
             <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
           )}
           <Link
-            href={href(schoolId ? "/schools/manage" : "/schools")}
+            href={href("/schools")}
             className="wb-shell-navlink is-active"
           >
             Schools
@@ -1749,7 +1781,7 @@ export function SchoolsLandingClient() {
             <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {v2(lang, "navFeatures") || "Features"}
             </Link>
-            <Link href={href(schoolId ? "/schools/manage" : "/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
+            <Link href={href("/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               Schools
             </Link>
             <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
