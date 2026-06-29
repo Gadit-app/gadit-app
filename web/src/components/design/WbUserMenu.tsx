@@ -267,13 +267,16 @@ export function WbUserMenu() {
           )}
           {/* My school menu item appears only for owners of a Schools
               subscription (schoolId === own uid). The principal lands
-              on /schools to manage classrooms + see weekly word
-              digests. Teachers (when we add a teacher seat in V2)
-              would route somewhere else. */}
+              on /schools/manage to manage classrooms + see weekly word
+              digests. Gadi (2026-06-29) flagged that this was routing
+              to /schools (the marketing landing) which is wrong for an
+              owner who clicked "My school" expecting their dashboard.
+              Teachers (when we add a teacher seat in V2) would route
+              somewhere else. */}
           {schoolId && user.uid === schoolId && (
             <Link
               role="menuitem"
-              href={href("/schools")}
+              href={href("/schools/manage")}
               onClick={() => setOpen(false)}
               style={{
                 display: "block",
