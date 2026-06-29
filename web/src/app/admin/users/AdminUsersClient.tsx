@@ -41,6 +41,8 @@ const STRINGS: Record<AdminLang, {
   statBasic: string;
   statClear: string;
   statDeep: string;
+  statPaying: string;
+  statPayingTooltip: string;
   byCountry: string;
   searchPlaceholder: string;
   allPlans: string;
@@ -84,6 +86,8 @@ const STRINGS: Record<AdminLang, {
     statBasic: "Basic",
     statClear: "Clear",
     statDeep: "Deep",
+    statPaying: "Paying",
+    statPayingTooltip: "Active or trialing Stripe subscriptions. Excludes family members and manual grants.",
     byCountry: "BY COUNTRY",
     searchPlaceholder: "Search email or uid…",
     allPlans: "All plans",
@@ -127,6 +131,8 @@ const STRINGS: Record<AdminLang, {
     statBasic: "Basic",
     statClear: "Clear",
     statDeep: "Deep",
+    statPaying: "משלמים בפועל",
+    statPayingTooltip: "מנויי Stripe פעילים או בתקופת ניסיון. ללא בני משפחה והקצאות ידניות.",
     byCountry: "לפי מדינה",
     searchPlaceholder: "חיפוש לפי אימייל או מזהה…",
     allPlans: "כל המסלולים",
@@ -165,6 +171,7 @@ type ApiResponse = {
     total: number;
     filtered: number;
     byPlan: { basic: number; clear: number; deep: number };
+    paying: { total: number; clear: number; deep: number };
     byCountry: Record<string, number>;
     signupsLast7Days: number;
     signupsLast30Days: number;
@@ -445,6 +452,18 @@ export default function AdminUsersClient() {
             <StatCard label={t.statBasic} value={data.counts.byPlan.basic} accent="#9CA3AF" />
             <StatCard label={t.statClear} value={data.counts.byPlan.clear} accent="#0EA5A5" />
             <StatCard label={t.statDeep} value={data.counts.byPlan.deep} accent="#7C3AED" />
+            {/* Paying = real Stripe subscriptions (active or trialing).
+                Excludes Family members and manual grants. Gadi
+                (2026-06-29) flagged that the Deep count above mixes
+                paying subscribers with manually-added family/schools
+                members and was misleading. This card cuts through. */}
+            <StatCard
+              label={t.statPaying}
+              value={data.counts.paying.total}
+              accent="#059669"
+              title={t.statPayingTooltip}
+              sublabel={`${data.counts.paying.deep} Deep · ${data.counts.paying.clear} Clear`}
+            />
           </div>
         )}
 
@@ -724,15 +743,35 @@ function Th({
   );
 }
 
-function StatCard({ label, value, accent }: { label: string; value: number; accent?: string }) {
+function StatCard({
+  label,
+  value,
+  accent,
+  title,
+  sublabel,
+}: {
+  label: string;
+  value: number;
+  accent?: string;
+  title?: string;
+  sublabel?: string;
+}) {
   return (
-    <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}>
+    <div
+      title={title}
+      style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}
+    >
       <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", letterSpacing: 0.5, textTransform: "uppercase" }}>
         {label}
       </div>
       <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>
         {value.toLocaleString()}
       </div>
+      {sublabel && (
+        <div style={{ fontSize: 11, fontWeight: 500, color: "#6B7280", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>
+          {sublabel}
+        </div>
+      )}
     </div>
   );
 }

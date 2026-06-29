@@ -159,6 +159,15 @@ export async function GET(req: NextRequest) {
   filtered.sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
 
   // ---------- 4) Aggregates for the dashboard header ----------
+  // "Paying" = went through Stripe Checkout and currently has an active
+  // or trialing subscription. Gadi (2026-06-29) flagged that the plain
+  // byPlan.deep count was misleading because it inflates with manually-
+  // granted Family members, manual Schools trials, and other non-paying
+  // upgrades. The paying counts answer "how many people have given us
+  // real money this month" honestly.
+  const isPayingRow = (r: typeof rows[number]) =>
+    r.subscriptionStatus === "active" || r.subscriptionStatus === "trialing";
+  const paying = rows.filter(isPayingRow);
   const counts = {
     total: rows.length,
     filtered: filtered.length,
@@ -166,6 +175,11 @@ export async function GET(req: NextRequest) {
       basic: rows.filter((r) => r.plan === "basic").length,
       clear: rows.filter((r) => r.plan === "clear").length,
       deep:  rows.filter((r) => r.plan === "deep").length,
+    },
+    paying: {
+      total: paying.length,
+      clear: paying.filter((r) => r.plan === "clear").length,
+      deep:  paying.filter((r) => r.plan === "deep").length,
     },
     byCountry: Object.fromEntries(
       Object.entries(
