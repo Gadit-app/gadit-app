@@ -445,7 +445,7 @@ export default function AdminUsersClient() {
             matters in Hebrew where "סך משתמשים" and "הרשמות · 30 ימים"
             measure very differently. */}
         {data && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(132px, 1fr))", gap: 10, marginBottom: 24 }}>
             <StatCard label={t.statTotalUsers} value={data.counts.total} />
             <StatCard label={t.statSignups7} value={data.counts.signupsLast7Days} />
             <StatCard label={t.statSignups30} value={data.counts.signupsLast30Days} />
@@ -759,16 +759,16 @@ function StatCard({
   return (
     <div
       title={title}
-      style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}
+      style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}
     >
-      <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", letterSpacing: 0.5, textTransform: "uppercase" }}>
+      <div style={{ fontSize: 10, fontWeight: 600, color: "#6B7280", letterSpacing: 0.4, textTransform: "uppercase" }}>
         {label}
       </div>
-      <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>
+      <div style={{ fontSize: 22, fontWeight: 700, color: accent ?? "#111827", marginTop: 2, fontVariantNumeric: "tabular-nums", lineHeight: 1.1 }}>
         {value.toLocaleString()}
       </div>
       {sublabel && (
-        <div style={{ fontSize: 11, fontWeight: 500, color: "#6B7280", marginTop: 4, fontVariantNumeric: "tabular-nums" }}>
+        <div style={{ fontSize: 10, fontWeight: 500, color: "#6B7280", marginTop: 2, fontVariantNumeric: "tabular-nums" }}>
           {sublabel}
         </div>
       )}
