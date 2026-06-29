@@ -11629,6 +11629,150 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border: 1px solid var(--hairline);
 }
 
+/* ── Classroom view — official Gadit chrome with school-specific
+   hero swaps. Gadi (2026-06-29): the classroom should look exactly
+   like the public homepage so brand identity carries across surfaces.
+   Only the central hero (logo + name) and the top-right cluster
+   change; everything else uses the same wb-shell-* / wb-home-* CSS
+   the rest of Gadit uses. */
+
+/* Tier chip in the topbar right cluster. Replaces the user's plan chip
+   (DEEP/CLEAR) with a SCHOOL marker. Teal-toned to match the rest of
+   the in-product brand. */
+.wordbook .wb-classroom-tier-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  background: rgba(14, 165, 165, 0.10);
+  color: rgb(13, 148, 148);
+  font-family: var(--wb-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* School avatar in the topbar — sits where a user avatar would be in
+   the normal Gadit chrome. Falls back to a graduation cap when the
+   school hasn't uploaded a logo yet. */
+.wordbook .wb-classroom-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+.wordbook .wb-classroom-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0EA5A5;
+}
+
+/* Central school hero — sits in place of the Gadit wordmark + tagline.
+   School logo (big) + school name + classroom welcome message + 'not
+   me' link if a student has identified themselves. */
+.wordbook .wb-classroom-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+.wordbook .wb-classroom-hero-logo {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.wordbook .wb-classroom-hero-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wordbook .wb-classroom-hero-name {
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: #0EA5A5;
+  letter-spacing: 0.04em;
+}
+.wordbook[dir="rtl"] .wb-classroom-hero-name { font-family: var(--wb-he); }
+.wordbook .wb-classroom-switch-user {
+  margin-top: 4px;
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Student picker — name chips the kid picks from on first visit. */
+.wordbook .wb-classroom-student-picker {
+  max-width: 720px;
+  margin: 0 auto 16px;
+}
+.wordbook .wb-classroom-student-picker-prompt {
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: #0EA5A5;
+  text-align: center;
+  margin: 0 0 14px;
+}
+.wordbook[dir="rtl"] .wb-classroom-student-picker-prompt { font-family: var(--wb-he); }
+.wordbook .wb-classroom-student-picker-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.wordbook .wb-classroom-student-chip {
+  padding: 10px 20px;
+  background: rgba(14, 165, 165, 0.08);
+  border: 1.5px solid rgba(14, 165, 165, 0.4);
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: #0EA5A5;
+  cursor: pointer;
+  transition: background 180ms var(--wb-ease-out), transform 120ms;
+}
+.wordbook .wb-classroom-student-chip:hover { background: rgba(14, 165, 165, 0.18); }
+.wordbook .wb-classroom-student-chip:active { transform: scale(0.97); }
+
+/* Off-hours hint — quieter look than the main UI. */
+.wordbook .wb-classroom-offhours {
+  max-width: 720px;
+  margin: 28px auto 0;
+  padding: 14px 18px;
+  background: rgba(14, 165, 165, 0.08);
+  border: 1px solid rgba(14, 165, 165, 0.3);
+  border-radius: 14px;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink);
+  text-align: center;
+}
+.wordbook .wb-classroom-offhours-line1 { margin-bottom: 6px; }
+.wordbook .wb-classroom-offhours-cta {
+  font-weight: 700;
+  color: #0EA5A5;
+  text-decoration: underline;
+}
+
 /* Classroom notebook list — aggregated class-wide search history */
 .wordbook .wb-classroom-notebook-filter {
   display: flex;

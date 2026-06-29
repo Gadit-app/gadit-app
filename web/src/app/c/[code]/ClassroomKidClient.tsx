@@ -21,6 +21,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { KidsModeToggle } from "@/components/KidsModeToggle";
+import { useKidsMode } from "@/lib/use-kids-mode";
+import VoiceInput from "@/components/VoiceInput";
+
+// Inline SearchIcon — kept local to avoid a primitives import cycle and
+// to match the homepage's identical SVG so the two surfaces look the
+// same down to the pixel.
+function SearchIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.6" />
+      <path d="m15 15 4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 type LookupOk = {
   schoolId: string;
@@ -136,6 +151,18 @@ export function ClassroomKidClient({ code }: { code: string }) {
   // independent identities. Anonymous kids leave this empty and the
   // search log gets stored without a studentName.
   const [studentName, setStudentName] = useState<string>("");
+  // Kids Mode is on by default in the classroom view — kids reading on
+  // a shared computer get the simpler, more visual renderings without
+  // having to flip a switch. The toggle stays visible in the search
+  // pill so an older student can turn it off if they want adult-level
+  // definitions.
+  const [, setKidsMode] = useKidsMode();
+  const kidsAutoEnabledRef = useRef(false);
+  useEffect(() => {
+    if (kidsAutoEnabledRef.current) return;
+    kidsAutoEnabledRef.current = true;
+    setKidsMode(true);
+  }, [setKidsMode]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -234,256 +261,173 @@ export function ClassroomKidClient({ code }: { code: string }) {
   }
 
   const { data } = state;
+  // Layout mirrors the official Gadit homepage exactly. Per Gadi's
+  // 2026-06-29 spec: classroom users see the same chrome the rest of
+  // the product has, so the brand carries across surfaces. The only
+  // differences from the public homepage:
+  //   - Top nav: only "School Notebook" and "Play" (no Features /
+  //     Pricing / Affiliates — those would confuse a kid in class).
+  //   - Top right: lang switcher, SCHOOL tier chip, school avatar
+  //     (no Share button, no login CTA — anonymous surface).
+  //   - Hero: school logo + school name in place of the Gadit
+  //     wordmark + tagline. The school IS the brand here.
   return (
-    <div className="wordbook wb-school-page" dir={dir}>
-      {/* Full Gadit topbar for the classroom. Gadi (2026-06-29) asked
-          for the full Gadit interface here — same chrome as a Deep
-          subscriber sees, including the Word Games and Notebook entry
-          points. The bar uses Gadit teal (#0EA5A5), not the school
-          mustard, because brand-color consistency across surfaces is
-          load-bearing for Gadit's identity. Links open in the same
-          tab so the back button returns home (no _blank to avoid
-          orphaned tabs on a shared classroom computer). */}
-      <header className="wb-classroom-topbar">
-        <Link href={href("/")} aria-label="Gadit" dir="ltr" className="wb-classroom-wordmark">
-          Gad<span className="wb-classroom-wordmark-it">it</span>
+    <div className="wordbook wb-shell-page wb-school-page" dir={dir}>
+      <header className="wb-shell-topbar">
+        <Link href={href(`/c/${code}`)} className="wb-shell-wordmark" dir="ltr" aria-label="Gadit">
+          Gad<span className="wb-shell-wordmark-it">it</span>
         </Link>
-        <nav className="wb-classroom-nav">
-          <Link href={href(`/c/${code}/games`)} className="wb-classroom-nav-link">
-            {c.games}
-          </Link>
-          <Link href={href(`/c/${code}/notebook`)} className="wb-classroom-nav-link">
-            {c.notebook}
-          </Link>
-          <ClassroomLangSwitch />
+        <nav className="wb-shell-nav">
+          <Link href={href(`/c/${code}/notebook`)} className="wb-shell-navlink">{c.notebook}</Link>
+          <Link href={href(`/c/${code}/games`)} className="wb-shell-navlink">{c.games}</Link>
         </nav>
-      </header>
-
-      <main className="wb-school-main" style={{ paddingTop: "clamp(40px, 8vh, 80px)" }}>
-        {/* School logo + name. The mustard chip falls back to a school
-            crest icon when no logo is uploaded. */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 32 }}>
-          <div
-            className="wb-school-logo-slot"
-            style={{
-              width: 96,
-              height: 96,
-              marginBottom: 16,
-              // Match the /schools dashboard fix: white background when
-              // a logo is uploaded so transparent-PNG logos don't show
-              // mustard bleed-through. Mustard placeholder kept for
-              // the empty (no-logo-yet) state.
-              ...(data.schoolLogoUrl ? {
-                background: "#FFFFFF",
-                border: "1px solid var(--hairline, #E5E7EB)",
-              } : {}),
-            }}
-          >
-            {data.schoolLogoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={data.schoolLogoUrl} alt="" />
-            ) : (
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <div className="wb-shell-actions">
+          <ClassroomLangSwitch />
+          <span className="wb-classroom-tier-chip">SCHOOL</span>
+          {data.schoolLogoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={data.schoolLogoUrl}
+              alt={data.schoolName || "School"}
+              className="wb-classroom-avatar"
+            />
+          ) : (
+            <div className="wb-classroom-avatar wb-classroom-avatar-fallback" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 7l9-4 9 4-9 4-9-4z" />
-                <path d="M21 10v6" />
                 <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
               </svg>
-            )}
-          </div>
-          {data.schoolName && (
-            <div style={{
-              fontFamily: "var(--wb-sans)",
-              fontSize: 14,
-              fontWeight: 600,
-              color: "#0EA5A5",
-              letterSpacing: "0.04em",
-              marginBottom: 4,
-            }}>
-              {data.schoolName}
             </div>
-          )}
-          <h1 style={{
-            fontFamily: "var(--wb-serif)",
-            fontSize: "clamp(28px, 5vw, 40px)",
-            fontWeight: 700,
-            color: "var(--ink)",
-            margin: 0,
-            textAlign: "center",
-          }}>
-            {studentName
-              ? `${c.greetingPrefix} ${studentName}`
-              : `${c.welcomeTo} ${data.classroomName || c.classroomDefault}`}
-          </h1>
-          {studentName && (
-            <button
-              type="button"
-              onClick={clearStudent}
-              style={{
-                marginTop: 8,
-                background: "transparent",
-                border: "none",
-                color: "var(--ink-soft, #6B7280)",
-                fontFamily: "var(--wb-sans)",
-                fontSize: 13,
-                cursor: "pointer",
-                textDecoration: "underline",
-              }}
-            >
-              {c.switchUser}
-            </button>
           )}
         </div>
+      </header>
 
-        {/* Student picker — shows ONLY when the classroom has a roster
-            AND the kid hasn't picked their identity yet (or just hit
-            "not me"). Click a name → name persists in localStorage on
-            this device + every search this session tags the log with
-            the name so the teacher can see who searched what. */}
-        {data.students.length > 0 && !studentName && (
-          <div style={{ maxWidth: 560, margin: "0 auto 16px" }}>
-            <p
-              style={{
-                fontFamily: "var(--wb-sans)",
-                fontSize: 16,
-                fontWeight: 600,
-                color: "#0EA5A5",
-                textAlign: "center",
-                marginBottom: 16,
-              }}
-            >
-              {c.pickName}
+      <main className="wb-home-main">
+        <div className="wb-home-center">
+          {/* School hero — replaces the Gadit wordmark + tagline.
+              Per spec, the school logo and name take the center stage
+              here while everything around them stays Gadit chrome. */}
+          <div className="wb-classroom-hero">
+            <div className="wb-classroom-hero-logo">
+              {data.schoolLogoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={data.schoolLogoUrl} alt="" />
+              ) : (
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 7l9-4 9 4-9 4-9-4z" />
+                  <path d="M21 10v6" />
+                  <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
+                </svg>
+              )}
+            </div>
+            {data.schoolName && (
+              <div className="wb-classroom-hero-name">{data.schoolName}</div>
+            )}
+            <p className="wb-home-tagline">
+              {studentName
+                ? `${c.greetingPrefix} ${studentName}`
+                : `${c.welcomeTo} ${data.classroomName || c.classroomDefault}`}
             </p>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 10,
-                justifyContent: "center",
-              }}
-            >
-              {data.students.map((sn) => (
+            {studentName && (
+              <button
+                type="button"
+                onClick={clearStudent}
+                className="wb-classroom-switch-user"
+              >
+                {c.switchUser}
+              </button>
+            )}
+          </div>
+
+          {/* Student picker — only when there's a roster and no name picked yet. */}
+          {data.students.length > 0 && !studentName && (
+            <div className="wb-classroom-student-picker">
+              <p className="wb-classroom-student-picker-prompt">{c.pickName}</p>
+              <div className="wb-classroom-student-picker-chips">
+                {data.students.map((sn) => (
+                  <button
+                    key={sn}
+                    type="button"
+                    onClick={() => pickStudent(sn)}
+                    className="wb-classroom-student-chip"
+                  >
+                    {sn}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* The search pill — exact same structure as the homepage's
+              wb-home-search-box so the layout matches pixel-for-pixel.
+              Kids toggle defaults ON (set on mount) but stays visible
+              so a kid can flip it. plan="deep" passed to bypass the
+              tier gate — classroom users get paid-tier features via
+              the school subscription. */}
+          {(data.students.length === 0 || studentName) && (
+            <form className="wb-home-search" onSubmit={onSubmit}>
+              <div className="wb-home-search-box">
+                <input
+                  type="text"
+                  value={word}
+                  onChange={(e) => setWord(e.target.value)}
+                  placeholder={c.searchPh}
+                  autoFocus
+                  className="wb-home-search-input"
+                  aria-label={c.searchPh}
+                />
+                <div className="wb-home-search-kids">
+                  <KidsModeToggle plan="deep" />
+                </div>
+                <div className="wb-home-search-mic">
+                  <VoiceInput
+                    uiLang={lang}
+                    getIdToken={async () => null}
+                    onResult={(text) => {
+                      setWord(text);
+                    }}
+                    enabled={true}
+                    size="sm"
+                    title="Voice"
+                  />
+                </div>
                 <button
-                  key={sn}
-                  type="button"
-                  onClick={() => pickStudent(sn)}
-                  style={{
-                    padding: "10px 20px",
-                    background: "rgba(14, 165, 165, 0.08)",
-                    border: "1.5px solid rgba(14, 165, 165, 0.4)",
-                    borderRadius: 999,
-                    fontFamily: "var(--wb-sans)",
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#0EA5A5",
-                    cursor: "pointer",
-                    transition: "background 180ms, transform 120ms",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(14, 165, 165, 0.18)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(14, 165, 165, 0.08)")}
+                  type="submit"
+                  className="wb-home-search-submit"
+                  aria-label={c.searchBtn}
+                  title={c.searchBtn}
                 >
-                  {sn}
+                  <SearchIcon size={20} />
                 </button>
-              ))}
-            </div>
-          </div>
-        )}
+              </div>
+              <div className="wb-home-sentence-wrap">
+                <textarea
+                  value={sentence}
+                  onChange={(e) => setSentence(e.target.value)}
+                  placeholder={c.sentencePh}
+                  rows={2}
+                  className="wb-home-sentence-input"
+                  aria-label={c.sentencePh}
+                />
+              </div>
+            </form>
+          )}
 
-        {/* The search box. Word input + submit on one row, optional
-            sentence input on a second row underneath so the kid can
-            disambiguate a multi-sense word the way the homepage lets
-            adults do. Search box hidden when a roster picker is open
-            so the kid focuses on identifying themselves first. */}
-        {(data.students.length === 0 || studentName) && (
-        <form onSubmit={onSubmit} style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-          maxWidth: 560,
-          margin: "0 auto",
-        }}>
-          <div style={{ display: "flex", gap: 10 }}>
-            <input
-              type="text"
-              value={word}
-              onChange={(e) => setWord(e.target.value)}
-              placeholder={c.searchPh}
-              autoFocus
-              style={{
-                flex: 1,
-                padding: "14px 18px",
-                border: "1px solid var(--hairline)",
-                borderRadius: 14,
-                background: "var(--surface)",
-                fontFamily: "var(--wb-sans)",
-                fontSize: 18,
-                color: "var(--ink)",
-                outline: "none",
-              }}
-            />
-            <button
-              type="submit"
-              className="wb-school-cta"
-              style={{ width: "auto", padding: "14px 24px", fontSize: 16 }}
-            >
-              {c.searchBtn}
-            </button>
-          </div>
-          <textarea
-            value={sentence}
-            onChange={(e) => setSentence(e.target.value)}
-            placeholder={c.sentencePh}
-            rows={2}
-            style={{
-              padding: "12px 16px",
-              border: "1px solid var(--hairline)",
-              borderRadius: 14,
-              background: "var(--surface)",
-              fontFamily: "var(--wb-sans)",
-              fontSize: 15,
-              color: "var(--ink)",
-              outline: "none",
-              resize: "vertical",
-              minHeight: 60,
-            }}
-          />
-        </form>
-        )}
-
-        {/* Off-hours soft hint. Render only when the classroom code is
-            reached outside the school's active window. The kid keeps
-            full search capability, just without image/kids' explanation
-            /game; the hint pushes the parent to Family for the rich
-            experience at home. */}
-        {!data.inSession && (
-          <div
-            style={{
-              maxWidth: 560,
-              margin: "32px auto 0",
-              padding: "14px 18px",
-              background: "rgba(14, 165, 165, 0.08)",
-              border: "1px solid rgba(14, 165, 165, 0.3)",
-              borderRadius: 14,
-              fontFamily: "var(--wb-sans)",
-              fontSize: 14,
-              color: "#0EA5A5",
-              textAlign: "center",
-            }}
-          >
-            <div style={{ marginBottom: 6 }}>
-              {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).line1}
+          {/* Off-hours soft hint. */}
+          {!data.inSession && (
+            <div className="wb-classroom-offhours">
+              <div className="wb-classroom-offhours-line1">
+                {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).line1}
+              </div>
+              <Link
+                href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
+                className="wb-classroom-offhours-cta"
+              >
+                {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).cta} →
+              </Link>
             </div>
-            <Link
-              href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
-              style={{
-                fontWeight: 700,
-                color: "#0EA5A5",
-                textDecoration: "underline",
-              }}
-            >
-              {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).cta} →
-            </Link>
-          </div>
-        )}
+          )}
+        </div>
       </main>
     </div>
   );
