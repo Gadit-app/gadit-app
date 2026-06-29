@@ -71,6 +71,10 @@ const COPY: Record<string, {
   back: string;
   saving: string;
   creating: string;
+  studentsLabel: string;
+  studentsHelp: string;
+  studentsPh: string;
+  studentsCount: (n: number) => string;
 }> = {
   he: {
     title: "בית הספר שלך",
@@ -107,6 +111,10 @@ const COPY: Record<string, {
     back: "→ חזרה",
     saving: "שומר...",
     creating: "יוצר...",
+    studentsLabel: "רשימת תלמידים (אופציונלי)",
+    studentsHelp: "שורה אחת לכל ילד, רק שם פרטי. הילדים יבחרו את שמם לפני החיפוש כדי שתדעו מי חיפש מה.",
+    studentsPh: "רותם\nיואב\nמיה\nנעם",
+    studentsCount: (n) => n === 0 ? "ללא רשימה" : n === 1 ? "תלמיד אחד" : `${n} תלמידים`,
   },
   en: {
     title: "Your School",
@@ -143,6 +151,10 @@ const COPY: Record<string, {
     back: "← Back",
     saving: "Saving…",
     creating: "Creating…",
+    studentsLabel: "Student roster (optional)",
+    studentsHelp: "One name per line, first names only. Kids pick their name before searching so you see who looked up what.",
+    studentsPh: "Rotem\nYoav\nMaya\nNoam",
+    studentsCount: (n) => n === 0 ? "No roster" : n === 1 ? "1 student" : `${n} students`,
   },
   hi: {
     title: "आपका स्कूल",
@@ -179,6 +191,10 @@ const COPY: Record<string, {
     back: "← वापस",
     saving: "सहेजा जा रहा है…",
     creating: "बनाया जा रहा है…",
+    studentsLabel: "छात्रों की सूची (वैकल्पिक)",
+    studentsHelp: "प्रति पंक्ति एक नाम, केवल पहला नाम। बच्चे खोज से पहले अपना नाम चुनेंगे, इससे आप देख सकेंगे कि किसने क्या खोजा।",
+    studentsPh: "Rotem\nYoav\nMaya\nNoam",
+    studentsCount: (n) => n === 0 ? "कोई सूची नहीं" : n === 1 ? "1 छात्र" : `${n} छात्र`,
   },
 };
 
@@ -237,6 +253,12 @@ export function SchoolsClient() {
   const [editingNameDraft, setEditingNameDraft] = useState("");
   const [editingTeacherDraft, setEditingTeacherDraft] = useState("");
   const [editingColorDraft, setEditingColorDraft] = useState(0);
+  // Students roster — newline-separated names. The kid view at /c/<CODE>
+  // shows these as a name-picker before search so each search log gets
+  // tagged with the kid's name. Empty = anonymous classroom (skip the
+  // picker). Gadi (2026-06-29) flagged that the dashboard was missing
+  // any UI for this; principals were having to hand-edit Firestore.
+  const [editingStudentsDraft, setEditingStudentsDraft] = useState("");
 
   const isWelcome = search.get("welcome") === "1";
 
@@ -323,6 +345,25 @@ export function SchoolsClient() {
     const name = editingNameDraft.trim();
     const teacherName = editingTeacherDraft.trim();
     const colorIndex = editingColorDraft;
+    // Parse the students textarea: split on newlines, trim each, drop
+    // empties, drop duplicates (case-insensitive — "rotem" and "Rotem"
+    // collapse to the first occurrence so the kid picker doesn't show
+    // the same name twice). Cap at 60 students per classroom — beyond
+    // that the picker grid gets unwieldy and the school should split
+    // into more classrooms.
+    const studentLines = editingStudentsDraft
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0 && s.length <= 40);
+    const seen = new Set<string>();
+    const students: string[] = [];
+    for (const sn of studentLines) {
+      const key = sn.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      students.push(sn);
+      if (students.length >= 60) break;
+    }
     setEditingId(null);
     try {
       await updateDoc(
@@ -331,6 +372,7 @@ export function SchoolsClient() {
           name,
           teacherName: teacherName || null,
           colorIndex,
+          students,
         }
       );
     } catch (err) {
@@ -343,6 +385,10 @@ export function SchoolsClient() {
     setEditingNameDraft(cls.name ?? "");
     setEditingTeacherDraft(cls.teacherName ?? "");
     setEditingColorDraft(typeof cls.colorIndex === "number" ? cls.colorIndex : 0);
+    // Pre-fill the students textarea with the current roster, one
+    // name per line, so the teacher can edit in place rather than
+    // re-type the whole list.
+    setEditingStudentsDraft((cls.students ?? []).join("\n"));
     // Mutually exclusive with the create form.
     setShowCreateForm(false);
   }
@@ -781,6 +827,78 @@ export function SchoolsClient() {
                         />
                       ))}
                     </div>
+                  </div>
+                  {/* Students roster — newline-separated names. Stored
+                      on the classroom doc as a string[]. The kid view at
+                      /c/<CODE> shows a name picker pre-search if this
+                      list is non-empty; otherwise the search box appears
+                      directly. Helper text explains the privacy story
+                      (first names only). */}
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#A16207",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {c.studentsLabel}
+                    </label>
+                    <textarea
+                      value={editingStudentsDraft}
+                      onChange={(e) => setEditingStudentsDraft(e.target.value)}
+                      placeholder={c.studentsPh}
+                      rows={8}
+                      style={{
+                        width: "100%",
+                        padding: "10px 14px",
+                        border: "1.5px solid #D6D3D1",
+                        borderRadius: 10,
+                        background: "#FFFFFF",
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 15,
+                        lineHeight: 1.5,
+                        color: "var(--ink)",
+                        outline: "none",
+                        resize: "vertical",
+                        minHeight: 120,
+                        boxSizing: "border-box",
+                      }}
+                    />
+                    <p
+                      style={{
+                        marginTop: 6,
+                        marginBottom: 0,
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 13,
+                        color: "var(--ink-soft, #6B7280)",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {c.studentsHelp}
+                    </p>
+                    <p
+                      style={{
+                        marginTop: 4,
+                        marginBottom: 0,
+                        fontFamily: "var(--wb-sans)",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#0EA5A5",
+                      }}
+                    >
+                      {c.studentsCount(
+                        editingStudentsDraft
+                          .split(/\r?\n/)
+                          .map((s) => s.trim())
+                          .filter((s) => s.length > 0).length
+                      )}
+                    </p>
                   </div>
                   <div style={{ display: "flex", gap: 10 }}>
                     <button
