@@ -75,7 +75,7 @@ const COPY: Record<string, {
     notFound: "כיתה לא נמצאה.",
     studentsLabel: "תלמידי הכיתה",
     studentsHint: "הוסיפו את שמות התלמידים והם יבחרו את עצמם כשייכנסו לקוד.",
-    addStudentPh: "שם פרטי (לדוגמה: מאיה)",
+    addStudentPh: "שם פרטי, או רשימה: מאיה, יוסי, רותם",
     addStudentBtn: "+ הוסף",
     removeStudentAria: "הסר תלמיד",
     anonymousLabel: "אנונימי",
@@ -93,7 +93,7 @@ const COPY: Record<string, {
     notFound: "Classroom not found.",
     studentsLabel: "Class roster",
     studentsHint: "Add your students' names and they'll pick themselves when they open the code.",
-    addStudentPh: "First name (e.g. Maya)",
+    addStudentPh: "First name, or a list: Maya, Yossi, Rotem",
     addStudentBtn: "+ Add",
     removeStudentAria: "Remove student",
     anonymousLabel: "Anonymous",
@@ -111,7 +111,7 @@ const COPY: Record<string, {
     notFound: "कक्षा नहीं मिली।",
     studentsLabel: "कक्षा की सूची",
     studentsHint: "अपने छात्रों के नाम जोड़ें, वे कोड खोलने पर अपना नाम चुनेंगे।",
-    addStudentPh: "पहला नाम (जैसे आर्या)",
+    addStudentPh: "पहला नाम, या सूची: आर्या, राहुल, माया",
     addStudentBtn: "+ जोड़ें",
     removeStudentAria: "छात्र हटाएँ",
     anonymousLabel: "अनाम",
@@ -137,23 +137,45 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
 
   async function addStudent() {
     if (!user || addingStudent) return;
-    const name = newStudentName.trim();
-    if (!name) return;
+    // Bulk add: split the input on commas, semicolons, or newlines so
+    // the teacher can paste a whole class list ("רותם, מאיה, יוסי, ...")
+    // in one go. Gadi (2026-06-29): "if a teacher wants to add 20
+    // students at once and separate by comma, can we do that?"
+    // Dedupe case-insensitively and cap at 50 per submission so a paste
+    // accident doesn't blow past the 60-per-classroom roster limit.
+    const parts = newStudentName
+      .split(/[,;\n]+/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0 && s.length <= 40);
+    const seen = new Set<string>();
+    const names: string[] = [];
+    for (const p of parts) {
+      const key = p.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      names.push(p);
+      if (names.length >= 50) break;
+    }
+    if (names.length === 0) return;
     setAddingStudent(true);
     try {
       const idToken = await user.getIdToken();
-      const res = await fetch("/api/schools/students", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ classroomId, name }),
-      });
-      if (res.ok) {
-        setNewStudentName("");
-      } else {
-        console.error("add student failed:", await res.text());
-      }
-    } catch (err) {
-      console.error("add student failed:", err);
+      // Fire all in parallel — the server-side endpoint is idempotent
+      // and uses FieldValue.arrayUnion, so concurrent calls are safe.
+      // For 20 names this completes in under a second on a normal
+      // network; well below any UI tolerance.
+      await Promise.all(
+        names.map((name) =>
+          fetch("/api/schools/students", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({ classroomId, name }),
+          }).then(async (res) => {
+            if (!res.ok) console.error("add student failed:", name, await res.text());
+          }).catch((err) => console.error("add student failed:", name, err)),
+        ),
+      );
+      setNewStudentName("");
     } finally {
       setAddingStudent(false);
     }
@@ -337,14 +359,21 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
               ))}
             </div>
           )}
-          <div style={{ display: "flex", gap: 10 }}>
-            <input
-              type="text"
+          <div style={{ display: "flex", gap: 10, alignItems: "stretch" }}>
+            <textarea
               value={newStudentName}
               placeholder={c.addStudentPh}
               onChange={(e) => setNewStudentName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") addStudent(); }}
+              onKeyDown={(e) => {
+                // Ctrl/Cmd+Enter submits; bare Enter inserts a newline so
+                // teachers can paste/type multi-line lists.
+                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault();
+                  addStudent();
+                }
+              }}
               disabled={addingStudent}
+              rows={2}
               style={{
                 flex: 1,
                 padding: "10px 14px",
@@ -355,6 +384,9 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
                 fontSize: 15,
                 color: "var(--ink)",
                 outline: "none",
+                resize: "vertical",
+                minHeight: 44,
+                lineHeight: 1.4,
               }}
             />
             <button
