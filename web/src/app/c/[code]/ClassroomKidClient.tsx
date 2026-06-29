@@ -16,7 +16,7 @@
  * classroom computer should see exactly one job-to-be-done: type a word.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
@@ -53,6 +53,8 @@ const COPY: Record<string, {
   sentencePh: string;
   errorTitle: string;
   errorBody: string;
+  games: string;
+  notebook: string;
 }> = {
   he: {
     welcomeTo: "ברוכים הבאים",
@@ -65,6 +67,8 @@ const COPY: Record<string, {
     sentencePh: "(אופציונלי) הקלידו את המשפט שבו מופיעה המילה כדי לקבל הגדרה מדויקת אחת",
     errorTitle: "הקוד לא תקין",
     errorBody: "בקשו מהמורה את הלינק שוב.",
+    games: "משחקי מילים",
+    notebook: "מחברת הכיתה",
   },
   en: {
     welcomeTo: "Welcome to",
@@ -77,6 +81,8 @@ const COPY: Record<string, {
     sentencePh: "(Optional) Type the sentence where the word appears to get one precise definition",
     errorTitle: "Code not valid",
     errorBody: "Ask your teacher for the link again.",
+    games: "Word Games",
+    notebook: "Class Notebook",
   },
   hi: {
     welcomeTo: "स्वागत है",
@@ -89,6 +95,8 @@ const COPY: Record<string, {
     sentencePh: "(वैकल्पिक) वह वाक्य लिखें जिसमें शब्द आया है, सटीक एक परिभाषा मिलेगी",
     errorTitle: "कोड मान्य नहीं है",
     errorBody: "अपने शिक्षक से लिंक फिर से माँगें।",
+    games: "शब्द खेल",
+    notebook: "कक्षा की नोटबुक",
   },
 };
 
@@ -228,38 +236,28 @@ export function ClassroomKidClient({ code }: { code: string }) {
   const { data } = state;
   return (
     <div className="wordbook wb-school-page" dir={dir}>
-      {/* Minimal Gadit wordmark in the inline-start corner. Gadi
-          (2026-06-28) flagged that the kid view had no Gadit brand
-          mark at all — earlier we stripped the full Gadit topbar so
-          the kid landing felt school-branded, but a tiny wordmark
-          in the corner is required so users (and the eventual app-
-          review reviewer) know what product they're inside. The
-          mark is dimmed (#CA8A04 on cream) so it doesn't compete
-          with the school branding directly below. */}
-      <div
-        style={{
-          position: "absolute",
-          top: 16,
-          insetInlineStart: 20,
-          zIndex: 1,
-        }}
-      >
-        <Link
-          href={href("/")}
-          aria-label="Gadit"
-          dir="ltr"
-          style={{
-            fontFamily: "var(--wb-serif), serif",
-            fontWeight: 700,
-            fontSize: 18,
-            color: "#A16207",
-            textDecoration: "none",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
+      {/* Full Gadit topbar for the classroom. Gadi (2026-06-29) asked
+          for the full Gadit interface here — same chrome as a Deep
+          subscriber sees, including the Word Games and Notebook entry
+          points. The bar uses Gadit teal (#0EA5A5), not the school
+          mustard, because brand-color consistency across surfaces is
+          load-bearing for Gadit's identity. Links open in the same
+          tab so the back button returns home (no _blank to avoid
+          orphaned tabs on a shared classroom computer). */}
+      <header className="wb-classroom-topbar">
+        <Link href={href("/")} aria-label="Gadit" dir="ltr" className="wb-classroom-wordmark">
+          Gad<span className="wb-classroom-wordmark-it">it</span>
         </Link>
-      </div>
+        <nav className="wb-classroom-nav">
+          <Link href={href(`/c/${code}/games`)} className="wb-classroom-nav-link">
+            {c.games}
+          </Link>
+          <Link href={href(`/c/${code}/notebook`)} className="wb-classroom-nav-link">
+            {c.notebook}
+          </Link>
+          <ClassroomLangSwitch />
+        </nav>
+      </header>
 
       <main className="wb-school-main" style={{ paddingTop: "clamp(40px, 8vh, 80px)" }}>
         {/* School logo + name. The mustard chip falls back to a school
@@ -487,6 +485,74 @@ export function ClassroomKidClient({ code }: { code: string }) {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+// Lang switcher for the classroom topbar. Small, kid-friendly — just
+// the active language label with a popover of the four supported langs.
+// Anonymous (no auth), persists via lang-context like the rest of /c.
+const CLASSROOM_LANGS = [
+  { code: "he", label: "עברית", flag: "il" },
+  { code: "en", label: "English", flag: "gb" },
+  { code: "ar", label: "العربية", flag: "sa" },
+  { code: "ru", label: "Русский", flag: "ru" },
+  { code: "hi", label: "हिन्दी", flag: "in" },
+] as const;
+
+function ClassroomLangSwitch() {
+  const { lang, setLang } = useLang();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!open) return;
+    function onClick(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+  const active = CLASSROOM_LANGS.find((l) => l.code === lang) ?? CLASSROOM_LANGS[1];
+  return (
+    <div ref={wrapRef} className="wb-classroom-lang">
+      <button
+        type="button"
+        className="wb-classroom-lang-chip"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="listbox"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
+        </svg>
+        <span>{active.label}</span>
+      </button>
+      {open && (
+        <ul className="wb-classroom-lang-menu" role="listbox">
+          {CLASSROOM_LANGS.map((l) => (
+            <li key={l.code}>
+              <button
+                type="button"
+                className={l.code === lang ? "is-active" : ""}
+                onClick={() => { setLang(l.code as typeof lang); setOpen(false); }}
+              >
+                <img
+                  className="wb-classroom-lang-flag"
+                  src={`https://flagcdn.com/40x30/${l.flag}.png`}
+                  srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`}
+                  width="20"
+                  height="15"
+                  alt=""
+                  loading="lazy"
+                />
+                <span>{l.label}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

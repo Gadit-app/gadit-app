@@ -11480,7 +11480,269 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook.wb-school-page {
   background: var(--wb-canvas);
   min-height: 100dvh;
-  padding: clamp(24px, 4vw, 48px) 0;
+  padding: 0;
+}
+
+/* ── Classroom topbar — full Gadit chrome for the kid view ──
+   Brand-consistent with the main app: teal accents, white surface,
+   Gadit wordmark on the left. Replaces the earlier "tiny wordmark in
+   the corner" approach after Gadi (2026-06-29) confirmed the kid view
+   should look identical to a Deep user's experience. */
+.wordbook .wb-classroom-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(16px, 3vw, 28px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--hairline);
+}
+.wordbook .wb-classroom-wordmark {
+  font-family: var(--wb-serif), serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.wordbook .wb-classroom-wordmark-it {
+  color: #0EA5A5;
+  font-style: italic;
+}
+.wordbook .wb-classroom-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.4vw, 18px);
+}
+.wordbook .wb-classroom-nav-link {
+  font-family: var(--wb-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition: background 160ms var(--wb-ease-out), color 160ms var(--wb-ease-out);
+}
+.wordbook[dir="rtl"] .wb-classroom-nav-link { font-family: var(--wb-he); }
+.wordbook .wb-classroom-nav-link:hover {
+  background: rgba(14, 165, 165, 0.08);
+  color: #0EA5A5;
+}
+
+/* Lang switcher inside the classroom topbar — same visual language as
+   the rest of Gadit's lang chips, kid-sized. */
+.wordbook .wb-classroom-lang {
+  position: relative;
+}
+.wordbook .wb-classroom-lang-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  border-radius: 999px;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 160ms var(--wb-ease-out);
+}
+.wordbook .wb-classroom-lang-chip:hover {
+  border-color: #0EA5A5;
+  color: #0EA5A5;
+}
+.wordbook .wb-classroom-lang-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  inset-inline-end: 0;
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
+  z-index: 50;
+}
+.wordbook .wb-classroom-lang-menu li { margin: 0; }
+.wordbook .wb-classroom-lang-menu button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: start;
+}
+.wordbook .wb-classroom-lang-menu button:hover { background: rgba(14, 165, 165, 0.08); }
+.wordbook .wb-classroom-lang-menu button.is-active {
+  color: #0EA5A5;
+  font-weight: 600;
+}
+.wordbook .wb-classroom-lang-flag {
+  width: 20px;
+  height: 15px;
+  border-radius: 3px;
+  object-fit: cover;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+}
+
+/* Override mustard school CTA to use Gadit teal inside the classroom
+   interface. The school chip stays (it's the school's identity space),
+   but interactive Gadit elements use the brand teal. */
+.wordbook .wb-school-page .wb-school-cta {
+  background: #0EA5A5;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--wb-sans);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms var(--wb-ease-out), transform 120ms;
+}
+.wordbook .wb-school-page .wb-school-cta:hover { background: rgb(13, 148, 148); }
+.wordbook .wb-school-page .wb-school-cta:active { transform: scale(0.97); }
+
+/* Classroom notebook list — aggregated class-wide search history */
+.wordbook .wb-classroom-notebook-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.wordbook .wb-classroom-notebook-filter select {
+  padding: 8px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--surface);
+  font-family: var(--wb-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+}
+.wordbook .wb-classroom-notebook-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wordbook .wb-classroom-notebook-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  transition: border-color 160ms var(--wb-ease-out), background 160ms var(--wb-ease-out);
+}
+.wordbook .wb-classroom-notebook-row:hover {
+  border-color: rgba(14, 165, 165, 0.4);
+  background: rgba(14, 165, 165, 0.03);
+}
+.wordbook .wb-classroom-notebook-word {
+  font-family: var(--wb-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+.wordbook .wb-classroom-notebook-word:hover { color: #0EA5A5; }
+.wordbook .wb-classroom-notebook-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--wb-sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+.wordbook .wb-classroom-notebook-student {
+  padding: 3px 10px;
+  background: rgba(14, 165, 165, 0.10);
+  color: rgb(13, 148, 148);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+}
+.wordbook .wb-classroom-notebook-empty {
+  text-align: center;
+  padding: 60px 24px;
+  font-family: var(--wb-sans);
+}
+.wordbook .wb-classroom-notebook-empty-title {
+  font-family: var(--wb-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.wordbook .wb-classroom-notebook-empty p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  margin: 0;
+}
+.wordbook .wb-classroom-notebook-skeleton {
+  height: 300px;
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    rgba(14, 165, 165, 0.04) 50%,
+    var(--surface) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 14px;
+  animation: wb-skeleton-shimmer 1.4s linear infinite;
+}
+@keyframes wb-skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* Classroom games grid — same look as /play but anonymous */
+.wordbook .wb-classroom-games-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-classroom-games-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+@media (min-width: 900px) {
+  .wordbook .wb-classroom-games-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
 }
 .wordbook .wb-school-main {
   max-width: 920px;
