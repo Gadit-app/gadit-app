@@ -256,7 +256,26 @@ export function buildQuizQuestions(
   pool: PlayWord[],
   count: number,
 ): QuizQuestion[] {
-  const targets = sample(pool, count);
+  // Only pick target words that have at least one same-script
+  // neighbour. A one-word-in-Hebrew-and-everything-else-English notebook
+  // shouldn't produce a Hebrew round with zero Hebrew distractors.
+  const wordScriptCounts = new Map<string, number>();
+  const meaningScriptCounts = new Map<string, number>();
+  for (const p of pool) {
+    const ws = scriptOf(p.word);
+    const ms = scriptOf(p.meaning);
+    wordScriptCounts.set(ws, (wordScriptCounts.get(ws) ?? 0) + 1);
+    meaningScriptCounts.set(ms, (meaningScriptCounts.get(ms) ?? 0) + 1);
+  }
+  const eligible = pool.filter((p) => {
+    const ws = wordScriptCounts.get(scriptOf(p.word)) ?? 0;
+    const ms = meaningScriptCounts.get(scriptOf(p.meaning)) ?? 0;
+    // ws/ms includes the target itself, so need ≥2 for at least one
+    // same-script neighbour to serve as distractor.
+    return ws >= 2 && ms >= 2;
+  });
+  const targetSource = eligible.length >= Math.min(count, 2) ? eligible : pool;
+  const targets = sample(targetSource, count);
   return targets.map((target): QuizQuestion => {
     // Alternate direction so users practice both ways within one session.
     const promptKind: "word" | "meaning" = Math.random() < 0.5 ? "word" : "meaning";
@@ -266,17 +285,18 @@ export function buildQuizQuestions(
     const targetScript = scriptOf(correct);
     // Only use distractors written in the same script as the correct
     // answer — otherwise a Hebrew answer with an English distractor is
-    // trivially unpickable and breaks the game. If we can't find enough
-    // same-script distractors we widen the net to any distractor so the
-    // game still fills its 4 options.
+    // trivially unpickable and breaks the game. If the pool doesn't
+    // have three same-script alternatives we simply show fewer options
+    // (down to a minimum of two) rather than smuggle a wrong-script
+    // distractor back in. This is what a mixed-notebook player sees on
+    // their first few rounds: 2 or 3 options at first, growing to 4 as
+    // they add more words in the same language. Gadi 2026-06-29.
     const candidates = pool.filter((p) => p.word !== target.word);
     const sameScriptCandidates = candidates.filter(
       (p) => scriptOf(p[distractorField as keyof PlayWord] as string) === targetScript,
     );
-    const distractorPool = sameScriptCandidates.length >= 3
-      ? sameScriptCandidates
-      : candidates;
-    const distractors = sample(distractorPool, 3).map(
+    const desiredDistractors = Math.min(3, sameScriptCandidates.length);
+    const distractors = sample(sameScriptCandidates, desiredDistractors).map(
       (p) => p[distractorField as keyof PlayWord] as string,
     );
     const options = shuffle([correct, ...distractors]);
@@ -323,16 +343,16 @@ export function buildFillBlankQuestions(
   return targets.map((target): FillBlankQuestion => {
     const example = pickOne(target.examples);
     // Same script-matching guardrail as Quiz — a Hebrew target word
-    // must not offer English distractor words. See scriptOf().
+    // must not offer English distractor words. See scriptOf(). If the
+    // pool doesn't have three same-script alternatives we show fewer
+    // options rather than smuggle in wrong-script ones.
     const targetScript = scriptOf(target.word);
     const candidates = pool.filter((p) => p.word !== target.word);
     const sameScriptCandidates = candidates.filter(
       (p) => scriptOf(p.word) === targetScript,
     );
-    const distractorPool = sameScriptCandidates.length >= 3
-      ? sameScriptCandidates
-      : candidates;
-    const distractors = sample(distractorPool, 3).map((p) => p.word);
+    const desiredDistractors = Math.min(3, sameScriptCandidates.length);
+    const distractors = sample(sameScriptCandidates, desiredDistractors).map((p) => p.word);
     const options = shuffle([target.word, ...distractors]);
     return {
       sentence: blankOut(example, target.word),
