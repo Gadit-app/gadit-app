@@ -230,6 +230,28 @@ export type QuizQuestion = {
   word: PlayWord; // for the "you missed these" recap
 };
 
+/**
+ * Script family of the first alphabetic character in a string. Used to
+ * filter distractors so a Hebrew notebook target never gets an English
+ * distractor mixed into its answer options (which would let a player
+ * eliminate wrong answers on script alone). Gadi 2026-06-29 on his
+ * mixed-language notebook: word "דרך" showed one option in English.
+ */
+type Script = "hebrew" | "arabic" | "cyrillic" | "devanagari" | "cjk" | "latin" | "unknown";
+function scriptOf(s: string): Script {
+  for (const ch of s) {
+    const c = ch.codePointAt(0);
+    if (c === undefined) continue;
+    if (c >= 0x0590 && c <= 0x05FF) return "hebrew";
+    if ((c >= 0x0600 && c <= 0x06FF) || (c >= 0xFB50 && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFF)) return "arabic";
+    if (c >= 0x0400 && c <= 0x04FF) return "cyrillic";
+    if (c >= 0x0900 && c <= 0x097F) return "devanagari";
+    if ((c >= 0x3040 && c <= 0x309F) || (c >= 0x30A0 && c <= 0x30FF) || (c >= 0x4E00 && c <= 0x9FFF)) return "cjk";
+    if ((c >= 0x0041 && c <= 0x005A) || (c >= 0x0061 && c <= 0x007A) || (c >= 0x00C0 && c <= 0x024F)) return "latin";
+  }
+  return "unknown";
+}
+
 export function buildQuizQuestions(
   pool: PlayWord[],
   count: number,
@@ -239,12 +261,24 @@ export function buildQuizQuestions(
     // Alternate direction so users practice both ways within one session.
     const promptKind: "word" | "meaning" = Math.random() < 0.5 ? "word" : "meaning";
     const distractorField = promptKind === "word" ? "meaning" : "word";
-    const distractors = sample(
-      pool.filter((p) => p.word !== target.word),
-      3,
-    ).map((p) => p[distractorField as keyof PlayWord] as string);
     const correct =
       promptKind === "word" ? target.meaning : target.word;
+    const targetScript = scriptOf(correct);
+    // Only use distractors written in the same script as the correct
+    // answer — otherwise a Hebrew answer with an English distractor is
+    // trivially unpickable and breaks the game. If we can't find enough
+    // same-script distractors we widen the net to any distractor so the
+    // game still fills its 4 options.
+    const candidates = pool.filter((p) => p.word !== target.word);
+    const sameScriptCandidates = candidates.filter(
+      (p) => scriptOf(p[distractorField as keyof PlayWord] as string) === targetScript,
+    );
+    const distractorPool = sameScriptCandidates.length >= 3
+      ? sameScriptCandidates
+      : candidates;
+    const distractors = sample(distractorPool, 3).map(
+      (p) => p[distractorField as keyof PlayWord] as string,
+    );
     const options = shuffle([correct, ...distractors]);
     return {
       prompt: promptKind === "word" ? target.word : target.meaning,
@@ -288,10 +322,17 @@ export function buildFillBlankQuestions(
   const targets = sample(withExamples, count);
   return targets.map((target): FillBlankQuestion => {
     const example = pickOne(target.examples);
-    const distractors = sample(
-      pool.filter((p) => p.word !== target.word),
-      3,
-    ).map((p) => p.word);
+    // Same script-matching guardrail as Quiz — a Hebrew target word
+    // must not offer English distractor words. See scriptOf().
+    const targetScript = scriptOf(target.word);
+    const candidates = pool.filter((p) => p.word !== target.word);
+    const sameScriptCandidates = candidates.filter(
+      (p) => scriptOf(p.word) === targetScript,
+    );
+    const distractorPool = sameScriptCandidates.length >= 3
+      ? sameScriptCandidates
+      : candidates;
+    const distractors = sample(distractorPool, 3).map((p) => p.word);
     const options = shuffle([target.word, ...distractors]);
     return {
       sentence: blankOut(example, target.word),
