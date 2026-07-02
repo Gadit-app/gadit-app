@@ -16,7 +16,10 @@
 // reported the search, sign-in, and burger menu all silently failing —
 // classic stale-JS-in-SW symptom. v3 → v4 forces every browser to
 // wipe its v3 caches and refetch fresh JS on the next visit.
-const CACHE_VERSION = "gadit-v4";
+// v4 → v5 (2026-06-29 evening): Gadi flagged that the script-match
+// distractor fix wasn't landing on his device — the SW was serving
+// the pre-fix bundle. Bump wipes it.
+const CACHE_VERSION = "gadit-v5";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
