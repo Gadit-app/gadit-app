@@ -638,6 +638,136 @@ const TWIN_TRAP_ROUNDS_RU: TwinTrapRound[] = [
   },
 ];
 
+// ─── Kids content ──────────────────────────────────────────────
+// Word pairs kids genuinely mix up at 6-12 — homophones and simple
+// spelling traps rather than adult grammar edges (who/whom, comprise
+// /compose). Sentences pulled from school and home life.
+const TWIN_TRAP_ROUNDS_KIDS_EN: TwinTrapRound[] = [
+  {
+    sentence: "I want to eat ____ pizza slice.",
+    options: ["their", "there"],
+    correctIdx: 1,
+    explain: "There points to a place. Their means belongs to them. Pizza slice is a thing, not a place — but here 'there' is short for 'over there'.",
+  },
+  {
+    sentence: "The children took ____ backpacks to school.",
+    options: ["their", "there"],
+    correctIdx: 0,
+    explain: "The backpacks belong to the children — that's whose. 'Their' means 'belonging to them'. 'There' would mean a place.",
+  },
+  {
+    sentence: "You have ____ hide when we play tag.",
+    options: ["too", "to"],
+    correctIdx: 1,
+    explain: "'To hide' is a whole action, like 'to run' or 'to eat'. 'Too' means also or very much. Actions get 'to' with one o.",
+  },
+  {
+    sentence: "The soup is ____ hot to drink right now.",
+    options: ["too", "to"],
+    correctIdx: 0,
+    explain: "'Too hot' means more hot than we want. 'Too' with two o's is like extra. 'To' with one o would be an action.",
+  },
+  {
+    sentence: "Can I have a ____ of that cake?",
+    options: ["piece", "peace"],
+    correctIdx: 0,
+    explain: "A piece is a part of something you can hold or eat. Peace means quiet or no war. Both sound the same — cake gives us the food clue.",
+  },
+  {
+    sentence: "After the loud storm, the forest went back to ____.",
+    options: ["piece", "peace"],
+    correctIdx: 1,
+    explain: "Peace is a quiet, calm feeling. Piece is a chunk of something. The forest is calm now, not a chunk of cake.",
+  },
+  {
+    sentence: "I ____ the ball straight into the goal!",
+    options: ["through", "threw"],
+    correctIdx: 1,
+    explain: "'Threw' is the past of 'throw' — what your arm did. 'Through' means going in and out the other side. Both sound the same but do very different jobs.",
+  },
+  {
+    sentence: "The little rabbit ran ____ the tunnel.",
+    options: ["through", "threw"],
+    correctIdx: 0,
+    explain: "'Through' means from one side to the other. 'Threw' is the past of throwing. Rabbits run, they don't throw themselves.",
+  },
+  {
+    sentence: "____ time to brush your teeth!",
+    options: ["It's", "Its"],
+    correctIdx: 0,
+    explain: "'It's' is short for 'it is'. 'Its' shows ownership like 'his' or 'her'. Only 'it is time' makes sense here.",
+  },
+  {
+    sentence: "The turtle pulled ____ head inside its shell.",
+    options: ["It's", "Its"],
+    correctIdx: 1,
+    explain: "The head belongs to the turtle — that's 'its' with no apostrophe. 'It's' would mean 'it is', which doesn't fit here.",
+  },
+];
+
+const TWIN_TRAP_ROUNDS_KIDS_HE: TwinTrapRound[] = [
+  {
+    sentence: "אני אוהב ____ הבית שלי.",
+    options: ["את", "אט"],
+    correctIdx: 0,
+    explain: "\"את\" מציין מה אני אוהב. \"אט\" זה לאט. הבית זה משהו שאני אוהב, אז המילה שמצביעה עליו זה \"את\".",
+  },
+  {
+    sentence: "התינוק הולך ____ לאט.",
+    options: ["את", "אט"],
+    correctIdx: 1,
+    explain: "\"אט\" זה מילה נרדפת ללאט. \"אט אט\" זה בעצם לאט לאט. \"את\" זו מילה שמציגה מושא — לא מתאימה כאן.",
+  },
+  {
+    sentence: "____ מגיע לבית הספר?",
+    options: ["מה", "מי"],
+    correctIdx: 1,
+    explain: "\"מי\" שואל על אדם. \"מה\" שואל על חפץ או פעולה. לבית הספר מגיעים אנשים, אז שואלים \"מי\".",
+  },
+  {
+    sentence: "____ יש היום לארוחת צהריים?",
+    options: ["מה", "מי"],
+    correctIdx: 0,
+    explain: "\"מה\" שואל על דבר — אוכל, חפץ, פעולה. \"מי\" שואל רק על בני אדם. אוכל זה \"מה\".",
+  },
+  {
+    sentence: "אמא ____ לי לישון מוקדם.",
+    options: ["אמרה", "עמרה"],
+    correctIdx: 0,
+    explain: "\"אמרה\" מהשורש אמ\"ר, לדבר. \"עמרה\" זה שם עצם (עומר של דגן). כשמישהו מדבר משתמשים ב\"אמר\" עם א'.",
+  },
+  {
+    sentence: "אני יודע ____ הטלפון שלך.",
+    options: ["מספר", "משפר"],
+    correctIdx: 0,
+    explain: "\"מספר\" זה ספרה או קוד. \"משפר\" זה מהשורש שפ\"ר, לעשות משהו טוב יותר. טלפון יש לו מספר, לא משפר.",
+  },
+  {
+    sentence: "החתול קפץ ____ העץ.",
+    options: ["על", "אל"],
+    correctIdx: 0,
+    explain: "\"על\" מציין למעלה — החתול הגיע לגובה על העץ. \"אל\" מציין כיוון — לכיוון העץ. פה החתול כבר על העץ.",
+  },
+  {
+    sentence: "רץ מהר ____ ההורים שלי!",
+    options: ["על", "אל"],
+    correctIdx: 1,
+    explain: "\"אל\" מציין כיוון של תנועה — רץ לכיוון ההורים. \"על\" מציין מיקום למעלה. פה זו תנועה, אז \"אל\".",
+  },
+  {
+    sentence: "התפוח נופל ____ העץ אל האדמה.",
+    options: ["מן", "מי"],
+    correctIdx: 0,
+    explain: "\"מן\" זה מ- ארוך, מציין מוצא: התפוח בא מהעץ. \"מי\" שואל על בן אדם. מקור התפוח זה מהעץ, אז \"מן\".",
+  },
+  {
+    sentence: "____ נתן לך את המתנה הזאת?",
+    options: ["מן", "מי"],
+    correctIdx: 1,
+    explain: "\"מי\" שואל על אדם. \"מן\" זה מ- ארוך למוצא. שואלים על מי שנתן — אדם — אז \"מי\".",
+  },
+];
+
 // ─── Per-language router ───────────────────────────────────────
 const ROUNDS_BY_LANG: Record<string, TwinTrapRound[]> = {
   en: TWIN_TRAP_ROUNDS_EN,
@@ -646,10 +776,28 @@ const ROUNDS_BY_LANG: Record<string, TwinTrapRound[]> = {
   ru: TWIN_TRAP_ROUNDS_RU,
 };
 
+const ROUNDS_BY_LANG_KIDS: Record<string, TwinTrapRound[]> = {
+  en: TWIN_TRAP_ROUNDS_KIDS_EN,
+  he: TWIN_TRAP_ROUNDS_KIDS_HE,
+};
+
 export function pickTwinTrapRounds(
   count: number,
   lang: string = "en",
+  kids: boolean = false,
 ): { rounds: TwinTrapRound[]; contentLang: string } {
+  if (kids) {
+    const kidsLang = ROUNDS_BY_LANG_KIDS[lang] ? lang : "en";
+    const kidsPool = ROUNDS_BY_LANG_KIDS[kidsLang];
+    if (kidsPool && kidsPool.length > 0) {
+      const shuffled = kidsPool.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return { rounds: shuffled.slice(0, count), contentLang: kidsLang };
+    }
+  }
   // Fall back to English if we don't have content for this UI lang yet.
   // Other locales will join over the next few weeks; until then a Russian
   // user gets English Twin Trap which is still useful for English learners.

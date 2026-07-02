@@ -14,6 +14,7 @@ import { useState, useMemo } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
+import { readKidsMode } from "@/lib/use-kids-mode";
 import {
   pickMeaningLensRounds,
   type MeaningLensRound,
@@ -27,8 +28,8 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
-  const { rounds: source, contentLang } = pickMeaningLensRounds(SESSION_SIZE.lens, uiLang);
+function buildRuntimeRounds(uiLang: string, kids: boolean): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickMeaningLensRounds(SESSION_SIZE.lens, uiLang, kids);
   return {
     contentLang,
     rounds: source.map((r): RuntimeRound => {
@@ -56,7 +57,7 @@ export function GameMeaningLens({
   lang: string;
   t: PlayT;
 }) {
-  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  const built = useMemo(() => buildRuntimeRounds(lang, readKidsMode()), [lang]);
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);

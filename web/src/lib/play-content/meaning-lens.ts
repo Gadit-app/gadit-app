@@ -593,6 +593,256 @@ const MEANING_LENS_ROUNDS_RU: MeaningLensRound[] = [
   },
 ];
 
+// ─── Kids content ──────────────────────────────────────────────
+// Polysemy the 6-12 crowd meets in real life — bark, bat, trunk,
+// spring. Sentences are simple, options are concrete, and the reveal
+// explains the trick to spotting which meaning the sentence is using.
+const MEANING_LENS_ROUNDS_KIDS_EN: MeaningLensRound[] = [
+  {
+    word: "bark",
+    sentence: "The dog started to bark loudly at the mailman.",
+    options: [
+      "the outer covering of a tree",
+      "the loud sound a dog makes",
+      "a small sailing boat",
+      "a hard shell of a fruit",
+    ],
+    correctIdx: 1,
+    story: "Look at the word 'dog' right before 'bark'. That's your cue — only the dog meaning of bark fits with a dog making a loud noise at someone.",
+  },
+  {
+    word: "bat",
+    sentence: "A tiny bat flew out of the dark cave right at sunset.",
+    options: [
+      "a wooden stick used in baseball",
+      "a black eye mask",
+      "a small flying animal",
+      "to hit something quickly",
+    ],
+    correctIdx: 2,
+    story: "The words 'flew' and 'cave' unlock it. Baseball bats don't fly and don't live in caves. Only the animal bat fits both clues at once.",
+  },
+  {
+    word: "trunk",
+    sentence: "The elephant lifted the peanut with its long trunk.",
+    options: [
+      "the box at the back of a car",
+      "a large wooden storage chest",
+      "the long nose of an elephant",
+      "the main part of a tree",
+    ],
+    correctIdx: 2,
+    story: "'Elephant' is your key. English uses trunk for four different things — a car boot, a chest, a tree, and an elephant's nose — but only one fits an elephant lifting a peanut.",
+  },
+  {
+    word: "star",
+    sentence: "She saw a shooting star cross the sky just before midnight.",
+    options: [
+      "a famous singer or actor",
+      "a shape with five or six points",
+      "a bright dot in the night sky",
+      "a top rank in a game",
+    ],
+    correctIdx: 2,
+    story: "'Sky' and 'midnight' are the giveaway. A famous singer doesn't 'shoot' across the sky. Only the sky-star meaning works with a shooting star at night.",
+  },
+  {
+    word: "spring",
+    sentence: "The flowers begin to bloom in early spring.",
+    options: [
+      "to jump up suddenly",
+      "the season after winter",
+      "a coiled metal wire",
+      "a small stream of water",
+    ],
+    correctIdx: 1,
+    story: "'Flowers begin to bloom' plants the clue. Metal wires don't have blooming seasons — only the time-of-year meaning of spring lands here.",
+  },
+  {
+    word: "match",
+    sentence: "Dad struck a match to light the birthday candles.",
+    options: [
+      "two things that go together",
+      "a football or tennis game",
+      "a short wooden fire stick",
+      "to be equal in a race",
+    ],
+    correctIdx: 2,
+    story: "'Struck' plus 'light the candles' is the combo. You strike a match to make fire; you don't strike a football game. The word 'candles' locks the fire-stick meaning.",
+  },
+  {
+    word: "cool",
+    sentence: "The lemonade was really cool after playing outside.",
+    options: [
+      "at a low but nice temperature",
+      "very impressive or awesome",
+      "calm and unbothered",
+      "quiet and reserved",
+    ],
+    correctIdx: 0,
+    story: "'Lemonade' after playing outside — that's a temperature clue. An 'awesome' drink is possible but the sentence is really about how it felt to drink something cold on a warm day.",
+  },
+  {
+    word: "fair",
+    sentence: "The whole family went to the fair for cotton candy and rides.",
+    options: [
+      "just and equal to everyone",
+      "a big outdoor event with rides",
+      "light-coloured hair or skin",
+      "average — not good and not bad",
+    ],
+    correctIdx: 1,
+    story: "'Cotton candy and rides' can only happen at one kind of fair — the outdoor event kind. The other meanings of fair don't have rides.",
+  },
+  {
+    word: "watch",
+    sentence: "Grandpa gave me a shiny watch for my tenth birthday.",
+    options: [
+      "to look at something carefully",
+      "a small clock you wear on your wrist",
+      "a group of guards on duty",
+      "to keep an eye on a baby",
+    ],
+    correctIdx: 1,
+    story: "'Gave me a shiny' is the tell. You can't give someone the act of looking. Only the wrist-clock meaning fits a birthday gift you can hold.",
+  },
+  {
+    word: "bank",
+    sentence: "We sat on the grassy bank and watched the river flow.",
+    options: [
+      "a place that keeps your money safe",
+      "a row of switches on a machine",
+      "the ground next to a river",
+      "to depend on someone completely",
+    ],
+    correctIdx: 2,
+    story: "'Grassy' and 'watched the river flow' point straight at the ground meaning. Money banks aren't grassy, and switches don't sit next to rivers.",
+  },
+];
+
+const MEANING_LENS_ROUNDS_KIDS_HE: MeaningLensRound[] = [
+  {
+    word: "עין",
+    sentence: "מהעין הקטנה בהר יצאו מים קרים וזכים.",
+    options: [
+      "האיבר שרואים בו",
+      "מעיין קטן של מים",
+      "אות בעברית עתיקה",
+      "בור עמוק באדמה",
+    ],
+    correctIdx: 1,
+    story: "המילה \"מים\" ו\"הר\" הם המפתח. מהעיניים של אנשים לא יוצאים מים זכים מההר. רק המשמעות של מעיין מים מתאימה למה שמתואר.",
+  },
+  {
+    word: "רגל",
+    sentence: "בחג הרגל כל המשפחה נסעה לסבתא.",
+    options: [
+      "החלק שהולכים איתו",
+      "חג יהודי מיוחד",
+      "קטע של שולחן",
+      "יחידה של צבא",
+    ],
+    correctIdx: 1,
+    story: "המילה \"חג\" לפני רגל היא הרמז. שלוש פעמים בשנה בתנ\"ך יש \"חג רגל\" — פסח, שבועות וסוכות. השם בא מהמצווה לעלות ברגל לירושלים.",
+  },
+  {
+    word: "כוכב",
+    sentence: "בלילה בהיר אפשר לראות אלפי כוכבים בשמיים.",
+    options: [
+      "שחקן מפורסם",
+      "נקודה זוהרת בשמיים",
+      "צורה עם חמש קצוות",
+      "חייל טוב מאוד",
+    ],
+    correctIdx: 1,
+    story: "\"בלילה\" ו\"בשמיים\" קובעים את זה. שחקן מפורסם לא נראה בשמיים בלילה. רק המשמעות של כוכב אמיתי בשמיים מתאימה.",
+  },
+  {
+    word: "פרח",
+    sentence: "בגינה של סבתא פרח יפה עם עלים אדומים.",
+    options: [
+      "צמח עם עלי כותרת צבעוניים",
+      "ילד או ילדה צעירים",
+      "מישהו שרק התחיל בעבודה",
+      "לצאת החוצה",
+    ],
+    correctIdx: 0,
+    story: "המילים \"בגינה\" ו\"עלים אדומים\" ברורות. גינה של סבתא לא מגדלים ילדים או עובדים חדשים — רק פרחים אמיתיים עם עלים.",
+  },
+  {
+    word: "אור",
+    sentence: "הדליק את האור בחדר לפני שנכנס.",
+    options: [
+      "הבוקר, הזמן שלפני הצהריים",
+      "שם של ילד או ילדה",
+      "מנורה או תאורה בחדר",
+      "אנרגיה שרואים איתה",
+    ],
+    correctIdx: 2,
+    story: "\"הדליק\" ו\"בחדר\" מובילים למשמעות של מנורה. בוקר לא מדליקים ואי אפשר להדליק שם של ילד. רק תאורה בחדר מתאימה.",
+  },
+  {
+    word: "לב",
+    sentence: "הלב שלה פעם חזק כשראתה את המבחן.",
+    options: [
+      "האיבר שמזרים דם בגוף",
+      "המרכז של משהו",
+      "אומץ ורצון",
+      "אמצע של פרי",
+    ],
+    correctIdx: 0,
+    story: "\"פעם חזק\" זה תיאור של פעימות הלב. המילה \"מבחן\" מזכירה התרגשות — וכשמתרגשים, הלב באמת פועם חזק. זו המשמעות הפיזית של לב.",
+  },
+  {
+    word: "יד",
+    sentence: "הוא הרים את היד וסימן לחבר שלו.",
+    options: [
+      "אחד משני האיברים לתפוס בהם",
+      "אנדרטה, מבנה זיכרון",
+      "כוח או שליטה",
+      "מקום או צד",
+    ],
+    correctIdx: 0,
+    story: "\"הרים\" ו\"סימן\" יחד רומזים על תנועה פיזית של איבר בגוף. אנדרטה לא מרימים כדי לסמן, וכוח לא מסמנים ככה.",
+  },
+  {
+    word: "בית",
+    sentence: "אחרי בית הראשון של השיר הצטרפה כל הכיתה.",
+    options: [
+      "המקום שגרים בו",
+      "חלק אחד של שיר או פזמון",
+      "משפחה, קרובים",
+      "מבנה של פסוקים",
+    ],
+    correctIdx: 1,
+    story: "המילה \"שיר\" קובעת את המשמעות. שיר בנוי מבתים ופזמונים — אין לו כניסה או מטבח. הרמז השני הוא \"אחרי הראשון\" — בבית לא סופרים ככה.",
+  },
+  {
+    word: "קר",
+    sentence: "בחוץ קר, אל תשכח סוודר.",
+    options: [
+      "טמפרטורה נמוכה",
+      "אדם ללא רגשות",
+      "צבע בין לבן לאפור",
+      "בלי חום או התלהבות",
+    ],
+    correctIdx: 0,
+    story: "המילים \"בחוץ\" ו\"סוודר\" הן הרמז. בחוץ יכולה להיות טמפרטורה, אבל לא רגשות של אדם. סוודר משתמשים בו רק כשהטמפרטורה נמוכה.",
+  },
+  {
+    word: "כלב",
+    sentence: "כלב הים שוחה מהר במים הקרים של האנטארקטיקה.",
+    options: [
+      "חיה של הבית שנובחת",
+      "יונק ים עם פרווה",
+      "מכשיר לתפוס דגים",
+      "אדם שלא נחמד",
+    ],
+    correctIdx: 1,
+    story: "\"של הים\" משנה את המשמעות לגמרי. כלב ים זו לא חיית מחמד — זו חיה שחיה במים הקרים. שם מטעה כי היא לא באמת מוצאת של כלב.",
+  },
+];
+
 const ROUNDS_BY_LANG: Record<string, MeaningLensRound[]> = {
   en: MEANING_LENS_ROUNDS_EN,
   he: MEANING_LENS_ROUNDS_HE,
@@ -600,10 +850,28 @@ const ROUNDS_BY_LANG: Record<string, MeaningLensRound[]> = {
   ru: MEANING_LENS_ROUNDS_RU,
 };
 
+const ROUNDS_BY_LANG_KIDS: Record<string, MeaningLensRound[]> = {
+  en: MEANING_LENS_ROUNDS_KIDS_EN,
+  he: MEANING_LENS_ROUNDS_KIDS_HE,
+};
+
 export function pickMeaningLensRounds(
   count: number,
   lang: string = "en",
+  kids: boolean = false,
 ): { rounds: MeaningLensRound[]; contentLang: string } {
+  if (kids) {
+    const kidsLang = ROUNDS_BY_LANG_KIDS[lang] ? lang : "en";
+    const kidsPool = ROUNDS_BY_LANG_KIDS[kidsLang];
+    if (kidsPool && kidsPool.length > 0) {
+      const shuffled = kidsPool.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return { rounds: shuffled.slice(0, count), contentLang: kidsLang };
+    }
+  }
   const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
   const pool = ROUNDS_BY_LANG[contentLang];
   const shuffled = pool.slice();

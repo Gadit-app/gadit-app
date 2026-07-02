@@ -373,6 +373,159 @@ const ETYMOLOGY_ARTIST_ROUNDS_RU: EtymologyArtistRound[] = [
   },
 ];
 
+// ─── Kids content ──────────────────────────────────────────────
+// Vocabulary a 6-12 year old actually meets — butterfly, dinosaur,
+// pineapple. Etymology stays honest (the game's magic is real
+// history) but the words and reveal are pitched for a curious child,
+// not an adult reader. English + Hebrew for launch; other languages
+// fall back to English kids content, and if even that pool isn't
+// big enough for a session, we fall back to the adult pool.
+const ETYMOLOGY_ARTIST_ROUNDS_KIDS_EN: EtymologyArtistRound[] = [
+  {
+    literal: "butter fly",
+    origin: "Old English butere + fleoge",
+    options: ["butterfly", "dragonfly", "bumblebee", "grasshopper"],
+    correctIdx: 0,
+    story: "Old English name for the yellow butterfly, the first one people saw each spring. The name stuck for every butterfly, even the ones that are blue or orange.",
+  },
+  {
+    literal: "terrible lizard",
+    origin: "Greek deinos + sauros",
+    options: ["dinosaur", "crocodile", "dragon", "alligator"],
+    correctIdx: 0,
+    story: "A British scientist made up this word in 1841. He wanted a name big enough for the giant bones he was finding. Greek gave him deinos (scary) and sauros (lizard).",
+  },
+  {
+    literal: "apple of a pine tree",
+    origin: "Middle English pine + appel",
+    options: ["pineapple", "acorn", "coconut", "kiwi"],
+    correctIdx: 0,
+    story: "Explorers found the spiky fruit in South America and thought it looked exactly like a pine cone. Back in Europe apples were the word for any round fruit, so: pine + apple.",
+  },
+  {
+    literal: "break the fast",
+    origin: "Old English brecan + fæstan",
+    options: ["breakfast", "brunch", "picnic", "dessert"],
+    correctIdx: 0,
+    story: "All night while you sleep, you're fasting — not eating. Your first meal in the morning breaks that fast. That's why English still calls it break-fast.",
+  },
+  {
+    literal: "sun flower",
+    origin: "Latin sol + flos",
+    options: ["sunflower", "daisy", "rose", "tulip"],
+    correctIdx: 0,
+    story: "Sunflowers actually turn their yellow faces to follow the sun across the sky when they're young. Almost every language on Earth calls it the sun-flower.",
+  },
+  {
+    literal: "spiral wing",
+    origin: "Greek helix + pteron",
+    options: ["helicopter", "airplane", "drone", "kite"],
+    correctIdx: 0,
+    story: "The blades spin in a spiral to lift the machine straight up. A French inventor gave it the Greek name in 1861, forty years before anyone actually built a working one.",
+  },
+  {
+    literal: "jelly fish",
+    origin: "Middle English gelee + fyshe",
+    options: ["jellyfish", "octopus", "starfish", "seahorse"],
+    correctIdx: 0,
+    story: "Squishy, wobbly, see-through — jellyfish feel exactly like jelly. English sailors named them centuries ago even though jellyfish aren't actually fish at all.",
+  },
+  {
+    literal: "hippo of the river",
+    origin: "Greek hippos + potamos",
+    options: ["hippopotamus", "rhinoceros", "elephant", "walrus"],
+    correctIdx: 0,
+    story: "The ancient Greeks saw the huge animal splashing in African rivers and made up the perfect name: horse (hippos) of the river (potamos). Say it out loud — it's actually two Greek words.",
+  },
+  {
+    literal: "milky way",
+    origin: "Latin via + lactea",
+    options: ["Milky Way", "Sun", "Moon", "Orion"],
+    correctIdx: 0,
+    story: "The band of stars looked like spilled milk across the night sky. Every ancient language noticed the same thing — Greek called it galaxias (from gala = milk), which is why we say galaxy today.",
+  },
+  {
+    literal: "hot dog",
+    origin: "American English 1890s slang",
+    options: ["hot dog", "hamburger", "pretzel", "popcorn"],
+    correctIdx: 0,
+    story: "German sausages in a bun were nicknamed hot dogs because a cartoonist joked they were made of dachshund meat. The joke wasn't true, but the name stuck forever.",
+  },
+];
+
+const ETYMOLOGY_ARTIST_ROUNDS_KIDS_HE: EtymologyArtistRound[] = [
+  {
+    literal: "לטאה מפחידה",
+    origin: "יוונית deinos + sauros",
+    options: ["דינוזאור", "תנין", "דרקון", "לטאה"],
+    correctIdx: 0,
+    story: "מדען בריטי המציא את המילה בשנת 1841. הוא ראה את העצמות הענקיות ורצה שם שיתאים לגודל: לטאה (סאורוס) מפחידה (דיינוס) ביוונית.",
+  },
+  {
+    literal: "רחוק-קול",
+    origin: "יוונית tele + phone",
+    options: ["טלפון", "רדיו", "מיקרופון", "רמקול"],
+    correctIdx: 0,
+    story: "טלה ביוונית זה רחוק (כמו טלסקופ שרואה רחוק), ופונה זה קול. טלפון = קול שמגיע ממרחק. פשוט וקסום כשחושבים על זה.",
+  },
+  {
+    literal: "כדור של רגל",
+    origin: "עברית מודרנית",
+    options: ["כדורגל", "כדורסל", "טניס", "בייסבול"],
+    correctIdx: 0,
+    story: "כשהמשחק הגיע לישראל בתחילת המאה ה-20, הוועד ללשון העברית הרכיב את השם משתי מילים פשוטות: כדור + רגל. אותו רעיון כמו football באנגלית.",
+  },
+  {
+    literal: "תפוח מהאדמה",
+    origin: "עברית מודרנית",
+    options: ["תפוח אדמה", "אבטיח", "מלפפון", "פלפל"],
+    correctIdx: 0,
+    story: "בעברית קראו לירק העגול תפוח, כי הוא עגול כמו תפוח. הוא גדל באדמה, אז: תפוח-אדמה. בצרפתית גם קוראים לו pomme de terre, אותו רעיון בדיוק.",
+  },
+  {
+    literal: "גלגל שנע",
+    origin: "עברית מודרנית",
+    options: ["אופנוע", "אופניים", "מכונית", "רכבת"],
+    correctIdx: 0,
+    story: "אופן זו מילה עברית עתיקה לגלגל (כמו \"אופני מרכבה\" בתנ\"ך). כשהמציאו את האופניים הממונעים, שילבו: אופן (גלגל) + נוע (תנועה). המילה נטבעה בשנות ה-30.",
+  },
+  {
+    literal: "העיר המבורג",
+    origin: "גרמנית — שם עיר",
+    options: ["המבורגר", "פיצה", "פלאפל", "שווארמה"],
+    correctIdx: 0,
+    story: "מהגרים מהעיר המבורג בגרמניה הביאו לאמריקה מנת בשר טחון. באמריקה קראו לזה \"סטייק מהמבורג\" ובקיצור: המבורגר. השם היה תמיד של העיר.",
+  },
+  {
+    literal: "משהו שמקרר",
+    origin: "עברית מודרנית",
+    options: ["מקרר", "פמוט", "טוסטר", "כירה"],
+    correctIdx: 0,
+    story: "מהמילה קור. כמו שמסמר \"מסמר\" ומעיל \"מעיל\", מקרר \"מקרר\" — כלי שעושה את הפעולה. המילה נטבעה בעברית ב-1937 כשהמוצר החדש נכנס לבתים.",
+  },
+  {
+    literal: "רחוק-להסתכל",
+    origin: "יוונית tele + skopein",
+    options: ["טלסקופ", "מיקרוסקופ", "משקפת", "משקפיים"],
+    correctIdx: 0,
+    story: "טלה ביוונית זה רחוק, וסקופין זה להסתכל. גלילאו לא המציא את המילה — הוא רק היה הראשון שהשתמש בטלסקופ כדי להסתכל בכוכבים בשנת 1610.",
+  },
+  {
+    literal: "גדול-אח",
+    origin: "עברית מקראית",
+    options: ["אחיין", "דוד", "בן-דוד", "אח גדול"],
+    correctIdx: 1,
+    story: "המילה דוד בתנ\"ך התחילה כתואר של חיבה — כמו יקירי. עם הזמן הפכה למילה ספציפית לאח של אמא או של אבא. \"דודי\" בשיר השירים לא היה קרוב משפחה, זה היה אהוב.",
+  },
+  {
+    literal: "ילד של החורף",
+    origin: "עברית מקראית",
+    options: ["גשם", "שלג", "ברד", "טל"],
+    correctIdx: 0,
+    story: "המילה גשם קשורה לשורש גש\"ם — משהו שיש לו גוף, מוחשי. בניגוד לטל שהוא כמעט לא נראה, הגשם הוא \"החורף שאתה יכול לגעת בו\".",
+  },
+];
+
 const ROUNDS_BY_LANG: Record<string, EtymologyArtistRound[]> = {
   en: ETYMOLOGY_ARTIST_ROUNDS_EN,
   he: ETYMOLOGY_ARTIST_ROUNDS_HE,
@@ -380,10 +533,35 @@ const ROUNDS_BY_LANG: Record<string, EtymologyArtistRound[]> = {
   ru: ETYMOLOGY_ARTIST_ROUNDS_RU,
 };
 
+const ROUNDS_BY_LANG_KIDS: Record<string, EtymologyArtistRound[]> = {
+  en: ETYMOLOGY_ARTIST_ROUNDS_KIDS_EN,
+  he: ETYMOLOGY_ARTIST_ROUNDS_KIDS_HE,
+};
+
+/**
+ * Pick `count` rounds. When kids=true, we prefer kids content for the
+ * requested lang, fall back to English kids content, and only fall
+ * back to adult content if the kids pool is missing entirely — that
+ * way a 6-year-old never sees "necromancy" mid-game because we ran
+ * out of curated kids rounds.
+ */
 export function pickEtymologyArtistRounds(
   count: number,
   lang: string = "en",
+  kids: boolean = false,
 ): { rounds: EtymologyArtistRound[]; contentLang: string } {
+  if (kids) {
+    const kidsLang = ROUNDS_BY_LANG_KIDS[lang] ? lang : "en";
+    const kidsPool = ROUNDS_BY_LANG_KIDS[kidsLang];
+    if (kidsPool && kidsPool.length > 0) {
+      const shuffled = kidsPool.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return { rounds: shuffled.slice(0, count), contentLang: kidsLang };
+    }
+  }
   const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
   const pool = ROUNDS_BY_LANG[contentLang];
   const shuffled = pool.slice();

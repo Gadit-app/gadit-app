@@ -19,6 +19,7 @@ import { useState, useMemo } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
+import { readKidsMode } from "@/lib/use-kids-mode";
 import {
   pickEtymologyArtistRounds,
   type EtymologyArtistRound,
@@ -32,8 +33,8 @@ type RuntimeRound = {
   story: string;
 };
 
-function buildRuntimeRounds(uiLang: string): { rounds: RuntimeRound[]; contentLang: string } {
-  const { rounds: source, contentLang } = pickEtymologyArtistRounds(SESSION_SIZE.artist, uiLang);
+function buildRuntimeRounds(uiLang: string, kids: boolean): { rounds: RuntimeRound[]; contentLang: string } {
+  const { rounds: source, contentLang } = pickEtymologyArtistRounds(SESSION_SIZE.artist, uiLang, kids);
   return {
     contentLang,
     rounds: source.map((r): RuntimeRound => {
@@ -61,7 +62,10 @@ export function GameEtymologyArtist({
   lang: string;
   t: PlayT;
 }) {
-  const built = useMemo(() => buildRuntimeRounds(lang), [lang]);
+  // Kids Mode is read once at game start — a session locks its content
+  // pool. If the parent flips the toggle mid-round we don't swap content
+  // out from under the player; the next replay picks up the new mode.
+  const built = useMemo(() => buildRuntimeRounds(lang, readKidsMode()), [lang]);
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);

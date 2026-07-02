@@ -22,6 +22,7 @@ import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { useKidsMode } from "@/lib/use-kids-mode";
 import {
   loadPlayWords,
   hydrateExamples,
@@ -61,6 +62,145 @@ const LANGS = [
   { code: "ja", label: "日本語", flag: "jp" },
   { code: "hi", label: "हिन्दी", flag: "in" },
 ] as const;
+
+// Kids Mode banner copy — this card sits at the top of the games menu
+// and makes Kids Mode discoverable to parents who otherwise wouldn't
+// notice the small toggle in the search bar. Round 1 ships EN + HE
+// verbatim; other languages fall back to English until native review.
+type KidsBannerCopy = {
+  offTitle: string;
+  offDesc: string;
+  offCTA: string;
+  onTitle: string;
+  onDesc: string;
+  onCTA: string;
+  gateTitle: string;
+  gateDesc: string;
+  gateCTA: string;
+};
+const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
+  he: {
+    offTitle: "משחקים עם ילד?",
+    offDesc: "הפעל מצב ילדים כדי לראות משחקים ושפה שמתאימים לגילאי 6-12.",
+    offCTA: "הפעל מצב ילדים",
+    onTitle: "✓ מצב ילדים פועל",
+    onDesc: "מציגים כרגע רק את המשחקים המתאימים לילדים.",
+    onCTA: "כבה",
+    gateTitle: "משחקים עם ילד?",
+    gateDesc: "מצב ילדים זמין למנויים בתכניות Clear ו-Deep.",
+    gateCTA: "צפה בתכניות",
+  },
+  en: {
+    offTitle: "Playing with a child?",
+    offDesc: "Turn on Kids Mode to see games and language tuned for ages 6–12.",
+    offCTA: "Turn on Kids Mode",
+    onTitle: "✓ Kids Mode is on",
+    onDesc: "Showing only the games we picked for younger players.",
+    onCTA: "Turn off",
+    gateTitle: "Playing with a child?",
+    gateDesc: "Kids Mode is available on the Clear and Deep plans.",
+    gateCTA: "See plans",
+  },
+  ar: {
+    offTitle: "تلعب مع طفل؟",
+    offDesc: "فعّل وضع الأطفال لرؤية ألعاب ولغة مناسبة لأعمار 6-12.",
+    offCTA: "فعّل وضع الأطفال",
+    onTitle: "✓ وضع الأطفال مفعّل",
+    onDesc: "نعرض فقط الألعاب المناسبة للأطفال الأصغر سنًا.",
+    onCTA: "إيقاف",
+    gateTitle: "تلعب مع طفل؟",
+    gateDesc: "وضع الأطفال متاح في خطتي Clear و Deep.",
+    gateCTA: "شاهد الخطط",
+  },
+  ru: {
+    offTitle: "Играете с ребёнком?",
+    offDesc: "Включите детский режим — увидите игры и язык для возраста 6-12.",
+    offCTA: "Включить детский режим",
+    onTitle: "✓ Детский режим включён",
+    onDesc: "Показываем только игры, подобранные для младших игроков.",
+    onCTA: "Выключить",
+    gateTitle: "Играете с ребёнком?",
+    gateDesc: "Детский режим доступен в тарифах Clear и Deep.",
+    gateCTA: "Смотреть тарифы",
+  },
+  es: {
+    offTitle: "¿Juegas con un niño?",
+    offDesc: "Activa el modo niños para ver juegos y lenguaje para 6-12 años.",
+    offCTA: "Activar modo niños",
+    onTitle: "✓ Modo niños activado",
+    onDesc: "Mostramos solo los juegos elegidos para los más pequeños.",
+    onCTA: "Desactivar",
+    gateTitle: "¿Juegas con un niño?",
+    gateDesc: "El modo niños está disponible en los planes Clear y Deep.",
+    gateCTA: "Ver planes",
+  },
+  pt: {
+    offTitle: "Jogando com uma criança?",
+    offDesc: "Ative o modo crianças para ver jogos e linguagem para 6-12 anos.",
+    offCTA: "Ativar modo crianças",
+    onTitle: "✓ Modo crianças ativado",
+    onDesc: "Mostrando apenas os jogos que escolhemos para os mais novos.",
+    onCTA: "Desativar",
+    gateTitle: "Jogando com uma criança?",
+    gateDesc: "O modo crianças está nos planos Clear e Deep.",
+    gateCTA: "Ver planos",
+  },
+  fr: {
+    offTitle: "Vous jouez avec un enfant ?",
+    offDesc: "Activez le mode enfants pour des jeux et un langage adaptés aux 6-12 ans.",
+    offCTA: "Activer le mode enfants",
+    onTitle: "✓ Mode enfants activé",
+    onDesc: "Nous n'affichons que les jeux choisis pour les plus jeunes.",
+    onCTA: "Désactiver",
+    gateTitle: "Vous jouez avec un enfant ?",
+    gateDesc: "Le mode enfants est disponible dans les formules Clear et Deep.",
+    gateCTA: "Voir les formules",
+  },
+  de: {
+    offTitle: "Spielst du mit einem Kind?",
+    offDesc: "Aktiviere den Kinder-Modus für Spiele und Sprache für 6- bis 12-Jährige.",
+    offCTA: "Kinder-Modus aktivieren",
+    onTitle: "✓ Kinder-Modus aktiv",
+    onDesc: "Wir zeigen nur die für jüngere Spieler ausgewählten Spiele.",
+    onCTA: "Deaktivieren",
+    gateTitle: "Spielst du mit einem Kind?",
+    gateDesc: "Der Kinder-Modus ist in den Clear- und Deep-Plänen enthalten.",
+    gateCTA: "Pläne ansehen",
+  },
+  cs: {
+    offTitle: "Hraješ s dítětem?",
+    offDesc: "Zapni Dětský režim — uvidíš hry a jazyk pro věk 6–12.",
+    offCTA: "Zapnout Dětský režim",
+    onTitle: "✓ Dětský režim je zapnutý",
+    onDesc: "Zobrazujeme jen hry vybrané pro mladší hráče.",
+    onCTA: "Vypnout",
+    gateTitle: "Hraješ s dítětem?",
+    gateDesc: "Dětský režim je součástí tarifů Clear a Deep.",
+    gateCTA: "Zobrazit tarify",
+  },
+  sk: {
+    offTitle: "Hráš s dieťaťom?",
+    offDesc: "Zapni Detský režim — uvidíš hry a jazyk pre vek 6–12.",
+    offCTA: "Zapnúť Detský režim",
+    onTitle: "✓ Detský režim je zapnutý",
+    onDesc: "Zobrazujeme len hry vybrané pre mladších hráčov.",
+    onCTA: "Vypnúť",
+    gateTitle: "Hráš s dieťaťom?",
+    gateDesc: "Detský režim je súčasťou plánov Clear a Deep.",
+    gateCTA: "Zobraziť plány",
+  },
+  hi: {
+    offTitle: "बच्चे के साथ खेल रहे हैं?",
+    offDesc: "6-12 वर्ष के लिए उपयुक्त गेम और भाषा देखने के लिए Kids Mode चालू करें।",
+    offCTA: "Kids Mode चालू करें",
+    onTitle: "✓ Kids Mode चालू है",
+    onDesc: "छोटे खिलाड़ियों के लिए चुने गए गेम दिखा रहे हैं।",
+    onCTA: "बंद करें",
+    gateTitle: "बच्चे के साथ खेल रहे हैं?",
+    gateDesc: "Kids Mode Clear और Deep प्लान में उपलब्ध है।",
+    gateCTA: "प्लान देखें",
+  },
+};
 
 // Localized strings — kept inline rather than added to i18n-v2 to keep
 // the games self-contained and easy to ship. Will be migrated into
@@ -1045,6 +1185,16 @@ export function PlayPage() {
   const [pool, setPool] = useState<PlayWord[] | null>(null);
   const [fetchError, setFetchError] = useState<string>("");
   const [streak, setStreak] = useState(() => getStreak());
+  // Kids Mode filters the games menu to only the 9 games we've curated
+  // for younger players: the 5 notebook games (auto-adapt from the
+  // child's own vocabulary) + Etymology Artist, Idiom Decoder, Meaning
+  // Lens, and Twin Trap (which each ship a kid-friendly content pool).
+  // The 6 remaining curated games — Time Traveler, Word Passport,
+  // False Friends, Root Rush, Shade Slider, Build A Word — are hidden
+  // because their content is genuinely too advanced (etymology roots,
+  // cross-language cognates, historical meaning shifts). Gadi 2026-06-29.
+  const [kidsMode, setKidsMode] = useKidsMode();
+  const isPaid = plan === "clear" || plan === "deep";
 
   // Auth + tier gate — Deep only.
   //
@@ -1124,6 +1274,10 @@ export function PlayPage() {
     icon: React.ReactNode;
     accent: string;
     category: GameCategory;
+    /** True if this game has a kid-appropriate content pool AND its
+     *  mechanic is understandable to a 6-12 year old. When Kids Mode
+     *  is on, the menu shows only these games. */
+    kidsFriendly?: boolean;
   }> = [
     {
       id: "quiz",
@@ -1132,6 +1286,7 @@ export function PlayPage() {
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.quiz,
       accent: "teal",
       category: "notebook",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="9" />
@@ -1147,6 +1302,7 @@ export function PlayPage() {
       enabled: poolWithExamples >= MIN_WORDS_FOR_GAME.fillblank,
       accent: "indigo",
       category: "notebook",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 7h7" />
@@ -1162,6 +1318,7 @@ export function PlayPage() {
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.memory,
       accent: "purple",
       category: "notebook",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="8" height="8" rx="1.5" />
@@ -1178,6 +1335,7 @@ export function PlayPage() {
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.anagram,
       accent: "amber",
       category: "notebook",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 6h16" />
@@ -1194,6 +1352,7 @@ export function PlayPage() {
       enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.speed,
       accent: "rose",
       category: "notebook",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
@@ -1208,6 +1367,7 @@ export function PlayPage() {
       enabled: true,
       accent: "sky",
       category: "precision",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="8" cy="12" r="4" />
@@ -1310,6 +1470,7 @@ export function PlayPage() {
       enabled: true,
       accent: "fuchsia",
       category: "structure",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
@@ -1323,6 +1484,7 @@ export function PlayPage() {
       enabled: true,
       accent: "cyan",
       category: "structure",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="7" />
@@ -1337,6 +1499,7 @@ export function PlayPage() {
       enabled: true,
       accent: "pink",
       category: "origin",
+      kidsFriendly: true,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2v6m0 0 3-3m-3 3-3-3" />
@@ -1538,6 +1701,65 @@ export function PlayPage() {
           </div>
         )}
 
+        {/* Kids Mode banner — sits above the games sections so a parent
+            handing the device to a 6-12 year old sees the toggle
+            immediately. Three states: paid user with Kids Mode off
+            (invite), paid user with Kids Mode on (confirmation), and
+            unpaid user (gentle upsell). Non-signed-in and Basic-plan
+            users see the gate state; only Clear/Deep can actually
+            switch the mode. Gadi 2026-06-29 tablet audit fix. */}
+        {(() => {
+          const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
+          if (!isPaid) {
+            return (
+              <div className="wb-play-kids-banner is-gate">
+                <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
+                <div className="wb-play-kids-banner-text">
+                  <div className="wb-play-kids-banner-title">{bannerCopy.gateTitle}</div>
+                  <div className="wb-play-kids-banner-desc">{bannerCopy.gateDesc}</div>
+                </div>
+                <Link href={href("/pricing")} className="wb-play-kids-banner-cta">
+                  {bannerCopy.gateCTA}
+                </Link>
+              </div>
+            );
+          }
+          if (kidsMode) {
+            return (
+              <div className="wb-play-kids-banner is-on">
+                <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
+                <div className="wb-play-kids-banner-text">
+                  <div className="wb-play-kids-banner-title">{bannerCopy.onTitle}</div>
+                  <div className="wb-play-kids-banner-desc">{bannerCopy.onDesc}</div>
+                </div>
+                <button
+                  type="button"
+                  className="wb-play-kids-banner-cta is-ghost"
+                  onClick={() => setKidsMode(false)}
+                >
+                  {bannerCopy.onCTA}
+                </button>
+              </div>
+            );
+          }
+          return (
+            <div className="wb-play-kids-banner">
+              <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
+              <div className="wb-play-kids-banner-text">
+                <div className="wb-play-kids-banner-title">{bannerCopy.offTitle}</div>
+                <div className="wb-play-kids-banner-desc">{bannerCopy.offDesc}</div>
+              </div>
+              <button
+                type="button"
+                className="wb-play-kids-banner-cta"
+                onClick={() => setKidsMode(true)}
+              >
+                {bannerCopy.offCTA}
+              </button>
+            </div>
+          );
+        })()}
+
         {/* Games rendered as grouped grids by category. We render each
             category as its own grid so the section heading sits cleanly
             above its games. Notebook games hide entirely when the user
@@ -1552,7 +1774,13 @@ export function PlayPage() {
           ];
           const hasEnoughForNotebook = (pool?.length ?? 0) >= 4;
           return sections.map((section) => {
-            const sectionGames = games.filter((g) => g.category === section.id);
+            // When Kids Mode is on, filter to games we've curated for
+            // younger players. The 5 notebook games always qualify
+            // (auto-adapt from the child's own vocabulary); the 4
+            // curated games with kids content join them.
+            const sectionGames = games.filter(
+              (g) => g.category === section.id && (!kidsMode || g.kidsFriendly),
+            );
             if (sectionGames.length === 0) return null;
             // Hide the notebook section entirely when the user doesn't
             // have enough words yet — the "not enough words" empty state

@@ -590,6 +590,256 @@ const IDIOM_DECODER_ROUNDS_RU: IdiomDecoderRound[] = [
   },
 ];
 
+// ─── Kids content ──────────────────────────────────────────────
+// Idioms a 6-12 year old can meet in a book, a movie, or a parent's
+// speech. Kept concrete, cheerful. Avoids anything about death,
+// money loss, or adult social situations. Origins simplified.
+const IDIOM_DECODER_ROUNDS_KIDS_EN: IdiomDecoderRound[] = [
+  {
+    idiom: "raining cats and dogs",
+    literal: "The sky opens and real cats and dogs fall out with the rain, landing on the streets in a wet, meowing, barking mess.",
+    options: [
+      "raining very very hard",
+      "there are many pets outside",
+      "a strange storm is coming",
+      "kids are playing in the rain",
+    ],
+    correctIdx: 0,
+    story: "This funny old English saying probably started 300 years ago. Some think it's from old roof-thatched houses where cats really did hide during storms and sometimes tumbled out.",
+  },
+  {
+    idiom: "a piece of cake",
+    literal: "One small slice of chocolate cake sits on a white plate. That's the whole challenge — just eat this piece.",
+    options: [
+      "something very easy",
+      "a birthday treat",
+      "sharing dessert",
+      "cooking something new",
+    ],
+    correctIdx: 0,
+    story: "Eating a piece of cake is one of the easiest, nicest things a kid can do. So when something's super easy, we say: piece of cake!",
+  },
+  {
+    idiom: "hit the books",
+    literal: "A kid stands at a desk and starts punching a stack of school books with their fists. Boxing gloves on. Books flying.",
+    options: [
+      "to start studying hard",
+      "to be angry at homework",
+      "to throw books around",
+      "to read very fast",
+    ],
+    correctIdx: 0,
+    story: "'Hit' here means to attack a task with energy. When a student really goes at their studies, we say they hit the books — even though no actual hitting is happening.",
+  },
+  {
+    idiom: "a bookworm",
+    literal: "A tiny worm wearing round glasses is curled up inside a page of an open book, quietly reading.",
+    options: [
+      "a person who loves to read",
+      "a worm that eats paper",
+      "a small library",
+      "someone with a book collection",
+    ],
+    correctIdx: 0,
+    story: "Real bookworms are tiny bugs that eat the paper of old books. The nickname jumped from the bugs to kids who love reading so much you can barely pull them out of a book.",
+  },
+  {
+    idiom: "the early bird catches the worm",
+    literal: "A tiny yellow bird flies out at sunrise while all the other birds are still sleeping, and grabs the fattest worm on the lawn.",
+    options: [
+      "waking up early helps you succeed",
+      "birds like sunrise",
+      "worms are good for breakfast",
+      "morning is prettier",
+    ],
+    correctIdx: 0,
+    story: "Real birds do wake up early to catch worms — the worms come out of the ground when the dew is fresh. From that we get: whoever starts first has the best chance.",
+  },
+  {
+    idiom: "spill the beans",
+    literal: "A kid tips over a big jar of dried beans on the classroom floor. Beans bounce everywhere. Impossible to sneak back into the jar.",
+    options: [
+      "to accidentally tell a secret",
+      "to make a big mess",
+      "to be clumsy at dinner",
+      "to lose your lunch",
+    ],
+    correctIdx: 0,
+    story: "Ancient Greeks voted by dropping colored beans into jars. If someone knocked the jar over, everyone could count the votes early — the secret was out.",
+  },
+  {
+    idiom: "when pigs fly",
+    literal: "A very round pink pig sprouts white feathery wings and floats over the barn, looking a little confused about it.",
+    options: [
+      "something that will never happen",
+      "a magic show",
+      "a strange dream",
+      "a farm trick",
+    ],
+    correctIdx: 0,
+    story: "Pigs are heavy, round, and definitely can't fly. So if a kid says 'When will you clean your room?' and you answer 'When pigs fly' — you mean never.",
+  },
+  {
+    idiom: "break the ice",
+    literal: "Two kids meet at a party. A giant sheet of ice stands between them like a wall. One of them takes a hammer and cracks it open.",
+    options: [
+      "to start talking with a new person",
+      "to serve cold drinks",
+      "to skate on a pond",
+      "to be very cold",
+    ],
+    correctIdx: 0,
+    story: "In really old times, ships got stuck in frozen harbours. Someone had to break the ice to let them sail. Now we use it for any 'first hello' between strangers.",
+  },
+  {
+    idiom: "a bad apple",
+    literal: "One brown, mushy apple sits in a wooden basket surrounded by twenty shiny red apples. It's slowly making them all rot.",
+    options: [
+      "one person who ruins the group",
+      "a bruised fruit",
+      "a bad breakfast",
+      "an old lunchbox",
+    ],
+    correctIdx: 0,
+    story: "One rotten apple really does spoil the whole basket — a chemical from it makes the other apples go bad. That's where the saying about one bad person spoiling the group came from.",
+  },
+  {
+    idiom: "on cloud nine",
+    literal: "A very happy kid sits cross-legged on top of a soft, fluffy white cloud floating high in the sky, giggling with joy.",
+    options: [
+      "feeling extremely happy",
+      "flying an airplane",
+      "having a good dream",
+      "watching the weather",
+    ],
+    correctIdx: 0,
+    story: "Weather scientists used to number cloud types. The ninth kind — cumulonimbus — is the tallest and puffiest. So being 'on cloud nine' means you're up as high as feelings go.",
+  },
+];
+
+const IDIOM_DECODER_ROUNDS_KIDS_HE: IdiomDecoderRound[] = [
+  {
+    idiom: "יורד גשם של חתולים וכלבים",
+    literal: "השמיים נפתחים וחתולים וכלבים אמיתיים נופלים למטה עם הגשם, נוחתים על הרחוב עם מיאו וגעגוע.",
+    options: [
+      "יורד גשם חזק מאוד",
+      "יש הרבה חיות מחמד",
+      "בא סופה מוזרה",
+      "ילדים משחקים בגשם",
+    ],
+    correctIdx: 0,
+    story: "ביטוי אנגלי משעשע שנולד לפני 300 שנה. יש מי שאומרים שהוא בא מבתים ישנים עם גגות קש שבהם חתולים היו מסתתרים בסופות ולפעמים נופלים מהגג.",
+  },
+  {
+    idiom: "פרפרים בבטן",
+    literal: "בתוך הבטן של ילד לפני מבחן, מאות פרפרים צבעוניים מעופפים ומתחככים בקירות הבטן.",
+    options: [
+      "להיות מתרגש או חרד",
+      "אכלת יותר מדי",
+      "אתה עצוב",
+      "אתה רעב",
+    ],
+    correctIdx: 0,
+    story: "כשמתרגשים, הבטן באמת מרגישה מוזרה — זה אדרנלין שמזרים דם למקום אחר. הביטוי הזה קיים בעברית ובכמעט כל שפה בעולם.",
+  },
+  {
+    idiom: "עלה על גדותיו",
+    literal: "כוס עם מים מלאה עד למעלה. עוד טיפה אחת קטנה גורמת לכל המים לזרום החוצה אל השולחן.",
+    options: [
+      "הרגשה שהתפוצצה החוצה",
+      "יש הרבה מים בכוס",
+      "מישהו טיפס על גדר",
+      "לשפוך משהו בטעות",
+    ],
+    correctIdx: 0,
+    story: "מקורו של הביטוי מנהרות שגולשות מהחופים כשיש יותר מדי מים. משתמשים בו לרגשות — כשמישהו שמח מאוד או כועס מאוד, כאילו הרגש הגדול מדי בשבילו.",
+  },
+  {
+    idiom: "אין לו לב",
+    literal: "בחור עומד ומחייך, אבל אם מסתכלים לו בחזה יש חלל ריק. הלב פשוט לא שם.",
+    options: [
+      "אכזרי, לא רגיש לאחרים",
+      "עייף מאוד",
+      "מפחד",
+      "רעב",
+    ],
+    correctIdx: 0,
+    story: "בעברית ובעוד שפות רבות הלב הוא סמל של רגשות. כשאומרים על מישהו \"אין לו לב\", מתכוונים שהוא לא מרגיש עם אחרים. כמובן שלכל אדם יש לב אמיתי.",
+  },
+  {
+    idiom: "יש לו יד קלה",
+    literal: "בחורה מציירת עם עיפרון, והיד שלה כל כך קלה שהיא ממש מרחפת מעל הדף בלי לגעת בו.",
+    options: [
+      "יש לו כישרון לעשות משהו בעדינות",
+      "היד שלו רזה",
+      "הוא לא אוכל הרבה",
+      "הוא לא עובד קשה",
+    ],
+    correctIdx: 0,
+    story: "משתמשים בזה למי שמצליח לעשות משהו בעדינות — לצייר, לבשל, לטפל בילד. יד \"קלה\" זה יד שיודעת לגעת בלי לפגוע.",
+  },
+  {
+    idiom: "יצא מהכלים",
+    literal: "בחור עומד ליד ערימת סירים ומחבתות. פתאום הוא קופץ החוצה מכל הכלים ומתחיל לצעוק.",
+    options: [
+      "להתפרץ מכעס",
+      "לצאת מהמטבח",
+      "לזרוק את הצלחות",
+      "להתחיל לבשל",
+    ],
+    correctIdx: 0,
+    story: "המילה \"כלי\" בעברית עתיקה זה גם המקום שמכיל אותך — הגוף, השליטה העצמית. \"לצאת מהכלים\" זה כמו לצאת מגבולות עצמך מרוב כעס.",
+  },
+  {
+    idiom: "כשיצמח שיער על כף ידי",
+    literal: "בחור מרים את היד ומסתכל על כף היד השטוחה, חלקה לגמרי. חיכה שיצמחו שם שערות אבל שום דבר לא קורה.",
+    options: [
+      "משהו שלא יקרה לעולם",
+      "משהו שיקרה כשאהיה זקן",
+      "טריק קסמים",
+      "משהו מוזר",
+    ],
+    correctIdx: 0,
+    story: "שיער לא צומח על כף היד. אף פעם. לכן כשילד אומר \"כשיצמח שיער על כף ידי אנקה את החדר\" — הוא מתכוון: לעולם לא.",
+  },
+  {
+    idiom: "לשבור את הקרח",
+    literal: "שני ילדים חדשים עומדים אחד מול השני. ביניהם קיר גדול של קרח. אחד מהם מרים פטיש ושובר את הקיר.",
+    options: [
+      "להתחיל שיחה עם מישהו חדש",
+      "לגעת בקרח",
+      "להיות קר",
+      "לשחק בשלג",
+    ],
+    correctIdx: 0,
+    story: "פעם, כשאוניות היו נתקעות בים קפוא, מישהו היה חייב לשבור את הקרח כדי שיוכלו לשוט. היום אנחנו \"שוברים את הקרח\" בכל פעם שאנחנו פותחים שיחה עם מישהו חדש.",
+  },
+  {
+    idiom: "אף פעם לא ידפוק פעמיים",
+    literal: "הזדמנות עומדת מחוץ לדלת ודופקת. אם לא פותחים לה, היא מסתובבת והולכת ולא חוזרת אף פעם.",
+    options: [
+      "הזדמנות טובה מגיעה רק פעם אחת",
+      "מישהו לא רוצה להיכנס",
+      "הדלת לא עובדת",
+      "אף אחד לא בבית",
+    ],
+    correctIdx: 0,
+    story: "פתגם שאומר: כשמגיעה הזדמנות טובה בחיים, תפוס אותה. אם תהסס יותר מדי, היא לא תחזור. חלק מהגירסה האנגלית של הפתגם הזה בן יותר מ-500 שנה.",
+  },
+  {
+    idiom: "יש לו זנב מהיר",
+    literal: "ילד עומד בכיתה עם זנב שועל אמיתי, וברגע שהמורה מסובבת את הראש, הזנב עף אחריו וכולו נעלם.",
+    options: [
+      "אין לו סבלנות, בורח מהר",
+      "הוא רץ מהר",
+      "הוא זריז",
+      "הוא חמקן",
+    ],
+    correctIdx: 0,
+    story: "ביטוי לילד או מבוגר שקשה לתפוס אותו במקום אחד — הוא רץ החוצה ברגע שהוא יכול, כמו שועל שנעלם מהר.",
+  },
+];
+
 const ROUNDS_BY_LANG: Record<string, IdiomDecoderRound[]> = {
   en: IDIOM_DECODER_ROUNDS_EN,
   he: IDIOM_DECODER_ROUNDS_HE,
@@ -597,10 +847,28 @@ const ROUNDS_BY_LANG: Record<string, IdiomDecoderRound[]> = {
   ru: IDIOM_DECODER_ROUNDS_RU,
 };
 
+const ROUNDS_BY_LANG_KIDS: Record<string, IdiomDecoderRound[]> = {
+  en: IDIOM_DECODER_ROUNDS_KIDS_EN,
+  he: IDIOM_DECODER_ROUNDS_KIDS_HE,
+};
+
 export function pickIdiomDecoderRounds(
   count: number,
   lang: string = "en",
+  kids: boolean = false,
 ): { rounds: IdiomDecoderRound[]; contentLang: string } {
+  if (kids) {
+    const kidsLang = ROUNDS_BY_LANG_KIDS[lang] ? lang : "en";
+    const kidsPool = ROUNDS_BY_LANG_KIDS[kidsLang];
+    if (kidsPool && kidsPool.length > 0) {
+      const shuffled = kidsPool.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return { rounds: shuffled.slice(0, count), contentLang: kidsLang };
+    }
+  }
   const contentLang = ROUNDS_BY_LANG[lang] ? lang : "en";
   const pool = ROUNDS_BY_LANG[contentLang];
   const shuffled = pool.slice();
