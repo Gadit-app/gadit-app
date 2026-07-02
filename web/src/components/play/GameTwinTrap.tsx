@@ -13,7 +13,7 @@
  * of the game; users need a beat to read it) → auto-advance.
  */
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -68,11 +68,6 @@ export function GameTwinTrap({
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<TwinTrapRound[]>([]);
   const [done, setDone] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
 
   function pick(i: number) {
     if (picked !== null) return;
@@ -91,17 +86,15 @@ export function GameTwinTrap({
         },
       ]);
     }
-    // Longer reveal than Quiz (900ms) because the explanation line is
-    // the load-bearing piece of the game — the whole point is the
-    // tiny moment of clarity. Don't rush the reveal.
-    advanceTimer.current = window.setTimeout(() => {
-      if (idx + 1 >= rounds.length) {
-        setDone(true);
-      } else {
-        setIdx((n) => n + 1);
-        setPicked(null);
-      }
-    }, 1700);
+  }
+
+  function advance() {
+    if (idx + 1 >= rounds.length) {
+      setDone(true);
+    } else {
+      setIdx((n) => n + 1);
+      setPicked(null);
+    }
   }
 
   if (done) {
@@ -182,9 +175,14 @@ export function GameTwinTrap({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-          {r.explain}
-        </div>
+        <>
+          <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
+            {r.explain}
+          </div>
+          <button type="button" className="wb-play-next" onClick={advance}>
+            {idx + 1 >= rounds.length ? t.playFinish : t.playNext}
+          </button>
+        </>
       )}
     </div>
   );

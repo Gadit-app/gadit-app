@@ -10,7 +10,7 @@
  * answer slot is full.
  */
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { PlayWord, AnagramRound } from "@/lib/play-engine";
 import { buildAnagramRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -47,11 +47,6 @@ export function GameAnagram({
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<AnagramRound[]>([]);
   const [done, setDone] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
 
   // When we move to a new round, reseed tiles from the new scramble.
   useEffect(() => {
@@ -98,11 +93,9 @@ export function GameAnagram({
     if (guess.toLowerCase() === word.word.word.toLowerCase()) {
       setResultState("correct");
       setScore((s) => s + 1);
-      advanceTimer.current = window.setTimeout(advance, 900);
     } else {
       setResultState("wrong");
       setMissed((m) => [...m, word]);
-      advanceTimer.current = window.setTimeout(advance, 1300);
     }
   }, [tiles, word, targetLen, resultState]);
 
@@ -181,6 +174,11 @@ export function GameAnagram({
       <button type="button" className="wb-play-anagram-reset" onClick={reset} disabled={resultState !== "none"}>
         {t.anagramReset}
       </button>
+      {resultState !== "none" && (
+        <button type="button" className="wb-play-next" onClick={advance}>
+          {roundIdx + 1 >= rounds.length ? t.playFinish : t.playNext}
+        </button>
+      )}
     </div>
   );
 }

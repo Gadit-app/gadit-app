@@ -15,7 +15,7 @@
  * story line is longer and the "wait what?!" moment needs to land.
  */
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -70,11 +70,6 @@ export function GameTimeTraveler({
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<RuntimeRound[]>([]);
   const [done, setDone] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
 
   function pick(i: number) {
     if (picked !== null) return;
@@ -85,14 +80,15 @@ export function GameTimeTraveler({
     } else {
       setMissed((m) => [...m, r]);
     }
-    advanceTimer.current = window.setTimeout(() => {
-      if (idx + 1 >= rounds.length) {
-        setDone(true);
-      } else {
-        setIdx((n) => n + 1);
-        setPicked(null);
-      }
-    }, 2400);
+  }
+
+  function advance() {
+    if (idx + 1 >= rounds.length) {
+      setDone(true);
+    } else {
+      setIdx((n) => n + 1);
+      setPicked(null);
+    }
   }
 
   if (done) {
@@ -159,9 +155,14 @@ export function GameTimeTraveler({
         })}
       </div>
       {picked !== null && (
-        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-          {r.story}
-        </div>
+        <>
+          <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
+            {r.story}
+          </div>
+          <button type="button" className="wb-play-next" onClick={advance}>
+            {idx + 1 >= rounds.length ? t.playFinish : t.playNext}
+          </button>
+        </>
       )}
     </div>
   );

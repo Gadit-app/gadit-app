@@ -10,7 +10,7 @@
  * After each answer: ~900ms reveal (correct/wrong tinting) → auto-advance.
  */
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildQuizQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -36,11 +36,6 @@ export function GameQuiz({
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<QuizQuestion[]>([]);
   const [done, setDone] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
 
   function pick(i: number) {
     if (picked !== null) return;
@@ -48,13 +43,14 @@ export function GameQuiz({
     const q = questions[idx];
     if (i === q.correctIdx) setScore((s) => s + 1);
     else setMissed((m) => [...m, q]);
-    advanceTimer.current = window.setTimeout(() => {
-      if (idx + 1 >= questions.length) setDone(true);
-      else {
-        setIdx((n) => n + 1);
-        setPicked(null);
-      }
-    }, 900);
+  }
+
+  function advance() {
+    if (idx + 1 >= questions.length) setDone(true);
+    else {
+      setIdx((n) => n + 1);
+      setPicked(null);
+    }
   }
 
   if (done) {
@@ -102,6 +98,11 @@ export function GameQuiz({
           );
         })}
       </div>
+      {picked !== null && (
+        <button type="button" className="wb-play-next" onClick={advance}>
+          {idx + 1 >= questions.length ? t.playFinish : t.playNext}
+        </button>
+      )}
     </div>
   );
 }
@@ -231,4 +232,11 @@ export type PlayT = {
   resultPlayAgain: string;
   resultBackToGames: string;
   resultFinalScore: (s: number) => string;
+  // Progression — pace-your-own-play. Gadi flew back from Israel with
+  // his kids on 2026-06-29 and reported that every game's reveal
+  // flashes for 900–2300 ms and then advances on its own, hiding
+  // the explanation before a slow reader can finish it. Every game
+  // now shows the reveal until the user taps Next / Finish.
+  playNext: string;
+  playFinish: string;
 };

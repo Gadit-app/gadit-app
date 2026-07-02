@@ -14,7 +14,7 @@
  * a fundamentally different mechanic. Curated content.
  */
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -74,15 +74,11 @@ export function GameShadeSlider({
   const [done, setDone] = useState(false);
   /** True after 5 cards placed — we lock the board and reveal. */
   const [revealed, setRevealed] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
 
   const r = rounds[idx];
 
-  // When the board fills (5 placed), reveal & schedule advance.
+  // When the board fills (5 placed), lock the board and score.
+  // Player taps Next when ready to move on.
   useEffect(() => {
     if (placed.length !== 5 || revealed) return;
     setRevealed(true);
@@ -94,16 +90,17 @@ export function GameShadeSlider({
     if (roundScore < 3) {
       setMissed((m) => [...m, r]);
     }
-    advanceTimer.current = window.setTimeout(() => {
-      if (idx + 1 >= rounds.length) {
-        setDone(true);
-      } else {
-        setIdx((n) => n + 1);
-        setPlaced([]);
-        setRevealed(false);
-      }
-    }, 3000);
-  }, [placed, revealed, r, idx, rounds.length]);
+  }, [placed, revealed, r]);
+
+  function advance() {
+    if (idx + 1 >= rounds.length) {
+      setDone(true);
+    } else {
+      setIdx((n) => n + 1);
+      setPlaced([]);
+      setRevealed(false);
+    }
+  }
 
   function takeFromPool(word: string) {
     if (revealed) return;
@@ -181,8 +178,8 @@ export function GameShadeSlider({
                 className="wb-play-shade-slot-word"
                 onClick={() => returnToPool(word)}
                 disabled={revealed}
-                lang="en"
-                dir="ltr"
+                lang={contentLang}
+                dir={contentDir}
               >
                 {word}
               </button>
@@ -203,8 +200,8 @@ export function GameShadeSlider({
               className={cls}
               onClick={() => takeFromPool(word)}
               disabled={isUsed || revealed}
-              lang="en"
-              dir="ltr"
+              lang={contentLang}
+              dir={contentDir}
             >
               {word}
             </button>
@@ -227,6 +224,9 @@ export function GameShadeSlider({
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
             {r.story}
           </div>
+          <button type="button" className="wb-play-next" onClick={advance}>
+            {idx + 1 >= rounds.length ? t.playFinish : t.playNext}
+          </button>
         </>
       )}
     </div>

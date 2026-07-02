@@ -9,7 +9,7 @@
  * 4 word options.
  */
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { PlayWord, FillBlankQuestion } from "@/lib/play-engine";
 import { buildFillBlankQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -35,11 +35,6 @@ export function GameFillBlank({
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<FillBlankQuestion[]>([]);
   const [done, setDone] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
 
   function pick(i: number) {
     if (picked !== null) return;
@@ -47,13 +42,14 @@ export function GameFillBlank({
     const q = questions[idx];
     if (i === q.correctIdx) setScore((s) => s + 1);
     else setMissed((m) => [...m, q]);
-    advanceTimer.current = window.setTimeout(() => {
-      if (idx + 1 >= questions.length) setDone(true);
-      else {
-        setIdx((n) => n + 1);
-        setPicked(null);
-      }
-    }, 1000);
+  }
+
+  function advance() {
+    if (idx + 1 >= questions.length) setDone(true);
+    else {
+      setIdx((n) => n + 1);
+      setPicked(null);
+    }
   }
 
   if (done) {
@@ -117,6 +113,11 @@ export function GameFillBlank({
           );
         })}
       </div>
+      {picked !== null && (
+        <button type="button" className="wb-play-next" onClick={advance}>
+          {idx + 1 >= questions.length ? t.playFinish : t.playNext}
+        </button>
+      )}
     </div>
   );
 }

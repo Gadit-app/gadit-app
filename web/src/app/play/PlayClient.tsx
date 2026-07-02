@@ -147,6 +147,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "שחק שוב",
     resultBackToGames: "חזרה למשחקים",
     resultFinalScore: (s) => `${s} נקודות`,
+    playNext: "הבא",
+    playFinish: "סיום",
   },
   en: {
     menuTitle: "Word Games",
@@ -229,6 +231,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Play again",
     resultBackToGames: "Back to games",
     resultFinalScore: (s) => `${s} points`,
+    playNext: "Next",
+    playFinish: "Finish",
   },
   ar: {
     menuTitle: "ألعاب الكلمات",
@@ -311,6 +315,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "العب مرة أخرى",
     resultBackToGames: "العودة للألعاب",
     resultFinalScore: (s) => `${s} نقطة`,
+    playNext: "التالي",
+    playFinish: "إنهاء",
   },
   ru: {
     menuTitle: "Игры со словами",
@@ -393,6 +399,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Ещё раз",
     resultBackToGames: "К играм",
     resultFinalScore: (s) => `${s} очков`,
+    playNext: "Далее",
+    playFinish: "Готово",
   },
   es: {
     menuTitle: "Juegos de Palabras",
@@ -475,6 +483,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Jugar de nuevo",
     resultBackToGames: "Volver a juegos",
     resultFinalScore: (s) => `${s} puntos`,
+    playNext: "Siguiente",
+    playFinish: "Terminar",
   },
   pt: {
     menuTitle: "Jogos de Palavras",
@@ -557,6 +567,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Jogar de novo",
     resultBackToGames: "Voltar aos jogos",
     resultFinalScore: (s) => `${s} pontos`,
+    playNext: "Próxima",
+    playFinish: "Terminar",
   },
   fr: {
     menuTitle: "Jeux de Mots",
@@ -639,6 +651,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Rejouer",
     resultBackToGames: "Retour aux jeux",
     resultFinalScore: (s) => `${s} points`,
+    playNext: "Suivant",
+    playFinish: "Terminer",
   },
   de: {
     menuTitle: "Wortspiele",
@@ -721,6 +735,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Nochmal spielen",
     resultBackToGames: "Zurück zu den Spielen",
     resultFinalScore: (s) => `${s} Punkte`,
+    playNext: "Weiter",
+    playFinish: "Fertig",
   },
   cs: {
     menuTitle: "Slovní hry",
@@ -803,6 +819,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Hrát znovu",
     resultBackToGames: "Zpět ke hrám",
     resultFinalScore: (s) => `${s} bodů`,
+    playNext: "Další",
+    playFinish: "Dokončit",
   },
   sk: {
     menuTitle: "Slovné hry",
@@ -885,6 +903,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "Hrať znova",
     resultBackToGames: "Späť ku hrám",
     resultFinalScore: (s) => `${s} bodov`,
+    playNext: "Ďalej",
+    playFinish: "Dokončiť",
   },
   hi: {
     menuTitle: "शब्द खेल",
@@ -967,6 +987,8 @@ const COPY: Record<string, PlayT> = {
     resultPlayAgain: "फिर से खेलें",
     resultBackToGames: "खेलों पर वापस",
     resultFinalScore: (s) => `${s} अंक`,
+    playNext: "अगला",
+    playFinish: "समाप्त",
   },
 };
 

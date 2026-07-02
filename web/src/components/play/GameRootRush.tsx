@@ -15,7 +15,7 @@
  * games — feels more like a puzzle and rewards confident knowledge.
  */
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -80,34 +80,32 @@ export function GameRootRush({
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<RuntimeRound[]>([]);
   const [done, setDone] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-  }, []);
+  /** True once we've recorded the round outcome into missed[] — one-shot. */
+  const [scored, setScored] = useState(false);
 
   const r = rounds[idx];
   const correctTapsSoFar = taps.filter((tap) => tap.correct).length;
   const roundOver = correctTapsSoFar >= 3 || taps.length >= MAX_TAPS_PER_ROUND;
 
-  // Auto-advance when round is over.
+  // Record the round's outcome once, when the round ends. No auto-advance —
+  // player taps Next when ready.
   useEffect(() => {
-    if (!roundOver || done) return;
-    advanceTimer.current = window.setTimeout(() => {
-      if (correctTapsSoFar < 3) {
-        setMissed((m) => [...m, r]);
-      }
-      if (idx + 1 >= rounds.length) {
-        setDone(true);
-      } else {
-        setIdx((n) => n + 1);
-        setTaps([]);
-      }
-    }, 2200);
-    return () => {
-      if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-    };
-  }, [roundOver, correctTapsSoFar, idx, rounds.length, r, done]);
+    if (!roundOver || done || scored) return;
+    if (correctTapsSoFar < 3) {
+      setMissed((m) => [...m, r]);
+    }
+    setScored(true);
+  }, [roundOver, correctTapsSoFar, r, done, scored]);
+
+  function advance() {
+    if (idx + 1 >= rounds.length) {
+      setDone(true);
+    } else {
+      setIdx((n) => n + 1);
+      setTaps([]);
+      setScored(false);
+    }
+  }
 
   function tap(tileIdx: number) {
     if (roundOver) return;
@@ -196,9 +194,14 @@ export function GameRootRush({
         ))}
       </div>
       {roundOver && (
-        <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-          {r.story}
-        </div>
+        <>
+          <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
+            {r.story}
+          </div>
+          <button type="button" className="wb-play-next" onClick={advance}>
+            {idx + 1 >= rounds.length ? t.playFinish : t.playNext}
+          </button>
+        </>
       )}
     </div>
   );
