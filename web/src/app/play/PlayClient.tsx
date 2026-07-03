@@ -23,6 +23,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { getCuratedPlayPool } from "@/lib/play-content/curated-play-words";
 import {
   loadPlayWords,
   hydrateExamples,
@@ -1254,9 +1255,20 @@ export function PlayPage() {
     }
   }, [stage.kind, user]);
 
+  // Effective pool for the 5 notebook-driven games. When the user's
+  // notebook has at least MIN_WORDS_FOR_GAME.quiz entries we use it;
+  // otherwise we fall back to a curated pool that ships with the app,
+  // so a first-time user (or a kid) can play every game without
+  // adding a single word. Gadi 2026-07-03: "the games should offer
+  // games regardless of the words the student chose".
+  const effectivePool = useMemo(() => {
+    if (pool && pool.length >= MIN_WORDS_FOR_GAME.quiz) return pool;
+    return getCuratedPlayPool(lang, kidsMode);
+  }, [pool, lang, kidsMode]);
+  const usingCurated = !pool || pool.length < MIN_WORDS_FOR_GAME.quiz;
   const poolWithExamples = useMemo(
-    () => (pool ?? []).filter((p) => p.examples.length > 0).length,
-    [pool],
+    () => effectivePool.filter((p) => p.examples.length > 0).length,
+    [effectivePool],
   );
 
   // Game catalogue — grouped on the menu by category. Order within
@@ -1283,7 +1295,7 @@ export function PlayPage() {
       id: "quiz",
       title: t.quizTitle,
       desc: t.quizDesc,
-      enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.quiz,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.quiz,
       accent: "teal",
       category: "notebook",
       kidsFriendly: true,
@@ -1315,7 +1327,7 @@ export function PlayPage() {
       id: "memory",
       title: t.memoryTitle,
       desc: t.memoryDesc,
-      enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.memory,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.memory,
       accent: "purple",
       category: "notebook",
       kidsFriendly: true,
@@ -1332,7 +1344,7 @@ export function PlayPage() {
       id: "anagram",
       title: t.anagramTitle,
       desc: t.anagramDesc,
-      enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.anagram,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.anagram,
       accent: "amber",
       category: "notebook",
       kidsFriendly: true,
@@ -1349,7 +1361,7 @@ export function PlayPage() {
       id: "speed",
       title: t.speedTitle,
       desc: t.speedDesc,
-      enabled: (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.speed,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.speed,
       accent: "rose",
       category: "notebook",
       kidsFriendly: true,
@@ -1587,8 +1599,11 @@ export function PlayPage() {
         </div>
       );
     }
-    if (!pool) return null;
-    const props = { pool, onExit: exit, lang, t };
+    // effectivePool always has at least the curated fallback, so we
+    // don't need a null guard here anymore. Games take the pool as-is;
+    // they don't care whether the words came from the notebook or the
+    // curated fallback. Gadi 2026-07-03.
+    const props = { pool: effectivePool, onExit: exit, lang, t };
     return (
       <div className="wordbook wb-play-page" dir={dir}>
         {stage.game === "quiz" && <GameQuiz {...props} />}
@@ -1691,15 +1706,11 @@ export function PlayPage() {
           <div className="wb-play-error">{fetchError}</div>
         )}
 
-        {pool && pool.length < 4 && (
-          <div className="wb-play-empty">
-            <div className="wb-play-empty-title">{t.notEnoughWords}</div>
-            <p className="wb-play-empty-hint">{t.notEnoughHint}</p>
-            <Link href={href("/notebook")} className="wb-play-empty-cta">
-              {t.goNotebook}
-            </Link>
-          </div>
-        )}
+        {/* The "not enough words" empty state used to block users with
+            < 4 notebook entries. Removed 2026-07-03 — every game now
+            runs on either the notebook or the curated fallback pool.
+            First-time users can play immediately; the notebook route
+            is still promoted via the ordinary nav bar. */}
 
         {/* Kids Mode banner — sits above the games sections so a parent
             handing the device to a 6-12 year old sees the toggle
@@ -1779,7 +1790,6 @@ export function PlayPage() {
             { id: "precision", label: t.catPrecision },
             { id: "structure", label: t.catStructure },
           ];
-          const hasEnoughForNotebook = (pool?.length ?? 0) >= 4;
           return sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
             // younger players. The 5 notebook games always qualify
@@ -1789,10 +1799,9 @@ export function PlayPage() {
               (g) => g.category === section.id && (!kidsMode || g.kidsFriendly),
             );
             if (sectionGames.length === 0) return null;
-            // Hide the notebook section entirely when the user doesn't
-            // have enough words yet — the "not enough words" empty state
-            // above already handles that case.
-            if (section.id === "notebook" && !hasEnoughForNotebook) return null;
+            // Notebook section always shows now — the effectivePool
+            // fallback means these games are always playable, even
+            // with an empty notebook.
             return (
               <section key={section.id} className="wb-play-section">
                 <h2 className="wb-play-section-heading">{section.label}</h2>
