@@ -49,11 +49,19 @@ export function GameMemory({
       const a = deck.find((c) => c.id === aId)!;
       const b = deck.find((c) => c.id === bId)!;
       if (a.pairKey === b.pairKey) {
-        setMatched((m) => [...m, a.pairKey]);
+        // Read the fresh length inside the updater so we don't miss the
+        // last match. Prior version compared `matched.length + 1` against
+        // the target — arithmetically equivalent in normal flow but
+        // relies on the closure's `matched` being the latest render. The
+        // functional form removes that assumption. Audit 2026-07-03.
+        setMatched((m) => {
+          const next = [...m, a.pairKey];
+          if (next.length === SESSION_SIZE.memory) {
+            setTimeout(() => setDone(true), 600);
+          }
+          return next;
+        });
         setFlipped([]);
-        if (matched.length + 1 === SESSION_SIZE.memory) {
-          setTimeout(() => setDone(true), 600);
-        }
       } else {
         // Give the user enough time to actually read both cards before
         // they close — 800ms felt rushed in the beta. ~1.4s for two

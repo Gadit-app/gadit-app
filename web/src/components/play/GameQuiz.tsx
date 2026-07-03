@@ -71,7 +71,7 @@ export function GameQuiz({
         <div className="wb-play-question-eyebrow">
           {q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning}
         </div>
-        <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={q.promptKind === "word" ? undefined : lang}>
+        <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang}>
           {q.prompt}
         </div>
       </div>

@@ -167,8 +167,8 @@ export function GameBuildAWord({
               className={cls}
               onClick={() => returnToPool(slot)}
               disabled={revealed}
-              lang="en"
-              dir="ltr"
+              lang={contentLang}
+              dir={contentDir}
             >
               {morpheme}
               {slot < slotCount - 1 && (
@@ -196,8 +196,8 @@ export function GameBuildAWord({
               className={cls}
               onClick={() => takeFromPool(morpheme)}
               disabled={isUsed || revealed}
-              lang="en"
-              dir="ltr"
+              lang={contentLang}
+              dir={contentDir}
             >
               {morpheme}
             </button>

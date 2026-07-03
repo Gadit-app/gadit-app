@@ -159,8 +159,8 @@ export function GameEtymologyArtist({
               className={cls}
               onClick={() => pick(i)}
               disabled={picked !== null}
-              lang="en"
-              dir="ltr"
+              lang={contentLang}
+              dir={contentDir}
             >
               {opt}
             </button>

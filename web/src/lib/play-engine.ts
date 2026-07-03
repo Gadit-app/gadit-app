@@ -247,7 +247,18 @@ function scriptOf(s: string): Script {
     if (c >= 0x0400 && c <= 0x04FF) return "cyrillic";
     if (c >= 0x0900 && c <= 0x097F) return "devanagari";
     if ((c >= 0x3040 && c <= 0x309F) || (c >= 0x30A0 && c <= 0x30FF) || (c >= 0x4E00 && c <= 0x9FFF)) return "cjk";
-    if ((c >= 0x0041 && c <= 0x005A) || (c >= 0x0061 && c <= 0x007A) || (c >= 0x00C0 && c <= 0x024F)) return "latin";
+    // Latin: basic Latin letters + Latin Supplement + Extended A/B/C/D
+    // (covers phonetic marks, IPA symbols, historical Latin-derived
+    // scripts). 0x0250–0x02AF was missing in v1 and let words with
+    // phonetic marks classify as unknown, which then leaked past the
+    // distractor script filter. Audit 2026-07-03.
+    if (
+      (c >= 0x0041 && c <= 0x005A) ||
+      (c >= 0x0061 && c <= 0x007A) ||
+      (c >= 0x00C0 && c <= 0x024F) ||
+      (c >= 0x0250 && c <= 0x02AF) ||
+      (c >= 0x1E00 && c <= 0x1EFF)
+    ) return "latin";
   }
   return "unknown";
 }
@@ -295,10 +306,25 @@ export function buildQuizQuestions(
     const sameScriptCandidates = candidates.filter(
       (p) => scriptOf(p[distractorField as keyof PlayWord] as string) === targetScript,
     );
-    const desiredDistractors = Math.min(3, sameScriptCandidates.length);
-    const distractors = sample(sameScriptCandidates, desiredDistractors).map(
-      (p) => p[distractorField as keyof PlayWord] as string,
-    );
+    // Dedup by the distractor STRING (not the PlayWord object) so a
+    // notebook with two entries that share a meaning ("run" and
+    // "sprint" both meaning "to move fast") never produces a round
+    // with duplicate visible options. Also dedup against the correct
+    // answer itself. Audit 2026-07-03.
+    const seen = new Set<string>([correct]);
+    const uniqueSameScript: string[] = [];
+    for (const p of sameScriptCandidates) {
+      const v = p[distractorField as keyof PlayWord] as string;
+      if (!seen.has(v)) {
+        seen.add(v);
+        uniqueSameScript.push(v);
+      }
+    }
+    const desiredDistractors = Math.min(3, uniqueSameScript.length);
+    const distractors = sample(
+      uniqueSameScript.map((v) => ({ value: v })),
+      desiredDistractors,
+    ).map((x) => x.value);
     const options = shuffle([correct, ...distractors]);
     return {
       prompt: promptKind === "word" ? target.word : target.meaning,
@@ -351,8 +377,21 @@ export function buildFillBlankQuestions(
     const sameScriptCandidates = candidates.filter(
       (p) => scriptOf(p.word) === targetScript,
     );
-    const desiredDistractors = Math.min(3, sameScriptCandidates.length);
-    const distractors = sample(sameScriptCandidates, desiredDistractors).map((p) => p.word);
+    // Dedup by word string so duplicate notebook entries (rare but
+    // possible) never render as duplicate options. Audit 2026-07-03.
+    const seen = new Set<string>([target.word]);
+    const uniqueSameScript: string[] = [];
+    for (const p of sameScriptCandidates) {
+      if (!seen.has(p.word)) {
+        seen.add(p.word);
+        uniqueSameScript.push(p.word);
+      }
+    }
+    const desiredDistractors = Math.min(3, uniqueSameScript.length);
+    const distractors = sample(
+      uniqueSameScript.map((v) => ({ value: v })),
+      desiredDistractors,
+    ).map((x) => x.value);
     const options = shuffle([target.word, ...distractors]);
     return {
       sentence: blankOut(example, target.word),

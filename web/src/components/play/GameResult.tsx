@@ -14,6 +14,7 @@
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { recordPlay } from "@/lib/play-streak";
+import { dirForLang } from "@/lib/play-engine";
 import type { PlayT } from "./GameQuiz";
 
 export type GameResultData = {
@@ -59,7 +60,7 @@ export function GameResult({
   }
 
   return (
-    <div className="wb-play-stage wb-play-result" lang={lang}>
+    <div className="wb-play-stage wb-play-result" lang={lang} dir={dirForLang(lang)}>
       <div className="wb-play-result-headline">{headline}</div>
       <div className="wb-play-result-score">
         <span className="wb-play-result-score-num">{data.score}</span>

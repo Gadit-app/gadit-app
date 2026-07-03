@@ -1712,7 +1712,7 @@ export function PlayPage() {
           const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
           if (!isPaid) {
             return (
-              <div className="wb-play-kids-banner is-gate">
+              <div className="wb-play-kids-banner is-gate" dir={dir}>
                 <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
                 <div className="wb-play-kids-banner-text">
                   <div className="wb-play-kids-banner-title">{bannerCopy.gateTitle}</div>
@@ -1726,7 +1726,7 @@ export function PlayPage() {
           }
           if (kidsMode) {
             return (
-              <div className="wb-play-kids-banner is-on">
+              <div className="wb-play-kids-banner is-on" dir={dir}>
                 <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
                 <div className="wb-play-kids-banner-text">
                   <div className="wb-play-kids-banner-title">{bannerCopy.onTitle}</div>
@@ -1743,7 +1743,7 @@ export function PlayPage() {
             );
           }
           return (
-            <div className="wb-play-kids-banner">
+            <div className="wb-play-kids-banner" dir={dir}>
               <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
               <div className="wb-play-kids-banner-text">
                 <div className="wb-play-kids-banner-title">{bannerCopy.offTitle}</div>
@@ -1752,7 +1752,14 @@ export function PlayPage() {
               <button
                 type="button"
                 className="wb-play-kids-banner-cta"
-                onClick={() => setKidsMode(true)}
+                onClick={() => {
+                  // Defensive second gate: the button is already only
+                  // rendered when isPaid, but explicit check inside the
+                  // handler blocks any theoretical race between plan
+                  // change and click. Audit 2026-07-03.
+                  if (!isPaid) return;
+                  setKidsMode(true);
+                }}
               >
                 {bannerCopy.offCTA}
               </button>

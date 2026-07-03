@@ -40,8 +40,13 @@ export function GameAnagram({
     [pool],
   );
   const [roundIdx, setRoundIdx] = useState(0);
+  // Defensive: if buildAnagramRounds returned an empty pool (which the
+  // menu's word-count gate should prevent, but Firestore can race with
+  // navigation), seed with an empty tile list. Audit 2026-07-03.
   const [tiles, setTiles] = useState<TileState[]>(() =>
-    rounds[0].scrambled.map((l, i) => ({ letter: l, slot: -1, id: `t-${i}` })),
+    rounds[0]
+      ? rounds[0].scrambled.map((l, i) => ({ letter: l, slot: -1, id: `t-${i}` }))
+      : [],
   );
   const [resultState, setResultState] = useState<"none" | "correct" | "wrong">("none");
   const [score, setScore] = useState(0);
