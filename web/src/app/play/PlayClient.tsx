@@ -27,6 +27,7 @@ import { getCuratedPlayPool } from "@/lib/play-content/curated-play-words";
 import {
   loadPlayWords,
   hydrateExamples,
+  usableFillBlankExamples,
   MIN_WORDS_FOR_GAME,
   type GameId,
   type PlayWord,
@@ -1255,19 +1256,29 @@ export function PlayPage() {
     }
   }, [stage.kind, user]);
 
-  // Effective pool for the 5 notebook-driven games. When the user's
-  // notebook has at least MIN_WORDS_FOR_GAME.quiz entries we use it;
-  // otherwise we fall back to a curated pool that ships with the app,
-  // so a first-time user (or a kid) can play every game without
-  // adding a single word. Gadi 2026-07-03: "the games should offer
-  // games regardless of the words the student chose".
+  // Effective pool for the 5 notebook-driven games: the user's notebook
+  // MERGED with the curated pool that ships with the app (deduped by
+  // word). Merging, not either/or, for two reasons found in the
+  // 2026-07-03 QA:
+  //  1. A first-time user (or a kid) can play every game with zero
+  //     notebook words — Gadi: "the games should offer games regardless
+  //     of the words the student chose".
+  //  2. A small or mixed-script notebook (3 Hebrew + 2 English words)
+  //     can't fill 4 same-script options on its own. The curated words
+  //     backfill the distractor pool so the user's own words still
+  //     appear in rounds instead of being dropped as degenerate.
   const effectivePool = useMemo(() => {
-    if (pool && pool.length >= MIN_WORDS_FOR_GAME.quiz) return pool;
-    return getCuratedPlayPool(lang, kidsMode);
+    const curated = getCuratedPlayPool(lang, kidsMode);
+    const notebook = pool ?? [];
+    const seen = new Set(notebook.map((p) => p.word.trim().toLowerCase()));
+    const merged = [...notebook];
+    for (const c of curated) {
+      if (!seen.has(c.word.trim().toLowerCase())) merged.push(c);
+    }
+    return merged;
   }, [pool, lang, kidsMode]);
-  const usingCurated = !pool || pool.length < MIN_WORDS_FOR_GAME.quiz;
   const poolWithExamples = useMemo(
-    () => effectivePool.filter((p) => p.examples.length > 0).length,
+    () => effectivePool.filter((p) => usableFillBlankExamples(p).length > 0).length,
     [effectivePool],
   );
 

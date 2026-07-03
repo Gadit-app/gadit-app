@@ -87,6 +87,8 @@ export function GameFalseFriends({
   }
 
   const r = rounds[idx];
+  // Defensive: never render off an undefined round. QA 2026-07-03.
+  if (!r) return null;
   // Reveal styling: which button is "correct" depends on r.isReal.
   // Button 0 = TRUE → correct if isReal. Button 1 = FALSE → correct if !isReal.
   const correctButton = r.isReal ? 0 : 1;

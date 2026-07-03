@@ -69,12 +69,14 @@ export function GameBuildAWord({
   const [revealed, setRevealed] = useState(false);
 
   const r = rounds[idx];
-  const slotCount = r.correct.length;
+  // Optional-chained: r is undefined if the picker ever returns an
+  // empty pool — render guard below, and the effect no-ops on 0 slots.
+  const slotCount = r?.correct.length ?? 0;
 
   // Auto-validate when player has placed exactly the right number of tiles.
   // No auto-advance — player taps Next when ready.
   useEffect(() => {
-    if (placed.length !== slotCount || revealed) return;
+    if (!r || slotCount === 0 || placed.length !== slotCount || revealed) return;
     setRevealed(true);
     const isCorrect = placed.join("") === r.correct.join("");
     if (isCorrect) {
@@ -126,6 +128,9 @@ export function GameBuildAWord({
       />
     );
   }
+
+  // Defensive: never render off an undefined round. QA 2026-07-03.
+  if (!r) return null;
 
   const builtWord = placed.join("");
   const isCorrect = revealed && builtWord === r.correct.join("");

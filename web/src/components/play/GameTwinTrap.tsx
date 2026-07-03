@@ -120,6 +120,8 @@ export function GameTwinTrap({
   }
 
   const r = rounds[idx];
+  // Defensive: never render off an undefined round. QA 2026-07-03.
+  if (!r) return null;
   // Sentence-with-blank, split around the ____ token so we can style
   // the blank as a visible underline rather than literal underscores.
   const parts = r.sentence.split("____");

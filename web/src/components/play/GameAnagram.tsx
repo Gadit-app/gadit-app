@@ -146,7 +146,10 @@ export function GameAnagram({
         <div className="wb-play-question-eyebrow">{t.anagramPrompt}</div>
         <div className="wb-play-anagram-hint">
           <span className="wb-play-anagram-hint-label">{t.anagramHint}</span>
-          <span className="wb-play-anagram-hint-text">{word.word.meaning}</span>
+          {/* dir=auto: the meaning can be in a different language than
+              the UI (notebook meanings are stored in the UI language
+              the word was searched under). */}
+          <span className="wb-play-anagram-hint-text" dir="auto">{word.word.meaning}</span>
         </div>
       </div>
       <div className={`wb-play-anagram-slots is-${resultState}`}>

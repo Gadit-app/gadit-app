@@ -67,14 +67,22 @@ export function GameSpeed({
     };
   }, [stage]);
 
+  // Reveal-advance timeout kept in a ref so unmount cleans it up and a
+  // late fire can't touch a finished game. QA 2026-07-03.
+  const advanceRef = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (advanceRef.current) window.clearTimeout(advanceRef.current);
+  }, []);
+
   function pick(i: number) {
     if (picked !== null) return;
-    setPicked(i);
     const q = deck[idx];
+    if (!q) return;
+    setPicked(i);
     if (i === q.correctIdx) setScore((s) => s + 1);
     else setTimeLeft((t) => Math.max(0, t - WRONG_PENALTY));
     // Quick advance — 220ms reveal then next.
-    window.setTimeout(() => {
+    advanceRef.current = window.setTimeout(() => {
       if (idx + 1 >= deck.length) setStage("done");
       else {
         setIdx((n) => n + 1);
@@ -117,6 +125,8 @@ export function GameSpeed({
   }
 
   const q = deck[idx];
+  // Defensive: empty deck (degenerate pool) — never crash the render.
+  if (!q) return null;
   return (
     <div className="wb-play-stage">
       <PlayHeader title={t.speedTitle} timeLeft={timeLeft} score={score} onExit={onExit} t={t} />
@@ -124,7 +134,7 @@ export function GameSpeed({
         <div className="wb-play-question-eyebrow">
           {q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning}
         </div>
-        <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang}>
+        <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
           {q.prompt}
         </div>
       </div>
@@ -145,6 +155,7 @@ export function GameSpeed({
               className={cls}
               onClick={() => pick(i)}
               disabled={picked !== null}
+              dir="auto"
             >
               {opt}
             </button>

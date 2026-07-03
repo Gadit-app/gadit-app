@@ -126,6 +126,8 @@ export function GameEtymologyArtist({
   }
 
   const r = rounds[idx];
+  // Defensive: never render off an undefined round. QA 2026-07-03.
+  if (!r) return null;
   return (
     <div className="wb-play-stage">
       <PlayHeader

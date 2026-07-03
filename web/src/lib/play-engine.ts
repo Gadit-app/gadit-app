@@ -162,7 +162,10 @@ export async function loadPlayWords(
     }),
   );
 
-  return hydrated;
+  // Entries with an empty word or meaning can't participate in any
+  // game — drop them at the source instead of guarding every builder.
+  // QA 2026-07-03.
+  return hydrated.filter((p) => p.word.trim().length > 0 && p.meaning.trim().length > 0);
 }
 
 /**
@@ -238,29 +241,58 @@ export type QuizQuestion = {
  * mixed-language notebook: word "דרך" showed one option in English.
  */
 type Script = "hebrew" | "arabic" | "cyrillic" | "devanagari" | "cjk" | "latin" | "unknown";
+
+function scriptOfChar(c: number): Script | null {
+  if (c >= 0x0590 && c <= 0x05FF) return "hebrew";
+  if ((c >= 0x0600 && c <= 0x06FF) || (c >= 0xFB50 && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFF)) return "arabic";
+  if (c >= 0x0400 && c <= 0x04FF) return "cyrillic";
+  if (c >= 0x0900 && c <= 0x097F) return "devanagari";
+  if ((c >= 0x3040 && c <= 0x309F) || (c >= 0x30A0 && c <= 0x30FF) || (c >= 0x4E00 && c <= 0x9FFF)) return "cjk";
+  // Latin: basic Latin letters + Latin Supplement + Extended A/B
+  // (covers phonetic marks, IPA symbols, historical Latin-derived
+  // scripts). 0x0250–0x02AF was missing in v1 and let words with
+  // phonetic marks classify as unknown, which then leaked past the
+  // distractor script filter. Audit 2026-07-03.
+  if (
+    (c >= 0x0041 && c <= 0x005A) ||
+    (c >= 0x0061 && c <= 0x007A) ||
+    (c >= 0x00C0 && c <= 0x024F) ||
+    (c >= 0x0250 && c <= 0x02AF) ||
+    (c >= 0x1E00 && c <= 0x1EFF)
+  ) return "latin";
+  return null;
+}
+
+/** Script of the FIRST alphabetic character. Right for single words. */
 function scriptOf(s: string): Script {
   for (const ch of s) {
     const c = ch.codePointAt(0);
     if (c === undefined) continue;
-    if (c >= 0x0590 && c <= 0x05FF) return "hebrew";
-    if ((c >= 0x0600 && c <= 0x06FF) || (c >= 0xFB50 && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFF)) return "arabic";
-    if (c >= 0x0400 && c <= 0x04FF) return "cyrillic";
-    if (c >= 0x0900 && c <= 0x097F) return "devanagari";
-    if ((c >= 0x3040 && c <= 0x309F) || (c >= 0x30A0 && c <= 0x30FF) || (c >= 0x4E00 && c <= 0x9FFF)) return "cjk";
-    // Latin: basic Latin letters + Latin Supplement + Extended A/B/C/D
-    // (covers phonetic marks, IPA symbols, historical Latin-derived
-    // scripts). 0x0250–0x02AF was missing in v1 and let words with
-    // phonetic marks classify as unknown, which then leaked past the
-    // distractor script filter. Audit 2026-07-03.
-    if (
-      (c >= 0x0041 && c <= 0x005A) ||
-      (c >= 0x0061 && c <= 0x007A) ||
-      (c >= 0x00C0 && c <= 0x024F) ||
-      (c >= 0x0250 && c <= 0x02AF) ||
-      (c >= 0x1E00 && c <= 0x1EFF)
-    ) return "latin";
+    const sc = scriptOfChar(c);
+    if (sc) return sc;
   }
   return "unknown";
+}
+
+/** DOMINANT script of a whole string — counts every letter and returns
+ *  the script with the most. Right for sentences, where the first word
+ *  can be a Latin brand name inside an otherwise-Hebrew sentence (or
+ *  vice versa). Used to keep Fill-Blank carrier sentences in the same
+ *  language as the word being blanked. QA 2026-07-03. */
+function dominantScriptOf(s: string): Script {
+  const counts = new Map<Script, number>();
+  for (const ch of s) {
+    const c = ch.codePointAt(0);
+    if (c === undefined) continue;
+    const sc = scriptOfChar(c);
+    if (sc) counts.set(sc, (counts.get(sc) ?? 0) + 1);
+  }
+  let best: Script = "unknown";
+  let bestCount = 0;
+  for (const [sc, n] of counts) {
+    if (n > bestCount) { best = sc; bestCount = n; }
+  }
+  return best;
 }
 
 export function buildQuizQuestions(
@@ -286,54 +318,60 @@ export function buildQuizQuestions(
     return ws >= 2 && ms >= 2;
   });
   const targetSource = eligible.length >= Math.min(count, 2) ? eligible : pool;
-  const targets = sample(targetSource, count);
-  return targets.map((target): QuizQuestion => {
-    // Alternate direction so users practice both ways within one session.
-    const promptKind: "word" | "meaning" = Math.random() < 0.5 ? "word" : "meaning";
-    const distractorField = promptKind === "word" ? "meaning" : "word";
-    const correct =
-      promptKind === "word" ? target.meaning : target.word;
-    const targetScript = scriptOf(correct);
-    // Only use distractors written in the same script as the correct
-    // answer — otherwise a Hebrew answer with an English distractor is
-    // trivially unpickable and breaks the game. If the pool doesn't
-    // have three same-script alternatives we simply show fewer options
-    // (down to a minimum of two) rather than smuggle a wrong-script
-    // distractor back in. This is what a mixed-notebook player sees on
-    // their first few rounds: 2 or 3 options at first, growing to 4 as
-    // they add more words in the same language. Gadi 2026-06-29.
-    const candidates = pool.filter((p) => p.word !== target.word);
-    const sameScriptCandidates = candidates.filter(
-      (p) => scriptOf(p[distractorField as keyof PlayWord] as string) === targetScript,
-    );
-    // Dedup by the distractor STRING (not the PlayWord object) so a
-    // notebook with two entries that share a meaning ("run" and
-    // "sprint" both meaning "to move fast") never produces a round
-    // with duplicate visible options. Also dedup against the correct
-    // answer itself. Audit 2026-07-03.
-    const seen = new Set<string>([correct]);
-    const uniqueSameScript: string[] = [];
-    for (const p of sameScriptCandidates) {
-      const v = p[distractorField as keyof PlayWord] as string;
-      if (!seen.has(v)) {
-        seen.add(v);
-        uniqueSameScript.push(v);
-      }
+  // Oversample: rounds that end up with fewer than 2 options are
+  // dropped below, so grab extras to keep the session at `count`
+  // when the pool allows. QA 2026-07-03.
+  const targets = sample(targetSource, count * 2);
+  const questions: QuizQuestion[] = [];
+  for (const target of targets) {
+    if (questions.length >= count) break;
+    const q = buildOneQuizQuestion(pool, target);
+    if (q) questions.push(q);
+  }
+  return questions;
+}
+
+function buildOneQuizQuestion(pool: PlayWord[], target: PlayWord): QuizQuestion | null {
+  // Alternate direction so users practice both ways within one session.
+  const promptKind: "word" | "meaning" = Math.random() < 0.5 ? "word" : "meaning";
+  const distractorField = promptKind === "word" ? "meaning" : "word";
+  const correct =
+    promptKind === "word" ? target.meaning : target.word;
+  const targetScript = scriptOf(correct);
+  // Only use distractors written in the same script as the correct
+  // answer — otherwise a Hebrew answer with an English distractor is
+  // trivially unpickable and breaks the game. Gadi 2026-06-29.
+  const candidates = pool.filter((p) => p.word !== target.word);
+  const sameScriptCandidates = candidates.filter(
+    (p) => scriptOf(p[distractorField as keyof PlayWord] as string) === targetScript,
+  );
+  // Dedup by the distractor STRING (not the PlayWord object) so a
+  // notebook with two entries that share a meaning ("run" and
+  // "sprint" both meaning "to move fast") never produces a round
+  // with duplicate visible options. Also dedup against the correct
+  // answer itself. Audit 2026-07-03.
+  const seen = new Set<string>([correct]);
+  const uniqueSameScript: string[] = [];
+  for (const p of sameScriptCandidates) {
+    const v = p[distractorField as keyof PlayWord] as string;
+    if (!seen.has(v)) {
+      seen.add(v);
+      uniqueSameScript.push(v);
     }
-    const desiredDistractors = Math.min(3, uniqueSameScript.length);
-    const distractors = sample(
-      uniqueSameScript.map((v) => ({ value: v })),
-      desiredDistractors,
-    ).map((x) => x.value);
-    const options = shuffle([correct, ...distractors]);
-    return {
-      prompt: promptKind === "word" ? target.word : target.meaning,
-      promptKind,
-      options,
-      correctIdx: options.indexOf(correct),
-      word: target,
-    };
-  });
+  }
+  const desiredDistractors = Math.min(3, uniqueSameScript.length);
+  // One-button rounds teach nothing — drop the round instead.
+  // The caller oversamples targets to compensate. QA 2026-07-03.
+  if (desiredDistractors < 1) return null;
+  const distractors = sample(uniqueSameScript, desiredDistractors);
+  const options = shuffle([correct, ...distractors]);
+  return {
+    prompt: promptKind === "word" ? target.word : target.meaning,
+    promptKind,
+    options,
+    correctIdx: options.indexOf(correct),
+    word: target,
+  };
 }
 
 // ─── Fill the blank ─────────────────────────────────────────────
@@ -347,15 +385,42 @@ export type FillBlankQuestion = {
 
 const BLANK_TOKEN = "____";
 
-/** Replace the word (and common inflected variants) in a sentence with
- *  the blank token. Falls back to appending the blank if we can't find
- *  the word — not pretty but never breaks the game. */
-function blankOut(sentence: string, word: string): string {
-  if (!word) return sentence;
+function wordRegex(word: string): RegExp {
   const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   // Unicode-aware word-boundaries don't exist universally; we wrap in
   // optional non-letter chars instead. \p{L} covers Hebrew, Arabic, Cyrillic.
-  const re = new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "iu");
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "iu");
+}
+
+/**
+ * Examples this word can actually play Fill-Blank with. Two hard rules,
+ * both from Gadi's 2026-07-03 screenshot ("The company celebrated the
+ * ____ of its latest smartphone" with Hebrew options):
+ *
+ *  1. The sentence must CONTAIN the word — otherwise the blank was
+ *     appended at the end, which reads as broken.
+ *  2. The sentence minus the word must be predominantly the SAME script
+ *     as the word. The define API can produce English carrier sentences
+ *     for a Hebrew headword (examples localized to the UI language);
+ *     an English sentence with four Hebrew options is not a usable round.
+ */
+export function usableFillBlankExamples(p: PlayWord): string[] {
+  const wordScript = scriptOf(p.word);
+  if (wordScript === "unknown") return [];
+  const re = wordRegex(p.word);
+  return p.examples.filter((ex) => {
+    if (!re.test(ex)) return false;
+    const carrier = ex.replace(re, " ");
+    return dominantScriptOf(carrier) === wordScript;
+  });
+}
+
+/** Replace the word in a sentence with the blank token. Callers pass
+ *  examples pre-vetted by usableFillBlankExamples, so the fallback
+ *  append should never fire — kept as a belt-and-braces guard. */
+function blankOut(sentence: string, word: string): string {
+  if (!word) return sentence;
+  const re = wordRegex(word);
   if (re.test(sentence)) return sentence.replace(re, BLANK_TOKEN);
   return `${sentence} ${BLANK_TOKEN}`;
 }
@@ -364,14 +429,17 @@ export function buildFillBlankQuestions(
   pool: PlayWord[],
   count: number,
 ): FillBlankQuestion[] {
-  const withExamples = pool.filter((p) => p.examples.length > 0);
-  const targets = sample(withExamples, count);
-  return targets.map((target): FillBlankQuestion => {
-    const example = pickOne(target.examples);
+  const withExamples = pool.filter((p) => usableFillBlankExamples(p).length > 0);
+  // Oversample: some targets may produce degenerate rounds (fewer than
+  // 2 options) and get dropped below — grab extras so the session still
+  // reaches `count` when the pool allows it.
+  const targets = sample(withExamples, count * 2);
+  const questions: FillBlankQuestion[] = [];
+  for (const target of targets) {
+    if (questions.length >= count) break;
+    const example = pickOne(usableFillBlankExamples(target));
     // Same script-matching guardrail as Quiz — a Hebrew target word
-    // must not offer English distractor words. See scriptOf(). If the
-    // pool doesn't have three same-script alternatives we show fewer
-    // options rather than smuggle in wrong-script ones.
+    // must not offer English distractor words.
     const targetScript = scriptOf(target.word);
     const candidates = pool.filter((p) => p.word !== target.word);
     const sameScriptCandidates = candidates.filter(
@@ -388,18 +456,19 @@ export function buildFillBlankQuestions(
       }
     }
     const desiredDistractors = Math.min(3, uniqueSameScript.length);
-    const distractors = sample(
-      uniqueSameScript.map((v) => ({ value: v })),
-      desiredDistractors,
-    ).map((x) => x.value);
+    // A round with a single button teaches nothing — drop it rather
+    // than render it. QA 2026-07-03.
+    if (desiredDistractors < 1) continue;
+    const distractors = sample(uniqueSameScript, desiredDistractors);
     const options = shuffle([target.word, ...distractors]);
-    return {
+    questions.push({
       sentence: blankOut(example, target.word),
       options,
       correctIdx: options.indexOf(target.word),
       word: target,
-    };
-  });
+    });
+  }
+  return questions;
 }
 
 // ─── Memory pairs ───────────────────────────────────────────────
@@ -416,7 +485,21 @@ export function buildMemoryDeck(
   pool: PlayWord[],
   pairs: number,
 ): MemoryCard[] {
-  const chosen = sample(pool, pairs);
+  // Dedup by word AND by meaning text before sampling: two entries
+  // with the same visible meaning would put two identical-looking
+  // cards on the board that belong to different pairs — an unguessable
+  // round. QA 2026-07-03.
+  const seenWord = new Set<string>();
+  const seenMeaning = new Set<string>();
+  const unique = pool.filter((p) => {
+    const w = p.word.trim().toLowerCase();
+    const m = p.meaning.trim().toLowerCase();
+    if (!w || !m || seenWord.has(w) || seenMeaning.has(m)) return false;
+    seenWord.add(w);
+    seenMeaning.add(m);
+    return true;
+  });
+  const chosen = sample(unique, pairs);
   const cards: MemoryCard[] = [];
   chosen.forEach((w, i) => {
     cards.push({ id: `w-${i}`, pairKey: `p-${i}`, kind: "word", text: w.word, word: w });
@@ -443,12 +526,17 @@ export function buildAnagramRounds(
   pool: PlayWord[],
   count: number,
 ): AnagramRound[] {
+  // Single-token words only: a multi-word entry ("תפוח אדמה") would
+  // turn its space into an invisible, unplaceable tile and make the
+  // round unsolvable. QA 2026-07-03.
+  const singleToken = pool.filter((p) => !/\s/.test(p.word.trim()));
   // Filter: at least 3 letters, not too long (10+ is brutal as anagram).
-  const usable = pool.filter((p) => {
+  const usable = singleToken.filter((p) => {
     const letters = splitLetters(p.word);
     return letters.length >= 3 && letters.length <= 9;
   });
-  const targets = sample(usable.length >= count ? usable : pool, count);
+  // Fallback relaxes the length rule but never the single-token rule.
+  const targets = sample(usable.length >= count ? usable : singleToken, count);
   return targets.map((target): AnagramRound => {
     let letters = splitLetters(target.word);
     // Shuffle until different from the original (so easy 3-letter words

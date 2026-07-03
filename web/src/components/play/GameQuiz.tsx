@@ -64,6 +64,10 @@ export function GameQuiz({
   }
 
   const q = questions[idx];
+  // Defensive: an adversarial pool (all mixed scripts, no coherent
+  // rounds) can leave the builder with zero questions. The menu gates
+  // should prevent it, but never render q.promptKind off undefined.
+  if (!q) return null;
   return (
     <div className="wb-play-stage">
       <PlayHeader title={t.quizTitle} progress={`${idx + 1}/${questions.length}`} score={score} onExit={onExit} t={t} />
@@ -71,7 +75,10 @@ export function GameQuiz({
         <div className="wb-play-question-eyebrow">
           {q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning}
         </div>
-        <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang}>
+        {/* dir=auto: prompt and options can be in a different language
+            than the UI (Hebrew word searched under English UI stores an
+            English meaning). Let the browser align each per content. */}
+        <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
           {q.prompt}
         </div>
       </div>
@@ -92,6 +99,7 @@ export function GameQuiz({
               className={cls}
               onClick={() => pick(i)}
               disabled={picked !== null}
+              dir="auto"
             >
               {opt}
             </button>

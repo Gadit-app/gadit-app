@@ -29,6 +29,11 @@ export function GameMemory({
     () => buildMemoryDeck(pool, SESSION_SIZE.memory),
     [pool],
   );
+  // Derive the pair count from the actual deck: buildMemoryDeck dedups
+  // duplicate words/meanings, so it can legitimately return fewer than
+  // SESSION_SIZE.memory pairs. Comparing against the constant would
+  // leave the done screen unreachable. QA 2026-07-03.
+  const totalPairs = deck.length / 2;
   // ids of cards currently face up but not yet matched
   const [flipped, setFlipped] = useState<string[]>([]);
   // pairKeys that have been matched (stay face up)
@@ -36,6 +41,17 @@ export function GameMemory({
   const [moves, setMoves] = useState(0);
   const [done, setDone] = useState(false);
   const lockRef = useRef(false);
+
+  // Completion watcher — a plain effect on matched.length instead of a
+  // setTimeout inside the setMatched updater. Updater functions must
+  // stay pure (StrictMode replays them); effects are the sanctioned
+  // place for side effects. QA 2026-07-03.
+  useEffect(() => {
+    if (done || totalPairs === 0) return;
+    if (matched.length !== totalPairs) return;
+    const id = window.setTimeout(() => setDone(true), 600);
+    return () => window.clearTimeout(id);
+  }, [matched.length, totalPairs, done]);
 
   function tryFlip(card: MemoryCard) {
     if (lockRef.current) return;
@@ -49,18 +65,7 @@ export function GameMemory({
       const a = deck.find((c) => c.id === aId)!;
       const b = deck.find((c) => c.id === bId)!;
       if (a.pairKey === b.pairKey) {
-        // Read the fresh length inside the updater so we don't miss the
-        // last match. Prior version compared `matched.length + 1` against
-        // the target — arithmetically equivalent in normal flow but
-        // relies on the closure's `matched` being the latest render. The
-        // functional form removes that assumption. Audit 2026-07-03.
-        setMatched((m) => {
-          const next = [...m, a.pairKey];
-          if (next.length === SESSION_SIZE.memory) {
-            setTimeout(() => setDone(true), 600);
-          }
-          return next;
-        });
+        setMatched((m) => [...m, a.pairKey]);
         setFlipped([]);
       } else {
         // Give the user enough time to actually read both cards before
@@ -82,8 +87,8 @@ export function GameMemory({
       <GameResult
         data={{
           title: t.memoryTitle,
-          score: SESSION_SIZE.memory,
-          total: SESSION_SIZE.memory,
+          score: totalPairs,
+          total: totalPairs,
           headline: t.memoryMoves(moves),
         }}
         onExit={onExit}
@@ -96,7 +101,7 @@ export function GameMemory({
 
   return (
     <div className="wb-play-stage">
-      <PlayHeader title={t.memoryTitle} progress={`${matched.length}/${SESSION_SIZE.memory}`} score={moves} onExit={onExit} t={t} />
+      <PlayHeader title={t.memoryTitle} progress={`${matched.length}/${totalPairs}`} score={moves} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.memoryFlipPrompt}</div>
       </div>
@@ -120,7 +125,7 @@ export function GameMemory({
                 </svg>
               </span>
               <span className="wb-play-memcard-face" aria-hidden={!open}>
-                {card.text}
+                <span className="wb-play-memcard-facetext" dir="auto">{card.text}</span>
               </span>
             </button>
           );

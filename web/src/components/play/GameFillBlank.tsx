@@ -70,6 +70,9 @@ export function GameFillBlank({
   }
 
   const q = questions[idx];
+  // Defensive: the builder drops incoherent rounds (sentence script ≠
+  // word script, missing distractors) and can return fewer than asked.
+  if (!q) return null;
   // Split the sentence so we can highlight the blank.
   const parts = q.sentence.split("____");
   return (
@@ -77,7 +80,9 @@ export function GameFillBlank({
       <PlayHeader title={t.fillblankTitle} progress={`${idx + 1}/${questions.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{t.fillblankPrompt}</div>
-        <div className="wb-play-sentence">
+        {/* dir=auto: the carrier sentence is in the WORD's language,
+            which can differ from the UI language. */}
+        <div className="wb-play-sentence" dir="auto">
           {parts.map((part, i) => (
             <span key={i}>
               {part}
@@ -107,6 +112,7 @@ export function GameFillBlank({
               className={cls}
               onClick={() => pick(i)}
               disabled={picked !== null}
+              dir="auto"
             >
               {opt}
             </button>

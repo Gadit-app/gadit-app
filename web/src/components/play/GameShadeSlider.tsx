@@ -80,7 +80,7 @@ export function GameShadeSlider({
   // When the board fills (5 placed), lock the board and score.
   // Player taps Next when ready to move on.
   useEffect(() => {
-    if (placed.length !== 5 || revealed) return;
+    if (!r || placed.length !== 5 || revealed) return;
     setRevealed(true);
     let roundScore = 0;
     placed.forEach((w, i) => {
@@ -133,6 +133,9 @@ export function GameShadeSlider({
       />
     );
   }
+
+  // Defensive: never render off an undefined round. QA 2026-07-03.
+  if (!r) return null;
 
   return (
     <div className="wb-play-stage">

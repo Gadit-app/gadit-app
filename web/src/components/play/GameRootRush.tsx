@@ -90,7 +90,7 @@ export function GameRootRush({
   // Record the round's outcome once, when the round ends. No auto-advance —
   // player taps Next when ready.
   useEffect(() => {
-    if (!roundOver || done || scored) return;
+    if (!r || !roundOver || done || scored) return;
     if (correctTapsSoFar < 3) {
       setMissed((m) => [...m, r]);
     }
@@ -138,6 +138,9 @@ export function GameRootRush({
       />
     );
   }
+
+  // Defensive: never render off an undefined round. QA 2026-07-03.
+  if (!r) return null;
 
   function tileClass(tileIdx: number): string {
     const tap = taps.find((t) => t.tileIdx === tileIdx);
