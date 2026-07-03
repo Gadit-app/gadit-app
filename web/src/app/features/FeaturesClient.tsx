@@ -110,10 +110,9 @@ interface Feature {
  *   4. Tier tie-back micro-section that names what each tier adds.
  *   5. Final CTA with the "Now I gad it!" character.
  *
- * Adding new fields to all 12 languages would explode this file; we
- * keep proper HE + EN translations and fall back to EN for the other
- * 10 langs (whose existing 10-feature list still works as before -
- * only the page-shell copy switches).
+ * 2026-07: GROUP_COPY now carries native translations for all 13 UI
+ * languages (EN stays the fallback for any future language that has
+ * not been translated yet).
  */
 type GroupKey = "understand" | "learn" | "master";
 
@@ -155,7 +154,7 @@ function Hl({ children }: { children: React.ReactNode }) {
   return <span className="wb-feat-group-title-hl">{children}</span>;
 }
 
-const GROUP_COPY: Record<"he" | "en" | "hi", GroupCopy> = {
+const GROUP_COPY: Record<string, GroupCopy> = {
   he: {
     groupTitles: {
       understand: "להבין את המילה",
@@ -296,12 +295,470 @@ const GROUP_COPY: Record<"he" | "en" | "hi", GroupCopy> = {
     },
     bubble: "Now I gad it!",
   },
+  ar: {
+    groupTitles: {
+      understand: "افهم الكلمة",
+      learn: <>افهم الكلمة <Hl>وشاهدها</Hl></>,
+      master: <>افهم الكلمة وشاهدها <Hl>وتذكّرها إلى الأبد</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "كل المعاني، جمل حقيقية في سياقها، التعابير التي تعيش فيها الكلمة، وأصلها التاريخي.",
+      learn:
+        "صورة للكلمة، شرح مبسّط للأطفال، دفتر شخصي، وجملة تكتبها بنفسك وتحصل على ملاحظات.",
+      master:
+        "اختبارات مخصّصة وألعاب كلمات ترسّخ الكلمة في الذاكرة لوقت طويل.",
+    },
+    family: {
+      title: <>افهم، شاهد، تذكّر، <Hl>لكل أفراد العائلة</Hl></>,
+      sub: "اشتراك واحد يمنح كل فرد من العائلة حساباً خاصاً به، مع كل الميزات المتقدمة. حتى 5 أطفال.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "ملف شخصي منفصل لكل فرد من العائلة",
+          body: "دفتر كلمات، سجلّ بحث، وسلسلة تعلّم شخصية لكل طفل وكل والد.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "ربط الجهاز برمز QR",
+          body: "يمسح طفلك رمز QR بهاتفه ويسجّل الدخول. يبقى متصلاً دائماً، من دون كلمة مرور.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "لوحة تحكّم للوالدين",
+          body: "شاهد كل كلمة بحث عنها كل طفل ومتى، وتابع وتيرة تعلّمه بنظرة واحدة.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "حتى 5 أطفال في اشتراك واحد",
+          body: "كل طفل يحصل على كامل ميزات Deep. يدفع الوالد مرة واحدة عن العائلة كلها.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  ru: {
+    groupTitles: {
+      understand: "Понять слово",
+      learn: <>Понять и <Hl>увидеть</Hl> слово</>,
+      master: <>Понять, увидеть и <Hl>запомнить слово навсегда</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Все значения, живые предложения в контексте, идиомы, в которых живёт слово, и его происхождение.",
+      learn:
+        "Картинка к слову, простая версия для детей, личная тетрадь и ваше собственное предложение с мгновенной обратной связью.",
+      master:
+        "Персональные викторины и игры со словами, которые закрепляют слово надолго.",
+    },
+    family: {
+      title: <>Понять, увидеть, запомнить, <Hl>для всей семьи</Hl></>,
+      sub: "Одна подписка даёт каждому члену семьи собственный аккаунт со всеми расширенными возможностями. До 5 детей.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Отдельный профиль для каждого члена семьи",
+          body: "Тетрадь слов, история поиска и личная серия обучения для каждого ребёнка и родителя.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Подключение устройства по QR-коду",
+          body: "Ребёнок сканирует QR на своём телефоне и входит в аккаунт. Остаётся подключённым навсегда, без пароля.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Панель для родителей",
+          body: "Смотрите, какие слова искал каждый ребёнок и когда, и следите за темпом каждого.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "До 5 детей в одной подписке",
+          body: "Каждый ребёнок получает все возможности Deep. Родитель платит один раз за всю семью.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  es: {
+    groupTitles: {
+      understand: "Entiende la palabra",
+      learn: <>Entiende y <Hl>ve</Hl> la palabra</>,
+      master: <>Entiende, ve y <Hl>recuerda la palabra para siempre</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Todos los significados, oraciones reales en contexto, los modismos donde vive la palabra y su origen.",
+      learn:
+        "Una imagen para la palabra, una versión para niños, un cuaderno personal y una oración que escribes con comentarios.",
+      master:
+        "Cuestionarios personalizados y juegos de palabras que fijan la palabra a largo plazo.",
+    },
+    family: {
+      title: <>Entiende, ve, recuerda, <Hl>para toda la familia</Hl></>,
+      sub: "Una sola suscripción le da a cada miembro de la familia su propia cuenta, con todas las funciones avanzadas. Hasta 5 niños.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Un perfil separado para cada miembro de la familia",
+          body: "Cuaderno de palabras, historial de búsqueda y racha personal de aprendizaje para cada niño y cada padre.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Conecta un dispositivo con un código QR",
+          body: "Tu hijo escanea un QR en su teléfono e inicia sesión. Queda conectado para siempre, sin contraseña.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Panel para padres",
+          body: "Ve cada palabra que buscó cada niño y cuándo, y sigue su ritmo de un vistazo.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Hasta 5 niños en una sola suscripción",
+          body: "Cada niño recibe todas las funciones de Deep. El padre paga una sola vez por toda la familia.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  pt: {
+    groupTitles: {
+      understand: "Entenda a palavra",
+      learn: <>Entenda e <Hl>veja</Hl> a palavra</>,
+      master: <>Entenda, veja e <Hl>lembre-se da palavra para sempre</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Todos os significados, frases reais em contexto, as expressões em que a palavra vive e a origem dela.",
+      learn:
+        "Uma imagem para a palavra, uma versão para crianças, um caderno pessoal e uma frase que você escreve com feedback.",
+      master:
+        "Quizzes personalizados e jogos de palavras que fixam a palavra por muito tempo.",
+    },
+    family: {
+      title: <>Entenda, veja, lembre, <Hl>para a família toda</Hl></>,
+      sub: "Uma assinatura dá a cada membro da família uma conta própria, com todos os recursos avançados. Até 5 crianças.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Um perfil separado para cada membro da família",
+          body: "Caderno de palavras, histórico de buscas e sequência pessoal de aprendizado para cada criança e cada responsável.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Conecte um aparelho com código QR",
+          body: "Seu filho escaneia um QR no celular e entra na conta. Fica conectado para sempre, sem senha.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Painel para os pais",
+          body: "Veja cada palavra que cada criança buscou e quando, e acompanhe o ritmo de todos num relance.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Até 5 crianças em uma assinatura",
+          body: "Cada criança recebe todos os recursos do Deep. Os pais pagam uma vez pela família toda.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  fr: {
+    groupTitles: {
+      understand: "Comprendre le mot",
+      learn: <>Comprendre et <Hl>voir</Hl> le mot</>,
+      master: <>Comprendre, voir et <Hl>retenir le mot pour toujours</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Tous les sens, de vraies phrases en contexte, les expressions où vit le mot, et son origine.",
+      learn:
+        "Une image pour le mot, une version pour les enfants, un carnet personnel et une phrase que vous écrivez avec un retour.",
+      master:
+        "Des quiz personnalisés et des jeux de mots qui ancrent le mot durablement.",
+    },
+    family: {
+      title: <>Comprendre, voir, retenir, <Hl>pour toute la famille</Hl></>,
+      sub: "Un seul abonnement donne à chaque membre de la famille son propre compte, avec toutes les fonctionnalités avancées. Jusqu'à 5 enfants.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Un profil distinct pour chaque membre de la famille",
+          body: "Carnet de mots, historique de recherche et série d'apprentissage personnelle pour chaque enfant et chaque parent.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Associer un appareil avec un code QR",
+          body: "Votre enfant scanne un QR sur son téléphone et se connecte. Il reste connecté pour toujours, sans mot de passe.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Tableau de bord parental",
+          body: "Voyez chaque mot recherché par chaque enfant et quand, et suivez son rythme d'un coup d'œil.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Jusqu'à 5 enfants avec un seul abonnement",
+          body: "Chaque enfant profite de toutes les fonctionnalités Deep. Le parent paie une seule fois pour toute la famille.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  de: {
+    groupTitles: {
+      understand: "Das Wort verstehen",
+      learn: <>Das Wort verstehen und <Hl>sehen</Hl></>,
+      master: <>Verstehen, sehen und <Hl>das Wort für immer behalten</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Jede Bedeutung, echte Sätze im Kontext, die Redewendungen, in denen das Wort lebt, und seine Herkunft.",
+      learn:
+        "Ein Bild zum Wort, eine kindgerechte Version, ein persönliches Notizbuch und ein Satz, den du schreibst und Feedback bekommst.",
+      master:
+        "Personalisierte Quizze und Wortspiele, die das Wort langfristig verankern.",
+    },
+    family: {
+      title: <>Verstehen, sehen, behalten, <Hl>für die ganze Familie</Hl></>,
+      sub: "Ein Abo gibt jedem Familienmitglied ein eigenes Konto, mit allen erweiterten Funktionen. Bis zu 5 Kinder.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Ein eigenes Profil pro Familienmitglied",
+          body: "Wörter-Notizbuch, Suchverlauf und persönliche Lernserie für jedes Kind und jeden Elternteil.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Gerät per QR-Code koppeln",
+          body: "Dein Kind scannt einen QR auf seinem Handy und ist angemeldet. Bleibt für immer verbunden, ganz ohne Passwort.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Eltern-Dashboard",
+          body: "Sieh jedes Wort, das jedes Kind nachgeschlagen hat und wann, und behalte das Tempo im Blick.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Bis zu 5 Kinder in einem Abo",
+          body: "Jedes Kind bekommt alle Deep-Funktionen. Eltern zahlen einmal für die ganze Familie.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  cs: {
+    groupTitles: {
+      understand: "Porozumět slovu",
+      learn: <>Porozumět slovu a <Hl>vidět ho</Hl></>,
+      master: <>Porozumět, vidět a <Hl>zapamatovat si slovo navždy</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Každý význam, skutečné věty v kontextu, idiomy, ve kterých slovo žije, a jeho původ.",
+      learn:
+        "Obrázek ke slovu, verze pro děti, osobní sešit a věta, kterou napíšeš a dostaneš zpětnou vazbu.",
+      master:
+        "Personalizované kvízy a slovní hry, které ti slovo uloží do paměti nadlouho.",
+    },
+    family: {
+      title: <>Porozumět, vidět, zapamatovat si, <Hl>pro celou rodinu</Hl></>,
+      sub: "Jedno předplatné dá každému členovi rodiny vlastní účet se všemi pokročilými funkcemi. Až 5 dětí.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Samostatný profil pro každého člena rodiny",
+          body: "Sešit slov, historie hledání a osobní série učení pro každé dítě i rodiče.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Připojení zařízení QR kódem",
+          body: "Dítě naskenuje QR na svém telefonu a je přihlášené. Zůstane připojené napořád, bez hesla.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Rodičovský přehled",
+          body: "Vidíš každé slovo, které si každé dítě vyhledalo a kdy, a máš jeho tempo stále na očích.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Až 5 dětí v jednom předplatném",
+          body: "Každé dítě dostane všechny funkce Deep. Rodič platí jednou za celou rodinu.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  sk: {
+    groupTitles: {
+      understand: "Porozumieť slovu",
+      learn: <>Porozumieť slovu a <Hl>vidieť ho</Hl></>,
+      master: <>Porozumieť, vidieť a <Hl>zapamätať si slovo navždy</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Každý význam, skutočné vety v kontexte, idiómy, v ktorých slovo žije, a jeho pôvod.",
+      learn:
+        "Obrázok k slovu, verzia pre deti, osobný zošit a veta, ktorú napíšeš a dostaneš spätnú väzbu.",
+      master:
+        "Personalizované kvízy a slovné hry, ktoré ti slovo uložia do pamäti nadlho.",
+    },
+    family: {
+      title: <>Porozumieť, vidieť, zapamätať si, <Hl>pre celú rodinu</Hl></>,
+      sub: "Jedno predplatné dá každému členovi rodiny vlastný účet so všetkými pokročilými funkciami. Až 5 detí.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Samostatný profil pre každého člena rodiny",
+          body: "Zošit slov, história hľadania a osobná séria učenia pre každé dieťa aj rodiča.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Pripojenie zariadenia QR kódom",
+          body: "Dieťa naskenuje QR na svojom telefóne a je prihlásené. Zostane pripojené navždy, bez hesla.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Rodičovský prehľad",
+          body: "Vidíš každé slovo, ktoré si každé dieťa vyhľadalo a kedy, a máš jeho tempo stále na očiach.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Až 5 detí v jednom predplatnom",
+          body: "Každé dieťa dostane všetky funkcie Deep. Rodič platí raz za celú rodinu.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  it: {
+    groupTitles: {
+      understand: "Capire la parola",
+      learn: <>Capire e <Hl>vedere</Hl> la parola</>,
+      master: <>Capire, vedere e <Hl>ricordare la parola per sempre</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Tutti i significati, frasi vere nel contesto, i modi di dire in cui vive la parola e la sua origine.",
+      learn:
+        "Un'immagine per la parola, una versione per bambini, un quaderno personale e una frase che scrivi con feedback.",
+      master:
+        "Quiz personalizzati e giochi di parole che fissano la parola nel lungo periodo.",
+    },
+    family: {
+      title: <>Capire, vedere, ricordare, <Hl>per tutta la famiglia</Hl></>,
+      sub: "Un solo abbonamento dà a ogni membro della famiglia un account personale, con tutte le funzionalità avanzate. Fino a 5 bambini.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Un profilo separato per ogni membro della famiglia",
+          body: "Quaderno delle parole, cronologia delle ricerche e serie personale di apprendimento per ogni bambino e genitore.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Collega un dispositivo con un codice QR",
+          body: "Tuo figlio scansiona un QR sul suo telefono e accede. Resta collegato per sempre, senza password.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Pannello per i genitori",
+          body: "Vedi ogni parola cercata da ogni bambino e quando, e segui il suo ritmo a colpo d'occhio.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Fino a 5 bambini con un solo abbonamento",
+          body: "Ogni bambino ha tutte le funzionalità Deep. Il genitore paga una volta sola per tutta la famiglia.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  ja: {
+    groupTitles: {
+      understand: "単語を理解する",
+      learn: <>単語を理解して<Hl>目で見る</Hl></>,
+      master: <>理解して、見て、<Hl>単語をずっと覚えておく</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "すべての意味、文脈の中の実際の例文、その単語が使われる慣用句、そして語源まで。",
+      learn:
+        "単語の画像、子ども向けのやさしい説明、自分だけのノート、そしてフィードバック付きの作文練習。",
+      master:
+        "パーソナライズされたクイズと単語ゲームで、単語を長く記憶に定着させます。",
+    },
+    family: {
+      title: <>理解して、見て、覚える。<Hl>家族みんなで</Hl></>,
+      sub: "ひとつのサブスクリプションで、家族全員がそれぞれのアカウントを持てます。高度な機能もすべて使えて、お子さまは5人まで。",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "家族ひとりひとりに専用プロフィール",
+          body: "単語ノート、検索履歴、学習の連続記録を、お子さまにも保護者にもひとりずつ用意します。",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "QRコードで端末を連携",
+          body: "お子さまが自分のスマートフォンでQRを読み取るだけでログイン。パスワードなしで、ずっとつながったままです。",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "保護者用ダッシュボード",
+          body: "お子さまがいつどの単語を調べたかをひと目で確認でき、学習のペースを見守れます。",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "ひとつの契約でお子さま5人まで",
+          body: "すべてのお子さまがDeepの全機能を使えます。お支払いは家族全体で一度だけです。",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
 };
 
 function pickGroupCopy(lang: string): GroupCopy {
-  if (lang === "he") return GROUP_COPY.he;
-  if (lang === "hi") return GROUP_COPY.hi;
-  return GROUP_COPY.en;
+  return GROUP_COPY[lang] ?? GROUP_COPY.en;
 }
 
 const COPY: Record<string, {
@@ -414,7 +871,7 @@ const COPY: Record<string, {
       { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idiomy a slovní spojení",            body: "Každý výraz, v němž se slovo vyskytuje, i s plným významem celé fráze." },
       { id: "origin",      icon: "origin",      tier: "basic", title: "Odkud slovo pochází",                body: "Z jakého jazyka slovo přišlo a co původně znamenalo." },
       { id: "kids",        icon: "kids",        tier: "clear", title: "Vysvětlení pro děti",                body: "Jasná, jednoduchá verze, kterou dítě přečte bez složitých pojmů." },
-      { id: "image",       icon: "image",       tier: "clear", title: "Slovo jako obrázek",                 body: "Jedinečný obrázek od AI ke slovu, vytvořený podle jeho významu a kontextu." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Slovo jako obrázek",                 body: "Jedinečný obrázek ke slovu, vytvořený podle jeho významu a kontextu." },
       { id: "notebook",    icon: "notebook",    tier: "clear", title: "Osobní sešit slov",                  body: "Ulož si slova, která si chceš zapamatovat. Dostupné i bez internetu." },
       { id: "compose",     icon: "compose",     tier: "clear", title: "Napiš větu, dostaň zpětnou vazbu",   body: "Sestav vlastní větu se slovem a okamžitě dostaň opravu a zpětnou vazbu." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalizované kvízy",              body: "Denní kvíz na slova, která ses naučil, aby ti zůstala nadlouho." },
@@ -439,7 +896,7 @@ const COPY: Record<string, {
       { id: "idioms",      icon: "idioms",      tier: "basic", title: "Idiómy a slovné spojenia",           body: "Každý výraz, v ktorom sa slovo vyskytuje, aj s plným významom celej frázy." },
       { id: "origin",      icon: "origin",      tier: "basic", title: "Odkiaľ slovo pochádza",              body: "Z akého jazyka slovo prišlo a čo pôvodne znamenalo." },
       { id: "kids",        icon: "kids",        tier: "clear", title: "Vysvetlenie pre deti",               body: "Jasná, jednoduchá verzia, ktorú dieťa prečíta bez zložitých pojmov." },
-      { id: "image",       icon: "image",       tier: "clear", title: "Slovo ako obrázok",                  body: "Jedinečný obrázok od AI ku slovu, vytvorený podľa jeho významu a kontextu." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Slovo ako obrázok",                  body: "Jedinečný obrázok ku slovu, vytvorený podľa jeho významu a kontextu." },
       { id: "notebook",    icon: "notebook",    tier: "clear", title: "Osobný zošit slov",                  body: "Ulož si slová, ktoré si chceš zapamätať. Dostupné aj bez internetu." },
       { id: "compose",     icon: "compose",     tier: "clear", title: "Napíš vetu, dostaň spätnú väzbu",    body: "Zostav vlastnú vetu so slovom a okamžite dostaň opravu a spätnú väzbu." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalizované kvízy",              body: "Denný kvíz na slová, ktoré si sa naučil, aby ti zostali nadlho." },
@@ -469,6 +926,181 @@ const COPY: Record<string, {
       { id: "compose",     icon: "compose",     tier: "clear", title: "वाक्य लिखें, फ़ीडबैक पाएँ",          body: "शब्द के साथ अपना वाक्य बनाएँ और तुरंत सुधार और फ़ीडबैक पाएँ।" },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "व्यक्तिगत क्विज़",                    body: "आपके सीखे हुए शब्दों पर रोज़ की क्विज़, ताकि वे आपके साथ लम्बे समय तक रहें।" },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "शब्द खेल",                          body: "ऐसे खेल जो आपकी शब्दावली बढ़ाते हैं: मिलान, अनुमान, शब्दों के बीच कनेक्शन बनाना।" },
+    ],
+  },
+  ar: {
+    heroEyebrow: "الميزات",
+    heroTitle: "قاموس لا يتوقف عند التعريف.",
+    heroSub: "Gadit يفهم الكلمة حتى النهاية. كل المعاني، جمل حقيقية في سياقها، التعابير، الأصل والتمرين. حتى تتضح الكلمة فعلاً. هذا ما نسميه أن تعمل GAD للكلمة.",
+    ctaPrimary: "ابدأ مجاناً",
+    ctaSecondary: "اطّلع على الأسعار",
+    signin: "تسجيل الدخول", pricing: "الأسعار", search: "بحث", features: "الميزات",
+    sectionLabel: "ماذا ستحصل عليه",
+    finalCtaTitle: "جاهز للتجربة؟",
+    finalCtaSub: "ابدأ مع Basic مجاناً بالكامل. ورقِّ اشتراكك بلمسة واحدة، فقط عندما تريد المزيد.",
+    finalCtaBtn: "ابدأ الآن",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "كل التعريفات",                       body: "جميع معاني الكلمة، حتى النادرة منها، مرتّبة حسب شيوع الاستخدام." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "جمل حقيقية في سياقها",               body: "ثلاث جمل حقيقية لكل معنى، ليتضح السياق فوراً." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "التعابير والمصطلحات",                body: "كل تعبير تدخل فيه الكلمة، مع المعنى الكامل للعبارة." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "أصل الكلمة",                         body: "اللغة التي جاءت منها الكلمة، وما كانت تعنيه في الأصل." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "شرح للأطفال",                        body: "نسخة واضحة وبسيطة يقرأها الطفل من دون مصطلحات معقّدة." },
+      { id: "image",       icon: "image",       tier: "clear", title: "الكلمة كصورة",                       body: "صورة فريدة للكلمة، مطابقة للمعنى الذي تقرأه بالضبط." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "دفتر كلمات شخصي",                    body: "احفظ الكلمات التي تريد تذكّرها. متاح حتى من دون إنترنت." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "اكتب جملة واحصل على ملاحظات",        body: "ألّف جملتك الخاصة بالكلمة واحصل فوراً على تصحيح وملاحظات." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "اختبارات مخصّصة",                    body: "اختبار يومي على الكلمات التي تعلّمتها، لتبقى معك لوقت طويل." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "ألعاب كلمات",                        body: "ألعاب تنمّي مفرداتك: مطابقة، تخمين، وبناء روابط بين الكلمات." },
+    ],
+  },
+  ru: {
+    heroEyebrow: "Возможности",
+    heroTitle: "Словарь, который не останавливается на определении.",
+    heroSub: "Gadit понимает слово до конца. Все значения, живые предложения в контексте, идиомы, происхождение и практика. Пока слово действительно не станет ясным. Мы называем это GAD-нуть слово.",
+    ctaPrimary: "Начать бесплатно",
+    ctaSecondary: "Посмотреть цены",
+    signin: "Войти", pricing: "Цены", search: "Поиск", features: "Возможности",
+    sectionLabel: "Что вы получаете",
+    finalCtaTitle: "Готовы попробовать?",
+    finalCtaSub: "Начните с Basic, совершенно бесплатно. Обновление в одно касание, только когда захотите большего.",
+    finalCtaBtn: "Начать сейчас",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Все определения",                          body: "Все значения слова, даже редкие, в порядке частоты употребления." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Живые предложения в контексте",            body: "Три настоящих предложения на каждое значение, чтобы контекст был понятен сразу." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Идиомы и выражения",                       body: "Каждое выражение, в котором живёт слово, с полным значением всей фразы." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Происхождение слова",                      body: "Из какого языка пришло слово и что оно значило изначально." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Объяснение для детей",                     body: "Ясная и простая версия, которую ребёнок прочитает без сложных терминов." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Слово как картинка",                       body: "Уникальная картинка для слова, подобранная под то значение, которое вы читаете." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Личная тетрадь слов",                      body: "Сохраняйте слова, которые хотите запомнить. Доступны даже без интернета." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Напишите предложение, получите разбор",    body: "Составьте своё предложение со словом и мгновенно получите исправления и обратную связь." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Персональные викторины",                   body: "Ежедневная викторина по выученным словам, чтобы они остались с вами надолго." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Игры со словами",                          body: "Игры, которые расширяют словарный запас: сопоставление, угадывание, связи между словами." },
+    ],
+  },
+  es: {
+    heroEyebrow: "Funciones",
+    heroTitle: "Un diccionario que no se detiene en la definición.",
+    heroSub: "Gadit entiende cada palabra hasta el fondo. Todos los significados, oraciones reales en contexto, modismos, origen y práctica. Hasta que la palabra de verdad haga clic. A eso lo llamamos hacerle GAD a una palabra.",
+    ctaPrimary: "Empieza gratis",
+    ctaSecondary: "Ver precios",
+    signin: "Iniciar sesión", pricing: "Precios", search: "Buscar", features: "Funciones",
+    sectionLabel: "Lo que obtienes",
+    finalCtaTitle: "¿Listo para probarlo?",
+    finalCtaSub: "Empieza con Basic, totalmente gratis. Mejora tu plan con un toque, solo cuando quieras más.",
+    finalCtaBtn: "Empieza ahora",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Todas las definiciones",                    body: "Todos los significados de la palabra, incluso los raros, ordenados según su frecuencia de uso." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Oraciones reales en contexto",              body: "Tres oraciones reales por significado, para que el contexto se entienda de inmediato." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Modismos y expresiones",                    body: "Cada expresión de la que forma parte la palabra, con el significado completo de la frase." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "El origen de la palabra",                   body: "El idioma donde nació la palabra y lo que significaba originalmente." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Explicación para niños",                    body: "Una versión clara y sencilla que un niño puede leer sin términos complicados." },
+      { id: "image",       icon: "image",       tier: "clear", title: "La palabra como imagen",                    body: "Una imagen única para la palabra, ajustada al significado exacto que estás leyendo." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Cuaderno personal de palabras",             body: "Guarda las palabras que quieres recordar. Disponibles incluso sin internet." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Escribe una oración y recibe comentarios",  body: "Crea tu propia oración con la palabra y recibe corrección y comentarios al instante." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Cuestionarios personalizados",              body: "Un cuestionario diario sobre las palabras que aprendiste, para que se queden contigo a largo plazo." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Juegos de palabras",                        body: "Juegos que amplían tu vocabulario: emparejar, adivinar y crear conexiones entre palabras." },
+    ],
+  },
+  pt: {
+    heroEyebrow: "Recursos",
+    heroTitle: "Um dicionário que não para na definição.",
+    heroSub: "O Gadit entende a palavra até o fim. Todos os significados, frases reais em contexto, expressões idiomáticas, origem e prática. Até a palavra realmente fazer sentido. É o que chamamos de dar um GAD na palavra.",
+    ctaPrimary: "Comece grátis",
+    ctaSecondary: "Ver preços",
+    signin: "Entrar", pricing: "Preços", search: "Buscar", features: "Recursos",
+    sectionLabel: "O que você recebe",
+    finalCtaTitle: "Pronto para experimentar?",
+    finalCtaSub: "Comece com o Basic, totalmente grátis. Faça upgrade em um toque, só quando quiser mais.",
+    finalCtaBtn: "Comece agora",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Todas as definições",                  body: "Todos os significados da palavra, até os raros, em ordem de frequência de uso." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Frases reais em contexto",             body: "Três frases reais para cada significado, para o contexto ficar claro na hora." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Expressões idiomáticas",               body: "Cada expressão da qual a palavra faz parte, com o significado completo da frase." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "De onde a palavra veio",               body: "A língua em que a palavra nasceu e o que ela significava originalmente." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Explicação para crianças",             body: "Uma versão clara e simples que uma criança lê sem termos complicados." },
+      { id: "image",       icon: "image",       tier: "clear", title: "A palavra em imagem",                  body: "Uma imagem única para a palavra, alinhada ao significado exato que você está lendo." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Caderno pessoal de palavras",          body: "Salve as palavras que você quer lembrar. Disponíveis até sem internet." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Escreva uma frase e receba feedback",  body: "Monte sua própria frase com a palavra e receba correção e feedback na hora." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Quizzes personalizados",               body: "Um quiz diário com as palavras que você aprendeu, para que fiquem com você por muito tempo." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Jogos de palavras",                    body: "Jogos que expandem seu vocabulário: combinar, adivinhar e criar conexões entre palavras." },
+    ],
+  },
+  fr: {
+    heroEyebrow: "Fonctionnalités",
+    heroTitle: "Un dictionnaire qui ne s'arrête pas à la définition.",
+    heroSub: "Gadit comprend chaque mot jusqu'au bout. Tous les sens, de vraies phrases en contexte, les expressions, l'origine et la pratique. Jusqu'à ce que le mot devienne vraiment clair. C'est ce que nous appelons faire un GAD sur un mot.",
+    ctaPrimary: "Commencez gratuitement",
+    ctaSecondary: "Voir les tarifs",
+    signin: "Se connecter", pricing: "Tarifs", search: "Recherche", features: "Fonctionnalités",
+    sectionLabel: "Ce que vous obtenez",
+    finalCtaTitle: "Prêt à essayer ?",
+    finalCtaSub: "Commencez avec Basic, entièrement gratuit. Passez au niveau supérieur en un geste, seulement quand vous en voulez plus.",
+    finalCtaBtn: "Commencez maintenant",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Toutes les définitions",                  body: "Tous les sens du mot, même les plus rares, classés par fréquence d'usage." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "De vraies phrases en contexte",           body: "Trois phrases réelles par sens, pour que le contexte soit clair immédiatement." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Expressions et locutions",                body: "Chaque expression dont le mot fait partie, avec le sens complet de la tournure." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "L'origine du mot",                        body: "La langue d'où vient le mot et ce qu'il signifiait à l'origine." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Explication pour les enfants",            body: "Une version claire et simple qu'un enfant peut lire sans jargon." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Le mot en image",                         body: "Une image unique pour le mot, adaptée au sens exact que vous lisez." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Carnet de mots personnel",                body: "Enregistrez les mots que vous voulez retenir. Disponibles même sans internet." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Écrivez une phrase, recevez un retour",   body: "Composez votre propre phrase avec le mot et recevez correction et retour immédiats." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Quiz personnalisés",                      body: "Un quiz quotidien sur les mots que vous avez appris, pour qu'ils restent durablement." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Jeux de mots",                            body: "Des jeux qui enrichissent votre vocabulaire : associer, deviner, relier les mots entre eux." },
+    ],
+  },
+  it: {
+    heroEyebrow: "Funzionalità",
+    heroTitle: "Un dizionario che non si ferma alla definizione.",
+    heroSub: "Gadit capisce una parola fino in fondo. Tutti i significati, frasi vere nel contesto, modi di dire, origine e pratica. Finché la parola non diventa davvero chiara. È quello che chiamiamo fare GAD a una parola.",
+    ctaPrimary: "Inizia gratis",
+    ctaSecondary: "Vedi i prezzi",
+    signin: "Accedi", pricing: "Prezzi", search: "Cerca", features: "Funzionalità",
+    sectionLabel: "Cosa ottieni",
+    finalCtaTitle: "Pronto a provarlo?",
+    finalCtaSub: "Inizia con Basic, completamente gratis. Passa al piano superiore con un tocco, solo quando vuoi di più.",
+    finalCtaBtn: "Inizia ora",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Tutte le definizioni",                 body: "Tutti i significati della parola, anche quelli rari, ordinati per frequenza d'uso." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Frasi vere nel contesto",              body: "Tre frasi reali per ogni significato, così il contesto è chiaro subito." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Modi di dire ed espressioni",          body: "Ogni espressione di cui la parola fa parte, con il significato completo della frase." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "L'origine della parola",               body: "La lingua da cui la parola è arrivata e cosa significava in origine." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Spiegazione per bambini",              body: "Una versione chiara e semplice che un bambino può leggere senza termini difficili." },
+      { id: "image",       icon: "image",       tier: "clear", title: "La parola come immagine",              body: "Un'immagine unica per la parola, in linea con il significato esatto che stai leggendo." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Quaderno personale delle parole",      body: "Salva le parole che vuoi ricordare. Disponibili anche senza internet." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Scrivi una frase, ricevi feedback",    body: "Componi la tua frase con la parola e ricevi subito correzione e feedback." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Quiz personalizzati",                  body: "Un quiz quotidiano sulle parole che hai imparato, perché restino con te a lungo." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Giochi di parole",                     body: "Giochi che ampliano il tuo vocabolario: abbinare, indovinare, creare collegamenti tra le parole." },
+    ],
+  },
+  ja: {
+    heroEyebrow: "機能",
+    heroTitle: "定義だけで終わらない辞書。",
+    heroSub: "Gaditは単語を最後まで理解します。すべての意味、文脈の中の実際の例文、慣用句、語源、そして練習まで。単語が本当に腑に落ちるまで。私たちはこれを、単語をGADすると呼んでいます。",
+    ctaPrimary: "無料で始める",
+    ctaSecondary: "料金を見る",
+    signin: "ログイン", pricing: "料金", search: "検索", features: "機能",
+    sectionLabel: "できること",
+    finalCtaTitle: "試してみませんか？",
+    finalCtaSub: "Basicなら完全無料で始められます。もっと知りたくなったら、ワンタップでアップグレードできます。",
+    finalCtaBtn: "今すぐ始める",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "すべての定義",                     body: "珍しいものも含めて、単語のすべての意味を使用頻度順に表示します。" },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "文脈の中の実際の例文",             body: "意味ごとに3つの実際の例文を用意。文脈がすぐに伝わります。" },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "慣用句と言い回し",                 body: "その単語が使われるすべての表現を、フレーズ全体の意味とあわせて紹介します。" },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "単語の由来",                       body: "その単語がどの言語から生まれ、もともと何を意味していたかがわかります。" },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "子ども向けの説明",                 body: "難しい用語を使わない、子どもでも読めるわかりやすい説明です。" },
+      { id: "image",       icon: "image",       tier: "clear", title: "単語をイメージで",                 body: "読んでいる意味にぴったり合わせた、単語ごとの特別な画像です。" },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "自分だけの単語ノート",             body: "覚えたい単語を保存できます。インターネットがなくても使えます。" },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "文を書いてフィードバック",         body: "その単語を使って自分の文を作ると、すぐに添削とフィードバックが届きます。" },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "パーソナライズされたクイズ",       body: "学んだ単語の毎日のクイズで、長く記憶に残ります。" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "単語ゲーム",                       body: "語彙を育てるゲーム。マッチング、推測、単語同士のつながりづくりで力がつきます。" },
     ],
   },
 };
