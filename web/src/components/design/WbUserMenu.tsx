@@ -74,7 +74,30 @@ export function WbUserMenu() {
   const router = useRouter();
   const href = useHref();
   const [open, setOpen] = useState(false);
+  // Which inline side the dropdown anchors to. Computed at open time
+  // from the trigger's actual viewport position — the avatar lives at
+  // the inline-END of the topbar on desktop but at the inline-START
+  // (next to the wordmark, mobile identity cluster) on phones, so a
+  // hardcoded side sends the panel off-screen on one of them. Gadi's
+  // 2026-07-03 screenshot: EN mobile, menu clipped off the left edge.
+  const [alignStart, setAlignStart] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  const toggleOpen = () => {
+    const el = wrapRef.current;
+    if (el && typeof window !== "undefined") {
+      const r = el.getBoundingClientRect();
+      const triggerCenter = r.left + r.width / 2;
+      const viewportCenter = window.innerWidth / 2;
+      // The panel must grow toward the roomy half of the screen.
+      // "Anchor to inline-start" means: LTR → left edge pinned, grows
+      // right; RTL → right edge pinned, grows left.
+      setAlignStart(
+        dir === "rtl" ? triggerCenter > viewportCenter : triggerCenter < viewportCenter,
+      );
+    }
+    setOpen((v) => !v);
+  };
 
   // Close on outside click + Escape
   useEffect(() => {
@@ -112,14 +135,12 @@ export function WbUserMenu() {
     }
   };
 
-  // Always pin the dropdown to the end side of the wrapper so it
-  // extends toward the page interior — never off-screen. In LTR this
-  // means its right edge aligns with the avatar's right edge (dropdown
-  // grows leftward); in RTL its left edge aligns with the avatar's
-  // left edge (dropdown grows rightward). The earlier insetInlineStart
-  // fallback for RTL pushed the menu off the left of the viewport when
-  // the avatar sat in the top-left (its visual position in RTL).
-  const sideOffset: React.CSSProperties = { insetInlineEnd: 0 };
+  // Side chosen at open time (see toggleOpen): anchor the panel so it
+  // grows toward the page interior from wherever the trigger actually
+  // sits, desktop actions cluster or mobile identity cluster alike.
+  const sideOffset: React.CSSProperties = alignStart
+    ? { insetInlineStart: 0 }
+    : { insetInlineEnd: 0 };
 
   const tier = tierStyle(plan);
 
@@ -139,7 +160,7 @@ export function WbUserMenu() {
       <button
         type="button"
         aria-label={c.openMenu}
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggleOpen}
         className="wb-tier-chip"
         style={{
           padding: "4px 10px",
@@ -168,7 +189,7 @@ export function WbUserMenu() {
         aria-label={c.openMenu}
         aria-haspopup="menu"
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggleOpen}
         style={{ border: "none", padding: 0, cursor: "pointer" }}
       >
         {user.photoURL ? (
@@ -187,6 +208,10 @@ export function WbUserMenu() {
             insetBlockStart: "calc(100% + 8px)",
             ...sideOffset,
             minWidth: 200,
+            // Never wider than the viewport minus a safe gutter — a
+            // long email (menu header) must ellipsize, not push the
+            // panel off-screen on narrow phones.
+            maxWidth: "min(300px, calc(100vw - 24px))",
             background: "var(--surface, #FFFFFF)",
             color: "var(--ink, #111827)",
             border: "1px solid var(--hairline, #E5E7EB)",
