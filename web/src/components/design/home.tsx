@@ -25,6 +25,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLang } from "@/lib/lang-context";
+import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 import {
@@ -564,16 +565,19 @@ export function ValueProps() {
 export function HomeFooter() {
   const { lang, dir } = useLang();
   const isRtl = dir === "rtl";
+  // Lang-prefixed links — raw "/privacy" etc. dropped the /he, /de...
+  // prefix for every non-English user. Launch QA 2026-07-03.
+  const href = useHref();
 
   const productLinks: Array<{ label: string; href: string }> = [
-    { label: v2(lang, "footerCompare"), href: "/compare" },
-    { label: v2(lang, "footerNotebook"), href: "/notebook" },
-    { label: v2(lang, "footerPricing"), href: "/pricing" },
+    { label: v2(lang, "footerCompare"), href: href("/compare") },
+    { label: v2(lang, "footerNotebook"), href: href("/notebook") },
+    { label: v2(lang, "footerPricing"), href: href("/pricing") },
   ];
   const legalLinks: Array<{ label: string; href: string }> = [
-    { label: v2(lang, "footerPrivacy"), href: "/privacy" },
-    { label: v2(lang, "footerTerms"), href: "/terms" },
-    { label: v2(lang, "footerContact"), href: "/contact" },
+    { label: v2(lang, "footerPrivacy"), href: href("/privacy") },
+    { label: v2(lang, "footerTerms"), href: href("/terms") },
+    { label: v2(lang, "footerContact"), href: href("/contact") },
   ];
 
   return (

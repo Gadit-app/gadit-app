@@ -22,6 +22,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -668,6 +669,7 @@ export function PracticeV2() {
   const { user } = useAuth();
   const { lang } = useLang();
   const router = useRouter();
+  const href = useHref();
 
   const [items, setItems] = useState<ReviewItem[] | null>(null);
   const [phase, setPhase] = useState<Phase>({ kind: "loading" });
@@ -691,7 +693,7 @@ export function PracticeV2() {
         });
         if (!res.ok) {
           if (res.status === 402) {
-            router.push("/pricing");
+            router.push(href("/pricing"));
             return;
           }
           if (cancelled) return;

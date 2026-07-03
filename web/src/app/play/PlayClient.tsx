@@ -1837,9 +1837,9 @@ export function PlayPage() {
         <span>·</span>
         <Link href={href("/pricing")}>{v2(lang, "navPricing")}</Link>
         <span>·</span>
-        <Link href={href("/privacy")}>Privacy</Link>
+        <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
-        <Link href={href("/terms")}>Terms</Link>
+        <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
       </footer>
     </div>
   );

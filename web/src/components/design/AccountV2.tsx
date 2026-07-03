@@ -24,6 +24,7 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -606,6 +607,7 @@ export function AccountV2() {
   const { user, logout } = useAuth();
   const { lang } = useLang();
   const router = useRouter();
+  const href = useHref();
 
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -687,11 +689,11 @@ export function AccountV2() {
   }
 
   function handleChangePlan() {
-    router.push("/pricing");
+    router.push(href("/pricing"));
   }
 
   function handleUpgrade() {
-    router.push("/pricing");
+    router.push(href("/pricing"));
   }
 
   async function handleSignOut() {

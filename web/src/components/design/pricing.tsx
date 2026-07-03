@@ -539,7 +539,9 @@ export function PricingTiers({ billing }: { billing: Billing }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ priceId }),
+        // lang drives the Stripe Checkout page language and keeps the
+        // post-purchase return URLs on the user's /<lang> prefix.
+        body: JSON.stringify({ priceId, lang }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         url?: string;

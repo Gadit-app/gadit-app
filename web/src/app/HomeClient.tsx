@@ -209,7 +209,7 @@ export function HomePage() {
           {user && plan === "deep" && (
             <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
           )}
-          <Link href={href("/schools")} className="wb-shell-navlink">Schools</Link>
+          <Link href={href("/schools")} className="wb-shell-navlink">{v2(lang, "navSchools")}</Link>
           <Link href={href("/pricing")} className="wb-shell-navlink">{c.pricing}</Link>
           {user && (plan === "clear" || plan === "deep") && (
             <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
@@ -302,7 +302,7 @@ export function HomePage() {
               </Link>
             )}
             <Link href={href("/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              Schools
+              {v2(lang, "navSchools")}
             </Link>
             <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
               {c.pricing}

@@ -20,6 +20,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
 
 export type UpgradeTier = "clear" | "deep";
@@ -401,6 +402,7 @@ export function UpgradeModal({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const href = useHref();
 
   // ESC closes
   useEffect(() => {
@@ -481,7 +483,7 @@ export function UpgradeModal({
           onClick={() => {
             track("upgrade_prompt_clicked", { feature, tier, lang });
             onClose();
-            router.push("/pricing");
+            router.push(href("/pricing"));
           }}
         >
           {c.primaryCta}

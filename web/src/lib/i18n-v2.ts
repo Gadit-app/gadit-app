@@ -86,6 +86,7 @@ export interface V2Strings {
   navCompare: string;
   navNotebook: string;
   navPricing: string;
+  navSchools: string;
   navFeatures: string;
   navPlay: string;
   navAffiliates: string;
@@ -493,6 +494,7 @@ const en: V2Strings = {
   navCompare: "Compare",
   navNotebook: "Notebook",
   navPricing: "Pricing",
+  navSchools: "Schools",
   navFeatures: "Features",
   navPlay: "Play",
   navAffiliates: "Affiliates",
@@ -880,6 +882,7 @@ const he: V2Strings = {
   navCompare: "השוואה",
   navNotebook: "מחברת",
   navPricing: "תמחור",
+  navSchools: "בתי ספר",
   navFeatures: "פיצ'רים",
   navPlay: "משחקים",
   navAffiliates: "שותפים",
@@ -1271,6 +1274,7 @@ const ar: V2Strings = {
   navCompare: "مقارنة",
   navNotebook: "الدفتر",
   navPricing: "الأسعار",
+  navSchools: "المدارس",
   navFeatures: "المزايا",
   navPlay: "ألعاب",
   navAffiliates: "الشركاء",
@@ -1678,6 +1682,7 @@ const ru: Partial<V2Strings> = {
   navCompare: "Сравнить",
   navNotebook: "Тетрадь",
   navPricing: "Тарифы",
+  navSchools: "Школы",
   navFeatures: "Возможности",
   navPlay: "Игры",
   navAffiliates: "Партнёры",
@@ -2066,6 +2071,7 @@ const es: Partial<V2Strings> = {
   navCompare: "Comparar",
   navNotebook: "Cuaderno",
   navPricing: "Precios",
+  navSchools: "Escuelas",
   navFeatures: "Funciones",
   navPlay: "Jugar",
   navAffiliates: "Afiliados",
@@ -2452,6 +2458,7 @@ const pt: Partial<V2Strings> = {
   navCompare: "Comparar",
   navNotebook: "Caderno",
   navPricing: "Preços",
+  navSchools: "Escolas",
   navFeatures: "Recursos",
   navPlay: "Jogar",
   navAffiliates: "Afiliados",
@@ -2838,6 +2845,7 @@ const fr: Partial<V2Strings> = {
   navCompare: "Comparer",
   navNotebook: "Carnet",
   navPricing: "Tarifs",
+  navSchools: "Écoles",
   navFeatures: "Fonctionnalités",
   navPlay: "Jeux",
   navAffiliates: "Affiliés",
@@ -3227,6 +3235,7 @@ const de: V2Strings = {
   navCompare: "Vergleichen",
   navNotebook: "Notizbuch",
   navPricing: "Preise",
+  navSchools: "Schulen",
   navFeatures: "Funktionen",
   navPlay: "Spielen",
   navAffiliates: "Affiliates",
@@ -3585,6 +3594,7 @@ const cs: V2Strings = {
   navCompare: "Porovnat",
   navNotebook: "Sešit",
   navPricing: "Ceník",
+  navSchools: "Školy",
   navFeatures: "Funkce",
   navPlay: "Hrát",
   navAffiliates: "Partneři",
@@ -3950,6 +3960,7 @@ const sk: V2Strings = {
   navCompare: "Porovnať",
   navNotebook: "Zošit",
   navPricing: "Cenník",
+  navSchools: "Školy",
   navFeatures: "Funkcie",
   navPlay: "Hrať",
   navAffiliates: "Partneri",
@@ -4312,6 +4323,7 @@ const it: Partial<V2Strings> = {
   navCompare: "Confronta",
   navNotebook: "Quaderno",
   navPricing: "Prezzi",
+  navSchools: "Scuole",
   navFeatures: "Funzionalità",
 
   // Pricing page
@@ -4693,6 +4705,7 @@ const ja: Partial<V2Strings> = {
   navCompare: "比較",
   navNotebook: "ノート",
   navPricing: "料金",
+  navSchools: "学校",
   navFeatures: "機能",
 
   // Pricing page
@@ -5072,6 +5085,7 @@ const hi: Partial<V2Strings> = {
   navCompare: "तुलना",
   navNotebook: "नोटबुक",
   navPricing: "क़ीमत",
+  navSchools: "स्कूल",
   navFeatures: "सुविधाएँ",
 
   // Pricing page

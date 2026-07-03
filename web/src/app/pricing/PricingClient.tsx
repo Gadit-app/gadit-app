@@ -893,7 +893,9 @@ export function PricingPageRoute() {
       const res = await fetch("/api/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ priceId }),
+        // lang drives the Stripe Checkout page language and keeps the
+        // post-purchase return URLs on the user's /<lang> prefix.
+        body: JSON.stringify({ priceId, lang }),
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
       if (data.url) { window.location.href = data.url; return; }
@@ -1415,9 +1417,9 @@ export function PricingPageRoute() {
         <span>·</span>
         <Link href={href("/")}>{lang === "he" ? "בית" : "Home"}</Link>
         <span>·</span>
-        <Link href={href("/privacy")}>Privacy</Link>
+        <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
-        <Link href={href("/terms")}>Terms</Link>
+        <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
       </footer>
     </div>
   );

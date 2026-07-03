@@ -762,7 +762,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       });
       if (!res.ok) {
         if (res.status === 402) {
-          router.push("/pricing");
+          router.push(href("/pricing"));
           return;
         }
         // Parse the body for a known error code and surface a
@@ -842,7 +842,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
       setUpgradeTrigger({ feature: tab, tier });
       return;
     }
-    router.push("/pricing");
+    router.push(href("/pricing"));
   }
 
   // Tracks why save failed so we can show the right toast/text.
@@ -959,7 +959,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         return;
       }
       if (plan === "basic") {
-        router.push("/pricing");
+        router.push(href("/pricing"));
         return;
       }
       setComposeOpen(true);
@@ -971,7 +971,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         return;
       }
       if (plan !== "deep") {
-        router.push("/pricing");
+        router.push(href("/pricing"));
         return;
       }
       setQuizOpen(true);
@@ -1003,7 +1003,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
         return;
       }
       if (plan === "basic") {
-        router.push("/pricing");
+        router.push(href("/pricing"));
         return;
       }
       // TODO: open a kids-explanation modal. For now this is a soft

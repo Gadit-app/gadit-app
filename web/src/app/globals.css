@@ -79,6 +79,28 @@ body {
   font-weight: 600;
 }
 
+/* ── JAPANESE ── Noto Sans JP. Launch QA 2026-07-03: only the
+   wordbook had a ja font rule, so every other surface (home, pricing,
+   play, notebook chrome) fell back through Inter to the OS default
+   CJK font — often a serif — and looked broken. Global rule matches
+   the Hebrew/Arabic pattern above. */
+:lang(ja),
+[lang="ja"],
+[data-lang="ja"] {
+  font-family: var(--font-noto-jp), 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+/* ── HINDI ── Noto Sans Devanagari. Same gap as Japanese. */
+:lang(hi),
+[lang="hi"],
+[data-lang="hi"] {
+  font-family: var(--font-noto-hi), 'Noto Sans Devanagari', 'Mangal', 'Kohinoor Devanagari', system-ui, sans-serif;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
 /* RTL fallback for dir attribute */
 [dir="rtl"] {
   font-family: var(--font-rubik), 'Rubik', system-ui, sans-serif;
@@ -174,6 +196,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook.wb-page {
   background: var(--surface);
   min-height: calc(100vh - 70px);
+  min-height: calc(100dvh - 70px);
   padding-bottom: 96px;
   padding-top: 8px;
 }
@@ -193,7 +216,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Outer chrome on desktop — soft warm gradient beyond the content column */
 .wordbook .wb-chrome {
   background: linear-gradient(135deg, #EDE5D2 0%, #E5DBC4 100%);
+  /* dvh after vh: older browsers keep vh, modern mobile tracks the
+     real viewport as the URL bar collapses. Launch QA 2026-07-03. */
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .wordbook .wb-shell {
@@ -206,6 +232,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook.wb-shell-page {
   background: var(--paper);
   min-height: 100vh;
+  min-height: 100dvh;
   /* No bottom padding — the page is flex:column with margin-top:auto
      on the footer, so dropping the 96px reservation pushes the
      footer flush against the viewport bottom on mobile. */
@@ -1146,6 +1173,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[lang="ar"] { font-family: var(--wb-ar); }
 [lang="ja"] .wordbook,
 .wordbook[lang="ja"] { font-family: var(--wb-jp); }
+[lang="hi"] .wordbook,
 .wordbook[lang="hi"] { font-family: var(--wb-hi); }
 
 .wordbook[dir="rtl"] .wb-word-title {
@@ -1847,7 +1875,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin: 0 0 6px;
   text-shadow: none;
   word-break: keep-all;
-  overflow-wrap: normal;
+  /* anywhere (not normal): keep-all still prevents mid-CJK breaks,
+     but a single long token — German compounds like Kraftfahrzeug-
+     haftpflichtversicherung — must emergency-break instead of pushing
+     the page into horizontal scroll on a 360px phone. QA 2026-07-03. */
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 @media (min-width: 768px) {
   .wordbook .wb-word-title { font-size: 56px; margin-bottom: 8px; }
@@ -3852,6 +3885,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     gap: 22px;
   }
 }
+/* Tablet portrait 768-1023px: three cards squeeze to ~230px each and
+   long de/ru feature labels wrap hard. Tighten padding + gap in that
+   band only; desktop spacing returns at 1024. Launch QA 2026-07-03. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .wordbook .wb-pricing-grid { gap: 14px; }
+  .wordbook .wb-tier-card { padding: 22px 16px 24px; }
+}
 
 /* Tier card — shared shape, per-tier accent stripe and CTA color.
    overflow: hidden clips the colored top stripe to the card's
@@ -5014,9 +5054,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 /* Mobile hamburger — desktop nav and actions overflow on phones,
    forcing horizontal scroll on the home/pricing/features chrome.
-   Below 720px the nav + actions collapse into a single hamburger
+   Below 768px the nav + actions collapse into a single hamburger
    button on the trailing edge; the wordmark stays visible.
-   Tapping opens a small dropdown menu anchored to the topbar. */
+   Tapping opens a small dropdown menu anchored to the topbar.
+   The boundary is 767px to MATCH the .wb-shell-nav hide rule — it
+   was 720px until 2026-07-03, which left a 721-767px dead zone with
+   no nav links and no burger. iPad Mini portrait is 744px wide and
+   sat exactly inside it. Launch QA fix. */
 .wordbook .wb-shell-burger { display: none; }
 .wordbook .wb-shell-mobile-menu { display: none; }
 
@@ -5084,7 +5128,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    side (visual left in RTL, right in LTR). */
 .wordbook .wb-shell-mobile-menu-cluster { display: contents; }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .wordbook .wb-shell-mobile-identity {
     display: inline-flex;
     align-items: center;
@@ -5113,7 +5157,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    ends. Hidden on desktop where the CTA already lives in the actions
    row. */
 .wordbook .wb-shell-mobile-cta { display: none; }
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .wordbook .wb-shell-mobile-cta {
     /* Constrain the absolute-positioned CTA inside the safe-area
        inset on edge-to-edge phones so it doesn't slide under the
@@ -5136,7 +5180,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .wordbook .wb-shell-topbar {
     /* Respect safe-area on devices with edge gestures / notches
        (iOS dynamic island, Android gesture pill). The CTA cluster
@@ -5245,7 +5289,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    handles it. Added 2026-06-19 after a Russian-speaking user reported
    she couldn't see any language affordance on mobile. */
 .wordbook .wb-shell-lang-mobile-wrap { display: none; }
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .wordbook .wb-shell-lang-mobile-wrap {
     display: inline-flex;
     position: relative;
@@ -5797,6 +5841,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: linear-gradient(to bottom, #F9FAFB 0%, #F9FAFB 70%, rgba(249, 250, 251, 0) 100%);
   padding-bottom: 12px;
   transition: box-shadow 160ms ease;
+}
+/* On phones the topbar is position:relative and scrolls away, so the
+   64px offset left the pill floating with a visible gap above it.
+   Stick flush to the viewport top instead. Launch QA 2026-07-03. */
+@media (max-width: 767px) {
+  .wordbook .wb-word-searchbar-stage { top: 0; }
 }
 .wordbook .wb-word-searchbar-stage.is-stuck {
   box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.18);
@@ -8141,11 +8191,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-play-anagram-tile,
   .wordbook .wb-play-cta-primary,
   .wordbook .wb-play-cta-ghost,
+  .wordbook .wb-play-next,
+  .wordbook .wb-play-kids-banner-cta,
+  .wordbook .wb-schools-cta,
+  .wordbook .wb-schools-price-card,
+  .wordbook .wb-schools-faq-chevron,
   .wordbook .wb-play-exit {
     transition: none;
+    animation: none;
   }
   .wordbook .wb-play-timer.is-urgent,
   .wordbook .wb-play-countdown-num,
+  .wordbook .wb-play-explain,
   .wordbook .wb-play-anagram-slots.is-wrong {
     animation: none;
   }
@@ -11925,6 +11982,30 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook.wb-school-page .wb-shell-topbar > .wb-shell-actions {
   justify-self: end;
+}
+
+/* Kid classroom topbar on phones — /c/CODE has NO burger markup, so
+   the generic ≤767px rules that hide .wb-shell-nav and
+   .wb-shell-actions left a bare "Gadit" wordmark with no way to reach
+   the Class Notebook or Word Games. The kid chrome is small (2 links
+   + lang + avatar), so instead of a burger we keep it visible and
+   compact it. The tier chip is decorative and hides to make room.
+   Launch QA 2026-07-03. */
+@media (max-width: 767px) {
+  .wordbook.wb-school-page .wb-shell-topbar > .wb-shell-nav {
+    display: flex;
+    gap: 10px;
+  }
+  .wordbook.wb-school-page .wb-shell-topbar > .wb-shell-nav a {
+    font-size: 12.5px;
+  }
+  .wordbook.wb-school-page .wb-shell-topbar > .wb-shell-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .wordbook.wb-school-page .wb-classroom-tier-chip {
+    display: none;
+  }
 }
 
 /* Off-hours hint — quieter look than the main UI. */

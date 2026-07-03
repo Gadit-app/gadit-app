@@ -58,10 +58,27 @@ const ALL_PAID_PRICE_IDS = new Set(
   ].filter(Boolean),
 );
 
+// Stripe Checkout locales we can pass straight through. Arabic and
+// Hindi are not supported by Stripe Checkout — those fall back to
+// "auto" (browser Accept-Language). Launch QA 2026-07-03: previously
+// no locale was sent at all, so a Hebrew-UI user with an English
+// browser got an English checkout page.
+const STRIPE_LOCALES = new Set([
+  "he", "en", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja",
+]);
+
+/** Lang prefix for return URLs — mirrors buildHref: English is the
+ *  canonical unprefixed surface, every other lang gets /<lang>. */
+function langPrefix(lang: string): string {
+  if (!lang || lang === "en") return "";
+  return `/${lang}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { priceId } = await req.json();
+    const { priceId, lang: rawLang } = await req.json();
     if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
+    const lang = typeof rawLang === "string" && /^[a-z]{2}$/.test(rawLang) ? rawLang : "en";
 
     // Resolve user from the verified Firebase ID token, NOT from a client-supplied
     // userId. Otherwise a malicious user could start a checkout that credits a
@@ -107,11 +124,15 @@ export async function POST(req: NextRequest) {
     //   Family   → /family?welcome=1     (parent sees the "add your kids" state)
     //   Schools  → /schools?welcome=1    (principal sees the "add your classes" state)
     //   Other    → /?success=1           (single-user checkout, lands on home)
+    // Both URLs carry the user's language prefix so a Hebrew buyer
+    // returns to /he/... and not the English site. Launch QA 2026-07-03.
+    const prefix = langPrefix(lang);
     const successPath = isSchools
-      ? "/schools?welcome=1"
+      ? `${prefix}/schools?welcome=1`
       : isFamily
-        ? "/family?welcome=1"
-        : "/?success=1";
+        ? `${prefix}/family?welcome=1`
+        : `${prefix}/?success=1`;
+    const cancelPath = `${prefix}/?canceled=1`;
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -124,8 +145,11 @@ export async function POST(req: NextRequest) {
       // launch partners) without having to manually provision their
       // accounts. Coupon codes are created in the Stripe dashboard.
       allow_promotion_codes: true,
+      // Checkout page language follows the app UI language when Stripe
+      // supports it; otherwise Stripe auto-detects from the browser.
+      locale: (STRIPE_LOCALES.has(lang) ? lang : "auto") as NonNullable<Stripe.Checkout.Session["locale"]>,
       success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}${successPath}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}/?canceled=1`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://gadit.app"}${cancelPath}`,
       metadata: {
         userId,
         ...(isFamily && { isFamily: "1" }),

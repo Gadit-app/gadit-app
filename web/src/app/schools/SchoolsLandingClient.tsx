@@ -1651,7 +1651,7 @@ export function SchoolsLandingClient() {
   // without losing access to the landing page itself.
   const ownerBannerCopy: Record<string, { text: string; cta: string }> = {
     en: { text: "You're on the Schools plan.", cta: "Go to my dashboard →" },
-    he: { text: "המנוי Schools פעיל אצלך.", cta: "מעבר לדשבורד →" },
+    he: { text: "המנוי Schools פעיל אצלך.", cta: "מעבר לדשבורד ←" },
     ar: { text: "خطة Schools نشطة لديك.", cta: "إلى لوحة التحكم ←" },
     ru: { text: "У вас активен тариф Schools.", cta: "В мою панель →" },
     cs: { text: "Máte aktivní tarif Schools.", cta: "Přejít na panel →" },
@@ -2135,9 +2135,9 @@ export function SchoolsLandingClient() {
         <span>·</span>
         <Link href={href("/pricing")}>Pricing</Link>
         <span>·</span>
-        <Link href={href("/privacy")}>Privacy</Link>
+        <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
-        <Link href={href("/terms")}>Terms</Link>
+        <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
       </footer>
     </div>
   );
