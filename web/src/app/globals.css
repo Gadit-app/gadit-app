@@ -8019,6 +8019,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-bottom: 8px;
   letter-spacing: -0.01em;
 }
+/* Perfect-score brand headline: "Now you Gad it!" — identical in
+   every UI language, with "it" carrying the wordmark treatment
+   (teal italic serif) so the pun lands visually. Mirrors the
+   .wb-wordmark lockup. Gadi 2026-07-03. */
+.wordbook .wb-play-result-gadit {
+  display: inline-block;
+  font-family: var(--wb-serif);
+  font-weight: 500;
+  letter-spacing: -0.022em;
+}
+.wordbook .wb-play-result-gadit-it {
+  color: var(--teal);
+  font-style: italic;
+  font-weight: 400;
+}
 .wordbook .wb-play-result-score {
   display: inline-flex;
   align-items: baseline;

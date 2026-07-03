@@ -11,7 +11,7 @@
  * the daily streak, regardless of score.
  */
 
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { recordPlay } from "@/lib/play-streak";
 import { dirForLang } from "@/lib/play-engine";
@@ -51,10 +51,21 @@ export function GameResult({
   }, []);
 
   const pct = data.total > 0 ? data.score / data.total : 0;
-  let headline = data.headline;
+  // Perfect score gets the BRAND headline — "Now you Gad it!" — in
+  // Latin script in every UI language, with "Gad it" styled exactly
+  // like the wordmark. It's a brand element like the logo, not a
+  // translatable string: Gadi 2026-07-03 killed the Hebrew
+  // transliteration ("GAD-ת את זה") as nonsensical. dir=ltr pins the
+  // exclamation mark to the correct side on RTL pages.
+  let headline: ReactNode = data.headline;
   if (!headline) {
-    if (pct >= 1) headline = t.resultPerfect;
-    else if (pct >= 0.8) headline = t.resultGreat;
+    if (pct >= 1) {
+      headline = (
+        <span className="wb-play-result-gadit" dir="ltr" lang="en">
+          Now you Gad&nbsp;<span className="wb-play-result-gadit-it">it</span>!
+        </span>
+      );
+    } else if (pct >= 0.8) headline = t.resultGreat;
     else if (pct >= 0.5) headline = t.resultGood;
     else headline = t.resultKeepGoing;
   }

@@ -232,7 +232,6 @@ export type PlayT = {
   memoryFlipPrompt: string;
   memoryMoves: (n: number) => string;
   // Result
-  resultPerfect: string;
   resultGreat: string;
   resultGood: string;
   resultKeepGoing: string;
