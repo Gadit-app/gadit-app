@@ -311,7 +311,21 @@ interface SSEError {
 }
 type SSEEvent = SSEDelta | SSEDone | SSEError;
 
-export function WordClient({ initialWord }: { initialWord: string }) {
+export function WordClient({
+  initialWord,
+  initialResult = null,
+  preloadLang = "en",
+}: {
+  initialWord: string;
+  /** Server-preloaded definition from the Firestore cache (anonymous
+   *  "base" tier, preloadLang UI language). When present and the
+   *  client context matches (anonymous, same lang, no context
+   *  sentence), the API fetch is skipped entirely — crawlers get full
+   *  HTML, anonymous users get an instant render that doesn't touch
+   *  their daily quota. Launch SEO fix 2026-07-04. */
+  initialResult?: WordResult | null;
+  preloadLang?: string;
+}) {
   const { user, plan: authPlan, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
@@ -356,8 +370,12 @@ export function WordClient({ initialWord }: { initialWord: string }) {
   // Gadit at home? Family" hint instead.
   const classroomInSession = searchParams?.get("in") === "1";
 
-  const [result, setResult] = useState<WordResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Seed from the server preload so the first paint (and the crawler's
+  // HTML snapshot) already contains the definition. The fetch effect
+  // below decides whether the preload is authoritative or needs a
+  // refetch (signed-in user, lang mismatch, context sentence).
+  const [result, setResult] = useState<WordResult | null>(initialResult);
+  const [loading, setLoading] = useState(!initialResult);
   const [isSaved, setIsSaved] = useState(false);
   // Offline pin state: true means the user has explicitly downloaded
   // this word for offline study (vs the implicit auto-cache that all
@@ -457,6 +475,27 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     if (!initialWord) return;
     const key = `${initialWord}::${user?.uid ?? "anon"}`;
     if (fetchedFor.current === key) return;
+
+    // Server preload short-circuit: the page arrived with the cached
+    // definition already rendered. Keep it — no API call — as long as
+    // the client context matches what the server preloaded for:
+    // anonymous visitor, same UI language, no context sentence. Any
+    // mismatch (user signs in, lang switch, ?sentence=) falls through
+    // to the normal fetch. Crawlers always match this branch, which is
+    // what turns the GSC Soft 404s into indexable pages.
+    if (initialResult && !user && !contextSentence && lang === preloadLang) {
+      fetchedFor.current = key;
+      setResult(initialResult);
+      setLoading(false);
+      setErrorMsg("");
+      // Cleanup must reset the fetch guard: the guard key doesn't
+      // include lang, so without this a lang switch would hit the
+      // key-match early-return above and keep stale-language content.
+      return () => {
+        fetchedFor.current = null;
+      };
+    }
+
     fetchedFor.current = key;
 
     let cancelled = false;
@@ -725,7 +764,7 @@ export function WordClient({ initialWord }: { initialWord: string }) {
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user, contextSentence]);
+  }, [initialWord, lang, user, contextSentence, initialResult, preloadLang]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate() {
