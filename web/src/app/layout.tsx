@@ -230,6 +230,28 @@ export async function generateMetadata(): Promise<Metadata> {
   // pixels at JPEG q85 are ~25 KB and scrape reliably.
   const ogImage = `/og/${lang}.jpg`;
 
+  // Per-page canonical + hreflang. The middleware forwards the
+  // ORIGINAL request path (with any /he, /de... prefix) in
+  // x-gadit-path. Before 2026-07-04 the canonical was hardcoded to
+  // the homepage for every route, which told Google to drop every
+  // other page from the index ("Alternate page with proper canonical
+  // tag" in the GSC report). Now each URL is canonical to itself and
+  // its hreflang alternates point at the SAME page in each language.
+  // Routes that define their own alternates (e.g. /word/[word])
+  // override this wholesale, unchanged.
+  const rawPath = headersList.get("x-gadit-path") || "/";
+  const trimmed =
+    rawPath !== "/" && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
+  const pathSegs = trimmed.split("/").filter(Boolean);
+  const hasLangPrefix = !!pathSegs[0] && ALL_LANGS.includes(pathSegs[0] as Lang);
+  const logicalPath = "/" + (hasLangPrefix ? pathSegs.slice(1) : pathSegs).join("/");
+  const BASE = "https://www.gadit.app";
+  const urlForLang = (l: Lang) =>
+    l === "en"
+      ? `${BASE}${logicalPath === "/" ? "" : logicalPath}`
+      : `${BASE}/${l}${logicalPath === "/" ? "" : logicalPath}`;
+  const canonical = trimmed === "/" ? BASE : `${BASE}${trimmed}`;
+
   return {
     metadataBase: new URL("https://www.gadit.app"),
     title: m.title,
@@ -252,28 +274,16 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     },
     alternates: {
-      canonical: "https://www.gadit.app",
+      canonical,
       languages: {
-        en: "https://www.gadit.app",
-        he: "https://www.gadit.app/he",
-        ar: "https://www.gadit.app/ar",
-        ru: "https://www.gadit.app/ru",
-        es: "https://www.gadit.app/es",
-        pt: "https://www.gadit.app/pt",
-        fr: "https://www.gadit.app/fr",
-        de: "https://www.gadit.app/de",
-        cs: "https://www.gadit.app/cs",
-        sk: "https://www.gadit.app/sk",
-        it: "https://www.gadit.app/it",
-        ja: "https://www.gadit.app/ja",
-        hi: "https://www.gadit.app/hi",
-        "x-default": "https://www.gadit.app",
+        ...Object.fromEntries(ALL_LANGS.map((l) => [l, urlForLang(l)])),
+        "x-default": urlForLang("en"),
       },
     },
     openGraph: {
       title: m.title,
       description: m.description,
-      url: "https://www.gadit.app",
+      url: canonical,
       siteName: "Gadit",
       type: "website",
       locale: m.locale,

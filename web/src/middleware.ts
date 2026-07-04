@@ -25,7 +25,15 @@ export function middleware(req: NextRequest) {
   const first = segments[0];
 
   if (!first || !SUPPORTED_LANGS.has(first)) {
-    return NextResponse.next();
+    // No lang prefix — still forward the original path so the layout's
+    // generateMetadata can emit a correct per-page canonical URL.
+    // Before this, every page inherited canonical=homepage from the
+    // root layout and Google refused to index anything but the
+    // homepage ("Alternate page with proper canonical tag", GSC email
+    // 2026-07-03). Launch SEO fix 2026-07-04.
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("x-gadit-path", pathname);
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   const remainder = segments.slice(1).join("/");
@@ -37,8 +45,11 @@ export function middleware(req: NextRequest) {
   // generation when a social-card crawler fetches a /he/… URL with
   // no cookie. Cookie is also set for the user's subsequent
   // (in-browser) requests so the client-side LangProvider picks it up.
+  // x-gadit-path carries the ORIGINAL prefixed path (/he/pricing) for
+  // per-page canonical + hreflang generation in the layout.
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set("x-gadit-lang", first);
+  requestHeaders.set("x-gadit-path", pathname);
 
   const res = NextResponse.rewrite(rewriteUrl, {
     request: { headers: requestHeaders },
