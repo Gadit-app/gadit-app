@@ -595,24 +595,21 @@ function MeaningEntry({
   // carries both versions — see route.ts for the rationale.
   const [kidsOn] = useKidsMode();
   const showKids = kidsOn && meaning.kidsExplanation;
-  // POS badge — shown by default on every meaning that has a pos value
-  // (the LLM Council 2026-06-20 ruled: it's not a configuration, it's
-  // part of what a dictionary entry IS, so the opt-in toggle was a
-  // category error). Translated into the UI language by formatPos so
-  // a Hebrew reader sees "שם עצם" not "noun".
+  // POS badge — shown on EVERY meaning that has a pos value (the LLM
+  // Council 2026-06-20 ruled: it's not a configuration, it's part of
+  // what a dictionary entry IS). Translated into the UI language by
+  // formatPos so a Hebrew reader sees "שם עצם" not "noun".
   //
-  // Hidden in:
-  //   1. Kids Mode — Gadi 2026-06-20: "במצב ילדים זה לא אמור להופיע
-  //      כדי לא לסבך את הילדים". A 7-year-old doesn't need to read
-  //      "noun" before they read what the word means.
-  //   2. Single-meaning words — "apple" with one obvious noun reads
-  //      as noise next to the meaning text. The moment a word has 2+
-  //      senses the badge becomes load-bearing again because it tells
-  //      the reader which sense they're scanning.
+  // Hidden only in Kids Mode — Gadi 2026-06-20: "במצב ילדים זה לא
+  // אמור להופיע כדי לא לסבך את הילדים". A 7-year-old doesn't need to
+  // read "noun" before they read what the word means.
+  //
+  // The single-meaning suppression (totalMeanings > 1) was removed on
+  // 2026-07-05 after a paying subscriber reported the part of speech
+  // as missing: for a learner, "what kind of word is this" is exactly
+  // the information they came for, even when there's only one sense.
   const posLabel =
-    !showKids && meaning.pos && totalMeanings > 1
-      ? formatPos(meaning.pos, lang)
-      : "";
+    !showKids && meaning.pos ? formatPos(meaning.pos, lang) : "";
   const effectiveMeaning = showKids
     ? meaning.kidsExplanation!.explanation
     : meaning.meaning;
