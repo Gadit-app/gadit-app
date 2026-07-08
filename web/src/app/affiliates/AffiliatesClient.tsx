@@ -41,6 +41,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
@@ -2181,36 +2182,10 @@ function EarningsTable({ c, lang }: { c: Copy; lang: Lang }) {
 }
 
 export function AffiliatesPage() {
-  const { user, plan, promptLogin } = useAuth();
+  const { user, promptLogin } = useAuth();
   const { lang, dir, setLang } = useLang();
   const href = useHref();
   const c = COPY[lang as Lang] ?? COPY.en;
-
-  // Mobile burger menu — mirrors the pattern used by every other shell
-  // (HomeClient, FeaturesClient, ...). On screens below 720px the
-  // desktop .wb-shell-nav + .wb-shell-actions are hidden by globals.css;
-  // without this menu the topbar would have zero interactive elements
-  // on mobile and a visitor would be stuck on the page.
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const burgerRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onClick(e: MouseEvent) {
-      const target = e.target as Node;
-      if (menuRef.current?.contains(target)) return;
-      if (burgerRef.current?.contains(target)) return;
-      setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
 
   return (
     <div className="wordbook wb-shell-page wb-aff-page" dir={dir}>
@@ -2218,38 +2193,7 @@ export function AffiliatesPage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
-        <nav className="wb-shell-nav">
-          <Link
-            href={href("/")}
-            className="wb-shell-navlink wb-shell-navlink-icon"
-            aria-label={v2(lang, "navSearch")}
-            title={v2(lang, "navSearch")}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="6.5" />
-              <path d="m20 20-4-4" />
-            </svg>
-          </Link>
-          <Link href={href("/features")} className="wb-shell-navlink">
-            {v2(lang, "navFeatures")}
-          </Link>
-          {user && (plan === "clear" || plan === "deep") && (
-            <Link href={href("/notebook")} className="wb-shell-navlink">
-              {v2(lang, "navNotebook")}
-            </Link>
-          )}
-          {user && plan === "deep" && (
-            <Link href={href("/play")} className="wb-shell-navlink">
-              {v2(lang, "navPlay")}
-            </Link>
-          )}
-          <Link href={href("/pricing")} className="wb-shell-navlink">
-            {v2(lang, "navPricing")}
-          </Link>
-          <Link href={href("/affiliates")} className="wb-shell-navlink is-active">
-            {c.navAffiliates}
-          </Link>
-        </nav>
+        <WbShellNav active="affiliates" />
         <div className="wb-shell-actions">
           {/* Share button only shown to signed-in users, non-members
               probably aren't going to share before they've tried the
@@ -2299,65 +2243,8 @@ export function AffiliatesPage() {
         )}
         <div className="wb-shell-mobile-menu-cluster">
         <LangSwitchMobile />
-        <button
-          ref={burgerRef}
-          type="button"
-          className="wb-shell-burger"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          {menuOpen ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-          )}
-        </button>
+        <WbShellBurger active="affiliates" />
         </div>
-        {menuOpen && (
-          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
-            <Link href={href("/")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navSearch")}
-            </Link>
-            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navFeatures")}
-            </Link>
-            {user && (plan === "clear" || plan === "deep") && (
-              <Link href={href("/notebook")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-                {v2(lang, "navNotebook")}
-              </Link>
-            )}
-            {user && plan === "deep" && (
-              <Link href={href("/play")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-                {v2(lang, "navPlay")}
-              </Link>
-            )}
-            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navPricing")}
-            </Link>
-            <Link href={href("/affiliates")} className="wb-shell-mobile-link is-active" onClick={() => setMenuOpen(false)}>
-              {c.navAffiliates}
-            </Link>
-            <div className="wb-shell-mobile-menu-sep" />
-            {user ? (
-              <Link href={href("/account")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-                {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
-              </Link>
-            ) : (
-              <button
-                type="button"
-                className="wb-shell-mobile-link"
-                onClick={() => { setMenuOpen(false); promptLogin({ mode: "signin" }); }}
-              >
-                {v2(lang, "signIn")}
-              </button>
-            )}
-          </div>
-        )}
       </header>
 
       <main className="wb-aff-main">

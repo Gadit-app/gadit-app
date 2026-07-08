@@ -31,6 +31,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 
 // Languages Affonso's embedded dashboard supports. Hebrew and Czech
@@ -450,64 +451,13 @@ export function DashboardPage() {
   // restore both blocks; localStorage key "gadit-affiliate-payout-guide-
   // dismissed" was the dismiss flag.
 
-  // Mobile burger menu mirrors the pattern used in /play, /affiliates,
-  // /features. Without it the topbar has zero interactive elements
-  // below 720px and the user is stuck.
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const burgerRef = useRef<HTMLButtonElement>(null);
-  const { setLang } = useLang();
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onClick(e: MouseEvent) {
-      const target = e.target as Node;
-      if (menuRef.current?.contains(target)) return;
-      if (burgerRef.current?.contains(target)) return;
-      setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
-
   return (
     <div className="wordbook wb-shell-page wb-affdash-page" dir={dir}>
       <header className="wb-shell-topbar">
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
-        <nav className="wb-shell-nav">
-          <Link
-            href={href("/")}
-            className="wb-shell-navlink wb-shell-navlink-icon"
-            aria-label={v2(lang, "navSearch")}
-            title={v2(lang, "navSearch")}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="6.5" />
-              <path d="m20 20-4-4" />
-            </svg>
-          </Link>
-          <Link href={href("/features")} className="wb-shell-navlink">
-            {v2(lang, "navFeatures")}
-          </Link>
-          <Link href={href("/notebook")} className="wb-shell-navlink">
-            {v2(lang, "navNotebook")}
-          </Link>
-          <Link href={href("/play")} className="wb-shell-navlink">
-            {v2(lang, "navPlay")}
-          </Link>
-          <Link href={href("/pricing")} className="wb-shell-navlink">
-            {v2(lang, "navPricing")}
-          </Link>
-          <Link href={href("/affiliates")} className="wb-shell-navlink">
-            {v2(lang, "navAffiliates")}
-          </Link>
-        </nav>
+        <WbShellNav active="affiliates" />
         <div className="wb-shell-actions">
           <ShareButton
             url="https://www.gadit.app/"
@@ -533,41 +483,8 @@ export function DashboardPage() {
         )}
         <div className="wb-shell-mobile-menu-cluster">
         <LangSwitchMobile />
-        <button
-          ref={burgerRef}
-          type="button"
-          className="wb-shell-burger"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          {menuOpen ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-          )}
-        </button>
+        <WbShellBurger active="affiliates" />
         </div>
-        {menuOpen && (
-          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
-            <Link href={href("/")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navSearch")}
-            </Link>
-            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navFeatures")}
-            </Link>
-            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navPricing")}
-            </Link>
-            <Link href={href("/affiliates")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navAffiliates")}
-            </Link>
-          </div>
-        )}
       </header>
 
       <main className="wb-affdash-main">

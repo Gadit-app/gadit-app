@@ -27,6 +27,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { HelpCenter } from "@/components/HelpCenter";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 
 function LangSwitch() {
   const { lang, setLang } = useLang();
@@ -74,7 +75,7 @@ function LangSwitch() {
 
 export function ContactClient() {
   const { lang, dir } = useLang();
-  const { user, plan, promptLogin } = useAuth();
+  const { user, promptLogin } = useAuth();
   const href = useHref();
 
   return (
@@ -83,32 +84,7 @@ export function ContactClient() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
-        <nav className="wb-shell-nav">
-          <Link
-            href={href("/")}
-            className="wb-shell-navlink wb-shell-navlink-icon"
-            aria-label={v2(lang, "navSearch")}
-            title={v2(lang, "navSearch")}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="6.5" />
-              <path d="m20 20-4-4" />
-            </svg>
-          </Link>
-          <Link href={href("/features")} className="wb-shell-navlink">
-            {v2(lang, "navFeatures")}
-          </Link>
-          {user && (plan === "clear" || plan === "deep") && (
-            <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
-          )}
-          {user && plan === "deep" && (
-            <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
-          )}
-          <Link href={href("/pricing")} className="wb-shell-navlink">{v2(lang, "navPricing")}</Link>
-          {user && (plan === "clear" || plan === "deep") && (
-            <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
-          )}
-        </nav>
+        <WbShellNav />
         <div className="wb-shell-actions">
           {user && (
             <ShareButton
@@ -153,6 +129,7 @@ export function ContactClient() {
         )}
         <div className="wb-shell-mobile-menu-cluster">
           <LangSwitchMobile />
+          <WbShellBurger />
         </div>
       </header>
 

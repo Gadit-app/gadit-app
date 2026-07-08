@@ -23,6 +23,7 @@ import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 
 const LANGS = [
   { code: "he", label: "עברית", flag: "il" },
@@ -148,28 +149,8 @@ export function HomePage() {
   const [query, setQuery] = useState("");
   const [sentence, setSentence] = useState("");
   const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const burgerRef = useRef<HTMLButtonElement>(null);
   const c = COPY[lang] ?? COPY.en;
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onClick(e: MouseEvent) {
-      const target = e.target as Node;
-      if (menuRef.current?.contains(target)) return;
-      if (burgerRef.current?.contains(target)) return;
-      setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setMenuOpen(false); }
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
 
   async function getIdToken(): Promise<string | null> {
     if (!user) return null;
@@ -195,26 +176,7 @@ export function HomePage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
-        <nav className="wb-shell-nav">
-          <Link href={href("/")} className="wb-shell-navlink wb-shell-navlink-icon is-active" aria-label={c.search}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="6.5" />
-              <path d="m20 20-4-4" />
-            </svg>
-          </Link>
-          <Link href={href("/features")} className="wb-shell-navlink">{c.features}</Link>
-          {user && (plan === "clear" || plan === "deep") && (
-            <Link href={href("/notebook")} className="wb-shell-navlink">{v2(lang, "navNotebook")}</Link>
-          )}
-          {user && plan === "deep" && (
-            <Link href={href("/play")} className="wb-shell-navlink">{v2(lang, "navPlay")}</Link>
-          )}
-          <Link href={href("/schools")} className="wb-shell-navlink">{v2(lang, "navSchools")}</Link>
-          <Link href={href("/pricing")} className="wb-shell-navlink">{c.pricing}</Link>
-          {user && (plan === "clear" || plan === "deep") && (
-            <Link href={href("/affiliates")} className="wb-shell-navlink">{v2(lang, "navAffiliates")}</Link>
-          )}
-        </nav>
+        <WbShellNav active="home" />
         <div className="wb-shell-actions">
           {user && (
             <ShareButton
@@ -263,70 +225,8 @@ export function HomePage() {
         )}
         <div className="wb-shell-mobile-menu-cluster">
         <LangSwitchMobile />
-                <button
-          ref={burgerRef}
-          type="button"
-          className="wb-shell-burger"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          {menuOpen ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-          )}
-        </button>
+        <WbShellBurger active="home" />
         </div>
-        {menuOpen && (
-          <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
-            {/* Mirror the desktop nav exactly — same links, same plan
-                gating. Gadi (2026-06-29) flagged that the mobile burger
-                was missing Notebook/Play/Schools/Affiliates so a paying
-                user couldn't even reach their own surfaces on a phone. */}
-            <Link href={href("/features")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {c.features}
-            </Link>
-            {user && (plan === "clear" || plan === "deep") && (
-              <Link href={href("/notebook")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-                {v2(lang, "navNotebook")}
-              </Link>
-            )}
-            {user && plan === "deep" && (
-              <Link href={href("/play")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-                {v2(lang, "navPlay")}
-              </Link>
-            )}
-            <Link href={href("/schools")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {v2(lang, "navSchools")}
-            </Link>
-            <Link href={href("/pricing")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-              {c.pricing}
-            </Link>
-            {user && (plan === "clear" || plan === "deep") && (
-              <Link href={href("/affiliates")} className="wb-shell-mobile-link" onClick={() => setMenuOpen(false)}>
-                {v2(lang, "navAffiliates")}
-              </Link>
-            )}
-            <div className="wb-shell-mobile-menu-sep" />
-            {user ? (
-              <Link href={href("/account")} onClick={() => setMenuOpen(false)}>
-                {(user.email?.[0] || "G").toUpperCase()} · {user.email ?? "Account"}
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => { setMenuOpen(false); promptLogin({ mode: "signin" }); }}
-              >
-                {c.signin}
-              </button>
-            )}
-          </div>
-        )}
       </header>
 
       <main className="wb-home-main">
