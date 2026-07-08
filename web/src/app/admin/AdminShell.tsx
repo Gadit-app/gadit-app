@@ -34,6 +34,7 @@ const STRINGS = {
     users: "Users",
     revenue: "Revenue",
     campaigns: "Campaigns",
+    emails: "Emails",
     activity: "Activity",
     reports: "Reports",
     backToApp: "Back to app",
@@ -50,6 +51,7 @@ const STRINGS = {
     users: "משתמשים",
     revenue: "הכנסות",
     campaigns: "קמפיינים",
+    emails: "מיילים",
     activity: "פעילות",
     reports: "דיווחים",
     backToApp: "חזרה לאפליקציה",
@@ -70,6 +72,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
   { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins />    },
   { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone />},
+  { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail />     },
   { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
   { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag />     },
 ];
@@ -375,6 +378,11 @@ function IconCoins() {
 function IconMegaphone() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+  );
+}
+function IconMail() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
   );
 }
 function IconActivity() {
