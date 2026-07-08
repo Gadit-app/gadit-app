@@ -1610,6 +1610,9 @@ const COPY: Record<string, T> = {
   },
 };
 
+const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
+const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
+
 export function SchoolsLandingClient() {
   const { user, schoolId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -1618,13 +1621,46 @@ export function SchoolsLandingClient() {
   const t = COPY[lang] ?? COPY.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+  // Every "Start 14-day free trial" CTA opens Stripe Checkout DIRECTLY
+  // instead of detouring through /pricing — Gadi 2026-07-08: a principal
+  // who already clicked "start trial" on the schools page shouldn't be
+  // dropped on a general pricing page to hunt for the button again.
+  // Anonymous visitors get the signup modal first, then flow straight
+  // into checkout (same pattern as PricingClient).
+  async function startCheckout(priceId: string, freshUser: { getIdToken: () => Promise<string> }) {
+    if (!priceId) {
+      console.error("Missing Stripe priceId");
+      window.alert("Pricing is misconfigured. Please contact support.");
+      return;
+    }
+    try {
+      const idToken = await freshUser.getIdToken();
+      const res = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ priceId, lang }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { url?: string };
+      if (data.url) { window.location.href = data.url; return; }
+      window.alert(lang === "he" ? "לא הצלחנו לפתוח את הצ'קאאוט. נסו שוב." : "Could not open checkout. Please try again.");
+    } catch (e) {
+      console.error("Checkout error:", e);
+    }
+  }
+  function clickTrial(priceId: string) {
+    // Existing school owners don't need a second subscription — send
+    // them to their dashboard instead of a duplicate checkout.
+    if (user && schoolId === user.uid) {
+      router.push(href("/schools/manage"));
+      return;
+    }
+    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+  }
+
   // Auto-redirect for school owners REMOVED (2026-06-29): Gadi wants
   // school owners to be able to see the landing too, e.g. for QA or to
-  // share the URL with a colleague. The "Schools" link in the main
-  // topbar is now smart on its own (HomeClient routes school owners
-  // straight to /schools/manage), so direct visitors to /schools who
-  // are school owners are intentional and should see the page.
-  void router; // keep router available for future use without lint complaint
+  // share the URL with a colleague. Owners who tap a trial CTA are
+  // routed to their dashboard by clickTrial above.
 
   // Localized "you already have Schools" banner copy. Shown to logged-in
   // school owners so they have a one-click path to their dashboard
@@ -1724,9 +1760,9 @@ export function SchoolsLandingClient() {
           <h1 className="wb-schools-h1">{t.heroH1}</h1>
           <p className="wb-schools-sub">{t.heroSub}</p>
           <div className="wb-schools-hero-actions">
-            <Link href={href("/pricing")} className="wb-schools-cta">
+            <button type="button" className="wb-schools-cta" onClick={() => clickTrial(PRICE_SCHOOLS_MONTHLY)}>
               {t.heroCta}
-            </Link>
+            </button>
             <span className="wb-schools-hero-trust">{t.heroTrust}</span>
           </div>
         </div>
@@ -1957,9 +1993,9 @@ export function SchoolsLandingClient() {
                 <span className="wb-schools-price-amount-period">/ month</span>
               </div>
               <div className="wb-schools-price-students">{t.priceSmallStudents}</div>
-              <Link href={href("/pricing")} className="wb-schools-cta wb-schools-cta-block">
+              <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={() => clickTrial(PRICE_SCHOOLS_MONTHLY)}>
                 {t.priceCta}
-              </Link>
+              </button>
             </div>
             <div className="wb-schools-price-card wb-schools-price-card-large">
               <div className="wb-schools-price-name">{t.priceLargeName}</div>
@@ -1968,9 +2004,9 @@ export function SchoolsLandingClient() {
                 <span className="wb-schools-price-amount-period">/ month</span>
               </div>
               <div className="wb-schools-price-students">{t.priceLargeStudents}</div>
-              <Link href={href("/pricing")} className="wb-schools-cta wb-schools-cta-block">
+              <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={() => clickTrial(PRICE_SCHOOLS_LARGE_MONTHLY)}>
                 {t.priceCta}
-              </Link>
+              </button>
             </div>
           </div>
           <div className="wb-schools-includes">
@@ -2024,9 +2060,9 @@ export function SchoolsLandingClient() {
         <div className="wb-schools-section-inner wb-schools-final-inner">
           <h2 className="wb-schools-h2 wb-schools-final-h2">{t.finalH2}</h2>
           <p className="wb-schools-final-body">{t.finalBody}</p>
-          <Link href={href("/pricing")} className="wb-schools-cta wb-schools-cta-big">
+          <button type="button" className="wb-schools-cta wb-schools-cta-big" onClick={() => clickTrial(PRICE_SCHOOLS_MONTHLY)}>
             {t.finalCta}
-          </Link>
+          </button>
           <div className="wb-schools-final-note">{t.finalNote}</div>
         </div>
       </section>
