@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useLang } from "@/lib/lang-context";
+import { buildHref } from "@/lib/href";
 
 /**
  * App-level share button for the topbar. Renders a single icon-only
@@ -31,8 +33,31 @@ export function ShareButton({
   shareLabel: string;
 }) {
   const [flash, setFlash] = useState(false);
+  const { lang } = useLang();
+
+  // Localize any gadit.app URL to the CURRENT UI language before
+  // sharing. Callers pass hardcoded unprefixed URLs (the homepage
+  // share is "https://www.gadit.app/"), so a Hebrew user's native
+  // share sheet sent the English site — Gadi hit this from his phone
+  // on 2026-07-08. Desktop felt correct only because people copy the
+  // address bar there. buildHref strips any existing prefix before
+  // re-applying, so already-prefixed URLs pass through unharmed, and
+  // non-gadit URLs are left untouched.
+  function localizedUrl(): string {
+    try {
+      const u = new URL(url);
+      if (u.hostname === "gadit.app" || u.hostname.endsWith(".gadit.app")) {
+        u.pathname = buildHref(lang, u.pathname);
+        return u.toString();
+      }
+    } catch {
+      // Relative or malformed URL — share as given.
+    }
+    return url;
+  }
 
   async function handleShare() {
+    const shareUrl = localizedUrl();
     // Only pass title + url, NOT text. When text is passed, WhatsApp
     // (and Telegram, Messenger, etc.) show it as a separate message
     // line above the URL — which then duplicates the og:description
@@ -45,8 +70,8 @@ export function ShareButton({
     // the app-wide topbar share, ShareButton renders with text=""
     // by convention.
     const data: ShareData = text
-      ? { title, text, url }
-      : { title, url };
+      ? { title, text, url: shareUrl }
+      : { title, url: shareUrl };
     const nav = navigator as Navigator & {
       share?: (data: ShareData) => Promise<void>;
     };
@@ -59,7 +84,7 @@ export function ShareButton({
       }
     }
     try {
-      await nav.clipboard?.writeText(url);
+      await nav.clipboard?.writeText(shareUrl);
       setFlash(true);
       window.setTimeout(() => setFlash(false), 1800);
     } catch {
