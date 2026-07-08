@@ -75,7 +75,13 @@ export async function GET(req: NextRequest) {
     const dripSent = (d.dripSent as Record<string, { sentAt?: unknown }> | undefined) ?? {};
     const notifiedSignupAt = tsToIso(d.notifiedSignupAt);
     const keys = Object.keys(dripSent);
-    if (keys.length === 0 && !notifiedSignupAt) continue;
+    // Only users who actually RECEIVED a drip email belong in this
+    // ledger. notifiedSignupAt alone doesn't qualify: that email goes
+    // to the ADMIN (new-signup alert), not to the user, and part of
+    // those stamps came from the historical backfill that never sent
+    // anything. Counting them inflated "users reached" to 60 when only
+    // 24 welcome emails had gone out. Gadi 2026-07-08.
+    if (keys.length === 0) continue;
 
     const sent: Record<string, string> = {};
     for (const k of keys) {
@@ -85,6 +91,7 @@ export async function GET(req: NextRequest) {
         perKey[k] = (perKey[k] ?? 0) + 1;
       }
     }
+    if (Object.keys(sent).length === 0) continue;
 
     // Drip language: inferred from whichever key family the user is in.
     const dripLang = keys.some((k) => k.endsWith("-he"))
