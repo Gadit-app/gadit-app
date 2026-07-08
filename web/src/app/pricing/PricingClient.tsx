@@ -1092,8 +1092,13 @@ export function PricingPageRoute() {
   const clearYearly    = "$29.99";
   const deepMonthly    = "$4.99";
   const deepYearly     = "$49.99";
-  const familyMonthly  = "$8.99";
-  const familyYearly   = "$89";
+  // Family repriced $8.99 → $6.99 on 2026-07-08 (Gadi: the jump from
+  // Deep $4.99 almost doubled the price; Family should feel like "a
+  // little more", not "twice as much", to become the default family
+  // buy). Yearly keeps the ~2-months-free convention. Existing $8.99
+  // subscribers stay on their old Stripe price automatically.
+  const familyMonthly  = "$6.99";
+  const familyYearly   = "$69";
   const schoolsMonthly       = "$69";
   const schoolsYearly        = "$690";
   const schoolsLargeMonthly  = "$149";
