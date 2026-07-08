@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { track } from "@/lib/track";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
@@ -1641,6 +1642,7 @@ export function SchoolsLandingClient() {
         body: JSON.stringify({ priceId, lang }),
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string };
+      track("checkout_started", { priceId });
       if (data.url) { window.location.href = data.url; return; }
       window.alert(lang === "he" ? "לא הצלחנו לפתוח את הצ'קאאוט. נסו שוב." : "Could not open checkout. Please try again.");
     } catch (e) {

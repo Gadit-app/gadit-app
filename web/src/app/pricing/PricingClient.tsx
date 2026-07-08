@@ -26,6 +26,7 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
+import { track } from "@/lib/track";
 import { useHref } from "@/lib/href";
 
 type Billing = "monthly" | "yearly";
@@ -1035,6 +1036,7 @@ export function PricingPageRoute() {
         body: JSON.stringify({ priceId, lang }),
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+      track("checkout_started", { priceId });
       if (data.url) { window.location.href = data.url; return; }
       // 'email_not_verified' branch removed in concert with the server-
       // side gate — the API no longer returns it. The only remaining

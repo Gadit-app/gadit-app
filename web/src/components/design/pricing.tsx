@@ -23,6 +23,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth-context";
+import { track } from "@/lib/track";
 import { Eyebrow } from "./primitives";
 
 type Billing = "monthly" | "yearly";
@@ -549,6 +550,7 @@ export function PricingTiers({ billing }: { billing: Billing }) {
         message?: string;
       };
       if (data.url) {
+        track("checkout_started", { priceId });
         window.location.href = data.url;
         return;
       }

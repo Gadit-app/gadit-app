@@ -7,16 +7,21 @@ import { recordWordSearch } from "@/lib/word-search-log";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
-//   run per IP per day before we ask them to sign up. The Aha-moment
-//   research said 5: enough for a real taste of multi-meaning + RTL +
-//   etymology, not so many that the wall feels punitive after value
-//   was already given.
-// BASIC_DAILY_LIMIT: signed-in free users get 4ֳ— the anonymous limit
-//   (20/day). Sign-up unlocks the rest of the day plus persistent
-//   notebook + history + first-class profile.
-// Paid (Clear/Deep) is unmetered ג€” handled by an isPaid bypass below.
-const ANON_DAILY_LIMIT = 5;
-const BASIC_DAILY_LIMIT = 10;
+//   run per IP per day before we ask them to sign up. 5 → 2 on
+//   2026-07-08 (council session + Gadi's call): a dictionary user
+//   searches 1-2 words per session, so at 5/day most visitors never
+//   met the wall at all. Two searches let a stranger feel the product;
+//   the third asks them to register. Note: cached word pages are
+//   server-preloaded for anonymous users and never hit this API, so
+//   SEO landings stay zero-friction and don't burn quota.
+// BASIC_DAILY_LIMIT: signed-in free users get 20/day — this matches
+//   the promise the soft wall makes in all 13 languages ("search up
+//   to 20 words a day"), which the previous value of 10 silently
+//   broke. 2 anonymous → 20 registered is also a 10x jump, which is
+//   the whole signup pitch. Fixed 2026-07-08.
+// Paid (Clear/Deep) is unmetered — handled by an isPaid bypass below.
+const ANON_DAILY_LIMIT = 2;
+const BASIC_DAILY_LIMIT = 20;
 
 function todayUTC(): string {
   // UTC date in YYYY-MM-DD so the daily counter resets at a consistent global

@@ -15,6 +15,7 @@ import {
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import { track } from "@/lib/track";
 
 function getFirebaseAuth() {
   const firebaseConfig = {
@@ -263,6 +264,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (extra?.isNewUser) {
       void notifySignupSafely(cred.user);
       trackAffonsoSignup(cred.user);
+      // Funnel event (council verdict 2026-07-08): measure signups by
+      // method so the wall→signup conversion is a number, not a guess.
+      track("signup_completed", { method: "google" });
       showWelcome();
     }
     setShowLoginModal(false);
@@ -287,6 +291,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     void notifySignupSafely(cred.user);
     trackAffonsoSignup(cred.user);
+    track("signup_completed", { method: "email" });
     setShowLoginModal(false);
     showWelcome();
   }
@@ -324,6 +329,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoginReason(reason);
     setLoginMode(mode);
     setShowLoginModal(true);
+    // Funnel event: the login/signup modal actually opened (signed-in
+    // users short-circuit above and never see it). reason is capped so
+    // long localized strings don't blow up the analytics property.
+    track("signup_started", { mode, reason: reason.slice(0, 40) });
   }
 
   return (

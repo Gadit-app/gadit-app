@@ -65,7 +65,8 @@ import {
 // On a UTC date change we reset to 0. Cleared cookies = reset; that's
 // fine, the server still enforces.
 const ANON_COUNTER_KEY = "gadit-anon-searches";
-const ANON_DAILY_LIMIT_CLIENT = 5;
+// Mirrors ANON_DAILY_LIMIT in /api/define (5 → 2 on 2026-07-08).
+const ANON_DAILY_LIMIT_CLIENT = 2;
 
 function todayUTC(): string {
   return new Date().toISOString().slice(0, 10);
@@ -117,6 +118,12 @@ function SoftWall({
 }) {
   const href = useHref();
   const isSignup = nextStep === "signup";
+  // Funnel event (council verdict 2026-07-08): every wall impression
+  // is counted so "how many see the wall / how many sign up from it"
+  // is measurable before and after the 5→2 quota change.
+  useEffect(() => {
+    track("softwall_shown", { variant: nextStep, lang });
+  }, [nextStep, lang]);
   return (
     <div
       className="wb-softwall"
