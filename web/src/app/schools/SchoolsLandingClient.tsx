@@ -1656,6 +1656,14 @@ export function SchoolsLandingClient() {
     }
     promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
   }
+  // Hero + final CTAs don't name a plan, so sending them straight to a
+  // specific checkout would silently pick the $69 tier for the user.
+  // Gadi 2026-07-08: scroll them to the in-page pricing section where
+  // the Schools / Schools Large choice is explicit; only the two price
+  // cards go directly to checkout.
+  function scrollToPricing() {
+    document.getElementById("schools-pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   // Auto-redirect for school owners REMOVED (2026-06-29): Gadi wants
   // school owners to be able to see the landing too, e.g. for QA or to
@@ -1760,7 +1768,7 @@ export function SchoolsLandingClient() {
           <h1 className="wb-schools-h1">{t.heroH1}</h1>
           <p className="wb-schools-sub">{t.heroSub}</p>
           <div className="wb-schools-hero-actions">
-            <button type="button" className="wb-schools-cta" onClick={() => clickTrial(PRICE_SCHOOLS_MONTHLY)}>
+            <button type="button" className="wb-schools-cta" onClick={scrollToPricing}>
               {t.heroCta}
             </button>
             <span className="wb-schools-hero-trust">{t.heroTrust}</span>
@@ -1980,7 +1988,7 @@ export function SchoolsLandingClient() {
       </section>
 
       {/* ─── 6. PRICING ──────────────────────────────────────────── */}
-      <section className="wb-schools-section wb-schools-pricing">
+      <section id="schools-pricing" className="wb-schools-section wb-schools-pricing">
         <div className="wb-schools-section-inner">
           <span className="wb-schools-tag">{t.priceTag}</span>
           <h2 className="wb-schools-h2">{t.priceH2}</h2>
@@ -2060,7 +2068,7 @@ export function SchoolsLandingClient() {
         <div className="wb-schools-section-inner wb-schools-final-inner">
           <h2 className="wb-schools-h2 wb-schools-final-h2">{t.finalH2}</h2>
           <p className="wb-schools-final-body">{t.finalBody}</p>
-          <button type="button" className="wb-schools-cta wb-schools-cta-big" onClick={() => clickTrial(PRICE_SCHOOLS_MONTHLY)}>
+          <button type="button" className="wb-schools-cta wb-schools-cta-big" onClick={scrollToPricing}>
             {t.finalCta}
           </button>
           <div className="wb-schools-final-note">{t.finalNote}</div>
