@@ -36,8 +36,10 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
-import { INSTALL_OPEN_EVENT, isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
+import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
+import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
+import { track } from "@/lib/track";
 
 // "Install the app" burger entry — permanent, discoverable install
 // path. Users kept asking Gadi "how do I download it?" because the
@@ -208,7 +210,8 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
                 type="button"
                 onClick={() => {
                   setOpen(false);
-                  window.dispatchEvent(new Event(INSTALL_OPEN_EVENT));
+                  track("install_menu_tapped", { lang });
+                  requestInstallOpen();
                 }}
               >
                 {INSTALL_LABELS[lang] ?? INSTALL_LABELS.en}

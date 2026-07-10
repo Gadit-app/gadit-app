@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { track } from "@/lib/track";
+import { consumePendingInstallOpen, subscribeInstallOpen } from "@/lib/install-bus";
 
 /**
  * Gentle PWA install prompt.
@@ -530,6 +531,12 @@ export function InstallPwaPrompt() {
   // Burger-menu "Install the app" entry → open the right flow now,
   // regardless of banner eligibility/snooze. A user who ASKS to
   // install should never be blocked by the nudge schedule.
+  //
+  // Wired through the queued install-bus (plus the window event for
+  // belt-and-braces): a fire-and-forget event alone can vanish if
+  // this component is remounting at tap time — a US tester tapped
+  // the menu entry on iOS Safari and nothing opened (2026-07-09).
+  // The bus keeps the request pending until a subscriber consumes it.
   useEffect(() => {
     function onOpenRequest() {
       track("install_prompt_shown", { platform, source: "menu" });
@@ -539,8 +546,17 @@ export function InstallPwaPrompt() {
         setShowIosSheet(true);
       }
     }
+    // Consume a request that fired while we weren't mounted.
+    if (consumePendingInstallOpen()) onOpenRequest();
+    const unsubscribe = subscribeInstallOpen(() => {
+      consumePendingInstallOpen();
+      onOpenRequest();
+    });
     window.addEventListener(INSTALL_OPEN_EVENT, onOpenRequest);
-    return () => window.removeEventListener(INSTALL_OPEN_EVENT, onOpenRequest);
+    return () => {
+      unsubscribe();
+      window.removeEventListener(INSTALL_OPEN_EVENT, onOpenRequest);
+    };
   }, [platform, deferred, handleInstall]);
 
   if (!visible && !showIosSheet) return null;
