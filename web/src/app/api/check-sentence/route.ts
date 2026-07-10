@@ -34,15 +34,20 @@ Respond ONLY with valid JSON in this exact format:
   "suggestion": "an improved or correct example sentence using the word in the same meaning, in the word's language. Only include this for 'incorrect'. Empty string for 'perfect' and 'almost'."
 }
 
-THE RULE, BE LENIENT ON GRAMMAR, STRICT ON MEANING:
-The goal is to verify the user UNDERSTANDS this meaning. Not to teach writing, polish style, or fix every grammar detail. A native speaker reading the sentence should be able to tell the user knows what the word means in this sense.
+THE RULE, BE LENIENT ON EVERYTHING EXCEPT THE MEANING:
+The goal is to verify the user UNDERSTANDS this meaning. Not to teach writing, polish style, or fix every grammar detail. A native speaker reading the sentence should be able to tell the user knows what the word means in this sense. Many users are CHILDREN typing on shared devices; expect kid spelling and phrasing.
+
+Leniency rules (all of these are "perfect", never downgrade for them):
+1. Typos and spelling mistakes in OTHER words of the sentence NEVER affect the status. "לעכבישים יש 8 רגלים" with רגלים misspelled is irrelevant when the practiced word is a different word.
+2. Inflected, prefixed, or spelling-variant forms of the TARGET word count as using it: plurals, conjugations, attached prepositions (Hebrew ב/ל/מ/כ/ה, Arabic ال/ب/ل, etc.), and common spelling variants.
+3. Using the word inside a natural compound or collocation COUNTS as using this meaning. "שיעור מדעים", "מורה למדעים", "science class", "science teacher" all demonstrate understanding of מדעים/science in the knowledge-domain sense. Do NOT demand the sentence be ABOUT the domain itself.
+4. Opinions, casual statements, and kid-logic sentences are fine. "שיעור מדעים זה משעמם" uses מדעים correctly. You are not grading the opinion.
+5. Wrong preposition, missing article, casual word order: fine.
 
 Status guidelines:
-- "perfect": The sentence uses the word in THIS specific meaning, and a reader understands what the user meant. Minor grammar quirks, awkward phrasing, missing articles, casual word order, all FINE. If the meaning is conveyed, it's perfect. → Encourage them warmly.
-- "almost": The sentence uses the right meaning BUT something is genuinely confusing or wrong enough that a reader would pause. Reserve this for real problems, not stylistic preferences. → Acknowledge what's right, point out the one issue.
-- "incorrect": The sentence uses the word in a DIFFERENT meaning than the one given, OR doesn't actually use the word, OR the sentence doesn't make sense at all. → Briefly explain the mismatch, give a correct example.
-
-Critical: DO NOT mark a sentence "almost" because of minor grammar, style, or because you would phrase it differently. The user is not training to be a writer. They're checking that they got the meaning right.
+- "perfect": The sentence uses the word (or an inflected/compound form of it) in THIS meaning's sense family, and a reader understands what the user meant. → Encourage them warmly. If there's a small typo elsewhere you MAY add one gentle tip after the praise, but the status stays "perfect".
+- "almost": Reserve for sentences where the TARGET WORD's usage itself is genuinely ambiguous or borderline — a reader can't tell whether the user grasped this meaning. NEVER "almost" because of other words, spelling, or style.
+- "incorrect": The sentence uses the word in a clearly DIFFERENT meaning than the one given, OR doesn't use the word at all, OR is gibberish. → Briefly explain the mismatch, give a correct example.
 
 Examples (Hebrew user, word "נבלה", meaning "אדם רע או מעשה חמור"):
 - User writes: "איזה נבלה הוא, גנב לי את הארנק"
@@ -50,7 +55,13 @@ Examples (Hebrew user, word "נבלה", meaning "אדם רע או מעשה חמ�
 - User writes: "הכלב מצא נבלה ביער" (used the OTHER meaning, dead animal)
   → {"status": "incorrect", "message": "במשפט הזה השתמשת במשמעות אחרת של 'נבלה', חיה מתה. נסה משפט שבו המילה מתייחסת לאדם רע או מעשה חמור.", "suggestion": "מה שעשה הוא נבלה אמיתית, אי אפשר לסלוח על כזה דבר."}
 - User writes: "הוא נבלה" (very short but meaning is clear)
-  → {"status": "perfect", "message": "קצר אבל ברור, אתה תופס את המשמעות של 'נבלה' כאדם רע.", "suggestion": ""}`;
+  → {"status": "perfect", "message": "קצר אבל ברור, אתה תופס את המשמעות של 'נבלה' כאדם רע.", "suggestion": ""}
+
+Examples (Hebrew child, word "מדעים", meaning "תחום הידע שחוקר את הטבע והעולם"):
+- User writes: "לעכבישים יש 8 רגלים למדתי את זה משיעור מדעים" (typo in רגלים, משיעור instead of בשיעור)
+  → {"status": "perfect", "message": "מעולה! השתמשת ב'מדעים' בדיוק נכון, בשיעור מדעים באמת לומדים דברים כאלה על בעלי חיים.", "suggestion": ""}
+- User writes: "שיעור מדעים זה משעמם" (opinion, word used inside a compound)
+  → {"status": "perfect", "message": "המשפט משתמש ב'מדעים' נכון לגמרי. חבל שמשעמם לך, אולי בגלל שעוד לא למדתם על עכבישים 🙂", "suggestion": ""}`;
 
 export async function POST(req: NextRequest) {
   try {
