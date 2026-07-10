@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useLang } from "@/lib/lang-context";
+import { track } from "@/lib/track";
 
 /**
  * Gentle PWA install prompt.
@@ -32,8 +33,34 @@ import { useLang } from "@/lib/lang-context";
 
 const STORAGE_KEY        = "gadit_install_prompt_state_v1";
 const SEARCH_SIGNAL_KEY  = "gadit_first_search_done";
-const DISMISS_SNOOZE_DAYS = 14;
+// 14 → 3 days (Gadi 2026-07-09): users kept asking him "how do I
+// install it?" — one reflexive "Later" silenced the prompt for two
+// weeks. Three days keeps it a recurring nudge without being a nag,
+// and the burger menu now carries a permanent "Install the app"
+// entry so the path is always discoverable between nudges.
+const DISMISS_SNOOZE_DAYS = 3;
 const APPEAR_DELAY_MS     = 8_000;
+
+/** Dispatched (window) by the burger-menu "Install the app" item.
+ *  The mounted InstallPwaPrompt picks it up and opens the right flow
+ *  for the platform: native prompt on Android Chrome, instructions
+ *  sheet otherwise. */
+export const INSTALL_OPEN_EVENT = "gadit-open-install";
+
+/** True when Gadit is running as an installed app, or the user
+ *  completed installation at some point on this browser profile.
+ *  Shared with the burger menu so it can hide its install entry. */
+export function isPwaInstalledOrDone(): boolean {
+  if (typeof window === "undefined") return false;
+  if (window.matchMedia("(display-mode: standalone)").matches) return true;
+  const nav = navigator as unknown as { standalone?: boolean };
+  if (nav.standalone === true) return true;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw && (JSON.parse(raw) as { installed?: boolean }).installed) return true;
+  } catch { /* ignore */ }
+  return false;
+}
 
 const TEAL       = "#0E7490";
 const TEAL_DEEP  = "#155E75";
@@ -54,6 +81,9 @@ type Copy = {
   iosStep1Hint: string;
   iosStep2: string;
   iosStep3: string;
+  androidStep1: string;
+  androidStep2: string;
+  androidStep3: string;
   iosClose: string;
   closeLabel: string;
 };
@@ -71,6 +101,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(הריבוע עם החץ למעלה, בתחתית הסאפארי)",
     iosStep2: "גללו ובחרו \"הוסף למסך הבית\"",
     iosStep3: "הקישו \"הוסף\" בפינה הימנית העליונה",
+    androidStep1: "פתחו את תפריט Chrome (⋮)",
+    androidStep2: "בחרו \"הוספה למסך הבית\"",
+    androidStep3: "אשרו בלחיצה על \"הוסף\"",
     iosClose: "הבנתי",
     closeLabel: "סגור",
   },
@@ -86,6 +119,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(the square with an arrow pointing up, at the bottom of Safari)",
     iosStep2: "Scroll and choose \"Add to Home Screen\"",
     iosStep3: "Tap \"Add\" in the top-right corner",
+    androidStep1: "Open the Chrome menu (⋮)",
+    androidStep2: "Choose \"Add to Home screen\"",
+    androidStep3: "Tap \"Add\" to confirm",
     iosClose: "Got it",
     closeLabel: "Close",
   },
@@ -101,6 +137,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(المربع مع السهم لأعلى، أسفل سفاري)",
     iosStep2: "مرر واختر \"إضافة إلى الشاشة الرئيسية\"",
     iosStep3: "اضغط \"إضافة\" في الزاوية العلوية اليمنى",
+    androidStep1: "افتح قائمة Chrome (⋮)",
+    androidStep2: "اختر \"إضافة إلى الشاشة الرئيسية\"",
+    androidStep3: "اضغط \"إضافة\" للتأكيد",
     iosClose: "فهمت",
     closeLabel: "إغلاق",
   },
@@ -116,6 +155,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(квадрат со стрелкой вверх, внизу Safari)",
     iosStep2: "Прокрутите и выберите «На экран Домой»",
     iosStep3: "Нажмите «Добавить» в правом верхнем углу",
+    androidStep1: "Откройте меню Chrome (⋮)",
+    androidStep2: "Выберите «Добавить на главный экран»",
+    androidStep3: "Нажмите «Добавить» для подтверждения",
     iosClose: "Понятно",
     closeLabel: "Закрыть",
   },
@@ -131,6 +173,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(el cuadrado con la flecha hacia arriba, abajo en Safari)",
     iosStep2: "Desliza y elige \"Añadir a pantalla de inicio\"",
     iosStep3: "Toca \"Añadir\" en la esquina superior derecha",
+    androidStep1: "Abre el menú de Chrome (⋮)",
+    androidStep2: "Elige \"Añadir a pantalla de inicio\"",
+    androidStep3: "Toca \"Añadir\" para confirmar",
     iosClose: "Entendido",
     closeLabel: "Cerrar",
   },
@@ -146,6 +191,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(o quadrado com a seta para cima, na parte inferior do Safari)",
     iosStep2: "Role e escolha \"Adicionar à Tela de Início\"",
     iosStep3: "Toque em \"Adicionar\" no canto superior direito",
+    androidStep1: "Abra o menu do Chrome (⋮)",
+    androidStep2: "Escolha \"Adicionar à tela inicial\"",
+    androidStep3: "Toque em \"Adicionar\" para confirmar",
     iosClose: "Entendi",
     closeLabel: "Fechar",
   },
@@ -161,6 +209,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(le carré avec une flèche vers le haut, en bas de Safari)",
     iosStep2: "Fais défiler et choisis \"Sur l'écran d'accueil\"",
     iosStep3: "Appuie sur \"Ajouter\" en haut à droite",
+    androidStep1: "Ouvre le menu Chrome (⋮)",
+    androidStep2: "Choisis \"Ajouter à l'écran d'accueil\"",
+    androidStep3: "Appuie sur \"Ajouter\" pour confirmer",
     iosClose: "Compris",
     closeLabel: "Fermer",
   },
@@ -176,6 +227,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(das Quadrat mit dem Pfeil nach oben, unten in Safari)",
     iosStep2: "Scrolle und wähle \"Zum Home-Bildschirm\"",
     iosStep3: "Tippe rechts oben auf \"Hinzufügen\"",
+    androidStep1: "Öffne das Chrome-Menü (⋮)",
+    androidStep2: "Wähle \"Zum Startbildschirm hinzufügen\"",
+    androidStep3: "Tippe zur Bestätigung auf \"Hinzufügen\"",
     iosClose: "Verstanden",
     closeLabel: "Schließen",
   },
@@ -191,6 +245,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(čtverec se šipkou nahoru, dole v Safari)",
     iosStep2: "Posuňte se a vyberte \"Přidat na plochu\"",
     iosStep3: "Klepněte na \"Přidat\" vpravo nahoře",
+    androidStep1: "Otevřete nabídku Chrome (⋮)",
+    androidStep2: "Zvolte \"Přidat na plochu\"",
+    androidStep3: "Potvrďte klepnutím na \"Přidat\"",
     iosClose: "Rozumím",
     closeLabel: "Zavřít",
   },
@@ -206,6 +263,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(štvorec so šípkou hore, dole v Safari)",
     iosStep2: "Posuňte sa a vyberte \"Pridať na plochu\"",
     iosStep3: "Klepnite na \"Pridať\" vpravo hore",
+    androidStep1: "Otvorte menu Chrome (⋮)",
+    androidStep2: "Zvoľte \"Pridať na plochu\"",
+    androidStep3: "Potvrďte klepnutím na \"Pridať\"",
     iosClose: "Rozumiem",
     closeLabel: "Zavrieť",
   },
@@ -221,6 +281,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(il quadrato con la freccia in alto, in basso su Safari)",
     iosStep2: "Scorri e scegli \"Aggiungi a Home\"",
     iosStep3: "Tocca \"Aggiungi\" in alto a destra",
+    androidStep1: "Apri il menu di Chrome (⋮)",
+    androidStep2: "Scegli \"Aggiungi a schermata Home\"",
+    androidStep3: "Tocca \"Aggiungi\" per confermare",
     iosClose: "Capito",
     closeLabel: "Chiudi",
   },
@@ -236,6 +299,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(Safari の下にある、上矢印の付いた四角)",
     iosStep2: "スクロールして「ホーム画面に追加」を選択",
     iosStep3: "右上の「追加」をタップ",
+    androidStep1: "Chrome のメニュー (⋮) を開く",
+    androidStep2: "「ホーム画面に追加」を選択",
+    androidStep3: "「追加」をタップして確定",
     iosClose: "わかりました",
     closeLabel: "閉じる",
   },
@@ -251,6 +317,9 @@ const COPY: Record<string, Copy> = {
     iosStep1Hint: "(Safari में नीचे का चौकोर बटन जिसमें ऊपर तीर है)",
     iosStep2: "स्क्रॉल करके \"होम स्क्रीन में जोड़ें\" चुनें",
     iosStep3: "ऊपर दाएँ \"जोड़ें\" दबाएँ",
+    androidStep1: "Chrome मेनू (⋮) खोलें",
+    androidStep2: "\"होम स्क्रीन में जोड़ें\" चुनें",
+    androidStep3: "पुष्टि के लिए \"जोड़ें\" दबाएँ",
     iosClose: "समझ गया",
     closeLabel: "बंद करें",
   },
@@ -265,6 +334,11 @@ interface BeforeInstallPromptEvent extends Event {
 type PromptState = {
   dismissedAt?: string;
   installed?: boolean;
+  /** First time this browser profile ever evaluated the prompt. Lets
+   *  the banner appear for returning visitors who never searched
+   *  (they were told "download the app", opened the site, browsed,
+   *  left) — after 24h the search-signal requirement is waived. */
+  firstSeenAt?: string;
 };
 
 function readState(): PromptState {
@@ -332,7 +406,8 @@ export function InstallPwaPrompt() {
     }
     window.addEventListener("beforeinstallprompt", onBip);
     function onInstalled() {
-      writeState({ installed: true });
+      track("install_accepted", { platform: "appinstalled_event" });
+      writeState({ ...readState(), installed: true });
       setVisible(false);
       setShowIosSheet(false);
     }
@@ -373,16 +448,32 @@ export function InstallPwaPrompt() {
       (platform === "android" && deferred);
     if (!eligible) return;
 
+    // Stamp the first evaluation so returning visitors qualify below.
+    if (!state.firstSeenAt) {
+      writeState({ ...state, firstSeenAt: new Date().toISOString() });
+    }
+    // Value signal: they searched a word — OR they're a returning
+    // visitor (first seen over 24h ago). The original search-only
+    // gate meant someone who was told "download the app", opened the
+    // site and browsed without searching never saw the prompt at all.
+    // Gadi 2026-07-09.
+    const returning =
+      !!state.firstSeenAt &&
+      Date.now() - new Date(state.firstSeenAt).getTime() > 86_400_000;
     const checkSignal = () =>
-      typeof window !== "undefined" &&
-      localStorage.getItem(SEARCH_SIGNAL_KEY) === "1";
+      returning ||
+      (typeof window !== "undefined" &&
+        localStorage.getItem(SEARCH_SIGNAL_KEY) === "1");
 
     let appearTimer: ReturnType<typeof setTimeout> | null = null;
     let pollTimer: ReturnType<typeof setInterval> | null = null;
 
     const scheduleAppear = () => {
       if (appearTimer) return;
-      appearTimer = setTimeout(() => setVisible(true), APPEAR_DELAY_MS);
+      appearTimer = setTimeout(() => {
+        setVisible(true);
+        track("install_prompt_shown", { platform, source: "auto" });
+      }, APPEAR_DELAY_MS);
     };
 
     if (checkSignal()) {
@@ -403,20 +494,23 @@ export function InstallPwaPrompt() {
   }, [platform, deferred]);
 
   const handleInstall = useCallback(async () => {
-    if (platform === "ios") {
+    if (platform === "ios" || !deferred) {
+      // iOS never fires beforeinstallprompt; Android without a
+      // captured prompt (menu-triggered before Chrome offered one)
+      // gets the same sheet with Android-specific steps.
       setShowIosSheet(true);
       return;
     }
-    if (!deferred) return;
     try {
       await deferred.prompt();
       const choice = await deferred.userChoice;
       if (choice.outcome === "accepted") {
-        writeState({ installed: true });
+        track("install_accepted", { platform });
+        writeState({ ...readState(), installed: true });
         setVisible(false);
       } else {
         // User declined the native dialog — snooze like a Later tap.
-        writeState({ dismissedAt: new Date().toISOString() });
+        writeState({ ...readState(), dismissedAt: new Date().toISOString() });
         setVisible(false);
       }
     } catch {
@@ -428,15 +522,32 @@ export function InstallPwaPrompt() {
   }, [platform, deferred]);
 
   const handleLater = useCallback(() => {
-    writeState({ dismissedAt: new Date().toISOString() });
+    writeState({ ...readState(), dismissedAt: new Date().toISOString() });
     setVisible(false);
     setShowIosSheet(false);
   }, []);
 
-  if (!visible) return null;
+  // Burger-menu "Install the app" entry → open the right flow now,
+  // regardless of banner eligibility/snooze. A user who ASKS to
+  // install should never be blocked by the nudge schedule.
+  useEffect(() => {
+    function onOpenRequest() {
+      track("install_prompt_shown", { platform, source: "menu" });
+      if (platform === "android" && deferred) {
+        void handleInstall();
+      } else {
+        setShowIosSheet(true);
+      }
+    }
+    window.addEventListener(INSTALL_OPEN_EVENT, onOpenRequest);
+    return () => window.removeEventListener(INSTALL_OPEN_EVENT, onOpenRequest);
+  }, [platform, deferred, handleInstall]);
+
+  if (!visible && !showIosSheet) return null;
 
   return (
     <>
+      {visible && (
       <div
         role="dialog"
         aria-label={t.title}
@@ -542,6 +653,7 @@ export function InstallPwaPrompt() {
           }
         `}</style>
       </div>
+      )}
 
       {showIosSheet && (
         <div
@@ -579,24 +691,45 @@ export function InstallPwaPrompt() {
               </div>
             </div>
             <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              <li style={iosStepStyle}>
-                <span style={iosBadgeStyle(1)}>1</span>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>
-                    {t.iosStep1}
-                    <ShareIcon />
-                  </div>
-                  <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2 }}>{t.iosStep1Hint}</div>
-                </div>
-              </li>
-              <li style={iosStepStyle}>
-                <span style={iosBadgeStyle(2)}>2</span>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.iosStep2}</div>
-              </li>
-              <li style={iosStepStyle}>
-                <span style={iosBadgeStyle(3)}>3</span>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.iosStep3}</div>
-              </li>
+              {platform === "ios" ? (
+                <>
+                  <li style={iosStepStyle}>
+                    <span style={iosBadgeStyle(1)}>1</span>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>
+                        {t.iosStep1}
+                        <ShareIcon />
+                      </div>
+                      <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2 }}>{t.iosStep1Hint}</div>
+                    </div>
+                  </li>
+                  <li style={iosStepStyle}>
+                    <span style={iosBadgeStyle(2)}>2</span>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.iosStep2}</div>
+                  </li>
+                  <li style={iosStepStyle}>
+                    <span style={iosBadgeStyle(3)}>3</span>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.iosStep3}</div>
+                  </li>
+                </>
+              ) : (
+                /* Android without a captured beforeinstallprompt (menu
+                   trigger before Chrome offered one) — manual steps. */
+                <>
+                  <li style={iosStepStyle}>
+                    <span style={iosBadgeStyle(1)}>1</span>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.androidStep1}</div>
+                  </li>
+                  <li style={iosStepStyle}>
+                    <span style={iosBadgeStyle(2)}>2</span>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.androidStep2}</div>
+                  </li>
+                  <li style={iosStepStyle}>
+                    <span style={iosBadgeStyle(3)}>3</span>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#0B1220" }}>{t.androidStep3}</div>
+                  </li>
+                </>
+              )}
             </ol>
             <button
               type="button"

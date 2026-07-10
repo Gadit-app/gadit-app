@@ -36,6 +36,28 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
+import { INSTALL_OPEN_EVENT, isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
+import { isInAppBrowser } from "@/lib/in-app-browser";
+
+// "Install the app" burger entry — permanent, discoverable install
+// path. Users kept asking Gadi "how do I download it?" because the
+// bottom banner is the ONLY install surface and one dismissal hid it
+// for days (2026-07-09). Label per language, local to the chrome.
+const INSTALL_LABELS: Record<string, string> = {
+  he: "התקינו את האפליקציה",
+  en: "Install the app",
+  ar: "ثبّت التطبيق",
+  ru: "Установить приложение",
+  es: "Instalar la app",
+  pt: "Instalar o app",
+  fr: "Installer l'app",
+  de: "App installieren",
+  cs: "Nainstalovat aplikaci",
+  sk: "Nainštalovať aplikáciu",
+  it: "Installa l'app",
+  ja: "アプリをインストール",
+  hi: "ऐप इंस्टॉल करें",
+};
 
 export type NavKey =
   | "home"
@@ -107,6 +129,17 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
   const { lang } = useLang();
   const href = useHref();
   const [open, setOpen] = useState(false);
+  // Show the install entry only where installing is actually possible:
+  // a real mobile browser (not an Instagram/Facebook webview), not
+  // already running as the installed app. Resolved post-hydration so
+  // SSR markup stays UA-independent.
+  const [showInstall, setShowInstall] = useState(false);
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    const isMobile = /iphone|ipod|ipad|android/.test(ua) ||
+      (/mac/.test(ua) && navigator.maxTouchPoints > 1);
+    setShowInstall(isMobile && !isPwaInstalledOrDone() && !isInAppBrowser());
+  }, []);
   const burgerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -168,6 +201,20 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
               {l.label}
             </Link>
           ))}
+          {showInstall && (
+            <>
+              <div className="wb-shell-mobile-menu-sep" />
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  window.dispatchEvent(new Event(INSTALL_OPEN_EVENT));
+                }}
+              >
+                {INSTALL_LABELS[lang] ?? INSTALL_LABELS.en}
+              </button>
+            </>
+          )}
           <div className="wb-shell-mobile-menu-sep" />
           {user ? (
             <Link href={href("/account")} onClick={() => setOpen(false)}>

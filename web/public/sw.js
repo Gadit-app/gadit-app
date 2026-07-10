@@ -19,7 +19,7 @@
 // v4 → v5 (2026-06-29 evening): Gadi flagged that the script-match
 // distractor fix wasn't landing on his device — the SW was serving
 // the pre-fix bundle. Bump wipes it.
-const CACHE_VERSION = "gadit-v18";
+const CACHE_VERSION = "gadit-v19";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
