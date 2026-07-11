@@ -6,7 +6,11 @@ import { Resend } from "resend";
  * from address, reply-to and error handling.
  */
 
-const FROM = "Gadi <gadi@gadit.app>";
+// Sender NAME is the brand, not the founder — subscribers should see
+// "Gadit" in their inbox list and build recognition with the product
+// (Gadi 2026-07-11). Replies still land in Gadi's personal mailbox
+// via reply-to, so the conversation stays human when someone answers.
+const FROM = "Gadit <gadi@gadit.app>";
 const REPLY_TO = "gadi@gadit.app";
 
 export async function sendDripEmail(opts: {
