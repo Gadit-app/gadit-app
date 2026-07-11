@@ -472,6 +472,11 @@ export function InstallPwaPrompt() {
     const scheduleAppear = () => {
       if (appearTimer) return;
       appearTimer = setTimeout(() => {
+        // Never pop the banner over the payment page — a bottom sheet
+        // sliding over the card form mid-checkout is the one overlay
+        // that can cost real money (Yooniz playbook: exclude checkout
+        // routes from every popup/gate).
+        if (window.location.pathname.includes("/checkout")) return;
         setVisible(true);
         track("install_prompt_shown", { platform, source: "auto" });
       }, APPEAR_DELAY_MS);

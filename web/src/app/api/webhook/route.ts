@@ -123,6 +123,90 @@ async function findUserIdByCustomer(customerId: string): Promise<string | null> 
   return snap.docs[0].id;
 }
 
+/** True when subId is the subscription currently recorded on the user
+ *  doc (or when no subscription is recorded at all). Downgrade guard:
+ *  a dying OLD subscription must never overwrite a live new one. */
+async function isCurrentSubscription(userId: string, subId: string): Promise<boolean> {
+  const db = getAdminDb();
+  const snap = await db.collection("users").doc(userId).get();
+  if (!snap.exists) return true;
+  const current = snap.data()?.subscriptionId as string | undefined;
+  return !current || current === subId;
+}
+
+/**
+ * Activation path for the in-app Payment Element flow (/checkout →
+ * /api/subscribe). Those subscriptions have NO checkout.session — the
+ * user is identified by subscription metadata.uid instead of
+ * client_reference_id, and provisioning (plan + family/schools
+ * bootstrap) happens here on customer.subscription.created/updated.
+ *
+ * Card-first guard: with a 14-day trial + default_incomplete, Stripe
+ * creates the subscription as `trialing` BEFORE the card is entered.
+ * Granting on that would hand out card-less trials to anyone who
+ * merely opened the checkout page. We activate only once a default
+ * payment method is attached (confirmSetup completed) or the
+ * subscription is outright `active` (paid). Everything is idempotent,
+ * so the events that follow (payment attach, status changes) re-apply
+ * safely. Returns true when the event was handled by this path.
+ */
+async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promise<boolean> {
+  const uid = sub.metadata?.uid;
+  if (!uid) return false; // hosted-checkout subscription — other handlers own it
+
+  const priceId = sub.items.data[0]?.price?.id ?? "";
+  const plan = getPlanFromPriceId(priceId);
+  const hasCard = !!sub.default_payment_method;
+  const statusOk = sub.status === "active" || (sub.status === "trialing" && hasCard);
+
+  if (!statusOk) {
+    // Canceled / past_due / unpaid → downgrade (mirrors the customer-
+    // lookup path) — but ONLY if this sub is the user's current one.
+    // Abandoned Payment-Element subs auto-cancel at trial end
+    // (missing_payment_method: cancel); if the user meanwhile paid via
+    // another subscription, that cancellation must not clobber it.
+    if (sub.status === "canceled" || sub.status === "unpaid" || sub.status === "past_due") {
+      if (await isCurrentSubscription(uid, sub.id)) {
+        await applyPlanToUser(uid, "basic", {
+          subscriptionStatus: sub.status,
+        });
+      } else {
+        console.log(`[webhook] ignoring ${sub.status} for stale sub ${sub.id} (uid=${uid})`);
+      }
+      return true;
+    }
+    console.log(`[webhook] sub ${sub.id} (uid=${uid}) awaiting payment method, skipping activation`);
+    return true;
+  }
+
+  const family = isFamilyPriceId(priceId);
+  const schools = isSchoolsPriceId(priceId);
+  const billingCycle: "monthly" | "yearly" =
+    priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
+      ? "yearly"
+      : "monthly";
+  const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+  const email = (sub.metadata?.email as string | undefined) ?? null;
+
+  await applyPlanToUser(uid, plan, {
+    ...(email && { email }),
+    stripeCustomerId: customerId,
+    subscriptionId: sub.id,
+    priceId,
+    subscriptionStatus: sub.status,
+    trialEnd: sub.trial_end ?? null,
+    cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
+    ...(family && { familyId: uid }),
+    ...(schools && { schoolId: uid }),
+  });
+
+  if (family) await bootstrapFamily(uid, billingCycle);
+  if (schools) await bootstrapSchool(uid, billingCycle, email);
+  return true;
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -196,8 +280,19 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    if (event.type === "customer.subscription.created") {
+      const sub = event.data.object as Stripe.Subscription;
+      await activateFromSubscriptionMetadata(sub);
+    }
+
     if (event.type === "customer.subscription.updated") {
       const sub = event.data.object as Stripe.Subscription;
+      // Payment-Element subscriptions (metadata.uid) are provisioned
+      // here; hosted-checkout ones fall through to the legacy
+      // customer-lookup update below.
+      if (await activateFromSubscriptionMetadata(sub)) {
+        return NextResponse.json({ received: true });
+      }
       const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
       const userId = await findUserIdByCustomer(customerId);
       if (userId) {
@@ -220,7 +315,10 @@ export async function POST(req: NextRequest) {
       const sub = event.data.object as Stripe.Subscription;
       const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
       const userId = await findUserIdByCustomer(customerId);
-      if (userId) {
+      // Same stale-sub guard as the metadata path: an abandoned
+      // Payment-Element sub auto-canceling at trial end must not
+      // downgrade a user whose CURRENT subscription is alive.
+      if (userId && (await isCurrentSubscription(userId, sub.id))) {
         await applyPlanToUser(userId, "basic", {
           subscriptionStatus: "canceled",
         });
