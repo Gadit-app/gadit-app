@@ -313,12 +313,18 @@ export async function POST(req: NextRequest) {
 
     if (event.type === "customer.subscription.deleted") {
       const sub = event.data.object as Stripe.Subscription;
+      // A Payment-Element sub that never got a card was never activated
+      // (nobody's plan came from it), so its deletion — auto-cancel at
+      // trial end or manual cleanup — must not downgrade anyone. The
+      // user may hold a plan granted by an entirely different flow
+      // (hosted checkout, admin) that this sub knows nothing about.
+      const neverActivated = !!sub.metadata?.uid && !sub.default_payment_method;
       const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
       const userId = await findUserIdByCustomer(customerId);
-      // Same stale-sub guard as the metadata path: an abandoned
-      // Payment-Element sub auto-canceling at trial end must not
-      // downgrade a user whose CURRENT subscription is alive.
-      if (userId && (await isCurrentSubscription(userId, sub.id))) {
+      // Stale-sub guard, same as the metadata path: a dying OLD
+      // subscription must not downgrade a user whose CURRENT
+      // subscription is alive.
+      if (userId && !neverActivated && (await isCurrentSubscription(userId, sub.id))) {
         await applyPlanToUser(userId, "basic", {
           subscriptionStatus: "canceled",
         });

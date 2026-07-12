@@ -16,7 +16,6 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { track } from "@/lib/track";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
@@ -1622,32 +1621,22 @@ export function SchoolsLandingClient() {
   const t = COPY[lang] ?? COPY.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Every "Start 14-day free trial" CTA opens Stripe Checkout DIRECTLY
+  // Every "Start 14-day free trial" CTA opens the payment page DIRECTLY
   // instead of detouring through /pricing — Gadi 2026-07-08: a principal
   // who already clicked "start trial" on the schools page shouldn't be
   // dropped on a general pricing page to hunt for the button again.
+  // Since 2026-07-12 that payment page is the in-app /checkout (Payment
+  // Element, user's own language) rather than hosted Stripe Checkout.
   // Anonymous visitors get the signup modal first, then flow straight
-  // into checkout (same pattern as PricingClient).
-  async function startCheckout(priceId: string, freshUser: { getIdToken: () => Promise<string> }) {
+  // into checkout (same pattern as PricingClient). checkout_started
+  // fires inside /checkout (no duplicates).
+  function startCheckout(priceId: string) {
     if (!priceId) {
       console.error("Missing Stripe priceId");
       window.alert("Pricing is misconfigured. Please contact support.");
       return;
     }
-    try {
-      const idToken = await freshUser.getIdToken();
-      const res = await fetch("/api/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ priceId, lang }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { url?: string };
-      track("checkout_started", { priceId });
-      if (data.url) { window.location.href = data.url; return; }
-      window.alert(lang === "he" ? "לא הצלחנו לפתוח את הצ'קאאוט. נסו שוב." : "Could not open checkout. Please try again.");
-    } catch (e) {
-      console.error("Checkout error:", e);
-    }
+    window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
   }
   function clickTrial(priceId: string) {
     // Existing school owners don't need a second subscription — send
@@ -1656,7 +1645,7 @@ export function SchoolsLandingClient() {
       router.push(href("/schools/manage"));
       return;
     }
-    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
   // Hero + final CTAs don't name a plan, so sending them straight to a
   // specific checkout would silently pick the $69 tier for the user.

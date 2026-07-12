@@ -23,7 +23,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth-context";
-import { track } from "@/lib/track";
+import { buildHref } from "@/lib/href";
 import { Eyebrow } from "./primitives";
 
 type Billing = "monthly" | "yearly";
@@ -522,55 +522,22 @@ export function PricingTiers({ billing }: { billing: Billing }) {
   const { lang } = useLang();
   const { promptLogin } = useAuth();
 
-  // Common: kick off Stripe Checkout for the given priceId. Used by
-  // both the Clear and Deep CTAs. promptLogin handles the "needs to
-  // sign in first" path automatically — if the user is already
-  // signed in, the modal is skipped and onSuccess fires immediately.
-  async function startCheckout(priceId: string, freshUser: { getIdToken: () => Promise<string> }) {
+  // Common: send the user to the in-app payment page (/checkout,
+  // Stripe Payment Element) in their own language. Replaced the
+  // hosted-Checkout redirect on 2026-07-12 after Gadi's end-to-end
+  // test — hosted had no Hebrew locale and an extra domain hop.
+  // /api/create-checkout stays deployed as a fallback. promptLogin
+  // handles the "needs to sign in first" path automatically — if the
+  // user is already signed in, the modal is skipped and onSuccess
+  // fires immediately. checkout_started fires inside /checkout, not
+  // here (one event per funnel step, no duplicates).
+  function startCheckout(priceId: string) {
     if (!priceId) {
       console.error("Missing Stripe priceId, env var not set");
       window.alert("Pricing is misconfigured. Please contact support.");
       return;
     }
-    try {
-      const idToken = await freshUser.getIdToken();
-      const res = await fetch("/api/create-checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        // lang drives the Stripe Checkout page language and keeps the
-        // post-purchase return URLs on the user's /<lang> prefix.
-        body: JSON.stringify({ priceId, lang }),
-      });
-      const data = (await res.json().catch(() => ({}))) as {
-        url?: string;
-        error?: string;
-        message?: string;
-      };
-      if (data.url) {
-        track("checkout_started", { priceId });
-        window.location.href = data.url;
-        return;
-      }
-      // (Removed) 'email_not_verified' branch. The server no longer
-      // blocks unverified emails at checkout — Stripe's card-level
-      // verification is the canonical 'this is a real human' check
-      // and the verification-email round-trip was blackholed by
-      // half the world's spam filters anyway, locking testers in
-      // CZ / DE / GMail-default-spam-policy regions out of the trial.
-      console.error("Checkout failed:", { status: res.status, body: data });
-      window.alert(
-        lang === "he"
-          ? "לא הצלחנו לפתוח את עמוד התשלום. נסו שוב."
-          : lang === "ar"
-            ? "تعذر فتح صفحة الدفع. حاول مرة أخرى."
-            : "Could not open the checkout page. Please try again."
-      );
-    } catch (err) {
-      console.error("Checkout request failed:", err);
-    }
+    window.location.href = `${buildHref(lang, "/checkout")}?price=${encodeURIComponent(priceId)}`;
   }
 
   function clickClear() {
@@ -579,7 +546,7 @@ export function PricingTiers({ billing }: { billing: Billing }) {
     promptLogin({
       reason: v2(lang, "tierClearCta"),
       mode: "signup",
-      onSuccess: (u) => startCheckout(priceId, u),
+      onSuccess: () => startCheckout(priceId),
     });
   }
 
@@ -589,7 +556,7 @@ export function PricingTiers({ billing }: { billing: Billing }) {
     promptLogin({
       reason: v2(lang, "tierDeepCta"),
       mode: "signup",
-      onSuccess: (u) => startCheckout(priceId, u),
+      onSuccess: () => startCheckout(priceId),
     });
   }
 

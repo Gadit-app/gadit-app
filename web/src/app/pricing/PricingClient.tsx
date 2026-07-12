@@ -11,8 +11,8 @@
  * Shares the wordbook palette + masthead with / and /word so the
  * whole product reads as one design system.
  *
- * Stripe checkout flow is unchanged: anonymous → promptLogin (signup);
- * signed-in → POST /api/create-checkout → Stripe-hosted Checkout.
+ * Checkout flow: anonymous → promptLogin (signup); signed-in →
+ * /checkout (in-app Payment Element page, user's own language).
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -26,7 +26,6 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
-import { track } from "@/lib/track";
 import { useHref } from "@/lib/href";
 
 type Billing = "monthly" | "yearly";
@@ -1020,31 +1019,18 @@ export function PricingPageRoute() {
   const [billing, setBilling] = useState<Billing>("monthly");
   const c = COPY[lang] ?? COPY.en;
 
-  async function startCheckout(priceId: string, freshUser: { getIdToken: () => Promise<string> }) {
+  // Send the user to the in-app payment page (/checkout, Payment
+  // Element) in their own language. Replaced the hosted-Checkout
+  // redirect on 2026-07-12 after Gadi's end-to-end test — hosted had
+  // no Hebrew locale. /api/create-checkout stays deployed as a
+  // fallback. checkout_started fires inside /checkout (no duplicates).
+  function startCheckout(priceId: string) {
     if (!priceId) {
       console.error("Missing Stripe priceId");
       window.alert("Pricing is misconfigured. Please contact support.");
       return;
     }
-    try {
-      const idToken = await freshUser.getIdToken();
-      const res = await fetch("/api/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        // lang drives the Stripe Checkout page language and keeps the
-        // post-purchase return URLs on the user's /<lang> prefix.
-        body: JSON.stringify({ priceId, lang }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
-      track("checkout_started", { priceId });
-      if (data.url) { window.location.href = data.url; return; }
-      // 'email_not_verified' branch removed in concert with the server-
-      // side gate — the API no longer returns it. The only remaining
-      // failure on this path is a generic 'something went wrong'.
-      window.alert(lang === "he" ? "לא הצלחנו לפתוח את הצ'קאאוט. נסו שוב." : "Could not open checkout. Please try again.");
-    } catch (e) {
-      console.error("Checkout error:", e);
-    }
+    window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
   }
 
   function clickBasic() {
@@ -1052,23 +1038,23 @@ export function PricingPageRoute() {
   }
   function clickClear() {
     const priceId = billing === "yearly" ? PRICE_CLEAR_YEARLY : PRICE_CLEAR_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
   function clickDeep() {
     const priceId = billing === "yearly" ? PRICE_DEEP_YEARLY : PRICE_DEEP_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
   function clickFamily() {
     const priceId = billing === "yearly" ? PRICE_FAMILY_YEARLY : PRICE_FAMILY_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
   function clickSchools() {
     const priceId = billing === "yearly" ? PRICE_SCHOOLS_YEARLY : PRICE_SCHOOLS_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
   function clickSchoolsLarge() {
     const priceId = billing === "yearly" ? PRICE_SCHOOLS_LARGE_YEARLY : PRICE_SCHOOLS_LARGE_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: (u) => startCheckout(priceId, u) });
+    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
 
   const clearMonthly   = "$2.99";
