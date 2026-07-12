@@ -169,7 +169,16 @@ export async function POST(req: NextRequest) {
       customer,
       items: [{ price: priceId, quantity: 1 }],
       payment_behavior: "default_incomplete",
-      payment_settings: { save_default_payment_method: "on_subscription" },
+      payment_settings: {
+        save_default_payment_method: "on_subscription",
+        // Card + Link only (Gadi 2026-07-12: Klarna / Amazon Pay confuse
+        // visitors). This list propagates to the pending SetupIntent, so
+        // it controls what the Payment Element displays. Google Pay and
+        // Apple Pay ride on "card" automatically where the device
+        // supports them (Apple Pay additionally needs the domain
+        // registered in the Stripe dashboard).
+        payment_method_types: ["card", "link"],
+      },
       trial_period_days: TRIAL_DAYS,
       trial_settings: { end_behavior: { missing_payment_method: "cancel" } },
       ...(discounts && { discounts }),
