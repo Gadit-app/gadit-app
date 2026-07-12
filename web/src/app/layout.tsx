@@ -11,6 +11,7 @@ import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import MetaPixel from "@/components/MetaPixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -355,6 +356,11 @@ export default async function RootLayout({
           <ServiceWorkerRegister />
           <Analytics />
           <SpeedInsights />
+          {/* Meta Pixel — base code + funnel standard events (see
+              components/MetaPixel.tsx). Never loads on /c/ classroom
+              routes: kids on school devices are not ad-tracking
+              subjects, by policy and by positioning. */}
+          <MetaPixel />
           {/* Affonso affiliate-tracking pixel, sets a 60-day
               affonso_referral cookie when a visitor lands with
               ?ref=CODE in the URL. Captured at checkout time and
