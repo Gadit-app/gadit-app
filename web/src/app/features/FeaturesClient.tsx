@@ -296,6 +296,52 @@ const GROUP_COPY: Record<string, GroupCopy> = {
     },
     bubble: "Now I gad it!",
   },
+  am: {
+    groupTitles: {
+      understand: "ቃሉን መረዳት",
+      learn: <>ቃሉን መረዳት እና <Hl>ማየት</Hl></>,
+      master: <>መረዳት፣ ማየት እና <Hl>ቃሉን ለዘላለም ማስታወስ</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "እያንዳንዱ ትርጉም፣ በአውድ ውስጥ እውነተኛ ዓረፍተ ነገሮች፣ ቃሉ የሚኖርባቸው ፈሊጦች፣ እና ከየት እንደመጣ።",
+      learn:
+        "ለቃሉ ምስል፣ ለልጆች የቀለለ ማብራሪያ፣ የግል ማስታወሻ ደብተር፣ እና እርስዎ የሚጽፉት ዓረፍተ ነገር ከግብረ መልስ ጋር።",
+      master:
+        "ቃሉን ለረጅም ጊዜ የሚያጸኑ የተበጁ ኩዊዞች እና የቃላት ጨዋታዎች።",
+    },
+    family: {
+      title: <>መረዳት፣ ማየት፣ ማስታወስ <Hl>ለመላው ቤተሰብ</Hl></>,
+      sub: "አንድ ምዝገባ ለእያንዳንዱ የቤተሰብ አባል የራሱን መለያ ይሰጣል፣ ከሁሉም የላቁ ባህሪያት ጋር። እስከ 5 ልጆች።",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "ለእያንዳንዱ የቤተሰብ አባል የተለየ መገለጫ",
+          body: "የቃላት ማስታወሻ ደብተር፣ የፍለጋ ታሪክ፣ እና ለእያንዳንዱ ልጅ እና ወላጅ የግል የመማሪያ ተከታታይ ቀናት።",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "መሣሪያን በ QR ኮድ ማገናኘት",
+          body: "ልጅዎ በስልኩ QR ኮድ ይቃኛል እና ይገባል። ያለ የይለፍ ቃል ለዘላለም ተገናኝቶ ይቆያል።",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "የወላጅ ዳሽቦርድ",
+          body: "እያንዳንዱ ልጅ የትኛውን ቃል መቼ እንደፈለገ ይመልከቱ፣ የእያንዳንዱን ፍጥነት በአንድ እይታ ይከታተሉ።",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "በአንድ ምዝገባ እስከ 5 ልጆች",
+          body: "እያንዳንዱ ልጅ ሙሉ የ Deep ባህሪያትን ያገኛል። ወላጅ ለመላው ቤተሰብ አንድ ጊዜ ይከፍላል።",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
   ar: {
     groupTitles: {
       understand: "افهم الكلمة",
@@ -927,6 +973,31 @@ const COPY: Record<string, {
       { id: "compose",     icon: "compose",     tier: "clear", title: "वाक्य लिखें, फ़ीडबैक पाएँ",          body: "शब्द के साथ अपना वाक्य बनाएँ और तुरंत सुधार और फ़ीडबैक पाएँ।" },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "व्यक्तिगत क्विज़",                    body: "आपके सीखे हुए शब्दों पर रोज़ की क्विज़, ताकि वे आपके साथ लम्बे समय तक रहें।" },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "शब्द खेल",                          body: "ऐसे खेल जो आपकी शब्दावली बढ़ाते हैं: मिलान, अनुमान, शब्दों के बीच कनेक्शन बनाना।" },
+    ],
+  },
+  am: {
+    heroEyebrow: "ባህሪያት",
+    heroTitle: "በትርጓሜ ላይ የማይቆም መዝገበ ቃላት።",
+    heroSub: "Gadit እያንዳንዱን ቃል እስከ መጨረሻው ይረዳል። እያንዳንዱ ትርጉም፣ በአውድ ውስጥ እውነተኛ ዓረፍተ ነገሮች፣ ፈሊጦች፣ መነሻ እና ልምምድ። ቃሉ በእውነት ግልጽ እስኪሆን ድረስ። ይህን ቃልን GAD ማድረግ እንለዋለን።",
+    ctaPrimary: "በነጻ ይጀምሩ",
+    ctaSecondary: "ዋጋዎችን ይመልከቱ",
+    signin: "ይግቡ", pricing: "ዋጋዎች", search: "ፍለጋ", features: "ባህሪያት",
+    sectionLabel: "ምን ያገኛሉ",
+    finalCtaTitle: "ለመሞከር ዝግጁ ነዎት?",
+    finalCtaSub: "በ Basic ሙሉ በሙሉ በነጻ ይጀምሩ። ተጨማሪ ሲፈልጉ ብቻ በአንድ ንክኪ ያሻሽሉ።",
+    finalCtaBtn: "አሁን ይጀምሩ",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "እያንዳንዱ ትርጓሜ",                    body: "የቃሉ ሁሉም ትርጉሞች፣ ብርቅዬዎቹም ጭምር፣ በአጠቃቀም ድግግሞሽ ቅደም ተከተል።" },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "በአውድ ውስጥ እውነተኛ ዓረፍተ ነገሮች",      body: "ለእያንዳንዱ ትርጉም ሦስት እውነተኛ ዓረፍተ ነገሮች፣ አውዱ ወዲያውኑ እንዲገባዎት።" },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "ፈሊጦች እና አገላለጾች",                  body: "ቃሉ የሚገኝበት እያንዳንዱ አገላለጽ፣ ከሙሉ የሐረጉ ትርጉም ጋር።" },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "ቃሉ ከየት መጣ",                       body: "ቃሉ የጀመረበት ቋንቋ፣ እና በመጀመሪያ ምን ማለት እንደነበር።" },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "ለልጆች ማብራሪያ",                     body: "ልጅ ያለ ከባድ ቃላት ሊያነበው የሚችል ግልጽ እና ቀላል ቅጂ።" },
+      { id: "image",       icon: "image",       tier: "clear", title: "ቃሉ እንደ ምስል",                      body: "ለቃሉ ልዩ ምስል፣ እያነበቡት ካለው ትክክለኛ ትርጉም ጋር የተዛመደ።" },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "የግል የቃላት ማስታወሻ ደብተር",            body: "ማስታወስ የሚፈልጓቸውን ቃላት ያስቀምጡ። ያለ ኢንተርኔትም ይገኛሉ።" },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "ዓረፍተ ነገር ይጻፉ፣ ግብረ መልስ ያግኙ",       body: "በቃሉ የራስዎን ዓረፍተ ነገር ይጻፉ እና ወዲያውኑ እርማት እና ግብረ መልስ ያግኙ።" },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "የተበጁ ኩዊዞች",                       body: "በተማሯቸው ቃላት ላይ ዕለታዊ ኩዊዝ፣ ለረጅም ጊዜ ከእርስዎ ጋር እንዲቆዩ።" },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "የቃላት ጨዋታዎች",                     body: "የቃላት ክምችትዎን የሚያሳድጉ ጨዋታዎች፡ ማዛመድ፣ መገመት፣ በቃላት መካከል ትስስር መፍጠር።" },
     ],
   },
   ar: {

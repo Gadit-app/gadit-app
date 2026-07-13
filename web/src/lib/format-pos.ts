@@ -110,6 +110,13 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "सहायक क्रिया", "particle": "अव्यय", "numeral": "अंक",
     "proper noun": "व्यक्तिवाचक संज्ञा", "phrase": "पदबंध", "idiom": "मुहावरा",
   },
+  am: {
+    "noun": "ስም", "verb": "ግሥ", "adjective": "ቅጽል", "adverb": "ተውሳከ ግሥ",
+    "preposition": "መስተዋድድ", "conjunction": "መስተጻምር", "pronoun": "ተውላጠ ስም",
+    "interjection": "ቃለ አጋኖ", "determiner": "አመልካች", "article": "መስተኣምር",
+    "auxiliary": "ረዳት ግሥ", "particle": "ንኡስ ቃል", "numeral": "ቁጥር",
+    "proper noun": "የተጸውዖ ስም", "phrase": "ሐረግ", "idiom": "ፈሊጥ",
+  },
 };
 
 export function formatPos(pos: string | null | undefined, lang: Lang): string {

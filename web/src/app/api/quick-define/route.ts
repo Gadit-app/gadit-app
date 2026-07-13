@@ -31,7 +31,7 @@ import { getAdminDb } from "@/lib/firebase-admin";
 export const maxDuration = 10;
 
 const SUPPORTED_LANGS = new Set([
-  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi",
+  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
 ]);
 
 const UI_LANG_NAMES: Record<string, string> = {
@@ -48,6 +48,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   it: "Italian",
   ja: "Japanese",
   hi: "Hindi",
+  am: "Amharic",
 };
 
 // On-the-fly micro-definition for popovers when the cache misses.

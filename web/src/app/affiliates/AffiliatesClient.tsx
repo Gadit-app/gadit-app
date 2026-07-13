@@ -28,7 +28,7 @@
  *   - testimonials would be fake right now, so trust is built via
  *     founder note + product stats instead
  *
- * 9 UI languages, COPY inline so the strings stay close to the markup.
+ * 14 UI languages, COPY inline so the strings stay close to the markup.
  * Same pattern as /play hub. CTAs route to the Affonso-hosted portal
  * — the actual signup, dashboard, coupons and payouts live there.
  */
@@ -54,7 +54,7 @@ const AFFONSO_PORTAL = "https://gaditapp.affonso.io";
 const COMMISSION_RATE = 0.30;
 const DEEP_PRICE = 4.99;
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am";
 
 type Copy = {
   navAffiliates: string;
@@ -199,7 +199,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "מילון אמיתי, לא תרגום יבש",
     why1Desc:
       "כל המשמעויות של מילה, דוגמאות אמיתיות לכל אחת, ניבים, מקור היסטורי ותמונה. Gadit מסביר מילה כמו שצריך, לא כמו שכל מילון רגיל עושה.",
-    why2Title: "עובד ב-11 שפות, כולל עברית מלאה",
+    why2Title: "עובד ב-14 שפות, כולל עברית מלאה",
     why2Desc:
       "עברית, אנגלית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, איטלקית ויפנית. מתאים גם לדוברי עברית וגם להורים של ילדים שלומדים שפה זרה.",
     why3Title: "תוכנן עבור הורים, מורים ולומדים",
@@ -269,7 +269,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "השליחות שלי תמיד הייתה אחת: לעזור לאנשים להבין דברים עד הסוף. כי כשמבינים באמת, אפשר ליישם. וכשאפשר ליישם, אפשר להשיג כל מה שרוצים.\n\nבמהלך השנים ראיתי אנשים חכמים, מוכשרים, שרצו להבין משהו ולא הצליחו. הם חשבו שהם פשוט \"לא מבינים בזה\". אבל זה לא היה הם. זאת הייתה מילה אחת בדרך.\n\nבניתי את Gadit כדי להסיר את המחסום הזה. לא עוד מילון. לא סתם תרגום. כלי שמסביר כל מילה עד הסוף, בפשטות, עם דוגמאות, עם הקשר ועם תמונה שמחיה אותה. אנחנו קוראים לזה לעשות GAD למילה.\n\nתוכנית השותפים פתוחה עכשיו לאנשים שמתחברים לרעיון הזה ורוצים להפיץ אותו הלאה. אם זה אתם, אשמח אם תצטרפו.",
     founderSign: "גדי בן לביא, מייסד Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "שפות ממשק נתמכות",
     stat2Num: "30%",
     stat2Label: "עמלה חוזרת ל-12 חודש",
@@ -292,7 +292,7 @@ const COPY: Record<Lang, Copy> = {
       "תקבלו עמלה רק על החודשים שהלקוח שילם בפועל. אם הוא ביטל אחרי 4 חודשים, קיבלתם 4 חודשים של תגמול. הוגן לשני הצדדים.",
     faq5Q: "האם יש מגבלה על כמות לקוחות?",
     faq5A:
-      "בכלל לא. תוכלו להביא כמה לקוחות שתרצו, מכל מקום בעולם, בכל אחת מ-9 השפות ש-Gadit תומך בהן.",
+      "בכלל לא. תוכלו להביא כמה לקוחות שתרצו, מכל מקום בעולם, בכל אחת מ-14 השפות ש-Gadit תומך בהן.",
     faq6Q: "מה הקישור עושה אם מישהו לא נרשם מיד?",
     faq6A:
       "הקישור זוכר אתכם ל-60 יום. אם מישהו לחץ עליו, התלבט שבועיים, וחזר לרכוש מנוי, ההרשמה עדיין נחשבת שלכם.",
@@ -340,7 +340,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "A real dictionary, not just translation",
     why1Desc:
       "Every meaning of a word, real examples for each, idioms, historical origin, and an image. Gadit explains a word properly, not like a regular dictionary.",
-    why2Title: "Works in 11 languages",
+    why2Title: "Works in 14 languages",
     why2Desc:
       "Hebrew, English, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Italian and Japanese, including full right-to-left support for Hebrew and Arabic. Works for native speakers and for parents of kids learning a second language.",
     why3Title: "Designed for parents, teachers and learners",
@@ -410,7 +410,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "My mission has always been one thing: to help people understand things all the way through. Because when you really understand, you can apply. And when you can apply, you can achieve anything you want.\n\nOver the years I've seen smart, talented people who wanted to understand something and couldn't. They thought they just \"weren't built for it.\" But it wasn't them. It was one word along the way.\n\nI built Gadit to remove that barrier. Not another dictionary. Not just a translation. A tool that explains every word all the way through, simply, with examples, with context, and with an image that brings it to life. We call it GAD-ing a word.\n\nThe partner program is now open to people who connect with this idea and want to help spread it further. If that's you, I'd be glad to have you join.",
     founderSign: "Gadi Ben Lavi, founder of Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "UI languages supported",
     stat2Num: "30%",
     stat2Label: "Recurring commission for 12 months",
@@ -433,7 +433,7 @@ const COPY: Record<Lang, Copy> = {
       "You earn only for the months the customer actually paid. If they cancel after 4 months, you've earned 4 months of reward. Fair to both sides.",
     faq5Q: "Is there a limit on how many customers I can refer?",
     faq5A:
-      "No limit. You can refer as many customers as you like, from anywhere in the world, in any of the 11 languages Gadit supports.",
+      "No limit. You can refer as many customers as you like, from anywhere in the world, in any of the 14 languages Gadit supports.",
     faq6Q: "What does the link do if someone doesn't sign up right away?",
     faq6A:
       "The link remembers you for 60 days. If someone clicks it, hesitates for two weeks, then comes back and subscribes, the signup still credits to you.",
@@ -486,7 +486,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "قاموس حقيقي، لا ترجمة جافة",
     why1Desc:
       "كل معاني الكلمة، أمثلة حقيقية لكل معنى، تعابير اصطلاحية، أصل تاريخي وصورة. Gadit يشرح الكلمة كما ينبغي، لا كما يفعل أي قاموس عادي.",
-    why2Title: "يعمل بـ 11 لغة",
+    why2Title: "يعمل بـ 14 لغة",
     why2Desc:
       "العبرية، الإنجليزية، العربية، الروسية، الإسبانية، البرتغالية، الفرنسية، الألمانية، التشيكية، الإيطالية واليابانية. مناسب للناطقين الأصليين وللآباء الذين يتعلم أطفالهم لغة ثانية.",
     why3Title: "مصمم للآباء والمعلمين والمتعلمين",
@@ -556,7 +556,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "مهمتي كانت دائماً واحدة: مساعدة الناس على فهم الأشياء حتى النهاية. لأنه عندما تفهم حقاً، يمكنك التطبيق. وعندما يمكنك التطبيق، يمكنك تحقيق كل ما تريد.\n\nخلال السنوات رأيت أناساً أذكياء وموهوبين أرادوا فهم شيء ولم يستطيعوا. ظنوا أنهم ببساطة \"لا يفهمون هذا\". لكن لم تكن المشكلة فيهم. كانت كلمة واحدة في الطريق.\n\nبنيت Gadit لإزالة هذه العقبة. ليس قاموساً آخر. ليس مجرد ترجمة. أداة تشرح كل كلمة حتى النهاية، ببساطة، بأمثلة، بسياق وبصورة تنبضها بالحياة. نحن نسمي ذلك القيام بـ GAD لكلمة.\n\nبرنامج الشركاء مفتوح الآن لأناس يتصلون بهذه الفكرة ويريدون نشرها أكثر. إذا كان هذا أنت، يسعدني أن تنضم.",
     founderSign: "غادي بن لافي، مؤسس Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "لغات واجهة مدعومة",
     stat2Num: "30%",
     stat2Label: "عمولة متكررة لمدة 12 شهراً",
@@ -579,7 +579,7 @@ const COPY: Record<Lang, Copy> = {
       "ستحصل على عمولة فقط عن الأشهر التي دفع فيها العميل فعلاً. إذا ألغى بعد 4 أشهر، استلمت 4 أشهر من المكافأة. عادل للطرفين.",
     faq5Q: "هل هناك حد لعدد العملاء؟",
     faq5A:
-      "إطلاقاً. يمكنك جلب أي عدد من العملاء، من أي مكان في العالم، بأي من اللغات الـ 11 التي يدعمها Gadit.",
+      "إطلاقاً. يمكنك جلب أي عدد من العملاء، من أي مكان في العالم، بأي من اللغات الـ 14 التي يدعمها Gadit.",
     faq6Q: "ماذا يفعل الرابط إذا لم يسجّل أحدهم فوراً؟",
     faq6A:
       "الرابط يتذكرك لمدة 60 يوماً. إذا ضغط أحدهم عليه، فكّر أسبوعين، ثم عاد لشراء اشتراك، فإن التسجيل لا يزال محسوباً لك.",
@@ -625,7 +625,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Настоящий словарь, а не сухой перевод",
     why1Desc:
       "Все значения слова, реальные примеры для каждого, идиомы, историческое происхождение и изображение. Gadit объясняет слово так, как и должен, не как обычный словарь.",
-    why2Title: "Работает на 11 языках",
+    why2Title: "Работает на 14 языках",
     why2Desc:
       "Иврит, английский, арабский, русский, испанский, португальский, французский, немецкий, чешский, итальянский и японский. Подходит и носителям языка, и родителям детей, изучающих второй язык.",
     why3Title: "Создан для родителей, учителей и учащихся",
@@ -695,7 +695,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Моя миссия всегда была одна: помогать людям понимать вещи до конца. Потому что когда понимаешь по-настоящему, можно применить. А когда можно применить, можно достичь всего, чего хочешь.\n\nЗа годы я видел умных, талантливых людей, которые хотели что-то понять и не могли. Они думали, что просто «не врубаются». Но дело было не в них. Дело было в одном слове на пути.\n\nЯ построил Gadit, чтобы убрать этот барьер. Не ещё один словарь. Не просто перевод. Инструмент, который объясняет каждое слово до конца, просто, с примерами, с контекстом и с картинкой, которая оживляет его. Мы называем это сделать GAD слову.\n\nПартнёрская программа открыта сейчас для людей, которые откликаются на эту идею и хотят нести её дальше. Если это ты, я буду рад, если ты присоединишься.",
     founderSign: "Гади Бен Лави, основатель Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "поддерживаемых языков интерфейса",
     stat2Num: "30%",
     stat2Label: "повторяющаяся комиссия за 12 месяцев",
@@ -718,7 +718,7 @@ const COPY: Record<Lang, Copy> = {
       "Ты получишь комиссию только за месяцы, которые клиент фактически оплатил. Если он отменил после 4 месяцев, ты получил 4 месяца награды. Честно для обеих сторон.",
     faq5Q: "Есть ли ограничение по количеству клиентов?",
     faq5A:
-      "Совсем нет. Можешь привести сколько угодно клиентов, из любой точки мира, на любом из 11 языков, которые поддерживает Gadit.",
+      "Совсем нет. Можешь привести сколько угодно клиентов, из любой точки мира, на любом из 14 языков, которые поддерживает Gadit.",
     faq6Q: "Что делает ссылка, если кто-то не регистрируется сразу?",
     faq6A:
       "Ссылка помнит тебя 60 дней. Если кто-то нажал, подумал две недели и вернулся оформить подписку, регистрация всё ещё считается твоей.",
@@ -765,7 +765,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Un diccionario de verdad, no una traducción seca",
     why1Desc:
       "Todos los significados de una palabra, ejemplos reales para cada uno, expresiones, origen histórico y una imagen. Gadit explica una palabra como debería, no como cualquier diccionario común.",
-    why2Title: "Funciona en 11 idiomas",
+    why2Title: "Funciona en 14 idiomas",
     why2Desc:
       "Hebreo, inglés, árabe, ruso, español, portugués, francés, alemán, checo, italiano y japonés. Sirve tanto a hablantes nativos como a padres de niños que aprenden una segunda lengua.",
     why3Title: "Diseñado para padres, maestros y estudiantes",
@@ -835,7 +835,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Mi misión siempre fue una: ayudar a las personas a entender las cosas hasta el final. Porque cuando entiendes de verdad, puedes aplicar. Y cuando puedes aplicar, puedes conseguir lo que te propongas.\n\nDurante años vi a personas inteligentes y talentosas que querían entender algo y no podían. Pensaban que simplemente \"no se les daba\". Pero no eran ellas. Era una palabra en el camino.\n\nConstruí Gadit para eliminar esa barrera. No un diccionario más. No solo una traducción. Una herramienta que explica cada palabra hasta el final, con sencillez, con ejemplos, con contexto y con una imagen que la trae a la vida. A esto lo llamamos hacer GAD a una palabra.\n\nEl programa de afiliados está abierto ahora a personas que conectan con esta idea y quieren ayudar a llevarla más lejos. Si eres tú, me encantaría tenerte dentro.",
     founderSign: "Gadi Ben Lavi, fundador de Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "idiomas de interfaz soportados",
     stat2Num: "30%",
     stat2Label: "comisión recurrente durante 12 meses",
@@ -858,7 +858,7 @@ const COPY: Record<Lang, Copy> = {
       "Recibirás comisión solo por los meses que el cliente pagó. Si cancela tras 4 meses, recibiste 4 meses de recompensa. Justo para ambos lados.",
     faq5Q: "¿Hay un límite de clientes?",
     faq5A:
-      "Para nada. Puedes traer todos los clientes que quieras, desde cualquier parte del mundo, en cualquiera de los 11 idiomas que Gadit soporta.",
+      "Para nada. Puedes traer todos los clientes que quieras, desde cualquier parte del mundo, en cualquiera de los 14 idiomas que Gadit soporta.",
     faq6Q: "¿Qué hace el enlace si alguien no se registra de inmediato?",
     faq6A:
       "El enlace te recuerda durante 60 días. Si alguien hace clic, lo piensa dos semanas y vuelve a comprar una suscripción, el registro sigue contando como tuyo.",
@@ -905,7 +905,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Um dicionário de verdade, não uma tradução seca",
     why1Desc:
       "Todos os significados de uma palavra, exemplos reais para cada um, expressões, origem histórica e uma imagem. O Gadit explica uma palavra como deveria, não como qualquer dicionário comum.",
-    why2Title: "Funciona em 11 idiomas",
+    why2Title: "Funciona em 14 idiomas",
     why2Desc:
       "Hebraico, inglês, árabe, russo, espanhol, português, francês, alemão, tcheco, italiano e japonês. Serve tanto a falantes nativos quanto a pais de crianças aprendendo uma segunda língua.",
     why3Title: "Pensado para pais, professores e estudantes",
@@ -975,7 +975,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Minha missão sempre foi uma: ajudar pessoas a entender as coisas até o fim. Porque quando você entende de verdade, dá para aplicar. E quando dá para aplicar, dá para alcançar qualquer coisa.\n\nAo longo dos anos vi pessoas inteligentes, talentosas, que queriam entender algo e não conseguiam. Achavam que simplesmente \"não eram boas nisso\". Mas não era isso. Era uma palavra no caminho.\n\nConstruí o Gadit para tirar essa barreira. Não mais um dicionário. Não só uma tradução. Uma ferramenta que explica cada palavra até o fim, com simplicidade, com exemplos, com contexto e com uma imagem que dá vida a ela. A gente chama isso de fazer GAD numa palavra.\n\nO programa de afiliados está aberto agora para pessoas que se conectam com essa ideia e querem levá-la adiante. Se for você, vou adorar te ter dentro.",
     founderSign: "Gadi Ben Lavi, fundador do Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "idiomas de interface suportados",
     stat2Num: "30%",
     stat2Label: "comissão recorrente por 12 meses",
@@ -998,7 +998,7 @@ const COPY: Record<Lang, Copy> = {
       "Você recebe comissão só pelos meses que o cliente efetivamente pagou. Se ele cancelar depois de 4 meses, você recebeu 4 meses de recompensa. Justo para os dois lados.",
     faq5Q: "Há limite no número de clientes?",
     faq5A:
-      "Nenhum. Você pode trazer quantos clientes quiser, de qualquer lugar do mundo, em qualquer um dos 11 idiomas que o Gadit suporta.",
+      "Nenhum. Você pode trazer quantos clientes quiser, de qualquer lugar do mundo, em qualquer um dos 14 idiomas que o Gadit suporta.",
     faq6Q: "O que o link faz se alguém não se cadastrar na hora?",
     faq6A:
       "O link te lembra por 60 dias. Se alguém clicou, hesitou duas semanas e voltou para assinar, o cadastro ainda conta como seu.",
@@ -1044,7 +1044,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Un vrai dictionnaire, pas une traduction sèche",
     why1Desc:
       "Tous les sens d'un mot, des exemples réels pour chacun, des expressions, l'origine historique et une image. Gadit explique un mot comme il faut, pas comme n'importe quel dictionnaire ordinaire.",
-    why2Title: "Fonctionne en 11 langues",
+    why2Title: "Fonctionne en 14 langues",
     why2Desc:
       "Hébreu, anglais, arabe, russe, espagnol, portugais, français, allemand, tchèque, italien et japonais. Convient autant aux locuteurs natifs qu'aux parents d'enfants qui apprennent une seconde langue.",
     why3Title: "Conçu pour les parents, enseignants et apprenants",
@@ -1114,7 +1114,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Ma mission a toujours été la même : aider les gens à comprendre les choses jusqu'au bout. Parce que quand on comprend vraiment, on peut appliquer. Et quand on peut appliquer, on peut atteindre tout ce qu'on veut.\n\nAu fil des années, j'ai vu des personnes intelligentes, talentueuses, qui voulaient comprendre quelque chose et qui n'y arrivaient pas. Elles pensaient qu'elles « n'étaient pas faites pour ça ». Mais ce n'était pas elles. C'était un mot sur le chemin.\n\nJ'ai construit Gadit pour enlever cette barrière. Pas un dictionnaire de plus. Pas juste une traduction. Un outil qui explique chaque mot jusqu'au bout, simplement, avec des exemples, avec du contexte et avec une image qui le fait vivre. On appelle ça faire GAD à un mot.\n\nLe programme partenaires est ouvert maintenant à des personnes qui se reconnaissent dans cette idée et veulent la porter plus loin. Si c'est vous, je serais ravi de vous compter parmi nous.",
     founderSign: "Gadi Ben Lavi, fondateur de Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "langues d'interface prises en charge",
     stat2Num: "30%",
     stat2Label: "commission récurrente pendant 12 mois",
@@ -1137,7 +1137,7 @@ const COPY: Record<Lang, Copy> = {
       "Vous ne recevez de commission que pour les mois où le client a effectivement payé. S'il annule après 4 mois, vous avez reçu 4 mois de récompense. Équitable des deux côtés.",
     faq5Q: "Y a-t-il une limite au nombre de clients ?",
     faq5A:
-      "Aucune. Vous pouvez amener autant de clients que vous voulez, depuis n'importe où dans le monde, dans n'importe laquelle des 11 langues que Gadit prend en charge.",
+      "Aucune. Vous pouvez amener autant de clients que vous voulez, depuis n'importe où dans le monde, dans n'importe laquelle des 14 langues que Gadit prend en charge.",
     faq6Q: "Que fait le lien si quelqu'un ne s'inscrit pas tout de suite ?",
     faq6A:
       "Le lien vous garde en mémoire pendant 60 jours. Si quelqu'un clique, hésite deux semaines et revient s'abonner, l'inscription compte toujours pour vous.",
@@ -1183,7 +1183,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Ein echtes Wörterbuch, keine trockene Übersetzung",
     why1Desc:
       "Alle Bedeutungen eines Wortes, echte Beispiele für jede, Redewendungen, historische Herkunft und ein Bild. Gadit erklärt ein Wort so, wie es sein sollte, nicht wie ein gewöhnliches Wörterbuch.",
-    why2Title: "Funktioniert in 11 Sprachen",
+    why2Title: "Funktioniert in 14 Sprachen",
     why2Desc:
       "Hebräisch, Englisch, Arabisch, Russisch, Spanisch, Portugiesisch, Französisch, Deutsch, Tschechisch, Italienisch und Japanisch. Geeignet für Muttersprachler ebenso wie für Eltern von Kindern, die eine zweite Sprache lernen.",
     why3Title: "Entwickelt für Eltern, Lehrer und Lernende",
@@ -1253,7 +1253,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Meine Mission war immer eine: Menschen zu helfen, Dinge bis zum Ende zu verstehen. Denn wenn man wirklich versteht, kann man umsetzen. Und wenn man umsetzen kann, kann man alles erreichen, was man will.\n\nÜber die Jahre habe ich kluge, talentierte Menschen gesehen, die etwas verstehen wollten und es nicht konnten. Sie dachten, sie wären einfach \"nicht dafür gemacht\". Aber sie waren es nicht. Es war ein Wort auf dem Weg.\n\nIch habe Gadit gebaut, um diese Hürde zu beseitigen. Nicht noch ein Wörterbuch. Nicht nur eine Übersetzung. Ein Werkzeug, das jedes Wort bis zum Ende erklärt, einfach, mit Beispielen, mit Kontext und mit einem Bild, das es lebendig macht. Wir nennen das ein Wort GADen.\n\nDas Partnerprogramm ist jetzt offen für Menschen, die sich mit dieser Idee verbinden und sie weitertragen möchten. Wenn das du bist, freue ich mich, wenn du dabei bist.",
     founderSign: "Gadi Ben Lavi, Gründer von Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "unterstützte Oberflächensprachen",
     stat2Num: "30%",
     stat2Label: "wiederkehrende Provision für 12 Monate",
@@ -1276,7 +1276,7 @@ const COPY: Record<Lang, Copy> = {
       "Du bekommst Provision nur für die Monate, die der Kunde tatsächlich gezahlt hat. Kündigt er nach 4 Monaten, hast du 4 Monate Belohnung bekommen. Fair für beide Seiten.",
     faq5Q: "Gibt es eine Grenze für die Anzahl der Kunden?",
     faq5A:
-      "Gar keine. Du kannst so viele Kunden bringen, wie du willst, von überall auf der Welt, in jeder der 11 Sprachen, die Gadit unterstützt.",
+      "Gar keine. Du kannst so viele Kunden bringen, wie du willst, von überall auf der Welt, in jeder der 14 Sprachen, die Gadit unterstützt.",
     faq6Q: "Was macht der Link, wenn sich jemand nicht sofort anmeldet?",
     faq6A:
       "Der Link erinnert sich 60 Tage an dich. Wenn jemand klickt, zwei Wochen zögert und dann zurückkommt, um ein Abo abzuschließen, gilt die Anmeldung weiterhin für dich.",
@@ -1323,7 +1323,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Skutečný slovník, ne suchý překlad",
     why1Desc:
       "Všechny významy slova, skutečné příklady ke každému, idiomy, historický původ a obrázek. Gadit vysvětluje slovo tak, jak má, ne jako kterýkoliv běžný slovník.",
-    why2Title: "Funguje v 11 jazycích",
+    why2Title: "Funguje ve 14 jazycích",
     why2Desc:
       "Hebrejsky, anglicky, arabsky, rusky, španělsky, portugalsky, francouzsky, německy, česky, italsky a japonsky. Vhodné pro rodilé mluvčí i pro rodiče dětí, které se učí druhý jazyk.",
     why3Title: "Navržen pro rodiče, učitele a studenty",
@@ -1393,7 +1393,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Moje poslání bylo vždy jedno: pomáhat lidem rozumět věcem až do konce. Protože když opravdu rozumíš, můžeš to uplatnit. A když to můžeš uplatnit, můžeš dosáhnout všeho, co chceš.\n\nBěhem let jsem viděl chytré, talentované lidi, kteří chtěli něčemu porozumět a nedařilo se jim to. Mysleli si, že na to prostě \"nemají\". Ale nebyli to oni. Bylo to jedno slovo v cestě.\n\nPostavil jsem Gadit, abych tuhle překážku odstranil. Ne další slovník. Ne jen překlad. Nástroj, který vysvětlí každé slovo až do konce, jednoduše, s příklady, s kontextem a s obrázkem, který ho oživí. Říkáme tomu udělat slovu GAD.\n\nPartnerský program je teď otevřený lidem, kteří se s touto myšlenkou ztotožňují a chtějí ji nést dál. Pokud jsi to ty, budu rád, když se přidáš.",
     founderSign: "Gadi Ben Lavi, zakladatel Gaditu",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "podporovaných jazyků rozhraní",
     stat2Num: "30%",
     stat2Label: "opakovaná provize po 12 měsíců",
@@ -1416,7 +1416,7 @@ const COPY: Record<Lang, Copy> = {
       "Provizi dostaneš jen za měsíce, které zákazník skutečně zaplatil. Pokud zruší po 4 měsících, dostal jsi 4 měsíce odměny. Spravedlivé pro obě strany.",
     faq5Q: "Existuje limit na počet zákazníků?",
     faq5A:
-      "Vůbec ne. Můžeš přivést kolik chceš zákazníků, odkudkoliv na světě, v jakémkoliv z 11 jazyků, které Gadit podporuje.",
+      "Vůbec ne. Můžeš přivést kolik chceš zákazníků, odkudkoliv na světě, v jakémkoliv ze 14 jazyků, které Gadit podporuje.",
     faq6Q: "Co dělá odkaz, když se někdo nepřihlásí hned?",
     faq6A:
       "Odkaz si tě pamatuje 60 dní. Pokud někdo klikne, dva týdny váhá a vrátí se koupit předplatné, registrace stále patří tobě.",
@@ -1463,7 +1463,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Skutočný slovník, nie suchý preklad",
     why1Desc:
       "Všetky významy slova, skutočné príklady ku každému, idiómy, historický pôvod a obrázok. Gadit vysvetľuje slovo tak, ako má, nie ako bežný slovník.",
-    why2Title: "Funguje v 11 jazykoch",
+    why2Title: "Funguje v 14 jazykoch",
     why2Desc:
       "Hebrejsky, anglicky, arabsky, rusky, španielsky, portugalsky, francúzsky, nemecky, česky, slovensky, taliansky a japonsky. Vhodné pre rodených hovoriacich aj pre rodičov detí, ktoré sa učia druhý jazyk.",
     why3Title: "Navrhnutý pre rodičov, učiteľov a študentov",
@@ -1533,7 +1533,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "Moje poslanie bolo vždy jedno: pomáhať ľuďom rozumieť veciam až do konca. Pretože keď naozaj rozumieš, môžeš to uplatniť. A keď to môžeš uplatniť, môžeš dosiahnuť všetko, čo chceš.\n\nPočas rokov som videl bystrých, talentovaných ľudí, ktorí chceli niečomu porozumieť a nedarilo sa im to. Mysleli si, že na to jednoducho \"nemajú\". Ale neboli to oni. Bolo to jedno slovo v ceste.\n\nPostavil som Gadit, aby som túto prekážku odstránil. Nie ďalší slovník. Nie len preklad. Nástroj, ktorý vysvetlí každé slovo až do konca, jednoducho, s príkladmi, s kontextom a s obrázkom, ktorý ho oživí. Hovoríme tomu urobiť slovu GAD.\n\nPartnerský program je teraz otvorený ľuďom, ktorí sa s touto myšlienkou stotožňujú a chcú ju niesť ďalej. Ak si to ty, budem rád, keď sa pridáš.",
     founderSign: "Gadi Ben Lavi, zakladateľ Gaditu",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "podporovaných jazykov rozhrania",
     stat2Num: "30%",
     stat2Label: "opakovaná provízia po 12 mesiacov",
@@ -1556,7 +1556,7 @@ const COPY: Record<Lang, Copy> = {
       "Províziu dostaneš len za mesiace, ktoré zákazník skutočne zaplatil. Ak zruší po 4 mesiacoch, dostal si 4 mesiace odmeny. Spravodlivé pre obe strany.",
     faq5Q: "Existuje limit na počet zákazníkov?",
     faq5A:
-      "Vôbec nie. Môžeš priviesť koľko chceš zákazníkov, odkiaľkoľvek na svete, v akomkoľvek z 11 jazykov, ktoré Gadit podporuje.",
+      "Vôbec nie. Môžeš priviesť koľko chceš zákazníkov, odkiaľkoľvek na svete, v akomkoľvek zo 14 jazykov, ktoré Gadit podporuje.",
     faq6Q: "Čo robí odkaz, keď sa niekto neprihlási hneď?",
     faq6A:
       "Odkaz si ťa pamätá 60 dní. Ak niekto klikne, dva týždne váha a vráti sa kúpiť predplatné, registrácia stále patrí tebe.",
@@ -1603,7 +1603,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "Un dizionario vero, non una traduzione asciutta",
     why1Desc:
       "Tutti i significati di una parola, esempi reali per ciascuno, modi di dire, origine storica e un'immagine. Gadit spiega una parola come si deve, non come fa un dizionario qualsiasi.",
-    why2Title: "Funziona in 11 lingue",
+    why2Title: "Funziona in 14 lingue",
     why2Desc:
       "Ebraico, inglese, arabo, russo, spagnolo, portoghese, francese, tedesco, ceco, italiano e giapponese. Adatto a madrelingua e a genitori di bambini che imparano una seconda lingua.",
     why3Title: "Pensato per genitori, insegnanti e studenti",
@@ -1673,7 +1673,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "La mia missione è sempre stata una: aiutare le persone a capire le cose fino in fondo. Perché quando capisci davvero, puoi applicare. E quando puoi applicare, puoi raggiungere qualsiasi cosa tu voglia.\n\nNel corso degli anni ho visto persone intelligenti, talentuose, che volevano capire qualcosa e non ci riuscivano. Pensavano di essere semplicemente \"non portate per quello\". Ma non erano loro. Era una parola sulla strada.\n\nHo costruito Gadit per togliere quella barriera. Non un altro dizionario. Non solo una traduzione. Uno strumento che spiega ogni parola fino in fondo, con semplicità, con esempi, con contesto e con un'immagine che la fa vivere. Lo chiamiamo fare GAD a una parola.\n\nIl programma partner è ora aperto a persone che si riconoscono in questa idea e vogliono portarla avanti. Se sei tu, sarò felice di averti dentro.",
     founderSign: "Gadi Ben Lavi, fondatore di Gadit",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "lingue dell'interfaccia supportate",
     stat2Num: "30%",
     stat2Label: "commissione ricorrente per 12 mesi",
@@ -1696,7 +1696,7 @@ const COPY: Record<Lang, Copy> = {
       "Riceverai commissione solo per i mesi in cui il cliente ha effettivamente pagato. Se annulla dopo 4 mesi, hai ricevuto 4 mesi di ricompensa. Giusto per entrambe le parti.",
     faq5Q: "C'è un limite al numero di clienti?",
     faq5A:
-      "Per niente. Puoi portare quanti clienti vuoi, da qualsiasi parte del mondo, in una qualsiasi delle 11 lingue supportate da Gadit.",
+      "Per niente. Puoi portare quanti clienti vuoi, da qualsiasi parte del mondo, in una qualsiasi delle 14 lingue supportate da Gadit.",
     faq6Q: "Cosa fa il link se qualcuno non si iscrive subito?",
     faq6A:
       "Il link ti ricorda per 60 giorni. Se qualcuno clicca, esita due settimane e torna a comprare un abbonamento, l'iscrizione conta ancora come tua.",
@@ -1743,7 +1743,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "本物の辞書、味気ない翻訳ではない",
     why1Desc:
       "単語のすべての意味、それぞれの実例、イディオム、歴史的な語源、そして画像。Gadit は普通の辞書のようにではなく、本来あるべき形で単語を説明します。",
-    why2Title: "11言語に対応",
+    why2Title: "14言語に対応",
     why2Desc:
       "ヘブライ語、英語、アラビア語、ロシア語、スペイン語、ポルトガル語、フランス語、ドイツ語、チェコ語、イタリア語、日本語。ネイティブの方にも、第二言語を学ぶ子どもの保護者の方にも合います。",
     why3Title: "保護者・教師・学習者のために設計",
@@ -1813,7 +1813,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "私のミッションはずっと一つでした：人々が物事を最後まで理解できるよう手伝うこと。本当に理解できれば、応用できる。応用できれば、望むものすべてを達成できる。\n\n長年にわたり、何かを理解したいのに理解できない、賢く才能ある人たちを見てきました。彼らは自分たちが「これが向いていない」だけだと思っていました。でもそれは彼らの問題ではありませんでした。途中にあった一つの言葉のせいでした。\n\nその障壁を取り除くために Gadit を作りました。もう一つの辞書ではありません。ただの翻訳でもありません。すべての単語を最後まで説明するツールです。シンプルに、例とともに、文脈とともに、そして単語を生き生きと見せる画像とともに。私たちはこれを単語に GAD する、と呼んでいます。\n\nパートナープログラムは今、この考えに共鳴し、それをさらに広めたい方々に開かれています。あなたがそうなら、参加していただけるとうれしいです。",
     founderSign: "ガディ・ベン・ラビ、Gadit 創業者",
-    stat1Num: "9",
+    stat1Num: "14",
     stat1Label: "対応インターフェース言語",
     stat2Num: "30%",
     stat2Label: "12か月の継続コミッション",
@@ -1836,7 +1836,7 @@ const COPY: Record<Lang, Copy> = {
       "顧客が実際に支払った月の分だけコミッションを受け取ります。4か月でキャンセルした場合、4か月分の報酬を受け取ったことになります。両者にとって公正です。",
     faq5Q: "顧客数に上限はありますか？",
     faq5A:
-      "ありません。Gadit が対応する11言語のいずれかで、世界のどこからでも、好きなだけ顧客を連れてこられます。",
+      "ありません。Gadit が対応する14言語のいずれかで、世界のどこからでも、好きなだけ顧客を連れてこられます。",
     faq6Q: "すぐにサインアップしなかった場合、リンクはどうなりますか？",
     faq6A:
       "リンクはあなたを60日間記憶します。誰かがクリックして2週間迷い、それから戻ってサブスクを購入しても、登録はあなたのものとカウントされます。",
@@ -1882,7 +1882,7 @@ const COPY: Record<Lang, Copy> = {
     why1Title: "असली शब्दकोश, सिर्फ़ अनुवाद नहीं",
     why1Desc:
       "हर शब्द के सभी अर्थ, हर अर्थ के असली उदाहरण, मुहावरे, ऐतिहासिक उत्पत्ति और तस्वीरें। Gadit शब्दों को वैसे समझाता है जैसे शब्दकोश को असल में समझाना चाहिए।",
-    why2Title: "13 भाषाएँ समर्थित",
+    why2Title: "14 भाषाएँ समर्थित",
     why2Desc:
       "हिब्रू, अंग्रेज़ी, अरबी, रूसी, स्पैनिश, पुर्तगाली, फ़्रेंच, जर्मन, चेक, स्लोवाक, इतालवी, जापानी और हिन्दी। नेटिव बोलने वाले, या दूसरी भाषा सीखते बच्चों के माता-पिता, दोनों के लिए।",
     why3Title: "माता-पिता, शिक्षकों और सीखने वालों के लिए बना",
@@ -1952,7 +1952,7 @@ const COPY: Record<Lang, Copy> = {
     founderBody:
       "मेरा मिशन हमेशा एक रहा है: लोगों को चीज़ें पूरी तरह समझने में मदद करना। जब आप सच में समझते हैं, तो आप लागू कर सकते हैं। जब आप लागू कर सकते हैं, तो आप अपनी मनचाही चीज़ें हासिल कर सकते हैं।\n\nसालों से मैंने ऐसे होशियार, प्रतिभाशाली लोग देखे जो कुछ समझना चाहते थे और नहीं समझ पाते थे। उन्होंने सोचा कि वे \"इसके लिए नहीं बने\"। पर समस्या उनकी नहीं थी। समस्या उनके रास्ते में एक शब्द की थी।\n\nइसी रुकावट को हटाने के लिए मैंने Gadit बनाया। यह कोई और शब्दकोश नहीं है। यह सिर्फ़ अनुवाद नहीं है। यह एक ऐसा टूल है जो हर शब्द को पूरी तरह समझाता है। सरलता से, उदाहरणों के साथ, संदर्भ में और एक तस्वीर के साथ जो शब्द को ज़िंदा करती है। हम इसे शब्द को GAD करना कहते हैं।\n\nपार्टनर प्रोग्राम अब उन लोगों के लिए खुला है जो इस विचार से जुड़ते हैं और इसे और आगे फैलाना चाहते हैं। अगर आप ऐसे हैं, तो हमें आपको शामिल करने में ख़ुशी होगी।",
     founderSign: "गादी बेन लावी, Gadit के संस्थापक",
-    stat1Num: "13",
+    stat1Num: "14",
     stat1Label: "समर्थित इंटरफ़ेस भाषाएँ",
     stat2Num: "30%",
     stat2Label: "12 महीने आजीवन कमीशन",
@@ -1975,7 +1975,7 @@ const COPY: Record<Lang, Copy> = {
       "आप ग्राहक के असल भुगतान के महीनों पर ही कमीशन कमाते हैं। 4 महीनों के बाद रद्द किया, 4 महीनों का रिवॉर्ड। दोनों के लिए न्यायसंगत।",
     faq5Q: "क्या ग्राहक संख्या की सीमा है?",
     faq5A:
-      "नहीं। आप दुनिया में कहीं से, Gadit की 13 भाषाओं में से किसी में भी जितने चाहें ग्राहक ला सकते हैं।",
+      "नहीं। आप दुनिया में कहीं से, Gadit की 14 भाषाओं में से किसी में भी जितने चाहें ग्राहक ला सकते हैं।",
     faq6Q: "अगर ग्राहक तुरंत साइन अप नहीं करे, तो लिंक का क्या?",
     faq6A:
       "लिंक आपको 60 दिनों तक याद रखता है। कोई क्लिक करके 2 हफ़्ते सोचे, फिर लौटे और सब्सक्राइब करे, वह साइनअप आपका गिना जाएगा।",
@@ -2000,6 +2000,145 @@ const COPY: Record<Lang, Copy> = {
     finalCta: "अपना निजी लिंक मुफ्त पाएँ",
     termsLink: "पार्टनर प्रोग्राम की शर्तें",
   },
+  am: {
+    navAffiliates: "አጋሮች",
+    topbarSignIn: "አስቀድመው አጋር ነዎት? ይግቡ",
+
+    heroEyebrow: "የአጋርነት ፕሮግራም",
+    heroTitle: "Gaditን ይምከሩ።\nወርሃዊ ገቢ ያግኙ።",
+    heroSubtitle:
+      "የግል ሊንክዎን ያጋራሉ፣ እኛም በመጀመሪያው ዓመት 30% ተደጋጋሚ ኮሚሽን እንከፍልዎታለን። 10 ንቁ ደንበኞችን ያምጡ፣ Active Partner ይሁኑ እና ለዕድሜ ልክ 10% ያግኙ።",
+    heroCtaPrimary: "የግል ሊንክዎን በነጻ ያግኙ",
+    heroProofA: "በመጀመሪያው ዓመት 30%",
+    heroProofB: "ለዕድሜ ልክ 10% (Active Partner)",
+    heroProofC: "ወዲያውኑ ሊንክ",
+    heroProofD: "ለClear እና Deep ተመዝጋቢዎች",
+
+    whyEyebrow: "መጀመሪያ ምርቱ",
+    whyTitle: "Gaditን መምከር ለምን ዋጋ አለው",
+    whySubtitle:
+      "የሚያምኑበትን ነገር ብቻ ነው የሚመክሩት። ታዳሚዎችዎ በእውነት ምን እንደሚያገኙ እና ለምን እንደሚያመሰግኑዎት እነሆ።",
+    why1Title: "እውነተኛ መዝገበ ቃላት፣ ተራ ትርጉም አይደለም",
+    why1Desc:
+      "የቃል ሁሉም ትርጉሞች፣ ለእያንዳንዱ እውነተኛ ምሳሌዎች፣ ፈሊጦች፣ ታሪካዊ መነሻ እና ምስል። Gadit ቃልን እንደሚገባ ያብራራል፣ እንደ ተራ መዝገበ ቃላት አይደለም።",
+    why2Title: "በ14 ቋንቋዎች ይሰራል",
+    why2Desc:
+      "ዕብራይስጥ፣ እንግሊዝኛ፣ ዓረብኛ፣ ሩስያኛ፣ ስፓኒሽ፣ ፖርቱጋልኛ፣ ፈረንሳይኛ፣ ጀርመንኛ፣ ቼክኛ፣ ስሎቫክኛ፣ ጣልያንኛ፣ ጃፓንኛ እና ሂንዲ። ለቋንቋው ተወላጅ ተናጋሪዎችም ሆነ ሁለተኛ ቋንቋ ለሚማሩ ልጆች ወላጆች ይስማማል።",
+    why3Title: "ለወላጆች፣ ለመምህራን እና ለተማሪዎች የተነደፈ",
+    why3Desc:
+      "ለልጆች ቀላል ማብራሪያ፣ ጥያቄና መልስ ጨዋታዎች፣ የቃላት ጨዋታዎች እና የግል ማስታወሻ ደብተር። Gadit ለምሁራን አይደለም። ለቤት፣ ለክፍል እና ለWhatsApp ቡድን ነው።",
+
+    whoEyebrow: "ለማን ነው",
+    whoTitle: "ማህበረሰባቸው የሚያምናቸው ሰዎች",
+    who1Title: "የይዘት ፈጣሪዎች እና የትምህርት ብሎገሮች",
+    who1Desc:
+      "ስለ ቋንቋ፣ መማር ወይም ትምህርት የሚጽፉ፣ የሚቀርጹ ወይም የሚያጋሩ ከሆነ፣ ታዳሚዎችዎ አስቀድመው ምክሮችዎን ያምናሉ።",
+    who2Title: "መምህራን፣ አስጠኚዎች እና የትምህርት ባለሙያዎች",
+    who2Desc:
+      "ከተማሪዎች እና ከወላጆች ጋር የሚሰሩ ከሆነ፣ ስለ ትምህርታዊ መሳሪያ የሚሰጡት ምክር ከሙያዊ እምነት የመነጨ ነው።",
+    who3Title: "በማህበረሰቦች ውስጥ ንቁ ወላጆች",
+    who3Desc:
+      "የወላጆች ቡድኖች፣ የክፍል ውይይቶች፣ የኢሜይል ዝርዝሮች፣ ወላጆች ልጆቻቸውን ስለሚረዱ መሳሪያዎች እርስ በርስ በሚጠያየቁበት ቦታ ሁሉ።",
+
+    howEyebrow: "እንዴት ይሰራል",
+    howTitle: "ሶስት እርምጃዎች፣ ምንም ቴክኒካዊ እውቀት አያስፈልግም",
+    how1Title: "ለፕሮግራሙ ይመዝገቡ",
+    how1Desc:
+      "አጭር ቅጽ ነው። በአንድ ደቂቃ ውስጥ ራስ-ሰር ማጽደቅ፣ የግል ሊንክ እና የመቆጣጠሪያ ሰሌዳ ያገኛሉ።",
+    how2Title: "ሊንክዎን ያጋሩ",
+    how2Desc:
+      "በወላጆች WhatsApp፣ በኢሜይል ዝርዝርዎ፣ በInstagram ስቶሪ፣ በብሎግ ወይም በአካል። ለታዳሚዎችዎ በሚስማማ ቦታ ሁሉ።",
+    how3Title: "ከእርስዎ ጋር የሚያድግ ሽልማት",
+    how3Desc:
+      "በሊንክዎ ለሚመዘገብ እያንዳንዱ ደንበኛ ለ12 ወራት 30% ተደጋጋሚ ኮሚሽን። 10 ንቁ ደንበኞችን ሲያመጡ Active Partner ይሆናሉ፣ ከ13ኛው ወር ጀምሮ በሁሉም ደንበኞችዎ ላይ ተጨማሪ 10% የዕድሜ ልክ ኮሚሽን ይከፈትልዎታል።",
+    midCta1: "አሁን ይጀምሩ። አንድ ደቂቃ ይወስዳል።",
+
+    getEyebrow: "ምን ያገኛሉ",
+    getTitle: "ብቻዎን አንተውዎትም",
+    getSubtitle:
+      "በህይወትዎ ምንም ነገር አስተዋውቀው የማያውቁ ከሆነ፣ ችግር የለም። ሁሉም ነገር ተዘጋጅቶልዎታል።",
+    get1Title: "የራስዎ የግል ሊንክ",
+    get1Desc:
+      "በየትኛውም ቦታ ሊያጋሩት የሚችሉት አጭር እና ልዩ ሊንክ። አንድ ሰው ጠቅ አድርጎ ከ60 ቀናት በኋላ ቢመለስም፣ ምዝገባው አሁንም ለእርስዎ ይቆጠራል።",
+    get2Title: "ለማጋራት ዝግጁ ጽሑፎች",
+    get2Desc:
+      "ለWhatsApp እና Facebook ዝግጁ ልጥፎች፣ ለወላጆች የተዘጋጀ ኢሜይል፣ የInstagram ስቶሪ ሃሳቦች። ኮፒ አድርገው ያጋሩ ብቻ።",
+    get3Title: "ንጹህ የመቆጣጠሪያ ሰሌዳ",
+    get3Desc:
+      "በቅጽበት ይመልከቱ፣ ስንት ሰው ሊንኩን እንደጫነ፣ ስንት እንደተመዘገበ፣ ስንት እንዳሻሻለ እና ምን ያህል እንዳገኙ። ሙሉ ግልጽነት።",
+    get4Title: "የግል ድጋፍ",
+    get4Desc:
+      "ስለ ፕሮግራሙ ጥያቄ አለዎት? በሊንኩ ላይ ችግር ገጠመዎት? የሚጠይቁት አካል አለ። በአንድ የስራ ቀን ውስጥ እንመልሳለን።",
+
+    earnEyebrow: "ምን ያህል ማግኘት ይችላሉ",
+    earnTitle: "ማንሸራተቻውን ያንቀሳቅሱ እና ይመልከቱ",
+    earnSubtitle:
+      "ቁጥሮቹ በታዳሚዎችዎ እና በሚያጋሩት ላይ ይወሰናሉ። እንዴት እንደሚጠራቀም እነሆ። የተወሰነ መጠን ቃል አንገባም፣ ግን ይህ የመጠኑ ደረጃ እውነተኛ ነው።",
+    calcSubsLabel: "በወር ንቁ የDeep ተመዝጋቢዎች",
+    calcMonthly: "ወርሃዊ ሽልማት",
+    calcYearly: "በ12 ወራት",
+    calcUnitSuffix: "ተመዝጋቢዎች",
+    tableHeaderSubs: "ተመዝጋቢዎች",
+    tableHeaderMonthly: "ወርሃዊ ሽልማት",
+    tableHeaderYearly: "በ12 ወራት",
+    earnNote:
+      "ስሌቱ በDeep ምዝገባ ($4.99/ወር) እና በመጀመሪያው ዓመት 30% ኮሚሽን ላይ የተመሰረተ ነው። ከ13ኛው ወር ጀምሮ Active Partners በእነዚያው ደንበኞች ላይ ተጨማሪ 10% የዕድሜ ልክ ኮሚሽን ያገኛሉ። ሽልማቶች ከ30 ቀናት የመጠበቂያ ጊዜ በኋላ ይለቀቃሉ፣ ክፍያም $50 ሲጠራቀም ይፈጸማል ($50 ዝቅተኛው የክፍያ ደረጃ ነው፣ ጣሪያ አይደለም)።",
+    midCta2: "ለመጀመር ዝግጁ ነዎት? ሊንክዎን ያግኙ",
+
+    trustEyebrow: "ለምን ያምኑናል",
+    trustTitle: "በመጀመሪያ ደረጃው ላይ ያለ የመስራች አጋሮች ፕሮግራም",
+    founderHeading: "Gaditን ለምን ፈጠርኩት?",
+    founderBody:
+      "ተልእኮዬ ሁልጊዜ አንድ ነበር፣ ሰዎች ነገሮችን እስከ መጨረሻው እንዲረዱ መርዳት። ምክንያቱም በእውነት ሲረዱ፣ መተግበር ይችላሉ። መተግበር ሲችሉ ደግሞ የፈለጉትን ሁሉ ማሳካት ይችላሉ።\n\nበዓመታት ውስጥ አንድን ነገር መረዳት ፈልገው ያልቻሉ ብልህ እና ተሰጥኦ ያላቸው ሰዎችን አይቻለሁ። እነሱም በቀላሉ \"ይህ ለእኔ አይሆንም\" ብለው አሰቡ። ግን ችግሩ እነሱ አልነበሩም። በመንገዱ ላይ ያለ አንድ ቃል ነበር።\n\nይህን እንቅፋት ለማስወገድ Gaditን ገነባሁ። ሌላ መዝገበ ቃላት አይደለም። ተራ ትርጉም አይደለም። እያንዳንዱን ቃል እስከ መጨረሻው በቀላሉ፣ በምሳሌዎች፣ በዐውድ እና ቃሉን ሕያው በሚያደርግ ምስል የሚያብራራ መሳሪያ ነው። ይህን ቃልን GAD ማድረግ እንለዋለን።\n\nየአጋርነት ፕሮግራሙ አሁን ከዚህ ሃሳብ ጋር ለሚገናኙ እና የበለጠ ለማስፋፋት ለሚፈልጉ ሰዎች ክፍት ነው። ይህ እርስዎ ከሆኑ፣ ቢቀላቀሉን ደስ ይለናል።",
+    founderSign: "ጋዲ ቤን ላቪ፣ የGadit መስራች",
+    stat1Num: "14",
+    stat1Label: "የሚደገፉ የገጽታ ቋንቋዎች",
+    stat2Num: "30%",
+    stat2Label: "ለ12 ወራት ተደጋጋሚ ኮሚሽን",
+    stat3Num: "60",
+    stat3Label: "ቀናት፣ ሊንኩ የሚያስታውስበት ጊዜ",
+
+    faqEyebrow: "ተደጋጋሚ ጥያቄዎች",
+    faqTitle: "አስቀድሞ ማወቅ የሚገባ",
+    faq1Q: "የግብይት ባለሙያ መሆን አለብኝ?",
+    faq1A:
+      "አይ። አብዛኞቹ አጋሮቻችን ምንም ነገር አስተዋውቀው የማያውቁ ወላጆች፣ መምህራን እና ብሎገሮች ናቸው። የሚያስፈልገው ሊንኩን ከGadit ተጠቃሚ ሊሆኑ ከሚችሉ ሰዎች ጋር ማጋራት ብቻ ነው።",
+    faq2Q: "በWhatsApp ወይም Facebook ቡድኖች ውስጥ ማጋራት ይቻላል?",
+    faq2A:
+      "አዎ፣ ይህም ለታዳሚዎቻችን ከምርጥ መንገዶች አንዱ ነው። ወላጆች በቡድኖች ውስጥ ስለ መሳሪያዎች እርስ በርስ ይጠያየቃሉ፣ እዚያም ምክርዎ ከሁሉም በላይ ክብደት አለው።",
+    faq3Q: "ክፍያ መቼ አገኛለሁ?",
+    faq3A:
+      "$50 ከተጠራቀመ በኋላ በየወሩ መጨረሻ ወርሃዊ ክፍያ ይፈጸማል። $50 ዝቅተኛው የክፍያ ደረጃ ነው፣ ጣሪያ አይደለም። ከዚያ በላይ ብዙ ማግኘት ይችላሉ፣ ደረጃውን ሲያልፉ ብቻ ትክክለኛውን ክፍያ ይቀበላሉ።",
+    faq4Q: "ያመጣሁት ደንበኛ ቢሰርዝስ?",
+    faq4A:
+      "ደንበኛው በትክክል ለከፈለባቸው ወራት ብቻ ነው የሚያገኙት። ከ4 ወራት በኋላ ከሰረዘ፣ የ4 ወራት ሽልማት አግኝተዋል። ለሁለቱም ወገን ፍትሃዊ ነው።",
+    faq5Q: "በደንበኞች ብዛት ላይ ገደብ አለ?",
+    faq5A:
+      "ምንም ገደብ የለም። ከየትኛውም የዓለም ክፍል፣ Gadit ከሚደግፋቸው 14 ቋንቋዎች በማንኛውም፣ የፈለጉትን ያህል ደንበኞች ማምጣት ይችላሉ።",
+    faq6Q: "አንድ ሰው ወዲያውኑ ካልተመዘገበ ሊንኩ ምን ያደርጋል?",
+    faq6A:
+      "ሊንኩ ለ60 ቀናት ያስታውስዎታል። አንድ ሰው ጠቅ አድርጎ ሁለት ሳምንት ካሰበ በኋላ ተመልሶ ቢመዘገብ፣ ምዝገባው አሁንም ለእርስዎ ይቆጠራል።",
+    faq7Q: "ስለ ዓመታዊ ምዝገባስ?",
+    faq7A:
+      "በዓመታዊ እቅድ ከመጀመሪያው ክፍያ 15% የአንድ ጊዜ ሽልማት ያገኛሉ (ለ12 ወራት ከወርሃዊ 30% ይልቅ)። ይህ በዓመታዊ ክፍያ ላይ ለምንሰጠው ቅናሽ ትክክለኛ ሚዛን ነው።",
+    faq8Q: "ዝግጁ የማስተዋወቂያ ቁሳቁሶች አገኛለሁ?",
+    faq8A:
+      "አዎ። ለWhatsApp ዝግጁ ጽሑፎች፣ ለወላጆች ኢሜይል፣ የFacebook ልጥፎች እና የስቶሪ ረቂቆች ኮፒ ማድረግ ይችላሉ። የተለየ ነገር ከፈለጉ ይጠይቁን፣ እናዘጋጅልዎታለን።",
+    faq9Q: "በGoogle ወይም Facebook የሚከፈልባቸው ማስታወቂያዎች ማስነሳት ይቻላል?",
+    faq9A:
+      "ለራስዎ ታዳሚዎች ተራ (ኦርጋኒክ) ልጥፎች፣ አዎ። ግን በ'Gadit' ቃል ራሱ ላይ በGoogle ወይም Facebook የሚከፈልባቸው ማስታወቂያዎች መግዛት አይፈቀድም። ከዋናው ድህረ ገጽ ጋር በተመሳሳይ ትራፊክ ላይ እንዲወዳደሩ አንፈልግም። ሙሉ ደንቦቹ በመቆጣጠሪያ ሰሌዳዎ ውስጥ ናቸው።",
+    faq10Q: "አጋር ለመሆን የሚከፍል ተመዝጋቢ መሆን አለብኝ?",
+    faq10A:
+      "አዎ። የአጋርነት ፕሮግራሙ ለClear እና Deep ተመዝጋቢዎች ብቻ ክፍት ነው። ጥሩ ምክር የሚጀምረው እርስዎ ራስዎ ከሚያውቁት ምርት ነው። አሁንም በBasic ላይ ከሆኑ፣ ከዋጋዎች ገጽ ወደ Clear ወይም Deep ያሻሽሉ፣ ሙሉውን መዝገበ ቃላት እና የፕሮግራሙን መዳረሻ ሁለቱንም ያገኛሉ።",
+    faq11Q: "Active Partner ምንድን ነው፣ እንዴትስ እደርስበታለሁ?",
+    faq11A:
+      "10 ንቁ የሚከፍሉ ደንበኞችን ሲያመጡ በራስ-ሰር Active Partner ይሆናሉ። ይህ ደረጃ በሁሉም ደንበኞችዎ ላይ (ነባሮቹንም ጨምሮ፣ ከ13ኛው ወር ጀምሮ) ተጨማሪ 10% ተደጋጋሚ የዕድሜ ልክ ኮሚሽን ይከፍትልዎታል። ይህ ማለት ከሁለት፣ ከሶስት ወይም ከአምስት ዓመታት በኋላም፣ ደንበኞችዎ ተመዝጋቢ እስከሆኑ ድረስ፣ ማግኘትዎን ይቀጥላሉ።",
+
+    finalTitle: "ለመጀመር ዝግጁ ነዎት?",
+    finalSubtitle: "ምዝገባ አንድ ደቂቃ ይወስዳል። ራስ-ሰር ማጽደቅ። ሊንክዎ ወዲያውኑ ዝግጁ ነው።",
+    finalCta: "የግል ሊንክዎን በነጻ ያግኙ",
+    termsLink: "የአጋርነት ፕሮግራም ውሎች",
+  },
 };
 
 const NAV_FALLBACKS: Record<Exclude<Lang, "he" | "en">, { navAffiliates: string; topbarSignIn: string }> = {
@@ -2014,6 +2153,7 @@ const NAV_FALLBACKS: Record<Exclude<Lang, "he" | "en">, { navAffiliates: string;
   it: { navAffiliates: "Affiliati", topbarSignIn: "Già partner? Accedi" },
   ja: { navAffiliates: "パートナー", topbarSignIn: "すでにパートナーですか？ ログイン" },
   hi: { navAffiliates: "पार्टनर", topbarSignIn: "पहले से पार्टनर हैं? साइन इन" },
+  am: { navAffiliates: "አጋሮች", topbarSignIn: "አስቀድመው አጋር ነዎት? ይግቡ" },
 };
 // Note: the NAV_FALLBACKS spread loop that used to live here is gone.
 // Every language in COPY now ships its own fully-translated entry, so

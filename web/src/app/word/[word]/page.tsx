@@ -33,7 +33,7 @@ import { WordClient } from "./WordClient";
  * client flow they had before.
  */
 
-const ALL_LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi"];
+const ALL_LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
 
 /** Resolve the request's UI language exactly like the root layout:
  *  middleware header (URL prefix) → cookie → English. */
@@ -87,7 +87,7 @@ export async function generateMetadata({
     (preloaded?.meanings?.[0] as { meaning?: string } | undefined)?.meaning?.trim() ?? "";
   const description = firstMeaning
     ? `${decoded}: ${firstMeaning.slice(0, 150)}${firstMeaning.length > 150 ? "…" : ""}`
-    : `Meanings, examples, etymology, and idioms for "${decoded}", in 13 languages.`;
+    : `Meanings, examples, etymology, and idioms for "${decoded}", in 14 languages.`;
   return {
     title: `${decoded}, Gadit`,
     description,

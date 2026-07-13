@@ -59,6 +59,7 @@ const INSTALL_LABELS: Record<string, string> = {
   it: "Installa l'app",
   ja: "アプリをインストール",
   hi: "ऐप इंस्टॉल करें",
+  am: "መተግበሪያውን ይጫኑ",
 };
 
 export type NavKey =

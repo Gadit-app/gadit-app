@@ -84,6 +84,16 @@ const COPY: Record<string, {
     errorBody: "पेज को रीफ्रेश करने का प्रयास करें।",
     backToClassroom: "← कक्षा में वापस",
   },
+  am: {
+    title: "የክፍል ማስታወሻ ደብተር",
+    emptyTitle: "እስካሁን ምንም ፍለጋ የለም",
+    emptyBody: "አንድ ተማሪ ቃል ሲፈልግ፣ እዚህ ይታያል።",
+    filterAll: "ሁሉም ተማሪዎች",
+    filterLabel: "በተማሪ ማጣራት",
+    errorTitle: "የሆነ ስህተት ተፈጥሯል",
+    errorBody: "ገጹን ለማደስ ሞክሩ።",
+    backToClassroom: "← ወደ ክፍል ተመለሱ",
+  },
 };
 
 type State =
@@ -236,7 +246,7 @@ function formatRelativeTime(iso: string, lang: string): string {
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
   if (minutes < 1) {
-    return lang === "he" ? "עכשיו" : lang === "ar" ? "الآن" : lang === "ru" ? "сейчас" : lang === "hi" ? "अभी" : "now";
+    return lang === "he" ? "עכשיו" : lang === "ar" ? "الآن" : lang === "ru" ? "сейчас" : lang === "hi" ? "अभी" : lang === "am" ? "አሁን" : "now";
   }
   if (minutes < 60) return `${minutes}m`;
   if (hours < 24) return `${hours}h`;

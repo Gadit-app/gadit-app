@@ -86,6 +86,21 @@ const COPY: Record<string, {
     back: "← वापस",
     qrAlt: "QR जोड़ने का कोड",
   },
+  am: {
+    title: "መሳሪያ ማገናኘት",
+    sub: "QR ኮዱን በአባሉ መሳሪያ ይቃኙ፣ ወይም ይህን ኮድ gadit.app/join ላይ ያስገቡ",
+    yourCode: "ኮድዎ",
+    ttlPrefix: "የሚያበቃው በ",
+    ttlSuffix: "ደቂቃ ውስጥ ነው",
+    expired: "ኮዱ ጊዜው አልፎበታል። አዲስ ኮድ ያዘጋጁ።",
+    newCode: "አዲስ ኮድ",
+    generating: "እየተዘጋጀ ነው...",
+    pairedTitle: "መሳሪያው ተገናኝቷል ✓",
+    pairedSub: "መሳሪያው አሁን ከዚህ አባል መለያ ጋር በቋሚነት ተገናኝቷል።",
+    done: "← ወደ ቤተሰብ ገጹ ተመለሱ",
+    back: "← ተመለስ",
+    qrAlt: "የመሳሪያ ማገናኛ QR ኮድ",
+  },
 };
 
 function formatMs(ms: number): string {

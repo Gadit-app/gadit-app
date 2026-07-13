@@ -74,6 +74,12 @@ const COPY: Record<
     retry: "फिर से कोशिश करें",
     home: "होम पर वापस",
   },
+  am: {
+    title: "የሆነ ስህተት ተፈጥሯል",
+    body: "ይህን ቃል መጫን አልቻልንም። ጊዜያዊ ችግር ሊሆን ይችላል፣ እባክዎ እንደገና ይሞክሩ።",
+    retry: "እንደገና ይሞክሩ",
+    home: "ወደ መነሻ ገጽ",
+  },
 };
 
 export default function WordError({

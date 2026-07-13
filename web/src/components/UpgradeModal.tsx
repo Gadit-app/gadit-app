@@ -48,7 +48,7 @@ export function isUpgradeSnoozed(feature: UpgradeFeature): boolean {
   }
 }
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am";
 
 interface Copy {
   featureNames: Record<UpgradeFeature, string>;
@@ -387,6 +387,31 @@ const COPY: Record<Lang, Copy> = {
     primaryCta: "14 दिन मुफ्त आज़माएँ",
     secondaryCta: "शायद बाद में",
     closeAria: "बंद करें",
+  },
+  am: {
+    featureNames: {
+      image: "ቃል በምስል",
+      kids: "ለልጆች ማብራሪያ",
+      compose: "የራስዎን ዓረፍተ ነገር ጽፈው አስተያየት ያግኙ",
+      notebook: "የግል የቃላት ማስታወሻ ደብተር",
+      quiz: "የግል ኩዊዝ",
+      compare: "የቃላት ጨዋታዎች",
+    },
+    featureBlurbs: {
+      image: "ለእያንዳንዱ ቃል ልዩ ምስል።",
+      kids: "ማንኛውም ልጅ በሚረዳው ቀላል ቋንቋ እና በሚታወቁ ምሳሌዎች የቀረበ ማብራሪያ።",
+      compose: "የራስዎን ዓረፍተ ነገር ይጻፉ እና ቃሉ እንዴት እንደዋለ ወዲያውኑ አስተያየት ያግኙ።",
+      notebook: "የተማሯቸውን ቃላት ከየትም ቦታ በሚከፍቱት የግል ዲጂታል ማስታወሻ ደብተርዎ ውስጥ ይሰብስቡ።",
+      quiz: "ቃላቱ ለረጅም ጊዜ እንዲታወሱ የተዘጋጀ የግል ኩዊዝ።",
+      compare: "ቃላትን በማስታወስዎ ውስጥ የሚያጸኑ አዝናኝ የቃላት ጨዋታዎች።",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "የ Clear እቅድ አገልግሎት ነው", deep: "የ Deep እቅድ አገልግሎት ነው" },
+    pricePerMonth: { clear: "$2.99 በወር", deep: "$4.99 በወር" },
+    trialNote: "14 ቀን በነጻ · በማንኛውም ጊዜ መሰረዝ ይቻላል",
+    primaryCta: "14 ቀን በነጻ ይሞክሩ",
+    secondaryCta: "ምናልባት በኋላ",
+    closeAria: "ዝጋ",
   },
 };
 

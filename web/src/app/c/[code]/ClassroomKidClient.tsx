@@ -113,6 +113,20 @@ const COPY: Record<string, {
     games: "शब्द खेल",
     notebook: "कक्षा की नोटबुक",
   },
+  am: {
+    welcomeTo: "እንኳን ደህና መጣችሁ ወደ",
+    greetingPrefix: "ሰላም፣",
+    switchUser: "(እኔ አይደለሁም)",
+    pickName: "ሰላም! ስማችሁን ምረጡ",
+    classroomDefault: "ክፍል",
+    searchPh: "ቃል ጻፉ",
+    searchBtn: "ፈልጉ",
+    sentencePh: "(ካስፈለገ) ቃሉ ያለበትን ዓረፍተ ነገር ጻፉ፣ አንድ ትክክለኛ ትርጉም ታገኛላችሁ",
+    errorTitle: "ኮዱ ትክክል አይደለም",
+    errorBody: "መምህራችሁን ሊንኩን እንደገና ጠይቁ።",
+    games: "የቃላት ጨዋታዎች",
+    notebook: "የክፍል ማስታወሻ ደብተር",
+  },
 };
 
 /** Off-hours hint copy. Shown at the bottom of the kid view when the
@@ -134,6 +148,11 @@ const OFFHOURS_HINT: Record<string, { line1: string; cta: string; link: string }
   hi: {
     line1: "कक्षा के समय के बाहर — बिना तस्वीर और बच्चों की समझ के शब्द खोज रहे हैं।",
     cta: "घर पर पूरा Gadit चाहिए? Family प्लान",
+    link: "/pricing",
+  },
+  am: {
+    line1: "ከክፍል ሰዓት ውጭ ነን። ቃላት ያለ ምስል እና ያለ የልጆች ማብራሪያ እየፈለግን ነው።",
+    cta: "ቤት ውስጥ ሙሉውን Gadit ትፈልጋላችሁ? የFamily እቅድ",
     link: "/pricing",
   },
 };

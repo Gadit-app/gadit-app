@@ -101,6 +101,17 @@ body {
   letter-spacing: 0;
 }
 
+/* ── AMHARIC ── Noto Sans Ethiopic. Ge'ez script (LTR); Inter/Heebo
+   carry no Ethiopic glyphs, so without this the fidel renders in OS
+   fallback (Windows: Nyala/Ebrima, macOS: Kefa) inconsistently. */
+:lang(am),
+[lang="am"],
+[data-lang="am"] {
+  font-family: var(--font-noto-am), 'Noto Sans Ethiopic', 'Nyala', 'Ebrima', 'Kefa', system-ui, sans-serif;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
 /* RTL fallback for dir attribute */
 [dir="rtl"] {
   font-family: var(--font-rubik), 'Rubik', system-ui, sans-serif;
@@ -181,6 +192,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --wb-ar:    var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), system-ui, sans-serif;
   --wb-jp:    var(--font-noto-jp), 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
   --wb-hi:    var(--font-noto-hi), 'Noto Sans Devanagari', 'Mangal', 'Kohinoor Devanagari', system-ui, sans-serif;
+  --wb-am:    var(--font-noto-am), 'Noto Sans Ethiopic', 'Nyala', 'Ebrima', 'Kefa', system-ui, sans-serif;
 
   font-family: var(--wb-sans);
   color: var(--ink);
@@ -1175,6 +1187,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[lang="ja"] { font-family: var(--wb-jp); }
 [lang="hi"] .wordbook,
 .wordbook[lang="hi"] { font-family: var(--wb-hi); }
+[lang="am"] .wordbook,
+.wordbook[lang="am"] { font-family: var(--wb-am); }
 
 .wordbook[dir="rtl"] .wb-word-title {
   font-family: var(--wb-he);
@@ -3287,7 +3301,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 500;
 }
 
-/* Tagline — locked across all 7 languages: same family/size/weight/
+/* Tagline — locked across all 14 languages: same family/size/weight/
    line-height. Sits tight under the logo (small margin) so logo +
    tagline read as one lockup, and the Y of both is identical
    regardless of which language is active. */
@@ -4497,7 +4511,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    wordmark in HE/AR than in the Inter-default LTR locales.
    `!important` on the four critical properties (family, weight,
    size, line-height) is the safe way to lock the lockup so it
-   renders identically across all 12 UI languages. The base classes
+   renders identically across all 14 UI languages. The base classes
    (without [dir="rtl"]) already set the same values; these
    overrides exist solely to defeat the global RTL cascade. */
 /* Earlier attempt added overflow:hidden to .wb-shell-topbar to clip

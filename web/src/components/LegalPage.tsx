@@ -73,6 +73,11 @@ const FALLBACK_NOTICE: Record<Lang, { prefix: string; link: string; suffix: stri
     link: "अंग्रेज़ी संस्करण",
     suffix: " मान्य होगा।",
   },
+  am: {
+    prefix: "ይህ ትርጉም ለእርስዎ ምቾት ብቻ የቀረበ ነው። በተተረጎመው ቅጂ እና በእንግሊዝኛው ቅጂ መካከል ልዩነት ቢፈጠር ",
+    link: "የእንግሊዝኛው ቅጂ",
+    suffix: " ተፈጻሚ ይሆናል።",
+  },
 };
 
 const LAST_UPDATED_LABEL: Record<Lang, string> = {
@@ -89,6 +94,7 @@ const LAST_UPDATED_LABEL: Record<Lang, string> = {
   it: "Ultimo aggiornamento: ",
   ja: "最終更新: ",
   hi: "आख़िरी बार अपडेट: ",
+  am: "ለመጨረሻ ጊዜ የተሻሻለው: ",
 };
 
 const BACK_LABEL: Record<Lang, string> = {
@@ -105,6 +111,7 @@ const BACK_LABEL: Record<Lang, string> = {
   it: "← Torna a Gadit",
   ja: "← Gaditに戻る",
   hi: "← Gadit पर वापस",
+  am: "← ወደ Gadit ተመለስ",
 };
 
 export default function LegalPage({

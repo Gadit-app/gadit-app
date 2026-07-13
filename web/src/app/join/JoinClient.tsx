@@ -68,6 +68,18 @@ const COPY: Record<string, {
     errNotFound: "कोड नहीं मिला",
     errGeneric: "कुछ ग़लत हुआ। फिर से कोशिश करें।",
   },
+  am: {
+    title: "ቤተሰብ ጋር ተቀላቀሉ",
+    sub: "ወላጃችሁ ያዘጋጀውን ባለ 6 አሃዝ ኮድ አስገቡ",
+    inputLabel: "ባለ 6 አሃዝ ኮድ",
+    submit: "ቀጥሉ",
+    joining: "እየተቀላቀላችሁ ነው...",
+    success: "ተቀላቅላችኋል! ወደ Gadit እየወሰድናችሁ ነው...",
+    errInvalid: "ኮዱ 6 አሃዝ መሆን አለበት",
+    errExpired: "ኮዱ ጊዜው አልፎበታል። ወላጃችሁ አዲስ ኮድ እንዲያዘጋጅ ጠይቁ።",
+    errNotFound: "ኮዱ አልተገኘም",
+    errGeneric: "የሆነ ስህተት ተፈጥሯል። እንደገና ሞክሩ።",
+  },
 };
 
 export function JoinClient() {

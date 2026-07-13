@@ -39,6 +39,7 @@ const LANGS = [
   { code: "it", label: "Italiano", flag: "it" },
   { code: "ja", label: "日本語", flag: "jp" },
   { code: "hi", label: "हिन्दी", flag: "in" },
+  { code: "am", label: "አማርኛ", flag: "et" },
 ] as const;
 
 function LangSwitch() {
@@ -130,6 +131,7 @@ const COPY: Record<
   it: { tagline: "Capire le parole fino in fondo", placeholder: "Scrivi una parola", tryLabel: "Prova", signin: "Accedi", pricing: "Prezzi", search: "Cerca", features: "Funzionalità", addSentence: "Aggiungi la frase in cui appare la parola per ottenere una definizione precisa", sentencePlaceholder: "(Opzionale) Scrivi la frase in cui appare la parola per ottenere una definizione precisa", optional: "Opzionale", founderNote: "Ogni volta che qualcosa non torna, c'è una parola sulla strada. Coglila, e tutto si apre.", founderSign: "Gadi, fondatore di Gadit" },
   ja: { tagline: "言葉を最後まで理解する", placeholder: "単語を入力", tryLabel: "例", signin: "ログイン", pricing: "料金", search: "検索", features: "機能", addSentence: "単語が出てくる文を追加すると、ぴったりの意味が一つだけ表示されます", sentencePlaceholder: "（任意）単語が出てくる文を入力すると、ぴったりの意味が一つだけ表示されます", optional: "任意", founderNote: "何かがしっくりこないとき、必ず一つの言葉が間にある。それを掴めば、すべてが開く。", founderSign: "ガディ、Gadit 創業者" },
   hi: { tagline: "शब्दों को पूरी तरह समझें", placeholder: "कोई शब्द लिखें", tryLabel: "आज़माएँ", signin: "साइन इन", pricing: "क़ीमत", search: "खोज", features: "सुविधाएँ", addSentence: "वह वाक्य जोड़ें जिसमें शब्द आया है, सटीक एक परिभाषा मिलेगी", sentencePlaceholder: "(वैकल्पिक) वह वाक्य लिखें जिसमें शब्द आया है, सटीक एक परिभाषा मिलेगी", optional: "वैकल्पिक", founderNote: "जब भी कुछ क्लिक नहीं करता, बीच में एक शब्द होता है। उसे पकड़ लो, सब खुल जाता है।", founderSign: "गादी, Gadit के संस्थापक" },
+  am: { tagline: "ቃላትን እስከ መጨረሻው መረዳት", placeholder: "ቃል ይጻፉ", tryLabel: "ይሞክሩ", signin: "ይግቡ", pricing: "ዋጋዎች", search: "ፍለጋ", features: "ባህሪያት", addSentence: "ቃሉ የሚገኝበትን ዓረፍተ ነገር ያክሉ፣ አንድ ትክክለኛ ትርጉም ያገኛሉ", sentencePlaceholder: "(አማራጭ) ቃሉ የሚገኝበትን ዓረፍተ ነገር ይጻፉ፣ አንድ ትክክለኛ ትርጉም ያገኛሉ", optional: "አማራጭ", founderNote: "አንድ ነገር ግልጽ ባልሆነ ቁጥር በመንገዱ ላይ አንድ ቃል አለ። ያዙት፣ ሁሉም ነገር ይከፈታል።", founderSign: "ጋዲ፣ የGadit መስራች" },
 };
 
 function SearchIcon({ size = 16 }: { size?: number }) {

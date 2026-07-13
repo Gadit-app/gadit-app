@@ -16,6 +16,7 @@ const LANG_HINT: Record<string, string> = {
   it: "it",
   ja: "ja",
   hi: "hi",
+  am: "am",
 };
 
 export async function POST(req: NextRequest) {

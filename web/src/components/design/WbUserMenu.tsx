@@ -55,6 +55,7 @@ const COPY: Record<Lang, Copy> = {
   it: { account: "Account",             family: "La mia famiglia",   school: "La mia scuola",     dashboard: "Area partner",  signOut: "Esci",        openMenu: "Apri menu account" },
   ja: { account: "アカウント",            family: "私の家族",            school: "私の学校",            dashboard: "パートナーエリア", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
   hi: { account: "खाता",                 family: "मेरा परिवार",       school: "मेरा स्कूल",         dashboard: "पार्टनर क्षेत्र", signOut: "साइन आउट",    openMenu: "खाता मेनू खोलें" },
+  am: { account: "መለያ",                 family: "ቤተሰቤ",             school: "ትምህርት ቤቴ",        dashboard: "የአጋሮች ክፍል",   signOut: "ዘግተው ይውጡ",  openMenu: "የመለያ ምናሌ ክፈት" },
 };
 
 // Tier chip colors. Mirrors the same scheme used on /account and

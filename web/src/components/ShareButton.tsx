@@ -210,4 +210,10 @@ export const APP_SHARE_COPY: Record<
     shareLabel: "Gadit साझा करें",
     copiedLabel: "लिंक कॉपी हो गया",
   },
+  am: {
+    title: "Gadit፣ ቃላትን እስከ መጨረሻው መረዳት",
+    text: "እያንዳንዱን ቃል በእውነት እንዲረዱ የሚያግዝ አዲስ መሣሪያ። ሁሉም ትርጉሞች፣ ምሳሌዎች፣ ፈሊጣዊ አገላለጾች እና የቃሉ መነሻ፣ ሁሉም በአንድ ቦታ። በነጻ ይጀምሩ፣ በጣም ተመጣጣኝ በሆነ ዋጋ ያሻሽሉ። መሞከር ተገቢ ነው:",
+    shareLabel: "Gaditን ያጋሩ",
+    copiedLabel: "አገናኙ ተቀድቷል",
+  },
 };

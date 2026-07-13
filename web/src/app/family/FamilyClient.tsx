@@ -102,12 +102,30 @@ const COPY: Record<string, {
     back: "← वापस",
     capReached: `आप Family प्लान में ${MAX_KIDS_PER_FAMILY} बच्चों की सीमा तक पहुँच गए हैं।`,
   },
+  am: {
+    title: "ቤተሰብዎ",
+    sub: "እያንዳንዱ የቤተሰብ አባል የራሱ ተጠቃሚ ነው፣ የራሱ ማስታወሻ ደብተር እና ታሪክ አለው።",
+    add: "+ ጨምር",
+    parents: "ወላጆች",
+    children: "ልጆች",
+    empty: "እስካሁን የቤተሰብ አባላት የሉም። የመጀመሪያውን ልጅ በመጨመር ይጀምሩ።",
+    pair: "መሳሪያ ያገናኙ",
+    revoke: "ግንኙነት አቋርጥ",
+    paired: "ተገናኝቷል",
+    owner: "ዋና ወላጅ",
+    notReady: "አባላትን ለማስተዳደር የFamily ምዝገባ ያስፈልጋል።",
+    goPricing: "ዋጋዎችን ይመልከቱ",
+    welcome: "እንኳን ወደ Family በደህና መጡ! ለመጀመር የቤተሰብ አባላትዎን ይጨምሩ።",
+    back: "← ተመለስ",
+    capReached: `በFamily እቅድ ላይ ያለውን የ${MAX_KIDS_PER_FAMILY} ልጆች ጣሪያ ደርሰዋል።`,
+  },
 };
 
 const ROLE_LABEL: Record<string, Record<"father" | "mother" | "boy" | "girl", string>> = {
   he: { father: "אבא", mother: "אמא", boy: "בן", girl: "בת" },
   en: { father: "Dad", mother: "Mom", boy: "Son", girl: "Daughter" },
   hi: { father: "पापा", mother: "मम्मी", boy: "बेटा", girl: "बेटी" },
+  am: { father: "አባት", mother: "እናት", boy: "ወንድ ልጅ", girl: "ሴት ልጅ" },
 };
 
 function MemberCard({

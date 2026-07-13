@@ -67,6 +67,11 @@ const COPY: Record<string, {
     hubLede: "शब्दावली निखारने के लिए खेल चुनें",
     backToClassroom: "← कक्षा में वापस",
   },
+  am: {
+    hubTitle: "የቃላት ጨዋታዎች",
+    hubLede: "ቃላታችሁን ለማጠንከር ጨዋታ ምረጡ",
+    backToClassroom: "← ወደ ክፍል ተመለሱ",
+  },
 };
 
 /** Minimal PlayT factory. We only need the fields the 10 curated games

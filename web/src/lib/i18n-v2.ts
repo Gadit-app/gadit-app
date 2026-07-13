@@ -439,7 +439,7 @@ const en: V2Strings = {
   homeHeadlineLine1: "Understand",
   homeHeadlineLine2: "to the end.",
   homeSubline:
-    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 11 languages.",
+    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 14 languages.",
 
   searchPlaceholderHome: "Type a word",
   voiceInputTitle: "Dictate a word",
@@ -463,7 +463,7 @@ const en: V2Strings = {
   valueProp3Title: "A history note, not a Wikipedia dump",
   valueProp3Body:
     "Where the word came from, told as a paragraph, the kind a curious friend would write.",
-  valueProp4Eyebrow: "11 languages",
+  valueProp4Eyebrow: "14 languages",
   valueProp4Title: "Hebrew & Arabic, fully native",
   valueProp4Body:
     "Real RTL, real fonts, real idioms, not a translated UI bolted on.",
@@ -484,8 +484,8 @@ const en: V2Strings = {
   footerPrivacy: "Privacy",
   footerTerms: "Terms",
   footerContact: "Help",
-  footerTagline: "A smart dictionary for 11 languages. Built for real reading.",
-  footerLanguagesNote: "11 languages",
+  footerTagline: "A smart dictionary for 14 languages. Built for real reading.",
+  footerLanguagesNote: "14 languages",
 
   signIn: "Sign in",
   startFree: "Start free",
@@ -827,7 +827,7 @@ const he: V2Strings = {
   homeHeadlineLine1: "להבין",
   homeHeadlineLine2: "עד הסוף.",
   homeSubline:
-    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־11 שפות.",
+    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־14 שפות.",
 
   searchPlaceholderHome: "הקלידו מילה",
   voiceInputTitle: "הכתבת מילה",
@@ -851,7 +851,7 @@ const he: V2Strings = {
   valueProp3Title: "הערה היסטורית, לא ויקיפדיה",
   valueProp3Body:
     "מאיפה המילה הגיעה, מסופר כפסקה, כמו שחבר סקרן היה כותב.",
-  valueProp4Eyebrow: "11 שפות",
+  valueProp4Eyebrow: "14 שפות",
   valueProp4Title: "עברית וערבית כשפות אם",
   valueProp4Body:
     "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים, לא ממשק מתורגם.",
@@ -872,8 +872,8 @@ const he: V2Strings = {
   footerPrivacy: "פרטיות",
   footerTerms: "תנאים",
   footerContact: "עזרה",
-  footerTagline: "מילון חכם ל־11 שפות. בנוי לקריאה אמיתית.",
-  footerLanguagesNote: "11 שפות",
+  footerTagline: "מילון חכם ל־14 שפות. בנוי לקריאה אמיתית.",
+  footerLanguagesNote: "14 שפות",
 
   signIn: "התחברות",
   startFree: "התחילו חינם",
@@ -1220,7 +1220,7 @@ const ar: V2Strings = {
   homeHeadlineLine1: "افهم",
   homeHeadlineLine2: "حتى النهاية.",
   homeSubline:
-    "قاموس يفهم السياق, معانٍ وأصول وتعابير وصورة حيّة، بسبع لغات.",
+    "قاموس يفهم السياق, معانٍ وأصول وتعابير وصورة حيّة، بـ14 لغة.",
 
   searchPlaceholderHome: "اكتب كلمة",
   voiceInputTitle: "إملاء كلمة",
@@ -1243,7 +1243,7 @@ const ar: V2Strings = {
   valueProp3Title: "ملاحظة تاريخية، لا مدخل ويكيبيديا",
   valueProp3Body:
     "من أين أتت الكلمة، يُروى كفقرة, كما يكتب صديق فضولي.",
-  valueProp4Eyebrow: "11 لغة",
+  valueProp4Eyebrow: "14 لغة",
   valueProp4Title: "العربية والعبرية، بكامل أصالتهما",
   valueProp4Body:
     "RTL حقيقي، خطوط حقيقية، تعابير حقيقية, لا واجهة مترجمة.",
@@ -1264,8 +1264,8 @@ const ar: V2Strings = {
   footerPrivacy: "الخصوصية",
   footerTerms: "الشروط",
   footerContact: "مساعدة",
-  footerTagline: "قاموس ذكي بسبع لغات. مبنيّ للقراءة الحقيقية.",
-  footerLanguagesNote: "11 لغة",
+  footerTagline: "قاموس ذكي بـ14 لغة. مبنيّ للقراءة الحقيقية.",
+  footerLanguagesNote: "14 لغة",
 
   signIn: "تسجيل الدخول",
   startFree: "ابدأ مجانًا",
@@ -1627,7 +1627,7 @@ const ru: Partial<V2Strings> = {
   homeHeadlineLine1: "Понимать",
   homeHeadlineLine2: "до конца.",
   homeSubline:
-    "Словарь, который улавливает контекст, значения, происхождение, идиомы и живой образ, на 7 языках.",
+    "Словарь, который улавливает контекст, значения, происхождение, идиомы и живой образ, на 14 языках.",
 
   searchPlaceholderHome: "Введите слово",
   voiceInputTitle: "Продиктовать слово",
@@ -1651,7 +1651,7 @@ const ru: Partial<V2Strings> = {
   valueProp3Title: "Краткая история, а не статья из Википедии",
   valueProp3Body:
     "Откуда пришло слово, рассказано как абзац, без сухих фактов.",
-  valueProp4Eyebrow: "11 языков",
+  valueProp4Eyebrow: "14 языков",
   valueProp4Title: "Иврит и арабский, как родные",
   valueProp4Body:
     "Настоящий RTL, настоящие шрифты, настоящие идиомы, а не переведённый интерфейс.",
@@ -1672,8 +1672,8 @@ const ru: Partial<V2Strings> = {
   footerPrivacy: "Конфиденциальность",
   footerTerms: "Условия",
   footerContact: "Помощь",
-  footerTagline: "Умный словарь на 7 языках. Создан для настоящего чтения.",
-  footerLanguagesNote: "11 языков",
+  footerTagline: "Умный словарь на 14 языках. Создан для настоящего чтения.",
+  footerLanguagesNote: "14 языков",
 
   signIn: "Войти",
   startFree: "Начать бесплатно",
@@ -2016,7 +2016,7 @@ const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "hasta el final.",
   homeSubline:
-    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 11 idiomas.",
+    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 14 idiomas.",
 
   searchPlaceholderHome: "Escribe una palabra",
   voiceInputTitle: "Dictar una palabra",
@@ -2040,7 +2040,7 @@ const es: Partial<V2Strings> = {
   valueProp3Title: "Una nota de origen, no un volcado de Wikipedia",
   valueProp3Body:
     "De dónde viene la palabra, contado como un párrafo, el que escribiría un amigo curioso.",
-  valueProp4Eyebrow: "11 idiomas",
+  valueProp4Eyebrow: "14 idiomas",
   valueProp4Title: "Hebreo y árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fuentes reales, modismos reales, no una interfaz traducida a la fuerza.",
@@ -2061,8 +2061,8 @@ const es: Partial<V2Strings> = {
   footerPrivacy: "Privacidad",
   footerTerms: "Términos",
   footerContact: "Ayuda",
-  footerTagline: "Un diccionario inteligente para 11 idiomas. Hecho para lectura real.",
-  footerLanguagesNote: "11 idiomas",
+  footerTagline: "Un diccionario inteligente para 14 idiomas. Hecho para lectura real.",
+  footerLanguagesNote: "14 idiomas",
 
   signIn: "Iniciar sesión",
   startFree: "Empezar gratis",
@@ -2403,7 +2403,7 @@ const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "até o fim.",
   homeSubline:
-    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 11 idiomas.",
+    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 14 idiomas.",
 
   searchPlaceholderHome: "Digite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
@@ -2427,7 +2427,7 @@ const pt: Partial<V2Strings> = {
   valueProp3Title: "Uma nota histórica, não despejo de Wikipédia",
   valueProp3Body:
     "De onde a palavra veio, contado em parágrafo, do jeito que um amigo curioso escreveria.",
-  valueProp4Eyebrow: "11 idiomas",
+  valueProp4Eyebrow: "14 idiomas",
   valueProp4Title: "Hebraico e árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fontes reais, expressões reais, não interface traduzida na pressa.",
@@ -2448,8 +2448,8 @@ const pt: Partial<V2Strings> = {
   footerPrivacy: "Privacidade",
   footerTerms: "Termos",
   footerContact: "Ajuda",
-  footerTagline: "Um dicionário inteligente em 11 idiomas. Feito pra leitura de verdade.",
-  footerLanguagesNote: "11 idiomas",
+  footerTagline: "Um dicionário inteligente em 14 idiomas. Feito pra leitura de verdade.",
+  footerLanguagesNote: "14 idiomas",
 
   signIn: "Entrar",
   startFree: "Começar grátis",
@@ -2790,7 +2790,7 @@ const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "jusqu'au bout.",
   homeSubline:
-    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 11 langues.",
+    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 14 langues.",
 
   searchPlaceholderHome: "Tapez un mot",
   voiceInputTitle: "Dicter un mot",
@@ -2814,7 +2814,7 @@ const fr: Partial<V2Strings> = {
   valueProp3Title: "Une note d'origine, pas un copier-coller de Wikipédia",
   valueProp3Body:
     "D'où vient le mot, raconté en un paragraphe, comme un ami curieux l'écrirait.",
-  valueProp4Eyebrow: "11 langues",
+  valueProp4Eyebrow: "14 langues",
   valueProp4Title: "Hébreu et arabe, vraiment natifs",
   valueProp4Body:
     "Vrai RTL, vraies polices, vraies expressions, pas une interface traduite à la va-vite.",
@@ -2835,8 +2835,8 @@ const fr: Partial<V2Strings> = {
   footerPrivacy: "Confidentialité",
   footerTerms: "Conditions",
   footerContact: "Aide",
-  footerTagline: "Un dictionnaire intelligent en 11 langues. Conçu pour vraiment lire.",
-  footerLanguagesNote: "11 langues",
+  footerTagline: "Un dictionnaire intelligent en 14 langues. Conçu pour vraiment lire.",
+  footerLanguagesNote: "14 langues",
 
   signIn: "Se connecter",
   startFree: "Commencer gratuit",
@@ -3186,7 +3186,7 @@ const de: V2Strings = {
   homeHeadlineLine1: "Verstehen",
   homeHeadlineLine2: "bis zum Ende.",
   homeSubline:
-    "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 11 Sprachen.",
+    "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 14 Sprachen.",
   searchPlaceholderHome: "Tippe ein Wort",
   voiceInputTitle: "Wort diktieren",
   addContext: "Kontext hinzufügen",
@@ -3205,7 +3205,7 @@ const de: V2Strings = {
   valueProp3Eyebrow: "Etymologie",
   valueProp3Title: "Eine Hintergrundnotiz, kein Wikipedia-Abklatsch",
   valueProp3Body: "Wo das Wort herkommt, erzählt als Absatz, wie ein neugieriger Freund ihn schreiben würde.",
-  valueProp4Eyebrow: "11 Sprachen",
+  valueProp4Eyebrow: "14 Sprachen",
   valueProp4Title: "Hebräisch und Arabisch, vollständig nativ",
   valueProp4Body: "Echtes RTL, echte Schriften, echte Redewendungen. Keine aufgesetzte Übersetzungs-UI.",
 
@@ -3225,8 +3225,8 @@ const de: V2Strings = {
   footerPrivacy: "Datenschutz",
   footerTerms: "AGB",
   footerContact: "Hilfe",
-  footerTagline: "Ein intelligentes Wörterbuch für 11 Sprachen. Gemacht fürs echte Lesen.",
-  footerLanguagesNote: "11 Sprachen",
+  footerTagline: "Ein intelligentes Wörterbuch für 14 Sprachen. Gemacht fürs echte Lesen.",
+  footerLanguagesNote: "14 Sprachen",
 
   signIn: "Anmelden",
   startFree: "Kostenlos starten",
@@ -3546,7 +3546,7 @@ const cs: V2Strings = {
   homeHeadlineLine1: "Rozumět",
   homeHeadlineLine2: "až do konce.",
   homeSubline:
-    "Slovník, který tě potkává v kontextu: významy, původ, idiomy a živý obraz, v 11 jazycích.",
+    "Slovník, který tě potkává v kontextu: významy, původ, idiomy a živý obraz, ve 14 jazycích.",
   searchPlaceholderHome: "Napiš slovo",
   voiceInputTitle: "Nadiktovat slovo",
   addContext: "Přidat kontext",
@@ -3565,7 +3565,7 @@ const cs: V2Strings = {
   valueProp3Eyebrow: "Etymologie",
   valueProp3Title: "Příběh, ne odstavec z Wikipedie",
   valueProp3Body: "Odkud slovo přišlo, vyprávěno jako odstavec, který by napsal zvídavý přítel.",
-  valueProp4Eyebrow: "11 jazyků",
+  valueProp4Eyebrow: "14 jazyků",
   valueProp4Title: "Hebrejština a arabština plně nativně",
   valueProp4Body: "Skutečné RTL, skutečné fonty, skutečné idiomy. Ne přilepené překladové rozhraní.",
 
@@ -3584,8 +3584,8 @@ const cs: V2Strings = {
   footerPrivacy: "Soukromí",
   footerTerms: "Podmínky",
   footerContact: "Nápověda",
-  footerTagline: "Chytrý slovník pro 11 jazyků. Stavěn pro skutečné čtení.",
-  footerLanguagesNote: "11 jazyků",
+  footerTagline: "Chytrý slovník pro 14 jazyků. Stavěn pro skutečné čtení.",
+  footerLanguagesNote: "14 jazyků",
 
   signIn: "Přihlásit se",
   startFree: "Začít zdarma",
@@ -3912,7 +3912,7 @@ const sk: V2Strings = {
   homeHeadlineLine1: "Rozumieť",
   homeHeadlineLine2: "až do konca.",
   homeSubline:
-    "Slovník, ktorý ťa stretáva v kontexte: významy, pôvod, idiómy a živý obraz, v 11 jazykoch.",
+    "Slovník, ktorý ťa stretáva v kontexte: významy, pôvod, idiómy a živý obraz, v 14 jazykoch.",
   searchPlaceholderHome: "Napíš slovo",
   voiceInputTitle: "Nadiktovať slovo",
   addContext: "Pridať kontext",
@@ -3931,7 +3931,7 @@ const sk: V2Strings = {
   valueProp3Eyebrow: "Etymológia",
   valueProp3Title: "Príbeh, nie odsek z Wikipédie",
   valueProp3Body: "Odkiaľ slovo prišlo, rozprávané ako odsek, ktorý by napísal zvedavý priateľ.",
-  valueProp4Eyebrow: "11 jazykov",
+  valueProp4Eyebrow: "14 jazykov",
   valueProp4Title: "Hebrejčina a arabčina plne natívne",
   valueProp4Body: "Skutočné RTL, skutočné fonty, skutočné idiómy. Nie prilepené prekladové rozhranie.",
 
@@ -3950,8 +3950,8 @@ const sk: V2Strings = {
   footerPrivacy: "Súkromie",
   footerTerms: "Podmienky",
   footerContact: "Pomoc",
-  footerTagline: "Inteligentný slovník pre 11 jazykov. Stavaný pre skutočné čítanie.",
-  footerLanguagesNote: "11 jazykov",
+  footerTagline: "Inteligentný slovník pre 14 jazykov. Stavaný pre skutočné čítanie.",
+  footerLanguagesNote: "14 jazykov",
 
   signIn: "Prihlásiť sa",
   startFree: "Začať zdarma",
@@ -4272,7 +4272,7 @@ const it: Partial<V2Strings> = {
   homeHeadlineLine1: "Capisci",
   homeHeadlineLine2: "fino in fondo.",
   homeSubline:
-    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 11 lingue.",
+    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 14 lingue.",
   searchPlaceholderHome: "Scrivi una parola",
   voiceInputTitle: "Detta una parola",
   addContext: "Aggiungi contesto",
@@ -4292,7 +4292,7 @@ const it: Partial<V2Strings> = {
   valueProp3Eyebrow: "Etimologia",
   valueProp3Title: "Una nota storica, non un dump di Wikipedia",
   valueProp3Body: "Da dove viene la parola, raccontato come un paragrafo, come lo scriverebbe un amico curioso.",
-  valueProp4Eyebrow: "11 lingue",
+  valueProp4Eyebrow: "14 lingue",
   valueProp4Title: "Ebraico e arabo, completamente nativi",
   valueProp4Body: "RTL vero, font veri, modi di dire veri. Non un'interfaccia tradotta posticcia.",
 
@@ -4312,8 +4312,8 @@ const it: Partial<V2Strings> = {
   footerPrivacy: "Privacy",
   footerTerms: "Termini",
   footerContact: "Aiuto",
-  footerTagline: "Un dizionario intelligente per 11 lingue. Costruito per la lettura vera.",
-  footerLanguagesNote: "11 lingue",
+  footerTagline: "Un dizionario intelligente per 14 lingue. Costruito per la lettura vera.",
+  footerLanguagesNote: "14 lingue",
 
   // Nav
   signIn: "Accedi",
@@ -4654,7 +4654,7 @@ const ja: Partial<V2Strings> = {
   homeHeadlineLine1: "理解する",
   homeHeadlineLine2: "最後まで。",
   homeSubline:
-    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、11言語で。",
+    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、14言語で。",
   searchPlaceholderHome: "単語を入力",
   voiceInputTitle: "単語を発音する",
   addContext: "文脈を追加",
@@ -4674,7 +4674,7 @@ const ja: Partial<V2Strings> = {
   valueProp3Eyebrow: "語源",
   valueProp3Title: "Wikipedia の貼り付けではなく、語られる歴史",
   valueProp3Body: "その単語がどこから来たのか、好奇心ある友人が書くような一段落で。",
-  valueProp4Eyebrow: "11 言語",
+  valueProp4Eyebrow: "14 言語",
   valueProp4Title: "ヘブライ語とアラビア語も完全ネイティブ",
   valueProp4Body: "本物の RTL、本物のフォント、本物のイディオム。後付けの翻訳UIではありません。",
 
@@ -4694,8 +4694,8 @@ const ja: Partial<V2Strings> = {
   footerPrivacy: "プライバシー",
   footerTerms: "利用規約",
   footerContact: "ヘルプ",
-  footerTagline: "11言語のためのスマートな辞書。本物の読書のために作られた。",
-  footerLanguagesNote: "11 言語",
+  footerTagline: "14言語のためのスマートな辞書。本物の読書のために作られた。",
+  footerLanguagesNote: "14 言語",
 
   // Nav
   signIn: "ログイン",
@@ -5034,7 +5034,7 @@ const hi: Partial<V2Strings> = {
   homeHeadlineLine1: "समझें",
   homeHeadlineLine2: "पूरी गहराई से।",
   homeSubline:
-    "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 13 भाषाओं में।",
+    "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 14 भाषाओं में।",
   searchPlaceholderHome: "कोई शब्द लिखें",
   voiceInputTitle: "एक शब्द बोलें",
   addContext: "संदर्भ जोड़ें",
@@ -5054,7 +5054,7 @@ const hi: Partial<V2Strings> = {
   valueProp3Eyebrow: "उत्पत्ति",
   valueProp3Title: "ऐतिहासिक नोट, विकिपीडिया डंप नहीं",
   valueProp3Body: "शब्द कहाँ से आया, एक छोटे पैराग्राफ़ में, जैसे कोई जिज्ञासु दोस्त लिखे।",
-  valueProp4Eyebrow: "13 भाषाएँ",
+  valueProp4Eyebrow: "14 भाषाएँ",
   valueProp4Title: "हिब्रू और अरबी, पूरी तरह नेटिव",
   valueProp4Body: "असली RTL, असली फ़ॉन्ट, असली मुहावरे। चिपकाया हुआ अनूदित इंटरफ़ेस नहीं।",
 
@@ -5074,8 +5074,8 @@ const hi: Partial<V2Strings> = {
   footerPrivacy: "गोपनीयता",
   footerTerms: "शर्तें",
   footerContact: "मदद",
-  footerTagline: "13 भाषाओं के लिए स्मार्ट शब्दकोश। सच्ची पढ़ाई के लिए बना।",
-  footerLanguagesNote: "13 भाषाएँ",
+  footerTagline: "14 भाषाओं के लिए स्मार्ट शब्दकोश। सच्ची पढ़ाई के लिए बना।",
+  footerLanguagesNote: "14 भाषाएँ",
 
   // Nav
   signIn: "साइन इन",
@@ -5411,6 +5411,388 @@ const hi: Partial<V2Strings> = {
     "आपकी भाषा में सबसे ज़्यादा खोजे गए शब्दों को आपकी नोटबुक में जोड़ता है और बिना WiFi ऑफ़लाइन अध्ययन के लिए उपलब्ध रखता है।",
 };
 
+const am: Partial<V2Strings> = {
+  // Homepage hero
+  homeHeadlineLine1: "ይረዱ",
+  homeHeadlineLine2: "በሙሉ ጥልቀት።",
+  homeSubline:
+    "በአውድዎ ውስጥ የሚያገኝዎት መዝገበ ቃላት፦ ትርጉሞች፣ ሥርወ ቃላት፣ ፈሊጦች እና ሕያው ምስል፣ በ14 ቋንቋዎች።",
+  searchPlaceholderHome: "ቃል ይጻፉ",
+  voiceInputTitle: "ቃል ይናገሩ",
+  addContext: "አውድ ይጨምሩ",
+  explain: "አብራራ",
+  contextHint: "የሚያነቡት ነገር አለ? ትርጉሙን ግልጽ ለማድረግ ዓረፍተ ነገሩን ይለጥፉ።",
+  tryLabel: "ይሞክሩ",
+
+  // Value props (Screen 1)
+  valuePropsEyebrow: "Gadit ምን የተለየ ያደርጋል",
+  valuePropsTitle: "ከፍቺ በላይ፣ ቃሉን የመኖር መንገድ።",
+  valueProp1Eyebrow: "አውድን የሚረዳ",
+  valueProp1Title: "በእያንዳንዱ ጊዜ ትክክለኛው ትርጉም",
+  valueProp1Body: "ዓረፍተ ነገር ይለጥፉ። Gadit የሚስማማውን ትርጉም ይመርጣል፣ በጣም የተለመደውን ብቻ አይደለም።",
+  valueProp2Eyebrow: "ምስላዊ",
+  valueProp2Title: "ሕያው ምስል፣ ለዚህ ቃል ብቻ",
+  valueProp2Body: "ለእያንዳንዱ ቃል የተፈጠረ። ቃሉ የሚሰጠውን ስሜት የሚይዝ ምስላዊ መልህቅ። የስቶክ ፎቶ አይደለም።",
+  valueProp3Eyebrow: "ሥርወ ቃል",
+  valueProp3Title: "ታሪካዊ ማስታወሻ፣ የዊኪፔዲያ ግልበጣ አይደለም",
+  valueProp3Body: "ቃሉ ከየት እንደመጣ፣ በአጭር አንቀጽ፣ ጉጉ ጓደኛ እንደሚጽፈው።",
+  valueProp4Eyebrow: "14 ቋንቋዎች",
+  valueProp4Title: "ዕብራይስጥ እና ዓረብኛ፣ ሙሉ በሙሉ ቤተኛ",
+  valueProp4Body: "እውነተኛ RTL፣ እውነተኛ ፊደላት፣ እውነተኛ ፈሊጦች። ተለጥፎ የተተረጎመ ገጽታ አይደለም።",
+
+  previewLabel: "ቅድመ እይታ",
+  seeFullResult: "ሙሉውን ውጤት ይመልከቱ",
+
+  pricingEyebrow: "ዋጋ",
+  pricingTeaserTitle: "ሦስት እቅዶች። በሁሉም ውስጥ እውነተኛ ይዘት።",
+  trustMicrocopy: "በማንኛውም ጊዜ ይሰርዙ · በClear ወርሃዊ እቅድ የ14 ቀን ሙከራ · ሙከራው እስኪያበቃ ድረስ ክፍያ የለም",
+
+  // Footer
+  footerProductGroup: "ምርት",
+  footerLegalGroup: "ሕጋዊ",
+  footerCompare: "ንጽጽር",
+  footerNotebook: "ደብተር",
+  footerPricing: "ዋጋ",
+  footerPrivacy: "ግላዊነት",
+  footerTerms: "ውሎች",
+  footerContact: "እርዳታ",
+  footerTagline: "ለ14 ቋንቋዎች ብልህ መዝገበ ቃላት። ለእውነተኛ ትምህርት የተሠራ።",
+  footerLanguagesNote: "14 ቋንቋዎች",
+
+  // Nav
+  signIn: "ይግቡ",
+  startFree: "በነጻ ይጀምሩ",
+  verbStampDef: "ቃልን ሙሉ በሙሉ መረዳት",
+  navSearch: "ፍለጋ",
+  navCompare: "ንጽጽር",
+  navNotebook: "ደብተር",
+  navPricing: "ዋጋ",
+  navSchools: "ትምህርት ቤቶች",
+  navFeatures: "ባህሪያት",
+
+  // Pricing page
+  pricingPageHeadline: "ሦስት እቅዶች። በሁሉም ውስጥ እውነተኛ ይዘት።",
+  pricingPageSubline: "በነጻ ይጀምሩ። ጥልቀት ሲጠቅምዎ ያሻሽሉ።",
+  billingMonthly: "ወርሃዊ",
+  billingYearly: "ዓመታዊ",
+  billingSave17: "17% ይቆጥቡ",
+
+  tierBasicTagline: "ይረዱ",
+  tierBasicPitch: "በዋና ዋናዎቹ ይጀምሩ።",
+  tierBasicCta: "ይጀምሩ",
+  tierClearTagline: "ይመልከቱ",
+  tierClearPitch: "በምስሎች፣ በልጆች ሁነታ እና በግብረመልስ ቃላትን ሕይወት ይስጧቸው።",
+  tierClearBadge: "በጣም ተወዳጅ",
+  tierClearCta: "የ14 ቀን ነጻ ሙከራ ይጀምሩ",
+  tierClearCtaYearly: "ዓመታዊ ደንበኝነት ይጀምሩ",
+  tierClearTrust: "በማንኛውም ጊዜ ይሰርዙ · በሙከራው ወቅት ክፍያ የለም",
+  tierDeepTagline: "ይለማመዱ",
+  tierDeepPitch: "ከጊዜ ወደ ጊዜ እየጠነከረ የሚሄድ የግል የቃላት ስብስብ ይገንቡ።",
+  tierDeepCta: "Deep ደንበኛ ይሁኑ",
+
+  tierBasicFeatures:
+    "በቀን 20 የቃል ፍለጋዎች¶ሁሉም ትርጉሞች (ዋናው ብቻ አይደለም)¶ለእያንዳንዱ ትርጉም 3 ምሳሌዎች¶ሥርወ ቃል እና ታሪክ¶ለመጠቀም መግባት ያስፈልጋል",
+  tierClearFeatures:
+    "በBasic ውስጥ ያለው ሁሉ¶ያልተገደበ ፍለጋ¶ለልጆች የሚሆን ማብራሪያ¶ለእያንዳንዱ ቃል ምስል (30/ወር)¶የራስዎን ዓረፍተ ነገር ይጻፉ እና ግብረመልስ ያግኙ¶ፈሊጦች እና አገላለጾች¶የፍለጋ ታሪክ (ያለፉት 30 ቀናት)",
+  tierDeepFeatures:
+    "በClear ውስጥ ያለው ሁሉ¶የልምምድ ኩዊዞች¶የግል የቃላት ደብተር¶ለረጅም ጊዜ የሚቆይ የቃላት ዕውቀት ብልህ ልምምድ¶ተመሳሳይ ቃላትን ይለዩ¶ለእያንዳንዱ ቃል ምስል (100/ወር)",
+
+  basicEquivalent: "",
+  clearEquivalent: "በወር $2.50 ማለት ነው",
+  deepEquivalent: "በወር $4.17 ማለት ነው",
+
+  // Section eyebrows on the result page
+  meaningsEyebrow: "ፍቺዎች",
+  idiomsEyebrow: "ፈሊጦች እና አገላለጾች",
+  wordOriginEyebrow: "ሥርወ ቃል",
+  visualEyebrow: "ምስል",
+  takeItFurtherEyebrow: "የበለጠ ይቀጥሉ",
+  // Word origin structured rows
+  wordOriginLanguage: "ቋንቋ",
+  wordOriginOriginallyMeant: "የመጀመሪያ ትርጉም",
+  wordOriginBackgroundLabel: "ዳራ",
+  wordOriginOriginalWord: "የመጀመሪያው ቃል",
+  wordOriginBreakdown: "የቃሉ ክፍሎች",
+  // Meaning-level action labels
+  actionCompose: "ዓረፍተ ነገር ይጻፉ",
+  actionQuiz: "ኩዊዝ",
+  actionCompare: "ቃላትን ያወዳድሩ",
+  actionKidsExplanation: "ለልጆች ማብራሪያ",
+  // Visual / image gen
+  visualEmptyLabel: "ለዚህ ቃል ምስል ይፈጠራል",
+  generateLabel: "ፍጠር",
+  imageGeneratingLabel: "ምስሉ እየተፈጠረ ነው…",
+  imageGeneratingHint: "ብዙውን ጊዜ ከ10 እስከ 15 ሰከንድ ይወስዳል።",
+  imageOpenFullAria: "ምስሉን በሙሉ መጠን ይክፈቱ",
+  compareComingSoon: "የቃላት ጨዋታዎች በቅርቡ ይመጣሉ።",
+  navPlay: "ጨዋታ",
+  navAffiliates: "አጋሮች",
+
+  kidsModeLabel: "ልጆች",
+  kidsModeTooltipOff: "እያንዳንዱ ቃል ወላጅ ለልጁ እንደሚያስረዳው እንዲብራራ ይንኩ።",
+  kidsModeTooltipOn: "የልጆች ሁነታ በርቷል። እያንዳንዱ ፍቺ ለልጅ ተብሎ ይጻፋል። ለማጥፋት ይንኩ።",
+  kidsModeBasicGate: "የልጆች ሁነታ የClear ባህሪ ነው። ለመጠቀም ያሻሽሉ።",
+
+  signupWelcomeTitle: "እንኳን ወደ Gadit በደህና መጡ!",
+  signupWelcomeBody: "መለያዎ ዝግጁ ነው። በማንኛውም ቃል ፍለጋ ይጀምሩ።",
+
+  // Share / save / listen on the result page
+  shareLabel: "ያጋሩ",
+  backLabel: "ተመለስ",
+  shareDefinitionAria: "ይህን ፍቺ ያጋሩ",
+  savedAgoTemplate: (t) => `ተቀምጧል · ${t}`,
+
+  // Trust strip
+  trustStripCancel: "በStripe ፖርታል በማንኛውም ጊዜ ይሰርዙ",
+  trustStripMoneyBack: "በመጀመሪያ ግዢ ላይ የ14 ቀን ገንዘብ ተመላሽ ዋስትና",
+  trustStripDataYours: "ውሂብዎ የእርስዎ ነው፣ በማንኛውም ጊዜ ኤክስፖርት ማድረግ ይችላሉ",
+  trustStripNoAds: "ማስታወቂያ የለም፣ የሶስተኛ ወገን ክትትል የለም",
+
+  // FAQ
+  faqEyebrow: "በተደጋጋሚ የሚጠየቁ ጥያቄዎች",
+  faqHeadline: "ጥያቄዎችዎ፣ ከመልሶች ጋር",
+  faqQ1: "እቅዴን መቀየር እችላለሁ?",
+  faqA1: "አዎ፣ በማንኛውም ጊዜ ማሻሻል ወይም መቀነስ ይችላሉ። ስሌቱ በራስ-ሰር ይስተካከላል፣ የሚከፍሉት ልዩነቱን ብቻ ነው።",
+  faqQ2: "ብሰርዝ ምን ይሆናል?",
+  faqA2: "እስከ ክፍያ ጊዜው መጨረሻ ድረስ መዳረሻዎ ይቀጥላል፣ ከዚያ በኋላ ወደ Basic ይመለሳሉ። ምንም ውሂብ አይጠፋም።",
+  faqQ3: "ሙከራው በእርግጥ ነጻ ነው?",
+  faqA3: "አዎ። አላግባብ መጠቀምን ለመከላከል ካርድ እንጠይቃለን፣ ግን እስከ 15ኛው ቀን ድረስ ክፍያ የለም። ከዚያ በፊት ከሰረዙ ምንም አይከፍሉም።",
+  faqQ4: "ለምን ሦስት እቅዶች?",
+  faqA4: "የተለያዩ ሰዎች የተለያየ ጥልቀት ያስፈልጋቸዋል። አንድ ከባድ እቅድ ከመሸጥ ይልቅ፣ እርስዎ ባሉበት እናገኝዎታለን።",
+  faqQ5: "የልጆች ማብራሪያ ደህንነቱ የተጠበቀ ነው?",
+  faqA5: "አዎ። እንደ አዋቂዎች ይዘት ሁሉ በተመሳሳይ ጥንቃቄ ይዘጋጃል፣ በይዘት ደንቦቻችን የተፈተሸ ነው። ለልጆች በተጠቃሚዎች የተፈጠረ ይዘት የለም።",
+
+  // Login modal
+  loginWelcomeBack: "ይግቡ",
+  loginCreateAccount: "መለያዎን ይፍጠሩ",
+  loginContinueWithGoogle: "በGoogle ይቀጥሉ",
+  loginInAppNotice: "በ{app} ውስጥ፣ ከታች በኢሜይል ይግቡ። ለGoogle፣ አገናኙን በአሳሽ ይክፈቱ።",
+  loginOrSeparator: "ወይም",
+  loginEmailLabel: "ኢሜይል",
+  loginPasswordLabel: "የይለፍ ቃል",
+  loginEmailPlaceholder: "you@example.com",
+  loginPasswordPlaceholder: "••••••••",
+  loginSubmitSignIn: "ይግቡ",
+  loginSubmitSignUp: "መለያ ይፍጠሩ",
+  loginSwitchToSignUp: "መለያ የለዎትም? ይመዝገቡ",
+  loginForgotPassword: "የይለፍ ቃልዎን ረሱ?",
+  loginForgotPasswordEnterEmail: "መጀመሪያ ከላይ ኢሜይልዎን ያስገቡ፣ ከዚያ እዚህ ይንኩ።",
+  loginResetSent: "በዚህ ኢሜይል መለያ ካለ፣ የመቀየሪያ አገናኝ በመንገድ ላይ ነው።",
+  loginResetError: "የመቀየሪያ ኢሜይሉን መላክ አልተቻለም። እንደገና ይሞክሩ።",
+  loginSwitchToSignIn: "አስቀድሞ መለያ አለዎት? ይግቡ",
+  loginShowPassword: "የይለፍ ቃል አሳይ",
+  loginHidePassword: "የይለፍ ቃል ደብቅ",
+  loginCloseAria: "ዝጋ",
+  loginSigningIn: "በመግባት ላይ…",
+  loginCreatingAccount: "መለያ በመፍጠር ላይ…",
+  loginErrorWrongCredentials: "ኢሜይሉ ወይም የይለፍ ቃሉ ትክክል አይደለም።",
+  loginErrorEmailInUse: "ይህ ኢሜይል አስቀድሞ ጥቅም ላይ ውሏል። ለመግባት ይሞክሩ።",
+  loginErrorWeakPassword: "የይለፍ ቃሉ ቢያንስ 8 ቁምፊዎች፣ አንድ ፊደል እና አንድ ቁጥር ሊኖረው ይገባል።",
+  loginAgeTermsLine: "13 ዓመት ወይም ከዚያ በላይ ነኝ እናም እቀበላለሁ",
+  loginTermsLinkLabel: "ውሎች",
+  loginPrivacyLinkLabel: "የግላዊነት መመሪያ",
+  loginErrorAgeRequired: "13 ዓመት ወይም ከዚያ በላይ መሆንዎን እና ውሎቹን እና የግላዊነት መመሪያውን መቀበልዎን ያረጋግጡ።",
+  loginErrorInvalidEmail: "ትክክለኛ የኢሜይል አድራሻ ያስገቡ።",
+  loginErrorGoogleFailed: "በGoogle መግባት አልተቻለም። እንደገና ይሞክሩ።",
+  loginErrorGeneric: "የሆነ ስህተት ተከስቷል። እንደገና ይሞክሩ።",
+
+  // Compose modal
+  composeEyebrow: "ይጻፉ",
+  composeTitleTemplate: (w) => `በ${w} የራስዎን ዓረፍተ ነገር ይጻፉ`,
+  composeSubtitle: "ቃሉን በዓረፍተ ነገር ውስጥ ይጠቀሙ እና በሰዋስው፣ በቃና እና በአገባብ ላይ ፈጣን ግብረመልስ ያግኙ።",
+  composeMeaningPickerLabel: "የሚለማመዱትን ትርጉም ይምረጡ",
+  composePlaceholder: "ዓረፍተ ነገርዎን እዚህ ይጻፉ…",
+  composeSubmit: "ዓረፍተ ነገሩን ያረጋግጡ",
+  composeChecking: "በመፈተሽ ላይ…",
+  composeStatusPerfectLabel: "ፍጹም ትክክል",
+  composeStatusAlmostLabel: "ተቃርቧል",
+  composeStatusIncorrectLabel: "ትክክል አይደለም",
+  composeSuggestionEyebrow: "የተጠቆመ አጻጻፍ",
+  composeTryAnother: "ሌላ ዓረፍተ ነገር ይሞክሩ",
+  composeBackToWord: "ወደ ቃሉ ይመለሱ",
+  composeErrorEmpty: "መጀመሪያ ዓረፍተ ነገር ይጻፉ።",
+  composeErrorTooShort: "ቢያንስ ጥቂት ቃላት ይጻፉ።",
+
+  // Quiz modal
+  quizEyebrow: "ይለማመዱ",
+  quizTitleTemplate: (w) => `${w}፣ ኩዊዝ`,
+  quizQuestionNofM: (n, m) => `ጥያቄ ${n} ከ${m}`,
+  quizSubmit: "ይላኩ",
+  quizNext: "ቀጣይ ጥያቄ",
+  quizFinish: "ይጨርሱ",
+  quizYesCorrect: "አዎ፣ ትክክል",
+  quizNotQuite: "ትክክል አይደለም",
+  quizLoading: "ኩዊዝዎ በመዘጋጀት ላይ ነው…",
+  quizFinalScoreTemplate: (c, t) => `ከ${t} ውስጥ ${c} በትክክል መልሰዋል።`,
+  quizPracticeAnotherWord: "ሌላ ቃል ይለማመዱ",
+  quizBackToWord: "ወደ ቃሉ ይመለሱ",
+  quizReviewMistakes: "የተሳሳቷቸውን ይከልሱ",
+
+  // Compare page
+  compareEyebrow: "ያወዳድሩ",
+  compareTitle: "ተመሳሳይ ቃላትን ይለዩ",
+  compareSubtitle:
+    "ብዙ ጊዜ የሚያደናግሩ ቃላት፣ የቋንቋው ተወላጆችንም ጭምር።",
+  compareWord1Label: "ቃል 1",
+  compareWord2Label: "ቃል 2",
+  compareWord1Placeholder: "ማወቅ",
+  compareWord2Placeholder: "መረዳት",
+  compareCta: "ያወዳድሩ",
+  compareLoading: "በማወዳደር ላይ…",
+  compareEmpty: "ለማወዳደር ሁለት ቃላት ያስገቡ",
+  compareDifferenceLabel: "ልዩነት",
+  compareExamplesLabel: "ምሳሌዎች",
+  compareCommonMistakeLabel: "የተለመደ ስህተት",
+  compareErrNotARealWord: "ከእነዚህ ቃላት አንዱን ማግኘት አልቻልንም።",
+  compareErrDifferentLanguages: "እነዚህ ሁለት ቃላት ከተለያዩ ቋንቋዎች ይመስላሉ። ተመሳሳይ ቋንቋ ያላቸውን ጥንድ ይሞክሩ።",
+  compareErrSameWord: "እነዚህ አንድ ዓይነት ቃል ይመስላሉ። ሁለት የተለያዩ ቃላት ይሞክሩ።",
+  compareErrGeneric: "ማወዳደር አሁን አይገኝም።",
+
+  // Notebook page
+  notebookEyebrow: "ደብተር",
+  notebookTitle: "የቃላት ዓለምዎ",
+  notebookSubtitle: "የፈለጉት እያንዳንዱ ቃል፣ ተቀምጦ፣ ተደራጅቶ፣ እያደገ።",
+  notebookCounterTemplate: (n) => `${n} ቃላት ተፈልገዋል`,
+  notebookWordsExplored: "የተፈለጉ ቃላት",
+  notebookPracticeNow: "አሁን ይለማመዱ",
+  notebookDueTodayTemplate: (n) => `${n} ዛሬ ለክለሳ`,
+  notebookListView: "ዝርዝር",
+  notebookGalaxyView: "ጋላክሲ",
+  notebookEmptyTitle: "ደብተርዎ ባዶ ነው",
+  notebookEmptyCta: "ለመጀመር አንድ ቃል ይፈልጉ",
+  notebookRemoveAria: "አስወግድ",
+  notebookMasteredLabel: "★ ተምረውታል",
+  notebookSavedOnTemplate: (d) => `በ${d} ተቀምጧል`,
+  notebookLegendRecent: "በቅርብ የተቀመጡ",
+  notebookLegendMastered: "የተማሩት",
+  notebookLegendNeedsReview: "ክለሳ የሚያስፈልጋቸው",
+
+  // Spaced Repetition
+  srEyebrow: "ይለማመዱ",
+  srWordNofMTemplate: (n, m) => `ቃል ${n} ከ${m}`,
+  srSkip: "ይዝለሉ",
+  srClickToReveal: "ለማየት የትም ቦታ ይጫኑ",
+  srTapToReveal: "ለማየት ይንኩ",
+  srPrimaryMeaningLabel: "ዋና ትርጉም",
+  srExamplesLabel: "ምሳሌዎች",
+  srIForgot: "ረሳሁት",
+  srIKnewIt: "አውቄዋለሁ",
+  srSchedulingHint: "አውቄዋለሁ = በሚቀጥለው ጊዜ ከጥቂት ቀናት በኋላ። ረሳሁት = ዛሬው ተመልሶ ይመጣል።",
+  srWordsPracticed: "የተለማመዱ ቃላት",
+  srSummaryStatTemplate: (k, f) => `${k} ትክክል · ${f} ለክለሳ`,
+  srTomorrow: "ነገ",
+  srNextReviewTemplate: (when, count) =>
+    `ቀጣይ ክለሳ፦ ${when} (${count} ${count === 1 ? "ቃል" : "ቃላት"} ለክለሳ)`,
+  srDoneForToday: "ለዛሬ ጨርሰዋል",
+  srPracticeMore: "ተጨማሪ ይለማመዱ",
+  srEmptyTitle: "ዛሬ ለክለሳ ምንም የለም",
+  srEmptyBody: "ጥሩ ሥራ። ነገ ይመለሱ።",
+  srBackToNotebook: "ወደ ደብተሩ ይመለሱ",
+  srLoading: "ልምምዱ በመጫን ላይ…",
+
+  // Account
+  accountEyebrow: "መለያ",
+  accountYourSpace: "የእርስዎ ቦታ",
+  accountNamedSpaceTemplate: (n) => `የ${n} ቦታ`,
+  accountPlanLabel: "እቅድ",
+  accountOnPlanFree: "ነጻ",
+  accountNoActiveSubscription: "ንቁ ምዝገባ የለም",
+  accountChooseAPlan: "ለመጀመር እቅድ ይምረጡ።",
+  accountTrialBadgeTemplate: (d) =>
+    `የ14 ቀን ሙከራ · ${d} ${Number(d) === 1 ? "ቀን ቀርቷል" : "ቀናት ቀርተዋል"}`,
+  accountRenewsOnTemplate: (d) => `በ${d} ይታደሳል`,
+  accountCancelsAtPeriodEnd: "በክፍያ ጊዜው መጨረሻ ይቆማል",
+  accountManageBilling: "ክፍያን ያስተዳድሩ",
+  accountChangePlan: "እቅድ ይቀይሩ",
+  accountUpgrade: "ያሻሽሉ",
+  accountUsageThisMonth: "የዚህ ወር አጠቃቀም",
+  accountImageGeneration: "ምስል መፍጠር",
+  accountSearches: "ፍለጋዎች",
+  accountLocked: "ተቆልፏል",
+  accountUnlimited: "ያልተገደበ",
+  accountTodaySuffix: "ዛሬ",
+  accountNearingLimit: "የዚህን ወር ገደብ እየተቃረቡ ነው።",
+  accountSectionLabel: "መለያ",
+  accountEmailLabel: "ኢሜይል",
+  accountChangeEmail: "ኢሜይል ይቀይሩ",
+  accountSignOut: "ይውጡ",
+  accountDeleteAccount: "መለያ ይሰርዙ",
+
+  // Report modal
+  reportEyebrow: "ስህተት ሪፖርት ያድርጉ",
+  reportTitle: "ምን ተሳስቷል?",
+  reportTellMore: "ተጨማሪ ይንገሩን",
+  reportTellMorePh: "አማራጭ ነው። በዝርዝር በገለጹ ቁጥር በፍጥነት እናስተካክለዋለን።",
+  reportSend: "ሪፖርቱን ይላኩ",
+  reportSending: "በመላክ ላይ…",
+  reportThanks: "እናመሰግናለን፣ ደርሶናል።",
+  reportError: "አሁን መላክ አልተቻለም። ትንሽ ቆይተው እንደገና ይሞክሩ።",
+  reportCatIncorrectDefinition: "የተሳሳተ ፍቺ",
+  reportCatWrongEtymology: "የተሳሳተ ሥርወ ቃል",
+  reportCatBadExample: "የተሳሳተ ምሳሌ ዓረፍተ ነገር",
+  reportCatKidsExplanation: "በልጆች ማብራሪያ ላይ ችግር",
+  reportCatIdiomIssue: "በፈሊጥ ላይ ችግር",
+  reportCatWrongImage: "የተሳሳተ ምስል",
+  reportCatQuizWrongAnswer: "ኩዊዝ፦ ትክክለኛ መልስ ስህተት ተብሏል",
+  reportCatComposeFeedback: "በዓረፍተ ነገር ግብረመልስ ላይ ችግር",
+  reportCatCompareResult: "በንጽጽር ውጤት ላይ ችግር",
+  reportCatSomethingElse: "ሌላ ነገር",
+
+  // Origin, history, kids
+  origin: "ሥርወ ቃል",
+  historyNote: "ታሪካዊ ማስታወሻ",
+  throughTime: "በጊዜ ሂደት",
+  forKids: "ለልጆች",
+  commonExpressions: "የተለመዱ አገላለጾች",
+  idiomsWithMeaning: "ከዚህ ትርጉም ጋር የተያያዙ ፈሊጦች",
+  meaningN: (n) => `ትርጉም ${n}`,
+  notJustPrimary: "ዋናው ትርጉም ብቻ አይደለም",
+  takeItFurther: "የበለጠ ይቀጥሉ",
+  doMoreWith: (w) => `በ${w} ተጨማሪ ያድርጉ`,
+  saveToNotebook: "ወደ ደብተር ያስቀምጡ",
+  saveToNotebookHint: "በኋላ ይመለሱበት፣ የተደራጀ እና በቀላሉ የሚገኝ።",
+  generateImage: "ምስል ይፍጠሩ",
+  generatingImage: "በመፍጠር ላይ…",
+  generateImageHint: "ለዚህ ቃል ብቻ የተፈጠረ ሕያው ምስል።",
+  composeSentence: "ዓረፍተ ነገር ይጻፉ",
+  composeSentenceHint: "የራስዎን ይጻፉ፣ Gadit ቃናውን እና አገባቡን ይፈትሻል።",
+  practiceWord: "ይህን ቃል ይለማመዱ",
+  practiceWordHint: "ከመማሪያ ስልትዎ ጋር የተስማማ አጭር ኩዊዝ።",
+  unlockWithClear: "በClear ይክፈቱ",
+  upgradeToClear: "ወደ Clear ያሻሽሉ",
+  softWallAnonTitle: "ነጻ ፍለጋዎችዎ አልቀዋል",
+  softWallAnonBody:
+    "በነጻ ይመዝገቡ እና በቀን 20 ቃላት ይፈልጉ፣ ከሙሉ ፍቺ፣ ምሳሌዎች፣ ፈሊጦች እና ሥርወ ቃል ጋር።",
+  softWallSignupCta: "በነጻ ይመዝገቡ",
+  softWallBasicTitle: "የዛሬውን ገደብ ጨርሰዋል",
+  softWallBasicBody:
+    "ነጻ መለያዎች በቀን 20 ፍለጋዎች ያገኛሉ። ነገ እንደገና ይጀምራል፣ ወይም ላልተገደበ ፍለጋ፣ ምስሎች፣ የልጆች ሁነታ እና የሰዋስው ግብረመልስ ወደ Clear ያሻሽሉ።",
+  softBannerSearchesLeft: (n) =>
+    Number(n) === 1
+      ? "ዛሬ 1 ነጻ ፍለጋ ቀርቷል፣ በነጻ ይመዝገቡ እና በቀን 20 ያግኙ።"
+      : `ዛሬ ${n} ነጻ ፍለጋዎች ቀርተዋል፣ በነጻ ይመዝገቡ እና በቀን 20 ያግኙ።`,
+  clearUnlocksThis: "Clear ይህን ይከፍታል",
+  visualizeThisWord: "በምስል ይመልከቱ",
+  visualBlurb: "በGadit የተፈጠረ ሕያው ምስል፣ የዚህ ቃል ምስላዊ መልህቅ።",
+  visualBlurbLocked: "ለዚህ ቃል ሕያው እና ልዩ ምስል ይፍጠሩ፣ በማየት መረዳት።",
+  reportLabel: "ስህተት ሪፖርት ያድርጉ",
+
+  // Misc result/save/listen
+  kidsComingSoon: "የልጆች ማብራሪያ በቅርቡ ይመጣል።",
+  saveToWordBook: "ወደ ደብተር ያስቀምጡ",
+  savedToWordBook: "በደብተር ውስጥ ተቀምጧል",
+  listenToWord: "ያዳምጡ",
+  offlinePin: "ከመስመር ውጭ ያስቀምጡ",
+  offlinePinned: "ከመስመር ውጭ ተቀምጧል",
+  offlinePinTitle: "ይህን ቃል ከመስመር ውጭ ለማጥናት ያስቀምጡ",
+  offlinePinnedTitle: "ተቀምጧል፣ ያለ WiFi ይገኛል",
+  offlineDownloadPack: "የመስመር ውጭ ጥቅል ያውርዱ",
+  offlineDownloadingPack: "በማውረድ ላይ…",
+  offlinePackHeader: "የመስመር ውጭ ጥቅል",
+  offlinePackDescription:
+    "በቋንቋዎ በብዛት የሚፈለጉትን ቃላት ወደ ደብተርዎ ይጨምራል እና ያለ WiFi ከመስመር ውጭ ለማጥናት ዝግጁ ያደርጋቸዋል።",
+};
+
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   en,
   he,
@@ -5425,6 +5807,7 @@ const TABLES: Record<Lang, Partial<V2Strings>> = {
   it,
   ja,
   hi,
+  am,
 };
 
 /**

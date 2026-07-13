@@ -15,6 +15,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   it: "Italian",
   ja: "Japanese",
   hi: "Hindi",
+  am: "Amharic",
 };
 
 const SYSTEM_PROMPT = `You are a warm, encouraging language tutor.

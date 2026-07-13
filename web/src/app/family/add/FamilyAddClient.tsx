@@ -94,6 +94,23 @@ const COPY: Record<string, {
     adding: "जोड़ रहे हैं...",
     capReached: `Family ${MAX_KIDS_PER_FAMILY} बच्चों तक सीमित है। और बच्चे नहीं जोड़ सकते, पर माता-पिता अब भी जोड़ सकते हैं।`,
   },
+  am: {
+    title: "ማን ነው ቤተሰቡን የሚቀላቀለው?",
+    step1: "ሚና ይምረጡ",
+    step2: "ስም እና ቀለም",
+    father: "አባት",
+    mother: "እናት",
+    boy: "ወንድ ልጅ",
+    girl: "ሴት ልጅ",
+    nameLabel: "ስም",
+    namePlaceholder: "ሰላም",
+    colorLabel: "የአምሳያ ቀለም",
+    back: "← ተመለስ",
+    cancel: "ሰርዝ",
+    add: "ወደ ቤተሰቡ ጨምር",
+    adding: "እየጨመርን ነው...",
+    capReached: `Family እስከ ${MAX_KIDS_PER_FAMILY} ልጆች ብቻ ነው። ተጨማሪ ልጆች መጨመር አይቻልም፣ ግን አሁንም ወላጅ መጨመር ይችላሉ።`,
+  },
 };
 
 const ROLE_DEFS: Array<{ role: MemberRole; iconViewBox: string; iconPath: string }> = [

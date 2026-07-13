@@ -324,6 +324,24 @@ const COPY: Record<string, Copy> = {
     iosClose: "समझ गया",
     closeLabel: "बंद करें",
   },
+  am: {
+    title: "Gaditን ወደ ስልክዎ ይጨምሩ",
+    bodyAndroid: "በአንድ ንክኪ ይጫኑት፣ ከመነሻ ማያ ገጽዎ እንደ እውነተኛ መተግበሪያ ይክፈቱት።",
+    bodyIos: "Gaditን በ iPhone መነሻ ማያ ገጽዎ ላይ እንደ እውነተኛ መተግበሪያ ይጨምሩ።",
+    install: "ጫን",
+    later: "በኋላ",
+    iosTitle: "Gaditን እንዴት እንደሚጭኑ",
+    iosLead: "በ3 ንክኪ ይጠናቀቃል:",
+    iosStep1: "የማጋራት ቁልፉን ይንኩ",
+    iosStep1Hint: "(በ Safari ታች ያለው ወደ ላይ ቀስት ያለው ካሬ)",
+    iosStep2: "ወደ ታች ሸብልለው \"ወደ መነሻ ማያ ገጽ አክል\" ይምረጡ",
+    iosStep3: "ከላይ በስተቀኝ \"አክል\" ይንኩ",
+    androidStep1: "የ Chrome ምናሌን (⋮) ይክፈቱ",
+    androidStep2: "\"ወደ መነሻ ማያ ገጽ አክል\" ይምረጡ",
+    androidStep3: "ለማረጋገጥ \"አክል\" ይንኩ",
+    iosClose: "ገባኝ",
+    closeLabel: "ዝጋ",
+  },
 };
 
 interface BeforeInstallPromptEvent extends Event {

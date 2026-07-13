@@ -130,6 +130,13 @@ const COPY: Record<string, {
     emptyHint: "कोई शब्द ढूँढें और 'नोटबुक में सहेजें' दबाएँ।",
     goSearch: "खोज पर वापस",
   },
+  am: {
+    title: "የእኔ ማስታወሻ ደብተር",
+    subtitle: "የሰበሰቧቸው ቃላት በሙሉ፣ ተቀምጠው እና ተደራጅተው።",
+    empty: "ማስታወሻ ደብተርዎ ባዶ ነው።",
+    emptyHint: "ቃል ፈልገው 'ወደ ማስታወሻ ደብተር አስቀምጥ' የሚለውን ይንኩ።",
+    goSearch: "ወደ ፍለጋ ተመለስ",
+  },
 };
 
 function LangSwitch() {

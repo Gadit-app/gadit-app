@@ -29,7 +29,7 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am";
 
 interface NotebookItem {
   word: string;
@@ -354,6 +354,28 @@ const COPY: Record<Lang, {
     backToWord: "शब्द पर वापस",
     notEnough: "सभी खेल खोलने के लिए अपनी नोटबुक में और शब्द सहेजें",
     notEnoughHint: "अपनी नोटबुक में 2-3 शब्द और जोड़ें और यह खेल खुल जाएगा।",
+  },
+  am: {
+    title: "ለዚህ ቃል የተዘጋጁ ጨዋታዎች",
+    loading: "በመጫን ላይ…",
+    anagramEyebrow: "ፊደላቱን መልሰው ደርድሩ",
+    anagramHintLabel: "ፍንጭ:",
+    anagramReset: "ዳግም አስጀምር",
+    fillblankEyebrow: "ዓረፍተ ነገሩን አሟሉ",
+    fillblankPrompt: "ዓረፍተ ነገሩን የሚያሟላው የትኛው ቃል ነው?",
+    next: "ቀጣይ",
+    finish: "ጨርስ",
+    close: "ዝጋ",
+    correct: "ትክክል!",
+    wrong: "ተቃርበዋል",
+    resultGreat: "ድንቅ!",
+    resultGood: "ጥሩ ሥራ።",
+    resultTryAgain: "አንድ ዙር ደግመው ይሞክሩ።",
+    scoreLine: (s, t) => `ከ${t} ውስጥ ${s}`,
+    playAgain: "እንደገና ተጫወት",
+    backToWord: "ወደ ቃሉ ተመለስ",
+    notEnough: "ሁሉንም ጨዋታዎች ለመክፈት በማስታወሻ ደብተርዎ ውስጥ ተጨማሪ ቃላት ያስቀምጡ",
+    notEnoughHint: "በማስታወሻ ደብተርዎ ላይ 2-3 ተጨማሪ ቃላት ይጨምሩ እና ይህ ጨዋታ ይከፈታል።",
   },
 };
 

@@ -43,7 +43,7 @@ const AFFONSO_LANGS = new Set([
 
 // Localized strings — inline so this single page doesn't add 9 entries
 // to i18n-v2 for what amounts to a loading state and an error message.
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am";
 const COPY: Record<Lang, {
   title: string;
   loadingTitle: string;
@@ -339,6 +339,27 @@ const COPY: Record<Lang, {
     payoutGuideTitle: "आख़िरी क़दम: भुगतान कैसे चाहिए",
     payoutGuideBody: "हमें आपको कमीशन भेजने के लिए, अपना भुगतान का तरीक़ा एक बार चुनें। नीचे डैशबोर्ड के अंदर पीले बैनर में मिलेगा। एक मिनट लगता है।",
     payoutGuideDismiss: "समझ गया",
+  },
+  am: {
+    title: "የእኔ ዳሽቦርድ",
+    loadingTitle: "ዳሽቦርድዎ እየተጫነ ነው…",
+    loadingHint: "ለመጀመሪያ ጊዜ ጥቂት ሰከንዶች ይወስዳል።",
+    notConfiguredTitle: "ዳሽቦርዱ ገና አልተዋቀረም",
+    notConfiguredBody:
+      "ውህደቱን በማጠናቀቅ ላይ ነን። እስከዚያው ዳሽቦርድዎን በውጫዊው ፖርታል በኩል በቀጥታ ማግኘት ይችላሉ።",
+    errorTitle: "የሆነ ስህተት ተፈጥሯል",
+    errorBody:
+      "ዳሽቦርድዎን መጫን አልቻልንም። ገጹን ለማደስ ይሞክሩ፣ ችግሩ ከቀጠለ ወደ ውጫዊው ፖርታል ይግቡ።",
+    signInTitle: "ዳሽቦርድዎን ለማየት ይግቡ",
+    signInBody: "የግል ሊንክዎን፣ ስታቲስቲክስዎን እና ኮሚሽኖችዎን ለማየት ወደ Gadit መለያዎ ይግቡ።",
+    marketingLink: "ፕሮግራሙ ምንድን ነው?",
+    upgradeTitle: "የአጋርነት ፕሮግራሙ ለClear እና Deep አባላት ነው",
+    upgradeBody:
+      "ምርጥ ምክሮች ከእውነተኛ አጠቃቀም ይመጣሉ። ወደ Clear ወይም Deep ያሻሽሉ፣ ሙሉውን የGadit ተሞክሮ ያግኙ፣ እና በእያንዳንዱ ያመጡት ደንበኛ 30% ኮሚሽን ያለው የአጋርነት ፕሮግራም ይከፈትልዎታል።",
+    upgradeCta: "ወደሚከፈልበት እቅድ ያሻሽሉ",
+    payoutGuideTitle: "የመጨረሻ እርምጃ፣ ክፍያ እንዴት መቀበል ይፈልጋሉ",
+    payoutGuideBody: "ኮሚሽኖችዎን ልንልክልዎ እንድንችል፣ የክፍያ መንገድዎን አንድ ጊዜ ይምረጡ። አማራጩን ከታች ባለው ዳሽቦርድዎ ውስጥ በቢጫው ባነር ላይ ያገኙታል። አንድ ደቂቃ ያህል ይወስዳል።",
+    payoutGuideDismiss: "ገባኝ",
   },
 };
 

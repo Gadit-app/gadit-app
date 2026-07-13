@@ -116,6 +116,24 @@ const COPY: Record<string, {
     removeStudentAria: "छात्र हटाएँ",
     anonymousLabel: "अनाम",
   },
+  am: {
+    title: "ክፍል",
+    classroomCodeLabel: "የክፍሉ ኮድ",
+    shareLinkLabel: "የልጆች ሊንክ",
+    copyLinkBtn: "ሊንኩን ኮፒ ያድርጉ",
+    copied: "ተቀድቷል",
+    recentSearches: "በቅርቡ የተፈለጉ ቃላት",
+    empty: "እስካሁን ምንም ፍለጋ የለም። ልጆች ከላይ ባለው ኮድ መግባት ይችላሉ።",
+    back: "← ወደ ትምህርት ቤቱ ተመለሱ",
+    loading: "እየተጫነ ነው…",
+    notFound: "ክፍሉ አልተገኘም።",
+    studentsLabel: "የክፍሉ ተማሪዎች",
+    studentsHint: "የተማሪዎችዎን ስሞች ይጨምሩ፣ ኮዱን ሲከፍቱ ራሳቸውን ይመርጣሉ።",
+    addStudentPh: "የመጀመሪያ ስም፣ ወይም ዝርዝር፡ ሰላም፣ ዳዊት፣ ሃና",
+    addStudentBtn: "+ ጨምር",
+    removeStudentAria: "ተማሪ አስወግድ",
+    anonymousLabel: "ስም አልባ",
+  },
 };
 
 export function TeacherClassroomClient({ classroomId }: { classroomId: string }) {
@@ -496,7 +514,7 @@ function formatRelativeTime(iso: string, lang: string): string {
   const min = Math.floor(ms / 60_000);
   const hr = Math.floor(ms / 3_600_000);
   const day = Math.floor(ms / 86_400_000);
-  if (min < 1) return lang === "he" ? "עכשיו" : lang === "hi" ? "अभी" : "now";
+  if (min < 1) return lang === "he" ? "עכשיו" : lang === "hi" ? "अभी" : lang === "am" ? "አሁን" : "now";
   if (min < 60) return `${min}m`;
   if (hr < 24) return `${hr}h`;
   if (day < 7) return `${day}d`;

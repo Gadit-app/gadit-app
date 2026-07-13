@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
-import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari, Noto_Sans_Ethiopic } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
@@ -123,6 +123,17 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
   display: "swap",
 });
 
+// Noto Sans Ethiopic — Amharic (Ge'ez script, LTR). Same story as
+// Devanagari/JP: none of the Latin-oriented fonts carry fidel glyphs,
+// and OS fallbacks (Windows Nyala/Ebrima, macOS Kefa) are wildly
+// inconsistent, so the script ships its own self-contained font.
+const notoSansEthiopic = Noto_Sans_Ethiopic({
+  variable: "--font-noto-am",
+  subsets: ["latin", "ethiopic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 // Per-language metadata strings used by generateMetadata below. The
 // description is the same first-person share blurb that ShareButton
 // uses for the Web Share API, so the social-card preview that gets
@@ -207,9 +218,15 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "हर शब्द को सच में समझने का नया तरीका। हर अर्थ, असली वाक्य, मुहावरे और शब्द का इतिहास, सब एक जगह। मुफ्त शुरू करें, बहुत किफायती दामों पर अपग्रेड करें। आज़माने लायक।",
     locale: "hi_IN",
   },
+  am: {
+    title: "Gadit, ቃላትን እስከ መጨረሻው ይረዱ",
+    description:
+      "እያንዳንዱን ቃል በእውነት እንዲረዱ የሚያግዝ አዲስ መሣሪያ። ሁሉም ትርጉሞች፣ ምሳሌዎች፣ ፈሊጦች እና የቃሉ መነሻ። ለመጀመር ነፃ ነው፣ ማሻሻያውም በጣም ተመጣጣኝ ዋጋ አለው። መሞከር ተገቢ ነው።",
+    locale: "am_ET",
+  },
 };
 
-const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi"];
+const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
 
 export async function generateMetadata(): Promise<Metadata> {
   // Resolve language for this request, exactly the same chain the
@@ -314,7 +331,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi"];
+const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
 
 export default async function RootLayout({
   children,
@@ -339,7 +356,7 @@ export default async function RootLayout({
     <html
       lang={initialLang}
       dir={initialDir}
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} ${notoSansEthiopic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           <LangProvider initialLang={initialLang}>
