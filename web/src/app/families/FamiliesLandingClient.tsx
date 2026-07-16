@@ -33,8 +33,8 @@ const PRICE_FAMILY_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY ?
 const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const PRICE_DEEP_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "";
 
-type Angle = "relief" | "anxiety" | "safe";
-const ANGLES: Angle[] = ["relief", "anxiety", "safe"];
+type Angle = "vocab" | "relief" | "anxiety" | "safe";
+const ANGLES: Angle[] = ["vocab", "relief", "anxiety", "safe"];
 
 /* ────────────────────────── copy ────────────────────────── */
 
@@ -94,6 +94,10 @@ const COPY: Record<"he" | "en", Copy> = {
   he: {
     heroBadge: "המסלול המשפחתי של Gadit",
     angles: {
+      vocab: {
+        h1: "אוצר מילים גדול זה לא כישרון. זה הרגל.",
+        sub: "כל מילה שהילד שואל עליה נכנסת למחברת המילים האישית שלו ב-Gadit: עם תמונה, הסבר בגובה של ילד, ותרגול קצר שמחזיר אותה עד שהיא שלו. פותחים את המחברת בסוף החודש ורואים את אוצר המילים גדל, מילה אחרי מילה.",
+      },
       relief: {
         h1: "די להיות המילון הפרטי של הבית",
         sub: "מהיום, כשהילד שואל \"מה זה אומר?\", יש לו מקום אחד שבו הוא מוצא את התשובה לבד: כל המשמעויות, תמונה לכל משמעות, והסבר בגובה של ילד. בלי צ'אט פתוח ובלי פרסומות.",
@@ -233,6 +237,10 @@ const COPY: Record<"he" | "en", Copy> = {
   en: {
     heroBadge: "The Gadit Family plan",
     angles: {
+      vocab: {
+        h1: "A big vocabulary is not a talent. It is a habit.",
+        sub: "Every word your child asks about lands in their personal word notebook in Gadit: with a picture, a kid-level explanation, and short practice that brings it back until it is theirs. Open the notebook at the end of the month and watch the vocabulary grow, word by word.",
+      },
       relief: {
         h1: "Stop being the family dictionary",
         sub: "From today, when your kid asks \"what does this mean?\", they have one place to find the answer alone: every meaning, a picture for each one, and an explanation at kid level. No open chat, no ads.",
@@ -538,8 +546,10 @@ export default function FamiliesLandingClient() {
   const he = lang === "he";
   const c = he ? COPY.he : COPY.en;
 
+  // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
+  // is visible vocabulary growth; the pain angles stay as variants).
   const rawAngle = params.get("v");
-  const angle: Angle = ANGLES.includes(rawAngle as Angle) ? (rawAngle as Angle) : "relief";
+  const angle: Angle = ANGLES.includes(rawAngle as Angle) ? (rawAngle as Angle) : "vocab";
   const hero = c.angles[angle];
 
   const [billing, setBilling] = useState<"yearly" | "monthly">("yearly");
