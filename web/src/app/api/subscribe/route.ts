@@ -138,6 +138,14 @@ export async function POST(req: NextRequest) {
 
     const customer = await resolveCustomer(uid, email);
 
+    // Hebrew users are billed in shekels. Every paid price carries an
+    // ILS currency_option (set 2026-07-16: Family ₪23.90/₪239, Deep
+    // ₪16.90/₪169, Clear ₪9.90/₪99, Schools ₪239/₪2,390, Large
+    // ₪499/₪4,990), and passing `currency` here selects it — same
+    // price IDs, so the webhook's plan mapping is untouched. Everyone
+    // else stays on the price's default USD.
+    const currency = lang === "he" ? "ils" : undefined;
+
     // Reuse an abandoned in-progress subscription for the same price
     // (every page load would otherwise mint a new incomplete/trialing
     // sub — Yooniz landmine #4). A sub without a default payment
@@ -158,6 +166,9 @@ export async function POST(req: NextRequest) {
         !s.default_payment_method &&
         s.items.data[0]?.price?.id === priceId &&
         s.metadata?.uid === uid &&
+        // A sub minted in the other currency (user switched language
+        // mid-checkout) can't be reused — the amount would be wrong.
+        s.currency === (currency ?? "usd") &&
         s.pending_setup_intent,
     );
     if (reusable) {
@@ -168,6 +179,7 @@ export async function POST(req: NextRequest) {
     const sub = await stripe.subscriptions.create({
       customer,
       items: [{ price: priceId, quantity: 1 }],
+      ...(currency && { currency }),
       payment_behavior: "default_incomplete",
       payment_settings: {
         save_default_payment_method: "on_subscription",

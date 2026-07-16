@@ -2,25 +2,31 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
+import { GaditDemoAnimation } from "@/components/design/GaditDemoAnimation";
 
 /**
- * Family-plan campaign landing page. Single column, direct-response
- * structure: angle hero → the pain → how it works → family value →
- * safety (the closer) → one pricing card (Family, annual anchored) →
- * FAQ → final CTA. Clear is deliberately ABSENT (downsell only, per
- * the July 2026 funnel inversion); a single-child Deep link is the
- * only alternative shown.
+ * Family-plan campaign landing page, v2 (2026-07-16).
  *
- * ?v=relief|anxiety|safe selects the hero angle so email/ad variants
- * share one page. The angle rides along in analytics events.
+ * v1 was a lean single-column pitch; Gadi reviewed it against his
+ * academy sales page and asked for a full direct-response build:
+ * promise hero, live demo, ONE SECTION PER FEATURE each with its own
+ * product visual, alternating color blocks, comparison table, value
+ * stack, guarantee, shekel pricing for Hebrew visitors (real ILS
+ * billing via Stripe currency_options), repeated CTAs.
  *
- * Self-contained styling (scoped .fam-* classes in an inline <style>)
- * so campaign iterations never touch globals.css.
+ * ?v=relief|anxiety|safe still swaps the hero angle so email/ad
+ * variants share one page; the angle rides on every analytics event.
+ *
+ * Product visuals are CSS/JSX mockups of real product surfaces (no
+ * fabricated screenshots, no fake testimonials): meanings card, kids
+ * mode, context picker, notebook + quiz, profiles, games, English
+ * helper. The hero embeds the real GaditDemoAnimation.
  */
 
 const PRICE_FAMILY_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY ?? "";
@@ -28,6 +34,11 @@ const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY
 const PRICE_DEEP_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "";
 
 type Angle = "relief" | "anxiety" | "safe";
+const ANGLES: Angle[] = ["relief", "anxiety", "safe"];
+
+/* ────────────────────────── copy ────────────────────────── */
+
+type FeatureCopy = { kicker: string; title: string; body: string };
 
 type Copy = {
   heroBadge: string;
@@ -35,16 +46,29 @@ type Copy = {
   heroCta: string;
   heroTrust: string;
   ownerCta: string;
+  stats: string[];
+  demoKicker: string;
+  demoTitle: string;
+  painKicker: string;
   painTitle: string;
   painBody1: string;
   painBody2: string;
-  howTitle: string;
-  steps: Array<{ t: string; d: string }>;
-  famTitle: string;
-  famItems: string[];
+  reframe: string;
+  featuresKicker: string;
+  features: FeatureCopy[];
+  midCtaTitle: string;
+  midCta: string;
+  compareKicker: string;
+  compareTitle: string;
+  compareGadit: string;
+  compareOther: string;
+  compareRows: Array<{ label: string; gadit: boolean; other: boolean }>;
   safeTitle: string;
-  safeItems: string[];
+  safeBody: string;
   safeLine: string;
+  stackTitle: string;
+  stackItems: string[];
+  priceKicker: string;
   priceTitle: string;
   trialBadge: string;
   yearly: string;
@@ -55,9 +79,12 @@ type Copy = {
   priceCta: string;
   cancelNote: string;
   singleChild: string;
+  guaranteeTitle: string;
+  guaranteeBody: string;
   faqTitle: string;
   faq: Array<{ q: string; a: string }>;
   finalTitle: string;
+  finalSub: string;
   finalCta: string;
   footerTerms: string;
   footerPrivacy: string;
@@ -69,7 +96,7 @@ const COPY: Record<"he" | "en", Copy> = {
     angles: {
       relief: {
         h1: "די להיות המילון הפרטי של הבית",
-        sub: "כשהילד שואל \"מה זה אומר?\", יש עכשיו מקום אחד שבו הוא מוצא את התשובה לבד: כל המשמעויות, תמונה לכל משמעות, והסבר בגובה של ילד. בלי צ'אט פתוח ובלי פרסומות.",
+        sub: "מהיום, כשהילד שואל \"מה זה אומר?\", יש לו מקום אחד שבו הוא מוצא את התשובה לבד: כל המשמעויות, תמונה לכל משמעות, והסבר בגובה של ילד. בלי צ'אט פתוח ובלי פרסומות.",
       },
       anxiety: {
         h1: "ילד שמדלג על מילים, מאבד את הסיפור",
@@ -83,49 +110,93 @@ const COPY: Record<"he" | "en", Copy> = {
     heroCta: "מתחילים 14 ימי ניסיון חינם",
     heroTrust: "בלי צ'אט פתוח · בלי פרסומות · ביטול בלחיצה אחת",
     ownerCta: "לאזור המשפחה שלכם",
+    stats: ["14 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
+    demoKicker: "הדגמה חיה",
+    demoTitle: "ככה זה נראה כשילד מחפש מילה",
+    painKicker: "מכירים את זה?",
     painTitle: "רגע שכל הורה מכיר",
     painBody1: "שמונה בערב. שיעורי בית. \"אבא, מה זה נחוש?\" שתי דקות אחר כך: \"מה זה להסס?\" ובפעם השלישית הילד כבר מבקש את הטלפון \"רק לבדוק מילה\", ונעלם בתוך טיקטוק.",
-    painBody2: "הבעיה היא לא הסקרנות של הילד. הבעיה היא שאין לו מקום בטוח לקבל בו תשובה לבד.",
-    howTitle: "ככה זה עובד",
-    steps: [
+    painBody2: "הבעיה היא לא הסקרנות של הילד.",
+    reframe: "הבעיה היא שאין לו מקום בטוח לקבל בו תשובה לבד. עד עכשיו.",
+    featuresKicker: "מה יש בפנים",
+    features: [
       {
-        t: "מקלידים מילה, או מדביקים משפט שלם",
-        d: "למילים יש יותר מפירוש אחד. Gadit מזהה איזו משמעות מתאימה בדיוק להקשר של המשפט.",
+        kicker: "כל המשמעויות",
+        title: "מילה אחת. כל הפירושים. תמונה לכל אחד.",
+        body: "מילון רגיל נותן הגדרה אחת יבשה. Gadit מציג את כל המשמעויות של המילה, עם שלוש דוגמאות אמיתיות ותמונה לכל משמעות, כי מוח של ילד זוכר תמונות הרבה יותר טוב ממילים.",
       },
       {
-        t: "רואים, לא רק קוראים",
-        d: "תמונה לכל משמעות, דוגמאות אמיתיות, ניבים ומקור המילה. ובמצב ילדים: הסבר שילד באמת מבין.",
+        kicker: "מצב ילדים",
+        title: "הסבר בגובה העיניים של הילד",
+        body: "מתג אחד, וכל ההסברים עוברים לשפה שילד בן 8 באמת מבין. בלי מילים קשות שמסבירות מילים קשות, בלי הגדרות מעגליות. פשוט להבין.",
       },
       {
-        t: "והמילה נשארת",
-        d: "כל מילה נשמרת במחברת האישית של הילד, עם תרגול קצר וחכם שמוודא שהיא נזכרת גם בעוד שבוע.",
+        kicker: "הבנת הקשר",
+        title: "מדביקים משפט, מקבלים את הפירוש הנכון",
+        body: "לרוב המילים יש יותר מפירוש אחד, ושם ילדים הולכים לאיבוד. מדביקים את המשפט מהספר או מדף העבודה, ו-Gadit מסמן בדיוק איזו משמעות מתאימה להקשר הזה.",
+      },
+      {
+        kicker: "מחברת אישית",
+        title: "המילים לא בורחות",
+        body: "כל מילה שהילד חיפש נשמרת במחברת האישית שלו, ותרגול קצר וחכם מחזיר אותה בדיוק כשהיא עומדת להישכח. ככה אוצר מילים באמת נבנה, מילה אחרי מילה.",
+      },
+      {
+        kicker: "פרופיל לכל ילד",
+        title: "בת ה-7 ובן ה-14 לא צריכים את אותו הסבר",
+        body: "לכל ילד במשפחה פרופיל משלו: המחברת שלו, התרגול שלו, והרמה שלו. ההסברים, הדוגמאות והמשחקים מותאמים לגיל, ואף אחד לא דורך לאף אחד על המילים.",
+      },
+      {
+        kicker: "משחקי מילים",
+        title: "לומדים גם כשמשחקים",
+        body: "חידונים ומשחקי מילים שבנויים על המילים שהילד עצמו חיפש. חמש דקות של משחק במקום עוד חצי שעה של מסך ריק, ואוצר המילים גדל בלי שמרגישים.",
+      },
+      {
+        kicker: "אנגלית",
+        title: "העוזר הכי טוב לשיעורי אנגלית",
+        body: "הילד מקליד מילה באנגלית ומקבל הסבר פשוט בעברית, עם תמונה ודוגמאות. בלי לנדוד בין מילון, גוגל טרנסלייט ויוטיוב. שיעורי אנגלית מפסיקים להיות מלחמה.",
       },
     ],
-    famTitle: "מנוי אחד. כל הילדים.",
-    famItems: [
-      "עד 5 ילדים, לכל אחד פרופיל משלו",
-      "כל ילד ברמה שלו ובקצב שלו",
-      "מחברת מילים ותרגול אישיים לכל ילד",
-      "עברית מלאה, אנגלית, ועוד 12 שפות",
+    midCtaTitle: "כל זה, במנוי משפחתי אחד",
+    midCta: "מתחילים 14 ימי ניסיון חינם",
+    compareKicker: "ההבדל",
+    compareTitle: "למה לא פשוט לחפש בגוגל או לשאול צ'אט?",
+    compareGadit: "Gadit",
+    compareOther: "האינטרנט הפתוח",
+    compareRows: [
+      { label: "עמוד אחד נקי לכל מילה", gadit: true, other: false },
+      { label: "הסבר בגובה של ילד", gadit: true, other: false },
+      { label: "תמונה לכל משמעות", gadit: true, other: false },
+      { label: "מחברת ותרגול שנשארים", gadit: true, other: false },
+      { label: "פרסומות וקישורים לכל כיוון", gadit: false, other: true },
+      { label: "צ'אט פתוח בלי גבולות", gadit: false, other: true },
     ],
     safeTitle: "בנוי כך שאפשר להשאיר אותם לבד איתו",
-    safeItems: [
-      "אין צ'אט פתוח ואין שיחה חופשית",
-      "אין פרסומות ואין קישורים החוצה",
-      "אין פיד, אין המלצות, אין חורי ארנב",
-      "עמוד אחד נקי לכל מילה, וזהו",
-    ],
+    safeBody: "אין צ'אט פתוח ואין שיחה חופשית. אין פרסומות ואין קישורים החוצה. אין פיד, אין המלצות, אין חורי ארנב. עמוד אחד נקי לכל מילה, וזהו.",
     safeLine: "ילד נכנס, מבין את המילה, וחוזר למה שהוא עשה.",
+    stackTitle: "מה מקבלים במסלול המשפחתי",
+    stackItems: [
+      "חיפושים בלי הגבלה לכל המשפחה",
+      "כל המשמעויות, עם תמונה לכל משמעות",
+      "מצב ילדים לכל הגילאים",
+      "בדיקת משפטים עם משוב מיידי",
+      "מחברת אישית ותרגול חכם לכל ילד",
+      "משחקי מילים וחידונים",
+      "עד 5 ילדים בפרופילים נפרדים",
+      "14 שפות, כולל עברית מלאה ואנגלית",
+    ],
+    priceKicker: "התמחור",
     priceTitle: "מסלול המשפחה",
     trialBadge: "14 ימי ניסיון חינם",
-    yearly: "$69 לשנה",
-    yearlyNote: "יוצא $5.75 לחודש",
-    monthly: "$6.99 לחודש",
+    yearly: "₪239 לשנה",
+    yearlyNote: "יוצא פחות מ-20 ₪ לחודש, לכל המשפחה",
+    monthly: "₪23.90 לחודש",
     billedYearly: "שנתי",
     billedMonthly: "חודשי",
     priceCta: "מתחילים את הניסיון",
-    cancelNote: "החיוב הראשון רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.",
-    singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-$4.99 לחודש",
+    cancelNote: "החיוב בשקלים, רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.",
+    singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש",
+    guaranteeTitle: "מבחן שיעורי הבית",
+    guaranteeBody: "מתחילים הערב ובודקים את זה על שיעורי הבית האמיתיים, שבועיים שלמים, בחינם. אם לא ראיתם את הילד מחפש מילים לבד, מבטלים בלחיצה אחת ולא שילמתם שקל.",
     faqTitle: "שאלות של הורים",
     faq: [
       {
@@ -135,6 +206,10 @@ const COPY: Record<"he" | "en", Copy> = {
       {
         q: "לאילו גילאים זה מתאים?",
         a: "הלב של Gadit הוא ילדים בגיל בית ספר, מכיתה א ועד תיכון. מצב ילדים מסביר לקטנים, וההסברים המלאים משרתים גם בני נוער והורים. את החשבון פותח ההורה.",
+      },
+      {
+        q: "המחיר באמת בשקלים?",
+        a: "כן. החיוב בשקלים, בכרטיס ישראלי רגיל, בלי עמלות המרה ובלי הפתעות: ₪239 לשנה או ₪23.90 לחודש, אחרי 14 ימי הניסיון.",
       },
       {
         q: "זה עוזר גם באנגלית?",
@@ -150,6 +225,7 @@ const COPY: Record<"he" | "en", Copy> = {
       },
     ],
     finalTitle: "נסו את זה הערב, בשיעורי הבית הבאים",
+    finalSub: "שבועיים חינם. ביטול בלחיצה. והילד לומד לפתור מילים לבד.",
     finalCta: "מתחילים 14 ימי ניסיון חינם",
     footerTerms: "תנאים",
     footerPrivacy: "פרטיות",
@@ -159,7 +235,7 @@ const COPY: Record<"he" | "en", Copy> = {
     angles: {
       relief: {
         h1: "Stop being the family dictionary",
-        sub: "When your kid asks \"what does this mean?\", there is now one place they can find the answer alone: every meaning, a picture for each one, and an explanation at kid level. No open chat, no ads.",
+        sub: "From today, when your kid asks \"what does this mean?\", they have one place to find the answer alone: every meaning, a picture for each one, and an explanation at kid level. No open chat, no ads.",
       },
       anxiety: {
         h1: "A kid who skips words loses the story",
@@ -173,49 +249,93 @@ const COPY: Record<"he" | "en", Copy> = {
     heroCta: "Start your 14-day free trial",
     heroTrust: "No open chat · No ads · Cancel in one click",
     ownerCta: "Go to your family space",
+    stats: ["14 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
+    demoKicker: "Live demo",
+    demoTitle: "This is what a kid sees when they look up a word",
+    painKicker: "Sound familiar?",
     painTitle: "A moment every parent knows",
     painBody1: "8 PM. Homework. \"Dad, what does reluctant mean?\" Two minutes later: \"What's hesitate?\" And the third time, they ask for your phone \"just to check a word\" and vanish into TikTok.",
-    painBody2: "The problem is not your kid's curiosity. The problem is that they have no safe place to get the answer alone.",
-    howTitle: "How it works",
-    steps: [
+    painBody2: "The problem is not your kid's curiosity.",
+    reframe: "The problem is that they have no safe place to get the answer alone. Until now.",
+    featuresKicker: "What's inside",
+    features: [
       {
-        t: "Type a word, or paste a whole sentence",
-        d: "Words have more than one meaning. Gadit picks the exact meaning that fits the sentence.",
+        kicker: "Every meaning",
+        title: "One word. Every meaning. A picture for each.",
+        body: "A regular dictionary gives one dry definition. Gadit shows every meaning of the word, with three real examples and a picture per meaning, because a child's brain remembers images far better than words.",
       },
       {
-        t: "See it, not just read it",
-        d: "A picture for every meaning, real examples, idioms and the word's origin. And in Kids Mode: an explanation a child actually understands.",
+        kicker: "Kids Mode",
+        title: "Explanations at your child's eye level",
+        body: "One switch, and every explanation turns into language an 8-year-old actually understands. No hard words explaining hard words, no circular definitions. Just understanding.",
       },
       {
-        t: "And the word sticks",
-        d: "Every word lands in your child's personal notebook, with short smart practice that makes sure it is still there next week.",
+        kicker: "Context",
+        title: "Paste a sentence, get the right meaning",
+        body: "Most words have more than one meaning, and that is where kids get lost. Paste the sentence from the book or worksheet, and Gadit marks exactly which meaning fits.",
+      },
+      {
+        kicker: "Personal notebook",
+        title: "The words don't run away",
+        body: "Every word your child looks up lands in their personal notebook, and short smart practice brings it back right before it slips away. That is how vocabulary is really built, one word at a time.",
+      },
+      {
+        kicker: "A profile per child",
+        title: "Your 7-year-old and your 14-year-old need different explanations",
+        body: "Each child gets their own profile: their notebook, their practice, their level. Explanations, examples and games match the age, and nobody steps on anybody's words.",
+      },
+      {
+        kicker: "Word games",
+        title: "Learning that feels like playing",
+        body: "Quizzes and word games built from the words your child actually looked up. Five minutes of play instead of another half hour of blank screen, and the vocabulary grows without anyone noticing.",
+      },
+      {
+        kicker: "Second language",
+        title: "The best homework helper for a second language",
+        body: "Your child types a word in English and gets a simple explanation in their own language, with a picture and examples. No wandering between a dictionary, a translator and YouTube.",
       },
     ],
-    famTitle: "One plan. All your kids.",
-    famItems: [
-      "Up to 5 kids, each with their own profile",
-      "Each child at their own level and pace",
-      "A personal word notebook and practice per child",
-      "14 languages, full support for each",
+    midCtaTitle: "All of it, on one family plan",
+    midCta: "Start your 14-day free trial",
+    compareKicker: "The difference",
+    compareTitle: "Why not just Google it or ask a chatbot?",
+    compareGadit: "Gadit",
+    compareOther: "The open internet",
+    compareRows: [
+      { label: "One clean page per word", gadit: true, other: false },
+      { label: "Explanations at kid level", gadit: true, other: false },
+      { label: "A picture for every meaning", gadit: true, other: false },
+      { label: "A notebook and practice that stick", gadit: true, other: false },
+      { label: "Ads and links in every direction", gadit: false, other: true },
+      { label: "Open-ended chat with no bounds", gadit: false, other: true },
     ],
     safeTitle: "Built so you can leave them alone with it",
-    safeItems: [
-      "No open chat, no free-form conversation",
-      "No ads and no outbound links",
-      "No feed, no recommendations, no rabbit holes",
-      "One clean page per word, and that is it",
-    ],
+    safeBody: "No open chat and no free-form conversation. No ads and no outbound links. No feed, no recommendations, no rabbit holes. One clean page per word, and that is it.",
     safeLine: "A kid comes in, understands the word, and goes back to what they were doing.",
+    stackTitle: "What the Family plan includes",
+    stackItems: [
+      "Unlimited searches for the whole family",
+      "Every meaning, with a picture for each",
+      "Kids Mode for every age",
+      "Sentence checking with instant feedback",
+      "A personal notebook and smart practice per child",
+      "Word games and quizzes",
+      "Up to 5 kids with separate profiles",
+      "14 languages with full support",
+    ],
+    priceKicker: "Pricing",
     priceTitle: "The Family plan",
     trialBadge: "14-day free trial",
     yearly: "$69 / year",
-    yearlyNote: "that is $5.75 a month",
+    yearlyNote: "that is $5.75 a month, for the whole family",
     monthly: "$6.99 / month",
     billedYearly: "Yearly",
     billedMonthly: "Monthly",
     priceCta: "Start the trial",
     cancelNote: "First charge only after the 14 days. Cancel anytime from your account page, one click.",
     singleChild: "Just one student at home? Deep is $4.99/month",
+    guaranteeTitle: "The homework test",
+    guaranteeBody: "Start tonight and test it on real homework, two full weeks, free. If you did not watch your kid look up words on their own, cancel in one click and you paid nothing.",
     faqTitle: "Questions parents ask",
     faq: [
       {
@@ -240,20 +360,183 @@ const COPY: Record<"he" | "en", Copy> = {
       },
     ],
     finalTitle: "Try it tonight, on the next homework",
+    finalSub: "Two weeks free. One-click cancel. And a kid who solves words alone.",
     finalCta: "Start your 14-day free trial",
     footerTerms: "Terms",
     footerPrivacy: "Privacy",
   },
 };
 
-const ANGLES: Angle[] = ["relief", "anxiety", "safe"];
+/* ─────────────────── product mockups (per feature) ─────────────────── */
+
+function MockMeanings({ he }: { he: boolean }) {
+  const word = he ? "עלה" : "bat";
+  const m1 = he
+    ? { t: "צמח: החלק הירוק של העץ", ex: "\"עלה אדום נפל מהעץ בסתיו.\"" }
+    : { t: "The animal that flies at night", ex: "\"A bat flew out of the cave.\"" };
+  const m2 = he
+    ? { t: "פועל: טיפס למעלה, התרומם", ex: "\"המחיר עלה בחודש האחרון.\"" }
+    : { t: "The stick used in baseball", ex: "\"She swung the bat and hit the ball.\"" };
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-search">
+        <SearchIcon /> <span>{word}</span>
+      </div>
+      {[m1, m2].map((m, i) => (
+        <div key={i} className="fam-mock-meaning">
+          <div className={`fam-mock-thumb fam-mock-thumb-${i}`}>
+            {i === 0 ? <LeafIcon /> : <ArrowUpIcon />}
+          </div>
+          <div>
+            <div className="fam-mock-meaning-t">{i + 1}. {m.t}</div>
+            <div className="fam-mock-meaning-ex">{m.ex}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MockKids({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-toggle">
+        <span className="fam-mock-toggle-pill">{he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-on" />
+      </div>
+      <div className="fam-mock-bubble">
+        {he
+          ? "\"נחוש\" זה כשמחליטים משהו חזק חזק בלב, וממשיכים גם כשקשה. כמו כשאתם מתאמנים על אופניים ולא מוותרים עד שמצליחים."
+          : "\"Reluctant\" is when you don't really want to do something, and your feet go slow. Like walking to the dentist."}
+      </div>
+      <Image
+        src="/gad-it-character.png"
+        alt=""
+        width={72}
+        height={72}
+        className="fam-mock-char"
+      />
+    </div>
+  );
+}
+
+function MockContext({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-sentence">
+        {he ? (
+          <>הוא קשר <mark>קשר</mark> חזק בחבל</>
+        ) : (
+          <>The <mark>bank</mark> of the river was steep</>
+        )}
+      </div>
+      <div className="fam-mock-arrow">↓</div>
+      <div className="fam-mock-picked">
+        <CheckIcon color="#0EA5A5" />
+        <span>
+          {he ? "המשמעות כאן: לולאה שמהדקת חבל" : "The meaning here: the side of a river"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function MockNotebook({ he }: { he: boolean }) {
+  const words = he ? ["נחוש", "להסס", "מרהיב"] : ["reluctant", "hesitate", "vivid"];
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-nb-title">{he ? "המחברת של נועה" : "Noa's notebook"}</div>
+      {words.map((w, i) => (
+        <div key={i} className="fam-mock-nb-row">
+          <CheckIcon color={i < 2 ? "#0EA5A5" : "#d1d5db"} />
+          <span>{w}</span>
+          {i === 2 && <span className="fam-mock-nb-due">{he ? "לתרגול היום" : "practice today"}</span>}
+        </div>
+      ))}
+      <div className="fam-mock-quiz">
+        <div className="fam-mock-quiz-q">{he ? "מה פירוש \"נחוש\"?" : "What does \"vivid\" mean?"}</div>
+        <div className="fam-mock-quiz-opt is-right">{he ? "החלטי, שלא מוותר" : "Bright and lifelike"}</div>
+        <div className="fam-mock-quiz-opt">{he ? "עצוב מאוד" : "Very quiet"}</div>
+      </div>
+    </div>
+  );
+}
+
+function MockProfiles({ he }: { he: boolean }) {
+  const kids = he
+    ? [
+        { n: "נועה", g: "כיתה ב׳", c: "#0EA5A5" },
+        { n: "עידו", g: "כיתה ו׳", c: "#7C3AED" },
+        { n: "מאיה", g: "כיתה ט׳", c: "#D97706" },
+      ]
+    : [
+        { n: "Noa", g: "2nd grade", c: "#0EA5A5" },
+        { n: "Ido", g: "6th grade", c: "#7C3AED" },
+        { n: "Maya", g: "9th grade", c: "#D97706" },
+      ];
+  return (
+    <div className="fam-mock fam-mock-profiles">
+      {kids.map((k) => (
+        <div key={k.n} className="fam-mock-profile">
+          <div className="fam-mock-avatar" style={{ background: k.c }}>
+            {k.n[0]}
+          </div>
+          <div className="fam-mock-profile-n">{k.n}</div>
+          <div className="fam-mock-profile-g">{k.g}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MockGames({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock fam-mock-games">
+      <div className="fam-mock-game" style={{ background: "rgba(14,165,165,0.1)" }}>
+        <PuzzleIcon />
+        <span>{he ? "תאומות במלכודת" : "Twin Trap"}</span>
+      </div>
+      <div className="fam-mock-game" style={{ background: "rgba(124,58,237,0.1)" }}>
+        <ClockIcon />
+        <span>{he ? "מסע בזמן" : "Time Traveler"}</span>
+      </div>
+      <div className="fam-mock-score">{he ? "רצף של 6 ימים 🔥" : "6-day streak 🔥"}</div>
+    </div>
+  );
+}
+
+function MockEnglish({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-search">
+        <SearchIcon /> <span>reluctant</span>
+      </div>
+      <div className="fam-mock-meaning">
+        <div className="fam-mock-thumb fam-mock-thumb-1">
+          <PersonIcon />
+        </div>
+        <div>
+          <div className="fam-mock-meaning-t">{he ? "מהסס, לא ממש רוצה" : "Not really wanting to"}</div>
+          <div className="fam-mock-meaning-ex">
+            {he ? "\"הוא ניגש לשיעורים בחוסר רצון.\"" : "\"He was reluctant to start his homework.\""}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
+
+/* ────────────────────────── page ────────────────────────── */
 
 export default function FamiliesLandingClient() {
   const params = useSearchParams();
   const { user, familyId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
-  const c = lang === "he" ? COPY.he : COPY.en;
+  const he = lang === "he";
+  const c = he ? COPY.he : COPY.en;
 
   const rawAngle = params.get("v");
   const angle: Angle = ANGLES.includes(rawAngle as Angle) ? (rawAngle as Angle) : "relief";
@@ -316,7 +599,7 @@ export default function FamiliesLandingClient() {
       </header>
 
       <main>
-        {/* Hero */}
+        {/* 1 · Hero */}
         <section className="fam-hero">
           <div className="fam-badge">{c.heroBadge}</div>
           <h1 className="fam-h1">{hero.h1}</h1>
@@ -325,131 +608,191 @@ export default function FamiliesLandingClient() {
             {ctaLabel}
           </button>
           <div className="fam-trust">{c.heroTrust}</div>
-        </section>
-
-        {/* The pain */}
-        <section className="fam-section">
-          <h2 className="fam-h2">{c.painTitle}</h2>
-          <p className="fam-body">{c.painBody1}</p>
-          <p className="fam-body fam-body-strong">{c.painBody2}</p>
-        </section>
-
-        {/* How it works */}
-        <section className="fam-section">
-          <h2 className="fam-h2">{c.howTitle}</h2>
-          <div className="fam-steps">
-            {c.steps.map((s, i) => (
-              <div key={i} className="fam-step">
-                <div className="fam-step-num">{i + 1}</div>
-                <div>
-                  <div className="fam-step-title">{s.t}</div>
-                  <div className="fam-step-desc">{s.d}</div>
-                </div>
-              </div>
+          <div className="fam-stats">
+            {c.stats.map((s, i) => (
+              <div key={i} className="fam-stat">{s}</div>
             ))}
           </div>
         </section>
 
-        {/* Family value */}
-        <section className="fam-section">
-          <h2 className="fam-h2">{c.famTitle}</h2>
-          <ul className="fam-list">
-            {c.famItems.map((item, i) => (
-              <li key={i}>
-                <CheckIcon color="#0EA5A5" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+        {/* 2 · Live demo */}
+        <section className="fam-band fam-band-white">
+          <div className="fam-section">
+            <div className="fam-kicker">{c.demoKicker}</div>
+            <h2 className="fam-h2">{c.demoTitle}</h2>
+            <div className="fam-demo-wrap">
+              <GaditDemoAnimation />
+            </div>
+          </div>
         </section>
 
-        {/* Safety — the closer */}
-        <section className="fam-section fam-safe">
-          <h2 className="fam-h2">{c.safeTitle}</h2>
-          <ul className="fam-list">
-            {c.safeItems.map((item, i) => (
-              <li key={i}>
-                <ShieldIcon />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="fam-safe-line">{c.safeLine}</p>
+        {/* 3 · Pain + reframe */}
+        <section className="fam-band fam-band-ink">
+          <div className="fam-section">
+            <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
+            <h2 className="fam-h2">{c.painTitle}</h2>
+            <p className="fam-body">{c.painBody1}</p>
+            <p className="fam-body fam-body-strong">{c.painBody2}</p>
+            <p className="fam-reframe">{c.reframe}</p>
+          </div>
         </section>
 
-        {/* Pricing */}
-        <section className="fam-section" id="fam-pricing">
-          <div className="fam-price-card">
-            <div className="fam-price-badge">{c.trialBadge}</div>
-            <h2 className="fam-price-title">{c.priceTitle}</h2>
+        {/* 4 · Features — one section per feature, alternating */}
+        {c.features.map((f, i) => {
+          const Mock = MOCKUPS[i];
+          const flip = i % 2 === 1;
+          return (
+            <section key={i} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
+              <div className={`fam-feature ${flip ? "is-flipped" : ""}`}>
+                <div className="fam-feature-text">
+                  <div className="fam-kicker">{f.kicker}</div>
+                  <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
+                  <p className="fam-body">{f.body}</p>
+                </div>
+                <div className="fam-feature-visual">
+                  <Mock he={he} />
+                </div>
+              </div>
+            </section>
+          );
+        })}
 
-            <div className="fam-billing-toggle" role="tablist">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={billing === "yearly"}
-                className={billing === "yearly" ? "is-active" : ""}
-                onClick={() => setBilling("yearly")}
-              >
-                {c.billedYearly}
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={billing === "monthly"}
-                className={billing === "monthly" ? "is-active" : ""}
-                onClick={() => setBilling("monthly")}
-              >
-                {c.billedMonthly}
-              </button>
+        {/* 5 · Mid CTA */}
+        <section className="fam-band fam-band-teal">
+          <div className="fam-section fam-center">
+            <h2 className="fam-h2 fam-h2-onteal">{c.midCtaTitle}</h2>
+            <button type="button" className="fam-cta fam-cta-inverse" onClick={() => startTrial("mid")}>
+              {isOwner ? c.ownerCta : c.midCta}
+            </button>
+          </div>
+        </section>
+
+        {/* 6 · Comparison */}
+        <section className="fam-band fam-band-white">
+          <div className="fam-section">
+            <div className="fam-kicker">{c.compareKicker}</div>
+            <h2 className="fam-h2">{c.compareTitle}</h2>
+            <div className="fam-compare">
+              <div className="fam-compare-head">
+                <span />
+                <span className="fam-compare-brand">{c.compareGadit}</span>
+                <span>{c.compareOther}</span>
+              </div>
+              {c.compareRows.map((r, i) => (
+                <div key={i} className="fam-compare-row">
+                  <span>{r.label}</span>
+                  <span>{r.gadit ? <CheckIcon color="#0EA5A5" /> : <XIcon />}</span>
+                  <span>{r.other ? <CheckIcon color="#b91c1c" /> : <XIcon />}</span>
+                </div>
+              ))}
             </div>
+          </div>
+        </section>
 
-            <div className="fam-price-amount">
-              {billing === "yearly" ? c.yearly : c.monthly}
-            </div>
-            {billing === "yearly" && <div className="fam-price-note">{c.yearlyNote}</div>}
+        {/* 7 · Safety */}
+        <section className="fam-band fam-band-purple">
+          <div className="fam-section fam-center">
+            <ShieldBigIcon />
+            <h2 className="fam-h2">{c.safeTitle}</h2>
+            <p className="fam-body fam-body-center">{c.safeBody}</p>
+            <p className="fam-safe-line">{c.safeLine}</p>
+          </div>
+        </section>
 
-            <ul className="fam-list fam-price-list">
-              {c.famItems.map((item, i) => (
+        {/* 8 · Value stack */}
+        <section className="fam-band fam-band-cream">
+          <div className="fam-section">
+            <h2 className="fam-h2">{c.stackTitle}</h2>
+            <ul className="fam-list fam-stack">
+              {c.stackItems.map((item, i) => (
                 <li key={i}>
                   <CheckIcon color="#0EA5A5" />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
-
-            <button type="button" className="fam-cta fam-cta-wide" onClick={() => startTrial("pricing")}>
-              {isOwner ? c.ownerCta : c.priceCta}
-            </button>
-            <p className="fam-cancel-note">{c.cancelNote}</p>
-          </div>
-
-          {!isOwner && (
-            <button type="button" className="fam-single-link" onClick={startDeep}>
-              {c.singleChild}
-            </button>
-          )}
-        </section>
-
-        {/* FAQ */}
-        <section className="fam-section">
-          <h2 className="fam-h2">{c.faqTitle}</h2>
-          <div className="fam-faq">
-            {c.faq.map((f, i) => (
-              <details key={i} className="fam-faq-item">
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
-              </details>
-            ))}
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section className="fam-section fam-final">
-          <h2 className="fam-h2">{c.finalTitle}</h2>
-          <button type="button" className="fam-cta" onClick={() => startTrial("final")}>
-            {isOwner ? c.ownerCta : c.finalCta}
-          </button>
+        {/* 9 · Pricing */}
+        <section className="fam-band fam-band-white" id="fam-pricing">
+          <div className="fam-section">
+            <div className="fam-kicker">{c.priceKicker}</div>
+            <div className="fam-price-card">
+              <div className="fam-price-badge">{c.trialBadge}</div>
+              <h2 className="fam-price-title">{c.priceTitle}</h2>
+
+              <div className="fam-billing-toggle" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={billing === "yearly"}
+                  className={billing === "yearly" ? "is-active" : ""}
+                  onClick={() => setBilling("yearly")}
+                >
+                  {c.billedYearly}
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={billing === "monthly"}
+                  className={billing === "monthly" ? "is-active" : ""}
+                  onClick={() => setBilling("monthly")}
+                >
+                  {c.billedMonthly}
+                </button>
+              </div>
+
+              <div className="fam-price-amount">{billing === "yearly" ? c.yearly : c.monthly}</div>
+              {billing === "yearly" && <div className="fam-price-note">{c.yearlyNote}</div>}
+
+              <button type="button" className="fam-cta fam-cta-wide" onClick={() => startTrial("pricing")}>
+                {isOwner ? c.ownerCta : c.priceCta}
+              </button>
+              <p className="fam-cancel-note">{c.cancelNote}</p>
+            </div>
+
+            {!isOwner && (
+              <button type="button" className="fam-single-link" onClick={startDeep}>
+                {c.singleChild}
+              </button>
+            )}
+
+            {/* Guarantee */}
+            <div className="fam-guarantee">
+              <ShieldIcon />
+              <div>
+                <div className="fam-guarantee-t">{c.guaranteeTitle}</div>
+                <div className="fam-guarantee-b">{c.guaranteeBody}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 10 · FAQ */}
+        <section className="fam-band fam-band-cream">
+          <div className="fam-section">
+            <h2 className="fam-h2">{c.faqTitle}</h2>
+            <div className="fam-faq">
+              {c.faq.map((f, i) => (
+                <details key={i} className="fam-faq-item">
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 11 · Final CTA */}
+        <section className="fam-band fam-band-teal">
+          <div className="fam-section fam-center fam-final">
+            <h2 className="fam-h2 fam-h2-onteal">{c.finalTitle}</h2>
+            <p className="fam-final-sub">{c.finalSub}</p>
+            <button type="button" className="fam-cta fam-cta-inverse" onClick={() => startTrial("final")}>
+              {isOwner ? c.ownerCta : c.finalCta}
+            </button>
+          </div>
         </section>
       </main>
 
@@ -462,6 +805,8 @@ export default function FamiliesLandingClient() {
   );
 }
 
+/* ────────────────────────── icons ────────────────────────── */
+
 function CheckIcon({ color }: { color: string }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ flexShrink: 0 }}>
@@ -469,15 +814,80 @@ function CheckIcon({ color }: { color: string }) {
     </svg>
   );
 }
-
+function XIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="2.4" strokeLinecap="round" aria-hidden style={{ flexShrink: 0 }}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
 function ShieldIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ flexShrink: 0 }}>
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ flexShrink: 0 }}>
       <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
       <path d="m9 12 2 2 4-4" />
     </svg>
   );
 }
+function ShieldBigIcon() {
+  return (
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ margin: "0 auto 10px", display: "block" }}>
+      <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+function SearchIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m20 20-4-4" />
+    </svg>
+  );
+}
+function LeafIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M6 21c0-9 4-15 14-17-1 10-6 15-14 17z" />
+      <path d="M6 21c3-6 7-10 11-12" />
+    </svg>
+  );
+}
+function ArrowUpIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  );
+}
+function PersonIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" />
+    </svg>
+  );
+}
+function PuzzleIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="4" y="4" width="7" height="7" rx="1.5" />
+      <rect x="13" y="4" width="7" height="7" rx="1.5" />
+      <rect x="4" y="13" width="7" height="7" rx="1.5" />
+      <rect x="13" y="13" width="7" height="7" rx="1.5" />
+    </svg>
+  );
+}
+function ClockIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7v5l3 3" />
+    </svg>
+  );
+}
+
+/* ────────────────────────── styles ────────────────────────── */
 
 const FAM_CSS = `
 .fam-page {
@@ -492,7 +902,7 @@ const FAM_CSS = `
   justify-content: space-between;
   align-items: center;
   padding: 16px 22px;
-  max-width: 960px;
+  max-width: 1040px;
   width: 100%;
   margin: 0 auto;
 }
@@ -516,8 +926,8 @@ const FAM_CSS = `
 }
 .fam-hero {
   text-align: center;
-  padding: 44px 20px 30px;
-  max-width: 720px;
+  padding: 44px 20px 36px;
+  max-width: 760px;
   margin: 0 auto;
 }
 .fam-badge {
@@ -532,18 +942,18 @@ const FAM_CSS = `
   margin-bottom: 18px;
 }
 .fam-h1 {
-  font-size: clamp(30px, 6vw, 44px);
+  font-size: clamp(32px, 6.4vw, 50px);
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.12;
   letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
 .fam-sub {
-  font-size: clamp(16px, 2.5vw, 18.5px);
+  font-size: clamp(16px, 2.5vw, 19px);
   line-height: 1.65;
   color: #4b5563;
   margin: 0 auto 24px;
-  max-width: 620px;
+  max-width: 640px;
 }
 .fam-cta {
   background: #0EA5A5;
@@ -551,7 +961,7 @@ const FAM_CSS = `
   border: none;
   font-weight: 800;
   font-size: 17px;
-  padding: 15px 30px;
+  padding: 16px 32px;
   border-radius: 14px;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(14,165,165,0.35);
@@ -559,51 +969,256 @@ const FAM_CSS = `
 }
 .fam-cta:active { transform: scale(0.97); }
 .fam-cta-wide { width: 100%; }
-.fam-trust {
-  margin-top: 14px;
+.fam-cta-inverse {
+  background: #fff;
+  color: #0b7d7d;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+.fam-trust { margin-top: 14px; font-size: 13.5px; color: #6b7280; }
+.fam-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 26px;
+}
+.fam-stat {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.08);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 700;
   font-size: 13.5px;
-  color: #6b7280;
+  color: #374151;
 }
-.fam-section {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 34px 20px;
+.fam-band { padding: 44px 0; }
+.fam-band-cream { background: #f6f4ee; }
+.fam-band-white { background: #ffffff; }
+.fam-band-teal { background: #0EA5A5; }
+.fam-band-purple { background: rgba(124,58,237,0.07); }
+.fam-band-ink { background: #fdf6ec; }
+.fam-section { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+.fam-center { text-align: center; }
+.fam-kicker {
+  text-align: center;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0b7d7d;
+  margin-bottom: 8px;
 }
+.fam-kicker-light { color: #b45309; }
 .fam-h2 {
-  font-size: clamp(22px, 4vw, 28px);
+  font-size: clamp(24px, 4.4vw, 32px);
   font-weight: 800;
   letter-spacing: -0.01em;
   margin: 0 0 16px;
   text-align: center;
 }
-.fam-body {
-  font-size: 16.5px;
-  line-height: 1.7;
-  color: #374151;
-  margin: 0 0 12px;
-}
+.fam-h2-start { text-align: start; }
+.fam-h2-onteal { color: #fff; }
+.fam-body { font-size: 16.5px; line-height: 1.7; color: #374151; margin: 0 0 12px; }
 .fam-body-strong { font-weight: 700; color: #1f2937; }
-.fam-steps { display: flex; flex-direction: column; gap: 16px; }
-.fam-step {
-  display: flex;
-  gap: 14px;
-  background: #fff;
-  border: 1px solid rgba(31,41,55,0.08);
-  border-radius: 16px;
-  padding: 16px 18px;
-  align-items: flex-start;
-}
-.fam-step-num {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: rgba(14,165,165,0.12);
-  color: #0b7d7d;
+.fam-body-center { text-align: center; max-width: 560px; margin-inline: auto; }
+.fam-reframe {
+  font-size: clamp(19px, 3vw, 23px);
   font-weight: 800;
+  color: #0b7d7d;
+  text-align: center;
+  margin: 22px 0 0;
+}
+.fam-demo-wrap { max-width: 560px; margin: 0 auto; }
+.fam-feature {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: center;
+}
+.fam-feature.is-flipped .fam-feature-text { order: 2; }
+.fam-feature.is-flipped .fam-feature-visual { order: 1; }
+.fam-feature-text .fam-kicker { text-align: start; }
+@media (max-width: 760px) {
+  .fam-feature { grid-template-columns: 1fr; gap: 20px; }
+  .fam-feature.is-flipped .fam-feature-text { order: 1; }
+  .fam-feature.is-flipped .fam-feature-visual { order: 2; }
+}
+.fam-mock {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.1);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 12px 32px rgba(31,41,55,0.09);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+.fam-mock-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-weight: 700;
+  font-size: 15px;
+}
+.fam-mock-meaning { display: flex; gap: 12px; align-items: flex-start; }
+.fam-mock-thumb {
+  width: 46px; height: 46px;
+  border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.fam-step-title { font-weight: 700; font-size: 16px; margin-bottom: 3px; }
-.fam-step-desc { color: #4b5563; font-size: 14.5px; line-height: 1.6; }
+.fam-mock-thumb-0 { background: linear-gradient(135deg, rgba(14,165,165,0.18), rgba(14,165,165,0.06)); }
+.fam-mock-thumb-1 { background: linear-gradient(135deg, rgba(124,58,237,0.16), rgba(124,58,237,0.05)); }
+.fam-mock-meaning-t { font-weight: 700; font-size: 14.5px; }
+.fam-mock-meaning-ex { color: #6b7280; font-size: 13px; margin-top: 2px; }
+.fam-mock-toggle { display: flex; align-items: center; gap: 10px; }
+.fam-mock-toggle-pill {
+  background: rgba(14,165,165,0.12);
+  color: #0b7d7d;
+  font-weight: 800;
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.fam-mock-toggle-on {
+  width: 38px; height: 22px;
+  background: #0EA5A5;
+  border-radius: 999px;
+  position: relative;
+}
+.fam-mock-toggle-on::after {
+  content: "";
+  position: absolute;
+  top: 3px; inset-inline-end: 3px;
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+}
+.fam-mock-bubble {
+  background: #f0fdfa;
+  border: 1px solid rgba(14,165,165,0.25);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.fam-mock-char { position: absolute; bottom: -14px; inset-inline-end: -10px; }
+.fam-mock-sentence {
+  font-size: 15.5px;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  line-height: 1.6;
+}
+.fam-mock-sentence mark {
+  background: rgba(14,165,165,0.2);
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-weight: 800;
+}
+.fam-mock-arrow { text-align: center; color: #0EA5A5; font-weight: 800; }
+.fam-mock-picked {
+  display: flex; gap: 8px; align-items: center;
+  font-weight: 700; font-size: 14px;
+  background: rgba(14,165,165,0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.fam-mock-nb-title { font-weight: 800; font-size: 14.5px; }
+.fam-mock-nb-row { display: flex; align-items: center; gap: 8px; font-size: 14.5px; }
+.fam-mock-nb-due {
+  margin-inline-start: auto;
+  background: rgba(217,119,6,0.12);
+  color: #b45309;
+  font-weight: 700;
+  font-size: 11.5px;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.fam-mock-quiz {
+  border-top: 1px dashed rgba(31,41,55,0.15);
+  padding-top: 12px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.fam-mock-quiz-q { font-weight: 700; font-size: 13.5px; }
+.fam-mock-quiz-opt {
+  border: 1.5px solid rgba(31,41,55,0.12);
+  border-radius: 10px;
+  padding: 7px 11px;
+  font-size: 13px;
+}
+.fam-mock-quiz-opt.is-right { border-color: #0EA5A5; background: rgba(14,165,165,0.07); font-weight: 700; }
+.fam-mock-profiles { flex-direction: row; justify-content: space-around; }
+.fam-mock-profile { text-align: center; }
+.fam-mock-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 800;
+  font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 6px;
+}
+.fam-mock-profile-n { font-weight: 700; font-size: 14px; }
+.fam-mock-profile-g { color: #6b7280; font-size: 12px; }
+.fam-mock-games { flex-direction: row; flex-wrap: wrap; }
+.fam-mock-game {
+  flex: 1;
+  min-width: 120px;
+  border-radius: 14px;
+  padding: 16px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 13.5px;
+}
+.fam-mock-score {
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #b45309;
+}
+.fam-compare {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.1);
+  border-radius: 18px;
+  overflow: hidden;
+  max-width: 560px;
+  margin: 0 auto;
+  box-shadow: 0 10px 28px rgba(31,41,55,0.07);
+}
+.fam-compare-head, .fam-compare-row {
+  display: grid;
+  grid-template-columns: 1fr 84px 84px;
+  align-items: center;
+  padding: 11px 16px;
+  font-size: 14px;
+}
+.fam-compare-head {
+  background: #f9fafb;
+  font-weight: 800;
+  font-size: 13px;
+}
+.fam-compare-head span:nth-child(2), .fam-compare-head span:nth-child(3),
+.fam-compare-row span:nth-child(2), .fam-compare-row span:nth-child(3) {
+  text-align: center;
+  display: flex; justify-content: center;
+}
+.fam-compare-brand { color: #0b7d7d; }
+.fam-compare-row { border-top: 1px solid rgba(31,41,55,0.06); }
+.fam-safe-line {
+  text-align: center;
+  font-weight: 800;
+  color: #7C3AED;
+  margin: 16px 0 0;
+  font-size: 16px;
+}
 .fam-list {
   list-style: none;
   padding: 0; margin: 0;
@@ -611,22 +1226,12 @@ const FAM_CSS = `
   max-width: 520px;
   margin-inline: auto;
 }
-.fam-list li {
-  display: flex; gap: 10px; align-items: flex-start;
-  font-size: 15.5px; line-height: 1.55;
-}
-.fam-safe {
+.fam-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 15.5px; line-height: 1.55; }
+.fam-stack {
   background: #fff;
-  border-radius: 22px;
-  border: 1px solid rgba(124,58,237,0.15);
-  max-width: 680px;
-}
-.fam-safe-line {
-  text-align: center;
-  font-weight: 700;
-  color: #7C3AED;
-  margin: 18px 0 0;
-  font-size: 15.5px;
+  border: 1px solid rgba(31,41,55,0.08);
+  border-radius: 18px;
+  padding: 22px 24px;
 }
 .fam-price-card {
   background: #fff;
@@ -667,9 +1272,8 @@ const FAM_CSS = `
   cursor: pointer;
 }
 .fam-billing-toggle button.is-active { background: #fff; color: #0b7d7d; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.fam-price-amount { font-size: 34px; font-weight: 800; direction: ltr; }
-.fam-price-note { color: #0b7d7d; font-weight: 700; font-size: 14.5px; margin-top: 2px; }
-.fam-price-list { margin: 18px auto; text-align: start; }
+.fam-price-amount { font-size: 36px; font-weight: 800; direction: ltr; }
+.fam-price-note { color: #0b7d7d; font-weight: 700; font-size: 14.5px; margin-top: 2px; margin-bottom: 16px; }
 .fam-cancel-note { color: #6b7280; font-size: 12.5px; margin: 12px 0 0; line-height: 1.55; }
 .fam-single-link {
   display: block;
@@ -681,6 +1285,19 @@ const FAM_CSS = `
   text-decoration: underline;
   cursor: pointer;
 }
+.fam-guarantee {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: rgba(124,58,237,0.06);
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 18px;
+  padding: 18px 20px;
+  max-width: 560px;
+  margin: 26px auto 0;
+}
+.fam-guarantee-t { font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+.fam-guarantee-b { color: #4b5563; font-size: 14.5px; line-height: 1.65; }
 .fam-faq { display: flex; flex-direction: column; gap: 10px; }
 .fam-faq-item {
   background: #fff;
@@ -688,20 +1305,11 @@ const FAM_CSS = `
   border-radius: 14px;
   padding: 14px 18px;
 }
-.fam-faq-item summary {
-  font-weight: 700;
-  font-size: 15.5px;
-  cursor: pointer;
-  list-style: none;
-}
+.fam-faq-item summary { font-weight: 700; font-size: 15.5px; cursor: pointer; list-style: none; }
 .fam-faq-item summary::-webkit-details-marker { display: none; }
-.fam-faq-item p {
-  margin: 10px 0 0;
-  color: #4b5563;
-  font-size: 14.5px;
-  line-height: 1.65;
-}
-.fam-final { text-align: center; padding-bottom: 60px; }
+.fam-faq-item p { margin: 10px 0 0; color: #4b5563; font-size: 14.5px; line-height: 1.65; }
+.fam-final { padding: 10px 20px; }
+.fam-final-sub { color: rgba(255,255,255,0.9); font-size: 16px; margin: 0 0 20px; }
 .fam-footer {
   display: flex;
   gap: 18px;

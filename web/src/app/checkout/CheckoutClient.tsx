@@ -40,24 +40,27 @@ type TierInfo = {
   name: string;
   cycle: "monthly" | "yearly";
   amount: string; // display string, USD
+  amountIls: string; // display string, ILS — Hebrew users are billed in shekels
   kind: "clear" | "deep" | "family" | "schools";
 };
 
 // Mirrors the display prices in PricingClient — the Payment Element
 // shows no order summary of its own, so this card is the only place
-// the user sees what they are agreeing to.
+// the user sees what they are agreeing to. ILS amounts must match the
+// currency_options set on the Stripe prices (2026-07-16); the API
+// bills lang==="he" in shekels.
 function tierForPrice(priceId: string): TierInfo | null {
   const map: Array<[string | undefined, TierInfo]> = [
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, { name: "Clear", cycle: "monthly", amount: "$2.99", kind: "clear" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY, { name: "Clear", cycle: "yearly", amount: "$29.99", kind: "clear" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, { name: "Deep", cycle: "monthly", amount: "$4.99", kind: "deep" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY, { name: "Deep", cycle: "yearly", amount: "$49.99", kind: "deep" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY, { name: "Family", cycle: "monthly", amount: "$6.99", kind: "family" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY, { name: "Family", cycle: "yearly", amount: "$69", kind: "family" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY, { name: "Schools", cycle: "monthly", amount: "$69", kind: "schools" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY, { name: "Schools", cycle: "yearly", amount: "$690", kind: "schools" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY, { name: "Schools Large", cycle: "monthly", amount: "$149", kind: "schools" }],
-    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY, { name: "Schools Large", cycle: "yearly", amount: "$1,490", kind: "schools" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, { name: "Clear", cycle: "monthly", amount: "$2.99", amountIls: "₪9.90", kind: "clear" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY, { name: "Clear", cycle: "yearly", amount: "$29.99", amountIls: "₪99", kind: "clear" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, { name: "Deep", cycle: "monthly", amount: "$4.99", amountIls: "₪16.90", kind: "deep" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY, { name: "Deep", cycle: "yearly", amount: "$49.99", amountIls: "₪169", kind: "deep" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY, { name: "Family", cycle: "monthly", amount: "$6.99", amountIls: "₪23.90", kind: "family" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY, { name: "Family", cycle: "yearly", amount: "$69", amountIls: "₪239", kind: "family" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY, { name: "Schools", cycle: "monthly", amount: "$69", amountIls: "₪239", kind: "schools" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY, { name: "Schools", cycle: "yearly", amount: "$690", amountIls: "₪2,390", kind: "schools" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY, { name: "Schools Large", cycle: "monthly", amount: "$149", amountIls: "₪499", kind: "schools" }],
+    [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY, { name: "Schools Large", cycle: "yearly", amount: "$1,490", amountIls: "₪4,990", kind: "schools" }],
   ];
   for (const [id, info] of map) if (id && id === priceId) return info;
   return null;
@@ -71,7 +74,7 @@ const COPY = {
     planLabel: "המסלול שבחרתם",
     perMonth: "לחודש",
     perYear: "לשנה",
-    trialToday: "היום תשלמו: 0 $",
+    trialToday: "היום תשלמו: 0 ₪",
     trialLine: "14 ימי ניסיון חינם. החיוב הראשון רק בסוף הניסיון.",
     afterTrial: "לאחר הניסיון:",
     cancelNote: "אפשר לבטל בכל רגע מדף החשבון, בלחיצה אחת.",
@@ -306,7 +309,7 @@ export default function CheckoutClient() {
                 <div style={styles.summaryRow}>
                   <span style={styles.muted}>{c.afterTrial}</span>
                   <span style={styles.amount}>
-                    {tier.amount} {cycleLabel}
+                    {lang === "he" ? tier.amountIls : tier.amount} {cycleLabel}
                   </span>
                 </div>
                 <div style={styles.trialBox}>
