@@ -9,6 +9,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 // gates (notebook, images, kids mode, quizzes) all work unchanged. The
 // "Family" identity lives in `users/{uid}.familyId` + `families/{familyId}`;
 // the "Schools" identity in `users/{uid}.schoolId` + `schools/{schoolId}`.
+// Retired Family price IDs ($6.99/mo + $69/yr, replaced 2026-07-16 by
+// $5.99/₪19.90 + $59/₪199). Env vars point at the NEW prices, but any
+// subscriber who signed up on the old ones keeps renewing on them
+// forever — without these entries their subscription.updated events
+// would map to "basic" and silently downgrade a paying family.
+const LEGACY_FAMILY_PRICE_IDS = [
+  "price_1TqqNWRprLKxF6OiZAzFpn35", // Family monthly $6.99
+  "price_1TqqNXRprLKxF6Oi700Vbwxv", // Family yearly $69
+];
+
 function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
   const map: Record<string, "basic" | "clear" | "deep"> = {
     [process.env.STRIPE_PRICE_CLEAR_MONTHLY!]: "clear",
@@ -22,13 +32,15 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
     [process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY!]: "deep",
   };
+  if (LEGACY_FAMILY_PRICE_IDS.includes(priceId)) return "deep";
   return map[priceId] ?? "basic";
 }
 
 function isFamilyPriceId(priceId: string): boolean {
   return (
     priceId === process.env.STRIPE_PRICE_FAMILY_MONTHLY ||
-    priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY
+    priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
+    LEGACY_FAMILY_PRICE_IDS.includes(priceId)
   );
 }
 

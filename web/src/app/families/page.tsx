@@ -8,7 +8,7 @@ import FamiliesLandingClient from "./FamiliesLandingClient";
  *
  * Born from the July 2026 marketing synthesis (our council + three
  * external AIs, unanimous): the cold funnel leads with FAMILY (annual
- * anchor $69 = $5.75/mo), not Clear; safety is the closer, pain is the
+ * anchor $59/₪199), not Clear; safety is the closer, pain is the
  * hook. This page is the destination for the warm-list email test and
  * later for cold Meta traffic.
  *
