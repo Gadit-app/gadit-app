@@ -536,6 +536,21 @@ function MockEnglish({ he }: { he: boolean }) {
 
 const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
 
+// Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
+// /public/fam as compressed WebP). One per feature; the 7th (English
+// homework) has no clean illustration yet (every generation leaked
+// text), so it falls back to the CSS mockup. Alt text is intentionally
+// empty: these are decorative, the copy carries the meaning.
+const FEATURE_IMG: Array<string | null> = [
+  "meanings",
+  "kids-mode",
+  "context",
+  "notebook",
+  "profiles",
+  "games",
+  null,
+];
+
 /* ────────────────────────── page ────────────────────────── */
 
 export default function FamiliesLandingClient() {
@@ -618,6 +633,16 @@ export default function FamiliesLandingClient() {
             {ctaLabel}
           </button>
           <div className="fam-trust">{c.heroTrust}</div>
+          <div className="fam-hero-img">
+            <Image
+              src="/fam/hero.webp"
+              alt=""
+              width={1200}
+              height={800}
+              priority
+              sizes="(max-width: 760px) 92vw, 680px"
+            />
+          </div>
           <div className="fam-stats">
             {c.stats.map((s, i) => (
               <div key={i} className="fam-stat">{s}</div>
@@ -641,6 +666,9 @@ export default function FamiliesLandingClient() {
           <div className="fam-section">
             <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
             <h2 className="fam-h2">{c.painTitle}</h2>
+            <div className="fam-inline-img">
+              <Image src="/fam/pain.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 620px" />
+            </div>
             <p className="fam-body">{c.painBody1}</p>
             <p className="fam-body fam-body-strong">{c.painBody2}</p>
             <p className="fam-reframe">{c.reframe}</p>
@@ -660,7 +688,18 @@ export default function FamiliesLandingClient() {
                   <p className="fam-body">{f.body}</p>
                 </div>
                 <div className="fam-feature-visual">
-                  <Mock he={he} />
+                  {FEATURE_IMG[i] ? (
+                    <Image
+                      src={`/fam/${FEATURE_IMG[i]}.webp`}
+                      alt=""
+                      width={1200}
+                      height={900}
+                      className="fam-feature-illus"
+                      sizes="(max-width: 760px) 92vw, 440px"
+                    />
+                  ) : (
+                    <Mock he={he} />
+                  )}
                 </div>
               </div>
             </section>
@@ -704,6 +743,9 @@ export default function FamiliesLandingClient() {
           <div className="fam-section fam-center">
             <ShieldBigIcon />
             <h2 className="fam-h2">{c.safeTitle}</h2>
+            <div className="fam-inline-img">
+              <Image src="/fam/safe.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 560px" />
+            </div>
             <p className="fam-body fam-body-center">{c.safeBody}</p>
             <p className="fam-safe-line">{c.safeLine}</p>
           </div>
@@ -985,6 +1027,31 @@ const FAM_CSS = `
   box-shadow: 0 6px 18px rgba(0,0,0,0.18);
 }
 .fam-trust { margin-top: 14px; font-size: 13.5px; color: #6b7280; }
+.fam-hero-img {
+  margin: 28px auto 0;
+  max-width: 680px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(31,41,55,0.14);
+  line-height: 0;
+}
+.fam-hero-img img { width: 100%; height: auto; display: block; }
+.fam-inline-img {
+  margin: 4px auto 20px;
+  max-width: 560px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgba(31,41,55,0.12);
+  line-height: 0;
+}
+.fam-inline-img img { width: 100%; height: auto; display: block; }
+.fam-feature-illus {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(31,41,55,0.12);
+}
 .fam-stats {
   display: flex;
   flex-wrap: wrap;
