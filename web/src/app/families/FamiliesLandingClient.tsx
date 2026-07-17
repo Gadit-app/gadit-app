@@ -8,7 +8,6 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
-import { GaditDemoAnimation } from "@/components/design/GaditDemoAnimation";
 
 /**
  * Family-plan campaign landing page, v2 (2026-07-16).
@@ -115,8 +114,8 @@ const COPY: Record<"he" | "en", Copy> = {
     heroTrust: "בלי צ'אט פתוח · בלי פרסומות · ביטול בלחיצה אחת",
     ownerCta: "לאזור המשפחה שלכם",
     stats: ["14 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
-    demoKicker: "הדגמה חיה",
-    demoTitle: "ככה זה נראה כשילד מחפש מילה",
+    demoKicker: "ככה נראה Gadit",
+    demoTitle: "מקלידים מילה, ומקבלים מסך אחד נקי",
     painKicker: "מכירים את זה?",
     painTitle: "רגע שכל הורה מכיר",
     painBody1: "שמונה בערב. שיעורי בית. \"אבא, מה זה נחוש?\" שתי דקות אחר כך: \"מה זה להסס?\" ובפעם השלישית הילד כבר מבקש את הטלפון \"רק לבדוק מילה\", ונעלם בתוך טיקטוק.",
@@ -258,8 +257,8 @@ const COPY: Record<"he" | "en", Copy> = {
     heroTrust: "No open chat · No ads · Cancel in one click",
     ownerCta: "Go to your family space",
     stats: ["14 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
-    demoKicker: "Live demo",
-    demoTitle: "This is what a kid sees when they look up a word",
+    demoKicker: "This is Gadit",
+    demoTitle: "Type a word, get one clean screen",
     painKicker: "Sound familiar?",
     painTitle: "A moment every parent knows",
     painBody1: "8 PM. Homework. \"Dad, what does reluctant mean?\" Two minutes later: \"What's hesitate?\" And the third time, they ask for your phone \"just to check a word\" and vanish into TikTok.",
@@ -534,6 +533,68 @@ function MockEnglish({ he }: { he: boolean }) {
   );
 }
 
+/** A faithful mockup of the real Gadit word screen inside a phone
+ *  shell. Gadi's feedback (2026-07-17): the page showed warm family
+ *  scenes but never the PRODUCT as an app on a device. This is the
+ *  actual UI (teal search pill, big word title, part-of-speech chip,
+ *  a meaning card with its picture, Kids Mode toggle, example) so a
+ *  parent sees exactly what they are buying. */
+function PhoneMock({ he }: { he: boolean }) {
+  const word = he ? "חלום" : "dream";
+  const pos = he ? "שם עצם" : "noun";
+  const meaning = he
+    ? "תמונות ומחשבות שעוברות בראש בזמן השינה"
+    : "images and thoughts that pass through the mind during sleep";
+  const example = he
+    ? "\"בלילה חלמתי חלום על מסע רחוק.\""
+    : "\"Last night I had a dream about a far journey.\"";
+  const kids = he ? "מצב ילדים" : "Kids Mode";
+  const searchHint = he ? "הקלידו מילה" : "Type a word";
+  return (
+    <div className="fam-phone" aria-hidden>
+      <div className="fam-phone-notch" />
+      <div className="fam-phone-screen">
+        <div className="fam-ph-top">
+          <span className="fam-ph-brand">Gad<span className="fam-ph-it">it</span></span>
+          <span className="fam-ph-kids">
+            <span className="fam-ph-kids-label">{kids}</span>
+            <span className="fam-ph-toggle" />
+          </span>
+        </div>
+        <div className="fam-ph-search">
+          <SearchIcon />
+          <span className="fam-ph-word-typed">{word}</span>
+          <span className="fam-ph-hint">{searchHint}</span>
+        </div>
+        <div className="fam-ph-title-row">
+          <span className="fam-ph-title">{word}</span>
+          <span className="fam-ph-pos">{pos}</span>
+        </div>
+        <div className="fam-ph-card">
+          <div className="fam-ph-pic">
+            <MoonIcon />
+            <span className="fam-ph-star fam-ph-star-1" />
+            <span className="fam-ph-star fam-ph-star-2" />
+            <span className="fam-ph-star fam-ph-star-3" />
+          </div>
+          <div className="fam-ph-meaning-row">
+            <span className="fam-ph-num">1</span>
+            <div>
+              <div className="fam-ph-def">{meaning}</div>
+              <div className="fam-ph-ex">{example}</div>
+            </div>
+          </div>
+        </div>
+        <div className="fam-ph-tabs">
+          <span className="is-active">{he ? "משמעויות" : "Meanings"}</span>
+          <span>{he ? "תמונה" : "Picture"}</span>
+          <span>{he ? "מחברת" : "Notebook"}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
 
 // Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
@@ -548,7 +609,7 @@ const FEATURE_IMG: Array<string | null> = [
   "notebook",
   "profiles",
   "games",
-  null,
+  "english",
 ];
 
 /* ────────────────────────── page ────────────────────────── */
@@ -650,13 +711,13 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
 
-        {/* 2 · Live demo */}
+        {/* 2 · The product, on a phone */}
         <section className="fam-band fam-band-white">
           <div className="fam-section">
             <div className="fam-kicker">{c.demoKicker}</div>
             <h2 className="fam-h2">{c.demoTitle}</h2>
-            <div className="fam-demo-wrap">
-              <GaditDemoAnimation />
+            <div className="fam-phone-wrap">
+              <PhoneMock he={he} />
             </div>
           </div>
         </section>
@@ -839,6 +900,9 @@ export default function FamiliesLandingClient() {
         {/* 11 · Final CTA */}
         <section className="fam-band fam-band-teal">
           <div className="fam-section fam-center fam-final">
+            <div className="fam-final-img">
+              <Image src="/fam/routine.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
+            </div>
             <h2 className="fam-h2 fam-h2-onteal">{c.finalTitle}</h2>
             <p className="fam-final-sub">{c.finalSub}</p>
             <button type="button" className="fam-cta fam-cta-inverse" onClick={() => startTrial("final")}>
@@ -935,6 +999,13 @@ function ClockIcon() {
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <circle cx="12" cy="12" r="8.5" />
       <path d="M12 7v5l3 3" />
+    </svg>
+  );
+}
+function MoonIcon() {
+  return (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff" aria-hidden style={{ opacity: 0.95 }}>
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
     </svg>
   );
 }
@@ -1105,7 +1176,108 @@ const FAM_CSS = `
   text-align: center;
   margin: 22px 0 0;
 }
-.fam-demo-wrap { max-width: 560px; margin: 0 auto; }
+/* Phone-frame product mockup */
+.fam-phone-wrap { display: flex; justify-content: center; margin-top: 8px; }
+.fam-phone {
+  width: 300px;
+  max-width: 84vw;
+  background: #1f2937;
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 26px 60px rgba(31,41,55,0.32);
+  position: relative;
+  direction: rtl;
+}
+.fam-phone-notch {
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  width: 120px; height: 24px;
+  background: #1f2937;
+  border-radius: 0 0 16px 16px;
+  z-index: 2;
+}
+.fam-phone-screen {
+  background: #f6f4ee;
+  border-radius: 30px;
+  padding: 34px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fam-ph-top { display: flex; align-items: center; justify-content: space-between; }
+.fam-ph-brand { font-weight: 800; font-size: 17px; color: #1f2937; letter-spacing: -0.02em; }
+.fam-ph-it { color: #0EA5A5; font-style: italic; }
+.fam-ph-kids { display: flex; align-items: center; gap: 6px; }
+.fam-ph-kids-label { font-size: 11px; font-weight: 700; color: #0b7d7d; }
+.fam-ph-toggle {
+  width: 30px; height: 18px;
+  background: #0EA5A5;
+  border-radius: 999px;
+  position: relative;
+}
+.fam-ph-toggle::after {
+  content: ""; position: absolute; top: 2.5px; inset-inline-end: 2.5px;
+  width: 13px; height: 13px; background: #fff; border-radius: 50%;
+}
+.fam-ph-search {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff;
+  border: 1.5px solid rgba(14,165,165,0.4);
+  border-radius: 999px;
+  padding: 10px 14px;
+}
+.fam-ph-word-typed { font-weight: 700; font-size: 15px; color: #1f2937; }
+.fam-ph-hint { margin-inline-start: auto; font-size: 12px; color: #b8bcc4; }
+.fam-ph-title-row { display: flex; align-items: baseline; gap: 10px; padding-top: 2px; }
+.fam-ph-title { font-size: 30px; font-weight: 800; color: #1f2937; letter-spacing: -0.02em; }
+.fam-ph-pos {
+  font-size: 11.5px; font-weight: 700; color: #7C3AED;
+  background: rgba(124,58,237,0.1); border-radius: 999px; padding: 3px 10px;
+}
+.fam-ph-card {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(31,41,55,0.06);
+}
+.fam-ph-pic {
+  height: 92px;
+  background: linear-gradient(140deg, #1e3a8a, #4c1d95);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.fam-ph-star {
+  position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; opacity: 0.9;
+}
+.fam-ph-star-1 { top: 20px; inset-inline-start: 40px; }
+.fam-ph-star-2 { top: 54px; inset-inline-end: 44px; width: 3px; height: 3px; }
+.fam-ph-star-3 { top: 30px; inset-inline-end: 70px; width: 5px; height: 5px; }
+.fam-ph-meaning-row { display: flex; gap: 10px; padding: 12px 14px; }
+.fam-ph-num {
+  width: 22px; height: 22px; flex-shrink: 0;
+  background: rgba(14,165,165,0.12); color: #0b7d7d;
+  border-radius: 50%; font-weight: 800; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.fam-ph-def { font-size: 13.5px; font-weight: 600; color: #1f2937; line-height: 1.45; }
+.fam-ph-ex { font-size: 12px; color: #6b7280; margin-top: 4px; line-height: 1.4; }
+.fam-ph-tabs { display: flex; gap: 8px; justify-content: center; padding-top: 2px; }
+.fam-ph-tabs span {
+  font-size: 11.5px; font-weight: 700; color: #9ca3af;
+  padding: 5px 12px; border-radius: 999px;
+}
+.fam-ph-tabs span.is-active { background: #0EA5A5; color: #fff; }
+.fam-final-img {
+  margin: 0 auto 22px;
+  max-width: 560px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+  line-height: 0;
+}
+.fam-final-img img { width: 100%; height: auto; display: block; }
 .fam-feature {
   max-width: 940px;
   margin: 0 auto;
