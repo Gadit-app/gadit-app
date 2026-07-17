@@ -41,6 +41,7 @@ type FeatureCopy = { kicker: string; title: string; body: string };
 
 type Copy = {
   heroBadge: string;
+  whatIs: string;
   angles: Record<Angle, { h1: string; sub: string }>;
   heroCta: string;
   heroTrust: string;
@@ -91,7 +92,8 @@ type Copy = {
 
 const COPY: Record<"he" | "en", Copy> = {
   he: {
-    heroBadge: "המסלול המשפחתי של Gadit",
+    heroBadge: "מילון חכם לילדים ולכל המשפחה",
+    whatIs: "Gadit הוא מילון חכם לילדים: מקלידים כל מילה ומקבלים את המשמעות בגובה של ילד, עם תמונה ושלוש דוגמאות. כל מילה נשמרת במחברת האישית של הילד ובונה לו אוצר מילים.",
     angles: {
       vocab: {
         h1: "אוצר מילים גדול זה לא כישרון. זה הרגל.",
@@ -114,8 +116,8 @@ const COPY: Record<"he" | "en", Copy> = {
     heroTrust: "בלי צ'אט פתוח · בלי פרסומות · ביטול בלחיצה אחת",
     ownerCta: "לאזור המשפחה שלכם",
     stats: ["14 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
-    demoKicker: "ככה נראה Gadit",
-    demoTitle: "מקלידים מילה, ומקבלים מסך אחד נקי",
+    demoKicker: "התוצאה",
+    demoTitle: "הילד לומד לפתור מילים לבד, ואתם נהנים מהשקט",
     painKicker: "מכירים את זה?",
     painTitle: "רגע שכל הורה מכיר",
     painBody1: "שמונה בערב. שיעורי בית. \"אבא, מה זה נחוש?\" שתי דקות אחר כך: \"מה זה להסס?\" ובפעם השלישית הילד כבר מבקש את הטלפון \"רק לבדוק מילה\", ונעלם בתוך טיקטוק.",
@@ -234,7 +236,8 @@ const COPY: Record<"he" | "en", Copy> = {
     footerPrivacy: "פרטיות",
   },
   en: {
-    heroBadge: "The Gadit Family plan",
+    heroBadge: "A smart dictionary for kids and the whole family",
+    whatIs: "Gadit is a smart dictionary for kids: type any word and get its meaning at a child's level, with a picture and three examples. Every word is saved to your child's personal notebook and builds their vocabulary.",
     angles: {
       vocab: {
         h1: "A big vocabulary is not a talent. It is a habit.",
@@ -257,8 +260,8 @@ const COPY: Record<"he" | "en", Copy> = {
     heroTrust: "No open chat · No ads · Cancel in one click",
     ownerCta: "Go to your family space",
     stats: ["14 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
-    demoKicker: "This is Gadit",
-    demoTitle: "Type a word, get one clean screen",
+    demoKicker: "The result",
+    demoTitle: "Your kid learns to solve words alone, and you get the quiet",
     painKicker: "Sound familiar?",
     painTitle: "A moment every parent knows",
     painBody1: "8 PM. Homework. \"Dad, what does reluctant mean?\" Two minutes later: \"What's hesitate?\" And the third time, they ask for your phone \"just to check a word\" and vanish into TikTok.",
@@ -685,24 +688,21 @@ export default function FamiliesLandingClient() {
       </header>
 
       <main>
-        {/* 1 · Hero */}
+        {/* 1 · Hero — for a COLD visitor: category first (badge),
+             then the promise (h1), then a plain what-it-is line, then
+             the product itself on a phone so it is instantly clear
+             this is a word app, not an abstract idea. */}
         <section className="fam-hero">
           <div className="fam-badge">{c.heroBadge}</div>
           <h1 className="fam-h1">{hero.h1}</h1>
+          <p className="fam-whatis">{c.whatIs}</p>
           <p className="fam-sub">{hero.sub}</p>
           <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
             {ctaLabel}
           </button>
           <div className="fam-trust">{c.heroTrust}</div>
-          <div className="fam-hero-img">
-            <Image
-              src="/fam/hero.webp"
-              alt=""
-              width={1200}
-              height={800}
-              priority
-              sizes="(max-width: 760px) 92vw, 680px"
-            />
+          <div className="fam-phone-wrap fam-hero-phone">
+            <PhoneMock he={he} />
           </div>
           <div className="fam-stats">
             {c.stats.map((s, i) => (
@@ -711,13 +711,13 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
 
-        {/* 2 · The product, on a phone */}
+        {/* 2 · The calm payoff (warm illustration) */}
         <section className="fam-band fam-band-white">
-          <div className="fam-section">
+          <div className="fam-section fam-center">
             <div className="fam-kicker">{c.demoKicker}</div>
             <h2 className="fam-h2">{c.demoTitle}</h2>
-            <div className="fam-phone-wrap">
-              <PhoneMock he={he} />
+            <div className="fam-inline-img">
+              <Image src="/fam/hero.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 620px" />
             </div>
           </div>
         </section>
@@ -1071,13 +1071,22 @@ const FAM_CSS = `
   letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
-.fam-sub {
-  font-size: clamp(16px, 2.5vw, 19px);
-  line-height: 1.65;
-  color: #4b5563;
-  margin: 0 auto 24px;
-  max-width: 640px;
+.fam-whatis {
+  font-size: clamp(15.5px, 2.3vw, 18px);
+  line-height: 1.6;
+  color: #1f2937;
+  font-weight: 600;
+  margin: 0 auto 14px;
+  max-width: 600px;
 }
+.fam-sub {
+  font-size: clamp(15px, 2.3vw, 17px);
+  line-height: 1.65;
+  color: #6b7280;
+  margin: 0 auto 24px;
+  max-width: 620px;
+}
+.fam-hero-phone { margin-top: 30px; }
 .fam-cta {
   background: #0EA5A5;
   color: #fff;
