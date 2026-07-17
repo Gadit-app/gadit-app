@@ -694,9 +694,15 @@ export default function FamiliesLandingClient() {
              this is a word app, not an abstract idea. */}
         <section className="fam-hero">
           <div className="fam-badge">{c.heroBadge}</div>
-          <h1 className="fam-h1">{hero.h1}</h1>
+          <h1 className="fam-h1">
+            {hero.h1.split(". ").map((line, i, arr) => (
+              <span key={i} className="fam-h1-line">
+                {line}
+                {i < arr.length - 1 ? "." : ""}
+              </span>
+            ))}
+          </h1>
           <p className="fam-whatis">{c.whatIs}</p>
-          <p className="fam-sub">{hero.sub}</p>
           <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
             {ctaLabel}
           </button>
@@ -1071,6 +1077,7 @@ const FAM_CSS = `
   letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
+.fam-h1-line { display: block; }
 .fam-whatis {
   font-size: clamp(15.5px, 2.3vw, 18px);
   line-height: 1.6;
