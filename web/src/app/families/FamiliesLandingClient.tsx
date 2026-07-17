@@ -682,10 +682,6 @@ export default function FamiliesLandingClient() {
         <Link href={href("/")} className="fam-wordmark">
           Gad<span className="fam-wordmark-it">it</span>
         </Link>
-        <span className="fam-header-tagline">{c.heroBadge}</span>
-        <button type="button" className="fam-header-cta" onClick={() => startTrial("header")}>
-          {isOwner ? c.ownerCta : c.trialBadge}
-        </button>
       </header>
 
       <main>
@@ -696,20 +692,12 @@ export default function FamiliesLandingClient() {
         <section className="fam-hero">
           <div className="fam-hero-grid">
             <div className="fam-hero-text">
-              <div className="fam-badge fam-badge-mobile">{c.heroBadge}</div>
-              <h1 className="fam-h1">
-                {hero.h1.split(". ").map((line, i, arr) => (
-                  <span key={i} className="fam-h1-line">
-                    {line}
-                    {i < arr.length - 1 ? "." : ""}
-                  </span>
-                ))}
-              </h1>
+              <div className="fam-badge">{c.heroBadge}</div>
+              <h1 className="fam-h1">{hero.h1}</h1>
               <p className="fam-whatis">{c.whatIs}</p>
               <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
                 {ctaLabel}
               </button>
-              <div className="fam-trust">{c.heroTrust}</div>
             </div>
             <div className="fam-hero-visual">
               <PhoneMock he={he} />
@@ -1058,19 +1046,6 @@ const FAM_CSS = `
   border-radius: 999px;
   cursor: pointer;
 }
-.fam-header-tagline { display: none; }
-@media (min-width: 880px) {
-  .fam-header-tagline {
-    display: inline-block;
-    font-weight: 700;
-    font-size: 13.5px;
-    color: #0b7d7d;
-    background: rgba(14,165,165,0.09);
-    border: 1px solid rgba(14,165,165,0.22);
-    border-radius: 999px;
-    padding: 6px 16px;
-  }
-}
 .fam-hero {
   padding: 26px 20px 30px;
   max-width: 1000px;
@@ -1092,7 +1067,6 @@ const FAM_CSS = `
   }
   .fam-hero-text { order: 1; }
   .fam-hero-visual { order: 2; }
-  .fam-badge-mobile { display: none; }
   .fam-hero-text .fam-cta { align-self: start; }
 }
 .fam-badge {
@@ -1109,11 +1083,10 @@ const FAM_CSS = `
 .fam-h1 {
   font-size: clamp(30px, 5.6vw, 46px);
   font-weight: 800;
-  line-height: 1.04;
+  line-height: 1.12;
   letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
-.fam-h1-line { display: block; }
 .fam-whatis {
   font-size: clamp(14.5px, 2.1vw, 16.5px);
   line-height: 1.6;
