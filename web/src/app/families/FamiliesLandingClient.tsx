@@ -682,6 +682,7 @@ export default function FamiliesLandingClient() {
         <Link href={href("/")} className="fam-wordmark">
           Gad<span className="fam-wordmark-it">it</span>
         </Link>
+        <span className="fam-header-tagline">{c.heroBadge}</span>
         <button type="button" className="fam-header-cta" onClick={() => startTrial("header")}>
           {isOwner ? c.ownerCta : c.trialBadge}
         </button>
@@ -693,22 +694,26 @@ export default function FamiliesLandingClient() {
              the product itself on a phone so it is instantly clear
              this is a word app, not an abstract idea. */}
         <section className="fam-hero">
-          <div className="fam-badge">{c.heroBadge}</div>
-          <h1 className="fam-h1">
-            {hero.h1.split(". ").map((line, i, arr) => (
-              <span key={i} className="fam-h1-line">
-                {line}
-                {i < arr.length - 1 ? "." : ""}
-              </span>
-            ))}
-          </h1>
-          <p className="fam-whatis">{c.whatIs}</p>
-          <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
-            {ctaLabel}
-          </button>
-          <div className="fam-trust">{c.heroTrust}</div>
-          <div className="fam-phone-wrap fam-hero-phone">
-            <PhoneMock he={he} />
+          <div className="fam-hero-grid">
+            <div className="fam-hero-text">
+              <div className="fam-badge fam-badge-mobile">{c.heroBadge}</div>
+              <h1 className="fam-h1">
+                {hero.h1.split(". ").map((line, i, arr) => (
+                  <span key={i} className="fam-h1-line">
+                    {line}
+                    {i < arr.length - 1 ? "." : ""}
+                  </span>
+                ))}
+              </h1>
+              <p className="fam-whatis">{c.whatIs}</p>
+              <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
+                {ctaLabel}
+              </button>
+              <div className="fam-trust">{c.heroTrust}</div>
+            </div>
+            <div className="fam-hero-visual">
+              <PhoneMock he={he} />
+            </div>
           </div>
           <div className="fam-stats">
             {c.stats.map((s, i) => (
@@ -1053,11 +1058,42 @@ const FAM_CSS = `
   border-radius: 999px;
   cursor: pointer;
 }
+.fam-header-tagline { display: none; }
+@media (min-width: 880px) {
+  .fam-header-tagline {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: #0b7d7d;
+    background: rgba(14,165,165,0.09);
+    border: 1px solid rgba(14,165,165,0.22);
+    border-radius: 999px;
+    padding: 6px 16px;
+  }
+}
 .fam-hero {
-  text-align: center;
-  padding: 44px 20px 36px;
-  max-width: 760px;
+  padding: 26px 20px 30px;
+  max-width: 1000px;
   margin: 0 auto;
+}
+.fam-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 26px;
+  align-items: center;
+  text-align: center;
+}
+.fam-hero-visual { display: flex; justify-content: center; }
+@media (min-width: 880px) {
+  .fam-hero-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 44px;
+    text-align: start;
+  }
+  .fam-hero-text { order: 1; }
+  .fam-hero-visual { order: 2; }
+  .fam-badge-mobile { display: none; }
+  .fam-hero-text .fam-cta { align-self: start; }
 }
 .fam-badge {
   display: inline-block;
@@ -1071,20 +1107,24 @@ const FAM_CSS = `
   margin-bottom: 18px;
 }
 .fam-h1 {
-  font-size: clamp(32px, 6.4vw, 50px);
+  font-size: clamp(30px, 5.6vw, 46px);
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.04;
   letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
 .fam-h1-line { display: block; }
 .fam-whatis {
-  font-size: clamp(15.5px, 2.3vw, 18px);
+  font-size: clamp(14.5px, 2.1vw, 16.5px);
   line-height: 1.6;
-  color: #1f2937;
-  font-weight: 600;
-  margin: 0 auto 14px;
-  max-width: 600px;
+  color: #4b5563;
+  font-weight: 400;
+  margin: 0 0 20px;
+  max-width: 520px;
+}
+.fam-hero-text .fam-whatis { margin-inline: auto; }
+@media (min-width: 880px) {
+  .fam-hero-text .fam-whatis { margin-inline: 0; }
 }
 .fam-sub {
   font-size: clamp(15px, 2.3vw, 17px);
@@ -1093,7 +1133,6 @@ const FAM_CSS = `
   margin: 0 auto 24px;
   max-width: 620px;
 }
-.fam-hero-phone { margin-top: 30px; }
 .fam-cta {
   background: #0EA5A5;
   color: #fff;
