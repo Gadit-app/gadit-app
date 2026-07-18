@@ -65,6 +65,12 @@ type Copy = {
   chainCost: string;
   chainTurnTitle: string;
   chainTurnBody: string;
+  dashKicker: string;
+  dashTitle: string;
+  dashBody: string;
+  dashKids: Array<{ name: string; total: number; week: number }>;
+  dashWordsLabel: string;
+  dashWeekLabel: string;
   featuresKicker: string;
   features: FeatureCopy[];
   midCtaTitle: string;
@@ -150,6 +156,16 @@ const COPY: Record<"he" | "en", Copy> = {
     chainCost: "הציונים יורדים, והתסכול עולה.",
     chainTurnTitle: "כאן נכנס Gadit",
     chainTurnBody: "המילון האישי והצמוד של הילד: בכל רגע שהוא נתקע במילה, הוא מקבל הסבר בגובה העיניים, תמונה ודוגמאות. כל מילה נשמרת, אוצר המילים גדל, והבנת הנקרא חוזרת. ואתם רואים את ההתקדמות שלו שחור על גבי לבן.",
+    dashKicker: "לוח הבקרה להורה",
+    dashTitle: "אתם רואים בדיוק כמה כל ילד למד",
+    dashBody: "לכל ילד במשפחה יש מחברת מילים אישית שגדלה. בלוח הבקרה שלכם אתם רואים במבט אחד כמה מילים כל ילד למד, כמה נוספו השבוע, ואילו מילים אחרונות. זה מה ש-ChatGPT לא ייתן לכם: הוכחה שרואים, שבוע אחרי שבוע.",
+    dashKids: [
+      { name: "נועה", total: 47, week: 12 },
+      { name: "עידו", total: 31, week: 8 },
+      { name: "מאיה", total: 63, week: 15 },
+    ],
+    dashWordsLabel: "מילים במחברת",
+    dashWeekLabel: "השבוע",
     featuresKicker: "מה יש בפנים",
     features: [
       {
@@ -310,6 +326,16 @@ const COPY: Record<"he" | "en", Copy> = {
     chainCost: "Grades drop, and frustration rises.",
     chainTurnTitle: "This is where Gadit comes in",
     chainTurnBody: "Your child's personal, always-there dictionary: the moment they get stuck on a word, they get an explanation at eye level, a picture and examples. Every word is saved, vocabulary grows, comprehension returns. And you see their progress in black and white.",
+    dashKicker: "The parent dashboard",
+    dashTitle: "You see exactly how much each child has learned",
+    dashBody: "Every child has a personal word notebook that grows. In your dashboard you see, at a glance, how many words each child has learned, how many were added this week, and their most recent words. This is what ChatGPT will never give you: visible proof, week after week.",
+    dashKids: [
+      { name: "Noa", total: 47, week: 12 },
+      { name: "Ido", total: 31, week: 8 },
+      { name: "Maya", total: 63, week: 15 },
+    ],
+    dashWordsLabel: "words in notebook",
+    dashWeekLabel: "this week",
     featuresKicker: "What's inside",
     features: [
       {
@@ -817,6 +843,49 @@ export default function FamiliesLandingClient() {
               <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
                 {ctaLabel}
               </button>
+            </div>
+          </div>
+        </section>
+
+        {/* 3.6 · The parent dashboard (Gadi 2026-07-18): the moat.
+             Shows a mockup of the real /family progress view so a parent
+             understands they are buying visible, accumulating proof of
+             growth that ChatGPT cannot give. */}
+        <section className="fam-band fam-band-white">
+          <div className="fam-feature">
+            <div className="fam-feature-text">
+              <div className="fam-kicker">{c.dashKicker}</div>
+              <h2 className="fam-h2 fam-h2-start">{c.dashTitle}</h2>
+              <p className="fam-body">{c.dashBody}</p>
+            </div>
+            <div className="fam-feature-visual">
+              <div className="fam-dashmock">
+                <div className="fam-dashmock-sum">
+                  <div className="fam-dashmock-sumnum">141</div>
+                  <div className="fam-dashmock-sumlabel">{he ? "מילים במחברות המשפחה" : "words in the family's notebooks"}</div>
+                </div>
+                {c.dashKids.map((k, i) => {
+                  const colors = ["#0EA5A5", "#7C3AED", "#D97706"];
+                  const pct = Math.min(100, Math.round((k.total / 70) * 100));
+                  return (
+                    <div key={i} className="fam-dashmock-row">
+                      <div className="fam-dashmock-avatar" style={{ background: colors[i % 3] }}>
+                        {k.name.charAt(0)}
+                      </div>
+                      <div className="fam-dashmock-info">
+                        <div className="fam-dashmock-name">{k.name}</div>
+                        <div className="fam-dashmock-bar">
+                          <span style={{ width: `${pct}%`, background: colors[i % 3] }} />
+                        </div>
+                      </div>
+                      <div className="fam-dashmock-nums">
+                        <span className="fam-dashmock-total">{k.total}</span>
+                        <span className="fam-dashmock-week">+{k.week} {c.dashWeekLabel}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
@@ -1453,6 +1522,41 @@ const FAM_CSS = `
   margin: 0 auto 18px;
   max-width: 520px;
 }
+
+/* Parent dashboard mockup (mirrors the real /family progress view) */
+.fam-dashmock {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.1);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(31,41,55,0.1);
+  direction: rtl;
+}
+.fam-dashmock-sum {
+  background: linear-gradient(140deg, rgba(14,165,165,0.12), rgba(14,165,165,0.04));
+  border: 1px solid rgba(14,165,165,0.2);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.fam-dashmock-sumnum { font-size: 30px; font-weight: 800; color: #0b7d7d; line-height: 1; }
+.fam-dashmock-sumlabel { font-size: 12.5px; color: #6b7280; font-weight: 600; margin-top: 2px; }
+.fam-dashmock-row { display: flex; align-items: center; gap: 11px; padding: 9px 0; }
+.fam-dashmock-row + .fam-dashmock-row { border-top: 1px solid rgba(31,41,55,0.06); }
+.fam-dashmock-avatar {
+  width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+  color: #fff; font-weight: 800; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.fam-dashmock-info { flex: 1; min-width: 0; }
+.fam-dashmock-name { font-weight: 700; font-size: 14.5px; color: #1f2937; margin-bottom: 5px; }
+.fam-dashmock-bar {
+  height: 7px; border-radius: 999px; background: #eef0f2; overflow: hidden;
+}
+.fam-dashmock-bar span { display: block; height: 100%; border-radius: 999px; }
+.fam-dashmock-nums { text-align: end; flex-shrink: 0; }
+.fam-dashmock-total { display: block; font-size: 20px; font-weight: 800; color: #1f2937; line-height: 1; }
+.fam-dashmock-week { font-size: 11.5px; font-weight: 700; color: #6d28d9; }
 /* Phone-frame product mockup */
 .fam-phone-wrap { display: flex; justify-content: center; margin-top: 8px; }
 .fam-phone {

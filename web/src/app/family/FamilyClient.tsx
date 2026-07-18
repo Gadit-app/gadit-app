@@ -128,6 +128,104 @@ const ROLE_LABEL: Record<string, Record<"father" | "mother" | "boy" | "girl", st
   am: { father: "አባት", mother: "እናት", boy: "ወንድ ልጅ", girl: "ሴት ልጅ" },
 };
 
+// ─── Progress dashboard ────────────────────────────────────────────
+// The parent's report card: per child, how their vocabulary is
+// growing (total words, words this week, recent words). This is the
+// feature that answers "why pay when ChatGPT is free" — ChatGPT is a
+// conversation that vanishes, Gadit accumulates and shows the growth.
+type ChildProgress = {
+  memberId: string;
+  name: string;
+  role: string;
+  colorIndex: number;
+  linked: boolean;
+  total: number;
+  thisWeek: number;
+  recent: string[];
+};
+
+const PROGRESS_COPY: Record<string, {
+  title: string;
+  sub: string;
+  familyTotal: string;
+  weekTotal: string;
+  wordsInNotebook: string;
+  thisWeek: string;
+  recentWords: string;
+  notLinked: string;
+  noneYet: string;
+  loading: string;
+}> = {
+  he: {
+    title: "ההתקדמות של הילדים",
+    sub: "כמה מילים כל ילד למד, וכמה נוספו השבוע. אוצר המילים גדל לנגד עיניכם.",
+    familyTotal: "מילים במחברות המשפחה",
+    weekTotal: "מילים חדשות השבוע",
+    wordsInNotebook: "מילים במחברת",
+    thisWeek: "השבוע",
+    recentWords: "מילים אחרונות",
+    notLinked: "המכשיר של הילד עדיין לא מחובר. חברו אותו כדי לראות את ההתקדמות.",
+    noneYet: "עדיין אין מילים במחברת. ברגע שהילד יתחיל לחפש, הן יופיעו כאן.",
+    loading: "טוענים את ההתקדמות...",
+  },
+  en: {
+    title: "Your children's progress",
+    sub: "How many words each child has learned, and how many were added this week. Watch the vocabulary grow.",
+    familyTotal: "words in the family's notebooks",
+    weekTotal: "new words this week",
+    wordsInNotebook: "words in notebook",
+    thisWeek: "this week",
+    recentWords: "Recent words",
+    notLinked: "This child's device is not linked yet. Pair it to see their progress.",
+    noneYet: "No words in the notebook yet. As soon as your child starts looking words up, they appear here.",
+    loading: "Loading progress...",
+  },
+};
+
+function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string }) {
+  const color = memberColorFor({ colorIndex: c.colorIndex });
+  const initial = (c.name || "?").trim().charAt(0).toUpperCase() || "?";
+  const roleName = (ROLE_LABEL[lang] ?? ROLE_LABEL.en)[c.role as "boy" | "girl"] ?? "";
+  return (
+    <div className="fam-dash-card">
+      <div className="fam-dash-head">
+        <div className="fam-dash-avatar" style={{ background: color }}>{initial}</div>
+        <div>
+          <div className="fam-dash-name">{c.name || roleName}</div>
+          <div className="fam-dash-role">{roleName}</div>
+        </div>
+      </div>
+      {!c.linked ? (
+        <div className="fam-dash-note">{t.notLinked}</div>
+      ) : c.total === 0 ? (
+        <div className="fam-dash-note">{t.noneYet}</div>
+      ) : (
+        <>
+          <div className="fam-dash-stats">
+            <div className="fam-dash-big">
+              <span className="fam-dash-num">{c.total}</span>
+              <span className="fam-dash-label">{t.wordsInNotebook}</span>
+            </div>
+            {c.thisWeek > 0 && (
+              <div className="fam-dash-week">+{c.thisWeek} {t.thisWeek}</div>
+            )}
+          </div>
+          {c.recent.length > 0 && (
+            <div className="fam-dash-recent">
+              <div className="fam-dash-recent-label">{t.recentWords}</div>
+              <div className="fam-dash-chips">
+                {c.recent.slice(0, 5).map((w, i) => (
+                  <span key={i} className="fam-dash-chip">{w}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 function MemberCard({
   m,
   onPair,
@@ -194,8 +292,32 @@ export function FamilyClient() {
   const [family, setFamily] = useState<Family | null>(null);
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [familyChecked, setFamilyChecked] = useState(false);
+  const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
 
   const isWelcome = search.get("welcome") === "1";
+  const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
+
+  // Load the progress dashboard once we know the user owns a family.
+  // Refetch when members change (a newly paired child should appear).
+  useEffect(() => {
+    if (!user || !family) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { getIdToken } = await import("firebase/auth");
+        const idToken = await getIdToken(user);
+        const res = await fetch("/api/family/progress", {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setProgress(data);
+      } catch {
+        /* progress is a nice-to-have; never block the roster */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user, family, members.length]);
 
   // Subscribe to families/{ownerUid} doc + its members subcollection.
   useEffect(() => {
@@ -277,6 +399,31 @@ export function FamilyClient() {
           )}
         </header>
 
+        {progress && progress.children.length > 0 && (
+          <section className="fam-dash">
+            <style>{FAM_DASH_CSS}</style>
+            <h2 className="wb-family-section-title">{pt.title}</h2>
+            <p className="fam-dash-sub">{pt.sub}</p>
+            {progress.totalWords > 0 && (
+              <div className="fam-dash-summary">
+                <div className="fam-dash-sumcard">
+                  <span className="fam-dash-sumnum">{progress.totalWords}</span>
+                  <span className="fam-dash-sumlabel">{pt.familyTotal}</span>
+                </div>
+                <div className="fam-dash-sumcard fam-dash-sumcard-week">
+                  <span className="fam-dash-sumnum">+{progress.weekWords}</span>
+                  <span className="fam-dash-sumlabel">{pt.weekTotal}</span>
+                </div>
+              </div>
+            )}
+            <div className="fam-dash-grid">
+              {progress.children.map((cp) => (
+                <ProgressCard key={cp.memberId} c={cp} t={pt} lang={lang} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {members.length === 0 ? (
           <div className="wb-family-empty-state">
             <p>{c.empty}</p>
@@ -342,3 +489,65 @@ async function revokeMember(_ownerUid: string, memberId: string) {
     body: JSON.stringify({ memberId }),
   });
 }
+
+// Scoped styles for the progress dashboard. Kept local (not in
+// globals.css) so this feature is fully self-contained.
+const FAM_DASH_CSS = `
+.fam-dash { margin: 8px 0 30px; }
+.fam-dash-sub { color: #6b7280; font-size: 14.5px; margin: 4px 0 16px; line-height: 1.5; }
+.fam-dash-summary { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.fam-dash-sumcard {
+  flex: 1; min-width: 150px;
+  background: linear-gradient(140deg, rgba(14,165,165,0.12), rgba(14,165,165,0.04));
+  border: 1px solid rgba(14,165,165,0.2);
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.fam-dash-sumcard-week {
+  background: linear-gradient(140deg, rgba(124,58,237,0.12), rgba(124,58,237,0.04));
+  border-color: rgba(124,58,237,0.2);
+}
+.fam-dash-sumnum { font-size: 30px; font-weight: 800; color: #1f2937; line-height: 1; }
+.fam-dash-sumcard-week .fam-dash-sumnum { color: #6d28d9; }
+.fam-dash-sumlabel { font-size: 13px; color: #6b7280; font-weight: 600; }
+.fam-dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.fam-dash-card {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.09);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(31,41,55,0.05);
+}
+.fam-dash-head { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+.fam-dash-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  color: #fff; font-weight: 800; font-size: 18px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.fam-dash-name { font-weight: 700; font-size: 16px; color: #1f2937; }
+.fam-dash-role { font-size: 12.5px; color: #9ca3af; }
+.fam-dash-note { color: #6b7280; font-size: 13.5px; line-height: 1.5; padding: 4px 0; }
+.fam-dash-stats { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.fam-dash-big { display: flex; flex-direction: column; }
+.fam-dash-num { font-size: 34px; font-weight: 800; color: #0b7d7d; line-height: 1; }
+.fam-dash-label { font-size: 12.5px; color: #6b7280; font-weight: 600; margin-top: 3px; }
+.fam-dash-week {
+  background: rgba(124,58,237,0.1); color: #6d28d9;
+  font-weight: 800; font-size: 13px;
+  border-radius: 999px; padding: 5px 11px;
+  white-space: nowrap;
+}
+.fam-dash-recent { margin-top: 14px; border-top: 1px dashed rgba(31,41,55,0.12); padding-top: 12px; }
+.fam-dash-recent-label { font-size: 12px; color: #9ca3af; font-weight: 700; margin-bottom: 7px; }
+.fam-dash-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fam-dash-chip {
+  background: rgba(14,165,165,0.09); color: #374151;
+  border-radius: 999px; padding: 4px 11px;
+  font-size: 13px; font-weight: 600;
+}
+`;
