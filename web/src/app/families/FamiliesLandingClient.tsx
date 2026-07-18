@@ -144,7 +144,7 @@ const COPY: Record<"he" | "en", Copy> = {
     painTitle: "רגע שכל הורה מכיר",
     painBody1: "שמונה בערב. שיעורי בית. \"אבא, מה זה נחוש?\" שתי דקות אחר כך: \"מה זה להסס?\" ובפעם השלישית הילד כבר מבקש את הטלפון \"רק לבדוק מילה\", ונעלם בתוך טיקטוק.",
     painBody2: "הבעיה היא לא הסקרנות של הילד.",
-    reframe: "הבעיה היא שמילה אחת שהוא מדלג עליה, גוררת אחריה שרשרת שלמה.",
+    reframe: "והתסכול הזה חוזר כל ערב מחדש.",
     chainKicker: "למה מילה אחת כל כך משנה",
     chainTitle: "מילה אחת לא מובנת מפילה את כל השיעור",
     chainSteps: [
@@ -314,7 +314,7 @@ const COPY: Record<"he" | "en", Copy> = {
     painTitle: "A moment every parent knows",
     painBody1: "8 PM. Homework. \"Dad, what does reluctant mean?\" Two minutes later: \"What's hesitate?\" And the third time, they ask for your phone \"just to check a word\" and vanish into TikTok.",
     painBody2: "The problem is not your kid's curiosity.",
-    reframe: "The problem is that one word they skip pulls a whole chain behind it.",
+    reframe: "And this repeats every single evening.",
     chainKicker: "Why one word matters this much",
     chainTitle: "One misunderstood word can bring down the whole lesson",
     chainSteps: [
@@ -794,7 +794,41 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
 
-        {/* 2 · The calm payoff (warm illustration) */}
+        {/* 2 · Reading-comprehension chain (Gadi 2026-07-18): the
+             stakes, promoted to the second section with an illustration
+             on the left. One misunderstood word cascades into lost
+             comprehension and lower grades; Gadit is the break in the
+             chain. */}
+        <section className="fam-band fam-band-cream">
+          <div className="fam-feature fam-feature-top">
+            <div className="fam-feature-text">
+              <div className="fam-kicker fam-kicker-light">{c.chainKicker}</div>
+              <h2 className="fam-h2 fam-h2-start">{c.chainTitle}</h2>
+              <div className="fam-chain">
+                {c.chainSteps.map((s, i) => (
+                  <div key={i} className="fam-chain-step">
+                    <span className="fam-chain-num">{i + 1}</span>
+                    <span className="fam-chain-text">{s}</span>
+                    <span className="fam-chain-arrow" aria-hidden>↓</span>
+                  </div>
+                ))}
+                <div className="fam-chain-cost">{c.chainCost}</div>
+              </div>
+              <div className="fam-chain-turn">
+                <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
+                <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
+                <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
+                  {ctaLabel}
+                </button>
+              </div>
+            </div>
+            <div className="fam-feature-visual">
+              <Image src="/fam/lost-reader.webp" alt="" width={1200} height={900} className="fam-feature-illus" sizes="(max-width: 760px) 92vw, 440px" />
+            </div>
+          </div>
+        </section>
+
+        {/* 3 · The calm payoff (warm illustration) */}
         <section className="fam-band fam-band-white">
           <div className="fam-section fam-center">
             <div className="fam-kicker">{c.demoKicker}</div>
@@ -816,34 +850,6 @@ export default function FamiliesLandingClient() {
             <p className="fam-body">{c.painBody1}</p>
             <p className="fam-body fam-body-strong">{c.painBody2}</p>
             <p className="fam-reframe">{c.reframe}</p>
-          </div>
-        </section>
-
-        {/* 3.5 · The reading-comprehension chain (Gadi 2026-07-18): one
-             misunderstood word cascades into lost comprehension and
-             lower grades. This is the emotional core of the vocabulary
-             positioning, and Gadit is the break in the chain. */}
-        <section className="fam-band fam-band-cream">
-          <div className="fam-section">
-            <div className="fam-kicker fam-kicker-light">{c.chainKicker}</div>
-            <h2 className="fam-h2">{c.chainTitle}</h2>
-            <div className="fam-chain">
-              {c.chainSteps.map((s, i) => (
-                <div key={i} className="fam-chain-step">
-                  <span className="fam-chain-num">{i + 1}</span>
-                  <span className="fam-chain-text">{s}</span>
-                  <span className="fam-chain-arrow" aria-hidden>↓</span>
-                </div>
-              ))}
-              <div className="fam-chain-cost">{c.chainCost}</div>
-            </div>
-            <div className="fam-chain-turn">
-              <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
-              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
-              <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
-                {ctaLabel}
-              </button>
-            </div>
           </div>
         </section>
 
@@ -1443,6 +1449,16 @@ const FAM_CSS = `
   color: #0b7d7d;
   text-align: center;
   margin: 22px 0 0;
+}
+
+/* When the chain lives inside a two-column feature (section 2), align
+   the illustration to the top of the tall text column and let the
+   chain fill the column instead of centering at 480px. */
+.fam-feature-top { align-items: start; }
+.fam-feature-text .fam-chain { margin-inline: 0; max-width: 100%; }
+.fam-feature-text .fam-chain-turn { margin-inline: 0; }
+@media (min-width: 761px) {
+  .fam-feature-top .fam-feature-illus { position: sticky; top: 24px; }
 }
 
 /* Reading-comprehension chain */
