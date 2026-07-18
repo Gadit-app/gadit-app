@@ -59,6 +59,12 @@ type Copy = {
   painBody1: string;
   painBody2: string;
   reframe: string;
+  chainKicker: string;
+  chainTitle: string;
+  chainSteps: string[];
+  chainCost: string;
+  chainTurnTitle: string;
+  chainTurnBody: string;
   featuresKicker: string;
   features: FeatureCopy[];
   midCtaTitle: string;
@@ -127,12 +133,23 @@ const COPY: Record<"he" | "en", Copy> = {
     ownerCta: "לאזור המשפחה שלכם",
     stats: ["14 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
     demoKicker: "התוצאה",
-    demoTitle: "הילד לומד לפתור מילים לבד, ואתם נהנים מהשקט",
+    demoTitle: "הילד מבין כל מילה, ואוצר המילים שלו גדל כל יום",
     painKicker: "מכירים את זה?",
     painTitle: "רגע שכל הורה מכיר",
     painBody1: "שמונה בערב. שיעורי בית. \"אבא, מה זה נחוש?\" שתי דקות אחר כך: \"מה זה להסס?\" ובפעם השלישית הילד כבר מבקש את הטלפון \"רק לבדוק מילה\", ונעלם בתוך טיקטוק.",
     painBody2: "הבעיה היא לא הסקרנות של הילד.",
-    reframe: "הבעיה היא שאין לו מקום בטוח לקבל בו תשובה לבד. עד עכשיו.",
+    reframe: "הבעיה היא שמילה אחת שהוא מדלג עליה, גוררת אחריה שרשרת שלמה.",
+    chainKicker: "למה מילה אחת כל כך משנה",
+    chainTitle: "מילה אחת לא מובנת מפילה את כל השיעור",
+    chainSteps: [
+      "הילד קורא, ונתקל במילה שהוא לא מבין",
+      "בלי המילה, המשפט מאבד את המשמעות",
+      "בלי המשפט, הפסקה כבר לא ברורה",
+      "וכך נסדקת הבנת הנקרא, בכל מקצוע",
+    ],
+    chainCost: "הציונים יורדים, והתסכול עולה.",
+    chainTurnTitle: "כאן נכנס Gadit",
+    chainTurnBody: "המילון האישי והצמוד של הילד: בכל רגע שהוא נתקע במילה, הוא מקבל הסבר בגובה העיניים, תמונה ודוגמאות. כל מילה נשמרת, אוצר המילים גדל, והבנת הנקרא חוזרת. ואתם רואים את ההתקדמות שלו שחור על גבי לבן.",
     featuresKicker: "מה יש בפנים",
     features: [
       {
@@ -211,7 +228,7 @@ const COPY: Record<"he" | "en", Copy> = {
     cancelNote: "החיוב בשקלים, רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.",
     singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש",
     guaranteeTitle: "מבחן שיעורי הבית",
-    guaranteeBody: "מתחילים הערב ובודקים את זה על שיעורי הבית האמיתיים, שבועיים שלמים, בחינם. אם לא ראיתם את הילד מחפש מילים לבד, מבטלים בלחיצה אחת ולא שילמתם שקל.",
+    guaranteeBody: "מתחילים הערב ובודקים את זה על שיעורי הבית האמיתיים, שבועיים שלמים, בחינם. אם לא ראיתם את הילד מבין מילים לבד ואת אוצר המילים שלו גדל, מבטלים בלחיצה אחת ולא שילמתם שקל.",
     faqTitle: "שאלות של הורים",
     faq: [
       {
@@ -276,12 +293,23 @@ const COPY: Record<"he" | "en", Copy> = {
     ownerCta: "Go to your family space",
     stats: ["14 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
     demoKicker: "The result",
-    demoTitle: "Your kid learns to solve words alone, and you get the quiet",
+    demoTitle: "Your child understands every word, and their vocabulary grows every day",
     painKicker: "Sound familiar?",
     painTitle: "A moment every parent knows",
     painBody1: "8 PM. Homework. \"Dad, what does reluctant mean?\" Two minutes later: \"What's hesitate?\" And the third time, they ask for your phone \"just to check a word\" and vanish into TikTok.",
     painBody2: "The problem is not your kid's curiosity.",
-    reframe: "The problem is that they have no safe place to get the answer alone. Until now.",
+    reframe: "The problem is that one word they skip pulls a whole chain behind it.",
+    chainKicker: "Why one word matters this much",
+    chainTitle: "One misunderstood word can bring down the whole lesson",
+    chainSteps: [
+      "Your child reads and hits a word they do not understand",
+      "Without the word, the sentence loses its meaning",
+      "Without the sentence, the paragraph is no longer clear",
+      "And reading comprehension cracks, in every subject",
+    ],
+    chainCost: "Grades drop, and frustration rises.",
+    chainTurnTitle: "This is where Gadit comes in",
+    chainTurnBody: "Your child's personal, always-there dictionary: the moment they get stuck on a word, they get an explanation at eye level, a picture and examples. Every word is saved, vocabulary grows, comprehension returns. And you see their progress in black and white.",
     featuresKicker: "What's inside",
     features: [
       {
@@ -360,7 +388,7 @@ const COPY: Record<"he" | "en", Copy> = {
     cancelNote: "First charge only after the 14 days. Cancel anytime from your account page, one click.",
     singleChild: "Just one student at home? Deep is $4.99/month",
     guaranteeTitle: "The homework test",
-    guaranteeBody: "Start tonight and test it on real homework, two full weeks, free. If you did not watch your kid look up words on their own, cancel in one click and you paid nothing.",
+    guaranteeBody: "Start tonight and test it on real homework, two full weeks, free. If you did not watch your kid understand words on their own and their vocabulary grow, cancel in one click and you paid nothing.",
     faqTitle: "Questions parents ask",
     faq: [
       {
@@ -762,6 +790,34 @@ export default function FamiliesLandingClient() {
             <p className="fam-body">{c.painBody1}</p>
             <p className="fam-body fam-body-strong">{c.painBody2}</p>
             <p className="fam-reframe">{c.reframe}</p>
+          </div>
+        </section>
+
+        {/* 3.5 · The reading-comprehension chain (Gadi 2026-07-18): one
+             misunderstood word cascades into lost comprehension and
+             lower grades. This is the emotional core of the vocabulary
+             positioning, and Gadit is the break in the chain. */}
+        <section className="fam-band fam-band-cream">
+          <div className="fam-section">
+            <div className="fam-kicker fam-kicker-light">{c.chainKicker}</div>
+            <h2 className="fam-h2">{c.chainTitle}</h2>
+            <div className="fam-chain">
+              {c.chainSteps.map((s, i) => (
+                <div key={i} className="fam-chain-step">
+                  <span className="fam-chain-num">{i + 1}</span>
+                  <span className="fam-chain-text">{s}</span>
+                  <span className="fam-chain-arrow" aria-hidden>↓</span>
+                </div>
+              ))}
+              <div className="fam-chain-cost">{c.chainCost}</div>
+            </div>
+            <div className="fam-chain-turn">
+              <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
+              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
+              <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
+                {ctaLabel}
+              </button>
+            </div>
           </div>
         </section>
 
@@ -1318,6 +1374,84 @@ const FAM_CSS = `
   color: #0b7d7d;
   text-align: center;
   margin: 22px 0 0;
+}
+
+/* Reading-comprehension chain */
+.fam-chain {
+  max-width: 480px;
+  margin: 4px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.fam-chain-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid rgba(217,119,6,0.18);
+  border-radius: 14px;
+  padding: 13px 16px;
+  margin-bottom: 26px;
+  box-shadow: 0 6px 16px rgba(31,41,55,0.05);
+}
+.fam-chain-num {
+  width: 26px; height: 26px; flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(217,119,6,0.12);
+  color: #b45309;
+  font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.fam-chain-text { font-size: 15.5px; font-weight: 600; color: #1f2937; line-height: 1.45; }
+.fam-chain-arrow {
+  position: absolute;
+  bottom: -23px;
+  inset-inline-start: 50%;
+  transform: translateX(50%);
+  color: #d97706;
+  font-size: 18px;
+  font-weight: 800;
+}
+.fam-chain-step:last-of-type { margin-bottom: 16px; }
+.fam-chain-cost {
+  text-align: center;
+  font-size: clamp(18px, 2.6vw, 21px);
+  font-weight: 800;
+  color: #b91c1c;
+  margin-top: 4px;
+}
+.fam-chain-turn {
+  max-width: 620px;
+  margin: 30px auto 0;
+  background: #fff;
+  border: 2px solid #0EA5A5;
+  border-radius: 20px;
+  padding: 24px 24px 26px;
+  text-align: center;
+  box-shadow: 0 14px 36px rgba(14,165,165,0.12);
+}
+.fam-chain-turn-title {
+  font-size: clamp(20px, 3vw, 25px);
+  font-weight: 800;
+  color: #0b7d7d;
+  margin-bottom: 10px;
+}
+.fam-chain-turn-title::before {
+  content: "";
+  display: block;
+  width: 44px; height: 3px;
+  background: #0EA5A5;
+  border-radius: 999px;
+  margin: 0 auto 14px;
+}
+.fam-chain-turn-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #374151;
+  margin: 0 auto 18px;
+  max-width: 520px;
 }
 /* Phone-frame product mockup */
 .fam-phone-wrap { display: flex; justify-content: center; margin-top: 8px; }
