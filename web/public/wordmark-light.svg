@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 40 560 160" fill="none" role="img" aria-label="Gadit">
+  <defs>
+    <linearGradient id="gl-it" x1="0" y1="76" x2="0" y2="191" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b9fe6"></stop>
+      <stop offset="1" stop-color="#1f6fe0"></stop>
+    </linearGradient>
+    <radialGradient id="gl-star" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5bb8f5"></stop>
+      <stop offset="0.55" stop-color="#2b9fe6"></stop>
+      <stop offset="1" stop-color="#1f6fe0"></stop>
+    </radialGradient>
+  </defs>
+
+  <!-- G a d, in dark ink for light backgrounds -->
+  <g fill="#1f2937">
+    <path d="M 138 50 C 96 50, 60 86, 60 130 C 60 174, 96 210, 138 210 C 162 210, 184 198, 198 178 L 198 158 L 174 158 L 174 168 C 165 178, 153 184, 138 184 C 110 184, 88 161, 88 130 C 88 99, 110 76, 138 76 C 153 76, 165 82, 174 92 L 192 74 C 178 60, 159 50, 138 50 Z"></path>
+    <rect x="174" y="124" width="24" height="38" rx="2"></rect>
+    <path fill-rule="evenodd" d="M 270 100 C 250 100, 234 116, 234 138 C 234 160, 250 176, 270 176 C 282 176, 292 170, 298 162 L 298 174 L 320 174 L 320 102 L 298 102 L 298 114 C 292 106, 282 100, 270 100 Z M 277 122 C 287 122, 296 130, 296 138 C 296 146, 287 154, 277 154 C 267 154, 258 146, 258 138 C 258 130, 267 122, 277 122 Z"></path>
+    <path fill-rule="evenodd" d="M 408 60 L 408 114 C 402 106, 392 100, 380 100 C 360 100, 344 118, 344 138 C 344 158, 360 176, 380 176 C 392 176, 402 170, 408 162 L 408 174 L 430 174 L 430 60 Z M 386 122 C 396 122, 406 130, 406 138 C 406 146, 396 154, 386 154 C 376 154, 367 146, 367 138 C 367 130, 376 122, 386 122 Z"></path>
+  </g>
+
+  <!-- i t, in electric blue (the brand accent) -->
+  <g fill="url(#gl-it)">
+    <rect x="464" y="100" width="24" height="74" rx="3"></rect>
+    <path d="M 524 76 L 548 76 L 548 102 L 572 102 L 572 122 L 548 122 L 548 152 C 548 162, 553 168, 562 168 C 566 168, 570 167, 573 165 L 580 184 C 574 188, 566 191, 556 191 C 538 191, 524 178, 524 156 L 524 122 L 510 122 L 510 102 L 524 102 Z"></path>
+  </g>
+
+  <!-- sparkle tittle over the i -->
+  <g transform="translate(476 64)">
+    <path d="M 0 -26 L 4.5 0 L 0 26 L -4.5 0 Z" fill="url(#gl-star)"></path>
+    <path d="M -26 0 L 0 -4.5 L 26 0 L 0 4.5 Z" fill="url(#gl-star)"></path>
+    <circle r="5" fill="#2b9fe6"></circle>
+  </g>
+</svg>

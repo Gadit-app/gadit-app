@@ -97,10 +97,10 @@ type Copy = {
 
 const COPY: Record<"he" | "en", Copy> = {
   he: {
-    heroBadge: "מילון חכם וחזותי לילדים",
+    heroBadge: "מילון חזותי וחכם לכל המשפחה",
     whatIs: "Gadit הוא מילון חכם וחזותי לילדים: כל מילה מקבלת הסבר בגובה של ילד, תמונה, דוגמאות, ומשחקים וחידונים שהופכים לימוד מילים לכיף. אוצר המילים גדל, הילד מבין את הנקרא, ומצליח יותר בלימודים.",
     ctaMicro: "",
-    trustLine: "14 ימי ניסיון · עד 5 ילדים במשפחה, כל אחד ברמה שלו",
+    trustLine: "עד 5 ילדים במשפחה, כל אחד ברמה שלו",
     proofTitle: "המחברת של נועה",
     proofBig: "12 מילים חדשות השבוע",
     proofWords: ["חלום", "מרהיב", "נחוש"],
@@ -246,10 +246,10 @@ const COPY: Record<"he" | "en", Copy> = {
     footerPrivacy: "פרטיות",
   },
   en: {
-    heroBadge: "A smart, visual dictionary for kids",
+    heroBadge: "A visual, smart dictionary for the whole family",
     whatIs: "Gadit is a smart, visual dictionary for kids: every word gets a kid-level explanation, a picture, examples, and games and quizzes that make learning words fun. Vocabulary grows, reading comprehension improves, and your child does better at school.",
     ctaMicro: "",
-    trustLine: "14-day trial · Up to 5 kids, each at their own level",
+    trustLine: "Up to 5 kids, each at their own level",
     proofTitle: "Noa's notebook",
     proofBig: "12 new words this week",
     proofWords: ["dream", "vivid", "reluctant"],
@@ -693,10 +693,11 @@ export default function FamiliesLandingClient() {
     <div dir={dir} className="fam-page">
       <style>{FAM_CSS}</style>
 
-      <header className="fam-header">
+      <header className="fam-topbrand">
         <Link href={href("/")} className="fam-logo" aria-label="Gadit">
-          <Image src="/icon-512.png" alt="Gadit" width={44} height={44} priority className="fam-logo-icon" />
+          <Image src="/wordmark-light.svg" alt="Gadit" width={132} height={38} priority className="fam-logo-mark" />
         </Link>
+        <div className="fam-topbrand-tagline">{c.heroBadge}</div>
       </header>
 
       <main>
@@ -707,7 +708,6 @@ export default function FamiliesLandingClient() {
         <section className="fam-hero">
           <div className="fam-hero-grid">
             <div className="fam-hero-text">
-              <div className="fam-badge">{c.heroBadge}</div>
               <h1 className="fam-h1">{hero.h1}</h1>
               <p className="fam-whatis">{c.whatIs}</p>
               <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
@@ -1076,6 +1076,23 @@ const FAM_CSS = `
 .fam-wordmark-it { color: #0EA5A5; font-style: italic; }
 .fam-logo { display: inline-flex; align-items: center; line-height: 0; }
 .fam-logo-icon { border-radius: 11px; display: block; }
+.fam-topbrand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 26px 20px 6px;
+}
+.fam-logo-mark { display: block; height: 38px; width: auto; }
+.fam-topbrand-tagline {
+  font-weight: 700;
+  font-size: 14px;
+  color: #0b7d7d;
+  background: rgba(14,165,165,0.09);
+  border: 1px solid rgba(14,165,165,0.22);
+  border-radius: 999px;
+  padding: 5px 16px;
+}
 .fam-header-cta {
   border: 1.5px solid #0EA5A5;
   background: transparent;
