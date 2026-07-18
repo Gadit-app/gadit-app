@@ -97,10 +97,10 @@ type Copy = {
 
 const COPY: Record<"he" | "en", Copy> = {
   he: {
-    heroBadge: "מילון חכם ובטוח לילדים",
-    whatIs: "Gadit הוא מילון חכם לילדים: מקלידים מילה ומקבלים הסבר בגובה של ילד, תמונה ושלוש דוגמאות. כל מילה נשמרת במחברת האישית, בלי צ'אט פתוח ובלי פרסומות, כך שאתם רואים בדיוק כמה הילד כבר למד.",
-    ctaMicro: "בלי כרטיס אשראי · ביטול בלחיצה אחת",
-    trustLine: "בלי צ'אט פתוח · בלי פרסומות · עד 5 ילדים",
+    heroBadge: "מילון חכם וחזותי לילדים",
+    whatIs: "Gadit הוא מילון חכם וחזותי לילדים: כל מילה מקבלת הסבר בגובה של ילד, תמונה, דוגמאות, ומשחקים וחידונים שהופכים לימוד מילים לכיף. אוצר המילים גדל, הילד מבין את הנקרא, ומצליח יותר בלימודים.",
+    ctaMicro: "",
+    trustLine: "14 ימי ניסיון · עד 5 ילדים במשפחה, כל אחד ברמה שלו",
     proofTitle: "המחברת של נועה",
     proofBig: "12 מילים חדשות השבוע",
     proofWords: ["חלום", "מרהיב", "נחוש"],
@@ -246,10 +246,10 @@ const COPY: Record<"he" | "en", Copy> = {
     footerPrivacy: "פרטיות",
   },
   en: {
-    heroBadge: "A smart, safe dictionary for kids",
-    whatIs: "Gadit is a smart dictionary for kids: type a word and get an explanation at a child's level, a picture and three examples. Every word is saved to their personal notebook, with no open chat and no ads, so you see exactly how much your child has learned.",
-    ctaMicro: "No credit card · Cancel in one click",
-    trustLine: "No open chat · No ads · Up to 5 kids",
+    heroBadge: "A smart, visual dictionary for kids",
+    whatIs: "Gadit is a smart, visual dictionary for kids: every word gets a kid-level explanation, a picture, examples, and games and quizzes that make learning words fun. Vocabulary grows, reading comprehension improves, and your child does better at school.",
+    ctaMicro: "",
+    trustLine: "14-day trial · Up to 5 kids, each at their own level",
     proofTitle: "Noa's notebook",
     proofBig: "12 new words this week",
     proofWords: ["dream", "vivid", "reluctant"],
@@ -694,8 +694,8 @@ export default function FamiliesLandingClient() {
       <style>{FAM_CSS}</style>
 
       <header className="fam-header">
-        <Link href={href("/")} className="fam-wordmark">
-          Gad<span className="fam-wordmark-it">it</span>
+        <Link href={href("/")} className="fam-logo" aria-label="Gadit">
+          <Image src="/icon-512.png" alt="Gadit" width={44} height={44} priority className="fam-logo-icon" />
         </Link>
       </header>
 
@@ -713,7 +713,7 @@ export default function FamiliesLandingClient() {
               <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
                 {ctaLabel}
               </button>
-              <div className="fam-cta-micro">{c.ctaMicro}</div>
+              {c.ctaMicro && <div className="fam-cta-micro">{c.ctaMicro}</div>}
               <div className="fam-trustline">{c.trustLine}</div>
             </div>
             <div className="fam-hero-visual">
@@ -1074,6 +1074,8 @@ const FAM_CSS = `
   letter-spacing: -0.02em;
 }
 .fam-wordmark-it { color: #0EA5A5; font-style: italic; }
+.fam-logo { display: inline-flex; align-items: center; line-height: 0; }
+.fam-logo-icon { border-radius: 11px; display: block; }
 .fam-header-cta {
   border: 1.5px solid #0EA5A5;
   background: transparent;
