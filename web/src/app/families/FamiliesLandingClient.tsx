@@ -694,8 +694,8 @@ export default function FamiliesLandingClient() {
       <style>{FAM_CSS}</style>
 
       <header className="fam-topbrand">
-        <Link href={href("/")} className="fam-logo" aria-label="Gadit">
-          <Image src="/wordmark-light.svg" alt="Gadit" width={132} height={38} priority className="fam-logo-mark" />
+        <Link href={href("/")} className="fam-logo-word" aria-label="Gadit" dir="ltr">
+          Gad<span className="fam-logo-it">it</span>
         </Link>
         <div className="fam-topbrand-tagline">{c.heroBadge}</div>
       </header>
@@ -1080,10 +1080,22 @@ const FAM_CSS = `
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   padding: 26px 20px 6px;
 }
-.fam-logo-mark { display: block; height: 38px; width: auto; }
+/* Matches the real Gadit wordmark from the live site: Inter, dark ink
+   "Gad" + teal italic "it" (globals .wb-home-logo). */
+.fam-logo-word {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #0B0F19;
+  text-decoration: none;
+  direction: ltr;
+}
+.fam-logo-it { color: #0EA5A5; font-style: italic; font-weight: 500; }
 .fam-topbrand-tagline {
   font-weight: 700;
   font-size: 14px;
