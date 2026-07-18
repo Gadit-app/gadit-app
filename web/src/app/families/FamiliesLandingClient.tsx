@@ -42,6 +42,11 @@ type FeatureCopy = { kicker: string; title: string; body: string };
 type Copy = {
   heroBadge: string;
   whatIs: string;
+  ctaMicro: string;
+  trustLine: string;
+  proofTitle: string;
+  proofBig: string;
+  proofWords: string[];
   angles: Record<Angle, { h1: string; sub: string }>;
   heroCta: string;
   heroTrust: string;
@@ -92,11 +97,16 @@ type Copy = {
 
 const COPY: Record<"he" | "en", Copy> = {
   he: {
-    heroBadge: "מילון חכם לילדים ולכל המשפחה",
-    whatIs: "Gadit הוא מילון חכם לילדים: מקלידים כל מילה ומקבלים את המשמעות בגובה של ילד, עם תמונה ושלוש דוגמאות. כל מילה נשמרת במחברת האישית של הילד ובונה לו אוצר מילים.",
+    heroBadge: "מילון חכם ובטוח לילדים",
+    whatIs: "Gadit הוא מילון חכם לילדים: מקלידים מילה ומקבלים הסבר בגובה של ילד, תמונה ושלוש דוגמאות. כל מילה נשמרת במחברת האישית, בלי צ'אט פתוח ובלי פרסומות, כך שאתם רואים בדיוק כמה הילד כבר למד.",
+    ctaMicro: "בלי כרטיס אשראי · ביטול בלחיצה אחת",
+    trustLine: "בלי צ'אט פתוח · בלי פרסומות · עד 5 ילדים",
+    proofTitle: "המחברת של נועה",
+    proofBig: "12 מילים חדשות השבוע",
+    proofWords: ["חלום", "מרהיב", "נחוש"],
     angles: {
       vocab: {
-        h1: "אוצר מילים גדול זה לא כישרון. זה הרגל.",
+        h1: "אוצר המילים של הילד שלכם גדל. מילה אחרי מילה.",
         sub: "כל מילה שהילד שואל עליה נכנסת למחברת המילים האישית שלו ב-Gadit: עם תמונה, הסבר בגובה של ילד, ותרגול קצר שמחזיר אותה עד שהיא שלו. פותחים את המחברת בסוף החודש ורואים את אוצר המילים גדל, מילה אחרי מילה.",
       },
       relief: {
@@ -236,11 +246,16 @@ const COPY: Record<"he" | "en", Copy> = {
     footerPrivacy: "פרטיות",
   },
   en: {
-    heroBadge: "A smart dictionary for kids and the whole family",
-    whatIs: "Gadit is a smart dictionary for kids: type any word and get its meaning at a child's level, with a picture and three examples. Every word is saved to your child's personal notebook and builds their vocabulary.",
+    heroBadge: "A smart, safe dictionary for kids",
+    whatIs: "Gadit is a smart dictionary for kids: type a word and get an explanation at a child's level, a picture and three examples. Every word is saved to their personal notebook, with no open chat and no ads, so you see exactly how much your child has learned.",
+    ctaMicro: "No credit card · Cancel in one click",
+    trustLine: "No open chat · No ads · Up to 5 kids",
+    proofTitle: "Noa's notebook",
+    proofBig: "12 new words this week",
+    proofWords: ["dream", "vivid", "reluctant"],
     angles: {
       vocab: {
-        h1: "A big vocabulary is not a talent. It is a habit.",
+        h1: "Your child's vocabulary grows. Word by word.",
         sub: "Every word your child asks about lands in their personal word notebook in Gadit: with a picture, a kid-level explanation, and short practice that brings it back until it is theirs. Open the notebook at the end of the month and watch the vocabulary grow, word by word.",
       },
       relief: {
@@ -698,15 +713,30 @@ export default function FamiliesLandingClient() {
               <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
                 {ctaLabel}
               </button>
+              <div className="fam-cta-micro">{c.ctaMicro}</div>
+              <div className="fam-trustline">{c.trustLine}</div>
             </div>
             <div className="fam-hero-visual">
-              <PhoneMock he={he} />
+              <div className="fam-hero-stage">
+                <div className="fam-hero-panel" aria-hidden />
+                <PhoneMock he={he} />
+                <div className="fam-proof-card" aria-hidden>
+                  <div className="fam-proof-head">
+                    <NotebookIcon />
+                    <span>{c.proofTitle}</span>
+                  </div>
+                  <div className="fam-proof-big">{c.proofBig}</div>
+                  <div className="fam-proof-words">
+                    {c.proofWords.map((w, i) => (
+                      <span key={i} className="fam-proof-chip">
+                        <CheckIcon color="#0EA5A5" />
+                        {w}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="fam-stats">
-            {c.stats.map((s, i) => (
-              <div key={i} className="fam-stat">{s}</div>
-            ))}
           </div>
         </section>
 
@@ -1008,6 +1038,14 @@ function MoonIcon() {
     </svg>
   );
 }
+function NotebookIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ flexShrink: 0 }}>
+      <path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z" />
+      <path d="M9 3v18" />
+    </svg>
+  );
+}
 
 /* ────────────────────────── styles ────────────────────────── */
 
@@ -1061,13 +1099,57 @@ const FAM_CSS = `
 .fam-hero-visual { display: flex; justify-content: center; }
 @media (min-width: 880px) {
   .fam-hero-grid {
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 44px;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
     text-align: start;
   }
   .fam-hero-text { order: 1; }
   .fam-hero-visual { order: 2; }
-  .fam-hero-text .fam-cta { align-self: start; }
+}
+
+/* Anchored product stage: phone sits in front of a soft teal panel,
+   with a notebook proof card overlapping its corner (the master
+   promise made visible, per the 5-AI hero review). */
+.fam-hero-stage { position: relative; display: inline-block; padding: 10px 0 34px; }
+.fam-hero-panel {
+  position: absolute;
+  inset: 24px -6% 60px -6%;
+  background:
+    radial-gradient(120% 90% at 50% 30%, rgba(14,165,165,0.16), rgba(14,165,165,0.05) 60%, transparent 75%);
+  border-radius: 34px;
+  z-index: 0;
+}
+.fam-hero-stage .fam-phone { position: relative; z-index: 1; }
+.fam-proof-card {
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  inset-inline-end: -14px;
+  width: 190px;
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.08);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(31,41,55,0.16);
+  padding: 12px 14px;
+  text-align: start;
+  direction: rtl;
+}
+.fam-proof-head {
+  display: flex; align-items: center; gap: 6px;
+  font-weight: 700; font-size: 12.5px; color: #0b7d7d;
+}
+.fam-proof-big { font-weight: 800; font-size: 17px; color: #1f2937; margin: 6px 0 8px; }
+.fam-proof-words { display: flex; flex-wrap: wrap; gap: 5px; }
+.fam-proof-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: rgba(14,165,165,0.09);
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 11.5px; font-weight: 600; color: #374151;
+}
+@media (max-width: 400px) {
+  .fam-proof-card { width: 150px; inset-inline-start: -6px; padding: 10px 12px; }
+  .fam-proof-big { font-size: 15px; }
 }
 .fam-badge {
   display: inline-block;
@@ -1112,12 +1194,14 @@ const FAM_CSS = `
   border: none;
   font-weight: 800;
   font-size: 17px;
-  padding: 16px 32px;
-  border-radius: 14px;
+  padding: 15px 30px;
+  border-radius: 13px;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(14,165,165,0.35);
+  box-shadow: 0 4px 14px rgba(14,165,165,0.22);
   transition: transform 160ms ease-out;
 }
+.fam-cta-micro { margin-top: 10px; font-size: 13px; color: #9ca3af; }
+.fam-trustline { margin-top: 16px; font-size: 14px; font-weight: 600; color: #4b5563; }
 .fam-cta:active { transform: scale(0.97); }
 .fam-cta-wide { width: 100%; }
 .fam-cta-inverse {
