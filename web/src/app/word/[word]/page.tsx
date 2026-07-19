@@ -88,11 +88,37 @@ export async function generateMetadata({
   const description = firstMeaning
     ? `${decoded}: ${firstMeaning.slice(0, 150)}${firstMeaning.length > 150 ? "…" : ""}`
     : `Meanings, examples, etymology, and idioms for "${decoded}", in 14 languages.`;
+
+  // Per-language self-canonical + hreflang (GSC fix, 2026-07-19).
+  // Previously every language variant canonicalized to the English
+  // /word/X, so Google flagged the Hebrew/Arabic/etc. pages as
+  // "Duplicate, Google chose a different canonical" and refused to
+  // index them in their own markets. Now each language page is
+  // canonical to ITSELF and declares hreflang alternates for all
+  // languages, so Google indexes each language version for its market.
+  // The current language comes from the ACTUAL requested URL prefix
+  // (x-gadit-path, set by middleware) — NOT the cookie — so a cookied
+  // Hebrew user landing on the unprefixed /word/X still yields the
+  // English canonical for that URL.
+  const headersList = await headers();
+  const rawPath = headersList.get("x-gadit-path") || `/word/${encodeURIComponent(decoded)}`;
+  const trimmed = rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
+  const firstSeg = trimmed.split("/").filter(Boolean)[0];
+  const urlLang = firstSeg && ALL_LANGS.includes(firstSeg) ? firstSeg : "en";
+  const wordEnc = encodeURIComponent(decoded);
+  const BASE = "https://www.gadit.app";
+  const urlForLang = (l: string) =>
+    l === "en" ? `${BASE}/word/${wordEnc}` : `${BASE}/${l}/word/${wordEnc}`;
+
   return {
     title: `${decoded}, Gadit`,
     description,
     alternates: {
-      canonical: `https://www.gadit.app/word/${encodeURIComponent(decoded)}`,
+      canonical: urlForLang(urlLang),
+      languages: {
+        ...Object.fromEntries(ALL_LANGS.map((l) => [l, urlForLang(l)])),
+        "x-default": urlForLang("en"),
+      },
     },
   };
 }
