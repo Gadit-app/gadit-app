@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 /**
  * One-shot admin tool — delete a Firebase Auth user by email, plus
@@ -82,18 +85,41 @@ export async function POST(req: NextRequest) {
   // SAFETY GUARD: never delete an account with a live subscription.
   // A paying Family/Schools/Clear/Deep owner must not be wiped by an
   // accidental click on the wrong duplicate row (Reut incident,
-  // 2026-07-23). The webhook keeps subscriptionStatus current on the
-  // user doc.
+  // 2026-07-23). Checked authoritatively against STRIPE, not the doc's
+  // subscriptionStatus field — that field is not reliably written (Reut's
+  // doc had none despite a live trialing sub), so trusting it would let
+  // a paying account through. We look up the user's Stripe customer
+  // (from the doc, or by email) and refuse if any sub is active/trialing.
   if (uid) {
     const doc = await db.collection("users").doc(uid).get();
-    const status = doc.exists ? (doc.data()?.subscriptionStatus as string | undefined) : undefined;
-    if (status === "active" || status === "trialing") {
+    const d = doc.exists ? (doc.data() ?? {}) : {};
+    let liveStatus: string | null = null;
+
+    let customerId = (d.stripeCustomerId as string | undefined) ?? null;
+    // Fall back to finding the customer by email if the doc lacks the id.
+    if (!customerId && email) {
+      try {
+        const found = await stripe.customers.list({ email, limit: 1 });
+        customerId = found.data[0]?.id ?? null;
+      } catch { /* ignore */ }
+    }
+    if (customerId) {
+      try {
+        const subs = await stripe.subscriptions.list({ customer: customerId, status: "all", limit: 20 });
+        const live = subs.data.find((s) => s.status === "active" || s.status === "trialing");
+        if (live) liveStatus = live.status;
+      } catch (e) {
+        console.warn("[admin/delete-user] Stripe check failed:", String(e));
+      }
+    }
+
+    if (liveStatus) {
       return NextResponse.json(
         {
-          error: "refused: this account has a live subscription (" + status + "). " +
-            "Cancel the subscription first if you really mean to delete a paying user.",
+          error: "refused: this account has a live subscription (" + liveStatus + "). " +
+            "Cancel the subscription in Stripe first if you really mean to delete a paying user.",
           uid,
-          subscriptionStatus: status,
+          subscriptionStatus: liveStatus,
         },
         { status: 409 },
       );
