@@ -194,10 +194,17 @@ export async function POST(req: NextRequest) {
 
   // ---------- PASS B: docs marked live but with no live sub -> downgrade ----------
   const downgraded: { uid: string; was: string }[] = [];
+  const skippedComp: string[] = [];
   for (const st of ["active", "trialing"] as const) {
     const snap = await db.collection("users").where("subscriptionStatus", "==", st).get();
     for (const doc of snap.docs) {
       if (liveUids.has(doc.id)) continue;
+      // Comp / internal accounts (owner, testing) keep their access even
+      // without a live Stripe sub — never downgrade them.
+      if (doc.data()?.comp === true) {
+        skippedComp.push(doc.id);
+        continue;
+      }
       downgraded.push({ uid: doc.id, was: st });
       if (!dryRun) {
         await doc.ref.set(
@@ -216,6 +223,7 @@ export async function POST(req: NextRequest) {
     docsDowngradedOvercount: downgraded.length,
     rowsChanged: rows.filter((r) => r.changed),
     downgraded,
+    skippedComp,
     skipped,
     hint: dryRun ? "Re-run without dryRun=1 to apply." : "Counts reconciled. Re-check /api/admin/overview.",
   });

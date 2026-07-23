@@ -120,6 +120,7 @@ export async function GET(req: NextRequest) {
   let signupsMonth = 0;
   let mrr = 0;
   let activeSubs = 0;
+  let compAccounts = 0;
   const byCountry = new Map<string, number>();
 
   for (const u of authUsers) {
@@ -133,6 +134,14 @@ export async function GET(req: NextRequest) {
     if (created >= todayStart) signupsToday++;
     if (created >= weekStart)  signupsWeek++;
     if (created >= monthStart) signupsMonth++;
+
+    // Comp / internal accounts (owner, testing) keep their feature plan but
+    // are NOT paying customers, so they never count toward MRR or active
+    // subscriptions (Gadi's own account, 2026-07-23). Tracked separately.
+    if (d.comp === true) {
+      compAccounts++;
+      continue;
+    }
 
     // MRR — only counts users whose plan is paid AND subscription is in a
     // billing state (active, trialing). Past_due / canceled don't count.
@@ -270,6 +279,7 @@ export async function GET(req: NextRequest) {
       mrrUsd: Math.round(mrr * 100) / 100,
       activeSubscriptions: activeSubs,
       arrUsd: Math.round(mrr * 12 * 100) / 100,
+      compAccounts,
     },
     activity: {
       searchesToday,
