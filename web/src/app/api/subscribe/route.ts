@@ -161,16 +161,39 @@ export async function POST(req: NextRequest) {
       limit: 10,
       expand: SUB_EXPAND.map((e) => `data.${e}`),
     });
-    const reusable = existing.data.find(
+    // Every card-less trialing sub belonging to this user is an
+    // abandoned checkout (payment never completed). One of them may be
+    // reusable for the exact plan+currency being requested now; the
+    // REST are leftovers from earlier plan attempts.
+    const cardlessOwn = existing.data.filter(
+      (s) => !s.default_payment_method && s.metadata?.uid === uid,
+    );
+    const reusable = cardlessOwn.find(
       (s) =>
-        !s.default_payment_method &&
         s.items.data[0]?.price?.id === priceId &&
-        s.metadata?.uid === uid &&
         // A sub minted in the other currency (user switched language
         // mid-checkout) can't be reused — the amount would be wrong.
         s.currency === (currency ?? "usd") &&
         s.pending_setup_intent,
     );
+
+    // Cancel the abandoned duplicates now, so a user who clicks several
+    // plans (Clear, then Family monthly, then Family yearly) does not
+    // accumulate a pile of trialing subscriptions — Reut ended up with
+    // three (2026-07-23). Card-less subs never activated the account,
+    // so the webhook's neverActivated guard ignores these deletions.
+    // Card-attached subs are the user's real subscription and are left
+    // untouched.
+    for (const s of cardlessOwn) {
+      if (s.id !== reusable?.id) {
+        try {
+          await stripe.subscriptions.cancel(s.id);
+        } catch (e) {
+          console.warn("[subscribe] failed to cancel abandoned sub", s.id, e);
+        }
+      }
+    }
+
     if (reusable) {
       const secret = extractClientSecret(reusable);
       if (secret) return NextResponse.json(secret);

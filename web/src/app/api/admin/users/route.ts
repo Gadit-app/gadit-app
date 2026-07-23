@@ -48,6 +48,8 @@ type AdminUserRow = {
   emailVerified: boolean;
   disabled: boolean;
   plan: Plan;
+  isFamily: boolean;               // has a familyId -> paying Family owner
+  isSchool: boolean;               // has a schoolId -> paying Schools owner
   country: string | null;
   lastSeenAt: string | null;       // ISO (Firestore Timestamp.toDate)
   searchCount: number;
@@ -131,7 +133,11 @@ export async function GET(req: NextRequest) {
       null;
     return {
       uid: u.uid,
-      email: u.email ?? null,
+      // Firebase Auth email first; fall back to the email stored on the
+      // /users doc by the Stripe webhook (some paying users, e.g. a
+      // Family owner whose Auth account was created without an email
+      // provider, only have their address on the doc + in Stripe).
+      email: u.email ?? (typeof d.email === "string" ? (d.email as string) : null),
       displayName,
       createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : null,
       lastSignInAt: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime).toISOString() : null,
@@ -139,6 +145,8 @@ export async function GET(req: NextRequest) {
       emailVerified: u.emailVerified,
       disabled: u.disabled,
       plan: (d.plan as Plan) || "basic",
+      isFamily: !!d.familyId,
+      isSchool: !!d.schoolId,
       country: (d.country as string) ?? null,
       lastSeenAt: tsToIso(d.lastSeenAt),
       searchCount: typeof d.searchCount === "number" ? d.searchCount : 0,

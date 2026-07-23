@@ -15,6 +15,8 @@ type AdminUserRow = {
   emailVerified: boolean;
   disabled: boolean;
   plan: Plan;
+  isFamily?: boolean;
+  isSchool?: boolean;
   country: string | null;
   lastSeenAt: string | null;
   searchCount: number;
@@ -247,10 +249,15 @@ function formatAbsoluteTooltip(iso: string | null, lang: AdminLang): string {
   });
 }
 
-function planBadge(plan: Plan): { label: string; bg: string; fg: string } {
-  if (plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
-  if (plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
-  return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
+function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string } {
+  // Family and Schools both store plan="deep" (identical feature set);
+  // the distinct identity lives in familyId / schoolId. Surface it so
+  // a Family owner reads as "Family", not "Deep".
+  if (row.isSchool) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
+  if (row.isFamily) return { label: "Family",  bg: "#FCE7F3", fg: "#9D174D" };
+  if (row.plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
+  if (row.plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
+  return                          { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
 
 // flagcdn.com returns real flag PNGs that render the same on Windows,
@@ -572,7 +579,7 @@ export default function AdminUsersClient() {
               </thead>
               <tbody>
                 {filteredSorted.map((u) => {
-                  const badge = planBadge(u.plan);
+                  const badge = planBadge(u);
                   return (
                     <tr key={u.uid} style={{ borderBottom: "1px solid #F3F4F6" }}>
                       {/* Every cell now sets textAlign:"start" explicitly.
