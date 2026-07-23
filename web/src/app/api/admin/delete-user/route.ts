@@ -45,28 +45,59 @@ export async function POST(req: NextRequest) {
 
   const dryRun = req.nextUrl.searchParams.get("dryRun") === "1";
 
-  let email: string;
+  // Accept EITHER an email OR a uid. Uid is needed for duplicate
+  // accounts that have no Auth email (e.g. an extra account created
+  // during checkout) — those can't be targeted by email.
+  let email = "";
+  let uidParam = "";
   try {
-    const body = (await req.json()) as { email?: string };
+    const body = (await req.json()) as { email?: string; uid?: string };
     email = (body.email ?? "").trim().toLowerCase();
+    uidParam = (body.uid ?? "").trim();
   } catch {
     return NextResponse.json({ error: "invalid JSON body" }, { status: 400 });
   }
-  if (!email || !email.includes("@")) {
+  if (!email && !uidParam) {
+    return NextResponse.json({ error: "email or uid required in body" }, { status: 400 });
+  }
+  if (email && !email.includes("@")) {
     return NextResponse.json({ error: "valid email required in body" }, { status: 400 });
   }
 
   const auth = getAdminAuth();
   const db   = getAdminDb();
 
-  // Look up the Auth user by email. getUserByEmail throws if not found.
-  let uid: string | null = null;
-  try {
-    const u = await auth.getUserByEmail(email);
-    uid = u.uid;
-  } catch (e) {
-    // Not in Firebase Auth — still try to clean any leftover Firestore docs.
-    console.warn("[admin/delete-user] not found in Auth:", email, String(e));
+  // Resolve the uid: explicit uid wins; otherwise look up by email.
+  let uid: string | null = uidParam || null;
+  if (!uid && email) {
+    try {
+      const u = await auth.getUserByEmail(email);
+      uid = u.uid;
+    } catch (e) {
+      // Not in Firebase Auth — still try to clean any leftover Firestore docs.
+      console.warn("[admin/delete-user] not found in Auth:", email, String(e));
+    }
+  }
+
+  // SAFETY GUARD: never delete an account with a live subscription.
+  // A paying Family/Schools/Clear/Deep owner must not be wiped by an
+  // accidental click on the wrong duplicate row (Reut incident,
+  // 2026-07-23). The webhook keeps subscriptionStatus current on the
+  // user doc.
+  if (uid) {
+    const doc = await db.collection("users").doc(uid).get();
+    const status = doc.exists ? (doc.data()?.subscriptionStatus as string | undefined) : undefined;
+    if (status === "active" || status === "trialing") {
+      return NextResponse.json(
+        {
+          error: "refused: this account has a live subscription (" + status + "). " +
+            "Cancel the subscription first if you really mean to delete a paying user.",
+          uid,
+          subscriptionStatus: status,
+        },
+        { status: 409 },
+      );
+    }
   }
 
   let deletedAuthUser = false;

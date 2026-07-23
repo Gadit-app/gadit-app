@@ -254,7 +254,9 @@ function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string }
   // the distinct identity lives in familyId / schoolId. Surface it so
   // a Family owner reads as "Family", not "Deep".
   if (row.isSchool) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
-  if (row.isFamily) return { label: "Family",  bg: "#FCE7F3", fg: "#9D174D" };
+  // Family = the landing-page teal (Gadi 2026-07-23). Distinct from
+  // Clear's cyan tint above.
+  if (row.isFamily) return { label: "Family",  bg: "#CCFBF1", fg: "#0B7D7D" };
   if (row.plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
   if (row.plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
   return                          { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
@@ -310,12 +312,10 @@ export default function AdminUsersClient() {
   // out of local state instead of refetching the whole list — snappier
   // and avoids the loading spinner flash.
   const handleDeleteUser = async (u: AdminUserRow) => {
-    if (!u.email) {
-      alert(t.deleteError("user has no email"));
-      return;
-    }
     if (!secret) return;
-    if (!window.confirm(t.deleteConfirm(u.email))) return;
+    // Some duplicate accounts have no Auth email; target them by uid.
+    const label = u.email || u.displayName || u.uid;
+    if (!window.confirm(t.deleteConfirm(label))) return;
 
     setDeletingUids((s) => {
       const next = new Set(s);
@@ -329,7 +329,8 @@ export default function AdminUsersClient() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: u.email }),
+          // Prefer email; fall back to uid for accounts with no email.
+          body: JSON.stringify(u.email ? { email: u.email } : { uid: u.uid }),
         },
       );
       const json = (await res.json().catch(() => null)) as
