@@ -121,6 +121,11 @@ export async function GET(req: NextRequest) {
   let mrr = 0;
   let activeSubs = 0;
   let compAccounts = 0;
+  // Paying subscribers broken down by their REAL tier. Family and Schools
+  // both store plan="deep", so without this split they'd hide inside Deep.
+  // Only billable (active/trialing, non-comp) subs are counted, so these
+  // sum to activeSubs.
+  const payingByTier = { clear: 0, deep: 0, family: 0, schools: 0 };
   const byCountry = new Map<string, number>();
 
   for (const u of authUsers) {
@@ -150,6 +155,12 @@ export async function GET(req: NextRequest) {
       const billable = status === "active" || status === "trialing";
       if (billable) {
         activeSubs++;
+        // Classify by real tier: Family/Schools live on plan="deep" but are
+        // distinguished by familyId/schoolId. Check those first.
+        if (d.familyId) payingByTier.family++;
+        else if (d.schoolId) payingByTier.schools++;
+        else if (plan === "clear") payingByTier.clear++;
+        else payingByTier.deep++;
         const priceId = (d.priceId as string) || "";
         const monthly = priceMap[priceId];
         if (monthly) {
@@ -280,6 +291,7 @@ export async function GET(req: NextRequest) {
       activeSubscriptions: activeSubs,
       arrUsd: Math.round(mrr * 12 * 100) / 100,
       compAccounts,
+      payingByTier,
     },
     activity: {
       searchesToday,

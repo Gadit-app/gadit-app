@@ -27,6 +27,8 @@ type Overview = {
     mrrUsd: number;
     activeSubscriptions: number;
     arrUsd: number;
+    compAccounts?: number;
+    payingByTier?: { clear: number; deep: number; family: number; schools: number };
   };
   activity: {
     searchesToday: number;
@@ -169,7 +171,7 @@ export default function AdminOverviewClient() {
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
             <BigCard label={t.cardMRR} value={`$${data.revenue.mrrUsd.toFixed(2)}`} accent="#0EA5A5" sub={t.perYear.replace("%", data.revenue.arrUsd.toFixed(0))} />
-            <BigCard label={t.cardActiveSubs} value={data.revenue.activeSubscriptions} accent="#7C3AED" sub={`${data.users.byPlan.clear} Clear · ${data.users.byPlan.deep} Deep`} />
+            <BigCard label={t.cardActiveSubs} value={data.revenue.activeSubscriptions} accent="#7C3AED" sub={tierBreakdown(data.revenue.payingByTier)} subLtr />
             <BigCard label={t.cardTotalUsers} value={data.users.total} accent="#111827" sub={`+${data.users.signupsWeek} ${t.thisWeek}`} />
             <BigCard label={t.cardSignupsToday} value={data.users.signupsToday} accent="#0EA5A5" />
             <BigCard label={t.cardSignupsWeek} value={data.users.signupsWeek} accent="#0EA5A5" />
@@ -259,12 +261,26 @@ export default function AdminOverviewClient() {
   );
 }
 
-function BigCard({ label, value, accent, sub }: { label: string; value: string | number; accent?: string; sub?: string }) {
+// Paying subscribers by real tier, e.g. "3 Clear · 4 Family · 2 Deep".
+// Only non-zero tiers, brand-order (Clear, Deep, Family, Schools). Labels
+// stay Latin (brand rule), so the caller renders this LTR to avoid the
+// numbers scrambling in the RTL admin.
+function tierBreakdown(t?: { clear: number; deep: number; family: number; schools: number }): string {
+  if (!t) return "";
+  const parts: string[] = [];
+  if (t.clear)   parts.push(`${t.clear} Clear`);
+  if (t.deep)    parts.push(`${t.deep} Deep`);
+  if (t.family)  parts.push(`${t.family} Family`);
+  if (t.schools) parts.push(`${t.schools} Schools`);
+  return parts.join(" · ");
+}
+
+function BigCard({ label, value, accent, sub, subLtr }: { label: string; value: string | number; accent?: string; sub?: string; subLtr?: boolean }) {
   return (
     <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}>
       <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
       <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", lineHeight: 1 }}>{value}</div>
-      {sub && <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 6 }}>{sub}</div>}
+      {sub && <div dir={subLtr ? "ltr" : undefined} style={{ fontSize: 11, color: "#9CA3AF", marginTop: 6 }}>{sub}</div>}
     </div>
   );
 }
