@@ -254,9 +254,9 @@ function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string }
   // the distinct identity lives in familyId / schoolId. Surface it so
   // a Family owner reads as "Family", not "Deep".
   if (row.isSchool) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
-  // Family = the landing-page teal (Gadi 2026-07-23). Distinct from
-  // Clear's cyan tint above.
-  if (row.isFamily) return { label: "Family",  bg: "#CCFBF1", fg: "#0B7D7D" };
+  // Family = the brand blue on a light-blue (תכלת) tint (Gadi
+  // 2026-07-23). Teal belongs to Clear; Family owns blue.
+  if (row.isFamily) return { label: "Family",  bg: "#DBEAFE", fg: "#1D4ED8" };
   if (row.plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
   if (row.plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
   return                          { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
