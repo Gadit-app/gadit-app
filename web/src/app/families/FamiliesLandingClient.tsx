@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -59,6 +59,12 @@ type Copy = {
   painBody1: string;
   painBody2: string;
   reframe: string;
+  puzzleKicker: string;
+  puzzleTitle: string;
+  puzzleBody: string;
+  puzzleBefore: string;
+  puzzleAfter: string;
+  puzzleLine: string;
   chainKicker: string;
   chainTitle: string;
   chainSteps: string[];
@@ -140,11 +146,17 @@ const COPY: Record<"he" | "en", Copy> = {
     stats: ["14 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
     demoKicker: "התוצאה",
     demoTitle: "הילד מבין כל מילה, ואוצר המילים שלו גדל כל יום",
-    painKicker: "מכירים את זה?",
-    painTitle: "רגע שכל הורה מכיר",
-    painBody1: "שמונה בערב. שיעורי בית. \"אבא, מה זה נחוש?\" שתי דקות אחר כך: \"מה זה להסס?\" ובפעם השלישית הילד כבר מבקש את הטלפון \"רק לבדוק מילה\", ונעלם בתוך טיקטוק.",
-    painBody2: "הבעיה היא לא הסקרנות של הילד.",
-    reframe: "והתסכול הזה חוזר כל ערב מחדש.",
+    painKicker: "נקודת הכאב האמיתית",
+    painTitle: "הילד קורא כל מילה, אבל המשמעות בורחת לו",
+    painBody1: "אתם דווקא שמחים כשהילד עוצר ושואל מה זה מילה. הבעיה היא כל המילים שהוא לא עוצר לשאול עליהן: הוא מדלג עליהן, ממשיך לקרוא, ובלי לשים לב מאבד את הבנת הנקרא. החומר לא נכנס, אוצר המילים נשאר דל, ובמבחן המילה הנכונה פשוט לא נשלפת.",
+    painBody2: "וזה קורה בשקט. הציונים יורדים לאט, אבל אף אחד לא רואה איפה בדיוק נשבר החוט.",
+    reframe: "והכול מתחיל ממילה אחת לא מובנת.",
+    puzzleKicker: "מה קורה בראש של הילד",
+    puzzleTitle: "טקסט הוא פאזל. כל מילה היא חתיכה.",
+    puzzleBody: "כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. כל מילה שהוא מבין היא חתיכה שנכנסת למקום. כל מילה שחסרה היא חור בתמונה. מספיק שלושה-ארבעה חורים, והילד כבר לא רואה את התמונה, גם אם הגה כל אות נכון.",
+    puzzleBefore: "פסקה עם מילים חסרות",
+    puzzleAfter: "עם Gadit, כל חתיכה במקום",
+    puzzleLine: "כשכל המילים ברורות, הילד רואה את התמונה השלמה.",
     chainKicker: "למה מילה אחת כל כך משנה",
     chainTitle: "מילה אחת לא מובנת מפילה את כל השיעור",
     chainSteps: [
@@ -218,9 +230,9 @@ const COPY: Record<"he" | "en", Copy> = {
       { label: "פרסומות וקישורים לכל כיוון", gadit: false, other: true },
       { label: "צ'אט פתוח בלי גבולות", gadit: false, other: true },
     ],
-    safeTitle: "בנוי כך שאפשר להשאיר אותם לבד איתו",
-    safeBody: "אין צ'אט פתוח ואין שיחה חופשית. אין פרסומות ואין קישורים החוצה. אין פיד, אין המלצות, אין חורי ארנב. עמוד אחד נקי לכל מילה, וזהו.",
-    safeLine: "ילד נכנס, מבין את המילה, וחוזר למה שהוא עשה.",
+    safeTitle: "אזור נפרד ונקי, לא שער לשום מקום אחר",
+    safeBody: "Gadit הוא מקום סגור לגמרי: אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. הילד לא נשאב מכאן לטיקטוק או לאף אפליקציה אחרת. יש כאן דבר אחד לעשות: להבין מילה, ולחזור ללימודים.",
+    safeLine: "מסך אחד שאפשר לתת לילד בראש שקט.",
     stackTitle: "מה מקבלים במסלול המשפחתי",
     stackItems: [
       "חיפושים בלי הגבלה לכל המשפחה",
@@ -310,11 +322,17 @@ const COPY: Record<"he" | "en", Copy> = {
     stats: ["14 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
     demoKicker: "The result",
     demoTitle: "Your child understands every word, and their vocabulary grows every day",
-    painKicker: "Sound familiar?",
-    painTitle: "A moment every parent knows",
-    painBody1: "8 PM. Homework. \"Dad, what does reluctant mean?\" Two minutes later: \"What's hesitate?\" And the third time, they ask for your phone \"just to check a word\" and vanish into TikTok.",
-    painBody2: "The problem is not your kid's curiosity.",
-    reframe: "And this repeats every single evening.",
+    painKicker: "The real pain",
+    painTitle: "Your child reads every word, but the meaning slips away",
+    painBody1: "You're actually glad when your child stops to ask what a word means. The problem is all the words they don't stop to ask about: they skip them, keep reading, and quietly lose comprehension. The material doesn't sink in, vocabulary stays thin, and in the exam the right word simply won't come.",
+    painBody2: "And it happens silently. Grades slip slowly, but nobody sees exactly where the thread broke.",
+    reframe: "And it all starts with one misunderstood word.",
+    puzzleKicker: "What happens in a child's head",
+    puzzleTitle: "Text is a puzzle. Every word is a piece.",
+    puzzleBody: "When a child reads, their mind assembles a whole picture from the words. Every word they understand is a piece that clicks into place. Every missing word is a hole in the picture. Just three or four holes, and the child no longer sees the picture, even if they sounded out every letter.",
+    puzzleBefore: "A paragraph with missing words",
+    puzzleAfter: "With Gadit, every piece in place",
+    puzzleLine: "When every word is clear, the child sees the whole picture.",
     chainKicker: "Why one word matters this much",
     chainTitle: "One misunderstood word can bring down the whole lesson",
     chainSteps: [
@@ -388,9 +406,9 @@ const COPY: Record<"he" | "en", Copy> = {
       { label: "Ads and links in every direction", gadit: false, other: true },
       { label: "Open-ended chat with no bounds", gadit: false, other: true },
     ],
-    safeTitle: "Built so you can leave them alone with it",
-    safeBody: "No open chat and no free-form conversation. No ads and no outbound links. No feed, no recommendations, no rabbit holes. One clean page per word, and that is it.",
-    safeLine: "A kid comes in, understands the word, and goes back to what they were doing.",
+    safeTitle: "A separate, clean zone. Not a doorway anywhere else.",
+    safeBody: "Gadit is a fully closed space: no open chat, no feed, no ads, no outbound links. A child is not pulled from here into TikTok or any other app. There is one thing to do here: understand a word, and get back to studying.",
+    safeLine: "One screen you can hand a child with a clear mind.",
     stackTitle: "What the Family plan includes",
     stackItems: [
       "Unlimited searches for the whole family",
@@ -605,6 +623,54 @@ function MockEnglish({ he }: { he: boolean }) {
   );
 }
 
+/** The puzzle metaphor made concrete (Gadi 2026-07-26): the same
+ *  sentence shown twice. First with its key words missing — dashed gaps
+ *  a child cannot fill, so the whole meaning collapses. Then complete,
+ *  every word a solid piece, and the picture is whole. Words ARE the
+ *  pieces of the picture. */
+function PuzzleMock({ he, beforeLabel, afterLabel }: { he: boolean; beforeLabel: string; afterLabel: string }) {
+  type Tok = string | { k: string };
+  const tokens: Tok[] = he
+    ? ["הספן", "היה", { k: "נחוש" }, "להגיע", "אל", "האי,", "ולמרות", { k: "הסופה" }, "העזה", "הוא", "לא", { k: "היסס" }]
+    : ["The", "sailor", "was", { k: "determined" }, "to", "reach", "the", "island,", "despite", "the", { k: "storm" }, "he", "never", { k: "hesitated" }];
+  return (
+    <div className="fam-puzzle">
+      <div className="fam-puzzle-block fam-puzzle-bad">
+        <div className="fam-puzzle-cap fam-puzzle-cap-bad">{beforeLabel}</div>
+        <p className="fam-puzzle-text">
+          {tokens.map((t, i) => (
+            <Fragment key={i}>
+              {typeof t === "string" ? (
+                <span className="fam-pz-word">{t}</span>
+              ) : (
+                <span className="fam-pz-gap" aria-hidden>?</span>
+              )}{" "}
+            </Fragment>
+          ))}
+        </p>
+      </div>
+      <div className="fam-puzzle-arrow" aria-hidden>↓</div>
+      <div className="fam-puzzle-block fam-puzzle-good">
+        <div className="fam-puzzle-cap fam-puzzle-cap-good">
+          <CheckIcon color="#0b7d7d" />
+          {afterLabel}
+        </div>
+        <p className="fam-puzzle-text">
+          {tokens.map((t, i) => (
+            <Fragment key={i}>
+              {typeof t === "string" ? (
+                <span className="fam-pz-word">{t}</span>
+              ) : (
+                <span className="fam-pz-fill">{t.k}</span>
+              )}{" "}
+            </Fragment>
+          ))}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /** A faithful mockup of the real Gadit word screen inside a phone
  *  shell. Gadi's feedback (2026-07-17): the page showed warm family
  *  scenes but never the PRODUCT as an app on a device. This is the
@@ -794,12 +860,41 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
 
-        {/* 2 · Reading-comprehension chain (Gadi 2026-07-18): the
-             stakes, promoted to the second section with an illustration
-             on the left. One misunderstood word cascades into lost
-             comprehension and lower grades; Gadit is the break in the
-             chain. */}
+        {/* 2 · Pain — the REAL academic pain (Gadi 2026-07-26). Not the
+             kid asking about words (that is a good thing) but the words
+             they skip: comprehension quietly breaks, vocabulary stays
+             thin, retrieval fails, grades slip. White band gives a clean
+             break from the cream hero above. */}
+        <section className="fam-band fam-band-white">
+          <div className="fam-section fam-center">
+            <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
+            <h2 className="fam-h2">{c.painTitle}</h2>
+            <div className="fam-inline-img">
+              <Image src="/fam/pain.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 600px" />
+            </div>
+            <p className="fam-body fam-body-center">{c.painBody1}</p>
+            <p className="fam-body fam-body-center fam-body-strong">{c.painBody2}</p>
+            <p className="fam-reframe">{c.reframe}</p>
+          </div>
+        </section>
+
+        {/* 3 · Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every
+             word a piece. Missing words are holes and the child stops
+             seeing the whole picture. Before (gaps) → after (filled). */}
         <section className="fam-band fam-band-cream">
+          <div className="fam-section fam-center">
+            <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
+            <h2 className="fam-h2">{c.puzzleTitle}</h2>
+            <p className="fam-body fam-body-center">{c.puzzleBody}</p>
+            <PuzzleMock he={he} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
+            <p className="fam-reframe">{c.puzzleLine}</p>
+          </div>
+        </section>
+
+        {/* 4 · Reading-comprehension chain + the turn to Gadit. One
+             misunderstood word cascades into lost comprehension and lower
+             grades; Gadit is the break in the chain. */}
+        <section className="fam-band fam-band-white">
           <div className="fam-feature fam-feature-top">
             <div className="fam-feature-text">
               <div className="fam-kicker fam-kicker-light">{c.chainKicker}</div>
@@ -828,36 +923,11 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
 
-        {/* 3 · The calm payoff (warm illustration) */}
-        <section className="fam-band fam-band-white">
-          <div className="fam-section fam-center">
-            <div className="fam-kicker">{c.demoKicker}</div>
-            <h2 className="fam-h2">{c.demoTitle}</h2>
-            <div className="fam-inline-img">
-              <Image src="/fam/hero.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 620px" />
-            </div>
-          </div>
-        </section>
-
-        {/* 3 · Pain + reframe */}
-        <section className="fam-band fam-band-ink">
-          <div className="fam-section">
-            <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
-            <h2 className="fam-h2">{c.painTitle}</h2>
-            <div className="fam-inline-img">
-              <Image src="/fam/pain.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 620px" />
-            </div>
-            <p className="fam-body">{c.painBody1}</p>
-            <p className="fam-body fam-body-strong">{c.painBody2}</p>
-            <p className="fam-reframe">{c.reframe}</p>
-          </div>
-        </section>
-
-        {/* 3.6 · The parent dashboard (Gadi 2026-07-18): the moat.
-             Shows a mockup of the real /family progress view so a parent
-             understands they are buying visible, accumulating proof of
-             growth that ChatGPT cannot give. */}
-        <section className="fam-band fam-band-white">
+        {/* 5 · The parent dashboard (Gadi 2026-07-18): the moat. A mockup
+             of the real /family progress view so a parent sees they are
+             buying visible, accumulating proof of growth that ChatGPT
+             cannot give. */}
+        <section className="fam-band fam-band-cream">
           <div className="fam-feature">
             <div className="fam-feature-text">
               <div className="fam-kicker">{c.dashKicker}</div>
@@ -901,7 +971,7 @@ export default function FamiliesLandingClient() {
           const Mock = MOCKUPS[i];
           const flip = i % 2 === 1;
           return (
-            <section key={i} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
+            <section key={i} className={`fam-band ${i % 2 === 0 ? "fam-band-white" : "fam-band-cream"}`}>
               <div className={`fam-feature ${flip ? "is-flipped" : ""}`}>
                 <div className="fam-feature-text">
                   <div className="fam-kicker">{f.kicker}</div>
@@ -1413,12 +1483,21 @@ const FAM_CSS = `
   font-size: 13.5px;
   color: #374151;
 }
-.fam-band { padding: 44px 0; }
-.fam-band-cream { background: #f6f4ee; }
-.fam-band-white { background: #ffffff; }
+/* Uniform band rhythm: every section gets the same generous vertical
+   space, and a hairline top divider makes the boundary between two
+   sections read clearly even when the two warm tones sit next to each
+   other (Gadi 2026-07-26 — the hero and the block under it blurred into
+   one). Teal/purple carry their own strong colour so they skip the
+   hairline. */
+.fam-band { padding: 62px 0; }
+.fam-band-cream { background: #f6f4ee; border-top: 1px solid rgba(31,41,55,0.06); }
+.fam-band-white { background: #ffffff; border-top: 1px solid rgba(31,41,55,0.06); }
 .fam-band-teal { background: #0EA5A5; }
 .fam-band-purple { background: rgba(124,58,237,0.07); }
 .fam-band-ink { background: #fdf6ec; }
+@media (max-width: 760px) {
+  .fam-band { padding: 46px 0; }
+}
 .fam-section { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 .fam-center { text-align: center; }
 .fam-kicker {
@@ -1966,4 +2045,68 @@ const FAM_CSS = `
   border-top: 1px solid rgba(31,41,55,0.06);
 }
 .fam-footer a { color: #9ca3af; text-decoration: none; }
+
+/* Puzzle metaphor: a sentence with missing pieces, then whole */
+.fam-puzzle {
+  max-width: 540px;
+  margin: 10px auto 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fam-puzzle-block {
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.1);
+  border-radius: 16px;
+  padding: 16px 18px 18px;
+  box-shadow: 0 10px 28px rgba(31,41,55,0.08);
+  text-align: start;
+}
+.fam-puzzle-bad { border-color: rgba(185,28,28,0.2); }
+.fam-puzzle-good { border-color: rgba(14,165,165,0.32); }
+.fam-puzzle-cap {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fam-puzzle-cap-bad { color: #b91c1c; }
+.fam-puzzle-cap-good { color: #0b7d7d; }
+.fam-puzzle-text {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 2.15;
+  color: #1f2937;
+  font-weight: 600;
+}
+.fam-pz-gap {
+  display: inline-block;
+  min-width: 42px;
+  text-align: center;
+  border: 2px dashed rgba(185,28,28,0.5);
+  border-radius: 8px;
+  color: rgba(185,28,28,0.75);
+  background: rgba(185,28,28,0.05);
+  font-weight: 800;
+  padding: 1px 8px;
+}
+.fam-pz-fill {
+  display: inline-block;
+  border-radius: 8px;
+  background: rgba(14,165,165,0.14);
+  border: 2px solid rgba(14,165,165,0.36);
+  color: #0b7d7d;
+  font-weight: 800;
+  padding: 1px 8px;
+}
+.fam-puzzle-arrow {
+  text-align: center;
+  color: #0EA5A5;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1;
+}
 `;
