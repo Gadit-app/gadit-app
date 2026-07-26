@@ -776,6 +776,54 @@ export default function FamiliesLandingClient() {
     track("families_lp_view", { angle, lang });
   }, [angle, lang]);
 
+  // Craft pass (2026-07-26): sections rise in as they enter the viewport,
+  // and a sticky CTA bar slides up once the hero has scrolled away so the
+  // action is always one tap from the reader (CRO: repeat the CTA at every
+  // decision point). Both degrade gracefully — no JS or reduced-motion
+  // leaves everything visible and static.
+  const rootRef = useRef<HTMLDivElement>(null);
+  const heroEndRef = useRef<HTMLDivElement>(null);
+  const [showSticky, setShowSticky] = useState(false);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    root.classList.add("fam-js");
+    const bands = Array.from(root.querySelectorAll<HTMLElement>(".fam-band"));
+    let revealObs: IntersectionObserver | null = null;
+    if (!reduce && "IntersectionObserver" in window) {
+      revealObs = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-in");
+              revealObs?.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+      );
+      bands.forEach((b) => revealObs?.observe(b));
+    } else {
+      bands.forEach((b) => b.classList.add("is-in"));
+    }
+    let stickyObs: IntersectionObserver | null = null;
+    const sentinel = heroEndRef.current;
+    if (sentinel && "IntersectionObserver" in window) {
+      stickyObs = new IntersectionObserver(
+        ([e]) => setShowSticky(!e.isIntersecting),
+        { threshold: 0 },
+      );
+      stickyObs.observe(sentinel);
+    }
+    return () => {
+      revealObs?.disconnect();
+      stickyObs?.disconnect();
+    };
+  }, []);
+
   function startTrial(source: string) {
     track("families_lp_cta", { angle, billing, source });
     if (isOwner) {
@@ -810,7 +858,7 @@ export default function FamiliesLandingClient() {
   const ctaLabel = isOwner ? c.ownerCta : c.heroCta;
 
   return (
-    <div dir={dir} className="fam-page">
+    <div dir={dir} className="fam-page" ref={rootRef}>
       <style>{FAM_CSS}</style>
 
       <header className="fam-topbrand">
@@ -858,7 +906,16 @@ export default function FamiliesLandingClient() {
               </div>
             </div>
           </div>
+          <div className="fam-trustbar">
+            {c.stats.map((s, i) => (
+              <span key={i} className="fam-trustbar-item">
+                <CheckIcon color="#0b7d7d" />
+                {s}
+              </span>
+            ))}
+          </div>
         </section>
+        <div ref={heroEndRef} aria-hidden className="fam-hero-sentinel" />
 
         {/* 2 · Pain — the REAL academic pain (Gadi 2026-07-26). Not the
              kid asking about words (that is a good thing) but the words
@@ -1141,6 +1198,16 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
       </main>
+
+      {/* Sticky CTA — mobile only, appears once the hero scrolls away */}
+      <div className={`fam-sticky ${showSticky ? "is-shown" : ""}`}>
+        <div className="fam-sticky-inner">
+          <span className="fam-sticky-note">{c.trialBadge}</span>
+          <button type="button" className="fam-cta fam-sticky-cta" onClick={() => startTrial("sticky")}>
+            {ctaLabel}
+          </button>
+        </div>
+      </div>
 
       <footer className="fam-footer">
         <span>© Gadit {new Date().getFullYear()}</span>
@@ -2108,5 +2175,86 @@ const FAM_CSS = `
   font-weight: 800;
   font-size: 20px;
   line-height: 1;
+}
+
+/* ─── Craft pass (2026-07-26): motion, sticky CTA, trust bar, polish ─── */
+.fam-page {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.fam-h1, .fam-h2 { text-wrap: balance; }
+.fam-body, .fam-whatis, .fam-chain-turn-body, .fam-guarantee-b { text-wrap: pretty; }
+
+/* CTA state polish: hover lift, active press, keyboard focus ring, custom
+   easing (emil: ease-out with punch, exit shorter than enter). */
+.fam-cta {
+  transition: transform 180ms cubic-bezier(0.23,1,0.32,1), box-shadow 200ms ease, background-color 160ms ease;
+}
+.fam-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(14,165,165,0.3); background-color: #0c9a9a; }
+.fam-cta:active { transform: translateY(0) scale(0.98); }
+.fam-cta:focus-visible { outline: 3px solid rgba(14,165,165,0.45); outline-offset: 3px; }
+.fam-cta-inverse:hover { background-color: #fff; box-shadow: 0 10px 26px rgba(0,0,0,0.22); }
+
+/* Scroll reveal — only when JS is active, so no-JS stays fully visible. */
+.fam-js .fam-band {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 640ms cubic-bezier(0.23,1,0.32,1), transform 640ms cubic-bezier(0.23,1,0.32,1);
+}
+.fam-js .fam-band.is-in { opacity: 1; transform: none; }
+
+/* Hero trust bar — the honest at-a-glance credibility strip. */
+.fam-trustbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 20px;
+  max-width: 720px;
+  margin: 24px auto 0;
+  padding: 0 20px;
+}
+.fam-trustbar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #4b5563;
+}
+.fam-hero-sentinel { height: 1px; width: 100%; }
+
+/* Sticky CTA bar (mobile) — appears after the hero scrolls out of view. */
+.fam-sticky {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(31,41,55,0.1);
+  box-shadow: 0 -6px 24px rgba(31,41,55,0.1);
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  transform: translateY(130%);
+  transition: transform 320ms cubic-bezier(0.32,0.72,0,1);
+}
+.fam-sticky.is-shown { transform: none; }
+.fam-sticky-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fam-sticky-note { font-size: 13px; font-weight: 800; color: #0b7d7d; white-space: nowrap; }
+.fam-sticky-cta { padding: 12px 22px; font-size: 15px; }
+@media (min-width: 900px) { .fam-sticky { display: none; } }
+@media (max-width: 899px) { .fam-footer { padding-bottom: 86px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fam-js .fam-band { opacity: 1; transform: none; transition: none; }
+  .fam-sticky, .fam-cta { transition: none; }
 }
 `;
