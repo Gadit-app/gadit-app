@@ -4,6 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useAdminContext } from "../admin-context";
 
 type Plan = "basic" | "clear" | "deep";
+// Filter values: real plans plus the two identities that both store
+// plan="deep" (Family via familyId, Schools via schoolId).
+type PlanFilter = "" | Plan | "family" | "schools";
 
 type AdminUserRow = {
   uid: string;
@@ -51,6 +54,8 @@ const STRINGS: Record<AdminLang, {
   basic: string;
   clear: string;
   deep: string;
+  family: string;
+  schools: string;
   allTime: string;
   last7: string;
   last30: string;
@@ -96,6 +101,8 @@ const STRINGS: Record<AdminLang, {
     basic: "Basic",
     clear: "Clear",
     deep: "Deep",
+    family: "Family",
+    schools: "Schools",
     allTime: "All time",
     last7: "Last 7 days",
     last30: "Last 30 days",
@@ -141,6 +148,8 @@ const STRINGS: Record<AdminLang, {
     basic: "Basic",
     clear: "Clear",
     deep: "Deep",
+    family: "Family",
+    schools: "Schools",
     allTime: "כל הזמן",
     last7: "7 ימים אחרונים",
     last30: "30 ימים אחרונים",
@@ -291,7 +300,7 @@ export default function AdminUsersClient() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [planFilter, setPlanFilter] = useState<"" | Plan>("");
+  const [planFilter, setPlanFilter] = useState<PlanFilter>("");
   const [countryFilter, setCountryFilter] = useState<string>("");
   const [sortBy, setSortBy] = useState<"createdAt" | "lastSeenAt" | "searchCount" | "plan" | "country">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
@@ -402,7 +411,15 @@ export default function AdminUsersClient() {
     const cutoff = rangeMs ? Date.now() - rangeMs : 0;
     let rows = data.users.filter((r) => {
       if (q && !(r.email ?? "").toLowerCase().includes(q) && !r.uid.toLowerCase().includes(q)) return false;
-      if (planFilter && r.plan !== planFilter) return false;
+      if (planFilter) {
+        // Family / Schools both store plan="deep"; distinguish by
+        // familyId / schoolId. "Deep" means an INDIVIDUAL Deep account
+        // (deep plan, no family or school identity).
+        if (planFilter === "family") { if (!r.isFamily) return false; }
+        else if (planFilter === "schools") { if (!r.isSchool) return false; }
+        else if (planFilter === "deep") { if (!(r.plan === "deep" && !r.isFamily && !r.isSchool)) return false; }
+        else if (r.plan !== planFilter) return false;
+      }
       if (countryFilter && (r.country ?? "") !== countryFilter) return false;
       if (rangeMs) {
         if (!r.createdAt) return false;
@@ -517,13 +534,15 @@ export default function AdminUsersClient() {
           />
           <select
             value={planFilter}
-            onChange={(e) => setPlanFilter(e.target.value as "" | Plan)}
+            onChange={(e) => setPlanFilter(e.target.value as PlanFilter)}
             style={{ ...inputStyle, width: "auto", marginBottom: 0 }}
           >
             <option value="">{t.allPlans}</option>
             <option value="basic">{t.basic}</option>
             <option value="clear">{t.clear}</option>
             <option value="deep">{t.deep}</option>
+            <option value="family">{t.family}</option>
+            <option value="schools">{t.schools}</option>
           </select>
           <select
             value={dateRange}
