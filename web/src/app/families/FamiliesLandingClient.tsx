@@ -100,6 +100,7 @@ type Copy = {
   trialBadge: string;
   yearly: string;
   yearlyNote: string;
+  priceAnchor: string;
   monthly: string;
   billedYearly: string;
   billedMonthly: string;
@@ -256,15 +257,16 @@ const COPY: Record<"he" | "en", Copy> = {
     priceTitle: "מסלול המשפחה",
     trialBadge: "14 ימי ניסיון חינם",
     yearly: "₪199 לשנה",
-    yearlyNote: "יוצא פחות מ-17 ₪ לחודש, לכל המשפחה",
+    yearlyNote: "פחות מ-17 ₪ לחודש לכל המשפחה, וחוסכים קרוב לחודשיים לעומת התשלום החודשי",
+    priceAnchor: "פחות משיעור פרטי אחד, לשנה שלמה, לכל הילדים בבית",
     monthly: "₪19.90 לחודש",
     billedYearly: "שנתי",
     billedMonthly: "חודשי",
     priceCta: "מתחילים את הניסיון",
     cancelNote: "החיוב בשקלים, רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.",
-    singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש",
+    singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש. בשלושה שקלים נוספים מצרפים עד 5 ילדים.",
     guaranteeTitle: "מבחן שיעורי הבית",
-    guaranteeBody: "מתחילים הערב ובודקים את זה על שיעורי הבית האמיתיים, שבועיים שלמים, בחינם. אם לא ראיתם את הילד מבין מילים לבד ואת אוצר המילים שלו גדל, מבטלים בלחיצה אחת ולא שילמתם שקל.",
+    guaranteeBody: "תנו לזה שבועיים על שיעורי הבית האמיתיים, בחינם. אם עד יום ה-14 לא הצטברו במחברת של הילד לפחות 20 מילים חדשות, מבטלים בלחיצה אחת ולא שילמתם שקל.",
     faqTitle: "שאלות של הורים",
     faq: [
       {
@@ -436,15 +438,16 @@ const COPY: Record<"he" | "en", Copy> = {
     priceTitle: "The Family plan",
     trialBadge: "14-day free trial",
     yearly: "$59 / year",
-    yearlyNote: "that is $4.92 a month, for the whole family",
+    yearlyNote: "that is $4.92 a month for the whole family, and saves you close to two months versus paying monthly",
+    priceAnchor: "Less than one private tutoring session, for a whole year, for every child at home",
     monthly: "$5.99 / month",
     billedYearly: "Yearly",
     billedMonthly: "Monthly",
     priceCta: "Start the trial",
     cancelNote: "First charge only after the 14 days. Cancel anytime from your account page, one click.",
-    singleChild: "Just one student at home? Deep is $4.99/month",
+    singleChild: "Just one student at home? Deep is $4.99/month. For a little more you can add up to 5 kids.",
     guaranteeTitle: "The homework test",
-    guaranteeBody: "Start tonight and test it on real homework, two full weeks, free. If you did not watch your kid understand words on their own and their vocabulary grow, cancel in one click and you paid nothing.",
+    guaranteeBody: "Give it two weeks on real homework, free. If by day 14 your child's notebook has not gathered at least 20 new words, cancel in one click and you paid nothing.",
     faqTitle: "Questions parents ask",
     faq: [
       {
@@ -1173,6 +1176,7 @@ export default function FamiliesLandingClient() {
 
               <div className="fam-price-amount">{billing === "yearly" ? c.yearly : c.monthly}</div>
               {billing === "yearly" && <div className="fam-price-note">{c.yearlyNote}</div>}
+              <div className="fam-price-anchor">{c.priceAnchor}</div>
 
               <button type="button" className="fam-cta fam-cta-wide" onClick={() => startTrial("pricing")}>
                 {isOwner ? c.ownerCta : c.priceCta}
@@ -2093,7 +2097,15 @@ const FAM_CSS = `
 }
 .fam-billing-toggle button.is-active { background: #fff; color: #0b7d7d; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .fam-price-amount { font-size: 36px; font-weight: 800; direction: ltr; }
-.fam-price-note { color: #0b7d7d; font-weight: 700; font-size: 14.5px; margin-top: 2px; margin-bottom: 16px; }
+.fam-price-note { color: #0b7d7d; font-weight: 700; font-size: 14.5px; margin-top: 2px; margin-bottom: 8px; }
+.fam-price-anchor {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 auto 16px;
+  max-width: 320px;
+  line-height: 1.45;
+}
 .fam-cancel-note { color: #6b7280; font-size: 12.5px; margin: 12px 0 0; line-height: 1.55; }
 .fam-single-link {
   display: block;
