@@ -44,6 +44,10 @@ type Copy = {
   whatIs: string;
   ctaMicro: string;
   trustLine: string;
+  credLine: string;
+  credKicker: string;
+  credTitle: string;
+  credBody: string;
   proofTitle: string;
   proofBig: string;
   proofWords: string[];
@@ -119,7 +123,11 @@ const COPY: Record<"he" | "en", Copy> = {
     whatIs: "Gadit הוא מילון חכם וחזותי לילדים: כל מילה מקבלת הסבר בגובה העיניים של הילד, תמונה, דוגמאות, ומשחקים וחידונים שהופכים לימוד מילים לכיף. אוצר המילים גדל, הילד מבין את הנקרא, ומצליח יותר בלימודים.",
     ctaMicro: "",
     trustLine: "עד 5 ילדים במשפחה, כל אחד ברמה שלו",
-    proofTitle: "המחברת של נועה",
+    credLine: "מבוסס על 15 שנות ניסיון עם למעלה מ-15,000 הורים, תלמידים ואנשי חינוך",
+    credKicker: "מי אנחנו",
+    credTitle: "15 שנה בחינוך. עכשיו בכלי אחד לילד.",
+    credBody: "Gadit נבנה על ידי צוות עם 15 שנות ניסיון בחינוך, שליווה למעלה מ-15,000 הורים, תלמידים ואנשי חינוך. את מה שראינו עובד שוב ושוב, בכיתה ובבית, הכנסנו לתוך כלי אחד פשוט שהילד יכול להשתמש בו לבד.",
+    proofTitle: "מחברת מילים · דוגמה",
     proofBig: "12 מילים חדשות השבוע",
     proofWords: ["חלום", "מרהיב", "נחוש"],
     angles: {
@@ -132,8 +140,8 @@ const COPY: Record<"he" | "en", Copy> = {
         sub: "מהיום, כשהילד שואל \"מה זה אומר?\", יש לו מקום אחד שבו הוא מוצא את התשובה לבד: כל המשמעויות, תמונה לכל משמעות, והסבר בגובה העיניים של הילד. בלי צ'אט פתוח ובלי פרסומות.",
       },
       anxiety: {
-        h1: "ילד שמדלג על מילים, מאבד את הסיפור",
-        sub: "מילה אחת לא מובנת מספיקה כדי לאבד את החוט בקריאה ובשיעורים. Gadit נותן לכל ילד דרך פשוטה לעצור, להבין באמת, ולחזור לספר בביטחון.",
+        h1: "הילד קורא כל מילה נכון, אבל לא באמת מבין",
+        sub: "הוא לא תמיד עוצר לשאול. הוא מדלג על מילה שהוא לא מבין, ממשיך הלאה, והחומר לא נכנס. לאט לאט זה הופך לתסכול מהלימודים ולתחושה של \"אני לא מצליח\". Gadit נותן לילד מקום אחד לעצור בו, להבין באמת, ולחזור לשיעור עם המילה שלו.",
       },
       safe: {
         h1: "המסך היחיד שנותנים לילד בלי לפחד",
@@ -147,30 +155,30 @@ const COPY: Record<"he" | "en", Copy> = {
     demoKicker: "התוצאה",
     demoTitle: "הילד מבין כל מילה, ואוצר המילים שלו גדל כל יום",
     painKicker: "נקודת הכאב האמיתית",
-    painTitle: "הילד קורא כל מילה, אבל המשמעות בורחת לו",
-    painBody1: "אתם דווקא שמחים כשהילד עוצר ושואל מה זה מילה. הבעיה היא כל המילים שהוא לא עוצר לשאול עליהן: הוא מדלג עליהן, ממשיך לקרוא, ובלי לשים לב מאבד את הבנת הנקרא. החומר לא נכנס, אוצר המילים נשאר דל, ובמבחן המילה הנכונה פשוט לא נשלפת.",
-    painBody2: "וזה קורה בשקט. הציונים יורדים לאט, אבל אף אחד לא רואה איפה בדיוק נשבר החוט.",
-    reframe: "והכול מתחיל ממילה אחת לא מובנת.",
+    painTitle: "הילד קורא, אבל לא תמיד באמת מבין",
+    painBody1: "אתם דווקא שמחים כשהילד עוצר ושואל מה זה מילה. הבעיה היא כל המילים שהוא לא עוצר לשאול עליהן. הוא מדלג עליהן, ממשיך לקרוא, והחומר לא נכנס. אוצר המילים נשאר דל, וההבנה נשברת מילה אחרי מילה.",
+    painBody2: "וזה נוגע בהרבה יותר מציון. ילד שלא מבין מרגיש שהוא לא מספיק טוב, מתוסכל מהלימודים, ומאבד ביטחון. וזה קורה בשקט, בלי שאף אחד יודע להצביע איפה בדיוק נשבר החוט.",
+    reframe: "וזה בדיוק המקום שבו Gadit נכנס.",
     puzzleKicker: "מה קורה בראש של הילד",
     puzzleTitle: "טקסט הוא פאזל. כל מילה היא חתיכה.",
     puzzleBody: "כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. כל מילה שהוא מבין היא חתיכה שנכנסת למקום. כל מילה שחסרה היא חור בתמונה. מספיק שלושה-ארבעה חורים, והילד כבר לא רואה את התמונה, גם אם הגה כל אות נכון.",
     puzzleBefore: "פסקה עם מילים חסרות",
     puzzleAfter: "עם Gadit, כל חתיכה במקום",
     puzzleLine: "כשכל המילים ברורות, הילד רואה את התמונה השלמה.",
-    chainKicker: "למה מילה אחת כל כך משנה",
-    chainTitle: "מילה אחת לא מובנת מפילה את כל השיעור",
+    chainKicker: "איך זה עובד",
+    chainTitle: "מחיפוש למילה שהילד יודע, בארבעה צעדים",
     chainSteps: [
-      "הילד קורא, ונתקל במילה שהוא לא מבין",
-      "בלי המילה, המשפט מאבד את המשמעות",
-      "בלי המשפט, הפסקה כבר לא ברורה",
-      "וכך נסדקת הבנת הנקרא, בכל מקצוע",
+      "הילד מקליד מילה שהוא לא מבין",
+      "מקבל הסבר בגובה העיניים שלו, תמונה ושלוש דוגמאות",
+      "המילה נשמרת במחברת האישית שלו",
+      "וחוזרת בתרגול קצר, עד שהיא באמת שלו",
     ],
-    chainCost: "הציונים יורדים, והתסכול עולה.",
-    chainTurnTitle: "כאן נכנס Gadit",
-    chainTurnBody: "המילון האישי והצמוד של הילד: בכל רגע שהוא נתקע במילה, הוא מקבל הסבר בגובה העיניים, תמונה ודוגמאות. כל מילה נשמרת, אוצר המילים גדל, והבנת הנקרא חוזרת. ואתם רואים את ההתקדמות שלו שחור על גבי לבן.",
+    chainCost: "",
+    chainTurnTitle: "וזה מה שאתם מקבלים",
+    chainTurnBody: "כל מילה שהילד נתקע בה הופכת למילה שהוא יודע, ואתם רואים את זה שחור על גבי לבן: כמה מילים הוא סגר, שבוע אחרי שבוע. במקום לקוות שמשהו משתפר, אתם פשוט רואים את זה קורה.",
     dashKicker: "לוח הבקרה להורה",
     dashTitle: "אתם רואים בדיוק כמה כל ילד למד",
-    dashBody: "לכל ילד במשפחה יש מחברת מילים אישית שגדלה. בלוח הבקרה שלכם אתם רואים במבט אחד כמה מילים כל ילד למד, כמה נוספו השבוע, ואילו מילים אחרונות. זה מה ש-ChatGPT לא ייתן לכם: הוכחה שרואים, שבוע אחרי שבוע.",
+    dashBody: "לכל ילד במשפחה יש מחברת מילים אישית שגדלה. בלוח הבקרה שלכם אתם רואים במבט אחד כמה מילים כל ילד למד, כמה נוספו השבוע, ואילו מילים אחרונות. כל כלי אחר עונה לילד ושוכח. Gadit שומר, ואתם רואים את ההתקדמות שבוע אחרי שבוע.",
     dashKids: [
       { name: "נועה", total: 47, week: 12 },
       { name: "עידו", total: 31, week: 8 },
@@ -216,7 +224,7 @@ const COPY: Record<"he" | "en", Copy> = {
         body: "הילד מקליד מילה באנגלית ומקבל הסבר פשוט בעברית, עם תמונה ודוגמאות. בלי לנדוד בין מילון, גוגל טרנסלייט ויוטיוב. שיעורי אנגלית מפסיקים להיות מלחמה.",
       },
     ],
-    midCtaTitle: "כל זה, במנוי משפחתי אחד",
+    midCtaTitle: "בדקו את זה על שיעורי הבית של הערב",
     midCta: "מתחילים 14 ימי ניסיון חינם",
     compareKicker: "ההבדל",
     compareTitle: "למה לא פשוט לחפש בגוגל או לשאול צ'אט?",
@@ -295,7 +303,11 @@ const COPY: Record<"he" | "en", Copy> = {
     whatIs: "Gadit is a smart, visual dictionary for kids: every word gets a kid-level explanation, a picture, examples, and games and quizzes that make learning words fun. Vocabulary grows, reading comprehension improves, and your child does better at school.",
     ctaMicro: "",
     trustLine: "Up to 5 kids, each at their own level",
-    proofTitle: "Noa's notebook",
+    credLine: "Built on 15 years of experience with more than 15,000 parents, students and educators",
+    credKicker: "Who we are",
+    credTitle: "15 years in education. Now in one tool for your child.",
+    credBody: "Gadit was built by a team with 15 years of experience in education, that has worked with more than 15,000 parents, students and educators. What we saw work again and again, in the classroom and at home, we put into one simple tool a child can use on their own.",
+    proofTitle: "Word notebook · example",
     proofBig: "12 new words this week",
     proofWords: ["dream", "vivid", "reluctant"],
     angles: {
@@ -308,8 +320,8 @@ const COPY: Record<"he" | "en", Copy> = {
         sub: "From today, when your kid asks \"what does this mean?\", they have one place to find the answer alone: every meaning, a picture for each one, and an explanation at kid level. No open chat, no ads.",
       },
       anxiety: {
-        h1: "A kid who skips words loses the story",
-        sub: "One misunderstood word is enough to lose the thread in reading and homework. Gadit gives every child a simple way to stop, truly understand, and get back to the book with confidence.",
+        h1: "Your child reads every word right, but does not really understand",
+        sub: "They do not always stop to ask. They skip a word they do not understand, keep going, and the material does not sink in. Over time it turns into frustration with school and a feeling of \"I can't do this\". Gadit gives your child one place to stop, truly understand, and get back to the lesson with the word in hand.",
       },
       safe: {
         h1: "The one screen you can hand a child without worry",
@@ -323,30 +335,30 @@ const COPY: Record<"he" | "en", Copy> = {
     demoKicker: "The result",
     demoTitle: "Your child understands every word, and their vocabulary grows every day",
     painKicker: "The real pain",
-    painTitle: "Your child reads every word, but the meaning slips away",
-    painBody1: "You're actually glad when your child stops to ask what a word means. The problem is all the words they don't stop to ask about: they skip them, keep reading, and quietly lose comprehension. The material doesn't sink in, vocabulary stays thin, and in the exam the right word simply won't come.",
-    painBody2: "And it happens silently. Grades slip slowly, but nobody sees exactly where the thread broke.",
-    reframe: "And it all starts with one misunderstood word.",
+    painTitle: "Your child reads, but does not always truly understand",
+    painBody1: "You're actually glad when your child stops to ask what a word means. The problem is all the words they don't stop to ask about. They skip them, keep reading, and the material doesn't sink in. Vocabulary stays thin, and comprehension breaks word after word.",
+    painBody2: "And it touches far more than a grade. A child who does not understand feels not good enough, gets frustrated with school, and loses confidence. And it happens silently, with nobody able to point to where the thread broke.",
+    reframe: "And this is exactly where Gadit comes in.",
     puzzleKicker: "What happens in a child's head",
     puzzleTitle: "Text is a puzzle. Every word is a piece.",
     puzzleBody: "When a child reads, their mind assembles a whole picture from the words. Every word they understand is a piece that clicks into place. Every missing word is a hole in the picture. Just three or four holes, and the child no longer sees the picture, even if they sounded out every letter.",
     puzzleBefore: "A paragraph with missing words",
     puzzleAfter: "With Gadit, every piece in place",
     puzzleLine: "When every word is clear, the child sees the whole picture.",
-    chainKicker: "Why one word matters this much",
-    chainTitle: "One misunderstood word can bring down the whole lesson",
+    chainKicker: "How it works",
+    chainTitle: "From a search to a word your child knows, in four steps",
     chainSteps: [
-      "Your child reads and hits a word they do not understand",
-      "Without the word, the sentence loses its meaning",
-      "Without the sentence, the paragraph is no longer clear",
-      "And reading comprehension cracks, in every subject",
+      "Your child types a word they do not understand",
+      "They get an explanation at their eye level, a picture and three examples",
+      "The word is saved in their personal notebook",
+      "And comes back in short practice, until it is truly theirs",
     ],
-    chainCost: "Grades drop, and frustration rises.",
-    chainTurnTitle: "This is where Gadit comes in",
-    chainTurnBody: "Your child's personal, always-there dictionary: the moment they get stuck on a word, they get an explanation at eye level, a picture and examples. Every word is saved, vocabulary grows, comprehension returns. And you see their progress in black and white.",
+    chainCost: "",
+    chainTurnTitle: "And this is what you get",
+    chainTurnBody: "Every word your child got stuck on becomes a word they know, and you see it in black and white: how many words they closed, week after week. Instead of hoping something is improving, you simply watch it happen.",
     dashKicker: "The parent dashboard",
     dashTitle: "You see exactly how much each child has learned",
-    dashBody: "Every child has a personal word notebook that grows. In your dashboard you see, at a glance, how many words each child has learned, how many were added this week, and their most recent words. This is what ChatGPT will never give you: visible proof, week after week.",
+    dashBody: "Every child has a personal word notebook that grows. In your dashboard you see, at a glance, how many words each child has learned, how many were added this week, and their most recent words. Any other tool answers your child and forgets. Gadit remembers, and you see the progress week after week.",
     dashKids: [
       { name: "Noa", total: 47, week: 12 },
       { name: "Ido", total: 31, week: 8 },
@@ -392,7 +404,7 @@ const COPY: Record<"he" | "en", Copy> = {
         body: "Your child types a word in English and gets a simple explanation in their own language, with a picture and examples. No wandering between a dictionary, a translator and YouTube.",
       },
     ],
-    midCtaTitle: "All of it, on one family plan",
+    midCtaTitle: "Try it on tonight's homework",
     midCta: "Start your 14-day free trial",
     compareKicker: "The difference",
     compareTitle: "Why not just Google it or ask a chatbot?",
@@ -914,6 +926,7 @@ export default function FamiliesLandingClient() {
               </span>
             ))}
           </div>
+          <div className="fam-credline">{c.credLine}</div>
         </section>
         <div ref={heroEndRef} aria-hidden className="fam-hero-sentinel" />
 
@@ -948,23 +961,25 @@ export default function FamiliesLandingClient() {
           </div>
         </section>
 
-        {/* 4 · Reading-comprehension chain + the turn to Gadit. One
-             misunderstood word cascades into lost comprehension and lower
-             grades; Gadit is the break in the chain. */}
+        {/* 4 · How it works (Gadi 2026-07-28, 5-model synthesis): the old
+             negative word→sentence→paragraph chain was redundant with the
+             pain + puzzle above (too much problem-piling before showing the
+             product), so it is now a POSITIVE 4-step of the actual flow,
+             ending in the visible-progress payoff + CTA. */}
         <section className="fam-band fam-band-white">
-          <div className="fam-feature fam-feature-top">
+          <div className="fam-feature fam-feature-top fam-how">
             <div className="fam-feature-text">
-              <div className="fam-kicker fam-kicker-light">{c.chainKicker}</div>
+              <div className="fam-kicker">{c.chainKicker}</div>
               <h2 className="fam-h2 fam-h2-start">{c.chainTitle}</h2>
               <div className="fam-chain">
                 {c.chainSteps.map((s, i) => (
                   <div key={i} className="fam-chain-step">
                     <span className="fam-chain-num">{i + 1}</span>
                     <span className="fam-chain-text">{s}</span>
-                    <span className="fam-chain-arrow" aria-hidden>↓</span>
+                    {i < c.chainSteps.length - 1 && <span className="fam-chain-arrow" aria-hidden>↓</span>}
                   </div>
                 ))}
-                <div className="fam-chain-cost">{c.chainCost}</div>
+                {c.chainCost && <div className="fam-chain-cost">{c.chainCost}</div>}
               </div>
               <div className="fam-chain-turn">
                 <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
@@ -975,7 +990,7 @@ export default function FamiliesLandingClient() {
               </div>
             </div>
             <div className="fam-feature-visual">
-              <Image src="/fam/lost-reader.webp" alt="" width={1200} height={900} className="fam-feature-illus" sizes="(max-width: 760px) 92vw, 440px" />
+              <Image src="/fam/hero.webp" alt="" width={1200} height={800} className="fam-feature-illus" sizes="(max-width: 760px) 92vw, 440px" />
             </div>
           </div>
         </section>
@@ -1111,6 +1126,19 @@ export default function FamiliesLandingClient() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        {/* 8.5 · Credibility (Gadi 2026-07-28): the honest proof the page
+             lacked. 15 years in education, 15,000+ parents/students/
+             educators. Kept generic on purpose, no institution named, to
+             respect the brand separation. Placed right before the price so
+             trust is highest at the ask. */}
+        <section className="fam-band fam-band-purple">
+          <div className="fam-section fam-center">
+            <div className="fam-kicker">{c.credKicker}</div>
+            <h2 className="fam-h2">{c.credTitle}</h2>
+            <p className="fam-body fam-body-center">{c.credBody}</p>
           </div>
         </section>
 
@@ -2223,6 +2251,23 @@ const FAM_CSS = `
   color: #4b5563;
 }
 .fam-hero-sentinel { height: 1px; width: 100%; }
+
+/* Credibility line under the hero trust bar */
+.fam-credline {
+  max-width: 640px;
+  margin: 14px auto 0;
+  padding: 0 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Positive "how it works" steps: teal accent instead of the amber
+   problem-chain accent, since this section now shows the product flow. */
+.fam-how .fam-chain-step { border-color: rgba(14,165,165,0.2); }
+.fam-how .fam-chain-num { background: rgba(14,165,165,0.12); color: #0b7d7d; }
+.fam-how .fam-chain-arrow { color: #0EA5A5; }
 
 /* Sticky CTA bar (mobile) — appears after the hero scrolls out of view. */
 .fam-sticky {
