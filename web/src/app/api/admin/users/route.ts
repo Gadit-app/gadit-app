@@ -50,6 +50,7 @@ type AdminUserRow = {
   plan: Plan;
   isFamily: boolean;               // has a familyId -> paying Family owner
   isSchool: boolean;               // has a schoolId -> paying Schools owner
+  comp: boolean;                   // internal/comp account -> excluded from paying counts
   country: string | null;
   lastSeenAt: string | null;       // ISO (Firestore Timestamp.toDate)
   searchCount: number;
@@ -155,6 +156,7 @@ export async function GET(req: NextRequest) {
       plan: (d.plan as Plan) || "basic",
       isFamily: !!d.familyId,
       isSchool: !!d.schoolId,
+      comp: d.comp === true,
       country: (d.country as string) ?? null,
       lastSeenAt: tsToIso(d.lastSeenAt),
       searchCount: typeof d.searchCount === "number" ? d.searchCount : 0,
@@ -181,9 +183,20 @@ export async function GET(req: NextRequest) {
   // granted Family members, manual Schools trials, and other non-paying
   // upgrades. The paying counts answer "how many people have given us
   // real money this month" honestly.
+  // A paying row: a live Stripe subscription (active or trialing) that is
+  // NOT a comp/internal account. Kept identical to /api/admin/overview so
+  // the two pages never disagree (Gadi 2026-07-27: this card read 11 while
+  // the overview read 10 because it counted the comp owner account and
+  // lumped Family into Deep). Broken out by REAL tier: Family/Schools both
+  // store plan="deep", so classify by familyId/schoolId first; "Deep" here
+  // means an individual Deep account.
   const isPayingRow = (r: typeof rows[number]) =>
-    r.subscriptionStatus === "active" || r.subscriptionStatus === "trialing";
+    !r.comp && (r.subscriptionStatus === "active" || r.subscriptionStatus === "trialing");
   const paying = rows.filter(isPayingRow);
+  const payingClear   = paying.filter((r) => !r.isFamily && !r.isSchool && r.plan === "clear").length;
+  const payingDeep    = paying.filter((r) => !r.isFamily && !r.isSchool && r.plan === "deep").length;
+  const payingFamily  = paying.filter((r) => r.isFamily).length;
+  const payingSchools = paying.filter((r) => r.isSchool).length;
   const counts = {
     total: rows.length,
     filtered: filtered.length,
@@ -193,9 +206,11 @@ export async function GET(req: NextRequest) {
       deep:  rows.filter((r) => r.plan === "deep").length,
     },
     paying: {
-      total: paying.length,
-      clear: paying.filter((r) => r.plan === "clear").length,
-      deep:  paying.filter((r) => r.plan === "deep").length,
+      total: payingClear + payingDeep + payingFamily + payingSchools,
+      clear: payingClear,
+      deep:  payingDeep,
+      family: payingFamily,
+      schools: payingSchools,
     },
     byCountry: Object.fromEntries(
       Object.entries(

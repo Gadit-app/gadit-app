@@ -182,7 +182,7 @@ type ApiResponse = {
     total: number;
     filtered: number;
     byPlan: { basic: number; clear: number; deep: number };
-    paying: { total: number; clear: number; deep: number };
+    paying: { total: number; clear: number; deep: number; family: number; schools: number };
     byCountry: Record<string, number>;
     signupsLast7Days: number;
     signupsLast30Days: number;
@@ -487,7 +487,7 @@ export default function AdminUsersClient() {
               value={data.counts.paying.total}
               accent="#059669"
               title={t.statPayingTooltip}
-              sublabel={`${data.counts.paying.deep} Deep · ${data.counts.paying.clear} Clear`}
+              sublabel={payingBreakdown(data.counts.paying)}
             />
           </div>
         )}
@@ -770,6 +770,18 @@ function Th({
   );
 }
 
+// Paying subscribers by real tier, e.g. "5 Clear · 3 Deep · 2 Family".
+// Only non-zero tiers, Latin labels kept (brand rule) so the caller
+// renders it LTR to stop the numbers scrambling in the RTL admin.
+function payingBreakdown(p: { clear: number; deep: number; family: number; schools: number }): string {
+  const parts: string[] = [];
+  if (p.clear)   parts.push(`${p.clear} Clear`);
+  if (p.deep)    parts.push(`${p.deep} Deep`);
+  if (p.family)  parts.push(`${p.family} Family`);
+  if (p.schools) parts.push(`${p.schools} Schools`);
+  return parts.join(" · ");
+}
+
 function StatCard({
   label,
   value,
@@ -795,7 +807,7 @@ function StatCard({
         {value.toLocaleString()}
       </div>
       {sublabel && (
-        <div style={{ fontSize: 10, fontWeight: 500, color: "#6B7280", marginTop: 2, fontVariantNumeric: "tabular-nums" }}>
+        <div dir="ltr" style={{ fontSize: 10, fontWeight: 500, color: "#6B7280", marginTop: 2, fontVariantNumeric: "tabular-nums" }}>
           {sublabel}
         </div>
       )}
