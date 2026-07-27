@@ -1,8 +1,68 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+/**
+ * Notify Gadi by email the FIRST time a customer's paid subscription
+ * activates (Family / Schools / Clear / Deep). Deduped via a `notifiedPaid`
+ * flag on the user doc, so renewals and repeated subscription.updated
+ * events never re-send. Non-blocking: every failure is swallowed so it can
+ * never break provisioning. This is the "someone just PAID" signal, which
+ * the client-side notify-signup never gave — that one only fires on account
+ * creation, so a family that upgraded from a free account produced no alert
+ * (Gadi 2026-07-27).
+ */
+async function notifyPaidActivation(uid: string, tier: string, email: string | null) {
+  try {
+    const resendKey = process.env.RESEND_API_KEY;
+    const notifyTo = process.env.NOTIFY_EMAIL;
+    if (!resendKey || !notifyTo) return;
+    const db = getAdminDb();
+    const ref = db.collection("users").doc(uid);
+    const snap = await ref.get();
+    if (snap.data()?.notifiedPaid === true) return; // dedupe: fire once per customer
+
+    const when = new Date().toLocaleString("en-IL", {
+      timeZone: "Asia/Jerusalem",
+      day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+    const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;">
+      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
+      <div style="font-size:22px;font-weight:700;margin-top:4px;">New ${tier} subscription 💰</div>
+    </div>
+    <div style="padding:24px;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <tr><td style="padding:8px 0;color:#6B7280;width:110px;">Plan</td><td style="padding:8px 0;font-weight:600;">${tier}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Email</td><td style="padding:8px 0;font-weight:500;">${(email ?? "(none)").replace(/</g, "&lt;")}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
+      </table>
+      <div style="margin-top:24px;padding-top:24px;border-top:1px solid #F3F4F6;text-align:center;">
+        <a href="https://www.gadit.app/admin/users" style="display:inline-block;background:#0EA5A5;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Open admin dashboard</a>
+      </div>
+    </div>
+  </div>
+</body></html>`;
+    const resend = new Resend(resendKey);
+    const res = await resend.emails.send({
+      from: "Gadit <notify@gadit.app>",
+      to: notifyTo,
+      subject: `💰 New ${tier} subscription: ${email ?? uid}`,
+      html,
+    });
+    if (res.error) {
+      console.error("[webhook] notifyPaidActivation resend error:", res.error);
+      return;
+    }
+    await ref.set({ notifiedPaid: true, notifiedPaidAt: new Date().toISOString() }, { merge: true });
+  } catch (e) {
+    console.warn("[webhook] notifyPaidActivation failed:", e);
+  }
+}
 
 // Feature-level plan. Family and Schools billing both translate to "deep"
 // features for every paired member or classroom kid, so existing feature
@@ -216,6 +276,11 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
 
   if (family) await bootstrapFamily(uid, billingCycle);
   if (schools) await bootstrapSchool(uid, billingCycle, email);
+
+  if (plan !== "basic") {
+    const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
+    await notifyPaidActivation(uid, tier, email);
+  }
   return true;
 }
 
@@ -289,6 +354,11 @@ export async function POST(req: NextRequest) {
       }
       if (schools) {
         await bootstrapSchool(userId, billingCycle, customerEmail);
+      }
+
+      if (plan !== "basic") {
+        const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
+        await notifyPaidActivation(userId, tier, customerEmail);
       }
     }
 

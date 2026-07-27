@@ -92,14 +92,19 @@ export async function GET(req: NextRequest) {
   const monthStart = startOfDayUTC(30);
 
   // ---------- 1) All Auth users + their Firestore docs ----------
-  const authUsers: UserRecord[] = [];
+  const allAuthUsers: UserRecord[] = [];
   let pageToken: string | undefined;
   do {
     const page = await auth.listUsers(1000, pageToken);
-    authUsers.push(...page.users);
+    allAuthUsers.push(...page.users);
     pageToken = page.pageToken;
-    if (authUsers.length >= 5000) break;
+    if (allAuthUsers.length >= 5000) break;
   } while (pageToken);
+
+  // Exclude synthetic family-member (kid) uids `${familyId}_${memberId}`:
+  // device-paired child sessions, not real accounts, so they must not
+  // inflate total users / byPlan / signups (Gadi 2026-07-27).
+  const authUsers = allAuthUsers.filter((u) => !u.uid.includes("_"));
 
   const userDocs = new Map<string, FirebaseFirestore.DocumentData>();
   const CHUNK = 400;

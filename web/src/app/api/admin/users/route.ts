@@ -95,14 +95,22 @@ export async function GET(req: NextRequest) {
   const db   = getAdminDb();
 
   // ---------- 1) List every Auth user, paginated ----------
-  const authUsers: UserRecord[] = [];
+  const allAuthUsers: UserRecord[] = [];
   let pageToken: string | undefined;
   do {
     const page = await auth.listUsers(1000, pageToken);
-    authUsers.push(...page.users);
+    allAuthUsers.push(...page.users);
     pageToken = page.pageToken;
-    if (authUsers.length >= limit) break;
+    if (allAuthUsers.length >= limit) break;
   } while (pageToken);
+
+  // Family member (kid) profiles use a SYNTHETIC uid `${familyId}_${memberId}`
+  // (see lib/family.ts syntheticUidFor). They are device-paired child
+  // sessions, NOT real accounts or paying customers, and never have an
+  // email — so they must not appear in the users list or inflate the
+  // counts (Gadi 2026-07-27 saw kids showing as email-less "families").
+  // Firebase's own uids never contain "_", so this is a safe discriminator.
+  const authUsers = allAuthUsers.filter((u) => !u.uid.includes("_"));
 
   // ---------- 2) Bulk-load matching /users/{uid} Firestore docs ----------
   // getAll has no documented cap but cloud-firestore-admin chokes past ~500
