@@ -11197,10 +11197,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-family-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 14px;
 }
-@media (min-width: 720px) {
+@media (min-width: 640px) {
   .wordbook .wb-family-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1040px) {
+  .wordbook .wb-family-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 .wordbook .wb-family-member-card {
@@ -11208,14 +11211,20 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 14px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-radius: 16px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(31, 41, 55, 0.05);
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 160ms ease;
+}
+.wordbook .wb-family-member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(31, 41, 55, 0.09);
 }
 .wordbook .wb-family-member-avatar {
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -11223,17 +11232,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: #FFFFFF;
   font-family: var(--wb-serif);
   font-weight: 700;
-  font-size: 20px;
+  font-size: 22px;
   overflow: hidden;
   flex-shrink: 0;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9), 0 4px 10px rgba(31, 41, 55, 0.12);
 }
 .wordbook .wb-family-member-avatar img {
   width: 100%; height: 100%; object-fit: cover;
 }
 .wordbook .wb-family-member-name {
   font-family: var(--wb-sans);
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16.5px;
+  font-weight: 700;
   color: var(--ink);
 }
 .wordbook[dir="rtl"] .wb-family-member-name { font-family: var(--wb-he); }
@@ -11241,9 +11251,32 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-family: var(--wb-sans);
   font-size: 13px;
   color: var(--ink-soft);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 .wordbook[dir="rtl"] .wb-family-member-role { font-family: var(--wb-he); }
-.wordbook .wb-family-member-paired-dot { color: #10B981; }
+/* Paired status becomes a small green "connected" chip with a dot. */
+.wordbook .wb-family-member-paired-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #047857;
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.wordbook .wb-family-member-paired-dot::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
 .wordbook .wb-family-member-actions {
   display: flex;
   gap: 6px;
@@ -11263,7 +11296,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-family-member-pair,
 .wordbook[dir="rtl"] .wb-family-member-revoke { font-family: var(--wb-he); }
-.wordbook .wb-family-member-pair:hover { background: var(--mist); }
+/* Pair is the primary action, so it reads as a teal-tinted button. */
+.wordbook .wb-family-member-pair {
+  color: #0b7d7d;
+  border-color: rgba(14, 165, 165, 0.35);
+  background: rgba(14, 165, 165, 0.08);
+  font-weight: 600;
+}
+.wordbook .wb-family-member-pair:hover { background: rgba(14, 165, 165, 0.16); }
 .wordbook .wb-family-member-revoke { color: #EF4444; border-color: rgba(239, 68, 68, 0.3); }
 .wordbook .wb-family-member-revoke:hover { background: rgba(239, 68, 68, 0.06); }
 

@@ -260,8 +260,8 @@ function MemberCard({
       <div className="wb-family-member-meta">
         <div className="wb-family-member-name">{m.name || roleLabel}</div>
         <div className="wb-family-member-role">
-          {m.isOwner ? ownerLabel : roleLabel}
-          {linked && <span className="wb-family-member-paired-dot">· {pairedLabel}</span>}
+          <span>{m.isOwner ? ownerLabel : roleLabel}</span>
+          {linked && <span className="wb-family-member-paired-dot">{pairedLabel}</span>}
         </div>
       </div>
       {!m.isOwner && (
