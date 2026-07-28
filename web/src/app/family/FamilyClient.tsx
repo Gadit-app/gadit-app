@@ -372,6 +372,7 @@ export function FamilyClient() {
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [familyChecked, setFamilyChecked] = useState(false);
   const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
+  const [progressLoaded, setProgressLoaded] = useState(false);
   const [tab, setTab] = useState<FamTab>("home");
 
   const isWelcome = search.get("welcome") === "1";
@@ -389,11 +390,16 @@ export function FamilyClient() {
         const res = await fetch("/api/family/progress", {
           headers: { Authorization: `Bearer ${idToken}` },
         });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled) setProgress(data);
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled) setProgress(data);
+        }
       } catch {
         /* progress is a nice-to-have; never block the roster */
+      } finally {
+        // Mark loaded either way so the home tab stops showing the loading
+        // skeleton and settles on the real content (or empty state).
+        if (!cancelled) setProgressLoaded(true);
       }
     })();
     return () => { cancelled = true; };
@@ -540,7 +546,13 @@ export function FamilyClient() {
 
           {tab === "home" && (
             <div className="fam-tab">
-              {progress && progress.children.length > 0 ? (
+              {!progressLoaded ? (
+                <div className="fam-dash-grid">
+                  {Array.from({ length: children.length > 0 ? children.length : 2 }).map((_, i) => (
+                    <div key={i} className="fam-skel-card" />
+                  ))}
+                </div>
+              ) : progress && progress.children.length > 0 ? (
                 <>
                   {progress.totalWords > 0 && (
                     <div className="fam-dash-summary">
@@ -838,6 +850,16 @@ const FAM_SHELL_CSS = `
   border-radius: 20px; padding: 40px 24px; text-align: center;
 }
 .fam-shell-empty p { color: #6b7280; font-size: 15px; margin: 0 0 16px; line-height: 1.6; }
+/* Loading skeleton for the home tab, so the empty-state CTA never flashes
+   before the real progress cards arrive (Gadi 2026-07-28). */
+.fam-skel-card {
+  height: 150px; border-radius: 18px;
+  background: linear-gradient(100deg, #efece5 30%, #f6f4ee 50%, #efece5 70%);
+  background-size: 200% 100%;
+  animation: fam-skel 1.3s ease-in-out infinite;
+}
+@keyframes fam-skel { 0% { background-position: 150% 0; } 100% { background-position: -50% 0; } }
+@media (prefers-reduced-motion: reduce) { .fam-skel-card { animation: none; } }
 
 .fam-settings { display: flex; flex-direction: column; gap: 12px; max-width: 620px; }
 .fam-set-row {
