@@ -11206,12 +11206,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-family-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
+/* Flex column with a fixed min-height so every member card is exactly the
+   same size, and the action row is pinned to the bottom (owner cards with
+   no actions keep the same height). */
 .wordbook .wb-family-member-card {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
   padding: 16px 18px;
+  min-height: 138px;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 18px;
@@ -11221,6 +11224,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-family-member-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(31, 41, 55, 0.09);
+}
+.wordbook .wb-family-member-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 .wordbook .wb-family-member-avatar {
   width: 54px;
@@ -11279,9 +11287,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-family-member-actions {
   display: flex;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 8px;
+  margin-top: auto;
 }
+.wordbook .wb-family-member-actions button { flex: 1; }
 .wordbook .wb-family-member-pair,
 .wordbook .wb-family-member-revoke {
   font-family: var(--wb-sans);

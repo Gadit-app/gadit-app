@@ -250,18 +250,20 @@ function MemberCard({
   const linked = !!m.userId && !m.isOwner;
   return (
     <div className="wb-family-member-card">
-      <div className="wb-family-member-avatar" style={{ background: color }}>
-        {m.avatarPhotoUrl ? (
-          <img src={m.avatarPhotoUrl} alt="" />
-        ) : (
-          <span>{initial}</span>
-        )}
-      </div>
-      <div className="wb-family-member-meta">
-        <div className="wb-family-member-name">{m.name || roleLabel}</div>
-        <div className="wb-family-member-role">
-          <span>{m.isOwner ? ownerLabel : roleLabel}</span>
-          {linked && <span className="wb-family-member-paired-dot">{pairedLabel}</span>}
+      <div className="wb-family-member-top">
+        <div className="wb-family-member-avatar" style={{ background: color }}>
+          {m.avatarPhotoUrl ? (
+            <img src={m.avatarPhotoUrl} alt="" />
+          ) : (
+            <span>{initial}</span>
+          )}
+        </div>
+        <div className="wb-family-member-meta">
+          <div className="wb-family-member-name">{m.name || roleLabel}</div>
+          <div className="wb-family-member-role">
+            <span>{m.isOwner ? ownerLabel : roleLabel}</span>
+            {linked && <span className="wb-family-member-paired-dot">{pairedLabel}</span>}
+          </div>
         </div>
       </div>
       {!m.isOwner && (
@@ -288,14 +290,14 @@ function MemberCard({
 type FamTab = "home" | "members" | "settings";
 
 const NAV_COPY: Record<string, {
-  home: string; members: string; settings: string; dictionary: string;
+  home: string; members: string; settings: string; dictionary: string; addMember: string;
   greetMorning: string; greetNoon: string; greetEvening: string; greetNight: string;
   kids: (n: number) => string; words: (n: number) => string;
   homeTitle: string; membersTitle: string; settingsTitle: string;
   langLabel: string; accountLabel: string; accountSub: string; subLabel: string; subSub: string;
 }> = {
   he: {
-    home: "דף הבית", members: "בני המשפחה", settings: "הגדרות", dictionary: "חזרה למילון",
+    home: "דף הבית", members: "בני המשפחה", settings: "הגדרות", dictionary: "חזרה למילון", addMember: "הוספת בן משפחה",
     greetMorning: "בוקר טוב", greetNoon: "צהריים טובים", greetEvening: "ערב טוב", greetNight: "לילה טוב",
     kids: (n) => (n === 1 ? "ילד אחד במשפחה" : `${n} ילדים במשפחה`), words: (n) => `${n} מילים נלמדו`,
     homeTitle: "מבט על", membersTitle: "בני המשפחה", settingsTitle: "הגדרות",
@@ -303,7 +305,7 @@ const NAV_COPY: Record<string, {
     subLabel: "המנוי שלי", subSub: "ניהול מסלול וחיוב",
   },
   en: {
-    home: "Home", members: "Family", settings: "Settings", dictionary: "Back to dictionary",
+    home: "Home", members: "Family", settings: "Settings", dictionary: "Back to dictionary", addMember: "Add a family member",
     greetMorning: "Good morning", greetNoon: "Good afternoon", greetEvening: "Good evening", greetNight: "Good night",
     kids: (n) => (n === 1 ? "1 kid in the family" : `${n} kids in the family`), words: (n) => `${n} words learned`,
     homeTitle: "Overview", membersTitle: "Family members", settingsTitle: "Settings",
@@ -311,7 +313,7 @@ const NAV_COPY: Record<string, {
     subLabel: "My subscription", subSub: "Manage plan and billing",
   },
   hi: {
-    home: "होम", members: "परिवार", settings: "सेटिंग्स", dictionary: "शब्दकोश पर वापस",
+    home: "होम", members: "परिवार", settings: "सेटिंग्स", dictionary: "शब्दकोश पर वापस", addMember: "परिवार सदस्य जोड़ें",
     greetMorning: "सुप्रभात", greetNoon: "शुभ दोपहर", greetEvening: "शुभ संध्या", greetNight: "शुभ रात्रि",
     kids: (n) => (n === 1 ? "परिवार में 1 बच्चा" : `परिवार में ${n} बच्चे`), words: (n) => `${n} शब्द सीखे`,
     homeTitle: "अवलोकन", membersTitle: "परिवार के सदस्य", settingsTitle: "सेटिंग्स",
@@ -319,7 +321,7 @@ const NAV_COPY: Record<string, {
     subLabel: "मेरी सदस्यता", subSub: "प्लान और बिलिंग प्रबंधित करें",
   },
   am: {
-    home: "መነሻ", members: "ቤተሰብ", settings: "ቅንብሮች", dictionary: "ወደ መዝገበ ቃላት ተመለስ",
+    home: "መነሻ", members: "ቤተሰብ", settings: "ቅንብሮች", dictionary: "ወደ መዝገበ ቃላት ተመለስ", addMember: "የቤተሰብ አባል ጨምር",
     greetMorning: "እንደምን አደሩ", greetNoon: "እንደምን ዋሉ", greetEvening: "እንደምን አመሹ", greetNight: "መልካም ሌሊት",
     kids: (n) => (n === 1 ? "1 ልጅ በቤተሰብ" : `${n} ልጆች በቤተሰብ`), words: (n) => `${n} ቃላት ተምረዋል`,
     homeTitle: "አጠቃላይ እይታ", membersTitle: "የቤተሰብ አባላት", settingsTitle: "ቅንብሮች",
@@ -526,10 +528,6 @@ export function FamilyClient() {
                 {totalWords > 0 ? ` · ${nav.words(totalWords)}` : ""}
               </p>
             </div>
-            {tab !== "settings" && !atCap && (
-              <Link href={href("/family/add")} className="fam-shell-add">{c.add}</Link>
-            )}
-            {tab === "members" && atCap && <span className="fam-shell-cap">{c.capReached}</span>}
           </header>
 
           {isWelcome && <div className="fam-shell-welcome">{c.welcome}</div>}
@@ -587,6 +585,14 @@ export function FamilyClient() {
                       <div className="wb-family-grid">{children.map(memberCard)}</div>
                     </section>
                   )}
+                  {atCap ? (
+                    <div className="fam-add-note">{c.capReached}</div>
+                  ) : (
+                    <Link href={href("/family/add")} className="fam-add-member">
+                      <span className="fam-add-plus" aria-hidden>+</span>
+                      {nav.addMember}
+                    </Link>
+                  )}
                 </>
               )}
             </div>
@@ -629,14 +635,6 @@ export function FamilyClient() {
                 <div className="fam-set-main">
                   <div className="fam-set-label">{nav.subLabel}</div>
                   <div className="fam-set-sub">{nav.subSub}</div>
-                </div>
-                <span className="fam-set-arrow" aria-hidden>{dir === "rtl" ? "‹" : "›"}</span>
-              </Link>
-
-              <Link href={href("/")} className="fam-set-row fam-set-link">
-                <div className="fam-set-icon"><NavIcon name="dictionary" /></div>
-                <div className="fam-set-main">
-                  <div className="fam-set-label">{nav.dictionary}</div>
                 </div>
                 <span className="fam-set-arrow" aria-hidden>{dir === "rtl" ? "‹" : "›"}</span>
               </Link>
@@ -768,13 +766,37 @@ const FAM_SHELL_CSS = `
 .fam-nav-item.is-active { background: rgba(14,165,165,0.12); color: #0b7d7d; }
 .fam-nav-item.is-active svg { color: #0b7d7d; }
 .fam-shell-side-foot { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(31,41,55,0.07); }
-.fam-nav-back { color: #0b7d7d; }
+/* The dictionary link is an ACTION, not another tab: a bordered teal pill
+   so it reads differently from the plain nav items above it. */
+.fam-nav-back {
+  color: #0b7d7d; font-weight: 700;
+  background: rgba(14,165,165,0.08);
+  border: 1px solid rgba(14,165,165,0.22);
+  justify-content: center;
+}
+.fam-nav-back:hover { background: rgba(14,165,165,0.15); color: #0b7d7d; }
 .fam-nav-back svg { color: #0EA5A5; }
 
 .fam-shell-body { flex: 1; min-width: 0; }
 .fam-shell-top {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 4px; margin-bottom: 26px;
+}
+.fam-add-member {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 6px; padding: 12px 22px;
+  border-radius: 14px;
+  border: 1.5px dashed rgba(14,165,165,0.42);
+  background: rgba(14,165,165,0.05);
+  color: #0b7d7d; font-weight: 700; font-size: 15px;
+  text-decoration: none; transition: background 150ms ease;
+}
+.fam-add-member:hover { background: rgba(14,165,165,0.13); }
+.fam-add-plus { font-size: 18px; font-weight: 800; line-height: 1; }
+.fam-add-note {
+  margin-top: 6px; color: #b45309;
+  background: rgba(217,119,6,0.1); border-radius: 12px;
+  padding: 12px 16px; font-size: 14px; font-weight: 600;
 }
 .fam-shell-greet h1 {
   font-size: clamp(23px, 4vw, 31px); font-weight: 800;
