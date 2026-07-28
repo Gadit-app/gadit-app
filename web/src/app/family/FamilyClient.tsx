@@ -517,17 +517,23 @@ export function FamilyClient() {
 
         {/* Main panel */}
         <main className="fam-shell-body">
-          <header className="fam-shell-top">
-            <div className="fam-shell-greet">
-              <h1>
-                {greetingFor(nav, hour)}, {firstName}{" "}
-                <span className="fam-shell-emoji">{greetingEmoji(hour)}</span>
-              </h1>
-              <p>
-                {nav.kids(children.length)}
-                {totalWords > 0 ? ` · ${nav.words(totalWords)}` : ""}
-              </p>
-            </div>
+          <header className={`fam-shell-top ${tab === "home" ? "is-home" : ""}`}>
+            {tab === "home" ? (
+              <div className="fam-shell-greet">
+                <h1>
+                  {greetingFor(nav, hour)}, {firstName}{" "}
+                  <span className="fam-shell-emoji">{greetingEmoji(hour)}</span>
+                </h1>
+                <p>
+                  {nav.kids(children.length)}
+                  {totalWords > 0 ? ` · ${nav.words(totalWords)}` : ""}
+                </p>
+              </div>
+            ) : (
+              <div className="fam-shell-greet">
+                <h1>{tab === "members" ? nav.membersTitle : nav.settingsTitle}</h1>
+              </div>
+            )}
           </header>
 
           {isWelcome && <div className="fam-shell-welcome">{c.welcome}</div>}
@@ -782,6 +788,8 @@ const FAM_SHELL_CSS = `
   display: flex; flex-direction: column; align-items: flex-start;
   text-align: start; gap: 4px; margin-bottom: 24px;
 }
+/* Home greets the parent, centered; other tabs show their title, at the start. */
+.fam-shell-top.is-home { align-items: center; text-align: center; }
 .fam-add-member {
   display: inline-flex; align-items: center; gap: 8px;
   margin-top: 6px; padding: 12px 22px;
