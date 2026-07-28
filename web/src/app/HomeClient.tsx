@@ -175,7 +175,7 @@ export function HomePage() {
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
       <header className="wb-shell-topbar">
-        <Link href={href("/")} className="wb-wordmark" dir="ltr">
+        <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <WbShellNav active="home" />
@@ -233,7 +233,7 @@ export function HomePage() {
 
       <main className="wb-home-main">
         <div className="wb-home-center">
-          <div className="wb-home-logo">
+          <div className="wb-home-logo" translate="no">
             Gad<span className="wb-home-logo-it">it</span>
           </div>
           <p className="wb-home-tagline">{c.tagline}</p>

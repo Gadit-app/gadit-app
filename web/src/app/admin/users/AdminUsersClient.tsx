@@ -472,16 +472,7 @@ export default function AdminUsersClient() {
         {data && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(132px, 1fr))", gap: 10, marginBottom: 24 }}>
             <StatCard label={t.statTotalUsers} value={data.counts.total} />
-            <StatCard label={t.statSignups7} value={data.counts.signupsLast7Days} />
             <StatCard label={t.statSignups30} value={data.counts.signupsLast30Days} />
-            <StatCard label={t.statBasic} value={data.counts.byPlan.basic} accent="#9CA3AF" />
-            <StatCard label={t.statClear} value={data.counts.byPlan.clear} accent="#0EA5A5" />
-            <StatCard label={t.statDeep} value={data.counts.byPlan.deep} accent="#7C3AED" />
-            {/* Paying = real Stripe subscriptions (active or trialing).
-                Excludes Family members and manual grants. Gadi
-                (2026-06-29) flagged that the Deep count above mixes
-                paying subscribers with manually-added family/schools
-                members and was misleading. This card cuts through. */}
             <StatCard
               label={t.statPaying}
               value={data.counts.paying.total}
@@ -489,6 +480,15 @@ export default function AdminUsersClient() {
               title={t.statPayingTooltip}
               sublabel={payingBreakdown(data.counts.paying)}
             />
+            {/* By tier, in the tier colours (Gadi 2026-07-28). Basic = free
+                accounts. Clear/Deep/Family/Schools are PAYING subscribers
+                per real tier (Family/Schools both bill as deep but are
+                counted separately), so they sum to the Paying total above. */}
+            <StatCard label={t.statBasic} value={data.counts.byPlan.basic} accent="#9CA3AF" />
+            <StatCard label={t.statClear}  value={data.counts.paying.clear}   accent="#0EA5A5" />
+            <StatCard label={t.statDeep}   value={data.counts.paying.deep}    accent="#7C3AED" />
+            <StatCard label={t.family}     value={data.counts.paying.family}  accent="#1D4ED8" />
+            <StatCard label={t.schools}    value={data.counts.paying.schools} accent="#D97706" />
           </div>
         )}
 
