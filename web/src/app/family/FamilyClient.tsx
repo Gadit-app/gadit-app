@@ -779,8 +779,8 @@ const FAM_SHELL_CSS = `
 
 .fam-shell-body { flex: 1; min-width: 0; }
 .fam-shell-top {
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 4px; margin-bottom: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  text-align: start; gap: 4px; margin-bottom: 24px;
 }
 .fam-add-member {
   display: inline-flex; align-items: center; gap: 8px;
@@ -799,11 +799,11 @@ const FAM_SHELL_CSS = `
   padding: 12px 16px; font-size: 14px; font-weight: 600;
 }
 .fam-shell-greet h1 {
-  font-size: clamp(23px, 4vw, 31px); font-weight: 800;
+  font-size: clamp(20px, 3.2vw, 26px); font-weight: 800;
   color: #1f2937; margin: 0; letter-spacing: -0.01em;
 }
 .fam-shell-emoji { font-weight: 400; }
-.fam-shell-greet p { margin: 6px 0 0; color: #6b7280; font-size: 15px; font-weight: 500; }
+.fam-shell-greet p { margin: 5px 0 0; color: #6b7280; font-size: 14px; font-weight: 500; }
 .fam-shell-add {
   background: #0EA5A5; color: #fff; text-decoration: none;
   font-weight: 700; font-size: 15px;
