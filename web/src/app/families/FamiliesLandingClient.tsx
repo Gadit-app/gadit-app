@@ -748,7 +748,32 @@ function PhoneMock({ he }: { he: boolean }) {
   );
 }
 
+/** Step 1 of the how-it-works flow: the child types a word. A faithful
+ *  recreation of the real search screen (Kids Mode on, teal search pill
+ *  with the typed word and a blinking caret). */
+function MockSearch({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-toggle">
+        <span className="fam-mock-toggle-pill">{he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-on" />
+      </div>
+      <div className="fam-mock-search fam-mock-search-lg">
+        <SearchIcon />
+        <span>{he ? "חלום" : "dream"}</span>
+        <span className="fam-mock-caret" aria-hidden />
+      </div>
+      <div className="fam-mock-searchhint">{he ? "הילד מקליד מילה, וזהו. השאר קורה לבד." : "The child types a word, and that is it."}</div>
+    </div>
+  );
+}
+
 const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
+
+// The four how-it-works steps, each paired with the real product screen it
+// produces: type a word, get the explanation with a picture and examples,
+// the word is saved in the notebook, it comes back in practice.
+const HOW_MOCKS = [MockSearch, MockMeanings, MockNotebook, MockGames];
 
 // Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
 // /public/fam as compressed WebP). One per feature; the 7th (English
@@ -970,30 +995,31 @@ export default function FamiliesLandingClient() {
              product), so it is now a POSITIVE 4-step of the actual flow,
              ending in the visible-progress payoff + CTA. */}
         <section className="fam-band fam-band-white">
-          <div className="fam-feature fam-feature-top fam-how">
-            <div className="fam-feature-text">
-              <div className="fam-kicker">{c.chainKicker}</div>
-              <h2 className="fam-h2 fam-h2-start">{c.chainTitle}</h2>
-              <div className="fam-chain">
-                {c.chainSteps.map((s, i) => (
-                  <div key={i} className="fam-chain-step">
-                    <span className="fam-chain-num">{i + 1}</span>
-                    <span className="fam-chain-text">{s}</span>
-                    {i < c.chainSteps.length - 1 && <span className="fam-chain-arrow" aria-hidden>↓</span>}
+          <div className="fam-section fam-center">
+            <div className="fam-kicker">{c.chainKicker}</div>
+            <h2 className="fam-h2">{c.chainTitle}</h2>
+            <div className="fam-how-steps">
+              {c.chainSteps.map((s, i) => {
+                const Mock = HOW_MOCKS[i] ?? HOW_MOCKS[0];
+                return (
+                  <div key={i} className="fam-how-step">
+                    <div className="fam-how-step-head">
+                      <span className="fam-how-num">{i + 1}</span>
+                      <span className="fam-how-text">{s}</span>
+                    </div>
+                    <div className="fam-how-visual">
+                      <Mock he={he} />
+                    </div>
                   </div>
-                ))}
-                {c.chainCost && <div className="fam-chain-cost">{c.chainCost}</div>}
-              </div>
-              <div className="fam-chain-turn">
-                <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
-                <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
-                <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
-                  {ctaLabel}
-                </button>
-              </div>
+                );
+              })}
             </div>
-            <div className="fam-feature-visual">
-              <Image src="/fam/hero.webp" alt="" width={1200} height={800} className="fam-feature-illus" sizes="(max-width: 760px) 92vw, 440px" />
+            <div className="fam-chain-turn">
+              <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
+              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
+              <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
+                {ctaLabel}
+              </button>
             </div>
           </div>
         </section>
@@ -2314,4 +2340,31 @@ const FAM_CSS = `
   .fam-js .fam-band { opacity: 1; transform: none; transition: none; }
   .fam-sticky, .fam-cta { transition: none; }
 }
+
+/* How it works: four steps, each with the real product screen it produces */
+.fam-how-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px 22px;
+  text-align: start;
+  margin: 8px 0 10px;
+}
+@media (min-width: 640px) { .fam-how-steps { grid-template-columns: 1fr 1fr; } }
+.fam-how-step-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.fam-how-num {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(14,165,165,0.12); color: #0b7d7d;
+  font-weight: 800; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.fam-how-text { font-size: 15.5px; font-weight: 700; color: #1f2937; line-height: 1.45; padding-top: 3px; }
+.fam-how-visual .fam-mock { margin: 0; }
+.fam-mock-search-lg { font-size: 17px; padding: 12px 16px; }
+.fam-mock-caret {
+  width: 2px; height: 18px; background: #0EA5A5; border-radius: 1px;
+  margin-inline-start: 2px; animation: fam-caret 1s step-end infinite;
+}
+@keyframes fam-caret { 50% { opacity: 0; } }
+.fam-mock-searchhint { font-size: 12.5px; color: #9ca3af; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .fam-mock-caret { animation: none; } }
 `;

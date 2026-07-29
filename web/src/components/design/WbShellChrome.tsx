@@ -68,10 +68,20 @@ export type NavKey =
   | "notebook"
   | "play"
   | "schools"
+  | "families"
   | "pricing"
   | "affiliates";
 
 type NavLink = { key: NavKey; href: string; label: string };
+
+// "Families" nav label. Kept local rather than in i18n-v2 so we don't have
+// to touch all 14 language blocks for one word (Gadi 2026-07-29: make the
+// three products — individuals, Families, Schools — visible in the top nav).
+const FAMILIES_LABEL: Record<string, string> = {
+  he: "משפחות", en: "Families", ar: "العائلات", ru: "Семьи", es: "Familias",
+  pt: "Famílias", fr: "Familles", de: "Familien", cs: "Rodiny", sk: "Rodiny",
+  it: "Famiglie", ja: "ファミリー", hi: "परिवार", am: "ቤተሰቦች",
+};
 
 function useNavLinks(): NavLink[] {
   const { user, plan } = useAuth();
@@ -83,6 +93,7 @@ function useNavLinks(): NavLink[] {
   ];
   if (paid) links.push({ key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") });
   if (user && plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
+  links.push({ key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en });
   links.push({ key: "schools", href: href("/schools"), label: v2(lang, "navSchools") });
   links.push({ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") });
   if (paid) links.push({ key: "affiliates", href: href("/affiliates"), label: v2(lang, "navAffiliates") });
