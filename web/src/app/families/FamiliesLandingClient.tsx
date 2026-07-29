@@ -109,6 +109,7 @@ type Copy = {
   monthly: string;
   billedYearly: string;
   billedMonthly: string;
+  yearlySave: string;
   priceCta: string;
   cancelNote: string;
   singleChild: string;
@@ -267,6 +268,7 @@ const COPY: Record<"he" | "en", Copy> = {
     monthly: "₪19.90 לחודש",
     billedYearly: "שנתי",
     billedMonthly: "חודשי",
+    yearlySave: "-17%",
     priceCta: "מתחילים את הניסיון",
     cancelNote: "החיוב בשקלים, רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.",
     singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש. בשלושה שקלים נוספים מצרפים עד 5 ילדים.",
@@ -448,6 +450,7 @@ const COPY: Record<"he" | "en", Copy> = {
     monthly: "$5.99 / month",
     billedYearly: "Yearly",
     billedMonthly: "Monthly",
+    yearlySave: "-18%",
     priceCta: "Start the trial",
     cancelNote: "First charge only after the 14 days. Cancel anytime from your account page, one click.",
     singleChild: "Just one student at home? Deep is $4.99/month. For a little more you can add up to 5 kids.",
@@ -811,7 +814,10 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
   const angle: Angle = ANGLES.includes(rawAngle as Angle) ? (rawAngle as Angle) : "vocab";
   const hero = c.angles[angle];
 
-  const [billing, setBilling] = useState<"yearly" | "monthly">("yearly");
+  // Default to MONTHLY (Gadi 2026-07-29): the yearly figure can scare a
+  // cold visitor. Show the small monthly price first; the yearly tab wears
+  // a discount badge so the saving is visible before they even click it.
+  const [billing, setBilling] = useState<"yearly" | "monthly">("monthly");
   const isOwner = !!user && familyId === user.uid;
 
   const viewedRef = useRef(false);
@@ -941,8 +947,13 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
         </header>
       ) : (
         /* Standalone campaign version (/families/landing): brand only,
-           no nav, so a sent link reads as a single product page. */
+           no nav, so a sent link reads as a single product page. A small
+           language switcher sits in the corner so a visitor can change the
+           interface language without a site nav. */
         <header className="fam-topbrand">
+          <div className="fam-topbrand-lang">
+            <LangSwitcher variant="muted" />
+          </div>
           <Link href={href("/")} className="fam-logo-word" aria-label="Gadit" dir="ltr" translate="no">
             Gad<span className="fam-logo-it">it</span>
           </Link>
@@ -1230,6 +1241,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                   onClick={() => setBilling("yearly")}
                 >
                   {c.billedYearly}
+                  <span className="fam-billing-save" dir="ltr">{c.yearlySave}</span>
                 </button>
                 <button
                   type="button"
@@ -1450,7 +1462,9 @@ const FAM_CSS = `
   align-items: center;
   gap: 9px;
   padding: 26px 20px 6px;
+  position: relative;
 }
+.fam-topbrand-lang { position: absolute; top: 14px; inset-inline-end: 16px; }
 /* Matches the real Gadit wordmark from the live site: Inter, dark ink
    "Gad" + teal italic "it" (globals .wb-home-logo). */
 .fam-logo-word {
@@ -2164,6 +2178,13 @@ const FAM_CSS = `
   cursor: pointer;
 }
 .fam-billing-toggle button.is-active { background: #fff; color: #0b7d7d; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.fam-billing-toggle button { display: inline-flex; align-items: center; gap: 6px; }
+.fam-billing-save {
+  background: #10B981; color: #fff;
+  font-size: 10.5px; font-weight: 800;
+  padding: 1px 6px; border-radius: 999px;
+  line-height: 1.5;
+}
 .fam-price-amount { font-size: 36px; font-weight: 800; direction: ltr; }
 .fam-price-note { color: #0b7d7d; font-weight: 700; font-size: 14.5px; margin-top: 2px; margin-bottom: 8px; }
 .fam-price-anchor {

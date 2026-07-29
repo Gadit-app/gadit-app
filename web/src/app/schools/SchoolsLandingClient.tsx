@@ -20,6 +20,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
@@ -1864,6 +1865,11 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           <WbShellBurger active="schools" />
         </div>
       </header>
+      )}
+      {standalone && (
+        <div style={{ position: "fixed", top: 12, insetInlineEnd: 12, zIndex: 50 }}>
+          <LangSwitcher variant="muted" />
+        </div>
       )}
 
       {/* ─── 1. HERO ─────────────────────────────────────────────── */}
