@@ -566,16 +566,16 @@ function MockContext({ he }: { he: boolean }) {
     <div className="fam-mock">
       <div className="fam-mock-sentence">
         {he ? (
-          <>הוא קשר <mark>קשר</mark> חזק בחבל</>
+          <>ה<mark>חלום</mark> שלי הוא להיות רופאה</>
         ) : (
-          <>The <mark>bank</mark> of the river was steep</>
+          <>My biggest <mark>dream</mark> is to be a doctor</>
         )}
       </div>
       <div className="fam-mock-arrow">↓</div>
       <div className="fam-mock-picked">
         <CheckIcon color="#0EA5A5" />
         <span>
-          {he ? "המשמעות כאן: לולאה שמהדקת חבל" : "The meaning here: the side of a river"}
+          {he ? "המשמעות כאן: שאיפה או מטרה שרוצים להגשים" : "The meaning here: a hope or goal you want to reach"}
         </span>
       </div>
     </div>
@@ -583,7 +583,7 @@ function MockContext({ he }: { he: boolean }) {
 }
 
 function MockNotebook({ he }: { he: boolean }) {
-  const words = he ? ["נחוש", "להסס", "מרהיב"] : ["reluctant", "hesitate", "vivid"];
+  const words = he ? ["חלום", "מרהיב", "נחוש"] : ["dream", "vivid", "reluctant"];
   return (
     <div className="fam-mock">
       <div className="fam-mock-nb-title">{he ? "המחברת של נועה" : "Noa's notebook"}</div>
@@ -827,12 +827,12 @@ function MockDefinition({ he }: { he: boolean }) {
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{he ? "נחוש" : "reluctant"}</span>
+        <SearchIcon /> <span>{he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-mock-bubble">
         {he
-          ? "\"נחוש\" זה כשמחליטים משהו חזק חזק בלב, וממשיכים גם כשקשה. כמו כשמתאמנים על אופניים ולא מוותרים עד שמצליחים."
-          : "\"Reluctant\" is when you don't really want to do something, so your feet go slow. Like walking to the dentist."}
+          ? "\"חלום\" זה התמונות והסיפורים שרצים בראש כשישנים. לפעמים שמחים, לפעמים מוזרים, והם נעלמים כשמתעוררים."
+          : "\"Dream\" is the pictures and stories that run through your head while you sleep. Sometimes happy, sometimes strange, and they fade when you wake up."}
       </div>
     </div>
   );
@@ -841,12 +841,12 @@ function MockDefinition({ he }: { he: boolean }) {
 /** Examples block: three real sentences with the word. */
 function MockExamples({ he }: { he: boolean }) {
   const ex = he
-    ? ["\"הספן היה נחוש להגיע אל האי.\"", "\"היא נחושה לסיים את הספר עוד הערב.\"", "\"נחוש בדעתו, הוא לא ויתר.\""]
-    : ["\"The sailor was reluctant to leave.\"", "\"She was reluctant to try again.\"", "\"He gave a reluctant nod.\""];
+    ? ["\"בלילה חלמתי חלום על מסע רחוק.\"", "\"היא התעוררה מחלום מפחיד.\"", "\"החלום הגדול שלו הוא לטוס לחלל.\""]
+    : ["\"Last night I had a dream about a long journey.\"", "\"She woke up from a scary dream.\"", "\"His big dream is to fly to space.\""];
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{he ? "נחוש" : "reluctant"}</span>
+        <SearchIcon /> <span>{he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-mock-examples">
         {ex.map((e, i) => (
@@ -865,10 +865,10 @@ function MockQuiz({ he }: { he: boolean }) {
   return (
     <div className="fam-mock">
       <div className="fam-mock-quiz fam-mock-quiz-solo">
-        <div className="fam-mock-quiz-q">{he ? "מה פירוש \"נחוש\"?" : "What does \"reluctant\" mean?"}</div>
-        <div className="fam-mock-quiz-opt is-right">{he ? "החלטי, שלא מוותר" : "Not really wanting to"}</div>
-        <div className="fam-mock-quiz-opt">{he ? "עצוב מאוד" : "Very fast"}</div>
-        <div className="fam-mock-quiz-opt">{he ? "מהיר מאוד" : "Very loud"}</div>
+        <div className="fam-mock-quiz-q">{he ? "מה פירוש \"חלום\"?" : "What does \"dream\" mean?"}</div>
+        <div className="fam-mock-quiz-opt is-right">{he ? "תמונות ומחשבות בזמן השינה" : "Images and thoughts during sleep"}</div>
+        <div className="fam-mock-quiz-opt">{he ? "סוג של עוגה" : "A kind of cake"}</div>
+        <div className="fam-mock-quiz-opt">{he ? "כלי נגינה" : "A musical instrument"}</div>
       </div>
     </div>
   );
