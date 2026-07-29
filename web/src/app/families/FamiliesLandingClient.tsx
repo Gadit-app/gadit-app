@@ -1154,7 +1154,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
              product), so it is now a POSITIVE 4-step of the actual flow,
              ending in the visible-progress payoff + CTA. */}
         <section className="fam-band fam-band-white">
-          <div className="fam-section fam-center">
+          <div className="fam-section fam-center fam-section-wide">
             <div className="fam-kicker">{c.chainKicker}</div>
             <h2 className="fam-h2">{c.chainTitle}</h2>
             <div className="fam-how-steps">
@@ -2513,15 +2513,25 @@ const FAM_CSS = `
   .fam-sticky, .fam-cta { transition: none; }
 }
 
-/* How it works: four steps, each with the real product screen it produces */
+/* How it works: one block per feature, each with a real product screen.
+   Two rows of four on desktop; every card the same height via
+   grid-auto-rows:1fr + a flex column that stretches the mock (Gadi
+   2026-07-29). */
+.fam-section-wide { max-width: 1140px; }
 .fam-how-steps {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 28px 22px;
+  grid-auto-rows: 1fr;
+  gap: 26px 18px;
   text-align: start;
-  margin: 8px 0 10px;
+  margin: 10px 0 12px;
 }
-@media (min-width: 640px) { .fam-how-steps { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 560px) { .fam-how-steps { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .fam-how-steps { grid-template-columns: repeat(4, 1fr); } }
+.fam-how-step { display: flex; flex-direction: column; height: 100%; }
+.fam-how-visual { flex: 1; display: flex; }
+.fam-how-visual .fam-mock { flex: 1; margin: 0; }
+.fam-how-body { flex-shrink: 0; }
 .fam-how-step-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
 .fam-how-num {
   flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
