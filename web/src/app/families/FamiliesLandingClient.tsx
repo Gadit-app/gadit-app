@@ -262,10 +262,10 @@ const COPY: Record<"he" | "en", Copy> = {
     priceKicker: "התמחור",
     priceTitle: "מסלול המשפחה",
     trialBadge: "14 ימי ניסיון חינם",
-    yearly: "₪199 לשנה",
+    yearly: "199 ₪ לשנה",
     yearlyNote: "פחות מ-17 ₪ לחודש לכל המשפחה, וחוסכים קרוב לחודשיים לעומת התשלום החודשי",
     priceAnchor: "פחות משיעור פרטי אחד, לשנה שלמה, לכל הילדים בבית",
-    monthly: "₪19.90 לחודש",
+    monthly: "19.90 ₪ לחודש",
     billedYearly: "שנתי",
     billedMonthly: "חודשי",
     yearlySave: "-17%",
@@ -1241,21 +1241,21 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                 <button
                   type="button"
                   role="tab"
+                  aria-selected={billing === "monthly"}
+                  className={billing === "monthly" ? "is-active" : ""}
+                  onClick={() => setBilling("monthly")}
+                >
+                  {c.billedMonthly}
+                </button>
+                <button
+                  type="button"
+                  role="tab"
                   aria-selected={billing === "yearly"}
                   className={billing === "yearly" ? "is-active" : ""}
                   onClick={() => setBilling("yearly")}
                 >
                   {c.billedYearly}
                   <span className="fam-billing-save" dir="ltr">{c.yearlySave}</span>
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={billing === "monthly"}
-                  className={billing === "monthly" ? "is-active" : ""}
-                  onClick={() => setBilling("monthly")}
-                >
-                  {c.billedMonthly}
                 </button>
               </div>
 
@@ -2190,7 +2190,9 @@ const FAM_CSS = `
   padding: 1px 6px; border-radius: 999px;
   line-height: 1.5;
 }
-.fam-price-amount { font-size: 36px; font-weight: 800; direction: ltr; }
+/* Follow the page direction so Hebrew reads "19.90 ₪ לחודש" (number on
+   the right, unit on the left) rather than the LTR "לחודש 19.90 ₪". */
+.fam-price-amount { font-size: 36px; font-weight: 800; }
 .fam-price-note { color: #0b7d7d; font-weight: 700; font-size: 14.5px; margin-top: 2px; margin-bottom: 8px; }
 .fam-price-anchor {
   color: #6b7280;
