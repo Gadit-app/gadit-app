@@ -1724,7 +1724,7 @@ const COPY: Record<string, T> = {
 const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
 const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
 
-export function SchoolsLandingClient() {
+export function SchoolsLandingClient({ standalone = false }: { standalone?: boolean } = {}) {
   const { user, schoolId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
@@ -1812,8 +1812,9 @@ export function SchoolsLandingClient() {
           the active page. Smart routing: for users who already own a
           schools subscription, the Schools link points at their
           dashboard so they don't get bounced from the marketing copy. */}
+      {!standalone && (
       <header className="wb-shell-topbar">
-        <Link href={href("/")} className="wb-wordmark" dir="ltr">
+        <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
         <WbShellNav active="schools" />
@@ -1863,6 +1864,7 @@ export function SchoolsLandingClient() {
           <WbShellBurger active="schools" />
         </div>
       </header>
+      )}
 
       {/* ─── 1. HERO ─────────────────────────────────────────────── */}
       <section className="wb-schools-hero">

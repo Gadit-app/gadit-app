@@ -35,9 +35,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function FamiliesPage() {
+  // In-site version: WITH the top nav, so it lives inside the site and the
+  // three products (individuals, Families, Schools) stay reachable. The
+  // no-nav campaign version lives at /families/landing.
   return (
     <Suspense fallback={null}>
-      <FamiliesLandingClient />
+      <FamiliesLandingClient withNav />
     </Suspense>
   );
 }

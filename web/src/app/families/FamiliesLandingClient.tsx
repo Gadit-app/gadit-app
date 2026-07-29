@@ -8,6 +8,11 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
+import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
+import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { LangSwitcher } from "@/components/design/LangSwitcher";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 
 /**
  * Family-plan campaign landing page, v2 (2026-07-16).
@@ -792,7 +797,7 @@ const FEATURE_IMG: Array<string | null> = [
 
 /* ────────────────────────── page ────────────────────────── */
 
-export default function FamiliesLandingClient() {
+export default function FamiliesLandingClient({ withNav = false }: { withNav?: boolean }) {
   const params = useSearchParams();
   const { user, familyId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -901,12 +906,49 @@ export default function FamiliesLandingClient() {
     <div dir={dir} className="fam-page" ref={rootRef}>
       <style>{FAM_CSS}</style>
 
-      <header className="fam-topbrand">
-        <Link href={href("/")} className="fam-logo-word" aria-label="Gadit" dir="ltr">
-          Gad<span className="fam-logo-it">it</span>
-        </Link>
-        <div className="fam-topbrand-tagline">{c.heroBadge}</div>
-      </header>
+      {withNav ? (
+        /* In-site version (/families): the full Gadit topbar, matching
+           /schools, so the three products stay reachable from the nav. */
+        <header className="wb-shell-topbar">
+          <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
+            Gad<span className="wb-wordmark-it">it</span>
+          </Link>
+          <WbShellNav active="families" />
+          <div className="wb-shell-actions">
+            <LangSwitcher />
+            {user ? (
+              <WbUserMenu />
+            ) : (
+              <>
+                <StartFreeCTA />
+                <button
+                  type="button"
+                  className="wb-shell-link"
+                  onClick={() => promptLogin({ mode: "signin" })}
+                >
+                  Sign in
+                </button>
+              </>
+            )}
+          </div>
+          <div className="wb-shell-mobile-cta">
+            <StartFreeCTA />
+          </div>
+          <div className="wb-shell-mobile-menu-cluster">
+            <LangSwitchMobile />
+            <WbShellBurger active="families" />
+          </div>
+        </header>
+      ) : (
+        /* Standalone campaign version (/families/landing): brand only,
+           no nav, so a sent link reads as a single product page. */
+        <header className="fam-topbrand">
+          <Link href={href("/")} className="fam-logo-word" aria-label="Gadit" dir="ltr" translate="no">
+            Gad<span className="fam-logo-it">it</span>
+          </Link>
+          <div className="fam-topbrand-tagline">{c.heroBadge}</div>
+        </header>
+      )}
 
       <main>
         {/* 1 · Hero — for a COLD visitor: category first (badge),
