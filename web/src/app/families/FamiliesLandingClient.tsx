@@ -77,6 +77,7 @@ type Copy = {
   chainKicker: string;
   chainTitle: string;
   chainSteps: string[];
+  howBlocks: Array<{ t: string; b: string }>;
   chainCost: string;
   chainTurnTitle: string;
   chainTurnBody: string;
@@ -173,12 +174,22 @@ const COPY: Record<"he" | "en", Copy> = {
     puzzleAfter: "עם Gadit, כל חתיכה במקום",
     puzzleLine: "כשכל המילים ברורות, הילד רואה את התמונה השלמה.",
     chainKicker: "איך זה עובד",
-    chainTitle: "מחיפוש למילה שהילד יודע, בארבעה צעדים",
+    chainTitle: "על כל מילה, הילד מקבל את כל זה",
     chainSteps: [
       "הילד מקליד מילה שהוא לא מבין",
       "מקבל הסבר בגובה העיניים שלו, תמונה ושלוש דוגמאות",
       "המילה נשמרת במחברת האישית שלו",
       "וחוזרת בתרגול קצר, עד שהיא באמת שלו",
+    ],
+    howBlocks: [
+      { t: "הקלדת המילה", b: "הילד מקליד כל מילה שהוא לא מבין, במצב ילדים, במקום נקי ובטוח." },
+      { t: "הגדרה ברורה", b: "הסבר בגובה העיניים של הילד, בלי מילים קשות שמסבירות מילים קשות." },
+      { t: "שלוש דוגמאות", b: "משפטים אמיתיים שמראים איך המילה חיה בתוך טקסט, לא רק הגדרה יבשה." },
+      { t: "תמונה לכל משמעות", b: "כי ילדים זוכרים מה שהם רואים, הרבה יותר טוב ממה שכתוב להם." },
+      { t: "הבנת הקשר", b: "מדביקים משפט מהספר, ו-Gadit מסמן בדיוק את המשמעות שמתאימה לו." },
+      { t: "מחברת אישית", b: "כל מילה שהילד חיפש נשמרת במחברת שלו, ולא בורחת." },
+      { t: "חידון קצר", b: "שאלה קצרה שמחזירה את המילה בדיוק כשהיא עומדת להישכח." },
+      { t: "משחק", b: "לומדים תוך כדי משחק, על המילים שהילד עצמו חיפש." },
     ],
     chainCost: "",
     chainTurnTitle: "וזה מה שאתם מקבלים",
@@ -355,12 +366,22 @@ const COPY: Record<"he" | "en", Copy> = {
     puzzleAfter: "With Gadit, every piece in place",
     puzzleLine: "When every word is clear, the child sees the whole picture.",
     chainKicker: "How it works",
-    chainTitle: "From a search to a word your child knows, in four steps",
+    chainTitle: "Everything your child gets, on every word",
     chainSteps: [
       "Your child types a word they do not understand",
       "They get an explanation at their eye level, a picture and three examples",
       "The word is saved in their personal notebook",
       "And comes back in short practice, until it is truly theirs",
+    ],
+    howBlocks: [
+      { t: "Type the word", b: "Your child types any word they don't understand, in Kids Mode, in a clean and safe place." },
+      { t: "A clear definition", b: "An explanation at the child's eye level, no hard words explaining hard words." },
+      { t: "Three examples", b: "Real sentences that show how the word lives inside a text, not just a dry definition." },
+      { t: "A picture for every meaning", b: "Because children remember what they see far better than what is written to them." },
+      { t: "Context", b: "Paste a sentence from the book and Gadit marks exactly the meaning that fits it." },
+      { t: "A personal notebook", b: "Every word your child looked up is saved in their notebook, and doesn't run away." },
+      { t: "A short quiz", b: "A quick question that brings the word back right before it slips away." },
+      { t: "A game", b: "Learning through play, on the words your child looked up themselves." },
     ],
     chainCost: "",
     chainTurnTitle: "And this is what you get",
@@ -573,11 +594,6 @@ function MockNotebook({ he }: { he: boolean }) {
           {i === 2 && <span className="fam-mock-nb-due">{he ? "לתרגול היום" : "practice today"}</span>}
         </div>
       ))}
-      <div className="fam-mock-quiz">
-        <div className="fam-mock-quiz-q">{he ? "מה פירוש \"נחוש\"?" : "What does \"vivid\" mean?"}</div>
-        <div className="fam-mock-quiz-opt is-right">{he ? "החלטי, שלא מוותר" : "Bright and lifelike"}</div>
-        <div className="fam-mock-quiz-opt">{he ? "עצוב מאוד" : "Very quiet"}</div>
-      </div>
     </div>
   );
 }
@@ -806,12 +822,67 @@ function MockPicture({ he }: { he: boolean }) {
   );
 }
 
+/** Definition block: the kid-level meaning, on its own. */
+function MockDefinition({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-search">
+        <SearchIcon /> <span>{he ? "נחוש" : "reluctant"}</span>
+      </div>
+      <div className="fam-mock-bubble">
+        {he
+          ? "\"נחוש\" זה כשמחליטים משהו חזק חזק בלב, וממשיכים גם כשקשה. כמו כשמתאמנים על אופניים ולא מוותרים עד שמצליחים."
+          : "\"Reluctant\" is when you don't really want to do something, so your feet go slow. Like walking to the dentist."}
+      </div>
+    </div>
+  );
+}
+
+/** Examples block: three real sentences with the word. */
+function MockExamples({ he }: { he: boolean }) {
+  const ex = he
+    ? ["\"הספן היה נחוש להגיע אל האי.\"", "\"היא נחושה לסיים את הספר עוד הערב.\"", "\"נחוש בדעתו, הוא לא ויתר.\""]
+    : ["\"The sailor was reluctant to leave.\"", "\"She was reluctant to try again.\"", "\"He gave a reluctant nod.\""];
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-search">
+        <SearchIcon /> <span>{he ? "נחוש" : "reluctant"}</span>
+      </div>
+      <div className="fam-mock-examples">
+        {ex.map((e, i) => (
+          <div key={i} className="fam-mock-ex-row">
+            <span className="fam-mock-ex-num">{i + 1}</span>
+            <span>{e}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Quiz block: a short practice question on its own. */
+function MockQuiz({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-quiz fam-mock-quiz-solo">
+        <div className="fam-mock-quiz-q">{he ? "מה פירוש \"נחוש\"?" : "What does \"reluctant\" mean?"}</div>
+        <div className="fam-mock-quiz-opt is-right">{he ? "החלטי, שלא מוותר" : "Not really wanting to"}</div>
+        <div className="fam-mock-quiz-opt">{he ? "עצוב מאוד" : "Very fast"}</div>
+        <div className="fam-mock-quiz-opt">{he ? "מהיר מאוד" : "Very loud"}</div>
+      </div>
+    </div>
+  );
+}
+
 const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
 
-// The four how-it-works steps, each paired with the real product screen it
-// produces: type a word, get the explanation WITH A PICTURE and examples,
-// the word is saved in the notebook, it comes back in practice (quiz/game).
-const HOW_MOCKS = [MockSearch, MockPicture, MockNotebook, MockGames];
+// One block per feature, in order, each with its own real product screen
+// (Gadi 2026-07-29: separate every feature so each gets its own space).
+// type → definition → examples → picture → context → notebook → quiz → game.
+const HOW_MOCKS = [
+  MockSearch, MockDefinition, MockExamples, MockPicture,
+  MockContext, MockNotebook, MockQuiz, MockGames,
+];
 
 // Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
 // /public/fam as compressed WebP). One per feature; the 7th (English
@@ -1087,17 +1158,18 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <div className="fam-kicker">{c.chainKicker}</div>
             <h2 className="fam-h2">{c.chainTitle}</h2>
             <div className="fam-how-steps">
-              {c.chainSteps.map((s, i) => {
+              {c.howBlocks.map((blk, i) => {
                 const Mock = HOW_MOCKS[i] ?? HOW_MOCKS[0];
                 return (
                   <div key={i} className="fam-how-step">
                     <div className="fam-how-step-head">
                       <span className="fam-how-num">{i + 1}</span>
-                      <span className="fam-how-text">{s}</span>
+                      <span className="fam-how-text">{blk.t}</span>
                     </div>
                     <div className="fam-how-visual">
                       <Mock he={he} />
                     </div>
+                    <p className="fam-how-body">{blk.b}</p>
                   </div>
                 );
               })}
@@ -2468,5 +2540,15 @@ const FAM_CSS = `
 .fam-mock-searchhint { font-size: 12.5px; color: #9ca3af; font-weight: 500; }
 .fam-mock-pic { border-radius: 14px; height: 120px; }
 .fam-mock-pic svg { width: 46px; height: 46px; }
+.fam-how-body { font-size: 13.5px; color: #6b7280; line-height: 1.55; margin: 12px 0 0; }
+.fam-mock-examples { display: flex; flex-direction: column; gap: 8px; }
+.fam-mock-ex-row { display: flex; gap: 9px; align-items: flex-start; font-size: 13.5px; color: #374151; line-height: 1.5; }
+.fam-mock-ex-num {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(14,165,165,0.1); color: #0b7d7d;
+  font-weight: 800; font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+}
+.fam-mock-quiz-solo { border-top: none; padding-top: 0; }
 @media (prefers-reduced-motion: reduce) { .fam-mock-caret { animation: none; } }
 `;
