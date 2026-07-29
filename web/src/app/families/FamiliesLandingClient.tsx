@@ -914,37 +914,42 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
 
       {withNav ? (
         /* In-site version (/families): the full Gadit topbar, matching
-           /schools, so the three products stay reachable from the nav. */
-        <header className="wb-shell-topbar">
-          <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
-            Gad<span className="wb-wordmark-it">it</span>
-          </Link>
-          <WbShellNav active="families" />
-          <div className="wb-shell-actions">
-            <LangSwitcher />
-            {user ? (
-              <WbUserMenu />
-            ) : (
-              <>
-                <StartFreeCTA />
-                <button
-                  type="button"
-                  className="wb-shell-link"
-                  onClick={() => promptLogin({ mode: "signin" })}
-                >
-                  Sign in
-                </button>
-              </>
-            )}
-          </div>
-          <div className="wb-shell-mobile-cta">
-            <StartFreeCTA />
-          </div>
-          <div className="wb-shell-mobile-menu-cluster">
-            <LangSwitchMobile />
-            <WbShellBurger active="families" />
-          </div>
-        </header>
+           /schools. Wrapped in a .wordbook context because the topbar CSS
+           is scoped under .wordbook — the families page is .fam-page, so
+           without this wrapper the nav collapsed into an unstyled cluster
+           (Gadi 2026-07-29). The wrapper only carries fonts/vars, no box. */
+        <div className="wordbook" dir={dir}>
+          <header className="wb-shell-topbar">
+            <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
+              Gad<span className="wb-wordmark-it">it</span>
+            </Link>
+            <WbShellNav active="families" />
+            <div className="wb-shell-actions">
+              <LangSwitcher />
+              {user ? (
+                <WbUserMenu />
+              ) : (
+                <>
+                  <StartFreeCTA />
+                  <button
+                    type="button"
+                    className="wb-shell-link"
+                    onClick={() => promptLogin({ mode: "signin" })}
+                  >
+                    Sign in
+                  </button>
+                </>
+              )}
+            </div>
+            <div className="wb-shell-mobile-cta">
+              <StartFreeCTA />
+            </div>
+            <div className="wb-shell-mobile-menu-cluster">
+              <LangSwitchMobile />
+              <WbShellBurger active="families" />
+            </div>
+          </header>
+        </div>
       ) : (
         /* Standalone campaign version (/families/landing): brand only,
            no nav, so a sent link reads as a single product page. A small
