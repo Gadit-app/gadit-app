@@ -776,12 +776,42 @@ function MockSearch({ he }: { he: boolean }) {
   );
 }
 
+/** Step 2 of the how-it-works flow: the meaning, shown with a PROMINENT
+ *  picture (Gadi 2026-07-29 — the picture is the heart of the product and
+ *  was barely visible as tiny icons before). A big illustrated card, the
+ *  kid-level meaning, and an example. */
+function MockPicture({ he }: { he: boolean }) {
+  return (
+    <div className="fam-mock">
+      <div className="fam-mock-search">
+        <SearchIcon /> <span>{he ? "חלום" : "dream"}</span>
+      </div>
+      <div className="fam-ph-pic fam-mock-pic" aria-hidden>
+        <MoonIcon />
+        <span className="fam-ph-star fam-ph-star-1" />
+        <span className="fam-ph-star fam-ph-star-2" />
+        <span className="fam-ph-star fam-ph-star-3" />
+      </div>
+      <div className="fam-mock-meaning">
+        <div>
+          <div className="fam-mock-meaning-t">
+            {he ? "תמונות ומחשבות שעוברות בראש בזמן השינה" : "Images and thoughts that pass through the mind during sleep"}
+          </div>
+          <div className="fam-mock-meaning-ex">
+            {he ? "\"בלילה חלמתי חלום על מסע רחוק.\"" : "\"Last night I had a dream about a far journey.\""}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
 
 // The four how-it-works steps, each paired with the real product screen it
-// produces: type a word, get the explanation with a picture and examples,
-// the word is saved in the notebook, it comes back in practice.
-const HOW_MOCKS = [MockSearch, MockMeanings, MockNotebook, MockGames];
+// produces: type a word, get the explanation WITH A PICTURE and examples,
+// the word is saved in the notebook, it comes back in practice (quiz/game).
+const HOW_MOCKS = [MockSearch, MockPicture, MockNotebook, MockGames];
 
 // Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
 // /public/fam as compressed WebP). One per feature; the 7th (English
@@ -2436,5 +2466,7 @@ const FAM_CSS = `
 }
 @keyframes fam-caret { 50% { opacity: 0; } }
 .fam-mock-searchhint { font-size: 12.5px; color: #9ca3af; font-weight: 500; }
+.fam-mock-pic { border-radius: 14px; height: 120px; }
+.fam-mock-pic svg { width: 46px; height: 46px; }
 @media (prefers-reduced-motion: reduce) { .fam-mock-caret { animation: none; } }
 `;
