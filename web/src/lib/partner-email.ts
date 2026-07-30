@@ -27,8 +27,8 @@ export type WelcomeConfig = { he: WelcomeLangConfig; en: WelcomeLangConfig };
 export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   he: {
     subject: "הצטרפת לתוכנית השותפים של Gadit 🎉",
-    intro: "היי {name}, ברוכים הבאים לתוכנית השותפים של Gadit. הנה הקישור האישי שלכם:",
-    shareLine: "שתפו את הקישור. על כל מי שיירשם וישלם דרכו, תקבלו {rateYearOne}% עמלה חוזרת בשנה הראשונה, ו-{rateLifetime}% לכל החיים.",
+    intro: "היי {name}, כיף שהצטרפת לתוכנית השותפים של Gadit. הנה הקישור האישי שלך:",
+    shareLine: "כל מי שנרשם ומשלם דרך הקישור שלך מזכה אותך ב-{rateYearOne}% עמלה חוזרת בשנה הראשונה, ו-{rateLifetime}% לכל החיים.",
   },
   en: {
     subject: "You're in — Gadit Partner Program 🎉",
@@ -70,12 +70,12 @@ export function buildWelcomeEmail(
   const vars = { name: partner.name, y1, life };
   const link = `${SITE}/p/${partner.code}`;
   const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
-  const linkLabel = he ? "הקישור שלכם" : "Your link";
-  const codeLabel = he ? "קוד השותף שלכם" : "Your partner code";
+  const linkLabel = he ? "הקישור שלך" : "Your link";
+  const codeLabel = he ? "קוד השותף שלך" : "Your partner code";
   const cta = he ? "פתיחת האזור האישי" : "Open your dashboard";
   const foot = he
-    ? "שמרו את הקישור הזה — הוא הכניסה הפרטית לאזור שלכם, בלי סיסמה."
-    : "Keep this link — it's your private, password-less way back into your dashboard.";
+    ? "כדאי לשמור את הקישור הזה. זו הכניסה הפרטית לאזור שלך, בלי סיסמה."
+    : "Keep this link. It's your private, password-less way back into your dashboard.";
 
   // Subject is a single plain-text line — collapse any stray newlines.
   const subject = applyVars(c.subject, vars).replace(/&amp;/g, "&").replace(/\s*\n\s*/g, " ");
