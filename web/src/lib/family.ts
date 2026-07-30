@@ -70,7 +70,7 @@ export function generateSixDigitCode(): string {
 }
 
 /** Pairing codes are valid for 15 minutes — mirrors Yooniz. */
-export const PAIRING_CODE_TTL_MS = 15 * 60 * 1000;
+export const PAIRING_CODE_TTL_MS = 30 * 60 * 1000;
 
 /** Cap on number of children per Family subscription. Parents don't
  *  count toward this cap. Set to 5 (Gadi 2026-06-26) — high enough to

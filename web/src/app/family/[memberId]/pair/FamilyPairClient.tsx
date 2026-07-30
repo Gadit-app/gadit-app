@@ -24,7 +24,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { db } from "@/lib/firebase";
-import { FamilyMember } from "@/lib/family";
+import { FamilyMember, PAIRING_CODE_TTL_MS } from "@/lib/family";
 
 const COPY: Record<string, {
   title: string;
@@ -173,7 +173,11 @@ export function FamilyPairClient() {
       const data = await res.json();
       if (data.code) {
         setCode(data.code);
-        setExpiresAt(data.expiresAt);
+        // Base the countdown on the CLIENT clock, not the server's absolute
+        // expiresAt: a device whose clock runs ahead was showing "expired"
+        // the instant the code was generated (Sheli, 2026-07-30). The server
+        // still validates the real expiry against its own clock on redeem.
+        setExpiresAt(Date.now() + PAIRING_CODE_TTL_MS);
       }
     } catch (e) {
       console.error("generate code failed:", e);

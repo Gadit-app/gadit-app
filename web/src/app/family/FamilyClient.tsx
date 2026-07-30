@@ -153,6 +153,7 @@ const PROGRESS_COPY: Record<string, {
   thisWeek: string;
   recentWords: string;
   notLinked: string;
+  pairCta: string;
   noneYet: string;
   loading: string;
 }> = {
@@ -165,6 +166,7 @@ const PROGRESS_COPY: Record<string, {
     thisWeek: "השבוע",
     recentWords: "מילים אחרונות",
     notLinked: "המכשיר של הילד עדיין לא מחובר. חברו אותו כדי לראות את ההתקדמות.",
+    pairCta: "חיבור מכשיר",
     noneYet: "עדיין אין מילים במחברת. ברגע שהילד יתחיל לחפש, הן יופיעו כאן.",
     loading: "טוענים את ההתקדמות...",
   },
@@ -177,12 +179,14 @@ const PROGRESS_COPY: Record<string, {
     thisWeek: "this week",
     recentWords: "Recent words",
     notLinked: "This child's device is not linked yet. Pair it to see their progress.",
+    pairCta: "Pair device",
     noneYet: "No words in the notebook yet. As soon as your child starts looking words up, they appear here.",
     loading: "Loading progress...",
   },
 };
 
 function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string }) {
+  const href = useHref();
   const color = memberColorFor({ colorIndex: c.colorIndex });
   const initial = (c.name || "?").trim().charAt(0).toUpperCase() || "?";
   const roleName = (ROLE_LABEL[lang] ?? ROLE_LABEL.en)[c.role as "boy" | "girl"] ?? "";
@@ -196,7 +200,10 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
         </div>
       </div>
       {!c.linked ? (
-        <div className="fam-dash-note">{t.notLinked}</div>
+        <>
+          <div className="fam-dash-note">{t.notLinked}</div>
+          <Link href={href(`/family/${c.memberId}/pair`)} className="fam-dash-pair">{t.pairCta}</Link>
+        </>
       ) : c.total === 0 ? (
         <div className="fam-dash-note">{t.noneYet}</div>
       ) : (
@@ -718,6 +725,15 @@ const FAM_DASH_CSS = `
 .fam-dash-name { font-weight: 700; font-size: 16px; color: #1f2937; }
 .fam-dash-role { font-size: 12.5px; color: #9ca3af; }
 .fam-dash-note { color: #6b7280; font-size: 13.5px; line-height: 1.5; padding: 4px 0; }
+.fam-dash-pair {
+  display: inline-block; margin-top: 10px;
+  background: #0EA5A5; color: #fff; text-decoration: none;
+  font-weight: 700; font-size: 13.5px;
+  padding: 8px 16px; border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(14,165,165,0.22);
+  transition: transform 160ms ease-out;
+}
+.fam-dash-pair:active { transform: scale(0.97); }
 .fam-dash-stats { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
 .fam-dash-big { display: flex; flex-direction: column; }
 .fam-dash-num { font-size: 34px; font-weight: 800; color: #0b7d7d; line-height: 1; }
