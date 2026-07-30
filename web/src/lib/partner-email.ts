@@ -48,6 +48,13 @@ function applyVars(s: string, v: { name: string; y1: number; life: number }): st
     .replace(/\{rateLifetime\}/g, String(v.life));
 }
 
+/** Body fields: keep the admin's line breaks. Each newline the admin typed
+ *  in the textarea becomes a <br>, so pressing Enter (or Enter twice for a
+ *  blank line) shows up in the email exactly as written. */
+function applyVarsHtml(s: string, v: { name: string; y1: number; life: number }): string {
+  return applyVars(s, v).replace(/\r\n/g, "\n").replace(/\n/g, "<br>");
+}
+
 type WelcomePartner = Pick<Partner, "code" | "name" | "email" | "dashboardToken" | "rateYearOne" | "rateLifetime">;
 
 /** Pure builder — used both to send and to preview. */
@@ -70,7 +77,8 @@ export function buildWelcomeEmail(
     ? "שמרו את הקישור הזה — הוא הכניסה הפרטית לאזור שלכם, בלי סיסמה."
     : "Keep this link — it's your private, password-less way back into your dashboard.";
 
-  const subject = applyVars(c.subject, vars).replace(/&amp;/g, "&"); // subject is plain text
+  // Subject is a single plain-text line — collapse any stray newlines.
+  const subject = applyVars(c.subject, vars).replace(/&amp;/g, "&").replace(/\s*\n\s*/g, " ");
   const html = `<!DOCTYPE html><html dir="${he ? "rtl" : "ltr"}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
   <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
     <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;">
@@ -78,12 +86,12 @@ export function buildWelcomeEmail(
       <div style="font-size:22px;font-weight:700;margin-top:4px;">${he ? "שותף חדש" : "Partner"}</div>
     </div>
     <div style="padding:24px;font-size:15px;line-height:1.6;">
-      <p style="margin:0 0 16px;">${applyVars(c.intro, vars)}</p>
+      <p style="margin:0 0 16px;">${applyVarsHtml(c.intro, vars)}</p>
       <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">${linkLabel}</p>
       <p style="margin:0 0 20px;"><a href="${link}" style="font-size:18px;font-weight:700;color:#0EA5A5;">${link}</a></p>
       <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">${codeLabel}</p>
       <p style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:2px;">${partner.code}</p>
-      <p style="margin:0 0 20px;">${applyVars(c.shareLine, vars)}</p>
+      <p style="margin:0 0 20px;">${applyVarsHtml(c.shareLine, vars)}</p>
       <div style="margin-top:8px;text-align:center;">
         <a href="${dash}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:11px 26px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">${cta}</a>
       </div>
