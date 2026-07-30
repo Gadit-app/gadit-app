@@ -71,6 +71,16 @@ const T = {
     sent: "Sent ✓",
     confirmPaid: "Mark all released (payable) commissions as PAID for this partner? This records that you've sent the money.",
     suspended: "Suspended",
+    emailTitle: "Edit the welcome email",
+    emailHint: "Sent to a partner the moment they join. The link, code and dashboard button are always added automatically.",
+    emailSubject: "Subject",
+    emailIntro: "Opening paragraph",
+    emailShare: "Share line",
+    emailVars: "Placeholders: {name}, {rateYearOne}, {rateLifetime}",
+    emailSave: "Save email",
+    emailSaving: "Saving…",
+    emailSaved: "Saved ✓",
+    emailPreview: "Preview",
   },
   he: {
     title: "שותפים",
@@ -109,8 +119,21 @@ const T = {
     sent: "נשלח ✓",
     confirmPaid: "לסמן את כל העמלות ששוחררו (לתשלום) של השותף הזה כשולמו? זה התיעוד שהעברת את הכסף.",
     suspended: "מושהה",
+    emailTitle: "עריכת מייל הפתיחה",
+    emailHint: "נשלח לשותף ברגע שהוא מצטרף. הקישור, הקוד וכפתור האזור האישי תמיד מתווספים אוטומטית.",
+    emailSubject: "נושא",
+    emailIntro: "פסקת פתיחה",
+    emailShare: "משפט השיתוף",
+    emailVars: "משתנים: {name}, {rateYearOne}, {rateLifetime}",
+    emailSave: "שמירת המייל",
+    emailSaving: "שומר…",
+    emailSaved: "נשמר ✓",
+    emailPreview: "תצוגה מקדימה",
   },
 };
+
+type LangCfg = { subject: string; intro: string; shareLine: string };
+type WelcomeCfg = { he: LangCfg; en: LangCfg };
 
 const CUR_SYMBOL: Record<string, string> = { ils: "₪", usd: "$", eur: "€", gbp: "£" };
 function money(minor: number, currency: string): string {
@@ -141,12 +164,45 @@ export default function AdminPartnersClient() {
   const [addState, setAddState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [addErr, setAddErr] = useState("");
 
+  // Welcome-email editor
+  const [cfg, setCfg] = useState<WelcomeCfg | null>(null);
+  const [previews, setPreviews] = useState<{ he: string; en: string }>({ he: "", en: "" });
+  const [editLang, setEditLang] = useState<"he" | "en">(lang);
+  const [emailState, setEmailState] = useState<"idle" | "saving" | "saved">("idle");
+
   const load = useCallback(async () => {
     const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`);
     if (res.ok) setRows((await res.json()).partners ?? []);
   }, [secret]);
 
-  useEffect(() => { void load(); }, [load]);
+  const loadConfig = useCallback(async () => {
+    const res = await fetch(`/api/admin/partner-config?secret=${encodeURIComponent(secret)}`);
+    if (res.ok) {
+      const d = await res.json();
+      setCfg(d.config);
+      setPreviews({ he: d.previewHe, en: d.previewEn });
+    }
+  }, [secret]);
+
+  useEffect(() => { void load(); void loadConfig(); }, [load, loadConfig]);
+
+  function setCfgField(field: keyof LangCfg, value: string) {
+    setCfg((prev) => (prev ? { ...prev, [editLang]: { ...prev[editLang], [field]: value } } : prev));
+    setEmailState("idle");
+  }
+
+  async function saveConfig() {
+    if (!cfg) return;
+    setEmailState("saving");
+    await fetch(`/api/admin/partner-config?secret=${encodeURIComponent(secret)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [editLang]: cfg[editLang] }),
+    });
+    await loadConfig();
+    setEmailState("saved");
+    setTimeout(() => setEmailState("idle"), 1600);
+  }
 
   async function createPartner(e: React.FormEvent) {
     e.preventDefault();
@@ -226,6 +282,36 @@ export default function AdminPartnersClient() {
           </div>
         </div>
       </form>
+
+      {/* Welcome-email editor */}
+      {cfg && (
+        <div style={{ ...card, marginBottom: 20 }}>
+          <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{t.emailTitle}</div>
+          <div style={{ fontSize: 12.5, color: "#6B7280", marginBottom: 12 }}>{t.emailHint}</div>
+          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+            <button type="button" style={editLang === "he" ? tabActive : tab} onClick={() => setEditLang("he")}>עברית</button>
+            <button type="button" style={editLang === "en" ? tabActive : tab} onClick={() => setEditLang("en")}>English</button>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
+            <div>
+              <label style={fieldLabel}>{t.emailSubject}</label>
+              <input style={input} dir={editLang === "he" ? "rtl" : "ltr"} value={cfg[editLang].subject} onChange={(e) => setCfgField("subject", e.target.value)} />
+              <label style={fieldLabel}>{t.emailIntro}</label>
+              <textarea style={{ ...input, minHeight: 64, resize: "vertical" }} dir={editLang === "he" ? "rtl" : "ltr"} value={cfg[editLang].intro} onChange={(e) => setCfgField("intro", e.target.value)} />
+              <label style={fieldLabel}>{t.emailShare}</label>
+              <textarea style={{ ...input, minHeight: 84, resize: "vertical" }} dir={editLang === "he" ? "rtl" : "ltr"} value={cfg[editLang].shareLine} onChange={(e) => setCfgField("shareLine", e.target.value)} />
+              <div style={{ fontSize: 12, color: "#9CA3AF", margin: "6px 0 14px", direction: "ltr", textAlign: "start" }}>{t.emailVars}</div>
+              <button type="button" style={btnPrimary} disabled={emailState === "saving"} onClick={saveConfig}>
+                {emailState === "saving" ? t.emailSaving : emailState === "saved" ? t.emailSaved : t.emailSave}
+              </button>
+            </div>
+            <div>
+              <label style={fieldLabel}>{t.emailPreview}</label>
+              <iframe title="welcome email preview" srcDoc={editLang === "he" ? previews.he : previews.en} style={{ width: "100%", height: 440, border: "1px solid #E5E7EB", borderRadius: 10, background: "#F9FAFB" }} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {rows === null && <div style={{ color: "#6B7280" }}>{t.loading}</div>}
       {rows !== null && rows.length === 0 && <div style={{ color: "#6B7280" }}>{t.none}</div>}
@@ -311,3 +397,6 @@ const pillStd: React.CSSProperties = { background: "rgba(14,165,165,0.12)", colo
 const pillFounder: React.CSSProperties = { background: "rgba(124,58,237,0.12)", color: "#6D28D9" };
 const btn: React.CSSProperties = { background: "#F3F4F6", color: "#374151", border: "1px solid #E5E7EB", borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" };
 const btnPrimary: React.CSSProperties = { background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" };
+const fieldLabel: React.CSSProperties = { display: "block", fontSize: 12.5, fontWeight: 600, color: "#6B7280", margin: "0 0 6px" };
+const tab: React.CSSProperties = { background: "#F3F4F6", color: "#374151", border: "1px solid #E5E7EB", borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" };
+const tabActive: React.CSSProperties = { background: "#0EA5A5", color: "#fff", border: "1px solid #0EA5A5", borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" };
