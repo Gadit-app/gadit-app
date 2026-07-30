@@ -19,6 +19,8 @@ type Stats = {
   name: string;
   code: string;
   tier: "standard" | "founder";
+  rateYearOne: number;
+  rateLifetime: number;
   status: string;
   link: string;
   clicks: number;
@@ -145,7 +147,9 @@ export function PartnerDashboardClient() {
                 {stats.tier === "founder" ? t.tierFounder : t.tierStandard}
               </span>
             </div>
-            <div style={S.rateLine}>{stats.tier === "founder" ? t.rateFounder : t.rateStandard}</div>
+            <div style={S.rateLine}>
+              {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
+            </div>
 
             {/* Referral link */}
             <div style={S.card}>

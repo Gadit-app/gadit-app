@@ -6,10 +6,12 @@ import { useAdminContext } from "../admin-context";
 /**
  * /admin/partners — run the in-house partner (affiliate) program.
  *
- * Lists every partner with clicks / signups / paying customers and an
- * earnings breakdown by currency. The payable balance is each currency's
- * `released` bucket (held 30 days, not yet paid). Per-partner actions:
- * promote to founder, suspend, and "mark paid" (the monthly payout).
+ * Add partners by hand with custom per-partner rates (like Yooniz), or let
+ * them self-signup at /partners. Each card shows clicks / signups / paying
+ * customers and an earnings breakdown by currency; the payable balance is
+ * each currency's `released` bucket (held 30 days, not yet paid). Actions:
+ * mark paid (the monthly payout), promote to founder, set rates, suspend,
+ * copy the referral / dashboard links, and re-send the welcome email.
  */
 
 type Bucket = { pending: number; released: number; paid: number };
@@ -19,6 +21,8 @@ type Row = {
   name: string;
   email: string;
   tier: "standard" | "founder";
+  rateYearOne: number;
+  rateLifetime: number;
   status: "active" | "suspended";
   clicks: number;
   signups: number;
@@ -33,15 +37,26 @@ const T = {
   en: {
     title: "Partners",
     sub: "In-house affiliate program. Payable = released earnings held 30 days, not yet paid.",
-    none: "No partners yet.",
+    none: "No partners yet. Add one below, or share /partners for self-signup.",
     loading: "Loading…",
-    partner: "Partner",
-    tier: "Tier",
+    addTitle: "Add a partner",
+    fName: "Full name",
+    fEmail: "Email",
+    fCode: "Code (optional)",
+    fY1: "Year 1 %",
+    fLife: "Lifetime %",
+    fSend: "Email them the link",
+    fCreate: "Create partner",
+    creating: "Creating…",
+    created: "Created ✓",
+    errEmail: "Enter a valid email.",
+    errExists: "A partner with that email or code already exists.",
+    errGeneric: "Couldn't create. Try again.",
+    rate: "Rate",
     funnel: "Clicks / Signups / Paying",
     payable: "Payable (owed)",
     pending: "Pending",
     paidTotal: "Paid to date",
-    actions: "Actions",
     standard: "Standard",
     founder: "Founder",
     promote: "Make founder",
@@ -49,23 +64,37 @@ const T = {
     suspend: "Suspend",
     activate: "Activate",
     markPaid: "Mark payable as paid",
-    copyDash: "Copy dashboard link",
+    copyRef: "Copy referral link",
+    copyDash: "Copy portal link",
+    resend: "Resend email",
     copied: "Copied ✓",
-    confirmPaid: "Mark all released (payable) commissions as PAID for this partner? This is the record that you've sent the money.",
+    sent: "Sent ✓",
+    confirmPaid: "Mark all released (payable) commissions as PAID for this partner? This records that you've sent the money.",
     suspended: "Suspended",
   },
   he: {
     title: "שותפים",
     sub: "תוכנית שותפים עצמאית. לתשלום = רווחים ששוחררו אחרי 30 יום ועדיין לא שולמו.",
-    none: "עדיין אין שותפים.",
+    none: "עדיין אין שותפים. הוסיפו אחד למטה, או שתפו את /partners להרשמה עצמית.",
     loading: "טוען…",
-    partner: "שותף",
-    tier: "דרגה",
+    addTitle: "הוספת שותף",
+    fName: "שם מלא",
+    fEmail: "אימייל",
+    fCode: "קוד (רשות)",
+    fY1: "% שנה א׳",
+    fLife: "% לכל החיים",
+    fSend: "שליחת הקישור אליו במייל",
+    fCreate: "יצירת שותף",
+    creating: "יוצר…",
+    created: "נוצר ✓",
+    errEmail: "הזינו אימייל תקין.",
+    errExists: "כבר קיים שותף עם האימייל או הקוד הזה.",
+    errGeneric: "היצירה נכשלה. נסו שוב.",
+    rate: "אחוז",
     funnel: "קליקים / נרשמו / משלמים",
     payable: "לתשלום (חוב)",
     pending: "בהמתנה",
     paidTotal: "שולם עד היום",
-    actions: "פעולות",
     standard: "רגיל",
     founder: "מייסד",
     promote: "הפוך למייסד",
@@ -73,8 +102,11 @@ const T = {
     suspend: "השהה",
     activate: "הפעל",
     markPaid: "סמן חוב כשולם",
-    copyDash: "העתק קישור דשבורד",
+    copyRef: "העתק קישור שיווק",
+    copyDash: "העתק קישור פורטל",
+    resend: "שלח מייל שוב",
     copied: "הועתק ✓",
+    sent: "נשלח ✓",
     confirmPaid: "לסמן את כל העמלות ששוחררו (לתשלום) של השותף הזה כשולמו? זה התיעוד שהעברת את הכסף.",
     suspended: "מושהה",
   },
@@ -86,9 +118,10 @@ function money(minor: number, currency: string): string {
   return `${sym}${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 function sumBuckets(e: Record<string, Bucket>, key: keyof Bucket): { cur: string; val: number }[] {
-  return Object.entries(e)
-    .map(([cur, b]) => ({ cur, val: b[key] }))
-    .filter((x) => x.val > 0);
+  return Object.entries(e).map(([cur, b]) => ({ cur, val: b[key] })).filter((x) => x.val > 0);
+}
+function isEmail(s: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
 export default function AdminPartnersClient() {
@@ -96,19 +129,49 @@ export default function AdminPartnersClient() {
   const t = T[lang];
   const [rows, setRows] = useState<Row[] | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [flash, setFlash] = useState<string | null>(null); // `${id}:${kind}`
+
+  // Add-partner form
+  const [fName, setFName] = useState("");
+  const [fEmail, setFEmail] = useState("");
+  const [fCode, setFCode] = useState("");
+  const [fY1, setFY1] = useState("25");
+  const [fLife, setFLife] = useState("10");
+  const [fSend, setFSend] = useState(true);
+  const [addState, setAddState] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [addErr, setAddErr] = useState("");
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`);
-    if (res.ok) {
-      const d = await res.json();
-      setRows(d.partners ?? []);
-    }
+    if (res.ok) setRows((await res.json()).partners ?? []);
   }, [secret]);
 
-  useEffect(() => {
-    void load();
-  }, [load]);
+  useEffect(() => { void load(); }, [load]);
+
+  async function createPartner(e: React.FormEvent) {
+    e.preventDefault();
+    if (!isEmail(fEmail)) { setAddErr(t.errEmail); setAddState("error"); return; }
+    setAddState("sending"); setAddErr("");
+    try {
+      const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fName, email: fEmail, code: fCode,
+          rateYearOne: fY1, rateLifetime: fLife,
+          sendEmail: fSend, lang,
+        }),
+      });
+      if (res.status === 409) { setAddErr(t.errExists); setAddState("error"); return; }
+      if (!res.ok) { setAddErr(t.errGeneric); setAddState("error"); return; }
+      setAddState("done");
+      setFName(""); setFEmail(""); setFCode(""); setFY1("25"); setFLife("10");
+      await load();
+      setTimeout(() => setAddState("idle"), 1600);
+    } catch {
+      setAddErr(t.errGeneric); setAddState("error");
+    }
+  }
 
   async function act(partnerId: string, action: string) {
     if (action === "markPaid" && !window.confirm(t.confirmPaid)) return;
@@ -117,19 +180,20 @@ export default function AdminPartnersClient() {
       await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ partnerId, action }),
+        body: JSON.stringify({ partnerId, action, lang }),
       });
+      if (action === "resendEmail") { setFlash(partnerId + ":sent"); setTimeout(() => setFlash(null), 1600); }
       await load();
     } finally {
       setBusy(null);
     }
   }
 
-  async function copyDash(row: Row) {
+  async function copy(text: string, key: string) {
     try {
-      await navigator.clipboard.writeText(row.dashboardUrl);
-      setCopiedId(row.id);
-      setTimeout(() => setCopiedId(null), 1600);
+      await navigator.clipboard.writeText(text);
+      setFlash(key);
+      setTimeout(() => setFlash(null), 1600);
     } catch { /* ignore */ }
   }
 
@@ -137,6 +201,31 @@ export default function AdminPartnersClient() {
     <div>
       <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "#111827" }}>{t.title}</h1>
       <p style={{ margin: "0 0 20px", fontSize: 14, color: "#6B7280" }}>{t.sub}</p>
+
+      {/* Add-partner form */}
+      <form onSubmit={createPartner} style={{ ...card, marginBottom: 20 }}>
+        <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>{t.addTitle}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1.4fr 0.9fr 0.7fr 0.7fr", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <input style={input} placeholder={t.fName} value={fName} onChange={(e) => setFName(e.target.value)} />
+          <input style={input} type="email" placeholder={t.fEmail} value={fEmail} onChange={(e) => setFEmail(e.target.value)} />
+          <input style={{ ...input, direction: "ltr" }} placeholder={t.fCode} value={fCode} onChange={(e) => setFCode(e.target.value)} />
+          <input style={input} inputMode="numeric" title={t.fY1} placeholder={t.fY1} value={fY1} onChange={(e) => setFY1(e.target.value)} />
+          <input style={input} inputMode="numeric" title={t.fLife} placeholder={t.fLife} value={fLife} onChange={(e) => setFLife(e.target.value)} />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#374151", cursor: "pointer" }}>
+            <input type="checkbox" checked={fSend} onChange={(e) => setFSend(e.target.checked)} />
+            {t.fSend}
+          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {addState === "error" && <span style={{ color: "#991B1B", fontSize: 13 }}>{addErr}</span>}
+            {addState === "done" && <span style={{ color: "#0b7d7d", fontSize: 13, fontWeight: 700 }}>{t.created}</span>}
+            <button type="submit" style={btnPrimary} disabled={addState === "sending"}>
+              {addState === "sending" ? t.creating : t.fCreate}
+            </button>
+          </div>
+        </div>
+      </form>
 
       {rows === null && <div style={{ color: "#6B7280" }}>{t.loading}</div>}
       {rows !== null && rows.length === 0 && <div style={{ color: "#6B7280" }}>{t.none}</div>}
@@ -147,6 +236,7 @@ export default function AdminPartnersClient() {
             const payable = sumBuckets(r.earnings, "released");
             const pending = sumBuckets(r.earnings, "pending");
             const paid = sumBuckets(r.earnings, "paid");
+            const refLink = `https://www.gadit.app/p/${r.code}`;
             return (
               <div key={r.id} style={card}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
@@ -160,6 +250,9 @@ export default function AdminPartnersClient() {
                       <span style={{ ...pill, background: "#F3F4F6", color: "#374151", direction: "ltr" }}>{r.code}</span>
                     </div>
                     <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 4 }}>{r.email}</div>
+                    <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 2, direction: "ltr", textAlign: "start" }}>
+                      {t.rate}: {Math.round(r.rateYearOne * 100)}% · {Math.round(r.rateLifetime * 100)}%
+                    </div>
                   </div>
                   <div style={{ textAlign: "end" }}>
                     <div style={{ fontSize: 11, color: "#6B7280", textTransform: "uppercase", letterSpacing: 0.4 }}>{t.funnel}</div>
@@ -169,19 +262,15 @@ export default function AdminPartnersClient() {
                   </div>
                 </div>
 
-                {/* Money row */}
                 <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 12, paddingTop: 12, borderTop: "1px solid #F3F4F6" }}>
                   <Money label={t.payable} items={payable} strong />
                   <Money label={t.pending} items={pending} />
                   <Money label={t.paidTotal} items={paid} />
                 </div>
 
-                {/* Actions */}
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
                   {payable.length > 0 && (
-                    <button style={btnPrimary} disabled={busy === r.id + "markPaid"} onClick={() => act(r.id, "markPaid")}>
-                      {t.markPaid}
-                    </button>
+                    <button style={btnPrimary} disabled={busy === r.id + "markPaid"} onClick={() => act(r.id, "markPaid")}>{t.markPaid}</button>
                   )}
                   {r.tier === "standard"
                     ? <button style={btn} onClick={() => act(r.id, "promote")}>{t.promote}</button>
@@ -189,7 +278,11 @@ export default function AdminPartnersClient() {
                   {r.status === "active"
                     ? <button style={btn} onClick={() => act(r.id, "suspend")}>{t.suspend}</button>
                     : <button style={btn} onClick={() => act(r.id, "activate")}>{t.activate}</button>}
-                  <button style={btn} onClick={() => copyDash(r)}>{copiedId === r.id ? t.copied : t.copyDash}</button>
+                  <button style={btn} onClick={() => copy(refLink, r.id + ":ref")}>{flash === r.id + ":ref" ? t.copied : t.copyRef}</button>
+                  <button style={btn} onClick={() => copy(r.dashboardUrl, r.id + ":dash")}>{flash === r.id + ":dash" ? t.copied : t.copyDash}</button>
+                  <button style={btn} disabled={busy === r.id + "resendEmail"} onClick={() => act(r.id, "resendEmail")}>
+                    {flash === r.id + ":sent" ? t.sent : t.resend}
+                  </button>
                 </div>
               </div>
             );
@@ -212,6 +305,7 @@ function Money({ label, items, strong }: { label: string; items: { cur: string; 
 }
 
 const card: React.CSSProperties = { background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: 18 };
+const input: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: "9px 11px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", outline: "none" };
 const pill: React.CSSProperties = { fontSize: 11.5, fontWeight: 700, padding: "3px 9px", borderRadius: 999 };
 const pillStd: React.CSSProperties = { background: "rgba(14,165,165,0.12)", color: "#0b7d7d" };
 const pillFounder: React.CSSProperties = { background: "rgba(124,58,237,0.12)", color: "#6D28D9" };

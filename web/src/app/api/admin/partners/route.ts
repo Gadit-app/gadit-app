@@ -14,9 +14,32 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { Partner, Commission, commissionState, PartnerTier } from "@/lib/partners";
+import { sendPartnerWelcome } from "@/lib/partner-email";
+import {
+  Partner,
+  Commission,
+  commissionState,
+  tierFor,
+  generatePartnerCode,
+  generateDashboardToken,
+  DEFAULT_RATE_YEAR_ONE,
+  DEFAULT_RATE_LIFETIME,
+  FOUNDER_RATE_YEAR_ONE,
+} from "@/lib/partners";
 
 export const maxDuration = 60;
+
+function isEmail(s: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
+/** Read a percentage from the request (e.g. 25) into a fraction (0.25),
+ *  clamped to a sane 0–100 range. Returns null if absent/invalid. */
+function pctToRate(v: unknown): number | null {
+  const n = typeof v === "number" ? v : typeof v === "string" ? parseFloat(v) : NaN;
+  if (!isFinite(n) || n < 0 || n > 100) return null;
+  return Math.round(n) / 100;
+}
 
 type Bucket = { pending: number; released: number; paid: number };
 
@@ -61,7 +84,9 @@ export async function GET(req: NextRequest) {
         code: p.code,
         name: p.name,
         email: p.email,
-        tier: p.tier,
+        tier: tierFor(p.rateYearOne ?? DEFAULT_RATE_YEAR_ONE),
+        rateYearOne: p.rateYearOne ?? DEFAULT_RATE_YEAR_ONE,
+        rateLifetime: p.rateLifetime ?? DEFAULT_RATE_LIFETIME,
         status: p.status,
         clicks: p.clicks || 0,
         signups: p.signups || 0,
@@ -78,11 +103,84 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ partners });
 }
 
+export async function POST(req: NextRequest) {
+  const denied = gate(req);
+  if (denied) return denied;
+
+  let body: {
+    name?: string; email?: string; code?: string;
+    rateYearOne?: number | string; rateLifetime?: number | string;
+    sendEmail?: boolean; lang?: string;
+  };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid JSON body" }, { status: 400 });
+  }
+
+  const name = (body.name ?? "").trim().slice(0, 120);
+  const email = (body.email ?? "").trim().toLowerCase().slice(0, 200);
+  if (!isEmail(email)) return NextResponse.json({ error: "invalid_email" }, { status: 400 });
+
+  const rateYearOne = pctToRate(body.rateYearOne) ?? DEFAULT_RATE_YEAR_ONE;
+  const rateLifetime = pctToRate(body.rateLifetime) ?? DEFAULT_RATE_LIFETIME;
+
+  const db = getAdminDb();
+
+  // No duplicate partner per email.
+  const dup = await db.collection("partners").where("email", "==", email).limit(1).get();
+  if (!dup.empty) return NextResponse.json({ error: "email_exists" }, { status: 409 });
+
+  // Custom code (uppercased) or auto-generated; must be unique.
+  let code = (body.code ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
+  if (code) {
+    const clash = await db.collection("partners").where("code", "==", code).limit(1).get();
+    if (!clash.empty) return NextResponse.json({ error: "code_exists" }, { status: 409 });
+  } else {
+    for (let i = 0; i < 6; i++) {
+      const cand = generatePartnerCode();
+      const clash = await db.collection("partners").where("code", "==", cand).limit(1).get();
+      if (clash.empty) { code = cand; break; }
+    }
+  }
+  if (!code) return NextResponse.json({ error: "code_generation_failed" }, { status: 500 });
+
+  const dashboardToken = generateDashboardToken();
+  const doc: Omit<Partner, "id"> = {
+    code,
+    name,
+    email,
+    tier: tierFor(rateYearOne),
+    rateYearOne,
+    rateLifetime,
+    status: "active",
+    dashboardToken,
+    audience: null,
+    clicks: 0,
+    signups: 0,
+    ownerUid: null,
+    createdAt: new Date().toISOString(),
+  };
+  const ref = await db.collection("partners").add(doc);
+
+  if (body.sendEmail) {
+    await sendPartnerWelcome(
+      { code, name, email, dashboardToken, rateYearOne, rateLifetime },
+      body.lang === "he" ? "he" : "en",
+    );
+  }
+
+  return NextResponse.json({ ok: true, id: ref.id, code });
+}
+
 export async function PATCH(req: NextRequest) {
   const denied = gate(req);
   if (denied) return denied;
 
-  let body: { partnerId?: string; action?: string };
+  let body: {
+    partnerId?: string; action?: string;
+    rateYearOne?: number | string; rateLifetime?: number | string; lang?: string;
+  };
   try {
     body = await req.json();
   } catch {
@@ -99,9 +197,33 @@ export async function PATCH(req: NextRequest) {
   if (!snap.exists) return NextResponse.json({ error: "partner_not_found" }, { status: 404 });
 
   if (action === "promote" || action === "demote") {
-    const tier: PartnerTier = action === "promote" ? "founder" : "standard";
-    await ref.update({ tier });
-    return NextResponse.json({ ok: true, tier });
+    const rateYearOne = action === "promote" ? FOUNDER_RATE_YEAR_ONE : DEFAULT_RATE_YEAR_ONE;
+    await ref.update({ rateYearOne, tier: tierFor(rateYearOne) });
+    return NextResponse.json({ ok: true, tier: tierFor(rateYearOne) });
+  }
+
+  // Set explicit rates (percentages) on a partner.
+  if (action === "setRates") {
+    const rateYearOne = pctToRate(body.rateYearOne);
+    const rateLifetime = pctToRate(body.rateLifetime);
+    if (rateYearOne === null && rateLifetime === null) {
+      return NextResponse.json({ error: "no valid rates" }, { status: 400 });
+    }
+    const upd: Record<string, unknown> = {};
+    if (rateYearOne !== null) { upd.rateYearOne = rateYearOne; upd.tier = tierFor(rateYearOne); }
+    if (rateLifetime !== null) upd.rateLifetime = rateLifetime;
+    await ref.update(upd);
+    return NextResponse.json({ ok: true });
+  }
+
+  // Re-send the welcome email (link + code + dashboard).
+  if (action === "resendEmail") {
+    const p = snap.data() as Omit<Partner, "id">;
+    await sendPartnerWelcome(
+      { code: p.code, name: p.name, email: p.email, dashboardToken: p.dashboardToken, rateYearOne: p.rateYearOne, rateLifetime: p.rateLifetime },
+      body.lang === "he" ? "he" : "en",
+    );
+    return NextResponse.json({ ok: true });
   }
 
   if (action === "suspend" || action === "activate") {

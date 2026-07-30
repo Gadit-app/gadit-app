@@ -33,7 +33,12 @@ export interface Partner {
   code: string;            // the referral code that appears in /p/<code>
   name: string;
   email: string;
-  tier: PartnerTier;
+  tier: PartnerTier;       // display badge, DERIVED from rateYearOne (see tierFor)
+  // Explicit per-partner rates (like Yooniz). These — not the tier — drive
+  // the money. Defaults 0.25 / 0.10; a founder is simply someone whose
+  // rateYearOne Gadi set to 0.30. Stored as fractions (0.25 = 25%).
+  rateYearOne: number;
+  rateLifetime: number;
   status: PartnerStatus;
   dashboardToken: string;  // secret that opens /partner/dashboard (no password)
   audience?: string | null; // free-text "where's your audience" from signup
@@ -41,6 +46,19 @@ export interface Partner {
   signups: number;         // referred accounts created
   ownerUid?: string | null; // set if the partner also has a Gadit account
   createdAt: string;
+}
+
+/** Program defaults for a self-signup partner. */
+export const DEFAULT_RATE_YEAR_ONE = 0.25;
+export const DEFAULT_RATE_LIFETIME = 0.1;
+/** What "founder" means when Gadi promotes someone. */
+export const FOUNDER_RATE_YEAR_ONE = 0.3;
+
+/** Badge label derived from the year-one rate — anyone at 30%+ is a
+ *  "founder", everyone else is "standard". Keeps the badge honest even
+ *  when Gadi types a custom rate. */
+export function tierFor(rateYearOne: number): PartnerTier {
+  return rateYearOne >= FOUNDER_RATE_YEAR_ONE ? "founder" : "standard";
 }
 
 /** Derived commission state — computed on read from timestamps, so no

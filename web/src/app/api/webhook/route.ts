@@ -50,8 +50,11 @@ async function accruePartnerCommission(invoice: Stripe.Invoice) {
     const referredAt = (u.referredAt as number | undefined) ?? Date.now();
     const paidAtMs = (invoice.created ?? Math.floor(Date.now() / 1000)) * 1000;
     const yearOne = paidAtMs - referredAt < YEAR_ONE_MS;
+    // Prefer the partner's explicit per-partner rate; fall back to the
+    // tier default for any legacy partner created before rates were stored.
     const tier = (partner?.tier as PartnerTier) ?? "standard";
-    const rate = rateFor(tier, yearOne);
+    const explicit = yearOne ? partner?.rateYearOne : partner?.rateLifetime;
+    const rate = typeof explicit === "number" ? explicit : rateFor(tier, yearOne);
     const amount = Math.round(gross * rate);
 
     const now = Date.now();

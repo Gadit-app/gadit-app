@@ -52,6 +52,8 @@ export async function GET(req: NextRequest) {
       name: partner.name,
       code: partner.code,
       tier: partner.tier,
+      rateYearOne: partner.rateYearOne ?? 0.25,
+      rateLifetime: partner.rateLifetime ?? 0.1,
       status: partner.status,
       link: `https://www.gadit.app/p/${partner.code}`,
       clicks: partner.clicks || 0,

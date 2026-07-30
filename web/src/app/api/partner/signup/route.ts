@@ -8,16 +8,19 @@
  * Response: { code, dashboardUrl }  (also emailed to the applicant)
  *
  * Idempotent by email: applying twice returns the SAME partner (and
- * re-sends the code) instead of minting a duplicate. Every applicant is
- * created as a `standard` tier partner; founder status is granted by hand
- * in /admin/partners.
+ * re-sends the code) instead of minting a duplicate. Self-signup partners
+ * start on the default rates (25% / 10%); founder rates are set by hand in
+ * /admin/partners.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { sendPartnerWelcome } from "@/lib/partner-email";
 import {
   generatePartnerCode,
   generateDashboardToken,
+  DEFAULT_RATE_YEAR_ONE,
+  DEFAULT_RATE_LIFETIME,
   Partner,
 } from "@/lib/partners";
 
@@ -27,67 +30,6 @@ const SITE = "https://www.gadit.app";
 
 function isEmail(s: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-}
-
-async function sendWelcome(
-  partner: Pick<Partner, "code" | "name" | "email" | "dashboardToken">,
-  lang: string,
-) {
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) return;
-  const link = `${SITE}/p/${partner.code}`;
-  const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
-  const he = lang === "he";
-
-  const subject = he
-    ? `הצטרפת לתוכנית השותפים של Gadit 🎉`
-    : `You're in — Gadit Partner Program 🎉`;
-  const heBody = `
-    <p style="margin:0 0 16px;">היי ${partner.name || ""},</p>
-    <p style="margin:0 0 16px;">ברוכים הבאים לתוכנית השותפים של Gadit. הנה הקישור האישי שלכם:</p>
-    <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">הקישור שלכם</p>
-    <p style="margin:0 0 20px;"><a href="${link}" style="font-size:18px;font-weight:700;color:#0EA5A5;">${link}</a></p>
-    <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">קוד השותף שלכם</p>
-    <p style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:2px;">${partner.code}</p>
-    <p style="margin:0 0 20px;">שתפו את הקישור. על כל מי שיירשם וישלם דרכו, תקבלו 25% עמלה חוזרת בשנה הראשונה, ו-10% לכל החיים.</p>
-  `;
-  const enBody = `
-    <p style="margin:0 0 16px;">Hi ${partner.name || ""},</p>
-    <p style="margin:0 0 16px;">Welcome to the Gadit Partner Program. Here's your personal link:</p>
-    <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">Your link</p>
-    <p style="margin:0 0 20px;"><a href="${link}" style="font-size:18px;font-weight:700;color:#0EA5A5;">${link}</a></p>
-    <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">Your partner code</p>
-    <p style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:2px;">${partner.code}</p>
-    <p style="margin:0 0 20px;">Share your link. For everyone who signs up and pays through it, you earn 25% recurring commission in year one, and 10% for life.</p>
-  `;
-  const cta = he ? "פתיחת האזור האישי" : "Open your dashboard";
-  const html = `<!DOCTYPE html><html dir="${he ? "rtl" : "ltr"}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
-  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;">
-      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
-      <div style="font-size:22px;font-weight:700;margin-top:4px;">${he ? "שותף חדש" : "Partner"}</div>
-    </div>
-    <div style="padding:24px;font-size:15px;line-height:1.6;">
-      ${he ? heBody : enBody}
-      <div style="margin-top:8px;text-align:center;">
-        <a href="${dash}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:11px 26px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">${cta}</a>
-      </div>
-      <p style="margin:20px 0 0;font-size:12px;color:#9CA3AF;">${he ? "שמרו את הקישור הזה — הוא הכניסה הפרטית לאזור שלכם, בלי סיסמה." : "Keep this link — it's your private, password-less way back into your dashboard."}</p>
-    </div>
-  </div>
-</body></html>`;
-
-  try {
-    const resend = new Resend(resendKey);
-    await resend.emails.send({
-      from: "Gadit <notify@gadit.app>",
-      to: partner.email,
-      subject,
-      html,
-    });
-  } catch (e) {
-    console.warn("[partner/signup] welcome email failed (non-blocking):", e);
-  }
 }
 
 export async function POST(req: NextRequest) {
@@ -112,7 +54,7 @@ export async function POST(req: NextRequest) {
       .get();
     if (!existing.empty) {
       const p = { id: existing.docs[0].id, ...(existing.docs[0].data() as Omit<Partner, "id">) };
-      await sendWelcome(p, lang);
+      await sendPartnerWelcome(p, lang);
       return NextResponse.json({
         code: p.code,
         dashboardUrl: `${SITE}/partner/dashboard?t=${p.dashboardToken}`,
@@ -140,6 +82,8 @@ export async function POST(req: NextRequest) {
       name,
       email,
       tier: "standard",
+      rateYearOne: DEFAULT_RATE_YEAR_ONE,
+      rateLifetime: DEFAULT_RATE_LIFETIME,
       status: "active",
       dashboardToken,
       audience: audience || null,
@@ -148,9 +92,9 @@ export async function POST(req: NextRequest) {
       ownerUid: null,
       createdAt: new Date().toISOString(),
     };
-    const ref = await db.collection("partners").add(doc);
+    await db.collection("partners").add(doc);
 
-    await sendWelcome({ code, name, email, dashboardToken }, lang);
+    await sendPartnerWelcome({ code, name, email, dashboardToken, rateYearOne: doc.rateYearOne, rateLifetime: doc.rateLifetime }, lang);
 
     // Tell Gadi a partner joined (reuse the notify address).
     try {
