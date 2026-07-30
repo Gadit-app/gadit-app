@@ -31,6 +31,7 @@ const STRINGS = {
     unlockCta: "Unlock",
     unlockPlaceholder: "ADMIN_SECRET",
     overview: "Overview",
+    strategy: "Strategy",
     users: "Users",
     revenue: "Revenue",
     campaigns: "Campaigns",
@@ -48,6 +49,7 @@ const STRINGS = {
     unlockCta: "פתח",
     unlockPlaceholder: "ADMIN_SECRET",
     overview: "סקירה",
+    strategy: "תוכנית אסטרטגית",
     users: "משתמשים",
     revenue: "הכנסות",
     campaigns: "קמפיינים",
@@ -69,6 +71,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/admin",           labelKey: "overview",  icon: <IconHome />     },
+  { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget />   },
   { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
   { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins />    },
   { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone />},
@@ -368,6 +371,11 @@ function IconHome() {
 function IconUsers() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+  );
+}
+function IconTarget() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
   );
 }
 function IconCoins() {

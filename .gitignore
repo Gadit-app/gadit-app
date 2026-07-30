@@ -49,3 +49,6 @@ env.txt
 
 # Word lock files (created when a .md/.txt is open in Word)
 ~$*
+
+# Strategic plan seed — contains revenue targets + list sizes, never commit
+strategic-plan-seed.json
