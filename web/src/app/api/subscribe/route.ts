@@ -206,13 +206,15 @@ export async function POST(req: NextRequest) {
       payment_behavior: "default_incomplete",
       payment_settings: {
         save_default_payment_method: "on_subscription",
-        // Card + Link only (Gadi 2026-07-12: Klarna / Amazon Pay confuse
-        // visitors). This list propagates to the pending SetupIntent, so
-        // it controls what the Payment Element displays. Google Pay and
-        // Apple Pay ride on "card" automatically where the device
-        // supports them (Apple Pay additionally needs the domain
-        // registered in the Stripe dashboard).
-        payment_method_types: ["card", "link"],
+        // Card only (Gadi 2026-07-12: Klarna / Amazon Pay confuse
+        // visitors; 2026-07-30: dropped Link too — its "save my info for
+        // faster checkout" block with email/phone fields cluttered the
+        // bottom of the form). This list propagates to the pending
+        // SetupIntent, so it controls what the Payment Element displays.
+        // Google Pay and Apple Pay still ride on "card" automatically
+        // where the device supports them (Apple Pay additionally needs the
+        // domain registered in the Stripe dashboard).
+        payment_method_types: ["card"],
       },
       trial_period_days: TRIAL_DAYS,
       trial_settings: { end_behavior: { missing_payment_method: "cancel" } },

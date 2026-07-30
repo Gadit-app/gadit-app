@@ -38,6 +38,7 @@ const STRINGS = {
     emails: "Emails",
     activity: "Activity",
     reports: "Reports",
+    partners: "Partners",
     backToApp: "Back to app",
     signOut: "Sign out",
     langToggle: "עברית",
@@ -56,6 +57,7 @@ const STRINGS = {
     emails: "מיילים",
     activity: "פעילות",
     reports: "דיווחים",
+    partners: "שותפים",
     backToApp: "חזרה לאפליקציה",
     signOut: "התנתק",
     langToggle: "English",
@@ -78,6 +80,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail />     },
   { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
   { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag />     },
+  { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake />},
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -401,6 +404,11 @@ function IconActivity() {
 function IconFlag() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+  );
+}
+function IconHandshake() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>
   );
 }
 function IconArrowOut() {

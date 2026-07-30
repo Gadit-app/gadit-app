@@ -93,6 +93,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Partner (affiliate) attribution — if this signup arrived through a
+    // /p/<code> referral link, the /p route dropped a `gadit_ref` cookie
+    // carrying the partner's id. Stamp it on the user doc (once) so every
+    // future Stripe payment on this account accrues a commission. Runs
+    // before the notify dedupe so it still lands on repeat calls, and is
+    // itself idempotent (only writes when referredBy is not already set).
+    try {
+      const refPartnerId = req.cookies.get("gadit_ref")?.value;
+      if (refPartnerId && !data.referredBy) {
+        const partnerSnap = await db.collection("partners").doc(refPartnerId).get();
+        const partner = partnerSnap.data();
+        if (partnerSnap.exists && partner?.status !== "suspended" && partner?.ownerUid !== uid) {
+          await userRef.set(
+            {
+              referredBy: partner?.code ?? null,
+              referredPartnerId: refPartnerId,
+              referredAt: Date.now(),
+            },
+            { merge: true },
+          );
+          await partnerSnap.ref.update({ signups: FieldValue.increment(1) });
+        }
+      }
+    } catch (e) {
+      console.warn("[notify-signup] partner attribution failed (non-blocking):", e);
+    }
+
     if (data.notifiedSignup === true) {
       return NextResponse.json({ sent: false, reason: "already_notified", utmStored: !!utm });
     }

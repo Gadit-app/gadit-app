@@ -2,8 +2,78 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+/**
+ * Book a partner (affiliate) commission for a paid invoice.
+ *
+ * Fires on every `invoice.payment_succeeded` for a referred customer, so
+ * the partner earns on each month actually paid — churn self-corrects. If
+ * the paying customer wasn't referred (no `referredPartnerId` on their
+ * user doc), this is a no-op.
+ *
+ * Rate follows the tier and whether the payment lands in the customer's
+ * first year (25%/30% year one, 10% for life after). The commission doc
+ * id is the Stripe invoice id, so a webhook retry can never double-count.
+ * Everything is best-effort: a failure here must never break provisioning
+ * or make Stripe retry the whole event.
+ */
+async function accruePartnerCommission(invoice: Stripe.Invoice) {
+  try {
+    if (!invoice.id) return;
+    const gross = invoice.amount_paid ?? 0;
+    if (gross <= 0) return; // $0 / trial invoices earn nothing
+
+    const customerId =
+      typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (!customerId) return;
+
+    const db = getAdminDb();
+    const userId = await findUserIdByCustomer(customerId);
+    if (!userId) return;
+
+    const userSnap = await db.collection("users").doc(userId).get();
+    const u = userSnap.data() ?? {};
+    const partnerId = u.referredPartnerId as string | undefined;
+    if (!partnerId) return; // customer wasn't referred by a partner
+
+    const partnerRef = db.collection("partners").doc(partnerId);
+    const partnerSnap = await partnerRef.get();
+    const partner = partnerSnap.data();
+    if (!partnerSnap.exists || partner?.status === "suspended") return;
+
+    const commissionRef = partnerRef.collection("commissions").doc(invoice.id);
+    if ((await commissionRef.get()).exists) return; // idempotent on retry
+
+    const referredAt = (u.referredAt as number | undefined) ?? Date.now();
+    const paidAtMs = (invoice.created ?? Math.floor(Date.now() / 1000)) * 1000;
+    const yearOne = paidAtMs - referredAt < YEAR_ONE_MS;
+    const tier = (partner?.tier as PartnerTier) ?? "standard";
+    const rate = rateFor(tier, yearOne);
+    const amount = Math.round(gross * rate);
+
+    const now = Date.now();
+    await commissionRef.set({
+      invoiceId: invoice.id,
+      referredUid: userId,
+      gross,
+      amount,
+      currency: invoice.currency ?? "usd",
+      rate,
+      yearOne,
+      createdAt: now,
+      releaseAt: now + COMMISSION_HOLD_MS,
+      paidAt: null,
+    });
+    console.log(
+      `[webhook] commission ${amount} ${invoice.currency} -> partner ${partnerId} (rate ${rate}, invoice ${invoice.id})`,
+    );
+  } catch (e) {
+    console.warn("[webhook] accruePartnerCommission failed (non-blocking):", e);
+  }
+}
 
 /**
  * Notify Gadi by email the FIRST time a customer's paid subscription
@@ -411,6 +481,11 @@ export async function POST(req: NextRequest) {
           subscriptionStatus: "canceled",
         });
       }
+    }
+
+    if (event.type === "invoice.payment_succeeded") {
+      const invoice = event.data.object as Stripe.Invoice;
+      await accruePartnerCommission(invoice);
     }
 
     return NextResponse.json({ received: true });
