@@ -110,6 +110,7 @@ RULE 1c ג€” If the typed string is NOT a real word and you have NO good sug
 
 IMPORTANT:
 - Rules 1a and 1b are NOT in conflict. If the typed word IS real, use 1a (just define it). If the typed word is NOT real, use 1b (suggest) or 1c (dead end).
+- ABBREVIATIONS, ACRONYMS & INITIALISMS ARE REAL ENTRIES: if the input is a known abbreviation, acronym, initialism, or short form (IRR, NASA, DNA, FBI, CEO, USB, AKA, e.g., etc., lol), treat it as a REAL word and define what it stands for. Do NOT send it to the typo path (1b) or the not-found path (1c). Give the full expansion plus a plain-language explanation of what it means. If it has SEVERAL common expansions, set multiplemeanings=true and list each as its own meaning, ordered by how common it is (e.g. IRR -> 1. Internal Rate of Return, a finance metric; 2. Iranian Rial, the currency code; 3. an informal short form of "irregular"). Include real example sentences that actually use the short form. Only use 1b/1c when the string is neither a real word NOR a known abbreviation.
 - Never silently replace. Only suggest openly via the "׳׳•׳׳™ ׳”׳×׳›׳•׳•׳ ׳× ׳-X" message.
 - Academic, technical, slang, and rare words ARE real words. If you know the word (even if unusual), define it normally ג€” do NOT fall through to the not-found path.
 
