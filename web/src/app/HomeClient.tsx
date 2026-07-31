@@ -309,7 +309,7 @@ export function HomePage() {
                   go(query);
                 }}
               >
-                <SearchIcon size={20} />
+                <SearchIcon size={22} />
               </button>
             </div>
             {/* Sentence input, Gadi 2026-06-19 v2: the OPTIONAL cue

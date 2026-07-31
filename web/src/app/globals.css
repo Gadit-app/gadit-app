@@ -3381,17 +3381,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    buys back the horizontal real estate the labelled pill was eating
    on mobile. */
 .wordbook .wb-home-search-submit {
-  /* 36px button with always-on teal-soft ground — matched to the
-     persistent /word searchbar exactly. Gadi 2026-06-24 round 3:
-     the round-2 44px size crowded the 46px pill; 36px restores
-     ~5px of bar breathing around the button on top and bottom. */
+  /* 40px SOLID teal button with a white magnifier — the universal
+     "click here to search" affordance (Gadi 2026-07-31: the earlier
+     36px teal-soft ground read too faint on mobile; people who don't
+     know to hit Enter need an obvious search button). Fits the 46px
+     pill with 3px of breathing top and bottom. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: var(--teal-soft);
-  color: var(--teal-edge, #0B8A8A);
+  width: 40px;
+  height: 40px;
+  background: var(--teal, #0EA5A5);
+  color: #FFFFFF;
   border: none;
   border-radius: 999px;
   padding: 0;
@@ -3400,8 +3401,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
 }
 .wordbook .wb-home-search-submit:hover {
-  background: rgba(14, 165, 165, 0.22);
-  color: var(--teal-edge, #0B8A8A);
+  background: var(--teal-edge, #0B8A8A);
+  color: #FFFFFF;
 }
 .wordbook .wb-home-search-submit:active { transform: scale(0.94); }
 .wordbook .wb-home-search-box:hover { box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12); border-color: var(--border-2); }
@@ -5919,20 +5920,17 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-inline-end: -6px;
 }
 .wordbook .wb-word-searchbar-submit {
-  /* Magnifier-icon submit — round soft-teal button with breathing
-     room inside the pill. Gadi 2026-06-24 round 3: the round-2
-     44px button was almost the full 46px of the bar (1px padding)
-     and looked crammed. Pulled back to 36px so there are ~5px of
-     visible bar around it on top and bottom — the button still
-     reads as a button thanks to the teal-soft ground, just isn't
-     fighting the bar for vertical real estate. */
+  /* Magnifier submit — 40px SOLID teal button with a white glyph, the
+     clear "click here to search" affordance (Gadi 2026-07-31: the 36px
+     teal-soft version read too faint on mobile). Fits the 46px pill
+     with 3px of breathing top and bottom. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: var(--teal-soft);
-  color: var(--teal-edge, #0B8A8A);
+  width: 40px;
+  height: 40px;
+  background: var(--teal, #0EA5A5);
+  color: #FFFFFF;
   border: none;
   border-radius: 999px;
   padding: 0;
@@ -5941,17 +5939,17 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
 }
 .wordbook .wb-word-searchbar-submit:hover:not(:disabled) {
-  background: rgba(14, 165, 165, 0.22);
-  color: var(--teal-edge, #0B8A8A);
+  background: var(--teal-edge, #0B8A8A);
+  color: #FFFFFF;
 }
 .wordbook .wb-word-searchbar-submit:active:not(:disabled) {
   transform: scale(0.94);
 }
 .wordbook .wb-word-searchbar-submit:disabled {
-  /* Even disabled, keep the colored ground so the button stays
-     visually present. Just dim the glyph slightly to signal "not
-     yet". */
-  color: #6B7280;
+  /* Before anything is typed the search isn't actionable — fall back to
+     the soft teal ground with a muted glyph so it reads as "not yet". */
+  background: var(--teal-soft);
+  color: #9CA3AF;
   cursor: not-allowed;
 }
 @media (max-width: 560px) {
@@ -5963,10 +5961,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   }
   .wordbook[dir="rtl"] .wb-word-searchbar {
     padding: 4px 12px 4px 5px;
-  }
-  .wordbook .wb-word-searchbar-submit {
-    padding: 7px 14px;
-    font-size: 12.5px;
   }
 }
 
