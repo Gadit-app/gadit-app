@@ -962,14 +962,16 @@ Output ONLY the JSON object.`;
 
   const userMessage = `Word: "${word}"\nUI language: ${uiLangName}`;
 
-  // Two models, two temperatures — the goal is variance, not redundancy.
-  // gpt-4o gets first try because main-result text quality on idioms
-  // and rare words is reliably better than mini. Mini gets the second
-  // try because if 4o is stuck on a degeneracy basin for THIS word,
-  // mini's different parameters often produce clean output.
+  // Two gpt-4o passes at different temperatures — the goal is variance,
+  // not redundancy. gpt-4o-mini was the SECOND attempt until 2026-08-01,
+  // but mini is the single biggest source of Hebrew mojibake in production
+  // (it emitted the garbled "חלומי" background field Gadi hit), and the
+  // main generateValidated wrapper already refuses to use it for the same
+  // reason. A cooler second gpt-4o pass breaks any degeneracy basin without
+  // reintroducing the mojibake-prone model.
   const attempts: Array<{ model: string; temperature: number }> = [
     { model: "gpt-4o", temperature: 0.8 },
-    { model: "gpt-4o-mini", temperature: 0.7 },
+    { model: "gpt-4o", temperature: 0.4 },
   ];
 
   for (const attempt of attempts) {

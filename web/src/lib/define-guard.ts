@@ -14,7 +14,20 @@ export type GuardResult =
   | { degenerate: false }
   | { degenerate: true; reason: string };
 
-const MOJIBAKE_CHARS = /[×™©¨‘’]/g;
+// The decisive UTF-8-as-cp1252 signature. Every Hebrew letter whose UTF-8
+// first byte is 0xD7 (which is almost all of them, א–ת live at D7 90–AA)
+// renders as "×" (U+00D7) when the bytes are mis-decoded as Windows-1252;
+// D6-prefixed letters render as "Ö". Real etymology text — Hebrew, English,
+// or a transliteration — never contains the multiplication sign or these
+// Latin-capital siblings, so two or more of them is unambiguous mojibake.
+// This catches the wide-second-byte variants (× followed by § ´ ¾ ¹ » …)
+// that the density list below misses — e.g. the "חלומי" background field
+// Gadi hit 2026-08-01, which slipped past the old narrow char set.
+const HARD_MOJIBAKE_RX = /[×ÖØÞÐ]/g;
+
+// cp1252 symbols/punctuation that UTF-8 continuation bytes (0x80–0xBF)
+// decode to. Broadened 2026-08-01 from the original ×™©¨ set.
+const MOJIBAKE_CHARS = /[×ÖØÞÐ™©¨§´¶·°±²³µ¼½¾¹»«¿‚ƒ„…†‡ˆ‰‹‘’“”•–—˜›€]/g;
 const HEBREW_RX   = /[֐-׿]/;
 const ARABIC_RX   = /[؀-ۿ]/;
 const CYRILLIC_RX = /[Ѐ-ӿ]/;
@@ -45,6 +58,9 @@ function isPunctuationSoup(text: string): boolean {
 // density threshold.
 function hasMojibakeDensity(text: string, threshold = 0.4): boolean {
   if (typeof text !== "string" || text.length === 0) return false;
+  // Decisive marker first — no density threshold needed. Two "×"/"Ö"-class
+  // chars in a field that should read as a language means it's mojibake.
+  if ((text.match(HARD_MOJIBAKE_RX) ?? []).length >= 2) return true;
   const cp1252Count = (text.match(MOJIBAKE_CHARS) ?? []).length;
   if (cp1252Count / text.length > threshold) return true;
   const decorCount = (text.match(HEBREW_DECORATIVE_RX) ?? []).length;
