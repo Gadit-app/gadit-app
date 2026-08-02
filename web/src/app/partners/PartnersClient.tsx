@@ -177,7 +177,7 @@ export function PartnersClient() {
   }
 
   const money = (n: number) => `${t.curSym}${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
-  const link = result ? `https://www.gadit.app/p/${result.code}` : "";
+  const link = result ? `https://www.gadit.app/?ref=${result.code}` : "";
 
   return (
     <div dir={dir} style={S.page}>

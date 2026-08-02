@@ -20,7 +20,6 @@ import {
   Commission,
   commissionState,
   tierFor,
-  generatePartnerCode,
   generateDashboardToken,
   DEFAULT_RATE_YEAR_ONE,
   DEFAULT_RATE_LIFETIME,
@@ -42,6 +41,31 @@ function pctToRate(v: unknown): number | null {
 }
 
 type Bucket = { pending: number; released: number; paid: number };
+
+// Sequential REF numbers, Yooniz-style: 100, 101, 102… A counter doc
+// (partnerConfig/refCounter.next) is the source of truth; claiming is done
+// in a transaction so two simultaneous creates can never collide on a
+// number.
+const REF_START = 100;
+type DB = ReturnType<typeof getAdminDb>;
+
+async function peekNextRef(db: DB): Promise<number> {
+  const snap = await db.collection("partnerConfig").doc("refCounter").get();
+  const n = snap.data()?.next;
+  return typeof n === "number" && n >= REF_START ? n : REF_START;
+}
+
+async function claimNextRef(db: DB): Promise<string> {
+  const ref = db.collection("partnerConfig").doc("refCounter");
+  const claimed = await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const cur = snap.data()?.next;
+    const n = typeof cur === "number" && cur >= REF_START ? cur : REF_START;
+    tx.set(ref, { next: n + 1 }, { merge: true });
+    return n;
+  });
+  return String(claimed);
+}
 
 function gate(req: NextRequest): NextResponse | null {
   const secret = req.nextUrl.searchParams.get("secret") ?? "";
@@ -100,7 +124,8 @@ export async function GET(req: NextRequest) {
   );
 
   partners.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-  return NextResponse.json({ partners });
+  const nextRef = await peekNextRef(db);
+  return NextResponse.json({ partners, nextRef });
 }
 
 export async function POST(req: NextRequest) {
@@ -131,14 +156,16 @@ export async function POST(req: NextRequest) {
   const dup = await db.collection("partners").where("email", "==", email).limit(1).get();
   if (!dup.empty) return NextResponse.json({ error: "email_exists" }, { status: 409 });
 
-  // Custom code (uppercased) or auto-generated; must be unique.
+  // Custom REF (uppercased) or the next sequential number from the counter.
   let code = (body.code ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
   if (code) {
     const clash = await db.collection("partners").where("code", "==", code).limit(1).get();
     if (!clash.empty) return NextResponse.json({ error: "code_exists" }, { status: 409 });
   } else {
-    for (let i = 0; i < 6; i++) {
-      const cand = generatePartnerCode();
+    // Claim sequential numbers until we land on a free one (a custom code
+    // could have squatted a future number).
+    for (let i = 0; i < 8; i++) {
+      const cand = await claimNextRef(db);
       const clash = await db.collection("partners").where("code", "==", cand).limit(1).get();
       if (clash.empty) { code = cand; break; }
     }

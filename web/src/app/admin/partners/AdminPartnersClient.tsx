@@ -42,7 +42,7 @@ const T = {
     addTitle: "Add a partner",
     fName: "Full name",
     fEmail: "Email",
-    fCode: "Code (optional)",
+    fCode: "REF number",
     fY1: "Year 1 %",
     fLife: "Lifetime %",
     fSend: "Email them the link",
@@ -54,6 +54,7 @@ const T = {
     errGeneric: "Couldn't create. Try again.",
     rate: "Rate",
     funnel: "Clicks / Signups / Paying",
+    accrued: "Accrued",
     payable: "Payable (owed)",
     pending: "Pending",
     paidTotal: "Paid to date",
@@ -93,7 +94,7 @@ const T = {
     addTitle: "הוספת שותף",
     fName: "שם מלא",
     fEmail: "אימייל",
-    fCode: "קוד (רשות)",
+    fCode: "מספר (REF)",
     fY1: "% שנה א׳",
     fLife: "% לכל החיים",
     fSend: "שליחת הקישור אליו במייל",
@@ -105,6 +106,7 @@ const T = {
     errGeneric: "היצירה נכשלה. נסו שוב.",
     rate: "אחוז",
     funnel: "קליקים / נרשמו / משלמים",
+    accrued: "נצבר",
     payable: "לתשלום (חוב)",
     pending: "בהמתנה",
     paidTotal: "שולם עד היום",
@@ -174,6 +176,9 @@ function money(minor: number, currency: string): string {
 function sumBuckets(e: Record<string, Bucket>, key: keyof Bucket): { cur: string; val: number }[] {
   return Object.entries(e).map(([cur, b]) => ({ cur, val: b[key] })).filter((x) => x.val > 0);
 }
+function accruedItems(e: Record<string, Bucket>): { cur: string; val: number }[] {
+  return Object.entries(e).map(([cur, b]) => ({ cur, val: b.pending + b.released + b.paid })).filter((x) => x.val > 0);
+}
 function isEmail(s: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
@@ -194,6 +199,7 @@ export default function AdminPartnersClient() {
   const [fSend, setFSend] = useState(true);
   const [addState, setAddState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [addErr, setAddErr] = useState("");
+  const [nextRef, setNextRef] = useState("");
 
   // Welcome-email editor
   const [cfg, setCfg] = useState<WelcomeCfg | null>(null);
@@ -204,7 +210,11 @@ export default function AdminPartnersClient() {
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`);
-    if (res.ok) setRows((await res.json()).partners ?? []);
+    if (res.ok) {
+      const d = await res.json();
+      setRows(d.partners ?? []);
+      if (d.nextRef != null) setNextRef(String(d.nextRef));
+    }
   }, [secret]);
 
   const loadConfig = useCallback(async () => {
@@ -218,6 +228,10 @@ export default function AdminPartnersClient() {
   }, [secret]);
 
   useEffect(() => { void load(); void loadConfig(); }, [load, loadConfig]);
+
+  // Pre-fill the REF field with the next free number (editable). Only when
+  // the field is empty, so a manual entry is never clobbered.
+  useEffect(() => { if (nextRef && !fCode) setFCode(nextRef); }, [nextRef, fCode]);
 
   function setCfgField(field: keyof LangCfg, value: string) {
     setCfg((prev) => (prev ? { ...prev, [editLang]: { ...prev[editLang], [field]: value } } : prev));
@@ -373,10 +387,10 @@ export default function AdminPartnersClient() {
       {rows !== null && rows.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {rows.map((r) => {
+            const accrued = accruedItems(r.earnings);
             const payable = sumBuckets(r.earnings, "released");
-            const pending = sumBuckets(r.earnings, "pending");
             const paid = sumBuckets(r.earnings, "paid");
-            const refLink = `https://www.gadit.app/p/${r.code}`;
+            const refLink = `https://www.gadit.app/?ref=${r.code}`;
             return (
               <div key={r.id} style={card}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
@@ -403,8 +417,8 @@ export default function AdminPartnersClient() {
                 </div>
 
                 <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 12, paddingTop: 12, borderTop: "1px solid #F3F4F6" }}>
+                  <Money label={t.accrued} items={accrued} />
                   <Money label={t.payable} items={payable} strong />
-                  <Money label={t.pending} items={pending} />
                   <Money label={t.paidTotal} items={paid} />
                 </div>
 
