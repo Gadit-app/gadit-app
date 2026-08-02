@@ -119,7 +119,16 @@ export function buildWelcomeEmail(
   const pctAfter = Math.round((partner.rateLifetime ?? 0.1) * 100);
   const link = `${SITE}/?ref=${partner.code}`;
   const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
-  const vars: Vars = { name: partner.name, pctY1, pctAfter, year1: c.year1Est, code: partner.code, link };
+  // {year1} = the PARTNER's first-year commission from one Family-plan
+  // customer, NOT the customer's spend (Gadi 2026-08-02: the text says
+  // "worth to YOU"). Basis: Family monthly annualized (₪19.90×12 ≈ 240,
+  // $5.99×12 ≈ 72) × the partner's own year-one rate. So 25% → ₪60, a
+  // founder's 30% → ₪72. Always correct per partner, per currency.
+  const ils = lang === "he" || lang === "ru";
+  const annualSpend = ils ? 240 : 72;
+  const y1Amount = Math.round((partner.rateYearOne ?? 0.25) * annualSpend);
+  const year1 = ils ? `${y1Amount} ₪` : `$${y1Amount}`;
+  const vars: Vars = { name: partner.name, pctY1, pctAfter, year1, code: partner.code, link };
 
   const linkLabel = he ? "הקישור שלך" : "Your link";
   const codeLabel = he ? "קוד השותף שלך" : "Your partner code";
