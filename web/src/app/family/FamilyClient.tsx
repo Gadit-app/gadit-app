@@ -119,11 +119,29 @@ const COPY: Record<string, {
     back: "← ተመለስ",
     capReached: `በFamily እቅድ ላይ ያለውን የ${MAX_KIDS_PER_FAMILY} ልጆች ጣሪያ ደርሰዋል።`,
   },
+  ru: {
+    title: "Ваша семья",
+    sub: "Каждый член семьи — отдельный пользователь, со своей тетрадью и историей.",
+    add: "+ Добавить",
+    parents: "Родители",
+    children: "Дети",
+    empty: "Членов семьи пока нет. Начните с первого ребёнка.",
+    pair: "Подключить устройство",
+    revoke: "Отключить",
+    paired: "Подключено",
+    owner: "Главный родитель",
+    notReady: "Чтобы управлять семьёй, нужна подписка Family.",
+    goPricing: "К ценам",
+    welcome: "Добро пожаловать в Family! Добавьте членов семьи, чтобы начать.",
+    back: "← Назад",
+    capReached: `Вы достигли максимума в ${MAX_KIDS_PER_FAMILY} детей на семейном плане.`,
+  },
 };
 
 const ROLE_LABEL: Record<string, Record<"father" | "mother" | "boy" | "girl", string>> = {
   he: { father: "אבא", mother: "אמא", boy: "בן", girl: "בת" },
   en: { father: "Dad", mother: "Mom", boy: "Son", girl: "Daughter" },
+  ru: { father: "Папа", mother: "Мама", boy: "Сын", girl: "Дочь" },
   hi: { father: "पापा", mother: "मम्मी", boy: "बेटा", girl: "बेटी" },
   am: { father: "አባት", mother: "እናት", boy: "ወንድ ልጅ", girl: "ሴት ልጅ" },
 };
@@ -182,6 +200,19 @@ const PROGRESS_COPY: Record<string, {
     pairCta: "Pair device",
     noneYet: "No words in the notebook yet. As soon as your child starts looking words up, they appear here.",
     loading: "Loading progress...",
+  },
+  ru: {
+    title: "Прогресс детей",
+    sub: "Сколько слов выучил каждый ребёнок и сколько добавилось за неделю. Словарный запас растёт на ваших глазах.",
+    familyTotal: "слов в тетрадях семьи",
+    weekTotal: "новых слов за неделю",
+    wordsInNotebook: "слов в тетради",
+    thisWeek: "за неделю",
+    recentWords: "Последние слова",
+    notLinked: "Устройство ребёнка ещё не подключено. Подключите его, чтобы видеть прогресс.",
+    pairCta: "Подключить устройство",
+    noneYet: "В тетради пока нет слов. Как только ребёнок начнёт искать слова, они появятся здесь.",
+    loading: "Загрузка прогресса...",
   },
 };
 
@@ -334,6 +365,14 @@ const NAV_COPY: Record<string, {
     homeTitle: "አጠቃላይ እይታ", membersTitle: "የቤተሰብ አባላት", settingsTitle: "ቅንብሮች",
     langLabel: "የገጽታ ቋንቋ", accountLabel: "የእኔ መለያ", accountSub: "ዝርዝሮች እና መግቢያ",
     subLabel: "የእኔ ምዝገባ", subSub: "እቅድ እና ክፍያ ያስተዳድሩ",
+  },
+  ru: {
+    home: "Главная", members: "Семья", settings: "Настройки", dictionary: "Назад к словарю", addMember: "Добавить члена семьи",
+    greetMorning: "Доброе утро", greetNoon: "Добрый день", greetEvening: "Добрый вечер", greetNight: "Доброй ночи",
+    kids: (n) => (n === 1 ? "1 ребёнок в семье" : `${n} детей в семье`), words: (n) => `${n} слов выучено`,
+    homeTitle: "Обзор", membersTitle: "Члены семьи", settingsTitle: "Настройки",
+    langLabel: "Язык интерфейса", accountLabel: "Мой аккаунт", accountSub: "Данные и вход",
+    subLabel: "Моя подписка", subSub: "Управление планом и оплатой",
   },
 };
 
