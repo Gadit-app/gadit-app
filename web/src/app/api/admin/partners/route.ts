@@ -301,3 +301,31 @@ export async function PATCH(req: NextRequest) {
 
   return NextResponse.json({ error: "unknown_action" }, { status: 400 });
 }
+
+/**
+ * DELETE /api/admin/partners?secret=...&partnerId=...
+ * Permanently removes a partner AND its commissions subcollection (Firestore
+ * doesn't cascade). For fixing test/duplicate entries. Attribution already
+ * written on a user doc (referredPartnerId) is left as-is but becomes inert
+ * — the webhook no-ops when the partner is gone.
+ */
+export async function DELETE(req: NextRequest) {
+  const denied = gate(req);
+  if (denied) return denied;
+
+  const partnerId = req.nextUrl.searchParams.get("partnerId") ?? "";
+  if (!partnerId) return NextResponse.json({ error: "missing partnerId" }, { status: 400 });
+
+  const db = getAdminDb();
+  const ref = db.collection("partners").doc(partnerId);
+  const snap = await ref.get();
+  if (!snap.exists) return NextResponse.json({ error: "partner_not_found" }, { status: 404 });
+
+  const comm = await ref.collection("commissions").get();
+  const batch = db.batch();
+  comm.docs.forEach((d) => batch.delete(d.ref));
+  batch.delete(ref);
+  await batch.commit();
+
+  return NextResponse.json({ ok: true, deletedCommissions: comm.size });
+}

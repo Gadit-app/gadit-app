@@ -68,6 +68,8 @@ const T = {
     copyRef: "Copy referral link",
     copyDash: "Copy portal link",
     resend: "Resend email",
+    del: "Delete",
+    confirmDel: "Permanently delete this partner and all their commission records? This cannot be undone.",
     copied: "Copied ✓",
     sent: "Sent ✓",
     confirmPaid: "Mark all released (payable) commissions as PAID for this partner? This records that you've sent the money.",
@@ -120,6 +122,8 @@ const T = {
     copyRef: "העתק קישור שיווק",
     copyDash: "העתק קישור פורטל",
     resend: "שלח מייל שוב",
+    del: "מחיקה",
+    confirmDel: "למחוק לצמיתות את השותף הזה ואת כל רשומות העמלה שלו? אי אפשר לשחזר.",
     copied: "הועתק ✓",
     sent: "נשלח ✓",
     confirmPaid: "לסמן את כל העמלות ששוחררו (לתשלום) של השותף הזה כשולמו? זה התיעוד שהעברת את הכסף.",
@@ -299,6 +303,17 @@ export default function AdminPartnersClient() {
     }
   }
 
+  async function delPartner(partnerId: string) {
+    if (!window.confirm(t.confirmDel)) return;
+    setBusy(partnerId + "delete");
+    try {
+      await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}&partnerId=${encodeURIComponent(partnerId)}`, { method: "DELETE" });
+      await load();
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function copy(text: string, key: string) {
     try {
       await navigator.clipboard.writeText(text);
@@ -437,6 +452,7 @@ export default function AdminPartnersClient() {
                   <button style={btn} disabled={busy === r.id + "resendEmail"} onClick={() => act(r.id, "resendEmail")}>
                     {flash === r.id + ":sent" ? t.sent : t.resend}
                   </button>
+                  <button style={btnDanger} disabled={busy === r.id + "delete"} onClick={() => delPartner(r.id)}>{t.del}</button>
                 </div>
               </div>
             );
@@ -465,6 +481,7 @@ const pillStd: React.CSSProperties = { background: "rgba(14,165,165,0.12)", colo
 const pillFounder: React.CSSProperties = { background: "rgba(124,58,237,0.12)", color: "#6D28D9" };
 const btn: React.CSSProperties = { background: "#F3F4F6", color: "#374151", border: "1px solid #E5E7EB", borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" };
 const btnPrimary: React.CSSProperties = { background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" };
+const btnDanger: React.CSSProperties = { background: "#FEF2F2", color: "#B91C1C", border: "1px solid #FECACA", borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" };
 const fieldLabel: React.CSSProperties = { display: "block", fontSize: 12.5, fontWeight: 600, color: "#6B7280", margin: "0 0 6px" };
 const tab: React.CSSProperties = { background: "#F3F4F6", color: "#374151", border: "1px solid #E5E7EB", borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" };
 const tabActive: React.CSSProperties = { background: "#0EA5A5", color: "#fff", border: "1px solid #0EA5A5", borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" };
