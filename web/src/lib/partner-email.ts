@@ -4,54 +4,104 @@ import { getAdminDb } from "./firebase-admin";
 import { Partner } from "./partners";
 
 /**
- * Partner-facing emails. Server-only (pulls in Resend + firebase-admin),
- * so this lives apart from lib/partners.ts, which is safe to import from
- * client components.
+ * Partner-facing "opening" (welcome) email — a full 14-field template
+ * modelled on the one Gadi runs on Yooniz, adapted to Gadit's product
+ * (a multilingual child-safe dictionary, not a screen-time app) and to
+ * Gadit's multi-currency reality. Server-only (Resend + firebase-admin),
+ * so it lives apart from lib/partners.ts (safe for client imports).
  *
- * The welcome ("opening") email is EDITABLE by an admin: the subject,
- * intro paragraph, and share line are stored in Firestore at
- * partnerConfig/welcomeEmail (per language) and edited from
- * /admin/partners. The functional blocks — the referral link, the code,
- * and the dashboard button — are always injected and cannot be removed,
- * so a bad edit can never produce a useless email.
+ * Editable from /admin/partners, stored per language in Firestore at
+ * partnerConfig/welcomeEmail. The functional blocks — referral link,
+ * code, dashboard button — are always injected and can't be removed, so
+ * a bad edit can never produce a useless email.
  *
- * Editable text supports placeholders: {name}, {rateYearOne},
- * {rateLifetime}.
+ * Tokens in the text fields: {name} {pctY1} {pctAfter} {year1} {code} {link}
+ *  - {pctY1} / {pctAfter} come from the partner's own rates.
+ *  - {year1} comes from the editable `year1Est` field (per language), so
+ *    Gadi sets the currency-appropriate figure himself (₪ / $).
  */
 
 const SITE = "https://www.gadit.app";
 
-export type WelcomeLangConfig = { subject: string; intro: string; shareLine: string };
+export type WelcomeLangConfig = {
+  subject: string;
+  greeting: string;
+  opening: string;
+  noteUnderLink: string;
+  commissionLine: string;
+  commissionExplain: string;
+  year1Est: string;            // fills the {year1} token, per-language / per-currency
+  dashboardNote: string;
+  tipsHeader: string;
+  tip1: string;
+  tip2: string;
+  tip3: string;
+  closing: string;
+  signatureName: string;
+  signatureRole: string;
+};
 export type WelcomeConfig = { he: WelcomeLangConfig; en: WelcomeLangConfig };
+
+export const WELCOME_FIELDS: (keyof WelcomeLangConfig)[] = [
+  "subject", "greeting", "opening", "noteUnderLink", "commissionLine",
+  "commissionExplain", "year1Est", "dashboardNote", "tipsHeader",
+  "tip1", "tip2", "tip3", "closing", "signatureName", "signatureRole",
+];
 
 export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   he: {
-    subject: "הצטרפת לתוכנית השותפים של Gadit 🎉",
-    intro: "היי {name}, כיף שהצטרפת לתוכנית השותפים של Gadit. הנה הקישור האישי שלך:",
-    shareLine: "כל מי שנרשם ומשלם דרך הקישור שלך מזכה אותך ב-{rateYearOne}% עמלה חוזרת בשנה הראשונה, ו-{rateLifetime}% לכל החיים.",
+    subject: "הצטרפת לתוכנית השותפים של Gadit. הנה הקישור שלך 🤝",
+    greeting: "טוב שהצטרפת לתוכנית השותפים של Gadit 🤝",
+    opening: "הנה כל מה שצריך כדי להתחיל. Gadit הוא מילון חכם ובטוח לילדים ב-14 שפות, עם דוגמאות, תמונות ומחברת אישית שעוזרת לילד באמת להבין מילים.",
+    noteUnderLink: "כל מי שנרשם ומשלם דרכו נזקף אליך אוטומטית. הקישור לא חושף את השם שלך.",
+    commissionLine: "העמלה שלך: {pctY1}% מכל תשלום בשנה הראשונה, {pctAfter}% אחריה לכל זמן שהמשפחה נשארת.",
+    commissionExplain: "משפחה אחת שנשארת שנה שווה לך מעל {year1}. והיא ממשיכה לשלם לך כל חודש שהיא איתנו. זו לא עמלה חד-פעמית, זו הכנסה שממשיכה.",
+    year1Est: "₪240",
+    dashboardNote: "אפשר לראות שם קליקים, הרשמות ורווחים בזמן אמת. בלי צורך להתחבר, הלוח פרטי לך בלבד.",
+    tipsHeader: "3 דברים שעוזרים להפיץ",
+    tip1: "לספר על זה איפה שההורים מקשיבים לך. קבוצת וואטסאפ, פוסט, שיחה אישית.",
+    tip2: "הכאב שכל הורה מכיר: ילד שנתקל במילה שהוא לא מבין ומוותר. Gadit נותן לו להבין לבד, בשפה שלו.",
+    tip3: "אפשר להתחיל בחינם, אז קל להמליץ בלי מחסום.",
+    closing: "כל שאלה, אפשר פשוט להשיב למייל הזה. הצוות ואני כאן.",
+    signatureName: "גדי בן לביא",
+    signatureRole: "מייסד Gadit",
   },
   en: {
-    subject: "You're in — Gadit Partner Program 🎉",
-    intro: "Hi {name}, welcome to the Gadit Partner Program. Here's your personal link:",
-    shareLine: "Share your link. For everyone who signs up and pays through it, you earn {rateYearOne}% recurring commission in year one, and {rateLifetime}% for life.",
+    subject: "You're in. Here's your Gadit partner link 🤝",
+    greeting: "Great to have you in the Gadit Partner Program 🤝",
+    opening: "Here's everything you need to start. Gadit is a smart, child-safe dictionary in 14 languages, with examples, pictures and a personal notebook that helps a child truly understand words.",
+    noteUnderLink: "Everyone who signs up and pays through it is credited to you automatically. The link never shows your name.",
+    commissionLine: "Your commission: {pctY1}% of every payment in year one, {pctAfter}% after that for as long as the family stays.",
+    commissionExplain: "One family that stays a year is worth over {year1} to you. And it keeps paying you every month they're with us. Not a one-time payout, income that continues.",
+    year1Est: "$60",
+    dashboardNote: "You can see clicks, signups and earnings there in real time. No login needed, the dashboard is private to you.",
+    tipsHeader: "3 things that help you spread the word",
+    tip1: "Mention it where parents already listen to you. A WhatsApp group, a post, a personal chat.",
+    tip2: "The pain every parent knows: a child hits a word they don't understand and gives up. Gadit lets them understand on their own, in their language.",
+    tip3: "There's a free way to start, so it's easy to recommend with no barrier.",
+    closing: "Any question, just reply to this email. The team and I are here.",
+    signatureName: "Gadi Ben Lavi",
+    signatureRole: "Founder, Gadit",
   },
 };
 
 function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function applyVars(s: string, v: { name: string; y1: number; life: number }): string {
+type Vars = { name: string; pctY1: number; pctAfter: number; year1: string; code: string; link: string };
+
+function applyVars(s: string, v: Vars): string {
   return esc(s)
     .replace(/\{name\}/g, esc(v.name || ""))
-    .replace(/\{rateYearOne\}/g, String(v.y1))
-    .replace(/\{rateLifetime\}/g, String(v.life));
+    .replace(/\{pctY1\}/g, String(v.pctY1))
+    .replace(/\{pctAfter\}/g, String(v.pctAfter))
+    .replace(/\{year1\}/g, esc(v.year1 || ""))
+    .replace(/\{code\}/g, esc(v.code))
+    .replace(/\{link\}/g, esc(v.link));
 }
 
-/** Body fields: keep the admin's line breaks. Each newline the admin typed
- *  in the textarea becomes a <br>, so pressing Enter (or Enter twice for a
- *  blank line) shows up in the email exactly as written. */
-function applyVarsHtml(s: string, v: { name: string; y1: number; life: number }): string {
+function applyVarsHtml(s: string, v: Vars): string {
   return applyVars(s, v).replace(/\r\n/g, "\n").replace(/\n/g, "<br>");
 }
 
@@ -65,37 +115,59 @@ export function buildWelcomeEmail(
 ): { subject: string; html: string } {
   const he = lang === "he";
   const c = he ? cfg.he : cfg.en;
-  const y1 = Math.round((partner.rateYearOne ?? 0.25) * 100);
-  const life = Math.round((partner.rateLifetime ?? 0.1) * 100);
-  const vars = { name: partner.name, y1, life };
-  const link = `${SITE}/p/${partner.code}`;
+  const pctY1 = Math.round((partner.rateYearOne ?? 0.25) * 100);
+  const pctAfter = Math.round((partner.rateLifetime ?? 0.1) * 100);
+  const link = `${SITE}/?ref=${partner.code}`;
   const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
+  const vars: Vars = { name: partner.name, pctY1, pctAfter, year1: c.year1Est, code: partner.code, link };
+
   const linkLabel = he ? "הקישור שלך" : "Your link";
   const codeLabel = he ? "קוד השותף שלך" : "Your partner code";
   const cta = he ? "פתיחת האזור האישי" : "Open your dashboard";
-  const foot = he
-    ? "כדאי לשמור את הקישור הזה. זו הכניסה הפרטית לאזור שלך, בלי סיסמה."
-    : "Keep this link. It's your private, password-less way back into your dashboard.";
+  const t = (s: string) => applyVars(s, vars);
+  const tb = (s: string) => applyVarsHtml(s, vars);
+  const dir = he ? "rtl" : "ltr";
+  const align = he ? "right" : "left";
 
-  // Subject is a single plain-text line — collapse any stray newlines.
-  const subject = applyVars(c.subject, vars).replace(/&amp;/g, "&").replace(/\s*\n\s*/g, " ");
-  const html = `<!DOCTYPE html><html dir="${he ? "rtl" : "ltr"}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
-  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;">
+  const subject = t(c.subject).replace(/&amp;/g, "&").replace(/\s*\n\s*/g, " ");
+
+  const tips = [c.tip1, c.tip2, c.tip3].filter((x) => x && x.trim());
+  const tipsHtml = tips.length
+    ? `<div style="margin:22px 0 4px;font-weight:700;font-size:15px;">${t(c.tipsHeader)}</div>
+       <ol style="margin:8px 0 0;padding-inline-start:20px;">${tips.map((tp) => `<li style="margin:0 0 8px;font-size:14.5px;line-height:1.6;">${tb(tp)}</li>`).join("")}</ol>`
+    : "";
+
+  const html = `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F6F8FA;color:#111827;">
+  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #EAECEF;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;text-align:${align};">
       <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
-      <div style="font-size:22px;font-weight:700;margin-top:4px;">${he ? "שותף חדש" : "Partner"}</div>
+      <div style="font-size:22px;font-weight:800;margin-top:4px;">${t(c.greeting)}</div>
     </div>
-    <div style="padding:24px;font-size:15px;line-height:1.6;">
-      <p style="margin:0 0 16px;">${applyVarsHtml(c.intro, vars)}</p>
-      <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">${linkLabel}</p>
-      <p style="margin:0 0 20px;"><a href="${link}" style="font-size:18px;font-weight:700;color:#0EA5A5;">${link}</a></p>
-      <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">${codeLabel}</p>
-      <p style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:2px;">${partner.code}</p>
-      <p style="margin:0 0 20px;">${applyVarsHtml(c.shareLine, vars)}</p>
-      <div style="margin-top:8px;text-align:center;">
-        <a href="${dash}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:11px 26px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">${cta}</a>
+    <div style="padding:24px;font-size:15px;line-height:1.6;text-align:${align};">
+      <p style="margin:0 0 18px;">${tb(c.opening)}</p>
+
+      <div style="font-size:13px;color:#6B7280;margin:0 0 6px;">${linkLabel}</div>
+      <p style="margin:0 0 6px;"><a href="${link}" style="font-size:18px;font-weight:700;color:#0EA5A5;word-break:break-all;">${link}</a></p>
+      <div style="font-size:12.5px;color:#9CA3AF;margin:0 0 18px;">${tb(c.noteUnderLink)}</div>
+
+      <div style="font-size:13px;color:#6B7280;margin:0 0 6px;">${codeLabel}</div>
+      <div style="font-size:22px;font-weight:800;letter-spacing:2px;margin:0 0 20px;">${esc(partner.code)}</div>
+
+      <div style="background:rgba(14,165,165,0.08);border-radius:12px;padding:16px;margin:0 0 18px;">
+        <div style="font-weight:700;margin:0 0 6px;">${tb(c.commissionLine)}</div>
+        <div style="font-size:14px;color:#374151;">${tb(c.commissionExplain)}</div>
       </div>
-      <p style="margin:20px 0 0;font-size:12px;color:#9CA3AF;">${foot}</p>
+
+      <div style="text-align:center;margin:20px 0 8px;">
+        <a href="${dash}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">${cta}</a>
+      </div>
+      <div style="font-size:12.5px;color:#9CA3AF;margin:0 0 4px;text-align:center;">${tb(c.dashboardNote)}</div>
+
+      ${tipsHtml}
+
+      <p style="margin:24px 0 0;font-size:14.5px;">${tb(c.closing)}</p>
+      <p style="margin:16px 0 0;font-size:14.5px;font-weight:700;">${t(c.signatureName)}</p>
+      <p style="margin:2px 0 0;font-size:13px;color:#6B7280;">${t(c.signatureRole)}</p>
     </div>
   </div>
 </body></html>`;
@@ -118,10 +190,7 @@ export async function loadWelcomeConfig(): Promise<WelcomeConfig> {
   }
 }
 
-/**
- * The welcome / "here's your link" email. Reads the editable config, then
- * sends. Non-blocking: swallows its own errors.
- */
+/** The welcome / "here's your link" email. Reads the editable config, sends. */
 export async function sendPartnerWelcome(partner: WelcomePartner, lang: string) {
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) return;

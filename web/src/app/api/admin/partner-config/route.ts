@@ -11,7 +11,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { loadWelcomeConfig, buildWelcomeEmail, WelcomeConfig } from "@/lib/partner-email";
+import { loadWelcomeConfig, buildWelcomeEmail, WelcomeConfig, WELCOME_FIELDS, DEFAULT_WELCOME_CONFIG } from "@/lib/partner-email";
 
 export const maxDuration = 30;
 
@@ -38,6 +38,7 @@ export async function GET(req: NextRequest) {
   const config = await loadWelcomeConfig();
   return NextResponse.json({
     config,
+    defaults: DEFAULT_WELCOME_CONFIG,
     previewHe: buildWelcomeEmail(SAMPLE, "he", config).html,
     previewEn: buildWelcomeEmail(SAMPLE, "en", config).html,
   });
@@ -58,9 +59,9 @@ export async function PATCH(req: NextRequest) {
   // arbitrary lands in the doc.
   const clean = (o: unknown) => {
     const s = (o ?? {}) as Record<string, unknown>;
-    const pick = (k: string) => (typeof s[k] === "string" ? (s[k] as string).slice(0, 1000) : undefined);
+    const pick = (k: string) => (typeof s[k] === "string" ? (s[k] as string).slice(0, 1500) : undefined);
     const out: Record<string, string> = {};
-    for (const k of ["subject", "intro", "shareLine"]) {
+    for (const k of WELCOME_FIELDS) {
       const v = pick(k);
       if (v !== undefined) out[k] = v;
     }

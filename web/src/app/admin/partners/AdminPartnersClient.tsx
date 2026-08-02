@@ -81,6 +81,9 @@ const T = {
     emailSaving: "Saving…",
     emailSaved: "Saved ✓",
     emailPreview: "Preview",
+    emailPreviewNote: "Reflects the SAVED template. Save to refresh.",
+    emailRestore: "Restore defaults",
+    emailRestoreConfirm: "Replace this language's fields with the default template? Unsaved edits will be lost (nothing is saved until you press Save).",
   },
   he: {
     title: "שותפים",
@@ -129,11 +132,39 @@ const T = {
     emailSaving: "שומר…",
     emailSaved: "נשמר ✓",
     emailPreview: "תצוגה מקדימה",
+    emailPreviewNote: "מציג את התבנית השמורה. לחצו שמירה כדי לרענן.",
+    emailRestore: "שחזור ברירת מחדל",
+    emailRestoreConfirm: "להחליף את שדות השפה הזו בתבנית ברירת המחדל? עריכות שלא נשמרו יאבדו (שום דבר לא נשמר עד לחיצה על שמירה).",
   },
 };
 
-type LangCfg = { subject: string; intro: string; shareLine: string };
+type LangCfg = {
+  subject: string; greeting: string; opening: string; noteUnderLink: string;
+  commissionLine: string; commissionExplain: string; year1Est: string;
+  dashboardNote: string; tipsHeader: string; tip1: string; tip2: string;
+  tip3: string; closing: string; signatureName: string; signatureRole: string;
+};
 type WelcomeCfg = { he: LangCfg; en: LangCfg };
+
+// The 15 editable fields, with bilingual labels + optional token hints.
+// `big` fields render as textareas. Order matches the email top-to-bottom.
+const FIELD_META: Array<{ key: keyof LangCfg; he: string; en: string; hintHe?: string; hintEn?: string; big?: boolean }> = [
+  { key: "subject", he: "נושא המייל", en: "Subject" },
+  { key: "greeting", he: "שורת ברכה", en: "Greeting" },
+  { key: "opening", he: "פתיחה", en: "Opening", big: true },
+  { key: "noteUnderLink", he: "הערה מתחת לקישור", en: "Note under the link", big: true },
+  { key: "commissionLine", he: "שורת העמלה", en: "Commission line", hintHe: "{pctY1} ו-{pctAfter} מוחלפים באחוזי השותף", hintEn: "{pctY1} and {pctAfter} are replaced by the partner's rates", big: true },
+  { key: "commissionExplain", he: "הסבר העמלה", en: "Commission explanation", hintHe: "{year1} מוחלף בערך למטה", hintEn: "{year1} is replaced by the value below", big: true },
+  { key: "year1Est", he: "ערך {year1}", en: "{year1} value", hintHe: "הסכום שיחליף את {year1}, למשל ₪240 (עברית) או $60 (אנגלית)", hintEn: "The figure that replaces {year1}, e.g. $60" },
+  { key: "dashboardNote", he: "הערה על לוח השותף", en: "Dashboard note", big: true },
+  { key: "tipsHeader", he: "כותרת הטיפים", en: "Tips header" },
+  { key: "tip1", he: "טיפ 1", en: "Tip 1", big: true },
+  { key: "tip2", he: "טיפ 2", en: "Tip 2", big: true },
+  { key: "tip3", he: "טיפ 3", en: "Tip 3", big: true },
+  { key: "closing", he: "שורת סיום", en: "Closing line", big: true },
+  { key: "signatureName", he: "שם בחתימה", en: "Signature name" },
+  { key: "signatureRole", he: "תפקיד בחתימה", en: "Signature role" },
+];
 
 const CUR_SYMBOL: Record<string, string> = { ils: "₪", usd: "$", eur: "€", gbp: "£" };
 function money(minor: number, currency: string): string {
@@ -166,6 +197,7 @@ export default function AdminPartnersClient() {
 
   // Welcome-email editor
   const [cfg, setCfg] = useState<WelcomeCfg | null>(null);
+  const [defaults, setDefaults] = useState<WelcomeCfg | null>(null);
   const [previews, setPreviews] = useState<{ he: string; en: string }>({ he: "", en: "" });
   const [editLang, setEditLang] = useState<"he" | "en">(lang);
   const [emailState, setEmailState] = useState<"idle" | "saving" | "saved">("idle");
@@ -180,6 +212,7 @@ export default function AdminPartnersClient() {
     if (res.ok) {
       const d = await res.json();
       setCfg(d.config);
+      if (d.defaults) setDefaults(d.defaults);
       setPreviews({ he: d.previewHe, en: d.previewEn });
     }
   }, [secret]);
@@ -188,6 +221,13 @@ export default function AdminPartnersClient() {
 
   function setCfgField(field: keyof LangCfg, value: string) {
     setCfg((prev) => (prev ? { ...prev, [editLang]: { ...prev[editLang], [field]: value } } : prev));
+    setEmailState("idle");
+  }
+
+  function restoreDefaults() {
+    if (!cfg || !defaults) return;
+    if (!window.confirm(t.emailRestoreConfirm)) return;
+    setCfg({ ...cfg, [editLang]: { ...defaults[editLang] } });
     setEmailState("idle");
   }
 
@@ -292,22 +332,36 @@ export default function AdminPartnersClient() {
             <button type="button" style={editLang === "he" ? tabActive : tab} onClick={() => setEditLang("he")}>עברית</button>
             <button type="button" style={editLang === "en" ? tabActive : tab} onClick={() => setEditLang("en")}>English</button>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 18 }}>
             <div>
-              <label style={fieldLabel}>{t.emailSubject}</label>
-              <input style={input} dir={editLang === "he" ? "rtl" : "ltr"} value={cfg[editLang].subject} onChange={(e) => setCfgField("subject", e.target.value)} />
-              <label style={fieldLabel}>{t.emailIntro}</label>
-              <textarea style={{ ...input, minHeight: 64, resize: "vertical" }} dir={editLang === "he" ? "rtl" : "ltr"} value={cfg[editLang].intro} onChange={(e) => setCfgField("intro", e.target.value)} />
-              <label style={fieldLabel}>{t.emailShare}</label>
-              <textarea style={{ ...input, minHeight: 84, resize: "vertical" }} dir={editLang === "he" ? "rtl" : "ltr"} value={cfg[editLang].shareLine} onChange={(e) => setCfgField("shareLine", e.target.value)} />
-              <div style={{ fontSize: 12, color: "#9CA3AF", margin: "6px 0 14px", direction: "ltr", textAlign: "start" }}>{t.emailVars}</div>
-              <button type="button" style={btnPrimary} disabled={emailState === "saving"} onClick={saveConfig}>
-                {emailState === "saving" ? t.emailSaving : emailState === "saved" ? t.emailSaved : t.emailSave}
-              </button>
+              {FIELD_META.map((fm) => {
+                const dir = editLang === "he" ? "rtl" : "ltr";
+                const label = editLang === "he" ? fm.he : fm.en;
+                const hint = editLang === "he" ? fm.hintHe : fm.hintEn;
+                const val = cfg[editLang][fm.key];
+                return (
+                  <div key={fm.key} style={{ marginBottom: 12 }}>
+                    <label style={fieldLabel}>{label}</label>
+                    {fm.big ? (
+                      <textarea style={{ ...input, minHeight: 60, resize: "vertical" }} dir={dir} value={val} onChange={(e) => setCfgField(fm.key, e.target.value)} />
+                    ) : (
+                      <input style={input} dir={dir} value={val} onChange={(e) => setCfgField(fm.key, e.target.value)} />
+                    )}
+                    {hint && <div style={{ fontSize: 11.5, color: "#9CA3AF", marginTop: 3 }}>{hint}</div>}
+                  </div>
+                );
+              })}
+              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 4 }}>
+                <button type="button" style={btnPrimary} disabled={emailState === "saving"} onClick={saveConfig}>
+                  {emailState === "saving" ? t.emailSaving : emailState === "saved" ? t.emailSaved : t.emailSave}
+                </button>
+                <button type="button" style={btn} onClick={restoreDefaults}>{t.emailRestore}</button>
+              </div>
             </div>
             <div>
               <label style={fieldLabel}>{t.emailPreview}</label>
-              <iframe title="welcome email preview" srcDoc={editLang === "he" ? previews.he : previews.en} style={{ width: "100%", height: 440, border: "1px solid #E5E7EB", borderRadius: 10, background: "#F9FAFB" }} />
+              <div style={{ fontSize: 11.5, color: "#9CA3AF", marginBottom: 6 }}>{t.emailPreviewNote}</div>
+              <iframe title="welcome email preview" srcDoc={editLang === "he" ? previews.he : previews.en} style={{ width: "100%", height: 620, border: "1px solid #E5E7EB", borderRadius: 10, background: "#F9FAFB", position: "sticky", top: 12 }} />
             </div>
           </div>
         </div>
