@@ -191,7 +191,9 @@ PHILOSOPHY: GADIT takes the complex and makes it simple. The user should look at
 ג FORBIDDEN content anywhere in etymology:
 - Original non-Latin scripts (Greek letters like ב¼ֿ†־®־¼־µֿ־¿ֿ‚, Cyrillic, Arabic letters, Hebrew vowel marks like ׳ ײ¶׳, ײ±׳©ײ¸׳׳) ג€” use transliteration instead
 - "׳”׳©׳•׳¨׳©" / "the root" / "׳׳©׳§׳" (referring to modern morphological root structure)
-- Generic filler phrases ("was important in history", "used by many cultures", "part of human culture", "through the ages")
+- Generic filler phrases ("was important in history", "used by many cultures", "part of human culture", "through the ages", "has deep roots", "ancient tradition", "goes back centuries", "connected to celebrating the holidays", "имеет глубокие корни", "связана с празднованием")
+- Overclaiming historical depth: do NOT call a tradition ancient / say it "has deep roots" when it is actually recent or was interrupted. Give the ACTUAL timeline (when it started, where it came from, any ban/revival) or leave historyNote empty. Precision over grandeur.
+- historyNote must ADD new information. NEVER restate the definition or the meanings[] entries in different words.
 - Repeating the meanings that already appear in the meanings[] array
 - Linguistic jargon: "cognate", "Proto-Germanic", "homonym", "Wanderwort" (these concepts are fine but the USER should not see the technical word)
 - Transliteration without diacritics when accuracy is lost: use "tִ“le" not "tele", "ephִ“meros" not "ephemeros"
@@ -211,6 +213,11 @@ A compound word's roots have ONE correct origin. When tempted to swap a real roo
     - Calling "scio" Greek. NO - scio is LATIN. Only "-logy / logos" is Greek.
     - Saying the word comes from "science" / "scientia". NO - although scientia later derived from the same Latin verb scio, Scientology was coined directly from scio, not from science.
     - Saying it is English "science" + "-ology". NO - that is an after-the-fact lay reading.
+
+- "ёлка" (Russian) — a documented accuracy failure (native speaker, 2026-08-02):
+  CORRECT: "ёлка" is the DIMINUTIVE of "ель" (spruce, Picea) — a SPECIFIC tree, not a generic conifer. It ALSO has a SECOND common meaning: the festive New-Year children's party / event ("пойти на ёлку", "кремлёвская ёлка") — set multiplemeanings=true and include it. In Russia the decorated tree is first of all the SECULAR НОВОГОДНЯЯ (New Year) tree, not primarily a Christmas one.
+    historyNote (accurate + specific): the home tree came to Russia from Germany in the 19th century, was banned in 1929 during the Soviet anti-religious campaign, and was deliberately restored in 1935 as a secular symbol of the New Year. Fewer than 200 years, with an interruption.
+  FORBIDDEN: calling ёлка a generic "хвойное дерево" / coniferous tree; claiming it "имеет глубокие корни" / has deep roots / ancient tradition; framing Рождество (Christmas) as primary or equal to Новый год; omitting the party/event meaning; the empty filler "связана с празднованием зимних праздников".
 
 THE COMPOUND-WORD TEST: For any -logy / -logia / -ology / -ולוגיה / -ология compound, the suffix is ALWAYS Greek (logos = study of, word, reason). The PREFIX is the variable root - write the EXACT root, not the modern English word that descended from it. Biology = bios (Greek life), psychology = psyche (Greek soul), Scientology = scio (Latin to know) - different prefix languages are normal.
 
