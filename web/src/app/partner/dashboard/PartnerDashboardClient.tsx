@@ -39,6 +39,7 @@ const COPY = {
     yourLink: "הקישור האישי שלך",
     copy: "העתקת קישור",
     copied: "הועתק ✓",
+    linkLangLabel: "שפת הקישור",
     clicks: "קליקים",
     signups: "נרשמו",
     paying: "לקוחות משלמים",
@@ -66,6 +67,7 @@ const COPY = {
     yourLink: "Your personal link",
     copy: "Copy link",
     copied: "Copied ✓",
+    linkLangLabel: "Link language",
     clicks: "Clicks",
     signups: "Signups",
     paying: "Paying customers",
@@ -94,6 +96,31 @@ function money(minor: number, currency: string): string {
   return `${sym}${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
+// The 14 UI languages, with native names, for the link-language picker.
+// A partner shares gadit.app/<lang>/?ref=<code>; the middleware sets the
+// language from the prefix and the ?ref= is preserved through the rewrite,
+// so the audience lands in that language AND the click is attributed.
+const LINK_LANGS: Array<{ code: string; native: string }> = [
+  { code: "en", native: "English" },
+  { code: "he", native: "עברית" },
+  { code: "ru", native: "Русский" },
+  { code: "es", native: "Español" },
+  { code: "ar", native: "العربية" },
+  { code: "fr", native: "Français" },
+  { code: "de", native: "Deutsch" },
+  { code: "pt", native: "Português" },
+  { code: "it", native: "Italiano" },
+  { code: "cs", native: "Čeština" },
+  { code: "sk", native: "Slovenčina" },
+  { code: "ja", native: "日本語" },
+  { code: "hi", native: "हिन्दी" },
+  { code: "am", native: "አማርኛ" },
+];
+function buildRefLink(code: string, lang: string): string {
+  const base = "https://www.gadit.app";
+  return lang === "en" ? `${base}/?ref=${code}` : `${base}/${lang}/?ref=${code}`;
+}
+
 export function PartnerDashboardClient() {
   const { lang } = useLang();
   const href = useHref();
@@ -103,6 +130,7 @@ export function PartnerDashboardClient() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [copied, setCopied] = useState(false);
+  const [linkLang, setLinkLang] = useState<string>(lang); // language for the shared link
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("t");
@@ -122,7 +150,7 @@ export function PartnerDashboardClient() {
   async function copyLink() {
     if (!stats) return;
     try {
-      await navigator.clipboard.writeText(stats.link);
+      await navigator.clipboard.writeText(buildRefLink(stats.code, linkLang));
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch { /* clipboard blocked — ignore */ }
@@ -151,14 +179,27 @@ export function PartnerDashboardClient() {
               {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
             </div>
 
-            {/* Referral link */}
+            {/* Referral link — with a language picker so the partner can
+                share it in any of the 14 languages (gadit.app/<lang>/?ref=). */}
             <div style={S.card}>
               <div style={S.cardLabel}>{t.yourLink}</div>
               <div style={S.linkRow}>
-                <div style={S.linkText} dir="ltr">{stats.link}</div>
+                <div style={S.linkText} dir="ltr">{buildRefLink(stats.code, linkLang)}</div>
                 <button type="button" onClick={copyLink} style={S.copyBtn}>
                   {copied ? t.copied : t.copy}
                 </button>
+              </div>
+              <div style={S.linkLangRow}>
+                <span style={S.linkLangLabel}>{t.linkLangLabel}</span>
+                <select
+                  value={linkLang}
+                  onChange={(e) => setLinkLang(e.target.value)}
+                  style={S.linkLangSelect}
+                >
+                  {LINK_LANGS.map((l) => (
+                    <option key={l.code} value={l.code}>{l.native}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -247,6 +288,9 @@ const S: Record<string, React.CSSProperties> = {
   linkRow: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" },
   linkText: { flex: 1, minWidth: 200, fontSize: 16, fontWeight: 700, color: "#0EA5A5", wordBreak: "break-all" },
   copyBtn: { background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 10, padding: "10px 18px", fontWeight: 700, fontSize: 14, cursor: "pointer", whiteSpace: "nowrap" },
+  linkLangRow: { display: "flex", alignItems: "center", gap: 8, marginTop: 12 },
+  linkLangLabel: { fontSize: 13, color: "#6B7280" },
+  linkLangSelect: { fontSize: 14, padding: "6px 10px", borderRadius: 8, border: "1px solid #D1D5DB", background: "#fff", cursor: "pointer", fontFamily: "inherit" },
   statGrid: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 16 },
   statCard: { background: "#fff", border: "1px solid #EAECEF", borderRadius: 16, padding: "18px 12px", textAlign: "center" },
   statValue: { fontSize: 28, fontWeight: 800, color: "#111827" },
