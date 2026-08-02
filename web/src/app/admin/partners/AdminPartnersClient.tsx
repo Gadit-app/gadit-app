@@ -211,13 +211,14 @@ export default function AdminPartnersClient() {
   const [editLang, setEditLang] = useState<"he" | "en">(lang);
   const [emailState, setEmailState] = useState<"idle" | "saving" | "saved">("idle");
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (): Promise<string | null> => {
     const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`);
     if (res.ok) {
       const d = await res.json();
       setRows(d.partners ?? []);
-      if (d.nextRef != null) setNextRef(String(d.nextRef));
+      if (d.nextRef != null) { setNextRef(String(d.nextRef)); return String(d.nextRef); }
     }
+    return null;
   }, [secret]);
 
   const loadConfig = useCallback(async () => {
@@ -278,8 +279,11 @@ export default function AdminPartnersClient() {
       if (res.status === 409) { setAddErr(t.errExists); setAddState("error"); return; }
       if (!res.ok) { setAddErr(t.errGeneric); setAddState("error"); return; }
       setAddState("done");
-      setFName(""); setFEmail(""); setFCode(""); setFY1("25"); setFLife("10");
-      await load();
+      setFName(""); setFEmail(""); setFY1("25"); setFLife("10");
+      // Reload and explicitly move the REF field to the fresh next number,
+      // so it never sticks on the number we just used.
+      const nr = await load();
+      setFCode(nr ?? "");
       setTimeout(() => setAddState("idle"), 1600);
     } catch {
       setAddErr(t.errGeneric); setAddState("error");
