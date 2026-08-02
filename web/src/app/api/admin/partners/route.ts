@@ -124,7 +124,16 @@ export async function GET(req: NextRequest) {
   );
 
   partners.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-  const nextRef = await peekNextRef(db);
+  // Self-healing suggestion: the next free number is the max of the counter
+  // AND one past the highest numeric code already in use. So even if the
+  // counter fell behind (e.g. a custom code was typed), the form never
+  // suggests a taken number.
+  const maxNum = partners.reduce(
+    (m, p) => (/^\d+$/.test(p.code) ? Math.max(m, Number(p.code)) : m),
+    REF_START - 1,
+  );
+  const counterNext = await peekNextRef(db);
+  const nextRef = Math.max(counterNext, maxNum + 1);
   return NextResponse.json({ partners, nextRef });
 }
 
@@ -189,6 +198,18 @@ export async function POST(req: NextRequest) {
     createdAt: new Date().toISOString(),
   };
   const ref = await db.collection("partners").add(doc);
+
+  // Advance the counter past this number so the next suggestion is free —
+  // covers both the claimed path and a manually-typed numeric REF. Without
+  // this, the form kept re-suggesting a number that was already taken.
+  if (/^\d+$/.test(code)) {
+    const n = Number(code);
+    const cRef = db.collection("partnerConfig").doc("refCounter");
+    const cur = (await cRef.get()).data()?.next;
+    if (typeof cur !== "number" || cur <= n) {
+      await cRef.set({ next: n + 1 }, { merge: true });
+    }
+  }
 
   if (body.sendEmail) {
     await sendPartnerWelcome(
