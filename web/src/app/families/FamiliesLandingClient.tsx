@@ -730,12 +730,17 @@ const COPY: Record<"he" | "en" | "ru", Copy> = {
 
 /* ─────────────────── product mockups (per feature) ─────────────────── */
 
-function MockMeanings({ he }: { he: boolean }) {
-  const word = he ? "עלה" : "bat";
-  const m1 = he
+function MockMeanings({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
+  const word = ru ? "ключ" : he ? "עלה" : "bat";
+  const m1 = ru
+    ? { t: "Предмет, которым открывают замок", ex: "«Я потерял ключ от двери.»" }
+    : he
     ? { t: "צמח: החלק הירוק של העץ", ex: "\"עלה אדום נפל מהעץ בסתיו.\"" }
     : { t: "The animal that flies at night", ex: "\"A bat flew out of the cave.\"" };
-  const m2 = he
+  const m2 = ru
+    ? { t: "Родник, источник воды", ex: "«Из земли бил холодный ключ.»" }
+    : he
     ? { t: "פועל: טיפס למעלה, התרומם", ex: "\"המחיר עלה בחודש האחרון.\"" }
     : { t: "The stick used in baseball", ex: "\"She swung the bat and hit the ball.\"" };
   return (
@@ -758,15 +763,18 @@ function MockMeanings({ he }: { he: boolean }) {
   );
 }
 
-function MockKids({ he }: { he: boolean }) {
+function MockKids({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-pill">{ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
         <span className="fam-mock-toggle-on" />
       </div>
       <div className="fam-mock-bubble">
-        {he
+        {ru
+          ? "«Упорный» — это когда ты сильно решил и не сдаёшься, даже когда трудно. Как когда учишься кататься на велосипеде и не бросаешь, пока не получится."
+          : he
           ? "\"נחוש\" זה כשמחליטים משהו חזק חזק בלב, וממשיכים גם כשקשה. כמו כשאתם מתאמנים על אופניים ולא מוותרים עד שמצליחים."
           : "\"Reluctant\" is when you don't really want to do something, and your feet go slow. Like walking to the dentist."}
       </div>
@@ -781,11 +789,14 @@ function MockKids({ he }: { he: boolean }) {
   );
 }
 
-function MockContext({ he }: { he: boolean }) {
+function MockContext({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-sentence">
-        {he ? (
+        {ru ? (
+          <>Моя <mark>мечта</mark> — стать врачом</>
+        ) : he ? (
           <>ה<mark>חלום</mark> שלי הוא להיות רופאה</>
         ) : (
           <>My biggest <mark>dream</mark> is to be a doctor</>
@@ -795,31 +806,39 @@ function MockContext({ he }: { he: boolean }) {
       <div className="fam-mock-picked">
         <CheckIcon color="#0EA5A5" />
         <span>
-          {he ? "המשמעות כאן: שאיפה או מטרה שרוצים להגשים" : "The meaning here: a hope or goal you want to reach"}
+          {ru ? "Значение здесь: цель или желание, которое хочется осуществить" : he ? "המשמעות כאן: שאיפה או מטרה שרוצים להגשים" : "The meaning here: a hope or goal you want to reach"}
         </span>
       </div>
     </div>
   );
 }
 
-function MockNotebook({ he }: { he: boolean }) {
-  const words = he ? ["חלום", "מרהיב", "נחוש"] : ["dream", "vivid", "reluctant"];
+function MockNotebook({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
+  const words = ru ? ["мечта", "яркий", "упорный"] : he ? ["חלום", "מרהיב", "נחוש"] : ["dream", "vivid", "reluctant"];
   return (
     <div className="fam-mock">
-      <div className="fam-mock-nb-title">{he ? "המחברת של נועה" : "Noa's notebook"}</div>
+      <div className="fam-mock-nb-title">{ru ? "Тетрадь Ноа" : he ? "המחברת של נועה" : "Noa's notebook"}</div>
       {words.map((w, i) => (
         <div key={i} className="fam-mock-nb-row">
           <CheckIcon color={i < 2 ? "#0EA5A5" : "#d1d5db"} />
           <span>{w}</span>
-          {i === 2 && <span className="fam-mock-nb-due">{he ? "לתרגול היום" : "practice today"}</span>}
+          {i === 2 && <span className="fam-mock-nb-due">{ru ? "повторить сегодня" : he ? "לתרגול היום" : "practice today"}</span>}
         </div>
       ))}
     </div>
   );
 }
 
-function MockProfiles({ he }: { he: boolean }) {
-  const kids = he
+function MockProfiles({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
+  const kids = ru
+    ? [
+        { n: "Ноа", g: "2 класс", c: "#0EA5A5" },
+        { n: "Идо", g: "6 класс", c: "#7C3AED" },
+        { n: "Майя", g: "9 класс", c: "#D97706" },
+      ]
+    : he
     ? [
         { n: "נועה", g: "כיתה ב׳", c: "#0EA5A5" },
         { n: "עידו", g: "כיתה ו׳", c: "#7C3AED" },
@@ -845,23 +864,25 @@ function MockProfiles({ he }: { he: boolean }) {
   );
 }
 
-function MockGames({ he }: { he: boolean }) {
+function MockGames({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock fam-mock-games">
       <div className="fam-mock-game" style={{ background: "rgba(14,165,165,0.1)" }}>
         <PuzzleIcon />
-        <span>{he ? "תאומות במלכודת" : "Twin Trap"}</span>
+        <span>{ru ? "Ловушка близнецов" : he ? "תאומות במלכודת" : "Twin Trap"}</span>
       </div>
       <div className="fam-mock-game" style={{ background: "rgba(124,58,237,0.1)" }}>
         <ClockIcon />
-        <span>{he ? "מסע בזמן" : "Time Traveler"}</span>
+        <span>{ru ? "Путешественник во времени" : he ? "מסע בזמן" : "Time Traveler"}</span>
       </div>
-      <div className="fam-mock-score">{he ? "רצף של 6 ימים 🔥" : "6-day streak 🔥"}</div>
+      <div className="fam-mock-score">{ru ? "Серия 6 дней 🔥" : he ? "רצף של 6 ימים 🔥" : "6-day streak 🔥"}</div>
     </div>
   );
 }
 
-function MockEnglish({ he }: { he: boolean }) {
+function MockEnglish({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
@@ -872,9 +893,9 @@ function MockEnglish({ he }: { he: boolean }) {
           <PersonIcon />
         </div>
         <div>
-          <div className="fam-mock-meaning-t">{he ? "מהסס, לא ממש רוצה" : "Not really wanting to"}</div>
+          <div className="fam-mock-meaning-t">{ru ? "Неохотно, без желания" : he ? "מהסס, לא ממש רוצה" : "Not really wanting to"}</div>
           <div className="fam-mock-meaning-ex">
-            {he ? "\"הוא ניגש לשיעורים בחוסר רצון.\"" : "\"He was reluctant to start his homework.\""}
+            {ru ? "«Он неохотно принялся за уроки.»" : he ? "\"הוא ניגש לשיעורים בחוסר רצון.\"" : "\"He was reluctant to start his homework.\""}
           </div>
         </div>
       </div>
@@ -887,9 +908,12 @@ function MockEnglish({ he }: { he: boolean }) {
  *  a child cannot fill, so the whole meaning collapses. Then complete,
  *  every word a solid piece, and the picture is whole. Words ARE the
  *  pieces of the picture. */
-function PuzzleMock({ he, beforeLabel, afterLabel }: { he: boolean; beforeLabel: string; afterLabel: string }) {
+function PuzzleMock({ lang, beforeLabel, afterLabel }: { lang: string; beforeLabel: string; afterLabel: string }) {
+  const he = lang === "he", ru = lang === "ru";
   type Tok = string | { k: string };
-  const tokens: Tok[] = he
+  const tokens: Tok[] = ru
+    ? ["Моряк", "твёрдо", { k: "решил" }, "добраться", "до", "острова,", "и", "несмотря", "на", { k: "шторм" }, "ни", "разу", "не", { k: "засомневался" }]
+    : he
     ? ["הספן", "היה", { k: "נחוש" }, "להגיע", "אל", "האי,", "ולמרות", { k: "הסופה" }, "העזה", "הוא", "לא", { k: "היסס" }]
     : ["The", "sailor", "was", { k: "determined" }, "to", "reach", "the", "island,", "despite", "the", { k: "storm" }, "he", "never", { k: "hesitated" }];
   return (
@@ -936,17 +960,22 @@ function PuzzleMock({ he, beforeLabel, afterLabel }: { he: boolean; beforeLabel:
  *  actual UI (teal search pill, big word title, part-of-speech chip,
  *  a meaning card with its picture, Kids Mode toggle, example) so a
  *  parent sees exactly what they are buying. */
-function PhoneMock({ he }: { he: boolean }) {
-  const word = he ? "חלום" : "dream";
-  const pos = he ? "שם עצם" : "noun";
-  const meaning = he
+function PhoneMock({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
+  const word = ru ? "мечта" : he ? "חלום" : "dream";
+  const pos = ru ? "существительное" : he ? "שם עצם" : "noun";
+  const meaning = ru
+    ? "то, о чём мечтаешь и к чему стремишься"
+    : he
     ? "תמונות ומחשבות שעוברות בראש בזמן השינה"
     : "images and thoughts that pass through the mind during sleep";
-  const example = he
+  const example = ru
+    ? "«Его мечта — полететь в космос.»"
+    : he
     ? "\"בלילה חלמתי חלום על מסע רחוק.\""
     : "\"Last night I had a dream about a far journey.\"";
-  const kids = he ? "מצב ילדים" : "Kids Mode";
-  const searchHint = he ? "הקלידו מילה" : "Type a word";
+  const kids = ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode";
+  const searchHint = ru ? "Введите слово" : he ? "הקלידו מילה" : "Type a word";
   return (
     <div className="fam-phone" aria-hidden>
       <div className="fam-phone-notch" />
@@ -983,9 +1012,9 @@ function PhoneMock({ he }: { he: boolean }) {
           </div>
         </div>
         <div className="fam-ph-tabs">
-          <span className="is-active">{he ? "משמעויות" : "Meanings"}</span>
-          <span>{he ? "תמונה" : "Picture"}</span>
-          <span>{he ? "מחברת" : "Notebook"}</span>
+          <span className="is-active">{ru ? "Значения" : he ? "משמעויות" : "Meanings"}</span>
+          <span>{ru ? "Картинка" : he ? "תמונה" : "Picture"}</span>
+          <span>{ru ? "Тетрадь" : he ? "מחברת" : "Notebook"}</span>
         </div>
       </div>
     </div>
@@ -995,19 +1024,20 @@ function PhoneMock({ he }: { he: boolean }) {
 /** Step 1 of the how-it-works flow: the child types a word. A faithful
  *  recreation of the real search screen (Kids Mode on, teal search pill
  *  with the typed word and a blinking caret). */
-function MockSearch({ he }: { he: boolean }) {
+function MockSearch({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-pill">{ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
         <span className="fam-mock-toggle-on" />
       </div>
       <div className="fam-mock-search fam-mock-search-lg">
         <SearchIcon />
-        <span>{he ? "חלום" : "dream"}</span>
+        <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
         <span className="fam-mock-caret" aria-hidden />
       </div>
-      <div className="fam-mock-searchhint">{he ? "הילד מקליד מילה, וזהו. השאר קורה לבד." : "The child types a word, and that is it."}</div>
+      <div className="fam-mock-searchhint">{ru ? "Ребёнок вводит слово, и всё. Остальное происходит само." : he ? "הילד מקליד מילה, וזהו. השאר קורה לבד." : "The child types a word, and that is it."}</div>
     </div>
   );
 }
@@ -1016,11 +1046,12 @@ function MockSearch({ he }: { he: boolean }) {
  *  picture (Gadi 2026-07-29 — the picture is the heart of the product and
  *  was barely visible as tiny icons before). A big illustrated card, the
  *  kid-level meaning, and an example. */
-function MockPicture({ he }: { he: boolean }) {
+function MockPicture({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-ph-pic fam-mock-pic" aria-hidden>
         {/* A child dreaming — a sleeping face with a dream cloud (moon +
@@ -1042,10 +1073,10 @@ function MockPicture({ he }: { he: boolean }) {
       <div className="fam-mock-meaning">
         <div>
           <div className="fam-mock-meaning-t">
-            {he ? "תמונות ומחשבות שעוברות בראש בזמן השינה" : "Images and thoughts that pass through the mind during sleep"}
+            {ru ? "То, о чём мечтаешь и к чему стремишься" : he ? "תמונות ומחשבות שעוברות בראש בזמן השינה" : "Images and thoughts that pass through the mind during sleep"}
           </div>
           <div className="fam-mock-meaning-ex">
-            {he ? "\"בלילה חלמתי חלום על מסע רחוק.\"" : "\"Last night I had a dream about a far journey.\""}
+            {ru ? "«Его мечта — полететь в космос.»" : he ? "\"בלילה חלמתי חלום על מסע רחוק.\"" : "\"Last night I had a dream about a far journey.\""}
           </div>
         </div>
       </div>
@@ -1054,14 +1085,17 @@ function MockPicture({ he }: { he: boolean }) {
 }
 
 /** Definition block: the kid-level meaning, on its own. */
-function MockDefinition({ he }: { he: boolean }) {
+function MockDefinition({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-mock-bubble">
-        {he
+        {ru
+          ? "«Мечта» — это то, чего очень хочется и о чём думаешь с радостью. То, к чему хочется идти и что хочется осуществить."
+          : he
           ? "\"חלום\" זה התמונות והסיפורים שרצים בראש כשישנים. לפעמים שמחים, לפעמים מוזרים, והם נעלמים כשמתעוררים."
           : "\"Dream\" is the pictures and stories that run through your head while you sleep. Sometimes happy, sometimes strange, and they fade when you wake up."}
       </div>
@@ -1070,14 +1104,17 @@ function MockDefinition({ he }: { he: boolean }) {
 }
 
 /** Examples block: three real sentences with the word. */
-function MockExamples({ he }: { he: boolean }) {
-  const ex = he
+function MockExamples({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
+  const ex = ru
+    ? ["«Его большая мечта — стать врачом.»", "«Она идёт к своей мечте шаг за шагом.»", "«У каждого ребёнка есть своя мечта.»"]
+    : he
     ? ["\"בלילה חלמתי חלום על מסע רחוק.\"", "\"היא התעוררה מחלום מפחיד.\"", "\"החלום הגדול שלו הוא לטוס לחלל.\""]
     : ["\"Last night I had a dream about a long journey.\"", "\"She woke up from a scary dream.\"", "\"His big dream is to fly to space.\""];
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-mock-examples">
         {ex.map((e, i) => (
@@ -1092,14 +1129,15 @@ function MockExamples({ he }: { he: boolean }) {
 }
 
 /** Quiz block: a short practice question on its own. */
-function MockQuiz({ he }: { he: boolean }) {
+function MockQuiz({ lang }: { lang: string }) {
+  const he = lang === "he", ru = lang === "ru";
   return (
     <div className="fam-mock">
       <div className="fam-mock-quiz fam-mock-quiz-solo">
-        <div className="fam-mock-quiz-q">{he ? "מה פירוש \"חלום\"?" : "What does \"dream\" mean?"}</div>
-        <div className="fam-mock-quiz-opt is-right">{he ? "תמונות ומחשבות בזמן השינה" : "Images and thoughts during sleep"}</div>
-        <div className="fam-mock-quiz-opt">{he ? "סוג של עוגה" : "A kind of cake"}</div>
-        <div className="fam-mock-quiz-opt">{he ? "כלי נגינה" : "A musical instrument"}</div>
+        <div className="fam-mock-quiz-q">{ru ? "Что значит «мечта»?" : he ? "מה פירוש \"חלום\"?" : "What does \"dream\" mean?"}</div>
+        <div className="fam-mock-quiz-opt is-right">{ru ? "То, к чему стремишься и чего хочешь" : he ? "תמונות ומחשבות בזמן השינה" : "Images and thoughts during sleep"}</div>
+        <div className="fam-mock-quiz-opt">{ru ? "Вид торта" : he ? "סוג של עוגה" : "A kind of cake"}</div>
+        <div className="fam-mock-quiz-opt">{ru ? "Музыкальный инструмент" : he ? "כלי נגינה" : "A musical instrument"}</div>
       </div>
     </div>
   );
@@ -1317,7 +1355,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <div className="fam-hero-visual">
               <div className="fam-hero-stage">
                 <div className="fam-hero-panel" aria-hidden />
-                <PhoneMock he={he} />
+                <PhoneMock lang={lang} />
                 <div className="fam-proof-card" aria-hidden>
                   <div className="fam-proof-head">
                     <NotebookIcon />
@@ -1374,7 +1412,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
             <h2 className="fam-h2">{c.puzzleTitle}</h2>
             <p className="fam-body fam-body-center">{c.puzzleBody}</p>
-            <PuzzleMock he={he} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
+            <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
             <p className="fam-reframe">{c.puzzleLine}</p>
           </div>
         </section>
@@ -1398,7 +1436,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                       <span className="fam-how-text">{blk.t}</span>
                     </div>
                     <div className="fam-how-visual">
-                      <Mock he={he} />
+                      <Mock lang={lang} />
                     </div>
                     <p className="fam-how-body">{blk.b}</p>
                   </div>
@@ -1481,7 +1519,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                       sizes="(max-width: 760px) 92vw, 440px"
                     />
                   ) : (
-                    <Mock he={he} />
+                    <Mock lang={lang} />
                   )}
                 </div>
               </div>
