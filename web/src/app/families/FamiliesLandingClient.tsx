@@ -409,7 +409,7 @@ const COPY: Record<"he" | "en", Copy> = {
       {
         kicker: "Every meaning",
         title: "One word. Every meaning. A picture for each.",
-        body: "A regular dictionary gives one dry definition. Gadit shows every meaning of the word, with three real examples and a picture per meaning, because a child's brain remembers images far better than words.",
+        body: "One word often has several different meanings, and that is where kids get confused. Gadit shows them all in one place, each with three real examples and its own picture, because a child's brain remembers images far better than words.",
       },
       {
         kicker: "Kids Mode",
@@ -428,13 +428,13 @@ const COPY: Record<"he" | "en", Copy> = {
       },
       {
         kicker: "A profile per child",
-        title: "Your 7-year-old and your 14-year-old need different explanations",
-        body: "Each child gets their own profile: their notebook, their practice, their level. Explanations, examples and games match the age, and nobody steps on anybody's words.",
+        title: "Every child gets their own space",
+        body: "Each child in the family gets a separate profile: their notebook, their practice, their history. Kids Mode adapts the explanation, simple and clear for the little ones and fuller for the older ones, and nobody steps on anybody's words.",
       },
       {
         kicker: "Word games",
-        title: "Learning that feels like playing",
-        body: "Quizzes and word games built from the words your child actually looked up. Five minutes of play instead of another half hour of blank screen, and the vocabulary grows without anyone noticing.",
+        title: "Learning games on your child's words",
+        body: "Short quizzes and games built from the words your child actually looked up. A few minutes of play, and vocabulary grows without effort.",
       },
       {
         kicker: "Second language",
@@ -442,7 +442,7 @@ const COPY: Record<"he" | "en", Copy> = {
         body: "Your child types a word in English and gets a simple explanation in their own language, with a picture and examples. No wandering between a dictionary, a translator and YouTube.",
       },
     ],
-    midCtaTitle: "Try it on tonight's homework",
+    midCtaTitle: "Start now, and watch your child's vocabulary grow day by day",
     midCta: "Start your 14-day free trial",
     compareKicker: "The difference",
     compareTitle: "Why not just Google it or ask a chatbot?",
@@ -483,21 +483,33 @@ const COPY: Record<"he" | "en", Copy> = {
     priceCta: "Start the trial",
     cancelNote: "First charge only after the 14 days. Cancel anytime from your account page, one click.",
     singleChild: "Just one student at home? Deep is $4.99/month. For a little more you can add up to 5 kids.",
-    guaranteeTitle: "The homework test",
-    guaranteeBody: "Give it two weeks on real homework, free. If by day 14 your child's notebook has not gathered at least 20 new words, cancel in one click and you paid nothing.",
+    guaranteeTitle: "Your test: two weeks",
+    guaranteeBody: "Give it two weeks of real use, free. If by day 14 your child's notebook has not gathered at least 20 new words, cancel in one click and you paid nothing.",
     faqTitle: "Questions parents ask",
     faq: [
+      {
+        q: "What do I get with Gadit?",
+        a: "Every word your child looks up gets one clean page: every meaning, a kid-level explanation (Kids Mode), three real examples, and a picture per meaning. Plus context (paste a sentence and get the right meaning), a personal word notebook with smart practice, word games and quizzes, a parent dashboard showing how much each child has learned, up to 5 kids on separate profiles, all in 14 languages, in a closed, safe space with no open chat and no ads.",
+      },
       {
         q: "Why not just ask a chatbot or Google?",
         a: "Because those are tools for adults. Google returns ads and links in every direction, and an open chatbot is a boundless conversation no parent leaves a child alone in. Gadit is built the other way around: one closed, clean page per word, at kid level, with no way to get lost.",
       },
       {
-        q: "What ages is it for?",
-        a: "The heart of Gadit is school-age kids, from first grade through high school. Kids Mode explains for the young ones, and the full explanations serve teens and parents too. The parent opens the account.",
+        q: "How do I know my child is actually progressing?",
+        a: "You get a parent dashboard. At a glance you see how many words each child has learned, how many were added this week, and their latest words. Every other tool answers the child and forgets; Gadit saves every word in the child's personal notebook, so you watch the vocabulary grow week after week.",
       },
       {
-        q: "Does it help with a second language?",
-        a: "Very much. A child can look up a word in English and get a simple explanation in their own language, with a picture and examples. Gadit works in 14 languages.",
+        q: "What ages is it for?",
+        a: "The heart of Gadit is school-age kids, from first grade through high school. Kids Mode explains simply for the young ones, and the full explanations serve teens and parents too. The parent opens the account.",
+      },
+      {
+        q: "Does it help with English and other languages?",
+        a: "Very much. A child can look up a word in English and get a simple explanation in their own language, with a picture and examples, exactly the helper missing at home. And it works in 14 languages, so the child can get the explanation in the language you speak at home too.",
+      },
+      {
+        q: "How much does it cost?",
+        a: "$59 a year or $5.99 a month, after the 14-day trial. No hidden fees, and you cancel anytime in one click.",
       },
       {
         q: "How many kids can I add?",
@@ -508,8 +520,8 @@ const COPY: Record<"he" | "en", Copy> = {
         a: "Yes. The trial starts with a card, but the first charge happens only when the 14 days end. Cancel anytime before that, one click, and you pay nothing.",
       },
     ],
-    finalTitle: "Try it tonight, on the next homework",
-    finalSub: "Two weeks free. One-click cancel. And a kid who solves words alone.",
+    finalTitle: "Start today, and watch the vocabulary grow",
+    finalSub: "Two weeks free. One-click cancel. And a child who learns to understand words on their own.",
     finalCta: "Start your 14-day free trial",
     footerTerms: "Terms",
     footerPrivacy: "Privacy",
