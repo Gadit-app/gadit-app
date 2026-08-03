@@ -5,6 +5,7 @@ import {
   getAdminDb,
   verifyUserAndGetPlan,
 } from "@/lib/firebase-admin";
+import { logDeletion } from "@/lib/deletion-log";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -51,12 +52,28 @@ export async function POST(req: NextRequest) {
     const { userId } = userInfo;
     const db = getAdminDb();
 
+    // Capture audit fields BEFORE we delete the user doc, so the deletion
+    // log has the plan/email even after the account is gone.
+    let auditEmail: string | null = null;
+    let auditPlan: string | null = null;
+    let auditStatus: string | null = null;
+    let auditFamily = false;
+    let auditSchool = false;
+    let canceledCount = 0;
+
     // 1. Cancel Stripe subscription if any.
     try {
       const userDoc = await db.collection("users").doc(userId).get();
-      const customerId = userDoc.data()?.stripeCustomerId as
-        | string
-        | undefined;
+      const ud = userDoc.data() ?? {};
+      auditEmail = (ud.email as string | undefined) ?? null;
+      auditPlan = (ud.plan as string | undefined) ?? null;
+      auditStatus = (ud.subscriptionStatus as string | undefined) ?? null;
+      auditFamily = !!ud.familyId;
+      auditSchool = !!ud.schoolId;
+      if (!auditEmail) {
+        try { auditEmail = (await getAdminAuth().getUser(userId)).email ?? null; } catch { /* ignore */ }
+      }
+      const customerId = ud.stripeCustomerId as string | undefined;
       if (customerId) {
         // List active subs and cancel each. Most users have at most
         // one, but list-then-loop handles edge cases (e.g. someone
@@ -71,9 +88,12 @@ export async function POST(req: NextRequest) {
             sub.status !== "canceled" &&
             sub.status !== "incomplete_expired"
           ) {
-            await stripe.subscriptions.cancel(sub.id).catch((err) => {
+            try {
+              await stripe.subscriptions.cancel(sub.id);
+              canceledCount++;
+            } catch (err) {
               console.error(`Stripe cancel failed for ${sub.id}:`, err);
-            });
+            }
           }
         }
       }
@@ -133,6 +153,18 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Audit: record the self-deletion (non-blocking).
+    await logDeletion({
+      uid: userId,
+      email: auditEmail,
+      source: "self",
+      plan: auditPlan,
+      subscriptionStatus: auditStatus,
+      isFamily: auditFamily,
+      isSchool: auditSchool,
+      canceledSubs: canceledCount,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (err) {

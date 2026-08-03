@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { logDeletion } from "@/lib/deletion-log";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -94,9 +95,18 @@ export async function POST(req: NextRequest) {
   // Card-less trialing subs are collected and canceled during deletion so
   // no orphaned sub lingers in Stripe.
   const cardlessTrialSubs: string[] = [];
+  let auditPlan: string | null = null;
+  let auditStatus: string | null = null;
+  let auditFamily = false;
+  let auditSchool = false;
   if (uid) {
     const doc = await db.collection("users").doc(uid).get();
     const d = doc.exists ? (doc.data() ?? {}) : {};
+    auditPlan = (d.plan as string | undefined) ?? null;
+    auditStatus = (d.subscriptionStatus as string | undefined) ?? null;
+    auditFamily = !!d.familyId;
+    auditSchool = !!d.schoolId;
+    if (!email && typeof d.email === "string") email = d.email;
 
     let customerId = (d.stripeCustomerId as string | undefined) ?? null;
     // Fall back to finding the customer by email if the doc lacks the id.
@@ -179,6 +189,20 @@ export async function POST(req: NextRequest) {
     // Finally, the Auth record itself
     if (!dryRun) await auth.deleteUser(uid);
     deletedAuthUser = true;
+
+    // Audit: record the admin deletion (non-blocking, real runs only).
+    if (!dryRun) {
+      await logDeletion({
+        uid,
+        email: email || null,
+        source: "admin",
+        plan: auditPlan,
+        subscriptionStatus: auditStatus,
+        isFamily: auditFamily,
+        isSchool: auditSchool,
+        canceledSubs: cardlessTrialSubs.length,
+      });
+    }
   }
 
   return NextResponse.json({
