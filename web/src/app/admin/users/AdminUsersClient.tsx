@@ -73,6 +73,11 @@ const STRINGS: Record<AdminLang, {
   deleteConfirm: (email: string) => string;
   deleteSuccess: (email: string) => string;
   deleteError: (msg: string) => string;
+  upgradeFamilyLabel: string;
+  upgradeConfirm: (email: string) => string;
+  upgradeSuccess: (email: string) => string;
+  upgradeAlready: (email: string) => string;
+  upgradeError: (msg: string) => string;
   noUsers: string;
   showingFooter: (n: number, total: number) => string;
   countryFooterNote: string;
@@ -120,6 +125,11 @@ const STRINGS: Record<AdminLang, {
     deleteConfirm: (email) => `Delete ${email}?\n\nThis removes the Firebase Auth account, the user document, and the entire notebook subtree. The email can sign up again afterwards.\n\nThis cannot be undone.`,
     deleteSuccess: (email) => `Deleted ${email}.`,
     deleteError: (msg) => `Delete failed: ${msg}`,
+    upgradeFamilyLabel: "Upgrade to Family",
+    upgradeConfirm: (email) => `Upgrade ${email} to Family?\n\nThis switches their existing subscription to the Family plan and charges the prorated difference to their card NOW. Only do this with the customer's consent.`,
+    upgradeSuccess: (email) => `${email} upgraded to Family. Give it a moment — the webhook provisions the family dashboard.`,
+    upgradeAlready: (email) => `${email} is already on Family.`,
+    upgradeError: (msg) => `Upgrade failed: ${msg}`,
     noUsers: "No matching users.",
     showingFooter: (n, total) => `Showing ${n} of ${total}.`,
     countryFooterNote: "Country is captured automatically on each authenticated API hit via Vercel edge geolocation; users who haven't returned since this feature shipped won't have a country yet.",
@@ -166,6 +176,11 @@ const STRINGS: Record<AdminLang, {
     deleteUserLabel: "מחיקת משתמש",
     deleteConfirm: (email) => `למחוק את ${email}?\n\nהפעולה מוחקת את חשבון Firebase Auth, את מסמך המשתמש, ואת כל המחברת שלו. האימייל יוכל להירשם שוב לאחר מכן.\n\nאי אפשר לבטל את הפעולה.`,
     deleteSuccess: (email) => `${email} נמחק.`,
+    upgradeFamilyLabel: "שדרג ל-Family",
+    upgradeConfirm: (email) => `לשדרג את ${email} ל-Family?\n\nהפעולה מחליפה את המנוי הקיים למסלול Family ומחייבת את הפרש המחיר היחסי בכרטיס עכשיו. בצעו רק באישור הלקוח.`,
+    upgradeSuccess: (email) => `${email} שודרג ל-Family. ייקח רגע — ה-webhook מספק את לוח המשפחה.`,
+    upgradeAlready: (email) => `${email} כבר במסלול Family.`,
+    upgradeError: (msg) => `השדרוג נכשל: ${msg}`,
     deleteError: (msg) => `המחיקה נכשלה: ${msg}`,
     noUsers: "אין משתמשים תואמים.",
     showingFooter: (n, total) => `מציג ${n} מתוך ${total}.`,
@@ -313,6 +328,7 @@ export default function AdminUsersClient() {
   // disabled and shows a spinner until the API responds. Set, not
   // boolean, so concurrent deletes don't fight over one flag.
   const [deletingUids, setDeletingUids] = useState<Set<string>>(new Set());
+  const [upgradingUids, setUpgradingUids] = useState<Set<string>>(new Set());
   const t = STRINGS[adminLang];
 
   // Delete a user via /api/admin/delete-user. The endpoint nukes the
@@ -367,6 +383,30 @@ export default function AdminUsersClient() {
         next.delete(u.uid);
         return next;
       });
+    }
+  };
+
+  // Upgrade a Clear/Deep subscriber to Family in place (with consent).
+  // Swaps the price on their existing Stripe sub + charges the prorated
+  // difference now; the webhook then provisions the family dashboard.
+  const handleUpgradeFamily = async (u: AdminUserRow) => {
+    if (!secret) return;
+    const label = u.email || u.uid;
+    if (!window.confirm(t.upgradeConfirm(label))) return;
+    setUpgradingUids((s) => new Set(s).add(u.uid));
+    try {
+      const res = await fetch(`/api/admin/upgrade-family?secret=${encodeURIComponent(secret)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(u.email ? { email: u.email } : { uid: u.uid }),
+      });
+      const json = (await res.json().catch(() => null)) as { error?: string; alreadyFamily?: boolean } | null;
+      if (!res.ok) { alert(t.upgradeError(json?.error ?? `HTTP ${res.status}`)); return; }
+      alert(json?.alreadyFamily ? t.upgradeAlready(label) : t.upgradeSuccess(label));
+    } catch (e) {
+      alert(t.upgradeError(String(e instanceof Error ? e.message : e)));
+    } finally {
+      setUpgradingUids((s) => { const n = new Set(s); n.delete(u.uid); return n; });
     }
   };
 
@@ -671,6 +711,30 @@ export default function AdminUsersClient() {
                         {u.providers.map((p) => p.replace(".com", "").replace("password", "email")).join(", ")}
                       </td>
                       <td style={{ padding: "12px 8px", textAlign: "center" }}>
+                        <div style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+                        {(u.plan === "clear" || u.plan === "deep") && !u.isFamily && !u.isSchool && (
+                          <button
+                            type="button"
+                            onClick={() => handleUpgradeFamily(u)}
+                            disabled={upgradingUids.has(u.uid)}
+                            title={t.upgradeFamilyLabel}
+                            aria-label={t.upgradeFamilyLabel}
+                            style={{
+                              background: "#DBEAFE",
+                              border: "1px solid #93C5FD",
+                              color: upgradingUids.has(u.uid) ? "#9CA3AF" : "#1D4ED8",
+                              borderRadius: 6,
+                              padding: "5px 8px",
+                              fontSize: 11.5,
+                              fontWeight: 700,
+                              cursor: upgradingUids.has(u.uid) ? "wait" : "pointer",
+                              whiteSpace: "nowrap",
+                              opacity: upgradingUids.has(u.uid) ? 0.6 : 1,
+                            }}
+                          >
+                            {upgradingUids.has(u.uid) ? "…" : "→ Family"}
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => handleDeleteUser(u)}
@@ -702,6 +766,7 @@ export default function AdminUsersClient() {
                             </svg>
                           )}
                         </button>
+                        </div>
                       </td>
                     </tr>
                   );
