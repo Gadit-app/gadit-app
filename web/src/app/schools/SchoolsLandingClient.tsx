@@ -2263,9 +2263,20 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           <h2 className="wb-schools-h2">{t.priceH2}</h2>
           <p className="wb-schools-section-sub">{t.priceSub}</p>
           <style>{`
-            .wordbook .wb-schools-price-grid.sl-price-grid-3 { max-width: 1040px; }
+            .wordbook .wb-schools-price-grid.sl-price-grid-3 {
+              max-width: 1080px;
+              margin-inline: auto;
+            }
             @media (min-width: 720px) {
               .wordbook .wb-schools-price-grid.sl-price-grid-3 { grid-template-columns: repeat(3, 1fr); }
+            }
+            .wordbook .wb-schools-price-grid.sl-price-grid-3 .wb-schools-price-card {
+              box-shadow: 0 8px 24px -10px rgba(16, 24, 40, 0.16);
+              border: 1px solid #E3E6EA;
+            }
+            .wordbook .wb-schools-price-grid.sl-price-grid-3 .wb-schools-price-card:hover {
+              border-color: rgba(202, 138, 4, 0.5);
+              box-shadow: 0 14px 34px -12px rgba(202, 138, 4, 0.28);
             }
           `}</style>
           <div className="wb-schools-price-grid sl-price-grid-3">
@@ -2295,6 +2306,37 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               ))}
             </div>
           </div>
+          {/* Israeli schools often pay by bank transfer against a tax
+              invoice rather than by card. Hebrew page only. */}
+          {lang === "he" && (
+            <div
+              style={{
+                maxWidth: 640,
+                margin: "26px auto 0",
+                background: "#fff",
+                border: "1px solid #E3E6EA",
+                borderRadius: 14,
+                padding: "18px 22px",
+                textAlign: "start",
+                boxShadow: "0 4px 16px -8px rgba(16,24,40,0.12)",
+              }}
+              dir="rtl"
+            >
+              <div style={{ fontSize: 15.5, fontWeight: 700, color: "#1C1917", marginBottom: 6 }}>
+                מעדיפים העברה בנקאית?
+              </div>
+              <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.7 }}>
+                אפשר לשלם בהעברה לחשבון של:
+                <br />
+                <strong>לביא טכנולוגיות למידה והדרכה בע״מ</strong>
+                <br />
+                בנק לאומי (10) · סניף 855 · חשבון 41850031
+              </div>
+              <div style={{ fontSize: 13, color: "#78716C", marginTop: 10, lineHeight: 1.6 }}>
+                אחרי ההעברה, אפשר ליצור קשר ונפעיל את בית הספר ונשלח חשבונית מס.
+              </div>
+            </div>
+          )}
           <p className="wb-schools-price-larger">{t.priceLarger}</p>
         </div>
       </section>

@@ -210,7 +210,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
         }}
       >
-        <div style={{ display: "flex", minHeight: "100vh" }}>
+        <style>{ADMIN_SHELL_MOBILE_CSS}</style>
+        <div className="admin-shell-flex" style={{ display: "flex", minHeight: "100vh" }}>
           {/* Sidebar, fixed width, sticky to the start edge.
               `align-self: stretch` + `height: 100vh` makes the dark
               background reach all the way to the viewport bottom even
@@ -221,6 +222,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               right) is the brand accent that ties the chrome to the
               Gadit wordmark's italic-teal "it". */}
           <aside
+            className="admin-shell-aside"
             style={{
               width: 220,
               flexShrink: 0,
@@ -267,7 +269,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             </button>
 
             {/* Nav items */}
-            <nav style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 8 }}>
+            <nav className="admin-shell-nav" style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 8 }}>
               {NAV_ITEMS.map((item) => {
                 const active =
                   item.href === "/admin"
@@ -356,7 +358,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </aside>
 
           {/* Main content area */}
-          <div style={{ flex: 1, padding: "24px 16px 64px", minWidth: 0 }}>
+          <div className="admin-shell-content" style={{ flex: 1, padding: "24px 16px 64px", minWidth: 0 }}>
             <div style={{ maxWidth: 1200, margin: "0 auto" }}>
               {children}
             </div>
@@ -429,6 +431,32 @@ function IconLogout() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
   );
 }
+
+// Mobile: the fixed 220px dark sidebar eats most of a phone screen and
+// crushes the content (Gadi 2026-08-04). Below 768px the shell stacks:
+// the sidebar becomes a compact top bar with a horizontal wrapping nav,
+// and the content takes the full width.
+const ADMIN_SHELL_MOBILE_CSS = `
+@media (max-width: 768px) {
+  .admin-shell-flex { flex-direction: column; }
+  .admin-shell-aside {
+    width: 100% !important;
+    height: auto !important;
+    position: static !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px !important;
+    padding: 10px 12px !important;
+    border-inline-end: none !important;
+    border-bottom: 3px solid #0EA5A5 !important;
+    overflow: visible !important;
+  }
+  .admin-shell-nav { flex-direction: row !important; flex-wrap: wrap; margin-top: 0 !important; gap: 4px !important; }
+  .admin-shell-nav a { padding: 8px 11px !important; }
+  .admin-shell-content { padding: 16px 12px 48px !important; }
+}
+`;
 
 const inputStyle: React.CSSProperties = {
   width: "100%",

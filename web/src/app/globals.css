@@ -12977,17 +12977,19 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   text-align: start;
   padding: 18px 22px;
   background: #fff;
-  border: 1px solid var(--hairline);
+  border: 1px solid #E3E6EA;
   border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
   cursor: pointer;
-  transition: border-color 180ms var(--wb-ease-out);
+  transition: border-color 180ms var(--wb-ease-out), box-shadow 180ms var(--wb-ease-out);
 }
 .wordbook .wb-schools-faq-item:hover {
-  border-color: rgba(14, 165, 165, 0.35);
+  border-color: rgba(202, 138, 4, 0.4);
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.08);
 }
 .wordbook .wb-schools-faq-item.is-open {
-  border-color: rgba(14, 165, 165, 0.5);
-  background: rgba(14, 165, 165, 0.03);
+  border-color: rgba(202, 138, 4, 0.55);
+  background: #FFFBEB;
 }
 .wordbook .wb-schools-faq-q {
   display: flex;
