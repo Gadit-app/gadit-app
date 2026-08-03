@@ -137,6 +137,100 @@ async function notifyPaidActivation(uid: string, tier: string, email: string | n
   }
 }
 
+/**
+ * Churn alert email. Sent the first time a REAL subscription is scheduled
+ * to cancel (a user clicked cancel during trial or while active). Amber,
+ * distinct from the teal "new subscription" alert. Non-blocking.
+ */
+async function notifyCancellation(tier: string, email: string | null, status: string, endsText: string) {
+  try {
+    const resendKey = process.env.RESEND_API_KEY;
+    const notifyTo = process.env.NOTIFY_EMAIL;
+    if (!resendKey || !notifyTo) return;
+    const when = new Date().toLocaleString("en-IL", {
+      timeZone: "Asia/Jerusalem",
+      day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+    const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#D97706,#B45309);padding:24px;color:#fff;">
+      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
+      <div style="font-size:22px;font-weight:700;margin-top:4px;">${tier} subscription canceled ⚠️</div>
+    </div>
+    <div style="padding:24px;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <tr><td style="padding:8px 0;color:#6B7280;width:110px;">Plan</td><td style="padding:8px 0;font-weight:600;">${tier}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Email</td><td style="padding:8px 0;font-weight:500;">${(email ?? "(none)").replace(/</g, "&lt;")}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Was</td><td style="padding:8px 0;">${status}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Access until</td><td style="padding:8px 0;">${endsText}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
+      </table>
+      <div style="margin-top:24px;padding-top:24px;border-top:1px solid #F3F4F6;text-align:center;">
+        <a href="https://www.gadit.app/admin/users" style="display:inline-block;background:#D97706;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Open admin dashboard</a>
+      </div>
+    </div>
+  </div>
+</body></html>`;
+    const resend = new Resend(resendKey);
+    const res = await resend.emails.send({
+      from: "Gadit <notify@gadit.app>",
+      to: notifyTo,
+      subject: `⚠️ Canceled ${tier} subscription: ${email ?? "(no email)"}`,
+      html,
+    });
+    if (res.error) console.error("[webhook] notifyCancellation resend error:", res.error);
+  } catch (e) {
+    console.warn("[webhook] notifyCancellation failed:", e);
+  }
+}
+
+/**
+ * Fire the churn alert once when a REAL sub is JUST scheduled to cancel.
+ * Gated to the transition via the event's `previous_attributes` (so it
+ * doesn't re-send on every update), to user-requested cancellations only,
+ * to real subs (active, or trialing WITH a card — abandoned card-less
+ * trials never reach here), and deduped per sub via `canceledNotifiedSub`.
+ */
+async function maybeNotifyScheduledCancel(sub: Stripe.Subscription, event: Stripe.Event) {
+  try {
+    const prev = (event.data as { previous_attributes?: Record<string, unknown> }).previous_attributes;
+    if (!prev) return;
+    const justScheduled =
+      (("cancel_at_period_end" in prev) && sub.cancel_at_period_end === true) ||
+      (("cancel_at" in prev) && !!sub.cancel_at);
+    if (!justScheduled) return;
+    if (sub.cancellation_details?.reason !== "cancellation_requested") return;
+    const real = sub.status === "active" || (sub.status === "trialing" && !!sub.default_payment_method);
+    if (!real) return;
+
+    const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+    const userId = await findUserIdByCustomer(customerId);
+    if (!userId) return;
+    const db = getAdminDb();
+    const ref = db.collection("users").doc(userId);
+    const snap = await ref.get();
+    if (snap.data()?.canceledNotifiedSub === sub.id) return; // once per sub
+
+    const priceId = sub.items.data[0]?.price?.id ?? "";
+    const tier = isFamilyPriceId(priceId)
+      ? "Family"
+      : isSchoolsPriceId(priceId)
+      ? "Schools"
+      : getPlanFromPriceId(priceId) === "clear"
+      ? "Clear"
+      : "Deep";
+    const email = (snap.data()?.email as string | undefined) ?? (sub.metadata?.email as string | undefined) ?? null;
+    const endsTs = sub.cancel_at ?? sub.trial_end ?? null;
+    const endsText = endsTs
+      ? new Date(endsTs * 1000).toLocaleDateString("en-IL", { timeZone: "Asia/Jerusalem", day: "2-digit", month: "short", year: "numeric" })
+      : "period end";
+    await notifyCancellation(tier, email, sub.status, endsText);
+    await ref.set({ canceledNotifiedSub: sub.id }, { merge: true });
+  } catch (e) {
+    console.warn("[webhook] maybeNotifyScheduledCancel failed:", e);
+  }
+}
+
 // Feature-level plan. Family and Schools billing both translate to "deep"
 // features for every paired member or classroom kid, so existing feature
 // gates (notebook, images, kids mode, quizzes) all work unchanged. The
@@ -442,6 +536,10 @@ export async function POST(req: NextRequest) {
 
     if (event.type === "customer.subscription.updated") {
       const sub = event.data.object as Stripe.Subscription;
+      // Churn alert BEFORE the metadata early-return, so it fires for
+      // Payment-Element subs too. One email the moment a real sub is
+      // scheduled to cancel.
+      await maybeNotifyScheduledCancel(sub, event);
       // Payment-Element subscriptions (metadata.uid) are provisioned
       // here; hosted-checkout ones fall through to the legacy
       // customer-lookup update below.
