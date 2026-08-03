@@ -26,6 +26,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { PrincipalOverview } from "./PrincipalOverview";
 import { useHref } from "@/lib/href";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
@@ -48,6 +49,8 @@ const COPY: Record<string, {
   logoBadType: string;
   logoUploading: string;
   classroomsHeading: string;
+  tabOverview: string;
+  tabClassrooms: string;
   addClassroom: string;
   classroomNameLabel: string;
   classroomNamePh: string;
@@ -88,6 +91,8 @@ const COPY: Record<string, {
     logoBadType: "רק קבצי PNG או JPG.",
     logoUploading: "מעלה...",
     classroomsHeading: "כיתות",
+    tabOverview: "מבט על",
+    tabClassrooms: "כיתות",
     addClassroom: "+ הוספת כיתה",
     classroomNameLabel: "שם הכיתה",
     classroomNamePh: "ז'1",
@@ -128,6 +133,8 @@ const COPY: Record<string, {
     logoBadType: "PNG or JPG only.",
     logoUploading: "Uploading…",
     classroomsHeading: "Classrooms",
+    tabOverview: "Overview",
+    tabClassrooms: "Classrooms",
     addClassroom: "+ Add classroom",
     classroomNameLabel: "Classroom name",
     classroomNamePh: "7B",
@@ -168,6 +175,8 @@ const COPY: Record<string, {
     logoBadType: "केवल PNG या JPG।",
     logoUploading: "अपलोड हो रहा है…",
     classroomsHeading: "कक्षाएँ",
+    tabOverview: "अवलोकन",
+    tabClassrooms: "कक्षाएँ",
     addClassroom: "+ कक्षा जोड़ें",
     classroomNameLabel: "कक्षा का नाम",
     classroomNamePh: "7B",
@@ -208,6 +217,8 @@ const COPY: Record<string, {
     logoBadType: "PNG ወይም JPG ብቻ።",
     logoUploading: "በመስቀል ላይ…",
     classroomsHeading: "ክፍሎች",
+    tabOverview: "አጠቃላይ እይታ",
+    tabClassrooms: "ክፍሎች",
     addClassroom: "+ ክፍል ጨምር",
     classroomNameLabel: "የክፍሉ ስም",
     classroomNamePh: "7ለ",
@@ -246,6 +257,7 @@ export function SchoolsClient() {
   const search = useSearchParams();
   const c = COPY[lang] ?? COPY.en;
 
+  const [tab, setTab] = useState<"overview" | "classrooms">("overview");
   const [school, setSchool] = useState<School | null>(null);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [schoolChecked, setSchoolChecked] = useState(false);
@@ -719,7 +731,39 @@ export function SchoolsClient() {
           </div>
         )}
 
+        {/* Section nav — Overview (school-wide roll-up) vs Classrooms.
+            The principal lands on Overview so the value is the first thing
+            they see; Classrooms is the management surface. */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+          {(["overview", "classrooms"] as const).map((tk) => {
+            const active = tab === tk;
+            return (
+              <button
+                key={tk}
+                type="button"
+                onClick={() => setTab(tk)}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: 999,
+                  border: active ? "1.5px solid #CA8A04" : "1px solid #E5E0D8",
+                  background: active ? "#FEF3C7" : "#fff",
+                  color: active ? "#92400E" : "#78716C",
+                  fontFamily: "var(--wb-sans)",
+                  fontSize: 14,
+                  fontWeight: active ? 700 : 600,
+                  cursor: "pointer",
+                }}
+              >
+                {tk === "overview" ? c.tabOverview : c.tabClassrooms}
+              </button>
+            );
+          })}
+        </div>
+
+        {tab === "overview" && <PrincipalOverview lang={lang} />}
+
         {/* Classrooms list */}
+        {tab === "classrooms" && (
         <section>
           <h2
             style={{
@@ -1338,6 +1382,7 @@ export function SchoolsClient() {
           </div>
           )}
         </section>
+        )}
       </main>
     </div>
   );
