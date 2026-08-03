@@ -83,6 +83,33 @@ export async function GET(req: NextRequest) {
   const allRaw: RawSearch[] = perClassroom.flatMap((c) => c.raw);
   const schoolInsights = computeClassroomInsights(allRaw, { topWordsLimit: 15, studentsLimit: 0 });
 
+  // School-wide per-student list for the Students tab: every named student,
+  // their classroom, lookup count, and top language. A student is a
+  // (classroom, name) pair since first names aren't unique across classes.
+  // Counts come from the sampled window (recent activity), same basis as
+  // the language map.
+  const students = perClassroom.flatMap((cls) => {
+    const counts = new Map<string, { count: number; langs: Map<string, number> }>();
+    for (const s of cls.raw) {
+      const name = (s.studentName ?? "").trim();
+      if (!name) continue;
+      const e = counts.get(name) ?? { count: 0, langs: new Map<string, number>() };
+      e.count += 1;
+      const lg = (s.lang ?? "").trim();
+      if (lg) e.langs.set(lg, (e.langs.get(lg) ?? 0) + 1);
+      counts.set(name, e);
+    }
+    return [...counts.entries()].map(([name, e]) => ({
+      name,
+      classroomId: cls.id,
+      classroomName: cls.name,
+      code: cls.code,
+      colorIndex: cls.colorIndex,
+      count: e.count,
+      topLanguage: [...e.langs.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "",
+    }));
+  }).sort((a, b) => b.count - a.count);
+
   const totalAllTime = perClassroom.reduce((sum, c) => sum + c.totalAllTime, 0);
 
   // Rank classrooms by all-time activity for the Overview list. Strip the
@@ -98,5 +125,6 @@ export async function GET(req: NextRequest) {
     topWords: schoolInsights.topWords,
     sampleSize: schoolInsights.sampleSize,
     classrooms,
+    students,
   });
 }

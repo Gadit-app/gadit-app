@@ -27,6 +27,7 @@ import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
+import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
 import { useHref } from "@/lib/href";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
@@ -51,6 +52,10 @@ const COPY: Record<string, {
   classroomsHeading: string;
   tabOverview: string;
   tabClassrooms: string;
+  tabStudents: string;
+  tabSettings: string;
+  settingsHeading: string;
+  langLabel: string;
   addClassroom: string;
   classroomNameLabel: string;
   classroomNamePh: string;
@@ -93,6 +98,10 @@ const COPY: Record<string, {
     classroomsHeading: "כיתות",
     tabOverview: "מבט על",
     tabClassrooms: "כיתות",
+    tabStudents: "תלמידים",
+    tabSettings: "הגדרות",
+    settingsHeading: "הגדרות בית הספר",
+    langLabel: "שפת הממשק",
     addClassroom: "+ הוספת כיתה",
     classroomNameLabel: "שם הכיתה",
     classroomNamePh: "ז'1",
@@ -135,6 +144,10 @@ const COPY: Record<string, {
     classroomsHeading: "Classrooms",
     tabOverview: "Overview",
     tabClassrooms: "Classrooms",
+    tabStudents: "Students",
+    tabSettings: "Settings",
+    settingsHeading: "School settings",
+    langLabel: "Interface language",
     addClassroom: "+ Add classroom",
     classroomNameLabel: "Classroom name",
     classroomNamePh: "7B",
@@ -177,6 +190,10 @@ const COPY: Record<string, {
     classroomsHeading: "कक्षाएँ",
     tabOverview: "अवलोकन",
     tabClassrooms: "कक्षाएँ",
+    tabStudents: "छात्र",
+    tabSettings: "सेटिंग्स",
+    settingsHeading: "स्कूल सेटिंग्स",
+    langLabel: "इंटरफ़ेस भाषा",
     addClassroom: "+ कक्षा जोड़ें",
     classroomNameLabel: "कक्षा का नाम",
     classroomNamePh: "7B",
@@ -219,6 +236,10 @@ const COPY: Record<string, {
     classroomsHeading: "ክፍሎች",
     tabOverview: "አጠቃላይ እይታ",
     tabClassrooms: "ክፍሎች",
+    tabStudents: "ተማሪዎች",
+    tabSettings: "ቅንብሮች",
+    settingsHeading: "የትምህርት ቤት ቅንብሮች",
+    langLabel: "የገጽታ ቋንቋ",
     addClassroom: "+ ክፍል ጨምር",
     classroomNameLabel: "የክፍሉ ስም",
     classroomNamePh: "7ለ",
@@ -251,13 +272,13 @@ const COPY: Record<string, {
 
 export function SchoolsClient() {
   const { user, loading } = useAuth();
-  const { lang, dir } = useLang();
+  const { lang, dir, setLang } = useLang();
   const href = useHref();
   const router = useRouter();
   const search = useSearchParams();
   const c = COPY[lang] ?? COPY.en;
 
-  const [tab, setTab] = useState<"overview" | "classrooms">("overview");
+  const [tab, setTab] = useState<"home" | "classrooms" | "students" | "settings">("home");
   const [school, setSchool] = useState<School | null>(null);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [schoolChecked, setSchoolChecked] = useState(false);
@@ -532,42 +553,61 @@ export function SchoolsClient() {
     }
   }
 
-  return (
-    <div className="wordbook wb-school-page" dir={dir}>
-      {/* Minimal Gadit wordmark in the inline-start corner. Gadi
-          (2026-06-28) flagged that the /schools dashboard had no
-          Gadit brand mark at all after we stripped the regular
-          masthead. The mark is dimmed mustard on cream so it doesn't
-          compete with the school logo + title below; a link back to
-          the homepage in case the principal lands here and wants to
-          poke around the consumer side. */}
-      <div
-        style={{
-          position: "absolute",
-          top: 16,
-          insetInlineStart: 20,
-          zIndex: 1,
-        }}
-      >
-        <Link
-          href={href("/")}
-          aria-label="Gadit"
-          dir="ltr"
-          style={{
-            fontFamily: "var(--wb-serif), serif",
-            fontWeight: 700,
-            fontSize: 18,
-            color: "#0EA5A5",
-            textDecoration: "none",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
-        </Link>
-      </div>
-      <main className="wb-school-main">
-        <Link href={href("/")} className="wb-family-back">{c.back}</Link>
+  const totalSearches = classrooms.reduce((s, cl) => s + (cl.searchCount ?? 0), 0);
+  const NAV: Array<"home" | "classrooms" | "students" | "settings"> = ["home", "classrooms", "students", "settings"];
 
+  return (
+    <div className="wordbook school-shell-page" dir={dir}>
+      <style>{SCHOOL_SHELL_CSS}</style>
+      <div className="school-shell">
+        {/* Right-side (RTL start) navigation, mirroring the Family
+            dashboard shell + Yooniz. */}
+        <aside className="school-shell-side">
+          <Link href={href("/")} className="school-shell-brand" dir="ltr" translate="no" aria-label="Gadit">
+            Gad<span className="school-shell-brand-it">it</span>
+          </Link>
+          <nav className="school-shell-nav">
+            {NAV.map((tk) => (
+              <button
+                key={tk}
+                type="button"
+                className={`school-nav-item ${tab === tk ? "is-active" : ""}`}
+                onClick={() => setTab(tk)}
+              >
+                <SchoolNavIcon name={tk} />
+                <span>
+                  {tk === "home" ? c.tabOverview : tk === "classrooms" ? c.tabClassrooms : tk === "students" ? c.tabStudents : c.tabSettings}
+                </span>
+              </button>
+            ))}
+          </nav>
+          <div className="school-shell-side-foot">
+            <Link href={href("/")} className="school-nav-item school-nav-back">
+              <SchoolNavIcon name="dictionary" />
+              <span>{c.back}</span>
+            </Link>
+          </div>
+        </aside>
+
+        <main className="school-shell-body">
+          <div className="school-shell-top">
+            <div className="school-shell-logo" aria-hidden>
+              {school.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={school.logoUrl} alt="" />
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z" /><path d="M21 10v6" /><path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" /></svg>
+              )}
+            </div>
+            <div>
+              <h1>{school.name || c.title}</h1>
+              <p>{classrooms.length} {c.classroomsHeading} · {totalSearches.toLocaleString()} {c.wordsLabel}</p>
+            </div>
+          </div>
+
+        {tab === "settings" && (
+        <>
+        <h2 className="school-sec-title">{c.settingsHeading}</h2>
         <header className="wb-school-header">
           {/* Logo slot. Universal "click to upload image" pattern:
               the slot itself shows the current logo (or a placeholder
@@ -713,6 +753,21 @@ export function SchoolsClient() {
         {logoError && (
           <div className="wb-school-sub" style={{ color: "#B91C1C", marginBottom: 12 }}>{logoError}</div>
         )}
+        {/* Interface language, like the Family settings selector. */}
+        <div className="school-set-row">
+          <span className="school-set-label">{c.langLabel}</span>
+          <select
+            className="school-set-select"
+            value={lang}
+            onChange={(e) => setLang(e.target.value as Parameters<typeof setLang>[0])}
+          >
+            {Object.entries(SCHOOL_LANG_NATIVE).map(([code, name]) => (
+              <option key={code} value={code}>{name}</option>
+            ))}
+          </select>
+        </div>
+        </>
+        )}
 
         {isWelcome && (
           <div
@@ -731,36 +786,9 @@ export function SchoolsClient() {
           </div>
         )}
 
-        {/* Section nav — Overview (school-wide roll-up) vs Classrooms.
-            The principal lands on Overview so the value is the first thing
-            they see; Classrooms is the management surface. */}
-        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
-          {(["overview", "classrooms"] as const).map((tk) => {
-            const active = tab === tk;
-            return (
-              <button
-                key={tk}
-                type="button"
-                onClick={() => setTab(tk)}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: 999,
-                  border: active ? "1.5px solid #CA8A04" : "1px solid #E5E0D8",
-                  background: active ? "#FEF3C7" : "#fff",
-                  color: active ? "#92400E" : "#78716C",
-                  fontFamily: "var(--wb-sans)",
-                  fontSize: 14,
-                  fontWeight: active ? 700 : 600,
-                  cursor: "pointer",
-                }}
-              >
-                {tk === "overview" ? c.tabOverview : c.tabClassrooms}
-              </button>
-            );
-          })}
-        </div>
+        {tab === "home" && <PrincipalOverview lang={lang} />}
 
-        {tab === "overview" && <PrincipalOverview lang={lang} />}
+        {tab === "students" && <SchoolStudentsPanel lang={lang} />}
 
         {/* Classrooms list */}
         {tab === "classrooms" && (
@@ -1383,7 +1411,92 @@ export function SchoolsClient() {
           )}
         </section>
         )}
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
+
+const SCHOOL_LANG_NATIVE: Record<string, string> = {
+  he: "עברית", en: "English", ar: "العربية", ru: "Русский", de: "Deutsch",
+  cs: "Čeština", es: "Español", hi: "हिन्दी", am: "አማርኛ", it: "Italiano",
+  ja: "日本語", sk: "Slovenčina",
+};
+
+function SchoolNavIcon({ name }: { name: "home" | "classrooms" | "students" | "settings" | "dictionary" }) {
+  const p = { width: 19, height: 19, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (name === "home") return (<svg {...p}><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /></svg>);
+  if (name === "classrooms") return (<svg {...p}><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 8h18" /><path d="M8 21h8" /></svg>);
+  if (name === "students") return (<svg {...p}><circle cx="9" cy="8" r="3.2" /><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5" /><path d="M16.5 5.2a3 3 0 0 1 0 5.6M18 20c-.3-2.4-1.4-4-3-4.9" /></svg>);
+  if (name === "settings") return (<svg {...p}><circle cx="12" cy="12" r="3" /><path d="M19 12a7 7 0 0 0-.1-1.3l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.2-1.3L14 3h-4l-.4 2.1a7 7 0 0 0-2.2 1.3l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .45.03.88.1 1.3l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.2 1.3L10 21h4l.4-2.1a7 7 0 0 0 2.2-1.3l2.3.9 2-3.4-2-1.5c.07-.42.1-.85.1-1.3z" /></svg>);
+  return (<svg {...p}><path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z" /><path d="M9 3v18" /></svg>);
+}
+
+const SCHOOL_SHELL_CSS = `
+.school-shell-page { min-height: 100dvh; background: #faf9f6; }
+.school-shell {
+  display: flex; gap: 20px; max-width: 1140px; margin: 0 auto;
+  padding: 20px 18px 48px; align-items: flex-start;
+}
+.school-shell-side {
+  width: 232px; flex-shrink: 0; background: #fff;
+  border: 1px solid rgba(31,41,55,0.08); border-radius: 20px;
+  padding: 16px 14px; position: sticky; top: 18px;
+  box-shadow: 0 8px 24px rgba(31,41,55,0.05);
+  display: flex; flex-direction: column; min-height: 420px;
+}
+.school-shell-brand {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  font-weight: 600; font-size: 26px; letter-spacing: -0.03em;
+  color: #1C1917; text-decoration: none; direction: ltr;
+  padding: 4px 12px 16px; text-align: center;
+}
+.school-shell-brand-it { color: #CA8A04; font-style: italic; font-weight: 500; }
+.school-shell-nav { display: flex; flex-direction: column; gap: 4px; }
+.school-nav-item {
+  display: flex; align-items: center; gap: 11px; width: 100%;
+  padding: 11px 14px; border-radius: 12px; border: none; background: transparent;
+  color: #57534E; font-size: 15px; font-weight: 600; font-family: inherit;
+  cursor: pointer; text-decoration: none; text-align: start;
+  transition: background 140ms ease, color 140ms ease;
+}
+.school-nav-item svg { flex-shrink: 0; color: #A8A29E; transition: color 140ms ease; }
+.school-nav-item:hover { background: #faf6ec; color: #1C1917; }
+.school-nav-item.is-active { background: rgba(202,138,4,0.12); color: #92400E; }
+.school-nav-item.is-active svg { color: #92400E; }
+.school-shell-side-foot { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(31,41,55,0.07); }
+.school-nav-back {
+  color: #92400E; font-weight: 700; background: rgba(202,138,4,0.08);
+  border: 1px solid rgba(202,138,4,0.22); justify-content: center;
+}
+.school-nav-back:hover { background: rgba(202,138,4,0.15); color: #92400E; }
+.school-nav-back svg { color: #CA8A04; }
+
+.school-shell-body { flex: 1; min-width: 0; }
+.school-shell-top { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.school-shell-top h1 { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; color: #1C1917; margin: 0; letter-spacing: -0.01em; }
+.school-shell-top p { margin: 4px 0 0; color: #78716C; font-size: 14px; font-weight: 500; }
+.school-shell-logo {
+  width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px;
+  background: rgba(202,138,4,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.school-shell-logo img { width: 100%; height: 100%; object-fit: contain; }
+.school-sec-title { font-size: 20px; font-weight: 800; color: #1C1917; margin: 0 0 16px; }
+.school-set-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  background: #fff; border: 1px solid rgba(31,41,55,0.08); border-radius: 16px;
+  padding: 15px 18px; margin-top: 12px; max-width: 620px;
+}
+.school-set-label { font-size: 15.5px; font-weight: 700; color: #1C1917; }
+.school-set-select {
+  font-family: inherit; font-size: 14.5px; font-weight: 600; color: #1C1917;
+  background: #faf6ec; border: 1px solid rgba(31,41,55,0.12); border-radius: 10px;
+  padding: 8px 12px; cursor: pointer;
+}
+@media (max-width: 720px) {
+  .school-shell { flex-direction: column; }
+  .school-shell-side { width: 100%; position: static; min-height: 0; flex-direction: column; }
+  .school-shell-nav { flex-direction: row; flex-wrap: wrap; }
+  .school-nav-item { width: auto; }
+}
+`;
