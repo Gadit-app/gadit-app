@@ -36,6 +36,16 @@ export async function GET(req: NextRequest) {
   }
   const codeData = codeSnap.data() as { schoolId: string; classroomId: string };
 
+  // Classroom meta (name + all-time counter) so the by-code teacher view
+  // can show a title and the proof-of-use total without a second request.
+  const classroomSnap = await db
+    .collection("schools")
+    .doc(codeData.schoolId)
+    .collection("classrooms")
+    .doc(codeData.classroomId)
+    .get();
+  const classroomData = (classroomSnap.data() ?? {}) as { name?: string; searchCount?: number };
+
   // NOTE: the search docs written by /api/classroom/log-search use the
   // fields `lang` and `at` (ISO string), NOT `language`/`createdAt`. An
   // earlier version of this route read the wrong names and ordered by a
@@ -68,5 +78,9 @@ export async function GET(req: NextRequest) {
     };
   });
 
-  return NextResponse.json({ searches });
+  return NextResponse.json({
+    name: classroomData.name ?? "",
+    searchCount: classroomData.searchCount ?? 0,
+    searches,
+  });
 }
