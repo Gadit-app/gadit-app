@@ -601,7 +601,7 @@ export function SchoolsClient() {
             </div>
             <div>
               <h1>{school.name || c.title}</h1>
-              <p>{classrooms.length} {c.classroomsHeading} · {totalSearches.toLocaleString()} {c.wordsLabel}</p>
+              <p>{classrooms.length} {c.classroomsHeading} · {totalSearches.toLocaleString()} {lang === "he" ? "חיפושים" : lang === "hi" ? "खोजें" : lang === "am" ? "ፍለጋዎች" : "lookups"}</p>
             </div>
           </div>
 
@@ -631,7 +631,7 @@ export function SchoolsClient() {
                 // the with-logo state so the user's logo reads clean;
                 // keep mustard for the empty placeholder state.
                 background: school.logoUrl ? "#FFFFFF" : undefined,
-                border: school.logoUrl ? "1px solid var(--hairline, #E5E7EB)" : "1px solid rgba(14, 165, 165, 0.3)",
+                border: school.logoUrl ? "1px solid var(--hairline, #E5E7EB)" : "1px solid rgba(202, 138, 4, 0.3)",
                 cursor: "pointer",
               }}
             >
@@ -639,7 +639,7 @@ export function SchoolsClient() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={school.logoUrl} alt="" />
               ) : (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 7l9-4 9 4-9 4-9-4z" />
                   <path d="M21 10v6" />
                   <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
@@ -663,7 +663,7 @@ export function SchoolsClient() {
                 width: 24,
                 height: 24,
                 borderRadius: 999,
-                background: "#0EA5A5",
+                background: "#CA8A04",
                 border: "2px solid var(--surface, #FFFFFF)",
                 display: "flex",
                 alignItems: "center",
@@ -740,7 +740,9 @@ export function SchoolsClient() {
                 {school.name}
               </h1>
             )}
-            <p className="wb-school-sub">{c.sub}</p>
+            {/* The marketing tagline (c.sub) was removed here: this block
+                now lives only inside the Settings tab, where a tagline is
+                out of place. The click-to-edit name + logo are the point. */}
             {nameSaving && (
               <div className="wb-school-sub" style={{ marginTop: 4, fontSize: 12 }}>{c.saving}</div>
             )}
@@ -773,10 +775,10 @@ export function SchoolsClient() {
           <div
             style={{
               padding: "12px 16px",
-              background: "rgba(14, 165, 165, 0.10)",
-              border: "1px solid rgba(14, 165, 165, 0.3)",
+              background: "rgba(202, 138, 4, 0.10)",
+              border: "1px solid rgba(202, 138, 4, 0.3)",
               borderRadius: 12,
-              color: "#0EA5A5",
+              color: "#92400E",
               fontFamily: "var(--wb-sans)",
               fontSize: 14,
               marginBottom: 24,
@@ -1499,4 +1501,17 @@ const SCHOOL_SHELL_CSS = `
   .school-shell-nav { flex-direction: row; flex-wrap: wrap; }
   .school-nav-item { width: auto; }
 }
+
+/* Unify the Schools dashboard to the mustard SKU accent. The classroom
+   management chrome (buttons, code pills) was built with the core teal;
+   inside the mustard shell that read as two accents in one view (Gadi QA
+   2026-08-03). Scoped to this page only, so the /c/<CODE> kid surface and
+   other teal chrome are untouched. */
+.school-shell-page .wb-school-cta {
+  background: #CA8A04 !important;
+  box-shadow: 0 1px 2px rgba(202,138,4,0.28), 0 8px 22px -8px rgba(202,138,4,0.42) !important;
+}
+.school-shell-page .wb-school-cta:hover { background: #A16207 !important; }
+.school-shell-page .wb-school-cta:focus-visible { outline: 2px solid #CA8A04 !important; }
+.school-shell-page .wb-classroom-code { color: #92400E; background: rgba(202,138,4,0.12); }
 `;
