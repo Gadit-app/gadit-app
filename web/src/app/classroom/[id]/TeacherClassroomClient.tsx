@@ -366,7 +366,18 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
   }
 
   return (
-    <div className="wordbook wb-school-page" dir={dir}>
+    <div className="wordbook wb-school-page school-admin-mustard" dir={dir}>
+      {/* Match the mustard Schools SKU accent used across the /schools
+          dashboard (Gadi 2026-08-03, full coherence). Scoped to this admin
+          view; the kid /c/<CODE> surface keeps the core teal. */}
+      <style>{`
+        .school-admin-mustard .wb-school-cta {
+          background: #CA8A04 !important;
+          box-shadow: 0 1px 2px rgba(202,138,4,0.28), 0 8px 22px -8px rgba(202,138,4,0.42) !important;
+        }
+        .school-admin-mustard .wb-school-cta:hover { background: #A16207 !important; }
+        .school-admin-mustard .wb-school-cta:focus-visible { outline: 2px solid #CA8A04 !important; }
+      `}</style>
       <main className="wb-school-main">
         <Link href={href("/schools")} className="wb-family-back">{c.back}</Link>
 
