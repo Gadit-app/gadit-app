@@ -82,18 +82,21 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // SAFETY GUARD: never delete an account with a live subscription.
-  // A paying Family/Schools/Clear/Deep owner must not be wiped by an
-  // accidental click on the wrong duplicate row (Reut incident,
+  // SAFETY GUARD: never delete a REAL paying account (Reut incident,
   // 2026-07-23). Checked authoritatively against STRIPE, not the doc's
-  // subscriptionStatus field — that field is not reliably written (Reut's
-  // doc had none despite a live trialing sub), so trusting it would let
-  // a paying account through. We look up the user's Stripe customer
-  // (from the doc, or by email) and refuse if any sub is active/trialing.
+  // subscriptionStatus field (not reliably written). BUT a card-less
+  // trialing sub is an ABANDONED checkout — Stripe creates the sub as
+  // `trialing` BEFORE the card is entered, and the webhook only grants
+  // access once a card is attached. Blocking on it made every
+  // abandoned-checkout / test account un-deletable (Gadi's test account
+  // osherbenlavi, 2026-08-03). So we block only on `active` subs and
+  // `trialing` subs WITH a card — mirroring the webhook's activation rule.
+  // Card-less trialing subs are collected and canceled during deletion so
+  // no orphaned sub lingers in Stripe.
+  const cardlessTrialSubs: string[] = [];
   if (uid) {
     const doc = await db.collection("users").doc(uid).get();
     const d = doc.exists ? (doc.data() ?? {}) : {};
-    let liveStatus: string | null = null;
 
     let customerId = (d.stripeCustomerId as string | undefined) ?? null;
     // Fall back to finding the customer by email if the doc lacks the id.
@@ -103,23 +106,30 @@ export async function POST(req: NextRequest) {
         customerId = found.data[0]?.id ?? null;
       } catch { /* ignore */ }
     }
+    let blockingStatus: string | null = null;
     if (customerId) {
       try {
         const subs = await stripe.subscriptions.list({ customer: customerId, status: "all", limit: 20 });
-        const live = subs.data.find((s) => s.status === "active" || s.status === "trialing");
-        if (live) liveStatus = live.status;
+        for (const s of subs.data) {
+          const hasCard = !!s.default_payment_method;
+          if (s.status === "active" || (s.status === "trialing" && hasCard)) {
+            blockingStatus = s.status; // real paying / trialing-with-card customer
+          } else if (s.status === "trialing" && !hasCard) {
+            cardlessTrialSubs.push(s.id); // abandoned checkout — safe to cancel
+          }
+        }
       } catch (e) {
         console.warn("[admin/delete-user] Stripe check failed:", String(e));
       }
     }
 
-    if (liveStatus) {
+    if (blockingStatus) {
       return NextResponse.json(
         {
-          error: "refused: this account has a live subscription (" + liveStatus + "). " +
+          error: "refused: this account has a live subscription (" + blockingStatus + "). " +
             "Cancel the subscription in Stripe first if you really mean to delete a paying user.",
           uid,
-          subscriptionStatus: liveStatus,
+          subscriptionStatus: blockingStatus,
         },
         { status: 409 },
       );
@@ -154,6 +164,18 @@ export async function POST(req: NextRequest) {
       deletedUserDoc = true;
     }
 
+    // Cancel any abandoned card-less trialing subs so no orphaned sub
+    // lingers in Stripe pointing at a now-deleted user.
+    if (!dryRun) {
+      for (const subId of cardlessTrialSubs) {
+        try {
+          await stripe.subscriptions.cancel(subId);
+        } catch (e) {
+          console.warn("[admin/delete-user] cancel card-less sub failed:", subId, String(e));
+        }
+      }
+    }
+
     // Finally, the Auth record itself
     if (!dryRun) await auth.deleteUser(uid);
     deletedAuthUser = true;
@@ -166,6 +188,7 @@ export async function POST(req: NextRequest) {
     deletedAuthUser,
     deletedUserDoc,
     deletedNotebookEntries,
+    canceledCardlessSubs: cardlessTrialSubs.length,
     hint: dryRun
       ? "Re-run without dryRun=1 to actually delete."
       : "Account fully removed. The user can sign up again with the same email.",
