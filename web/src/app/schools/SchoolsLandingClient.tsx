@@ -1725,12 +1725,87 @@ const COPY: Record<string, T> = {
 const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
 const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
 
+/**
+ * Cross-language flagship section copy. Rendered from its own object so the
+ * 14 main `T` dicts stay untouched; he/en/ar/ru are native, everything else
+ * falls back to English (Gadi's he+en-primary pattern). The one goal is
+ * comprehension of the material; cross-language is the strongest tool for
+ * it, NOT the whole identity — so the copy frames it as "for every student
+ * who hits a hard word", with multilingual students as the sharpest case.
+ */
+type XLang = {
+  tag: string;
+  h2: string;
+  body1: string;
+  body2: string;
+  keyline: string;
+  demoWordLabel: string;
+  demoMeaningLabel: string;
+  note: string;
+};
+const XLANG: Record<string, XLang> = {
+  en: {
+    tag: "Cross-language",
+    h2: "And when the word is in a language the student hasn't fully mastered?",
+    body1: "A child reads the lesson in the language of instruction but still thinks in Russian, Amharic, or Arabic. They hit a word they don't know, don't raise their hand, and drown quietly while the class moves on.",
+    body2: "In Gadit, that student looks the word up and gets the full meaning in their own language, then keeps reading the lesson. The comprehension barrier is gone in one tap.",
+    keyline: "Your multilingual students stop falling behind in every other subject, because they can finally read the material.",
+    demoWordLabel: "The lesson says",
+    demoMeaningLabel: "The student understands",
+    note: "This is not only for new immigrants. It is for every student who hits a hard word, in any of 14 languages. The goal is understanding the material; this is the strongest tool for it.",
+  },
+  he: {
+    tag: "חוצה שפות",
+    h2: "ומה קורה כשהמילה בשפה שהתלמיד עדיין לא שולט בה?",
+    body1: "ילד קורא את החומר בשפת ההוראה, אבל עדיין חושב ברוסית, באמהרית או בערבית. הוא נתקל במילה שאינו מכיר, לא מרים יד, וטובע בשקט בזמן שהכיתה ממשיכה הלאה.",
+    body2: "ב-Gadit אותו תלמיד מחפש את המילה ומקבל את המשמעות המלאה בשפה שלו, וממשיך לקרוא את השיעור. מחסום ההבנה נעלם בהקשה אחת.",
+    keyline: "התלמידים הרב-לשוניים שלך מפסיקים לפגר בכל מקצוע אחר, כי סוף סוף הם מצליחים לקרוא את החומר.",
+    demoWordLabel: "בשיעור כתוב",
+    demoMeaningLabel: "התלמיד מבין",
+    note: "זה לא רק לעולים חדשים. זה לכל תלמיד שנתקל במילה קשה, בכל אחת מ-14 שפות. המטרה היא הבנת החומר, וזה הכלי החזק ביותר עבורה.",
+  },
+  ar: {
+    tag: "عبر اللغات",
+    h2: "وماذا لو كانت الكلمة بلغة لم يتقنها الطالب بعد؟",
+    body1: "يقرأ الطفل الدرس بلغة التدريس لكنه لا يزال يفكر بالروسية أو الأمهرية أو العربية. يصادف كلمة لا يعرفها، لا يرفع يده، ويغرق بصمت بينما يمضي الصف قدمًا.",
+    body2: "في Gadit يبحث ذلك الطالب عن الكلمة فيحصل على معناها الكامل بلغته، ثم يواصل قراءة الدرس. يختفي حاجز الفهم بنقرة واحدة.",
+    keyline: "طلابك متعددو اللغات يتوقفون عن التأخر في كل مادة أخرى، لأنهم أخيرًا يستطيعون قراءة المحتوى.",
+    demoWordLabel: "الدرس يقول",
+    demoMeaningLabel: "الطالب يفهم",
+    note: "هذا ليس للقادمين الجدد فقط. إنه لكل طالب يصادف كلمة صعبة، بأي من 14 لغة. الهدف هو فهم المحتوى، وهذه أقوى أداة لذلك.",
+  },
+  ru: {
+    tag: "Между языками",
+    h2: "А если слово на языке, которым ученик ещё не владеет?",
+    body1: "Ребёнок читает урок на языке обучения, но всё ещё думает по-русски, на амхарском или арабском. Он встречает незнакомое слово, не поднимает руку и молча тонет, пока класс движется дальше.",
+    body2: "В Gadit этот ученик ищет слово и получает полное значение на своём языке, а затем продолжает читать урок. Барьер понимания исчезает одним касанием.",
+    keyline: "Ваши многоязычные ученики перестают отставать по всем другим предметам, потому что наконец могут читать материал.",
+    demoWordLabel: "В уроке написано",
+    demoMeaningLabel: "Ученик понимает",
+    note: "Это не только для новых репатриантов. Это для каждого ученика, который встречает трудное слово, на любом из 14 языков. Цель — понимание материала, и это самый сильный инструмент для этого.",
+  },
+};
+
+// Fixed cross-language demo — same content in every UI language (like the
+// teacher mockup). A word from the lesson, understood in three of the
+// student's languages. Shows the superpower concretely without depending
+// on the viewer's language.
+const XLANG_DEMO = {
+  word: "photosynthesis",
+  meanings: [
+    { lang: "Русский", text: "Процесс, которым растения превращают свет в пищу." },
+    { lang: "العربية", text: "العملية التي تحوّل بها النباتات الضوء إلى غذاء.", dir: "rtl" as const },
+    { lang: "አማርኛ", text: "ተክሎች ብርሃንን ወደ ምግብ የሚቀይሩበት ሂደት።" },
+  ],
+};
+
 export function SchoolsLandingClient({ standalone = false }: { standalone?: boolean } = {}) {
   const { user, schoolId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
   const t = COPY[lang] ?? COPY.en;
+  const xt = XLANG[lang] ?? XLANG.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Every "Start 14-day free trial" CTA opens the payment page DIRECTLY
@@ -1967,6 +2042,56 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <div className="wb-schools-callout-body">{t.probCallout3Body}</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ─── 2.5 CROSS-LANGUAGE (flagship) ───────────────────────── */}
+      <section className="wb-schools-section" style={{ background: "#FFFBEB" }}>
+        <div className="wb-schools-section-inner">
+          <span className="wb-schools-tag" style={{ color: "#B45309" }}>{xt.tag}</span>
+          <h2 className="wb-schools-h2">{xt.h2}</h2>
+          <p className="wb-schools-body">{xt.body1}</p>
+          <p className="wb-schools-body">{xt.body2}</p>
+
+          {/* Concrete demo: one lesson word, understood in the student's
+              own language. Fixed content, UI-translated labels. */}
+          <div
+            style={{
+              marginTop: 28,
+              background: "#fff",
+              border: "1px solid #FDE68A",
+              borderRadius: 18,
+              padding: "22px 24px",
+              maxWidth: 560,
+              boxShadow: "0 10px 30px -14px rgba(202,138,4,0.35)",
+            }}
+          >
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#B45309", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>
+              {xt.demoWordLabel}
+            </div>
+            <div dir="ltr" style={{ fontSize: 28, fontWeight: 800, color: "#1C1917", marginBottom: 18, textAlign: dir === "rtl" ? "right" : "left" }}>
+              {XLANG_DEMO.word}
+            </div>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#B45309", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 10 }}>
+              {xt.demoMeaningLabel}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {XLANG_DEMO.meanings.map((m) => (
+                <div key={m.lang} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                  <span style={{ flexShrink: 0, minWidth: 74, fontSize: 13.5, fontWeight: 700, color: "#92400E" }}>{m.lang}</span>
+                  <span dir={m.dir ?? "ltr"} style={{ fontSize: 14.5, color: "#44403C", lineHeight: 1.5, textAlign: m.dir === "rtl" ? "right" : "left" }}>{m.text}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #FEF3C7", fontSize: 12.5, color: "#A16207", fontWeight: 600 }}>
+              {lang === "he" ? "ועוד 11 שפות" : lang === "ar" ? "و11 لغة أخرى" : lang === "ru" ? "и ещё 11 языков" : "+ 11 more languages"}
+            </div>
+          </div>
+
+          <p className="wb-schools-body" style={{ marginTop: 26, fontSize: 19, fontWeight: 700, color: "#1C1917", maxWidth: 640 }}>
+            {xt.keyline}
+          </p>
+          <p className="wb-schools-body" style={{ marginTop: 12, color: "#78716C" }}>{xt.note}</p>
         </div>
       </section>
 
