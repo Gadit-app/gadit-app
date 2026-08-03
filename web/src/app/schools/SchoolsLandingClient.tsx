@@ -1731,28 +1731,29 @@ const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS
  * Prices are in shekels — the Israeli school market is the primary
  * channel and buys in ₪ with a tax invoice; international currency
  * display is a follow-up tied to the billing-routing work. The middle
- * tier is featured (middle-anchor). Each price is a NEW Stripe price, so
- * the three env vars must be set once the Stripe products exist.
+ * All three tiers are equal weight: the right one is decided by school
+ * size, not preference, so there is no "recommended" tier (Gadi
+ * 2026-08-04). Each price is a NEW Stripe price, so the three env vars
+ * must be set once the Stripe products exist.
  */
 const SCHOOL_TIERS = [
-  { key: "small" as const,  price: 349, priceId: PRICE_SCHOOLS_MONTHLY,        featured: false },
-  { key: "medium" as const, price: 649, priceId: PRICE_SCHOOLS_MEDIUM_MONTHLY, featured: true },
-  { key: "large" as const,  price: 949, priceId: PRICE_SCHOOLS_LARGE_MONTHLY,  featured: false },
+  { key: "small" as const,  price: 349, priceId: PRICE_SCHOOLS_MONTHLY },
+  { key: "medium" as const, price: 649, priceId: PRICE_SCHOOLS_MEDIUM_MONTHLY },
+  { key: "large" as const,  price: 949, priceId: PRICE_SCHOOLS_LARGE_MONTHLY },
 ];
 
 type PricingUI = {
   perMonth: string;
-  recommended: string;
   tiers: { small: string; medium: string; large: string };
 };
 const PRICING_UI: Record<string, PricingUI> = {
-  he: { perMonth: "לחודש", recommended: "מומלץ",
+  he: { perMonth: "לחודש",
         tiers: { small: "עד 100 תלמידים", medium: "101–500 תלמידים", large: "501–1,000 תלמידים" } },
-  en: { perMonth: "/ month", recommended: "Recommended",
+  en: { perMonth: "/ month",
         tiers: { small: "Up to 100 students", medium: "101–500 students", large: "501–1,000 students" } },
-  ar: { perMonth: "شهريًا", recommended: "موصى به",
+  ar: { perMonth: "شهريًا",
         tiers: { small: "حتى 100 طالب", medium: "101–500 طالب", large: "501–1,000 طالب" } },
-  ru: { perMonth: "в месяц", recommended: "Рекомендуем",
+  ru: { perMonth: "в месяц",
         tiers: { small: "до 100 учеников", medium: "101–500 учеников", large: "501–1,000 учеников" } },
 };
 
@@ -2262,20 +2263,14 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           <h2 className="wb-schools-h2">{t.priceH2}</h2>
           <p className="wb-schools-section-sub">{t.priceSub}</p>
           <style>{`
-            .sl-price-grid-3 { max-width: 980px; }
-            @media (min-width: 768px) { .sl-price-grid-3 { grid-template-columns: repeat(3, 1fr); } }
+            .wordbook .wb-schools-price-grid.sl-price-grid-3 { max-width: 1040px; }
+            @media (min-width: 720px) {
+              .wordbook .wb-schools-price-grid.sl-price-grid-3 { grid-template-columns: repeat(3, 1fr); }
+            }
           `}</style>
           <div className="wb-schools-price-grid sl-price-grid-3">
             {SCHOOL_TIERS.map((tier) => (
-              <div
-                key={tier.key}
-                className={`wb-schools-price-card${tier.featured ? " wb-schools-price-card-large" : ""}`}
-              >
-                {tier.featured && (
-                  <div style={{ display: "inline-block", background: "#CA8A04", color: "#fff", fontSize: 12, fontWeight: 700, padding: "3px 12px", borderRadius: 999, marginBottom: 10 }}>
-                    {pu.recommended}
-                  </div>
-                )}
+              <div key={tier.key} className="wb-schools-price-card">
                 <div className="wb-schools-price-name">{pu.tiers[tier.key]}</div>
                 <div className="wb-schools-price-amount">
                   <span className="wb-schools-price-amount-num" dir="ltr">{`₪${tier.price}`}</span>
