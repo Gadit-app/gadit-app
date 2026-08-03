@@ -45,6 +45,8 @@ interface AccountData {
   email: string | null;
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+  isFamily: boolean;
+  isSchool: boolean;
   isTrial: boolean;
   trialDaysLeft: number;
   trialEnd: number | null;
@@ -138,11 +140,17 @@ function PlanSection({
   onManageBilling,
   onChangePlan,
   onUpgrade,
+  familyEligible,
+  upgradingFamily,
+  onUpgradeFamily,
 }: {
   data: AccountData;
   onManageBilling: () => void;
   onChangePlan: () => void;
   onUpgrade: () => void;
+  familyEligible: boolean;
+  upgradingFamily: boolean;
+  onUpgradeFamily: () => void;
 }) {
   const { lang, dir } = useLang();
   const isRtl = dir === "rtl";
@@ -311,6 +319,14 @@ function PlanSection({
               </>
             ) : (
               <>
+                {/* Family switch, offered only when the server confirms
+                    eligibility. Primary because it's the one upgrade path
+                    we actively want a paying Clear/Deep user to consider. */}
+                {familyEligible && (
+                  <PrimaryBtn onClick={onUpgradeFamily} disabled={upgradingFamily}>
+                    {v2(lang, "accountUpgradeToFamily")}
+                  </PrimaryBtn>
+                )}
                 <GhostBtn onClick={onManageBilling}>
                   {v2(lang, "accountManageBilling")}
                 </GhostBtn>
@@ -612,6 +628,11 @@ export function AccountV2() {
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  // Self-service "Switch to Family": only offered when the server confirms
+  // the caller is an eligible Clear/Deep subscriber (has a live sub, isn't
+  // already Family/Schools). The button stays hidden otherwise.
+  const [familyEligible, setFamilyEligible] = useState(false);
+  const [upgradingFamily, setUpgradingFamily] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -632,6 +653,23 @@ export function AccountV2() {
         }
         const json = (await res.json()) as AccountData;
         if (!cancelled) setData(json);
+
+        // Ask the server whether a self-service Family switch is available.
+        // Only a paid, non-Family, non-Schools account with a live sub is
+        // eligible — the endpoint does all that checking authoritatively.
+        if (!cancelled && (json.plan === "clear" || json.plan === "deep") && !json.isFamily && !json.isSchool) {
+          try {
+            const elig = await fetch("/api/account/upgrade-family", {
+              headers: { Authorization: `Bearer ${idToken}` },
+            });
+            if (elig.ok) {
+              const ej = (await elig.json()) as { eligible?: boolean };
+              if (!cancelled && ej.eligible) setFamilyEligible(true);
+            }
+          } catch {
+            /* non-fatal — just don't show the button */
+          }
+        }
       } catch {
         if (!cancelled) setErrorMsg("Could not load account data.");
       } finally {
@@ -694,6 +732,60 @@ export function AccountV2() {
 
   function handleUpgrade() {
     router.push(href("/pricing"));
+  }
+
+  async function handleUpgradeFamily() {
+    if (!user || upgradingFamily) return;
+    // Consent lives here: the user, from their own account, chooses to
+    // switch. We swap the price in place and invoice the prorated
+    // difference now (Family is a small step up from Clear/Deep).
+    const ok = window.confirm(
+      lang === "he"
+        ? "מעבר לתוכנית Family מוסיף עד 5 בני משפחה תחת המנוי הקיים, בלי להזין כרטיס מחדש. ההפרש היחסי עד סוף התקופה יחויב עכשיו. להמשיך?"
+        : lang === "ar"
+          ? "التبديل إلى خطة Family يضيف حتى 5 أفراد من العائلة إلى اشتراكك الحالي دون إعادة إدخال البطاقة. سيُحتسب الفرق النسبي حتى نهاية الفترة الآن. هل تريد المتابعة؟"
+          : "Switching to Family adds up to 5 family members on your current subscription, with no card re-entry. The prorated difference for the rest of the period is charged now. Continue?"
+    );
+    if (!ok) return;
+    setUpgradingFamily(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/account/upgrade-family", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) {
+        window.alert(
+          lang === "he"
+            ? "המעבר ל-Family נכשל. אפשר לנסות שוב או לפנות לתמיכה ב-support@gadit.app."
+            : lang === "ar"
+              ? "فشل التبديل إلى Family. حاول مرة أخرى أو راسل support@gadit.app."
+              : "Switching to Family failed. Please try again or contact support@gadit.app."
+        );
+        setUpgradingFamily(false);
+        return;
+      }
+      // Provisioning is async (Stripe webhook → familyId + family doc).
+      // Point the user at /family so the new dashboard is one tap away.
+      window.alert(
+        lang === "he"
+          ? "מצוין! החשבון עובר לתוכנית Family. אפשר להוסיף בני משפחה מעמוד המשפחה תוך רגע."
+          : lang === "ar"
+            ? "رائع! يتم تحويل حسابك إلى خطة Family. يمكنك إضافة أفراد العائلة من صفحة العائلة خلال لحظات."
+            : "Done! Your account is switching to the Family plan. You can add members from the Family page in a moment."
+      );
+      router.push(href("/family"));
+    } catch (err) {
+      console.error("Family upgrade failed:", err);
+      window.alert(
+        lang === "he"
+          ? "המעבר ל-Family נכשל. אפשר לנסות שוב או לפנות לתמיכה ב-support@gadit.app."
+          : lang === "ar"
+            ? "فشل التبديل إلى Family. راسل support@gadit.app."
+            : "Switching to Family failed. Please contact support@gadit.app."
+      );
+      setUpgradingFamily(false);
+    }
   }
 
   async function handleSignOut() {
@@ -812,6 +904,9 @@ export function AccountV2() {
           onManageBilling={handleManageBilling}
           onChangePlan={handleChangePlan}
           onUpgrade={handleUpgrade}
+          familyEligible={familyEligible}
+          upgradingFamily={upgradingFamily}
+          onUpgradeFamily={handleUpgradeFamily}
         />
         <UsageSection data={data} />
         <AccountInfoSection

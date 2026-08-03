@@ -52,6 +52,8 @@ export async function GET(req: NextRequest) {
       stripeCustomerId: data.stripeCustomerId ?? null,
       subscriptionId: data.subscriptionId ?? null,
       subscriptionStatus: data.subscriptionStatus ?? null,
+      isFamily: !!data.familyId,
+      isSchool: !!data.schoolId,
       isTrial,
       trialDaysLeft,
       trialEnd: trialEndSec,
