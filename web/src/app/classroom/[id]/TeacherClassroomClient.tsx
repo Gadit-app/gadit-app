@@ -35,6 +35,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { db } from "@/lib/firebase";
 import type { Classroom } from "@/lib/school";
+import { computeClassroomInsights, classroomLangLabel } from "@/lib/classroom-insights";
 
 interface SearchEntry {
   id: string;
@@ -61,6 +62,19 @@ const COPY: Record<string, {
   addStudentBtn: string;
   removeStudentAria: string;
   anonymousLabel: string;
+  insightsTitle: string;
+  totalLabel: string;
+  totalAllTime: string;
+  langMapTitle: string;
+  langMapSub: string;
+  notEnough: string;
+  stuckTitle: string;
+  stuckSub: string;
+  supportTitle: string;
+  supportSub: string;
+  supportRosterHint: string;
+  lookupsLabel: string;
+  basedOn: (n: number) => string;
 }> = {
   he: {
     title: "כיתה",
@@ -79,6 +93,19 @@ const COPY: Record<string, {
     addStudentBtn: "+ הוסף",
     removeStudentAria: "הסר תלמיד",
     anonymousLabel: "אנונימי",
+    insightsTitle: "תובנות הכיתה",
+    totalLabel: "סה\"כ חיפושים",
+    totalAllTime: "מתחילת הדרך",
+    langMapTitle: "השפות שהכיתה לומדת בהן",
+    langMapSub: "כל חיפוש נענה בשפה של התלמיד. זו מפת השפות האמיתית של הכיתה.",
+    notEnough: "עדיין אין מספיק נתונים.",
+    stuckTitle: "מילים שהכיתה נתקעת עליהן",
+    stuckSub: "כדאי ללמד אותן מראש לפני השיעור הבא.",
+    supportTitle: "אולי צריכים תשומת לב נוספת",
+    supportSub: "פרטי, רק בשבילך. ריבוי חיפושים יכול להעיד על קושי או פשוט על סקרנות.",
+    supportRosterHint: "כשמוסיפים שמות תלמידים לרשימה למעלה, יופיע כאן איתות תמיכה פרטי.",
+    lookupsLabel: "חיפושים",
+    basedOn: (n) => `מבוסס על ${n} החיפושים האחרונים`,
   },
   en: {
     title: "Classroom",
@@ -97,6 +124,19 @@ const COPY: Record<string, {
     addStudentBtn: "+ Add",
     removeStudentAria: "Remove student",
     anonymousLabel: "Anonymous",
+    insightsTitle: "Class insights",
+    totalLabel: "Total lookups",
+    totalAllTime: "all time",
+    langMapTitle: "Languages your class learns in",
+    langMapSub: "Every lookup is answered in the student's own language. This is your class's real language map.",
+    notEnough: "Not enough data yet.",
+    stuckTitle: "Words your class gets stuck on",
+    stuckSub: "Worth pre-teaching before the next lesson.",
+    supportTitle: "May need extra attention",
+    supportSub: "Private, just for you. Lots of lookups can mean a struggle or simply curiosity.",
+    supportRosterHint: "Add student names to the roster above to see a private support signal here.",
+    lookupsLabel: "lookups",
+    basedOn: (n) => `Based on the last ${n} lookups`,
   },
   hi: {
     title: "कक्षा",
@@ -115,6 +155,19 @@ const COPY: Record<string, {
     addStudentBtn: "+ जोड़ें",
     removeStudentAria: "छात्र हटाएँ",
     anonymousLabel: "अनाम",
+    insightsTitle: "कक्षा की जानकारी",
+    totalLabel: "कुल खोजें",
+    totalAllTime: "अब तक",
+    langMapTitle: "आपकी कक्षा जिन भाषाओं में सीखती है",
+    langMapSub: "हर खोज छात्र की अपनी भाषा में उत्तर देती है। यह आपकी कक्षा का असली भाषा-नक्शा है।",
+    notEnough: "अभी पर्याप्त डेटा नहीं है।",
+    stuckTitle: "जिन शब्दों पर कक्षा अटकती है",
+    stuckSub: "अगले पाठ से पहले इन्हें पढ़ाना अच्छा रहेगा।",
+    supportTitle: "शायद अतिरिक्त ध्यान चाहिए",
+    supportSub: "निजी, सिर्फ़ आपके लिए। ज़्यादा खोजें कठिनाई या केवल जिज्ञासा दिखा सकती हैं।",
+    supportRosterHint: "ऊपर सूची में छात्रों के नाम जोड़ें ताकि यहाँ निजी सहायता संकेत दिखे।",
+    lookupsLabel: "खोजें",
+    basedOn: (n) => `पिछली ${n} खोजों पर आधारित`,
   },
   am: {
     title: "ክፍል",
@@ -133,6 +186,19 @@ const COPY: Record<string, {
     addStudentBtn: "+ ጨምር",
     removeStudentAria: "ተማሪ አስወግድ",
     anonymousLabel: "ስም አልባ",
+    insightsTitle: "የክፍሉ ግንዛቤዎች",
+    totalLabel: "ጠቅላላ ፍለጋዎች",
+    totalAllTime: "ከጅምሩ",
+    langMapTitle: "ክፍሉ የሚማርባቸው ቋንቋዎች",
+    langMapSub: "እያንዳንዱ ፍለጋ በተማሪው ቋንቋ ይመለሳል። ይህ የክፍሉ እውነተኛ የቋንቋ ካርታ ነው።",
+    notEnough: "እስካሁን በቂ መረጃ የለም።",
+    stuckTitle: "ክፍሉ የሚቸገርባቸው ቃላት",
+    stuckSub: "ከቀጣዩ ትምህርት በፊት እነሱን ማስተማር ጥሩ ነው።",
+    supportTitle: "ተጨማሪ ትኩረት ሊፈልጉ ይችላሉ",
+    supportSub: "የግል፣ ለእርስዎ ብቻ። ብዙ ፍለጋ ችግርን ወይም ጉጉትን ሊያሳይ ይችላል።",
+    supportRosterHint: "ከላይ ባለው ዝርዝር የተማሪ ስሞችን ሲጨምሩ እዚህ የግል የድጋፍ ምልክት ይታያል።",
+    lookupsLabel: "ፍለጋዎች",
+    basedOn: (n) => `በመጨረሻዎቹ ${n} ፍለጋዎች ላይ የተመሠረተ`,
   },
 };
 
@@ -227,10 +293,14 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
       },
       () => setClassroomChecked(true)
     );
+    // Pull a wider window than the 50-row list needs so the insight
+    // aggregation (language map, stuck words, support signal) has a
+    // meaningful sample. 300 realtime docs is cheap for a page a teacher
+    // opens occasionally.
     const searchesQ = query(
       collection(db, "schools", schoolId, "classrooms", classroomId, "searches"),
       orderBy("at", "desc"),
-      limit(50),
+      limit(300),
     );
     const unsubSearches = onSnapshot(
       searchesQ,
@@ -252,6 +322,12 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
     if (typeof window === "undefined") return `https://gadit.app/c/${classroom.code}`;
     return `${window.location.origin}/c/${classroom.code}`;
   }, [classroom]);
+
+  // Class-level insights (council-approved unit of measurement): language
+  // map + stuck words + private support signal. Computed from the loaded
+  // window; total-ever comes from the classroom doc's searchCount.
+  const insights = useMemo(() => computeClassroomInsights(searches), [searches]);
+  const recentToShow = useMemo(() => searches.slice(0, 50), [searches]);
 
   if (loading) {
     return <div className="wordbook wb-school-page" dir={dir}>&nbsp;</div>;
@@ -423,6 +499,110 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
           </div>
         </section>
 
+        {/* Class insights — the council-approved value: comprehension
+            made visible at the CLASS level. Language map (which languages
+            the class learns in), stuck words (pre-teach these), a total
+            (proof of use), and a PRIVATE support signal (never a public
+            ranking). Only shown once the class has looked something up. */}
+        {searches.length > 0 && (
+          <section style={{ marginBottom: 36 }}>
+            <h2 style={{ fontFamily: "var(--wb-serif)", fontWeight: 700, fontSize: 20, color: "var(--ink)", margin: "0 0 4px" }}>
+              {c.insightsTitle}
+            </h2>
+            <p style={{ fontFamily: "var(--wb-sans)", fontSize: 12.5, color: "var(--ink-soft, #6B7280)", margin: "0 0 16px" }}>
+              {c.basedOn(insights.sampleSize)}
+            </p>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
+              {/* Total lookups — proof of use, all-time from the counter. */}
+              <div style={insightCardStyle}>
+                <div style={insightLabelStyle}>{c.totalLabel}</div>
+                <div style={{ fontFamily: "var(--wb-serif)", fontWeight: 700, fontSize: 40, color: "#CA8A04", lineHeight: 1.05 }}>
+                  {(classroom.searchCount ?? 0).toLocaleString()}
+                </div>
+                <div style={{ fontFamily: "var(--wb-sans)", fontSize: 12, color: "var(--ink-soft, #9CA3AF)" }}>
+                  {c.totalAllTime}
+                </div>
+              </div>
+
+              {/* Language map — the un-fakeable home-language signal. */}
+              <div style={insightCardStyle}>
+                <div style={insightLabelStyle}>{c.langMapTitle}</div>
+                <p style={insightSubStyle}>{c.langMapSub}</p>
+                {insights.languages.length === 0 ? (
+                  <p style={{ fontFamily: "var(--wb-sans)", fontSize: 13, color: "var(--ink-soft, #9CA3AF)", margin: 0 }}>{c.notEnough}</p>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>
+                    {insights.languages.map((l) => (
+                      <div key={l.lang} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontFamily: "var(--wb-sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", minWidth: 78 }}>
+                          {classroomLangLabel(l.lang)}
+                        </span>
+                        <span style={{ flex: 1, height: 8, background: "#F3F4F6", borderRadius: 999, overflow: "hidden" }}>
+                          <span style={{ display: "block", height: "100%", width: `${Math.max(l.pct, 3)}%`, background: "#CA8A04", borderRadius: 999 }} />
+                        </span>
+                        <span style={{ fontFamily: "var(--wb-sans)", fontSize: 12, fontWeight: 600, color: "var(--ink-soft, #6B7280)", minWidth: 34, textAlign: "end" }}>
+                          {l.pct}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Stuck words — the pre-teach list. */}
+            <div style={{ ...insightCardStyle, marginTop: 14 }}>
+              <div style={insightLabelStyle}>{c.stuckTitle}</div>
+              <p style={insightSubStyle}>{c.stuckSub}</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
+                {insights.topWords.map((w) => (
+                  <Link
+                    key={w.word}
+                    href={href(`/word/${encodeURIComponent(w.word)}`)}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 8,
+                      padding: "6px 12px", background: "#FFFBEB", border: "1px solid #FDE68A",
+                      borderRadius: 999, textDecoration: "none",
+                      fontFamily: "var(--wb-sans)", fontSize: 14, fontWeight: 600, color: "#92400E",
+                    }}
+                  >
+                    <span>{w.word}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#CA8A04", background: "#FEF3C7", borderRadius: 999, padding: "1px 7px" }}>
+                      {w.count}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Private support signal — teacher-only, never a public
+                leaderboard. Shows only when the roster has named students. */}
+            <div style={{ ...insightCardStyle, marginTop: 14 }}>
+              <div style={insightLabelStyle}>{c.supportTitle}</div>
+              <p style={insightSubStyle}>{c.supportSub}</p>
+              {insights.students.length === 0 ? (
+                <p style={{ fontFamily: "var(--wb-sans)", fontSize: 13, color: "var(--ink-soft, #9CA3AF)", margin: 0 }}>
+                  {c.supportRosterHint}
+                </p>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>
+                  {insights.students.map((st) => (
+                    <div key={st.name} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ fontFamily: "var(--wb-sans)", fontSize: 14, fontWeight: 600, color: "var(--ink)", flex: 1 }}>
+                        {st.name}
+                      </span>
+                      <span style={{ fontFamily: "var(--wb-sans)", fontSize: 12.5, color: "var(--ink-soft, #6B7280)" }}>
+                        {st.count} {c.lookupsLabel}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Recent searches list. Newest first. Each row carries the
             student name (when the roster picker was used) so the
             teacher can see who searched what. */}
@@ -440,7 +620,7 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
             <p className="wb-school-sub">{c.empty}</p>
           ) : (
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {searches.map((s) => (
+              {recentToShow.map((s) => (
                 <li
                   key={s.id}
                   style={{
@@ -503,6 +683,29 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
     </div>
   );
 }
+
+// Shared styles for the insight cards (mustard-accented, matching the
+// Schools SKU brand).
+const insightCardStyle: React.CSSProperties = {
+  background: "var(--surface, #fff)",
+  border: "1px solid var(--hairline, #E5E7EB)",
+  borderRadius: 14,
+  padding: "16px 18px",
+};
+const insightLabelStyle: React.CSSProperties = {
+  fontFamily: "var(--wb-sans)",
+  fontSize: 13,
+  fontWeight: 700,
+  color: "var(--ink)",
+  marginBottom: 4,
+};
+const insightSubStyle: React.CSSProperties = {
+  fontFamily: "var(--wb-sans)",
+  fontSize: 12.5,
+  color: "var(--ink-soft, #6B7280)",
+  lineHeight: 1.45,
+  margin: "0 0 12px",
+};
 
 // Tiny relative-time formatter. Enough granularity for a teacher
 // scanning today's class activity ("now / 5m / 1h / yesterday").

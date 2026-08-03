@@ -36,30 +36,35 @@ export async function GET(req: NextRequest) {
   }
   const codeData = codeSnap.data() as { schoolId: string; classroomId: string };
 
+  // NOTE: the search docs written by /api/classroom/log-search use the
+  // fields `lang` and `at` (ISO string), NOT `language`/`createdAt`. An
+  // earlier version of this route read the wrong names and ordered by a
+  // field that doesn't exist, so it silently returned nothing. Fixed to
+  // the real schema (Gadi 2026-08-03).
   const snap = await db
     .collection("schools")
     .doc(codeData.schoolId)
     .collection("classrooms")
     .doc(codeData.classroomId)
     .collection("searches")
-    .orderBy("createdAt", "desc")
+    .orderBy("at", "desc")
     .limit(MAX_SEARCHES)
     .get();
 
   type SearchDoc = {
     word: string;
-    language?: string;
+    lang?: string;
     studentName?: string;
-    createdAt?: string;
+    at?: string;
   };
 
   const searches = snap.docs.map((d) => {
     const data = d.data() as SearchDoc;
     return {
       word: data.word ?? "",
-      language: data.language ?? "",
+      language: data.lang ?? "",
       studentName: data.studentName ?? "",
-      createdAt: data.createdAt ?? "",
+      createdAt: data.at ?? "",
     };
   });
 
