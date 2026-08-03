@@ -283,7 +283,7 @@ const COPY: Record<string, T> = {
     heroH1: "כל תלמיד מבין את השיעור.",
     heroSub: "כל מילה קשה, ב-14 שפות, מוסברת מיד.",
     heroCta: "להתחיל 14 ימי ניסיון חינם",
-    heroPriceChip: "מ-$69 לחודש",
+    heroPriceChip: "מ-₪349 לחודש",
     heroTrust: "בשירות עצמי. אפשר לבטל בכל רגע.",
     probTag: "הבעיה",
     probH2: "תלמיד שלא מבין מילה לא יכול להבין את המשפט.",
@@ -338,7 +338,7 @@ const COPY: Record<string, T> = {
       "14 ימי ניסיון חינם",
     ],
     priceCta: "להתחיל 14 ימי ניסיון חינם",
-    priceLarger: "יותר מ-500 תלמידים? אפשר ליצור קשר לתוכנית מותאמת.",
+    priceLarger: "יותר מ-1,000 תלמידים? אפשר ליצור קשר לתוכנית מותאמת.",
     faqTag: "שאלות נפוצות",
     faqH2: "מה מנהלים שואלים לפני שמתחילים ניסיון.",
     faq: [
@@ -367,8 +367,8 @@ const COPY: Record<string, T> = {
         a: "קודי כיתה תחומים לשעות הפעילות של בית הספר (ברירת מחדל א–ה 7:30–15:00, ניתן להגדיר). מחוץ לחלון הזה הקוד נותן גישה למילון בסיסי בלבד. זה מונע מהקוד של בית הספר להפוך לתחליף חינמי של תוכנית Family ב-24/7.",
       },
       {
-        q: "מה אם בית הספר שלי מעל 500 תלמידים?",
-        a: "אפשר להשתמש ב-Schools Large ($149 לחודש, עד 500 תלמידים) לכל בית ספר מתחת ל-500. ל-500+ תלמידים או רשתות בתי ספר, אפשר ליצור קשר לתוכנית מותאמת.",
+        q: "מה אם בית הספר שלי מעל 1,000 תלמידים?",
+        a: "יש שלוש חבילות לפי גודל בית הספר, עד 1,000 תלמידים. למעלה מ-1,000 תלמידים או לרשתות בתי ספר, אפשר ליצור קשר לתוכנית מותאמת.",
       },
       {
         q: "איך Gadit מסביר מילה? זה תרגום?",
@@ -1723,7 +1723,38 @@ const COPY: Record<string, T> = {
 };
 
 const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
+const PRICE_SCHOOLS_MEDIUM_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY ?? "";
 const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
+
+/**
+ * Three school-size tiers (Gadi 2026-08-04, after the pricing council).
+ * Prices are in shekels — the Israeli school market is the primary
+ * channel and buys in ₪ with a tax invoice; international currency
+ * display is a follow-up tied to the billing-routing work. The middle
+ * tier is featured (middle-anchor). Each price is a NEW Stripe price, so
+ * the three env vars must be set once the Stripe products exist.
+ */
+const SCHOOL_TIERS = [
+  { key: "small" as const,  price: 349, priceId: PRICE_SCHOOLS_MONTHLY,        featured: false },
+  { key: "medium" as const, price: 649, priceId: PRICE_SCHOOLS_MEDIUM_MONTHLY, featured: true },
+  { key: "large" as const,  price: 949, priceId: PRICE_SCHOOLS_LARGE_MONTHLY,  featured: false },
+];
+
+type PricingUI = {
+  perMonth: string;
+  recommended: string;
+  tiers: { small: string; medium: string; large: string };
+};
+const PRICING_UI: Record<string, PricingUI> = {
+  he: { perMonth: "לחודש", recommended: "מומלץ",
+        tiers: { small: "עד 100 תלמידים", medium: "101–500 תלמידים", large: "501–1,000 תלמידים" } },
+  en: { perMonth: "/ month", recommended: "Recommended",
+        tiers: { small: "Up to 100 students", medium: "101–500 students", large: "501–1,000 students" } },
+  ar: { perMonth: "شهريًا", recommended: "موصى به",
+        tiers: { small: "حتى 100 طالب", medium: "101–500 طالب", large: "501–1,000 طالب" } },
+  ru: { perMonth: "в месяц", recommended: "Рекомендуем",
+        tiers: { small: "до 100 учеников", medium: "101–500 учеников", large: "501–1,000 учеников" } },
+};
 
 /**
  * Cross-language flagship section copy. Rendered from its own object so the
@@ -1806,6 +1837,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
   const router = useRouter();
   const t = COPY[lang] ?? COPY.en;
   const xt = XLANG[lang] ?? XLANG.en;
+  const pu = PRICING_UI[lang] ?? PRICING_UI.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Every "Start 14-day free trial" CTA opens the payment page DIRECTLY
@@ -1853,7 +1885,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
   // without losing access to the landing page itself.
   const ownerBannerCopy: Record<string, { text: string; cta: string }> = {
     en: { text: "You're on the Schools plan.", cta: "Go to my dashboard →" },
-    he: { text: "המנוי Schools פעיל אצלך.", cta: "מעבר לדשבורד ←" },
+    he: { text: "מנוי בתי הספר פעיל אצלך.", cta: "מעבר ללוח הבקרה ←" },
     ar: { text: "خطة Schools نشطة لديك.", cta: "إلى لوحة التحكم ←" },
     ru: { text: "У вас активен тариф Schools.", cta: "В мою панель →" },
     cs: { text: "Máte aktivní tarif Schools.", cta: "Přejít na panel →" },
@@ -2229,36 +2261,38 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           <span className="wb-schools-tag">{t.priceTag}</span>
           <h2 className="wb-schools-h2">{t.priceH2}</h2>
           <p className="wb-schools-section-sub">{t.priceSub}</p>
-          <div className="wb-schools-price-grid">
-            <div className="wb-schools-price-card">
-              <div className="wb-schools-price-name">{t.priceSmallName}</div>
-              <div className="wb-schools-price-amount">
-                <span className="wb-schools-price-amount-num" dir="ltr">{t.priceSmallAmount}</span>
-                <span className="wb-schools-price-amount-period">/ month</span>
+          <style>{`
+            .sl-price-grid-3 { max-width: 980px; }
+            @media (min-width: 768px) { .sl-price-grid-3 { grid-template-columns: repeat(3, 1fr); } }
+          `}</style>
+          <div className="wb-schools-price-grid sl-price-grid-3">
+            {SCHOOL_TIERS.map((tier) => (
+              <div
+                key={tier.key}
+                className={`wb-schools-price-card${tier.featured ? " wb-schools-price-card-large" : ""}`}
+              >
+                {tier.featured && (
+                  <div style={{ display: "inline-block", background: "#CA8A04", color: "#fff", fontSize: 12, fontWeight: 700, padding: "3px 12px", borderRadius: 999, marginBottom: 10 }}>
+                    {pu.recommended}
+                  </div>
+                )}
+                <div className="wb-schools-price-name">{pu.tiers[tier.key]}</div>
+                <div className="wb-schools-price-amount">
+                  <span className="wb-schools-price-amount-num" dir="ltr">{`₪${tier.price}`}</span>
+                  <span className="wb-schools-price-amount-period">{pu.perMonth}</span>
+                </div>
+                <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={() => clickTrial(tier.priceId)}>
+                  {t.priceCta}
+                </button>
               </div>
-              <div className="wb-schools-price-students">{t.priceSmallStudents}</div>
-              <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={() => clickTrial(PRICE_SCHOOLS_MONTHLY)}>
-                {t.priceCta}
-              </button>
-            </div>
-            <div className="wb-schools-price-card wb-schools-price-card-large">
-              <div className="wb-schools-price-name">{t.priceLargeName}</div>
-              <div className="wb-schools-price-amount">
-                <span className="wb-schools-price-amount-num" dir="ltr">{t.priceLargeAmount}</span>
-                <span className="wb-schools-price-amount-period">/ month</span>
-              </div>
-              <div className="wb-schools-price-students">{t.priceLargeStudents}</div>
-              <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={() => clickTrial(PRICE_SCHOOLS_LARGE_MONTHLY)}>
-                {t.priceCta}
-              </button>
-            </div>
+            ))}
           </div>
           <div className="wb-schools-includes">
             <div className="wb-schools-includes-title">{t.priceIncludesTitle}</div>
             <div className="wb-schools-includes-list">
               {t.priceIncludes.map((line) => (
                 <div key={line} className="wb-schools-includes-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12l5 5L20 7" />
                   </svg>
                   <span>{line}</span>

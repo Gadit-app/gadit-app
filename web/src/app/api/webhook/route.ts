@@ -342,6 +342,8 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
     [process.env.STRIPE_PRICE_FAMILY_YEARLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_MONTHLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_YEARLY!]: "deep",
+    [process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY!]: "deep",
+    [process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY!]: "deep",
     [process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY!]: "deep",
   };
@@ -361,6 +363,8 @@ function isSchoolsPriceId(priceId: string): boolean {
   return (
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MONTHLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
   );
@@ -509,6 +513,7 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
   const billingCycle: "monthly" | "yearly" =
     priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
       ? "yearly"
       : "monthly";

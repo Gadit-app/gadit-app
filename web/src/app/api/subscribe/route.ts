@@ -43,6 +43,8 @@ function paidPriceIds(): Set<string> {
       process.env.STRIPE_PRICE_FAMILY_YEARLY,
       process.env.STRIPE_PRICE_SCHOOLS_MONTHLY,
       process.env.STRIPE_PRICE_SCHOOLS_YEARLY,
+      process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY,
+      process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY,
       process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY,
       process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY,
     ].filter((v): v is string => !!v),
