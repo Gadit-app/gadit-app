@@ -171,8 +171,8 @@ type T = {
 
 const COPY: Record<string, T> = {
   en: {
-    heroH1: "See every word your class doesn't understand.",
-    heroSub: "Students search any word. You see what they searched. No student accounts, no IT setup, no parent complaints.",
+    heroH1: "Every student understands the lesson.",
+    heroSub: "Any hard word, in any of 14 languages, explained on the spot.",
     heroCta: "Start 14-day free trial",
     heroPriceChip: "From $69 / month",
     heroTrust: "Self-serve. Cancel anytime.",
@@ -280,8 +280,8 @@ const COPY: Record<string, T> = {
     mockupExampleEx: "Photosynthesis takes place mostly in the leaves of the plant.",
   },
   he: {
-    heroH1: "ראו כל מילה שהכיתה לא מבינה.",
-    heroSub: "התלמידים מחפשים מילים. אתם רואים מה הם חיפשו. בלי חשבונות לתלמידים, בלי הקמה של IT, בלי תלונות הורים.",
+    heroH1: "כל תלמיד מבין את השיעור.",
+    heroSub: "כל מילה קשה, ב-14 שפות, מוסברת מיד.",
     heroCta: "התחילו 14 ימי ניסיון חינם",
     heroPriceChip: "מ-$69 לחודש",
     heroTrust: "Self-serve. בטלו בכל רגע.",
@@ -391,8 +391,8 @@ const COPY: Record<string, T> = {
 
   // ─── Russian ──────────────────────────────────────────────────
   ru: {
-    heroH1: "Видеть каждое слово, которое класс не понимает.",
-    heroSub: "Ученики ищут любое слово. Вы видите, что они искали. Без аккаунтов для учеников, без настройки IT, без жалоб от родителей.",
+    heroH1: "Каждый ученик понимает урок.",
+    heroSub: "Любое трудное слово, на любом из 14 языков, объяснено сразу.",
     heroCta: "Начать 14-дневный пробный период",
     heroPriceChip: "От $69 в месяц",
     heroTrust: "Самообслуживание. Отмена в любой момент.",
@@ -502,8 +502,8 @@ const COPY: Record<string, T> = {
 
   // ─── Arabic (MSA) ─────────────────────────────────────────────
   ar: {
-    heroH1: "اكتشف كل كلمة لا يفهمها صفّك.",
-    heroSub: "الطلاب يبحثون عن أي كلمة. وأنت ترى ما بحثوا عنه. لا حسابات للطلاب، لا إعداد لتقنية المعلومات، لا شكاوى من أولياء الأمور.",
+    heroH1: "كل طالب يفهم الدرس.",
+    heroSub: "أي كلمة صعبة، بأي من 14 لغة، تُشرح في الحال.",
     heroCta: "ابدأ التجربة المجانية لـ 14 يومًا",
     heroPriceChip: "ابتداءً من 69 دولارًا شهريًا",
     heroTrust: "خدمة ذاتية. ألغِ في أي وقت.",
@@ -613,8 +613,8 @@ const COPY: Record<string, T> = {
 
   // ─── Czech ────────────────────────────────────────────────────
   cs: {
-    heroH1: "Vidět každé slovo, kterému vaše třída nerozumí.",
-    heroSub: "Žáci hledají jakékoliv slovo. Vy vidíte, co hledali. Bez žákovských účtů, bez IT nastavení, bez stížností rodičů.",
+    heroH1: "Každý žák rozumí učivu.",
+    heroSub: "Každé těžké slovo, v kterémkoli ze 14 jazyků, hned vysvětlené.",
     heroCta: "Začít 14denní zkušební období",
     heroPriceChip: "Od $69 měsíčně",
     heroTrust: "Samoobsluha. Zrušení kdykoli.",
@@ -724,8 +724,8 @@ const COPY: Record<string, T> = {
 
   // ─── Slovak ───────────────────────────────────────────────────
   sk: {
-    heroH1: "Vidieť každé slovo, ktorému vaša trieda nerozumie.",
-    heroSub: "Žiaci hľadajú akékoľvek slovo. Vy vidíte, čo hľadali. Bez žiackych účtov, bez IT nastavenia, bez sťažností rodičov.",
+    heroH1: "Každý žiak rozumie učivu.",
+    heroSub: "Každé ťažké slovo, v ktoromkoľvek zo 14 jazykov, hneď vysvetlené.",
     heroCta: "Začať 14-dňovú skúšobnú dobu",
     heroPriceChip: "Od $69 mesačne",
     heroTrust: "Samoobsluha. Zrušenie kedykoľvek.",
@@ -835,8 +835,8 @@ const COPY: Record<string, T> = {
 
   // ─── Hindi ────────────────────────────────────────────────────
   hi: {
-    heroH1: "हर शब्द देखें जो आपकी कक्षा नहीं समझती।",
-    heroSub: "छात्र किसी भी शब्द को खोजते हैं। आप देखते हैं कि उन्होंने क्या खोजा। न छात्र खाते, न IT सेटअप, न अभिभावक शिकायतें।",
+    heroH1: "हर छात्र पाठ समझता है।",
+    heroSub: "कोई भी कठिन शब्द, 14 में से किसी भी भाषा में, तुरंत समझाया गया।",
     heroCta: "14 दिन का मुफ्त ट्रायल शुरू करें",
     heroPriceChip: "$69 / माह से",
     heroTrust: "स्वयं-सेवा। कभी भी रद्द करें।",
@@ -946,8 +946,8 @@ const COPY: Record<string, T> = {
 
   // ─── Amharic ──────────────────────────────────────────────────
   am: {
-    heroH1: "ክፍልዎ ያልገባውን እያንዳንዱን ቃል ይመልከቱ።",
-    heroSub: "ተማሪዎች ማንኛውንም ቃል ይፈልጋሉ። እርስዎ ምን እንደፈለጉ ያያሉ። የተማሪ መለያዎች የሉም፣ የ IT ዝግጅት የለም፣ የወላጆች ቅሬታ የለም።",
+    heroH1: "እያንዳንዱ ተማሪ ትምህርቱን ይረዳል።",
+    heroSub: "ማንኛውም አስቸጋሪ ቃል፣ ከ14 ቋንቋዎች በአንዱ፣ ወዲያውኑ ይብራራል።",
     heroCta: "የ 14 ቀን ነጻ ሙከራ ይጀምሩ",
     heroPriceChip: "ከ $69 / ወር ጀምሮ",
     heroTrust: "በራስ አገልግሎት። በማንኛውም ጊዜ ይሰርዙ።",
@@ -1057,8 +1057,8 @@ const COPY: Record<string, T> = {
 
   // ─── Spanish ──────────────────────────────────────────────────
   es: {
-    heroH1: "Vea cada palabra que su clase no entiende.",
-    heroSub: "Los estudiantes buscan cualquier palabra. Usted ve qué buscaron. Sin cuentas de estudiantes, sin configuración de IT, sin quejas de padres.",
+    heroH1: "Cada estudiante entiende la lección.",
+    heroSub: "Cualquier palabra difícil, en cualquiera de 14 idiomas, explicada al instante.",
     heroCta: "Comenzar prueba gratuita de 14 días",
     heroPriceChip: "Desde $69 al mes",
     heroTrust: "Autoservicio. Cancele cuando quiera.",
@@ -1168,8 +1168,8 @@ const COPY: Record<string, T> = {
 
   // ─── Portuguese (Brazilian) ───────────────────────────────────
   pt: {
-    heroH1: "Veja cada palavra que sua turma não entende.",
-    heroSub: "Os alunos buscam qualquer palavra. Você vê o que eles buscaram. Sem contas de aluno, sem configuração de TI, sem reclamações de pais.",
+    heroH1: "Cada aluno entende a aula.",
+    heroSub: "Qualquer palavra difícil, em qualquer um dos 14 idiomas, explicada na hora.",
     heroCta: "Iniciar teste gratuito de 14 dias",
     heroPriceChip: "A partir de $69 por mês",
     heroTrust: "Autoatendimento. Cancele a qualquer momento.",
@@ -1279,8 +1279,8 @@ const COPY: Record<string, T> = {
 
   // ─── French ──────────────────────────────────────────────────
   fr: {
-    heroH1: "Voyez chaque mot que votre classe ne comprend pas.",
-    heroSub: "Les élèves cherchent n'importe quel mot. Vous voyez ce qu'ils ont cherché. Sans comptes d'élèves, sans installation informatique, sans plaintes des parents.",
+    heroH1: "Chaque élève comprend la leçon.",
+    heroSub: "Chaque mot difficile, dans l'une des 14 langues, expliqué aussitôt.",
     heroCta: "Commencer l'essai gratuit de 14 jours",
     heroPriceChip: "À partir de $69 par mois",
     heroTrust: "Libre-service. Annulez à tout moment.",
@@ -1390,8 +1390,8 @@ const COPY: Record<string, T> = {
 
   // ─── German ──────────────────────────────────────────────────
   de: {
-    heroH1: "Sehen Sie jedes Wort, das Ihre Klasse nicht versteht.",
-    heroSub: "Schüler suchen jedes Wort. Sie sehen, was sie gesucht haben. Keine Schülerkonten, keine IT-Einrichtung, keine Elternbeschwerden.",
+    heroH1: "Jeder Schüler versteht den Unterricht.",
+    heroSub: "Jedes schwierige Wort, in einer von 14 Sprachen, sofort erklärt.",
     heroCta: "14 Tage kostenlos testen",
     heroPriceChip: "Ab $69 pro Monat",
     heroTrust: "Selbstbedienung. Jederzeit kündbar.",
@@ -1501,8 +1501,8 @@ const COPY: Record<string, T> = {
 
   // ─── Italian ──────────────────────────────────────────────────
   it: {
-    heroH1: "Vedi ogni parola che la tua classe non capisce.",
-    heroSub: "Gli studenti cercano qualsiasi parola. Tu vedi cosa hanno cercato. Nessun account studente, nessuna configurazione IT, nessun reclamo dei genitori.",
+    heroH1: "Ogni studente capisce la lezione.",
+    heroSub: "Ogni parola difficile, in una delle 14 lingue, spiegata all'istante.",
     heroCta: "Inizia la prova gratuita di 14 giorni",
     heroPriceChip: "Da $69 al mese",
     heroTrust: "Self-service. Annulla quando vuoi.",
@@ -1612,8 +1612,8 @@ const COPY: Record<string, T> = {
 
   // ─── Japanese ────────────────────────────────────────────────
   ja: {
-    heroH1: "クラスが理解していない単語をすべて見える化。",
-    heroSub: "生徒が単語を検索します。あなたは何を検索したかが見えます。生徒アカウントなし、IT設定なし、保護者の苦情なし。",
+    heroH1: "すべての生徒が授業を理解する。",
+    heroSub: "どんな難しい単語も、14の言語のいずれかで、その場で説明。",
     heroCta: "14日間の無料トライアルを開始",
     heroPriceChip: "$69 / 月から",
     heroTrust: "セルフサービス。いつでもキャンセル可能。",
