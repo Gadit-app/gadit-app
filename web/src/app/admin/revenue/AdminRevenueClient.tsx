@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
 
-type Plan = "basic" | "clear" | "deep";
+type Tier = "clear" | "deep" | "family" | "schools";
 
 type Subscriber = {
   uid: string;
   email: string | null;
-  plan: Plan;
+  tier: Tier;
   billing: "monthly" | "yearly" | "unknown";
   monthlyUsd: number;
+  currency: string;
   status: string;
   cancelAtPeriodEnd: boolean;
   trialEnd: string | null;
@@ -19,21 +20,19 @@ type Subscriber = {
   country: string | null;
 };
 
+type BreakdownEntry = { tier: Tier; billing: "monthly" | "yearly"; count: number; mrr: number };
+
 type RevenueResponse = {
   generatedAt: string;
   summary: {
     mrrUsd: number;
     arrUsd: number;
-    activeCount: number;
+    activePayingCount: number;
+    trialingCount: number;
     atRiskCount: number;
     recentlyCanceledCount: number;
   };
-  breakdown: {
-    clearMonthly: { count: number; mrr: number };
-    clearYearly:  { count: number; mrr: number };
-    deepMonthly:  { count: number; mrr: number };
-    deepYearly:   { count: number; mrr: number };
-  };
+  breakdown: BreakdownEntry[];
   active: Subscriber[];
   atRisk: Subscriber[];
   recentlyCanceled: Subscriber[];
@@ -45,13 +44,11 @@ const STRINGS = {
     loading: "Loading…",
     cardMRR: "Monthly recurring",
     cardARR: "Annual recurring",
-    cardActive: "Active subscriptions",
+    cardActive: "Active (paying)",
+    cardTrialing: "In trial",
     cardAtRisk: "At risk",
     breakdownTitle: "MRR breakdown",
-    clearMonthly: "Clear · monthly",
-    clearYearly:  "Clear · yearly",
-    deepMonthly:  "Deep · monthly",
-    deepYearly:   "Deep · yearly",
+    tierClear: "Clear", tierDeep: "Deep", tierFamily: "Family", tierSchools: "Schools",
     activeTitle: "Active subscribers",
     atRiskTitle: "At-risk subscriptions",
     recentlyCanceledTitle: "Recently canceled (30 days)",
@@ -76,13 +73,11 @@ const STRINGS = {
     loading: "טוען…",
     cardMRR: "הכנסה חודשית",
     cardARR: "הכנסה שנתית",
-    cardActive: "מנויים פעילים",
+    cardActive: "משלמים פעילים",
+    cardTrialing: "בניסיון",
     cardAtRisk: "בסיכון",
     breakdownTitle: "פירוט הכנסה חודשית",
-    clearMonthly: "Clear · חודשי",
-    clearYearly:  "Clear · שנתי",
-    deepMonthly:  "Deep · חודשי",
-    deepYearly:   "Deep · שנתי",
+    tierClear: "Clear", tierDeep: "Deep", tierFamily: "Family", tierSchools: "בתי ספר",
     activeTitle: "מנויים פעילים",
     atRiskTitle: "מנויים בסיכון",
     recentlyCanceledTitle: "בוטלו לאחרונה (30 ימים)",
@@ -115,11 +110,16 @@ function FlagImg({ iso2 }: { iso2: string }) {
   );
 }
 
-function planBadge(plan: Plan) {
-  if (plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
-  if (plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
-  return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
+function tierBadge(tier: Tier) {
+  if (tier === "schools") return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
+  if (tier === "family")  return { label: "Family",  bg: "#DCFCE7", fg: "#166534" };
+  if (tier === "deep")    return { label: "Deep",    bg: "#EDE9FE", fg: "#5B21B6" };
+  return                        { label: "Clear",   bg: "#CFFAFE", fg: "#0E7490" };
 }
+
+const TIER_COLOR: Record<Tier, string> = {
+  clear: "#0EA5A5", deep: "#7C3AED", family: "#16A34A", schools: "#CA8A04",
+};
 
 function formatDate(iso: string | null): string {
   if (!iso) return ", ";
@@ -169,19 +169,36 @@ export default function AdminRevenueClient() {
 
       {data && (
         <>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 24 }}>
             <BigCard label={t.cardMRR} value={`$${data.summary.mrrUsd.toFixed(2)}`} accent="#0EA5A5" />
             <BigCard label={t.cardARR} value={`$${data.summary.arrUsd.toFixed(2)}`} accent="#0E7490" />
-            <BigCard label={t.cardActive} value={data.summary.activeCount} accent="#7C3AED" />
+            <BigCard label={t.cardActive} value={data.summary.activePayingCount} accent="#7C3AED" />
+            <BigCard label={t.cardTrialing} value={data.summary.trialingCount} accent="#0891B2" />
             <BigCard label={t.cardAtRisk} value={data.summary.atRiskCount} accent={data.summary.atRiskCount > 0 ? "#DC2626" : "#9CA3AF"} />
           </div>
 
           <div style={{ ...cardStyle, marginBottom: 24 }}>
             <div style={sectionTitleStyle}>{t.breakdownTitle}</div>
-            <BreakdownRow label={t.clearMonthly} count={data.breakdown.clearMonthly.count} mrr={data.breakdown.clearMonthly.mrr} color="#0EA5A5" />
-            <BreakdownRow label={t.clearYearly}  count={data.breakdown.clearYearly.count}  mrr={data.breakdown.clearYearly.mrr}  color="#0E7490" />
-            <BreakdownRow label={t.deepMonthly}  count={data.breakdown.deepMonthly.count}  mrr={data.breakdown.deepMonthly.mrr}  color="#7C3AED" />
-            <BreakdownRow label={t.deepYearly}   count={data.breakdown.deepYearly.count}   mrr={data.breakdown.deepYearly.mrr}   color="#5B21B6" />
+            {data.breakdown.length === 0 ? (
+              <div style={{ color: "#9CA3AF", fontSize: 13, padding: "12px 0" }}>{t.emptyActive}</div>
+            ) : (
+              data.breakdown.map((b) => {
+                const tierLabel =
+                  b.tier === "clear" ? t.tierClear :
+                  b.tier === "deep" ? t.tierDeep :
+                  b.tier === "family" ? t.tierFamily : t.tierSchools;
+                const billingLabel = b.billing === "monthly" ? t.billingMonthly : t.billingYearly;
+                return (
+                  <BreakdownRow
+                    key={`${b.tier}_${b.billing}`}
+                    label={`${tierLabel} · ${billingLabel}`}
+                    count={b.count}
+                    mrr={b.mrr}
+                    color={TIER_COLOR[b.tier]}
+                  />
+                );
+              })
+            )}
           </div>
 
           <SubscriberTable title={t.activeTitle} rows={data.active} empty={t.emptyActive} t={t} />
@@ -228,7 +245,7 @@ function SubscriberTable({
             </thead>
             <tbody>
               {rows.map((r) => {
-                const badge = planBadge(r.plan);
+                const badge = tierBadge(r.tier);
                 const billingLabel =
                   r.billing === "monthly" ? t.billingMonthly :
                   r.billing === "yearly"  ? t.billingYearly :
