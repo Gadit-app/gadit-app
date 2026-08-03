@@ -25,6 +25,7 @@ import { collection, doc, onSnapshot, orderBy, query } from "firebase/firestore"
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { db } from "@/lib/firebase";
 import {
   FamilyMember,
@@ -592,6 +593,9 @@ export function FamilyClient() {
 
           {tab === "home" && (
             <div className="fam-tab">
+              {/* First-steps checklist — hides itself once the family is
+                  set up or the owner dismisses it. */}
+              <FamilySetupChecklist members={members} lang={lang} />
               {!progressLoaded ? (
                 <div className="fam-dash-grid">
                   {Array.from({ length: children.length > 0 ? children.length : 2 }).map((_, i) => (

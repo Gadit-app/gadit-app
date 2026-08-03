@@ -138,6 +138,92 @@ async function notifyPaidActivation(uid: string, tier: string, email: string | n
 }
 
 /**
+ * Customer-facing Family welcome email. Sent once when a Family
+ * subscription first activates (Gadi 2026-08-03), it congratulates the
+ * parent and points them straight at the first-steps checklist on /family
+ * (connect the second parent, connect the kids, save to the home screen).
+ * Distinct from notifyPaidActivation, which is an internal alert to us.
+ * Localized he/en from the user doc's uiLang. Deduped via
+ * `familyWelcomeSent`. Non-blocking.
+ */
+async function sendFamilyWelcome(uid: string, email: string | null) {
+  try {
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey || !email) return;
+    const db = getAdminDb();
+    const ref = db.collection("users").doc(uid);
+    const snap = await ref.get();
+    if (snap.data()?.familyWelcomeSent === true) return; // once per owner
+
+    const uiLang = (snap.data()?.uiLang as string | undefined) ?? "";
+    const he = uiLang === "he";
+    const base = "https://www.gadit.app";
+    const link = he ? `${base}/he/family` : `${base}/family`;
+
+    const c = he
+      ? {
+          subject: "המנוי המשפחתי שלך ב-Gadit פעיל 🎉",
+          heading: "המשפחה מוכנה לצאת לדרך",
+          intro: "שמחים שהצטרפת ל-Gadit Family. המנוי המשפחתי שלך פעיל. הנה שלושת הצעדים הראשונים כדי שכל המשפחה תהיה מוכנה:",
+          s1: "לחבר את ההורה השני, כדי ששניכם תראו את ההתקדמות של הילדים.",
+          s2: "לחבר את הילדים, לכל אחד מכשיר משלו בלי סיסמה, עם קוד חיבור פשוט.",
+          s3: "לשמור את Gadit על מסך הבית, בטלפון, בטאבלט או במחשב.",
+          cta: "לצעדים הראשונים",
+          foot: "כאן בשבילך בכל שאלה. אפשר פשוט להשיב למייל הזה.",
+        }
+      : {
+          subject: "Your Gadit Family plan is live 🎉",
+          heading: "Your family is ready to go",
+          intro: "Welcome to Gadit Family. Your family plan is active. Here are the first three steps to get everyone set up:",
+          s1: "Connect the second parent, so you both follow the kids' progress.",
+          s2: "Connect the kids, each on their own device with no password, just a short pairing code.",
+          s3: "Save Gadit to the home screen, on a phone, tablet or computer.",
+          cta: "Start the first steps",
+          foot: "We're here for any question. Just reply to this email.",
+        };
+
+    const dir = he ? "rtl" : "ltr";
+    const align = he ? "right" : "left";
+    const html = `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
+    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:26px 24px;color:#fff;">
+      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;" dir="ltr">GADIT FAMILY</div>
+      <div style="font-size:22px;font-weight:700;margin-top:6px;">${c.heading}</div>
+    </div>
+    <div style="padding:24px;">
+      <p style="font-size:15px;line-height:1.6;margin:0 0 18px;">${c.intro}</p>
+      <ol style="margin:0 0 22px;padding-${he ? "right" : "left"}:20px;font-size:14.5px;line-height:1.7;color:#374151;">
+        <li style="margin-bottom:8px;">${c.s1}</li>
+        <li style="margin-bottom:8px;">${c.s2}</li>
+        <li>${c.s3}</li>
+      </ol>
+      <div style="text-align:center;">
+        <a href="${link}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${c.cta}</a>
+      </div>
+      <p style="font-size:13px;color:#6B7280;line-height:1.5;margin:22px 0 0;">${c.foot}</p>
+    </div>
+  </div>
+</body></html>`;
+
+    const resend = new Resend(resendKey);
+    const res = await resend.emails.send({
+      from: "Gadit <gadi@gadit.app>",
+      replyTo: "gadi@gadit.app",
+      to: email,
+      subject: c.subject,
+      html,
+    });
+    if (res.error) {
+      console.error("[webhook] sendFamilyWelcome resend error:", res.error);
+      return;
+    }
+    await ref.set({ familyWelcomeSent: true, familyWelcomeSentAt: new Date().toISOString() }, { merge: true });
+  } catch (e) {
+    console.warn("[webhook] sendFamilyWelcome failed:", e);
+  }
+}
+
+/**
  * Churn alert email. Sent the first time a REAL subscription is scheduled
  * to cancel (a user clicked cancel during trial or while active). Amber,
  * distinct from the teal "new subscription" alert. Non-blocking.
@@ -448,6 +534,7 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
     await notifyPaidActivation(uid, tier, email);
   }
+  if (family) await sendFamilyWelcome(uid, email);
   return true;
 }
 
@@ -527,6 +614,7 @@ export async function POST(req: NextRequest) {
         const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
         await notifyPaidActivation(userId, tier, customerEmail);
       }
+      if (family) await sendFamilyWelcome(userId, customerEmail);
     }
 
     if (event.type === "customer.subscription.created") {
