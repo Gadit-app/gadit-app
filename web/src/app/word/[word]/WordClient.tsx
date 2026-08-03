@@ -394,20 +394,17 @@ export function WordClient({
   // Null = no modal showing.
   const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
 
-  // Wrong-keyboard rescue: if a Hebrew user types 'nxnr' (the physical
-  // keys for מסמר with English keyboard on), or vice-versa, silently
-  // redirect to the corrected word. The replaced URL keeps the typo
-  // in ?from= so the result page can offer a "search instead for…"
-  // override link. ?stay=1 short-circuits the detection on re-entry.
-  useEffect(() => {
-    if (stayOnInput) return;
-    const corrected = detectWrongKeyboard(initialWord, lang);
-    if (corrected && corrected !== initialWord) {
-      router.replace(
-        `/word/${encodeURIComponent(corrected)}?from=${encodeURIComponent(initialWord)}`,
-      );
-    }
-  }, [initialWord, lang, router, stayOnInput]);
+  // Cross-language is a flagship feature (Gadi 2026-08-03): a student on a
+  // Russian/Hebrew UI can type a word in ANY language and get the meaning
+  // explained in their interface language. The old wrong-keyboard rescue
+  // auto-redirected any Latin input on a Hebrew UI to its keyboard-mapped
+  // Hebrew (e.g. "dream" -> "גרקשץ"), because it only checked that the
+  // mapping produced Hebrew LETTERS, not a real WORD. That hijacked every
+  // legitimate foreign-word lookup. We no longer redirect — the word is
+  // defined exactly as typed, in the UI language. Genuine wrong-keyboard
+  // typos still get the model's own "did you mean" suggestion in the
+  // result. `detectWrongKeyboard` is intentionally left unused here.
+  void detectWrongKeyboard;
   // Brief toast above the topbar confirming a save worked. The button
   // label also flips to "Saved" but the toast gives an explicit ack.
   const [saveFlash, setSaveFlash] = useState(false);
