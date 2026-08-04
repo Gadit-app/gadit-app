@@ -47,7 +47,7 @@ interface Props {
 }
 
 // ─── Localized strings (inline, 9 langs) ────────────────────────
-const COPY: Record<Lang, {
+const COPY: Record<string, {
   title: string;
   loading: string;
   anagramEyebrow: string;

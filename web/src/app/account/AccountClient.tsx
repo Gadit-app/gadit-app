@@ -57,7 +57,7 @@ function fontBody(lang: Lang): string {
 // slants the glyphs crudely, which reads worse than upright. Suppress
 // italic for every non-Latin script.
 function displayItalic(lang: Lang): "italic" | "normal" {
-  return lang === "he" || lang === "ar" || lang === "ja" || lang === "hi" ? "normal" : "italic";
+  return lang === "he" || lang === "ar" || lang === "fa" || lang === "ja" || lang === "hi" ? "normal" : "italic";
 }
 
 interface AccountData {
@@ -436,10 +436,10 @@ export function AccountPage() {
             style={{
               fontFamily: fontDisplay(lang),
               fontStyle: displayItalic(lang),
-              fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
+              fontWeight: lang === "he" || lang === "ar" || lang === "fa" ? 700 : 400,
               fontSize: "clamp(32px, 6vw, 56px)",
               lineHeight: 1.05,
-              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
+              letterSpacing: lang === "he" || lang === "ar" || lang === "fa" ? 0 : "-0.02em",
               color: "var(--ink)",
               marginTop: 12,
               overflowWrap: "anywhere",
@@ -642,14 +642,14 @@ function PlanSection({
             style={{
               fontFamily: fontDisplay(lang),
               fontStyle: displayItalic(lang),
-              fontWeight: lang === "he" || lang === "ar" ? 700 : 400,
+              fontWeight: lang === "he" || lang === "ar" || lang === "fa" ? 700 : 400,
               // Slightly smaller than before — 'Deep' / 'Clear' is a
               // proper noun at this point, not a hero heading, so it
               // doesn't need display-sized treatment to feel right.
               fontSize: "clamp(22px, 2.8vw, 34px)",
               lineHeight: 1,
               color: tColor,
-              letterSpacing: lang === "he" || lang === "ar" ? 0 : "-0.02em",
+              letterSpacing: lang === "he" || lang === "ar" || lang === "fa" ? 0 : "-0.02em",
               // Negative top margin pulls it back toward the 'Plan'
               // SectionLabel above. The label has 24px below it by
               // default; this brings the tier name about 12px closer

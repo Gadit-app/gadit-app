@@ -16,6 +16,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   ja: "Japanese",
   hi: "Hindi",
   am: "Amharic",
+  uk: "Ukrainian",
+  tr: "Turkish",
+  pl: "Polish",
+  fa: "Persian",
+  id: "Indonesian",
 };
 
 const SYSTEM_PROMPT = `You are creating a short quiz to help a learner cement their understanding of a specific word and meaning.

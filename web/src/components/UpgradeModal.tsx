@@ -62,7 +62,7 @@ interface Copy {
   closeAria: string;
 }
 
-const COPY: Record<Lang, Copy> = {
+const COPY: Record<string, Copy> = {
   he: {
     featureNames: {
       image: "המחשת המילה בתמונה",

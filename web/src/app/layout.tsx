@@ -153,6 +153,36 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "A new tool that helps you really understand every word. All the meanings, examples, idioms, and where the word comes from. Free to start, very low-cost upgrade. Worth a try.",
     locale: "en_US",
   },
+  uk: {
+    title: "Gadit, Зрозуміти слова до кінця",
+    description:
+      "Новий інструмент, що допомагає по-справжньому зрозуміти кожне слово. Усі значення, приклади, ідіоми та походження слова. Безкоштовно почати, дешеве оновлення. Варто спробувати.",
+    locale: "uk_UA",
+  },
+  tr: {
+    title: "Gadit, Kelimeleri sonuna kadar anla",
+    description:
+      "Her kelimeyi gerçekten anlamana yardımcı olan yeni bir araç. Tüm anlamlar, örnekler, deyimler ve kelimenin kökeni. Başlaması ücretsiz, yükseltme çok uygun. Denemeye değer.",
+    locale: "tr_TR",
+  },
+  pl: {
+    title: "Gadit, Zrozum słowa do końca",
+    description:
+      "Nowe narzędzie, które pomaga naprawdę zrozumieć każde słowo. Wszystkie znaczenia, przykłady, idiomy i pochodzenie słowa. Zacznij za darmo, tania aktualizacja. Warto spróbować.",
+    locale: "pl_PL",
+  },
+  fa: {
+    title: "Gadit، درک کامل واژه‌ها",
+    description:
+      "ابزاری تازه که کمک می‌کند هر واژه را واقعاً بفهمید. همه معناها، مثال‌ها، اصطلاح‌ها و ریشه واژه. شروع رایگان، ارتقای بسیار کم‌هزینه. ارزش امتحان دارد.",
+    locale: "fa_IR",
+  },
+  id: {
+    title: "Gadit, Pahami kata sampai tuntas",
+    description:
+      "Alat baru yang membantu kamu benar-benar memahami setiap kata. Semua makna, contoh, idiom, dan asal kata. Gratis untuk memulai, peningkatan berbiaya sangat rendah. Layak dicoba.",
+    locale: "id_ID",
+  },
   ar: {
     title: "Gadit, لفهم الكلمات حتى النهاية",
     description:
@@ -351,7 +381,7 @@ export default async function RootLayout({
     (cookieLang && SUPPORTED_LANGS.includes(cookieLang) && cookieLang) ||
     "en";
   const initialDir: "ltr" | "rtl" =
-    initialLang === "he" || initialLang === "ar" ? "rtl" : "ltr";
+    initialLang === "he" || initialLang === "ar" || initialLang === "fa" ? "rtl" : "ltr";
 
   return (
     <html

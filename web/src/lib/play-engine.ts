@@ -102,7 +102,7 @@ export const SESSION_SIZE: Record<GameId, number> = {
  *  (returned from each picker) here, not the UI lang — they only differ
  *  when we fall back to English content. */
 export function dirForLang(lang: string): "rtl" | "ltr" {
-  return lang === "he" || lang === "ar" ? "rtl" : "ltr";
+  return lang === "he" || lang === "ar" || lang === "fa" ? "rtl" : "ltr";
 }
 
 // ─── Random utilities ──────────────────────────────────────────

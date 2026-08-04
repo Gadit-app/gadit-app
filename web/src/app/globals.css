@@ -79,6 +79,20 @@ body {
   font-weight: 600;
 }
 
+/* ── PERSIAN (FARSI) ── Perso-Arabic script, RTL. Reuses the Arabic
+   Naskh / Cairo fonts (no new font needed). */
+:lang(fa),
+[lang="fa"],
+[data-lang="fa"] {
+  font-family: var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), 'Cairo', system-ui, sans-serif;
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+[data-lang="fa"] h1, [data-lang="fa"] h2, [data-lang="fa"] h3 {
+  line-height: 1.4;
+  font-weight: 600;
+}
+
 /* ── JAPANESE ── Noto Sans JP. Launch QA 2026-07-03: only the
    wordbook had a ja font rule, so every other surface (home, pricing,
    play, notebook chrome) fell back through Inter to the OS default
@@ -190,6 +204,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --wb-sans:  var(--font-inter), 'Inter', system-ui, sans-serif;
   --wb-he:    var(--font-rubik), 'Rubik', system-ui, sans-serif;
   --wb-ar:    var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), system-ui, sans-serif;
+  --wb-fa:    var(--font-arabic), 'Noto Naskh Arabic', var(--font-cairo), system-ui, sans-serif;
   --wb-jp:    var(--font-noto-jp), 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
   --wb-hi:    var(--font-noto-hi), 'Noto Sans Devanagari', 'Mangal', 'Kohinoor Devanagari', system-ui, sans-serif;
   --wb-am:    var(--font-noto-am), 'Noto Sans Ethiopic', 'Nyala', 'Ebrima', 'Kefa', system-ui, sans-serif;
@@ -1183,6 +1198,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[dir="rtl"] { font-family: var(--wb-he); }
 [lang="ar"] .wordbook,
 .wordbook[lang="ar"] { font-family: var(--wb-ar); }
+[lang="fa"] .wordbook,
+.wordbook[lang="fa"] { font-family: var(--wb-fa); }
 [lang="ja"] .wordbook,
 .wordbook[lang="ja"] { font-family: var(--wb-jp); }
 [lang="hi"] .wordbook,

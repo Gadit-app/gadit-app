@@ -41,7 +41,7 @@ type QuickDef =
   | { status: "not-cached" }
   | { status: "error" };
 
-const COPY: Record<Lang, { openFull: string; loading: string; noPreview: string }> = {
+const COPY: Record<string, { openFull: string; loading: string; noPreview: string }> = {
   en: { openFull: "Open full definition",   loading: "Loading…",   noPreview: "Tap below to see the full definition." },
   he: { openFull: "פתח הגדרה מלאה",          loading: "טוען...",     noPreview: "הקישו למטה כדי לראות את ההגדרה המלאה." },
   ar: { openFull: "افتح التعريف الكامل",     loading: "جارٍ التحميل…", noPreview: "اضغط أدناه لعرض التعريف الكامل." },
@@ -212,7 +212,7 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
             marginBottom: 14,
             paddingInlineStart: 10,
             borderInlineStart: "2px solid var(--hairline, #E5E7EB)",
-            fontStyle: lang === "he" || lang === "ar" ? "normal" : "italic",
+            fontStyle: lang === "he" || lang === "ar" || lang === "fa" ? "normal" : "italic",
           }}
         >
           {def.example}

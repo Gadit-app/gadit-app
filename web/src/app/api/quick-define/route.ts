@@ -49,6 +49,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   ja: "Japanese",
   hi: "Hindi",
   am: "Amharic",
+  uk: "Ukrainian",
+  tr: "Turkish",
+  pl: "Polish",
+  fa: "Persian",
+  id: "Indonesian",
 };
 
 // On-the-fly micro-definition for popovers when the cache misses.

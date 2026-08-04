@@ -19,6 +19,7 @@ type PosKey =
   | "proper noun" | "phrase" | "idiom";
 
 const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
+  uk: {}, tr: {}, pl: {}, fa: {}, id: {},
   en: {
     "noun": "noun", "verb": "verb", "adjective": "adjective", "adverb": "adverb",
     "preposition": "preposition", "conjunction": "conjunction", "pronoun": "pronoun",

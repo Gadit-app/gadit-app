@@ -17,7 +17,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * cookie / localStorage / browser-locale logic in LangProvider.
  */
 
-const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"]);
+const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "uk", "tr", "pl", "fa", "id"]);
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

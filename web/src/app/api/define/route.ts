@@ -1073,6 +1073,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   ja: "Japanese",
   hi: "Hindi",
   am: "Amharic",
+  uk: "Ukrainian",
+  tr: "Turkish",
+  pl: "Polish",
+  fa: "Persian",
+  id: "Indonesian",
 };
 
 // Reject input that isn't plausibly a word BEFORE we burn an OpenAI

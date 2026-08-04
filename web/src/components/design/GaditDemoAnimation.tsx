@@ -110,7 +110,7 @@ interface DemoContent {
   };
 }
 
-const DEMO: Record<Lang, DemoContent> = {
+const DEMO: Record<string, DemoContent> = {
   en: {
     word: "dream",
     searchPlaceholder: "Type a word",

@@ -7,7 +7,7 @@ import { Lang, LANGUAGES, getLangDir } from "@/lib/i18n";
 
 type LocaleContent = { title: string; body: React.ReactNode };
 
-const FALLBACK_NOTICE: Record<Lang, { prefix: string; link: string; suffix: string }> = {
+const FALLBACK_NOTICE: Record<string, { prefix: string; link: string; suffix: string }> = {
   en: {
     prefix: "This translation is provided for convenience only. In case of any conflict between the translated version and the English version, ",
     link: "the English version",
@@ -80,7 +80,7 @@ const FALLBACK_NOTICE: Record<Lang, { prefix: string; link: string; suffix: stri
   },
 };
 
-const LAST_UPDATED_LABEL: Record<Lang, string> = {
+const LAST_UPDATED_LABEL: Record<string, string> = {
   en: "Last updated: ",
   he: "עודכן לאחרונה: ",
   ar: "آخر تحديث: ",
@@ -97,7 +97,7 @@ const LAST_UPDATED_LABEL: Record<Lang, string> = {
   am: "ለመጨረሻ ጊዜ የተሻሻለው: ",
 };
 
-const BACK_LABEL: Record<Lang, string> = {
+const BACK_LABEL: Record<string, string> = {
   en: "← Back to Gadit",
   he: "→ חזרה ל-Gadit",
   ar: "→ العودة إلى Gadit",
@@ -134,7 +134,7 @@ export default function LegalPage({
 
   const active = locales[locale] ?? locales.en!;
   const dir = getLangDir(locale);
-  const notice = FALLBACK_NOTICE[locale];
+  const notice = FALLBACK_NOTICE[locale] ?? FALLBACK_NOTICE.en;
 
   // Languages available for this doc (in the same order as LANGUAGES)
   const available = LANGUAGES.filter((l) => locales[l.code]);
@@ -173,7 +173,7 @@ export default function LegalPage({
             {active.title}
           </h1>
           <p className="text-xs text-slate-400 mb-8">
-            {LAST_UPDATED_LABEL[locale]}
+            {LAST_UPDATED_LABEL[locale] ?? LAST_UPDATED_LABEL.en}
             {lastUpdated}
           </p>
 
@@ -198,7 +198,7 @@ export default function LegalPage({
           href={href("/")}
           className="block text-center mt-8 text-sm text-slate-500 hover:text-blue-600 transition-colors"
         >
-          {BACK_LABEL[locale]}
+          {BACK_LABEL[locale] ?? BACK_LABEL.en}
         </Link>
       </div>
     </main>

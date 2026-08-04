@@ -437,7 +437,7 @@ export function buildWelcomeEmail(
   lang: string,
   cfg: WelcomeConfig,
 ): { subject: string; html: string } {
-  const rtl = lang === "he" || lang === "ar";
+  const rtl = lang === "he" || lang === "ar" || lang === "fa";
   const c = cfg[lang] ?? cfg.en;
   const L = WELCOME_LABELS[lang] ?? WELCOME_LABELS.en;
   const pctY1 = Math.round((partner.rateYearOne ?? 0.25) * 100);

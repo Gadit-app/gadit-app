@@ -41,7 +41,7 @@ type Copy = {
   openMenu: string;
 };
 
-const COPY: Record<Lang, Copy> = {
+const COPY: Record<string, Copy> = {
   en: { account: "Account",            family: "My family",         school: "My school",         dashboard: "Partner area",  signOut: "Sign out",    openMenu: "Open account menu" },
   he: { account: "החשבון שלי",          family: "המשפחה שלי",        school: "בית הספר שלי",      dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
   ar: { account: "حسابي",               family: "عائلتي",           school: "مدرستي",            dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
