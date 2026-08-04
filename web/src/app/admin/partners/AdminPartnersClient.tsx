@@ -67,6 +67,7 @@ const T = {
     markPaid: "Mark payable as paid",
     copyRef: "Copy referral link",
     copyDash: "Copy portal link",
+    openDash: "Open dashboard →",
     resend: "Resend email",
     del: "Delete",
     confirmDel: "Permanently delete this partner and all their commission records? This cannot be undone.",
@@ -121,6 +122,7 @@ const T = {
     markPaid: "סמן חוב כשולם",
     copyRef: "העתק קישור שיווק",
     copyDash: "העתק קישור פורטל",
+    openDash: "פתיחת דשבורד ←",
     resend: "שלח מייל שוב",
     del: "מחיקה",
     confirmDel: "למחוק לצמיתות את השותף הזה ואת כל רשומות העמלה שלו? אי אפשר לשחזר.",
@@ -471,6 +473,7 @@ export default function AdminPartnersClient() {
                     : <button style={btn} onClick={() => act(r.id, "activate")}>{t.activate}</button>}
                   <button style={btn} onClick={() => copy(refLink, r.id + ":ref")}>{flash === r.id + ":ref" ? t.copied : t.copyRef}</button>
                   <button style={btn} onClick={() => copy(r.dashboardUrl, r.id + ":dash")}>{flash === r.id + ":dash" ? t.copied : t.copyDash}</button>
+                  <a href={r.dashboardUrl} target="_blank" rel="noopener noreferrer" style={{ ...btn, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>{t.openDash}</a>
                   <button style={btn} disabled={busy === r.id + "resendEmail"} onClick={() => act(r.id, "resendEmail")}>
                     {flash === r.id + ":sent" ? t.sent : t.resend}
                   </button>
