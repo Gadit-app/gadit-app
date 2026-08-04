@@ -90,6 +90,9 @@ const COPY = {
     genericError: "משהו השתבש. נסו שוב.",
     invalidCode: "קוד הקופון לא תקף. אפשר להמשיך בלי קוד או לבדוק את האיות.",
     loading: "מכינים את הטופס...",
+    promoQ: "יש לך קוד קופון?",
+    promoPlaceholder: "קוד קופון",
+    promoApply: "החלה",
   },
   en: {
     title: "One step away",
@@ -112,6 +115,9 @@ const COPY = {
     genericError: "Something went wrong. Please try again.",
     invalidCode: "That coupon code is not valid. Continue without it or check the spelling.",
     loading: "Preparing the form...",
+    promoQ: "Have a promo code?",
+    promoPlaceholder: "Promo code",
+    promoApply: "Apply",
   },
 };
 
@@ -131,6 +137,19 @@ export default function CheckoutClient() {
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [elementReady, setElementReady] = useState(false);
+  const [promoOpen, setPromoOpen] = useState(false);
+  const [promoVal, setPromoVal] = useState(code);
+
+  // Applying a promo code just reloads the page with ?code=CODE and lets
+  // the existing (tested) URL-param path attach the discount via
+  // /api/subscribe. Simpler and safer than re-mounting the Element.
+  function applyPromo() {
+    const v = promoVal.trim();
+    if (!v) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("code", v);
+    window.location.href = url.toString();
+  }
 
   const stripeRef = useRef<StripeJs | null>(null);
   const elementsRef = useRef<StripeElements | null>(null);
@@ -316,9 +335,33 @@ export default function CheckoutClient() {
                   <div style={styles.trialToday}>{c.trialToday}</div>
                   <div style={styles.trialLine}>{c.trialLine}</div>
                 </div>
-                {code && phase === "form" && (
+                {code && phase === "form" ? (
                   <div style={styles.coupon}>{c.couponApplied(code.toUpperCase())}</div>
-                )}
+                ) : (phase === "form" || phase === "error") ? (
+                  <div style={styles.promoWrap}>
+                    {!promoOpen ? (
+                      <button type="button" style={styles.promoToggle} onClick={() => setPromoOpen(true)}>
+                        {c.promoQ}
+                      </button>
+                    ) : (
+                      <div style={styles.promoRow}>
+                        <input
+                          value={promoVal}
+                          onChange={(e) => setPromoVal(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === "Enter") applyPromo(); }}
+                          placeholder={c.promoPlaceholder}
+                          autoCapitalize="characters"
+                          autoCorrect="off"
+                          spellCheck={false}
+                          style={styles.promoInput}
+                        />
+                        <button type="button" style={styles.promoApply} onClick={applyPromo}>
+                          {c.promoApply}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : null}
               </div>
 
               {phase !== "form" && !errMsg && <p style={styles.muted}>{c.loading}</p>}
@@ -445,6 +488,47 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 13.5,
     color: "#7C3AED",
     fontWeight: 600,
+  },
+  promoWrap: {
+    marginTop: 10,
+  },
+  promoToggle: {
+    background: "none",
+    border: "none",
+    padding: 0,
+    color: "#0b7d7d",
+    fontSize: 13.5,
+    fontWeight: 600,
+    cursor: "pointer",
+    fontFamily: "inherit",
+    textDecoration: "underline",
+  },
+  promoRow: {
+    display: "flex",
+    gap: 8,
+    alignItems: "stretch",
+  },
+  promoInput: {
+    flex: 1,
+    minWidth: 0,
+    padding: "10px 12px",
+    borderRadius: 10,
+    border: "1px solid rgba(31,41,55,0.18)",
+    fontSize: 15,
+    fontFamily: "inherit",
+    textTransform: "uppercase",
+  },
+  promoApply: {
+    padding: "10px 16px",
+    borderRadius: 10,
+    border: "none",
+    background: "#1f2937",
+    color: "#ffffff",
+    fontWeight: 700,
+    fontSize: 14,
+    cursor: "pointer",
+    fontFamily: "inherit",
+    flexShrink: 0,
   },
   muted: {
     color: "#6b7280",
