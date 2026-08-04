@@ -367,13 +367,16 @@ export default async function RootLayout({
                   with the rest of the chrome. Header is no longer
                   global. */}
               <LoginModal />
+              {/* KidRouteGuard reads useAuth()/useHref(), so it MUST live
+                  inside AuthProvider + LangProvider (not next to
+                  RefCapture, which is provider-free). */}
+              <KidRouteGuard />
               {children}
               <InstallPwaPrompt />
             </AuthProvider>
           </LangProvider>
           <ServiceWorkerRegister />
           <RefCapture />
-          <KidRouteGuard />
           <Analytics />
           <SpeedInsights />
           {/* Meta Pixel — base code + funnel standard events (see
