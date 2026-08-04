@@ -33,6 +33,7 @@ type RevenueResponse = {
     recentlyCanceledCount: number;
   };
   breakdown: BreakdownEntry[];
+  trialingBreakdown: BreakdownEntry[];
   active: Subscriber[];
   atRisk: Subscriber[];
   recentlyCanceled: Subscriber[];
@@ -47,7 +48,8 @@ const STRINGS = {
     cardActive: "Active (paying)",
     cardTrialing: "In trial",
     cardAtRisk: "At risk",
-    breakdownTitle: "MRR breakdown",
+    breakdownTitle: "MRR breakdown (paying)",
+    trialBreakdownTitle: "Trial pipeline (not yet paying)",
     tierClear: "Clear", tierDeep: "Deep", tierFamily: "Family", tierSchools: "Schools",
     activeTitle: "Active subscribers",
     atRiskTitle: "At-risk subscriptions",
@@ -76,7 +78,8 @@ const STRINGS = {
     cardActive: "משלמים פעילים",
     cardTrialing: "בניסיון",
     cardAtRisk: "בסיכון",
-    breakdownTitle: "פירוט הכנסה חודשית",
+    breakdownTitle: "פירוט הכנסה חודשית (משלמים)",
+    trialBreakdownTitle: "פייפליין ניסיונות (עדיין לא משלמים)",
     tierClear: "Clear", tierDeep: "Deep", tierFamily: "Family", tierSchools: "בתי ספר",
     activeTitle: "מנויים פעילים",
     atRiskTitle: "מנויים בסיכון",
@@ -200,6 +203,28 @@ export default function AdminRevenueClient() {
               })
             )}
           </div>
+
+          {data.trialingBreakdown.length > 0 && (
+            <div style={{ ...cardStyle, marginBottom: 24 }}>
+              <div style={sectionTitleStyle}>{t.trialBreakdownTitle}</div>
+              {data.trialingBreakdown.map((b) => {
+                const tierLabel =
+                  b.tier === "clear" ? t.tierClear :
+                  b.tier === "deep" ? t.tierDeep :
+                  b.tier === "family" ? t.tierFamily : t.tierSchools;
+                const billingLabel = b.billing === "monthly" ? t.billingMonthly : t.billingYearly;
+                return (
+                  <BreakdownRow
+                    key={`trial_${b.tier}_${b.billing}`}
+                    label={`${tierLabel} · ${billingLabel}`}
+                    count={b.count}
+                    mrr={b.mrr}
+                    color={TIER_COLOR[b.tier]}
+                  />
+                );
+              })}
+            </div>
+          )}
 
           <SubscriberTable title={t.activeTitle} rows={data.active} empty={t.emptyActive} t={t} />
           {data.atRisk.length > 0 && (

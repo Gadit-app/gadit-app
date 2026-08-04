@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import type { UserRecord } from "firebase-admin/auth";
 
 /**
- * Admin tool — revenue dashboard. Aggregates current subscriptions
- * straight out of /users/{uid} (set by the Stripe webhook), but pulls
- * the ACTUAL amount + currency of each price live from Stripe so it can
- * never drift from the real prices (Gadi 2026-08-04: the old version
- * hardcoded Clear/Deep USD amounts and knew nothing about Family or
- * Schools, so those tiers showed $0 and the totals were wrong).
+ * Admin tool — revenue dashboard, read LIVE from Stripe (Gadi 2026-08-05:
+ * the old Firestore-based version drifted because it trusted the user
+ * doc's `subscriptionStatus`, which lags Stripe; and it couldn't show the
+ * trial pipeline). Stripe is the source of truth for money, so we list
+ * subscriptions straight from it.
  *
- * Fixes vs the old version:
- *   - Recognizes ALL paid tiers: Clear, Deep, Family, Schools (Family
- *     via `familyId`, Schools via `schoolId`, else the `plan` field).
- *   - Real amount + currency per price, fetched once from Stripe.
- *     ILS prices are converted to USD for one unified MRR figure.
- *   - TRIALING subs are NOT counted as revenue — they haven't paid.
- *     They get their own count; MRR is active-paying only.
- *   - Breakdown is a generic list (tier × billing), so every tier shows.
+ * What it returns:
+ *   - MRR / ARR from ACTIVE (paying) subs only. Trials are NOT revenue.
+ *   - active-paying + trialing counts.
+ *   - a paying breakdown (tier × billing) AND a separate TRIALING
+ *     breakdown, so the Family/Schools trial pipeline is visible.
+ *   - subscriber rows for the table (active + trialing), at-risk
+ *     (past_due/unpaid/incomplete), and recently-canceled (30d).
+ *
+ * Amounts come from each price live; ILS is converted to USD for one
+ * unified figure. Tier is derived from the price id via the STRIPE_PRICE_*
+ * env vars (same ids the webhook provisions on).
  *
  * USAGE: GET /api/admin/revenue?secret=$ADMIN_SECRET
  */
@@ -26,22 +26,18 @@ import type { UserRecord } from "firebase-admin/auth";
 export const maxDuration = 60;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
-// Fixed FX for turning ILS MRR into the unified USD figure. Approximate
-// on purpose — this dashboard is a directional revenue read, not
-// accounting. ~3.7 ₪ / $.
-const ILS_TO_USD = 0.27;
+const ILS_TO_USD = 0.27; // ~1/3.7, directional
 
 type Tier = "clear" | "deep" | "family" | "schools";
-type Billing = "monthly" | "yearly" | "unknown";
+type Billing = "monthly" | "yearly";
 
 type Subscriber = {
-  uid: string;
+  uid: string;            // stripe subscription id (table key)
   email: string | null;
   tier: Tier;
-  billing: Billing;
-  monthlyUsd: number;      // normalized to USD (ILS converted)
-  currency: string;        // native price currency (e.g. "usd" | "ils")
+  billing: Billing | "unknown";
+  monthlyUsd: number;
+  currency: string;
   status: string;
   cancelAtPeriodEnd: boolean;
   trialEnd: string | null;
@@ -50,157 +46,118 @@ type Subscriber = {
   country: string | null;
 };
 
-type PriceInfo = { billing: "monthly" | "yearly"; monthlyUsd: number; currency: string };
+type BreakdownEntry = { tier: Tier; billing: Billing; count: number; mrr: number };
 
-/** Fetch the real amount + currency for each unique price id from Stripe. */
-async function loadPriceInfo(priceIds: string[]): Promise<Map<string, PriceInfo>> {
-  const map = new Map<string, PriceInfo>();
-  const unique = [...new Set(priceIds)].filter(Boolean);
-  await Promise.all(
-    unique.map(async (pid) => {
-      try {
-        const p = await stripe.prices.retrieve(pid);
-        const interval = p.recurring?.interval; // "month" | "year"
-        const amount = (p.unit_amount ?? 0) / 100;
-        const currency = (p.currency ?? "usd").toLowerCase();
-        const monthlyNative = interval === "year" ? amount / 12 : amount;
-        const monthlyUsd = currency === "ils" ? monthlyNative * ILS_TO_USD : monthlyNative;
-        map.set(pid, { billing: interval === "year" ? "yearly" : "monthly", monthlyUsd, currency });
-      } catch {
-        /* unknown/deleted price → leave unmapped (shows as $0, unknown) */
-      }
-    }),
-  );
-  return map;
-}
-
-function tierOf(d: FirebaseFirestore.DocumentData): Tier {
-  if (d.familyId) return "family";
-  if (d.schoolId) return "schools";
-  const plan = (d.plan as string) || "basic";
-  return plan === "deep" ? "deep" : "clear";
-}
-
-function tsToIso(v: unknown): string | null {
-  if (!v) return null;
-  if (typeof v === "object" && v !== null && "toDate" in v && typeof (v as { toDate: () => Date }).toDate === "function") {
-    return (v as { toDate: () => Date }).toDate().toISOString();
-  }
-  if (v instanceof Date) return v.toISOString();
-  if (typeof v === "number") return new Date(v).toISOString();
-  if (typeof v === "string") return v;
-  return null;
+function buildTierMap(): Record<string, Tier> {
+  const m: Record<string, Tier> = {};
+  const add = (id: string | undefined, t: Tier) => { if (id) m[id] = t; };
+  add(process.env.STRIPE_PRICE_CLEAR_MONTHLY, "clear");
+  add(process.env.STRIPE_PRICE_CLEAR_YEARLY, "clear");
+  add(process.env.STRIPE_PRICE_DEEP_MONTHLY, "deep");
+  add(process.env.STRIPE_PRICE_DEEP_YEARLY, "deep");
+  add(process.env.STRIPE_PRICE_FAMILY_MONTHLY, "family");
+  add(process.env.STRIPE_PRICE_FAMILY_YEARLY, "family");
+  add(process.env.STRIPE_PRICE_SCHOOLS_MONTHLY, "schools");
+  add(process.env.STRIPE_PRICE_SCHOOLS_YEARLY, "schools");
+  add(process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY, "schools");
+  add(process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY, "schools");
+  add(process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY, "schools");
+  add(process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY, "schools");
+  return m;
 }
 
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get("secret") ?? "";
   const expected = process.env.ADMIN_SECRET;
-  if (!expected) {
-    return NextResponse.json({ error: "ADMIN_SECRET env var not configured, refusing to run" }, { status: 503 });
-  }
-  if (secret !== expected) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  if (!expected) return NextResponse.json({ error: "ADMIN_SECRET env var not configured, refusing to run" }, { status: 503 });
+  if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
-  const auth = getAdminAuth();
-  const db = getAdminDb();
+  const tierMap = buildTierMap();
 
-  // 1) Auth users
-  const authUsers: UserRecord[] = [];
-  let pageToken: string | undefined;
+  // List all subscriptions (paginate).
+  const subs: Stripe.Subscription[] = [];
+  let startingAfter: string | undefined;
   do {
-    const page = await auth.listUsers(1000, pageToken);
-    authUsers.push(...page.users);
-    pageToken = page.pageToken;
-    if (authUsers.length >= 5000) break;
-  } while (pageToken);
+    const page = await stripe.subscriptions.list({
+      status: "all",
+      limit: 100,
+      expand: ["data.customer"],
+      ...(startingAfter ? { starting_after: startingAfter } : {}),
+    });
+    subs.push(...page.data);
+    startingAfter = page.has_more ? page.data[page.data.length - 1]?.id : undefined;
+    if (subs.length >= 2000) break;
+  } while (startingAfter);
 
-  // 2) Bulk-load Firestore docs
-  const userDocs = new Map<string, FirebaseFirestore.DocumentData>();
-  const CHUNK = 400;
-  for (let i = 0; i < authUsers.length; i += CHUNK) {
-    const refs = authUsers.slice(i, i + CHUNK).map((u) => db.collection("users").doc(u.uid));
-    const snaps = await db.getAll(...refs);
-    for (const snap of snaps) if (snap.exists) userDocs.set(snap.id, snap.data() ?? {});
-  }
-
-  // 3) Fetch real prices from Stripe for every priceId seen on a paid doc.
-  const priceIds: string[] = [];
-  for (const u of authUsers) {
-    const d = userDocs.get(u.uid);
-    if (d?.priceId) priceIds.push(d.priceId as string);
-  }
-  const priceMap = await loadPriceInfo(priceIds);
-
-  // 4) Project subscribers
-  const active: Subscriber[] = []; // active + trialing (for the table)
+  const active: Subscriber[] = [];      // active + trialing (for the table)
   const atRisk: Subscriber[] = [];
   const recentlyCanceled: Subscriber[] = [];
 
-  let mrr = 0;                 // active-paying only, USD
+  let mrr = 0;
   let activePayingCount = 0;
   let trialingCount = 0;
 
-  // Generic tier×billing breakdown, keyed "tier_billing".
-  const breakdownMap = new Map<string, { tier: Tier; billing: "monthly" | "yearly"; count: number; mrr: number }>();
-  const bump = (tier: Tier, billing: "monthly" | "yearly", usd: number) => {
+  const payBreak = new Map<string, BreakdownEntry>();
+  const trialBreak = new Map<string, BreakdownEntry>();
+  const bump = (map: Map<string, BreakdownEntry>, tier: Tier, billing: Billing, usd: number) => {
     const key = `${tier}_${billing}`;
-    const cur = breakdownMap.get(key) ?? { tier, billing, count: 0, mrr: 0 };
+    const cur = map.get(key) ?? { tier, billing, count: 0, mrr: 0 };
     cur.count += 1;
     cur.mrr += usd;
-    breakdownMap.set(key, cur);
+    map.set(key, cur);
   };
 
   const thirtyDaysAgo = Date.now() - 30 * 86_400_000;
 
-  for (const u of authUsers) {
-    const d = userDocs.get(u.uid) ?? {};
-    const plan = (d.plan as string) || "basic";
-    const status = (d.subscriptionStatus as string) || "";
-    const priceId = (d.priceId as string) || "";
-    const info = priceMap.get(priceId);
-    const stripeCustomerId = (d.stripeCustomerId as string) ?? null;
+  for (const s of subs) {
+    const price = s.items.data[0]?.price;
+    const priceId = price?.id ?? "";
+    const interval = price?.recurring?.interval; // "month" | "year"
+    const billing: Billing | "unknown" = interval === "year" ? "yearly" : interval === "month" ? "monthly" : "unknown";
+    const amount = (price?.unit_amount ?? 0) / 100;
+    const currency = (price?.currency ?? "usd").toLowerCase();
+    const monthlyNative = billing === "yearly" ? amount / 12 : amount;
+    const monthlyUsd = currency === "ils" ? monthlyNative * ILS_TO_USD : monthlyNative;
+    const tier: Tier = tierMap[priceId] ?? "clear";
 
-    // Skip true basic users (never paid) entirely.
-    if (plan === "basic" && !stripeCustomerId) continue;
+    const cust = typeof s.customer === "object" && s.customer && !("deleted" in s.customer) ? s.customer : null;
+    const email = cust?.email ?? (s.metadata?.email as string | undefined) ?? null;
+    const country = cust?.address?.country ?? null;
+    const stripeCustomerId = typeof s.customer === "string" ? s.customer : s.customer?.id ?? null;
 
     const sub: Subscriber = {
-      uid: u.uid,
-      email: u.email ?? null,
-      tier: tierOf(d),
-      billing: info?.billing ?? "unknown",
-      monthlyUsd: info?.monthlyUsd ?? 0,
-      currency: info?.currency ?? "usd",
-      status,
-      cancelAtPeriodEnd: (d.cancelAtPeriodEnd as boolean) ?? false,
-      trialEnd: tsToIso(d.trialEnd),
-      signedUpAt: u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : null,
+      uid: s.id,
+      email,
+      tier,
+      billing,
+      monthlyUsd,
+      currency,
+      status: s.status,
+      cancelAtPeriodEnd: s.cancel_at_period_end ?? false,
+      trialEnd: s.trial_end ? new Date(s.trial_end * 1000).toISOString() : null,
+      signedUpAt: new Date(s.created * 1000).toISOString(),
       stripeCustomerId,
-      country: (d.country as string) ?? null,
+      country,
     };
 
-    if (plan === "basic" && stripeCustomerId) {
-      // Was paid once, now downgraded. Recently-canceled if touched in 30d.
-      const updated = tsToIso(d.updatedAt);
-      if (updated && new Date(updated).getTime() > thirtyDaysAgo) recentlyCanceled.push(sub);
-      continue;
-    }
-
-    if (status === "active") {
+    if (s.status === "active") {
       active.push(sub);
       activePayingCount += 1;
-      mrr += sub.monthlyUsd;
-      if (sub.billing !== "unknown") bump(sub.tier, sub.billing, sub.monthlyUsd);
-    } else if (status === "trialing") {
-      // Visible in the table, but NOT revenue: a trial hasn't paid.
+      mrr += monthlyUsd;
+      if (billing !== "unknown") bump(payBreak, tier, billing, monthlyUsd);
+    } else if (s.status === "trialing") {
       active.push(sub);
       trialingCount += 1;
-    } else if (status === "past_due" || status === "unpaid" || status === "incomplete") {
+      if (billing !== "unknown") bump(trialBreak, tier, billing, monthlyUsd);
+    } else if (s.status === "past_due" || s.status === "unpaid" || s.status === "incomplete") {
       atRisk.push(sub);
+    } else if (s.status === "canceled") {
+      const endedMs = (s.canceled_at ?? s.ended_at ?? 0) * 1000;
+      if (endedMs > thirtyDaysAgo) recentlyCanceled.push(sub);
     }
   }
 
-  // active list: paying first (by contribution), trialing after.
+  // active first (by contribution), trialing after.
   active.sort((a, b) => {
     const ap = a.status === "active" ? 1 : 0;
     const bp = b.status === "active" ? 1 : 0;
@@ -211,12 +168,13 @@ export async function GET(req: NextRequest) {
   recentlyCanceled.sort((a, b) => (b.signedUpAt ?? "").localeCompare(a.signedUpAt ?? ""));
 
   const TIER_ORDER: Tier[] = ["clear", "deep", "family", "schools"];
-  const breakdown = [...breakdownMap.values()]
-    .map((b) => ({ ...b, mrr: Math.round(b.mrr * 100) / 100 }))
-    .sort((a, b) =>
-      TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier) ||
-      (a.billing === "monthly" ? -1 : 1) - (b.billing === "monthly" ? -1 : 1),
-    );
+  const toArray = (map: Map<string, BreakdownEntry>) =>
+    [...map.values()]
+      .map((b) => ({ ...b, mrr: Math.round(b.mrr * 100) / 100 }))
+      .sort((a, b) =>
+        TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier) ||
+        (a.billing === "monthly" ? -1 : 1) - (b.billing === "monthly" ? -1 : 1),
+      );
 
   return NextResponse.json({
     generatedAt: new Date().toISOString(),
@@ -228,7 +186,8 @@ export async function GET(req: NextRequest) {
       atRiskCount: atRisk.length,
       recentlyCanceledCount: recentlyCanceled.length,
     },
-    breakdown,
+    breakdown: toArray(payBreak),
+    trialingBreakdown: toArray(trialBreak),
     active,
     atRisk,
     recentlyCanceled,
