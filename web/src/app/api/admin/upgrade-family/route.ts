@@ -45,6 +45,10 @@ export async function POST(req: NextRequest) {
   if (denied) return denied;
 
   const dryRun = req.nextUrl.searchParams.get("dryRun") === "1";
+  // gift=1: upgrade to Family but keep the student paying their CURRENT
+  // price. We attach a forever coupon for exactly the price difference so
+  // Gadi absorbs it as a gift, and DON'T charge the proration now.
+  const gift = req.nextUrl.searchParams.get("gift") === "1";
 
   let email = "";
   let uidParam = "";
@@ -104,22 +108,63 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, alreadyFamily: true, uid, email, subId: live.id });
   }
 
+  const currentAmount = currentPrice?.unit_amount ?? 0;
+
+  // For a gift, resolve the Family price amount + currency so we can gift
+  // exactly the difference (keeps the student at their current price).
+  let giftCouponId: string | null = null;
+  let giftDiff = 0;
+  let giftCurrency = "usd";
+  if (gift) {
+    const fp = await stripe.prices.retrieve(familyPrice);
+    const familyAmount = fp.unit_amount ?? 0;
+    giftCurrency = (fp.currency ?? "usd").toLowerCase();
+    giftDiff = Math.max(0, familyAmount - currentAmount);
+    giftCouponId = `family_gift_${giftCurrency}_${giftDiff}`;
+  }
+
   const plan = {
-    uid, email, subId: live.id, cycle: interval,
-    from: currentPrice?.id, fromAmount: (currentPrice?.unit_amount ?? 0) / 100,
+    uid, email, subId: live.id, cycle: interval, gift,
+    from: currentPrice?.id, fromAmount: currentAmount / 100,
     to: familyPrice,
+    ...(gift ? { giftOffAmount: giftDiff / 100, giftCurrency } : {}),
   };
 
   if (dryRun) {
-    return NextResponse.json({ dryRun: true, ...plan, note: "Re-run without dryRun=1 to apply. Will charge the prorated difference now." });
+    return NextResponse.json({
+      dryRun: true,
+      ...plan,
+      note: gift
+        ? `Re-run without dryRun=1 to apply. Will swap to Family, apply a forever ${giftDiff / 100} ${giftCurrency} coupon so the student keeps paying ${currentAmount / 100}, and NOT charge now.`
+        : "Re-run without dryRun=1 to apply. Will charge the prorated difference now.",
+    });
   }
 
-  // Apply: swap the price, stamp uid/email so the webhook provisions Family,
-  // and invoice the proration immediately (charge the difference now).
+  // Gift: ensure a "forever" coupon for exactly the difference exists.
+  if (gift && giftCouponId) {
+    try {
+      await stripe.coupons.retrieve(giftCouponId);
+    } catch {
+      await stripe.coupons.create({
+        id: giftCouponId,
+        amount_off: giftDiff,
+        currency: giftCurrency,
+        duration: "forever",
+        name: `Family gift (${giftDiff / 100} ${giftCurrency.toUpperCase()}/cycle off)`,
+      });
+    }
+  }
+
+  // Apply: swap the price, stamp uid/email so the webhook provisions Family.
+  // Gift → attach the coupon and DON'T charge now (proration_behavior none),
+  // so the student keeps their current price. Normal → invoice the
+  // prorated difference immediately.
   await stripe.subscriptions.update(live.id, {
     items: [{ id: item.id, price: familyPrice }],
     metadata: { ...(live.metadata ?? {}), uid, ...(email ? { email } : {}) },
-    proration_behavior: "always_invoice",
+    ...(gift
+      ? { discounts: [{ coupon: giftCouponId! }], proration_behavior: "none" as const }
+      : { proration_behavior: "always_invoice" as const }),
   });
 
   return NextResponse.json({

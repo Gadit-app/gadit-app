@@ -74,6 +74,8 @@ const STRINGS: Record<AdminLang, {
   deleteSuccess: (email: string) => string;
   deleteError: (msg: string) => string;
   upgradeFamilyLabel: string;
+  upgradeGiftLabel: string;
+  upgradeGiftConfirm: (email: string) => string;
   upgradeConfirm: (email: string) => string;
   upgradeSuccess: (email: string) => string;
   upgradeAlready: (email: string) => string;
@@ -126,6 +128,8 @@ const STRINGS: Record<AdminLang, {
     deleteSuccess: (email) => `Deleted ${email}.`,
     deleteError: (msg) => `Delete failed: ${msg}`,
     upgradeFamilyLabel: "Upgrade to Family",
+    upgradeGiftLabel: "Gift Family (keep current price)",
+    upgradeGiftConfirm: (email) => `Gift-upgrade ${email} to Family?\n\nSwitches them to the Family plan but attaches a forever coupon for exactly the price difference, so they keep paying their CURRENT price. No charge now. You absorb the difference. Nice gift.`,
     upgradeConfirm: (email) => `Upgrade ${email} to Family?\n\nThis switches their existing subscription to the Family plan and charges the prorated difference to their card NOW. Only do this with the customer's consent.`,
     upgradeSuccess: (email) => `${email} upgraded to Family. Give it a moment — the webhook provisions the family dashboard.`,
     upgradeAlready: (email) => `${email} is already on Family.`,
@@ -177,6 +181,8 @@ const STRINGS: Record<AdminLang, {
     deleteConfirm: (email) => `למחוק את ${email}?\n\nהפעולה מוחקת את חשבון Firebase Auth, את מסמך המשתמש, ואת כל המחברת שלו. האימייל יוכל להירשם שוב לאחר מכן.\n\nאי אפשר לבטל את הפעולה.`,
     deleteSuccess: (email) => `${email} נמחק.`,
     upgradeFamilyLabel: "שדרג ל-Family",
+    upgradeGiftLabel: "Family במתנה (באותו מחיר)",
+    upgradeGiftConfirm: (email) => `לשדרג את ${email} ל-Family במתנה?\n\nהפעולה מעבירה למסלול Family אבל מצרפת קופון קבוע בדיוק על הפרש המחיר, כך שהתלמיד ממשיך לשלם את המחיר הנוכחי שלו. בלי חיוב עכשיו. אתה סופג את ההפרש. מתנה יפה.`,
     upgradeConfirm: (email) => `לשדרג את ${email} ל-Family?\n\nהפעולה מחליפה את המנוי הקיים למסלול Family ומחייבת את הפרש המחיר היחסי בכרטיס עכשיו. בצעו רק באישור הלקוח.`,
     upgradeSuccess: (email) => `${email} שודרג ל-Family. ייקח רגע — ה-webhook מספק את לוח המשפחה.`,
     upgradeAlready: (email) => `${email} כבר במסלול Family.`,
@@ -389,13 +395,13 @@ export default function AdminUsersClient() {
   // Upgrade a Clear/Deep subscriber to Family in place (with consent).
   // Swaps the price on their existing Stripe sub + charges the prorated
   // difference now; the webhook then provisions the family dashboard.
-  const handleUpgradeFamily = async (u: AdminUserRow) => {
+  const handleUpgradeFamily = async (u: AdminUserRow, gift = false) => {
     if (!secret) return;
     const label = u.email || u.uid;
-    if (!window.confirm(t.upgradeConfirm(label))) return;
+    if (!window.confirm(gift ? t.upgradeGiftConfirm(label) : t.upgradeConfirm(label))) return;
     setUpgradingUids((s) => new Set(s).add(u.uid));
     try {
-      const res = await fetch(`/api/admin/upgrade-family?secret=${encodeURIComponent(secret)}`, {
+      const res = await fetch(`/api/admin/upgrade-family?secret=${encodeURIComponent(secret)}${gift ? "&gift=1" : ""}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(u.email ? { email: u.email } : { uid: u.uid }),
@@ -733,6 +739,29 @@ export default function AdminUsersClient() {
                             }}
                           >
                             {upgradingUids.has(u.uid) ? "…" : "→ Family"}
+                          </button>
+                        )}
+                        {(u.plan === "clear" || u.plan === "deep") && !u.isFamily && !u.isSchool && (
+                          <button
+                            type="button"
+                            onClick={() => handleUpgradeFamily(u, true)}
+                            disabled={upgradingUids.has(u.uid)}
+                            title={t.upgradeGiftLabel}
+                            aria-label={t.upgradeGiftLabel}
+                            style={{
+                              background: "#FEF3C7",
+                              border: "1px solid #FCD34D",
+                              color: upgradingUids.has(u.uid) ? "#9CA3AF" : "#92400E",
+                              borderRadius: 6,
+                              padding: "5px 8px",
+                              fontSize: 11.5,
+                              fontWeight: 700,
+                              cursor: upgradingUids.has(u.uid) ? "wait" : "pointer",
+                              whiteSpace: "nowrap",
+                              opacity: upgradingUids.has(u.uid) ? 0.6 : 1,
+                            }}
+                          >
+                            {upgradingUids.has(u.uid) ? "…" : "🎁 Family"}
                           </button>
                         )}
                         <button
