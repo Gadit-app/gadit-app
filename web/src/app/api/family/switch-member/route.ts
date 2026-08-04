@@ -1,18 +1,21 @@
 /**
- * Shared-device profile switcher for a Family (Gadi 2026-08-05).
+ * Shared-device profile switcher for a Family (Gadi 2026-08-05,
+ * back-to-parent added 2026-08-04).
  *
- * On a shared computer, kids should be able to switch between their
- * profiles WITHOUT the parent generating a fresh 6-digit code each time
- * (the /c/<CODE> roster picker, but for a family). Any signed-in member
- * of a family can switch to any OTHER non-owner member of the SAME
- * family; we mint a custom token for that member and the client signs in
- * with it.
+ * On a shared computer, kids switch between their profiles WITHOUT the
+ * parent generating a fresh 6-digit code each time (the /c/<CODE> roster
+ * picker, but for a family). Any signed-in member of a family can switch
+ * to any OTHER profile of the SAME family, INCLUDING back to the parent
+ * account. This mirrors the "kids mode on a shared computer" idea: one
+ * tap to become any household profile, no password.
  *
- * The billing OWNER is never a switch target (a kid must not be able to
- * become the paying account and touch billing). To use the owner
- * account, log in normally.
+ * Owner switch target: the parent's REAL uid is the family id, so we mint
+ * the token for `familyId` (not a synthetic member uid). That restores
+ * the parent's actual account — billing, member management, everything.
+ * Gadi chose the frictionless model (no PIN) for the simplest UX; a
+ * parent PIN can layer on later if the household needs it.
  *
- *   GET  → { members: [{ id, name, role, colorIndex }] }  (non-owner)
+ *   GET  → { members: [{ id, name, role, colorIndex, isOwner }] }
  *   POST { memberId } → { token, role, memberId, name }
  *
  * Auth: Firebase ID token (Authorization: Bearer <token>). The caller's
@@ -44,18 +47,19 @@ export async function GET(req: NextRequest) {
 
   const db = getAdminDb();
   const snap = await db.collection("families").doc(ctx.familyId).collection("members").orderBy("createdAt", "asc").get();
-  const rows = snap.docs.map((d) => ({
-    id: d.id,
-    ...(d.data() as { isOwner?: boolean; name?: string; role?: string; colorIndex?: number }),
-  }));
-  const members = rows
-    .filter((m) => !m.isOwner) // never offer the billing owner as a switch target
-    .map((m) => ({
-      id: m.id,
+  // Every profile in the household is a switch target now, INCLUDING the
+  // parent/owner, so a kid (or the parent testing) always has a one-tap
+  // way back to the parent account.
+  const members = snap.docs.map((d) => {
+    const m = d.data() as { isOwner?: boolean; name?: string; role?: string; colorIndex?: number };
+    return {
+      id: d.id,
       name: m.name || "",
       role: m.role || "boy",
       colorIndex: m.colorIndex ?? 0,
-    }));
+      isOwner: !!m.isOwner,
+    };
+  });
 
   return NextResponse.json({ members });
 }
@@ -78,11 +82,23 @@ export async function POST(req: NextRequest) {
   const memberSnap = await memberRef.get();
   if (!memberSnap.exists) return NextResponse.json({ error: "member_not_found" }, { status: 404 });
   const member = memberSnap.data() as { role: MemberRole; name: string; isOwner?: boolean };
-  if (member.isOwner) return NextResponse.json({ error: "cannot_switch_to_owner" }, { status: 403 });
+  const auth = getAdminAuth();
+
+  // Back to the parent: the owner's real uid IS the family id. Mint the
+  // token for that uid so the parent lands in their genuine account. Do
+  // NOT touch the owner's user doc (it already holds their real plan and
+  // Stripe data) — only stamp membership onto synthetic member accounts.
+  if (member.isOwner) {
+    const token = await auth.createCustomToken(ctx.familyId, {
+      role: "parent",
+      familyId: ctx.familyId,
+      memberId,
+    });
+    return NextResponse.json({ token, role: "parent", memberId, name: member.name });
+  }
 
   const role: "kid" | "parent" = isParentRole(member.role) ? "parent" : "kid";
   const syntheticUid = syntheticUidFor(ctx.familyId, memberId);
-  const auth = getAdminAuth();
 
   // Ensure the Firebase Auth user + user doc exist (same as pair redeem),
   // so a member who was never paired on their own device can still be
