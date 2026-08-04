@@ -40,6 +40,10 @@ const STRINGS = {
     reports: "Reports",
     partners: "Partners",
     deletions: "Deletions",
+    secMarketing: "Marketing & growth",
+    secUsers: "Users",
+    secFinance: "Finance",
+    secContent: "Content & support",
     backToApp: "Back to app",
     signOut: "Sign out",
     langToggle: "עברית",
@@ -60,6 +64,10 @@ const STRINGS = {
     reports: "דיווחים",
     partners: "שותפים",
     deletions: "מחיקות",
+    secMarketing: "שיווק וצמיחה",
+    secUsers: "משתמשים",
+    secFinance: "כספים",
+    secContent: "תוכן ותמיכה",
     backToApp: "חזרה לאפליקציה",
     signOut: "התנתק",
     langToggle: "English",
@@ -73,17 +81,32 @@ type NavItem = {
   icon: React.ReactNode;
 };
 
-const NAV_ITEMS: NavItem[] = [
-  { href: "/admin",           labelKey: "overview",  icon: <IconHome />     },
-  { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget />   },
-  { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
-  { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins />    },
-  { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone />},
-  { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail />     },
-  { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
-  { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag />     },
-  { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake />},
-  { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
+// Grouped nav (Gadi 2026-08-05, modelled on the Yooniz admin sidebar):
+// section headers by topic so it's easier to navigate. A null title = the
+// top group (Overview / Strategy) with no header.
+type NavSection = { titleKey: keyof typeof STRINGS["en"] | null; items: NavItem[] };
+
+const NAV_SECTIONS: NavSection[] = [
+  { titleKey: null, items: [
+    { href: "/admin",           labelKey: "overview",  icon: <IconHome />   },
+    { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget /> },
+  ] },
+  { titleKey: "secMarketing", items: [
+    { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone /> },
+    { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake /> },
+  ] },
+  { titleKey: "secUsers", items: [
+    { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
+    { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
+    { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
+  ] },
+  { titleKey: "secFinance", items: [
+    { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins /> },
+  ] },
+  { titleKey: "secContent", items: [
+    { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail /> },
+    { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag /> },
+  ] },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -270,44 +293,55 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
             {/* Nav items */}
             <nav className="admin-shell-nav" style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 8 }}>
-              {NAV_ITEMS.map((item) => {
-                const active =
-                  item.href === "/admin"
-                    ? pathname === "/admin"
-                    : pathname === item.href || pathname.startsWith(item.href + "/");
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      padding: "9px 10px",
-                      borderRadius: 8,
-                      fontSize: 13,
-                      fontWeight: 600,
-                      textDecoration: "none",
-                      color: active ? "#FFFFFF" : "#9CA3AF",
-                      background: active ? "#0EA5A5" : "transparent",
-                      transition: "background 0.15s, color 0.15s",
-                    }}
-                  >
-                    <span
+              {NAV_SECTIONS.map((section, si) => (
+                <div key={si} className="admin-nav-group" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {section.titleKey && (
+                    <div
+                      className="admin-nav-section-title"
                       style={{
-                        width: 16,
-                        height: 16,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        fontSize: 10.5,
+                        fontWeight: 700,
+                        letterSpacing: 0.6,
+                        textTransform: "uppercase",
+                        color: "#6B7280",
+                        padding: "14px 10px 4px",
                       }}
                     >
-                      {item.icon}
-                    </span>
-                    <span>{t[item.labelKey]}</span>
-                  </a>
-                );
-              })}
+                      {t[section.titleKey]}
+                    </div>
+                  )}
+                  {section.items.map((item) => {
+                    const active =
+                      item.href === "/admin"
+                        ? pathname === "/admin"
+                        : pathname === item.href || pathname.startsWith(item.href + "/");
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                          padding: "9px 10px",
+                          borderRadius: 8,
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: "none",
+                          color: active ? "#FFFFFF" : "#9CA3AF",
+                          background: active ? "#0EA5A5" : "transparent",
+                          transition: "background 0.15s, color 0.15s",
+                        }}
+                      >
+                        <span style={{ width: 16, height: 16, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                          {item.icon}
+                        </span>
+                        <span>{t[item.labelKey]}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              ))}
             </nav>
 
             {/* Bottom, back to app + sign out, pinned to the bottom
