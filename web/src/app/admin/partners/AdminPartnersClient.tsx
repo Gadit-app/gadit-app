@@ -209,6 +209,9 @@ export default function AdminPartnersClient() {
   const [defaults, setDefaults] = useState<WelcomeCfg | null>(null);
   const [previews, setPreviews] = useState<{ he: string; en: string }>({ he: "", en: "" });
   const [editLang, setEditLang] = useState<"he" | "en">(lang);
+  // Collapsed by default (Gadi 2026-08-05): the welcome-email editor is a
+  // rare edit; keep it closed so the partner list is what you see.
+  const [emailOpen, setEmailOpen] = useState(false);
   const [emailState, setEmailState] = useState<"idle" | "saving" | "saved">("idle");
 
   const load = useCallback(async (): Promise<string | null> => {
@@ -358,8 +361,22 @@ export default function AdminPartnersClient() {
       {/* Welcome-email editor */}
       {cfg && (
         <div style={{ ...card, marginBottom: 20 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{t.emailTitle}</div>
-          <div style={{ fontSize: 12.5, color: "#6B7280", marginBottom: 12 }}>{t.emailHint}</div>
+          <button
+            type="button"
+            onClick={() => setEmailOpen((v) => !v)}
+            aria-expanded={emailOpen}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+              width: "100%", background: "none", border: "none", cursor: "pointer",
+              padding: 0, textAlign: "start", fontFamily: "inherit",
+            }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 700, color: "#111827" }}>{t.emailTitle}</span>
+            <span style={{ fontSize: 13, color: "#9CA3AF", transform: emailOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▾</span>
+          </button>
+          {emailOpen && (
+          <>
+          <div style={{ fontSize: 12.5, color: "#6B7280", margin: "10px 0 12px" }}>{t.emailHint}</div>
           <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
             <button type="button" style={editLang === "he" ? tabActive : tab} onClick={() => setEditLang("he")}>עברית</button>
             <button type="button" style={editLang === "en" ? tabActive : tab} onClick={() => setEditLang("en")}>English</button>
@@ -396,6 +413,8 @@ export default function AdminPartnersClient() {
               <iframe title="welcome email preview" srcDoc={editLang === "he" ? previews.he : previews.en} style={{ width: "100%", height: 620, border: "1px solid #E5E7EB", borderRadius: 10, background: "#F9FAFB", position: "sticky", top: 12 }} />
             </div>
           </div>
+          </>
+          )}
         </div>
       )}
 
