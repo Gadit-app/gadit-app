@@ -36,7 +36,11 @@ const COPY = {
     loading: "טוען את האזור שלך…",
     notFound: "לא מצאנו את הקישור הזה. כדאי לוודא שכל הכתובת הועתקה מהמייל, או לפנות אלינו.",
     hi: "היי",
-    yourLink: "הקישור האישי שלך",
+    yourLink: "הקישורים האישיים שלך",
+    linksHint: "קישור לכל מוצר. כל מי שנכנס דרכו ונרשם נזקף לך, בכל שפה.",
+    linkGeneral: "Gadit (כללי)",
+    linkFamilies: "למשפחות",
+    linkSchools: "לבתי ספר",
     copy: "העתקת קישור",
     copied: "הועתק ✓",
     linkLangLabel: "שפת הקישור",
@@ -64,7 +68,11 @@ const COPY = {
     loading: "Loading your dashboard…",
     notFound: "We couldn't find this link. Make sure you copied the full address from your email, or contact us.",
     hi: "Hi",
-    yourLink: "Your personal link",
+    yourLink: "Your personal links",
+    linksHint: "One link per product. Anyone who lands through it and signs up is credited to you, in any language.",
+    linkGeneral: "Gadit (general)",
+    linkFamilies: "Families",
+    linkSchools: "Schools",
     copy: "Copy link",
     copied: "Copied ✓",
     linkLangLabel: "Link language",
@@ -116,9 +124,22 @@ const LINK_LANGS: Array<{ code: string; native: string }> = [
   { code: "hi", native: "हिन्दी" },
   { code: "am", native: "አማርኛ" },
 ];
-function buildRefLink(code: string, lang: string): string {
+// A partner link = a landing path + ?ref=<code>, in the chosen language.
+// RefCapture (mounted in the root layout) reads ?ref on EVERY page, so the
+// referral is attributed no matter which product page they land on.
+const PRODUCT_PATHS = {
+  general: "",
+  families: "/families/landing",
+  schools: "/schools/landing",
+} as const;
+type ProductKey = keyof typeof PRODUCT_PATHS;
+
+function buildRefLink(code: string, lang: string, path = ""): string {
   const base = "https://www.gadit.app";
-  return lang === "en" ? `${base}/?ref=${code}` : `${base}/${lang}/?ref=${code}`;
+  const prefix = lang === "en" ? "" : `/${lang}`;
+  return path
+    ? `${base}${prefix}${path}?ref=${code}`
+    : `${base}${prefix}/?ref=${code}`;
 }
 
 export function PartnerDashboardClient() {
@@ -129,8 +150,8 @@ export function PartnerDashboardClient() {
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
-  const [copied, setCopied] = useState(false);
-  const [linkLang, setLinkLang] = useState<string>(lang); // language for the shared link
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [linkLang, setLinkLang] = useState<string>(lang); // language for the shared links
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("t");
@@ -147,12 +168,12 @@ export function PartnerDashboardClient() {
       .catch(() => setState("error"));
   }, []);
 
-  async function copyLink() {
+  async function copyLink(product: ProductKey) {
     if (!stats) return;
     try {
-      await navigator.clipboard.writeText(buildRefLink(stats.code, linkLang));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      await navigator.clipboard.writeText(buildRefLink(stats.code, linkLang, PRODUCT_PATHS[product]));
+      setCopiedKey(product);
+      setTimeout(() => setCopiedKey((k) => (k === product ? null : k)), 1800);
     } catch { /* clipboard blocked — ignore */ }
   }
 
@@ -179,16 +200,26 @@ export function PartnerDashboardClient() {
               {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
             </div>
 
-            {/* Referral link — with a language picker so the partner can
-                share it in any of the 14 languages (gadit.app/<lang>/?ref=). */}
+            {/* Referral links — one per product (general Gadit, Families
+                landing, Schools landing), with a shared language picker.
+                RefCapture attributes ?ref on any of them. */}
             <div style={S.card}>
               <div style={S.cardLabel}>{t.yourLink}</div>
-              <div style={S.linkRow}>
-                <div style={S.linkText} dir="ltr">{buildRefLink(stats.code, linkLang)}</div>
-                <button type="button" onClick={copyLink} style={S.copyBtn}>
-                  {copied ? t.copied : t.copy}
-                </button>
-              </div>
+              <div style={{ fontSize: 12.5, color: "#6B7280", marginBottom: 12, lineHeight: 1.5 }}>{t.linksHint}</div>
+              {(["general", "families", "schools"] as ProductKey[]).map((product) => {
+                const label = product === "general" ? t.linkGeneral : product === "families" ? t.linkFamilies : t.linkSchools;
+                return (
+                  <div key={product} style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 4 }}>{label}</div>
+                    <div style={S.linkRow}>
+                      <div style={S.linkText} dir="ltr">{buildRefLink(stats.code, linkLang, PRODUCT_PATHS[product])}</div>
+                      <button type="button" onClick={() => copyLink(product)} style={S.copyBtn}>
+                        {copiedKey === product ? t.copied : t.copy}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
               <div style={S.linkLangRow}>
                 <span style={S.linkLangLabel}>{t.linkLangLabel}</span>
                 <select

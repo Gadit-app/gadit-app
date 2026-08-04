@@ -118,6 +118,20 @@ export function buildWelcomeEmail(
   const pctY1 = Math.round((partner.rateYearOne ?? 0.25) * 100);
   const pctAfter = Math.round((partner.rateLifetime ?? 0.1) * 100);
   const link = `${SITE}/?ref=${partner.code}`;
+  // Per-product referral links (general Gadit, Families landing, Schools
+  // landing). RefCapture attributes ?ref on any page, so a partner who
+  // wants to sell Family shares the Families link directly (Gadi
+  // 2026-08-05). Links match the email language; other languages are in
+  // the dashboard.
+  const linkPrefix = he ? "/he" : "";
+  const productLinks = [
+    { label: he ? "Gadit (כללי)" : "Gadit (general)", url: `${SITE}${linkPrefix}/?ref=${partner.code}` },
+    { label: he ? "למשפחות" : "Families", url: `${SITE}${linkPrefix}/families/landing?ref=${partner.code}` },
+    { label: he ? "לבתי ספר" : "Schools", url: `${SITE}${linkPrefix}/schools/landing?ref=${partner.code}` },
+  ];
+  const linksHint = he
+    ? "קישור לכל מוצר. אפשר לשתף כל אחד בנפרד, בכל שפה מהאזור האישי."
+    : "One link per product. Share whichever fits, in any language from your dashboard.";
   const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
   // {year1} = the PARTNER's first-year commission from one Family-plan
   // customer, NOT the customer's spend (Gadi 2026-08-02: the text says
@@ -130,7 +144,7 @@ export function buildWelcomeEmail(
   const year1 = ils ? `${y1Amount} ₪` : `$${y1Amount}`;
   const vars: Vars = { name: partner.name, pctY1, pctAfter, year1, code: partner.code, link };
 
-  const linkLabel = he ? "הקישור שלך" : "Your link";
+  const linkLabel = he ? "הקישורים שלך" : "Your links";
   const codeLabel = he ? "קוד השותף שלך" : "Your partner code";
   const cta = he ? "פתיחת האזור האישי" : "Open your dashboard";
   const t = (s: string) => applyVars(s, vars);
@@ -155,8 +169,13 @@ export function buildWelcomeEmail(
     <div style="padding:24px;font-size:15px;line-height:1.6;text-align:${align};">
       <p style="margin:0 0 18px;">${tb(c.opening)}</p>
 
-      <div style="font-size:13px;color:#6B7280;margin:0 0 6px;">${linkLabel}</div>
-      <p style="margin:0 0 6px;"><a href="${link}" style="font-size:18px;font-weight:700;color:#0EA5A5;word-break:break-all;">${link}</a></p>
+      <div style="font-size:13px;color:#6B7280;margin:0 0 4px;">${linkLabel}</div>
+      <div style="font-size:12.5px;color:#9CA3AF;margin:0 0 12px;">${linksHint}</div>
+      ${productLinks.map((p) => `
+      <div style="margin:0 0 12px;">
+        <div style="font-size:12px;font-weight:700;color:#374151;margin:0 0 3px;">${p.label}</div>
+        <a href="${p.url}" style="font-size:14px;font-weight:600;color:#0EA5A5;word-break:break-all;">${p.url}</a>
+      </div>`).join("")}
       <div style="font-size:12.5px;color:#9CA3AF;margin:0 0 18px;">${tb(c.noteUnderLink)}</div>
 
       <div style="font-size:13px;color:#6B7280;margin:0 0 6px;">${codeLabel}</div>
