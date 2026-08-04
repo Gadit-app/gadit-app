@@ -75,6 +75,8 @@ function tierStyle(
   return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
 
+import { FamilyProfileSwitcher } from "./FamilyProfileSwitcher";
+
 export function WbUserMenu() {
   const { user, plan, familyId, schoolId, logout } = useAuth();
   const { lang, dir } = useLang();
@@ -256,6 +258,9 @@ export function WbUserMenu() {
               {user.email}
             </div>
           )}
+          {/* Shared-device family profile switcher — lets a kid switch
+              to a sibling on a shared computer without a new code. */}
+          <FamilyProfileSwitcher onSwitch={() => setOpen(false)} />
           <Link
             role="menuitem"
             href={href("/account")}

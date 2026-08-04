@@ -119,7 +119,7 @@ The "etymology" field is a structured object with 5 fields. The philosophy: KEEP
 
 The 5 fields are:
 
-1. "sourceLanguage" ג€” the name of the source language, TRANSLATED INTO THE USER'S LANGUAGE. Examples:
+1. "sourceLanguage" ג€” the name of the source language, TRANSLATED INTO THE USER'S INTERFACE LANGUAGE. This holds EVEN WHEN the searched word itself is in another language: a Hebrew word like "ביצה" shown to an ARABIC user must have sourceLanguage in Arabic (e.g. "العبرية التوراتية"), NEVER in Hebrew ("עברית מקראית"). Examples:
    - If user's language is Hebrew: "׳™׳•׳•׳ ׳™׳×", "׳׳˜׳™׳ ׳™׳×", "׳׳ ׳’׳׳™׳× ׳¢׳×׳™׳§׳”", "׳¢׳‘׳¨׳™׳× ׳׳§׳¨׳׳™׳×", "׳׳¨׳׳™׳×", "׳׳›׳“׳™׳×", "׳₪׳¨׳¡׳™׳× ׳¢׳×׳™׳§׳”", "׳׳©׳•׳ ׳, ׳, ׳´׳", "׳¢׳‘׳¨׳™׳× ׳׳•׳“׳¨׳ ׳™׳×"
    - If user's language is English: "Greek", "Latin", "Old English", "Biblical Hebrew", "Aramaic", "Akkadian", "Old Persian", "Mishnaic Hebrew", "Modern Hebrew"
    - If user's language is Arabic: "״§„ˆ†״§†״©", "״§„„״§״×†״©", "״§„״¥†״¬„״²״© ״§„‚״¯…״©", "״§„״¹״¨״±״© ״§„״×ˆ״±״§״×״©", "״§„״¢״±״§…״©"
