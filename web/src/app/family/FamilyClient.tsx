@@ -137,6 +137,23 @@ const COPY: Record<string, {
     back: "← Назад",
     capReached: `Вы достигли максимума в ${MAX_KIDS_PER_FAMILY} детей на семейном плане.`,
   },
+  ar: {
+    title: "عائلتك",
+    sub: "كل فرد من العائلة مستخدم مستقل، مع دفتره وسجلّه الخاص.",
+    add: "+ إضافة",
+    parents: "الوالدان",
+    children: "الأطفال",
+    empty: "لا يوجد أفراد عائلة بعد. ابدأ بإضافة طفلك الأول.",
+    pair: "ربط جهاز",
+    revoke: "فصل",
+    paired: "مرتبط",
+    owner: "الوالد الرئيسي",
+    notReady: "لإدارة العائلة تحتاج إلى اشتراك Family.",
+    goPricing: "الأسعار",
+    welcome: "مرحباً بك في Family! أضف أفراد عائلتك للبدء.",
+    back: "→ رجوع",
+    capReached: `وصلت إلى الحد الأقصى ${MAX_KIDS_PER_FAMILY} أطفال في خطة العائلة.`,
+  },
 };
 
 const ROLE_LABEL: Record<string, Record<"father" | "mother" | "boy" | "girl", string>> = {
@@ -145,6 +162,7 @@ const ROLE_LABEL: Record<string, Record<"father" | "mother" | "boy" | "girl", st
   ru: { father: "Папа", mother: "Мама", boy: "Сын", girl: "Дочь" },
   hi: { father: "पापा", mother: "मम्मी", boy: "बेटा", girl: "बेटी" },
   am: { father: "አባት", mother: "እናት", boy: "ወንድ ልጅ", girl: "ሴት ልጅ" },
+  ar: { father: "أبي", mother: "أمي", boy: "ابن", girl: "ابنة" },
 };
 
 // ─── Progress dashboard ────────────────────────────────────────────
@@ -214,6 +232,19 @@ const PROGRESS_COPY: Record<string, {
     pairCta: "Подключить устройство",
     noneYet: "В тетради пока нет слов. Как только ребёнок начнёт искать слова, они появятся здесь.",
     loading: "Загрузка прогресса...",
+  },
+  ar: {
+    title: "تقدّم أطفالك",
+    sub: "كم كلمة تعلّم كل طفل، وكم أُضيفت هذا الأسبوع. شاهد الحصيلة اللغوية تنمو أمام عينيك.",
+    familyTotal: "كلمة في دفاتر العائلة",
+    weekTotal: "كلمة جديدة هذا الأسبوع",
+    wordsInNotebook: "كلمة في الدفتر",
+    thisWeek: "هذا الأسبوع",
+    recentWords: "أحدث الكلمات",
+    notLinked: "جهاز هذا الطفل غير مرتبط بعد. اربطه لرؤية تقدّمه.",
+    pairCta: "ربط جهاز",
+    noneYet: "لا توجد كلمات في الدفتر بعد. حالما يبدأ طفلك بالبحث عن الكلمات، ستظهر هنا.",
+    loading: "جارٍ تحميل التقدّم...",
   },
 };
 
@@ -350,6 +381,14 @@ const NAV_COPY: Record<string, {
     homeTitle: "Overview", membersTitle: "Family members", settingsTitle: "Settings",
     langLabel: "Interface language", accountLabel: "My account", accountSub: "Details and sign in",
     subLabel: "My subscription", subSub: "Manage plan and billing",
+  },
+  ar: {
+    home: "الرئيسية", members: "أفراد العائلة", settings: "الإعدادات", dictionary: "العودة إلى القاموس", addMember: "إضافة فرد للعائلة",
+    greetMorning: "صباح الخير", greetNoon: "طاب يومك", greetEvening: "مساء الخير", greetNight: "طابت ليلتك",
+    kids: (n) => (n === 1 ? "طفل واحد في العائلة" : `${n} أطفال في العائلة`), words: (n) => `${n} كلمة تعلّمها`,
+    homeTitle: "نظرة عامة", membersTitle: "أفراد العائلة", settingsTitle: "الإعدادات",
+    langLabel: "لغة الواجهة", accountLabel: "حسابي", accountSub: "التفاصيل وتسجيل الدخول",
+    subLabel: "اشتراكي", subSub: "إدارة الخطة والدفع",
   },
   hi: {
     home: "होम", members: "परिवार", settings: "सेटिंग्स", dictionary: "शब्दकोश पर वापस", addMember: "परिवार सदस्य जोड़ें",
