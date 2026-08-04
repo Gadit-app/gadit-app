@@ -1,31 +1,21 @@
 import type { Metadata } from "next";
-import { AffiliatesPage } from "./AffiliatesClient";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
- * /affiliates — public marketing page for the Gadit Partner Program.
+ * /affiliates — RETIRED, forwards to /partners.
  *
- * Mission-led copy: leads with "help people in the world understand
- * words to the end" and converts that into recurring income. The
- * commission detail (30% × 12 months on monthly, 15% one-time on
- * yearly, 60-day cookie) follows the program we configured in Affonso.
- *
- * Every CTA on this page routes to the Affonso-hosted portal
- * (https://gaditapp.affonso.io) — that's where signup, dashboard,
- * coupon codes, and payouts live. Embedding the portal in-app is a
- * future iteration; for V1 the marketing page introduces the program
- * and the portal handles the actual mechanics.
+ * The old Affonso-hosted affiliate marketing page. Superseded by the
+ * in-house partner program marketing page at /partners. Keeps the
+ * language prefix so /he/affiliates lands on /he/partners.
  */
 export const metadata: Metadata = {
-  title: "Gadit, Affiliate Program",
-  description:
-    "Help people around the world understand words deeply, earn 30% recurring commission for 12 months on every paid Gadit subscription you refer.",
-  openGraph: {
-    title: "Gadit, Affiliate Program",
-    description:
-      "Help people around the world understand words deeply, earn 30% recurring commission for 12 months on every paid subscription you refer.",
-  },
+  robots: { index: false, follow: false },
 };
 
-export default function Page() {
-  return <AffiliatesPage />;
+export default async function Page() {
+  const h = await headers();
+  const lang = h.get("x-gadit-lang");
+  const prefix = lang && lang !== "en" ? `/${lang}` : "";
+  redirect(`${prefix}/partners`);
 }

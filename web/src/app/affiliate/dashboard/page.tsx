@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
-import { DashboardPage } from "./DashboardClient";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
- * /affiliate/dashboard — embedded Affonso partner dashboard for
- * signed-in Gadit users. Server endpoint at /api/affiliate/embed-token
- * mints a short-lived publicToken; this page pastes it into the
- * Affonso iframe.
+ * /affiliate/dashboard — RETIRED.
  *
- * noindex so search engines don't try to crawl what would always be
- * a login-walled URL. The page itself prompts login for anonymous
- * visitors via the auth context.
+ * This used to embed the Affonso partner dashboard. Gadit now runs its
+ * own in-house partner program (/partners signup, /partner/dashboard),
+ * so this legacy URL permanently forwards there. The language prefix
+ * from the middleware (x-gadit-lang) is preserved so /he/affiliate/...
+ * lands on /he/partners.
  */
 export const metadata: Metadata = {
-  title: "Affiliate Dashboard, Gadit",
   robots: { index: false, follow: false },
 };
 
-export default function Page() {
-  return <DashboardPage />;
+export default async function Page() {
+  const h = await headers();
+  const lang = h.get("x-gadit-lang");
+  const prefix = lang && lang !== "en" ? `/${lang}` : "";
+  redirect(`${prefix}/partners`);
 }

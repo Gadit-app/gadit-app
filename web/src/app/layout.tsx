@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari, Noto_Sans_Ethiopic } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
@@ -380,36 +379,10 @@ export default async function RootLayout({
               routes: kids on school devices are not ad-tracking
               subjects, by policy and by positioning. */}
           <MetaPixel />
-          {/* Affonso affiliate-tracking pixel, sets a 60-day
-              affonso_referral cookie when a visitor lands with
-              ?ref=CODE in the URL. Captured at checkout time and
-              attributed via Stripe metadata. afterInteractive is the
-              App Router-safe strategy for third-party tracking: it
-              still fires early enough to catch the ?ref= param on
-              the first navigation, while keeping initial paint
-              snappy.
-
-              Cookie duration: 60 days — must match the value set in
-              Affonso dashboard (Tracking & Coupons → Cookie Lifetime).
-              60 days matches the consumer audience: parents, teachers
-              and bloggers decide slowly — a referred reader who comes
-              back two weeks later still attributes to the affiliate.
-
-              First-party delivery: src points at /r/pixel.js (proxied
-              to cdn.affonso.io via next.config.ts rewrites) and
-              data-api-base="/r" tells the pixel to call /r/track and
-              /r/signups instead of api.affonso.io directly. This
-              defeats ad blockers and privacy guards that block known
-              tracker domains, so referral attribution doesn't silently
-              leak ~20-30% of conversions. Setup per
-              https://affonso.io/help/installation-guides/overview/first-party-delivery */}
-          <Script
-            src="/r/pixel.js"
-            strategy="afterInteractive"
-            data-affonso="cmq3oz349000p11r2lloq0xb2"
-            data-cookie_duration="60"
-            data-api-base="/r"
-          />
+          {/* Affonso affiliate tracking removed 2026-08-04. Gadit retired
+              the Affonso program in favour of its own in-house partner
+              system (/partners signup, RefCapture reads ?ref=CODE and
+              hits /api/partner/click). No third-party affiliate pixel. */}
         </body>
     </html>
   );

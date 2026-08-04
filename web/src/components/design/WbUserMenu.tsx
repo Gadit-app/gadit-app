@@ -332,7 +332,7 @@ export function WbUserMenu() {
           )}
           <Link
             role="menuitem"
-            href={href("/affiliate/dashboard")}
+            href={href("/partners")}
             onClick={() => setOpen(false)}
             style={{
               display: "block",

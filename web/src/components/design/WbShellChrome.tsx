@@ -96,7 +96,7 @@ function useNavLinks(): NavLink[] {
   links.push({ key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en });
   links.push({ key: "schools", href: href("/schools"), label: v2(lang, "navSchools") });
   links.push({ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") });
-  if (paid) links.push({ key: "affiliates", href: href("/affiliates"), label: v2(lang, "navAffiliates") });
+  if (paid) links.push({ key: "affiliates", href: href("/partners"), label: v2(lang, "navAffiliates") });
   return links;
 }
 

@@ -322,7 +322,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "How do I become a Gadit partner?",
             a: [
-              "Open /affiliates from any page and click \"Get your link\". You'll be signed in automatically (or prompted to sign up). The dashboard mints your unique link instantly. No waiting for approval.",
+              "Open /partners from any page and click \"Become a partner\". Sign up with your name and email, and your unique referral link plus a dashboard to track clicks and commissions are ready right away. No waiting for approval.",
               "The partner program is for Clear or Deep subscribers only. To recommend Gadit credibly, we ask that you use it yourself first. Upgrade from Pricing if you're on Basic.",
             ],
           },
@@ -675,7 +675,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "איך אני נהיה שותף של Gadit?",
             a: [
-              "פתחו את /affiliates מכל עמוד ולחצו \"קבלו את הלינק שלכם\". תיכנסו אוטומטית (או יתבקש מכם להירשם). הדאשבורד מייצר את הלינק הייחודי שלכם מיידית. אין המתנה לאישור.",
+              "פתיחת /partners מכל עמוד, ולחיצה על \"הצטרפות כשותף\". ההרשמה היא עם שם ואימייל, והלינק הייחודי מגיע מיד יחד עם דשבורד למעקב אחרי קליקים ועמלות. אין המתנה לאישור.",
               "תוכנית השותפים היא רק למנויי Clear או Deep. כדי להמליץ על Gadit בצורה אמינה, אנחנו מבקשים שתשתמשו בעצמכם קודם. שדרגו מ-Pricing אם אתם ב-Basic.",
             ],
           },
