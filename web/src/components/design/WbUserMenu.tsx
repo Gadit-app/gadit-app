@@ -61,9 +61,15 @@ const COPY: Record<Lang, Copy> = {
 // Tier chip colors. Mirrors the same scheme used on /account and
 // /pricing — Basic gray, Clear teal, Deep purple — so a signed-in user
 // recognises their plan badge across every surface.
-function tierStyle(plan: "basic" | "clear" | "deep"): {
-  label: string; bg: string; fg: string;
-} {
+function tierStyle(
+  plan: "basic" | "clear" | "deep",
+  opts: { familyId?: string | null; schoolId?: string | null } = {},
+): { label: string; bg: string; fg: string } {
+  // Family and Schools both store plan="deep" (same feature set). Show the
+  // REAL tier on the chip so a Family owner reads "Family", not "Deep"
+  // (Gadi 2026-08-05). Family = brand blue; Schools = mustard.
+  if (opts.familyId) return { label: "Family",  bg: "#DBEAFE", fg: "#1D4ED8" };
+  if (opts.schoolId) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
   if (plan === "deep")  return { label: "Deep",  bg: "#F3EEFF", fg: "#7C3AED" };
   if (plan === "clear") return { label: "Clear", bg: "#E0F6F4", fg: "#0E7490" };
   return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
@@ -143,7 +149,7 @@ export function WbUserMenu() {
     ? { insetInlineStart: 0 }
     : { insetInlineEnd: 0 };
 
-  const tier = tierStyle(plan);
+  const tier = tierStyle(plan, { familyId, schoolId });
 
   return (
     <div
