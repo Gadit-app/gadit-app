@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
-import { headers, cookies } from "next/headers";
 import { Suspense } from "react";
 import FamiliesLandingClient from "./FamiliesLandingClient";
+import { shareMetadata, type ShareCopy } from "@/lib/landing-metadata";
+
+/** Localized share (OG/WhatsApp) copy for the Family landing, reused by
+ *  the in-site page and the standalone /families/landing campaign page. */
+export const FAMILIES_OG: Record<string, ShareCopy> = {
+  he: { title: "Gadit למשפחות · מילון חזותי וחכם לכל המשפחה", description: "כל מילה מקבלת הסבר בגובה של ילד, תמונה, דוגמאות ומשחקים. אוצר המילים גדל, ההבנה משתפרת, והילד מצליח יותר בבית הספר. עד 5 ילדים, 14 ימי ניסיון חינם." },
+  en: { title: "Gadit for Families · A visual, smart dictionary for the whole family", description: "Every word gets a kid-level explanation, a picture, examples and games. Vocabulary grows, comprehension improves, and your child does better at school. Up to 5 kids, 14-day free trial." },
+  ar: { title: "Gadit للعائلات · قاموس ذكي ومصوَّر لكل أفراد العائلة", description: "كل كلمة تحصل على شرح بمستوى الطفل، وصورة، وأمثلة، وألعاب. تنمو الحصيلة اللغوية، ويتحسّن الفهم، ويتقدّم طفلك في المدرسة. حتى 5 أطفال، تجربة مجانية 14 يوماً." },
+  ru: { title: "Gadit для семьи · Умный визуальный словарь для всей семьи", description: "Каждое слово получает объяснение на уровне ребёнка, картинку, примеры и игры. Словарный запас растёт, понимание улучшается, ребёнок лучше учится. До 5 детей, 14 дней бесплатно." },
+};
 
 /**
  * /families — the Family-plan campaign landing page.
@@ -20,18 +29,8 @@ import FamiliesLandingClient from "./FamiliesLandingClient";
  * fallback for every other locale.
  */
 
-export async function generateMetadata(): Promise<Metadata> {
-  const headersList = await headers();
-  const cookieStore = await cookies();
-  const lang =
-    headersList.get("x-gadit-lang") ?? cookieStore.get("gadit-lang")?.value ?? "en";
-  const he = lang === "he";
-  return {
-    title: he ? "Gadit למשפחות, מקום אחד בטוח להבין כל מילה" : "Gadit for Families, one safe place to understand every word",
-    description: he
-      ? "כל המשמעויות, תמונה לכל משמעות והסבר בגובה של ילד. בלי צ'אט פתוח, בלי פרסומות. עד 5 ילדים במנוי אחד, 14 ימי ניסיון חינם."
-      : "Every meaning, a picture for each one, and explanations a child understands. No open chat, no ads. Up to 5 kids on one plan, 14-day free trial.",
-  };
+export function generateMetadata(): Promise<Metadata> {
+  return shareMetadata(FAMILIES_OG);
 }
 
 export default function FamiliesPage() {
