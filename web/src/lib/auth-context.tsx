@@ -84,6 +84,11 @@ interface AuthContextType {
    *  a code at /c/<CODE> without authenticating — so this is set on
    *  the principal/coordinator account only. null = no Schools sub. */
   schoolId: string | null;
+  /** Family membership role for paired members: "kid" or "parent"
+   *  (secondary parents). null for the billing owner and for anyone
+   *  who is not a paired family member. Kids get a stripped-down,
+   *  commerce-free UI (nav + route guard). */
+  familyRole: "kid" | "parent" | null;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -109,6 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState<UserPlan>("basic");
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
+  const [familyRole, setFamilyRole] = useState<"kid" | "parent" | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -163,6 +169,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setPlan("basic");
       setFamilyId(null);
       setSchoolId(null);
+      setFamilyRole(null);
       return;
     }
     const db = getFirebaseDb();
@@ -174,12 +181,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setPlan(p);
         setFamilyId((data?.familyId as string) ?? null);
         setSchoolId((data?.schoolId as string) ?? null);
+        const fr = data?.familyRole;
+        setFamilyRole(fr === "kid" || fr === "parent" ? fr : null);
       },
       () => {
-        // If we can't read (e.g. security rules block it), default to basic
+        // If we can't read (e.g. security rules block it), default to basic.
+        // familyRole stays null → treated as an adult, never a kid, so a
+        // read failure can never lock a grown-up out of commercial pages.
         setPlan("basic");
         setFamilyId(null);
         setSchoolId(null);
+        setFamilyRole(null);
       }
     );
     return unsub;
@@ -306,7 +318,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, familyId, schoolId,
+      user, loading, plan, familyId, schoolId, familyRole,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,

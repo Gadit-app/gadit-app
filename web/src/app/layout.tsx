@@ -9,6 +9,7 @@ import LoginModal from "@/components/LoginModal";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
+import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import MetaPixel from "@/components/MetaPixel";
@@ -372,6 +373,7 @@ export default async function RootLayout({
           </LangProvider>
           <ServiceWorkerRegister />
           <RefCapture />
+          <KidRouteGuard />
           <Analytics />
           <SpeedInsights />
           {/* Meta Pixel — base code + funnel standard events (see

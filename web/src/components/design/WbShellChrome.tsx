@@ -84,9 +84,22 @@ const FAMILIES_LABEL: Record<string, string> = {
 };
 
 function useNavLinks(): NavLink[] {
-  const { user, plan } = useAuth();
+  const { user, plan, familyRole } = useAuth();
   const { lang } = useLang();
   const href = useHref();
+
+  // A kid on a Family plan gets a stripped-down, commerce-free nav
+  // (council 2026-08-04): only their own words + games. No Features,
+  // Families, Schools, Pricing or Partners — a child can't buy, can't
+  // recruit, can't switch schools, so those links are noise or a trap.
+  // The parent/subscriber nav below is unchanged (Gadi's call).
+  if (familyRole === "kid") {
+    return [
+      { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
+      { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
+    ];
+  }
+
   const paid = !!user && (plan === "clear" || plan === "deep");
   const links: NavLink[] = [
     { key: "features", href: href("/features"), label: v2(lang, "navFeatures") },

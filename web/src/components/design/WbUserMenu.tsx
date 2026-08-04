@@ -78,7 +78,7 @@ function tierStyle(
 import { FamilyProfileSwitcher } from "./FamilyProfileSwitcher";
 
 export function WbUserMenu() {
-  const { user, plan, familyId, schoolId, logout } = useAuth();
+  const { user, plan, familyId, schoolId, familyRole, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -330,24 +330,27 @@ export function WbUserMenu() {
               {c.school}
             </Link>
           )}
-          <Link
-            role="menuitem"
-            href={href("/partners")}
-            onClick={() => setOpen(false)}
-            style={{
-              display: "block",
-              padding: "10px 12px",
-              borderRadius: 8,
-              color: "var(--ink, #111827)",
-              textDecoration: "none",
-              fontSize: 14,
-              fontWeight: 500,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-          >
-            {c.dashboard}
-          </Link>
+          {/* Partner area is commercial — never shown to a kid. */}
+          {familyRole !== "kid" && (
+            <Link
+              role="menuitem"
+              href={href("/partners")}
+              onClick={() => setOpen(false)}
+              style={{
+                display: "block",
+                padding: "10px 12px",
+                borderRadius: 8,
+                color: "var(--ink, #111827)",
+                textDecoration: "none",
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {c.dashboard}
+            </Link>
+          )}
           <button
             role="menuitem"
             type="button"
