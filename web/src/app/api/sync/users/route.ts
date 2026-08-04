@@ -22,7 +22,7 @@ import type { UserRecord } from "firebase-admin/auth";
  * RESPONSE (bare JSON array, one row per user that has an email):
  *   [
  *     { "email": "parent@example.com", "status": "active",
- *       "plan": "deep", "created_at": "2026-01-05" },
+ *       "plan": "family", "plan_real": "family", "created_at": "2026-01-05" },
  *     ...
  *   ]
  *   X-Total-Count header carries the row count.
@@ -30,12 +30,23 @@ import type { UserRecord } from "firebase-admin/auth";
  * status: "active"  = paying subscriber (subscriptionStatus active or
  *                     trialing, on a paid plan, not a comp account)
  *         "registered" = has an account but is not currently paying
- * plan:  "basic" | "clear" | "deep"  (Family/Schools bill as "deep")
+ * plan / plan_real: the REAL tier, "basic" | "clear" | "deep" | "family"
+ *   | "schools". Family and Schools are no longer folded into "deep"
+ *   (Gadi 2026-08-05, college request) so the college can color-code each
+ *   student by their actual Gadit tier. `plan` and `plan_real` are the
+ *   same value — `plan_real` is a stable explicit alias.
  */
 
 export const maxDuration = 60;
 
-type Row = { email: string; status: "active" | "registered"; plan: string; created_at: string };
+type Row = { email: string; status: "active" | "registered"; plan: string; plan_real: string; created_at: string };
+
+/** The real tier, unfolded: Family/Schools are their own tiers, not "deep". */
+function realTier(d: FirebaseFirestore.DocumentData): string {
+  if (d.familyId) return "family";
+  if (d.schoolId) return "schools";
+  return (d.plan as string) || "basic";
+}
 
 export async function GET(req: NextRequest) {
   const expected = process.env.GADIT_SYNC_TOKEN;
@@ -81,10 +92,10 @@ export async function GET(req: NextRequest) {
     const email = u.email ?? (typeof d.email === "string" ? (d.email as string) : null);
     if (!email) continue; // no email = useless for cross-referencing
 
-    const plan = (d.plan as string) || "basic";
+    const tier = realTier(d); // basic | clear | deep | family | schools
     const subStatus = (d.subscriptionStatus as string) || "";
     const comp = d.comp === true;
-    const paying = !comp && plan !== "basic" && (subStatus === "active" || subStatus === "trialing");
+    const paying = !comp && tier !== "basic" && (subStatus === "active" || subStatus === "trialing");
     if (onlyActive && !paying) continue;
 
     const created = u.metadata.creationTime
@@ -94,7 +105,8 @@ export async function GET(req: NextRequest) {
     rows.push({
       email: email.toLowerCase(),
       status: paying ? "active" : "registered",
-      plan,
+      plan: tier,
+      plan_real: tier,
       created_at: created,
     });
   }
