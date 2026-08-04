@@ -125,7 +125,7 @@ type Copy = {
   footerPrivacy: string;
 };
 
-const COPY: Record<"he" | "en" | "ru", Copy> = {
+const COPY: Record<string, Copy> = {
   he: {
     heroBadge: "מילון חזותי וחכם לכל המשפחה",
     whatIs: "Gadit הוא מילון חכם וחזותי לילדים: כל מילה מקבלת הסבר בגובה העיניים של הילד, תמונה, דוגמאות, ומשחקים וחידונים שהופכים לימוד מילים לכיף. אוצר המילים גדל, הילד מבין את הנקרא, ומצליח יותר בלימודים.",
@@ -726,19 +726,141 @@ const COPY: Record<"he" | "en" | "ru", Copy> = {
     footerTerms: "Условия",
     footerPrivacy: "Конфиденциальность",
   },
+  ar: {
+    heroBadge: "قاموس ذكي ومصوَّر لكل أفراد العائلة",
+    whatIs: "Gadit قاموس ذكي ومصوَّر للأطفال: كل كلمة تحصل على شرح بمستوى الطفل، وصورة، وأمثلة، وألعاب واختبارات تجعل تعلُّم الكلمات ممتعاً. تنمو الحصيلة اللغوية، ويتحسّن الفهم القرائي، ويتقدّم طفلك في المدرسة.",
+    ctaMicro: "",
+    trustLine: "حتى 5 أطفال، كلٌّ حسب مستواه",
+    credLine: "مبني على 15 عاماً من الخبرة مع أكثر من 15,000 من الآباء والطلاب والمعلمين",
+    credKicker: "من نحن",
+    credTitle: "15 عاماً في التعليم. والآن في أداة واحدة بين يدَي طفلك.",
+    credBody: "بُني Gadit على يد فريق يملك 15 عاماً من الخبرة في التعليم، عمل مع أكثر من 15,000 من الآباء والطلاب والمعلمين. كل ما رأيناه ينجح مرة بعد مرة، في الصف وفي البيت، وضعناه في أداة واحدة بسيطة يستطيع الطفل استخدامها بمفرده.",
+    proofTitle: "دفتر الكلمات · مثال",
+    proofBig: "12 كلمة جديدة هذا الأسبوع",
+    proofWords: ["حلم", "واضح", "متردّد"],
+    angles: {
+      vocab: { h1: "حصيلة طفلك اللغوية تنمو. كلمة بعد كلمة.", sub: "كل كلمة يسأل عنها طفلك تستقرّ في دفتر كلماته الشخصي في Gadit: مع صورة، وشرح بمستوى الطفل، وتدريب قصير يعيدها إليه حتى تصبح ملكه. افتح الدفتر في نهاية الشهر، وشاهد الحصيلة تكبر، كلمة بعد كلمة." },
+      relief: { h1: "توقّف عن أن تكون قاموس العائلة", sub: "من اليوم، حين يسأل طفلك «ماذا تعني هذه الكلمة؟»، يجد مكاناً واحداً يعرف فيه الإجابة بنفسه: كل المعاني، وصورة لكل واحد منها، وشرح بمستوى الطفل. بلا محادثة مفتوحة، بلا إعلانات." },
+      anxiety: { h1: "طفلك يقرأ كل كلمة بشكل صحيح، لكنه لا يفهم حقاً", sub: "لا يتوقّف دائماً ليسأل. يتخطّى كلمة لا يفهمها، ويكمل، فلا تترسّخ المادة. ومع الوقت يتحوّل ذلك إلى إحباط من المدرسة وشعور بأن «أنا لا أستطيع». يمنح Gadit طفلك مكاناً واحداً يتوقّف فيه، ويفهم حقاً، ويعود إلى الدرس والكلمة بين يديه." },
+      safe: { h1: "الشاشة الوحيدة التي تسلّمها لطفلك دون قلق", sub: "بلا محادثة مفتوحة. بلا خلاصة لا تنتهي. بلا إعلانات. مكان واحد نظيف يكتب فيه الطفل كلمة، يفهمها كاملة، ويعود إلى واجباته." },
+    },
+    heroCta: "ابدأ تجربتك المجانية لمدة 14 يوماً",
+    heroTrust: "بلا محادثة مفتوحة · بلا إعلانات · إلغاء بنقرة واحدة",
+    ownerCta: "انتقل إلى مساحة عائلتك",
+    stats: ["14 لغة", "صورة لكل معنى", "حتى 5 أطفال", "إلغاء بنقرة واحدة"],
+    demoKicker: "النتيجة",
+    demoTitle: "طفلك يفهم كل كلمة، وحصيلته اللغوية تنمو كل يوم",
+    painKicker: "الألم الحقيقي",
+    painTitle: "طفلك يقرأ، لكنه لا يفهم دائماً فهماً حقيقياً",
+    painBody1: "أنت في الواقع سعيد حين يتوقّف طفلك ليسأل عن معنى كلمة. المشكلة في كل الكلمات التي لا يتوقّف ليسأل عنها. يتخطّاها، ويكمل القراءة، فلا تترسّخ المادة. تبقى الحصيلة اللغوية ضعيفة، وينكسر الفهم كلمة بعد كلمة.",
+    painBody2: "والأمر يمسّ ما هو أبعد بكثير من الدرجة. الطفل الذي لا يفهم يشعر بأنه ليس جيداً بما يكفي، ويُحبَط من المدرسة، ويفقد ثقته. ويحدث ذلك بصمت، دون أن يستطيع أحد أن يشير إلى المكان الذي انقطع فيه الخيط.",
+    reframe: "وهنا بالضبط يأتي دور Gadit.",
+    puzzleKicker: "ما يحدث في رأس الطفل",
+    puzzleTitle: "النص أحجية. وكل كلمة قطعة.",
+    puzzleBody: "حين يقرأ الطفل، يركّب ذهنه صورة كاملة من الكلمات. كل كلمة يفهمها قطعة تستقرّ في مكانها. وكل كلمة ناقصة ثغرة في الصورة. ثلاث أو أربع ثغرات فقط، ولا يعود الطفل يرى الصورة، حتى لو نطق كل حرف.",
+    puzzleBefore: "فقرة بكلمات ناقصة",
+    puzzleAfter: "مع Gadit، كل قطعة في مكانها",
+    puzzleLine: "حين تكون كل كلمة واضحة، يرى الطفل الصورة كاملة.",
+    chainKicker: "كيف يعمل",
+    chainTitle: "كل ما يحصل عليه طفلك، مع كل كلمة",
+    chainSteps: ["طفلك يكتب كلمة لا يفهمها", "يحصل على شرح في مستوى نظره، وصورة وثلاثة أمثلة", "تُحفَظ الكلمة في دفتره الشخصي", "وتعود في تدريب قصير، حتى تصبح ملكه حقاً"],
+    howBlocks: [
+      { t: "اكتب الكلمة", b: "يكتب طفلك أي كلمة لا يفهمها، في وضع الأطفال، في مكان نظيف وآمن." },
+      { t: "تعريف واضح", b: "شرح في مستوى نظر الطفل، بلا كلمات صعبة تشرح كلمات صعبة." },
+      { t: "ثلاثة أمثلة", b: "جُمل حقيقية تُظهر كيف تعيش الكلمة داخل النص، لا مجرّد تعريف جاف." },
+      { t: "صورة لكل معنى", b: "لأن الأطفال يتذكّرون ما يرونه أفضل بكثير مما يُكتب لهم." },
+      { t: "السياق", b: "الصق جملة من الكتاب، ويحدّد Gadit بالضبط المعنى الذي يناسبها." },
+      { t: "دفتر شخصي", b: "كل كلمة بحث عنها طفلك تُحفَظ في دفتره، ولا تهرب." },
+      { t: "اختبار قصير", b: "سؤال سريع يعيد الكلمة قبل أن تنساها بلحظة." },
+      { t: "لعبة", b: "تعلُّم باللعب، على الكلمات التي بحث عنها طفلك بنفسه." },
+    ],
+    chainCost: "",
+    chainTurnTitle: "وهذا ما تحصل عليه",
+    chainTurnBody: "كل كلمة تعثّر عندها طفلك تصبح كلمة يعرفها، وتراها بالأبيض والأسود: كم كلمة أغلق، أسبوعاً بعد أسبوع. بدل أن تأمل أن شيئاً ما يتحسّن، تشاهده يحدث ببساطة.",
+    dashKicker: "لوحة الآباء",
+    dashTitle: "ترى بالضبط كم تعلّم كل طفل",
+    dashBody: "لكل طفل دفتر كلمات شخصي ينمو. في لوحتك ترى، بنظرة واحدة، كم كلمة تعلّم كل طفل، وكم كلمة أُضيفت هذا الأسبوع، وأحدث كلماته. أي أداة أخرى تجيب طفلك ثم تنسى. أما Gadit فيتذكّر، وأنت ترى التقدّم أسبوعاً بعد أسبوع.",
+    dashKids: [ { name: "نور", total: 47, week: 12 }, { name: "آدم", total: 31, week: 8 }, { name: "مايا", total: 63, week: 15 } ],
+    dashWordsLabel: "كلمة في الدفتر",
+    dashWeekLabel: "هذا الأسبوع",
+    featuresKicker: "ما بداخله",
+    features: [
+      { kicker: "كل معنى", title: "كلمة واحدة. كل المعاني. وصورة لكل واحد.", body: "غالباً ما تحمل الكلمة الواحدة عدة معانٍ مختلفة، وهنا يقع الأطفال في الحيرة. يعرضها Gadit جميعها في مكان واحد، كلٌّ مع ثلاثة أمثلة حقيقية وصورته الخاصة، لأن دماغ الطفل يتذكّر الصور أفضل بكثير من الكلمات." },
+      { kicker: "وضع الأطفال", title: "شروحات في مستوى نظر طفلك", body: "زرّ واحد، ويتحوّل كل شرح إلى لغة يفهمها فعلاً طفل في الثامنة. بلا كلمات صعبة تشرح كلمات صعبة، بلا تعريفات تدور حول نفسها. مجرّد فهم." },
+      { kicker: "السياق", title: "الصق جملة، واحصل على المعنى الصحيح", body: "معظم الكلمات تحمل أكثر من معنى، وهنا يضيع الأطفال. الصق الجملة من الكتاب أو ورقة العمل، ويحدّد Gadit بالضبط أي معنى يناسب." },
+      { kicker: "دفتر شخصي", title: "الكلمات لا تهرب", body: "كل كلمة يبحث عنها طفلك تستقرّ في دفتره الشخصي، وتدريب قصير وذكي يعيدها قبل أن تنساها بلحظة. هكذا تُبنى الحصيلة اللغوية حقاً، كلمة كلمة." },
+      { kicker: "ملف لكل طفل", title: "لكل طفل مساحته الخاصة", body: "كل طفل في العائلة يحصل على ملف منفصل: دفتره، وتدريبه، وسجلّه. يتكيّف وضع الأطفال مع الشرح، بسيطاً وواضحاً للصغار وأكمل للكبار، ولا أحد يتعدّى على كلمات أحد." },
+      { kicker: "ألعاب الكلمات", title: "ألعاب تعليمية على كلمات طفلك", body: "اختبارات وألعاب قصيرة مبنية من الكلمات التي بحث عنها طفلك فعلاً. بضع دقائق من اللعب، وتنمو الحصيلة اللغوية دون جهد." },
+      { kicker: "لغة ثانية", title: "أفضل مساعد للواجبات في لغة ثانية", body: "يكتب طفلك كلمة بالإنجليزية ويحصل على شرح بسيط بلغته هو، مع صورة وأمثلة. بلا تنقّل بين قاموس ومترجم ويوتيوب." },
+    ],
+    midCtaTitle: "ابدأ الآن، وشاهد حصيلة طفلك اللغوية تنمو يوماً بعد يوم",
+    midCta: "ابدأ تجربتك المجانية لمدة 14 يوماً",
+    compareKicker: "الفرق",
+    compareTitle: "لماذا لا تكتفي بالبحث في جوجل أو سؤال روبوت محادثة؟",
+    compareGadit: "Gadit",
+    compareOther: "الإنترنت المفتوح",
+    compareRows: [
+      { label: "صفحة واحدة نظيفة لكل كلمة", gadit: true, other: false },
+      { label: "شروحات بمستوى الطفل", gadit: true, other: false },
+      { label: "صورة لكل معنى", gadit: true, other: false },
+      { label: "دفتر وتدريب يترسّخان", gadit: true, other: false },
+      { label: "إعلانات وروابط في كل اتجاه", gadit: false, other: true },
+      { label: "محادثة مفتوحة بلا حدود", gadit: false, other: true },
+    ],
+    safeTitle: "منطقة منفصلة ونظيفة. لا بوابة إلى أي مكان آخر.",
+    safeBody: "Gadit مساحة مغلقة تماماً: بلا محادثة مفتوحة، بلا خلاصة، بلا إعلانات، بلا روابط خارجية. لا يُسحَب الطفل من هنا إلى تيك توك أو أي تطبيق آخر. هناك شيء واحد يُفعَل هنا: فهم كلمة، والعودة إلى الدراسة.",
+    safeLine: "شاشة واحدة تسلّمها لطفلك بصفاء ذهن.",
+    stackTitle: "ما تشمله خطة العائلة",
+    stackItems: ["عمليات بحث غير محدودة لكل أفراد العائلة", "كل معنى، مع صورة لكل واحد", "وضع الأطفال لكل عمر", "فحص الجُمل مع ملاحظات فورية", "دفتر شخصي وتدريب ذكي لكل طفل", "ألعاب واختبارات كلمات", "حتى 5 أطفال بملفات منفصلة", "14 لغة بدعم كامل"],
+    priceKicker: "الأسعار",
+    priceTitle: "خطة العائلة",
+    trialBadge: "تجربة مجانية 14 يوماً",
+    yearly: "$59 / سنة",
+    yearlyNote: "أي $4.92 في الشهر لكل أفراد العائلة، ويوفّر لك ما يقارب شهرين مقارنة بالدفع الشهري",
+    priceAnchor: "أقل من حصة درس خصوصي واحدة، لسنة كاملة، ولكل طفل في البيت",
+    monthly: "$5.99 / شهر",
+    billedYearly: "سنوي",
+    billedMonthly: "شهري",
+    yearlySave: "-18%",
+    priceCta: "ابدأ التجربة",
+    cancelNote: "لا خصم إلا بعد الـ 14 يوماً. ألغِ في أي وقت من صفحة حسابك، بنقرة واحدة.",
+    singleChild: "طالب واحد فقط في البيت؟ خطة Deep بـ $4.99/شهر. وبقليل أكثر يمكنك إضافة حتى 5 أطفال.",
+    guaranteeTitle: "اختبارك: أسبوعان",
+    guaranteeBody: "جرّبه أسبوعين من الاستخدام الحقيقي، مجاناً. إن لم يجمع دفتر طفلك بحلول اليوم الـ 14 ما لا يقلّ عن 20 كلمة جديدة، ألغِ بنقرة واحدة ولم تدفع شيئاً.",
+    faqTitle: "أسئلة يطرحها الآباء",
+    faq: [
+      { q: "ماذا أحصل عليه مع Gadit؟", a: "كل كلمة يبحث عنها طفلك تحصل على صفحة واحدة نظيفة: كل المعاني، وشرح بمستوى الطفل (وضع الأطفال)، وثلاثة أمثلة حقيقية، وصورة لكل معنى. إضافة إلى السياق (الصق جملة واحصل على المعنى الصحيح)، ودفتر كلمات شخصي بتدريب ذكي، وألعاب واختبارات كلمات، ولوحة للآباء تُظهر كم تعلّم كل طفل، وحتى 5 أطفال بملفات منفصلة، كل ذلك بـ 14 لغة، في مساحة مغلقة وآمنة بلا محادثة مفتوحة وبلا إعلانات." },
+      { q: "لماذا لا أكتفي بسؤال روبوت محادثة أو جوجل؟", a: "لأن تلك أدوات للكبار. جوجل يعيد إعلانات وروابط في كل اتجاه، وروبوت المحادثة المفتوح محادثة بلا حدود لا يترك فيها أي والد طفله وحده. أما Gadit فمبني على العكس تماماً: صفحة واحدة مغلقة ونظيفة لكل كلمة، بمستوى الطفل، بلا طريقة للضياع." },
+      { q: "كيف أعرف أن طفلي يتقدّم فعلاً؟", a: "تحصل على لوحة للآباء. بنظرة واحدة ترى كم كلمة تعلّم كل طفل، وكم كلمة أُضيفت هذا الأسبوع، وأحدث كلماته. كل أداة أخرى تجيب الطفل ثم تنسى؛ أما Gadit فيحفظ كل كلمة في دفتر الطفل الشخصي، فتشاهد الحصيلة اللغوية تنمو أسبوعاً بعد أسبوع." },
+      { q: "لأي الأعمار هو مناسب؟", a: "قلب Gadit هو أطفال سنّ المدرسة، من الصف الأول حتى الثانوية. يشرح وضع الأطفال ببساطة للصغار، والشروحات الكاملة تخدم المراهقين والآباء أيضاً. الوالد هو من يفتح الحساب." },
+      { q: "هل يساعد في الإنجليزية واللغات الأخرى؟", a: "كثيراً. يستطيع الطفل البحث عن كلمة بالإنجليزية ويحصل على شرح بسيط بلغته هو، مع صورة وأمثلة، وهو بالضبط المساعد الناقص في البيت. وهو يعمل بـ 14 لغة، فيمكن للطفل أن يحصل على الشرح باللغة التي تتحدّثها في البيت أيضاً." },
+      { q: "كم يكلّف؟", a: "$59 في السنة أو $5.99 في الشهر، بعد تجربة الـ 14 يوماً. بلا رسوم خفية، وتلغي في أي وقت بنقرة واحدة." },
+      { q: "كم طفلاً يمكنني إضافته؟", a: "حتى 5 أطفال في خطة عائلة واحدة، لكل واحد ملفه ودفتره وتدريبه." },
+      { q: "هل يمكننا تجربته دون التزام؟", a: "نعم. تبدأ التجربة ببطاقة، لكن أول خصم يحدث فقط عند انتهاء الـ 14 يوماً. ألغِ في أي وقت قبل ذلك، بنقرة واحدة، ولا تدفع شيئاً." },
+    ],
+    finalTitle: "ابدأ اليوم، وشاهد الحصيلة اللغوية تنمو",
+    finalSub: "أسبوعان مجاناً. إلغاء بنقرة واحدة. وطفل يتعلّم أن يفهم الكلمات بنفسه.",
+    finalCta: "ابدأ تجربتك المجانية لمدة 14 يوماً",
+    footerTerms: "الشروط",
+    footerPrivacy: "الخصوصية",
+  },
 };
 
 /* ─────────────────── product mockups (per feature) ─────────────────── */
 
 function MockMeanings({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
-  const word = ru ? "ключ" : he ? "עלה" : "bat";
-  const m1 = ru
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const word = ar ? "عين" : ru ? "ключ" : he ? "עלה" : "bat";
+  const m1 = ar
+    ? { t: "نبع ماء يخرج من الأرض", ex: "«شربنا من عين باردة في الجبل.»" }
+    : ru
     ? { t: "Предмет, которым открывают замок", ex: "«Я потерял ключ от двери.»" }
     : he
     ? { t: "צמח: החלק הירוק של העץ", ex: "\"עלה אדום נפל מהעץ בסתיו.\"" }
     : { t: "The animal that flies at night", ex: "\"A bat flew out of the cave.\"" };
-  const m2 = ru
+  const m2 = ar
+    ? { t: "العضو الذي نرى به", ex: "«أغمض عينيه ونام بهدوء.»" }
+    : ru
     ? { t: "Родник, источник воды", ex: "«Из земли бил холодный ключ.»" }
     : he
     ? { t: "פועל: טיפס למעלה, התרומם", ex: "\"המחיר עלה בחודש האחרון.\"" }
@@ -764,15 +886,17 @@ function MockMeanings({ lang }: { lang: string }) {
 }
 
 function MockKids({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-pill">{ar ? "وضع الأطفال" : ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
         <span className="fam-mock-toggle-on" />
       </div>
       <div className="fam-mock-bubble">
-        {ru
+        {ar
+          ? "«متردّد» يعني أنك لا تريد أن تفعل شيئاً حقاً، وقدماك تمشيان ببطء. مثل المشي إلى طبيب الأسنان."
+          : ru
           ? "«Упорный» — это когда ты сильно решил и не сдаёшься, даже когда трудно. Как когда учишься кататься на велосипеде и не бросаешь, пока не получится."
           : he
           ? "\"נחוש\" זה כשמחליטים משהו חזק חזק בלב, וממשיכים גם כשקשה. כמו כשאתם מתאמנים על אופניים ולא מוותרים עד שמצליחים."
@@ -790,11 +914,13 @@ function MockKids({ lang }: { lang: string }) {
 }
 
 function MockContext({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-sentence">
-        {ru ? (
+        {ar ? (
+          <><mark>حلمي</mark> أن أصبح طبيبة</>
+        ) : ru ? (
           <>Моя <mark>мечта</mark> — стать врачом</>
         ) : he ? (
           <>ה<mark>חלום</mark> שלי הוא להיות רופאה</>
@@ -806,7 +932,7 @@ function MockContext({ lang }: { lang: string }) {
       <div className="fam-mock-picked">
         <CheckIcon color="#0EA5A5" />
         <span>
-          {ru ? "Значение здесь: цель или желание, которое хочется осуществить" : he ? "המשמעות כאן: שאיפה או מטרה שרוצים להגשים" : "The meaning here: a hope or goal you want to reach"}
+          {ar ? "المعنى هنا: أمنية أو هدف تريد تحقيقه" : ru ? "Значение здесь: цель или желание, которое хочется осуществить" : he ? "המשמעות כאן: שאיפה או מטרה שרוצים להגשים" : "The meaning here: a hope or goal you want to reach"}
         </span>
       </div>
     </div>
@@ -814,16 +940,16 @@ function MockContext({ lang }: { lang: string }) {
 }
 
 function MockNotebook({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
-  const words = ru ? ["мечта", "яркий", "упорный"] : he ? ["חלום", "מרהיב", "נחוש"] : ["dream", "vivid", "reluctant"];
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const words = ar ? ["حلم", "واضح", "متردّد"] : ru ? ["мечта", "яркий", "упорный"] : he ? ["חלום", "מרהיב", "נחוש"] : ["dream", "vivid", "reluctant"];
   return (
     <div className="fam-mock">
-      <div className="fam-mock-nb-title">{ru ? "Тетрадь Ноа" : he ? "המחברת של נועה" : "Noa's notebook"}</div>
+      <div className="fam-mock-nb-title">{ar ? "دفتر نور" : ru ? "Тетрадь Ноа" : he ? "המחברת של נועה" : "Noa's notebook"}</div>
       {words.map((w, i) => (
         <div key={i} className="fam-mock-nb-row">
           <CheckIcon color={i < 2 ? "#0EA5A5" : "#d1d5db"} />
           <span>{w}</span>
-          {i === 2 && <span className="fam-mock-nb-due">{ru ? "повторить сегодня" : he ? "לתרגול היום" : "practice today"}</span>}
+          {i === 2 && <span className="fam-mock-nb-due">{ar ? "للتدريب اليوم" : ru ? "повторить сегодня" : he ? "לתרגול היום" : "practice today"}</span>}
         </div>
       ))}
     </div>
@@ -831,8 +957,14 @@ function MockNotebook({ lang }: { lang: string }) {
 }
 
 function MockProfiles({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
-  const kids = ru
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const kids = ar
+    ? [
+        { n: "نور", g: "الصف الثاني", c: "#0EA5A5" },
+        { n: "آدم", g: "الصف السادس", c: "#7C3AED" },
+        { n: "مايا", g: "الصف التاسع", c: "#D97706" },
+      ]
+    : ru
     ? [
         { n: "Ноа", g: "2 класс", c: "#0EA5A5" },
         { n: "Идо", g: "6 класс", c: "#7C3AED" },
@@ -865,24 +997,24 @@ function MockProfiles({ lang }: { lang: string }) {
 }
 
 function MockGames({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock fam-mock-games">
       <div className="fam-mock-game" style={{ background: "rgba(14,165,165,0.1)" }}>
         <PuzzleIcon />
-        <span>{ru ? "Ловушка близнецов" : he ? "תאומות במלכודת" : "Twin Trap"}</span>
+        <span>{ar ? "فخ التوائم" : ru ? "Ловушка близнецов" : he ? "תאומות במלכודת" : "Twin Trap"}</span>
       </div>
       <div className="fam-mock-game" style={{ background: "rgba(124,58,237,0.1)" }}>
         <ClockIcon />
-        <span>{ru ? "Путешественник во времени" : he ? "מסע בזמן" : "Time Traveler"}</span>
+        <span>{ar ? "المسافر عبر الزمن" : ru ? "Путешественник во времени" : he ? "מסע בזמן" : "Time Traveler"}</span>
       </div>
-      <div className="fam-mock-score">{ru ? "Серия 6 дней 🔥" : he ? "רצף של 6 ימים 🔥" : "6-day streak 🔥"}</div>
+      <div className="fam-mock-score">{ar ? "سلسلة 6 أيام 🔥" : ru ? "Серия 6 дней 🔥" : he ? "רצף של 6 ימים 🔥" : "6-day streak 🔥"}</div>
     </div>
   );
 }
 
 function MockEnglish({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
@@ -893,9 +1025,9 @@ function MockEnglish({ lang }: { lang: string }) {
           <PersonIcon />
         </div>
         <div>
-          <div className="fam-mock-meaning-t">{ru ? "Неохотно, без желания" : he ? "מהסס, לא ממש רוצה" : "Not really wanting to"}</div>
+          <div className="fam-mock-meaning-t">{ar ? "متردّد، لا يريد فعلاً" : ru ? "Неохотно, без желания" : he ? "מהסס, לא ממש רוצה" : "Not really wanting to"}</div>
           <div className="fam-mock-meaning-ex">
-            {ru ? "«Он неохотно принялся за уроки.»" : he ? "\"הוא ניגש לשיעורים בחוסר רצון.\"" : "\"He was reluctant to start his homework.\""}
+            {ar ? "«كان متردّداً في البدء بواجباته.»" : ru ? "«Он неохотно принялся за уроки.»" : he ? "\"הוא ניגש לשיעורים בחוסר רצון.\"" : "\"He was reluctant to start his homework.\""}
           </div>
         </div>
       </div>
@@ -909,9 +1041,11 @@ function MockEnglish({ lang }: { lang: string }) {
  *  every word a solid piece, and the picture is whole. Words ARE the
  *  pieces of the picture. */
 function PuzzleMock({ lang, beforeLabel, afterLabel }: { lang: string; beforeLabel: string; afterLabel: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   type Tok = string | { k: string };
-  const tokens: Tok[] = ru
+  const tokens: Tok[] = ar
+    ? ["كان", "البحّار", { k: "مصمّماً" }, "على", "الوصول", "إلى", "الجزيرة،", "ورغم", { k: "العاصفة" }, "لم", { k: "يتردّد" }, "أبداً"]
+    : ru
     ? ["Моряк", "твёрдо", { k: "решил" }, "добраться", "до", "острова,", "и", "несмотря", "на", { k: "шторм" }, "ни", "разу", "не", { k: "засомневался" }]
     : he
     ? ["הספן", "היה", { k: "נחוש" }, "להגיע", "אל", "האי,", "ולמרות", { k: "הסופה" }, "העזה", "הוא", "לא", { k: "היסס" }]
@@ -961,21 +1095,25 @@ function PuzzleMock({ lang, beforeLabel, afterLabel }: { lang: string; beforeLab
  *  a meaning card with its picture, Kids Mode toggle, example) so a
  *  parent sees exactly what they are buying. */
 function PhoneMock({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
-  const word = ru ? "мечта" : he ? "חלום" : "dream";
-  const pos = ru ? "существительное" : he ? "שם עצם" : "noun";
-  const meaning = ru
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const word = ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream";
+  const pos = ar ? "اسم" : ru ? "существительное" : he ? "שם עצם" : "noun";
+  const meaning = ar
+    ? "صور وأفكار وأحاسيس تظهر في الذهن أثناء النوم"
+    : ru
     ? "то, о чём мечтаешь и к чему стремишься"
     : he
     ? "תמונות ומחשבות שעוברות בראש בזמן השינה"
     : "images and thoughts that pass through the mind during sleep";
-  const example = ru
+  const example = ar
+    ? "«الليلة الماضية رأيت حلماً عن رحلة بعيدة.»"
+    : ru
     ? "«Его мечта — полететь в космос.»"
     : he
     ? "\"בלילה חלמתי חלום על מסע רחוק.\""
     : "\"Last night I had a dream about a far journey.\"";
-  const kids = ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode";
-  const searchHint = ru ? "Введите слово" : he ? "הקלידו מילה" : "Type a word";
+  const kids = ar ? "وضع الأطفال" : ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode";
+  const searchHint = ar ? "اكتب كلمة" : ru ? "Введите слово" : he ? "הקלידו מילה" : "Type a word";
   return (
     <div className="fam-phone" aria-hidden>
       <div className="fam-phone-notch" />
@@ -1012,9 +1150,9 @@ function PhoneMock({ lang }: { lang: string }) {
           </div>
         </div>
         <div className="fam-ph-tabs">
-          <span className="is-active">{ru ? "Значения" : he ? "משמעויות" : "Meanings"}</span>
-          <span>{ru ? "Картинка" : he ? "תמונה" : "Picture"}</span>
-          <span>{ru ? "Тетрадь" : he ? "מחברת" : "Notebook"}</span>
+          <span className="is-active">{ar ? "المعاني" : ru ? "Значения" : he ? "משמעויות" : "Meanings"}</span>
+          <span>{ar ? "صورة" : ru ? "Картинка" : he ? "תמונה" : "Picture"}</span>
+          <span>{ar ? "الدفتر" : ru ? "Тетрадь" : he ? "מחברת" : "Notebook"}</span>
         </div>
       </div>
     </div>
@@ -1025,19 +1163,19 @@ function PhoneMock({ lang }: { lang: string }) {
  *  recreation of the real search screen (Kids Mode on, teal search pill
  *  with the typed word and a blinking caret). */
 function MockSearch({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-pill">{ar ? "وضع الأطفال" : ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
         <span className="fam-mock-toggle-on" />
       </div>
       <div className="fam-mock-search fam-mock-search-lg">
         <SearchIcon />
-        <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
         <span className="fam-mock-caret" aria-hidden />
       </div>
-      <div className="fam-mock-searchhint">{ru ? "Ребёнок вводит слово, и всё. Остальное происходит само." : he ? "הילד מקליד מילה, וזהו. השאר קורה לבד." : "The child types a word, and that is it."}</div>
+      <div className="fam-mock-searchhint">{ar ? "الطفل يكتب كلمة، وهذا كل شيء. الباقي يحدث وحده." : ru ? "Ребёнок вводит слово, и всё. Остальное происходит само." : he ? "הילד מקליד מילה, וזהו. השאר קורה לבד." : "The child types a word, and that is it."}</div>
     </div>
   );
 }
@@ -1047,11 +1185,11 @@ function MockSearch({ lang }: { lang: string }) {
  *  was barely visible as tiny icons before). A big illustrated card, the
  *  kid-level meaning, and an example. */
 function MockPicture({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-ph-pic fam-mock-pic" aria-hidden>
         {/* A child dreaming — a sleeping face with a dream cloud (moon +
@@ -1073,10 +1211,10 @@ function MockPicture({ lang }: { lang: string }) {
       <div className="fam-mock-meaning">
         <div>
           <div className="fam-mock-meaning-t">
-            {ru ? "То, о чём мечтаешь и к чему стремишься" : he ? "תמונות ומחשבות שעוברות בראש בזמן השינה" : "Images and thoughts that pass through the mind during sleep"}
+            {ar ? "صور وأفكار تمرّ في الذهن أثناء النوم" : ru ? "То, о чём мечтаешь и к чему стремишься" : he ? "תמונות ומחשבות שעוברות בראש בזמן השינה" : "Images and thoughts that pass through the mind during sleep"}
           </div>
           <div className="fam-mock-meaning-ex">
-            {ru ? "«Его мечта — полететь в космос.»" : he ? "\"בלילה חלמתי חלום על מסע רחוק.\"" : "\"Last night I had a dream about a far journey.\""}
+            {ar ? "«الليلة الماضية رأيت حلماً عن رحلة بعيدة.»" : ru ? "«Его мечта — полететь в космос.»" : he ? "\"בלילה חלמתי חלום על מסע רחוק.\"" : "\"Last night I had a dream about a far journey.\""}
           </div>
         </div>
       </div>
@@ -1086,14 +1224,16 @@ function MockPicture({ lang }: { lang: string }) {
 
 /** Definition block: the kid-level meaning, on its own. */
 function MockDefinition({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-mock-bubble">
-        {ru
+        {ar
+          ? "«حلم» هو الصور والقصص التي تجري في رأسك وأنت نائم. أحياناً سعيدة وأحياناً غريبة، وتختفي حين تستيقظ."
+          : ru
           ? "«Мечта» — это то, чего очень хочется и о чём думаешь с радостью. То, к чему хочется идти и что хочется осуществить."
           : he
           ? "\"חלום\" זה התמונות והסיפורים שרצים בראש כשישנים. לפעמים שמחים, לפעמים מוזרים, והם נעלמים כשמתעוררים."
@@ -1105,8 +1245,10 @@ function MockDefinition({ lang }: { lang: string }) {
 
 /** Examples block: three real sentences with the word. */
 function MockExamples({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
-  const ex = ru
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const ex = ar
+    ? ["«الليلة الماضية رأيت حلماً عن رحلة بعيدة.»", "«استيقظت من حلم مخيف.»", "«حلمه الكبير أن يطير إلى الفضاء.»"]
+    : ru
     ? ["«Его большая мечта — стать врачом.»", "«Она идёт к своей мечте шаг за шагом.»", "«У каждого ребёнка есть своя мечта.»"]
     : he
     ? ["\"בלילה חלמתי חלום על מסע רחוק.\"", "\"היא התעוררה מחלום מפחיד.\"", "\"החלום הגדול שלו הוא לטוס לחלל.\""]
@@ -1114,7 +1256,7 @@ function MockExamples({ lang }: { lang: string }) {
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
       </div>
       <div className="fam-mock-examples">
         {ex.map((e, i) => (
@@ -1130,14 +1272,14 @@ function MockExamples({ lang }: { lang: string }) {
 
 /** Quiz block: a short practice question on its own. */
 function MockQuiz({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru";
+  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   return (
     <div className="fam-mock">
       <div className="fam-mock-quiz fam-mock-quiz-solo">
-        <div className="fam-mock-quiz-q">{ru ? "Что значит «мечта»?" : he ? "מה פירוש \"חלום\"?" : "What does \"dream\" mean?"}</div>
-        <div className="fam-mock-quiz-opt is-right">{ru ? "То, к чему стремишься и чего хочешь" : he ? "תמונות ומחשבות בזמן השינה" : "Images and thoughts during sleep"}</div>
-        <div className="fam-mock-quiz-opt">{ru ? "Вид торта" : he ? "סוג של עוגה" : "A kind of cake"}</div>
-        <div className="fam-mock-quiz-opt">{ru ? "Музыкальный инструмент" : he ? "כלי נגינה" : "A musical instrument"}</div>
+        <div className="fam-mock-quiz-q">{ar ? "ماذا تعني «حلم»؟" : ru ? "Что значит «мечта»?" : he ? "מה פירוש \"חלום\"?" : "What does \"dream\" mean?"}</div>
+        <div className="fam-mock-quiz-opt is-right">{ar ? "صور وأفكار أثناء النوم" : ru ? "То, к чему стремишься и чего хочешь" : he ? "תמונות ומחשבות בזמן השינה" : "Images and thoughts during sleep"}</div>
+        <div className="fam-mock-quiz-opt">{ar ? "نوع من الكعك" : ru ? "Вид торта" : he ? "סוג של עוגה" : "A kind of cake"}</div>
+        <div className="fam-mock-quiz-opt">{ar ? "آلة موسيقية" : ru ? "Музыкальный инструмент" : he ? "כלי נגינה" : "A musical instrument"}</div>
       </div>
     </div>
   );
