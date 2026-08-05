@@ -487,6 +487,7 @@ export function FamilyClient() {
   const [editOpen, setEditOpen] = useState(false);
   const [editName, setEditName] = useState("");
   const [editRole, setEditRole] = useState<MemberRole>("father");
+  const [editMemberId, setEditMemberId] = useState<string | null>(null);
   const [editSaving, setEditSaving] = useState(false);
 
   const isWelcome = search.get("welcome") === "1";
@@ -601,11 +602,12 @@ export function FamilyClient() {
       pairedLabel={c.paired}
       ownerLabel={c.owner}
       roleLabel={roleLabel[m.role]}
-      onEdit={m.isOwner ? () => {
+      onEdit={() => {
+        setEditMemberId(m.id);
         setEditName(m.name || "");
-        setEditRole((m.role === "mother" ? "mother" : "father"));
+        setEditRole(m.role);
         setEditOpen(true);
-      } : undefined}
+      }}
       editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
       onDelete={!m.isOwner ? () => {
         const label = m.name || roleLabel[m.role];
@@ -616,17 +618,17 @@ export function FamilyClient() {
     />
   );
 
-  async function saveOwner() {
-    if (!user || !ownerMember || editSaving) return;
+  async function saveMember() {
+    if (!user || !editMemberId || editSaving) return;
     setEditSaving(true);
     try {
-      await updateDoc(doc(db, "families", user.uid, "members", ownerMember.id), {
+      await updateDoc(doc(db, "families", user.uid, "members", editMemberId), {
         name: editName.trim(),
-        role: editRole === "mother" ? "mother" : "father",
+        role: editRole,
       });
       setEditOpen(false);
     } catch (e) {
-      console.error("edit primary parent failed:", e);
+      console.error("edit member failed:", e);
     } finally {
       setEditSaving(false);
     }
@@ -646,9 +648,11 @@ export function FamilyClient() {
             dir={dir}
             style={{ background: "#fff", borderRadius: 16, padding: "22px 20px", width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(17,24,39,0.25)" }}
           >
-            <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#111827" }}>{c.owner}</h3>
+            <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#111827" }}>
+              {lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
+            </h3>
             <p style={{ margin: "0 0 16px", fontSize: 13.5, color: "#6b7280" }}>
-              {lang === "he" ? "השם והתפקיד שמוצגים כהורה הראשי." : "The name and role shown as the primary parent."}
+              {lang === "he" ? "השם והתפקיד שיוצגו." : "The name and role to show."}
             </p>
             <input
               value={editName}
@@ -657,7 +661,7 @@ export function FamilyClient() {
               style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", marginBottom: 12, boxSizing: "border-box" }}
             />
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-              {(["father", "mother"] as const).map((r) => (
+              {(isParentRole(editRole) ? (["father", "mother"] as const) : (["boy", "girl"] as const)).map((r) => (
                 <button
                   key={r}
                   type="button"
@@ -672,7 +676,7 @@ export function FamilyClient() {
               <button type="button" onClick={() => setEditOpen(false)} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", background: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "#374151" }}>
                 {lang === "he" ? "ביטול" : "Cancel"}
               </button>
-              <button type="button" onClick={saveOwner} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", fontFamily: "inherit", opacity: editSaving ? 0.6 : 1 }}>
+              <button type="button" onClick={saveMember} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", fontFamily: "inherit", opacity: editSaving ? 0.6 : 1 }}>
                 {editSaving ? "…" : (lang === "he" ? "שמירה" : "Save")}
               </button>
             </div>
