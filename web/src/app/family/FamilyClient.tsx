@@ -329,6 +329,20 @@ function MemberCard({
   const linked = !!m.userId && !m.isOwner;
   return (
     <div className="wb-family-member-card">
+      {(onEdit || onDelete) && (
+        <div className="wb-family-member-icons">
+          {onEdit && (
+            <button type="button" className="wb-family-member-icon" onClick={onEdit} title={editLabel} aria-label={editLabel}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
+            </button>
+          )}
+          {onDelete && (
+            <button type="button" className="wb-family-member-icon wb-family-member-icon-danger" onClick={onDelete} title={deleteLabel} aria-label={deleteLabel}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /></svg>
+            </button>
+          )}
+        </div>
+      )}
       <div className="wb-family-member-top">
         <div className="wb-family-member-avatar" style={{ background: color }}>
           {m.avatarPhotoUrl ? (
@@ -345,13 +359,6 @@ function MemberCard({
           </div>
         </div>
       </div>
-      {m.isOwner && onEdit && (
-        <div className="wb-family-member-actions">
-          <button type="button" className="wb-family-member-pair" onClick={onEdit}>
-            {editLabel}
-          </button>
-        </div>
-      )}
       {!m.isOwner && (
         <div className="wb-family-member-actions">
           <button type="button" className="wb-family-member-pair" onClick={onPair}>
@@ -360,11 +367,6 @@ function MemberCard({
           {linked && (
             <button type="button" className="wb-family-member-revoke" onClick={onRevoke}>
               {revokeLabel}
-            </button>
-          )}
-          {onDelete && (
-            <button type="button" className="wb-family-member-revoke" onClick={onDelete}>
-              {deleteLabel}
             </button>
           )}
         </div>
