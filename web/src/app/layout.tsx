@@ -13,6 +13,7 @@ import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import MetaPixel from "@/components/MetaPixel";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -414,10 +415,23 @@ export default async function RootLayout({
               routes: kids on school devices are not ad-tracking
               subjects, by policy and by positioning. */}
           <MetaPixel />
-          {/* Affonso affiliate tracking removed 2026-08-04. Gadit retired
-              the Affonso program in favour of its own in-house partner
-              system (/partners signup, RefCapture reads ?ref=CODE and
-              hits /api/partner/click). No third-party affiliate pixel. */}
+          {/* Affonso affiliate-tracking pixel. RESTORED 2026-08-05: the
+              embed DASHBOARD was retired (bad API key) and /affiliate now
+              redirects to the in-house /partners portal, but Affonso's
+              MARKETPLACE keeps bringing international affiliates Gadi never
+              recruited, and this pixel is what credits their referrals. It
+              runs IN PARALLEL with the in-house program: our RefCapture
+              ignores codes that aren't in-house partners, Affonso ignores
+              codes that aren't its own, so there is no double-attribution.
+              First-party delivery via the /r/* rewrites in next.config.ts
+              (defeats ad blockers). Program ID is public. */}
+          <Script
+            src="/r/pixel.js"
+            strategy="afterInteractive"
+            data-affonso="cmq3oz349000p11r2lloq0xb2"
+            data-cookie_duration="60"
+            data-api-base="/r"
+          />
         </body>
     </html>
   );

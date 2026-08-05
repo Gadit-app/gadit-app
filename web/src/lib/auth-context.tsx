@@ -226,12 +226,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // Affonso affiliate attribution — RETIRED 2026-08-04. Gadit moved to
-  // its own in-house partner program; referral attribution now runs
-  // through RefCapture (?ref=CODE) and the Stripe webhook, not Affonso.
-  // Kept as a no-op so the new-user call sites stay untouched.
-  function trackAffonsoSignup(_u: User) {
-    return;
+  // Affonso affiliate attribution — RESTORED 2026-08-05. Runs alongside
+  // the in-house partner program: this pairs an Affonso ?ref cookie with
+  // the brand-new user so a future Stripe sale is credited to the Affonso
+  // marketplace affiliate who referred them. In-house partners are tracked
+  // separately by RefCapture, and the two never collide (each ignores the
+  // other's codes), so a signup is never double-attributed.
+  //
+  // Retry loop covers the pixel's afterInteractive load not being ready
+  // when auth resolves. Best-effort, never blocks UX. Only fires for
+  // genuinely-new users (returning logins would create duplicate leads).
+  function trackAffonsoSignup(u: User) {
+    if (typeof window === "undefined") return;
+    type AffonsoApi = {
+      signup: (
+        data: { email?: string; externalUserId?: string; name?: string },
+      ) => void;
+    };
+    const fire = (attempt: number): void => {
+      const Affonso = (window as Window & { Affonso?: AffonsoApi }).Affonso;
+      if (Affonso?.signup) {
+        try {
+          Affonso.signup({
+            email: u.email ?? undefined,
+            externalUserId: u.uid,
+            name: u.displayName ?? undefined,
+          });
+        } catch (err) {
+          console.warn("Affonso.signup failed (non-blocking):", err);
+        }
+        return;
+      }
+      if (attempt >= 5) return;
+      window.setTimeout(() => fire(attempt + 1), 500);
+    };
+    fire(0);
   }
 
   async function signInWithGoogle() {
