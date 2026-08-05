@@ -1,8 +1,9 @@
 // Curated themed vocabulary sets for schools (Gadi 2026-08-05, schools
 // council). A teacher opens a set and steps through the words in present
 // mode on the classroom screen; each word runs through Gadit's normal
-// define + picture engine. Plain data file (no CMS yet) so it is easy to
-// edit and extend. Elementary (יסודי) subjects, Israeli curriculum.
+// define + picture engine. Plain data file (no CMS yet). Israeli
+// elementary (יסודי) curriculum. Language + math keyword sets are built
+// from Gadi's own curriculum decks, organised per grade (כיתה א-ו).
 
 export type WordSet = {
   id: string;
@@ -24,18 +25,26 @@ export const SET_SUBJECTS: { key: string; he: string }[] = [
 ];
 
 export const WORD_SETS: WordSet[] = [
-{ id: "lang-chelkey-hadibur", subject: "language", title: "חלקי הדיבר", grade: "ג-ו", lang: "he", words: ["שם עצם", "שם תואר", "פועל", "שם פועל", "מילת יחס", "מילת חיבור", "כינוי גוף", "כינוי רמז", "תואר הפועל", "שם מספר", "מילת שאלה", "שם פרטי"] },
-{ id: "lang-dikduk-velashon", subject: "language", title: "דקדוק ולשון", grade: "ד-ו", lang: "he", words: ["שורש", "משקל", "בניין", "גזרה", "זכר", "נקבה", "יחיד", "רבים", "זמן עבר", "זמן הווה", "זמן עתיד", "נטייה", "מין", "גוף"] },
-{ id: "lang-simaney-pisuk", subject: "language", title: "סימני פיסוק", grade: "ב-ד", lang: "he", words: ["נקודה", "פסיק", "סימן שאלה", "סימן קריאה", "נקודתיים", "מירכאות", "נקודה ופסיק", "מקף", "סוגריים", "שלוש נקודות"] },
-{ id: "lang-havanat-hanikra", subject: "language", title: "הבנת הנקרא", grade: "ג-ו", lang: "he", words: ["רעיון מרכזי", "כותרת", "פסקה", "נושא", "פרט", "מסקנה", "הסבר", "כותרת משנה", "רצף", "מילת מפתח", "משמעות", "הקשר"] },
-{ id: "lang-sifrut-vesipur", subject: "language", title: "ספרות וסיפור", grade: "ג-ו", lang: "he", words: ["עלילה", "גיבור", "דמות", "מספר", "שיא", "פתיחה", "סיום", "מוסר השכל", "משל", "אגדה", "בית", "חרוז", "דימוי", "עלילה משנית"] },
-{ id: "lang-nirdafot-vahafachim", subject: "language", title: "מילים נרדפות והפכים", grade: "ב-ה", lang: "he", words: ["מילים נרדפות", "מילים הפכיות", "ניגוד", "משמעות", "מילה בודדה", "צירוף מילים", "ביטוי", "פתגם", "משפחת מילים", "מילה כללית", "מילה מדויקת"] },
-{ id: "math-mispar-ve-erech-hamakom", subject: "math", title: "מספרים וערך המקום", grade: "א-ד", lang: "he", words: ["מספר", "ספרה", "יחידות", "עשרות", "מאות", "אלפים", "ערך המקום", "מספר זוגי", "מספר אי זוגי", "סדר עולה", "סדר יורד", "עיגול מספרים", "ציר המספרים"] },
-{ id: "math-arba-hapeulot", subject: "math", title: "ארבע פעולות החשבון", grade: "א-ו", lang: "he", words: ["חיבור", "חיסור", "כפל", "חילוק", "סכום", "הפרש", "מכפלה", "מנה", "שארית", "פעולה הפוכה", "לוח הכפל", "מספר חסר", "סוגריים"] },
-{ id: "math-shvarim", subject: "math", title: "שברים", grade: "ג-ו", lang: "he", words: ["שבר", "מונה", "מכנה", "שבר יסודי", "שבר עשרוני", "שלם", "חצי", "שליש", "רבע", "שברים שווים", "מכנה משותף", "צמצום", "הרחבה", "שבר מדומה"] },
-{ id: "math-geometria-ve-tzurot", subject: "math", title: "גיאומטריה וצורות", grade: "א-ו", lang: "he", words: ["מצולע", "משולש", "מרובע", "ריבוע", "מלבן", "עיגול", "מעגל", "זווית", "צלע", "קדקוד", "אלכסון", "היקף", "שטח", "סימטריה"] },
-{ id: "math-medidot", subject: "math", title: "מדידות", grade: "ב-ו", lang: "he", words: ["אורך", "משקל", "נפח", "מטר", "סנטימטר", "מילימטר", "קילומטר", "קילוגרם", "גרם", "ליטר", "מיליליטר", "יחידת מידה", "סרגל", "מאזניים"] },
-{ id: "math-zman-ve-kesef", subject: "math", title: "זמן וכסף", grade: "א-ד", lang: "he", words: ["שעה", "דקה", "שנייה", "לוח שנה", "יממה", "שבוע", "חודש", "שנה", "עונש", "שקל", "אגורה", "עודף", "מטבע", "שטר"] },
+{ id: "lang-a-otiyot-utzlilim", subject: "language", title: "אותיות וצלילים", grade: "כיתה א", lang: "he", words: ["אות", "צליל", "עיצור", "תנועה", "ניקוד", "אלף-בית", "אות דגושה", "אות רפויה"] },
+{ id: "lang-a-b-hanikud", subject: "language", title: "ניקוד ואותיות מיוחדות", grade: "כיתה א-ב", lang: "he", words: ["ניקוד", "תנועה", "עיצור", "אות דגושה", "אות רפויה", "אותיות אהו\"י", "אות", "צליל", "אלף-בית"] },
+{ id: "lang-b-milim-umishpatim", subject: "language", title: "מילים ומשפטים", grade: "כיתה ב", lang: "he", words: ["מילה", "משפט", "פסקה", "סימני פיסוק", "נקודה", "פסיק", "סימן שאלה", "סימן קריאה", "מרכאות"] },
+{ id: "lang-b-g-simaney-pisuk", subject: "language", title: "סימני פיסוק", grade: "כיתה ב-ג", lang: "he", words: ["סימני פיסוק", "נקודה", "פסיק", "סימן שאלה", "סימן קריאה", "מרכאות", "משפט", "פסקה"] },
+{ id: "lang-g-kriah-vehavanah", subject: "language", title: "קריאה והבנת הנקרא", grade: "כיתה ג-ד", lang: "he", words: ["קריאה", "פענוח", "הבנת הנקרא", "טקסט מידעי", "טקסט סיפורי", "כותרת", "רעיון מרכזי", "פסקה", "משפט"] },
+{ id: "lang-g-avodah-im-milon", subject: "language", title: "עבודה עם מילון", grade: "כיתה ג-ד", lang: "he", words: ["מילון", "ערך", "הגדרה", "מילים מנחות", "סדר האלף-בית", "אלף-בית", "מילה", "אוצר מילים"] },
+{ id: "lang-d-ktivah-vehabaah", subject: "language", title: "כתיבה והבעה", grade: "כיתה ד-ה", lang: "he", words: ["כתיבה", "איות", "הבעה", "אוצר מילים", "חיבור", "טיוטה", "פסקה", "כותרת"] },
+{ id: "lang-g-e-milot-tifkud", subject: "language", title: "מילות תפקוד", grade: "כיתה ג-ה", lang: "he", words: ["מילות חיבור", "מילת חיבור", "מילות שאלה", "מילת שאלה", "מילות שלילה", "מילות יחס", "משפט", "מילה"] },
+{ id: "lang-d-o-helkey-hadibur", subject: "language", title: "חלקי הדיבר", grade: "כיתה ד-ו", lang: "he", words: ["שם עצם", "שם תואר", "פועל", "שם פועל", "כינוי גוף", "שם מספר", "תואר הפועל", "מילה"] },
+{ id: "lang-b-o-otzar-milim", subject: "language", title: "אוצר מילים", grade: "כיתה ב-ו", lang: "he", words: ["מילים נרדפות", "מילים מנוגדות", "מילה נרדפת", "ניגוד", "שורש", "משפחת מילים", "אוצר מילים", "מילה"] },
+{ id: "math-a-misparim-vesfira", subject: "math", title: "מספרים וספירה", grade: "כיתה א", lang: "he", words: ["מספר", "ספרה", "ספירה", "מספר חד-ספרתי", "עשרת", "עשרות", "לוח המאה", "גדול מ", "קטן מ", "שווה", "מספר זוגי", "מספר אי-זוגי"] },
+{ id: "math-a-hibur-vehisur", subject: "math", title: "חיבור וחיסור", grade: "כיתה א", lang: "he", words: ["חיבור", "חיסור", "פעולה", "חשבון", "סכום", "הפרש", "מספר", "ספירה", "עשרת", "שווה"] },
+{ id: "math-b-ad-mea", subject: "math", title: "מספרים עד מאה", grade: "כיתה ב", lang: "he", words: ["מספר דו-ספרתי", "עשרות", "עשרת", "ספרה", "חיבור", "חיסור", "סכום", "הפרש", "בעיה מילולית", "פעולה", "מספר זוגי", "מספר אי-זוגי"] },
+{ id: "math-b-kefel-vehiluk", subject: "math", title: "כפל וחילוק ראשונים", grade: "כיתה ב", lang: "he", words: ["כפל", "חילוק", "מכפלה", "מנה", "פעולה", "חשבון", "חיבור", "חיסור", "בעיה מילולית", "מספר"] },
+{ id: "math-g-luach-hakefel", subject: "math", title: "לוח הכפל", grade: "כיתה ג", lang: "he", words: ["לוח הכפל", "כפל", "מכפלה", "חילוק", "מנה", "מספר תלת-ספרתי", "מאות", "כפל ארוך", "סדר פעולות חשבון", "פעולה"] },
+{ id: "math-g-hekerut-shever", subject: "math", title: "היכרות עם השבר", grade: "כיתה ג", lang: "he", words: ["שבר", "מונה", "מכנה", "קו שבר", "שבר פשוט", "חצי", "רבע", "שליש", "מספר", "שווה"] },
+{ id: "math-d-misparim-gdolim", subject: "math", title: "מספרים גדולים וכפל", grade: "כיתה ד", lang: "he", words: ["אלפים", "מאות", "עשרות", "מספר תלת-ספרתי", "כפל ארוך", "כפל", "מכפלה", "המרה", "פריטה", "אומדן"] },
+{ id: "math-d-hibur-shvarim", subject: "math", title: "חיבור שברים", grade: "כיתה ד", lang: "he", words: ["שבר", "שבר פשוט", "מונה", "מכנה", "קו שבר", "מספר מעורב", "הרחבה", "צמצום", "חצי", "רבע"] },
+{ id: "math-h-shever-esroni", subject: "math", title: "שברים עשרוניים", grade: "כיתה ה", lang: "he", words: ["שבר עשרוני", "נקודה עשרונית", "שבר", "מונה", "מכנה", "כפל", "חילוק", "עיגול מספרים", "אומדן", "מנה"] },
+{ id: "math-v-ahuzim-veyachas", subject: "math", title: "אחוזים ויחס", grade: "כיתה ו", lang: "he", words: ["אחוז", "יחס", "ממוצע", "שבר עשרוני", "נקודה עשרונית", "עיגול מספרים", "אומדן", "מספר", "חילוק", "מנה"] },
 { id: "english-colors", subject: "english", title: "Colors", grade: "ג-ו", lang: "en", words: ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white", "gray"] },
 { id: "english-numbers", subject: "english", title: "Numbers", grade: "ג-ו", lang: "en", words: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"] },
 { id: "english-family", subject: "english", title: "Family", grade: "ג-ו", lang: "en", words: ["mother", "father", "sister", "brother", "baby", "grandmother", "grandfather", "aunt", "uncle", "cousin"] },

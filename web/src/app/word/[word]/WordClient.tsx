@@ -1302,7 +1302,7 @@ export function WordClient({
         {/* The searchbar wrap is wrapped in a sticky stage so the input
             stays in view as the reader scrolls past long etymology +
             idiom sections. Gadi 2026-06-26 audit fix M1. */}
-        <div className="wb-word-searchbar-stage">
+        <div className="wb-word-searchbar-stage" style={present ? { marginTop: 14, marginBottom: 20 } : undefined}>
         <div className="wb-word-searchbar-wrap">
           <form
             className="wb-word-searchbar"
