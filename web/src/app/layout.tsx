@@ -7,6 +7,7 @@ import { LangProvider } from "@/lib/lang-context";
 import type { Lang } from "@/lib/i18n";
 import LoginModal from "@/components/LoginModal";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import { AutoUpdater } from "@/components/AutoUpdater";
 import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
@@ -407,6 +408,7 @@ export default async function RootLayout({
             </AuthProvider>
           </LangProvider>
           <ServiceWorkerRegister />
+          <AutoUpdater />
           <RefCapture />
           <Analytics />
           <SpeedInsights />

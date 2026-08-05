@@ -482,7 +482,21 @@ export function FamilyClient() {
   const [familyChecked, setFamilyChecked] = useState(false);
   const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
   const [progressLoaded, setProgressLoaded] = useState(false);
-  const [tab, setTab] = useState<FamTab>("home");
+  // Tab lives in the URL (?tab=members) so a refresh (or an auto-update
+  // reload) returns to the same screen instead of resetting to "home".
+  const [tab, setTab] = useState<FamTab>(() => {
+    const t = search.get("tab");
+    return t === "members" || t === "settings" ? t : "home";
+  });
+  const changeTab = (tk: FamTab) => {
+    setTab(tk);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (tk === "home") url.searchParams.delete("tab");
+      else url.searchParams.set("tab", tk);
+      window.history.replaceState(null, "", url.toString());
+    }
+  };
   // Edit the primary parent (owner). The owner profile is auto-created as
   // "father" with no name, so a mother who registered sees "אבא". This
   // lets the owner set their own name + role (Gadi 2026-08-05, Lital).
@@ -697,7 +711,7 @@ export function FamilyClient() {
                 key={tk}
                 type="button"
                 className={`fam-nav-item ${tab === tk ? "is-active" : ""}`}
-                onClick={() => setTab(tk)}
+                onClick={() => changeTab(tk)}
               >
                 <NavIcon name={tk} />
                 <span>{nav[tk]}</span>

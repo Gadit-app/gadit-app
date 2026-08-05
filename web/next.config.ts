@@ -35,6 +35,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(process.cwd(), ".."),
   },
+  // Build id baked into the client bundle so the running app can tell when
+  // a newer deploy exists and reload itself (see AutoUpdater + /api/version).
+  // On Vercel this is the commit SHA, unique per deploy.
+  env: {
+    NEXT_PUBLIC_BUILD_ID: process.env.VERCEL_GIT_COMMIT_SHA || "dev",
+  },
   async rewrites() {
     return AFFONSO_REWRITES;
   },
