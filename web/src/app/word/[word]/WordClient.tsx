@@ -365,6 +365,12 @@ export function WordClient({
   // looked up today. No personal data is logged, only the word + lang
   // (+ first name only when the roster picker was used).
   const classroomCode = searchParams?.get("cls")?.trim() || "";
+  // Present / projector mode (Gadi 2026-08-05, schools council): the SAME
+  // clean Gadit word view with the top chrome hidden, for a teacher
+  // explaining a word to the whole class on the classroom screen. Same
+  // format as always, just without the top menu. Initialised from
+  // ?present=1 (shareable link) and toggled live by the corner button.
+  const [present, setPresent] = useState(searchParams?.get("present") === "1");
   // ?sn=<first-name> set by the /c/<CODE> roster picker. Carries
   // forward through the persistent search bar so a kid who chains
   // multiple lookups stays attributed. Empty string == anonymous.
@@ -1096,7 +1102,7 @@ export function WordClient({
             turned out to do the same job — typing a new word in the
             persistent bar now preserves the ?cls= param so the kid
             stays in classroom mode and the search keeps logging. */}
-        {!classroomCode && (
+        {!classroomCode && !present && (
         <header className="wb-shell-topbar">
           <Link href={href("/")} className="wb-wordmark" dir="ltr" aria-label="Gadit home">
             Gad<span className="wb-wordmark-it">it</span>
@@ -1180,6 +1186,48 @@ export function WordClient({
         </div>
 
         </header>
+        )}
+
+        {/* Present-mode toggle (schools council 2026-08-05). A subtle
+            corner button that hides/shows the top chrome so a teacher can
+            project a clean word view to the whole class. Only for
+            signed-in users; hidden inside the /c/ classroom kid view. */}
+        {user && !classroomCode && (
+          <button
+            type="button"
+            onClick={() => setPresent((p) => !p)}
+            aria-label={present ? "Exit present mode" : "Present mode"}
+            title={present ? "Exit present mode" : "Present mode, a clean view for the classroom screen"}
+            style={{
+              position: "fixed",
+              top: 12,
+              insetInlineEnd: 12,
+              zIndex: 50,
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              border: "1px solid rgba(31,41,55,0.12)",
+              background: "rgba(255,255,255,0.72)",
+              color: "#6b7280",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              boxShadow: "0 1px 4px rgba(31,41,55,0.08)",
+            }}
+          >
+            {present ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" />
+              </svg>
+            )}
+          </button>
         )}
 
         {/* Persistent search bar, Eyal (June 2026) flagged that
