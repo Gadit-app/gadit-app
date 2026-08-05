@@ -30,7 +30,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { getWordSet } from "@/lib/word-sets";
+import { getWordSet, curatedDef } from "@/lib/word-sets";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref } from "@/lib/href";
@@ -383,6 +383,11 @@ export function WordClient({
     : -1;
   const goToSetWord = (w: string) =>
     router.push(href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(setId)}`));
+  // Classroom mode: a set word shown on the projector. Show ONE relevant
+  // definition (Gadi's curated one when we have it, else the first
+  // meaning) plus an auto-generated picture, never the full multi-meaning
+  // result, so students see the subject-relevant sense only.
+  const classroomMode = present && !!wordSet && setIdx >= 0;
   useEffect(() => {
     if (!wordSet || setIdx < 0) return;
     function onKey(e: KeyboardEvent) {
@@ -800,8 +805,18 @@ export function WordClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialWord, lang, user, contextSentence, initialResult, preloadLang]);
 
+  // Classroom mode: auto-generate the picture so the word shows WITH its
+  // image by default on the projector, no click. Prompts with the curated
+  // definition so the picture matches the subject-relevant sense.
+  useEffect(() => {
+    if (!classroomMode || !result || imageUrl || imageGenerating || !user) return;
+    const def = curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? "";
+    void handleGenerate({ meaning: def, example: result.meanings[0]?.examples?.[0] ?? "" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classroomMode, result, imageUrl, imageGenerating, user]);
+
   // ── Action handlers ───────────────────────────────────────────
-  async function handleGenerate() {
+  async function handleGenerate(opts?: { meaning?: string; example?: string }) {
     if (!result || !user) {
       promptLogin(v2(lang, "generateImage"));
       return;
@@ -819,12 +834,14 @@ export function WordClient({
         },
         body: JSON.stringify({
           word: result.word,
-          meaning: result.meanings[0]?.meaning ?? "",
+          // Classroom mode passes the curated (subject-relevant) definition
+          // so the picture depicts the right sense of the word.
+          meaning: opts?.meaning ?? result.meanings[0]?.meaning ?? "",
           // First example sentence anchors the image prompt to a real
           // scene — biggest win for abstract words ("חוויה", "תקווה")
           // that have no everyday object to photograph. See
           // buildDallePrompt comment for the why.
-          example: result.meanings[0]?.examples?.[0] ?? "",
+          example: opts?.example ?? result.meanings[0]?.examples?.[0] ?? "",
           uiLang: lang,
           // Kids Mode → server swaps to the modern-flat illustration
           // prompt (Style B, locked 2026-06-19) and stores the result
@@ -1530,7 +1547,31 @@ export function WordClient({
             </button>
           </div>
         )}
-        {result && (
+        {result && (classroomMode ? (
+          <div
+            className="wb-classroom-card"
+            style={{ maxWidth: 720, margin: "6px auto 0", textAlign: dir === "rtl" ? "right" : "left" }}
+          >
+            <p style={{ fontSize: 24, lineHeight: 1.65, fontWeight: 600, color: "#1f2937", margin: "0 0 20px" }}>
+              {curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? ""}
+            </p>
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={result.word}
+                style={{ display: "block", maxWidth: 380, width: "100%", borderRadius: 14, margin: "0 auto", boxShadow: "0 4px 18px rgba(31,41,55,0.10)" }}
+              />
+            ) : imageGenerating ? (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, padding: "20px 0", color: "#9CA3AF" }} aria-busy="true">
+                <svg className="wb-image-spinner" width="40" height="40" viewBox="0 0 44 44" aria-hidden="true">
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="3" />
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="28 84" />
+                </svg>
+                <span style={{ fontSize: 14 }}>{lang === "he" ? "מכינים תמונה..." : "Preparing a picture..."}</span>
+              </div>
+            ) : null}
+          </div>
+        ) : (
           <ResultView
             result={result}
             plan={plan}
@@ -1562,7 +1603,7 @@ export function WordClient({
               });
             }}
           />
-        )}
+        ))}
 
         {/* HomeFooter intentionally omitted on /word pages, the V2
             navy footer clashes with the cream Wordbook surface. A
