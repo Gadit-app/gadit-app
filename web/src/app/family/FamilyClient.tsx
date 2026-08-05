@@ -308,6 +308,8 @@ function MemberCard({
   roleLabel,
   onEdit,
   editLabel,
+  onDelete,
+  deleteLabel,
 }: {
   m: FamilyMember;
   onPair: () => void;
@@ -319,6 +321,8 @@ function MemberCard({
   roleLabel: string;
   onEdit?: () => void;
   editLabel?: string;
+  onDelete?: () => void;
+  deleteLabel?: string;
 }) {
   const color = memberColorFor(m);
   const initial = (m.name || roleLabel || "?").trim().charAt(0).toUpperCase();
@@ -356,6 +360,11 @@ function MemberCard({
           {linked && (
             <button type="button" className="wb-family-member-revoke" onClick={onRevoke}>
               {revokeLabel}
+            </button>
+          )}
+          {onDelete && (
+            <button type="button" className="wb-family-member-revoke" onClick={onDelete}>
+              {deleteLabel}
             </button>
           )}
         </div>
@@ -598,6 +607,12 @@ export function FamilyClient() {
         setEditOpen(true);
       } : undefined}
       editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
+      onDelete={!m.isOwner ? () => {
+        const label = m.name || roleLabel[m.role];
+        const msg = lang === "he" ? `להסיר את ${label} מהמשפחה?` : `Remove ${label} from the family?`;
+        if (window.confirm(msg)) void deleteMember(m.id);
+      } : undefined}
+      deleteLabel={lang === "he" ? "הסרה" : lang === "ar" ? "إزالة" : lang === "ru" ? "Удалить" : "Remove"}
     />
   );
 
@@ -843,6 +858,18 @@ async function revokeMember(_ownerUid: string, memberId: string) {
   if (!u) return;
   const idToken = await getIdToken(u);
   await fetch("/api/family/pair/revoke", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ memberId }),
+  });
+}
+
+async function deleteMember(memberId: string) {
+  const { getAuth, getIdToken } = await import("firebase/auth");
+  const u = getAuth().currentUser;
+  if (!u) return;
+  const idToken = await getIdToken(u);
+  await fetch("/api/family/pair/delete", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
     body: JSON.stringify({ memberId }),
