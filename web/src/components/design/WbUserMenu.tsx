@@ -330,6 +330,28 @@ export function WbUserMenu() {
               {c.school}
             </Link>
           )}
+          {/* Word Sets, curated themed vocabulary for teachers. Shown to
+              school owners (schools council 2026-08-05). */}
+          {schoolId && user.uid === schoolId && (
+            <Link
+              role="menuitem"
+              href={href("/sets")}
+              onClick={() => setOpen(false)}
+              style={{
+                display: "block",
+                padding: "10px 12px",
+                borderRadius: 8,
+                color: "var(--ink, #111827)",
+                textDecoration: "none",
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {lang === "he" ? "קבוצות מילים" : "Word sets"}
+            </Link>
+          )}
           {/* Partner area is commercial — never shown to a kid. */}
           {familyRole !== "kid" && (
             <Link

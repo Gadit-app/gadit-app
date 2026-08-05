@@ -30,6 +30,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { getWordSet } from "@/lib/word-sets";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref } from "@/lib/href";
@@ -371,6 +372,28 @@ export function WordClient({
   // format as always, just without the top menu. Initialised from
   // ?present=1 (shareable link) and toggled live by the corner button.
   const [present, setPresent] = useState(searchParams?.get("present") === "1");
+  // Word-set stepping (schools council 2026-08-05). ?set=<id> means this
+  // word is part of a curated themed set the teacher is walking through;
+  // show a prev/next stepper (and arrow-key paging) that keeps present +
+  // set params so the whole lesson stays clean on the projector.
+  const setId = searchParams?.get("set")?.trim() || "";
+  const wordSet = setId ? getWordSet(setId) : undefined;
+  const setIdx = wordSet
+    ? wordSet.words.findIndex((w) => w.trim().toLowerCase() === initialWord.trim().toLowerCase())
+    : -1;
+  const goToSetWord = (w: string) =>
+    router.push(href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(setId)}`));
+  useEffect(() => {
+    if (!wordSet || setIdx < 0) return;
+    function onKey(e: KeyboardEvent) {
+      if (!wordSet) return;
+      if (e.key === "ArrowRight" && setIdx < wordSet.words.length - 1) goToSetWord(wordSet.words[setIdx + 1]);
+      else if (e.key === "ArrowLeft" && setIdx > 0) goToSetWord(wordSet.words[setIdx - 1]);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setId, setIdx]);
   // ?sn=<first-name> set by the /c/<CODE> roster picker. Carries
   // forward through the persistent search bar so a kid who chains
   // multiple lookups stays attributed. Empty string == anonymous.
@@ -1228,6 +1251,37 @@ export function WordClient({
               </svg>
             )}
           </button>
+        )}
+
+        {/* Word-set stepper: prev / position / next, fixed at the bottom
+            so a teacher can walk a themed set on the projector. Arrow keys
+            page too. */}
+        {wordSet && setIdx >= 0 && (
+          <div style={{ position: "fixed", insetInlineStart: 0, insetInlineEnd: 0, bottom: 16, display: "flex", justifyContent: "center", zIndex: 50, pointerEvents: "none" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.94)", border: "1px solid rgba(31,41,55,0.12)", borderRadius: 999, padding: "8px 12px", boxShadow: "0 4px 16px rgba(31,41,55,0.14)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", pointerEvents: "auto", maxWidth: "92vw" }}>
+              <button
+                type="button"
+                aria-label="Previous word"
+                disabled={setIdx <= 0}
+                onClick={() => goToSetWord(wordSet.words[setIdx - 1])}
+                style={{ width: 34, height: 34, borderRadius: 999, border: "none", background: setIdx <= 0 ? "#F3F4F6" : "#0EA5A5", color: setIdx <= 0 ? "#9CA3AF" : "#fff", cursor: setIdx <= 0 ? "default" : "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+              </button>
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: "#374151", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {wordSet.title} · {setIdx + 1}/{wordSet.words.length}
+              </span>
+              <button
+                type="button"
+                aria-label="Next word"
+                disabled={setIdx >= wordSet.words.length - 1}
+                onClick={() => goToSetWord(wordSet.words[setIdx + 1])}
+                style={{ width: 34, height: 34, borderRadius: 999, border: "none", background: setIdx >= wordSet.words.length - 1 ? "#F3F4F6" : "#0EA5A5", color: setIdx >= wordSet.words.length - 1 ? "#9CA3AF" : "#fff", cursor: setIdx >= wordSet.words.length - 1 ? "default" : "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Persistent search bar, Eyal (June 2026) flagged that
