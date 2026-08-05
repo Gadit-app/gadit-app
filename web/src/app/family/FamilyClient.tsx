@@ -21,7 +21,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { collection, doc, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -33,6 +33,7 @@ import {
   isParentRole,
   memberColorFor,
   MAX_KIDS_PER_FAMILY,
+  type MemberRole,
 } from "@/lib/family";
 
 const COPY: Record<string, {
@@ -305,6 +306,8 @@ function MemberCard({
   pairedLabel,
   ownerLabel,
   roleLabel,
+  onEdit,
+  editLabel,
 }: {
   m: FamilyMember;
   onPair: () => void;
@@ -314,6 +317,8 @@ function MemberCard({
   pairedLabel: string;
   ownerLabel: string;
   roleLabel: string;
+  onEdit?: () => void;
+  editLabel?: string;
 }) {
   const color = memberColorFor(m);
   const initial = (m.name || roleLabel || "?").trim().charAt(0).toUpperCase();
@@ -336,6 +341,13 @@ function MemberCard({
           </div>
         </div>
       </div>
+      {m.isOwner && onEdit && (
+        <div className="wb-family-member-actions">
+          <button type="button" className="wb-family-member-pair" onClick={onEdit}>
+            {editLabel}
+          </button>
+        </div>
+      )}
       {!m.isOwner && (
         <div className="wb-family-member-actions">
           <button type="button" className="wb-family-member-pair" onClick={onPair}>
@@ -460,6 +472,13 @@ export function FamilyClient() {
   const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
   const [progressLoaded, setProgressLoaded] = useState(false);
   const [tab, setTab] = useState<FamTab>("home");
+  // Edit the primary parent (owner). The owner profile is auto-created as
+  // "father" with no name, so a mother who registered sees "אבא". This
+  // lets the owner set their own name + role (Gadi 2026-08-05, Lital).
+  const [editOpen, setEditOpen] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editRole, setEditRole] = useState<MemberRole>("father");
+  const [editSaving, setEditSaving] = useState(false);
 
   const isWelcome = search.get("welcome") === "1";
   const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
@@ -573,13 +592,78 @@ export function FamilyClient() {
       pairedLabel={c.paired}
       ownerLabel={c.owner}
       roleLabel={roleLabel[m.role]}
+      onEdit={m.isOwner ? () => {
+        setEditName(m.name || "");
+        setEditRole((m.role === "mother" ? "mother" : "father"));
+        setEditOpen(true);
+      } : undefined}
+      editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
     />
   );
+
+  async function saveOwner() {
+    if (!user || !ownerMember || editSaving) return;
+    setEditSaving(true);
+    try {
+      await updateDoc(doc(db, "families", user.uid, "members", ownerMember.id), {
+        name: editName.trim(),
+        role: editRole === "mother" ? "mother" : "father",
+      });
+      setEditOpen(false);
+    } catch (e) {
+      console.error("edit primary parent failed:", e);
+    } finally {
+      setEditSaving(false);
+    }
+  }
 
   return (
     <div className="wordbook fam-shell-page" dir={dir}>
       <style>{FAM_SHELL_CSS}</style>
       <style>{FAM_DASH_CSS}</style>
+      {editOpen && (
+        <div
+          onClick={() => !editSaving && setEditOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(17,24,39,0.45)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            dir={dir}
+            style={{ background: "#fff", borderRadius: 16, padding: "22px 20px", width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(17,24,39,0.25)" }}
+          >
+            <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#111827" }}>{c.owner}</h3>
+            <p style={{ margin: "0 0 16px", fontSize: 13.5, color: "#6b7280" }}>
+              {lang === "he" ? "השם והתפקיד שמוצגים כהורה הראשי." : "The name and role shown as the primary parent."}
+            </p>
+            <input
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              placeholder={lang === "he" ? "שם" : "Name"}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", marginBottom: 12, boxSizing: "border-box" }}
+            />
+            <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+              {(["father", "mother"] as const).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setEditRole(r)}
+                  style={{ flex: 1, padding: "10px", borderRadius: 10, border: editRole === r ? "2px solid #0EA5A5" : "1px solid rgba(17,24,39,0.18)", background: editRole === r ? "rgba(14,165,165,0.08)" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "#111827" }}
+                >
+                  {roleLabel[r]}
+                </button>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button type="button" onClick={() => setEditOpen(false)} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", background: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "#374151" }}>
+                {lang === "he" ? "ביטול" : "Cancel"}
+              </button>
+              <button type="button" onClick={saveOwner} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", fontFamily: "inherit", opacity: editSaving ? 0.6 : 1 }}>
+                {editSaving ? "…" : (lang === "he" ? "שמירה" : "Save")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="fam-shell">
         {/* Side navigation */}
         <aside className="fam-shell-side">
