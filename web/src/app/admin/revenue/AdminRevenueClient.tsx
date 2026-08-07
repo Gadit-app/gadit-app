@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
 
 type Tier = "clear" | "deep" | "family" | "schools";
@@ -140,11 +140,13 @@ export default function AdminRevenueClient() {
   const [error, setError] = useState<string | null>(null);
   const t = STRINGS[lang];
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+  // Read live from Stripe. Re-fetch on mount, on focus/visibility, and every
+  // 60s while visible, so the numbers are never a stale snapshot (Gadi
+  // 2026-08-06: the trial pipeline grows through the day).
+  const load = useCallback(() => {
     setLoading(true);
     setError(null);
-    fetch(`/api/admin/revenue?secret=${encodeURIComponent(secret)}`)
+    fetch(`/api/admin/revenue?secret=${encodeURIComponent(secret)}`, { cache: "no-store" })
       .then(async (r) => {
         if (!r.ok) {
           const j = (await r.json().catch(() => null)) as { error?: string } | null;
@@ -157,10 +159,40 @@ export default function AdminRevenueClient() {
       .finally(() => setLoading(false));
   }, [secret]);
 
+  useEffect(() => {
+    load();
+    const onVisible = () => { if (document.visibilityState === "visible") load(); };
+    window.addEventListener("focus", load);
+    document.addEventListener("visibilitychange", onVisible);
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === "visible") load();
+    }, 60_000);
+    return () => {
+      window.removeEventListener("focus", load);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.clearInterval(interval);
+    };
+  }, [load]);
+
   return (
     <>
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {data?.generatedAt && (
+            <span style={{ fontSize: 12.5, color: "#9CA3AF" }}>
+              {(lang === "he" ? "עודכן " : "as of ") + new Date(data.generatedAt).toLocaleTimeString()}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={load}
+            disabled={loading}
+            style={{ padding: "8px 16px", borderRadius: 10, border: "1px solid #D1D5DB", background: "#fff", color: "#374151", fontWeight: 700, fontSize: 14, cursor: loading ? "default" : "pointer", opacity: loading ? 0.6 : 1, fontFamily: "inherit" }}
+          >
+            {loading ? "…" : (lang === "he" ? "רענון" : "Refresh")}
+          </button>
+        </div>
       </div>
 
       {loading && <div style={{ padding: 32, textAlign: "center", color: "#6B7280" }}>{t.loading}</div>}

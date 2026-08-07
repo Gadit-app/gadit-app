@@ -66,6 +66,27 @@ function buildTierMap(): Record<string, Tier> {
   return m;
 }
 
+/**
+ * Map each Stripe PRODUCT id to a tier by its name. This is the robust
+ * source of truth: a Family sub on ANY Family price (current, retired,
+ * monthly, yearly) counts as Family, even if the env var was never updated
+ * to that price id. Env-price mapping stays as a fallback.
+ */
+async function buildProductTierMap(): Promise<Record<string, Tier>> {
+  const m: Record<string, Tier> = {};
+  const products = await stripe.products.list({ limit: 100 });
+  for (const p of products.data) {
+    const n = (p.name || "").toLowerCase();
+    const t: Tier | null =
+      n.includes("family") ? "family" :
+      n.includes("school") ? "schools" :
+      n.includes("deep") ? "deep" :
+      n.includes("clear") ? "clear" : null;
+    if (t) m[p.id] = t;
+  }
+  return m;
+}
+
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get("secret") ?? "";
   const expected = process.env.ADMIN_SECRET;
@@ -73,6 +94,7 @@ export async function GET(req: NextRequest) {
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const tierMap = buildTierMap();
+  const productTier = await buildProductTierMap();
 
   // List all subscriptions (paginate).
   const subs: Stripe.Subscription[] = [];
@@ -118,7 +140,8 @@ export async function GET(req: NextRequest) {
     const currency = (price?.currency ?? "usd").toLowerCase();
     const monthlyNative = billing === "yearly" ? amount / 12 : amount;
     const monthlyUsd = currency === "ils" ? monthlyNative * ILS_TO_USD : monthlyNative;
-    const tier: Tier = tierMap[priceId] ?? "clear";
+    const prodId = typeof price?.product === "string" ? price.product : price?.product?.id ?? "";
+    const tier: Tier = productTier[prodId] ?? tierMap[priceId] ?? "clear";
 
     const cust = typeof s.customer === "object" && s.customer && !("deleted" in s.customer) ? s.customer : null;
     const email = cust?.email ?? (s.metadata?.email as string | undefined) ?? null;
