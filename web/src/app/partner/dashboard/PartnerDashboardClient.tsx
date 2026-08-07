@@ -529,7 +529,7 @@ function buildRefLink(code: string, lang: string, path = ""): string {
 export function PartnerDashboardClient() {
   const { lang } = useLang();
   const href = useHref();
-  const t = COPY[lang === "he" ? "he" : "en"];
+  const t = COPY[(lang in COPY ? lang : "en") as keyof typeof COPY];
   const dir = t.dir;
 
   const [stats, setStats] = useState<Stats | null>(null);

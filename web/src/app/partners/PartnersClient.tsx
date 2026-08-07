@@ -793,7 +793,7 @@ function isEmail(s: string): boolean {
 export function PartnersClient() {
   const { lang } = useLang();
   const href = useHref();
-  const t = COPY[lang === "he" ? "he" : "en"];
+  const t = COPY[(lang in COPY ? lang : "en") as keyof typeof COPY];
   const dir = t.dir;
 
   const [count, setCount] = useState(20);
