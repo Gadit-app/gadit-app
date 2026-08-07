@@ -54,6 +54,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   pl: "Polish",
   fa: "Persian",
   id: "Indonesian",
+  nl: "Dutch",
 };
 
 // On-the-fly micro-definition for popovers when the cache misses.

@@ -21,6 +21,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   pl: "Polish",
   fa: "Persian",
   id: "Indonesian",
+  nl: "Dutch",
 };
 
 const SYSTEM_PROMPT = `You are a warm, encouraging language tutor.

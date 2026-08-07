@@ -5812,7 +5812,7 @@ const am: Partial<V2Strings> = {
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   // uk/tr/pl/fa/id: core UI ships from T (i18n.ts); v2 long-tail strings
   // fall back to English via v2() until translated.
-  uk: {}, tr: {}, pl: {}, fa: {}, id: {},
+  uk: {}, tr: {}, pl: {}, fa: {}, id: {}, nl: {},
   en,
   he,
   ar,

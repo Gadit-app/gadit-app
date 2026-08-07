@@ -257,6 +257,12 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "እያንዳንዱን ቃል በእውነት እንዲረዱ የሚያግዝ አዲስ መሣሪያ። ሁሉም ትርጉሞች፣ ምሳሌዎች፣ ፈሊጦች እና የቃሉ መነሻ። ለመጀመር ነፃ ነው፣ ማሻሻያውም በጣም ተመጣጣኝ ዋጋ አለው። መሞከር ተገቢ ነው።",
     locale: "am_ET",
   },
+  nl: {
+    title: "Gadit, begrijp elk woord volledig",
+    description:
+      "Een nieuwe tool die je elk woord echt laat begrijpen. Alle betekenissen, voorbeelden, uitdrukkingen en de herkomst van het woord. Gratis om te beginnen, en de upgrade is heel betaalbaar. Zeker het proberen waard.",
+    locale: "nl_NL",
+  },
 };
 
 const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
