@@ -2386,7 +2386,7 @@ const nl: V2Strings = {
   homeHeadlineLine1: "Begrijp",
   homeHeadlineLine2: "tot het einde.",
   homeSubline:
-    "Een woordenboek dat je ontmoet in context, betekenissen, herkomst, uitdrukkingen en een levendig beeld, in 14 talen.",
+    "Een woordenboek dat je opzoekt in context: betekenissen, herkomst, uitdrukkingen en een levendig beeld, in 14 talen.",
 
   searchPlaceholderHome: "Typ een woord",
   voiceInputTitle: "Spreek een woord in",
@@ -2411,9 +2411,9 @@ const nl: V2Strings = {
   valueProp3Body:
     "Waar het woord vandaan komt, verteld als een alinea, zoals een nieuwsgierige vriend zou schrijven.",
   valueProp4Eyebrow: "14 talen",
-  valueProp4Title: "Hebreeuws en Arabisch, volledig native",
+  valueProp4Title: "Hebreeuws en Arabisch, volledig in de eigen taal",
   valueProp4Body:
-    "Echte RTL, echte lettertypes, echte uitdrukkingen, geen vertaalde UI die er los op geplakt is.",
+    "Echte RTL, echte lettertypes, echte uitdrukkingen, geen vertaalde interface die er los op geplakt is.",
 
   previewLabel: "Voorbeeld",
   seeFullResult: "Bekijk het volledige resultaat",
@@ -2471,7 +2471,7 @@ const nl: V2Strings = {
   tierClearPitch:
     "Breng woorden tot leven met beelden, kindermodus en feedback.",
   tierClearBadge: "Meest populair",
-  tierClearCta: "Start 14 dagen gratis proberen",
+  tierClearCta: "Probeer 14 dagen gratis",
   tierClearCtaYearly: "Jaarlijks abonneren",
   tierClearTrust: "Altijd opzegbaar · Geen kosten tijdens de proefperiode",
   tierClearFeatures:
@@ -2494,7 +2494,7 @@ const nl: V2Strings = {
   trustStripNoAds: "Geen advertenties, geen tracking door derden",
 
   faqEyebrow: "Veelgestelde vragen",
-  faqHeadline: "Vragen, beantwoord",
+  faqHeadline: "Antwoorden op je vragen",
   faqQ1: "Kan ik van abonnement wisselen?",
   faqA1:
     "Ja, upgrade of downgrade altijd. Verrekening gebeurt automatisch, je betaalt alleen het verschil.",
@@ -2536,7 +2536,7 @@ const nl: V2Strings = {
   loginCreatingAccount: "Account aanmaken…",
   loginErrorWrongCredentials: "Verkeerd e-mailadres of wachtwoord.",
   loginErrorEmailInUse: "E-mail is al in gebruik. Probeer in te loggen.",
-  loginErrorWeakPassword: "Wachtwoord moet minstens 8 tekens bevatten en een letter en een cijfer bevatten.",
+  loginErrorWeakPassword: "Wachtwoord moet minstens 8 tekens lang zijn en minstens één letter en één cijfer bevatten.",
   loginAgeTermsLine: "Ik ben 13 jaar of ouder en ga akkoord met de",
   loginTermsLinkLabel: "Voorwaarden",
   loginPrivacyLinkLabel: "Privacybeleid",
@@ -2729,7 +2729,7 @@ const nl: V2Strings = {
   visualBlurb:
     "Eén levendig beeld, gegenereerd door Gadit, een visueel anker voor hoe dit woord aanvoelt.",
   visualBlurbLocked:
-    "Genereer een levendig, uniek beeld voor dit woord, begrijpen via het zien.",
+    "Genereer een levendig, uniek beeld voor dit woord, begrijpen door te zien.",
   reportLabel: "Een fout melden",
 
   // ── Wordbook redesign ───────────────────────────────────────

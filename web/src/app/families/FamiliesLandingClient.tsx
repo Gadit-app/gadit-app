@@ -4920,7 +4920,7 @@ const FAM_MOCK: Record<string, FamMock> = {
     dreamMeaningFull: "beelden en gedachten die tijdens de slaap door je hoofd gaan",
     dreamExample: "„Vannacht had ik een droom over een verre reis.”",
     dreamMeaningShort: "Beelden en gedachten die tijdens de slaap door je hoofd gaan",
-    dreamKidDef: "„Droom” zijn de plaatjes en verhalen die door je hoofd lopen terwijl je slaapt. Soms leuk, soms raar, en ze vervagen als je wakker wordt.",
+    dreamKidDef: "„Dromen” zijn de plaatjes en verhalen die door je hoofd lopen terwijl je slaapt. Soms leuk, soms raar, en ze vervagen als je wakker wordt.",
     dreamEx1: "„Vannacht had ik een droom over een lange reis.”",
     dreamEx2: "„Ze werd wakker uit een enge droom.”",
     dreamEx3: "„Zijn grote droom is naar de ruimte vliegen.”",
