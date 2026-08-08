@@ -12436,6 +12436,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[dir="rtl"] .wb-schools-body,
 .wordbook[dir="rtl"] .wb-schools-section-sub { font-family: var(--wb-he); }
 
+/* Text-only sections (no side image) read best centered — Gadi 2026-08-08.
+   The problem section is pure copy + callouts, so center its header and
+   cards. Sections that gain a side image should NOT get this class. */
+.wordbook .wb-schools-problem .wb-schools-section-inner { text-align: center; }
+.wordbook .wb-schools-problem .wb-schools-h2,
+.wordbook .wb-schools-problem .wb-schools-body { margin-inline: auto; }
+
 /* ─── 1. HERO ──────────────────────────────────────────────── */
 .wordbook .wb-schools-hero {
   display: grid;

@@ -200,7 +200,7 @@ const COPY: Record<string, T> = {
     privPoint4: "COPPA, GDPR-K, and Israeli student-privacy law all comfortably handled.",
     privKahoot: "Joins as easily as a classroom quiz game. Built for word comprehension and teacher visibility.",
     priceTag: "Pricing",
-    priceH2: "Simple. Below the procurement threshold.",
+    priceH2: "Annual pricing, by school size.",
     priceSub: "Self-serve via Stripe. No sales calls, no demos, no purchase orders.",
     priceSmallName: "Schools",
     priceSmallAmount: "$69",
@@ -854,7 +854,7 @@ const COPY: Record<string, T> = {
     privPoint4: "עומד בחוק הגנת הפרטיות הישראלי ובתקני הפרטיות המחמירים בעולם.",
     privKahoot: "הצטרפות פשוטה כמו במשחק חידון. נבנה להבנת מילים ולנראות למורה.",
     priceTag: "מחירים",
-    priceH2: "פשוט. מתחת לסף הרכש.",
+    priceH2: "מחיר שנתי, לפי גודל בית הספר.",
     priceSub: "הרשמה ותשלום מאובטח באתר. בלי שיחות מכירה, בלי הדגמות, בלי הזמנות רכש.",
     priceSmallName: "Schools",
     priceSmallAmount: "$69",
@@ -2607,7 +2607,21 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
       </header>
       )}
       {standalone && (
-        <div style={{ position: "fixed", top: 12, insetInlineEnd: 12, zIndex: 50 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            padding: "14px 22px",
+            maxWidth: 1180,
+            margin: "0 auto",
+            width: "100%",
+          }}
+        >
+          <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
+            Gad<span className="wb-wordmark-it">it</span>
+          </Link>
           <LangSwitcher variant="muted" />
         </div>
       )}
@@ -2615,14 +2629,12 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
       {/* ─── 1. HERO ─────────────────────────────────────────────── */}
       <section className="wb-schools-hero">
         <div className="wb-schools-hero-text">
-          <span className="wb-schools-pricechip">{t.heroPriceChip}</span>
           <h1 className="wb-schools-h1">{t.heroH1}</h1>
           <p className="wb-schools-sub">{t.heroSub}</p>
           <div className="wb-schools-hero-actions">
             <button type="button" className="wb-schools-cta" onClick={scrollToPricing}>
               {t.heroCta}
             </button>
-            <span className="wb-schools-hero-trust">{t.heroTrust}</span>
           </div>
         </div>
 
@@ -2893,7 +2905,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
         <div className="wb-schools-section-inner">
           <span className="wb-schools-tag">{t.priceTag}</span>
           <h2 className="wb-schools-h2">{t.priceH2}</h2>
-          <p className="wb-schools-section-sub">{t.priceSub}</p>
           <style>{`
             .wordbook .wb-schools-price-grid.sl-price-grid-3 {
               max-width: 1080px;
@@ -2957,10 +2968,10 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               dir="rtl"
             >
               <div style={{ fontSize: 16, fontWeight: 700, color: "#1C1917", marginBottom: 8 }}>
-                הזמנה ותשלום, פשוט
+                הרשמה, פשוט
               </div>
               <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.75 }}>
-                בתי ספר משלמים שנה מראש בהעברה בנקאית או הזמנת רכש, מול חשבונית מס. השאירו פרטים ונשלח הצעת מחיר וחשבונית, ואחרי התשלום נפעיל את בית הספר.
+                ממלאים טופס קצר עם פרטי בית הספר, ואנחנו פותחים לכם את בית הספר עם שם משתמש וסיסמה ושולחים חשבונית מס. התשלום שנתי בהעברה בנקאית או בהזמנת רכש.
               </div>
               <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.75, marginTop: 12 }}>
                 <strong>לביא טכנולוגיות למידה והדרכה בע״מ</strong>
@@ -2981,7 +2992,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                   borderRadius: 10,
                 }}
               >
-                בקשת הצעת מחיר
+                להרשמת בית הספר
               </a>
             </div>
           )}
