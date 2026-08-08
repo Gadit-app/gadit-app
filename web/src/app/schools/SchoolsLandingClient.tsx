@@ -2630,6 +2630,9 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
       {/* ─── 1. HERO ─────────────────────────────────────────────── */}
       <section className="wb-schools-hero">
         <div className="wb-schools-hero-text">
+          {lang === "he" && (
+            <span className="wb-schools-tag" style={{ marginBottom: 16 }}>מילון חזותי וחכם לבתי ספר</span>
+          )}
           <h1 className="wb-schools-h1">{t.heroH1}</h1>
           <p className="wb-schools-sub">{t.heroSub}</p>
           <div className="wb-schools-hero-actions">
@@ -2730,6 +2733,14 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           <h2 className="wb-schools-h2">{xt.h2}</h2>
           <p className="wb-schools-body">{xt.body1}</p>
           <p className="wb-schools-body">{xt.body2}</p>
+          {lang === "he" && (
+            <img
+              src="/schools/own-language.webp"
+              alt=""
+              loading="lazy"
+              style={{ width: "100%", maxWidth: 620, borderRadius: 18, margin: "10px auto 6px", display: "block", boxShadow: "0 14px 40px -18px rgba(16,24,40,0.28)" }}
+            />
+          )}
 
           {/* Concrete demo: one lesson word, understood in the student's
               own language. Fixed content, UI-translated labels. */}

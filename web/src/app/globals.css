@@ -12866,6 +12866,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin: 0 auto;
 }
 
+/* Section color bands — clear visual separation between sections, so each
+   one reads as its own step (Gadi 2026-08-08, inspired by the families
+   page). Adjacent sections always differ: white / soft-teal / soft-amber. */
+.wordbook .wb-schools-problem { background: #FFFFFF; }
+.wordbook .wb-schools-teacher { background: #ECFAF9; }
+.wordbook .wb-schools-pricing { background: #FBF7EF; }
+.wordbook .wb-schools-faq { background: #FFFFFF; }
+
 /* ─── 5. PRIVACY ──────────────────────────────────────────── */
 .wordbook .wb-schools-privacy { background: #fff; }
 .wordbook .wb-schools-privacy-grid {
