@@ -3323,7 +3323,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 500;
 }
 
-/* Tagline — locked across all 14 languages: same family/size/weight/
+/* Tagline — locked across all 20 languages: same family/size/weight/
    line-height. Sits tight under the logo (small margin) so logo +
    tagline read as one lockup, and the Y of both is identical
    regardless of which language is active. */

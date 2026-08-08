@@ -15,7 +15,7 @@ import { recordWordSearch } from "@/lib/word-search-log";
 //   server-preloaded for anonymous users and never hit this API, so
 //   SEO landings stay zero-friction and don't burn quota.
 // BASIC_DAILY_LIMIT: signed-in free users get 20/day — this matches
-//   the promise the soft wall makes in all 14 languages ("search up
+//   the promise the soft wall makes in all 20 languages ("search up
 //   to 20 words a day"), which the previous value of 10 silently
 //   broke. 2 anonymous → 20 registered is also a 10x jump, which is
 //   the whole signup pitch. Fixed 2026-07-08.
@@ -1143,7 +1143,7 @@ function buildGaditEasterEgg(uiLangCode: string): object {
         },
         {
           meaning:
-            "(שם עצם, מותג) מילון חכם רב-לשוני שנבנה סביב הפעולה הזאת, מסביר כל מילה עם משמעויות, דוגמאות, אטימולוגיה, ניבים ותמונה, ב-14 שפות.",
+            "(שם עצם, מותג) מילון חכם רב-לשוני שנבנה סביב הפעולה הזאת, מסביר כל מילה עם משמעויות, דוגמאות, אטימולוגיה, ניבים ותמונה, ב-20 שפות.",
           pos: "שם עצם",
           examples: [
             "Gadit הוא המקום שבו עושים GAD למילה.",
@@ -1180,7 +1180,7 @@ function buildGaditEasterEgg(uiLangCode: string): object {
       },
       {
         meaning:
-          "(noun, brand) A smart multilingual dictionary built around the act of GADing, it explains every word with meanings, examples, etymology, idioms and an image, in 14 languages.",
+          "(noun, brand) A smart multilingual dictionary built around the act of GADing, it explains every word with meanings, examples, etymology, idioms and an image, in 20 languages.",
         pos: "noun",
         examples: [
           "Gadit is the place where you GAD a word.",

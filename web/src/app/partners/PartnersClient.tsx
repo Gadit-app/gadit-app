@@ -27,7 +27,7 @@ const COPY = {
     proofC: "Виплати щомісяця",
     whyTitle: "Чому варто рекомендувати Gadit",
     why: [
-      { t: "Продукт, який люблять батьки", d: "Безпечний для дітей словник 14 мовами, з прикладами, картинками та особистим зошитом. Легко рекомендувати те, що справді допомагає." },
+      { t: "Продукт, який люблять батьки", d: "Безпечний для дітей словник 20 мовами, з прикладами, картинками та особистим зошитом. Легко рекомендувати те, що справді допомагає." },
       { t: "Справжній регулярний дохід", d: "Не одноразова виплата. Кожного місяця, коли клієнт платить, ви заробляєте. Клієнт, який лишається рік, вартий для вас цілого року." },
       { t: "Нуль ризику", d: "Приєднання безкоштовне, без цілей, без мінімумів. Поділіться посиланням, заробляйте." },
     ],
@@ -82,7 +82,7 @@ const COPY = {
     proofC: "Aylık ödeme",
     whyTitle: "Neden Gadit'i önermelisiniz",
     why: [
-      { t: "Velilerin sevdiği bir ürün", d: "Örnekler, resimler ve kişisel bir defterle 14 dilde, çocuklar için güvenli bir sözlük. Gerçekten faydalı bir şeyi önermek kolaydır." },
+      { t: "Velilerin sevdiği bir ürün", d: "Örnekler, resimler ve kişisel bir defterle 20 dilde, çocuklar için güvenli bir sözlük. Gerçekten faydalı bir şeyi önermek kolaydır." },
       { t: "Gerçek düzenli gelir", d: "Tek seferlik bir ödeme değil. Bir müşteri her ay ödedikçe siz kazanırsınız. Bir yıl kalan bir müşteri size tam bir yıl değerindedir." },
       { t: "Sıfır risk", d: "Katılmak ücretsiz, hedef yok, alt sınır yok. Bir bağlantı paylaşın, kazanın." },
     ],
@@ -137,7 +137,7 @@ const COPY = {
     proofC: "Wypłata co miesiąc",
     whyTitle: "Dlaczego warto polecać Gadit",
     why: [
-      { t: "Produkt, który kochają rodzice", d: "Bezpieczny dla dzieci słownik w 14 językach, z przykładami, obrazkami i osobistym zeszytem. Łatwo polecać coś, co naprawdę pomaga." },
+      { t: "Produkt, który kochają rodzice", d: "Bezpieczny dla dzieci słownik w 20 językach, z przykładami, obrazkami i osobistym zeszytem. Łatwo polecać coś, co naprawdę pomaga." },
       { t: "Realny cykliczny dochód", d: "Nie jednorazowa wypłata. Za każdy miesiąc, w którym klient płaci, Ty zarabiasz. Klient, który zostaje na rok, jest wart dla Ciebie pełny rok." },
       { t: "Zero ryzyka", d: "Dołączenie jest darmowe, bez celów, bez minimów. Udostępnij link, zarabiaj." },
     ],
@@ -192,7 +192,7 @@ const COPY = {
     proofC: "پرداخت ماهانه",
     whyTitle: "چرا Gadit را توصیه کنی",
     why: [
-      { t: "محصولی که والدین دوستش دارند", d: "فرهنگ لغتی امن برای کودکان در 14 زبان، با مثال‌ها، تصویرها و یک دفترچه‌ی شخصی. توصیه‌ی چیزی که واقعاً کمک می‌کند آسان است." },
+      { t: "محصولی که والدین دوستش دارند", d: "فرهنگ لغتی امن برای کودکان در 20 زبان، با مثال‌ها، تصویرها و یک دفترچه‌ی شخصی. توصیه‌ی چیزی که واقعاً کمک می‌کند آسان است." },
       { t: "درآمد بازگشتی واقعی", d: "نه یک پرداخت یک‌باره. هر ماه که مشتری می‌پردازد، تو کسب می‌کنی. مشتری‌ای که یک سال می‌ماند برایت یک سال کامل ارزش دارد." },
       { t: "بدون ریسک", d: "پیوستن رایگان است، بدون هدف، بدون حداقل. یک لینک به اشتراک بگذار، کسب کن." },
     ],
@@ -247,7 +247,7 @@ const COPY = {
     proofC: "Dibayar bulanan",
     whyTitle: "Kenapa merekomendasikan Gadit",
     why: [
-      { t: "Produk yang disukai orang tua", d: "Kamus aman untuk anak dalam 14 bahasa, dengan contoh, gambar, dan buku catatan pribadi. Mudah merekomendasikan sesuatu yang benar-benar membantu." },
+      { t: "Produk yang disukai orang tua", d: "Kamus aman untuk anak dalam 20 bahasa, dengan contoh, gambar, dan buku catatan pribadi. Mudah merekomendasikan sesuatu yang benar-benar membantu." },
       { t: "Penghasilan berulang yang nyata", d: "Bukan pembayaran sekali. Setiap bulan pelanggan membayar, Anda mendapat. Pelanggan yang bertahan setahun bernilai setahun penuh untuk Anda." },
       { t: "Tanpa risiko", d: "Bergabung gratis, tanpa target, tanpa minimum. Bagikan tautan, dapatkan penghasilan." },
     ],
@@ -302,7 +302,7 @@ const COPY = {
     proofC: "תשלום פעם בחודש",
     whyTitle: "למה להמליץ על Gadit",
     why: [
-      { t: "מוצר שהורים אוהבים", d: "מילון בטוח לילדים ב-14 שפות, עם דוגמאות, תמונות ומחברת אישית. קל להמליץ על משהו שבאמת עוזר." },
+      { t: "מוצר שהורים אוהבים", d: "מילון בטוח לילדים ב-20 שפות, עם דוגמאות, תמונות ומחברת אישית. קל להמליץ על משהו שבאמת עוזר." },
       { t: "הכנסה חוזרת אמיתית", d: "לא תגמול חד-פעמי. על כל חודש שהלקוח משלם נכנסת עמלה. לקוח שנשאר שנה שווה שנה שלמה." },
       { t: "אפס סיכון", d: "ההצטרפות חינם, אין יעדים ואין מינימום. מספיק לשתף קישור כדי להרוויח." },
     ],
@@ -357,7 +357,7 @@ const COPY = {
     proofC: "Paid monthly",
     whyTitle: "Why recommend Gadit",
     why: [
-      { t: "A product parents love", d: "A child-safe dictionary in 14 languages, with examples, pictures and a personal notebook. Easy to recommend something that genuinely helps." },
+      { t: "A product parents love", d: "A child-safe dictionary in 20 languages, with examples, pictures and a personal notebook. Easy to recommend something that genuinely helps." },
       { t: "Real recurring income", d: "Not a one-time payout. Every month a customer pays, you earn. A customer who stays a year is worth a full year to you." },
       { t: "Zero risk", d: "Joining is free, no targets, no minimums. Share a link, earn." },
     ],
@@ -405,14 +405,14 @@ const COPY = {
     monthlyPrice: 4.99, // Deep monthly, USD
     nav: "Home",
     heroTitle: "Beveel Gadit aan. Verdien terugkerend inkomen.",
-    heroSub: "Iedereen die zich aanmeldt en betaalt via jouw persoonlijke link levert je 25% terugkerende commissie op in het eerste jaar, en 10% voor het leven.",
+    heroSub: "Iedereen die zich aanmeldt en betaalt via jouw persoonlijke link levert je 25% terugkerende commissie op in het eerste jaar, en 10% levenslang.",
     heroCta: "Gratis meedoen",
     proofA: "25% eerste jaar",
-    proofB: "10% voor het leven",
+    proofB: "10% levenslang",
     proofC: "Maandelijks uitbetaald",
     whyTitle: "Waarom Gadit aanbevelen",
     why: [
-      { t: "Een product waar ouders van houden", d: "Een kindveilig woordenboek in 14 talen, met voorbeelden, afbeeldingen en een persoonlijk notitieboek. Makkelijk om iets aan te bevelen dat echt helpt." },
+      { t: "Een product waar ouders van houden", d: "Een kindveilig woordenboek in 20 talen, met voorbeelden, afbeeldingen en een persoonlijk notitieboek. Makkelijk om iets aan te bevelen dat echt helpt." },
       { t: "Echt terugkerend inkomen", d: "Geen eenmalige uitbetaling. Elke maand dat een klant betaalt, verdien jij. Een klant die een jaar blijft is een vol jaar waard voor jou." },
       { t: "Nul risico", d: "Meedoen is gratis, geen doelen, geen minimums. Deel een link, verdien." },
     ],
@@ -420,20 +420,20 @@ const COPY = {
     how: [
       { t: "Aanmelden", d: "Vul een naam en e-mailadres in, en ontvang binnen enkele seconden een code + persoonlijke link." },
       { t: "Delen", d: "Stuur je link naar je publiek. Iedereen die klikt wordt 60 dagen aan jou toegeschreven, ook als ze zich later aanmelden." },
-      { t: "Verdienen", d: "Je verdient op elke maand dat de klant daadwerkelijk betaalt. Vrijgegeven na 30 dagen, maandelijks uitbetaald." },
+      { t: "Verdienen", d: "Je verdient aan elke maand dat de klant daadwerkelijk betaalt. Vrijgegeven na 30 dagen, maandelijks uitbetaald." },
     ],
     ratesTitle: "Hoeveel je verdient",
     standardName: "Partner",
     standardRate: "25%",
-    standardSub: "terugkerend in het eerste jaar, daarna 10% voor het leven op elke klant.",
+    standardSub: "terugkerend in het eerste jaar, daarna 10% levenslang op elke klant.",
     founderName: "Founder-partner",
     founderRate: "30%",
-    founderSub: "in het eerste jaar, daarna 10% voor het leven. Beperkt aantal plekken voor partners die echt volume kunnen leveren.",
+    founderSub: "in het eerste jaar, daarna 10% levenslang. Beperkt aantal plekken voor partners die echt volume kunnen leveren.",
     calcTitle: "Verdiencalculator",
     calcLead: "Hoeveel actieve klanten ga je aanbrengen?",
     calcMonthly: "per maand",
     calcYearly: "in het eerste jaar",
-    calcNote: "Schatting op basis van een Deep-abonnement en een tarief van 25%. Jaar-, Familie- en Schoolklanten duwen het hoger op.",
+    calcNote: "Schatting op basis van een Deep-abonnement en een tarief van 25%. Jaar-, Familie- en Schoolklanten stuwen het bedrag omhoog.",
     formTitle: "Doe mee aan het programma",
     formName: "Volledige naam",
     formEmail: "E-mail",
@@ -450,7 +450,7 @@ const COPY = {
     faq: [
       { q: "Moet ik een betalende klant zijn?", a: "Nee. Meedoen staat open voor iedereen, gratis." },
       { q: "Wanneer word ik betaald?", a: "Elke commissie wordt 30 dagen na de betaling vrijgegeven, en uitbetalingen lopen eens per maand." },
-      { q: "Wat als een klant opzegt?", a: "Je verdiende op elke maand die daadwerkelijk betaald is. Opzeggen na 4 maanden, dan hield je 4 maanden. Eerlijk voor beide kanten." },
+      { q: "Wat als een klant opzegt?", a: "Je verdient aan elke maand die daadwerkelijk betaald is. Opzeggen na 4 maanden, dan heb je 4 maanden verdiend. Eerlijk voor beide kanten." },
       { q: "Is er een limiet?", a: "Geen enkele. Breng zoveel klanten aan als je wilt." },
     ],
   },
@@ -577,7 +577,7 @@ const COPY = {
     proofC: "Pago mensual",
     whyTitle: "Por qué recomendar Gadit",
     why: [
-      { t: "Un producto que las familias adoran", d: "Un diccionario seguro para niños en 14 idiomas, con ejemplos, imágenes y un cuaderno personal. Es fácil recomendar algo que de verdad ayuda." },
+      { t: "Un producto que las familias adoran", d: "Un diccionario seguro para niños en 20 idiomas, con ejemplos, imágenes y un cuaderno personal. Es fácil recomendar algo que de verdad ayuda." },
       { t: "Ingresos recurrentes reales", d: "No es un pago único. Cada mes que un cliente paga, tú ganas. Un cliente que se queda un año vale un año entero para ti." },
       { t: "Cero riesgo", d: "Unirse es gratis, sin objetivos ni mínimos. Comparte un enlace y gana." },
     ],
@@ -632,7 +632,7 @@ const COPY = {
     proofC: "Pago todo mês",
     whyTitle: "Por que recomendar o Gadit",
     why: [
-      { t: "Um produto que os pais amam", d: "Um dicionário seguro para crianças em 14 idiomas, com exemplos, imagens e um caderno pessoal. É fácil recomendar algo que realmente ajuda." },
+      { t: "Um produto que os pais amam", d: "Um dicionário seguro para crianças em 20 idiomas, com exemplos, imagens e um caderno pessoal. É fácil recomendar algo que realmente ajuda." },
       { t: "Renda recorrente de verdade", d: "Não é um pagamento único. A cada mês que o cliente paga, você ganha. Um cliente que fica um ano vale um ano inteiro para você." },
       { t: "Zero risco", d: "Participar é grátis, sem metas, sem mínimos. Compartilhe um link e ganhe." },
     ],
@@ -687,7 +687,7 @@ const COPY = {
     proofC: "Versé chaque mois",
     whyTitle: "Pourquoi recommander Gadit",
     why: [
-      { t: "Un produit que les parents adorent", d: "Un dictionnaire sûr pour les enfants en 14 langues, avec des exemples, des images et un carnet personnel. Facile de recommander quelque chose qui aide vraiment." },
+      { t: "Un produit que les parents adorent", d: "Un dictionnaire sûr pour les enfants en 20 langues, avec des exemples, des images et un carnet personnel. Facile de recommander quelque chose qui aide vraiment." },
       { t: "Un revenu récurrent réel", d: "Pas un paiement unique. Chaque mois où un client paie, vous gagnez. Un client qui reste un an vous rapporte une année entière." },
       { t: "Aucun risque", d: "L'inscription est gratuite, sans objectifs, sans minimums. Partagez un lien, gagnez." },
     ],
@@ -742,7 +742,7 @@ const COPY = {
     proofC: "Monatlich ausgezahlt",
     whyTitle: "Warum du Gadit empfehlen solltest",
     why: [
-      { t: "Ein Produkt, das Eltern lieben", d: "Ein kindersicheres Wörterbuch in 14 Sprachen, mit Beispielen, Bildern und einem persönlichen Notizbuch. Etwas, das wirklich hilft, empfiehlt sich leicht." },
+      { t: "Ein Produkt, das Eltern lieben", d: "Ein kindersicheres Wörterbuch in 20 Sprachen, mit Beispielen, Bildern und einem persönlichen Notizbuch. Etwas, das wirklich hilft, empfiehlt sich leicht." },
       { t: "Echtes wiederkehrendes Einkommen", d: "Keine einmalige Zahlung. In jedem Monat, in dem ein Kunde zahlt, verdienst du mit. Ein Kunde, der ein Jahr bleibt, ist für dich ein ganzes Jahr wert." },
       { t: "Null Risiko", d: "Der Beitritt ist kostenlos, ohne Ziele, ohne Mindestbeträge. Teile einen Link und verdiene." },
     ],
@@ -852,7 +852,7 @@ const COPY = {
     proofC: "Vyplácané mesačne",
     whyTitle: "Prečo odporúčať Gadit",
     why: [
-      { t: "Produkt, ktorý rodičia milujú", d: "Bezpečný slovník pre deti v 14 jazykoch, s príkladmi, obrázkami a osobným zošitom. Ľahko sa odporúča niečo, čo naozaj pomáha." },
+      { t: "Produkt, ktorý rodičia milujú", d: "Bezpečný slovník pre deti v 20 jazykoch, s príkladmi, obrázkami a osobným zošitom. Ľahko sa odporúča niečo, čo naozaj pomáha." },
       { t: "Skutočný opakovaný príjem", d: "Nie jednorazová výplata. Každý mesiac, keď zákazník platí, zarábaš. Zákazník, ktorý ostane rok, má pre teba hodnotu celého roka." },
       { t: "Nulové riziko", d: "Pridanie je zadarmo, žiadne ciele, žiadne minimá. Zdieľaj odkaz, zarábaj." },
     ],
@@ -907,7 +907,7 @@ const COPY = {
     proofC: "Pagamento mensile",
     whyTitle: "Perché consigliare Gadit",
     why: [
-      { t: "Un prodotto che i genitori amano", d: "Un dizionario sicuro per i bambini in 14 lingue, con esempi, immagini e un quaderno personale. È facile consigliare qualcosa che aiuta davvero." },
+      { t: "Un prodotto che i genitori amano", d: "Un dizionario sicuro per i bambini in 20 lingue, con esempi, immagini e un quaderno personale. È facile consigliare qualcosa che aiuta davvero." },
       { t: "Un vero reddito ricorrente", d: "Non un pagamento una tantum. Ogni mese in cui un cliente paga, tu guadagni. Un cliente che resta un anno vale per te un anno intero." },
       { t: "Zero rischi", d: "Iscriversi è gratis, senza obiettivi né minimi. Condividi un link e guadagna." },
     ],
@@ -962,7 +962,7 @@ const COPY = {
     proofC: "毎月お支払い",
     whyTitle: "Gadit をおすすめする理由",
     why: [
-      { t: "保護者に愛される製品", d: "14言語対応の子どもに安全な辞書。例文、画像、そして自分だけのノートブック付き。本当に役立つものだから、自信を持っておすすめできます。" },
+      { t: "保護者に愛される製品", d: "20言語対応の子どもに安全な辞書。例文、画像、そして自分だけのノートブック付き。本当に役立つものだから、自信を持っておすすめできます。" },
       { t: "本物の継続収入", d: "一度きりの報酬ではありません。お客様が支払う毎月、あなたに報酬が入ります。1年間続けてくれるお客様は、あなたにとって丸1年分の価値になります。" },
       { t: "リスクはゼロ", d: "参加は無料。ノルマも最低条件もありません。リンクをシェアして、報酬を得ましょう。" },
     ],
@@ -1017,7 +1017,7 @@ const COPY = {
     proofC: "हर महीने भुगतान",
     whyTitle: "Gadit की सिफारिश क्यों करें",
     why: [
-      { t: "एक प्रोडक्ट जो माता-पिता को पसंद है", d: "14 भाषाओं में एक बच्चों के लिए सुरक्षित शब्दकोश, जिसमें उदाहरण, तस्वीरें और एक निजी नोटबुक है। जो सचमुच मदद करता है उसकी सिफारिश करना आसान है।" },
+      { t: "एक प्रोडक्ट जो माता-पिता को पसंद है", d: "20 भाषाओं में एक बच्चों के लिए सुरक्षित शब्दकोश, जिसमें उदाहरण, तस्वीरें और एक निजी नोटबुक है। जो सचमुच मदद करता है उसकी सिफारिश करना आसान है।" },
       { t: "असली रेकरिंग कमाई", d: "एक बार का भुगतान नहीं। हर महीने जब ग्राहक भुगतान करता है, आप कमाते हैं। जो ग्राहक एक साल रुकता है वह आपके लिए पूरे साल के बराबर है।" },
       { t: "शून्य जोखिम", d: "जुड़ना मुफ्त है, कोई टारगेट नहीं, कोई न्यूनतम नहीं। एक लिंक शेयर करें, कमाएं।" },
     ],
@@ -1072,7 +1072,7 @@ const COPY = {
     proofC: "በየወሩ ይከፈላል",
     whyTitle: "Gadit ን ለምን ይመክራሉ",
     why: [
-      { t: "ወላጆች የሚወዱት ምርት", d: "በ14 ቋንቋዎች የቀረበ ለልጆች ደኅንነቱ የተጠበቀ መዝገበ ቃላት፣ ከምሳሌዎች፣ ስዕሎች እና ከግል ማስታወሻ ደብተር ጋር። በእውነት የሚጠቅም ነገር መምከር ቀላል ነው።" },
+      { t: "ወላጆች የሚወዱት ምርት", d: "በ20 ቋንቋዎች የቀረበ ለልጆች ደኅንነቱ የተጠበቀ መዝገበ ቃላት፣ ከምሳሌዎች፣ ስዕሎች እና ከግል ማስታወሻ ደብተር ጋር። በእውነት የሚጠቅም ነገር መምከር ቀላል ነው።" },
       { t: "እውነተኛ ተደጋጋሚ ገቢ", d: "የአንድ ጊዜ ክፍያ አይደለም። ደንበኛው በከፈለ ቁጥር በየወሩ ያገኛሉ። አንድ ዓመት የሚቆይ ደንበኛ ለእርስዎ ሙሉ ዓመት ዋጋ አለው።" },
       { t: "ምንም ስጋት የለም", d: "መቀላቀል ነጻ ነው፣ ምንም ኮታ የለም፣ ምንም ዝቅተኛ መጠን የለም። አገናኝ ያካፍሉ፣ ያግኙ።" },
     ],

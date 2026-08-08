@@ -75,7 +75,7 @@ export type NavKey =
 type NavLink = { key: NavKey; href: string; label: string };
 
 // "Families" nav label. Kept local rather than in i18n-v2 so we don't have
-// to touch all 14 language blocks for one word (Gadi 2026-07-29: make the
+// to touch all 20 language blocks for one word (Gadi 2026-07-29: make the
 // three products — individuals, Families, Schools — visible in the top nav).
 const FAMILIES_LABEL: Record<string, string> = {
   he: "משפחות", en: "Families", ar: "العائلات", ru: "Семьи", es: "Familias",

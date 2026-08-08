@@ -88,7 +88,7 @@ export async function generateMetadata({
     (preloaded?.meanings?.[0] as { meaning?: string } | undefined)?.meaning?.trim() ?? "";
   const description = firstMeaning
     ? `${decoded}: ${firstMeaning.slice(0, 150)}${firstMeaning.length > 150 ? "…" : ""}`
-    : `Meanings, examples, etymology, and idioms for "${decoded}", in 14 languages.`;
+    : `Meanings, examples, etymology, and idioms for "${decoded}", in 20 languages.`;
 
   // Per-language self-canonical + hreflang (GSC fix, 2026-07-19).
   // Previously every language variant canonicalized to the English

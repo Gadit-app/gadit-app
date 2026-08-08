@@ -161,7 +161,7 @@ type T = {
 const COPY: Record<string, T> = {
   en: {
     heroH1: "Every student understands the lesson.",
-    heroSub: "Any hard word, in any of 14 languages, explained on the spot.",
+    heroSub: "Any hard word, in any of 20 languages, explained on the spot.",
     heroCta: "Start 14-day free trial",
     heroPriceChip: "From $69 / month",
     heroTrust: "Self-serve. Cancel anytime.",
@@ -214,7 +214,7 @@ const COPY: Record<string, T> = {
       "Full teacher dashboard",
       "Student picker roster",
       "Time-bound classroom codes",
-      "Student UI in 14 languages",
+      "Student UI in 20 languages",
       "14-day free trial",
     ],
     priceCta: "Start 14-day free trial",
@@ -270,7 +270,7 @@ const COPY: Record<string, T> = {
   },
   uk: {
     heroH1: "Кожен учень розуміє урок.",
-    heroSub: "Будь-яке складне слово, будь-якою з 14 мов, пояснене одразу.",
+    heroSub: "Будь-яке складне слово, будь-якою з 20 мов, пояснене одразу.",
     heroCta: "Почати 14-денний безкоштовний період",
     heroPriceChip: "Від $69 / місяць",
     heroTrust: "Самообслуговування. Скасування будь-коли.",
@@ -323,7 +323,7 @@ const COPY: Record<string, T> = {
       "Повну панель для вчителя",
       "Список для вибору учня",
       "Класні коди з обмеженням у часі",
-      "Інтерфейс учня 14 мовами",
+      "Інтерфейс учня 20 мовами",
       "14-денний безкоштовний період",
     ],
     priceCta: "Почати 14-денний безкоштовний період",
@@ -379,7 +379,7 @@ const COPY: Record<string, T> = {
   },
   tr: {
     heroH1: "Her öğrenci dersi anlar.",
-    heroSub: "Zor herhangi bir kelime, 14 dilden herhangi birinde, anında açıklanır.",
+    heroSub: "Zor herhangi bir kelime, 20 dilden herhangi birinde, anında açıklanır.",
     heroCta: "14 günlük ücretsiz denemeyi başlat",
     heroPriceChip: "Aylık $69'dan başlayan fiyatlarla",
     heroTrust: "Kendi kendine kurulum. İstediğiniz zaman iptal.",
@@ -432,7 +432,7 @@ const COPY: Record<string, T> = {
       "Tam öğretmen paneli",
       "Öğrenci seçim listesi",
       "Zaman sınırlı sınıf kodları",
-      "14 dilde öğrenci arayüzü",
+      "20 dilde öğrenci arayüzü",
       "14 günlük ücretsiz deneme",
     ],
     priceCta: "14 günlük ücretsiz denemeyi başlat",
@@ -488,7 +488,7 @@ const COPY: Record<string, T> = {
   },
   pl: {
     heroH1: "Każdy uczeń rozumie lekcję.",
-    heroSub: "Każde trudne słowo, w dowolnym z 14 języków, wyjaśnione od razu.",
+    heroSub: "Każde trudne słowo, w dowolnym z 20 języków, wyjaśnione od razu.",
     heroCta: "Rozpocznij 14-dniowy bezpłatny okres próbny",
     heroPriceChip: "Od $69 / miesiąc",
     heroTrust: "Samoobsługa. Anuluj w dowolnym momencie.",
@@ -541,7 +541,7 @@ const COPY: Record<string, T> = {
       "Pełny panel nauczyciela",
       "Lista uczniów do wyboru",
       "Kody klas ograniczone czasowo",
-      "Interfejs ucznia w 14 językach",
+      "Interfejs ucznia w 20 językach",
       "14-dniowy bezpłatny okres próbny",
     ],
     priceCta: "Rozpocznij 14-dniowy bezpłatny okres próbny",
@@ -597,7 +597,7 @@ const COPY: Record<string, T> = {
   },
   fa: {
     heroH1: "هر دانش‌آموز درس را می‌فهمد.",
-    heroSub: "هر واژه‌ی دشوار، در هر یک از 14 زبان، همان‌جا توضیح داده می‌شود.",
+    heroSub: "هر واژه‌ی دشوار، در هر یک از 20 زبان، همان‌جا توضیح داده می‌شود.",
     heroCta: "دوره‌ی آزمایشی رایگان 14 روزه را شروع کن",
     heroPriceChip: "از $69 / ماه",
     heroTrust: "خودخدمت. هر زمان لغو کن.",
@@ -650,7 +650,7 @@ const COPY: Record<string, T> = {
       "داشبورد کامل معلم",
       "فهرست انتخاب دانش‌آموز",
       "کدهای کلاس زمان‌دار",
-      "رابط کاربری دانش‌آموز در 14 زبان",
+      "رابط کاربری دانش‌آموز در 20 زبان",
       "دوره‌ی آزمایشی رایگان 14 روزه",
     ],
     priceCta: "دوره‌ی آزمایشی رایگان 14 روزه را شروع کن",
@@ -706,7 +706,7 @@ const COPY: Record<string, T> = {
   },
   id: {
     heroH1: "Setiap murid memahami pelajaran.",
-    heroSub: "Kata sulit apa pun, dalam salah satu dari 14 bahasa, dijelaskan saat itu juga.",
+    heroSub: "Kata sulit apa pun, dalam salah satu dari 20 bahasa, dijelaskan saat itu juga.",
     heroCta: "Mulai uji coba gratis 14 hari",
     heroPriceChip: "Mulai $69 / bulan",
     heroTrust: "Layanan mandiri. Batalkan kapan saja.",
@@ -759,7 +759,7 @@ const COPY: Record<string, T> = {
       "Dasbor guru lengkap",
       "Daftar pemilih murid",
       "Kode kelas terikat waktu",
-      "Antarmuka murid dalam 14 bahasa",
+      "Antarmuka murid dalam 20 bahasa",
       "Uji coba gratis 14 hari",
     ],
     priceCta: "Mulai uji coba gratis 14 hari",
@@ -815,7 +815,7 @@ const COPY: Record<string, T> = {
   },
   he: {
     heroH1: "כל תלמיד מבין את השיעור.",
-    heroSub: "כל מילה קשה, ב-14 שפות, מוסברת מיד.",
+    heroSub: "כל מילה קשה, ב-20 שפות, מוסברת מיד.",
     heroCta: "להתחיל 14 ימי ניסיון חינם",
     heroPriceChip: "מ-₪349 לחודש",
     heroTrust: "בשירות עצמי. אפשר לבטל בכל רגע.",
@@ -868,7 +868,7 @@ const COPY: Record<string, T> = {
       "דשבורד מורה מלא",
       "רשימת בחירת שם תלמיד",
       "קודי כיתה תחומים בזמן",
-      "ממשק תלמיד ב-14 שפות",
+      "ממשק תלמיד ב-20 שפות",
       "14 ימי ניסיון חינם",
     ],
     priceCta: "להתחיל 14 ימי ניסיון חינם",
@@ -1037,7 +1037,7 @@ const COPY: Record<string, T> = {
   // ─── Arabic (MSA) ─────────────────────────────────────────────
   nl: {
     heroH1: "Elke leerling begrijpt de les.",
-    heroSub: "Elk moeilijk woord, in een van de 14 talen, meteen uitgelegd.",
+    heroSub: "Elk moeilijk woord, in een van de 20 talen, meteen uitgelegd.",
     heroCta: "Start gratis proefperiode van 14 dagen",
     heroPriceChip: "Vanaf $69 / maand",
     heroTrust: "Zelf te regelen. Altijd opzegbaar.",
@@ -1090,7 +1090,7 @@ const COPY: Record<string, T> = {
       "Volledig docentendashboard",
       "Namenlijst om leerling te kiezen",
       "In tijd begrensde klascodes",
-      "Leerlinginterface in 14 talen",
+      "Leerlinginterface in 20 talen",
       "Gratis proefperiode van 14 dagen",
     ],
     priceCta: "Start gratis proefperiode van 14 dagen",
@@ -1257,7 +1257,7 @@ const COPY: Record<string, T> = {
   // ─── Czech ────────────────────────────────────────────────────
   cs: {
     heroH1: "Každý žák rozumí učivu.",
-    heroSub: "Každé těžké slovo, v kterémkoli ze 14 jazyků, hned vysvětlené.",
+    heroSub: "Každé těžké slovo, v kterémkoli ze 20 jazyků, hned vysvětlené.",
     heroCta: "Začít 14denní zkušební období",
     heroPriceChip: "Od $69 měsíčně",
     heroTrust: "Samoobsluha. Zrušení kdykoli.",
@@ -1368,7 +1368,7 @@ const COPY: Record<string, T> = {
   // ─── Slovak ───────────────────────────────────────────────────
   sk: {
     heroH1: "Každý žiak rozumie učivu.",
-    heroSub: "Každé ťažké slovo, v ktoromkoľvek zo 14 jazykov, hneď vysvetlené.",
+    heroSub: "Každé ťažké slovo, v ktoromkoľvek zo 20 jazykov, hneď vysvetlené.",
     heroCta: "Začať 14-dňovú skúšobnú dobu",
     heroPriceChip: "Od $69 mesačne",
     heroTrust: "Samoobsluha. Zrušenie kedykoľvek.",
@@ -1421,7 +1421,7 @@ const COPY: Record<string, T> = {
       "Plný panel učiteľa",
       "Zoznam výberu mena žiaka",
       "Triedne kódy viazané na čas",
-      "Žiacke rozhranie v 14 jazykoch",
+      "Žiacke rozhranie v 20 jazykoch",
       "14-dňová skúšobná doba",
     ],
     priceCta: "Začať 14-dňovú skúšobnú dobu",
@@ -1532,7 +1532,7 @@ const COPY: Record<string, T> = {
       "पूर्ण शिक्षक डैशबोर्ड",
       "छात्र नाम चयन सूची",
       "समय-बद्ध कक्षा कोड",
-      "14 भाषाओं में छात्र इंटरफ़ेस",
+      "20 भाषाओं में छात्र इंटरफ़ेस",
       "14 दिन का मुफ्त ट्रायल",
     ],
     priceCta: "14 दिन का मुफ्त ट्रायल शुरू करें",
@@ -1590,7 +1590,7 @@ const COPY: Record<string, T> = {
   // ─── Amharic ──────────────────────────────────────────────────
   am: {
     heroH1: "እያንዳንዱ ተማሪ ትምህርቱን ይረዳል።",
-    heroSub: "ማንኛውም አስቸጋሪ ቃል፣ ከ14 ቋንቋዎች በአንዱ፣ ወዲያውኑ ይብራራል።",
+    heroSub: "ማንኛውም አስቸጋሪ ቃል፣ ከ20 ቋንቋዎች በአንዱ፣ ወዲያውኑ ይብራራል።",
     heroCta: "የ 14 ቀን ነጻ ሙከራ ይጀምሩ",
     heroPriceChip: "ከ $69 / ወር ጀምሮ",
     heroTrust: "በራስ አገልግሎት። በማንኛውም ጊዜ ይሰርዙ።",
@@ -1643,7 +1643,7 @@ const COPY: Record<string, T> = {
       "ሙሉ የመምህር ዳሽቦርድ",
       "የተማሪ ስም መምረጫ ዝርዝር",
       "በሰዓት የተገደቡ የክፍል ኮዶች",
-      "የተማሪ ገጽታ በ 14 ቋንቋዎች",
+      "የተማሪ ገጽታ በ 20 ቋንቋዎች",
       "የ 14 ቀን ነጻ ሙከራ",
     ],
     priceCta: "የ 14 ቀን ነጻ ሙከራ ይጀምሩ",
@@ -1701,7 +1701,7 @@ const COPY: Record<string, T> = {
   // ─── Spanish ──────────────────────────────────────────────────
   es: {
     heroH1: "Cada estudiante entiende la lección.",
-    heroSub: "Cualquier palabra difícil, en cualquiera de 14 idiomas, explicada al instante.",
+    heroSub: "Cualquier palabra difícil, en cualquiera de 20 idiomas, explicada al instante.",
     heroCta: "Comenzar prueba gratuita de 14 días",
     heroPriceChip: "Desde $69 al mes",
     heroTrust: "Autoservicio. Cancele cuando quiera.",
@@ -1754,7 +1754,7 @@ const COPY: Record<string, T> = {
       "Panel docente completo",
       "Lista de selección de nombre del estudiante",
       "Códigos de aula con horario",
-      "Interfaz del estudiante en 14 idiomas",
+      "Interfaz del estudiante en 20 idiomas",
       "Prueba gratuita de 14 días",
     ],
     priceCta: "Comenzar prueba gratuita de 14 días",
@@ -1812,7 +1812,7 @@ const COPY: Record<string, T> = {
   // ─── Portuguese (Brazilian) ───────────────────────────────────
   pt: {
     heroH1: "Cada aluno entende a aula.",
-    heroSub: "Qualquer palavra difícil, em qualquer um dos 14 idiomas, explicada na hora.",
+    heroSub: "Qualquer palavra difícil, em qualquer um dos 20 idiomas, explicada na hora.",
     heroCta: "Iniciar teste gratuito de 14 dias",
     heroPriceChip: "A partir de $69 por mês",
     heroTrust: "Autoatendimento. Cancele a qualquer momento.",
@@ -1865,7 +1865,7 @@ const COPY: Record<string, T> = {
       "Painel completo do professor",
       "Lista de seleção de nome do aluno",
       "Códigos de sala vinculados ao horário",
-      "Interface do aluno em 14 idiomas",
+      "Interface do aluno em 20 idiomas",
       "Teste gratuito de 14 dias",
     ],
     priceCta: "Iniciar teste gratuito de 14 dias",
@@ -1923,7 +1923,7 @@ const COPY: Record<string, T> = {
   // ─── French ──────────────────────────────────────────────────
   fr: {
     heroH1: "Chaque élève comprend la leçon.",
-    heroSub: "Chaque mot difficile, dans l'une des 14 langues, expliqué aussitôt.",
+    heroSub: "Chaque mot difficile, dans l'une des 20 langues, expliqué aussitôt.",
     heroCta: "Commencer l'essai gratuit de 14 jours",
     heroPriceChip: "À partir de $69 par mois",
     heroTrust: "Libre-service. Annulez à tout moment.",
@@ -1976,7 +1976,7 @@ const COPY: Record<string, T> = {
       "Tableau de bord enseignant complet",
       "Liste de sélection du nom de l'élève",
       "Codes de classe liés à l'horaire",
-      "Interface élève en 14 langues",
+      "Interface élève en 20 langues",
       "Essai gratuit de 14 jours",
     ],
     priceCta: "Commencer l'essai gratuit de 14 jours",
@@ -2034,7 +2034,7 @@ const COPY: Record<string, T> = {
   // ─── German ──────────────────────────────────────────────────
   de: {
     heroH1: "Jeder Schüler versteht den Unterricht.",
-    heroSub: "Jedes schwierige Wort, in einer von 14 Sprachen, sofort erklärt.",
+    heroSub: "Jedes schwierige Wort, in einer von 20 Sprachen, sofort erklärt.",
     heroCta: "14 Tage kostenlos testen",
     heroPriceChip: "Ab $69 pro Monat",
     heroTrust: "Selbstbedienung. Jederzeit kündbar.",
@@ -2087,7 +2087,7 @@ const COPY: Record<string, T> = {
       "Vollständiges Lehrer-Dashboard",
       "Schüler-Namensauswahlliste",
       "Zeitgebundene Klassencodes",
-      "Schüler-Oberfläche in 14 Sprachen",
+      "Schüler-Oberfläche in 20 Sprachen",
       "14 Tage kostenlose Testphase",
     ],
     priceCta: "14 Tage kostenlos testen",
@@ -2145,7 +2145,7 @@ const COPY: Record<string, T> = {
   // ─── Italian ──────────────────────────────────────────────────
   it: {
     heroH1: "Ogni studente capisce la lezione.",
-    heroSub: "Ogni parola difficile, in una delle 14 lingue, spiegata all'istante.",
+    heroSub: "Ogni parola difficile, in una delle 20 lingue, spiegata all'istante.",
     heroCta: "Inizia la prova gratuita di 14 giorni",
     heroPriceChip: "Da $69 al mese",
     heroTrust: "Self-service. Annulla quando vuoi.",
@@ -2198,7 +2198,7 @@ const COPY: Record<string, T> = {
       "Dashboard insegnante completa",
       "Elenco di selezione del nome dello studente",
       "Codici classe vincolati all'orario",
-      "Interfaccia studente in 14 lingue",
+      "Interfaccia studente in 20 lingue",
       "Prova gratuita di 14 giorni",
     ],
     priceCta: "Inizia la prova gratuita di 14 giorni",
@@ -2309,7 +2309,7 @@ const COPY: Record<string, T> = {
       "教師ダッシュボード一式",
       "生徒名選択リスト",
       "時間制限付きクラスコード",
-      "14言語の生徒インターフェース",
+      "20言語の生徒インターフェース",
       "14日間の無料トライアル",
     ],
     priceCta: "14日間の無料トライアルを開始",
@@ -2427,7 +2427,7 @@ const XLANG: Record<string, XLang> = {
     keyline: "Your multilingual students stop falling behind in every other subject, because they can finally read the material.",
     demoWordLabel: "The lesson says",
     demoMeaningLabel: "The student understands",
-    note: "This is not only for new immigrants. It is for every student who hits a hard word, in any of 14 languages. The goal is understanding the material; this is the strongest tool for it.",
+    note: "This is not only for new immigrants. It is for every student who hits a hard word, in any of 20 languages. The goal is understanding the material; this is the strongest tool for it.",
   },
   he: {
     tag: "חוצה שפות",
@@ -2437,7 +2437,7 @@ const XLANG: Record<string, XLang> = {
     keyline: "התלמידים הרב-לשוניים שלך מפסיקים לפגר בכל מקצוע אחר, כי סוף סוף הם מצליחים לקרוא את החומר.",
     demoWordLabel: "בשיעור כתוב",
     demoMeaningLabel: "התלמיד מבין",
-    note: "זה לא רק לעולים חדשים. זה לכל תלמיד שנתקל במילה קשה, בכל אחת מ-14 שפות. המטרה היא הבנת החומר, וזה הכלי החזק ביותר עבורה.",
+    note: "זה לא רק לעולים חדשים. זה לכל תלמיד שנתקל במילה קשה, בכל אחת מ-20 שפות. המטרה היא הבנת החומר, וזה הכלי החזק ביותר עבורה.",
   },
   ar: {
     tag: "عبر اللغات",
