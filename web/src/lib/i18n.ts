@@ -29,7 +29,7 @@ export const LANGUAGES: { code: Lang; label: string; dir: "ltr" | "rtl"; flag: s
   { code: "tr", label: "Türkçe",    dir: "ltr", flag: "tr" },
   { code: "pl", label: "Polski",    dir: "ltr", flag: "pl" },
   { code: "fa", label: "فارسی",      dir: "rtl", flag: "ir" },
-  { code: "id", label: "Bahasa Indonesia", dir: "ltr", flag: "id" },
+  { code: "id", label: "Indonesia", dir: "ltr", flag: "id" },
   { code: "nl", label: "Nederlands", dir: "ltr", flag: "nl" },
 ];
 
