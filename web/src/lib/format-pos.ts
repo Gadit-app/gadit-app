@@ -19,7 +19,48 @@ type PosKey =
   | "proper noun" | "phrase" | "idiom";
 
 const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
-  uk: {}, tr: {}, pl: {}, fa: {}, id: {}, nl: {},
+  uk: {
+    "noun": "іменник", "verb": "дієслово", "adjective": "прикметник", "adverb": "прислівник",
+    "preposition": "прийменник", "conjunction": "сполучник", "pronoun": "займенник",
+    "interjection": "вигук", "determiner": "детермінатив", "article": "артикль",
+    "auxiliary": "допоміжне дієслово", "particle": "частка", "numeral": "числівник",
+    "proper noun": "власна назва", "phrase": "словосполучення", "idiom": "ідіома",
+  },
+  tr: {
+    "noun": "isim", "verb": "fiil", "adjective": "sıfat", "adverb": "zarf",
+    "preposition": "edat", "conjunction": "bağlaç", "pronoun": "zamir",
+    "interjection": "ünlem", "determiner": "belirteç", "article": "tanımlık",
+    "auxiliary": "yardımcı fiil", "particle": "ilgeç", "numeral": "sayı sözcüğü",
+    "proper noun": "özel isim", "phrase": "öbek", "idiom": "deyim",
+  },
+  pl: {
+    "noun": "rzeczownik", "verb": "czasownik", "adjective": "przymiotnik", "adverb": "przysłówek",
+    "preposition": "przyimek", "conjunction": "spójnik", "pronoun": "zaimek",
+    "interjection": "wykrzyknik", "determiner": "określnik", "article": "rodzajnik",
+    "auxiliary": "czasownik posiłkowy", "particle": "partykuła", "numeral": "liczebnik",
+    "proper noun": "nazwa własna", "phrase": "wyrażenie", "idiom": "idiom",
+  },
+  fa: {
+    "noun": "اسم", "verb": "فعل", "adjective": "صفت", "adverb": "قید",
+    "preposition": "حرف اضافه", "conjunction": "حرف ربط", "pronoun": "ضمیر",
+    "interjection": "حرف ندا", "determiner": "معرف", "article": "حرف تعریف",
+    "auxiliary": "فعل کمکی", "particle": "ادات", "numeral": "عدد",
+    "proper noun": "اسم خاص", "phrase": "عبارت", "idiom": "اصطلاح",
+  },
+  id: {
+    "noun": "kata benda", "verb": "kata kerja", "adjective": "kata sifat", "adverb": "kata keterangan",
+    "preposition": "kata depan", "conjunction": "kata sambung", "pronoun": "kata ganti",
+    "interjection": "kata seru", "determiner": "kata sandang penunjuk", "article": "kata sandang",
+    "auxiliary": "kata bantu", "particle": "partikel", "numeral": "kata bilangan",
+    "proper noun": "kata benda khusus", "phrase": "frasa", "idiom": "idiom",
+  },
+  nl: {
+    "noun": "zelfstandig naamwoord", "verb": "werkwoord", "adjective": "bijvoeglijk naamwoord", "adverb": "bijwoord",
+    "preposition": "voorzetsel", "conjunction": "voegwoord", "pronoun": "voornaamwoord",
+    "interjection": "tussenwerpsel", "determiner": "bepaler", "article": "lidwoord",
+    "auxiliary": "hulpwerkwoord", "particle": "partikel", "numeral": "telwoord",
+    "proper noun": "eigennaam", "phrase": "uitdrukking", "idiom": "zegswijze",
+  },
   en: {
     "noun": "noun", "verb": "verb", "adjective": "adjective", "adverb": "adverb",
     "preposition": "preposition", "conjunction": "conjunction", "pronoun": "pronoun",
