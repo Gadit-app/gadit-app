@@ -4048,23 +4048,910 @@ const COPY: Record<string, Copy> = {
 
 /* ─────────────────── product mockups (per feature) ─────────────────── */
 
+// Per-language content for the demo mockups on this page (the little
+// phone/notebook/quiz illustrations). Was a pile of ar/ru/he/en inline
+// ternaries, so every other language showed English example words and
+// sentences. Now one map keyed by UI language; falls back to en.
+type FamMock = Record<string, string>;
+
+const FAM_MOCK: Record<string, FamMock> = {
+  en: {
+    meaningsWord: "bat",
+    meaning1T: "The animal that flies at night",
+    meaning1Ex: "\"A bat flew out of the cave.\"",
+    meaning2T: "The stick used in baseball",
+    meaning2Ex: "\"She swung the bat and hit the ball.\"",
+    kidsBubble: "\"Reluctant\" is when you don't really want to do something, and your feet go slow. Like walking to the dentist.",
+    contextSentence: "My biggest {dream} is to be a doctor",
+    contextMeaning: "The meaning here: a hope or goal you want to reach",
+    notebookTitle: "Noa's notebook",
+    notebookDue: "practice today",
+    profile1Name: "Noa",
+    profile1Grade: "2nd grade",
+    profile2Name: "Ido",
+    profile2Grade: "6th grade",
+    profile3Name: "Maya",
+    profile3Grade: "9th grade",
+    gameTwinTrap: "Twin Trap",
+    gameTimeTraveler: "Time Traveler",
+    gameStreak: "6-day streak 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Not really wanting to",
+    englishMeaningEx: "\"He was reluctant to start his homework.\"",
+    puzzleSentence: "The sailor was {determined} to reach the island, despite the {storm} he never {hesitated}",
+    dreamWord: "dream",
+    dreamPos: "noun",
+    dreamMeaningFull: "images and thoughts that pass through the mind during sleep",
+    dreamExample: "\"Last night I had a dream about a far journey.\"",
+    dreamMeaningShort: "Images and thoughts that pass through the mind during sleep",
+    dreamKidDef: "\"Dream\" is the pictures and stories that run through your head while you sleep. Sometimes happy, sometimes strange, and they fade when you wake up.",
+    dreamEx1: "\"Last night I had a dream about a long journey.\"",
+    dreamEx2: "\"She woke up from a scary dream.\"",
+    dreamEx3: "\"His big dream is to fly to space.\"",
+    kidsLabel: "Kids Mode",
+    searchHint: "Type a word",
+    tabMeanings: "Meanings",
+    tabPicture: "Picture",
+    tabNotebook: "Notebook",
+    searchTagline: "The child types a word, and that is it.",
+    quizQ: "What does \"dream\" mean?",
+    quizRight: "Images and thoughts during sleep",
+    quizWrong1: "A kind of cake",
+    quizWrong2: "A musical instrument",
+  },
+  he: {
+    meaningsWord: "עין",
+    meaning1T: "אֵיבָר הראייה שבגוף",
+    meaning1Ex: "\"נכנס לי גרגר חול לעין.\"",
+    meaning2T: "מעיין, מקור מים הנובע מהאדמה",
+    meaning2Ex: "\"מילאנו בקבוקים ממי העין הקרירים.\"",
+    kidsBubble: "\"reluctant\" זה כשלא ממש בא לך לעשות משהו, והרגליים נגררות לאט. כמו ללכת לרופא שיניים.",
+    contextSentence: "{החלום} הכי גדול שלי הוא להיות רופא",
+    contextMeaning: "המשמעות כאן: תקווה או מטרה שרוצים להגשים",
+    notebookTitle: "המחברת של נועה",
+    notebookDue: "לתרגל היום",
+    profile1Name: "נועה",
+    profile1Grade: "כיתה ב׳",
+    profile2Name: "עידו",
+    profile2Grade: "כיתה ו׳",
+    profile3Name: "מאיה",
+    profile3Grade: "כיתה ט׳",
+    gameTwinTrap: "מלכודת התאומים",
+    gameTimeTraveler: "מטייל בזמן",
+    gameStreak: "רצף של 6 ימים 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "כשלא ממש רוצים משהו",
+    englishMeaningEx: "\"הוא לא ממש רצה להתחיל את שיעורי הבית.\"",
+    puzzleSentence: "המלח היה {נחוש} להגיע לאי, ולמרות ה{סערה} הוא מעולם לא {היסס}",
+    dreamWord: "חלום",
+    dreamPos: "שם עצם",
+    dreamMeaningFull: "תמונות ומחשבות שעוברות בראש בזמן השינה",
+    dreamExample: "\"אתמול בלילה חלמתי חלום על מסע רחוק.\"",
+    dreamMeaningShort: "תמונות ומחשבות שעוברות בראש בזמן השינה",
+    dreamKidDef: "\"חלום\" הוא התמונות והסיפורים שרצים לך בראש בזמן השינה. לפעמים שמחים, לפעמים מוזרים, והם נמוגים ברגע שמתעוררים.",
+    dreamEx1: "\"אתמול בלילה חלמתי חלום על מסע ארוך.\"",
+    dreamEx2: "\"היא התעוררה מחלום מפחיד.\"",
+    dreamEx3: "\"החלום הגדול שלו הוא לטוס לחלל.\"",
+    kidsLabel: "מצב ילדים",
+    searchHint: "להקליד מילה",
+    tabMeanings: "משמעויות",
+    tabPicture: "תמונה",
+    tabNotebook: "מחברת",
+    searchTagline: "הילד מקליד מילה, וזהו.",
+    quizQ: "מה זה \"חלום\"?",
+    quizRight: "תמונות ומחשבות בזמן השינה",
+    quizWrong1: "סוג של עוגה",
+    quizWrong2: "כלי נגינה",
+  },
+  ar: {
+    meaningsWord: "عين",
+    meaning1T: "عضو الإبصار في الجسم",
+    meaning1Ex: "\"دخلت حبة رمل في عيني.\"",
+    meaning2T: "نبع ماء يخرج من الأرض",
+    meaning2Ex: "\"ملأنا القوارير من ماء العين البارد.\"",
+    kidsBubble: "\"reluctant\" هي عندما لا ترغب حقاً في فعل شيء، فتمشي قدماك ببطء. مثل الذهاب إلى طبيب الأسنان.",
+    contextSentence: "أكبر {حُلم} لديّ أن أصبح طبيباً",
+    contextMeaning: "المعنى هنا: أمل أو هدف تريد الوصول إليه",
+    notebookTitle: "دفتر يوسف",
+    notebookDue: "التدريب اليوم",
+    profile1Name: "يوسف",
+    profile1Grade: "الصف الثاني",
+    profile2Name: "ليلى",
+    profile2Grade: "الصف السادس",
+    profile3Name: "عمر",
+    profile3Grade: "الصف التاسع",
+    gameTwinTrap: "فخ التوأم",
+    gameTimeTraveler: "مسافر عبر الزمن",
+    gameStreak: "سلسلة 6 أيام 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "لا يرغب حقاً",
+    englishMeaningEx: "\"كان متردداً في بدء واجباته المدرسية.\"",
+    puzzleSentence: "كان البحّار {مصمّماً} على الوصول إلى الجزيرة، ورغم {العاصفة} لم {يتردّد} أبداً",
+    dreamWord: "حُلم",
+    dreamPos: "اسم",
+    dreamMeaningFull: "صور وأفكار تمر في الذهن أثناء النوم",
+    dreamExample: "\"الليلة الماضية رأيت حلماً عن رحلة بعيدة.\"",
+    dreamMeaningShort: "صور وأفكار تمر في الذهن أثناء النوم",
+    dreamKidDef: "\"الحُلم\" هو الصور والقصص التي تمر في رأسك أثناء النوم. أحياناً سعيدة وأحياناً غريبة، وتتلاشى عند الاستيقاظ.",
+    dreamEx1: "\"الليلة الماضية رأيت حلماً عن رحلة طويلة.\"",
+    dreamEx2: "\"استيقظت من حلم مخيف.\"",
+    dreamEx3: "\"حلمه الكبير أن يطير إلى الفضاء.\"",
+    kidsLabel: "وضع الأطفال",
+    searchHint: "اكتب كلمة",
+    tabMeanings: "المعاني",
+    tabPicture: "صورة",
+    tabNotebook: "الدفتر",
+    searchTagline: "يكتب الطفل كلمة، وهذا كل شيء.",
+    quizQ: "ماذا تعني كلمة \"حُلم\"؟",
+    quizRight: "صور وأفكار أثناء النوم",
+    quizWrong1: "نوع من الكعك",
+    quizWrong2: "آلة موسيقية",
+  },
+  ru: {
+    meaningsWord: "ключ",
+    meaning1T: "предмет, которым открывают замок",
+    meaning1Ex: "\"Я потерял ключ от квартиры.\"",
+    meaning2T: "родник, источник воды из земли",
+    meaning2Ex: "\"Мы пили холодную воду из лесного ключа.\"",
+    kidsBubble: "\"reluctant\" это когда тебе не очень хочется что-то делать и ноги идут медленно. Как идти к зубному врачу.",
+    contextSentence: "Моя самая большая {мечта} стать врачом",
+    contextMeaning: "Значение здесь: надежда или цель, которую хочешь достичь",
+    notebookTitle: "Тетрадь Ани",
+    notebookDue: "повторить сегодня",
+    profile1Name: "Аня",
+    profile1Grade: "2-й класс",
+    profile2Name: "Максим",
+    profile2Grade: "6-й класс",
+    profile3Name: "Соня",
+    profile3Grade: "9-й класс",
+    gameTwinTrap: "Ловушка близнецов",
+    gameTimeTraveler: "Путешественник во времени",
+    gameStreak: "серия из 6 дней 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Не очень-то хочет",
+    englishMeaningEx: "\"Он неохотно приступал к домашнему заданию.\"",
+    puzzleSentence: "Моряк был полон {решимости} добраться до острова, и несмотря на {шторм} он ни разу не {дрогнул}",
+    dreamWord: "сон",
+    dreamPos: "существительное",
+    dreamMeaningFull: "образы и мысли, проходящие в сознании во время сна",
+    dreamExample: "\"Прошлой ночью мне приснился сон о далёком путешествии.\"",
+    dreamMeaningShort: "Образы и мысли, проходящие в сознании во время сна",
+    dreamKidDef: "\"Сон\" это картинки и истории, которые проносятся в голове, пока ты спишь. Иногда весёлые, иногда странные, и они тают, когда просыпаешься.",
+    dreamEx1: "\"Прошлой ночью мне приснился сон о долгом путешествии.\"",
+    dreamEx2: "\"Она проснулась от страшного сна.\"",
+    dreamEx3: "\"Его большая мечта полететь в космос.\"",
+    kidsLabel: "Детский режим",
+    searchHint: "Введите слово",
+    tabMeanings: "Значения",
+    tabPicture: "Картинка",
+    tabNotebook: "Тетрадь",
+    searchTagline: "Ребёнок вводит слово, и всё.",
+    quizQ: "Что означает слово \"сон\"?",
+    quizRight: "Образы и мысли во время сна",
+    quizWrong1: "Вид торта",
+    quizWrong2: "Музыкальный инструмент",
+  },
+  es: {
+    meaningsWord: "banco",
+    meaning1T: "asiento largo para varias personas",
+    meaning1Ex: "\"Nos sentamos en un banco del parque.\"",
+    meaning2T: "lugar donde se guarda el dinero",
+    meaning2Ex: "\"Fui al banco a sacar dinero.\"",
+    kidsBubble: "\"reluctant\" es cuando no tienes muchas ganas de hacer algo y tus pies van despacio. Como ir al dentista.",
+    contextSentence: "Mi mayor {sueño} es ser médico",
+    contextMeaning: "El significado aquí: una esperanza o meta que quieres alcanzar",
+    notebookTitle: "El cuaderno de Lucía",
+    notebookDue: "practicar hoy",
+    profile1Name: "Lucía",
+    profile1Grade: "2.º grado",
+    profile2Name: "Mateo",
+    profile2Grade: "6.º grado",
+    profile3Name: "Sofía",
+    profile3Grade: "9.º grado",
+    gameTwinTrap: "Trampa de gemelos",
+    gameTimeTraveler: "Viajero del tiempo",
+    gameStreak: "racha de 6 días 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Sin muchas ganas",
+    englishMeaningEx: "\"No tenía muchas ganas de empezar los deberes.\"",
+    puzzleSentence: "El marinero estaba {decidido} a llegar a la isla, y pese a la {tormenta} nunca {dudó}",
+    dreamWord: "sueño",
+    dreamPos: "sustantivo",
+    dreamMeaningFull: "imágenes y pensamientos que pasan por la mente durante el sueño",
+    dreamExample: "\"Anoche tuve un sueño sobre un viaje lejano.\"",
+    dreamMeaningShort: "Imágenes y pensamientos que pasan por la mente durante el sueño",
+    dreamKidDef: "\"Sueño\" son las imágenes y las historias que pasan por tu cabeza mientras duermes. A veces alegres, a veces extrañas, y se desvanecen al despertar.",
+    dreamEx1: "\"Anoche tuve un sueño sobre un largo viaje.\"",
+    dreamEx2: "\"Se despertó de un sueño aterrador.\"",
+    dreamEx3: "\"Su gran sueño es volar al espacio.\"",
+    kidsLabel: "Modo niños",
+    searchHint: "Escribe una palabra",
+    tabMeanings: "Significados",
+    tabPicture: "Imagen",
+    tabNotebook: "Cuaderno",
+    searchTagline: "El niño escribe una palabra, y ya está.",
+    quizQ: "¿Qué significa \"sueño\"?",
+    quizRight: "Imágenes y pensamientos durante el sueño",
+    quizWrong1: "Un tipo de pastel",
+    quizWrong2: "Un instrumento musical",
+  },
+  pt: {
+    meaningsWord: "manga",
+    meaning1T: "fruta tropical doce e alaranjada",
+    meaning1Ex: "\"Comi uma manga bem madura.\"",
+    meaning2T: "parte da roupa que cobre o braço",
+    meaning2Ex: "\"Arregacei a manga da camisa.\"",
+    kidsBubble: "\"reluctant\" é quando não tens muita vontade de fazer algo e os teus pés andam devagar. Como ir ao dentista.",
+    contextSentence: "O meu maior {sonho} é ser médico",
+    contextMeaning: "O significado aqui: uma esperança ou objetivo que queres alcançar",
+    notebookTitle: "O caderno da Sofia",
+    notebookDue: "praticar hoje",
+    profile1Name: "Sofia",
+    profile1Grade: "2.º ano",
+    profile2Name: "Miguel",
+    profile2Grade: "6.º ano",
+    profile3Name: "Beatriz",
+    profile3Grade: "9.º ano",
+    gameTwinTrap: "Armadilha dos Gémeos",
+    gameTimeTraveler: "Viajante do Tempo",
+    gameStreak: "sequência de 6 dias 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Sem muita vontade",
+    englishMeaningEx: "\"Ele estava sem vontade de começar os trabalhos de casa.\"",
+    puzzleSentence: "O marinheiro estava {determinado} a chegar à ilha, e apesar da {tempestade} nunca {hesitou}",
+    dreamWord: "sonho",
+    dreamPos: "substantivo",
+    dreamMeaningFull: "imagens e pensamentos que passam pela mente durante o sono",
+    dreamExample: "\"Ontem à noite tive um sonho sobre uma viagem distante.\"",
+    dreamMeaningShort: "Imagens e pensamentos que passam pela mente durante o sono",
+    dreamKidDef: "\"Sonho\" são as imagens e as histórias que passam pela tua cabeça enquanto dormes. Às vezes alegres, às vezes estranhas, e desaparecem quando acordas.",
+    dreamEx1: "\"Ontem à noite tive um sonho sobre uma longa viagem.\"",
+    dreamEx2: "\"Ela acordou de um sonho assustador.\"",
+    dreamEx3: "\"O seu grande sonho é voar até ao espaço.\"",
+    kidsLabel: "Modo crianças",
+    searchHint: "Escreve uma palavra",
+    tabMeanings: "Significados",
+    tabPicture: "Imagem",
+    tabNotebook: "Caderno",
+    searchTagline: "A criança escreve uma palavra, e pronto.",
+    quizQ: "O que significa \"sonho\"?",
+    quizRight: "Imagens e pensamentos durante o sono",
+    quizWrong1: "Um tipo de bolo",
+    quizWrong2: "Um instrumento musical",
+  },
+  fr: {
+    meaningsWord: "avocat",
+    meaning1T: "personne qui défend les gens au tribunal",
+    meaning1Ex: "\"L'avocat a défendu son client.\"",
+    meaning2T: "fruit vert à gros noyau",
+    meaning2Ex: "\"J'ai mangé un avocat au déjeuner.\"",
+    kidsBubble: "\"reluctant\" c'est quand tu n'as pas vraiment envie de faire quelque chose et que tes pieds traînent. Comme aller chez le dentiste.",
+    contextSentence: "Mon plus grand {rêve} est de devenir médecin",
+    contextMeaning: "Le sens ici: un espoir ou un but que l'on veut atteindre",
+    notebookTitle: "Le cahier de Léa",
+    notebookDue: "à réviser aujourd'hui",
+    profile1Name: "Léa",
+    profile1Grade: "CE1",
+    profile2Name: "Hugo",
+    profile2Grade: "6e",
+    profile3Name: "Chloé",
+    profile3Grade: "3e",
+    gameTwinTrap: "Le piège des jumeaux",
+    gameTimeTraveler: "Voyageur du temps",
+    gameStreak: "série de 6 jours 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Sans vraiment vouloir",
+    englishMeaningEx: "\"Il rechignait à commencer ses devoirs.\"",
+    puzzleSentence: "Le marin était {déterminé} à atteindre l'île, et malgré la {tempête} il n'a jamais {hésité}",
+    dreamWord: "rêve",
+    dreamPos: "nom",
+    dreamMeaningFull: "images et pensées qui traversent l'esprit pendant le sommeil",
+    dreamExample: "\"La nuit dernière, j'ai fait un rêve sur un voyage lointain.\"",
+    dreamMeaningShort: "Images et pensées qui traversent l'esprit pendant le sommeil",
+    dreamKidDef: "\"Rêve\", ce sont les images et les histoires qui défilent dans ta tête pendant que tu dors. Parfois joyeuses, parfois étranges, et elles s'effacent au réveil.",
+    dreamEx1: "\"La nuit dernière, j'ai fait un rêve sur un long voyage.\"",
+    dreamEx2: "\"Elle s'est réveillée d'un rêve effrayant.\"",
+    dreamEx3: "\"Son grand rêve est de voler dans l'espace.\"",
+    kidsLabel: "Mode enfant",
+    searchHint: "Tape un mot",
+    tabMeanings: "Sens",
+    tabPicture: "Image",
+    tabNotebook: "Cahier",
+    searchTagline: "L'enfant tape un mot, et c'est tout.",
+    quizQ: "Que signifie \"rêve\"?",
+    quizRight: "Images et pensées pendant le sommeil",
+    quizWrong1: "Une sorte de gâteau",
+    quizWrong2: "Un instrument de musique",
+  },
+  de: {
+    meaningsWord: "Bank",
+    meaning1T: "Sitzgelegenheit für mehrere Personen",
+    meaning1Ex: "\"Wir saßen auf einer Bank im Park.\"",
+    meaning2T: "Ort, an dem man Geld aufbewahrt",
+    meaning2Ex: "\"Ich ging zur Bank, um Geld abzuheben.\"",
+    kidsBubble: "\"reluctant\" ist, wenn du etwas nicht wirklich tun willst und deine Füße langsam werden. Wie der Gang zum Zahnarzt.",
+    contextSentence: "Mein größter {Traum} ist es, Arzt zu werden",
+    contextMeaning: "Die Bedeutung hier: eine Hoffnung oder ein Ziel, das man erreichen möchte",
+    notebookTitle: "Emmas Heft",
+    notebookDue: "heute üben",
+    profile1Name: "Emma",
+    profile1Grade: "2. Klasse",
+    profile2Name: "Leon",
+    profile2Grade: "6. Klasse",
+    profile3Name: "Mia",
+    profile3Grade: "9. Klasse",
+    gameTwinTrap: "Zwillingsfalle",
+    gameTimeTraveler: "Zeitreisender",
+    gameStreak: "6-Tage-Serie 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Nicht wirklich wollen",
+    englishMeaningEx: "\"Er begann seine Hausaufgaben nur widerwillig.\"",
+    puzzleSentence: "Der Seemann war {entschlossen}, die Insel zu erreichen, und trotz des {Sturms} {zögerte} er nie",
+    dreamWord: "Traum",
+    dreamPos: "Substantiv",
+    dreamMeaningFull: "Bilder und Gedanken, die während des Schlafs durch den Kopf gehen",
+    dreamExample: "\"Letzte Nacht hatte ich einen Traum von einer fernen Reise.\"",
+    dreamMeaningShort: "Bilder und Gedanken, die während des Schlafs durch den Kopf gehen",
+    dreamKidDef: "\"Traum\" sind die Bilder und Geschichten, die dir durch den Kopf gehen, während du schläfst. Mal fröhlich, mal seltsam, und sie verblassen, wenn du aufwachst.",
+    dreamEx1: "\"Letzte Nacht hatte ich einen Traum von einer langen Reise.\"",
+    dreamEx2: "\"Sie wachte aus einem beängstigenden Traum auf.\"",
+    dreamEx3: "\"Sein großer Traum ist es, ins All zu fliegen.\"",
+    kidsLabel: "Kindermodus",
+    searchHint: "Ein Wort eingeben",
+    tabMeanings: "Bedeutungen",
+    tabPicture: "Bild",
+    tabNotebook: "Heft",
+    searchTagline: "Das Kind gibt ein Wort ein, und das war's.",
+    quizQ: "Was bedeutet \"Traum\"?",
+    quizRight: "Bilder und Gedanken während des Schlafs",
+    quizWrong1: "Eine Art Kuchen",
+    quizWrong2: "Ein Musikinstrument",
+  },
+  cs: {
+    meaningsWord: "zámek",
+    meaning1T: "velké panské sídlo",
+    meaning1Ex: "\"Navštívili jsme starý zámek.\"",
+    meaning2T: "zařízení na zamykání dveří",
+    meaning2Ex: "\"Zámek u dveří se zasekl.\"",
+    kidsBubble: "\"reluctant\" je, když se ti do něčeho moc nechce a nohy jdou pomalu. Jako jít k zubaři.",
+    contextSentence: "Můj největší {sen} je stát se lékařem",
+    contextMeaning: "Význam zde: naděje nebo cíl, kterého chceš dosáhnout",
+    notebookTitle: "Eliščin sešit",
+    notebookDue: "procvičit dnes",
+    profile1Name: "Eliška",
+    profile1Grade: "2. třída",
+    profile2Name: "Jakub",
+    profile2Grade: "6. třída",
+    profile3Name: "Tereza",
+    profile3Grade: "9. třída",
+    gameTwinTrap: "Past na dvojčata",
+    gameTimeTraveler: "Cestovatel časem",
+    gameStreak: "série 6 dnů 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Nemít moc chuť",
+    englishMeaningEx: "\"Do domácích úkolů se mu moc nechtělo.\"",
+    puzzleSentence: "Námořník byl {odhodlaný} dostat se na ostrov, a navzdory {bouři} nikdy {nezaváhal}",
+    dreamWord: "sen",
+    dreamPos: "podstatné jméno",
+    dreamMeaningFull: "obrazy a myšlenky, které procházejí myslí během spánku",
+    dreamExample: "\"Včera v noci se mi zdál sen o daleké cestě.\"",
+    dreamMeaningShort: "Obrazy a myšlenky, které procházejí myslí během spánku",
+    dreamKidDef: "\"Sen\" jsou obrázky a příběhy, které ti běží hlavou, když spíš. Někdy veselé, někdy zvláštní, a zmizí, když se probudíš.",
+    dreamEx1: "\"Včera v noci se mi zdál sen o dlouhé cestě.\"",
+    dreamEx2: "\"Probudila se z děsivého snu.\"",
+    dreamEx3: "\"Jeho velký sen je letět do vesmíru.\"",
+    kidsLabel: "Dětský režim",
+    searchHint: "Napiš slovo",
+    tabMeanings: "Významy",
+    tabPicture: "Obrázek",
+    tabNotebook: "Sešit",
+    searchTagline: "Dítě napíše slovo, a je to.",
+    quizQ: "Co znamená \"sen\"?",
+    quizRight: "Obrazy a myšlenky během spánku",
+    quizWrong1: "Druh dortu",
+    quizWrong2: "Hudební nástroj",
+  },
+  sk: {
+    meaningsWord: "zámok",
+    meaning1T: "veľké panské sídlo",
+    meaning1Ex: "\"Navštívili sme starý zámok.\"",
+    meaning2T: "zariadenie na zamykanie dverí",
+    meaning2Ex: "\"Zámok na dverách sa zasekol.\"",
+    kidsBubble: "\"reluctant\" je, keď sa ti do niečoho veľmi nechce a nohy idú pomaly. Ako ísť k zubárovi.",
+    contextSentence: "Mojím najväčším {snom} je stať sa lekárom",
+    contextMeaning: "Význam tu: nádej alebo cieľ, ktorý chceš dosiahnuť",
+    notebookTitle: "Ninin zošit",
+    notebookDue: "precvičiť dnes",
+    profile1Name: "Nina",
+    profile1Grade: "2. ročník",
+    profile2Name: "Adam",
+    profile2Grade: "6. ročník",
+    profile3Name: "Ema",
+    profile3Grade: "9. ročník",
+    gameTwinTrap: "Pasca na dvojčatá",
+    gameTimeTraveler: "Cestovateľ časom",
+    gameStreak: "séria 6 dní 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Nemať veľkú chuť",
+    englishMeaningEx: "\"Do domácich úloh sa mu veľmi nechcelo.\"",
+    puzzleSentence: "Námorník bol {odhodlaný} dostať sa na ostrov, a napriek {búrke} nikdy {nezaváhal}",
+    dreamWord: "sen",
+    dreamPos: "podstatné meno",
+    dreamMeaningFull: "obrazy a myšlienky, ktoré prechádzajú mysľou počas spánku",
+    dreamExample: "\"Včera v noci sa mi sníval sen o ďalekej ceste.\"",
+    dreamMeaningShort: "Obrazy a myšlienky, ktoré prechádzajú mysľou počas spánku",
+    dreamKidDef: "\"Sen\" sú obrázky a príbehy, ktoré ti bežia hlavou, keď spíš. Niekedy veselé, niekedy zvláštne, a zmiznú, keď sa zobudíš.",
+    dreamEx1: "\"Včera v noci sa mi sníval sen o dlhej ceste.\"",
+    dreamEx2: "\"Prebudila sa z desivého sna.\"",
+    dreamEx3: "\"Jeho veľký sen je letieť do vesmíru.\"",
+    kidsLabel: "Detský režim",
+    searchHint: "Napíš slovo",
+    tabMeanings: "Významy",
+    tabPicture: "Obrázok",
+    tabNotebook: "Zošit",
+    searchTagline: "Dieťa napíše slovo, a je to.",
+    quizQ: "Čo znamená \"sen\"?",
+    quizRight: "Obrazy a myšlienky počas spánku",
+    quizWrong1: "Druh torty",
+    quizWrong2: "Hudobný nástroj",
+  },
+  it: {
+    meaningsWord: "riso",
+    meaning1T: "L'atto di ridere, l'ilarità",
+    meaning1Ex: "«Il suo riso allegro riempì tutta la stanza.»",
+    meaning2T: "Il cereale bianco che si mangia a tavola",
+    meaning2Ex: "«Ho cucinato il riso per cena.»",
+    kidsBubble: "«Riluttante» è quando non hai proprio voglia di fare una cosa e i piedi vanno piano piano. Come andare dal dentista.",
+    contextSentence: "Il mio più grande {sogno} è diventare medico",
+    contextMeaning: "Qui significa: una speranza o un traguardo che vuoi raggiungere",
+    notebookTitle: "Il quaderno di Giulia",
+    notebookDue: "da ripassare oggi",
+    profile1Name: "Giulia",
+    profile1Grade: "seconda elementare",
+    profile2Name: "Marco",
+    profile2Grade: "prima media",
+    profile3Name: "Sofia",
+    profile3Grade: "prima superiore",
+    gameTwinTrap: "Trappola dei Gemelli",
+    gameTimeTraveler: "Viaggiatore del Tempo",
+    gameStreak: "6 giorni di fila 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Che non ne ha davvero voglia",
+    englishMeaningEx: "«Era riluttante a iniziare i compiti.»",
+    puzzleSentence: "Il marinaio era {determinato} a raggiungere l'isola, nonostante la {tempesta} non {esitò} mai",
+    dreamWord: "sogno",
+    dreamPos: "sostantivo",
+    dreamMeaningFull: "immagini e pensieri che attraversano la mente durante il sonno",
+    dreamExample: "«Ieri notte ho fatto un sogno su un lungo viaggio.»",
+    dreamMeaningShort: "Immagini e pensieri che attraversano la mente durante il sonno",
+    dreamKidDef: "«Sogno» sono le immagini e le storie che ti passano per la testa mentre dormi. A volte belle, a volte strane, e svaniscono quando ti svegli.",
+    dreamEx1: "«Ieri notte ho fatto un sogno su un lungo viaggio.»",
+    dreamEx2: "«Si è svegliata da un sogno spaventoso.»",
+    dreamEx3: "«Il suo grande sogno è volare nello spazio.»",
+    kidsLabel: "Modalità Bambini",
+    searchHint: "Scrivi una parola",
+    tabMeanings: "Significati",
+    tabPicture: "Immagine",
+    tabNotebook: "Quaderno",
+    searchTagline: "Il bambino scrive una parola, e basta.",
+    quizQ: "Che cosa significa «sogno»?",
+    quizRight: "Immagini e pensieri durante il sonno",
+    quizWrong1: "Un tipo di torta",
+    quizWrong2: "Uno strumento musicale",
+  },
+  ja: {
+    meaningsWord: "はし",
+    meaning1T: "川などにかかり、向こう岸へ渡るための橋",
+    meaning1Ex: "「橋を渡って向こう岸へ行った。」",
+    meaning2T: "食事のときに使う箸",
+    meaning2Ex: "「箸でごはんを食べる。」",
+    kidsBubble: "「気が進まない」は、あることを本当はやりたくなくて、足がのろのろになること。歯医者さんに歩いていくときみたいにね。",
+    contextSentence: "私のいちばんの{夢}は医者になることです",
+    contextMeaning: "ここでの意味：かなえたい希望や目標",
+    notebookTitle: "さくらのノート",
+    notebookDue: "今日の練習",
+    profile1Name: "さくら",
+    profile1Grade: "小学2年生",
+    profile2Name: "はると",
+    profile2Grade: "小学6年生",
+    profile3Name: "みお",
+    profile3Grade: "中学3年生",
+    gameTwinTrap: "そっくりわな",
+    gameTimeTraveler: "タイムトラベラー",
+    gameStreak: "6日連続 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "あまり気が進まない",
+    englishMeaningEx: "「彼は宿題を始めるのに気が進まなかった。」",
+    puzzleSentence: "船乗りは島にたどり着こうと{決意}し、{嵐}の中でも決して{ためらわ}なかった",
+    dreamWord: "夢",
+    dreamPos: "名詞",
+    dreamMeaningFull: "眠っているあいだに心をよぎる映像や思い",
+    dreamExample: "「昨夜、遠い旅の夢を見た。」",
+    dreamMeaningShort: "眠っているあいだに心をよぎる映像や思い",
+    dreamKidDef: "「夢」は、眠っているあいだに頭の中を流れる絵やお話のこと。楽しいときもあれば、へんてこなときもあって、目がさめると消えてしまうんだ。",
+    dreamEx1: "「昨夜、遠い旅の夢を見た。」",
+    dreamEx2: "「彼女はこわい夢から目をさました。」",
+    dreamEx3: "「彼の大きな夢は宇宙へ飛ぶことだ。」",
+    kidsLabel: "キッズモード",
+    searchHint: "言葉を入力",
+    tabMeanings: "意味",
+    tabPicture: "絵",
+    tabNotebook: "ノート",
+    searchTagline: "子どもが言葉を入力する。それだけ。",
+    quizQ: "「夢」の意味は？",
+    quizRight: "眠っているあいだの映像や思い",
+    quizWrong1: "ケーキの一種",
+    quizWrong2: "楽器の一種",
+  },
+  hi: {
+    meaningsWord: "सोना",
+    meaning1T: "बहुमूल्य पीली धातु जिससे गहने बनते हैं",
+    meaning1Ex: "“उसने सोने की अंगूठी पहनी।”",
+    meaning2T: "आँखें बंद करके नींद लेना",
+    meaning2Ex: "“बच्चे रात को जल्दी सोना चाहते हैं।”",
+    kidsBubble: "“अनिच्छुक” तब होता है जब आपका किसी काम को करने का बिल्कुल मन नहीं होता, और पैर धीरे-धीरे चलते हैं। जैसे दाँतों के डॉक्टर के पास जाना।",
+    contextSentence: "मेरा सबसे बड़ा {सपना} डॉक्टर बनना है",
+    contextMeaning: "यहाँ इसका मतलब: एक उम्मीद या लक्ष्य जिसे आप पाना चाहते हैं",
+    notebookTitle: "आन्या की नोटबुक",
+    notebookDue: "आज अभ्यास करना है",
+    profile1Name: "आन्या",
+    profile1Grade: "दूसरी कक्षा",
+    profile2Name: "आरव",
+    profile2Grade: "छठी कक्षा",
+    profile3Name: "दीया",
+    profile3Grade: "नौवीं कक्षा",
+    gameTwinTrap: "जुड़वाँ जाल",
+    gameTimeTraveler: "समय यात्री",
+    gameStreak: "लगातार 6 दिन 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "करने का सच में मन न होना",
+    englishMeaningEx: "“वह अपना होमवर्क शुरू करने में अनिच्छुक था।”",
+    puzzleSentence: "नाविक द्वीप तक पहुँचने के लिए {दृढ़} था, {तूफ़ान} के बावजूद उसने कभी {संकोच} नहीं किया",
+    dreamWord: "सपना",
+    dreamPos: "संज्ञा",
+    dreamMeaningFull: "नींद के दौरान मन में आने वाले चित्र और विचार",
+    dreamExample: "“कल रात मैंने एक लंबी यात्रा का सपना देखा।”",
+    dreamMeaningShort: "नींद के दौरान मन में आने वाले चित्र और विचार",
+    dreamKidDef: "“सपना” वे तस्वीरें और कहानियाँ हैं जो सोते समय आपके दिमाग में चलती हैं। कभी खुशी वाली, कभी अजीब, और जागते ही गायब हो जाती हैं।",
+    dreamEx1: "“कल रात मैंने एक लंबी यात्रा का सपना देखा।”",
+    dreamEx2: "“वह एक डरावने सपने से जाग गई।”",
+    dreamEx3: "“उसका बड़ा सपना अंतरिक्ष में उड़ना है।”",
+    kidsLabel: "किड्स मोड",
+    searchHint: "कोई शब्द लिखें",
+    tabMeanings: "अर्थ",
+    tabPicture: "चित्र",
+    tabNotebook: "नोटबुक",
+    searchTagline: "बच्चा एक शब्द लिखता है, और बस।",
+    quizQ: "“सपना” का क्या मतलब है?",
+    quizRight: "नींद के दौरान आने वाले चित्र और विचार",
+    quizWrong1: "एक तरह का केक",
+    quizWrong2: "एक वाद्य यंत्र",
+  },
+  am: {
+    meaningsWord: "ብር",
+    meaning1T: "ውድ የሆነ ነጭ ብረት",
+    meaning1Ex: "«እናቷ የብር ቀለበት አጠለቀች።»",
+    meaning2T: "የኢትዮጵያ ገንዘብ",
+    meaning2Ex: "«መቶ ብር ከፈለ።»",
+    kidsBubble: "«ፈቃደኛ ያለመሆን» ማለት አንድ ነገር ለማድረግ ልብህ ሳይፈልግ ሲቀር፣ እግርህም ቀስ ብሎ ሲራመድ ነው። ወደ ጥርስ ሐኪም እንደመሄድ ማለት ነው።",
+    contextSentence: "ትልቁ {ሕልሜ} ዶክተር መሆን ነው",
+    contextMeaning: "እዚህ ትርጉሙ፦ ልታሳካው የምትፈልገው ተስፋ ወይም ግብ",
+    notebookTitle: "የሳራ ደብተር",
+    notebookDue: "ዛሬ ልምምድ",
+    profile1Name: "ሳራ",
+    profile1Grade: "ሁለተኛ ክፍል",
+    profile2Name: "ናትናኤል",
+    profile2Grade: "ስድስተኛ ክፍል",
+    profile3Name: "ሄለን",
+    profile3Grade: "ዘጠነኛ ክፍል",
+    gameTwinTrap: "የመንታ ወጥመድ",
+    gameTimeTraveler: "የጊዜ ተጓዥ",
+    gameStreak: "ተከታታይ 6 ቀናት 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "በእውነት ማድረግ አለመፈለግ",
+    englishMeaningEx: "«የቤት ስራውን ለመጀመር ፈቃደኛ አልነበረም።»",
+    puzzleSentence: "መርከበኛው ደሴቱ ላይ ለመድረስ {ቆራጥ} ነበር፣ {ማዕበሉ} ቢኖርም ፈጽሞ {አልተወላወለም}",
+    dreamWord: "ሕልም",
+    dreamPos: "ስም",
+    dreamMeaningFull: "በእንቅልፍ ጊዜ በአእምሮ ውስጥ የሚያልፉ ምስሎችና ሐሳቦች",
+    dreamExample: "«ትናንት ማታ ስለ ሩቅ ጉዞ ሕልም አየሁ።»",
+    dreamMeaningShort: "በእንቅልፍ ጊዜ በአእምሮ ውስጥ የሚያልፉ ምስሎችና ሐሳቦች",
+    dreamKidDef: "«ሕልም» ማለት ስትተኛ በጭንቅላትህ ውስጥ የሚሮጡ ሥዕሎችና ታሪኮች ናቸው። አንዳንዴ አስደሳች፣ አንዳንዴ እንግዳ፣ ስትነቃም ይጠፋሉ።",
+    dreamEx1: "«ትናንት ማታ ስለ ረጅም ጉዞ ሕልም አየሁ።»",
+    dreamEx2: "«ከሚያስፈራ ሕልም ነቃች።»",
+    dreamEx3: "«ትልቁ ሕልሙ ወደ ጠፈር መብረር ነው።»",
+    kidsLabel: "የልጆች ሁነታ",
+    searchHint: "አንድ ቃል ጻፍ",
+    tabMeanings: "ትርጉሞች",
+    tabPicture: "ሥዕል",
+    tabNotebook: "ደብተር",
+    searchTagline: "ልጁ አንድ ቃል ይጽፋል፣ ያ ብቻ ነው።",
+    quizQ: "«ሕልም» ማለት ምን ማለት ነው?",
+    quizRight: "በእንቅልፍ ጊዜ የሚመጡ ምስሎችና ሐሳቦች",
+    quizWrong1: "የኬክ ዓይነት",
+    quizWrong2: "የሙዚቃ መሣሪያ",
+  },
+  uk: {
+    meaningsWord: "коса",
+    meaning1T: "Заплетене довге волосся",
+    meaning1Ex: "«У неї була довга руса коса.»",
+    meaning2T: "Інструмент для косіння трави",
+    meaning2Ex: "«Дід нагострив косу перед сінокосом.»",
+    kidsBubble: "«Неохочий» це коли тобі зовсім не хочеться щось робити, і ноги йдуть повільно-повільно. Наче йдеш до зубного лікаря.",
+    contextSentence: "Моя найбільша {мрія} стати лікарем",
+    contextMeaning: "Тут означає: надія або мета, якої ти хочеш досягти",
+    notebookTitle: "Зошит Софії",
+    notebookDue: "повторити сьогодні",
+    profile1Name: "Софія",
+    profile1Grade: "2-й клас",
+    profile2Name: "Максим",
+    profile2Grade: "6-й клас",
+    profile3Name: "Марія",
+    profile3Grade: "9-й клас",
+    gameTwinTrap: "Пастка близнюків",
+    gameTimeTraveler: "Мандрівник у часі",
+    gameStreak: "6 днів поспіль 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Коли насправді не хочеться",
+    englishMeaningEx: "«Він неохоче брався за домашнє завдання.»",
+    puzzleSentence: "Моряк був {рішучий} дістатися острова, попри {шторм} він жодного разу не {завагався}",
+    dreamWord: "сон",
+    dreamPos: "іменник",
+    dreamMeaningFull: "образи й думки, що проходять у голові під час сну",
+    dreamExample: "«Минулої ночі мені наснився сон про далеку подорож.»",
+    dreamMeaningShort: "Образи й думки, що проходять у голові під час сну",
+    dreamKidDef: "«Сон» це картинки й історії, що біжать у твоїй голові, поки ти спиш. Іноді веселі, іноді дивні, і вони зникають, щойно ти прокидаєшся.",
+    dreamEx1: "«Минулої ночі мені наснився сон про довгу подорож.»",
+    dreamEx2: "«Вона прокинулася від страшного сну.»",
+    dreamEx3: "«Йому наснився дивовижний сон про політ у космос.»",
+    kidsLabel: "Дитячий режим",
+    searchHint: "Введіть слово",
+    tabMeanings: "Значення",
+    tabPicture: "Малюнок",
+    tabNotebook: "Зошит",
+    searchTagline: "Дитина вводить слово, і все.",
+    quizQ: "Що означає «сон»?",
+    quizRight: "Образи й думки під час сну",
+    quizWrong1: "Різновид торта",
+    quizWrong2: "Музичний інструмент",
+  },
+  tr: {
+    meaningsWord: "yüz",
+    meaning1T: "Başın ön kısmı, surat",
+    meaning1Ex: "“Gülümseyince yüzü aydınlandı.”",
+    meaning2T: "Doksan dokuzdan sonra gelen sayı, 100",
+    meaning2Ex: "“Kutuda yüz tane boya kalemi var.”",
+    kidsBubble: "“İsteksiz”, bir şeyi yapmayı hiç canın istemediğinde ve ayaklarının ağır ağır gittiği zamandır. Dişçiye yürümek gibi.",
+    contextSentence: "En büyük {hayalim} doktor olmak",
+    contextMeaning: "Buradaki anlamı: ulaşmak istediğin bir umut ya da hedef",
+    notebookTitle: "Zeynep'in defteri",
+    notebookDue: "bugün alıştırma",
+    profile1Name: "Zeynep",
+    profile1Grade: "2. sınıf",
+    profile2Name: "Emir",
+    profile2Grade: "6. sınıf",
+    profile3Name: "Elif",
+    profile3Grade: "9. sınıf",
+    gameTwinTrap: "İkiz Tuzağı",
+    gameTimeTraveler: "Zaman Yolcusu",
+    gameStreak: "6 gün üst üste 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Pek de istemeyen",
+    englishMeaningEx: "“Ödevine başlamakta isteksizdi.”",
+    puzzleSentence: "Denizci adaya ulaşmakta {kararlıydı}, {fırtınaya} rağmen hiç {tereddüt} etmedi",
+    dreamWord: "rüya",
+    dreamPos: "isim",
+    dreamMeaningFull: "uyku sırasında zihinden geçen görüntüler ve düşünceler",
+    dreamExample: "“Dün gece uzak bir yolculuk rüyası gördüm.”",
+    dreamMeaningShort: "Uyku sırasında zihinden geçen görüntüler ve düşünceler",
+    dreamKidDef: "“Rüya”, sen uyurken kafanın içinde akan resimler ve hikâyelerdir. Bazen mutlu, bazen tuhaf olur ve uyanınca kaybolurlar.",
+    dreamEx1: "“Dün gece uzun bir yolculuk rüyası gördüm.”",
+    dreamEx2: "“Korkunç bir rüyadan uyandı.”",
+    dreamEx3: "“En büyük rüyası uzaya uçmak.”",
+    kidsLabel: "Çocuk Modu",
+    searchHint: "Bir kelime yaz",
+    tabMeanings: "Anlamlar",
+    tabPicture: "Resim",
+    tabNotebook: "Defter",
+    searchTagline: "Çocuk bir kelime yazar, hepsi bu.",
+    quizQ: "“Rüya” ne demek?",
+    quizRight: "Uyku sırasındaki görüntüler ve düşünceler",
+    quizWrong1: "Bir çeşit kek",
+    quizWrong2: "Bir müzik aleti",
+  },
+  pl: {
+    meaningsWord: "zamek",
+    meaning1T: "Warowna budowla, dawna siedziba króla",
+    meaning1Ex: "„Zwiedzaliśmy stary zamek na wzgórzu.”",
+    meaning2T: "Suwak zapinany w ubraniu",
+    meaning2Ex: "„Zepsuł się zamek w mojej kurtce.”",
+    kidsBubble: "„Niechętny” to wtedy, gdy wcale nie masz ochoty czegoś robić i nogi idą wolno, wolno. Jak wtedy, gdy idziesz do dentysty.",
+    contextSentence: "Moim największym {marzeniem} jest zostać lekarzem",
+    contextMeaning: "Tutaj znaczy: nadzieja lub cel, który chcesz osiągnąć",
+    notebookTitle: "Zeszyt Zofii",
+    notebookDue: "ćwiczenie na dziś",
+    profile1Name: "Zofia",
+    profile1Grade: "druga klasa",
+    profile2Name: "Jakub",
+    profile2Grade: "szósta klasa",
+    profile3Name: "Maja",
+    profile3Grade: "pierwsza klasa liceum",
+    gameTwinTrap: "Pułapka Bliźniąt",
+    gameTimeTraveler: "Podróżnik w Czasie",
+    gameStreak: "6 dni z rzędu 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Niezbyt chętny do zrobienia czegoś",
+    englishMeaningEx: "„Niechętnie zabierał się do odrabiania lekcji.”",
+    puzzleSentence: "Żeglarz był {zdeterminowany}, by dotrzeć na wyspę, mimo {sztormu} nigdy się nie {zawahał}",
+    dreamWord: "sen",
+    dreamPos: "rzeczownik",
+    dreamMeaningFull: "obrazy i myśli przepływające przez głowę podczas snu",
+    dreamExample: "„Zeszłej nocy miałem sen o dalekiej podróży.”",
+    dreamMeaningShort: "Obrazy i myśli przepływające przez głowę podczas snu",
+    dreamKidDef: "„Sen” to obrazki i historie, które biegną ci w głowie, kiedy śpisz. Czasem wesołe, czasem dziwne, i znikają, gdy się budzisz.",
+    dreamEx1: "„Zeszłej nocy miałem sen o długiej podróży.”",
+    dreamEx2: "„Obudziła się ze strasznego snu.”",
+    dreamEx3: "„Śniło mu się, że leci w kosmos.”",
+    kidsLabel: "Tryb dla dzieci",
+    searchHint: "Wpisz słowo",
+    tabMeanings: "Znaczenia",
+    tabPicture: "Obrazek",
+    tabNotebook: "Zeszyt",
+    searchTagline: "Dziecko wpisuje słowo i tyle.",
+    quizQ: "Co znaczy „sen”?",
+    quizRight: "Obrazy i myśli podczas snu",
+    quizWrong1: "Rodzaj ciasta",
+    quizWrong2: "Instrument muzyczny",
+  },
+  fa: {
+    meaningsWord: "شیر",
+    meaning1T: "حیوان درنده و نیرومند جنگل",
+    meaning1Ex: "«شیر در جنگل غرید.»",
+    meaning2T: "نوشیدنی سفیدی که از حیوانات به دست می‌آید",
+    meaning2Ex: "«هر روز صبح یک لیوان شیر می‌خورم.»",
+    kidsBubble: "«بی‌میل» یعنی وقتی اصلاً دلت نمی‌خواهد کاری را انجام بدهی و پاهایت آرام آرام راه می‌روند. مثل رفتن به دندان‌پزشکی.",
+    contextSentence: "بزرگ‌ترین {رویای} من پزشک شدن است",
+    contextMeaning: "معنی اینجا: امید یا هدفی که می‌خواهی به آن برسی",
+    notebookTitle: "دفترچه‌ی زهرا",
+    notebookDue: "تمرین امروز",
+    profile1Name: "زهرا",
+    profile1Grade: "کلاس دوم",
+    profile2Name: "علی",
+    profile2Grade: "کلاس ششم",
+    profile3Name: "یاسمن",
+    profile3Grade: "کلاس نهم",
+    gameTwinTrap: "تله‌ی دوقلوها",
+    gameTimeTraveler: "مسافر زمان",
+    gameStreak: "6 روز پیاپی 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "کسی که واقعاً تمایلی ندارد",
+    englishMeaningEx: "«او برای شروع تکالیفش بی‌میل بود.»",
+    puzzleSentence: "ملوان {مصمم} بود به جزیره برسد، با وجود {طوفان} هرگز {تردید} نکرد",
+    dreamWord: "رویا",
+    dreamPos: "اسم",
+    dreamMeaningFull: "تصویرها و اندیشه‌هایی که هنگام خواب از ذهن می‌گذرند",
+    dreamExample: "«دیشب رویای یک سفر دور را دیدم.»",
+    dreamMeaningShort: "تصویرها و اندیشه‌هایی که هنگام خواب از ذهن می‌گذرند",
+    dreamKidDef: "«رویا» همان تصویرها و داستان‌هایی است که وقتی خوابی در سرت جریان دارند. گاهی شاد، گاهی عجیب، و همین‌که بیدار می‌شوی محو می‌شوند.",
+    dreamEx1: "«دیشب رویای یک سفر طولانی را دیدم.»",
+    dreamEx2: "«او از یک رویای ترسناک بیدار شد.»",
+    dreamEx3: "«بزرگ‌ترین رویای او پرواز به فضاست.»",
+    kidsLabel: "حالت کودکان",
+    searchHint: "یک واژه بنویس",
+    tabMeanings: "معناها",
+    tabPicture: "تصویر",
+    tabNotebook: "دفترچه",
+    searchTagline: "کودک یک واژه می‌نویسد، همین.",
+    quizQ: "«رویا» یعنی چه؟",
+    quizRight: "تصویرها و اندیشه‌ها هنگام خواب",
+    quizWrong1: "نوعی کیک",
+    quizWrong2: "یک ساز موسیقی",
+  },
+  id: {
+    meaningsWord: "bulan",
+    meaning1T: "Benda langit yang bersinar di malam hari",
+    meaning1Ex: "“Bulan purnama bersinar terang malam ini.”",
+    meaning2T: "Jangka waktu sekitar tiga puluh hari",
+    meaning2Ex: "“Kami akan berlibur bulan depan.”",
+    kidsBubble: "“Enggan” itu ketika kamu benar-benar tidak ingin melakukan sesuatu, dan kakimu melangkah pelan-pelan. Seperti berjalan ke dokter gigi.",
+    contextSentence: "{Mimpi} terbesarku adalah menjadi dokter",
+    contextMeaning: "Artinya di sini: harapan atau tujuan yang ingin kamu capai",
+    notebookTitle: "Buku catatan Putri",
+    notebookDue: "latihan hari ini",
+    profile1Name: "Putri",
+    profile1Grade: "kelas 2 SD",
+    profile2Name: "Rizki",
+    profile2Grade: "kelas 6 SD",
+    profile3Name: "Dewi",
+    profile3Grade: "kelas 3 SMP",
+    gameTwinTrap: "Jebakan Kembar",
+    gameTimeTraveler: "Penjelajah Waktu",
+    gameStreak: "6 hari beruntun 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Tidak begitu ingin melakukan",
+    englishMeaningEx: "“Dia enggan mulai mengerjakan PR-nya.”",
+    puzzleSentence: "Pelaut itu {bertekad} mencapai pulau, meski ada {badai} ia tidak pernah {ragu}",
+    dreamWord: "mimpi",
+    dreamPos: "kata benda",
+    dreamMeaningFull: "gambar dan pikiran yang melintas di benak saat tidur",
+    dreamExample: "“Semalam aku bermimpi tentang perjalanan jauh.”",
+    dreamMeaningShort: "Gambar dan pikiran yang melintas di benak saat tidur",
+    dreamKidDef: "“Mimpi” adalah gambar dan cerita yang berjalan di kepalamu saat kamu tidur. Kadang menyenangkan, kadang aneh, dan hilang begitu kamu bangun.",
+    dreamEx1: "“Semalam aku bermimpi tentang perjalanan panjang.”",
+    dreamEx2: "“Dia terbangun dari mimpi yang menakutkan.”",
+    dreamEx3: "“Mimpi besarnya adalah terbang ke luar angkasa.”",
+    kidsLabel: "Mode Anak",
+    searchHint: "Ketik sebuah kata",
+    tabMeanings: "Makna",
+    tabPicture: "Gambar",
+    tabNotebook: "Buku catatan",
+    searchTagline: "Anak mengetik sebuah kata, dan selesai.",
+    quizQ: "Apa arti “mimpi”?",
+    quizRight: "Gambar dan pikiran saat tidur",
+    quizWrong1: "Sejenis kue",
+    quizWrong2: "Alat musik",
+  },
+  nl: {
+    meaningsWord: "bank",
+    meaning1T: "Een lange zitplaats in de woonkamer",
+    meaning1Ex: "„We zaten samen op de bank televisie te kijken.”",
+    meaning2T: "Een plek waar je je geld bewaart",
+    meaning2Ex: "„Ze bracht haar spaargeld naar de bank.”",
+    kidsBubble: "„Onwillig” is wanneer je iets eigenlijk niet wilt doen en je voeten heel langzaam gaan. Net als lopen naar de tandarts.",
+    contextSentence: "Mijn grootste {droom} is om dokter te worden",
+    contextMeaning: "De betekenis hier: een hoop of doel dat je wilt bereiken",
+    notebookTitle: "Emma's schrift",
+    notebookDue: "vandaag oefenen",
+    profile1Name: "Emma",
+    profile1Grade: "groep 4",
+    profile2Name: "Daan",
+    profile2Grade: "groep 8",
+    profile3Name: "Sophie",
+    profile3Grade: "derde klas",
+    gameTwinTrap: "Tweelingval",
+    gameTimeTraveler: "Tijdreiziger",
+    gameStreak: "6 dagen op rij 🔥",
+    englishWord: "reluctant",
+    englishMeaningT: "Niet echt zin hebben om iets te doen",
+    englishMeaningEx: "„Hij was onwillig om aan zijn huiswerk te beginnen.”",
+    puzzleSentence: "De zeeman was {vastberaden} om het eiland te bereiken, ondanks de {storm} {aarzelde} hij nooit",
+    dreamWord: "droom",
+    dreamPos: "zelfstandig naamwoord",
+    dreamMeaningFull: "beelden en gedachten die tijdens de slaap door je hoofd gaan",
+    dreamExample: "„Vannacht had ik een droom over een verre reis.”",
+    dreamMeaningShort: "Beelden en gedachten die tijdens de slaap door je hoofd gaan",
+    dreamKidDef: "„Droom” zijn de plaatjes en verhalen die door je hoofd lopen terwijl je slaapt. Soms leuk, soms raar, en ze vervagen als je wakker wordt.",
+    dreamEx1: "„Vannacht had ik een droom over een lange reis.”",
+    dreamEx2: "„Ze werd wakker uit een enge droom.”",
+    dreamEx3: "„Zijn grote droom is naar de ruimte vliegen.”",
+    kidsLabel: "Kindermodus",
+    searchHint: "Typ een woord",
+    tabMeanings: "Betekenissen",
+    tabPicture: "Afbeelding",
+    tabNotebook: "Schrift",
+    searchTagline: "Het kind typt een woord, en dat is het.",
+    quizQ: "Wat betekent „droom”?",
+    quizRight: "Beelden en gedachten tijdens de slaap",
+    quizWrong1: "Een soort taart",
+    quizWrong2: "Een muziekinstrument",
+  },
+};
+
+// Split a sentence that marks a word with {braces} into [before, word, after].
+function splitMark(s: string): [string, string, string] {
+  const m = s.match(/^(.*?)\{([^}]*)\}(.*)$/);
+  return m ? [m[1], m[2], m[3]] : [s, "", ""];
+}
+
+function famMock(lang: string): FamMock {
+  return FAM_MOCK[lang] ?? FAM_MOCK.en;
+}
+
 function MockMeanings({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
-  const word = ar ? "عين" : ru ? "ключ" : he ? "עלה" : "bat";
-  const m1 = ar
-    ? { t: "نبع ماء يخرج من الأرض", ex: "«شربنا من عين باردة في الجبل.»" }
-    : ru
-    ? { t: "Предмет, которым открывают замок", ex: "«Я потерял ключ от двери.»" }
-    : he
-    ? { t: "צמח: החלק הירוק של העץ", ex: "\"עלה אדום נפל מהעץ בסתיו.\"" }
-    : { t: "The animal that flies at night", ex: "\"A bat flew out of the cave.\"" };
-  const m2 = ar
-    ? { t: "العضو الذي نرى به", ex: "«أغمض عينيه ونام بهدوء.»" }
-    : ru
-    ? { t: "Родник, источник воды", ex: "«Из земли бил холодный ключ.»" }
-    : he
-    ? { t: "פועל: טיפס למעלה, התרומם", ex: "\"המחיר עלה בחודש האחרון.\"" }
-    : { t: "The stick used in baseball", ex: "\"She swung the bat and hit the ball.\"" };
+  const m = famMock(lang);
+  const word = m.meaningsWord;
+  const m1 = { t: m.meaning1T, ex: m.meaning1Ex };
+  const m2 = { t: m.meaning2T, ex: m.meaning2Ex };
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
@@ -4086,21 +4973,15 @@ function MockMeanings({ lang }: { lang: string }) {
 }
 
 function MockKids({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock">
       <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{ar ? "وضع الأطفال" : ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-pill">{m.kidsLabel}</span>
         <span className="fam-mock-toggle-on" />
       </div>
       <div className="fam-mock-bubble">
-        {ar
-          ? "«متردّد» يعني أنك لا تريد أن تفعل شيئاً حقاً، وقدماك تمشيان ببطء. مثل المشي إلى طبيب الأسنان."
-          : ru
-          ? "«Упорный» — это когда ты сильно решил и не сдаёшься, даже когда трудно. Как когда учишься кататься на велосипеде и не бросаешь, пока не получится."
-          : he
-          ? "\"נחוש\" זה כשמחליטים משהו חזק חזק בלב, וממשיכים גם כשקשה. כמו כשאתם מתאמנים על אופניים ולא מוותרים עד שמצליחים."
-          : "\"Reluctant\" is when you don't really want to do something, and your feet go slow. Like walking to the dentist."}
+        {m.kidsBubble}
       </div>
       <Image
         src="/gad-it-character.png"
@@ -4114,26 +4995,17 @@ function MockKids({ lang }: { lang: string }) {
 }
 
 function MockContext({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
+  const [pre, mark, post] = splitMark(m.contextSentence);
   return (
     <div className="fam-mock">
       <div className="fam-mock-sentence">
-        {ar ? (
-          <><mark>حلمي</mark> أن أصبح طبيبة</>
-        ) : ru ? (
-          <>Моя <mark>мечта</mark> — стать врачом</>
-        ) : he ? (
-          <>ה<mark>חלום</mark> שלי הוא להיות רופאה</>
-        ) : (
-          <>My biggest <mark>dream</mark> is to be a doctor</>
-        )}
+        {pre}<mark>{mark}</mark>{post}
       </div>
       <div className="fam-mock-arrow">↓</div>
       <div className="fam-mock-picked">
         <CheckIcon color="#0EA5A5" />
-        <span>
-          {ar ? "المعنى هنا: أمنية أو هدف تريد تحقيقه" : ru ? "Значение здесь: цель или желание, которое хочется осуществить" : he ? "המשמעות כאן: שאיפה או מטרה שרוצים להגשים" : "The meaning here: a hope or goal you want to reach"}
-        </span>
+        <span>{m.contextMeaning}</span>
       </div>
     </div>
   );
@@ -4166,16 +5038,16 @@ const EXAMPLE_WORDS: Record<string, [string, string, string]> = {
 };
 
 function MockNotebook({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   const words = EXAMPLE_WORDS[lang] ?? EXAMPLE_WORDS.en;
   return (
     <div className="fam-mock">
-      <div className="fam-mock-nb-title">{ar ? "دفتر نور" : ru ? "Тетрадь Ноа" : he ? "המחברת של נועה" : "Noa's notebook"}</div>
+      <div className="fam-mock-nb-title">{m.notebookTitle}</div>
       {words.map((w, i) => (
         <div key={i} className="fam-mock-nb-row">
           <CheckIcon color={i < 2 ? "#0EA5A5" : "#d1d5db"} />
           <span>{w}</span>
-          {i === 2 && <span className="fam-mock-nb-due">{ar ? "للتدريب اليوم" : ru ? "повторить сегодня" : he ? "לתרגול היום" : "practice today"}</span>}
+          {i === 2 && <span className="fam-mock-nb-due">{m.notebookDue}</span>}
         </div>
       ))}
     </div>
@@ -4183,30 +5055,12 @@ function MockNotebook({ lang }: { lang: string }) {
 }
 
 function MockProfiles({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
-  const kids = ar
-    ? [
-        { n: "نور", g: "الصف الثاني", c: "#0EA5A5" },
-        { n: "آدم", g: "الصف السادس", c: "#7C3AED" },
-        { n: "مايا", g: "الصف التاسع", c: "#D97706" },
-      ]
-    : ru
-    ? [
-        { n: "Ноа", g: "2 класс", c: "#0EA5A5" },
-        { n: "Идо", g: "6 класс", c: "#7C3AED" },
-        { n: "Майя", g: "9 класс", c: "#D97706" },
-      ]
-    : he
-    ? [
-        { n: "נועה", g: "כיתה ב׳", c: "#0EA5A5" },
-        { n: "עידו", g: "כיתה ו׳", c: "#7C3AED" },
-        { n: "מאיה", g: "כיתה ט׳", c: "#D97706" },
-      ]
-    : [
-        { n: "Noa", g: "2nd grade", c: "#0EA5A5" },
-        { n: "Ido", g: "6th grade", c: "#7C3AED" },
-        { n: "Maya", g: "9th grade", c: "#D97706" },
-      ];
+  const m = famMock(lang);
+  const kids = [
+    { n: m.profile1Name, g: m.profile1Grade, c: "#0EA5A5" },
+    { n: m.profile2Name, g: m.profile2Grade, c: "#7C3AED" },
+    { n: m.profile3Name, g: m.profile3Grade, c: "#D97706" },
+  ];
   return (
     <div className="fam-mock fam-mock-profiles">
       {kids.map((k) => (
@@ -4223,38 +5077,36 @@ function MockProfiles({ lang }: { lang: string }) {
 }
 
 function MockGames({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock fam-mock-games">
       <div className="fam-mock-game" style={{ background: "rgba(14,165,165,0.1)" }}>
         <PuzzleIcon />
-        <span>{ar ? "فخ التوائم" : ru ? "Ловушка близнецов" : he ? "תאומות במלכודת" : "Twin Trap"}</span>
+        <span>{m.gameTwinTrap}</span>
       </div>
       <div className="fam-mock-game" style={{ background: "rgba(124,58,237,0.1)" }}>
         <ClockIcon />
-        <span>{ar ? "المسافر عبر الزمن" : ru ? "Путешественник во времени" : he ? "מסע בזמן" : "Time Traveler"}</span>
+        <span>{m.gameTimeTraveler}</span>
       </div>
-      <div className="fam-mock-score">{ar ? "سلسلة 6 أيام 🔥" : ru ? "Серия 6 дней 🔥" : he ? "רצף של 6 ימים 🔥" : "6-day streak 🔥"}</div>
+      <div className="fam-mock-score">{m.gameStreak}</div>
     </div>
   );
 }
 
 function MockEnglish({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>reluctant</span>
+        <SearchIcon /> <span>{m.englishWord}</span>
       </div>
       <div className="fam-mock-meaning">
         <div className="fam-mock-thumb fam-mock-thumb-1">
           <PersonIcon />
         </div>
         <div>
-          <div className="fam-mock-meaning-t">{ar ? "متردّد، لا يريد فعلاً" : ru ? "Неохотно, без желания" : he ? "מהסס, לא ממש רוצה" : "Not really wanting to"}</div>
-          <div className="fam-mock-meaning-ex">
-            {ar ? "«كان متردّداً في البدء بواجباته.»" : ru ? "«Он неохотно принялся за уроки.»" : he ? "\"הוא ניגש לשיעורים בחוסר רצון.\"" : "\"He was reluctant to start his homework.\""}
-          </div>
+          <div className="fam-mock-meaning-t">{m.englishMeaningT}</div>
+          <div className="fam-mock-meaning-ex">{m.englishMeaningEx}</div>
         </div>
       </div>
     </div>
@@ -4267,15 +5119,11 @@ function MockEnglish({ lang }: { lang: string }) {
  *  every word a solid piece, and the picture is whole. Words ARE the
  *  pieces of the picture. */
 function PuzzleMock({ lang, beforeLabel, afterLabel }: { lang: string; beforeLabel: string; afterLabel: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
   type Tok = string | { k: string };
-  const tokens: Tok[] = ar
-    ? ["كان", "البحّار", { k: "مصمّماً" }, "على", "الوصول", "إلى", "الجزيرة،", "ورغم", { k: "العاصفة" }, "لم", { k: "يتردّد" }, "أبداً"]
-    : ru
-    ? ["Моряк", "твёрдо", { k: "решил" }, "добраться", "до", "острова,", "и", "несмотря", "на", { k: "шторм" }, "ни", "разу", "не", { k: "засомневался" }]
-    : he
-    ? ["הספן", "היה", { k: "נחוש" }, "להגיע", "אל", "האי,", "ולמרות", { k: "הסופה" }, "העזה", "הוא", "לא", { k: "היסס" }]
-    : ["The", "sailor", "was", { k: "determined" }, "to", "reach", "the", "island,", "despite", "the", { k: "storm" }, "he", "never", { k: "hesitated" }];
+  const tokens: Tok[] = famMock(lang).puzzleSentence.split(" ").map((w) => {
+    const mm = w.match(/^\{(.*)\}$/);
+    return mm ? { k: mm[1] } : w;
+  });
   return (
     <div className="fam-puzzle">
       <div className="fam-puzzle-block fam-puzzle-bad">
@@ -4321,25 +5169,13 @@ function PuzzleMock({ lang, beforeLabel, afterLabel }: { lang: string; beforeLab
  *  a meaning card with its picture, Kids Mode toggle, example) so a
  *  parent sees exactly what they are buying. */
 function PhoneMock({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
-  const word = ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream";
-  const pos = ar ? "اسم" : ru ? "существительное" : he ? "שם עצם" : "noun";
-  const meaning = ar
-    ? "صور وأفكار وأحاسيس تظهر في الذهن أثناء النوم"
-    : ru
-    ? "то, о чём мечтаешь и к чему стремишься"
-    : he
-    ? "תמונות ומחשבות שעוברות בראש בזמן השינה"
-    : "images and thoughts that pass through the mind during sleep";
-  const example = ar
-    ? "«الليلة الماضية رأيت حلماً عن رحلة بعيدة.»"
-    : ru
-    ? "«Его мечта — полететь в космос.»"
-    : he
-    ? "\"בלילה חלמתי חלום על מסע רחוק.\""
-    : "\"Last night I had a dream about a far journey.\"";
-  const kids = ar ? "وضع الأطفال" : ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode";
-  const searchHint = ar ? "اكتب كلمة" : ru ? "Введите слово" : he ? "הקלידו מילה" : "Type a word";
+  const m = famMock(lang);
+  const word = m.dreamWord;
+  const pos = m.dreamPos;
+  const meaning = m.dreamMeaningFull;
+  const example = m.dreamExample;
+  const kids = m.kidsLabel;
+  const searchHint = m.searchHint;
   return (
     <div className="fam-phone" aria-hidden>
       <div className="fam-phone-notch" />
@@ -4376,9 +5212,9 @@ function PhoneMock({ lang }: { lang: string }) {
           </div>
         </div>
         <div className="fam-ph-tabs">
-          <span className="is-active">{ar ? "المعاني" : ru ? "Значения" : he ? "משמעויות" : "Meanings"}</span>
-          <span>{ar ? "صورة" : ru ? "Картинка" : he ? "תמונה" : "Picture"}</span>
-          <span>{ar ? "الدفتر" : ru ? "Тетрадь" : he ? "מחברת" : "Notebook"}</span>
+          <span className="is-active">{m.tabMeanings}</span>
+          <span>{m.tabPicture}</span>
+          <span>{m.tabNotebook}</span>
         </div>
       </div>
     </div>
@@ -4389,19 +5225,19 @@ function PhoneMock({ lang }: { lang: string }) {
  *  recreation of the real search screen (Kids Mode on, teal search pill
  *  with the typed word and a blinking caret). */
 function MockSearch({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock">
       <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{ar ? "وضع الأطفال" : ru ? "Детский режим" : he ? "מצב ילדים" : "Kids Mode"}</span>
+        <span className="fam-mock-toggle-pill">{m.kidsLabel}</span>
         <span className="fam-mock-toggle-on" />
       </div>
       <div className="fam-mock-search fam-mock-search-lg">
         <SearchIcon />
-        <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <span>{m.dreamWord}</span>
         <span className="fam-mock-caret" aria-hidden />
       </div>
-      <div className="fam-mock-searchhint">{ar ? "الطفل يكتب كلمة، وهذا كل شيء. الباقي يحدث وحده." : ru ? "Ребёнок вводит слово, и всё. Остальное происходит само." : he ? "הילד מקליד מילה, וזהו. השאר קורה לבד." : "The child types a word, and that is it."}</div>
+      <div className="fam-mock-searchhint">{m.searchTagline}</div>
     </div>
   );
 }
@@ -4411,11 +5247,11 @@ function MockSearch({ lang }: { lang: string }) {
  *  was barely visible as tiny icons before). A big illustrated card, the
  *  kid-level meaning, and an example. */
 function MockPicture({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{m.dreamWord}</span>
       </div>
       <div className="fam-ph-pic fam-mock-pic" aria-hidden>
         {/* A child dreaming — a sleeping face with a dream cloud (moon +
@@ -4436,12 +5272,8 @@ function MockPicture({ lang }: { lang: string }) {
       </div>
       <div className="fam-mock-meaning">
         <div>
-          <div className="fam-mock-meaning-t">
-            {ar ? "صور وأفكار تمرّ في الذهن أثناء النوم" : ru ? "То, о чём мечтаешь и к чему стремишься" : he ? "תמונות ומחשבות שעוברות בראש בזמן השינה" : "Images and thoughts that pass through the mind during sleep"}
-          </div>
-          <div className="fam-mock-meaning-ex">
-            {ar ? "«الليلة الماضية رأيت حلماً عن رحلة بعيدة.»" : ru ? "«Его мечта — полететь в космос.»" : he ? "\"בלילה חלמתי חלום על מסע רחוק.\"" : "\"Last night I had a dream about a far journey.\""}
-          </div>
+          <div className="fam-mock-meaning-t">{m.dreamMeaningShort}</div>
+          <div className="fam-mock-meaning-ex">{m.dreamExample}</div>
         </div>
       </div>
     </div>
@@ -4450,39 +5282,25 @@ function MockPicture({ lang }: { lang: string }) {
 
 /** Definition block: the kid-level meaning, on its own. */
 function MockDefinition({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{m.dreamWord}</span>
       </div>
-      <div className="fam-mock-bubble">
-        {ar
-          ? "«حلم» هو الصور والقصص التي تجري في رأسك وأنت نائم. أحياناً سعيدة وأحياناً غريبة، وتختفي حين تستيقظ."
-          : ru
-          ? "«Мечта» — это то, чего очень хочется и о чём думаешь с радостью. То, к чему хочется идти и что хочется осуществить."
-          : he
-          ? "\"חלום\" זה התמונות והסיפורים שרצים בראש כשישנים. לפעמים שמחים, לפעמים מוזרים, והם נעלמים כשמתעוררים."
-          : "\"Dream\" is the pictures and stories that run through your head while you sleep. Sometimes happy, sometimes strange, and they fade when you wake up."}
-      </div>
+      <div className="fam-mock-bubble">{m.dreamKidDef}</div>
     </div>
   );
 }
 
 /** Examples block: three real sentences with the word. */
 function MockExamples({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
-  const ex = ar
-    ? ["«الليلة الماضية رأيت حلماً عن رحلة بعيدة.»", "«استيقظت من حلم مخيف.»", "«حلمه الكبير أن يطير إلى الفضاء.»"]
-    : ru
-    ? ["«Его большая мечта — стать врачом.»", "«Она идёт к своей мечте шаг за шагом.»", "«У каждого ребёнка есть своя мечта.»"]
-    : he
-    ? ["\"בלילה חלמתי חלום על מסע רחוק.\"", "\"היא התעוררה מחלום מפחיד.\"", "\"החלום הגדול שלו הוא לטוס לחלל.\""]
-    : ["\"Last night I had a dream about a long journey.\"", "\"She woke up from a scary dream.\"", "\"His big dream is to fly to space.\""];
+  const m = famMock(lang);
+  const ex = [m.dreamEx1, m.dreamEx2, m.dreamEx3];
   return (
     <div className="fam-mock">
       <div className="fam-mock-search">
-        <SearchIcon /> <span>{ar ? "حلم" : ru ? "мечта" : he ? "חלום" : "dream"}</span>
+        <SearchIcon /> <span>{m.dreamWord}</span>
       </div>
       <div className="fam-mock-examples">
         {ex.map((e, i) => (
@@ -4498,14 +5316,14 @@ function MockExamples({ lang }: { lang: string }) {
 
 /** Quiz block: a short practice question on its own. */
 function MockQuiz({ lang }: { lang: string }) {
-  const he = lang === "he", ru = lang === "ru", ar = lang === "ar";
+  const m = famMock(lang);
   return (
     <div className="fam-mock">
       <div className="fam-mock-quiz fam-mock-quiz-solo">
-        <div className="fam-mock-quiz-q">{ar ? "ماذا تعني «حلم»؟" : ru ? "Что значит «мечта»?" : he ? "מה פירוש \"חלום\"?" : "What does \"dream\" mean?"}</div>
-        <div className="fam-mock-quiz-opt is-right">{ar ? "صور وأفكار أثناء النوم" : ru ? "То, к чему стремишься и чего хочешь" : he ? "תמונות ומחשבות בזמן השינה" : "Images and thoughts during sleep"}</div>
-        <div className="fam-mock-quiz-opt">{ar ? "نوع من الكعك" : ru ? "Вид торта" : he ? "סוג של עוגה" : "A kind of cake"}</div>
-        <div className="fam-mock-quiz-opt">{ar ? "آلة موسيقية" : ru ? "Музыкальный инструмент" : he ? "כלי נגינה" : "A musical instrument"}</div>
+        <div className="fam-mock-quiz-q">{m.quizQ}</div>
+        <div className="fam-mock-quiz-opt is-right">{m.quizRight}</div>
+        <div className="fam-mock-quiz-opt">{m.quizWrong1}</div>
+        <div className="fam-mock-quiz-opt">{m.quizWrong2}</div>
       </div>
     </div>
   );
