@@ -856,7 +856,7 @@ const COPY: Record<string, T> = {
     privKahoot: "הצטרפות פשוטה כמו במשחק חידון. נבנה להבנת מילים ולנראות למורה.",
     priceTag: "מחירים",
     priceH2: "מחיר שנתי, לפי גודל בית הספר.",
-    priceSub: "הרשמה ותשלום מאובטח באתר. בלי שיחות מכירה, בלי הדגמות, בלי הזמנות רכש.",
+    priceSub: "ממלאים טופס קצר, ואנחנו פותחים את בית הספר ושולחים חשבונית מס. תשלום שנתי בהעברה בנקאית או בהזמנת רכש.",
     priceSmallName: "Schools",
     priceSmallAmount: "$69",
     priceSmallStudents: "עד 100 תלמידים",
@@ -2627,12 +2627,200 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
         </div>
       )}
 
+      {lang === "he" ? (
+      <>
+      {/* ═══════════════════════════════════════════════════════════════
+          HEBREW REBUILD (2026-08-08) — principal-facing sales page.
+          Two ways Gadit works in a school are shown explicitly: on the
+          board for the whole class, and personally per student in their
+          own language. Plus word sets and games. Branded teal/amber
+          bands + real classroom images. Other languages keep the
+          original mockup sections in the `else` branch below.
+          Privacy / pricing / FAQ / final CTA stay shared under the
+          ternary (they already read the Hebrew copy correctly).
+          ═══════════════════════════════════════════════════════════ */}
+
+      {/* ─── HE 1. HERO ──────────────────────────────────────────── */}
+      <section className="wb-schools-hero">
+        <div className="wb-schools-hero-text">
+          <span className="wb-schools-tag" style={{ marginBottom: 16 }}>מילון חזותי וחכם לבתי ספר</span>
+          <h1 className="wb-schools-h1">{t.heroH1}</h1>
+          <p className="wb-schools-sub">כל מילה קשה בשיעור נפתחת מיד. על הלוח לכל הכיתה, או אישית לכל תלמיד בשפה שלו.</p>
+          <div className="wb-schools-hero-actions">
+            <button type="button" className="wb-schools-cta" onClick={scrollToOrder}>
+              {t.heroCta}
+            </button>
+          </div>
+          <div className="wb-schools-hero-trust" style={{ marginTop: 14 }}>
+            מ-₪3,490 לשנה · בלי לוגין לתלמידים · בלי התקנה
+          </div>
+        </div>
+        <div className="wb-schools-hero-visual">
+          <img src="/schools/hero.webp" alt="" loading="lazy" className="wb-schools-hero-img" />
+        </div>
+      </section>
+
+      {/* ─── HE 2. THE PROBLEM ───────────────────────────────────── */}
+      <section className="wb-schools-section wb-schools-problem" style={{ background: "#FFFFFF" }}>
+        <div className="wb-schools-section-inner">
+          <span className="wb-schools-tag">{t.probTag}</span>
+          <h2 className="wb-schools-h2">{t.probH2}</h2>
+          <p className="wb-schools-body">{t.probBody1}</p>
+          <p className="wb-schools-body">{t.probBody2}</p>
+          <div className="wb-schools-callout-grid">
+            <div className="wb-schools-callout">
+              <div className="wb-schools-callout-num">01</div>
+              <div className="wb-schools-callout-title">{t.probCallout1Title}</div>
+              <div className="wb-schools-callout-body">{t.probCallout1Body}</div>
+            </div>
+            <div className="wb-schools-callout">
+              <div className="wb-schools-callout-num">02</div>
+              <div className="wb-schools-callout-title">{t.probCallout2Title}</div>
+              <div className="wb-schools-callout-body">{t.probCallout2Body}</div>
+            </div>
+            <div className="wb-schools-callout">
+              <div className="wb-schools-callout-num">03</div>
+              <div className="wb-schools-callout-title">{t.probCallout3Title}</div>
+              <div className="wb-schools-callout-body">{t.probCallout3Body}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HE 3. ON THE BOARD, THE WHOLE CLASS ─────────────────── */}
+      <section className="wb-schools-section" style={{ background: "#ECFAF9" }}>
+        <div className="wb-schools-feature">
+          <div className="wb-schools-feature-text">
+            <span className="wb-schools-tag">על הלוח, לכל הכיתה</span>
+            <h2 className="wb-schools-h2">המורה מקלידה מילה, וכל הכיתה מבינה יחד.</h2>
+            <p className="wb-schools-body">
+              באמצע השיעור צצה מילה שחצי מהכיתה לא מכירה. במקום לעצור ולהסביר בעל פה, המורה מקלידה אותה ב-Gadit על הלוח, והמילה נפתחת בשלבים שכולם רואים באותו רגע.
+            </p>
+            <ol className="wb-schools-stages">
+              <li className="wb-schools-stage"><span className="wb-schools-stage-num">1</span>המילה, גדולה וברורה על המסך</li>
+              <li className="wb-schools-stage"><span className="wb-schools-stage-num">2</span>הסבר בגובה העיניים, בשפה שילד מבין</li>
+              <li className="wb-schools-stage"><span className="wb-schools-stage-num">3</span>תמונה שמראה את המשמעות במבט אחד</li>
+              <li className="wb-schools-stage"><span className="wb-schools-stage-num">4</span>שלושה משפטי דוגמה שמראים איך משתמשים בה</li>
+            </ol>
+            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
+          </div>
+          <div className="wb-schools-feature-visual">
+            <img src="/schools/steps.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HE 4. AND PERSONALLY, IN EACH STUDENT'S LANGUAGE ─────── */}
+      <section className="wb-schools-section" style={{ background: "#FFFFFF" }}>
+        <div className="wb-schools-feature is-flipped">
+          <div className="wb-schools-feature-text">
+            <span className="wb-schools-tag">וגם אישית, בשפה של כל תלמיד</span>
+            <h2 className="wb-schools-h2">תלמיד שחושב ברוסית, אמהרית או ערבית, מקבל את התשובה בשפה שלו.</h2>
+            <p className="wb-schools-body">
+              לא הכל קורה על הלוח. תלמיד שקורא את החומר בעברית אבל עדיין חושב בשפת האם נתקל במילה, לא מרים יד, וטובע בשקט. עכשיו הוא פשוט מחפש אותה לבד, במחשב הכיתה או בטלפון, ומקבל את המשמעות המלאה בשפה שלו.
+            </p>
+            <p className="wb-schools-body" style={{ fontWeight: 700, color: "#1C1917" }}>
+              מחסום ההבנה נעלם בהקשה אחת, והתלמיד ממשיך לקרוא את השיעור עם כל השאר.
+            </p>
+
+            {/* Concrete demo: one lesson word, understood in the student's
+                own language. Fixed content, UI-translated labels. */}
+            <div style={{ marginTop: 22, background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 16, padding: "18px 20px", maxWidth: 480 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#B45309", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>{xt.demoWordLabel}</div>
+              <div dir="ltr" style={{ fontSize: 24, fontWeight: 800, color: "#1C1917", marginBottom: 14, textAlign: "right" }}>{XLANG_DEMO.word}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#B45309", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 10 }}>{xt.demoMeaningLabel}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {XLANG_DEMO.meanings.map((m) => (
+                  <div key={m.lang} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                    <span style={{ flexShrink: 0, minWidth: 64, fontSize: 13, fontWeight: 700, color: "#92400E" }}>{m.lang}</span>
+                    <span dir={m.dir ?? "ltr"} style={{ fontSize: 14, color: "#44403C", lineHeight: 1.5, textAlign: m.dir === "rtl" ? "right" : "left" }}>{m.text}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px solid #FEF3C7", fontSize: 12, color: "#A16207", fontWeight: 600 }}>
+                ועוד 17 שפות
+              </div>
+            </div>
+
+            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
+          </div>
+          <div className="wb-schools-feature-visual">
+            <img src="/schools/cross-personal.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HE 5. READY-MADE WORD SETS BY SUBJECT ───────────────── */}
+      <section className="wb-schools-section" style={{ background: "#FFFBEB" }}>
+        <div className="wb-schools-feature">
+          <div className="wb-schools-feature-text">
+            <span className="wb-schools-tag" style={{ color: "#B45309", background: "rgba(202,138,4,0.12)" }}>מאגר מוכן</span>
+            <h2 className="wb-schools-h2">רשימות מילים מוכנות לכל מקצוע.</h2>
+            <p className="wb-schools-body">
+              לא צריך להכין כלום מראש. לכל מקצוע ולכל שכבה מחכה רשימת מילים בנויה. המורה בוחרת נושא, והמילים החשובות של היחידה כבר שם, מוכנות להקרנה על הלוח או לתרגול אישי.
+            </p>
+            <div className="wb-schools-subjects">
+              <span className="wb-schools-subject">מדעים</span>
+              <span className="wb-schools-subject">היסטוריה</span>
+              <span className="wb-schools-subject">תנ״ך</span>
+              <span className="wb-schools-subject">גאוגרפיה</span>
+              <span className="wb-schools-subject">אזרחות</span>
+              <span className="wb-schools-subject">ספרות</span>
+              <span className="wb-schools-subject">אנגלית</span>
+            </div>
+            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
+          </div>
+          <div className="wb-schools-feature-visual">
+            <img src="/schools/word-sets.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HE 6. PRACTICE WITH GAMES ───────────────────────────── */}
+      <section className="wb-schools-section" style={{ background: "#FFFFFF" }}>
+        <div className="wb-schools-feature is-flipped">
+          <div className="wb-schools-feature-text">
+            <span className="wb-schools-tag">תרגול</span>
+            <h2 className="wb-schools-h2">משחקים קצרים שמקבעים את המילים.</h2>
+            <p className="wb-schools-body">
+              מילה שהובנה פעם אחת עדיין צריכה חזרה כדי להישאר. אחרי השיעור התלמידים מתרגלים את המילים של הכיתה במשחקים קצרים, וכל מילה שחיפשו הופכת לחלק מהידע שלהם.
+            </p>
+            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
+          </div>
+          <div className="wb-schools-feature-visual">
+            <img src="/schools/games.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HE 7. WHAT THE PRINCIPAL GETS ───────────────────────── */}
+      <section className="wb-schools-section" style={{ background: "#ECFAF9" }}>
+        <div className="wb-schools-feature">
+          <div className="wb-schools-feature-text">
+            <span className="wb-schools-tag">מה מקבל המנהל</span>
+            <h2 className="wb-schools-h2">כלי שגורם לתלמידים באמת להבין, בלי כאב ראש תפעולי.</h2>
+            <p className="wb-schools-body">
+              המורים מקבלים דרך פשוטה לוודא שאף תלמיד לא נשאר מאחור בגלל מילה אחת. בלי חשבונות לתלמידים, בלי התקנה, בלי מעורבות של צוות מחשוב.
+            </p>
+            <ul className="wb-schools-bullets">
+              <li>בלי לוגין לתלמידים, בלי סיסמאות לנהל</li>
+              <li>בלי התקנה ובלי מעורבות של צוות מחשוב</li>
+              <li>עובד על כל מסך: לוח חכם, מחשב או טלפון</li>
+              <li>דשבורד שמראה למורה עם אילו מילים הכיתה מתקשה</li>
+            </ul>
+            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
+          </div>
+          <div className="wb-schools-feature-visual">
+            <img src="/schools/trust.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
+          </div>
+        </div>
+      </section>
+      </>
+      ) : (
+      <>
       {/* ─── 1. HERO ─────────────────────────────────────────────── */}
       <section className="wb-schools-hero">
         <div className="wb-schools-hero-text">
-          {lang === "he" && (
-            <span className="wb-schools-tag" style={{ marginBottom: 16 }}>מילון חזותי וחכם לבתי ספר</span>
-          )}
           <h1 className="wb-schools-h1">{t.heroH1}</h1>
           <p className="wb-schools-sub">{t.heroSub}</p>
           <div className="wb-schools-hero-actions">
@@ -2691,7 +2879,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 <div className="wb-schools-mockup-meaning-text">{t.mockupExampleDef}</div>
               </div>
               <div className="wb-schools-mockup-example">
-                <div className="wb-schools-mockup-example-label">{lang === "he" ? "דוגמה" : "Example"}</div>
+                <div className="wb-schools-mockup-example-label">Example</div>
                 <div className="wb-schools-mockup-example-text">{t.mockupExampleEx}</div>
               </div>
             </div>
@@ -2765,7 +2953,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               ))}
             </div>
             <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #FEF3C7", fontSize: 12.5, color: "#A16207", fontWeight: 600 }}>
-              {lang === "he" ? "ועוד 11 שפות" : lang === "ar" ? "و11 لغة أخرى" : lang === "ru" ? "и ещё 11 языков" : "+ 11 more languages"}
+              {lang === "ar" ? "و11 لغة أخرى" : lang === "ru" ? "и ещё 11 языков" : "+ 11 more languages"}
             </div>
           </div>
 
@@ -2875,6 +3063,14 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           </div>
         </div>
       </section>
+
+      </>
+      )}
+
+      {/* ─── SHARED (all languages): PRIVACY / PRICING / FAQ / FINAL ─
+          These four sections already render the correct per-language
+          copy via `t` / `pu`, so they live outside the he/other branch
+          and stay identical for every language. */}
 
       {/* ─── 5. PRIVACY MOAT ─────────────────────────────────────── */}
       <section className="wb-schools-section wb-schools-privacy">

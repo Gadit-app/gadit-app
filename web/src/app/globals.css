@@ -13123,3 +13123,112 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-size: 13px;
   color: var(--ink-soft);
 }
+
+/* ─── Hebrew Schools rebuild (2026-08-08) ──────────────────────────
+   Branded two-column feature rows + real classroom images, mirroring
+   the families page rhythm. Hebrew-only surface; other languages keep
+   the original mockup-driven sections. */
+
+/* Hero image (replaces the split CSS mockup on the Hebrew page) */
+.wordbook .wb-schools-hero-img {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  border-radius: 18px;
+  box-shadow: 0 24px 54px -22px rgba(15, 23, 42, 0.30);
+  margin-inline: auto;
+}
+
+/* Two-column feature row: text + image */
+.wordbook .wb-schools-feature {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 34px;
+  max-width: 1080px;
+  margin: 0 auto;
+  align-items: center;
+}
+@media (min-width: 860px) {
+  .wordbook .wb-schools-feature {
+    grid-template-columns: 1.02fr 1fr;
+    gap: 60px;
+  }
+  .wordbook .wb-schools-feature.is-flipped .wb-schools-feature-text { order: 2; }
+  .wordbook .wb-schools-feature.is-flipped .wb-schools-feature-visual { order: 1; }
+}
+.wordbook .wb-schools-feature-img {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  border-radius: 18px;
+  box-shadow: 0 22px 50px -22px rgba(15, 23, 42, 0.28);
+  margin-inline: auto;
+}
+
+/* Staged explanation list (word → definition → picture → sentences) */
+.wordbook .wb-schools-stages {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wordbook .wb-schools-stage {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-family: var(--wb-he);
+  font-size: 15.5px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.wordbook .wb-schools-stage-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(14, 165, 165, 0.12);
+  color: #0EA5A5;
+  font-family: var(--wb-sans);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+/* Subject chips for the word-sets section */
+.wordbook .wb-schools-subjects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+.wordbook .wb-schools-subject {
+  font-family: var(--wb-he);
+  font-size: 14px;
+  font-weight: 600;
+  color: #92400E;
+  background: rgba(202, 138, 4, 0.10);
+  border: 1px solid rgba(202, 138, 4, 0.28);
+  padding: 7px 14px;
+  border-radius: 999px;
+}
+
+/* Inline text CTA that scrolls to the order form */
+.wordbook .wb-schools-textcta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--wb-he);
+  font-size: 15px;
+  font-weight: 700;
+  color: #0EA5A5;
+  cursor: pointer;
+  transition: opacity 160ms var(--wb-ease-out);
+}
+.wordbook .wb-schools-textcta:hover { opacity: 0.72; }
