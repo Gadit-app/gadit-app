@@ -2620,9 +2620,15 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
             width: "100%",
           }}
         >
-          <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
-            Gad<span className="wb-wordmark-it">it</span>
-          </Link>
+          {lang === "he" ? (
+            /* Hebrew shows a big centered Gadit lockup below (like the
+               families page), so the corner wordmark is omitted here. */
+            <span />
+          ) : (
+            <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
+              Gad<span className="wb-wordmark-it">it</span>
+            </Link>
+          )}
           <LangSwitcher variant="muted" />
         </div>
       )}
@@ -2640,10 +2646,26 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           ternary (they already read the Hebrew copy correctly).
           ═══════════════════════════════════════════════════════════ */}
 
+      {/* Centered brand lockup at the very top, like the families page:
+          the Gadit wordmark + a one-line tagline pill. */}
+      <div style={{ textAlign: "center", padding: "8px 20px 0" }}>
+        <Link
+          href={href("/")}
+          className="wb-wordmark"
+          dir="ltr"
+          translate="no"
+          style={{ fontSize: 38, fontWeight: 800, letterSpacing: "-0.02em", display: "inline-block" }}
+        >
+          Gad<span className="wb-wordmark-it">it</span>
+        </Link>
+        <div style={{ marginTop: 12 }}>
+          <span className="wb-schools-tag">מילון חזותי וחכם לבתי ספר</span>
+        </div>
+      </div>
+
       {/* ─── HE 1. HERO ──────────────────────────────────────────── */}
       <section className="wb-schools-hero">
         <div className="wb-schools-hero-text">
-          <span className="wb-schools-tag" style={{ marginBottom: 16 }}>מילון חזותי וחכם לבתי ספר</span>
           <h1 className="wb-schools-h1">{t.heroH1}</h1>
           <p className="wb-schools-sub">כל מילה קשה בשיעור נפתחת מיד. על הלוח לכל הכיתה, או אישית לכל תלמיד בשפה שלו.</p>
           <div className="wb-schools-hero-actions">
