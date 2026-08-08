@@ -2979,7 +2979,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 בנק לאומי (10) · סניף 855 · חשבון 41850031
               </div>
               <a
-                href={href("/contact")}
+                href={href("/schools/order")}
                 style={{
                   display: "inline-block",
                   marginTop: 14,
