@@ -144,6 +144,282 @@ function Hl({ children }: { children: React.ReactNode }) {
 }
 
 const GROUP_COPY: Record<string, GroupCopy> = {
+  uk: {
+    groupTitles: {
+      understand: "Зрозумій слово",
+      learn: <>Зрозумій і <Hl>побач</Hl> слово</>,
+      master: <>Зрозумій, побач і <Hl>запамʼятай слово назавжди</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Кожне значення, справжні речення в контексті, ідіоми, у яких воно живе, і звідки воно походить.",
+      learn:
+        "Зображення до слова, версія для дітей, особистий зошит і речення, яке ти пишеш, з відгуком.",
+      master:
+        "Персональні тести та ігри зі словами, що закріплюють слово надовго.",
+    },
+    family: {
+      title: <>Зрозумій, побач, запамʼятай <Hl>для всієї родини</Hl></>,
+      sub: "Одна підписка дає кожному членові родини власний обліковий запис з усіма розширеними можливостями. До 5 дітей.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Окремий профіль для кожного члена родини",
+          body: "Зошит слів, історія пошуку та особиста серія навчання для кожної дитини й кожного з батьків.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Підключіть пристрій за QR-кодом",
+          body: "Дитина сканує QR на своєму телефоні й входить. Звʼязок лишається назавжди, без пароля.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Панель для батьків",
+          body: "Бачте кожне слово, яке шукала кожна дитина, і коли, стежте за її темпом з одного погляду.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "До 5 дітей на одній підписці",
+          body: "Кожна дитина отримує всі можливості Deep. Батьки платять один раз за всю родину.",
+        },
+      ],
+    },
+    bubble: "Тепер я gad it!",
+  },
+  tr: {
+    groupTitles: {
+      understand: "Kelimeyi anla",
+      learn: <>Kelimeyi anla ve <Hl>gör</Hl></>,
+      master: <>Kelimeyi anla, gör ve <Hl>sonsuza kadar hatırla</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Her anlam, bağlam içinde gerçek cümleler, içinde yaşadığı deyimler ve nereden geldiği.",
+      learn:
+        "Kelime için bir görsel, çocuklara uygun bir sürüm, kişisel bir defter ve geri bildirimle yazdığın bir cümle.",
+      master:
+        "Kelimeyi uzun vadede kalıcı kılan kişiselleştirilmiş testler ve kelime oyunları.",
+    },
+    family: {
+      title: <>Anla, gör, hatırla <Hl>tüm aile için</Hl></>,
+      sub: "Tek bir abonelik, ailenin her üyesine tüm gelişmiş özelliklerle kendi hesabını verir. 5 çocuğa kadar.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Her aile üyesi için ayrı bir profil",
+          body: "Her çocuk ve ebeveyn için kelime defteri, arama geçmişi ve kişisel öğrenme serisi.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Bir cihazı QR koduyla eşle",
+          body: "Çocuğunuz telefonunda bir QR tarar ve giriş yapar. Sonsuza kadar eşli kalır, şifre gerekmez.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Ebeveyn paneli",
+          body: "Her çocuğun hangi kelimeye ne zaman baktığını görün, hızlarını bir bakışta takip edin.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Tek abonelikte 5 çocuğa kadar",
+          body: "Her çocuk tüm Deep özelliklerini alır. Ebeveyn, tüm aile için bir kez öder.",
+        },
+      ],
+    },
+    bubble: "Şimdi anladım, gad it!",
+  },
+  pl: {
+    groupTitles: {
+      understand: "Zrozum słowo",
+      learn: <>Zrozum i <Hl>zobacz</Hl> słowo</>,
+      master: <>Zrozum, zobacz i <Hl>zapamiętaj słowo na zawsze</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Każde znaczenie, prawdziwe zdania w kontekście, idiomy, w których żyje, i skąd pochodzi.",
+      learn:
+        "Obraz do słowa, wersja przyjazna dzieciom, osobisty zeszyt i zdanie, które piszesz, z informacją zwrotną.",
+      master:
+        "Spersonalizowane quizy i gry słowne, które utrwalają słowo na długo.",
+    },
+    family: {
+      title: <>Zrozum, zobacz, zapamiętaj <Hl>dla całej rodziny</Hl></>,
+      sub: "Jedna subskrypcja daje każdemu członkowi rodziny własne konto ze wszystkimi zaawansowanymi funkcjami. Do 5 dzieci.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Osobny profil dla każdego członka rodziny",
+          body: "Zeszyt słów, historia wyszukiwań i osobista seria nauki dla każdego dziecka i rodzica.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Sparuj urządzenie kodem QR",
+          body: "Dziecko skanuje kod QR na swoim telefonie i loguje się. Pozostaje sparowane na zawsze, bez hasła.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Panel rodzica",
+          body: "Zobacz każde słowo, które sprawdziło każde dziecko i kiedy, śledź jego tempo jednym spojrzeniem.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Do 5 dzieci w jednej subskrypcji",
+          body: "Każde dziecko otrzymuje pełne funkcje Deep. Rodzic płaci raz za całą rodzinę.",
+        },
+      ],
+    },
+    bubble: "Teraz to złapałem!",
+  },
+  fa: {
+    groupTitles: {
+      understand: "کلمه را بفهم",
+      learn: <>کلمه را بفهم و <Hl>ببین</Hl></>,
+      master: <>کلمه را بفهم، ببین، و <Hl>برای همیشه به خاطر بسپار</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "هر معنا، جمله‌های واقعی در بافت، اصطلاحاتی که کلمه در آن‌ها زندگی می‌کند، و اینکه از کجا آمده است.",
+      learn:
+        "یک تصویر برای کلمه، نسخه‌ای مناسب کودکان، یک دفترچه شخصی، و جمله‌ای که خودت می‌نویسی با بازخورد.",
+      master:
+        "آزمون‌های شخصی‌سازی‌شده و بازی‌های کلمه‌ای که کلمه را برای بلندمدت تثبیت می‌کنند.",
+    },
+    family: {
+      title: <>بفهم، ببین، به خاطر بسپار <Hl>برای کل خانواده</Hl></>,
+      sub: "یک اشتراک به هر عضو خانواده حساب خودش را می‌دهد، با همه امکانات پیشرفته. تا ۵ کودک.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "یک پروفایل جداگانه برای هر عضو خانواده",
+          body: "دفترچه کلمات، تاریخچه جستجو، و زنجیره یادگیری شخصی برای هر کودک و والد.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "جفت کردن دستگاه با کد QR",
+          body: "کودکت یک QR را روی تلفنش اسکن می‌کند و وارد می‌شود. برای همیشه جفت می‌ماند، بدون رمز عبور.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "داشبورد والدین",
+          body: "هر کلمه‌ای که هر کودک جستجو کرده و چه زمانی را ببین، سرعتشان را در یک نگاه دنبال کن.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "تا ۵ کودک با یک اشتراک",
+          body: "هر کودک همه امکانات Deep را می‌گیرد. والد یک بار برای کل خانواده پرداخت می‌کند.",
+        },
+      ],
+    },
+    bubble: "حالا گرفتمش!",
+  },
+  id: {
+    groupTitles: {
+      understand: "Pahami kata",
+      learn: <>Pahami dan <Hl>lihat</Hl> kata</>,
+      master: <>Pahami, lihat, dan <Hl>ingat kata selamanya</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Setiap makna, kalimat nyata dalam konteks, idiom tempat kata itu hidup, dan dari mana asalnya.",
+      learn:
+        "Gambar untuk kata, versi ramah anak, buku catatan pribadi, dan kalimat yang kamu tulis dengan masukan.",
+      master:
+        "Kuis yang dipersonalisasi dan permainan kata yang menancapkan kata itu untuk jangka panjang.",
+    },
+    family: {
+      title: <>Pahami, lihat, ingat <Hl>untuk seluruh keluarga</Hl></>,
+      sub: "Satu langganan memberi setiap anggota keluarga akun mereka sendiri, dengan semua fitur canggih. Hingga 5 anak.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Profil terpisah untuk tiap anggota keluarga",
+          body: "Buku catatan kata, riwayat pencarian, dan rangkaian belajar pribadi untuk setiap anak dan orang tua.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Sambungkan perangkat dengan kode QR",
+          body: "Anakmu memindai QR di ponselnya dan masuk. Tetap tersambung selamanya, tanpa kata sandi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Dasbor orang tua",
+          body: "Lihat setiap kata yang dicari tiap anak dan kapan, ikuti kecepatan mereka sekilas.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Hingga 5 anak dalam satu langganan",
+          body: "Setiap anak mendapatkan fitur Deep lengkap. Orang tua membayar sekali untuk seluruh keluarga.",
+        },
+      ],
+    },
+    bubble: "Sekarang aku paham!",
+  },
+  nl: {
+    groupTitles: {
+      understand: "Begrijp het woord",
+      learn: <>Begrijp en <Hl>zie</Hl> het woord</>,
+      master: <>Begrijp, zie en <Hl>onthoud het woord voor altijd</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Elke betekenis, echte zinnen in context, de uitdrukkingen waarin het leeft, en waar het vandaan komt.",
+      learn:
+        "Een afbeelding voor het woord, een kindvriendelijke versie, een persoonlijk schrift, en een zin die je schrijft met feedback.",
+      master:
+        "Gepersonaliseerde quizzen en woordspellen die het woord voor de lange termijn vastleggen.",
+    },
+    family: {
+      title: <>Begrijp, zie, onthoud <Hl>voor het hele gezin</Hl></>,
+      sub: "Een abonnement geeft elk gezinslid een eigen account, met alle geavanceerde functies. Tot 5 kinderen.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Een apart profiel per gezinslid",
+          body: "Woordenschrift, zoekgeschiedenis en persoonlijke leerreeks voor elk kind en elke ouder.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Koppel een apparaat met een QR-code",
+          body: "Je kind scant een QR op de telefoon en logt in. Blijft voor altijd gekoppeld, zonder wachtwoord.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Ouderdashboard",
+          body: "Zie elk woord dat elk kind heeft opgezocht en wanneer, volg hun tempo in een oogopslag.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Tot 5 kinderen op een abonnement",
+          body: "Elk kind krijgt volledige Deep-functies. De ouder betaalt een keer voor het hele gezin.",
+        },
+      ],
+    },
+    bubble: "Nu snap ik het!",
+  },
   he: {
     groupTitles: {
       understand: "להבין את המילה",
