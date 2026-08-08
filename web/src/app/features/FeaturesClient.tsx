@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { LANGUAGES } from "@/lib/i18n";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -21,21 +22,8 @@ import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { GaditDemoAnimation } from "@/components/design/GaditDemoAnimation";
 
-const LANGS = [
-  { code: "he", label: "עברית", flag: "il" },
-  { code: "en", label: "English", flag: "gb" },
-  { code: "ar", label: "العربية", flag: "sa" },
-  { code: "ru", label: "Русский", flag: "ru" },
-  { code: "es", label: "Español", flag: "es" },
-  { code: "pt", label: "Português", flag: "pt" },
-  { code: "fr", label: "Français", flag: "fr" },
-  { code: "de", label: "Deutsch", flag: "de" },
-  { code: "cs", label: "Čeština", flag: "cz" },
-  { code: "sk", label: "Slovenčina", flag: "sk" },
-  { code: "it", label: "Italiano", flag: "it" },
-  { code: "ja", label: "日本語", flag: "jp" },
-  { code: "hi", label: "हिन्दी", flag: "in" },
-] as const;
+// Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
+const LANGS = LANGUAGES;
 
 function LangSwitch() {
   const { lang, setLang } = useLang();

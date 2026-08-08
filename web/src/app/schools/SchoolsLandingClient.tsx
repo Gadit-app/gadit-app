@@ -21,6 +21,7 @@ import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
+import { LANGUAGES } from "@/lib/i18n";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
@@ -29,21 +30,9 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 // Same languages as HomeClient — duplicated rather than refactored so
 // the topbar on /schools mirrors the homepage exactly without coupling
 // the two files.
-const LANGS = [
-  { code: "he", label: "עברית", flag: "il" },
-  { code: "en", label: "English", flag: "gb" },
-  { code: "ar", label: "العربية", flag: "sa" },
-  { code: "ru", label: "Русский", flag: "ru" },
-  { code: "es", label: "Español", flag: "es" },
-  { code: "pt", label: "Português", flag: "pt" },
-  { code: "fr", label: "Français", flag: "fr" },
-  { code: "de", label: "Deutsch", flag: "de" },
-  { code: "cs", label: "Čeština", flag: "cz" },
-  { code: "sk", label: "Slovenčina", flag: "sk" },
-  { code: "it", label: "Italiano", flag: "it" },
-  { code: "ja", label: "日本語", flag: "jp" },
-  { code: "hi", label: "हिन्दी", flag: "in" },
-] as const;
+// Single source of truth: the shared LANGUAGES registry, so this switcher
+// never drifts behind newly-added UI languages.
+const LANGS = LANGUAGES;
 
 function LangSwitch() {
   const { lang, setLang } = useLang();

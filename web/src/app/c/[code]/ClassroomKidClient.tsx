@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { LANGUAGES } from "@/lib/i18n";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import VoiceInput from "@/components/VoiceInput";
@@ -455,13 +456,9 @@ export function ClassroomKidClient({ code }: { code: string }) {
 // Lang switcher for the classroom topbar. Small, kid-friendly — just
 // the active language label with a popover of the four supported langs.
 // Anonymous (no auth), persists via lang-context like the rest of /c.
-const CLASSROOM_LANGS = [
-  { code: "he", label: "עברית", flag: "il" },
-  { code: "en", label: "English", flag: "gb" },
-  { code: "ar", label: "العربية", flag: "sa" },
-  { code: "ru", label: "Русский", flag: "ru" },
-  { code: "hi", label: "हिन्दी", flag: "in" },
-] as const;
+// Shared LANGUAGES registry so a classroom kid can pick any UI language
+// (a Dutch student in Belgium needs Dutch, not a curated 5-lang subset).
+const CLASSROOM_LANGS = LANGUAGES;
 
 function ClassroomLangSwitch() {
   const { lang, setLang } = useLang();

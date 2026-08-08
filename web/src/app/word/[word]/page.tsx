@@ -4,6 +4,7 @@ import { headers, cookies } from "next/headers";
 import { getAdminDb } from "@/lib/firebase-admin";
 import type { WordResult } from "@/components/design/result";
 import { WordClient } from "./WordClient";
+import { LANGUAGES } from "@/lib/i18n";
 
 /**
  * /word/[word] — result screen.
@@ -33,7 +34,7 @@ import { WordClient } from "./WordClient";
  * client flow they had before.
  */
 
-const ALL_LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
+const ALL_LANGS: string[] = LANGUAGES.map((l) => l.code);
 
 /** Resolve the request's UI language exactly like the root layout:
  *  middleware header (URL prefix) → cookie → English. */

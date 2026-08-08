@@ -24,23 +24,12 @@ import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
+import { LANGUAGES } from "@/lib/i18n";
 
-const LANGS = [
-  { code: "he", label: "עברית", flag: "il" },
-  { code: "en", label: "English", flag: "gb" },
-  { code: "ar", label: "العربية", flag: "sa" },
-  { code: "ru", label: "Русский", flag: "ru" },
-  { code: "es", label: "Español", flag: "es" },
-  { code: "pt", label: "Português", flag: "pt" },
-  { code: "fr", label: "Français", flag: "fr" },
-  { code: "de", label: "Deutsch", flag: "de" },
-  { code: "cs", label: "Čeština", flag: "cz" },
-  { code: "sk", label: "Slovenčina", flag: "sk" },
-  { code: "it", label: "Italiano", flag: "it" },
-  { code: "ja", label: "日本語", flag: "jp" },
-  { code: "hi", label: "हिन्दी", flag: "in" },
-  { code: "am", label: "አማርኛ", flag: "et" },
-] as const;
+// Single source of truth: the shared LANGUAGES registry, so the homepage
+// switcher never drifts behind newly-added UI languages (it used to be a
+// hand-maintained copy that got stuck at 14).
+const LANGS = LANGUAGES;
 
 function LangSwitch() {
   const { lang, setLang } = useLang();

@@ -5,6 +5,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
 import type { Lang } from "@/lib/i18n";
+import { LANGUAGES } from "@/lib/i18n";
 import LoginModal from "@/components/LoginModal";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { AutoUpdater } from "@/components/AutoUpdater";
@@ -265,7 +266,7 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
   },
 };
 
-const ALL_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
+const ALL_LANGS: Lang[] = LANGUAGES.map((l) => l.code);
 
 export async function generateMetadata(): Promise<Metadata> {
   // Resolve language for this request, exactly the same chain the
@@ -370,7 +371,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const SUPPORTED_LANGS: Lang[] = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
+const SUPPORTED_LANGS: Lang[] = LANGUAGES.map((l) => l.code);
 
 export default async function RootLayout({
   children,

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { LANGUAGES } from "@/lib/i18n";
 
 /**
  * Native partner dashboard. Reads the `t` token from the URL (set in the
@@ -524,22 +525,10 @@ function money(minor: number, currency: string): string {
 // A partner shares gadit.app/<lang>/?ref=<code>; the middleware sets the
 // language from the prefix and the ?ref= is preserved through the rewrite,
 // so the audience lands in that language AND the click is attributed.
-const LINK_LANGS: Array<{ code: string; native: string }> = [
-  { code: "en", native: "English" },
-  { code: "he", native: "עברית" },
-  { code: "ru", native: "Русский" },
-  { code: "es", native: "Español" },
-  { code: "ar", native: "العربية" },
-  { code: "fr", native: "Français" },
-  { code: "de", native: "Deutsch" },
-  { code: "pt", native: "Português" },
-  { code: "it", native: "Italiano" },
-  { code: "cs", native: "Čeština" },
-  { code: "sk", native: "Slovenčina" },
-  { code: "ja", native: "日本語" },
-  { code: "hi", native: "हिन्दी" },
-  { code: "am", native: "አማርኛ" },
-];
+// Derived from the shared LANGUAGES registry so a partner can always build
+// a referral link in every UI language we support (never drifts behind).
+const LINK_LANGS: Array<{ code: string; native: string }> =
+  LANGUAGES.map((l) => ({ code: l.code, native: l.label }));
 // A partner link = a landing path + ?ref=<code>, in the chosen language.
 // RefCapture (mounted in the root layout) reads ?ref on EVERY page, so the
 // referral is attributed no matter which product page they land on.
