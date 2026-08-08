@@ -18,7 +18,7 @@ import type { Metadata } from "next";
 
 // Languages that have a dedicated /og/<lang>.jpg card. Anything else
 // falls back to the neutral default card.
-const OG_LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "am"];
+const OG_LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "am", "hi", "uk", "tr", "pl", "fa", "id", "nl"];
 
 export type ShareCopy = { title: string; description: string };
 

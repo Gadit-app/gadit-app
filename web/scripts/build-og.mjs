@@ -51,7 +51,7 @@ const outDir    = resolve(webRoot, "public/og");
 
 await mkdir(outDir, { recursive: true });
 
-const LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
+const LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "uk", "tr", "pl", "fa", "id", "nl"];
 
 console.log(`Rendering OG cards from ${sourcePath} …`);
 
