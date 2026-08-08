@@ -22,6 +22,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { LANGUAGES } from "@/lib/i18n";
+import { SchoolOrderForm } from "./SchoolOrderForm";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
@@ -2978,22 +2979,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 <br />
                 בנק לאומי (10) · סניף 855 · חשבון 41850031
               </div>
-              <a
-                href={href("/schools/order")}
-                style={{
-                  display: "inline-block",
-                  marginTop: 14,
-                  background: "#CA8A04",
-                  color: "#fff",
-                  fontSize: 14.5,
-                  fontWeight: 700,
-                  textDecoration: "none",
-                  padding: "10px 20px",
-                  borderRadius: 10,
-                }}
-              >
-                להרשמת בית הספר
-              </a>
+              <SchoolOrderForm />
             </div>
           )}
           <p className="wb-schools-price-larger">{t.priceLarger}</p>
