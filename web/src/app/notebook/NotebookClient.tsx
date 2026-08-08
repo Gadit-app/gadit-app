@@ -41,6 +41,62 @@ const COPY: Record<string, {
   emptyHint: string;
   goSearch: string;
 }> = {
+  it: {
+    title: "Il mio quaderno",
+    subtitle: "Ogni parola che hai raccolto, salvato e organizzato.",
+    empty: "Il tuo quaderno è vuoto.",
+    emptyHint: "Trova una parola e tocca 'Salva nel quaderno'.",
+    goSearch: "Torna alla ricerca",
+  },
+  ja: {
+    title: "マイノート",
+    subtitle: "あなたが集めて、保存して、整理したすべての単語。",
+    empty: "ノートはまだ空です。",
+    emptyHint: "単語を見つけて「ノートに保存」をタップしてください。",
+    goSearch: "検索に戻る",
+  },
+  uk: {
+    title: "Мій зошит",
+    subtitle: "Кожне слово, яке ти зібрав, зберіг та впорядкував.",
+    empty: "Твій зошит порожній.",
+    emptyHint: "Знайди слово й натисни «Зберегти в зошит».",
+    goSearch: "Назад до пошуку",
+  },
+  tr: {
+    title: "Defterim",
+    subtitle: "Topladığın, kaydettiğin ve düzenlediğin her kelime.",
+    empty: "Defterin boş.",
+    emptyHint: "Bir kelime bul ve 'Deftere kaydet'e dokun.",
+    goSearch: "Aramaya dön",
+  },
+  pl: {
+    title: "Mój zeszyt",
+    subtitle: "Każde słowo, które zebrałeś, zapisałeś i uporządkowałeś.",
+    empty: "Twój zeszyt jest pusty.",
+    emptyHint: "Znajdź słowo i dotknij „Zapisz w zeszycie”.",
+    goSearch: "Powrót do wyszukiwania",
+  },
+  fa: {
+    title: "دفترچه من",
+    subtitle: "هر واژه‌ای که جمع کرده‌ای، ذخیره کرده‌ای و مرتب کرده‌ای.",
+    empty: "دفترچه‌ات خالی است.",
+    emptyHint: "یک واژه پیدا کن و روی «ذخیره در دفترچه» بزن.",
+    goSearch: "بازگشت به جستجو",
+  },
+  id: {
+    title: "Buku Catatanku",
+    subtitle: "Setiap kata yang kamu kumpulkan, simpan, dan atur.",
+    empty: "Buku catatanmu kosong.",
+    emptyHint: "Temukan sebuah kata dan ketuk 'Simpan ke Buku Catatan'.",
+    goSearch: "Kembali ke pencarian",
+  },
+  nl: {
+    title: "Mijn notitieboek",
+    subtitle: "Elk woord dat je hebt verzameld, opgeslagen en geordend.",
+    empty: "Je notitieboek is leeg.",
+    emptyHint: "Zoek een woord en tik op 'Opslaan in notitieboek'.",
+    goSearch: "Terug naar zoeken",
+  },
   he: {
     title: "המחברת שלי",
     subtitle: "כל המילים שאספת, שמורות ומסודרות.",
