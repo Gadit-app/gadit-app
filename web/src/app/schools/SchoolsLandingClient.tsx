@@ -162,8 +162,8 @@ const COPY: Record<string, T> = {
   en: {
     heroH1: "Every student understands the lesson.",
     heroSub: "Any hard word, in any of 20 languages, explained on the spot.",
-    heroCta: "Start 14-day free trial",
-    heroPriceChip: "From $69 / month",
+    heroCta: "See pricing and order",
+    heroPriceChip: "From ₪3,490 / year",
     heroTrust: "Self-serve. Cancel anytime.",
     probTag: "The Problem",
     probH2: "A student who doesn't understand a word can't understand the sentence.",
@@ -215,12 +215,12 @@ const COPY: Record<string, T> = {
       "Student picker roster",
       "Time-bound classroom codes",
       "Student UI in 20 languages",
-      "14-day free trial",
+      "Simple annual order, below the procurement threshold",
     ],
-    priceCta: "Start 14-day free trial",
+    priceCta: "See pricing and order",
     priceLarger: "Need more than 500 students? Contact us about district plans.",
     faqTag: "FAQ",
-    faqH2: "Questions principals ask before they trial.",
+    faqH2: "Questions principals ask before they order.",
     faq: [
       {
         q: "If there are no logins, how do I know which student searched what?",
@@ -256,9 +256,9 @@ const COPY: Record<string, T> = {
       },
     ],
     finalH2: "Stop the silent failure mode.",
-    finalBody: "Give your teachers the tool to see exactly what their class doesn't understand. The trial takes 2 minutes to start. No IT, no procurement, no parent forms.",
-    finalCta: "Start 14-day free trial",
-    finalNote: "No credit card required for the trial. Cancel anytime.",
+    finalBody: "Give your teachers the tool to see exactly what their class doesn't understand. Getting started takes 2 minutes. No IT, no procurement, no parent forms.",
+    finalCta: "See pricing and order",
+    finalNote: "Pay annually by bank transfer against a tax invoice. No tender needed.",
     mockupRoster: "Class roster, 22 students",
     mockupSearches: "Most searched this week",
     mockupStudent1: "Maya searched photosynthesis",
@@ -816,8 +816,8 @@ const COPY: Record<string, T> = {
   he: {
     heroH1: "כל תלמיד מבין את השיעור.",
     heroSub: "כל מילה קשה, ב-20 שפות, מוסברת מיד.",
-    heroCta: "להתחיל 14 ימי ניסיון חינם",
-    heroPriceChip: "מ-₪349 לחודש",
+    heroCta: "לפרטים ולהזמנה",
+    heroPriceChip: "מ-₪3,490 לשנה",
     heroTrust: "בשירות עצמי. אפשר לבטל בכל רגע.",
     probTag: "הבעיה",
     probH2: "תלמיד שלא מבין מילה לא יכול להבין את המשפט.",
@@ -869,12 +869,12 @@ const COPY: Record<string, T> = {
       "רשימת בחירת שם תלמיד",
       "קודי כיתה תחומים בזמן",
       "ממשק תלמיד ב-20 שפות",
-      "14 ימי ניסיון חינם",
+      "הזמנה שנתית פשוטה, מתחת לסף הרכש",
     ],
-    priceCta: "להתחיל 14 ימי ניסיון חינם",
+    priceCta: "לפרטים ולהזמנה",
     priceLarger: "יותר מ-1,000 תלמידים? אפשר ליצור קשר לתוכנית מותאמת.",
     faqTag: "שאלות נפוצות",
-    faqH2: "מה מנהלים שואלים לפני שמתחילים ניסיון.",
+    faqH2: "מה מנהלים שואלים לפני שמזמינים.",
     faq: [
       {
         q: "אם אין לוגינים, איך אדע איזה תלמיד חיפש מה?",
@@ -910,9 +910,9 @@ const COPY: Record<string, T> = {
       },
     ],
     finalH2: "כאן נעצר כשל הלמידה השקט.",
-    finalBody: "המורים שלך מקבלים את הכלי לראות בדיוק מה הכיתה לא מבינה. הניסיון מתחיל ב-2 דקות. בלי מחשוב, בלי רכש, בלי טפסי הורים.",
-    finalCta: "להתחיל 14 ימי ניסיון חינם",
-    finalNote: "אין צורך בכרטיס אשראי לניסיון. אפשר לבטל בכל רגע.",
+    finalBody: "המורים שלך מקבלים את הכלי לראות בדיוק מה הכיתה לא מבינה. ההתחלה לוקחת 2 דקות. בלי מחשוב, בלי רכש מסובך, בלי טפסי הורים.",
+    finalCta: "לפרטים ולהזמנה",
+    finalNote: "תשלום שנתי בהעברה בנקאית מול חשבונית מס. אין צורך במכרז.",
     mockupRoster: "רשימת כיתה, 22 תלמידים",
     mockupSearches: "הכי מחופשים השבוע",
     mockupStudent1: "מאיה חיפשה פוטוסינתזה",
@@ -927,8 +927,8 @@ const COPY: Record<string, T> = {
   ru: {
     heroH1: "Каждый ученик понимает урок.",
     heroSub: "Любое трудное слово, на любом из 14 языков, объяснено сразу.",
-    heroCta: "Начать 14-дневный пробный период",
-    heroPriceChip: "От $69 в месяц",
+    heroCta: "Цены и заказ",
+    heroPriceChip: "От ₪3,490 в год",
     heroTrust: "Самообслуживание. Отмена в любой момент.",
     probTag: "Проблема",
     probH2: "Ученик, не понимающий слово, не может понять предложение.",
@@ -982,7 +982,7 @@ const COPY: Record<string, T> = {
       "Интерфейс ученика на 14 языках",
       "14-дневный пробный период",
     ],
-    priceCta: "Начать 14-дневный пробный период",
+    priceCta: "Цены и заказ",
     priceLarger: "Больше 500 учеников? Свяжитесь с нами для тарифа района.",
     faqTag: "Вопросы и ответы",
     faqH2: "Что директора спрашивают перед пробным периодом.",
@@ -1022,7 +1022,7 @@ const COPY: Record<string, T> = {
     ],
     finalH2: "Остановите тихий провал.",
     finalBody: "Дайте учителям инструмент, чтобы видеть, что именно их класс не понимает. Пробный период начинается за 2 минуты. Без IT, без закупок, без родительских форм.",
-    finalCta: "Начать 14-дневный пробный период",
+    finalCta: "Цены и заказ",
     finalNote: "Кредитная карта не нужна для пробного периода. Отмена в любой момент.",
     mockupRoster: "Список класса, 22 ученика",
     mockupSearches: "Самые искомые за неделю",
@@ -1147,8 +1147,8 @@ const COPY: Record<string, T> = {
   ar: {
     heroH1: "كل طالب يفهم الدرس.",
     heroSub: "أي كلمة صعبة، بأي من 14 لغة، تُشرح في الحال.",
-    heroCta: "ابدأ التجربة المجانية لـ 14 يومًا",
-    heroPriceChip: "ابتداءً من 69 دولارًا شهريًا",
+    heroCta: "الأسعار والطلب",
+    heroPriceChip: "ابتداءً من ₪3,490 سنويًا",
     heroTrust: "خدمة ذاتية. ألغِ في أي وقت.",
     probTag: "المشكلة",
     probH2: "طالب لا يفهم كلمة لا يستطيع فهم الجملة.",
@@ -1202,7 +1202,7 @@ const COPY: Record<string, T> = {
       "واجهة طالب بـ 14 لغة",
       "تجربة مجانية لـ 14 يومًا",
     ],
-    priceCta: "ابدأ التجربة المجانية لـ 14 يومًا",
+    priceCta: "الأسعار والطلب",
     priceLarger: "أكثر من 500 طالب؟ تواصل معنا لخطة منطقة.",
     faqTag: "أسئلة شائعة",
     faqH2: "ما يسأله المديرون قبل بدء التجربة.",
@@ -1242,7 +1242,7 @@ const COPY: Record<string, T> = {
     ],
     finalH2: "أوقف الفشل الصامت.",
     finalBody: "أعطِ معلميك الأداة لرؤية ما لا يفهمه صفّهم بالضبط. تبدأ التجربة في دقيقتين. بلا تقنية معلومات، بلا مشتريات، بلا نماذج لأولياء الأمور.",
-    finalCta: "ابدأ التجربة المجانية لـ 14 يومًا",
+    finalCta: "الأسعار والطلب",
     finalNote: "لا حاجة لبطاقة ائتمان للتجربة. ألغِ في أي وقت.",
     mockupRoster: "قائمة الصف، 22 طالبًا",
     mockupSearches: "الأكثر بحثًا هذا الأسبوع",
@@ -2365,10 +2365,6 @@ const COPY: Record<string, T> = {
   },
 };
 
-const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
-const PRICE_SCHOOLS_MEDIUM_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY ?? "";
-const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
-
 /**
  * Three school-size tiers (Gadi 2026-08-04, after the pricing council).
  * Prices are in shekels — the Israeli school market is the primary
@@ -2379,24 +2375,28 @@ const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS
  * 2026-08-04). Each price is a NEW Stripe price, so the three env vars
  * must be set once the Stripe products exist.
  */
+// Annual pricing in ₪ (Gadi 2026-08-08, after the market research: Israeli
+// schools buy a full year up front, by bank transfer against a tax invoice,
+// not by monthly card). ×10 the old monthly = two months free.
 const SCHOOL_TIERS = [
-  { key: "small" as const,  price: 349, priceId: PRICE_SCHOOLS_MONTHLY },
-  { key: "medium" as const, price: 649, priceId: PRICE_SCHOOLS_MEDIUM_MONTHLY },
-  { key: "large" as const,  price: 949, priceId: PRICE_SCHOOLS_LARGE_MONTHLY },
+  { key: "small" as const,  price: 3490 },
+  { key: "medium" as const, price: 6490 },
+  { key: "large" as const,  price: 9490 },
 ];
 
 type PricingUI = {
-  perMonth: string;
+  perYear: string;
+  orderCta: string;
   tiers: { small: string; medium: string; large: string };
 };
 const PRICING_UI: Record<string, PricingUI> = {
-  he: { perMonth: "לחודש",
+  he: { perYear: "לשנה", orderCta: "לפרטים והזמנה",
         tiers: { small: "עד 100 תלמידים", medium: "101–500 תלמידים", large: "501–1,000 תלמידים" } },
-  en: { perMonth: "/ month",
+  en: { perYear: "/ year", orderCta: "Get a quote",
         tiers: { small: "Up to 100 students", medium: "101–500 students", large: "501–1,000 students" } },
-  ar: { perMonth: "شهريًا",
+  ar: { perYear: "سنويًا", orderCta: "لطلب عرض سعر",
         tiers: { small: "حتى 100 طالب", medium: "101–500 طالب", large: "501–1,000 طالب" } },
-  ru: { perMonth: "в месяц",
+  ru: { perYear: "в год", orderCta: "Запросить счёт",
         tiers: { small: "до 100 учеников", medium: "101–500 учеников", large: "501–1,000 учеников" } },
 };
 
@@ -2484,7 +2484,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
   const pu = PRICING_UI[lang] ?? PRICING_UI.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Every "Start 14-day free trial" CTA opens the payment page DIRECTLY
+  // Every "See pricing and order" CTA opens the payment page DIRECTLY
   // instead of detouring through /pricing — Gadi 2026-07-08: a principal
   // who already clicked "start trial" on the schools page shouldn't be
   // dropped on a general pricing page to hunt for the button again.
@@ -2493,22 +2493,11 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
   // Anonymous visitors get the signup modal first, then flow straight
   // into checkout (same pattern as PricingClient). checkout_started
   // fires inside /checkout (no duplicates).
-  function startCheckout(priceId: string) {
-    if (!priceId) {
-      console.error("Missing Stripe priceId");
-      window.alert("Pricing is misconfigured. Please contact support.");
-      return;
-    }
-    window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
-  }
-  function clickTrial(priceId: string) {
-    // Existing school owners don't need a second subscription — send
-    // them to their dashboard instead of a duplicate checkout.
-    if (user && schoolId === user.uid) {
-      router.push(href("/schools/manage"));
-      return;
-    }
-    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
+  // Israeli schools pay a full year up front by bank transfer against a
+  // tax invoice, not by card, so the price cards scroll to the order box
+  // instead of opening a checkout.
+  function scrollToOrder() {
+    document.getElementById("schools-order")?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
   // Hero + final CTAs don't name a plan, so sending them straight to a
   // specific checkout would silently pick the $69 tier for the user.
@@ -2927,11 +2916,11 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <div key={tier.key} className="wb-schools-price-card">
                 <div className="wb-schools-price-name">{pu.tiers[tier.key]}</div>
                 <div className="wb-schools-price-amount">
-                  <span className="wb-schools-price-amount-num" dir="ltr">{`₪${tier.price}`}</span>
-                  <span className="wb-schools-price-amount-period">{pu.perMonth}</span>
+                  <span className="wb-schools-price-amount-num" dir="ltr">{`₪${tier.price.toLocaleString()}`}</span>
+                  <span className="wb-schools-price-amount-period">{pu.perYear}</span>
                 </div>
-                <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={() => clickTrial(tier.priceId)}>
-                  {t.priceCta}
+                <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={scrollToOrder}>
+                  {pu.orderCta}
                 </button>
               </div>
             ))}
@@ -2949,35 +2938,51 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               ))}
             </div>
           </div>
-          {/* Israeli schools often pay by bank transfer against a tax
-              invoice rather than by card. Hebrew page only. */}
+          {/* Israeli schools buy a full year up front by bank transfer /
+              purchase order against a tax invoice, not by card. This is
+              the primary (and only) payment path, Hebrew page only. */}
           {lang === "he" && (
             <div
+              id="schools-order"
               style={{
                 maxWidth: 640,
                 margin: "26px auto 0",
                 background: "#fff",
                 border: "1px solid #E3E6EA",
                 borderRadius: 14,
-                padding: "18px 22px",
+                padding: "20px 22px",
                 textAlign: "start",
                 boxShadow: "0 4px 16px -8px rgba(16,24,40,0.12)",
               }}
               dir="rtl"
             >
-              <div style={{ fontSize: 15.5, fontWeight: 700, color: "#1C1917", marginBottom: 6 }}>
-                מעדיפים העברה בנקאית?
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#1C1917", marginBottom: 8 }}>
+                הזמנה ותשלום, פשוט
               </div>
-              <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.7 }}>
-                אפשר לשלם בהעברה לחשבון של:
-                <br />
+              <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.75 }}>
+                בתי ספר משלמים שנה מראש בהעברה בנקאית או הזמנת רכש, מול חשבונית מס. השאירו פרטים ונשלח הצעת מחיר וחשבונית, ואחרי התשלום נפעיל את בית הספר.
+              </div>
+              <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.75, marginTop: 12 }}>
                 <strong>לביא טכנולוגיות למידה והדרכה בע״מ</strong>
                 <br />
                 בנק לאומי (10) · סניף 855 · חשבון 41850031
               </div>
-              <div style={{ fontSize: 13, color: "#78716C", marginTop: 10, lineHeight: 1.6 }}>
-                אחרי ההעברה, אפשר ליצור קשר ונפעיל את בית הספר ונשלח חשבונית מס.
-              </div>
+              <a
+                href={href("/contact")}
+                style={{
+                  display: "inline-block",
+                  marginTop: 14,
+                  background: "#CA8A04",
+                  color: "#fff",
+                  fontSize: 14.5,
+                  fontWeight: 700,
+                  textDecoration: "none",
+                  padding: "10px 20px",
+                  borderRadius: 10,
+                }}
+              >
+                בקשת הצעת מחיר
+              </a>
             </div>
           )}
           <p className="wb-schools-price-larger">{t.priceLarger}</p>
