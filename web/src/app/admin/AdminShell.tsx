@@ -32,7 +32,7 @@ const STRINGS = {
     unlockPlaceholder: "ADMIN_SECRET",
     overview: "Overview",
     strategy: "Strategy",
-    users: "Users",
+    users: "Subscribers",
     revenue: "Revenue",
     campaigns: "Campaigns",
     emails: "Emails",
@@ -41,7 +41,7 @@ const STRINGS = {
     partners: "Partners",
     deletions: "Deletions",
     secMarketing: "Marketing & growth",
-    secUsers: "Users",
+    secUsers: "Subscribers",
     secFinance: "Finance",
     secContent: "Content & support",
     backToApp: "Back to app",
@@ -56,7 +56,7 @@ const STRINGS = {
     unlockPlaceholder: "ADMIN_SECRET",
     overview: "סקירה",
     strategy: "תוכנית אסטרטגית",
-    users: "משתמשים",
+    users: "מנויים",
     revenue: "הכנסות",
     campaigns: "קמפיינים",
     emails: "מיילים",
@@ -65,7 +65,7 @@ const STRINGS = {
     partners: "שותפים",
     deletions: "מחיקות",
     secMarketing: "שיווק וצמיחה",
-    secUsers: "משתמשים",
+    secUsers: "מנויים",
     secFinance: "כספים",
     secContent: "תוכן ותמיכה",
     backToApp: "חזרה לאפליקציה",
@@ -89,16 +89,16 @@ type NavSection = { titleKey: keyof typeof STRINGS["en"] | null; items: NavItem[
 const NAV_SECTIONS: NavSection[] = [
   { titleKey: null, items: [
     { href: "/admin",           labelKey: "overview",  icon: <IconHome />   },
-    { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget /> },
-  ] },
-  { titleKey: "secMarketing", items: [
-    { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone /> },
-    { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake /> },
   ] },
   { titleKey: "secUsers", items: [
     { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
     { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
     { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
+  ] },
+  { titleKey: "secMarketing", items: [
+    { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget /> },
+    { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone /> },
+    { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake /> },
   ] },
   { titleKey: "secFinance", items: [
     { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins /> },
