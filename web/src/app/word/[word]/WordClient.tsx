@@ -372,6 +372,9 @@ export function WordClient({
   // format as always, just without the top menu. Initialised from
   // ?present=1 (shareable link) and toggled live by the corner button.
   const [present, setPresent] = useState(searchParams?.get("present") === "1");
+  // In present mode the search bar is hidden (we are showing words, not
+  // searching). A small "open dictionary" button reveals it on demand.
+  const [showSearch, setShowSearch] = useState(false);
   // Word-set stepping (schools council 2026-08-05). ?set=<id> means this
   // word is part of a curated themed set the teacher is walking through;
   // show a prev/next stepper (and arrow-key paging) that keeps present +
@@ -1270,6 +1273,41 @@ export function WordClient({
           </button>
         )}
 
+        {/* "Open dictionary" button, present mode only. We are showing
+            words on the board, not searching, so the search field is
+            hidden until the teacher taps this (schools, Gadi 2026-08-09). */}
+        {present && user && !classroomCode && (
+          <button
+            type="button"
+            onClick={() => setShowSearch((s) => !s)}
+            style={{
+              position: "fixed",
+              top: 12,
+              insetInlineStart: 12,
+              zIndex: 50,
+              height: 40,
+              borderRadius: 999,
+              border: "1px solid rgba(31,41,55,0.12)",
+              background: showSearch ? "#0EA5A5" : "rgba(255,255,255,0.85)",
+              color: showSearch ? "#fff" : "#0b7d7d",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "0 14px",
+              fontWeight: 700,
+              fontSize: 13.5,
+              fontFamily: "inherit",
+              boxShadow: "0 1px 4px rgba(31,41,55,0.08)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+            {lang === "he" ? "חפש מילון" : "Dictionary"}
+          </button>
+        )}
+
         {/* Word-set stepper: prev / position / next, fixed at the bottom
             so a teacher can walk a themed set on the projector. Arrow keys
             page too. */}
@@ -1319,7 +1357,7 @@ export function WordClient({
         {/* The searchbar wrap is wrapped in a sticky stage so the input
             stays in view as the reader scrolls past long etymology +
             idiom sections. Gadi 2026-06-26 audit fix M1. */}
-        <div className="wb-word-searchbar-stage" style={present ? { marginTop: 14, marginBottom: 20 } : undefined}>
+        <div className="wb-word-searchbar-stage" style={present ? (showSearch ? { marginTop: 64, marginBottom: 20 } : { display: "none" }) : undefined}>
         <div className="wb-word-searchbar-wrap">
           <form
             className="wb-word-searchbar"
@@ -1550,8 +1588,12 @@ export function WordClient({
         {result && (classroomMode ? (
           <div
             className="wb-classroom-card"
-            style={{ maxWidth: 720, margin: "6px auto 0", textAlign: dir === "rtl" ? "right" : "left" }}
+            style={{ maxWidth: 760, margin: "0 auto", paddingTop: 72, textAlign: dir === "rtl" ? "right" : "left" }}
           >
+            {/* The word itself, big — this is what the class is looking at. */}
+            <div style={{ fontSize: 46, lineHeight: 1.1, fontWeight: 800, color: "#0b7d7d", marginBottom: 16 }}>
+              {result.word}
+            </div>
             <p style={{ fontSize: 24, lineHeight: 1.65, fontWeight: 600, color: "#1f2937", margin: "0 0 20px" }}>
               {curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? ""}
             </p>
@@ -1559,7 +1601,7 @@ export function WordClient({
               <img
                 src={imageUrl}
                 alt={result.word}
-                style={{ display: "block", maxWidth: 380, width: "100%", borderRadius: 14, margin: "0 auto", boxShadow: "0 4px 18px rgba(31,41,55,0.10)" }}
+                style={{ display: "block", maxWidth: 380, width: "100%", borderRadius: 14, margin: "0 auto 22px", boxShadow: "0 4px 18px rgba(31,41,55,0.10)" }}
               />
             ) : imageGenerating ? (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, padding: "20px 0", color: "#9CA3AF" }} aria-busy="true">
@@ -1568,6 +1610,15 @@ export function WordClient({
                   <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="28 84" />
                 </svg>
                 <span style={{ fontSize: 14 }}>{lang === "he" ? "מכינים תמונה..." : "Preparing a picture..."}</span>
+              </div>
+            ) : null}
+            {result.meanings[0]?.examples?.length ? (
+              <div style={{ marginTop: 6, display: "grid", gap: 10 }}>
+                {result.meanings[0].examples.slice(0, 3).map((ex, i) => (
+                  <div key={i} style={{ fontSize: 19, lineHeight: 1.6, color: "#374151" }}>
+                    <span style={{ color: "#0EA5A5", fontWeight: 800, marginInlineEnd: 8 }}>{i + 1}</span>{ex}
+                  </div>
+                ))}
               </div>
             ) : null}
           </div>
