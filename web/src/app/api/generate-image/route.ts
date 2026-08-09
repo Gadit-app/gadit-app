@@ -95,6 +95,40 @@ function buildDallePrompt(word: string, meaning: string, example?: string): stri
   return `A clean, realistic photograph of ${cleanWord}. Context: ${cleanMeaning}. Show the actual everyday object or scene, well-lit, with a plain neutral background. The subject fills the frame and is instantly recognizable. The image contains no text, no letters, no numbers, and no written characters.`;
 }
 
+/**
+ * Turn a (possibly Hebrew/other-language) word + meaning into a short
+ * ENGLISH visual brief, so the image model actually understands what to
+ * draw. gpt-image-1 mis-fires on non-English abstract/grammar terms
+ * ("ניקוד" → a random cute character). It also crucially decides when
+ * letters/numbers BELONG in the picture (the word "אות"/letter,
+ * "מספר"/number, "פסיק"/comma) — the old blanket "no letters/numbers"
+ * rule was wrong for exactly those curriculum words. Returns "" on any
+ * failure so the caller falls back to the legacy prompt. Runs only on a
+ * cache miss, so it's one call per unique (word, meaning).
+ */
+async function englishBrief(word: string, meaning: string, example: string, uiLang: string): Promise<string> {
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.3,
+        max_tokens: 90,
+        messages: [
+          { role: "system", content: "You turn a dictionary word and its meaning into a short ENGLISH description of ONE clear, literal illustration that represents that EXACT meaning, for a children's educational app. Describe a single concrete subject or a simple scene, instantly recognizable. If the word is itself about letters, vowel marks, punctuation, digits or numbers, DO show those symbols clearly (this is the one case where letters or numbers belong in the picture, e.g. Hebrew letters with vowel points for the word ניקוד). Otherwise avoid written text. Reply with ONLY the description, one sentence, no preamble." },
+          { role: "user", content: `Word (${uiLang}): ${word}\nMeaning: ${meaning}${example ? `\nExample: ${example}` : ""}\n\nDescribe the illustration:` },
+        ],
+      }),
+    });
+    if (!res.ok) return "";
+    const data = await res.json();
+    return String(data?.choices?.[0]?.message?.content || "").replace(/\s+/g, " ").trim().slice(0, 320);
+  } catch {
+    return "";
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { word, meaning, uiLang, example, kidsMode } = await req.json();
@@ -175,9 +209,17 @@ export async function POST(req: NextRequest) {
         }),
       });
     }
-    const dallePrompt = isKidsMode
-      ? buildKidsPrompt(word, meaning)
-      : buildDallePrompt(word, meaning, safeExample || undefined);
+    // First get an English visual brief so the image actually matches the
+    // meaning (crucial for Hebrew grammar/math terms). Falls back to the
+    // legacy prompt if the brief call fails.
+    const brief = await englishBrief(word, meaning, safeExample, uiLangCode);
+    const dallePrompt = brief
+      ? (isKidsMode
+          ? `A modern flat illustration for a children's educational app, ages 5-12. Draw this: ${brief}. Bright cheerful colors, simple geometric shapes, friendly cartoon style with soft outlines, clean white background. The subject fills the frame and is instantly recognizable. Do not add any caption or descriptive words on top of the image.`
+          : `A clean, clear illustration. Draw this: ${brief}. Natural lighting, plain neutral background, the key subject fills the frame and is instantly recognizable. Do not add any caption or descriptive words on top of the image.`)
+      : (isKidsMode
+          ? buildKidsPrompt(word, meaning)
+          : buildDallePrompt(word, meaning, safeExample || undefined));
     let dalleRes = await callDalle(dallePrompt);
 
     if (!dalleRes.ok) {
