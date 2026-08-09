@@ -278,7 +278,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Upload to Firebase Storage
-    const storagePath = `word-images/${cKey}.png`;
+    // Unique filename per generation. The files are served with a 1-year
+    // "immutable" cache, so reusing a fixed path meant a regenerated image
+    // (after a cache bust) kept showing the OLD bytes in browsers/CDN.
+    // A fresh path per generation gives a fresh URL, so regenerated images
+    // actually appear.
+    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
     const bucket = getDefaultBucket();
     const file = bucket.file(storagePath);
     await file.save(buffer, {

@@ -1304,7 +1304,7 @@ export function WordClient({
             }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
-            {lang === "he" ? "חפש מילון" : "Dictionary"}
+            {lang === "he" ? "חיפוש במילון" : "Search dictionary"}
           </button>
         )}
 
@@ -1661,7 +1661,7 @@ export function WordClient({
             cream-friendly footer (or no footer at all, matching the
             mockup) will be addressed in the homepage port. */}
 
-        <GadVerbStamp />
+        {!present && <GadVerbStamp />}
       </div>
 
       {result && (
