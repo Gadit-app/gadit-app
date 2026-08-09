@@ -6,6 +6,18 @@ import { useHref } from "@/lib/href";
 import { useLang } from "@/lib/lang-context";
 import { setsBySubject, type WordSet } from "@/lib/word-sets";
 
+// One color per subject, so the sections read as clearly separate topics.
+const SUBJECT_COLORS: Record<string, { accent: string; soft: string; border: string }> = {
+  language:  { accent: "#2563EB", soft: "#EFF6FF", border: "#DBEAFE" }, // blue
+  math:      { accent: "#0D9488", soft: "#F0FDFA", border: "#CCFBF1" }, // teal
+  english:   { accent: "#7C3AED", soft: "#F5F3FF", border: "#EDE9FE" }, // violet
+  geography: { accent: "#16A34A", soft: "#F0FDF4", border: "#DCFCE7" }, // green
+  history:   { accent: "#B45309", soft: "#FFFBEB", border: "#FDE68A" }, // amber
+  torah:     { accent: "#BE123C", soft: "#FFF1F2", border: "#FECDD3" }, // rose
+  science:   { accent: "#0891B2", soft: "#ECFEFF", border: "#CFF9FE" }, // cyan
+  _default:  { accent: "#0EA5A5", soft: "#F0FDFA", border: "#CCFBF1" },
+};
+
 /**
  * /sets — themed vocabulary sets for teachers (schools council 2026-08-05).
  * Browse curated word groups by subject; "Present to class" opens the
@@ -51,12 +63,14 @@ export default function SetsClient() {
         <h1 style={S.h1}>{c.title}</h1>
         <p style={S.subtitle}>{c.sub}</p>
 
-        {groups.map((g) => (
+        {groups.map((g) => {
+          const col = SUBJECT_COLORS[g.key] ?? SUBJECT_COLORS._default;
+          return (
           <section key={g.key} style={S.section}>
-            <h2 style={S.h2}>{g.he}</h2>
+            <h2 style={{ ...S.h2, color: col.accent }}>{g.he}</h2>
             <div style={S.grid}>
               {g.sets.map((set) => (
-                <div key={set.id} style={S.card}>
+                <div key={set.id} style={{ ...S.card, borderTop: `3px solid ${col.accent}` }}>
                   <div style={S.cardHead}>
                     <span style={S.cardTitle}>{set.title}</span>
                     {set.grade && <span style={S.grade}>{set.grade}</span>}
@@ -66,13 +80,15 @@ export default function SetsClient() {
                       <Link
                         key={w}
                         href={href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(set.id)}`)}
-                        style={S.chip}
+                        style={{ ...S.chip, background: col.soft, color: col.accent, border: `1px solid ${col.border}` }}
                       >
                         {w}
                       </Link>
                     ))}
                   </div>
-                  <button type="button" style={S.presentBtn} onClick={() => presentSet(set)}>
+                  {/* Button pinned to the bottom so every card's CTA lines
+                      up at the same height, regardless of word count. */}
+                  <button type="button" style={{ ...S.presentBtn, background: col.accent, marginTop: "auto" }} onClick={() => presentSet(set)}>
                     {c.present}
                     <span style={{ fontSize: 12, opacity: 0.85 }}>· {set.words.length} {c.words}</span>
                   </button>
@@ -80,7 +96,8 @@ export default function SetsClient() {
               ))}
             </div>
           </section>
-        ))}
+          );
+        })}
       </main>
     </div>
   );
