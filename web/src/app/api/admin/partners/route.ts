@@ -228,6 +228,7 @@ export async function PATCH(req: NextRequest) {
   let body: {
     partnerId?: string; action?: string;
     rateYearOne?: number | string; rateLifetime?: number | string; lang?: string;
+    name?: string; email?: string;
   };
   try {
     body = await req.json();
@@ -297,6 +298,21 @@ export async function PATCH(req: NextRequest) {
     }
     if (count > 0) await batch.commit();
     return NextResponse.json({ ok: true, count, paidByCurrency });
+  }
+
+  // Edit a partner's basic details (name / email).
+  if (action === "updateDetails") {
+    const upd: Record<string, unknown> = {};
+    const nm = typeof body.name === "string" ? body.name.trim().slice(0, 120) : "";
+    const em = typeof body.email === "string" ? body.email.trim().toLowerCase().slice(0, 200) : "";
+    if (nm) upd.name = nm;
+    if (em) {
+      if (!isEmail(em)) return NextResponse.json({ error: "invalid_email" }, { status: 400 });
+      upd.email = em;
+    }
+    if (Object.keys(upd).length === 0) return NextResponse.json({ error: "no_fields" }, { status: 400 });
+    await ref.update(upd);
+    return NextResponse.json({ ok: true });
   }
 
   return NextResponse.json({ error: "unknown_action" }, { status: 400 });

@@ -215,6 +215,10 @@ export default function AdminPartnersClient() {
   // rare edit; keep it closed so the partner list is what you see.
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailState, setEmailState] = useState<"idle" | "saving" | "saved">("idle");
+  // Inline "edit partner details" (name / email)
+  const [editId, setEditId] = useState<string | null>(null);
+  const [eName, setEName] = useState("");
+  const [eEmail, setEEmail] = useState("");
 
   const load = useCallback(async (): Promise<string | null> => {
     const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`);
@@ -295,20 +299,26 @@ export default function AdminPartnersClient() {
     }
   }
 
-  async function act(partnerId: string, action: string) {
+  async function act(partnerId: string, action: string, extra?: Record<string, unknown>) {
     if (action === "markPaid" && !window.confirm(t.confirmPaid)) return;
     setBusy(partnerId + action);
     try {
       await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ partnerId, action, lang }),
+        body: JSON.stringify({ partnerId, action, lang, ...extra }),
       });
       if (action === "resendEmail") { setFlash(partnerId + ":sent"); setTimeout(() => setFlash(null), 1600); }
       await load();
     } finally {
       setBusy(null);
     }
+  }
+
+  async function saveEdit(id: string) {
+    if (!eName.trim() && !eEmail.trim()) return;
+    await act(id, "updateDetails", { name: eName.trim(), email: eEmail.trim() });
+    setEditId(null);
   }
 
   async function delPartner(partnerId: string) {
@@ -461,7 +471,17 @@ export default function AdminPartnersClient() {
                   <Money label={t.paidTotal} items={paid} />
                 </div>
 
+                {editId === r.id && (
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
+                    <input value={eName} onChange={(e) => setEName(e.target.value)} placeholder="שם" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", minWidth: 160 }} />
+                    <input value={eEmail} onChange={(e) => setEEmail(e.target.value)} placeholder="email" dir="ltr" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", minWidth: 200 }} />
+                    <button style={btnPrimary} disabled={busy === r.id + "updateDetails"} onClick={() => saveEdit(r.id)}>שמירה</button>
+                    <button style={btn} onClick={() => setEditId(null)}>ביטול</button>
+                  </div>
+                )}
+
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
+                  <button style={btn} onClick={() => { setEditId(r.id); setEName(r.name); setEEmail(r.email); }}>עריכה</button>
                   {payable.length > 0 && (
                     <button style={btnPrimary} disabled={busy === r.id + "markPaid"} onClick={() => act(r.id, "markPaid")}>{t.markPaid}</button>
                   )}
