@@ -444,6 +444,10 @@ interface MeaningEntryProps {
       "meaning-1") is passed through so the parent can pre-fill the
       report modal with the correct category. */
   onReport?: (section: string) => void;
+  /** Kids Mode only: a picture generated for THIS specific meaning,
+   *  shown inline under the definition with no tab/click. Empty in the
+   *  adult UI, which keeps its per-meaning image tab unchanged. */
+  kidsImageUrl?: string;
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
@@ -608,6 +612,7 @@ function MeaningEntry({
   onUpgrade,
   onAction,
   onReport,
+  kidsImageUrl,
 }: MeaningEntryProps) {
   const { lang } = useLang();
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
@@ -789,6 +794,14 @@ function MeaningEntry({
         </div>
       )}
 
+      {/* Kids Mode: a picture for THIS meaning, always visible, no tap.
+          Adult UI never sets kidsImageUrl, so this is inert there. */}
+      {showKids && kidsImageUrl && (
+        <div className="wb-mkids-image">
+          <img src={kidsImageUrl} alt={effectiveMeaning || word} loading="lazy" />
+        </div>
+      )}
+
       {(effectiveExamples ?? []).length > 0 && (
         <div className="wb-mexamples">
           {(effectiveExamples ?? []).map((ex, j) => (
@@ -933,6 +946,7 @@ export function MeaningsBlock({
   onUpgrade,
   onAction,
   onReport,
+  kidsImages,
 }: {
   meanings: Meaning[];
   word?: string;
@@ -945,6 +959,8 @@ export function MeaningsBlock({
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
+  /** Kids Mode: per-meaning pictures keyed by meaning index. */
+  kidsImages?: Record<number, string>;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
   onReport?: (section: string) => void;
@@ -979,6 +995,7 @@ export function MeaningsBlock({
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
             onGenerate={onGenerate}
+            kidsImageUrl={kidsImages?.[i]}
             onUpgrade={onUpgrade}
             onAction={onAction}
             onReport={onReport}
@@ -1368,6 +1385,7 @@ export function ResultView({
   onRegenerate,
   onAction,
   onReport,
+  kidsImages,
 }: {
   result: WordResult;
   plan: Plan;
@@ -1390,6 +1408,8 @@ export function ResultView({
   onSaveImage?: () => void;
   onAction?: (id: ActionId) => void;
   onReport?: (section: string) => void;
+  /** Kids Mode: per-meaning pictures keyed by meaning index. */
+  kidsImages?: Record<number, string>;
 }) {
   const { dir } = useLang();
   // imageState retained for the legacy <VisualCard /> export; no
@@ -1433,6 +1453,7 @@ export function ResultView({
         onUpgrade={onUpgrade}
         onAction={onAction}
         onReport={onReport}
+        kidsImages={kidsImages}
       />
 
       <IdiomsSection

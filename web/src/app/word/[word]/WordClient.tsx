@@ -487,6 +487,9 @@ export function WordClient({
   const [anonSearchesLeft, setAnonSearchesLeft] = useState<number | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [imageGenerating, setImageGenerating] = useState(false);
+  // Kids Mode: a picture per meaning, keyed by meaning index, shown inline
+  // under each definition. Adult mode never fills this.
+  const [kidsImages, setKidsImages] = useState<Record<number, string>>({});
   // Surface image-gen failures to the user — previously the handler
   // swallowed any non-402 error and the user saw 'loading → nothing',
   // with no signal that anything had gone wrong. A Czech beta tester
@@ -581,6 +584,7 @@ export function WordClient({
       setErrorMsg("");
       setResult(null);
       setImageUrl(undefined);
+      setKidsImages({});
       setAnonSearchesLeft(null);
 
       const headers: Record<string, string> = {
@@ -850,18 +854,52 @@ export function WordClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classroomMode, result, imageUrl, imageGenerating, user]);
 
-  // Kids Mode: always show a picture, generated automatically, with no
-  // "Generate" click. The first kid to view a (word, meaning, lang) pays
-  // for it; it lands in the img_kids_* cache so every kid after gets it
-  // free. Runs silently — never redirects to /pricing or shows an error
-  // card if it can't (e.g. quota) — and only for non-basic users (a kid
-  // paired into a Family is on "deep"). Classroom has its own effect above.
+  // Kids Mode: generate a picture for EACH meaning, shown inline under its
+  // definition with no "Generate" click. Sequential + silent: the first kid
+  // to view a (word, meaning, lang) pays; it lands in the img_kids_* cache
+  // so every kid after gets it free (generate-image serves the cache before
+  // the quota check). Stops early if a call fails (e.g. the monthly image
+  // quota) so we never hammer the API. Non-basic only (a Family kid is on
+  // "deep"). Classroom has its own single-image effect above.
+  const kidsGenWordRef = useRef<string>("");
   useEffect(() => {
-    if (!kidsMode || classroomMode) return;
-    if (!result || imageUrl || imageGenerating || !user || plan === "basic") return;
-    void handleGenerate({ silent: true });
+    if (!kidsMode || classroomMode || !result?.word || !user || plan === "basic") return;
+    if (kidsGenWordRef.current === result.word) return;
+    kidsGenWordRef.current = result.word;
+    const meanings = result.meanings ?? [];
+    const w = result.word;
+    let cancelled = false;
+    (async () => {
+      for (let i = 0; i < meanings.length; i++) {
+        if (cancelled) return;
+        try {
+          const idToken = await user.getIdToken();
+          const res = await fetch("/api/generate-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({
+              word: w,
+              meaning: meanings[i]?.meaning ?? "",
+              example: meanings[i]?.examples?.[0] ?? "",
+              uiLang: lang,
+              kidsMode: true,
+            }),
+          });
+          if (!res.ok) return; // quota / error — stop generating the rest
+          const data = (await res.json()) as { url?: string };
+          if (cancelled) return;
+          if (data.url) {
+            const url = data.url;
+            setKidsImages((prev) => ({ ...prev, [i]: url }));
+          }
+        } catch {
+          return; // network — stop the loop, never disturb the reader
+        }
+      }
+    })();
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kidsMode, classroomMode, result, imageUrl, imageGenerating, user, plan]);
+  }, [kidsMode, classroomMode, result?.word, user, plan]);
 
   // Kids Mode: always save the looked-up word to the notebook
   // automatically, so a child never has to tap "Save" and the parent's
@@ -1746,6 +1784,7 @@ export function WordClient({
             classroomInSession={classroomInSession}
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
+            kidsImages={kidsImages}
             isSaved={isSaved}
             onSave={handleSave}
             onShare={handleShare}

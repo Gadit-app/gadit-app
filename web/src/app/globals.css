@@ -2838,6 +2838,23 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 
 /* Examples block — naked, no frame. Sit directly on the card. */
+/* Kids Mode: the per-meaning picture, sitting between the definition and
+   the examples. Soft rounded frame, capped width so it reads as a friendly
+   illustration, not a hero image. */
+.wordbook .wb-mkids-image {
+  margin: 10px 0 12px;
+}
+.wordbook .wb-mkids-image img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 6px 18px -10px rgba(16, 24, 40, 0.28);
+}
+
 .wordbook .wb-mexamples {
   background: transparent;
   border: none;
