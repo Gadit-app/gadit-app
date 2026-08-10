@@ -88,7 +88,12 @@ async function accruePartnerCommission(invoice: Stripe.Invoice) {
  * creation, so a family that upgraded from a free account produced no alert
  * (Gadi 2026-07-27).
  */
-async function notifyPaidActivation(uid: string, tier: string, email: string | null) {
+async function notifyPaidActivation(
+  uid: string,
+  tier: string,
+  email: string | null,
+  opts?: { fromTrial?: boolean },
+) {
   try {
     const resendKey = process.env.RESEND_API_KEY;
     const notifyTo = process.env.NOTIFY_EMAIL;
@@ -98,6 +103,14 @@ async function notifyPaidActivation(uid: string, tier: string, email: string | n
     const snap = await ref.get();
     if (snap.data()?.notifiedPaid === true) return; // dedupe: fire once per customer
 
+    // A customer who started on a free trial and is only now being charged
+    // is a CONVERSION, not a fresh signup. Labelling the two apart stops
+    // the "New subscription" alert from looking like a duplicate signup
+    // weeks after the trial began (Gadi 2026-08-10).
+    const converted = !!opts?.fromTrial;
+    const heading = converted ? `Trial converted to paid 💰` : `New ${tier} subscription 💰`;
+    const kindLabel = converted ? "Trial → paid" : "New paid signup";
+
     const when = new Date().toLocaleString("en-IL", {
       timeZone: "Asia/Jerusalem",
       day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
@@ -106,11 +119,12 @@ async function notifyPaidActivation(uid: string, tier: string, email: string | n
   <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
     <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;">
       <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
-      <div style="font-size:22px;font-weight:700;margin-top:4px;">New ${tier} subscription 💰</div>
+      <div style="font-size:22px;font-weight:700;margin-top:4px;">${heading}</div>
     </div>
     <div style="padding:24px;">
       <table style="width:100%;border-collapse:collapse;font-size:14px;">
         <tr><td style="padding:8px 0;color:#6B7280;width:110px;">Plan</td><td style="padding:8px 0;font-weight:600;">${tier}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Type</td><td style="padding:8px 0;font-weight:500;">${kindLabel}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">Email</td><td style="padding:8px 0;font-weight:500;">${(email ?? "(none)").replace(/</g, "&lt;")}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
       </table>
@@ -124,7 +138,9 @@ async function notifyPaidActivation(uid: string, tier: string, email: string | n
     const res = await resend.emails.send({
       from: "Gadit <notify@gadit.app>",
       to: notifyTo,
-      subject: `💰 New ${tier} subscription: ${email ?? uid}`,
+      subject: converted
+        ? `💰 Trial converted to paid (${tier}): ${email ?? uid}`
+        : `💰 New ${tier} subscription: ${email ?? uid}`,
       html,
     });
     if (res.error) {
@@ -537,7 +553,10 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
 
   if (plan !== "basic") {
     const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
-    await notifyPaidActivation(uid, tier, email);
+    // trial_end set on the sub means this subscription ran a free trial;
+    // by the time we reach activation that trial has ended, so this is a
+    // trial-to-paid conversion rather than a fresh paid signup.
+    await notifyPaidActivation(uid, tier, email, { fromTrial: !!sub.trial_end });
   }
   if (family) await sendFamilyWelcome(uid, email);
   return true;
@@ -617,7 +636,7 @@ export async function POST(req: NextRequest) {
 
       if (plan !== "basic") {
         const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
-        await notifyPaidActivation(userId, tier, customerEmail);
+        await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd });
       }
       if (family) await sendFamilyWelcome(userId, customerEmail);
     }
