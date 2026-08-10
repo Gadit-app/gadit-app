@@ -1093,7 +1093,7 @@ export function OriginCard({ etymology, onReport }: { etymology: Etymology | str
   // Final render-time guard. The server rejects garbled generations and
   // the SSR preload sanitises the cache, but this is the last line before
   // pixels: whatever reaches the browser — a stale cache entry, an edge
-  // path, a novel corruption in any of the 20 languages — a field that
+  // path, a novel corruption in any of the 21 languages — a field that
   // looks like mojibake is never shown. If that empties every field the
   // whole card disappears, exactly as Gadi asked ("if it has this bug,
   // don't show it at all").

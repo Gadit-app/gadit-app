@@ -159,7 +159,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Почніть 14-денний безкоштовний період",
     heroTrust: "Без відкритого чату · Без реклами · Скасування в один клік",
     ownerCta: "Перейти до сімейного простору",
-    stats: ["20 мов", "Картинка до кожного значення", "До 5 дітей", "Скасування в один клік"],
+    stats: ["21 мов", "Картинка до кожного значення", "До 5 дітей", "Скасування в один клік"],
     demoKicker: "Результат",
     demoTitle: "Ваша дитина розуміє кожне слово, а її словниковий запас зростає щодня",
     painKicker: "Справжній біль",
@@ -268,7 +268,7 @@ const COPY: Record<string, Copy> = {
       "Особистий зошит і розумне тренування для кожної дитини",
       "Ігри зі словами та вікторини",
       "До 5 дітей з окремими профілями",
-      "20 мов з повною підтримкою",
+      "21 мов з повною підтримкою",
     ],
     priceKicker: "Ціни",
     priceTitle: "Сімейний план",
@@ -289,7 +289,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Що я отримую з Gadit?",
-        a: "Кожне слово, яке шукає ваша дитина, отримує одну чисту сторінку: кожне значення, пояснення на дитячому рівні (Дитячий режим), три справжні приклади та картинку до кожного значення. Плюс контекст (вставте речення й отримайте правильне значення), особистий зошит слів із розумним тренуванням, ігри зі словами та вікторини, панель для батьків, що показує, скільки навчилася кожна дитина, до 5 дітей на окремих профілях, усе 20 мовами, у закритому, безпечному просторі без відкритого чату та без реклами.",
+        a: "Кожне слово, яке шукає ваша дитина, отримує одну чисту сторінку: кожне значення, пояснення на дитячому рівні (Дитячий режим), три справжні приклади та картинку до кожного значення. Плюс контекст (вставте речення й отримайте правильне значення), особистий зошит слів із розумним тренуванням, ігри зі словами та вікторини, панель для батьків, що показує, скільки навчилася кожна дитина, до 5 дітей на окремих профілях, усе 21 мовами, у закритому, безпечному просторі без відкритого чату та без реклами.",
       },
       {
         q: "Чому б просто не запитати чат-бота чи Google?",
@@ -305,7 +305,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Чи допомагає це з англійською та іншими мовами?",
-        a: "Дуже. Дитина може шукати слово англійською й отримати просте пояснення своєю мовою, з картинкою та прикладами, саме той помічник, якого бракує вдома. І це працює 20 мовами, тож дитина може отримати пояснення й тією мовою, якою ви говорите вдома.",
+        a: "Дуже. Дитина може шукати слово англійською й отримати просте пояснення своєю мовою, з картинкою та прикладами, саме той помічник, якого бракує вдома. І це працює 21 мовами, тож дитина може отримати пояснення й тією мовою, якою ви говорите вдома.",
       },
       {
         q: "Скільки це коштує?",
@@ -359,7 +359,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "14 günlük ücretsiz denemenizi başlatın",
     heroTrust: "Açık sohbet yok · Reklam yok · Tek tıkla iptal",
     ownerCta: "Aile alanınıza gidin",
-    stats: ["20 dil", "Her anlam için bir resim", "5 çocuğa kadar", "Tek tıkla iptal"],
+    stats: ["21 dil", "Her anlam için bir resim", "5 çocuğa kadar", "Tek tıkla iptal"],
     demoKicker: "Sonuç",
     demoTitle: "Çocuğunuz her kelimeyi anlar ve kelime dağarcığı her gün büyür",
     painKicker: "Asıl sıkıntı",
@@ -468,7 +468,7 @@ const COPY: Record<string, Copy> = {
       "Her çocuk için kişisel defter ve akıllı alıştırma",
       "Kelime oyunları ve testler",
       "Ayrı profillerle 5 çocuğa kadar",
-      "Tam destekle 20 dil",
+      "Tam destekle 21 dil",
     ],
     priceKicker: "Fiyatlandırma",
     priceTitle: "Aile planı",
@@ -489,7 +489,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Gadit ile ne elde ederim?",
-        a: "Çocuğunuzun aradığı her kelime tertemiz tek bir sayfa alır: her anlam, çocuk seviyesinde bir açıklama (Çocuk Modu), üç gerçek örnek ve her anlam için bir resim. Ayrıca bağlam (bir cümle yapıştırın, doğru anlamı alın), akıllı alıştırmalı kişisel bir kelime defteri, kelime oyunları ve testler, her çocuğun ne kadar öğrendiğini gösteren bir veli paneli, ayrı profillerde 5 çocuğa kadar, hepsi 20 dilde, açık sohbetin ve reklamın olmadığı kapalı ve güvenli bir alanda.",
+        a: "Çocuğunuzun aradığı her kelime tertemiz tek bir sayfa alır: her anlam, çocuk seviyesinde bir açıklama (Çocuk Modu), üç gerçek örnek ve her anlam için bir resim. Ayrıca bağlam (bir cümle yapıştırın, doğru anlamı alın), akıllı alıştırmalı kişisel bir kelime defteri, kelime oyunları ve testler, her çocuğun ne kadar öğrendiğini gösteren bir veli paneli, ayrı profillerde 5 çocuğa kadar, hepsi 21 dilde, açık sohbetin ve reklamın olmadığı kapalı ve güvenli bir alanda.",
       },
       {
         q: "Neden sadece bir sohbet botuna ya da Google'a sormayayım?",
@@ -505,7 +505,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "İngilizce ve diğer dillerde yardımcı olur mu?",
-        a: "Çok. Bir çocuk İngilizce bir kelimeyi arayıp kendi dilinde, bir resim ve örneklerle basit bir açıklama alabilir, tam da evde eksik olan yardımcı. Ve 20 dilde çalışır, böylece çocuk açıklamayı evde konuştuğunuz dilde de alabilir.",
+        a: "Çok. Bir çocuk İngilizce bir kelimeyi arayıp kendi dilinde, bir resim ve örneklerle basit bir açıklama alabilir, tam da evde eksik olan yardımcı. Ve 21 dilde çalışır, böylece çocuk açıklamayı evde konuştuğunuz dilde de alabilir.",
       },
       {
         q: "Ne kadar tutuyor?",
@@ -559,7 +559,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Rozpocznij 14-dniowy bezpłatny okres próbny",
     heroTrust: "Bez otwartego czatu · Bez reklam · Anuluj jednym kliknięciem",
     ownerCta: "Przejdź do przestrzeni rodzinnej",
-    stats: ["20 języków", "Obrazek do każdego znaczenia", "Do 5 dzieci", "Anuluj jednym kliknięciem"],
+    stats: ["21 języków", "Obrazek do każdego znaczenia", "Do 5 dzieci", "Anuluj jednym kliknięciem"],
     demoKicker: "Efekt",
     demoTitle: "Twoje dziecko rozumie każde słowo, a jego słownictwo rośnie każdego dnia",
     painKicker: "Prawdziwy problem",
@@ -668,7 +668,7 @@ const COPY: Record<string, Copy> = {
       "Osobisty zeszyt i mądre ćwiczenia dla każdego dziecka",
       "Gry słowne i quizy",
       "Do 5 dzieci z osobnymi profilami",
-      "20 języków z pełnym wsparciem",
+      "21 języków z pełnym wsparciem",
     ],
     priceKicker: "Cennik",
     priceTitle: "Plan Rodzinny",
@@ -689,7 +689,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Co dostaję z Gadit?",
-        a: "Każde słowo, które sprawdza Twoje dziecko, dostaje jedną czystą stronę: każde znaczenie, wyjaśnienie na poziomie dziecka (Tryb dla dzieci), trzy prawdziwe przykłady i obrazek do każdego znaczenia. Plus kontekst (wklej zdanie i otrzymaj właściwe znaczenie), osobisty zeszyt słów z mądrymi ćwiczeniami, gry słowne i quizy, panel rodzica pokazujący, ile nauczyło się każde dziecko, do 5 dzieci na osobnych profilach, wszystko w 20 językach, w zamkniętej, bezpiecznej przestrzeni bez otwartego czatu i bez reklam.",
+        a: "Każde słowo, które sprawdza Twoje dziecko, dostaje jedną czystą stronę: każde znaczenie, wyjaśnienie na poziomie dziecka (Tryb dla dzieci), trzy prawdziwe przykłady i obrazek do każdego znaczenia. Plus kontekst (wklej zdanie i otrzymaj właściwe znaczenie), osobisty zeszyt słów z mądrymi ćwiczeniami, gry słowne i quizy, panel rodzica pokazujący, ile nauczyło się każde dziecko, do 5 dzieci na osobnych profilach, wszystko w 21 językach, w zamkniętej, bezpiecznej przestrzeni bez otwartego czatu i bez reklam.",
       },
       {
         q: "Dlaczego nie zapytać po prostu czatbota albo Google?",
@@ -705,7 +705,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Czy pomaga z angielskim i innymi językami?",
-        a: "Bardzo. Dziecko może sprawdzić słowo po angielsku i dostać proste wyjaśnienie w swoim języku, z obrazkiem i przykładami, dokładnie ten pomocnik, którego brakuje w domu. A działa w 20 językach, więc dziecko może dostać wyjaśnienie także w języku, którym mówicie w domu.",
+        a: "Bardzo. Dziecko może sprawdzić słowo po angielsku i dostać proste wyjaśnienie w swoim języku, z obrazkiem i przykładami, dokładnie ten pomocnik, którego brakuje w domu. A działa w 21 językach, więc dziecko może dostać wyjaśnienie także w języku, którym mówicie w domu.",
       },
       {
         q: "Ile to kosztuje?",
@@ -759,7 +759,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "دوره‌ی آزمایشی رایگان 14 روزه‌ات را شروع کن",
     heroTrust: "بدون چتِ باز · بدون تبلیغ · لغو با یک کلیک",
     ownerCta: "به فضای خانوادگی‌ات برو",
-    stats: ["20 زبان", "یک تصویر برای هر معنا", "تا 5 کودک", "لغو با یک کلیک"],
+    stats: ["21 زبان", "یک تصویر برای هر معنا", "تا 5 کودک", "لغو با یک کلیک"],
     demoKicker: "نتیجه",
     demoTitle: "کودک شما هر واژه را می‌فهمد، و دایره‌ی واژگانش هر روز رشد می‌کند",
     painKicker: "درد واقعی",
@@ -868,7 +868,7 @@ const COPY: Record<string, Copy> = {
       "یک دفترچه‌ی شخصی و تمرین هوشمند برای هر کودک",
       "بازی‌ها و آزمون‌های واژگان",
       "تا 5 کودک با پروفایل‌های جداگانه",
-      "20 زبان با پشتیبانی کامل",
+      "21 زبان با پشتیبانی کامل",
     ],
     priceKicker: "قیمت‌گذاری",
     priceTitle: "طرح خانواده",
@@ -889,7 +889,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "با Gadit چه به دست می‌آورم؟",
-        a: "هر واژه‌ای که کودک شما جست‌وجو می‌کند یک صفحه‌ی تمیز می‌گیرد: هر معنا، توضیحی در سطح کودک (حالت کودکان)، سه مثال واقعی، و یک تصویر برای هر معنا. به‌علاوه بافت (جمله‌ای را بچسبان و معنای درست را بگیر)، یک دفترچه‌ی واژگان شخصی با تمرین هوشمند، بازی‌ها و آزمون‌های واژگان، یک داشبورد والدین که نشان می‌دهد هر کودک چقدر یاد گرفته، تا 5 کودک روی پروفایل‌های جداگانه، همه در 20 زبان، در فضایی بسته و امن بدون چتِ باز و بدون تبلیغ.",
+        a: "هر واژه‌ای که کودک شما جست‌وجو می‌کند یک صفحه‌ی تمیز می‌گیرد: هر معنا، توضیحی در سطح کودک (حالت کودکان)، سه مثال واقعی، و یک تصویر برای هر معنا. به‌علاوه بافت (جمله‌ای را بچسبان و معنای درست را بگیر)، یک دفترچه‌ی واژگان شخصی با تمرین هوشمند، بازی‌ها و آزمون‌های واژگان، یک داشبورد والدین که نشان می‌دهد هر کودک چقدر یاد گرفته، تا 5 کودک روی پروفایل‌های جداگانه، همه در 21 زبان، در فضایی بسته و امن بدون چتِ باز و بدون تبلیغ.",
       },
       {
         q: "چرا فقط از یک چت‌بات یا گوگل نپرسیم؟",
@@ -905,7 +905,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "آیا با انگلیسی و زبان‌های دیگر کمک می‌کند؟",
-        a: "بسیار زیاد. کودک می‌تواند واژه‌ای را به انگلیسی جست‌وجو کند و توضیحی ساده به زبان خودش بگیرد، با یک تصویر و مثال‌ها، دقیقاً همان کمک‌کاری که در خانه کم است. و در 20 زبان کار می‌کند، پس کودک می‌تواند توضیح را به زبانی که در خانه صحبت می‌کنید هم بگیرد.",
+        a: "بسیار زیاد. کودک می‌تواند واژه‌ای را به انگلیسی جست‌وجو کند و توضیحی ساده به زبان خودش بگیرد، با یک تصویر و مثال‌ها، دقیقاً همان کمک‌کاری که در خانه کم است. و در 21 زبان کار می‌کند، پس کودک می‌تواند توضیح را به زبانی که در خانه صحبت می‌کنید هم بگیرد.",
       },
       {
         q: "چقدر هزینه دارد؟",
@@ -959,7 +959,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Mulai uji coba gratis 14 hari",
     heroTrust: "Tanpa chat terbuka · Tanpa iklan · Batalkan dengan satu klik",
     ownerCta: "Buka ruang keluarga Anda",
-    stats: ["20 bahasa", "Gambar untuk setiap makna", "Hingga 5 anak", "Batalkan dengan satu klik"],
+    stats: ["21 bahasa", "Gambar untuk setiap makna", "Hingga 5 anak", "Batalkan dengan satu klik"],
     demoKicker: "Hasilnya",
     demoTitle: "Anak Anda memahami setiap kata, dan kosakatanya bertambah setiap hari",
     painKicker: "Rasa sakit yang sebenarnya",
@@ -1068,7 +1068,7 @@ const COPY: Record<string, Copy> = {
       "Buku catatan pribadi dan latihan cerdas per anak",
       "Permainan dan kuis kata",
       "Hingga 5 anak dengan profil terpisah",
-      "20 bahasa dengan dukungan penuh",
+      "21 bahasa dengan dukungan penuh",
     ],
     priceKicker: "Harga",
     priceTitle: "Paket Keluarga",
@@ -1089,7 +1089,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Apa yang saya dapatkan dengan Gadit?",
-        a: "Setiap kata yang dicari anak Anda mendapat satu halaman bersih: setiap makna, penjelasan sesuai level anak (Mode Anak), tiga contoh nyata, dan gambar per makna. Ditambah konteks (tempelkan kalimat dan dapatkan makna yang tepat), buku catatan kata pribadi dengan latihan cerdas, permainan dan kuis kata, dasbor orang tua yang menunjukkan berapa banyak yang telah dipelajari setiap anak, hingga 5 anak dengan profil terpisah, semuanya dalam 20 bahasa, di ruang tertutup yang aman tanpa chat terbuka dan tanpa iklan.",
+        a: "Setiap kata yang dicari anak Anda mendapat satu halaman bersih: setiap makna, penjelasan sesuai level anak (Mode Anak), tiga contoh nyata, dan gambar per makna. Ditambah konteks (tempelkan kalimat dan dapatkan makna yang tepat), buku catatan kata pribadi dengan latihan cerdas, permainan dan kuis kata, dasbor orang tua yang menunjukkan berapa banyak yang telah dipelajari setiap anak, hingga 5 anak dengan profil terpisah, semuanya dalam 21 bahasa, di ruang tertutup yang aman tanpa chat terbuka dan tanpa iklan.",
       },
       {
         q: "Kenapa tidak bertanya saja ke chatbot atau Google?",
@@ -1105,7 +1105,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Apakah membantu untuk bahasa Inggris dan bahasa lain?",
-        a: "Sangat. Anak bisa mencari kata dalam bahasa Inggris dan mendapat penjelasan sederhana dalam bahasanya sendiri, dengan gambar dan contoh, persis pembantu yang hilang di rumah. Dan ini bekerja dalam 20 bahasa, sehingga anak juga bisa mendapat penjelasan dalam bahasa yang Anda gunakan di rumah.",
+        a: "Sangat. Anak bisa mencari kata dalam bahasa Inggris dan mendapat penjelasan sederhana dalam bahasanya sendiri, dengan gambar dan contoh, persis pembantu yang hilang di rumah. Dan ini bekerja dalam 21 bahasa, sehingga anak juga bisa mendapat penjelasan dalam bahasa yang Anda gunakan di rumah.",
       },
       {
         q: "Berapa biayanya?",
@@ -1159,7 +1159,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "מתחילים 14 ימי ניסיון חינם",
     heroTrust: "בלי צ'אט פתוח · בלי פרסומות · ביטול בלחיצה אחת",
     ownerCta: "לאזור המשפחה שלכם",
-    stats: ["20 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
+    stats: ["21 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
     demoKicker: "התוצאה",
     demoTitle: "הילד מבין כל מילה, ואוצר המילים שלו גדל כל יום",
     painKicker: "נקודת הכאב האמיתית",
@@ -1268,7 +1268,7 @@ const COPY: Record<string, Copy> = {
       "מחברת אישית ותרגול חכם לכל ילד",
       "משחקי מילים וחידונים",
       "עד 5 ילדים בפרופילים נפרדים",
-      "20 שפות, כולל עברית מלאה ואנגלית",
+      "21 שפות, כולל עברית מלאה ואנגלית",
     ],
     priceKicker: "התמחור",
     priceTitle: "מסלול המשפחה",
@@ -1289,7 +1289,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "מה אני מקבל ב-Gadit?",
-        a: "כל מילה שהילד מחפש מקבלת עמוד אחד נקי: כל המשמעויות, הסבר בגובה העיניים של הילד (מצב ילדים), שלוש דוגמאות אמיתיות, ותמונה לכל משמעות. בנוסף, הבנת הקשר (מדביקים משפט ומקבלים את המשמעות הנכונה), מחברת מילים אישית עם תרגול חכם, משחקי מילים וחידונים, לוח בקרה להורה שמראה כמה כל ילד למד, עד 5 ילדים בפרופילים נפרדים, והכול ב-20 שפות, במרחב סגור ובטוח, בלי צ'אט פתוח ובלי פרסומות.",
+        a: "כל מילה שהילד מחפש מקבלת עמוד אחד נקי: כל המשמעויות, הסבר בגובה העיניים של הילד (מצב ילדים), שלוש דוגמאות אמיתיות, ותמונה לכל משמעות. בנוסף, הבנת הקשר (מדביקים משפט ומקבלים את המשמעות הנכונה), מחברת מילים אישית עם תרגול חכם, משחקי מילים וחידונים, לוח בקרה להורה שמראה כמה כל ילד למד, עד 5 ילדים בפרופילים נפרדים, והכול ב-21 שפות, במרחב סגור ובטוח, בלי צ'אט פתוח ובלי פרסומות.",
       },
       {
         q: "למה לא פשוט לשאול צ'אט או גוגל?",
@@ -1305,7 +1305,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "זה עוזר גם באנגלית ובשפות נוספות?",
-        a: "מאוד. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות, בדיוק הכלי שחסר בבית לשיעורי אנגלית. וזה עובד ב-20 שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית.",
+        a: "מאוד. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות, בדיוק הכלי שחסר בבית לשיעורי אנגלית. וזה עובד ב-21 שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית.",
       },
       {
         q: "המחיר באמת בשקלים?",
@@ -1359,7 +1359,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Start your 14-day free trial",
     heroTrust: "No open chat · No ads · Cancel in one click",
     ownerCta: "Go to your family space",
-    stats: ["20 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
+    stats: ["21 languages", "A picture per meaning", "Up to 5 kids", "Cancel in one click"],
     demoKicker: "The result",
     demoTitle: "Your child understands every word, and their vocabulary grows every day",
     painKicker: "The real pain",
@@ -1468,7 +1468,7 @@ const COPY: Record<string, Copy> = {
       "A personal notebook and smart practice per child",
       "Word games and quizzes",
       "Up to 5 kids with separate profiles",
-      "20 languages with full support",
+      "21 languages with full support",
     ],
     priceKicker: "Pricing",
     priceTitle: "The Family plan",
@@ -1489,7 +1489,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "What do I get with Gadit?",
-        a: "Every word your child looks up gets one clean page: every meaning, a kid-level explanation (Kids Mode), three real examples, and a picture per meaning. Plus context (paste a sentence and get the right meaning), a personal word notebook with smart practice, word games and quizzes, a parent dashboard showing how much each child has learned, up to 5 kids on separate profiles, all in 20 languages, in a closed, safe space with no open chat and no ads.",
+        a: "Every word your child looks up gets one clean page: every meaning, a kid-level explanation (Kids Mode), three real examples, and a picture per meaning. Plus context (paste a sentence and get the right meaning), a personal word notebook with smart practice, word games and quizzes, a parent dashboard showing how much each child has learned, up to 5 kids on separate profiles, all in 21 languages, in a closed, safe space with no open chat and no ads.",
       },
       {
         q: "Why not just ask a chatbot or Google?",
@@ -1505,7 +1505,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Does it help with English and other languages?",
-        a: "Very much. A child can look up a word in English and get a simple explanation in their own language, with a picture and examples, exactly the helper missing at home. And it works in 20 languages, so the child can get the explanation in the language you speak at home too.",
+        a: "Very much. A child can look up a word in English and get a simple explanation in their own language, with a picture and examples, exactly the helper missing at home. And it works in 21 languages, so the child can get the explanation in the language you speak at home too.",
       },
       {
         q: "How much does it cost?",
@@ -1559,7 +1559,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Ξεκίνα τη δωρεάν δοκιμή 14 ημερών",
     heroTrust: "Χωρίς ανοιχτή συνομιλία · Χωρίς διαφημίσεις · Ακύρωση με ένα κλικ",
     ownerCta: "Πήγαινε στον οικογενειακό σου χώρο",
-    stats: ["20 γλώσσες", "Μια εικόνα ανά σημασία", "Έως 5 παιδιά", "Ακύρωση με ένα κλικ"],
+    stats: ["21 γλώσσες", "Μια εικόνα ανά σημασία", "Έως 5 παιδιά", "Ακύρωση με ένα κλικ"],
     demoKicker: "Το αποτέλεσμα",
     demoTitle: "Το παιδί σου καταλαβαίνει κάθε λέξη και το λεξιλόγιό του μεγαλώνει κάθε μέρα",
     painKicker: "Ο πραγματικός πόνος",
@@ -1668,7 +1668,7 @@ const COPY: Record<string, Copy> = {
       "Ένα προσωπικό τετράδιο και έξυπνη εξάσκηση ανά παιδί",
       "Παιχνίδια λέξεων και κουίζ",
       "Έως 5 παιδιά με ξεχωριστά προφίλ",
-      "20 γλώσσες με πλήρη υποστήριξη",
+      "21 γλώσσες με πλήρη υποστήριξη",
     ],
     priceKicker: "Τιμές",
     priceTitle: "Το οικογενειακό πλάνο",
@@ -1689,7 +1689,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Τι παίρνω με το Gadit;",
-        a: "Κάθε λέξη που ψάχνει το παιδί σου παίρνει μία καθαρή σελίδα: κάθε σημασία, μια εξήγηση στο επίπεδο του παιδιού (Παιδική Λειτουργία), τρία πραγματικά παραδείγματα και μια εικόνα ανά σημασία. Επιπλέον πλαίσιο (επικόλλησε μια πρόταση και πάρε τη σωστή σημασία), ένα προσωπικό τετράδιο λέξεων με έξυπνη εξάσκηση, παιχνίδια λέξεων και κουίζ, έναν πίνακα γονιών που δείχνει πόσα έχει μάθει κάθε παιδί, έως 5 παιδιά σε ξεχωριστά προφίλ, όλα σε 20 γλώσσες, σε έναν κλειστό, ασφαλή χώρο χωρίς ανοιχτή συνομιλία και χωρίς διαφημίσεις.",
+        a: "Κάθε λέξη που ψάχνει το παιδί σου παίρνει μία καθαρή σελίδα: κάθε σημασία, μια εξήγηση στο επίπεδο του παιδιού (Παιδική Λειτουργία), τρία πραγματικά παραδείγματα και μια εικόνα ανά σημασία. Επιπλέον πλαίσιο (επικόλλησε μια πρόταση και πάρε τη σωστή σημασία), ένα προσωπικό τετράδιο λέξεων με έξυπνη εξάσκηση, παιχνίδια λέξεων και κουίζ, έναν πίνακα γονιών που δείχνει πόσα έχει μάθει κάθε παιδί, έως 5 παιδιά σε ξεχωριστά προφίλ, όλα σε 21 γλώσσες, σε έναν κλειστό, ασφαλή χώρο χωρίς ανοιχτή συνομιλία και χωρίς διαφημίσεις.",
       },
       {
         q: "Γιατί όχι απλώς ένα chatbot ή το Google;",
@@ -1705,7 +1705,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Βοηθάει με τα αγγλικά και άλλες γλώσσες;",
-        a: "Πάρα πολύ. Ένα παιδί μπορεί να ψάξει μια λέξη στα αγγλικά και να πάρει μια απλή εξήγηση στη δική του γλώσσα, με εικόνα και παραδείγματα, ακριβώς ο βοηθός που λείπει στο σπίτι. Και λειτουργεί σε 20 γλώσσες, οπότε το παιδί μπορεί να πάρει την εξήγηση και στη γλώσσα που μιλάτε στο σπίτι.",
+        a: "Πάρα πολύ. Ένα παιδί μπορεί να ψάξει μια λέξη στα αγγλικά και να πάρει μια απλή εξήγηση στη δική του γλώσσα, με εικόνα και παραδείγματα, ακριβώς ο βοηθός που λείπει στο σπίτι. Και λειτουργεί σε 21 γλώσσες, οπότε το παιδί μπορεί να πάρει την εξήγηση και στη γλώσσα που μιλάτε στο σπίτι.",
       },
       {
         q: "Πόσο κοστίζει;",
@@ -1759,7 +1759,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Start je gratis proefperiode van 14 dagen",
     heroTrust: "Geen open chat · Geen advertenties · Opzeggen met één klik",
     ownerCta: "Ga naar je gezinsruimte",
-    stats: ["20 talen", "Een afbeelding per betekenis", "Tot 5 kinderen", "Opzeggen met één klik"],
+    stats: ["21 talen", "Een afbeelding per betekenis", "Tot 5 kinderen", "Opzeggen met één klik"],
     demoKicker: "Het resultaat",
     demoTitle: "Je kind begrijpt elk woord, en zijn woordenschat groeit met de dag",
     painKicker: "De echte pijn",
@@ -1868,7 +1868,7 @@ const COPY: Record<string, Copy> = {
       "Een persoonlijk schrift en slimme oefeningen per kind",
       "Woordspelletjes en quizzen",
       "Tot 5 kinderen met aparte profielen",
-      "20 talen met volledige ondersteuning",
+      "21 talen met volledige ondersteuning",
     ],
     priceKicker: "Prijzen",
     priceTitle: "Het Family-abonnement",
@@ -1889,7 +1889,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Wat krijg ik met Gadit?",
-        a: "Elk woord dat je kind opzoekt, krijgt één overzichtelijke pagina: elke betekenis, uitleg op kinderniveau (Kindermodus), drie echte voorbeelden, en een afbeelding per betekenis. Plus context (plak een zin en krijg de juiste betekenis), een persoonlijk woordenschrift met slimme oefeningen, woordspelletjes en quizzen, een ouderdashboard dat laat zien hoeveel elk kind heeft geleerd, tot 5 kinderen op aparte profielen, alles in 20 talen, in een afgesloten, veilige ruimte zonder open chat en zonder advertenties.",
+        a: "Elk woord dat je kind opzoekt, krijgt één overzichtelijke pagina: elke betekenis, uitleg op kinderniveau (Kindermodus), drie echte voorbeelden, en een afbeelding per betekenis. Plus context (plak een zin en krijg de juiste betekenis), een persoonlijk woordenschrift met slimme oefeningen, woordspelletjes en quizzen, een ouderdashboard dat laat zien hoeveel elk kind heeft geleerd, tot 5 kinderen op aparte profielen, alles in 21 talen, in een afgesloten, veilige ruimte zonder open chat en zonder advertenties.",
       },
       {
         q: "Waarom niet gewoon een chatbot of Google vragen?",
@@ -1905,7 +1905,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Helpt het bij Engels en andere talen?",
-        a: "Zeer zeker. Een kind kan een woord in het Engels opzoeken en een eenvoudige uitleg in zijn eigen taal krijgen, met een afbeelding en voorbeelden, precies de hulp die thuis ontbreekt. En het werkt in 20 talen, zodat het kind de uitleg ook kan krijgen in de taal die je thuis spreekt.",
+        a: "Zeer zeker. Een kind kan een woord in het Engels opzoeken en een eenvoudige uitleg in zijn eigen taal krijgen, met een afbeelding en voorbeelden, precies de hulp die thuis ontbreekt. En het werkt in 21 talen, zodat het kind de uitleg ook kan krijgen in de taal die je thuis spreekt.",
       },
       {
         q: "Hoeveel kost het?",
@@ -2277,7 +2277,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Comienza tu prueba gratis de 14 días",
     heroTrust: "Sin chat abierto · Sin anuncios · Cancela con un clic",
     ownerCta: "Ir a tu espacio familiar",
-    stats: ["20 idiomas", "Una imagen por significado", "Hasta 5 niños", "Cancela con un clic"],
+    stats: ["21 idiomas", "Una imagen por significado", "Hasta 5 niños", "Cancela con un clic"],
     demoKicker: "El resultado",
     demoTitle: "Tu hijo entiende cada palabra, y su vocabulario crece cada día",
     painKicker: "El dolor real",
@@ -2386,7 +2386,7 @@ const COPY: Record<string, Copy> = {
       "Un cuaderno personal y práctica inteligente por niño",
       "Juegos de palabras y cuestionarios",
       "Hasta 5 niños con perfiles separados",
-      "20 idiomas con soporte completo",
+      "21 idiomas con soporte completo",
     ],
     priceKicker: "Precios",
     priceTitle: "El plan Familia",
@@ -2407,7 +2407,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "¿Qué obtengo con Gadit?",
-        a: "Cada palabra que tu hijo consulta recibe una página limpia: cada significado, una explicación a nivel infantil (Modo Niños), tres ejemplos reales y una imagen por significado. Además contexto (pega una frase y obtén el significado correcto), un cuaderno de palabras personal con práctica inteligente, juegos de palabras y cuestionarios, un panel para padres que muestra cuánto ha aprendido cada niño, hasta 5 niños en perfiles separados, todo en 20 idiomas, en un espacio cerrado y seguro sin chat abierto y sin anuncios.",
+        a: "Cada palabra que tu hijo consulta recibe una página limpia: cada significado, una explicación a nivel infantil (Modo Niños), tres ejemplos reales y una imagen por significado. Además contexto (pega una frase y obtén el significado correcto), un cuaderno de palabras personal con práctica inteligente, juegos de palabras y cuestionarios, un panel para padres que muestra cuánto ha aprendido cada niño, hasta 5 niños en perfiles separados, todo en 21 idiomas, en un espacio cerrado y seguro sin chat abierto y sin anuncios.",
       },
       {
         q: "¿Por qué no simplemente preguntarle a un chatbot o a Google?",
@@ -2423,7 +2423,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "¿Ayuda con el inglés y otros idiomas?",
-        a: "Muchísimo. Un niño puede consultar una palabra en inglés y recibir una explicación sencilla en su propio idioma, con una imagen y ejemplos, justo el apoyo que falta en casa. Y funciona en 20 idiomas, así que el niño también puede recibir la explicación en el idioma que hablas en casa.",
+        a: "Muchísimo. Un niño puede consultar una palabra en inglés y recibir una explicación sencilla en su propio idioma, con una imagen y ejemplos, justo el apoyo que falta en casa. Y funciona en 21 idiomas, así que el niño también puede recibir la explicación en el idioma que hablas en casa.",
       },
       {
         q: "¿Cuánto cuesta?",
@@ -2477,7 +2477,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Comece seu teste grátis de 14 dias",
     heroTrust: "Sem chat aberto · Sem anúncios · Cancele com um clique",
     ownerCta: "Ir para o espaço da sua família",
-    stats: ["20 idiomas", "Uma imagem por significado", "Até 5 crianças", "Cancele com um clique"],
+    stats: ["21 idiomas", "Uma imagem por significado", "Até 5 crianças", "Cancele com um clique"],
     demoKicker: "O resultado",
     demoTitle: "Seu filho entende cada palavra, e o vocabulário dele cresce todos os dias",
     painKicker: "A dor de verdade",
@@ -2586,7 +2586,7 @@ const COPY: Record<string, Copy> = {
       "Um caderno pessoal e prática inteligente por criança",
       "Jogos de palavras e quizzes",
       "Até 5 crianças com perfis separados",
-      "20 idiomas com suporte completo",
+      "21 idiomas com suporte completo",
     ],
     priceKicker: "Preços",
     priceTitle: "O plano Família",
@@ -2607,7 +2607,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "O que eu recebo com o Gadit?",
-        a: "Cada palavra que seu filho pesquisa ganha uma página limpa: cada significado, uma explicação no nível da criança (Modo Kids), três exemplos reais e uma imagem por significado. Além de contexto (cole uma frase e receba o significado certo), um caderno de palavras pessoal com prática inteligente, jogos de palavras e quizzes, um painel dos pais mostrando quanto cada criança aprendeu, até 5 crianças em perfis separados, tudo em 20 idiomas, em um espaço fechado e seguro, sem chat aberto e sem anúncios.",
+        a: "Cada palavra que seu filho pesquisa ganha uma página limpa: cada significado, uma explicação no nível da criança (Modo Kids), três exemplos reais e uma imagem por significado. Além de contexto (cole uma frase e receba o significado certo), um caderno de palavras pessoal com prática inteligente, jogos de palavras e quizzes, um painel dos pais mostrando quanto cada criança aprendeu, até 5 crianças em perfis separados, tudo em 21 idiomas, em um espaço fechado e seguro, sem chat aberto e sem anúncios.",
       },
       {
         q: "Por que não simplesmente perguntar a um chatbot ou pesquisar no Google?",
@@ -2623,7 +2623,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Ajuda com inglês e outros idiomas?",
-        a: "E muito. A criança pode pesquisar uma palavra em inglês e receber uma explicação simples no idioma dela, com imagem e exemplos, exatamente o apoio que faltava em casa. E funciona em 20 idiomas, então a criança pode receber a explicação também no idioma que você fala em casa.",
+        a: "E muito. A criança pode pesquisar uma palavra em inglês e receber uma explicação simples no idioma dela, com imagem e exemplos, exatamente o apoio que faltava em casa. E funciona em 21 idiomas, então a criança pode receber a explicação também no idioma que você fala em casa.",
       },
       {
         q: "Quanto custa?",
@@ -2677,7 +2677,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Commencez votre essai gratuit de 14 jours",
     heroTrust: "Pas de chat ouvert · Pas de publicité · Annulez en un clic",
     ownerCta: "Accéder à votre espace famille",
-    stats: ["20 langues", "Une image par sens", "Jusqu'à 5 enfants", "Annulez en un clic"],
+    stats: ["21 langues", "Une image par sens", "Jusqu'à 5 enfants", "Annulez en un clic"],
     demoKicker: "Le résultat",
     demoTitle: "Votre enfant comprend chaque mot, et son vocabulaire s'enrichit chaque jour",
     painKicker: "La vraie difficulté",
@@ -2786,7 +2786,7 @@ const COPY: Record<string, Copy> = {
       "Un carnet personnel et des exercices intelligents par enfant",
       "Jeux de mots et quiz",
       "Jusqu'à 5 enfants avec des profils distincts",
-      "20 langues entièrement prises en charge",
+      "21 langues entièrement prises en charge",
     ],
     priceKicker: "Tarifs",
     priceTitle: "Le forfait Famille",
@@ -2807,7 +2807,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Qu'est-ce que j'obtiens avec Gadit?",
-        a: "Chaque mot que votre enfant cherche reçoit une page épurée : chaque sens, une explication à hauteur d'enfant (Mode Enfant), trois exemples réels, et une image par sens. Plus le contexte (collez une phrase et obtenez le bon sens), un carnet de mots personnel avec des exercices intelligents, des jeux de mots et des quiz, un tableau de bord parent montrant combien chaque enfant a appris, jusqu'à 5 enfants sur des profils distincts, le tout en 20 langues, dans un espace fermé et sûr, sans chat ouvert et sans publicité.",
+        a: "Chaque mot que votre enfant cherche reçoit une page épurée : chaque sens, une explication à hauteur d'enfant (Mode Enfant), trois exemples réels, et une image par sens. Plus le contexte (collez une phrase et obtenez le bon sens), un carnet de mots personnel avec des exercices intelligents, des jeux de mots et des quiz, un tableau de bord parent montrant combien chaque enfant a appris, jusqu'à 5 enfants sur des profils distincts, le tout en 21 langues, dans un espace fermé et sûr, sans chat ouvert et sans publicité.",
       },
       {
         q: "Pourquoi ne pas simplement demander à un chatbot ou à Google?",
@@ -2823,7 +2823,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Est-ce que ça aide pour l'anglais et d'autres langues?",
-        a: "Énormément. Un enfant peut chercher un mot en anglais et obtenir une explication simple dans sa propre langue, avec une image et des exemples, exactement l'aide qui manque à la maison. Et cela fonctionne en 20 langues, pour que l'enfant puisse aussi recevoir l'explication dans la langue que vous parlez à la maison.",
+        a: "Énormément. Un enfant peut chercher un mot en anglais et obtenir une explication simple dans sa propre langue, avec une image et des exemples, exactement l'aide qui manque à la maison. Et cela fonctionne en 21 langues, pour que l'enfant puisse aussi recevoir l'explication dans la langue que vous parlez à la maison.",
       },
       {
         q: "Combien ça coûte?",
@@ -2877,7 +2877,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Starten Sie Ihre 14-tägige kostenlose Testphase",
     heroTrust: "Kein offener Chat · Keine Werbung · Kündbar mit einem Klick",
     ownerCta: "Zu Ihrem Familienbereich",
-    stats: ["20 Sprachen", "Ein Bild pro Bedeutung", "Bis zu 5 Kinder", "Kündbar mit einem Klick"],
+    stats: ["21 Sprachen", "Ein Bild pro Bedeutung", "Bis zu 5 Kinder", "Kündbar mit einem Klick"],
     demoKicker: "Das Ergebnis",
     demoTitle: "Ihr Kind versteht jedes Wort, und sein Wortschatz wächst jeden Tag",
     painKicker: "Der wahre Schmerz",
@@ -2986,7 +2986,7 @@ const COPY: Record<string, Copy> = {
       "Ein persönliches Heft und smarte Übungen pro Kind",
       "Wortspiele und Quizze",
       "Bis zu 5 Kinder mit eigenen Profilen",
-      "20 Sprachen mit voller Unterstützung",
+      "21 Sprachen mit voller Unterstützung",
     ],
     priceKicker: "Preise",
     priceTitle: "Der Familientarif",
@@ -3007,7 +3007,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Was bekomme ich mit Gadit?",
-        a: "Jedes Wort, das Ihr Kind nachschlägt, bekommt eine klare Seite: jede Bedeutung, eine kindgerechte Erklärung (Kindermodus), drei echte Beispiele und ein Bild pro Bedeutung. Dazu Kontext (einen Satz einfügen und die richtige Bedeutung erhalten), ein persönliches Wörterheft mit smarten Übungen, Wortspiele und Quizze, ein Eltern-Dashboard, das zeigt, wie viel jedes Kind gelernt hat, bis zu 5 Kinder auf eigenen Profilen, alles in 20 Sprachen, in einem geschlossenen, sicheren Raum ohne offenen Chat und ohne Werbung.",
+        a: "Jedes Wort, das Ihr Kind nachschlägt, bekommt eine klare Seite: jede Bedeutung, eine kindgerechte Erklärung (Kindermodus), drei echte Beispiele und ein Bild pro Bedeutung. Dazu Kontext (einen Satz einfügen und die richtige Bedeutung erhalten), ein persönliches Wörterheft mit smarten Übungen, Wortspiele und Quizze, ein Eltern-Dashboard, das zeigt, wie viel jedes Kind gelernt hat, bis zu 5 Kinder auf eigenen Profilen, alles in 21 Sprachen, in einem geschlossenen, sicheren Raum ohne offenen Chat und ohne Werbung.",
       },
       {
         q: "Warum nicht einfach einen Chatbot fragen oder googeln?",
@@ -3023,7 +3023,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Hilft es bei Englisch und anderen Sprachen?",
-        a: "Sehr. Ein Kind kann ein Wort auf Englisch nachschlagen und eine einfache Erklärung in seiner eigenen Sprache erhalten, mit Bild und Beispielen, genau der Helfer, der zu Hause fehlt. Und es funktioniert in 20 Sprachen, sodass das Kind die Erklärung auch in der Sprache bekommen kann, die Sie zu Hause sprechen.",
+        a: "Sehr. Ein Kind kann ein Wort auf Englisch nachschlagen und eine einfache Erklärung in seiner eigenen Sprache erhalten, mit Bild und Beispielen, genau der Helfer, der zu Hause fehlt. Und es funktioniert in 21 Sprachen, sodass das Kind die Erklärung auch in der Sprache bekommen kann, die Sie zu Hause sprechen.",
       },
       {
         q: "Was kostet es?",
@@ -3477,7 +3477,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "Inizia la prova gratuita di 14 giorni",
     heroTrust: "Nessuna chat aperta · Nessuna pubblicità · Disdici con un clic",
     ownerCta: "Vai al tuo spazio famiglia",
-    stats: ["20 lingue", "Un'immagine per significato", "Fino a 5 bambini", "Disdici con un clic"],
+    stats: ["21 lingue", "Un'immagine per significato", "Fino a 5 bambini", "Disdici con un clic"],
     demoKicker: "Il risultato",
     demoTitle: "Tuo figlio capisce ogni parola, e il suo vocabolario cresce ogni giorno",
     painKicker: "Il vero problema",
@@ -3586,7 +3586,7 @@ const COPY: Record<string, Copy> = {
       "Un quaderno personale ed esercizi intelligenti per ogni bambino",
       "Giochi di parole e quiz",
       "Fino a 5 bambini con profili separati",
-      "20 lingue con supporto completo",
+      "21 lingue con supporto completo",
     ],
     priceKicker: "Prezzi",
     priceTitle: "Il piano Famiglia",
@@ -3607,7 +3607,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Cosa ottengo con Gadit?",
-        a: "Ogni parola che tuo figlio cerca riceve una pagina pulita: ogni significato, una spiegazione a misura di bambino (Modalità Bambini), tre esempi reali e un'immagine per ogni significato. In più il contesto (incolla una frase e ottieni il significato giusto), un quaderno delle parole personale con esercizi intelligenti, giochi di parole e quiz, una dashboard per i genitori che mostra quanto ha imparato ogni bambino, fino a 5 bambini su profili separati, tutto in 20 lingue, in uno spazio chiuso e sicuro senza chat aperta e senza pubblicità.",
+        a: "Ogni parola che tuo figlio cerca riceve una pagina pulita: ogni significato, una spiegazione a misura di bambino (Modalità Bambini), tre esempi reali e un'immagine per ogni significato. In più il contesto (incolla una frase e ottieni il significato giusto), un quaderno delle parole personale con esercizi intelligenti, giochi di parole e quiz, una dashboard per i genitori che mostra quanto ha imparato ogni bambino, fino a 5 bambini su profili separati, tutto in 21 lingue, in uno spazio chiuso e sicuro senza chat aperta e senza pubblicità.",
       },
       {
         q: "Perché non chiedere semplicemente a un chatbot o a Google?",
@@ -3623,7 +3623,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "Aiuta con l'inglese e le altre lingue?",
-        a: "Moltissimo. Un bambino può cercare una parola in inglese e ottenere una spiegazione semplice nella propria lingua, con un'immagine ed esempi, esattamente l'aiuto che manca a casa. E funziona in 20 lingue, così il bambino può ricevere la spiegazione anche nella lingua che parlate a casa.",
+        a: "Moltissimo. Un bambino può cercare una parola in inglese e ottenere una spiegazione semplice nella propria lingua, con un'immagine ed esempi, esattamente l'aiuto che manca a casa. E funziona in 21 lingue, così il bambino può ricevere la spiegazione anche nella lingua che parlate a casa.",
       },
       {
         q: "Quanto costa?",
@@ -3677,7 +3677,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "14日間の無料トライアルを始める",
     heroTrust: "開かれたチャットなし・広告なし・ワンクリックで解約",
     ownerCta: "家族のスペースへ",
-    stats: ["20言語", "意味ごとにイラスト", "最大5人のお子さままで", "ワンクリックで解約"],
+    stats: ["21言語", "意味ごとにイラスト", "最大5人のお子さままで", "ワンクリックで解約"],
     demoKicker: "その結果",
     demoTitle: "お子さまがどんな言葉も理解し、語彙が毎日広がっていきます",
     painKicker: "本当の悩み",
@@ -3786,7 +3786,7 @@ const COPY: Record<string, Copy> = {
       "お子さまごとの自分専用ノートと賢い練習",
       "言葉のゲームとクイズ",
       "別々のプロフィールで最大5人のお子さままで",
-      "20言語にしっかり対応",
+      "21言語にしっかり対応",
     ],
     priceKicker: "料金",
     priceTitle: "ファミリープラン",
@@ -3807,7 +3807,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Gaditで何が手に入りますか?",
-        a: "お子さまが調べた言葉ごとに、すっきりした1ページが手に入ります。すべての意味、子どもの目線に合わせた説明(キッズモード)、3つの本物の例文、そして意味ごとのイラストです。さらに文脈判定(一文を貼れば正しい意味が返る)、賢い練習つきの自分専用の言葉ノート、言葉のゲームとクイズ、各お子さまの学習量がわかる保護者ダッシュボード、別々のプロフィールで最大5人のお子さままで、これらすべてが20言語で、開かれたチャットも広告もない、閉じた安全な空間で使えます。",
+        a: "お子さまが調べた言葉ごとに、すっきりした1ページが手に入ります。すべての意味、子どもの目線に合わせた説明(キッズモード)、3つの本物の例文、そして意味ごとのイラストです。さらに文脈判定(一文を貼れば正しい意味が返る)、賢い練習つきの自分専用の言葉ノート、言葉のゲームとクイズ、各お子さまの学習量がわかる保護者ダッシュボード、別々のプロフィールで最大5人のお子さままで、これらすべてが21言語で、開かれたチャットも広告もない、閉じた安全な空間で使えます。",
       },
       {
         q: "チャットボットや検索に聞くだけではダメなの?",
@@ -3823,7 +3823,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "英語やほかの言語にも役立ちますか?",
-        a: "とても役立ちます。お子さまは英語の言葉を調べて、自分の言語でのシンプルな説明を、イラストと例文つきで受け取れます。まさに家庭に足りなかった助っ人です。20言語で使えるので、お家で話す言語で説明を受け取ることもできます。",
+        a: "とても役立ちます。お子さまは英語の言葉を調べて、自分の言語でのシンプルな説明を、イラストと例文つきで受け取れます。まさに家庭に足りなかった助っ人です。21言語で使えるので、お家で話す言語で説明を受け取ることもできます。",
       },
       {
         q: "料金はいくらですか?",
@@ -3877,7 +3877,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "अपना 14-दिन का मुफ़्त ट्रायल शुरू करें",
     heroTrust: "कोई खुला चैट नहीं · कोई विज्ञापन नहीं · एक क्लिक में रद्द करें",
     ownerCta: "अपने फ़ैमिली स्पेस पर जाएँ",
-    stats: ["20 भाषाएँ", "हर मतलब के लिए एक तस्वीर", "5 बच्चों तक", "एक क्लिक में रद्द"],
+    stats: ["21 भाषाएँ", "हर मतलब के लिए एक तस्वीर", "5 बच्चों तक", "एक क्लिक में रद्द"],
     demoKicker: "नतीजा",
     demoTitle: "आपका बच्चा हर शब्द समझता है, और उसका शब्दभंडार हर दिन बढ़ता है",
     painKicker: "असली तकलीफ़",
@@ -3986,7 +3986,7 @@ const COPY: Record<string, Copy> = {
       "हर बच्चे के लिए एक निजी नोटबुक और स्मार्ट प्रैक्टिस",
       "शब्द गेम्स और क्विज़",
       "अलग प्रोफ़ाइल के साथ 5 बच्चों तक",
-      "पूरे सहयोग के साथ 20 भाषाएँ",
+      "पूरे सहयोग के साथ 21 भाषाएँ",
     ],
     priceKicker: "कीमत",
     priceTitle: "फ़ैमिली प्लान",
@@ -4007,7 +4007,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "Gadit से मुझे क्या मिलता है?",
-        a: "आपका बच्चा जो भी शब्द देखता है उसके लिए एक साफ़ पेज मिलता है: हर मतलब, बच्चों के स्तर की समझाइश (किड्स मोड), तीन असली उदाहरण, और हर मतलब के लिए एक तस्वीर। इसके अलावा संदर्भ (एक वाक्य पेस्ट करें और सही मतलब पाएँ), स्मार्ट प्रैक्टिस के साथ एक निजी शब्द नोटबुक, शब्द गेम्स और क्विज़, एक पैरेंट डैशबोर्ड जो दिखाता है कि हर बच्चे ने कितना सीखा, अलग प्रोफ़ाइल पर 5 बच्चों तक, यह सब 20 भाषाओं में, एक बंद, सुरक्षित जगह में जहाँ कोई खुला चैट और कोई विज्ञापन नहीं।",
+        a: "आपका बच्चा जो भी शब्द देखता है उसके लिए एक साफ़ पेज मिलता है: हर मतलब, बच्चों के स्तर की समझाइश (किड्स मोड), तीन असली उदाहरण, और हर मतलब के लिए एक तस्वीर। इसके अलावा संदर्भ (एक वाक्य पेस्ट करें और सही मतलब पाएँ), स्मार्ट प्रैक्टिस के साथ एक निजी शब्द नोटबुक, शब्द गेम्स और क्विज़, एक पैरेंट डैशबोर्ड जो दिखाता है कि हर बच्चे ने कितना सीखा, अलग प्रोफ़ाइल पर 5 बच्चों तक, यह सब 21 भाषाओं में, एक बंद, सुरक्षित जगह में जहाँ कोई खुला चैट और कोई विज्ञापन नहीं।",
       },
       {
         q: "बस किसी चैटबॉट या Google से क्यों न पूछें?",
@@ -4023,7 +4023,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "क्या यह अंग्रेज़ी और दूसरी भाषाओं में मदद करता है?",
-        a: "बहुत ज़्यादा। बच्चा अंग्रेज़ी में एक शब्द देख सकता है और अपनी भाषा में एक आसान समझाइश पा सकता है, तस्वीर और उदाहरणों के साथ, ठीक वही साथी जो घर पर नहीं होता। और यह 20 भाषाओं में काम करता है, इसलिए बच्चा उस भाषा में भी समझाइश पा सकता है जो आप घर पर बोलते हैं।",
+        a: "बहुत ज़्यादा। बच्चा अंग्रेज़ी में एक शब्द देख सकता है और अपनी भाषा में एक आसान समझाइश पा सकता है, तस्वीर और उदाहरणों के साथ, ठीक वही साथी जो घर पर नहीं होता। और यह 21 भाषाओं में काम करता है, इसलिए बच्चा उस भाषा में भी समझाइश पा सकता है जो आप घर पर बोलते हैं।",
       },
       {
         q: "इसकी कीमत कितनी है?",
@@ -4077,7 +4077,7 @@ const COPY: Record<string, Copy> = {
     heroCta: "የ14 ቀን ነጻ ሙከራዎን ይጀምሩ",
     heroTrust: "ክፍት ውይይት የለም · ማስታወቂያ የለም · በአንድ ጠቅታ ይሰርዙ",
     ownerCta: "ወደ የቤተሰብ ቦታዎ ይሂዱ",
-    stats: ["20 ቋንቋዎች", "ለእያንዳንዱ ትርጉም ስዕል", "እስከ 5 ልጆች", "በአንድ ጠቅታ ይሰርዙ"],
+    stats: ["21 ቋንቋዎች", "ለእያንዳንዱ ትርጉም ስዕል", "እስከ 5 ልጆች", "በአንድ ጠቅታ ይሰርዙ"],
     demoKicker: "ውጤቱ",
     demoTitle: "ልጅዎ እያንዳንዱን ቃል ይረዳል፣ የቃላት ክምችቱም በየቀኑ ያድጋል",
     painKicker: "እውነተኛው ህመም",
@@ -4186,7 +4186,7 @@ const COPY: Record<string, Copy> = {
       "ለእያንዳንዱ ልጅ የግል ደብተርና ብልህ ልምምድ",
       "የቃላት ጨዋታዎችና ፈተናዎች",
       "እስከ 5 ልጆች በተለያዩ መገለጫዎች",
-      "ሙሉ ድጋፍ ያለው 20 ቋንቋዎች",
+      "ሙሉ ድጋፍ ያለው 21 ቋንቋዎች",
     ],
     priceKicker: "ዋጋ",
     priceTitle: "የቤተሰብ እቅድ",
@@ -4207,7 +4207,7 @@ const COPY: Record<string, Copy> = {
     faq: [
       {
         q: "ከGadit ምን አገኛለሁ?",
-        a: "ልጅዎ የሚፈልገው እያንዳንዱ ቃል አንድ ንጹህ ገጽ ያገኛል፦ እያንዳንዱ ትርጉም፣ በልጅ ደረጃ ማብራሪያ (የልጆች ሁነታ)፣ ሦስት እውነተኛ ምሳሌዎች እና ለእያንዳንዱ ትርጉም ስዕል። በተጨማሪም አውድ (ዓረፍተ ነገር ይለጥፉ ትክክለኛውን ትርጉም ያግኙ)፣ ብልህ ልምምድ ያለው የግል ቃላት ደብተር፣ የቃላት ጨዋታዎችና ፈተናዎች፣ እያንዳንዱ ልጅ ምን ያህል እንደተማረ የሚያሳይ የወላጅ ዳሽቦርድ፣ በተለያዩ መገለጫዎች እስከ 5 ልጆች፣ ሁሉም በ20 ቋንቋዎች፣ ክፍት ውይይትም ሆነ ማስታወቂያ በሌለው የተዘጋ ደህንነቱ በተጠበቀ ቦታ ውስጥ።",
+        a: "ልጅዎ የሚፈልገው እያንዳንዱ ቃል አንድ ንጹህ ገጽ ያገኛል፦ እያንዳንዱ ትርጉም፣ በልጅ ደረጃ ማብራሪያ (የልጆች ሁነታ)፣ ሦስት እውነተኛ ምሳሌዎች እና ለእያንዳንዱ ትርጉም ስዕል። በተጨማሪም አውድ (ዓረፍተ ነገር ይለጥፉ ትክክለኛውን ትርጉም ያግኙ)፣ ብልህ ልምምድ ያለው የግል ቃላት ደብተር፣ የቃላት ጨዋታዎችና ፈተናዎች፣ እያንዳንዱ ልጅ ምን ያህል እንደተማረ የሚያሳይ የወላጅ ዳሽቦርድ፣ በተለያዩ መገለጫዎች እስከ 5 ልጆች፣ ሁሉም በ21 ቋንቋዎች፣ ክፍት ውይይትም ሆነ ማስታወቂያ በሌለው የተዘጋ ደህንነቱ በተጠበቀ ቦታ ውስጥ።",
       },
       {
         q: "ለምን ቻትቦት መጠየቅ ወይም Google ማድረግ ብቻ አይሆንም?",
@@ -4223,7 +4223,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "በእንግሊዝኛና በሌሎች ቋንቋዎች ይረዳል?",
-        a: "በጣም። ልጅ በእንግሊዝኛ ቃል ፈልጎ በራሱ ቋንቋ ቀላል ማብራሪያ ከስዕልና ከምሳሌዎች ጋር ማግኘት ይችላል፣ በቤት ውስጥ የጎደለው ረዳት በትክክል ነው። በ20 ቋንቋዎችም ይሰራል፣ ስለዚህ ልጁ በቤት ውስጥ በሚናገሩት ቋንቋም ማብራሪያውን ማግኘት ይችላል።",
+        a: "በጣም። ልጅ በእንግሊዝኛ ቃል ፈልጎ በራሱ ቋንቋ ቀላል ማብራሪያ ከስዕልና ከምሳሌዎች ጋር ማግኘት ይችላል፣ በቤት ውስጥ የጎደለው ረዳት በትክክል ነው። በ21 ቋንቋዎችም ይሰራል፣ ስለዚህ ልጁ በቤት ውስጥ በሚናገሩት ቋንቋም ማብራሪያውን ማግኘት ይችላል።",
       },
       {
         q: "ስንት ያስከፍላል?",
