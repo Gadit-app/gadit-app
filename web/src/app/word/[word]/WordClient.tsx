@@ -850,6 +850,48 @@ export function WordClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classroomMode, result, imageUrl, imageGenerating, user]);
 
+  // Kids Mode: always show a picture, generated automatically, with no
+  // "Generate" click. The first kid to view a (word, meaning, lang) pays
+  // for it; it lands in the img_kids_* cache so every kid after gets it
+  // free. Runs silently — never redirects to /pricing or shows an error
+  // card if it can't (e.g. quota) — and only for non-basic users (a kid
+  // paired into a Family is on "deep"). Classroom has its own effect above.
+  useEffect(() => {
+    if (!kidsMode || classroomMode) return;
+    if (!result || imageUrl || imageGenerating || !user || plan === "basic") return;
+    void handleGenerate({ silent: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kidsMode, classroomMode, result, imageUrl, imageGenerating, user, plan]);
+
+  // Kids Mode: always save the looked-up word to the notebook
+  // automatically, so a child never has to tap "Save" and the parent's
+  // progress dashboard captures everything they explored. Silent (no
+  // upgrade modal / toast); once per word; non-basic only.
+  const autoSavedRef = useRef<string>("");
+  useEffect(() => {
+    if (!kidsMode || !result?.word || !user || plan === "basic") return;
+    if (autoSavedRef.current === result.word) return;
+    autoSavedRef.current = result.word;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/notebook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({
+            word: result.word,
+            language: result.language,
+            meaning: result.meanings[0]?.meaning ?? "",
+          }),
+        });
+        if (res.ok) setIsSaved(true);
+      } catch {
+        /* best effort — auto-save must never disturb the reading flow */
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kidsMode, result?.word, user, plan]);
+
   // Classroom present mode: fetch subject-appropriate examples for the
   // curated meaning. Uses the SET's language (the curated defs are
   // Hebrew) so examples match the definition, and passes the resolved
@@ -883,9 +925,9 @@ export function WordClient({
   }, [classroomMode, initialWord, setId, result]);
 
   // ── Action handlers ───────────────────────────────────────────
-  async function handleGenerate(opts?: { meaning?: string; example?: string }) {
+  async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
     if (!result || !user) {
-      promptLogin(v2(lang, "generateImage"));
+      if (!opts?.silent) promptLogin(v2(lang, "generateImage"));
       return;
     }
     if (imageGenerating) return; // guard against double-click
@@ -919,9 +961,12 @@ export function WordClient({
       });
       if (!res.ok) {
         if (res.status === 402) {
-          router.push(href("/pricing"));
+          // Auto (kids) generation must never yank the reader to /pricing.
+          if (!opts?.silent) router.push(href("/pricing"));
           return;
         }
+        // Silent (auto) mode fails quietly — no error card on the page.
+        if (opts?.silent) return;
         // Parse the body for a known error code and surface a
         // language-appropriate message instead of failing silently.
         let bodyJson: { error?: string; used?: number; limit?: number } = {};
@@ -977,6 +1022,7 @@ export function WordClient({
       if (data.url) setImageUrl(data.url);
     } catch (e) {
       console.error("generate-image:", e);
+      if (opts?.silent) return;
       setImageError(
         lang === "he" ? "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב."
         : lang === "cs" ? "Ztratilo se připojení k internetu. Zkontroluj síť a zkus to znovu."
