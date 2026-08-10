@@ -52,7 +52,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   he: {
     subject: "הצטרפת לתוכנית השותפים של Gadit. הנה הקישור שלך 🤝",
     greeting: "טוב שהצטרפת לתוכנית השותפים של Gadit 🤝",
-    opening: "הנה כל מה שצריך כדי להתחיל. Gadit הוא מילון חכם ובטוח לילדים ב-21 שפות, עם דוגמאות, תמונות ומחברת אישית שעוזרת לילד באמת להבין מילים.",
+    opening: "הנה כל מה שצריך כדי להתחיל. Gadit הוא מילון חכם ובטוח לילדים ב-22 שפות, עם דוגמאות, תמונות ומחברת אישית שעוזרת לילד באמת להבין מילים.",
     noteUnderLink: "כל מי שנרשם ומשלם דרכו נזקף אליך אוטומטית. הקישור לא חושף את השם שלך.",
     commissionLine: "העמלה שלך: {pctY1}% מכל תשלום בשנה הראשונה, {pctAfter}% אחריה לכל זמן שהמשפחה נשארת.",
     commissionExplain: "לדוגמה: משפחה אחת שנרשמת למנוי המשפחתי ונשארת שנה שווה לך מעל {year1}. וכל עוד המשפחה נשארת מנויה, אנחנו ב-Gadit ממשיכים לשלם לך עמלה על המנוי שלה, חודש אחרי חודש. זו לא עמלה חד-פעמית, זו הכנסה שממשיכה.",
@@ -69,7 +69,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   en: {
     subject: "You're in. Here's your Gadit partner link 🤝",
     greeting: "Great to have you in the Gadit Partner Program 🤝",
-    opening: "Here's everything you need to start. Gadit is a smart, child-safe dictionary in 21 languages, with examples, pictures and a personal notebook that helps a child truly understand words.",
+    opening: "Here's everything you need to start. Gadit is a smart, child-safe dictionary in 22 languages, with examples, pictures and a personal notebook that helps a child truly understand words.",
     noteUnderLink: "Everyone who signs up and pays through it is credited to you automatically. The link never shows your name.",
     commissionLine: "Your commission: {pctY1}% of every payment in year one, {pctAfter}% after that for as long as the family stays.",
     commissionExplain: "For example, one family that joins the Family plan and stays a year is worth over {year1} to you. And for as long as that family stays subscribed, we at Gadit keep paying you a commission on their subscription, month after month. Not a one-time payout, income that continues.",
@@ -86,7 +86,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   nl: {
     subject: "Je bent erbij. Hier is je Gadit-partnerlink 🤝",
     greeting: "Fijn dat je meedoet aan het Gadit Partnerprogramma 🤝",
-    opening: "Hier is alles wat je nodig hebt om te beginnen. Gadit is een slim, kindveilig woordenboek in 21 talen, met voorbeelden, plaatjes en een persoonlijk notitieboek dat een kind helpt woorden echt te begrijpen.",
+    opening: "Hier is alles wat je nodig hebt om te beginnen. Gadit is een slim, kindveilig woordenboek in 22 talen, met voorbeelden, plaatjes en een persoonlijk notitieboek dat een kind helpt woorden echt te begrijpen.",
     noteUnderLink: "Iedereen die zich via de link aanmeldt en betaalt, wordt automatisch aan jou toegeschreven. De link toont nooit je naam.",
     commissionLine: "Jouw commissie: {pctY1}% van elke betaling in het eerste jaar, daarna {pctAfter}% zolang het gezin blijft.",
     commissionExplain: "Een gezin dat bijvoorbeeld op het Family-abonnement instapt en een jaar blijft, is meer dan {year1} voor je waard. En zolang dat gezin geabonneerd blijft, blijven wij bij Gadit je commissie over hun abonnement betalen, maand na maand. Geen eenmalige uitbetaling, maar inkomen dat doorloopt.",
@@ -137,7 +137,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   es: {
     subject: "Ya estás dentro. Aquí tienes tu enlace de socio de Gadit 🤝",
     greeting: "Nos alegra tenerte en el Programa de Socios de Gadit 🤝",
-    opening: "Aquí tienes todo lo que necesitas para empezar. Gadit es un diccionario inteligente y seguro para niños en 21 idiomas, con ejemplos, imágenes y un cuaderno personal que ayuda a cada niño a entender de verdad las palabras.",
+    opening: "Aquí tienes todo lo que necesitas para empezar. Gadit es un diccionario inteligente y seguro para niños en 22 idiomas, con ejemplos, imágenes y un cuaderno personal que ayuda a cada niño a entender de verdad las palabras.",
     noteUnderLink: "Toda persona que se registre y pague a través de él queda acreditada a tu nombre automáticamente. El enlace nunca muestra tu nombre.",
     commissionLine: "Tu comisión: {pctY1}% de cada pago durante el primer año, y {pctAfter}% después mientras la familia siga con nosotros.",
     commissionExplain: "Por ejemplo, una familia que se une al plan Familias y se queda un año vale para ti más de {year1}. Y mientras esa familia siga suscrita, en Gadit seguimos pagándote una comisión sobre su suscripción, mes tras mes. No es un pago único, es un ingreso que continúa.",
@@ -154,7 +154,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   pt: {
     subject: "Você entrou. Aqui está o seu link de parceiro Gadit 🤝",
     greeting: "Que bom ter você no Programa de Parceiros da Gadit 🤝",
-    opening: "Aqui está tudo o que você precisa para começar. A Gadit é um dicionário inteligente e seguro para crianças em 21 idiomas, com exemplos, imagens e um caderno pessoal que ajuda a criança a entender de verdade as palavras.",
+    opening: "Aqui está tudo o que você precisa para começar. A Gadit é um dicionário inteligente e seguro para crianças em 22 idiomas, com exemplos, imagens e um caderno pessoal que ajuda a criança a entender de verdade as palavras.",
     noteUnderLink: "Todo mundo que se cadastra e paga por ele é creditado a você automaticamente. O link nunca mostra o seu nome.",
     commissionLine: "Sua comissão: {pctY1}% de cada pagamento no primeiro ano, {pctAfter}% depois disso por todo o tempo que a família continuar.",
     commissionExplain: "Por exemplo, uma família que entra no plano Família e fica um ano vale mais de {year1} para você. E por todo o tempo que essa família continuar assinando, nós da Gadit seguimos pagando a você uma comissão sobre a assinatura dela, mês após mês. Não é um pagamento único, é uma renda que continua.",
@@ -171,7 +171,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   fr: {
     subject: "C'est validé. Voici votre lien partenaire Gadit 🤝",
     greeting: "Ravis de vous compter dans le Programme Partenaires de Gadit 🤝",
-    opening: "Voici tout ce qu'il vous faut pour commencer. Gadit est un dictionnaire intelligent et sûr pour les enfants, en 21 langues, avec des exemples, des images et un carnet personnel qui aide l'enfant à vraiment comprendre les mots.",
+    opening: "Voici tout ce qu'il vous faut pour commencer. Gadit est un dictionnaire intelligent et sûr pour les enfants, en 22 langues, avec des exemples, des images et un carnet personnel qui aide l'enfant à vraiment comprendre les mots.",
     noteUnderLink: "Toute personne qui s'inscrit et paie via ce lien vous est attribuée automatiquement. Le lien n'affiche jamais votre nom.",
     commissionLine: "Votre commission : {pctY1} % de chaque paiement la première année, puis {pctAfter} % ensuite, aussi longtemps que la famille reste.",
     commissionExplain: "Par exemple, une famille qui souscrit au plan Familles et reste un an vous rapporte plus de {year1}. Et tant que cette famille reste abonnée, nous, chez Gadit, continuons à vous verser une commission sur son abonnement, mois après mois. Pas un paiement unique, un revenu qui continue.",
@@ -188,7 +188,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   de: {
     subject: "Du bist dabei. Hier ist dein Gadit Partner-Link 🤝",
     greeting: "Schön, dass du im Gadit Partnerprogramm bist 🤝",
-    opening: "Hier ist alles, was du für den Start brauchst. Gadit ist ein smartes, kindersicheres Wörterbuch in 21 Sprachen, mit Beispielen, Bildern und einem persönlichen Notizbuch, das einem Kind hilft, Wörter wirklich zu verstehen.",
+    opening: "Hier ist alles, was du für den Start brauchst. Gadit ist ein smartes, kindersicheres Wörterbuch in 22 Sprachen, mit Beispielen, Bildern und einem persönlichen Notizbuch, das einem Kind hilft, Wörter wirklich zu verstehen.",
     noteUnderLink: "Jeder, der sich darüber anmeldet und bezahlt, wird dir automatisch gutgeschrieben. Der Link zeigt niemals deinen Namen.",
     commissionLine: "Deine Provision: {pctY1}% von jeder Zahlung im ersten Jahr, danach {pctAfter}%, solange die Familie bleibt.",
     commissionExplain: "Ein Beispiel: Eine Familie, die den Family-Plan abschließt und ein Jahr bleibt, ist für dich über {year1} wert. Und solange diese Familie ihr Abo behält, zahlen wir von Gadit dir weiterhin eine Provision auf ihr Abo, Monat für Monat. Keine einmalige Auszahlung, sondern Einkommen, das weiterläuft.",
@@ -239,7 +239,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   it: {
     subject: "Ci sei. Ecco il tuo link partner Gadit 🤝",
     greeting: "Che bello averti nel Programma Partner di Gadit 🤝",
-    opening: "Ecco tutto ciò che ti serve per iniziare. Gadit è un dizionario intelligente e sicuro per i bambini in 21 lingue, con esempi, immagini e un quaderno personale che aiuta il bambino a capire davvero le parole.",
+    opening: "Ecco tutto ciò che ti serve per iniziare. Gadit è un dizionario intelligente e sicuro per i bambini in 22 lingue, con esempi, immagini e un quaderno personale che aiuta il bambino a capire davvero le parole.",
     noteUnderLink: "Chiunque si iscriva e paghi tramite questo link viene attribuito a te in automatico. Il link non mostra mai il tuo nome.",
     commissionLine: "La tua commissione: {pctY1}% di ogni pagamento nel primo anno, {pctAfter}% in seguito per tutto il tempo in cui la famiglia resta.",
     commissionExplain: "Per esempio, una famiglia che sceglie il piano Family e resta un anno vale per te oltre {year1}. E finché quella famiglia mantiene l'abbonamento, noi di Gadit continuiamo a pagarti una commissione sul suo abbonamento, mese dopo mese. Non un pagamento una tantum, ma un reddito che continua.",
@@ -256,7 +256,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   ja: {
     subject: "ご登録が完了しました。Gadit パートナーリンクはこちらです 🤝",
     greeting: "Gadit パートナープログラムへのご参加、誠にありがとうございます 🤝",
-    opening: "始めるために必要なものをすべてご用意しました。Gadit は 21 言語に対応した、子どもにも安心してお使いいただける賢い辞書です。例文や画像、そして子どもが言葉を本当に理解できるように手助けする専用ノートが備わっています。",
+    opening: "始めるために必要なものをすべてご用意しました。Gadit は 22 言語に対応した、子どもにも安心してお使いいただける賢い辞書です。例文や画像、そして子どもが言葉を本当に理解できるように手助けする専用ノートが備わっています。",
     noteUnderLink: "このリンクを通じて登録し、お支払いされた方は、自動的にあなたの成果として記録されます。リンクにあなたの名前が表示されることはありません。",
     commissionLine: "あなたのコミッション、初年度は毎回のお支払いの {pctY1}%、それ以降はご家族が継続される限り {pctAfter}% です。",
     commissionExplain: "たとえば、Family プランに加入して 1 年間継続されたご家族 1 組は、あなたにとって {year1} 以上の価値があります。そしてそのご家族が購読を続けてくださる限り、私たち Gadit はそのサブスクリプションに対するコミッションを毎月お支払いし続けます。一度きりの支払いではなく、継続する収入です。",
@@ -273,7 +273,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   hi: {
     subject: "आप शामिल हो गए। यह रहा आपका Gadit पार्टनर link 🤝",
     greeting: "Gadit Partner Program में आपका स्वागत है 🤝",
-    opening: "शुरू करने के लिए जो कुछ आपको चाहिए, वह सब यहाँ है। Gadit 21 भाषाओं में एक स्मार्ट, बच्चों के लिए सुरक्षित डिक्शनरी है, जिसमें उदाहरण, तस्वीरें और एक निजी नोटबुक है, जो बच्चे को शब्दों को सचमुच समझने में मदद करती है।",
+    opening: "शुरू करने के लिए जो कुछ आपको चाहिए, वह सब यहाँ है। Gadit 22 भाषाओं में एक स्मार्ट, बच्चों के लिए सुरक्षित डिक्शनरी है, जिसमें उदाहरण, तस्वीरें और एक निजी नोटबुक है, जो बच्चे को शब्दों को सचमुच समझने में मदद करती है।",
     noteUnderLink: "जो भी इसके ज़रिए sign up करके भुगतान करता है, उसका श्रेय अपने आप आपको मिलता है। link में आपका नाम कभी नहीं दिखता।",
     commissionLine: "आपका कमीशन, पहले साल हर भुगतान का {pctY1}%, और उसके बाद {pctAfter}%, जब तक परिवार जुड़ा रहता है।",
     commissionExplain: "उदाहरण के लिए, एक परिवार जो Family plan लेता है और एक साल तक जुड़ा रहता है, वह आपके लिए {year1} से अधिक मूल्य का है। और जब तक वह परिवार सदस्यता में बना रहता है, हम Gadit में उनकी सदस्यता पर आपको महीने दर महीने कमीशन देते रहते हैं। यह एक बार का भुगतान नहीं, बल्कि ऐसी आय है जो चलती रहती है।",
@@ -290,7 +290,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   am: {
     subject: "ገብተሃል። ይኸውልህ የGadit አጋርነት ሊንክህ 🤝",
     greeting: "በGadit የአጋሮች መርሃ ግብር ውስጥ በመኖርህ ደስ ብሎናል 🤝",
-    opening: "ለመጀመር የሚያስፈልግህ ሁሉ ይኸውልህ። Gadit በ21 ቋንቋዎች ብልህና ለልጆች ደህንነቱ የተጠበቀ መዝገበ ቃላት ነው, ከምሳሌዎች, ስዕሎችና ልጅ ቃላትን በእውነት እንዲረዳ ከሚያግዝ የግል ማስታወሻ ደብተር ጋር።",
+    opening: "ለመጀመር የሚያስፈልግህ ሁሉ ይኸውልህ። Gadit በ22 ቋንቋዎች ብልህና ለልጆች ደህንነቱ የተጠበቀ መዝገበ ቃላት ነው, ከምሳሌዎች, ስዕሎችና ልጅ ቃላትን በእውነት እንዲረዳ ከሚያግዝ የግል ማስታወሻ ደብተር ጋር።",
     noteUnderLink: "በእሱ በኩል የሚመዘገብና የሚከፍል ሁሉ በራስ ሰር ለአንተ ይመዘገባል። ሊንኩ ስምህን በጭራሽ አያሳይም።",
     commissionLine: "ኮሚሽንህ, በመጀመሪያው ዓመት ከእያንዳንዱ ክፍያ {pctY1}%, ከዚያ በኋላ ቤተሰቡ እስከቆየ ድረስ {pctAfter}%።",
     commissionExplain: "ለምሳሌ, የFamily እቅድን የተቀላቀለና አንድ ዓመት የሚቆይ አንድ ቤተሰብ ለአንተ ከ{year1} በላይ ዋጋ አለው። እናም ያ ቤተሰብ ተመዝግቦ እስከቆየ ድረስ, እኛ በGadit በደንበኝነት ምዝገባቸው ላይ ኮሚሽን መክፈላችንን እንቀጥላለን, ወር በወር። አንድ ጊዜ የሚከፈል ሳይሆን, የሚቀጥል ገቢ ነው።",

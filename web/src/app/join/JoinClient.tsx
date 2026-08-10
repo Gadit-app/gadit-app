@@ -56,6 +56,18 @@ const COPY: Record<string, {
     errNotFound: "Code not found",
     errGeneric: "Something went wrong. Please try again.",
   },
+  zu: {
+    title: "Joyina umndeni",
+    sub: "Bhala ikhodi enezinombolo ezingu-6 eyenziwe umzali wakho",
+    inputLabel: "Ikhodi enezinombolo ezingu-6",
+    submit: "Qhubeka",
+    joining: "Iyajoyina...",
+    success: "Ujoyinile! Sikuyisa ku-Gadit...",
+    errInvalid: "Ikhodi kumele ibe nezinombolo ezingu-6",
+    errExpired: "Ikhodi iphelelwe yisikhathi. Cela umzali wakho enze entsha.",
+    errNotFound: "Ikhodi ayitholakalanga",
+    errGeneric: "Kukhona okungahambanga kahle. Sicela uzame futhi.",
+  },
   el: {
     title: "Μπες σε μια οικογένεια",
     sub: "Πληκτρολόγησε τον 6ψήφιο κωδικό που δημιούργησε ο γονιός σου",

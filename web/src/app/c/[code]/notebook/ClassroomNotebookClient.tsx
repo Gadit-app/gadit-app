@@ -54,6 +54,16 @@ const COPY: Record<string, {
     errorBody: "Try refreshing the page.",
     backToClassroom: "← Back to classroom",
   },
+  zu: {
+    title: "Incwadi Yekilasi",
+    emptyTitle: "Akukho kusesha okwamanje",
+    emptyBody: "Uma umfundi ebheka igama, lizovela lapha.",
+    filterAll: "Bonke abafundi",
+    filterLabel: "Hlunga ngomfundi",
+    errorTitle: "Kukhona okungahambanga kahle",
+    errorBody: "Zama ukuvuselela ikhasi.",
+    backToClassroom: "← Buyela ekilasini",
+  },
   el: {
     title: "Τετράδιο τάξης",
     emptyTitle: "Δεν υπάρχουν αναζητήσεις ακόμη",

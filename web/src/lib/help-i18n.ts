@@ -307,7 +307,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "How do I change the UI language?",
             a: [
-              "Top right of any page, you'll see a small flag icon (or your current language name). Tap it and pick from 21 languages: English, Greek, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese, Hindi, Amharic.",
+              "Top right of any page, you'll see a small flag icon (or your current language name). Tap it and pick from 22 languages: English, Greek, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese, Hindi, Amharic, Zulu.",
               "Your choice is saved on this device. Everything reloads in the new language: the interface, the menus, future word definitions, examples, kid explanations, even the etymology. Already-cached results in the old language stay until you search those words again.",
             ],
           },
@@ -385,7 +385,7 @@ Object.assign(HELP, {
             id: "languages",
             q: "Which languages do you support?",
             a: [
-              "Interface: English, Greek, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese.",
+              "Interface: English, Greek, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese, Zulu.",
               "You can look up a word in any of those languages and get the definition, examples, and everything else in your chosen UI language. Hebrew and Arabic are fully RTL and use their native fonts.",
             ],
           },
@@ -411,6 +411,359 @@ Object.assign(HELP, {
             a: [
               "Use the email button at the bottom of this page. It goes straight to the team inbox. Every message gets read and a reply within 24 to 48 hours (often faster).",
               "Email beats chat for support: it gives the team a chance to read carefully and reply thoughtfully. Phone support isn't offered yet.",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  zu: {
+    eyebrow: "Isikhungo Sosizo",
+    heading: "Thola impendulo, ngokushesha.",
+    lede: "Imibuzo evamile nezixazululo isinyathelo nesinyathelo, zihlelwe ngezindawo. Uma ungayiboni inkinga yakho, xhumana neqembu ngezansi.",
+    stillNeedHelpHeading: "Usabambekile?",
+    stillNeedHelpBody: "Sibhalele ngqo. Wonke umyalezo ufundwa iqembu futhi uthola impendulo phakathi kosuku noma ezimbili.",
+    emailCta: "Sithumelele i-imeyili",
+    responseTime: "Impendulo evamile: phakathi kwamahora angu-24 kuya kwangu-48.",
+    categories: [
+      {
+        id: "billing",
+        icon: "💳",
+        title: "Ukukhokha nokubhalisa",
+        items: [
+          {
+            id: "change-card",
+            q: "Ngiyishintsha kanjani ikhadi lesikweletu ekubhaliseni kwami?",
+            a: [
+              "Ungashintshela ekhadini elisha ngaphansi komzuzu ngaphandle kokukhansela. Ukubhalisa kwakho kwamanje kuqhubeka kusebenza, kodwa manje ekhadini elisha.",
+              "1. Ngena ku-gadit.app bese uvula ikhasi lakho le-Account (phezulu ngakwesokudla). 2. Chofoza \"Manage billing\". 3. Kuvuleka ikhasi le-Stripe elivikelekile. Chofoza \"Add payment method\", faka ikhadi elisha, bese ulimaka njenge-Default. 4. Ngokuzikhethela, susa ikhadi elidala.",
+              "Kusukela emjikelezweni olandelayo wokukhokha, konke kuya ekhadini elisha. Inkokhelo yangaphambilini (esivele iqoqiwe) ihlala ekhadini elidala. Akudingeki umbuyiselo ngaphandle uma uwufuna ngokuqondile.",
+            ],
+          },
+          {
+            id: "cancel",
+            q: "Ngikukhansela kanjani ukubhalisa kwami?",
+            a: [
+              "Uzenzela wena, nganoma yisiphi isikhathi. Ngena, vula i-Account, chofoza Manage billing, bese uchofoza Cancel subscription.",
+              "Ukufinyelela kwakho kuqhubeka kuze kube sekupheleni kwesikhathi osuvele usikhokhele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (yamahhala). Amagama akho awagcinile, umlando, nencwadi yamanothi kuhlala kuphephile futhi kufinyeleleka.",
+              "Uma ukhansela ngephutha noma ushintsha umqondo, ungaqhubeka nokubhalisa kusuka kuleli khasi elifanayo ngaphambi kokuphela kwesikhathi.",
+            ],
+          },
+          {
+            id: "switch-plan",
+            q: "Ngishintsha kanjani kusuka ku-Clear ngiya ku-Deep (noma okuphambene)?",
+            a: [
+              "I-Account, bese Manage billing, bese Update subscription. Khetha uhlelo olusha.",
+              "I-Stripe ibala umehluko wentengo ngokuzenzakalelayo, ngokwezinsuku ezisele esikhathini samanje. Uma uthuthukisa, uzokhokhiswa umehluko kuphela wesikhathi esisele. Uma ushintshela ezingeni eliphansi, isikweletu sisebenza esikweletini sakho esilandelayo.",
+            ],
+          },
+          {
+            id: "invoice",
+            q: "Ngiyilanda kanjani i-invoyisi noma irisidi?",
+            a: [
+              "I-Account, bese Manage billing, bese Invoice history. Yonke inkokhelo inerisidi ye-PDF elandekayo enemininingwane yokukhokha oyigcinile.",
+              "Uma udinga igama, ikheli, noma i-ID yentela ehlukile ku-invoyisi (isibonelo igama lenkampani ngezinjongo zentela), buyekeza imininingwane yakho yokukhokha kuleli khasi elifanayo ngaphambi kokulanda. Irisidi elandelayo lizosebenzisa imininingwane emisha.",
+            ],
+          },
+          {
+            id: "portal-error",
+            q: "Ngichofozile Manage billing kodwa ngathola iphutha. Manje kwenziwani?",
+            a: [
+              "Izimbangela ezimbili ezivamile. Okokuqala, i-akhawunti yakho ayinakho ukubhalisa kwe-Stripe okusebenzayo. Okwesibili, kungenzeka i-Stripe ingakabi nephrofayela egcwele yokukhokha ye-akhawunti yakho okwamanje.",
+              "Ukuhlola kokuqala okulula: phuma, ubuye ungene nge-imeyili oyisebenzisile lapho ukhokha, bese uzama futhi. Uma kusehluleka, xhumana nathi nge-imeyili ye-akhawunti yakho futhi iqembu lizokulungisa ohlangothini lwethu ngomzuzu.",
+            ],
+          },
+          {
+            id: "autorenew",
+            q: "Ingabe ukubhalisa kwami kuzozivuselela ngokuzenzakalelayo?",
+            a: [
+              "Yebo. Amahlelo enyanga avuselela njalo ngenyanga, amahlelo onyaka avuselela njalo ngonyaka ngosuku olufanayo. Ungabona usuku olulandelayo lokukhokha ku-akhawunti yakho nasephothalini ye-Stripe.",
+              "Uma ungakufuni ukuzivuselela okuzenzakalelayo, khansela nganoma yisiphi isikhathi ngaphambi kosuku lokuvuselela. Ukukhansela akwenzeki ngokushesha. Ugcina ukufinyelela kuze kube sekupheleni kwesikhathi osuvele usikhokhele.",
+            ],
+          },
+          {
+            id: "refund",
+            q: "Ngingawuthola umbuyiselo?",
+            a: [
+              "Yebo. Uma ukuthenga kwenzeke ngaphansi kwezinsuku ezingu-14 ezedlule futhi insizakalo ingasetshenzisiwe kakhulu, sibhalele nge-imeyili ye-akhawunti yakho nenothi elifushane ngesizathu. Leyo mibuyiselo iyagunyazwa ngaphandle kwempikiswano.",
+              "Uma sekwedlule izinsuku ezingaphezu kuka-14, iqembu likuphatha icala ngecala. Khansela ukubhalisa ukuze kungaqhubeki kuvuselela, bese usithumelela i-imeyili.",
+            ],
+          },
+          {
+            id: "unknown-charge",
+            q: "Ngibona inkokhelo engingayazi.",
+            a: [
+              "Izinkokhelo zivela njenge-GADIT noma i-GADIT.APP nge-$2.99 (Clear yanyanga), $4.99 (Deep yanyanga), $29.99 (Clear yonyaka), noma $49.99 (Deep yonyaka). Uma ingahambisani, kungenzeka ivela kwenye insizakalo.",
+              "Uma uqinisekile ukuthi akuyona eyakho, ungaqali ngokuphikisa ngebhange lakho. Sibhalele ngqo kuqala ngosuku nenani. Iqembu lizoyithola, lichaze ukuthi iyini, futhi libuyisele uma kudingeka. Ukuphikisa ngebhange kungenza ukukhokha kwesikhathi esizayo kube nzima, ngakho ukukuxazulula ngosizo ngokuvamile kushesha futhi kuphephe kakhulu.",
+            ],
+          },
+          {
+            id: "failed-payment",
+            q: "Inkokhelo yami yehlulekile. Kufanele ngenzeni?",
+            a: [
+              "I-Stripe izama kabusha ngokuzenzakalelayo izinkokhelo ezihlulekile izikhathi ezimbalwa ezinsukwini ezilandelayo. Iningi lokwehluleka lizixazulula lona uma ibhange likhulula ukubamba noma ikhadi linebhalansi eyanele.",
+              "Uma ufuna ukuyilungisa ngokushesha, iya ku-Account, Manage billing, Add payment method, faka ikhadi elisebenzayo, bese ulisetha njenge-Default. I-Stripe izozama kabusha inkokhelo ehlulekile ngokushesha ekhadini elisha. Uma ukubhalisa kwakho sekuphelelwe yisikhathi kwabuyela ku-Basic, ungabhalisa kabusha kusuka ku-Pricing futhi incwadi yakho yamanothi ihlala iphelele.",
+            ],
+          },
+          {
+            id: "plan-comparison",
+            q: "Uyini umehluko phakathi kwe-Basic, Clear, ne-Deep?",
+            a: [
+              "Basic (yamahhala): kufikela kumagama angu-20 owasesha ngosuku, zonke izincazelo, izibonelo ngencazelo ngayinye, izisho, nomsuka wegama. Akudingeki kubhalisa ukuze usesho olusisekelo.",
+              "Clear ($2.99/inyanga noma $29.99/unyaka): usesho olungenamkhawulo, izincazelo ezinobungane, isithombe ngegama ngalinye (30/inyanga), ukubumba owakho umusho ngempendulo, imininingwane yezisho, nezinsuku ezingu-30 zomlando wosesho.",
+              "Deep ($4.99/inyanga noma $49.99/unyaka): konke okuku-Clear, kanye nezivivinyo zokuzejwayeza, incwadi yamanothi yomuntu siqu enokuzejwayeza kokuphinda okuhlakaniphile, ukuhlukanisa amagama afanayo, kanye nesabelo esikhulu sezithombe (100/inyanga).",
+            ],
+          },
+        ],
+      },
+      {
+        id: "account",
+        icon: "👤",
+        title: "I-akhawunti nokungena",
+        items: [
+          {
+            id: "no-verification-email",
+            q: "Angiyitholanga i-imeyili yami yokuqinisekisa.",
+            a: [
+              "Hlola amafolda e-spam nawezikhangiso kuqala. I-Gmail ne-Outlook kwesinye isikhathi zithumela ama-imeyili e-akhawunti lapho kuze kube yilapho umaka elilodwa njenge \"Not spam\".",
+              "Uma lingekho, kungenzeka i-imeyili yabhalwa ngephutha ngesikhathi sokubhalisa. Zama ukubhalisa futhi bese uhlola kabili ikheli. Uma usebenzise ukubhalisa nge-Google, akudingeki i-imeyili yokuqinisekisa.",
+            ],
+          },
+          {
+            id: "forgot-password",
+            q: "Ngiyikhohliwe iphasiwedi yami.",
+            a: [
+              "Vula ibhokisi lokungena bese uchofoza \"Forgot password?\". Faka i-imeyili oyisebenzisela i-Gadit bese uthola isixhumanisi sokusetha kabusha phakathi komzuzu noma emibili.",
+              "Uma i-imeyili ingafiki, hlola i-spam. Uma isengafiki, kungenzeka wabhalisa nge-Google esikhundleni se-imeyili nephasiwedi. Zama inkinobho ethi \"Continue with Google\".",
+            ],
+          },
+          {
+            id: "wrong-credentials",
+            q: "Ngiqinisekile ukuthi iphasiwedi yami ilungile kodwa ithi \"Wrong email or password\".",
+            a: [
+              "Izinto ezintathu okufanele uzihlole. Okokuqala, i-capslock. Okwesibili, isikhala esisemuva uma ukopisha unamathisela. Okwesithathu, wabhalisa nge-Google kunephasiwedi (sebenzisa \"Continue with Google\" esikhundleni salokho).",
+              "Usabambekile? Setha kabusha iphasiwedi kusuka kubhokisi elifanayo. Kukubeka endaweni ecacile.",
+            ],
+          },
+          {
+            id: "google-fails",
+            q: "Ukungena nge-Google akusebenzi.",
+            a: [
+              "Imbangela evame kakhulu: isiphequluli sakho sivimbela amakhukhi enkampani yesithathu noma ama-pop-up e-gadit.app. Wavumele ezimvumeni ezisebharini yekheli bese uzama futhi.",
+              "Uma usemodini ye-incognito, ukungena nge-Google kuvinjelwe ngamabomu. Shintshela kuwindi elijwayelekile lesiphequluli.",
+            ],
+          },
+          {
+            id: "change-email",
+            q: "Ngiyishintsha kanjani i-imeyili ku-akhawunti yami?",
+            a: [
+              "I-Account, chofoza i-imeyili yakho, Change email. Uzodinga ukuqinisekisa ikheli elisha ngaphambi kokuthi lisebenze. Ukubhalisa kwakho, umlando, nencwadi yamanothi konke kudlulela.",
+              "Uma i-imeyili iboshelwe kukhasimende le-Stripe, yibuyekeze nasephothalini yokukhokha ye-Stripe ukuze amarisidi esikhathi esizayo aye ekhelini elisha.",
+            ],
+          },
+          {
+            id: "delete-account",
+            q: "Ngiyisusa kanjani i-akhawunti yami?",
+            a: [
+              "I-Account, ngezansi kwekhasi, Delete account. Lokhu kuhlala unomphela. Ukubhalisa kwakho kuyakhanselwa, incwadi yakho yamanothi nomlando kuyasuswa, futhi i-imeyili iyakhululwa ukuze ubhalise kabusha.",
+              "Amarekhodi e-Stripe ezinkokhelo ezedlule ahlala (ngokomthetho sidinga ukuwagcina ngezobalomali). Akukho okunye okusalayo.",
+            ],
+          },
+          {
+            id: "share-account",
+            q: "Ingabe umlingani wami noma ingane yami bangayabelana nge-akhawunti yami?",
+            a: [
+              "Umsebenzisi oyedwa ongenile nge-akhawunti ngasikhathi sinye. Imodi yezingane ivumela i-akhawunti eyodwa ye-Clear noma ye-Deep ukuthi isize umzali nengane: guqula i-toggle bese izincazelo zivela zinobungane ngaphandle kokungena okwehlukene.",
+              "Kubantu abadala ababili abafuna bobabili izincwadi zamanothi ezihlukene nenqubekela phambili, dala ama-akhawunti amabili. I-Clear ingu-$2.99 ngenyanga nge-akhawunti ngayinye.",
+            ],
+          },
+          {
+            id: "multiple-accounts",
+            q: "Ngicabanga ukuthi nginama-akhawunti amabili ngephutha. Manje kwenziwani?",
+            a: [
+              "Lokhu kuvame ukwenzeka lapho umuntu ebhalisa kanye nge-Google bese ebhalisa kanye nge-imeyili nephasiwedi esebenzisa ikheli elifanayo, noma lapho ubhalisa kabili ngamakheli e-imeyili ahlukene. Ukubhalisa ngakunye kudala i-akhawunti ye-Gadit ehlukene enencwadi yamanothi yayo, umlando, nesimo sokubhalisa.",
+              "Sibhalele ngamakheli e-imeyili womabili (noma ama-UID asuka ekhasini le-Account) nokuthi yiliphi ofuna ukuligcina. Iqembu lizohlanganisa izincwadi zamanothi nomlando ku-akhawunti oyikhethayo, bese livala enye ngokuhlanzekile. Ayikho idatha elahlekayo.",
+            ],
+          },
+        ],
+      },
+      {
+        id: "product",
+        icon: "🔍",
+        title: "Ukusebenzisa i-Gadit",
+        items: [
+          {
+            id: "wrong-definition",
+            q: "Ngicabanga ukuthi incazelo ayilungile. Ngenzani?",
+            a: [
+              "Wonke amakhasi omphumela anenkinobho encane ethi \"Report\" ngezansi. Yicindezele, khetha isigaba (incazelo, umsuka wegama, isibonelo, isisho, incazelo yezingane, njalonjalo) bese ubhala inothi elifushane. Kufika ngqo eqenjini futhi wonke umbiko uyabuyekezwa.",
+              "Ungakhathazeki ngokuba nokukhetha okweqile. Isichazamazwi sithuthuka kule mpendulo ngokushesha kunanoma yini enye.",
+            ],
+          },
+          {
+            id: "kids-not-working",
+            q: "Imodi yezingane ayiyishintshi incazelo.",
+            a: [
+              "Imodi yezingane iguqula umbhalo kuphela lapho igama selivele linencazelo enobungane ekhiqiziwe. Emagameni amasha owaqeda ukuwabheka, linike imizuzwana engu-10 kuya kwengu-15. Inguqulo enobungane ikhiqizwa khona lapho okokuqala.",
+              "Futhi: imodi yezingane idinga i-Clear noma i-Deep. Uma uku-Basic, i-toggle izokunxusa ukuthi uthuthukise. Abasebenzisi abangaziwa banxuswa ukuthi babhalise.",
+            ],
+          },
+          {
+            id: "voice-fails",
+            q: "Usesho ngezwi alusebenzi.",
+            a: [
+              "Usesho ngezwi ludinga imvume yemakrofoni. Iziphequluli eziningi zibuza kanye ngesayithi ngalinye. Uma ngengozi uchofoze u-Block, uzodinga ukukuguqula kabusha ngesandla: chofoza isikhiye noma isithonjana solwazi eduze kwe-gadit.app ebharini yekheli, bese Site settings, bese Microphone, bese Allow.",
+              "Ku-Safari iOS, ukufinyelela imakrofoni kudinga futhi i-toggle ku-Settings, Safari, Microphone. Izwi okwamanje liyisici se-Clear ne-Deep: abasebenzisi be-Basic babona isinxuso sokuthuthukisa, izivakashi ezingaphumile zibona isinxuso sokungena.",
+            ],
+          },
+          {
+            id: "no-image",
+            q: "Angikwazi ukukhiqiza isithombe segama.",
+            a: [
+              "Ukukhiqiza izithombe kuyisici se-Clear noma se-Deep esinesabelo sanyanga. I-Clear ithola izithombe ezingu-30 ngenyanga, i-Deep ithola ezingu-100. Uma usisebenzise saphela isabelo, uzobona udonga. Sisetha kabusha ngo-1 wanyanga zonke.",
+              "Uma ungaphansi kwesabelo kodwa usabona ukwehluleka, ngokuvamile kuyedlula. Zama futhi ngemva kwemizuzwana engu-30. Ukwehluleka okuqhubekayo kuyiphutha lohlelo. Sicela ubike kusuka ekhasini legama.",
+            ],
+          },
+          {
+            id: "save-word",
+            q: "Ngiligcina kanjani igama encwadini yami yamanothi?",
+            a: [
+              "Kunoma yiliphi ikhasi lomphumela wegama, cindezela Save to notebook eduze kwesihloko. Incwadi yamanothi iyisici se-Clear ne-Deep lapho ungabuyekeza khona amagama awagcinile kamuva, uwabone ngokubuka kwe-galaxy, futhi uqhube izikhathi zokuzejwayeza okuhlakaniphile (Deep).",
+              "Amagama owagcinile futhi wawavula okungenani kanye ayatholakala ungaxhunyiwe ku-inthanethi kusuka kunqolobane yasendaweni. Iphakethe lokungaxhunyiwe futhi ligcina amagama adume kakhulu ngolimi lwakho ukuze ulunge ngaphandle kwe-inthanethi.",
+            ],
+          },
+          {
+            id: "offline",
+            q: "Isebenza kanjani imodi yokungaxhunyiwe ku-inthanethi?",
+            a: [
+              "Amagama osuwabukile agcinwa endaweni yasendaweni. Wavule futhi ngaphandle kwe-inthanethi bese elayisha ngokushesha. Iphakethe eligcwele lokungaxhunyiwe (amagama aphambili ngolimi lwakho) lilanda ngokudingeka kusuka ekhasini lencwadi yamanothi.",
+              "Ukusesha igama elisha ngokuphelele kusadinga uxhumano, ngoba i-Gadit kufanele ikhiqize incazelo kusukela ekuqaleni. Inqolobane yokungaxhunyiwe ingeyamagama osuwahlolile.",
+            ],
+          },
+          {
+            id: "slow",
+            q: "Uhlelo lokusebenza luzwakala luhamba kancane.",
+            a: [
+              "Ukubheka kokuqala kwegama kuhamba kancane kakhulu ngoba i-Gadit ikhiqiza umphumela ophelele kusukela ekuqaleni: ngokuvamile imizuzwana embalwa, kwesinye isikhathi isikhathi eside kumagama ayinkimbinkimbi. Ukubheka okulandelayo kwegama elifanayo kusheshayo, kulethwa kusuka enqolobaneni.",
+              "Uma konke kuzwakala kuhamba kancane, zama ukuvuselela okuqinile: Cmd+Shift+R ku-Mac, Ctrl+Shift+R ku-Windows. Uma ukuhamba kancane kuqhubeka kuwo wonke amakhasi, sicela usithumelele i-imeyili nezwe lakho nesiphequluli ukuze iqembu lihlole indlela yenethiwekhi eya kumaseva ethu kusuka esifundeni sakho.",
+            ],
+          },
+          {
+            id: "word-not-found",
+            q: "Ngiseshe igama kodwa angitholanga mphumela. Kwenzekani?",
+            a: [
+              "Okokuqala, hlola upelo. I-Gadit iphatha amaphutha amancane wokuthayipha isikhathi esiningi, kodwa unkamisa ongalungile noma uhlamvu olungekho kungayidukisa. Zama ukulungiswa okuphakanyisiwe uma kuvela.",
+              "Ngaphandle kwalokho: amagama angavamile kakhulu noma esilingi angahle angabuyisi umphumela oqinisekile. Uma uqinisekile ukuthi igama likhona ngempela, chofoza inkinobho ethi Report ekhasini lomphumela (noma esikrinini sephutha) bese usazisa. Wonke umbiko uyabuyekezwa futhi ukungatholakali kwangempela kubuyiselwa ohlelweni.",
+            ],
+          },
+          {
+            id: "change-language",
+            q: "Ngilushintsha kanjani ulimi lwesixhumi (UI)?",
+            a: [
+              "Phezulu ngakwesokudla kwanoma yiliphi ikhasi, uzobona isithonjana esincane sefulege (noma igama lolimi lwakho lwamanje). Yicindezele bese ukhetha phakathi kwezilimi ezingu-21: isiNgisi, isiGreki, isiHeberu, isi-Arabhu, isiRashiya, isiSpanish, isiPutukezi, isiFulentshi, isiJalimane, isiCzech, isiSlovak, isiTaliyane, isiJaphane, isiHindi, isi-Amharic, isiZulu.",
+              "Ukukhetha kwakho kugcinwa kule divayisi. Konke kulayisha kabusha ngolimi olusha: isixhumi, amamenyu, izincazelo zamagama zesikhathi esizayo, izibonelo, izincazelo zezingane, ngisho nomsuka wegama. Imiphumela esivele igciniwe ngolimi oludala ihlala kuze kube yilapho usesha lawo magama futhi.",
+            ],
+          },
+        ],
+      },
+      {
+        id: "partner",
+        icon: "🤝",
+        title: "Uhlelo lwabalingani",
+        items: [
+          {
+            id: "join-partner",
+            q: "Ngiba kanjani umlingani we-Gadit?",
+            a: [
+              "Vula i-/partners kusuka kunoma yiliphi ikhasi bese uchofoza \"Become a partner\". Bhalisa ngegama nge-imeyili yakho, futhi isixhumanisi sakho esiyingqayizivele sokudlulisela kanye nedeshibhodi yokulandelela ukuchofoza namakhomishini kulungile ngokushesha. Akukho ukulinda ukugunyazwa.",
+              "Uhlelo lwabalingani lungolwababhalisi be-Clear noma be-Deep kuphela. Ukuze utuse i-Gadit ngokwethembeka, sicela ukuthi uyisebenzise wena kuqala. Thuthukisa kusuka ku-Pricing uma uku-Basic.",
+            ],
+          },
+          {
+            id: "commission-model",
+            q: "Amakhomishini abalwa kanjani?",
+            a: [
+              "Abalingani abajwayelekile bahola u-30% wakho konke ukubhalisa okukhokhwa ngesixhumanisi sabo, njalo ngenyanga, ezinyangeni ezingu-12 zokuqala zombhalisi ngamunye. Ngemva kwezinyanga ezingu-12 lokho kwehla kuya ku-0%. Uma ufinyelele esimweni se-Active Partner (ababhalisi abangu-10 abakhokhayo abasebenzayo ngasikhathi sinye), ugcina ikhomishini engu-10% impilo yonke kubo bonke ababhalisi bakho, ngisho nangemva kokuphela kwezinyanga ezingu-12 zokuqala.",
+              "Ukubhalisa konyaka kuthola ikhomishini engu-15% kanye enkokhelweni yokuqala, esikhundleni sezinga langenyanga elingu-30% elisatshalaliswe unyaka wonke.",
+            ],
+          },
+          {
+            id: "payout",
+            q: "Ngikhokhelwa nini?",
+            a: [
+              "Ngenyanga, uma ibhalansi yakho iwela ngaphezu kuka-$50. Sisebenzisa indlela yokukhokha oyisethe kudeshibhodi yabalingani (ukudlulisa ngebhange, i-PayPal, njalonjalo). U-$50 uwumkhawulo ophansi, hhayi umkhawulo ophezulu. Ungahola okuningi kakhulu, uthola nje inkokhelo lapho wedlula umkhawulo.",
+              "Amakhomishini akhululwa ngemva kwezinsuku ezingu-30 kwenkokhelo yokubhalisa, ukuze kuvumeleke iwindi lombuyiselo. Ngakho ukubhalisa kukaJanuwari kukhululwa ekuqaleni kukaFebhuwari futhi kufika enkokhelweni yakho elandelayo uma ibhalansi yakho iwela ngaphezu kuka-$50.",
+            ],
+          },
+          {
+            id: "empty-dashboard",
+            q: "Ngijoyinile kodwa ideshibhodi yami ayinalutho.",
+            a: [
+              "Izibalo zivela ngemva kokuchofoza kokuqala esixhumanisini sakho. Okungenalutho kusho nje ukuthi akekho osechofozile okwamanje. Hamba wabelane ngesixhumanisi. Ideshibhodi ibuyekeza cishe ngesikhathi sangempela uma umsebenzi uqala.",
+              "Uma wabelane futhi othile ebhalisile kodwa ideshibhodi ingakubonisi, sibhalele ngesikhathi esilinganiselwe sokubhalisa futhi iqembu lizohlola ukwabelwa.",
+            ],
+          },
+          {
+            id: "attribution-window",
+            q: "Isixhumanisi sami sokudlulisela siqhubeka isikhathi esingakanani silandelela isivakashi?",
+            a: [
+              "Izinsuku ezingamashumi ayisithupha. Lapho isivakashi sichofoza isixhumanisi sakho, sibeka ikhukhi elikuhlonza njengomdlulisi. Uma bebhalisa futhi bebhalisela nganoma yisiphi isikhathi ezinsukwini ezingu-60 ezizayo (ngisho noma beshiya isayithi bese bebuya kamuva ngosesho lwe-Google), ukwabelwa kusakubalela wena.",
+              "Ukususwa kwamakhukhi: uma isivakashi sisusa amakhukhi aso noma sishintsha isiphequluli noma idivayisi ngaphambi kokuthi babhalise, ukwabelwa kungalahleka. Alikho isu lokusijikela lokho, kodwa izinsuku ezingu-60 ziyiwindi elivulelekile uma kuqhathaniswa nezinhlelo eziningi zabalingani.",
+            ],
+          },
+          {
+            id: "missing-commission",
+            q: "Umuntu othile ubhalise ngesixhumanisi sami kodwa angiyiboni ikhomishini.",
+            a: [
+              "Ngokuvamile lokhu kungenxa yesikhathi: ukubhalisa kuvela kudeshibhodi phakathi kwemizuzu, kodwa ikhomishini ibhukwa kuphela uma ukubhalisa sekukhokhelwe ngempela (okungaba izinsuku kamuva uma besesikhathini sokulinga samahhala). Buyela emuva ngemva kokuphela kwesikhathi sokulinga.",
+              "Uma ukubhalisa kukhokhelwe kodwa usangayiboni ikhomishini ngemva kwamahora angu-48, sibhalele ngesikhathi esilinganiselwe sokubhalisa kanye ne-imeyili noma igama elilinganiselwe lombhalisi uma ulazi. Iqembu lizophenya iketango lokwabelwa futhi lilungise noma yikuphi ukungatholakali ngesandla.",
+            ],
+          },
+        ],
+      },
+      {
+        id: "general",
+        icon: "❓",
+        title: "Okujwayelekile",
+        items: [
+          {
+            id: "what-is-gadit",
+            q: "Yini i-Gadit?",
+            a: [
+              "Isichazamazwi sezilimi eziningi esakhelwe ukwenza igama licace, hhayi nje ukunika incazelo yomugqa owodwa. Igama ngalinye livuleka nazo zonke izincazelo zalo, izibonelo zangempela ngencazelo ngayinye, izisho, umsuka wegama, isithombe ongazikhethela sona, kanye (nge-Clear ne-Deep) nencazelo enobungane, ukubumba owakho umusho ngempendulo, nezivivinyo.",
+              "Okwamanje izilimi ze-UI ezingu-14. Ngaphakathi iqembu likubiza ngokuthi uku-GAD igama: ukuqonda igama ngokuphelele, hhayi nje ukulihumusha.",
+            ],
+          },
+          {
+            id: "languages",
+            q: "Yiziphi izilimi enizisekelayo?",
+            a: [
+              "Isixhumi: isiNgisi, isiGreki, isiHeberu, isi-Arabhu, isiRashiya, isiSpanish, isiPutukezi, isiFulentshi, isiJalimane, isiCzech, isiSlovak, isiTaliyane, isiJaphane, isiZulu.",
+              "Ungabheka igama nganoma yiluphi lwalezo zilimi bese uthola incazelo, izibonelo, nakho konke okunye ngolimi lwe-UI olukhethile. IsiHeberu nesi-Arabhu zibhalwa ngokugcwele kusuka ngakwesokudla kuya ngakwesobunxele futhi zisebenzisa amafonti azo omdabu.",
+            ],
+          },
+          {
+            id: "kid-safety",
+            q: "Ingabe i-Gadit iphephile ezinganeni?",
+            a: [
+              "I-Gadit yakhelwe ukuthi umzali ayisebenzise ngokuphepha eceleni kwengane. Imodi yezingane ikhiqiza izincazelo ezilula, ezibonakalayo, nezifanele ubudala (cishe izinga leminyaka engu-5 kuya kwengu-10), isebenzisa injini efanayo enika amandla okuqukethwe kwabadala nemiyalo ecacile yokwenza kube lula. Akukho okuqukethwe okwenziwe umsebenzisi okuke kuboniswe ezinganeni.",
+              "Ngokuhambisana nezinqubomgomo zethu nemithetho yobumfihlo bezingane emhlabeni wonke, ubunikazi be-akhawunti ezimele bungobeminyaka engu-13 nangaphezulu. Iphethini ejwayelekile yi-akhawunti yomzali umzali ayisebenzisa kanye nengane yakhe, okuyikho kanye i-Kids mode eyakhelwe kona.",
+            ],
+          },
+          {
+            id: "data",
+            q: "Idatha yami igcinwaphi? Ingabe niyayithengisa?",
+            a: [
+              "I-akhawunti, umlando, incwadi yamanothi, nezithombe ezikhiqiziwe zigcinwa ngokuphephile ku-Firebase, zibethelwe endaweni yokugcina. Asiyithengisi idatha yakho kunoma ubani. Sabelana kuphela ngalokho okudingekayo ukusebenzisa i-Gadit (indawo yokugcina, izinkokhelo, abahlinzeki bokuqukethwe), njengoba kuchaziwe kuNqubomgomo Yobumfihlo.",
+              "Ungakhipha incwadi yakho yamanothi noma ususe i-akhawunti yakho nganoma yisiphi isikhathi kusuka ekhasini le-Account.",
+            ],
+          },
+          {
+            id: "contact-direct",
+            q: "Ngingafinyelela kanjani kini ngqo?",
+            a: [
+              "Sebenzisa inkinobho ye-imeyili engezansi kwaleli khasi. Iya ngqo enqolobaneni yemiyalezo yeqembu. Wonke umyalezo uyafundwa futhi uthola impendulo phakathi kwamahora angu-24 kuya kwangu-48 (ngokuvamile ngokushesha okukhulu).",
+              "I-imeyili ingcono kunengxoxo ekusekeleni: inika iqembu ithuba lokufunda ngokucophelela nokuphendula ngokucabanga. Ukusekelwa ngefoni akukatholakali okwamanje.",
             ],
           },
         ],
@@ -660,7 +1013,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Πώς αλλάζω τη γλώσσα του περιβάλλοντος;",
             a: [
-              "Πάνω δεξιά σε κάθε σελίδα, θα δεις ένα μικρό εικονίδιο σημαίας (ή το όνομα της τρέχουσας γλώσσας σου). Πάτησέ το και διάλεξε ανάμεσα σε 21 γλώσσες: Αγγλικά, Ελληνικά, Εβραϊκά, Αραβικά, Ρωσικά, Ισπανικά, Πορτογαλικά, Γαλλικά, Γερμανικά, Τσέχικα, Σλοβάκικα, Ιταλικά, Ιαπωνικά, Χίντι, Αμχαρικά.",
+              "Πάνω δεξιά σε κάθε σελίδα, θα δεις ένα μικρό εικονίδιο σημαίας (ή το όνομα της τρέχουσας γλώσσας σου). Πάτησέ το και διάλεξε ανάμεσα σε 22 γλώσσες: Αγγλικά, Ελληνικά, Εβραϊκά, Αραβικά, Ρωσικά, Ισπανικά, Πορτογαλικά, Γαλλικά, Γερμανικά, Τσέχικα, Σλοβάκικα, Ιταλικά, Ιαπωνικά, Χίντι, Αμχαρικά.",
               "Η επιλογή σου αποθηκεύεται σε αυτή τη συσκευή. Όλα ξαναφορτώνουν στη νέα γλώσσα: το περιβάλλον, τα μενού, οι μελλοντικοί ορισμοί λέξεων, τα παραδείγματα, οι επεξηγήσεις για παιδιά, ακόμα και η ετυμολογία. Τα ήδη αποθηκευμένα αποτελέσματα στην παλιά γλώσσα παραμένουν μέχρι να αναζητήσεις ξανά αυτές τις λέξεις.",
             ],
           },
@@ -731,7 +1084,7 @@ Object.assign(HELP, {
             q: "Τι είναι το Gadit;",
             a: [
               "Ένα πολύγλωσσο λεξικό φτιαγμένο για να κάνει μια λέξη να «κουμπώσει», όχι απλώς να δώσει έναν μονόγραμμο ορισμό. Κάθε λέξη ανοίγει με όλες τις σημασίες της, πραγματικά παραδείγματα ανά σημασία, ιδιωματισμούς, ετυμολογία, μια προαιρετική εικόνα και (με τα Clear και Deep) μια επεξήγηση φιλική προς τα παιδιά, σύνθεση δικής σου πρότασης με ανατροφοδότηση και κουίζ.",
-              "Αυτή τη στιγμή 21 γλώσσες περιβάλλοντος. Εσωτερικά, η ομάδα το λέει «να κάνεις GAD σε μια λέξη»: να την καταλάβεις μέχρι το τέλος, όχι απλώς να τη μεταφράσεις.",
+              "Αυτή τη στιγμή 22 γλώσσες περιβάλλοντος. Εσωτερικά, η ομάδα το λέει «να κάνεις GAD σε μια λέξη»: να την καταλάβεις μέχρι το τέλος, όχι απλώς να τη μεταφράσεις.",
             ],
           },
           {
@@ -1013,7 +1366,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "איך משנים את שפת הממשק?",
             a: [
-              "בפינה הימנית-עליונה של כל עמוד תראו אייקון קטן של דגל (או את שם השפה הנוכחית). לחצו עליו ובחרו מתוך 21 שפות: עברית, אנגלית, יוונית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, סלובקית, איטלקית, יפנית, הינדי, אמהרית.",
+              "בפינה הימנית-עליונה של כל עמוד תראו אייקון קטן של דגל (או את שם השפה הנוכחית). לחצו עליו ובחרו מתוך 22 שפות: עברית, אנגלית, יוונית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, סלובקית, איטלקית, יפנית, הינדי, אמהרית.",
               "הבחירה נשמרת על המכשיר. הכל ייטען מחדש בשפה החדשה: הממשק, התפריטים, הגדרות מילים עתידיות, הדוגמאות, ההסבר לילדים ואפילו האטימולוגיה. תוצאות שכבר נשמרו במטמון בשפה הישנה יישארו כך עד שתחפשו אותן שוב.",
             ],
           },
@@ -1084,7 +1437,7 @@ Object.assign(HELP, {
             q: "מה זה Gadit?",
             a: [
               "מילון רב־לשוני שבנוי כדי לגרום למילה להיתפס, לא רק לתת הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים, אטימולוגיה, תמונה אופציונלית, ו(עם Clear ו-Deep) הסבר ידידותי לילדים, חיבור משפט משלכם עם פידבק, וחידונים.",
-              "כרגע 21 שפות ממשק. אצלנו אומרים לעשות GAD למילה, כלומר להבין אותה עד הסוף, לא רק לתרגם אותה.",
+              "כרגע 22 שפות ממשק. אצלנו אומרים לעשות GAD למילה, כלומר להבין אותה עד הסוף, לא רק לתרגם אותה.",
             ],
           },
           {

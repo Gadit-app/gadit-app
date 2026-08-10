@@ -441,7 +441,7 @@ const uk: V2Strings = {
   homeHeadlineLine1: "Зрозумій",
   homeHeadlineLine2: "до кінця.",
   homeSubline:
-    "Словник, що зустрічає тебе в контексті: значення, походження, ідіоми та яскравий образ, 21 мовами.",
+    "Словник, що зустрічає тебе в контексті: значення, походження, ідіоми та яскравий образ, 22 мовами.",
 
   searchPlaceholderHome: "Введи слово",
   voiceInputTitle: "Продиктуй слово",
@@ -465,7 +465,7 @@ const uk: V2Strings = {
   valueProp3Title: "Історична нотатка, а не витяг з Вікіпедії",
   valueProp3Body:
     "Звідки прийшло слово, розказано абзацом, так, як написав би допитливий друг.",
-  valueProp4Eyebrow: "21 мов",
+  valueProp4Eyebrow: "22 мов",
   valueProp4Title: "Іврит і арабська, повністю рідними",
   valueProp4Body:
     "Справжній RTL, справжні шрифти, справжні ідіоми, а не перекладений інтерфейс наспіх.",
@@ -486,8 +486,8 @@ const uk: V2Strings = {
   footerPrivacy: "Конфіденційність",
   footerTerms: "Умови",
   footerContact: "Допомога",
-  footerTagline: "Розумний словник для 21 мов. Створений для справжнього читання.",
-  footerLanguagesNote: "21 мов",
+  footerTagline: "Розумний словник для 22 мов. Створений для справжнього читання.",
+  footerLanguagesNote: "22 мов",
 
   signIn: "Увійти",
   startFree: "Почати безкоштовно",
@@ -830,7 +830,7 @@ const tr: V2Strings = {
   homeHeadlineLine1: "Sonuna kadar",
   homeHeadlineLine2: "anla.",
   homeSubline:
-    "Seni bağlamda karşılayan bir sözlük: anlamlar, kökenler, deyimler ve capcanlı bir görsel, 21 dilde.",
+    "Seni bağlamda karşılayan bir sözlük: anlamlar, kökenler, deyimler ve capcanlı bir görsel, 22 dilde.",
 
   searchPlaceholderHome: "Bir kelime yaz",
   voiceInputTitle: "Bir kelime söyle",
@@ -854,7 +854,7 @@ const tr: V2Strings = {
   valueProp3Title: "Wikipedia yığını değil, bir tarih notu",
   valueProp3Body:
     "Kelimenin nereden geldiği, meraklı bir arkadaşın yazacağı türden bir paragraf olarak anlatılır.",
-  valueProp4Eyebrow: "21 dil",
+  valueProp4Eyebrow: "22 dil",
   valueProp4Title: "İbranice ve Arapça, tümüyle yerel",
   valueProp4Body:
     "Gerçek RTL, gerçek yazı tipleri, gerçek deyimler, üstüne yamanmış bir çeviri arayüzü değil.",
@@ -875,8 +875,8 @@ const tr: V2Strings = {
   footerPrivacy: "Gizlilik",
   footerTerms: "Koşullar",
   footerContact: "Yardım",
-  footerTagline: "21 dil için akıllı bir sözlük. Gerçek okuma için yapıldı.",
-  footerLanguagesNote: "21 dil",
+  footerTagline: "22 dil için akıllı bir sözlük. Gerçek okuma için yapıldı.",
+  footerLanguagesNote: "22 dil",
 
   signIn: "Giriş yap",
   startFree: "Ücretsiz başla",
@@ -1219,7 +1219,7 @@ const pl: V2Strings = {
   homeHeadlineLine1: "Zrozum",
   homeHeadlineLine2: "do końca.",
   homeSubline:
-    "Słownik, który wychodzi ci naprzeciw w kontekście, znaczeniach, źródłosłowie, idiomach i wyrazistym obrazie, w 21 językach.",
+    "Słownik, który wychodzi ci naprzeciw w kontekście, znaczeniach, źródłosłowie, idiomach i wyrazistym obrazie, w 22 językach.",
 
   searchPlaceholderHome: "Wpisz słowo",
   voiceInputTitle: "Podyktuj słowo",
@@ -1243,7 +1243,7 @@ const pl: V2Strings = {
   valueProp3Title: "Notka historyczna, a nie zrzut z Wikipedii",
   valueProp3Body:
     "Skąd wzięło się słowo, opowiedziane w akapicie, tak jak napisałby ciekawy świata przyjaciel.",
-  valueProp4Eyebrow: "21 języków",
+  valueProp4Eyebrow: "22 języków",
   valueProp4Title: "Hebrajski i arabski, w pełni natywnie",
   valueProp4Body:
     "Prawdziwe RTL, prawdziwe czcionki, prawdziwe idiomy, a nie doklejony przetłumaczony interfejs.",
@@ -1264,8 +1264,8 @@ const pl: V2Strings = {
   footerPrivacy: "Prywatność",
   footerTerms: "Regulamin",
   footerContact: "Pomoc",
-  footerTagline: "Inteligentny słownik dla 21 języków. Stworzony do prawdziwego czytania.",
-  footerLanguagesNote: "21 języków",
+  footerTagline: "Inteligentny słownik dla 22 języków. Stworzony do prawdziwego czytania.",
+  footerLanguagesNote: "22 języków",
 
   signIn: "Zaloguj się",
   startFree: "Zacznij za darmo",
@@ -1997,7 +1997,7 @@ const id: V2Strings = {
   homeHeadlineLine1: "Pahami",
   homeHeadlineLine2: "sampai tuntas.",
   homeSubline:
-    "Kamus yang menemuimu dalam konteks, makna, asal-usul, idiom, dan gambar yang hidup, dalam 21 bahasa.",
+    "Kamus yang menemuimu dalam konteks, makna, asal-usul, idiom, dan gambar yang hidup, dalam 22 bahasa.",
 
   searchPlaceholderHome: "Ketik sebuah kata",
   voiceInputTitle: "Ucapkan sebuah kata",
@@ -2021,7 +2021,7 @@ const id: V2Strings = {
   valueProp3Title: "Catatan sejarah, bukan salinan Wikipedia",
   valueProp3Body:
     "Dari mana kata itu berasal, dituturkan sebagai satu paragraf, seperti yang ditulis teman yang penasaran.",
-  valueProp4Eyebrow: "21 bahasa",
+  valueProp4Eyebrow: "22 bahasa",
   valueProp4Title: "Ibrani & Arab, sepenuhnya alami",
   valueProp4Body:
     "RTL sungguhan, font sungguhan, idiom sungguhan, bukan UI terjemahan yang ditempelkan.",
@@ -2042,8 +2042,8 @@ const id: V2Strings = {
   footerPrivacy: "Privasi",
   footerTerms: "Ketentuan",
   footerContact: "Bantuan",
-  footerTagline: "Kamus cerdas untuk 21 bahasa. Dibuat untuk membaca sungguhan.",
-  footerLanguagesNote: "21 bahasa",
+  footerTagline: "Kamus cerdas untuk 22 bahasa. Dibuat untuk membaca sungguhan.",
+  footerLanguagesNote: "22 bahasa",
 
   signIn: "Masuk",
   startFree: "Mulai gratis",
@@ -2386,7 +2386,7 @@ const nl: V2Strings = {
   homeHeadlineLine1: "Begrijp",
   homeHeadlineLine2: "tot het einde.",
   homeSubline:
-    "Een woordenboek dat je opzoekt in context: betekenissen, herkomst, uitdrukkingen en een levendig beeld, in 21 talen.",
+    "Een woordenboek dat je opzoekt in context: betekenissen, herkomst, uitdrukkingen en een levendig beeld, in 22 talen.",
 
   searchPlaceholderHome: "Typ een woord",
   voiceInputTitle: "Spreek een woord in",
@@ -2410,7 +2410,7 @@ const nl: V2Strings = {
   valueProp3Title: "Een stukje geschiedenis, geen Wikipedia-brok",
   valueProp3Body:
     "Waar het woord vandaan komt, verteld als een alinea, zoals een nieuwsgierige vriend zou schrijven.",
-  valueProp4Eyebrow: "21 talen",
+  valueProp4Eyebrow: "22 talen",
   valueProp4Title: "Hebreeuws en Arabisch, volledig in de eigen taal",
   valueProp4Body:
     "Echte RTL, echte lettertypes, echte uitdrukkingen, geen vertaalde interface die er los op geplakt is.",
@@ -2431,8 +2431,8 @@ const nl: V2Strings = {
   footerPrivacy: "Privacy",
   footerTerms: "Voorwaarden",
   footerContact: "Hulp",
-  footerTagline: "Een slim woordenboek voor 21 talen. Gemaakt voor echt lezen.",
-  footerLanguagesNote: "21 talen",
+  footerTagline: "Een slim woordenboek voor 22 talen. Gemaakt voor echt lezen.",
+  footerLanguagesNote: "22 talen",
 
   signIn: "Inloggen",
   startFree: "Gratis beginnen",
@@ -2775,7 +2775,7 @@ const en: V2Strings = {
   homeHeadlineLine1: "Understand",
   homeHeadlineLine2: "to the end.",
   homeSubline:
-    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 21 languages.",
+    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 22 languages.",
 
   searchPlaceholderHome: "Type a word",
   voiceInputTitle: "Dictate a word",
@@ -2799,7 +2799,7 @@ const en: V2Strings = {
   valueProp3Title: "A history note, not a Wikipedia dump",
   valueProp3Body:
     "Where the word came from, told as a paragraph, the kind a curious friend would write.",
-  valueProp4Eyebrow: "21 languages",
+  valueProp4Eyebrow: "22 languages",
   valueProp4Title: "Hebrew & Arabic, fully native",
   valueProp4Body:
     "Real RTL, real fonts, real idioms, not a translated UI bolted on.",
@@ -2820,8 +2820,8 @@ const en: V2Strings = {
   footerPrivacy: "Privacy",
   footerTerms: "Terms",
   footerContact: "Help",
-  footerTagline: "A smart dictionary for 21 languages. Built for real reading.",
-  footerLanguagesNote: "21 languages",
+  footerTagline: "A smart dictionary for 22 languages. Built for real reading.",
+  footerLanguagesNote: "22 languages",
 
   signIn: "Sign in",
   startFree: "Start free",
@@ -3164,7 +3164,7 @@ const he: V2Strings = {
   homeHeadlineLine1: "להבין",
   homeHeadlineLine2: "עד הסוף.",
   homeSubline:
-    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־21 שפות.",
+    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־22 שפות.",
 
   searchPlaceholderHome: "הקלידו מילה",
   voiceInputTitle: "הכתבת מילה",
@@ -3188,7 +3188,7 @@ const he: V2Strings = {
   valueProp3Title: "הערה היסטורית, לא ויקיפדיה",
   valueProp3Body:
     "מאיפה המילה הגיעה, מסופר כפסקה, כמו שחבר סקרן היה כותב.",
-  valueProp4Eyebrow: "21 שפות",
+  valueProp4Eyebrow: "22 שפות",
   valueProp4Title: "עברית וערבית כשפות אם",
   valueProp4Body:
     "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים, לא ממשק מתורגם.",
@@ -3209,8 +3209,8 @@ const he: V2Strings = {
   footerPrivacy: "פרטיות",
   footerTerms: "תנאים",
   footerContact: "עזרה",
-  footerTagline: "מילון חכם ל־21 שפות. בנוי לקריאה אמיתית.",
-  footerLanguagesNote: "21 שפות",
+  footerTagline: "מילון חכם ל־22 שפות. בנוי לקריאה אמיתית.",
+  footerLanguagesNote: "22 שפות",
 
   signIn: "התחברות",
   startFree: "התחילו חינם",
@@ -4356,7 +4356,7 @@ const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "hasta el final.",
   homeSubline:
-    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 21 idiomas.",
+    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 22 idiomas.",
 
   searchPlaceholderHome: "Escribe una palabra",
   voiceInputTitle: "Dictar una palabra",
@@ -4380,7 +4380,7 @@ const es: Partial<V2Strings> = {
   valueProp3Title: "Una nota de origen, no un volcado de Wikipedia",
   valueProp3Body:
     "De dónde viene la palabra, contado como un párrafo, el que escribiría un amigo curioso.",
-  valueProp4Eyebrow: "21 idiomas",
+  valueProp4Eyebrow: "22 idiomas",
   valueProp4Title: "Hebreo y árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fuentes reales, modismos reales, no una interfaz traducida a la fuerza.",
@@ -4401,8 +4401,8 @@ const es: Partial<V2Strings> = {
   footerPrivacy: "Privacidad",
   footerTerms: "Términos",
   footerContact: "Ayuda",
-  footerTagline: "Un diccionario inteligente para 21 idiomas. Hecho para lectura real.",
-  footerLanguagesNote: "21 idiomas",
+  footerTagline: "Un diccionario inteligente para 22 idiomas. Hecho para lectura real.",
+  footerLanguagesNote: "22 idiomas",
 
   signIn: "Iniciar sesión",
   startFree: "Empezar gratis",
@@ -4744,7 +4744,7 @@ const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "até o fim.",
   homeSubline:
-    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 21 idiomas.",
+    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 22 idiomas.",
 
   searchPlaceholderHome: "Digite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
@@ -4768,7 +4768,7 @@ const pt: Partial<V2Strings> = {
   valueProp3Title: "Uma nota histórica, não despejo de Wikipédia",
   valueProp3Body:
     "De onde a palavra veio, contado em parágrafo, do jeito que um amigo curioso escreveria.",
-  valueProp4Eyebrow: "21 idiomas",
+  valueProp4Eyebrow: "22 idiomas",
   valueProp4Title: "Hebraico e árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fontes reais, expressões reais, não interface traduzida na pressa.",
@@ -4789,8 +4789,8 @@ const pt: Partial<V2Strings> = {
   footerPrivacy: "Privacidade",
   footerTerms: "Termos",
   footerContact: "Ajuda",
-  footerTagline: "Um dicionário inteligente em 21 idiomas. Feito pra leitura de verdade.",
-  footerLanguagesNote: "21 idiomas",
+  footerTagline: "Um dicionário inteligente em 22 idiomas. Feito pra leitura de verdade.",
+  footerLanguagesNote: "22 idiomas",
 
   signIn: "Entrar",
   startFree: "Começar grátis",
@@ -5132,7 +5132,7 @@ const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "jusqu'au bout.",
   homeSubline:
-    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 21 langues.",
+    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 22 langues.",
 
   searchPlaceholderHome: "Tapez un mot",
   voiceInputTitle: "Dicter un mot",
@@ -5156,7 +5156,7 @@ const fr: Partial<V2Strings> = {
   valueProp3Title: "Une note d'origine, pas un copier-coller de Wikipédia",
   valueProp3Body:
     "D'où vient le mot, raconté en un paragraphe, comme un ami curieux l'écrirait.",
-  valueProp4Eyebrow: "21 langues",
+  valueProp4Eyebrow: "22 langues",
   valueProp4Title: "Hébreu et arabe, vraiment natifs",
   valueProp4Body:
     "Vrai RTL, vraies polices, vraies expressions, pas une interface traduite à la va-vite.",
@@ -5177,8 +5177,8 @@ const fr: Partial<V2Strings> = {
   footerPrivacy: "Confidentialité",
   footerTerms: "Conditions",
   footerContact: "Aide",
-  footerTagline: "Un dictionnaire intelligent en 21 langues. Conçu pour vraiment lire.",
-  footerLanguagesNote: "21 langues",
+  footerTagline: "Un dictionnaire intelligent en 22 langues. Conçu pour vraiment lire.",
+  footerLanguagesNote: "22 langues",
 
   signIn: "Se connecter",
   startFree: "Commencer gratuit",
@@ -5529,7 +5529,7 @@ const de: V2Strings = {
   homeHeadlineLine1: "Verstehen",
   homeHeadlineLine2: "bis zum Ende.",
   homeSubline:
-    "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 21 Sprachen.",
+    "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 22 Sprachen.",
   searchPlaceholderHome: "Tippe ein Wort",
   voiceInputTitle: "Wort diktieren",
   addContext: "Kontext hinzufügen",
@@ -5548,7 +5548,7 @@ const de: V2Strings = {
   valueProp3Eyebrow: "Etymologie",
   valueProp3Title: "Eine Hintergrundnotiz, kein Wikipedia-Abklatsch",
   valueProp3Body: "Wo das Wort herkommt, erzählt als Absatz, wie ein neugieriger Freund ihn schreiben würde.",
-  valueProp4Eyebrow: "21 Sprachen",
+  valueProp4Eyebrow: "22 Sprachen",
   valueProp4Title: "Hebräisch und Arabisch, vollständig nativ",
   valueProp4Body: "Echtes RTL, echte Schriften, echte Redewendungen. Keine aufgesetzte Übersetzungs-UI.",
 
@@ -5568,8 +5568,8 @@ const de: V2Strings = {
   footerPrivacy: "Datenschutz",
   footerTerms: "AGB",
   footerContact: "Hilfe",
-  footerTagline: "Ein intelligentes Wörterbuch für 21 Sprachen. Gemacht fürs echte Lesen.",
-  footerLanguagesNote: "21 Sprachen",
+  footerTagline: "Ein intelligentes Wörterbuch für 22 Sprachen. Gemacht fürs echte Lesen.",
+  footerLanguagesNote: "22 Sprachen",
 
   signIn: "Anmelden",
   startFree: "Kostenlos starten",
@@ -6618,7 +6618,7 @@ const it: Partial<V2Strings> = {
   homeHeadlineLine1: "Capisci",
   homeHeadlineLine2: "fino in fondo.",
   homeSubline:
-    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 21 lingue.",
+    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 22 lingue.",
   searchPlaceholderHome: "Scrivi una parola",
   voiceInputTitle: "Detta una parola",
   addContext: "Aggiungi contesto",
@@ -6638,7 +6638,7 @@ const it: Partial<V2Strings> = {
   valueProp3Eyebrow: "Etimologia",
   valueProp3Title: "Una nota storica, non un dump di Wikipedia",
   valueProp3Body: "Da dove viene la parola, raccontato come un paragrafo, come lo scriverebbe un amico curioso.",
-  valueProp4Eyebrow: "21 lingue",
+  valueProp4Eyebrow: "22 lingue",
   valueProp4Title: "Ebraico e arabo, completamente nativi",
   valueProp4Body: "RTL vero, font veri, modi di dire veri. Non un'interfaccia tradotta posticcia.",
 
@@ -6658,8 +6658,8 @@ const it: Partial<V2Strings> = {
   footerPrivacy: "Privacy",
   footerTerms: "Termini",
   footerContact: "Aiuto",
-  footerTagline: "Un dizionario intelligente per 21 lingue. Costruito per la lettura vera.",
-  footerLanguagesNote: "21 lingue",
+  footerTagline: "Un dizionario intelligente per 22 lingue. Costruito per la lettura vera.",
+  footerLanguagesNote: "22 lingue",
 
   // Nav
   signIn: "Accedi",
@@ -7001,7 +7001,7 @@ const ja: Partial<V2Strings> = {
   homeHeadlineLine1: "理解する",
   homeHeadlineLine2: "最後まで。",
   homeSubline:
-    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、21言語で。",
+    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、22言語で。",
   searchPlaceholderHome: "単語を入力",
   voiceInputTitle: "単語を発音する",
   addContext: "文脈を追加",
@@ -7021,7 +7021,7 @@ const ja: Partial<V2Strings> = {
   valueProp3Eyebrow: "語源",
   valueProp3Title: "Wikipedia の貼り付けではなく、語られる歴史",
   valueProp3Body: "その単語がどこから来たのか、好奇心ある友人が書くような一段落で。",
-  valueProp4Eyebrow: "21 言語",
+  valueProp4Eyebrow: "22 言語",
   valueProp4Title: "ヘブライ語とアラビア語も完全ネイティブ",
   valueProp4Body: "本物の RTL、本物のフォント、本物のイディオム。後付けの翻訳UIではありません。",
 
@@ -7041,8 +7041,8 @@ const ja: Partial<V2Strings> = {
   footerPrivacy: "プライバシー",
   footerTerms: "利用規約",
   footerContact: "ヘルプ",
-  footerTagline: "21言語のためのスマートな辞書。本物の読書のために作られた。",
-  footerLanguagesNote: "21 言語",
+  footerTagline: "22言語のためのスマートな辞書。本物の読書のために作られた。",
+  footerLanguagesNote: "22 言語",
 
   // Nav
   signIn: "ログイン",
@@ -7382,7 +7382,7 @@ const hi: Partial<V2Strings> = {
   homeHeadlineLine1: "समझें",
   homeHeadlineLine2: "पूरी गहराई से।",
   homeSubline:
-    "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 21 भाषाओं में।",
+    "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 22 भाषाओं में।",
   searchPlaceholderHome: "कोई शब्द लिखें",
   voiceInputTitle: "एक शब्द बोलें",
   addContext: "संदर्भ जोड़ें",
@@ -7402,7 +7402,7 @@ const hi: Partial<V2Strings> = {
   valueProp3Eyebrow: "उत्पत्ति",
   valueProp3Title: "ऐतिहासिक नोट, विकिपीडिया डंप नहीं",
   valueProp3Body: "शब्द कहाँ से आया, एक छोटे पैराग्राफ़ में, जैसे कोई जिज्ञासु दोस्त लिखे।",
-  valueProp4Eyebrow: "21 भाषाएँ",
+  valueProp4Eyebrow: "22 भाषाएँ",
   valueProp4Title: "हिब्रू और अरबी, पूरी तरह नेटिव",
   valueProp4Body: "असली RTL, असली फ़ॉन्ट, असली मुहावरे। चिपकाया हुआ अनूदित इंटरफ़ेस नहीं।",
 
@@ -7422,8 +7422,8 @@ const hi: Partial<V2Strings> = {
   footerPrivacy: "गोपनीयता",
   footerTerms: "शर्तें",
   footerContact: "मदद",
-  footerTagline: "21 भाषाओं के लिए स्मार्ट शब्दकोश। सच्ची पढ़ाई के लिए बना।",
-  footerLanguagesNote: "21 भाषाएँ",
+  footerTagline: "22 भाषाओं के लिए स्मार्ट शब्दकोश। सच्ची पढ़ाई के लिए बना।",
+  footerLanguagesNote: "22 भाषाएँ",
 
   // Nav
   signIn: "साइन इन",
@@ -7765,7 +7765,7 @@ const am: Partial<V2Strings> = {
   homeHeadlineLine1: "ይረዱ",
   homeHeadlineLine2: "በሙሉ ጥልቀት።",
   homeSubline:
-    "በአውድዎ ውስጥ የሚያገኝዎት መዝገበ ቃላት፦ ትርጉሞች፣ ሥርወ ቃላት፣ ፈሊጦች እና ሕያው ምስል፣ በ21 ቋንቋዎች።",
+    "በአውድዎ ውስጥ የሚያገኝዎት መዝገበ ቃላት፦ ትርጉሞች፣ ሥርወ ቃላት፣ ፈሊጦች እና ሕያው ምስል፣ በ22 ቋንቋዎች።",
   searchPlaceholderHome: "ቃል ይጻፉ",
   voiceInputTitle: "ቃል ይናገሩ",
   addContext: "አውድ ይጨምሩ",
@@ -7785,7 +7785,7 @@ const am: Partial<V2Strings> = {
   valueProp3Eyebrow: "ሥርወ ቃል",
   valueProp3Title: "ታሪካዊ ማስታወሻ፣ የዊኪፔዲያ ግልበጣ አይደለም",
   valueProp3Body: "ቃሉ ከየት እንደመጣ፣ በአጭር አንቀጽ፣ ጉጉ ጓደኛ እንደሚጽፈው።",
-  valueProp4Eyebrow: "21 ቋንቋዎች",
+  valueProp4Eyebrow: "22 ቋንቋዎች",
   valueProp4Title: "ዕብራይስጥ እና ዓረብኛ፣ ሙሉ በሙሉ ቤተኛ",
   valueProp4Body: "እውነተኛ RTL፣ እውነተኛ ፊደላት፣ እውነተኛ ፈሊጦች። ተለጥፎ የተተረጎመ ገጽታ አይደለም።",
 
@@ -7805,8 +7805,8 @@ const am: Partial<V2Strings> = {
   footerPrivacy: "ግላዊነት",
   footerTerms: "ውሎች",
   footerContact: "እርዳታ",
-  footerTagline: "ለ21 ቋንቋዎች ብልህ መዝገበ ቃላት። ለእውነተኛ ትምህርት የተሠራ።",
-  footerLanguagesNote: "21 ቋንቋዎች",
+  footerTagline: "ለ22 ቋንቋዎች ብልህ መዝገበ ቃላት። ለእውነተኛ ትምህርት የተሠራ።",
+  footerLanguagesNote: "22 ቋንቋዎች",
 
   // Nav
   signIn: "ይግቡ",
@@ -8149,7 +8149,7 @@ const el: Partial<V2Strings> = {
   homeHeadlineLine1: "Κατάλαβε",
   homeHeadlineLine2: "μέχρι το τέλος.",
   homeSubline:
-    "Ένα λεξικό που σε συναντά στο νόημα, στις σημασίες, στην προέλευση, στις εκφράσεις και σε μια ζωντανή εικόνα, σε 21 γλώσσες.",
+    "Ένα λεξικό που σε συναντά στο νόημα, στις σημασίες, στην προέλευση, στις εκφράσεις και σε μια ζωντανή εικόνα, σε 22 γλώσσες.",
 
   searchPlaceholderHome: "Πληκτρολόγησε μια λέξη",
   voiceInputTitle: "Υπαγόρευσε μια λέξη",
@@ -8173,7 +8173,7 @@ const el: Partial<V2Strings> = {
   valueProp3Title: "Μια ιστορική σημείωση, όχι αντιγραφή από Wikipedia",
   valueProp3Body:
     "Από πού ήρθε η λέξη, σε μια παράγραφο, όπως θα την έγραφε ένας περίεργος φίλος.",
-  valueProp4Eyebrow: "21 γλώσσες",
+  valueProp4Eyebrow: "22 γλώσσες",
   valueProp4Title: "Εβραϊκά και Αραβικά, πλήρως στη μητρική τους μορφή",
   valueProp4Body:
     "Πραγματικό RTL, πραγματικές γραμματοσειρές, πραγματικές εκφράσεις, όχι ένα μεταφρασμένο περιβάλλον κολλημένο από πάνω.",
@@ -8194,8 +8194,8 @@ const el: Partial<V2Strings> = {
   footerPrivacy: "Απόρρητο",
   footerTerms: "Όροι",
   footerContact: "Βοήθεια",
-  footerTagline: "Ένα έξυπνο λεξικό για 21 γλώσσες. Φτιαγμένο για πραγματικό διάβασμα.",
-  footerLanguagesNote: "21 γλώσσες",
+  footerTagline: "Ένα έξυπνο λεξικό για 22 γλώσσες. Φτιαγμένο για πραγματικό διάβασμα.",
+  footerLanguagesNote: "22 γλώσσες",
 
   signIn: "Σύνδεση",
   startFree: "Ξεκίνα δωρεάν",
@@ -8537,7 +8537,395 @@ const el: Partial<V2Strings> = {
 
 // zu (Zulu) — seeded empty; v2() falls back to English per-key until the
 // native Zulu strings are spliced in.
-const zu: Partial<V2Strings> = {};
+const zu: Partial<V2Strings> = {
+  homeHeadlineLine1: "Qonda",
+  homeHeadlineLine2: "ngokugcwele.",
+  homeSubline:
+    "Isichazamazwi esikuhlangabeza kumongo, izincazelo, imvelaphi, izisho, kanye nesithombe esicacile, ngezilimi ezingu-21.",
+
+  searchPlaceholderHome: "Thayipha igama",
+  voiceInputTitle: "Sho igama",
+  addContext: "Engeza umongo",
+  explain: "Chaza",
+  contextHint:
+    "Ufunda okuthile? Namathisela umusho ukuze sicacise incazelo.",
+  tryLabel: "Zama",
+
+  valuePropsEyebrow: "Yini uGadit ayenza ngendlela ehlukile",
+  valuePropsTitle: "Ngaphezu kwencazelo, indlela yokuphila negama.",
+  valueProp1Eyebrow: "Iqaphela umongo",
+  valueProp1Title: "Incazelo elungile, njalo",
+  valueProp1Body:
+    "Namathisela umusho, uGadit akhethe incazelo efanele, hhayi nje evame kakhulu.",
+  valueProp2Eyebrow: "Ngokubukwayo",
+  valueProp2Title: "Isithombe esicacile, sokhethelwe leli gama",
+  valueProp2Body:
+    "Sidalelwa igama ngalinye. Insika ebonakalayo yendlela igama elizwakala ngayo, hhayi isithombe esivamile.",
+  valueProp3Eyebrow: "Imvelaphi yamagama",
+  valueProp3Title: "Inothi lomlando, hhayi ikhophi ye-Wikipedia",
+  valueProp3Body:
+    "Lapho igama lisuka khona, lixoxwa njengesigaba, sohlobo umngane onelukuluku angalibhala.",
+  valueProp4Eyebrow: "Izilimi ezingu-21",
+  valueProp4Title: "IsiHeberu nesi-Arabhu, ngokugcwele njengabomdabu",
+  valueProp4Body:
+    "I-RTL yangempela, amafonti angempela, izisho zangempela, hhayi i-UI ehunyushiwe enanyathiselwe.",
+
+  previewLabel: "Ukubuka kuqala",
+  seeFullResult: "Bona umphumela ogcwele",
+
+  pricingEyebrow: "Amanani",
+  pricingTeaserTitle: "Amazinga amathathu. Wonke aneqoqo langempela.",
+  trustMicrocopy:
+    "Khansela noma nini · Isilingo semihla engu-14 ku-Clear yenyanga · Awukhokhi kuze kuphele isilingo",
+
+  footerProductGroup: "Umkhiqizo",
+  footerLegalGroup: "Ezomthetho",
+  footerCompare: "Qhathanisa",
+  footerNotebook: "Incwadi yamanothi",
+  footerPricing: "Amanani",
+  footerPrivacy: "Ubumfihlo",
+  footerTerms: "Imigomo",
+  footerContact: "Usizo",
+  footerTagline: "Isichazamazwi esihlakaniphile sezilimi ezingu-21. Sakhelwe ukufunda kwangempela.",
+  footerLanguagesNote: "Izilimi ezingu-21",
+
+  signIn: "Ngena ngemvume",
+  startFree: "Qala mahhala",
+  verbStampDef: "ukuqonda igama, ngokugcwele",
+  navSearch: "Sesha",
+  navCompare: "Qhathanisa",
+  navNotebook: "Incwadi yamanothi",
+  navPricing: "Amanani",
+  navSchools: "Izikole",
+  navFeatures: "Izici",
+  navPlay: "Dlala",
+  navAffiliates: "Abambisene nathi",
+
+  kidsModeLabel: "Izingane",
+  kidsModeTooltipOff: "Thepha ukuze uchaze wonke igama njengoba umzali angachazela ingane.",
+  kidsModeTooltipOn: "Imodi yezingane ivuliwe, zonke izincazelo zizobhalelwa ingane. Thepha ukuvala.",
+  kidsModeBasicGate: "Imodi yezingane iyisici se-Clear. Thuthukisa ukuze uyisebenzise.",
+
+  signupWelcomeTitle: "Wamukelekile ku-Gadit!",
+  signupWelcomeBody: "I-akhawunti yakho isilungile. Qala ngokusesha noma yiliphi igama.",
+
+  // Pricing page (Screen 3)
+  pricingPageHeadline: "Amazinga amathathu. Wonke aneqoqo langempela.",
+  pricingPageSubline: "Qala mahhala. Thuthukisa lapho ukujula kukusiza.",
+  billingMonthly: "Ngenyanga",
+  billingYearly: "Ngonyaka",
+  billingSave17: "Onga u-17%",
+
+  tierBasicTagline: "Qonda",
+  tierBasicPitch: "Qala ngezinto ezibalulekile.",
+  tierBasicCta: "Qalisa",
+  tierBasicFeatures:
+    "Ukusesha amagama angu-20 ngosuku¶Zonke izincazelo (hhayi eyinhloko kuphela)¶Izibonelo ezingu-3 encazelweni ngayinye¶Imvelaphi nomsuka wegama¶Kudingeka ukungena ngemvume",
+
+  tierClearTagline: "Bona ngamehlo",
+  tierClearPitch:
+    "Yenza amagama aphile ngezithombe, imodi yezingane, kanye nempendulo.",
+  tierClearBadge: "Ethandwa kakhulu",
+  tierClearCta: "Qala isilingo samahhala semihla engu-14",
+  tierClearCtaYearly: "Bhalisela ngonyaka",
+  tierClearTrust: "Khansela noma nini · Awukhokhi ngesikhathi sesilingo",
+  tierClearFeatures:
+    "Konke okuku-Basic¶Ukusesha okungenamkhawulo¶Izincazelo zezingane¶Isithombe segama ngalinye (angu-30/ngenyanga)¶Bhala umusho uthole impendulo¶Izisho namatemu¶Umlando wokusesha (izinsuku ezingu-30 ezedlule)",
+
+  tierDeepTagline: "Zilolonge",
+  tierDeepPitch:
+    "Yakha umtapo wolwazi wamagama wakho siqu oqina ngokuhamba kwesikhathi.",
+  tierDeepCta: "Bhalisela i-Deep",
+  tierDeepFeatures:
+    "Konke okuku-Clear¶Izivivinyo zokuzilolonga¶Incwadi yamanothi yamagama yakho siqu¶Ukuzilolonga okuhlakaniphile kwamagama ahlala isikhathi eside¶Hlukanisa amagama afanayo¶Isithombe segama ngalinye (angu-100/ngenyanga)",
+
+  basicEquivalent: "",
+  clearEquivalent: "Kulingana no-$2.50/ngenyanga",
+  deepEquivalent: "Kulingana no-$4.17/ngenyanga",
+
+  trustStripCancel: "Khansela noma nini ngephothali ye-Stripe",
+  trustStripMoneyBack: "Ukubuyiselwa imali kwezinsuku ezingu-14 ekuthengeni kokuqala",
+  trustStripDataYours: "Idatha yakho ingeyakho, yikhiphe noma nini",
+  trustStripNoAds: "Azikho izikhangiso, akukho ukulandelela kwabanye",
+
+  faqEyebrow: "Imibuzo evamile",
+  faqHeadline: "Imibuzo, iphenduliwe",
+  faqQ1: "Ngingazishintsha izinhlelo?",
+  faqA1:
+    "Yebo, thuthukisa noma wehlise noma nini. Ukwabiwa kwentengo kwenzeka ngokuzenzakalelayo, ukhokha umehluko kuphela.",
+  faqQ2: "Kwenzekani uma ngikhansela?",
+  faqA2:
+    "Uhlala unokufinyelela kuze kuphele isikhathi sakho sokukhokha, bese ubuyela ku-Basic. Ayikho idatha elahlekayo.",
+  faqQ3: "Ingabe isilingo simahhala ngempela?",
+  faqA3:
+    "Yebo. Sicela ikhadi ukuvimbela ukuhlukumezeka, kodwa awukhokhiswa kuze kube usuku lwe-15. Khansela ngaphambi kwalokho = akukho ukukhokha.",
+  faqQ4: "Kungani kunamazinga amathathu?",
+  faqA4:
+    "Abasebenzisi abehlukene badinga ukujula okwehlukene. Singathanda ukukuhlangabeza lapho ukhona kunokukudayisela uhlelo olulodwa olukhulise ngokweqile.",
+  faqQ5: "Ingabe izincazelo zezingane ziphephile?",
+  faqA5:
+    "Yebo. Zenziwa ngokunakekela okufanayo nokoqukethe kwabadala, zibuyekezwe ngemithetho yethu yokuqukethwe. Akukho okuqukethwe kwezingane okwenziwe ngabasebenzisi.",
+
+  // Login Modal (Screen 4)
+  loginWelcomeBack: "Ngena ngemvume",
+  loginCreateAccount: "Dala i-akhawunti yakho",
+  loginContinueWithGoogle: "Qhubeka nge-Google",
+  loginInAppNotice: "Ngaphakathi kwe-{app}, ngena ngemvume nge-imeyili ngezansi. Ngenketho ye-Google, vula leli xhumo kusiphequluli sakho.",
+  loginOrSeparator: "noma",
+  loginEmailLabel: "I-imeyili",
+  loginPasswordLabel: "Iphasiwedi",
+  loginEmailPlaceholder: "wena@isibonelo.com",
+  loginPasswordPlaceholder: "••••••••",
+  loginSubmitSignIn: "Ngena ngemvume",
+  loginSubmitSignUp: "Dala i-akhawunti",
+  loginSwitchToSignUp: "Awunayo i-akhawunti? Bhalisa",
+  loginForgotPassword: "Ukhohlwe iphasiwedi?",
+  loginForgotPasswordEnterEmail: "Faka i-imeyili yakho ngenhla kuqala, bese uthepha lapha.",
+  loginResetSent: "Uma kunale-akhawunti yaleyo imeyili, ixhumo lokusetha kabusha liyeza.",
+  loginResetError: "Asikwazanga ukuthumela i-imeyili yokusetha kabusha. Zama futhi.",
+  loginSwitchToSignIn: "Usunayo i-akhawunti? Ngena ngemvume",
+  loginShowPassword: "Bonisa iphasiwedi",
+  loginHidePassword: "Fihla iphasiwedi",
+  loginCloseAria: "Vala",
+  loginSigningIn: "Iyangena…",
+  loginCreatingAccount: "Idala i-akhawunti…",
+  loginErrorWrongCredentials: "I-imeyili noma iphasiwedi engalungile.",
+  loginErrorEmailInUse: "I-imeyili isisetshenziswa. Zama ukungena ngemvume.",
+  loginErrorWeakPassword: "Iphasiwedi kufanele ibe nezinhlamvu okungenani ezingu-8 futhi ihlanganise uhlamvu nenombolo.",
+  loginAgeTermsLine: "Ngineminyaka engu-13 noma ngaphezulu futhi ngiyavuma",
+  loginTermsLinkLabel: "Imigomo",
+  loginPrivacyLinkLabel: "Inqubomgomo Yobumfihlo",
+  loginErrorAgeRequired: "Sicela uqinisekise ukuthi uneminyaka engu-13 noma ngaphezulu futhi uyavuma Imigomo Nenqubomgomo Yobumfihlo.",
+  loginErrorInvalidEmail: "Sicela ufake ikheli le-imeyili elivumelekile.",
+  loginErrorGoogleFailed: "Asikwazanga ukungena ngemvume nge-Google. Zama futhi.",
+  loginErrorGeneric: "Kukhona okungahambanga kahle. Zama futhi.",
+
+  // Compose Modal (Screen 5)
+  composeEyebrow: "Bhala",
+  composeTitleTemplate: (w) => `Bhala owakho umusho nge-${w}`,
+  composeSubtitle:
+    "Lisebenzise emushweni bese uthola impendulo ngokushesha ngohlelo lolimi, ithoni, nokufaneleka.",
+  composeMeaningPickerLabel: "Khetha incazelo oyilolongayo",
+  composePlaceholder: "Thayipha umusho wakho lapha…",
+  composeSubmit: "Hlola umusho",
+  composeChecking: "Iyahlola…",
+  composeStatusPerfectLabel: "Uphelele",
+  composeStatusAlmostLabel: "Ususondele",
+  composeStatusIncorrectLabel: "Awukafiki",
+  composeSuggestionEyebrow: "Ukubhala kabusha okuphakanyisiwe",
+  composeTryAnother: "Zama omunye umusho",
+  composeBackToWord: "Buyela egameni",
+  composeErrorEmpty: "Sicela ubhale umusho kuqala.",
+  composeErrorTooShort: "Sicela ubhale okungenani amagama ambalwa.",
+
+  // Quiz Modal (Screen 6)
+  quizEyebrow: "Zilolonge",
+  quizTitleTemplate: (w) => `${w}, isivivinyo`,
+  quizQuestionNofM: (n, m) => `Umbuzo ${n} kwangu-${m}`,
+  quizSubmit: "Thumela",
+  quizNext: "Umbuzo olandelayo",
+  quizFinish: "Qeda",
+  quizYesCorrect: "Yebo, kulungile",
+  quizNotQuite: "Awukafiki",
+  quizLoading: "Silungiselela isivivinyo sakho…",
+  quizFinalScoreTemplate: (c, t) => `Uthole ${c} kwangu-${t} okulungile.`,
+  quizPracticeAnotherWord: "Zilolonge elinye igama",
+  quizBackToWord: "Buyela egameni",
+  quizReviewMistakes: "Buyekeza lawo engawaphosa",
+
+  // Compare Page (Screen 7)
+  compareEyebrow: "Qhathanisa",
+  compareTitle: "Hlukanisa amagama afanayo",
+  compareSubtitle:
+    "affect vs effect, אומנות vs אמנות, principle vs principal, amagama abamba ngisho nabakhuluma ulimi lwebele.",
+  compareWord1Label: "Igama 1",
+  compareWord2Label: "Igama 2",
+  compareWord1Placeholder: "affect",
+  compareWord2Placeholder: "effect",
+  compareCta: "Qhathanisa",
+  compareLoading: "Iyaqhathanisa…",
+  compareEmpty: "Faka amagama amabili ukuze uwaqhathanise",
+  compareDifferenceLabel: "Umehluko",
+  compareExamplesLabel: "Izibonelo",
+  compareCommonMistakeLabel: "Iphutha elivamile",
+  compareErrNotARealWord: "Asilazi elinye laleyo magama.",
+  compareErrDifferentLanguages:
+    "La magama amabili abonakala esezilimini ezehlukene, zama iphea evumelanayo.",
+  compareErrSameWord: "Lawa abukeka eyigama elifanayo, zama amabili ahlukene.",
+  compareErrGeneric: "Ukuqhathanisa akutholakali okwamanje.",
+
+  // Notebook (Screen 8)
+  notebookEyebrow: "Incwadi yamanothi",
+  notebookTitle: "Umkhathi wakho wamagama",
+  notebookSubtitle:
+    "Wonke amagama owahlolile, agciniwe, ahleliwe, akhula.",
+  notebookCounterTemplate: (n) => `Amagama angu-${n} ahloliwe`,
+  notebookWordsExplored: "amagama ahloliwe",
+  notebookPracticeNow: "Zilolonge manje",
+  notebookDueTodayTemplate: (n) => `Angu-${n} afanele namuhla`,
+  notebookListView: "Uhlu",
+  notebookGalaxyView: "Umthala",
+  notebookEmptyTitle: "Incwadi yakho yamanothi ayinalutho",
+  notebookEmptyCta: "Sesha igama ukuze uqale",
+  notebookRemoveAria: "Susa",
+  notebookMasteredLabel: "★ Ukwazi ngokuphelele",
+  notebookSavedOnTemplate: (d) => `Kugcinwe ${d}`,
+  notebookLegendRecent: "Kugcinwe muva nje",
+  notebookLegendMastered: "Ukwazi ngokuphelele",
+  notebookLegendNeedsReview: "Kudinga ukubuyekezwa",
+
+  // Practice / Spaced Repetition (Screen 9)
+  srEyebrow: "Zilolonge",
+  srWordNofMTemplate: (n, m) => `Igama ${n} kwangu-${m}`,
+  srSkip: "Yeqa",
+  srClickToReveal: "Chofoza noma kuphi ukuze uveze",
+  srTapToReveal: "Thepha ukuze uveze",
+  srPrimaryMeaningLabel: "Incazelo eyinhloko",
+  srExamplesLabel: "Izibonelo",
+  srIForgot: "Ngikhohliwe",
+  srIKnewIt: "Bengikwazi",
+  srSchedulingHint:
+    "Bengikwazi = ukubuyekezwa okulandelayo ezinsukwini ezimbalwa. Ngikhohliwe = kubuyela namuhla.",
+  srWordsPracticed: "amagama azilolongiwe",
+  srSummaryStatTemplate: (k, f) => `${k} obewazi · ${f} okumele ukubuyekeze futhi`,
+  srTomorrow: "Kusasa",
+  srNextReviewTemplate: (when, count) =>
+    `Ukubuyekezwa okulandelayo: ${when} (${count} ${count === 1 ? "igama" : "amagama"} afanele)`,
+  srDoneForToday: "Kuphelile namuhla",
+  srPracticeMore: "Zilolonge okwengeziwe",
+  srEmptyTitle: "Akukho okumele kubuyekezwe namuhla",
+  srEmptyBody: "Wenze kahle. Buya kusasa.",
+  srBackToNotebook: "Buyela encwadini yamanothi",
+  srLoading: "Ilayisha ukuzilolonga kwakho…",
+
+  // Account (Screen 10)
+  accountEyebrow: "I-akhawunti",
+  accountYourSpace: "Isikhala sakho",
+  accountNamedSpaceTemplate: (n) => `Isikhala sika-${n}`,
+  accountPlanLabel: "Uhlelo",
+  accountOnPlanFree: "Mahhala",
+  accountNoActiveSubscription: "Akukho ukubhalisa okusebenzayo",
+  accountChooseAPlan: "Khetha uhlelo ukuze uqalise.",
+  accountTrialBadgeTemplate: (d) =>
+    `Isilingo semihla engu-14 · ${d} ${Number(d) === 1 ? "usuku" : "izinsuku"} ezisele`,
+  accountRenewsOnTemplate: (d) => `Kuvuselelwa ${d}`,
+  accountCancelsAtPeriodEnd: "Kukhanselwa ekupheleni kwesikhathi sokukhokha",
+  accountManageBilling: "Phatha ukukhokha",
+  accountChangePlan: "Shintsha uhlelo",
+  accountUpgrade: "Thuthukisa",
+  accountUpgradeToFamily: "Shintshela ku-Family",
+  accountUsageThisMonth: "Ukusetshenziswa kule nyanga",
+  accountImageGeneration: "Ukwakhiwa kwezithombe",
+  accountSearches: "Ukusesha",
+  accountLocked: "Kukhiyiwe",
+  accountUnlimited: "okungenamkhawulo",
+  accountTodaySuffix: "namuhla",
+  accountNearingLimit: "Kusondela emkhawulweni wale nyanga.",
+  accountSectionLabel: "I-akhawunti",
+  accountEmailLabel: "I-imeyili",
+  accountChangeEmail: "Shintsha i-imeyili",
+  accountSignOut: "Phuma",
+  accountDeleteAccount: "Susa i-akhawunti",
+
+  // Report Modal (Screen 11)
+  reportEyebrow: "Bika iphutha",
+  reportTitle: "Yini engalungile?",
+  reportTellMore: "Sitshele okwengeziwe",
+  reportTellMorePh: "Ngokuzikhethela. Ngokuqondile, ngokushesha singakulungisa.",
+  reportSend: "Thumela umbiko",
+  reportSending: "Iyathumela…",
+  reportThanks: "Siyabonga, siwutholile.",
+  reportError: "Asikwazanga ukuthumela. Zama futhi ngomzuzwana.",
+  reportCatIncorrectDefinition: "Incazelo engalungile",
+  reportCatWrongEtymology: "Imvelaphi engalungile",
+  reportCatBadExample: "Umusho wesibonelo ombi",
+  reportCatKidsExplanation: "Inkinga yencazelo yezingane",
+  reportCatIdiomIssue: "Inkinga yesisho",
+  reportCatWrongImage: "Isithombe esingalungile",
+  reportCatQuizWrongAnswer: "Isivivinyo: kumakwe impendulo engalungile",
+  reportCatComposeFeedback: "Inkinga yempendulo yokubhala",
+  reportCatCompareResult: "Inkinga yomphumela wokuqhathanisa",
+  reportCatSomethingElse: "Okunye",
+
+  origin: "Umsuka",
+  historyNote: "Inothi lomlando",
+  throughTime: "Ngokuhamba kwesikhathi",
+  forKids: "Kwezingane",
+  commonExpressions: "Amatemu avamile",
+  idiomsWithMeaning: "Izisho ngalencazelo",
+  meaningN: (n) => `Incazelo ${n}`,
+  notJustPrimary: "Hhayi nje eyinhloko",
+  takeItFurther: "Yenza okwengeziwe",
+  doMoreWith: (w) => `Yenza okwengeziwe nge-${w}`,
+  saveToNotebook: "Gcina encwadini yamanothi",
+  saveToNotebookHint: "Buyela kuyo kamuva, ihleliwe, iseshekayo.",
+  generateImage: "Yakha isithombe",
+  generatingImage: "Iyakha…",
+  generateImageHint: "Umbukiso ocacile owenziwe yi-AI, wokhethelwe leli gama.",
+  composeSentence: "Bhala umusho",
+  composeSentenceHint: "Bhala owakho, uGadit abuyekeze ithoni nokufaneleka.",
+  practiceWord: "Zilolonge leli gama",
+  practiceWordHint: "Isivivinyo esifushane esilungiselelwe indlela ofunda ngayo.",
+  unlockWithClear: "Vula nge-Clear",
+  upgradeToClear: "Thuthukisela ku-Clear",
+  softWallAnonTitle: "Usebenzise ukusesha kwakho kwamahhala",
+  softWallAnonBody:
+    "Bhalisa mahhala ukuze usesha amagama afika angu-20 ngosuku, nezincazelo ezigcwele, izibonelo, izisho, nomsuka wegama.",
+  softWallSignupCta: "Bhalisa, kumahhala",
+  softWallBasicTitle: "Ufinyelele umkhawulo wanamuhla",
+  softWallBasicBody:
+    "Ama-akhawunti amahhala athola ukusesha okungu-20 ngosuku. Umkhawulo usetha kabusha kusasa, noma thuthukisela ku-Clear ukuthola ukusesha okungenamkhawulo kanye nezithombe, imodi yezingane, nempendulo yohlelo lolimi.",
+  softBannerSearchesLeft: (n) =>
+    Number(n) === 1
+      ? "Kusele ukusesha okukodwa kwamahhala namuhla, bhalisa mahhala ukuthola okungu-20 ngosuku."
+      : `Kusele ukusesha okungu-${n} kwamahhala namuhla, bhalisa mahhala ukuthola okungu-20 ngosuku.`,
+  clearUnlocksThis: "I-Clear ivula lokhu",
+  visualizeThisWord: "Bona ngamehlo",
+  visualBlurb:
+    "Isithombe esisodwa esicacile, esakhiwe yi-Gadit, insika ebonakalayo yendlela leli gama elizwakala ngayo.",
+  visualBlurbLocked:
+    "Yakha isithombe esicacile, esiyingqayizivele saleli gama, ukuqonda ngokubona.",
+  reportLabel: "Bika iphutha",
+
+  // ── Wordbook redesign ───────────────────────────────────────
+  wordOriginEyebrow: "Umsuka Wegama",
+  idiomsEyebrow: "Izisho namatemu",
+  wordOriginBackgroundLabel: "Isizinda",
+  wordOriginOriginalWord: "Igama loqobo",
+  wordOriginBreakdown: "Izingxenye zegama",
+  imageGeneratingLabel: "Iyakha isithombe…",
+  imageGeneratingHint: "Lokhu kuvame ukuthatha imizuzwana engu-10 kuya ku-15.",
+  imageOpenFullAria: "Vula isithombe ngosayizi ogcwele",
+  kidsComingSoon: "Incazelo yezingane iyeza maduze.",
+  compareComingSoon: "Imidlalo yamagama iyeza maduze.",
+  shareDefinitionAria: "Yabelana ngale ncazelo",
+  visualEyebrow: "Ngokubukwayo",
+  meaningsEyebrow: "Izincazelo",
+  takeItFurtherEyebrow: "Yenza okwengeziwe",
+  wordOriginLanguage: "Ulimi",
+  wordOriginOriginallyMeant: "Ekuqaleni lalisho",
+  actionCompose: "Bhala umusho",
+  actionQuiz: "Isivivinyo",
+  actionCompare: "Qhathanisa amagama",
+  actionKidsExplanation: "Incazelo yezingane",
+  saveToWordBook: "Gcina encwadini yamanothi",
+  savedToWordBook: "Kugcinwe encwadini yamanothi",
+  listenToWord: "Lalela",
+  offlinePin: "Gcina ungaxhunyiwe",
+  offlinePinned: "Kugcinwe ungaxhunyiwe",
+  offlinePinTitle: "Gcina leli gama ukuze ulifunde ungaxhunyiwe",
+  offlinePinnedTitle: "Kugcinwe, kuyatholakala ngaphandle kwe-WiFi",
+  offlineDownloadPack: "Landa iphakethe lokungaxhumeki",
+  offlineDownloadingPack: "Iyalanda…",
+  offlinePackHeader: "Iphakethe lokungaxhumeki",
+  offlinePackDescription: "Kungeza amagama aseshwa kakhulu ngolimi lwakho encwadini yakho yamanothi, futhi awagcina etholakala ngaphandle kwe-WiFi ukuze uwafunde ungaxhunyiwe.",
+  visualEmptyLabel: "Kuzodwetshwa isithombe saleli gama",
+  generateLabel: "Yakha",
+  savedAgoTemplate: (t) => `Kugcinwe · ${t}`,
+  shareLabel: "Yabelana",
+  backLabel: "Emuva",
+};
+
 
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   // uk/tr/pl/fa/id: core UI ships from T (i18n.ts); v2 long-tail strings

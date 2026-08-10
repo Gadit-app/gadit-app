@@ -39,6 +39,12 @@ const COPY: Record<string, { title: string; sub: string; present: string; words:
     present: "Present to class",
     words: "words",
   },
+  zu: {
+    title: "Amasethi amagama",
+    sub: "Khetha isihloko, uvule isethi, bese uyibonisa ekilasini. I-Gadit ichaza igama ngalinye ngesithombe nezibonelo.",
+    present: "Yibonise ekilasini",
+    words: "amagama",
+  },
   el: {
     title: "Σετ λέξεων",
     sub: "Διάλεξε ένα θέμα, άνοιξε ένα σετ και πρόβαλέ το στην τάξη. Το Gadit εξηγεί κάθε λέξη με μια εικόνα και παραδείγματα.",

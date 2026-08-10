@@ -53,6 +53,46 @@ Object.assign(CONTACT, {
     ],
   },
 
+  zu: {
+    pageTitle: "Xhumana Nathi Nemibuzo Evamile",
+    pageSubtitle: "Imibuzo evamile, kanye nendlela yokuxhumana nathi uma ungakutholi lokho okufunayo.",
+    faqHeading: "Imibuzo evame ukubuzwa",
+    stillNeedHelpHeading: "Usadinga usizo?",
+    stillNeedHelpBody: "Uma umbuzo wakho ungaphendulwanga lapha, sithumele i-imeyili ngqo. Sifunda wonke umyalezo.",
+    emailButton: "Thumela i-imeyili yosizo",
+    responseTime: "Ngokuvamile siphendula phakathi kwamahora angu-24 kuya kwangu-48.",
+    faq: [
+      {
+        q: "Yini i-Gadit?",
+        a: "I-Gadit yisichazamazwi sokuqonda igama ngokweqiniso. Uthola izincazelo, izibonelo zempilo yangempela, umsuka wegama, izisho nezingqondo zamagama, izincazelo zezingane, isithombe, ukuzijwayeza imisho ngempendulo, kanye nezivivinyo ezifushane. Konke endaweni eyodwa.",
+      },
+      {
+        q: "Yiziphi izilimi i-Gadit ezisekelayo?",
+        a: "Isikhombimsebenzisi okwamanje sisekela isiNgisi, isiHebheru, isi-Arabhu, isiRashiya, isiSpeyini, isiPutukezi, kanye nesiFulentshi, futhi ezinye zisendleleni.",
+      },
+      {
+        q: "I-Gadit yehluke kanjani kwisichazamazwi esijwayelekile?",
+        a: "Isichazamazwi esijwayelekile sikunika incazelo. I-Gadit ikusiza ukuthi wenze i-GAD egameni: bona zonke izincazelo, uthole incazelo efanele umusho wakho, ubuke igama njengesithombe, ubhale owakho umusho uthole nempendulo, futhi uzivivinye uze uligxilise.",
+      },
+      {
+        q: "Yiziphi izinhlelo zokubhalisa ezikhona?",
+        a: "Zintathu. I-Basic imahhala, ayidingi kubhalisa, futhi ihlanganisa izincazelo, izibonelo, nomsuka wegama. I-Clear yengeza izincazelo zezingane, izisho nezingqondo zamagama, imifanekiso, ukufaka ngezwi, ukuzijwayeza imisho ngempendulo, nomlando wokusesha, kanye nezinsuku ezingu-14 zokulinga mahhala. I-Deep yengeza izivivinyo ezisebenzisanayo ezikusiza ugxilise ngempela lokho okufundile.",
+      },
+      {
+        q: "Ngingakukhansela yini ukubhalisa kwami nganoma yisiphi isikhathi?",
+        a: "Yebo. Ungakukhansela ukubhalisa kwakho nganoma yisiphi isikhathi endaweni ye-akhawunti yakho. Ukufinyelela ohlelweni olukhokhelwayo kuhlala kuze kuphele isikhathi samanje sokukhokha.",
+      },
+      {
+        q: "Zinembe kangakanani izincazelo ze-Gadit?",
+        a: "Izincazelo zibhalwa ukuze zicace, zibe usizo, futhi zithembeke endleleni amagama asetshenziswa ngayo ngempela.",
+      },
+      {
+        q: "Kwenzekani ngedatha yami nomlando wokusesha?",
+        a: "Idatha ye-akhawunti yakho, umlando wokusesha (kuze kufike emagameni angu-10 amuva), nezithombe ezakhiwe kugcinwa ngokuphephile. Asiyithengisi neze idatha yakho. Ukuze uthole imininingwane egcwele, bona iNqubomgomo yethu Yobumfihlo.",
+      },
+    ],
+  },
+
   el: {
     pageTitle: "Επικοινωνία και συχνές ερωτήσεις",
     pageSubtitle: "Συχνές ερωτήσεις, και πώς να επικοινωνήσεις μαζί μας αν δεν βρεις αυτό που ψάχνεις.",

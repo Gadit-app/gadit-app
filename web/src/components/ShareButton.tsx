@@ -144,6 +144,12 @@ export const APP_SHARE_COPY: Record<
     shareLabel: "Share Gadit",
     copiedLabel: "Link copied",
   },
+  zu: {
+    title: "Gadit, Qonda amagama ngokugcwele",
+    text: "Ithuluzi elisha elikusiza uqonde ngempela igama ngalinye. Zonke izincazelo, izibonelo, izisho, nokuthi igama livelaphi. Mahhala ukuqala, ukuthuthukisa ngezindleko eziphansi kakhulu. Kufanele ukuzame:",
+    shareLabel: "Yabelana nge-Gadit",
+    copiedLabel: "Isixhumanisi sikopishiwe",
+  },
   el: {
     title: "Gadit, να καταλαβαίνεις τις λέξεις μέχρι το τέλος",
     text: "Ένα νέο εργαλείο που σε βοηθά να καταλάβεις πραγματικά κάθε λέξη. Όλες οι σημασίες, παραδείγματα, ιδιωματισμοί και η προέλευση της λέξης. Δωρεάν για ξεκίνημα, αναβάθμιση με πολύ χαμηλό κόστος. Αξίζει μια δοκιμή:",

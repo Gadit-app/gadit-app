@@ -42,6 +42,17 @@ const COPY = {
     retry: "Try again",
     toPricing: "Go to pricing",
   },
+  zu: {
+    okTitle: "Usungenile",
+    okBody: "Ukulinga kwakho kwezinsuku ezingu-14 kuqalile. I-akhawunti yakho ivuselelwa emizuzwaneni. Uma okuthile kungavuleki ngokushesha, vuselela ikhasi.",
+    ctaGeneral: "Qala ukubheka amagama",
+    ctaFamily: "Iya endaweni yomndeni wakho",
+    ctaSchools: "Phatha isikole sakho",
+    failTitle: "Inkokhelo ayiqedwanga",
+    failBody: "Awukhokhiswanga. Ungazama futhi, kuthatha ngaphansi komzuzu.",
+    retry: "Zama futhi",
+    toPricing: "Iya emananini",
+  },
   el: {
     okTitle: "Είσαι μέσα",
     okBody: "Η δοκιμή σου των 14 ημερών ξεκίνησε. Ο λογαριασμός σου ενημερώνεται μέσα σε λίγες στιγμές. Αν κάτι δεν ανοίξει αμέσως, ανανέωσε τη σελίδα.",

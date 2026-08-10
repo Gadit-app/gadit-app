@@ -111,6 +111,13 @@ const COPY: Record<string, {
     emptyHint: "Find a word and tap 'Save to Notebook'.",
     goSearch: "Back to search",
   },
+  zu: {
+    title: "Ibhuku Lami Lamanothi",
+    subtitle: "Wonke amagama owaqoqile, owawagcina nowawahlela.",
+    empty: "Ibhuku lakho lamanothi alinalutho.",
+    emptyHint: "Thola igama bese uthepha ku-'Gcina Ebhukwini'.",
+    goSearch: "Buyela ekusesheni",
+  },
   el: {
     title: "Το τετράδιό μου",
     subtitle: "Κάθε λέξη που έχεις συλλέξει, αποθηκευμένη και οργανωμένη.",

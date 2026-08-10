@@ -514,6 +514,52 @@ const GROUP_COPY: Record<string, GroupCopy> = {
     },
     bubble: "Now I gad it!",
   },
+  zu: {
+    groupTitles: {
+      understand: "Qonda igama",
+      learn: <>Qonda futhi <Hl>ubone</Hl> igama</>,
+      master: <>Qonda, ubone, futhi <Hl>ukhumbule igama kuze kube phakade</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Yonke incazelo, imisho yangempela ngomongo, izisho eliphila kuzo, nokuthi lisukaphi.",
+      learn:
+        "Isithombe segama, uhlobo olulungele izingane, incwadi yakho siqu, nomusho owubhalayo onempendulo.",
+      master:
+        "Imibuzo eyenzelwe wena nemidlalo yamagama egcina igama isikhathi eside.",
+    },
+    family: {
+      title: <>Qonda, bona, khumbula <Hl>kuwo wonke umndeni</Hl></>,
+      sub: "Ukubhalisa okukodwa kunikeza ilungu ngalinye lomndeni i-akhawunti yalo siqu, nazo zonke izici ezithuthukile. Kufika ezinganeni ezi-5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Iphrofayela ehlukene esebenzela ilungu ngalinye lomndeni",
+          body: "Incwadi yamagama, umlando wosesho, nochungechunge lokufunda oluqondene nengane ngayinye nomzali ngamunye.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Xhuma idivayisi ngekhodi ye-QR",
+          body: "Ingane yakho iskena i-QR efonini yayo bese ingena. Ihlala ixhunywe kuze kube phakade, ngaphandle kwephasiwedi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Ideshibhodi yomzali",
+          body: "Bona wonke amagama ingane ngayinye eyawabhekayo nokuthi nini, ulandele ijubane layo ngokushesha.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Kufika ezinganeni ezi-5 ngokubhalisa okukodwa",
+          body: "Ingane ngayinye ithola zonke izici ze-Deep. Umzali ukhokha kanye kuwo wonke umndeni.",
+        },
+      ],
+    },
+    bubble: "Manje sengiyi-gad it!",
+  },
   el: {
     groupTitles: {
       understand: "Κατάλαβε τη λέξη",
@@ -1183,6 +1229,31 @@ const COPY: Record<string, {
       { id: "compose",     icon: "compose",     tier: "clear", title: "Write a sentence, get feedback",   body: "Compose your own sentence with the word and get instant correction and feedback." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quizzes",             body: "A daily quiz on the words you learned, so they stay with you for the long run." },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "Word games",                       body: "Games that grow your vocabulary: matching, guessing, building connections between words." },
+    ],
+  },
+  zu: {
+    heroEyebrow: "Izici",
+    heroTitle: "Isichazamazwi esingagcini encazelweni.",
+    heroSub: "I-Gadit liqonda igama ngokugcwele. Yonke incazelo, imisho yangempela ngomongo, izisho, umsuka nokuzijwayeza. Kuze kube igama liqondakala ngempela. Yilokho esikubiza ngokuthi uku-GAD-a igama.",
+    ctaPrimary: "Qala mahhala",
+    ctaSecondary: "Bona amanani",
+    signin: "Ngena", pricing: "Amanani", search: "Sesha", features: "Izici",
+    sectionLabel: "Okutholayo",
+    finalCtaTitle: "Usukulungele ukuyizama?",
+    finalCtaSub: "Qala nge-Basic, mahhala ngokuphelele. Thuthukisa ngokuthepha kanye, kuphela lapho ufuna okwengeziwe.",
+    finalCtaBtn: "Qala manje",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Zonke izincazelo",                  body: "Zonke izincazelo zegama, ngisho nezingavamile, zihlelwe ngokuthi zisetshenziswa kangakanani." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Imisho yangempela ngomongo",        body: "Imisho yangempela emithathu encazelweni ngayinye, ukuze umongo uqondakale ngokushesha." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Izisho nemishwana",                 body: "Wonke umshwana igama eliyingxenye yawo, nencazelo egcwele yomshwana." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Ukuthi igama lisukaphi",           body: "Ulimi igama eliqale kulo, nokuthi lalisho ukuthini ekuqaleni." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Incazelo yezingane",                body: "Uhlobo olucacile, olulula ingane engalufunda ngaphandle kwamagama anzima." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Igama njengesithombe",             body: "Isithombe esiyingqayizivele segama, esihambisana ncamashi nencazelo oyifundayo." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Incwadi yamagama yakho siqu",       body: "Londoloza amagama ofuna ukuwakhumbula. Ayatholakala ngisho ngaphandle kwe-inthanethi." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Bhala umusho, uthole impendulo",    body: "Yakha umusho wakho siqu ngegama bese uthola ukulungiswa nempendulo ngokushesha." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Imibuzo eyenzelwe wena",            body: "Umbuzo wansuku zonke ngamagama owawafundayo, ukuze ahlale nawe isikhathi eside." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Imidlalo yamagama",                 body: "Imidlalo ekhulisa isilulumagama sakho: ukuhambisanisa, ukuqagela, ukwakha ukuxhumana phakathi kwamagama." },
     ],
   },
   el: {

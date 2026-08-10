@@ -52,6 +52,11 @@ const COPY: Record<string, {
     hubLede: "Pick a game to sharpen your vocabulary",
     backToClassroom: "← Back to classroom",
   },
+  zu: {
+    hubTitle: "Imidlalo Yamagama",
+    hubLede: "Khetha umdlalo ukuze ulole isilulumagama sakho",
+    backToClassroom: "← Buyela ekilasini",
+  },
   el: {
     hubTitle: "Παιχνίδια λέξεων",
     hubLede: "Διάλεξε ένα παιχνίδι για να βελτιώσεις το λεξιλόγιό σου",

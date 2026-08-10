@@ -113,6 +113,31 @@ const COPY: Record<string, Copy> = {
     secondaryCta: "Maybe later",
     closeAria: "Close",
   },
+  zu: {
+    featureNames: {
+      image: "Bonisa igama ngesithombe",
+      kids: "Incazelo yezingane",
+      compose: "Bhala umusho uthole impendulo",
+      notebook: "Ibhuku lakho lamagama",
+      quiz: "Ukuhlolwa okwenzelwe wena",
+      compare: "Imidlalo yamagama",
+    },
+    featureBlurbs: {
+      image: "Isithombe esikhethekile esenzelwa igama ngalinye.",
+      kids: "Incazelo elula noma yiyiphi ingane eyiqondayo, enezibonelo ezivela emhlabeni wayo.",
+      compose: "Bhala owakho umusho ngegama bese uthola impendulo ngokushesha ngendlela oye walisebenzisa ngayo.",
+      notebook: "Qoqa amagama owafundile ebhukwini lakho ledijithali, elitholakala kuwe noma kuphi.",
+      quiz: "Ukuhlolwa okusheshayo okusiza igama ngalinye ligxile.",
+      compare: "Imidlalo emifushane ekusiza ukhumbule amagama owawagcinile.",
+    },
+    tierLabels: { clear: "Clear", deep: "Deep" },
+    tierIs: { clear: "iyisici se-Clear", deep: "iyisici se-Deep" },
+    pricePerMonth: { clear: "$2.99 / inyanga", deep: "$4.99 / inyanga" },
+    trialNote: "Izinsuku ezingu-14 mahhala · khansela noma nini",
+    primaryCta: "Zama izinsuku ezingu-14 mahhala",
+    secondaryCta: "Mhlawumbe kamuva",
+    closeAria: "Vala",
+  },
   el: {
     featureNames: {
       image: "Εικονογράφηση της λέξης",

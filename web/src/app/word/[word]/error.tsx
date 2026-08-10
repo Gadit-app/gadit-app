@@ -32,6 +32,12 @@ const COPY: Record<
     retry: "Try again",
     home: "Back home",
   },
+  zu: {
+    title: "Kukhona okungahambanga kahle",
+    body: "Asikwazanga ukulayisha leli gama. Kungenzeka kube yinkinga yesikhashana, sicela uzame futhi.",
+    retry: "Zama futhi",
+    home: "Buyela ekhaya",
+  },
   el: {
     title: "Κάτι πήγε στραβά",
     body: "Δεν μπορέσαμε να φορτώσουμε αυτή τη λέξη. Ίσως είναι μια προσωρινή δυσλειτουργία, δοκίμασε ξανά.",

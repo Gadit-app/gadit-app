@@ -68,7 +68,13 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "βοηθητικό ρήμα", "particle": "μόριο", "numeral": "αριθμητικό",
     "proper noun": "κύριο όνομα", "phrase": "φράση", "idiom": "ιδιωματισμός",
   },
-  zu: {},
+  zu: {
+    "noun": "ibizo", "verb": "isenzo", "adjective": "isiphawulo", "adverb": "isandiso",
+    "preposition": "isihlanganisi", "conjunction": "isihlanganiso", "pronoun": "isabizwana",
+    "interjection": "isibabazo", "determiner": "isibaluli", "article": "isikhombisi",
+    "auxiliary": "isenzo elisizayo", "particle": "isakhi", "numeral": "isibalo",
+    "proper noun": "ibizoqho", "phrase": "umshwana", "idiom": "isisho",
+  },
   en: {
     "noun": "noun", "verb": "verb", "adjective": "adjective", "adverb": "adverb",
     "preposition": "preposition", "conjunction": "conjunction", "pronoun": "pronoun",

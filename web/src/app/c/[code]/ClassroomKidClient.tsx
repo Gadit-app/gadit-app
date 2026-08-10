@@ -100,6 +100,20 @@ const COPY: Record<string, {
     games: "Word Games",
     notebook: "Class Notebook",
   },
+  zu: {
+    welcomeTo: "Siyakwamukela ku-",
+    greetingPrefix: "Sawubona,",
+    switchUser: "(akumina)",
+    pickName: "Sawubona! Khetha igama lakho",
+    classroomDefault: "Igumbi lokufunda",
+    searchPh: "Thayipha igama",
+    searchBtn: "Bheka",
+    sentencePh: "(Kungakhethwa) Thayipha umusho igama elivela kuwo ukuze uthole incazelo eyodwa enembayo",
+    errorTitle: "Ikhodi ayilungile",
+    errorBody: "Cela uthisha wakho isixhumanisi futhi.",
+    games: "Imidlalo Yamagama",
+    notebook: "Incwadi Yekilasi",
+  },
   el: {
     welcomeTo: "Καλώς ήρθες στην",
     greetingPrefix: "Γεια,",
@@ -158,6 +172,11 @@ const OFFHOURS_HINT: Record<string, { line1: string; cta: string; link: string }
   en: {
     line1: "Outside class hours — looking words up without images and kids' explanation.",
     cta: "Want full Gadit at home? Family plan",
+    link: "/pricing",
+  },
+  zu: {
+    line1: "Ngaphandle kwamahora ekilasi. Sibheka amagama ngaphandle kwezithombe nencazelo yezingane.",
+    cta: "Ufuna i-Gadit egcwele ekhaya? Uhlelo lomndeni",
     link: "/pricing",
   },
   el: {

@@ -43,6 +43,7 @@ type Copy = {
 
 const COPY: Record<string, Copy> = {
   en: { account: "Account",            family: "My family",         school: "My school",         dashboard: "Partner area",  signOut: "Sign out",    openMenu: "Open account menu" },
+  zu: { account: "I-akhawunti",         family: "Umndeni wami",      school: "Isikole sami",      dashboard: "Indawo yabalingani", signOut: "Phuma",       openMenu: "Vula imenyu ye-akhawunti" },
   el: { account: "Λογαριασμός",         family: "Η οικογένειά μου",  school: "Το σχολείο μου",    dashboard: "Περιοχή συνεργατών", signOut: "Αποσύνδεση",  openMenu: "Άνοιγμα μενού λογαριασμού" },
   he: { account: "החשבון שלי",          family: "המשפחה שלי",        school: "בית הספר שלי",      dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
   ar: { account: "حسابي",               family: "عائلتي",           school: "مدرستي",            dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
