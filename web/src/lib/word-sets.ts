@@ -86,10 +86,11 @@ export const WORD_SETS: WordSet[] = [
 // first meaning. Simple wording, exactly as Gadi teaches it.
 export const CURATED_DEFS: Record<string, string> = {
   // שפה
-  "אות": "כל סימן מסימני הכתב בשפה שמייצג צליל מסוים.",
+  "אות": "כל סימן מסימני הכתב בעברית שמייצג צליל מסוים.",
+  "אלף-בית": "כל אותיות הכתב בעברית לפי הסדר, מהאות א ועד האות ת (22 אותיות).",
   "צליל": "צירוף של אות וניקוד.",
-  "עיצור": "צליל שאנחנו יוצרים בתוך חלל הפה.",
-  "תנועה": "צליל האוויר שיוצא ומתמשך מהפה (האותיות א, ה, ו, י).",
+  "עיצור": "צליל שנוצר כשסוגרים או מצמצמים את חלל הפה, כמו הצלילים של האותיות ב או מ.",
+  "תנועה": "צליל שנוצר כשהפה פתוח והאוויר יוצא ממנו בחופשיות. חמש התנועות הן a, e, i, o, u.",
   "ניקוד": "סימן שמצטרף לאות כדי לייצג תנועות.",
   "אות דגושה": "אות שנאמרת בצורה חזקה, עם נקודה (דגש) בתוך האותיות ב, כ, פ.",
   "אות רפויה": "אות שנאמרת בצורה חלשה, בלי נקודה בתוך האותיות ב, כ, פ.",
@@ -137,6 +138,45 @@ export const CURATED_DEFS: Record<string, string> = {
 /** Curated single classroom definition for a word, if we have one. */
 export function curatedDef(word: string): string | undefined {
   return CURATED_DEFS[word.trim()];
+}
+
+// Curated per-word IMAGE HINTS (Gadi 2026-08-08). An explicit ENGLISH
+// art-direction sentence that OVERRIDES the AI-guessed englishBrief in
+// word-image.ts, so gpt-image-1 draws the pedagogically-correct picture
+// instead of its default guess. The English wording renders best on
+// gpt-image-1, but the hint explicitly demands HEBREW letters / nikud
+// where the concept is about Hebrew script. Written for a flat,
+// kid-friendly illustration with no captions (the outer prompt in
+// word-image.ts already adds the flat-style + no-text wrapper).
+//
+// Why these exist: the language set "אותיות וצלילים" came out wrong —
+// "אות" drew LATIN letters (must be HEBREW), and the articulation was
+// reversed: a VOWEL (תנועה) is made with an OPEN mouth and a CONSONANT
+// (עיצור) with a CLOSED / constricted mouth (confirmed articulatory
+// phonetics), yet the guesses drew a wide-open mouth for עיצור and a car
+// for תנועה. These hints pin down the correct, Hebrew, kid-level concept.
+export const CURATED_IMAGE_HINTS: Record<string, string> = {
+  "אות":
+    "A colorful grid of large, clearly HEBREW alphabet letters (aleph א, bet ב, gimel ג, dalet ד, he ה, vav ו), unmistakably Hebrew script and NOT Latin letters, bright and kid-friendly.",
+  "אלף-בית":
+    "The full Hebrew alphabet shown in order from aleph to tav as a clean, colorful chart of large Hebrew letters, clearly Hebrew script and NOT Latin letters, kid-friendly.",
+  "עיצור":
+    "A friendly side profile of a child's face making a CONSONANT sound with the lips pressed together and the mouth CLOSED or narrowed (like the Hebrew sounds ב or מ), with one large Hebrew consonant letter beside the face. The mouth is clearly CLOSED, not open.",
+  "תנועה":
+    "A friendly side profile of a child's face with the mouth WIDE OPEN saying an 'ah' vowel sound, air flowing out freely, with a single Hebrew vowel-point (nikud) mark beside the face. The mouth is clearly OPEN. NOT a car, NOT a road, NOT traffic.",
+  "ניקוד":
+    "Exactly six large Hebrew letters, each with ONE big, clear, emphasized vowel-point (nikud) mark below or inside it (a patach horizontal line, a kamatz line-with-dot, a tsere two dots, a chirik single dot). Few letters, the colorful nikud marks are the prominent focus. Hebrew script only.",
+  "צליל":
+    "Two or three large Hebrew letters next to bright, friendly musical notes, showing that a letter makes a sound. Clearly Hebrew script, cheerful and kid-friendly.",
+  "אות דגושה":
+    "One single large Hebrew letter bet (ב) with a clear, emphasized DOT (dagesh) in its centre, the dot standing out, bright and kid-friendly. Hebrew script only.",
+  "אות רפויה":
+    "One single large Hebrew letter vet (ב) WITHOUT any dot inside it, plain and empty, shown next to the same letter WITH a dot, so the difference between the undotted (rafa) and dotted letter is clear. Hebrew script only, kid-friendly.",
+};
+
+/** Curated ENGLISH image art-direction hint for a word, if we have one. */
+export function curatedImageHint(word: string): string | undefined {
+  return CURATED_IMAGE_HINTS[word.trim()];
 }
 
 export function getWordSet(id: string): WordSet | undefined {

@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
+import { curatedImageHint } from "@/lib/word-sets";
 
 /**
  * Admin-side image generation for classroom word sets.
@@ -134,7 +135,14 @@ export async function generateWordImage(opts: {
     return { status: "error", error: "OPENAI_API_KEY not configured", cacheKey: cKey };
   }
 
-  const brief = await englishBrief(word, meaning, example, uiLang);
+  // A curated per-word hint (word-sets.ts) OVERRIDES the AI-guessed brief:
+  // it pins the exact, pedagogically-correct picture (Hebrew letters, the
+  // right open/closed mouth for vowel/consonant, etc.). Everything else
+  // below — the kids/adult wrapper, gpt-image-1 call, versioned storage
+  // path, cacheKey and imageCache write — stays identical, so a warmed
+  // image is still found by the classroom on a cache hit.
+  const hint = curatedImageHint(word);
+  const brief = hint || (await englishBrief(word, meaning, example, uiLang));
   const prompt = brief
     ? (kidsMode
         ? `A modern flat illustration for a children's educational app, ages 5-12. Draw this: ${brief}. Bright cheerful colors, simple geometric shapes, friendly cartoon style with soft outlines, clean white background. The subject fills the frame and is instantly recognizable. Do not add any caption or descriptive words on top of the image.`
