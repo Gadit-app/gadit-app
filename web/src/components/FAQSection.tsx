@@ -6,7 +6,7 @@ import { CONTACT } from "@/lib/contact-i18n";
 
 export default function FAQSection() {
   const { lang, dir } = useLang();
-  const c = CONTACT[lang];
+  const c = CONTACT[lang] ?? CONTACT.en;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (

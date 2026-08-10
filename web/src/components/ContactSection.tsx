@@ -7,7 +7,7 @@ const SUPPORT_EMAIL = "support@gadit.app";
 
 export default function ContactSection() {
   const { lang, dir } = useLang();
-  const c = CONTACT[lang];
+  const c = CONTACT[lang] ?? CONTACT.en;
 
   return (
     <section id="contact" className="py-24 px-4 bg-white scroll-mt-20" dir={dir}>

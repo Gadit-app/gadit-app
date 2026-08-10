@@ -23,6 +23,7 @@ const LANG_HINT: Record<string, string> = {
   fa: "fa",
   id: "id",
   nl: "nl",
+  el: "el",
 };
 
 export async function POST(req: NextRequest) {

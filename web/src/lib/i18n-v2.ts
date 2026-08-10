@@ -8143,10 +8143,14 @@ const am: Partial<V2Strings> = {
     "በቋንቋዎ በብዛት የሚፈለጉትን ቃላት ወደ ደብተርዎ ይጨምራል እና ያለ WiFi ከመስመር ውጭ ለማጥናት ዝግጁ ያደርጋቸዋል።",
 };
 
+// el (Greek) — seeded empty; v2() falls back to English per-key until the
+// native Greek strings are spliced in.
+const el: Partial<V2Strings> = {};
+
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   // uk/tr/pl/fa/id: core UI ships from T (i18n.ts); v2 long-tail strings
   // fall back to English via v2() until translated.
-  uk, tr, pl, fa, id, nl,
+  uk, tr, pl, fa, id, nl, el,
   en,
   he,
   ar,

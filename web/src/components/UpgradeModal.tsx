@@ -48,7 +48,7 @@ export function isUpgradeSnoozed(feature: UpgradeFeature): boolean {
   }
 }
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el";
 
 interface Copy {
   featureNames: Record<UpgradeFeature, string>;

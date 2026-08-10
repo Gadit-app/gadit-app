@@ -97,7 +97,10 @@ const jetbrainsMono = JetBrains_Mono({
 // Inter — body sans for the wordbook design. Coexists with Geist for now.
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin", "latin-ext"],
+  // "greek" added for the el (Greek) UI locale — Inter ships full Greek
+  // glyph coverage, so Greek renders in the brand body font instead of an
+  // inconsistent system fallback. No separate Greek font needed.
+  subsets: ["latin", "latin-ext", "greek"],
   weight: ["300", "400", "500", "600"],
   display: "swap",
 });
@@ -263,6 +266,12 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
     description:
       "Een nieuwe tool die je elk woord echt laat begrijpen. Alle betekenissen, voorbeelden, uitdrukkingen en de herkomst van het woord. Gratis om te beginnen, en de upgrade is heel betaalbaar. Zeker het proberen waard.",
     locale: "nl_NL",
+  },
+  el: {
+    title: "Gadit, κατανόησε πλήρως κάθε λέξη",
+    description:
+      "Ένα νέο εργαλείο που σε βοηθά να κατανοήσεις πραγματικά κάθε λέξη. Όλες οι σημασίες, παραδείγματα, εκφράσεις και η προέλευση της λέξης. Δωρεάν για να ξεκινήσεις, και η αναβάθμιση είναι πολύ προσιτή. Αξίζει να το δοκιμάσεις.",
+    locale: "el_GR",
   },
 };
 

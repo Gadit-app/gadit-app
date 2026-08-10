@@ -58,6 +58,7 @@ export function LangProvider({
       // Keep this set in sync with middleware.ts SUPPORTED_LANGS.
       const supported = new Set([
         "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
+        "uk", "tr", "pl", "fa", "id", "nl", "el",
       ]);
       const url = new URL(window.location.href);
       const segs = url.pathname.split("/").filter(Boolean);

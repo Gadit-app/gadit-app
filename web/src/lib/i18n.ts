@@ -1,4 +1,4 @@
-export type Lang = "en" | "he" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl";
+export type Lang = "en" | "he" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el";
 
 /**
  * The single source of truth for every supported UI language. `flag`
@@ -31,6 +31,7 @@ export const LANGUAGES: { code: Lang; label: string; dir: "ltr" | "rtl"; flag: s
   { code: "fa", label: "فارسی",      dir: "rtl", flag: "ir" },
   { code: "id", label: "Indonesia", dir: "ltr", flag: "id" },
   { code: "nl", label: "Nederlands", dir: "ltr", flag: "nl" },
+  { code: "el", label: "Ελληνικά", dir: "ltr", flag: "gr" },
 ];
 
 /** Stable CDN that returns a small PNG flag for an ISO country code. */
@@ -67,6 +68,7 @@ export function detectBrowserLang(): Lang {
   if (lang === "fa") return "fa";
   if (lang === "id") return "id";
   if (lang === "nl") return "nl";
+  if (lang === "el") return "el";
   return "en";
 }
 
@@ -6115,6 +6117,9 @@ export const T: Record<Lang, {
     reviewDoneText: "Kamu meninjau {count} kata hari ini.",
     reviewBack: "Kembali ke buku kata",
   },
+  // el (Greek) — seeded empty; the fallback loop below fills every key
+  // from English until the native Greek strings are spliced in.
+  el: {} as unknown as (typeof T)["en"],
 };
 
 // Fill missing it/ja/hi/am keys from English so the build sees a complete
@@ -6133,6 +6138,9 @@ for (const key of Object.keys(T.en) as Array<keyof typeof T.en>) {
   }
   if ((T.am as Record<string, unknown>)[key] === undefined) {
     (T.am as Record<string, unknown>)[key] = T.en[key];
+  }
+  if ((T.el as Record<string, unknown>)[key] === undefined) {
+    (T.el as Record<string, unknown>)[key] = T.en[key];
   }
 }
 

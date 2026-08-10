@@ -29,7 +29,7 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
-type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am";
+type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el";
 
 interface NotebookItem {
   word: string;
