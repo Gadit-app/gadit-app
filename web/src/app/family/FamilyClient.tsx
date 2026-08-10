@@ -26,6 +26,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
+import { enableOwnerPush, disableOwnerPush } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
   FamilyMember,
@@ -1142,6 +1143,7 @@ export function FamilyClient() {
 
           {tab === "settings" && (
             <div className="fam-tab fam-settings">
+              <NotifSettings user={user} lang={lang} dir={dir} />
               <div className="fam-set-row">
                 <div className="fam-set-icon"><NavIcon name="settings" /></div>
                 <div className="fam-set-main">
@@ -1184,6 +1186,196 @@ export function FamilyClient() {
           )}
         </main>
       </div>
+    </div>
+  );
+}
+
+// ─── Word-alert notification settings (parent) ─────────────────
+const NOTIF_COPY: Record<string, {
+  title: string; sub: string; enable: string;
+  instant: string; instantSub: string; daily: string; dailySub: string;
+  pushOn: string; pushUnavailable: string; emailNote: string;
+}> = {
+  en: {
+    title: "Word alerts",
+    sub: "Get notified when your child looks up a word in the dictionary.",
+    enable: "Notify me when my child looks up a word",
+    instant: "Every word", instantSub: "A notification the moment they look one up.",
+    daily: "Daily summary", dailySub: "One notification at the end of the day.",
+    pushOn: "Phone alerts are on for this device.",
+    pushUnavailable: "This device can't show a phone banner, but you'll still get emails.",
+    emailNote: "Sent to your account email, and as a phone banner when available.",
+  },
+  he: {
+    title: "התראות על מילים",
+    sub: "קבלו התראה כשהילד מחפש מילה במילון.",
+    enable: "הודיעו לי כשהילד מחפש מילה",
+    instant: "כל מילה", instantSub: "התראה ברגע שהילד מחפש מילה.",
+    daily: "סיכום יומי", dailySub: "התראה אחת בסוף היום.",
+    pushOn: "התראות לטלפון פעילות במכשיר הזה.",
+    pushUnavailable: "המכשיר הזה לא יכול להציג באנר, אבל עדיין תקבלו אימיילים.",
+    emailNote: "נשלח למייל של החשבון, וכבאנר בטלפון כשאפשר.",
+  },
+};
+
+function NotifSettings({
+  user,
+  lang,
+  dir,
+}: {
+  user: { getIdToken: () => Promise<string> } | null;
+  lang: string;
+  dir: "ltr" | "rtl";
+}) {
+  const t = NOTIF_COPY[lang] ?? NOTIF_COPY.en;
+  const [enabled, setEnabled] = useState(false);
+  const [mode, setMode] = useState<"instant" | "daily">("instant");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!user) return;
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/family/notify-prefs", {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (data?.prefs && !cancelled) {
+          setEnabled(!!data.prefs.enabled);
+          setMode(data.prefs.mode === "daily" ? "daily" : "instant");
+        }
+      } catch {
+        /* nice-to-have */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  async function savePrefs(nextEnabled: boolean, nextMode: "instant" | "daily") {
+    if (!user) return;
+    const idToken = await user.getIdToken();
+    await fetch("/api/family/notify-prefs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+      body: JSON.stringify({ enabled: nextEnabled, mode: nextMode }),
+    });
+  }
+
+  async function onToggle() {
+    if (!user || busy) return;
+    setBusy(true);
+    setNote("");
+    try {
+      if (!enabled) {
+        const idToken = await user.getIdToken();
+        const r = await enableOwnerPush(idToken);
+        setNote(r.ok ? t.pushOn : t.pushUnavailable);
+        await savePrefs(true, mode); // email fallback works even if push didn't
+        setEnabled(true);
+      } else {
+        await savePrefs(false, mode);
+        const idToken = await user.getIdToken();
+        await disableOwnerPush(idToken);
+        setEnabled(false);
+        setNote("");
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function pickMode(m: "instant" | "daily") {
+    if (busy || m === mode) return;
+    setMode(m);
+    if (enabled) await savePrefs(enabled, m);
+  }
+
+  const TEAL = "#0EA5A5";
+  return (
+    <div
+      dir={dir}
+      style={{
+        background: "#fff",
+        border: "1px solid #E7E5E4",
+        borderRadius: 14,
+        padding: "16px 18px",
+        marginBottom: 14,
+      }}
+    >
+      <div style={{ fontSize: 15, fontWeight: 800, color: "#1C1917" }}>{t.title}</div>
+      <div style={{ fontSize: 13, color: "#78716C", marginTop: 3, lineHeight: 1.6 }}>{t.sub}</div>
+
+      <label
+        style={{
+          display: "flex", alignItems: "center", gap: 12, marginTop: 14,
+          cursor: busy ? "default" : "pointer",
+        }}
+      >
+        <span
+          role="switch"
+          aria-checked={enabled}
+          onClick={onToggle}
+          style={{
+            flex: "0 0 auto", width: 44, height: 26, borderRadius: 999,
+            background: enabled ? TEAL : "#D6D3D1", position: "relative",
+            transition: "background 160ms ease", opacity: busy ? 0.6 : 1,
+          }}
+        >
+          <span
+            style={{
+              position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3,
+              width: 20, height: 20, borderRadius: "50%", background: "#fff",
+              transition: "inset-inline-start 160ms ease",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+            }}
+          />
+        </span>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "#292524" }}>{t.enable}</span>
+      </label>
+
+      {enabled && (
+        <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+          {(["instant", "daily"] as const).map((m) => {
+            const active = mode === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => pickMode(m)}
+                style={{
+                  display: "flex", alignItems: "flex-start", gap: 10, textAlign: "start",
+                  padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+                  border: `1.5px solid ${active ? TEAL : "#E7E5E4"}`,
+                  background: active ? "rgba(14,165,165,0.06)" : "#fff",
+                }}
+              >
+                <span
+                  style={{
+                    flex: "0 0 auto", marginTop: 2, width: 16, height: 16, borderRadius: "50%",
+                    border: `4px solid ${active ? TEAL : "#D6D3D1"}`,
+                    background: "#fff", boxSizing: "border-box",
+                  }}
+                />
+                <span>
+                  <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#292524" }}>
+                    {m === "instant" ? t.instant : t.daily}
+                  </span>
+                  <span style={{ display: "block", fontSize: 12.5, color: "#78716C", marginTop: 1 }}>
+                    {m === "instant" ? t.instantSub : t.dailySub}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+          <div style={{ fontSize: 12, color: "#A8A29E", marginTop: 2 }}>
+            {note || t.emailNote}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

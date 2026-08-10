@@ -122,3 +122,41 @@ self.addEventListener("fetch", (event) => {
     );
   }
 });
+
+// ─── Web Push ──────────────────────────────────────────────────
+// Parent "notify me when my child looks up a word" alerts. The server
+// (lib/push.ts) sends a JSON payload { title, body, url, tag }.
+self.addEventListener("push", (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { title: "Gadit", body: event.data ? event.data.text() : "" };
+  }
+  const title = data.title || "Gadit";
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: data.body || "",
+      icon: "/icon-192.png",
+      badge: "/favicon-32x32.png",
+      tag: data.tag || "gadit",
+      data: { url: data.url || "/family" },
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || "/family";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const c of clients) {
+        if ("focus" in c) {
+          c.navigate(target);
+          return c.focus();
+        }
+      }
+      return self.clients.openWindow(target);
+    })
+  );
+});

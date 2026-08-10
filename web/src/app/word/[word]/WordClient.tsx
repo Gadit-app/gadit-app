@@ -335,7 +335,7 @@ export function WordClient({
   initialResult?: WordResult | null;
   preloadLang?: string;
 }) {
-  const { user, plan: authPlan, promptLogin } = useAuth();
+  const { user, plan: authPlan, promptLogin, familyRole } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -422,6 +422,31 @@ export function WordClient({
   const [result, setResult] = useState<WordResult | null>(initialResult);
   const [loading, setLoading] = useState(!initialResult);
   const [isSaved, setIsSaved] = useState(false);
+
+  // Parent alert: when the searcher is a child in a family, tell the
+  // server so the parent gets notified (push + email) that their kid
+  // looked up this word. Best-effort and fire-and-forget; the endpoint
+  // is a silent no-op for anyone who isn't a kid. Fires once per word.
+  const notifiedWordRef = useRef<string>("");
+  useEffect(() => {
+    const w = result?.word;
+    if (!w || familyRole !== "kid" || !user) return;
+    if (notifiedWordRef.current === w) return;
+    notifiedWordRef.current = w;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch("/api/family/notify-search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ word: w, language: result?.language ?? "" }),
+          keepalive: true,
+        });
+      } catch {
+        /* best effort — never disturb the search flow */
+      }
+    })();
+  }, [result?.word, result?.language, familyRole, user]);
   // Offline pin state: true means the user has explicitly downloaded
   // this word for offline study (vs the implicit auto-cache that all
   // Clear/Deep users get on view). Loaded from IDB once the result
