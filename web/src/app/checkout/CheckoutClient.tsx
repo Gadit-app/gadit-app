@@ -92,6 +92,7 @@ const COPY = {
     monthlyLabel: "חודשי",
     yearlyLabel: "שנתי",
     cycleQ: "איך לחייב אחרי הניסיון?",
+    yearlyRibbon: "חודשיים חינם",
     trialToday: "היום תשלמו: 0 ₪",
     trialLine: "14 ימי ניסיון חינם. החיוב הראשון רק בסוף הניסיון.",
     afterTrial: "לאחר הניסיון:",
@@ -120,6 +121,7 @@ const COPY = {
     monthlyLabel: "Monthly",
     yearlyLabel: "Yearly",
     cycleQ: "How to bill after the trial?",
+    yearlyRibbon: "2 months free",
     trialToday: "Due today: $0",
     trialLine: "14 day free trial. The first charge comes only when the trial ends.",
     afterTrial: "After the trial:",
@@ -357,24 +359,31 @@ export default function CheckoutClient() {
                     Gadit {tier.name}
                   </span>
                 </div>
+                <div style={styles.trialBox}>
+                  <div style={styles.trialToday}>{c.trialToday}</div>
+                  <div style={styles.trialLine}>{c.trialLine}</div>
+                </div>
                 {otherTier && otherId && (() => {
                   const monthlyT = tier.cycle === "monthly" ? tier : otherTier;
                   const yearlyT = tier.cycle === "yearly" ? tier : otherTier;
                   const monthlyId = tier.cycle === "monthly" ? priceId : otherId;
                   const yearlyId = tier.cycle === "yearly" ? priceId : otherId;
                   const amt = (t: TierInfo) => (lang === "he" ? t.amountIls : t.amount);
-                  const opt = (label: string, sub: string, active: boolean, onClick: () => void) => (
-                    <button type="button" onClick={onClick} style={{ flex: 1, padding: "9px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
+                  const opt = (label: string, sub: string, active: boolean, ribbon: string | null, onClick: () => void) => (
+                    <button type="button" onClick={onClick} style={{ position: "relative", flex: 1, padding: "9px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
+                      {ribbon && (
+                        <span style={{ position: "absolute", top: -9, insetInlineEnd: 8, background: "#CA8A04", color: "#fff", fontSize: 10.5, fontWeight: 800, padding: "2px 7px", borderRadius: 999, whiteSpace: "nowrap" }}>{ribbon}</span>
+                      )}
                       <div style={{ fontSize: 13.5, fontWeight: 700, color: active ? "#0b7d7d" : "#374151" }}>{label}</div>
                       <div style={{ fontSize: 12.5, color: "#6b7280", marginTop: 2 }}>{sub}</div>
                     </button>
                   );
                   return (
-                    <div style={{ margin: "10px 0" }}>
-                      <div style={{ ...styles.muted, marginBottom: 6 }}>{c.cycleQ}</div>
+                    <div style={{ margin: "14px 0 2px" }}>
+                      <div style={{ ...styles.muted, marginBottom: 8 }}>{c.cycleQ}</div>
                       <div style={{ display: "flex", gap: 8 }}>
-                        {opt(c.monthlyLabel, `${amt(monthlyT)} ${c.perMonth}`, tier.cycle === "monthly", () => { if (tier.cycle !== "monthly") switchCycle(monthlyId); })}
-                        {opt(c.yearlyLabel, `${amt(yearlyT)} ${c.perYear}`, tier.cycle === "yearly", () => { if (tier.cycle !== "yearly") switchCycle(yearlyId); })}
+                        {opt(c.monthlyLabel, `${amt(monthlyT)} ${c.perMonth}`, tier.cycle === "monthly", null, () => { if (tier.cycle !== "monthly") switchCycle(monthlyId); })}
+                        {opt(c.yearlyLabel, `${amt(yearlyT)} ${c.perYear}`, tier.cycle === "yearly", c.yearlyRibbon, () => { if (tier.cycle !== "yearly") switchCycle(yearlyId); })}
                       </div>
                     </div>
                   );
@@ -384,10 +393,6 @@ export default function CheckoutClient() {
                   <span style={styles.amount}>
                     {lang === "he" ? tier.amountIls : tier.amount} {cycleLabel}
                   </span>
-                </div>
-                <div style={styles.trialBox}>
-                  <div style={styles.trialToday}>{c.trialToday}</div>
-                  <div style={styles.trialLine}>{c.trialLine}</div>
                 </div>
                 {code && phase === "form" ? (
                   <div style={styles.coupon}>{c.couponApplied(code.toUpperCase())}</div>
