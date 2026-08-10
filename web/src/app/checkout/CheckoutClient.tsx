@@ -66,6 +66,21 @@ function tierForPrice(priceId: string): TierInfo | null {
   return null;
 }
 
+/** The opposite-cycle price of the same plan (Family monthly <-> Family
+ *  yearly), so the checkout can offer a monthly/yearly choice. Matched by
+ *  plan NAME so "Schools" and "Schools Large" don't cross. */
+function counterpartPrice(current: TierInfo): string | null {
+  const target: "monthly" | "yearly" = current.cycle === "monthly" ? "yearly" : "monthly";
+  const byName: Record<string, { monthly?: string; yearly?: string }> = {
+    Clear: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY },
+    Deep: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY },
+    Family: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY },
+    Schools: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY },
+    "Schools Large": { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY },
+  };
+  return byName[current.name]?.[target] || null;
+}
+
 // Local copy, Hebrew first (the page's raison d'être) + English
 // fallback for every other lang. Startup voice, no dashes.
 const COPY = {
@@ -74,6 +89,9 @@ const COPY = {
     planLabel: "המסלול שבחרתם",
     perMonth: "לחודש",
     perYear: "לשנה",
+    monthlyLabel: "חודשי",
+    yearlyLabel: "שנתי",
+    cycleQ: "איך לחייב אחרי הניסיון?",
     trialToday: "היום תשלמו: 0 ₪",
     trialLine: "14 ימי ניסיון חינם. החיוב הראשון רק בסוף הניסיון.",
     afterTrial: "לאחר הניסיון:",
@@ -99,6 +117,9 @@ const COPY = {
     planLabel: "Your plan",
     perMonth: "per month",
     perYear: "per year",
+    monthlyLabel: "Monthly",
+    yearlyLabel: "Yearly",
+    cycleQ: "How to bill after the trial?",
     trialToday: "Due today: $0",
     trialLine: "14 day free trial. The first charge comes only when the trial ends.",
     afterTrial: "After the trial:",
@@ -132,6 +153,8 @@ export default function CheckoutClient() {
   const href = useHref();
   const c = lang === "he" ? COPY.he : COPY.en;
   const tier = tierForPrice(priceId);
+  const otherId = tier ? counterpartPrice(tier) : null;
+  const otherTier = otherId ? tierForPrice(otherId) : null;
 
   const [phase, setPhase] = useState<Phase>("boot");
   const [errMsg, setErrMsg] = useState<string | null>(null);
@@ -143,6 +166,15 @@ export default function CheckoutClient() {
   // Applying a promo code just reloads the page with ?code=CODE and lets
   // the existing (tested) URL-param path attach the discount via
   // /api/subscribe. Simpler and safer than re-mounting the Element.
+  // Switch billing cycle: reload /checkout with the other-cycle price so
+  // the whole init flow re-runs cleanly for the new plan (same pattern as
+  // applying a promo, no risky live Element re-mount).
+  function switchCycle(toId: string) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("price", toId);
+    window.location.href = url.toString();
+  }
+
   function applyPromo() {
     const v = promoVal.trim();
     if (!v) return;
@@ -325,6 +357,28 @@ export default function CheckoutClient() {
                     Gadit {tier.name}
                   </span>
                 </div>
+                {otherTier && otherId && (() => {
+                  const monthlyT = tier.cycle === "monthly" ? tier : otherTier;
+                  const yearlyT = tier.cycle === "yearly" ? tier : otherTier;
+                  const monthlyId = tier.cycle === "monthly" ? priceId : otherId;
+                  const yearlyId = tier.cycle === "yearly" ? priceId : otherId;
+                  const amt = (t: TierInfo) => (lang === "he" ? t.amountIls : t.amount);
+                  const opt = (label: string, sub: string, active: boolean, onClick: () => void) => (
+                    <button type="button" onClick={onClick} style={{ flex: 1, padding: "9px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: active ? "#0b7d7d" : "#374151" }}>{label}</div>
+                      <div style={{ fontSize: 12.5, color: "#6b7280", marginTop: 2 }}>{sub}</div>
+                    </button>
+                  );
+                  return (
+                    <div style={{ margin: "10px 0" }}>
+                      <div style={{ ...styles.muted, marginBottom: 6 }}>{c.cycleQ}</div>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        {opt(c.monthlyLabel, `${amt(monthlyT)} ${c.perMonth}`, tier.cycle === "monthly", () => { if (tier.cycle !== "monthly") switchCycle(monthlyId); })}
+                        {opt(c.yearlyLabel, `${amt(yearlyT)} ${c.perYear}`, tier.cycle === "yearly", () => { if (tier.cycle !== "yearly") switchCycle(yearlyId); })}
+                      </div>
+                    </div>
+                  );
+                })()}
                 <div style={styles.summaryRow}>
                   <span style={styles.muted}>{c.afterTrial}</span>
                   <span style={styles.amount}>
