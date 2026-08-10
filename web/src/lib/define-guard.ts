@@ -90,6 +90,43 @@ function hasQuoteScatter(text: string, threshold = 0.15): boolean {
   return count / text.length > threshold;
 }
 
+// Broad "symbol soup" backstop. The specific char lists above (cp1252
+// misdecode, Hebrew-decorative, quote scatter) each target a KNOWN
+// corruption signature. This one is the general net for novel mojibake
+// whose exact bytes aren't enumerated anywhere — a field dominated by
+// symbol (™ © × ¢ °), currency, modifier, control, or replacement (�)
+// characters. Real etymology prose in any of the 20 UI languages carries
+// almost none of these; a legitimate breakdown might hold one "+" or a
+// stray directionality mark, so we require BOTH an absolute floor (≥4)
+// and a high ratio (>20%) to trip. This is the check that catches the
+// German "חלום" origin card Gadi hit 2026-08-08, which rendered as a
+// stream of ™ § ¢ ž © and unrenderable tofu boxes. Note: \p{M} (combining
+// marks) is deliberately EXCLUDED so heavily-vocalised Hebrew niqqud —
+// already handled by HEBREW_DECORATIVE_RX at its own threshold — doesn't
+// false-trip here.
+const SYMBOL_NOISE_RX = /[\p{S}\p{C}�]/gu;
+function hasSymbolNoise(text: string): boolean {
+  if (typeof text !== "string" || text.length < 8) return false;
+  const count = (text.match(SYMBOL_NOISE_RX) ?? []).length;
+  return count >= 4 && count / text.length > 0.2;
+}
+
+// Single source of truth for "is this one etymology sub-field garbled?".
+// Shared by isDegenerate (server reject/cache-drop), the SSR preload
+// sanitiser, and the client render guard so all three agree on exactly
+// what counts as garbled and none of them can drift.
+export function isEtymologyFieldGarbled(field: string, raw: unknown): boolean {
+  if (typeof raw !== "string" || raw.length === 0) return false;
+  return (
+    hasMojibakeDensity(raw) ||
+    isPunctuationSoup(raw) ||
+    hasQuoteScatter(raw) ||
+    hasSymbolNoise(raw) ||
+    (field === "sourceLanguage" && /['"׳״]/.test(raw)) ||
+    /[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}]/u.test(raw)
+  );
+}
+
 export function isDegenerate(result: unknown, inputWord: string): GuardResult {
   if (!result || typeof result !== "object") {
     return { degenerate: true, reason: "result is not an object" };
@@ -159,41 +196,13 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
     const fields = ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote"] as const;
     for (const f of fields) {
       const raw = (fr.etymology as Record<string, unknown>)[f];
-      if (typeof raw !== "string" || raw.length === 0) continue;
-      if (hasMojibakeDensity(raw)) {
-        return { degenerate: true, reason: `etymology.${f} is mojibake` };
-      }
-      if (isPunctuationSoup(raw)) {
-        return { degenerate: true, reason: `etymology.${f} is punctuation soup (no real letters)` };
-      }
-      if (hasQuoteScatter(raw)) {
-        return { degenerate: true, reason: `etymology.${f} has ASCII quote / geresh scatter pattern` };
-      }
-      // Belt-and-suspenders for sourceLanguage specifically. The value
-      // is always a short clean language name like "Hebrew", "Old
-      // English", "עברית", "ערבית קלאסית", "ארמית / יוונית". It NEVER
-      // contains apostrophes, double-quotes, Hebrew geresh, or Hebrew
-      // gershayim in valid output. So a single one of those characters
-      // in sourceLanguage is degenerate by definition, no density
-      // threshold needed.
-      if (f === "sourceLanguage" && /['"׳״]/.test(raw)) {
-        return {
-          degenerate: true,
-          reason: `etymology.sourceLanguage contains a quote / geresh character (never valid for a language name)`,
-        };
-      }
-      // Three-letters-with-marks-between pattern: A character class
-      // letter, one or more mark characters (quote / geresh / niqqud),
-      // another letter, more marks, a third letter. Real Hebrew never
-      // produces this shape outside extremely unusual abbreviations.
-      // Biblical citations like כ"ח cluster their gershayim (letter +
-      // mark + letter, one pair) rather than scattering them between
-      // every letter (letter + mark + letter + mark + letter).
-      if (/[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}]/u.test(raw)) {
-        return {
-          degenerate: true,
-          reason: `etymology.${f} has interspersed letter-mark-letter-mark-letter pattern`,
-        };
+      // All the per-field garbled signatures — mojibake density, symbol
+      // soup, punctuation soup, quote/geresh scatter, sourceLanguage-only
+      // quote rule, and the letter-mark-letter-mark-letter pattern — now
+      // live in one shared predicate so this reject path, the SSR preload
+      // sanitiser, and the client render guard can never disagree.
+      if (isEtymologyFieldGarbled(f, raw)) {
+        return { degenerate: true, reason: `etymology.${f} is garbled` };
       }
     }
   }
@@ -235,13 +244,7 @@ export function sanitizeDegenerateEtymology(result: unknown): unknown {
       cleaned[f] = "";
       continue;
     }
-    const bad =
-      hasMojibakeDensity(raw) ||
-      isPunctuationSoup(raw) ||
-      hasQuoteScatter(raw) ||
-      (f === "sourceLanguage" && /['"׳״]/.test(raw)) ||
-      /[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}](?:['"׳״ֱ-ׇ])+[\p{L}]/u.test(raw);
-    cleaned[f] = bad ? "" : raw;
+    cleaned[f] = isEtymologyFieldGarbled(f, raw) ? "" : raw;
   }
 
   return { ...r, etymology: cleaned };

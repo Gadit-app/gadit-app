@@ -38,6 +38,7 @@ import { useState, type ReactNode } from "react";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
+import { isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
 import { ImageLightbox } from "@/components/design/ImageLightbox";
@@ -1064,11 +1065,18 @@ export function OriginCard({ etymology, onReport }: { etymology: Etymology | str
     ? etymology.historyNote?.trim()
     : (etymology as string).trim();
 
-  const hasLang = !!sourceLanguage;
-  const hasOriginal = !!originalWord;
-  const hasBreakdown = !!breakdown;
-  const hasMeant = !!originalMeaning;
-  const hasStory = !!historyNote;
+  // Final render-time guard. The server rejects garbled generations and
+  // the SSR preload sanitises the cache, but this is the last line before
+  // pixels: whatever reaches the browser — a stale cache entry, an edge
+  // path, a novel corruption in any of the 20 languages — a field that
+  // looks like mojibake is never shown. If that empties every field the
+  // whole card disappears, exactly as Gadi asked ("if it has this bug,
+  // don't show it at all").
+  const hasLang = !!sourceLanguage && !isEtymologyFieldGarbled("sourceLanguage", sourceLanguage);
+  const hasOriginal = !!originalWord && !isEtymologyFieldGarbled("originalWord", originalWord);
+  const hasBreakdown = !!breakdown && !isEtymologyFieldGarbled("breakdown", breakdown);
+  const hasMeant = !!originalMeaning && !isEtymologyFieldGarbled("originalMeaning", originalMeaning);
+  const hasStory = !!historyNote && !isEtymologyFieldGarbled("historyNote", historyNote);
   if (!hasLang && !hasOriginal && !hasBreakdown && !hasMeant && !hasStory) return null;
 
   return (

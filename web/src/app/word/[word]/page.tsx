@@ -5,6 +5,7 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import type { WordResult } from "@/components/design/result";
 import { WordClient } from "./WordClient";
 import { LANGUAGES } from "@/lib/i18n";
+import { sanitizeDegenerateEtymology } from "@/lib/define-guard";
 
 /**
  * /word/[word] — result screen.
@@ -63,7 +64,14 @@ const getPreloadedResult = cache(
       if (!data || !Array.isArray(data.meanings) || data.meanings.length === 0) {
         return null;
       }
-      return data as unknown as WordResult;
+      // The client /api/define read path runs every cache hit through the
+      // degenerate-output guard, but this SSR preload used to hand the raw
+      // cache doc straight to render — so a legacy entry with clean
+      // meanings but a garbled etymology block (the German "חלום" origin
+      // card Gadi hit 2026-08-08) got server-rendered mojibake to both
+      // users and Googlebot. Blank any garbled etymology field before
+      // serving; OriginCard drops the whole card when every field is empty.
+      return sanitizeDegenerateEtymology(data) as unknown as WordResult;
     } catch (e) {
       console.error("word preload cache read failed:", e);
       return null;
