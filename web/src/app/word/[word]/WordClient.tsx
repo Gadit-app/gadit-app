@@ -467,6 +467,13 @@ export function WordClient({
   // with no signal that anything had gone wrong. A Czech beta tester
   // hit a quota error and could not tell why the button did nothing.
   const [imageError, setImageError] = useState<string | null>(null);
+  // Classroom present mode: subject-appropriate example sentences pinned
+  // to the word's curated (subject-relevant) meaning, fetched from
+  // /api/classroom-examples. A polysemous curriculum word like "אות"
+  // (a letter of the alphabet, in the language set) then shows letter
+  // examples, not a musical-signal or medal example. Falls back to the
+  // general /api/define examples until these land (or if none exist).
+  const [classroomExamples, setClassroomExamples] = useState<string[]>([]);
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
   const [wordGameOpen, setWordGameOpen] = useState(false);
@@ -817,6 +824,38 @@ export function WordClient({
     void handleGenerate({ meaning: def, example: result.meanings[0]?.examples?.[0] ?? "" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classroomMode, result, imageUrl, imageGenerating, user]);
+
+  // Classroom present mode: fetch subject-appropriate examples for the
+  // curated meaning. Uses the SET's language (the curated defs are
+  // Hebrew) so examples match the definition, and passes the resolved
+  // meaning so the cache key lines up with the admin warm-set. Best
+  // effort: on empty/failure we keep the general define examples.
+  useEffect(() => {
+    if (!classroomMode || !result) {
+      setClassroomExamples([]);
+      return;
+    }
+    let cancelled = false;
+    const meaning = curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? "";
+    const exLang = wordSet?.lang ?? lang;
+    const params = new URLSearchParams({ word: initialWord, uiLang: exLang });
+    if (setId) params.set("set", setId);
+    if (meaning) params.set("meaning", meaning);
+    fetch(`/api/classroom-examples?${params.toString()}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { examples?: string[] } | null) => {
+        if (!cancelled && Array.isArray(d?.examples) && d.examples.length > 0) {
+          setClassroomExamples(d.examples);
+        }
+      })
+      .catch(() => {
+        /* keep define examples */
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classroomMode, initialWord, setId, result]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string }) {
@@ -1612,15 +1651,22 @@ export function WordClient({
                 <span style={{ fontSize: 14 }}>{lang === "he" ? "מכינים תמונה..." : "Preparing a picture..."}</span>
               </div>
             ) : null}
-            {result.meanings[0]?.examples?.length ? (
-              <div style={{ marginTop: 6, display: "grid", gap: 10 }}>
-                {result.meanings[0].examples.slice(0, 3).map((ex, i) => (
-                  <div key={i} style={{ fontSize: 19, lineHeight: 1.6, color: "#374151" }}>
-                    <span style={{ color: "#0EA5A5", fontWeight: 800, marginInlineEnd: 8 }}>{i + 1}</span>{ex}
-                  </div>
-                ))}
-              </div>
-            ) : null}
+            {(() => {
+              // Prefer the subject-appropriate curated examples; fall back
+              // to the general define examples until (or unless) those land.
+              const shownExamples = classroomExamples.length
+                ? classroomExamples
+                : result.meanings[0]?.examples ?? [];
+              return shownExamples.length ? (
+                <div style={{ marginTop: 6, display: "grid", gap: 10 }}>
+                  {shownExamples.slice(0, 3).map((ex, i) => (
+                    <div key={i} style={{ fontSize: 19, lineHeight: 1.6, color: "#374151" }}>
+                      <span style={{ color: "#0EA5A5", fontWeight: 800, marginInlineEnd: 8 }}>{i + 1}</span>{ex}
+                    </div>
+                  ))}
+                </div>
+              ) : null;
+            })()}
           </div>
         ) : (
           <ResultView
