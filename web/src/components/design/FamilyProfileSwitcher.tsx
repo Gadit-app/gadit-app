@@ -19,6 +19,7 @@ type SwitchMember = { id: string; name: string; role: string; colorIndex: number
 const COPY: Record<string, { title: string; parentTag: string; parentFallback: string; switching: string }> = {
   he: { title: "החלפת פרופיל", parentTag: "הורה", parentFallback: "חשבון ההורה", switching: "מחליף…" },
   en: { title: "Switch profile", parentTag: "Parent", parentFallback: "Parent account", switching: "Switching…" },
+  el: { title: "Αλλαγή προφίλ", parentTag: "Γονέας", parentFallback: "Λογαριασμός γονέα", switching: "Αλλαγή…" },
   ar: { title: "تبديل الملف الشخصي", parentTag: "الوالد", parentFallback: "حساب الوالد", switching: "جارٍ التبديل…" },
   ru: { title: "Сменить профиль", parentTag: "Родитель", parentFallback: "Аккаунт родителя", switching: "Переключение…" },
 };

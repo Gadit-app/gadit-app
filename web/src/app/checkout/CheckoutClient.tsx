@@ -142,6 +142,35 @@ const COPY = {
     promoPlaceholder: "Promo code",
     promoApply: "Apply",
   },
+  el: {
+    title: "Μένει ένα βήμα",
+    planLabel: "Το πακέτο σου",
+    perMonth: "τον μήνα",
+    perYear: "τον χρόνο",
+    monthlyLabel: "Μηνιαία",
+    yearlyLabel: "Ετήσια",
+    cycleQ: "Πώς να χρεώνουμε μετά τη δοκιμή;",
+    yearlyRibbon: "2 μήνες δωρεάν",
+    trialToday: "Πληρώνεις σήμερα: $0",
+    trialLine: "14 ημέρες δωρεάν δοκιμή. Η πρώτη χρέωση γίνεται μόνο όταν τελειώσει η δοκιμή.",
+    afterTrial: "Μετά τη δοκιμή:",
+    cancelNote: "Ακύρωσε όποτε θες από τη σελίδα του λογαριασμού σου, με ένα κλικ.",
+    couponApplied: (code: string) => `Ο κωδικός ${code} ενεργοποιήθηκε. Θα εφαρμοστεί στην πρώτη σου χρέωση.`,
+    payButton: "Επιβεβαίωση και έναρξη δοκιμής",
+    processing: "Μια στιγμή...",
+    secureNote: "Η πληρωμή είναι ασφαλής μέσω Stripe. Δεν αποθηκεύουμε ποτέ τα στοιχεία της κάρτας σου.",
+    needAuthTitle: "Χρειάζεσαι λογαριασμό Gadit για να συνεχίσεις",
+    needAuthBody: "Η εγγραφή παίρνει μισό λεπτό, και η συνδρομή σου αποθηκεύεται στον λογαριασμό σου.",
+    needAuthCta: "Εγγραφή ή σύνδεση",
+    invalidPrice: "Το πακέτο δεν βρέθηκε. Διάλεξε ένα πακέτο στη σελίδα τιμών.",
+    toPricing: "Στη σελίδα τιμών",
+    genericError: "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
+    invalidCode: "Αυτός ο κωδικός κουπονιού δεν ισχύει. Συνέχισε χωρίς αυτόν ή έλεγξε την ορθογραφία.",
+    loading: "Ετοιμάζουμε τη φόρμα...",
+    promoQ: "Έχεις κωδικό προσφοράς;",
+    promoPlaceholder: "Κωδικός προσφοράς",
+    promoApply: "Εφαρμογή",
+  },
 };
 
 type Phase = "boot" | "need-auth" | "form" | "bad-price" | "error";
@@ -153,7 +182,7 @@ export default function CheckoutClient() {
   const { user, loading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
-  const c = lang === "he" ? COPY.he : COPY.en;
+  const c = (COPY as Record<string, typeof COPY.en>)[lang] ?? COPY.en;
   const tier = tierForPrice(priceId);
   const otherId = tier ? counterpartPrice(tier) : null;
   const otherTier = otherId ? tierForPrice(otherId) : null;

@@ -100,6 +100,20 @@ const COPY: Record<string, {
     games: "Word Games",
     notebook: "Class Notebook",
   },
+  el: {
+    welcomeTo: "Καλώς ήρθες στην",
+    greetingPrefix: "Γεια,",
+    switchUser: "(δεν είμαι εγώ)",
+    pickName: "Γεια! Διάλεξε το όνομά σου",
+    classroomDefault: "Τάξη",
+    searchPh: "Πληκτρολόγησε μια λέξη",
+    searchBtn: "Αναζήτηση",
+    sentencePh: "(Προαιρετικό) Πληκτρολόγησε την πρόταση όπου εμφανίζεται η λέξη για να λάβεις έναν ακριβή ορισμό",
+    errorTitle: "Μη έγκυρος κωδικός",
+    errorBody: "Ζήτησε ξανά τον σύνδεσμο από τον δάσκαλό σου.",
+    games: "Παιχνίδια λέξεων",
+    notebook: "Τετράδιο τάξης",
+  },
   hi: {
     welcomeTo: "स्वागत है",
     greetingPrefix: "नमस्ते,",
@@ -144,6 +158,11 @@ const OFFHOURS_HINT: Record<string, { line1: string; cta: string; link: string }
   en: {
     line1: "Outside class hours — looking words up without images and kids' explanation.",
     cta: "Want full Gadit at home? Family plan",
+    link: "/pricing",
+  },
+  el: {
+    line1: "Εκτός ωρών μαθήματος. Αναζητάς λέξεις χωρίς εικόνες και επεξήγηση για παιδιά.",
+    cta: "Θέλεις όλο το Gadit στο σπίτι; Το πλάνο Family",
     link: "/pricing",
   },
   hi: {

@@ -56,6 +56,18 @@ const COPY: Record<string, {
     errNotFound: "Code not found",
     errGeneric: "Something went wrong. Please try again.",
   },
+  el: {
+    title: "Μπες σε μια οικογένεια",
+    sub: "Πληκτρολόγησε τον 6ψήφιο κωδικό που δημιούργησε ο γονιός σου",
+    inputLabel: "6ψήφιος κωδικός",
+    submit: "Συνέχεια",
+    joining: "Σύνδεση...",
+    success: "Μπήκες! Σε πάμε στο Gadit...",
+    errInvalid: "Ο κωδικός πρέπει να έχει 6 ψηφία",
+    errExpired: "Ο κωδικός έληξε. Ζήτησε από τον γονιό σου να δημιουργήσει νέο.",
+    errNotFound: "Ο κωδικός δεν βρέθηκε",
+    errGeneric: "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
+  },
   hi: {
     title: "परिवार में जुड़ें",
     sub: "अपने माता-पिता का बनाया 6-अंकों का कोड डालें",

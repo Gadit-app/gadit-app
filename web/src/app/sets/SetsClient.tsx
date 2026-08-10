@@ -39,6 +39,12 @@ const COPY: Record<string, { title: string; sub: string; present: string; words:
     present: "Present to class",
     words: "words",
   },
+  el: {
+    title: "Σετ λέξεων",
+    sub: "Διάλεξε ένα θέμα, άνοιξε ένα σετ και πρόβαλέ το στην τάξη. Το Gadit εξηγεί κάθε λέξη με μια εικόνα και παραδείγματα.",
+    present: "Προβολή στην τάξη",
+    words: "λέξεις",
+  },
 };
 
 export default function SetsClient() {

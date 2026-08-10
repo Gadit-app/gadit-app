@@ -52,6 +52,11 @@ const COPY: Record<string, {
     hubLede: "Pick a game to sharpen your vocabulary",
     backToClassroom: "← Back to classroom",
   },
+  el: {
+    hubTitle: "Παιχνίδια λέξεων",
+    hubLede: "Διάλεξε ένα παιχνίδι για να βελτιώσεις το λεξιλόγιό σου",
+    backToClassroom: "← Πίσω στην τάξη",
+  },
   ar: {
     hubTitle: "ألعاب الكلمات",
     hubLede: "اختر لعبة لتقوية مفرداتك",

@@ -42,6 +42,17 @@ const COPY = {
     retry: "Try again",
     toPricing: "Go to pricing",
   },
+  el: {
+    okTitle: "Είσαι μέσα",
+    okBody: "Η δοκιμή σου των 14 ημερών ξεκίνησε. Ο λογαριασμός σου ενημερώνεται μέσα σε λίγες στιγμές. Αν κάτι δεν ανοίξει αμέσως, ανανέωσε τη σελίδα.",
+    ctaGeneral: "Ξεκίνα να ψάχνεις λέξεις",
+    ctaFamily: "Στον χώρο της οικογένειάς σου",
+    ctaSchools: "Διαχείριση του σχολείου σου",
+    failTitle: "Η πληρωμή δεν ολοκληρώθηκε",
+    failBody: "Δεν χρεώθηκες. Μπορείς να δοκιμάσεις ξανά, παίρνει λιγότερο από ένα λεπτό.",
+    retry: "Δοκίμασε ξανά",
+    toPricing: "Στη σελίδα τιμών",
+  },
 };
 
 function isFamilyPrice(priceId: string): boolean {
@@ -64,7 +75,7 @@ export default function DoneClient() {
   const params = useSearchParams();
   const { lang, dir } = useLang();
   const href = useHref();
-  const c = lang === "he" ? COPY.he : COPY.en;
+  const c = (COPY as Record<string, typeof COPY.en>)[lang] ?? COPY.en;
 
   const priceId = params.get("price") ?? "";
   // confirmSetup appends redirect_status; treat "processing" as success

@@ -54,6 +54,16 @@ const COPY: Record<string, {
     errorBody: "Try refreshing the page.",
     backToClassroom: "← Back to classroom",
   },
+  el: {
+    title: "Τετράδιο τάξης",
+    emptyTitle: "Δεν υπάρχουν αναζητήσεις ακόμη",
+    emptyBody: "Όταν ένας μαθητής αναζητήσει μια λέξη, θα εμφανιστεί εδώ.",
+    filterAll: "Όλοι οι μαθητές",
+    filterLabel: "Φιλτράρισμα κατά μαθητή",
+    errorTitle: "Κάτι πήγε στραβά",
+    errorBody: "Δοκίμασε να ανανεώσεις τη σελίδα.",
+    backToClassroom: "← Πίσω στην τάξη",
+  },
   ar: {
     title: "دفتر الفصل",
     emptyTitle: "لا توجد عمليات بحث بعد",

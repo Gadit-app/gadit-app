@@ -111,6 +111,13 @@ const COPY: Record<string, {
     emptyHint: "Find a word and tap 'Save to Notebook'.",
     goSearch: "Back to search",
   },
+  el: {
+    title: "Το τετράδιό μου",
+    subtitle: "Κάθε λέξη που έχεις συλλέξει, αποθηκευμένη και οργανωμένη.",
+    empty: "Το τετράδιό σου είναι άδειο.",
+    emptyHint: "Βρες μια λέξη και πάτησε «Αποθήκευση στο τετράδιο».",
+    goSearch: "Πίσω στην αναζήτηση",
+  },
   ar: {
     title: "دفتر كلماتي",
     subtitle: "كل الكلمات التي جمعتها, محفوظة ومنظمة.",
