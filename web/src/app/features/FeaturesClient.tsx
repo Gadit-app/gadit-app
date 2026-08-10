@@ -514,6 +514,52 @@ const GROUP_COPY: Record<string, GroupCopy> = {
     },
     bubble: "Now I gad it!",
   },
+  el: {
+    groupTitles: {
+      understand: "Κατάλαβε τη λέξη",
+      learn: <>Κατάλαβε και <Hl>δες</Hl> τη λέξη</>,
+      master: <>Κατάλαβε, δες και <Hl>θυμήσου τη λέξη για πάντα</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Κάθε σημασία, αληθινές προτάσεις σε συμφραζόμενα, οι εκφράσεις όπου ζει, και από πού προήλθε.",
+      learn:
+        "Μια εικόνα για τη λέξη, μια εκδοχή για παιδιά, ένα προσωπικό τετράδιο, και μια πρόταση που γράφεις εσύ με σχόλια.",
+      master:
+        "Εξατομικευμένα κουίζ και παιχνίδια λέξεων που κλειδώνουν τη λέξη για τα καλά.",
+    },
+    family: {
+      title: <>Κατάλαβε, δες, θυμήσου <Hl>για όλη την οικογένεια</Hl></>,
+      sub: "Μία συνδρομή δίνει σε κάθε μέλος της οικογένειας τον δικό του λογαριασμό, με όλες τις προηγμένες δυνατότητες. Έως 5 παιδιά.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Ξεχωριστό προφίλ για κάθε μέλος της οικογένειας",
+          body: "Τετράδιο λέξεων, ιστορικό αναζήτησης και προσωπικό σερί μάθησης για κάθε παιδί και γονιό.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Σύνδεσε μια συσκευή με κωδικό QR",
+          body: "Το παιδί σου σαρώνει ένα QR στο τηλέφωνό του και συνδέεται. Μένει συνδεδεμένο για πάντα, χωρίς κωδικό.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Πίνακας για γονείς",
+          body: "Δες κάθε λέξη που αναζήτησε κάθε παιδί και πότε, και παρακολούθησε τον ρυθμό του με μια ματιά.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Έως 5 παιδιά σε μία συνδρομή",
+          body: "Κάθε παιδί αποκτά όλες τις δυνατότητες Deep. Ο γονιός πληρώνει μία φορά για όλη την οικογένεια.",
+        },
+      ],
+    },
+    bubble: "Τώρα το έπιασα, gad it!",
+  },
   hi: {
     groupTitles: {
       understand: "शब्द को समझें",
@@ -1137,6 +1183,31 @@ const COPY: Record<string, {
       { id: "compose",     icon: "compose",     tier: "clear", title: "Write a sentence, get feedback",   body: "Compose your own sentence with the word and get instant correction and feedback." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Personalized quizzes",             body: "A daily quiz on the words you learned, so they stay with you for the long run." },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "Word games",                       body: "Games that grow your vocabulary: matching, guessing, building connections between words." },
+    ],
+  },
+  el: {
+    heroEyebrow: "Δυνατότητες",
+    heroTitle: "Ένα λεξικό που δεν σταματά στον ορισμό.",
+    heroSub: "Το Gadit καταλαβαίνει μια λέξη ως το τέλος. Κάθε σημασία, αληθινές προτάσεις σε συμφραζόμενα, εκφράσεις, προέλευση και εξάσκηση. Μέχρι η λέξη να κάνει πραγματικά κλικ. Αυτό λέμε να GAD-άρεις μια λέξη.",
+    ctaPrimary: "Ξεκίνα δωρεάν",
+    ctaSecondary: "Δες τις τιμές",
+    signin: "Σύνδεση", pricing: "Τιμές", search: "Αναζήτηση", features: "Δυνατότητες",
+    sectionLabel: "Τι αποκτάς",
+    finalCtaTitle: "Έτοιμος να το δοκιμάσεις;",
+    finalCtaSub: "Ξεκίνα με το Basic, εντελώς δωρεάν. Αναβάθμισε με ένα άγγιγμα, μόνο όταν θέλεις περισσότερα.",
+    finalCtaBtn: "Ξεκίνα τώρα",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Κάθε ορισμός",                        body: "Όλες οι σημασίες της λέξης, ακόμη και οι σπάνιες, ταξινομημένες κατά συχνότητα χρήσης." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Αληθινές προτάσεις σε συμφραζόμενα",  body: "Τρεις αληθινές προτάσεις ανά σημασία, ώστε τα συμφραζόμενα να γίνονται αμέσως σαφή." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Ιδιωματισμοί και εκφράσεις",         body: "Κάθε έκφραση στην οποία ανήκει η λέξη, με την πλήρη σημασία της φράσης." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Από πού προήλθε η λέξη",             body: "Η γλώσσα από την οποία ξεκίνησε η λέξη, και τι σήμαινε αρχικά." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Εξήγηση για παιδιά",                body: "Μια καθαρή, απλή εκδοχή που μπορεί να διαβάσει ένα παιδί χωρίς δύσκολους όρους." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Η λέξη ως εικόνα",                  body: "Μια μοναδική εικόνα για τη λέξη, ταιριασμένη με την ακριβή σημασία που διαβάζεις." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Προσωπικό τετράδιο λέξεων",         body: "Αποθήκευσε τις λέξεις που θέλεις να θυμάσαι. Διαθέσιμο ακόμη και χωρίς ίντερνετ." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Γράψε μια πρόταση, πάρε σχόλια",     body: "Σύνθεσε τη δική σου πρόταση με τη λέξη και πάρε άμεση διόρθωση και σχόλια." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Εξατομικευμένα κουίζ",              body: "Ένα καθημερινό κουίζ στις λέξεις που έμαθες, ώστε να μένουν μαζί σου για τα καλά." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Παιχνίδια λέξεων",                  body: "Παιχνίδια που μεγαλώνουν το λεξιλόγιό σου: αντιστοίχιση, μάντεμα, χτίσιμο συνδέσεων ανάμεσα στις λέξεις." },
     ],
   },
   de: {
