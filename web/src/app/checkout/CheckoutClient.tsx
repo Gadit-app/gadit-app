@@ -318,8 +318,8 @@ export default function CheckoutClient() {
   return (
     <div dir={dir} style={styles.page}>
       <header style={styles.header}>
-        <Link href={href("/")} style={styles.wordmark}>
-          Gadit
+        <Link href={href("/")} style={styles.wordmark} dir="ltr" translate="no" aria-label="Gadit">
+          Gad<span style={{ fontStyle: "italic", color: "#0EA5A5" }}>it</span>
         </Link>
       </header>
 
@@ -370,9 +370,9 @@ export default function CheckoutClient() {
                   const yearlyId = tier.cycle === "yearly" ? priceId : otherId;
                   const amt = (t: TierInfo) => (lang === "he" ? t.amountIls : t.amount);
                   const opt = (label: string, sub: string, active: boolean, ribbon: string | null, onClick: () => void) => (
-                    <button type="button" onClick={onClick} style={{ position: "relative", flex: 1, padding: "9px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
+                    <button type="button" onClick={onClick} style={{ position: "relative", flex: 1, padding: ribbon ? "18px 8px 10px" : "10px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
                       {ribbon && (
-                        <span style={{ position: "absolute", top: -9, insetInlineEnd: 8, background: "#CA8A04", color: "#fff", fontSize: 10.5, fontWeight: 800, padding: "2px 7px", borderRadius: 999, whiteSpace: "nowrap" }}>{ribbon}</span>
+                        <span style={{ position: "absolute", top: -11, insetInlineStart: "50%", transform: "translateX(-50%)", background: "#CA8A04", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, whiteSpace: "nowrap", boxShadow: "0 1px 3px rgba(0,0,0,0.12)" }}>{ribbon}</span>
                       )}
                       <div style={{ fontSize: 13.5, fontWeight: 700, color: active ? "#0b7d7d" : "#374151" }}>{label}</div>
                       <div style={{ fontSize: 12.5, color: "#6b7280", marginTop: 2 }}>{sub}</div>
@@ -472,14 +472,17 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: "column",
   },
   header: {
-    padding: "18px 24px",
+    padding: "26px 24px 8px",
+    display: "flex",
+    justifyContent: "center",
   },
   wordmark: {
     fontWeight: 800,
-    fontSize: 20,
+    fontSize: 30,
     color: "#1f2937",
     textDecoration: "none",
     letterSpacing: "-0.02em",
+    display: "inline-block",
   },
   main: {
     flex: 1,
