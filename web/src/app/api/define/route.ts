@@ -1088,6 +1088,7 @@ const UI_LANG_NAMES: Record<string, string> = {
   id: "Indonesian",
   nl: "Dutch",
   el: "Greek",
+  zu: "Zulu",
 };
 
 // Reject input that isn't plausibly a word BEFORE we burn an OpenAI

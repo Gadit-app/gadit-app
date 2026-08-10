@@ -68,6 +68,7 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "βοηθητικό ρήμα", "particle": "μόριο", "numeral": "αριθμητικό",
     "proper noun": "κύριο όνομα", "phrase": "φράση", "idiom": "ιδιωματισμός",
   },
+  zu: {},
   en: {
     "noun": "noun", "verb": "verb", "adjective": "adjective", "adverb": "adverb",
     "preposition": "preposition", "conjunction": "conjunction", "pronoun": "pronoun",

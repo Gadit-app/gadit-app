@@ -1,4 +1,4 @@
-export type Lang = "en" | "he" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el";
+export type Lang = "en" | "he" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el" | "zu";
 
 /**
  * The single source of truth for every supported UI language. `flag`
@@ -32,6 +32,7 @@ export const LANGUAGES: { code: Lang; label: string; dir: "ltr" | "rtl"; flag: s
   { code: "id", label: "Indonesia", dir: "ltr", flag: "id" },
   { code: "nl", label: "Nederlands", dir: "ltr", flag: "nl" },
   { code: "el", label: "Ελληνικά", dir: "ltr", flag: "gr" },
+  { code: "zu", label: "isiZulu", dir: "ltr", flag: "za" },
 ];
 
 /** Stable CDN that returns a small PNG flag for an ISO country code. */
@@ -69,6 +70,7 @@ export function detectBrowserLang(): Lang {
   if (lang === "id") return "id";
   if (lang === "nl") return "nl";
   if (lang === "el") return "el";
+  if (lang === "zu") return "zu";
   return "en";
 }
 
@@ -6429,6 +6431,8 @@ export const T: Record<Lang, {
     reviewDoneText: "Έκανες επανάληψη σε {count} λέξεις σήμερα.",
     reviewBack: "Πίσω στο τετράδιο",
   } as unknown as (typeof T)["en"],
+  // zu (Zulu) seeded empty; fallback loop fills from English until spliced.
+  zu: {} as unknown as (typeof T)["en"],
 };
 
 // Fill missing it/ja/hi/am keys from English so the build sees a complete
@@ -6450,6 +6454,9 @@ for (const key of Object.keys(T.en) as Array<keyof typeof T.en>) {
   }
   if ((T.el as Record<string, unknown>)[key] === undefined) {
     (T.el as Record<string, unknown>)[key] = T.en[key];
+  }
+  if ((T.zu as Record<string, unknown>)[key] === undefined) {
+    (T.zu as Record<string, unknown>)[key] = T.en[key];
   }
 }
 

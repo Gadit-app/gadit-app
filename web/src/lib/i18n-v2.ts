@@ -8535,10 +8535,14 @@ const el: Partial<V2Strings> = {
 };
 
 
+// zu (Zulu) — seeded empty; v2() falls back to English per-key until the
+// native Zulu strings are spliced in.
+const zu: Partial<V2Strings> = {};
+
 const TABLES: Record<Lang, Partial<V2Strings>> = {
   // uk/tr/pl/fa/id: core UI ships from T (i18n.ts); v2 long-tail strings
   // fall back to English via v2() until translated.
-  uk, tr, pl, fa, id, nl, el,
+  uk, tr, pl, fa, id, nl, el, zu,
   en,
   he,
   ar,

@@ -273,6 +273,12 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "Ένα νέο εργαλείο που σε βοηθά να κατανοήσεις πραγματικά κάθε λέξη. Όλες οι σημασίες, παραδείγματα, εκφράσεις και η προέλευση της λέξης. Δωρεάν για να ξεκινήσεις, και η αναβάθμιση είναι πολύ προσιτή. Αξίζει να το δοκιμάσεις.",
     locale: "el_GR",
   },
+  zu: {
+    title: "Gadit, qonda igama ngalinye ngokugcwele",
+    description:
+      "Ithuluzi elisha elikusiza uqonde ngempela igama ngalinye. Zonke izincazelo, izibonelo, izisho, nemvelaphi yegama. Kumahhala ukuqala, futhi ukuthuthukisa kubiza kancane. Kufanele ukuzame.",
+    locale: "zu_ZA",
+  },
 };
 
 const ALL_LANGS: Lang[] = LANGUAGES.map((l) => l.code);
