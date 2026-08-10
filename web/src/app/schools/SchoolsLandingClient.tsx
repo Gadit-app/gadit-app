@@ -2388,16 +2388,22 @@ const SCHOOL_TIERS = [
 type PricingUI = {
   perYear: string;
   orderCta: string;
+  plusVat: string;
+  netNote: string;
   tiers: { small: string; medium: string; large: string };
 };
 const PRICING_UI: Record<string, PricingUI> = {
   he: { perYear: "לשנה", orderCta: "לפרטים והזמנה",
+        plusVat: "+ מע״מ", netNote: "כל המחירים אינם כוללים מע״מ.",
         tiers: { small: "עד 100 תלמידים", medium: "101–500 תלמידים", large: "501–1,000 תלמידים" } },
   en: { perYear: "/ year", orderCta: "Get a quote",
+        plusVat: "+ VAT", netNote: "All prices exclude VAT.",
         tiers: { small: "Up to 100 students", medium: "101–500 students", large: "501–1,000 students" } },
   ar: { perYear: "سنويًا", orderCta: "لطلب عرض سعر",
+        plusVat: "+ ض.ق.م", netNote: "جميع الأسعار لا تشمل ضريبة القيمة المضافة.",
         tiers: { small: "حتى 100 طالب", medium: "101–500 طالب", large: "501–1,000 طالب" } },
   ru: { perYear: "в год", orderCta: "Запросить счёт",
+        plusVat: "+ НДС", netNote: "Все цены указаны без НДС.",
         tiers: { small: "до 100 учеников", medium: "101–500 учеников", large: "501–1,000 учеников" } },
 };
 
@@ -3150,6 +3156,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 <div className="wb-schools-price-name">{pu.tiers[tier.key]}</div>
                 <div className="wb-schools-price-amount">
                   <span className="wb-schools-price-amount-num" dir="ltr">{`₪${tier.price.toLocaleString()}`}</span>
+                  <span className="wb-schools-price-amount-vat">{pu.plusVat}</span>
                   <span className="wb-schools-price-amount-period">{pu.perYear}</span>
                 </div>
                 <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={scrollToOrder}>
@@ -3158,6 +3165,22 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               </div>
             ))}
           </div>
+          <p className="wb-schools-price-net">{pu.netNote}</p>
+          <style>{`
+            .wordbook .wb-schools-price-amount-vat {
+              font-size: 0.62em;
+              font-weight: 600;
+              color: #A8734B;
+              margin-inline-start: 4px;
+              white-space: nowrap;
+            }
+            .wordbook .wb-schools-price-net {
+              margin: 14px auto 0;
+              text-align: center;
+              font-size: 13px;
+              color: #78716C;
+            }
+          `}</style>
           <div className="wb-schools-includes">
             <div className="wb-schools-includes-title">{t.priceIncludesTitle}</div>
             <div className="wb-schools-includes-list">

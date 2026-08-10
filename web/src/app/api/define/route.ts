@@ -515,6 +515,7 @@ Your response must follow this exact JSON structure:
 {
   "word": "the word as given",
   "language": "detected language name in English (e.g. Hebrew, Arabic, English, Russian)",
+  "translation": "the headword's single most common equivalent WORD in the user's UI language — ONLY when the input word's language differs from the UI language (e.g. Hebrew word 'חלום' for a German user → 'Traum'; English word 'dream' for a Hebrew user → 'חלום'). Use the primary/most-common sense. Empty string when the word is already in the UI language (same language → leave empty).",
   "multiplemeanings": true or false,
   "meanings": [
     {
@@ -545,6 +546,7 @@ CRITICAL RULES (FINAL CHECKLIST):
 - Every word in the output must be a real, standard word ג€” no invented or hallucinated words (RULE #3).
 - Every meaning MUST have a "pos" field, the part of speech for THAT specific meaning, given as a single English token from this exact set: noun, verb, adjective, adverb, preposition, conjunction, pronoun, interjection, determiner, article, auxiliary, particle, numeral, proper noun, phrase, idiom. ALWAYS English (the UI translates it to the reader's language). When a word has different meanings with different parts of speech, EACH meaning carries its own pos (e.g. "dream" meaning 1 noun, meaning 2 noun, meaning 3 verb).
 - Do NOT include domain, register, frequency, or wordFamily fields, they are not needed.
+- "translation": when the input word is in a DIFFERENT language than the UI, give the single most common equivalent word in the UI language (the primary sense) — this is the reader's direct cross-language anchor, e.g. a German user searching 'חלום' sees 'Traum'. It is a WORD or very short phrase, never a definition. Empty string when the input word's language == the UI language (a Hebrew word for a Hebrew user needs no translation).
 - Respond ENTIRELY in the user's UI language passed in the user message. NEVER in the input word's language when they differ, UI language always wins for definitions, examples, etymology fields, and kids explanation. The headword and original-script forms stay native; everything else uses UI language.
 - Keep language human, warm, clear. No academic tone. No dictionary phrasing.
 - Examples must feel like real life ג€” sentences a person would actually say or read.`;
@@ -715,6 +717,7 @@ Return this exact JSON:
 {
   "word": "the word",
   "language": "detected language in English",
+  "translation": "the headword's most common equivalent WORD in the user's UI language — ONLY when the input word's language differs from the UI language (e.g. Hebrew 'חלום' for a German user → 'Traum'). Empty string when the word is already in the UI language.",
   "multiplemeanings": false,
   "meanings": [
     {
@@ -777,6 +780,11 @@ const RESPONSE_SCHEMA = {
   properties: {
     word:     { type: "string" },
     language: { type: "string" },
+    // translation — the headword's equivalent in the reader's UI language,
+    // populated only for cross-language lookups (a German reader searching
+    // a Hebrew word gets "Traum"). Nullable/empty when the word is already
+    // in the UI language; the render side shows nothing then.
+    translation: { type: ["string", "null"] },
     // ipa and contextNote aren't always produced (ipa is silently
     // skipped by the current prompt; contextNote is only for the
     // CONTEXT mode). Allow null so the model can comply with strict
@@ -853,7 +861,7 @@ const RESPONSE_SCHEMA = {
     },
     contextNote: { type: ["string", "null"] },
   },
-  required: ["word", "language", "ipa", "meanings", "etymology", "generalIdioms", "contextNote"],
+  required: ["word", "language", "translation", "ipa", "meanings", "etymology", "generalIdioms", "contextNote"],
 } as const;
 
 const STRUCTURED_RESPONSE_FORMAT = {

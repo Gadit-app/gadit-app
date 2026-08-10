@@ -615,6 +615,34 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-word-title-row > .wb-word-title { margin: 0; }
 
+/* Cross-language gloss — the headword's equivalent in the reader's own
+   language, shown under the (foreign) headword. e.g. a German reader who
+   looked up "חלום" sees "Deutsch  Traum". Quiet by design: it anchors the
+   word without competing with the big display title above it. */
+.wordbook .wb-word-translation {
+  margin-top: 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.wordbook .wb-word-translation-lang {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0EA5A5;
+  background: rgba(14, 165, 165, 0.10);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.wordbook .wb-word-translation-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #292524;
+}
+
 /* Listen button — outlined teal disc, ~36px so it doesn't compete
    with the word display type. Pulses on .is-playing while audio
    plays so the user gets a calm visual signal that something is

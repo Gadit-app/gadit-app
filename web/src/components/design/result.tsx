@@ -38,6 +38,7 @@ import { useState, type ReactNode } from "react";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import type { Lang } from "@/lib/i18n";
+import { LANGUAGES } from "@/lib/i18n";
 import { isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
@@ -78,6 +79,10 @@ export interface Etymology {
 export interface WordResult {
   word: string;
   language: string;
+  /** The headword's equivalent in the UI language — only populated for
+   *  cross-language lookups (e.g. a German user searching "חלום" gets
+   *  "Traum"). Empty/absent when the word is already in the UI language. */
+  translation?: string;
   meanings: Meaning[];
   etymology: Etymology | string;
   generalIdioms?: Idiom[];
@@ -284,6 +289,7 @@ export function ProgressSignal({ savedAgo }: { savedAgo: string }) {
 export function WordHeader({
   word,
   language,
+  translation,
   pos,
   isSaved = false,
   onSave,
@@ -296,6 +302,7 @@ export function WordHeader({
 }: {
   word: string;
   language: string;
+  translation?: string;
   pos?: string;
   ipa?: string;
   isSaved?: boolean;
@@ -309,6 +316,16 @@ export function WordHeader({
 }) {
   const { lang } = useLang();
   const showLang = !langMatchesUi(language, lang);
+  // Cross-language anchor: when the word is in another language, show its
+  // equivalent in the UI language right under the headword (חלום → Traum),
+  // so a reader browsing in German who looked up a Hebrew word gets the one
+  // German word for it — the piece that was missing before. Guarded so a
+  // garbled value is never shown, and only when the word IS foreign.
+  const cleanTranslation =
+    showLang && typeof translation === "string" && translation.trim() &&
+    !isEtymologyFieldGarbled("originalMeaning", translation.trim())
+      ? translation.trim()
+      : "";
   // word-meta: "pos · language" — both italicized in Latin, plain in HE/AR.
   // Hide entire row if neither is shown.
   const showMeta = !!pos || showLang;
@@ -335,6 +352,14 @@ export function WordHeader({
             className="wb-word-listen-btn"
           />
         </div>
+        {cleanTranslation && (
+          <div className="wb-word-translation">
+            <span className="wb-word-translation-lang">
+              {LANGUAGES.find((l) => l.code === lang)?.label ?? lang}
+            </span>
+            <span className="wb-word-translation-value">{cleanTranslation}</span>
+          </div>
+        )}
       </div>
       {(onSave || onShare || onPin) && (
         <div className="wb-word-actions">
@@ -1385,6 +1410,7 @@ export function ResultView({
       <WordHeader
         word={result.word}
         language={result.language}
+        translation={result.translation}
         ipa={result.ipa}
         isSaved={isSaved}
         onShare={onShare}
