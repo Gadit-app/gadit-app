@@ -1104,6 +1104,7 @@ export function FamilyClient() {
                   <Link href={href("/family/add")} className="wb-family-cta">{c.add}</Link>
                 </div>
               )}
+              <ActivityFeed user={user} lang={lang} dir={dir} />
             </div>
           )}
 
@@ -1185,6 +1186,117 @@ export function FamilyClient() {
             </div>
           )}
         </main>
+      </div>
+    </div>
+  );
+}
+
+// ─── Recent-lookups activity feed (parent) ─────────────────────
+const ACTIVITY_COPY: Record<string, { title: string; sub: string; empty: string; today: string; yesterday: string }> = {
+  en: {
+    title: "Recent lookups",
+    sub: "Every word your kids looked up, newest first.",
+    empty: "No lookups yet. When your kids search a word in Kids Mode, it shows up here.",
+    today: "Today", yesterday: "Yesterday",
+  },
+  he: {
+    title: "חיפושים אחרונים",
+    sub: "כל מילה שהילדים חיפשו, מהחדש לישן.",
+    empty: "עדיין אין חיפושים. כשהילדים יחפשו מילה במצב ילדים, זה יופיע כאן.",
+    today: "היום", yesterday: "אתמול",
+  },
+};
+
+type SearchItem = { word: string; language: string; kidName: string; memberId: string | null; at: string };
+
+function ActivityFeed({
+  user,
+  lang,
+  dir,
+}: {
+  user: { getIdToken: () => Promise<string> } | null;
+  lang: string;
+  dir: "ltr" | "rtl";
+}) {
+  const t = ACTIVITY_COPY[lang] ?? ACTIVITY_COPY.en;
+  const [items, setItems] = useState<SearchItem[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!user) return;
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/family/searches", { headers: { Authorization: `Bearer ${idToken}` } });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (!cancelled) setItems(Array.isArray(data.items) ? data.items : []);
+      } catch {
+        if (!cancelled) setItems([]);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  function timeLabel(iso: string): string {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    const now = new Date();
+    const yd = new Date(now);
+    yd.setDate(now.getDate() - 1);
+    const hm = d.toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
+    if (d.toDateString() === now.toDateString()) return `${t.today} ${hm}`;
+    if (d.toDateString() === yd.toDateString()) return `${t.yesterday} ${hm}`;
+    return d.toLocaleDateString(lang, { day: "numeric", month: "short" });
+  }
+
+  if (items === null || items.length === 0) {
+    // Hide entirely when there's nothing yet (keeps the dashboard clean);
+    // the empty hint only shows once loaded AND still empty is not worth a
+    // whole card, so render nothing until there's real activity.
+    if (items === null) return null;
+    return null;
+  }
+
+  const TEAL = "#0EA5A5";
+  return (
+    <div
+      dir={dir}
+      style={{
+        marginTop: 18, background: "#fff", border: "1px solid #E7E5E4",
+        borderRadius: 14, padding: "16px 18px",
+      }}
+    >
+      <div style={{ fontSize: 15, fontWeight: 800, color: "#1C1917" }}>{t.title}</div>
+      <div style={{ fontSize: 13, color: "#78716C", marginTop: 3 }}>{t.sub}</div>
+      <div style={{ marginTop: 12 }}>
+        {items.map((it, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex", alignItems: "baseline", gap: 10,
+              padding: "9px 0",
+              borderTop: i === 0 ? "none" : "1px solid #F5F5F4",
+            }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 700, color: "#292524" }}>{it.word}</span>
+            {it.kidName && (
+              <span
+                style={{
+                  fontSize: 11, fontWeight: 700, color: TEAL,
+                  background: "rgba(14,165,165,0.10)", padding: "1px 7px", borderRadius: 999,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {it.kidName}
+              </span>
+            )}
+            <span style={{ marginInlineStart: "auto", fontSize: 12, color: "#A8A29E", whiteSpace: "nowrap" }}>
+              {timeLabel(it.at)}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
