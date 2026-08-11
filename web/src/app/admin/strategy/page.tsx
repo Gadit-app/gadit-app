@@ -5,7 +5,7 @@ import AdminStrategyClient from "./AdminStrategyClient";
  * /admin layout) as the sibling admin pages.
  */
 export const metadata = {
-  title: "Admin · Strategy, Gadit",
+  title: "Strategy",
   robots: { index: false, follow: false },
 };
 

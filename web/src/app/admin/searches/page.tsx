@@ -8,7 +8,7 @@ import AdminSearchesClient from "./AdminSearchesClient";
  * /admin/users so unlocking one unlocks both for the tab session.
  */
 export const metadata = {
-  title: "Admin · Searches, Gadit",
+  title: "Activity",
   robots: { index: false, follow: false },
 };
 

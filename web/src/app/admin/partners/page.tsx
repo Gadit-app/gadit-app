@@ -5,7 +5,7 @@ import AdminPartnersClient from "./AdminPartnersClient";
  * by the /admin layout) as the sibling admin pages.
  */
 export const metadata = {
-  title: "Admin · Partners, Gadit",
+  title: "Partners",
   robots: { index: false, follow: false },
 };
 

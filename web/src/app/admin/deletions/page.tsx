@@ -6,7 +6,7 @@ import AdminDeletionsClient from "./AdminDeletionsClient";
  * indexed; reuses the shared AdminShell chrome.
  */
 export const metadata = {
-  title: "Admin · Deletions, Gadit",
+  title: "Deletions",
   robots: { index: false, follow: false },
 };
 

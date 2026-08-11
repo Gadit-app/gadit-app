@@ -7,7 +7,7 @@ import { AdminEmailsClient } from "./AdminEmailsClient";
  * Resend's short-retention dashboard.
  */
 export const metadata = {
-  title: "Admin · Emails, Gadit",
+  title: "Emails",
   robots: { index: false, follow: false },
 };
 

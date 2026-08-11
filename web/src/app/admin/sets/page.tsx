@@ -7,7 +7,7 @@ import AdminSetsClient from "./AdminSetsClient";
  * (shell gate + server endpoints). Not indexed.
  */
 export const metadata = {
-  title: "Admin · Word sets, Gadit",
+  title: "Word sets",
   robots: { index: false, follow: false },
 };
 
