@@ -74,8 +74,13 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
       const { signInWithCustomToken, getAuth } = await import("firebase/auth");
       await signInWithCustomToken(getAuth(), json.token);
       onSwitch?.();
-      // Reload so every surface picks up the new profile's session + notebook.
-      window.location.reload();
+      // Land on the search home (in the current language), not on whatever
+      // commercial/dashboard page we happened to be on. Reloading the
+      // current URL sent a parent switching back from a kid to /pricing or
+      // /family instead of their own search page (Gadi 2026-08-11). A full
+      // navigation also lets every surface pick up the new session + notebook.
+      const home = lang === "en" ? "/" : `/${lang}`;
+      window.location.assign(home);
     } catch {
       setBusy(null);
     }

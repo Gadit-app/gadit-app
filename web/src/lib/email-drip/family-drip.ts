@@ -26,27 +26,31 @@ function shell(
 ): string {
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
+  // dir is repeated on every block because Gmail drops it from <html>/<body>.
   return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
-  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
+  <div dir="${dir}" style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
     <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:26px 24px;color:#fff;">
       <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;" dir="ltr">GADIT FAMILY</div>
-      <div style="font-size:22px;font-weight:700;margin-top:6px;">${parts.heading}</div>
+      <div dir="${dir}" style="text-align:${align};font-size:22px;font-weight:700;margin-top:6px;">${parts.heading}</div>
     </div>
-    <div style="padding:24px;">
-      <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0EA5A5;margin:0 0 10px;">${parts.eyebrow}</div>
+    <div dir="${dir}" style="padding:24px;text-align:${align};">
+      <div dir="${dir}" style="text-align:${align};font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0EA5A5;margin:0 0 10px;">${parts.eyebrow}</div>
       ${parts.bodyHtml}
       <div style="text-align:center;margin-top:22px;">
         <a href="${parts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${parts.ctaText}</a>
       </div>
-      <p style="font-size:13px;color:#6B7280;line-height:1.5;margin:22px 0 0;">${parts.foot}</p>
-      <p style="font-size:11px;color:#B4B4B4;margin:16px 0 0;"><a href="${parts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
+      <p dir="${dir}" style="text-align:${align};font-size:13px;color:#6B7280;line-height:1.5;margin:22px 0 0;">${parts.foot}</p>
+      <p dir="${dir}" style="text-align:${align};font-size:11px;color:#B4B4B4;margin:16px 0 0;"><a href="${parts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
     </div>
   </div>
 </body></html>`;
 }
 
+// dir + text-align go on EACH paragraph, not just the container: Gmail
+// strips dir off <html>/<body>, so without this Hebrew paragraphs fall back
+// to LTR and sentence-final periods land on the wrong (right) side.
 const p = (he: boolean, html: string) =>
-  `<p style="font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;">${html}</p>`;
+  `<p dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;">${html}</p>`;
 
 // ── Email 1 (day 1): connect the kids + switching between users ──
 function connectKids({ he, unsubscribeUrl }: { he: boolean; unsubscribeUrl: string }) {
