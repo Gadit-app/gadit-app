@@ -3,6 +3,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
+import { FAMILY_DRIP } from "@/lib/email-drip/family-drip";
 import { sendDripEmail } from "@/lib/email-drip/send";
 
 /**
@@ -108,6 +109,46 @@ export async function GET(req: NextRequest) {
         : d.uiLang === "he" || d.country === "IL"
           ? "he"
           : "en";
+
+    const he = lang === "he";
+
+    // ── Family onboarding drip (keyed on Family activation) ──────
+    // A Family owner gets the 3-step setup series (connect kids, turn on
+    // alerts, how it works) instead of the general signup drip, which
+    // ends in an upgrade CTA irrelevant to a paying parent. familyActivatedAt
+    // is stamped once by the webhook when the Family plan activates.
+    const famActivatedIso = d.familyActivatedAt as string | undefined;
+    if (famActivatedIso) {
+      const famActivated = Date.parse(famActivatedIso);
+      if (Number.isFinite(famActivated)) {
+        const famDayN = daysBetween(famActivated, now);
+        const famSent = (d.familyDripSent as Record<string, unknown> | undefined) ?? {};
+        let famCand: (typeof FAMILY_DRIP)[number] | null = null;
+        for (const m of FAMILY_DRIP) {
+          if (m.dayOffset > famDayN) continue;
+          if (famSent[m.key]) continue;
+          if (!famCand || m.dayOffset > famCand.dayOffset) famCand = m;
+        }
+        if (famCand) {
+          const built = famCand.build({ he, unsubscribeUrl: buildUnsubUrl(u.uid) });
+          if (dryRun) {
+            results.push({ uid: u.uid, email, mailKey: famCand.key, status: "skipped", reason: "dryRun" });
+          } else {
+            const sent = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+            if (sent.ok) {
+              await db.collection("users").doc(u.uid).set(
+                { familyDripSent: { [famCand.key]: { sentAt: FieldValue.serverTimestamp(), messageId: sent.id ?? null } } },
+                { merge: true },
+              );
+              results.push({ uid: u.uid, email, mailKey: famCand.key, status: "sent" });
+            } else {
+              results.push({ uid: u.uid, email, mailKey: famCand.key, status: "failed", reason: sent.reason });
+            }
+          }
+        }
+      }
+      continue; // Family owners skip the general signup drip.
+    }
 
     const drip = getDripForLang(lang);
     if (drip.length === 0) continue;

@@ -162,6 +162,22 @@ async function notifyPaidActivation(
  * Localized he/en from the user doc's uiLang. Deduped via
  * `familyWelcomeSent`. Non-blocking.
  */
+/**
+ * Stamp the moment a Family plan first activated, once, so the Family
+ * onboarding drip (lib/email-drip/family-drip) can key its schedule off
+ * it. Read-checked so re-firing webhooks don't reset the start date.
+ */
+async function stampFamilyActivated(uid: string) {
+  try {
+    const ref = getAdminDb().collection("users").doc(uid);
+    if (!(await ref.get()).data()?.familyActivatedAt) {
+      await ref.set({ familyActivatedAt: new Date().toISOString() }, { merge: true });
+    }
+  } catch (e) {
+    console.warn("[webhook] stampFamilyActivated failed:", e);
+  }
+}
+
 async function sendFamilyWelcome(uid: string, email: string | null) {
   try {
     const resendKey = process.env.RESEND_API_KEY;
@@ -558,7 +574,7 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     // trial-to-paid conversion rather than a fresh paid signup.
     await notifyPaidActivation(uid, tier, email, { fromTrial: !!sub.trial_end });
   }
-  if (family) await sendFamilyWelcome(uid, email);
+  if (family) { await stampFamilyActivated(uid); await sendFamilyWelcome(uid, email); }
   return true;
 }
 
@@ -638,7 +654,7 @@ export async function POST(req: NextRequest) {
         const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
         await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd });
       }
-      if (family) await sendFamilyWelcome(userId, customerEmail);
+      if (family) { await stampFamilyActivated(userId); await sendFamilyWelcome(userId, customerEmail); }
     }
 
     if (event.type === "customer.subscription.created") {
