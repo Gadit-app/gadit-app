@@ -4,6 +4,8 @@ import {
   User,
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -146,6 +148,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const auth = getFirebaseAuth();
+    // Complete a Google sign-in that used the full-page redirect flow
+    // (PWAs / popup fallback). Returns null on an ordinary load.
+    getRedirectResult(auth)
+      .then((cred) => { if (cred) postGoogleSignIn(cred); })
+      .catch((err) => { console.warn("getRedirectResult failed:", err); });
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
@@ -161,6 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
     return unsub;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Subscribe to user's plan changes in Firestore (security rules must allow reading own doc)
@@ -272,23 +280,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fire(0);
   }
 
-  async function signInWithGoogle() {
-    const auth = getFirebaseAuth();
-    const provider = new GoogleAuthProvider();
-    const cred = await signInWithPopup(auth, provider);
-    // Google popup serves both first-time signups AND returning logins.
-    // additionalUserInfo.isNewUser disambiguates — only fire the notify
-    // call when Firebase confirms this is the user's first auth event.
+  // Post-sign-in side effects, shared by the popup path and the redirect
+  // path (getRedirectResult on load). isNewUser disambiguates first-time
+  // signup from a returning login so we only notify/track/welcome once.
+  function postGoogleSignIn(cred: import("firebase/auth").UserCredential) {
     const extra = getAdditionalUserInfo(cred);
     if (extra?.isNewUser) {
       void notifySignupSafely(cred.user);
       trackAffonsoSignup(cred.user);
-      // Funnel event (council verdict 2026-07-08): measure signups by
-      // method so the wall→signup conversion is a number, not a guess.
       track("signup_completed", { method: "google" });
       showWelcome();
     }
     setShowLoginModal(false);
+  }
+
+  async function signInWithGoogle() {
+    const auth = getFirebaseAuth();
+    const provider = new GoogleAuthProvider();
+    // Popups don't work in an installed PWA (standalone display mode): the
+    // popup can't open or postMessage back, so signInWithPopup throws and
+    // the user sees "Could not sign in with Google" (Gadi 2026-08-11 on
+    // his phone). In standalone, go straight to a full-page redirect;
+    // getRedirectResult (in the auth-init effect) completes it on return.
+    const standalone =
+      typeof window !== "undefined" &&
+      ((window.matchMedia?.("(display-mode: standalone)")?.matches ?? false) ||
+        (window.navigator as unknown as { standalone?: boolean }).standalone === true);
+    if (standalone) {
+      await signInWithRedirect(auth, provider);
+      return;
+    }
+    try {
+      const cred = await signInWithPopup(auth, provider);
+      postGoogleSignIn(cred);
+    } catch (e) {
+      const code = (e as { code?: string })?.code ?? "";
+      // Any popup/environment failure → fall back to the redirect flow.
+      if (
+        code === "auth/popup-blocked" ||
+        code === "auth/popup-closed-by-user" ||
+        code === "auth/cancelled-popup-request" ||
+        code === "auth/operation-not-supported-in-this-environment" ||
+        code === "auth/internal-error"
+      ) {
+        await signInWithRedirect(auth, provider);
+        return;
+      }
+      throw e;
+    }
   }
 
   async function signInWithEmail(email: string, password: string) {
