@@ -31,12 +31,30 @@ export function LangProvider({
   const [lang, setLangState] = useState<Lang>(initialLang ?? "en");
 
   useEffect(() => {
-    // If the server didn't seed us (first visit), fall back to the
-    // previously-saved choice in localStorage or detected browser lang.
-    if (initialLang) return;
-    const saved = localStorage.getItem("gadit-lang") as Lang | null;
-    setLangState(saved ?? detectBrowserLang());
-  }, [initialLang]);
+    // The saved choice (localStorage) is the user's REAL preference and
+    // must win over the server's seed. The server seeds "en" both when
+    // the cookie says English AND when there's no cookie at all — and the
+    // installed PWA (start_url "/", no lang prefix) doesn't reliably send
+    // the cookie, so a Hebrew user would otherwise get stuck on the
+    // English UI (Gadi 2026-08-11, family dashboard opened in English).
+    let resolved: Lang;
+    try {
+      const saved = localStorage.getItem("gadit-lang") as Lang | null;
+      resolved = saved ?? initialLang ?? detectBrowserLang();
+    } catch {
+      resolved = initialLang ?? "en";
+    }
+    if (resolved !== lang) setLangState(resolved);
+    // Persist so the SERVER renders the right language on the next load
+    // (kills the English flash next time the PWA opens).
+    try {
+      document.cookie = `gadit-lang=${resolved}; path=/; max-age=31536000; SameSite=Lax`;
+      localStorage.setItem("gadit-lang", resolved);
+    } catch {
+      /* private mode / blocked */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function setLang(l: Lang) {
     setLangState(l);
