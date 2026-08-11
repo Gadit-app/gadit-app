@@ -430,7 +430,11 @@ export function WordClient({
   const notifiedWordRef = useRef<string>("");
   useEffect(() => {
     const w = result?.word;
-    if (!w || familyRole !== "kid" || !user) return;
+    // Only on a COMPLETE result. During SSE streaming result.word is built
+    // up letter by letter (ח → חפ → חפץ), so firing on every change sent
+    // the parent 3 alerts for prefixes. loading stays true until the final
+    // result lands, so gate on it.
+    if (loading || !w || familyRole !== "kid" || !user) return;
     if (notifiedWordRef.current === w) return;
     notifiedWordRef.current = w;
     (async () => {
@@ -439,14 +443,14 @@ export function WordClient({
         await fetch("/api/family/notify-search", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ word: w, language: result?.language ?? "" }),
+          body: JSON.stringify({ word: w, language: result?.language ?? "", uiLang: lang }),
           keepalive: true,
         });
       } catch {
         /* best effort — never disturb the search flow */
       }
     })();
-  }, [result?.word, result?.language, familyRole, user]);
+  }, [result?.word, result?.language, familyRole, user, loading, lang]);
   // Offline pin state: true means the user has explicitly downloaded
   // this word for offline study (vs the implicit auto-cache that all
   // Clear/Deep users get on view). Loaded from IDB once the result
@@ -863,7 +867,9 @@ export function WordClient({
   // "deep"). Classroom has its own single-image effect above.
   const kidsGenWordRef = useRef<string>("");
   useEffect(() => {
-    if (!kidsMode || classroomMode || !result?.word || !user || plan === "basic") return;
+    // Complete result only — mid-stream result.word is a partial prefix,
+    // so without this we'd generate images for ח, חפ, חפץ.
+    if (loading || !kidsMode || classroomMode || !result?.word || !user || plan === "basic") return;
     if (kidsGenWordRef.current === result.word) return;
     kidsGenWordRef.current = result.word;
     const meanings = result.meanings ?? [];
@@ -899,7 +905,7 @@ export function WordClient({
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kidsMode, classroomMode, result?.word, user, plan]);
+  }, [kidsMode, classroomMode, result?.word, user, plan, loading]);
 
   // Kids Mode: always save the looked-up word to the notebook
   // automatically, so a child never has to tap "Save" and the parent's
@@ -907,7 +913,8 @@ export function WordClient({
   // upgrade modal / toast); once per word; non-basic only.
   const autoSavedRef = useRef<string>("");
   useEffect(() => {
-    if (!kidsMode || !result?.word || !user || plan === "basic") return;
+    // Complete result only — mid-stream result.word is a partial prefix.
+    if (loading || !kidsMode || !result?.word || !user || plan === "basic") return;
     if (autoSavedRef.current === result.word) return;
     autoSavedRef.current = result.word;
     (async () => {
@@ -928,7 +935,7 @@ export function WordClient({
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kidsMode, result?.word, user, plan]);
+  }, [kidsMode, result?.word, user, plan, loading]);
 
   // Classroom present mode: fetch subject-appropriate examples for the
   // curated meaning. Uses the SET's language (the curated defs are

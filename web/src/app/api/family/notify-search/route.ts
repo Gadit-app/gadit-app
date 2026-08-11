@@ -31,7 +31,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: "bad_token" });
     }
 
-    const body = (await req.json().catch(() => null)) as { word?: string; language?: string } | null;
+    const body = (await req.json().catch(() => null)) as
+      | { word?: string; language?: string; uiLang?: string }
+      | null;
     const word = (body?.word ?? "").toString().trim();
     if (!word || word.length > 120) return NextResponse.json({ ok: true, skipped: "no_word" });
 
@@ -74,12 +76,23 @@ export async function POST(req: NextRequest) {
         notified: false,
       });
 
-    const prefs = (
-      await db.collection("families").doc(ownerUid).get()
-    ).data()?.notifyPrefs as { enabled?: boolean; mode?: string } | undefined;
+    const famRef = db.collection("families").doc(ownerUid);
+    const prefs = (await famRef.get()).data()?.notifyPrefs as
+      | { enabled?: boolean; mode?: string; lang?: string }
+      | undefined;
+
+    // If the parent enabled alerts before we captured their language,
+    // adopt the household's search language so alerts aren't stuck in
+    // English. The parent's own toggle (which sends their UI language)
+    // still overrides this, and we only ever fill it when it's empty.
+    const uiLang = typeof body?.uiLang === "string" ? body.uiLang.slice(0, 8) : "";
+    if (prefs?.enabled && uiLang && !prefs.lang) {
+      await famRef.set({ notifyPrefs: { ...prefs, lang: uiLang } }, { merge: true });
+    }
 
     if (prefs?.enabled && prefs.mode !== "daily") {
-      // Instant mode (default when enabled): notify right away.
+      // Instant mode (default when enabled): notify right away. The lang
+      // we may have just written is picked up inside notifyOwnerInstant.
       await notifyOwnerInstant(ownerUid, kidName, word);
     }
 
