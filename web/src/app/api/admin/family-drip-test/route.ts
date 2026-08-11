@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
 
   const sent: { key: string; ok: boolean; reason?: string }[] = [];
   for (const m of targets) {
-    const built = m.build({ he, unsubscribeUrl: buildUnsubUrl(uid) });
+    const built = await m.build({ he, unsubscribeUrl: buildUnsubUrl(uid) });
     const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
     sent.push({ key: m.key, ok: r.ok, reason: r.ok ? undefined : r.reason });
   }

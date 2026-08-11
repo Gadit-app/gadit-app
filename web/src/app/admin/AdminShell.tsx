@@ -36,6 +36,7 @@ const STRINGS = {
     revenue: "Revenue",
     campaigns: "Campaigns",
     emails: "Emails",
+    emailEditor: "Email editor",
     activity: "Activity",
     reports: "Reports",
     partners: "Partners",
@@ -61,6 +62,7 @@ const STRINGS = {
     revenue: "הכנסות",
     campaigns: "קמפיינים",
     emails: "מיילים",
+    emailEditor: "עריכת מיילים",
     activity: "פעילות",
     reports: "דיווחים",
     partners: "שותפים",
@@ -108,6 +110,7 @@ const NAV_SECTIONS: NavSection[] = [
   { titleKey: "secContent", items: [
     { href: "/admin/sets",      labelKey: "wordsets",  icon: <IconGrid /> },
     { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail /> },
+    { href: "/admin/email-editor", labelKey: "emailEditor", icon: <IconMail /> },
     { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag /> },
   ] },
 ];

@@ -130,7 +130,7 @@ export async function GET(req: NextRequest) {
           if (!famCand || m.dayOffset > famCand.dayOffset) famCand = m;
         }
         if (famCand) {
-          const built = famCand.build({ he, unsubscribeUrl: buildUnsubUrl(u.uid) });
+          const built = await famCand.build({ he, unsubscribeUrl: buildUnsubUrl(u.uid) });
           if (dryRun) {
             results.push({ uid: u.uid, email, mailKey: famCand.key, status: "skipped", reason: "dryRun" });
           } else {
