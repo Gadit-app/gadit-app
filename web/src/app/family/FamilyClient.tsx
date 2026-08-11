@@ -26,7 +26,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
-import { enableOwnerPush, disableOwnerPush } from "@/lib/push-client";
+import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
   FamilyMember,
@@ -1307,6 +1307,7 @@ const NOTIF_COPY: Record<string, {
   title: string; sub: string; enable: string;
   instant: string; instantSub: string; daily: string; dailySub: string;
   pushOn: string; pushUnavailable: string; emailNote: string;
+  enableHere: string; enableHereHint: string;
 }> = {
   en: {
     title: "Word alerts",
@@ -1317,6 +1318,8 @@ const NOTIF_COPY: Record<string, {
     pushOn: "Phone alerts are on for this device.",
     pushUnavailable: "This device can't show a phone banner, but you'll still get emails.",
     emailNote: "Sent to your account email, and as a phone banner when available.",
+    enableHere: "Turn on alerts on this device",
+    enableHereHint: "Each phone or computer needs to be turned on once. Tap here on your phone (opened from the home screen) to get the banner there too.",
   },
   he: {
     title: "התראות על מילים",
@@ -1327,6 +1330,8 @@ const NOTIF_COPY: Record<string, {
     pushOn: "התראות לטלפון פעילות במכשיר הזה.",
     pushUnavailable: "המכשיר הזה לא יכול להציג באנר, אבל עדיין תקבלו אימיילים.",
     emailNote: "נשלח למייל של החשבון, וכבאנר בטלפון כשאפשר.",
+    enableHere: "הפעל התראות במכשיר הזה",
+    enableHereHint: "כל טלפון או מחשב צריך הפעלה פעם אחת. פתח את Gadit מהמסך הבית בטלפון ולחץ כאן כדי לקבל את הבאנר גם שם.",
   },
 };
 
@@ -1344,10 +1349,16 @@ function NotifSettings({
   const [mode, setMode] = useState<"instant" | "daily">("instant");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
+  // Whether THIS device has a live push subscription (null = still
+  // checking). Push subscriptions are per-device, so a phone can need
+  // turning on even when alerts are already enabled from a laptop.
+  const [localSubscribed, setLocalSubscribed] = useState<boolean | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const sub = await hasLocalPushSubscription();
+      if (!cancelled) setLocalSubscribed(sub);
       if (!user) return;
       try {
         const idToken = await user.getIdToken();
@@ -1366,6 +1377,24 @@ function NotifSettings({
     })();
     return () => { cancelled = true; };
   }, [user]);
+
+  async function enableThisDevice() {
+    if (!user || busy) return;
+    setBusy(true);
+    setNote("");
+    try {
+      const idToken = await user.getIdToken();
+      const r = await enableOwnerPush(idToken);
+      if (r.ok) {
+        setLocalSubscribed(true);
+        setNote(t.pushOn);
+      } else {
+        setNote(t.pushUnavailable);
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function savePrefs(nextEnabled: boolean, nextMode: "instant" | "daily") {
     if (!user) return;
@@ -1388,6 +1417,7 @@ function NotifSettings({
         const idToken = await user.getIdToken();
         const r = await enableOwnerPush(idToken);
         setNote(r.ok ? t.pushOn : t.pushUnavailable);
+        setLocalSubscribed(r.ok);
         await savePrefs(true, mode); // email fallback works even if push didn't
         setEnabled(true);
       } else {
@@ -1395,6 +1425,7 @@ function NotifSettings({
         const idToken = await user.getIdToken();
         await disableOwnerPush(idToken);
         setEnabled(false);
+        setLocalSubscribed(false);
         setNote("");
       }
     } finally {
@@ -1485,6 +1516,25 @@ function NotifSettings({
               </button>
             );
           })}
+          {localSubscribed === false && (
+            <div style={{ marginTop: 6 }}>
+              <button
+                type="button"
+                onClick={enableThisDevice}
+                disabled={busy}
+                style={{
+                  width: "100%", padding: "11px 14px", borderRadius: 10, cursor: busy ? "default" : "pointer",
+                  border: "1.5px solid #0EA5A5", background: "rgba(14,165,165,0.06)",
+                  color: "#0E7490", fontSize: 14, fontWeight: 700, fontFamily: "inherit",
+                }}
+              >
+                🔔 {t.enableHere}
+              </button>
+              <div style={{ fontSize: 12, color: "#A8A29E", marginTop: 6, lineHeight: 1.6 }}>
+                {t.enableHereHint}
+              </div>
+            </div>
+          )}
           <div style={{ fontSize: 12, color: "#A8A29E", marginTop: 2 }}>
             {note || t.emailNote}
           </div>

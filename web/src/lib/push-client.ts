@@ -56,6 +56,20 @@ export async function enableOwnerPush(idToken: string): Promise<EnableResult> {
   }
 }
 
+/** Does THIS browser/device already have a push subscription? Used to
+ *  show an "enable on this device" prompt when alerts are on globally but
+ *  the current device (e.g. the parent's phone vs their laptop) never
+ *  subscribed. Each device needs its own subscription. */
+export async function hasLocalPushSubscription(): Promise<boolean> {
+  try {
+    if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return false;
+    const reg = await navigator.serviceWorker.ready;
+    return !!(await reg.pushManager.getSubscription());
+  } catch {
+    return false;
+  }
+}
+
 export async function disableOwnerPush(idToken: string): Promise<void> {
   try {
     const reg = await navigator.serviceWorker.ready;
