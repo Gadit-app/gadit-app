@@ -36,6 +36,10 @@ export async function GET(req: NextRequest) {
     // Unknown user: default to English, use a stable fake uid for the unsub link.
     uid = "preview";
   }
+  // Optional language override for previews (?lang=he) — the recipient's
+  // stored uiLang may be stale.
+  const langOverride = sp.get("lang");
+  if (langOverride) he = langOverride === "he";
 
   const seedDaysAgo = sp.get("seedDaysAgo");
   if (seedDaysAgo && uid && uid !== "preview") {
