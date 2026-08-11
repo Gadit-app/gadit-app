@@ -210,13 +210,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const token = await u.getIdToken();
       const { getStoredUtms, clearStoredUtms } = await import("./utm");
       const utm = getStoredUtms();
+      // Current UI language from the gadit-lang cookie (set by lang-context)
+      // so the server can persist it and send every email / alert in the
+      // user's own language, not English.
+      const langMatch =
+        typeof document !== "undefined" ? document.cookie.match(/(?:^|;\s*)gadit-lang=([^;]+)/) : null;
+      const lang = langMatch ? decodeURIComponent(langMatch[1]) : undefined;
+      const payload: Record<string, unknown> = {};
+      if (utm) payload.utm = utm;
+      if (lang) payload.lang = lang;
       await fetch("/api/notify-signup", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: utm ? JSON.stringify({ utm }) : undefined,
+        body: JSON.stringify(payload),
       });
       // Clear after a successful attribution — second signup on the
       // same device should re-capture from the next campaign click.

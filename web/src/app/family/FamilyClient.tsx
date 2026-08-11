@@ -1373,7 +1373,9 @@ function NotifSettings({
     await fetch("/api/family/notify-prefs", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-      body: JSON.stringify({ enabled: nextEnabled, mode: nextMode }),
+      // lang travels with every save so alerts always match the parent's
+      // current language, even if they switch it later.
+      body: JSON.stringify({ enabled: nextEnabled, mode: nextMode, lang }),
     });
   }
 

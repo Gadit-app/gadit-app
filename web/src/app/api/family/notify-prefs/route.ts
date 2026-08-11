@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
   const owner = await requireOwner(req);
   if (!owner) return NextResponse.json({ error: "not_family_owner" }, { status: 403 });
 
-  const body = (await req.json().catch(() => null)) as Partial<NotifyPrefs> | null;
+  const body = (await req.json().catch(() => null)) as (Partial<NotifyPrefs> & { lang?: string }) | null;
   if (!body) return NextResponse.json({ error: "bad_body" }, { status: 400 });
 
   const prefs: NotifyPrefs = {
@@ -45,10 +45,15 @@ export async function POST(req: NextRequest) {
     mode: body.mode === "daily" ? "daily" : "instant",
   };
 
+  // Capture the language the parent is using right now, so every alert
+  // (push + email, instant + digest) is rendered in their language.
+  const stored: Record<string, unknown> = { ...prefs, updatedAt: new Date().toISOString() };
+  if (typeof body.lang === "string" && body.lang.length <= 8) stored.lang = body.lang;
+
   await getAdminDb()
     .collection("families")
     .doc(owner.uid)
-    .set({ notifyPrefs: { ...prefs, updatedAt: new Date().toISOString() } }, { merge: true });
+    .set({ notifyPrefs: stored }, { merge: true });
 
   return NextResponse.json({ ok: true, prefs });
 }

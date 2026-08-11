@@ -46,8 +46,12 @@ export async function POST(req: NextRequest) {
       source?: string; medium?: string; campaign?: string;
       term?: string; content?: string; landingPath?: string;
     } | null = null;
+    let signupLang: string | null = null;
     try {
       const body = await req.json().catch(() => null);
+      if (body && typeof body === "object" && typeof body.lang === "string" && body.lang.length <= 8) {
+        signupLang = body.lang;
+      }
       if (body && typeof body === "object" && body.utm) {
         const u = body.utm as Record<string, unknown>;
         const pick = (k: string): string | undefined =>
@@ -91,6 +95,13 @@ export async function POST(req: NextRequest) {
         },
         { merge: true },
       );
+    }
+
+    // Persist the user's UI language so every email + alert we send them
+    // (welcome, drip, family word-alerts) is rendered in their language,
+    // not English. Refreshed on each login so it tracks a later switch.
+    if (signupLang && data.uiLang !== signupLang) {
+      await userRef.set({ uiLang: signupLang }, { merge: true });
     }
 
     // Partner (affiliate) attribution — if this signup arrived through a
