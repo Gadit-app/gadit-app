@@ -243,10 +243,16 @@ export async function GET(req: NextRequest) {
       signupsMonth,
     },
     revenue: {
-      // Paying only (Stripe active subs). Trials are the pipeline, shown
-      // separately — they are NOT counted as revenue.
+      // Three money figures Gadi wants at a glance (2026-08-12):
+      //   mrrUsd        = current paying (Stripe active subs)
+      //   trialingMrrUsd = future pipeline ($ the trials would bring)
+      //   totalMrrUsd   = both combined
       mrrUsd: rev.mrrUsd,
       arrUsd: rev.arrUsd,
+      trialingMrrUsd: rev.trialingMrrUsd,
+      trialingArrUsd: rev.trialingArrUsd,
+      totalMrrUsd: rev.totalMrrUsd,
+      totalArrUsd: rev.totalArrUsd,
       payingSubscriptions: rev.activePayingCount,
       trialingSubscriptions: rev.trialingCount,
       payingByTier: rev.payingByTier,

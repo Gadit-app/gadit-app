@@ -40,6 +40,10 @@ export async function GET(req: NextRequest) {
     summary: {
       mrrUsd: r.mrrUsd,
       arrUsd: r.arrUsd,
+      trialingMrrUsd: r.trialingMrrUsd,
+      trialingArrUsd: r.trialingArrUsd,
+      totalMrrUsd: r.totalMrrUsd,
+      totalArrUsd: r.totalArrUsd,
       activePayingCount: r.activePayingCount,
       trialingCount: r.trialingCount,
       atRiskCount: r.atRiskCount,

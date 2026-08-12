@@ -26,6 +26,10 @@ type Overview = {
   revenue: {
     mrrUsd: number;
     arrUsd: number;
+    trialingMrrUsd: number;
+    trialingArrUsd: number;
+    totalMrrUsd: number;
+    totalArrUsd: number;
     payingSubscriptions: number;
     trialingSubscriptions: number;
     compAccounts?: number;
@@ -61,8 +65,8 @@ const STRINGS = {
     title: "Overview",
     loading: "Loading…",
     cardMRR: "Monthly revenue",
-    cardPayingSubs: "Paying subscriptions",
-    cardTrialingSubs: "In trial",
+    cardFuture: "Future revenue",
+    cardTotal: "Total revenue",
     cardTotalUsers: "Total users",
     cardSignupsWeek: "Signups · 7 days",
     cardSearchesToday: "Searches today",
@@ -85,8 +89,8 @@ const STRINGS = {
     title: "סקירה",
     loading: "טוען…",
     cardMRR: "הכנסה חודשית",
-    cardPayingSubs: "מנויים משלמים",
-    cardTrialingSubs: "בניסיון",
+    cardFuture: "הכנסה עתידית",
+    cardTotal: "סכום כולל",
     cardTotalUsers: "סך משתמשים",
     cardSignupsWeek: "הרשמות · 7 ימים",
     cardSearchesToday: "חיפושים היום",
@@ -174,9 +178,9 @@ export default function AdminOverviewClient() {
       {data && (
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
-            <BigCard label={t.cardMRR} value={`$${data.revenue.mrrUsd.toFixed(2)}`} accent="#0EA5A5" sub={t.perYear.replace("%", data.revenue.arrUsd.toFixed(0))} />
-            <BigCard label={t.cardPayingSubs} value={data.revenue.payingSubscriptions} accent="#7C3AED" sub={tierBreakdown(data.revenue.payingByTier)} subLtr />
-            <BigCard label={t.cardTrialingSubs} value={data.revenue.trialingSubscriptions} accent="#9CA3AF" sub={tierBreakdown(data.revenue.trialingByTier)} subLtr />
+            <BigCard label={t.cardMRR} value={`$${data.revenue.mrrUsd.toFixed(2)}`} accent="#0EA5A5" sub={countAndTiers(data.revenue.payingSubscriptions, data.revenue.payingByTier)} subLtr />
+            <BigCard label={t.cardFuture} value={`$${data.revenue.trialingMrrUsd.toFixed(2)}`} accent="#F59E0B" sub={countAndTiers(data.revenue.trialingSubscriptions, data.revenue.trialingByTier)} subLtr />
+            <BigCard label={t.cardTotal} value={`$${data.revenue.totalMrrUsd.toFixed(2)}`} accent="#7C3AED" sub={t.perYear.replace("%", data.revenue.totalArrUsd.toFixed(0))} />
             <BigCard label={t.cardTotalUsers} value={data.users.total} accent="#111827" sub={`+${data.users.signupsWeek} ${t.thisWeek}`} />
             <BigCard label={t.cardSignupsToday} value={data.users.signupsToday} accent="#0EA5A5" />
             <BigCard label={t.cardSignupsWeek} value={data.users.signupsWeek} accent="#0EA5A5" />
@@ -278,6 +282,14 @@ function tierBreakdown(t?: { clear: number; deep: number; family: number; school
   if (t.family)  parts.push(`${t.family} Family`);
   if (t.schools) parts.push(`${t.schools} Schools`);
   return parts.join(" · ");
+}
+
+// "11 subs · 5 Clear · 2 Deep · 4 Family" — the subscriber count next to its
+// tier split. All-Latin so it renders LTR cleanly in the RTL admin.
+function countAndTiers(count: number, t?: { clear: number; deep: number; family: number; schools: number }): string {
+  const tiers = tierBreakdown(t);
+  const head = `${count} ${count === 1 ? "sub" : "subs"}`;
+  return tiers ? `${head} · ${tiers}` : head;
 }
 
 function BigCard({ label, value, accent, sub, subLtr }: { label: string; value: string | number; accent?: string; sub?: string; subLtr?: boolean }) {

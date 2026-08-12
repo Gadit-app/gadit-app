@@ -27,6 +27,10 @@ type RevenueResponse = {
   summary: {
     mrrUsd: number;
     arrUsd: number;
+    trialingMrrUsd: number;
+    trialingArrUsd: number;
+    totalMrrUsd: number;
+    totalArrUsd: number;
     activePayingCount: number;
     trialingCount: number;
     atRiskCount: number;
@@ -44,6 +48,8 @@ const STRINGS = {
     title: "Revenue",
     loading: "Loading…",
     cardMRR: "Monthly recurring",
+    cardFuture: "Future (pipeline)",
+    cardTotal: "Total (incl. trials)",
     cardARR: "Annual recurring",
     cardActive: "Active (paying)",
     cardTrialing: "In trial",
@@ -74,6 +80,8 @@ const STRINGS = {
     title: "הכנסות",
     loading: "טוען…",
     cardMRR: "הכנסה חודשית",
+    cardFuture: "הכנסה עתידית",
+    cardTotal: "סכום כולל",
     cardARR: "הכנסה שנתית",
     cardActive: "משלמים פעילים",
     cardTrialing: "בניסיון",
@@ -206,6 +214,8 @@ export default function AdminRevenueClient() {
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 24 }}>
             <BigCard label={t.cardMRR} value={`$${data.summary.mrrUsd.toFixed(2)}`} accent="#0EA5A5" />
+            <BigCard label={t.cardFuture} value={`$${data.summary.trialingMrrUsd.toFixed(2)}`} accent="#F59E0B" />
+            <BigCard label={t.cardTotal} value={`$${data.summary.totalMrrUsd.toFixed(2)}`} accent="#7C3AED" />
             <BigCard label={t.cardARR} value={`$${data.summary.arrUsd.toFixed(2)}`} accent="#0E7490" />
             <BigCard label={t.cardActive} value={data.summary.activePayingCount} accent="#7C3AED" />
             <BigCard label={t.cardTrialing} value={data.summary.trialingCount} accent="#0891B2" />

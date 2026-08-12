@@ -34,6 +34,12 @@ export type BreakdownEntry = { tier: Tier; billing: Billing; count: number; mrr:
 export type StripeRevenue = {
   mrrUsd: number;
   arrUsd: number;
+  /** Monthly $ the trialing subs WOULD bring if they all convert (pipeline). */
+  trialingMrrUsd: number;
+  trialingArrUsd: number;
+  /** mrrUsd + trialingMrrUsd — current paying plus the full trial pipeline. */
+  totalMrrUsd: number;
+  totalArrUsd: number;
   activePayingCount: number;
   trialingCount: number;
   atRiskCount: number;
@@ -114,6 +120,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   const recentlyCanceled: RevenueSubscriber[] = [];
 
   let mrr = 0;
+  let trialingMrr = 0;
   let activePayingCount = 0;
   let trialingCount = 0;
   const payingByTier: Record<Tier, number> = { clear: 0, deep: 0, family: 0, schools: 0 };
@@ -173,6 +180,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
       active.push(sub);
       trialingCount += 1;
       trialingByTier[tier] += 1;
+      trialingMrr += monthlyUsd;
       if (billing !== "unknown") bump(trialBreak, tier, billing, monthlyUsd);
     } else if (s.status === "past_due" || s.status === "unpaid" || s.status === "incomplete") {
       atRisk.push(sub);
@@ -201,9 +209,14 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
         (a.billing === "monthly" ? -1 : 1) - (b.billing === "monthly" ? -1 : 1),
       );
 
+  const totalMrr = mrr + trialingMrr;
   return {
     mrrUsd: Math.round(mrr * 100) / 100,
     arrUsd: Math.round(mrr * 12 * 100) / 100,
+    trialingMrrUsd: Math.round(trialingMrr * 100) / 100,
+    trialingArrUsd: Math.round(trialingMrr * 12 * 100) / 100,
+    totalMrrUsd: Math.round(totalMrr * 100) / 100,
+    totalArrUsd: Math.round(totalMrr * 12 * 100) / 100,
     activePayingCount,
     trialingCount,
     atRiskCount: atRisk.length,
