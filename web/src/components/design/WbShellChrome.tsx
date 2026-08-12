@@ -87,7 +87,12 @@ const FAMILIES_LABEL: Record<string, string> = {
 // playful to a child + mature to a teen; LLM council + Gadi 2026-08-12).
 // Short nav form; en fallback for languages not listed.
 const TREASURE_NAV: Record<string, string> = {
-  he: "אוצר המילים", en: "My words", ar: "كلماتي", ru: "Мои слова",
+  en: "My words", he: "אוצר המילים", ar: "كلماتي", ru: "Мои слова",
+  es: "Mis palabras", pt: "Minhas palavras", fr: "Mes mots", de: "Meine Wörter",
+  cs: "Moje slova", sk: "Moje slová", it: "Le mie parole", ja: "わたしのことば",
+  hi: "मेरे शब्द", am: "የእኔ ቃላት", uk: "Мої слова", tr: "Kelimelerim",
+  pl: "Moje słowa", fa: "کلمات من", id: "Kata-kataku", nl: "Mijn woorden",
+  el: "Οι λέξεις μου", zu: "Amagama ami",
 };
 
 function useNavLinks(): NavLink[] {
