@@ -11,6 +11,7 @@ import {
 } from "@stripe/stripe-js";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { isTwa, openInBrowser } from "@/lib/twa";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
 
@@ -222,6 +223,9 @@ export default function CheckoutClient() {
   const [elementReady, setElementReady] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
   const [promoVal, setPromoVal] = useState(code);
+  // Set after mount (reads localStorage) so SSR and first client render match.
+  const [inTwa, setInTwa] = useState(false);
+  useEffect(() => { setInTwa(isTwa()); }, []);
 
   // Applying a promo code just reloads the page with ?code=CODE and lets
   // the existing (tested) URL-param path attach the discount via
@@ -372,6 +376,41 @@ export default function CheckoutClient() {
   }
 
   const cycleLabel = tier?.cycle === "yearly" ? c.perYear : c.perMonth;
+
+  // Inside the Android app (TWA): payment must happen in a browser, not
+  // in-app, so the purchase stays a web/reader-app one (no Google Play
+  // Billing, no 15-30% cut, all on Stripe). Show a "continue in the
+  // browser" screen instead of the in-app Stripe form.
+  if (inTwa) {
+    return (
+      <div dir={dir} style={styles.page}>
+        <header style={styles.header}>
+          <span style={styles.wordmark} dir="ltr" translate="no" aria-label="Gadit">
+            Gad<span style={{ fontStyle: "italic", color: "#0EA5A5" }}>it</span>
+          </span>
+        </header>
+        <main style={styles.main}>
+          <div style={{ ...styles.card, textAlign: "center" }}>
+            <h1 style={{ fontSize: 20, fontWeight: 800, margin: "0 0 10px", color: "#1C1917" }}>
+              {lang === "he" ? "ממשיכים לתשלום בדפדפן" : "Continue to payment in the browser"}
+            </h1>
+            <p style={{ fontSize: 14.5, color: "#57534E", lineHeight: 1.7, margin: "0 0 22px" }}>
+              {lang === "he"
+                ? "התשלום מתבצע בדפדפן, בצורה מאובטחת. לחיצה על הכפתור תפתח את עמוד התשלום."
+                : "Payment is completed securely in your browser. Tap the button to open the payment page."}
+            </p>
+            <button
+              type="button"
+              onClick={() => openInBrowser(typeof window !== "undefined" ? window.location.href : "/checkout")}
+              style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", padding: "13px 30px", borderRadius: 12, border: "none", fontWeight: 700, fontSize: 15.5, fontFamily: "inherit", cursor: "pointer" }}
+            >
+              {lang === "he" ? "פתח את עמוד התשלום" : "Open the payment page"}
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div dir={dir} style={styles.page}>

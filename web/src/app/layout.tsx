@@ -12,6 +12,7 @@ import { AutoUpdater } from "@/components/AutoUpdater";
 import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
+import { TwaInit } from "@/components/TwaInit";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import MetaPixel from "@/components/MetaPixel";
@@ -425,6 +426,7 @@ export default async function RootLayout({
                   inside AuthProvider + LangProvider (not next to
                   RefCapture, which is provider-free). */}
               <KidRouteGuard />
+              <TwaInit />
               {children}
               <InstallPwaPrompt />
             </AuthProvider>
