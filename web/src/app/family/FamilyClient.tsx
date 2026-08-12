@@ -36,6 +36,8 @@ import {
   MAX_KIDS_PER_FAMILY,
   type MemberRole,
 } from "@/lib/family";
+import { type RankKey } from "@/lib/gamification";
+import { rankLabel, gameCopy } from "@/lib/gamification-labels";
 
 const COPY: Record<string, {
   title: string;
@@ -455,6 +457,8 @@ type ChildProgress = {
   total: number;
   thisWeek: number;
   recent: string[];
+  streak: number;
+  rankKey: RankKey;
 };
 
 const PROGRESS_COPY: Record<string, {
@@ -581,6 +585,17 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
             {c.thisWeek > 0 && (
               <div className="fam-dash-week">+{c.thisWeek} {t.thisWeek}</div>
             )}
+          </div>
+          {/* Gamification at a glance: streak + explorer rank. */}
+          <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+            {c.streak > 0 && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 999, background: "rgba(245,158,11,0.12)", color: "#B45309", fontSize: 12.5, fontWeight: 700 }}>
+                🔥 {gameCopy(lang).streakDays(c.streak)}
+              </span>
+            )}
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 999, background: "rgba(124,58,237,0.10)", color: "#6D28D9", fontSize: 12.5, fontWeight: 700 }}>
+              🏅 {rankLabel(c.rankKey, lang)}
+            </span>
           </div>
           {c.recent.length > 0 && (
             <div className="fam-dash-recent">

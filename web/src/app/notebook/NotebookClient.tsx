@@ -20,6 +20,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { KidsGameHeader } from "@/components/design/KidsGameHeader";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
 
@@ -239,7 +240,7 @@ function LangSwitch() {
 }
 
 export function NotebookPage() {
-  const { user, plan, loading, promptLogin } = useAuth();
+  const { user, plan, loading, promptLogin, familyRole } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -404,6 +405,16 @@ export function NotebookPage() {
               {c.goSearch}
             </Link>
           </div>
+        )}
+
+        {/* Kids gamification header — Family-plan kids only. Streak, weekly
+            goal and explorer rank, all from the notebook's own addedAt dates. */}
+        {items && items.length > 0 && familyRole === "kid" && (
+          <KidsGameHeader
+            addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}
+            lang={lang}
+            dir={dir}
+          />
         )}
 
         {items && items.length > 0 && (

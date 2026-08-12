@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { computeGamification, toLocalDateStr, type RankKey } from "@/lib/gamification";
 
 /**
  * Family progress dashboard data.
@@ -32,6 +33,10 @@ type ChildProgress = {
   total: number;
   thisWeek: number;
   recent: string[];
+  // Gamification (Gadi 2026-08-12): forgiving daily streak + explorer rank,
+  // computed from the same notebook addedAt dates. 0 / "scout" when empty.
+  streak: number;
+  rankKey: RankKey;
 };
 
 export async function GET(req: NextRequest) {
@@ -81,25 +86,37 @@ export async function GET(req: NextRequest) {
             total: 0,
             thisWeek: 0,
             recent: [],
+            streak: 0,
+            rankKey: "scout",
           };
           const uid = m.userId;
           if (!uid) return base;
 
           const notebook = db.collection("users").doc(uid).collection("notebook");
           try {
-            const [totalAgg, weekAgg, recentSnap] = await Promise.all([
-              notebook.count().get(),
-              notebook.where("addedAt", ">=", cutoffIso).count().get(),
-              notebook.orderBy("addedAt", "desc").limit(6).get(),
-            ]);
+            // Read every word's addedAt (+ word) once, so we can derive the
+            // streak (needs all dates) without extra round-trips. Cheap at
+            // family scale (at most a few hundred words per child).
+            const snap = await notebook.select("addedAt", "word").get();
+            const rows = snap.docs
+              .map((d) => ({ word: (d.data().word as string) || "", addedAt: (d.data().addedAt as string) || "" }))
+              .filter((r) => r.addedAt);
+            const addedAt = rows.map((r) => r.addedAt);
+            const now = Date.now();
+            const g = computeGamification(addedAt, now, toLocalDateStr(new Date(now).toISOString()));
+            const recent = rows
+              .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+              .slice(0, 6)
+              .map((r) => r.word)
+              .filter(Boolean);
             return {
               ...base,
               linked: true,
-              total: totalAgg.data().count,
-              thisWeek: weekAgg.data().count,
-              recent: recentSnap.docs
-                .map((doc) => (doc.data().word as string) || "")
-                .filter(Boolean),
+              total: g.distinct,
+              thisWeek: addedAt.filter((iso) => iso >= cutoffIso).length,
+              recent,
+              streak: g.streak,
+              rankKey: g.rank.key,
             };
           } catch (e) {
             console.error(`[family/progress] notebook read failed for ${uid}:`, e);
