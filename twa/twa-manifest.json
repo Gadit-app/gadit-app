@@ -37,7 +37,7 @@
   "isMetaQuest": false,
   "fullScopeUrl": "https://www.gadit.app/",
   "minSdkVersion": 21,
-  "additionalTrustedOrigins": ["gadit.app"],
+  "additionalTrustedOrigins": [],
   "retainedBundles": [],
   "appVersion": "1.0.0"
 }
