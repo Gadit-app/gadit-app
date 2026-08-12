@@ -40,10 +40,25 @@ const COPY: Record<string, {
   done: string;
   back: string;
   qrAlt: string;
+  // Two clearly separated ways to connect (Gadi 2026-08-12): a QR to scan,
+  // OR a link to open + the code to type. Keys optional per lang: the
+  // effective copy merges each language over the English defaults.
+  qrTitle?: string;
+  qrHint?: string;
+  orDivider?: string;
+  linkTitle?: string;
+  linkHint?: string;
+  thenEnter?: string;
 }> = {
   he: {
     title: "חיבור מכשיר",
-    sub: "סרקו את ה-QR מהמכשיר שלכם, או הקלידו את הקוד הזה ב-gadit.app/join",
+    sub: "יש שתי דרכים לחבר את המכשיר של הילד. בחרו את הנוחה לכם.",
+    qrTitle: "1. חיבור עם קוד QR",
+    qrHint: "סרקו את הקוד הזה מהמכשיר של הילד, והחיבור יקרה מיד.",
+    orDivider: "או",
+    linkTitle: "2. חיבור עם קישור",
+    linkHint: "מהמכשיר של הילד, כנסו לכתובת:",
+    thenEnter: "ואז הקלידו את הקוד הזה:",
     yourCode: "הקוד שלכם",
     ttlPrefix: "פג בעוד",
     ttlSuffix: "דקות",
@@ -58,7 +73,13 @@ const COPY: Record<string, {
   },
   en: {
     title: "Pair device",
-    sub: "Scan the QR from your member's device, or type this code at gadit.app/join",
+    sub: "There are two ways to connect the child's device. Pick whichever is easier.",
+    qrTitle: "1. Connect with a QR code",
+    qrHint: "Scan this code from the child's device and they're connected instantly.",
+    orDivider: "or",
+    linkTitle: "2. Connect with a link",
+    linkHint: "On the child's device, open:",
+    thenEnter: "then enter this code:",
     yourCode: "Your code",
     ttlPrefix: "Expires in",
     ttlSuffix: "min",
@@ -163,7 +184,9 @@ export function FamilyPairClient() {
   const router = useRouter();
   const params = useParams<{ memberId: string }>();
   const memberId = params.memberId;
-  const c = COPY[lang] ?? COPY.en;
+  // Merge per-key so a language that hasn't translated the newer two-option
+  // strings still shows English for just those, not a broken undefined.
+  const c = { ...COPY.en, ...(COPY[lang] ?? {}) };
 
   const [code, setCode] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
@@ -266,11 +289,35 @@ export function FamilyPairClient() {
         <div className="wb-family-pair-card">
           {code && !expired && (
             <>
-              <div className="wb-family-qr-frame" dir="ltr">
-                <QRCodeSVG value={qrUrl} size={208} bgColor="#FFFFFF" fgColor="#0F172A" level="M" />
+              {/* Option 1 — scan the QR. Instant, no typing. */}
+              <div className="wb-pair-option">
+                <div className="wb-pair-option-title">{c.qrTitle}</div>
+                <p className="wb-pair-option-hint">{c.qrHint}</p>
+                <div className="wb-family-qr-frame" dir="ltr">
+                  <QRCodeSVG value={qrUrl} size={200} bgColor="#FFFFFF" fgColor="#0F172A" level="M" />
+                </div>
               </div>
-              <div className="wb-family-code-label">{c.yourCode}</div>
-              <div className="wb-family-code" dir="ltr">{code}</div>
+
+              <div className="wb-pair-or"><span>{c.orDivider}</span></div>
+
+              {/* Option 2 — open the link, then type the code. */}
+              <div className="wb-pair-option">
+                <div className="wb-pair-option-title">{c.linkTitle}</div>
+                <p className="wb-pair-option-hint">{c.linkHint}</p>
+                <a
+                  href={`${origin}/join`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="wb-pair-joinlink"
+                  dir="ltr"
+                >
+                  gadit.app/join
+                </a>
+                <p className="wb-pair-option-hint" style={{ marginTop: 14 }}>{c.thenEnter}</p>
+                <div className="wb-family-code-label">{c.yourCode}</div>
+                <div className="wb-family-code" dir="ltr">{code}</div>
+              </div>
+
               <div className="wb-family-code-ttl">
                 {c.ttlPrefix} {formatMs(msLeft)} {c.ttlSuffix}
               </div>

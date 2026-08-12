@@ -205,6 +205,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsub;
   }, [user]);
 
+  // Kids Mode defaults ON for a child's own profile (Gadi 2026-08-12).
+  // Applied once per profile per device; the kid can still switch to the
+  // regular view and that choice sticks.
+  useEffect(() => {
+    if (user && familyRole === "kid") {
+      void import("./use-kids-mode").then((m) => m.applyKidsModeDefaultForKid(user.uid));
+    }
+  }, [user, familyRole]);
+
   // Ping the server to email Gadi about a new signup. Server-side
   // dedupe via notifiedSignup flag means duplicate calls are harmless;
   // we just need to fire it after any auth event that could be a first

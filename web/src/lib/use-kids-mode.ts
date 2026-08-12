@@ -59,3 +59,20 @@ export function readKidsMode(): boolean {
   if (typeof window === "undefined") return false;
   return window.localStorage.getItem(KEY) === "1";
 }
+
+/**
+ * When a child signs in with their own profile, Kids Mode should be the
+ * DEFAULT (Gadi 2026-08-12) — they still get a toggle to switch to the
+ * regular view. We apply the default ONCE per profile per device (tracked
+ * by a per-uid marker), so after a kid deliberately turns it off it stays
+ * off for them; we never force it back on every navigation.
+ */
+const APPLIED_PREFIX = "gadit-kids-default-applied:";
+export function applyKidsModeDefaultForKid(uid: string): void {
+  if (typeof window === "undefined" || !uid) return;
+  const marker = APPLIED_PREFIX + uid;
+  if (window.localStorage.getItem(marker) === "1") return; // already applied for this kid here
+  window.localStorage.setItem(marker, "1");
+  window.localStorage.setItem(KEY, "1");
+  window.dispatchEvent(new Event(EVENT_NAME));
+}

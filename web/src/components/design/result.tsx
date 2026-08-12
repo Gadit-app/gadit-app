@@ -74,6 +74,9 @@ export interface Etymology {
   breakdown: string;
   originalMeaning: string;
   historyNote?: string;
+  /** Kids Mode: the origin story retold for a child, shown in place of the
+   *  technical fields above when Kids Mode is on. */
+  kidsExplanation?: string;
 }
 
 export interface WordResult {
@@ -1119,11 +1122,52 @@ export function IdiomsSection({
 // ─── OriginCard (renamed from EtymologyCard) ───────────────────
 export function OriginCard({ etymology, onReport }: { etymology: Etymology | string | undefined; onReport?: (section: string) => void }) {
   const { lang } = useLang();
+  const [kidsOn] = useKidsMode();
   if (!etymology) return null;
 
   // Legacy: etymology was sometimes a free-text string. Render it as the
   // story paragraph below an empty fields block.
   const isStructured = typeof etymology === "object";
+  // Kids Mode: show the child-friendly origin story ALONE, in place of the
+  // technical fields (source language / breakdown / originally-meant). The
+  // same guard against garbled generations applies. Falls back to the adult
+  // fields when a (usually older cached) entry has no kids version.
+  const kidsStory = isStructured ? etymology.kidsExplanation?.trim() : "";
+  const showKidsOrigin =
+    kidsOn && !!kidsStory && !isEtymologyFieldGarbled("historyNote", kidsStory!);
+  if (showKidsOrigin) {
+    return (
+      <div className="wb-origin-section">
+        <div className="wb-eyebrow wb-eyebrow-with-flag">
+          <span>
+            <span className="wb-eyebrow-icon"><ScrollIcon /></span>
+            {v2(lang, "wordOriginEyebrow")}
+          </span>
+          {onReport && (
+            <button
+              type="button"
+              className="wb-section-flag wb-flag-tip"
+              aria-label={v2(lang, "reportLabel")}
+              data-tip={v2(lang, "reportLabel")}
+              onClick={() => onReport("etymology")}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="4" y1="22" x2="4" y2="15" />
+                <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+              </svg>
+            </button>
+          )}
+        </div>
+        <div className="wb-card wb-origin">
+          <div className="wb-origin-fields">
+            <div className="wb-origin-row wb-origin-row-story">
+              <div className="wb-origin-value">{kidsStory}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   const sourceLanguage = isStructured ? etymology.sourceLanguage?.trim() : "";
   const originalWord = isStructured ? etymology.originalWord?.trim() : "";
   const breakdown = isStructured ? etymology.breakdown?.trim() : "";

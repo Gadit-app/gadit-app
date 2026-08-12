@@ -237,7 +237,9 @@ export function sanitizeDegenerateEtymology(result: unknown): unknown {
 
   const e = ety as Record<string, unknown>;
   const fields = ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote"] as const;
-  const cleaned: Record<string, unknown> = {};
+  // Start from a copy so non-text fields we don't scrub (e.g. the Kids Mode
+  // kidsExplanation) are preserved rather than dropped.
+  const cleaned: Record<string, unknown> = { ...e };
   for (const f of fields) {
     const raw = e[f];
     if (typeof raw !== "string" || raw.length === 0) {
@@ -245,6 +247,15 @@ export function sanitizeDegenerateEtymology(result: unknown): unknown {
       continue;
     }
     cleaned[f] = isEtymologyFieldGarbled(f, raw) ? "" : raw;
+  }
+  // Kids Mode origin story is shown to a child, so blank it if garbled
+  // (same treatment as historyNote — the client then falls back to the
+  // adult fields).
+  const kx = e.kidsExplanation;
+  if (typeof kx === "string") {
+    cleaned.kidsExplanation = kx.length > 0 && isEtymologyFieldGarbled("historyNote", kx) ? "" : kx;
+  } else {
+    cleaned.kidsExplanation = "";
   }
 
   return { ...r, etymology: cleaned };

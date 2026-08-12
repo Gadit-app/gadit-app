@@ -95,7 +95,7 @@ Return this JSON shape when the exact typed word is not real but a likely-intend
   "multiplemeanings": false,
   "suggestedWord": "<the correctly-spelled word>",
   "meanings": [{"meaning": "׳”׳׳™׳׳” '<typed>' ׳׳ ׳ ׳׳¦׳׳” ׳‘׳׳™׳׳•׳. ׳׳•׳׳™ ׳”׳×׳›׳•׳•׳ ׳× ׳-'<suggested>'?", "examples": ["", "", ""]}],
-  "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": ""}
+  "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": "", "historyNote": "", "kidsExplanation": ""}
 }
 (adapt the sentence template to the user's UI language; examples: Hebrew "׳׳•׳׳™ ׳”׳×׳›׳•׳•׳ ׳× ׳-X?"; English "Did you mean 'X'?"; Arabic "‡„ ״×‚״µ״¯ 'X'״"; Russian "׀’׀¾׀·׀¼׀¾׀¶׀½׀¾, ׀²ׁ‹ ׀¸׀¼׀µ׀»׀¸ ׀² ׀²׀¸׀´ׁƒ 'X'?")
 
@@ -105,7 +105,7 @@ RULE 1c ג€” If the typed string is NOT a real word and you have NO good sug
   "language": "<detected>",
   "multiplemeanings": false,
   "meanings": [{"meaning": "׳׳™׳׳” ׳, ׳• ׳׳ ׳ ׳׳¦׳׳” ׳‘׳׳™׳׳•׳.", "examples": ["", "", ""]}],
-  "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": ""}
+  "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": "", "historyNote": "", "kidsExplanation": ""}
 }
 
 IMPORTANT:
@@ -181,9 +181,11 @@ GOOD historyNote examples:
 - English "telephone": "Coined in the 1830s as a Greek compound (tele + phone) for early sound-transmitting devices, before Bell's invention took the name in 1876."
 - Hebrew "׳׳, ׳©׳‘": "׳, ׳™׳“׳•׳© ׳©׳ ׳”׳׳§׳“׳׳™׳” ׳׳׳©׳•׳ ׳”׳¢׳‘׳¨׳™׳× ׳‘׳׳׳” ׳”-20, ׳¢׳ ׳‘׳¡׳™׳¡ ׳”׳׳™׳׳” ׳”׳×׳ ׳´׳›׳™׳× '׳׳, ׳©׳‘׳”', ׳›׳×׳¨׳’׳•׳ ׳-computer (׳׳˜׳™׳ ׳™׳×: ׳׳, ׳©׳‘ ׳™׳, ׳“)."
 
+6. "kidsExplanation" — the SAME origin story, retold for a child aged 6-10, in 1-2 warm, simple sentences, IN THE USER'S LANGUAGE. This is what a kid sees in Kids Mode instead of the technical fields above, so it must stand ALONE: no linguistic terms (no "root", "triliteral", "transliteration", "cognate", "hapax"), no foreign scripts, no dates unless they help ("a very long time ago" is better than "16th century"). Just: where the word comes from and one fun, true idea about it, the way you'd tell a curious child. Example (dream): "The word 'dream' is super old. Long ago it meant joy and music, and only later did people start using it for the pictures we see while we sleep!". Example (salary): "A long time ago, soldiers were sometimes paid with salt, because salt was so precious. That's where the word 'salary' comes from!". Never leave this empty — every word gets a kid version, even Hebrew/Arabic words (tell the kid the simple story of where it first appeared).
+
 DISPLAY LOGIC (for your understanding ג€” the UI handles it):
-- The UI always shows: sourceLanguage + (breakdown OR originalWord) + originalMeaning
-- If historyNote is non-empty, it's shown as a fourth line below the others
+- Adults see: sourceLanguage + (breakdown OR originalWord) + originalMeaning + historyNote
+- Kids Mode shows ONLY kidsExplanation in place of all of the above
 - If historyNote is empty, the line is hidden ג€” no awkward gap
 
 PHILOSOPHY: GADIT takes the complex and makes it simple. The user should look at the etymology and say "oh, now I understand where this word came from and its story" ג€” not "what am I looking at?". NEVER write anything that requires linguistic knowledge to read.
@@ -229,7 +231,8 @@ Example 1 ג€” English user asking "ephemeral" (COMPOUND):
   "originalWord": "",
   "breakdown": "epi (upon, on) + hִ“mera (day)",
   "originalMeaning": "lasting only one day",
-  "historyNote": "Originally a medical term in ancient Greece for fevers that lasted only one day. Entered English in the late 16th century via scientific Latin."
+  "historyNote": "Originally a medical term in ancient Greece for fevers that lasted only one day. Entered English in the late 16th century via scientific Latin.",
+  "kidsExplanation": "This word comes from ancient Greek and first meant something that lasts just ONE day. Doctors used it for fevers that came and went really fast!"
 }
 
 Example 2 ג€” English user asking "salary" (COMPOUND):
@@ -238,7 +241,8 @@ Example 2 ג€” English user asking "salary" (COMPOUND):
   "originalWord": "",
   "breakdown": "sal (salt) + -arium (allowance, place for)",
   "originalMeaning": "salt money ג€” payment given to Roman soldiers in salt",
-  "historyNote": "Roman soldiers received part of their pay in salt rations, since salt was rare and essential for preserving food. The Latin word entered English in the 14th century through Old French."
+  "historyNote": "Roman soldiers received part of their pay in salt rations, since salt was rare and essential for preserving food. The Latin word entered English in the 14th century through Old French.",
+  "kidsExplanation": "A long time ago, Roman soldiers were sometimes paid with salt, because salt was very precious back then. That's where the word 'salary' comes from!"
 }
 
 Example 3 ג€” Hebrew user asking "׳ ׳, ׳©׳" (SIMPLE, native Hebrew ג†’ no originalWord):
@@ -844,8 +848,9 @@ const RESPONSE_SCHEMA = {
         breakdown:       { type: "string" },
         originalMeaning: { type: "string" },
         historyNote:     { type: "string" },
+        kidsExplanation: { type: "string" },
       },
-      required: ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote"],
+      required: ["sourceLanguage", "originalWord", "breakdown", "originalMeaning", "historyNote", "kidsExplanation"],
     },
     generalIdioms: {
       type: "array",
