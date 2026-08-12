@@ -83,10 +83,11 @@ const FAMILIES_LABEL: Record<string, string> = {
   it: "Famiglie", ja: "ファミリー", hi: "परिवार", am: "ቤተሰቦች",
 };
 
-// Kids see their notebook as their "treasure box" (Gadi 2026-08-12). Short
-// nav form; en fallback for languages not listed.
+// Kids see their notebook as "אוצר המילים שלי" (= vocabulary in Hebrew,
+// playful to a child + mature to a teen; LLM council + Gadi 2026-08-12).
+// Short nav form; en fallback for languages not listed.
 const TREASURE_NAV: Record<string, string> = {
-  he: "האוצר שלי", en: "My treasure", ar: "كنزي", ru: "Сокровища",
+  he: "אוצר המילים", en: "My words", ar: "كلماتي", ru: "Мои слова",
 };
 
 function useNavLinks(): NavLink[] {

@@ -35,14 +35,17 @@ type NotebookItem = {
   addedAt: string;
 };
 
-// Kids' "treasure box" reframe of the notebook title/subtitle. he/en/ar/ru
-// with an English fallback; the rest of the copy (empty state etc.) stays
-// shared. Keeps the brand rule: never translates "Gadit".
+// Kids' reframe of the notebook title/subtitle. The Hebrew "אוצר המילים"
+// literally means "vocabulary" — so it reads playful to a young child AND
+// mature to a teen, one term that bridges the whole 7-16 range (LLM council
+// + Gadi 2026-08-12; replaced the too-young "treasure box"). English uses
+// the age-neutral "My words". he/en/ar/ru, English fallback. Never
+// translates the brand "Gadit".
 const TREASURE_COPY: Record<string, { title: string; subtitle: string }> = {
-  en: { title: "My treasure box", subtitle: "Every word you've discovered and collected. Your treasure grows!" },
-  he: { title: "תיבת האוצר שלי", subtitle: "כל מילה שגילית ואספת. האוצר שלך גדל!" },
-  ar: { title: "صندوق كنزي", subtitle: "كل كلمة اكتشفتها وجمعتها. كنزك يكبر!" },
-  ru: { title: "Мой сундук сокровищ", subtitle: "Каждое слово, которое ты открыл и собрал. Твоё сокровище растёт!" },
+  en: { title: "My words", subtitle: "Every word you've discovered, in one place. Your collection keeps growing." },
+  he: { title: "אוצר המילים שלי", subtitle: "כל מילה שגילית, במקום אחד. אוצר המילים שלך גדל." },
+  ar: { title: "كلماتي", subtitle: "كل كلمة اكتشفتها، في مكان واحد. مجموعتك تكبر." },
+  ru: { title: "Мои слова", subtitle: "Все слова, которые ты открыл, в одном месте. Твой словарь растёт." },
 };
 
 const COPY: Record<string, {
