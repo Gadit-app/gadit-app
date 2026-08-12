@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { summarizeStripeRevenue } from "@/lib/admin-revenue";
 import type { UserRecord } from "firebase-admin/auth";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 /**
  * Admin tool — single overview endpoint that the /admin main dashboard
@@ -27,27 +31,11 @@ export const maxDuration = 60;
 
 type Plan = "basic" | "clear" | "deep";
 
-// Pricing model — kept in sync with web/src/app/pricing/PricingClient.tsx.
-// MRR computation: for yearly subscriptions we divide by 12 so a year of
-// Clear shows as $2.50/mo MRR contribution rather than counting the full
-// $29.99 as one month.
-const MONTHLY_PRICE: Record<string, number> = {
-  // Filled at request time from env vars so we don't ship price IDs in
-  // the bundle. Map: priceId → monthly $ contribution to MRR.
-};
-
-function buildPriceMap(): Record<string, number> {
-  const map: Record<string, number> = {};
-  const clearMo = process.env.STRIPE_PRICE_CLEAR_MONTHLY;
-  const clearYr = process.env.STRIPE_PRICE_CLEAR_YEARLY;
-  const deepMo  = process.env.STRIPE_PRICE_DEEP_MONTHLY;
-  const deepYr  = process.env.STRIPE_PRICE_DEEP_YEARLY;
-  if (clearMo) map[clearMo] = 2.99;
-  if (clearYr) map[clearYr] = 29.99 / 12;
-  if (deepMo)  map[deepMo]  = 4.99;
-  if (deepYr)  map[deepYr]  = 49.99 / 12;
-  return map;
-}
+// Money (MRR, paying/trialing counts, tier breakdowns) now comes LIVE from
+// Stripe via summarizeStripeRevenue, the same helper the Revenue page uses,
+// so the two pages report identical figures. The Overview used to compute
+// MRR from the Firestore user doc's subscriptionStatus and counted TRIALING
+// subs as revenue, inflating "monthly revenue" (Gadi 2026-08-12).
 
 function tsToMs(v: unknown): number | null {
   if (!v) return null;
@@ -85,7 +73,8 @@ export async function GET(req: NextRequest) {
 
   const auth = getAdminAuth();
   const db = getAdminDb();
-  const priceMap = buildPriceMap();
+  // Money from Stripe (source of truth), same helper as the Revenue page.
+  const rev = await summarizeStripeRevenue(stripe);
   const now = Date.now();
   const todayStart = startOfDayUTC(0);
   const weekStart  = startOfDayUTC(7);
@@ -118,19 +107,12 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // ---------- 2) User aggregates ----------
+  // ---------- 2) User aggregates (accounts only; money comes from Stripe) ----------
   const byPlan = { basic: 0, clear: 0, deep: 0 };
   let signupsToday = 0;
   let signupsWeek = 0;
   let signupsMonth = 0;
-  let mrr = 0;
-  let activeSubs = 0;
   let compAccounts = 0;
-  // Paying subscribers broken down by their REAL tier. Family and Schools
-  // both store plan="deep", so without this split they'd hide inside Deep.
-  // Only billable (active/trialing, non-comp) subs are counted, so these
-  // sum to activeSubs.
-  const payingByTier = { clear: 0, deep: 0, family: 0, schools: 0 };
   const byCountry = new Map<string, number>();
 
   for (const u of authUsers) {
@@ -145,39 +127,8 @@ export async function GET(req: NextRequest) {
     if (created >= weekStart)  signupsWeek++;
     if (created >= monthStart) signupsMonth++;
 
-    // Comp / internal accounts (owner, testing) keep their feature plan but
-    // are NOT paying customers, so they never count toward MRR or active
-    // subscriptions (Gadi's own account, 2026-07-23). Tracked separately.
-    if (d.comp === true) {
-      compAccounts++;
-      continue;
-    }
-
-    // MRR — only counts users whose plan is paid AND subscription is in a
-    // billing state (active, trialing). Past_due / canceled don't count.
-    if (plan !== "basic") {
-      const status = (d.subscriptionStatus as string) || "";
-      const billable = status === "active" || status === "trialing";
-      if (billable) {
-        activeSubs++;
-        // Classify by real tier: Family/Schools live on plan="deep" but are
-        // distinguished by familyId/schoolId. Check those first.
-        if (d.familyId) payingByTier.family++;
-        else if (d.schoolId) payingByTier.schools++;
-        else if (plan === "clear") payingByTier.clear++;
-        else payingByTier.deep++;
-        const priceId = (d.priceId as string) || "";
-        const monthly = priceMap[priceId];
-        if (monthly) {
-          mrr += monthly;
-        } else {
-          // Unknown priceId (manual upgrade, legacy doc, etc.) — fall
-          // back to the monthly price for the plan so MRR isn't
-          // understated.
-          mrr += plan === "clear" ? 2.99 : 4.99;
-        }
-      }
-    }
+    // Comp / internal accounts (owner, testing) — tracked separately.
+    if (d.comp === true) compAccounts++;
   }
 
   const sortedCountries = Array.from(byCountry.entries())
@@ -292,11 +243,15 @@ export async function GET(req: NextRequest) {
       signupsMonth,
     },
     revenue: {
-      mrrUsd: Math.round(mrr * 100) / 100,
-      activeSubscriptions: activeSubs,
-      arrUsd: Math.round(mrr * 12 * 100) / 100,
+      // Paying only (Stripe active subs). Trials are the pipeline, shown
+      // separately — they are NOT counted as revenue.
+      mrrUsd: rev.mrrUsd,
+      arrUsd: rev.arrUsd,
+      payingSubscriptions: rev.activePayingCount,
+      trialingSubscriptions: rev.trialingCount,
+      payingByTier: rev.payingByTier,
+      trialingByTier: rev.trialingByTier,
       compAccounts,
-      payingByTier,
     },
     activity: {
       searchesToday,

@@ -25,10 +25,12 @@ type Overview = {
   };
   revenue: {
     mrrUsd: number;
-    activeSubscriptions: number;
     arrUsd: number;
+    payingSubscriptions: number;
+    trialingSubscriptions: number;
     compAccounts?: number;
     payingByTier?: { clear: number; deep: number; family: number; schools: number };
+    trialingByTier?: { clear: number; deep: number; family: number; schools: number };
   };
   activity: {
     searchesToday: number;
@@ -59,7 +61,8 @@ const STRINGS = {
     title: "Overview",
     loading: "Loading…",
     cardMRR: "Monthly revenue",
-    cardActiveSubs: "Active subscriptions",
+    cardPayingSubs: "Paying subscriptions",
+    cardTrialingSubs: "In trial",
     cardTotalUsers: "Total users",
     cardSignupsWeek: "Signups · 7 days",
     cardSearchesToday: "Searches today",
@@ -82,7 +85,8 @@ const STRINGS = {
     title: "סקירה",
     loading: "טוען…",
     cardMRR: "הכנסה חודשית",
-    cardActiveSubs: "מנויים פעילים",
+    cardPayingSubs: "מנויים משלמים",
+    cardTrialingSubs: "בניסיון",
     cardTotalUsers: "סך משתמשים",
     cardSignupsWeek: "הרשמות · 7 ימים",
     cardSearchesToday: "חיפושים היום",
@@ -171,7 +175,8 @@ export default function AdminOverviewClient() {
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
             <BigCard label={t.cardMRR} value={`$${data.revenue.mrrUsd.toFixed(2)}`} accent="#0EA5A5" sub={t.perYear.replace("%", data.revenue.arrUsd.toFixed(0))} />
-            <BigCard label={t.cardActiveSubs} value={data.revenue.activeSubscriptions} accent="#7C3AED" sub={tierBreakdown(data.revenue.payingByTier)} subLtr />
+            <BigCard label={t.cardPayingSubs} value={data.revenue.payingSubscriptions} accent="#7C3AED" sub={tierBreakdown(data.revenue.payingByTier)} subLtr />
+            <BigCard label={t.cardTrialingSubs} value={data.revenue.trialingSubscriptions} accent="#9CA3AF" sub={tierBreakdown(data.revenue.trialingByTier)} subLtr />
             <BigCard label={t.cardTotalUsers} value={data.users.total} accent="#111827" sub={`+${data.users.signupsWeek} ${t.thisWeek}`} />
             <BigCard label={t.cardSignupsToday} value={data.users.signupsToday} accent="#0EA5A5" />
             <BigCard label={t.cardSignupsWeek} value={data.users.signupsWeek} accent="#0EA5A5" />
