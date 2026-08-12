@@ -2854,6 +2854,31 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   border: 1px solid rgba(17, 24, 39, 0.08);
   box-shadow: 0 6px 18px -10px rgba(16, 24, 40, 0.28);
 }
+/* Kids Mode: skeleton shown while a meaning's picture is generating, so
+   the slot never looks empty (empty made a parent tap the manual image
+   action and get a duplicate). Matches the final image footprint. */
+.wordbook .wb-mkids-skeleton {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: linear-gradient(
+    100deg,
+    rgba(14, 165, 165, 0.06) 30%,
+    rgba(14, 165, 165, 0.14) 50%,
+    rgba(14, 165, 165, 0.06) 70%
+  );
+  background-size: 200% 100%;
+  animation: wb-mkids-shimmer 1.3s ease-in-out infinite;
+}
+@keyframes wb-mkids-shimmer {
+  0% { background-position: 180% 0; }
+  100% { background-position: -80% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wordbook .wb-mkids-skeleton { animation: none; }
+}
 
 .wordbook .wb-mexamples {
   background: transparent;

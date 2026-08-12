@@ -484,7 +484,7 @@ Respond ENTIRELY in the user's UI language (the language is passed at the end of
   - sourceLanguage / breakdown / originalMeaning / historyNote
   - kidsExplanation
   - idiom meanings
-The headword and the original-script forms (originalWord) stay in their native script. Example sentences are written in the UI language but they MAY include the headword inline in its original script when it reads naturally (e.g. for a Hebrew user searching "love", the examples are written in Hebrew and use "love" inline). If the input word's detected language differs from the UI language, IGNORE the input word's language for output purposes, always use the UI language.
+The headword and the original-script forms (originalWord) stay in their native script. Example sentences are written in the UI language but they MAY include the headword inline in its original script when it reads naturally (e.g. for a Hebrew user searching "love", the examples are written in Hebrew and use "love" inline). If the input word's detected language differs from the UI language, IGNORE the input word's language for output purposes, always use the UI language. This applies ONLY to the written OUTPUT (meaning text, examples, kidsExplanation). It does NOT change the "language" field, which must always report the input word's OWN detected language (an English word stays "English" even for a Hebrew UI), nor the "translation" field, which depends on that cross-language difference.
 
 CRITICAL, HEBREW AND ARABIC GRAMMATICAL AGREEMENT (gender and number):
 When the UI language is Hebrew or Arabic, EVERY example sentence must have correct verb-subject agreement in gender (masculine vs feminine) and number (singular vs plural). This is non-negotiable native grammar. The most common machine-generated mistake is taking an idiom or phrase that contains a verb in masculine singular form and pasting it into example sentences with feminine or plural subjects WITHOUT inflecting the verb to match. That is a glaring error a native speaker spots immediately.
@@ -514,7 +514,7 @@ This rule is ABOVE freedom in choosing subjects. If the idiom only works natural
 Your response must follow this exact JSON structure:
 {
   "word": "the word as given",
-  "language": "detected language name in English (e.g. Hebrew, Arabic, English, Russian)",
+  "language": "the language the INPUT WORD is actually written in, named in English (e.g. Hebrew, Arabic, English, Russian). This is ALWAYS the word's own detected language, NEVER the UI/output language: the English word 'dream' is 'English' even when the UI language is Hebrew and the explanation is written in Hebrew. Do not copy the UI language here.",
   "translation": "the headword's single most common equivalent WORD in the user's UI language — ONLY when the input word's language differs from the UI language (e.g. Hebrew word 'חלום' for a German user → 'Traum'; English word 'dream' for a Hebrew user → 'חלום'). Use the primary/most-common sense. Empty string when the word is already in the UI language (same language → leave empty).",
   "multiplemeanings": true or false,
   "meanings": [
@@ -716,7 +716,7 @@ Respond ENTIRELY in the user's UI language (passed in the user message as "User'
 Return this exact JSON:
 {
   "word": "the word",
-  "language": "detected language in English",
+  "language": "the language the INPUT WORD is written in, named in English — ALWAYS the word's own detected language, NEVER the UI/output language (English word 'dream' → 'English' even for a Hebrew UI).",
   "translation": "the headword's most common equivalent WORD in the user's UI language — ONLY when the input word's language differs from the UI language (e.g. Hebrew 'חלום' for a German user → 'Traum'). Empty string when the word is already in the UI language.",
   "multiplemeanings": false,
   "meanings": [

@@ -321,8 +321,14 @@ export function WordHeader({
   // so a reader browsing in German who looked up a Hebrew word gets the one
   // German word for it — the piece that was missing before. Guarded so a
   // garbled value is never shown, and only when the word IS foreign.
+  // Not gated on showLang: the model fills `translation` ONLY when the word
+  // is in a different language than the UI, so its presence alone is the
+  // reliable cross-language signal. showLang depends on the model's
+  // `language` field, which Kids Mode sometimes mis-stamps as the UI
+  // language (an English "dream" tagged "Hebrew"), and that used to hide
+  // the gloss even though the equivalent word was right there.
   const cleanTranslation =
-    showLang && typeof translation === "string" && translation.trim() &&
+    typeof translation === "string" && translation.trim() &&
     !isEtymologyFieldGarbled("originalMeaning", translation.trim())
       ? translation.trim()
       : "";
@@ -448,6 +454,11 @@ interface MeaningEntryProps {
    *  shown inline under the definition with no tab/click. Empty in the
    *  adult UI, which keeps its per-meaning image tab unchanged. */
   kidsImageUrl?: string;
+  /** Kids Mode only: the picture for this meaning is still being
+   *  generated. Drives a skeleton placeholder so it never looks like
+   *  nothing is happening (which used to make a parent tap the manual
+   *  image action and get a second, duplicate picture). */
+  kidsImageLoading?: boolean;
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
@@ -613,6 +624,7 @@ function MeaningEntry({
   onAction,
   onReport,
   kidsImageUrl,
+  kidsImageLoading,
 }: MeaningEntryProps) {
   const { lang } = useLang();
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
@@ -801,6 +813,11 @@ function MeaningEntry({
           <img src={kidsImageUrl} alt={effectiveMeaning || word} loading="lazy" />
         </div>
       )}
+      {showKids && !kidsImageUrl && kidsImageLoading && (
+        <div className="wb-mkids-image wb-mkids-image-loading" aria-hidden="true">
+          <div className="wb-mkids-skeleton" />
+        </div>
+      )}
 
       {(effectiveExamples ?? []).length > 0 && (
         <div className="wb-mexamples">
@@ -835,7 +852,11 @@ function MeaningEntry({
           the row, not just the chip. */}
       <div className="wb-mtabs wb-mtabs-tier">
         {CLEAR_TAB_IDS
-          .filter((id) => !(showKids && id === "kids"))
+          // Kids Mode hides BOTH the "kids' explanation" tab (already the
+          // main definition) AND the manual "image" tab: every meaning
+          // now auto-shows its own picture, so the manual action is
+          // redundant and used to produce a second, duplicate image.
+          .filter((id) => !(showKids && (id === "kids" || id === "image")))
           .filter((id) => !(id === "save" && !onSave))
           .filter((id) => !(id === "pin" && !onPin))
           .map((id) => renderTab(id))}
@@ -947,6 +968,7 @@ export function MeaningsBlock({
   onAction,
   onReport,
   kidsImages,
+  kidsImagesLoading,
 }: {
   meanings: Meaning[];
   word?: string;
@@ -961,6 +983,8 @@ export function MeaningsBlock({
   onGenerate?: () => void;
   /** Kids Mode: per-meaning pictures keyed by meaning index. */
   kidsImages?: Record<number, string>;
+  /** Kids Mode: which meaning indexes are still generating a picture. */
+  kidsImagesLoading?: Record<number, boolean>;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
   onReport?: (section: string) => void;
@@ -996,6 +1020,7 @@ export function MeaningsBlock({
             imageGenerating={imageGenerating}
             onGenerate={onGenerate}
             kidsImageUrl={kidsImages?.[i]}
+            kidsImageLoading={kidsImagesLoading?.[i]}
             onUpgrade={onUpgrade}
             onAction={onAction}
             onReport={onReport}
@@ -1386,6 +1411,7 @@ export function ResultView({
   onAction,
   onReport,
   kidsImages,
+  kidsImagesLoading,
 }: {
   result: WordResult;
   plan: Plan;
@@ -1410,6 +1436,8 @@ export function ResultView({
   onReport?: (section: string) => void;
   /** Kids Mode: per-meaning pictures keyed by meaning index. */
   kidsImages?: Record<number, string>;
+  /** Kids Mode: which meaning indexes are still generating a picture. */
+  kidsImagesLoading?: Record<number, boolean>;
 }) {
   const { dir } = useLang();
   // imageState retained for the legacy <VisualCard /> export; no
@@ -1454,6 +1482,7 @@ export function ResultView({
         onAction={onAction}
         onReport={onReport}
         kidsImages={kidsImages}
+        kidsImagesLoading={kidsImagesLoading}
       />
 
       <IdiomsSection

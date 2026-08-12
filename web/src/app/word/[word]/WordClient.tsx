@@ -494,6 +494,10 @@ export function WordClient({
   // Kids Mode: a picture per meaning, keyed by meaning index, shown inline
   // under each definition. Adult mode never fills this.
   const [kidsImages, setKidsImages] = useState<Record<number, string>>({});
+  // Which meaning indexes are still generating their kids picture, so the
+  // card can show a skeleton instead of blank space (blank space made a
+  // parent think it failed and tap the manual action, creating a duplicate).
+  const [kidsImgLoading, setKidsImgLoading] = useState<Record<number, boolean>>({});
   // Surface image-gen failures to the user — previously the handler
   // swallowed any non-402 error and the user saw 'loading → nothing',
   // with no signal that anything had gone wrong. A Czech beta tester
@@ -875,6 +879,20 @@ export function WordClient({
     const meanings = result.meanings ?? [];
     const w = result.word;
     let cancelled = false;
+    // Fresh word: clear any stale pictures and mark every meaning as
+    // "generating" so each card shows a skeleton until its image lands.
+    setKidsImages({});
+    setKidsImgLoading(() => {
+      const m: Record<number, boolean> = {};
+      for (let i = 0; i < meanings.length; i++) m[i] = true;
+      return m;
+    });
+    const clearLoading = (from: number) =>
+      setKidsImgLoading((prev) => {
+        const next = { ...prev };
+        for (let i = from; i < meanings.length; i++) next[i] = false;
+        return next;
+      });
     (async () => {
       for (let i = 0; i < meanings.length; i++) {
         if (cancelled) return;
@@ -891,14 +909,16 @@ export function WordClient({
               kidsMode: true,
             }),
           });
-          if (!res.ok) return; // quota / error — stop generating the rest
+          if (!res.ok) { if (!cancelled) clearLoading(i); return; } // quota / error — stop, drop remaining skeletons
           const data = (await res.json()) as { url?: string };
           if (cancelled) return;
           if (data.url) {
             const url = data.url;
             setKidsImages((prev) => ({ ...prev, [i]: url }));
           }
+          setKidsImgLoading((prev) => ({ ...prev, [i]: false }));
         } catch {
+          if (!cancelled) clearLoading(i);
           return; // network — stop the loop, never disturb the reader
         }
       }
@@ -1792,6 +1812,7 @@ export function WordClient({
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
             kidsImages={kidsImages}
+            kidsImagesLoading={kidsImgLoading}
             isSaved={isSaved}
             onSave={handleSave}
             onShare={handleShare}
