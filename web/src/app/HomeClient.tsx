@@ -21,6 +21,7 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
+import { KidsGameHeader } from "@/components/design/KidsGameHeader";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
@@ -142,7 +143,7 @@ function SearchIcon({ size = 16 }: { size?: number }) {
 
 export function HomePage() {
   const { lang, dir, setLang } = useLang();
-  const { user, plan, schoolId, promptLogin } = useAuth();
+  const { user, plan, schoolId, promptLogin, familyRole } = useAuth();
   const router = useRouter();
   const href = useHref();
   const [query, setQuery] = useState("");
@@ -150,6 +151,25 @@ export function HomePage() {
   const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const c = COPY[lang] ?? COPY.en;
+
+  // Kids gamification on the child's landing page — the first thing they
+  // see when they open their profile (Gadi 2026-08-12). Kid profiles only;
+  // fetches the notebook's addedAt dates to drive streak/goal/rank.
+  const [kidDates, setKidDates] = useState<string[] | null>(null);
+  useEffect(() => {
+    if (familyRole !== "kid" || !user) { setKidDates(null); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/notebook", { headers: { Authorization: `Bearer ${idToken}` } });
+        if (!res.ok) return;
+        const data = (await res.json()) as { items?: Array<{ addedAt?: string }> };
+        if (!cancelled) setKidDates((data.items ?? []).map((i) => i.addedAt || "").filter(Boolean));
+      } catch { /* gamification is a nice-to-have; stay silent */ }
+    })();
+    return () => { cancelled = true; };
+  }, [familyRole, user]);
 
   async function getIdToken(): Promise<string | null> {
     if (!user) return null;
@@ -325,6 +345,14 @@ export function HomePage() {
               />
             </div>
           </form>
+
+          {/* Kid's own progress, right under the search — their streak,
+              weekly goal and explorer rank the moment they open the app. */}
+          {familyRole === "kid" && kidDates && kidDates.length > 0 && (
+            <div className="wb-home-game">
+              <KidsGameHeader addedAtDates={kidDates} lang={lang} dir={dir} />
+            </div>
+          )}
         </div>
       </main>
 

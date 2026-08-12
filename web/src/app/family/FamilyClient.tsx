@@ -577,25 +577,19 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
         <div className="fam-dash-note">{t.noneYet}</div>
       ) : (
         <>
-          <div className="fam-dash-stats">
-            <div className="fam-dash-big">
-              <span className="fam-dash-num">{c.total}</span>
-              <span className="fam-dash-label">{t.wordsInNotebook}</span>
-            </div>
-            {c.thisWeek > 0 && (
-              <div className="fam-dash-week">+{c.thisWeek} {t.thisWeek}</div>
-            )}
+          <div className="fam-dash-hero">
+            <span className="fam-dash-num">{c.total}</span>
+            <span className="fam-dash-label">{t.wordsInNotebook}</span>
           </div>
-          {/* Gamification at a glance: streak + explorer rank. */}
-          <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+          {/* One clean, consistent badge row: streak, rank, this week. */}
+          <div className="fam-dash-badges">
             {c.streak > 0 && (
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 999, background: "rgba(245,158,11,0.12)", color: "#B45309", fontSize: 12.5, fontWeight: 700 }}>
-                🔥 {gameCopy(lang).streakDays(c.streak)}
-              </span>
+              <span className="fam-dash-badge fam-dash-badge-streak">🔥 {gameCopy(lang).streakDays(c.streak)}</span>
             )}
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 999, background: "rgba(124,58,237,0.10)", color: "#6D28D9", fontSize: 12.5, fontWeight: 700 }}>
-              🏅 {rankLabel(c.rankKey, lang)}
-            </span>
+            <span className="fam-dash-badge fam-dash-badge-rank">🏅 {rankLabel(c.rankKey, lang)}</span>
+            {c.thisWeek > 0 && (
+              <span className="fam-dash-badge fam-dash-badge-week">+{c.thisWeek} {t.thisWeek}</span>
+            )}
           </div>
           {c.recent.length > 0 && (
             <div className="fam-dash-recent">
@@ -1693,24 +1687,26 @@ const FAM_DASH_CSS = `
 .fam-dash-sumlabel { font-size: 13px; color: #6b7280; font-weight: 600; }
 .fam-dash-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
 }
 .fam-dash-card {
   background: #fff;
   border: 1px solid rgba(31,41,55,0.09);
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 6px 18px rgba(31,41,55,0.05);
+  border-radius: 22px;
+  padding: 24px 24px 22px;
+  box-shadow: 0 8px 24px rgba(31,41,55,0.06);
 }
-.fam-dash-head { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+.fam-dash-head { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
 .fam-dash-avatar {
-  width: 42px; height: 42px; border-radius: 50%;
-  color: #fff; font-weight: 800; font-size: 18px;
+  width: 48px; height: 48px; border-radius: 50%;
+  color: #fff; font-weight: 800; font-size: 20px;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  overflow: hidden;
 }
-.fam-dash-name { font-weight: 700; font-size: 16px; color: #1f2937; }
-.fam-dash-role { font-size: 12.5px; color: #9ca3af; }
+.fam-dash-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.fam-dash-name { font-weight: 800; font-size: 17px; color: #1f2937; }
+.fam-dash-role { font-size: 13px; color: #9ca3af; }
 .fam-dash-note { color: #6b7280; font-size: 13.5px; line-height: 1.5; padding: 4px 0; }
 .fam-dash-pair {
   display: inline-block; margin-top: 10px;
@@ -1721,22 +1717,26 @@ const FAM_DASH_CSS = `
   transition: transform 160ms ease-out;
 }
 .fam-dash-pair:active { transform: scale(0.97); }
-.fam-dash-stats { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
-.fam-dash-big { display: flex; flex-direction: column; }
-.fam-dash-num { font-size: 34px; font-weight: 800; color: #0b7d7d; line-height: 1; }
-.fam-dash-label { font-size: 12.5px; color: #6b7280; font-weight: 600; margin-top: 3px; }
-.fam-dash-week {
-  background: rgba(124,58,237,0.1); color: #6d28d9;
-  font-weight: 800; font-size: 13px;
-  border-radius: 999px; padding: 5px 11px;
-  white-space: nowrap;
+/* Hero number: words in the notebook. */
+.fam-dash-hero { display: flex; align-items: baseline; gap: 9px; }
+.fam-dash-num { font-size: 40px; font-weight: 800; color: #0b7d7d; line-height: 1; }
+.fam-dash-label { font-size: 13.5px; color: #6b7280; font-weight: 600; }
+/* One consistent badge row (streak / rank / this week), evenly weighted. */
+.fam-dash-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.fam-dash-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 999px; padding: 7px 13px;
+  font-size: 13px; font-weight: 700; white-space: nowrap;
 }
-.fam-dash-recent { margin-top: 14px; border-top: 1px dashed rgba(31,41,55,0.12); padding-top: 12px; }
-.fam-dash-recent-label { font-size: 12px; color: #9ca3af; font-weight: 700; margin-bottom: 7px; }
-.fam-dash-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fam-dash-badge-streak { background: rgba(245,158,11,0.13); color: #b45309; }
+.fam-dash-badge-rank   { background: rgba(124,58,237,0.11); color: #6d28d9; }
+.fam-dash-badge-week   { background: rgba(14,165,165,0.12); color: #0f766e; }
+.fam-dash-recent { margin-top: 18px; border-top: 1px dashed rgba(31,41,55,0.12); padding-top: 14px; }
+.fam-dash-recent-label { font-size: 12px; color: #9ca3af; font-weight: 700; margin-bottom: 8px; }
+.fam-dash-chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .fam-dash-chip {
   background: rgba(14,165,165,0.09); color: #374151;
-  border-radius: 999px; padding: 4px 11px;
+  border-radius: 999px; padding: 5px 12px;
   font-size: 13px; font-weight: 600;
 }
 `;
