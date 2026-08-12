@@ -822,6 +822,11 @@ export function FamilyClient() {
   const [editRole, setEditRole] = useState<MemberRole>("father");
   const [editMemberId, setEditMemberId] = useState<string | null>(null);
   const [editSaving, setEditSaving] = useState(false);
+  // Per-member profile photo the parent can upload so a child is easy to
+  // recognize in the profile switcher and cards. Held as a small resized
+  // JPEG data URL (see resizeToAvatar); "" means "no photo / use the chip".
+  const [editPhoto, setEditPhoto] = useState<string>("");
+  const [editPhotoBusy, setEditPhotoBusy] = useState(false);
 
   const isWelcome = search.get("welcome") === "1";
   const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
@@ -939,6 +944,7 @@ export function FamilyClient() {
         setEditMemberId(m.id);
         setEditName(m.name || "");
         setEditRole(m.role);
+        setEditPhoto(m.avatarPhotoUrl || "");
         setEditOpen(true);
       }}
       editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
@@ -958,12 +964,57 @@ export function FamilyClient() {
       await updateDoc(doc(db, "families", user.uid, "members", editMemberId), {
         name: editName.trim(),
         role: editRole,
+        // "" clears the photo back to the colored chip. A resized data URL
+        // (~10-20KB) sits comfortably inside the 1MB Firestore doc limit.
+        avatarPhotoUrl: editPhoto || null,
       });
       setEditOpen(false);
     } catch (e) {
       console.error("edit member failed:", e);
     } finally {
       setEditSaving(false);
+    }
+  }
+
+  // Read a chosen image file and downscale it to a small square avatar
+  // (cover-cropped, centered) so we can store it inline in Firestore
+  // without any storage bucket. Returns a JPEG data URL.
+  async function resizeToAvatar(file: File): Promise<string> {
+    const SIZE = 160;
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result || ""));
+      r.onerror = () => reject(new Error("read failed"));
+      r.readAsDataURL(file);
+    });
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error("decode failed"));
+      i.src = dataUrl;
+    });
+    const canvas = document.createElement("canvas");
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return dataUrl;
+    const side = Math.min(img.width, img.height);
+    const sx = (img.width - side) / 2;
+    const sy = (img.height - side) / 2;
+    ctx.drawImage(img, sx, sy, side, side, 0, 0, SIZE, SIZE);
+    return canvas.toDataURL("image/jpeg", 0.82);
+  }
+
+  async function onPickPhoto(file: File | null) {
+    if (!file) return;
+    setEditPhotoBusy(true);
+    try {
+      const url = await resizeToAvatar(file);
+      setEditPhoto(url);
+    } catch (e) {
+      console.error("avatar resize failed:", e);
+    } finally {
+      setEditPhotoBusy(false);
     }
   }
 
@@ -985,8 +1036,44 @@ export function FamilyClient() {
               {lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
             </h3>
             <p style={{ margin: "0 0 16px", fontSize: 13.5, color: "#6b7280" }}>
-              {lang === "he" ? "השם והתפקיד שיוצגו." : "The name and role to show."}
+              {lang === "he" ? "השם, התמונה והתפקיד שיוצגו." : "The name, photo and role to show."}
             </p>
+            {/* Profile photo: helps a parent recognize each child at a glance
+                in the profile switcher. Optional; falls back to the chip. */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+              <div style={{ width: 60, height: 60, borderRadius: 999, flexShrink: 0, overflow: "hidden", background: "#F3F4F6", border: "1px solid rgba(17,24,39,0.12)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                {editPhoto ? (
+                  <img src={editPhoto} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
+                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "start" }}>
+                <label style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 12px", borderRadius: 9, border: "1px solid rgba(14,165,165,0.4)", background: "rgba(14,165,165,0.06)", color: "#0E7490", fontWeight: 700, fontSize: 13, cursor: editPhotoBusy ? "default" : "pointer", fontFamily: "inherit", opacity: editPhotoBusy ? 0.6 : 1 }}>
+                  {editPhotoBusy
+                    ? (lang === "he" ? "טוען…" : lang === "ar" ? "جارٍ التحميل…" : lang === "ru" ? "Загрузка…" : "Loading…")
+                    : editPhoto
+                      ? (lang === "he" ? "החלפת תמונה" : lang === "ar" ? "تغيير الصورة" : lang === "ru" ? "Заменить фото" : "Change photo")
+                      : (lang === "he" ? "הוספת תמונה" : lang === "ar" ? "إضافة صورة" : lang === "ru" ? "Добавить фото" : "Add a photo")}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={editPhotoBusy}
+                    onChange={(e) => { void onPickPhoto(e.target.files?.[0] ?? null); e.currentTarget.value = ""; }}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                {editPhoto && !editPhotoBusy && (
+                  <button
+                    type="button"
+                    onClick={() => setEditPhoto("")}
+                    style={{ background: "none", border: "none", padding: "2px 2px", color: "#9CA3AF", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+                  >
+                    {lang === "he" ? "הסרת התמונה" : lang === "ar" ? "إزالة الصورة" : lang === "ru" ? "Удалить фото" : "Remove photo"}
+                  </button>
+                )}
+              </div>
+            </div>
             <input
               value={editName}
               onChange={(e) => setEditName(e.target.value)}

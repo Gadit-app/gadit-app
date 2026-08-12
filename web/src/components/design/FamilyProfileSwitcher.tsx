@@ -14,7 +14,7 @@ import { memberColorFor } from "@/lib/family";
  * back). Lives inside the topbar user menu, reachable from any screen.
  */
 
-type SwitchMember = { id: string; name: string; role: string; colorIndex: number; isOwner: boolean };
+type SwitchMember = { id: string; name: string; role: string; colorIndex: number; avatarPhotoUrl?: string; isOwner: boolean };
 
 const COPY: Record<string, { title: string; parentTag: string; parentFallback: string; switching: string }> = {
   he: { title: "החלפת פרופיל", parentTag: "הורה", parentFallback: "חשבון ההורה", switching: "מחליף…" },
@@ -112,8 +112,12 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
         onMouseEnter={(e) => { if (!busy && !mine) e.currentTarget.style.background = "var(--paper, #F9FAFB)"; }}
         onMouseLeave={(e) => { if (!mine) e.currentTarget.style.background = "transparent"; }}
       >
-        <span style={{ width: 26, height: 26, borderRadius: 999, flexShrink: 0, background: memberColorFor({ colorIndex: m.colorIndex }), display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>
-          {ROLE_ICON[m.role] ?? (m.isOwner ? "🧑" : "🙂")}
+        <span style={{ width: 26, height: 26, borderRadius: 999, flexShrink: 0, overflow: "hidden", background: memberColorFor({ colorIndex: m.colorIndex }), display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>
+          {m.avatarPhotoUrl ? (
+            <img src={m.avatarPhotoUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            ROLE_ICON[m.role] ?? (m.isOwner ? "🧑" : "🙂")
+          )}
         </span>
         <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: "var(--ink, #111827)" }}>
           {label}

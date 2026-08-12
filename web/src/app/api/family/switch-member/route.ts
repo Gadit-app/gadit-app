@@ -51,12 +51,13 @@ export async function GET(req: NextRequest) {
   // parent/owner, so a kid (or the parent testing) always has a one-tap
   // way back to the parent account.
   const members = snap.docs.map((d) => {
-    const m = d.data() as { isOwner?: boolean; name?: string; role?: string; colorIndex?: number };
+    const m = d.data() as { isOwner?: boolean; name?: string; role?: string; colorIndex?: number; avatarPhotoUrl?: string | null };
     return {
       id: d.id,
       name: m.name || "",
       role: m.role || "boy",
       colorIndex: m.colorIndex ?? 0,
+      avatarPhotoUrl: m.avatarPhotoUrl || "",
       isOwner: !!m.isOwner,
     };
   });
