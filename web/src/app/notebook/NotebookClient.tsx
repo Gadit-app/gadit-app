@@ -35,6 +35,16 @@ type NotebookItem = {
   addedAt: string;
 };
 
+// Kids' "treasure box" reframe of the notebook title/subtitle. he/en/ar/ru
+// with an English fallback; the rest of the copy (empty state etc.) stays
+// shared. Keeps the brand rule: never translates "Gadit".
+const TREASURE_COPY: Record<string, { title: string; subtitle: string }> = {
+  en: { title: "My treasure box", subtitle: "Every word you've discovered and collected. Your treasure grows!" },
+  he: { title: "תיבת האוצר שלי", subtitle: "כל מילה שגילית ואספת. האוצר שלך גדל!" },
+  ar: { title: "صندوق كنزي", subtitle: "كل كلمة اكتشفتها وجمعتها. كنزك يكبر!" },
+  ru: { title: "Мой сундук сокровищ", subtitle: "Каждое слово, которое ты открыл и собрал. Твоё сокровище растёт!" },
+};
+
 const COPY: Record<string, {
   title: string;
   subtitle: string;
@@ -245,6 +255,12 @@ export function NotebookPage() {
   const router = useRouter();
   const href = useHref();
   const c = COPY[lang] ?? COPY.en;
+  // In the kids' area the notebook is reframed as a "treasure box" (Gadi
+  // 2026-08-12, from the moms' feedback) — same page, warmer name for a kid.
+  const isKid = familyRole === "kid";
+  const tc = TREASURE_COPY[lang] ?? TREASURE_COPY.en;
+  const pageTitle = isKid ? tc.title : c.title;
+  const pageSubtitle = isKid ? tc.subtitle : c.subtitle;
 
   const [items, setItems] = useState<NotebookItem[] | null>(null);
   // Lowercase set of every word the user has cached locally — drives
@@ -385,8 +401,8 @@ export function NotebookPage() {
 
       <main className="wb-notebook-main">
         <div className="wb-notebook-hero">
-          <h1 className="wb-notebook-title">{c.title}</h1>
-          <p className="wb-notebook-sub">{c.subtitle}</p>
+          <h1 className="wb-notebook-title">{pageTitle}</h1>
+          <p className="wb-notebook-sub">{pageSubtitle}</p>
         </div>
 
         {items === null && !fetchError && (

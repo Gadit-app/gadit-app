@@ -1,8 +1,18 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { computeGamification, toLocalDateStr } from "@/lib/gamification";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
+import { KidsCelebration } from "./KidsCelebration";
+
+// Streak days that earn a celebration. streakTier() returns the highest one
+// reached, so we can tell when the child crosses into a new tier.
+const STREAK_TIERS = [3, 7, 14, 30, 60, 100];
+function streakTier(streak: number): number {
+  let t = 0;
+  for (const m of STREAK_TIERS) if (streak >= m) t = m;
+  return t;
+}
 
 /**
  * Kids gamification header (Gadi 2026-08-12) — shown on the child's own
@@ -30,6 +40,32 @@ export function KidsGameHeader({
     return computeGamification(addedAtDates, now, todayStr);
   }, [addedAtDates]);
 
+  // Fire fireworks when the child crosses a NEW milestone (rank up, weekly
+  // goal newly complete, or a new streak tier). Deduped in localStorage so
+  // it celebrates once per achievement, and never on the very first load
+  // for a kid who already had progress.
+  const [celebrateId, setCelebrateId] = useState(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const KEY = "gadit-kids-celebrate";
+    try {
+      const prev = JSON.parse(window.localStorage.getItem(KEY) || "null") as
+        | { rankIndex: number; streakTier: number; weeklyDone: boolean }
+        | null;
+      const curTier = streakTier(g.streak);
+      const weeklyDone = g.weekly >= g.weeklyGoal;
+      const next = { rankIndex: g.rank.index, streakTier: curTier, weeklyDone };
+      window.localStorage.setItem(KEY, JSON.stringify(next));
+      if (prev) {
+        const crossed =
+          g.rank.index > prev.rankIndex ||
+          curTier > (prev.streakTier ?? 0) ||
+          (weeklyDone && !prev.weeklyDone);
+        if (crossed) setCelebrateId((x) => x + 1);
+      }
+    } catch { /* localStorage blocked — no celebration, no harm */ }
+  }, [g.streak, g.rank.index, g.weekly, g.weeklyGoal]);
+
   const c = gameCopy(lang);
   const weeklyPct = Math.min(100, Math.round((g.weekly / g.weeklyGoal) * 100));
   const weeklyDone = g.weekly >= g.weeklyGoal;
@@ -37,6 +73,7 @@ export function KidsGameHeader({
 
   return (
     <div dir={dir} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 12, margin: "4px 0 22px" }}>
+      <KidsCelebration runId={celebrateId} />
       {/* Streak */}
       <Tile bg="linear-gradient(135deg, #FFF7ED, #FFEDD5)" border="rgba(245,158,11,0.28)">
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

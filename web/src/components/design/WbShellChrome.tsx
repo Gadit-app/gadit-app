@@ -83,6 +83,12 @@ const FAMILIES_LABEL: Record<string, string> = {
   it: "Famiglie", ja: "ファミリー", hi: "परिवार", am: "ቤተሰቦች",
 };
 
+// Kids see their notebook as their "treasure box" (Gadi 2026-08-12). Short
+// nav form; en fallback for languages not listed.
+const TREASURE_NAV: Record<string, string> = {
+  he: "האוצר שלי", en: "My treasure", ar: "كنزي", ru: "Сокровища",
+};
+
 function useNavLinks(): NavLink[] {
   const { user, plan, familyRole } = useAuth();
   const { lang } = useLang();
@@ -95,7 +101,7 @@ function useNavLinks(): NavLink[] {
   // The parent/subscriber nav below is unchanged (Gadi's call).
   if (familyRole === "kid") {
     return [
-      { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
+      { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
     ];
   }
