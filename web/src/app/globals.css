@@ -2981,13 +2981,44 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   line-height: 1.55;
   color: var(--ink);
   font-weight: 500;
+  /* Text on the start edge, a per-idiom speaker on the end edge. */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 .wordbook .wb-midiom + .wb-midiom {
   margin-top: 4px;
 }
+.wordbook .wb-midiom-text { flex: 1; min-width: 0; }
 .wordbook .wb-midiom-phrase { font-weight: 700; color: var(--ink); }
 .wordbook .wb-midiom-sep    { color: var(--ink-muted); }
 .wordbook .wb-midiom-meaning { color: var(--ink-soft); }
+/* Per-idiom speaker button, matches the section-listen box. */
+.wordbook .wb-midiom-listen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint, #9CA3AF);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.wordbook .wb-midiom-listen:hover {
+  background: rgba(14, 165, 165, 0.1);
+  color: #0E7490;
+  border-color: rgba(14, 165, 165, 0.32);
+}
+.wordbook .wb-midiom-listen.is-playing {
+  background: rgba(14, 165, 165, 0.14);
+  color: #0E7490;
+  border-color: rgba(14, 165, 165, 0.4);
+}
 
 /* Tab row — single row of compact pills, wraps to 2 rows if needed */
 /* Tier-grouped tab rows — 2026-06-20 Gadi split the per-meaning

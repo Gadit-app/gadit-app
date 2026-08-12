@@ -1089,49 +1089,52 @@ export function IdiomsSection({
   }
   if (all.length === 0) return null;
 
-  // Read every idiom aloud: "phrase, meaning. phrase, meaning." OpenAI TTS
-  // (paying users) handles the mixed phrase-language + UI-language meaning.
-  const ttsText = all.map((i) => [i.phrase?.trim(), i.meaning?.trim()].filter(Boolean).join(", ")).filter(Boolean).join(". ");
+  // A speaker PER idiom (Gadi 2026-08-12: not one button that reads them
+  // all). OpenAI voice for paying users handles the mixed phrase-language
+  // + UI-language meaning.
   const ttsUseAI = plan === "clear" || plan === "deep";
 
   return (
     <div className="wb-idioms-section">
       <div className="wb-eyebrow wb-eyebrow-with-flag">
         <span>{v2(lang, "idiomsEyebrow")}</span>
-        <div className="wb-section-controls">
-          {ttsText && (
-            <TTSButton
-              text={ttsText}
-              audioLang={lang}
-              useOpenAI={ttsUseAI}
-              ariaLabel={v2(lang, "listenToWord")}
-              className="wb-section-listen"
-            />
-          )}
-          {onReport && (
-            <button
-              type="button"
-              className="wb-section-flag wb-flag-tip"
-              aria-label={v2(lang, "reportLabel")}
-              data-tip={v2(lang, "reportLabel")}
-              onClick={() => onReport("idioms")}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="4" y1="22" x2="4" y2="15" />
-                <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
-              </svg>
-            </button>
-          )}
-        </div>
+        {onReport && (
+          <button
+            type="button"
+            className="wb-section-flag wb-flag-tip"
+            aria-label={v2(lang, "reportLabel")}
+            data-tip={v2(lang, "reportLabel")}
+            onClick={() => onReport("idioms")}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="4" y1="22" x2="4" y2="15" />
+              <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+            </svg>
+          </button>
+        )}
       </div>
       <div className="wb-card wb-idioms-card">
-        {all.map((id, j) => (
-          <div className="wb-midiom" key={j}>
-            <span className="wb-midiom-phrase">{id.phrase}</span>
-            <span className="wb-midiom-sep">, </span>
-            <span className="wb-midiom-meaning">{id.meaning}</span>
-          </div>
-        ))}
+        {all.map((id, j) => {
+          const rowTts = [id.phrase?.trim(), id.meaning?.trim()].filter(Boolean).join(", ");
+          return (
+            <div className="wb-midiom" key={j}>
+              <div className="wb-midiom-text">
+                <span className="wb-midiom-phrase">{id.phrase}</span>
+                <span className="wb-midiom-sep">, </span>
+                <span className="wb-midiom-meaning">{id.meaning}</span>
+              </div>
+              {rowTts && (
+                <TTSButton
+                  text={rowTts}
+                  audioLang={lang}
+                  useOpenAI={ttsUseAI}
+                  ariaLabel={v2(lang, "listenToWord")}
+                  className="wb-midiom-listen"
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
