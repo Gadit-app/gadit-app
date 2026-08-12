@@ -1060,10 +1060,12 @@ export function IdiomsSection({
   meanings,
   generalIdioms,
   onReport,
+  plan = "basic",
 }: {
   meanings: Meaning[];
   generalIdioms?: Idiom[];
   onReport?: (section: string) => void;
+  plan?: Plan;
 }) {
   const { lang } = useLang();
   // Combine all idioms — per-meaning first (preserving order), then
@@ -1087,24 +1089,40 @@ export function IdiomsSection({
   }
   if (all.length === 0) return null;
 
+  // Read every idiom aloud: "phrase, meaning. phrase, meaning." OpenAI TTS
+  // (paying users) handles the mixed phrase-language + UI-language meaning.
+  const ttsText = all.map((i) => [i.phrase?.trim(), i.meaning?.trim()].filter(Boolean).join(", ")).filter(Boolean).join(". ");
+  const ttsUseAI = plan === "clear" || plan === "deep";
+
   return (
     <div className="wb-idioms-section">
       <div className="wb-eyebrow wb-eyebrow-with-flag">
         <span>{v2(lang, "idiomsEyebrow")}</span>
-        {onReport && (
-          <button
-            type="button"
-            className="wb-section-flag wb-flag-tip"
-            aria-label={v2(lang, "reportLabel")}
-            data-tip={v2(lang, "reportLabel")}
-            onClick={() => onReport("idioms")}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <line x1="4" y1="22" x2="4" y2="15" />
-              <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
-            </svg>
-          </button>
-        )}
+        <div className="wb-section-controls">
+          {ttsText && (
+            <TTSButton
+              text={ttsText}
+              audioLang={lang}
+              useOpenAI={ttsUseAI}
+              ariaLabel={v2(lang, "listenToWord")}
+              className="wb-section-listen"
+            />
+          )}
+          {onReport && (
+            <button
+              type="button"
+              className="wb-section-flag wb-flag-tip"
+              aria-label={v2(lang, "reportLabel")}
+              data-tip={v2(lang, "reportLabel")}
+              onClick={() => onReport("idioms")}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="4" y1="22" x2="4" y2="15" />
+                <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
       <div className="wb-card wb-idioms-card">
         {all.map((id, j) => (
@@ -1120,9 +1138,10 @@ export function IdiomsSection({
 }
 
 // ─── OriginCard (renamed from EtymologyCard) ───────────────────
-export function OriginCard({ etymology, onReport }: { etymology: Etymology | string | undefined; onReport?: (section: string) => void }) {
+export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology: Etymology | string | undefined; onReport?: (section: string) => void; plan?: Plan }) {
   const { lang } = useLang();
   const [kidsOn] = useKidsMode();
+  const ttsUseAI = plan === "clear" || plan === "deep";
   if (!etymology) return null;
 
   // Legacy: etymology was sometimes a free-text string. Render it as the
@@ -1143,20 +1162,29 @@ export function OriginCard({ etymology, onReport }: { etymology: Etymology | str
             <span className="wb-eyebrow-icon"><ScrollIcon /></span>
             {v2(lang, "wordOriginEyebrow")}
           </span>
-          {onReport && (
-            <button
-              type="button"
-              className="wb-section-flag wb-flag-tip"
-              aria-label={v2(lang, "reportLabel")}
-              data-tip={v2(lang, "reportLabel")}
-              onClick={() => onReport("etymology")}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="4" y1="22" x2="4" y2="15" />
-                <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
-              </svg>
-            </button>
-          )}
+          <div className="wb-section-controls">
+            <TTSButton
+              text={kidsStory!}
+              audioLang={lang}
+              useOpenAI={ttsUseAI}
+              ariaLabel={v2(lang, "listenToWord")}
+              className="wb-section-listen"
+            />
+            {onReport && (
+              <button
+                type="button"
+                className="wb-section-flag wb-flag-tip"
+                aria-label={v2(lang, "reportLabel")}
+                data-tip={v2(lang, "reportLabel")}
+                onClick={() => onReport("etymology")}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="4" y1="22" x2="4" y2="15" />
+                  <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
         <div className="wb-card wb-origin">
           <div className="wb-origin-fields">
@@ -1190,6 +1218,15 @@ export function OriginCard({ etymology, onReport }: { etymology: Etymology | str
   const hasStory = !!historyNote && !isEtymologyFieldGarbled("historyNote", historyNote);
   if (!hasLang && !hasOriginal && !hasBreakdown && !hasMeant && !hasStory) return null;
 
+  // Read the origin aloud: each visible field with its label, then the story.
+  const originTts = [
+    hasLang && `${v2(lang, "wordOriginLanguage")}: ${sourceLanguage}`,
+    hasOriginal && `${v2(lang, "wordOriginOriginalWord")}: ${originalWord}`,
+    hasBreakdown && `${v2(lang, "wordOriginBreakdown")}: ${breakdown}`,
+    hasMeant && `${v2(lang, "wordOriginOriginallyMeant")}: ${originalMeaning}`,
+    hasStory && historyNote,
+  ].filter(Boolean).join(". ");
+
   return (
     <div className="wb-origin-section">
       <div className="wb-eyebrow wb-eyebrow-with-flag">
@@ -1197,20 +1234,31 @@ export function OriginCard({ etymology, onReport }: { etymology: Etymology | str
           <span className="wb-eyebrow-icon"><ScrollIcon /></span>
           {v2(lang, "wordOriginEyebrow")}
         </span>
-        {onReport && (
-          <button
-            type="button"
-            className="wb-section-flag wb-flag-tip"
-            aria-label={v2(lang, "reportLabel")}
-            data-tip={v2(lang, "reportLabel")}
-            onClick={() => onReport("etymology")}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <line x1="4" y1="22" x2="4" y2="15" />
-              <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
-            </svg>
-          </button>
-        )}
+        <div className="wb-section-controls">
+          {originTts && (
+            <TTSButton
+              text={originTts}
+              audioLang={lang}
+              useOpenAI={ttsUseAI}
+              ariaLabel={v2(lang, "listenToWord")}
+              className="wb-section-listen"
+            />
+          )}
+          {onReport && (
+            <button
+              type="button"
+              className="wb-section-flag wb-flag-tip"
+              aria-label={v2(lang, "reportLabel")}
+              data-tip={v2(lang, "reportLabel")}
+              onClick={() => onReport("etymology")}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="4" y1="22" x2="4" y2="15" />
+                <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
       <div className="wb-card wb-origin">
         <div className="wb-origin-fields">
@@ -1533,9 +1581,10 @@ export function ResultView({
         meanings={result.meanings ?? []}
         generalIdioms={result.generalIdioms}
         onReport={onReport}
+        plan={plan}
       />
 
-      <OriginCard etymology={result.etymology} onReport={onReport} />
+      <OriginCard etymology={result.etymology} onReport={onReport} plan={plan} />
     </div>
   );
 }

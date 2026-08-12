@@ -2741,6 +2741,38 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: #B45309;
   border-color: rgba(180, 83, 9, 0.32);
 }
+/* Group the section's listen + flag controls together on the end edge. */
+.wordbook .wb-section-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+/* Per-section speaker (idioms, word origin) — matches the flag box size. */
+.wordbook .wb-section-listen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint, #9CA3AF);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+.wordbook .wb-section-listen:hover {
+  background: rgba(14, 165, 165, 0.1);
+  color: #0E7490;
+  border-color: rgba(14, 165, 165, 0.32);
+}
+.wordbook .wb-section-listen.is-playing {
+  background: rgba(14, 165, 165, 0.14);
+  color: #0E7490;
+  border-color: rgba(14, 165, 165, 0.4);
+}
 
 /* CSS-only hover tooltip for the report flags. The plain `title`
    attribute browsers render is slow (~600ms native delay) and styled
