@@ -1,0 +1,88 @@
+name: Build TWA (Android AAB)
+
+# Builds the Gadit Android app (Trusted Web Activity) into a signed .aab
+# for Google Play — no local Android toolchain needed (Gadi 2026-08-12,
+# option "ב"). Run it from the Actions tab (workflow_dispatch), download
+# the .aab from the run's artifacts, and upload it to Play Console.
+#
+# Signing: on the FIRST run there is no keystore, so the job generates a
+# new upload keystore and uploads it as an artifact — download and BACK IT
+# UP, then add these repo secrets so every later build reuses the same key:
+#   ANDROID_KEYSTORE_BASE64     = base64 of twa/android.keystore
+#   ANDROID_KEYSTORE_PASSWORD   = the store password
+#   ANDROID_KEY_PASSWORD        = the key password
+# (Play App Signing is on by default, so this is only the UPLOAD key.)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli
+
+      - name: Point Bubblewrap at the CI JDK + Android SDK
+        run: |
+          mkdir -p "$HOME/.bubblewrap"
+          printf '{ "jdkPath": "%s", "androidSdkPath": "%s" }\n' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$HOME/.bubblewrap/config.json"
+          cat "$HOME/.bubblewrap/config.json"
+
+      - name: Restore or create the upload keystore
+        id: keystore
+        run: |
+          STORE_PASS="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+          KEY_PASS="${{ secrets.ANDROID_KEY_PASSWORD }}"
+          [ -z "$STORE_PASS" ] && STORE_PASS="gadit-upload"
+          [ -z "$KEY_PASS" ] && KEY_PASS="gadit-upload"
+          echo "store_pass=$STORE_PASS" >> "$GITHUB_OUTPUT"
+          echo "key_pass=$KEY_PASS" >> "$GITHUB_OUTPUT"
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > twa/android.keystore
+            echo "Restored keystore from the ANDROID_KEYSTORE_BASE64 secret."
+          else
+            keytool -genkeypair -v -keystore twa/android.keystore -alias android \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$STORE_PASS" -keypass "$KEY_PASS" \
+              -dname "CN=Gadit, O=Lavi Learning and Training LLC, C=US"
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret set — generated a NEW upload keystore. Download twa/android.keystore from this run's artifacts, back it up, and add it (base64) as the ANDROID_KEYSTORE_BASE64 secret so future builds keep the same signature."
+          fi
+
+      - name: Build the signed AAB
+        working-directory: twa
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ steps.keystore.outputs.store_pass }}
+          BUBBLEWRAP_KEY_PASSWORD: ${{ steps.keystore.outputs.key_pass }}
+        run: bubblewrap build --skipPwaValidation
+
+      - name: Print signing SHA-256 (for assetlinks.json)
+        working-directory: twa
+        run: |
+          echo "=== Upload key SHA-256 — put this in web/public/.well-known/assetlinks.json ==="
+          keytool -list -v -keystore android.keystore -alias android \
+            -storepass "${{ steps.keystore.outputs.store_pass }}" | grep -E "SHA256:" || true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gadit-twa-build
+          path: |
+            twa/app-release-bundle.aab
+            twa/app-release-signed.apk
+            twa/android.keystore
+          if-no-files-found: warn
