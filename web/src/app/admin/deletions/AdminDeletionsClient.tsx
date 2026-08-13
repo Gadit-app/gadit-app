@@ -23,6 +23,8 @@ type DeletionRow = {
   isFamily?: boolean;
   isSchool?: boolean;
   canceledSubs?: number;
+  reason?: string | null;
+  comment?: string | null;
   at?: string;
 };
 
@@ -45,6 +47,10 @@ const STRINGS: Record<AdminLang, {
   sourceAdmin: string;
   family: string;
   school: string;
+  reasonsTitle: string;
+  noReasons: string;
+  colReason: string;
+  noReasonGiven: string;
 }> = {
   en: {
     title: "Deletions",
@@ -61,6 +67,10 @@ const STRINGS: Record<AdminLang, {
     sourceAdmin: "Admin",
     family: "Family",
     school: "School",
+    reasonsTitle: "Why people leave",
+    noReasons: "No reasons given yet.",
+    colReason: "Reason",
+    noReasonGiven: "—",
   },
   he: {
     title: "מחיקות",
@@ -77,6 +87,10 @@ const STRINGS: Record<AdminLang, {
     sourceAdmin: "אדמין",
     family: "משפחה",
     school: "בית ספר",
+    reasonsTitle: "למה אנשים עוזבים",
+    noReasons: "עדיין לא נבחרו סיבות.",
+    colReason: "סיבה",
+    noReasonGiven: "—",
   },
 };
 
@@ -134,6 +148,15 @@ export default function AdminDeletionsClient() {
 
   const rows = data?.rows ?? [];
 
+  // Reason breakdown for the survey summary (self-deletions that gave one).
+  const reasonCounts = new Map<string, number>();
+  for (const r of rows) {
+    const reason = (r.reason ?? "").trim();
+    if (reason) reasonCounts.set(reason, (reasonCounts.get(reason) ?? 0) + 1);
+  }
+  const sortedReasons = [...reasonCounts.entries()].sort((a, b) => b[1] - a[1]);
+  const maxReason = sortedReasons[0]?.[1] ?? 1;
+
   return (
     <>
       <div style={{ marginBottom: 24 }}>
@@ -155,6 +178,30 @@ export default function AdminDeletionsClient() {
         </div>
       )}
 
+      {/* Exit-survey summary: why people leave, most common first. */}
+      {rows.length > 0 && (
+        <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, marginBottom: 16 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 12 }}>
+            {t.reasonsTitle}
+          </div>
+          {sortedReasons.length === 0 ? (
+            <div style={{ color: "#9CA3AF", fontSize: 13 }}>{t.noReasons}</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {sortedReasons.map(([reason, count]) => (
+                <div key={reason} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ width: 200, fontSize: 13, color: "#374151", flexShrink: 0 }} dir="ltr">{reason}</div>
+                  <div style={{ flex: 1, background: "#F3F4F6", borderRadius: 4, height: 8, overflow: "hidden" }}>
+                    <div style={{ width: `${Math.round((count / maxReason) * 100)}%`, height: "100%", background: "#DC2626" }} />
+                  </div>
+                  <div style={{ width: 28, textAlign: "end", fontSize: 13, fontWeight: 700, color: "#111827", fontVariantNumeric: "tabular-nums" }}>{count}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {rows.length > 0 && (
         <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -164,6 +211,7 @@ export default function AdminDeletionsClient() {
                 <th style={thStyle}>{t.colEmail}</th>
                 <th style={thStyle}>{t.colSource}</th>
                 <th style={thStyle}>{t.colPlan}</th>
+                <th style={thStyle}>{t.colReason}</th>
                 <th style={thStyle}>{t.colFlags}</th>
                 <th style={{ ...thStyle, textAlign: "end" }}>{t.colCanceled}</th>
               </tr>
@@ -196,6 +244,16 @@ export default function AdminDeletionsClient() {
                     {r.plan || "—"}
                     {r.subscriptionStatus ? (
                       <span style={{ color: "#9CA3AF" }}> · {r.subscriptionStatus}</span>
+                    ) : null}
+                  </td>
+                  <td style={{ ...tdStyle, fontSize: 12.5, color: "#374151", maxWidth: 240 }} dir="ltr">
+                    {r.reason ? (
+                      <span>{r.reason}</span>
+                    ) : (
+                      <span style={{ color: "#D1D5DB" }}>{t.noReasonGiven}</span>
+                    )}
+                    {r.comment ? (
+                      <div style={{ marginTop: 3, fontStyle: "italic", color: "#6B7280", fontSize: 12 }}>“{r.comment}”</div>
                     ) : null}
                   </td>
                   <td style={{ ...tdStyle, fontSize: 12 }}>

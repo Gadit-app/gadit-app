@@ -361,6 +361,10 @@ async function maybeNotifyScheduledCancel(sub: Stripe.Subscription, event: Strip
 async function maybeNotifyDeletedCancel(sub: Stripe.Subscription) {
   try {
     if (sub.cancellation_details?.reason !== "cancellation_requested") return; // user-initiated only
+    // Only REAL subs (had a card). An abandoned card-less trial that our
+    // /subscribe cleanup cancels when the user upgrades is not churn — it's
+    // noise (found via shirlovsky, who switched monthly→yearly, 2026-08-13).
+    if (!sub.default_payment_method && sub.status !== "active") return;
     const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
     const userId = await findUserIdByCustomer(customerId);
     if (!userId) return;
