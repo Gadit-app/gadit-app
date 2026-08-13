@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { Resend } from "resend";
 import {
   getAdminAuth,
   getAdminDb,
@@ -8,6 +9,50 @@ import {
 import { logDeletion } from "@/lib/deletion-log";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+/** Alert Gadi that an account was self-deleted. Non-blocking. */
+async function notifyAccountDeleted(email: string | null, plan: string | null, canceledSubs: number) {
+  try {
+    const resendKey = process.env.RESEND_API_KEY;
+    const notifyTo = process.env.NOTIFY_EMAIL;
+    if (!resendKey || !notifyTo) return;
+    const when = new Date().toLocaleString("en-IL", {
+      timeZone: "Asia/Jerusalem",
+      day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+    const safeEmail = (email ?? "(none)").replace(/</g, "&lt;");
+    const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#DC2626,#991B1B);padding:24px;color:#fff;">
+      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
+      <div style="font-size:22px;font-weight:700;margin-top:4px;">Account deleted 🗑️</div>
+    </div>
+    <div style="padding:24px;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <tr><td style="padding:8px 0;color:#6B7280;width:130px;">Email</td><td style="padding:8px 0;font-weight:600;">${safeEmail}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Was on plan</td><td style="padding:8px 0;">${plan ?? "basic"}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Subs canceled</td><td style="padding:8px 0;">${canceledSubs}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Deleted by</td><td style="padding:8px 0;">the user (self-service)</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
+      </table>
+      <div style="margin-top:24px;padding-top:24px;border-top:1px solid #F3F4F6;text-align:center;">
+        <a href="https://www.gadit.app/admin/deletions" style="display:inline-block;background:#DC2626;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">View deletion log</a>
+      </div>
+    </div>
+  </div>
+</body></html>`;
+    const resend = new Resend(resendKey);
+    const res = await resend.emails.send({
+      from: "Gadit <notify@gadit.app>",
+      to: notifyTo,
+      subject: `🗑️ Account deleted: ${email ?? "(no email)"}`,
+      html,
+    });
+    if (res.error) console.error("[account/delete] notify resend error:", res.error);
+  } catch (e) {
+    console.warn("[account/delete] notifyAccountDeleted failed:", e);
+  }
+}
 
 /**
  * /api/account/delete — permanently remove the requesting user.
@@ -60,6 +105,29 @@ export async function POST(req: NextRequest) {
     let auditFamily = false;
     let auditSchool = false;
     let canceledCount = 0;
+
+    // Read the account's real email up-front for the typed-confirmation gate.
+    const preDoc = await db.collection("users").doc(userId).get();
+    const realEmail =
+      ((preDoc.data()?.email as string | undefined) ?? null) ||
+      (await getAdminAuth().getUser(userId).then((u) => u.email ?? null).catch(() => null));
+
+    // Typed-confirmation gate (Gadi 2026-08-13): a confused user deleted
+    // her own account TWICE by clicking through a one-tap confirm dialog,
+    // losing her Family trial. Deleting now REQUIRES the client to echo the
+    // account's exact email, so an accidental click can never nuke an
+    // account. Enforced server-side, not just in the UI.
+    let confirmEmail = "";
+    try {
+      const body = (await req.json()) as { confirmEmail?: string };
+      confirmEmail = (body.confirmEmail ?? "").trim().toLowerCase();
+    } catch { /* no body */ }
+    if (realEmail && confirmEmail !== realEmail.trim().toLowerCase()) {
+      return NextResponse.json(
+        { error: "confirm_email_mismatch", message: "Type your account email exactly to confirm deletion." },
+        { status: 400 },
+      );
+    }
 
     // 1. Cancel Stripe subscription if any.
     try {
@@ -165,6 +233,10 @@ export async function POST(req: NextRequest) {
       isSchool: auditSchool,
       canceledSubs: canceledCount,
     });
+
+    // Real-time alert to Gadi so an account deletion is never a surprise
+    // again (2026-08-13). Non-blocking.
+    void notifyAccountDeleted(auditEmail, auditPlan, canceledCount);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

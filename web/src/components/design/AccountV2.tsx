@@ -800,19 +800,33 @@ export function AccountV2() {
     // confirm() is universal and impossible to skip programmatically
     // (without explicit user click). Pre-launch we ship this; a
     // designed flow comes post-launch if needed.
-    const ok = window.confirm(
+    if (!user) return;
+    const acctEmail = (user.email ?? "").trim();
+    // Type-to-confirm (2026-08-13): a one-tap confirm let a confused user
+    // delete her own account twice and lose her Family. Require the exact
+    // email; the server re-verifies it.
+    const typed = window.prompt(
       lang === "he"
-        ? "פעולת מחיקת חשבון אינה הפיכה. כל המנויים שלכם יבוטלו וכל הנתונים יימחקו. להמשיך?"
+        ? `מחיקת חשבון היא סופית: כל המנויים יבוטלו וכל הנתונים יימחקו לצמיתות.\nכדי לאשר, הקלד/י את כתובת המייל שלך:\n${acctEmail}`
         : lang === "ar"
-          ? "حذف الحساب لا يمكن التراجع عنه. سيتم إلغاء جميع اشتراكاتكم وستُحذف كل البيانات. الاستمرار؟"
-          : "Account deletion is permanent. Any active subscriptions will be canceled and all data wiped. Continue?"
+          ? `حذف الحساب نهائي: تُلغى جميع الاشتراكات ويُحذف كل شيء.\nللتأكيد، اكتب بريدك الإلكتروني:\n${acctEmail}`
+          : `Deleting your account is permanent: all subscriptions are canceled and everything is erased.\nTo confirm, type your email:\n${acctEmail}`,
     );
-    if (!ok || !user) return;
+    if (typed === null) return; // cancelled
+    if (typed.trim().toLowerCase() !== acctEmail.toLowerCase()) {
+      window.alert(
+        lang === "he" ? "המייל לא תואם. המחיקה בוטלה." :
+        lang === "ar" ? "البريد غير مطابق. أُلغي الحذف." :
+        "Email didn't match. Deletion canceled."
+      );
+      return;
+    }
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/account/delete", {
         method: "POST",
-        headers: { Authorization: `Bearer ${idToken}` },
+        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmEmail: acctEmail }),
       });
       if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as {

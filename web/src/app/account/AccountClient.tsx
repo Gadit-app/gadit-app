@@ -296,21 +296,36 @@ export function AccountPage() {
   }
 
   async function handleDeleteAccount() {
-    const ok = window.confirm(
+    if (!user) return;
+    const acctEmail = (user.email ?? "").trim();
+    // Type-to-confirm: an accidental OK-click must never wipe an account
+    // (a confused user deleted hers twice, losing her Family — 2026-08-13).
+    // The user has to type their exact email; the server re-checks it too.
+    const typed = window.prompt(
       lang === "he"
-        ? "פעולת מחיקת חשבון אינה הפיכה. כל המנויים שלכם יבוטלו וכל הנתונים יימחקו. להמשיך?"
+        ? `מחיקת חשבון היא סופית: כל המנויים יבוטלו וכל הנתונים יימחקו לצמיתות.\nכדי לאשר, הקלד/י את כתובת המייל שלך:\n${acctEmail}`
         : lang === "ar"
-        ? "حذف الحساب لا يمكن التراجع عنه. سيتم إلغاء جميع اشتراكاتكم وستُحذف كل البيانات. الاستمرار؟"
+        ? `حذف الحساب نهائي: تُلغى جميع الاشتراكات ويُحذف كل شيء.\nللتأكيد، اكتب بريدك الإلكتروني:\n${acctEmail}`
         : lang === "hi"
-        ? "खाता हटाना स्थायी है। आपके सभी सक्रिय सब्सक्रिप्शन रद्द हो जाएँगे और सारा डेटा मिट जाएगा। जारी रखें?"
-        : "Account deletion is permanent. Any active subscriptions will be canceled and all data wiped. Continue?"
+        ? `खाता हटाना स्थायी है: सभी सब्सक्रिप्शन रद्द और सारा डेटा हमेशा के लिए मिट जाएगा।\nपुष्टि के लिए अपना ईमेल टाइप करें:\n${acctEmail}`
+        : `Deleting your account is permanent: all subscriptions are canceled and everything is erased.\nTo confirm, type your email:\n${acctEmail}`,
     );
-    if (!ok || !user) return;
+    if (typed === null) return; // cancelled
+    if (typed.trim().toLowerCase() !== acctEmail.toLowerCase()) {
+      window.alert(
+        lang === "he" ? "המייל לא תואם. המחיקה בוטלה." :
+        lang === "ar" ? "البريد غير مطابق. أُلغي الحذف." :
+        lang === "hi" ? "ईमेल मेल नहीं खाता। हटाना रद्द।" :
+        "Email didn't match. Deletion canceled."
+      );
+      return;
+    }
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/account/delete", {
         method: "POST",
-        headers: { Authorization: `Bearer ${idToken}` },
+        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmEmail: acctEmail }),
       });
       if (!res.ok) {
         window.alert(
