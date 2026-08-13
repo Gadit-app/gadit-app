@@ -349,6 +349,42 @@ async function maybeNotifyScheduledCancel(sub: Stripe.Subscription, event: Strip
   }
 }
 
+/**
+ * Churn alert for an IMMEDIATE cancellation (customer.subscription.deleted):
+ * a user who cancels during a trial, or whose sub ends right away, never
+ * flips cancel_at_period_end, so maybeNotifyScheduledCancel above never
+ * fired. Without this, those cancellations downgraded the user silently and
+ * Gadi got no email (found 2026-08-13). Only USER-requested cancellations,
+ * deduped against the scheduled path via the same `canceledNotifiedSub`
+ * flag so a sub already alerted never double-notifies.
+ */
+async function maybeNotifyDeletedCancel(sub: Stripe.Subscription) {
+  try {
+    if (sub.cancellation_details?.reason !== "cancellation_requested") return; // user-initiated only
+    const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+    const userId = await findUserIdByCustomer(customerId);
+    if (!userId) return;
+    const db = getAdminDb();
+    const ref = db.collection("users").doc(userId);
+    const snap = await ref.get();
+    if (snap.data()?.canceledNotifiedSub === sub.id) return; // already alerted (scheduled path)
+
+    const priceId = sub.items.data[0]?.price?.id ?? "";
+    const tier = isFamilyPriceId(priceId)
+      ? "Family"
+      : isSchoolsPriceId(priceId)
+      ? "Schools"
+      : getPlanFromPriceId(priceId) === "clear"
+      ? "Clear"
+      : "Deep";
+    const email = (snap.data()?.email as string | undefined) ?? (sub.metadata?.email as string | undefined) ?? null;
+    await notifyCancellation(tier, email, "canceled", "immediately");
+    await ref.set({ canceledNotifiedSub: sub.id }, { merge: true });
+  } catch (e) {
+    console.warn("[webhook] maybeNotifyDeletedCancel failed:", e);
+  }
+}
+
 // Feature-level plan. Family and Schools billing both translate to "deep"
 // features for every paired member or classroom kid, so existing feature
 // gates (notebook, images, kids mode, quizzes) all work unchanged. The
@@ -694,6 +730,9 @@ export async function POST(req: NextRequest) {
 
     if (event.type === "customer.subscription.deleted") {
       const sub = event.data.object as Stripe.Subscription;
+      // Alert Gadi on an immediate/trial cancellation the scheduled-cancel
+      // path never caught (deduped, user-requested only).
+      await maybeNotifyDeletedCancel(sub);
       // A Payment-Element sub that never got a card was never activated
       // (nobody's plan came from it), so its deletion — auto-cancel at
       // trial end or manual cleanup — must not downgrade anyone. The
