@@ -10,8 +10,8 @@ import { logDeletion } from "@/lib/deletion-log";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-/** Alert Gadi that an account was self-deleted. Non-blocking. */
-async function notifyAccountDeleted(email: string | null, plan: string | null, canceledSubs: number) {
+/** Alert Gadi that an account was self-deleted, with the exit survey. Non-blocking. */
+async function notifyAccountDeleted(email: string | null, plan: string | null, canceledSubs: number, reason: string | null, comment: string | null) {
   try {
     const resendKey = process.env.RESEND_API_KEY;
     const notifyTo = process.env.NOTIFY_EMAIL;
@@ -21,6 +21,10 @@ async function notifyAccountDeleted(email: string | null, plan: string | null, c
       day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
     });
     const safeEmail = (email ?? "(none)").replace(/</g, "&lt;");
+    const esc = (s: string) => s.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const surveyRows =
+      (reason ? `<tr><td style="padding:8px 0;color:#6B7280;">Reason</td><td style="padding:8px 0;font-weight:600;">${esc(reason)}</td></tr>` : "") +
+      (comment ? `<tr><td style="padding:8px 0;color:#6B7280;vertical-align:top;">Their note</td><td style="padding:8px 0;font-style:italic;">“${esc(comment)}”</td></tr>` : "");
     const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
   <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #E5E7EB;overflow:hidden;">
     <div style="background:linear-gradient(135deg,#DC2626,#991B1B);padding:24px;color:#fff;">
@@ -32,6 +36,7 @@ async function notifyAccountDeleted(email: string | null, plan: string | null, c
         <tr><td style="padding:8px 0;color:#6B7280;width:130px;">Email</td><td style="padding:8px 0;font-weight:600;">${safeEmail}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">Was on plan</td><td style="padding:8px 0;">${plan ?? "basic"}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">Subs canceled</td><td style="padding:8px 0;">${canceledSubs}</td></tr>
+        ${surveyRows}
         <tr><td style="padding:8px 0;color:#6B7280;">Deleted by</td><td style="padding:8px 0;">the user (self-service)</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
       </table>
@@ -118,9 +123,13 @@ export async function POST(req: NextRequest) {
     // account's exact email, so an accidental click can never nuke an
     // account. Enforced server-side, not just in the UI.
     let confirmEmail = "";
+    let reason: string | null = null;
+    let comment: string | null = null;
     try {
-      const body = (await req.json()) as { confirmEmail?: string };
+      const body = (await req.json()) as { confirmEmail?: string; reason?: string; comment?: string };
       confirmEmail = (body.confirmEmail ?? "").trim().toLowerCase();
+      reason = (body.reason ?? "").trim().slice(0, 120) || null;
+      comment = (body.comment ?? "").trim().slice(0, 1000) || null;
     } catch { /* no body */ }
     if (realEmail && confirmEmail !== realEmail.trim().toLowerCase()) {
       return NextResponse.json(
@@ -232,11 +241,13 @@ export async function POST(req: NextRequest) {
       isFamily: auditFamily,
       isSchool: auditSchool,
       canceledSubs: canceledCount,
+      reason,
+      comment,
     });
 
     // Real-time alert to Gadi so an account deletion is never a surprise
-    // again (2026-08-13). Non-blocking.
-    void notifyAccountDeleted(auditEmail, auditPlan, canceledCount);
+    // again (2026-08-13), now with the exit-survey reason/comment.
+    void notifyAccountDeleted(auditEmail, auditPlan, canceledCount, reason, comment);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

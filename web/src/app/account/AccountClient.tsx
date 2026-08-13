@@ -28,6 +28,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { DeleteAccountModal } from "@/components/design/DeleteAccountModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
 import { countCached, setCachedWord } from "@/lib/offline-db";
@@ -153,6 +154,7 @@ export function AccountPage() {
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   // How many word definitions the user has cached for offline use.
   // Only meaningful for Clear/Deep — Basic never writes to the cache.
   const [offlineCount, setOfflineCount] = useState<number | null>(null);
@@ -295,52 +297,14 @@ export function AccountPage() {
     router.push(href("/"));
   }
 
-  async function handleDeleteAccount() {
+  // Opens the exit-survey + type-to-confirm modal (DeleteAccountModal).
+  function handleDeleteAccount() {
     if (!user) return;
-    const acctEmail = (user.email ?? "").trim();
-    // Type-to-confirm: an accidental OK-click must never wipe an account
-    // (a confused user deleted hers twice, losing her Family — 2026-08-13).
-    // The user has to type their exact email; the server re-checks it too.
-    const typed = window.prompt(
-      lang === "he"
-        ? `מחיקת חשבון היא סופית: כל המנויים יבוטלו וכל הנתונים יימחקו לצמיתות.\nכדי לאשר, הקלד/י את כתובת המייל שלך:\n${acctEmail}`
-        : lang === "ar"
-        ? `حذف الحساب نهائي: تُلغى جميع الاشتراكات ويُحذف كل شيء.\nللتأكيد، اكتب بريدك الإلكتروني:\n${acctEmail}`
-        : lang === "hi"
-        ? `खाता हटाना स्थायी है: सभी सब्सक्रिप्शन रद्द और सारा डेटा हमेशा के लिए मिट जाएगा।\nपुष्टि के लिए अपना ईमेल टाइप करें:\n${acctEmail}`
-        : `Deleting your account is permanent: all subscriptions are canceled and everything is erased.\nTo confirm, type your email:\n${acctEmail}`,
-    );
-    if (typed === null) return; // cancelled
-    if (typed.trim().toLowerCase() !== acctEmail.toLowerCase()) {
-      window.alert(
-        lang === "he" ? "המייל לא תואם. המחיקה בוטלה." :
-        lang === "ar" ? "البريد غير مطابق. أُلغي الحذف." :
-        lang === "hi" ? "ईमेल मेल नहीं खाता। हटाना रद्द।" :
-        "Email didn't match. Deletion canceled."
-      );
-      return;
-    }
-    try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/account/delete", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ confirmEmail: acctEmail }),
-      });
-      if (!res.ok) {
-        window.alert(
-          lang === "he" ? "מחיקת החשבון נכשלה." :
-          lang === "ar" ? "فشل حذف الحساب." :
-          lang === "hi" ? "खाता हटाना असफल रहा।" :
-          "Account deletion failed."
-        );
-        return;
-      }
-      await logout();
-      router.push(href("/"));
-    } catch (err) {
-      console.error("Delete account failed:", err);
-    }
+    setDeleteModalOpen(true);
+  }
+  async function handleAccountDeleted() {
+    await logout();
+    router.push(href("/"));
   }
 
   // Renewal date string from trial end timestamp
@@ -383,6 +347,15 @@ export function AccountPage() {
 
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
+      {deleteModalOpen && user && (
+        <DeleteAccountModal
+          user={user}
+          lang={lang}
+          dir={dir}
+          onClose={() => setDeleteModalOpen(false)}
+          onDeleted={handleAccountDeleted}
+        />
+      )}
       <header className="wb-shell-topbar">
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>

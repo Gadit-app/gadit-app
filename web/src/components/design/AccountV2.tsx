@@ -29,6 +29,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { Eyebrow } from "./primitives";
+import { DeleteAccountModal } from "./DeleteAccountModal";
 
 type Script = "latin" | "he" | "ar";
 function scriptFor(lang: string): Script {
@@ -621,13 +622,14 @@ function AccountHero({ data }: { data: AccountData }) {
 // ─── Main AccountV2 ───────────────────────────────────────
 export function AccountV2() {
   const { user, logout } = useAuth();
-  const { lang } = useLang();
+  const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
 
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   // Self-service "Switch to Family": only offered when the server confirms
   // the caller is an eligible Clear/Deep subscriber (has a live sub, isn't
   // already Family/Schools). The button stays hidden otherwise.
@@ -793,69 +795,15 @@ export function AccountV2() {
     router.push("/");
   }
 
-  async function handleDeleteAccount() {
-    // Browser native confirm — this is the last line of defense
-    // before an irreversible destructive action. A custom modal
-    // would be prettier but harder to verify on a security review;
-    // confirm() is universal and impossible to skip programmatically
-    // (without explicit user click). Pre-launch we ship this; a
-    // designed flow comes post-launch if needed.
+  // Opens the exit-survey + type-to-confirm modal (DeleteAccountModal),
+  // which handles the reason survey, the email confirmation, and the call.
+  function handleDeleteAccount() {
     if (!user) return;
-    const acctEmail = (user.email ?? "").trim();
-    // Type-to-confirm (2026-08-13): a one-tap confirm let a confused user
-    // delete her own account twice and lose her Family. Require the exact
-    // email; the server re-verifies it.
-    const typed = window.prompt(
-      lang === "he"
-        ? `מחיקת חשבון היא סופית: כל המנויים יבוטלו וכל הנתונים יימחקו לצמיתות.\nכדי לאשר, הקלד/י את כתובת המייל שלך:\n${acctEmail}`
-        : lang === "ar"
-          ? `حذف الحساب نهائي: تُلغى جميع الاشتراكات ويُحذف كل شيء.\nللتأكيد، اكتب بريدك الإلكتروني:\n${acctEmail}`
-          : `Deleting your account is permanent: all subscriptions are canceled and everything is erased.\nTo confirm, type your email:\n${acctEmail}`,
-    );
-    if (typed === null) return; // cancelled
-    if (typed.trim().toLowerCase() !== acctEmail.toLowerCase()) {
-      window.alert(
-        lang === "he" ? "המייל לא תואם. המחיקה בוטלה." :
-        lang === "ar" ? "البريد غير مطابق. أُلغي الحذف." :
-        "Email didn't match. Deletion canceled."
-      );
-      return;
-    }
-    try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/account/delete", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ confirmEmail: acctEmail }),
-      });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as {
-          message?: string;
-        };
-        window.alert(
-          body.message ??
-            (lang === "he"
-              ? "מחיקת החשבון נכשלה. נסו שוב או פנו לתמיכה."
-              : lang === "ar"
-                ? "فشل حذف الحساب. حاول مرة أخرى أو راسل الدعم."
-                : "Account deletion failed. Please try again or contact support.")
-        );
-        return;
-      }
-      // Sign out locally and bounce home — the auth user is gone,
-      // so any future token request would 401 anyway.
-      await logout();
-      router.push("/");
-    } catch (err) {
-      console.error("Delete account request failed:", err);
-      window.alert(
-        lang === "he"
-          ? "מחיקת החשבון נכשלה. נסו שוב או פנו לתמיכה ב־support@gadit.app."
-          : lang === "ar"
-            ? "فشل حذف الحساب. راسل support@gadit.app للحصول على المساعدة."
-            : "Account deletion failed. Please contact support@gadit.app."
-      );
-    }
+    setDeleteModalOpen(true);
+  }
+  async function handleAccountDeleted() {
+    await logout();
+    router.push("/");
   }
 
   if (loading) {
@@ -905,6 +853,15 @@ export function AccountV2() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", paddingInline: 24 }}>
+      {deleteModalOpen && user && (
+        <DeleteAccountModal
+          user={user}
+          lang={lang}
+          dir={dir}
+          onClose={() => setDeleteModalOpen(false)}
+          onDeleted={handleAccountDeleted}
+        />
+      )}
       <AccountHero data={data} />
 
       <div

@@ -22,6 +22,10 @@ export interface DeletionLogEntry {
   isFamily?: boolean;
   isSchool?: boolean;
   canceledSubs?: number; // live subs canceled as part of the deletion
+  // Exit survey (Gadi 2026-08-13): the reason the user picked + any free
+  // text they left, so churn feedback is captured at the moment of leaving.
+  reason?: string | null;
+  comment?: string | null;
   at: string; // ISO timestamp
 }
 
