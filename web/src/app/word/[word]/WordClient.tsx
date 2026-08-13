@@ -335,7 +335,7 @@ export function WordClient({
   initialResult?: WordResult | null;
   preloadLang?: string;
 }) {
-  const { user, plan: authPlan, promptLogin, familyRole } = useAuth();
+  const { user, plan: authPlan, promptLogin, familyRole, schoolId } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -1413,9 +1413,13 @@ export function WordClient({
 
         {/* Present-mode toggle (schools council 2026-08-05). A subtle
             corner button that hides/shows the top chrome so a teacher can
-            project a clean word view to the whole class. Only for
-            signed-in users; hidden inside the /c/ classroom kid view. */}
-        {user && !classroomCode && (
+            project a clean word view to the whole class. SCHOOLS ONLY
+            (Gadi 2026-08-13): it was showing for every signed-in user,
+            where in RTL it sat top-left, covered the hamburger, and a
+            family parent couldn't find her way back — pure confusion for
+            anyone who isn't a teacher. Hidden inside the /c/ classroom kid
+            view too. */}
+        {user && !!schoolId && !classroomCode && (
           <button
             type="button"
             onClick={() => setPresent((p) => !p)}

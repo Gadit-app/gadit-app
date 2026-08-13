@@ -794,8 +794,11 @@ export function PartnerDashboardClient() {
                 <div style={S.card}>
                   <div style={S.cardLabel}>{t.yourLink}</div>
                   <div style={S.subtle}>{t.linksHint}</div>
-                  {(["general", "families", "schools"] as ProductKey[]).map((product) => {
-                    const label = product === "general" ? t.linkGeneral : product === "families" ? t.linkFamilies : t.linkSchools;
+                  {/* Families + Schools only (Gadi 2026-08-13): these are the
+                      products we want partners to sell. The general Gadit link
+                      was dropped from the portal and the welcome email. */}
+                  {(["families", "schools"] as ProductKey[]).map((product) => {
+                    const label = product === "families" ? t.linkFamilies : t.linkSchools;
                     return (
                       <div key={product} style={{ marginBottom: 12 }}>
                         <div style={S.linkProductLabel}>{label}</div>
@@ -903,9 +906,9 @@ const S: Record<string, React.CSSProperties> = {
   tierStandard: { background: "rgba(14,165,165,0.12)", color: "#0b7d7d" },
   tierFounder: { background: "rgba(124,58,237,0.12)", color: "#6D28D9" },
   kpiGrid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginBottom: 18 },
-  kpiCard: { background: "#fff", border: "1px solid #E9ECEF", borderRadius: 16, padding: "20px 18px", boxShadow: "0 1px 2px rgba(16,24,40,0.04)" },
-  kpiValue: { fontSize: 32, fontWeight: 800, lineHeight: 1.1 },
-  kpiLabel: { fontSize: 13, color: "#6B7280", marginTop: 6, fontWeight: 500 },
+  kpiCard: { background: "#fff", border: "1px solid #E9ECEF", borderRadius: 16, padding: "20px 18px", boxShadow: "0 1px 2px rgba(16,24,40,0.04)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" },
+  kpiValue: { fontSize: 32, fontWeight: 800, lineHeight: 1.1, textAlign: "center" },
+  kpiLabel: { fontSize: 13, color: "#6B7280", marginTop: 6, fontWeight: 500, textAlign: "center" },
   body: { display: "grid", gridTemplateColumns: "1fr", gap: 18 },
   col: { display: "flex", flexDirection: "column", gap: 18, minWidth: 0 },
   card: { background: "#fff", border: "1px solid #E9ECEF", borderRadius: 16, padding: 22, boxShadow: "0 1px 2px rgba(16,24,40,0.04)" },
