@@ -226,6 +226,49 @@ export default function CheckoutClient() {
   // Set after mount (reads localStorage) so SSR and first client render match.
   const [inTwa, setInTwa] = useState(false);
   useEffect(() => { setInTwa(isTwa()); }, []);
+  // TWA-only: state for the "open payment in browser" handoff.
+  const [twaBusy, setTwaBusy] = useState(false);
+  const [twaErr, setTwaErr] = useState<string | null>(null);
+
+  // Inside the TWA, payment must open in an EXTERNAL browser to stay on
+  // the reader-app model. We can't just open www.gadit.app/checkout: the
+  // TWA verifies that exact host with full scope, so Android recaptures
+  // the link straight back into the app (the Custom Tab flashes and
+  // vanishes), and the shared localStorage would loop this interstitial
+  // anyway. Instead we mint a Stripe-HOSTED Checkout Session and open
+  // checkout.stripe.com — a different origin the TWA never captures, so
+  // it opens externally and stays. Same webhook (checkout.session.completed)
+  // provisions the account. Hosted Checkout also carries its own promo
+  // field, so no coupon plumbing is needed here.
+  async function openExternalCheckout() {
+    setTwaErr(null);
+    if (!user) {
+      promptLogin({ mode: "signup", reason: "checkout" });
+      return;
+    }
+    setTwaBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ priceId, lang }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { url?: string };
+      if (!res.ok || !data.url) {
+        setTwaErr(c.genericError);
+        setTwaBusy(false);
+        return;
+      }
+      openInBrowser(data.url);
+      // Leave the button in its "opening" state — the user is now in the
+      // external browser; returning to the app re-shows this screen.
+      setTwaBusy(false);
+    } catch {
+      setTwaErr(c.genericError);
+      setTwaBusy(false);
+    }
+  }
 
   // Applying a promo code just reloads the page with ?code=CODE and lets
   // the existing (tested) URL-param path attach the discount via
@@ -401,11 +444,17 @@ export default function CheckoutClient() {
             </p>
             <button
               type="button"
-              onClick={() => openInBrowser(typeof window !== "undefined" ? window.location.href : "/checkout")}
-              style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", padding: "13px 30px", borderRadius: 12, border: "none", fontWeight: 700, fontSize: 15.5, fontFamily: "inherit", cursor: "pointer" }}
+              disabled={twaBusy}
+              onClick={openExternalCheckout}
+              style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", padding: "13px 30px", borderRadius: 12, border: "none", fontWeight: 700, fontSize: 15.5, fontFamily: "inherit", cursor: twaBusy ? "default" : "pointer", opacity: twaBusy ? 0.6 : 1 }}
             >
-              {lang === "he" ? "פתח את עמוד התשלום" : "Open the payment page"}
+              {twaBusy
+                ? c.processing
+                : lang === "he" ? "פתח את עמוד התשלום" : "Open the payment page"}
             </button>
+            {twaErr && (
+              <p role="alert" style={{ color: "#b91c1c", fontSize: 14, margin: "14px 0 0" }}>{twaErr}</p>
+            )}
           </div>
         </main>
       </div>
