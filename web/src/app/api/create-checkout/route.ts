@@ -62,13 +62,16 @@ const ALL_PAID_PRICE_IDS = new Set(
   ].filter(Boolean),
 );
 
-// Stripe Checkout locales we can pass straight through. Arabic and
-// Hindi are not supported by Stripe Checkout — those fall back to
-// "auto" (browser Accept-Language). Launch QA 2026-07-03: previously
-// no locale was sent at all, so a Hebrew-UI user with an English
-// browser got an English checkout page.
+// Stripe HOSTED Checkout supports only a fixed locale list — and Hebrew
+// is NOT on it (that omission is the whole reason the in-app Payment
+// Element exists for /checkout). Anything Stripe doesn't support must
+// fall back to "auto" or the API throws "Invalid locale" and no session
+// is created. This set is the intersection of Gadit's UI languages with
+// Stripe's supported locales; the rest (he, ar, hi, am, uk, fa, zu) go
+// to "auto" (browser Accept-Language). Do NOT add "he" back here.
 const STRIPE_LOCALES = new Set([
-  "he", "en", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja",
+  "en", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja",
+  "tr", "pl", "id", "nl", "el",
 ]);
 
 /** Lang prefix for return URLs — mirrors buildHref: English is the
