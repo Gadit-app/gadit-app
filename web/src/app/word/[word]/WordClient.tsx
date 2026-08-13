@@ -758,7 +758,12 @@ export function WordClient({
                         !!m && typeof m === "object" && typeof m.meaning === "string"
                     )
                   : [];
+                // Spread the whole partial so no field is dropped mid-stream
+                // (this used to hand-pick fields and silently lost the
+                // cross-language `translation` gloss + `ipa` — 2026-08-13).
+                // Only the rendered-shape fields are overridden for safety.
                 setResult({
+                  ...(partial as WordResult),
                   word: partial.word ?? initialWord,
                   language: partial.language ?? "",
                   meanings: partialMeanings,

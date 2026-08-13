@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { isDegenerate, sanitizeDegenerateEtymology } from "@/lib/define-guard";
+import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
 
@@ -1216,6 +1216,37 @@ function buildGaditEasterEgg(uiLangCode: string): object {
   };
 }
 
+/**
+ * Lazy backfill for the cross-language gloss. Entries cached BEFORE the
+ * `translation` field existed have no gloss, so a German user looking up a
+ * Hebrew word never saw the German equivalent. On a cache hit for a foreign
+ * word missing its gloss we fetch just the one equivalent word (cheap), so
+ * the whole existing cache upgrades itself lazily — no full regeneration
+ * (Gadi 2026-08-13). Returns "" on any failure.
+ */
+async function backfillTranslation(word: string, wordLangName: string, uiLangName: string): Promise<string> {
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0,
+        max_tokens: 16,
+        messages: [
+          { role: "system", content: "Reply with ONLY the single most common everyday equivalent WORD of the given word in the target language (its primary sense). No quotes, no punctuation, no explanation. Give a short phrase only if there is no single word." },
+          { role: "user", content: `Word (${wordLangName}): ${word}\nTarget language: ${uiLangName}\nEquivalent word:` },
+        ],
+      }),
+    });
+    if (!res.ok) return "";
+    const data = await res.json();
+    return String(data?.choices?.[0]?.message?.content || "").replace(/["'.\n]/g, "").trim().slice(0, 60);
+  } catch {
+    return "";
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { word, contextSentence, uiLang } = await req.json();
@@ -1319,6 +1350,22 @@ export async function POST(req: NextRequest) {
         console.warn(`Dropping corrupted cache entry [${cacheKey}]: ${cachedVerdict.reason}`);
         await deleteCachedResult(cacheKey);
       } else {
+        // Lazy backfill of the cross-language gloss for pre-existing cache
+        // entries that predate the `translation` field. If the word is in a
+        // DIFFERENT language than the UI and the gloss is missing, compute
+        // it once and patch the cache, so every foreign word shows its
+        // UI-language equivalent (Gadi 2026-08-13). Same-language words and
+        // entries that already have a gloss are untouched.
+        const wordLangName = typeof cached.language === "string" ? cached.language.trim() : "";
+        const sameLang = !!wordLangName && wordLangName.toLowerCase().includes(uiLangName.toLowerCase());
+        const hasGloss = typeof cached.translation === "string" && cached.translation.trim().length > 0;
+        if (wordLangName && !sameLang && !hasGloss && !contextSentence) {
+          const t = await backfillTranslation(word, wordLangName, uiLangName);
+          if (t && !isEtymologyFieldGarbled("originalMeaning", t)) {
+            (cached as Record<string, unknown>).translation = t;
+            void getAdminDb().collection("cache").doc(cacheKey).set({ translation: t }, { merge: true });
+          }
+        }
         // Cached response — send as a single SSE event so the client can use one code path
         const payload = { ...cached, fromCache: true };
         const body = `data: ${JSON.stringify({ type: "done", result: payload })}\n\n`;
