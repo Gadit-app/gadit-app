@@ -52,3 +52,12 @@ env.txt
 
 # Strategic plan seed — contains revenue targets + list sizes, never commit
 strategic-plan-seed.json
+
+# TWA / Android signing secrets (never commit — public repo)
+twa/*.zip
+twa/*.keystore
+twa/*.aab
+twa/*.apk
+twa/signing-key-info.txt
+**/signing.keystore
+**/*.keystore
