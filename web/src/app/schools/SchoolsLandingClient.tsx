@@ -1045,7 +1045,7 @@ const COPY: Record<string, T> = {
     probCallout1Title: "פער שמתעצם",
     probCallout1Body: "מילים שלא הובנו בונות חומה בלתי נראית לכל שיעור עתידי.",
     probCallout2Title: "זמן שהולך לאיבוד",
-    probCallout2Body: "מורים מאבדים 5–10 דקות בכל שיעור על הסברי מילים.",
+    probCallout2Body: "מורים מאבדים 5 עד 10 דקות בכל שיעור על הסברי מילים.",
     probCallout3Title: "הניתוק השקט",
     probCallout3Body: "תלמידים מתנתקים כשפסקה מכילה יותר מדי מילים לא מוכרות.",
     howTag: "איך זה עובד",
@@ -1073,7 +1073,7 @@ const COPY: Record<string, T> = {
     privPoint4: "עומד בחוק הגנת הפרטיות הישראלי ובתקני הפרטיות המחמירים בעולם.",
     privKahoot: "הצטרפות פשוטה כמו במשחק חידון. נבנה להבנת מילים ולנראות למורה.",
     priceTag: "מחירים",
-    priceH2: "מחיר שנתי, לפי גודל בית הספר.",
+    priceH2: "תוכניות ומחירים, לפי גודל בית הספר.",
     priceSub: "ממלאים טופס קצר, ואנחנו פותחים את בית הספר ושולחים חשבונית מס. תשלום שנתי בהעברה בנקאית או בהזמנת רכש.",
     priceSmallName: "Schools",
     priceSmallAmount: "$69",
@@ -1081,7 +1081,7 @@ const COPY: Record<string, T> = {
     priceLargeName: "Schools Large",
     priceLargeAmount: "$149",
     priceLargeStudents: "עד 500 תלמידים",
-    priceIncludesTitle: "שתי התוכניות כוללות",
+    priceIncludesTitle: "כל התוכניות כוללות",
     priceIncludes: [
       "כיתות ללא הגבלה",
       "דשבורד מורה מלא",
@@ -1096,7 +1096,7 @@ const COPY: Record<string, T> = {
     faqH2: "מה מנהלים שואלים לפני שמזמינים.",
     faq: [
       {
-        q: "אם אין לוגינים, איך אדע איזה תלמיד חיפש מה?",
+        q: "אם אין התחברות, איך אדע איזה תלמיד חיפש מה?",
         a: "המורה טוענת מראש רשימה של שמות פרטיים בדשבורד. כשהתלמיד נכנס לכתובת הכיתה, הוא בוחר את השם שלו בקליק אחד. כל חיפוש מתוייג לאותו שם. בלי מייל, בלי סיסמה, בלי שום מידע אישי.",
       },
       {
@@ -1117,7 +1117,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "האם זה עובד מחוץ לשעות הלימודים?",
-        a: "קודי כיתה תחומים לשעות הפעילות של בית הספר (ברירת מחדל א–ה 7:30–15:00, ניתן להגדיר). מחוץ לחלון הזה הקוד נותן גישה למילון בסיסי בלבד. זה מונע מהקוד של בית הספר להפוך לתחליף חינמי של תוכנית Family ב-24/7.",
+        a: "קודי כיתה תחומים לשעות הפעילות של בית הספר (ברירת מחדל א' עד ה', 7:30 עד 15:00, ניתן להגדיר). מחוץ לחלון הזה הקוד נותן גישה למילון בסיסי בלבד. זה מונע מהקוד של בית הספר להפוך לתחליף חינמי של תוכנית Family ב-24/7.",
       },
       {
         q: "מה אם בית הספר שלי מעל 1,000 תלמידים?",
@@ -2632,9 +2632,9 @@ type PricingUI = {
   tiers: { small: string; medium: string; large: string };
 };
 const PRICING_UI: Record<string, PricingUI> = {
-  he: { perYear: "לשנה", orderCta: "לפרטים והזמנה",
+  he: { perYear: "לשנה", orderCta: "לפרטים ולהזמנה",
         plusVat: "+ מע״מ", netNote: "כל המחירים אינם כוללים מע״מ.",
-        tiers: { small: "עד 100 תלמידים", medium: "101–500 תלמידים", large: "501–1,000 תלמידים" } },
+        tiers: { small: "עד 100 תלמידים", medium: "101 עד 500 תלמידים", large: "501 עד 1,000 תלמידים" } },
   en: { perYear: "/ year", orderCta: "Get a quote",
         plusVat: "+ VAT", netNote: "All prices exclude VAT.",
         tiers: { small: "Up to 100 students", medium: "101–500 students", large: "501–1,000 students" } },
@@ -2979,7 +2979,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
             </button>
           </div>
           <div className="wb-schools-hero-trust" style={{ marginTop: 14 }}>
-            מ-₪349 לחודש · בלי לוגין לתלמידים · בלי התקנה
+            מ-₪349 לחודש · בלי התחברות לתלמידים · בלי התקנה
           </div>
         </div>
         <div className="wb-schools-hero-visual">
@@ -3064,7 +3064,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 ))}
               </div>
               <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px solid #FEF3C7", fontSize: 12, color: "#A16207", fontWeight: 600 }}>
-                ועוד 17 שפות
+                ועוד 19 שפות
               </div>
             </div>
 
@@ -3126,7 +3126,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               המורים מקבלים דרך פשוטה לוודא שאף תלמיד לא נשאר מאחור בגלל מילה אחת. בלי חשבונות לתלמידים, בלי התקנה, בלי מעורבות של צוות מחשוב.
             </p>
             <ul className="wb-schools-bullets">
-              <li>בלי לוגין לתלמידים, בלי סיסמאות לנהל</li>
+              <li>בלי התחברות לתלמידים, בלי סיסמאות לנהל</li>
               <li>בלי התקנה ובלי מעורבות של צוות מחשוב</li>
               <li>עובד על כל מסך: לוח חכם, מחשב או טלפון</li>
               <li>דשבורד שמראה למורה עם אילו מילים הכיתה מתקשה</li>
@@ -3445,6 +3445,9 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               border-color: rgba(202, 138, 4, 0.5);
               box-shadow: 0 14px 34px -12px rgba(202, 138, 4, 0.28);
             }
+            .wordbook .sl-price-grid-3 .wb-schools-price-card { text-align: center; }
+            .wordbook .sl-price-grid-3 .wb-schools-price-amount { justify-content: center; }
+            .wordbook .sl-price-grid-3 .wb-schools-price-name { text-transform: none; letter-spacing: 0; }
             .wordbook .sl-billing-toggle {
               display: flex; width: fit-content; margin: 0 auto 24px;
               background: #f1f3f5; border-radius: 999px; padding: 4px; gap: 2px;
@@ -3605,6 +3608,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
           <p className="wb-schools-price-net">{upu.afterTrial}</p>
           </>
           )}
+          <p className="wb-schools-price-larger">{t.priceLarger}</p>
           <div className="wb-schools-includes">
             <div className="wb-schools-includes-title">{t.priceIncludesTitle}</div>
             <div className="wb-schools-includes-list">
@@ -3636,11 +3640,11 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               }}
               dir="rtl"
             >
-              <div style={{ fontSize: 16, fontWeight: 700, color: "#1C1917", marginBottom: 8 }}>
-                הרשמה, פשוט
+              <div style={{ fontSize: 18, fontWeight: 800, color: "#1C1917", marginBottom: 8 }}>
+                ההרשמה פשוטה
               </div>
               <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.75 }}>
-                ממלאים טופס קצר עם פרטי בית הספר, ואנחנו פותחים לכם את בית הספר עם שם משתמש וסיסמה ושולחים חשבונית מס. התשלום שנתי בהעברה בנקאית או בהזמנת רכש.
+                ממלאים טופס קצר עם פרטי בית הספר, ואנחנו פותחים את בית הספר עם שם משתמש וסיסמה ושולחים חשבונית מס. התשלום שנתי בהעברה בנקאית או בהזמנת רכש.
               </div>
               <div style={{ fontSize: 14, color: "#44403C", lineHeight: 1.75, marginTop: 12 }}>
                 <strong>לביא טכנולוגיות למידה והדרכה בע״מ</strong>
@@ -3650,7 +3654,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <SchoolOrderForm />
             </div>
           )}
-          <p className="wb-schools-price-larger">{t.priceLarger}</p>
         </div>
       </section>
 

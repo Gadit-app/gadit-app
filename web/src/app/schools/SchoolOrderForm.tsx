@@ -11,8 +11,8 @@ import { useState } from "react";
 
 const SIZES = [
   { v: "s", label: "עד 100 תלמידים" },
-  { v: "m", label: "101-500 תלמידים" },
-  { v: "l", label: "501-1,000 תלמידים" },
+  { v: "m", label: "101 עד 500 תלמידים" },
+  { v: "l", label: "501 עד 1,000 תלמידים" },
   { v: "xl", label: "יותר מ-1,000 תלמידים" },
 ];
 
@@ -109,7 +109,7 @@ export function SchoolOrderForm() {
 
       {state === "error" && (
         <div style={{ fontSize: 13, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "9px 11px" }}>
-          משהו השתבש. נסו שוב, או כתבו לנו ל-support@gadit.app.
+          משהו השתבש. אפשר לנסות שוב, או לכתוב לנו ל-support@gadit.app.
         </div>
       )}
 
