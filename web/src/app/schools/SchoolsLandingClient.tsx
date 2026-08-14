@@ -3029,7 +3029,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <li className="wb-schools-stage"><span className="wb-schools-stage-num">3</span>תמונה שמראה את המשמעות במבט אחד</li>
               <li className="wb-schools-stage"><span className="wb-schools-stage-num">4</span>שלושה משפטי דוגמה שמראים איך משתמשים בה</li>
             </ol>
-            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
           </div>
           <div className="wb-schools-feature-visual">
             <img src="/schools/steps.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
@@ -3069,7 +3068,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               </div>
             </div>
 
-            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
           </div>
           <div className="wb-schools-feature-visual">
             <img src="/schools/cross-personal.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
@@ -3095,7 +3093,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <span className="wb-schools-subject">ספרות</span>
               <span className="wb-schools-subject">אנגלית</span>
             </div>
-            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
           </div>
           <div className="wb-schools-feature-visual">
             <img src="/schools/word-sets.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
@@ -3112,7 +3109,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
             <p className="wb-schools-body">
               מילה שהובנה פעם אחת עדיין צריכה חזרה כדי להישאר. אחרי השיעור התלמידים מתרגלים את המילים של הכיתה במשחקים קצרים, וכל מילה שחיפשו הופכת לחלק מהידע שלהם.
             </p>
-            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
           </div>
           <div className="wb-schools-feature-visual">
             <img src="/schools/games.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
@@ -3135,7 +3131,6 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <li>עובד על כל מסך: לוח חכם, מחשב או טלפון</li>
               <li>דשבורד שמראה למורה עם אילו מילים הכיתה מתקשה</li>
             </ul>
-            <button type="button" className="wb-schools-textcta" onClick={scrollToOrder}>לפתיחת בית ספר ←</button>
           </div>
           <div className="wb-schools-feature-visual">
             <img src="/schools/trust.webp" alt="" loading="lazy" className="wb-schools-feature-img" />
