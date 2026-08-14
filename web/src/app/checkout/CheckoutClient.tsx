@@ -229,6 +229,11 @@ export default function CheckoutClient() {
   // TWA-only: state for the "open payment in browser" handoff.
   const [twaBusy, setTwaBusy] = useState(false);
   const [twaErr, setTwaErr] = useState<string | null>(null);
+  // Which price the TWA hand-off will use. Hosted Checkout is a single
+  // price, so the monthly/yearly choice has to be made here, in the app,
+  // before we open the browser (the web Payment Element shows the toggle
+  // inline, but the hosted page can't).
+  const [twaPriceId, setTwaPriceId] = useState(priceId);
 
   // Inside the TWA, payment must open in an EXTERNAL browser to stay on
   // the reader-app model. We can't just open www.gadit.app/checkout: the
@@ -252,7 +257,7 @@ export default function CheckoutClient() {
       const res = await fetch("/api/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ priceId, lang }),
+        body: JSON.stringify({ priceId: twaPriceId, lang }),
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string };
       if (!res.ok || !data.url) {
@@ -425,6 +430,19 @@ export default function CheckoutClient() {
   // Billing, no 15-30% cut, all on Stripe). Show a "continue in the
   // browser" screen instead of the in-app Stripe form.
   if (inTwa) {
+    const twaTier = tierForPrice(twaPriceId);
+    const twaOtherId = twaTier ? counterpartPrice(twaTier) : null;
+    const twaOtherTier = twaOtherId ? tierForPrice(twaOtherId) : null;
+    const amt = (t: TierInfo) => (lang === "he" ? t.amountIls : t.amount);
+    const cycleOpt = (label: string, sub: string, active: boolean, ribbon: string | null, onClick: () => void) => (
+      <button type="button" onClick={onClick} style={{ position: "relative", flex: 1, padding: ribbon ? "18px 8px 10px" : "10px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
+        {ribbon && (
+          <span style={{ position: "absolute", top: -11, insetInlineStart: "50%", transform: "translateX(-50%)", background: "#CA8A04", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, whiteSpace: "nowrap", boxShadow: "0 1px 3px rgba(0,0,0,0.12)" }}>{ribbon}</span>
+        )}
+        <div style={{ fontSize: 13.5, fontWeight: 700, color: active ? "#0b7d7d" : "#374151" }}>{label}</div>
+        <div style={{ fontSize: 12.5, color: "#6b7280", marginTop: 2 }}>{sub}</div>
+      </button>
+    );
     return (
       <div dir={dir} style={styles.page}>
         <header style={styles.header}>
@@ -437,16 +455,51 @@ export default function CheckoutClient() {
             <h1 style={{ fontSize: 20, fontWeight: 800, margin: "0 0 10px", color: "#1C1917" }}>
               {lang === "he" ? "ממשיכים לתשלום בדפדפן" : "Continue to payment in the browser"}
             </h1>
-            <p style={{ fontSize: 14.5, color: "#57534E", lineHeight: 1.7, margin: "0 0 22px" }}>
+            <p style={{ fontSize: 14.5, color: "#57534E", lineHeight: 1.7, margin: "0 0 18px" }}>
               {lang === "he"
                 ? "התשלום מתבצע בדפדפן, בצורה מאובטחת. לחיצה על הכפתור תפתח את עמוד התשלום."
                 : "Payment is completed securely in your browser. Tap the button to open the payment page."}
             </p>
+
+            {twaTier && (
+              <div style={{ ...styles.summary, textAlign: "start", marginBottom: 18 }}>
+                <div style={styles.summaryRow}>
+                  <span style={styles.muted}>{c.planLabel}</span>
+                  <span style={styles.planName}>Gadit {twaTier.name}</span>
+                </div>
+                <div style={styles.trialBox}>
+                  <div style={styles.trialToday}>{c.trialToday}</div>
+                  <div style={styles.trialLine}>{c.trialLine}</div>
+                </div>
+                {twaOtherTier && twaOtherId && (() => {
+                  const monthlyT = twaTier.cycle === "monthly" ? twaTier : twaOtherTier;
+                  const yearlyT = twaTier.cycle === "yearly" ? twaTier : twaOtherTier;
+                  const monthlyId = twaTier.cycle === "monthly" ? twaPriceId : twaOtherId;
+                  const yearlyId = twaTier.cycle === "yearly" ? twaPriceId : twaOtherId;
+                  return (
+                    <div style={{ margin: "14px 0 2px" }}>
+                      <div style={{ ...styles.muted, marginBottom: 8 }}>{c.cycleQ}</div>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        {cycleOpt(c.monthlyLabel, `${amt(monthlyT)} ${c.perMonth}`, twaTier.cycle === "monthly", null, () => setTwaPriceId(monthlyId))}
+                        {cycleOpt(c.yearlyLabel, `${amt(yearlyT)} ${c.perYear}`, twaTier.cycle === "yearly", c.yearlyRibbon, () => setTwaPriceId(yearlyId))}
+                      </div>
+                    </div>
+                  );
+                })()}
+                <div style={styles.summaryRow}>
+                  <span style={styles.muted}>{c.afterTrial}</span>
+                  <span style={styles.amount}>
+                    {amt(twaTier)} {twaTier.cycle === "yearly" ? c.perYear : c.perMonth}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <button
               type="button"
               disabled={twaBusy}
               onClick={openExternalCheckout}
-              style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", padding: "13px 30px", borderRadius: 12, border: "none", fontWeight: 700, fontSize: 15.5, fontFamily: "inherit", cursor: twaBusy ? "default" : "pointer", opacity: twaBusy ? 0.6 : 1 }}
+              style={{ display: "block", width: "100%", background: "#0EA5A5", color: "#fff", padding: "14px 30px", borderRadius: 12, border: "none", fontWeight: 700, fontSize: 15.5, fontFamily: "inherit", cursor: twaBusy ? "default" : "pointer", opacity: twaBusy ? 0.6 : 1 }}
             >
               {twaBusy
                 ? c.processing
