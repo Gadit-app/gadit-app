@@ -2597,10 +2597,14 @@ const COPY: Record<string, T> = {
 // Annual pricing in ₪ (Gadi 2026-08-08, after the market research: Israeli
 // schools buy a full year up front, by bank transfer against a tax invoice,
 // not by monthly card). ×10 the old monthly = two months free.
+// Hebrew ₪ tiers. Monthly-first display (Gadi 2026-08-14: show the small
+// per-month number, not the scary annual sum), with a yearly option at
+// ×10 the monthly = two months free. Actual payment for Israeli schools is
+// still the annual bank-transfer / tax-invoice order form below.
 const SCHOOL_TIERS = [
-  { key: "small" as const,  price: 3490 },
-  { key: "medium" as const, price: 6490 },
-  { key: "large" as const,  price: 9490 },
+  { key: "small" as const,  monthly: 349, yearly: 3490 },
+  { key: "medium" as const, monthly: 649, yearly: 6490 },
+  { key: "large" as const,  monthly: 949, yearly: 9490 },
 ];
 
 // Self-serve USD pricing for the international (non-Hebrew) Schools page.
@@ -3446,15 +3450,53 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               border-color: rgba(202, 138, 4, 0.5);
               box-shadow: 0 14px 34px -12px rgba(202, 138, 4, 0.28);
             }
+            .wordbook .sl-billing-toggle {
+              display: flex; width: fit-content; margin: 0 auto 24px;
+              background: #f1f3f5; border-radius: 999px; padding: 4px; gap: 2px;
+            }
+            .wordbook .sl-billing-toggle button {
+              border: none; background: transparent; font-family: var(--wb-he);
+              font-weight: 700; font-size: 14px; color: #64748b;
+              padding: 8px 18px; border-radius: 999px; cursor: pointer;
+              display: inline-flex; align-items: center; gap: 7px;
+            }
+            .wordbook .sl-billing-toggle button.is-active {
+              background: #fff; color: #0b7d7d; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            }
+            .wordbook .sl-billing-save {
+              background: #10B981; color: #fff; font-size: 10.5px; font-weight: 800;
+              padding: 2px 7px; border-radius: 999px; line-height: 1.5;
+            }
           `}</style>
+          <div className="sl-billing-toggle" role="tablist" aria-label="billing period">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billing === "monthly"}
+              className={billing === "monthly" ? "is-active" : ""}
+              onClick={() => setBilling("monthly")}
+            >
+              חודשי
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billing === "yearly"}
+              className={billing === "yearly" ? "is-active" : ""}
+              onClick={() => setBilling("yearly")}
+            >
+              שנתי
+              <span className="sl-billing-save">חודשיים חינם</span>
+            </button>
+          </div>
           <div className="wb-schools-price-grid sl-price-grid-3">
             {SCHOOL_TIERS.map((tier) => (
               <div key={tier.key} className="wb-schools-price-card">
                 <div className="wb-schools-price-name">{pu.tiers[tier.key]}</div>
                 <div className="wb-schools-price-amount">
-                  <span className="wb-schools-price-amount-num" dir="ltr">{`₪${tier.price.toLocaleString()}`}</span>
+                  <span className="wb-schools-price-amount-num" dir="ltr">{`₪${(billing === "yearly" ? tier.yearly : tier.monthly).toLocaleString()}`}</span>
                   <span className="wb-schools-price-amount-vat">{pu.plusVat}</span>
-                  <span className="wb-schools-price-amount-period">{pu.perYear}</span>
+                  <span className="wb-schools-price-amount-period">{billing === "yearly" ? "לשנה" : "לחודש"}</span>
                 </div>
                 <button type="button" className="wb-schools-cta wb-schools-cta-block" onClick={scrollToOrder}>
                   {pu.orderCta}
