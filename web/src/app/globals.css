@@ -1841,7 +1841,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   display: inline-flex;
   align-items: center;
 }
-@media (max-width: 480px) {
+/* Hide the plan chip across the whole mobile/tablet range, not just tiny
+   phones. The burger topbar layout is active up to 1023px, and between
+   481–1023px the chip used to render on top of the hamburger (Gadi
+   2026-08-14). The avatar alone is the mobile identity, like Google's
+   chrome; the chip returns on the desktop topbar (≥1024px). */
+@media (max-width: 1023px) {
   .wordbook .wb-tier-chip { display: none; }
 }
 
