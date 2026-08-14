@@ -12705,6 +12705,36 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--ink-soft);
 }
 
+/* ─── Centering pass (Families-style), Gadi 2026-08-14 ──────────
+   Schools content hugged the start edge, so on mobile it read
+   flush-right in RTL and looked messy. Center the hero on phones
+   (the 2-col desktop grid goes back to start-aligned) and center every
+   standalone section header. Two-column feature rows are intentionally
+   left alone: their header lives inside .wb-schools-feature-text, not a
+   direct child of the section, so the direct-child selectors below skip
+   them, exactly like the Families page keeps its feature text dir-aware. */
+.wordbook .wb-schools-hero-text { text-align: center; }
+.wordbook .wb-schools-hero-text .wb-schools-sub { margin-inline: auto; }
+.wordbook .wb-schools-hero-actions { justify-content: center; }
+@media (min-width: 900px) {
+  .wordbook .wb-schools-hero-text { text-align: start; }
+  .wordbook .wb-schools-hero-text .wb-schools-sub { margin-inline: 0; }
+  .wordbook .wb-schools-hero-actions { justify-content: flex-start; }
+}
+.wordbook .wb-schools-section > .wb-schools-tag,
+.wordbook .wb-schools-section-inner > .wb-schools-tag {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+}
+.wordbook .wb-schools-section > .wb-schools-h2,
+.wordbook .wb-schools-section > .wb-schools-section-sub,
+.wordbook .wb-schools-section-inner > .wb-schools-h2,
+.wordbook .wb-schools-section-inner > .wb-schools-section-sub {
+  text-align: center;
+  margin-inline: auto;
+}
+
 .wordbook .wb-schools-cta {
   display: inline-flex;
   align-items: center;
