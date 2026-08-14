@@ -2603,6 +2603,23 @@ const SCHOOL_TIERS = [
   { key: "large" as const,  price: 9490 },
 ];
 
+// Self-serve USD pricing for the international (non-Hebrew) Schools page.
+// Hebrew keeps the ₪ annual bank-transfer order form (Israeli schools buy
+// against a tax invoice); every other language buys by card via /checkout
+// like the rest of the app. Gadi 2026-08-14: a single global USD price is
+// what makes it read as a modern international platform, and monthly-first
+// (with a yearly option) means a principal sees the small per-month number,
+// not a scary annual sum. Amounts mirror the live Stripe SKUs.
+const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
+const PRICE_SCHOOLS_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY ?? "";
+const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
+const PRICE_SCHOOLS_LARGE_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ?? "";
+
+const USD_TIERS = [
+  { key: "small" as const, large: false, monthly: "$69", yearly: "$690" },
+  { key: "large" as const, large: true, monthly: "$149", yearly: "$1,490" },
+];
+
 type PricingUI = {
   perYear: string;
   orderCta: string;
@@ -2623,6 +2640,45 @@ const PRICING_UI: Record<string, PricingUI> = {
   ru: { perYear: "в год", orderCta: "Запросить счёт",
         plusVat: "+ НДС", netNote: "Все цены указаны без НДС.",
         tiers: { small: "до 100 учеников", medium: "101–500 учеников", large: "501–1,000 учеников" } },
+};
+
+// Labels for the international USD pricing block (non-Hebrew). Native for
+// en/ar/ru; the other 18 languages fall back to English, same he+en-primary
+// pattern as PRICING_UI above. Plan names ("Schools" / "Schools Large") stay
+// in English everywhere, like every other Gadit tier.
+type UsdPricingUI = {
+  h2: string;
+  billedMonthly: string;
+  billedYearly: string;
+  yearlySave: string;
+  perMonth: string;
+  perYear: string;
+  smallName: string;
+  largeName: string;
+  smallStudents: string;
+  largeStudents: string;
+  cta: string;
+  afterTrial: string;
+};
+const USD_PRICING_UI: Record<string, UsdPricingUI> = {
+  en: { h2: "One price, every school, everywhere.",
+        billedMonthly: "Monthly", billedYearly: "Yearly", yearlySave: "2 months free",
+        perMonth: "/ month", perYear: "/ year",
+        smallName: "Schools", largeName: "Schools Large",
+        smallStudents: "Up to 100 students", largeStudents: "Up to 500 students",
+        cta: "Start free trial", afterTrial: "14-day free trial, cancel anytime." },
+  ar: { h2: "سعر واحد، لكل مدرسة، في كل مكان.",
+        billedMonthly: "شهري", billedYearly: "سنوي", yearlySave: "شهران مجانًا",
+        perMonth: "/ شهر", perYear: "/ سنة",
+        smallName: "Schools", largeName: "Schools Large",
+        smallStudents: "حتى 100 طالب", largeStudents: "حتى 500 طالب",
+        cta: "ابدأ النسخة التجريبية المجانية", afterTrial: "نسخة تجريبية مجانية 14 يومًا، ألغِ في أي وقت." },
+  ru: { h2: "Одна цена для каждой школы, везде.",
+        billedMonthly: "Ежемесячно", billedYearly: "Ежегодно", yearlySave: "2 месяца бесплатно",
+        perMonth: "/ месяц", perYear: "/ год",
+        smallName: "Schools", largeName: "Schools Large",
+        smallStudents: "до 100 учеников", largeStudents: "до 500 учеников",
+        cta: "Начать бесплатный период", afterTrial: "14 дней бесплатно, отмена в любое время." },
 };
 
 /**
@@ -2707,7 +2763,28 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
   const t = COPY[lang] ?? COPY.en;
   const xt = XLANG[lang] ?? XLANG.en;
   const pu = PRICING_UI[lang] ?? PRICING_UI.en;
+  const upu = USD_PRICING_UI[lang] ?? USD_PRICING_UI.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  // Monthly-first billing toggle for the international USD pricing (non-Hebrew).
+  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+
+  // Non-Hebrew schools buy by card, self-serve, like the rest of the app:
+  // pick the tier's Stripe price for the selected billing cycle, gate anon
+  // users through the signup modal, then land them in /checkout (Payment
+  // Element, their own language). Mirrors PricingClient.startCheckout.
+  function startSchoolsCheckout(priceId: string) {
+    if (!priceId) {
+      window.alert("Pricing is misconfigured. Please contact support.");
+      return;
+    }
+    window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
+  }
+  function clickSchoolsTier(large: boolean) {
+    const priceId = large
+      ? billing === "yearly" ? PRICE_SCHOOLS_LARGE_YEARLY : PRICE_SCHOOLS_LARGE_MONTHLY
+      : billing === "yearly" ? PRICE_SCHOOLS_YEARLY : PRICE_SCHOOLS_MONTHLY;
+    promptLogin({ mode: "signup", onSuccess: () => startSchoolsCheckout(priceId) });
+  }
 
   // Every "See pricing and order" CTA opens the payment page DIRECTLY
   // instead of detouring through /pricing — Gadi 2026-07-08: a principal
@@ -3350,7 +3427,9 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
       <section id="schools-pricing" className="wb-schools-section wb-schools-pricing">
         <div className="wb-schools-section-inner">
           <span className="wb-schools-tag">{t.priceTag}</span>
-          <h2 className="wb-schools-h2">{t.priceH2}</h2>
+          <h2 className="wb-schools-h2">{lang === "he" ? t.priceH2 : upu.h2}</h2>
+          {lang === "he" ? (
+          <>
           <style>{`
             .wordbook .wb-schools-price-grid.sl-price-grid-3 {
               max-width: 1080px;
@@ -3399,6 +3478,96 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               color: #78716C;
             }
           `}</style>
+          </>
+          ) : (
+          <>
+          {/* International (non-Hebrew): uniform USD, monthly-first with a
+              yearly option, self-serve by card. Same billing-toggle pattern
+              as the Families page. Gadi 2026-08-14. */}
+          <style>{`
+            .wordbook .sl-billing-toggle {
+              display: flex; width: fit-content; margin: 4px auto 24px;
+              background: #f1f3f5; border-radius: 999px; padding: 4px; gap: 2px;
+            }
+            .wordbook .sl-billing-toggle button {
+              border: none; background: transparent; font-family: var(--wb-sans);
+              font-weight: 700; font-size: 14px; color: #64748b;
+              padding: 8px 18px; border-radius: 999px; cursor: pointer;
+              display: inline-flex; align-items: center; gap: 7px;
+            }
+            .wordbook .sl-billing-toggle button.is-active {
+              background: #fff; color: #0b7d7d; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            }
+            .wordbook .sl-billing-save {
+              background: #10B981; color: #fff; font-size: 10.5px; font-weight: 800;
+              padding: 2px 7px; border-radius: 999px; line-height: 1.5;
+            }
+            .wordbook .wb-schools-price-grid.sl-price-grid-usd {
+              max-width: 720px; margin-inline: auto;
+              grid-template-columns: 1fr; gap: 20px;
+            }
+            @media (min-width: 620px) {
+              .wordbook .wb-schools-price-grid.sl-price-grid-usd { grid-template-columns: 1fr 1fr; }
+            }
+            .wordbook .sl-price-grid-usd .wb-schools-price-card { text-align: center; }
+            .wordbook .sl-price-grid-usd .wb-schools-price-amount { justify-content: center; margin-block: 4px 6px; }
+            .wordbook .sl-price-grid-usd .wb-schools-cta-block { margin-top: 18px; }
+            .wordbook .wb-schools-price-net {
+              margin: 16px auto 0; text-align: center; font-size: 13px; color: #78716C;
+            }
+          `}</style>
+          <div className="sl-billing-toggle" role="tablist" aria-label="billing period">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billing === "monthly"}
+              className={billing === "monthly" ? "is-active" : ""}
+              onClick={() => setBilling("monthly")}
+            >
+              {upu.billedMonthly}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billing === "yearly"}
+              className={billing === "yearly" ? "is-active" : ""}
+              onClick={() => setBilling("yearly")}
+            >
+              {upu.billedYearly}
+              <span className="sl-billing-save" dir="ltr">{upu.yearlySave}</span>
+            </button>
+          </div>
+          <div className="wb-schools-price-grid sl-price-grid-usd">
+            {USD_TIERS.map((tier) => (
+              <div
+                key={tier.key}
+                className={`wb-schools-price-card${tier.large ? " wb-schools-price-card-large" : ""}`}
+              >
+                <div className="wb-schools-price-name">{tier.large ? upu.largeName : upu.smallName}</div>
+                <div className="wb-schools-price-amount">
+                  <span className="wb-schools-price-amount-num" dir="ltr">
+                    {billing === "yearly" ? tier.yearly : tier.monthly}
+                  </span>
+                  <span className="wb-schools-price-amount-period">
+                    {billing === "yearly" ? upu.perYear : upu.perMonth}
+                  </span>
+                </div>
+                <div className="wb-schools-price-students">
+                  {tier.large ? upu.largeStudents : upu.smallStudents}
+                </div>
+                <button
+                  type="button"
+                  className="wb-schools-cta wb-schools-cta-block"
+                  onClick={() => clickSchoolsTier(tier.large)}
+                >
+                  {upu.cta}
+                </button>
+              </div>
+            ))}
+          </div>
+          <p className="wb-schools-price-net">{upu.afterTrial}</p>
+          </>
+          )}
           <div className="wb-schools-includes">
             <div className="wb-schools-includes-title">{t.priceIncludesTitle}</div>
             <div className="wb-schools-includes-list">
