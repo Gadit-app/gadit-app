@@ -12772,6 +12772,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* Hero visual — split mockup */
 .wordbook .wb-schools-hero-visual {
   position: relative;
+  min-height: 0;
+}
+/* The 360px floor is only needed to hold the absolutely-positioned mockup
+   (non-Hebrew hero). The Hebrew hero puts a plain <img> here, so the floor
+   left a big empty gap under the photo on mobile — Gadi 2026-08-14. Reserve
+   the height only when a mockup is actually present. */
+.wordbook .wb-schools-hero-visual:has(.wb-schools-mockup) {
   min-height: 360px;
 }
 .wordbook .wb-schools-mockup {
