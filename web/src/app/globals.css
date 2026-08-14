@@ -5244,6 +5244,30 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    warm contrast against the teal brand. White text. Sits in the
    desktop actions row, and (separately) is centered on mobile via the
    wb-shell-mobile-cta wrapper below. */
+/* Auth pair wrapper (Sign in link + Start free pill). On desktop only the
+   pill shows (the actions row carries its own Sign in); on mobile the link
+   is revealed inside the centered mobile CTA so a returning user has a
+   visible way in — Gadi 2026-08-15. */
+.wordbook .wb-shell-auth-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.wordbook .wb-shell-signin-mobile {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+@media (max-width: 1023px) {
+  .wordbook .wb-shell-mobile-cta .wb-shell-signin-mobile { display: inline-flex; }
+}
 .wordbook .wb-shell-startfree {
   display: inline-flex;
   align-items: center;

@@ -40,14 +40,28 @@ export function StartFreeCTA() {
   // it caused.
   if (loading || user) return null;
 
+  // A "Sign in" link sits before the Start-free pill for RETURNING users.
+  // It is hidden by default and only shown inside the mobile CTA wrapper
+  // (≤1023px) — on desktop the actions row already has its own Sign in link,
+  // and on mobile the topbar previously showed ONLY "Start free" with no
+  // visible way in for an existing user (Gadi 2026-08-15).
   return (
-    <button
-      type="button"
-      onClick={() => promptLogin({ mode: "signup" })}
-      className="wb-shell-startfree"
-      aria-label={v2(lang, "startFree")}
-    >
-      {v2(lang, "startFree")}
-    </button>
+    <span className="wb-shell-auth-pair">
+      <button
+        type="button"
+        onClick={() => promptLogin({ mode: "signin" })}
+        className="wb-shell-signin-mobile"
+      >
+        {v2(lang, "signIn")}
+      </button>
+      <button
+        type="button"
+        onClick={() => promptLogin({ mode: "signup" })}
+        className="wb-shell-startfree"
+        aria-label={v2(lang, "startFree")}
+      >
+        {v2(lang, "startFree")}
+      </button>
+    </span>
   );
 }
