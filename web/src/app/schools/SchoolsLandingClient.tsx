@@ -2979,7 +2979,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
             </button>
           </div>
           <div className="wb-schools-hero-trust" style={{ marginTop: 14 }}>
-            מ-₪3,490 לשנה · בלי לוגין לתלמידים · בלי התקנה
+            מ-₪349 לחודש · בלי לוגין לתלמידים · בלי התקנה
           </div>
         </div>
         <div className="wb-schools-hero-visual">
