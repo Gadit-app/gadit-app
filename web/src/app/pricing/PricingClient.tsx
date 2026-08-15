@@ -685,6 +685,7 @@ const COPY: Record<string, {
       cta: "התחילו חינם",
       features: [
         "20 חיפושי מילים ליום",
+        "מילה בכל שפה, מוסברת בשפה שלך",
         "כל ההגדרות למילה",
         "דוגמאות של משפטים לפי הקשר",
         "ניבים וצירופי מילים",
@@ -764,6 +765,7 @@ const COPY: Record<string, {
       cta: "Start now",
       features: [
         "20 word searches per day",
+        "A word in any language, explained in yours",
         "Every definition of the word",
         "Sentence examples by context",
         "Idioms & expressions",
@@ -1724,6 +1726,7 @@ const FEATURE_MATRIX: Record<
     searchesBasic: "20 ליום",
     unlimited: "ללא הגבלה",
     rows: [
+      { l: "מילה בכל שפה, מוסברת בשפה שלך", t: "bcd" },
       { l: "כל ההגדרות למילה", t: "bcd" },
       { l: "דוגמאות משפטים לפי הקשר", t: "bcd" },
       { l: "ניבים וצירופי מילים", t: "bcd" },
@@ -1745,6 +1748,7 @@ const FEATURE_MATRIX: Record<
     searchesBasic: "20 / day",
     unlimited: "Unlimited",
     rows: [
+      { l: "A word in any language, explained in yours", t: "bcd" },
       { l: "Every definition of the word", t: "bcd" },
       { l: "Sentence examples by context", t: "bcd" },
       { l: "Idioms and expressions", t: "bcd" },
