@@ -438,12 +438,34 @@ function sample<T>(arr: readonly T[], n: number): T[] {
 function splitLetters(word: string): string[] {
   return Array.from(word.trim());
 }
-function blankOut(sentence: string, word: string): string {
-  if (!word) return sentence;
-  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const re = new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "iu");
-  if (re.test(sentence)) return sentence.replace(re, "____");
-  return `${sentence} ____`;
+// Hebrew/Arabic inseparable prefixes. A word like תום often appears in its
+// example only as בתום / לתום / ותום etc.; the bare word-boundary match then
+// fails and the old code appended a stray "____" at the end while leaving the
+// answer fully visible inside "בתום" (Gadi 2026-08-15, word "תום"). We now
+// blank the base word even when it carries a one/two-letter prefix, KEEPING
+// the prefix so the sentence stays grammatical ("...פעל ב____ לב"). Returns
+// null when the word cannot be cleanly blanked in this sentence.
+const BLANK_PREFIX = "בכלמהושאלوبكتفﺍ"; // Hebrew + common Arabic prefixes/article
+function blankOne(sentence: string, word: string): string | null {
+  if (!word) return null;
+  const esc = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const bare = new RegExp(`(?<![\\p{L}\\p{N}])${esc}(?![\\p{L}\\p{N}])`, "iu");
+  if (bare.test(sentence)) return sentence.replace(bare, "____");
+  const prefixed = new RegExp(
+    `(?<![\\p{L}\\p{N}])([${BLANK_PREFIX}]{1,2})${esc}(?![\\p{L}\\p{N}])`,
+    "iu",
+  );
+  if (prefixed.test(sentence)) return sentence.replace(prefixed, "$1____");
+  return null;
+}
+/** First example where the word can be cleanly blanked, already blanked;
+ *  null when none of the examples is usable (fill-blank is then skipped). */
+function pickBlankSentence(examples: string[], word: string): string | null {
+  for (const ex of examples) {
+    const b = blankOne(ex, word);
+    if (b) return b;
+  }
+  return null;
 }
 
 type TileState = { letter: string; slot: number; id: string };
@@ -469,15 +491,17 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
   const [tiles, setTiles] = useState<TileState[]>([]);
   const [anagramResult, setAnagramResult] = useState<"none" | "correct" | "wrong">("none");
 
-  // Fill-blank state
-  const fillblankEligible = examples.length > 0;
+  // Fill-blank state. Only eligible when at least one example actually
+  // yields a clean blank (word present, prefix-aware) — otherwise the round
+  // is skipped rather than rendered broken.
   const [fbOptions, setFbOptions] = useState<string[]>([]);
   const [fbCorrectIdx, setFbCorrectIdx] = useState(0);
   const [fbPicked, setFbPicked] = useState<number | null>(null);
-  const fbSentence = useMemo(() => {
-    if (!examples.length) return "";
-    return blankOut(examples[0], word);
-  }, [examples, word]);
+  const fbSentence = useMemo(
+    () => pickBlankSentence(examples, word) ?? "",
+    [examples, word],
+  );
+  const fillblankEligible = fbSentence.length > 0;
 
   // Lock body scroll while open
   useEffect(() => {
