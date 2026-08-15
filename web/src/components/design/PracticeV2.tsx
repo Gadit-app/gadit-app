@@ -8,7 +8,7 @@
  *
  * State machine: loading → empty | front → back → next | summary
  *
- * Phases share the same warm-paper card on the navy stage. No flip
+ * Phases share the same wordbook card on the light surface. No flip
  * animation — just a 150ms cross-fade between front/back. Self-
  * reported recall (I knew it / I forgot), equal visual weight, only
  * the ring tint differs (green vs amber). Skip is a separate code
@@ -35,15 +35,24 @@ function scriptFor(lang: string): Script {
   return "latin";
 }
 function fontDisplay(s: Script) {
-  return s === "he" ? "gd-font-he" : s === "ar" ? "gd-font-ar" : "gd-font-display";
+  return s === "he" ? "var(--wb-he)" : s === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
 }
 function fontBody(s: Script) {
-  return s === "he"
-    ? "gd-font-he gd-rtl-body"
-    : s === "ar"
-      ? "gd-font-ar gd-rtl-body"
-      : "gd-font-display";
+  return s === "he" ? "var(--wb-he)" : s === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
 }
+// gd-rtl-body is purely directional (font-size / line-height tuning under
+// [dir="rtl"]); keep it on body copy for he/ar, drop it for latin.
+function bodyDir(s: Script) {
+  return s === "he" || s === "ar" ? "gd-rtl-body" : "";
+}
+
+// Wordbook white card chrome. Replaces the old cream `gd-card`.
+const wbCard = {
+  background: "var(--surface, #fff)",
+  border: "1px solid var(--rule, #E2E5EA)",
+  borderRadius: 16,
+  boxShadow: "0 8px 24px -12px rgba(16,24,40,0.12)",
+};
 
 interface ReviewItem {
   id: string;
@@ -85,9 +94,10 @@ function CardFront({
 
   return (
     <div
-      className="gd-card relative cursor-pointer sr-fade"
+      className="relative cursor-pointer sr-fade"
       onClick={onReveal}
       style={{
+        ...wbCard,
         width: "100%",
         maxWidth: 720,
         padding: "clamp(40px, 6vw, 64px) clamp(28px, 4vw, 56px) clamp(32px, 4vw, 48px)",
@@ -104,15 +114,15 @@ function CardFront({
         <div
           className={`flex items-center gap-2.5 `}
         >
-          <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
+          <Eyebrow style={{ color: "#0EA5A5" }}>
             {v2(lang, "srEyebrow")}
           </Eyebrow>
-          <span style={{ color: "var(--gd-ink-300)", fontSize: 11 }}>·</span>
+          <span style={{ color: "var(--rule, #E2E5EA)", fontSize: 11 }}>·</span>
           <span
-            className="gd-font-sans-ui"
             style={{
+              fontFamily: "var(--wb-sans)",
               fontSize: 11,
-              color: "var(--gd-ink-500)",
+              color: "var(--ink-muted, #6B7280)",
               letterSpacing: "0.06em",
             }}
           >
@@ -125,10 +135,11 @@ function CardFront({
             e.stopPropagation();
             onSkip();
           }}
-          className="gd-font-sans-ui transition-colors hover:text-[oklch(0.5_0.05_265)]"
+          className="transition-colors hover:text-[#3F4856]"
           style={{
+            fontFamily: "var(--wb-sans)",
             fontSize: 12,
-            color: "var(--gd-ink-400)",
+            color: "var(--ink-muted, #6B7280)",
             padding: "4px 8px",
           }}
         >
@@ -149,10 +160,10 @@ function CardFront({
               borderRadius: 999,
               background:
                 i < index
-                  ? "oklch(0.7 0.13 155 / 0.55)"
+                  ? "rgba(16,185,129,0.55)"
                   : i === index
-                    ? "oklch(0.5 0.18 250)"
-                    : "oklch(0.85 0.005 265)",
+                    ? "#0EA5A5"
+                    : "var(--rule, #E2E5EA)",
               transition: "all 200ms",
             }}
           />
@@ -165,14 +176,14 @@ function CardFront({
         style={{ marginBlock: "clamp(36px, 6vw, 56px)" }}
       >
         <h2
-          className={fontDisplay(script)}
           style={{
+            fontFamily: fontDisplay(script),
             // Floor lowered (was 56px) and overflowWrap added so long
             // compound words don't overflow the practice card on
             // narrow phones.
             fontSize: "clamp(40px, 9vw, 88px)",
             lineHeight: 1.05,
-            color: "oklch(0.4 0.14 250)",
+            color: "#0EA5A5",
             fontStyle: script === "latin" ? "italic" : "normal",
             letterSpacing: script === "latin" ? "-0.02em" : 0,
             overflowWrap: "anywhere",
@@ -191,10 +202,11 @@ function CardFront({
 
       {/* Reveal hint */}
       <div
-        className={`gd-font-sans-ui flex items-center justify-center gap-2 `}
+        className={`flex items-center justify-center gap-2 `}
         style={{
+          fontFamily: "var(--wb-sans)",
           fontSize: 12.5,
-          color: "var(--gd-ink-500)",
+          color: "var(--ink-muted, #6B7280)",
           letterSpacing: "0.04em",
         }}
       >
@@ -235,8 +247,9 @@ function CardBack({
 
   return (
     <div
-      className="gd-card relative sr-fade"
+      className="relative sr-fade"
       style={{
+        ...wbCard,
         width: "100%",
         maxWidth: 720,
         padding: "clamp(32px, 5vw, 52px) clamp(28px, 4vw, 56px) clamp(32px, 4vw, 44px)",
@@ -247,15 +260,15 @@ function CardBack({
       <div
         className={`flex items-center gap-2.5 `}
       >
-        <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
+        <Eyebrow style={{ color: "#0EA5A5" }}>
           {v2(lang, "srEyebrow")}
         </Eyebrow>
-        <span style={{ color: "var(--gd-ink-300)", fontSize: 11 }}>·</span>
+        <span style={{ color: "var(--rule, #E2E5EA)", fontSize: 11 }}>·</span>
         <span
-          className="gd-font-sans-ui"
           style={{
+            fontFamily: "var(--wb-sans)",
             fontSize: 11,
-            color: "var(--gd-ink-500)",
+            color: "var(--ink-muted, #6B7280)",
             letterSpacing: "0.06em",
           }}
         >
@@ -265,10 +278,10 @@ function CardBack({
 
       {/* Word — smaller now */}
       <h3
-        className={fontDisplay(script)}
         style={{
+          fontFamily: fontDisplay(script),
           fontSize: "clamp(32px, 4.4vw, 40px)",
-          color: "oklch(0.4 0.14 250)",
+          color: "#0EA5A5",
           fontStyle: script === "latin" ? "italic" : "normal",
           letterSpacing: script === "latin" ? "-0.02em" : 0,
           marginTop: 18,
@@ -283,23 +296,25 @@ function CardBack({
       {/* Meaning */}
       <div className="mt-5">
         <div
-          className={`gd-font-sans-ui mb-2 ${isRtl ? "text-right" : ""}`}
+          className={`mb-2 ${isRtl ? "text-right" : ""}`}
           style={{
+            fontFamily: "var(--wb-sans)",
             fontSize: 10.5,
             letterSpacing: "0.16em",
             textTransform: "uppercase",
-            color: "var(--gd-ink-500)",
+            color: "var(--ink-muted, #6B7280)",
             fontWeight: 600,
           }}
         >
           {v2(lang, "srPrimaryMeaningLabel")}
         </div>
         <p
-          className={fontBody(script)}
+          className={bodyDir(script)}
           style={{
+            fontFamily: fontBody(script),
             fontSize: "clamp(19px, 2.2vw, 22px)",
             lineHeight: 1.4,
-            color: "var(--gd-ink-900)",
+            color: "var(--ink, #0B1220)",
             ...(script === "latin"
               ? { fontVariationSettings: '"opsz" 32' }
               : {}),
@@ -314,12 +329,13 @@ function CardBack({
       {entry.examples && entry.examples.length > 0 && (
         <div className="mt-6">
           <div
-            className={`gd-font-sans-ui mb-2 ${isRtl ? "text-right" : ""}`}
+            className={`mb-2 ${isRtl ? "text-right" : ""}`}
             style={{
+              fontFamily: "var(--wb-sans)",
               fontSize: 10.5,
               letterSpacing: "0.16em",
               textTransform: "uppercase",
-              color: "var(--gd-ink-500)",
+              color: "var(--ink-muted, #6B7280)",
               fontWeight: 600,
             }}
           >
@@ -329,14 +345,15 @@ function CardBack({
             {entry.examples.map((ex, i) => (
               <li
                 key={i}
-                className={fontBody(script)}
+                className={bodyDir(script)}
                 style={{
+                  fontFamily: fontBody(script),
                   fontSize: "clamp(14.5px, 1.6vw, 16px)",
                   lineHeight: 1.55,
-                  color: "var(--gd-ink-700)",
+                  color: "var(--ink-soft, #3F4856)",
                   fontStyle: script === "latin" ? "italic" : "normal",
                   paddingInlineStart: 14,
-                  borderInlineStart: "2px solid oklch(0.85 0.04 250)",
+                  borderInlineStart: "2px solid rgba(14,165,165,0.35)",
                 }}
               >
                 {ex}
@@ -351,8 +368,9 @@ function CardBack({
         <button
           type="button"
           onClick={onForgot}
-          className="gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
+          className="font-medium transition-transform hover:translate-y-[-1px]"
           style={{
+            fontFamily: "var(--wb-sans)",
             padding: "clamp(14px, 1.6vw, 16px) clamp(14px, 1.8vw, 18px)",
             borderRadius: 12,
             background: "oklch(0.99 0.012 75)",
@@ -367,8 +385,9 @@ function CardBack({
         <button
           type="button"
           onClick={onKnew}
-          className="gd-font-sans-ui font-medium transition-transform hover:translate-y-[-1px]"
+          className="font-medium transition-transform hover:translate-y-[-1px]"
           style={{
+            fontFamily: "var(--wb-sans)",
             padding: "clamp(14px, 1.6vw, 16px) clamp(14px, 1.8vw, 18px)",
             borderRadius: 12,
             background: "oklch(0.98 0.018 155)",
@@ -384,10 +403,11 @@ function CardBack({
 
       {/* Scheduling hint */}
       <p
-        className={`gd-font-sans-ui mt-3 ${isRtl ? "text-right" : "text-center"}`}
+        className={`mt-3 ${isRtl ? "text-right" : "text-center"}`}
         style={{
+          fontFamily: "var(--wb-sans)",
           fontSize: 11.5,
-          color: "var(--gd-ink-500)",
+          color: "var(--ink-muted, #6B7280)",
           lineHeight: 1.5,
         }}
       >
@@ -417,15 +437,16 @@ function Summary({
 
   return (
     <div
-      className="gd-card relative"
+      className="relative"
       style={{
+        ...wbCard,
         width: "100%",
         maxWidth: 720,
         padding: "clamp(40px, 6vw, 60px) clamp(28px, 4vw, 56px) clamp(32px, 4vw, 48px)",
         textAlign: isRtl ? "right" : "left",
       }}
     >
-      <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
+      <Eyebrow style={{ color: "#0EA5A5" }}>
         {v2(lang, "srEyebrow")}
       </Eyebrow>
 
@@ -434,11 +455,11 @@ function Summary({
         className={`flex items-baseline gap-3 mt-3 `}
       >
         <span
-          className="gd-font-display"
           style={{
+            fontFamily: "var(--wb-serif)",
             fontSize: "clamp(88px, 14vw, 132px)",
             lineHeight: 0.95,
-            color: "oklch(0.4 0.14 250)",
+            color: "#0EA5A5",
             fontVariationSettings: '"opsz" 144, "SOFT" 80',
             fontWeight: 400,
             fontStyle: "italic",
@@ -448,10 +469,10 @@ function Summary({
           {total}
         </span>
         <span
-          className="gd-font-sans-ui"
           style={{
+            fontFamily: "var(--wb-sans)",
             fontSize: "clamp(17px, 1.8vw, 20px)",
-            color: "var(--gd-ink-700)",
+            color: "var(--ink-soft, #3F4856)",
             maxWidth: 200,
             lineHeight: 1.3,
           }}
@@ -462,10 +483,11 @@ function Summary({
 
       {/* Stat line */}
       <p
-        className="gd-font-sans-ui mt-5"
+        className="mt-5"
         style={{
+          fontFamily: "var(--wb-sans)",
           fontSize: "clamp(15px, 1.7vw, 17px)",
-          color: "var(--gd-ink-700)",
+          color: "var(--ink-soft, #3F4856)",
           lineHeight: 1.5,
         }}
       >
@@ -478,8 +500,8 @@ function Summary({
         style={{
           padding: "clamp(14px, 1.8vw, 16px) clamp(18px, 2.4vw, 22px)",
           borderRadius: 12,
-          background: "oklch(0.96 0.012 250 / 0.6)",
-          boxShadow: "inset 0 0 0 1px oklch(0.5 0.18 250 / 0.18)",
+          background: "rgba(14,165,165,0.08)",
+          boxShadow: "inset 0 0 0 1px rgba(14,165,165,0.18)",
         }}
       >
         <div
@@ -490,7 +512,7 @@ function Summary({
             height="22"
             viewBox="0 0 24 24"
             fill="none"
-            style={{ color: "oklch(0.5 0.16 250)", flexShrink: 0 }}
+            style={{ color: "#0EA5A5", flexShrink: 0 }}
           >
             <rect
               x="3.5"
@@ -510,10 +532,10 @@ function Summary({
             <circle cx="12" cy="14" r="1.6" fill="currentColor" />
           </svg>
           <p
-            className="gd-font-sans-ui"
             style={{
+              fontFamily: "var(--wb-sans)",
               fontSize: "clamp(14px, 1.5vw, 15px)",
-              color: "var(--gd-ink-900)",
+              color: "var(--ink, #0B1220)",
               lineHeight: 1.5,
             }}
           >
@@ -532,16 +554,17 @@ function Summary({
         <button
           type="button"
           onClick={onDone}
-          className="gd-font-sans-ui font-medium"
+          className="font-medium"
           style={{
+            fontFamily: "var(--wb-sans)",
             padding: "13px 24px",
             borderRadius: 12,
             background:
-              "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+              "linear-gradient(180deg, #0EA5A5, #0b7d7d)",
             color: "white",
             fontSize: 15,
             boxShadow:
-              "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+              "0 0 0 1px rgba(14,165,165,0.6), 0 8px 22px rgba(14,165,165,0.4)",
           }}
         >
           {v2(lang, "srDoneForToday")}
@@ -550,14 +573,14 @@ function Summary({
           <button
             type="button"
             onClick={onMore}
-            className="gd-font-sans-ui"
             style={{
+              fontFamily: "var(--wb-sans)",
               padding: "13px 24px",
               borderRadius: 12,
               background: "transparent",
-              color: "var(--gd-ink-700)",
+              color: "var(--ink-soft, #3F4856)",
               fontSize: 15,
-              boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
+              boxShadow: "inset 0 0 0 1px var(--rule, #E2E5EA)",
             }}
           >
             {v2(lang, "srPracticeMore")}
@@ -575,8 +598,9 @@ function EmptyState({ onBack }: { onBack: () => void }) {
 
   return (
     <div
-      className="gd-card relative"
+      className="relative"
       style={{
+        ...wbCard,
         width: "100%",
         maxWidth: 720,
         padding: "clamp(50px, 8vw, 80px) clamp(28px, 4vw, 56px) clamp(40px, 6vw, 64px)",
@@ -584,7 +608,7 @@ function EmptyState({ onBack }: { onBack: () => void }) {
       }}
       dir={dir}
     >
-      <Eyebrow style={{ color: "oklch(0.4 0.14 250)" }}>
+      <Eyebrow style={{ color: "#0EA5A5" }}>
         {v2(lang, "srEyebrow")}
       </Eyebrow>
 
@@ -597,7 +621,7 @@ function EmptyState({ onBack }: { onBack: () => void }) {
         style={{
           display: "block",
           margin: "32px auto 24px",
-          color: "oklch(0.7 0.1 250)",
+          color: "#0EA5A5",
         }}
       >
         <circle cx="24" cy="24" r="2" fill="currentColor" />
@@ -620,10 +644,10 @@ function EmptyState({ onBack }: { onBack: () => void }) {
       </svg>
 
       <h3
-        className={fontDisplay(script)}
         style={{
+          fontFamily: fontDisplay(script),
           fontSize: "clamp(28px, 3.6vw, 36px)",
-          color: "var(--gd-ink-900)",
+          color: "var(--ink, #0B1220)",
           fontStyle: script === "latin" ? "italic" : "normal",
           letterSpacing: script === "latin" ? "-0.02em" : 0,
           ...(script === "latin"
@@ -634,10 +658,11 @@ function EmptyState({ onBack }: { onBack: () => void }) {
         {v2(lang, "srEmptyTitle")}
       </h3>
       <p
-        className="gd-font-sans-ui mt-3"
+        className="mt-3"
         style={{
+          fontFamily: "var(--wb-sans)",
           fontSize: "clamp(14.5px, 1.6vw, 16px)",
-          color: "var(--gd-ink-700)",
+          color: "var(--ink-soft, #3F4856)",
           lineHeight: 1.5,
         }}
       >
@@ -647,15 +672,16 @@ function EmptyState({ onBack }: { onBack: () => void }) {
       <button
         type="button"
         onClick={onBack}
-        className="gd-font-sans-ui mt-8"
+        className="mt-8"
         style={{
+          fontFamily: "var(--wb-sans)",
           padding: "13px 26px",
           borderRadius: 12,
           background: "transparent",
-          color: "var(--gd-ink-900)",
+          color: "var(--ink, #0B1220)",
           fontSize: 15,
           fontWeight: 500,
-          boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
+          boxShadow: "inset 0 0 0 1px var(--rule, #E2E5EA)",
         }}
       >
         {v2(lang, "srBackToNotebook")}
@@ -792,8 +818,8 @@ export function PracticeV2() {
   if (phase.kind === "loading") {
     return (
       <div
-        className="gd-card"
         style={{
+          ...wbCard,
           width: "100%",
           maxWidth: 720,
           padding: "60px 40px",
@@ -802,8 +828,7 @@ export function PracticeV2() {
         }}
       >
         <span
-          className="gd-font-sans-ui"
-          style={{ fontSize: 14, color: "oklch(0.65 0.03 265)" }}
+          style={{ fontFamily: "var(--wb-sans)", fontSize: 14, color: "var(--ink-muted, #6B7280)" }}
         >
           {v2(lang, "srLoading")}
         </span>

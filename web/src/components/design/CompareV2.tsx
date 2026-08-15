@@ -80,14 +80,15 @@ function Spinner() {
 function CompareEmpty() {
   const { lang } = useLang();
   const script = scriptFor(lang);
-  const font = script === "he" ? "gd-font-he" : script === "ar" ? "gd-font-ar" : "gd-font-display";
+  const fontFamily =
+    script === "he" ? "var(--wb-he)" : script === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
   return (
     <div
       style={{
         borderRadius: 18,
         padding: "clamp(40px, 8vw, 64px) clamp(24px, 4vw, 32px)",
-        background: "oklch(1 0 0 / 0.03)",
-        boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.08)",
+        background: "rgba(16,24,40,0.02)",
+        boxShadow: "inset 0 0 0 1px var(--rule, #E2E5EA)",
         textAlign: "center",
       }}
     >
@@ -97,7 +98,7 @@ function CompareEmpty() {
         viewBox="0 0 36 36"
         fill="none"
         style={{
-          color: "oklch(0.5 0.05 265)",
+          color: "var(--ink-muted, #6B7280)",
           margin: "0 auto",
           opacity: 0.7,
         }}
@@ -106,10 +107,11 @@ function CompareEmpty() {
         <circle cx="23" cy="23" r="6" stroke="currentColor" strokeWidth="1.4" />
       </svg>
       <p
-        className={`mt-4 ${font}`}
+        className="mt-4"
         style={{
+          fontFamily,
           fontSize: "clamp(17px, 1.8vw, 19px)",
-          color: "oklch(0.65 0.02 265)",
+          color: "var(--ink-muted, #6B7280)",
           ...(script === "latin"
             ? {
                 fontVariationSettings: '"opsz" 24',
@@ -133,8 +135,8 @@ function CompareError({ errorKey }: { errorKey: string }) {
       style={{
         borderRadius: 14,
         padding: "clamp(18px, 2vw, 22px) clamp(18px, 2.4vw, 24px)",
-        background: "oklch(0.4 0.12 35 / 0.18)",
-        boxShadow: "inset 0 0 0 1px oklch(0.7 0.18 35 / 0.4)",
+        background: "oklch(0.96 0.035 30)",
+        boxShadow: "inset 0 0 0 1px oklch(0.8 0.1 30 / 0.5)",
         display: "flex",
         alignItems: "flex-start",
         gap: 14,
@@ -165,11 +167,11 @@ function CompareError({ errorKey }: { errorKey: string }) {
         </svg>
       </div>
       <div
-        className="gd-font-sans-ui"
         style={{
+          fontFamily: "var(--wb-sans)",
           fontSize: 14.5,
           lineHeight: 1.5,
-          color: "oklch(0.95 0.02 35)",
+          color: "oklch(0.4 0.12 30)",
         }}
       >
         {v2(lang, errorKey as never)}
@@ -191,24 +193,21 @@ function CompareResult({
   const { lang, dir } = useLang();
   const isRtl = dir === "rtl";
   const script = scriptFor(lang);
-  const wordFont =
-    script === "he" ? "gd-font-he" : script === "ar" ? "gd-font-ar" : "gd-font-display";
-  const bodyFont =
-    script === "he"
-      ? "gd-font-he gd-rtl-body"
-      : script === "ar"
-        ? "gd-font-ar gd-rtl-body"
-        : "gd-font-display";
+  const wordFontFamily =
+    script === "he" ? "var(--wb-he)" : script === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
+  const bodyFontFamily =
+    script === "he" ? "var(--wb-he)" : script === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
+  const bodyRtl = script === "he" || script === "ar" ? "gd-rtl-body" : "";
 
   function WordCol({ word, def }: { word: string; def: string }) {
     return (
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3
-          className={wordFont}
           style={{
+            fontFamily: wordFontFamily,
             fontSize: "clamp(38px, 5vw, 52px)",
             lineHeight: 1.05,
-            color: "oklch(0.5 0.18 250)",
+            color: "#0EA5A5",
             ...(script === "latin"
               ? {
                   fontVariationSettings: '"opsz" 96',
@@ -222,11 +221,12 @@ function CompareResult({
           {word}
         </h3>
         <p
-          className={`mt-3 ${bodyFont}`}
+          className={`mt-3 ${bodyRtl}`}
           style={{
+            fontFamily: bodyFontFamily,
             fontSize: "clamp(15.5px, 1.7vw, 16.5px)",
             lineHeight: 1.5,
-            color: "var(--gd-ink-900)",
+            color: "var(--ink, #0B1220)",
             ...(script === "latin"
               ? { fontVariationSettings: '"opsz" 22' }
               : {}),
@@ -240,8 +240,11 @@ function CompareResult({
 
   return (
     <div
-      className="gd-card"
       style={{
+        background: "var(--surface, #fff)",
+        border: "1px solid var(--rule, #E2E5EA)",
+        borderRadius: 16,
+        boxShadow: "0 8px 24px -12px rgba(16,24,40,0.12)",
         padding: "clamp(24px, 3vw, 36px) clamp(22px, 3vw, 40px)",
         textAlign: isRtl ? "right" : "left",
       }}
@@ -271,19 +274,20 @@ function CompareResult({
       {data.keyDifference && (
         <div
           style={{
-            borderInlineStart: "3px solid oklch(0.5 0.18 250)",
+            borderInlineStart: "3px solid #0EA5A5",
             paddingInlineStart: "clamp(16px, 2vw, 20px)",
           }}
         >
-          <Eyebrow style={{ color: "oklch(0.5 0.18 250)" }}>
+          <Eyebrow style={{ color: "#0EA5A5" }}>
             {v2(lang, "compareDifferenceLabel")}
           </Eyebrow>
           <p
-            className={`mt-2 ${bodyFont}`}
+            className={`mt-2 ${bodyRtl}`}
             style={{
+              fontFamily: bodyFontFamily,
               fontSize: "clamp(17px, 1.9vw, 19px)",
               lineHeight: 1.5,
-              color: "var(--gd-ink-900)",
+              color: "var(--ink, #0B1220)",
               ...(script === "latin"
                 ? { fontVariationSettings: '"opsz" 28' }
                 : {}),
@@ -303,11 +307,12 @@ function CompareResult({
           <div className="mt-3 grid gap-x-10 gap-y-3 grid-cols-1 md:grid-cols-2">
             {data.exampleA && (
               <p
-                className={bodyFont}
+                className={bodyRtl}
                 style={{
+                  fontFamily: bodyFontFamily,
                   fontSize: "clamp(15px, 1.6vw, 16px)",
                   lineHeight: 1.5,
-                  color: "var(--gd-ink-700)",
+                  color: "var(--ink-soft, #3F4856)",
                   fontStyle: script === "latin" ? "italic" : "normal",
                   ...(script === "latin"
                     ? { fontVariationSettings: '"opsz" 22' }
@@ -319,11 +324,12 @@ function CompareResult({
             )}
             {data.exampleB && (
               <p
-                className={bodyFont}
+                className={bodyRtl}
                 style={{
+                  fontFamily: bodyFontFamily,
                   fontSize: "clamp(15px, 1.6vw, 16px)",
                   lineHeight: 1.5,
-                  color: "var(--gd-ink-700)",
+                  color: "var(--ink-soft, #3F4856)",
                   fontStyle: script === "latin" ? "italic" : "normal",
                   ...(script === "latin"
                     ? { fontVariationSettings: '"opsz" 22' }
@@ -352,8 +358,9 @@ function CompareResult({
             {v2(lang, "compareCommonMistakeLabel")}
           </Eyebrow>
           <p
-            className={`mt-1.5 ${bodyFont}`}
+            className={`mt-1.5 ${bodyRtl}`}
             style={{
+              fontFamily: bodyFontFamily,
               fontSize: "clamp(14.5px, 1.5vw, 15.5px)",
               lineHeight: 1.55,
               color: "oklch(0.32 0.06 60)",
@@ -376,10 +383,10 @@ export function CompareV2() {
   const { lang, dir } = useLang();
   const isRtl = dir === "rtl";
   const script = scriptFor(lang);
-  const titleFont =
-    script === "he" ? "gd-font-he" : script === "ar" ? "gd-font-ar" : "gd-font-display";
-  const wordFont =
-    script === "he" ? "gd-font-he" : script === "ar" ? "gd-font-ar" : "gd-font-display";
+  const titleFontFamily =
+    script === "he" ? "var(--wb-he)" : script === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
+  const wordFontFamily =
+    script === "he" ? "var(--wb-he)" : script === "ar" ? "var(--wb-ar)" : "var(--wb-serif)";
 
   const [word1, setWord1] = useState("");
   const [word2, setWord2] = useState("");
@@ -462,16 +469,16 @@ export function CompareV2() {
           textAlign: isRtl ? "right" : "left",
         }}
       >
-        <Eyebrow style={{ color: "oklch(0.82 0.1 245)" }}>
+        <Eyebrow style={{ color: "#0EA5A5" }}>
           {v2(lang, "compareEyebrow")}
         </Eyebrow>
         <h1
-          className={titleFont}
           style={{
+            fontFamily: titleFontFamily,
             marginTop: 8,
             fontSize: "clamp(36px, 5.5vw, 56px)",
             lineHeight: 1.05,
-            color: "oklch(0.97 0.008 265)",
+            color: "var(--ink, #0B1220)",
             ...(script === "latin"
               ? {
                   fontVariationSettings: '"opsz" 144, "SOFT" 80',
@@ -484,11 +491,12 @@ export function CompareV2() {
           {v2(lang, "compareTitle")}
         </h1>
         <p
-          className="mt-4 gd-font-sans-ui"
+          className="mt-4"
           style={{
+            fontFamily: "var(--wb-sans)",
             fontSize: "clamp(15px, 1.6vw, 17px)",
             lineHeight: 1.55,
-            color: "oklch(0.72 0.02 265)",
+            color: "var(--ink-soft, #3F4856)",
             maxWidth: 720,
           }}
         >
@@ -512,10 +520,11 @@ export function CompareV2() {
           {/* Field 1 */}
           <div className="flex-1" style={{ minWidth: 0 }}>
             <label
-              className="gd-font-sans-ui block mb-2"
+              className="block mb-2"
               style={{
+                fontFamily: "var(--wb-sans)",
                 fontSize: 11,
-                color: "oklch(0.62 0.02 265)",
+                color: "var(--ink-muted, #6B7280)",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -525,10 +534,10 @@ export function CompareV2() {
             </label>
             <div
               style={{
-                background: "oklch(1 0 0 / 0.04)",
+                background: "var(--surface, #fff)",
                 borderRadius: 14,
                 padding: 5,
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.1)",
+                boxShadow: "inset 0 0 0 1px var(--rule, #E2E5EA)",
               }}
             >
               <input
@@ -537,9 +546,10 @@ export function CompareV2() {
                 value={word1}
                 onChange={(e) => setWord1(e.target.value)}
                 placeholder={v2(lang, "compareWord1Placeholder")}
-                className={`w-full bg-transparent outline-none ${wordFont}`}
+                className="w-full bg-transparent outline-none"
                 style={{
-                  color: "white",
+                  fontFamily: wordFontFamily,
+                  color: "var(--ink, #0B1220)",
                   fontSize: "clamp(22px, 2.4vw, 28px)",
                   padding: "14px 18px",
                   fontStyle: script === "latin" ? "italic" : "normal",
@@ -561,17 +571,18 @@ export function CompareV2() {
               height: 1,
               marginBottom: 26,
               flexShrink: 0,
-              background: "oklch(1 0 0 / 0.18)",
+              background: "var(--rule, #E2E5EA)",
             }}
           />
 
           {/* Field 2 */}
           <div className="flex-1" style={{ minWidth: 0 }}>
             <label
-              className="gd-font-sans-ui block mb-2"
+              className="block mb-2"
               style={{
+                fontFamily: "var(--wb-sans)",
                 fontSize: 11,
-                color: "oklch(0.62 0.02 265)",
+                color: "var(--ink-muted, #6B7280)",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -581,10 +592,10 @@ export function CompareV2() {
             </label>
             <div
               style={{
-                background: "oklch(1 0 0 / 0.04)",
+                background: "var(--surface, #fff)",
                 borderRadius: 14,
                 padding: 5,
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.1)",
+                boxShadow: "inset 0 0 0 1px var(--rule, #E2E5EA)",
               }}
             >
               <input
@@ -593,9 +604,10 @@ export function CompareV2() {
                 value={word2}
                 onChange={(e) => setWord2(e.target.value)}
                 placeholder={v2(lang, "compareWord2Placeholder")}
-                className={`w-full bg-transparent outline-none ${wordFont}`}
+                className="w-full bg-transparent outline-none"
                 style={{
-                  color: "white",
+                  fontFamily: wordFontFamily,
+                  color: "var(--ink, #0B1220)",
                   fontSize: "clamp(22px, 2.4vw, 28px)",
                   padding: "14px 18px",
                   fontStyle: script === "latin" ? "italic" : "normal",
@@ -612,18 +624,15 @@ export function CompareV2() {
           <button
             type="submit"
             disabled={loading}
-            className="gd-font-sans-ui font-medium w-full md:w-auto"
+            className="font-medium w-full md:w-auto"
             style={{
+              fontFamily: "var(--wb-sans)",
               fontSize: 14,
               padding: "16px 26px",
               borderRadius: 14,
-              background: loading
-                ? "oklch(0.4 0.06 250 / 0.5)"
-                : "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
+              background: loading ? "rgba(14,165,165,0.5)" : "#0EA5A5",
               color: "white",
-              boxShadow: loading
-                ? "none"
-                : "0 0 0 1px oklch(0.5 0.2 250 / 0.6), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
+              boxShadow: loading ? "none" : "0 8px 22px rgba(14,165,165,0.35)",
               flexShrink: 0,
               display: "inline-flex",
               alignItems: "center",

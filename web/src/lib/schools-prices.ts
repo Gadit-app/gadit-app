@@ -95,6 +95,15 @@ export function studentsUpTo(n: number, lang: string): string {
     case "it": return `fino a ${n} studenti`;
     case "ja": return `最大${n}人の生徒`;
     case "hi": return `${n} छात्रों तक`;
+    case "am": return `እስከ ${n} ተማሪዎች`;
+    case "uk": return `до ${n} учнів`;
+    case "tr": return `${n} öğrenciye kadar`;
+    case "pl": return `do ${n} uczniów`;
+    case "fa": return `تا ${n} دانش‌آموز`;
+    case "id": return `hingga ${n} siswa`;
+    case "nl": return `tot ${n} leerlingen`;
+    case "el": return `έως ${n} μαθητές`;
+    case "zu": return `kufika kubafundi abangu-${n}`;
     default: return `up to ${n} students`;
   }
 }
