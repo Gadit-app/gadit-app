@@ -4104,7 +4104,28 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-pc-headrow { border-bottom: 1px solid var(--hairline); align-items: end; }
 .wordbook .wb-pc-headrow .wb-pc-cell { padding: 22px 16px 18px; }
 .wordbook .wb-pc-col { text-align: center; }
-.wordbook .wb-pc-col.is-pop { background: rgba(14, 165, 165, 0.05); }
+
+/* Column separators — frame the four columns so the table reads as one
+   framed grid, not detached cards (Gadi 2026-08-15). */
+.wordbook .wb-pc-cell + .wb-pc-cell { border-inline-start: 1px solid rgba(16, 24, 40, 0.07); }
+
+/* Per-tier column colour lanes: Basic slate · Clear teal · Deep purple. The
+   tint runs the full height so each subscription reads as its own column. */
+.wordbook .wb-pc-t-clear { background: rgba(14, 165, 165, 0.06); }
+.wordbook .wb-pc-t-deep { background: rgba(124, 58, 237, 0.05); }
+.wordbook .wb-pc-row:not(.wb-pc-headrow):nth-child(even) .wb-pc-t-clear { background: rgba(14, 165, 165, 0.1); }
+.wordbook .wb-pc-row:not(.wb-pc-headrow):nth-child(even) .wb-pc-t-deep { background: rgba(124, 58, 237, 0.09); }
+/* header colour accents (top bar + coloured name) */
+.wordbook .wb-pc-headrow .wb-pc-t-basic { border-top: 3px solid #94A3B8; }
+.wordbook .wb-pc-headrow .wb-pc-t-clear { border-top: 3px solid #0EA5A5; }
+.wordbook .wb-pc-headrow .wb-pc-t-deep { border-top: 3px solid #7C3AED; }
+.wordbook .wb-pc-t-basic .wb-pc-name { color: #475569; }
+.wordbook .wb-pc-t-clear .wb-pc-name { color: #0b7d7d; }
+.wordbook .wb-pc-t-deep .wb-pc-name { color: #6D28D9; }
+.wordbook .wb-pc-t-basic .wb-pc-check { color: #64748B; }
+.wordbook .wb-pc-t-clear .wb-pc-check { color: #0EA5A5; }
+.wordbook .wb-pc-t-deep .wb-pc-check { color: #7C3AED; }
+
 .wordbook .wb-pc-badge {
   display: inline-block; background: #0EA5A5; color: #fff; font-size: 10.5px;
   font-weight: 800; padding: 2px 9px; border-radius: 999px; margin-bottom: 8px;
@@ -4120,7 +4141,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: background 150ms var(--wb-ease-out, ease), transform 120ms ease;
 }
 .wordbook .wb-pc-cta:active { transform: scale(0.97); }
-.wordbook .wb-pc-cta-pop { background: #0EA5A5; color: #fff; border-color: #0EA5A5; }
+.wordbook .wb-pc-t-clear .wb-pc-cta { background: #0EA5A5; color: #fff; border-color: #0EA5A5; }
+.wordbook .wb-pc-t-deep .wb-pc-cta { background: #7C3AED; color: #fff; border-color: #7C3AED; }
 
 /* Pricing section headings (Individuals / Families / Schools) */
 .wordbook .wb-pricing-section-h {

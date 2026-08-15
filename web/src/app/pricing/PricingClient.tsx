@@ -1940,20 +1940,20 @@ export function PricingPageRoute() {
               <div className="wb-pc">
                 <div className="wb-pc-row wb-pc-headrow">
                   <div className="wb-pc-cell wb-pc-corner" />
-                  <div className="wb-pc-cell wb-pc-col">
+                  <div className="wb-pc-cell wb-pc-col wb-pc-t-basic">
                     <div className="wb-pc-name">{c.tierBasic.name}</div>
                     <div className="wb-pc-price">$0</div>
                     <div className="wb-pc-sub">{basicSub}</div>
                     <button type="button" className="wb-pc-cta" onClick={clickBasic}>{c.tierBasic.cta}</button>
                   </div>
-                  <div className="wb-pc-cell wb-pc-col is-pop">
+                  <div className="wb-pc-cell wb-pc-col wb-pc-t-clear is-pop">
                     {c.tierClear.badge && <div className="wb-pc-badge">{c.tierClear.badge}</div>}
                     <div className="wb-pc-name">{c.tierClear.name}</div>
                     <div className="wb-pc-price">{clearPrice}<span className="wb-pc-period">{period}</span></div>
                     <div className="wb-pc-sub">{clearSub}</div>
-                    <button type="button" className="wb-pc-cta wb-pc-cta-pop" onClick={clickClear}>{c.tierClear.cta}</button>
+                    <button type="button" className="wb-pc-cta" onClick={clickClear}>{c.tierClear.cta}</button>
                   </div>
-                  <div className="wb-pc-cell wb-pc-col">
+                  <div className="wb-pc-cell wb-pc-col wb-pc-t-deep">
                     <div className="wb-pc-name">{c.tierDeep.name}</div>
                     <div className="wb-pc-price">{deepPrice}<span className="wb-pc-period">{period}</span></div>
                     <div className="wb-pc-sub">{deepSub}</div>
@@ -1962,16 +1962,16 @@ export function PricingPageRoute() {
                 </div>
                 <div className="wb-pc-row">
                   <div className="wb-pc-cell wb-pc-feat">{fm.searchesLabel}</div>
-                  <div className="wb-pc-cell wb-pc-val">{fm.searchesBasic}</div>
-                  <div className="wb-pc-cell wb-pc-val wb-pc-strong">{fm.unlimited}</div>
-                  <div className="wb-pc-cell wb-pc-val wb-pc-strong">{fm.unlimited}</div>
+                  <div className="wb-pc-cell wb-pc-val wb-pc-t-basic">{fm.searchesBasic}</div>
+                  <div className="wb-pc-cell wb-pc-val wb-pc-t-clear wb-pc-strong">{fm.unlimited}</div>
+                  <div className="wb-pc-cell wb-pc-val wb-pc-t-deep wb-pc-strong">{fm.unlimited}</div>
                 </div>
                 {fm.rows.map((r, i) => (
                   <div className="wb-pc-row" key={i}>
                     <div className="wb-pc-cell wb-pc-feat">{r.l}</div>
-                    <div className="wb-pc-cell wb-pc-val">{r.t.includes("b") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
-                    <div className="wb-pc-cell wb-pc-val">{r.t.includes("c") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
-                    <div className="wb-pc-cell wb-pc-val">{r.t.includes("d") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                    <div className="wb-pc-cell wb-pc-val wb-pc-t-basic">{r.t.includes("b") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                    <div className="wb-pc-cell wb-pc-val wb-pc-t-clear">{r.t.includes("c") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                    <div className="wb-pc-cell wb-pc-val wb-pc-t-deep">{r.t.includes("d") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
                   </div>
                 ))}
               </div>
