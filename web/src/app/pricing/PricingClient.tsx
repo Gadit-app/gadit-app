@@ -2032,6 +2032,7 @@ export function PricingPageRoute() {
         })()}
 
         <h2 className="wb-pricing-section-h">{sh.fam}</h2>
+        <div className="wb-section-toggle">{billingToggle}</div>
         {/* Family — a single horizontal card below the three personal tiers.
             This is the volume play: one no-brainer price for the whole
             household. Falls back to EN copy for any UI language that
@@ -2089,6 +2090,7 @@ export function PricingPageRoute() {
         })()}
 
         <h2 className="wb-pricing-section-h">{sh.sch}</h2>
+        <div className="wb-section-toggle">{billingToggle}</div>
         {/* Schools — fifth tier, sits below Family. Mustard accent
             (#CA8A04) deliberately distant from the four tiers above
             (Basic gray / Clear teal / Deep purple / Family blue) so a

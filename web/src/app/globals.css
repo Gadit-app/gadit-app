@@ -4175,6 +4175,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook[dir="rtl"] .wb-pricing-section-h { letter-spacing: 0; font-family: var(--wb-he); }
 
+/* Per-section monthly/yearly toggle (Family, Schools) so a visitor at the
+   bottom of the page can switch without scrolling back to the top. All
+   toggles share the same billing state. Gadi 2026-08-15. */
+.wordbook .wb-section-toggle { display: flex; justify-content: center; margin: -4px 0 26px; }
+
 /* Tier card — shared shape, per-tier accent stripe and CTA color.
    overflow: hidden clips the colored top stripe to the card's
    rounded corners and also clips the Clear ribbon on the left. */
