@@ -4068,6 +4068,72 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   .wordbook .wb-tier-card { padding: 22px 16px 24px; }
 }
 
+/* ─── Individual-tiers comparison table (DESKTOP only) ─────────
+   Gadi 2026-08-15: on desktop show one feature column with checkmarks so a
+   solo buyer sees what each tier adds at a glance; below 900px the stacked
+   cards (.wb-pricing-grid) render instead. Each row is its own 4-col grid so
+   columns align without a <table>. */
+.wordbook .wb-pc { display: none; }
+@media (min-width: 900px) {
+  .wordbook .wb-pc {
+    display: block;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 30px -14px rgba(16, 24, 40, 0.14);
+  }
+  .wordbook .wb-pricing-grid { display: none; }
+}
+.wordbook .wb-pc-row {
+  display: grid;
+  grid-template-columns: 1.9fr 1fr 1fr 1fr;
+  align-items: center;
+}
+.wordbook .wb-pc-row:not(.wb-pc-headrow):nth-child(even) { background: rgba(16, 24, 40, 0.022); }
+.wordbook .wb-pc-cell { padding: 12px 18px; font-family: var(--wb-sans); font-size: 14.5px; }
+.wordbook[dir="rtl"] .wb-pc-cell { font-family: var(--wb-he); }
+.wordbook .wb-pc-feat { color: var(--ink); font-weight: 500; text-align: start; }
+.wordbook .wb-pc-val { text-align: center; color: var(--ink-soft); }
+.wordbook .wb-pc-strong { color: var(--ink); font-weight: 700; }
+.wordbook .wb-pc-check { display: inline-flex; color: #0EA5A5; }
+.wordbook .wb-pc-check svg { width: 18px; height: 18px; }
+.wordbook .wb-pc-dash { color: #D1D5DB; }
+.wordbook .wb-pc-headrow { border-bottom: 1px solid var(--hairline); align-items: end; }
+.wordbook .wb-pc-headrow .wb-pc-cell { padding: 22px 16px 18px; }
+.wordbook .wb-pc-col { text-align: center; }
+.wordbook .wb-pc-col.is-pop { background: rgba(14, 165, 165, 0.05); }
+.wordbook .wb-pc-badge {
+  display: inline-block; background: #0EA5A5; color: #fff; font-size: 10.5px;
+  font-weight: 800; padding: 2px 9px; border-radius: 999px; margin-bottom: 8px;
+}
+.wordbook .wb-pc-name { font-family: var(--wb-serif); font-size: 19px; font-weight: 700; color: var(--ink); }
+.wordbook .wb-pc-price { font-size: 23px; font-weight: 800; color: var(--ink); margin-top: 4px; }
+.wordbook .wb-pc-period { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-inline-start: 3px; }
+.wordbook .wb-pc-sub { font-size: 11.5px; color: var(--ink-soft); margin-top: 3px; min-height: 15px; }
+.wordbook .wb-pc-cta {
+  margin-top: 13px; width: 100%; padding: 9px 12px; border-radius: 10px;
+  border: 1px solid var(--hairline); background: #fff; color: var(--ink);
+  font-family: var(--wb-sans); font-size: 13.5px; font-weight: 700; cursor: pointer;
+  transition: background 150ms var(--wb-ease-out, ease), transform 120ms ease;
+}
+.wordbook .wb-pc-cta:active { transform: scale(0.97); }
+.wordbook .wb-pc-cta-pop { background: #0EA5A5; color: #fff; border-color: #0EA5A5; }
+
+/* Pricing section headings (Individuals / Families / Schools) */
+.wordbook .wb-pricing-section-h {
+  font-family: var(--wb-serif);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin: 44px 0 20px;
+  letter-spacing: -0.01em;
+}
+.wordbook[dir="rtl"] .wb-pricing-section-h { letter-spacing: 0; font-family: var(--wb-he); }
+
 /* Tier card — shared shape, per-tier accent stripe and CTA color.
    overflow: hidden clips the colored top stripe to the card's
    rounded corners and also clips the Clear ribbon on the left. */

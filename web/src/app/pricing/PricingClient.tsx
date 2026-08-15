@@ -704,6 +704,7 @@ const COPY: Record<string, {
         "מחברת מילים אישית",
         "חיבור משפט עם המילה וקבלת משוב",
         "היסטוריית חיפוש מלאה",
+        "שמירה וגישה אופליין",
       ],
     },
     tierDeep: {
@@ -782,6 +783,7 @@ const COPY: Record<string, {
         "Personal word notebook",
         "Compose a sentence and get feedback",
         "Full search history",
+        "Offline saving and access",
       ],
     },
     tierDeep: {
@@ -1702,12 +1704,79 @@ const COPY: Record<string, {
   },
 };
 
+// Desktop comparison matrix for the individual tiers (Basic/Clear/Deep).
+// Gadi 2026-08-15: on DESKTOP show one feature column with checkmarks so a
+// solo buyer sees at a glance what each tier adds; MOBILE keeps the stacked
+// cards (checkmark tables don't read on a phone). `t` = which tiers include
+// the row: "bcd" all, "cd" Clear+Deep, "d" Deep only. he + en native, en
+// fallback for the rest.
+const FEATURE_MATRIX: Record<
+  string,
+  {
+    searchesLabel: string;
+    searchesBasic: string;
+    unlimited: string;
+    rows: { l: string; t: string }[];
+  }
+> = {
+  he: {
+    searchesLabel: "חיפושי מילים",
+    searchesBasic: "20 ליום",
+    unlimited: "ללא הגבלה",
+    rows: [
+      { l: "כל ההגדרות למילה", t: "bcd" },
+      { l: "דוגמאות משפטים לפי הקשר", t: "bcd" },
+      { l: "ניבים וצירופי מילים", t: "bcd" },
+      { l: "מקור המילה", t: "bcd" },
+      { l: "הסבר לילדים", t: "cd" },
+      { l: "המחשת המילה בתמונה", t: "cd" },
+      { l: "מחברת מילים אישית", t: "cd" },
+      { l: "חיבור משפט וקבלת משוב", t: "cd" },
+      { l: "היסטוריית חיפוש מלאה", t: "cd" },
+      { l: "שמירה וגישה אופליין", t: "cd" },
+      { l: "חידונים מותאמים אישית", t: "d" },
+      { l: "משחקי מילים", t: "d" },
+      { l: "תרגול ולמידה לטווח ארוך", t: "d" },
+      { l: "ייצוא תוכן", t: "d" },
+    ],
+  },
+  en: {
+    searchesLabel: "Word searches",
+    searchesBasic: "20 / day",
+    unlimited: "Unlimited",
+    rows: [
+      { l: "Every definition of the word", t: "bcd" },
+      { l: "Sentence examples by context", t: "bcd" },
+      { l: "Idioms and expressions", t: "bcd" },
+      { l: "Word origin", t: "bcd" },
+      { l: "Kids' explanation", t: "cd" },
+      { l: "Word illustrated as an image", t: "cd" },
+      { l: "Personal word notebook", t: "cd" },
+      { l: "Compose a sentence and get feedback", t: "cd" },
+      { l: "Full search history", t: "cd" },
+      { l: "Offline saving and access", t: "cd" },
+      { l: "Personalized quizzes", t: "d" },
+      { l: "Word games", t: "d" },
+      { l: "Long-term practice and retention", t: "d" },
+      { l: "Export content", t: "d" },
+    ],
+  },
+};
+
+// Section headings for the three-product pricing page (Gadi 2026-08-15).
+const SECTION_HEAD: Record<string, { ind: string; fam: string; sch: string }> = {
+  he: { ind: "יחידים", fam: "משפחות", sch: "בתי ספר" },
+  en: { ind: "Individuals", fam: "Families", sch: "Schools" },
+};
+
 export function PricingPageRoute() {
   const { lang, dir, setLang } = useLang();
   const { user, promptLogin } = useAuth();
   const href = useHref();
   const [billing, setBilling] = useState<Billing>("monthly");
   const c = COPY[lang] ?? COPY.en;
+  const sh = SECTION_HEAD[lang] ?? SECTION_HEAD.en;
+  const fm = FEATURE_MATRIX[lang] ?? FEATURE_MATRIX.en;
 
   // Send the user to the in-app payment page (/checkout, Payment
   // Element) in their own language. Replaced the hosted-Checkout
@@ -1838,6 +1907,7 @@ export function PricingPageRoute() {
           </div>
         </div>
 
+        <h2 className="wb-pricing-section-h">{sh.ind}</h2>
         {(() => {
           // "Single user" reminder under each personal-tier price so the
           // contrast with Family (unlimited kids) reads at a glance.
@@ -1859,46 +1929,96 @@ export function PricingPageRoute() {
           const basicSub = `${c.freeForever} · ${singleUser}`;
           const clearSub = billing === "yearly" ? `≈ $2.49 ${c.mo} · ${singleUser}` : singleUser;
           const deepSub  = billing === "yearly" ? `≈ $4.16 ${c.mo} · ${singleUser}` : singleUser;
+          const clearPrice = billing === "yearly" ? clearYearly : clearMonthly;
+          const deepPrice = billing === "yearly" ? deepYearly : deepMonthly;
+          const period = billing === "yearly" ? c.yr : c.mo;
+          const dash = <span className="wb-pc-dash">·</span>;
           return (
-            <div className="wb-pricing-grid">
-              <TierCard
-                id="basic"
-                name={c.tierBasic.name}
-                tagline={c.tierBasic.tagline}
-                price={"$0"}
-                period={""}
-                subPrice={basicSub}
-                features={c.tierBasic.features}
-                cta={c.tierBasic.cta}
-                onCta={clickBasic}
-              />
-              <TierCard
-                id="clear"
-                name={c.tierClear.name}
-                tagline={c.tierClear.tagline}
-                price={billing === "yearly" ? clearYearly : clearMonthly}
-                period={billing === "yearly" ? c.yr : c.mo}
-                subPrice={clearSub}
-                badge={c.tierClear.badge}
-                features={c.tierClear.features}
-                cta={c.tierClear.cta}
-                onCta={clickClear}
-              />
-              <TierCard
-                id="deep"
-                name={c.tierDeep.name}
-                tagline={c.tierDeep.tagline}
-                price={billing === "yearly" ? deepYearly : deepMonthly}
-                period={billing === "yearly" ? c.yr : c.mo}
-                subPrice={deepSub}
-                features={c.tierDeep.features}
-                cta={c.tierDeep.cta}
-                onCta={clickDeep}
-              />
-            </div>
+            <>
+              {/* DESKTOP: one comparison table with checkmarks. Hidden on
+                  mobile (see .wb-pc CSS) where the stacked cards render. */}
+              <div className="wb-pc">
+                <div className="wb-pc-row wb-pc-headrow">
+                  <div className="wb-pc-cell wb-pc-corner" />
+                  <div className="wb-pc-cell wb-pc-col">
+                    <div className="wb-pc-name">{c.tierBasic.name}</div>
+                    <div className="wb-pc-price">$0</div>
+                    <div className="wb-pc-sub">{basicSub}</div>
+                    <button type="button" className="wb-pc-cta" onClick={clickBasic}>{c.tierBasic.cta}</button>
+                  </div>
+                  <div className="wb-pc-cell wb-pc-col is-pop">
+                    {c.tierClear.badge && <div className="wb-pc-badge">{c.tierClear.badge}</div>}
+                    <div className="wb-pc-name">{c.tierClear.name}</div>
+                    <div className="wb-pc-price">{clearPrice}<span className="wb-pc-period">{period}</span></div>
+                    <div className="wb-pc-sub">{clearSub}</div>
+                    <button type="button" className="wb-pc-cta wb-pc-cta-pop" onClick={clickClear}>{c.tierClear.cta}</button>
+                  </div>
+                  <div className="wb-pc-cell wb-pc-col">
+                    <div className="wb-pc-name">{c.tierDeep.name}</div>
+                    <div className="wb-pc-price">{deepPrice}<span className="wb-pc-period">{period}</span></div>
+                    <div className="wb-pc-sub">{deepSub}</div>
+                    <button type="button" className="wb-pc-cta" onClick={clickDeep}>{c.tierDeep.cta}</button>
+                  </div>
+                </div>
+                <div className="wb-pc-row">
+                  <div className="wb-pc-cell wb-pc-feat">{fm.searchesLabel}</div>
+                  <div className="wb-pc-cell wb-pc-val">{fm.searchesBasic}</div>
+                  <div className="wb-pc-cell wb-pc-val wb-pc-strong">{fm.unlimited}</div>
+                  <div className="wb-pc-cell wb-pc-val wb-pc-strong">{fm.unlimited}</div>
+                </div>
+                {fm.rows.map((r, i) => (
+                  <div className="wb-pc-row" key={i}>
+                    <div className="wb-pc-cell wb-pc-feat">{r.l}</div>
+                    <div className="wb-pc-cell wb-pc-val">{r.t.includes("b") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                    <div className="wb-pc-cell wb-pc-val">{r.t.includes("c") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                    <div className="wb-pc-cell wb-pc-val">{r.t.includes("d") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* MOBILE: the original stacked cards (checkmark tables don't
+                  read on a phone). Hidden on desktop. */}
+              <div className="wb-pricing-grid">
+                <TierCard
+                  id="basic"
+                  name={c.tierBasic.name}
+                  tagline={c.tierBasic.tagline}
+                  price={"$0"}
+                  period={""}
+                  subPrice={basicSub}
+                  features={c.tierBasic.features}
+                  cta={c.tierBasic.cta}
+                  onCta={clickBasic}
+                />
+                <TierCard
+                  id="clear"
+                  name={c.tierClear.name}
+                  tagline={c.tierClear.tagline}
+                  price={clearPrice}
+                  period={period}
+                  subPrice={clearSub}
+                  badge={c.tierClear.badge}
+                  features={c.tierClear.features}
+                  cta={c.tierClear.cta}
+                  onCta={clickClear}
+                />
+                <TierCard
+                  id="deep"
+                  name={c.tierDeep.name}
+                  tagline={c.tierDeep.tagline}
+                  price={deepPrice}
+                  period={period}
+                  subPrice={deepSub}
+                  features={c.tierDeep.features}
+                  cta={c.tierDeep.cta}
+                  onCta={clickDeep}
+                />
+              </div>
+            </>
           );
         })()}
 
+        <h2 className="wb-pricing-section-h">{sh.fam}</h2>
         {/* Family — a single horizontal card below the three personal tiers.
             This is the volume play: one no-brainer price for the whole
             household. Falls back to EN copy for any UI language that
@@ -1955,6 +2075,7 @@ export function PricingPageRoute() {
           );
         })()}
 
+        <h2 className="wb-pricing-section-h">{sh.sch}</h2>
         {/* Schools — fifth tier, sits below Family. Mustard accent
             (#CA8A04) deliberately distant from the four tiers above
             (Basic gray / Clear teal / Deep purple / Family blue) so a
