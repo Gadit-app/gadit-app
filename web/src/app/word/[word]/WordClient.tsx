@@ -33,7 +33,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, curatedDef } from "@/lib/word-sets";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import VoiceInput from "@/components/VoiceInput";
-import { useHref } from "@/lib/href";
+import { useHref, wordPath } from "@/lib/href";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
@@ -1560,7 +1560,7 @@ export function WordClient({
               const clsParam = classroomCode
                 ? `?cls=${encodeURIComponent(classroomCode)}${classroomStudentName ? `&sn=${encodeURIComponent(classroomStudentName)}` : ""}`
                 : "";
-              router.push(href(`/word/${encodeURIComponent(q)}${clsParam}`));
+              router.push(href(wordPath(q, clsParam)));
             }}
           >
             {/* Convention layout, same recipe the homepage pill follows
@@ -1592,7 +1592,7 @@ export function WordClient({
                   const clsParam = classroomCode
                 ? `?cls=${encodeURIComponent(classroomCode)}${classroomStudentName ? `&sn=${encodeURIComponent(classroomStudentName)}` : ""}`
                 : "";
-                  router.push(href(`/word/${encodeURIComponent(text.trim())}${clsParam}`));
+                  router.push(href(wordPath(text.trim(), clsParam)));
                 }}
                 enabled={true}
                 title={v2(lang, "voiceInputTitle")}

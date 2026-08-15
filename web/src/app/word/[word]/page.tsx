@@ -51,6 +51,21 @@ function safeDecodeWord(w: string): string {
   }
 }
 
+/** The word to define. A `q` query param wins over the path segment: it
+ *  carries "dot-segment" searches ("." / "..") that the browser and Vercel
+ *  strip out of the path (see wordPath() in lib/href). Otherwise use the
+ *  path param. */
+async function resolveWord(
+  params: Promise<{ word: string }>,
+  searchParams: Promise<{ [k: string]: string | string[] | undefined }>,
+): Promise<string> {
+  const sp = await searchParams;
+  const q = Array.isArray(sp?.q) ? sp.q[0] : sp?.q;
+  if (typeof q === "string" && q.trim()) return safeDecodeWord(q);
+  const { word } = await params;
+  return safeDecodeWord(word);
+}
+
 /** Resolve the request's UI language exactly like the root layout:
  *  middleware header (URL prefix) → cookie → English. */
 async function resolveLang(): Promise<string> {
@@ -95,11 +110,12 @@ const getPreloadedResult = cache(
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ word: string }>;
+  searchParams: Promise<{ [k: string]: string | string[] | undefined }>;
 }): Promise<Metadata> {
-  const { word } = await params;
-  const decoded = safeDecodeWord(word);
+  const decoded = await resolveWord(params, searchParams);
   const lang = await resolveLang();
   const preloaded = await getPreloadedResult(decoded, lang);
   // When we have the real definition, the meta description is the
@@ -148,11 +164,12 @@ export async function generateMetadata({
 
 export default async function WordRoute({
   params,
+  searchParams,
 }: {
   params: Promise<{ word: string }>;
+  searchParams: Promise<{ [k: string]: string | string[] | undefined }>;
 }) {
-  const { word } = await params;
-  const decoded = safeDecodeWord(word);
+  const decoded = await resolveWord(params, searchParams);
   const lang = await resolveLang();
   const preloaded = await getPreloadedResult(decoded, lang);
   return (

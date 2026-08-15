@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
-import { useHref } from "@/lib/href";
+import { useHref, wordPath } from "@/lib/href";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
@@ -181,7 +181,7 @@ export function HomePage() {
     if (!trimmed) return;
     const ctx = (ctxSentence ?? sentence).trim();
     const qs = ctx ? `?sentence=${encodeURIComponent(ctx)}` : "";
-    router.push(href(`/word/${encodeURIComponent(trimmed)}${qs}`));
+    router.push(href(wordPath(trimmed, qs)));
   }
 
   function onSubmit(e: React.FormEvent) {

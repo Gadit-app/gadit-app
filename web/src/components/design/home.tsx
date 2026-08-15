@@ -25,7 +25,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLang } from "@/lib/lang-context";
-import { useHref } from "@/lib/href";
+import { useHref, wordPath } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 import {
@@ -138,7 +138,7 @@ export function HomeSearch() {
   function go(word: string) {
     const trimmed = word.trim();
     if (!trimmed) return;
-    router.push(`/word/${encodeURIComponent(trimmed)}`);
+    router.push(wordPath(trimmed));
   }
 
   function handleSubmit() {

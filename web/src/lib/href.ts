@@ -35,6 +35,30 @@ export function useHref() {
 }
 
 /**
+ * Build the logical /word path for a search term, handling URL "dot-segments".
+ *
+ * A path segment that is only dots ("." or "..") is a URL dot-segment: the
+ * browser strips it before the request AND Vercel normalizes it (even
+ * percent-encoded as %2E → 404), so /word/[word] never receives it and the
+ * user lands on a 404 (Gadi 2026-08-15, searched "."). Carry an all-dots term
+ * through a ?q= query on a placeholder segment instead; the /word route reads
+ * `q` in preference to the path param. Every other symbol ("#", "/", "%", "-")
+ * survives encodeURIComponent as a normal path segment, so it stays in the path.
+ *
+ * `extra` is optional extra query (e.g. "cls=ABC" or "ctx=..."), WITHOUT a
+ * leading "?"/"&"; it is chained correctly for both path and query forms.
+ * Wrap the result in useHref()/buildHref() to add the language prefix.
+ */
+export function wordPath(word: string, extra?: string): string {
+  const trimmed = word.trim();
+  const extraClean = extra ? extra.replace(/^[?&]+/, "") : "";
+  if (/^\.+$/.test(trimmed)) {
+    return `/word/_?q=${encodeURIComponent(trimmed)}${extraClean ? `&${extraClean}` : ""}`;
+  }
+  return `/word/${encodeURIComponent(trimmed)}${extraClean ? `?${extraClean}` : ""}`;
+}
+
+/**
  * Pure variant for non-React contexts (route handlers, sitemap generation,
  * tests). Caller supplies the lang explicitly.
  */

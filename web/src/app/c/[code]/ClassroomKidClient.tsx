@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
-import { useHref } from "@/lib/href";
+import { useHref, wordPath } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useKidsMode } from "@/lib/use-kids-mode";
@@ -285,7 +285,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
     const sentenceParam = sent ? `&sentence=${encodeURIComponent(sent)}` : "";
     const studentParam = studentName ? `&sn=${encodeURIComponent(studentName)}` : "";
     const sessionParam = state.data.inSession ? `&in=1` : "";
-    router.push(href(`/word/${encodeURIComponent(trimmed)}?cls=${encodeURIComponent(code)}${sentenceParam}${studentParam}${sessionParam}`));
+    router.push(href(wordPath(trimmed, `cls=${encodeURIComponent(code)}${sentenceParam}${studentParam}${sessionParam}`)));
   }
 
   if (state.kind === "loading") {
