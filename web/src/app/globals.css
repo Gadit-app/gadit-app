@@ -4105,7 +4105,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-pc-check { display: inline-flex; color: #0EA5A5; }
 .wordbook .wb-pc-check svg { width: 18px; height: 18px; }
 .wordbook .wb-pc-dash { color: #D1D5DB; }
-.wordbook .wb-pc-headrow { align-items: end; }
+/* Equal-height header columns (SaaS style): stretch the cells, let content
+   flow from the top and pin the CTA to the bottom so all three align. */
+.wordbook .wb-pc-headrow { align-items: stretch; }
+.wordbook .wb-pc-headrow .wb-pc-col { display: flex; flex-direction: column; }
+.wordbook .wb-pc-headrow .wb-pc-cta { margin-top: auto; }
 .wordbook .wb-pc-headrow .wb-pc-cell { padding: 22px 16px 18px; }
 .wordbook .wb-pc-col { text-align: center; }
 
@@ -4113,8 +4117,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    framed grid, not detached cards (Gadi 2026-08-15). */
 .wordbook .wb-pc-cell + .wb-pc-cell { border-inline-start: 1px solid rgba(16, 24, 40, 0.11); }
 
-/* Columns stay clean/white; colour lives only in the header accent, the
-   checkmarks and the CTAs, not in column background tints (Gadi 2026-08-15). */
+/* Soft uniform colour per column, full height (Gadi 2026-08-15 liked the
+   SaaS-pricing 3-colour example). Very light so the row lines and checkmarks
+   stay readable; the feature-label column (corner) stays white. */
+.wordbook .wb-pc-t-basic { background: rgba(100, 116, 139, 0.035); }
+.wordbook .wb-pc-t-clear { background: rgba(14, 165, 165, 0.05); }
+.wordbook .wb-pc-t-deep { background: rgba(124, 58, 237, 0.045); }
 /* header colour accents (top bar + coloured name) */
 .wordbook .wb-pc-headrow .wb-pc-t-basic { border-top: 3px solid #94A3B8; }
 .wordbook .wb-pc-headrow .wb-pc-t-clear { border-top: 3px solid #0EA5A5; }

@@ -1951,7 +1951,6 @@ export function PricingPageRoute() {
                     <button type="button" className="wb-pc-cta" onClick={clickBasic}>{c.tierBasic.cta}</button>
                   </div>
                   <div className="wb-pc-cell wb-pc-col wb-pc-t-clear is-pop">
-                    {c.tierClear.badge && <div className="wb-pc-badge">{c.tierClear.badge}</div>}
                     <div className="wb-pc-name">{c.tierClear.name}</div>
                     <div className="wb-pc-price">{clearPrice}<span className="wb-pc-period">{period}</span></div>
                     <div className="wb-pc-sub">{clearSub}</div>
