@@ -133,7 +133,7 @@ export const APP_SHARE_COPY: Record<
   { title: string; text: string; shareLabel: string; copiedLabel: string }
 > = {
   he: {
-    title: "Gadit, להבין מילים עד הסוף",
+    title: "Gadit, להבין כל מילה עד הסוף",
     text: "כלי חדש שעוזר להבין כל מילה באמת. כל המשמעויות, דוגמאות, ניבים, ומקור המילה. חינמי להתחיל, שדרוג בעלות מאוד נמוכה. שווה לנסות:",
     shareLabel: "שתפו את Gadit",
     copiedLabel: "הקישור הועתק",

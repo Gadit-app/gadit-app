@@ -149,7 +149,7 @@ const notoSansEthiopic = Noto_Sans_Ethiopic({
 // when a user invokes the in-app share. Title is third-person.
 const META: Record<Lang, { title: string; description: string; locale: string }> = {
   he: {
-    title: "Gadit, להבין מילים עד הסוף",
+    title: "Gadit, להבין כל מילה עד הסוף",
     description:
       "כלי חדש שעוזר להבין כל מילה באמת. כל המשמעויות, דוגמאות, ניבים, ומקור המילה. חינמי להתחיל, שדרוג בעלות מאוד נמוכה. שווה לנסות.",
     locale: "he_IL",
