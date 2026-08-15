@@ -4112,15 +4112,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[dir="rtl"] .wb-pc-cell { font-family: var(--wb-he); }
 .wordbook .wb-pc-feat { color: var(--ink); font-weight: 500; text-align: start; }
 .wordbook .wb-pc-val { text-align: center; color: var(--ink-soft); }
-.wordbook .wb-pc-strong { color: var(--ink); font-weight: 700; }
+.wordbook .wb-pc-strong { color: var(--ink); font-weight: 400; }
 .wordbook .wb-pc-check { display: inline-flex; color: #0EA5A5; }
 .wordbook .wb-pc-check svg { width: 18px; height: 18px; }
 .wordbook .wb-pc-dash { color: #D1D5DB; }
-/* Equal-height header columns (SaaS style): stretch the cells, let content
-   flow from the top and pin the CTA to the bottom so all three align. */
+/* Equal-height header columns (SaaS style). The tier content is the same
+   height so the CTAs already align; the base CTA margin gives the air Gadi
+   asked for between "for one user" and the button. */
 .wordbook .wb-pc-headrow { align-items: stretch; }
-.wordbook .wb-pc-headrow .wb-pc-col { display: flex; flex-direction: column; }
-.wordbook .wb-pc-headrow .wb-pc-cta { margin-top: auto; }
 .wordbook .wb-pc-headrow .wb-pc-cell { padding: 22px 16px 18px; }
 .wordbook .wb-pc-col { text-align: center; }
 
@@ -4152,9 +4151,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-pc-name { font-family: var(--wb-serif); font-size: 19px; font-weight: 700; color: var(--ink); }
 .wordbook .wb-pc-price { font-size: 23px; font-weight: 800; color: var(--ink); margin-top: 4px; }
 .wordbook .wb-pc-period { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-inline-start: 3px; }
-.wordbook .wb-pc-sub { font-size: 11.5px; color: var(--ink-soft); margin-top: 3px; min-height: 15px; }
+.wordbook .wb-pc-sub { font-size: 11.5px; color: var(--ink-soft); margin-top: 6px; margin-bottom: 4px; min-height: 15px; }
 .wordbook .wb-pc-cta {
-  margin-top: 13px; width: 100%; padding: 9px 12px; border-radius: 10px;
+  margin-top: 20px; width: 100%; padding: 9px 12px; border-radius: 10px;
   border: 1px solid var(--hairline); background: #fff; color: var(--ink);
   font-family: var(--wb-sans); font-size: 13.5px; font-weight: 700; cursor: pointer;
   transition: background 150ms var(--wb-ease-out, ease), transform 120ms ease;

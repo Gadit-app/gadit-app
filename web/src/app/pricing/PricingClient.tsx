@@ -1938,7 +1938,9 @@ export function PricingPageRoute() {
             : lang === "ja" ? "1ユーザーあたり"
             : lang === "hi" ? "एक यूज़र के लिए"
             : "For one user";
-          const basicSub = `${c.freeForever} · ${singleUser}`;
+          // Basic sub is just "for one user" — Gadi 2026-08-15: drop "free
+          // forever" so the free tier isn't promoted.
+          const basicSub = singleUser;
           const clearSub = billing === "yearly" ? `≈ $2.49 ${c.mo} · ${singleUser}` : singleUser;
           const deepSub  = billing === "yearly" ? `≈ $4.16 ${c.mo} · ${singleUser}` : singleUser;
           const clearPrice = billing === "yearly" ? clearYearly : clearMonthly;
