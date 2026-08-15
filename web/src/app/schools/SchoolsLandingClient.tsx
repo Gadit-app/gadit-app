@@ -27,6 +27,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
 
 // Same languages as HomeClient — duplicated rather than refactored so
 // the topbar on /schools mirrors the homepage exactly without coupling
@@ -164,7 +165,7 @@ const COPY: Record<string, T> = {
     heroH1: "Every student understands the lesson.",
     heroSub: "Any hard word, in any of 22 languages, explained on the spot.",
     heroCta: "See pricing and order",
-    heroPriceChip: "From ₪3,490 / year",
+    heroPriceChip: "From $97 / month",
     heroTrust: "Self-serve. Cancel anytime.",
     probTag: "The Problem",
     probH2: "A student who doesn't understand a word can't understand the sentence.",
@@ -219,7 +220,7 @@ const COPY: Record<string, T> = {
       "Simple annual order, below the procurement threshold",
     ],
     priceCta: "See pricing and order",
-    priceLarger: "Need more than 500 students? Contact us about district plans.",
+    priceLarger: "Need more than 1,000 students? Contact us about district plans.",
     faqTag: "FAQ",
     faqH2: "Questions principals ask before they order.",
     faq: [
@@ -249,7 +250,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "What if my school has more than 500 students?",
-        a: "Use Schools Large ($149/month, up to 500 students) for any school under 500. For 500+ students or multi-site districts, contact us for a custom plan that fits your school's structure.",
+        a: "Pick by student count: up to 100 students is $97/month, up to 500 is $297/month, and up to 1,000 is $497/month. For more than 1,000 students or multi-site districts, contact us for a custom plan.",
       },
       {
         q: "How does Gadit explain a word? Is it just a translation?",
@@ -273,7 +274,7 @@ const COPY: Record<string, T> = {
     heroH1: "Wonke umfundi uyasiqonda isifundo.",
     heroSub: "Noma yiliphi igama elinzima, kunoma yiziphi izilimi ezingama-21, lichazwa khona lapho.",
     heroCta: "Buka amanani bese uodola",
-    heroPriceChip: "Kusukela ku-₪3,490 / ngonyaka",
+    heroPriceChip: "Kusukela ku-$97 / ngenyanga",
     heroTrust: "Uzisebenzela wena. Ungakhansela noma nini.",
     probTag: "Inkinga",
     probH2: "Umfundi ongaliqondi igama akakwazi ukuwuqonda umusho.",
@@ -328,7 +329,7 @@ const COPY: Record<string, T> = {
       "I-oda lonyaka elula, ngaphansi komkhawulo wokuthenga",
     ],
     priceCta: "Buka amanani bese uodola",
-    priceLarger: "Udinga abafundi abangaphezu kwabangu-500? Xhumana nathi mayelana nezinhlelo zesifunda.",
+    priceLarger: "Udinga abafundi abangaphezu kwabangu-1,000? Xhumana nathi mayelana nezinhlelo zesifunda.",
     faqTag: "Imibuzo Evamile",
     faqH2: "Imibuzo othishanhloko abayibuzayo ngaphambi kokuthi baodole.",
     faq: [
@@ -358,7 +359,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Kuthiwani uma isikole sami sinabafundi abangaphezu kwabangu-500?",
-        a: "Sebenzisa i-Izikole Ezinkulu ($149/ngenyanga, kufika kubafundi abangu-500) kunoma yisiphi isikole esingaphansi kuka-500. Kubafundi abangu-500+ noma izifunda ezinezindawo eziningi, xhumana nathi ukuze uthole uhlelo olwenzelwe wena oluhambisana nesakhiwo sesikole sakho.",
+        a: "Khetha ngokwenani labafundi: kufika ku-100 abafundi ku-$97/ngenyanga, kufika ku-500 ku-$297/ngenyanga, futhi kufika ku-1,000 ku-$497/ngenyanga. Kubafundi abangaphezu kuka-1,000 noma izifunda ezinezindawo eziningi, xhumana nathi ukuze uthole uhlelo olwenzelwe wena.",
       },
       {
         q: "I-Gadit ilichaza kanjani igama? Ingabe ukuhumusha nje?",
@@ -382,7 +383,7 @@ const COPY: Record<string, T> = {
     heroH1: "Κάθε μαθητής καταλαβαίνει το μάθημα.",
     heroSub: "Κάθε δύσκολη λέξη, σε οποιαδήποτε από τις 22 γλώσσες, εξηγείται επιτόπου.",
     heroCta: "Δείτε τις τιμές και παραγγείλετε",
-    heroPriceChip: "Από ₪3,490 / έτος",
+    heroPriceChip: "Από $97 / μήνα",
     heroTrust: "Αυτοεξυπηρέτηση. Ακύρωση οποτεδήποτε.",
     probTag: "Το Πρόβλημα",
     probH2: "Ένας μαθητής που δεν καταλαβαίνει μια λέξη δεν μπορεί να καταλάβει την πρόταση.",
@@ -437,7 +438,7 @@ const COPY: Record<string, T> = {
       "Απλή ετήσια παραγγελία, κάτω από το όριο των διαγωνισμών προμηθειών",
     ],
     priceCta: "Δείτε τις τιμές και παραγγείλετε",
-    priceLarger: "Χρειάζεστε περισσότερους από 500 μαθητές; Επικοινωνήστε μαζί μας για πακέτα περιφέρειας.",
+    priceLarger: "Χρειάζεστε περισσότερους από 1,000 μαθητές; Επικοινωνήστε μαζί μας για πακέτα περιφέρειας.",
     faqTag: "Συχνές Ερωτήσεις",
     faqH2: "Ερωτήσεις που κάνουν οι διευθυντές πριν παραγγείλουν.",
     faq: [
@@ -467,7 +468,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Τι γίνεται αν το σχολείο μου έχει περισσότερους από 500 μαθητές;",
-        a: "Χρησιμοποιήστε το Σχολεία Μεγάλα ($149/μήνα, έως 500 μαθητές) για κάθε σχολείο κάτω από 500. Για 500+ μαθητές ή περιφέρειες με πολλές τοποθεσίες, επικοινωνήστε μαζί μας για ένα προσαρμοσμένο πακέτο που ταιριάζει στη δομή του σχολείου σας.",
+        a: "Επιλέξτε ανάλογα με τον αριθμό μαθητών: έως 100 μαθητές είναι $97/μήνα, έως 500 είναι $297/μήνα και έως 1,000 είναι $497/μήνα. Για περισσότερους από 1,000 μαθητές ή περιφέρειες με πολλές τοποθεσίες, επικοινωνήστε μαζί μας για ένα προσαρμοσμένο πακέτο.",
       },
       {
         q: "Πώς εξηγεί το Gadit μια λέξη; Είναι απλώς μια μετάφραση;",
@@ -491,7 +492,7 @@ const COPY: Record<string, T> = {
     heroH1: "Кожен учень розуміє урок.",
     heroSub: "Будь-яке складне слово, будь-якою з 22 мов, пояснене одразу.",
     heroCta: "Почати 14-денний безкоштовний період",
-    heroPriceChip: "Від $69 / місяць",
+    heroPriceChip: "Від $97 / місяць",
     heroTrust: "Самообслуговування. Скасування будь-коли.",
     probTag: "Проблема",
     probH2: "Учень, який не розуміє слова, не може зрозуміти речення.",
@@ -546,7 +547,7 @@ const COPY: Record<string, T> = {
       "14-денний безкоштовний період",
     ],
     priceCta: "Почати 14-денний безкоштовний період",
-    priceLarger: "Потрібно більше ніж 500 учнів? Зв'яжіться з нами щодо планів для округів.",
+    priceLarger: "Потрібно більше ніж 1,000 учнів? Зв'яжіться з нами щодо планів для округів.",
     faqTag: "Часті запитання",
     faqH2: "Питання, які ставлять директори перед пробним періодом.",
     faq: [
@@ -576,7 +577,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Що, якщо в моїй школі понад 500 учнів?",
-        a: "Використовуйте Школи Великі ($149/місяць, до 500 учнів) для будь-якої школи до 500. Для 500+ учнів або мультисайтових округів зв'яжіться з нами щодо індивідуального плану, що підходить структурі вашої школи.",
+        a: "Обирайте за кількістю учнів: до 100 учнів це $97/місяць, до 500 це $297/місяць, а до 1,000 це $497/місяць. Для понад 1,000 учнів або мультисайтових округів зв'яжіться з нами щодо індивідуального плану.",
       },
       {
         q: "Як Gadit пояснює слово? Це просто переклад?",
@@ -600,7 +601,7 @@ const COPY: Record<string, T> = {
     heroH1: "Her öğrenci dersi anlar.",
     heroSub: "Zor herhangi bir kelime, 22 dilden herhangi birinde, anında açıklanır.",
     heroCta: "14 günlük ücretsiz denemeyi başlat",
-    heroPriceChip: "Aylık $69'dan başlayan fiyatlarla",
+    heroPriceChip: "Aylık $97'dan başlayan fiyatlarla",
     heroTrust: "Kendi kendine kurulum. İstediğiniz zaman iptal.",
     probTag: "Sorun",
     probH2: "Bir kelimeyi anlamayan öğrenci, cümleyi de anlayamaz.",
@@ -655,7 +656,7 @@ const COPY: Record<string, T> = {
       "14 günlük ücretsiz deneme",
     ],
     priceCta: "14 günlük ücretsiz denemeyi başlat",
-    priceLarger: "500'den fazla öğrenciye mi ihtiyacınız var? İlçe planları için bizimle iletişime geçin.",
+    priceLarger: "1,000'den fazla öğrenciye mi ihtiyacınız var? İlçe planları için bizimle iletişime geçin.",
     faqTag: "SSS",
     faqH2: "Müdürlerin denemeden önce sorduğu sorular.",
     faq: [
@@ -685,7 +686,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Okulumda 500'den fazla öğrenci varsa ne olur?",
-        a: "500'ün altındaki her okul için Okullar Büyük'ü ($149/ay, 500 öğrenciye kadar) kullanın. 500+ öğrenci ya da çok kampüslü ilçeler için, okulunuzun yapısına uyan özel bir plan için bizimle iletişime geçin.",
+        a: "Öğrenci sayısına göre seçin: 100 öğrenciye kadar aylık $97, 500 öğrenciye kadar aylık $297 ve 1,000 öğrenciye kadar aylık $497. 1,000'den fazla öğrenci ya da çok kampüslü ilçeler için özel bir plan için bizimle iletişime geçin.",
       },
       {
         q: "Gadit bir kelimeyi nasıl açıklar? Sadece bir çeviri mi?",
@@ -709,7 +710,7 @@ const COPY: Record<string, T> = {
     heroH1: "Każdy uczeń rozumie lekcję.",
     heroSub: "Każde trudne słowo, w dowolnym z 22 języków, wyjaśnione od razu.",
     heroCta: "Rozpocznij 14-dniowy bezpłatny okres próbny",
-    heroPriceChip: "Od $69 / miesiąc",
+    heroPriceChip: "Od $97 / miesiąc",
     heroTrust: "Samoobsługa. Anuluj w dowolnym momencie.",
     probTag: "Problem",
     probH2: "Uczeń, który nie rozumie słowa, nie może zrozumieć zdania.",
@@ -764,7 +765,7 @@ const COPY: Record<string, T> = {
       "14-dniowy bezpłatny okres próbny",
     ],
     priceCta: "Rozpocznij 14-dniowy bezpłatny okres próbny",
-    priceLarger: "Potrzebujesz więcej niż 500 uczniów? Skontaktuj się z nami w sprawie planów dla okręgów.",
+    priceLarger: "Potrzebujesz więcej niż 1,000 uczniów? Skontaktuj się z nami w sprawie planów dla okręgów.",
     faqTag: "FAQ",
     faqH2: "Pytania, które zadają dyrektorzy przed okresem próbnym.",
     faq: [
@@ -794,7 +795,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Co jeśli moja szkoła ma więcej niż 500 uczniów?",
-        a: "Użyj Szkoły Large ($149/miesiąc, do 500 uczniów) dla każdej szkoły poniżej 500. Dla 500+ uczniów lub okręgów wieloplacówkowych skontaktuj się z nami po plan dopasowany do struktury Twojej szkoły.",
+        a: "Wybierz według liczby uczniów: do 100 uczniów to $97/miesiąc, do 500 to $297/miesiąc, a do 1,000 to $497/miesiąc. Dla ponad 1,000 uczniów lub okręgów wieloplacówkowych skontaktuj się z nami po plan dopasowany do Twojej szkoły.",
       },
       {
         q: "Jak Gadit wyjaśnia słowo? Czy to tylko tłumaczenie?",
@@ -818,7 +819,7 @@ const COPY: Record<string, T> = {
     heroH1: "هر دانش‌آموز درس را می‌فهمد.",
     heroSub: "هر واژه‌ی دشوار، در هر یک از 22 زبان، همان‌جا توضیح داده می‌شود.",
     heroCta: "دوره‌ی آزمایشی رایگان 14 روزه را شروع کن",
-    heroPriceChip: "از $69 / ماه",
+    heroPriceChip: "از $97 / ماه",
     heroTrust: "خودخدمت. هر زمان لغو کن.",
     probTag: "مشکل",
     probH2: "دانش‌آموزی که یک واژه را نمی‌فهمد نمی‌تواند جمله را بفهمد.",
@@ -873,7 +874,7 @@ const COPY: Record<string, T> = {
       "دوره‌ی آزمایشی رایگان 14 روزه",
     ],
     priceCta: "دوره‌ی آزمایشی رایگان 14 روزه را شروع کن",
-    priceLarger: "بیش از 500 دانش‌آموز نیاز داری؟ درباره‌ی طرح‌های ناحیه‌ای با ما تماس بگیر.",
+    priceLarger: "بیش از 1,000 دانش‌آموز نیاز داری؟ درباره‌ی طرح‌های ناحیه‌ای با ما تماس بگیر.",
     faqTag: "پرسش‌های پرتکرار",
     faqH2: "پرسش‌هایی که مدیران پیش از آزمایش می‌پرسند.",
     faq: [
@@ -903,7 +904,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "اگر مدرسه‌ام بیش از 500 دانش‌آموز داشته باشد چه؟",
-        a: "برای هر مدرسه‌ی زیر 500، از مدرسه‌های بزرگ ($149 در ماه، تا 500 دانش‌آموز) استفاده کن. برای بیش از 500 دانش‌آموز یا نواحی چندمکانی، برای طرحی سفارشی که با ساختار مدرسه‌ات جور درآید با ما تماس بگیر.",
+        a: "بر اساس تعداد دانش‌آموز انتخاب کن: تا 100 دانش‌آموز ماهی $97، تا 500 دانش‌آموز ماهی $297، و تا 1,000 دانش‌آموز ماهی $497. برای بیش از 1,000 دانش‌آموز یا نواحی چندمکانی، برای طرحی سفارشی با ما تماس بگیر.",
       },
       {
         q: "Gadit چگونه یک واژه را توضیح می‌دهد؟ آیا فقط یک ترجمه است؟",
@@ -927,7 +928,7 @@ const COPY: Record<string, T> = {
     heroH1: "Setiap murid memahami pelajaran.",
     heroSub: "Kata sulit apa pun, dalam salah satu dari 22 bahasa, dijelaskan saat itu juga.",
     heroCta: "Mulai uji coba gratis 14 hari",
-    heroPriceChip: "Mulai $69 / bulan",
+    heroPriceChip: "Mulai $97 / bulan",
     heroTrust: "Layanan mandiri. Batalkan kapan saja.",
     probTag: "Masalahnya",
     probH2: "Murid yang tidak memahami sebuah kata tidak bisa memahami kalimatnya.",
@@ -982,7 +983,7 @@ const COPY: Record<string, T> = {
       "Uji coba gratis 14 hari",
     ],
     priceCta: "Mulai uji coba gratis 14 hari",
-    priceLarger: "Butuh lebih dari 500 murid? Hubungi kami tentang paket distrik.",
+    priceLarger: "Butuh lebih dari 1,000 murid? Hubungi kami tentang paket distrik.",
     faqTag: "Tanya Jawab",
     faqH2: "Pertanyaan yang diajukan kepala sekolah sebelum mencoba.",
     faq: [
@@ -1012,7 +1013,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Bagaimana jika sekolah saya punya lebih dari 500 murid?",
-        a: "Gunakan Sekolah Besar ($149/bulan, hingga 500 murid) untuk sekolah mana pun di bawah 500. Untuk 500+ murid atau distrik multi-lokasi, hubungi kami untuk paket khusus yang sesuai dengan struktur sekolah Anda.",
+        a: "Pilih berdasarkan jumlah murid: hingga 100 murid $97/bulan, hingga 500 murid $297/bulan, dan hingga 1,000 murid $497/bulan. Untuk lebih dari 1,000 murid atau distrik multi-lokasi, hubungi kami untuk paket khusus.",
       },
       {
         q: "Bagaimana Gadit menjelaskan sebuah kata? Apakah hanya terjemahan?",
@@ -1121,7 +1122,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "מה אם בית הספר שלי מעל 1,000 תלמידים?",
-        a: "יש שלוש חבילות לפי גודל בית הספר, עד 1,000 תלמידים. למעלה מ-1,000 תלמידים או לרשתות בתי ספר, אפשר ליצור קשר לתוכנית מותאמת.",
+        a: "שלוש חבילות לפי מספר התלמידים: עד 100 תלמידים ₪349 לחודש, עד 500 תלמידים ₪649 לחודש, ועד 1,000 תלמידים ₪949 לחודש (או ₪3,490 / ₪6,490 / ₪9,490 לשנה). מעל 1,000 תלמידים או לרשתות בתי ספר, אפשר ליצור קשר להצעת מחיר מותאמת.",
       },
       {
         q: "איך Gadit מסביר מילה? זה תרגום?",
@@ -1147,7 +1148,7 @@ const COPY: Record<string, T> = {
     heroH1: "Каждый ученик понимает урок.",
     heroSub: "Любое трудное слово, на любом из 14 языков, объяснено сразу.",
     heroCta: "Цены и заказ",
-    heroPriceChip: "От ₪3,490 в год",
+    heroPriceChip: "От $97 / месяц",
     heroTrust: "Самообслуживание. Отмена в любой момент.",
     probTag: "Проблема",
     probH2: "Ученик, не понимающий слово, не может понять предложение.",
@@ -1202,7 +1203,7 @@ const COPY: Record<string, T> = {
       "14-дневный пробный период",
     ],
     priceCta: "Цены и заказ",
-    priceLarger: "Больше 500 учеников? Свяжитесь с нами для тарифа района.",
+    priceLarger: "Больше 1,000 учеников? Свяжитесь с нами для тарифа района.",
     faqTag: "Вопросы и ответы",
     faqH2: "Что директора спрашивают перед пробным периодом.",
     faq: [
@@ -1232,7 +1233,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Что если в моей школе больше 500 учеников?",
-        a: "Используйте Schools Large ($149 в месяц, до 500 учеников) для любой школы меньше 500. Для 500+ учеников или многоплощадочных районов свяжитесь с нами для индивидуального плана.",
+        a: "Выбирайте по числу учеников: до 100 учеников $97 в месяц, до 500 учеников $297 в месяц, до 1,000 учеников $497 в месяц. Для более 1,000 учеников или многоплощадочных районов свяжитесь с нами для индивидуального плана.",
       },
       {
         q: "Как Gadit объясняет слово? Это просто перевод?",
@@ -1258,7 +1259,7 @@ const COPY: Record<string, T> = {
     heroH1: "Elke leerling begrijpt de les.",
     heroSub: "Elk moeilijk woord, in een van de 22 talen, meteen uitgelegd.",
     heroCta: "Start gratis proefperiode van 14 dagen",
-    heroPriceChip: "Vanaf $69 / maand",
+    heroPriceChip: "Vanaf $97 / maand",
     heroTrust: "Zelf te regelen. Altijd opzegbaar.",
     probTag: "Het probleem",
     probH2: "Een leerling die een woord niet begrijpt, kan de zin niet begrijpen.",
@@ -1313,7 +1314,7 @@ const COPY: Record<string, T> = {
       "Gratis proefperiode van 14 dagen",
     ],
     priceCta: "Start gratis proefperiode van 14 dagen",
-    priceLarger: "Meer dan 500 leerlingen nodig? Neem contact met ons op over districtsplannen.",
+    priceLarger: "Meer dan 1,000 leerlingen nodig? Neem contact met ons op over districtsplannen.",
     faqTag: "Veelgestelde vragen",
     faqH2: "Vragen die directeuren stellen voordat ze een proef starten.",
     faq: [
@@ -1343,7 +1344,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Wat als mijn school meer dan 500 leerlingen heeft?",
-        a: "Gebruik Schools Large ($149/maand, tot 500 leerlingen) voor elke school onder de 500. Voor meer dan 500 leerlingen of districten met meerdere locaties kun je contact met ons opnemen voor een plan op maat dat past bij de structuur van je school.",
+        a: "Kies op basis van het aantal leerlingen: tot 100 leerlingen is $97/maand, tot 500 is $297/maand en tot 1,000 is $497/maand. Voor meer dan 1,000 leerlingen of districten met meerdere locaties kun je contact met ons opnemen voor een plan op maat.",
       },
       {
         q: "Hoe legt Gadit een woord uit? Is het gewoon een vertaling?",
@@ -1367,7 +1368,7 @@ const COPY: Record<string, T> = {
     heroH1: "كل طالب يفهم الدرس.",
     heroSub: "أي كلمة صعبة، بأي من 14 لغة، تُشرح في الحال.",
     heroCta: "الأسعار والطلب",
-    heroPriceChip: "ابتداءً من ₪3,490 سنويًا",
+    heroPriceChip: "ابتداءً من $97 شهريًا",
     heroTrust: "خدمة ذاتية. ألغِ في أي وقت.",
     probTag: "المشكلة",
     probH2: "طالب لا يفهم كلمة لا يستطيع فهم الجملة.",
@@ -1422,7 +1423,7 @@ const COPY: Record<string, T> = {
       "تجربة مجانية لـ 14 يومًا",
     ],
     priceCta: "الأسعار والطلب",
-    priceLarger: "أكثر من 500 طالب؟ تواصل معنا لخطة منطقة.",
+    priceLarger: "أكثر من 1,000 طالب؟ تواصل معنا لخطة منطقة.",
     faqTag: "أسئلة شائعة",
     faqH2: "ما يسأله المديرون قبل بدء التجربة.",
     faq: [
@@ -1452,7 +1453,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "ماذا لو كانت مدرستي أكثر من 500 طالب؟",
-        a: "استخدم Schools Large (149 دولارًا شهريًا، حتى 500 طالب) لأي مدرسة دون 500. لـ 500+ طالب أو شبكات متعدّدة المواقع، تواصل معنا لخطة مخصّصة.",
+        a: "اختر حسب عدد الطلاب: حتى 100 طالب بـ 97 دولارًا شهريًا، حتى 500 طالب بـ 297 دولارًا شهريًا، وحتى 1,000 طالب بـ 497 دولارًا شهريًا. لأكثر من 1,000 طالب أو شبكات متعدّدة المواقع، تواصل معنا لخطة مخصّصة.",
       },
       {
         q: "كيف يشرح Gadit كلمة؟ هل هو ترجمة فقط؟",
@@ -1478,7 +1479,7 @@ const COPY: Record<string, T> = {
     heroH1: "Každý žák rozumí učivu.",
     heroSub: "Každé těžké slovo, v kterémkoli ze 20 jazyků, hned vysvětlené.",
     heroCta: "Začít 14denní zkušební období",
-    heroPriceChip: "Od $69 měsíčně",
+    heroPriceChip: "Od $97 měsíčně",
     heroTrust: "Samoobsluha. Zrušení kdykoli.",
     probTag: "Problém",
     probH2: "Žák, který nerozumí slovu, nemůže rozumět větě.",
@@ -1533,7 +1534,7 @@ const COPY: Record<string, T> = {
       "14denní zkušební období",
     ],
     priceCta: "Začít 14denní zkušební období",
-    priceLarger: "Více než 500 žáků? Kontaktujte nás ohledně okresního plánu.",
+    priceLarger: "Více než 1,000 žáků? Kontaktujte nás ohledně okresního plánu.",
     faqTag: "Časté dotazy",
     faqH2: "Otázky, které ředitelé kladou před zkouškou.",
     faq: [
@@ -1563,7 +1564,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Co když má moje škola více než 500 žáků?",
-        a: "Použijte Schools Large ($149 měsíčně, až 500 žáků) pro jakoukoli školu pod 500. Pro 500+ žáků nebo víceokresní sítě nás kontaktujte ohledně plánu na míru.",
+        a: "Vyberte podle počtu žáků: do 100 žáků $97 měsíčně, do 500 žáků $297 měsíčně a do 1,000 žáků $497 měsíčně. Pro více než 1,000 žáků nebo víceokresní sítě nás kontaktujte ohledně plánu na míru.",
       },
       {
         q: "Jak Gadit vysvětluje slovo? Je to jen překlad?",
@@ -1589,7 +1590,7 @@ const COPY: Record<string, T> = {
     heroH1: "Každý žiak rozumie učivu.",
     heroSub: "Každé ťažké slovo, v ktoromkoľvek zo 20 jazykov, hneď vysvetlené.",
     heroCta: "Začať 14-dňovú skúšobnú dobu",
-    heroPriceChip: "Od $69 mesačne",
+    heroPriceChip: "Od $97 mesačne",
     heroTrust: "Samoobsluha. Zrušenie kedykoľvek.",
     probTag: "Problém",
     probH2: "Žiak, ktorý nerozumie slovu, nedokáže rozumieť vete.",
@@ -1644,7 +1645,7 @@ const COPY: Record<string, T> = {
       "14-dňová skúšobná doba",
     ],
     priceCta: "Začať 14-dňovú skúšobnú dobu",
-    priceLarger: "Viac ako 500 žiakov? Kontaktujte nás ohľadom okresného plánu.",
+    priceLarger: "Viac ako 1,000 žiakov? Kontaktujte nás ohľadom okresného plánu.",
     faqTag: "Časté otázky",
     faqH2: "Otázky, ktoré riaditelia kladú pred skúškou.",
     faq: [
@@ -1674,7 +1675,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Čo ak má moja škola viac ako 500 žiakov?",
-        a: "Použite Schools Large ($149 mesačne, až 500 žiakov) pre akúkoľvek školu pod 500. Pre 500+ žiakov alebo viacokresné siete nás kontaktujte ohľadom plánu na mieru.",
+        a: "Vyberte podľa počtu žiakov: do 100 žiakov $97 mesačne, do 500 žiakov $297 mesačne a do 1,000 žiakov $497 mesačne. Pre viac ako 1,000 žiakov alebo viacokresné siete nás kontaktujte ohľadom plánu na mieru.",
       },
       {
         q: "Ako Gadit vysvetľuje slovo? Je to len preklad?",
@@ -1700,7 +1701,7 @@ const COPY: Record<string, T> = {
     heroH1: "हर छात्र पाठ समझता है।",
     heroSub: "कोई भी कठिन शब्द, 14 में से किसी भी भाषा में, तुरंत समझाया गया।",
     heroCta: "14 दिन का मुफ्त ट्रायल शुरू करें",
-    heroPriceChip: "$69 / माह से",
+    heroPriceChip: "$97 / माह से",
     heroTrust: "स्वयं-सेवा। कभी भी रद्द करें।",
     probTag: "समस्या",
     probH2: "जो छात्र शब्द को नहीं समझता वह वाक्य को नहीं समझ सकता।",
@@ -1755,7 +1756,7 @@ const COPY: Record<string, T> = {
       "14 दिन का मुफ्त ट्रायल",
     ],
     priceCta: "14 दिन का मुफ्त ट्रायल शुरू करें",
-    priceLarger: "500 से अधिक छात्र? ज़िला योजना के लिए संपर्क करें।",
+    priceLarger: "1,000 से अधिक छात्र? ज़िला योजना के लिए संपर्क करें।",
     faqTag: "अक्सर पूछे जाने वाले प्रश्न",
     faqH2: "प्रधानाचार्य ट्रायल से पहले क्या पूछते हैं।",
     faq: [
@@ -1785,7 +1786,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "अगर मेरे स्कूल में 500 से अधिक छात्र हैं तो क्या?",
-        a: "500 से कम के किसी भी स्कूल के लिए Schools Large ($149 / माह, 500 छात्रों तक) का उपयोग करें। 500 से अधिक छात्रों या बहु-साइट ज़िलों के लिए, कस्टम योजना के लिए संपर्क करें।",
+        a: "छात्रों की संख्या के अनुसार चुनें: 100 छात्रों तक $97/माह, 500 छात्रों तक $297/माह, और 1,000 छात्रों तक $497/माह। 1,000 से अधिक छात्रों या बहु-साइट ज़िलों के लिए, कस्टम योजना के लिए संपर्क करें।",
       },
       {
         q: "Gadit एक शब्द को कैसे समझाता है? क्या यह सिर्फ अनुवाद है?",
@@ -1811,7 +1812,7 @@ const COPY: Record<string, T> = {
     heroH1: "እያንዳንዱ ተማሪ ትምህርቱን ይረዳል።",
     heroSub: "ማንኛውም አስቸጋሪ ቃል፣ ከ22 ቋንቋዎች በአንዱ፣ ወዲያውኑ ይብራራል።",
     heroCta: "የ 14 ቀን ነጻ ሙከራ ይጀምሩ",
-    heroPriceChip: "ከ $69 / ወር ጀምሮ",
+    heroPriceChip: "ከ $97 / ወር ጀምሮ",
     heroTrust: "በራስ አገልግሎት። በማንኛውም ጊዜ ይሰርዙ።",
     probTag: "ችግሩ",
     probH2: "ቃሉን ያልተረዳ ተማሪ ዓረፍተ ነገሩን ሊረዳ አይችልም።",
@@ -1866,7 +1867,7 @@ const COPY: Record<string, T> = {
       "የ 14 ቀን ነጻ ሙከራ",
     ],
     priceCta: "የ 14 ቀን ነጻ ሙከራ ይጀምሩ",
-    priceLarger: "ከ 500 በላይ ተማሪዎች? ለዲስትሪክት ዕቅድ ያግኙን።",
+    priceLarger: "ከ 1,000 በላይ ተማሪዎች? ለዲስትሪክት ዕቅድ ያግኙን።",
     faqTag: "ተደጋጋሚ ጥያቄዎች",
     faqH2: "ርዕሰ መምህራን ከሙከራው በፊት የሚጠይቁት።",
     faq: [
@@ -1896,7 +1897,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "ትምህርት ቤቴ ከ 500 በላይ ተማሪዎች ካሉትስ?",
-        a: "ከ 500 በታች ለሆነ ማንኛውም ትምህርት ቤት Schools Large ($149 / ወር፣ እስከ 500 ተማሪዎች) ይጠቀሙ። ከ 500 በላይ ተማሪዎች ወይም ባለብዙ ቅርንጫፍ ዲስትሪክቶች ከሆነ ለብጁ ዕቅድ ያግኙን።",
+        a: "እንደ ተማሪ ብዛት ይምረጡ፦ እስከ 100 ተማሪዎች በወር $97፣ እስከ 500 ተማሪዎች በወር $297፣ እና እስከ 1,000 ተማሪዎች በወር $497። ከ 1,000 በላይ ተማሪዎች ወይም ባለብዙ ቅርንጫፍ ዲስትሪክቶች ከሆነ ለብጁ ዕቅድ ያግኙን።",
       },
       {
         q: "Gadit ቃልን እንዴት ያብራራል? ትርጉም ብቻ ነው?",
@@ -1922,7 +1923,7 @@ const COPY: Record<string, T> = {
     heroH1: "Cada estudiante entiende la lección.",
     heroSub: "Cualquier palabra difícil, en cualquiera de 22 idiomas, explicada al instante.",
     heroCta: "Comenzar prueba gratuita de 14 días",
-    heroPriceChip: "Desde $69 al mes",
+    heroPriceChip: "Desde $97 al mes",
     heroTrust: "Autoservicio. Cancele cuando quiera.",
     probTag: "El problema",
     probH2: "Un estudiante que no entiende una palabra no puede entender la oración.",
@@ -1977,7 +1978,7 @@ const COPY: Record<string, T> = {
       "Prueba gratuita de 14 días",
     ],
     priceCta: "Comenzar prueba gratuita de 14 días",
-    priceLarger: "¿Más de 500 estudiantes? Contáctenos para un plan de distrito.",
+    priceLarger: "¿Más de 1,000 estudiantes? Contáctenos para un plan de distrito.",
     faqTag: "Preguntas frecuentes",
     faqH2: "Lo que los directores preguntan antes de la prueba.",
     faq: [
@@ -2007,7 +2008,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "¿Qué pasa si mi escuela tiene más de 500 estudiantes?",
-        a: "Use Schools Large ($149 al mes, hasta 500 estudiantes) para cualquier escuela menor a 500. Para más de 500 estudiantes o redes con varias sedes, contáctenos para un plan personalizado.",
+        a: "Elija según el número de estudiantes: hasta 100 estudiantes son $97 al mes, hasta 500 son $297 al mes y hasta 1,000 son $497 al mes. Para más de 1,000 estudiantes o redes con varias sedes, contáctenos para un plan personalizado.",
       },
       {
         q: "¿Cómo explica Gadit una palabra? ¿Es solo traducción?",
@@ -2033,7 +2034,7 @@ const COPY: Record<string, T> = {
     heroH1: "Cada aluno entende a aula.",
     heroSub: "Qualquer palavra difícil, em qualquer um dos 22 idiomas, explicada na hora.",
     heroCta: "Iniciar teste gratuito de 14 dias",
-    heroPriceChip: "A partir de $69 por mês",
+    heroPriceChip: "A partir de $97 por mês",
     heroTrust: "Autoatendimento. Cancele a qualquer momento.",
     probTag: "O problema",
     probH2: "Um aluno que não entende uma palavra não consegue entender a frase.",
@@ -2088,7 +2089,7 @@ const COPY: Record<string, T> = {
       "Teste gratuito de 14 dias",
     ],
     priceCta: "Iniciar teste gratuito de 14 dias",
-    priceLarger: "Mais de 500 alunos? Entre em contato para um plano distrital.",
+    priceLarger: "Mais de 1,000 alunos? Entre em contato para um plano distrital.",
     faqTag: "Perguntas frequentes",
     faqH2: "O que os diretores perguntam antes do teste.",
     faq: [
@@ -2118,7 +2119,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "E se minha escola tem mais de 500 alunos?",
-        a: "Use Schools Large ($149 por mês, até 500 alunos) para qualquer escola menor que 500. Para mais de 500 alunos ou redes com várias unidades, entre em contato para um plano personalizado.",
+        a: "Escolha pelo número de alunos: até 100 alunos são $97 por mês, até 500 são $297 por mês e até 1,000 são $497 por mês. Para mais de 1,000 alunos ou redes com várias unidades, entre em contato para um plano personalizado.",
       },
       {
         q: "Como Gadit explica uma palavra? É só tradução?",
@@ -2144,7 +2145,7 @@ const COPY: Record<string, T> = {
     heroH1: "Chaque élève comprend la leçon.",
     heroSub: "Chaque mot difficile, dans l'une des 22 langues, expliqué aussitôt.",
     heroCta: "Commencer l'essai gratuit de 14 jours",
-    heroPriceChip: "À partir de $69 par mois",
+    heroPriceChip: "À partir de $97 par mois",
     heroTrust: "Libre-service. Annulez à tout moment.",
     probTag: "Le problème",
     probH2: "Un élève qui ne comprend pas un mot ne peut pas comprendre la phrase.",
@@ -2199,7 +2200,7 @@ const COPY: Record<string, T> = {
       "Essai gratuit de 14 jours",
     ],
     priceCta: "Commencer l'essai gratuit de 14 jours",
-    priceLarger: "Plus de 500 élèves ? Contactez-nous pour un plan de district.",
+    priceLarger: "Plus de 1,000 élèves ? Contactez-nous pour un plan de district.",
     faqTag: "Questions fréquentes",
     faqH2: "Ce que les directeurs demandent avant l'essai.",
     faq: [
@@ -2229,7 +2230,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Et si mon école a plus de 500 élèves ?",
-        a: "Utilisez Schools Large ($149 par mois, jusqu'à 500 élèves) pour toute école de moins de 500. Pour plus de 500 élèves ou réseaux multi-sites, contactez-nous pour un plan personnalisé.",
+        a: "Choisissez selon le nombre d'élèves : jusqu'à 100 élèves c'est $97 par mois, jusqu'à 500 c'est $297 par mois et jusqu'à 1,000 c'est $497 par mois. Pour plus de 1,000 élèves ou réseaux multi-sites, contactez-nous pour un plan personnalisé.",
       },
       {
         q: "Comment Gadit explique-t-il un mot ? Est-ce juste de la traduction ?",
@@ -2255,7 +2256,7 @@ const COPY: Record<string, T> = {
     heroH1: "Jeder Schüler versteht den Unterricht.",
     heroSub: "Jedes schwierige Wort, in einer von 22 Sprachen, sofort erklärt.",
     heroCta: "14 Tage kostenlos testen",
-    heroPriceChip: "Ab $69 pro Monat",
+    heroPriceChip: "Ab $97 pro Monat",
     heroTrust: "Selbstbedienung. Jederzeit kündbar.",
     probTag: "Das Problem",
     probH2: "Ein Schüler, der ein Wort nicht versteht, kann den Satz nicht verstehen.",
@@ -2310,7 +2311,7 @@ const COPY: Record<string, T> = {
       "14 Tage kostenlose Testphase",
     ],
     priceCta: "14 Tage kostenlos testen",
-    priceLarger: "Mehr als 500 Schüler? Kontaktieren Sie uns für einen Bezirksplan.",
+    priceLarger: "Mehr als 1,000 Schüler? Kontaktieren Sie uns für einen Bezirksplan.",
     faqTag: "Häufige Fragen",
     faqH2: "Was Direktoren vor der Testphase fragen.",
     faq: [
@@ -2340,7 +2341,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Was, wenn meine Schule mehr als 500 Schüler hat?",
-        a: "Verwenden Sie Schools Large ($149 pro Monat, bis zu 500 Schüler) für jede Schule unter 500. Für mehr als 500 Schüler oder Mehrstandortnetzwerke kontaktieren Sie uns für einen maßgeschneiderten Plan.",
+        a: "Wählen Sie nach Schülerzahl: bis 100 Schüler $97 pro Monat, bis 500 Schüler $297 pro Monat und bis 1,000 Schüler $497 pro Monat. Für mehr als 1,000 Schüler oder Mehrstandortnetzwerke kontaktieren Sie uns für einen maßgeschneiderten Plan.",
       },
       {
         q: "Wie erklärt Gadit ein Wort? Ist das nur Übersetzung?",
@@ -2366,7 +2367,7 @@ const COPY: Record<string, T> = {
     heroH1: "Ogni studente capisce la lezione.",
     heroSub: "Ogni parola difficile, in una delle 22 lingue, spiegata all'istante.",
     heroCta: "Inizia la prova gratuita di 14 giorni",
-    heroPriceChip: "Da $69 al mese",
+    heroPriceChip: "Da $97 al mese",
     heroTrust: "Self-service. Annulla quando vuoi.",
     probTag: "Il problema",
     probH2: "Uno studente che non capisce una parola non può capire la frase.",
@@ -2421,7 +2422,7 @@ const COPY: Record<string, T> = {
       "Prova gratuita di 14 giorni",
     ],
     priceCta: "Inizia la prova gratuita di 14 giorni",
-    priceLarger: "Più di 500 studenti? Contattaci per un piano distrettuale.",
+    priceLarger: "Più di 1,000 studenti? Contattaci per un piano distrettuale.",
     faqTag: "Domande frequenti",
     faqH2: "Cosa chiedono i direttori prima della prova.",
     faq: [
@@ -2451,7 +2452,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "E se la mia scuola ha più di 500 studenti?",
-        a: "Usa Schools Large ($149 al mese, fino a 500 studenti) per qualsiasi scuola sotto i 500. Per più di 500 studenti o reti con più sedi, contattaci per un piano personalizzato.",
+        a: "Scegli in base al numero di studenti: fino a 100 studenti $97 al mese, fino a 500 studenti $297 al mese e fino a 1,000 studenti $497 al mese. Per più di 1,000 studenti o reti con più sedi, contattaci per un piano personalizzato.",
       },
       {
         q: "Come spiega Gadit una parola? È solo traduzione?",
@@ -2477,7 +2478,7 @@ const COPY: Record<string, T> = {
     heroH1: "すべての生徒が授業を理解する。",
     heroSub: "どんな難しい単語も、14の言語のいずれかで、その場で説明。",
     heroCta: "14日間の無料トライアルを開始",
-    heroPriceChip: "$69 / 月から",
+    heroPriceChip: "$97 / 月から",
     heroTrust: "セルフサービス。いつでもキャンセル可能。",
     probTag: "課題",
     probH2: "単語を理解していない生徒は文を理解できません。",
@@ -2532,7 +2533,7 @@ const COPY: Record<string, T> = {
       "14日間の無料トライアル",
     ],
     priceCta: "14日間の無料トライアルを開始",
-    priceLarger: "500人を超える生徒は?学区プランについてお問い合わせください。",
+    priceLarger: "1,000人を超える生徒は?学区プランについてお問い合わせください。",
     faqTag: "よくある質問",
     faqH2: "校長がトライアル前に聞くこと。",
     faq: [
@@ -2562,7 +2563,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "学校に500人を超える生徒がいる場合は?",
-        a: "500人未満の学校にはSchools Large($149/月、生徒500人まで)をご利用ください。500人を超える生徒や複数拠点のネットワークについては、カスタムプランについてお問い合わせください。",
+        a: "生徒数に応じてお選びください。生徒100人まで月額$97、500人まで月額$297、1,000人まで月額$497です。1,000人を超える生徒や複数拠点のネットワークについては、カスタムプランをお問い合わせください。",
       },
       {
         q: "Gaditはどのように単語を説明しますか?ただの翻訳ですか?",
@@ -2614,15 +2615,9 @@ const SCHOOL_TIERS = [
 // what makes it read as a modern international platform, and monthly-first
 // (with a yearly option) means a principal sees the small per-month number,
 // not a scary annual sum. Amounts mirror the live Stripe SKUs.
-const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
-const PRICE_SCHOOLS_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY ?? "";
-const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
-const PRICE_SCHOOLS_LARGE_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ?? "";
-
-const USD_TIERS = [
-  { key: "small" as const, large: false, monthly: "$69", yearly: "$690" },
-  { key: "large" as const, large: true, monthly: "$149", yearly: "$1,490" },
-];
+// International USD pricing = the shared 3-tier ladder ($97/$297/$497) from
+// @/lib/schools-prices, the same source /pricing uses (Gadi 2026-08-15,
+// raised from the old flat $69/$149). Hebrew keeps the ₪ order form below.
 
 type PricingUI = {
   perYear: string;
@@ -2783,10 +2778,9 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
     }
     window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
   }
-  function clickSchoolsTier(large: boolean) {
-    const priceId = large
-      ? billing === "yearly" ? PRICE_SCHOOLS_LARGE_YEARLY : PRICE_SCHOOLS_LARGE_MONTHLY
-      : billing === "yearly" ? PRICE_SCHOOLS_YEARLY : PRICE_SCHOOLS_MONTHLY;
+  function clickSchoolsTier(tier: SchoolsTierKey) {
+    const t = SCHOOLS_TIERS[tier];
+    const priceId = billing === "yearly" ? t.yearly : t.monthly;
     promptLogin({ mode: "signup", onSuccess: () => startSchoolsCheckout(priceId) });
   }
 
@@ -2806,7 +2800,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
     document.getElementById("schools-order")?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
   // Hero + final CTAs don't name a plan, so sending them straight to a
-  // specific checkout would silently pick the $69 tier for the user.
+  // specific checkout would silently pick the cheapest tier for the user.
   // Gadi 2026-07-08: scroll them to the in-page pricing section where
   // the Schools / Schools Large choice is explicit; only the two price
   // cards go directly to checkout.
@@ -3543,11 +3537,11 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               padding: 2px 7px; border-radius: 999px; line-height: 1.5;
             }
             .wordbook .wb-schools-price-grid.sl-price-grid-usd {
-              max-width: 720px; margin-inline: auto;
+              max-width: 1080px; margin-inline: auto;
               grid-template-columns: 1fr; gap: 20px;
             }
-            @media (min-width: 620px) {
-              .wordbook .wb-schools-price-grid.sl-price-grid-usd { grid-template-columns: 1fr 1fr; }
+            @media (min-width: 720px) {
+              .wordbook .wb-schools-price-grid.sl-price-grid-usd { grid-template-columns: repeat(3, 1fr); }
             }
             .wordbook .sl-price-grid-usd .wb-schools-price-card { text-align: center; }
             .wordbook .sl-price-grid-usd .wb-schools-price-amount { justify-content: center; margin-block: 4px 6px; }
@@ -3578,27 +3572,24 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
             </button>
           </div>
           <div className="wb-schools-price-grid sl-price-grid-usd">
-            {USD_TIERS.map((tier) => (
-              <div
-                key={tier.key}
-                className={`wb-schools-price-card${tier.large ? " wb-schools-price-card-large" : ""}`}
-              >
-                <div className="wb-schools-price-name">{tier.large ? upu.largeName : upu.smallName}</div>
+            {SCHOOLS_TIER_LIST.map((tier) => (
+              <div key={tier.key} className="wb-schools-price-card">
+                <div className="wb-schools-price-name">{upu.smallName}</div>
                 <div className="wb-schools-price-amount">
                   <span className="wb-schools-price-amount-num" dir="ltr">
-                    {billing === "yearly" ? tier.yearly : tier.monthly}
+                    {billing === "yearly" ? tier.usdYearly : tier.usdMonthly}
                   </span>
                   <span className="wb-schools-price-amount-period">
                     {billing === "yearly" ? upu.perYear : upu.perMonth}
                   </span>
                 </div>
                 <div className="wb-schools-price-students">
-                  {tier.large ? upu.largeStudents : upu.smallStudents}
+                  {studentsUpTo(tier.maxStudents, lang)}
                 </div>
                 <button
                   type="button"
                   className="wb-schools-cta wb-schools-cta-block"
-                  onClick={() => clickSchoolsTier(tier.large)}
+                  onClick={() => clickSchoolsTier(tier.key)}
                 >
                   {upu.cta}
                 </button>

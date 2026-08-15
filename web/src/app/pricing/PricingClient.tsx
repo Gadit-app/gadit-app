@@ -28,29 +28,9 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
-import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, type SchoolsTierKey } from "@/lib/schools-prices";
+import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
 
 type Billing = "monthly" | "yearly";
-
-// "up to N students" per tier, one template instead of three ternaries.
-// Same language set the rest of the Schools block covers, EN fallback.
-function studentsUpTo(n: number, lang: string): string {
-  switch (lang) {
-    case "he": return `עד ${n} תלמידים`;
-    case "ar": return `حتى ${n} طالب`;
-    case "ru": return `до ${n} учеников`;
-    case "es": return `hasta ${n} alumnos`;
-    case "pt": return `até ${n} alunos`;
-    case "fr": return `jusqu'à ${n} élèves`;
-    case "de": return `bis ${n} Schüler`;
-    case "cs": return `až ${n} studentů`;
-    case "sk": return `až ${n} študentov`;
-    case "it": return `fino a ${n} studenti`;
-    case "ja": return `最大${n}人の生徒`;
-    case "hi": return `${n} छात्रों तक`;
-    default: return `up to ${n} students`;
-  }
-}
 
 const PRICE_CLEAR_MONTHLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY  ?? "";
 const PRICE_CLEAR_YEARLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY   ?? "";

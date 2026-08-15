@@ -78,6 +78,27 @@ export function isNewSchoolsPrice(priceId: string | null | undefined): boolean {
   return !!priceId && NEW_SCHOOLS_PRICE_IDS.includes(priceId);
 }
 
+/** "up to N students" for a tier header, one template instead of a per-tier
+ *  ternary. Native for the languages listed, English fallback for the rest
+ *  (matches the he+en-primary pattern used across the Schools surfaces). */
+export function studentsUpTo(n: number, lang: string): string {
+  switch (lang) {
+    case "he": return `עד ${n} תלמידים`;
+    case "ar": return `حتى ${n} طالب`;
+    case "ru": return `до ${n} учеников`;
+    case "es": return `hasta ${n} alumnos`;
+    case "pt": return `até ${n} alunos`;
+    case "fr": return `jusqu'à ${n} élèves`;
+    case "de": return `bis ${n} Schüler`;
+    case "cs": return `až ${n} studentů`;
+    case "sk": return `až ${n} študentov`;
+    case "it": return `fino a ${n} studenti`;
+    case "ja": return `最大${n}人の生徒`;
+    case "hi": return `${n} छात्रों तक`;
+    default: return `up to ${n} students`;
+  }
+}
+
 /** Resolve the tier a new-schools price belongs to (or null). */
 export function schoolsTierForPrice(priceId: string | null | undefined): SchoolsTier | null {
   if (!priceId) return null;
