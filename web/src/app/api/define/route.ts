@@ -111,6 +111,7 @@ RULE 1c ג€” If the typed string is NOT a real word and you have NO good sug
 IMPORTANT:
 - Rules 1a and 1b are NOT in conflict. If the typed word IS real, use 1a (just define it). If the typed word is NOT real, use 1b (suggest) or 1c (dead end).
 - ABBREVIATIONS, ACRONYMS & INITIALISMS ARE REAL ENTRIES: if the input is a known abbreviation, acronym, initialism, or short form (IRR, NASA, DNA, FBI, CEO, USB, AKA, e.g., etc., lol), treat it as a REAL word and define what it stands for. Do NOT send it to the typo path (1b) or the not-found path (1c). Give the full expansion plus a plain-language explanation of what it means. If it has SEVERAL common expansions, set multiplemeanings=true and list each as its own meaning, ordered by how common it is (e.g. IRR -> 1. Internal Rate of Return, a finance metric; 2. Iranian Rial, the currency code; 3. an informal short form of "irregular"). Include real example sentences that actually use the short form. Only use 1b/1c when the string is neither a real word NOR a known abbreviation.
+- SYMBOLS & SIGNS ARE REAL ENTRIES: if the input is a punctuation mark, a mathematical sign, a currency sign, or any other symbol (for example "-", "*", "x", "/", "%", "@", "&", "#", "+", "=", the multiplication sign, an arrow, a copyright sign, an ellipsis), treat it as a REAL word. Identify the symbol by its name and explain what it means and how it is used. If it has SEVERAL distinct uses, set multiplemeanings=true and list each as its own meaning (for example the hyphen "-": 1. joins words into a compound; 2. the minus sign in arithmetic; 3. a dash that separates parts of a sentence). Provide real example sentences or expressions that actually use the symbol. Do NOT send a symbol to the typo path (1b) or the not-found path (1c) just because it has no letters. Answer in the user's UI language, exactly like any other word.
 - Never silently replace. Only suggest openly via the "׳׳•׳׳™ ׳”׳×׳›׳•׳•׳ ׳× ׳-X" message.
 - Academic, technical, slang, and rare words ARE real words. If you know the word (even if unusual), define it normally ג€” do NOT fall through to the not-found path.
 
@@ -1111,17 +1112,28 @@ const UI_LANG_NAMES: Record<string, string> = {
 function looksLikeWord(input: string): boolean {
   const w = input.trim();
   if (w.length === 0 || w.length > 60) return false;
+  // Reject control characters / null bytes
+  // eslint-disable-next-line no-control-regex
+  if (/[\x00-\x1f\x7f]/.test(w)) return false;
+
+  // Symbol / sign lookup (Gadi 2026-08-15): a short token with no letters
+  // that is (or contains) a punctuation or math sign is a valid query —
+  // Gadit defines the SYMBOL itself, treating it as a word ("-", "×", "%",
+  // "@", "/", "&"). Handled BEFORE the email/URL guards below so a lone "@"
+  // or "/" is still definable, while real emails / URLs (letters plus @ or
+  // /) fall through those guards and get rejected. Pure digits ("42") are
+  // not signs, so they stay rejected.
+  if (!/\p{L}/u.test(w)) {
+    const core = w.replace(/\s+/g, "");
+    return core.length >= 1 && core.length <= 3 && /[\p{P}\p{S}]/u.test(core);
+  }
+
   // Reject emails (anything containing @)
   if (w.includes("@")) return false;
   // Reject URLs (any slash)
   if (/[/\\]/.test(w)) return false;
-  // Reject control characters / null bytes
-  // eslint-disable-next-line no-control-regex
-  if (/[\x00-\x1f\x7f]/.test(w)) return false;
   // Reject long keyboard mashes: same character repeated 6+ times
   if (/(.)\1{5,}/.test(w)) return false;
-  // Reject if no letters at all (pure digits / punctuation)
-  if (!/\p{L}/u.test(w)) return false;
   // Reject if more than ~5 word-like tokens (probably a sentence
   // pasted into the wrong field)
   if (w.split(/\s+/).length > 5) return false;
