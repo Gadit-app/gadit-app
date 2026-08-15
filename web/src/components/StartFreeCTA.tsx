@@ -51,8 +51,13 @@ export function StartFreeCTA() {
         type="button"
         onClick={() => promptLogin({ mode: "signin" })}
         className="wb-shell-signin-mobile"
+        aria-label={v2(lang, "signIn")}
+        title={v2(lang, "signIn")}
       >
-        {v2(lang, "signIn")}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.5" />
+          <path d="M5.5 20c0-3.6 2.9-5.6 6.5-5.6s6.5 2 6.5 5.6" />
+        </svg>
       </button>
       <button
         type="button"
