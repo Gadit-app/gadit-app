@@ -103,6 +103,10 @@ export default function WordError({
 }) {
   const { lang, dir } = useLang();
   const c = COPY[lang] ?? COPY.en;
+  const rtlFont =
+    lang === "he" ? "var(--wb-he)" : lang === "ar" || lang === "fa" ? "var(--wb-ar)" : null;
+  const titleFont = rtlFont ?? "var(--wb-serif)";
+  const bodyFont = rtlFont ?? "var(--wb-sans)";
 
   useEffect(() => {
     // Surface to the browser console for triage; in production this
@@ -117,110 +121,106 @@ export default function WordError({
   }, [error]);
 
   return (
-    <div className="gd-stage" style={{ minHeight: "100vh" }} dir={dir}>
-      <div className="gd-stars" />
-      <main
+    <div
+      className="wordbook"
+      dir={dir}
+      style={{
+        minHeight: "100dvh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+        background: "var(--paper, #F4F5F8)",
+      }}
+    >
+      <div
         style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 560,
-          margin: "0 auto",
-          padding: "clamp(60px, 10vw, 120px) 24px",
+          maxWidth: 460,
+          width: "100%",
+          background: "var(--surface, #fff)",
+          border: "1px solid var(--rule, #E2E5EA)",
+          borderRadius: 20,
+          padding: "clamp(32px, 5vw, 44px) clamp(24px, 4vw, 36px)",
           textAlign: "center",
+          boxShadow: "0 10px 34px -14px rgba(16, 24, 40, 0.18)",
         }}
       >
         <div
-          className="gd-card"
-          style={{ padding: "clamp(32px, 4vw, 48px)" }}
+          style={{
+            width: 46,
+            height: 46,
+            borderRadius: 999,
+            background: "#FEF3E2",
+            color: "#D97706",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 18,
+          }}
         >
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 999,
-              background: "oklch(0.95 0.04 60)",
-              color: "oklch(0.55 0.16 60)",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 16,
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M10 2v9m0 4v.01"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-              <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
-            </svg>
-          </div>
-          <h1
-            className={
-              lang === "he"
-                ? "gd-font-he"
-                : lang === "ar"
-                  ? "gd-font-ar"
-                  : "gd-font-display"
-            }
-            style={{
-              fontSize: "clamp(24px, 3vw, 30px)",
-              color: "var(--gd-ink-900)",
-              marginBottom: 8,
-              ...(lang !== "he" && lang !== "ar"
-                ? { fontVariationSettings: '"opsz" 36', fontStyle: "italic" }
-                : {}),
-            }}
-          >
-            {c.title}
-          </h1>
-          <p
-            className="gd-font-sans-ui"
-            style={{
-              fontSize: 14.5,
-              color: "var(--gd-ink-700)",
-              lineHeight: 1.5,
-              marginBottom: 24,
-            }}
-          >
-            {c.body}
-          </p>
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <button
-              type="button"
-              onClick={reset}
-              className="gd-font-sans-ui font-medium"
-              style={{
-                fontSize: 14,
-                padding: "11px 22px",
-                borderRadius: 12,
-                color: "white",
-                background:
-                  "linear-gradient(180deg, oklch(0.78 0.17 245), oklch(0.62 0.2 250))",
-                boxShadow:
-                  "0 0 0 1px oklch(0.5 0.2 250 / 0.55), 0 8px 22px oklch(0.5 0.2 250 / 0.4)",
-              }}
-            >
-              {c.retry}
-            </button>
-            <Link
-              href="/"
-              className="gd-font-sans-ui font-medium"
-              style={{
-                fontSize: 14,
-                padding: "11px 22px",
-                borderRadius: 12,
-                color: "var(--gd-ink-900)",
-                background: "oklch(0 0 0 / 0.04)",
-                boxShadow: "inset 0 0 0 1px oklch(0.85 0.005 265)",
-              }}
-            >
-              {c.home}
-            </Link>
-          </div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 8v4m0 4h.01" />
+          </svg>
         </div>
-      </main>
+        <h1
+          style={{
+            fontFamily: titleFont,
+            fontSize: "clamp(22px, 3vw, 28px)",
+            fontWeight: 700,
+            color: "var(--ink, #0B1220)",
+            margin: "0 0 8px",
+          }}
+        >
+          {c.title}
+        </h1>
+        <p
+          style={{
+            fontFamily: bodyFont,
+            fontSize: 14.5,
+            lineHeight: 1.6,
+            color: "var(--ink-soft, #3F4856)",
+            margin: "0 0 24px",
+          }}
+        >
+          {c.body}
+        </p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={reset}
+            style={{
+              fontFamily: bodyFont,
+              fontSize: 14,
+              fontWeight: 700,
+              padding: "11px 22px",
+              borderRadius: 12,
+              border: "none",
+              color: "#fff",
+              background: "#0EA5A5",
+              cursor: "pointer",
+            }}
+          >
+            {c.retry}
+          </button>
+          <Link
+            href="/"
+            style={{
+              fontFamily: bodyFont,
+              fontSize: 14,
+              fontWeight: 600,
+              padding: "11px 22px",
+              borderRadius: 12,
+              color: "var(--ink, #0B1220)",
+              background: "transparent",
+              border: "1px solid var(--rule, #E2E5EA)",
+              textDecoration: "none",
+            }}
+          >
+            {c.home}
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

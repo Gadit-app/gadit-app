@@ -37,6 +37,20 @@ import { sanitizeDegenerateEtymology } from "@/lib/define-guard";
 
 const ALL_LANGS: string[] = LANGUAGES.map((l) => l.code);
 
+/** Next.js already URL-decodes route params, so params.word for /word/%25
+ *  arrives as "%". Running decodeURIComponent on that throws "URI malformed"
+ *  and trips the error boundary — which is exactly what happened when a user
+ *  searched the "%" symbol (Gadi 2026-08-15). Decode defensively: a single
+ *  bare "%" or any half-encoded sequence falls back to the raw param, which
+ *  is the real word/symbol to define. */
+function safeDecodeWord(w: string): string {
+  try {
+    return decodeURIComponent(w);
+  } catch {
+    return w;
+  }
+}
+
 /** Resolve the request's UI language exactly like the root layout:
  *  middleware header (URL prefix) → cookie → English. */
 async function resolveLang(): Promise<string> {
@@ -85,7 +99,7 @@ export async function generateMetadata({
   params: Promise<{ word: string }>;
 }): Promise<Metadata> {
   const { word } = await params;
-  const decoded = decodeURIComponent(word);
+  const decoded = safeDecodeWord(word);
   const lang = await resolveLang();
   const preloaded = await getPreloadedResult(decoded, lang);
   // When we have the real definition, the meta description is the
@@ -138,7 +152,7 @@ export default async function WordRoute({
   params: Promise<{ word: string }>;
 }) {
   const { word } = await params;
-  const decoded = decodeURIComponent(word);
+  const decoded = safeDecodeWord(word);
   const lang = await resolveLang();
   const preloaded = await getPreloadedResult(decoded, lang);
   return (
