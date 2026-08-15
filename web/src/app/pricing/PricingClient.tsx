@@ -1837,6 +1837,29 @@ export function PricingPageRoute() {
   const schoolsLargeMonthly  = "$149";
   const schoolsLargeYearly   = "$1,490";
 
+  // One monthly/yearly toggle, rendered in two spots that share the same
+  // `billing` state: inside the desktop comparison table's empty corner cell
+  // (Gadi 2026-08-15), and at the top for mobile where the table is hidden.
+  const billingToggle = (
+    <div className="wb-pricing-toggle">
+      <button
+        type="button"
+        className={billing === "monthly" ? "is-active" : ""}
+        onClick={() => setBilling("monthly")}
+      >
+        {c.monthly}
+      </button>
+      <button
+        type="button"
+        className={billing === "yearly" ? "is-active" : ""}
+        onClick={() => setBilling("yearly")}
+      >
+        {c.yearly}
+        <span className="wb-pricing-save">{c.save}</span>
+      </button>
+    </div>
+  );
+
   return (
     <div className="wordbook wb-shell-page" dir={dir}>
       <header className="wb-shell-topbar">
@@ -1892,23 +1915,8 @@ export function PricingPageRoute() {
         <div className="wb-pricing-hero">
           <h1 className="wb-pricing-title">{c.heroTitle}</h1>
           <p className="wb-pricing-sub">{c.heroSub}</p>
-          <div className="wb-pricing-toggle">
-            <button
-              type="button"
-              className={billing === "monthly" ? "is-active" : ""}
-              onClick={() => setBilling("monthly")}
-            >
-              {c.monthly}
-            </button>
-            <button
-              type="button"
-              className={billing === "yearly" ? "is-active" : ""}
-              onClick={() => setBilling("yearly")}
-            >
-              {c.yearly}
-              <span className="wb-pricing-save">{c.save}</span>
-            </button>
-          </div>
+          {/* Mobile toggle (desktop shows it inside the table corner). */}
+          <div className="wb-pricing-toggle-top">{billingToggle}</div>
         </div>
 
         <h2 className="wb-pricing-section-h">{sh.ind}</h2>
@@ -1943,7 +1951,7 @@ export function PricingPageRoute() {
                   mobile (see .wb-pc CSS) where the stacked cards render. */}
               <div className="wb-pc">
                 <div className="wb-pc-row wb-pc-headrow">
-                  <div className="wb-pc-cell wb-pc-corner" />
+                  <div className="wb-pc-cell wb-pc-corner">{billingToggle}</div>
                   <div className="wb-pc-cell wb-pc-col wb-pc-t-basic">
                     <div className="wb-pc-name">{c.tierBasic.name}</div>
                     <div className="wb-pc-price">$0</div>
