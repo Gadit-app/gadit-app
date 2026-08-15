@@ -4079,11 +4079,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     display: block;
     max-width: 900px;
     margin: 0 auto;
-    border: 1px solid var(--hairline);
-    border-radius: 18px;
+    /* Flat framed table, no drop shadow — the shadow made the white sheet
+       read as a card floating under the tier headers, detached at the empty
+       top corner (Gadi 2026-08-15). A clean border closes the frame. */
+    border: 1px solid rgba(16, 24, 40, 0.14);
+    border-radius: 16px;
     overflow: hidden;
     background: #fff;
-    box-shadow: 0 10px 30px -14px rgba(16, 24, 40, 0.14);
   }
   .wordbook .wb-pricing-grid { display: none; }
 }
