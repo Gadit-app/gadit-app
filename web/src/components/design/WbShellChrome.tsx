@@ -67,6 +67,7 @@ export type NavKey =
   | "features"
   | "notebook"
   | "play"
+  | "individuals"
   | "schools"
   | "families"
   | "pricing"
@@ -81,6 +82,18 @@ const FAMILIES_LABEL: Record<string, string> = {
   he: "משפחות", en: "Families", ar: "العائلات", ru: "Семьи", es: "Familias",
   pt: "Famílias", fr: "Familles", de: "Familien", cs: "Rodiny", sk: "Rodiny",
   it: "Famiglie", ja: "ファミリー", hi: "परिवार", am: "ቤተሰቦች",
+};
+
+// "Individuals" nav label — the solo/single-user product area (Gadi 2026-08-15,
+// multi-AI panel picked "Individuals / יחידים" to keep the three nav tabs
+// parallel plural nouns: יחידים / משפחות / בתי ספר). Links to /pricing, which
+// leads with the individual tiers. Same local-map pattern as FAMILIES_LABEL;
+// en fallback for the other languages.
+const INDIVIDUALS_LABEL: Record<string, string> = {
+  he: "יחידים", en: "Individuals", ar: "الأفراد", ru: "Индивидуальный",
+  es: "Individual", pt: "Individual", fr: "Particuliers", de: "Einzelpersonen",
+  cs: "Jednotlivci", sk: "Jednotlivci", it: "Individuale", ja: "個人",
+  hi: "व्यक्तिगत", am: "ግለሰቦች",
 };
 
 // Kids see their notebook as "אוצר המילים שלי" (= vocabulary in Hebrew,
@@ -118,6 +131,7 @@ function useNavLinks(): NavLink[] {
   ];
   if (paid) links.push({ key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") });
   if (user && plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
+  links.push({ key: "individuals", href: href("/pricing"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en });
   links.push({ key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en });
   links.push({ key: "schools", href: href("/schools"), label: v2(lang, "navSchools") });
   links.push({ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") });
