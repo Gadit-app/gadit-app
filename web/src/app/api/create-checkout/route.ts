@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth } from "@/lib/firebase-admin";
+import { isNewSchoolsPrice, NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -37,7 +38,8 @@ function isSchoolsPriceId(priceId: string): boolean {
     (!!SCHOOLS_MEDIUM_MONTHLY_PRICE_ID && priceId === SCHOOLS_MEDIUM_MONTHLY_PRICE_ID) ||
     (!!SCHOOLS_MEDIUM_YEARLY_PRICE_ID && priceId === SCHOOLS_MEDIUM_YEARLY_PRICE_ID) ||
     (!!SCHOOLS_LARGE_MONTHLY_PRICE_ID && priceId === SCHOOLS_LARGE_MONTHLY_PRICE_ID) ||
-    (!!SCHOOLS_LARGE_YEARLY_PRICE_ID && priceId === SCHOOLS_LARGE_YEARLY_PRICE_ID)
+    (!!SCHOOLS_LARGE_YEARLY_PRICE_ID && priceId === SCHOOLS_LARGE_YEARLY_PRICE_ID) ||
+    isNewSchoolsPrice(priceId)
   );
 }
 
@@ -59,6 +61,7 @@ const ALL_PAID_PRICE_IDS = new Set(
     SCHOOLS_YEARLY_PRICE_ID,
     SCHOOLS_LARGE_MONTHLY_PRICE_ID,
     SCHOOLS_LARGE_YEARLY_PRICE_ID,
+    ...NEW_SCHOOLS_PRICE_IDS,
   ].filter(Boolean),
 );
 

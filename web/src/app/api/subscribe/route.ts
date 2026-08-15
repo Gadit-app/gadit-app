@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -47,6 +48,7 @@ function paidPriceIds(): Set<string> {
       process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY,
       process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY,
       process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY,
+      ...NEW_SCHOOLS_PRICE_IDS,
     ].filter((v): v is string => !!v),
   );
 }

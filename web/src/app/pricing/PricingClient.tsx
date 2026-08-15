@@ -28,8 +28,29 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
+import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, type SchoolsTierKey } from "@/lib/schools-prices";
 
 type Billing = "monthly" | "yearly";
+
+// "up to N students" per tier, one template instead of three ternaries.
+// Same language set the rest of the Schools block covers, EN fallback.
+function studentsUpTo(n: number, lang: string): string {
+  switch (lang) {
+    case "he": return `עד ${n} תלמידים`;
+    case "ar": return `حتى ${n} طالب`;
+    case "ru": return `до ${n} учеников`;
+    case "es": return `hasta ${n} alumnos`;
+    case "pt": return `até ${n} alunos`;
+    case "fr": return `jusqu'à ${n} élèves`;
+    case "de": return `bis ${n} Schüler`;
+    case "cs": return `až ${n} studentů`;
+    case "sk": return `až ${n} študentov`;
+    case "it": return `fino a ${n} studenti`;
+    case "ja": return `最大${n}人の生徒`;
+    case "hi": return `${n} छात्रों तक`;
+    default: return `up to ${n} students`;
+  }
+}
 
 const PRICE_CLEAR_MONTHLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY  ?? "";
 const PRICE_CLEAR_YEARLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY   ?? "";
@@ -37,10 +58,8 @@ const PRICE_DEEP_MONTHLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY  
 const PRICE_DEEP_YEARLY    = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY    ?? "";
 const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const PRICE_FAMILY_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY  ?? "";
-const PRICE_SCHOOLS_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ?? "";
-const PRICE_SCHOOLS_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY  ?? "";
-const PRICE_SCHOOLS_LARGE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ?? "";
-const PRICE_SCHOOLS_LARGE_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY  ?? "";
+// Schools prices are the 3-tier ladder in @/lib/schools-prices (hardcoded
+// public IDs) so /pricing, /checkout and the webhook share one source.
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -1811,12 +1830,16 @@ export function PricingPageRoute() {
     const priceId = billing === "yearly" ? PRICE_FAMILY_YEARLY : PRICE_FAMILY_MONTHLY;
     promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
-  function clickSchools() {
-    const priceId = billing === "yearly" ? PRICE_SCHOOLS_YEARLY : PRICE_SCHOOLS_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
-  }
-  function clickSchoolsLarge() {
-    const priceId = billing === "yearly" ? PRICE_SCHOOLS_LARGE_YEARLY : PRICE_SCHOOLS_LARGE_MONTHLY;
+  function clickSchoolsTier(tier: SchoolsTierKey) {
+    // Hebrew schools go through the ₪ order form on /schools (Invoice4U
+    // bank transfer + Israeli tax invoice — the main Israeli channel).
+    // Everyone else self-serves in USD via the in-app Payment Element.
+    if (lang === "he") {
+      window.location.href = href("/schools");
+      return;
+    }
+    const t = SCHOOLS_TIERS[tier];
+    const priceId = billing === "yearly" ? t.yearly : t.monthly;
     promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
 
@@ -1832,10 +1855,6 @@ export function PricingPageRoute() {
   // webhook maps the retired price IDs so they never downgrade.
   const familyMonthly  = "$5.99";
   const familyYearly   = "$59";
-  const schoolsMonthly       = "$69";
-  const schoolsYearly        = "$690";
-  const schoolsLargeMonthly  = "$149";
-  const schoolsLargeYearly   = "$1,490";
 
   // One monthly/yearly toggle, rendered in two spots that share the same
   // `billing` state: inside the desktop comparison table's empty corner cell
@@ -2099,144 +2118,101 @@ export function PricingPageRoute() {
             supplied their own school strings yet. */}
         {(() => {
           const s = c.school ?? COPY.en.school!;
+          const period = billing === "yearly" ? c.yr : c.mo;
           return (
-            <div className="wb-school-card-wrap">
-              <div className="wb-school-card">
-                <div className="wb-school-card-head">
-                  <div className="wb-school-eyebrow">{s.eyebrow}</div>
-                  <h3 className="wb-school-name">
-                    {s.name}{" "}
-                    <span style={{ fontSize: "0.55em", fontWeight: 600, color: "#A16207", whiteSpace: "nowrap" }}>
-                      {lang === "he" ? "עד 100 תלמידים"
-                        : lang === "ar" ? "حتى 100 طالب"
-                        : lang === "ru" ? "до 100 учеников"
-                        : lang === "es" ? "hasta 100 alumnos"
-                        : lang === "pt" ? "até 100 alunos"
-                        : lang === "fr" ? "jusqu'à 100 élèves"
-                        : lang === "de" ? "bis 100 Schüler"
-                        : lang === "cs" ? "až 100 studentů"
-                        : lang === "sk" ? "až 100 študentov"
-                        : lang === "it" ? "fino a 100 studenti"
-                        : lang === "ja" ? "最大100人"
-                        : lang === "hi" ? "100 छात्रों तक"
-                        : "up to 100 students"}
-                    </span>
-                  </h3>
-                  <p className="wb-school-tagline">{s.tagline}</p>
-                </div>
-                <ul className="wb-school-features">
-                  {s.features.map((feat, i) => (
-                    <li key={i}>
-                      <span className="wb-school-check"><CheckIcon /></span>
-                      <span>{feat}</span>
-                    </li>
+            <>
+              {/* Desktop: one mustard comparison table, mirroring the
+                  individuals table above. All three tiers include every
+                  feature, so every cell is a check; the tiers differ only
+                  in student cap + price. Hidden below 900px, where the
+                  stacked cards render instead (Gadi 2026-08-15: table on
+                  desktop, keep cards on mobile). */}
+              <div className="wb-sc">
+                <div className="wb-sc-row wb-sc-headrow">
+                  <div className="wb-sc-corner">
+                    <div className="wb-sc-corner-eyebrow">{s.eyebrow}</div>
+                    <div className="wb-sc-corner-name">{s.name}</div>
+                    <p className="wb-sc-corner-tag">{s.tagline}</p>
+                  </div>
+                  {SCHOOLS_TIER_LIST.map((t) => (
+                    <div key={t.key} className="wb-sc-head">
+                      <div className="wb-sc-cap">{studentsUpTo(t.maxStudents, lang)}</div>
+                      <div className="wb-sc-price">
+                        {billing === "yearly" ? t.usdYearly : t.usdMonthly}
+                        <span className="wb-sc-per">{period}</span>
+                      </div>
+                      <div className="wb-sc-sub">
+                        {billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo}` : " "}
+                      </div>
+                      <button
+                        type="button"
+                        className="wb-sc-cta"
+                        onClick={() => clickSchoolsTier(t.key)}
+                      >
+                        {s.cta}
+                      </button>
+                    </div>
                   ))}
-                </ul>
-                <div className="wb-school-cta-col">
-                  <div className="wb-school-price-row">
-                    <span className="wb-school-price">
-                      {billing === "yearly" ? schoolsYearly : schoolsMonthly}
-                    </span>
-                    <span className="wb-school-period">
-                      {billing === "yearly" ? c.yr : c.mo}
-                    </span>
-                  </div>
-                  <div className="wb-school-subprice">
-                    {billing === "yearly" ? `≈ $57.50 ${c.mo} · ` : ""}
-                    {lang === "he" ? "עד 100 תלמידים"
-                      : lang === "ar" ? "حتى 100 طالب"
-                      : lang === "ru" ? "До 100 учеников"
-                      : lang === "es" ? "Hasta 100 alumnos"
-                      : lang === "pt" ? "Até 100 alunos"
-                      : lang === "fr" ? "Jusqu'à 100 élèves"
-                      : lang === "de" ? "Bis zu 100 Schüler"
-                      : lang === "cs" ? "Až 100 studentů"
-                      : lang === "sk" ? "Až 100 študentov"
-                      : lang === "it" ? "Fino a 100 studenti"
-                      : lang === "ja" ? "最大100人の生徒"
-                      : lang === "hi" ? "100 छात्रों तक"
-                      : "Up to 100 students"}
-                  </div>
-                  <button type="button" className="wb-school-cta" onClick={clickSchools}>
-                    {s.cta}
-                  </button>
                 </div>
+                {s.features.map((feat, i) => (
+                  <div key={i} className="wb-sc-row">
+                    <div className="wb-sc-feat">{feat}</div>
+                    {SCHOOLS_TIER_LIST.map((t) => (
+                      <div key={t.key} className="wb-sc-check">
+                        <CheckIcon />
+                      </div>
+                    ))}
+                  </div>
+                ))}
               </div>
-            </div>
-          );
-        })()}
 
-        {/* Schools Large — same card shape, doubled-tier institutional
-            pricing. Sits below Schools (Small). Built 2026-06-28 after
-            the multi-AI pricing audit (Gadi council) flagged the flat
-            $69/unlimited as a strategic giveaway: a school with 500
-            students paid the same as a school with 30. Tiered now. */}
-        {(() => {
-          const s = c.school ?? COPY.en.school!;
-          return (
-            <div className="wb-school-card-wrap">
-              <div className="wb-school-card">
-                <div className="wb-school-card-head">
-                  <div className="wb-school-eyebrow">{s.eyebrow}</div>
-                  <h3 className="wb-school-name">
-                    {s.name} <span style={{ fontSize: "0.65em", fontWeight: 600, color: "#A16207" }}>Large</span>{" "}
-                    <span style={{ fontSize: "0.55em", fontWeight: 600, color: "#A16207", whiteSpace: "nowrap" }}>
-                      {lang === "he" ? "עד 500 תלמידים"
-                        : lang === "ar" ? "حتى 500 طالب"
-                        : lang === "ru" ? "до 500 учеников"
-                        : lang === "es" ? "hasta 500 alumnos"
-                        : lang === "pt" ? "até 500 alunos"
-                        : lang === "fr" ? "jusqu'à 500 élèves"
-                        : lang === "de" ? "bis 500 Schüler"
-                        : lang === "cs" ? "až 500 studentů"
-                        : lang === "sk" ? "až 500 študentov"
-                        : lang === "it" ? "fino a 500 studenti"
-                        : lang === "ja" ? "最大500人"
-                        : lang === "hi" ? "500 छात्रों तक"
-                        : "up to 500 students"}
-                    </span>
-                  </h3>
-                  <p className="wb-school-tagline">{s.tagline}</p>
-                </div>
-                <ul className="wb-school-features">
-                  {s.features.map((feat, i) => (
-                    <li key={i}>
-                      <span className="wb-school-check"><CheckIcon /></span>
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="wb-school-cta-col">
-                  <div className="wb-school-price-row">
-                    <span className="wb-school-price">
-                      {billing === "yearly" ? schoolsLargeYearly : schoolsLargeMonthly}
-                    </span>
-                    <span className="wb-school-period">
-                      {billing === "yearly" ? c.yr : c.mo}
-                    </span>
+              {/* Mobile: the same three tiers as stacked cards. */}
+              <div className="wb-sc-cards">
+                {SCHOOLS_TIER_LIST.map((t) => (
+                  <div key={t.key} className="wb-school-card-wrap">
+                    <div className="wb-school-card">
+                      <div className="wb-school-card-head">
+                        <div className="wb-school-eyebrow">{s.eyebrow}</div>
+                        <h3 className="wb-school-name">
+                          {s.name}{" "}
+                          <span style={{ fontSize: "0.55em", fontWeight: 600, color: "#A16207", whiteSpace: "nowrap" }}>
+                            {studentsUpTo(t.maxStudents, lang)}
+                          </span>
+                        </h3>
+                        <p className="wb-school-tagline">{s.tagline}</p>
+                      </div>
+                      <ul className="wb-school-features">
+                        {s.features.map((feat, i) => (
+                          <li key={i}>
+                            <span className="wb-school-check"><CheckIcon /></span>
+                            <span>{feat}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="wb-school-cta-col">
+                        <div className="wb-school-price-row">
+                          <span className="wb-school-price">
+                            {billing === "yearly" ? t.usdYearly : t.usdMonthly}
+                          </span>
+                          <span className="wb-school-period">{period}</span>
+                        </div>
+                        <div className="wb-school-subprice">
+                          {billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo} · ` : ""}
+                          {studentsUpTo(t.maxStudents, lang)}
+                        </div>
+                        <button
+                          type="button"
+                          className="wb-school-cta"
+                          onClick={() => clickSchoolsTier(t.key)}
+                        >
+                          {s.cta}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="wb-school-subprice">
-                    {billing === "yearly" ? `≈ $124 ${c.mo} · ` : ""}
-                    {lang === "he" ? "עד 500 תלמידים"
-                      : lang === "ar" ? "حتى 500 طالب"
-                      : lang === "ru" ? "До 500 учеников"
-                      : lang === "es" ? "Hasta 500 alumnos"
-                      : lang === "pt" ? "Até 500 alunos"
-                      : lang === "fr" ? "Jusqu'à 500 élèves"
-                      : lang === "de" ? "Bis zu 500 Schüler"
-                      : lang === "cs" ? "Až 500 studentů"
-                      : lang === "sk" ? "Až 500 študentov"
-                      : lang === "it" ? "Fino a 500 studenti"
-                      : lang === "ja" ? "最大500人の生徒"
-                      : lang === "hi" ? "500 छात्रों तक"
-                      : "Up to 500 students"}
-                  </div>
-                  <button type="button" className="wb-school-cta" onClick={clickSchoolsLarge}>
-                    {s.cta}
-                  </button>
-                </div>
+                ))}
               </div>
-            </div>
+            </>
           );
         })()}
 
@@ -2255,30 +2231,30 @@ export function PricingPageRoute() {
           }}
         >
           {lang === "he"
-            ? "מעל 500 תלמידים? "
+            ? "מעל 1,000 תלמידים? "
             : lang === "hi"
-            ? "500 से ज़्यादा छात्र? "
+            ? "1,000 से ज़्यादा छात्र? "
             : lang === "ar"
-            ? "أكثر من 500 طالب؟ "
+            ? "أكثر من 1,000 طالب؟ "
             : lang === "ru"
-            ? "Более 500 учеников? "
+            ? "Более 1 000 учеников? "
             : lang === "es"
-            ? "¿Más de 500 alumnos? "
+            ? "¿Más de 1000 alumnos? "
             : lang === "pt"
-            ? "Mais de 500 alunos? "
+            ? "Mais de 1000 alunos? "
             : lang === "fr"
-            ? "Plus de 500 élèves ? "
+            ? "Plus de 1000 élèves ? "
             : lang === "de"
-            ? "Mehr als 500 Schüler? "
+            ? "Mehr als 1000 Schüler? "
             : lang === "cs"
-            ? "Více než 500 studentů? "
+            ? "Více než 1000 studentů? "
             : lang === "sk"
-            ? "Viac ako 500 študentov? "
+            ? "Viac ako 1000 študentov? "
             : lang === "it"
-            ? "Più di 500 studenti? "
+            ? "Più di 1000 studenti? "
             : lang === "ja"
-            ? "500人を超える生徒? "
-            : "More than 500 students? "}
+            ? "1,000人を超える生徒? "
+            : "More than 1,000 students? "}
           <a
             href="mailto:support@gadit.app?subject=Gadit Schools Enterprise"
             style={{ color: "#CA8A04", fontWeight: 600, textDecoration: "underline" }}

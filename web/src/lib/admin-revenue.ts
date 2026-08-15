@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 
 /**
  * Shared Stripe revenue summary, read LIVE from Stripe.
@@ -72,6 +73,9 @@ function buildTierMap(): Record<string, Tier> {
   add(process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY, "schools");
   add(process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY, "schools");
   add(process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY, "schools");
+  // New 3-tier Schools ladder (hardcoded IDs). The product-name map below
+  // also catches these (same "Gadit Schools" product), this is belt-and-braces.
+  for (const id of NEW_SCHOOLS_PRICE_IDS) m[id] = "schools";
   return m;
 }
 

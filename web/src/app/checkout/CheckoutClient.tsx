@@ -14,6 +14,11 @@ import { useLang } from "@/lib/lang-context";
 import { isTwa, openInBrowser } from "@/lib/twa";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
+import {
+  SCHOOLS_TIERS,
+  schoolsTierForPrice,
+  type SchoolsTierKey,
+} from "@/lib/schools-prices";
 
 /**
  * In-app checkout with the Stripe Payment Element (Yooniz playbook,
@@ -43,6 +48,20 @@ type TierInfo = {
   amount: string; // display string, USD
   amountIls: string; // display string, ILS — Hebrew users are billed in shekels
   kind: "clear" | "deep" | "family" | "schools";
+  // Set for the new 3-tier Schools prices so counterpartPrice can flip
+  // monthly<->yearly within the same student tier (the by-name map can't,
+  // since all three tiers display as "Schools").
+  schoolsTier?: SchoolsTierKey;
+};
+
+// ILS display for the new Schools tiers (Israeli schools normally use the
+// ₪ order form on /schools, but keep a shekel figure here so the summary
+// never shows a blank if a Hebrew user does reach /checkout). USD is the
+// billed currency for these prices.
+const SCHOOLS_ILS: Record<SchoolsTierKey, { monthly: string; yearly: string }> = {
+  s: { monthly: "₪349", yearly: "₪3,490" },
+  m: { monthly: "₪649", yearly: "₪6,490" },
+  l: { monthly: "₪949", yearly: "₪9,490" },
 };
 
 // Mirrors the display prices in PricingClient — the Payment Element
@@ -51,6 +70,19 @@ type TierInfo = {
 // currency_options set on the Stripe prices (2026-07-16); the API
 // bills lang==="he" in shekels.
 function tierForPrice(priceId: string): TierInfo | null {
+  // New 3-tier Schools prices (hardcoded IDs, one source of truth).
+  const st = schoolsTierForPrice(priceId);
+  if (st) {
+    const cycle: "monthly" | "yearly" = priceId === st.yearly ? "yearly" : "monthly";
+    return {
+      name: "Schools",
+      cycle,
+      amount: cycle === "yearly" ? st.usdYearly : st.usdMonthly,
+      amountIls: cycle === "yearly" ? SCHOOLS_ILS[st.key].yearly : SCHOOLS_ILS[st.key].monthly,
+      kind: "schools",
+      schoolsTier: st.key,
+    };
+  }
   const map: Array<[string | undefined, TierInfo]> = [
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, { name: "Clear", cycle: "monthly", amount: "$2.99", amountIls: "₪9.90", kind: "clear" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY, { name: "Clear", cycle: "yearly", amount: "$29.99", amountIls: "₪99", kind: "clear" }],
@@ -72,6 +104,11 @@ function tierForPrice(priceId: string): TierInfo | null {
  *  plan NAME so "Schools" and "Schools Large" don't cross. */
 function counterpartPrice(current: TierInfo): string | null {
   const target: "monthly" | "yearly" = current.cycle === "monthly" ? "yearly" : "monthly";
+  // New Schools tiers flip within their own tier via the shared registry.
+  if (current.schoolsTier) {
+    const t = SCHOOLS_TIERS[current.schoolsTier];
+    return target === "yearly" ? t.yearly : t.monthly;
+  }
   const byName: Record<string, { monthly?: string; yearly?: string }> = {
     Clear: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY },
     Deep: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY },

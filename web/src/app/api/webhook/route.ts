@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
+import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -420,6 +421,7 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
     [process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY!]: "deep",
   };
   if (LEGACY_FAMILY_PRICE_IDS.includes(priceId)) return "deep";
+  if (isNewSchoolsPrice(priceId)) return "deep";
   return map[priceId] ?? "basic";
 }
 
@@ -438,7 +440,8 @@ function isSchoolsPriceId(priceId: string): boolean {
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ||
-    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ||
+    isNewSchoolsPrice(priceId)
   );
 }
 
@@ -586,7 +589,8 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY ||
-    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ||
+    NEW_SCHOOLS_YEARLY_IDS.includes(priceId)
       ? "yearly"
       : "monthly";
   const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
@@ -667,7 +671,8 @@ export async function POST(req: NextRequest) {
       const billingCycle: "monthly" | "yearly" =
         priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY ||
         priceId === process.env.STRIPE_PRICE_SCHOOLS_YEARLY ||
-        priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
+        priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ||
+        NEW_SCHOOLS_YEARLY_IDS.includes(priceId)
           ? "yearly"
           : "monthly";
       const customerEmail = session.customer_details?.email ?? session.customer_email ?? null;

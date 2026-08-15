@@ -4163,6 +4163,103 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook .wb-pc-t-clear .wb-pc-cta { background: #0EA5A5; color: #fff; border-color: #0EA5A5; }
 .wordbook .wb-pc-t-deep .wb-pc-cta { background: #7C3AED; color: #fff; border-color: #7C3AED; }
 
+/* ─── Schools comparison table (.wb-sc) ─────────────────────────────
+   Mustard sibling of .wb-pc. Gadi 2026-08-15: three Schools plans by
+   student count (up to 100 / 500 / 1000), so show them in one table like
+   the individuals table rather than three repeated cards. All three tiers
+   include every feature — every cell is a check — so they differ only in
+   student cap + price. Desktop only; below 900px the .wb-sc-cards stack
+   renders instead. */
+.wordbook .wb-sc { display: none; }
+.wordbook .wb-sc-cards { display: block; }
+@media (min-width: 900px) {
+  .wordbook .wb-sc {
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(16, 24, 40, 0.14);
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .wordbook .wb-sc-cards { display: none; }
+}
+.wordbook .wb-sc-row {
+  display: grid;
+  grid-template-columns: 1.9fr 1fr 1fr 1fr;
+  align-items: stretch;
+}
+.wordbook .wb-sc-row + .wb-sc-row { border-top: 1px solid rgba(16, 24, 40, 0.1); }
+.wordbook .wb-sc-row > * + * { border-inline-start: 1px solid rgba(16, 24, 40, 0.11); }
+/* soft uniform mustard tint on the three tier columns; label column stays white */
+.wordbook .wb-sc-head,
+.wordbook .wb-sc-check { background: rgba(202, 138, 4, 0.05); }
+
+.wordbook .wb-sc-corner {
+  padding: 22px 20px 18px;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+.wordbook .wb-sc-corner-eyebrow {
+  font-family: var(--wb-sans); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: #A16207;
+}
+.wordbook[dir="rtl"] .wb-sc-corner-eyebrow { font-family: var(--wb-he); letter-spacing: 0; }
+.wordbook .wb-sc-corner-name {
+  font-family: var(--wb-serif); font-size: 20px; font-weight: 700; color: #A16207;
+}
+.wordbook .wb-sc-corner-tag {
+  font-family: var(--wb-sans); font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; line-height: 1.35;
+}
+.wordbook[dir="rtl"] .wb-sc-corner-tag { font-family: var(--wb-he); }
+
+.wordbook .wb-sc-head {
+  text-align: center;
+  padding: 22px 16px 18px;
+  border-top: 3px solid #CA8A04;
+  display: flex;
+  flex-direction: column;
+}
+.wordbook .wb-sc-cap {
+  font-family: var(--wb-sans); font-size: 13px; font-weight: 700; color: #A16207; white-space: nowrap;
+}
+.wordbook[dir="rtl"] .wb-sc-cap { font-family: var(--wb-he); }
+.wordbook .wb-sc-price { font-family: var(--wb-sans); font-size: 23px; font-weight: 800; color: var(--ink); margin-top: 6px; }
+.wordbook .wb-sc-per { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-inline-start: 3px; }
+.wordbook .wb-sc-sub { font-family: var(--wb-sans); font-size: 11.5px; color: var(--ink-soft); margin-top: 4px; min-height: 15px; }
+.wordbook .wb-sc-cta {
+  margin-top: auto; width: 100%; padding: 9px 12px; border-radius: 10px;
+  border: 1px solid #CA8A04; background: #CA8A04; color: #fff;
+  font-family: var(--wb-sans); font-size: 13.5px; font-weight: 700; cursor: pointer;
+  transition: background 150ms var(--wb-ease-out, ease), transform 120ms ease;
+}
+.wordbook[dir="rtl"] .wb-sc-cta { font-family: var(--wb-he); }
+.wordbook .wb-sc-cta:hover { background: #A16207; }
+.wordbook .wb-sc-cta:active { transform: scale(0.97); }
+.wordbook .wb-sc-cta:focus-visible { outline: 2px solid #CA8A04; outline-offset: 2px; }
+
+.wordbook .wb-sc-feat {
+  padding: 12px 20px; font-family: var(--wb-sans); font-size: 14.5px;
+  color: var(--ink); font-weight: 500; text-align: start; display: flex; align-items: center;
+}
+.wordbook[dir="rtl"] .wb-sc-feat { font-family: var(--wb-he); }
+.wordbook .wb-sc-check {
+  display: flex; align-items: center; justify-content: center; padding: 12px; color: #CA8A04;
+}
+.wordbook .wb-sc-check svg { width: 18px; height: 18px; }
+
+/* /pricing mobile Schools cards: paint the CTA mustard (the shared base
+   .wb-school-cta is teal). Scoped to .wb-sc-cards so the /schools landing
+   button is untouched. */
+.wordbook .wb-sc-cards .wb-school-cta {
+  background: #CA8A04;
+  box-shadow: 0 1px 2px rgba(202, 138, 4, 0.3), 0 8px 24px -8px rgba(202, 138, 4, 0.45);
+}
+.wordbook .wb-sc-cards .wb-school-cta:hover { background: #A16207; }
+.wordbook .wb-sc-cards .wb-school-cta:focus-visible { outline-color: #CA8A04; }
+
 /* Pricing section headings (Individuals / Families / Schools) */
 .wordbook .wb-pricing-section-h {
   font-family: var(--wb-serif);

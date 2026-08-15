@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
+import { isNewSchoolsPrice } from "@/lib/schools-prices";
 
 /**
  * Return page for the Payment Element flow. Stripe appends
@@ -78,7 +79,8 @@ function isSchoolsPrice(priceId: string): boolean {
     priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_MONTHLY ||
     priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_YEARLY ||
     priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ||
-    priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
+    priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ||
+    isNewSchoolsPrice(priceId)
   );
 }
 
