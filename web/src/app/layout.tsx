@@ -415,6 +415,15 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} ${notoSansEthiopic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+          {/* Apply the saved appearance/skin (data-theme) before first paint
+              so there is no flash of the default light theme. Kept tiny and
+              inline; the React useTheme() hook keeps it in sync afterwards. */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "try{var t=localStorage.getItem('gadit-theme');if(t&&t!=='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}",
+            }}
+          />
           <LangProvider initialLang={initialLang}>
             <AuthProvider>
               {/* MarketingHeader is rendered per-route from each page's

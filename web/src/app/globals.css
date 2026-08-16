@@ -195,6 +195,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --teal: #0E7490;
   --teal-deep: #155E75;
 
+  /* Skinnable accent (Gadi 2026-08-16). Base = the product teal; the
+     [data-theme] skins below override it so kids surfaces re-colour to the
+     chosen skin. Use var(--accent) on new kids/game surfaces instead of a
+     hardcoded teal so they follow the skin. */
+  --accent: #0EA5A5;
+  --accent-2: #7C3AED;
+  --accent-ink: #FFFFFF;
+
   /* Type stacks */
   /* --wb-serif used to be Lora italic — kept the token name to avoid
      touching 13 rules, but the value is now Rubik so English display
@@ -13716,3 +13724,82 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: opacity 160ms var(--wb-ease-out);
 }
 .wordbook .wb-schools-textcta:hover { opacity: 0.72; }
+
+/* ─── Appearance skins (Gadi 2026-08-16) ──────────────────────────────
+   One global data-theme on <html> swaps a palette. Stage 1 paints the
+   strong skin on the PLAY / games surfaces (the "too grown-up" area) where
+   the tokens are fully controlled; the engine is global so the rest of the
+   kids area + adult dark can follow. `light` is the default (no attribute)
+   and keeps the current look untouched. */
+
+/* The picker chips */
+.wordbook .wb-skin-picker { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 8px 0 2px; }
+.wordbook .wb-skin-chip {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  border: 1.5px solid var(--rule, #E2E5EA); background: var(--surface, #fff); color: var(--ink, #0B1220);
+  font-family: var(--wb-sans); font-size: 13px; font-weight: 700;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+.wordbook[dir="rtl"] .wb-skin-chip { font-family: var(--wb-he); }
+.wordbook .wb-skin-chip:active { transform: scale(0.96); }
+.wordbook .wb-skin-chip.is-active {
+  border-color: var(--accent, #0EA5A5);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #0EA5A5) 22%, transparent);
+}
+.wordbook .wb-skin-emoji { font-size: 16px; line-height: 1; }
+.wordbook .wb-skin-dots { display: inline-flex; gap: 3px; }
+.wordbook .wb-skin-dots > span { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
+
+/* Shared: when ANY non-light skin is active, the play surfaces consume the
+   palette tokens set per theme below. (light = no data-theme = untouched.) */
+html[data-theme] .wb-play-page,
+html[data-theme] .wb-play-stage { background: var(--skin-bg, var(--paper)); }
+html[data-theme] .wb-play-page .wb-shell-topbar { background: transparent; border-bottom-color: color-mix(in srgb, var(--ink) 14%, transparent); }
+html[data-theme] .wb-play-page .wb-wordmark,
+html[data-theme] .wb-play-page .wb-shell-navlink,
+html[data-theme] .wb-play-page .wb-play-title,
+html[data-theme] .wb-play-stage .wb-play-question,
+html[data-theme] .wb-play-stage .wb-play-sentence { color: var(--ink); }
+html[data-theme] .wb-play-page .wb-play-lede,
+html[data-theme] .wb-play-page .wb-play-card-desc,
+html[data-theme] .wb-play-stage .wb-play-question-eyebrow { color: var(--ink-soft); }
+html[data-theme] .wb-play-page .wb-play-card,
+html[data-theme] .wb-play-stage .wb-play-option {
+  background: var(--surface); border-color: var(--rule); color: var(--ink);
+}
+html[data-theme] .wb-play-page .wb-play-card-title,
+html[data-theme] .wb-play-stage .wb-play-option { color: var(--ink); }
+html[data-theme] .wb-play-page .wb-skin-chip { background: color-mix(in srgb, var(--surface) 80%, transparent); }
+html[data-theme] .wb-play-stage .wb-play-blank { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Per-theme palettes. --skin-bg may be a gradient/pattern; the other tokens
+   are read by the shared rules above. */
+html[data-theme="dark"] .wb-play-page, html[data-theme="dark"] .wb-play-stage {
+  --skin-bg:#0B111B; --surface:#1B2432; --ink:#E5EAF1; --ink-soft:#AEB7C4; --ink-muted:#7E8896; --rule:#2A3444; --accent:#2DD4BF; --accent-2:#22D3EE; --accent-ink:#04241F;
+}
+html[data-theme="space"] .wb-play-page, html[data-theme="space"] .wb-play-stage {
+  --skin-bg:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9), transparent),
+    radial-gradient(1.5px 1.5px at 72% 18%, rgba(255,255,255,.7), transparent),
+    radial-gradient(2px 2px at 85% 62%, rgba(255,255,255,.85), transparent),
+    radial-gradient(1.5px 1.5px at 38% 82%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1100px 700px at 82% -12%, rgba(124,58,237,.4), transparent),
+    linear-gradient(160deg, #0B1030, #0A0A1F);
+  --surface:#181A44; --ink:#EAF0FF; --ink-soft:#B7C0E6; --ink-muted:#8590C0; --rule:#2E326A; --accent:#22D3EE; --accent-2:#A855F7; --accent-ink:#041018;
+}
+html[data-theme="ocean"] .wb-play-page, html[data-theme="ocean"] .wb-play-stage {
+  --skin-bg: radial-gradient(900px 520px at 15% 8%, rgba(56,189,248,.3), transparent), linear-gradient(160deg, #073349, #052330);
+  --surface:#0C3D52; --ink:#E6FBFF; --ink-soft:#A9D8E4; --ink-muted:#7FB4C4; --rule:#14536A; --accent:#38BDF8; --accent-2:#0EA5A5; --accent-ink:#032630;
+}
+html[data-theme="candy"] .wb-play-page, html[data-theme="candy"] .wb-play-stage {
+  --skin-bg: linear-gradient(160deg, #FDECF7, #F3E8FF);
+  --surface:#FFFFFF; --ink:#4A1D3F; --ink-soft:#86527A; --ink-muted:#A87E9E; --rule:#F3D0E6; --accent:#EC4899; --accent-2:#A855F7; --accent-ink:#FFFFFF;
+}
+html[data-theme="jungle"] .wb-play-page, html[data-theme="jungle"] .wb-play-stage {
+  --skin-bg: radial-gradient(900px 520px at 85% 4%, rgba(34,197,94,.3), transparent), linear-gradient(160deg, #06341F, #052818);
+  --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F;
+}
+html[data-theme="neon"] .wb-play-page, html[data-theme="neon"] .wb-play-stage {
+  --skin-bg: radial-gradient(800px 520px at 18% 0%, rgba(163,230,53,.16), transparent), radial-gradient(700px 520px at 92% 100%, rgba(244,114,182,.16), transparent), #0A0A14;
+  --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14;
+}

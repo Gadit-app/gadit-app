@@ -25,6 +25,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { AppearancePicker } from "@/components/AppearancePicker";
 import { getCuratedPlayPool } from "@/lib/play-content/curated-play-words";
 import {
   loadPlayWords,
@@ -2016,6 +2017,7 @@ export function PlayPage() {
         <div className="wb-play-hero">
           <h1 className="wb-play-title">{t.menuTitle}</h1>
           <p className="wb-play-lede">{t.menuLede}</p>
+          <AppearancePicker scope="kid" />
           {streak.current > 0 && (
             <div className="wb-play-streak">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
