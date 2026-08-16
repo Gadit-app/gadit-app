@@ -168,6 +168,7 @@ The 5 fields are:
    - The unique story of how the word reached its current meaning
    - For Hebrew words: where in the Tanach / Mishnah / Talmud it appears, hapax legomena, who coined it
    - For English/Latin/Greek words: who first used it, what historical practice it relates to (e.g., "salary" = Roman soldiers paid in salt)
+   - For BRAND, PRODUCT, APP, GAME, or COMPANY names and other COINED / INVENTED words (Roblox, Google, Instagram, Kodak, Lego, Spotify): the etymology must explain HOW THE NAME ITSELF WAS FORMED, never describe what the product does. Most are blends (portmanteaus), acronyms, or plays on words. Put the source parts in "breakdown" (e.g. Roblox = "robots" + "blocks"; Instagram = "instant" + "telegram"; Google from "googol", the number 1 followed by 100 zeros), put what those source words mean in "originalMeaning", and put who coined it and the naming idea in "historyNote". NEVER put the product's function ("an online games platform", "a search engine") in originalMeaning or originalWord: that is a definition, not an etymology. If you genuinely do not know how the name was coined, leave the fields empty rather than describing the product.
    What is NOT a historyNote:
    - Generic phrases ("used throughout history", "common in many languages")
    - Repeating what's already in originalMeaning
