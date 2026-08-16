@@ -190,7 +190,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="wordbook wb-shell-page" dir={dir}>
+    <div className={`wordbook wb-shell-page${familyRole === "kid" ? " wb-kid-area" : ""}`} dir={dir}>
       <header className="wb-shell-topbar">
         <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
           Gad<span className="wb-wordmark-it">it</span>

@@ -25,7 +25,6 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useKidsMode } from "@/lib/use-kids-mode";
-import { AppearancePicker } from "@/components/AppearancePicker";
 import { getCuratedPlayPool } from "@/lib/play-content/curated-play-words";
 import {
   loadPlayWords,
@@ -1525,7 +1524,8 @@ function LangSwitch() {
 }
 
 export function PlayPage() {
-  const { user, plan, loading, promptLogin } = useAuth();
+  const { user, plan, loading, promptLogin, familyRole } = useAuth();
+  const isKidPlayer = familyRole === "kid";
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -1891,70 +1891,70 @@ export function PlayPage() {
     const curatedProps = { onExit: exit, lang, t };
     if (stage.game === "twin") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameTwinTrap {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "time") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameTimeTraveler {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "passport") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameWordPassport {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "friends") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameFalseFriends {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "root") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameRootRush {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "shade") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameShadeSlider {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "build") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameBuildAWord {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "idiom") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameIdiomDecoder {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "lens") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameMeaningLens {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "artist") {
       return (
-        <div className="wordbook wb-play-page" dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
           <GameEtymologyArtist {...curatedProps} />
         </div>
       );
@@ -1965,7 +1965,7 @@ export function PlayPage() {
     // curated fallback. Gadi 2026-07-03.
     const props = { pool: effectivePool, onExit: exit, lang, t };
     return (
-      <div className="wordbook wb-play-page" dir={dir}>
+      <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
         {stage.game === "quiz" && <GameQuiz {...props} />}
         {stage.game === "fillblank" && <GameFillBlank {...props} />}
         {stage.game === "memory" && <GameMemory {...props} />}
@@ -1977,7 +1977,7 @@ export function PlayPage() {
 
   // ─── Menu stage ────────────────────────────────────────────────
   return (
-    <div className="wordbook wb-shell-page wb-play-page" dir={dir}>
+    <div className={`wordbook wb-shell-page wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
       <header className="wb-shell-topbar">
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
@@ -2017,7 +2017,6 @@ export function PlayPage() {
         <div className="wb-play-hero">
           <h1 className="wb-play-title">{t.menuTitle}</h1>
           <p className="wb-play-lede">{t.menuLede}</p>
-          <AppearancePicker scope="kid" />
           {streak.current > 0 && (
             <div className="wb-play-streak">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

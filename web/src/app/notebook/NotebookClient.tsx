@@ -17,6 +17,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
+import { AppearancePicker } from "@/components/AppearancePicker";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
@@ -354,7 +355,7 @@ export function NotebookPage() {
   }, [loading, user, plan]);
 
   return (
-    <div className="wordbook wb-shell-page" dir={dir}>
+    <div className={`wordbook wb-shell-page${isKid ? " wb-kid-area" : ""}`} dir={dir}>
       {/* Offline banner, top-of-page strip that appears whenever the
           browser thinks the network is down. Tells the user how many
           words they have available locally so 'offline' doesn't feel
@@ -424,6 +425,7 @@ export function NotebookPage() {
         <div className="wb-notebook-hero">
           <h1 className="wb-notebook-title">{pageTitle}</h1>
           <p className="wb-notebook-sub">{pageSubtitle}</p>
+          {isKid && <AppearancePicker scope="kid" />}
         </div>
 
         {items === null && !fetchError && (
