@@ -243,22 +243,46 @@ export async function GET(req: NextRequest) {
       signupsMonth,
     },
     revenue: {
-      // Three money figures Gadi wants at a glance (2026-08-12):
-      //   mrrUsd        = current paying (Stripe active subs)
-      //   trialingMrrUsd = future pipeline ($ the trials would bring)
-      //   totalMrrUsd   = both combined
+      // Money triplet (spec §3.1): current MRR (active + past_due),
+      // potential MRR from trials, net-new MRR this month.
       mrrUsd: rev.mrrUsd,
       arrUsd: rev.arrUsd,
+      atRiskMrrUsd: rev.atRiskMrrUsd,
       trialingMrrUsd: rev.trialingMrrUsd,
       trialingArrUsd: rev.trialingArrUsd,
       totalMrrUsd: rev.totalMrrUsd,
       totalArrUsd: rev.totalArrUsd,
+      newMrrUsd: rev.newMrrUsd,
+      churnedMrrUsd: rev.churnedMrrUsd,
+      netNewMrrUsd: rev.netNewMrrUsd,
       payingSubscriptions: rev.activePayingCount,
+      payingCustomers: rev.activePayingCustomers,
+      newCustomersThisMonth: rev.newCustomersThisMonth,
+      churnedCustomersThisMonth: rev.churnedCustomersThisMonth,
       trialingSubscriptions: rev.trialingCount,
       payingByTier: rev.payingByTier,
       trialingByTier: rev.trialingByTier,
       compAccounts,
     },
+    // Three decision metrics (spec §13): trial→paid, ARPU, CAC payback.
+    decision: {
+      arpuUsd: rev.arpuUsd,
+      monthlyChurnPct: rev.monthlyChurnPct,
+      trialConversionPct: rev.trialConversionPct,
+      trialResolvedCount: rev.trialResolvedCount,
+      cacUsd: rev.cacUsd,
+      grossMargin: rev.grossMargin,
+      cacPaybackMonths: rev.cacPaybackMonths,
+    },
+    // Operational alerts (spec §3.6) — only rendered when a counter > 0.
+    alerts: {
+      pastDueCount: rev.pastDueCount,
+      scheduledCancelCount: rev.scheduledCancelCount,
+      endedThisWeekCount: rev.endedThisWeekCount,
+      unmappedPriceCount: rev.unmappedPriceCount,
+      unmappedPriceIds: rev.unmappedPriceIds,
+    },
+    businessTz: rev.businessTz,
     activity: {
       searchesToday,
       searchesWeek,

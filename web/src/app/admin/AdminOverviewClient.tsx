@@ -2,20 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { useAdminContext } from "./admin-context";
+import { TOKENS } from "@/lib/admin-config";
 
 /**
- * Admin overview dashboard — the morning-glance view.
+ * Admin overview dashboard — the morning-glance view, built to the locked
+ * admin spec (v4, 2026-08-17):
+ *   §3.1 money triplet · §3.2 four operational KPIs · §13 three decision
+ *   metrics · §3.6 alerts. Cohorts + the 12-month MRR graph are DEFERRED
+ *   to 200+ payers (spec §13) — the snapshot layer accrues the history now.
  *
- * Reads /api/admin/overview which aggregates everything in one bulk
- * RPC pass: user counts, MRR, search activity, conversion funnel,
- * top words, top languages, top countries.
- *
- * The persistent sidebar + secret gate live in AdminShell (the parent
- * layout). This page just renders content + fetches its data.
+ * Reads /api/admin/overview, which aggregates everything in one pass.
  */
+
+type ByTier = { clear: number; deep: number; family: number; schools: number };
 
 type Overview = {
   generatedAt: string;
+  businessTz?: string;
   users: {
     total: number;
     byPlan: { basic: number; clear: number; deep: number };
@@ -26,15 +29,38 @@ type Overview = {
   revenue: {
     mrrUsd: number;
     arrUsd: number;
+    atRiskMrrUsd: number;
     trialingMrrUsd: number;
     trialingArrUsd: number;
     totalMrrUsd: number;
     totalArrUsd: number;
+    newMrrUsd: number;
+    churnedMrrUsd: number;
+    netNewMrrUsd: number;
     payingSubscriptions: number;
+    payingCustomers: number;
+    newCustomersThisMonth: number;
+    churnedCustomersThisMonth: number;
     trialingSubscriptions: number;
     compAccounts?: number;
-    payingByTier?: { clear: number; deep: number; family: number; schools: number };
-    trialingByTier?: { clear: number; deep: number; family: number; schools: number };
+    payingByTier?: ByTier;
+    trialingByTier?: ByTier;
+  };
+  decision: {
+    arpuUsd: number;
+    monthlyChurnPct: number;
+    trialConversionPct: number | null;
+    trialResolvedCount: number;
+    cacUsd: number;
+    grossMargin: number;
+    cacPaybackMonths: number | null;
+  };
+  alerts: {
+    pastDueCount: number;
+    scheduledCancelCount: number;
+    endedThisWeekCount: number;
+    unmappedPriceCount: number;
+    unmappedPriceIds: string[];
   };
   activity: {
     searchesToday: number;
@@ -55,59 +81,95 @@ type Overview = {
   };
 };
 
-// Page titles deliberately mirror the sidebar nav labels word-for-word
-// (Gadi 2026-06-22) — consistency cue that says "this is the page you
-// clicked, in the same words". One source of truth would be cleaner but
-// duplicating into each page's STRINGS keeps the per-page i18n dict
-// self-contained.
 const STRINGS = {
   en: {
     title: "Overview",
     loading: "Loading…",
-    cardMRR: "Monthly revenue",
-    cardFuture: "Future revenue",
-    cardTotal: "Total revenue",
-    cardTotalUsers: "Total users",
-    cardSignupsWeek: "Signups · 7 days",
-    cardSearchesToday: "Searches today",
-    cardSignupsToday: "Signups today",
-    perYear: "≈ $%/yr",
+    // money triplet
+    mCurrentMrr: "Current MRR",
+    mTrialMrr: "Potential MRR · trials",
+    mNetNew: "Net-new MRR · month",
+    atRisk: "at risk",
+    potentialNote: "potential, not yet revenue",
+    // operational KPIs
+    kPaying: "Paying customers",
+    kNew: "New customers · month",
+    kChurn: "Monthly churn",
+    kTrialing: "In trial",
+    subs: "subs",
+    churnedThisMonth: "churned this month",
+    ofPipeline: "in the pipeline",
+    // decision metrics
+    dConversion: "Trial → paid",
+    dArpu: "ARPU",
+    dPayback: "CAC payback",
+    resolvedTrials: "resolved trials",
+    perCustomer: "per paying customer",
+    months: "mo",
+    cacBasis: "CAC $% · %m margin",
+    noData: "no data yet",
+    // alerts
+    alertsTitle: "Needs attention",
+    aPastDue: "Failed payments",
+    aScheduled: "Scheduled cancels",
+    aEnded: "Ended this week",
+    aUnmapped: "Unmapped prices",
+    // existing
     funnelTitle: "Conversion funnel · 30 days",
     funnelAnonymous: "Anonymous visitors who searched",
     funnelSignedUp: "Signed up",
     funnelPaid: "Paying customers",
     funnelAnonToSignup: "Anonymous → signup",
     funnelSignupToPaid: "Signup → paid",
-    topWordsTitle: "Top searched words",
     topLangsTitle: "Searches by language",
+    topWordsTitle: "Top searched words",
     topCountriesTitle: "Top countries",
     noActivity: "No activity yet",
     generatedAtLabel: "Updated",
     thisWeek: "this week",
+    perYear: "≈ $%/yr",
   },
   he: {
     title: "סקירה",
     loading: "טוען…",
-    cardMRR: "הכנסה חודשית",
-    cardFuture: "הכנסה עתידית",
-    cardTotal: "סכום כולל",
-    cardTotalUsers: "סך משתמשים",
-    cardSignupsWeek: "הרשמות · 7 ימים",
-    cardSearchesToday: "חיפושים היום",
-    cardSignupsToday: "הרשמות היום",
-    perYear: "≈ $%/שנה",
+    mCurrentMrr: "MRR נוכחי",
+    mTrialMrr: "MRR פוטנציאלי · ניסיונות",
+    mNetNew: "MRR נטו חדש · החודש",
+    atRisk: "בסיכון",
+    potentialNote: "פוטנציאל, עדיין לא הכנסה",
+    kPaying: "לקוחות משלמים",
+    kNew: "לקוחות חדשים · החודש",
+    kChurn: "נטישה חודשית",
+    kTrialing: "בתקופת ניסיון",
+    subs: "מנויים",
+    churnedThisMonth: "נטשו החודש",
+    ofPipeline: "בצנרת",
+    dConversion: "ניסיון ← תשלום",
+    dArpu: "ARPU",
+    dPayback: "החזר CAC",
+    resolvedTrials: "ניסיונות שהוכרעו",
+    perCustomer: "ללקוח משלם",
+    months: "חודשים",
+    cacBasis: "CAC $% · %m שולי רווח",
+    noData: "אין נתונים עדיין",
+    alertsTitle: "דורש טיפול",
+    aPastDue: "תשלומים שנכשלו",
+    aScheduled: "ביטולים מתוזמנים",
+    aEnded: "הסתיימו השבוע",
+    aUnmapped: "מחירים לא ממופים",
     funnelTitle: "משפך המרה · 30 ימים",
     funnelAnonymous: "אנונימיים שחיפשו",
     funnelSignedUp: "נרשמו",
     funnelPaid: "משלמים",
     funnelAnonToSignup: "אנונימי → רישום",
     funnelSignupToPaid: "רישום → תשלום",
-    topWordsTitle: "מילים פופולריות",
     topLangsTitle: "חיפושים לפי שפה",
+    topWordsTitle: "מילים פופולריות",
     topCountriesTitle: "מדינות מובילות",
     noActivity: "אין פעילות עדיין",
     generatedAtLabel: "עודכן",
     thisWeek: "השבוע",
+    perYear: "≈ $%/שנה",
   },
 } as const;
 
@@ -157,56 +219,140 @@ export default function AdminOverviewClient() {
 
   const updatedTime = data ? new Date(data.generatedAt).toLocaleTimeString(lang === "he" ? "he-IL" : "en-GB", { hour: "2-digit", minute: "2-digit" }) : "";
 
+  const rev = data?.revenue;
+  const dec = data?.decision;
+  const al = data?.alerts;
+  const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const signed = (n: number) => `${n >= 0 ? "+" : "−"}${money(Math.abs(n))}`;
+
+  const alertItems = al
+    ? [
+        { label: t.aPastDue, count: al.pastDueCount },
+        { label: t.aScheduled, count: al.scheduledCancelCount },
+        { label: t.aEnded, count: al.endedThisWeekCount },
+        { label: t.aUnmapped, count: al.unmappedPriceCount },
+      ].filter((x) => x.count > 0)
+    : [];
+
   return (
     <>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: TOKENS.ink }}>{t.title}</h1>
         {data && (
-          <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 4 }}>
+          <div style={{ fontSize: 12, color: TOKENS.inkFaint, marginTop: 4 }}>
             {t.generatedAtLabel} · {updatedTime}
+            {data.businessTz ? ` · ${data.businessTz}` : ""}
           </div>
         )}
       </div>
 
-      {loading && <div style={{ padding: 32, textAlign: "center", color: "#6B7280" }}>{t.loading}</div>}
+      {loading && <div style={{ padding: 32, textAlign: "center", color: TOKENS.inkSoft }}>{t.loading}</div>}
       {error && (
         <div style={{ background: "#FEF2F2", color: "#991B1B", padding: 12, borderRadius: 8, marginBottom: 16, fontSize: 14 }}>
           {error}
         </div>
       )}
 
-      {data && (
+      {data && rev && dec && (
         <>
+          {/* §3.1 Money triplet */}
+          <SectionGrid cols={3}>
+            <Kpi
+              label={t.mCurrentMrr}
+              value={money(rev.mrrUsd)}
+              accent={TOKENS.teal}
+              detail={countAndTiers(rev.payingCustomers, rev.payingByTier)}
+              note={rev.atRiskMrrUsd > 0 ? `${money(rev.atRiskMrrUsd)} ${t.atRisk}` : undefined}
+              noteColor={TOKENS.danger}
+            />
+            <Kpi
+              label={t.mTrialMrr}
+              value={money(rev.trialingMrrUsd)}
+              accent={TOKENS.amber}
+              detail={countAndTiers(rev.trialingSubscriptions, rev.trialingByTier)}
+              note={t.potentialNote}
+            />
+            <Kpi
+              label={t.mNetNew}
+              value={signed(rev.netNewMrrUsd)}
+              accent={rev.netNewMrrUsd < 0 ? TOKENS.danger : TOKENS.purple}
+              detail={`+${money(rev.newMrrUsd)} · −${money(rev.churnedMrrUsd)}`}
+              detailLtr
+            />
+          </SectionGrid>
+
+          {/* §3.2 Four operational KPIs */}
+          <SectionGrid cols={4}>
+            <Kpi label={t.kPaying} value={rev.payingCustomers} accent={TOKENS.ink}
+                 detail={`${rev.payingSubscriptions} ${t.subs}`} detailLtr />
+            <Kpi label={t.kNew} value={rev.newCustomersThisMonth} accent={TOKENS.teal} />
+            <Kpi label={t.kChurn} value={`${dec.monthlyChurnPct}%`}
+                 accent={dec.monthlyChurnPct > 0 ? TOKENS.danger : TOKENS.ink}
+                 detail={`${rev.churnedCustomersThisMonth} ${t.churnedThisMonth}`} />
+            <Kpi label={t.kTrialing} value={rev.trialingSubscriptions} accent={TOKENS.amber}
+                 detail={countAndTiers(rev.trialingSubscriptions, rev.trialingByTier)} />
+          </SectionGrid>
+
+          {/* §13 Three decision metrics */}
+          <SectionGrid cols={3}>
+            <Kpi
+              label={t.dConversion}
+              value={dec.trialConversionPct == null ? "—" : `${dec.trialConversionPct}%`}
+              accent={TOKENS.purple}
+              detail={dec.trialConversionPct == null ? t.noData : `${dec.trialResolvedCount} ${t.resolvedTrials}`}
+            />
+            <Kpi label={t.dArpu} value={money(dec.arpuUsd)} accent={TOKENS.teal} detail={t.perCustomer} />
+            <Kpi
+              label={t.dPayback}
+              value={dec.cacPaybackMonths == null ? "—" : `${dec.cacPaybackMonths} ${t.months}`}
+              accent={TOKENS.ink}
+              detail={t.cacBasis.replace("$%", `$${dec.cacUsd}`).replace("%m", `${Math.round(dec.grossMargin * 100)}%`)}
+              detailLtr
+            />
+          </SectionGrid>
+
+          {/* §3.6 Alerts — only when something needs attention */}
+          {alertItems.length > 0 && (
+            <div style={{ ...cardStyle, marginBottom: 16, borderColor: "#FECACA", background: "#FEF2F2" }}>
+              <div style={{ ...sectionTitleStyle, color: "#991B1B" }}>{t.alertsTitle}</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {alertItems.map((a) => (
+                  <div key={a.label} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 999, border: "1px solid #FCA5A5", background: "#FFFFFF", fontSize: 13, color: "#7F1D1D" }}>
+                    <span style={{ fontWeight: 500 }}>{a.label}</span>
+                    <span style={{ fontWeight: 700, color: TOKENS.danger }}>{a.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Existing operational sections kept below the money layer */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
-            <BigCard label={t.cardMRR} value={`$${data.revenue.mrrUsd.toFixed(2)}`} accent="#0EA5A5" sub={countAndTiers(data.revenue.payingSubscriptions, data.revenue.payingByTier)} subLtr />
-            <BigCard label={t.cardFuture} value={`$${data.revenue.trialingMrrUsd.toFixed(2)}`} accent="#F59E0B" sub={countAndTiers(data.revenue.trialingSubscriptions, data.revenue.trialingByTier)} subLtr />
-            <BigCard label={t.cardTotal} value={`$${data.revenue.totalMrrUsd.toFixed(2)}`} accent="#7C3AED" sub={t.perYear.replace("%", data.revenue.totalArrUsd.toFixed(0))} />
-            <BigCard label={t.cardTotalUsers} value={data.users.total} accent="#111827" sub={`+${data.users.signupsWeek} ${t.thisWeek}`} />
-            <BigCard label={t.cardSignupsToday} value={data.users.signupsToday} accent="#0EA5A5" />
-            <BigCard label={t.cardSignupsWeek} value={data.users.signupsWeek} accent="#0EA5A5" />
-            <BigCard label={t.cardSearchesToday} value={data.activity.searchesToday} accent="#111827" sub={`${data.activity.searchesWeek} ${t.thisWeek}`} />
+            <Kpi label={STRINGS[lang].title === "סקירה" ? "סך משתמשים" : "Total users"} value={data.users.total} accent={TOKENS.ink} detail={`+${data.users.signupsWeek} ${t.thisWeek}`} />
+            <Kpi label={lang === "he" ? "הרשמות · 7 ימים" : "Signups · 7 days"} value={data.users.signupsWeek} accent={TOKENS.teal} />
+            <Kpi label={lang === "he" ? "חיפושים היום" : "Searches today"} value={data.activity.searchesToday} accent={TOKENS.ink} detail={`${data.activity.searchesWeek} ${t.thisWeek}`} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
+          <div className="ov-two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
             <div style={cardStyle}>
               <div style={sectionTitleStyle}>{t.funnelTitle}</div>
-              <FunnelRow label={t.funnelAnonymous} value={data.funnel.anonymousMonth} color="#9CA3AF" max={Math.max(data.funnel.anonymousMonth, 1)} />
-              <FunnelRow label={t.funnelSignedUp} value={data.funnel.signedUpMonth} color="#0EA5A5" max={Math.max(data.funnel.anonymousMonth, 1)} />
-              <FunnelRow label={t.funnelPaid} value={data.funnel.paidMonth} color="#7C3AED" max={Math.max(data.funnel.anonymousMonth, 1)} />
+              <FunnelRow label={t.funnelAnonymous} value={data.funnel.anonymousMonth} color={TOKENS.inkFaint} max={Math.max(data.funnel.anonymousMonth, 1)} />
+              <FunnelRow label={t.funnelSignedUp} value={data.funnel.signedUpMonth} color={TOKENS.tealBright} max={Math.max(data.funnel.anonymousMonth, 1)} />
+              <FunnelRow label={t.funnelPaid} value={data.funnel.paidMonth} color={TOKENS.purpleBright} max={Math.max(data.funnel.anonymousMonth, 1)} />
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px dashed #E5E7EB" }}>
-                <span style={{ fontSize: 12, color: "#6B7280" }}>{t.funnelAnonToSignup}</span>
-                <span style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>{data.funnel.anonToSignup}%</span>
+                <span style={{ fontSize: 12, color: TOKENS.inkSoft }}>{t.funnelAnonToSignup}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{data.funnel.anonToSignup}%</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-                <span style={{ fontSize: 12, color: "#6B7280" }}>{t.funnelSignupToPaid}</span>
-                <span style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>{data.funnel.signupToPaid}%</span>
+                <span style={{ fontSize: 12, color: TOKENS.inkSoft }}>{t.funnelSignupToPaid}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{data.funnel.signupToPaid}%</span>
               </div>
             </div>
 
             <div style={cardStyle}>
               <div style={sectionTitleStyle}>{t.topLangsTitle}</div>
               {data.activity.byLang.length === 0 ? (
-                <div style={{ color: "#9CA3AF", fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
+                <div style={{ color: TOKENS.inkFaint, fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
               ) : (
                 <div>
                   {data.activity.byLang.slice(0, 8).map((row) => {
@@ -216,10 +362,10 @@ export default function AdminOverviewClient() {
                       <div key={row.lang} style={{ marginBottom: 8 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
                           <span style={{ fontSize: 13, color: "#374151" }}>{LANG_NAMES[row.lang] ?? row.lang}</span>
-                          <span style={{ fontSize: 13, color: "#6B7280" }}>{row.count}</span>
+                          <span style={{ fontSize: 13, color: TOKENS.inkSoft }}>{row.count}</span>
                         </div>
                         <div style={{ background: "#F3F4F6", borderRadius: 4, height: 6, overflow: "hidden" }}>
-                          <div style={{ width: `${pct}%`, height: "100%", background: "#0EA5A5" }} />
+                          <div style={{ width: `${pct}%`, height: "100%", background: TOKENS.tealBright }} />
                         </div>
                       </div>
                     );
@@ -232,17 +378,17 @@ export default function AdminOverviewClient() {
           <div style={{ ...cardStyle, marginBottom: 24 }}>
             <div style={sectionTitleStyle}>{t.topWordsTitle}</div>
             {data.activity.topWords.length === 0 ? (
-              <div style={{ color: "#9CA3AF", fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
+              <div style={{ color: TOKENS.inkFaint, fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
                 {data.activity.topWords.map((w, i) => (
-                  <div key={`${w.lang}_${w.word}_${i}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 10px", background: "#F9FAFB", borderRadius: 6, fontSize: 13 }}>
+                  <div key={`${w.lang}_${w.word}_${i}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 10px", background: TOKENS.bg, borderRadius: 6, fontSize: 13 }}>
                     <span>
-                      <span style={{ color: "#9CA3AF", marginInlineEnd: 8 }}>#{i + 1}</span>
-                      <span style={{ fontWeight: 500, color: "#111827" }}>{w.word}</span>
-                      <span style={{ color: "#9CA3AF", marginInlineStart: 6, fontSize: 11 }}>{w.lang}</span>
+                      <span style={{ color: TOKENS.inkFaint, marginInlineEnd: 8 }}>#{i + 1}</span>
+                      <span style={{ fontWeight: 500, color: TOKENS.ink }}>{w.word}</span>
+                      <span style={{ color: TOKENS.inkFaint, marginInlineStart: 6, fontSize: 11 }}>{w.lang}</span>
                     </span>
-                    <span style={{ color: "#6B7280", fontWeight: 600 }}>{w.count}</span>
+                    <span style={{ color: TOKENS.inkSoft, fontWeight: 600 }}>{w.count}</span>
                   </div>
                 ))}
               </div>
@@ -257,8 +403,8 @@ export default function AdminOverviewClient() {
                   <div key={code} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 999, border: "1px solid #E5E7EB", background: "#FFFFFF", fontSize: 13, color: "#374151" }}>
                     {code === "?" ? <span>🌐</span> : <FlagImg iso2={code} />}
                     <span style={{ fontWeight: 500 }}>{code}</span>
-                    <span style={{ color: "#9CA3AF" }}>·</span>
-                    <span style={{ color: "#6B7280" }}>{count}</span>
+                    <span style={{ color: TOKENS.inkFaint }}>·</span>
+                    <span style={{ color: TOKENS.inkSoft }}>{count}</span>
                   </div>
                 ))}
               </div>
@@ -266,15 +412,13 @@ export default function AdminOverviewClient() {
           )}
         </>
       )}
+      <style>{OV_CSS}</style>
     </>
   );
 }
 
-// Paying subscribers by real tier, e.g. "3 Clear · 4 Family · 2 Deep".
-// Only non-zero tiers, brand-order (Clear, Deep, Family, Schools). Labels
-// stay Latin (brand rule), so the caller renders this LTR to avoid the
-// numbers scrambling in the RTL admin.
-function tierBreakdown(t?: { clear: number; deep: number; family: number; schools: number }): string {
+// Paying subscribers by real tier, brand-order, non-zero only.
+function tierBreakdown(t?: ByTier): string {
   if (!t) return "";
   const parts: string[] = [];
   if (t.clear)   parts.push(`${t.clear} Clear`);
@@ -284,20 +428,51 @@ function tierBreakdown(t?: { clear: number; deep: number; family: number; school
   return parts.join(" · ");
 }
 
-// "11 subs · 5 Clear · 2 Deep · 4 Family" — the subscriber count next to its
-// tier split. All-Latin so it renders LTR cleanly in the RTL admin.
-function countAndTiers(count: number, t?: { clear: number; deep: number; family: number; schools: number }): string {
+// "11 · 5 Clear · 2 Deep · 4 Family" — count + tier split, all-Latin so it
+// renders LTR cleanly in the RTL admin.
+function countAndTiers(count: number, t?: ByTier): string {
   const tiers = tierBreakdown(t);
-  const head = `${count} ${count === 1 ? "sub" : "subs"}`;
-  return tiers ? `${head} · ${tiers}` : head;
+  return tiers ? `${count} · ${tiers}` : `${count}`;
 }
 
-function BigCard({ label, value, accent, sub, subLtr }: { label: string; value: string | number; accent?: string; sub?: string; subLtr?: boolean }) {
+function SectionGrid({ cols, children }: { cols: number; children: React.ReactNode }) {
   return (
-    <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
-      <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", lineHeight: 1 }}>{value}</div>
-      {sub && <div dir={subLtr ? "ltr" : undefined} style={{ fontSize: 11, color: "#9CA3AF", marginTop: 6 }}>{sub}</div>}
+    <div
+      className="ov-grid"
+      style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 16, marginBottom: 16 }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// Centered KPI card (spec §1). Value 28px in an AA-safe hue; the detail row
+// is a FIXED-HEIGHT 18px slot with ellipsis so a 2-item card and a 4-item
+// card stay the same height and the grid never jitters.
+function Kpi({ label, value, accent, detail, detailLtr, note, noteColor }: {
+  label: string;
+  value: string | number;
+  accent?: string;
+  detail?: string;
+  detailLtr?: boolean;
+  note?: string;
+  noteColor?: string;
+}) {
+  return (
+    <div style={{ background: TOKENS.surface, border: `1px solid ${TOKENS.rule}`, borderRadius: 12, padding: 16, textAlign: "center" }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: TOKENS.inkSoft, marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
+      <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? TOKENS.ink, lineHeight: 1 }}>{value}</div>
+      <div
+        dir={detailLtr ? "ltr" : undefined}
+        style={{ height: 18, lineHeight: "18px", marginTop: 6, fontSize: 11, color: TOKENS.inkFaint, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+      >
+        {detail ?? ""}
+      </div>
+      {note && (
+        <div style={{ marginTop: 2, fontSize: 11, fontWeight: 600, color: noteColor ?? TOKENS.inkFaint }} dir={noteColor === TOKENS.danger ? "ltr" : undefined}>
+          {note}
+        </div>
+      )}
     </div>
   );
 }
@@ -308,7 +483,7 @@ function FunnelRow({ label, value, color, max }: { label: string; value: number;
     <div style={{ marginBottom: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
         <span style={{ fontSize: 13, color: "#374151" }}>{label}</span>
-        <span style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>{value}</span>
+        <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{value}</span>
       </div>
       <div style={{ background: "#F3F4F6", borderRadius: 4, height: 8, overflow: "hidden" }}>
         <div style={{ width: `${pct}%`, height: "100%", background: color }} />
@@ -318,8 +493,8 @@ function FunnelRow({ label, value, color, max }: { label: string; value: number;
 }
 
 const cardStyle: React.CSSProperties = {
-  background: "white",
-  border: "1px solid #E5E7EB",
+  background: TOKENS.surface,
+  border: `1px solid ${TOKENS.rule}`,
   borderRadius: 12,
   padding: 16,
 };
@@ -327,8 +502,20 @@ const cardStyle: React.CSSProperties = {
 const sectionTitleStyle: React.CSSProperties = {
   fontSize: 12,
   fontWeight: 600,
-  color: "#6B7280",
+  color: TOKENS.inkSoft,
   marginBottom: 12,
   letterSpacing: 0.5,
   textTransform: "uppercase",
 };
+
+// The fixed 3/4-col KPI grids collapse to 2 columns on tablet and 1 on
+// phones so the 28px values never crush together.
+const OV_CSS = `
+@media (max-width: 900px) {
+  .ov-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .ov-two { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 520px) {
+  .ov-grid { grid-template-columns: 1fr !important; }
+}
+`;

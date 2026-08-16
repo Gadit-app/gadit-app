@@ -42,8 +42,9 @@ const STRINGS = {
     partners: "Partners",
     deletions: "Deletions",
     wordsets: "Word sets",
-    secMarketing: "Marketing & growth",
-    secUsers: "Subscribers",
+    secMarketing: "Marketing",
+    secGrowth: "Growth",
+    secUsers: "Users",
     secFinance: "Finance",
     secContent: "Content & support",
     backToApp: "Back to app",
@@ -68,8 +69,9 @@ const STRINGS = {
     partners: "שותפים",
     deletions: "מחיקות",
     wordsets: "מערכי מילים",
-    secMarketing: "שיווק וצמיחה",
-    secUsers: "מנויים",
+    secMarketing: "שיווק",
+    secGrowth: "צמיחה",
+    secUsers: "משתמשים",
     secFinance: "כספים",
     secContent: "תוכן ותמיכה",
     backToApp: "חזרה לאפליקציה",
@@ -94,6 +96,9 @@ const NAV_SECTIONS: NavSection[] = [
   { titleKey: null, items: [
     { href: "/admin",           labelKey: "overview",  icon: <IconHome />   },
   ] },
+  // Group order is locked by the admin spec (§9). Only pages that exist
+  // are listed — the spec's not-yet-built pages (leads / referrals / posts /
+  // traffic / billing / settings) are the next build stage, not dead links.
   { titleKey: "secUsers", items: [
     { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
     { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
@@ -102,6 +107,8 @@ const NAV_SECTIONS: NavSection[] = [
   { titleKey: "secMarketing", items: [
     { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget /> },
     { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone /> },
+  ] },
+  { titleKey: "secGrowth", items: [
     { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake /> },
   ] },
   { titleKey: "secFinance", items: [
@@ -258,6 +265,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               background: "#111827",
               color: "#F9FAFB",
               padding: "24px 16px",
+              fontFamily: "Heebo, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
               display: "flex",
               flexDirection: "column",
               gap: 6,
@@ -305,11 +313,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                     <div
                       className="admin-nav-section-title"
                       style={{
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontWeight: 700,
-                        letterSpacing: 0.6,
-                        textTransform: "uppercase",
-                        color: "#6B7280",
+                        // Hebrew has no case, so uppercase is meaningless there
+                        // (spec §9). Keep it for the Latin admin only.
+                        letterSpacing: isRtl ? "0.04em" : "0.05em",
+                        textTransform: isRtl ? "none" : "uppercase",
+                        color: "#9CA3AF",
                         padding: "14px 10px 4px",
                       }}
                     >
@@ -334,12 +344,18 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                           fontSize: 13,
                           fontWeight: 600,
                           textDecoration: "none",
-                          color: active ? "#FFFFFF" : "#9CA3AF",
-                          background: active ? "#0EA5A5" : "transparent",
+                          // Active = subtle teal wash + white text + teal icon
+                          // + a 3px indicator on the item's inner edge (spec
+                          // §9): a solid teal fill reads as noise across 18
+                          // items. transparent border when inactive keeps the
+                          // text from shifting on select.
+                          color: active ? "#FFFFFF" : "#E5E7EB",
+                          background: active ? "rgba(14,165,165,0.14)" : "transparent",
+                          borderInlineEnd: `3px solid ${active ? "#0EA5A5" : "transparent"}`,
                           transition: "background 0.15s, color 0.15s",
                         }}
                       >
-                        <span style={{ width: 16, height: 16, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ width: 16, height: 16, display: "inline-flex", alignItems: "center", justifyContent: "center", color: active ? "#0EA5A5" : "#E5E7EB" }}>
                           {item.icon}
                         </span>
                         <span>{t[item.labelKey]}</span>
@@ -364,7 +380,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                   fontSize: 13,
                   fontWeight: 600,
                   textDecoration: "none",
-                  color: "#9CA3AF",
+                  color: "#E5E7EB",
                 }}
               >
                 <span style={{ width: 16, height: 16, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
@@ -384,7 +400,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                   fontWeight: 600,
                   background: "transparent",
                   border: "none",
-                  color: "#9CA3AF",
+                  color: "#E5E7EB",
                   cursor: "pointer",
                   textAlign: "start",
                 }}
