@@ -25,6 +25,7 @@ import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
@@ -765,11 +766,13 @@ const NAV_COPY: Record<string, {
   },
 };
 
-const LANG_NATIVE: Record<string, string> = {
-  he: "עברית", en: "English", ar: "العربية", ru: "Русский", de: "Deutsch",
-  cs: "Čeština", es: "Español", hi: "हिन्दी", am: "አማርኛ", it: "Italiano",
-  ja: "日本語", sk: "Slovenčina",
-};
+// All 22 UI languages, native names, straight from the shared LANGUAGES
+// registry so the family settings picker never drifts behind new languages
+// (Gadi 2026-08-16: it was hardcoded to 12). Same source the main switcher
+// uses.
+const LANG_NATIVE: Record<string, string> = Object.fromEntries(
+  LANGUAGES.map((l) => [l.code, l.label]),
+);
 
 function greetingFor(n: (typeof NAV_COPY)["en"], hour: number): string {
   if (hour < 5) return n.greetNight;
@@ -1445,6 +1448,12 @@ function NotifSettings({
   const [mode, setMode] = useState<"instant" | "daily">("instant");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
+  // The real on/off value only arrives after the notify-prefs fetch. Until
+  // then the switch must NOT render a definitive OFF that then snaps ON when
+  // the fetch lands (Gadi 2026-08-16: the toggle looked unstable, flashing
+  // closed then opening). We gate the switch on `loaded` and mount it fresh,
+  // so it appears already in its true state with no self-animating flip.
+  const [loaded, setLoaded] = useState(false);
   // Whether THIS device has a live push subscription (null = still
   // checking). Push subscriptions are per-device, so a phone can need
   // turning on even when alerts are already enabled from a laptop.
@@ -1455,21 +1464,26 @@ function NotifSettings({
     (async () => {
       const sub = await hasLocalPushSubscription();
       if (!cancelled) setLocalSubscribed(sub);
-      if (!user) return;
-      try {
-        const idToken = await user.getIdToken();
-        const res = await fetch("/api/family/notify-prefs", {
-          headers: { Authorization: `Bearer ${idToken}` },
-        });
-        if (!res.ok || cancelled) return;
-        const data = await res.json();
-        if (data?.prefs && !cancelled) {
-          setEnabled(!!data.prefs.enabled);
-          setMode(data.prefs.mode === "daily" ? "daily" : "instant");
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          const res = await fetch("/api/family/notify-prefs", {
+            headers: { Authorization: `Bearer ${idToken}` },
+          });
+          if (res.ok && !cancelled) {
+            const data = await res.json();
+            if (data?.prefs) {
+              setEnabled(!!data.prefs.enabled);
+              setMode(data.prefs.mode === "daily" ? "daily" : "instant");
+            }
+          }
+        } catch {
+          /* nice-to-have */
         }
-      } catch {
-        /* nice-to-have */
       }
+      // Always resolve the loading gate, even for signed-out or failed
+      // fetches, so the switch renders its (default OFF) state cleanly.
+      if (!cancelled) setLoaded(true);
     })();
     return () => { cancelled = true; };
   }, [user]);
@@ -1553,28 +1567,51 @@ function NotifSettings({
       <label
         style={{
           display: "flex", alignItems: "center", gap: 12, marginTop: 14,
-          cursor: busy ? "default" : "pointer",
+          cursor: busy || !loaded ? "default" : "pointer",
         }}
       >
-        <span
-          role="switch"
-          aria-checked={enabled}
-          onClick={onToggle}
-          style={{
-            flex: "0 0 auto", width: 44, height: 26, borderRadius: 999,
-            background: enabled ? TEAL : "#D6D3D1", position: "relative",
-            transition: "background 160ms ease", opacity: busy ? 0.6 : 1,
-          }}
-        >
+        {!loaded ? (
+          // Loading placeholder — dimmed, non-interactive, so no false OFF
+          // flashes before the real value lands.
           <span
+            role="switch"
+            aria-checked={false}
+            aria-busy="true"
             style={{
-              position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3,
-              width: 20, height: 20, borderRadius: "50%", background: "#fff",
-              transition: "inset-inline-start 160ms ease",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+              flex: "0 0 auto", width: 44, height: 26, borderRadius: 999,
+              background: "#E7E5E4", position: "relative", opacity: 0.5,
+              cursor: "default",
             }}
-          />
-        </span>
+          >
+            <span
+              style={{
+                position: "absolute", top: 3, insetInlineStart: 3,
+                width: 20, height: 20, borderRadius: "50%", background: "#fff",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+              }}
+            />
+          </span>
+        ) : (
+          <span
+            role="switch"
+            aria-checked={enabled}
+            onClick={onToggle}
+            style={{
+              flex: "0 0 auto", width: 44, height: 26, borderRadius: 999,
+              background: enabled ? TEAL : "#D6D3D1", position: "relative",
+              transition: "background 160ms ease", opacity: busy ? 0.6 : 1,
+            }}
+          >
+            <span
+              style={{
+                position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3,
+                width: 20, height: 20, borderRadius: "50%", background: "#fff",
+                transition: "inset-inline-start 160ms ease",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+              }}
+            />
+          </span>
+        )}
         <span style={{ fontSize: 14, fontWeight: 600, color: "#292524" }}>{t.enable}</span>
       </label>
 

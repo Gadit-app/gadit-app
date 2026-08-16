@@ -447,8 +447,9 @@ function isSchoolsPriceId(priceId: string): boolean {
 
 // Bootstrap the family doc + the owner's member record on the very first
 // Family checkout. Idempotent: re-runs no-op via merge. Owner's role is
-// "father" by default; user can change it on /family afterwards. familyId
-// is the owner's Firebase Auth uid (mirrors Yooniz).
+// "mother" by default (Gadi 2026-08-16: ~99% of family sign-ups are
+// mothers, so default to mother; anyone can change it on /family after).
+// familyId is the owner's Firebase Auth uid (mirrors Yooniz).
 async function bootstrapFamily(ownerUid: string, plan: "monthly" | "yearly") {
   const db = getAdminDb();
   const familyRef = db.collection("families").doc(ownerUid);
@@ -462,7 +463,7 @@ async function bootstrapFamily(ownerUid: string, plan: "monthly" | "yearly") {
     // Owner's own member doc — they're a full user inside their own family.
     await familyRef.collection("members").doc(ownerUid).set({
       id: ownerUid,
-      role: "father",
+      role: "mother",
       name: "",
       colorIndex: 0,
       isOwner: true,

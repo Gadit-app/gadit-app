@@ -103,7 +103,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   ar: {
     subject: "تم قبولك. هذا هو رابط شريك Gadit الخاص بك 🤝",
     greeting: "يسعدنا انضمامك إلى برنامج شركاء Gadit 🤝",
-    opening: "هذا كل ما تحتاجه للبدء. Gadit قاموس ذكي وآمن للأطفال بأربع عشرة لغة، مع أمثلة وصور ودفتر شخصي يساعد الطفل على فهم الكلمات فهماً حقيقياً.",
+    opening: "هذا كل ما تحتاجه للبدء. Gadit قاموس ذكي وآمن للأطفال بـ22 لغة، مع أمثلة وصور ودفتر شخصي يساعد الطفل على فهم الكلمات فهماً حقيقياً.",
     noteUnderLink: "كل من يسجّل ويدفع من خلاله يُحتسب لك تلقائياً. الرابط لا يُظهر اسمك أبداً.",
     commissionLine: "عمولتك: {pctY1}% من كل دفعة في السنة الأولى، و{pctAfter}% بعد ذلك طوال بقاء العائلة معنا.",
     commissionExplain: "على سبيل المثال، عائلة واحدة تنضم إلى خطة العائلة وتبقى سنة كاملة تساوي لك أكثر من {year1}. وطالما بقيت تلك العائلة مشتركة، نستمر نحن في Gadit بدفع عمولتك على اشتراكها شهراً بعد شهر. ليست دفعة لمرة واحدة، بل دخل يستمر.",
@@ -120,7 +120,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   ru: {
     subject: "Вы в деле. Вот ваша партнёрская ссылка Gadit 🤝",
     greeting: "Рады видеть вас в Партнёрской программе Gadit 🤝",
-    opening: "Здесь всё, что нужно для старта. Gadit это умный, безопасный для детей словарь на 14 языках, с примерами, картинками и личной тетрадью, которая помогает ребёнку по-настоящему понять слова.",
+    opening: "Здесь всё, что нужно для старта. Gadit это умный, безопасный для детей словарь на 22 языках, с примерами, картинками и личной тетрадью, которая помогает ребёнку по-настоящему понять слова.",
     noteUnderLink: "Каждый, кто регистрируется и оплачивает по ней, автоматически засчитывается вам. Ссылка никогда не показывает ваше имя.",
     commissionLine: "Ваша комиссия: {pctY1}% с каждого платежа в первый год и {pctAfter}% после этого всё время, пока семья остаётся с нами.",
     commissionExplain: "Например, одна семья, которая подключает план Family и остаётся на год, приносит вам больше {year1}. И пока эта семья сохраняет подписку, мы в Gadit продолжаем платить вам комиссию с её подписки, месяц за месяцем. Это не разовая выплата, а доход, который продолжается.",
@@ -205,7 +205,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   cs: {
     subject: "Jste v tom. Tady je váš partnerský odkaz Gadit 🤝",
     greeting: "Jsme rádi, že jste součástí Partnerského programu Gadit 🤝",
-    opening: "Tady je všechno, co potřebujete k rozjezdu. Gadit je chytrý slovník bezpečný pro děti ve 14 jazycích, s příklady, obrázky a osobním sešitem, který dítěti pomáhá slovům opravdu porozumět.",
+    opening: "Tady je všechno, co potřebujete k rozjezdu. Gadit je chytrý slovník bezpečný pro děti ve 22 jazycích, s příklady, obrázky a osobním sešitem, který dítěti pomáhá slovům opravdu porozumět.",
     noteUnderLink: "Každý, kdo se přes něj zaregistruje a zaplatí, se automaticky připíše vám. Odkaz nikdy neukazuje vaše jméno.",
     commissionLine: "Vaše provize: {pctY1} % z každé platby v prvním roce a {pctAfter} % poté po celou dobu, kdy rodina zůstane.",
     commissionExplain: "Například jedna rodina, která se připojí k plánu Family a zůstane rok, má pro vás hodnotu přes {year1}. A po celou dobu, kdy má tato rodina předplatné, vám my v Gaditu dál platíme provizi z jejího předplatného, měsíc po měsíci. Ne jednorázová výplata, ale příjem, který pokračuje.",
@@ -222,7 +222,7 @@ export const DEFAULT_WELCOME_CONFIG: WelcomeConfig = {
   sk: {
     subject: "Ste súčasťou. Tu je váš partnerský odkaz Gadit 🤝",
     greeting: "Sme radi, že ste v Partnerskom programe Gadit 🤝",
-    opening: "Tu je všetko, čo potrebujete na začiatok. Gadit je inteligentný slovník bezpečný pre deti v 20 jazykoch, s príkladmi, obrázkami a osobným zošitom, ktorý pomáha dieťaťu naozaj porozumieť slovám.",
+    opening: "Tu je všetko, čo potrebujete na začiatok. Gadit je inteligentný slovník bezpečný pre deti v 22 jazykoch, s príkladmi, obrázkami a osobným zošitom, ktorý pomáha dieťaťu naozaj porozumieť slovám.",
     noteUnderLink: "Každý, kto sa cezeň zaregistruje a zaplatí, sa automaticky pripíše vám. Odkaz nikdy nezobrazuje vaše meno.",
     commissionLine: "Vaša provízia: {pctY1}% z každej platby v prvom roku a {pctAfter}% potom, kým rodina zostáva.",
     commissionExplain: "Napríklad jedna rodina, ktorá si predplatí plán Families a zostane rok, má pre vás hodnotu viac ako {year1}. A kým táto rodina zostáva predplatená, my v Gadit vám naďalej vyplácame províziu z jej predplatného, mesiac čo mesiac. Nie jednorazová výplata, ale príjem, ktorý pokračuje.",
@@ -439,20 +439,37 @@ function esc(s: string): string {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-type Vars = { name: string; pctY1: number; pctAfter: number; year1: string; code: string; link: string };
-
-function applyVars(s: string, v: Vars): string {
-  return esc(s)
-    .replace(/\{name\}/g, esc(v.name || ""))
-    .replace(/\{pctY1\}/g, String(v.pctY1))
-    .replace(/\{pctAfter\}/g, String(v.pctAfter))
-    .replace(/\{year1\}/g, esc(v.year1 || ""))
-    .replace(/\{code\}/g, esc(v.code))
-    .replace(/\{link\}/g, esc(v.link));
+// Wrap runs of Latin letters / digits / currency / percent in a Unicode
+// First-Strong Isolate (U+2068 … U+2069 PDI) so the RTL bidi algorithm
+// doesn't scramble "72 ₪", "$60", "30%", "Gadit", or the colon before them
+// when they sit inside Hebrew/Arabic text (Gadi 2026-08-16: partner emails
+// read out of order for RTL readers). Run on RAW text BEFORE escaping, so
+// the isolate marks never land inside an HTML entity. ":" is deliberately
+// left out of the run so it stays anchored in the RTL flow.
+function isolateLtr(s: string): string {
+  return s.replace(
+    /[A-Za-z0-9$₪€£][A-Za-z0-9$₪€£%@/._\- ]*[A-Za-z0-9$₪€£%]|[A-Za-z0-9$₪€£%]/g,
+    (m) => `⁨${m}⁩`,
+  );
 }
 
-function applyVarsHtml(s: string, v: Vars): string {
-  return applyVars(s, v).replace(/\r\n/g, "\n").replace(/\n/g, "<br>");
+type Vars = { name: string; pctY1: number; pctAfter: number; year1: string; code: string; link: string };
+
+function applyVars(s: string, v: Vars, rtl = false): string {
+  // Inject raw values first, isolate LTR runs (for RTL), THEN escape — so
+  // isolation sees clean text and escaping never splits an isolate.
+  const injected = s
+    .replace(/\{name\}/g, v.name || "")
+    .replace(/\{pctY1\}/g, String(v.pctY1))
+    .replace(/\{pctAfter\}/g, String(v.pctAfter))
+    .replace(/\{year1\}/g, v.year1 || "")
+    .replace(/\{code\}/g, v.code)
+    .replace(/\{link\}/g, v.link);
+  return esc(rtl ? isolateLtr(injected) : injected);
+}
+
+function applyVarsHtml(s: string, v: Vars, rtl = false): string {
+  return applyVars(s, v, rtl).replace(/\r\n/g, "\n").replace(/\n/g, "<br>");
 }
 
 type WelcomePartner = Pick<Partner, "code" | "name" | "email" | "dashboardToken" | "rateYearOne" | "rateLifetime">;
@@ -501,12 +518,15 @@ export function buildWelcomeEmail(
   const linkLabel = L.linkLabel;
   const codeLabel = L.codeLabel;
   const cta = L.ctaLabel;
-  const t = (s: string) => applyVars(s, vars);
-  const tb = (s: string) => applyVarsHtml(s, vars);
+  // Body + signature isolate LTR runs for RTL; the subject line does not
+  // (mail clients bidi-order subjects themselves, and stray isolate marks
+  // can show as boxes in some subject renderers).
+  const t = (s: string) => applyVars(s, vars, rtl);
+  const tb = (s: string) => applyVarsHtml(s, vars, rtl);
   const dir = rtl ? "rtl" : "ltr";
   const align = rtl ? "right" : "left";
 
-  const subject = t(c.subject).replace(/&amp;/g, "&").replace(/\s*\n\s*/g, " ");
+  const subject = applyVars(c.subject, vars, false).replace(/&amp;/g, "&").replace(/\s*\n\s*/g, " ");
 
   const tips = [c.tip1, c.tip2, c.tip3].filter((x) => x && x.trim());
   const tipsHtml = tips.length
