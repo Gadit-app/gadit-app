@@ -29,6 +29,7 @@ import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
 import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
 import { useHref } from "@/lib/href";
+import { LANGUAGES } from "@/lib/i18n";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
 import {
@@ -1511,11 +1512,12 @@ export function SchoolsClient() {
   );
 }
 
-const SCHOOL_LANG_NATIVE: Record<string, string> = {
-  he: "עברית", en: "English", ar: "العربية", ru: "Русский", de: "Deutsch",
-  cs: "Čeština", es: "Español", hi: "हिन्दी", am: "አማርኛ", it: "Italiano",
-  ja: "日本語", sk: "Slovenčina",
-};
+// All 22 UI languages from the shared registry, so the classroom-language
+// picker never drifts behind new languages (Gadi 2026-08-16: was hardcoded
+// to 12). Same source the main switcher + family picker use.
+const SCHOOL_LANG_NATIVE: Record<string, string> = Object.fromEntries(
+  LANGUAGES.map((l) => [l.code, l.label]),
+);
 
 function SchoolNavIcon({ name }: { name: "home" | "classrooms" | "students" | "settings" | "dictionary" }) {
   const p = { width: 19, height: 19, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
