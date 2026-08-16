@@ -25,6 +25,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { AppearancePicker } from "@/components/AppearancePicker";
 import { getCuratedPlayPool } from "@/lib/play-content/curated-play-words";
 import {
   loadPlayWords,
@@ -1984,6 +1985,7 @@ export function PlayPage() {
         </Link>
         <WbShellNav active="play" />
         <div className="wb-shell-actions">
+          {isKidPlayer && <AppearancePicker scope="kid" />}
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}

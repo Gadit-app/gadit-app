@@ -15,6 +15,7 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 import { useHref, wordPath } from "@/lib/href";
+import { AppearancePicker } from "@/components/AppearancePicker";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
@@ -197,6 +198,7 @@ export function HomePage() {
         </Link>
         <WbShellNav active="home" />
         <div className="wb-shell-actions">
+          {familyRole === "kid" && <AppearancePicker scope="kid" />}
           {user && (
             <ShareButton
               url="https://www.gadit.app/"

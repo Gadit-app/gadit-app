@@ -390,6 +390,7 @@ export function NotebookPage() {
         </Link>
         <WbShellNav active="notebook" />
         <div className="wb-shell-actions">
+          {isKid && <AppearancePicker scope="kid" />}
           <ShareButton
             url="https://www.gadit.app/"
             title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
@@ -425,7 +426,6 @@ export function NotebookPage() {
         <div className="wb-notebook-hero">
           <h1 className="wb-notebook-title">{pageTitle}</h1>
           <p className="wb-notebook-sub">{pageSubtitle}</p>
-          {isKid && <AppearancePicker scope="kid" />}
         </div>
 
         {items === null && !fetchError && (

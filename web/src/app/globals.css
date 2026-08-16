@@ -13732,20 +13732,31 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    kids area + adult dark can follow. `light` is the default (no attribute)
    and keeps the current look untouched. */
 
-/* The picker chips */
-.wordbook .wb-skin-picker { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 8px 0 2px; }
-.wordbook .wb-skin-chip {
-  display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; cursor: pointer;
-  border: 1.5px solid var(--rule, #E2E5EA); background: var(--surface, #fff); color: var(--ink, #0B1220);
-  font-family: var(--wb-sans); font-size: 13px; font-weight: 700;
-  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+/* The skin dropdown (lives in the topbar so it's reachable from every kid
+   screen). A tiny trigger; the menu lists the skins. */
+.wordbook .wb-skin-dd { position: relative; display: inline-flex; }
+.wordbook .wb-skin-dd-trigger {
+  display: inline-flex; align-items: center; gap: 4px; padding: 7px 9px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--rule, #E2E5EA); background: var(--surface, #fff); color: var(--ink, #0B1220);
+  transition: background 120ms ease, border-color 120ms ease;
 }
-.wordbook[dir="rtl"] .wb-skin-chip { font-family: var(--wb-he); }
-.wordbook .wb-skin-chip:active { transform: scale(0.96); }
-.wordbook .wb-skin-chip.is-active {
-  border-color: var(--accent, #0EA5A5);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #0EA5A5) 22%, transparent);
+.wordbook .wb-skin-dd-trigger:hover { border-color: var(--accent, #0EA5A5); }
+.wordbook .wb-skin-dd-menu {
+  position: absolute; inset-inline-end: 0; inset-block-start: calc(100% + 8px); z-index: 60;
+  min-width: 176px; padding: 6px; border-radius: 14px;
+  background: var(--surface, #fff); border: 1px solid var(--rule, #E2E5EA);
+  box-shadow: 0 12px 34px -12px rgba(16, 24, 40, 0.28);
+  display: flex; flex-direction: column; gap: 2px;
 }
+.wordbook .wb-skin-dd-item {
+  display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 9px; cursor: pointer;
+  border: none; background: transparent; color: var(--ink, #0B1220);
+  font-family: var(--wb-sans); font-size: 13.5px; font-weight: 650; text-align: start;
+}
+.wordbook[dir="rtl"] .wb-skin-dd-item { font-family: var(--wb-he); }
+.wordbook .wb-skin-dd-item:hover { background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, transparent); }
+.wordbook .wb-skin-dd-item.is-active { background: color-mix(in srgb, var(--accent, #0EA5A5) 16%, transparent); }
+.wordbook .wb-skin-dd-item .wb-skin-name { flex: 1; }
 .wordbook .wb-skin-emoji { font-size: 16px; line-height: 1; }
 .wordbook .wb-skin-dots { display: inline-flex; gap: 3px; }
 .wordbook .wb-skin-dots > span { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
@@ -13754,7 +13765,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    is added ONLY for kid profiles (the surfaces where a kid searches words +
    sees their word collection + plays), so adults are never skinned. light =
    no data-theme = current look untouched. */
-html[data-theme] .wb-kid-area { background: var(--skin-bg, var(--paper)); }
+html[data-theme] .wb-kid-area { background: var(--skin-bg, var(--paper)); background-size: cover; background-position: center; background-attachment: fixed; }
 html[data-theme] .wb-kid-area .wb-shell-topbar { background: transparent; border-bottom-color: color-mix(in srgb, var(--ink) 14%, transparent); }
 html[data-theme] .wb-kid-area .wb-wordmark,
 html[data-theme] .wb-kid-area .wb-shell-navlink,
@@ -13777,13 +13788,12 @@ html[data-theme] .wb-kid-area .wb-play-card-title,
 html[data-theme] .wb-kid-area .wb-notebook-card-word,
 html[data-theme] .wb-kid-area .wb-play-option { color: var(--ink); }
 html[data-theme] .wb-kid-area .wb-notebook-card-lang { color: var(--ink-muted); }
-html[data-theme] .wb-kid-area .wb-skin-chip { background: color-mix(in srgb, var(--surface) 82%, transparent); }
 html[data-theme] .wb-kid-area .wb-play-blank { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* Per-theme palettes (read by the rules above). */
 html[data-theme="dark"] .wb-kid-area { --skin-bg:#0B111B; --surface:#1B2432; --ink:#E5EAF1; --ink-soft:#AEB7C4; --ink-muted:#7E8896; --rule:#2A3444; --accent:#2DD4BF; --accent-2:#22D3EE; --accent-ink:#04241F; }
-html[data-theme="space"] .wb-kid-area { --skin-bg: radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9), transparent), radial-gradient(1.5px 1.5px at 72% 18%, rgba(255,255,255,.7), transparent), radial-gradient(2px 2px at 85% 62%, rgba(255,255,255,.85), transparent), radial-gradient(1.5px 1.5px at 38% 82%, rgba(255,255,255,.6), transparent), radial-gradient(1100px 700px at 82% -12%, rgba(124,58,237,.4), transparent), linear-gradient(160deg, #0B1030, #0A0A1F); --surface:#181A44; --ink:#EAF0FF; --ink-soft:#B7C0E6; --ink-muted:#8590C0; --rule:#2E326A; --accent:#22D3EE; --accent-2:#A855F7; --accent-ink:#041018; }
-html[data-theme="ocean"] .wb-kid-area { --skin-bg: radial-gradient(900px 520px at 15% 8%, rgba(56,189,248,.3), transparent), linear-gradient(160deg, #073349, #052330); --surface:#0C3D52; --ink:#E6FBFF; --ink-soft:#A9D8E4; --ink-muted:#7FB4C4; --rule:#14536A; --accent:#38BDF8; --accent-2:#0EA5A5; --accent-ink:#032630; }
-html[data-theme="candy"] .wb-kid-area { --skin-bg: linear-gradient(160deg, #FDECF7, #F3E8FF); --surface:#FFFFFF; --ink:#4A1D3F; --ink-soft:#86527A; --ink-muted:#A87E9E; --rule:#F3D0E6; --accent:#EC4899; --accent-2:#A855F7; --accent-ink:#FFFFFF; }
-html[data-theme="jungle"] .wb-kid-area { --skin-bg: radial-gradient(900px 520px at 85% 4%, rgba(34,197,94,.3), transparent), linear-gradient(160deg, #06341F, #052818); --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F; }
-html[data-theme="neon"] .wb-kid-area { --skin-bg: radial-gradient(800px 520px at 18% 0%, rgba(163,230,53,.16), transparent), radial-gradient(700px 520px at 92% 100%, rgba(244,114,182,.16), transparent), #0A0A14; --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14; }
+html[data-theme="space"] .wb-kid-area { --skin-bg: linear-gradient(rgba(11,16,48,.72), rgba(10,10,31,.82)), url(/skins/space.webp); --surface:#181A44; --ink:#EAF0FF; --ink-soft:#B7C0E6; --ink-muted:#8590C0; --rule:#2E326A; --accent:#22D3EE; --accent-2:#A855F7; --accent-ink:#041018; }
+html[data-theme="ocean"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,42,58,.66), rgba(5,35,48,.8)), url(/skins/ocean.webp); --surface:#0C3D52; --ink:#E6FBFF; --ink-soft:#A9D8E4; --ink-muted:#7FB4C4; --rule:#14536A; --accent:#38BDF8; --accent-2:#0EA5A5; --accent-ink:#032630; }
+html[data-theme="candy"] .wb-kid-area { --skin-bg: linear-gradient(rgba(253,236,247,.66), rgba(243,232,255,.76)), url(/skins/candy.webp); --surface:#FFFFFF; --ink:#4A1D3F; --ink-soft:#86527A; --ink-muted:#A87E9E; --rule:#F3D0E6; --accent:#EC4899; --accent-2:#A855F7; --accent-ink:#FFFFFF; }
+html[data-theme="jungle"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F; }
+html[data-theme="neon"] .wb-kid-area { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14; }
