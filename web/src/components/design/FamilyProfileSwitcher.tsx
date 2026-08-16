@@ -105,11 +105,14 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
         style={{
           display: "flex", alignItems: "center", gap: 10, width: "100%",
           padding: "8px 8px", borderRadius: 8, border: "none",
-          background: mine ? "var(--paper, #F3F4F6)" : "transparent",
+          // A subtle ink-tinted highlight (not --paper, which the skins don't
+          // override and stays light) so the row highlight adapts to any skin
+          // surface and never puts light text on a light row (Gadi 2026-08-16).
+          background: mine ? "color-mix(in srgb, var(--ink, #111827) 12%, transparent)" : "transparent",
           cursor: busy || mine ? "default" : "pointer", textAlign: "start",
           fontFamily: "inherit", opacity: busy && !linked ? 0.5 : 1,
         }}
-        onMouseEnter={(e) => { if (!busy && !mine) e.currentTarget.style.background = "var(--paper, #F9FAFB)"; }}
+        onMouseEnter={(e) => { if (!busy && !mine) e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)"; }}
         onMouseLeave={(e) => { if (!mine) e.currentTarget.style.background = "transparent"; }}
       >
         <span style={{ width: 26, height: 26, borderRadius: 999, flexShrink: 0, overflow: "hidden", background: memberColorFor({ colorIndex: m.colorIndex }), display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>

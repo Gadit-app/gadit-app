@@ -281,7 +281,7 @@ export function WbUserMenu() {
               fontSize: 14,
               fontWeight: 500,
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             {c.account}
@@ -303,7 +303,7 @@ export function WbUserMenu() {
                 fontSize: 14,
                 fontWeight: 500,
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {c.family}
@@ -331,7 +331,7 @@ export function WbUserMenu() {
                 fontSize: 14,
                 fontWeight: 500,
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {c.school}
@@ -353,7 +353,7 @@ export function WbUserMenu() {
                 fontSize: 14,
                 fontWeight: 500,
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {lang === "he" ? "קבוצות מילים" : "Word sets"}
@@ -374,7 +374,7 @@ export function WbUserMenu() {
                 fontSize: 14,
                 fontWeight: 500,
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {c.dashboard}
@@ -398,7 +398,7 @@ export function WbUserMenu() {
               fontWeight: 500,
               fontFamily: "inherit",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper, #F9FAFB)")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             {c.signOut}
