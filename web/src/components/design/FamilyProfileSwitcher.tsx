@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
-import { memberColorFor } from "@/lib/family";
+import { memberColorFor, avatarUrl } from "@/lib/family";
 
 /**
  * Shared-device family profile switcher (Gadi 2026-08-05; back-to-parent
@@ -14,7 +14,7 @@ import { memberColorFor } from "@/lib/family";
  * back). Lives inside the topbar user menu, reachable from any screen.
  */
 
-type SwitchMember = { id: string; name: string; role: string; colorIndex: number; avatarPhotoUrl?: string; isOwner: boolean };
+type SwitchMember = { id: string; name: string; role: string; colorIndex: number; avatarPhotoUrl?: string; avatarId?: string; isOwner: boolean };
 
 const COPY: Record<string, { title: string; parentTag: string; parentFallback: string; switching: string }> = {
   he: { title: "החלפת פרופיל", parentTag: "הורה", parentFallback: "חשבון ההורה", switching: "מחליף…" },
@@ -118,6 +118,8 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
         <span style={{ width: 26, height: 26, borderRadius: 999, flexShrink: 0, overflow: "hidden", background: memberColorFor({ colorIndex: m.colorIndex }), display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>
           {m.avatarPhotoUrl ? (
             <img src={m.avatarPhotoUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : avatarUrl(m.avatarId) ? (
+            <img src={avatarUrl(m.avatarId) ?? ""} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           ) : (
             ROLE_ICON[m.role] ?? (m.isOwner ? "🧑" : "🙂")
           )}
