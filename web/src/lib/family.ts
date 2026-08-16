@@ -64,18 +64,18 @@ export function memberColorFor(m: { colorIndex?: number }): string {
  *  they pick a Roblox character. Each id has an image at /avatars/{id}.webp
  *  (generated via gpt-image-1). `emoji` is a lightweight fallback/label. */
 export const AVATARS: { id: string; emoji: string; name: Record<string, string> }[] = [
-  { id: "fox", emoji: "🦊", name: { he: "שועל", en: "Fox", ar: "ثعلب", ru: "Лис" } },
-  { id: "cat", emoji: "🐱", name: { he: "חתול", en: "Cat", ar: "قطة", ru: "Кот" } },
-  { id: "dog", emoji: "🐶", name: { he: "כלב", en: "Dog", ar: "كلب", ru: "Пёс" } },
-  { id: "panda", emoji: "🐼", name: { he: "פנדה", en: "Panda", ar: "باندا", ru: "Панда" } },
-  { id: "lion", emoji: "🦁", name: { he: "אריה", en: "Lion", ar: "أسد", ru: "Лев" } },
-  { id: "bunny", emoji: "🐰", name: { he: "ארנב", en: "Bunny", ar: "أرنب", ru: "Зайка" } },
-  { id: "bear", emoji: "🐻", name: { he: "דוב", en: "Bear", ar: "دب", ru: "Мишка" } },
-  { id: "owl", emoji: "🦉", name: { he: "ינשוף", en: "Owl", ar: "بومة", ru: "Сова" } },
-  { id: "robot", emoji: "🤖", name: { he: "רובוט", en: "Robot", ar: "روبوت", ru: "Робот" } },
-  { id: "unicorn", emoji: "🦄", name: { he: "חד-קרן", en: "Unicorn", ar: "يونيكورن", ru: "Единорог" } },
-  { id: "astronaut", emoji: "🚀", name: { he: "אסטרונאוט", en: "Astronaut", ar: "رائد فضاء", ru: "Космонавт" } },
-  { id: "dino", emoji: "🦖", name: { he: "דינוזאור", en: "Dino", ar: "ديناصور", ru: "Динозавр" } },
+  { id: "kid1", emoji: "📖", name: { he: "קוראת", en: "Reader", ar: "قارئة", ru: "Читатель" } },
+  { id: "kid2", emoji: "🔬", name: { he: "מדען", en: "Scientist", ar: "عالِم", ru: "Учёный" } },
+  { id: "kid3", emoji: "🎨", name: { he: "אמנית", en: "Artist", ar: "فنانة", ru: "Художник" } },
+  { id: "kid4", emoji: "🧭", name: { he: "חוקר", en: "Explorer", ar: "مستكشف", ru: "Исследователь" } },
+  { id: "kid5", emoji: "🎧", name: { he: "מוזיקאית", en: "Musician", ar: "موسيقية", ru: "Музыкант" } },
+  { id: "kid6", emoji: "✏️", name: { he: "כותב", en: "Writer", ar: "كاتب", ru: "Писатель" } },
+  { id: "kid7", emoji: "⭐", name: { he: "חולמת", en: "Dreamer", ar: "حالمة", ru: "Мечтатель" } },
+  { id: "kid8", emoji: "🎮", name: { he: "גיימר", en: "Gamer", ar: "لاعب", ru: "Геймер" } },
+  { id: "kid9", emoji: "💡", name: { he: "ממציאה", en: "Inventor", ar: "مخترعة", ru: "Изобретатель" } },
+  { id: "kid10", emoji: "⚽", name: { he: "ספורטאי", en: "Athlete", ar: "رياضي", ru: "Спортсмен" } },
+  { id: "kid11", emoji: "😄", name: { he: "צוחקת", en: "Giggler", ar: "ضاحكة", ru: "Весельчак" } },
+  { id: "kid12", emoji: "🧠", name: { he: "גאון", en: "Genius", ar: "عبقري", ru: "Гений" } },
 ];
 
 const AVATAR_IDS = new Set(AVATARS.map((a) => a.id));
