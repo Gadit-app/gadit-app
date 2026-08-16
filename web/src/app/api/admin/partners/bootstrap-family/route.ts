@@ -41,6 +41,7 @@ type Candidate = {
   country: string | null;
   status: string;
   lang: string;
+  langSource: "account" | "fallback"; // did lang come from the user's real uiLang, or a guess?
   alreadyPartner: boolean;
 };
 
@@ -72,6 +73,7 @@ async function run(req: NextRequest) {
       status: s.status,
       // Provisional; refined below from the customer's real UI language.
       lang: s.country === "IL" ? "he" : "en",
+      langSource: "fallback",
       alreadyPartner: false,
     });
   }
@@ -88,7 +90,7 @@ async function run(req: NextRequest) {
       if (u.displayName) cand.name = u.displayName;
       const udoc = await db.collection("users").doc(u.uid).get();
       const uiLang = udoc.exists ? (udoc.data()?.uiLang as string | undefined) : undefined;
-      if (uiLang && typeof uiLang === "string") cand.lang = uiLang;
+      if (uiLang && typeof uiLang === "string") { cand.lang = uiLang; cand.langSource = "account"; }
     } catch {
       /* no matching Gadit account (e.g. billing email differs) — keep the
          country-based provisional language. */
@@ -110,7 +112,7 @@ async function run(req: NextRequest) {
       familySubscribers: candidates.length,
       alreadyPartners: candidates.filter((c) => c.alreadyPartner).length,
       wouldCreate: toCreate.length,
-      candidates: candidates.map((c) => ({ email: c.email, status: c.status, country: c.country, lang: c.lang, alreadyPartner: c.alreadyPartner })),
+      candidates: candidates.map((c) => ({ email: c.email, status: c.status, country: c.country, lang: c.lang, langSource: c.langSource, alreadyPartner: c.alreadyPartner })),
     });
   }
 
