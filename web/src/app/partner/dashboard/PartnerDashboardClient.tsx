@@ -16,6 +16,8 @@ import { LANGUAGES } from "@/lib/i18n";
  */
 
 type Bucket = { pending: number; released: number; paid: number };
+type Referral = { maskedId: string; joinedAt: string; totalMinor: number; currency: string; status: "pending" | "available" | "paid"; availableAt: string | null };
+type Payout = { minimumMinor: number; currency: string; availableMinor: number; nextPayoutDate: string };
 type Stats = {
   name: string;
   code: string;
@@ -29,6 +31,35 @@ type Stats = {
   payingCustomers: number;
   commissionCount: number;
   earnings: Record<string, Bucket>;
+  referrals?: Referral[];
+  payout?: Payout;
+};
+
+// Section-10 additions (account status, conversion, payout, referrals
+// table). Kept in a small side-dict with an EN fallback so we don't have to
+// re-translate them into all 14 COPY blocks tonight — the long-tail EN
+// fallback pattern used elsewhere in the app.
+const MORE: Record<string, {
+  statusActive: string; statusPending: string; statusSuspended: string;
+  ofClicks: string; ofSignups: string;
+  payoutTitle: string; payoutOf: string; nextPayout: string; payoutReady: string;
+  refTitle: string; refCustomer: string; refJoined: string; refCommission: string;
+  stPending: string; stAvailable: string; stPaid: string; refEmpty: string;
+}> = {
+  en: {
+    statusActive: "Active", statusPending: "Pending", statusSuspended: "Paused",
+    ofClicks: "of clicks", ofSignups: "of signups",
+    payoutTitle: "Payout", payoutOf: "of", nextPayout: "Next payout", payoutReady: "Ready to pay out",
+    refTitle: "Who signed up through you", refCustomer: "Customer", refJoined: "Joined", refCommission: "Commission",
+    stPending: "Pending", stAvailable: "Available", stPaid: "Paid", refEmpty: "No paying referrals yet. Share your link to get your first.",
+  },
+  he: {
+    statusActive: "פעיל", statusPending: "ממתין", statusSuspended: "מושהה",
+    ofClicks: "מהקליקים", ofSignups: "מההרשמות",
+    payoutTitle: "תשלום", payoutOf: "מתוך", nextPayout: "תשלום הבא", payoutReady: "מוכן לתשלום",
+    refTitle: "מי נרשם דרכך", refCustomer: "לקוח", refJoined: "הצטרף", refCommission: "עמלה",
+    stPending: "בהמתנה", stAvailable: "זמין", stPaid: "שולם", refEmpty: "עדיין אין הפניות משלמות. אפשר לשתף את הקישור כדי לקבל את הראשונה.",
+  },
 };
 
 const COPY = {
@@ -711,6 +742,7 @@ export function PartnerDashboardClient() {
   const { lang } = useLang();
   const href = useHref();
   const t = COPY[(lang in COPY ? lang : "en") as keyof typeof COPY];
+  const m = MORE[lang] ?? MORE.en;
   const dir = t.dir;
 
   const [stats, setStats] = useState<Stats | null>(null);
@@ -773,16 +805,33 @@ export function PartnerDashboardClient() {
                   {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
                 </div>
               </div>
-              <span style={{ ...S.tierBadge, ...(stats.tier === "founder" ? S.tierFounder : S.tierStandard) }}>
-                {stats.tier === "founder" ? t.tierFounder : t.tierStandard}
-              </span>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                <span style={{ ...S.tierBadge, ...(stats.tier === "founder" ? S.tierFounder : S.tierStandard) }}>
+                  {stats.tier === "founder" ? t.tierFounder : t.tierStandard}
+                </span>
+                {(() => {
+                  const st = stats.status === "suspended"
+                    ? { bg: "rgba(220,38,38,0.10)", fg: "#B91C1C", label: m.statusSuspended }
+                    : stats.status === "active"
+                    ? { bg: "rgba(22,163,74,0.12)", fg: "#15803D", label: m.statusActive }
+                    : { bg: "rgba(180,83,9,0.12)", fg: "#B45309", label: m.statusPending };
+                  return (
+                    <span style={{ ...S.statusBadge, background: st.bg, color: st.fg }}>
+                      <span style={{ width: 7, height: 7, borderRadius: 999, background: st.fg, display: "inline-block" }} />
+                      {st.label}
+                    </span>
+                  );
+                })()}
+              </div>
             </div>
 
-            {/* KPI row */}
+            {/* KPI row — with conversion % beneath signups and paying. */}
             <div className="pd-kpi" style={S.kpiGrid}>
               <Kpi label={t.clicks} value={stats.clicks.toLocaleString()} accent="#0EA5A5" />
-              <Kpi label={t.signups} value={stats.signups.toLocaleString()} accent="#7C3AED" />
-              <Kpi label={t.paying} value={stats.payingCustomers.toLocaleString()} accent="#0891B2" />
+              <Kpi label={t.signups} value={stats.signups.toLocaleString()} accent="#7C3AED"
+                   sub={stats.clicks > 0 ? `${Math.round((stats.signups / stats.clicks) * 100)}% ${m.ofClicks}` : undefined} />
+              <Kpi label={t.paying} value={stats.payingCustomers.toLocaleString()} accent="#0891B2"
+                   sub={stats.signups > 0 ? `${Math.round((stats.payingCustomers / stats.signups) * 100)}% ${m.ofSignups}` : undefined} />
               <Kpi label={t.available} value={hasEarnings ? money(stats.earnings[currencies[0]].released, currencies[0]) : "—"} accent="#16A34A" />
             </div>
 
@@ -819,6 +868,46 @@ export function PartnerDashboardClient() {
                   </div>
                 </div>
 
+                {/* Who signed up through you (masked, privacy-safe §10.6) */}
+                <div style={S.card}>
+                  <div style={S.cardLabel}>{m.refTitle}</div>
+                  {!stats.referrals || stats.referrals.length === 0 ? (
+                    <div style={S.muted}>{m.refEmpty}</div>
+                  ) : (
+                    <div style={{ overflowX: "auto" }}>
+                      <table style={S.table}>
+                        <thead>
+                          <tr>
+                            <th style={S.th}>{m.refCustomer}</th>
+                            <th style={S.th}>{m.refJoined}</th>
+                            <th style={{ ...S.th, textAlign: "end" }}>{m.refCommission}</th>
+                            <th style={{ ...S.th, textAlign: "end" }}>{t.pending}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {stats.referrals.map((r, i) => {
+                            const chip = r.status === "paid"
+                              ? { bg: "#F3F4F6", fg: "#4B5563", label: m.stPaid }
+                              : r.status === "available"
+                              ? { bg: "rgba(22,163,74,0.12)", fg: "#15803D", label: m.stAvailable }
+                              : { bg: "rgba(180,83,9,0.12)", fg: "#B45309", label: m.stPending };
+                            return (
+                              <tr key={i}>
+                                <td style={S.td} dir="ltr">{r.maskedId}</td>
+                                <td style={S.td}>{new Date(r.joinedAt).toLocaleDateString(lang === "he" ? "he-IL" : undefined, { day: "2-digit", month: "short" })}</td>
+                                <td style={{ ...S.td, textAlign: "end", fontWeight: 700 }} dir="ltr">{money(r.totalMinor, r.currency)}</td>
+                                <td style={{ ...S.td, textAlign: "end" }}>
+                                  <span style={{ ...S.chip, background: chip.bg, color: chip.fg }}>{chip.label}</span>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+
                 {/* How it works */}
                 <div style={S.card}>
                   <div style={S.cardLabel}>{t.howTitle}</div>
@@ -850,6 +939,26 @@ export function PartnerDashboardClient() {
                   })}
                   {hasEarnings && <div style={S.pendingNote}>{t.pendingNote}</div>}
                 </div>
+
+                {/* Payout threshold + next payout (§10.4) */}
+                {stats.payout && (() => {
+                  const p = stats.payout;
+                  const pct = p.minimumMinor > 0 ? Math.min(100, (p.availableMinor / p.minimumMinor) * 100) : 0;
+                  const ready = p.availableMinor >= p.minimumMinor && p.availableMinor > 0;
+                  return (
+                    <div style={S.card}>
+                      <div style={S.cardLabel}>{m.payoutTitle}</div>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8 }}>
+                        <span style={{ fontSize: 22, fontWeight: 800, color: ready ? "#16A34A" : "#111827" }} dir="ltr">{money(p.availableMinor, p.currency)}</span>
+                        <span style={{ fontSize: 13, color: "#6B7280" }} dir="ltr">{m.payoutOf} {money(p.minimumMinor, p.currency)}</span>
+                      </div>
+                      <div style={S.payoutBar}><div style={{ ...S.payoutFill, width: `${pct}%`, background: ready ? "#16A34A" : "#0EA5A5" }} /></div>
+                      <div style={S.payoutNext}>
+                        {ready ? m.payoutReady : `${m.nextPayout}: ${new Date(p.nextPayoutDate).toLocaleDateString(lang === "he" ? "he-IL" : undefined, { day: "2-digit", month: "short" })}`}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </>
@@ -859,11 +968,12 @@ export function PartnerDashboardClient() {
   );
 }
 
-function Kpi({ label, value, accent }: { label: string; value: string; accent: string }) {
+function Kpi({ label, value, accent, sub }: { label: string; value: string; accent: string; sub?: string }) {
   return (
     <div style={S.kpiCard}>
       <div style={{ ...S.kpiValue, color: accent }} dir="ltr">{value}</div>
       <div style={S.kpiLabel}>{label}</div>
+      <div style={S.kpiSub}>{sub ?? " "}</div>
     </div>
   );
 }
@@ -909,6 +1019,15 @@ const S: Record<string, React.CSSProperties> = {
   kpiCard: { background: "#fff", border: "1px solid #E9ECEF", borderRadius: 16, padding: "20px 18px", boxShadow: "0 1px 2px rgba(16,24,40,0.04)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" },
   kpiValue: { fontSize: 32, fontWeight: 800, lineHeight: 1.1, textAlign: "center" },
   kpiLabel: { fontSize: 13, color: "#6B7280", marginTop: 6, fontWeight: 500, textAlign: "center" },
+  kpiSub: { fontSize: 11.5, color: "#9CA3AF", marginTop: 3, textAlign: "center", height: 15, lineHeight: "15px" },
+  statusBadge: { fontSize: 12, fontWeight: 700, padding: "4px 10px", borderRadius: 999, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 6 },
+  payoutBar: { background: "#F0F2F4", borderRadius: 999, height: 8, overflow: "hidden" },
+  payoutFill: { height: "100%", borderRadius: 999, transition: "width 0.3s" },
+  payoutNext: { fontSize: 12.5, color: "#6B7280", marginTop: 10, fontWeight: 600 },
+  table: { width: "100%", borderCollapse: "collapse", fontSize: 13.5 },
+  th: { textAlign: "start", fontSize: 11, fontWeight: 700, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: 0.3, padding: "0 8px 8px", borderBottom: "1px solid #F0F2F4", whiteSpace: "nowrap" },
+  td: { padding: "10px 8px", borderBottom: "1px solid #F6F7F8", color: "#374151", whiteSpace: "nowrap" },
+  chip: { fontSize: 11.5, fontWeight: 700, padding: "3px 9px", borderRadius: 999, whiteSpace: "nowrap" },
   body: { display: "grid", gridTemplateColumns: "1fr", gap: 18 },
   col: { display: "flex", flexDirection: "column", gap: 18, minWidth: 0 },
   card: { background: "#fff", border: "1px solid #E9ECEF", borderRadius: 16, padding: 22, boxShadow: "0 1px 2px rgba(16,24,40,0.04)" },
