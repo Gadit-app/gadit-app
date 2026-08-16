@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { summarizeStripeRevenue } from "@/lib/admin-revenue";
 import { sendPartnerWelcome } from "@/lib/partner-email";
 import {
@@ -70,12 +70,32 @@ async function run(req: NextRequest) {
       name: "",
       country: s.country,
       status: s.status,
+      // Provisional; refined below from the customer's real UI language.
       lang: s.country === "IL" ? "he" : "en",
       alreadyPartner: false,
     });
   }
 
-  // 2) Which of them are already partners (idempotent, no dup / no re-email).
+  // 2) Resolve each customer's REAL UI language from their Gadit account
+  //    (users/{uid}.uiLang), so the welcome email lands in the language they
+  //    actually use. Stripe billing country is null for almost everyone, so
+  //    the country heuristic alone would wrongly default a Hebrew base to
+  //    English. Fall back: country → he/en, then en. Also grab their name.
+  const auth = getAdminAuth();
+  for (const cand of byEmail.values()) {
+    try {
+      const u = await auth.getUserByEmail(cand.email);
+      if (u.displayName) cand.name = u.displayName;
+      const udoc = await db.collection("users").doc(u.uid).get();
+      const uiLang = udoc.exists ? (udoc.data()?.uiLang as string | undefined) : undefined;
+      if (uiLang && typeof uiLang === "string") cand.lang = uiLang;
+    } catch {
+      /* no matching Gadit account (e.g. billing email differs) — keep the
+         country-based provisional language. */
+    }
+  }
+
+  // 3) Which of them are already partners (idempotent, no dup / no re-email).
   for (const cand of byEmail.values()) {
     const existing = await db.collection("partners").where("email", "==", cand.email).limit(1).get();
     cand.alreadyPartner = !existing.empty;
@@ -94,7 +114,7 @@ async function run(req: NextRequest) {
     });
   }
 
-  // 3) Execute: create each as a FOUNDER partner + send the welcome email.
+  // 4) Execute: create each as a FOUNDER partner + send the welcome email.
   const created: Array<{ email: string; code: string; lang: string; emailed: boolean }> = [];
   const failed: Array<{ email: string; error: string }> = [];
 
