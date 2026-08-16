@@ -270,8 +270,11 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   const trialingByTier: Record<Tier, number> = { clear: 0, deep: 0, family: 0, schools: 0 };
   const payingCustomers = new Set<string>();
 
-  // Per-customer bookkeeping for new / churned customer detection.
-  const earliestCreatedByCustomer = new Map<string, number>();
+  // Per-customer bookkeeping for new / churned customer detection. "Paying
+  // start" = when the customer actually began paying (trial end if they
+  // trialed, else sub creation) — so a trial that started last month but
+  // converted this month counts as new revenue THIS month.
+  const earliestPayingStartByCustomer = new Map<string, number>();
   const hasActiveByCustomer = new Map<string, boolean>();
   const lastEndedByCustomer = new Map<string, number>();
 
@@ -321,8 +324,9 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
 
     const createdMs = s.created * 1000;
     const endedMs = (s.canceled_at ?? s.ended_at ?? 0) * 1000;
-    const prev = earliestCreatedByCustomer.get(custKey);
-    if (prev == null || createdMs < prev) earliestCreatedByCustomer.set(custKey, createdMs);
+    const trialEndMs = s.trial_end ? s.trial_end * 1000 : 0;
+    // When this sub began (or would begin) collecting money.
+    const payingStartMs = trialEndMs || createdMs;
 
     const sub: RevenueSubscriber = {
       uid: s.id,
@@ -360,7 +364,9 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
       if (s.cancel_at_period_end) scheduledCancelCount += 1;
       if (unsupported && monthlyUsd === 0) { unmappedPriceIds.add(priceId || "(no-price)"); }
       if (billing !== "unknown" && monthlyUsd > 0) bump(payBreak, tier, billing, monthlyUsd);
-      if (createdMs >= monthStart) newMrr += monthlyUsd;
+      const eps = earliestPayingStartByCustomer.get(custKey);
+      if (eps == null || payingStartMs < eps) earliestPayingStartByCustomer.set(custKey, payingStartMs);
+      if (payingStartMs >= monthStart) newMrr += monthlyUsd;
     } else if (paused) {
       pausedCount += 1;
     } else if (s.status === "trialing") {
@@ -372,12 +378,19 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     } else if (s.status === "unpaid" || s.status === "incomplete") {
       atRisk.push(sub);
     } else if (s.status === "canceled") {
-      if (endedMs > thirtyDaysAgo) recentlyCanceled.push(sub);
-      if (endedMs > weekAgo) endedThisWeekCount += 1;
-      if (endedMs >= monthStart) {
-        churnedMrr += monthlyUsd;
-        const le = lastEndedByCustomer.get(custKey) ?? 0;
-        if (endedMs > le) lastEndedByCustomer.set(custKey, endedMs);
+      // Real churn vs a free trial that simply expired without ever paying:
+      // Stripe cancels both. Count churn only if the sub was actually
+      // paying — no trial, or it lived past its trial end (converted, then
+      // later churned). Otherwise it's a trial that lapsed, not lost revenue.
+      const wasPaying = !s.trial_end || endedMs > trialEndMs + 2 * 86_400_000;
+      if (wasPaying) {
+        if (endedMs > thirtyDaysAgo) recentlyCanceled.push(sub);
+        if (endedMs > weekAgo) endedThisWeekCount += 1;
+        if (endedMs >= monthStart) {
+          churnedMrr += monthlyUsd;
+          const le = lastEndedByCustomer.get(custKey) ?? 0;
+          if (endedMs > le) lastEndedByCustomer.set(custKey, endedMs);
+        }
       }
     }
   }
@@ -386,7 +399,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   // month and who are currently paying (first-time MRR, not reactivation).
   let newCustomersThisMonth = 0;
   for (const cust of payingCustomers) {
-    const first = earliestCreatedByCustomer.get(cust) ?? 0;
+    const first = earliestPayingStartByCustomer.get(cust) ?? 0;
     if (first >= monthStart) newCustomersThisMonth += 1;
   }
   // Churned customers this month = customers with a sub ended this month and
