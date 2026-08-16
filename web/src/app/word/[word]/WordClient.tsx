@@ -1294,7 +1294,7 @@ export function WordClient({
   // A minimal wordmark + home link in `.wb-shell-topbar` takes its
   // place; Save / Share live inside ResultView's own topbar.
   return (
-    <div className="wordbook wb-shell-page" dir={dir}>
+    <div className={`wordbook wb-shell-page${familyRole === "kid" ? " wb-kid-bg" : ""}`} dir={dir}>
       {saveFlash && (
         <div
           className={`wb-save-toast ${saveError ? "is-error" : ""}`}

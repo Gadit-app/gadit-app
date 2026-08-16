@@ -13797,3 +13797,22 @@ html[data-theme="ocean"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,42,58,
 html[data-theme="candy"] .wb-kid-area { --skin-bg: linear-gradient(rgba(253,236,247,.66), rgba(243,232,255,.76)), url(/skins/candy.webp); --surface:#FFFFFF; --ink:#4A1D3F; --ink-soft:#86527A; --ink-muted:#A87E9E; --rule:#F3D0E6; --accent:#EC4899; --accent-2:#A855F7; --accent-ink:#FFFFFF; }
 html[data-theme="jungle"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F; }
 html[data-theme="neon"] .wb-kid-area { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14; }
+
+/* Word RESULT page: paint the skin only as the page BACKGROUND and float the
+   definition content on a light sheet, so reading stays easy on the eyes
+   (Gadi 2026-08-16: the skin must continue around the definition, but the
+   definition area itself stays light). `.wb-kid-bg` sets ONLY --skin-bg, no
+   token overrides, so all the content keeps the default light theme. */
+html[data-theme] .wb-kid-bg { background: var(--skin-bg, var(--paper)); background-size: cover; background-position: center; background-attachment: fixed; }
+html[data-theme] .wb-kid-bg .wb-page {
+  max-width: 940px; margin-inline: auto;
+  background: var(--paper, #F4F5F8); border-radius: 20px;
+  padding: 16px clamp(12px, 2.5vw, 24px) 28px;
+  box-shadow: 0 14px 46px -18px rgba(0, 0, 0, 0.45);
+}
+html[data-theme="dark"] .wb-kid-bg { --skin-bg:#0B111B; }
+html[data-theme="space"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(11,16,48,.72), rgba(10,10,31,.82)), url(/skins/space.webp); }
+html[data-theme="ocean"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(6,42,58,.66), rgba(5,35,48,.8)), url(/skins/ocean.webp); }
+html[data-theme="candy"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(253,236,247,.66), rgba(243,232,255,.76)), url(/skins/candy.webp); }
+html[data-theme="jungle"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); }
+html[data-theme="neon"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); }
