@@ -27,6 +27,7 @@ export interface FamilyMember {
   name: string;
   colorIndex: number;    // 0..7, picks from MEMBER_COLORS
   avatarPhotoUrl?: string | null;
+  avatarId?: string | null;     // picked illustrated avatar (see AVATARS); overrides the colored initial, but a real photo still wins
   isOwner: boolean;
   userId?: string | null;       // present once the device is paired (real or synthetic Firebase Auth uid)
   deviceLinkedAt?: string | null;
@@ -57,6 +58,31 @@ export const MEMBER_COLORS = [
 export function memberColorFor(m: { colorIndex?: number }): string {
   const i = typeof m.colorIndex === "number" ? m.colorIndex : 0;
   return MEMBER_COLORS[Math.max(0, Math.min(MEMBER_COLORS.length - 1, i))];
+}
+
+/** Illustrated character avatars a kid can pick (Gadi 2026-08-16), the way
+ *  they pick a Roblox character. Each id has an image at /avatars/{id}.webp
+ *  (generated via gpt-image-1). `emoji` is a lightweight fallback/label. */
+export const AVATARS: { id: string; emoji: string; name: Record<string, string> }[] = [
+  { id: "fox", emoji: "🦊", name: { he: "שועל", en: "Fox", ar: "ثعلب", ru: "Лис" } },
+  { id: "cat", emoji: "🐱", name: { he: "חתול", en: "Cat", ar: "قطة", ru: "Кот" } },
+  { id: "dog", emoji: "🐶", name: { he: "כלב", en: "Dog", ar: "كلب", ru: "Пёс" } },
+  { id: "panda", emoji: "🐼", name: { he: "פנדה", en: "Panda", ar: "باندا", ru: "Панда" } },
+  { id: "lion", emoji: "🦁", name: { he: "אריה", en: "Lion", ar: "أسد", ru: "Лев" } },
+  { id: "bunny", emoji: "🐰", name: { he: "ארנב", en: "Bunny", ar: "أرنب", ru: "Зайка" } },
+  { id: "bear", emoji: "🐻", name: { he: "דוב", en: "Bear", ar: "دب", ru: "Мишка" } },
+  { id: "owl", emoji: "🦉", name: { he: "ינשוף", en: "Owl", ar: "بومة", ru: "Сова" } },
+  { id: "robot", emoji: "🤖", name: { he: "רובוט", en: "Robot", ar: "روبوت", ru: "Робот" } },
+  { id: "unicorn", emoji: "🦄", name: { he: "חד-קרן", en: "Unicorn", ar: "يونيكورن", ru: "Единорог" } },
+  { id: "astronaut", emoji: "🚀", name: { he: "אסטרונאוט", en: "Astronaut", ar: "رائد فضاء", ru: "Космонавт" } },
+  { id: "dino", emoji: "🦖", name: { he: "דינוזאור", en: "Dino", ar: "ديناصور", ru: "Динозавр" } },
+];
+
+const AVATAR_IDS = new Set(AVATARS.map((a) => a.id));
+
+/** The image URL for a picked avatar id, or null if unset/unknown. */
+export function avatarUrl(id?: string | null): string | null {
+  return id && AVATAR_IDS.has(id) ? `/avatars/${id}.webp` : null;
 }
 
 /** "Parent" group = father + mother. "Children" group = boy + girl. */

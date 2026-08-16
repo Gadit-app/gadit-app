@@ -35,6 +35,8 @@ import {
   isParentRole,
   memberColorFor,
   MAX_KIDS_PER_FAMILY,
+  AVATARS,
+  avatarUrl,
   type MemberRole,
 } from "@/lib/family";
 import { type RankKey } from "@/lib/gamification";
@@ -658,6 +660,8 @@ function MemberCard({
         <div className="wb-family-member-avatar" style={{ background: color }}>
           {m.avatarPhotoUrl ? (
             <img src={m.avatarPhotoUrl} alt="" />
+          ) : avatarUrl(m.avatarId) ? (
+            <img src={avatarUrl(m.avatarId) ?? ""} alt="" />
           ) : (
             <span>{initial}</span>
           )}
@@ -839,6 +843,8 @@ export function FamilyClient() {
   // JPEG data URL (see resizeToAvatar); "" means "no photo / use the chip".
   const [editPhoto, setEditPhoto] = useState<string>("");
   const [editPhotoBusy, setEditPhotoBusy] = useState(false);
+  // Picked illustrated avatar id ("" = none). A real photo still wins over it.
+  const [editAvatarId, setEditAvatarId] = useState<string>("");
 
   const isWelcome = search.get("welcome") === "1";
   const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
@@ -957,6 +963,7 @@ export function FamilyClient() {
         setEditName(m.name || "");
         setEditRole(m.role);
         setEditPhoto(m.avatarPhotoUrl || "");
+        setEditAvatarId(m.avatarId || "");
         setEditOpen(true);
       }}
       editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
@@ -979,6 +986,7 @@ export function FamilyClient() {
         // "" clears the photo back to the colored chip. A resized data URL
         // (~10-20KB) sits comfortably inside the 1MB Firestore doc limit.
         avatarPhotoUrl: editPhoto || null,
+        avatarId: editAvatarId || null,
       });
       setEditOpen(false);
     } catch (e) {
@@ -1084,6 +1092,30 @@ export function FamilyClient() {
                     {lang === "he" ? "הסרת התמונה" : lang === "ar" ? "إزالة الصورة" : lang === "ru" ? "Удалить фото" : "Remove photo"}
                   </button>
                 )}
+              </div>
+            </div>
+            {/* Avatar picker — pick an illustrated character (Gadi 2026-08-16).
+                A real photo above still wins; this is the fun default. */}
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#374151", marginBottom: 8 }}>
+                {lang === "he" ? "או בחרו דמות" : lang === "ar" ? "أو اختر شخصية" : lang === "ru" ? "Или выберите персонажа" : "Or pick a character"}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {AVATARS.map((a) => {
+                  const active = editAvatarId === a.id;
+                  return (
+                    <button
+                      key={a.id}
+                      type="button"
+                      onClick={() => setEditAvatarId(active ? "" : a.id)}
+                      aria-pressed={active}
+                      title={a.name[lang] ?? a.name.en}
+                      style={{ width: 46, height: 46, borderRadius: 999, padding: 0, overflow: "hidden", cursor: "pointer", background: "#fff", border: active ? "2.5px solid #0EA5A5" : "2px solid rgba(17,24,39,0.1)", boxShadow: active ? "0 0 0 3px rgba(14,165,165,0.18)" : "none" }}
+                    >
+                      <img src={avatarUrl(a.id) ?? ""} alt={a.name[lang] ?? a.name.en} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </button>
+                  );
+                })}
               </div>
             </div>
             <input
