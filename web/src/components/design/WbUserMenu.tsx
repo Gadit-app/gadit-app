@@ -28,6 +28,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { avatarUrl } from "@/lib/family";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import type { Lang } from "@/lib/i18n";
@@ -80,7 +81,7 @@ function tierStyle(
 import { FamilyProfileSwitcher } from "./FamilyProfileSwitcher";
 
 export function WbUserMenu() {
-  const { user, plan, familyId, schoolId, familyRole, logout } = useAuth();
+  const { user, plan, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -131,6 +132,10 @@ export function WbUserMenu() {
 
   const c = COPY[lang] ?? COPY.en;
   const initial = (user.email?.[0] || user.displayName?.[0] || "G").toUpperCase();
+  // A kid sees the character they picked; falls back to member photo, then
+  // the auth photo, then the initial. Swaps the existing avatar element, so
+  // it never adds width to the topbar (Gadi 2026-08-16).
+  const avatarSrc = avatarPhotoUrl || avatarUrl(avatarId) || user.photoURL;
 
   const onSignOut = async () => {
     setOpen(false);
@@ -203,9 +208,9 @@ export function WbUserMenu() {
         onClick={toggleOpen}
         style={{ border: "none", padding: 0, cursor: "pointer" }}
       >
-        {user.photoURL ? (
+        {avatarSrc ? (
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={user.photoURL} alt="" />
+          <img src={avatarSrc} alt="" />
         ) : (
           <span>{initial}</span>
         )}

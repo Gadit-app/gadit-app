@@ -91,6 +91,11 @@ interface AuthContextType {
    *  who is not a paired family member. Kids get a stripped-down,
    *  commerce-free UI (nav + route guard). */
   familyRole: "kid" | "parent" | null;
+  /** For a paired KID: their picked illustrated avatar id + uploaded photo,
+   *  read from their own member doc so their identity (the topbar avatar,
+   *  etc.) shows the character they chose. null for everyone else. */
+  avatarId: string | null;
+  avatarPhotoUrl: string | null;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -117,6 +122,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
   const [familyRole, setFamilyRole] = useState<"kid" | "parent" | null>(null);
+  const [avatarId, setAvatarId] = useState<string | null>(null);
+  const [avatarPhotoUrl, setAvatarPhotoUrl] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -213,6 +220,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       void import("./use-kids-mode").then((m) => m.applyKidsModeDefaultForKid(user.uid));
     }
   }, [user, familyRole]);
+
+  // A kid's own avatar (picked character / photo) lives on their member doc.
+  // Rules let a kid read ONLY their own member (token.memberId), so we read
+  // families/{familyId}/members/{memberId} directly and expose the avatar so
+  // the kid's identity in the topbar shows the character they chose.
+  useEffect(() => {
+    if (!user || familyRole !== "kid" || !familyId) {
+      setAvatarId(null);
+      setAvatarPhotoUrl(null);
+      return;
+    }
+    let unsub: (() => void) | undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await user.getIdTokenResult();
+        const memberId = res.claims?.memberId as string | undefined;
+        if (!memberId || cancelled) return;
+        const db = getFirebaseDb();
+        unsub = onSnapshot(
+          doc(db, "families", familyId, "members", memberId),
+          (snap) => {
+            const d = snap.data();
+            setAvatarId((d?.avatarId as string) ?? null);
+            setAvatarPhotoUrl((d?.avatarPhotoUrl as string) ?? null);
+          },
+          () => { setAvatarId(null); setAvatarPhotoUrl(null); },
+        );
+      } catch {
+        /* nice-to-have */
+      }
+    })();
+    return () => { cancelled = true; if (unsub) unsub(); };
+  }, [user, familyRole, familyId]);
 
   // Ping the server to email Gadi about a new signup. Server-side
   // dedupe via notifiedSignup flag means duplicate calls are harmless;
@@ -404,7 +445,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, familyId, schoolId, familyRole,
+      user, loading, plan, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,
