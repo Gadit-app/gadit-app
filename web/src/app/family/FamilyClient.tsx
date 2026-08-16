@@ -35,7 +35,7 @@ import {
   isParentRole,
   memberColorFor,
   MAX_KIDS_PER_FAMILY,
-  AVATARS,
+  avatarsForRole,
   avatarUrl,
   type MemberRole,
 } from "@/lib/family";
@@ -1101,7 +1101,7 @@ export function FamilyClient() {
                 {lang === "he" ? "או בחרו דמות" : lang === "ar" ? "أو اختر شخصية" : lang === "ru" ? "Или выберите персонажа" : "Or pick a character"}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {AVATARS.map((a) => {
+                {avatarsForRole(editRole).map((a) => {
                   const active = editAvatarId === a.id;
                   return (
                     <button

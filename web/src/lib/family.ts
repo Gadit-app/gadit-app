@@ -63,7 +63,10 @@ export function memberColorFor(m: { colorIndex?: number }): string {
 /** Illustrated character avatars a kid can pick (Gadi 2026-08-16), the way
  *  they pick a Roblox character. Each id has an image at /avatars/{id}.webp
  *  (generated via gpt-image-1). `emoji` is a lightweight fallback/label. */
-export const AVATARS: { id: string; emoji: string; name: Record<string, string> }[] = [
+export type AvatarDef = { id: string; emoji: string; name: Record<string, string> };
+
+/** Kid characters (modern flat, learning-themed) for boy/girl members. */
+export const KID_AVATARS: AvatarDef[] = [
   { id: "kid1", emoji: "📖", name: { he: "קוראת", en: "Reader", ar: "قارئة", ru: "Читатель" } },
   { id: "kid2", emoji: "🔬", name: { he: "מדען", en: "Scientist", ar: "عالِم", ru: "Учёный" } },
   { id: "kid3", emoji: "🎨", name: { he: "אמנית", en: "Artist", ar: "فنانة", ru: "Художник" } },
@@ -78,7 +81,28 @@ export const AVATARS: { id: string; emoji: string; name: Record<string, string> 
   { id: "kid12", emoji: "🧠", name: { he: "גאון", en: "Genius", ar: "عبقري", ru: "Гений" } },
 ];
 
-const AVATAR_IDS = new Set(AVATARS.map((a) => a.id));
+/** Parent avatars (dads + moms), simpler, for father/mother members. */
+export const PARENT_AVATARS: (AvatarDef & { for: "father" | "mother" })[] = [
+  { id: "dad1", for: "father", emoji: "👨", name: { he: "אבא", en: "Dad", ar: "أب", ru: "Папа" } },
+  { id: "dad2", for: "father", emoji: "👨🏾", name: { he: "אבא", en: "Dad", ar: "أب", ru: "Папа" } },
+  { id: "dad3", for: "father", emoji: "👨‍🦱", name: { he: "אבא", en: "Dad", ar: "أب", ru: "Папа" } },
+  { id: "dad4", for: "father", emoji: "👱‍♂️", name: { he: "אבא", en: "Dad", ar: "أب", ru: "Папа" } },
+  { id: "mom1", for: "mother", emoji: "👩", name: { he: "אמא", en: "Mom", ar: "أم", ru: "Мама" } },
+  { id: "mom2", for: "mother", emoji: "👩🏾", name: { he: "אמא", en: "Mom", ar: "أم", ru: "Мама" } },
+  { id: "mom3", for: "mother", emoji: "🧕", name: { he: "אמא", en: "Mom", ar: "أم", ru: "Мама" } },
+  { id: "mom4", for: "mother", emoji: "👱‍♀️", name: { he: "אמא", en: "Mom", ar: "أم", ru: "Мама" } },
+];
+
+const ALL_AVATARS: AvatarDef[] = [...KID_AVATARS, ...PARENT_AVATARS];
+const AVATAR_IDS = new Set(ALL_AVATARS.map((a) => a.id));
+
+/** The avatars offered for a member, by role: kids get the character set,
+ *  parents get the dad/mom set matching their role. */
+export function avatarsForRole(role: MemberRole): AvatarDef[] {
+  if (role === "father") return PARENT_AVATARS.filter((a) => a.for === "father");
+  if (role === "mother") return PARENT_AVATARS.filter((a) => a.for === "mother");
+  return KID_AVATARS;
+}
 
 /** The image URL for a picked avatar id, or null if unset/unknown. */
 export function avatarUrl(id?: string | null): string | null {
