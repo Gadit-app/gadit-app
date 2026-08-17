@@ -254,7 +254,7 @@ export default function AdminOverviewClient() {
 
   return (
     <>
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 14 }}>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: TOKENS.ink }}>{t.title}</h1>
         {data && (
           <div style={{ fontSize: 12, color: TOKENS.inkFaint, marginTop: 4 }}>
@@ -276,17 +276,17 @@ export default function AdminOverviewClient() {
           {/* Total monthly forecast — the headline "what I'd earn per month
               if every trial converts" (Gadi 2026-08-17): current MRR + the
               full trial pipeline. */}
-          <div style={{ ...cardStyle, marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.06)" }}>
+          <div style={{ ...cardStyle, padding: "12px 16px", marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.06)" }}>
             <div>
               <div style={{ fontSize: 12, fontWeight: 700, color: TOKENS.inkSoft, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.totalLabel}</div>
-              <div dir="ltr" style={{ fontSize: 12, color: TOKENS.inkFaint, marginTop: 4, textAlign: "start" }}>
+              <div dir="ltr" style={{ fontSize: 12, color: TOKENS.inkFaint, marginTop: 3, textAlign: "start" }}>
                 {t.totalSub
                   .replace("%c", money(rev.mrrUsd))
                   .replace("%t", money(rev.trialingMrrUsd))
                   .replace("%y", Math.round(rev.totalMrrUsd * 12).toLocaleString("en-US"))}
               </div>
             </div>
-            <div style={{ fontSize: 34, fontWeight: 800, color: TOKENS.teal }} dir="ltr">{money(rev.totalMrrUsd)}</div>
+            <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.teal }} dir="ltr">{money(rev.totalMrrUsd)}</div>
           </div>
 
           {/* §3.1 Money triplet */}
@@ -368,13 +368,13 @@ export default function AdminOverviewClient() {
           )}
 
           {/* Existing operational sections kept below the money layer */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 12 }}>
             <Kpi label={STRINGS[lang].title === "סקירה" ? "סך משתמשים" : "Total users"} value={data.users.total} accent={TOKENS.ink} detail={`+${data.users.signupsWeek} ${t.thisWeek}`} />
             <Kpi label={lang === "he" ? "הרשמות · 7 ימים" : "Signups · 7 days"} value={data.users.signupsWeek} accent={TOKENS.teal} />
             <Kpi label={lang === "he" ? "חיפושים היום" : "Searches today"} value={data.activity.searchesToday} accent={TOKENS.ink} detail={`${data.activity.searchesWeek} ${t.thisWeek}`} />
           </div>
 
-          <div className="ov-two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
+          <div className="ov-two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
             <div style={cardStyle}>
               <div style={sectionTitleStyle}>{t.funnelTitle}</div>
               <FunnelRow label={t.funnelAnonymous} value={data.funnel.anonymousMonth} color={TOKENS.inkFaint} max={Math.max(data.funnel.anonymousMonth, 1)} />
@@ -416,7 +416,7 @@ export default function AdminOverviewClient() {
             </div>
           </div>
 
-          <div style={{ ...cardStyle, marginBottom: 24 }}>
+          <div style={{ ...cardStyle, marginBottom: 14 }}>
             <div style={sectionTitleStyle}>{t.topWordsTitle}</div>
             {data.activity.topWords.length === 0 ? (
               <div style={{ color: TOKENS.inkFaint, fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
@@ -473,7 +473,7 @@ function SectionGrid({ cols, children }: { cols: number; children: React.ReactNo
   return (
     <div
       className="ov-grid"
-      style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 16, marginBottom: 16 }}
+      style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 12, marginBottom: 10 }}
     >
       {children}
     </div>
@@ -494,20 +494,20 @@ function Kpi({ label, value, accent, hint, detail, detailLtr, note, noteColor }:
   noteColor?: string;
 }) {
   return (
-    <div style={{ background: TOKENS.surface, border: `1px solid ${TOKENS.rule}`, borderRadius: 12, padding: 16, textAlign: "center" }}>
+    <div style={{ background: TOKENS.surface, border: `1px solid ${TOKENS.rule}`, borderRadius: 12, padding: "11px 12px", textAlign: "center" }}>
       <div style={{ fontSize: 11, fontWeight: 600, color: TOKENS.inkSoft, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
       {/* Plain-language explanation of an acronym (MRR / ARPU / CAC). Fixed
           height so cards with and without a hint stay aligned in the grid. */}
-      <div style={{ height: 26, lineHeight: "13px", margin: "3px 0 6px", fontSize: 10.5, color: TOKENS.inkFaint, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>{hint ?? ""}</div>
-      <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? TOKENS.ink, lineHeight: 1 }}>{value}</div>
+      <div style={{ height: 15, lineHeight: "15px", margin: "2px 0 3px", fontSize: 10.5, color: TOKENS.inkFaint, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{hint ?? ""}</div>
+      <div style={{ fontSize: 26, fontWeight: 700, color: accent ?? TOKENS.ink, lineHeight: 1 }}>{value}</div>
       <div
         dir={detailLtr ? "ltr" : undefined}
-        style={{ height: 18, lineHeight: "18px", marginTop: 6, fontSize: 11, color: TOKENS.inkFaint, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+        style={{ height: 16, lineHeight: "16px", marginTop: 4, fontSize: 11, color: TOKENS.inkFaint, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
       >
         {detail ?? ""}
       </div>
       {note && (
-        <div style={{ marginTop: 2, fontSize: 11, fontWeight: 600, color: noteColor ?? TOKENS.inkFaint }} dir={noteColor === TOKENS.danger ? "ltr" : undefined}>
+        <div style={{ marginTop: 1, fontSize: 11, fontWeight: 600, color: noteColor ?? TOKENS.inkFaint }} dir={noteColor === TOKENS.danger ? "ltr" : undefined}>
           {note}
         </div>
       )}
@@ -534,7 +534,7 @@ const cardStyle: React.CSSProperties = {
   background: TOKENS.surface,
   border: `1px solid ${TOKENS.rule}`,
   borderRadius: 12,
-  padding: 16,
+  padding: 14,
 };
 
 const sectionTitleStyle: React.CSSProperties = {
