@@ -963,6 +963,36 @@ export function WordClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kidsMode, result?.word, user, plan, loading]);
 
+  // Voice assistant arrival (?speak=1): read the definition aloud once, so a
+  // hands-free "Gadit, what is X" gets a spoken answer (Gadi 2026-08-17).
+  const spokeRef = useRef(false);
+  useEffect(() => {
+    if (searchParams?.get("speak") !== "1") return;
+    if (spokeRef.current || loading || !result?.word || !user) return;
+    if (plan !== "clear" && plan !== "deep") return;
+    spokeRef.current = true;
+    (async () => {
+      try {
+        const meaning = result.meanings?.[0]?.meaning ?? "";
+        const text = `${result.word}. ${meaning}`.slice(0, 600);
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ text, lang }),
+        });
+        if (!res.ok) return;
+        const url = URL.createObjectURL(await res.blob());
+        const audio = new Audio(url);
+        audio.onended = () => URL.revokeObjectURL(url);
+        void audio.play();
+      } catch {
+        /* best effort — a missing spoken answer must never break the page */
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, result?.word, user, plan]);
+
   // Classroom present mode: fetch subject-appropriate examples for the
   // curated meaning. Uses the SET's language (the curated defs are
   // Hebrew) so examples match the definition, and passes the resolved

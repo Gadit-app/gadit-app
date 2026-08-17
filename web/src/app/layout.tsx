@@ -11,6 +11,7 @@ import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { AutoUpdater } from "@/components/AutoUpdater";
 import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
+import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
 import { Analytics } from "@vercel/analytics/next";
@@ -437,6 +438,7 @@ export default async function RootLayout({
               <KidRouteGuard />
               <TwaInit />
               {children}
+              <VoiceAssistant />
               <InstallPwaPrompt />
             </AuthProvider>
           </LangProvider>
