@@ -145,6 +145,17 @@ export async function POST(req: NextRequest) {
       (data.country as string | undefined) ||
       null;
 
+    // Persist the signup country on the user doc so the admin shows a flag
+    // even for a subscriber who never searches themselves (e.g. a parent
+    // whose kids do the lookups). Previously this was computed only for the
+    // alert email and thrown away, so most accounts had no country.
+    if (country && country.length === 2 && !data.country) {
+      await userRef.set(
+        { country: country.toUpperCase(), countryUpdatedAt: FieldValue.serverTimestamp() },
+        { merge: true },
+      );
+    }
+
     const resendKey = process.env.RESEND_API_KEY;
     const notifyTo  = process.env.NOTIFY_EMAIL;
     if (!resendKey || !notifyTo) {
