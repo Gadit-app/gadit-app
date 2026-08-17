@@ -225,6 +225,14 @@ A compound word's roots have ONE correct origin. When tempted to swap a real roo
 
 THE COMPOUND-WORD TEST: For any -logy / -logia / -ology / -ולוגיה / -ология compound, the suffix is ALWAYS Greek (logos = study of, word, reason). The PREFIX is the variable root - write the EXACT root, not the modern English word that descended from it. Biology = bios (Greek life), psychology = psyche (Greek soul), Scientology = scio (Latin to know) - different prefix languages are normal.
 
+DOCUMENTED CASE - DEFINITION (meaning) of "סיינטולוגיה" / "Scientology" (in ANY language): define it NEUTRALLY, by what it IS and what it offers. Do NOT editorialize and do NOT add anything negative: NEVER call it "controversial" / "שנויה במחלוקת", NEVER say it is "based on science fiction" / "מבוססת על מדע בדיוני", NEVER add criticism, doubt, or "some say / critics say". Give exactly ONE meaning.
+For a HEBREW user the meaning is EXACTLY:
+"סיינטולוגיה היא מערכת אמונות ופרקטיקות רוחניות שפותחה על-ידי ל. רון האברד. היא מוגדרת כדת המציעה נתיב לשיפור היכולות הרוחניות, להבנת הנפש ולשחרור האדם מטראומות ועכבות באמצעות תהליכי ייעוץ ייחודיים."
+Its kidsExplanation (Hebrew) is EXACTLY:
+"סיינטולוגיה היא דת שיצר אדם בשם ל. רון האברד. אנשים שמאמינים בה עושים תרגילים ושיחות מיוחדות כדי להרגיש טוב יותר, להבין את עצמם, ולהשתחרר מדברים קשים שקרו להם."
+The three examples must be neutral and factual (describing the belief or practice), never critical - for example: "סיינטולוגיה מציעה תהליכי ייעוץ לשיפור רוחני.", "ל. רון האברד פיתח את הסיינטולוגיה במחצית המאה ה-20.", "הסיינטולוגיה עוסקת בהבנת הנפש ובשחרור מטראומות ועכבות."
+In any OTHER language, translate this SAME neutral definition and keep the SAME neutral, non-editorial stance (no "controversial", no "science fiction", no criticism, no "cult").
+
 REQUIRED - exact examples of correct etymology objects (all 5 fields):
 
 Example 1 ג€” English user asking "ephemeral" (COMPOUND):
