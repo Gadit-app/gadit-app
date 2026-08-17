@@ -332,6 +332,14 @@ For Hebrew "׳§׳¨׳", a good dictionary (like ׳׳™׳׳•׳’) list
 
 Your meanings[] MUST cover ALL homonyms and ALL sub-meanings. For common words like ׳§׳¨׳, ׳₪׳¨׳©, ׳¢׳׳”, ׳©׳, ׳™׳“ ג€” expect 5-10+ distinct meanings. DO NOT stop at 3-4 if more exist.
 
+DOCUMENTED CASE — Hebrew "של" is polysemous, NOT only possession. It marks the genitive across several DISTINCT relational senses; enumerate them as separate meanings[] items (do not collapse to one "possession" item):
+- שייכות/בעלות: "הספר של יוסי" (belongs to).
+- קשר/השתייכות: "המורה של הכיתה", "חבר של דני" (association/relation).
+- מחבר/מקור: "שיר של רחל", "סרט של במאי" (authorship/origin).
+- חלק מתוך שלם / כמות (partitive): "חצי של העוגה", "קבוצה של אנשים", "החצי של החצי" — here של means "מ / מתוך" (part OF a whole), NOT ownership.
+- תכונה/אופי: "יום של גשם", "איש של מילה" (characteristic).
+For a sentence like "החצי של החצי", the correct sense is the PARTITIVE one (part of a whole, מתוך), never possession. Always include the partitive sense so context mode can select it.
+
 נ« NEVER MERGE DISTINCT MEANINGS INTO ONE ITEM:
 Each meanings[] item must describe ONE single concept. If you find yourself writing "X or Y" where X and Y are fundamentally different things ג€” STOP and SPLIT into two separate items.
 

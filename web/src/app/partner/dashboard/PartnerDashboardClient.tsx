@@ -45,6 +45,7 @@ const MORE: Record<string, {
   payoutTitle: string; payoutOf: string; nextPayout: string; payoutReady: string;
   refTitle: string; refCustomer: string; refJoined: string; refCommission: string;
   stPending: string; stAvailable: string; stPaid: string; refEmpty: string;
+  greetMorning: string; greetNoon: string; greetEvening: string; greetNight: string;
 }> = {
   en: {
     statusActive: "Active", statusPending: "Pending", statusSuspended: "Paused",
@@ -52,6 +53,7 @@ const MORE: Record<string, {
     payoutTitle: "Payout", payoutOf: "of", nextPayout: "Next payout", payoutReady: "Ready to pay out",
     refTitle: "Who signed up through you", refCustomer: "Customer", refJoined: "Joined", refCommission: "Commission",
     stPending: "Pending", stAvailable: "Available", stPaid: "Paid", refEmpty: "No paying referrals yet. Share your link to get your first.",
+    greetMorning: "Good morning", greetNoon: "Good afternoon", greetEvening: "Good evening", greetNight: "Good night",
   },
   he: {
     statusActive: "פעיל", statusPending: "ממתין", statusSuspended: "מושהה",
@@ -59,8 +61,23 @@ const MORE: Record<string, {
     payoutTitle: "תשלום", payoutOf: "מתוך", nextPayout: "תשלום הבא", payoutReady: "מוכן לתשלום",
     refTitle: "מי נרשם דרכך", refCustomer: "לקוח", refJoined: "הצטרף", refCommission: "עמלה",
     stPending: "בהמתנה", stAvailable: "זמין", stPaid: "שולם", refEmpty: "עדיין אין הפניות משלמות. אפשר לשתף את הקישור כדי לקבל את הראשונה.",
+    greetMorning: "בוקר טוב", greetNoon: "צהריים טובים", greetEvening: "ערב טוב", greetNight: "לילה טוב",
   },
 };
+
+function partnerGreeting(m: (typeof MORE)["en"], hour: number): string {
+  if (hour < 5) return m.greetNight;
+  if (hour < 12) return m.greetMorning;
+  if (hour < 17) return m.greetNoon;
+  if (hour < 22) return m.greetEvening;
+  return m.greetNight;
+}
+function greetEmoji(hour: number): string {
+  if (hour < 5 || hour >= 22) return "🌙";
+  if (hour < 12) return "☀️";
+  if (hour < 17) return "🌤️";
+  return "🌆";
+}
 
 const COPY = {
   uk: {
@@ -776,6 +793,7 @@ export function PartnerDashboardClient() {
 
   const currencies = stats ? Object.keys(stats.earnings) : [];
   const hasEarnings = currencies.length > 0;
+  const hour = new Date().getHours();
 
   return (
     <div dir={dir} style={S.page}>
@@ -797,32 +815,32 @@ export function PartnerDashboardClient() {
 
         {state === "ready" && stats && (
           <>
-            {/* Identity */}
-            <div style={S.headRow}>
-              <div>
-                <h1 style={S.h1}>{t.hi} {stats.name || ""}</h1>
-                <div style={S.rateLine}>
-                  {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
-                </div>
+            {/* Identity — centered, badge on top, dynamic greeting with the
+                partner's FIRST name only (Yooniz style, Gadi 2026-08-17). */}
+            <div style={S.headCenter}>
+              <span style={{ ...S.tierBadge, ...(stats.tier === "founder" ? S.tierFounder : S.tierStandard) }}>
+                {stats.tier === "founder" ? t.tierFounder : t.tierStandard}
+              </span>
+              <h1 style={S.h1}>
+                <span style={{ marginInlineEnd: 8 }}>{greetEmoji(hour)}</span>
+                {partnerGreeting(m, hour)}{stats.name ? ` ${stats.name.trim().split(/\s+/)[0]}` : ""}
+              </h1>
+              <div style={S.rateLine}>
+                {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-                <span style={{ ...S.tierBadge, ...(stats.tier === "founder" ? S.tierFounder : S.tierStandard) }}>
-                  {stats.tier === "founder" ? t.tierFounder : t.tierStandard}
-                </span>
-                {(() => {
-                  const st = stats.status === "suspended"
-                    ? { bg: "rgba(220,38,38,0.10)", fg: "#B91C1C", label: m.statusSuspended }
-                    : stats.status === "active"
-                    ? { bg: "rgba(22,163,74,0.12)", fg: "#15803D", label: m.statusActive }
-                    : { bg: "rgba(180,83,9,0.12)", fg: "#B45309", label: m.statusPending };
-                  return (
-                    <span style={{ ...S.statusBadge, background: st.bg, color: st.fg }}>
-                      <span style={{ width: 7, height: 7, borderRadius: 999, background: st.fg, display: "inline-block" }} />
-                      {st.label}
-                    </span>
-                  );
-                })()}
-              </div>
+              {(() => {
+                const st = stats.status === "suspended"
+                  ? { bg: "rgba(220,38,38,0.10)", fg: "#B91C1C", label: m.statusSuspended }
+                  : stats.status === "active"
+                  ? { bg: "rgba(22,163,74,0.12)", fg: "#15803D", label: m.statusActive }
+                  : { bg: "rgba(180,83,9,0.12)", fg: "#B45309", label: m.statusPending };
+                return (
+                  <span style={{ ...S.statusBadge, background: st.bg, color: st.fg, marginTop: 4 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: 999, background: st.fg, display: "inline-block" }} />
+                    {st.label}
+                  </span>
+                );
+              })()}
             </div>
 
             {/* KPI row — with conversion % beneath signups and paying. */}
@@ -1010,8 +1028,9 @@ const S: Record<string, React.CSSProperties> = {
   muted: { color: "#6B7280", fontSize: 15, padding: "12px 0" },
   errorBox: { background: "#FEF2F2", border: "1px solid #FECACA", color: "#991B1B", borderRadius: 12, padding: 20, fontSize: 15, lineHeight: 1.6 },
   headRow: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 22 },
+  headCenter: { display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 8, marginBottom: 24 },
   h1: { fontSize: 26, fontWeight: 800, margin: 0 },
-  rateLine: { color: "#6B7280", fontSize: 14, marginTop: 6 },
+  rateLine: { color: "#6B7280", fontSize: 14, marginTop: 2 },
   tierBadge: { fontSize: 12.5, fontWeight: 700, padding: "6px 14px", borderRadius: 999, whiteSpace: "nowrap" },
   tierStandard: { background: "rgba(14,165,165,0.12)", color: "#0b7d7d" },
   tierFounder: { background: "rgba(124,58,237,0.12)", color: "#6D28D9" },

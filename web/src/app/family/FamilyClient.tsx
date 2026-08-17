@@ -941,10 +941,15 @@ export function FamilyClient() {
   const atCap = children.length >= MAX_KIDS_PER_FAMILY;
   const hour = new Date().getHours();
   const ownerMember = members.find((m) => m.isOwner);
+  // Greet by first name. Skip a name that's just the role word ("אבא" /
+  // "Mom") — an un-personalised default — and fall back to the mother label,
+  // not the father (Gadi 2026-08-17: the primary parent defaults to mother).
+  const ownerName = ownerMember?.name?.trim() || "";
+  const nameIsRole = ownerName === roleLabel.father || ownerName === roleLabel.mother;
   const firstName =
     (user.displayName && user.displayName.trim().split(/\s+/)[0]) ||
-    (ownerMember?.name && ownerMember.name.trim()) ||
-    roleLabel.father;
+    (ownerName && !nameIsRole ? ownerName.split(/\s+/)[0] : "") ||
+    roleLabel.mother;
   const totalWords = progress?.totalWords ?? 0;
 
   const memberCard = (m: FamilyMember) => (
@@ -1180,7 +1185,7 @@ export function FamilyClient() {
             {tab === "home" ? (
               <div className="fam-shell-greet">
                 <h1>
-                  {greetingFor(nav, hour)}, {firstName}{" "}
+                  {greetingFor(nav, hour)} {firstName}{" "}
                   <span className="fam-shell-emoji">{greetingEmoji(hour)}</span>
                 </h1>
                 <p>

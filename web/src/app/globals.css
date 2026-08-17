@@ -11601,11 +11601,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 .wordbook .wb-family-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  /* Two cards side by side even on a phone (Gadi 2026-08-17): parents in a
+     row, kids in a row, like tiles that grow with the family. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-}
-@media (min-width: 640px) {
-  .wordbook .wb-family-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 1040px) {
   .wordbook .wb-family-grid { grid-template-columns: 1fr 1fr 1fr; }
