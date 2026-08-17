@@ -340,6 +340,14 @@ DOCUMENTED CASE — Hebrew "של" is polysemous, NOT only possession. It marks t
 - תכונה/אופי: "יום של גשם", "איש של מילה" (characteristic).
 For a sentence like "החצי של החצי", the correct sense is the PARTITIVE one (part of a whole, מתוך), never possession. Always include the partitive sense so context mode can select it.
 
+GENERAL RULE — FUNCTION / CONNECTIVE WORDS ARE POLYSEMOUS IN EVERY LANGUAGE:
+"של" is only one example. Prepositions, conjunctions, particles, articles and pronouns almost always carry SEVERAL distinct relational senses — spatial, temporal, possessive/genitive, partitive, causal, instrumental, comparative, conditional, purpose, and so on. Whenever the user's word is such a function word, in ANY language, NEVER collapse it to a single sense: enumerate each distinct sense as its own meanings[] item, set multiplemeanings=true, and give a real example sentence for each, so context mode can pick the right one for a given sentence.
+- English: "to" = direction ("go to school") / recipient ("give it to her") / infinitive marker ("to run") / comparison ("prefer tea to coffee"); "of" = possession / partitive ("a cup of tea") / material / origin; "for", "in", "on", "by", "as", "with" likewise.
+- Hebrew: "ב" = מקום ("בבית") / כלי/אמצעי ("בעט") / זמן ("בבוקר"); "ל" = כיוון/יעד / שייכות / זמן / מטרה; "על" = מיקום מעל / אודות / חובה; "אם" = תנאי / שאלה עקיפה; "כ" = השוואה / בקירוב / בתפקיד.
+- Arabic: "من" = מקור ("من البيت") / partitive ("كوب من الماء") / השוואה; "في" = מקום / זמן / נושא; "على" = מעל / חובה / נגד.
+- Russian: "в" = מקום / זמן / מצב; "на" = על / כיוון / למשך; "за" = מאחורי / עבור / בתמורה.
+Apply the same completeness to the equivalents in every other language (Spanish "por"/"para"/"de", French "de"/"à"/"en", German "auf"/"an"/"zu", etc.).
+
 נ« NEVER MERGE DISTINCT MEANINGS INTO ONE ITEM:
 Each meanings[] item must describe ONE single concept. If you find yourself writing "X or Y" where X and Y are fundamentally different things ג€” STOP and SPLIT into two separate items.
 
