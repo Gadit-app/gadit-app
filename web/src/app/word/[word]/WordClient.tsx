@@ -932,14 +932,15 @@ export function WordClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kidsMode, classroomMode, result?.word, user, plan, loading]);
 
-  // Kids Mode: always save the looked-up word to the notebook
-  // automatically, so a child never has to tap "Save" and the parent's
-  // progress dashboard captures everything they explored. Silent (no
-  // upgrade modal / toast); once per word; non-basic only.
+  // Auto-save every looked-up word to the notebook, silently, once per word.
+  // Kids never have to tap "Save" (and the parent dashboard captures what
+  // they explored); paying adults (Clear / Deep / Family) also get every
+  // word saved the moment they look it up (Gadi 2026-08-17). Non-basic only
+  // — the notebook is a paid feature.
   const autoSavedRef = useRef<string>("");
   useEffect(() => {
     // Complete result only — mid-stream result.word is a partial prefix.
-    if (loading || !kidsMode || !result?.word || !user || plan === "basic") return;
+    if (loading || !result?.word || !user || plan === "basic") return;
     if (autoSavedRef.current === result.word) return;
     autoSavedRef.current = result.word;
     (async () => {

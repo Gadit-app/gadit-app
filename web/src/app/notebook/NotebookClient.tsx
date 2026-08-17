@@ -36,6 +36,24 @@ type NotebookItem = {
   addedAt: string;
 };
 
+// Group notebook entries by the word's language (Gadi 2026-08-17) so a user
+// who looks up words in several languages sees them tidied into per-language
+// sections. Groups are ordered by most recent activity (the language you
+// used last floats to the top); within a group the API's addedAt-desc order
+// is preserved.
+function groupByLanguage(items: NotebookItem[]): Array<[string, NotebookItem[]]> {
+  const map = new Map<string, NotebookItem[]>();
+  for (const it of items) {
+    const key = (it.language || "").trim() || "—";
+    const arr = map.get(key);
+    if (arr) arr.push(it);
+    else map.set(key, [it]);
+  }
+  const recency = (list: NotebookItem[]) =>
+    Math.max(...list.map((i) => Date.parse(i.addedAt) || 0));
+  return [...map.entries()].sort((a, b) => recency(b[1]) - recency(a[1]));
+}
+
 // Kids' reframe of the notebook title/subtitle. The Hebrew "אוצר המילים"
 // literally means "vocabulary" — so it reads playful to a young child AND
 // mature to a teen, one term that bridges the whole 7-16 range (LLM council
@@ -457,8 +475,14 @@ export function NotebookPage() {
         )}
 
         {items && items.length > 0 && (
-          <ul className="wb-notebook-grid">
-            {items.map((item) => {
+          groupByLanguage(items).map(([language, group]) => (
+            <section key={language} className="wb-notebook-langsec">
+              <h2 className="wb-notebook-langhead">
+                <span className="wb-notebook-langname">{language}</span>
+                <span className="wb-notebook-langcount">{group.length}</span>
+              </h2>
+              <ul className="wb-notebook-grid">
+                {group.map((item) => {
               const offline = offlineWords.has(item.word.toLowerCase());
               return (
                 <li key={item.id} className="wb-notebook-card">
@@ -496,8 +520,10 @@ export function NotebookPage() {
                   </Link>
                 </li>
               );
-            })}
-          </ul>
+                })}
+              </ul>
+            </section>
+          ))
         )}
       </main>
 

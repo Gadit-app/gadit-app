@@ -5076,6 +5076,32 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   grid-template-columns: 1fr;
   gap: 10px;
 }
+/* Per-language section header inside the notebook (Gadi 2026-08-17). */
+.wordbook .wb-notebook-langsec { margin-bottom: 22px; }
+.wordbook .wb-notebook-langhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule, #E5E7EB);
+}
+.wordbook .wb-notebook-langname {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink, #111827);
+  letter-spacing: 0.01em;
+}
+.wordbook .wb-notebook-langcount {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent, #0EA5A5);
+  background: color-mix(in srgb, var(--accent, #0EA5A5) 12%, transparent);
+  border-radius: 999px;
+  padding: 1px 8px;
+  min-width: 20px;
+  text-align: center;
+}
 @media (min-width: 600px) {
   .wordbook .wb-notebook-grid { grid-template-columns: repeat(2, 1fr); }
 }
