@@ -102,7 +102,9 @@ function extractQuery(raw: string): string | null {
   return q || null;
 }
 
-type Status = "off" | "listening" | "heard" | "error";
+type Status = "off" | "armed" | "listening" | "heard" | "error";
+
+const PREF_KEY = "gadit-voice-on";
 
 export function VoiceAssistant() {
   const { user, plan } = useAuth();
@@ -125,6 +127,7 @@ export function VoiceAssistant() {
     setStatus("off");
     try { recRef.current?.abort(); } catch { /* ignore */ }
     recRef.current = null;
+    try { localStorage.setItem(PREF_KEY, "0"); } catch { /* ignore */ }
   }, []);
 
   const handleTranscript = useCallback((text: string) => {
@@ -140,8 +143,10 @@ export function VoiceAssistant() {
   }, [router, href]);
 
   const start = useCallback(() => {
+    if (listeningRef.current) return; // already listening — idempotent
     const Ctor = getSRCtor();
     if (!Ctor) { setStatus("error"); return; }
+    try { localStorage.setItem(PREF_KEY, "1"); } catch { /* ignore */ }
     const rec = new Ctor();
     rec.lang = recLocale(lang);
     rec.continuous = true;
@@ -177,33 +182,59 @@ export function VoiceAssistant() {
   // Clean up on unmount.
   useEffect(() => () => { try { recRef.current?.abort(); } catch { /* ignore */ } }, []);
 
+  // Persistent mode: if the user turned listening on before, remember it and
+  // resume automatically — but a browser needs one user gesture to (re)start
+  // the mic after a page load, so we resume on the very first interaction
+  // anywhere on the page (no need to hunt for the mic button).
+  useEffect(() => {
+    const elig = !!user && (plan === "clear" || plan === "deep") && supported;
+    if (!elig || listeningRef.current) return;
+    let saved = false;
+    try { saved = localStorage.getItem(PREF_KEY) === "1"; } catch { /* ignore */ }
+    if (!saved) return;
+    setStatus("armed");
+    const resume = () => {
+      document.removeEventListener("pointerdown", resume);
+      document.removeEventListener("keydown", resume);
+      if (!listeningRef.current) start();
+    };
+    document.addEventListener("pointerdown", resume);
+    document.addEventListener("keydown", resume);
+    return () => {
+      document.removeEventListener("pointerdown", resume);
+      document.removeEventListener("keydown", resume);
+    };
+  }, [user, plan, supported, start]);
+
   // Gate: paying, logged-in users on a supporting browser only.
   const eligible = !!user && (plan === "clear" || plan === "deep") && supported;
   if (!eligible) return null;
 
-  const on = status === "listening" || status === "heard";
+  const active = status === "listening" || status === "heard";
+  const armed = status === "armed";
   const label =
     denied ? (lang === "he" ? "צריך לאשר מיקרופון בדפדפן (סמל המנעול בשורת הכתובת)" : "Allow the microphone in your browser (lock icon in the address bar)")
     : heard ? heard
     : status === "listening" ? (lang === "he" ? "מקשיב… אמור: “גדית, מה זה…”" : "Listening… say “Gadit, what is…”")
+    : armed ? (lang === "he" ? "האזנה מופעלת · תגע במסך כדי לחדש" : "Listening on · tap anywhere to resume")
     : (lang === "he" ? "מצב האזנה" : "Listening mode");
 
   return (
     <div dir={dir} style={{ position: "fixed", insetInlineEnd: 16, bottom: 16, zIndex: 60, display: "flex", alignItems: "center", gap: 10, flexDirection: dir === "rtl" ? "row-reverse" : "row" }}>
-      {(on || denied) && (
+      {(active || armed || denied) && (
         <div style={{ maxWidth: 320, background: "#111827", color: "#fff", fontSize: 13, fontWeight: 500, padding: "9px 15px", borderRadius: 16, boxShadow: "0 6px 20px rgba(0,0,0,0.18)", lineHeight: 1.4 }}>
           {label}
         </div>
       )}
       <button
         type="button"
-        onClick={() => (on ? stop() : start())}
+        onClick={() => (active ? stop() : start())}
         aria-label={label}
         title={label}
         style={{
           width: 52, height: 52, borderRadius: "50%", border: "none", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
-          background: on ? "#DC2626" : "#0EA5A5", color: "#fff",
+          background: active ? "#DC2626" : armed ? "#F59E0B" : "#0EA5A5", color: "#fff",
           boxShadow: "0 6px 20px rgba(0,0,0,0.22)", transition: "background 0.2s",
           animation: status === "listening" ? "vaPulse 1.6s ease-in-out infinite" : "none",
         }}
