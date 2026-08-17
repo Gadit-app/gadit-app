@@ -91,6 +91,16 @@ const STRINGS = {
     mNetNew: "Net-new MRR · month",
     atRisk: "at risk",
     potentialNote: "potential, not yet revenue",
+    // plain-language explanations of the acronyms
+    hMrr: "Monthly recurring revenue",
+    hTrialMrr: "What trials would add if they convert",
+    hNetNew: "Net change this month (new minus churn)",
+    hArpu: "Average revenue per user",
+    hPayback: "Months to recoup a customer's acquisition cost (CAC)",
+    hChurn: "Share of customers who left this month",
+    // total monthly forecast
+    totalLabel: "Full monthly forecast · if every trial pays",
+    totalSub: "current %c + trials %t · ≈ $%y/yr",
     // operational KPIs
     kPaying: "Paying customers",
     kNew: "New customers · month",
@@ -137,6 +147,14 @@ const STRINGS = {
     mNetNew: "MRR נטו חדש · החודש",
     atRisk: "בסיכון",
     potentialNote: "פוטנציאל, עדיין לא הכנסה",
+    hMrr: "הכנסה חודשית קבועה ממנויים",
+    hTrialMrr: "מה שהניסיונות יוסיפו אם ישלמו",
+    hNetNew: "שינוי נטו החודש (חדשים פחות נטישה)",
+    hArpu: "הכנסה ממוצעת ללקוח משלם",
+    hPayback: "חודשים להחזר עלות גיוס לקוח",
+    hChurn: "אחוז הלקוחות שעזבו החודש",
+    totalLabel: 'סה"כ צפי חודשי · אם כל ניסיון משלם',
+    totalSub: "נוכחי %c + ניסיונות %t · ≈ $%y לשנה",
     kPaying: "לקוחות משלמים",
     kNew: "לקוחות חדשים · החודש",
     kChurn: "נטישה חודשית",
@@ -255,13 +273,31 @@ export default function AdminOverviewClient() {
 
       {data && rev && dec && (
         <>
+          {/* Total monthly forecast — the headline "what I'd earn per month
+              if every trial converts" (Gadi 2026-08-17): current MRR + the
+              full trial pipeline. */}
+          <div style={{ ...cardStyle, marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.06)" }}>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: TOKENS.inkSoft, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.totalLabel}</div>
+              <div dir="ltr" style={{ fontSize: 12, color: TOKENS.inkFaint, marginTop: 4, textAlign: "start" }}>
+                {t.totalSub
+                  .replace("%c", money(rev.mrrUsd))
+                  .replace("%t", money(rev.trialingMrrUsd))
+                  .replace("%y", Math.round(rev.totalMrrUsd * 12).toLocaleString("en-US"))}
+              </div>
+            </div>
+            <div style={{ fontSize: 34, fontWeight: 800, color: TOKENS.teal }} dir="ltr">{money(rev.totalMrrUsd)}</div>
+          </div>
+
           {/* §3.1 Money triplet */}
           <SectionGrid cols={3}>
             <Kpi
               label={t.mCurrentMrr}
               value={money(rev.mrrUsd)}
               accent={TOKENS.teal}
-              detail={countAndTiers(rev.payingCustomers, rev.payingByTier)}
+              hint={t.hMrr}
+              detail={tierBreakdown(rev.payingByTier)}
+              detailLtr
               note={rev.atRiskMrrUsd > 0 ? `${money(rev.atRiskMrrUsd)} ${t.atRisk}` : undefined}
               noteColor={TOKENS.danger}
             />
@@ -269,13 +305,16 @@ export default function AdminOverviewClient() {
               label={t.mTrialMrr}
               value={money(rev.trialingMrrUsd)}
               accent={TOKENS.amber}
-              detail={countAndTiers(rev.trialingSubscriptions, rev.trialingByTier)}
+              hint={t.hTrialMrr}
+              detail={tierBreakdown(rev.trialingByTier)}
+              detailLtr
               note={t.potentialNote}
             />
             <Kpi
               label={t.mNetNew}
               value={signed(rev.netNewMrrUsd)}
               accent={rev.netNewMrrUsd < 0 ? TOKENS.danger : TOKENS.purple}
+              hint={t.hNetNew}
               detail={`+${money(rev.newMrrUsd)} · −${money(rev.churnedMrrUsd)}`}
               detailLtr
             />
@@ -288,9 +327,10 @@ export default function AdminOverviewClient() {
             <Kpi label={t.kNew} value={rev.newCustomersThisMonth} accent={TOKENS.teal} />
             <Kpi label={t.kChurn} value={`${dec.monthlyChurnPct}%`}
                  accent={dec.monthlyChurnPct > 0 ? TOKENS.danger : TOKENS.ink}
+                 hint={t.hChurn}
                  detail={`${rev.churnedCustomersThisMonth} ${t.churnedThisMonth}`} />
             <Kpi label={t.kTrialing} value={rev.trialingSubscriptions} accent={TOKENS.amber}
-                 detail={countAndTiers(rev.trialingSubscriptions, rev.trialingByTier)} />
+                 detail={tierBreakdown(rev.trialingByTier)} detailLtr />
           </SectionGrid>
 
           {/* §13 Three decision metrics */}
@@ -301,11 +341,12 @@ export default function AdminOverviewClient() {
               accent={TOKENS.purple}
               detail={dec.trialConversionPct == null ? t.noData : `${dec.trialResolvedCount} ${t.resolvedTrials}`}
             />
-            <Kpi label={t.dArpu} value={money(dec.arpuUsd)} accent={TOKENS.teal} detail={t.perCustomer} />
+            <Kpi label={t.dArpu} value={money(dec.arpuUsd)} accent={TOKENS.teal} hint={t.hArpu} detail={t.perCustomer} />
             <Kpi
               label={t.dPayback}
               value={dec.cacPaybackMonths == null ? "—" : `${dec.cacPaybackMonths} ${t.months}`}
               accent={TOKENS.ink}
+              hint={t.hPayback}
               detail={t.cacBasis.replace("$%", `$${dec.cacUsd}`).replace("%m", `${Math.round(dec.grossMargin * 100)}%`)}
               detailLtr
             />
@@ -428,13 +469,6 @@ function tierBreakdown(t?: ByTier): string {
   return parts.join(" · ");
 }
 
-// "11 · 5 Clear · 2 Deep · 4 Family" — count + tier split, all-Latin so it
-// renders LTR cleanly in the RTL admin.
-function countAndTiers(count: number, t?: ByTier): string {
-  const tiers = tierBreakdown(t);
-  return tiers ? `${count} · ${tiers}` : `${count}`;
-}
-
 function SectionGrid({ cols, children }: { cols: number; children: React.ReactNode }) {
   return (
     <div
@@ -449,10 +483,11 @@ function SectionGrid({ cols, children }: { cols: number; children: React.ReactNo
 // Centered KPI card (spec §1). Value 28px in an AA-safe hue; the detail row
 // is a FIXED-HEIGHT 18px slot with ellipsis so a 2-item card and a 4-item
 // card stay the same height and the grid never jitters.
-function Kpi({ label, value, accent, detail, detailLtr, note, noteColor }: {
+function Kpi({ label, value, accent, hint, detail, detailLtr, note, noteColor }: {
   label: string;
   value: string | number;
   accent?: string;
+  hint?: string;
   detail?: string;
   detailLtr?: boolean;
   note?: string;
@@ -460,7 +495,10 @@ function Kpi({ label, value, accent, detail, detailLtr, note, noteColor }: {
 }) {
   return (
     <div style={{ background: TOKENS.surface, border: `1px solid ${TOKENS.rule}`, borderRadius: 12, padding: 16, textAlign: "center" }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: TOKENS.inkSoft, marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
+      <div style={{ fontSize: 11, fontWeight: 600, color: TOKENS.inkSoft, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
+      {/* Plain-language explanation of an acronym (MRR / ARPU / CAC). Fixed
+          height so cards with and without a hint stay aligned in the grid. */}
+      <div style={{ height: 26, lineHeight: "13px", margin: "3px 0 6px", fontSize: 10.5, color: TOKENS.inkFaint, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>{hint ?? ""}</div>
       <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? TOKENS.ink, lineHeight: 1 }}>{value}</div>
       <div
         dir={detailLtr ? "ltr" : undefined}
