@@ -95,14 +95,26 @@ export async function GET(req: NextRequest) {
     if (customerId) stripeCandidates.push({ uid: u.uid, email: u.email ?? null, customerId });
   }
 
-  // 4) Stripe billing country for the rest (bounded).
+  // 4) Stripe country for the rest (bounded). Billing address is usually
+  //    blank, so fall back to the CARD's issuing country — Stripe populates
+  //    that for almost every paying customer and it's a solid proxy.
   for (const cand of stripeCandidates.slice(0, 400)) {
     try {
-      const cust = await stripe.customers.retrieve(cand.customerId);
-      if (cust && !("deleted" in cust)) {
-        const c = (cust.address?.country || "").toUpperCase();
-        if (c && c.length === 2) fixes.push({ uid: cand.uid, email: cand.email, country: c, source: "stripe" });
+      const cust = await stripe.customers.retrieve(cand.customerId, {
+        expand: ["invoice_settings.default_payment_method"],
+      });
+      if (!cust || "deleted" in cust) continue;
+      let c = (cust.address?.country || "").toUpperCase();
+      if (!c) {
+        const pm = cust.invoice_settings?.default_payment_method;
+        if (pm && typeof pm === "object" && "card" in pm && pm.card?.country) c = pm.card.country.toUpperCase();
       }
+      if (!c) {
+        const pms = await stripe.paymentMethods.list({ customer: cand.customerId, type: "card", limit: 1 });
+        const cc = pms.data[0]?.card?.country;
+        if (cc) c = cc.toUpperCase();
+      }
+      if (c && c.length === 2) fixes.push({ uid: cand.uid, email: cand.email, country: c, source: "stripe" });
     } catch { /* skip unresolvable customers */ }
   }
 
