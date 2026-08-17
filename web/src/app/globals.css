@@ -13821,6 +13821,33 @@ html[data-theme] .wb-kid-area .wb-play-option { color: var(--ink); }
 html[data-theme] .wb-kid-area .wb-notebook-card-lang { color: var(--ink-muted); }
 html[data-theme] .wb-kid-area .wb-play-blank { color: var(--accent); border-bottom-color: var(--accent); }
 
+/* Contrast fix (Gadi 2026-08-17): under a kid skin, the option cards were
+   darkened but many other game surfaces stayed hardcoded white while the
+   text went light, so the question and other cards became unreadable. Make
+   the wordbook ink/border tokens follow the skin (so all game text adapts),
+   and darken every remaining hardcoded-white game surface to the skin
+   surface. Interactive state colours (correct/wrong) and inline shade
+   colours are untouched. */
+html[data-theme] .wb-kid-area {
+  --wb-ink: var(--ink);
+  --wb-ink-soft: var(--ink-soft);
+  --wb-border: var(--rule);
+}
+html[data-theme] .wb-kid-area .wb-play-question,
+html[data-theme] .wb-kid-area .wb-play-exit,
+html[data-theme] .wb-kid-area .wb-play-empty,
+html[data-theme] .wb-kid-area .wb-play-root-tile,
+html[data-theme] .wb-kid-area .wb-play-build-slot,
+html[data-theme] .wb-kid-area .wb-play-build-tile,
+html[data-theme] .wb-kid-area .wb-play-memcard-face,
+html[data-theme] .wb-kid-area .wb-play-anagram-slots,
+html[data-theme] .wb-kid-area .wb-play-anagram-tile,
+html[data-theme] .wb-kid-area .wb-play-result-missed {
+  background: var(--surface);
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
 /* Per-theme palettes (read by the rules above). */
 html[data-theme="dark"] .wb-kid-area { --skin-bg:#0B111B; --surface:#1B2432; --ink:#E5EAF1; --ink-soft:#AEB7C4; --ink-muted:#7E8896; --rule:#2A3444; --accent:#2DD4BF; --accent-2:#22D3EE; --accent-ink:#04241F; }
 html[data-theme="space"] .wb-kid-area { --skin-bg: linear-gradient(rgba(11,16,48,.72), rgba(10,10,31,.82)), url(/skins/space.webp); --surface:#181A44; --ink:#EAF0FF; --ink-soft:#B7C0E6; --ink-muted:#8590C0; --rule:#2E326A; --accent:#22D3EE; --accent-2:#A855F7; --accent-ink:#041018; }
