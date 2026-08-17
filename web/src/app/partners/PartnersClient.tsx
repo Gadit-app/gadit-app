@@ -4,6 +4,18 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { LANGUAGES } from "@/lib/i18n";
+
+// "Your language" for the signup form's language question, so the partner's
+// email language is chosen, never guessed. A few natives + English fallback.
+const LANG_Q: Record<string, string> = {
+  he: "השפה שלך", en: "Your language", ar: "لغتك", ru: "Ваш язык",
+  es: "Tu idioma", pt: "Seu idioma", fr: "Votre langue", de: "Deine Sprache",
+  it: "La tua lingua", nl: "Je taal", cs: "Váš jazyk", sk: "Váš jazyk",
+  uk: "Ваша мова", tr: "Diliniz", pl: "Twój język", fa: "زبان شما",
+  id: "Bahasa Anda", el: "Η γλώσσα σου", hi: "आपकी भाषा", am: "ቋንቋህ",
+  ja: "あなたの言語", zu: "Ulimi lwakho",
+};
 
 /**
  * Partner program landing + instant signup. Mirrors the Yooniz partners
@@ -1243,6 +1255,7 @@ export function PartnersClient() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [audience, setAudience] = useState("");
+  const [signupLang, setSignupLang] = useState<string>(lang);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errMsg, setErrMsg] = useState("");
   const [result, setResult] = useState<{ code: string; dashboardUrl: string } | null>(null);
@@ -1260,7 +1273,7 @@ export function PartnersClient() {
       const res = await fetch("/api/partner/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, audience, lang }),
+        body: JSON.stringify({ name, email, audience, lang: signupLang }),
       });
       const d = await res.json();
       if (!res.ok || !d.code) {
@@ -1387,6 +1400,13 @@ export function PartnersClient() {
               <input style={S.input} placeholder={t.formName} value={name} onChange={(e) => setName(e.target.value)} />
               <input style={S.input} type="email" placeholder={t.formEmail} value={email} onChange={(e) => setEmail(e.target.value)} />
               <textarea style={{ ...S.input, minHeight: 72, resize: "vertical" as const }} placeholder={t.formAudience} value={audience} onChange={(e) => setAudience(e.target.value)} />
+              {/* Explicit language question — we email the partner in this
+                  language, so we never guess (Gadi 2026-08-17). Defaults to
+                  the page language; the partner can change it. */}
+              <label style={{ display: "block", fontSize: 12.5, color: "#6B7280", margin: "2px 0 5px" }}>{LANG_Q[lang] ?? LANG_Q.en}</label>
+              <select style={{ ...S.input, cursor: "pointer" }} value={signupLang} onChange={(e) => setSignupLang(e.target.value)}>
+                {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{l.label}</option>))}
+              </select>
               {state === "error" && <div style={S.formErr}>{errMsg}</div>}
               <button type="submit" style={S.formCta} disabled={state === "sending"}>
                 {state === "sending" ? t.formSending : t.formCta}

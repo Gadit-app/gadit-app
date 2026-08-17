@@ -52,6 +52,11 @@ async function run(req: NextRequest) {
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const dryRun = req.nextUrl.searchParams.get("dryRun") === "1";
+  // Default language for candidates whose real UI language we DON'T know.
+  // Gadi 2026-08-17: default the unknowns to Hebrew (Israeli base). Anyone
+  // whose account has a real uiLang still keeps THAT (accurate beats default),
+  // so a genuinely-English subscriber isn't forced into Hebrew.
+  const fallbackLang = (req.nextUrl.searchParams.get("fallbackLang") || "en").trim() || "en";
   const db = getAdminDb();
 
   // 1) Every current Family subscriber, from Stripe (the billing email).
@@ -72,7 +77,7 @@ async function run(req: NextRequest) {
       country: s.country,
       status: s.status,
       // Provisional; refined below from the customer's real UI language.
-      lang: s.country === "IL" ? "he" : "en",
+      lang: fallbackLang,
       langSource: "fallback",
       alreadyPartner: false,
     });
