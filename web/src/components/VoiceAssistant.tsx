@@ -61,30 +61,42 @@ function recLocale(lang: string): string {
   return map[lang] ?? "en-US";
 }
 
-const WAKE = /\b(gadit|היי גדית|hey gadit|גדית)\b/i;
+// Forgiving wake-word matching — speech recognition mis-transcribes "Gadit"
+// in several ways, especially in Hebrew. No \b (doesn't work across scripts).
+const WAKE = /(gad+it|gaddit|gadeet|gadi[ts]|hey gadit|היי גדית|גדית|גדיט|גדעת|גד' ?ית)/i;
 
-// Strip the wake word and any leading question phrasing, return the target
-// word(s) — or null if nothing usable. Deliberately forgiving.
+// Extract the target word from a transcript. If the wake word was said, any
+// phrasing works ("Gadit, nuance"). Without a wake word, only an explicit
+// question pattern triggers (so ambient speech is ignored). Returns null when
+// there's nothing to look up.
 function extractQuery(raw: string): string | null {
   let t = raw.trim();
+  let hasWake = false;
   const m = t.match(WAKE);
-  if (!m || m.index === undefined) return null;
-  t = t.slice(m.index + m[0].length).trim().replace(/^[,\s.]+/, "");
+  if (m && m.index !== undefined) {
+    t = t.slice(m.index + m[0].length).trim().replace(/^[,\s.]+/, "");
+    hasWake = true;
+  }
   if (!t) return null;
   const lower = t.toLowerCase();
 
-  // "what does X mean" / "what is X" (capture before "mean")
   let q =
+    // "what does X mean" / "what is X" (capture before "mean")
     lower.match(/what (?:does|is|are) (?:the word |the meaning of |a )?(.+?)(?: mean| means)?$/)?.[1] ||
     // "define X" / "definition of X" / "meaning of X"
     lower.match(/(?:define|definition of|meaning of|what's)\s+(?:the word )?(.+)$/)?.[1] ||
     // Hebrew: "מה זה X" / "מה הפירוש של X" / "פירוש X" / "הגדרה של X"
     t.match(/(?:מה\s+(?:זה|זאת אומרת)|מה\s+(?:ה)?(?:פירוש|משמעות|הגדרה)(?:\s+של)?(?:\s+המילה)?|פירוש|הגדרה\s+של)\s+(.+)$/)?.[1] ||
-    // Fallback: whatever followed the wake word
-    t;
+    null;
+
+  if (!q) {
+    // No explicit pattern. With a wake word, treat the rest as the word;
+    // without one, ignore (don't fire on random speech / TV).
+    if (!hasWake) return null;
+    q = t;
+  }
 
   q = q.trim().replace(/[?.!,;]+$/g, "").replace(/^(the word|a|an)\s+/i, "").trim();
-  // A dictionary lookup is almost always one token; keep it tight.
   const parts = q.split(/\s+/);
   if (parts.length > 4) q = parts.slice(-2).join(" ");
   return q || null;
@@ -101,6 +113,7 @@ export function VoiceAssistant() {
   const [supported, setSupported] = useState(false);
   const [status, setStatus] = useState<Status>("off");
   const [heard, setHeard] = useState("");
+  const [denied, setDenied] = useState(false);
   const recRef = useRef<SpeechRec | null>(null);
   const listeningRef = useRef(false);
   const cooldownRef = useRef(0);
@@ -132,17 +145,24 @@ export function VoiceAssistant() {
     const rec = new Ctor();
     rec.lang = recLocale(lang);
     rec.continuous = true;
-    rec.interimResults = false;
+    rec.interimResults = true; // live feedback so you can SEE it's hearing you
     rec.maxAlternatives = 1;
+    setDenied(false);
+    setHeard("");
     rec.onresult = (e: SREvent) => {
+      let interim = "", final = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const r = e.results[i];
-        if (r.isFinal) handleTranscript(r[0].transcript);
+        if (r.isFinal) final += r[0].transcript;
+        else interim += r[0].transcript;
       }
+      const shown = (final || interim).trim();
+      if (shown) setHeard(shown); // shows the running transcript in the pill
+      if (final.trim()) handleTranscript(final);
     };
     rec.onerror = (e: SRErrorEvent) => {
       // Transient errors (silence, aborted) — the onend handler restarts.
-      if (e.error === "not-allowed" || e.error === "service-not-allowed") stop();
+      if (e.error === "not-allowed" || e.error === "service-not-allowed") { setDenied(true); stop(); }
     };
     rec.onend = () => {
       // Browsers stop after a silence; restart to stay hands-free.
@@ -163,14 +183,15 @@ export function VoiceAssistant() {
 
   const on = status === "listening" || status === "heard";
   const label =
-    status === "heard" ? (heard || (lang === "he" ? "מחפש…" : "Searching…"))
+    denied ? (lang === "he" ? "צריך לאשר מיקרופון בדפדפן (סמל המנעול בשורת הכתובת)" : "Allow the microphone in your browser (lock icon in the address bar)")
+    : heard ? heard
     : status === "listening" ? (lang === "he" ? "מקשיב… אמור: “גדית, מה זה…”" : "Listening… say “Gadit, what is…”")
     : (lang === "he" ? "מצב האזנה" : "Listening mode");
 
   return (
     <div dir={dir} style={{ position: "fixed", insetInlineEnd: 16, bottom: 16, zIndex: 60, display: "flex", alignItems: "center", gap: 10, flexDirection: dir === "rtl" ? "row-reverse" : "row" }}>
-      {on && (
-        <div style={{ maxWidth: 260, background: "#111827", color: "#fff", fontSize: 13, fontWeight: 500, padding: "8px 14px", borderRadius: 999, boxShadow: "0 6px 20px rgba(0,0,0,0.18)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+      {(on || denied) && (
+        <div style={{ maxWidth: 320, background: "#111827", color: "#fff", fontSize: 13, fontWeight: 500, padding: "9px 15px", borderRadius: 16, boxShadow: "0 6px 20px rgba(0,0,0,0.18)", lineHeight: 1.4 }}>
           {label}
         </div>
       )}
