@@ -41,6 +41,9 @@ export interface Partner {
   rateLifetime: number;
   status: PartnerStatus;
   dashboardToken: string;  // secret that opens /partner/dashboard (no password)
+  lang?: string | null;    // the partner's language — every email we send them
+                           // (welcome, future payout notices) renders in it.
+                           // Set at creation; defaults to "en" if unknown.
   audience?: string | null; // free-text "where's your audience" from signup
   clicks: number;          // referral-link hits
   signups: number;         // referred accounts created

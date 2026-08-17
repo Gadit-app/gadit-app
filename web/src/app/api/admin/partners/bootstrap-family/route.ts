@@ -141,6 +141,7 @@ async function run(req: NextRequest) {
         rateLifetime: DEFAULT_RATE_LIFETIME,
         status: "active",
         dashboardToken,
+        lang: cand.lang,
         audience: "Family subscriber (auto-enrolled founder 2026-08-17)",
         clicks: 0,
         signups: 0,

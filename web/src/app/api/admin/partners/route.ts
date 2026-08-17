@@ -112,6 +112,7 @@ export async function GET(req: NextRequest) {
         rateYearOne: p.rateYearOne ?? DEFAULT_RATE_YEAR_ONE,
         rateLifetime: p.rateLifetime ?? DEFAULT_RATE_LIFETIME,
         status: p.status,
+        lang: p.lang ?? null,
         clicks: p.clicks || 0,
         signups: p.signups || 0,
         payingCustomers: payingUids.size,
@@ -181,6 +182,12 @@ export async function POST(req: NextRequest) {
   }
   if (!code) return NextResponse.json({ error: "code_generation_failed" }, { status: 500 });
 
+  // The partner's OWN language (from the create form), stored on the record
+  // so every email we ever send them is in their language — not the admin's.
+  const partnerLang = typeof body.lang === "string" && body.lang.trim().length > 0 && body.lang.length <= 8
+    ? body.lang.trim()
+    : "en";
+
   const dashboardToken = generateDashboardToken();
   const doc: Omit<Partner, "id"> = {
     code,
@@ -191,6 +198,7 @@ export async function POST(req: NextRequest) {
     rateLifetime,
     status: "active",
     dashboardToken,
+    lang: partnerLang,
     audience: null,
     clicks: 0,
     signups: 0,
@@ -212,9 +220,11 @@ export async function POST(req: NextRequest) {
   }
 
   if (body.sendEmail) {
+    // Send in the PARTNER's language (partner-email falls back to English
+    // for any language it doesn't have a full template for).
     await sendPartnerWelcome(
       { code, name, email, dashboardToken, rateYearOne, rateLifetime },
-      body.lang === "he" ? "he" : "en",
+      partnerLang,
     );
   }
 
@@ -265,14 +275,31 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  // Re-send the welcome email (link + code + dashboard).
+  // Set the partner's language (for their emails). Lets an existing partner
+  // created before this field, or with the wrong language, be corrected.
+  if (action === "setLang") {
+    const lang = typeof body.lang === "string" && body.lang.trim().length > 0 && body.lang.length <= 8
+      ? body.lang.trim()
+      : "en";
+    await ref.update({ lang });
+    return NextResponse.json({ ok: true, lang });
+  }
+
+  // Re-send the welcome email (link + code + dashboard) in the PARTNER's
+  // stored language — NOT the admin's current UI language. `body.lang`, if
+  // present, updates the stored language first (so "fix + resend" is one step).
   if (action === "resendEmail") {
     const p = snap.data() as Omit<Partner, "id">;
+    let lang = p.lang || "en";
+    if (typeof body.lang === "string" && body.lang.trim().length > 0 && body.lang.length <= 8) {
+      lang = body.lang.trim();
+      await ref.update({ lang });
+    }
     await sendPartnerWelcome(
       { code: p.code, name: p.name, email: p.email, dashboardToken: p.dashboardToken, rateYearOne: p.rateYearOne, rateLifetime: p.rateLifetime },
-      body.lang === "he" ? "he" : "en",
+      lang,
     );
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, lang });
   }
 
   if (action === "suspend" || action === "activate") {

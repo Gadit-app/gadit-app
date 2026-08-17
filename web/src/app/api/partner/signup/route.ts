@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
       rateLifetime: DEFAULT_RATE_LIFETIME,
       status: "active",
       dashboardToken,
+      lang: lang || "en",
       audience: audience || null,
       clicks: 0,
       signups: 0,

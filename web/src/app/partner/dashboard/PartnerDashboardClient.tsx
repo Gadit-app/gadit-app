@@ -46,6 +46,7 @@ const MORE: Record<string, {
   refTitle: string; refCustomer: string; refJoined: string; refCommission: string;
   stPending: string; stAvailable: string; stPaid: string; refEmpty: string;
   greetMorning: string; greetNoon: string; greetEvening: string; greetNight: string;
+  linkIndividuals: string;
 }> = {
   en: {
     statusActive: "Active", statusPending: "Pending", statusSuspended: "Paused",
@@ -54,6 +55,7 @@ const MORE: Record<string, {
     refTitle: "Who signed up through you", refCustomer: "Customer", refJoined: "Joined", refCommission: "Commission",
     stPending: "Pending", stAvailable: "Available", stPaid: "Paid", refEmpty: "No paying referrals yet. Share your link to get your first.",
     greetMorning: "Good morning", greetNoon: "Good afternoon", greetEvening: "Good evening", greetNight: "Good night",
+    linkIndividuals: "Individuals",
   },
   he: {
     statusActive: "פעיל", statusPending: "ממתין", statusSuspended: "מושהה",
@@ -62,6 +64,7 @@ const MORE: Record<string, {
     refTitle: "מי נרשם דרכך", refCustomer: "לקוח", refJoined: "הצטרף", refCommission: "עמלה",
     stPending: "בהמתנה", stAvailable: "זמין", stPaid: "שולם", refEmpty: "עדיין אין הפניות משלמות. אפשר לשתף את הקישור כדי לקבל את הראשונה.",
     greetMorning: "בוקר טוב", greetNoon: "צהריים טובים", greetEvening: "ערב טוב", greetNight: "לילה טוב",
+    linkIndividuals: "יחידים",
   },
 };
 
@@ -741,7 +744,7 @@ const LINK_LANGS: Array<{ code: string; native: string }> =
 // RefCapture (mounted in the root layout) reads ?ref on EVERY page, so the
 // referral is attributed no matter which product page they land on.
 const PRODUCT_PATHS = {
-  general: "",
+  individuals: "/pricing",
   families: "/families/landing",
   schools: "/schools/landing",
 } as const;
@@ -864,8 +867,8 @@ export function PartnerDashboardClient() {
                   {/* Families + Schools only (Gadi 2026-08-13): these are the
                       products we want partners to sell. The general Gadit link
                       was dropped from the portal and the welcome email. */}
-                  {(["families", "schools"] as ProductKey[]).map((product) => {
-                    const label = product === "families" ? t.linkFamilies : t.linkSchools;
+                  {(["individuals", "families", "schools"] as ProductKey[]).map((product) => {
+                    const label = product === "individuals" ? m.linkIndividuals : product === "families" ? t.linkFamilies : t.linkSchools;
                     return (
                       <div key={product} style={{ marginBottom: 12 }}>
                         <div style={S.linkProductLabel}>{label}</div>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { LANGUAGES } from "@/lib/i18n";
 
 /**
  * /admin/partners — run the in-house partner (affiliate) program.
@@ -24,6 +25,7 @@ type Row = {
   rateYearOne: number;
   rateLifetime: number;
   status: "active" | "suspended";
+  lang?: string | null;
   clicks: number;
   signups: number;
   payingCustomers: number;
@@ -202,6 +204,10 @@ export default function AdminPartnersClient() {
   const [fY1, setFY1] = useState("25");
   const [fLife, setFLife] = useState("10");
   const [fSend, setFSend] = useState(true);
+  // The PARTNER's language (for their welcome email), NOT the admin's UI
+  // language. Defaults to the admin lang for convenience but is a visible,
+  // per-partner choice so a partner never gets an email in the wrong language.
+  const [fLang, setFLang] = useState<string>(lang);
   const [addState, setAddState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [addErr, setAddErr] = useState("");
   const [nextRef, setNextRef] = useState("");
@@ -282,7 +288,7 @@ export default function AdminPartnersClient() {
         body: JSON.stringify({
           name: fName, email: fEmail, code: fCode,
           rateYearOne: fY1, rateLifetime: fLife,
-          sendEmail: fSend, lang,
+          sendEmail: fSend, lang: fLang,
         }),
       });
       if (res.status === 409) { setAddErr(t.errExists); setAddState("error"); return; }
@@ -306,7 +312,10 @@ export default function AdminPartnersClient() {
       await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ partnerId, action, lang, ...extra }),
+        // Deliberately NOT sending the admin's `lang` here: resendEmail must
+        // use the partner's OWN stored language. A language override only
+        // travels when explicitly placed in `extra` (setLang / fix + resend).
+        body: JSON.stringify({ partnerId, action, ...extra }),
       });
       if (action === "resendEmail") { setFlash(partnerId + ":sent"); setTimeout(() => setFlash(null), 1600); }
       await load();
@@ -356,10 +365,19 @@ export default function AdminPartnersClient() {
           <input style={input} inputMode="numeric" title={t.fLife} placeholder={t.fLife} value={fLife} onChange={(e) => setFLife(e.target.value)} />
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
-          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#374151", cursor: "pointer" }}>
-            <input type="checkbox" checked={fSend} onChange={(e) => setFSend(e.target.checked)} />
-            {t.fSend}
-          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#374151", cursor: "pointer" }}>
+              <input type="checkbox" checked={fSend} onChange={(e) => setFSend(e.target.checked)} />
+              {t.fSend}
+            </label>
+            {/* The partner's own language — the welcome email is sent in it. */}
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#374151" }}>
+              <span>{lang === "he" ? "שפת השותף" : "Partner language"}</span>
+              <select value={fLang} onChange={(e) => setFLang(e.target.value)} style={{ fontSize: 13.5, padding: "6px 8px", borderRadius: 8, border: "1px solid #D1D5DB", background: "#fff", cursor: "pointer" }}>
+                {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{l.label}</option>))}
+              </select>
+            </label>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {addState === "error" && <span style={{ color: "#991B1B", fontSize: 13 }}>{addErr}</span>}
             {addState === "done" && <span style={{ color: "#0b7d7d", fontSize: 13, fontWeight: 700 }}>{t.created}</span>}
@@ -494,6 +512,18 @@ export default function AdminPartnersClient() {
                   <button style={btn} onClick={() => copy(refLink, r.id + ":ref")}>{flash === r.id + ":ref" ? t.copied : t.copyRef}</button>
                   <button style={btn} onClick={() => copy(r.dashboardUrl, r.id + ":dash")}>{flash === r.id + ":dash" ? t.copied : t.copyDash}</button>
                   <a href={r.dashboardUrl} target="_blank" rel="noopener noreferrer" style={{ ...btn, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>{t.openDash}</a>
+                  {/* The partner's email language. Changing it stores the new
+                      language so a resend (and any future email) goes out
+                      correctly — fixes a partner emailed in the wrong tongue. */}
+                  <select
+                    value={r.lang ?? "en"}
+                    disabled={busy === r.id + "setLang"}
+                    onChange={(e) => act(r.id, "setLang", { lang: e.target.value })}
+                    title={lang === "he" ? "שפת המיילים של השותף" : "Partner email language"}
+                    style={{ ...btn, cursor: "pointer", paddingInline: 10 }}
+                  >
+                    {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{l.label}</option>))}
+                  </select>
                   <button style={btn} disabled={busy === r.id + "resendEmail"} onClick={() => act(r.id, "resendEmail")}>
                     {flash === r.id + ":sent" ? t.sent : t.resend}
                   </button>
