@@ -50,6 +50,20 @@ function getSRCtor(): SRCtor | null {
   return w.SpeechRecognition || w.webkitSpeechRecognition || null;
 }
 
+// iOS / iPadOS Safari technically exposes webkitSpeechRecognition, but it
+// does NOT honour `continuous`: it stops after a single phrase and won't
+// reliably auto-restart without a fresh user gesture. So on those devices
+// (the tablet Gadi tested, 2026-08-18) we switch to a tap-to-ask model —
+// one tap = one question — which works every time. Everywhere else
+// (Android Chrome, desktop Chromium) we keep the hands-free continuous
+// mode. iPadOS 13+ reports as "MacIntel", so we also check touch points.
+function isIOSPlatform(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const nav = navigator as unknown as { userAgent: string; platform?: string; maxTouchPoints?: number };
+  if (/iPad|iPhone|iPod/.test(nav.userAgent)) return true;
+  return nav.platform === "MacIntel" && (nav.maxTouchPoints ?? 0) > 1;
+}
+
 // UI language → BCP-47 recognition locale (accuracy hint).
 function recLocale(lang: string): string {
   const map: Record<string, string> = {
@@ -130,9 +144,14 @@ export function VoiceAssistant() {
     try { localStorage.setItem(PREF_KEY, "0"); } catch { /* ignore */ }
   }, []);
 
-  const handleTranscript = useCallback((text: string) => {
+  const handleTranscript = useCallback((text: string, direct = false) => {
     setHeard(text);
-    const word = extractQuery(text);
+    // `direct` = tap-to-ask (iOS): the user deliberately tapped and spoke,
+    // so treat the whole utterance as the word even without a wake word.
+    let word = extractQuery(text);
+    if (!word && direct) {
+      word = text.trim().replace(/[?.!,;]+$/g, "").split(/\s+/).slice(-2).join(" ") || null;
+    }
     if (!word) return;
     // Debounce: ignore repeats within 4s (recognition can echo).
     const now = Date.now();
@@ -146,10 +165,14 @@ export function VoiceAssistant() {
     if (listeningRef.current) return; // already listening — idempotent
     const Ctor = getSRCtor();
     if (!Ctor) { setStatus("error"); return; }
-    try { localStorage.setItem(PREF_KEY, "1"); } catch { /* ignore */ }
+    const singleShot = isIOSPlatform(); // iOS: one tap = one question
+    // Only remember "keep listening" on platforms that can actually stay
+    // hands-free; on iOS every question is an explicit tap, so we don't
+    // auto-resume (which would fail silently and look broken).
+    try { localStorage.setItem(PREF_KEY, singleShot ? "0" : "1"); } catch { /* ignore */ }
     const rec = new Ctor();
     rec.lang = recLocale(lang);
-    rec.continuous = true;
+    rec.continuous = !singleShot;
     rec.interimResults = true; // live feedback so you can SEE it's hearing you
     rec.maxAlternatives = 1;
     setDenied(false);
@@ -163,14 +186,21 @@ export function VoiceAssistant() {
       }
       const shown = (final || interim).trim();
       if (shown) setHeard(shown); // shows the running transcript in the pill
-      if (final.trim()) handleTranscript(final);
+      if (final.trim()) handleTranscript(final, singleShot);
     };
     rec.onerror = (e: SRErrorEvent) => {
       // Transient errors (silence, aborted) — the onend handler restarts.
       if (e.error === "not-allowed" || e.error === "service-not-allowed") { setDenied(true); stop(); }
     };
     rec.onend = () => {
-      // Browsers stop after a silence; restart to stay hands-free.
+      if (singleShot) {
+        // iOS: the single utterance is done. Return to a ready state so the
+        // next tap asks again — no auto-restart (iOS blocks it).
+        listeningRef.current = false;
+        setStatus("off");
+        return;
+      }
+      // Continuous platforms stop after a silence; restart to stay hands-free.
       if (listeningRef.current) { try { rec.start(); } catch { /* ignore */ } }
     };
     recRef.current = rec;
@@ -187,7 +217,8 @@ export function VoiceAssistant() {
   // the mic after a page load, so we resume on the very first interaction
   // anywhere on the page (no need to hunt for the mic button).
   useEffect(() => {
-    const elig = !!user && (plan === "clear" || plan === "deep") && supported;
+    // iOS is tap-to-ask only (no reliable hands-free), so never auto-resume.
+    const elig = !!user && (plan === "clear" || plan === "deep") && supported && !isIOSPlatform();
     if (!elig || listeningRef.current) return;
     let saved = false;
     try { saved = localStorage.getItem(PREF_KEY) === "1"; } catch { /* ignore */ }
@@ -212,11 +243,16 @@ export function VoiceAssistant() {
 
   const active = status === "listening" || status === "heard";
   const armed = status === "armed";
+  const ios = isIOSPlatform(); // tap-to-ask model, no wake word needed
   const label =
     denied ? (lang === "he" ? "צריך לאשר מיקרופון בדפדפן (סמל המנעול בשורת הכתובת)" : "Allow the microphone in your browser (lock icon in the address bar)")
     : heard ? heard
-    : status === "listening" ? (lang === "he" ? "מקשיב… אמור: “גדית, מה זה…”" : "Listening… say “Gadit, what is…”")
+    : status === "listening"
+      ? ios
+        ? (lang === "he" ? "מקשיב… תגיד מילה עכשיו" : "Listening… say a word now")
+        : (lang === "he" ? "מקשיב… אמור: “גדית, מה זה…”" : "Listening… say “Gadit, what is…”")
     : armed ? (lang === "he" ? "האזנה מופעלת · תגע במסך כדי לחדש" : "Listening on · tap anywhere to resume")
+    : ios ? (lang === "he" ? "הקש ושאל" : "Tap and ask")
     : (lang === "he" ? "מצב האזנה" : "Listening mode");
 
   return (

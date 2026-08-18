@@ -580,6 +580,30 @@ export function HomeFooter() {
     { label: v2(lang, "footerContact"), href: href("/contact") },
   ];
 
+  // Sales decks (Gadi 2026-08-18) — static self-contained HTML in
+  // public/decks/, one per product. Only English + Hebrew exist so far;
+  // every other UI language falls back to the English deck. Plain <a>
+  // (not the app router / href helper) because these are static files
+  // served straight from /public with no locale prefix, opened in a new
+  // tab. Local label maps (en fallback) so a new footer group doesn't
+  // force a 22-language i18n sweep.
+  const deckLang = lang === "he" ? "he" : "en";
+  const deckGroupLabel: Record<string, string> = {
+    en: "Decks", he: "מצגות", ar: "عروض", ru: "Презентации", es: "Presentaciones",
+    pt: "Apresentações", fr: "Présentations", de: "Präsentationen", it: "Presentazioni",
+    nl: "Presentaties", pl: "Prezentacje", tr: "Sunumlar", uk: "Презентації",
+    cs: "Prezentace", sk: "Prezentácie", el: "Παρουσιάσεις", id: "Presentasi",
+  };
+  const deckItems: Array<{ key: string; label: Record<string, string> }> = [
+    { key: "schools", label: { en: "For schools", he: "לבתי ספר", ar: "للمدارس", ru: "Для школ", es: "Para escuelas", pt: "Para escolas", fr: "Pour les écoles", de: "Für Schulen" } },
+    { key: "families", label: { en: "For families", he: "למשפחות", ar: "للعائلات", ru: "Для семей", es: "Para familias", pt: "Para famílias", fr: "Pour les familles", de: "Für Familien" } },
+    { key: "individuals", label: { en: "For you", he: "ליחידים", ar: "للأفراد", ru: "Для вас", es: "Para ti", pt: "Para você", fr: "Pour vous", de: "Für dich" } },
+  ];
+  const deckLinks = deckItems.map((it) => ({
+    label: it.label[lang] ?? it.label.en,
+    href: `/decks/${it.key}-${deckLang}.html`,
+  }));
+
   return (
     // Footer is forced to LTR layout regardless of UI locale: logo
     // anchored to the LEFT, nav columns to the RIGHT. This is the
@@ -618,7 +642,7 @@ export function HomeFooter() {
         </div>
         <div
           dir={dir}
-          className="grid grid-cols-2 gap-6 md:gap-12"
+          className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12"
           style={{ textAlign: isRtl ? "right" : "left" }}
         >
           <div>
@@ -653,6 +677,26 @@ export function HomeFooter() {
                   >
                     {it.label}
                   </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
+              {deckGroupLabel[lang] ?? deckGroupLabel.en}
+            </Eyebrow>
+            <ul className="mt-3 space-y-2 gd-font-sans-ui">
+              {deckLinks.map((it) => (
+                <li key={it.href}>
+                  <a
+                    href={it.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                    style={{ fontSize: 13, color: "oklch(0.78 0.02 265)" }}
+                  >
+                    {it.label}
+                  </a>
                 </li>
               ))}
             </ul>
