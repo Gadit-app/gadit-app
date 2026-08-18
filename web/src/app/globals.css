@@ -12057,6 +12057,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 600;
   letter-spacing: 0.18em;
   color: var(--ink);
+  /* Always render the code strictly left-to-right, isolated from the RTL
+     document, so it can never read reversed on any device (Gadi 2026-08-19). */
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 .wordbook .wb-family-code-ttl {
   font-family: var(--wb-sans);
@@ -12832,6 +12836,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-weight: 700;
   color: #0EA5A5;
   letter-spacing: 0.08em;
+  /* Strict LTR isolation so the class code never reads reversed in the RTL
+     dashboard (Gadi 2026-08-19). */
+  direction: ltr;
+  unicode-bidi: isolate;
   padding: 6px 10px;
   background: rgba(14, 165, 165, 0.10);
   border-radius: 8px;
