@@ -377,6 +377,15 @@ export function HomePage() {
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
+        {/* Product sales decks (Gadi 2026-08-18), static HTML in /public/decks.
+            EN + HE only; other UI languages fall back to the English deck. */}
+        <span>·</span>
+        <span style={{ opacity: 0.55 }}>{lang === "he" ? "מצגות:" : "Decks:"}</span>
+        <a href={`/decks/schools-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "בתי ספר" : "Schools"}</a>
+        <span>·</span>
+        <a href={`/decks/families-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "משפחות" : "Families"}</a>
+        <span>·</span>
+        <a href={`/decks/individuals-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "יחידים" : "Individuals"}</a>
       </footer>
     </div>
   );

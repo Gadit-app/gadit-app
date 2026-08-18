@@ -16,6 +16,7 @@ import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { TTSButton } from "@/components/design/TTSButton";
+import VoiceInput from "@/components/VoiceInput";
 
 // The tool's few strings. English is the fallback for any UI language
 // not listed here (same launch pattern as other new surfaces).
@@ -23,7 +24,7 @@ type Copy = {
   title: string; sub: string; from: string; to: string;
   placeholder: string; button: string; loading: string;
   hearing: string; tip: string; loginTitle: string; loginBody: string;
-  loginCta: string; errGeneric: string;
+  loginCta: string; errGeneric: string; speak: string;
 };
 const COPY: Partial<Record<Lang, Copy>> = {
   en: {
@@ -37,6 +38,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     loginBody: "Speaking practice is part of your Gadit account.",
     loginCta: "Go to Gadit",
     errGeneric: "Something went wrong. Try again.",
+    speak: "Speak instead of typing",
   },
   he: {
     title: "תגיד את זה בשפה אחרת",
@@ -49,6 +51,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     loginBody: "תרגול דיבור הוא חלק מהחשבון שלך בגדית.",
     loginCta: "לגדית",
     errGeneric: "משהו השתבש. נסה שוב.",
+    speak: "לדבר במקום להקליד",
   },
 };
 function copy(lang: Lang): Copy {
@@ -159,19 +162,32 @@ export function SayClient() {
               </label>
             </div>
 
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={t.placeholder}
-              rows={3}
-              dir={dirOf(sourceLang)}
-              maxLength={500}
-              style={{
-                width: "100%", boxSizing: "border-box", fontSize: 18, lineHeight: 1.45,
-                padding: "14px 16px", borderRadius: 14, border: "1px solid var(--wb-border, #E7E7E2)",
-                background: "var(--wb-card, #fff)", color: "inherit", resize: "vertical", fontFamily: "inherit",
-              }}
-            />
+            <div style={{ position: "relative" }}>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder={t.placeholder}
+                rows={3}
+                dir={dirOf(sourceLang)}
+                maxLength={500}
+                style={{
+                  width: "100%", boxSizing: "border-box", fontSize: 18, lineHeight: 1.45,
+                  padding: "14px 16px 48px", borderRadius: 14, border: "1px solid var(--wb-border, #E7E7E2)",
+                  background: "var(--wb-card, #fff)", color: "inherit", resize: "vertical", fontFamily: "inherit",
+                }}
+              />
+              {/* Speak instead of type: record → Whisper transcribes in the
+                  source language and fills the box (Gadi 2026-08-18). */}
+              <div style={{ position: "absolute", bottom: 10, insetInlineEnd: 10 }}>
+                <VoiceInput
+                  uiLang={sourceLang}
+                  getIdToken={async () => (user ? await user.getIdToken() : null)}
+                  enabled={plan === "clear" || plan === "deep"}
+                  title={t.speak}
+                  onResult={(spoken) => setText((p) => (p.trim() ? p.trim() + " " + spoken : spoken))}
+                />
+              </div>
+            </div>
 
             <button
               type="button"
