@@ -101,6 +101,11 @@ const STRINGS = {
     // total monthly forecast
     totalLabel: "Full monthly forecast · if every trial pays",
     totalSub: "current %c + trials %t · ≈ $%y/yr",
+    confirmedLabel: "Confirmed · paying now",
+    confirmedSub: "%n paying customers · real revenue",
+    pendingLabel: "Pending · trials (not money yet)",
+    pendingSub: "%n trials · counts only if they pay",
+    forecastFoot: "Full forecast if every trial pays: %f · ≈ $%y/yr",
     // operational KPIs
     kPaying: "Paying customers",
     kNew: "New customers · month",
@@ -155,6 +160,11 @@ const STRINGS = {
     hChurn: "אחוז הלקוחות שעזבו החודש",
     totalLabel: 'סה"כ צפי חודשי · אם כל ניסיון משלם',
     totalSub: "נוכחי %c + ניסיונות %t · ≈ $%y לשנה",
+    confirmedLabel: "כסף ודאי · משלמים עכשיו",
+    confirmedSub: "%n משלמים · הכנסה אמיתית",
+    pendingLabel: "בהמתנה · ניסיונות (עוד לא כסף)",
+    pendingSub: "%n ניסיונות · נספר רק אם ישלמו",
+    forecastFoot: "צפי מלא אם כל הניסיונות ישלמו: %f · ≈ $%y לשנה",
     kPaying: "לקוחות משלמים",
     kNew: "לקוחות חדשים · החודש",
     kChurn: "נטישה חודשית",
@@ -273,20 +283,30 @@ export default function AdminOverviewClient() {
 
       {data && rev && dec && (
         <>
-          {/* Total monthly forecast — the headline "what I'd earn per month
-              if every trial converts" (Gadi 2026-08-17): current MRR + the
-              full trial pipeline. */}
-          <div style={{ ...cardStyle, padding: "12px 16px", marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.06)" }}>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: TOKENS.inkSoft, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.totalLabel}</div>
-              <div dir="ltr" style={{ fontSize: 12, color: TOKENS.inkFaint, marginTop: 3, textAlign: "start" }}>
-                {t.totalSub
-                  .replace("%c", money(rev.mrrUsd))
-                  .replace("%t", money(rev.trialingMrrUsd))
-                  .replace("%y", Math.round(rev.totalMrrUsd * 12).toLocaleString("en-US"))}
-              </div>
+          {/* CONFIRMED money vs PENDING trials — two visually distinct blocks
+              so real revenue is never confused with the "if every trial pays"
+              pipeline (Gadi 2026-08-19: the combined forecast read as money).
+              Confirmed = solid teal / real. Pending = dashed amber / not money
+              yet. The full forecast is demoted to a footnote. */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 8 }}>
+            {/* Confirmed */}
+            <div style={{ ...cardStyle, padding: "14px 18px", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.08)" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.tealBright, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.confirmedLabel}</div>
+              <div style={{ fontSize: 34, fontWeight: 800, color: TOKENS.teal, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.mrrUsd)}</div>
+              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 4 }}>{t.confirmedSub.replace("%n", String(rev.payingCustomers))}</div>
             </div>
-            <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.teal }} dir="ltr">{money(rev.totalMrrUsd)}</div>
+            {/* Pending — deliberately dashed + amber so it never reads as money */}
+            <div style={{ ...cardStyle, padding: "14px 18px", borderStyle: "dashed", borderColor: TOKENS.amber, background: "rgba(245,158,11,0.06)" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.amber, textTransform: "uppercase", letterSpacing: 0.5 }}>⏳ {t.pendingLabel}</div>
+              <div style={{ fontSize: 34, fontWeight: 800, color: TOKENS.amber, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.trialingMrrUsd)}</div>
+              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 4 }}>{t.pendingSub.replace("%n", String(rev.trialingSubscriptions))}</div>
+            </div>
+          </div>
+          {/* Forecast demoted to a small footnote */}
+          <div style={{ fontSize: 12, color: TOKENS.inkFaint, marginBottom: 14, textAlign: "start" }} dir="ltr">
+            {t.forecastFoot
+              .replace("%f", money(rev.totalMrrUsd))
+              .replace("%y", Math.round(rev.totalMrrUsd * 12).toLocaleString("en-US"))}
           </div>
 
           {/* §3.1 Money triplet */}
