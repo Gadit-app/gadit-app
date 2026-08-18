@@ -1387,7 +1387,7 @@ export function GaditDemoAnimation() {
 
   return (
     <div
-      className="wb-demo-anim"
+      className="wb-demo-anim wb-force-light"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-label="Gadit feature tour"

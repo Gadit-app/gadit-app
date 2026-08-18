@@ -28,9 +28,9 @@ export function meaningsEn(opts: { displayName?: string; unsubscribeUrl: string 
 
   return {
     subject: "One word, layers you haven't seen",
-    preheader: "Most dictionaries give one definition. We want to give them all.",
+    preheader: "Most tools stop at the definition. Gadit keeps going until it sticks.",
     html: layoutEn({
-      preheader: "Most dictionaries give one definition. We want to give them all.",
+      preheader: "Most tools stop at the definition. Gadit keeps going until it sticks.",
       bodyHtml,
       ctaText: 'Search "spirit" and see all the faces',
       ctaUrl: "https://www.gadit.app/en/word/spirit?utm_source=email&utm_medium=drip&utm_campaign=meanings",

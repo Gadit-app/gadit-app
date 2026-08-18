@@ -1184,7 +1184,7 @@ const COPY: Record<string, Copy> = {
     howBlocks: [
       { t: "הקלדת המילה", b: "הילד מקליד כל מילה שהוא לא מבין, במצב ילדים, במקום נקי ובטוח." },
       { t: "הגדרה ברורה", b: "הסבר בגובה העיניים של הילד, בלי מילים קשות שמסבירות מילים קשות." },
-      { t: "שלוש דוגמאות", b: "משפטים אמיתיים שמראים איך המילה חיה בתוך טקסט, לא רק הגדרה יבשה." },
+      { t: "שלוש דוגמאות", b: "משפטים אמיתיים שמראים איך המילה חיה בתוך טקסט, לצד תמונה שממחישה אותה." },
       { t: "תמונה לכל משמעות", b: "כי ילדים זוכרים מה שהם רואים, הרבה יותר טוב ממה שכתוב להם." },
       { t: "הבנת הקשר", b: "מדביקים משפט מהספר, ו-Gadit מסמן בדיוק את המשמעות שמתאימה לו." },
       { t: "מחברת אישית", b: "כל מילה שהילד חיפש נשמרת במחברת שלו, ולא בורחת." },
@@ -1384,7 +1384,7 @@ const COPY: Record<string, Copy> = {
     howBlocks: [
       { t: "Type the word", b: "Your child types any word they don't understand, in Kids Mode, in a clean and safe place." },
       { t: "A clear definition", b: "An explanation at the child's eye level, no hard words explaining hard words." },
-      { t: "Three examples", b: "Real sentences that show how the word lives inside a text, not just a dry definition." },
+      { t: "Three examples", b: "Real sentences that show how the word lives inside a text, with an image, not just a definition." },
       { t: "A picture for every meaning", b: "Because children remember what they see far better than what is written to them." },
       { t: "Context", b: "Paste a sentence from the book and Gadit marks exactly the meaning that fits it." },
       { t: "A personal notebook", b: "Every word your child looked up is saved in their notebook, and doesn't run away." },

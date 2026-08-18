@@ -26,9 +26,9 @@ export function meaningsHe(opts: { displayName?: string; unsubscribeUrl: string 
 
   return {
     subject: "מילה אחת, שכבות שלא ראית בה",
-    preheader: "רוב המילונים נותנים הגדרה אחת. אני רוצה לתת את כולן.",
+    preheader: "רוב הכלים עוצרים בהגדרה. Gadit ממשיך עד שהמילה נכנסת.",
     html: layoutHe({
-      preheader: "רוב המילונים נותנים הגדרה אחת. אני רוצה לתת את כולן.",
+      preheader: "רוב הכלים עוצרים בהגדרה. Gadit ממשיך עד שהמילה נכנסת.",
       bodyHtml,
       ctaText: 'לחפש "רוח" ולראות את כל הפנים',
       ctaUrl: "https://www.gadit.app/he/word/%D7%A8%D7%95%D7%97?utm_source=email&utm_medium=drip&utm_campaign=meanings",
