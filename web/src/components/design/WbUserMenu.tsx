@@ -32,6 +32,7 @@ import { avatarUrl } from "@/lib/family";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { useTheme } from "@/lib/appearance";
+import { resolvePartnerArea } from "@/lib/partner-nav";
 import type { Lang } from "@/lib/i18n";
 
 // "Dark mode" label — kept as a small local map (en fallback) so adding
@@ -372,26 +373,36 @@ export function WbUserMenu() {
               {lang === "he" ? "קבוצות מילים" : "Word sets"}
             </Link>
           )}
-          {/* Partner area is commercial — never shown to a kid. */}
+          {/* Partner area is commercial — never shown to a kid. A user who
+              is already a partner is sent to their own dashboard; everyone
+              else to the /partners landing (Gadi 2026-08-18). */}
           {familyRole !== "kid" && (
-            <Link
+            <button
               role="menuitem"
-              href={href("/partners")}
-              onClick={() => setOpen(false)}
+              type="button"
+              onClick={async () => {
+                setOpen(false);
+                router.push(await resolvePartnerArea(user, href));
+              }}
               style={{
                 display: "block",
+                width: "100%",
+                textAlign: dir === "rtl" ? "right" : "left",
                 padding: "10px 12px",
                 borderRadius: 8,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
                 color: "var(--ink, #111827)",
-                textDecoration: "none",
                 fontSize: 14,
                 fontWeight: 500,
+                fontFamily: "inherit",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {c.dashboard}
-            </Link>
+            </button>
           )}
           {/* Dark mode — adults only (kids theme via skins). Toggles the
               global data-theme between light and the teal-black dark. */}

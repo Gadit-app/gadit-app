@@ -32,7 +32,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { resolvePartnerArea } from "@/lib/partner-nav";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
@@ -171,6 +173,8 @@ export function WbShellNav({ active }: { active?: NavKey }) {
   const links = useNavLinks();
   const { lang } = useLang();
   const href = useHref();
+  const { user } = useAuth();
+  const router = useRouter();
   return (
     <nav className="wb-shell-nav">
       {active !== "home" && (
@@ -196,6 +200,15 @@ export function WbShellNav({ active }: { active?: NavKey }) {
           >
             {l.label}
           </button>
+        ) : l.key === "affiliates" ? (
+          <button
+            key={l.key}
+            type="button"
+            className={`wb-shell-navlink${active === l.key ? " is-active" : ""}`}
+            onClick={async () => router.push(await resolvePartnerArea(user, href))}
+          >
+            {l.label}
+          </button>
         ) : (
           <Link
             key={l.key}
@@ -218,6 +231,7 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
   const { user, promptLogin } = useAuth();
   const { lang } = useLang();
   const href = useHref();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   // Show the install entry only where installing is actually possible:
   // a real mobile browser (not an Instagram/Facebook webview), not
@@ -288,6 +302,15 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
                 type="button"
                 className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
                 onClick={() => { setOpen(false); openSay(); }}
+              >
+                {l.label}
+              </button>
+            ) : l.key === "affiliates" ? (
+              <button
+                key={l.key}
+                type="button"
+                className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
+                onClick={async () => { setOpen(false); router.push(await resolvePartnerArea(user, href)); }}
               >
                 {l.label}
               </button>
