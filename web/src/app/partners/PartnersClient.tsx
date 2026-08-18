@@ -1293,7 +1293,7 @@ export function PartnersClient() {
   const link = result ? `https://www.gadit.app/?ref=${result.code}` : "";
 
   return (
-    <div dir={dir} style={S.page}>
+    <div className="wordbook" dir={dir} style={S.page}>
       {/* Top bar */}
       <header style={S.topbar}>
         <Link href={href("/")} style={S.wordmark} translate="no">Gadit</Link>
@@ -1375,7 +1375,7 @@ export function PartnersClient() {
               <div style={S.calcLabel}>{t.calcMonthly}</div>
             </div>
             <div style={S.calcCell}>
-              <div style={{ ...S.calcVal, color: "#0EA5A5" }} dir="ltr">{money(yearly)}</div>
+              <div style={{ ...S.calcVal, color: "var(--teal)" }} dir="ltr">{money(yearly)}</div>
               <div style={S.calcLabel}>{t.calcYearly}</div>
             </div>
           </div>
@@ -1403,7 +1403,7 @@ export function PartnersClient() {
               {/* Explicit language question — we email the partner in this
                   language, so we never guess (Gadi 2026-08-17). Defaults to
                   the page language; the partner can change it. */}
-              <label style={{ display: "block", fontSize: 12.5, color: "#6B7280", margin: "2px 0 5px" }}>{LANG_Q[lang] ?? LANG_Q.en}</label>
+              <label style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted)", margin: "2px 0 5px" }}>{LANG_Q[lang] ?? LANG_Q.en}</label>
               <select style={{ ...S.input, cursor: "pointer" }} value={signupLang} onChange={(e) => setSignupLang(e.target.value)}>
                 {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{l.label}</option>))}
               </select>
@@ -1437,50 +1437,50 @@ export function PartnersClient() {
 }
 
 const S: Record<string, React.CSSProperties> = {
-  page: { background: "#F6F8FA", color: "#111827", fontFamily: "var(--font-rubik, -apple-system, Segoe UI, Roboto, sans-serif)", minHeight: "100dvh" },
+  page: { background: "var(--paper)", color: "var(--ink)", fontFamily: "var(--font-rubik, -apple-system, Segoe UI, Roboto, sans-serif)", minHeight: "100dvh" },
   topbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", maxWidth: 960, margin: "0 auto" },
-  wordmark: { fontSize: 22, fontWeight: 800, color: "#0EA5A5", textDecoration: "none" },
-  navLink: { color: "#6B7280", textDecoration: "none", fontSize: 14, fontWeight: 600 },
+  wordmark: { fontSize: 22, fontWeight: 800, color: "var(--teal)", textDecoration: "none" },
+  navLink: { color: "var(--ink-muted)", textDecoration: "none", fontSize: 14, fontWeight: 600 },
   hero: { textAlign: "center", padding: "48px 20px 40px", maxWidth: 760, margin: "0 auto" },
   heroTitle: { fontSize: 40, lineHeight: 1.15, fontWeight: 800, margin: "0 0 16px" },
-  heroSub: { fontSize: 18, lineHeight: 1.6, color: "#4B5563", margin: "0 auto 28px", maxWidth: 620 },
-  heroCta: { display: "inline-block", background: "#0EA5A5", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: 16, padding: "14px 32px", borderRadius: 12, boxShadow: "0 6px 20px rgba(14,165,165,0.28)" },
+  heroSub: { fontSize: 18, lineHeight: 1.6, color: "var(--ink-soft)", margin: "0 auto 28px", maxWidth: 620 },
+  heroCta: { display: "inline-block", background: "var(--teal)", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: 16, padding: "14px 32px", borderRadius: 12, boxShadow: "0 6px 20px rgba(14,165,165,0.28)" },
   proofRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 22, flexWrap: "wrap" },
-  proof: { fontSize: 14, fontWeight: 700, color: "#0b7d7d" },
-  proofDot: { color: "#CBD5E1" },
+  proof: { fontSize: 14, fontWeight: 700, color: "var(--teal)" },
+  proofDot: { color: "var(--rule)" },
   section: { maxWidth: 960, margin: "0 auto", padding: "36px 20px" },
   h2: { fontSize: 26, fontWeight: 800, textAlign: "center", margin: "0 0 28px" },
   grid3: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 },
-  featCard: { background: "#fff", border: "1px solid #EAECEF", borderRadius: 16, padding: 22 },
-  stepCard: { background: "#fff", border: "1px solid #EAECEF", borderRadius: 16, padding: 22, position: "relative" },
-  stepNum: { width: 34, height: 34, borderRadius: 999, background: "rgba(14,165,165,0.12)", color: "#0b7d7d", fontWeight: 800, fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 },
+  featCard: { background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: 16, padding: 22 },
+  stepCard: { background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: 16, padding: 22, position: "relative" },
+  stepNum: { width: 34, height: 34, borderRadius: 999, background: "rgba(14,165,165,0.12)", color: "var(--teal)", fontWeight: 800, fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 },
   featTitle: { fontSize: 17, fontWeight: 700, marginBottom: 8 },
-  featBody: { fontSize: 14.5, lineHeight: 1.65, color: "#4B5563" },
+  featBody: { fontSize: 14.5, lineHeight: 1.65, color: "var(--ink-soft)" },
   rateGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, maxWidth: 720, margin: "0 auto" },
-  rateCard: { background: "#fff", border: "1px solid #EAECEF", borderRadius: 18, padding: 28, textAlign: "center" },
+  rateCard: { background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: 18, padding: 28, textAlign: "center" },
   rateCardFounder: { border: "1.5px solid rgba(124,58,237,0.35)", background: "rgba(124,58,237,0.03)" },
-  rateName: { fontSize: 15, fontWeight: 700, color: "#0b7d7d", marginBottom: 6 },
-  rateBig: { fontSize: 46, fontWeight: 800, color: "#0EA5A5", lineHeight: 1 },
-  rateSub: { fontSize: 14.5, lineHeight: 1.6, color: "#4B5563", marginTop: 12 },
-  calcCard: { background: "#fff", border: "1px solid #EAECEF", borderRadius: 18, padding: 28, maxWidth: 560, margin: "0 auto", textAlign: "center" },
-  calcLead: { display: "block", fontSize: 15, fontWeight: 600, color: "#374151", marginBottom: 16 },
-  slider: { width: "100%", accentColor: "#0EA5A5" },
-  calcCount: { fontSize: 32, fontWeight: 800, color: "#111827", margin: "8px 0 20px" },
+  rateName: { fontSize: 15, fontWeight: 700, color: "var(--teal)", marginBottom: 6 },
+  rateBig: { fontSize: 46, fontWeight: 800, color: "var(--teal)", lineHeight: 1 },
+  rateSub: { fontSize: 14.5, lineHeight: 1.6, color: "var(--ink-soft)", marginTop: 12 },
+  calcCard: { background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: 18, padding: 28, maxWidth: 560, margin: "0 auto", textAlign: "center" },
+  calcLead: { display: "block", fontSize: 15, fontWeight: 600, color: "var(--ink-soft)", marginBottom: 16 },
+  slider: { width: "100%", accentColor: "var(--teal)" },
+  calcCount: { fontSize: 32, fontWeight: 800, color: "var(--ink)", margin: "8px 0 20px" },
   calcResults: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  calcCell: { background: "#F6F8FA", borderRadius: 12, padding: "16px 8px" },
+  calcCell: { background: "var(--paper)", borderRadius: 12, padding: "16px 8px" },
   calcVal: { fontSize: 26, fontWeight: 800 },
-  calcLabel: { fontSize: 13, color: "#6B7280", marginTop: 4 },
-  calcNote: { fontSize: 12.5, color: "#9CA3AF", marginTop: 16, lineHeight: 1.5 },
-  formCard: { background: "#fff", border: "1px solid #EAECEF", borderRadius: 18, padding: 28, maxWidth: 480, margin: "0 auto" },
-  input: { width: "100%", boxSizing: "border-box", padding: "13px 14px", borderRadius: 10, border: "1px solid #D1D5DB", fontSize: 15, marginBottom: 12, fontFamily: "inherit", outline: "none" },
+  calcLabel: { fontSize: 13, color: "var(--ink-muted)", marginTop: 4 },
+  calcNote: { fontSize: 12.5, color: "var(--ink-faint)", marginTop: 16, lineHeight: 1.5 },
+  formCard: { background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: 18, padding: 28, maxWidth: 480, margin: "0 auto" },
+  input: { width: "100%", boxSizing: "border-box", background: "var(--surface)", color: "var(--ink)", padding: "13px 14px", borderRadius: 10, border: "1px solid var(--rule)", fontSize: 15, marginBottom: 12, fontFamily: "inherit", outline: "none" },
   formErr: { color: "#991B1B", fontSize: 13.5, marginBottom: 12 },
-  formCta: { width: "100%", background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontSize: 16, fontWeight: 700, cursor: "pointer" },
+  formCta: { width: "100%", background: "var(--teal)", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontSize: 16, fontWeight: 700, cursor: "pointer" },
   successTitle: { fontSize: 24, fontWeight: 800, marginBottom: 8 },
-  successBody: { fontSize: 15, color: "#4B5563", marginBottom: 18 },
-  successLinkLabel: { fontSize: 13, color: "#6B7280", marginBottom: 6 },
-  successLink: { fontSize: 17, fontWeight: 700, color: "#0EA5A5", wordBreak: "break-all", marginBottom: 20 },
-  faqItem: { borderBottom: "1px solid #EAECEF", padding: "16px 0" },
+  successBody: { fontSize: 15, color: "var(--ink-soft)", marginBottom: 18 },
+  successLinkLabel: { fontSize: 13, color: "var(--ink-muted)", marginBottom: 6 },
+  successLink: { fontSize: 17, fontWeight: 700, color: "var(--teal)", wordBreak: "break-all", marginBottom: 20 },
+  faqItem: { borderBottom: "1px solid var(--rule)", padding: "16px 0" },
   faqQ: { fontSize: 16, fontWeight: 700, marginBottom: 6 },
-  faqA: { fontSize: 14.5, lineHeight: 1.6, color: "#4B5563" },
+  faqA: { fontSize: 14.5, lineHeight: 1.6, color: "var(--ink-soft)" },
   footer: { textAlign: "center", padding: "40px 20px 56px" },
 };

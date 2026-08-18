@@ -15,7 +15,7 @@ const SUBJECT_COLORS: Record<string, { accent: string; soft: string; border: str
   history:   { accent: "#B45309", soft: "#FFFBEB", border: "#FDE68A" }, // amber
   torah:     { accent: "#BE123C", soft: "#FFF1F2", border: "#FECDD3" }, // rose
   science:   { accent: "#0891B2", soft: "#ECFEFF", border: "#CFF9FE" }, // cyan
-  _default:  { accent: "#0EA5A5", soft: "#F0FDFA", border: "#CCFBF1" },
+  _default:  { accent: "var(--teal)", soft: "#F0FDFA", border: "#CCFBF1" },
 };
 
 /**
@@ -64,7 +64,7 @@ export default function SetsClient() {
     router.push(href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`));
 
   return (
-    <div dir={dir} style={S.page}>
+    <div className="wordbook" dir={dir} style={S.page}>
       <header style={S.header}>
         <Link href={href("/")} style={S.wordmark} dir="ltr" aria-label="Gadit home">
           Gad<span style={{ fontStyle: "italic" }}>it</span>
@@ -116,20 +116,20 @@ export default function SetsClient() {
 }
 
 const S: Record<string, React.CSSProperties> = {
-  page: { minHeight: "100dvh", background: "#f6f4ee", color: "#1f2937" },
-  header: { padding: "18px 24px", borderBottom: "1px solid rgba(31,41,55,0.06)" },
-  wordmark: { fontWeight: 800, fontSize: 20, color: "#1f2937", textDecoration: "none", letterSpacing: "-0.02em" },
+  page: { minHeight: "100dvh", background: "var(--paper)", color: "var(--ink)" },
+  header: { padding: "18px 24px", borderBottom: "1px solid var(--rule)" },
+  wordmark: { fontWeight: 800, fontSize: 20, color: "var(--ink)", textDecoration: "none", letterSpacing: "-0.02em" },
   main: { maxWidth: 1080, margin: "0 auto", padding: "28px 20px 64px" },
   h1: { fontSize: 30, fontWeight: 800, margin: "0 0 6px", letterSpacing: "-0.01em" },
-  subtitle: { color: "#6b7280", fontSize: 15.5, margin: "0 0 28px", maxWidth: 640 },
+  subtitle: { color: "var(--ink-muted)", fontSize: 15.5, margin: "0 0 28px", maxWidth: 640 },
   section: { marginBottom: 34 },
-  h2: { fontSize: 20, fontWeight: 800, margin: "0 0 14px", color: "#0b7d7d" },
+  h2: { fontSize: 20, fontWeight: 800, margin: "0 0 14px", color: "var(--teal)" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 },
-  card: { background: "#fff", border: "1px solid rgba(31,41,55,0.08)", borderRadius: 16, padding: "16px 16px 14px", display: "flex", flexDirection: "column", gap: 12 },
+  card: { background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: 16, padding: "16px 16px 14px", display: "flex", flexDirection: "column", gap: 12 },
   cardHead: { display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 },
   cardTitle: { fontWeight: 700, fontSize: 16.5 },
-  grade: { fontSize: 12.5, fontWeight: 700, color: "#9CA3AF", flexShrink: 0 },
+  grade: { fontSize: 12.5, fontWeight: 700, color: "var(--ink-faint)", flexShrink: 0 },
   chips: { display: "flex", flexWrap: "wrap", gap: 6 },
-  chip: { fontSize: 13.5, fontWeight: 600, color: "#374151", background: "#F3F4F6", borderRadius: 8, padding: "4px 9px", textDecoration: "none", border: "1px solid transparent" },
-  presentBtn: { marginTop: 2, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "10px 14px", borderRadius: 12, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 15, cursor: "pointer", fontFamily: "inherit" },
+  chip: { fontSize: 13.5, fontWeight: 600, color: "var(--ink-soft)", background: "var(--mist)", borderRadius: 8, padding: "4px 9px", textDecoration: "none", border: "1px solid transparent" },
+  presentBtn: { marginTop: 2, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "10px 14px", borderRadius: 12, border: "none", background: "var(--teal)", color: "#fff", fontWeight: 800, fontSize: 15, cursor: "pointer", fontFamily: "inherit" },
 };

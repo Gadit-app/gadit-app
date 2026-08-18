@@ -723,8 +723,8 @@ export function SchoolsClient() {
                 // background showing through in V1). Swap to white in
                 // the with-logo state so the user's logo reads clean;
                 // keep mustard for the empty placeholder state.
-                background: school.logoUrl ? "#FFFFFF" : undefined,
-                border: school.logoUrl ? "1px solid var(--hairline, #E5E7EB)" : "1px solid rgba(202, 138, 4, 0.3)",
+                background: school.logoUrl ? "var(--surface)" : undefined,
+                border: school.logoUrl ? "1px solid var(--hairline, var(--rule))" : "1px solid rgba(202, 138, 4, 0.3)",
                 cursor: "pointer",
               }}
             >
@@ -765,7 +765,7 @@ export function SchoolsClient() {
                 boxShadow: "0 2px 4px rgba(202, 138, 4, 0.35)",
               }}
             >
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--surface)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 20h9" />
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
               </svg>
@@ -809,9 +809,9 @@ export function SchoolsClient() {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1.5px solid #D6D3D1",
+                  border: "1.5px solid var(--rule)",
                   borderRadius: 10,
-                  background: "#FFFFFF",
+                  background: "var(--surface)",
                   fontFamily: "var(--wb-serif)",
                   fontWeight: 700,
                   fontSize: "clamp(24px, 3.6vw, 36px)",
@@ -920,7 +920,7 @@ export function SchoolsClient() {
                     gap: 12,
                     padding: 18,
                     background: "var(--surface)",
-                    border: "1.5px solid #0EA5A5",
+                    border: "1.5px solid var(--teal)",
                     borderRadius: 14,
                     marginBottom: 10,
                   }}
@@ -934,7 +934,7 @@ export function SchoolsClient() {
                         fontWeight: 600,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "#0EA5A5",
+                        color: "var(--teal)",
                         marginBottom: 6,
                       }}
                     >
@@ -952,9 +952,9 @@ export function SchoolsClient() {
                       style={{
                         width: "100%",
                         padding: "10px 14px",
-                        border: "1.5px solid #D6D3D1",
+                        border: "1.5px solid var(--rule)",
                         borderRadius: 10,
-                        background: "#FFFFFF",
+                        background: "var(--surface)",
                         fontFamily: "var(--wb-sans)",
                         fontSize: 15,
                         color: "var(--ink)",
@@ -971,7 +971,7 @@ export function SchoolsClient() {
                         fontWeight: 600,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "#0EA5A5",
+                        color: "var(--teal)",
                         marginBottom: 6,
                       }}
                     >
@@ -988,9 +988,9 @@ export function SchoolsClient() {
                       style={{
                         width: "100%",
                         padding: "10px 14px",
-                        border: "1.5px solid #D6D3D1",
+                        border: "1.5px solid var(--rule)",
                         borderRadius: 10,
-                        background: "#FFFFFF",
+                        background: "var(--surface)",
                         fontFamily: "var(--wb-sans)",
                         fontSize: 15,
                         color: "var(--ink)",
@@ -1007,7 +1007,7 @@ export function SchoolsClient() {
                         fontWeight: 600,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "#0EA5A5",
+                        color: "var(--teal)",
                         marginBottom: 6,
                       }}
                     >
@@ -1050,7 +1050,7 @@ export function SchoolsClient() {
                         fontWeight: 600,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "#0EA5A5",
+                        color: "var(--teal)",
                         marginBottom: 6,
                       }}
                     >
@@ -1064,9 +1064,9 @@ export function SchoolsClient() {
                       style={{
                         width: "100%",
                         padding: "10px 14px",
-                        border: "1.5px solid #D6D3D1",
+                        border: "1.5px solid var(--rule)",
                         borderRadius: 10,
-                        background: "#FFFFFF",
+                        background: "var(--surface)",
                         fontFamily: "var(--wb-sans)",
                         fontSize: 15,
                         lineHeight: 1.5,
@@ -1083,7 +1083,7 @@ export function SchoolsClient() {
                         marginBottom: 0,
                         fontFamily: "var(--wb-sans)",
                         fontSize: 13,
-                        color: "var(--ink-soft, #6B7280)",
+                        color: "var(--ink-soft, var(--ink-muted))",
                         lineHeight: 1.5,
                       }}
                     >
@@ -1096,7 +1096,7 @@ export function SchoolsClient() {
                         fontFamily: "var(--wb-sans)",
                         fontSize: 12,
                         fontWeight: 600,
-                        color: "#0EA5A5",
+                        color: "var(--teal)",
                       }}
                     >
                       {c.studentsCount(
@@ -1127,11 +1127,11 @@ export function SchoolsClient() {
                       style={{
                         padding: "10px 22px",
                         background: "transparent",
-                        border: "1px solid var(--hairline, #E5E7EB)",
+                        border: "1px solid var(--hairline, var(--rule))",
                         borderRadius: 10,
                         fontFamily: "var(--wb-sans)",
                         fontSize: 15,
-                        color: "var(--ink-soft, #6B7280)",
+                        color: "var(--ink-soft, var(--ink-muted))",
                         cursor: "pointer",
                       }}
                     >
@@ -1193,12 +1193,12 @@ export function SchoolsClient() {
                       height: 30,
                       borderRadius: 999,
                       background: "transparent",
-                      border: "1px solid var(--hairline, #E5E7EB)",
+                      border: "1px solid var(--hairline, var(--rule))",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "var(--ink-soft, #6B7280)",
+                      color: "var(--ink-soft, var(--ink-muted))",
                     }}
                   >
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1220,7 +1220,7 @@ export function SchoolsClient() {
                       height: 30,
                       borderRadius: 999,
                       background: "transparent",
-                      border: "1px solid var(--hairline, #E5E7EB)",
+                      border: "1px solid var(--hairline, var(--rule))",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
@@ -1257,7 +1257,7 @@ export function SchoolsClient() {
                       alignItems: "center",
                       gap: 10,
                       padding: "10px 18px",
-                      borderTop: "1px dashed var(--hairline, #E5E7EB)",
+                      borderTop: "1px dashed var(--hairline, var(--rule))",
                       background: "transparent",
                       cursor: "pointer",
                       textAlign: dir === "rtl" ? "right" : "left",
@@ -1272,7 +1272,7 @@ export function SchoolsClient() {
                         fontWeight: 600,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "#0EA5A5",
+                        color: "var(--teal)",
                         flexShrink: 0,
                       }}
                     >
@@ -1298,7 +1298,7 @@ export function SchoolsClient() {
                         fontFamily: "var(--wb-sans)",
                         fontSize: 12,
                         fontWeight: 600,
-                        color: copiedId === cls.id ? "#10B981" : "var(--ink-soft, #6B7280)",
+                        color: copiedId === cls.id ? "#10B981" : "var(--ink-soft, var(--ink-muted))",
                         flexShrink: 0,
                         display: "inline-flex",
                         alignItems: "center",
@@ -1365,7 +1365,7 @@ export function SchoolsClient() {
                   fontWeight: 600,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: "#0EA5A5",
+                  color: "var(--teal)",
                   marginBottom: 6,
                 }}
               >
@@ -1381,9 +1381,9 @@ export function SchoolsClient() {
                 style={{
                   width: "100%",
                   padding: "10px 14px",
-                  border: "1.5px solid #D6D3D1",
+                  border: "1.5px solid var(--rule)",
                   borderRadius: 10,
-                  background: "#FFFFFF",
+                  background: "var(--surface)",
                   fontFamily: "var(--wb-sans)",
                   fontSize: 15,
                   color: "var(--ink)",
@@ -1401,7 +1401,7 @@ export function SchoolsClient() {
                   fontWeight: 600,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: "#0EA5A5",
+                  color: "var(--teal)",
                   marginBottom: 6,
                 }}
               >
@@ -1417,9 +1417,9 @@ export function SchoolsClient() {
                 style={{
                   width: "100%",
                   padding: "10px 14px",
-                  border: "1.5px solid #D6D3D1",
+                  border: "1.5px solid var(--rule)",
                   borderRadius: 10,
-                  background: "#FFFFFF",
+                  background: "var(--surface)",
                   fontFamily: "var(--wb-sans)",
                   fontSize: 15,
                   color: "var(--ink)",
@@ -1437,7 +1437,7 @@ export function SchoolsClient() {
                   fontWeight: 600,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: "#0EA5A5",
+                  color: "var(--teal)",
                   marginBottom: 6,
                 }}
               >
@@ -1491,11 +1491,11 @@ export function SchoolsClient() {
                 style={{
                   padding: "10px 22px",
                   background: "transparent",
-                  border: "1px solid var(--hairline, #E5E7EB)",
+                  border: "1px solid var(--hairline, var(--rule))",
                   borderRadius: 10,
                   fontFamily: "var(--wb-sans)",
                   fontSize: 15,
-                  color: "var(--ink-soft, #6B7280)",
+                  color: "var(--ink-soft, var(--ink-muted))",
                   cursor: "pointer",
                 }}
               >
@@ -1529,7 +1529,7 @@ function SchoolNavIcon({ name }: { name: "home" | "classrooms" | "students" | "s
 }
 
 const SCHOOL_SHELL_CSS = `
-.school-shell-page { min-height: 100dvh; background: #faf9f6; }
+.school-shell-page { min-height: 100dvh; background: var(--paper); }
 .school-shell {
   display: flex; gap: 20px; max-width: 1140px; margin: 0 auto;
   padding: 20px 18px 48px; align-items: flex-start;
@@ -1544,7 +1544,7 @@ const SCHOOL_SHELL_CSS = `
 .school-shell-brand {
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
   font-weight: 600; font-size: 26px; letter-spacing: -0.03em;
-  color: #1C1917; text-decoration: none; direction: ltr;
+  color: var(--ink); text-decoration: none; direction: ltr;
   padding: 4px 12px 16px; text-align: center;
 }
 .school-shell-brand-it { color: #CA8A04; font-style: italic; font-weight: 500; }
@@ -1556,8 +1556,8 @@ const SCHOOL_SHELL_CSS = `
   cursor: pointer; text-decoration: none; text-align: start;
   transition: background 140ms ease, color 140ms ease;
 }
-.school-nav-item svg { flex-shrink: 0; color: #A8A29E; transition: color 140ms ease; }
-.school-nav-item:hover { background: #faf6ec; color: #1C1917; }
+.school-nav-item svg { flex-shrink: 0; color: var(--ink-faint); transition: color 140ms ease; }
+.school-nav-item:hover { background: var(--mist); color: var(--ink); }
 .school-nav-item.is-active { background: rgba(202,138,4,0.12); color: #92400E; }
 .school-nav-item.is-active svg { color: #92400E; }
 .school-shell-side-foot { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(31,41,55,0.07); }
@@ -1570,23 +1570,23 @@ const SCHOOL_SHELL_CSS = `
 
 .school-shell-body { flex: 1; min-width: 0; }
 .school-shell-top { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-.school-shell-top h1 { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; color: #1C1917; margin: 0; letter-spacing: -0.01em; }
-.school-shell-top p { margin: 4px 0 0; color: #78716C; font-size: 14px; font-weight: 500; }
+.school-shell-top h1 { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+.school-shell-top p { margin: 4px 0 0; color: var(--ink-muted); font-size: 14px; font-weight: 500; }
 .school-shell-logo {
   width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px;
   background: rgba(202,138,4,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 .school-shell-logo img { width: 100%; height: 100%; object-fit: contain; }
-.school-sec-title { font-size: 20px; font-weight: 800; color: #1C1917; margin: 0 0 16px; }
+.school-sec-title { font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 16px; }
 .school-set-row {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
   background: #fff; border: 1px solid rgba(31,41,55,0.08); border-radius: 16px;
   padding: 15px 18px; margin-top: 12px; max-width: 620px;
 }
-.school-set-label { font-size: 15.5px; font-weight: 700; color: #1C1917; }
+.school-set-label { font-size: 15.5px; font-weight: 700; color: var(--ink); }
 .school-set-select {
-  font-family: inherit; font-size: 14.5px; font-weight: 600; color: #1C1917;
-  background: #faf6ec; border: 1px solid rgba(31,41,55,0.12); border-radius: 10px;
+  font-family: inherit; font-size: 14.5px; font-weight: 600; color: var(--ink);
+  background: var(--mist); border: 1px solid rgba(31,41,55,0.12); border-radius: 10px;
   padding: 8px 12px; cursor: pointer;
 }
 @media (max-width: 720px) {

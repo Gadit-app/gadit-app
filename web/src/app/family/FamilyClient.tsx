@@ -1347,9 +1347,9 @@ export function FamilyClient() {
           <div
             onClick={(e) => e.stopPropagation()}
             dir={dir}
-            style={{ background: "#fff", borderRadius: 16, padding: "22px 20px", width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(17,24,39,0.25)" }}
+            style={{ background: "var(--surface)", borderRadius: 16, padding: "22px 20px", width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(17,24,39,0.25)" }}
           >
-            <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#111827" }}>
+            <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "var(--ink)" }}>
               {lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
             </h3>
             <p style={{ margin: "0 0 16px", fontSize: 13.5, color: "#6b7280" }}>
@@ -1358,11 +1358,11 @@ export function FamilyClient() {
             {/* Profile photo: helps a parent recognize each child at a glance
                 in the profile switcher. Optional; falls back to the chip. */}
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-              <div style={{ width: 60, height: 60, borderRadius: 999, flexShrink: 0, overflow: "hidden", background: "#F3F4F6", border: "1px solid rgba(17,24,39,0.12)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 60, height: 60, borderRadius: 999, flexShrink: 0, overflow: "hidden", background: "var(--mist)", border: "1px solid rgba(17,24,39,0.12)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 {editPhoto ? (
                   <img src={editPhoto} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
                 )}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "start" }}>
@@ -1384,7 +1384,7 @@ export function FamilyClient() {
                   <button
                     type="button"
                     onClick={() => setEditPhoto("")}
-                    style={{ background: "none", border: "none", padding: "2px 2px", color: "#9CA3AF", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+                    style={{ background: "none", border: "none", padding: "2px 2px", color: "var(--ink-faint)", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
                   >
                     {lang === "he" ? "הסרת התמונה" : lang === "ar" ? "إزالة الصورة" : lang === "ru" ? "Удалить фото" : "Remove photo"}
                   </button>
@@ -1394,7 +1394,7 @@ export function FamilyClient() {
             {/* Avatar picker — pick an illustrated character (Gadi 2026-08-16).
                 A real photo above still wins; this is the fun default. */}
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#374151", marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--ink-soft)", marginBottom: 8 }}>
                 {lang === "he" ? "או בחרו דמות" : lang === "ar" ? "أو اختر شخصية" : lang === "ru" ? "Или выберите персонажа" : "Or pick a character"}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -1407,7 +1407,7 @@ export function FamilyClient() {
                       onClick={() => setEditAvatarId(active ? "" : a.id)}
                       aria-pressed={active}
                       title={a.name[lang] ?? a.name.en}
-                      style={{ width: 46, height: 46, borderRadius: 999, padding: 0, overflow: "hidden", cursor: "pointer", background: "#fff", border: active ? "2.5px solid #0EA5A5" : "2px solid rgba(17,24,39,0.1)", boxShadow: active ? "0 0 0 3px rgba(14,165,165,0.18)" : "none" }}
+                      style={{ width: 46, height: 46, borderRadius: 999, padding: 0, overflow: "hidden", cursor: "pointer", background: "var(--surface)", border: active ? "2.5px solid #0EA5A5" : "2px solid rgba(17,24,39,0.1)", boxShadow: active ? "0 0 0 3px rgba(14,165,165,0.18)" : "none" }}
                     >
                       <img src={avatarUrl(a.id) ?? ""} alt={a.name[lang] ?? a.name.en} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </button>
@@ -1427,14 +1427,14 @@ export function FamilyClient() {
                   key={r}
                   type="button"
                   onClick={() => setEditRole(r)}
-                  style={{ flex: 1, padding: "10px", borderRadius: 10, border: editRole === r ? "2px solid #0EA5A5" : "1px solid rgba(17,24,39,0.18)", background: editRole === r ? "rgba(14,165,165,0.08)" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "#111827" }}
+                  style={{ flex: 1, padding: "10px", borderRadius: 10, border: editRole === r ? "2px solid #0EA5A5" : "1px solid rgba(17,24,39,0.18)", background: editRole === r ? "rgba(14,165,165,0.08)" : "var(--surface)", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "var(--ink)" }}
                 >
                   {roleLabel[r]}
                 </button>
               ))}
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button type="button" onClick={() => setEditOpen(false)} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", background: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "#374151" }}>
+              <button type="button" onClick={() => setEditOpen(false)} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", background: "var(--surface)", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "var(--ink-soft)" }}>
                 {lang === "he" ? "ביטול" : "Cancel"}
               </button>
               <button type="button" onClick={saveMember} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", fontFamily: "inherit", opacity: editSaving ? 0.6 : 1 }}>
@@ -1832,7 +1832,7 @@ function ActivityFeed({
     <div
       dir={dir}
       style={{
-        marginTop: 18, background: "#fff", border: "1px solid #E7E5E4",
+        marginTop: 18, background: "var(--surface)", border: "1px solid var(--rule)",
         borderRadius: 14, padding: "16px 18px",
       }}
     >
@@ -1845,10 +1845,10 @@ function ActivityFeed({
             style={{
               display: "flex", alignItems: "baseline", gap: 10,
               padding: "9px 0",
-              borderTop: i === 0 ? "none" : "1px solid #F5F5F4",
+              borderTop: i === 0 ? "none" : "1px solid var(--mist)",
             }}
           >
-            <span style={{ fontSize: 15, fontWeight: 700, color: "#292524" }}>{it.word}</span>
+            <span style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)" }}>{it.word}</span>
             {it.kidName && (
               <span
                 style={{
@@ -2303,8 +2303,8 @@ function NotifSettings({
     <div
       dir={dir}
       style={{
-        background: "#fff",
-        border: "1px solid #E7E5E4",
+        background: "var(--surface)",
+        border: "1px solid var(--rule)",
         borderRadius: 14,
         padding: "16px 18px",
         marginBottom: 14,
@@ -2328,14 +2328,14 @@ function NotifSettings({
             aria-busy="true"
             style={{
               flex: "0 0 auto", width: 44, height: 26, borderRadius: 999,
-              background: "#E7E5E4", position: "relative", opacity: 0.5,
+              background: "var(--rule)", position: "relative", opacity: 0.5,
               cursor: "default",
             }}
           >
             <span
               style={{
                 position: "absolute", top: 3, insetInlineStart: 3,
-                width: 20, height: 20, borderRadius: "50%", background: "#fff",
+                width: 20, height: 20, borderRadius: "50%", background: "var(--surface)",
                 boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
               }}
             />
@@ -2354,14 +2354,14 @@ function NotifSettings({
             <span
               style={{
                 position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3,
-                width: 20, height: 20, borderRadius: "50%", background: "#fff",
+                width: 20, height: 20, borderRadius: "50%", background: "var(--surface)",
                 transition: "inset-inline-start 160ms ease",
                 boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
               }}
             />
           </span>
         )}
-        <span style={{ fontSize: 14, fontWeight: 600, color: "#292524" }}>{t.enable}</span>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{t.enable}</span>
       </label>
 
       {enabled && (
@@ -2376,19 +2376,19 @@ function NotifSettings({
                 style={{
                   display: "flex", alignItems: "flex-start", gap: 10, textAlign: "start",
                   padding: "10px 12px", borderRadius: 10, cursor: "pointer",
-                  border: `1.5px solid ${active ? TEAL : "#E7E5E4"}`,
-                  background: active ? "rgba(14,165,165,0.06)" : "#fff",
+                  border: `1.5px solid ${active ? TEAL : "var(--rule)"}`,
+                  background: active ? "rgba(14,165,165,0.06)" : "var(--surface)",
                 }}
               >
                 <span
                   style={{
                     flex: "0 0 auto", marginTop: 2, width: 16, height: 16, borderRadius: "50%",
                     border: `4px solid ${active ? TEAL : "#D6D3D1"}`,
-                    background: "#fff", boxSizing: "border-box",
+                    background: "var(--surface)", boxSizing: "border-box",
                   }}
                 />
                 <span>
-                  <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#292524" }}>
+                  <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>
                     {m === "instant" ? t.instant : t.daily}
                   </span>
                   <span style={{ display: "block", fontSize: 12.5, color: "#78716C", marginTop: 1 }}>
@@ -2492,7 +2492,7 @@ const FAM_DASH_CSS = `
 }
 .fam-dash-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .fam-dash-name { font-weight: 800; font-size: 17px; color: #1f2937; }
-.fam-dash-role { font-size: 13px; color: #9ca3af; }
+.fam-dash-role { font-size: 13px; color: var(--ink-faint); }
 .fam-dash-note { color: #6b7280; font-size: 13.5px; line-height: 1.5; padding: 4px 0; }
 .fam-dash-pair {
   display: inline-block; margin-top: 10px;
@@ -2518,10 +2518,10 @@ const FAM_DASH_CSS = `
 .fam-dash-badge-rank   { background: rgba(124,58,237,0.11); color: #6d28d9; }
 .fam-dash-badge-week   { background: rgba(14,165,165,0.12); color: #0f766e; }
 .fam-dash-recent { margin-top: 18px; border-top: 1px dashed rgba(31,41,55,0.12); padding-top: 14px; }
-.fam-dash-recent-label { font-size: 12px; color: #9ca3af; font-weight: 700; margin-bottom: 8px; }
+.fam-dash-recent-label { font-size: 12px; color: var(--ink-faint); font-weight: 700; margin-bottom: 8px; }
 .fam-dash-chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .fam-dash-chip {
-  background: rgba(14,165,165,0.09); color: #374151;
+  background: rgba(14,165,165,0.09); color: var(--ink-soft);
   border-radius: 999px; padding: 5px 12px;
   font-size: 13px; font-weight: 600;
 }
@@ -2568,7 +2568,7 @@ const FAM_SHELL_CSS = `
   text-align: start;
   transition: background 140ms ease, color 140ms ease;
 }
-.fam-nav-item svg { flex-shrink: 0; color: #9ca3af; transition: color 140ms ease; }
+.fam-nav-item svg { flex-shrink: 0; color: var(--ink-faint); transition: color 140ms ease; }
 .fam-nav-item:hover { background: #f6f4ee; color: #1f2937; }
 .fam-nav-item.is-active { background: rgba(14,165,165,0.12); color: #0b7d7d; }
 .fam-nav-item.is-active svg { color: #0b7d7d; }
@@ -2632,7 +2632,7 @@ const FAM_SHELL_CSS = `
 }
 .fam-shell-h2 {
   font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: #9ca3af; margin: 24px 0 12px;
+  text-transform: uppercase; color: var(--ink-faint); margin: 24px 0 12px;
 }
 .fam-shell-empty {
   background: #fff; border: 1px dashed rgba(31,41,55,0.18);
@@ -2665,7 +2665,7 @@ const FAM_SHELL_CSS = `
 }
 .fam-set-main { flex: 1; min-width: 0; }
 .fam-set-label { font-size: 15.5px; font-weight: 700; color: #1f2937; }
-.fam-set-sub { font-size: 13px; color: #9ca3af; margin-top: 2px; }
+.fam-set-sub { font-size: 13px; color: var(--ink-faint); margin-top: 2px; }
 .fam-set-select {
   font-family: inherit; font-size: 14.5px; font-weight: 600; color: #1f2937;
   background: #f6f4ee; border: 1px solid rgba(31,41,55,0.12);
