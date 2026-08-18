@@ -131,8 +131,13 @@ function useNavLinks(): NavLink[] {
   // recruit, can't switch schools, so those links are noise or a trap.
   // The parent/subscriber nav below is unchanged (Gadi's call).
   if (familyRole === "kid") {
+    // A kid on a Family plan is "deep", so the Say-it pronunciation tool
+    // works for them (it's the literal Zulu-learner use case). Surface it
+    // in the stripped kid nav alongside their words + games. Still no
+    // commercial links (KidRouteGuard backstops the address bar).
     return [
       { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
+      { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
     ];
   }
