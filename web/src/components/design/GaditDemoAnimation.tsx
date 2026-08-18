@@ -1387,18 +1387,21 @@ export function GaditDemoAnimation() {
 
   return (
     <div
-      className="wb-demo-anim wb-force-light"
+      className="wb-demo-anim"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-label="Gadit feature tour"
     >
+      {/* The intro sits on the PAGE background, so it follows the page
+          theme (page tokens, readable on dark). Only the mockup FRAME
+          below is force-light — it's a "screenshot" of the light app. */}
       <div className="wb-demo-anim-headstrip">
         <div className="wb-demo-anim-eyebrow">{c.watchEyebrow}</div>
         <h2 className="wb-demo-anim-title">{c.watchTitle}</h2>
         <p className="wb-demo-anim-lede">{c.watchLede}</p>
       </div>
 
-      <div className="wb-demo-anim-frame">
+      <div className="wb-demo-anim-frame wb-force-light">
         <div className="wb-demo-anim-topbar">
           <div className="wb-demo-anim-wordmark">
             Gad<span className="wb-demo-anim-wordmark-it">it</span>
