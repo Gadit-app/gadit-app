@@ -143,7 +143,7 @@ export function IndividualsLandingClient() {
         </div>
       </header>
 
-      <main className="wb-home-main" style={{ color: "var(--ink)" }}>
+      <main style={{ flex: 1, color: "var(--ink)" }}>
         {/* Hero */}
         <section style={{ maxWidth: 820, margin: "0 auto", padding: "56px 20px 44px", textAlign: "center" }}>
           <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800, lineHeight: 1.12, margin: "0 0 18px", textWrap: "balance" }}>{t.heroTitle}</h1>
