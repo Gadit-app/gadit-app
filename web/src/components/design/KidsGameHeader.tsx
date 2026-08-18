@@ -89,8 +89,8 @@ export function KidsGameHeader({
           <div className="wb-kids-tile-head">
             <Chip color={AMBER} emoji="🔥" dim={g.streak === 0} />
             <div>
-              <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.streak}</div>
               <div className="wb-kids-tile-label">{c.streakTitle}</div>
+              <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.streak}</div>
             </div>
           </div>
           <div className="wb-kids-tile-cap">{g.streak > 0 ? c.streakDays(g.streak) : c.streakStart}</div>
@@ -101,8 +101,8 @@ export function KidsGameHeader({
           <div className="wb-kids-tile-head">
             <Chip color={TEAL} emoji="🎯" />
             <div>
-              <div className="wb-kids-tile-num" style={{ color: TEAL }}>{g.weekly}<span className="wb-kids-tile-of">/{g.weeklyGoal}</span></div>
               <div className="wb-kids-tile-label">{c.weeklyTitle}</div>
+              <div className="wb-kids-tile-num" style={{ color: TEAL }}>{g.weekly}<span className="wb-kids-tile-of">/{g.weeklyGoal}</span></div>
             </div>
           </div>
           <Bar pct={weeklyPct} color={weeklyDone ? "#059669" : TEAL} />
@@ -114,8 +114,8 @@ export function KidsGameHeader({
           <div className="wb-kids-tile-head">
             <Chip color={PURPLE} emoji={RANK_EMOJI[g.rank.index] ?? "🏅"} />
             <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
-              <div className="wb-kids-tile-num" style={{ color: PURPLE, fontSize: 17 }}>{rankLabel(g.rank.key, lang)}</div>
               <div className="wb-kids-tile-label">{c.rankTitle}</div>
+              <div className="wb-kids-tile-num" style={{ color: PURPLE, fontSize: 17 }}>{rankLabel(g.rank.key, lang)}</div>
             </div>
           </div>
           <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />

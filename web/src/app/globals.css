@@ -13964,5 +13964,5 @@ html[data-theme="neon"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(10,10,20,.7
 .wordbook .wb-kids-tile-head { display: flex; align-items: center; gap: 12px; }
 .wordbook .wb-kids-tile-num { font-size: 26px; font-weight: 800; line-height: 1; }
 .wordbook .wb-kids-tile-of { font-size: 15px; font-weight: 700; color: var(--ink-muted); }
-.wordbook .wb-kids-tile-label { font-size: 11.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 3px; }
-.wordbook .wb-kids-tile-cap { font-size: 12.5px; color: var(--ink-soft); }
+.wordbook .wb-kids-tile-label { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; }
+.wordbook .wb-kids-tile-cap { font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
