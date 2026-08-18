@@ -161,8 +161,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   /* Surface — replaced warm cream with a very light cool gray for
      page chrome, plus pure white for the content card the
      definitions live inside. Cleaner, modern, less "library-paper". */
-  --paper: #F4F5F8;          /* page bg — very light gray */
-  --paper-deep: #ECEEF3;
+  --paper: #F2F6F4;          /* page bg — warm teal-white (whisper of Gadit green) */
+  --paper-deep: #E9F1EC;
   --surface: #FFFFFF;        /* the content card the definitions sit in */
 
   /* Ink — slightly darker now that we're on white */
@@ -1703,11 +1703,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    ═══════════════════════════════════════════════════════════════════ */
 
 .wordbook {
-  /* Palette swap */
-  --paper:      #FAFAFA;
-  --paper-deep: #F4F5F7;
+  /* Palette swap. Page ground is a warm teal-white (a whisper of the
+     Gadit green, ~sub-15% saturation) so the pure-white content cards
+     float and read premium, per the design council (2026-08-18). The
+     tint lives only on the page chrome; cards stay #FFFFFF so dense
+     multilingual / RTL text never sits on a coloured field. */
+  --paper:      #F2F6F4;
+  --paper-deep: #E9F1EC;
   --surface:    #FFFFFF;
-  --mist:       #F4F5F7;
+  --mist:       #EAF1EE;
 
   --ink:        #0B0F19;
   --ink-soft:   #3A3F4B;
@@ -2547,7 +2551,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   padding-inline-end: 56px;
   width: 100%;
   position: relative;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  /* Soft teal-tinted elevation so the white card lifts off the
+     warm teal-white page (premium "floating card", council 2026-08-18). */
+  box-shadow: 0 1px 2px rgba(16, 44, 38, 0.05), 0 16px 32px -18px rgba(16, 44, 38, 0.16);
 }
 @media (min-width: 768px) {
   .wordbook .wb-mcard {
