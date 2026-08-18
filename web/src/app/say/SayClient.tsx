@@ -25,6 +25,7 @@ type Copy = {
   placeholder: string; button: string; loading: string;
   hearing: string; tip: string; loginTitle: string; loginBody: string;
   loginCta: string; errGeneric: string; speak: string;
+  paidTitle: string; paidBody: string; paidCta: string;
 };
 const COPY: Partial<Record<Lang, Copy>> = {
   en: {
@@ -39,6 +40,9 @@ const COPY: Partial<Record<Lang, Copy>> = {
     loginCta: "Go to Gadit",
     errGeneric: "Something went wrong. Try again.",
     speak: "Speak instead of typing",
+    paidTitle: "A paid feature",
+    paidBody: "Say it is part of the Clear, Deep, Family and Schools plans.",
+    paidCta: "See plans",
   },
   he: {
     title: "תגיד את זה בשפה אחרת",
@@ -52,6 +56,9 @@ const COPY: Partial<Record<Lang, Copy>> = {
     loginCta: "לגדית",
     errGeneric: "משהו השתבש. נסה שוב.",
     speak: "לדבר במקום להקליד",
+    paidTitle: "פיצ'ר בתוכניות בתשלום",
+    paidBody: "תגיד את זה זמין בתוכניות Clear, Deep, Family ו-Schools.",
+    paidCta: "לתוכניות",
   },
 };
 function copy(lang: Lang): Copy {
@@ -67,6 +74,9 @@ export function SayClient() {
   const { user, plan } = useAuth();
   const href = useHref();
   const t = copy(lang);
+  // Paid-only feature: Clear / Deep / Family / Schools (Family + Schools
+  // both resolve to "deep"). Basic (free) is gated out.
+  const paid = plan === "clear" || plan === "deep";
 
   const [sourceLang, setSourceLang] = useState<string>(lang);
   const [targetLang, setTargetLang] = useState<string>(lang === "en" ? "es" : "en");
@@ -148,6 +158,12 @@ export function SayClient() {
             <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.loginTitle}</div>
             <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{t.loginBody}</div>
             <a href={href("/")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.loginCta}</a>
+          </div>
+        ) : !paid ? (
+          <div style={{ background: "var(--wb-card, #fff)", border: "1px solid var(--wb-border, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.paidTitle}</div>
+            <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{t.paidBody}</div>
+            <a href={href("/pricing")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.paidCta}</a>
           </div>
         ) : (
           <>

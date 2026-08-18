@@ -45,6 +45,14 @@ export async function POST(req: NextRequest) {
   if (!userInfo) {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
   }
+  // Paid feature: Clear / Deep / Family / Schools only (Family and Schools
+  // both resolve to the "deep" feature-plan). Basic (free) is excluded.
+  if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
+    return NextResponse.json(
+      { error: "upgrade_required", message: "Say it is a paid feature." },
+      { status: 403 },
+    );
+  }
 
   let body: { text?: unknown; targetLang?: unknown; sourceLang?: unknown };
   try {
