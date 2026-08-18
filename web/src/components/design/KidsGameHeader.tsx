@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { computeGamification, toLocalDateStr } from "@/lib/gamification";
+import { computeGamification, toLocalDateStr, RANKS } from "@/lib/gamification";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
 import { KidsCelebration } from "./KidsCelebration";
 
@@ -15,15 +15,24 @@ function streakTier(streak: number): number {
 }
 
 /**
- * Kids gamification header (Gadi 2026-08-12) — shown on the child's own
- * notebook page for Family-plan kids. Three tiles from data that already
- * exists (the notebook's addedAt dates): a FORGIVING daily streak, a weekly
- * new-words goal, and an explorer rank with progress to the next. No
- * streaks-that-punish, no leaderboards — the reward is the child's own
- * progress. See lib/gamification.ts for the pure logic.
+ * Kids gamification header (Gadi 2026-08-12, premium redesign 2026-08-18) —
+ * three tiles in ONE row from data that already exists (the notebook's
+ * addedAt dates): a FORGIVING daily streak, a weekly new-words goal, and an
+ * explorer rank. Clean surface cards (theme-aware, light + dark) with a
+ * coloured icon chip per loop. Tapping the rank tile opens the full ranks
+ * table so a child can see every rank and how far to the next. No
+ * leaderboards, no punishing streaks. Pure logic in lib/gamification.ts.
  */
 
 const RANK_EMOJI = ["🌱", "🔍", "🧭", "🗺️", "🎖️", "👑"];
+
+// Small local copy for the ranks table (he + en, en fallback) so a new
+// surface doesn't force a full gamification-labels sweep.
+const RANKS_COPY: Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }> = {
+  en: { title: "Your ranks", sub: (n) => `You've collected ${n} words. Keep exploring to climb.`, words: "words", you: "You're here", locked: "Locked", close: "Close" },
+  he: { title: "הדרגות שלך", sub: (n) => `אספת ${n} מילים. תמשיך לחקור כדי לעלות.`, words: "מילים", you: "כאן את/ה", locked: "נעול", close: "סגירה" },
+};
+function ranksCopy(lang: string) { return RANKS_COPY[lang] ?? RANKS_COPY.en; }
 
 export function KidsGameHeader({
   addedAtDates,
@@ -40,11 +49,8 @@ export function KidsGameHeader({
     return computeGamification(addedAtDates, now, todayStr);
   }, [addedAtDates]);
 
-  // Fire fireworks when the child crosses a NEW milestone (rank up, weekly
-  // goal newly complete, or a new streak tier). Deduped in localStorage so
-  // it celebrates once per achievement, and never on the very first load
-  // for a kid who already had progress.
   const [celebrateId, setCelebrateId] = useState(0);
+  const [ranksOpen, setRanksOpen] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const KEY = "gadit-kids-celebrate";
@@ -71,61 +77,131 @@ export function KidsGameHeader({
   const weeklyDone = g.weekly >= g.weeklyGoal;
   const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.distinct);
 
+  const AMBER = "#F59E0B", TEAL = "#0EA5A5", PURPLE = "#8B5CF6";
+
   return (
-    <div dir={dir} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 12, margin: "4px 0 22px" }}>
-      <KidsCelebration runId={celebrateId} />
-      {/* Streak */}
-      <Tile bg="linear-gradient(135deg, #FFF7ED, #FFEDD5)" border="rgba(245,158,11,0.28)">
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 34, lineHeight: 1, filter: g.streak > 0 ? "none" : "grayscale(1) opacity(0.5)" }}>🔥</span>
-          <div>
-            <div style={{ fontSize: 26, fontWeight: 800, color: "#B45309", lineHeight: 1 }}>{g.streak}</div>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: "#B45309", opacity: 0.7, textTransform: "uppercase", letterSpacing: 0.4 }}>{c.streakTitle}</div>
-          </div>
-        </div>
-        <div style={{ fontSize: 12.5, color: "#92400E", marginTop: 8 }}>
-          {g.streak > 0 ? c.streakDays(g.streak) : c.streakStart}
-        </div>
-      </Tile>
+    <>
+      <div dir={dir} className="wb-kids-tiles">
+        <KidsCelebration runId={celebrateId} />
 
-      {/* Weekly goal */}
-      <Tile bg="linear-gradient(135deg, #F0FDFA, #CCFBF1)" border="rgba(14,165,165,0.28)">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#0F766E", textTransform: "uppercase", letterSpacing: 0.4 }}>🎯 {c.weeklyTitle}</span>
-          <span style={{ fontSize: 13, fontWeight: 800, color: "#0F766E" }}>{g.weekly}/{g.weeklyGoal}</span>
-        </div>
-        <div style={{ marginTop: 10, background: "rgba(15,118,110,0.14)", borderRadius: 999, height: 9, overflow: "hidden" }}>
-          <div style={{ width: `${weeklyPct}%`, height: "100%", background: weeklyDone ? "#059669" : "#0EA5A5", borderRadius: 999, transition: "width 400ms cubic-bezier(0.23,1,0.32,1)" }} />
-        </div>
-        <div style={{ fontSize: 12.5, color: "#0F766E", marginTop: 8 }}>
-          {weeklyDone ? `✅ ${c.weeklyDone}` : c.weeklyProgress(g.weekly, g.weeklyGoal)}
-        </div>
-      </Tile>
-
-      {/* Explorer rank */}
-      <Tile bg="linear-gradient(135deg, #F5F3FF, #EDE9FE)" border="rgba(124,58,237,0.24)">
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 30, lineHeight: 1 }}>{RANK_EMOJI[g.rank.index] ?? "🏅"}</span>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: "#6D28D9", lineHeight: 1.15 }}>{rankLabel(g.rank.key, lang)}</div>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: "#6D28D9", opacity: 0.7, textTransform: "uppercase", letterSpacing: 0.4 }}>{c.rankTitle}</div>
+        {/* Streak */}
+        <div className="wb-kids-tile">
+          <div className="wb-kids-tile-head">
+            <Chip color={AMBER} emoji="🔥" dim={g.streak === 0} />
+            <div>
+              <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.streak}</div>
+              <div className="wb-kids-tile-label">{c.streakTitle}</div>
+            </div>
           </div>
+          <div className="wb-kids-tile-cap">{g.streak > 0 ? c.streakDays(g.streak) : c.streakStart}</div>
         </div>
-        <div style={{ marginTop: 10, background: "rgba(124,58,237,0.14)", borderRadius: 999, height: 9, overflow: "hidden" }}>
-          <div style={{ width: `${Math.round(g.rank.progress * 100)}%`, height: "100%", background: "#7C3AED", borderRadius: 999, transition: "width 400ms cubic-bezier(0.23,1,0.32,1)" }} />
+
+        {/* Weekly goal */}
+        <div className="wb-kids-tile">
+          <div className="wb-kids-tile-head">
+            <Chip color={TEAL} emoji="🎯" />
+            <div>
+              <div className="wb-kids-tile-num" style={{ color: TEAL }}>{g.weekly}<span className="wb-kids-tile-of">/{g.weeklyGoal}</span></div>
+              <div className="wb-kids-tile-label">{c.weeklyTitle}</div>
+            </div>
+          </div>
+          <Bar pct={weeklyPct} color={weeklyDone ? "#059669" : TEAL} />
+          <div className="wb-kids-tile-cap">{weeklyDone ? `✅ ${c.weeklyDone}` : c.weeklyProgress(g.weekly, g.weeklyGoal)}</div>
         </div>
-        <div style={{ fontSize: 12.5, color: "#6D28D9", marginTop: 8 }}>
-          {g.rank.next === null ? `⭐ ${c.topRank}` : c.toNext(toNext)}
-        </div>
-      </Tile>
+
+        {/* Explorer rank — tap for the full ranks table */}
+        <button type="button" className="wb-kids-tile wb-kids-tile-btn" onClick={() => setRanksOpen(true)}>
+          <div className="wb-kids-tile-head">
+            <Chip color={PURPLE} emoji={RANK_EMOJI[g.rank.index] ?? "🏅"} />
+            <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
+              <div className="wb-kids-tile-num" style={{ color: PURPLE, fontSize: 17 }}>{rankLabel(g.rank.key, lang)}</div>
+              <div className="wb-kids-tile-label">{c.rankTitle}</div>
+            </div>
+          </div>
+          <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />
+          <div className="wb-kids-tile-cap">{g.rank.next === null ? `⭐ ${c.topRank}` : c.toNext(toNext)}</div>
+        </button>
+      </div>
+
+      {ranksOpen && (
+        <RanksModal
+          onClose={() => setRanksOpen(false)}
+          distinct={g.distinct}
+          currentIndex={g.rank.index}
+          lang={lang}
+          dir={dir}
+        />
+      )}
+    </>
+  );
+}
+
+function Chip({ color, emoji, dim }: { color: string; emoji: string; dim?: boolean }) {
+  return (
+    <span
+      style={{
+        width: 44, height: 44, flexShrink: 0, borderRadius: 13,
+        background: `color-mix(in srgb, ${color} 16%, transparent)`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: 22, lineHeight: 1, filter: dim ? "grayscale(1) opacity(0.55)" : "none",
+      }}
+    >{emoji}</span>
+  );
+}
+
+function Bar({ pct, color }: { pct: number; color: string }) {
+  return (
+    <div style={{ background: "color-mix(in srgb, var(--ink) 10%, transparent)", borderRadius: 999, height: 8, overflow: "hidden" }}>
+      <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 999, transition: "width 400ms cubic-bezier(0.23,1,0.32,1)" }} />
     </div>
   );
 }
 
-function Tile({ children, bg, border }: { children: React.ReactNode; bg: string; border: string }) {
+function RanksModal({ onClose, distinct, currentIndex, lang, dir }: {
+  onClose: () => void; distinct: number; currentIndex: number; lang: string; dir: "rtl" | "ltr";
+}) {
+  const rc = ranksCopy(lang);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
   return (
-    <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: 16, padding: "14px 16px" }}>
-      {children}
+    <div
+      role="dialog" aria-modal="true" onClick={onClose}
+      style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(10,14,20,0.55)", backdropFilter: "blur(3px)" }}
+    >
+      <div
+        className="wordbook" dir={dir} onClick={(e) => e.stopPropagation()}
+        style={{ width: "100%", maxWidth: 460, maxHeight: "88dvh", overflowY: "auto", background: "var(--surface)", color: "var(--ink)", borderRadius: 22, padding: "24px 22px", boxShadow: "0 24px 70px rgba(0,0,0,0.34)" }}
+      >
+        <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>{rc.title}</div>
+        <div style={{ fontSize: 14, color: "var(--ink-soft)", marginBottom: 16 }}>{rc.sub(distinct)}</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {RANKS.map((r, i) => {
+            const unlocked = distinct >= r.min;
+            const isCurrent = i === currentIndex;
+            return (
+              <div key={r.key} style={{
+                display: "flex", alignItems: "center", gap: 12, padding: "11px 13px", borderRadius: 13,
+                border: isCurrent ? "1.5px solid #8B5CF6" : "1px solid var(--rule)",
+                background: isCurrent ? "color-mix(in srgb, #8B5CF6 10%, transparent)" : "transparent",
+                opacity: unlocked ? 1 : 0.55,
+              }}>
+                <span style={{ fontSize: 26, lineHeight: 1, flexShrink: 0, filter: unlocked ? "none" : "grayscale(1)" }}>{RANK_EMOJI[i]}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 800 }}>{rankLabel(r.key, lang)}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted)" }}>{r.min}+ {rc.words}</div>
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 700, color: isCurrent ? "#8B5CF6" : "var(--ink-faint)" }}>
+                  {isCurrent ? rc.you : unlocked ? "✓" : rc.locked}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <button type="button" onClick={onClose} style={{ marginTop: 18, width: "100%", background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 999, padding: "12px", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{rc.close}</button>
+      </div>
     </div>
   );
 }
