@@ -24,6 +24,7 @@ const LANGS = new Set(["he", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it
 // First path segment (after any locale) a kid must never reach.
 const BLOCKED = new Set([
   "pricing",
+  "individuals",
   "partner",
   "partners",
   "affiliate",

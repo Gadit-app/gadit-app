@@ -159,7 +159,7 @@ function useNavLinks(): NavLink[] {
   if (paid) links.push({ key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") });
   if (paid) links.push({ key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en });
   if (user && plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
-  links.push({ key: "individuals", href: href("/pricing"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en });
+  links.push({ key: "individuals", href: href("/individuals"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en });
   links.push({ key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en });
   links.push({ key: "schools", href: href("/schools"), label: v2(lang, "navSchools") });
   links.push({ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") });
