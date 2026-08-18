@@ -38,7 +38,7 @@ type Copy = {
   pricingEyebrow: string; pricingTitle: string;
   clearName: string; clearDesc: string; deepName: string; deepDesc: string;
   perMonth: string; choose: string;
-  finalTitle: string;
+  finalTitle: string; heroCta: string;
 };
 
 const COPY: Partial<Record<Lang, Copy>> = {
@@ -70,6 +70,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     clearName: "Clear", clearDesc: "The full dictionary. Every meaning, examples, image and origin.",
     deepName: "Deep", deepDesc: "Everything in Clear, plus the notebook, practice and games.",
     perMonth: "/mo", choose: "Choose",
+    heroCta: "Start free",
     finalTitle: "Want to understand every word?",
   },
   he: {
@@ -100,6 +101,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     clearName: "Clear", clearDesc: "המילון המלא. כל משמעות, דוגמאות, תמונה ומקור.",
     deepName: "Deep", deepDesc: "כל מה שב-Clear, ועוד המחברת, תרגול ומשחקים.",
     perMonth: "/חודש", choose: "בחירה",
+    heroCta: "להתחיל בחינם",
     finalTitle: "רוצה להבין כל מילה?",
   },
 };
@@ -116,6 +118,8 @@ export function IndividualsLandingClient() {
     if (!user) { promptLogin({ mode: "signup" }); return; }
     window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
   };
+  const startFree = () => { if (user) { window.location.href = href("/"); } else { promptLogin({ mode: "signup" }); } };
+  const ctaBtn: React.CSSProperties = { background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 999, padding: "14px 32px", fontSize: 16, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" };
 
   const teal = "#0EA5A5";
   const sectionMax = 1080;
@@ -149,7 +153,7 @@ export function IndividualsLandingClient() {
           <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800, lineHeight: 1.12, margin: "0 0 18px", textWrap: "balance" }}>{t.heroTitle}</h1>
           <p style={{ fontSize: "clamp(16px, 2.2vw, 19px)", lineHeight: 1.6, color: "var(--ink-soft)", maxWidth: 640, margin: "0 auto 28px" }}>{t.heroSub}</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
-            <StartFreeCTA />
+            <button type="button" onClick={startFree} style={ctaBtn}>{t.heroCta}</button>
             <a href="#pricing" style={{ color: teal, fontWeight: 700, fontSize: 16, textDecoration: "none" }}>{t.heroCta2}</a>
           </div>
         </section>
@@ -212,7 +216,7 @@ export function IndividualsLandingClient() {
         {/* Final CTA */}
         <section style={{ maxWidth: 640, margin: "0 auto", padding: "56px 20px 64px", textAlign: "center" }}>
           <h2 style={{ ...h2s, marginBottom: 22 }}>{t.finalTitle}</h2>
-          <div style={{ display: "flex", justifyContent: "center" }}><StartFreeCTA /></div>
+          <div style={{ display: "flex", justifyContent: "center" }}><button type="button" onClick={startFree} style={ctaBtn}>{t.heroCta}</button></div>
         </section>
       </main>
 
