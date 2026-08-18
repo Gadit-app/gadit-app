@@ -13,6 +13,15 @@ function streakTier(streak: number): number {
   for (const m of STREAK_TIERS) if (streak >= m) t = m;
   return t;
 }
+// Progress (0..100) toward the next streak milestone, so the streak tile has
+// a bar too and all three tiles line up (Gadi 2026-08-18).
+function streakProgress(streak: number): number {
+  let prev = 0, next = STREAK_TIERS[0];
+  for (const m of STREAK_TIERS) { if (streak >= m) prev = m; else { next = m; break; } }
+  if (streak >= STREAK_TIERS[STREAK_TIERS.length - 1]) return 100;
+  const denom = next - prev;
+  return denom > 0 ? Math.min(100, Math.round(((streak - prev) / denom) * 100)) : 0;
+}
 
 /**
  * Kids gamification header (Gadi 2026-08-12, premium redesign 2026-08-18) —
@@ -93,6 +102,7 @@ export function KidsGameHeader({
               <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.streak}</div>
             </div>
           </div>
+          <Bar pct={streakProgress(g.streak)} color={AMBER} />
           <div className="wb-kids-tile-cap">{g.streak > 0 ? c.streakDays(g.streak) : c.streakStart}</div>
         </div>
 
@@ -115,7 +125,7 @@ export function KidsGameHeader({
             <Chip color={PURPLE} emoji={RANK_EMOJI[g.rank.index] ?? "🏅"} />
             <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
               <div className="wb-kids-tile-label">{c.rankTitle}</div>
-              <div className="wb-kids-tile-num" style={{ color: PURPLE, fontSize: 17 }}>{rankLabel(g.rank.key, lang)}</div>
+              <div className="wb-kids-tile-num" style={{ color: PURPLE }}>{rankLabel(g.rank.key, lang)}</div>
             </div>
           </div>
           <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />

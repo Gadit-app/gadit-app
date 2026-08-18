@@ -13962,7 +13962,7 @@ html[data-theme="neon"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(10,10,20,.7
 .wordbook .wb-kids-tile-btn:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgba(16, 44, 38, 0.06), 0 18px 34px -18px rgba(16, 44, 38, 0.2); }
 .wordbook .wb-kids-tile-btn:active { transform: translateY(0) scale(0.99); }
 .wordbook .wb-kids-tile-head { display: flex; align-items: center; gap: 12px; }
-.wordbook .wb-kids-tile-num { font-size: 26px; font-weight: 800; line-height: 1; }
-.wordbook .wb-kids-tile-of { font-size: 15px; font-weight: 700; color: var(--ink-muted); }
+.wordbook .wb-kids-tile-num { font-size: 22px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wordbook .wb-kids-tile-of { font-size: 14px; font-weight: 700; color: var(--ink-muted); }
 .wordbook .wb-kids-tile-label { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; }
 .wordbook .wb-kids-tile-cap { font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
