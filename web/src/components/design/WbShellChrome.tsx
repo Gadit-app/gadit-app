@@ -40,6 +40,14 @@ import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
 import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { track } from "@/lib/track";
+import { OPEN_SAY_EVENT } from "@/components/SayModal";
+
+// "Say it" opens as a modal over the current (themed) screen rather than
+// routing to a separate page, so a kid keeps their skin and a clear way
+// back (Gadi 2026-08-18).
+function openSay() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(OPEN_SAY_EVENT));
+}
 
 // "Install the app" burger entry — permanent, discoverable install
 // path. Users kept asking Gadi "how do I download it?" because the
@@ -178,15 +186,26 @@ export function WbShellNav({ active }: { active?: NavKey }) {
           </svg>
         </Link>
       )}
-      {links.map((l) => (
-        <Link
-          key={l.key}
-          href={l.href}
-          className={`wb-shell-navlink${active === l.key ? " is-active" : ""}`}
-        >
-          {l.label}
-        </Link>
-      ))}
+      {links.map((l) =>
+        l.key === "say" ? (
+          <button
+            key={l.key}
+            type="button"
+            className={`wb-shell-navlink${active === l.key ? " is-active" : ""}`}
+            onClick={openSay}
+          >
+            {l.label}
+          </button>
+        ) : (
+          <Link
+            key={l.key}
+            href={l.href}
+            className={`wb-shell-navlink${active === l.key ? " is-active" : ""}`}
+          >
+            {l.label}
+          </Link>
+        ),
+      )}
     </nav>
   );
 }
@@ -262,16 +281,27 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
               {v2(lang, "navSearch")}
             </Link>
           )}
-          {links.map((l) => (
-            <Link
-              key={l.key}
-              href={l.href}
-              className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
-              onClick={() => setOpen(false)}
-            >
-              {l.label}
-            </Link>
-          ))}
+          {links.map((l) =>
+            l.key === "say" ? (
+              <button
+                key={l.key}
+                type="button"
+                className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
+                onClick={() => { setOpen(false); openSay(); }}
+              >
+                {l.label}
+              </button>
+            ) : (
+              <Link
+                key={l.key}
+                href={l.href}
+                className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
+                onClick={() => setOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ),
+          )}
           {showInstall && (
             <>
               <div className="wb-shell-mobile-menu-sep" />
