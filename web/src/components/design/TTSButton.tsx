@@ -68,6 +68,22 @@ function toBcp47(audioLang: string | undefined): string {
     de: "de-DE",
     cs: "cs-CZ",
     sk: "sk-SK",
+    // All 22 UI languages — without an entry here Web Speech gets the
+    // bare 2-letter code, which most engines don't recognise, so they
+    // read the word with the system-default (usually English) voice.
+    // That mispronounces e.g. Zulu "isikole" as English. (Gadi 2026-08-18)
+    it: "it-IT",
+    nl: "nl-NL",
+    uk: "uk-UA",
+    tr: "tr-TR",
+    pl: "pl-PL",
+    fa: "fa-IR",
+    id: "id-ID",
+    el: "el-GR",
+    hi: "hi-IN",
+    ja: "ja-JP",
+    am: "am-ET",
+    zu: "zu-ZA",
   };
   const short = audioLang.split("-")[0].toLowerCase();
   return map[short] ?? audioLang;

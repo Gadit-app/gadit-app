@@ -46,20 +46,20 @@ const MAX_TEXT_LENGTH = 1200;
 // accent. 'alloy' and 'nova' are the most neutral / multilingual; for
 // langs with named speakers we use them. Caller can override via the
 // voice param (advanced users).
+// The gpt-4o-mini-tts model detects the spoken language from the input
+// text itself, so `voice` picks the timbre, not the language. We still
+// map every one of the 22 UI languages to a warm, capable voice so the
+// listening experience is consistent across the whole app. Anything not
+// listed falls back to 'alloy' (the most neutral / multilingual voice).
 function pickVoice(lang: string | undefined): string {
-  switch (lang) {
-    case "he": return "nova";
-    case "ar": return "nova";
-    case "ru": return "shimmer";
-    case "es":
-    case "pt": return "nova";
-    case "fr": return "shimmer";
-    case "de": return "onyx";
-    case "cs": return "alloy";
-    case "sk": return "alloy";
-    case "en":
-    default:   return "alloy";
-  }
+  const map: Record<string, string> = {
+    he: "nova", ar: "nova", ru: "shimmer", es: "nova", pt: "nova",
+    fr: "shimmer", de: "onyx", cs: "alloy", sk: "alloy", en: "alloy",
+    it: "nova", nl: "shimmer", uk: "shimmer", tr: "nova", pl: "alloy",
+    fa: "nova", id: "nova", el: "shimmer", hi: "nova", ja: "nova",
+    am: "nova", zu: "nova",
+  };
+  return (lang && map[lang]) || "alloy";
 }
 
 // Audio format we ask OpenAI to produce. Christopher (early tester,
