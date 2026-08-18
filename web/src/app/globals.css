@@ -13862,6 +13862,43 @@ html[data-theme="candy"] .wb-kid-area { --skin-bg: linear-gradient(rgba(253,236,
 html[data-theme="jungle"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F; }
 html[data-theme="neon"] .wb-kid-area { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14; }
 
+/* ─── ADULT DARK MODE (Gadi 2026-08-18, design-council "ownable teal-black")
+   The Dark theme is adult-only (kids use skins). Unlike the skins above,
+   which only recolour .wb-kid-area, Dark swaps the palette for the WHOLE
+   .wordbook app. Ground is a deep teal-black (#0E1514, not the generic
+   slate every SaaS ships); pure-dark cards lift via a lighter teal surface;
+   a bright teal accent. `html[data-theme="dark"] .wordbook` (0,2,1) beats
+   the base `.wordbook` token blocks (0,1,0). */
+html[data-theme="dark"] { --background: #0A100E; }
+html[data-theme="dark"] .wordbook {
+  --paper:      #0E1514;   /* page ground — deep teal-black */
+  --paper-deep: #0A100F;
+  --surface:    #17211E;   /* cards lift off the page */
+  --mist:       #17211E;
+  --ink:        #E9EEEB;
+  --ink-soft:   #AEB8B4;
+  --ink-muted:  #808B87;
+  --ink-faint:  #5B6662;
+  --rule:       #26332F;
+  --rule-soft:  #1F2C28;
+  --rule-faint: #182320;
+  --border-2:   #33413C;
+  --teal:       #2DD4BF;   /* brighter teal reads well on dark */
+  --teal-soft:  #12332E;
+  --teal-edge:  #14B8A6;
+  --accent:     #2DD4BF;
+  --accent-2:   #22D3EE;
+  --accent-ink: #04241F;
+  /* Tier accents re-tuned for a dark ground */
+  --deep-bg: #241B3A; --deep-fg: #B99DFB; --deep-edge: #4A3A72;
+  --basic-bg: #362B12; --basic-fg: #FCD34D; --basic-edge: #5E4A1A;
+}
+/* On dark, the lighter surface does the lifting; swap the light-mode
+   teal drop-shadow for a soft black one so the card doesn't glow. */
+html[data-theme="dark"] .wordbook .wb-mcard {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 16px 34px -18px rgba(0,0,0,0.55);
+}
+
 /* Word RESULT page: paint the skin only as the page BACKGROUND and float the
    definition content on a light sheet, so reading stays easy on the eyes
    (Gadi 2026-08-16: the skin must continue around the definition, but the

@@ -57,11 +57,12 @@ export function SayModal() {
       }}
     >
       <div
+        className="wordbook"
         dir={dir}
         onClick={(e) => e.stopPropagation()}
         style={{
           width: "100%", maxWidth: 600, maxHeight: "90dvh", overflowY: "auto",
-          background: "var(--wb-card, #fff)", color: "var(--wb-ink, #14181F)",
+          background: "var(--surface, #fff)", color: "var(--ink, #14181F)",
           borderRadius: 22, padding: "26px 26px 30px",
           boxShadow: "0 24px 70px rgba(0,0,0,0.34)",
           animation: "sayPop 0.18s cubic-bezier(0.23,1,0.32,1)",

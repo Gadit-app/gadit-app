@@ -14,7 +14,7 @@ export function SayClient() {
   const { dir } = useLang();
   const href = useHref();
   return (
-    <div dir={dir} style={{ minHeight: "100dvh", background: "var(--wb-bg, #F7F7F5)", color: "var(--wb-ink, #14181F)" }}>
+    <div className="wordbook" dir={dir} style={{ minHeight: "100dvh", background: "var(--paper, #F7F7F5)", color: "var(--ink, #14181F)" }}>
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: 760, margin: "0 auto" }}>
         <a href={href("/")} style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.02em", textDecoration: "none", color: "inherit" }}>
           Gad<span style={{ color: "#0EA5A5" }}>it</span>

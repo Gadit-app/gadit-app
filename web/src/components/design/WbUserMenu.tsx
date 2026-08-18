@@ -31,7 +31,19 @@ import { useAuth } from "@/lib/auth-context";
 import { avatarUrl } from "@/lib/family";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { useTheme } from "@/lib/appearance";
 import type { Lang } from "@/lib/i18n";
+
+// "Dark mode" label — kept as a small local map (en fallback) so adding
+// the toggle doesn't force a field into every COPY entry. (Gadi 2026-08-18)
+const DARK_LABEL: Record<string, string> = {
+  en: "Dark mode", he: "מצב כהה", ar: "الوضع الداكن", ru: "Тёмная тема",
+  es: "Modo oscuro", pt: "Modo escuro", fr: "Mode sombre", de: "Dunkelmodus",
+  it: "Modalità scura", nl: "Donkere modus", cs: "Tmavý režim", sk: "Tmavý režim",
+  uk: "Темна тема", tr: "Karanlık mod", pl: "Tryb ciemny", fa: "حالت تیره",
+  id: "Mode gelap", el: "Σκοτεινή λειτουργία", hi: "डार्क मोड", ja: "ダークモード",
+  am: "ጨለማ ገጽታ", zu: "Imodi emnyama",
+};
 
 type Copy = {
   account: string;
@@ -83,6 +95,7 @@ import { FamilyProfileSwitcher } from "./FamilyProfileSwitcher";
 export function WbUserMenu() {
   const { user, plan, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout } = useAuth();
   const { lang, dir } = useLang();
+  const [theme, setTheme] = useTheme();
   const router = useRouter();
   const href = useHref();
   const [open, setOpen] = useState(false);
@@ -379,6 +392,33 @@ export function WbUserMenu() {
             >
               {c.dashboard}
             </Link>
+          )}
+          {/* Dark mode — adults only (kids theme via skins). Toggles the
+              global data-theme between light and the teal-black dark. */}
+          {familyRole !== "kid" && (
+            <>
+              <div style={{ borderTop: "1px solid var(--hairline, #F3F4F6)", margin: "4px 0" }} />
+              <button
+                role="menuitemcheckbox"
+                aria-checked={theme === "dark"}
+                type="button"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+                  width: "100%", padding: "10px 12px", borderRadius: 8, background: "transparent",
+                  border: "none", cursor: "pointer", color: "var(--ink, #111827)", fontSize: 14,
+                  fontWeight: 500, fontFamily: "inherit",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+              >
+                <span>{DARK_LABEL[lang] ?? DARK_LABEL.en}</span>
+                <span aria-hidden="true" style={{ position: "relative", width: 38, height: 22, borderRadius: 999, background: theme === "dark" ? "#2DD4BF" : "var(--rule, #D1D5DB)", transition: "background .16s ease", flexShrink: 0 }}>
+                  <span style={{ position: "absolute", top: 2, insetInlineStart: theme === "dark" ? 18 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "inset-inline-start .16s ease", boxShadow: "0 1px 2px rgba(0,0,0,.3)" }} />
+                </span>
+              </button>
+              <div style={{ borderTop: "1px solid var(--hairline, #F3F4F6)", margin: "4px 0" }} />
+            </>
           )}
           <button
             role="menuitem"

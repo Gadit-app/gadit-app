@@ -142,7 +142,7 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
           style={{
             position: "absolute", insetInlineEnd: -4, top: -4, width: 36, height: 36,
             borderRadius: "50%", border: "none", cursor: "pointer", background: "transparent",
-            color: "var(--wb-ink, #14181F)", opacity: 0.55, fontSize: 22, lineHeight: 1,
+            color: "var(--ink, #14181F)", opacity: 0.55, fontSize: 22, lineHeight: 1,
             display: "flex", alignItems: "center", justifyContent: "center",
           }}
         >
@@ -154,13 +154,13 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
       <p style={{ fontSize: 15, opacity: 0.7, margin: "0 0 22px" }}>{t.sub}</p>
 
       {!user ? (
-        <div style={{ background: "var(--wb-card, #fff)", border: "1px solid var(--wb-border, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
+        <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.loginTitle}</div>
           <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{t.loginBody}</div>
           <a href={href("/")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.loginCta}</a>
         </div>
       ) : !paid ? (
-        <div style={{ background: "var(--wb-card, #fff)", border: "1px solid var(--wb-border, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
+        <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.paidTitle}</div>
           <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{t.paidBody}</div>
           <a href={href("/pricing")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.paidCta}</a>
@@ -188,8 +188,8 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
               maxLength={500}
               style={{
                 width: "100%", boxSizing: "border-box", fontSize: 18, lineHeight: 1.45,
-                padding: "14px 16px 48px", borderRadius: 14, border: "1px solid var(--wb-border, #E7E7E2)",
-                background: "var(--wb-card, #fff)", color: "inherit", resize: "vertical", fontFamily: "inherit",
+                padding: "14px 16px 48px", borderRadius: 14, border: "1px solid var(--rule, #E7E7E2)",
+                background: "var(--surface, #fff)", color: "inherit", resize: "vertical", fontFamily: "inherit",
               }}
             />
             <div style={{ position: "absolute", bottom: 10, insetInlineEnd: 10 }}>
@@ -219,7 +219,7 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
           {error && <div style={{ marginTop: 16, color: "#DC2626", fontSize: 15 }}>{error}</div>}
 
           {result && (
-            <div style={{ marginTop: 26, background: "var(--wb-card, #fff)", border: "1px solid var(--wb-border, #E7E7E2)", borderRadius: 18, padding: "22px 22px 24px" }}>
+            <div style={{ marginTop: 26, background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 18, padding: "22px 22px 24px" }}>
               <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#0EA5A5", marginBottom: 12 }}>
                 {t.hearing} · {LANGUAGES.find((l) => l.code === result.targetLang)?.label}
               </div>
@@ -239,7 +239,7 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
                 <div style={{ marginTop: 10, fontSize: 17, opacity: 0.6, fontStyle: "italic" }}>{result.romanization}</div>
               )}
               {result.tip && (
-                <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--wb-border, #E7E7E2)", fontSize: 14, opacity: 0.8 }}>
+                <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--rule, #E7E7E2)", fontSize: 14, opacity: 0.8 }}>
                   <span style={{ fontWeight: 700 }}>{t.tip}: </span>{result.tip}
                 </div>
               )}
@@ -263,8 +263,8 @@ function LangSelect({
       onChange={(e) => onChange(e.target.value)}
       style={{
         display: "block", width: "100%", marginTop: 6, fontSize: 16, fontWeight: 600,
-        padding: "10px 12px", borderRadius: 12, border: "1px solid var(--wb-border, #E7E7E2)",
-        background: "var(--wb-card, #fff)", color: "inherit", cursor: "pointer", fontFamily: "inherit",
+        padding: "10px 12px", borderRadius: 12, border: "1px solid var(--rule, #E7E7E2)",
+        background: "var(--surface, #fff)", color: "inherit", cursor: "pointer", fontFamily: "inherit",
       }}
     >
       {options.map((l) => (
