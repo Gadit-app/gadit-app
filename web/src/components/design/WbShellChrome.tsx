@@ -67,6 +67,7 @@ export type NavKey =
   | "features"
   | "notebook"
   | "play"
+  | "say"
   | "individuals"
   | "schools"
   | "families"
@@ -99,6 +100,17 @@ const INDIVIDUALS_LABEL: Record<string, string> = {
 // Kids see their notebook as "אוצר המילים שלי" (= vocabulary in Hebrew,
 // playful to a child + mature to a teen; LLM council + Gadi 2026-08-12).
 // Short nav form; en fallback for languages not listed.
+// "Say it" nav label — the pronunciation-practice tool (/say). Local map
+// like the others so a new tool doesn't force a 22-language i18n sweep;
+// en fallback for the rest. (Gadi 2026-08-18)
+const SAY_NAV: Record<string, string> = {
+  en: "Say it", he: "תגיד את זה", ar: "قلها", ru: "Скажи это",
+  es: "Dilo", pt: "Diga", fr: "Dis-le", de: "Sag es", cs: "Řekni to",
+  sk: "Povedz to", it: "Dillo", nl: "Zeg het", uk: "Скажи це",
+  tr: "Söyle", pl: "Powiedz to", fa: "بگو", id: "Ucapkan", el: "Πες το",
+  hi: "कहो", ja: "言ってみて", am: "ተናገረው", zu: "Yisho",
+};
+
 const TREASURE_NAV: Record<string, string> = {
   en: "My words", he: "אוצר המילים", ar: "كلماتي", ru: "Мои слова",
   es: "Mis palabras", pt: "Minhas palavras", fr: "Mes mots", de: "Meine Wörter",
@@ -130,6 +142,7 @@ function useNavLinks(): NavLink[] {
     { key: "features", href: href("/features"), label: v2(lang, "navFeatures") },
   ];
   if (paid) links.push({ key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") });
+  if (paid) links.push({ key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en });
   if (user && plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
   links.push({ key: "individuals", href: href("/pricing"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en });
   links.push({ key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en });
