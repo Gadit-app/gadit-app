@@ -5874,7 +5874,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
            is scoped under .wordbook — the families page is .fam-page, so
            without this wrapper the nav collapsed into an unstyled cluster
            (Gadi 2026-07-29). The wrapper only carries fonts/vars, no box. */
-        <div className="wordbook" dir={dir}>
+        <div className="wordbook wb-force-light" dir={dir}>
           <header className="wb-shell-topbar">
             <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
               Gad<span className="wb-wordmark-it">it</span>

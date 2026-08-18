@@ -13910,6 +13910,25 @@ html[data-theme="dark"] .wordbook .wb-mcard {
   box-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 16px 34px -18px rgba(0,0,0,0.55);
 }
 
+/* Marketing landings stay LIGHT regardless of the global dark theme (Gadi
+   2026-08-18): they're image-heavy, brand-controlled pages designed light,
+   with light-background photos + intentional coloured section bands that a
+   dark ground would fight. Re-declaring the light palette here re-lights the
+   token-driven parts so the page reads all-light, not half-flipped. Same
+   specificity as the dark .wordbook block, so this must stay AFTER it to win.
+   The --wb-* aliases follow automatically (they resolve to these tokens). */
+html[data-theme="dark"] .wb-force-light,
+html[data-theme="dark"] .wb-force-light .wordbook,
+html[data-theme="dark"] .wb-schools-landing,
+html[data-theme="dark"] .wb-schools-landing .wordbook {
+  --paper: #F2F6F4; --paper-deep: #E9F1EC; --surface: #FFFFFF; --mist: #EAF1EE;
+  --ink: #0B0F19; --ink-soft: #3A3F4B; --ink-muted: #5C6270; --ink-faint: #8B91A0;
+  --rule: #E6E8EC; --rule-soft: #EDEFF2; --rule-faint: #F1F2F6; --border-2: #D4D7DD;
+  --teal: #0EA5A5; --teal-soft: #E0F6F4; --teal-edge: #0B8A8A; --accent: #0EA5A5;
+  --deep-bg: #EDE9FE; --deep-fg: #7C3AED; --deep-edge: #C4B5FD;
+  --basic-bg: #FEF3C7; --basic-fg: #B45309; --basic-edge: #FDE68A;
+}
+
 /* Word RESULT page: paint the skin only as the page BACKGROUND and float the
    definition content on a light sheet, so reading stays easy on the eyes
    (Gadi 2026-08-16: the skin must continue around the definition, but the
