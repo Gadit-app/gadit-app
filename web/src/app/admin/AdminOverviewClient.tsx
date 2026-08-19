@@ -106,6 +106,9 @@ const STRINGS = {
     pendingLabel: "Pending · trials (not money yet)",
     pendingSub: "%n trials · counts only if they pay",
     forecastFoot: "Full forecast if every trial pays: %f · ≈ $%y/yr",
+    perMonth: "/mo",
+    totalLabel2: "Total · full forecast",
+    totalSub2: "confirmed + pending · if every trial pays",
     // operational KPIs
     kPaying: "Paying customers",
     kNew: "New customers · month",
@@ -165,6 +168,9 @@ const STRINGS = {
     pendingLabel: "בהמתנה · ניסיונות (עוד לא כסף)",
     pendingSub: "%n ניסיונות · נספר רק אם ישלמו",
     forecastFoot: "צפי מלא אם כל הניסיונות ישלמו: %f · ≈ $%y לשנה",
+    perMonth: "לחודש",
+    totalLabel2: "סך הכל · צפי מלא",
+    totalSub2: "ודאי + בהמתנה · אם כל הניסיונות ישלמו",
     kPaying: "לקוחות משלמים",
     kNew: "לקוחות חדשים · החודש",
     kChurn: "נטישה חודשית",
@@ -252,6 +258,8 @@ export default function AdminOverviewClient() {
   const al = data?.alerts;
   const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const signed = (n: number) => `${n >= 0 ? "+" : "−"}${money(Math.abs(n))}`;
+  // Annualized headline: monthly recurring × 12, rounded, thousands-grouped.
+  const perYear = (n: number) => t.perYear.replace("%", Math.round(n * 12).toLocaleString("en-US"));
 
   const alertItems = al
     ? [
@@ -283,53 +291,45 @@ export default function AdminOverviewClient() {
 
       {data && rev && dec && (
         <>
-          {/* CONFIRMED money vs PENDING trials — two visually distinct blocks
-              so real revenue is never confused with the "if every trial pays"
-              pipeline (Gadi 2026-08-19: the combined forecast read as money).
-              Confirmed = solid teal / real. Pending = dashed amber / not money
-              yet. The full forecast is demoted to a footnote. */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 8 }}>
+          {/* Money headline — three distinct blocks, each with a monthly AND an
+              annual figure (Gadi 2026-08-19: wanted the yearly total, and no
+              figure shown twice). Confirmed = solid teal / real money. Pending =
+              dashed amber / not money yet. Total = purple / full forecast. The
+              old duplicate "Current/Potential MRR" cards are gone; the tier
+              breakdowns moved into these subs so nothing is lost. */}
+          <div className="ov-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
             {/* Confirmed */}
             <div style={{ ...cardStyle, padding: "14px 18px", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.08)" }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.tealBright, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.confirmedLabel}</div>
-              <div style={{ fontSize: 34, fontWeight: 800, color: TOKENS.teal, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.mrrUsd)}</div>
-              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 4 }}>{t.confirmedSub.replace("%n", String(rev.payingCustomers))}</div>
+              <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.teal, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.mrrUsd)}<span style={{ fontSize: 13, fontWeight: 600, color: TOKENS.inkSoft }}> {t.perMonth}</span></div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: TOKENS.teal, marginTop: 2 }} dir="ltr">{perYear(rev.mrrUsd)}</div>
+              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 5 }}>{t.confirmedSub.replace("%n", String(rev.payingCustomers))}</div>
+              <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }} dir="ltr">{tierBreakdown(rev.payingByTier)}</div>
+              {rev.atRiskMrrUsd > 0 && (
+                <div style={{ fontSize: 11, fontWeight: 600, color: TOKENS.danger, marginTop: 2 }} dir="ltr">{money(rev.atRiskMrrUsd)} {t.atRisk}</div>
+              )}
             </div>
             {/* Pending — deliberately dashed + amber so it never reads as money */}
             <div style={{ ...cardStyle, padding: "14px 18px", borderStyle: "dashed", borderColor: TOKENS.amber, background: "rgba(245,158,11,0.06)" }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.amber, textTransform: "uppercase", letterSpacing: 0.5 }}>⏳ {t.pendingLabel}</div>
-              <div style={{ fontSize: 34, fontWeight: 800, color: TOKENS.amber, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.trialingMrrUsd)}</div>
-              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 4 }}>{t.pendingSub.replace("%n", String(rev.trialingSubscriptions))}</div>
+              <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.amber, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.trialingMrrUsd)}<span style={{ fontSize: 13, fontWeight: 600, color: TOKENS.inkSoft }}> {t.perMonth}</span></div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: TOKENS.amber, marginTop: 2 }} dir="ltr">{perYear(rev.trialingMrrUsd)}</div>
+              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 5 }}>{t.pendingSub.replace("%n", String(rev.trialingSubscriptions))}</div>
+              <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }} dir="ltr">{tierBreakdown(rev.trialingByTier)}</div>
+            </div>
+            {/* Total — confirmed + pending, the number Gadi asked for */}
+            <div style={{ ...cardStyle, padding: "14px 18px", borderColor: TOKENS.purpleBright, background: "rgba(124,58,237,0.06)" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.purpleBright, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.totalLabel2}</div>
+              <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.purple, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.totalMrrUsd)}<span style={{ fontSize: 13, fontWeight: 600, color: TOKENS.inkSoft }}> {t.perMonth}</span></div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: TOKENS.purple, marginTop: 2 }} dir="ltr">{perYear(rev.totalMrrUsd)}</div>
+              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 5 }}>{t.totalSub2}</div>
             </div>
           </div>
-          {/* Forecast demoted to a small footnote */}
-          <div style={{ fontSize: 12, color: TOKENS.inkFaint, marginBottom: 14, textAlign: "start" }} dir="ltr">
-            {t.forecastFoot
-              .replace("%f", money(rev.totalMrrUsd))
-              .replace("%y", Math.round(rev.totalMrrUsd * 12).toLocaleString("en-US"))}
-          </div>
 
-          {/* §3.1 Money triplet */}
-          <SectionGrid cols={3}>
-            <Kpi
-              label={t.mCurrentMrr}
-              value={money(rev.mrrUsd)}
-              accent={TOKENS.teal}
-              hint={t.hMrr}
-              detail={tierBreakdown(rev.payingByTier)}
-              detailLtr
-              note={rev.atRiskMrrUsd > 0 ? `${money(rev.atRiskMrrUsd)} ${t.atRisk}` : undefined}
-              noteColor={TOKENS.danger}
-            />
-            <Kpi
-              label={t.mTrialMrr}
-              value={money(rev.trialingMrrUsd)}
-              accent={TOKENS.amber}
-              hint={t.hTrialMrr}
-              detail={tierBreakdown(rev.trialingByTier)}
-              detailLtr
-              note={t.potentialNote}
-            />
+          {/* §3.2 Operational KPIs — net-new leads (the only unique money card
+              left), then customer counts. Trialing count dropped: it lived in
+              the Pending block above. */}
+          <SectionGrid cols={4}>
             <Kpi
               label={t.mNetNew}
               value={signed(rev.netNewMrrUsd)}
@@ -338,10 +338,6 @@ export default function AdminOverviewClient() {
               detail={`+${money(rev.newMrrUsd)} · −${money(rev.churnedMrrUsd)}`}
               detailLtr
             />
-          </SectionGrid>
-
-          {/* §3.2 Four operational KPIs */}
-          <SectionGrid cols={4}>
             <Kpi label={t.kPaying} value={rev.payingCustomers} accent={TOKENS.ink}
                  detail={`${rev.payingSubscriptions} ${t.subs}`} detailLtr />
             <Kpi label={t.kNew} value={rev.newCustomersThisMonth} accent={TOKENS.teal} />
@@ -349,8 +345,6 @@ export default function AdminOverviewClient() {
                  accent={dec.monthlyChurnPct > 0 ? TOKENS.danger : TOKENS.ink}
                  hint={t.hChurn}
                  detail={`${rev.churnedCustomersThisMonth} ${t.churnedThisMonth}`} />
-            <Kpi label={t.kTrialing} value={rev.trialingSubscriptions} accent={TOKENS.amber}
-                 detail={tierBreakdown(rev.trialingByTier)} detailLtr />
           </SectionGrid>
 
           {/* §13 Three decision metrics */}
