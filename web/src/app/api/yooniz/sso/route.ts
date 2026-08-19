@@ -22,21 +22,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { syntheticUidFor, MAX_KIDS_PER_FAMILY, type MemberRole } from "@/lib/family";
+import { syntheticUidFor, isParentRole, MAX_KIDS_PER_FAMILY, type MemberRole } from "@/lib/family";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 20;
 
+// Member-generic token: any family member opens their own Gadit space.
 type Payload = {
   v: number;
-  who: "kid" | "parent"; // kid → per-kid notebook; parent → Family owner account
   yoonizFamilyId: string;
-  parentEmail: string; // always — the Gadit Family owner key
-  kidId?: string; // who=kid only
-  kidName?: string; // who=kid only
-  role?: "boy" | "girl"; // who=kid only
-  parentName?: string; // who=parent only (for account creation)
+  parentEmail: string; // the Gadit Family owner key (always)
+  isOwner: boolean; // true → sign into the Family OWNER account (memberId ignored)
+  memberId?: string; // non-owner only → one Gadit member + personal area
+  memberName?: string; // display name, e.g. "אבא" / "דין"
+  role?: "father" | "mother" | "boy" | "girl";
   iat: number;
   nonce: string;
 };
@@ -60,13 +60,12 @@ function verifyToken(token: string, secret: string): Payload | null {
     return null;
   }
   if (payload.v !== 1) return null;
-  // Default a missing `who` to "kid" (backward compatible with pre-`who` tokens).
-  payload.who = payload.who === "parent" ? "parent" : "kid";
+  payload.isOwner = payload.isOwner === true;
   if (!payload.yoonizFamilyId || !payload.parentEmail || !payload.nonce) return null;
-  if (payload.who === "kid") {
-    // Kid tokens must carry a stable kidId + a role; parent tokens carry neither.
-    if (!payload.kidId) return null;
-    if (payload.role !== "boy" && payload.role !== "girl") return null;
+  if (!payload.isOwner) {
+    // Non-owner tokens must carry a stable memberId + a valid family role.
+    if (!payload.memberId) return null;
+    if (!["father", "mother", "boy", "girl"].includes(payload.role as string)) return null;
   }
   const nowSec = Math.floor(Date.now() / 1000);
   if (typeof payload.iat !== "number" || Math.abs(nowSec - payload.iat) > 120) return null;
@@ -156,12 +155,15 @@ export async function GET(req: NextRequest) {
     if (linkSnap.exists && (linkSnap.data() as { gaditFamilyId?: string }).gaditFamilyId) {
       gaditFamilyId = (linkSnap.data() as { gaditFamilyId: string }).gaditFamilyId;
     } else {
+      // The owner's own name only when the OWNER is the one launching; a
+      // non-owner kid launching first shouldn't stamp their name on the owner.
+      const ownerName = payload.isOwner ? payload.memberName || "" : "";
       // Find the Gadit auth user for this parent email, or create one.
       let ownerUid: string;
       try {
         ownerUid = (await auth.getUserByEmail(email)).uid;
       } catch {
-        ownerUid = (await auth.createUser({ email, displayName: payload.parentName || undefined })).uid;
+        ownerUid = (await auth.createUser({ email, displayName: ownerName || undefined })).uid;
       }
       // Ensure a Family exists on that owner. If not, bootstrap it with a
       // Phase-1 free trial (mirrors the webhook's bootstrapFamily).
@@ -169,7 +171,7 @@ export async function GET(req: NextRequest) {
       if (!(await famRef.get()).exists) {
         await famRef.set({ ownerUid, plan: "monthly", createdAt: iso, yoonizProvisioned: true });
         await famRef.collection("members").doc(ownerUid).set({
-          id: ownerUid, role: "mother", name: payload.parentName || "", colorIndex: 0, isOwner: true, userId: ownerUid, createdAt: iso,
+          id: ownerUid, role: "mother", name: ownerName, colorIndex: 0, isOwner: true, userId: ownerUid, createdAt: iso,
         });
         // Grant the entitlement (Family === feature-plan "deep") so the kid's
         // access passes. Phase-1 = free trial; Phase-2 enforces the trial end.
@@ -189,10 +191,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(new URL("/he/families", req.url), 302);
     }
 
-    // ── who === "parent": sign the parent into their OWN Family owner account
-    //    (the real Gadit user for parentEmail), NOT a kid member. gaditFamilyId
-    //    IS the owner uid in our model (families doc id === ownerUid). ─────────
-    if (payload.who === "parent") {
+    // ── isOwner === true: sign into the Family OWNER account (the real Gadit
+    //    user for parentEmail). gaditFamilyId IS the owner uid in our model
+    //    (families doc id === ownerUid). memberId is ignored here. ────────────
+    if (payload.isOwner) {
       const ownerToken = await auth.createCustomToken(gaditFamilyId, {
         role: "parent",
         familyId: gaditFamilyId,
@@ -200,27 +202,32 @@ export async function GET(req: NextRequest) {
       return spinnerPage(signInScript(ownerToken));
     }
 
-    // ── §3 Resolve (or create) the Gadit member for this Yooniz kid ───────
+    // ── §3 isOwner === false: resolve/create the Gadit member (co-parent or
+    //    kid) for this Yooniz memberId, and land in their personal area. ──────
     const membersRef = db.collection("families").doc(gaditFamilyId).collection("members");
-    const existing = await membersRef.where("yoonizKidId", "==", payload.kidId).limit(1).get();
+    const existing = await membersRef.where("yoonizMemberId", "==", payload.memberId).limit(1).get();
+    const role = payload.role as MemberRole; // father | mother | boy | girl
+    const familyRole = isParentRole(role) ? "parent" : "kid";
     let memberId: string;
-    const role = payload.role as MemberRole; // "boy" | "girl"
     if (!existing.empty) {
       memberId = existing.docs[0].id;
     } else {
       const all = await membersRef.get();
-      const kidCount = all.docs.filter((d) => {
-        const r = (d.data() as { role?: string }).role;
-        return r === "boy" || r === "girl";
-      }).length;
-      if (kidCount >= MAX_KIDS_PER_FAMILY) {
-        return page("המשפחה כבר הגיעה למקסימום הילדים בגדית. הסירו ילד קיים כדי להוסיף חדש.");
+      // The 5-member cap applies to KIDS only; co-parents don't count against it.
+      if (familyRole === "kid") {
+        const kidCount = all.docs.filter((d) => {
+          const r = (d.data() as { role?: string }).role;
+          return r === "boy" || r === "girl";
+        }).length;
+        if (kidCount >= MAX_KIDS_PER_FAMILY) {
+          return page("המשפחה כבר הגיעה למקסימום הילדים בגדית. הסירו ילד קיים כדי להוסיף חדש.");
+        }
       }
       const newRef = membersRef.doc();
       memberId = newRef.id;
       await newRef.set({
-        id: memberId, role, name: payload.kidName || "", colorIndex: all.size % 8,
-        isOwner: false, yoonizKidId: payload.kidId, createdAt: iso,
+        id: memberId, role, name: payload.memberName || "", colorIndex: all.size % 8,
+        isOwner: false, yoonizMemberId: payload.memberId, createdAt: iso,
       });
     }
 
@@ -229,21 +236,21 @@ export async function GET(req: NextRequest) {
     try {
       await auth.getUser(syntheticUid);
     } catch {
-      await auth.createUser({ uid: syntheticUid, displayName: payload.kidName || undefined });
+      await auth.createUser({ uid: syntheticUid, displayName: payload.memberName || undefined });
     }
     await db.collection("users").doc(syntheticUid).set(
-      { plan: "deep", familyId: gaditFamilyId, memberId, memberRole: role, familyRole: "kid", yoonizKidId: payload.kidId, createdAt: iso },
+      { plan: "deep", familyId: gaditFamilyId, memberId, memberRole: role, familyRole, yoonizMemberId: payload.memberId, createdAt: iso },
       { merge: true },
     );
     await membersRef.doc(memberId).set({ userId: syntheticUid, deviceLinkedAt: iso }, { merge: true });
 
     const customToken = await auth.createCustomToken(syntheticUid, {
-      role: "kid",
+      role: familyRole,
       familyId: gaditFamilyId,
       memberId,
     });
 
-    // ── §3.5 Client-side sign-in handoff → the child's own notebook ───────
+    // ── §3.5 Client-side sign-in handoff → the member's own space ─────────
     return spinnerPage(signInScript(customToken));
   } catch (err) {
     console.error("[/api/yooniz/sso] error:", err);

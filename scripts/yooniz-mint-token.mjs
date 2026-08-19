@@ -33,21 +33,24 @@ if (!secret) {
 const b64url = (buf) =>
   buf.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
-const who = args["who"] === "parent" ? "parent" : "kid";
+// Member-generic token. --owner mints the Family-owner launch; otherwise a
+// per-member launch (--role father|mother|boy|girl, --member <id>, --name).
+const isOwner = args["owner"] === true || args["owner"] === "true" || args["isOwner"] === "true";
 const payload = {
   v: 1,
-  who,
   yoonizFamilyId: args["yfam"] || "demo-yooniz-family-1",
   parentEmail: args["email"] || "parent@example.com",
+  isOwner,
   iat: Math.floor(Date.now() / 1000),
   nonce: crypto.randomBytes(16).toString("hex"),
 };
-if (who === "kid") {
-  payload.kidId = args["kid"] || "demo-kid-1";
-  payload.kidName = args["name"] || "Demo Kid";
-  payload.role = args["role"] === "girl" ? "girl" : "boy";
+if (isOwner) {
+  payload.memberName = args["name"] || "Demo Parent";
 } else {
-  payload.parentName = args["name"] || "Demo Parent";
+  const role = ["father", "mother", "boy", "girl"].includes(args["role"]) ? args["role"] : "boy";
+  payload.memberId = args["member"] || args["kid"] || "demo-member-1";
+  payload.memberName = args["name"] || "Demo Member";
+  payload.role = role;
 }
 
 const p = b64url(Buffer.from(JSON.stringify(payload)));
