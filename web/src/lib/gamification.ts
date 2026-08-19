@@ -15,7 +15,13 @@
  * the returned rank key to a localized label with its own copy.
  */
 
-export const WEEKLY_GOAL = 8;
+// Weekly goal bounds. The goal is ADAPTIVE (see computeGoal): it meets each
+// child at their own recent pace rather than a one-size-fits-all number, so a
+// 6-year-old and a 13-year-old both get "achievable but slightly stretchy"
+// with no parent/kid config (LLM council 2026-08-19). Floor kills a
+// meaningless "1", ceiling kills a crushing "40".
+export const WEEKLY_GOAL_FLOOR = 5;
+export const WEEKLY_GOAL_CEIL = 15;
 
 export type RankKey = "scout" | "explorer" | "tracker" | "ranger" | "guide" | "master";
 
@@ -113,15 +119,60 @@ export function computeStreak(activeDates: Iterable<string>, todayStr: string): 
   return count;
 }
 
-/** Distinct new words added within the last 7 days (rolling). */
-export function weeklyCount(isoDates: string[], nowMs: number): number {
-  const cutoff = nowMs - 7 * 24 * 60 * 60 * 1000;
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** Local start-of-week (Sunday 00:00) for a timestamp. The goal is anchored
+ *  to week boundaries so it stays frozen for the whole week rather than
+ *  shifting under the child as they add words (council: don't move the bar
+ *  while they watch it). */
+function startOfWeekMs(nowMs: number): number {
+  const d = new Date(nowMs);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - d.getDay()); // back to Sunday
+  return d.getTime();
+}
+
+function countInWindow(isoDates: string[], startMs: number, endMs: number): number {
   let n = 0;
   for (const iso of isoDates) {
     const t = new Date(iso).getTime();
-    if (!Number.isNaN(t) && t >= cutoff) n++;
+    if (!Number.isNaN(t) && t >= startMs && t < endMs) n++;
   }
   return n;
+}
+
+/** Distinct new words added since the start of the CURRENT week (Sunday) —
+ *  the child's progress this week, matched to the frozen weekly goal. */
+export function weeklyCount(isoDates: string[], nowMs: number): number {
+  return countInWindow(isoDates, startOfWeekMs(nowMs), nowMs + 1);
+}
+
+/**
+ * ADAPTIVE weekly goal (LLM council 2026-08-19). The product owns the number
+ * — not the parent (a parent-set quota turns "the child's own progress" into
+ * pressure) and not the kid (a 7-year-old can't calibrate; a 12-year-old
+ * games it). Instead it's computed from the child's OWN recent pace:
+ *   base = max(last complete week, avg of the 3 weeks before it)
+ *   goal = clamp(round(base * 1.1), 5, 15)
+ * A good week nudges the target up gently (×1.1); a slow week never spikes it
+ * (the max()), so the pressure stays off. New kids (< 14 days of data) get the
+ * floor. Pure function of the same notebook dates — no stored config, no
+ * migration, frozen for the week (past weeks don't change mid-week).
+ */
+export function computeGoal(isoDates: string[], nowMs: number): number {
+  let earliest = Infinity;
+  for (const iso of isoDates) {
+    const t = new Date(iso).getTime();
+    if (!Number.isNaN(t) && t < earliest) earliest = t;
+  }
+  if (!Number.isFinite(earliest) || nowMs - earliest < 14 * 24 * 60 * 60 * 1000) {
+    return WEEKLY_GOAL_FLOOR;
+  }
+  const ws = startOfWeekMs(nowMs);
+  const lastWeek = countInWindow(isoDates, ws - WEEK_MS, ws);
+  const prev3Avg = countInWindow(isoDates, ws - 4 * WEEK_MS, ws - WEEK_MS) / 3;
+  const base = Math.max(lastWeek, prev3Avg);
+  return Math.max(WEEKLY_GOAL_FLOOR, Math.min(WEEKLY_GOAL_CEIL, Math.round(base * 1.1)));
 }
 
 /** Everything a surface needs, computed from a list of notebook addedAt dates. */
@@ -137,6 +188,6 @@ export function computeGamification(
     rank: rankFor(distinct),
     streak: computeStreak(localDates, todayStr),
     weekly: weeklyCount(addedAtIsoDates, nowMs),
-    weeklyGoal: WEEKLY_GOAL,
+    weeklyGoal: computeGoal(addedAtIsoDates, nowMs),
   };
 }
