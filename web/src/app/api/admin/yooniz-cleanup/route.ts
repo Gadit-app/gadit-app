@@ -55,14 +55,18 @@ export async function POST(req: NextRequest) {
 
     const downgraded: string[] = [];
     for (const ownerUid of owners) {
+      // Already reconciled on a prior run → don't re-report it.
+      const fam = await db.collection("families").doc(ownerUid).get();
+      if ((fam.data() as { deactivated?: boolean })?.deactivated === true) continue;
       downgraded.push(ownerUid);
       if (!apply) continue;
-      // Owner user → basic; family → deactivated.
+      // Owner user → basic; family → deactivated + marker cleared so this run
+      // is idempotent (the next dry-run reports 0).
       await db.collection("users").doc(ownerUid).set(
         { plan: "basic", yoonizTrial: false, yoonizReconciledAt: iso }, { merge: true },
       );
       await db.collection("families").doc(ownerUid).set(
-        { deactivated: true, deactivatedReason: "yooniz-auto-provision-reconcile", deactivatedAt: iso }, { merge: true },
+        { deactivated: true, deactivatedReason: "yooniz-auto-provision-reconcile", deactivatedAt: iso, yoonizProvisioned: false }, { merge: true },
       );
       // Synthetic members of that family → basic too (they inherited "deep").
       const members = await db.collection("users").where("familyId", "==", ownerUid).get();
