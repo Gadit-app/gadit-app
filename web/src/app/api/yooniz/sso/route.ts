@@ -45,6 +45,12 @@ function b64urlToBuf(s: string): Buffer {
   return Buffer.from(s.replace(/-/g, "+").replace(/_/g, "/"), "base64");
 }
 
+/** Casefold + collapse whitespace, for matching a Yooniz member to an existing
+ *  Gadit profile by name (the fallback when there's no stable id link yet). */
+function normalizeName(s?: unknown): string {
+  return typeof s === "string" ? s.trim().replace(/\s+/g, " ").toLowerCase() : "";
+}
+
 /** Verify the launch token (contract §1). Returns the payload or null. */
 function verifyToken(token: string, secret: string): Payload | null {
   const parts = token.split(".");
@@ -147,49 +153,32 @@ export async function GET(req: NextRequest) {
     if ((await nonceRef.get()).exists) return page("הקישור כבר נוצל. נסו שוב מ-Yooniz.");
     await nonceRef.set({ at: Date.now() });
 
-    // ── §2 Resolve (or auto-provision) the linked Gadit Family ────────────
+    // ── §2/§4 Resolve the Gadit Family owner by email. NO auto-provision, NO
+    //    card-less trial (contract corrected 19/8): entry requires an ACTIVE
+    //    PAID Gadit Family (plan "deep" + a families doc). A non-subscriber is
+    //    sent to the Stripe Family checkout / landing — nowhere else, nothing
+    //    created. Once they subscribe there, the next launch resolves them. ────
     const email = payload.parentEmail.toLowerCase().trim();
-    const linkRef = db.collection("yoonizLinks").doc(payload.yoonizFamilyId);
-    const linkSnap = await linkRef.get();
-    let gaditFamilyId: string;
-    if (linkSnap.exists && (linkSnap.data() as { gaditFamilyId?: string }).gaditFamilyId) {
-      gaditFamilyId = (linkSnap.data() as { gaditFamilyId: string }).gaditFamilyId;
-    } else {
-      // The owner's own name only when the OWNER is the one launching; a
-      // non-owner kid launching first shouldn't stamp their name on the owner.
-      const ownerName = payload.isOwner ? payload.memberName || "" : "";
-      // Find the Gadit auth user for this parent email, or create one.
-      let ownerUid: string;
-      try {
-        ownerUid = (await auth.getUserByEmail(email)).uid;
-      } catch {
-        ownerUid = (await auth.createUser({ email, displayName: ownerName || undefined })).uid;
-      }
-      // Ensure a Family exists on that owner. If not, bootstrap it with a
-      // Phase-1 free trial (mirrors the webhook's bootstrapFamily).
-      const famRef = db.collection("families").doc(ownerUid);
-      if (!(await famRef.get()).exists) {
-        await famRef.set({ ownerUid, plan: "monthly", createdAt: iso, yoonizProvisioned: true });
-        await famRef.collection("members").doc(ownerUid).set({
-          id: ownerUid, role: "mother", name: ownerName, colorIndex: 0, isOwner: true, userId: ownerUid, createdAt: iso,
-        });
-        // Grant the entitlement (Family === feature-plan "deep") so the kid's
-        // access passes. Phase-1 = free trial; Phase-2 enforces the trial end.
-        await db.collection("users").doc(ownerUid).set(
-          { plan: "deep", familyId: ownerUid, yoonizTrial: true, updatedAt: iso },
-          { merge: true },
-        );
-      }
-      gaditFamilyId = ownerUid;
-      await linkRef.set({ gaditFamilyId, linkedAt: iso }, { merge: true });
-    }
+    const upsell = () => NextResponse.redirect(new URL("/he/families", req.url), 302);
 
-    // ── §4 Entitlement: only enter the notebook if the Family is active ───
-    const ownerUserSnap = await db.collection("users").doc(gaditFamilyId).get();
-    if ((ownerUserSnap.data() as { plan?: string })?.plan !== "deep") {
-      // Lapsed / never-active Family → upsell instead of the notebook.
-      return NextResponse.redirect(new URL("/he/families", req.url), 302);
+    let ownerUid: string | null = null;
+    try {
+      ownerUid = (await auth.getUserByEmail(email)).uid;
+    } catch {
+      ownerUid = null; // no Gadit account for this email → promo, don't provision
     }
+    if (!ownerUid) return upsell();
+
+    const [ownerUserSnap, famSnap] = await Promise.all([
+      db.collection("users").doc(ownerUid).get(),
+      db.collection("families").doc(ownerUid).get(),
+    ]);
+    const activeFamily = famSnap.exists && (ownerUserSnap.data() as { plan?: string })?.plan === "deep";
+    if (!activeFamily) return upsell();
+
+    const gaditFamilyId = ownerUid;
+    // Persist the mapping now that we've confirmed a real active subscriber.
+    await db.collection("yoonizLinks").doc(payload.yoonizFamilyId).set({ gaditFamilyId, linkedAt: iso }, { merge: true });
 
     // ── isOwner === true: sign into the Family OWNER account (the real Gadit
     //    user for parentEmail). gaditFamilyId IS the owner uid in our model
@@ -202,23 +191,43 @@ export async function GET(req: NextRequest) {
       return spinnerPage(signInScript(ownerToken));
     }
 
-    // ── §3 isOwner === false: resolve/create the Gadit member (co-parent or
-    //    kid) for this Yooniz memberId, and land in their personal area. ──────
+    // ── §3 isOwner === false: match the member to their EXISTING Gadit
+    //    profile — NEVER duplicate (Gadi 19/8: opening דין/אושר from Yooniz
+    //    spawned second profiles). Fetch all members once, resolve in memory:
+    //      1. exact stable id link (yoonizKidId OR legacy yoonizMemberId)
+    //      2. else normalized name within the same kid/parent class → backfill
+    //         the id onto that existing profile so the link is stable after
+    //      3. only if genuinely no match: create a new member ─────────────────
     const membersRef = db.collection("families").doc(gaditFamilyId).collection("members");
-    const existing = await membersRef.where("yoonizMemberId", "==", payload.memberId).limit(1).get();
     const role = payload.role as MemberRole; // father | mother | boy | girl
     const familyRole = isParentRole(role) ? "parent" : "kid";
-    let memberId: string;
-    if (!existing.empty) {
-      memberId = existing.docs[0].id;
-    } else {
-      const all = await membersRef.get();
-      // The 5-member cap applies to KIDS only; co-parents don't count against it.
+    const wantName = normalizeName(payload.memberName);
+
+    const all = await membersRef.get();
+    const docs = all.docs.map((d) => ({ id: d.id, ref: d.ref, m: d.data() as Record<string, unknown> }));
+    let memberId: string | null = null;
+
+    const byId = docs.find((x) => x.m.yoonizKidId === payload.memberId || x.m.yoonizMemberId === payload.memberId);
+    if (byId) {
+      memberId = byId.id;
+    } else if (wantName) {
+      const cands = docs.filter(
+        (x) =>
+          !x.m.isOwner &&
+          isParentRole(x.m.role as MemberRole) === (familyRole === "parent") &&
+          normalizeName(x.m.name) === wantName,
+      );
+      const pick = cands.find((x) => !x.m.yoonizKidId && !x.m.yoonizMemberId) || cands[0];
+      if (pick) {
+        memberId = pick.id;
+        await pick.ref.set({ yoonizKidId: payload.memberId }, { merge: true }); // stable link from now on
+      }
+    }
+
+    if (!memberId) {
+      // Genuinely new member. The 5-member cap applies to KIDS only.
       if (familyRole === "kid") {
-        const kidCount = all.docs.filter((d) => {
-          const r = (d.data() as { role?: string }).role;
-          return r === "boy" || r === "girl";
-        }).length;
+        const kidCount = docs.filter((x) => x.m.role === "boy" || x.m.role === "girl").length;
         if (kidCount >= MAX_KIDS_PER_FAMILY) {
           return page("המשפחה כבר הגיעה למקסימום הילדים בגדית. הסירו ילד קיים כדי להוסיף חדש.");
         }
@@ -226,8 +235,8 @@ export async function GET(req: NextRequest) {
       const newRef = membersRef.doc();
       memberId = newRef.id;
       await newRef.set({
-        id: memberId, role, name: payload.memberName || "", colorIndex: all.size % 8,
-        isOwner: false, yoonizMemberId: payload.memberId, createdAt: iso,
+        id: memberId, role, name: payload.memberName || "", colorIndex: docs.length % 8,
+        isOwner: false, yoonizKidId: payload.memberId, createdAt: iso,
       });
     }
 
@@ -239,7 +248,7 @@ export async function GET(req: NextRequest) {
       await auth.createUser({ uid: syntheticUid, displayName: payload.memberName || undefined });
     }
     await db.collection("users").doc(syntheticUid).set(
-      { plan: "deep", familyId: gaditFamilyId, memberId, memberRole: role, familyRole, yoonizMemberId: payload.memberId, createdAt: iso },
+      { plan: "deep", familyId: gaditFamilyId, memberId, memberRole: role, familyRole, yoonizKidId: payload.memberId, createdAt: iso },
       { merge: true },
     );
     await membersRef.doc(memberId).set({ userId: syntheticUid, deviceLinkedAt: iso }, { merge: true });

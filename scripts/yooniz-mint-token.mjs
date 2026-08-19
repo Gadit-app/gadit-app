@@ -33,21 +33,26 @@ if (!secret) {
 const b64url = (buf) =>
   buf.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
-// Member-generic token. --owner mints the Family-owner launch; otherwise a
-// per-member launch (--role father|mother|boy|girl, --member <id>, --name).
+// --status mints a status-check token (no member fields) for POST /api/yooniz/status.
+// --owner mints the Family-owner launch; otherwise a per-member launch
+// (--role father|mother|boy|girl, --member <id>, --name).
+const isStatus = args["status"] === true || args["status"] === "true";
 const isOwner = args["owner"] === true || args["owner"] === "true" || args["isOwner"] === "true";
 const payload = {
   v: 1,
   yoonizFamilyId: args["yfam"] || "demo-yooniz-family-1",
   parentEmail: args["email"] || "parent@example.com",
-  isOwner,
   iat: Math.floor(Date.now() / 1000),
   nonce: crypto.randomBytes(16).toString("hex"),
 };
-if (isOwner) {
+if (isStatus) {
+  // no member fields
+} else if (isOwner) {
+  payload.isOwner = true;
   payload.memberName = args["name"] || "Demo Parent";
 } else {
   const role = ["father", "mother", "boy", "girl"].includes(args["role"]) ? args["role"] : "boy";
+  payload.isOwner = false;
   payload.memberId = args["member"] || args["kid"] || "demo-member-1";
   payload.memberName = args["name"] || "Demo Member";
   payload.role = role;
@@ -59,5 +64,10 @@ const token = `${p}.${sig}`;
 
 const base = (args["base"] || "http://localhost:3000").replace(/\/$/, "");
 console.log("payload:", payload);
-console.log("\nlaunch URL (valid 120s):\n");
-console.log(`${base}/api/yooniz/sso?token=${token}`);
+if (isStatus) {
+  console.log("\nstatus check (valid 120s):\n");
+  console.log(`curl -s -X POST ${base}/api/yooniz/status -H "content-type: application/json" -d '{"token":"${token}"}'`);
+} else {
+  console.log("\nlaunch URL (valid 120s):\n");
+  console.log(`${base}/api/yooniz/sso?token=${token}`);
+}
