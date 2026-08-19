@@ -1999,6 +1999,9 @@ export function PlayPage() {
         {/* Mobile identity cluster — 2026-06-19 redesign. */}
         {user && (
           <div className="wb-shell-mobile-identity">
+            {/* Kid skin picker on mobile (desktop one is in the hidden
+                .wb-shell-actions), Gadi 2026-08-19. */}
+            {isKidPlayer && <AppearancePicker scope="kid" />}
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}

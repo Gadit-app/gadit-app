@@ -234,6 +234,10 @@ export function HomePage() {
             the natural corner exactly like Google's mobile chrome. */}
         {user && (
           <div className="wb-shell-mobile-identity">
+            {/* Skin picker on MOBILE for kids — the desktop one lives in
+                .wb-shell-actions which is hidden on phones, so a kid on a
+                phone had no way to change their skin (Gadi 2026-08-19). */}
+            {familyRole === "kid" && <AppearancePicker scope="kid" />}
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
