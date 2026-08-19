@@ -65,12 +65,27 @@ function verifyToken(token: string, secret: string): Payload | null {
   return payload;
 }
 
-/** Full-screen message page (errors + the sign-in handoff share this shell). */
-function page(bodyMsg: string, script = ""): NextResponse {
+/** Full-screen message page — used ONLY for error/blocked states (a token that
+ *  failed, a full family). Shows the wordmark + a short line of text. */
+function page(bodyMsg: string): NextResponse {
   const html = `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gadit</title>
 <style>html,body{height:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Rubik,sans-serif;display:flex;align-items:center;justify-content:center;background:#F2F6F4;color:#14181F;text-align:center;padding:24px}
 .wm{font-weight:800;font-size:26px;margin-bottom:14px}.wm i{color:#0EA5A5;font-style:italic}.msg{font-size:16px;color:#3A3F4B}</style></head>
-<body><div><div class="wm" dir="ltr">Gad<i>it</i></div><div class="msg" id="msg">${bodyMsg}</div></div>${script}</body></html>`;
+<body><div><div class="wm" dir="ltr">Gad<i>it</i></div><div class="msg">${bodyMsg}</div></div></body></html>`;
+  return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
+/** Minimal sign-in handoff page: ONLY a spinner — no dictionary UI, no wordmark
+ *  flash. The child never sees a screen; `location.replace` drops them straight
+ *  into their notebook. On failure the script reveals #err. */
+function spinnerPage(script: string): NextResponse {
+  const html = `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gadit</title>
+<style>html,body{height:100%}body{margin:0;background:#F2F6F4;display:flex;align-items:center;justify-content:center}
+.spin{width:38px;height:38px;border-radius:50%;border:3px solid rgba(14,165,165,.25);border-top-color:#0EA5A5;animation:r .8s linear infinite}
+.err{display:none;font-family:system-ui,-apple-system,Segoe UI,Rubik,sans-serif;color:#3A3F4B;font-size:16px;text-align:center;padding:24px}
+@keyframes r{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2s}}</style></head>
+<body><div class="spin" id="spin" role="status" aria-label="טוען"></div><div class="err" id="err"></div>${script}</body></html>`;
   return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
 }
 
@@ -198,11 +213,14 @@ import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebase
     location.replace("/he/notebook");
   } catch (e) {
     console.error(e);
-    document.getElementById("msg").textContent = "שגיאת התחברות. נסו שוב מ-Yooniz.";
+    document.getElementById("spin").style.display = "none";
+    const el = document.getElementById("err");
+    el.style.display = "block";
+    el.textContent = "שגיאת התחברות. נסו שוב מ-Yooniz.";
   }
 })();
 </script>`;
-    return page("מתחבר למחברת אוצר המילים…", script);
+    return spinnerPage(script);
   } catch (err) {
     console.error("[/api/yooniz/sso] error:", err);
     return page("שגיאה זמנית. נסו שוב עוד רגע.");
