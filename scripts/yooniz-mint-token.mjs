@@ -33,16 +33,22 @@ if (!secret) {
 const b64url = (buf) =>
   buf.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
+const who = args["who"] === "parent" ? "parent" : "kid";
 const payload = {
   v: 1,
+  who,
   yoonizFamilyId: args["yfam"] || "demo-yooniz-family-1",
-  kidId: args["kid"] || "demo-kid-1",
-  kidName: args["name"] || "Demo Kid",
-  role: args["role"] === "girl" ? "girl" : "boy",
   parentEmail: args["email"] || "parent@example.com",
   iat: Math.floor(Date.now() / 1000),
   nonce: crypto.randomBytes(16).toString("hex"),
 };
+if (who === "kid") {
+  payload.kidId = args["kid"] || "demo-kid-1";
+  payload.kidName = args["name"] || "Demo Kid";
+  payload.role = args["role"] === "girl" ? "girl" : "boy";
+} else {
+  payload.parentName = args["name"] || "Demo Parent";
+}
 
 const p = b64url(Buffer.from(JSON.stringify(payload)));
 const sig = b64url(crypto.createHmac("sha256", secret).update(p).digest());

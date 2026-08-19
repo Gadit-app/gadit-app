@@ -30,11 +30,13 @@ export const maxDuration = 20;
 
 type Payload = {
   v: number;
+  who: "kid" | "parent"; // kid → per-kid notebook; parent → Family owner account
   yoonizFamilyId: string;
-  kidId: string;
-  kidName: string;
-  role: "boy" | "girl";
-  parentEmail: string;
+  parentEmail: string; // always — the Gadit Family owner key
+  kidId?: string; // who=kid only
+  kidName?: string; // who=kid only
+  role?: "boy" | "girl"; // who=kid only
+  parentName?: string; // who=parent only (for account creation)
   iat: number;
   nonce: string;
 };
@@ -58,8 +60,14 @@ function verifyToken(token: string, secret: string): Payload | null {
     return null;
   }
   if (payload.v !== 1) return null;
-  if (payload.role !== "boy" && payload.role !== "girl") return null;
-  if (!payload.yoonizFamilyId || !payload.kidId || !payload.parentEmail || !payload.nonce) return null;
+  // Default a missing `who` to "kid" (backward compatible with pre-`who` tokens).
+  payload.who = payload.who === "parent" ? "parent" : "kid";
+  if (!payload.yoonizFamilyId || !payload.parentEmail || !payload.nonce) return null;
+  if (payload.who === "kid") {
+    // Kid tokens must carry a stable kidId + a role; parent tokens carry neither.
+    if (!payload.kidId) return null;
+    if (payload.role !== "boy" && payload.role !== "girl") return null;
+  }
   const nowSec = Math.floor(Date.now() / 1000);
   if (typeof payload.iat !== "number" || Math.abs(nowSec - payload.iat) > 120) return null;
   return payload;
@@ -87,6 +95,37 @@ function spinnerPage(script: string): NextResponse {
 @media (prefers-reduced-motion:reduce){.spin{animation-duration:2s}}</style></head>
 <body><div class="spin" id="spin" role="status" aria-label="טוען"></div><div class="err" id="err"></div>${script}</body></html>`;
   return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
+/** The client-side sign-in handoff: signs in with the minted custom token, then
+ *  hard-replaces into the notebook. Shared by the kid and parent branches. */
+function signInScript(customToken: string): string {
+  const cfg = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  };
+  return `<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+(async () => {
+  try {
+    const app = initializeApp(${JSON.stringify(cfg)});
+    const auth = getAuth(app);
+    await signInWithCustomToken(auth, ${JSON.stringify(customToken)});
+    location.replace("/he/notebook");
+  } catch (e) {
+    console.error(e);
+    document.getElementById("spin").style.display = "none";
+    const el = document.getElementById("err");
+    el.style.display = "block";
+    el.textContent = "שגיאת התחברות. נסו שוב מ-Yooniz.";
+  }
+})();
+</script>`;
 }
 
 export async function GET(req: NextRequest) {
@@ -122,7 +161,7 @@ export async function GET(req: NextRequest) {
       try {
         ownerUid = (await auth.getUserByEmail(email)).uid;
       } catch {
-        ownerUid = (await auth.createUser({ email })).uid;
+        ownerUid = (await auth.createUser({ email, displayName: payload.parentName || undefined })).uid;
       }
       // Ensure a Family exists on that owner. If not, bootstrap it with a
       // Phase-1 free trial (mirrors the webhook's bootstrapFamily).
@@ -130,7 +169,7 @@ export async function GET(req: NextRequest) {
       if (!(await famRef.get()).exists) {
         await famRef.set({ ownerUid, plan: "monthly", createdAt: iso, yoonizProvisioned: true });
         await famRef.collection("members").doc(ownerUid).set({
-          id: ownerUid, role: "mother", name: "", colorIndex: 0, isOwner: true, userId: ownerUid, createdAt: iso,
+          id: ownerUid, role: "mother", name: payload.parentName || "", colorIndex: 0, isOwner: true, userId: ownerUid, createdAt: iso,
         });
         // Grant the entitlement (Family === feature-plan "deep") so the kid's
         // access passes. Phase-1 = free trial; Phase-2 enforces the trial end.
@@ -148,6 +187,17 @@ export async function GET(req: NextRequest) {
     if ((ownerUserSnap.data() as { plan?: string })?.plan !== "deep") {
       // Lapsed / never-active Family → upsell instead of the notebook.
       return NextResponse.redirect(new URL("/he/families", req.url), 302);
+    }
+
+    // ── who === "parent": sign the parent into their OWN Family owner account
+    //    (the real Gadit user for parentEmail), NOT a kid member. gaditFamilyId
+    //    IS the owner uid in our model (families doc id === ownerUid). ─────────
+    if (payload.who === "parent") {
+      const ownerToken = await auth.createCustomToken(gaditFamilyId, {
+        role: "parent",
+        familyId: gaditFamilyId,
+      });
+      return spinnerPage(signInScript(ownerToken));
     }
 
     // ── §3 Resolve (or create) the Gadit member for this Yooniz kid ───────
@@ -194,33 +244,7 @@ export async function GET(req: NextRequest) {
     });
 
     // ── §3.5 Client-side sign-in handoff → the child's own notebook ───────
-    const cfg = {
-      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    };
-    const script = `<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-(async () => {
-  try {
-    const app = initializeApp(${JSON.stringify(cfg)});
-    const auth = getAuth(app);
-    await signInWithCustomToken(auth, ${JSON.stringify(customToken)});
-    location.replace("/he/notebook");
-  } catch (e) {
-    console.error(e);
-    document.getElementById("spin").style.display = "none";
-    const el = document.getElementById("err");
-    el.style.display = "block";
-    el.textContent = "שגיאת התחברות. נסו שוב מ-Yooniz.";
-  }
-})();
-</script>`;
-    return spinnerPage(script);
+    return spinnerPage(signInScript(customToken));
   } catch (err) {
     console.error("[/api/yooniz/sso] error:", err);
     return page("שגיאה זמנית. נסו שוב עוד רגע.");
