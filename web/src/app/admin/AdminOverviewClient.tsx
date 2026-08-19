@@ -299,7 +299,7 @@ export default function AdminOverviewClient() {
               breakdowns moved into these subs so nothing is lost. */}
           <div className="ov-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
             {/* Confirmed */}
-            <div style={{ ...cardStyle, padding: "14px 18px", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.08)" }}>
+            <div style={{ ...cardStyle, padding: "14px 18px", textAlign: "center", borderColor: TOKENS.tealBright, background: "rgba(14,165,165,0.08)" }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.tealBright, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.confirmedLabel}</div>
               <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.teal, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.mrrUsd)}<span style={{ fontSize: 13, fontWeight: 600, color: TOKENS.inkSoft }}> {t.perMonth}</span></div>
               <div style={{ fontSize: 14, fontWeight: 700, color: TOKENS.teal, marginTop: 2 }} dir="ltr">{perYear(rev.mrrUsd)}</div>
@@ -310,7 +310,7 @@ export default function AdminOverviewClient() {
               )}
             </div>
             {/* Pending — deliberately dashed + amber so it never reads as money */}
-            <div style={{ ...cardStyle, padding: "14px 18px", borderStyle: "dashed", borderColor: TOKENS.amber, background: "rgba(245,158,11,0.06)" }}>
+            <div style={{ ...cardStyle, padding: "14px 18px", textAlign: "center", borderStyle: "dashed", borderColor: TOKENS.amber, background: "rgba(245,158,11,0.06)" }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.amber, textTransform: "uppercase", letterSpacing: 0.5 }}>⏳ {t.pendingLabel}</div>
               <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.amber, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.trialingMrrUsd)}<span style={{ fontSize: 13, fontWeight: 600, color: TOKENS.inkSoft }}> {t.perMonth}</span></div>
               <div style={{ fontSize: 14, fontWeight: 700, color: TOKENS.amber, marginTop: 2 }} dir="ltr">{perYear(rev.trialingMrrUsd)}</div>
@@ -318,7 +318,7 @@ export default function AdminOverviewClient() {
               <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }} dir="ltr">{tierBreakdown(rev.trialingByTier)}</div>
             </div>
             {/* Total — confirmed + pending, the number Gadi asked for */}
-            <div style={{ ...cardStyle, padding: "14px 18px", borderColor: TOKENS.purpleBright, background: "rgba(124,58,237,0.06)" }}>
+            <div style={{ ...cardStyle, padding: "14px 18px", textAlign: "center", borderColor: TOKENS.purpleBright, background: "rgba(124,58,237,0.06)" }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: TOKENS.purpleBright, textTransform: "uppercase", letterSpacing: 0.5 }}>{t.totalLabel2}</div>
               <div style={{ fontSize: 30, fontWeight: 800, color: TOKENS.purple, lineHeight: 1.1, marginTop: 4 }} dir="ltr">{money(rev.totalMrrUsd)}<span style={{ fontSize: 13, fontWeight: 600, color: TOKENS.inkSoft }}> {t.perMonth}</span></div>
               <div style={{ fontSize: 15, fontWeight: 800, color: TOKENS.purple, marginTop: 2 }} dir="ltr">{perYear(rev.totalMrrUsd)}</div>
