@@ -3406,6 +3406,18 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--ink-soft);
   text-decoration: none;
   transition: color 0.15s ease;
+  /* Some navlinks are <button> (Say it, Partners), the rest are <a>. Reset
+     the native button chrome (border, padding, background, font) so the
+     button renders pixel-identical to the anchor links — "תגיד את זה" was
+     smaller/boxier than מחברת/משחקים (Gadi 2026-08-20). */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .wordbook .wb-shell-navlink:hover { color: var(--ink); }
 
