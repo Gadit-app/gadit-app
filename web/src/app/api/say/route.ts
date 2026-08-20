@@ -86,7 +86,10 @@ export async function POST(req: NextRequest) {
     (wantRoman
       ? `"romanization" (a simple Latin-letter guide to how it sounds, for a learner who cannot read the script), `
       : ``) +
-    `"tip" (one short, optional pronunciation tip in ${source}; empty string if nothing useful). ` +
+    `"tip" (ONE very short, friendly pronunciation tip that helps a young child or a beginner say the ${target} sentence out loud. ` +
+    `Write the WHOLE tip in ${source} only, never mixing languages. Point out at most ONE tricky sound or word in the ${target} sentence ` +
+    `and show simply how to say it, using ${source} sounds a child already knows. No grammar terms, no phonetic symbols, no jargon. ` +
+    `One short, warm sentence a child would understand. Empty string if nothing tricky). ` +
     `No extra keys, no commentary.`;
 
   try {

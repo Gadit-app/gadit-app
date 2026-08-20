@@ -21,6 +21,21 @@ const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de",
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // Malformed paths — a stray backslash (crawlers hit "/individuals\" =
+  // "/individuals%5C") or a bad percent-escape — throw downstream in
+  // URL/metadata construction and surface as 5xx (Vercel anomaly alert
+  // 2026-08-20). Bounce them to a clean 404 before they reach any page.
+  let decodedPath: string;
+  try {
+    decodedPath = decodeURIComponent(pathname);
+  } catch {
+    return new NextResponse(null, { status: 404 });
+  }
+  if (decodedPath.includes("\\")) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   const segments = pathname.split("/").filter(Boolean);
   const first = segments[0];
 
