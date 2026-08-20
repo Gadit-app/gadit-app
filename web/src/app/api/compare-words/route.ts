@@ -28,6 +28,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   fil: "Filipino",
   af: "Afrikaans",
   sw: "Swahili",
+  "zh-CN": "Simplified Chinese",
+  "zh-TW": "Traditional Chinese",
+  ko: "Korean",
+  th: "Thai",
+  bn: "Bengali",
 };
 
 const SYSTEM_PROMPT = `You are Gadit's word comparison engine. The user gives you two words that look or sound similar (or are easy to confuse), and you explain the difference clearly.

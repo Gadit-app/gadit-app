@@ -201,6 +201,41 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "kitenzi kisaidizi", "particle": "chembe", "numeral": "kihesabu",
     "proper noun": "nomino ya pekee", "phrase": "kifungu", "idiom": "nahau",
   },
+  "zh-CN": {
+    "noun": "名词", "verb": "动词", "adjective": "形容词", "adverb": "副词",
+    "preposition": "介词", "conjunction": "连词", "pronoun": "代词",
+    "interjection": "叹词", "determiner": "限定词", "article": "冠词",
+    "auxiliary": "助动词", "particle": "助词", "numeral": "数词",
+    "proper noun": "专有名词", "phrase": "短语", "idiom": "习语",
+  },
+  "zh-TW": {
+    "noun": "名詞", "verb": "動詞", "adjective": "形容詞", "adverb": "副詞",
+    "preposition": "介詞", "conjunction": "連接詞", "pronoun": "代名詞",
+    "interjection": "感嘆詞", "determiner": "限定詞", "article": "冠詞",
+    "auxiliary": "助動詞", "particle": "助詞", "numeral": "數詞",
+    "proper noun": "專有名詞", "phrase": "片語", "idiom": "慣用語",
+  },
+  ko: {
+    "noun": "명사", "verb": "동사", "adjective": "형용사", "adverb": "부사",
+    "preposition": "전치사", "conjunction": "접속사", "pronoun": "대명사",
+    "interjection": "감탄사", "determiner": "한정사", "article": "관사",
+    "auxiliary": "조동사", "particle": "조사", "numeral": "수사",
+    "proper noun": "고유명사", "phrase": "구", "idiom": "관용구",
+  },
+  th: {
+    "noun": "คำนาม", "verb": "คำกริยา", "adjective": "คำคุณศัพท์", "adverb": "คำวิเศษณ์",
+    "preposition": "คำบุพบท", "conjunction": "คำสันธาน", "pronoun": "คำสรรพนาม",
+    "interjection": "คำอุทาน", "determiner": "คำกำหนด", "article": "คำนำหน้านาม",
+    "auxiliary": "คำกริยาช่วย", "particle": "คำอนุภาค", "numeral": "คำบอกจำนวน",
+    "proper noun": "คำวิสามานยนาม", "phrase": "วลี", "idiom": "สำนวน",
+  },
+  bn: {
+    "noun": "বিশেষ্য", "verb": "ক্রিয়া", "adjective": "বিশেষণ", "adverb": "ক্রিয়া-বিশেষণ",
+    "preposition": "পদান্বয়ী অব্যয়", "conjunction": "সংযোজক অব্যয়", "pronoun": "সর্বনাম",
+    "interjection": "আবেগসূচক অব্যয়", "determiner": "নির্ধারক", "article": "নির্দেশক",
+    "auxiliary": "সহায়ক ক্রিয়া", "particle": "অনুসর্গ", "numeral": "সংখ্যাবাচক",
+    "proper noun": "নামবাচক বিশেষ্য", "phrase": "বাক্যাংশ", "idiom": "বাগধারা",
+  },
 };
 
 export function formatPos(pos: string | null | undefined, lang: Lang): string {

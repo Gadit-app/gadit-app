@@ -29,6 +29,11 @@ const LANG_HINT: Record<string, string> = {
   fil: "tl",
   af: "af",
   sw: "sw",
+  "zh-CN": "zh",
+  "zh-TW": "zh",
+  ko: "ko",
+  th: "th",
+  bn: "bn",
 };
 
 export async function POST(req: NextRequest) {

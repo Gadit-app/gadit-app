@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
-import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari, Noto_Sans_Ethiopic } from "next/font/google";
+import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari, Noto_Sans_Ethiopic, Noto_Sans_SC, Noto_Sans_TC, Noto_Sans_KR, Noto_Sans_Thai, Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
@@ -140,6 +140,47 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
 const notoSansEthiopic = Noto_Sans_Ethiopic({
   variable: "--font-noto-am",
   subsets: ["latin", "ethiopic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// CJK + Thai + Bengali scripts. Same rationale as JP/Devanagari/Ethiopic:
+// the Latin-oriented brand fonts carry no Han/Hangul/Thai/Bengali glyphs and
+// OS fallbacks are wildly inconsistent, so each script ships its own Noto.
+// SC/TC/KR follow the JP pattern (subsets: ["latin"] — the CJK glyph set
+// ships whole, next/font can't unicode-range slice it); Thai and Bengali
+// have named Google-Fonts subsets.
+const notoSansSC = Noto_Sans_SC({
+  variable: "--font-noto-sc",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const notoSansTC = Noto_Sans_TC({
+  variable: "--font-noto-tc",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const notoSansKR = Noto_Sans_KR({
+  variable: "--font-noto-kr",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const notoSansThai = Noto_Sans_Thai({
+  variable: "--font-noto-th",
+  subsets: ["latin", "thai"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const notoSansBengali = Noto_Sans_Bengali({
+  variable: "--font-noto-bn",
+  subsets: ["latin", "bengali"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
@@ -306,6 +347,36 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "Zana mpya inayokusaidia kuelewa kwa kweli kila neno. Maana zote, mifano, nahau, na neno limetoka wapi. Bila malipo kuanza, uboreshaji wa gharama nafuu sana. Inafaa kujaribu.",
     locale: "sw_TZ",
   },
+  "zh-CN": {
+    title: "Gadit, 把每个词彻底理解",
+    description:
+      "一个帮助你真正理解每个词的新工具。所有释义、例句、习语，以及词的来源。免费开始，升级价格非常低。值得一试。",
+    locale: "zh_CN",
+  },
+  "zh-TW": {
+    title: "Gadit, 把每個字徹底理解",
+    description:
+      "一個幫助你真正理解每個字的新工具。所有解釋、例句、慣用語，以及字的來源。免費開始，升級價格非常低。值得一試。",
+    locale: "zh_TW",
+  },
+  ko: {
+    title: "Gadit, 모든 단어를 끝까지 이해하세요",
+    description:
+      "모든 단어를 진짜로 이해하도록 돕는 새로운 도구. 모든 뜻과 예문, 관용구, 그리고 단어의 유래까지. 무료로 시작하고, 업그레이드도 매우 저렴합니다. 한번 써볼 만합니다.",
+    locale: "ko_KR",
+  },
+  th: {
+    title: "Gadit, เข้าใจทุกคำอย่างถ่องแท้",
+    description:
+      "เครื่องมือใหม่ที่ช่วยให้คุณเข้าใจทุกคำอย่างแท้จริง ทั้งความหมายทั้งหมด ตัวอย่าง สำนวน และที่มาของคำ เริ่มใช้ฟรี อัปเกรดราคาถูกมาก คุ้มค่าที่จะลอง",
+    locale: "th_TH",
+  },
+  bn: {
+    title: "Gadit, প্রতিটি শব্দ পুরোপুরি বুঝুন",
+    description:
+      "প্রতিটি শব্দ সত্যিকারভাবে বুঝতে সাহায্য করে এমন একটি নতুন টুল। সব অর্থ, উদাহরণ, বাগধারা, আর শব্দটি কোথা থেকে এসেছে। শুরু করা বিনামূল্যে, আপগ্রেড খুব সাশ্রয়ী। চেষ্টা করে দেখার মতো।",
+    locale: "bn_BD",
+  },
 };
 
 const ALL_LANGS: Lang[] = LANGUAGES.map((l) => l.code);
@@ -438,7 +509,7 @@ export default async function RootLayout({
     <html
       lang={initialLang}
       dir={initialDir}
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} ${notoSansEthiopic.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} ${notoSansEthiopic.variable} ${notoSansSC.variable} ${notoSansTC.variable} ${notoSansKR.variable} ${notoSansThai.variable} ${notoSansBengali.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
           {/* Apply the saved appearance/skin (data-theme) before first paint

@@ -1132,6 +1132,11 @@ const UI_LANG_NAMES: Record<string, string> = {
   fil: "Filipino",
   af: "Afrikaans",
   sw: "Swahili",
+  "zh-CN": "Simplified Chinese",
+  "zh-TW": "Traditional Chinese",
+  ko: "Korean",
+  th: "Thai",
+  bn: "Bengali",
 };
 
 // Reject input that isn't plausibly a word BEFORE we burn an OpenAI

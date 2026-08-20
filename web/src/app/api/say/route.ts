@@ -32,7 +32,8 @@ const LANG_NAMES: Record<string, string> = {
   cs: "Czech", sk: "Slovak", uk: "Ukrainian", tr: "Turkish", pl: "Polish",
   fa: "Persian", id: "Indonesian", el: "Greek", hi: "Hindi", ja: "Japanese",
   am: "Amharic", zu: "Zulu", vi: "Vietnamese", fil: "Filipino",
-  af: "Afrikaans", sw: "Swahili",
+  af: "Afrikaans", sw: "Swahili", "zh-CN": "Chinese", "zh-TW": "Chinese",
+  ko: "Korean", th: "Thai", bn: "Bengali",
 };
 
 // Languages written in a non-Latin script — for these we ask the model

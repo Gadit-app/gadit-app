@@ -216,6 +216,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   --wb-jp:    var(--font-noto-jp), 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
   --wb-hi:    var(--font-noto-hi), 'Noto Sans Devanagari', 'Mangal', 'Kohinoor Devanagari', system-ui, sans-serif;
   --wb-am:    var(--font-noto-am), 'Noto Sans Ethiopic', 'Nyala', 'Ebrima', 'Kefa', system-ui, sans-serif;
+  --wb-sc:    var(--font-noto-sc), 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --wb-tc:    var(--font-noto-tc), 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+  --wb-ko:    var(--font-noto-kr), 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --wb-th:    var(--font-noto-th), 'Noto Sans Thai', 'Leelawadee UI', 'Thonburi', system-ui, sans-serif;
+  --wb-bn:    var(--font-noto-bn), 'Noto Sans Bengali', 'Vrinda', 'Shonar Bangla', system-ui, sans-serif;
 
   font-family: var(--wb-sans);
   color: var(--ink);
@@ -1236,6 +1241,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .wordbook[lang="hi"] { font-family: var(--wb-hi); }
 [lang="am"] .wordbook,
 .wordbook[lang="am"] { font-family: var(--wb-am); }
+[lang="zh-CN"] .wordbook,
+.wordbook[lang="zh-CN"] { font-family: var(--wb-sc); }
+[lang="zh-TW"] .wordbook,
+.wordbook[lang="zh-TW"] { font-family: var(--wb-tc); }
+[lang="ko"] .wordbook,
+.wordbook[lang="ko"] { font-family: var(--wb-ko); }
+[lang="th"] .wordbook,
+.wordbook[lang="th"] { font-family: var(--wb-th); }
+[lang="bn"] .wordbook,
+.wordbook[lang="bn"] { font-family: var(--wb-bn); }
 
 .wordbook[dir="rtl"] .wb-word-title {
   font-family: var(--wb-he);

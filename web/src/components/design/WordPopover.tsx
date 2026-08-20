@@ -171,7 +171,12 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
               : lang === "ja" ? "var(--wb-jp)"
                 : lang === "hi" ? "var(--wb-hi)"
                   : lang === "am" ? "var(--font-noto-am)"
-                    : "var(--wb-sans, Inter, system-ui, sans-serif)",
+                    : lang === "zh-CN" ? "var(--wb-sc)"
+                      : lang === "zh-TW" ? "var(--wb-tc)"
+                        : lang === "ko" ? "var(--wb-ko)"
+                          : lang === "th" ? "var(--wb-th)"
+                            : lang === "bn" ? "var(--wb-bn)"
+                              : "var(--wb-sans, Inter, system-ui, sans-serif)",
       }}
     >
       <div
