@@ -148,6 +148,13 @@ export function LangSwitcher({
               "0 18px 40px -12px oklch(0.08 0.08 260 / 0.6), " +
               "0 6px 18px -8px oklch(0.08 0.08 260 / 0.45)",
             zIndex: 50,
+            // Bounded, self-scrolling panel so the (growing) language list
+            // never sprawls down the whole page. Scroll stays inside the box
+            // (overscroll-contain) so it doesn't drag the page underneath.
+            maxHeight: "min(62vh, 440px)",
+            overflowY: "auto",
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
           }}
         >
           {LANGUAGES.map((l) => {
