@@ -37,6 +37,7 @@
 import { useState, type ReactNode } from "react";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
+import { useHref, wordPath } from "@/lib/href";
 import type { Lang } from "@/lib/i18n";
 import { LANGUAGES } from "@/lib/i18n";
 import { isEtymologyFieldGarbled } from "@/lib/define-guard";
@@ -90,6 +91,10 @@ export interface WordResult {
   etymology: Etymology | string;
   generalIdioms?: Idiom[];
   ipa?: string;
+  /** Set by the define API's "did you mean" path (RULE 1b) when the typed
+   *  string is not a real word but a nearby real word likely was intended.
+   *  Rendered as a clickable chip that searches the suggested word. */
+  suggestedWord?: string;
 }
 
 // ActionDef — IDs surfaced by the Take it further tiles. WordClient
@@ -1534,7 +1539,8 @@ export function ResultView({
   /** Kids Mode: which meaning indexes are still generating a picture. */
   kidsImagesLoading?: Record<number, boolean>;
 }) {
-  const { dir } = useLang();
+  const { dir, lang } = useLang();
+  const href = useHref();
   // imageState retained for the legacy <VisualCard /> export; no
   // longer rendered in this ResultView since image lives inside each
   // MeaningEntry tab now. The state derivation also feeds onAction
@@ -1560,6 +1566,20 @@ export function ResultView({
         isPinned={isPinned}
         onPin={onPin}
       />
+
+      {/* "Did you mean" — RULE 1b suggestion rendered as a clickable chip
+          that searches the corrected word. The localized "did you mean X?"
+          sentence still appears in the meaning text below, so the chip needs
+          no translated label of its own. */}
+      {result.suggestedWord && (
+        <a href={href(wordPath(result.suggestedWord))} className="wb-dym-chip" dir={dir} lang={detectWordLang(result.language)}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <span className="wb-dym-word">{result.suggestedWord}</span>
+        </a>
+      )}
 
       <MeaningsBlock
         meanings={result.meanings ?? []}

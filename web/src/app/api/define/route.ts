@@ -822,6 +822,12 @@ const RESPONSE_SCHEMA = {
     // CONTEXT mode). Allow null so the model can comply with strict
     // mode without us forcing the prompt to invent a value.
     ipa:      { type: ["string", "null"] },
+    // suggestedWord — the "did you mean" correction (RULE 1b). Non-null ONLY
+    // when the typed string isn't a real word but a nearby real word was
+    // likely intended; null otherwise. The UI renders it as a clickable chip.
+    // Must be listed in `required` too (strict mode); nullable covers the
+    // normal case where there's nothing to suggest.
+    suggestedWord: { type: ["string", "null"] },
     meanings: {
       type: "array",
       items: {
@@ -894,7 +900,7 @@ const RESPONSE_SCHEMA = {
     },
     contextNote: { type: ["string", "null"] },
   },
-  required: ["word", "language", "translation", "ipa", "meanings", "etymology", "generalIdioms", "contextNote"],
+  required: ["word", "language", "translation", "ipa", "suggestedWord", "meanings", "etymology", "generalIdioms", "contextNote"],
 } as const;
 
 const STRUCTURED_RESPONSE_FORMAT = {
