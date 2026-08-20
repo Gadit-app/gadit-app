@@ -5825,8 +5825,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     font-family: var(--wb-he);
     font-size: 13.5px;
     font-weight: 500;
-    text-align: start;
+    /* Force a uniform row (label left-side filling, flag pinned right) no
+       matter the UI language, so every flag lines up in one right column
+       (Gadi 2026-08-20). Only the label text keeps its own script direction. */
+    direction: ltr;
     cursor: pointer;
+  }
+  .wordbook .wb-shell-lang-mobile-menu .wb-shell-lang-mobile-label {
+    flex: 1;
+    min-width: 0;
+    text-align: start;
   }
   .wordbook .wb-shell-lang-mobile-menu button:hover {
     background: var(--rule-faint);

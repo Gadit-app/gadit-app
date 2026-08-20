@@ -84,8 +84,11 @@ export function LangSwitchMobile() {
                   setLang(l.code as Lang);
                   setOpen(false);
                 }}
-                style={{ direction: l.dir }}
               >
+                {/* Flag always on the right (uniform column, Gadi 2026-08-20).
+                    The row layout is forced RTL in CSS; only the label text
+                    keeps its own script direction via dir. */}
+                <span className="wb-shell-lang-mobile-label" dir={l.dir}>{l.label}</span>
                 <img
                   className="wb-shell-lang-mobile-flag"
                   src={`https://flagcdn.com/40x30/${l.flag}.png`}
@@ -95,7 +98,6 @@ export function LangSwitchMobile() {
                   alt=""
                   loading="lazy"
                 />
-                <span>{l.label}</span>
               </button>
             </li>
           ))}
