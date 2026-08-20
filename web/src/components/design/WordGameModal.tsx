@@ -683,7 +683,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
   const tray = tiles.filter((t) => t.slot < 0);
 
   return createPortal(
-    <div className="wb-wgm-overlay" dir={dir} role="dialog" aria-modal="true" aria-label={c.title}>
+    <div className="wordbook wb-wgm-overlay" dir={dir} role="dialog" aria-modal="true" aria-label={c.title}>
       <div className="wb-wgm-sheet">
         <header className="wb-wgm-header">
           <button type="button" className="wb-wgm-close" onClick={onClose} aria-label={c.close}>
