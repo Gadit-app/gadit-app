@@ -153,18 +153,34 @@ function useNavLinks(): NavLink[] {
   }
 
   const paid = !!user && (plan === "clear" || plan === "deep");
-  const links: NavLink[] = [
+
+  // Context-aware nav (Gadi 2026-08-20): a signed-in user sees only what's
+  // relevant to THEIR use, not the marketing pages. This also fixes the nav
+  // overflow in long-label languages (Russian/German) — the old 9-item
+  // marketing+tools nav couldn't fit. Partners moved to the footer.
+  if (user) {
+    if (paid) {
+      // Paying member — their tools only. No Features/Pricing/Individuals/
+      // Schools (noise once subscribed).
+      const links: NavLink[] = [
+        { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
+        { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
+      ];
+      if (plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
+      return links;
+    }
+    // Basic (signed in, free) — no paid tools yet, so a single gentle upsell.
+    return [{ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") }];
+  }
+
+  // Anonymous — the marketing nav.
+  return [
     { key: "features", href: href("/features"), label: v2(lang, "navFeatures") },
+    { key: "individuals", href: href("/individuals"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en },
+    { key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en },
+    { key: "schools", href: href("/schools"), label: v2(lang, "navSchools") },
+    { key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") },
   ];
-  if (paid) links.push({ key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") });
-  if (paid) links.push({ key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en });
-  if (user && plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
-  links.push({ key: "individuals", href: href("/individuals"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en });
-  links.push({ key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en });
-  links.push({ key: "schools", href: href("/schools"), label: v2(lang, "navSchools") });
-  links.push({ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") });
-  if (paid) links.push({ key: "affiliates", href: href("/partners"), label: v2(lang, "navAffiliates") });
-  return links;
 }
 
 /** Desktop centre nav. Drop-in replacement for the old inline
