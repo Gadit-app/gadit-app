@@ -18,6 +18,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { type Lang } from "@/lib/i18n";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
@@ -132,6 +133,14 @@ export function IndividualsLandingClient() {
         </Link>
         <WbShellNav active="individuals" />
         <div className="wb-shell-actions">
+          <ShareButton
+            url="https://www.gadit.app/individuals"
+            currentPage
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text=""
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
           <LangSwitcher />
           {user ? <WbUserMenu /> : (
             <>

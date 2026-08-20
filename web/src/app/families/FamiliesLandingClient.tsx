@@ -11,6 +11,7 @@ import { track } from "@/lib/track";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 
@@ -5881,6 +5882,14 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             </Link>
             <WbShellNav active="families" />
             <div className="wb-shell-actions">
+              <ShareButton
+                url="https://www.gadit.app/families"
+                currentPage
+                title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+                text=""
+                shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+                copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+              />
               <LangSwitcher />
               {user ? (
                 <WbUserMenu />

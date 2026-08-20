@@ -2329,7 +2329,7 @@ export function PricingPageRoute() {
         <div className="wb-shell-actions">
           {user && (
             <ShareButton
-              url="https://www.gadit.app/"
+              url="https://www.gadit.app/" currentPage
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
               text=""
               shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
@@ -2355,7 +2355,7 @@ export function PricingPageRoute() {
         {user && (
           <div className="wb-shell-mobile-identity">
             <ShareButton
-              url="https://www.gadit.app/"
+              url="https://www.gadit.app/" currentPage
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
               text=""
               shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}

@@ -25,12 +25,17 @@ export function ShareButton({
   text,
   copiedLabel,
   shareLabel,
+  currentPage = false,
 }: {
   url: string;
   title: string;
   text: string;
   copiedLabel: string;
   shareLabel: string;
+  /** When true, share the page the user is actually on (its own URL),
+   *  not the passed `url`. Used by content/marketing pages so the topbar
+   *  share sends a link to THIS page, not always the homepage. */
+  currentPage?: boolean;
 }) {
   const [flash, setFlash] = useState(false);
   const { lang } = useLang();
@@ -44,8 +49,15 @@ export function ShareButton({
   // re-applying, so already-prefixed URLs pass through unharmed, and
   // non-gadit URLs are left untouched.
   function localizedUrl(): string {
+    // Share the current page when asked (its path is re-localized below, so
+    // the existing lang prefix is stripped + reapplied cleanly). Falls back to
+    // the passed url during SSR / when currentPage is off.
+    const target =
+      currentPage && typeof window !== "undefined"
+        ? window.location.origin + window.location.pathname
+        : url;
     try {
-      const u = new URL(url);
+      const u = new URL(target);
       if (u.hostname === "gadit.app" || u.hostname.endsWith(".gadit.app")) {
         u.pathname = buildHref(lang, u.pathname);
         return u.toString();
@@ -53,7 +65,7 @@ export function ShareButton({
     } catch {
       // Relative or malformed URL — share as given.
     }
-    return url;
+    return target;
   }
 
   async function handleShare() {
