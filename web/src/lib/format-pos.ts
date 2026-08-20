@@ -173,6 +173,34 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "ረዳት ግሥ", "particle": "ንኡስ ቃል", "numeral": "ቁጥር",
     "proper noun": "የተጸውዖ ስም", "phrase": "ሐረግ", "idiom": "ፈሊጥ",
   },
+  vi: {
+    "noun": "danh từ", "verb": "động từ", "adjective": "tính từ", "adverb": "trạng từ",
+    "preposition": "giới từ", "conjunction": "liên từ", "pronoun": "đại từ",
+    "interjection": "thán từ", "determiner": "từ hạn định", "article": "mạo từ",
+    "auxiliary": "trợ động từ", "particle": "tiểu từ", "numeral": "số từ",
+    "proper noun": "danh từ riêng", "phrase": "cụm từ", "idiom": "thành ngữ",
+  },
+  fil: {
+    "noun": "pangngalan", "verb": "pandiwa", "adjective": "pang-uri", "adverb": "pang-abay",
+    "preposition": "pang-ukol", "conjunction": "pangatnig", "pronoun": "panghalip",
+    "interjection": "pandamdam", "determiner": "pantukoy", "article": "pantukoy",
+    "auxiliary": "pantulong na pandiwa", "particle": "kataga", "numeral": "pambilang",
+    "proper noun": "pangngalang pantangi", "phrase": "parirala", "idiom": "idyoma",
+  },
+  af: {
+    "noun": "selfstandige naamwoord", "verb": "werkwoord", "adjective": "byvoeglike naamwoord", "adverb": "bywoord",
+    "preposition": "voorsetsel", "conjunction": "voegwoord", "pronoun": "voornaamwoord",
+    "interjection": "tussenwerpsel", "determiner": "bepaler", "article": "lidwoord",
+    "auxiliary": "hulpwerkwoord", "particle": "partikel", "numeral": "telwoord",
+    "proper noun": "eienaam", "phrase": "frase", "idiom": "idioom",
+  },
+  sw: {
+    "noun": "nomino", "verb": "kitenzi", "adjective": "kivumishi", "adverb": "kielezi",
+    "preposition": "kihusishi", "conjunction": "kiunganishi", "pronoun": "kiwakilishi",
+    "interjection": "kihisishi", "determiner": "kibainishi", "article": "kioanishi",
+    "auxiliary": "kitenzi kisaidizi", "particle": "chembe", "numeral": "kihesabu",
+    "proper noun": "nomino ya pekee", "phrase": "kifungu", "idiom": "nahau",
+  },
 };
 
 export function formatPos(pos: string | null | undefined, lang: Lang): string {

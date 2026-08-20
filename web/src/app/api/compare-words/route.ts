@@ -22,6 +22,12 @@ const UI_LANG_NAMES: Record<string, string> = {
   fa: "Persian",
   id: "Indonesian",
   nl: "Dutch",
+  el: "Greek",
+  zu: "Zulu",
+  vi: "Vietnamese",
+  fil: "Filipino",
+  af: "Afrikaans",
+  sw: "Swahili",
 };
 
 const SYSTEM_PROMPT = `You are Gadit's word comparison engine. The user gives you two words that look or sound similar (or are easy to confuse), and you explain the difference clearly.

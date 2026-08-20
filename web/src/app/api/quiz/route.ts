@@ -22,6 +22,12 @@ const UI_LANG_NAMES: Record<string, string> = {
   fa: "Persian",
   id: "Indonesian",
   nl: "Dutch",
+  el: "Greek",
+  zu: "Zulu",
+  vi: "Vietnamese",
+  fil: "Filipino",
+  af: "Afrikaans",
+  sw: "Swahili",
 };
 
 const SYSTEM_PROMPT = `You are creating a short quiz to help a learner cement their understanding of a specific word and meaning.

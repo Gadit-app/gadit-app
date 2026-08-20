@@ -37,6 +37,12 @@ const UI_LANG_NAMES: Record<string, string> = {
   fa: "Persian",
   id: "Indonesian",
   nl: "Dutch",
+  el: "Greek",
+  zu: "Zulu",
+  vi: "Vietnamese",
+  fil: "Filipino",
+  af: "Afrikaans",
+  sw: "Swahili",
 };
 
 export function uiLangName(uiLang: string): string {

@@ -18,8 +18,8 @@ import { useHref } from "@/lib/href";
  * transacts, so the brief render before the bounce is harmless.
  */
 
-// URL prefixes (14 UI langs) so we can strip the locale segment.
-const LANGS = new Set(["he", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "en", "uk", "tr", "pl", "fa", "id", "nl"]);
+// URL prefixes (all UI langs) so we can strip the locale segment.
+const LANGS = new Set(["he", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "en", "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw"]);
 
 // First path segment (after any locale) a kid must never reach.
 const BLOCKED = new Set([

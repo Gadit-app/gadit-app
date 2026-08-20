@@ -282,6 +282,30 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "Ithuluzi elisha elikusiza uqonde ngempela igama ngalinye. Zonke izincazelo, izibonelo, izisho, nemvelaphi yegama. Kumahhala ukuqala, futhi ukuthuthukisa kubiza kancane. Kufanele ukuzame.",
     locale: "zu_ZA",
   },
+  vi: {
+    title: "Gadit, Hiểu trọn vẹn từng từ",
+    description:
+      "Một công cụ mới giúp bạn thực sự hiểu từng từ. Tất cả các nghĩa, ví dụ, thành ngữ và nguồn gốc của từ. Miễn phí để bắt đầu, nâng cấp với chi phí rất thấp. Đáng để thử.",
+    locale: "vi_VN",
+  },
+  fil: {
+    title: "Gadit, Unawain ang bawat salita nang lubusan",
+    description:
+      "Isang bagong tool na tumutulong sa iyong tunay na maunawaan ang bawat salita. Lahat ng kahulugan, halimbawa, idyoma, at kung saan nagmula ang salita. Libre pagsimula, napakamura ng upgrade. Sulit subukan.",
+    locale: "fil_PH",
+  },
+  af: {
+    title: "Gadit, Verstaan elke woord tot in die kern",
+    description:
+      "'n Nuwe hulpmiddel wat jou help om elke woord regtig te verstaan. Al die betekenisse, voorbeelde, idiome, en waar die woord vandaan kom. Gratis om te begin, baie bekostigbare opgradering. Die moeite werd om te probeer.",
+    locale: "af_ZA",
+  },
+  sw: {
+    title: "Gadit, Elewa kila neno kikamilifu",
+    description:
+      "Zana mpya inayokusaidia kuelewa kwa kweli kila neno. Maana zote, mifano, nahau, na neno limetoka wapi. Bila malipo kuanza, uboreshaji wa gharama nafuu sana. Inafaa kujaribu.",
+    locale: "sw_TZ",
+  },
 };
 
 const ALL_LANGS: Lang[] = LANGUAGES.map((l) => l.code);
