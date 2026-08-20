@@ -5910,6 +5910,14 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
               <StartFreeCTA />
             </div>
             <div className="wb-shell-mobile-menu-cluster">
+              <ShareButton
+                url="https://www.gadit.app/families"
+                currentPage
+                title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+                text=""
+                shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+                copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+              />
               <LangSwitchMobile />
               <WbShellBurger active="families" />
             </div>

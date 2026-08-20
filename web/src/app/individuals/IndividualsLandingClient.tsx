@@ -151,6 +151,14 @@ export function IndividualsLandingClient() {
         </div>
         <div className="wb-shell-mobile-cta"><StartFreeCTA /></div>
         <div className="wb-shell-mobile-menu-cluster">
+          <ShareButton
+            url="https://www.gadit.app/individuals"
+            currentPage
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text=""
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
           <LangSwitchMobile />
           <WbShellBurger active="individuals" />
         </div>
