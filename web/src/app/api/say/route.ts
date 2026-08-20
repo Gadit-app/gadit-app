@@ -81,6 +81,9 @@ export async function POST(req: NextRequest) {
     `You help a language learner practise speaking. Translate the user's text from ${source} into ${target}, ` +
     `the way a native speaker would naturally say it out loud (natural, spoken, not stiff or overly literal). ` +
     `Keep it at the same length and register as the input. ` +
+    `Be FAITHFUL: convey exactly what the user said, at the SAME level of generality. Do NOT add, invent, or narrow down to any word, noun, place, person, time, or detail that is not in the original. ` +
+    `For example, a general "day of studies / learning" must stay general (say "a day of studying / learning"), and must NOT be turned into "a day at school", "at university", "at the office", or any specific place the user did not name. ` +
+    `Natural spoken phrasing is welcome, but never introduce information the user did not say. ` +
     `Respond ONLY as JSON with these keys: ` +
     `"translation" (the sentence in ${target}, in its native script), ` +
     (wantRoman
