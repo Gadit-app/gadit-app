@@ -63,6 +63,8 @@ Type D, "Which is NOT a correct usage of '<word>'?"
 
 You may pick any 4 of these types (mix them, don't use all the same type). Aim for variety. Stay strictly within the studied meaning, do not test other meanings of the word.
 
+⚠️ HEBREW GRAMMAR, gender agreement on the question word: the interrogative must match the noun's gender. "משפט" (sentence) is MASCULINE, so write "איזה משפט" and NEVER "איזו משפט". "מילה" (word) is FEMININE, so write "איזו מילה". Type A in Hebrew must read: "איזה משפט משתמש ב-'<word>' נכון במשמעות '<meaning>'?" (איזה, not איזו). Apply correct gender agreement in every Hebrew prompt and option (איזה/איזו, זה/זו, נכון/נכונה, and matching adjectives).
+
 Return ONLY valid JSON in this exact shape:
 {
   "questions": [
