@@ -602,6 +602,28 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
     totalRounds.current = Math.max(n, 1);
   }, [stage, anagramEligible, fillblankEligible, distractors]);
 
+  // Kids gamification v2: reaching "result" having done well on THIS word's
+  // games proves comprehension, so mark it understood + award points (same
+  // multiplier as a passed quiz). Best effort + non-blocking; the endpoint is
+  // idempotent per word, and a 60% bar keeps a single lucky round from
+  // counting. See /api/notebook/understood.
+  useEffect(() => {
+    if (stage !== "result" || !user || !word || !language) return;
+    const total = totalRounds.current || 1;
+    if (score / total < 0.6) return;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch("/api/notebook/understood", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ word, language, source: "game" }),
+        });
+      } catch { /* comprehension credit is best-effort */ }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage]);
+
   // ─── Anagram handlers ─────────────────────────────────────────
   function placeTile(tile: TileState) {
     if (anagramResult !== "none") return;
