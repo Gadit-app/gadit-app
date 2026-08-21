@@ -34,6 +34,9 @@ type NotebookItem = {
   language: string;
   meaning: string;
   addedAt: string;
+  /** Set once the child proves comprehension (passed quiz/game). Drives the
+   *  explorer rank via earned points. Absent on older docs = not yet understood. */
+  understood?: boolean;
 };
 
 // Group notebook entries by the word's language (Gadi 2026-08-17) so a user
@@ -472,6 +475,7 @@ export function NotebookPage() {
         {items && items.length > 0 && familyRole === "kid" && (
           <KidsGameHeader
             addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}
+            understoodCount={items.filter((i) => i.understood).length}
             lang={lang}
             dir={dir}
           />

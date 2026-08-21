@@ -40,25 +40,30 @@ const RANK_EMOJI = ["🌱", "🔍", "🧭", "🗺️", "🎖️", "👑", "🏆"
 // Small local copy for the ranks table (he + en, en fallback) so a new
 // surface doesn't force a full gamification-labels sweep.
 const RANKS_COPY: Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }> = {
-  en: { title: "Your ranks", sub: (n) => `You've collected ${n} words. Keep exploring to climb.`, words: "words", you: "You're here", locked: "Locked", close: "Close" },
-  he: { title: "הדרגות שלך", sub: (n) => `אספת ${n} מילים. תמשיך לחקור כדי לעלות.`, words: "מילים", you: "כאן את/ה", locked: "נעול", close: "סגירה" },
+  en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. Understand words to earn more and climb.`, words: "points", you: "You're here", locked: "Locked", close: "Close" },
+  he: { title: "הדרגות שלך", sub: (n) => `צברת ${n} נקודות. תבין מילים כדי לצבור עוד ולעלות.`, words: "נקודות", you: "כאן את/ה", locked: "נעול", close: "סגירה" },
 };
 function ranksCopy(lang: string) { return RANKS_COPY[lang] ?? RANKS_COPY.en; }
 
 export function KidsGameHeader({
   addedAtDates,
+  understoodCount = 0,
   lang,
   dir,
 }: {
   addedAtDates: string[];
+  /** How many of these words the child has proven they understand (passed a
+   *  quiz/game). Drives the rank via earned points; 0 falls back to one point
+   *  per word. See computeGamification. */
+  understoodCount?: number;
   lang: string;
   dir: "rtl" | "ltr";
 }) {
   const g = useMemo(() => {
     const now = Date.now();
     const todayStr = toLocalDateStr(new Date(now).toISOString());
-    return computeGamification(addedAtDates, now, todayStr);
-  }, [addedAtDates]);
+    return computeGamification(addedAtDates, now, todayStr, understoodCount);
+  }, [addedAtDates, understoodCount]);
 
   const [celebrateId, setCelebrateId] = useState(0);
   const [ranksOpen, setRanksOpen] = useState(false);
@@ -86,7 +91,7 @@ export function KidsGameHeader({
   const c = gameCopy(lang);
   const weeklyPct = Math.min(100, Math.round((g.weekly / g.weeklyGoal) * 100));
   const weeklyDone = g.weekly >= g.weeklyGoal;
-  const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.distinct);
+  const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);
 
   const AMBER = "#F59E0B", TEAL = "#0EA5A5", PURPLE = "#8B5CF6";
 
@@ -138,7 +143,7 @@ export function KidsGameHeader({
       {ranksOpen && (
         <RanksModal
           onClose={() => setRanksOpen(false)}
-          distinct={g.distinct}
+          points={g.points}
           currentIndex={g.rank.index}
           lang={lang}
           dir={dir}
@@ -169,8 +174,8 @@ function Bar({ pct, color }: { pct: number; color: string }) {
   );
 }
 
-function RanksModal({ onClose, distinct, currentIndex, lang, dir }: {
-  onClose: () => void; distinct: number; currentIndex: number; lang: string; dir: "rtl" | "ltr";
+function RanksModal({ onClose, points, currentIndex, lang, dir }: {
+  onClose: () => void; points: number; currentIndex: number; lang: string; dir: "rtl" | "ltr";
 }) {
   const rc = ranksCopy(lang);
   useEffect(() => {
@@ -188,10 +193,10 @@ function RanksModal({ onClose, distinct, currentIndex, lang, dir }: {
         style={{ width: "100%", maxWidth: 460, maxHeight: "88dvh", overflowY: "auto", background: "var(--surface)", color: "var(--ink)", borderRadius: 22, padding: "24px 22px", boxShadow: "0 24px 70px rgba(0,0,0,0.34)" }}
       >
         <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>{rc.title}</div>
-        <div style={{ fontSize: 14, color: "var(--ink-soft)", marginBottom: 16 }}>{rc.sub(distinct)}</div>
+        <div style={{ fontSize: 14, color: "var(--ink-soft)", marginBottom: 16 }}>{rc.sub(points)}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {RANKS.map((r, i) => {
-            const unlocked = distinct >= r.min;
+            const unlocked = points >= r.min;
             const isCurrent = i === currentIndex;
             return (
               <div key={r.key} style={{

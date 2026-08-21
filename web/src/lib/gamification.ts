@@ -201,17 +201,33 @@ export function computeGoal(isoDates: string[], nowMs: number): number {
   return Math.max(WEEKLY_GOAL_FLOOR, Math.min(WEEKLY_GOAL_CEIL, Math.round(base * 1.1)));
 }
 
-/** Everything a surface needs, computed from a list of notebook addedAt dates. */
+/**
+ * Everything a surface needs, computed from a list of notebook addedAt dates.
+ *
+ * Rank is driven by EARNED POINTS, not raw word count (kids gamification v2,
+ * council 2026-08): every saved word is worth POINTS.seen, and proving you
+ * understood it (a passed quiz/game, tracked by `understood` on the notebook
+ * doc) adds POINTS.understood. So comprehension is a multiplier on rank
+ * progress, not a gate. `understoodCount` is how many of these words are
+ * understood; pass 0 (the default) for surfaces that don't yet track it and
+ * ranks fall back to one point per word. Streak + weekly goal stay on raw
+ * activity dates, unchanged.
+ */
 export function computeGamification(
   addedAtIsoDates: string[],
   nowMs: number,
   todayStr: string,
-): { distinct: number; rank: RankInfo; streak: number; weekly: number; weeklyGoal: number } {
+  understoodCount = 0,
+): { distinct: number; understood: number; points: number; rank: RankInfo; streak: number; weekly: number; weeklyGoal: number } {
   const distinct = addedAtIsoDates.length;
+  const understood = Math.max(0, Math.min(distinct, understoodCount));
+  const points = distinct * POINTS.seen + understood * POINTS.understood;
   const localDates = addedAtIsoDates.map(toLocalDateStr).filter(Boolean);
   return {
     distinct,
-    rank: rankFor(distinct),
+    understood,
+    points,
+    rank: rankFor(points),
     streak: computeStreak(localDates, todayStr),
     weekly: weeklyCount(addedAtIsoDates, nowMs),
     weeklyGoal: computeGoal(addedAtIsoDates, nowMs),

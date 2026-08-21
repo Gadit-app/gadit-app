@@ -157,16 +157,21 @@ export function HomePage() {
   // see when they open their profile (Gadi 2026-08-12). Kid profiles only;
   // fetches the notebook's addedAt dates to drive streak/goal/rank.
   const [kidDates, setKidDates] = useState<string[] | null>(null);
+  const [kidUnderstood, setKidUnderstood] = useState(0);
   useEffect(() => {
-    if (familyRole !== "kid" || !user) { setKidDates(null); return; }
+    if (familyRole !== "kid" || !user) { setKidDates(null); setKidUnderstood(0); return; }
     let cancelled = false;
     (async () => {
       try {
         const idToken = await user.getIdToken();
         const res = await fetch("/api/notebook", { headers: { Authorization: `Bearer ${idToken}` } });
         if (!res.ok) return;
-        const data = (await res.json()) as { items?: Array<{ addedAt?: string }> };
-        if (!cancelled) setKidDates((data.items ?? []).map((i) => i.addedAt || "").filter(Boolean));
+        const data = (await res.json()) as { items?: Array<{ addedAt?: string; understood?: boolean }> };
+        const items = data.items ?? [];
+        if (!cancelled) {
+          setKidDates(items.map((i) => i.addedAt || "").filter(Boolean));
+          setKidUnderstood(items.filter((i) => i.understood).length);
+        }
       } catch { /* gamification is a nice-to-have; stay silent */ }
     })();
     return () => { cancelled = true; };
@@ -356,7 +361,7 @@ export function HomePage() {
               weekly goal and explorer rank the moment they open the app. */}
           {familyRole === "kid" && kidDates && kidDates.length > 0 && (
             <div className="wb-home-game">
-              <KidsGameHeader addedAtDates={kidDates} lang={lang} dir={dir} />
+              <KidsGameHeader addedAtDates={kidDates} understoodCount={kidUnderstood} lang={lang} dir={dir} />
             </div>
           )}
         </div>
