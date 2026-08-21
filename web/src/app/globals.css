@@ -13961,6 +13961,21 @@ html[data-theme="candy"] .wb-kid-area { --skin-bg: linear-gradient(rgba(253,236,
 html[data-theme="jungle"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F; }
 html[data-theme="neon"] .wb-kid-area { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14; }
 
+/* Mobile skin visibility (Gadi 2026-08): on phones the skin image was barely
+   felt — `background-attachment: fixed` crops a wide image to a narrow center
+   strip on mobile browsers, and the dark readability overlay (.66–.85) hid
+   what was left. Text sits on OPAQUE surface cards, so lightening the
+   BACKGROUND overlay doesn't hurt readability; it just lets the galaxy /
+   jungle leaves / neon glow actually show. Switch to `scroll` and ease the
+   overlay on the dark skins so the theme reads. Candy is already light. */
+@media (max-width: 640px) {
+  html[data-theme] .wb-kid-area { background-attachment: scroll; background-position: center top; }
+  html[data-theme="space"]  .wb-kid-area { --skin-bg: linear-gradient(rgba(11,16,48,.46), rgba(10,10,31,.60)), url(/skins/space.webp); }
+  html[data-theme="ocean"]  .wb-kid-area { --skin-bg: linear-gradient(rgba(6,42,58,.42),  rgba(5,35,48,.58)),  url(/skins/ocean.webp); }
+  html[data-theme="jungle"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,48,31,.40),  rgba(5,40,24,.56)),  url(/skins/jungle.webp); }
+  html[data-theme="neon"]   .wb-kid-area { --skin-bg: linear-gradient(rgba(10,10,20,.48), rgba(10,10,20,.64)), url(/skins/neon.webp); }
+}
+
 /* ─── ADULT DARK MODE (Gadi 2026-08-18, design-council "ownable teal-black")
    The Dark theme is adult-only (kids use skins). Unlike the skins above,
    which only recolour .wb-kid-area, Dark swaps the palette for the WHOLE
