@@ -27,6 +27,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
+import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
@@ -1578,16 +1579,10 @@ export function FamilyClient() {
                 <div className="fam-set-main">
                   <label className="fam-set-label" htmlFor="fam-lang">{nav.langLabel}</label>
                 </div>
-                <select
-                  id="fam-lang"
-                  className="fam-set-select"
-                  value={lang}
-                  onChange={(e) => setLang(e.target.value as Parameters<typeof setLang>[0])}
-                >
-                  {Object.entries(LANG_NATIVE).map(([code, name]) => (
-                    <option key={code} value={code}>{name}</option>
-                  ))}
-                </select>
+                {/* Custom dropdown (not a native <select>) so it shows a flag
+                    per language — a native select renders text-only on mobile,
+                    losing the flags a non-reader relies on (Gadi 2026-08). */}
+                <LangSwitcher variant="muted" />
               </div>
 
               <Link href={href("/account")} className="fam-set-row fam-set-link">
