@@ -34,6 +34,7 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
 
   const [members, setMembers] = useState<SwitchMember[] | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user || !familyId) return;
@@ -62,6 +63,7 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
   async function switchTo(m: SwitchMember) {
     if (!user || busy || isCurrent(m)) return;
     setBusy(m.id);
+    setErr(null);
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/family/switch-member", {
@@ -69,8 +71,15 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({ memberId: m.id }),
       });
-      const json = (await res.json().catch(() => null)) as { token?: string } | null;
-      if (!res.ok || !json?.token) { setBusy(null); return; }
+      const json = (await res.json().catch(() => null)) as { token?: string; error?: string } | null;
+      if (!res.ok || !json?.token) {
+        // Surface the failure instead of silently doing nothing (Gadi: a
+        // switch that "just doesn't switch" with no feedback).
+        console.error("[switch-member] failed", res.status, json);
+        setErr(json?.error ? `${json.error} (${res.status})` : `switch failed (${res.status})`);
+        setBusy(null);
+        return;
+      }
       const { signInWithCustomToken, getAuth } = await import("firebase/auth");
       await signInWithCustomToken(getAuth(), json.token);
       onSwitch?.();
@@ -81,7 +90,9 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
       // navigation also lets every surface pick up the new session + notebook.
       const home = lang === "en" ? "/" : `/${lang}`;
       window.location.assign(home);
-    } catch {
+    } catch (e) {
+      console.error("[switch-member] threw", e);
+      setErr("switch failed, please try again");
       setBusy(null);
     }
   }
@@ -142,6 +153,11 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
       <div style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-soft, #9CA3AF)", letterSpacing: 0.4, textTransform: "uppercase", padding: "2px 6px 6px" }}>
         {t.title}
       </div>
+      {err && (
+        <div style={{ fontSize: 12, color: "#DC2626", background: "#FDE7E7", borderRadius: 8, padding: "6px 10px", margin: "0 6px 6px" }}>
+          {err}
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {kids.map((m) => <Row key={m.id} m={m} />)}
         {owner && (
