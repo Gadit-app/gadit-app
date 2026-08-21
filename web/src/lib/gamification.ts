@@ -23,10 +23,17 @@
 export const WEEKLY_GOAL_FLOOR = 5;
 export const WEEKLY_GOAL_CEIL = 15;
 
-export type RankKey = "scout" | "explorer" | "tracker" | "ranger" | "guide" | "master";
+export type RankKey =
+  | "scout" | "explorer" | "tracker" | "ranger" | "guide" | "master"
+  // Long-tail tiers past "Word Master" so the game sustains for months, not
+  // weeks (Gadi 2026-08: the old ladder ended at 300 and ran out too fast).
+  | "champion" | "sage" | "virtuoso" | "legend" | "wizard" | "grandmaster";
 
-/** Distinct-word thresholds for each rank. Ranks grow on DISTINCT words, so
- *  re-searching the same word never inflates them. */
+/** Thresholds for each rank. Ranks grow on the child's *understood* words once
+ *  the comprehension ledger is wired (LLM council 2026-08: reward understanding,
+ *  not raw searches); until then rankFor is metric-agnostic and takes whatever
+ *  count the caller passes (currently distinct words). Re-searching the same
+ *  word never inflates a rank. */
 export const RANKS: { key: RankKey; min: number }[] = [
   { key: "scout", min: 0 },
   { key: "explorer", min: 10 },
@@ -34,7 +41,26 @@ export const RANKS: { key: RankKey; min: number }[] = [
   { key: "ranger", min: 75 },
   { key: "guide", min: 150 },
   { key: "master", min: 300 },
+  { key: "champion", min: 450 },
+  { key: "sage", min: 650 },
+  { key: "virtuoso", min: 900 },
+  { key: "legend", min: 1200 },
+  { key: "wizard", min: 1600 },
+  { key: "grandmaster", min: 2200 },
 ];
+
+/**
+ * Points model for the unlock economy (LLM council 2026-08, approved by Gadi).
+ * Comprehension is a MULTIPLIER, not a gate: looking a word up earns a little,
+ * proving you understood it (a correct quiz/game on that word) earns a lot.
+ * Points buy NEW cosmetics; the 5 existing skins stay free. Parent/Yooniz
+ * "gift points" live in a SEPARATE, capped wallet (see GIFT_WEEKLY_CAP) and
+ * never count toward ranks or the parent dashboard's mastery metric.
+ */
+export const POINTS = { seen: 1, understood: 10 } as const;
+/** Weekly ceiling on parent/Yooniz gift points, so bonuses stay a treat and
+ *  can't launder raw-count into the earned economy. */
+export const GIFT_WEEKLY_CAP = 50;
 
 export type RankInfo = {
   key: RankKey;

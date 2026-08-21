@@ -8,9 +8,13 @@ import type { RankKey } from "./gamification";
  * is the fallback for any code not listed. Never translates "Gadit".
  */
 
-export const RANK_LABELS: Record<string, Record<RankKey, string>> = {
-  en: { scout: "Word Scout", explorer: "Word Explorer", tracker: "Word Tracker", ranger: "Word Ranger", guide: "Word Guide", master: "Word Master" },
-  he: { scout: "מגלה מתחיל", explorer: "מגלה מילים", tracker: "חוקר מילים", ranger: "מגלה מנוסה", guide: "מדריך מילים", master: "אלוף המילים" },
+// Inner is Partial so a language may omit the newer long-tail tiers and fall
+// back to English per-key (rankLabel below). English is the complete source
+// and MUST carry every RankKey. New tiers are en+he now; other languages get
+// the English label until a small translation pass fills them in.
+export const RANK_LABELS: Record<string, Partial<Record<RankKey, string>>> = {
+  en: { scout: "Word Scout", explorer: "Word Explorer", tracker: "Word Tracker", ranger: "Word Ranger", guide: "Word Guide", master: "Word Master", champion: "Word Champion", sage: "Word Sage", virtuoso: "Word Virtuoso", legend: "Word Legend", wizard: "Word Wizard", grandmaster: "Word Grandmaster" },
+  he: { scout: "מגלה מתחיל", explorer: "מגלה מילים", tracker: "חוקר מילים", ranger: "מגלה מנוסה", guide: "מדריך מילים", master: "אלוף המילים", champion: "גיבור מילים", sage: "חכם המילים", virtuoso: "אמן המילים", legend: "אגדת המילים", wizard: "קוסם המילים", grandmaster: "קיסר המילים" },
   ar: { scout: "مستكشف مبتدئ", explorer: "مستكشف كلمات", tracker: "باحث كلمات", ranger: "مستكشف متمرّس", guide: "مرشد كلمات", master: "بطل الكلمات" },
   ru: { scout: "Юный искатель", explorer: "Искатель слов", tracker: "Следопыт слов", ranger: "Опытный искатель", guide: "Проводник слов", master: "Мастер слов" },
   es: { scout: "Explorador novato", explorer: "Explorador de palabras", tracker: "Rastreador de palabras", ranger: "Explorador experto", guide: "Guía de palabras", master: "Maestro de palabras" },
@@ -34,7 +38,9 @@ export const RANK_LABELS: Record<string, Record<RankKey, string>> = {
 };
 
 export function rankLabel(key: RankKey, lang: string): string {
-  return (RANK_LABELS[lang] ?? RANK_LABELS.en)[key];
+  // Per-key fallback to English: a language that predates the long-tail tiers
+  // still resolves them (RANK_LABELS.en is complete for every RankKey).
+  return RANK_LABELS[lang]?.[key] ?? RANK_LABELS.en[key] ?? key;
 }
 
 export type GameCopy = {

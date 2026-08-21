@@ -33,7 +33,9 @@ function streakProgress(streak: number): number {
  * leaderboards, no punishing streaks. Pure logic in lib/gamification.ts.
  */
 
-const RANK_EMOJI = ["🌱", "🔍", "🧭", "🗺️", "🎖️", "👑"];
+// One per rank tier (see RANKS). The 6 long-tail tiers (champion..grandmaster)
+// escalate past the crown so the ladder keeps feeling like it grows.
+const RANK_EMOJI = ["🌱", "🔍", "🧭", "🗺️", "🎖️", "👑", "🏆", "🦉", "🎨", "🌟", "🧙", "🐉"];
 
 // Small local copy for the ranks table (he + en, en fallback) so a new
 // surface doesn't force a full gamification-labels sweep.
