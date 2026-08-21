@@ -5952,6 +5952,14 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
            interface language without a site nav. */
         <header className="fam-topbrand">
           <div className="fam-topbrand-lang">
+            <ShareButton
+              url="https://www.gadit.app/families"
+              currentPage
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
             <LangSwitcher variant="muted" />
           </div>
           <Link href={href("/")} className="fam-logo-word" aria-label="Gadit" dir="ltr" translate="no">

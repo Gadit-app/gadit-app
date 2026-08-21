@@ -3064,7 +3064,17 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               Gad<span className="wb-wordmark-it">it</span>
             </Link>
           )}
-          <LangSwitcher variant="muted" />
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <ShareButton
+              url="https://www.gadit.app/schools"
+              currentPage
+              title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+              text=""
+              shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+              copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+            />
+            <LangSwitcher variant="muted" />
+          </div>
         </div>
       )}
 
