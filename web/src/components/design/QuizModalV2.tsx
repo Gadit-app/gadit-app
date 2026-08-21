@@ -369,11 +369,15 @@ export function QuizModalV2({
   onClose,
   word,
   meaning,
+  language,
 }: {
   open: boolean;
   onClose: () => void;
   word: string;
   meaning: string;
+  /** The word's language, matching how it was saved to the notebook, so a
+   *  passed quiz can mark it understood + award comprehension points. */
+  language?: string;
 }) {
   const { user, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -414,6 +418,29 @@ export function QuizModalV2({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+
+  // Kids gamification v2: when a quiz is PASSED for this word, mark it
+  // understood and award comprehension points (multiplier, not a gate). Best
+  // effort + non-blocking; the API is idempotent per word (understoodAt), so
+  // re-passing never double-credits, and a 60% bar keeps one lucky tap from
+  // counting as real understanding.
+  useEffect(() => {
+    if (!done || !user || !language || !word) return;
+    const total = results.length;
+    if (total === 0) return;
+    if (results.filter(Boolean).length / total < 0.6) return;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch("/api/notebook/understood", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ word, language, source: "quiz" }),
+        });
+      } catch { /* comprehension credit is best-effort */ }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
 
   const fetchQuiz = useCallback(async () => {
     if (!user) {

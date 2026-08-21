@@ -1909,6 +1909,7 @@ export function WordClient({
           onClose={() => setQuizOpen(false)}
           word={result.word}
           meaning={result.meanings[0]?.meaning ?? ""}
+          language={result.language}
         />
       )}
 
