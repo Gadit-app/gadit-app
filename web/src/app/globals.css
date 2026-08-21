@@ -396,7 +396,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     z-index: 1;
   }
 }
-.wordbook .wb-shell-nav a {
+.wordbook .wb-shell-nav a,
+.wordbook .wb-shell-nav .wb-shell-navlink {
   font-family: var(--wb-sans);
   font-size: 14px;
   font-weight: 500;
@@ -407,8 +408,10 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transition: color 120ms ease;
   white-space: nowrap;
 }
-.wordbook .wb-shell-nav a:hover { color: var(--ink); }
-.wordbook .wb-shell-nav a:hover::after {
+.wordbook .wb-shell-nav a:hover,
+.wordbook .wb-shell-nav .wb-shell-navlink:hover { color: var(--ink); }
+.wordbook .wb-shell-nav a:hover::after,
+.wordbook .wb-shell-nav .wb-shell-navlink:hover::after {
   content: '';
   position: absolute;
   inset-inline-start: 0;
@@ -419,10 +422,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   opacity: 0.6;
 }
 /* Active page indicator — the current section gets a quiet teal underline */
-.wordbook .wb-shell-nav a.is-active {
+.wordbook .wb-shell-nav a.is-active,
+.wordbook .wb-shell-nav .wb-shell-navlink.is-active {
   color: var(--ink);
 }
-.wordbook .wb-shell-nav a.is-active::after {
+.wordbook .wb-shell-nav a.is-active::after,
+.wordbook .wb-shell-nav .wb-shell-navlink.is-active::after {
   content: '';
   position: absolute;
   inset-inline-start: 0;
