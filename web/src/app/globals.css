@@ -14044,6 +14044,22 @@ html[data-theme] .wb-kid-bg .wb-page {
   padding: 16px clamp(12px, 2.5vw, 24px) 28px;
   box-shadow: 0 14px 46px -18px rgba(0, 0, 0, 0.45);
 }
+/* The topbar and the sticky search band ship with opaque light backgrounds,
+   so under a skin they sat as a white block above the content and visually
+   CROPPED the skin's top (Gadi 2026-08-21). Frost the topbar (light, so the
+   dark nav text stays readable) and clear the search band, so the skin runs
+   continuously from the very top down to the light definition sheet. */
+html[data-theme] .wb-kid-bg .wb-shell-topbar {
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom-color: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+html[data-theme] .wb-kid-bg .wb-word-searchbar-stage,
+html[data-theme] .wb-kid-bg .wb-word-searchbar-stage.is-stuck {
+  background: transparent;
+  box-shadow: none;
+}
 html[data-theme="dark"] .wb-kid-bg { --skin-bg:#0B111B; }
 html[data-theme="space"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(11,16,48,.72), rgba(10,10,31,.82)), url(/skins/space.webp); }
 html[data-theme="ocean"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(6,42,58,.66), rgba(5,35,48,.8)), url(/skins/ocean.webp); }
