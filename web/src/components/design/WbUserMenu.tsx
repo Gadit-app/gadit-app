@@ -37,7 +37,7 @@ import type { Lang } from "@/lib/i18n";
 
 // "Dark mode" label — kept as a small local map (en fallback) so adding
 // the toggle doesn't force a field into every COPY entry. (Gadi 2026-08-18)
-const DARK_LABEL: Record<string, string> = {
+export const DARK_LABEL: Record<string, string> = {
   en: "Dark mode", he: "מצב כהה", ar: "الوضع الداكن", ru: "Тёмная тема",
   es: "Modo oscuro", pt: "Modo escuro", fr: "Mode sombre", de: "Dunkelmodus",
   it: "Modalità scura", nl: "Donkere modus", cs: "Tmavý režim", sk: "Tmavý režim",

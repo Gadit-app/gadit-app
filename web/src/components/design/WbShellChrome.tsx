@@ -43,6 +43,8 @@ import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { track } from "@/lib/track";
 import { OPEN_SAY_EVENT } from "@/components/SayModal";
+import { useTheme } from "@/lib/appearance";
+import { DARK_LABEL } from "@/components/design/WbUserMenu";
 
 // "Say it" opens as a modal over the current (themed) screen rather than
 // routing to a separate page, so a kid keeps their skin and a clear way
@@ -244,10 +246,11 @@ export function WbShellNav({ active }: { active?: NavKey }) {
  *  outside tap / Escape / navigation. */
 export function WbShellBurger({ active }: { active?: NavKey }) {
   const links = useNavLinks();
-  const { user, promptLogin } = useAuth();
+  const { user, promptLogin, familyRole } = useAuth();
   const { lang } = useLang();
   const href = useHref();
   const router = useRouter();
+  const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
   // Show the install entry only where installing is actually possible:
   // a real mobile browser (not an Instagram/Facebook webview), not
@@ -371,6 +374,27 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
             >
               {v2(lang, "signIn")}
             </button>
+          )}
+          {/* Dark mode also lives here, not only in the avatar menu: people
+              open the hamburger looking for settings, so hiding the toggle in
+              a different menu made it undiscoverable (Gadi 2026-08-21). Adults
+              only, kids get skins instead. */}
+          {familyRole !== "kid" && (
+            <>
+              <div className="wb-shell-mobile-menu-sep" />
+              <button
+                type="button"
+                role="menuitemcheckbox"
+                aria-checked={theme === "dark"}
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}
+              >
+                <span>{DARK_LABEL[lang] ?? DARK_LABEL.en}</span>
+                <span aria-hidden="true" style={{ position: "relative", width: 38, height: 22, borderRadius: 999, flexShrink: 0, background: theme === "dark" ? "#2DD4BF" : "var(--rule, #D1D5DB)", transition: "background .16s ease" }}>
+                  <span style={{ position: "absolute", top: 2, insetInlineStart: theme === "dark" ? 18 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "inset-inline-start .16s ease", boxShadow: "0 1px 2px rgba(0,0,0,.3)" }} />
+                </span>
+              </button>
+            </>
           )}
         </div>
       )}
