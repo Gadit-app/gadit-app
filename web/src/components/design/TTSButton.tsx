@@ -68,7 +68,7 @@ function toBcp47(audioLang: string | undefined): string {
     de: "de-DE",
     cs: "cs-CZ",
     sk: "sk-SK",
-    // All 22 UI languages — without an entry here Web Speech gets the
+    // All 30+ UI languages — without an entry here Web Speech gets the
     // bare 2-letter code, which most engines don't recognise, so they
     // read the word with the system-default (usually English) voice.
     // That mispronounces e.g. Zulu "isikole" as English. (Gadi 2026-08-18)

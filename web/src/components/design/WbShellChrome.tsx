@@ -87,7 +87,7 @@ export type NavKey =
 type NavLink = { key: NavKey; href: string; label: string };
 
 // "Families" nav label. Kept local rather than in i18n-v2 so we don't have
-// to touch all 22 language blocks for one word (Gadi 2026-07-29: make the
+// to touch all 30+ language blocks for one word (Gadi 2026-07-29: make the
 // three products — individuals, Families, Schools — visible in the top nav).
 const FAMILIES_LABEL: Record<string, string> = {
   he: "משפחות", en: "Families", ar: "العائلات", ru: "Семьи", es: "Familias",
@@ -111,7 +111,7 @@ const INDIVIDUALS_LABEL: Record<string, string> = {
 // playful to a child + mature to a teen; LLM council + Gadi 2026-08-12).
 // Short nav form; en fallback for languages not listed.
 // "Say it" nav label — the pronunciation-practice tool (/say). Local map
-// like the others so a new tool doesn't force a 22-language i18n sweep;
+// like the others so a new tool doesn't force a full i18n sweep;
 // en fallback for the rest. (Gadi 2026-08-18)
 const SAY_NAV: Record<string, string> = {
   en: "Say it", he: "תגיד את זה", ar: "قلها", ru: "Скажи это",

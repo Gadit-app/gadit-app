@@ -1062,7 +1062,7 @@ const NAV_COPY: Record<string, {
   },
 };
 
-// All 22 UI languages, native names, straight from the shared LANGUAGES
+// All 30+ UI languages, native names, straight from the shared LANGUAGES
 // registry so the family settings picker never drifts behind new languages
 // (Gadi 2026-08-16: it was hardcoded to 12). Same source the main switcher
 // uses.

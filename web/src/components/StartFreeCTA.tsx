@@ -16,7 +16,7 @@
  * the desktop modal flow felt more inviting and gave parity with
  * how Sign in already behaves.
  *
- * Translates to all 14 UI languages via the `startFree` key in
+ * Translates to all 30+ UI languages via the `startFree` key in
  * i18n-v2. Hebrew uses "התחילו חינם" (plural imperative, gender-
  * neutral) per Gadi's explicit choice.
  */

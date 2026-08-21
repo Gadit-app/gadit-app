@@ -95,7 +95,7 @@ function hasQuoteScatter(text: string, threshold = 0.15): boolean {
 // corruption signature. This one is the general net for novel mojibake
 // whose exact bytes aren't enumerated anywhere — a field dominated by
 // symbol (™ © × ¢ °), currency, modifier, control, or replacement (�)
-// characters. Real etymology prose in any of the 20 UI languages carries
+// characters. Real etymology prose in any of the 30+ UI languages carries
 // almost none of these; a legitimate breakdown might hold one "+" or a
 // stray directionality mark, so we require BOTH an absolute floor (≥4)
 // and a high ratio (>20%) to trip. This is the check that catches the

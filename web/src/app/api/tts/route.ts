@@ -48,7 +48,7 @@ const MAX_TEXT_LENGTH = 1200;
 // voice param (advanced users).
 // The gpt-4o-mini-tts model detects the spoken language from the input
 // text itself, so `voice` picks the timbre, not the language. We still
-// map every one of the 22 UI languages to a warm, capable voice so the
+// map every one of the 30+ UI languages to a warm, capable voice so the
 // listening experience is consistent across the whole app. Anything not
 // listed falls back to 'alloy' (the most neutral / multilingual voice).
 function pickVoice(lang: string | undefined): string {

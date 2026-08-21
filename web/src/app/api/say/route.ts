@@ -7,7 +7,7 @@ import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
  * A language learner types a sentence in a language they know and gets
  * it back in the language they're learning, so they can then hear it
  * pronounced (the client plays it through /api/tts, which now speaks all
- * 22 languages in their own locale). Born from a South-African parent
+ * 30+ languages in their own locale). Born from a South-African parent
  * whose son is learning Zulu at school and needs to hear how a sentence
  * is actually said.
  *
@@ -25,7 +25,7 @@ export const maxDuration = 30;
 
 const MAX_TEXT_LENGTH = 500;
 
-// The 22 UI languages, code → English name for the prompt.
+// The 30+ UI languages, code → English name for the prompt.
 const LANG_NAMES: Record<string, string> = {
   en: "English", he: "Hebrew", ar: "Arabic", ru: "Russian", es: "Spanish",
   pt: "Portuguese", fr: "French", de: "German", it: "Italian", nl: "Dutch",

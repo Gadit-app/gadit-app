@@ -1,7 +1,7 @@
 import type { RankKey } from "./gamification";
 
 /**
- * Localized copy for the kids gamification widgets, in all 22 UI languages
+ * Localized copy for the kids gamification widgets, in all 30+ UI languages
  * (Gadi 2026-08-13: make the whole kids experience native everywhere, like
  * the rest of the app — it sits right next to "אוצר המילים שלי"). Kept out
  * of the pure gamification module so that stays i/o- and i18n-free. English

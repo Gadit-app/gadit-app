@@ -46,7 +46,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
   en: {
     signIn: "Sign in",
     heroTitle: "Understand every word. Build your vocabulary.",
-    heroSub: "The dictionary that explains any word at your level, in 22 languages, saves it to your notebook, and helps you remember it. Your own vocabulary, growing every day.",
+    heroSub: "The dictionary that explains any word at your level, in 30+ languages, saves it to your notebook, and helps you remember it. Your own vocabulary, growing every day.",
     heroCta2: "See plans",
     problemEyebrow: "The problem",
     problemTitle: "A definition alone isn't enough",
@@ -59,7 +59,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     features: [
       { t: "The dictionary", b: "Every meaning, examples, an image and the origin, for any word." },
       { t: "Your notebook", b: "Every word you look up is saved automatically, sorted by language." },
-      { t: "In your language", b: "Kid-level explanations in 22 languages. New to a language? Understand it in the one you think in." },
+      { t: "In your language", b: "Kid-level explanations in 30+ languages. New to a language? Understand it in the one you think in." },
       { t: "Games & practice", b: "Word games and smart practice that make a word stay." },
       { t: "Say it", b: "Type or speak a sentence and hear it in the language you're learning." },
     ],
@@ -77,7 +77,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
   he: {
     signIn: "התחברות",
     heroTitle: "להבין כל מילה. לבנות אוצר מילים.",
-    heroSub: "המילון שמסביר כל מילה ברמה שלך, ב-22 שפות, שומר אותה במחברת ועוזר לזכור. אוצר המילים האישי שלך, שגדל כל יום.",
+    heroSub: "המילון שמסביר כל מילה ברמה שלך, ב-30+ שפות, שומר אותה במחברת ועוזר לזכור. אוצר המילים האישי שלך, שגדל כל יום.",
     heroCta2: "למחירים",
     problemEyebrow: "הבעיה",
     problemTitle: "הגדרה לבד לא מספיקה",
@@ -90,7 +90,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     features: [
       { t: "המילון", b: "כל המשמעויות, דוגמאות, תמונה ומקור המילה, לכל מילה." },
       { t: "המחברת שלך", b: "כל מילה שחיפשת נשמרת אוטומטית, מסודרת לפי שפה." },
-      { t: "בשפה שלך", b: "הסבר ברמת ילד ב-22 שפות. חדש בשפה? מבינים אותה בשפה שבה חושבים." },
+      { t: "בשפה שלך", b: "הסבר ברמת ילד ב-30+ שפות. חדש בשפה? מבינים אותה בשפה שבה חושבים." },
       { t: "משחקים ותרגול", b: "משחקי מילים ותרגול חכם שגורמים למילה להישאר." },
       { t: "תגיד את זה", b: "מקלידים או אומרים משפט ושומעים אותו בשפה שרוצים ללמוד." },
     ],

@@ -1512,7 +1512,7 @@ export function SchoolsClient() {
   );
 }
 
-// All 22 UI languages from the shared registry, so the classroom-language
+// All 30+ UI languages from the shared registry, so the classroom-language
 // picker never drifts behind new languages (Gadi 2026-08-16: was hardcoded
 // to 12). Same source the main switcher + family picker use.
 const SCHOOL_LANG_NATIVE: Record<string, string> = Object.fromEntries(

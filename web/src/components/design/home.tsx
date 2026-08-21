@@ -588,7 +588,7 @@ export function HomeFooter() {
   // (not the app router / href helper) because these are static files
   // served straight from /public with no locale prefix, opened in a new
   // tab. Local label maps (en fallback) so a new footer group doesn't
-  // force a 22-language i18n sweep.
+  // force a full i18n sweep.
   const deckLang = lang === "he" ? "he" : "en";
   const deckGroupLabel: Record<string, string> = {
     en: "Decks", he: "מצגות", ar: "عروض", ru: "Презентации", es: "Presentaciones",

@@ -441,7 +441,7 @@ const uk: V2Strings = {
   homeHeadlineLine1: "Зрозумій",
   homeHeadlineLine2: "до кінця.",
   homeSubline:
-    "Словник, що зустрічає тебе в контексті: значення, походження, ідіоми та яскравий образ, 22 мовами.",
+    "Словник, що зустрічає тебе в контексті: значення, походження, ідіоми та яскравий образ, 30+ мовами.",
 
   searchPlaceholderHome: "Введи слово",
   voiceInputTitle: "Продиктуй слово",
@@ -465,7 +465,7 @@ const uk: V2Strings = {
   valueProp3Title: "Історична нотатка, а не витяг з Вікіпедії",
   valueProp3Body:
     "Звідки прийшло слово, розказано абзацом, так, як написав би допитливий друг.",
-  valueProp4Eyebrow: "22 мов",
+  valueProp4Eyebrow: "30+ мов",
   valueProp4Title: "Іврит і арабська, повністю рідними",
   valueProp4Body:
     "Справжній RTL, справжні шрифти, справжні ідіоми, а не перекладений інтерфейс наспіх.",
@@ -486,8 +486,8 @@ const uk: V2Strings = {
   footerPrivacy: "Конфіденційність",
   footerTerms: "Умови",
   footerContact: "Допомога",
-  footerTagline: "Розумний словник для 22 мов. Створений для справжнього читання.",
-  footerLanguagesNote: "22 мов",
+  footerTagline: "Розумний словник для 30+ мов. Створений для справжнього читання.",
+  footerLanguagesNote: "30+ мов",
 
   signIn: "Увійти",
   startFree: "Почати безкоштовно",
@@ -830,7 +830,7 @@ const tr: V2Strings = {
   homeHeadlineLine1: "Sonuna kadar",
   homeHeadlineLine2: "anla.",
   homeSubline:
-    "Seni bağlamda karşılayan bir sözlük: anlamlar, kökenler, deyimler ve capcanlı bir görsel, 22 dilde.",
+    "Seni bağlamda karşılayan bir sözlük: anlamlar, kökenler, deyimler ve capcanlı bir görsel, 30+ dilde.",
 
   searchPlaceholderHome: "Bir kelime yaz",
   voiceInputTitle: "Bir kelime söyle",
@@ -854,7 +854,7 @@ const tr: V2Strings = {
   valueProp3Title: "Wikipedia yığını değil, bir tarih notu",
   valueProp3Body:
     "Kelimenin nereden geldiği, meraklı bir arkadaşın yazacağı türden bir paragraf olarak anlatılır.",
-  valueProp4Eyebrow: "22 dil",
+  valueProp4Eyebrow: "30+ dil",
   valueProp4Title: "İbranice ve Arapça, tümüyle yerel",
   valueProp4Body:
     "Gerçek RTL, gerçek yazı tipleri, gerçek deyimler, üstüne yamanmış bir çeviri arayüzü değil.",
@@ -875,8 +875,8 @@ const tr: V2Strings = {
   footerPrivacy: "Gizlilik",
   footerTerms: "Koşullar",
   footerContact: "Yardım",
-  footerTagline: "22 dil için akıllı bir sözlük. Gerçek okuma için yapıldı.",
-  footerLanguagesNote: "22 dil",
+  footerTagline: "30+ dil için akıllı bir sözlük. Gerçek okuma için yapıldı.",
+  footerLanguagesNote: "30+ dil",
 
   signIn: "Giriş yap",
   startFree: "Ücretsiz başla",
@@ -1219,7 +1219,7 @@ const pl: V2Strings = {
   homeHeadlineLine1: "Zrozum",
   homeHeadlineLine2: "do końca.",
   homeSubline:
-    "Słownik, który wychodzi ci naprzeciw w kontekście, znaczeniach, źródłosłowie, idiomach i wyrazistym obrazie, w 22 językach.",
+    "Słownik, który wychodzi ci naprzeciw w kontekście, znaczeniach, źródłosłowie, idiomach i wyrazistym obrazie, w 30+ językach.",
 
   searchPlaceholderHome: "Wpisz słowo",
   voiceInputTitle: "Podyktuj słowo",
@@ -1243,7 +1243,7 @@ const pl: V2Strings = {
   valueProp3Title: "Notka historyczna, a nie zrzut z Wikipedii",
   valueProp3Body:
     "Skąd wzięło się słowo, opowiedziane w akapicie, tak jak napisałby ciekawy świata przyjaciel.",
-  valueProp4Eyebrow: "22 języków",
+  valueProp4Eyebrow: "30+ języków",
   valueProp4Title: "Hebrajski i arabski, w pełni natywnie",
   valueProp4Body:
     "Prawdziwe RTL, prawdziwe czcionki, prawdziwe idiomy, a nie doklejony przetłumaczony interfejs.",
@@ -1264,8 +1264,8 @@ const pl: V2Strings = {
   footerPrivacy: "Prywatność",
   footerTerms: "Regulamin",
   footerContact: "Pomoc",
-  footerTagline: "Inteligentny słownik dla 22 języków. Stworzony do prawdziwego czytania.",
-  footerLanguagesNote: "22 języków",
+  footerTagline: "Inteligentny słownik dla 30+ języków. Stworzony do prawdziwego czytania.",
+  footerLanguagesNote: "30+ języków",
 
   signIn: "Zaloguj się",
   startFree: "Zacznij za darmo",
@@ -1997,7 +1997,7 @@ const id: V2Strings = {
   homeHeadlineLine1: "Pahami",
   homeHeadlineLine2: "sampai tuntas.",
   homeSubline:
-    "Kamus yang menemuimu dalam konteks, makna, asal-usul, idiom, dan gambar yang hidup, dalam 22 bahasa.",
+    "Kamus yang menemuimu dalam konteks, makna, asal-usul, idiom, dan gambar yang hidup, dalam 30+ bahasa.",
 
   searchPlaceholderHome: "Ketik sebuah kata",
   voiceInputTitle: "Ucapkan sebuah kata",
@@ -2021,7 +2021,7 @@ const id: V2Strings = {
   valueProp3Title: "Catatan sejarah, bukan salinan Wikipedia",
   valueProp3Body:
     "Dari mana kata itu berasal, dituturkan sebagai satu paragraf, seperti yang ditulis teman yang penasaran.",
-  valueProp4Eyebrow: "22 bahasa",
+  valueProp4Eyebrow: "30+ bahasa",
   valueProp4Title: "Ibrani & Arab, sepenuhnya alami",
   valueProp4Body:
     "RTL sungguhan, font sungguhan, idiom sungguhan, bukan UI terjemahan yang ditempelkan.",
@@ -2042,8 +2042,8 @@ const id: V2Strings = {
   footerPrivacy: "Privasi",
   footerTerms: "Ketentuan",
   footerContact: "Bantuan",
-  footerTagline: "Kamus cerdas untuk 22 bahasa. Dibuat untuk membaca sungguhan.",
-  footerLanguagesNote: "22 bahasa",
+  footerTagline: "Kamus cerdas untuk 30+ bahasa. Dibuat untuk membaca sungguhan.",
+  footerLanguagesNote: "30+ bahasa",
 
   signIn: "Masuk",
   startFree: "Mulai gratis",
@@ -2386,7 +2386,7 @@ const nl: V2Strings = {
   homeHeadlineLine1: "Begrijp",
   homeHeadlineLine2: "tot het einde.",
   homeSubline:
-    "Een woordenboek dat je opzoekt in context: betekenissen, herkomst, uitdrukkingen en een levendig beeld, in 22 talen.",
+    "Een woordenboek dat je opzoekt in context: betekenissen, herkomst, uitdrukkingen en een levendig beeld, in 30+ talen.",
 
   searchPlaceholderHome: "Typ een woord",
   voiceInputTitle: "Spreek een woord in",
@@ -2410,7 +2410,7 @@ const nl: V2Strings = {
   valueProp3Title: "Een stukje geschiedenis, geen Wikipedia-brok",
   valueProp3Body:
     "Waar het woord vandaan komt, verteld als een alinea, zoals een nieuwsgierige vriend zou schrijven.",
-  valueProp4Eyebrow: "22 talen",
+  valueProp4Eyebrow: "30+ talen",
   valueProp4Title: "Hebreeuws en Arabisch, volledig in de eigen taal",
   valueProp4Body:
     "Echte RTL, echte lettertypes, echte uitdrukkingen, geen vertaalde interface die er los op geplakt is.",
@@ -2431,8 +2431,8 @@ const nl: V2Strings = {
   footerPrivacy: "Privacy",
   footerTerms: "Voorwaarden",
   footerContact: "Hulp",
-  footerTagline: "Een slim woordenboek voor 22 talen. Gemaakt voor echt lezen.",
-  footerLanguagesNote: "22 talen",
+  footerTagline: "Een slim woordenboek voor 30+ talen. Gemaakt voor echt lezen.",
+  footerLanguagesNote: "30+ talen",
 
   signIn: "Inloggen",
   startFree: "Gratis beginnen",
@@ -2775,7 +2775,7 @@ const en: V2Strings = {
   homeHeadlineLine1: "Understand",
   homeHeadlineLine2: "to the end.",
   homeSubline:
-    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 22 languages.",
+    "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 30+ languages.",
 
   searchPlaceholderHome: "Type a word",
   voiceInputTitle: "Dictate a word",
@@ -2799,7 +2799,7 @@ const en: V2Strings = {
   valueProp3Title: "A history note, not a Wikipedia dump",
   valueProp3Body:
     "Where the word came from, told as a paragraph, the kind a curious friend would write.",
-  valueProp4Eyebrow: "22 languages",
+  valueProp4Eyebrow: "30+ languages",
   valueProp4Title: "Hebrew & Arabic, fully native",
   valueProp4Body:
     "Real RTL, real fonts, real idioms, not a translated UI bolted on.",
@@ -2820,8 +2820,8 @@ const en: V2Strings = {
   footerPrivacy: "Privacy",
   footerTerms: "Terms",
   footerContact: "Help",
-  footerTagline: "A smart dictionary for 22 languages. Built for real reading.",
-  footerLanguagesNote: "22 languages",
+  footerTagline: "A smart dictionary for 30+ languages. Built for real reading.",
+  footerLanguagesNote: "30+ languages",
 
   signIn: "Sign in",
   startFree: "Start free",
@@ -3164,7 +3164,7 @@ const he: V2Strings = {
   homeHeadlineLine1: "להבין",
   homeHeadlineLine2: "עד הסוף.",
   homeSubline:
-    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־22 שפות.",
+    "מילון שמבין הקשר, הגדרות, מקור, ביטויים ותמונה חיה, ב־30+ שפות.",
 
   searchPlaceholderHome: "הקלידו מילה",
   voiceInputTitle: "הכתבת מילה",
@@ -3188,7 +3188,7 @@ const he: V2Strings = {
   valueProp3Title: "הערה היסטורית, לא ויקיפדיה",
   valueProp3Body:
     "מאיפה המילה הגיעה, מסופר כפסקה, כמו שחבר סקרן היה כותב.",
-  valueProp4Eyebrow: "22 שפות",
+  valueProp4Eyebrow: "30+ שפות",
   valueProp4Title: "עברית וערבית כשפות אם",
   valueProp4Body:
     "RTL אמיתי, גופנים אמיתיים, ביטויים אמיתיים, לא ממשק מתורגם.",
@@ -3209,8 +3209,8 @@ const he: V2Strings = {
   footerPrivacy: "פרטיות",
   footerTerms: "תנאים",
   footerContact: "עזרה",
-  footerTagline: "מילון חכם ל־22 שפות. בנוי לקריאה אמיתית.",
-  footerLanguagesNote: "22 שפות",
+  footerTagline: "מילון חכם ל־30+ שפות. בנוי לקריאה אמיתית.",
+  footerLanguagesNote: "30+ שפות",
 
   signIn: "התחברות",
   startFree: "התחילו חינם",
@@ -3558,7 +3558,7 @@ const ar: V2Strings = {
   homeHeadlineLine1: "افهم",
   homeHeadlineLine2: "حتى النهاية.",
   homeSubline:
-    "قاموس يفهم السياق, معانٍ وأصول وتعابير وصورة حيّة، بـ14 لغة.",
+    "قاموس يفهم السياق, معانٍ وأصول وتعابير وصورة حيّة، بـ30+ لغة.",
 
   searchPlaceholderHome: "اكتب كلمة",
   voiceInputTitle: "إملاء كلمة",
@@ -3581,7 +3581,7 @@ const ar: V2Strings = {
   valueProp3Title: "ملاحظة تاريخية، لا مدخل ويكيبيديا",
   valueProp3Body:
     "من أين أتت الكلمة، يُروى كفقرة, كما يكتب صديق فضولي.",
-  valueProp4Eyebrow: "14 لغة",
+  valueProp4Eyebrow: "30+ لغة",
   valueProp4Title: "العربية والعبرية، بكامل أصالتهما",
   valueProp4Body:
     "RTL حقيقي، خطوط حقيقية، تعابير حقيقية, لا واجهة مترجمة.",
@@ -3602,8 +3602,8 @@ const ar: V2Strings = {
   footerPrivacy: "الخصوصية",
   footerTerms: "الشروط",
   footerContact: "مساعدة",
-  footerTagline: "قاموس ذكي بـ14 لغة. مبنيّ للقراءة الحقيقية.",
-  footerLanguagesNote: "14 لغة",
+  footerTagline: "قاموس ذكي بـ30+ لغة. مبنيّ للقراءة الحقيقية.",
+  footerLanguagesNote: "30+ لغة",
 
   signIn: "تسجيل الدخول",
   startFree: "ابدأ مجانًا",
@@ -3966,7 +3966,7 @@ const ru: Partial<V2Strings> = {
   homeHeadlineLine1: "Понимать",
   homeHeadlineLine2: "до конца.",
   homeSubline:
-    "Словарь, который улавливает контекст, значения, происхождение, идиомы и живой образ, на 14 языках.",
+    "Словарь, который улавливает контекст, значения, происхождение, идиомы и живой образ, на 30+ языках.",
 
   searchPlaceholderHome: "Введите слово",
   voiceInputTitle: "Продиктовать слово",
@@ -3990,7 +3990,7 @@ const ru: Partial<V2Strings> = {
   valueProp3Title: "Краткая история, а не статья из Википедии",
   valueProp3Body:
     "Откуда пришло слово, рассказано как абзац, без сухих фактов.",
-  valueProp4Eyebrow: "14 языков",
+  valueProp4Eyebrow: "30+ языков",
   valueProp4Title: "Иврит и арабский, как родные",
   valueProp4Body:
     "Настоящий RTL, настоящие шрифты, настоящие идиомы, а не переведённый интерфейс.",
@@ -4011,8 +4011,8 @@ const ru: Partial<V2Strings> = {
   footerPrivacy: "Конфиденциальность",
   footerTerms: "Условия",
   footerContact: "Помощь",
-  footerTagline: "Умный словарь на 14 языках. Создан для настоящего чтения.",
-  footerLanguagesNote: "14 языков",
+  footerTagline: "Умный словарь на 30+ языках. Создан для настоящего чтения.",
+  footerLanguagesNote: "30+ языков",
 
   signIn: "Войти",
   startFree: "Начать бесплатно",
@@ -4356,7 +4356,7 @@ const es: Partial<V2Strings> = {
   homeHeadlineLine1: "Entiende",
   homeHeadlineLine2: "hasta el final.",
   homeSubline:
-    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 22 idiomas.",
+    "Un diccionario que entiende el contexto, significados, origen, expresiones e imagen viva, en 30+ idiomas.",
 
   searchPlaceholderHome: "Escribe una palabra",
   voiceInputTitle: "Dictar una palabra",
@@ -4380,7 +4380,7 @@ const es: Partial<V2Strings> = {
   valueProp3Title: "Una nota de origen, no un volcado de Wikipedia",
   valueProp3Body:
     "De dónde viene la palabra, contado como un párrafo, el que escribiría un amigo curioso.",
-  valueProp4Eyebrow: "22 idiomas",
+  valueProp4Eyebrow: "30+ idiomas",
   valueProp4Title: "Hebreo y árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fuentes reales, modismos reales, no una interfaz traducida a la fuerza.",
@@ -4401,8 +4401,8 @@ const es: Partial<V2Strings> = {
   footerPrivacy: "Privacidad",
   footerTerms: "Términos",
   footerContact: "Ayuda",
-  footerTagline: "Un diccionario inteligente para 22 idiomas. Hecho para lectura real.",
-  footerLanguagesNote: "22 idiomas",
+  footerTagline: "Un diccionario inteligente para 30+ idiomas. Hecho para lectura real.",
+  footerLanguagesNote: "30+ idiomas",
 
   signIn: "Iniciar sesión",
   startFree: "Empezar gratis",
@@ -4744,7 +4744,7 @@ const pt: Partial<V2Strings> = {
   homeHeadlineLine1: "Entenda",
   homeHeadlineLine2: "até o fim.",
   homeSubline:
-    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 22 idiomas.",
+    "Um dicionário que entende o contexto, significados, origem, expressões e imagem viva, em 30+ idiomas.",
 
   searchPlaceholderHome: "Digite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
@@ -4768,7 +4768,7 @@ const pt: Partial<V2Strings> = {
   valueProp3Title: "Uma nota histórica, não despejo de Wikipédia",
   valueProp3Body:
     "De onde a palavra veio, contado em parágrafo, do jeito que um amigo curioso escreveria.",
-  valueProp4Eyebrow: "22 idiomas",
+  valueProp4Eyebrow: "30+ idiomas",
   valueProp4Title: "Hebraico e árabe, totalmente nativos",
   valueProp4Body:
     "RTL real, fontes reais, expressões reais, não interface traduzida na pressa.",
@@ -4789,8 +4789,8 @@ const pt: Partial<V2Strings> = {
   footerPrivacy: "Privacidade",
   footerTerms: "Termos",
   footerContact: "Ajuda",
-  footerTagline: "Um dicionário inteligente em 22 idiomas. Feito pra leitura de verdade.",
-  footerLanguagesNote: "22 idiomas",
+  footerTagline: "Um dicionário inteligente em 30+ idiomas. Feito pra leitura de verdade.",
+  footerLanguagesNote: "30+ idiomas",
 
   signIn: "Entrar",
   startFree: "Começar grátis",
@@ -5132,7 +5132,7 @@ const fr: Partial<V2Strings> = {
   homeHeadlineLine1: "Comprendre",
   homeHeadlineLine2: "jusqu'au bout.",
   homeSubline:
-    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 22 langues.",
+    "Un dictionnaire qui saisit le contexte, sens, origines, expressions et image vivante, en 30+ langues.",
 
   searchPlaceholderHome: "Tapez un mot",
   voiceInputTitle: "Dicter un mot",
@@ -5156,7 +5156,7 @@ const fr: Partial<V2Strings> = {
   valueProp3Title: "Une note d'origine, pas un copier-coller de Wikipédia",
   valueProp3Body:
     "D'où vient le mot, raconté en un paragraphe, comme un ami curieux l'écrirait.",
-  valueProp4Eyebrow: "22 langues",
+  valueProp4Eyebrow: "30+ langues",
   valueProp4Title: "Hébreu et arabe, vraiment natifs",
   valueProp4Body:
     "Vrai RTL, vraies polices, vraies expressions, pas une interface traduite à la va-vite.",
@@ -5177,8 +5177,8 @@ const fr: Partial<V2Strings> = {
   footerPrivacy: "Confidentialité",
   footerTerms: "Conditions",
   footerContact: "Aide",
-  footerTagline: "Un dictionnaire intelligent en 22 langues. Conçu pour vraiment lire.",
-  footerLanguagesNote: "22 langues",
+  footerTagline: "Un dictionnaire intelligent en 30+ langues. Conçu pour vraiment lire.",
+  footerLanguagesNote: "30+ langues",
 
   signIn: "Se connecter",
   startFree: "Commencer gratuit",
@@ -5529,7 +5529,7 @@ const de: V2Strings = {
   homeHeadlineLine1: "Verstehen",
   homeHeadlineLine2: "bis zum Ende.",
   homeSubline:
-    "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 22 Sprachen.",
+    "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 30+ Sprachen.",
   searchPlaceholderHome: "Tippe ein Wort",
   voiceInputTitle: "Wort diktieren",
   addContext: "Kontext hinzufügen",
@@ -5548,7 +5548,7 @@ const de: V2Strings = {
   valueProp3Eyebrow: "Etymologie",
   valueProp3Title: "Eine Hintergrundnotiz, kein Wikipedia-Abklatsch",
   valueProp3Body: "Wo das Wort herkommt, erzählt als Absatz, wie ein neugieriger Freund ihn schreiben würde.",
-  valueProp4Eyebrow: "22 Sprachen",
+  valueProp4Eyebrow: "30+ Sprachen",
   valueProp4Title: "Hebräisch und Arabisch, vollständig nativ",
   valueProp4Body: "Echtes RTL, echte Schriften, echte Redewendungen. Keine aufgesetzte Übersetzungs-UI.",
 
@@ -5568,8 +5568,8 @@ const de: V2Strings = {
   footerPrivacy: "Datenschutz",
   footerTerms: "AGB",
   footerContact: "Hilfe",
-  footerTagline: "Ein intelligentes Wörterbuch für 22 Sprachen. Gemacht fürs echte Lesen.",
-  footerLanguagesNote: "22 Sprachen",
+  footerTagline: "Ein intelligentes Wörterbuch für 30+ Sprachen. Gemacht fürs echte Lesen.",
+  footerLanguagesNote: "30+ Sprachen",
 
   signIn: "Anmelden",
   startFree: "Kostenlos starten",
@@ -6618,7 +6618,7 @@ const it: Partial<V2Strings> = {
   homeHeadlineLine1: "Capisci",
   homeHeadlineLine2: "fino in fondo.",
   homeSubline:
-    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 22 lingue.",
+    "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 30+ lingue.",
   searchPlaceholderHome: "Scrivi una parola",
   voiceInputTitle: "Detta una parola",
   addContext: "Aggiungi contesto",
@@ -6638,7 +6638,7 @@ const it: Partial<V2Strings> = {
   valueProp3Eyebrow: "Etimologia",
   valueProp3Title: "Una nota storica, non un dump di Wikipedia",
   valueProp3Body: "Da dove viene la parola, raccontato come un paragrafo, come lo scriverebbe un amico curioso.",
-  valueProp4Eyebrow: "22 lingue",
+  valueProp4Eyebrow: "30+ lingue",
   valueProp4Title: "Ebraico e arabo, completamente nativi",
   valueProp4Body: "RTL vero, font veri, modi di dire veri. Non un'interfaccia tradotta posticcia.",
 
@@ -6658,8 +6658,8 @@ const it: Partial<V2Strings> = {
   footerPrivacy: "Privacy",
   footerTerms: "Termini",
   footerContact: "Aiuto",
-  footerTagline: "Un dizionario intelligente per 22 lingue. Costruito per la lettura vera.",
-  footerLanguagesNote: "22 lingue",
+  footerTagline: "Un dizionario intelligente per 30+ lingue. Costruito per la lettura vera.",
+  footerLanguagesNote: "30+ lingue",
 
   // Nav
   signIn: "Accedi",
@@ -7001,7 +7001,7 @@ const ja: Partial<V2Strings> = {
   homeHeadlineLine1: "理解する",
   homeHeadlineLine2: "最後まで。",
   homeSubline:
-    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、22言語で。",
+    "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、30+言語で。",
   searchPlaceholderHome: "単語を入力",
   voiceInputTitle: "単語を発音する",
   addContext: "文脈を追加",
@@ -7021,7 +7021,7 @@ const ja: Partial<V2Strings> = {
   valueProp3Eyebrow: "語源",
   valueProp3Title: "Wikipedia の貼り付けではなく、語られる歴史",
   valueProp3Body: "その単語がどこから来たのか、好奇心ある友人が書くような一段落で。",
-  valueProp4Eyebrow: "22 言語",
+  valueProp4Eyebrow: "30+ 言語",
   valueProp4Title: "ヘブライ語とアラビア語も完全ネイティブ",
   valueProp4Body: "本物の RTL、本物のフォント、本物のイディオム。後付けの翻訳UIではありません。",
 
@@ -7041,8 +7041,8 @@ const ja: Partial<V2Strings> = {
   footerPrivacy: "プライバシー",
   footerTerms: "利用規約",
   footerContact: "ヘルプ",
-  footerTagline: "22言語のためのスマートな辞書。本物の読書のために作られた。",
-  footerLanguagesNote: "22 言語",
+  footerTagline: "30+言語のためのスマートな辞書。本物の読書のために作られた。",
+  footerLanguagesNote: "30+ 言語",
 
   // Nav
   signIn: "ログイン",
@@ -7382,7 +7382,7 @@ const hi: Partial<V2Strings> = {
   homeHeadlineLine1: "समझें",
   homeHeadlineLine2: "पूरी गहराई से।",
   homeSubline:
-    "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 22 भाषाओं में।",
+    "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 30+ भाषाओं में।",
   searchPlaceholderHome: "कोई शब्द लिखें",
   voiceInputTitle: "एक शब्द बोलें",
   addContext: "संदर्भ जोड़ें",
@@ -7402,7 +7402,7 @@ const hi: Partial<V2Strings> = {
   valueProp3Eyebrow: "उत्पत्ति",
   valueProp3Title: "ऐतिहासिक नोट, विकिपीडिया डंप नहीं",
   valueProp3Body: "शब्द कहाँ से आया, एक छोटे पैराग्राफ़ में, जैसे कोई जिज्ञासु दोस्त लिखे।",
-  valueProp4Eyebrow: "22 भाषाएँ",
+  valueProp4Eyebrow: "30+ भाषाएँ",
   valueProp4Title: "हिब्रू और अरबी, पूरी तरह नेटिव",
   valueProp4Body: "असली RTL, असली फ़ॉन्ट, असली मुहावरे। चिपकाया हुआ अनूदित इंटरफ़ेस नहीं।",
 
@@ -7422,8 +7422,8 @@ const hi: Partial<V2Strings> = {
   footerPrivacy: "गोपनीयता",
   footerTerms: "शर्तें",
   footerContact: "मदद",
-  footerTagline: "22 भाषाओं के लिए स्मार्ट शब्दकोश। सच्ची पढ़ाई के लिए बना।",
-  footerLanguagesNote: "22 भाषाएँ",
+  footerTagline: "30+ भाषाओं के लिए स्मार्ट शब्दकोश। सच्ची पढ़ाई के लिए बना।",
+  footerLanguagesNote: "30+ भाषाएँ",
 
   // Nav
   signIn: "साइन इन",
@@ -7765,7 +7765,7 @@ const am: Partial<V2Strings> = {
   homeHeadlineLine1: "ይረዱ",
   homeHeadlineLine2: "በሙሉ ጥልቀት።",
   homeSubline:
-    "በአውድዎ ውስጥ የሚያገኝዎት መዝገበ ቃላት፦ ትርጉሞች፣ ሥርወ ቃላት፣ ፈሊጦች እና ሕያው ምስል፣ በ22 ቋንቋዎች።",
+    "በአውድዎ ውስጥ የሚያገኝዎት መዝገበ ቃላት፦ ትርጉሞች፣ ሥርወ ቃላት፣ ፈሊጦች እና ሕያው ምስል፣ በ30+ ቋንቋዎች።",
   searchPlaceholderHome: "ቃል ይጻፉ",
   voiceInputTitle: "ቃል ይናገሩ",
   addContext: "አውድ ይጨምሩ",
@@ -7785,7 +7785,7 @@ const am: Partial<V2Strings> = {
   valueProp3Eyebrow: "ሥርወ ቃል",
   valueProp3Title: "ታሪካዊ ማስታወሻ፣ የዊኪፔዲያ ግልበጣ አይደለም",
   valueProp3Body: "ቃሉ ከየት እንደመጣ፣ በአጭር አንቀጽ፣ ጉጉ ጓደኛ እንደሚጽፈው።",
-  valueProp4Eyebrow: "22 ቋንቋዎች",
+  valueProp4Eyebrow: "30+ ቋንቋዎች",
   valueProp4Title: "ዕብራይስጥ እና ዓረብኛ፣ ሙሉ በሙሉ ቤተኛ",
   valueProp4Body: "እውነተኛ RTL፣ እውነተኛ ፊደላት፣ እውነተኛ ፈሊጦች። ተለጥፎ የተተረጎመ ገጽታ አይደለም።",
 
@@ -7805,8 +7805,8 @@ const am: Partial<V2Strings> = {
   footerPrivacy: "ግላዊነት",
   footerTerms: "ውሎች",
   footerContact: "እርዳታ",
-  footerTagline: "ለ22 ቋንቋዎች ብልህ መዝገበ ቃላት። ለእውነተኛ ትምህርት የተሠራ።",
-  footerLanguagesNote: "22 ቋንቋዎች",
+  footerTagline: "ለ30+ ቋንቋዎች ብልህ መዝገበ ቃላት። ለእውነተኛ ትምህርት የተሠራ።",
+  footerLanguagesNote: "30+ ቋንቋዎች",
 
   // Nav
   signIn: "ይግቡ",
@@ -8149,7 +8149,7 @@ const el: Partial<V2Strings> = {
   homeHeadlineLine1: "Κατάλαβε",
   homeHeadlineLine2: "μέχρι το τέλος.",
   homeSubline:
-    "Ένα λεξικό που σε συναντά στο νόημα, στις σημασίες, στην προέλευση, στις εκφράσεις και σε μια ζωντανή εικόνα, σε 22 γλώσσες.",
+    "Ένα λεξικό που σε συναντά στο νόημα, στις σημασίες, στην προέλευση, στις εκφράσεις και σε μια ζωντανή εικόνα, σε 30+ γλώσσες.",
 
   searchPlaceholderHome: "Πληκτρολόγησε μια λέξη",
   voiceInputTitle: "Υπαγόρευσε μια λέξη",
@@ -8173,7 +8173,7 @@ const el: Partial<V2Strings> = {
   valueProp3Title: "Μια ιστορική σημείωση, όχι αντιγραφή από Wikipedia",
   valueProp3Body:
     "Από πού ήρθε η λέξη, σε μια παράγραφο, όπως θα την έγραφε ένας περίεργος φίλος.",
-  valueProp4Eyebrow: "22 γλώσσες",
+  valueProp4Eyebrow: "30+ γλώσσες",
   valueProp4Title: "Εβραϊκά και Αραβικά, πλήρως στη μητρική τους μορφή",
   valueProp4Body:
     "Πραγματικό RTL, πραγματικές γραμματοσειρές, πραγματικές εκφράσεις, όχι ένα μεταφρασμένο περιβάλλον κολλημένο από πάνω.",
@@ -8194,8 +8194,8 @@ const el: Partial<V2Strings> = {
   footerPrivacy: "Απόρρητο",
   footerTerms: "Όροι",
   footerContact: "Βοήθεια",
-  footerTagline: "Ένα έξυπνο λεξικό για 22 γλώσσες. Φτιαγμένο για πραγματικό διάβασμα.",
-  footerLanguagesNote: "22 γλώσσες",
+  footerTagline: "Ένα έξυπνο λεξικό για 30+ γλώσσες. Φτιαγμένο για πραγματικό διάβασμα.",
+  footerLanguagesNote: "30+ γλώσσες",
 
   signIn: "Σύνδεση",
   startFree: "Ξεκίνα δωρεάν",
@@ -8994,7 +8994,7 @@ export function v2<K extends keyof V2Strings>(
 Object.assign(vi, {
   "homeHeadlineLine1": "Hiểu",
   "homeHeadlineLine2": "đến tận cùng.",
-  "homeSubline": "Một cuốn từ điển hiểu ngữ cảnh của bạn: nghĩa, nguồn gốc, thành ngữ và một hình ảnh sống động, bằng 22 ngôn ngữ.",
+  "homeSubline": "Một cuốn từ điển hiểu ngữ cảnh của bạn: nghĩa, nguồn gốc, thành ngữ và một hình ảnh sống động, bằng 30+ ngôn ngữ.",
   "searchPlaceholderHome": "Nhập một từ",
   "voiceInputTitle": "Đọc một từ",
   "addContext": "Thêm ngữ cảnh",
@@ -9012,7 +9012,7 @@ Object.assign(vi, {
   "valueProp3Eyebrow": "Từ nguyên",
   "valueProp3Title": "Một mẩu ghi chú lịch sử, không phải trích nguyên từ Wikipedia",
   "valueProp3Body": "Từ này đến từ đâu, kể lại bằng một đoạn văn, như cách một người bạn tò mò sẽ viết.",
-  "valueProp4Eyebrow": "22 ngôn ngữ",
+  "valueProp4Eyebrow": "30+ ngôn ngữ",
   "valueProp4Title": "Tiếng Do Thái & tiếng Ả Rập, hoàn toàn bản địa",
   "valueProp4Body": "RTL thật, phông chữ thật, thành ngữ thật, không phải một giao diện dịch vội gắn thêm vào.",
   "previewLabel": "Xem trước",
@@ -9028,8 +9028,8 @@ Object.assign(vi, {
   "footerPrivacy": "Bảo mật",
   "footerTerms": "Điều khoản",
   "footerContact": "Trợ giúp",
-  "footerTagline": "Một cuốn từ điển thông minh cho 22 ngôn ngữ. Tạo ra cho việc đọc thực thụ.",
-  "footerLanguagesNote": "22 ngôn ngữ",
+  "footerTagline": "Một cuốn từ điển thông minh cho 30+ ngôn ngữ. Tạo ra cho việc đọc thực thụ.",
+  "footerLanguagesNote": "30+ ngôn ngữ",
   "signIn": "Đăng nhập",
   "startFree": "Bắt đầu miễn phí",
   "verbStampDef": "hiểu một từ, trọn vẹn",
@@ -9608,7 +9608,7 @@ Object.assign(fil, {
 Object.assign(af, {
   "homeHeadlineLine1": "Verstaan",
   "homeHeadlineLine2": "tot die einde.",
-  "homeSubline": "'n Woordeboek wat jou in konteks ontmoet, betekenisse, herkomste, idiome, en 'n lewendige prent, in 22 tale.",
+  "homeSubline": "'n Woordeboek wat jou in konteks ontmoet, betekenisse, herkomste, idiome, en 'n lewendige prent, in 30+ tale.",
   "searchPlaceholderHome": "Tik 'n woord",
   "voiceInputTitle": "Sê 'n woord",
   "addContext": "Voeg konteks by",
@@ -9626,7 +9626,7 @@ Object.assign(af, {
   "valueProp3Eyebrow": "Etimologie",
   "valueProp3Title": "'n Geskiedenisnota, nie 'n Wikipedia-uittreksel nie",
   "valueProp3Body": "Waar die woord vandaan kom, vertel as 'n paragraaf, soos 'n nuuskierige vriend dit sou skryf.",
-  "valueProp4Eyebrow": "22 tale",
+  "valueProp4Eyebrow": "30+ tale",
   "valueProp4Title": "Hebreeus & Arabies, heeltemal inheems",
   "valueProp4Body": "Werklike RTL, werklike lettertipes, werklike idiome, nie 'n vertaalde koppelvlak wat aangelas is nie.",
   "previewLabel": "Voorskou",
@@ -9642,8 +9642,8 @@ Object.assign(af, {
   "footerPrivacy": "Privaatheid",
   "footerTerms": "Voorwaardes",
   "footerContact": "Hulp",
-  "footerTagline": "'n Slim woordeboek vir 22 tale. Gebou vir werklike lees.",
-  "footerLanguagesNote": "22 tale",
+  "footerTagline": "'n Slim woordeboek vir 30+ tale. Gebou vir werklike lees.",
+  "footerLanguagesNote": "30+ tale",
   "signIn": "Meld aan",
   "startFree": "Begin gratis",
   "verbStampDef": "om 'n woord ten volle te verstaan",
@@ -9915,7 +9915,7 @@ Object.assign(af, {
 Object.assign(sw, {
   "homeHeadlineLine1": "Elewa",
   "homeHeadlineLine2": "hadi mwisho.",
-  "homeSubline": "Kamusi inayokukuta katika muktadha, maana, asili, nahau, na picha hai, kwa lugha 22.",
+  "homeSubline": "Kamusi inayokukuta katika muktadha, maana, asili, nahau, na picha hai, kwa lugha 30+.",
   "searchPlaceholderHome": "Andika neno",
   "voiceInputTitle": "Sema neno",
   "addContext": "Ongeza muktadha",
@@ -9949,7 +9949,7 @@ Object.assign(sw, {
   "footerPrivacy": "Faragha",
   "footerTerms": "Masharti",
   "footerContact": "Msaada",
-  "footerTagline": "Kamusi mahiri kwa lugha 22. Imejengwa kwa usomaji halisi.",
+  "footerTagline": "Kamusi mahiri kwa lugha 30+. Imejengwa kwa usomaji halisi.",
   "footerLanguagesNote": "Lugha 22",
   "signIn": "Ingia",
   "startFree": "Anza bila malipo",
@@ -10530,7 +10530,7 @@ Object.assign(zhCN, {
 Object.assign(zhTW, {
   "homeHeadlineLine1": "徹底",
   "homeHeadlineLine2": "看懂。",
-  "homeSubline": "一部懂得語境的字典，釋義、詞源、慣用語，還有一張生動的配圖，支援 22 種語言。",
+  "homeSubline": "一部懂得語境的字典，釋義、詞源、慣用語，還有一張生動的配圖，支援 30+ 種語言。",
   "searchPlaceholderHome": "輸入一個詞",
   "voiceInputTitle": "用說的輸入一個詞",
   "addContext": "加入語境",
@@ -10548,7 +10548,7 @@ Object.assign(zhTW, {
   "valueProp3Eyebrow": "詞源",
   "valueProp3Title": "一段歷史小記，不是維基百科的堆砌",
   "valueProp3Body": "這個詞從哪裡來，用一小段文字講給你聽，就像一位好奇的朋友寫下的。",
-  "valueProp4Eyebrow": "22 種語言",
+  "valueProp4Eyebrow": "30+ 種語言",
   "valueProp4Title": "希伯來文與阿拉伯文，道地母語呈現",
   "valueProp4Body": "真正的右至左排版、真正的字型、真正的慣用語，不是硬套上去的翻譯介面。",
   "previewLabel": "預覽",
@@ -10564,8 +10564,8 @@ Object.assign(zhTW, {
   "footerPrivacy": "隱私權",
   "footerTerms": "使用條款",
   "footerContact": "說明",
-  "footerTagline": "支援 22 種語言的聰明字典，為真正的閱讀而生。",
-  "footerLanguagesNote": "22 種語言",
+  "footerTagline": "支援 30+ 種語言的聰明字典，為真正的閱讀而生。",
+  "footerLanguagesNote": "30+ 種語言",
   "signIn": "登入",
   "startFree": "免費開始",
   "verbStampDef": "徹底看懂一個詞",
@@ -10837,7 +10837,7 @@ Object.assign(zhTW, {
 Object.assign(ko, {
   "homeHeadlineLine1": "끝까지",
   "homeHeadlineLine2": "이해하세요.",
-  "homeSubline": "맥락에 맞춰 다가가는 사전. 뜻, 어원, 관용구, 그리고 생생한 그림까지, 22개 언어로 만나 보세요.",
+  "homeSubline": "맥락에 맞춰 다가가는 사전. 뜻, 어원, 관용구, 그리고 생생한 그림까지, 30+개 언어로 만나 보세요.",
   "searchPlaceholderHome": "단어를 입력하세요",
   "voiceInputTitle": "음성으로 단어 입력",
   "addContext": "맥락 추가",
@@ -10855,7 +10855,7 @@ Object.assign(ko, {
   "valueProp3Eyebrow": "어원",
   "valueProp3Title": "위키백과 복사가 아닌, 이야기 같은 유래",
   "valueProp3Body": "단어가 어디서 왔는지, 호기심 많은 친구가 들려주듯 한 문단으로 풀어드려요.",
-  "valueProp4Eyebrow": "22개 언어",
+  "valueProp4Eyebrow": "30+개 언어",
   "valueProp4Title": "히브리어와 아랍어까지 완전한 현지화",
   "valueProp4Body": "진짜 RTL, 진짜 글꼴, 진짜 관용구예요. 번역만 덧씌운 화면이 아니에요.",
   "previewLabel": "미리보기",
@@ -10871,8 +10871,8 @@ Object.assign(ko, {
   "footerPrivacy": "개인정보",
   "footerTerms": "약관",
   "footerContact": "도움말",
-  "footerTagline": "22개 언어를 위한 똑똑한 사전. 진짜 읽기를 위해 만들었어요.",
-  "footerLanguagesNote": "22개 언어",
+  "footerTagline": "30+개 언어를 위한 똑똑한 사전. 진짜 읽기를 위해 만들었어요.",
+  "footerLanguagesNote": "30+개 언어",
   "signIn": "로그인",
   "startFree": "무료로 시작",
   "verbStampDef": "단어를 끝까지 이해하다",
@@ -11144,7 +11144,7 @@ Object.assign(ko, {
 Object.assign(th, {
   "homeHeadlineLine1": "เข้าใจ",
   "homeHeadlineLine2": "ถึงแก่น",
-  "homeSubline": "พจนานุกรมที่เข้าใจบริบทของคุณ ทั้งความหมาย ที่มา สำนวน และภาพที่มีชีวิตชีวา ใน 22 ภาษา",
+  "homeSubline": "พจนานุกรมที่เข้าใจบริบทของคุณ ทั้งความหมาย ที่มา สำนวน และภาพที่มีชีวิตชีวา ใน 30+ ภาษา",
   "searchPlaceholderHome": "พิมพ์คำที่อยากรู้",
   "voiceInputTitle": "พูดคำที่ต้องการ",
   "addContext": "เพิ่มบริบท",
@@ -11162,7 +11162,7 @@ Object.assign(th, {
   "valueProp3Eyebrow": "รากศัพท์",
   "valueProp3Title": "บันทึกความเป็นมา ไม่ใช่ข้อความยกมาจากวิกิพีเดีย",
   "valueProp3Body": "คำนี้มาจากไหน เล่าเป็นย่อหน้าเดียว แบบที่เพื่อนช่างสงสัยจะเขียนให้อ่าน",
-  "valueProp4Eyebrow": "22 ภาษา",
+  "valueProp4Eyebrow": "30+ ภาษา",
   "valueProp4Title": "ฮีบรูและอาหรับ เป็นเจ้าของภาษาอย่างแท้จริง",
   "valueProp4Body": "RTL จริง ฟอนต์จริง สำนวนจริง ไม่ใช่แค่แปลหน้าจอมาแปะ",
   "previewLabel": "ตัวอย่าง",
@@ -11178,8 +11178,8 @@ Object.assign(th, {
   "footerPrivacy": "ความเป็นส่วนตัว",
   "footerTerms": "ข้อกำหนด",
   "footerContact": "ช่วยเหลือ",
-  "footerTagline": "พจนานุกรมอัจฉริยะสำหรับ 22 ภาษา สร้างมาเพื่อการอ่านจริง",
-  "footerLanguagesNote": "22 ภาษา",
+  "footerTagline": "พจนานุกรมอัจฉริยะสำหรับ 30+ ภาษา สร้างมาเพื่อการอ่านจริง",
+  "footerLanguagesNote": "30+ ภาษา",
   "signIn": "เข้าสู่ระบบ",
   "startFree": "เริ่มใช้ฟรี",
   "verbStampDef": "เข้าใจคำหนึ่งคำอย่างถึงแก่น",
@@ -11759,7 +11759,7 @@ Object.assign(bn, {
 Object.assign(da, {
   "homeHeadlineLine1": "Forstå",
   "homeHeadlineLine2": "til bunds.",
-  "homeSubline": "En ordbog, der møder dig i konteksten, betydninger, oprindelse, udtryk og et levende billede, på 22 sprog.",
+  "homeSubline": "En ordbog, der møder dig i konteksten, betydninger, oprindelse, udtryk og et levende billede, på 30+ sprog.",
   "searchPlaceholderHome": "Skriv et ord",
   "voiceInputTitle": "Diktér et ord",
   "addContext": "Tilføj kontekst",
@@ -11777,7 +11777,7 @@ Object.assign(da, {
   "valueProp3Eyebrow": "Etymologi",
   "valueProp3Title": "En historisk note, ikke et udklip fra Wikipedia",
   "valueProp3Body": "Hvor ordet kom fra, fortalt som et afsnit, sådan som en nysgerrig ven ville skrive det.",
-  "valueProp4Eyebrow": "22 sprog",
+  "valueProp4Eyebrow": "30+ sprog",
   "valueProp4Title": "Hebraisk og arabisk, helt på modersmålet",
   "valueProp4Body": "Ægte RTL, ægte skrifttyper, ægte udtryk, ikke bare en oversat brugerflade sat ovenpå.",
   "previewLabel": "Forhåndsvisning",
@@ -11793,8 +11793,8 @@ Object.assign(da, {
   "footerPrivacy": "Privatliv",
   "footerTerms": "Vilkår",
   "footerContact": "Hjælp",
-  "footerTagline": "En smart ordbog til 22 sprog. Bygget til virkelig læsning.",
-  "footerLanguagesNote": "22 sprog",
+  "footerTagline": "En smart ordbog til 30+ sprog. Bygget til virkelig læsning.",
+  "footerLanguagesNote": "30+ sprog",
   "signIn": "Log ind",
   "startFree": "Start gratis",
   "verbStampDef": "at forstå et ord, fuldt ud",
@@ -12066,7 +12066,7 @@ Object.assign(da, {
 Object.assign(hu, {
   "homeHeadlineLine1": "Megérteni",
   "homeHeadlineLine2": "a végsőkig.",
-  "homeSubline": "Szótár, amely a kontextusban is ért: jelentések, eredet, szólások és egy élénk kép, 22 nyelven.",
+  "homeSubline": "Szótár, amely a kontextusban is ért: jelentések, eredet, szólások és egy élénk kép, 30+ nyelven.",
   "searchPlaceholderHome": "Írj be egy szót",
   "voiceInputTitle": "Mondj egy szót",
   "addContext": "Adj hozzá kontextust",
@@ -12084,7 +12084,7 @@ Object.assign(hu, {
   "valueProp3Eyebrow": "Etimológia",
   "valueProp3Title": "Történeti jegyzet, nem Wikipédia-halom",
   "valueProp3Body": "Honnan ered a szó, egy bekezdésben elmesélve, ahogy egy kíváncsi barát írná.",
-  "valueProp4Eyebrow": "22 nyelv",
+  "valueProp4Eyebrow": "30+ nyelv",
   "valueProp4Title": "Héber és arab, teljesen anyanyelvi szinten",
   "valueProp4Body": "Valódi RTL, valódi betűtípusok, valódi szólások, nem egy sietve ráaggatott fordított felület.",
   "previewLabel": "Előnézet",
@@ -12100,8 +12100,8 @@ Object.assign(hu, {
   "footerPrivacy": "Adatvédelem",
   "footerTerms": "Feltételek",
   "footerContact": "Súgó",
-  "footerTagline": "Okos szótár 22 nyelvre. Valódi olvasáshoz készült.",
-  "footerLanguagesNote": "22 nyelv",
+  "footerTagline": "Okos szótár 30+ nyelvre. Valódi olvasáshoz készült.",
+  "footerLanguagesNote": "30+ nyelv",
   "signIn": "Bejelentkezés",
   "startFree": "Kezdd ingyen",
   "verbStampDef": "megérteni egy szót, teljesen",

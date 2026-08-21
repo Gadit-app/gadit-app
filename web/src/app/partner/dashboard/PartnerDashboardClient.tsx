@@ -732,7 +732,7 @@ function money(minor: number, currency: string): string {
   return `${sym}${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-// The 14 UI languages, with native names, for the link-language picker.
+// The 30+ UI languages, with native names, for the link-language picker.
 // A partner shares gadit.app/<lang>/?ref=<code>; the middleware sets the
 // language from the prefix and the ?ref= is preserved through the rewrite,
 // so the audience lands in that language AND the click is attributed.
@@ -860,7 +860,7 @@ export function PartnerDashboardClient() {
             <div className="pd-body" style={S.body}>
               <div style={S.col}>
                 {/* Referral links — one per product, RefCapture attributes
-                    ?ref on any of them. Shared 14-language picker. */}
+                    ?ref on any of them. Shared language picker. */}
                 <div style={S.card}>
                   <div style={S.cardLabel}>{t.yourLink}</div>
                   <div style={S.subtle}>{t.linksHint}</div>
