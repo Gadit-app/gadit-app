@@ -32,6 +32,7 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, curatedDef } from "@/lib/word-sets";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
+import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
@@ -1363,6 +1364,10 @@ export function WordClient({
           </Link>
           <WbShellNav />
           <div className="wb-shell-actions">
+            {/* Kid skin picker, so a kid can change their look from the word
+                page too (it was on home/notebook/play but missing here, where
+                the skin is most visible). Gadi 2026-08-21. */}
+            {familyRole === "kid" && <AppearancePicker scope="kid" />}
             <KidsModeToggle
               plan={plan}
               onBasicGate={() => {
@@ -1408,6 +1413,9 @@ export function WordClient({
             toggle). 2026-06-19 Gadi feedback. */}
         {user && (
           <div className="wb-shell-mobile-identity">
+            {/* Kid skin picker on mobile (desktop one is in the hidden
+                .wb-shell-actions), mirroring notebook/play. Gadi 2026-08-21. */}
+            {familyRole === "kid" && <AppearancePicker scope="kid" />}
             <ShareButton
               url="https://www.gadit.app/"
               title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
