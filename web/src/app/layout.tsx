@@ -377,6 +377,18 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "প্রতিটি শব্দ সত্যিকারভাবে বুঝতে সাহায্য করে এমন একটি নতুন টুল। সব অর্থ, উদাহরণ, বাগধারা, আর শব্দটি কোথা থেকে এসেছে। শুরু করা বিনামূল্যে, আপগ্রেড খুব সাশ্রয়ী। চেষ্টা করে দেখার মতো।",
     locale: "bn_BD",
   },
+  da: {
+    title: "Gadit, Forstå hvert ord helt til bunds",
+    description:
+      "Et nyt værktøj, der hjælper dig med virkelig at forstå hvert ord. Alle betydninger, eksempler, idiomer, og hvor ordet kommer fra. Gratis at starte, opgradering til meget lav pris. Værd at prøve.",
+    locale: "da_DK",
+  },
+  hu: {
+    title: "Gadit, Érts meg minden szót az utolsó betűig",
+    description:
+      "Egy új eszköz, amely segít, hogy tényleg megérts minden szót. Minden jelentés, példa, kifejezés, és hogy honnan ered a szó. Ingyenes a kezdés, a bővítés nagyon olcsó. Érdemes kipróbálni.",
+    locale: "hu_HU",
+  },
 };
 
 const ALL_LANGS: Lang[] = LANGUAGES.map((l) => l.code);

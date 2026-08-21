@@ -77,7 +77,7 @@ export function LangProvider({
       const supported = new Set([
         "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
         "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw",
-        "zh-CN", "zh-TW", "ko", "th", "bn",
+        "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu",
       ]);
       const url = new URL(window.location.href);
       const segs = url.pathname.split("/").filter(Boolean);

@@ -48,6 +48,8 @@ const UI_LANG_NAMES: Record<string, string> = {
   ko: "Korean",
   th: "Thai",
   bn: "Bengali",
+  da: "Danish",
+  hu: "Hungarian",
 };
 
 export function uiLangName(uiLang: string): string {

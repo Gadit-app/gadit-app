@@ -33,6 +33,8 @@ const UI_LANG_NAMES: Record<string, string> = {
   ko: "Korean",
   th: "Thai",
   bn: "Bengali",
+  da: "Danish",
+  hu: "Hungarian",
 };
 
 const SYSTEM_PROMPT = `You are Gadit's word comparison engine. The user gives you two words that look or sound similar (or are easy to confuse), and you explain the difference clearly.

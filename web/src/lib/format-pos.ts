@@ -236,6 +236,20 @@ const TABLE: Record<Lang, Partial<Record<PosKey, string>>> = {
     "auxiliary": "সহায়ক ক্রিয়া", "particle": "অনুসর্গ", "numeral": "সংখ্যাবাচক",
     "proper noun": "নামবাচক বিশেষ্য", "phrase": "বাক্যাংশ", "idiom": "বাগধারা",
   },
+  da: {
+    "noun": "navneord", "verb": "udsagnsord", "adjective": "tillægsord", "adverb": "biord",
+    "preposition": "forholdsord", "conjunction": "bindeord", "pronoun": "stedord",
+    "interjection": "udråbsord", "determiner": "bestemmerord", "article": "kendeord",
+    "auxiliary": "hjælpeudsagnsord", "particle": "partikel", "numeral": "talord",
+    "proper noun": "egennavn", "phrase": "frase", "idiom": "talemåde",
+  },
+  hu: {
+    "noun": "főnév", "verb": "ige", "adjective": "melléknév", "adverb": "határozószó",
+    "preposition": "elöljárószó", "conjunction": "kötőszó", "pronoun": "névmás",
+    "interjection": "indulatszó", "determiner": "determináns", "article": "névelő",
+    "auxiliary": "segédige", "particle": "partikula", "numeral": "számnév",
+    "proper noun": "tulajdonnév", "phrase": "kifejezés", "idiom": "szólás",
+  },
 };
 
 export function formatPos(pos: string | null | undefined, lang: Lang): string {

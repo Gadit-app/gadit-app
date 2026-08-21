@@ -66,6 +66,8 @@ const UI_LANG_NAMES: Record<string, string> = {
   ko: "Korean",
   th: "Thai",
   bn: "Bengali",
+  da: "Danish",
+  hu: "Hungarian",
 };
 
 // On-the-fly micro-definition for popovers when the cache misses.

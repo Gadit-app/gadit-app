@@ -33,6 +33,8 @@ const UI_LANG_NAMES: Record<string, string> = {
   ko: "Korean",
   th: "Thai",
   bn: "Bengali",
+  da: "Danish",
+  hu: "Hungarian",
 };
 
 const SYSTEM_PROMPT = `You are creating a short quiz to help a learner cement their understanding of a specific word and meaning.
