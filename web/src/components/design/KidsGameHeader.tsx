@@ -44,6 +44,43 @@ const RANKS_COPY: Record<string, { title: string; sub: (n: number) => string; wo
   en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. Understand words to earn more and climb.`, words: "points", you: "You're here", locked: "Locked", close: "Close" },
   he: { title: "הדרגות שלך", sub: (n) => `צברת ${n} נקודות. תבין מילים כדי לצבור עוד ולעלות.`, words: "נקודות", you: "כאן את/ה", locked: "נעול", close: "סגירה" },
 };
+
+// Ranks-table modal copy for the other 31 languages (was en+he only),
+// added 2026-08-22 so the ranks modal is native everywhere.
+Object.assign(RANKS_COPY, {
+  "ar": { title: "رتبك", sub: (n) => "لقد جمعت " + n + " نقطة. افهم الكلمات لتجمع المزيد وتتقدم.", words: "نقطة", you: "أنت هنا", locked: "مقفل", close: "إغلاق" },
+  "ru": { title: "Твои ранги", sub: (n) => "Ты набрал " + n + " очков. Понимай слова, чтобы набрать больше и подняться выше.", words: "очков", you: "Ты здесь", locked: "Закрыто", close: "Закрыть" },
+  "es": { title: "Tus rangos", sub: (n) => "Has ganado " + n + " puntos. Entiende palabras para ganar más y subir.", words: "puntos", you: "Estás aquí", locked: "Bloqueado", close: "Cerrar" },
+  "pt": { title: "Seus níveis", sub: (n) => "Você ganhou " + n + " pontos. Entenda palavras para ganhar mais e subir.", words: "pontos", you: "Você está aqui", locked: "Bloqueado", close: "Fechar" },
+  "fr": { title: "Tes rangs", sub: (n) => "Tu as gagné " + n + " points. Comprends des mots pour en gagner plus et grimper.", words: "points", you: "Tu es ici", locked: "Verrouillé", close: "Fermer" },
+  "de": { title: "Deine Ränge", sub: (n) => "Du hast " + n + " Punkte gesammelt. Verstehe Wörter, um mehr zu sammeln und aufzusteigen.", words: "Punkte", you: "Du bist hier", locked: "Gesperrt", close: "Schließen" },
+  "cs": { title: "Tvoje hodnosti", sub: (n) => "Získal jsi " + n + " bodů. Rozuměj slovům, ať získáš víc a postoupíš výš.", words: "bodů", you: "Tady jsi", locked: "Zamčeno", close: "Zavřít" },
+  "sk": { title: "Tvoje hodnosti", sub: (n) => "Získal si " + n + " bodov. Rozumej slovám, aby si získal viac a postúpil vyššie.", words: "bodov", you: "Tu si", locked: "Zamknuté", close: "Zavrieť" },
+  "it": { title: "I tuoi gradi", sub: (n) => "Hai guadagnato " + n + " punti. Capisci le parole per guadagnarne di più e salire.", words: "punti", you: "Sei qui", locked: "Bloccato", close: "Chiudi" },
+  "ja": { title: "あなたのランク", sub: (n) => "" + n + "ポイントを獲得しました。言葉を理解してもっと集めて、上を目指そう。", words: "ポイント", you: "ここだよ", locked: "ロック中", close: "閉じる" },
+  "hi": { title: "तुम्हारे रैंक", sub: (n) => "तुमने " + n + " अंक कमाए हैं। और कमाने और ऊपर चढ़ने के लिए शब्दों को समझो।", words: "अंक", you: "तुम यहाँ हो", locked: "बंद", close: "बंद करें" },
+  "am": { title: "ደረጃዎችህ", sub: (n) => "" + n + " ነጥብ አግኝተሃል። ተጨማሪ ለማግኘት እና ወደ ላይ ለመውጣት ቃላትን ተረዳ።", words: "ነጥብ", you: "እዚህ ነህ", locked: "ተቆልፏል", close: "ዝጋ" },
+  "uk": { title: "Твої ранги", sub: (n) => "Ти набрав " + n + " балів. Розумій слова, щоб набрати більше й піднятися вище.", words: "балів", you: "Ти тут", locked: "Закрито", close: "Закрити" },
+  "tr": { title: "Rütbelerin", sub: (n) => "" + n + " puan kazandın. Daha fazla kazanmak ve yükselmek için kelimeleri anla.", words: "puan", you: "Buradasın", locked: "Kilitli", close: "Kapat" },
+  "pl": { title: "Twoje rangi", sub: (n) => "Zdobyłeś " + n + " punktów. Rozumiej słowa, aby zdobyć więcej i awansować.", words: "punktów", you: "Tu jesteś", locked: "Zablokowane", close: "Zamknij" },
+  "fa": { title: "رتبه‌های تو", sub: (n) => "تو " + n + " امتیاز گرفتی. کلمه‌ها را بفهم تا بیشتر بگیری و بالاتر بروی.", words: "امتیاز", you: "تو اینجایی", locked: "قفل", close: "بستن" },
+  "id": { title: "Peringkatmu", sub: (n) => "Kamu sudah mengumpulkan " + n + " poin. Pahami kata untuk mengumpulkan lebih banyak dan naik.", words: "poin", you: "Kamu di sini", locked: "Terkunci", close: "Tutup" },
+  "nl": { title: "Jouw rangen", sub: (n) => "Je hebt " + n + " punten verdiend. Begrijp woorden om er meer te verdienen en te stijgen.", words: "punten", you: "Jij bent hier", locked: "Vergrendeld", close: "Sluiten" },
+  "el": { title: "Οι βαθμοί σου", sub: (n) => "Κέρδισες " + n + " πόντους. Κατάλαβε λέξεις για να κερδίσεις κι άλλους και να ανέβεις.", words: "πόντοι", you: "Εδώ είσαι", locked: "Κλειδωμένο", close: "Κλείσιμο" },
+  "zu": { title: "Amazinga akho", sub: (n) => "Uthole amaphuzu angu-" + n + ". Qonda amagama ukuze uthole amaningi futhi ukhuphuke.", words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
+  "af": { title: "Jou range", sub: (n) => "Jy het " + n + " punte verdien. Verstaan woorde om meer te verdien en te klim.", words: "punte", you: "Jy is hier", locked: "Gesluit", close: "Maak toe" },
+  "bn": { title: "তোমার র‍্যাঙ্ক", sub: (n) => "তুমি " + n + " পয়েন্ট পেয়েছ। আরও পেতে আর উপরে উঠতে শব্দ বোঝো।", words: "পয়েন্ট", you: "তুমি এখানে", locked: "লক করা", close: "বন্ধ করো" },
+  "da": { title: "Dine niveauer", sub: (n) => "Du har tjent " + n + " point. Forstå ord for at tjene flere og rykke op.", words: "point", you: "Du er her", locked: "Låst", close: "Luk" },
+  "fil": { title: "Mga ranggo mo", sub: (n) => "Nakakuha ka na ng " + n + " puntos. Unawain ang mga salita para makakuha pa at umakyat.", words: "puntos", you: "Nandito ka", locked: "Naka-lock", close: "Isara" },
+  "hu": { title: "A rangjaid", sub: (n) => "" + n + " pontot gyűjtöttél. Értsd meg a szavakat, hogy többet gyűjts és feljebb juss.", words: "pont", you: "Itt vagy", locked: "Zárolva", close: "Bezárás" },
+  "ko": { title: "내 랭크", sub: (n) => "" + n + "점을 모았어요. 단어를 이해해서 더 모으고 위로 올라가요.", words: "점", you: "여기예요", locked: "잠김", close: "닫기" },
+  "sw": { title: "Vyeo vyako", sub: (n) => "Umepata pointi " + n + ". Elewa maneno ili upate zaidi na upande juu.", words: "pointi", you: "Uko hapa", locked: "Imefungwa", close: "Funga" },
+  "th": { title: "อันดับของคุณ", sub: (n) => "คุณได้ " + n + " คะแนนแล้ว เข้าใจคำศัพท์เพื่อรับเพิ่มและไต่อันดับขึ้นไป", words: "คะแนน", you: "คุณอยู่นี่", locked: "ล็อก", close: "ปิด" },
+  "vi": { title: "Cấp bậc của bạn", sub: (n) => "Bạn đã kiếm được " + n + " điểm. Hiểu từ để kiếm thêm và leo lên cao.", words: "điểm", you: "Bạn ở đây", locked: "Đã khóa", close: "Đóng" },
+  "zh-CN": { title: "你的段位", sub: (n) => "你已获得 " + n + " 分。理解词语，赚取更多分数，向上攀登。", words: "分", you: "你在这里", locked: "未解锁", close: "关闭" },
+  "zh-TW": { title: "你的段位", sub: (n) => "你已獲得 " + n + " 分。理解詞語，賺取更多分數，往上攀登。", words: "分", you: "你在這裡", locked: "未解鎖", close: "關閉" },
+} satisfies Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }>);
+
 function ranksCopy(lang: string) { return RANKS_COPY[lang] ?? RANKS_COPY.en; }
 
 export function KidsGameHeader({
