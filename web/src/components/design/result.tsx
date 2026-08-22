@@ -307,6 +307,9 @@ export function WordHeader({
   // ipa accepted for API stability — not rendered in this design.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ipa: _ipa,
+  showNiqqud = false,
+  niqqudOn = false,
+  onToggleNiqqud,
 }: {
   word: string;
   language: string;
@@ -321,6 +324,11 @@ export function WordHeader({
    *  isn't passed (Basic users + signed-out visitors). */
   isPinned?: boolean;
   onPin?: () => void;
+  /** Niqqud toggle, shown next to the word's speaker (Hebrew word + signed-in
+   *  only). Vowel points for young readers. Gadi 2026-08-22. */
+  showNiqqud?: boolean;
+  niqqudOn?: boolean;
+  onToggleNiqqud?: () => void;
 }) {
   const { lang } = useLang();
   const showLang = !langMatchesUi(language, lang);
@@ -365,6 +373,24 @@ export function WordHeader({
             ariaLabel={v2(lang, "listenToWord")}
             className="wb-word-listen-btn"
           />
+          {showNiqqud && onToggleNiqqud && (
+            <button
+              type="button"
+              onClick={onToggleNiqqud}
+              aria-pressed={niqqudOn}
+              title={lang === "he" ? "ניקוד למי שקורא עם עזרה" : "Vowel points for young readers"}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 13px",
+                borderRadius: 999, cursor: "pointer", fontFamily: "inherit", fontSize: 14, fontWeight: 700,
+                border: niqqudOn ? "1.5px solid #0EA5A5" : "1px solid var(--rule, #E4EAE8)",
+                background: niqqudOn ? "color-mix(in srgb, #0EA5A5 12%, transparent)" : "var(--surface, #fff)",
+                color: niqqudOn ? "#0B8A8A" : "var(--ink-soft, #3F4856)",
+              }}
+            >
+              <span aria-hidden="true" style={{ fontSize: 15 }}>{niqqudOn ? "✓" : "אָ"}</span>
+              {lang === "he" ? "ניקוד" : "Niqqud"}
+            </button>
+          )}
         </div>
         {cleanTranslation && (
           <div className="wb-word-translation">
@@ -1512,6 +1538,9 @@ export function ResultView({
   onReport,
   kidsImages,
   kidsImagesLoading,
+  showNiqqud = false,
+  niqqudOn = false,
+  onToggleNiqqud,
 }: {
   result: WordResult;
   plan: Plan;
@@ -1538,6 +1567,10 @@ export function ResultView({
   kidsImages?: Record<number, string>;
   /** Kids Mode: which meaning indexes are still generating a picture. */
   kidsImagesLoading?: Record<number, boolean>;
+  /** Niqqud toggle beside the word's speaker (Hebrew word + signed-in). */
+  showNiqqud?: boolean;
+  niqqudOn?: boolean;
+  onToggleNiqqud?: () => void;
 }) {
   const { dir, lang } = useLang();
   const href = useHref();
@@ -1565,6 +1598,9 @@ export function ResultView({
         onShare={onShare}
         isPinned={isPinned}
         onPin={onPin}
+        showNiqqud={showNiqqud}
+        niqqudOn={niqqudOn}
+        onToggleNiqqud={onToggleNiqqud}
       />
 
       {/* "Did you mean" — RULE 1b suggestion rendered as a clickable chip

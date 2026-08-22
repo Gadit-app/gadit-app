@@ -1884,26 +1884,6 @@ export function WordClient({
             </button>
           </div>
         )}
-        {result && isHebrewWord && user && !classroomMode && (
-          <div style={{ maxWidth: 760, margin: "8px auto 0", padding: "0 16px", display: "flex", justifyContent: dir === "rtl" ? "flex-start" : "flex-end" }}>
-            <button
-              type="button"
-              onClick={toggleNiqqud}
-              aria-pressed={niqqud}
-              title={lang === "he" ? "ניקוד למי שקורא עם עזרה" : "Vowel points for young readers"}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 14px",
-                borderRadius: 999, cursor: "pointer", fontFamily: "inherit", fontSize: 14, fontWeight: 700,
-                border: niqqud ? "1.5px solid #0EA5A5" : "1px solid var(--rule, #E4EAE8)",
-                background: niqqud ? "color-mix(in srgb, #0EA5A5 12%, transparent)" : "var(--surface, #fff)",
-                color: niqqud ? "#0B8A8A" : "var(--ink-soft, #3F4856)",
-              }}
-            >
-              <span aria-hidden="true" style={{ fontSize: 15 }}>{niqqud ? "✓" : "אָ"}</span>
-              {lang === "he" ? "ניקוד" : "Niqqud"}
-            </button>
-          </div>
-        )}
         {result && (classroomMode ? (
           <div
             className="wb-classroom-card"
@@ -1951,6 +1931,9 @@ export function WordClient({
         ) : (
           <ResultView
             result={displayResult ?? result}
+            showNiqqud={isHebrewWord && !!user}
+            niqqudOn={niqqud}
+            onToggleNiqqud={toggleNiqqud}
             plan={plan}
             classroomInSession={classroomInSession}
             imageUrl={imageUrl}
