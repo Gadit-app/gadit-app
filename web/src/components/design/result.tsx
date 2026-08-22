@@ -387,7 +387,7 @@ export function WordHeader({
                 color: niqqudOn ? "#0B8A8A" : "var(--ink-soft, #3F4856)",
               }}
             >
-              <span aria-hidden="true" style={{ fontSize: 15 }}>{niqqudOn ? "✓" : "אָ"}</span>
+              {niqqudOn && <span aria-hidden="true" style={{ fontSize: 15 }}>✓</span>}
               {lang === "he" ? "ניקוד" : "Niqqud"}
             </button>
           )}
