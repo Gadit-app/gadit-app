@@ -514,6 +514,60 @@ export function WordClient({
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
   const [wordGameOpen, setWordGameOpen] = useState(false);
+
+  // Niqqud (מנוקד) — optional Hebrew vowel points for young readers (grades
+  // 1-2). The toggle persists per device; when on for a Hebrew word we fetch a
+  // vowelized copy of the word/meanings/examples (Dicta, via /api/niqqud) and
+  // render THAT, while every logic path keeps the original un-vowelized text.
+  // Gadi 2026-08-22.
+  const [niqqud, setNiqqud] = useState(false);
+  const [niqResult, setNiqResult] = useState<WordResult | null>(null);
+  const isHebrewWord = !!result && /[֐-׿]/.test(result.word || "");
+  useEffect(() => {
+    try { setNiqqud(localStorage.getItem("gadit-niqqud") === "1"); } catch { /* ignore */ }
+  }, []);
+  function toggleNiqqud() {
+    setNiqqud((v) => {
+      const next = !v;
+      try { localStorage.setItem("gadit-niqqud", next ? "1" : "0"); } catch { /* ignore */ }
+      return next;
+    });
+  }
+  useEffect(() => {
+    if (!niqqud || !isHebrewWord || !result || !user) { setNiqResult(null); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const texts: string[] = [result.word];
+        for (const m of result.meanings ?? []) {
+          texts.push(m.meaning ?? "");
+          for (const ex of m.examples ?? []) texts.push(ex);
+        }
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/niqqud", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ texts }),
+        });
+        if (!res.ok) throw new Error("niqqud");
+        const data = (await res.json()) as { niqqud?: string[] };
+        const niq = data.niqqud ?? [];
+        if (cancelled || niq.length !== texts.length) return;
+        let i = 0;
+        const vWord = niq[i++];
+        const vMeanings = (result.meanings ?? []).map((m) => {
+          const meaning = niq[i++];
+          const examples = (m.examples ?? []).map(() => niq[i++]);
+          return { ...m, meaning, examples };
+        });
+        setNiqResult({ ...result, word: vWord, meanings: vMeanings });
+      } catch {
+        if (!cancelled) setNiqResult(null); // Dicta down → plain Hebrew, no break
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [niqqud, isHebrewWord, result, user]);
+  const displayResult = niqqud && niqResult ? niqResult : result;
   const [reportContext, setReportContext] = useState<ReportContext | null>(
     null
   );
@@ -1808,6 +1862,26 @@ export function WordClient({
             </button>
           </div>
         )}
+        {result && isHebrewWord && user && !classroomMode && (
+          <div style={{ maxWidth: 760, margin: "8px auto 0", padding: "0 16px", display: "flex", justifyContent: dir === "rtl" ? "flex-start" : "flex-end" }}>
+            <button
+              type="button"
+              onClick={toggleNiqqud}
+              aria-pressed={niqqud}
+              title={lang === "he" ? "ניקוד למי שקורא עם עזרה" : "Vowel points for young readers"}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 14px",
+                borderRadius: 999, cursor: "pointer", fontFamily: "inherit", fontSize: 14, fontWeight: 700,
+                border: niqqud ? "1.5px solid #0EA5A5" : "1px solid var(--rule, #E4EAE8)",
+                background: niqqud ? "color-mix(in srgb, #0EA5A5 12%, transparent)" : "var(--surface, #fff)",
+                color: niqqud ? "#0B8A8A" : "var(--ink-soft, #3F4856)",
+              }}
+            >
+              <span aria-hidden="true" style={{ fontSize: 15 }}>{niqqud ? "✓" : "אָ"}</span>
+              {lang === "he" ? "ניקוד" : "Niqqud"}
+            </button>
+          </div>
+        )}
         {result && (classroomMode ? (
           <div
             className="wb-classroom-card"
@@ -1854,7 +1928,7 @@ export function WordClient({
           </div>
         ) : (
           <ResultView
-            result={result}
+            result={displayResult ?? result}
             plan={plan}
             classroomInSession={classroomInSession}
             imageUrl={imageUrl}
