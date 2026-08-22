@@ -1273,6 +1273,68 @@ function buildGaditEasterEgg(uiLangCode: string): object {
 }
 
 /**
+ * Brand entry for "Yooniz" — the sibling app from the same team. Without this,
+ * the model treats "Yooniz" as the Arabic given name Younis (Gadi flagged
+ * 2026-08-22). HE + EN native; every other UI language falls back to EN.
+ * Same WordResult shape + trigger path as the Gadit easter egg.
+ */
+function buildYoonizEasterEgg(uiLangCode: string): object {
+  if (uiLangCode === "he") {
+    return {
+      word: "Yooniz",
+      language: "עברית",
+      meanings: [
+        {
+          meaning:
+            "(שם עצם, מותג) אפליקציית הורות שבה ההורה בונה לילד סדר יום ומשימות, הילד מבצע ומרוויח מטבע וירטואלי (Yoon), ובונה שיתוף פעולה, עצמאות וחינוך פיננסי. מהצוות שמאחורי Gadit.",
+          pos: "שם עצם",
+          examples: [
+            "בזכות Yooniz הילדים עושים את המשימות בלי לריב.",
+            "ב-Yooniz הילד מרוויח Yoon על כל משימה שהוא משלים.",
+            "Yooniz הפך את המטלות וזמן המסך לכלכלה קטנה של הילד.",
+          ],
+        },
+      ],
+      etymology: {
+        sourceLanguage: "אנגלית (שם מותג מומצא)",
+        originalWord: "Yooniz",
+        originalMeaning: "",
+        breakdown:
+          "שם מותג מומצא, לא השם הערבי יוניס. המטבע במערכת נקרא Yoon.",
+        historyNote:
+          "מותג של United Family / Lavi Learning, מהצוות שמאחורי Gadit. הרעיון: הילד מרוויח, זה לא דמי כיס.",
+      },
+    };
+  }
+  // EN canonical (and fallback for every other UI language).
+  return {
+    word: "Yooniz",
+    language: "English",
+    meanings: [
+      {
+        meaning:
+          "(noun, brand) A parenting app where a parent sets a child's daily routine and tasks, the child completes them and earns a virtual currency (Yoon), building cooperation, independence and financial literacy. From the team behind Gadit.",
+        pos: "noun",
+        examples: [
+          "With Yooniz, my kids do their tasks without a fight.",
+          "In Yooniz the child earns Yoon for every task they finish.",
+          "Yooniz turned chores and screen time into the child's own little economy.",
+        ],
+      },
+    ],
+    etymology: {
+      sourceLanguage: "English (coined brand name)",
+      originalWord: "Yooniz",
+      originalMeaning: "",
+      breakdown:
+        "A coined brand name, not the Arabic given name Younis. The in-app currency is called Yoon.",
+      historyNote:
+        "A brand by United Family / Lavi Learning, from the team behind Gadit. The idea: the child earns it, it is not an allowance.",
+    },
+  };
+}
+
+/**
  * Lazy backfill for the cross-language gloss. Entries cached BEFORE the
  * `translation` field existed have no gloss, so a German user looking up a
  * Hebrew word never saw the German equivalent. On a cache hit for a foreign
@@ -1363,6 +1425,21 @@ export async function POST(req: NextRequest) {
     // too) because the goal is to surprise them, not to gate the bit.
     if (word.trim().toLowerCase() === "gadit") {
       const result = buildGaditEasterEgg(uiLangCode);
+      const body = `data: ${JSON.stringify({ type: "done", result })}\n\n`;
+      return new Response(body, {
+        headers: {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          Connection: "keep-alive",
+        },
+      });
+    }
+
+    // Sibling brand: "Yooniz" is the parenting app from the same team, not the
+    // Arabic name Younis. Runs before the cache, so it overrides any stale
+    // (wrong) cached entry automatically.
+    if (word.trim().toLowerCase() === "yooniz") {
+      const result = buildYoonizEasterEgg(uiLangCode);
       const body = `data: ${JSON.stringify({ type: "done", result })}\n\n`;
       return new Response(body, {
         headers: {
