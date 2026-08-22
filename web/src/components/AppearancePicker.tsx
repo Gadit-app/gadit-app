@@ -25,13 +25,14 @@ import {
   themeName,
   type ThemeMeta,
 } from "@/lib/appearance";
-import { rankFor, POINTS } from "@/lib/gamification";
+import { RANKS, rankFor, POINTS } from "@/lib/gamification";
+import { rankLabel } from "@/lib/gamification-labels";
 
 // Store micro-copy (en + he, English fallback — matches the existing picker
 // label pattern; full-language coverage is a follow-up).
-const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; ask: string; need: string }> = {
-  en: { balance: "Gift points", buy: "Get for", owned: "Yours", ask: "Ask a parent to unlock skins", need: "{n} 🎁 to go" },
-  he: { balance: "נקודות מתנה", buy: "קבל תמורת", owned: "שלך", ask: "בקש מההורה כדי לפתוח סקינים", need: "עוד {n} 🎁" },
+const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; ask: string; need: string; orRank: string }> = {
+  en: { balance: "Gift points", buy: "Get for", owned: "Yours", ask: "Ask a parent to unlock skins", need: "{n} 🎁 to go", orRank: "or reach {rank}" },
+  he: { balance: "נקודות מתנה", buy: "קבל תמורת", owned: "שלך", ask: "בקש מההורה כדי לפתוח סקינים", need: "עוד {n} 🎁", orRank: "או בדרגת {rank}" },
 };
 function storeCopy(lang: string) { return STORE_COPY[lang] ?? STORE_COPY.en; }
 
@@ -213,14 +214,23 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
                     {st.isOwned && <span className="wb-skin-owned" aria-hidden="true">{copy.owned}</span>}
                   </span>
                   {st.forSale && (
-                    <span
-                      className="wb-skin-price"
-                      style={{ color: st.affordable ? "var(--accent, #0EA5A5)" : "var(--ink-muted, #94a3b8)", opacity: st.affordable ? 1 : 0.85 }}
-                    >
-                      {st.affordable
-                        ? `${copy.buy} 🎁 ${t.price}`
-                        : copy.need.replace("{n}", String((t.price ?? 0) - giftPoints))}
-                    </span>
+                    <>
+                      <span
+                        className="wb-skin-price"
+                        style={{ color: st.affordable ? "var(--accent, #0EA5A5)" : "var(--ink-muted, #94a3b8)", opacity: st.affordable ? 1 : 0.85 }}
+                      >
+                        {st.affordable
+                          ? `${copy.buy} 🎁 ${t.price}`
+                          : copy.need.replace("{n}", String((t.price ?? 0) - giftPoints))}
+                      </span>
+                      {/* Dual path: a rank skin can ALSO be earned by climbing —
+                          show both ways so the child sees they can wait and earn it. */}
+                      {t.unlockAtRank != null && !st.rankReached && (
+                        <span className="wb-skin-earnhint">
+                          {copy.orRank.replace("{rank}", rankLabel(RANKS[t.unlockAtRank].key, lang))}
+                        </span>
+                      )}
+                    </>
                   )}
                 </span>
                 <span className="wb-skin-dots" aria-hidden="true" style={st.forSale ? { filter: "grayscale(0.7)" } : undefined}>

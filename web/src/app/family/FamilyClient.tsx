@@ -866,7 +866,7 @@ function MemberCard({
   const initial = (m.name || roleLabel || "?").trim().charAt(0).toUpperCase();
   const linked = !!m.userId && !m.isOwner;
   return (
-    <div className="wb-family-member-card">
+    <div className="wb-family-member-card" style={{ ["--m-color" as string]: color }}>
       {(onEdit || onDelete) && (
         <div className="wb-family-member-icons">
           {onEdit && (
@@ -2554,6 +2554,20 @@ const FAM_DASH_CSS = `
 // on the right automatically (flex row reverses); on narrow screens the
 // nav collapses to a horizontal bar on top.
 const FAM_SHELL_CSS = `
+/* The parent dashboard is an ADULT surface — it must not wear the theme the
+   kids toggle (a dark skin turned the token-driven cards dark while this
+   hardcoded-light shell stayed cream = a broken half-dark look). Pin the whole
+   area to the light adult palette so member cards / notifications / rewards /
+   coaches all stay consistent regardless of the global data-theme. High
+   specificity (extra class) to beat html[data-theme="dark"] .wordbook. */
+html[data-theme] .wordbook.fam-shell-page {
+  --paper: #F2F6F4; --surface: #FFFFFF; --mist: #EAF1EE;
+  --ink: #0B0F19; --ink-soft: #3A3F4B; --ink-muted: #5C6270; --ink-faint: #8B91A0;
+  --rule: #E6E8EC; --rule-soft: #EDEFF2; --rule-faint: #F1F2F6;
+  --accent: #0EA5A5; --accent-2: #7C3AED; --accent-ink: #FFFFFF;
+  --wb-card: #FFFFFF; --wb-surface: #FFFFFF; --wb-bg: #F2F6F4;
+  --wb-ink: #0B0F19; --wb-ink-soft: #3A3F4B; --wb-border: #E6E8EC;
+}
 .fam-shell-page { min-height: 100dvh; background: #f6f4ee; }
 .fam-shell {
   display: flex;
