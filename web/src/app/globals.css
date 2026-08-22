@@ -25,6 +25,11 @@
 * { box-sizing: border-box; }
 html {
   scroll-behavior: smooth;
+  /* Paint the canvas itself, not just <body>. On mobile the top overscroll /
+     safe-area strip behind the status bar shows the html element, and if only
+     body carried the background it flashed light there in dark mode (Gadi
+     2026-08-22: "נחתך למעלה לפני התפריט"). --background is theme-aware. */
+  background: var(--background);
   /* Belt-and-suspenders against horizontal overflow on mobile.
      Gadi (2026-06-19): "המסך זז מצד לצד" — the page shifted a few
      millimetres side-to-side on his phone. Some element was eclipsing
@@ -6368,6 +6373,12 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-word-searchbar-stage.is-stuck {
   box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.18);
+}
+/* Dark mode: the fog gradient must fade to the dark page ground, not the
+   hardcoded light #F9FAFB, which otherwise showed a light band under the
+   topbar on the word page in dark mode (Gadi 2026-08-22). */
+html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
+  background: linear-gradient(to bottom, var(--paper) 0%, var(--paper) 70%, transparent 100%);
 }
 .wordbook .wb-word-searchbar {
   display: flex;
