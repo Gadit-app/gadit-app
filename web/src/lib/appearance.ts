@@ -17,6 +17,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import { SKIN_PRICES } from "@/lib/gamification";
 
 export type ThemeId =
   | "light"
@@ -29,7 +30,9 @@ export type ThemeId =
   | "sunset"
   | "aurora"
   | "cosmos"
-  | "lava";
+  | "lava"
+  | "rainbow"
+  | "royal";
 
 export interface ThemeMeta {
   id: ThemeId;
@@ -46,6 +49,12 @@ export interface ThemeMeta {
    *  gift points) drives this, so it can't be faked. The 5 original skins stay
    *  free forever; only these new ones are earned. */
   unlockAtRank?: number;
+  /** Kids gamification v2 (gift store): the price in GIFT points to buy this
+   *  skin. Gift points come from a parent (in-app reward) or Yooniz, live in a
+   *  separate capped wallet, and NEVER touch ranks. A skin with a price is
+   *  buyable in the store; one that ALSO has unlockAtRank is dual-path (earn it
+   *  by climbing, OR let a parent gift-buy it early). Absent = not for sale. */
+  price?: number;
 }
 
 export const THEMES: ThemeMeta[] = [
@@ -64,7 +73,9 @@ export const THEMES: ThemeMeta[] = [
     name: { he: "ג'ונגל", en: "Jungle", ar: "غابة", ru: "Джунгли" } },
   { id: "neon", kind: "kid", emoji: "⚡", dark: true, swatch: ["#0A0A14", "#A3E635", "#F472B6"],
     name: { he: "ניאון", en: "Neon", ar: "نيون", ru: "Неон" } },
-  // Unlockable skins — earned by climbing ranks (kids gamification v2).
+  // Unlockable skins — DUAL PATH: earned by climbing ranks (free, can't be
+  // faked) OR gift-bought early with parent/Yooniz gift points (a treat).
+  // Prices come from SKIN_PRICES (injected below) so client + server agree.
   { id: "sunset", kind: "kid", emoji: "🌅", dark: true, unlockAtRank: 1, swatch: ["#1f0a2e", "#FB923C", "#F472B6"],
     name: { he: "שקיעה", en: "Sunset", ar: "غروب", ru: "Закат" } },
   { id: "aurora", kind: "kid", emoji: "🌌", dark: true, unlockAtRank: 3, swatch: ["#04121f", "#2DD4BF", "#A855F7"],
@@ -73,7 +84,19 @@ export const THEMES: ThemeMeta[] = [
     name: { he: "קוסמוס", en: "Cosmos", ar: "كون", ru: "Вселенная" } },
   { id: "lava", kind: "kid", emoji: "🌋", dark: true, unlockAtRank: 7, swatch: ["#1a0a0a", "#F97316", "#EF4444"],
     name: { he: "לבה", en: "Lava", ar: "حمم", ru: "Лава" } },
+  // Store-EXCLUSIVE skins — no rank path; only a parent gift can unlock them,
+  // so the store always has something to buy even for a top-rank child.
+  { id: "rainbow", kind: "kid", emoji: "🌈", dark: false, swatch: ["#FFF4FB", "#F472B6", "#38BDF8"],
+    name: { he: "קשת", en: "Rainbow", ar: "قوس قزح", ru: "Радуга" } },
+  { id: "royal", kind: "kid", emoji: "👑", dark: true, swatch: ["#12102A", "#FBBF24", "#A855F7"],
+    name: { he: "מלכותי", en: "Royal", ar: "ملكي", ru: "Королевский" } },
 ];
+
+// Inject store prices from the single source of truth (server + client agree).
+for (const t of THEMES) if (SKIN_PRICES[t.id] != null) t.price = SKIN_PRICES[t.id];
+
+/** Skins that can be bought in the gift store (have a price), cheapest first. */
+export const STORE_THEMES = THEMES.filter((t) => t.price != null).sort((a, b) => a.price! - b.price!);
 
 export const KID_THEMES = THEMES.filter((t) => t.kind === "kid");
 export const ADULT_THEMES = THEMES.filter((t) => t.kind === "adult");

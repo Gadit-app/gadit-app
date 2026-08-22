@@ -29,6 +29,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { CoachesSection } from "@/components/design/CoachesSection";
+import { RewardsSection } from "@/components/design/RewardsSection";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
@@ -1599,6 +1600,7 @@ export function FamilyClient() {
                   <label className="fam-set-label">{lang === "he" ? "מצב ילדים · מסך משותף" : "Kids Mode · shared device"}</label>
                 </div>
               </Link>
+              <RewardsSection />
               <CoachesSection />
               <div className="fam-set-row">
                 <div className="fam-set-icon"><NavIcon name="settings" /></div>

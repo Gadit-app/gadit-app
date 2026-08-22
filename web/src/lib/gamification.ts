@@ -62,6 +62,17 @@ export const POINTS = { seen: 1, understood: 10 } as const;
  *  can't launder raw-count into the earned economy. */
 export const GIFT_WEEKLY_CAP = 50;
 
+/**
+ * Gift-store prices, in GIFT points (the separate parent/Yooniz wallet — never
+ * ranks). Single source of truth so both the client picker (@/lib/appearance
+ * reads these) and the server buy endpoint agree. Keyed by ThemeId. A skin
+ * listed here is buyable; the 5 original skins are free and never appear.
+ */
+export const SKIN_PRICES: Record<string, number> = {
+  sunset: 15, aurora: 20, cosmos: 25, lava: 30, // dual-path: also earnable by rank
+  rainbow: 35, royal: 40,                        // store-exclusive
+};
+
 export type RankInfo = {
   key: RankKey;
   index: number;        // 0..RANKS.length-1
