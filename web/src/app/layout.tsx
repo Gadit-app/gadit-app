@@ -445,7 +445,11 @@ export async function generateMetadata(): Promise<Metadata> {
     manifest: "/manifest.json",
     appleWebApp: {
       capable: true,
-      statusBarStyle: "black-translucent",
+      // "default" makes iOS RESERVE the status-bar strip above the web view,
+      // so the topbar sits below the clock. "black-translucent" overlaid the
+      // status bar ON the topbar, which hid the language/menu controls behind
+      // the clock and swallowed taps there (Gadi 2026-08-22, iPhone partner).
+      statusBarStyle: "default",
       title: "Gadit",
     },
     icons: {
