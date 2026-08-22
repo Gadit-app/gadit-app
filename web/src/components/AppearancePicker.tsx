@@ -29,9 +29,9 @@ import { rankFor, POINTS } from "@/lib/gamification";
 
 // Store micro-copy (en + he, English fallback — matches the existing picker
 // label pattern; full-language coverage is a follow-up).
-const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; ask: string }> = {
-  en: { balance: "Gift points", buy: "Get for", owned: "Yours", ask: "Ask a parent to unlock skins" },
-  he: { balance: "נקודות מתנה", buy: "קבל תמורת", owned: "שלך", ask: "בקש מההורה כדי לפתוח סקינים" },
+const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; ask: string; need: string }> = {
+  en: { balance: "Gift points", buy: "Get for", owned: "Yours", ask: "Ask a parent to unlock skins", need: "{n} 🎁 to go" },
+  he: { balance: "נקודות מתנה", buy: "קבל תמורת", owned: "שלך", ask: "בקש מההורה כדי לפתוח סקינים", need: "עוד {n} 🎁" },
 };
 function storeCopy(lang: string) { return STORE_COPY[lang] ?? STORE_COPY.en; }
 
@@ -217,7 +217,9 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
                       className="wb-skin-price"
                       style={{ color: st.affordable ? "var(--accent, #0EA5A5)" : "var(--ink-muted, #94a3b8)", opacity: st.affordable ? 1 : 0.85 }}
                     >
-                      {st.affordable ? `${copy.buy} 🎁 ${t.price}` : `🎁 ${t.price}`}
+                      {st.affordable
+                        ? `${copy.buy} 🎁 ${t.price}`
+                        : copy.need.replace("{n}", String((t.price ?? 0) - giftPoints))}
                     </span>
                   )}
                 </span>
