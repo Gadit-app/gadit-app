@@ -25,7 +25,11 @@ export type ThemeId =
   | "ocean"
   | "candy"
   | "jungle"
-  | "neon";
+  | "neon"
+  | "sunset"
+  | "aurora"
+  | "cosmos"
+  | "lava";
 
 export interface ThemeMeta {
   id: ThemeId;
@@ -37,13 +41,19 @@ export interface ThemeMeta {
   dark: boolean;
   /** Native name; he/en/ar/ru provided, English fallback for the rest. */
   name: Record<string, string>;
+  /** Kids gamification v2 (unlock economy): the rank INDEX a child must reach
+   *  for this skin to unlock. Absent = free from the start. Earned rank (not
+   *  gift points) drives this, so it can't be faked. The 5 original skins stay
+   *  free forever; only these new ones are earned. */
+  unlockAtRank?: number;
 }
 
 export const THEMES: ThemeMeta[] = [
   { id: "light", kind: "adult", emoji: "☀️", dark: false, swatch: ["#F4F5F8", "#FFFFFF", "#0EA5A5"],
     name: { he: "בהיר", en: "Light", ar: "فاتح", ru: "Светлая" } },
   { id: "dark", kind: "adult", emoji: "🌙", dark: true, swatch: ["#0F1622", "#1B2432", "#2DD4BF"],
-    name: { he: "כהה", en: "Dark", ar: "داكن", ru: "Тёмная" } },
+    name: { he: "כהה", en: "Dark", ar: "داكن", ru: "Тёمная" } },
+  // The 5 original skins — always free.
   { id: "space", kind: "kid", emoji: "🚀", dark: true, swatch: ["#0B1030", "#7C3AED", "#22D3EE"],
     name: { he: "חלל", en: "Space", ar: "الفضاء", ru: "Космос" } },
   { id: "ocean", kind: "kid", emoji: "🌊", dark: true, swatch: ["#062A3A", "#0EA5A5", "#38BDF8"],
@@ -54,6 +64,15 @@ export const THEMES: ThemeMeta[] = [
     name: { he: "ג'ונגל", en: "Jungle", ar: "غابة", ru: "Джунгли" } },
   { id: "neon", kind: "kid", emoji: "⚡", dark: true, swatch: ["#0A0A14", "#A3E635", "#F472B6"],
     name: { he: "ניאון", en: "Neon", ar: "نيون", ru: "Неон" } },
+  // Unlockable skins — earned by climbing ranks (kids gamification v2).
+  { id: "sunset", kind: "kid", emoji: "🌅", dark: true, unlockAtRank: 1, swatch: ["#1f0a2e", "#FB923C", "#F472B6"],
+    name: { he: "שקיעה", en: "Sunset", ar: "غروب", ru: "Закат" } },
+  { id: "aurora", kind: "kid", emoji: "🌌", dark: true, unlockAtRank: 3, swatch: ["#04121f", "#2DD4BF", "#A855F7"],
+    name: { he: "זוהר", en: "Aurora", ar: "شفق", ru: "Сияние" } },
+  { id: "cosmos", kind: "kid", emoji: "🪐", dark: true, unlockAtRank: 5, swatch: ["#0a0a2e", "#818CF8", "#E879F9"],
+    name: { he: "קוסמוס", en: "Cosmos", ar: "كون", ru: "Вселенная" } },
+  { id: "lava", kind: "kid", emoji: "🌋", dark: true, unlockAtRank: 7, swatch: ["#1a0a0a", "#F97316", "#EF4444"],
+    name: { he: "לבה", en: "Lava", ar: "حمم", ru: "Лава" } },
 ];
 
 export const KID_THEMES = THEMES.filter((t) => t.kind === "kid");

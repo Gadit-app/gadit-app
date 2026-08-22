@@ -437,6 +437,9 @@ export function QuizModalV2({
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
           body: JSON.stringify({ word, language, source: "quiz" }),
         });
+        // Points may have crossed a rank threshold that unlocks a new skin;
+        // drop the picker's cached rank so it refetches fresh next mount.
+        try { sessionStorage.removeItem("gadit-kid-rankindex"); } catch { /* ignore */ }
       } catch { /* comprehension credit is best-effort */ }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

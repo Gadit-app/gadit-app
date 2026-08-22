@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { computeGamification, toLocalDateStr, RANKS } from "@/lib/gamification";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
+import { KID_THEMES, themeName } from "@/lib/appearance";
 import { KidsCelebration } from "./KidsCelebration";
 
 // Streak days that earn a celebration. streakTier() returns the highest one
@@ -78,6 +79,9 @@ export function KidsGameHeader({
       const weeklyDone = g.weekly >= g.weeklyGoal;
       const next = { rankIndex: g.rank.index, streakTier: curTier, weeklyDone };
       window.localStorage.setItem(KEY, JSON.stringify(next));
+      // Publish the earned rank so the skin picker (which may be mounted on a
+      // page without this header) knows which unlockable skins are available.
+      try { window.sessionStorage.setItem("gadit-kid-rankindex", String(g.rank.index)); } catch { /* ignore */ }
       if (prev) {
         const crossed =
           g.rank.index > prev.rankIndex ||
@@ -209,6 +213,18 @@ function RanksModal({ onClose, points, currentIndex, lang, dir }: {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 15, fontWeight: 800 }}>{rankLabel(r.key, lang)}</div>
                   <div style={{ fontSize: 12.5, color: "var(--ink-muted)" }}>{r.min}+ {rc.words}</div>
+                  {(() => {
+                    const skins = KID_THEMES.filter((t) => t.unlockAtRank === i);
+                    return skins.length ? (
+                      <div style={{ fontSize: 12.5, marginTop: 3, display: "flex", gap: 8, flexWrap: "wrap", color: unlocked ? "var(--accent, #0EA5A5)" : "var(--ink-muted)" }}>
+                        {skins.map((t) => (
+                          <span key={t.id} style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 600 }}>
+                            <span aria-hidden="true">{unlocked ? t.emoji : "🔒"}</span>{themeName(t, lang)}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null;
+                  })()}
                 </div>
                 <span style={{ fontSize: 12, fontWeight: 700, color: isCurrent ? "#8B5CF6" : "var(--ink-faint)" }}>
                   {isCurrent ? rc.you : unlocked ? "✓" : rc.locked}

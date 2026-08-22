@@ -13971,6 +13971,12 @@ html[data-theme="ocean"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,42,58,
 html[data-theme="candy"] .wb-kid-area { --skin-bg: linear-gradient(rgba(253,236,247,.66), rgba(243,232,255,.76)), url(/skins/candy.webp); --surface:#FFFFFF; --ink:#4A1D3F; --ink-soft:#86527A; --ink-muted:#A87E9E; --rule:#F3D0E6; --accent:#EC4899; --accent-2:#A855F7; --accent-ink:#FFFFFF; }
 html[data-theme="jungle"] .wb-kid-area { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); --surface:#0C3D28; --ink:#E7FBEC; --ink-soft:#AEDCBB; --ink-muted:#86BC97; --rule:#14502F; --accent:#F59E0B; --accent-2:#22C55E; --accent-ink:#05230F; }
 html[data-theme="neon"] .wb-kid-area { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); --surface:#15151F; --ink:#F0F2F8; --ink-soft:#B9BECB; --ink-muted:#888E9E; --rule:#2A2A3C; --accent:#A3E635; --accent-2:#F472B6; --accent-ink:#0A0A14; }
+/* Unlockable skins (kids gamification v2) — pure-gradient, no image asset, so
+   they load instantly and still feel premium next to the 5 image skins. */
+html[data-theme="sunset"] .wb-kid-area { --skin-bg: radial-gradient(85% 60% at 82% 8%, rgba(255,176,89,.28), transparent 55%), linear-gradient(160deg,#1f0a2e 0%,#5e1745 46%,#b7472f 100%); --surface:#2A1330; --ink:#FFEEE4; --ink-soft:#E7C3B8; --ink-muted:#C39488; --rule:#4A2340; --accent:#FB923C; --accent-2:#F472B6; --accent-ink:#2A0F12; }
+html[data-theme="aurora"] .wb-kid-area { --skin-bg: radial-gradient(70% 50% at 18% 12%, rgba(45,212,191,.24), transparent 55%), radial-gradient(60% 50% at 86% 88%, rgba(168,85,247,.22), transparent 55%), linear-gradient(160deg,#04121f 0%,#0a2540 58%,#0e3b3b 100%); --surface:#0E2233; --ink:#EAF6FF; --ink-soft:#B4D2DE; --ink-muted:#86AAB8; --rule:#1C3A4E; --accent:#2DD4BF; --accent-2:#A855F7; --accent-ink:#041A20; }
+html[data-theme="cosmos"] .wb-kid-area { --skin-bg: radial-gradient(60% 42% at 76% 18%, rgba(129,140,248,.24), transparent 55%), radial-gradient(52% 42% at 18% 82%, rgba(232,121,249,.18), transparent 55%), linear-gradient(160deg,#0a0a2e 0%,#1a1145 56%,#2a1a5e 100%); --surface:#17123F; --ink:#EEEAFF; --ink-soft:#C4BCEA; --ink-muted:#948CC0; --rule:#2C2560; --accent:#818CF8; --accent-2:#E879F9; --accent-ink:#0A0820; }
+html[data-theme="lava"] .wb-kid-area { --skin-bg: radial-gradient(72% 52% at 50% 102%, rgba(239,68,68,.32), transparent 60%), radial-gradient(40% 30% at 85% 20%, rgba(249,115,22,.16), transparent 55%), linear-gradient(180deg,#1a0a0a 0%,#2b0f0f 55%,#4a1410 100%); --surface:#2A1212; --ink:#FFEDE8; --ink-soft:#E4B9AE; --ink-muted:#C08D82; --rule:#4A1F1A; --accent:#F97316; --accent-2:#EF4444; --accent-ink:#2A0A08; }
 
 /* Mobile skin visibility (Gadi 2026-08): on phones the skin image was barely
    felt — `background-attachment: fixed` crops a wide image to a narrow center
@@ -14077,6 +14083,10 @@ html[data-theme="ocean"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(6,42,58,.6
 html[data-theme="candy"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(253,236,247,.66), rgba(243,232,255,.76)), url(/skins/candy.webp); }
 html[data-theme="jungle"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(6,48,31,.66), rgba(5,40,24,.8)), url(/skins/jungle.webp); }
 html[data-theme="neon"] .wb-kid-bg { --skin-bg: linear-gradient(rgba(10,10,20,.72), rgba(10,10,20,.85)), url(/skins/neon.webp); }
+html[data-theme="sunset"] .wb-kid-bg { --skin-bg: radial-gradient(85% 60% at 82% 8%, rgba(255,176,89,.28), transparent 55%), linear-gradient(160deg,#1f0a2e 0%,#5e1745 46%,#b7472f 100%); }
+html[data-theme="aurora"] .wb-kid-bg { --skin-bg: radial-gradient(70% 50% at 18% 12%, rgba(45,212,191,.24), transparent 55%), radial-gradient(60% 50% at 86% 88%, rgba(168,85,247,.22), transparent 55%), linear-gradient(160deg,#04121f 0%,#0a2540 58%,#0e3b3b 100%); }
+html[data-theme="cosmos"] .wb-kid-bg { --skin-bg: radial-gradient(60% 42% at 76% 18%, rgba(129,140,248,.24), transparent 55%), radial-gradient(52% 42% at 18% 82%, rgba(232,121,249,.18), transparent 55%), linear-gradient(160deg,#0a0a2e 0%,#1a1145 56%,#2a1a5e 100%); }
+html[data-theme="lava"] .wb-kid-bg { --skin-bg: radial-gradient(72% 52% at 50% 102%, rgba(239,68,68,.32), transparent 60%), radial-gradient(40% 30% at 85% 20%, rgba(249,115,22,.16), transparent 55%), linear-gradient(180deg,#1a0a0a 0%,#2b0f0f 55%,#4a1410 100%); }
 
 /* Kids gamification tiles (premium redesign, Gadi 2026-08-18). Three tiles
    in ONE row on the child's home/notebook; theme-aware surface cards with a
