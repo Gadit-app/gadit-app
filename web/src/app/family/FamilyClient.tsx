@@ -782,11 +782,46 @@ const PROGRESS_COPY: Record<string, {
   },
 };
 
+// Reward-prompt copy (en + he, English fallback — a small micro-surface; full
+// 33-language coverage is a follow-up i18n pass, tracked with the store labels).
+const REWARD_COPY: Record<string, { streak: string; week: string; prompt: string; sent: string; capped: string }> = {
+  en: { streak: "{n}-day streak! 🔥", week: "Strong week! 🎉", prompt: "Reward the effort", sent: "🎁 Sent!", capped: "Weekly limit reached" },
+  he: { streak: "{n} ימים ברצף! 🔥", week: "שבוע חזק! 🎉", prompt: "פרגן על המאמץ", sent: "🎁 נשלח!", capped: "הגעת למכסה השבועית" },
+};
+function rewardCopy(lang: string) { return REWARD_COPY[lang] ?? REWARD_COPY.en; }
+
 function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string }) {
   const href = useHref();
+  const { user } = useAuth();
+  const rc = rewardCopy(lang);
+  const [rewardBusy, setRewardBusy] = useState(false);
+  const [rewardSent, setRewardSent] = useState("");
   const color = memberColorFor({ colorIndex: c.colorIndex });
   const initial = (c.name || "?").trim().charAt(0).toUpperCase() || "?";
   const roleName = (ROLE_LABEL[lang] ?? ROLE_LABEL.en)[c.role as "boy" | "girl"] ?? "";
+
+  // The gift is a reward for something the child actually DID. Surface the
+  // achievement so the parent gives with a reason and a moment (not at random):
+  // a live streak or a strong week; otherwise a gentle "reward the effort".
+  const achievement =
+    c.streak >= 3 ? rc.streak.replace("{n}", String(c.streak)) : c.thisWeek >= 5 ? rc.week : "";
+
+  async function sendReward(amount: number) {
+    if (!user || rewardBusy) return;
+    setRewardBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/family/gift-points", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ memberId: c.memberId, amount }),
+      });
+      const d = (await res.json()) as { granted?: number };
+      setRewardSent((d.granted ?? 0) > 0 ? rc.sent : rc.capped);
+    } catch { /* best-effort */ } finally {
+      setRewardBusy(false);
+    }
+  }
   return (
     <div className="fam-dash-card">
       <div className="fam-dash-head">
@@ -829,6 +864,28 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
               </div>
             </div>
           )}
+          {/* Reward the child for what they DID — an achievement gives the
+              parent a reason and a moment; one tap sends gift points. */}
+          <div className={`fam-dash-reward${achievement ? " has-achievement" : ""}`}>
+            <span className="fam-dash-reward-head">{achievement || rc.prompt}</span>
+            {rewardSent ? (
+              <span className="fam-dash-reward-sent">{rewardSent}</span>
+            ) : (
+              <span className="fam-dash-reward-chips">
+                {[10, 20, 30].map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    className="fam-dash-reward-chip"
+                    onClick={() => sendReward(a)}
+                    disabled={rewardBusy}
+                  >
+                    🎁 {a}
+                  </button>
+                ))}
+              </span>
+            )}
+          </div>
         </>
       )}
     </div>
@@ -2548,6 +2605,30 @@ const FAM_DASH_CSS = `
   border-radius: 999px; padding: 5px 12px;
   font-size: 13px; font-weight: 600;
 }
+/* Reward prompt: tie the parent's gift to something the child DID. Warms up
+   when there's a live achievement (streak / strong week). */
+.fam-dash-reward {
+  margin-top: 16px; padding-top: 13px; border-top: 1px dashed rgba(31,41,55,0.12);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+.fam-dash-reward-head { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.fam-dash-reward.has-achievement {
+  border-top-color: rgba(245,158,11,0.35);
+  background: linear-gradient(0deg, rgba(245,158,11,0.05), transparent);
+  border-radius: 0 0 14px 14px; margin-inline: -18px; padding-inline: 18px; margin-bottom: -16px; padding-bottom: 14px;
+}
+.fam-dash-reward.has-achievement .fam-dash-reward-head { color: #b45309; font-weight: 800; }
+.fam-dash-reward-chips { display: inline-flex; gap: 6px; }
+.fam-dash-reward-chip {
+  background: rgba(14,165,165,0.1); color: #0f766e;
+  border: 1px solid rgba(14,165,165,0.28); border-radius: 999px;
+  padding: 5px 11px; font-size: 13px; font-weight: 800; cursor: pointer;
+  font-family: inherit; font-variant-numeric: tabular-nums; transition: background 140ms ease, transform 140ms ease;
+}
+.fam-dash-reward-chip:hover { background: rgba(14,165,165,0.18); }
+.fam-dash-reward-chip:active { transform: scale(0.95); }
+.fam-dash-reward-chip:disabled { opacity: 0.5; cursor: default; }
+.fam-dash-reward-sent { font-size: 13px; font-weight: 800; color: #0f766e; }
 `;
 
 // Dashboard shell: side nav + greeting + tabbed panels. RTL puts the nav
