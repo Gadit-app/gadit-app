@@ -37,6 +37,22 @@ export const RANK_LABELS: Record<string, Partial<Record<RankKey, string>>> = {
   zu: { scout: "Umhloli oqalayo", explorer: "Umhloli wamagama", tracker: "Umlandeli wamagama", ranger: "Umhloli onolwazi", guide: "Umholi wamagama", master: "Ingcweti yamagama", champion: "Iqhawe lamagama", sage: "Isihlakaniphi samagama", virtuoso: "Ingcithabuchopho yamagama", legend: "Inganekwane yamagama", wizard: "Usomlingo wamagama", grandmaster: "Inkosi yamagama" },
 };
 
+// 11 store-locale languages (added 2026-08-22): full 12-tier rank titles.
+Object.assign(RANK_LABELS, {
+  "af": {"scout":"Woordverkenner","explorer":"Woordontdekker","tracker":"Woordspoorsnyer","ranger":"Woordwagter","guide":"Woordgids","master":"Woordmeester","champion":"Woordkampioen","sage":"Woordwyse","virtuoso":"Woordvirtuoos","legend":"Woordlegende","wizard":"Woordtowenaar","grandmaster":"Woordgrootmeester"},
+  "bn": {"scout":"শব্দ স্কাউট","explorer":"শব্দ অভিযাত্রী","tracker":"শব্দ সন্ধানী","ranger":"শব্দ রক্ষী","guide":"শব্দ পথপ্রদর্শক","master":"শব্দ মাস্টার","champion":"শব্দ চ্যাম্পিয়ন","sage":"শব্দ ঋষি","virtuoso":"শব্দ নিপুণ","legend":"শব্দ কিংবদন্তি","wizard":"শব্দ জাদুকর","grandmaster":"শব্দ মহাগুরু"},
+  "da": {"scout":"Ordspejder","explorer":"Ordopdager","tracker":"Ordsporer","ranger":"Ordvogter","guide":"Ordguide","master":"Ordmester","champion":"Ordchampion","sage":"Ordvismand","virtuoso":"Ordvirtuos","legend":"Ordlegende","wizard":"Ordtroldmand","grandmaster":"Ordstormester"},
+  "fil": {"scout":"Iskaut ng Salita","explorer":"Eksplorador ng Salita","tracker":"Tagasubaybay ng Salita","ranger":"Bantay ng Salita","guide":"Gabay ng Salita","master":"Master ng Salita","champion":"Kampeon ng Salita","sage":"Pantas ng Salita","virtuoso":"Birtuoso ng Salita","legend":"Alamat ng Salita","wizard":"Salamangkero ng Salita","grandmaster":"Grandmaster ng Salita"},
+  "hu": {"scout":"Szófelderítő","explorer":"Szófelfedező","tracker":"Szónyomkövető","ranger":"Szóőr","guide":"Szóvezető","master":"Szómester","champion":"Szóbajnok","sage":"Szóbölcs","virtuoso":"Szóvirtuóz","legend":"Szólegenda","wizard":"Szóvarázsló","grandmaster":"Szónagymester"},
+  "ko": {"scout":"단어 스카우트","explorer":"단어 탐험가","tracker":"단어 추적자","ranger":"단어 레인저","guide":"단어 안내자","master":"단어 마스터","champion":"단어 챔피언","sage":"단어 현자","virtuoso":"단어 명인","legend":"단어 전설","wizard":"단어 마법사","grandmaster":"단어 그랜드마스터"},
+  "sw": {"scout":"Skauti wa Neno","explorer":"Mgunduzi wa Neno","tracker":"Mfuatiliaji wa Neno","ranger":"Mlinzi wa Neno","guide":"Kiongozi wa Neno","master":"Bwana wa Neno","champion":"Bingwa wa Neno","sage":"Mjuzi wa Neno","virtuoso":"Gwiji wa Neno","legend":"Hekaya wa Neno","wizard":"Mchawi wa Neno","grandmaster":"Bingwa Mkuu wa Neno"},
+  "th": {"scout":"ลูกเสือคำศัพท์","explorer":"นักสำรวจคำศัพท์","tracker":"นักติดตามคำศัพท์","ranger":"ผู้พิทักษ์คำศัพท์","guide":"ผู้นำทางคำศัพท์","master":"มาสเตอร์คำศัพท์","champion":"แชมป์คำศัพท์","sage":"ปราชญ์คำศัพท์","virtuoso":"ผู้เชี่ยวชาญคำศัพท์","legend":"ตำนานคำศัพท์","wizard":"พ่อมดคำศัพท์","grandmaster":"ปรมาจารย์คำศัพท์"},
+  "vi": {"scout":"Trinh Sát Từ","explorer":"Nhà Thám Hiểm Từ","tracker":"Người Truy Vết Từ","ranger":"Vệ Binh Từ","guide":"Người Dẫn Đường Từ","master":"Bậc Thầy Từ","champion":"Nhà Vô Địch Từ","sage":"Hiền Nhân Từ","virtuoso":"Cao Thủ Từ","legend":"Huyền Thoại Từ","wizard":"Phù Thủy Từ","grandmaster":"Đại Sư Từ"},
+  "zh-CN": {"scout":"单词侦察兵","explorer":"单词探险家","tracker":"单词追踪者","ranger":"单词游侠","guide":"单词向导","master":"单词大师","champion":"单词冠军","sage":"单词贤者","virtuoso":"单词名家","legend":"单词传奇","wizard":"单词魔法师","grandmaster":"单词宗师"},
+  "zh-TW": {"scout":"單字偵察兵","explorer":"單字探險家","tracker":"單字追蹤者","ranger":"單字遊俠","guide":"單字嚮導","master":"單字大師","champion":"單字冠軍","sage":"單字賢者","virtuoso":"單字名家","legend":"單字傳奇","wizard":"單字魔法師","grandmaster":"單字宗師"}
+} satisfies Record<string, Partial<Record<RankKey, string>>>);
+
+
 export function rankLabel(key: RankKey, lang: string): string {
   // Per-key fallback to English: a language that predates the long-tail tiers
   // still resolves them (RANK_LABELS.en is complete for every RankKey).
@@ -322,6 +338,143 @@ export const GAME_COPY: Record<string, GameCopy> = {
     collected: (n) => (n === 1 ? "igama eli-1 liqoqiwe" : `amagama angu-${n} aqoqiwe`),
   },
 };
+
+// 11 store-locale languages (added 2026-08-22): native streak/weekly/rank copy.
+Object.assign(GAME_COPY, {
+  "af": {
+    streakTitle: "Dagreeks",
+    streakDays: (n) => (n === 1 ? "1 dag op 'n ry" : "" + n + " dae op 'n ry"),
+    streakStart: "Soek 'n woord op om 'n reeks te begin",
+    weeklyTitle: "Weeklikse doel",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " nuwe woorde",
+    weeklyDone: "Doel voltooi!",
+    rankTitle: "Jou rang",
+    toNext: (n) => (n === 1 ? "1 punt meer om op te gradeer" : "" + n + " punte meer om op te gradeer"),
+    topRank: "Boonste rang bereik!",
+    collected: (n) => (n === 1 ? "1 woord versamel" : "" + n + " woorde versamel"),
+  },
+  "bn": {
+    streakTitle: "ধারাবাহিক দিন",
+    streakDays: (n) => (n === 1 ? "টানা 1 দিন" : "টানা " + n + " দিন"),
+    streakStart: "ধারা শুরু করতে একটি শব্দ খোঁজো",
+    weeklyTitle: "সাপ্তাহিক লক্ষ্য",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " নতুন শব্দ",
+    weeklyDone: "লক্ষ্য পূর্ণ!",
+    rankTitle: "তোমার র‍্যাঙ্ক",
+    toNext: (n) => (n === 1 ? "লেভেল বাড়াতে আর 1 পয়েন্ট" : "লেভেল বাড়াতে আর " + n + " পয়েন্ট"),
+    topRank: "সর্বোচ্চ র‍্যাঙ্কে পৌঁছেছ!",
+    collected: (n) => (n === 1 ? "1টি শব্দ সংগ্রহ" : "" + n + "টি শব্দ সংগ্রহ"),
+  },
+  "da": {
+    streakTitle: "Dagsrække",
+    streakDays: (n) => (n === 1 ? "1 dag i træk" : "" + n + " dage i træk"),
+    streakStart: "Slå et ord op for at starte en række",
+    weeklyTitle: "Ugentligt mål",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " nye ord",
+    weeklyDone: "Mål nået!",
+    rankTitle: "Din rang",
+    toNext: (n) => (n === 1 ? "1 point mere for at stige et niveau" : "" + n + " point mere for at stige et niveau"),
+    topRank: "Højeste rang nået!",
+    collected: (n) => (n === 1 ? "1 ord samlet" : "" + n + " ord samlet"),
+  },
+  "fil": {
+    streakTitle: "Sunod-sunod na araw",
+    streakDays: (n) => (n === 1 ? "1 araw nang sunod-sunod" : "" + n + " araw nang sunod-sunod"),
+    streakStart: "Maghanap ng salita para magsimula ng streak",
+    weeklyTitle: "Lingguhang layunin",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " bagong salita",
+    weeklyDone: "Tapos na ang layunin!",
+    rankTitle: "Ang iyong ranggo",
+    toNext: (n) => (n === 1 ? "1 puntos na lang para umangat" : "" + n + " puntos na lang para umangat"),
+    topRank: "Nasa pinakamataas na ranggo!",
+    collected: (n) => (n === 1 ? "1 salitang nakolekta" : "" + n + " salitang nakolekta"),
+  },
+  "hu": {
+    streakTitle: "Napi sorozat",
+    streakDays: (n) => (n === 1 ? "1 nap egymás után" : "" + n + " nap egymás után"),
+    streakStart: "Keress egy szót a sorozat indításához",
+    weeklyTitle: "Heti cél",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " új szó",
+    weeklyDone: "Cél teljesítve!",
+    rankTitle: "A rangod",
+    toNext: (n) => (n === 1 ? "Még 1 pont a szintlépéshez" : "Még " + n + " pont a szintlépéshez"),
+    topRank: "Elérted a legmagasabb rangot!",
+    collected: (n) => (n === 1 ? "1 szó összegyűjtve" : "" + n + " szó összegyűjtve"),
+  },
+  "ko": {
+    streakTitle: "연속 일수",
+    streakDays: (n) => (n === 1 ? "" + n + "일 연속" : "" + n + "일 연속"),
+    streakStart: "단어를 검색해 연속 기록을 시작하세요",
+    weeklyTitle: "주간 목표",
+    weeklyProgress: (n, goal) => "새 단어 " + n + " / " + goal + "개",
+    weeklyDone: "목표 달성!",
+    rankTitle: "내 등급",
+    toNext: (n) => (n === 1 ? "레벨업까지 " + n + "점" : "레벨업까지 " + n + "점"),
+    topRank: "최고 등급 달성!",
+    collected: (n) => (n === 1 ? "단어 " + n + "개 수집" : "단어 " + n + "개 수집"),
+  },
+  "sw": {
+    streakTitle: "Mfululizo wa siku",
+    streakDays: (n) => (n === 1 ? "Siku 1 mfululizo" : "Siku " + n + " mfululizo"),
+    streakStart: "Tafuta neno ili kuanza mfululizo",
+    weeklyTitle: "Lengo la wiki",
+    weeklyProgress: (n, goal) => "Maneno mapya " + n + " / " + goal + "",
+    weeklyDone: "Lengo limekamilika!",
+    rankTitle: "Cheo chako",
+    toNext: (n) => (n === 1 ? "Pointi 1 zaidi ili kupanda ngazi" : "Pointi " + n + " zaidi ili kupanda ngazi"),
+    topRank: "Umefika cheo cha juu!",
+    collected: (n) => (n === 1 ? "Neno 1 limekusanywa" : "Maneno " + n + " yamekusanywa"),
+  },
+  "th": {
+    streakTitle: "จำนวนวันต่อเนื่อง",
+    streakDays: (n) => (n === 1 ? "ต่อเนื่อง " + n + " วัน" : "ต่อเนื่อง " + n + " วัน"),
+    streakStart: "ค้นหาคำเพื่อเริ่มสถิติต่อเนื่อง",
+    weeklyTitle: "เป้าหมายรายสัปดาห์",
+    weeklyProgress: (n, goal) => "คำใหม่ " + n + " / " + goal + " คำ",
+    weeklyDone: "ทำเป้าหมายสำเร็จ!",
+    rankTitle: "อันดับของคุณ",
+    toNext: (n) => (n === 1 ? "อีก " + n + " แต้มเพื่อเลื่อนระดับ" : "อีก " + n + " แต้มเพื่อเลื่อนระดับ"),
+    topRank: "ถึงอันดับสูงสุดแล้ว!",
+    collected: (n) => (n === 1 ? "เก็บได้ " + n + " คำ" : "เก็บได้ " + n + " คำ"),
+  },
+  "vi": {
+    streakTitle: "Chuỗi ngày",
+    streakDays: (n) => (n === 1 ? "" + n + " ngày liên tiếp" : "" + n + " ngày liên tiếp"),
+    streakStart: "Tra một từ để bắt đầu chuỗi",
+    weeklyTitle: "Mục tiêu tuần",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " từ mới",
+    weeklyDone: "Hoàn thành mục tiêu!",
+    rankTitle: "Cấp bậc của bạn",
+    toNext: (n) => (n === 1 ? "Thêm " + n + " điểm để lên cấp" : "Thêm " + n + " điểm để lên cấp"),
+    topRank: "Đã đạt cấp cao nhất!",
+    collected: (n) => (n === 1 ? "Đã thu thập " + n + " từ" : "Đã thu thập " + n + " từ"),
+  },
+  "zh-CN": {
+    streakTitle: "连续天数",
+    streakDays: (n) => (n === 1 ? "连续 " + n + " 天" : "连续 " + n + " 天"),
+    streakStart: "查一个单词开始连续记录",
+    weeklyTitle: "每周目标",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " 个新单词",
+    weeklyDone: "目标完成！",
+    rankTitle: "你的等级",
+    toNext: (n) => (n === 1 ? "再得 " + n + " 分升级" : "再得 " + n + " 分升级"),
+    topRank: "已达最高等级！",
+    collected: (n) => (n === 1 ? "已收集 " + n + " 个单词" : "已收集 " + n + " 个单词"),
+  },
+  "zh-TW": {
+    streakTitle: "連續天數",
+    streakDays: (n) => (n === 1 ? "連續 " + n + " 天" : "連續 " + n + " 天"),
+    streakStart: "查一個單字開始連續紀錄",
+    weeklyTitle: "每週目標",
+    weeklyProgress: (n, goal) => "" + n + " / " + goal + " 個新單字",
+    weeklyDone: "目標完成！",
+    rankTitle: "你的等級",
+    toNext: (n) => (n === 1 ? "再得 " + n + " 分升級" : "再得 " + n + " 分升級"),
+    topRank: "已達最高等級！",
+    collected: (n) => (n === 1 ? "已收集 " + n + " 個單字" : "已收集 " + n + " 個單字"),
+  },
+} satisfies Record<string, GameCopy>);
+
 
 export function gameCopy(lang: string): GameCopy {
   return GAME_COPY[lang] ?? GAME_COPY.en;
