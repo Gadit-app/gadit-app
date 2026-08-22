@@ -5,6 +5,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
 import { CoachSessionBanner } from "@/components/CoachSessionBanner";
+import { KidsModeBar } from "@/components/KidsModeBar";
 import type { Lang } from "@/lib/i18n";
 import { LANGUAGES } from "@/lib/i18n";
 import LoginModal from "@/components/LoginModal";
@@ -547,6 +548,7 @@ export default async function RootLayout({
               <KidRouteGuard />
               <TwaInit />
               <CoachSessionBanner />
+              <KidsModeBar />
               {children}
               <VoiceAssistant />
               <SayModal />
