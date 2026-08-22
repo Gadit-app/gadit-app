@@ -25,17 +25,13 @@ import {
   themeName,
   type ThemeMeta,
 } from "@/lib/appearance";
-import { RANKS, rankFor, POINTS } from "@/lib/gamification";
-import { rankLabel } from "@/lib/gamification-labels";
-
-const UNLOCK_AT: Record<string, string> = { en: "unlock at", he: "נפתח בדרגת" };
-function unlockLabel(lang: string) { return UNLOCK_AT[lang] ?? UNLOCK_AT.en; }
+import { rankFor, POINTS } from "@/lib/gamification";
 
 // Store micro-copy (en + he, English fallback — matches the existing picker
-// label pattern; full-language coverage is a follow-up like UNLOCK_AT).
-const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; need: string }> = {
-  en: { balance: "Gift points", buy: "Get", owned: "Yours", need: "more to get" },
-  he: { balance: "נקודות מתנה", buy: "קבל", owned: "שלך", need: "עוד כדי לקבל" },
+// label pattern; full-language coverage is a follow-up).
+const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; ask: string }> = {
+  en: { balance: "Gift points", buy: "Get for", owned: "Yours", ask: "Ask a parent to unlock skins" },
+  he: { balance: "נקודות מתנה", buy: "קבל תמורת", owned: "שלך", ask: "בקש מההורה כדי לפתוח סקינים" },
 };
 function storeCopy(lang: string) { return STORE_COPY[lang] ?? STORE_COPY.en; }
 
@@ -178,9 +174,12 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
       {open && (
         <div className="wb-skin-dd-menu" role="listbox">
           {scope === "kid" && (
-            <div className="wb-skin-dd-wallet" aria-hidden="true">
-              <span>🎁 {copy.balance}</span>
-              <strong>{giftPoints}</strong>
+            <div className="wb-skin-dd-wallet-wrap">
+              <div className="wb-skin-dd-wallet" aria-hidden="true">
+                <span>🎁 {copy.balance}</span>
+                <strong>{giftPoints}</strong>
+              </div>
+              {giftPoints === 0 && <div className="wb-skin-dd-ask">{copy.ask}</div>}
             </div>
           )}
           {list.map((t) => {
@@ -195,7 +194,6 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
               if (st.forSale && st.affordable) { void buySkin(t); }
             };
             const inert = st.forSale && !st.affordable;
-            const shortRankHint = t.unlockAtRank != null && !st.rankReached && !st.isOwned;
             return (
               <button
                 key={t.id}
@@ -215,11 +213,11 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
                     {st.isOwned && <span className="wb-skin-owned" aria-hidden="true">{copy.owned}</span>}
                   </span>
                   {st.forSale && (
-                    <span style={{ fontSize: 11, opacity: 0.85, fontWeight: 500 }}>
-                      {st.affordable
-                        ? `${copy.buy} · 🎁 ${t.price}`
-                        : `🎁 ${t.price} · ${(t.price ?? 0) - giftPoints} ${copy.need}`}
-                      {shortRankHint && ` · ${unlockLabel(lang)} ${rankLabel(RANKS[t.unlockAtRank!].key, lang)}`}
+                    <span
+                      className="wb-skin-price"
+                      style={{ color: st.affordable ? "var(--accent, #0EA5A5)" : "var(--ink-muted, #94a3b8)", opacity: st.affordable ? 1 : 0.85 }}
+                    >
+                      {st.affordable ? `${copy.buy} 🎁 ${t.price}` : `🎁 ${t.price}`}
                     </span>
                   )}
                 </span>
