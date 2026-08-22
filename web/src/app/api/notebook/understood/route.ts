@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { POINTS } from "@/lib/gamification";
+import { creditYoonizLearning } from "@/lib/yooniz-learning";
 
 /**
  * Mark a notebook word as UNDERSTOOD and award comprehension points
@@ -85,6 +86,11 @@ export async function POST(req: NextRequest) {
       language,
       ts: result.now,
     });
+
+    // Direction B of the Yooniz bridge: credit "learning Yoon" in the kid's
+    // linked Yooniz family. Best-effort + bounded; a no-op for non-kids or
+    // families not linked/opted-in, never blocks or fails this response.
+    await creditYoonizLearning(uid);
 
     return NextResponse.json({ understood: true, awarded: POINTS.understood, points });
   } catch (err) {
