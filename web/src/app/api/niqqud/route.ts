@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
   let texts: string[] = [];
   try {
     const b = (await req.json()) as { texts?: unknown };
-    if (Array.isArray(b.texts)) texts = b.texts.filter((x): x is string => typeof x === "string").slice(0, 12);
+    if (Array.isArray(b.texts)) texts = b.texts.filter((x): x is string => typeof x === "string").slice(0, 40);
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }

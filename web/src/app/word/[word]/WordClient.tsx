@@ -538,35 +538,57 @@ export function WordClient({
     let cancelled = false;
     (async () => {
       try {
-        const texts: string[] = [result.word];
+        const isHeb = (s?: string) => !!s && /[֐-׿]/.test(s);
+        // Collect only the text that's actually SHOWN in the current mode:
+        // in Kids Mode the kids explanation replaces the standard meaning.
+        const texts: string[] = [];
+        const add = (s?: string) => { if (isHeb(s)) texts.push(s as string); };
+        add(result.word);
         for (const m of result.meanings ?? []) {
-          texts.push(m.meaning ?? "");
-          for (const ex of m.examples ?? []) texts.push(ex);
+          if (kidsMode && m.kidsExplanation) {
+            add(m.kidsExplanation.intro);
+            add(m.kidsExplanation.explanation);
+            for (const ex of m.kidsExplanation.examples ?? []) add(ex);
+          } else {
+            add(m.meaning);
+            for (const ex of m.examples ?? []) add(ex);
+          }
         }
+        const unique = Array.from(new Set(texts));
+        if (unique.length === 0) { setNiqResult(null); return; }
         const idToken = await user.getIdToken();
         const res = await fetch("/api/niqqud", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ texts }),
+          body: JSON.stringify({ texts: unique }),
         });
         if (!res.ok) throw new Error("niqqud");
         const data = (await res.json()) as { niqqud?: string[] };
         const niq = data.niqqud ?? [];
-        if (cancelled || niq.length !== texts.length) return;
-        let i = 0;
-        const vWord = niq[i++];
-        const vMeanings = (result.meanings ?? []).map((m) => {
-          const meaning = niq[i++];
-          const examples = (m.examples ?? []).map(() => niq[i++]);
-          return { ...m, meaning, examples };
-        });
-        setNiqResult({ ...result, word: vWord, meanings: vMeanings });
+        if (cancelled || niq.length !== unique.length) return;
+        const map = new Map<string, string>();
+        unique.forEach((tx, i) => map.set(tx, niq[i] ?? tx));
+        const v = (s?: string) => (s && map.has(s) ? (map.get(s) as string) : s);
+        const vMeanings = (result.meanings ?? []).map((m) => ({
+          ...m,
+          meaning: v(m.meaning) ?? m.meaning,
+          examples: (m.examples ?? []).map((e) => v(e) ?? e),
+          kidsExplanation: m.kidsExplanation
+            ? {
+                ...m.kidsExplanation,
+                intro: v(m.kidsExplanation.intro),
+                explanation: v(m.kidsExplanation.explanation) ?? m.kidsExplanation.explanation,
+                examples: (m.kidsExplanation.examples ?? []).map((e) => v(e) ?? e),
+              }
+            : m.kidsExplanation,
+        }));
+        setNiqResult({ ...result, word: v(result.word) ?? result.word, meanings: vMeanings });
       } catch {
         if (!cancelled) setNiqResult(null); // Dicta down → plain Hebrew, no break
       }
     })();
     return () => { cancelled = true; };
-  }, [niqqud, isHebrewWord, result, user]);
+  }, [niqqud, isHebrewWord, result, user, kidsMode]);
   const displayResult = niqqud && niqResult ? niqResult : result;
   const [reportContext, setReportContext] = useState<ReportContext | null>(
     null
