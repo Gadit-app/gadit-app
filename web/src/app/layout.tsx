@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Int
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
+import { CoachSessionBanner } from "@/components/CoachSessionBanner";
 import type { Lang } from "@/lib/i18n";
 import { LANGUAGES } from "@/lib/i18n";
 import LoginModal from "@/components/LoginModal";
@@ -545,6 +546,7 @@ export default async function RootLayout({
                   RefCapture, which is provider-free). */}
               <KidRouteGuard />
               <TwaInit />
+              <CoachSessionBanner />
               {children}
               <VoiceAssistant />
               <SayModal />

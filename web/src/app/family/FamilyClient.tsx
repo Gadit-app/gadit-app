@@ -28,6 +28,7 @@ import { useHref } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
+import { CoachesSection } from "@/components/design/CoachesSection";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
@@ -1574,6 +1575,7 @@ export function FamilyClient() {
           {tab === "settings" && (
             <div className="fam-tab fam-settings">
               <NotifSettings user={user} lang={lang} dir={dir} />
+              <CoachesSection />
               <div className="fam-set-row">
                 <div className="fam-set-icon"><NavIcon name="settings" /></div>
                 <div className="fam-set-main">
