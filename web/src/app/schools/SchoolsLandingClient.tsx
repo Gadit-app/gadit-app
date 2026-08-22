@@ -2833,6 +2833,23 @@ const USD_PRICING_UI: Record<string, UsdPricingUI> = {
         cta: "Qala ukuzama kwamahhala", afterTrial: "Ukuzama kwamahhala kwezinsuku ezingu-14, khansela noma nini." },
 };
 
+// 11 store-locale languages (af/bn/da/fil/hu/ko/sw/th/vi/zh-CN/zh-TW), added 2026-08-22
+// so the Schools USD pricing card is native instead of English fallback.
+Object.assign(USD_PRICING_UI, {
+  "af": {"h2":"Een prys, elke skool, oral.","billedMonthly":"Maandeliks","billedYearly":"Jaarliks","yearlySave":"2 maande gratis","perMonth":"/ maand","perYear":"/ jaar","smallName":"Schools","largeName":"Schools Large","smallStudents":"Tot 100 leerders","largeStudents":"Tot 500 leerders","cta":"Begin gratis proeftydperk","afterTrial":"14-dag gratis proeftydperk, kanselleer enige tyd."},
+  "bn": {"h2":"একটি মূল্য, প্রতিটি স্কুল, সর্বত্র।","billedMonthly":"মাসিক","billedYearly":"বার্ষিক","yearlySave":"2 মাস বিনামূল্যে","perMonth":"/ মাস","perYear":"/ বছর","smallName":"Schools","largeName":"Schools Large","smallStudents":"100 জন শিক্ষার্থী পর্যন্ত","largeStudents":"500 জন শিক্ষার্থী পর্যন্ত","cta":"বিনামূল্যে ট্রায়াল শুরু করুন","afterTrial":"14 দিনের বিনামূল্যে ট্রায়াল, যেকোনো সময় বাতিল করুন।"},
+  "da": {"h2":"Én pris, alle skoler, overalt.","billedMonthly":"Månedligt","billedYearly":"Årligt","yearlySave":"2 måneder gratis","perMonth":"/ måned","perYear":"/ år","smallName":"Schools","largeName":"Schools Large","smallStudents":"Op til 100 elever","largeStudents":"Op til 500 elever","cta":"Start gratis prøveperiode","afterTrial":"14 dages gratis prøveperiode, opsig når som helst."},
+  "fil": {"h2":"Isang presyo, bawat paaralan, saanman.","billedMonthly":"Buwanan","billedYearly":"Taunan","yearlySave":"2 buwan libre","perMonth":"/ buwan","perYear":"/ taon","smallName":"Schools","largeName":"Schools Large","smallStudents":"Hanggang 100 mag-aaral","largeStudents":"Hanggang 500 mag-aaral","cta":"Simulan ang libreng subok","afterTrial":"14 na araw na libreng subok, kanselahin anumang oras."},
+  "hu": {"h2":"Egy ár, minden iskola, mindenhol.","billedMonthly":"Havonta","billedYearly":"Évente","yearlySave":"2 hónap ingyen","perMonth":"/ hó","perYear":"/ év","smallName":"Schools","largeName":"Schools Large","smallStudents":"Legfeljebb 100 diák","largeStudents":"Legfeljebb 500 diák","cta":"Ingyenes próba indítása","afterTrial":"14 napos ingyenes próba, bármikor lemondható."},
+  "ko": {"h2":"하나의 가격, 모든 학교, 어디서나.","billedMonthly":"월간","billedYearly":"연간","yearlySave":"2개월 무료","perMonth":"/ 월","perYear":"/ 년","smallName":"Schools","largeName":"Schools Large","smallStudents":"최대 100명 학생","largeStudents":"최대 500명 학생","cta":"무료 체험 시작","afterTrial":"14일 무료 체험, 언제든지 취소 가능."},
+  "sw": {"h2":"Bei moja, kila shule, kila mahali.","billedMonthly":"Kila mwezi","billedYearly":"Kila mwaka","yearlySave":"Miezi 2 bila malipo","perMonth":"/ mwezi","perYear":"/ mwaka","smallName":"Schools","largeName":"Schools Large","smallStudents":"Hadi wanafunzi 100","largeStudents":"Hadi wanafunzi 500","cta":"Anza jaribio la bure","afterTrial":"Jaribio la bure la siku 14, ghairi wakati wowote."},
+  "th": {"h2":"ราคาเดียว ทุกโรงเรียน ทุกที่","billedMonthly":"รายเดือน","billedYearly":"รายปี","yearlySave":"ฟรี 2 เดือน","perMonth":"/ เดือน","perYear":"/ ปี","smallName":"Schools","largeName":"Schools Large","smallStudents":"สูงสุด 100 คน","largeStudents":"สูงสุด 500 คน","cta":"เริ่มทดลองใช้ฟรี","afterTrial":"ทดลองใช้ฟรี 14 วัน ยกเลิกได้ทุกเมื่อ"},
+  "vi": {"h2":"Một mức giá, mọi trường học, ở khắp nơi.","billedMonthly":"Hàng tháng","billedYearly":"Hàng năm","yearlySave":"Miễn phí 2 tháng","perMonth":"/ tháng","perYear":"/ năm","smallName":"Schools","largeName":"Schools Large","smallStudents":"Tối đa 100 học sinh","largeStudents":"Tối đa 500 học sinh","cta":"Bắt đầu dùng thử miễn phí","afterTrial":"Dùng thử miễn phí 14 ngày, hủy bất cứ lúc nào."},
+  "zh-CN": {"h2":"一个价格，所有学校，遍及各地。","billedMonthly":"按月","billedYearly":"按年","yearlySave":"免费 2 个月","perMonth":"/ 月","perYear":"/ 年","smallName":"Schools","largeName":"Schools Large","smallStudents":"最多 100 名学生","largeStudents":"最多 500 名学生","cta":"开始免费试用","afterTrial":"14 天免费试用，随时取消。"},
+  "zh-TW": {"h2":"一個價格，所有學校，遍及各地。","billedMonthly":"按月","billedYearly":"按年","yearlySave":"免費 2 個月","perMonth":"/ 月","perYear":"/ 年","smallName":"Schools","largeName":"Schools Large","smallStudents":"最多 100 名學生","largeStudents":"最多 500 名學生","cta":"開始免費試用","afterTrial":"14 天免費試用，隨時取消。"}
+} satisfies Record<string, UsdPricingUI>);
+
+
 /**
  * Cross-language flagship section copy. Rendered from its own object so the
  * 14 main `T` dicts stay untouched; he/en/ar/ru are native, everything else
