@@ -25,6 +25,19 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 
+// Short label for the MOBILE topbar (just the "start" verb, no "free") so the
+// pill doesn't eat the narrow row. Desktop keeps the full "startFree" label.
+// Gadi 2026-08-22. Falls back to "Start".
+const START_SHORT: Record<string, string> = {
+  en: "Start", he: "התחל", ar: "ابدأ", ru: "Начать", es: "Empezar",
+  pt: "Começar", fr: "Commencer", de: "Starten", it: "Inizia", nl: "Beginnen",
+  cs: "Začít", sk: "Začať", uk: "Почати", tr: "Başla", pl: "Zacznij",
+  fa: "شروع", id: "Mulai", el: "Ξεκίνα", ja: "始める", hi: "शुरू करें",
+  am: "ይጀምሩ", zu: "Qala", af: "Begin", bn: "শুরু করুন", da: "Start",
+  fil: "Magsimula", hu: "Kezdés", ko: "시작", sw: "Anza", th: "เริ่ม",
+  vi: "Bắt đầu", "zh-CN": "开始", "zh-TW": "開始",
+};
+
 export function StartFreeCTA() {
   const { user, loading, promptLogin } = useAuth();
   const { lang } = useLang();
@@ -65,7 +78,8 @@ export function StartFreeCTA() {
         className="wb-shell-startfree"
         aria-label={v2(lang, "startFree")}
       >
-        {v2(lang, "startFree")}
+        <span className="sf-full">{v2(lang, "startFree")}</span>
+        <span className="sf-short">{START_SHORT[lang] ?? "Start"}</span>
       </button>
     </span>
   );
