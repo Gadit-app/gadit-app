@@ -812,7 +812,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "10px 12px",
     borderRadius: 10,
     border: "1px solid rgba(31,41,55,0.18)",
-    fontSize: 15,
+    fontSize: 16, // 16px avoids iOS Safari zoom-on-focus
     fontFamily: "inherit",
     textTransform: "uppercase",
   },
