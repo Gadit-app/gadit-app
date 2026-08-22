@@ -39,8 +39,24 @@ export function LangProvider({
     // English UI (Gadi 2026-08-11, family dashboard opened in English).
     let resolved: Lang;
     try {
-      const saved = localStorage.getItem("gadit-lang") as Lang | null;
-      resolved = saved ?? initialLang ?? detectBrowserLang();
+      // A /<lang>/ prefix in the URL is an EXPLICIT choice for THIS visit (a
+      // shared link, e.g. a partner's /es/families link) and MUST win over the
+      // visitor's saved preference — otherwise a Hebrew/English browser opening
+      // a Spanish link still sees Hebrew/English (Gadi 2026-08-22, PR partner).
+      // No prefix ⇒ fall back to the saved pref (keeps the PWA / cookie fix).
+      const SUP = new Set([
+        "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
+        "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw",
+        "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu",
+      ]);
+      const seg0 = window.location.pathname.split("/").filter(Boolean)[0];
+      const urlLang = seg0 && SUP.has(seg0) ? (seg0 as Lang) : null;
+      if (urlLang) {
+        resolved = urlLang;
+      } else {
+        const saved = localStorage.getItem("gadit-lang") as Lang | null;
+        resolved = saved ?? initialLang ?? detectBrowserLang();
+      }
     } catch {
       resolved = initialLang ?? "en";
     }
