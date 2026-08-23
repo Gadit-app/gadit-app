@@ -220,13 +220,15 @@ export function PrincipalOverview({ lang }: { lang: string }) {
     <div>
       {/* Top stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14, marginBottom: 14 }}>
-        <div style={card}>
-          <div style={label}>{t.totalLabel}</div>
-          <div style={{ fontSize: 40, fontWeight: 800, color: "#CA8A04", lineHeight: 1.05 }}>{data.totalAllTime.toLocaleString()}</div>
+        <div style={statMustard}>
+          <span aria-hidden="true" style={{ position: "absolute", insetInlineEnd: -18, top: -18, width: 84, height: 84, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
+          <div style={{ ...statLabel, position: "relative" }}>{t.totalLabel}</div>
+          <div style={{ ...statNum, position: "relative" }}>{data.totalAllTime.toLocaleString()}</div>
         </div>
-        <div style={card}>
-          <div style={label}>{t.classroomsLabel}</div>
-          <div style={{ fontSize: 40, fontWeight: 800, color: "#1C1917", lineHeight: 1.05 }}>{data.classroomCount}</div>
+        <div style={statTeal}>
+          <span aria-hidden="true" style={{ position: "absolute", insetInlineEnd: -18, top: -18, width: 84, height: 84, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
+          <div style={{ ...statLabel, position: "relative" }}>{t.classroomsLabel}</div>
+          <div style={{ ...statNum, position: "relative" }}>{data.classroomCount}</div>
         </div>
       </div>
 
@@ -303,8 +305,14 @@ export function PrincipalOverview({ lang }: { lang: string }) {
   );
 }
 
-const card: React.CSSProperties = { background: "#fff", border: "1px solid #EAE7E3", borderRadius: 14, padding: "16px 18px" };
+const card: React.CSSProperties = { background: "#fff", border: "1px solid #EAE7E3", borderRadius: 16, padding: "18px 20px" };
 const label: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#1C1917", marginBottom: 4 };
 const sub: React.CSSProperties = { fontSize: 12.5, color: "#78716C", lineHeight: 1.45, margin: "0 0 12px" };
+// Vibrant KPI cards (modern school dashboard, Gadi 2026-08-23).
+const statBase: React.CSSProperties = { borderRadius: 20, padding: "20px 22px 18px", border: "none", color: "#fff", display: "flex", flexDirection: "column", gap: 3, position: "relative", overflow: "hidden" };
+const statMustard: React.CSSProperties = { ...statBase, background: "linear-gradient(135deg,#F0A81E,#CA8A04)", boxShadow: "0 16px 32px -18px rgba(202,138,4,0.6)" };
+const statTeal: React.CSSProperties = { ...statBase, background: "linear-gradient(135deg,#10B6B6,#0B7D7D)", boxShadow: "0 16px 32px -18px rgba(14,165,165,0.6)" };
+const statNum: React.CSSProperties = { fontSize: 40, fontWeight: 800, color: "#fff", lineHeight: 1.05 };
+const statLabel: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.92)" };
 const btnPrimary: React.CSSProperties = { background: "#CA8A04", color: "#fff", borderRadius: 9, padding: "7px 14px", fontSize: 13, fontWeight: 700, textDecoration: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap" };
 const btnGhost: React.CSSProperties = { background: "#fff", color: "#92400E", borderRadius: 9, padding: "7px 14px", fontSize: 13, fontWeight: 700, border: "1px solid #FDE68A", cursor: "pointer", whiteSpace: "nowrap" };

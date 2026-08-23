@@ -854,7 +854,7 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
     }
   }
   return (
-    <div className="fam-dash-card">
+    <div className="fam-dash-card" style={{ ["--m-color" as string]: color }}>
       <div className="fam-dash-head">
         <div className="fam-dash-avatar" style={{ background: color }}>{initial}</div>
         <div>
@@ -2566,22 +2566,29 @@ async function deleteMember(memberId: string) {
 const FAM_DASH_CSS = `
 .fam-dash { margin: 8px 0 30px; }
 .fam-dash-sub { color: #6b7280; font-size: 14.5px; margin: 4px 0 16px; line-height: 1.5; }
-.fam-dash-summary { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.fam-dash-summary { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
 .fam-dash-sumcard {
-  flex: 1; min-width: 150px;
-  background: linear-gradient(140deg, rgba(14,165,165,0.12), rgba(14,165,165,0.04));
-  border: 1px solid rgba(14,165,165,0.2);
-  border-radius: 16px;
-  padding: 16px 18px;
-  display: flex; flex-direction: column; gap: 2px;
+  flex: 1; min-width: 160px;
+  background: linear-gradient(135deg, #10B6B6, #0B7D7D);
+  border: none;
+  border-radius: 20px;
+  padding: 20px 20px 18px;
+  display: flex; flex-direction: column; gap: 3px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 16px 32px -18px rgba(14,165,165,0.65);
+}
+.fam-dash-sumcard::after {
+  content: ""; position: absolute; inset-inline-end: -20px; top: -20px;
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,0.14);
 }
 .fam-dash-sumcard-week {
-  background: linear-gradient(140deg, rgba(124,58,237,0.12), rgba(124,58,237,0.04));
-  border-color: rgba(124,58,237,0.2);
+  background: linear-gradient(135deg, #9366F2, #7C3AED);
+  box-shadow: 0 16px 32px -18px rgba(124,58,237,0.65);
 }
-.fam-dash-sumnum { font-size: 30px; font-weight: 800; color: #1f2937; line-height: 1; }
-.fam-dash-sumcard-week .fam-dash-sumnum { color: #6d28d9; }
-.fam-dash-sumlabel { font-size: 13px; color: #6b7280; font-weight: 600; }
+.fam-dash-sumnum { font-size: 34px; font-weight: 800; color: #fff; line-height: 1; position: relative; }
+.fam-dash-sumcard-week .fam-dash-sumnum { color: #fff; }
+.fam-dash-sumlabel { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 600; position: relative; }
 .fam-dash-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
@@ -2593,6 +2600,12 @@ const FAM_DASH_CSS = `
   border-radius: 22px;
   padding: 24px 24px 22px;
   box-shadow: 0 8px 24px rgba(31,41,55,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.fam-dash-card::before {
+  content: ""; position: absolute; inset-inline: 0; top: 0; height: 5px;
+  background: linear-gradient(90deg, var(--m-color, var(--teal)), color-mix(in srgb, var(--m-color, var(--teal)) 50%, #ffffff));
 }
 .fam-dash-head { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
 .fam-dash-avatar {
