@@ -12,6 +12,7 @@
     --teal:#0EA5A5; --teal-deep:#0B7D7D; --teal-soft:#E0F6F4;
     --purple:#7C3AED; --purple-soft:#F1EAFE;
     --amber:#F59E0B; --amber-soft:#FEF3E2;
+    --rust:#C2410C; --rust-soft:#FBE7DC;
     --ink:#0B0F19; --ink-soft:#3A3F4B; --ink-muted:#5C6270; --ink-faint:#8B91A0;
     --cream:#F6F4EE; --paper:#F2F6F4; --surface:#FFFFFF; --rule:#E6E8EC;
     --basic:#94A3B8;
@@ -26,31 +27,52 @@
   section{padding:clamp(56px,9vw,110px) 22px;position:relative}
   .wrap{max-width:var(--maxw);margin:0 auto}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px}
+  .eyebrow.pain{color:var(--rust)}
   h1{font-size:clamp(34px,7vw,64px);font-weight:900;letter-spacing:-.02em;line-height:1.04;text-wrap:balance}
   h2{font-size:clamp(27px,4.6vw,44px);font-weight:800;letter-spacing:-.015em;line-height:1.1;text-wrap:balance}
   .lead{font-size:clamp(17px,2.3vw,21px);color:var(--ink-soft);max-width:620px;font-weight:400}
   .muted{color:var(--ink-muted)}
 
-  /* ---- Cover ---- */
   .cover{background:linear-gradient(165deg,#0c2a2a 0%,#0e3b38 52%,#123f52 100%);color:#eafcf8;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
   .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 45% at 82% 12%,rgba(45,212,191,.22),transparent 60%),radial-gradient(55% 45% at 12% 96%,rgba(124,58,237,.20),transparent 60%);pointer-events:none}
   .cover .wrap{position:relative;z-index:1}
   .brand{font-family:var(--lat);direction:ltr;font-weight:700;font-size:30px;letter-spacing:-.03em}
   .brand i{color:#2DD4BF;font-style:italic;font-weight:500}
-  .cover h1{color:#fff;margin:26px 0 18px;max-width:15ch}
+  .cover h1{color:#fff;margin:26px 0 18px;max-width:16ch}
   .cover .lead{color:#bfeee6;max-width:560px}
-  .cover-tag{display:inline-block;margin-bottom:28px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7fe0d3;border:1px solid rgba(127,224,211,.35);border-radius:999px;padding:7px 15px}
-  .scrolls{margin-top:44px;font-size:13px;color:#7fe0d3;font-weight:600;display:flex;align-items:center;gap:8px}
+  .scrolls{margin-top:38px;font-size:13px;color:#7fe0d3;font-weight:600;display:flex;align-items:center;gap:8px}
   .scrolls span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
-  /* ---- generic scene ---- */
   .scene{display:grid;grid-template-columns:1fr;gap:clamp(30px,5vw,64px);align-items:center}
   @media(min-width:860px){.scene{grid-template-columns:1fr 1fr}.scene.flip .copy{order:2}}
   .copy h2{margin-bottom:16px}
+  .copy .lead+.lead{margin-top:16px}
   .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
   .chip{font-size:13.5px;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:8px 14px}
   .chip b{color:var(--teal-deep);font-weight:700}
+
+  /* ---- problem: "the text as the child receives it" ---- */
+  .painsec{background:linear-gradient(180deg,#faeee8,var(--cream))}
+  .lesson{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 22px 24px;box-shadow:0 24px 55px -32px rgba(60,30,15,.4)}
+  .lesson .ll{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .lesson .ll .dot{width:7px;height:7px;border-radius:99px;background:var(--teal)}
+  .lesson .ll.bad{color:var(--rust);margin-top:22px}
+  .lesson .ll.bad .dot{background:var(--rust)}
+  .lesson .lt{font-size:clamp(17px,2.4vw,20px);line-height:1.75;font-weight:600;color:var(--ink)}
+  .lesson .lt.dim{color:var(--ink-muted);font-weight:500}
+  .redact{display:inline-block;background:#c9cdd3;color:transparent;border-radius:5px;padding:0 3px;user-select:none;position:relative;top:2px}
+  .paincap{font-size:13.5px;color:var(--rust);font-weight:600;margin-top:18px}
+
+  /* ---- cascade ---- */
+  .cascade{display:grid;grid-template-columns:1fr;gap:14px;margin-top:34px;counter-reset:c}
+  @media(min-width:820px){.cascade{grid-template-columns:repeat(3,1fr)}}
+  .cstep{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:20px 18px;position:relative}
+  .cstep .ic{font-size:26px}
+  .cstep h3{font-size:16.5px;font-weight:800;margin:10px 0 6px}
+  .cstep p{font-size:14px;color:var(--ink-muted);line-height:1.55}
+  .cstep.last{border-color:var(--rust-soft);background:linear-gradient(180deg,var(--rust-soft),var(--surface) 70%)}
+  .cstep.last h3{color:var(--rust)}
 
   /* ---- device: phone ---- */
   .phone{width:min(320px,86vw);margin:0 auto;background:#0e1512;border-radius:38px;padding:11px;box-shadow:0 30px 70px -28px rgba(8,20,18,.6),0 0 0 1px rgba(0,0,0,.04);position:relative}
@@ -59,8 +81,6 @@
   .st-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 8px;font-family:var(--lat);font-size:12px;font-weight:700;color:var(--ink-muted)}
   .st-bar .brand2{font-size:15px;color:var(--ink)}
   .st-bar .brand2 i{color:var(--teal);font-style:italic;font-weight:500}
-
-  /* word page mock */
   .wp{padding:6px 16px 18px}
   .wp-word{font-family:var(--lat);direction:ltr;text-align:left;font-size:30px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
   .wp-spk{width:26px;height:26px;border-radius:999px;border:1px solid var(--rule);color:var(--teal);display:grid;place-items:center;font-size:12px;flex:none}
@@ -72,7 +92,6 @@
   .mcard .ex{font-size:12.5px;color:var(--ink-muted);margin-top:7px;padding-inline-start:10px;border-inline-start:2px solid var(--rule);line-height:1.5}
   .tapw{color:var(--teal-deep);border-bottom:1.5px dotted var(--teal);font-weight:600}
 
-  /* kids mode mock */
   .kids{--kb:linear-gradient(160deg,#181a44 0%,#2a1f5e 60%,#3b2a6e 100%);background:var(--kb);color:#eef0ff;height:100%;padding:14px 16px 18px}
   .kids .kbar{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:#c9c3f2}
   .kids .krank{background:rgba(255,255,255,.14);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800}
@@ -84,7 +103,6 @@
   .ktap{color:#8be8dd;border-bottom:1.5px dotted #5fd6c8;font-weight:600}
   .kchip{display:inline-flex;align-items:center;gap:6px;margin-top:16px;background:#22D3EE;color:#04241f;font-weight:800;font-size:12.5px;border-radius:999px;padding:8px 14px}
 
-  /* ---- device: browser (dashboard) ---- */
   .browser{background:#fff;border-radius:16px;box-shadow:0 30px 70px -30px rgba(16,44,38,.4),0 0 0 1px var(--rule);overflow:hidden}
   .bbar{background:var(--cream);border-bottom:1px solid var(--rule);padding:11px 14px;display:flex;align-items:center;gap:8px}
   .bdot{width:11px;height:11px;border-radius:99px;background:#dfe3e0}
@@ -114,7 +132,6 @@
   .reward.win .rh{color:#b45309;font-weight:800}
   .gchip{background:rgba(14,165,165,.1);color:#0f766e;border:1px solid rgba(14,165,165,.28);border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800}
 
-  /* ---- steps ---- */
   .steps{display:grid;grid-template-columns:1fr;gap:16px;margin-top:34px}
   @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
   .step{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 20px}
@@ -122,7 +139,6 @@
   .step h3{font-size:18px;font-weight:800;margin:8px 0 7px}
   .step p{font-size:14.5px;color:var(--ink-muted);line-height:1.55}
 
-  /* ---- safe grid ---- */
   .safe{display:grid;grid-template-columns:1fr;gap:14px;margin-top:32px}
   @media(min-width:680px){.safe{grid-template-columns:1fr 1fr}}
   .safeitem{display:flex;gap:13px;align-items:flex-start;background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:18px}
@@ -130,7 +146,6 @@
   .safeitem h3{font-size:16px;font-weight:800;margin-bottom:4px}
   .safeitem p{font-size:14px;color:var(--ink-muted);line-height:1.5}
 
-  /* ---- vision + cta ---- */
   .vision{background:linear-gradient(165deg,#0c2a2a,#0e3b38 60%,#123f52);color:#eafcf8;text-align:center}
   .vision h2{color:#fff;max-width:18ch;margin:0 auto 16px}
   .vision .lead{color:#bfeee6;margin:0 auto}
@@ -148,50 +163,42 @@
 <section class="cover">
   <div class="wrap">
     <div class="brand">Gad<i>it</i></div>
-    <h1>מרחב אחד ובטוח שבו כל ילד מבין כל מילה.</h1>
-    <p class="lead">ילדים, כל אחד בפרופיל שלו, בלי פרסומות ובלי צ'אט פתוח. ולוח הורים שמראה במבט אחד מה כל ילד למד השבוע.</p>
-    <div class="scrolls" style="margin-top:38px"><span>↓</span> לגלילה</div>
+    <h1>הילד קורא, אבל לא תמיד באמת מבין.</h1>
+    <p class="lead">כל יום נופלות מילים שהילד לא מבין, והוא ממשיך הלאה. Gadit הוא המרחב הבטוח שבו כל ילד עוצר, מבין כל מילה עד הסוף, ובונה שפה מילה אחרי מילה.</p>
+    <div class="scrolls"><span>↓</span> לגלילה</div>
   </div>
 </section>
 
-<!-- THE MOMENT -->
+<!-- THE PAIN — the text as the child receives it -->
+<section class="painsec">
+  <div class="wrap">
+    <div style="max-width:640px;margin:0 auto 34px;text-align:center">
+      <div class="eyebrow pain" style="justify-self:center">הכאב האמיתי</div>
+      <h2>ככה נראה טקסט כשחסרות בו המילים.</h2>
+      <p class="lead" style="margin:16px auto 0">הילד לא עוצר לשאול על כל מילה. הוא מדלג על מה שהוא לא מבין, ממשיך הלאה, והחומר לא נכנס. כל חור קטן בהבנה מצטרף לחור הבא.</p>
+    </div>
+    <div class="lesson" style="max-width:620px;margin:0 auto">
+      <div class="ll"><span class="dot"></span>מה שכתוב בספר</div>
+      <p class="lt">הנווט העתיק חצה את האוקיינוס הסוער בעזרת המצפן וכוכבי הצפון.</p>
+      <div class="ll bad"><span class="dot"></span>מה שהילד באמת קולט</div>
+      <p class="lt dim">ה<span class="redact">נווט</span> העתיק חצה את ה<span class="redact">אוקיינוס</span> ה<span class="redact">סוער</span> בעזרת ה<span class="redact">מצפן</span> וכוכבי הצפון.</p>
+      <div class="paincap">כל מלבן אפור הוא מילה שהילד לא הבין, ופשוט המשיך הלאה.</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE COST -->
 <section>
-  <div class="wrap scene">
-    <div class="copy">
-      <div class="eyebrow">רגע מוכר</div>
-      <h2>כל יום, ילד נתקל במילה שהוא לא מבין.</h2>
-      <p class="lead">ורוב הפעמים הוא פשוט ממשיך הלאה, ומקווה שזה לא חשוב. המילה נשארת חור קטן בהבנה, והחור הבא מצטרף אליו.</p>
-      <div class="chips">
-        <span class="chip">בכיתה, חצי מהתלמידים מפספסים מילת מפתח</span>
-        <span class="chip">בבית, ההורה שואל <b>"הבנת?"</b> ומקבל <b>"כן"</b></span>
-      </div>
-    </div>
-    <div class="mock">
-      <div class="phone"><div class="screen">
-        <div class="st-bar"><span class="brand2">Gad<i>it</i></span><span>9:41</span></div>
-        <div class="wp">
-          <div class="wp-word lat">horizon <span class="wp-spk">▶</span></div>
-          <div class="wp-phon">/həˈraɪzən/ · שם עצם</div>
-          <div class="mcard" style="--c:var(--basic)"><div class="tag">משמעות בסיסית</div><div class="def">הקו הרחוק שבו נראה שהשמיים נוגעים בקרקע.</div><div class="ex lat">We watched the sun sink below the <b>horizon</b>.</div></div>
-          <div class="mcard" style="--c:var(--teal)"><div class="tag">משמעות נוספת</div><div class="def">טווח ה<span class="tapw">ידע</span> או ה<span class="tapw">ניסיון</span> של אדם.</div></div>
-        </div>
-      </div></div>
-    </div>
-  </div>
-</section>
-
-<!-- THE PROBLEM -->
-<section style="background:var(--paper)">
-  <div class="wrap" style="text-align:center;max-width:760px">
-    <div class="eyebrow" style="justify-self:center">הבעיה האמיתית</div>
-    <h2>אף אחד לא באמת רואה מה הילד הבין.</h2>
-    <p class="lead" style="margin:18px auto 0">מילון רגיל נותן הגדרה אחת ומשאיר את הילד לבד. מנוע חיפוש נותן תשובה למבוגר. אף אחד לא בנוי לילד שרוצה להבין, ואף אחד לא מראה להורה מה קרה אחר כך.</p>
+  <div class="wrap" style="text-align:center;max-width:720px">
+    <div class="eyebrow pain" style="justify-self:center">וזה לא רק ציון</div>
+    <h2>ילד שלא מבין מפסיק להאמין בעצמו.</h2>
+    <p class="lead" style="margin:18px auto 0">אוצר המילים נשאר דל, וההבנה נשברת מילה אחרי מילה. לאט לאט מגיעה תחושת "אני לא מספיק טוב", תסכול מהלימודים, ואובדן ביטחון. וזה קורה בשקט, בלי שאף אחד יכול להצביע איפה החוט נקרע.</p>
   </div>
 </section>
 
 <!-- SOLUTION: kids mode -->
-<section>
-  <div class="wrap scene flip">
+<section style="background:var(--paper)">
+  <div class="wrap scene">
     <div class="copy">
       <div class="eyebrow">הפתרון · לכל ילד</div>
       <h2>הסבר ברמת ילד. בשפה שבה הוא חושב.</h2>
@@ -214,6 +221,28 @@
         </div>
         <div class="kchip">▶ להקריא · לחצו על כל מילה</div>
       </div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- word page feature -->
+<section>
+  <div class="wrap scene flip">
+    <div class="copy">
+      <div class="eyebrow">כל המשמעויות</div>
+      <h2>מילון שלא נותן תשובה אחת ומשאיר את הילד לבד.</h2>
+      <p class="lead">כל משמעות, בשכבות ברורות, עם דוגמאות ואטימולוגיה. הילד רואה את התמונה המלאה, לא רק את המשמעות הראשית.</p>
+    </div>
+    <div class="mock">
+      <div class="phone"><div class="screen">
+        <div class="st-bar"><span class="brand2">Gad<i>it</i></span><span>9:41</span></div>
+        <div class="wp">
+          <div class="wp-word lat">horizon <span class="wp-spk">▶</span></div>
+          <div class="wp-phon">/həˈraɪzən/ · שם עצם</div>
+          <div class="mcard" style="--c:var(--basic)"><div class="tag">משמעות בסיסית</div><div class="def">הקו הרחוק שבו נראה שהשמיים נוגעים בקרקע.</div><div class="ex lat">We watched the sun sink below the <b>horizon</b>.</div></div>
+          <div class="mcard" style="--c:var(--teal)"><div class="tag">משמעות נוספת</div><div class="def">טווח ה<span class="tapw">ידע</span> או ה<span class="tapw">ניסיון</span> של אדם.</div></div>
+        </div>
+      </div></div>
     </div>
   </div>
 </section>

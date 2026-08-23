@@ -11,6 +11,7 @@
   :root{
     --teal:#0EA5A5; --teal-deep:#0B7D7D; --teal-soft:#E0F6F4;
     --mustard:#D97706; --mustard-2:#B45309; --mustard-soft:#FDF0DC;
+    --rust:#C2410C; --rust-soft:#FBE7DC;
     --purple:#7C3AED; --purple-soft:#F1EAFE;
     --ink:#0B0F19; --ink-soft:#3A3F4B; --ink-muted:#5C6270; --ink-faint:#8B91A0;
     --cream:#F7F3EA; --paper:#F3F4F1; --surface:#FFFFFF; --rule:#E7E4DC;
@@ -24,17 +25,18 @@
   section{padding:clamp(56px,9vw,110px) 22px;position:relative}
   .wrap{max-width:var(--maxw);margin:0 auto}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mustard-2);margin-bottom:14px}
+  .eyebrow.pain{color:var(--rust)}
   h1{font-size:clamp(34px,7vw,62px);font-weight:900;letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
   h2{font-size:clamp(27px,4.6vw,44px);font-weight:800;letter-spacing:-.015em;line-height:1.1;text-wrap:balance}
   .lead{font-size:clamp(17px,2.3vw,21px);color:var(--ink-soft);max-width:640px;font-weight:400}
 
-  .cover{background:linear-gradient(160deg,#0d2b2a 0%,#123a37 48%,#3a2a12 116%);color:#f3f7ee;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
-  .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(58% 44% at 84% 12%,rgba(217,119,6,.24),transparent 60%),radial-gradient(52% 42% at 10% 94%,rgba(45,212,191,.18),transparent 60%);pointer-events:none}
+  .cover{background:linear-gradient(160deg,#241206 0%,#3a2411 46%,#123a37 118%);color:#f7f0e8;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
+  .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(58% 44% at 84% 12%,rgba(217,119,6,.26),transparent 60%),radial-gradient(52% 42% at 10% 94%,rgba(45,212,191,.16),transparent 60%);pointer-events:none}
   .cover .wrap{position:relative;z-index:1}
   .brand{font-family:var(--lat);direction:ltr;font-weight:700;font-size:30px;letter-spacing:-.03em}
   .brand i{color:#2DD4BF;font-style:italic;font-weight:500}
-  .cover h1{color:#fff;margin:24px 0 18px;max-width:14ch}
-  .cover .lead{color:#d8e8df;max-width:600px}
+  .cover h1{color:#fff;margin:24px 0 18px;max-width:15ch}
+  .cover .lead{color:#ecd9c4;max-width:600px}
   .scrolls{margin-top:38px;font-size:13px;color:#f0c886;font-weight:600;display:flex;align-items:center;gap:8px}
   .scrolls span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
@@ -46,12 +48,33 @@
   .chip{font-size:13.5px;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:8px 14px}
   .chip b{color:var(--mustard-2);font-weight:700}
 
-  /* browser / projector frame */
+  /* pain */
+  .painsec{background:linear-gradient(180deg,#f8e9df,var(--cream))}
+  .lesson{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 22px 24px;box-shadow:0 24px 55px -32px rgba(60,30,15,.4)}
+  .lesson .ll{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .lesson .ll .dot{width:7px;height:7px;border-radius:99px;background:var(--mustard)}
+  .lesson .ll.bad{color:var(--rust);margin-top:22px}
+  .lesson .ll.bad .dot{background:var(--rust)}
+  .lesson .lt{font-size:clamp(17px,2.4vw,20px);line-height:1.75;font-weight:600;color:var(--ink)}
+  .lesson .lt.dim{color:var(--ink-muted);font-weight:500}
+  .redact{display:inline-block;background:#cfcabf;color:transparent;border-radius:5px;padding:0 3px;user-select:none;position:relative;top:2px}
+  .paincap{font-size:13.5px;color:var(--rust);font-weight:600;margin-top:18px}
+
+  .cascade{display:grid;grid-template-columns:1fr;gap:14px;margin-top:36px}
+  @media(min-width:820px){.cascade{grid-template-columns:repeat(3,1fr)}}
+  .cstep{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:20px 18px;position:relative}
+  .cstep .ic{font-size:26px}
+  .cstep h3{font-size:16.5px;font-weight:800;margin:10px 0 6px}
+  .cstep p{font-size:14px;color:var(--ink-muted);line-height:1.55}
+  .cstep.last{border-color:var(--rust-soft);background:linear-gradient(180deg,var(--rust-soft),var(--surface) 70%)}
+  .cstep.last h3{color:var(--rust)}
+  .cstep .arrow{position:absolute;inset-inline-start:-11px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--rust);font-weight:900}
+  @media(max-width:819px){.cstep .arrow{display:none}}
+
   .browser{background:#fff;border-radius:16px;box-shadow:0 30px 70px -30px rgba(30,22,8,.4),0 0 0 1px var(--rule);overflow:hidden}
   .bbar{background:var(--cream);border-bottom:1px solid var(--rule);padding:11px 14px;display:flex;align-items:center;gap:8px}
   .bdot{width:11px;height:11px;border-radius:99px;background:#e2ddd2}
   .burl{margin-inline-start:10px;font-family:var(--lat);direction:ltr;font-size:11.5px;color:var(--ink-faint);background:#fff;border:1px solid var(--rule);border-radius:7px;padding:4px 12px;flex:1;max-width:250px}
-  /* present mode */
   .present{padding:34px 26px 40px;text-align:center;background:radial-gradient(80% 70% at 50% 0%,#fbfaf6,#fff)}
   .present .rooms{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-muted);margin-bottom:26px}
   .present .code{background:var(--mustard-soft);color:var(--mustard-2);border-radius:999px;padding:4px 12px;font-family:var(--lat)}
@@ -60,7 +83,6 @@
   .present .pm{max-width:440px;margin:22px auto 0;font-size:16px;color:var(--ink-soft);line-height:1.6}
   .present .pm b{color:var(--ink);font-weight:700}
 
-  /* phone */
   .phone{width:min(300px,82vw);margin:0 auto;background:#0e1512;border-radius:36px;padding:10px;box-shadow:0 26px 60px -26px rgba(20,30,26,.6);position:relative}
   .phone::before{content:"";position:absolute;top:19px;left:50%;transform:translateX(-50%);width:100px;height:6px;border-radius:99px;background:#2a3330;z-index:3}
   .screen{background:var(--surface);border-radius:27px;overflow:hidden;aspect-ratio:9/18;position:relative}
@@ -74,7 +96,6 @@
   .join .jgo{background:var(--teal);color:#fff;font-weight:800;font-size:15px;border-radius:12px;padding:12px 26px;margin-top:6px}
   .join .jnote{font-size:12px;color:var(--ink-faint);margin-top:14px}
 
-  /* cross-language cards */
   .xhead{text-align:center;margin-bottom:20px}
   .xword{font-family:var(--lat);direction:ltr;font-size:clamp(26px,5vw,38px);font-weight:800;letter-spacing:-.02em}
   .xsub{color:var(--ink-muted);font-size:14px;margin-top:2px}
@@ -86,7 +107,6 @@
   .xcard p{font-size:14px;line-height:1.6;color:var(--ink-soft)}
   .xcard.rtl{direction:rtl;text-align:right} .xcard.ltr{direction:ltr;text-align:left}
 
-  /* word sets */
   .setwrap{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:8px;box-shadow:0 16px 40px -24px rgba(30,22,8,.3);max-width:440px;margin:0 auto}
   .setrow{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:12px}
   .setrow+.setrow{border-top:1px solid var(--rule)}
@@ -109,9 +129,9 @@
   .safeitem h3{font-size:16px;font-weight:800;margin-bottom:4px}
   .safeitem p{font-size:14px;color:var(--ink-muted);line-height:1.5}
 
-  .vision{background:linear-gradient(160deg,#0d2b2a,#123a37 55%,#3a2a12 120%);color:#f3f7ee;text-align:center}
+  .vision{background:linear-gradient(160deg,#241206,#3a2411 55%,#123a37 120%);color:#f7f0e8;text-align:center}
   .vision h2{color:#fff;max-width:18ch;margin:0 auto 16px}
-  .vision .lead{color:#d8e8df;margin:0 auto}
+  .vision .lead{color:#ecd9c4;margin:0 auto}
   .cta{margin-top:34px;display:inline-flex;flex-direction:column;align-items:center;gap:14px}
   .cta a{font-family:var(--sans);font-weight:800;font-size:17px;background:#F59E0B;color:#3a2408;text-decoration:none;padding:15px 34px;border-radius:14px;box-shadow:0 12px 30px -10px rgba(245,158,11,.5);transition:transform .15s ease}
   .cta a:hover{transform:translateY(-2px)}
@@ -122,26 +142,51 @@
 </head>
 <body>
 
+<!-- COVER: lead with the problem -->
 <section class="cover">
   <div class="wrap">
     <div class="brand">Gad<i>it</i> · לבתי ספר</div>
-    <h1>כל תלמיד מבין את השיעור.</h1>
-    <p class="lead">כיתה שלמה נכנסת עם קוד אחד, כמו משחק. מצב מקרן למורה, מערכי מילים מוכנים, וכל מילה מוסברת בשפה של התלמיד, ב-33 שפות.</p>
+    <h1>כשתלמיד לא מבין את המילים, הוא כבר לא בשיעור.</h1>
+    <p class="lead">Gadit מחזיר כל תלמיד פנימה. כיתה שלמה נכנסת עם קוד אחד, מצב מקרן למורה, וכל מילה מוסברת בשפה של התלמיד, ב-33 שפות.</p>
     <div class="scrolls"><span>↓</span> לגלילה</div>
   </div>
 </section>
 
-<!-- problem -->
-<section style="background:var(--paper)">
-  <div class="wrap" style="text-align:center;max-width:780px">
-    <div class="eyebrow">הבעיה בכיתה</div>
-    <h2>חצי מהכיתה מפספסת מילת מפתח, ואף אחד לא רואה את זה.</h2>
-    <p class="lead" style="margin:18px auto 0">התלמיד לא מרים יד. הוא פשוט ממשיך הלאה. והפער הבא מצטרף לקודם. במיוחד עולה שדובר רוסית, אמהרית או ערבית, שחושב בשפה אחת ופוגש את המילה בשנייה, בלי מקום בטוח להבין אותה.</p>
+<!-- THE PAIN: the lesson as the student receives it -->
+<section class="painsec">
+  <div class="wrap">
+    <div style="max-width:660px;margin:0 auto 34px;text-align:center">
+      <div class="eyebrow pain" style="justify-self:center">הבעיה בכיתה</div>
+      <h2>המורה מלמדת. חצי מהכיתה שומעת רק חורים.</h2>
+      <p class="lead" style="margin:16px auto 0">מילים לא מובנות נופלות מהמורה, מהלוח ומהספר. התלמיד לא מרים יד, הוא פשוט ממשיך, ומאבד את חוט המחשבה. במיוחד עולה שדובר רוסית, אמהרית או ערבית, שחושב בשפה אחת ופוגש את המילה בשנייה.</p>
+    </div>
+    <div class="lesson" style="max-width:620px;margin:0 auto">
+      <div class="ll"><span class="dot"></span>מה שהמורה אומרת</div>
+      <p class="lt">הפוטוסינתזה הופכת אור שמש לאנרגיה דרך הכלורופלסט שבעלים.</p>
+      <div class="ll bad"><span class="dot"></span>מה שהתלמיד באמת קולט</div>
+      <p class="lt dim">ה<span class="redact">פוטוסינתזה</span> הופכת אור שמש ל<span class="redact">אנרגיה</span> דרך ה<span class="redact">כלורופלסט</span> שבעלים.</p>
+      <div class="paincap">בלי המילים האלה, אין שיעור. יש רעש.</div>
+    </div>
   </div>
 </section>
 
-<!-- present mode + join -->
+<!-- THE CASCADE -->
 <section>
+  <div class="wrap">
+    <div style="max-width:640px;margin:0 auto;text-align:center">
+      <div class="eyebrow pain" style="justify-self:center">איך זה מתגלגל</div>
+      <h2>מילה שלא הובנה לא נשארת מילה. היא הופכת לבעיית משמעת.</h2>
+    </div>
+    <div class="cascade">
+      <div class="cstep"><div class="ic">📖</div><h3>מילים לא מובנות</h3><p>מהמורה, על הלוח, בספר. אחת אחרי השנייה, בלי שאף אחד עוצר.</p></div>
+      <div class="cstep"><span class="arrow">←</span><div class="ic">🌫️</div><h3>התלמיד מתנתק</h3><p>מרחף, מאבד עניין, כבר לא בשיעור. ההבנה נשברה ואיתה הקשב.</p></div>
+      <div class="cstep last"><span class="arrow">←</span><div class="ic">⚡</div><h3>מתחילות בעיות משמעת</h3><p>לא כי הוא ילד בעייתי, אלא כי הוא מעולם לא באמת היה שם.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION: present + join -->
+<section style="background:var(--paper)">
   <div class="wrap">
     <div style="text-align:center;max-width:620px;margin:0 auto 34px">
       <div class="eyebrow" style="justify-self:center">הפתרון · בכיתה</div>
@@ -170,7 +215,7 @@
 </section>
 
 <!-- cross-language killer feature -->
-<section style="background:var(--paper)">
+<section>
   <div class="wrap">
     <div style="text-align:center;max-width:660px;margin:0 auto 26px">
       <div class="eyebrow" style="justify-self:center">מה שאין לאף אחד אחר</div>
@@ -186,8 +231,8 @@
   </div>
 </section>
 
-<!-- ready to teach: word sets -->
-<section>
+<!-- word sets -->
+<section style="background:var(--paper)">
   <div class="wrap scene flip">
     <div class="copy">
       <div class="eyebrow">מוכן ללמד</div>
@@ -211,7 +256,7 @@
 </section>
 
 <!-- how it works -->
-<section style="background:var(--paper)">
+<section>
   <div class="wrap">
     <div style="text-align:center;max-width:640px;margin:0 auto">
       <div class="eyebrow" style="justify-self:center">איך זה עובד</div>
@@ -225,8 +270,8 @@
   </div>
 </section>
 
-<!-- safe / simple for schools -->
-<section>
+<!-- safe / simple -->
+<section style="background:var(--paper)">
   <div class="wrap">
     <div style="max-width:600px">
       <div class="eyebrow">פשוט ובטוח למוסד</div>

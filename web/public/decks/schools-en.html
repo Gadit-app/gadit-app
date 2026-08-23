@@ -11,6 +11,7 @@
   :root{
     --teal:#0EA5A5; --teal-deep:#0B7D7D; --teal-soft:#E0F6F4;
     --mustard:#D97706; --mustard-2:#B45309; --mustard-soft:#FDF0DC;
+    --rust:#C2410C; --rust-soft:#FBE7DC;
     --purple:#7C3AED; --purple-soft:#F1EAFE;
     --ink:#0B0F19; --ink-soft:#3A3F4B; --ink-muted:#5C6270; --ink-faint:#8B91A0;
     --cream:#F7F3EA; --paper:#F3F4F1; --surface:#FFFFFF; --rule:#E7E4DC;
@@ -24,17 +25,18 @@
   section{padding:clamp(56px,9vw,110px) 22px;position:relative}
   .wrap{max-width:var(--maxw);margin:0 auto}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mustard-2);margin-bottom:14px}
+  .eyebrow.pain{color:var(--rust)}
   h1{font-size:clamp(34px,7vw,62px);font-weight:900;letter-spacing:-.022em;line-height:1.05;text-wrap:balance}
   h2{font-size:clamp(27px,4.6vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.1;text-wrap:balance}
   .lead{font-size:clamp(17px,2.3vw,21px);color:var(--ink-soft);max-width:640px;font-weight:400}
 
-  .cover{background:linear-gradient(160deg,#0d2b2a 0%,#123a37 48%,#3a2a12 116%);color:#f3f7ee;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
-  .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(58% 44% at 84% 12%,rgba(217,119,6,.24),transparent 60%),radial-gradient(52% 42% at 10% 94%,rgba(45,212,191,.18),transparent 60%);pointer-events:none}
+  .cover{background:linear-gradient(160deg,#241206 0%,#3a2411 46%,#123a37 118%);color:#f7f0e8;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
+  .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(58% 44% at 84% 12%,rgba(217,119,6,.26),transparent 60%),radial-gradient(52% 42% at 10% 94%,rgba(45,212,191,.16),transparent 60%);pointer-events:none}
   .cover .wrap{position:relative;z-index:1}
   .brand{font-weight:700;font-size:30px;letter-spacing:-.03em}
   .brand i{color:#2DD4BF;font-style:italic;font-weight:500}
-  .cover h1{color:#fff;margin:24px 0 18px;max-width:15ch}
-  .cover .lead{color:#d8e8df;max-width:600px}
+  .cover h1{color:#fff;margin:24px 0 18px;max-width:16ch}
+  .cover .lead{color:#ecd9c4;max-width:600px}
   .scrolls{margin-top:38px;font-size:13px;color:#f0c886;font-weight:600;display:flex;align-items:center;gap:8px}
   .scrolls span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
@@ -45,6 +47,28 @@
   .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
   .chip{font-size:13.5px;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:8px 14px}
   .chip b{color:var(--mustard-2);font-weight:700}
+
+  .painsec{background:linear-gradient(180deg,#f8e9df,var(--cream))}
+  .lesson{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 22px 24px;box-shadow:0 24px 55px -32px rgba(60,30,15,.4)}
+  .lesson .ll{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .lesson .ll .dot{width:7px;height:7px;border-radius:99px;background:var(--mustard)}
+  .lesson .ll.bad{color:var(--rust);margin-top:22px}
+  .lesson .ll.bad .dot{background:var(--rust)}
+  .lesson .lt{font-size:clamp(17px,2.4vw,20px);line-height:1.75;font-weight:600;color:var(--ink)}
+  .lesson .lt.dim{color:var(--ink-muted);font-weight:500}
+  .redact{display:inline-block;background:#cfcabf;color:transparent;border-radius:5px;padding:0 3px;user-select:none;position:relative;top:2px}
+  .paincap{font-size:13.5px;color:var(--rust);font-weight:600;margin-top:18px}
+
+  .cascade{display:grid;grid-template-columns:1fr;gap:14px;margin-top:36px}
+  @media(min-width:820px){.cascade{grid-template-columns:repeat(3,1fr)}}
+  .cstep{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:20px 18px;position:relative}
+  .cstep .ic{font-size:26px}
+  .cstep h3{font-size:16.5px;font-weight:800;margin:10px 0 6px}
+  .cstep p{font-size:14px;color:var(--ink-muted);line-height:1.55}
+  .cstep.last{border-color:var(--rust-soft);background:linear-gradient(180deg,var(--rust-soft),var(--surface) 70%)}
+  .cstep.last h3{color:var(--rust)}
+  .cstep .arrow{position:absolute;inset-inline-start:-11px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--rust);font-weight:900}
+  @media(max-width:819px){.cstep .arrow{display:none}}
 
   .browser{background:#fff;border-radius:16px;box-shadow:0 30px 70px -30px rgba(30,22,8,.4),0 0 0 1px var(--rule);overflow:hidden}
   .bbar{background:var(--cream);border-bottom:1px solid var(--rule);padding:11px 14px;display:flex;align-items:center;gap:8px}
@@ -104,9 +128,9 @@
   .safeitem h3{font-size:16px;font-weight:800;margin-bottom:4px}
   .safeitem p{font-size:14px;color:var(--ink-muted);line-height:1.5}
 
-  .vision{background:linear-gradient(160deg,#0d2b2a,#123a37 55%,#3a2a12 120%);color:#f3f7ee;text-align:center}
+  .vision{background:linear-gradient(160deg,#241206,#3a2411 55%,#123a37 120%);color:#f7f0e8;text-align:center}
   .vision h2{color:#fff;max-width:20ch;margin:0 auto 16px}
-  .vision .lead{color:#d8e8df;margin:0 auto}
+  .vision .lead{color:#ecd9c4;margin:0 auto}
   .cta{margin-top:34px;display:inline-flex;flex-direction:column;align-items:center;gap:14px}
   .cta a{font-weight:800;font-size:17px;background:#F59E0B;color:#3a2408;text-decoration:none;padding:15px 34px;border-radius:14px;box-shadow:0 12px 30px -10px rgba(245,158,11,.5);transition:transform .15s ease}
   .cta a:hover{transform:translateY(-2px)}
@@ -119,21 +143,44 @@
 <section class="cover">
   <div class="wrap">
     <div class="brand">Gad<i>it</i> · for Schools</div>
-    <h1>Every student understands the lesson.</h1>
-    <p class="lead">A whole class joins with one code, like a game. Projector mode for the teacher, ready-made word sets, and every word explained in the student's own language, across 33 languages.</p>
+    <h1>When a student doesn't understand the words, they're no longer in the lesson.</h1>
+    <p class="lead">Gadit brings every student back in. A whole class joins with one code, projector mode for the teacher, and every word explained in the student's own language, across 33 languages.</p>
     <div class="scrolls"><span>↓</span> Scroll</div>
   </div>
 </section>
 
-<section style="background:var(--paper)">
-  <div class="wrap" style="text-align:center;max-width:780px">
-    <div class="eyebrow">The problem in class</div>
-    <h2>Half the class misses a key word, and no one sees it.</h2>
-    <p class="lead" style="margin:18px auto 0">The student doesn't raise a hand. They just move on. And the next gap joins the last. Especially a newcomer, thinking in one language and meeting the word in another, with no safe place to understand it.</p>
+<section class="painsec">
+  <div class="wrap">
+    <div style="max-width:660px;margin:0 auto 34px;text-align:center">
+      <div class="eyebrow pain">The problem in class</div>
+      <h2>The teacher teaches. Half the class hears only holes.</h2>
+      <p class="lead" style="margin:16px auto 0">Words they don't understand fall from the teacher, the board and the book. The student doesn't raise a hand, they just move on and lose the thread. Especially a newcomer, thinking in one language and meeting the word in another.</p>
+    </div>
+    <div class="lesson" style="max-width:620px;margin:0 auto">
+      <div class="ll"><span class="dot"></span>What the teacher says</div>
+      <p class="lt">Photosynthesis turns sunlight into energy through the chloroplast in the leaves.</p>
+      <div class="ll bad"><span class="dot"></span>What the student actually takes in</div>
+      <p class="lt dim"><span class="redact">Photosynthesis</span> turns sunlight into <span class="redact">energy</span> through the <span class="redact">chloroplast</span> in the leaves.</p>
+      <div class="paincap">Without those words, there is no lesson. There's noise.</div>
+    </div>
   </div>
 </section>
 
 <section>
+  <div class="wrap">
+    <div style="max-width:660px;margin:0 auto;text-align:center">
+      <div class="eyebrow pain">How it snowballs</div>
+      <h2>A word not understood doesn't stay a word. It becomes a discipline problem.</h2>
+    </div>
+    <div class="cascade">
+      <div class="cstep"><div class="ic">📖</div><h3>Unknown words</h3><p>From the teacher, on the board, in the book. One after another, with no one stopping.</p></div>
+      <div class="cstep"><span class="arrow">→</span><div class="ic">🌫️</div><h3>The student checks out</h3><p>Drifts, loses interest, no longer in the lesson. Understanding broke, and attention with it.</p></div>
+      <div class="cstep last"><span class="arrow">→</span><div class="ic">⚡</div><h3>Discipline problems start</h3><p>Not because they're a difficult kid, but because they were never really there.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--paper)">
   <div class="wrap">
     <div style="text-align:center;max-width:620px;margin:0 auto 34px">
       <div class="eyebrow">The fix · in class</div>
@@ -161,7 +208,7 @@
   </div>
 </section>
 
-<section style="background:var(--paper)">
+<section>
   <div class="wrap">
     <div style="text-align:center;max-width:660px;margin:0 auto 26px">
       <div class="eyebrow">What no one else has</div>
@@ -177,7 +224,7 @@
   </div>
 </section>
 
-<section>
+<section style="background:var(--paper)">
   <div class="wrap scene flip">
     <div class="copy">
       <div class="eyebrow">Ready to teach</div>
@@ -200,7 +247,7 @@
   </div>
 </section>
 
-<section style="background:var(--paper)">
+<section>
   <div class="wrap">
     <div style="text-align:center;max-width:640px;margin:0 auto">
       <div class="eyebrow">How it works</div>
@@ -214,7 +261,7 @@
   </div>
 </section>
 
-<section>
+<section style="background:var(--paper)">
   <div class="wrap">
     <div style="max-width:600px">
       <div class="eyebrow">Simple and safe for the school</div>
