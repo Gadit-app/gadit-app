@@ -1529,7 +1529,19 @@ function SchoolNavIcon({ name }: { name: "home" | "classrooms" | "students" | "s
 }
 
 const SCHOOL_SHELL_CSS = `
-.school-shell-page { min-height: 100dvh; background: var(--paper); }
+/* The school dashboard is an adult admin surface — pin it to a clean light
+   palette so a device set to dark mode (or a kid skin) never turns the cards
+   dark and breaks contrast. Mirrors the family dashboard. High specificity to
+   beat html[data-theme="dark"] .wordbook. (Gadi 2026-08-23) */
+html[data-theme] .wordbook.school-shell-page {
+  --paper: #F3F4F1; --surface: #FFFFFF; --mist: #EAF1EE;
+  --ink: #0B0F19; --ink-soft: #3A3F4B; --ink-muted: #5C6270; --ink-faint: #8B91A0;
+  --rule: #E7E4DC; --rule-soft: #EDEFF2; --rule-faint: #F1F2F6;
+  --accent: #0EA5A5; --accent-2: #7C3AED; --accent-ink: #FFFFFF;
+  --wb-card: #FFFFFF; --wb-surface: #FFFFFF; --wb-bg: #F3F4F1;
+  --wb-ink: #0B0F19; --wb-ink-soft: #3A3F4B; --wb-border: #E7E4DC;
+}
+.school-shell-page { min-height: 100dvh; background: #f7f3ea; }
 .school-shell {
   display: flex; gap: 20px; max-width: 1140px; margin: 0 auto;
   padding: 20px 18px 48px; align-items: flex-start;
