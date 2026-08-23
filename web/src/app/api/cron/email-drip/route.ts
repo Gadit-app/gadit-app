@@ -110,7 +110,19 @@ export async function GET(req: NextRequest) {
           ? "he"
           : "en";
 
-    const he = lang === "he";
+    const he = lang === "he"; // binary, used only by the family drip below
+
+    // The general signup drip ships in the user's real UI language (33-lang
+    // path), falling back to English inside getDripForLang for languages whose
+    // content isn't authored yet.
+    const generalLang: string =
+      typeof d.uiLang === "string" && d.uiLang
+        ? (d.uiLang as string)
+        : d.dripLang === "he" || d.dripLang === "en"
+          ? (d.dripLang as string)
+          : d.country === "IL"
+            ? "he"
+            : "en";
 
     // ── Family onboarding drip (keyed on Family activation) ──────
     // A Family owner gets the 3-step setup series (connect kids, turn on
@@ -150,7 +162,7 @@ export async function GET(req: NextRequest) {
       continue; // Family owners skip the general signup drip.
     }
 
-    const drip = getDripForLang(lang);
+    const drip = getDripForLang(generalLang);
     if (drip.length === 0) continue;
 
     // Days since signup.

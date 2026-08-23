@@ -253,23 +253,26 @@ export async function POST(req: NextRequest) {
     // Language gate: today only Hebrew is shipped. Use country=IL as
     // the proxy for "Hebrew speaker" since the auth flow doesn't
     // expose UI language. English drip is the next file to land.
-    const dripLang: "he" | "en" =
-      country?.toUpperCase() === "IL" || (data.uiLang as string | undefined) === "he"
-        ? "he"
-        : "en";
+    // The welcome fires in the user's real UI language (33-lang path), falling
+    // back to English inside getDripForLang. Fire it now rather than waiting for
+    // the daily cron — a 24-hour first-impression delay costs too much.
+    const generalLang: string =
+      typeof data.uiLang === "string" && data.uiLang
+        ? (data.uiLang as string)
+        : country?.toUpperCase() === "IL"
+          ? "he"
+          : "en";
+    const dripLang: "he" | "en" = generalLang === "he" ? "he" : "en";
 
-    // Pick the right welcome by user's drip language and fire it now
-    // rather than waiting for the daily cron — first-impression cost
-    // of a 24-hour delay is too high.
-    const welcomeKey = dripLang === "he" ? "welcome-he" : "welcome-en";
+    const { getDripForLang, buildUnsubUrl } = await import("@/lib/email-drip/registry");
+    const welcomeDrip = getDripForLang(generalLang);
+    const welcome = welcomeDrip.find((m) => m.dayOffset === 0) ?? welcomeDrip[0];
+    const welcomeKey = welcome?.key ?? "welcome-en";
     const alreadySent = (data.dripSent as Record<string, unknown> | undefined)?.[welcomeKey];
 
-    if (email && !alreadySent) {
+    if (email && !alreadySent && welcome) {
       try {
-        const { HE_DRIP, EN_DRIP, buildUnsubUrl } = await import("@/lib/email-drip/registry");
         const { sendDripEmail } = await import("@/lib/email-drip/send");
-        const drip = dripLang === "he" ? HE_DRIP : EN_DRIP;
-        const welcome = drip.find((m) => m.key === welcomeKey);
         if (welcome) {
           const built = welcome.build({
             displayName:

@@ -1,4 +1,6 @@
 import crypto from "node:crypto";
+import type { Lang } from "@/lib/i18n";
+import { buildI18nDrip } from "./build-i18n-drip";
 import { welcomeHe } from "./mail-1-welcome-he";
 import { meaningsHe } from "./mail-2-meanings-he";
 import { etymologyHe } from "./mail-3-etymology-he";
@@ -62,10 +64,16 @@ export const EN_DRIP: DripMail[] = [
   { key: "summary-en",    dayOffset: 14, build: summaryEn },
 ];
 
-export function getDripForLang(lang: DripLang): DripMail[] {
+/**
+ * Resolve the drip series for a user's language. Hebrew and English keep their
+ * original hand-written files; every other language routes through the
+ * data-driven i18n drip (build-i18n-drip.ts), falling back to English until
+ * that language's content is authored. Accepts any string (the raw uiLang).
+ */
+export function getDripForLang(lang: string): DripMail[] {
   if (lang === "he") return HE_DRIP;
   if (lang === "en") return EN_DRIP;
-  return [];
+  return buildI18nDrip(lang as Lang) ?? EN_DRIP;
 }
 
 const UNSUB_SECRET_FALLBACK = "gadit-unsub-fallback-do-not-rely";
