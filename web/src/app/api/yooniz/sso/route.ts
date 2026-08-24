@@ -148,10 +148,19 @@ export async function GET(req: NextRequest) {
   const iso = new Date().toISOString();
 
   try {
-    // One-time nonce (replay guard, contract §1.3 / §7).
+    // Nonce recording — IDEMPOTENT, not a hard one-time gate (Gadi/Yooniz
+    // 2026-08-24). The launch URL carries a one-time token; when the child
+    // taps Back or the in-app WebView reloads, the browser revisits this exact
+    // URL. Erroring on a re-hit ("link already used") broke the feature. The
+    // token is already bound to a 120s window by the iat check in verifyToken,
+    // so replay is inherently capped to ~2 minutes on a low-sensitivity
+    // kid-dictionary sign-in; within that window a Back/reload just re-serves
+    // the sign-in handoff, which is fully idempotent (member resolution finds
+    // the existing profile, never duplicates). We still record the nonce for
+    // audit, but a repeat is NOT an error.
     const nonceRef = db.collection("yoonizNonces").doc(payload.nonce);
-    if ((await nonceRef.get()).exists) return page("הקישור כבר נוצל. נסו שוב מ-Yooniz.");
-    await nonceRef.set({ at: Date.now() });
+    const nonceSeen = (await nonceRef.get()).exists;
+    if (!nonceSeen) await nonceRef.set({ at: Date.now() });
 
     // ── §2/§4 Resolve the Gadit Family owner by email. NO auto-provision, NO
     //    card-less trial (contract corrected 19/8): entry requires an ACTIVE
