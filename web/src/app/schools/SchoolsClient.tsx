@@ -28,7 +28,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
 import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
-import { SKIN_PRESETS, DEFAULT_ACCENT, dominantColorFromImage, darkenHex, isHex } from "@/lib/school-skin";
+import { DEFAULT_ACCENT, dominantColorFromImage, darkenHex, isHex, skinStyleVars } from "@/lib/school-skin";
 import { useHref } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
 import { db } from "@/lib/firebase";
@@ -724,7 +724,7 @@ export function SchoolsClient() {
   const NAV: Array<"home" | "classrooms" | "students" | "settings"> = ["home", "classrooms", "students", "settings"];
 
   return (
-    <div className="wordbook school-shell-page" dir={dir}>
+    <div className="wordbook school-shell-page" dir={dir} style={skinStyleVars(school.skinAccent)}>
       <style>{SCHOOL_SHELL_CSS}</style>
       <div className="school-shell">
         {/* Right-side (RTL start) navigation, mirroring the Family
@@ -970,41 +970,9 @@ export function SchoolsClient() {
                 </span>
               </div>
 
-              {/* Presets */}
-              <div style={{ fontSize: 12, color: "var(--ink-soft, #6B7280)", marginBottom: 6 }}>{a.presets}</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
-                {SKIN_PRESETS.map((p) => {
-                  const active = current.toLowerCase() === p.hex.toLowerCase();
-                  return (
-                    <button
-                      key={p.hex}
-                      type="button"
-                      onClick={() => saveSkin(p.hex)}
-                      title={p.name}
-                      aria-label={p.name}
-                      disabled={skinSaving}
-                      style={{
-                        width: 30, height: 30, borderRadius: 999, background: p.hex, cursor: "pointer",
-                        border: active ? "3px solid var(--ink)" : "2px solid var(--surface)",
-                        boxShadow: active ? "0 0 0 1px var(--ink)" : "0 0 0 1px var(--rule)",
-                      }}
-                    />
-                  );
-                })}
-              </div>
-
-              {/* Custom + auto + reset */}
+              {/* Theme: the clean Gadit default, or one generated from the logo.
+                  No arbitrary colour palette (Gadi 2026-08-25): keep it on-brand. */}
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-                <label style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, cursor: "pointer" }}>
-                  <input
-                    type="color"
-                    value={current}
-                    onChange={(e) => saveSkin(e.target.value)}
-                    disabled={skinSaving}
-                    style={{ width: 34, height: 30, border: "1px solid var(--rule)", borderRadius: 8, background: "var(--surface)", cursor: "pointer", padding: 2 }}
-                  />
-                  {a.custom}
-                </label>
                 {school.logoUrl && (
                   <button
                     type="button"
@@ -1705,14 +1673,15 @@ const SCHOOL_SHELL_CSS = `
    dark and breaks contrast. Mirrors the family dashboard. High specificity to
    beat html[data-theme="dark"] .wordbook. (Gadi 2026-08-23) */
 html[data-theme] .wordbook.school-shell-page {
-  --paper: #F3F4F1; --surface: #FFFFFF; --mist: #EAF1EE;
+  --paper: #F4F7F6; --surface: #FFFFFF; --mist: #EAF1EE;
   --ink: #0B0F19; --ink-soft: #3A3F4B; --ink-muted: #5C6270; --ink-faint: #8B91A0;
-  --rule: #E7E4DC; --rule-soft: #EDEFF2; --rule-faint: #F1F2F6;
+  --rule: #E4EAE8; --rule-soft: #EDEFF2; --rule-faint: #F1F2F6;
   --accent: #0EA5A5; --accent-2: #7C3AED; --accent-ink: #FFFFFF;
-  --wb-card: #FFFFFF; --wb-surface: #FFFFFF; --wb-bg: #F3F4F1;
-  --wb-ink: #0B0F19; --wb-ink-soft: #3A3F4B; --wb-border: #E7E4DC;
+  --wb-card: #FFFFFF; --wb-surface: #FFFFFF; --wb-bg: #F4F7F6;
+  --wb-ink: #0B0F19; --wb-ink-soft: #3A3F4B; --wb-border: #E4EAE8;
 }
-.school-shell-page { min-height: 100dvh; background: #f7f3ea; }
+/* Clean Gadit-brand light background (was a warm cream that read mustard). */
+.school-shell-page { min-height: 100dvh; background: #F4F7F6; }
 .school-shell {
   display: flex; gap: 20px; max-width: 1140px; margin: 0 auto;
   padding: 20px 18px 48px; align-items: flex-start;
@@ -1788,7 +1757,7 @@ html[data-theme] .wordbook.school-shell-page {
   background: #0EA5A5 !important;
   box-shadow: 0 1px 2px rgba(14, 165, 165,0.28), 0 8px 22px -8px rgba(14, 165, 165,0.42) !important;
 }
-.school-shell-page .wb-school-cta:hover { background: #A16207 !important; }
+.school-shell-page .wb-school-cta:hover { background: #0B8A8A !important; }
 .school-shell-page .wb-school-cta:focus-visible { outline: 2px solid #0EA5A5 !important; }
 .school-shell-page .wb-classroom-code { color: #0E7490; background: rgba(14, 165, 165,0.12); }
 `;
