@@ -62,6 +62,9 @@ export async function GET(req: NextRequest) {
       plan?: string;
       createdAt?: string;
     };
+    const ownerSnap = await db.collection("users").doc(schoolId).get();
+    const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
+
     const insights = await computeSchoolInsights(db, schoolId);
 
     // Diagnostic: the TRUE number of logged search docs per classroom, via a
@@ -89,6 +92,7 @@ export async function GET(req: NextRequest) {
         contactEmail: meta.contactEmail ?? null,
         plan: meta.plan ?? "",
         createdAt: meta.createdAt ?? null,
+        ownerSearches,
       },
       ...insights,
       classrooms,
@@ -113,6 +117,12 @@ export async function GET(req: NextRequest) {
       for (const c of classroomsSnap.docs) {
         totalSearches += (c.data() as { searchCount?: number }).searchCount ?? 0;
       }
+      // The owner's OWN lookups (users/{schoolId}.searchCount) — a teacher or
+      // principal trying Gadit while signed in. These never touch the /c/CODE
+      // classroom logs, so a school can show 0 classroom searches yet a high
+      // owner count (e.g. Corinne's 99). Surface both so activity is visible.
+      const ownerSnap = await db.collection("users").doc(doc.id).get();
+      const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
       return {
         id: doc.id,
         name: (d.name ?? "").trim(),
@@ -121,12 +131,14 @@ export async function GET(req: NextRequest) {
         createdAt: d.createdAt ?? null,
         classroomCount: classroomsSnap.size,
         totalSearches,
+        ownerSearches,
       };
     }),
   );
 
-  // Most active schools first; blank/idle schools sink to the bottom.
-  schools.sort((a, b) => b.totalSearches - a.totalSearches);
+  // Most active schools first by TOTAL activity (classroom + owner's own
+  // lookups); blank/idle schools sink to the bottom.
+  schools.sort((a, b) => (b.totalSearches + b.ownerSearches) - (a.totalSearches + a.ownerSearches));
 
   return NextResponse.json({
     schools,

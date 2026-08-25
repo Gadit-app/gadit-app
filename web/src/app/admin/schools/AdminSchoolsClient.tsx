@@ -28,6 +28,7 @@ type SchoolRow = {
   createdAt: string | null;
   classroomCount: number;
   totalSearches: number;
+  ownerSearches: number;
 };
 
 type WordCount = { word: string; count: number };
@@ -56,7 +57,7 @@ type StudentRow = {
 };
 
 type SchoolDetail = {
-  school: { id: string; name: string; contactEmail: string | null; plan: string; createdAt: string | null };
+  school: { id: string; name: string; contactEmail: string | null; plan: string; createdAt: string | null; ownerSearches: number };
   totalAllTime: number;
   classroomCount: number;
   languages: LangCount[];
@@ -79,7 +80,9 @@ const COPY = {
     colContact: "Contact",
     colPlan: "Plan",
     colClasses: "Classes",
-    colLookups: "Lookups",
+    colLookups: "Classroom",
+    colOwner: "Owner",
+    kpiOwner: "Owner's own lookups",
     unnamed: "(unnamed school)",
     back: "All schools",
     kpiLookups: "Counter total",
@@ -123,7 +126,9 @@ const COPY = {
     colContact: "איש קשר",
     colPlan: "מסלול",
     colClasses: "כיתות",
-    colLookups: "חיפושים",
+    colLookups: "כיתתי",
+    colOwner: "בעלים",
+    kpiOwner: "חיפושי בעל החשבון",
     unnamed: "(בית ספר ללא שם)",
     back: "כל בתי הספר",
     kpiLookups: "מונה (searchCount)",
@@ -323,10 +328,10 @@ export default function AdminSchoolsClient() {
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 12 }}>
+              <Kpi label={t.kpiOwner} value={detail.school.ownerSearches} accent="#7C3AED" />
               <Kpi label={t.kpiLookups} value={detail.totalAllTime} accent="#0EA5A5" />
               <Kpi label={t.kpiLogged} value={detail.loggedTotal} accent={detail.loggedTotal !== detail.totalAllTime ? "#DC2626" : "#0EA5A5"} />
               <Kpi label={t.kpiClasses} value={detail.classroomCount} />
-              <Kpi label={t.kpiLanguages} value={detail.languages.length} accent="#7C3AED" />
               <Kpi label={t.kpiSample} value={detail.sampleSize} />
             </div>
             {detail.loggedTotal !== detail.totalAllTime && (
@@ -538,6 +543,7 @@ export default function AdminSchoolsClient() {
                 <th style={th}>{t.colPlan}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colClasses}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colLookups}</th>
+                <th style={{ ...th, textAlign: "end" }}>{t.colOwner}</th>
                 <th style={th}></th>
               </tr>
             </thead>
@@ -560,6 +566,9 @@ export default function AdminSchoolsClient() {
                   </td>
                   <td style={{ ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#0E7490", fontWeight: 700 }}>
                     {s.totalSearches.toLocaleString()}
+                  </td>
+                  <td style={{ ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#7C3AED", fontWeight: 700 }}>
+                    {s.ownerSearches.toLocaleString()}
                   </td>
                   <td style={{ ...td, textAlign: "end", width: 40 }}>
                     <button
