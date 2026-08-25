@@ -37,6 +37,11 @@ const CONFIGS = {
       { marker: "const COPY: Record<string, Copy>", value: (v) => JSON.stringify(v.menu) },
     ],
   },
+  features: {
+    file: "src/app/features/FeaturesClient.tsx",
+    json: "features-i18n.json",
+    maps: [{ marker: "const COPY: Record<string, {", value: (v) => JSON.stringify(v) }],
+  },
   wordgame: {
     file: "src/components/design/WordGameModal.tsx",
     json: "wordgame-i18n.json",
