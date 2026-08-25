@@ -44,6 +44,17 @@ export const DARK_LABEL: Record<string, string> = {
   uk: "Темна тема", tr: "Karanlık mod", pl: "Tryb ciemny", fa: "حالت تیره",
   id: "Mode gelap", el: "Σκοτεινή λειτουργία", hi: "डार्क मोड", ja: "ダークモード",
   am: "ጨለማ ገጽታ", zu: "Imodi emnyama",
+  vi: "Chế độ tối",
+  fil: "Madilim na mode",
+  af: "Donker modus",
+  sw: "Hali ya giza",
+  "zh-CN": "深色模式",
+  "zh-TW": "深色模式",
+  ko: "다크 모드",
+  th: "โหมดมืด",
+  bn: "ডার্ক মোড",
+  da: "Mørk tilstand",
+  hu: "Sötét mód",
 };
 
 type Copy = {
@@ -72,6 +83,23 @@ const COPY: Record<string, Copy> = {
   ja: { account: "アカウント",            family: "私の家族",            school: "私の学校",            dashboard: "パートナーエリア", signOut: "ログアウト",   openMenu: "アカウントメニューを開く" },
   hi: { account: "खाता",                 family: "मेरा परिवार",       school: "मेरा स्कूल",         dashboard: "पार्टनर क्षेत्र", signOut: "साइन आउट",    openMenu: "खाता मेनू खोलें" },
   am: { account: "መለያ",                 family: "ቤተሰቤ",             school: "ትምህርት ቤቴ",        dashboard: "የአጋሮች ክፍል",   signOut: "ዘግተው ይውጡ",  openMenu: "የመለያ ምናሌ ክፈት" },
+  uk: { account: "Акаунт", family: "Моя сім'я", school: "Моя школа", dashboard: "Для партнерів", signOut: "Вийти", openMenu: "Відкрити меню акаунта" },
+  id: { account: "Akun", family: "Keluargaku", school: "Sekolahku", dashboard: "Area mitra", signOut: "Keluar", openMenu: "Buka menu akun" },
+  tr: {"account":"Hesap","family":"Ailem","school":"Okulum","dashboard":"Ortak alanı","signOut":"Çıkış yap","openMenu":"Hesap menüsünü aç"},
+  pl: {"account":"Konto","family":"Moja rodzina","school":"Moja szkoła","dashboard":"Strefa partnera","signOut":"Wyloguj się","openMenu":"Otwórz menu konta"},
+  fa: {"account":"حساب","family":"خانواده من","school":"مدرسه من","dashboard":"بخش شرکا","signOut":"خروج","openMenu":"باز کردن منوی حساب"},
+  nl: {"account":"Account","family":"Mijn gezin","school":"Mijn school","dashboard":"Partnergedeelte","signOut":"Uitloggen","openMenu":"Accountmenu openen"},
+  vi: {"account":"Tài khoản","family":"Gia đình của tôi","school":"Trường của tôi","dashboard":"Khu vực đối tác","signOut":"Đăng xuất","openMenu":"Mở menu tài khoản"},
+  fil: {"account":"Account","family":"Aking pamilya","school":"Aking paaralan","dashboard":"Lugar ng partner","signOut":"Mag-sign out","openMenu":"Buksan ang menu ng account"},
+  af: {"account":"Rekening","family":"My gesin","school":"My skool","dashboard":"Vennootgebied","signOut":"Teken uit","openMenu":"Open rekeningkieslys"},
+  sw: {"account":"Akaunti","family":"Familia yangu","school":"Shule yangu","dashboard":"Eneo la washirika","signOut":"Toka","openMenu":"Fungua menyu ya akaunti"},
+  "zh-CN": {"account":"账户","family":"我的家庭","school":"我的学校","dashboard":"合作伙伴专区","signOut":"退出登录","openMenu":"打开账户菜单"},
+  "zh-TW": {"account":"帳戶","family":"我的家庭","school":"我的學校","dashboard":"合作夥伴專區","signOut":"登出","openMenu":"開啟帳戶選單"},
+  ko: {"account":"계정","family":"내 가족","school":"내 학교","dashboard":"파트너 영역","signOut":"로그아웃","openMenu":"계정 메뉴 열기"},
+  th: {"account":"บัญชี","family":"ครอบครัวของฉัน","school":"โรงเรียนของฉัน","dashboard":"พื้นที่พาร์ทเนอร์","signOut":"ออกจากระบบ","openMenu":"เปิดเมนูบัญชี"},
+  bn: {"account":"অ্যাকাউন্ট","family":"আমার পরিবার","school":"আমার স্কুল","dashboard":"পার্টনার এলাকা","signOut":"সাইন আউট","openMenu":"অ্যাকাউন্ট মেনু খুলুন"},
+  da: {"account":"Konto","family":"Min familie","school":"Min skole","dashboard":"Partnerområde","signOut":"Log ud","openMenu":"Åbn kontomenu"},
+  hu: {"account":"Fiók","family":"Családom","school":"Iskolám","dashboard":"Partnerterület","signOut":"Kijelentkezés","openMenu":"Fiókmenü megnyitása"},
 };
 
 // Tier chip colors. Mirrors the same scheme used on /account and
