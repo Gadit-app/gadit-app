@@ -34,6 +34,7 @@ const STRINGS = {
     strategy: "Strategy",
     users: "Subscribers",
     revenue: "Revenue",
+    forecast: "Cash flow",
     campaigns: "Campaigns",
     emails: "Emails",
     emailEditor: "Email editor",
@@ -63,6 +64,7 @@ const STRINGS = {
     strategy: "תוכנית אסטרטגית",
     users: "מנויים",
     revenue: "הכנסות",
+    forecast: "תזרים עתידי",
     campaigns: "קמפיינים",
     emails: "מיילים",
     emailEditor: "עריכת מיילים",
@@ -120,6 +122,7 @@ const NAV_SECTIONS: NavSection[] = [
   ] },
   { titleKey: "secFinance", items: [
     { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins /> },
+    { href: "/admin/forecast",  labelKey: "forecast",  icon: <IconTrendUp /> },
   ] },
   { titleKey: "secContent", items: [
     { href: "/admin/sets",      labelKey: "wordsets",  icon: <IconGrid /> },
@@ -482,6 +485,11 @@ function IconHandshake() {
 function IconGrid() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+  );
+}
+function IconTrendUp() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
   );
 }
 function IconSchool() {
