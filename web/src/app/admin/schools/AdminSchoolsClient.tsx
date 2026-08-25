@@ -57,7 +57,16 @@ type StudentRow = {
 };
 
 type SchoolDetail = {
-  school: { id: string; name: string; contactEmail: string | null; plan: string; createdAt: string | null; ownerSearches: number };
+  school: {
+    id: string;
+    name: string;
+    contactEmail: string | null;
+    plan: string;
+    createdAt: string | null;
+    ownerSearches: number;
+    logoUrl: string | null;
+    ownerRecentWords: { word: string; lang: string; at: string }[];
+  };
   totalAllTime: number;
   classroomCount: number;
   languages: LangCount[];
@@ -83,6 +92,10 @@ const COPY = {
     colLookups: "Classroom",
     colOwner: "Owner",
     kpiOwner: "Owner's own lookups",
+    ownerWords: "Owner's recent searches",
+    ownerWordsNote: "The last words the account owner looked up (kids' classroom searches show under Students).",
+    logoLabel: "Logo",
+    noLogo: "No logo uploaded",
     unnamed: "(unnamed school)",
     back: "All schools",
     kpiLookups: "Counter total",
@@ -129,6 +142,10 @@ const COPY = {
     colLookups: "כיתתי",
     colOwner: "בעלים",
     kpiOwner: "חיפושי בעל החשבון",
+    ownerWords: "החיפושים האחרונים של בעל החשבון",
+    ownerWordsNote: "המילים האחרונות שבעל החשבון חיפש (חיפושי הילדים בכיתה מופיעים תחת תלמידים).",
+    logoLabel: "לוגו",
+    noLogo: "לא הועלה לוגו",
     unnamed: "(בית ספר ללא שם)",
     back: "כל בתי הספר",
     kpiLookups: "מונה (searchCount)",
@@ -312,13 +329,29 @@ export default function AdminSchoolsClient() {
         {detail && (
           <>
             <div style={{ marginTop: 8, marginBottom: 20 }}>
-              <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: "#111827" }} dir="auto">
-                {detail.school.name || t.unnamed}
-              </h1>
-              <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }} dir="ltr">
-                {detail.school.contactEmail || detail.school.id}
-                {detail.school.plan ? ` · ${detail.school.plan}` : ""}
-              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                {detail.school.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={detail.school.logoUrl}
+                    alt={t.logoLabel}
+                    style={{ width: 52, height: 52, borderRadius: 12, objectFit: "contain", background: "white", border: "1px solid #E5E7EB", flexShrink: 0 }}
+                  />
+                ) : (
+                  <div style={{ width: 52, height: 52, borderRadius: 12, background: "#F3F4F6", border: "1px dashed #D1D5DB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#9CA3AF", textAlign: "center", flexShrink: 0, padding: 4 }}>
+                    {t.noLogo}
+                  </div>
+                )}
+                <div>
+                  <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: "#111827" }} dir="auto">
+                    {detail.school.name || t.unnamed}
+                  </h1>
+                  <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }} dir="ltr">
+                    {detail.school.contactEmail || detail.school.id}
+                    {detail.school.plan ? ` · ${detail.school.plan}` : ""}
+                  </p>
+                </div>
+              </div>
               <button
                 onClick={() => { setMergeInto(""); setMergeOpen(true); }}
                 style={{ marginTop: 10, padding: "8px 14px", borderRadius: 8, border: "1px solid #7C3AED", background: "#F5F3FF", color: "#6D28D9", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
@@ -355,6 +388,28 @@ export default function AdminSchoolsClient() {
                     >
                       {w.word}
                       <span style={{ color: "#0E7490", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{w.count}</span>
+                    </a>
+                  ))}
+                </div>
+              </Section>
+            )}
+
+            {/* Owner's own recent searches (from their paid history) */}
+            {detail.school.ownerRecentWords.length > 0 && (
+              <Section title={t.ownerWords}>
+                <p style={{ color: "#9CA3AF", fontSize: 12, margin: "0 0 10px" }}>{t.ownerWordsNote}</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {detail.school.ownerRecentWords.map((w, i) => (
+                    <a
+                      key={`${w.word}-${i}`}
+                      href={`/word/${encodeURIComponent(w.word)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ ...chip, borderColor: "#EDE9FE", background: "#F5F3FF", color: "#6D28D9" }}
+                      dir="auto"
+                    >
+                      {w.word}
+                      {w.lang && <span style={{ color: "#9CA3AF", fontSize: 11 }}>{w.lang}</span>}
                     </a>
                   ))}
                 </div>

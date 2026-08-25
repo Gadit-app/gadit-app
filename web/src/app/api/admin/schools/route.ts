@@ -61,9 +61,19 @@ export async function GET(req: NextRequest) {
       contactEmail?: string | null;
       plan?: string;
       createdAt?: string;
+      logoUrl?: string | null;
     };
     const ownerSnap = await db.collection("users").doc(schoolId).get();
     const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
+
+    // The owner's own recent lookups (last ~10 words), from their paid search
+    // history at users/{id}/meta/history. This is the only place the actual
+    // WORDS the account looked up are kept (the counter above is just a total),
+    // so it answers "what did this school search?" for the owner's own use.
+    const histSnap = await db.collection("users").doc(schoolId).collection("meta").doc("history").get();
+    const ownerRecentWords = (((histSnap.data()?.items as { word?: string; uiLang?: string; timestamp?: string }[]) ?? [])
+      .map((h) => ({ word: (h.word ?? "").trim(), lang: h.uiLang ?? "", at: h.timestamp ?? "" }))
+      .filter((h) => h.word));
 
     const insights = await computeSchoolInsights(db, schoolId);
 
@@ -92,7 +102,9 @@ export async function GET(req: NextRequest) {
         contactEmail: meta.contactEmail ?? null,
         plan: meta.plan ?? "",
         createdAt: meta.createdAt ?? null,
+        logoUrl: meta.logoUrl ?? null,
         ownerSearches,
+        ownerRecentWords,
       },
       ...insights,
       classrooms,
