@@ -763,7 +763,7 @@ export function SchoolsClient() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={school.logoUrl} alt="" />
               ) : (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z" /><path d="M21 10v6" /><path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" /></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z" /><path d="M21 10v6" /><path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" /></svg>
               )}
             </div>
             <div>
@@ -798,7 +798,7 @@ export function SchoolsClient() {
                 // the with-logo state so the user's logo reads clean;
                 // keep mustard for the empty placeholder state.
                 background: school.logoUrl ? "var(--surface)" : undefined,
-                border: school.logoUrl ? "1px solid var(--hairline, var(--rule))" : "1px solid rgba(202, 138, 4, 0.3)",
+                border: school.logoUrl ? "1px solid var(--hairline, var(--rule))" : "1px solid rgba(14, 165, 165, 0.3)",
                 cursor: "pointer",
               }}
             >
@@ -806,7 +806,7 @@ export function SchoolsClient() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={school.logoUrl} alt="" />
               ) : (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 7l9-4 9 4-9 4-9-4z" />
                   <path d="M21 10v6" />
                   <path d="M5 9v5c0 2 3 4 7 4s7-2 7-4V9" />
@@ -830,13 +830,13 @@ export function SchoolsClient() {
                 width: 24,
                 height: 24,
                 borderRadius: 999,
-                background: "#CA8A04",
+                background: "#0EA5A5",
                 border: "2px solid var(--surface, #FFFFFF)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 pointerEvents: "none",
-                boxShadow: "0 2px 4px rgba(202, 138, 4, 0.35)",
+                boxShadow: "0 2px 4px rgba(14, 165, 165, 0.35)",
               }}
             >
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--surface)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
@@ -1039,10 +1039,10 @@ export function SchoolsClient() {
           <div
             style={{
               padding: "12px 16px",
-              background: "rgba(202, 138, 4, 0.10)",
-              border: "1px solid rgba(202, 138, 4, 0.3)",
+              background: "rgba(14, 165, 165, 0.10)",
+              border: "1px solid rgba(14, 165, 165, 0.3)",
               borderRadius: 12,
-              color: "#92400E",
+              color: "#0E7490",
               fontFamily: "var(--wb-sans)",
               fontSize: 14,
               marginBottom: 24,
@@ -1730,7 +1730,7 @@ html[data-theme] .wordbook.school-shell-page {
   color: var(--ink); text-decoration: none; direction: ltr;
   padding: 4px 12px 16px; text-align: center;
 }
-.school-shell-brand-it { color: #CA8A04; font-style: italic; font-weight: 500; }
+.school-shell-brand-it { color: #0EA5A5; font-style: italic; font-weight: 500; }
 .school-shell-nav { display: flex; flex-direction: column; gap: 4px; }
 .school-nav-item {
   display: flex; align-items: center; gap: 11px; width: 100%;
@@ -1741,15 +1741,15 @@ html[data-theme] .wordbook.school-shell-page {
 }
 .school-nav-item svg { flex-shrink: 0; color: var(--ink-faint); transition: color 140ms ease; }
 .school-nav-item:hover { background: var(--mist); color: var(--ink); }
-.school-nav-item.is-active { background: rgba(202,138,4,0.12); color: #92400E; }
-.school-nav-item.is-active svg { color: #92400E; }
+.school-nav-item.is-active { background: rgba(14, 165, 165,0.12); color: #0E7490; }
+.school-nav-item.is-active svg { color: #0E7490; }
 .school-shell-side-foot { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(31,41,55,0.07); }
 .school-nav-back {
-  color: #92400E; font-weight: 700; background: rgba(202,138,4,0.08);
-  border: 1px solid rgba(202,138,4,0.22); justify-content: center;
+  color: #0E7490; font-weight: 700; background: rgba(14, 165, 165,0.08);
+  border: 1px solid rgba(14, 165, 165,0.22); justify-content: center;
 }
-.school-nav-back:hover { background: rgba(202,138,4,0.15); color: #92400E; }
-.school-nav-back svg { color: #CA8A04; }
+.school-nav-back:hover { background: rgba(14, 165, 165,0.15); color: #0E7490; }
+.school-nav-back svg { color: #0EA5A5; }
 
 .school-shell-body { flex: 1; min-width: 0; }
 .school-shell-top { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
@@ -1757,7 +1757,7 @@ html[data-theme] .wordbook.school-shell-page {
 .school-shell-top p { margin: 4px 0 0; color: var(--ink-muted); font-size: 14px; font-weight: 500; }
 .school-shell-logo {
   width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px;
-  background: rgba(202,138,4,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden;
+  background: rgba(14, 165, 165,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 .school-shell-logo img { width: 100%; height: 100%; object-fit: contain; }
 .school-sec-title { font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 16px; }
@@ -1785,10 +1785,10 @@ html[data-theme] .wordbook.school-shell-page {
    2026-08-03). Scoped to this page only, so the /c/<CODE> kid surface and
    other teal chrome are untouched. */
 .school-shell-page .wb-school-cta {
-  background: #CA8A04 !important;
-  box-shadow: 0 1px 2px rgba(202,138,4,0.28), 0 8px 22px -8px rgba(202,138,4,0.42) !important;
+  background: #0EA5A5 !important;
+  box-shadow: 0 1px 2px rgba(14, 165, 165,0.28), 0 8px 22px -8px rgba(14, 165, 165,0.42) !important;
 }
 .school-shell-page .wb-school-cta:hover { background: #A16207 !important; }
-.school-shell-page .wb-school-cta:focus-visible { outline: 2px solid #CA8A04 !important; }
-.school-shell-page .wb-classroom-code { color: #92400E; background: rgba(202,138,4,0.12); }
+.school-shell-page .wb-school-cta:focus-visible { outline: 2px solid #0EA5A5 !important; }
+.school-shell-page .wb-classroom-code { color: #0E7490; background: rgba(14, 165, 165,0.12); }
 `;

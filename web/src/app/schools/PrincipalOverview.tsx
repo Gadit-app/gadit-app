@@ -232,12 +232,12 @@ export function PrincipalOverview({ lang }: { lang: string }) {
       {/* Top stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14, marginBottom: 14 }}>
         <div style={statMustard}>
-          <span aria-hidden="true" style={{ position: "absolute", insetInlineEnd: -18, top: -18, width: 84, height: 84, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
+          <span aria-hidden="true" style={{ position: "absolute", insetInlineEnd: -18, top: -18, width: 84, height: 84, borderRadius: "50%", background: "rgba(14,165,165,0.06)" }} />
           <div style={{ ...statLabel, position: "relative" }}>{t.totalLabel}</div>
           <div style={{ ...statNum, position: "relative" }}>{data.totalAllTime.toLocaleString()}</div>
         </div>
         <div style={statTeal}>
-          <span aria-hidden="true" style={{ position: "absolute", insetInlineEnd: -18, top: -18, width: 84, height: 84, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
+          <span aria-hidden="true" style={{ position: "absolute", insetInlineEnd: -18, top: -18, width: 84, height: 84, borderRadius: "50%", background: "rgba(14,165,165,0.06)" }} />
           <div style={{ ...statLabel, position: "relative" }}>{t.classroomsLabel}</div>
           <div style={{ ...statNum, position: "relative" }}>{data.classroomCount}</div>
         </div>
@@ -256,7 +256,7 @@ export function PrincipalOverview({ lang }: { lang: string }) {
                 <div key={l.lang} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "#1C1917", minWidth: 78 }}>{classroomLangLabel(l.lang)}</span>
                   <span style={{ flex: 1, height: 8, background: "#F0EEEB", borderRadius: 999, overflow: "hidden" }}>
-                    <span style={{ display: "block", height: "100%", width: `${Math.max(l.pct, 3)}%`, background: "#CA8A04", borderRadius: 999 }} />
+                    <span style={{ display: "block", height: "100%", width: `${Math.max(l.pct, 3)}%`, background: "#0EA5A5", borderRadius: 999 }} />
                   </span>
                   <span style={{ fontSize: 12, fontWeight: 600, color: "#78716C", minWidth: 34, textAlign: "end" }}>{l.pct}%</span>
                 </div>
@@ -275,9 +275,9 @@ export function PrincipalOverview({ lang }: { lang: string }) {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
               {data.topWords.map((w) => (
                 <Link key={w.word} href={href(`/word/${encodeURIComponent(w.word)}`)}
-                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 999, textDecoration: "none", fontSize: 14, fontWeight: 600, color: "#92400E" }}>
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", background: "#ECFEFF", border: "1px solid #A5F3F0", borderRadius: 999, textDecoration: "none", fontSize: 14, fontWeight: 600, color: "#0E7490" }}>
                   <span>{w.word}</span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: "#CA8A04", background: "#FEF3C7", borderRadius: 999, padding: "1px 7px" }}>{w.count}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#0EA5A5", borderRadius: 999, padding: "1px 7px" }}>{w.count}</span>
                 </Link>
               ))}
             </div>
@@ -300,7 +300,7 @@ export function PrincipalOverview({ lang }: { lang: string }) {
                 {cls.topLanguage ? ` · ${classroomLangLabel(cls.topLanguage)}` : ""}
               </div>
             </div>
-            <div style={{ fontSize: 13.5, fontWeight: 700, color: "#CA8A04", minWidth: 90, textAlign: "center" }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: "#0EA5A5", minWidth: 90, textAlign: "center" }}>
               {cls.totalAllTime.toLocaleString()} {t.lookups}
             </div>
             <div style={{ display: "flex", gap: 8 }}>
@@ -320,10 +320,13 @@ const card: React.CSSProperties = { background: "#fff", border: "1px solid #EAE7
 const label: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#1C1917", marginBottom: 4 };
 const sub: React.CSSProperties = { fontSize: 12.5, color: "#78716C", lineHeight: 1.45, margin: "0 0 12px" };
 // Vibrant KPI cards (modern school dashboard, Gadi 2026-08-23).
-const statBase: React.CSSProperties = { borderRadius: 20, padding: "20px 22px 18px", border: "none", color: "#fff", display: "flex", flexDirection: "column", gap: 3, position: "relative", overflow: "hidden" };
-const statMustard: React.CSSProperties = { ...statBase, background: "linear-gradient(135deg,#F0A81E,#CA8A04)", boxShadow: "0 16px 32px -18px rgba(202,138,4,0.6)" };
-const statTeal: React.CSSProperties = { ...statBase, background: "linear-gradient(135deg,#10B6B6,#0B7D7D)", boxShadow: "0 16px 32px -18px rgba(14,165,165,0.6)" };
-const statNum: React.CSSProperties = { fontSize: 40, fontWeight: 800, color: "#fff", lineHeight: 1.05 };
-const statLabel: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.92)" };
-const btnPrimary: React.CSSProperties = { background: "#CA8A04", color: "#fff", borderRadius: 9, padding: "7px 14px", fontSize: 13, fontWeight: 700, textDecoration: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap" };
-const btnGhost: React.CSSProperties = { background: "#fff", color: "#92400E", borderRadius: 9, padding: "7px 14px", fontSize: 13, fontWeight: 700, border: "1px solid #FDE68A", cursor: "pointer", whiteSpace: "nowrap" };
+// Clean Gadit-brand KPI cards: light surface, teal number, quiet border — the
+// same restrained look as the rest of Gadit (Gadi 2026-08-25: drop the loud
+// mustard/teal gradients, keep it clean and on-brand).
+const statBase: React.CSSProperties = { borderRadius: 16, padding: "18px 20px", border: "1px solid var(--rule, #E7E5E4)", background: "var(--surface, #fff)", color: "var(--ink, #1C1917)", display: "flex", flexDirection: "column", gap: 4, position: "relative", overflow: "hidden", boxShadow: "0 1px 2px rgba(16,24,40,0.04)" };
+const statMustard: React.CSSProperties = { ...statBase };
+const statTeal: React.CSSProperties = { ...statBase };
+const statNum: React.CSSProperties = { fontSize: 38, fontWeight: 800, color: "#0EA5A5", lineHeight: 1.05, fontVariantNumeric: "tabular-nums" };
+const statLabel: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: "var(--ink-soft, #78716C)" };
+const btnPrimary: React.CSSProperties = { background: "#0EA5A5", color: "#fff", borderRadius: 9, padding: "7px 14px", fontSize: 13, fontWeight: 700, textDecoration: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap" };
+const btnGhost: React.CSSProperties = { background: "#fff", color: "#0E7490", borderRadius: 9, padding: "7px 14px", fontSize: 13, fontWeight: 700, border: "1px solid #A5F3F0", cursor: "pointer", whiteSpace: "nowrap" };
