@@ -40,6 +40,7 @@ type Copy = {
   loading: string;
   error: string;
   empty: string;
+  emptyNoActivity: string;
   totalLabel: string;
   classroomsLabel: string;
   langMapTitle: string;
@@ -59,7 +60,8 @@ const COPY: Record<string, Copy> = {
   he: {
     loading: "טוען...",
     error: "לא הצלחנו לטעון את התובנות. אפשר לנסות שוב.",
-    empty: "עדיין אין כיתות עם פעילות. אפשר להוסיף כיתה ולשתף את הקוד עם הילדים.",
+    empty: "עדיין אין כיתות. הוסיפו כיתה ראשונה כדי לקבל קוד לילדים.",
+    emptyNoActivity: "עדיין אין חיפושים. שתפו את קוד הכיתה עם התלמידים והחיפושים שלהם יופיעו כאן.",
     totalLabel: "סה\"כ חיפושים בבית הספר",
     classroomsLabel: "כיתות",
     langMapTitle: "השפות שבית הספר לומד בהן",
@@ -77,7 +79,8 @@ const COPY: Record<string, Copy> = {
   en: {
     loading: "Loading…",
     error: "Couldn't load insights. Please try again.",
-    empty: "No classroom activity yet. Add a classroom and share the code with the kids.",
+    empty: "No classrooms yet. Add your first classroom to get a code for the kids.",
+    emptyNoActivity: "No lookups yet. Share the classroom code with your students and their searches will appear here.",
     totalLabel: "Total lookups across the school",
     classroomsLabel: "classrooms",
     langMapTitle: "Languages your school learns in",
@@ -95,7 +98,8 @@ const COPY: Record<string, Copy> = {
   zu: {
     loading: "Iyalayisha…",
     error: "Asikwazanga ukulayisha imininingwane. Sicela uzame futhi.",
-    empty: "Awukho umsebenzi wekilasi okwamanje. Engeza ikilasi bese wabelana ngekhodi nezingane.",
+    empty: "Awukho amakilasi okwamanje. Engeza ikilasi lakho lokuqala ukuze uthole ikhodi yezingane.",
+    emptyNoActivity: "Awukho amagama afuniwe okwamanje. Yabelana ngekhodi yekilasi nabafundi bakho, ukusesha kwabo kuzovela lapha.",
     totalLabel: "Isamba sokubheka kuso sonke isikole",
     classroomsLabel: "amakilasi",
     langMapTitle: "Izilimi isikole sakho esifunda ngazo",
@@ -113,7 +117,8 @@ const COPY: Record<string, Copy> = {
   el: {
     loading: "Φόρτωση…",
     error: "Δεν ήταν δυνατή η φόρτωση των στατιστικών. Δοκιμάστε ξανά.",
-    empty: "Δεν υπάρχει δραστηριότητα τάξης ακόμη. Προσθέστε μια τάξη και μοιραστείτε τον κωδικό με τα παιδιά.",
+    empty: "Δεν υπάρχουν τάξεις ακόμη. Πρόσθεσε την πρώτη σου τάξη για να πάρεις κωδικό για τα παιδιά.",
+    emptyNoActivity: "Δεν υπάρχουν αναζητήσεις ακόμη. Μοιράσου τον κωδικό της τάξης με τους μαθητές σου και οι αναζητήσεις τους θα εμφανιστούν εδώ.",
     totalLabel: "Συνολικές αναζητήσεις σε όλο το σχολείο",
     classroomsLabel: "τάξεις",
     langMapTitle: "Οι γλώσσες στις οποίες μαθαίνει το σχολείο σας",
@@ -131,7 +136,8 @@ const COPY: Record<string, Copy> = {
   hi: {
     loading: "लोड हो रहा है…",
     error: "जानकारी लोड नहीं हो सकी। फिर से कोशिश करें।",
-    empty: "अभी कोई कक्षा गतिविधि नहीं। कक्षा जोड़ें और कोड बच्चों के साथ साझा करें।",
+    empty: "अभी कोई कक्षा नहीं। बच्चों के लिए कोड पाने हेतु अपनी पहली कक्षा जोड़ें।",
+    emptyNoActivity: "अभी कोई खोज नहीं। कक्षा कोड अपने छात्रों के साथ साझा करें, उनकी खोजें यहाँ दिखेंगी।",
     totalLabel: "स्कूल भर में कुल खोजें",
     classroomsLabel: "कक्षाएँ",
     langMapTitle: "आपका स्कूल जिन भाषाओं में सीखता है",
@@ -149,7 +155,8 @@ const COPY: Record<string, Copy> = {
   am: {
     loading: "እየተጫነ ነው…",
     error: "ግንዛቤዎቹን መጫን አልተቻለም። እንደገና ይሞክሩ።",
-    empty: "እስካሁን የክፍል እንቅስቃሴ የለም። ክፍል ጨምረው ኮዱን ከልጆች ጋር ያጋሩ።",
+    empty: "እስካሁን ክፍሎች የሉም። ለልጆች ኮድ ለማግኘት የመጀመሪያ ክፍልዎን ይጨምሩ።",
+    emptyNoActivity: "እስካሁን ፍለጋዎች የሉም። የክፍል ኮዱን ከተማሪዎችዎ ጋር ያጋሩ፣ ፍለጋዎቻቸው እዚህ ይታያሉ።",
     totalLabel: "በትምህርት ቤቱ ጠቅላላ ፍለጋዎች",
     classroomsLabel: "ክፍሎች",
     langMapTitle: "ትምህርት ቤቱ የሚማርባቸው ቋንቋዎች",
@@ -212,8 +219,12 @@ export function PrincipalOverview({ lang }: { lang: string }) {
   if (loading) return <p style={{ color: "#78716C", fontSize: 15 }}>{t.loading}</p>;
   if (error || !data) return <p style={{ color: "#B45309", fontSize: 15 }}>{t.error}</p>;
 
-  if (data.classroomCount === 0 || (data.totalAllTime === 0 && data.sampleSize === 0)) {
+  if (data.classroomCount === 0) {
     return <p style={{ color: "#78716C", fontSize: 15 }}>{t.empty}</p>;
+  }
+  if (data.totalAllTime === 0 && data.sampleSize === 0) {
+    // Classrooms exist but no lookups yet — don't tell them to add a classroom.
+    return <p style={{ color: "#78716C", fontSize: 15 }}>{t.emptyNoActivity}</p>;
   }
 
   return (

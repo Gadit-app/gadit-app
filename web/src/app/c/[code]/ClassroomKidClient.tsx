@@ -169,32 +169,32 @@ const OFFHOURS_HINT: Record<string, { line1: string; cta: string; link: string }
   he: {
     line1: "מחוץ לשעות הכיתה. מוצא מילים בלי תמונה והסבר לילדים.",
     cta: "רוצה את כל גדית בבית? המנוי המשפחתי",
-    link: "/pricing",
+    link: "/families",
   },
   en: {
-    line1: "Outside class hours — looking words up without images and kids' explanation.",
+    line1: "Outside class hours. Looking words up without images and kids' explanation.",
     cta: "Want full Gadit at home? Family plan",
-    link: "/pricing",
+    link: "/families",
   },
   zu: {
     line1: "Ngaphandle kwamahora ekilasi. Sibheka amagama ngaphandle kwezithombe nencazelo yezingane.",
     cta: "Ufuna i-Gadit egcwele ekhaya? Uhlelo lomndeni",
-    link: "/pricing",
+    link: "/families",
   },
   el: {
     line1: "Εκτός ωρών μαθήματος. Αναζητάς λέξεις χωρίς εικόνες και επεξήγηση για παιδιά.",
     cta: "Θέλεις όλο το Gadit στο σπίτι; Το πλάνο Family",
-    link: "/pricing",
+    link: "/families",
   },
   hi: {
-    line1: "कक्षा के समय के बाहर — बिना तस्वीर और बच्चों की समझ के शब्द खोज रहे हैं।",
+    line1: "कक्षा के समय के बाहर। बिना तस्वीर और बच्चों की समझ के शब्द खोज रहे हैं।",
     cta: "घर पर पूरा Gadit चाहिए? Family प्लान",
-    link: "/pricing",
+    link: "/families",
   },
   am: {
     line1: "ከክፍል ሰዓት ውጭ ነን። ቃላት ያለ ምስል እና ያለ የልጆች ማብራሪያ እየፈለግን ነው።",
     cta: "ቤት ውስጥ ሙሉውን Gadit ትፈልጋላችሁ? የFamily እቅድ",
-    link: "/pricing",
+    link: "/families",
   },
 };
 

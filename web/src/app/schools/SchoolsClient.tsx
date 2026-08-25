@@ -471,18 +471,18 @@ export function SchoolsClient() {
     }
   }
 
-  // "Auto from logo": load the current logo and pull its dominant colour.
-  function autoSkinFromLogo(logoUrl: string) {
+  // "Auto from logo": load the logo through our same-origin proxy (loading the
+  // Firebase URL directly taints the canvas) and pull its dominant colour.
+  function autoSkinFromLogo(schoolId: string) {
     setSkinAutoNote(null);
     const img = new Image();
-    img.crossOrigin = "anonymous";
     img.onload = () => {
       const hex = dominantColorFromImage(img);
       if (hex) saveSkin(hex);
       else setSkinAutoNote((APPEARANCE_COPY[lang] ?? APPEARANCE_COPY.en).autoFail);
     };
     img.onerror = () => setSkinAutoNote((APPEARANCE_COPY[lang] ?? APPEARANCE_COPY.en).autoFail);
-    img.src = logoUrl;
+    img.src = `/api/schools/logo-proxy?schoolId=${encodeURIComponent(schoolId)}`;
   }
   // Per-row classroom edit. The pencil button on a row opens a full
   // expanded form (name + teacher + color) so the principal can
@@ -1008,7 +1008,7 @@ export function SchoolsClient() {
                 {school.logoUrl && (
                   <button
                     type="button"
-                    onClick={() => autoSkinFromLogo(school.logoUrl!)}
+                    onClick={() => autoSkinFromLogo(school.ownerUid)}
                     disabled={skinSaving}
                     className="school-set-select"
                     style={{ cursor: "pointer", fontSize: 13, padding: "6px 12px", width: "auto" }}
