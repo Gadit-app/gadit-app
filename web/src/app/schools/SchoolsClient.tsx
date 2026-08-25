@@ -116,7 +116,7 @@ const COPY: Record<string, {
     wordsLabel: "מילים",
     editAria: "עריכת הכיתה",
     deleteAria: "מחיקת כיתה",
-    copyLinkAria: "העתקת לינק לילדים",
+    copyLinkAria: "העתקת לינק לכיתה",
     copiedBadge: "הועתק",
     deleteConfirm: "למחוק את הכיתה הזו לתמיד? כל היסטוריית החיפושים שלה תאבד.",
     saveBtn: "שמירה",
@@ -162,7 +162,7 @@ const COPY: Record<string, {
     wordsLabel: "words",
     editAria: "Edit classroom",
     deleteAria: "Delete classroom",
-    copyLinkAria: "Copy kids link",
+    copyLinkAria: "Copy class link",
     copiedBadge: "Copied",
     deleteConfirm: "Delete this classroom forever? All its search history will be lost.",
     saveBtn: "Save",
@@ -1415,7 +1415,7 @@ export function SchoolsClient() {
                         flexShrink: 0,
                       }}
                     >
-                      {lang === "he" ? "לינק לילדים" : lang === "hi" ? "बच्चों का लिंक" : "Kids link"}
+                      {lang === "he" ? "לינק לכיתה" : lang === "hi" ? "कक्षा लिंक" : "Class link"}
                     </span>
                     <span
                       dir="ltr"
@@ -1673,15 +1673,16 @@ const SCHOOL_SHELL_CSS = `
    dark and breaks contrast. Mirrors the family dashboard. High specificity to
    beat html[data-theme="dark"] .wordbook. (Gadi 2026-08-23) */
 html[data-theme] .wordbook.school-shell-page {
-  --paper: #F4F7F6; --surface: #FFFFFF; --mist: #EAF1EE;
+  --paper: #F2F6F4; --surface: #FFFFFF; --mist: #EAF1EE;
   --ink: #0B0F19; --ink-soft: #3A3F4B; --ink-muted: #5C6270; --ink-faint: #8B91A0;
   --rule: #E4EAE8; --rule-soft: #EDEFF2; --rule-faint: #F1F2F6;
   --accent: #0EA5A5; --accent-2: #7C3AED; --accent-ink: #FFFFFF;
-  --wb-card: #FFFFFF; --wb-surface: #FFFFFF; --wb-bg: #F4F7F6;
+  --wb-card: #FFFFFF; --wb-surface: #FFFFFF; --wb-bg: #F2F6F4;
   --wb-ink: #0B0F19; --wb-ink-soft: #3A3F4B; --wb-border: #E4EAE8;
 }
-/* Clean Gadit-brand light background (was a warm cream that read mustard). */
-.school-shell-page { min-height: 100dvh; background: #F4F7F6; }
+/* Exactly the main dictionary's page ground (--paper #F2F6F4), so the school
+   dashboard reads as the same premium Gadit surface. (Gadi 2026-08-25.) */
+.school-shell-page { min-height: 100dvh; background: #F2F6F4; }
 .school-shell {
   display: flex; gap: 20px; max-width: 1140px; margin: 0 auto;
   padding: 20px 18px 48px; align-items: flex-start;
