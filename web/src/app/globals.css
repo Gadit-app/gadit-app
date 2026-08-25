@@ -12617,8 +12617,15 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   margin-bottom: clamp(14px, 2.5vw, 22px);
 }
 /* The welcome line is a shared homepage class with a big 36px gap under it;
-   shrink it only inside the classroom so the names pull up. */
-.wordbook.wb-school-page .wb-home-tagline { margin-bottom: 14px; }
+   trim it inside the classroom, but keep a little breathing room before the
+   names. (Gadi 2026-08-25.) */
+.wordbook.wb-school-page .wb-home-tagline { margin-bottom: 24px; }
+/* Raise the whole school lockup: the homepage pushes it far down from the
+   topbar (80/150px), which stranded the logo low on the classroom page. */
+.wordbook.wb-school-page .wb-home-main { padding-top: 44px; }
+@media (min-width: 768px) {
+  .wordbook.wb-school-page .wb-home-main { padding-top: 60px; }
+}
 .wordbook .wb-classroom-hero-logo {
   width: 110px;
   height: 110px;
