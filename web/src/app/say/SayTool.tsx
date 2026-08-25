@@ -109,17 +109,23 @@ function levenshtein(a: string, b: string): number {
   }
   return prev[n];
 }
+// Tuned to be encouraging without cheapening a perfect score (Gadi 2026-08-25):
+// 3 stars is an honest bar (exact / strong similarity), 2 stars rewards a
+// recognizable attempt (real progress), 1 star means keep trying. Short words
+// get a little slack (one or two edits still counts as close), since a single
+// missed sound is a big fraction of a short word.
 function scorePron(target: string, spoken: string): "correct" | "close" | "wrong" {
   const t = normPron(target), s = normPron(spoken);
   if (!s || !t) return "wrong";
   if (t === s) return "correct";
   if (t.length >= 2 && s.length >= 2 && (t.includes(s) || s.includes(t))) {
     const ratio = Math.min(t.length, s.length) / Math.max(t.length, s.length);
-    return ratio >= 0.8 ? "correct" : "close";
+    return ratio >= 0.7 ? "correct" : "close";
   }
-  const sim = 1 - levenshtein(t, s) / Math.max(t.length, s.length);
-  if (sim >= 0.85) return "correct";
-  if (sim >= 0.6) return "close";
+  const dist = levenshtein(t, s);
+  const sim = 1 - dist / Math.max(t.length, s.length);
+  if (sim >= 0.8) return "correct";
+  if (sim >= 0.5 || (t.length <= 6 && dist <= 2)) return "close";
   return "wrong";
 }
 
@@ -330,8 +336,12 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
                     : pron.status === "close"
                       ? { bg: "rgba(245,158,11,0.12)", bd: "rgba(245,158,11,0.4)", fg: "#b45309", ic: "≈", msg: t.pcClose }
                       : { bg: "rgba(239,68,68,0.1)", bd: "rgba(239,68,68,0.35)", fg: "#b91c1c", ic: "↻", msg: t.pcWrong };
+                  const stars = pron.status === "correct" ? 3 : pron.status === "close" ? 2 : 1;
                   return (
                     <div style={{ marginTop: 14, borderRadius: 12, padding: "12px 14px", background: c.bg, border: `1px solid ${c.bd}` }}>
+                      <div style={{ fontSize: 20, letterSpacing: 3, lineHeight: 1, marginBottom: 6 }} aria-label={`${stars}/3`}>
+                        <span style={{ color: c.fg }}>{"★".repeat(stars)}</span><span style={{ color: "rgba(0,0,0,0.14)" }}>{"★".repeat(3 - stars)}</span>
+                      </div>
                       <div style={{ fontWeight: 700, color: c.fg, fontSize: 15 }}><span aria-hidden="true">{c.ic}</span> {c.msg}</div>
                       {pron.status !== "correct" && (
                         <div style={{ marginTop: 5, fontSize: 14, opacity: 0.85 }}>
