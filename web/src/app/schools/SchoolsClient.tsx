@@ -914,7 +914,7 @@ export function SchoolsClient() {
                   background: "var(--surface)",
                   fontFamily: "var(--wb-serif)",
                   fontWeight: 700,
-                  fontSize: "clamp(24px, 3.6vw, 36px)",
+                  fontSize: "clamp(22px, 2.6vw, 30px)",
                   color: "var(--ink)",
                   outline: "none",
                   marginBottom: 6,
@@ -948,26 +948,69 @@ export function SchoolsClient() {
         {logoError && (
           <div className="wb-school-sub" style={{ color: "#B91C1C", marginBottom: 12 }}>{logoError}</div>
         )}
-        {/* Interface language, like the Family settings selector. */}
-        <div className="school-set-row">
-          <span className="school-set-label">{c.langLabel}</span>
-          <select
-            className="school-set-select"
-            value={lang}
-            onChange={(e) => setLang(e.target.value as Parameters<typeof setLang>[0])}
-          >
-            {Object.entries(SCHOOL_LANG_NATIVE).map(([code, name]) => (
-              <option key={code} value={code}>{name}</option>
-            ))}
-          </select>
+        {/* Each setting group sits in its own clean card so it reads as a
+            distinct block. Order (Gadi 2026-08-25): language, notification,
+            design. */}
+
+        {/* 1 · Interface language */}
+        <div className="school-set-card">
+          <div className="school-set-row" style={{ margin: 0 }}>
+            <span className="school-set-label">{c.langLabel}</span>
+            <select
+              className="school-set-select"
+              value={lang}
+              onChange={(e) => setLang(e.target.value as Parameters<typeof setLang>[0])}
+            >
+              {Object.entries(SCHOOL_LANG_NATIVE).map(([code, name]) => (
+                <option key={code} value={code}>{name}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        {/* Classroom skin — accent colour for the /c/<CODE> surface. */}
+        {/* 2 · Daily summary email (notification) — opt-out, on by default. */}
+        {(() => {
+          const d = DIGEST_COPY[lang] ?? DIGEST_COPY.en;
+          const enabled = school.dailyDigest?.enabled !== false;
+          const hour = typeof school.dailyDigest?.hour === "number" ? school.dailyDigest.hour : 15;
+          return (
+            <div className="school-set-card">
+              <div className="school-set-label" style={{ marginBottom: 4 }}>{d.heading}</div>
+              <p className="wb-school-sub" style={{ margin: "0 0 12px", fontSize: 13 }}>{d.note}</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                <label style={{ display: "inline-flex", alignItems: "center", gap: 10, cursor: "pointer", fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={enabled}
+                    onClick={() => saveDigest({ enabled: !enabled })}
+                    style={{ width: 44, height: 26, borderRadius: 999, border: "none", cursor: "pointer", position: "relative", background: enabled ? "#0EA5A5" : "#D1D5DB", transition: "background 160ms" }}
+                  >
+                    <span style={{ position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "inset-inline-start 160ms" }} />
+                  </button>
+                  {d.toggle}
+                </label>
+                {enabled && (
+                  <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--ink-soft)" }}>
+                    {d.timeLabel}
+                    <select value={hour} onChange={(e) => saveDigest({ hour: parseInt(e.target.value, 10) })} className="school-set-select" style={{ width: "auto", padding: "6px 10px" }}>
+                      {Array.from({ length: 24 }, (_, h) => (
+                        <option key={h} value={h}>{String(h).padStart(2, "0")}:00</option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* 3 · Classroom appearance (design) — accent for the /c/<CODE> surface. */}
         {(() => {
           const a = APPEARANCE_COPY[lang] ?? APPEARANCE_COPY.en;
           const current = school.skinAccent && isHex(school.skinAccent) ? school.skinAccent : DEFAULT_ACCENT;
           return (
-            <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--rule)" }}>
+            <div className="school-set-card">
               <div className="school-set-label" style={{ marginBottom: 4 }}>{a.heading}</div>
               <p className="wb-school-sub" style={{ margin: "0 0 12px", fontSize: 13 }}>{a.note}</p>
 
@@ -1027,50 +1070,6 @@ export function SchoolsClient() {
           );
         })()}
 
-        {/* Daily summary email — opt-out (on by default). */}
-        {(() => {
-          const d = DIGEST_COPY[lang] ?? DIGEST_COPY.en;
-          const enabled = school.dailyDigest?.enabled !== false;
-          const hour = typeof school.dailyDigest?.hour === "number" ? school.dailyDigest.hour : 15;
-          return (
-            <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--rule)" }}>
-              <div className="school-set-label" style={{ marginBottom: 4 }}>{d.heading}</div>
-              <p className="wb-school-sub" style={{ margin: "0 0 12px", fontSize: 13 }}>{d.note}</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-                <label style={{ display: "inline-flex", alignItems: "center", gap: 10, cursor: "pointer", fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={enabled}
-                    onClick={() => saveDigest({ enabled: !enabled })}
-                    style={{
-                      width: 44, height: 26, borderRadius: 999, border: "none", cursor: "pointer", position: "relative",
-                      background: enabled ? "#0EA5A5" : "#D1D5DB", transition: "background 160ms",
-                    }}
-                  >
-                    <span style={{ position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "inset-inline-start 160ms" }} />
-                  </button>
-                  {d.toggle}
-                </label>
-                {enabled && (
-                  <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--ink-soft)" }}>
-                    {d.timeLabel}
-                    <select
-                      value={hour}
-                      onChange={(e) => saveDigest({ hour: parseInt(e.target.value, 10) })}
-                      className="school-set-select"
-                      style={{ width: "auto", padding: "6px 10px" }}
-                    >
-                      {Array.from({ length: 24 }, (_, h) => (
-                        <option key={h} value={h}>{String(h).padStart(2, "0")}:00</option>
-                      ))}
-                    </select>
-                  </label>
-                )}
-              </div>
-            </div>
-          );
-        })()}
         </>
         )}
 
@@ -1802,10 +1801,14 @@ html[data-theme] .wordbook.school-shell-page {
 }
 .school-shell-logo img { width: 100%; height: 100%; object-fit: contain; }
 .school-sec-title { font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 16px; }
+/* Uniform settings-group card, so language / notification / design each read as
+   a clean distinct block. */
+.school-set-card {
+  background: #fff; border: 1px solid rgba(31,41,55,0.08); border-radius: 16px;
+  padding: 16px 18px; margin-top: 14px; max-width: 620px;
+}
 .school-set-row {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  background: #fff; border: 1px solid rgba(31,41,55,0.08); border-radius: 16px;
-  padding: 15px 18px; margin-top: 12px; max-width: 620px;
 }
 .school-set-label { font-size: 15.5px; font-weight: 700; color: var(--ink); }
 .school-set-select {
