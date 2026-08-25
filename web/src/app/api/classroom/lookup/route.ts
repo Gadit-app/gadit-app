@@ -58,6 +58,7 @@ export async function GET(req: NextRequest) {
     name?: string;
     logoUrl?: string | null;
     activeHours?: ActiveHours;
+    skinAccent?: string | null;
   };
   const classroom = classroomSnap.data() as { name?: string; students?: string[] };
 
@@ -77,6 +78,7 @@ export async function GET(req: NextRequest) {
     classroomId: codeData.classroomId,
     schoolName: school.name ?? "",
     schoolLogoUrl: school.logoUrl ?? null,
+    skinAccent: school.skinAccent ?? null,
     classroomName: classroom.name ?? "",
     students: classroom.students ?? [],
     inSession,

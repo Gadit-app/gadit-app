@@ -25,6 +25,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import VoiceInput from "@/components/VoiceInput";
+import { skinStyleVars, stashSkin } from "@/lib/school-skin";
 
 // Inline SearchIcon — kept local to avoid a primitives import cycle and
 // to match the homepage's identical SVG so the two surfaces look the
@@ -43,6 +44,7 @@ type LookupOk = {
   classroomId: string;
   schoolName: string;
   schoolLogoUrl: string | null;
+  skinAccent: string | null;
   classroomName: string;
   students: string[];
   inSession: boolean;
@@ -258,6 +260,9 @@ export function ClassroomKidClient({ code }: { code: string }) {
           return;
         }
         const data = (await res.json()) as LookupOk;
+        // Stash the school's skin so the word page + sub-pages theme to it
+        // without another round trip.
+        stashSkin(code, data.skinAccent);
         setState({ kind: "ok", data });
       } catch {
         if (!cancelled) setState({ kind: "error" });
@@ -330,7 +335,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
   //   - Hero: school logo + school name in place of the Gadit
   //     wordmark + tagline. The school IS the brand here.
   return (
-    <div className="wordbook wb-shell-page wb-school-page" dir={dir}>
+    <div className="wordbook wb-shell-page wb-school-page" dir={dir} style={skinStyleVars(data.skinAccent)}>
       <header className="wb-shell-topbar">
         <Link href={href(`/c/${code}`)} className="wb-shell-wordmark" dir="ltr" aria-label="Gadit">
           Gad<span className="wb-shell-wordmark-it">it</span>

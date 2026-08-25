@@ -28,6 +28,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
 import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
+import { SKIN_PRESETS, DEFAULT_ACCENT, dominantColorFromImage, darkenHex, isHex } from "@/lib/school-skin";
 import { useHref } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
 import { db } from "@/lib/firebase";
@@ -363,6 +364,43 @@ const COPY: Record<string, {
   },
 };
 
+// Appearance (skin) copy — kept as a separate map (en fallback) so adding it
+// doesn't force editing every language block of the main COPY object.
+const APPEARANCE_COPY: Record<string, {
+  heading: string;
+  note: string;
+  autoFromLogo: string;
+  autoFail: string;
+  presets: string;
+  custom: string;
+  reset: string;
+  previewLabel: string;
+  saving: string;
+}> = {
+  en: {
+    heading: "Classroom appearance",
+    note: "Pick an accent colour for what students see at your /c code. Match it to your logo.",
+    autoFromLogo: "Auto from logo",
+    autoFail: "Could not read the logo's colours. Pick one below.",
+    presets: "Presets",
+    custom: "Custom",
+    reset: "Reset to default",
+    previewLabel: "Preview",
+    saving: "Saving…",
+  },
+  he: {
+    heading: "מראה הכיתה",
+    note: "בחר צבע הדגשה למה שהתלמידים רואים בקוד ה-/c שלך. אפשר להתאים ללוגו.",
+    autoFromLogo: "אוטומטי מהלוגו",
+    autoFail: "לא הצלחנו לקרוא את צבעי הלוגו. בחר צבע למטה.",
+    presets: "צבעים מוכנים",
+    custom: "מותאם אישית",
+    reset: "איפוס לברירת מחדל",
+    previewLabel: "תצוגה מקדימה",
+    saving: "שומר…",
+  },
+};
+
 export function SchoolsClient() {
   const { user, loading } = useAuth();
   const { lang, dir, setLang } = useLang();
@@ -410,6 +448,42 @@ export function SchoolsClient() {
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
+  // School skin (accent colour for the /c/<CODE> classroom surface).
+  const [skinSaving, setSkinSaving] = useState(false);
+  const [skinAutoNote, setSkinAutoNote] = useState<string | null>(null);
+
+  async function saveSkin(accent: string | null) {
+    if (!user || skinSaving) return;
+    setSkinSaving(true);
+    setSkinAutoNote(null);
+    try {
+      const idToken = await user.getIdToken();
+      await fetch("/api/schools/skin", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ accent: accent ?? "" }),
+      });
+      // The live onSnapshot listener reflects the new colour automatically.
+    } catch {
+      /* swallow — non-critical cosmetic save */
+    } finally {
+      setSkinSaving(false);
+    }
+  }
+
+  // "Auto from logo": load the current logo and pull its dominant colour.
+  function autoSkinFromLogo(logoUrl: string) {
+    setSkinAutoNote(null);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const hex = dominantColorFromImage(img);
+      if (hex) saveSkin(hex);
+      else setSkinAutoNote((APPEARANCE_COPY[lang] ?? APPEARANCE_COPY.en).autoFail);
+    };
+    img.onerror = () => setSkinAutoNote((APPEARANCE_COPY[lang] ?? APPEARANCE_COPY.en).autoFail);
+    img.src = logoUrl;
+  }
   // Per-row classroom edit. The pencil button on a row opens a full
   // expanded form (name + teacher + color) so the principal can
   // change every editable property in one place, not just the name.
@@ -861,6 +935,103 @@ export function SchoolsClient() {
             ))}
           </select>
         </div>
+
+        {/* Classroom skin — accent colour for the /c/<CODE> surface. */}
+        {(() => {
+          const a = APPEARANCE_COPY[lang] ?? APPEARANCE_COPY.en;
+          const current = school.skinAccent && isHex(school.skinAccent) ? school.skinAccent : DEFAULT_ACCENT;
+          return (
+            <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--rule)" }}>
+              <div className="school-set-label" style={{ marginBottom: 4 }}>{a.heading}</div>
+              <p className="wb-school-sub" style={{ margin: "0 0 12px", fontSize: 13 }}>{a.note}</p>
+
+              {/* Preview: a mini classroom topbar + button in the chosen colour. */}
+              <div
+                style={{
+                  display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
+                  padding: "12px 14px", borderRadius: 12, border: "1px solid var(--rule)",
+                  background: "var(--surface)", marginBottom: 14,
+                }}
+              >
+                <span style={{ fontSize: 12, color: "var(--ink-soft, #6B7280)" }}>{a.previewLabel}:</span>
+                <span style={{ fontFamily: "var(--wb-sans)", fontWeight: 600, color: current, fontSize: 15 }} dir="ltr">
+                  Gad<span style={{ fontStyle: "italic", fontWeight: 400 }}>it</span>
+                </span>
+                <span style={{ fontSize: 13, color: current, fontWeight: 600 }}>{a.previewLabel === "Preview" ? "Class Notebook" : "מחברת הכיתה"}</span>
+                <span
+                  style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    width: 30, height: 30, borderRadius: 999, background: current, color: "#fff",
+                    boxShadow: `0 1px 3px ${darkenHex(current)}55`,
+                  }}
+                  aria-hidden="true"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="6.5" /><path d="M20 20l-3.5-3.5" /></svg>
+                </span>
+              </div>
+
+              {/* Presets */}
+              <div style={{ fontSize: 12, color: "var(--ink-soft, #6B7280)", marginBottom: 6 }}>{a.presets}</div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
+                {SKIN_PRESETS.map((p) => {
+                  const active = current.toLowerCase() === p.hex.toLowerCase();
+                  return (
+                    <button
+                      key={p.hex}
+                      type="button"
+                      onClick={() => saveSkin(p.hex)}
+                      title={p.name}
+                      aria-label={p.name}
+                      disabled={skinSaving}
+                      style={{
+                        width: 30, height: 30, borderRadius: 999, background: p.hex, cursor: "pointer",
+                        border: active ? "3px solid var(--ink)" : "2px solid var(--surface)",
+                        boxShadow: active ? "0 0 0 1px var(--ink)" : "0 0 0 1px var(--rule)",
+                      }}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Custom + auto + reset */}
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                <label style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, cursor: "pointer" }}>
+                  <input
+                    type="color"
+                    value={current}
+                    onChange={(e) => saveSkin(e.target.value)}
+                    disabled={skinSaving}
+                    style={{ width: 34, height: 30, border: "1px solid var(--rule)", borderRadius: 8, background: "var(--surface)", cursor: "pointer", padding: 2 }}
+                  />
+                  {a.custom}
+                </label>
+                {school.logoUrl && (
+                  <button
+                    type="button"
+                    onClick={() => autoSkinFromLogo(school.logoUrl!)}
+                    disabled={skinSaving}
+                    className="school-set-select"
+                    style={{ cursor: "pointer", fontSize: 13, padding: "6px 12px", width: "auto" }}
+                  >
+                    {a.autoFromLogo}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => saveSkin(null)}
+                  disabled={skinSaving || current.toLowerCase() === DEFAULT_ACCENT.toLowerCase()}
+                  style={{ background: "none", border: "none", color: "var(--ink-soft, #6B7280)", fontSize: 13, cursor: "pointer", textDecoration: "underline" }}
+                >
+                  {a.reset}
+                </button>
+                {skinSaving && <span className="wb-school-sub" style={{ fontSize: 12 }}>{a.saving}</span>}
+              </div>
+              {skinAutoNote && (
+                <div className="wb-school-sub" style={{ color: "#B91C1C", fontSize: 12, marginTop: 8 }}>{skinAutoNote}</div>
+              )}
+            </div>
+          );
+        })()}
         </>
         )}
 

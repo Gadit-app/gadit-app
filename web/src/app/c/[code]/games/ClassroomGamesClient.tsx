@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -191,6 +192,9 @@ export function ClassroomGamesClient({ code }: { code: string }) {
   const c = COPY[lang] ?? COPY.en;
   const [active, setActive] = useState<GameId | null>(null);
   const t = classroomPlayT(lang);
+  const [skin, setSkin] = useState<string | null>(null);
+  useEffect(() => { setSkin(readStashedSkin(code)); }, [code]);
+  const skinVars = skinStyleVars(skin);
 
   // When the player exits a game, return to the games hub. Same UX as
   // /play but without the streak update side-effect.
@@ -200,7 +204,7 @@ export function ClassroomGamesClient({ code }: { code: string }) {
   // Active game stage — renders the same game components as /play.
   if (active) {
     return (
-      <div className="wordbook wb-play-page" dir={dir}>
+      <div className="wordbook wb-play-page" dir={dir} style={skinVars}>
         {active === "twin"     && <GameTwinTrap {...props} />}
         {active === "time"     && <GameTimeTraveler {...props} />}
         {active === "passport" && <GameWordPassport {...props} />}
@@ -217,7 +221,7 @@ export function ClassroomGamesClient({ code }: { code: string }) {
 
   // Hub
   return (
-    <div className="wordbook wb-school-page" dir={dir}>
+    <div className="wordbook wb-school-page" dir={dir} style={skinVars}>
       <header className="wb-classroom-topbar">
         <Link href={href("/")} aria-label="Gadit" dir="ltr" className="wb-classroom-wordmark">
           Gad<span className="wb-classroom-wordmark-it">it</span>

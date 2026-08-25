@@ -13,6 +13,7 @@
  */
 
 import { useEffect, useMemo, useState } from "react";
+import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -121,12 +122,19 @@ type State =
   | { kind: "ok"; searches: SearchEntry[] }
   | { kind: "error" };
 
+function useClassroomSkin(code: string) {
+  const [skin, setSkin] = useState<string | null>(null);
+  useEffect(() => { setSkin(readStashedSkin(code)); }, [code]);
+  return skinStyleVars(skin);
+}
+
 export function ClassroomNotebookClient({ code }: { code: string }) {
   const { lang, dir } = useLang();
   const href = useHref();
   const c = COPY[lang] ?? COPY.en;
   const [state, setState] = useState<State>({ kind: "loading" });
   const [studentFilter, setStudentFilter] = useState<string>("");
+  const skinVars = useClassroomSkin(code);
 
   useEffect(() => {
     let cancelled = false;
@@ -166,7 +174,7 @@ export function ClassroomNotebookClient({ code }: { code: string }) {
   }, [state, studentFilter]);
 
   return (
-    <div className="wordbook wb-school-page" dir={dir}>
+    <div className="wordbook wb-school-page" dir={dir} style={skinVars}>
       <header className="wb-classroom-topbar">
         <Link href={href("/")} aria-label="Gadit" dir="ltr" className="wb-classroom-wordmark">
           Gad<span className="wb-classroom-wordmark-it">it</span>

@@ -49,6 +49,10 @@ export interface School {
    *  experience 24/7. Default if unset: Israel school week
    *  (Sun-Thu, 7:30-15:00, Asia/Jerusalem). */
   activeHours?: ActiveHours;
+  /** Optional accent colour (hex) that themes the /c/<CODE> classroom
+   *  surface to the school's branding, ideally matched to the logo. Unset =
+   *  Gadit's default teal. */
+  skinAccent?: string | null;
   createdAt: string;
   updatedAt?: string;
 }

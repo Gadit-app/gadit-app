@@ -43,6 +43,7 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 
 import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { ClassroomTopbar } from "@/components/design/ClassroomTopbar";
+import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
 import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
@@ -368,6 +369,13 @@ export function WordClient({
   // looked up today. No personal data is logged, only the word + lang
   // (+ first name only when the roster picker was used).
   const classroomCode = searchParams?.get("cls")?.trim() || "";
+  // The school's skin colour, stashed by the /c/<CODE> landing so the word
+  // page themes to it without another lookup. Read after mount (sessionStorage
+  // is client-only) to avoid a hydration mismatch.
+  const [classroomSkin, setClassroomSkin] = useState<string | null>(null);
+  useEffect(() => {
+    if (classroomCode) setClassroomSkin(readStashedSkin(classroomCode));
+  }, [classroomCode]);
   // Present / projector mode (Gadi 2026-08-05, schools council): the SAME
   // clean Gadit word view with the top chrome hidden, for a teacher
   // explaining a word to the whole class on the classroom screen. Same
@@ -1403,7 +1411,11 @@ export function WordClient({
   // A minimal wordmark + home link in `.wb-shell-topbar` takes its
   // place; Save / Share live inside ResultView's own topbar.
   return (
-    <div className={`wordbook wb-shell-page${familyRole === "kid" ? " wb-kid-bg" : ""}`} dir={dir}>
+    <div
+      className={`wordbook wb-shell-page${familyRole === "kid" ? " wb-kid-bg" : ""}`}
+      dir={dir}
+      style={classroomCode ? skinStyleVars(classroomSkin) : undefined}
+    >
       {saveFlash && (
         <div
           className={`wb-save-toast ${saveError ? "is-error" : ""}`}
