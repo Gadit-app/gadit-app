@@ -15,6 +15,10 @@
     {
       "path": "/api/cron/school-digest",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/dedup-cardless",
+      "schedule": "30 3 * * *"
     }
   ]
 }
