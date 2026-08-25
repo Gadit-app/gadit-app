@@ -563,12 +563,10 @@ export default async function RootLayout({
           <AutoUpdater />
           <RefCapture />
           <Analytics />
-          {/* sampleRate 0.5: Speed Insights free tier is 10k data points / 30
-              days; at 100% collection we hit 207% and Vercel paused it. Half
-              sampling keeps a representative Web-Vitals signal while staying
-              free. Raise toward 1 on Speed Insights Plus, or lower if traffic
-              grows. (Gadi 2026-08-25.) */}
-          <SpeedInsights sampleRate={0.5} />
+          {/* Full 100% collection: Gadi upgraded to Speed Insights Plus
+              (2026-08-25), so no need to sample. Plus keeps collecting past
+              the free 10k/30-day cap ($0.65/10k over the 10k included). */}
+          <SpeedInsights />
           {/* Meta Pixel — base code + funnel standard events (see
               components/MetaPixel.tsx). Never loads on /c/ classroom
               routes: kids on school devices are not ad-tracking
