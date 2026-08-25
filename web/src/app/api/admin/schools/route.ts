@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { computeSchoolInsights } from "@/lib/school-insights";
 
@@ -62,6 +63,25 @@ export async function GET(req: NextRequest) {
       createdAt?: string;
     };
     const insights = await computeSchoolInsights(db, schoolId);
+
+    // Diagnostic: the TRUE number of logged search docs per classroom, via a
+    // cheap Firestore count() aggregation. computeSchoolInsights reports
+    // `totalAllTime` from the classroom's `searchCount` counter and `sampleSize`
+    // from a capped 200-doc read; this exact count exposes a mismatch (e.g. a
+    // classroom whose kids never went through /c/<CODE>, so nothing was logged).
+    const loggedCounts = await Promise.all(
+      insights.classrooms.map(async (c) => {
+        const agg = await db
+          .collection("schools").doc(schoolId)
+          .collection("classrooms").doc(c.id)
+          .collection("searches").count().get();
+        return [c.id, agg.data().count] as const;
+      }),
+    );
+    const loggedById = new Map(loggedCounts);
+    const classrooms = insights.classrooms.map((c) => ({ ...c, loggedCount: loggedById.get(c.id) ?? 0 }));
+    const loggedTotal = loggedCounts.reduce((s, [, n]) => s + n, 0);
+
     return NextResponse.json({
       school: {
         id: schoolId,
@@ -71,6 +91,8 @@ export async function GET(req: NextRequest) {
         createdAt: meta.createdAt ?? null,
       },
       ...insights,
+      classrooms,
+      loggedTotal,
     });
   }
 
@@ -111,4 +133,40 @@ export async function GET(req: NextRequest) {
     totalSchools: schools.length,
     totalSearches: schools.reduce((s, x) => s + x.totalSearches, 0),
   });
+}
+
+/**
+ * DELETE /api/admin/schools?schoolId=UID — remove a school entirely.
+ *
+ * Nukes schools/{uid} and every classroom + searches subcollection under it
+ * (recursiveDelete), deletes the classroomCodes/* docs that route to it, and
+ * clears the owner user's schoolId so it no longer appears as a school. Does
+ * NOT touch Stripe/billing — cancel the subscription separately if needed.
+ *
+ * For clearing out test/duplicate schools. Admin-gated, irreversible.
+ */
+export async function DELETE(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
+  const db = getAdminDb();
+  const schoolId = req.nextUrl.searchParams.get("schoolId");
+  if (!schoolId) return NextResponse.json({ error: "missing_schoolId" }, { status: 400 });
+
+  const schoolRef = db.collection("schools").doc(schoolId);
+  const snap = await schoolRef.get();
+  if (!snap.exists) return NextResponse.json({ error: "not_found" }, { status: 404 });
+
+  // classroomCodes routing docs that point at this school.
+  const codesSnap = await db.collection("classroomCodes").where("schoolId", "==", schoolId).get();
+  await Promise.all(codesSnap.docs.map((d) => d.ref.delete()));
+
+  // The school doc + all classrooms + their searches, in one recursive sweep.
+  await db.recursiveDelete(schoolRef);
+
+  // Detach the owner user so they drop out of the schools list. Leaves the
+  // account (and any Stripe subscription) intact; billing is handled apart.
+  await db.collection("users").doc(schoolId).set({ schoolId: FieldValue.delete() }, { merge: true }).catch(() => {});
+
+  return NextResponse.json({ ok: true, deletedCodes: codesSnap.size });
 }

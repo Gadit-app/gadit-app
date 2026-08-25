@@ -41,6 +41,7 @@ type ClassroomRow = {
   totalAllTime: number;
   sampleSize: number;
   topLanguage: string;
+  loggedCount?: number;
 };
 
 type StudentRow = {
@@ -61,6 +62,7 @@ type SchoolDetail = {
   languages: LangCount[];
   topWords: WordCount[];
   sampleSize: number;
+  loggedTotal: number;
   classrooms: ClassroomRow[];
   students: StudentRow[];
 };
@@ -80,7 +82,8 @@ const COPY = {
     colLookups: "Lookups",
     unnamed: "(unnamed school)",
     back: "All schools",
-    kpiLookups: "Total lookups",
+    kpiLookups: "Counter total",
+    kpiLogged: "Logged searches",
     kpiClasses: "Classrooms",
     kpiLanguages: "Languages",
     kpiSample: "Recent sample",
@@ -91,7 +94,15 @@ const COPY = {
     noWords: "No words in the recent window.",
     wordsFor: (n: string) => `Words ${n} looked up`,
     searchesLabel: "searches",
+    loggedLabel: "logged",
     tapStudent: "Tap a student to see the words they looked up.",
+    mismatchNote: "Counter total and logged searches differ. If logged is 0, no searches ever came through the /c/CODE classroom flow for this school.",
+    del: "Delete",
+    delTitle: "Delete this school?",
+    delBody: (n: string) => `This permanently removes "${n}" and all its classrooms and search logs. It does not cancel any Stripe subscription. Type DELETE to confirm.`,
+    delConfirm: "Delete school",
+    delCancel: "Cancel",
+    deleting: "Deleting…",
   },
   he: {
     title: "בתי ספר",
@@ -107,7 +118,8 @@ const COPY = {
     colLookups: "חיפושים",
     unnamed: "(בית ספר ללא שם)",
     back: "כל בתי הספר",
-    kpiLookups: "סך חיפושים",
+    kpiLookups: "מונה (searchCount)",
+    kpiLogged: "חיפושים שנרשמו",
     kpiClasses: "כיתות",
     kpiLanguages: "שפות",
     kpiSample: "מדגם אחרון",
@@ -118,7 +130,15 @@ const COPY = {
     noWords: "אין מילים בחלון האחרון.",
     wordsFor: (n: string) => `מילים ש${n} חיפש`,
     searchesLabel: "חיפושים",
+    loggedLabel: "נרשמו",
     tapStudent: "הקש על תלמיד כדי לראות אילו מילים חיפש.",
+    mismatchNote: "המונה (searchCount) והחיפושים שנרשמו בפועל שונים. אם 'נרשמו' הוא 0, אף חיפוש לא עבר דרך זרימת הכיתה /c/CODE בבית ספר הזה.",
+    del: "מחיקה",
+    delTitle: "למחוק את בית הספר?",
+    delBody: (n: string) => `פעולה זו מוחקת לצמיתות את "${n}" וכל הכיתות ויומני החיפוש שלו. היא לא מבטלת מנוי Stripe. הקלד DELETE כדי לאשר.`,
+    delConfirm: "מחק בית ספר",
+    delCancel: "ביטול",
+    deleting: "מוחק…",
   },
 };
 
@@ -139,6 +159,9 @@ export default function AdminSchoolsClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [openStudent, setOpenStudent] = useState<string | null>(null);
+  const [delTarget, setDelTarget] = useState<SchoolRow | null>(null);
+  const [delText, setDelText] = useState("");
+  const [delBusy, setDelBusy] = useState(false);
 
   const isAdmin = user?.email === ADMIN_EMAIL;
 
@@ -190,6 +213,26 @@ export default function AdminSchoolsClient() {
     else loadList();
   }, [authLoading, user, promptLogin, selected, loadList, loadDetail, t.signInAdmin]);
 
+  const deleteSchool = async () => {
+    if (!user || !delTarget || delBusy) return;
+    setDelBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch(`/api/admin/schools?schoolId=${encodeURIComponent(delTarget.id)}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      setDelTarget(null);
+      setDelText("");
+      loadList();
+    } catch (e) {
+      setError(String(e instanceof Error ? e.message : e));
+    } finally {
+      setDelBusy(false);
+    }
+  };
+
   const openSchool = (id: string) => {
     setDetail(null);
     setSelected(id);
@@ -225,12 +268,18 @@ export default function AdminSchoolsClient() {
               </p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 12 }}>
               <Kpi label={t.kpiLookups} value={detail.totalAllTime} accent="#0EA5A5" />
+              <Kpi label={t.kpiLogged} value={detail.loggedTotal} accent={detail.loggedTotal !== detail.totalAllTime ? "#DC2626" : "#0EA5A5"} />
               <Kpi label={t.kpiClasses} value={detail.classroomCount} />
               <Kpi label={t.kpiLanguages} value={detail.languages.length} accent="#7C3AED" />
               <Kpi label={t.kpiSample} value={detail.sampleSize} />
             </div>
+            {detail.loggedTotal !== detail.totalAllTime && (
+              <div style={{ background: "#FDE7E7", color: "#991B1B", padding: 12, borderRadius: 8, marginBottom: 24, fontSize: 13 }}>
+                {t.mismatchNote}
+              </div>
+            )}
 
             {/* Top words */}
             {detail.topWords.length > 0 && (
@@ -262,8 +311,13 @@ export default function AdminSchoolsClient() {
                       <div style={{ fontWeight: 600, color: "#111827", fontSize: 14 }} dir="auto">
                         {c.name || c.code}
                       </div>
-                      <div style={{ color: "#6B7280", fontSize: 12, marginTop: 4, display: "flex", gap: 8 }}>
+                      <div style={{ color: "#6B7280", fontSize: 12, marginTop: 4, display: "flex", gap: 8, flexWrap: "wrap" }}>
                         <span style={{ fontVariantNumeric: "tabular-nums" }}>{c.totalAllTime.toLocaleString()} {t.searchesLabel}</span>
+                        <span
+                          style={{ fontVariantNumeric: "tabular-nums", color: (c.loggedCount ?? 0) !== c.totalAllTime ? "#DC2626" : "#6B7280" }}
+                        >
+                          · {(c.loggedCount ?? 0).toLocaleString()} {t.loggedLabel}
+                        </span>
                         {c.topLanguage && <span>· {classroomLangLabel(c.topLanguage)}</span>}
                       </div>
                     </div>
@@ -388,6 +442,7 @@ export default function AdminSchoolsClient() {
                 <th style={th}>{t.colPlan}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colClasses}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colLookups}</th>
+                <th style={th}></th>
               </tr>
             </thead>
             <tbody>
@@ -410,10 +465,56 @@ export default function AdminSchoolsClient() {
                   <td style={{ ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#0E7490", fontWeight: 700 }}>
                     {s.totalSearches.toLocaleString()}
                   </td>
+                  <td style={{ ...td, textAlign: "end", width: 40 }}>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setDelTarget(s); setDelText(""); }}
+                      title={t.del}
+                      style={{ background: "none", border: "none", cursor: "pointer", color: "#DC2626", fontSize: 13, padding: "4px 6px" }}
+                    >
+                      🗑
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {delTarget && (
+        <div
+          onClick={() => !delBusy && setDelTarget(null)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 }}
+        >
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "white", borderRadius: 14, padding: 24, maxWidth: 440, width: "100%" }}>
+            <h3 style={{ margin: "0 0 8px", fontSize: 18, fontWeight: 700, color: "#111827" }}>{t.delTitle}</h3>
+            <p style={{ color: "#4B5563", fontSize: 14, lineHeight: 1.5, margin: "0 0 16px" }}>
+              {t.delBody(delTarget.name || delTarget.contactEmail || delTarget.id)}
+            </p>
+            <input
+              value={delText}
+              onChange={(e) => setDelText(e.target.value)}
+              placeholder="DELETE"
+              dir="ltr"
+              style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 14, marginBottom: 16, outline: "none" }}
+            />
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setDelTarget(null)}
+                disabled={delBusy}
+                style={{ padding: "10px 16px", borderRadius: 8, border: "1px solid #E5E7EB", background: "white", color: "#374151", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+              >
+                {t.delCancel}
+              </button>
+              <button
+                onClick={deleteSchool}
+                disabled={delBusy || delText.trim() !== "DELETE"}
+                style={{ padding: "10px 16px", borderRadius: 8, border: "none", background: delText.trim() === "DELETE" ? "#DC2626" : "#FCA5A5", color: "white", fontSize: 14, fontWeight: 700, cursor: delText.trim() === "DELETE" ? "pointer" : "not-allowed" }}
+              >
+                {delBusy ? t.deleting : t.delConfirm}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
