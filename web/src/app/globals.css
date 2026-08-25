@@ -336,6 +336,25 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-style: italic;
   font-weight: 400;
 }
+/* The classroom/school topbar wordmark used a `.wb-shell-wordmark` class that
+   was never given the brand text style, so its "it" rendered as plain dark
+   text instead of the teal italic (Gadi 2026-08-25: "Gadit is written
+   differently in different places"). Mirror the canonical wordmark exactly so
+   every logo is identical. */
+.wordbook .wb-shell-wordmark {
+  font-family: var(--wb-serif);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-decoration: none;
+  line-height: 1;
+}
+.wordbook .wb-shell-wordmark .wb-shell-wordmark-it {
+  color: var(--teal);
+  font-style: italic;
+  font-weight: 400;
+}
 .wordbook .wb-shell-actions {
   display: flex;
   align-items: center;

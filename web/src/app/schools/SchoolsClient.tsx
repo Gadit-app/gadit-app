@@ -981,7 +981,7 @@ export function SchoolsClient() {
               >
                 <span style={{ fontSize: 12, color: "var(--ink-soft, #6B7280)" }}>{a.previewLabel}:</span>
                 <span style={{ fontFamily: "var(--wb-sans)", fontWeight: 600, color: current, fontSize: 15 }} dir="ltr">
-                  Gad<span style={{ fontStyle: "italic", fontWeight: 400 }}>it</span>
+                  Gad<span style={{ fontStyle: "italic", fontWeight: 400, color: "#0EA5A5" }}>it</span>
                 </span>
                 <span style={{ fontSize: 13, color: current, fontWeight: 600 }}>{a.previewLabel === "Preview" ? "Class Notebook" : "מחברת הכיתה"}</span>
                 <span

@@ -67,7 +67,7 @@ export default function SetsClient() {
     <div className="wordbook" dir={dir} style={S.page}>
       <header style={S.header}>
         <Link href={href("/")} style={S.wordmark} dir="ltr" aria-label="Gadit home">
-          Gad<span style={{ fontStyle: "italic" }}>it</span>
+          Gad<span style={{ fontStyle: "italic", color: "#0EA5A5" }}>it</span>
         </Link>
       </header>
 

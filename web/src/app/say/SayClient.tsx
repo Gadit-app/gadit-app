@@ -17,7 +17,7 @@ export function SayClient() {
     <div className="wordbook" dir={dir} style={{ minHeight: "100dvh", background: "var(--paper, #F7F7F5)", color: "var(--ink, #14181F)" }}>
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: 760, margin: "0 auto" }}>
         <a href={href("/")} style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.02em", textDecoration: "none", color: "inherit" }}>
-          Gad<span style={{ color: "#0EA5A5" }}>it</span>
+          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
         </a>
       </header>
       <main style={{ maxWidth: 640, margin: "0 auto", padding: "8px 20px 64px" }}>

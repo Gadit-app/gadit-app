@@ -76,7 +76,7 @@ const COPY: Record<string, {
 }> = {
   he: {
     welcomeTo: "ברוכים הבאים",
-    greetingPrefix: "שלום,",
+    greetingPrefix: "שלום",
     switchUser: "(לא אני)",
     pickName: "שלום! בחרו את השם שלכם",
     classroomDefault: "כיתה",
@@ -90,7 +90,7 @@ const COPY: Record<string, {
   },
   en: {
     welcomeTo: "Welcome to",
-    greetingPrefix: "Hi,",
+    greetingPrefix: "Hi",
     switchUser: "(not me)",
     pickName: "Hi! Pick your name",
     classroomDefault: "Classroom",
@@ -104,7 +104,7 @@ const COPY: Record<string, {
   },
   zu: {
     welcomeTo: "Siyakwamukela ku-",
-    greetingPrefix: "Sawubona,",
+    greetingPrefix: "Sawubona",
     switchUser: "(akumina)",
     pickName: "Sawubona! Khetha igama lakho",
     classroomDefault: "Igumbi lokufunda",
@@ -118,7 +118,7 @@ const COPY: Record<string, {
   },
   el: {
     welcomeTo: "Καλώς ήρθες στην",
-    greetingPrefix: "Γεια,",
+    greetingPrefix: "Γεια",
     switchUser: "(δεν είμαι εγώ)",
     pickName: "Γεια! Διάλεξε το όνομά σου",
     classroomDefault: "Τάξη",
@@ -132,7 +132,7 @@ const COPY: Record<string, {
   },
   hi: {
     welcomeTo: "स्वागत है",
-    greetingPrefix: "नमस्ते,",
+    greetingPrefix: "नमस्ते",
     switchUser: "(मैं नहीं)",
     pickName: "नमस्ते! अपना नाम चुनें",
     classroomDefault: "कक्षा",
@@ -146,7 +146,7 @@ const COPY: Record<string, {
   },
   am: {
     welcomeTo: "እንኳን ደህና መጣችሁ ወደ",
-    greetingPrefix: "ሰላም፣",
+    greetingPrefix: "ሰላም",
     switchUser: "(እኔ አይደለሁም)",
     pickName: "ሰላም! ስማችሁን ምረጡ",
     classroomDefault: "ክፍል",

@@ -192,7 +192,7 @@ export function TeacherByCodeClient({ code }: { code: string }) {
     <div dir={dir} style={{ minHeight: "100vh", background: "#FAFAF9", padding: "40px 20px", fontFamily: "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
         <Link href={href("/")} translate="no" dir="ltr" style={{ display: "inline-block", fontSize: 22, fontWeight: 800, color: "#1C1917", textDecoration: "none", marginBottom: 20 }}>
-          Gad<span style={{ color: "#CA8A04", fontStyle: "italic" }}>it</span>
+          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
         </Link>
 
         {loading ? (
