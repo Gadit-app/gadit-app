@@ -53,6 +53,12 @@ export interface School {
    *  surface to the school's branding, ideally matched to the logo. Unset =
    *  Gadit's default teal. */
   skinAccent?: string | null;
+  /** Daily summary email. Opt-OUT: on by default (a missing value or
+   *  enabled !== false counts as on). `hour` is 0-23 in the school's timezone
+   *  (default 15). */
+  dailyDigest?: { enabled?: boolean; hour?: number };
+  /** Local Y-M-D of the last digest sent, so the hourly cron fires once a day. */
+  lastDigestDate?: string;
   createdAt: string;
   updatedAt?: string;
 }

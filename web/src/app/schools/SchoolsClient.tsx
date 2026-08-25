@@ -401,6 +401,21 @@ const APPEARANCE_COPY: Record<string, {
   },
 };
 
+const DIGEST_COPY: Record<string, { heading: string; note: string; toggle: string; timeLabel: string }> = {
+  en: {
+    heading: "Daily summary email",
+    note: "Once a day we email you every word your students looked up. On by default; turn it off any time.",
+    toggle: "Send me a daily summary",
+    timeLabel: "Send at",
+  },
+  he: {
+    heading: "סיכום יומי במייל",
+    note: "פעם ביום נשלח לך במייל את כל המילים שהתלמידים חיפשו. פעיל כברירת מחדל; אפשר לכבות בכל רגע.",
+    toggle: "שלחו לי סיכום יומי",
+    timeLabel: "שליחה בשעה",
+  },
+};
+
 export function SchoolsClient() {
   const { user, loading } = useAuth();
   const { lang, dir, setLang } = useLang();
@@ -469,6 +484,17 @@ export function SchoolsClient() {
     } finally {
       setSkinSaving(false);
     }
+  }
+
+  // Daily-summary preference. Opt-out model: a missing value = on.
+  async function saveDigest(patch: { enabled?: boolean; hour?: number }) {
+    if (!user) return;
+    const current = school?.dailyDigest ?? {};
+    try {
+      await updateDoc(doc(db, "schools", user.uid), {
+        dailyDigest: { enabled: current.enabled !== false, hour: typeof current.hour === "number" ? current.hour : 15, ...patch },
+      });
+    } catch { /* non-critical */ }
   }
 
   // "Auto from logo": load the logo through our same-origin proxy (loading the
@@ -997,6 +1023,51 @@ export function SchoolsClient() {
               {skinAutoNote && (
                 <div className="wb-school-sub" style={{ color: "#B91C1C", fontSize: 12, marginTop: 8 }}>{skinAutoNote}</div>
               )}
+            </div>
+          );
+        })()}
+
+        {/* Daily summary email — opt-out (on by default). */}
+        {(() => {
+          const d = DIGEST_COPY[lang] ?? DIGEST_COPY.en;
+          const enabled = school.dailyDigest?.enabled !== false;
+          const hour = typeof school.dailyDigest?.hour === "number" ? school.dailyDigest.hour : 15;
+          return (
+            <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--rule)" }}>
+              <div className="school-set-label" style={{ marginBottom: 4 }}>{d.heading}</div>
+              <p className="wb-school-sub" style={{ margin: "0 0 12px", fontSize: 13 }}>{d.note}</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                <label style={{ display: "inline-flex", alignItems: "center", gap: 10, cursor: "pointer", fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={enabled}
+                    onClick={() => saveDigest({ enabled: !enabled })}
+                    style={{
+                      width: 44, height: 26, borderRadius: 999, border: "none", cursor: "pointer", position: "relative",
+                      background: enabled ? "#0EA5A5" : "#D1D5DB", transition: "background 160ms",
+                    }}
+                  >
+                    <span style={{ position: "absolute", top: 3, insetInlineStart: enabled ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "inset-inline-start 160ms" }} />
+                  </button>
+                  {d.toggle}
+                </label>
+                {enabled && (
+                  <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--ink-soft)" }}>
+                    {d.timeLabel}
+                    <select
+                      value={hour}
+                      onChange={(e) => saveDigest({ hour: parseInt(e.target.value, 10) })}
+                      className="school-set-select"
+                      style={{ width: "auto", padding: "6px 10px" }}
+                    >
+                      {Array.from({ length: 24 }, (_, h) => (
+                        <option key={h} value={h}>{String(h).padStart(2, "0")}:00</option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+              </div>
             </div>
           );
         })()}
