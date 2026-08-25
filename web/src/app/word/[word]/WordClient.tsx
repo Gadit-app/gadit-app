@@ -42,6 +42,7 @@ import { track } from "@/lib/track";
 import { useKidsMode } from "@/lib/use-kids-mode";
 
 import { MarketingHeader } from "@/components/design/MarketingHeader";
+import { ClassroomTopbar } from "@/components/design/ClassroomTopbar";
 import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
@@ -1432,7 +1433,13 @@ export function WordClient({
             classroom" strip after the persistent search bar below
             turned out to do the same job — typing a new word in the
             persistent bar now preserves the ?cls= param so the kid
-            stays in classroom mode and the search keeps logging. */}
+            stays in classroom mode and the search keeps logging.
+
+            2026-08-25 (Gadi): the fully-stripped word page left kids with
+            no way back to Class Notebook / Word Games / Say it. Restore the
+            classroom topbar (the search itself stays in the persistent bar
+            below). */}
+        {classroomCode && <ClassroomTopbar code={classroomCode} lang={lang} />}
         {!classroomCode && !present && (
         <header className="wb-shell-topbar">
           <Link href={href("/")} className="wb-wordmark" dir="ltr" aria-label="Gadit home">
