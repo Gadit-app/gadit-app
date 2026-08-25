@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { classroomLangLabel } from "@/lib/classroom-insights";
 import { classroomColorFor } from "@/lib/school";
+import { getLangDir, type Lang } from "@/lib/i18n";
 
 /**
  * Students tab of the /schools shell. Lists every named student across the
@@ -23,6 +24,7 @@ type StudentRow = {
   colorIndex: number;
   count: number;
   topLanguage: string;
+  words?: { word: string; count: number }[];
 };
 
 type Sort = "activity" | "name" | "classroom";
@@ -42,6 +44,9 @@ type Copy = {
   colLookups: string;
   filterPh: string;
   countLabel: (n: number) => string;
+  wordsHeading?: string;
+  noWords?: string;
+  closeLabel?: string;
 };
 
 const COPY: Record<string, Copy> = {
@@ -60,6 +65,9 @@ const COPY: Record<string, Copy> = {
     colLookups: "חיפושים",
     filterPh: "סינון לפי שם...",
     countLabel: (n) => `${n} תלמידים`,
+    wordsHeading: "מילים שחיפש",
+    noWords: "אין עדיין חיפושים בחלון האחרון.",
+    closeLabel: "סגור",
   },
   en: {
     loading: "Loading…",
@@ -76,6 +84,9 @@ const COPY: Record<string, Copy> = {
     colLookups: "Lookups",
     filterPh: "Filter by name…",
     countLabel: (n) => `${n} students`,
+    wordsHeading: "Words looked up",
+    noWords: "No searches in the recent window yet.",
+    closeLabel: "Close",
   },
   zu: {
     loading: "Iyalayisha…",
@@ -147,6 +158,11 @@ export function SchoolStudentsPanel({ lang }: { lang: string }) {
   const { user } = useAuth();
   const href = useHref();
   const t = COPY[lang] ?? COPY.en;
+  const dir = getLangDir(lang as Lang);
+  const wordsHeading = t.wordsHeading ?? COPY.en.wordsHeading!;
+  const noWords = t.noWords ?? COPY.en.noWords!;
+  const closeLabel = t.closeLabel ?? COPY.en.closeLabel!;
+  const [selected, setSelected] = useState<StudentRow | null>(null);
 
   const [rows, setRows] = useState<StudentRow[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -229,7 +245,14 @@ export function SchoolStudentsPanel({ lang }: { lang: string }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {view.map((r) => (
           <div key={`${r.classroomId}:${r.name}`} style={{ display: "flex", alignItems: "center", gap: 12, background: "#fff", border: "1px solid #EAE7E3", borderRadius: 12, padding: "12px 16px", flexWrap: "wrap" }}>
-            <span style={{ fontSize: 15, fontWeight: 700, color: "#1C1917", flex: "1 1 120px", minWidth: 100 }}>{r.name}</span>
+            <button
+              type="button"
+              onClick={() => setSelected(r)}
+              style={{ display: "inline-flex", alignItems: "center", gap: 5, flex: "1 1 120px", minWidth: 100, background: "transparent", border: "none", padding: 0, cursor: "pointer", font: "inherit", textAlign: "start", fontSize: 15, fontWeight: 700, color: "#1C1917" }}
+            >
+              {r.name}
+              <span aria-hidden="true" style={{ color: "#CA8A04", fontSize: 15 }}>{dir === "rtl" ? "‹" : "›"}</span>
+            </button>
             <Link href={href(`/classroom/${r.classroomId}`)} style={{ display: "inline-flex", alignItems: "center", gap: 7, textDecoration: "none", fontSize: 13, color: "#78716C", minWidth: 90 }}>
               <span style={{ width: 10, height: 10, borderRadius: 999, flexShrink: 0, background: classroomColorFor({ colorIndex: r.colorIndex }) }} />
               <span style={{ fontWeight: 600 }}>{r.classroomName || r.code}</span>
@@ -239,6 +262,52 @@ export function SchoolStudentsPanel({ lang }: { lang: string }) {
           </div>
         ))}
       </div>
+
+      {selected && (
+        <div
+          onClick={() => setSelected(null)}
+          role="dialog"
+          aria-modal="true"
+          style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(28,25,23,0.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            dir={dir}
+            style={{ position: "relative", width: "100%", maxWidth: 460, maxHeight: "82vh", overflowY: "auto", background: "#fff", borderRadius: 18, padding: "22px 22px 24px", boxShadow: "0 24px 60px -20px rgba(28,25,23,0.5)" }}
+          >
+            <button
+              type="button"
+              onClick={() => setSelected(null)}
+              aria-label={closeLabel}
+              style={{ position: "absolute", insetInlineEnd: 12, top: 12, width: 32, height: 32, borderRadius: "50%", border: "none", background: "transparent", cursor: "pointer", fontSize: 22, lineHeight: 1, color: "#78716C" }}
+            >
+              ×
+            </button>
+            <div style={{ fontSize: 21, fontWeight: 800, color: "#1C1917", paddingInlineEnd: 28 }}>{selected.name}</div>
+            <div style={{ fontSize: 13, color: "#78716C", marginTop: 3 }}>
+              {selected.classroomName || selected.code} · {selected.count} {t.colLookups}
+              {selected.topLanguage ? ` · ${classroomLangLabel(selected.topLanguage)}` : ""}
+            </div>
+            <div style={{ marginTop: 18, fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", color: "#CA8A04" }}>{wordsHeading}</div>
+            {!selected.words || selected.words.length === 0 ? (
+              <div style={{ marginTop: 8, fontSize: 14, color: "#A8A29E" }}>{noWords}</div>
+            ) : (
+              <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {selected.words.map((w) => (
+                  <Link
+                    key={w.word}
+                    href={href(`/word/${encodeURIComponent(w.word)}`)}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 999, padding: "6px 12px", fontSize: 14, fontWeight: 600, color: "#92400E", textDecoration: "none" }}
+                  >
+                    {w.word}
+                    {w.count > 1 && <span style={{ fontSize: 12, fontWeight: 800, color: "#CA8A04", background: "#FEF3C7", borderRadius: 999, padding: "1px 7px" }}>{w.count}</span>}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

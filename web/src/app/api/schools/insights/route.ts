@@ -89,14 +89,16 @@ export async function GET(req: NextRequest) {
   // Counts come from the sampled window (recent activity), same basis as
   // the language map.
   const students = perClassroom.flatMap((cls) => {
-    const counts = new Map<string, { count: number; langs: Map<string, number> }>();
+    const counts = new Map<string, { count: number; langs: Map<string, number>; words: Map<string, number> }>();
     for (const s of cls.raw) {
       const name = (s.studentName ?? "").trim();
       if (!name) continue;
-      const e = counts.get(name) ?? { count: 0, langs: new Map<string, number>() };
+      const e = counts.get(name) ?? { count: 0, langs: new Map<string, number>(), words: new Map<string, number>() };
       e.count += 1;
       const lg = (s.lang ?? "").trim();
       if (lg) e.langs.set(lg, (e.langs.get(lg) ?? 0) + 1);
+      const w = (s.word ?? "").trim();
+      if (w) e.words.set(w, (e.words.get(w) ?? 0) + 1);
       counts.set(name, e);
     }
     return [...counts.entries()].map(([name, e]) => ({
@@ -107,6 +109,9 @@ export async function GET(req: NextRequest) {
       colorIndex: cls.colorIndex,
       count: e.count,
       topLanguage: [...e.langs.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "",
+      // The words this student looked up (in the sampled window), most-searched
+      // first, so a teacher can tap a student and see exactly what they explored.
+      words: [...e.words.entries()].sort((a, b) => b[1] - a[1]).slice(0, 40).map(([word, count]) => ({ word, count })),
     }));
   }).sort((a, b) => b.count - a.count);
 
