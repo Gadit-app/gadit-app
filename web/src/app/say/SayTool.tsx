@@ -109,24 +109,27 @@ function levenshtein(a: string, b: string): number {
   }
   return prev[n];
 }
-// Tuned to be encouraging without cheapening a perfect score (Gadi 2026-08-25):
-// 3 stars is an honest bar (exact / strong similarity), 2 stars rewards a
-// recognizable attempt (real progress), 1 star means keep trying. Short words
-// get a little slack (one or two edits still counts as close), since a single
-// missed sound is a big fraction of a short word.
-function scorePron(target: string, spoken: string): "correct" | "close" | "wrong" {
+// A 1-to-5 star score, the scale everyone knows from reviews (Gadi 2026-08-25):
+// 5 = spot on, and the empty stars make it obvious how much room is left. The
+// tier drives the color + message (4-5 green, 3 amber, 1-2 red). Tuned to be
+// encouraging without cheapening a perfect score; short words and near-
+// containment get a little slack, since one missed sound is a big fraction of a
+// short word.
+function scoreStars(target: string, spoken: string): { stars: number; tier: "correct" | "close" | "wrong" } {
   const t = normPron(target), s = normPron(spoken);
-  if (!s || !t) return "wrong";
-  if (t === s) return "correct";
-  if (t.length >= 2 && s.length >= 2 && (t.includes(s) || s.includes(t))) {
-    const ratio = Math.min(t.length, s.length) / Math.max(t.length, s.length);
-    return ratio >= 0.7 ? "correct" : "close";
+  let eff: number;
+  if (!s || !t) eff = 0;
+  else if (t === s) eff = 1;
+  else if (t.length >= 2 && s.length >= 2 && (t.includes(s) || s.includes(t))) {
+    eff = Math.max(Math.min(t.length, s.length) / Math.max(t.length, s.length), 0.75);
+  } else {
+    const dist = levenshtein(t, s);
+    eff = 1 - dist / Math.max(t.length, s.length);
+    if (t.length <= 6 && dist <= 2) eff = Math.max(eff, 0.72);
   }
-  const dist = levenshtein(t, s);
-  const sim = 1 - dist / Math.max(t.length, s.length);
-  if (sim >= 0.8) return "correct";
-  if (sim >= 0.5 || (t.length <= 6 && dist <= 2)) return "close";
-  return "wrong";
+  const stars = eff >= 0.9 ? 5 : eff >= 0.78 ? 4 : eff >= 0.6 ? 3 : eff >= 0.4 ? 2 : 1;
+  const tier = stars >= 4 ? "correct" : stars === 3 ? "close" : "wrong";
+  return { stars, tier };
 }
 
 export function SayTool({ onClose }: { onClose?: () => void }) {
@@ -144,13 +147,13 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
   const [result, setResult] = useState<{
     translation: string; romanization: string; tip: string; targetLang: string;
   } | null>(null);
-  const [pron, setPron] = useState<{ status: "correct" | "close" | "wrong"; heard: string } | null>(null);
+  const [pron, setPron] = useState<{ stars: number; tier: "correct" | "close" | "wrong"; heard: string } | null>(null);
 
   useEffect(() => { setSourceLang(lang); }, [lang]);
 
   const checkPron = useCallback((spoken: string) => {
     setResult((r) => {
-      if (r) setPron({ status: scorePron(r.translation, spoken), heard: spoken });
+      if (r) setPron({ ...scoreStars(r.translation, spoken), heard: spoken });
       return r;
     });
   }, []);
@@ -331,19 +334,18 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
                   <span style={{ fontSize: 14, opacity: 0.7 }}>{t.practiceBtn}</span>
                 </div>
                 {pron && (() => {
-                  const c = pron.status === "correct"
+                  const c = pron.tier === "correct"
                     ? { bg: "rgba(16,185,129,0.1)", bd: "rgba(16,185,129,0.35)", fg: "#047857", ic: "✓", msg: t.pcCorrect }
-                    : pron.status === "close"
+                    : pron.tier === "close"
                       ? { bg: "rgba(245,158,11,0.12)", bd: "rgba(245,158,11,0.4)", fg: "#b45309", ic: "≈", msg: t.pcClose }
                       : { bg: "rgba(239,68,68,0.1)", bd: "rgba(239,68,68,0.35)", fg: "#b91c1c", ic: "↻", msg: t.pcWrong };
-                  const stars = pron.status === "correct" ? 3 : pron.status === "close" ? 2 : 1;
                   return (
                     <div style={{ marginTop: 14, borderRadius: 12, padding: "12px 14px", background: c.bg, border: `1px solid ${c.bd}` }}>
-                      <div style={{ fontSize: 20, letterSpacing: 3, lineHeight: 1, marginBottom: 6 }} aria-label={`${stars}/3`}>
-                        <span style={{ color: c.fg }}>{"★".repeat(stars)}</span><span style={{ color: "rgba(0,0,0,0.14)" }}>{"★".repeat(3 - stars)}</span>
+                      <div style={{ fontSize: 22, letterSpacing: 3, lineHeight: 1, marginBottom: 6 }} aria-label={`${pron.stars}/5`}>
+                        <span style={{ color: "#F59E0B" }}>{"★".repeat(pron.stars)}</span><span style={{ color: "rgba(0,0,0,0.14)" }}>{"★".repeat(5 - pron.stars)}</span>
                       </div>
                       <div style={{ fontWeight: 700, color: c.fg, fontSize: 15 }}><span aria-hidden="true">{c.ic}</span> {c.msg}</div>
-                      {pron.status !== "correct" && (
+                      {pron.tier !== "correct" && (
                         <div style={{ marginTop: 5, fontSize: 14, opacity: 0.85 }}>
                           {t.heardLabel}: <span dir={dirOf(result.targetLang)} style={{ fontWeight: 600 }}>{pron.heard}</span>
                         </div>
