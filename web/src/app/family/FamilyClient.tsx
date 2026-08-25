@@ -1228,7 +1228,6 @@ export function FamilyClient() {
   const [editPhotoBusy, setEditPhotoBusy] = useState(false);
   // Picked illustrated avatar id ("" = none). A real photo still wins over it.
   const [editAvatarId, setEditAvatarId] = useState<string>("");
-  const [editPin, setEditPin] = useState<string>(""); // Kids Mode 4-digit soft gate
 
   const isWelcome = search.get("welcome") === "1";
   const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
@@ -1353,7 +1352,6 @@ export function FamilyClient() {
         setEditRole(m.role);
         setEditPhoto(m.avatarPhotoUrl || "");
         setEditAvatarId(m.avatarId || "");
-        setEditPin((m as { pin?: string }).pin || "");
         setEditOpen(true);
       }}
       editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
@@ -1377,8 +1375,6 @@ export function FamilyClient() {
         // (~10-20KB) sits comfortably inside the 1MB Firestore doc limit.
         avatarPhotoUrl: editPhoto || null,
         avatarId: editAvatarId || null,
-        // Kids Mode soft gate: store a 4-digit PIN, or clear it. Kids only.
-        pin: !isParentRole(editRole) && /^\d{4}$/.test(editPin) ? editPin : null,
       });
       setEditOpen(false);
     } catch (e) {
@@ -1528,20 +1524,6 @@ export function FamilyClient() {
                 </button>
               ))}
             </div>
-            {!isParentRole(editRole) && (
-              <div style={{ marginBottom: 18 }}>
-                <label style={{ fontSize: 13, fontWeight: 700, color: "var(--ink-soft)", display: "block", marginBottom: 6 }}>
-                  {lang === "he" ? "קוד 4 ספרות למצב ילדים (לא חובה)" : "4-digit code for Kids Mode (optional)"}
-                </label>
-                <input
-                  value={editPin}
-                  onChange={(e) => setEditPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                  inputMode="numeric"
-                  placeholder="1234"
-                  style={{ width: 130, padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 18, fontFamily: "inherit", letterSpacing: "0.35em", textAlign: "center", boxSizing: "border-box" }}
-                />
-              </div>
-            )}
             <div style={{ display: "flex", gap: 8 }}>
               <button type="button" onClick={() => setEditOpen(false)} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", background: "var(--surface)", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "var(--ink-soft)" }}>
                 {lang === "he" ? "ביטול" : "Cancel"}
