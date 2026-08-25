@@ -42,9 +42,11 @@ const STRINGS = {
     partners: "Partners",
     deletions: "Deletions",
     wordsets: "Word sets",
+    schools: "Schools",
     secMarketing: "Marketing",
     secGrowth: "Growth",
     secUsers: "Users",
+    secSchools: "Schools",
     secFinance: "Finance",
     secContent: "Content & support",
     backToApp: "Back to app",
@@ -69,9 +71,11 @@ const STRINGS = {
     partners: "שותפים",
     deletions: "מחיקות",
     wordsets: "מערכי מילים",
+    schools: "בתי ספר",
     secMarketing: "שיווק",
     secGrowth: "צמיחה",
     secUsers: "משתמשים",
+    secSchools: "בתי ספר",
     secFinance: "כספים",
     secContent: "תוכן ותמיכה",
     backToApp: "חזרה לאפליקציה",
@@ -103,6 +107,9 @@ const NAV_SECTIONS: NavSection[] = [
     { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
     { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
     { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
+  ] },
+  { titleKey: "secSchools", items: [
+    { href: "/admin/schools",   labelKey: "schools",   icon: <IconSchool /> },
   ] },
   { titleKey: "secMarketing", items: [
     { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget /> },
@@ -475,6 +482,11 @@ function IconHandshake() {
 function IconGrid() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+  );
+}
+function IconSchool() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 22v-4a2 2 0 0 0-4 0v4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M18 5v17"/><path d="m4 6 8-4 8 4"/><path d="M6 5v17"/><circle cx="12" cy="9" r="2"/></svg>
   );
 }
 function IconTrash() {
