@@ -5643,7 +5643,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
    space-between scattering all four mobile children evenly across
    the row. margin-inline-start:auto pushes the cluster to the END
    side (visual left in RTL, right in LTR). */
-.wordbook .wb-shell-mobile-menu-cluster { display: contents; }
+/* Desktop: the whole mobile cluster is hidden (the desktop actions row carries
+   share/lang/sign-in). It was `display: contents`, which is invisible only when
+   every child self-hides on desktop — true for LangSwitchMobile + burger, but
+   NOT for a ShareButton, so pages that put a Share in this cluster (e.g.
+   /families) leaked it into the desktop topbar and it overlapped the nav.
+   `display: none` hides the cluster wholesale on desktop; the <1024 rule below
+   restores it as a real inline-flex cluster on mobile. (Gadi 2026-08-25.) */
+.wordbook .wb-shell-mobile-menu-cluster { display: none; }
 
 @media (max-width: 1023px) {
   .wordbook .wb-shell-mobile-identity {
@@ -12605,8 +12612,13 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-bottom: clamp(24px, 4vw, 40px);
+  /* Tighter than the homepage lockup so the "pick your name" chips sit close
+     to the logo, not stranded below it. (Gadi 2026-08-25.) */
+  margin-bottom: clamp(14px, 2.5vw, 22px);
 }
+/* The welcome line is a shared homepage class with a big 36px gap under it;
+   shrink it only inside the classroom so the names pull up. */
+.wordbook.wb-school-page .wb-home-tagline { margin-bottom: 14px; }
 .wordbook .wb-classroom-hero-logo {
   width: 110px;
   height: 110px;
@@ -12729,19 +12741,21 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 }
 
 /* Off-hours hint — quieter look than the main UI. */
+/* Off-hours hint: a low-key sub-footer, pushed well down from the search so it
+   doesn't compete for attention, with a smaller font. (Gadi 2026-08-25.) */
 .wordbook .wb-classroom-offhours {
-  max-width: 720px;
-  margin: 28px auto 0;
-  padding: 14px 18px;
-  background: rgba(14, 165, 165, 0.08);
-  border: 1px solid rgba(14, 165, 165, 0.3);
-  border-radius: 14px;
+  max-width: 620px;
+  margin: 72px auto 0;
+  padding: 11px 16px;
+  background: rgba(14, 165, 165, 0.06);
+  border: 1px solid rgba(14, 165, 165, 0.22);
+  border-radius: 12px;
   font-family: var(--wb-sans);
-  font-size: 14px;
-  color: var(--ink);
+  font-size: 12px;
+  color: var(--ink-soft);
   text-align: center;
 }
-.wordbook .wb-classroom-offhours-line1 { margin-bottom: 6px; }
+.wordbook .wb-classroom-offhours-line1 { margin-bottom: 4px; }
 .wordbook .wb-classroom-offhours-cta {
   font-weight: 700;
   color: #0EA5A5;
