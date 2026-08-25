@@ -119,8 +119,10 @@ export function KidsSwitcherClient() {
   }
 
   function tapKid(m: Member) {
-    if (m.pin && /^\d{4}$/.test(m.pin)) { setSelected(m); setPin(""); }
-    else void enter(m);
+    // No PIN gate (Gadi 2026-08-25): one family device, tap a sibling to enter.
+    // A wrong tap only ever helps the other child toward their goals/skins, so
+    // the extra keypad step was pure friction.
+    void enter(m);
   }
 
   function pressDigit(d: string) {
@@ -167,7 +169,7 @@ export function KidsSwitcherClient() {
                     {photo ? <img src={photo} alt="" width={108} height={108} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (m.name || "?").charAt(0).toUpperCase()}
                   </span>
                   <span style={{ fontSize: 19, fontWeight: 700, color: "var(--ink)" }}>
-                    {m.name || "—"}{m.pin ? " 🔒" : ""}
+                    {m.name || "—"}
                   </span>
                 </button>
               );

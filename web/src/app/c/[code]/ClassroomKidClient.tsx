@@ -365,7 +365,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
             )}
             <p className="wb-home-tagline">
               {studentName
-                ? `${c.greetingPrefix} ${studentName}`
+                ? `${c.greetingPrefix} ${studentName},`
                 : `${c.welcomeTo} ${data.classroomName || c.classroomDefault}`}
             </p>
             {studentName && (
