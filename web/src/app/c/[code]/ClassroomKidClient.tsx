@@ -165,37 +165,14 @@ const COPY: Record<string, {
  *  The search still works (basic dictionary) but image / kids'
  *  explanation / classroom game are off. The hint upsells to Family
  *  so a kid asking their parent gets pointed at the right product. */
-const OFFHOURS_HINT: Record<string, { line1: string; cta: string; link: string }> = {
-  he: {
-    line1: "מחוץ לשעות הכיתה. מוצא מילים בלי תמונה והסבר לילדים.",
-    cta: "רוצה את Gadit בבית? המנוי המשפחתי",
-    link: "/families",
-  },
-  en: {
-    line1: "Outside class hours. Looking words up without images and kids' explanation.",
-    cta: "Want Gadit at home? Family plan",
-    link: "/families",
-  },
-  zu: {
-    line1: "Ngaphandle kwamahora ekilasi. Sibheka amagama ngaphandle kwezithombe nencazelo yezingane.",
-    cta: "Ufuna i-Gadit ekhaya? Uhlelo lomndeni",
-    link: "/families",
-  },
-  el: {
-    line1: "Εκτός ωρών μαθήματος. Αναζητάς λέξεις χωρίς εικόνες και επεξήγηση για παιδιά.",
-    cta: "Θέλεις το Gadit στο σπίτι; Το πλάνο Family",
-    link: "/families",
-  },
-  hi: {
-    line1: "कक्षा के समय के बाहर। बिना तस्वीर और बच्चों की समझ के शब्द खोज रहे हैं।",
-    cta: "घर पर Gadit चाहिए? Family प्लान",
-    link: "/families",
-  },
-  am: {
-    line1: "ከክፍል ሰዓት ውጭ ነን። ቃላት ያለ ምስል እና ያለ የልጆች ማብራሪያ እየፈለግን ነው።",
-    cta: "ቤት ውስጥ Gadit ትፈልጋላችሁ? የFamily እቅድ",
-    link: "/families",
-  },
+const OFFHOURS_LINK_URL = "www.gadit.app/families";
+const OFFHOURS_HINT: Record<string, { lead: string; link: string }> = {
+  he: { lead: "רוצים את Gadit בבית? שלחו להורים את הקישור:", link: "/families" },
+  en: { lead: "Want Gadit at home? Send your parents this link:", link: "/families" },
+  zu: { lead: "Ufuna i-Gadit ekhaya? Thumela abazali bakho leli khophi:", link: "/families" },
+  el: { lead: "Θέλεις το Gadit στο σπίτι; Στείλε στους γονείς σου αυτόν τον σύνδεσμο:", link: "/families" },
+  hi: { lead: "घर पर Gadit चाहिए? अपने माता-पिता को यह लिंक भेजें:", link: "/families" },
+  am: { lead: "ቤት ውስጥ Gadit ትፈልጋላችሁ? ይህን ሊንክ ለወላጆቻችሁ ላኩ:", link: "/families" },
 };
 
 export function ClassroomKidClient({ code }: { code: string }) {
@@ -486,13 +463,14 @@ export function ClassroomKidClient({ code }: { code: string }) {
       {!data.inSession && (
         <footer className="wb-classroom-offhours">
           <div className="wb-classroom-offhours-line1">
-            {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).line1}
+            {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).lead}
           </div>
           <Link
             href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
             className="wb-classroom-offhours-cta"
+            dir="ltr"
           >
-            {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).cta} →
+            {OFFHOURS_LINK_URL}
           </Link>
         </footer>
       )}
