@@ -103,6 +103,14 @@ const COPY = {
     delConfirm: "Delete school",
     delCancel: "Cancel",
     deleting: "Deleting…",
+    mergeBtn: "Merge into another school",
+    mergeTitle: "Merge this school into another",
+    mergeLead: "Every classroom and search log here moves into the school you pick, then this record is deleted. Classroom codes keep working. Billing is untouched. Pick the school to KEEP (usually the one with the active subscription).",
+    mergePickPlaceholder: "Choose the school to keep…",
+    mergeConfirm: "Merge",
+    mergeCancel: "Cancel",
+    merging: "Merging…",
+    mergeDone: (c: number, s: number) => `Merged ${c} classrooms and ${s} searches.`,
   },
   he: {
     title: "בתי ספר",
@@ -139,6 +147,14 @@ const COPY = {
     delConfirm: "מחק בית ספר",
     delCancel: "ביטול",
     deleting: "מוחק…",
+    mergeBtn: "מזג לבית ספר אחר",
+    mergeTitle: "מיזוג בית הספר הזה לתוך אחר",
+    mergeLead: "כל הכיתות ויומני החיפוש כאן עוברים לבית הספר שתבחר, ואז הרשומה הזו נמחקת. קודי הכיתות ממשיכים לעבוד. החיוב לא מושפע. בחר את בית הספר שיישאר (בדרך כלל זה עם המנוי הפעיל).",
+    mergePickPlaceholder: "בחר את בית הספר שיישאר…",
+    mergeConfirm: "מזג",
+    mergeCancel: "ביטול",
+    merging: "ממזג…",
+    mergeDone: (c: number, s: number) => `מוזגו ${c} כיתות ו-${s} חיפושים.`,
   },
 };
 
@@ -162,6 +178,9 @@ export default function AdminSchoolsClient() {
   const [delTarget, setDelTarget] = useState<SchoolRow | null>(null);
   const [delText, setDelText] = useState("");
   const [delBusy, setDelBusy] = useState(false);
+  const [mergeOpen, setMergeOpen] = useState(false);
+  const [mergeInto, setMergeInto] = useState("");
+  const [mergeBusy, setMergeBusy] = useState(false);
 
   const isAdmin = user?.email === ADMIN_EMAIL;
 
@@ -209,8 +228,14 @@ export default function AdminSchoolsClient() {
       promptLogin(t.signInAdmin);
       return;
     }
-    if (selected) loadDetail(selected);
-    else loadList();
+    if (selected) {
+      loadDetail(selected);
+      if (!list) loadList(); // keep the merge-target picker populated
+    } else {
+      loadList();
+    }
+    // list intentionally excluded: we only want the top-up load once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, user, promptLogin, selected, loadList, loadDetail, t.signInAdmin]);
 
   const deleteSchool = async () => {
@@ -230,6 +255,29 @@ export default function AdminSchoolsClient() {
       setError(String(e instanceof Error ? e.message : e));
     } finally {
       setDelBusy(false);
+    }
+  };
+
+  const mergeSchools = async () => {
+    if (!user || !selected || !mergeInto || mergeBusy) return;
+    setMergeBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/admin/schools/merge", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ sourceId: selected, targetId: mergeInto }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      setMergeOpen(false);
+      setMergeInto("");
+      // Source is gone; jump to the surviving target's detail.
+      setDetail(null);
+      setSelected(mergeInto);
+    } catch (e) {
+      setError(String(e instanceof Error ? e.message : e));
+    } finally {
+      setMergeBusy(false);
     }
   };
 
@@ -266,6 +314,12 @@ export default function AdminSchoolsClient() {
                 {detail.school.contactEmail || detail.school.id}
                 {detail.school.plan ? ` · ${detail.school.plan}` : ""}
               </p>
+              <button
+                onClick={() => { setMergeInto(""); setMergeOpen(true); }}
+                style={{ marginTop: 10, padding: "8px 14px", borderRadius: 8, border: "1px solid #7C3AED", background: "#F5F3FF", color: "#6D28D9", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+              >
+                {t.mergeBtn}
+              </button>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 12 }}>
@@ -413,6 +467,48 @@ export default function AdminSchoolsClient() {
               )}
             </Section>
           </>
+        )}
+
+        {mergeOpen && (
+          <div
+            onClick={() => !mergeBusy && setMergeOpen(false)}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 }}
+          >
+            <div onClick={(e) => e.stopPropagation()} style={{ background: "white", borderRadius: 14, padding: 24, maxWidth: 460, width: "100%" }} dir={dir}>
+              <h3 style={{ margin: "0 0 8px", fontSize: 18, fontWeight: 700, color: "#111827" }}>{t.mergeTitle}</h3>
+              <p style={{ color: "#4B5563", fontSize: 14, lineHeight: 1.5, margin: "0 0 16px" }}>{t.mergeLead}</p>
+              <select
+                value={mergeInto}
+                onChange={(e) => setMergeInto(e.target.value)}
+                style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 14, marginBottom: 16, background: "white" }}
+              >
+                <option value="">{t.mergePickPlaceholder}</option>
+                {(list?.schools ?? [])
+                  .filter((s) => s.id !== selected)
+                  .map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {(s.name || s.contactEmail || s.id)}{s.plan ? ` (${s.plan})` : ""}
+                    </option>
+                  ))}
+              </select>
+              <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+                <button
+                  onClick={() => setMergeOpen(false)}
+                  disabled={mergeBusy}
+                  style={{ padding: "10px 16px", borderRadius: 8, border: "1px solid #E5E7EB", background: "white", color: "#374151", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+                >
+                  {t.mergeCancel}
+                </button>
+                <button
+                  onClick={mergeSchools}
+                  disabled={mergeBusy || !mergeInto}
+                  style={{ padding: "10px 16px", borderRadius: 8, border: "none", background: mergeInto ? "#7C3AED" : "#C4B5FD", color: "white", fontSize: 14, fontWeight: 700, cursor: mergeInto ? "pointer" : "not-allowed" }}
+                >
+                  {mergeBusy ? t.merging : t.mergeConfirm}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     );
