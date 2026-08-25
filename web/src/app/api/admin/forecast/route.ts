@@ -55,10 +55,10 @@ function hasCard(s: Stripe.Subscription): boolean {
 }
 
 function tierFromSub(s: Stripe.Subscription): string {
+  // No product expand (that would push the expand past Stripe's 4-level cap and
+  // 500 the whole call). The price nickname is enough for a label.
   const nick = s.items.data[0]?.price?.nickname || "";
-  const prod = s.items.data[0]?.price?.product;
-  const name = typeof prod === "object" && prod && "name" in prod ? (prod as Stripe.Product).name : "";
-  return (name || nick || "Subscription").replace(/^Gadit\s+/i, "");
+  return (nick || "Subscription").replace(/^Gadit\s+/i, "");
 }
 
 function dayKey(ms: number): string {
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
   let startingAfter: string | undefined;
   do {
     const page = await stripe.subscriptions.list({
-      status: "all", limit: 100, expand: ["data.customer", "data.items.data.price.product"],
+      status: "all", limit: 100, expand: ["data.customer"],
       ...(startingAfter ? { starting_after: startingAfter } : {}),
     });
     subs.push(...page.data);
