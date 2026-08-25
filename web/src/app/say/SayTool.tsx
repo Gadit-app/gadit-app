@@ -24,6 +24,8 @@ type Copy = {
   hearing: string; tip: string; loginTitle: string; loginBody: string;
   loginCta: string; errGeneric: string; speak: string;
   paidTitle: string; paidBody: string; paidCta: string; close: string;
+  practiceTitle: string; practiceHint: string; practiceBtn: string;
+  pcCorrect: string; pcClose: string; pcWrong: string; heardLabel: string;
 };
 const COPY: Partial<Record<Lang, Copy>> = {
   en: {
@@ -41,6 +43,13 @@ const COPY: Partial<Record<Lang, Copy>> = {
     paidTitle: "A paid feature",
     paidBody: "Say it is part of the Clear, Deep, Family and Schools plans.",
     paidCta: "See plans", close: "Close",
+    practiceTitle: "Now you try",
+    practiceHint: "Say it aloud, and I'll check your pronunciation.",
+    practiceBtn: "Practice saying it",
+    pcCorrect: "Spot on. That sounded right.",
+    pcClose: "Almost there. Listen again and give it one more go.",
+    pcWrong: "Not quite yet. Hear it again, then try once more.",
+    heardLabel: "I heard",
   },
   he: {
     title: "תגיד את זה בשפה אחרת",
@@ -57,6 +66,13 @@ const COPY: Partial<Record<Lang, Copy>> = {
     paidTitle: "פיצ'ר בתוכניות בתשלום",
     paidBody: "תגיד את זה זמין בתוכניות Clear, Deep, Family ו-Schools.",
     paidCta: "לתוכניות", close: "סגור",
+    practiceTitle: "עכשיו תורך",
+    practiceHint: "אמרו את זה בקול, ואבדוק את ההגייה.",
+    practiceBtn: "תרגול הגייה",
+    pcCorrect: "מדויק. נשמע נכון.",
+    pcClose: "כמעט. הקשיבו שוב ונסו עוד פעם.",
+    pcWrong: "עוד לא בדיוק. הקשיבו שוב, ותנסו שוב.",
+    heardLabel: "שמעתי",
   },
 };
 function copy(lang: Lang): Copy {
@@ -64,6 +80,47 @@ function copy(lang: Lang): Copy {
 }
 function dirOf(code: string): "ltr" | "rtl" {
   return LANGUAGES.find((l) => l.code === code)?.dir ?? "ltr";
+}
+
+// ── Pronunciation scoring (Gadi 2026-08-25) ──────────────────────────────
+// The learner speaks the target phrase; /api/transcribe (Whisper, hinted to the
+// target language) returns what it heard. If the target-language recognizer
+// produces the target word, the pronunciation was clear enough. Normalize both
+// (case, punctuation, and Latin/Hebrew/Arabic diacritics) and compare.
+function normPron(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-֑ͯ-ׇֽֿׁׂًׅׄ-ٰٟ]/g, "")
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  let prev = Array.from({ length: n + 1 }, (_, i) => i);
+  for (let i = 1; i <= m; i++) {
+    const cur = [i];
+    for (let j = 1; j <= n; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+function scorePron(target: string, spoken: string): "correct" | "close" | "wrong" {
+  const t = normPron(target), s = normPron(spoken);
+  if (!s || !t) return "wrong";
+  if (t === s) return "correct";
+  if (t.length >= 2 && s.length >= 2 && (t.includes(s) || s.includes(t))) {
+    const ratio = Math.min(t.length, s.length) / Math.max(t.length, s.length);
+    return ratio >= 0.8 ? "correct" : "close";
+  }
+  const sim = 1 - levenshtein(t, s) / Math.max(t.length, s.length);
+  if (sim >= 0.85) return "correct";
+  if (sim >= 0.6) return "close";
+  return "wrong";
 }
 
 export function SayTool({ onClose }: { onClose?: () => void }) {
@@ -81,14 +138,22 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
   const [result, setResult] = useState<{
     translation: string; romanization: string; tip: string; targetLang: string;
   } | null>(null);
+  const [pron, setPron] = useState<{ status: "correct" | "close" | "wrong"; heard: string } | null>(null);
 
   useEffect(() => { setSourceLang(lang); }, [lang]);
+
+  const checkPron = useCallback((spoken: string) => {
+    setResult((r) => {
+      if (r) setPron({ status: scorePron(r.translation, spoken), heard: spoken });
+      return r;
+    });
+  }, []);
 
   const autoPlayedRef = useRef<string>("");
 
   const submit = useCallback(async () => {
     if (!user || !text.trim() || busy) return;
-    setBusy(true); setError(""); setResult(null);
+    setBusy(true); setError(""); setResult(null); setPron(null);
     try {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/say", {
@@ -243,6 +308,40 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
                   <span style={{ fontWeight: 700 }}>{t.tip}: </span>{result.tip}
                 </div>
               )}
+
+              {/* Pronunciation practice: the learner says it, Gadit checks. */}
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--rule, #E7E7E2)" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#0EA5A5", marginBottom: 6 }}>{t.practiceTitle}</div>
+                <div style={{ fontSize: 14, opacity: 0.75, marginBottom: 12 }}>{t.practiceHint}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <VoiceInput
+                    key={result.translation}
+                    uiLang={result.targetLang}
+                    getIdToken={async () => (user ? await user.getIdToken() : null)}
+                    enabled={paid}
+                    title={t.practiceBtn}
+                    onResult={checkPron}
+                  />
+                  <span style={{ fontSize: 14, opacity: 0.7 }}>{t.practiceBtn}</span>
+                </div>
+                {pron && (() => {
+                  const c = pron.status === "correct"
+                    ? { bg: "rgba(16,185,129,0.1)", bd: "rgba(16,185,129,0.35)", fg: "#047857", ic: "✓", msg: t.pcCorrect }
+                    : pron.status === "close"
+                      ? { bg: "rgba(245,158,11,0.12)", bd: "rgba(245,158,11,0.4)", fg: "#b45309", ic: "≈", msg: t.pcClose }
+                      : { bg: "rgba(239,68,68,0.1)", bd: "rgba(239,68,68,0.35)", fg: "#b91c1c", ic: "↻", msg: t.pcWrong };
+                  return (
+                    <div style={{ marginTop: 14, borderRadius: 12, padding: "12px 14px", background: c.bg, border: `1px solid ${c.bd}` }}>
+                      <div style={{ fontWeight: 700, color: c.fg, fontSize: 15 }}><span aria-hidden="true">{c.ic}</span> {c.msg}</div>
+                      {pron.status !== "correct" && (
+                        <div style={{ marginTop: 5, fontSize: 14, opacity: 0.85 }}>
+                          {t.heardLabel}: <span dir={dirOf(result.targetLang)} style={{ fontWeight: 600 }}>{pron.heard}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
             </div>
           )}
         </>
