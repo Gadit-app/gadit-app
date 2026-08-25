@@ -58,6 +58,23 @@ const COPY: Record<string, { openFull: string; loading: string; noPreview: strin
   ja: { openFull: "完全な定義を開く",         loading: "読み込み中…",    noPreview: "下をタップして完全な定義を表示。" },
   hi: { openFull: "पूरी परिभाषा खोलें",      loading: "लोड हो रहा है…", noPreview: "पूरी परिभाषा देखने के लिए नीचे दबाएँ।" },
   am: { openFull: "ሙሉውን ፍቺ ክፈት",          loading: "በመጫን ላይ…",   noPreview: "ሙሉውን ፍቺ ለማየት ከታች ይንኩ።" },
+  uk: { openFull: "Відкрити повне визначення", loading: "Завантаження…", noPreview: "Торкніться нижче, щоб побачити повне визначення." },
+  tr: { openFull: "Tam tanımı aç", loading: "Yükleniyor…", noPreview: "Tam tanımı görmek için aşağıya dokunun." },
+  pl: { openFull: "Otwórz pełną definicję", loading: "Ładowanie…", noPreview: "Dotknij poniżej, aby zobaczyć pełną definicję." },
+  fa: { openFull: "باز کردن تعریف کامل", loading: "در حال بارگذاری…", noPreview: "برای دیدن تعریف کامل، پایین را لمس کنید." },
+  id: { openFull: "Buka definisi lengkap", loading: "Memuat…", noPreview: "Ketuk di bawah untuk melihat definisi lengkap." },
+  nl: { openFull: "Volledige definitie openen", loading: "Laden…", noPreview: "Tik hieronder om de volledige definitie te bekijken." },
+  vi: { openFull: "Mở định nghĩa đầy đủ", loading: "Đang tải…", noPreview: "Nhấn bên dưới để xem định nghĩa đầy đủ." },
+  fil: { openFull: "Buksan ang buong depinisyon", loading: "Naglo-load…", noPreview: "I-tap sa ibaba para makita ang buong depinisyon." },
+  af: { openFull: "Maak volledige definisie oop", loading: "Laai tans…", noPreview: "Tik hieronder om die volledige definisie te sien." },
+  sw: { openFull: "Fungua ufafanuzi kamili", loading: "Inapakia…", noPreview: "Gusa hapa chini ili kuona ufafanuzi kamili." },
+  "zh-CN": { openFull: "打开完整释义", loading: "加载中…", noPreview: "点击下方查看完整释义。" },
+  "zh-TW": { openFull: "開啟完整釋義", loading: "載入中…", noPreview: "點按下方查看完整釋義。" },
+  ko: { openFull: "전체 뜻풀이 열기", loading: "불러오는 중…", noPreview: "아래를 눌러 전체 뜻풀이를 확인하세요." },
+  th: { openFull: "เปิดคำนิยามฉบับเต็ม", loading: "กำลังโหลด…", noPreview: "แตะด้านล่างเพื่อดูคำนิยามฉบับเต็ม" },
+  bn: { openFull: "সম্পূর্ণ সংজ্ঞা খুলুন", loading: "লোড হচ্ছে…", noPreview: "সম্পূর্ণ সংজ্ঞা দেখতে নিচে ট্যাপ করুন।" },
+  da: { openFull: "Åbn fuld definition", loading: "Indlæser…", noPreview: "Tryk nedenfor for at se den fulde definition." },
+  hu: { openFull: "Teljes meghatározás megnyitása", loading: "Betöltés…", noPreview: "Koppintson lentebb a teljes meghatározás megtekintéséhez." },
 };
 
 export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
