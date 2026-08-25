@@ -129,6 +129,8 @@ const COPY = {
     mergeCancel: "Cancel",
     merging: "Merging…",
     mergeDone: (c: number, s: number) => `Merged ${c} classrooms and ${s} searches.`,
+    enterDash: "Enter dashboard",
+    entering: "Signing in…",
   },
   he: {
     title: "בתי ספר",
@@ -180,6 +182,8 @@ const COPY = {
     mergeCancel: "ביטול",
     merging: "ממזג…",
     mergeDone: (c: number, s: number) => `מוזגו ${c} כיתות ו-${s} חיפושים.`,
+    enterDash: "כניסה ללוח הבקרה",
+    entering: "מתחבר…",
   },
 };
 
@@ -306,6 +310,28 @@ export default function AdminSchoolsClient() {
     }
   };
 
+  const [enterBusy, setEnterBusy] = useState(false);
+  const enterDashboard = async () => {
+    if (!user || !selected || enterBusy) return;
+    setEnterBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/admin/impersonate-school", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ schoolId: selected }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const { token } = (await res.json()) as { token: string };
+      const { signInWithCustomToken, getAuth } = await import("firebase/auth");
+      await signInWithCustomToken(getAuth(), token);
+      window.location.href = "/schools";
+    } catch (e) {
+      setError(String(e instanceof Error ? e.message : e));
+      setEnterBusy(false);
+    }
+  };
+
   const openSchool = (id: string) => {
     setDetail(null);
     setSelected(id);
@@ -355,12 +381,21 @@ export default function AdminSchoolsClient() {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => { setMergeInto(""); setMergeOpen(true); }}
-                style={{ marginTop: 10, padding: "8px 14px", borderRadius: 8, border: "1px solid #7C3AED", background: "#F5F3FF", color: "#6D28D9", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
-              >
-                {t.mergeBtn}
-              </button>
+              <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <button
+                  onClick={enterDashboard}
+                  disabled={enterBusy}
+                  style={{ padding: "8px 14px", borderRadius: 8, border: "none", background: "#B45309", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+                >
+                  {enterBusy ? t.entering : t.enterDash}
+                </button>
+                <button
+                  onClick={() => { setMergeInto(""); setMergeOpen(true); }}
+                  style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid #7C3AED", background: "#F5F3FF", color: "#6D28D9", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+                >
+                  {t.mergeBtn}
+                </button>
+              </div>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 12 }}>
