@@ -67,7 +67,7 @@ const T: Record<string, {
 function t(lang: string) { return T[lang] ?? T.en; }
 
 export function KidsSwitcherClient() {
-  const { user, promptLogin } = useAuth();
+  const { user, loading: authLoading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
@@ -134,6 +134,17 @@ export function KidsSwitcherClient() {
   }
 
   if (!user) {
+    // A shared-tablet PWA drops `user` to null for a moment every time it wakes,
+    // and often wakes offline. Don't flash the sign-in prompt in that window —
+    // wait quietly (Yooniz gotcha: the most painful one to miss).
+    const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+    if (authLoading || offline) {
+      return (
+        <div className="wordbook wb-shell-page" dir={dir} style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontSize: 32, color: "var(--ink-faint, #9CA3AF)" }} aria-busy="true">
+          …
+        </div>
+      );
+    }
     return (
       <div className="wordbook wb-shell-page" dir={dir} style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <button type="button" onClick={() => promptLogin({ mode: "signin" })} style={btnTeal}>{c.signin}</button>
@@ -177,7 +188,8 @@ export function KidsSwitcherClient() {
               <span key={i} style={{ width: 18, height: 18, borderRadius: "50%", background: i < pin.length ? "#0EA5A5" : "color-mix(in srgb, var(--ink) 18%, transparent)" }} />
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 74px)", gap: 14 }}>
+          {/* Always LTR so the digits never mirror to 3-2-1 in an RTL UI. */}
+          <div dir="ltr" style={{ display: "grid", gridTemplateColumns: "repeat(3, 74px)", gap: 14 }}>
             {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
               <button key={d} type="button" onClick={() => pressDigit(d)} style={keyStyle}>{d}</button>
             ))}
