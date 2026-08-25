@@ -12798,10 +12798,12 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   font-weight: 600;
   color: var(--ink);
   text-decoration: none;
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
 }
-.wordbook .wb-classroom-notebook-word:hover { color: #0EA5A5; }
+.wordbook .wb-classroom-notebook-word:hover { color: var(--accent, #0EA5A5); }
+/* Word + time sit together on the trailing side (left in RTL); the student
+   name leads on the right. (Gadi 2026-08-25.) */
 .wordbook .wb-classroom-notebook-meta {
   display: flex;
   align-items: center;
@@ -12809,15 +12811,18 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   font-family: var(--wb-sans);
   font-size: 13px;
   color: var(--ink-soft);
-  flex-shrink: 0;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 0;
 }
 .wordbook .wb-classroom-notebook-student {
-  padding: 3px 10px;
-  background: rgba(14, 165, 165, 0.10);
-  color: rgb(13, 148, 148);
+  padding: 4px 12px;
+  background: color-mix(in srgb, var(--accent, #0EA5A5) 12%, transparent);
+  color: var(--accent, #0EA5A5);
   border-radius: 999px;
-  font-weight: 600;
-  font-size: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
 }
 .wordbook .wb-classroom-notebook-empty {
   text-align: center;

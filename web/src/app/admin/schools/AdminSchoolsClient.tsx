@@ -43,6 +43,7 @@ type ClassroomRow = {
   sampleSize: number;
   topLanguage: string;
   loggedCount?: number;
+  roster?: string[];
 };
 
 type StudentRow = {
@@ -105,6 +106,7 @@ const COPY = {
     kpiSample: "Recent sample",
     topWords: "Most-searched words",
     classrooms: "Classrooms",
+    rosterLabel: "Roster (added by teacher)",
     students: "Students",
     noStudents: "No named student activity yet.",
     noWords: "No words in the recent window.",
@@ -155,6 +157,7 @@ const COPY = {
     kpiSample: "מדגם אחרון",
     topWords: "המילים המחופשות ביותר",
     classrooms: "כיתות",
+    rosterLabel: "רשימת תלמידים (שהמורה הוסיף)",
     students: "תלמידים",
     noStudents: "אין עדיין פעילות תלמידים עם שם.",
     noWords: "אין מילים בחלון האחרון.",
@@ -434,6 +437,20 @@ export default function AdminSchoolsClient() {
                         </span>
                         {c.topLanguage && <span>· {classroomLangLabel(c.topLanguage)}</span>}
                       </div>
+                      {c.roster && c.roster.length > 0 && (
+                        <div style={{ marginTop: 8 }}>
+                          <div style={{ fontSize: 10, fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 4 }}>
+                            {t.rosterLabel} ({c.roster.length})
+                          </div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                            {c.roster.map((name) => (
+                              <span key={name} style={{ fontSize: 11, padding: "2px 8px", borderRadius: 999, background: "#F3F4F6", color: "#374151" }} dir="auto">
+                                {name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

@@ -27,7 +27,7 @@ export async function computeSchoolInsights(db: Firestore, schoolId: string) {
 
   const perClassroom = await Promise.all(
     classroomDocs.map(async (doc) => {
-      const data = doc.data() as { name?: string; code?: string; searchCount?: number; colorIndex?: number };
+      const data = doc.data() as { name?: string; code?: string; searchCount?: number; colorIndex?: number; students?: string[] };
       const searchesSnap = await doc.ref.collection("searches").orderBy("at", "desc").limit(PER_CLASSROOM_WINDOW).get();
       const raw: RawSearch[] = searchesSnap.docs.map((s) => {
         const sd = s.data() as { word?: string; lang?: string; studentName?: string };
@@ -42,6 +42,9 @@ export async function computeSchoolInsights(db: Firestore, schoolId: string) {
         totalAllTime: data.searchCount ?? 0,
         sampleSize: insights.sampleSize,
         topLanguage: insights.languages[0]?.lang ?? "",
+        // The roster the teacher added to this classroom (distinct from who
+        // actually searched — a name can be on the roster with 0 lookups).
+        roster: Array.isArray(data.students) ? data.students.filter((s) => typeof s === "string" && s.trim()) : [],
         raw,
       };
     }),

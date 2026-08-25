@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
 
+/**
+ * Strip stray CJK characters that gpt-4o-mini occasionally injects INTO a word
+ * of another script (e.g. it returned "והצ致תי" instead of "והצלתי" — a lone
+ * Han char dropped into a Hebrew word). We only remove a CJK run when it is
+ * directly adjacent to a Latin/Greek/Cyrillic/Hebrew/Arabic letter, i.e. it is
+ * embedded in a non-CJK word. A genuinely Chinese/Japanese suggestion is pure
+ * CJK (its chars never touch another script), so this leaves it untouched.
+ */
+const CJK = "\\u3040-\\u30ff\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff\\uac00-\\ud7af";
+const OTHER_LETTER = "A-Za-z\\u00c0-\\u024f\\u0370-\\u03ff\\u0400-\\u04ff\\u0590-\\u05ff\\u0600-\\u06ff";
+const STRAY_CJK_AFTER = new RegExp(`(?<=[${OTHER_LETTER}])[${CJK}]+`, "g");
+const STRAY_CJK_BEFORE = new RegExp(`[${CJK}]+(?=[${OTHER_LETTER}])`, "g");
+function sanitizeStrayCJK(s: string): string {
+  if (!s) return s;
+  return s.replace(STRAY_CJK_AFTER, "").replace(STRAY_CJK_BEFORE, "");
+}
+
 const UI_LANG_NAMES: Record<string, string> = {
   he: "Hebrew",
   en: "English",
@@ -152,8 +169,8 @@ User's UI language (write all feedback in this): ${uiLangName}`;
 
     return NextResponse.json({
       status: parsed.status,
-      message: parsed.message || "",
-      suggestion: parsed.suggestion || "",
+      message: sanitizeStrayCJK(parsed.message || ""),
+      suggestion: sanitizeStrayCJK(parsed.suggestion || ""),
     });
   } catch (err) {
     console.error("check-sentence error:", err);

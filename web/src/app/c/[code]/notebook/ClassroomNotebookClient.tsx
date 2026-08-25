@@ -122,6 +122,16 @@ type State =
   | { kind: "ok"; searches: SearchEntry[] }
   | { kind: "error" };
 
+// Top-students strip copy (en fallback), kept separate from the main COPY.
+const TOP_COPY: Record<string, { heading: string; words: (n: number) => string }> = {
+  en: { heading: "Top students", words: (n) => `${n} ${n === 1 ? "word" : "words"}` },
+  he: { heading: "התלמידים המובילים", words: (n) => `${n} מילים` },
+  ar: { heading: "الطلاب الأكثر نشاطًا", words: (n) => `${n} كلمات` },
+  ru: { heading: "Самые активные", words: (n) => `${n} слов` },
+  es: { heading: "Mejores alumnos", words: (n) => `${n} palabras` },
+  fr: { heading: "Meilleurs élèves", words: (n) => `${n} mots` },
+};
+
 function useClassroomSkin(code: string) {
   const [skin, setSkin] = useState<string | null>(null);
   useEffect(() => { setSkin(readStashedSkin(code)); }, [code]);
@@ -173,6 +183,21 @@ export function ClassroomNotebookClient({ code }: { code: string }) {
     return state.searches.filter((s) => s.studentName === studentFilter);
   }, [state, studentFilter]);
 
+  // Top students by number of lookups (named only), so the teacher always
+  // sees who is most active at a glance. (Gadi 2026-08-25.)
+  const topStudents = useMemo(() => {
+    if (state.kind !== "ok") return [] as { name: string; count: number }[];
+    const counts = new Map<string, number>();
+    for (const s of state.searches) {
+      const n = (s.studentName ?? "").trim();
+      if (n) counts.set(n, (counts.get(n) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 3);
+  }, [state]);
+
   return (
     <div className="wordbook wb-school-page" dir={dir} style={skinVars}>
       <header className="wb-classroom-topbar">
@@ -217,6 +242,42 @@ export function ClassroomNotebookClient({ code }: { code: string }) {
 
         {state.kind === "ok" && state.searches.length > 0 && (
           <>
+            {topStudents.length > 0 && (() => {
+              const tc = TOP_COPY[lang] ?? TOP_COPY.en;
+              const medals = ["🥇", "🥈", "🥉"];
+              return (
+                <div
+                  style={{
+                    marginBottom: 20, padding: "14px 16px", borderRadius: 14,
+                    background: "color-mix(in srgb, var(--accent, #0EA5A5) 8%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--accent, #0EA5A5) 25%, transparent)",
+                  }}
+                >
+                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase", color: "var(--accent, #0EA5A5)", marginBottom: 10 }}>
+                    {tc.heading}
+                  </div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {topStudents.map((s, i) => (
+                      <button
+                        key={s.name}
+                        type="button"
+                        onClick={() => setStudentFilter(s.name)}
+                        style={{
+                          display: "inline-flex", alignItems: "center", gap: 8,
+                          padding: "8px 14px", borderRadius: 999, cursor: "pointer",
+                          background: "var(--surface, #fff)",
+                          border: "1px solid var(--rule, #E5E7EB)",
+                        }}
+                      >
+                        <span style={{ fontSize: 18 }} aria-hidden="true">{medals[i]}</span>
+                        <span style={{ fontWeight: 700, color: "var(--ink, #111827)" }}>{s.name}</span>
+                        <span style={{ fontSize: 12, color: "var(--ink-soft, #6B7280)", fontVariantNumeric: "tabular-nums" }}>{tc.words(s.count)}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
             {studentOptions.length > 0 && (
               <div className="wb-classroom-notebook-filter">
                 <label htmlFor="student-filter">{c.filterLabel}:</label>
@@ -235,18 +296,21 @@ export function ClassroomNotebookClient({ code }: { code: string }) {
 
             <ul className="wb-classroom-notebook-list">
               {filteredSearches.map((s, i) => (
+                // Student name leads (right in RTL, left in LTR) so a teacher
+                // can scan by pupil; the word + time sit on the far side.
+                // (Gadi 2026-08-25.)
                 <li key={i} className="wb-classroom-notebook-row">
-                  <Link
-                    href={href(`/word/${encodeURIComponent(s.word)}?cls=${encodeURIComponent(code)}`)}
-                    className="wb-classroom-notebook-word"
-                    lang={s.language || undefined}
-                  >
-                    {s.word}
-                  </Link>
+                  <span className="wb-classroom-notebook-student">
+                    {s.studentName || c.filterAll}
+                  </span>
                   <div className="wb-classroom-notebook-meta">
-                    {s.studentName && (
-                      <span className="wb-classroom-notebook-student">{s.studentName}</span>
-                    )}
+                    <Link
+                      href={href(`/word/${encodeURIComponent(s.word)}?cls=${encodeURIComponent(code)}`)}
+                      className="wb-classroom-notebook-word"
+                      lang={s.language || undefined}
+                    >
+                      {s.word}
+                    </Link>
                     <span className="wb-classroom-notebook-time">
                       {formatRelativeTime(s.createdAt, lang)}
                     </span>
