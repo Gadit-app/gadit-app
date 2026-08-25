@@ -406,8 +406,11 @@ export function ClassroomKidClient({ code }: { code: string }) {
           {data.students.length > 0 && !studentName && (
             <div className="wb-classroom-student-picker">
               <p className="wb-classroom-student-picker-prompt">{c.pickName}</p>
-              <div className="wb-classroom-student-picker-chips">
-                {data.students.map((sn) => (
+              {/* Alphabetical (A first, on the left), filling left to right and
+                  wrapping down, so a student finds their name fast. dir=ltr
+                  keeps A on the left even in an RTL school UI. (Gadi 2026-08-25.) */}
+              <div className="wb-classroom-student-picker-chips" dir="ltr">
+                {[...data.students].sort((a, b) => a.localeCompare(b)).map((sn) => (
                   <button
                     key={sn}
                     type="button"
@@ -475,23 +478,24 @@ export function ClassroomKidClient({ code }: { code: string }) {
               </div>
             </form>
           )}
-
-          {/* Off-hours soft hint. */}
-          {!data.inSession && (
-            <div className="wb-classroom-offhours">
-              <div className="wb-classroom-offhours-line1">
-                {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).line1}
-              </div>
-              <Link
-                href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
-                className="wb-classroom-offhours-cta"
-              >
-                {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).cta} →
-              </Link>
-            </div>
-          )}
         </div>
       </main>
+
+      {/* Off-hours soft hint — a real bottom footer (margin-top:auto pins it to
+          the viewport bottom) so it never floats up with the hero + names. */}
+      {!data.inSession && (
+        <footer className="wb-classroom-offhours">
+          <div className="wb-classroom-offhours-line1">
+            {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).line1}
+          </div>
+          <Link
+            href={href((OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).link)}
+            className="wb-classroom-offhours-cta"
+          >
+            {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).cta} →
+          </Link>
+        </footer>
+      )}
     </div>
   );
 }

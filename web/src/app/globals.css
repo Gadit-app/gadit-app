@@ -12619,7 +12619,7 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 /* The welcome line is a shared homepage class with a big 36px gap under it;
    trim it inside the classroom, but keep a little breathing room before the
    names. (Gadi 2026-08-25.) */
-.wordbook.wb-school-page .wb-home-tagline { margin-bottom: 24px; }
+.wordbook.wb-school-page .wb-home-tagline { margin: 14px 0 34px; }
 /* Raise the whole school lockup: the homepage pushes it far down from the
    topbar (80/150px), which stranded the logo low on the classroom page. */
 .wordbook.wb-school-page .wb-home-main { padding-top: 44px; }
@@ -12748,11 +12748,13 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 }
 
 /* Off-hours hint — quieter look than the main UI. */
-/* Off-hours hint: a low-key sub-footer, pushed well down from the search so it
-   doesn't compete for attention, with a smaller font. (Gadi 2026-08-25.) */
+/* Off-hours hint: a real bottom footer. margin-top:auto pins it to the viewport
+   bottom (it is a direct flex child of the flex-column page), so it never rides
+   up with the hero + names. Low-key: small font, muted colour. (Gadi 2026-08-25.) */
 .wordbook .wb-classroom-offhours {
   max-width: 620px;
-  margin: 72px auto 0;
+  width: calc(100% - 44px);
+  margin: auto auto 20px;
   padding: 11px 16px;
   background: rgba(14, 165, 165, 0.06);
   border: 1px solid rgba(14, 165, 165, 0.22);
