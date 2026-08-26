@@ -41,6 +41,10 @@ const T = {
     sub: "In-house affiliate program. Payable = released earnings held 30 days, not yet paid.",
     none: "No partners yet. Add one below, or share /partners for self-signup.",
     loading: "Loading…",
+    searchPlaceholder: "Search by name, email or REF number",
+    searchCount: (shown: number, total: number) => `Showing ${shown} of ${total}`,
+    noMatch: "No partner matches your search.",
+    clearSearch: "Clear",
     addTitle: "Add a partner",
     fName: "Full name",
     fEmail: "Email",
@@ -96,6 +100,10 @@ const T = {
     sub: "תוכנית שותפים עצמאית. לתשלום = רווחים ששוחררו אחרי 30 יום ועדיין לא שולמו.",
     none: "עדיין אין שותפים. הוסיפו אחד למטה, או שתפו את /partners להרשמה עצמית.",
     loading: "טוען…",
+    searchPlaceholder: "חיפוש לפי שם, אימייל או מספר (REF)",
+    searchCount: (shown: number, total: number) => `מציג ${shown} מתוך ${total}`,
+    noMatch: "אין שותף שתואם לחיפוש.",
+    clearSearch: "נקה",
     addTitle: "הוספת שותף",
     fName: "שם מלא",
     fEmail: "אימייל",
@@ -194,6 +202,7 @@ export default function AdminPartnersClient() {
   const { secret, lang } = useAdminContext();
   const t = T[lang];
   const [rows, setRows] = useState<Row[] | null>(null);
+  const [query, setQuery] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [flash, setFlash] = useState<string | null>(null); // `${id}:${kind}`
 
@@ -349,6 +358,15 @@ export default function AdminPartnersClient() {
     } catch { /* ignore */ }
   }
 
+  const q = query.trim().toLowerCase();
+  const filtered = (rows ?? []).filter(
+    (r) =>
+      !q ||
+      r.name.toLowerCase().includes(q) ||
+      r.email.toLowerCase().includes(q) ||
+      r.code.toLowerCase().includes(q),
+  );
+
   return (
     <div>
       <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "#111827" }}>{t.title}</h1>
@@ -448,12 +466,41 @@ export default function AdminPartnersClient() {
         </div>
       )}
 
+      {/* Search — filter the list by name / email / REF number */}
+      {rows !== null && rows.length > 0 && (
+        <div style={{ position: "relative", marginBottom: 12 }}>
+          <span aria-hidden style={{ position: "absolute", insetInlineStart: 14, top: "50%", transform: "translateY(-50%)", color: "#9CA3AF", fontSize: 16, pointerEvents: "none" }}>⌕</span>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t.searchPlaceholder}
+            aria-label={t.searchPlaceholder}
+            style={{ ...input, paddingInlineStart: 38, paddingInlineEnd: query ? 76 : 11, height: 44, fontSize: 15 }}
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              style={{ position: "absolute", insetInlineEnd: 8, top: "50%", transform: "translateY(-50%)", ...btn, padding: "5px 10px", fontSize: 12 }}
+            >
+              {t.clearSearch}
+            </button>
+          )}
+        </div>
+      )}
+      {rows !== null && rows.length > 0 && query && (
+        <div style={{ fontSize: 12.5, color: "#9CA3AF", margin: "0 0 12px" }}>{t.searchCount(filtered.length, rows.length)}</div>
+      )}
+
       {rows === null && <div style={{ color: "#6B7280" }}>{t.loading}</div>}
       {rows !== null && rows.length === 0 && <div style={{ color: "#6B7280" }}>{t.none}</div>}
+      {rows !== null && rows.length > 0 && filtered.length === 0 && (
+        <div style={{ color: "#6B7280" }}>{t.noMatch}</div>
+      )}
 
-      {rows !== null && rows.length > 0 && (
+      {rows !== null && filtered.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {rows.map((r) => {
+          {filtered.map((r) => {
             const accrued = accruedItems(r.earnings);
             const payable = sumBuckets(r.earnings, "released");
             const paid = sumBuckets(r.earnings, "paid");
