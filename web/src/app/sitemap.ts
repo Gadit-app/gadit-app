@@ -1,17 +1,50 @@
 import type { MetadataRoute } from "next";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { LANGUAGES } from "@/lib/i18n";
 
 const BASE = "https://www.gadit.app";
+const ALL_LANGS: string[] = LANGUAGES.map((l) => l.code);
+
+/** URL for a path in a given UI language. English is the unprefixed canonical
+ *  surface (mirrors buildHref); every other language gets a /<lang> prefix. */
+function langUrl(path: string, l: string): string {
+  return l === "en" ? `${BASE}${path}` : `${BASE}/${l}${path}`;
+}
+
+/** hreflang alternates for a multilingual path — declares every language
+ *  variant so Google indexes each in its own market instead of treating the
+ *  non-English pages as duplicates of the English one. The pages already send
+ *  matching self-canonical + hreflang tags (see word/[word] generateMetadata);
+ *  listing them here lets crawlers discover all 33 variants from the sitemap
+ *  rather than one language at a time. */
+function alternatesFor(path: string): { languages: Record<string, string> } {
+  return {
+    languages: {
+      ...Object.fromEntries(ALL_LANGS.map((l) => [l, langUrl(path, l)])),
+      "x-default": langUrl(path, "en"),
+    },
+  };
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Static pages. The consumer-facing ones are localized into all 33 languages,
+  // so they carry hreflang alternates; the legal pages stay English-only.
+  const localizedStatic: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
+    { path: "/", changeFrequency: "weekly", priority: 1 },
+    { path: "/features", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/pricing", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/schools", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/partners", changeFrequency: "monthly", priority: 0.5 },
+  ];
   const staticEntries: MetadataRoute.Sitemap = [
-    { url: `${BASE}/`, changeFrequency: "weekly", priority: 1 },
-    { url: `${BASE}/features`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/pricing`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/schools`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/partners`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE}/privacy`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE}/terms`, changeFrequency: "yearly", priority: 0.3 },
+    ...localizedStatic.map((s) => ({
+      url: langUrl(s.path, "en"),
+      changeFrequency: s.changeFrequency,
+      priority: s.priority,
+      alternates: alternatesFor(s.path),
+    })),
+    { url: `${BASE}/privacy`, changeFrequency: "yearly" as const, priority: 0.3 },
+    { url: `${BASE}/terms`, changeFrequency: "yearly" as const, priority: 0.3 },
   ];
 
   // Pull every cached word — those are the words our system already understands
@@ -42,10 +75,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const word = (doc.data().word as string | undefined)?.trim();
       if (!word || seen.has(word) || !looksLikeWord(word)) continue;
       seen.add(word);
+      const path = `/word/${encodeURIComponent(word)}`;
       wordEntries.push({
-        url: `${BASE}/word/${encodeURIComponent(word)}`,
+        url: langUrl(path, "en"),
         changeFrequency: "monthly",
         priority: 0.6,
+        // Each word page exists in all 33 languages and is self-canonical per
+        // language; declare the alternates so every market's version is found.
+        alternates: alternatesFor(path),
       });
     }
   } catch (e) {
