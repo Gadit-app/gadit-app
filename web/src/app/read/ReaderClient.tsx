@@ -6,9 +6,12 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
+import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
+import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { ReaderText } from "@/components/design/ReaderText";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
-import type { Lang } from "@/lib/i18n";
+import { LANGUAGES, type Lang } from "@/lib/i18n";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -35,8 +38,20 @@ function hashText(t: string): string {
   return (h >>> 0).toString(36);
 }
 
-function copy(lang: Lang) {
-  const en = {
+type ReaderStrings = {
+  title: string; sub: string; placeholder: string; load: string; photo: string;
+  reading: string; ocrError: string; newText: string;
+  /** Progress template with {a} = reviewed, {b} = total. */
+  progress: string;
+  doneAll: string; hint: string; loginTitle: string; loginBtn: string;
+  upgradeTitle: string; upgradeBtn: string; loading: string;
+};
+
+// Reader UI copy. en + he authored; every other language falls back to en until
+// its native strings land (translated in a batch). The look-up and OCR
+// themselves already work in every language — this is only the chrome.
+const READER_COPY: Record<string, ReaderStrings> = {
+  en: {
     title: "Read a text",
     sub: "Paste a text or photograph a page. Gadit turns every word into a tap, so you can go word by word and reveal all its meanings.",
     placeholder: "Paste your text here…",
@@ -45,7 +60,7 @@ function copy(lang: Lang) {
     reading: "Reading the file…",
     ocrError: "We couldn't read that file. Try a clearer photo, or a PDF / image with readable text.",
     newText: "New text",
-    progress: (a: number, b: number) => `${a} of ${b} words`,
+    progress: "{a} of {b} words",
     doneAll: "Nice work. You went over every word.",
     hint: "Tap any word to see its meanings. Words you've opened turn green.",
     loginTitle: "Sign in to read a text",
@@ -53,8 +68,8 @@ function copy(lang: Lang) {
     upgradeTitle: "Reading a text is a paid feature",
     upgradeBtn: "See plans",
     loading: "Loading…",
-  };
-  const he: typeof en = {
+  },
+  he: {
     title: "קריאת טקסט",
     sub: "להדביק טקסט או לצלם עמוד. גדית הופך כל מילה ללחיצה, ואפשר לעבור מילה-מילה ולגלות את כל המשמעויות שלה.",
     placeholder: "להדביק כאן את הטקסט…",
@@ -63,7 +78,7 @@ function copy(lang: Lang) {
     reading: "קורא את הקובץ…",
     ocrError: "לא הצלחנו לקרוא את הקובץ. כדאי צילום ברור יותר, או PDF/תמונה עם טקסט קריא.",
     newText: "טקסט חדש",
-    progress: (a: number, b: number) => `${a} מתוך ${b} מילים`,
+    progress: "{a} מתוך {b} מילים",
     doneAll: "כל הכבוד. עברת על כל המילים.",
     hint: "לוחצים על כל מילה כדי לראות את המשמעויות. מילים שפתחת נצבעות בירוק.",
     loginTitle: "צריך להתחבר כדי לקרוא טקסט",
@@ -71,8 +86,15 @@ function copy(lang: Lang) {
     upgradeTitle: "קריאת טקסט היא תכונה בתשלום",
     upgradeBtn: "לצפייה במסלולים",
     loading: "טוען…",
-  };
-  return lang === "he" ? he : en;
+  },
+};
+
+function copy(lang: Lang): ReaderStrings {
+  return READER_COPY[lang] ?? READER_COPY.en;
+}
+
+function fmtProgress(tpl: string, a: number, b: number): string {
+  return tpl.replace("{a}", String(a)).replace("{b}", String(b));
 }
 
 export function ReaderClient() {
@@ -159,7 +181,27 @@ export function ReaderClient() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
-        <div className="wb-shell-actions">{user ? <WbUserMenu /> : null}</div>
+        <WbShellNav />
+        <div className="wb-shell-actions">
+          <ShareButton
+            url="https://www.gadit.app/"
+            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
+            text=""
+            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
+            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
+          />
+          <LangSwitch />
+          {user ? <WbUserMenu /> : null}
+        </div>
+        {user && (
+          <div className="wb-shell-mobile-identity">
+            <WbUserMenu />
+          </div>
+        )}
+        <div className="wb-shell-mobile-menu-cluster">
+          <LangSwitchMobile />
+          <WbShellBurger />
+        </div>
       </header>
 
       <main style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 96px", fontFamily: fontBody(lang) }}>
@@ -217,7 +259,7 @@ export function ReaderClient() {
             <div style={{ position: "sticky", top: 8, zIndex: 20, background: "var(--paper,#F9FAFB)", paddingBottom: 12, marginBottom: 16, borderBottom: "1px solid var(--hairline,#E5E7EB)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8 }}>
                 <span style={{ fontSize: 14, fontWeight: 700, color: allDone ? "#16A34A" : "var(--ink,#20272E)" }}>
-                  {allDone ? t.doneAll : t.progress(reviewed.size, total)}
+                  {allDone ? t.doneAll : fmtProgress(t.progress, reviewed.size, total)}
                 </span>
                 <button type="button" onClick={resetText} style={{ background: "none", border: "none", color: "var(--teal-deep,#0E7490)", fontSize: 13.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>
                   {t.newText}
@@ -232,6 +274,49 @@ export function ReaderClient() {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+// Desktop language chip — same look/behavior as the one on /notebook and
+// /account (there's no shared component; each surface carries its own).
+function LangSwitch() {
+  const { lang, setLang } = useLang();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    function onClick(e: MouseEvent) {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+  const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+  return (
+    <div ref={wrapRef} className="wb-lang-chip-wrap">
+      <button type="button" className="wb-lang-chip" onClick={() => setOpen((v) => !v)}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
+        </svg>
+        {active.label}
+      </button>
+      {open && (
+        <ul className="wb-lang-menu" role="listbox">
+          {LANGUAGES.map((l) => (
+            <li key={l.code}>
+              <button
+                type="button"
+                className={l.code === lang ? "is-active" : ""}
+                onClick={() => { setLang(l.code as Lang); setOpen(false); }}
+              >
+                {l.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
