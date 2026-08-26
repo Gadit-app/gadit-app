@@ -1,8 +1,14 @@
 /**
- * The 3-tier Schools USD pricing, created 2026-08-15 in Stripe under
- * product "Gadit Schools" (prod_UmbRMt53Eitoes). Gadi raised the old
- * flat $69 / $149 to a proper by-student-count ladder ($97 / $297 /
- * $497), yearly = 10x monthly (two months free).
+ * The 3-tier Schools USD pricing. Gadi raised the old flat $69 / $149 to a
+ * proper by-student-count ladder ($97 / $297 / $497), yearly = 10x monthly
+ * (two months free).
+ *
+ * 2026-08-26: split into THREE Stripe products (one per band) so the hosted
+ * Stripe checkout shows the size band ("Gadit Schools: up to 100 students")
+ * instead of one generic "Gadit Schools" line for every tier. The old single
+ * product (prod_UmbRMt53Eitoes) and its 6 prices are retired — no live sub
+ * used them (only canceled test subs), so no grandfathering was needed.
+ *   S  prod_V8z3bN3VAPaG0M   M  prod_V8z3GxYryw2Z1O   L  prod_V8z3au6PWPmDwz
  *
  * Stripe price IDs are PUBLIC — they ship in the client bundle — so
  * hardcoding them here is safe and gives every surface (/pricing,
@@ -32,8 +38,8 @@ export interface SchoolsTier {
 export const SCHOOLS_TIERS: Record<SchoolsTierKey, SchoolsTier> = {
   s: {
     key: "s",
-    monthly: "price_1U4k8QRprLKxF6OiIw9hsTAm",
-    yearly: "price_1U4k8RRprLKxF6OiYrUdVKf0",
+    monthly: "price_1U8h59RprLKxF6OiFSWeZlxH",
+    yearly: "price_1U8h5ARprLKxF6Oi3Gl4M8PV",
     maxStudents: 100,
     usdMonthly: "$97",
     usdYearly: "$970",
@@ -41,8 +47,8 @@ export const SCHOOLS_TIERS: Record<SchoolsTierKey, SchoolsTier> = {
   },
   m: {
     key: "m",
-    monthly: "price_1U4k8RRprLKxF6OibDiQWyLb",
-    yearly: "price_1U4k8SRprLKxF6Oiz7ERqnlO",
+    monthly: "price_1U8h5BRprLKxF6OikfQgQRL0",
+    yearly: "price_1U8h5BRprLKxF6OiGxI5xxJN",
     maxStudents: 500,
     usdMonthly: "$297",
     usdYearly: "$2,970",
@@ -50,8 +56,8 @@ export const SCHOOLS_TIERS: Record<SchoolsTierKey, SchoolsTier> = {
   },
   l: {
     key: "l",
-    monthly: "price_1U4k8TRprLKxF6OiWyJM5noK",
-    yearly: "price_1U4k8URprLKxF6Oi1g6Mv9rA",
+    monthly: "price_1U8h5CRprLKxF6OiuZDEwRgT",
+    yearly: "price_1U8h5CRprLKxF6OirePwJ7j3",
     maxStudents: 1000,
     usdMonthly: "$497",
     usdYearly: "$4,970",
