@@ -80,6 +80,7 @@ export type NavKey =
   | "notebook"
   | "play"
   | "say"
+  | "read"
   | "individuals"
   | "schools"
   | "families"
@@ -123,6 +124,18 @@ const SAY_NAV: Record<string, string> = {
   hi: "कहो", ja: "言ってみて", am: "ተናገረው", zu: "Yisho",
 };
 
+// "Read a text" nav label — the Reader (/read). Same local-map + en-fallback
+// pattern as the other tools. Shown to deep-tier users (Family + Deep) and to
+// Family kids (it's a reading tool for them too). (Gadi 2026-08-26)
+const READ_NAV: Record<string, string> = {
+  en: "Read a text", he: "קריאת טקסט", ar: "اقرأ نصًا", ru: "Чтение текста",
+  es: "Leer un texto", pt: "Ler um texto", fr: "Lire un texte", de: "Text lesen",
+  cs: "Číst text", sk: "Čítať text", it: "Leggi un testo", nl: "Tekst lezen",
+  uk: "Читати текст", tr: "Metin oku", pl: "Czytaj tekst", fa: "خواندن متن",
+  id: "Baca teks", el: "Διάβασε κείμενο", hi: "पाठ पढ़ें", ja: "文章を読む",
+  am: "ጽሑፍ አንብብ", zu: "Funda umbhalo",
+};
+
 const TREASURE_NAV: Record<string, string> = {
   en: "My words", he: "אוצר המילים", ar: "كلماتي", ru: "Мои слова",
   es: "Mis palabras", pt: "Minhas palavras", fr: "Mes mots", de: "Meine Wörter",
@@ -150,6 +163,7 @@ function useNavLinks(): NavLink[] {
     return [
       { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
       { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
+      { key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
     ];
   }
@@ -168,7 +182,13 @@ function useNavLinks(): NavLink[] {
         { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       ];
-      if (plan === "deep") links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
+      // Reader + games are deep-tier tools (Family maps to deep, so Family
+      // parents get them too; Clear does not). Gadi 2026-08-26: add the Reader
+      // to the Family + Deep nav.
+      if (plan === "deep") {
+        links.push({ key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en });
+        links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
+      }
       return links;
     }
     // Basic (signed in, free) — no paid tools yet, so a single gentle upsell.
