@@ -41,9 +41,9 @@ function copy(lang: Lang) {
     sub: "Paste a text or photograph a page. Gadit turns every word into a tap, so you can go word by word and reveal all its meanings.",
     placeholder: "Paste your text here…",
     load: "Open text",
-    photo: "Photograph or upload an image",
-    reading: "Reading the image…",
-    ocrError: "We couldn't read that image. Try a clearer, well-lit photo.",
+    photo: "Photo, image or PDF",
+    reading: "Reading the file…",
+    ocrError: "We couldn't read that file. Try a clearer photo, or a PDF / image with readable text.",
     newText: "New text",
     progress: (a: number, b: number) => `${a} of ${b} words`,
     doneAll: "Nice work. You went over every word.",
@@ -59,9 +59,9 @@ function copy(lang: Lang) {
     sub: "להדביק טקסט או לצלם עמוד. גדית הופך כל מילה ללחיצה, ואפשר לעבור מילה-מילה ולגלות את כל המשמעויות שלה.",
     placeholder: "להדביק כאן את הטקסט…",
     load: "לפתוח את הטקסט",
-    photo: "צילום או העלאת תמונה",
-    reading: "קורא את התמונה…",
-    ocrError: "לא הצלחנו לקרוא את התמונה. כדאי לנסות צילום ברור ומואר.",
+    photo: "צילום, תמונה או PDF",
+    reading: "קורא את הקובץ…",
+    ocrError: "לא הצלחנו לקרוא את הקובץ. כדאי צילום ברור יותר, או PDF/תמונה עם טקסט קריא.",
     newText: "טקסט חדש",
     progress: (a: number, b: number) => `${a} מתוך ${b} מילים`,
     doneAll: "כל הכבוד. עברת על כל המילים.",
@@ -204,7 +204,7 @@ export function ReaderClient() {
               >
                 {ocrState === "reading" ? t.reading : `📷 ${t.photo}`}
               </button>
-              <input ref={fileRef} type="file" accept="image/*" onChange={onPhoto} style={{ display: "none" }} />
+              <input ref={fileRef} type="file" accept="image/*,application/pdf" onChange={onPhoto} style={{ display: "none" }} />
             </div>
             {ocrState === "error" && (
               <p style={{ marginTop: 12, color: "#B91C1C", fontSize: 14 }}>{t.ocrError}</p>
