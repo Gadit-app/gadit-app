@@ -100,6 +100,10 @@ export async function GET(req: NextRequest) {
     // Respect unsubscribe.
     if (d.dripUnsubscribed === true) continue;
 
+    // Skip addresses we've flagged as junk (disposable domain, hard bounce).
+    // Mailing them bounces and hurts sender reputation for real users.
+    if (d.emailSuppressed === true) continue;
+
     // Language gate. We only ship Hebrew drip today. English coming next.
     // Fall back to the user's UI language preference if stored on doc;
     // otherwise use the explicitly-tracked `dripLang` field.

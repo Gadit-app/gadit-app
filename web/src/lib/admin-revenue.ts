@@ -42,6 +42,10 @@ export type RevenueSubscriber = {
   signedUpAt: string | null;
   stripeCustomerId: string | null;
   country: string | null;
+  /** Only meaningful for trialing rows: does a card sit on file? A card-less
+   *  trial auto-cancels at trial end (missing_payment_method: "cancel") and
+   *  never charges, so it's pipeline vanity, not real forecastable revenue. */
+  hasCard?: boolean;
 };
 
 export type BreakdownEntry = { tier: Tier; billing: Billing; count: number; mrr: number };
@@ -54,6 +58,13 @@ export type StripeRevenue = {
   /** Monthly $ the trialing subs WOULD bring if they all convert (pipeline). */
   trialingMrrUsd: number;
   trialingArrUsd: number;
+  /** The trial pipeline split by whether a card is on file. Card-less trials
+   *  auto-cancel and never charge, so `trialingCardedMrrUsd` is the pipeline
+   *  that can actually convert; the card-less side is vanity. */
+  trialingCardedMrrUsd: number;
+  trialingCardlessMrrUsd: number;
+  trialingCardedCount: number;
+  trialingCardlessCount: number;
   /** mrrUsd + trialingMrrUsd — current paying plus the full trial pipeline. */
   totalMrrUsd: number;
   totalArrUsd: number;
@@ -206,6 +217,19 @@ function isPaused(s: Stripe.Subscription): boolean {
   return !!s.pause_collection;
 }
 
+/** Does this subscription have a card (or any payment method) on file? A
+ *  trialing sub with no card auto-cancels at trial end and never charges. */
+function subHasCard(s: Stripe.Subscription): boolean {
+  if (s.default_payment_method) return true;
+  const cust = s.customer;
+  if (cust && typeof cust === "object" && !("deleted" in cust && cust.deleted)) {
+    const c = cust as Stripe.Customer;
+    if (c.invoice_settings?.default_payment_method) return true;
+    if (c.default_source) return true;
+  }
+  return false;
+}
+
 // Business-timezone calendar-month start (spec §14: declared TZ, not raw UTC).
 // At our scale the intra-day boundary shift is immaterial, but we anchor the
 // cut to the declared TZ so MTD stays stable as volume grows.
@@ -255,6 +279,10 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   let mrr = 0;
   let atRiskMrr = 0;
   let trialingMrr = 0;
+  let trialingCardedMrr = 0;
+  let trialingCardlessMrr = 0;
+  let trialingCardedCount = 0;
+  let trialingCardlessCount = 0;
   let newMrr = 0;
   let churnedMrr = 0;
   let activePayingCount = 0;
@@ -370,10 +398,14 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     } else if (paused) {
       pausedCount += 1;
     } else if (s.status === "trialing") {
+      const carded = subHasCard(s);
+      sub.hasCard = carded;
       active.push(sub);
       trialingCount += 1;
       trialingByTier[tier] += 1;
       trialingMrr += monthlyUsd;
+      if (carded) { trialingCardedMrr += monthlyUsd; trialingCardedCount += 1; }
+      else { trialingCardlessMrr += monthlyUsd; trialingCardlessCount += 1; }
       if (billing !== "unknown") bump(trialBreak, tier, billing, monthlyUsd);
     } else if (s.status === "unpaid" || s.status === "incomplete") {
       atRisk.push(sub);
@@ -450,6 +482,10 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     atRiskMrrUsd: r2(atRiskMrr),
     trialingMrrUsd: r2(trialingMrr),
     trialingArrUsd: r2(trialingMrr * 12),
+    trialingCardedMrrUsd: r2(trialingCardedMrr),
+    trialingCardlessMrrUsd: r2(trialingCardlessMrr),
+    trialingCardedCount,
+    trialingCardlessCount,
     totalMrrUsd: r2(totalMrr),
     totalArrUsd: r2(totalMrr * 12),
     newMrrUsd: r2(newMrr),

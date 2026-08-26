@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { isDisposableEmail } from "@/lib/email/disposable";
 
 /**
  * One-shot notify Gadi by email when a brand-new user signs up.
@@ -133,6 +134,25 @@ export async function POST(req: NextRequest) {
 
     if (data.notifiedSignup === true) {
       return NextResponse.json({ sent: false, reason: "already_notified", utmStored: !!utm });
+    }
+
+    // Throwaway inbox → suppress ALL mail (admin notify + welcome + drip).
+    // We still keep the account (they can use the app), but mailing a
+    // disposable address bounces and poisons the gadit.app sender
+    // reputation for real users. Mark notified so the drip cron skips it,
+    // and set emailSuppressed so the cron won't reconsider it later.
+    if (isDisposableEmail(email)) {
+      await userRef.set(
+        {
+          notifiedSignup: true,
+          emailSuppressed: true,
+          emailSuppressedReason: "disposable_domain",
+          notifiedSignupAt: FieldValue.serverTimestamp(),
+          email: email ?? data.email ?? null,
+        },
+        { merge: true },
+      );
+      return NextResponse.json({ sent: false, reason: "disposable_email" });
     }
 
     // Look up the Firebase Auth metadata for richer detail in the email.

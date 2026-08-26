@@ -393,6 +393,26 @@ export default function CheckoutClient() {
     (async () => {
       try {
         const idToken = await user.getIdToken();
+
+        // Schools must put a card down up front (no card-less trial record), so
+        // they go through the hosted Checkout Session (which always collects a
+        // card) instead of the inline Payment Element. Israeli schools pay by
+        // bank transfer via Invoice4U, a separate flow that never reaches here.
+        if (schoolsTierForPrice(priceId)) {
+          const hosted = await fetch("/api/create-checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({ priceId, lang }),
+          });
+          const hd = (await hosted.json().catch(() => ({}))) as { url?: string };
+          if (cancelled) return;
+          if (hosted.ok && hd.url) { window.location.href = hd.url; return; }
+          setErrMsg(c.genericError);
+          setPhase("error");
+          startedRef.current = false;
+          return;
+        }
+
         const res = await fetch("/api/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },

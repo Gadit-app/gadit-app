@@ -18,6 +18,7 @@ type Subscriber = {
   signedUpAt: string | null;
   stripeCustomerId: string | null;
   country: string | null;
+  hasCard?: boolean;
 };
 
 type BreakdownEntry = { tier: Tier; billing: "monthly" | "yearly"; count: number; mrr: number };
@@ -29,6 +30,10 @@ type RevenueResponse = {
     arrUsd: number;
     trialingMrrUsd: number;
     trialingArrUsd: number;
+    trialingCardedMrrUsd: number;
+    trialingCardlessMrrUsd: number;
+    trialingCardedCount: number;
+    trialingCardlessCount: number;
     totalMrrUsd: number;
     totalArrUsd: number;
     activePayingCount: number;
@@ -49,6 +54,7 @@ const STRINGS = {
     loading: "Loading…",
     cardMRR: "Monthly recurring",
     cardFuture: "Future (pipeline)",
+    cardlessNote: (n: number, mrr: string) => `+ ${mrr} card-less (${n}, won't charge)`,
     cardTotal: "Total (incl. trials)",
     cardARR: "Annual recurring",
     cardActive: "Active (paying)",
@@ -75,12 +81,14 @@ const STRINGS = {
     billingYearly: "Yearly",
     billingUnknown: ", ",
     willCancel: "Cancels at period end",
+    noCard: "No card, won't charge",
   },
   he: {
     title: "הכנסות",
     loading: "טוען…",
     cardMRR: "הכנסה חודשית",
     cardFuture: "הכנסה עתידית",
+    cardlessNote: (n: number, mrr: string) => `${mrr} ללא כרטיס (${n}, לא ייגבו) +`,
     cardTotal: "סכום כולל",
     cardARR: "הכנסה שנתית",
     cardActive: "משלמים פעילים",
@@ -107,6 +115,7 @@ const STRINGS = {
     billingYearly: "שנתי",
     billingUnknown: ", ",
     willCancel: "מבוטל בסוף התקופה",
+    noCard: "ללא כרטיס, לא ייגבה",
   },
 } as const;
 
@@ -214,7 +223,14 @@ export default function AdminRevenueClient() {
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 24 }}>
             <BigCard label={t.cardMRR} value={`$${data.summary.mrrUsd.toFixed(2)}`} accent="#0EA5A5" />
-            <BigCard label={t.cardFuture} value={`$${data.summary.trialingMrrUsd.toFixed(2)}`} accent="#F59E0B" />
+            <BigCard
+              label={t.cardFuture}
+              value={`$${data.summary.trialingCardedMrrUsd.toFixed(2)}`}
+              accent="#F59E0B"
+              sub={data.summary.trialingCardlessCount > 0
+                ? t.cardlessNote(data.summary.trialingCardlessCount, `$${data.summary.trialingCardlessMrrUsd.toFixed(2)}`)
+                : undefined}
+            />
             <BigCard label={t.cardTotal} value={`$${data.summary.totalMrrUsd.toFixed(2)}`} accent="#7C3AED" />
             <BigCard label={t.cardARR} value={`$${data.summary.arrUsd.toFixed(2)}`} accent="#0E7490" />
             <BigCard label={t.cardActive} value={data.summary.activePayingCount} accent="#7C3AED" />
@@ -343,6 +359,9 @@ function SubscriberTable({
                       {r.cancelAtPeriodEnd && (
                         <div style={{ fontSize: 10, color: "#DC2626", marginTop: 2 }}>{t.willCancel}</div>
                       )}
+                      {r.status === "trialing" && r.hasCard === false && (
+                        <div style={{ fontSize: 10, color: "#B45309", marginTop: 2, fontWeight: 600 }}>{t.noCard}</div>
+                      )}
                     </td>
                     <td style={{ padding: "10px 12px", textAlign: "start", color: "#6B7280", fontSize: 12 }}>{formatDate(r.signedUpAt)}</td>
                     <td style={{ padding: "10px 12px", textAlign: "center" }}>
@@ -363,11 +382,12 @@ function SubscriberTable({
   );
 }
 
-function BigCard({ label, value, accent }: { label: string; value: string | number; accent?: string }) {
+function BigCard({ label, value, accent, sub }: { label: string; value: string | number; accent?: string; sub?: string }) {
   return (
     <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, padding: 16, textAlign: "center" }}>
       <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>{label}</div>
       <div style={{ fontSize: 28, fontWeight: 700, color: accent ?? "#111827", lineHeight: 1 }}>{value}</div>
+      {sub && <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 6, lineHeight: 1.3 }}>{sub}</div>}
     </div>
   );
 }

@@ -112,6 +112,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_price" }, { status: 400 });
     }
 
+    // Schools must never go through the card-LESS Payment Element trial: a
+    // school (B2B) has to put a card down up front, so it can't register as a
+    // dangling card-less "Schools" subscription (Gadi 2026-08-26 — junk signups
+    // like a fake Schools L trial with no card). They use the hosted Checkout
+    // Session instead, which always collects a card even with a trial. Israeli
+    // schools pay by bank transfer through Invoice4U, off Stripe entirely, so
+    // this only ever blocks the USD Stripe school prices.
+    if (NEW_SCHOOLS_PRICE_IDS.includes(priceId)) {
+      return NextResponse.json({ error: "schools_require_card", useHostedCheckout: true }, { status: 409 });
+    }
+
     // Auth — resolve user from the verified Firebase ID token only.
     const authHeader = req.headers.get("Authorization") || "";
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;

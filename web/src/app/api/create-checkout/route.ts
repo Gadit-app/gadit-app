@@ -147,6 +147,9 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
+      // Always collect a card, even with a trial — this is the card-required
+      // flow (schools go through here so they can't create a card-less trial).
+      payment_method_collection: "always",
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: userEmail,
       client_reference_id: userId,
