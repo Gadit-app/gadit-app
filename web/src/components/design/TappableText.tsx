@@ -16,6 +16,7 @@
 import { useMemo, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { WordPopover } from "./WordPopover";
+import { tokenizeWords } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
 
 type Props = {
@@ -27,47 +28,12 @@ type Props = {
   skipWord?: string;
 };
 
-type Token =
-  | { type: "word"; value: string }
-  | { type: "other"; value: string };
-
-/**
- * Split a string into word vs non-word tokens.
- *
- * \p{L} = any letter from any script (Latin, Hebrew, Arabic, Cyrillic, …).
- * \p{N} = any number.
- *
- * Anything else (whitespace, punctuation, dashes, parentheses) goes into
- * 'other' tokens so they render as plain text but preserve their layout
- * role (spaces stay spaces, line-breaks within text are kept by CSS).
- *
- * One-character runs and pure-digit runs are demoted to 'other' so we
- * don't make every 'a', '1' or 'I' tappable.
- */
-function tokenize(text: string): Token[] {
-  const out: Token[] = [];
-  const re = /([\p{L}][\p{L}\p{N}'’\-]*)|([\s]+)|([^\p{L}\p{N}\s]+)/gu;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text))) {
-    const word = m[1];
-    if (word) {
-      // Skip single-character "words" (Hebrew prefix letters like ה ,ו
-      // a, I, etc.) — looking them up is mostly noise.
-      if (word.length >= 2) {
-        out.push({ type: "word", value: word });
-      } else {
-        out.push({ type: "other", value: word });
-      }
-      continue;
-    }
-    out.push({ type: "other", value: m[2] ?? m[3] ?? "" });
-  }
-  return out;
-}
-
 export function TappableText({ text, skipWord }: Props) {
   const { lang } = useLang();
-  const tokens = useMemo(() => tokenize(text), [text]);
+  // Shared, script-aware, RTL-safe splitter. Keeps combining marks (Hebrew
+  // niqqud, Arabic tashkeel) attached to their word so a vowelized word stays
+  // one tappable token instead of fragmenting.
+  const tokens = useMemo(() => tokenizeWords(text), [text]);
   const [popover, setPopover] = useState<{ word: string; anchor: HTMLElement } | null>(null);
   const skip = skipWord?.toLowerCase();
 

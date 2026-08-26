@@ -12,9 +12,24 @@ export type WordToken =
   | { type: "word"; value: string }
   | { type: "other"; value: string };
 
+// Optional pronunciation diacritics that are NOT part of a word's identity and
+// must be stripped before a cache/definition lookup: Hebrew niqqud + cantillation
+// (U+0591–U+05C7) and Arabic tashkeel (U+064B–U+065F, U+0670, U+06D6–U+06ED).
+// Deliberately NOT a blanket \p{M} strip — Indic matras (Devanagari etc.) ARE
+// part of the word and stripping them would change the word.
+const LOOKUP_DIACRITICS = /[֑-ׇً-ٰٟۖ-ۭ]/gu;
+
+/** Remove optional Hebrew/Arabic vowel marks for lookup, keeping the base word. */
+export function stripLookupDiacritics(word: string): string {
+  return word.replace(LOOKUP_DIACRITICS, "");
+}
+
 export function tokenizeWords(text: string): WordToken[] {
   const out: WordToken[] = [];
-  const re = /([\p{L}][\p{L}\p{N}'’\-]*)|([\s]+)|([^\p{L}\p{N}\s]+)/gu;
+  // \p{M} keeps combining marks (Hebrew niqqud, Arabic tashkeel, Indic matras)
+  // ATTACHED to their base letter, so a vowelized word stays one tappable token
+  // instead of fragmenting into single letters + marks.
+  const re = /([\p{L}][\p{L}\p{N}\p{M}'’\-]*)|([\s]+)|([^\p{L}\p{N}\p{M}\s]+)/gu;
   let m: RegExpExecArray | null;
   while ((m = re.exec(text))) {
     const word = m[1];
@@ -28,11 +43,11 @@ export function tokenizeWords(text: string): WordToken[] {
   return out;
 }
 
-/** Normalized key for a word — how we dedupe "Word" / "word" / "word." so all
- *  occurrences share one reviewed state and the progress denominator is the
- *  count of distinct words. */
+/** Normalized key for a word — dedupes "Word" / "word" and vowelized vs plain
+ *  ("מַחְבֶּרֶת" / "מחברת") so all occurrences share one reviewed state and the
+ *  progress denominator counts distinct words. */
 export function wordKey(word: string): string {
-  return word.toLowerCase();
+  return stripLookupDiacritics(word).toLowerCase();
 }
 
 /** Distinct tappable words in a text (the progress denominator). */

@@ -17,6 +17,7 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { stripLookupDiacritics } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
 
 type Props = {
@@ -83,6 +84,12 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
   const popRef = useRef<HTMLDivElement | null>(null);
 
+  // Vowel points (Hebrew niqqud, Arabic tashkeel) are display-only — the cache
+  // and word pages are keyed by the plain word. Strip them for every LOOKUP
+  // (quick-define fetch + the full-word link) while still showing the vowelized
+  // form the user tapped. Without this, tapping a niqqud'd word never resolves.
+  const lookupWord = stripLookupDiacritics(word);
+
   // Fetch quick definition. Cache-only on the server — a 404 means the
   // word hasn't been cached yet, and we just offer the 'open full' link
   // without a preview. No fresh OpenAI calls fire from the popover.
@@ -91,7 +98,7 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
     (async () => {
       try {
         const res = await fetch(
-          `/api/quick-define?word=${encodeURIComponent(word)}&lang=${encodeURIComponent(lang)}`,
+          `/api/quick-define?word=${encodeURIComponent(lookupWord)}&lang=${encodeURIComponent(lang)}`,
         );
         if (cancelled) return;
         if (res.status === 404) {
@@ -114,7 +121,7 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
       }
     })();
     return () => { cancelled = true; };
-  }, [word, lang]);
+  }, [lookupWord, lang]);
 
   // Close on outside click + Escape
   useEffect(() => {
@@ -245,8 +252,8 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
       <Link
         href={
           fromWord
-            ? href(`/word/${encodeURIComponent(word)}?back=${encodeURIComponent(fromWord)}`)
-            : href(`/word/${encodeURIComponent(word)}`)
+            ? href(`/word/${encodeURIComponent(lookupWord)}?back=${encodeURIComponent(fromWord)}`)
+            : href(`/word/${encodeURIComponent(lookupWord)}`)
         }
         onClick={onClose}
         style={{
