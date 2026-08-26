@@ -328,6 +328,26 @@ export function WbUserMenu() {
           >
             {c.account}
           </Link>
+          {/* Read a text — the Reader. A learning tool, shown to everyone
+              including kids (unlike the commercial items below). */}
+          <Link
+            role="menuitem"
+            href={href("/read")}
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "10px 12px",
+              borderRadius: 8,
+              color: "var(--ink, #111827)",
+              textDecoration: "none",
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {lang === "he" ? "קריאת טקסט" : "Read a text"}
+          </Link>
           {/* Family menu item appears only for owners of a Family
               subscription (familyId === own uid). Paired members (kids
               + secondary parents) don't need to manage the family. */}

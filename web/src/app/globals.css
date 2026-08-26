@@ -2715,6 +2715,36 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   background: rgba(14, 165, 165, 0.22);
 }
 
+/* Reader (/read): a passage laid out as tappable words. */
+.wordbook .wb-reader-body {
+  font-size: 20px;
+  line-height: 2.05;
+  white-space: pre-wrap;   /* keep the OCR / pasted line breaks */
+  word-break: break-word;
+}
+/* A word the reader has already opened: green, softly highlighted, with a
+   check — so going 'word by word' visibly fills the page in. */
+.wordbook .wb-reader-done {
+  color: #0F7B4F;
+  background: rgba(22, 163, 74, 0.12);
+  border-radius: 5px;
+  text-decoration: underline solid rgba(22, 163, 74, 0.55);
+  text-underline-offset: 3px;
+}
+.wordbook .wb-reader-done::after {
+  content: "\2713";        /* ✓ */
+  font-size: 0.62em;
+  color: #16A34A;
+  vertical-align: super;
+  margin-inline-start: 1px;
+  font-weight: 700;
+}
+:root[data-theme="dark"] .wordbook .wb-reader-done,
+.wordbook.wb-dark .wb-reader-done {
+  color: #6EE7A8;
+  background: rgba(22, 163, 74, 0.2);
+}
+
 /* 'Back to <previous word>' chip — appears at the top of /word/X when
    the user arrived via the tap-any-word popover. Sits in its own row
    above the headword so the page reads as 'you're here, you came from
