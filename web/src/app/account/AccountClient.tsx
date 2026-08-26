@@ -155,6 +155,11 @@ export function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  // Cancellation save-flow. `cancelFlow` null = closed; else it carries whether
+  // the one-time save offer (14-day trial extension) is eligible for this user.
+  const [cancelFlow, setCancelFlow] = useState<null | { offerEligible: boolean }>(null);
+  const [cancelBusy, setCancelBusy] = useState(false);
+  const [cancelResult, setCancelResult] = useState<null | "extended" | "canceled">(null);
   // How many word definitions the user has cached for offline use.
   // Only meaningful for Clear/Deep — Basic never writes to the cache.
   const [offlineCount, setOfflineCount] = useState<number | null>(null);
@@ -292,6 +297,55 @@ export function AccountPage() {
     }
   }
 
+  // Cancellation runs through us (not Stripe's portal) so we can show the
+  // one-time save offer first. Step 1: ask the server whether this user is a
+  // card-holding trialer who hasn't seen the offer yet, then open the modal.
+  async function handleStartCancel() {
+    if (!user) return;
+    setCancelBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/retention", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ action: "check" }),
+      });
+      const j = (await res.json().catch(() => ({}))) as { offerEligible?: boolean; error?: string };
+      if (!res.ok) {
+        // No sub found etc. — fall back to the billing portal so they're not stuck.
+        await handleManageBilling();
+        return;
+      }
+      setCancelResult(null);
+      setCancelFlow({ offerEligible: !!j.offerEligible });
+    } finally {
+      setCancelBusy(false);
+    }
+  }
+
+  async function handleRetentionAction(action: "extend" | "cancel") {
+    if (!user) return;
+    setCancelBusy(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/retention", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ action }),
+      });
+      if (res.ok) {
+        setCancelResult(action === "extend" ? "extended" : "canceled");
+        // Refresh the account data so the plan card reflects the new state.
+        try {
+          const d = await fetch("/api/account", { headers: { Authorization: `Bearer ${idToken}` } });
+          if (d.ok) setData(await d.json());
+        } catch { /* non-blocking */ }
+      }
+    } finally {
+      setCancelBusy(false);
+    }
+  }
+
   async function handleSignOut() {
     await logout();
     router.push(href("/"));
@@ -354,6 +408,18 @@ export function AccountPage() {
           dir={dir}
           onClose={() => setDeleteModalOpen(false)}
           onDeleted={handleAccountDeleted}
+        />
+      )}
+      {cancelFlow && (
+        <RetentionModal
+          lang={lang}
+          dir={dir}
+          offerEligible={cancelFlow.offerEligible}
+          busy={cancelBusy}
+          result={cancelResult}
+          onExtend={() => handleRetentionAction("extend")}
+          onConfirmCancel={() => handleRetentionAction("cancel")}
+          onClose={() => { setCancelFlow(null); setCancelResult(null); }}
         />
       )}
       <header className="wb-shell-topbar">
@@ -466,6 +532,8 @@ export function AccountPage() {
                 onManageBilling={handleManageBilling}
                 onUpgrade={() => router.push(href("/pricing"))}
                 onChangePlan={() => router.push(href("/pricing"))}
+                onCancel={handleStartCancel}
+                cancelBusy={cancelBusy && !cancelFlow}
               />
             </SectionCard>
             <SectionCard>
@@ -558,13 +626,15 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 function PlanSection({
-  data, renewalDate, onManageBilling, onUpgrade, onChangePlan,
+  data, renewalDate, onManageBilling, onUpgrade, onChangePlan, onCancel, cancelBusy,
 }: {
   data: AccountData;
   renewalDate: string | null;
   onManageBilling: () => void;
   onUpgrade: () => void;
   onChangePlan: () => void;
+  onCancel: () => void;
+  cancelBusy: boolean;
 }) {
   const { lang } = useLang();
   const href = useHref();
@@ -691,6 +761,31 @@ function PlanSection({
               </>
             )}
           </div>
+          {/* Quiet, self-serve cancellation. Routed through our own save-flow
+              (not Stripe's portal) so a card-holding trialer sees the one-time
+              14-day extension offer first. Hidden once already set to cancel. */}
+          {plan !== "basic" && !data.cancelAtPeriodEnd && (
+            <div style={{ marginTop: 14 }}>
+              <button
+                type="button"
+                onClick={onCancel}
+                disabled={cancelBusy}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: cancelBusy ? "default" : "pointer",
+                  fontFamily: fontBody(lang),
+                  fontSize: 13,
+                  color: "var(--ink-muted, #9CA3AF)",
+                  textDecoration: "underline",
+                  opacity: cancelBusy ? 0.5 : 1,
+                }}
+              >
+                {RETENTION_COPY(lang).cancelLink}
+              </button>
+            </div>
+          )}
           {/* Contextual self-service link to the billing section of the
               Help Center. Shown to anyone — Basic gets it for "how do
               I upgrade / what plans / can I trial" type questions,
@@ -1114,5 +1209,134 @@ function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick?: 
     >
       {children}
     </button>
+  );
+}
+
+// ── Cancellation save-flow copy + modal ──────────────────────────────────────
+// he + en authored; every other language falls back to en (the account surface
+// follows the he+en-primary pattern, more languages can be added in a wave).
+// Hebrew is gender-neutral singular (fits a man or a woman): no gendered
+// imperatives, uses infinitives and "שלך".
+function RETENTION_COPY(lang: Lang) {
+  const en = {
+    cancelLink: "Cancel subscription",
+    offerTitle: "Before you go — 14 more days, free",
+    offerBody:
+      "Take two more weeks on us. It's worth setting up your second child and opening the parent dashboard to see the words each child is learning. Nothing to pay until the extended trial ends.",
+    offerAccept: "Yes, give me 14 more days",
+    offerDecline: "No thanks, cancel",
+    confirmTitle: "Cancel your subscription?",
+    confirmBody:
+      "You keep full access until the end of your current period. You can resume any time before then.",
+    keepBtn: "Keep my subscription",
+    confirmCancelBtn: "Cancel subscription",
+    extendedTitle: "Done — 14 days added",
+    extendedBody:
+      "Your free trial now runs two weeks longer. Nothing to pay in the meantime.",
+    canceledTitle: "Subscription canceled",
+    canceledBody:
+      "You keep access until the end of the period you already paid for. Changed your mind? You can resume from this page any time before then.",
+    closeBtn: "Close",
+  };
+  const he: typeof en = {
+    cancelLink: "ביטול המנוי",
+    offerTitle: "רגע לפני — עוד 14 יום, חינם",
+    offerBody:
+      "אפשר לקבל עוד שבועיים על חשבוננו. שווה להגדיר את הילד השני ולפתוח את דשבורד ההורה כדי לראות את המילים שכל ילד לומד. אין מה לשלם עד שהניסיון המוארך מסתיים.",
+    offerAccept: "כן, אשמח לעוד 14 יום",
+    offerDecline: "לא תודה, לבטל",
+    confirmTitle: "לבטל את המנוי?",
+    confirmBody:
+      "הגישה המלאה נשמרת עד סוף התקופה הנוכחית. אפשר לחדש בכל רגע לפני כן.",
+    keepBtn: "להשאיר את המנוי",
+    confirmCancelBtn: "לבטל את המנוי",
+    extendedTitle: "מעולה, נוספו 14 יום",
+    extendedBody:
+      "הניסיון החינמי שלך ארוך עכשיו בשבועיים. אין מה לשלם בינתיים.",
+    canceledTitle: "המנוי בוטל",
+    canceledBody:
+      "הגישה נשמרת עד סוף התקופה ששילמת עליה. שינית את דעתך? אפשר לחדש מהעמוד הזה בכל רגע לפני כן.",
+    closeBtn: "סגירה",
+  };
+  return lang === "he" ? he : en;
+}
+
+function RetentionModal({
+  lang, dir, offerEligible, busy, result, onExtend, onConfirmCancel, onClose,
+}: {
+  lang: Lang;
+  dir: "rtl" | "ltr";
+  offerEligible: boolean;
+  busy: boolean;
+  result: "extended" | "canceled" | null;
+  onExtend: () => void;
+  onConfirmCancel: () => void;
+  onClose: () => void;
+}) {
+  const c = RETENTION_COPY(lang);
+  const done = result !== null;
+
+  const title = result === "extended" ? c.extendedTitle
+    : result === "canceled" ? c.canceledTitle
+    : offerEligible ? c.offerTitle
+    : c.confirmTitle;
+  const body = result === "extended" ? c.extendedBody
+    : result === "canceled" ? c.canceledBody
+    : offerEligible ? c.offerBody
+    : c.confirmBody;
+
+  const primary: React.CSSProperties = {
+    padding: "11px 18px", borderRadius: 12, border: "none", cursor: busy ? "default" : "pointer",
+    background: "var(--teal, #0EA5A5)", color: "#fff", fontFamily: fontBody(lang), fontSize: 14,
+    fontWeight: 700, opacity: busy ? 0.6 : 1,
+  };
+  const ghost: React.CSSProperties = {
+    padding: "11px 18px", borderRadius: 12, background: "transparent", color: "var(--ink)",
+    border: "1px solid var(--hairline, #E5E7EB)", cursor: busy ? "default" : "pointer",
+    fontFamily: fontBody(lang), fontSize: 14, fontWeight: 500, opacity: busy ? 0.6 : 1,
+  };
+  const danger: React.CSSProperties = {
+    ...ghost, color: "#B91C1C", border: "1px solid #FECACA", background: "#FEF2F2",
+  };
+
+  return (
+    <div
+      dir={dir}
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 1000, background: "rgba(17,24,39,0.45)",
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "var(--paper, #fff)", borderRadius: 18, padding: 28, maxWidth: 460, width: "100%",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.25)", border: "1px solid var(--hairline, #E5E7EB)",
+        }}
+      >
+        <h2 style={{ margin: "0 0 12px", fontFamily: fontBody(lang), fontSize: 20, fontWeight: 800, color: "var(--ink)", lineHeight: 1.25 }}>
+          {title}
+        </h2>
+        <p style={{ margin: "0 0 22px", fontFamily: fontBody(lang), fontSize: 15, lineHeight: 1.55, color: "var(--ink-muted, #6B7280)" }}>
+          {body}
+        </p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {done ? (
+            <button type="button" style={primary} onClick={onClose}>{c.closeBtn}</button>
+          ) : offerEligible ? (
+            <>
+              <button type="button" style={ghost} disabled={busy} onClick={onConfirmCancel}>{c.offerDecline}</button>
+              <button type="button" style={primary} disabled={busy} onClick={onExtend}>{c.offerAccept}</button>
+            </>
+          ) : (
+            <>
+              <button type="button" style={danger} disabled={busy} onClick={onConfirmCancel}>{c.confirmCancelBtn}</button>
+              <button type="button" style={primary} disabled={busy} onClick={onClose}>{c.keepBtn}</button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
