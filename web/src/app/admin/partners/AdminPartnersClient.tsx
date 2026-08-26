@@ -507,33 +507,33 @@ export default function AdminPartnersClient() {
             const refLink = `https://www.gadit.app/?ref=${r.code}`;
             return (
               <div key={r.id} style={card}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>{r.name || r.email}</span>
-                      <span style={{ ...pill, ...(r.tier === "founder" ? pillFounder : pillStd) }}>
-                        {r.tier === "founder" ? t.founder : t.standard}
-                      </span>
-                      {r.status === "suspended" && <span style={{ ...pill, background: "#FEE2E2", color: "#991B1B" }}>{t.suspended}</span>}
-                      <span style={{ ...pill, background: "#F3F4F6", color: "#374151", direction: "ltr" }}>{r.code}</span>
-                    </div>
-                    <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 4 }}>{r.email}</div>
-                    <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 2, direction: "ltr", textAlign: "start" }}>
-                      {t.rate}: {Math.round(r.rateYearOne * 100)}% · {Math.round(r.rateLifetime * 100)}%
-                    </div>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>{r.name || r.email}</span>
+                    <span style={{ ...pill, ...(r.tier === "founder" ? pillFounder : pillStd) }}>
+                      {r.tier === "founder" ? t.founder : t.standard}
+                    </span>
+                    {r.status === "suspended" && <span style={{ ...pill, background: "#FEE2E2", color: "#991B1B" }}>{t.suspended}</span>}
+                    <span style={{ ...pill, background: "#F3F4F6", color: "#374151", direction: "ltr" }}>{r.code}</span>
                   </div>
-                  <div style={{ textAlign: "end" }}>
-                    <div style={{ fontSize: 11, color: "#6B7280", textTransform: "uppercase", letterSpacing: 0.4 }}>{t.funnel}</div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: "#111827", direction: "ltr" }}>
-                      {r.clicks} / {r.signups} / {r.payingCustomers}
-                    </div>
+                  <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 4 }}>{r.email}</div>
+                  <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 2, direction: "ltr", textAlign: "start" }}>
+                    {t.rate}: {Math.round(r.rateYearOne * 100)}% · {Math.round(r.rateLifetime * 100)}%
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 12, paddingTop: 12, borderTop: "1px solid #F3F4F6" }}>
-                  <Money label={t.accrued} items={accrued} />
-                  <Money label={t.payable} items={payable} strong />
-                  <Money label={t.paidTotal} items={paid} />
+                {/* One tidy stats strip: 4 even columns, labels on the top row
+                    and values aligned directly beneath them (grid guarantees
+                    the values line up regardless of label length). */}
+                <div style={statStrip}>
+                  <div style={statLabel}>{t.funnel}</div>
+                  <div style={statLabel}>{t.accrued}</div>
+                  <div style={statLabel}>{t.payable}</div>
+                  <div style={statLabel}>{t.paidTotal}</div>
+                  <div style={statValue}><span dir="ltr">{r.clicks} / {r.signups} / {r.payingCustomers}</span></div>
+                  <div style={statValue}><span dir="ltr">{fmtMoney(accrued)}</span></div>
+                  <div style={{ ...statValue, color: "#0EA5A5", fontWeight: 800 }}><span dir="ltr">{fmtMoney(payable)}</span></div>
+                  <div style={statValue}><span dir="ltr">{fmtMoney(paid)}</span></div>
                 </div>
 
                 {editId === r.id && (
@@ -585,18 +585,25 @@ export default function AdminPartnersClient() {
   );
 }
 
-function Money({ label, items, strong }: { label: string; items: { cur: string; val: number }[]; strong?: boolean }) {
-  return (
-    <div>
-      <div style={{ fontSize: 11, color: "#6B7280", textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div>
-      <div style={{ fontSize: strong ? 18 : 15, fontWeight: strong ? 800 : 600, color: strong ? "#0EA5A5" : "#374151", direction: "ltr", textAlign: "start" }}>
-        {items.length === 0 ? "—" : items.map((x) => money(x.val, x.cur)).join(" · ")}
-      </div>
-    </div>
-  );
+/** Render a currency-bucket list as one line, or an em-free dash when empty. */
+function fmtMoney(items: { cur: string; val: number }[]): string {
+  return items.length === 0 ? "—" : items.map((x) => money(x.val, x.cur)).join(" · ");
 }
 
 const card: React.CSSProperties = { background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: 18 };
+// The stats strip: 4 equal columns, labels row then values row. rowGap keeps the
+// value line just under the labels; alignSelf:end drops each label onto its value.
+const statStrip: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+  columnGap: 16,
+  rowGap: 3,
+  marginTop: 14,
+  paddingTop: 14,
+  borderTop: "1px solid #F3F4F6",
+};
+const statLabel: React.CSSProperties = { fontSize: 10.5, fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: 0.4, lineHeight: 1.3, alignSelf: "end", textAlign: "start" };
+const statValue: React.CSSProperties = { fontSize: 15, fontWeight: 700, color: "#374151", textAlign: "start" };
 const input: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: "9px 11px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", outline: "none" };
 const pill: React.CSSProperties = { fontSize: 11.5, fontWeight: 700, padding: "3px 9px", borderRadius: 999 };
 const pillStd: React.CSSProperties = { background: "rgba(14,165,165,0.12)", color: "#0b7d7d" };
