@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
+import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
 import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
@@ -623,6 +624,61 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
   return true;
 }
 
+/**
+ * Credit a member-gets-member referral when a referred friend actually PAYS.
+ *
+ * Fires on invoice.payment_succeeded with a real (non-zero) amount, so a trial
+ * that never converts never credits anyone. Counted ONCE per referred friend
+ * (guarded by referralConversionCounted on the friend's doc), so the referrer
+ * earns a single reward per friend, not one per monthly invoice. The reward is
+ * recorded as "owed" for the admin to grant — v1 has no billing-path payout.
+ * Best-effort: any failure must never break provisioning or force a retry.
+ */
+async function creditReferralConversion(invoice: Stripe.Invoice) {
+  try {
+    const gross = invoice.amount_paid ?? 0;
+    if (gross <= 0) return; // trial / $0 invoices don't convert
+
+    const customerId =
+      typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (!customerId) return;
+
+    const db = getAdminDb();
+    const userId = await findUserIdByCustomer(customerId);
+    if (!userId) return;
+
+    const userRef = db.collection("users").doc(userId);
+    const u = (await userRef.get()).data() ?? {};
+    const referrerUid = u.referredByUser as string | undefined;
+    if (!referrerUid || referrerUid === userId) return; // not referred (or self)
+    if (u.referralConversionCounted === true) return; // already credited once
+
+    // Mark the friend first so a webhook retry can't double-credit.
+    await userRef.set({ referralConversionCounted: true }, { merge: true });
+
+    const referrerRef = db.collection("users").doc(referrerUid);
+    await referrerRef.set(
+      {
+        referralConversions: FieldValue.increment(1),
+        referralRewardsOwed: FieldValue.increment(1),
+      },
+      { merge: true },
+    );
+    // Ledger entry (one per referred friend) so the admin can see and grant.
+    await referrerRef.collection("referralRewards").doc(userId).set({
+      referredUid: userId,
+      invoiceId: invoice.id ?? null,
+      grossFirstPayment: gross,
+      currency: invoice.currency ?? "usd",
+      createdAt: Date.now(),
+      granted: false,
+    });
+    console.log(`[webhook] referral conversion -> referrer ${referrerUid} (friend ${userId})`);
+  } catch (e) {
+    console.warn("[webhook] referral conversion credit failed (non-blocking):", e);
+  }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -764,6 +820,7 @@ export async function POST(req: NextRequest) {
     if (event.type === "invoice.payment_succeeded") {
       const invoice = event.data.object as Stripe.Invoice;
       await accruePartnerCommission(invoice);
+      await creditReferralConversion(invoice);
     }
 
     return NextResponse.json({ received: true });

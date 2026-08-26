@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isDisposableEmail } from "@/lib/email/disposable";
+import { REFERRAL_USER_COOKIE } from "@/lib/referral";
 
 /**
  * One-shot notify Gadi by email when a brand-new user signs up.
@@ -130,6 +131,40 @@ export async function POST(req: NextRequest) {
       }
     } catch (e) {
       console.warn("[notify-signup] partner attribution failed (non-blocking):", e);
+    }
+
+    // Member-gets-member referral attribution — if this signup arrived through
+    // an /invite/<code> link, that route dropped a `gadit_uref` cookie carrying
+    // the referrer's code. Resolve the referrer, stamp `referredByUser` once,
+    // and count the signup on the referrer. Idempotent (only writes when
+    // referredByUser is unset) and fully non-blocking. Separate from the
+    // partner cookie above; a user can't refer themselves.
+    try {
+      const refCode = req.cookies.get(REFERRAL_USER_COOKIE)?.value;
+      if (refCode && !data.referredByUser) {
+        const q = await db
+          .collection("users")
+          .where("referralCode", "==", refCode.toUpperCase())
+          .limit(1)
+          .get();
+        const referrer = q.docs[0];
+        if (referrer && referrer.id !== uid) {
+          await userRef.set(
+            {
+              referredByUser: referrer.id,
+              referredByCode: refCode.toUpperCase(),
+              referredAtUser: Date.now(),
+            },
+            { merge: true },
+          );
+          await referrer.ref.set(
+            { referralSignups: FieldValue.increment(1) },
+            { merge: true },
+          );
+        }
+      }
+    } catch (e) {
+      console.warn("[notify-signup] referral attribution failed (non-blocking):", e);
     }
 
     if (data.notifiedSignup === true) {
