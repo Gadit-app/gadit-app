@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -45,6 +45,9 @@ type ReaderStrings = {
   progress: string;
   doneAll: string; hint: string; loginTitle: string; loginBtn: string;
   upgradeTitle: string; upgradeBtn: string; loading: string;
+  /** Two distinct upload actions. Optional so the 31 batch-translated langs
+   *  compile; they fall back to English until their natives land. */
+  camera?: string; upload?: string;
 };
 
 // Reader UI copy. en + he authored; every other language falls back to en until
@@ -68,6 +71,8 @@ const READER_COPY: Record<string, ReaderStrings> = {
     upgradeTitle: "Reading a text is a paid feature",
     upgradeBtn: "See plans",
     loading: "Loading…",
+    camera: "Photograph with camera",
+    upload: "Upload image or PDF",
   },
   he: {
     title: "קריאת טקסט",
@@ -86,6 +91,8 @@ const READER_COPY: Record<string, ReaderStrings> = {
     upgradeTitle: "קריאת טקסט היא תכונה בתשלום",
     upgradeBtn: "לצפייה במסלולים",
     loading: "טוען…",
+    camera: "צילום מהמצלמה",
+    upload: "העלאת תמונה או PDF",
   },
   "ar": {"title":"اقرأ نصاً","sub":"الصق نصاً أو صوّر صفحة. يحوّل Gadit كل كلمة إلى نقرة، حتى تتنقل كلمة كلمة وتكشف كل معانيها.","placeholder":"الصق نصك هنا…","load":"افتح النص","photo":"صورة أو ملف PDF","reading":"جارٍ قراءة الملف…","ocrError":"تعذّرت علينا قراءة هذا الملف. جرّب صورة أوضح، أو ملف PDF أو صورة بنص مقروء.","newText":"نص جديد","progress":"{a} من {b} كلمة","doneAll":"عمل رائع. لقد مررت على كل كلمة.","hint":"انقر على أي كلمة لرؤية معانيها. الكلمات التي فتحتها تتحول إلى الأخضر.","loginTitle":"سجّل الدخول لقراءة نص","loginBtn":"تسجيل الدخول","upgradeTitle":"قراءة نص ميزة مدفوعة","upgradeBtn":"اطّلع على الخطط","loading":"جارٍ التحميل…"},
   "ru": {"title":"Читать текст","sub":"Вставьте текст или сфотографируйте страницу. Gadit превращает каждое слово в нажатие, чтобы вы могли идти слово за словом и раскрывать все его значения.","placeholder":"Вставьте свой текст сюда…","load":"Открыть текст","photo":"Фото, изображение или PDF","reading":"Читаем файл…","ocrError":"Не удалось прочитать этот файл. Попробуйте более четкое фото или PDF либо изображение с читаемым текстом.","newText":"Новый текст","progress":"{a} из {b} слов","doneAll":"Отличная работа. Вы прошли по всем словам.","hint":"Нажмите на любое слово, чтобы увидеть его значения. Открытые слова становятся зелеными.","loginTitle":"Войдите, чтобы читать текст","loginBtn":"Войти","upgradeTitle":"Чтение текста, это платная функция","upgradeBtn":"Посмотреть тарифы","loading":"Загрузка…"},
@@ -128,6 +135,18 @@ function fmtProgress(tpl: string, a: number, b: number): string {
   return tpl.replace("{a}", String(a)).replace("{b}", String(b));
 }
 
+const ghostBtn: CSSProperties = {
+  background: "transparent",
+  color: "var(--ink,#20272E)",
+  border: "1px solid var(--hairline,#E5E7EB)",
+  borderRadius: 12,
+  padding: "12px 18px",
+  fontSize: 15,
+  fontWeight: 600,
+  cursor: "pointer",
+  fontFamily: "inherit",
+};
+
 export function ReaderClient() {
   const { user, plan, loading: authLoading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -138,7 +157,10 @@ export function ReaderClient() {
   const [text, setText] = useState("");
   const [reviewed, setReviewed] = useState<Set<string>>(new Set());
   const [ocrState, setOcrState] = useState<"idle" | "reading" | "error">("idle");
-  const fileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const uploadRef = useRef<HTMLInputElement>(null);
+  const camLabel = t.camera ?? READER_COPY.en.camera ?? "Photograph with camera";
+  const uploadLabel = t.upload ?? READER_COPY.en.upload ?? "Upload image or PDF";
 
   const total = useMemo(() => (text ? distinctWordCount(text) : 0), [text]);
   const storageKey = useMemo(() => (text ? `gadit-reader-${hashText(text)}` : ""), [text]);
@@ -260,7 +282,21 @@ export function ReaderClient() {
               rows={8}
               style={{ width: "100%", boxSizing: "border-box", padding: "14px 16px", borderRadius: 14, border: "1px solid var(--hairline,#E5E7EB)", fontSize: 16, lineHeight: 1.6, fontFamily: "inherit", background: "var(--card,#fff)", color: "var(--ink,#20272E)", resize: "vertical", outline: "none" }}
             />
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14, alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 14, alignItems: "center", justifyContent: "space-between" }}>
+              {/* Two distinct upload actions so it's obvious which is which. */}
+              {ocrState === "reading" ? (
+                <div style={{ ...ghostBtn, opacity: 0.7, cursor: "default" }}>{t.reading}</div>
+              ) : (
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                  <button type="button" onClick={() => cameraRef.current?.click()} style={ghostBtn}>
+                    📷 {camLabel}
+                  </button>
+                  <button type="button" onClick={() => uploadRef.current?.click()} style={ghostBtn}>
+                    📄 {uploadLabel}
+                  </button>
+                </div>
+              )}
+              {/* Primary action, sits at the end (left in RTL). */}
               <button
                 type="button"
                 onClick={openText}
@@ -269,15 +305,9 @@ export function ReaderClient() {
               >
                 {t.load}
               </button>
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                disabled={ocrState === "reading"}
-                style={{ background: "transparent", color: "var(--ink,#20272E)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 12, padding: "12px 20px", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
-              >
-                {ocrState === "reading" ? t.reading : `📷 ${t.photo}`}
-              </button>
-              <input ref={fileRef} type="file" accept="image/*,application/pdf" onChange={onPhoto} style={{ display: "none" }} />
+              {/* Camera: hints mobile to open the camera. Upload: images + PDF. */}
+              <input ref={cameraRef} type="file" accept="image/*" capture="environment" onChange={onPhoto} style={{ display: "none" }} />
+              <input ref={uploadRef} type="file" accept="image/*,application/pdf" onChange={onPhoto} style={{ display: "none" }} />
             </div>
             {ocrState === "error" && (
               <p style={{ marginTop: 12, color: "#B91C1C", fontSize: 14 }}>{t.ocrError}</p>
