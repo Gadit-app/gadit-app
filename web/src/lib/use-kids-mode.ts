@@ -22,9 +22,12 @@ const KEY = "gadit-kids-mode";
 const EVENT_NAME = "gadit-kids-mode-change";
 
 export function useKidsMode(): [boolean, (next: boolean) => void] {
-  const [on, setOn] = useState(false);
+  // Lazy initializer reads localStorage synchronously, so the very first render
+  // already has the real value — no OFF-then-ON flash on kids-mode surfaces
+  // (Gadi 2026-08-27). SSR returns false; the client hydrates with the real one.
+  const [on, setOn] = useState<boolean>(() => readKidsMode());
 
-  // Initial read + listen for cross-tab and same-tab updates.
+  // Re-sync on mount + listen for cross-tab and same-tab updates.
   useEffect(() => {
     if (typeof window === "undefined") return;
     setOn(window.localStorage.getItem(KEY) === "1");

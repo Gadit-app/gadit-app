@@ -381,7 +381,7 @@ function LangSwitch() {
 }
 
 export function NotebookPage() {
-  const { user, plan, loading, promptLogin, familyRole } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, familyRole } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -434,10 +434,14 @@ export function NotebookPage() {
       promptLogin(c.title);
       return;
     }
+    // Wait for the plan to actually resolve. `loading` only covers Firebase
+    // auth; `plan` defaults to "basic" until the Firestore snapshot lands, so
+    // without this a paying subscriber gets bounced to /pricing for a beat.
+    if (!planReady) return;
     if (plan === "basic") {
       router.replace(href("/pricing"));
     }
-  }, [loading, user, plan, c.title, promptLogin, router]);
+  }, [loading, planReady, user, plan, c.title, promptLogin, router, href]);
 
   // Load notebook contents once authorized
   useEffect(() => {

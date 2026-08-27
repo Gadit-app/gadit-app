@@ -122,7 +122,7 @@ function tierStyle(
 import { FamilyProfileSwitcher, prefetchSwitchMembers } from "./FamilyProfileSwitcher";
 
 export function WbUserMenu() {
-  const { user, plan, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout } = useAuth();
+  const { user, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout } = useAuth();
   const { lang, dir } = useLang();
   const [theme, setTheme] = useTheme();
   const router = useRouter();
@@ -220,7 +220,10 @@ export function WbUserMenu() {
     >
       {/* Plan chip, clicking it opens the same menu as clicking the
           avatar, so the entire grouping reads as one control. Hidden
-          on very narrow viewports to keep the topbar from wrapping. */}
+          on very narrow viewports to keep the topbar from wrapping.
+          Rendered only once the plan has resolved, so it never flashes
+          "BASIC" before the real tier lands (Gadi 2026-08-27). */}
+      {planReady && (
       <button
         type="button"
         aria-label={c.openMenu}
@@ -247,6 +250,7 @@ export function WbUserMenu() {
       >
         {tier.label}
       </button>
+      )}
       <button
         type="button"
         className="wb-avatar"

@@ -36,19 +36,21 @@ const BLOCKED = new Set([
 ]);
 
 export function KidRouteGuard() {
-  const { familyRole, loading } = useAuth();
+  const { familyRole, loading, planReady } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const href = useHref();
 
   useEffect(() => {
-    if (loading || familyRole !== "kid") return;
+    // Wait for the plan/role snapshot, not just auth — familyRole is null until
+    // it resolves, so acting earlier would decide on a stale role.
+    if (loading || !planReady || familyRole !== "kid") return;
     const segs = pathname.split("/").filter(Boolean);
     const first = segs.length && LANGS.has(segs[0]) ? segs[1] : segs[0];
     if (first && BLOCKED.has(first)) {
       router.replace(href("/"));
     }
-  }, [familyRole, loading, pathname, router, href]);
+  }, [familyRole, loading, planReady, pathname, router, href]);
 
   return null;
 }

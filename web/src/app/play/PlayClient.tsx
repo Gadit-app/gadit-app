@@ -1525,7 +1525,7 @@ function LangSwitch() {
 }
 
 export function PlayPage() {
-  const { user, plan, loading, promptLogin, familyRole } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, familyRole } = useAuth();
   const isKidPlayer = familyRole === "kid";
   const { lang, dir } = useLang();
   const router = useRouter();
@@ -1560,10 +1560,13 @@ export function PlayPage() {
       promptLogin(t.menuTitle);
       return;
     }
+    // `loading` only covers Firebase auth; wait for the plan snapshot too, or a
+    // Deep subscriber gets bounced to /pricing while `plan` is still "basic".
+    if (!planReady) return;
     if (plan === "basic" || plan === "clear") {
       router.replace(href("/pricing"));
     }
-  }, [loading, user, plan, t.menuTitle, promptLogin, router, href]);
+  }, [loading, planReady, user, plan, t.menuTitle, promptLogin, router, href]);
 
   // Load notebook + hydrate from IDB.
   //
