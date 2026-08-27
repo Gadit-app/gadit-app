@@ -325,7 +325,9 @@ export default function AdminSchoolsClient() {
       const { token } = (await res.json()) as { token: string };
       const { signInWithCustomToken, getAuth } = await import("firebase/auth");
       await signInWithCustomToken(getAuth(), token);
-      window.location.href = "/schools";
+      // Straight to the control panel, not the marketing landing (which would
+      // make the admin click "go to dashboard" again). Gadi 2026-08-27.
+      window.location.href = "/schools/manage";
     } catch (e) {
       setError(String(e instanceof Error ? e.message : e));
       setEnterBusy(false);
