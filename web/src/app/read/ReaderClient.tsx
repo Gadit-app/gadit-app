@@ -48,6 +48,8 @@ type ReaderStrings = {
   /** Two distinct upload actions. Optional so the 31 batch-translated langs
    *  compile; they fall back to English until their natives land. */
   camera?: string; upload?: string;
+  /** Capture-screen button (desktop). Optional; English fallback. */
+  captureScreen?: string;
 };
 
 // Reader UI copy. en + he authored; every other language falls back to en until
@@ -57,7 +59,7 @@ const READER_COPY: Record<string, ReaderStrings> = {
   en: {
     title: "Understand every word",
     sub: "Paste a text or photograph a page. Tap any word you don't know and its meaning pops up, without stopping your reading.",
-    placeholder: "Paste your text here…",
+    placeholder: "Paste text or a screenshot here…",
     load: "Open text",
     photo: "Photo, image or PDF",
     reading: "Reading the file…",
@@ -73,11 +75,12 @@ const READER_COPY: Record<string, ReaderStrings> = {
     loading: "Loading…",
     camera: "Photograph with camera",
     upload: "Upload image or PDF",
+    captureScreen: "Capture screen",
   },
   he: {
     title: "להבין כל מילה",
     sub: "להדביק טקסט או לצלם עמוד. לוחצים על מילה שלא ברורה, וקופץ ההסבר שלה, בלי לעצור את הקריאה.",
-    placeholder: "להדביק כאן את הטקסט…",
+    placeholder: "להדביק כאן טקסט או צילום מסך…",
     load: "לפתוח את הטקסט",
     photo: "צילום, תמונה או PDF",
     reading: "קורא את הקובץ…",
@@ -93,6 +96,7 @@ const READER_COPY: Record<string, ReaderStrings> = {
     loading: "טוען…",
     camera: "לצלם עמוד",
     upload: "להעלות תמונה או PDF",
+    captureScreen: "צילום מסך",
   },
   "ar": {"title":"افهم كل كلمة","sub":"الصق نصاً أو صوّر صفحة. انقر على أي كلمة لا تعرفها ليظهر معناها، دون أن تتوقف عن القراءة.","placeholder":"الصق نصك هنا…","load":"افتح النص","photo":"صورة أو ملف PDF","reading":"جارٍ قراءة الملف…","ocrError":"تعذّرت علينا قراءة هذا الملف. جرّب صورة أوضح، أو ملف PDF أو صورة بنص مقروء.","newText":"نص جديد","progress":"{a} من {b} كلمة","doneAll":"عمل رائع. لقد مررت على كل كلمة.","hint":"انقر على أي كلمة لرؤية معانيها. الكلمات التي فتحتها تتحول إلى الأخضر.","loginTitle":"سجّل الدخول لقراءة نص","loginBtn":"تسجيل الدخول","upgradeTitle":"قراءة نص ميزة مدفوعة","upgradeBtn":"اطّلع على الخطط","loading":"جارٍ التحميل…","camera":"التقاط بالكاميرا","upload":"رفع صورة أو PDF"},
   "ru": {"title":"Понять каждое слово","sub":"Вставьте текст или сфотографируйте страницу. Нажмите на любое незнакомое слово, и его значение появится, не прерывая чтения.","placeholder":"Вставьте свой текст сюда…","load":"Открыть текст","photo":"Фото, изображение или PDF","reading":"Читаем файл…","ocrError":"Не удалось прочитать этот файл. Попробуйте более четкое фото или PDF либо изображение с читаемым текстом.","newText":"Новый текст","progress":"{a} из {b} слов","doneAll":"Отличная работа. Вы прошли по всем словам.","hint":"Нажмите на любое слово, чтобы увидеть его значения. Открытые слова становятся зелеными.","loginTitle":"Войдите, чтобы читать текст","loginBtn":"Войти","upgradeTitle":"Чтение текста, это платная функция","upgradeBtn":"Посмотреть тарифы","loading":"Загрузка…","camera":"Сфотографировать камерой","upload":"Загрузить изображение или PDF"},
@@ -142,7 +146,7 @@ function fmtProgress(tpl: string, a: number, b: number): string {
  * EXIF orientation is baked in so a sideways photo OCRs upright. PDFs and any
  * format the browser can't decode pass through unchanged.
  */
-async function prepareForUpload(file: File): Promise<Blob> {
+async function prepareForUpload(file: Blob): Promise<Blob> {
   if (file.type === "application/pdf" || !file.type.startsWith("image/")) return file;
   // 3000px keeps fine detail (Hebrew niqqud, small print) legible for OCR while
   // JPEG at 0.92 still lands well under the body limit for a page of text.
@@ -209,6 +213,7 @@ export function ReaderClient() {
   const uploadRef = useRef<HTMLInputElement>(null);
   const camLabel = t.camera ?? READER_COPY.en.camera ?? "Photograph with camera";
   const uploadLabel = t.upload ?? READER_COPY.en.upload ?? "Upload image or PDF";
+  const screenLabel = t.captureScreen ?? READER_COPY.en.captureScreen ?? "Capture screen";
 
   const total = useMemo(() => (text ? distinctWordCount(text) : 0), [text]);
   const storageKey = useMemo(() => (text ? `gadit-reader-${hashText(text)}` : ""), [text]);
@@ -247,17 +252,14 @@ export function ReaderClient() {
     setOcrState("idle");
   }
 
-  async function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file || !user) return;
+  // Shared OCR pipeline for every input path (file, camera, pasted screenshot,
+  // screen capture): downscale/recompress the image, send it to /api/ocr, and
+  // load the extracted text.
+  async function runOcr(input: Blob) {
+    if (!user) return;
     setOcrState("reading");
     try {
-      // Downscale + recompress an image before upload: a full-res phone photo is
-      // often several MB, over the serverless body limit, and the failure looks
-      // like "we couldn't read the file". A page of text stays perfectly legible
-      // at ~2200px. PDFs and undecodable formats pass through untouched.
-      const prepared = await prepareForUpload(file);
+      const prepared = await prepareForUpload(input);
       const idToken = await user.getIdToken();
       const fd = new FormData();
       fd.append("image", prepared, "upload");
@@ -278,6 +280,65 @@ export function ReaderClient() {
       setOcrState("error");
     }
   }
+
+  async function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (file) await runOcr(file);
+  }
+
+  // Paste a screenshot (from Windows Snip / Chrome or Google screenshot / any
+  // snipping tool) straight into the box: if the clipboard holds an image we
+  // OCR it; otherwise the normal text paste happens.
+  async function onPasteBox(e: React.ClipboardEvent<HTMLTextAreaElement>) {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (it.type.startsWith("image/")) {
+        const blob = it.getAsFile();
+        if (blob) { e.preventDefault(); await runOcr(blob); return; }
+      }
+    }
+  }
+
+  // Capture the screen (a window or a browser tab, e.g. the page you're reading
+  // on another site) and turn what's on it into text. Desktop only.
+  async function onCaptureScreen() {
+    const md = navigator.mediaDevices as MediaDevices & {
+      getDisplayMedia?: (c?: DisplayMediaStreamOptions) => Promise<MediaStream>;
+    };
+    if (!md?.getDisplayMedia) return;
+    setOcrState("reading");
+    let stream: MediaStream | null = null;
+    try {
+      stream = await md.getDisplayMedia({ video: { width: { ideal: 3000 } } } as DisplayMediaStreamOptions);
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      await video.play();
+      // Let a frame actually render before grabbing it.
+      await new Promise((r) => setTimeout(r, 350));
+      const w = video.videoWidth, h = video.videoHeight;
+      stream.getTracks().forEach((tk) => tk.stop());
+      stream = null;
+      if (!w || !h) { setOcrState("error"); return; }
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) { setOcrState("error"); return; }
+      ctx.drawImage(video, 0, 0, w, h);
+      const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/jpeg", 0.92));
+      if (blob) await runOcr(blob); else setOcrState("error");
+    } catch (err) {
+      // User dismissed the "choose what to share" picker → not an error, just reset.
+      if (err && typeof err === "object" && (err as { name?: string }).name === "NotAllowedError") setOcrState("idle");
+      else setOcrState("error");
+    } finally {
+      stream?.getTracks().forEach((tk) => tk.stop());
+    }
+  }
+
+  const canCaptureScreen = typeof navigator !== "undefined" && !!(navigator.mediaDevices as { getDisplayMedia?: unknown } | undefined)?.getDisplayMedia;
 
   const allDone = total > 0 && reviewed.size >= total;
 
@@ -330,6 +391,7 @@ export function ReaderClient() {
             <textarea
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
+              onPaste={onPasteBox}
               placeholder={t.placeholder}
               dir={dir}
               rows={8}
@@ -347,6 +409,11 @@ export function ReaderClient() {
                   <button type="button" onClick={() => uploadRef.current?.click()} style={ghostBtn}>
                     📄 {uploadLabel}
                   </button>
+                  {canCaptureScreen && (
+                    <button type="button" onClick={onCaptureScreen} style={ghostBtn}>
+                      🖥️ {screenLabel}
+                    </button>
+                  )}
                 </div>
               )}
               {/* Primary action, sits at the end (left in RTL). */}
