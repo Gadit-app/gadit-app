@@ -124,16 +124,20 @@ const SAY_NAV: Record<string, string> = {
   hi: "कहो", ja: "言ってみて", am: "ተናገረው", zu: "Yisho",
 };
 
-// "Read a text" nav label — the Reader (/read). Same local-map + en-fallback
-// pattern as the other tools. Shown to deep-tier users (Family + Deep) and to
-// Family kids (it's a reading tool for them too). (Gadi 2026-08-26)
+// "Every Word" nav label for the Reader (/read). Renamed from "Read a text" via
+// the LLM naming council (Gadi 2026-08-27): it names the promise that no word is
+// left un-understood, straight from the brand tagline, and avoids "read" reading
+// as text-to-speech (which would clash with "Say it"). Shown to deep-tier users
+// (Family + Deep) and Family kids. All 33 langs.
 const READ_NAV: Record<string, string> = {
-  en: "Read a text", he: "קריאת טקסט", ar: "اقرأ نصًا", ru: "Чтение текста",
-  es: "Leer un texto", pt: "Ler um texto", fr: "Lire un texte", de: "Text lesen",
-  cs: "Číst text", sk: "Čítať text", it: "Leggi un testo", nl: "Tekst lezen",
-  uk: "Читати текст", tr: "Metin oku", pl: "Czytaj tekst", fa: "خواندن متن",
-  id: "Baca teks", el: "Διάβασε κείμενο", hi: "पाठ पढ़ें", ja: "文章を読む",
-  am: "ጽሑፍ አንብብ", zu: "Funda umbhalo",
+  en: "Every Word", he: "כל מילה", ar: "كل كلمة", ru: "Каждое слово",
+  es: "Cada palabra", pt: "Cada palavra", fr: "Chaque mot", de: "Jedes Wort",
+  cs: "Každé slovo", sk: "Každé slovo", it: "Ogni parola", nl: "Elk woord",
+  uk: "Кожне слово", tr: "Her kelime", pl: "Każde słowo", fa: "هر واژه",
+  id: "Setiap kata", el: "Κάθε λέξη", hi: "हर शब्द", ja: "すべての単語",
+  am: "እያንዳንዱ ቃል", zu: "Wonke amagama", vi: "Mọi từ", fil: "Bawat salita",
+  af: "Elke woord", sw: "Kila neno", "zh-CN": "每个词", "zh-TW": "每個詞",
+  ko: "모든 단어", th: "ทุกคำ", bn: "প্রতিটি শব্দ", da: "Hvert ord", hu: "Minden szó",
 };
 
 const TREASURE_NAV: Record<string, string> = {
