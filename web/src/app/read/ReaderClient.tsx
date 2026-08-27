@@ -192,7 +192,17 @@ export function ReaderClient() {
   const t = copy(lang);
 
   const [draft, setDraft] = useState("");
-  const [text, setText] = useState("");
+  // Restore the open passage from the session so a refresh, or opening a word's
+  // full page (which we open in a new tab anyway), never loses it.
+  const [text, setText] = useState<string>(() => {
+    try { return typeof window !== "undefined" ? (sessionStorage.getItem("gadit-reader-text") ?? "") : ""; } catch { return ""; }
+  });
+  useEffect(() => {
+    try {
+      if (text) sessionStorage.setItem("gadit-reader-text", text);
+      else sessionStorage.removeItem("gadit-reader-text");
+    } catch { /* ignore */ }
+  }, [text]);
   const [reviewed, setReviewed] = useState<Set<string>>(new Set());
   const [ocrState, setOcrState] = useState<"idle" | "reading" | "error">("idle");
   const cameraRef = useRef<HTMLInputElement>(null);

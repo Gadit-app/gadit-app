@@ -36,6 +36,9 @@ type Props = {
    *  taps a word inside a passage), the definition is the sense that fits THIS
    *  context, not the generic first meaning. */
   context?: string;
+  /** Open the full-definition link in a NEW TAB. Set by the Reader so opening a
+   *  word's full page never navigates away from (and loses) the passage. */
+  fullInNewTab?: boolean;
   /** Close-on-outside-click / Escape / link-tap. */
   onClose: () => void;
 };
@@ -82,7 +85,7 @@ const COPY: Record<string, { openFull: string; loading: string; noPreview: strin
   hu: { openFull: "Teljes meghatározás megnyitása", loading: "Betöltés…", noPreview: "Koppintson lentebb a teljes meghatározás megtekintéséhez." },
 };
 
-export function WordPopover({ word, anchor, lang, fromWord, context, onClose }: Props) {
+export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTab, onClose }: Props) {
   const { dir } = useLang();
   const href = useHref();
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
@@ -279,6 +282,7 @@ export function WordPopover({ word, anchor, lang, fromWord, context, onClose }: 
             ? href(`/word/${encodeURIComponent(lookupWord)}?back=${encodeURIComponent(fromWord)}`)
             : href(`/word/${encodeURIComponent(lookupWord)}`)
         }
+        {...(fullInNewTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         onClick={onClose}
         style={{
           display: "inline-flex",

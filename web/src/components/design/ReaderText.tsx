@@ -75,6 +75,7 @@ export function ReaderText({ text, reviewed, onReview }: Props) {
           anchor={popover.anchor}
           lang={lang}
           context={popover.context}
+          fullInNewTab
           onClose={() => setPopover(null)}
         />
       )}
