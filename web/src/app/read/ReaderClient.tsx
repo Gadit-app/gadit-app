@@ -135,6 +135,41 @@ function fmtProgress(tpl: string, a: number, b: number): string {
   return tpl.replace("{a}", String(a)).replace("{b}", String(b));
 }
 
+/**
+ * Prepare a picked file for the OCR upload. Images are downscaled to a max edge
+ * and re-encoded as JPEG so a multi-MB phone photo lands well under the
+ * serverless body limit (the usual cause of "we couldn't read the file"), and
+ * EXIF orientation is baked in so a sideways photo OCRs upright. PDFs and any
+ * format the browser can't decode pass through unchanged.
+ */
+async function prepareForUpload(file: File): Promise<Blob> {
+  if (file.type === "application/pdf" || !file.type.startsWith("image/")) return file;
+  const MAX_EDGE = 2200;
+  const SMALL_ENOUGH = 1.2 * 1024 * 1024; // already small and reasonable → leave it
+  try {
+    const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const longest = Math.max(bitmap.width, bitmap.height);
+    // Nothing to gain from re-encoding a small, well-sized image.
+    if (longest <= MAX_EDGE && file.size <= SMALL_ENOUGH) { bitmap.close?.(); return file; }
+    const scale = Math.min(1, MAX_EDGE / longest);
+    const w = Math.max(1, Math.round(bitmap.width * scale));
+    const h = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) { bitmap.close?.(); return file; }
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    bitmap.close?.();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
+    return blob && blob.size > 0 ? blob : file;
+  } catch {
+    // HEIC on a browser that can't decode it, etc. — send the original and let
+    // the server try; if it's too large the user gets the clear size message.
+    return file;
+  }
+}
+
 const ghostBtn: CSSProperties = {
   background: "transparent",
   color: "var(--ink,#20272E)",
@@ -205,9 +240,14 @@ export function ReaderClient() {
     if (!file || !user) return;
     setOcrState("reading");
     try {
+      // Downscale + recompress an image before upload: a full-res phone photo is
+      // often several MB, over the serverless body limit, and the failure looks
+      // like "we couldn't read the file". A page of text stays perfectly legible
+      // at ~2200px. PDFs and undecodable formats pass through untouched.
+      const prepared = await prepareForUpload(file);
       const idToken = await user.getIdToken();
       const fd = new FormData();
-      fd.append("image", file);
+      fd.append("image", prepared, "upload");
       const res = await fetch("/api/ocr", {
         method: "POST",
         headers: { Authorization: `Bearer ${idToken}` },
