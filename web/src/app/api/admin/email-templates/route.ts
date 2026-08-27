@@ -23,13 +23,14 @@ function authed(req: NextRequest): boolean {
 function renderPreview(key: string, he: boolean, c: EmailContent): string {
   const m = FAMILY_META.find((x) => x.key === key);
   const tab = m?.ctaUrlTab ?? "";
+  const base = he ? `${EMAIL_BASE}/he` : EMAIL_BASE;
   return renderEmailHtml({
     he,
     eyebrow: he ? m?.eyebrow.he ?? "" : m?.eyebrow.en ?? "",
     heading: c.heading,
     bodyHtml: mdLiteToHtml(he, c.body),
     ctaText: c.ctaText,
-    ctaUrl: (he ? `${EMAIL_BASE}/he/family` : `${EMAIL_BASE}/family`) + tab,
+    ctaUrl: `${base}${m?.ctaPath ?? "/family"}${tab}`,
     foot: he ? m?.foot.he ?? "" : m?.foot.en ?? "",
     unsubscribeUrl: `${EMAIL_BASE}/`,
   });
