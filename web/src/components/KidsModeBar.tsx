@@ -55,7 +55,12 @@ export function KidsModeBar() {
   const { lang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
-  const [on, setOn] = useState(false);
+  // Lazy initializer reads the flag synchronously so the bar is correct on the
+  // first paint (with familyRole now seeded from cache too), instead of
+  // appearing late and shoving the page down (Gadi 2026-08-27).
+  const [on, setOn] = useState<boolean>(() => {
+    try { return typeof window !== "undefined" && sessionStorage.getItem("gadit-kids-mode") === "1"; } catch { return false; }
+  });
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {

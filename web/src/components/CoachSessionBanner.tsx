@@ -53,18 +53,33 @@ export function CoachSessionBanner() {
   const { user } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
-  const [isCoach, setIsCoach] = useState(false);
+  // Seed from a session flag so the banner is present on the first paint of
+  // every navigation WITHIN a coach session, instead of resolving the token
+  // claim async each time and shoving the page down (Gadi 2026-08-27). The flag
+  // lives only for the browser session and is reconciled below.
+  const [isCoach, setIsCoach] = useState<boolean>(() => {
+    try { return typeof window !== "undefined" && sessionStorage.getItem("gadit-coach-active") === "1"; } catch { return false; }
+  });
   const [name, setName] = useState("");
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      if (!user) { setIsCoach(false); return; }
+      if (!user) {
+        setIsCoach(false);
+        try { sessionStorage.removeItem("gadit-coach-active"); } catch { /* ignore */ }
+        return;
+      }
       try {
         const res = await user.getIdTokenResult();
         if (cancelled) return;
-        setIsCoach(res.claims?.coach === true);
+        const coach = res.claims?.coach === true;
+        setIsCoach(coach);
         setName(user.displayName || "");
+        try {
+          if (coach) sessionStorage.setItem("gadit-coach-active", "1");
+          else sessionStorage.removeItem("gadit-coach-active");
+        } catch { /* ignore */ }
       } catch {
         if (!cancelled) setIsCoach(false);
       }

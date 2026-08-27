@@ -119,6 +119,38 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// Per-uid cache of the last-known plan/role, so a RETURNING user's plan-driven
+// UI (kid skin, family/school layout) paints correctly on the very first frame
+// after auth resolves, instead of flashing the "basic"/adult default while the
+// Firestore snapshot is in flight (Gadi 2026-08-27). Keyed by uid so it never
+// leaks across users on a shared device. Used ONLY to seed the cosmetic values;
+// `planReady` still waits for the authoritative snapshot, so redirects and paid
+// gates never act on a possibly-stale cache.
+type AuthCache = {
+  plan: UserPlan;
+  familyId: string | null;
+  schoolId: string | null;
+  familyRole: "kid" | "parent" | null;
+};
+const AUTH_CACHE_PREFIX = "gadit-auth-cache:";
+function readAuthCache(uid: string): AuthCache | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(AUTH_CACHE_PREFIX + uid);
+    return raw ? (JSON.parse(raw) as AuthCache) : null;
+  } catch {
+    return null;
+  }
+}
+function writeAuthCache(uid: string, c: AuthCache): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(AUTH_CACHE_PREFIX + uid, JSON.stringify(c));
+  } catch {
+    /* ignore quota / private-mode errors */
+  }
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -198,18 +230,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     setPlanReady(false); // a user just appeared — the plan is not resolved yet
+    // Seed the COSMETIC values from the per-uid cache so the first frame paints
+    // the right skin/tier instead of the default. planReady stays false: the
+    // redirect guards and paid gates still wait for the authoritative snapshot,
+    // so a stale cache can never cause a wrong redirect.
+    const cached = readAuthCache(user.uid);
+    if (cached) {
+      setPlan(cached.plan);
+      setFamilyId(cached.familyId);
+      setSchoolId(cached.schoolId);
+      setFamilyRole(cached.familyRole);
+    }
     const db = getFirebaseDb();
     const unsub = onSnapshot(
       doc(db, "users", user.uid),
       (snap) => {
         const data = snap.data();
         const p = (data?.plan as UserPlan) || "basic";
+        const famId = (data?.familyId as string) ?? null;
+        const schId = (data?.schoolId as string) ?? null;
+        const frRaw = data?.familyRole;
+        const fr = frRaw === "kid" || frRaw === "parent" ? frRaw : null;
         setPlan(p);
-        setFamilyId((data?.familyId as string) ?? null);
-        setSchoolId((data?.schoolId as string) ?? null);
-        const fr = data?.familyRole;
-        setFamilyRole(fr === "kid" || fr === "parent" ? fr : null);
+        setFamilyId(famId);
+        setSchoolId(schId);
+        setFamilyRole(fr);
         setPlanReady(true);
+        writeAuthCache(user.uid, { plan: p, familyId: famId, schoolId: schId, familyRole: fr });
       },
       () => {
         // If we can't read (e.g. security rules block it), default to basic.
