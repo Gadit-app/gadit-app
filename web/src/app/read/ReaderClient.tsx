@@ -148,7 +148,7 @@ const ghostBtn: CSSProperties = {
 };
 
 export function ReaderClient() {
-  const { user, plan, loading: authLoading, promptLogin } = useAuth();
+  const { user, plan, planReady, loading: authLoading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const t = copy(lang);
@@ -265,7 +265,7 @@ export function ReaderClient() {
           {t.sub}
         </p>
 
-        {authLoading ? (
+        {authLoading || (user && !planReady) ? (
           <div style={{ color: "var(--ink-muted,#6B7280)" }}>{t.loading}</div>
         ) : !user ? (
           <Gate title={t.loginTitle} btn={t.loginBtn} onClick={() => promptLogin?.()} />

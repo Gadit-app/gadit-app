@@ -77,6 +77,10 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   plan: UserPlan;
+  /** False until the plan has actually been resolved for the current user
+   *  (or immediately true when anonymous). Gate paid features on this, not on
+   *  `loading`, to avoid a paid-feature flash for subscribers. */
+  planReady: boolean;
   /** Owner of a Family subscription has this set to their own uid.
    *  Paired members (kids + secondary parents) have it set to the
    *  family owner's uid. null means no Family membership at all. */
@@ -119,6 +123,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [plan, setPlan] = useState<UserPlan>("basic");
+  // True once the plan has actually been resolved (first Firestore snapshot for
+  // a signed-in user, or immediately for an anonymous visitor). `loading` only
+  // covers Firebase AUTH, so without this a paid user briefly reads as "basic"
+  // between auth-ready and plan-snapshot — which flashes paid-feature gates.
+  const [planReady, setPlanReady] = useState(false);
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
   const [familyRole, setFamilyRole] = useState<"kid" | "parent" | null>(null);
@@ -185,8 +194,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setFamilyId(null);
       setSchoolId(null);
       setFamilyRole(null);
+      setPlanReady(true); // anonymous: nothing to resolve, "basic" is final
       return;
     }
+    setPlanReady(false); // a user just appeared — the plan is not resolved yet
     const db = getFirebaseDb();
     const unsub = onSnapshot(
       doc(db, "users", user.uid),
@@ -198,6 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSchoolId((data?.schoolId as string) ?? null);
         const fr = data?.familyRole;
         setFamilyRole(fr === "kid" || fr === "parent" ? fr : null);
+        setPlanReady(true);
       },
       () => {
         // If we can't read (e.g. security rules block it), default to basic.
@@ -207,6 +219,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setFamilyId(null);
         setSchoolId(null);
         setFamilyRole(null);
+        setPlanReady(true);
       }
     );
     return unsub;
@@ -445,7 +458,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
+      user, loading, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,
