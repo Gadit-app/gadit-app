@@ -32,6 +32,10 @@ type Props = {
    *  ?from=<fromWord> query param on the 'Open full definition' link
    *  so the destination page can render a 'back to <fromWord>' chip. */
   fromWord?: string;
+  /** Optional surrounding sentence. When present (the Reader / "Every Word"
+   *  taps a word inside a passage), the definition is the sense that fits THIS
+   *  context, not the generic first meaning. */
+  context?: string;
   /** Close-on-outside-click / Escape / link-tap. */
   onClose: () => void;
 };
@@ -78,7 +82,7 @@ const COPY: Record<string, { openFull: string; loading: string; noPreview: strin
   hu: { openFull: "Teljes meghatározás megnyitása", loading: "Betöltés…", noPreview: "Koppintson lentebb a teljes meghatározás megtekintéséhez." },
 };
 
-export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
+export function WordPopover({ word, anchor, lang, fromWord, context, onClose }: Props) {
   const { dir } = useLang();
   const href = useHref();
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
@@ -97,8 +101,11 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
     let cancelled = false;
     (async () => {
       try {
+        const ctxParam = context && context.trim()
+          ? `&context=${encodeURIComponent(context.trim().slice(0, 300))}`
+          : "";
         const res = await fetch(
-          `/api/quick-define?word=${encodeURIComponent(lookupWord)}&lang=${encodeURIComponent(lang)}`,
+          `/api/quick-define?word=${encodeURIComponent(lookupWord)}&lang=${encodeURIComponent(lang)}${ctxParam}`,
         );
         if (cancelled) return;
         if (res.status === 404) {
@@ -121,7 +128,7 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
       }
     })();
     return () => { cancelled = true; };
-  }, [lookupWord, lang]);
+  }, [lookupWord, lang, context]);
 
   // Close on outside click + Escape
   useEffect(() => {
@@ -203,16 +210,33 @@ export function WordPopover({ word, anchor, lang, fromWord, onClose }: Props) {
                               : "var(--wb-sans, Inter, system-ui, sans-serif)",
       }}
     >
-      <div
-        style={{
-          fontSize: 18,
-          fontWeight: 700,
-          color: "var(--ink, #0B1220)",
-          marginBottom: 6,
-          overflowWrap: "anywhere",
-        }}
-      >
-        {word}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 6 }}>
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 700,
+            color: "var(--ink, #0B1220)",
+            overflowWrap: "anywhere",
+          }}
+        >
+          {word}
+        </div>
+        {/* Explicit close, so tapping a word and getting back to the text is one
+            obvious tap (not only an outside-click), especially on touch. */}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            flex: "none", width: 26, height: 26, marginTop: -2,
+            display: "grid", placeItems: "center",
+            background: "var(--paper, #F3F4F6)", color: "var(--ink-muted, #6B7280)",
+            border: "1px solid var(--hairline, #E5E7EB)", borderRadius: 8,
+            cursor: "pointer", fontSize: 15, lineHeight: 1, padding: 0,
+          }}
+        >
+          ✕
+        </button>
       </div>
       {/* Meaning, full first definition. This is the answer the user
           is here for; the open-full link below is for the cases where

@@ -80,11 +80,18 @@ const UI_LANG_NAMES: Record<string, string> = {
 async function generatePreview(
   word: string,
   langCode: string,
+  context?: string,
 ): Promise<{ meaning: string; example: string } | null> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   const langName = UI_LANG_NAMES[langCode] ?? "English";
-  const systemPrompt = `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word"}. Write BOTH fields in ${langName}. Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
+  // With a context sentence (the Reader / "Every Word" taps a word inside a
+  // passage), define the word AS USED IN THIS SENTENCE — that is Gadit's whole
+  // promise, the RIGHT meaning for the context, not the generic first one.
+  const systemPrompt = context
+    ? `You are a fast dictionary. Define the given word AS IT IS USED IN THE PROVIDED SENTENCE: choose the sense that fits this exact context and IGNORE the word's other meanings. Return STRICT JSON: {"meaning":"15-25 word definition of the word in THIS context","example":"one short sentence using the word in the SAME sense"}. Write BOTH fields in ${langName}. Keep the word itself in its original script. No markdown, no extra keys, no preamble.`
+    : `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word"}. Write BOTH fields in ${langName}. Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
+  const userMsg = context ? `Word: ${word}\nSentence: ${context}` : `Word: ${word}`;
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -96,7 +103,7 @@ async function generatePreview(
         model: "gpt-4o-mini",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: `Word: ${word}` },
+          { role: "user", content: userMsg },
         ],
         response_format: { type: "json_object" },
         temperature: 0.3,
@@ -124,12 +131,31 @@ export async function GET(req: NextRequest) {
   const url = req.nextUrl;
   const word = (url.searchParams.get("word") ?? "").trim();
   const lang = (url.searchParams.get("lang") ?? "").trim().toLowerCase();
+  // Context sentence (the Reader passes the phrase around the tapped word).
+  const context = (url.searchParams.get("context") ?? "").trim().slice(0, 300);
 
   if (!word) {
     return NextResponse.json({ error: "word_required" }, { status: 400 });
   }
   if (!SUPPORTED_LANGS.has(lang)) {
     return NextResponse.json({ error: "invalid_lang" }, { status: 400 });
+  }
+
+  // Context-aware path: the context-free cache holds only the word's FIRST/most
+  // common meaning, which is wrong for a polysemous word inside a passage
+  // (e.g. Hebrew התפשט = "spread" generically, but "undressed" in its story
+  // sentence). When a context sentence is provided, resolve the sense that fits
+  // it directly, bypassing the cache. gpt-4o-mini keeps this cheap; the response
+  // is CDN-cached per (word, context) so re-taps don't re-bill.
+  if (context) {
+    const preview = await generatePreview(word, lang, context);
+    if (preview && (preview.meaning || preview.example)) {
+      return NextResponse.json(
+        { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true, contextual: true },
+        { headers: { "Cache-Control": "public, max-age=600" } },
+      );
+    }
+    // Fall through to the cache/generic path if the contextual call failed.
   }
 
   // The main /api/define route builds cache keys as either

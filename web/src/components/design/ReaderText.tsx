@@ -27,7 +27,18 @@ type Props = {
 export function ReaderText({ text, reviewed, onReview }: Props) {
   const { lang } = useLang();
   const tokens = useMemo(() => tokenizeWords(text), [text]);
-  const [popover, setPopover] = useState<{ word: string; anchor: HTMLElement } | null>(null);
+  const [popover, setPopover] = useState<{ word: string; anchor: HTMLElement; context: string } | null>(null);
+
+  // The phrase around a tapped word, so the definition is the sense that fits
+  // THIS passage (Gadit's promise), not the word's generic first meaning.
+  function contextAround(i: number): string {
+    return tokens.slice(Math.max(0, i - 25), i + 26).map((t) => t.value).join("").trim();
+  }
+
+  function openWord(word: string, i: number, anchor: HTMLElement) {
+    onReview(word);
+    setPopover({ word, anchor, context: contextAround(i) });
+  }
 
   return (
     <>
@@ -44,14 +55,12 @@ export function ReaderText({ text, reviewed, onReview }: Props) {
               aria-haspopup="dialog"
               onClick={(e) => {
                 e.stopPropagation();
-                onReview(tok.value);
-                setPopover({ word: tok.value, anchor: e.currentTarget });
+                openWord(tok.value, i, e.currentTarget);
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  onReview(tok.value);
-                  setPopover({ word: tok.value, anchor: e.currentTarget });
+                  openWord(tok.value, i, e.currentTarget);
                 }
               }}
             >
@@ -65,6 +74,7 @@ export function ReaderText({ text, reviewed, onReview }: Props) {
           word={popover.word}
           anchor={popover.anchor}
           lang={lang}
+          context={popover.context}
           onClose={() => setPopover(null)}
         />
       )}

@@ -25,11 +25,13 @@ const MAX_BYTES = 4.3 * 1024 * 1024;
 
 const OCR_SYSTEM =
   "You are an OCR engine. Transcribe the text EXACTLY as written, in its " +
-  "original language and script. For a multi-page document, transcribe every " +
-  "page in reading order, separated by a blank line. Preserve line breaks and " +
-  "paragraph breaks. Do not translate, summarize, correct, explain, or add " +
-  "anything. Return ONLY the transcribed text. If there is no readable text, " +
-  "return an empty string.";
+  "original language and script. Transcribe EVERY word, in order, and do not " +
+  "skip, omit, merge, or drop any word, even if the scan is imperfect or the " +
+  "text has Hebrew niqqud / Arabic diacritics (keep them). For a multi-page " +
+  "document, transcribe every page in reading order, separated by a blank " +
+  "line. Preserve line breaks and paragraph breaks. Do not translate, " +
+  "summarize, correct, explain, or add anything. Return ONLY the transcribed " +
+  "text. If there is no readable text, return an empty string.";
 
 export async function POST(req: NextRequest) {
   try {

@@ -144,7 +144,10 @@ function fmtProgress(tpl: string, a: number, b: number): string {
  */
 async function prepareForUpload(file: File): Promise<Blob> {
   if (file.type === "application/pdf" || !file.type.startsWith("image/")) return file;
-  const MAX_EDGE = 2200;
+  // 3000px keeps fine detail (Hebrew niqqud, small print) legible for OCR while
+  // JPEG at 0.92 still lands well under the body limit for a page of text.
+  const MAX_EDGE = 3000;
+  const JPEG_QUALITY = 0.92;
   const SMALL_ENOUGH = 1.2 * 1024 * 1024; // already small and reasonable → leave it
   try {
     const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
@@ -161,7 +164,7 @@ async function prepareForUpload(file: File): Promise<Blob> {
     if (!ctx) { bitmap.close?.(); return file; }
     ctx.drawImage(bitmap, 0, 0, w, h);
     bitmap.close?.();
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY));
     return blob && blob.size > 0 ? blob : file;
   } catch {
     // HEIC on a browser that can't decode it, etc. — send the original and let
