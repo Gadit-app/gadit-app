@@ -286,6 +286,14 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 @media (min-width: 768px) {
   .wordbook.wb-shell-page { padding-bottom: 0; }
 }
+/* Parent dashboard: paint the standard Gadit page ground (#F2F6F4 via --paper),
+   same as the site and the schools dashboard. Without this the family shell
+   never painted --paper and fell through to the body's old colour. */
+.wordbook.fam-shell-page {
+  background: var(--paper);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
 
 /* ── Topbar — cream "magazine masthead" replacing V2 navy header ──
    Subtle hairline bottom + light backdrop blur lift this off the page
