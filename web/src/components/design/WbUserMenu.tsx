@@ -33,6 +33,10 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { useTheme } from "@/lib/appearance";
 import { resolvePartnerArea } from "@/lib/partner-nav";
+
+// Per-uid cache of "is this user a registered partner", so the menu doesn't
+// refetch /api/partner/me on every page (it mounts in the topbar everywhere).
+const partnerStatusCache = new Map<string, boolean>();
 import type { Lang } from "@/lib/i18n";
 
 // "Dark mode" label — kept as a small local map (en fallback) so adding
@@ -134,6 +138,29 @@ export function WbUserMenu() {
   useEffect(() => {
     if (familyId) void prefetchSwitchMembers(user, familyId);
   }, [user, familyId]);
+
+  // Is this user a registered partner (founder / standard)? If so, they earn a
+  // commission and should NOT be shown the member-gets-member "Invite friends"
+  // free-month link — that would confuse a 30%/25% partner. They get the
+  // "Partner area" entry instead (Gadi 2026-08-27).
+  const [isPartner, setIsPartner] = useState<boolean>(() => (user ? partnerStatusCache.get(user.uid) ?? false : false));
+  useEffect(() => {
+    if (!user) { setIsPartner(false); return; }
+    const cached = partnerStatusCache.get(user.uid);
+    if (cached !== undefined) { setIsPartner(cached); return; } // known — no refetch on every page
+    let cancelled = false;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/partner/me", { headers: { Authorization: `Bearer ${idToken}` } });
+        if (!res.ok) return;
+        const d = (await res.json()) as { isPartner?: boolean };
+        partnerStatusCache.set(user.uid, !!d.isPartner);
+        if (!cancelled) setIsPartner(!!d.isPartner);
+      } catch { /* default: not a partner */ }
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
   // Which inline side the dropdown anchors to. Computed at open time
   // from the trigger's actual viewport position — the avatar lives at
   // the inline-END of the topbar on desktop but at the inline-START
@@ -411,9 +438,10 @@ export function WbUserMenu() {
               {lang === "he" ? "קבוצות מילים" : "Word sets"}
             </Link>
           )}
-          {/* Invite friends (member-gets-member). Commercial, so hidden from
-              kids like the partner area below. */}
-          {familyRole !== "kid" && (
+          {/* Invite friends (member-gets-member). Hidden from kids, and from
+              registered partners (they earn a commission, so a free-month
+              referral would just confuse them — they use Partner area). */}
+          {familyRole !== "kid" && !isPartner && (
             <Link
               role="menuitem"
               href={href("/refer")}
