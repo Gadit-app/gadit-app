@@ -1119,6 +1119,28 @@ export function SchoolsClient() {
             {c.classroomsHeading}
           </h2>
 
+          {/* The account's OWN searches — lookups the school did directly, not
+              through a classroom /c/<code> link. Shown as its own line so the
+              count is visible here too (and never falsely attributed to a
+              specific classroom). Gadi 2026-08-27. */}
+          {ownerSearches > 0 && (
+            <div
+              style={{
+                display: "flex", alignItems: "center", gap: 12,
+                background: "var(--surface)", border: "1px solid var(--hairline)",
+                borderRadius: 14, padding: "12px 16px", marginBottom: 12,
+              }}
+            >
+              <span aria-hidden style={{ fontSize: 18 }}>🔎</span>
+              <span style={{ flex: 1, fontWeight: 600, color: "var(--ink)" }}>
+                {lang === "he" ? "חיפושים כלליים של החשבון" : "The account's own searches"}
+              </span>
+              <span style={{ fontWeight: 700, color: "var(--ink)" }}>
+                {ownerSearches.toLocaleString()} {c.wordsLabel}
+              </span>
+            </div>
+          )}
+
           {classrooms.length === 0 ? (
             <p className="wb-school-sub" style={{ marginBottom: 16 }}>{c.empty}</p>
           ) : (
