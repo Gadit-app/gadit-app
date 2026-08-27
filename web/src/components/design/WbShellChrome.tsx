@@ -150,9 +150,15 @@ const TREASURE_NAV: Record<string, string> = {
 };
 
 function useNavLinks(): NavLink[] {
-  const { user, plan, familyRole } = useAuth();
+  const { user, plan, planReady, loading, familyRole } = useAuth();
   const { lang } = useLang();
   const href = useHref();
+
+  // Until auth AND the plan are resolved, render no nav rather than the wrong
+  // nav: otherwise a logged-in user briefly sees the anonymous marketing links
+  // (or a paid user sees the basic upsell) before it flips to their tools.
+  // (Gadi 2026-08-27: kill the topbar flashes.)
+  if (loading || (user && !planReady)) return [];
 
   // A kid on a Family plan gets a stripped-down, commerce-free nav
   // (council 2026-08-04): only their own words + games. No Features,

@@ -16,6 +16,28 @@ import { memberColorFor, avatarUrl } from "@/lib/family";
 
 type SwitchMember = { id: string; name: string; role: string; colorIndex: number; avatarPhotoUrl?: string; avatarId?: string; isOwner: boolean };
 
+import type { User } from "firebase/auth";
+
+// Module-level cache so the switcher renders INSTANTLY every time the menu
+// opens instead of fetching and popping in (Gadi 2026-08-27: opening the menu
+// showed part of it, then the family members appeared). The cache is warmed by
+// prefetchSwitchMembers() from the always-mounted user menu, so by the time the
+// menu is opened the members are already here.
+const membersCache = new Map<string, SwitchMember[]>();
+
+export async function prefetchSwitchMembers(user: User | null, familyId: string | null): Promise<void> {
+  if (!user || !familyId) return;
+  try {
+    const idToken = await user.getIdToken();
+    const res = await fetch("/api/family/switch-member", { headers: { Authorization: `Bearer ${idToken}` } });
+    if (!res.ok) return;
+    const json = (await res.json()) as { members?: SwitchMember[] };
+    membersCache.set(user.uid, json.members ?? []);
+  } catch {
+    /* optional prefetch; ignore */
+  }
+}
+
 const COPY: Record<string, { title: string; parentTag: string; parentFallback: string; switching: string }> = {
   he: { title: "החלפת פרופיל", parentTag: "הורה", parentFallback: "חשבון ההורה", switching: "מחליף…" },
   en: { title: "Switch profile", parentTag: "Parent", parentFallback: "Parent account", switching: "Switching…" },
@@ -32,19 +54,26 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
   const { lang } = useLang();
   const t = COPY[lang] ?? COPY.en;
 
-  const [members, setMembers] = useState<SwitchMember[] | null>(null);
+  // Seed from the cache so a warmed menu opens with the members already there.
+  const [members, setMembers] = useState<SwitchMember[] | null>(
+    () => (user ? membersCache.get(user.uid) ?? null : null),
+  );
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user || !familyId) return;
     let cancelled = false;
+    // Show the cached list immediately (if any), then refresh in the background.
+    const cached = membersCache.get(user.uid);
+    if (cached) setMembers(cached);
     (async () => {
       try {
         const idToken = await user.getIdToken();
         const res = await fetch("/api/family/switch-member", { headers: { Authorization: `Bearer ${idToken}` } });
         if (!res.ok) return;
         const json = (await res.json()) as { members?: SwitchMember[] };
+        membersCache.set(user.uid, json.members ?? []);
         if (!cancelled) setMembers(json.members ?? []);
       } catch {
         /* switcher is optional; stay hidden on failure */

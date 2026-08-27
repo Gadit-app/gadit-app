@@ -119,7 +119,7 @@ function tierStyle(
   return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
 
-import { FamilyProfileSwitcher } from "./FamilyProfileSwitcher";
+import { FamilyProfileSwitcher, prefetchSwitchMembers } from "./FamilyProfileSwitcher";
 
 export function WbUserMenu() {
   const { user, plan, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout } = useAuth();
@@ -128,6 +128,12 @@ export function WbUserMenu() {
   const router = useRouter();
   const href = useHref();
   const [open, setOpen] = useState(false);
+
+  // Warm the family-switcher cache as soon as we know there's a family, so the
+  // menu opens with the members already in place instead of popping them in.
+  useEffect(() => {
+    if (familyId) void prefetchSwitchMembers(user, familyId);
+  }, [user, familyId]);
   // Which inline side the dropdown anchors to. Computed at open time
   // from the trigger's actual viewport position — the avatar lives at
   // the inline-END of the topbar on desktop but at the inline-START
