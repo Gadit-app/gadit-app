@@ -626,10 +626,10 @@ It's worth opening the ranks screen with your child and seeing how close the nex
       subject: "מורה פרטי או מאמן: גישה מבוקרת לפרופיל של הילד",
       heading: "מורה פרטי או מאמן",
       ctaText: "להגדרות המשפחה",
-      body: `אם לילד יש מורה פרטי, או מאמן לשיפור מיומנויות למידה, אפשר לצרף אותו פנימה, בשליטה מלאה שלך.
+      body: `אם לילד יש מורה פרטי, או מאמן לשיפור מיומנויות למידה, שיש לו חשבון Gadit משלו, אפשר לצרף אותו פנימה, בשליטה מלאה שלך.
 
 ## איך זה עובד
-בהגדרות המשפחה נותנים למורה או למאמן גישה **מבוקרת** לפרופיל של ילד מסוים, לפי אימייל. בזמן השיעור הוא יכול להוסיף מילים ישירות למחברת של הילד.
+בהגדרות המשפחה נותנים למורה או למאמן, שכבר יש לו חשבון Gadit, גישה **מבוקרת** לפרופיל של ילד מסוים, לפי אימייל. בזמן השיעור הוא יכול להוסיף מילים ישירות למחברת של הילד.
 
 ## שלך לתת, ושלך לבטל
 הגישה מוגבלת לילד אחד שבחרת, ואפשר לבטל אותה בכל רגע בהקשה אחת. המורה אף פעם לא רואה את שאר המשפחה.
@@ -643,10 +643,10 @@ It's worth opening the ranks screen with your child and seeing how close the nex
       subject: "A private teacher or coach: controlled access to your child's profile",
       heading: "A private teacher or coach",
       ctaText: "Family settings",
-      body: `If your child has a private teacher, or a learning-skills coach, you can bring them in, fully under your control.
+      body: `If your child has a private teacher, or a learning-skills coach, who has their own Gadit account, you can bring them in, fully under your control.
 
 ## How it works
-In your family settings you give the teacher or coach **controlled** access to a specific child's profile, by email. During a lesson they can add words straight into the child's notebook.
+In your family settings you give the teacher or coach, who already has a Gadit account, **controlled** access to a specific child's profile, by email. During a lesson they can add words straight into the child's notebook.
 
 ## Yours to grant, yours to revoke
 Access is limited to the one child you choose, and you can revoke it any moment with a single tap. The teacher never sees the rest of your family.
