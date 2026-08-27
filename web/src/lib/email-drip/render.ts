@@ -93,6 +93,11 @@ export function renderEmailHtml(opts: {
       <div style="text-align:center;margin-top:22px;">
         <a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${esc(opts.ctaText)}</a>
       </div>
+      <div dir="${dir}" style="text-align:${align};margin:26px 0 0;font-size:15px;line-height:1.6;color:#111827;">
+        <p style="margin:0;">${he ? "שלך," : "Yours,"}</p>
+        <p style="margin:0;font-weight:600;">${he ? "גדי" : "Gadi"}</p>
+        <p style="margin:0;color:#6B7280;font-size:14px;" dir="${dir}">${he ? "מייסד, " : "Founder, "}<span dir="ltr" translate="no">Gadit</span></p>
+      </div>
       <p dir="${dir}" style="text-align:${align};font-size:13px;color:#6B7280;line-height:1.5;margin:22px 0 0;">${esc(opts.foot)}</p>
       <p dir="${dir}" style="text-align:${align};font-size:11px;color:#B4B4B4;margin:16px 0 0;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
     </div>
