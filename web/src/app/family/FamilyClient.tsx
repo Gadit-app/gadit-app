@@ -29,7 +29,6 @@ import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { CoachesSection } from "@/components/design/CoachesSection";
-import { RewardsSection } from "@/components/design/RewardsSection";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
@@ -782,77 +781,13 @@ const PROGRESS_COPY: Record<string, {
   },
 };
 
-// Reward-prompt copy (en + he, English fallback — a small micro-surface; full
-// 33-language coverage is a follow-up i18n pass, tracked with the store labels).
-const REWARD_COPY: Record<string, { streak: string; week: string; prompt: string; sent: string; capped: string }> = {
-  en: { streak: "{n}-day streak! 🔥", week: "Strong week! 🎉", prompt: "Reward the effort", sent: "🎁 Sent!", capped: "Weekly limit reached" },
-  he: { streak: "{n} ימים ברצף! 🔥", week: "שבוע חזק! 🎉", prompt: "פרגן על המאמץ", sent: "🎁 נשלח!", capped: "הגעת למכסה השבועית" },
-  ar: { streak: "سلسلة {n} أيام! 🔥", week: "أسبوع رائع! 🎉", prompt: "كافئ المجهود", sent: "🎁 أُرسلت!", capped: "تم بلوغ الحد الأسبوعي" },
-  ru: { streak: "Серия {n} дней! 🔥", week: "Отличная неделя! 🎉", prompt: "Отметь старания", sent: "🎁 Отправлено!", capped: "Недельный лимит достигнут" },
-  es: { streak: "¡Racha de {n} días! 🔥", week: "¡Gran semana! 🎉", prompt: "Premia el esfuerzo", sent: "🎁 ¡Enviado!", capped: "Límite semanal alcanzado" },
-  pt: { streak: "Sequência de {n} dias! 🔥", week: "Semana forte! 🎉", prompt: "Recompense o esforço", sent: "🎁 Enviado!", capped: "Limite semanal atingido" },
-  fr: { streak: "Série de {n} jours ! 🔥", week: "Belle semaine ! 🎉", prompt: "Récompense l'effort", sent: "🎁 Envoyé !", capped: "Limite de la semaine atteinte" },
-  de: { streak: "{n} Tage in Folge! 🔥", week: "Starke Woche! 🎉", prompt: "Belohne den Einsatz", sent: "🎁 Gesendet!", capped: "Wochenlimit erreicht" },
-  cs: { streak: "Série {n} dní! 🔥", week: "Skvělý týden! 🎉", prompt: "Odměň snahu", sent: "🎁 Odesláno!", capped: "Týdenní limit vyčerpán" },
-  sk: { streak: "Séria {n} dní! 🔥", week: "Skvelý týždeň! 🎉", prompt: "Odmeň snahu", sent: "🎁 Odoslané!", capped: "Týždenný limit vyčerpaný" },
-  it: { streak: "Serie di {n} giorni! 🔥", week: "Che settimana! 🎉", prompt: "Premia l'impegno", sent: "🎁 Inviato!", capped: "Limite settimanale raggiunto" },
-  ja: { streak: "{n}日れんぞく! 🔥", week: "いい一週間! 🎉", prompt: "がんばりにごほうび", sent: "🎁 おくったよ!", capped: "今週のじょうげんに達しました" },
-  hi: { streak: "{n} दिन की लगातार लय! 🔥", week: "शानदार हफ़्ता! 🎉", prompt: "मेहनत का इनाम दें", sent: "🎁 भेज दिया!", capped: "इस हफ़्ते की सीमा पूरी" },
-  am: { streak: "{n} ቀናት ተከታታይ! 🔥", week: "ጠንካራ ሳምንት! 🎉", prompt: "ጥረቱን ሸልም", sent: "🎁 ተልኳል!", capped: "የሳምንቱ ገደብ ደርሷል" },
-  uk: { streak: "Серія {n} днів! 🔥", week: "Класний тиждень! 🎉", prompt: "Винагороди старання", sent: "🎁 Надіслано!", capped: "Тижневий ліміт вичерпано" },
-  tr: { streak: "{n} günlük seri! 🔥", week: "Harika bir hafta! 🎉", prompt: "Emeği ödüllendir", sent: "🎁 Gönderildi!", capped: "Haftalık sınıra ulaşıldı" },
-  pl: { streak: "Passa {n} dni! 🔥", week: "Świetny tydzień! 🎉", prompt: "Nagrodź wysiłek", sent: "🎁 Wysłano!", capped: "Osiągnięto tygodniowy limit" },
-  fa: { streak: "{n} روز پشت سر هم! 🔥", week: "هفته پرقدرتی بود! 🎉", prompt: "به تلاشش جایزه بده", sent: "🎁 فرستاده شد!", capped: "به سقف هفتگی رسیدی" },
-  id: { streak: "Rentetan {n} hari! 🔥", week: "Minggu yang hebat! 🎉", prompt: "Beri hadiah atas usahanya", sent: "🎁 Terkirim!", capped: "Batas mingguan tercapai" },
-  nl: { streak: "{n} dagen op rij! 🔥", week: "Sterke week! 🎉", prompt: "Beloon de inzet", sent: "🎁 Verstuurd!", capped: "Weeklimiet bereikt" },
-  el: { streak: "Σερί {n} ημερών! 🔥", week: "Δυνατή εβδομάδα! 🎉", prompt: "Επιβράβευσε την προσπάθεια", sent: "🎁 Στάλθηκε!", capped: "Έφτασες το εβδομαδιαίο όριο" },
-  zu: { streak: "Izinsuku ezingu-{n} zilandelana! 🔥", week: "Iviki elimnandi! 🎉", prompt: "Klomelisa umzamo", sent: "🎁 Kuthunyelwe!", capped: "Ufinyelele umkhawulo weviki" },
-  vi: { streak: "Chuỗi {n} ngày! 🔥", week: "Một tuần tuyệt vời! 🎉", prompt: "Thưởng cho sự cố gắng", sent: "🎁 Đã gửi!", capped: "Đã đạt giới hạn tuần" },
-  fil: { streak: "{n} araw na sunod-sunod! 🔥", week: "Ang galing ngayong linggo! 🎉", prompt: "Gantimpalaan ang sipag", sent: "🎁 Naipadala na!", capped: "Naabot na ang limit sa linggo" },
-  af: { streak: "{n} dae agtermekaar! 🔥", week: "Sterk week! 🎉", prompt: "Beloon die moeite", sent: "🎁 Gestuur!", capped: "Weeklikse limiet bereik" },
-  sw: { streak: "Siku {n} mfululizo! 🔥", week: "Wiki nzuri sana! 🎉", prompt: "Zawadia bidii", sent: "🎁 Zimetumwa!", capped: "Kikomo cha wiki kimefikiwa" },
-  "zh-CN": { streak: "连续 {n} 天啦！🔥", week: "这周表现真棒！🎉", prompt: "奖励一下努力", sent: "🎁 已送出！", capped: "本周额度已用完" },
-  "zh-TW": { streak: "連續 {n} 天囉！🔥", week: "這週表現真棒！🎉", prompt: "獎勵一下努力", sent: "🎁 已送出！", capped: "本週額度已用完" },
-  ko: { streak: "{n}일 연속! 🔥", week: "멋진 한 주였어요! 🎉", prompt: "노력에 보상해 주세요", sent: "🎁 보냈어요!", capped: "이번 주 한도 도달" },
-  th: { streak: "ต่อเนื่อง {n} วันแล้ว! 🔥", week: "สัปดาห์นี้เก่งมาก! 🎉", prompt: "ให้รางวัลกับความพยายาม", sent: "🎁 ส่งแล้ว!", capped: "ถึงขีดจำกัดของสัปดาห์นี้แล้ว" },
-  bn: { streak: "{n} দিন টানা! 🔥", week: "দারুণ সপ্তাহ! 🎉", prompt: "পরিশ্রমের পুরস্কার দাও", sent: "🎁 পাঠানো হয়েছে!", capped: "এই সপ্তাহের সীমা শেষ" },
-  da: { streak: "{n} dage i træk! 🔥", week: "Stærk uge! 🎉", prompt: "Beløn indsatsen", sent: "🎁 Sendt!", capped: "Ugens grænse er nået" },
-  hu: { streak: "{n} napos sorozat! 🔥", week: "Erős hét! 🎉", prompt: "Jutalmazd a kitartást", sent: "🎁 Elküldve!", capped: "Elérted a heti korlátot" },
-};
-function rewardCopy(lang: string) { return REWARD_COPY[lang] ?? REWARD_COPY.en; }
 
 function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string }) {
   const href = useHref();
-  const { user } = useAuth();
-  const rc = rewardCopy(lang);
-  const [rewardBusy, setRewardBusy] = useState(false);
-  const [rewardSent, setRewardSent] = useState("");
   const color = memberColorFor({ colorIndex: c.colorIndex });
   const initial = (c.name || "?").trim().charAt(0).toUpperCase() || "?";
   const roleName = (ROLE_LABEL[lang] ?? ROLE_LABEL.en)[c.role as "boy" | "girl"] ?? "";
 
-  // The gift is a reward for something the child actually DID. Surface the
-  // achievement so the parent gives with a reason and a moment (not at random):
-  // a live streak or a strong week; otherwise a gentle "reward the effort".
-  const achievement =
-    c.streak >= 3 ? rc.streak.replace("{n}", String(c.streak)) : c.thisWeek >= 5 ? rc.week : "";
-
-  async function sendReward(amount: number) {
-    if (!user || rewardBusy) return;
-    setRewardBusy(true);
-    try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/family/gift-points", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ memberId: c.memberId, amount }),
-      });
-      const d = (await res.json()) as { granted?: number };
-      setRewardSent((d.granted ?? 0) > 0 ? rc.sent : rc.capped);
-    } catch { /* best-effort */ } finally {
-      setRewardBusy(false);
-    }
-  }
   return (
     <div className="fam-dash-card" style={{ ["--m-color" as string]: color }}>
       <div className="fam-dash-head">
@@ -895,28 +830,6 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
               </div>
             </div>
           )}
-          {/* Reward the child for what they DID — an achievement gives the
-              parent a reason and a moment; one tap sends gift points. */}
-          <div className={`fam-dash-reward${achievement ? " has-achievement" : ""}`}>
-            <span className="fam-dash-reward-head">{achievement || rc.prompt}</span>
-            {rewardSent ? (
-              <span className="fam-dash-reward-sent">{rewardSent}</span>
-            ) : (
-              <span className="fam-dash-reward-chips">
-                {[10, 20, 30].map((a) => (
-                  <button
-                    key={a}
-                    type="button"
-                    className="fam-dash-reward-chip"
-                    onClick={() => sendReward(a)}
-                    disabled={rewardBusy}
-                  >
-                    🎁 {a}
-                  </button>
-                ))}
-              </span>
-            )}
-          </div>
         </>
       )}
     </div>
@@ -1658,19 +1571,20 @@ export function FamilyClient() {
                   )}
                 </>
               )}
+              {/* Shared-device Kids Mode lives with the family members (like
+                  Yooniz), not in Settings (Gadi 2026-08-27). */}
+              <Link href={href("/kids")} className="fam-set-row fam-set-link" style={{ marginTop: 14 }}>
+                <div className="fam-set-icon" style={{ fontSize: 20 }} aria-hidden="true">🧒</div>
+                <div className="fam-set-main">
+                  <label className="fam-set-label">{lang === "he" ? "מצב ילדים · מסך משותף" : "Kids Mode · shared device"}</label>
+                </div>
+              </Link>
             </div>
           )}
 
           {tab === "settings" && (
             <div className="fam-tab fam-settings">
               <NotifSettings user={user} lang={lang} dir={dir} />
-              <Link href={href("/kids")} className="fam-set-row fam-set-link">
-                <div className="fam-set-icon" style={{ fontSize: 20 }} aria-hidden="true">🧒</div>
-                <div className="fam-set-main">
-                  <label className="fam-set-label">{lang === "he" ? "מצב ילדים · מסך משותף" : "Kids Mode · shared device"}</label>
-                </div>
-              </Link>
-              <RewardsSection />
               <CoachesSection />
               <div className="fam-set-row">
                 <div className="fam-set-icon"><NavIcon name="settings" /></div>

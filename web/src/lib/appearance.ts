@@ -73,22 +73,28 @@ export const THEMES: ThemeMeta[] = [
     name: { he: "ג'ונגל", en: "Jungle", ar: "غابة", ru: "Джунгли" } },
   { id: "neon", kind: "kid", emoji: "⚡", dark: true, swatch: ["#0A0A14", "#A3E635", "#F472B6"],
     name: { he: "ניאון", en: "Neon", ar: "نيون", ru: "Неон" } },
-  // Unlockable skins — DUAL PATH: earned by climbing ranks (free, can't be
-  // faked) OR gift-bought early with parent/Yooniz gift points (a treat).
-  // Prices come from SKIN_PRICES (injected below) so client + server agree.
-  { id: "sunset", kind: "kid", emoji: "🌅", dark: true, unlockAtRank: 1, swatch: ["#1f0a2e", "#FB923C", "#F472B6"],
+  // Unlockable skins — earned PURELY by climbing ranks (= distinct words learned).
+  // Each skin unlocks exactly when its rank milestone is reached, so the rank
+  // ladder and the skins are one progression (Gadi 2026-08-27, naming council):
+  //   🌅 Sunset  → Word Tracker   (rank 2, ~30 words)
+  //   🌌 Aurora  → Word Guide     (rank 4, ~150)
+  //   🪐 Cosmos  → Word Master    (rank 5, ~300)
+  //   🌋 Lava    → Word Sage      (rank 7, ~650)
+  //   🌈 Rainbow → Word Legend    (rank 9, ~1200)
+  //   👑 Royal   → Word Grandmaster/קיסר המילים (rank 11, ~2200)
+  // Big gaps between skins by design (long-term motivation). No gift-points path:
+  // more words → higher rank → more skins. The parent gift store was removed.
+  { id: "sunset", kind: "kid", emoji: "🌅", dark: true, unlockAtRank: 2, swatch: ["#1f0a2e", "#FB923C", "#F472B6"],
     name: { he: "שקיעה", en: "Sunset", ar: "غروب", ru: "Закат" } },
-  { id: "aurora", kind: "kid", emoji: "🌌", dark: true, unlockAtRank: 3, swatch: ["#04121f", "#2DD4BF", "#A855F7"],
+  { id: "aurora", kind: "kid", emoji: "🌌", dark: true, unlockAtRank: 4, swatch: ["#04121f", "#2DD4BF", "#A855F7"],
     name: { he: "זוהר", en: "Aurora", ar: "شفق", ru: "Сияние" } },
   { id: "cosmos", kind: "kid", emoji: "🪐", dark: true, unlockAtRank: 5, swatch: ["#0a0a2e", "#818CF8", "#E879F9"],
     name: { he: "קוסמוס", en: "Cosmos", ar: "كون", ru: "Вселенная" } },
   { id: "lava", kind: "kid", emoji: "🌋", dark: true, unlockAtRank: 7, swatch: ["#1a0a0a", "#F97316", "#EF4444"],
     name: { he: "לבה", en: "Lava", ar: "حمم", ru: "Лава" } },
-  // Store-EXCLUSIVE skins — no rank path; only a parent gift can unlock them,
-  // so the store always has something to buy even for a top-rank child.
-  { id: "rainbow", kind: "kid", emoji: "🌈", dark: false, swatch: ["#FFF4FB", "#F472B6", "#38BDF8"],
+  { id: "rainbow", kind: "kid", emoji: "🌈", dark: false, unlockAtRank: 9, swatch: ["#FFF4FB", "#F472B6", "#38BDF8"],
     name: { he: "קשת", en: "Rainbow", ar: "قوس قزح", ru: "Радуга" } },
-  { id: "royal", kind: "kid", emoji: "👑", dark: true, swatch: ["#12102A", "#FBBF24", "#A855F7"],
+  { id: "royal", kind: "kid", emoji: "👑", dark: true, unlockAtRank: 11, swatch: ["#12102A", "#FBBF24", "#A855F7"],
     name: { he: "מלכותי", en: "Royal", ar: "ملكي", ru: "Королевский" } },
 ];
 

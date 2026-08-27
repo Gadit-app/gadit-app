@@ -78,9 +78,6 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
   const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
   const [rankIndex, setRankIndex] = useState(0);
-  const [giftPoints, setGiftPoints] = useState(0);
-  const [ownedSkins, setOwnedSkins] = useState<string[]>([]);
-  const [buying, setBuying] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const copy = storeCopy(lang);
 
@@ -120,47 +117,6 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
     return () => { cancelled = true; };
   }, [scope, user]);
 
-  // Load the kid's gift wallet (balance + owned skins) for the store. Refetch
-  // when the menu opens so a fresh parent gift shows without a reload.
-  useEffect(() => {
-    if (scope !== "kid" || !user) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const idToken = await user.getIdToken();
-        const res = await fetch("/api/kids/wallet", { headers: { Authorization: `Bearer ${idToken}` } });
-        if (!res.ok) return;
-        const w = (await res.json()) as { giftPoints?: number; ownedSkins?: string[] };
-        if (cancelled) return;
-        setGiftPoints(Number(w.giftPoints) || 0);
-        setOwnedSkins(Array.isArray(w.ownedSkins) ? w.ownedSkins : []);
-      } catch { /* wallet is best-effort; store just shows 0 */ }
-    })();
-    return () => { cancelled = true; };
-  }, [scope, user, open]);
-
-  async function buySkin(t: ThemeMeta) {
-    if (!user || t.price == null || buying) return;
-    setBuying(t.id);
-    try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/kids/buy-skin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ themeId: t.id }),
-      });
-      const data = (await res.json()) as { owned?: boolean; giftPoints?: number; ownedSkins?: string[] };
-      if (res.ok && data.owned) {
-        setGiftPoints(Number(data.giftPoints) || 0);
-        setOwnedSkins(Array.isArray(data.ownedSkins) ? data.ownedSkins : ownedSkins);
-        setTheme(t.id); // wear it right away — the reward moment
-        setOpen(false);
-      }
-    } catch { /* leave state as-is on failure */ } finally {
-      setBuying(null);
-    }
-  }
-
   useEffect(() => {
     if (!open) return;
     const onDown = (e: PointerEvent) => {
@@ -175,17 +131,14 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
     };
   }, [open]);
 
-  // A skin can be reached two ways: EARNED by climbing ranks (free) or BOUGHT
-  // with gift points. It is selectable if free, rank-reached, or owned; else
-  // it is for sale (and affordable when the wallet covers the price).
+  // A skin is unlocked PURELY by rank (= distinct words learned). Free skins
+  // have no rank gate; earnable skins unlock when their rank is reached. No
+  // gift-points / store path anymore (Gadi 2026-08-27).
   function skinState(t: ThemeMeta) {
     const rankReached = t.unlockAtRank != null && rankIndex >= t.unlockAtRank;
-    const isFree = t.unlockAtRank == null && t.price == null;
-    const isOwned = t.price != null && ownedSkins.includes(t.id);
-    const selectable = isFree || rankReached || isOwned;
-    const forSale = !selectable && t.price != null;
-    const affordable = forSale && giftPoints >= (t.price ?? Infinity);
-    return { selectable, isOwned, forSale, affordable, rankReached };
+    const isFree = t.unlockAtRank == null;
+    const selectable = isFree || rankReached;
+    return { selectable, rankReached };
   }
 
   return (
@@ -205,66 +158,36 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
       </button>
       {open && (
         <div className="wb-skin-dd-menu" role="listbox">
-          {scope === "kid" && (
-            <div className="wb-skin-dd-wallet-wrap">
-              <div className="wb-skin-dd-wallet" aria-hidden="true">
-                <span>🎁 {copy.balance}</span>
-                <strong>{giftPoints}</strong>
-              </div>
-              {giftPoints === 0 && <div className="wb-skin-dd-ask">{copy.ask}</div>}
-            </div>
-          )}
           {list.map((t) => {
             const st = skinState(t);
             const justUnlocked = t.unlockAtRank != null && t.unlockAtRank === rankIndex;
-            const busy = buying === t.id;
-            // The whole row acts as: select (selectable) | buy (for sale &
-            // affordable) | inert (for sale & too dear).
-            const onClick = () => {
-              if (busy) return;
-              if (st.selectable) { setTheme(t.id); setOpen(false); return; }
-              if (st.forSale && st.affordable) { void buySkin(t); }
-            };
-            const inert = st.forSale && !st.affordable;
+            const locked = !st.selectable;
+            const onClick = () => { if (st.selectable) { setTheme(t.id); setOpen(false); } };
             return (
               <button
                 key={t.id}
                 type="button"
                 role="option"
                 aria-selected={theme === t.id}
-                aria-disabled={inert}
+                aria-disabled={locked}
                 className={`wb-skin-dd-item${theme === t.id ? " is-active" : ""}`}
-                style={inert ? { cursor: "not-allowed", opacity: 0.65 } : busy ? { opacity: 0.7 } : undefined}
+                style={locked ? { cursor: "not-allowed", opacity: 0.65 } : undefined}
                 onClick={onClick}
               >
-                <span className="wb-skin-emoji" aria-hidden="true">{st.forSale ? "🔒" : t.emoji}</span>
+                <span className="wb-skin-emoji" aria-hidden="true">{locked ? "🔒" : t.emoji}</span>
                 <span className="wb-skin-name" style={{ display: "flex", flexDirection: "column", lineHeight: 1.25, minWidth: 0 }}>
                   <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
                     {themeName(t, lang)}
                     {justUnlocked && st.selectable && <span aria-hidden="true">✨</span>}
-                    {st.isOwned && <span className="wb-skin-owned" aria-hidden="true">{copy.owned}</span>}
                   </span>
-                  {st.forSale && (
-                    <>
-                      <span
-                        className="wb-skin-price"
-                        style={{ color: st.affordable ? "var(--accent, #0EA5A5)" : "var(--ink-muted, #94a3b8)", opacity: st.affordable ? 1 : 0.85 }}
-                      >
-                        {st.affordable
-                          ? `${copy.buy} 🎁 ${t.price}`
-                          : copy.need.replace("{n}", String((t.price ?? 0) - giftPoints))}
-                      </span>
-                      {/* Dual path: a rank skin can ALSO be earned by climbing —
-                          show both ways so the child sees they can wait and earn it. */}
-                      {t.unlockAtRank != null && !st.rankReached && (
-                        <span className="wb-skin-earnhint">
-                          {copy.orRank.replace("{rank}", rankLabel(RANKS[t.unlockAtRank].key, lang))}
-                        </span>
-                      )}
-                    </>
+                  {/* Locked → show the rank (words) it unlocks at. */}
+                  {locked && t.unlockAtRank != null && (
+                    <span className="wb-skin-earnhint">
+                      {copy.orRank.replace("{rank}", rankLabel(RANKS[t.unlockAtRank].key, lang))}
+                    </span>
                   )}
                 </span>
-                <span className="wb-skin-dots" aria-hidden="true" style={st.forSale ? { filter: "grayscale(0.7)" } : undefined}>
+                <span className="wb-skin-dots" aria-hidden="true" style={locked ? { filter: "grayscale(0.7)" } : undefined}>
                   {t.swatch.map((c, i) => (
                     <span key={i} style={{ background: c }} />
                   ))}
