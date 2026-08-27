@@ -24,14 +24,16 @@ export const maxDuration = 120;
 const MAX_BYTES = 4.3 * 1024 * 1024;
 
 const OCR_SYSTEM =
-  "You are an OCR engine. Transcribe the text EXACTLY as written, in its " +
-  "original language and script. Transcribe EVERY word, in order, and do not " +
-  "skip, omit, merge, or drop any word, even if the scan is imperfect or the " +
-  "text has Hebrew niqqud / Arabic diacritics (keep them). For a multi-page " +
-  "document, transcribe every page in reading order, separated by a blank " +
-  "line. Preserve line breaks and paragraph breaks. Do not translate, " +
-  "summarize, correct, explain, or add anything. Return ONLY the transcribed " +
-  "text. If there is no readable text, return an empty string.";
+  "You are an OCR engine. Transcribe the text in the image EXACTLY as written, " +
+  "in its original language and script. Transcribe EVERY word, in order, and do " +
+  "not skip, omit, merge, or drop any word, even if the scan is imperfect or " +
+  "skewed. For HEBREW you do NOT need to include niqqud (vowel points) — focus " +
+  "on getting every letter and word right; the niqqud is added separately. For " +
+  "a multi-page document, transcribe every page in reading order, separated by " +
+  "a blank line. Preserve line breaks and paragraph breaks. Do not translate, " +
+  "summarize, correct, explain, apologize, or add any commentary. Return ONLY " +
+  "the transcribed text. If there is genuinely no readable text, return an " +
+  "empty string (never a sentence explaining that you cannot read it).";
 
 export async function POST(req: NextRequest) {
   try {
@@ -103,7 +105,19 @@ export async function POST(req: NextRequest) {
     }
 
     const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    const text = (data.choices?.[0]?.message?.content ?? "").trim();
+    let text = (data.choices?.[0]?.message?.content ?? "").trim();
+    // A blank/black frame makes the model reply with a refusal ("I'm sorry, I
+    // can't transcribe…") instead of empty. Treat that as no text so the client
+    // shows a real error rather than loading the apology as the passage.
+    const low = text.toLowerCase();
+    if (
+      text.length < 300 &&
+      (low.startsWith("i'm sorry") || low.startsWith("i am sorry") || low.startsWith("sorry") ||
+        low.includes("can't transcribe") || low.includes("cannot transcribe") ||
+        low.includes("unable to transcribe") || low.includes("no readable text"))
+    ) {
+      text = "";
+    }
     return NextResponse.json({ text });
   } catch (e) {
     console.error("[ocr] error:", e);

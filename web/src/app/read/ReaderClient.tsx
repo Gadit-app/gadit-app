@@ -177,6 +177,19 @@ async function prepareForUpload(file: Blob): Promise<Blob> {
   }
 }
 
+/** A short model reply that is a refusal ("I'm sorry, I can't transcribe…")
+ *  rather than real transcribed text — usually a blank/black capture. */
+function looksLikeRefusal(t: string): boolean {
+  const s = t.trim().toLowerCase();
+  if (s.length > 300) return false; // real transcriptions are longer than a refusal
+  return (
+    s.startsWith("i'm sorry") || s.startsWith("i am sorry") || s.startsWith("sorry") ||
+    s.includes("can't transcribe") || s.includes("cannot transcribe") ||
+    s.includes("unable to transcribe") || s.includes("no readable text") ||
+    s.includes("can't help") || s.includes("cannot help")
+  );
+}
+
 const ghostBtn: CSSProperties = {
   background: "transparent",
   color: "var(--ink,#20272E)",
@@ -269,13 +282,32 @@ export function ReaderClient() {
         body: fd,
       });
       const j = (await res.json().catch(() => ({}))) as { text?: string };
-      if (res.ok && j.text && j.text.trim()) {
-        setDraft(j.text);
-        setText(j.text.trim());
-        setOcrState("idle");
-      } else {
+      let out = (j.text ?? "").trim();
+      // A blank/black capture makes the model reply "I'm sorry, I can't
+      // transcribe…" — that is a FAILURE, not the text. Don't load it.
+      if (!res.ok || !out || looksLikeRefusal(out)) {
         setOcrState("error");
+        return;
       }
+      // Hebrew: OCR routinely drops niqqud, but a young reader needs it. Run the
+      // text through Dicta (via /api/niqqud) to restore accurate, readable vowel
+      // points. Best-effort: on failure keep the un-niqqud'd text.
+      if (/[֐-׿]/.test(out)) {
+        try {
+          const nres = await fetch("/api/niqqud", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({ texts: [out] }),
+          });
+          if (nres.ok) {
+            const nj = (await nres.json()) as { niqqud?: string[] };
+            if (Array.isArray(nj.niqqud) && nj.niqqud[0]) out = nj.niqqud[0];
+          }
+        } catch { /* keep the plain text */ }
+      }
+      setDraft(out);
+      setText(out);
+      setOcrState("idle");
     } catch {
       setOcrState("error");
     }
@@ -314,19 +346,31 @@ export function ReaderClient() {
     try {
       stream = await md.getDisplayMedia({ video: { width: { ideal: 3000 } } } as DisplayMediaStreamOptions);
       const video = document.createElement("video");
+      video.muted = true;
       video.srcObject = stream;
-      await video.play();
-      // Let a frame actually render before grabbing it.
-      await new Promise((r) => setTimeout(r, 350));
+      await video.play().catch(() => {});
+      // Wait for real dimensions (metadata), then for an actually-painted frame,
+      // so we never grab a black/blank frame that the model would refuse to read.
+      if (!video.videoWidth) {
+        await new Promise<void>((res) => {
+          const to = setTimeout(res, 2000);
+          video.onloadedmetadata = () => { clearTimeout(to); res(); };
+        });
+      }
+      await new Promise<void>((res) => {
+        const v = video as HTMLVideoElement & { requestVideoFrameCallback?: (cb: () => void) => number };
+        if (typeof v.requestVideoFrameCallback === "function") v.requestVideoFrameCallback(() => res());
+        else setTimeout(res, 500);
+      });
       const w = video.videoWidth, h = video.videoHeight;
-      stream.getTracks().forEach((tk) => tk.stop());
-      stream = null;
       if (!w || !h) { setOcrState("error"); return; }
       const canvas = document.createElement("canvas");
       canvas.width = w; canvas.height = h;
       const ctx = canvas.getContext("2d");
       if (!ctx) { setOcrState("error"); return; }
       ctx.drawImage(video, 0, 0, w, h);
+      stream.getTracks().forEach((tk) => tk.stop());
+      stream = null;
       const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/jpeg", 0.92));
       if (blob) await runOcr(blob); else setOcrState("error");
     } catch (err) {
