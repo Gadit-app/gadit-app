@@ -92,7 +92,20 @@ export async function GET(req: NextRequest) {
   // ---------- 3) Per-user: decide which (if any) drip mail to send ----------
   const results: SendResult[] = [];
 
+  // Per-run real-send cap: one cron run never sends more than this many live
+  // emails, so a backlog or a bug can't fan out to the whole list at once.
+  // Anything not reached this run is picked up on the next daily run.
+  const SEND_CAP = 80;
+  let realSends = 0;
+
+  // A mail whose scheduled day is more than this many days behind is "stale":
+  // a user who signs up (or activates) long after a mail was due should not
+  // get old onboarding mail. We skip-mark stale mail so a late arrival starts
+  // near "today" instead of receiving a backlog one message per day.
+  const STALE_DAYS = 3;
+
   for (const u of authUsers) {
+    if (realSends >= SEND_CAP) break;
     const email = u.email;
     if (!email) continue;
     const d = userDocs.get(u.uid) ?? {};
@@ -139,10 +152,25 @@ export async function GET(req: NextRequest) {
       if (Number.isFinite(famActivated)) {
         const famDayN = daysBetween(famActivated, now);
         const famSent = (d.familyDripSent as Record<string, unknown> | undefined) ?? {};
+
+        // Skip-mark any stale unsent mail (due more than STALE_DAYS ago) so a
+        // late-activating family doesn't get a backlog; then pick the newest
+        // remaining due mail. Marking is a no-op write when there's nothing stale.
+        const famStale = FAMILY_DRIP.filter(
+          (m) => !famSent[m.key] && m.dayOffset <= famDayN && famDayN - m.dayOffset > STALE_DAYS,
+        );
+        if (famStale.length && !dryRun) {
+          const patch: Record<string, unknown> = {};
+          for (const m of famStale) patch[m.key] = { skippedAt: FieldValue.serverTimestamp() };
+          await db.collection("users").doc(u.uid).set({ familyDripSent: patch }, { merge: true });
+          for (const m of famStale) famSent[m.key] = true;
+        }
+
         let famCand: (typeof FAMILY_DRIP)[number] | null = null;
         for (const m of FAMILY_DRIP) {
           if (m.dayOffset > famDayN) continue;
           if (famSent[m.key]) continue;
+          if (famDayN - m.dayOffset > STALE_DAYS) continue;
           if (!famCand || m.dayOffset > famCand.dayOffset) famCand = m;
         }
         if (famCand) {
@@ -152,6 +180,7 @@ export async function GET(req: NextRequest) {
           } else {
             const sent = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
             if (sent.ok) {
+              realSends++;
               await db.collection("users").doc(u.uid).set(
                 { familyDripSent: { [famCand.key]: { sentAt: FieldValue.serverTimestamp(), messageId: sent.id ?? null } } },
                 { merge: true },
@@ -183,11 +212,24 @@ export async function GET(req: NextRequest) {
     // Day-0 (welcome) is sent from notify-signup, not here.
     const sentMap = (d.dripSent as Record<string, unknown> | undefined) ?? {};
 
+    // Skip-mark stale signup mail (due more than STALE_DAYS ago) so a user who
+    // signs up long after a step was due starts near "today", not with a backlog.
+    const stale = drip.filter(
+      (m) => m.dayOffset !== 0 && !sentMap[m.key] && m.dayOffset <= dayN && dayN - m.dayOffset > STALE_DAYS,
+    );
+    if (stale.length && !dryRun) {
+      const patch: Record<string, unknown> = {};
+      for (const m of stale) patch[m.key] = { skippedAt: FieldValue.serverTimestamp() };
+      await db.collection("users").doc(u.uid).set({ dripSent: patch }, { merge: true });
+      for (const m of stale) sentMap[m.key] = true;
+    }
+
     let candidate: typeof drip[number] | null = null;
     for (const mail of drip) {
       if (mail.dayOffset === 0) continue; // welcome handled elsewhere
       if (mail.dayOffset > dayN) continue;
       if (sentMap[mail.key]) continue;
+      if (dayN - mail.dayOffset > STALE_DAYS) continue;
       if (!candidate || mail.dayOffset > candidate.dayOffset) candidate = mail;
     }
 
@@ -223,6 +265,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (sent.ok) {
+      realSends++;
       // Mark sent atomically so a concurrent run can't double-send.
       await db.collection("users").doc(u.uid).set(
         {
