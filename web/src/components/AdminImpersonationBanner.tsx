@@ -44,6 +44,26 @@ export function AdminImpersonationBanner() {
     : { viewing: name ? `Viewing as admin: ${name}` : "Viewing a school as admin", exit: "Exit" };
 
   async function exit() {
+    // Return to the admin's OWN account instead of signing out. The endpoint
+    // mints a custom token for the admin named in the impersonation claim; we
+    // sign back in with it. Only fall back to a full sign-out if that fails.
+    try {
+      if (user) {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/admin/exit-impersonation", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        const j = (await res.json().catch(() => ({}))) as { token?: string };
+        if (res.ok && j.token) {
+          const { signInWithCustomToken, getAuth } = await import("firebase/auth");
+          await signInWithCustomToken(getAuth(), j.token);
+          setActive(false);
+          router.push("/admin/schools");
+          return;
+        }
+      }
+    } catch { /* fall through to sign-out */ }
     try {
       const { signOut, getAuth } = await import("firebase/auth");
       await signOut(getAuth());
