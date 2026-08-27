@@ -24,7 +24,11 @@ export const FAMILY_DRIP: FamilyDripMail[] = FAMILY_META.map((m) => ({
   dayOffset: m.dayOffset,
   async build({ he, unsubscribeUrl }) {
     const c = await getEffectiveContent(m.key, he);
-    const link = (he ? `${EMAIL_BASE}/he/family` : `${EMAIL_BASE}/family`) + m.ctaUrlTab;
+    // CTA links to /family by default; a feature-specific email can point at
+    // its own page (e.g. /read, /say, /play) via ctaPath. he uses the /he
+    // locale prefix, en is unprefixed.
+    const base = he ? `${EMAIL_BASE}/he` : EMAIL_BASE;
+    const link = `${base}${m.ctaPath ?? "/family"}${m.ctaUrlTab}`;
     const html = renderEmailHtml({
       he,
       eyebrow: he ? m.eyebrow.he : m.eyebrow.en,
