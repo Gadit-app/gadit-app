@@ -80,11 +80,22 @@ export async function computeSchoolInsights(db: Firestore, schoolId: string) {
     })
     .sort((a, b) => b.count - a.count);
 
-  const totalAllTime = perClassroom.reduce((sum, c) => sum + c.totalAllTime, 0);
+  const classroomSearches = perClassroom.reduce((sum, c) => sum + c.totalAllTime, 0);
   const classrooms = perClassroom.map(({ raw: _raw, ...rest }) => rest).sort((a, b) => b.totalAllTime - a.totalAllTime);
+
+  // The school account's OWN lookups (the principal / school using Gadit
+  // directly, not through a classroom /c/<code> link). Without this the
+  // dashboard showed 0 while the account had really searched hundreds of words,
+  // making a school that IS using Gadit look inactive (Gadi 2026-08-27). School
+  // total = classroom (student) searches + the account's general searches.
+  const ownerSnap = await db.collection("users").doc(schoolId).get();
+  const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
+  const totalAllTime = classroomSearches + ownerSearches;
 
   return {
     totalAllTime,
+    classroomSearches,
+    ownerSearches,
     classroomCount: classroomDocs.length,
     languages: schoolInsights.languages,
     topWords: schoolInsights.topWords,

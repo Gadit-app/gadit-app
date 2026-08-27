@@ -427,6 +427,8 @@ export function SchoolsClient() {
   const [tab, setTab] = useState<"home" | "classrooms" | "students" | "settings">("home");
   const [school, setSchool] = useState<School | null>(null);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  // The school account's own lookups (general use, not through a classroom).
+  const [ownerSearches, setOwnerSearches] = useState(0);
   const [schoolChecked, setSchoolChecked] = useState(false);
   const [nameDraft, setNameDraft] = useState("");
   const [nameSaving, setNameSaving] = useState(false);
@@ -561,9 +563,17 @@ export function SchoolsClient() {
       },
       () => {}
     );
+    // The account's OWN searchCount (general lookups) so the header total isn't
+    // just classroom searches — a school using Gadit directly shouldn't read 0.
+    const unsubUser = onSnapshot(
+      doc(db, "users", user.uid),
+      (snap) => setOwnerSearches((snap.data()?.searchCount as number) ?? 0),
+      () => {},
+    );
     return () => {
       unsubSchool();
       unsubClassrooms();
+      unsubUser();
     };
   }, [user]);
 
@@ -746,7 +756,7 @@ export function SchoolsClient() {
     }
   }
 
-  const totalSearches = classrooms.reduce((s, cl) => s + (cl.searchCount ?? 0), 0);
+  const totalSearches = classrooms.reduce((s, cl) => s + (cl.searchCount ?? 0), 0) + ownerSearches;
   const NAV: Array<"home" | "classrooms" | "students" | "settings"> = ["home", "classrooms", "students", "settings"];
 
   return (
