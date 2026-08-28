@@ -136,6 +136,15 @@ export async function POST(req: NextRequest) {
     //   Other    → /?success=1           (single-user checkout, lands on home)
     // Both URLs carry the user's language prefix so a Hebrew buyer
     // returns to /he/... and not the English site. Launch QA 2026-07-03.
+    // Google Play Subscriptions policy wants the trial/renewal terms called out
+    // in the payment cart itself, not only on the offer page. Stripe surfaces
+    // this via custom_text.submit.message. he + en; other langs fall back to en.
+    const cartTerms: Record<"he" | "en", string> = {
+      he: "14 יום ניסיון חינם. במהלך הניסיון לא מחייבים אותך. בסיום, הכרטיס מחויב בסכום המוצג למעלה, והמנוי מתחדש בכל תקופה עד שמבטלים. אפשר לבטל בכל רגע לפני תום הניסיון, מהחשבון שלך ב-Gadit, בלי חיוב.",
+      en: "14-day free trial. You are not charged during the trial. When it ends, your card is charged the amount shown above and the subscription renews each period until you cancel. Cancel anytime before the trial ends, from your Gadit account, and you won't be charged.",
+    };
+    const trialMessage = grantsTrial ? cartTerms[lang === "he" ? "he" : "en"] : null;
+
     const prefix = langPrefix(lang);
     const successPath = isSchools
       ? `${prefix}/schools?welcome=1`
@@ -164,6 +173,7 @@ export async function POST(req: NextRequest) {
       // launch partners) without having to manually provision their
       // accounts. Coupon codes are created in the Stripe dashboard.
       allow_promotion_codes: true,
+      ...(trialMessage && { custom_text: { submit: { message: trialMessage } } }),
       // Checkout page language follows the app UI language when Stripe
       // supports it; otherwise Stripe auto-detects from the browser.
       locale: (STRIPE_LOCALES.has(lang) ? lang : "auto") as NonNullable<Stripe.Checkout.Session["locale"]>,
