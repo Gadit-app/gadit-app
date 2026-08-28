@@ -16,6 +16,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { usePricing } from "@/lib/use-pricing";
 import { LANGUAGES } from "@/lib/i18n";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
@@ -2247,6 +2248,7 @@ export function PricingPageRoute() {
   const { user, promptLogin } = useAuth();
   const href = useHref();
   const [billing, setBilling] = useState<Billing>("monthly");
+  const px = usePricing();
   const c = COPY[lang] ?? COPY.en;
   const sh = SECTION_HEAD[lang] ?? SECTION_HEAD.en;
   const fm = FEATURE_MATRIX[lang] ?? FEATURE_MATRIX.en;
@@ -2293,18 +2295,19 @@ export function PricingPageRoute() {
     promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
 
-  const clearMonthly   = "$2.99";
-  const clearYearly    = "$29.99";
-  const deepMonthly    = "$4.99";
-  const deepYearly     = "$49.99";
-  // Family repriced twice: $8.99 → $6.99 (2026-07-08), then → $5.99
-  // (2026-07-16, Gadi: the family price must start with a 5 in dollars
-  // and stay under ₪20 in shekels for the Israeli campaign). Yearly
-  // keeps the ~2-months-free convention ($59 / ₪199). Existing
-  // subscribers stay on their old Stripe prices automatically; the
-  // webhook maps the retired price IDs so they never downgrade.
-  const familyMonthly  = "$5.99";
-  const familyYearly   = "$59";
+  // Prices come from the country currency engine (lib/pricing-currency.ts),
+  // via /api/pricing. usd-only today, so these are the same USD strings as
+  // before; adding a market localizes them here AND in the Stripe cart from
+  // one source, so the offer page and the cart never diverge (the Google Play
+  // requirement). Family history: $8.99 → $6.99 (2026-07-08) → $5.99
+  // (2026-07-16); existing subscribers keep their old Stripe prices via the
+  // webhook's retired-price mapping.
+  const clearMonthly   = px.clearMonthly;
+  const clearYearly    = px.clearYearly;
+  const deepMonthly    = px.deepMonthly;
+  const deepYearly     = px.deepYearly;
+  const familyMonthly  = px.familyMonthly;
+  const familyYearly   = px.familyYearly;
 
   // One monthly/yearly toggle, rendered in two spots that share the same
   // `billing` state: inside the desktop comparison table's empty corner cell
@@ -2410,8 +2413,8 @@ export function PricingPageRoute() {
           // Basic sub is just "for one user" — Gadi 2026-08-15: drop "free
           // forever" so the free tier isn't promoted.
           const basicSub = singleUser;
-          const clearSub = billing === "yearly" ? `≈ $2.49 ${c.mo} · ${singleUser}` : singleUser;
-          const deepSub  = billing === "yearly" ? `≈ $4.16 ${c.mo} · ${singleUser}` : singleUser;
+          const clearSub = billing === "yearly" ? `≈ ${px.clearYearlyPerMo} ${c.mo} · ${singleUser}` : singleUser;
+          const deepSub  = billing === "yearly" ? `≈ ${px.deepYearlyPerMo} ${c.mo} · ${singleUser}` : singleUser;
           const clearPrice = billing === "yearly" ? clearYearly : clearMonthly;
           const deepPrice = billing === "yearly" ? deepYearly : deepMonthly;
           const period = billing === "yearly" ? c.yr : c.mo;

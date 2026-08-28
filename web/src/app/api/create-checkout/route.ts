@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth } from "@/lib/firebase-admin";
 import { isNewSchoolsPrice, NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
+import { currencyForCountry } from "@/lib/pricing-currency";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -153,14 +154,22 @@ export async function POST(req: NextRequest) {
         : `${prefix}/?success=1`;
     const cancelPath = `${prefix}/?canceled=1`;
 
+    // Pin the charge currency to the caller's country (currency engine). Only
+    // ever a currency that has a Stripe currency_option; usd-only today, so
+    // this is usd for everyone and no `currency` is set (Stripe uses the
+    // price's default USD). Adding a market makes page and cart localize from
+    // one source. See lib/pricing-currency.ts.
+    const cur = currencyForCountry(req.headers.get("x-vercel-ip-country"));
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       // Google Play Subscriptions policy requires the currency on the offer
       // page and in the payment cart to match. Stripe Adaptive Pricing (on by
       // default) auto-converts the cart to the buyer's local currency (e.g. a
       // reviewer in the Philippines saw PHP while our pricing shows USD), which
-      // triggered a rejection. Pin the cart to the price's own currency.
+      // triggered a rejection. Pin the cart to a currency we control.
       adaptive_pricing: { enabled: false },
+      ...(cur !== "usd" && { currency: cur }),
       payment_method_types: ["card"],
       // Always collect a card, even with a trial — this is the card-required
       // flow (schools go through here so they can't create a card-less trial).

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
+import { currencyForCountry } from "@/lib/pricing-currency";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -153,13 +154,16 @@ export async function POST(req: NextRequest) {
 
     const customer = await resolveCustomer(uid, email);
 
-    // Hebrew users are billed in shekels. Every paid price carries an
-    // ILS currency_option (set 2026-07-16: Family ₪23.90/₪239, Deep
-    // ₪16.90/₪169, Clear ₪9.90/₪99, Schools ₪239/₪2,390, Large
-    // ₪499/₪4,990), and passing `currency` here selects it — same
-    // price IDs, so the webhook's plan mapping is untouched. Everyone
-    // else stays on the price's default USD.
-    const currency = lang === "he" ? "ils" : undefined;
+    // Hebrew users are billed in shekels (language-driven, kept as-is). Every
+    // paid price carries an ILS currency_option (set 2026-07-16: Family
+    // ₪23.90/₪239, Deep ₪16.90/₪169, Clear ₪9.90/₪99, Schools ₪239/₪2,390,
+    // Large ₪499/₪4,990), and passing `currency` selects it — same price IDs,
+    // so the webhook's plan mapping is untouched. For everyone else, the
+    // country currency engine pins the charge currency (usd-only today, so
+    // undefined = the price's default USD; adding a market localizes it in
+    // step with the pricing page). See lib/pricing-currency.ts.
+    const engineCur = currencyForCountry(req.headers.get("x-vercel-ip-country"));
+    const currency = lang === "he" ? "ils" : engineCur !== "usd" ? engineCur : undefined;
 
     // Reuse an abandoned in-progress subscription for the same price
     // (every page load would otherwise mint a new incomplete/trialing
