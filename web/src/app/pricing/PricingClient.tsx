@@ -198,6 +198,12 @@ const COPY: Record<string, {
   freeForever: string;
   saveTrustBasic?: string;
   trustClear?: string;
+  // Subscription-terms disclosure (Google Play Subscriptions policy): trialTerms
+  // is a short per-plan line ({price} is replaced with the plan's price+cycle);
+  // trialTermsFull is the prominent note shown once near the plans. Optional so
+  // only he+en need authoring; every other language falls back to en.
+  trialTerms?: string;
+  trialTermsFull?: string;
 }> = {
   uk: {
     heroTitle: "Почни безкоштовно.",
@@ -678,6 +684,8 @@ const COPY: Record<string, {
     features: "פיצ'רים",
     mo: "/חודש", yr: "/שנה",
     freeForever: "חינם לתמיד",
+    trialTerms: "14 יום ניסיון חינם, ואחר כך {price}. אפשר לבטל בכל רגע לפני הסיום, בלי חיוב.",
+    trialTermsFull: "כל המסלולים בתשלום מתחילים ב-14 יום ניסיון חינם. במהלך הניסיון לא מחייבים אותך. בסיום הניסיון הכרטיס מחויב במחיר המוצג, לפי המסלול ומחזור החיוב שבחרת, והמנוי מתחדש בכל תקופה עד שמבטלים. אפשר לבטל בכל רגע לפני תום הניסיון, מהחשבון שלך בלחיצה אחת, ולא תחויב.",
     tierBasic: {
       name: "Basic",
       tagline: "להבין את המילה",
@@ -758,6 +766,8 @@ const COPY: Record<string, {
     features: "Features",
     mo: "/mo", yr: "/yr",
     freeForever: "Free forever",
+    trialTerms: "14-day free trial, then {price}. Cancel anytime before it ends and you won't be charged.",
+    trialTermsFull: "All paid plans start with a 14-day free trial. You are not charged during the trial. When it ends, your card is billed the price shown for the plan and billing cycle you chose, and it renews each period until you cancel. Cancel anytime before the trial ends, from your account in one click, and you won't be charged.",
     tierBasic: {
       name: "Basic",
       tagline: "Understand the word",
@@ -2408,6 +2418,18 @@ export function PricingPageRoute() {
           const dash = <span className="wb-pc-dash">·</span>;
           return (
             <>
+              {/* Subscription-terms disclosure — required by Google Play's
+                  Subscriptions policy: the trial length, the price after it
+                  ends, and how to cancel must be called out clearly in the
+                  offer itself, not only in the payment cart. */}
+              <p className="wb-pricing-terms" style={{
+                maxWidth: 720, margin: "0 auto 18px", padding: "12px 16px",
+                background: "var(--surface, #fff)", border: "1px solid var(--rule, #E4EAE8)",
+                borderRadius: 12, fontSize: 13.5, lineHeight: 1.6, color: "var(--ink-soft, #3F4856)",
+                textAlign: "center",
+              }}>
+                {c.trialTermsFull ?? COPY.en.trialTermsFull}
+              </p>
               {/* DESKTOP: one comparison table with checkmarks. Hidden on
                   mobile (see .wb-pc CSS) where the stacked cards render. */}
               <div className="wb-pc">
@@ -2472,6 +2494,7 @@ export function PricingPageRoute() {
                   badge={c.tierClear.badge}
                   features={c.tierClear.features}
                   cta={c.tierClear.cta}
+                  ctaSub={(c.trialTerms ?? COPY.en.trialTerms ?? "").replace("{price}", `${clearPrice}${period}`)}
                   onCta={clickClear}
                 />
                 <TierCard
@@ -2483,6 +2506,7 @@ export function PricingPageRoute() {
                   subPrice={deepSub}
                   features={c.tierDeep.features}
                   cta={c.tierDeep.cta}
+                  ctaSub={(c.trialTerms ?? COPY.en.trialTerms ?? "").replace("{price}", `${deepPrice}${period}`)}
                   onCta={clickDeep}
                 />
               </div>

@@ -146,6 +146,12 @@ export async function POST(req: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
+      // Google Play Subscriptions policy requires the currency on the offer
+      // page and in the payment cart to match. Stripe Adaptive Pricing (on by
+      // default) auto-converts the cart to the buyer's local currency (e.g. a
+      // reviewer in the Philippines saw PHP while our pricing shows USD), which
+      // triggered a rejection. Pin the cart to the price's own currency.
+      adaptive_pricing: { enabled: false },
       payment_method_types: ["card"],
       // Always collect a card, even with a trial — this is the card-required
       // flow (schools go through here so they can't create a card-less trial).
