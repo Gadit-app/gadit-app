@@ -5769,8 +5769,16 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     /* Respect safe-area on devices with edge gestures / notches
        (iOS dynamic island, Android gesture pill). The CTA cluster
        used to slip beneath them in landscape and on edge-to-edge
-       phones. Gadi 2026-06-26 audit fix C3. */
-    padding: 10px max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left));
+       phones. Gadi 2026-06-26 audit fix C3.
+       TOP inset added 2026-08-28: with viewportFit:cover, an iPhone
+       with a notch / Dynamic Island drew the status bar OVER the top
+       row, so the language switcher (top-right) sat under it and was
+       unreachable. Pad the top by the inset and grow the bar by the
+       same amount so the 44px content row sits fully below the notch;
+       the blurred background fills the inset band. env() is 0 on
+       devices without a notch, so nothing changes there. */
+    padding: calc(10px + env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left));
+    height: calc(64px + env(safe-area-inset-top, 0px));
     gap: 8px;
     position: relative;
     flex-wrap: nowrap;

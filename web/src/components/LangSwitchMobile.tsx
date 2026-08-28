@@ -36,16 +36,18 @@ export function LangSwitchMobile() {
 
   useEffect(() => {
     if (!open) return;
-    function onClick(e: MouseEvent) {
+    // pointerdown (not mousedown) so outside-tap-to-close also fires on iOS
+    // Safari, where mousedown on non-interactive elements is unreliable.
+    function onDown(e: Event) {
       if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
     }
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
-    document.addEventListener("mousedown", onClick);
+    document.addEventListener("pointerdown", onDown);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("pointerdown", onDown);
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
