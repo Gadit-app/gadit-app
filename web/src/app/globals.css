@@ -14241,3 +14241,12 @@ html[data-theme="royal"] .wb-kid-bg { --skin-bg: radial-gradient(65% 48% at 82% 
 .wordbook .wb-kids-tile-of { font-size: 13px; font-weight: 700; color: var(--ink-muted); }
 .wordbook .wb-kids-tile-label { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; }
 .wordbook .wb-kids-tile-cap { font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Google Play consumption-only ────────────────────────────────────
+   Inside the Play TWA the middleware stamps data-play="1" on <html>. No
+   purchase may be offered there (Play Payments policy). Hide every element
+   tagged .gd-buy (buy / upgrade / start-trial / pricing CTAs). The plain
+   web has no data-play attribute, so it is completely unaffected. Routes
+   like /pricing and /checkout are already blocked server-side in middleware;
+   this hides the entry-point CTAs on the pages that stay accessible. */
+html[data-play="1"] .gd-buy { display: none !important; }

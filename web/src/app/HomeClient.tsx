@@ -389,8 +389,8 @@ export function HomePage() {
 
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
-        <span>·</span>
-        <Link href={href("/pricing")}>{c.pricing}</Link>
+        <span className="gd-buy">·</span>
+        <Link href={href("/pricing")} className="gd-buy">{c.pricing}</Link>
         <span>·</span>
         <Link href={href("/contact")}>{v2(lang, "footerContact")}</Link>
         <span>·</span>
@@ -398,14 +398,15 @@ export function HomePage() {
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
         {/* Product sales decks (Gadi 2026-08-18), static HTML in /public/decks.
-            EN + HE only; other UI languages fall back to the English deck. */}
-        <span>·</span>
-        <span style={{ opacity: 0.55 }}>{lang === "he" ? "מצגות:" : "Decks:"}</span>
-        <a href={`/decks/schools-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "בתי ספר" : "Schools"}</a>
-        <span>·</span>
-        <a href={`/decks/families-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "משפחות" : "Families"}</a>
-        <span>·</span>
-        <a href={`/decks/individuals-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "יחידים" : "Individuals"}</a>
+            EN + HE only; other UI languages fall back to the English deck.
+            Tagged gd-buy — sales collateral is hidden in the Play app. */}
+        <span className="gd-buy">·</span>
+        <span className="gd-buy" style={{ opacity: 0.55 }}>{lang === "he" ? "מצגות:" : "Decks:"}</span>
+        <a className="gd-buy" href={`/decks/schools-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "בתי ספר" : "Schools"}</a>
+        <span className="gd-buy">·</span>
+        <a className="gd-buy" href={`/decks/families-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "משפחות" : "Families"}</a>
+        <span className="gd-buy">·</span>
+        <a className="gd-buy" href={`/decks/individuals-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "יחידים" : "Individuals"}</a>
       </footer>
     </div>
   );

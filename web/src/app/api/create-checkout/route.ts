@@ -87,6 +87,11 @@ function langPrefix(lang: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    // Google Play consumption-only: no purchase may be initiated from inside
+    // the Play app. Middleware skips /api, so guard here too.
+    if (req.cookies.get("gadit_play")?.value === "1") {
+      return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
+    }
     const { priceId, lang: rawLang } = await req.json();
     if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
     const lang = typeof rawLang === "string" && /^[a-z]{2}$/.test(rawLang) ? rawLang : "en";

@@ -19,6 +19,24 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw", "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu"]);
 
+// ── Google Play "consumption-only" mode ─────────────────────────────
+// The Play-distributed TWA must not offer or lead to any purchase, or it
+// violates Google Play's Payments/Subscriptions policy (there is no
+// reader-app exemption on Google Play). So the Play build launches at
+// www.gadit.app/?src=play; from then on we treat that session as Play mode
+// (sticky cookie), block every purchase surface server-side, and hide the
+// purchase CTAs. The plain web (no marker) keeps selling via Stripe with the
+// free trial, untouched — Gadit is web-first, the app is convenience only.
+const PLAY_COOKIE = "gadit_play";
+// Consumer purchase surfaces that must not exist inside the Play app.
+const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools"]);
+
+function detectPlay(req: NextRequest): boolean {
+  if (req.nextUrl.searchParams.get("src") === "play") return true;
+  if ((req.headers.get("referer") || "").startsWith("android-app://")) return true;
+  return req.cookies.get(PLAY_COOKIE)?.value === "1";
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -39,6 +57,22 @@ export function middleware(req: NextRequest) {
   const segments = pathname.split("/").filter(Boolean);
   const first = segments[0];
 
+  // Play mode: sticky cookie + block purchase surfaces server-side (never a
+  // client-only hide — the price must not exist in the HTML the reviewer gets).
+  const playMode = detectPlay(req);
+  if (playMode) {
+    const langPrefixed = !!first && SUPPORTED_LANGS.has(first);
+    const routeFirst = langPrefixed ? segments[1] : first;
+    if (routeFirst && BLOCKED_IN_PLAY.has(routeFirst)) {
+      const home = req.nextUrl.clone();
+      home.pathname = langPrefixed ? `/${first}` : "/";
+      home.search = "";
+      const redirect = NextResponse.redirect(home);
+      redirect.cookies.set(PLAY_COOKIE, "1", { maxAge: 60 * 60 * 24 * 365, sameSite: "lax", path: "/" });
+      return redirect;
+    }
+  }
+
   if (!first || !SUPPORTED_LANGS.has(first)) {
     // No lang prefix — still forward the original path so the layout's
     // generateMetadata can emit a correct per-page canonical URL.
@@ -48,7 +82,10 @@ export function middleware(req: NextRequest) {
     // 2026-07-03). Launch SEO fix 2026-07-04.
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set("x-gadit-path", pathname);
-    return NextResponse.next({ request: { headers: requestHeaders } });
+    if (playMode) requestHeaders.set("x-gadit-play", "1");
+    const res = NextResponse.next({ request: { headers: requestHeaders } });
+    if (playMode) res.cookies.set(PLAY_COOKIE, "1", { maxAge: 60 * 60 * 24 * 365, sameSite: "lax", path: "/" });
+    return res;
   }
 
   const remainder = segments.slice(1).join("/");
@@ -65,6 +102,7 @@ export function middleware(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set("x-gadit-lang", first);
   requestHeaders.set("x-gadit-path", pathname);
+  if (playMode) requestHeaders.set("x-gadit-play", "1");
 
   const res = NextResponse.rewrite(rewriteUrl, {
     request: { headers: requestHeaders },
@@ -74,6 +112,7 @@ export function middleware(req: NextRequest) {
     sameSite: "lax",
     path: "/",
   });
+  if (playMode) res.cookies.set(PLAY_COOKIE, "1", { maxAge: 60 * 60 * 24 * 365, sameSite: "lax", path: "/" });
   return res;
 }
 

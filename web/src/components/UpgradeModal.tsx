@@ -972,14 +972,14 @@ export function UpgradeModal({
         <h2 className="wb-upgrade-feature">{featureName}</h2>
         <p className="wb-upgrade-blurb">{blurb}</p>
 
-        <div className="wb-upgrade-price">
+        <div className="wb-upgrade-price gd-buy">
           <strong>{price}</strong>
           <span className="wb-upgrade-trial">{c.trialNote}</span>
         </div>
 
         <button
           type="button"
-          className={`wb-upgrade-cta wb-upgrade-cta-${tier}`}
+          className={`wb-upgrade-cta wb-upgrade-cta-${tier} gd-buy`}
           onClick={() => {
             track("upgrade_prompt_clicked", { feature, tier, lang });
             onClose();

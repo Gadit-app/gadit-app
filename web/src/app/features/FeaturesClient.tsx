@@ -1709,7 +1709,7 @@ export function FeaturesPage() {
           <p className="wb-feat-lede">{c.heroSub}</p>
           <div className="wb-feat-cta-row">
             <Link href={href("/")} className="wb-feat-cta-primary">{c.ctaPrimary}</Link>
-            <Link href={href("/pricing")} className="wb-feat-cta-ghost">{c.ctaSecondary}</Link>
+            <Link href={href("/pricing")} className="wb-feat-cta-ghost gd-buy">{c.ctaSecondary}</Link>
           </div>
         </section>
 

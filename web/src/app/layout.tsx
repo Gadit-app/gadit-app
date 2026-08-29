@@ -524,10 +524,17 @@ export default async function RootLayout({
   const initialDir: "ltr" | "rtl" =
     initialLang === "he" || initialLang === "ar" || initialLang === "fa" ? "rtl" : "ltr";
 
+  // Google Play consumption-only: the middleware stamps x-gadit-play on
+  // requests inside the Play TWA. Stamp data-play on <html> so purchase CTAs
+  // are hidden by CSS from the first server-rendered paint (no flash of a
+  // "Subscribe" button), and blocked routes are already redirected upstream.
+  const playMode = headersList.get("x-gadit-play") === "1";
+
   return (
     <html
       lang={initialLang}
       dir={initialDir}
+      {...(playMode ? { "data-play": "1" } : {})}
       className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} ${notoSansEthiopic.variable} ${notoSansSC.variable} ${notoSansTC.variable} ${notoSansKR.variable} ${notoSansThai.variable} ${notoSansBengali.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

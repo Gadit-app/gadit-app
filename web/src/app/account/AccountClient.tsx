@@ -566,8 +566,8 @@ export function AccountPage() {
 
       <footer className="wb-home-footer">
         <Link href={href("/")}>{v2(lang, "navSearch")}</Link>
-        <span>·</span>
-        <Link href={href("/pricing")}>{v2(lang, "navPricing")}</Link>
+        <span className="gd-buy">·</span>
+        <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
         <span>·</span>
         <Link href={href("/features")}>{v2(lang, "navFeatures")}</Link>
       </footer>
@@ -753,7 +753,7 @@ function PlanSection({
               // Basic only has one direction to go: up. A "Change plan"
               // ghost button next to Upgrade was redundant (both routed
               // to /pricing) and read as ambiguous ("change to what?").
-              <PrimaryBtn onClick={onUpgrade}>{v2(lang, "accountUpgrade")}</PrimaryBtn>
+              <span className="gd-buy"><PrimaryBtn onClick={onUpgrade}>{v2(lang, "accountUpgrade")}</PrimaryBtn></span>
             ) : (
               <>
                 <GhostBtn onClick={onManageBilling}>{v2(lang, "accountManageBilling")}</GhostBtn>

@@ -103,6 +103,10 @@ const SUB_EXPAND = ["pending_setup_intent", "latest_invoice.confirmation_secret"
 
 export async function POST(req: NextRequest) {
   try {
+    // Google Play consumption-only: no purchase from inside the Play app.
+    if (req.cookies.get("gadit_play")?.value === "1") {
+      return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
+    }
     const { priceId, code, lang } = (await req.json()) as {
       priceId?: string;
       code?: string;

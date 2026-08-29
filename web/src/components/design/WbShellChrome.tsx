@@ -43,6 +43,10 @@ import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { track } from "@/lib/track";
 import { OPEN_SAY_EVENT } from "@/components/SayModal";
+
+// Nav keys that lead to a purchase surface — tagged .gd-buy so they are
+// hidden inside the Google Play consumption-only TWA (html[data-play="1"]).
+const BUY_NAV_KEYS = new Set(["pricing", "families", "individuals", "schools"]);
 import { useTheme } from "@/lib/appearance";
 import { DARK_LABEL } from "@/components/design/WbUserMenu";
 
@@ -261,7 +265,7 @@ export function WbShellNav({ active }: { active?: NavKey }) {
           <Link
             key={l.key}
             href={l.href}
-            className={`wb-shell-navlink${active === l.key ? " is-active" : ""}`}
+            className={`wb-shell-navlink${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
           >
             {l.label}
           </Link>
@@ -367,7 +371,7 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
               <Link
                 key={l.key}
                 href={l.href}
-                className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
+                className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
                 onClick={() => setOpen(false)}
               >
                 {l.label}
