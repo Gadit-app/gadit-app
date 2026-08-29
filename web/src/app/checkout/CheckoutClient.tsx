@@ -163,7 +163,7 @@ const COPY = {
     trialToday: "היום תשלמו: 0 ₪",
     trialLine: "14 ימי ניסיון חינם. החיוב הראשון רק בסוף הניסיון.",
     afterTrial: "לאחר הניסיון:",
-    cancelNote: "אפשר לבטל בכל רגע מדף החשבון, בלחיצה אחת.",
+    cancelNote: "אפשר לבטל בכל רגע לפני תום הניסיון, מדף החשבון בלחיצה אחת, ולא תחויב.",
     couponApplied: (code: string) => `קוד ${code} הופעל ויחול על החיוב הראשון.`,
     payButton: "אישור והתחלת הניסיון",
     processing: "רק רגע...",
@@ -192,7 +192,7 @@ const COPY = {
     trialToday: "Due today: $0",
     trialLine: "14 day free trial. The first charge comes only when the trial ends.",
     afterTrial: "After the trial:",
-    cancelNote: "Cancel anytime from your account page, one click.",
+    cancelNote: "Cancel anytime before the trial ends, from your account in one click, and you won't be charged.",
     couponApplied: (code: string) => `Code ${code} applied. It will apply to your first charge.`,
     payButton: "Confirm and start trial",
     processing: "One moment...",
@@ -578,6 +578,10 @@ export default function CheckoutClient() {
                     {amt(twaTier)} {twaTier.cycle === "yearly" ? c.perYear : c.perMonth}
                   </span>
                 </div>
+                {/* Cancel terms inside the offer card too — Google Play requires
+                    the trial length, the price after, AND how to cancel to be
+                    clear in the offer itself, not only the payment cart. */}
+                <p style={{ ...styles.cancelNote, marginTop: 12, marginBottom: 0 }}>{c.cancelNote}</p>
               </div>
             )}
 
