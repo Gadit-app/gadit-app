@@ -51,7 +51,16 @@ const outDir    = resolve(webRoot, "public/og");
 
 await mkdir(outDir, { recursive: true });
 
-const LANGS = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "uk", "tr", "pl", "fa", "id", "nl"];
+// Every shipped UI language gets its own /og/<lang>.jpg. The image is
+// language-neutral (wordmark only), so all files are byte-identical; we
+// keep one per lang so layout.tsx can point at /og/<lang>.jpg with no
+// special-case fallback. Keep this list in sync with the languages that
+// exist under public/og so a re-run never leaves a stale tagline card.
+const LANGS = [
+  "af", "am", "ar", "bn", "cs", "da", "de", "el", "en", "es", "fa", "fil",
+  "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "pl", "pt", "ru",
+  "sk", "sw", "th", "tr", "uk", "vi", "zh-CN", "zh-TW", "zu",
+];
 
 console.log(`Rendering OG cards from ${sourcePath} …`);
 
