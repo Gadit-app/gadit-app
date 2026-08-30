@@ -5498,7 +5498,7 @@ function MockProfiles({ lang }: { lang: string }) {
   const m = famMock(lang);
   const kids = [
     { n: m.profile1Name, g: m.profile1Grade, c: "#0EA5A5" },
-    { n: m.profile2Name, g: m.profile2Grade, c: "#7C3AED" },
+    { n: m.profile2Name, g: m.profile2Grade, c: "#0891B2" },
     { n: m.profile3Name, g: m.profile3Grade, c: "#D97706" },
   ];
   return (
@@ -5524,7 +5524,7 @@ function MockGames({ lang }: { lang: string }) {
         <PuzzleIcon />
         <span>{m.gameTwinTrap}</span>
       </div>
-      <div className="fam-mock-game" style={{ background: "rgba(124,58,237,0.1)" }}>
+      <div className="fam-mock-game" style={{ background: "rgba(14,165,165,0.1)" }}>
         <ClockIcon />
         <span>{m.gameTimeTraveler}</span>
       </div>
@@ -5705,9 +5705,9 @@ function MockPicture({ lang }: { lang: string }) {
           <circle cx="114" cy="40" r="1.4" fill="#FDE68A" />
           <ellipse cx="52" cy="95" rx="40" ry="10" fill="rgba(255,255,255,0.16)" />
           <circle cx="50" cy="74" r="18" fill="#F8FAFC" />
-          <path d="M40 72q4 4 8 0" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" />
-          <path d="M52 72q4 4 8 0" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" />
-          <path d="M44 82q6 5 12 0" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M40 72q4 4 8 0" stroke="#0EA5A5" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M52 72q4 4 8 0" stroke="#0EA5A5" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M44 82q6 5 12 0" stroke="#0EA5A5" strokeWidth="2.4" strokeLinecap="round" />
         </svg>
       </div>
       <div className="fam-mock-meaning">
@@ -5796,7 +5796,7 @@ const FEATURE_IMG: Array<string | null> = [
 
 /* ────────────────────────── page ────────────────────────── */
 
-export default function FamiliesLandingClient({ withNav = false }: { withNav?: boolean }) {
+export default function FamiliesV2Client({ withNav = false }: { withNav?: boolean }) {
   const params = useSearchParams();
   const { user, familyId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -6121,7 +6121,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                   <div className="fam-dashmock-sumlabel">{he ? "מילים במחברות המשפחה" : "words in the family's notebooks"}</div>
                 </div>
                 {c.dashKids.map((k, i) => {
-                  const colors = ["#0EA5A5", "#7C3AED", "#D97706"];
+                  const colors = ["#0EA5A5", "#0891B2", "#D97706"];
                   const pct = Math.min(100, Math.round((k.total / 70) * 100));
                   return (
                     <div key={i} className="fam-dashmock-row">
@@ -6374,7 +6374,7 @@ function XIcon() {
 }
 function ShieldIcon() {
   return (
-    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ flexShrink: 0 }}>
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ flexShrink: 0 }}>
       <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
       <path d="m9 12 2 2 4-4" />
     </svg>
@@ -6382,7 +6382,7 @@ function ShieldIcon() {
 }
 function ShieldBigIcon() {
   return (
-    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ margin: "0 auto 10px", display: "block" }}>
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#0EA5A5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ margin: "0 auto 10px", display: "block" }}>
       <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
       <path d="m9 12 2 2 4-4" />
     </svg>
@@ -6406,7 +6406,7 @@ function LeafIcon() {
 }
 function ArrowUpIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M12 19V5M5 12l7-7 7 7" />
     </svg>
   );
@@ -6431,7 +6431,7 @@ function PuzzleIcon() {
 }
 function ClockIcon() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <circle cx="12" cy="12" r="8.5" />
       <path d="M12 7v5l3 3" />
     </svg>
@@ -6602,11 +6602,12 @@ const FAM_CSS = `
   margin-bottom: 18px;
 }
 .fam-h1 {
-  font-size: clamp(30px, 5.6vw, 46px);
-  font-weight: 800;
-  line-height: 1.12;
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 900;
+  line-height: 1.08;
   letter-spacing: -0.02em;
-  margin: 0 0 14px;
+  margin: 0 0 16px;
+  text-wrap: balance;
 }
 .fam-whatis {
   font-size: clamp(14.5px, 2.1vw, 16.5px);
@@ -6631,14 +6632,15 @@ const FAM_CSS = `
   background: #0EA5A5;
   color: #fff;
   border: none;
-  font-weight: 800;
-  font-size: 17px;
-  padding: 15px 30px;
-  border-radius: 13px;
+  font-weight: 900;
+  font-size: 18px;
+  padding: 17px 38px;
+  border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(14,165,165,0.22);
-  transition: transform 160ms ease-out;
+  box-shadow: 0 10px 26px rgba(14,165,165,0.30);
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out;
 }
+.fam-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(14,165,165,0.38); }
 .fam-cta-micro { margin-top: 10px; font-size: 13px; color: #9ca3af; }
 .fam-trustline { margin-top: 16px; font-size: 14px; font-weight: 600; color: #4b5563; }
 .fam-cta:active { transform: scale(0.97); }
@@ -6696,11 +6698,11 @@ const FAM_CSS = `
    other (Gadi 2026-07-26 — the hero and the block under it blurred into
    one). Teal/purple carry their own strong colour so they skip the
    hairline. */
-.fam-band { padding: 62px 0; }
-.fam-band-cream { background: #f6f4ee; border-top: 1px solid rgba(31,41,55,0.06); }
+.fam-band { padding: clamp(56px, 6vw, 82px) 0; }
+.fam-band-cream { background: #eef4f2; border-top: 1px solid rgba(31,41,55,0.06); }
 .fam-band-white { background: #ffffff; border-top: 1px solid rgba(31,41,55,0.06); }
 .fam-band-teal { background: #0EA5A5; }
-.fam-band-purple { background: rgba(124,58,237,0.07); }
+.fam-band-purple { background: rgba(14,165,165,0.06); }
 .fam-band-ink { background: #fdf6ec; }
 @media (max-width: 760px) {
   .fam-band { padding: 46px 0; }
@@ -6718,11 +6720,13 @@ const FAM_CSS = `
 }
 .fam-kicker-light { color: #b45309; }
 .fam-h2 {
-  font-size: clamp(24px, 4.4vw, 32px);
+  font-size: clamp(25px, 3.8vw, 38px);
   font-weight: 800;
+  line-height: 1.14;
   letter-spacing: -0.01em;
   margin: 0 0 16px;
   text-align: center;
+  text-wrap: balance;
 }
 .fam-h2-start { text-align: start; }
 .fam-h2-onteal { color: #fff; }
@@ -6858,7 +6862,7 @@ const FAM_CSS = `
 .fam-dashmock-bar span { display: block; height: 100%; border-radius: 999px; }
 .fam-dashmock-nums { text-align: end; flex-shrink: 0; }
 .fam-dashmock-total { display: block; font-size: 20px; font-weight: 800; color: #1f2937; line-height: 1; }
-.fam-dashmock-week { font-size: 11.5px; font-weight: 700; color: #6d28d9; }
+.fam-dashmock-week { font-size: 11.5px; font-weight: 700; color: #0b7d7d; }
 /* Phone-frame product mockup */
 .fam-phone-wrap { display: flex; justify-content: center; margin-top: 8px; }
 .fam-phone {
@@ -6915,8 +6919,8 @@ const FAM_CSS = `
 .fam-ph-title-row { display: flex; align-items: baseline; gap: 10px; padding-top: 2px; }
 .fam-ph-title { font-size: 30px; font-weight: 800; color: #1f2937; letter-spacing: -0.02em; }
 .fam-ph-pos {
-  font-size: 11.5px; font-weight: 700; color: #7C3AED;
-  background: rgba(124,58,237,0.1); border-radius: 999px; padding: 3px 10px;
+  font-size: 11.5px; font-weight: 700; color: #0EA5A5;
+  background: rgba(14,165,165,0.1); border-radius: 999px; padding: 3px 10px;
 }
 .fam-ph-card {
   background: #fff;
@@ -7007,7 +7011,7 @@ const FAM_CSS = `
   flex-shrink: 0;
 }
 .fam-mock-thumb-0 { background: linear-gradient(135deg, rgba(14,165,165,0.18), rgba(14,165,165,0.06)); }
-.fam-mock-thumb-1 { background: linear-gradient(135deg, rgba(124,58,237,0.16), rgba(124,58,237,0.05)); }
+.fam-mock-thumb-1 { background: linear-gradient(135deg, rgba(14,165,165,0.16), rgba(14,165,165,0.05)); }
 .fam-mock-meaning-t { font-weight: 700; font-size: 14.5px; }
 .fam-mock-meaning-ex { color: #6b7280; font-size: 13px; margin-top: 2px; }
 .fam-mock-toggle { display: flex; align-items: center; gap: 10px; }
@@ -7147,7 +7151,7 @@ const FAM_CSS = `
 .fam-safe-line {
   text-align: center;
   font-weight: 800;
-  color: #7C3AED;
+  color: #0EA5A5;
   margin: 16px 0 0;
   font-size: 16px;
 }
@@ -7238,8 +7242,8 @@ const FAM_CSS = `
   display: flex;
   gap: 14px;
   align-items: flex-start;
-  background: rgba(124,58,237,0.06);
-  border: 1px solid rgba(124,58,237,0.2);
+  background: rgba(14,165,165,0.06);
+  border: 1px solid rgba(14,165,165,0.2);
   border-radius: 18px;
   padding: 18px 20px;
   max-width: 560px;
