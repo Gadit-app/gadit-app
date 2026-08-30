@@ -4,43 +4,123 @@
  * FamiliesV2Client — NON-LIVE preview of the redesigned Family landing.
  *
  * Design language ported from the approved light prototype: one light
- * ground, teal as the single action color, an eyebrow label system,
- * big clamp typography, soft-shadow cards, scroll reveal, and a sticky
- * mobile CTA. Hebrew-first for the preview (localization comes after the
- * design is locked). Every feature gets its own section with its real
- * screenshot from /public/fam; the two new features (Say it, tap any
- * word) use built-in mockups. Price sits at the very end.
- *
- * Lives at /families-v2 only. The live /families page is untouched.
+ * ground, teal as the single action color, an eyebrow label system, big
+ * clamp typography, soft-shadow cards, scroll reveal, sticky mobile CTA.
+ * The COPY is the existing (good) Hebrew from the live /families page,
+ * kept verbatim, plus two added feature sections for Say it and tap-any-
+ * word. Each existing feature uses its real /public/fam screenshot; the
+ * two new features use polished built-in mockups. Price sits at the very
+ * end, after every feature. Hebrew-first for the preview; localization
+ * comes once the design is locked. Lives only at /families-v2 — the live
+ * /families page is untouched.
  */
 
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const FEATURES: Array<{ img?: string; mock?: "say" | "everyword"; eyebrow: string; title: string; body: string }> = [
-  { img: "meanings", eyebrow: "כל המשמעויות", title: "כל מילה, מוסברת בשפה שלך.", body: "מילה בכל שפה מקבלת את כל המשמעויות שלה, דוגמאות לפי הקשר, ניבים ומקור היסטורי, מוסברת בשפה שמדברים בבית." },
-  { img: "kids-mode", eyebrow: "מצב ילדים", title: "הסבר בגובה של ילד, לא של מילון.", body: "אותה מילה, מנוסחת פשוט וברור לילד. בלי הגדרות יבשות שהוא סוגר בלי להבין." },
-  { mock: "everyword", eyebrow: "כל מילה", title: "לחיצה על כל מילה בתוך ההסבר.", body: "גם מילה בתוך ההסבר לא מובנת? לחיצה אחת פותחת אותה מיד, בלי לצאת מהעמוד. ככה ההבנה לא נתקעת באמצע." },
-  { mock: "say", eyebrow: "Say it", title: "לשמוע כל מילה, ולתרגל את ההגייה.", body: "הילד שומע איך אומרים את המילה, אומר אותה בעצמו, ומקבל משוב על ההגייה. בטוח לדבר, בלי בושה." },
-  { img: "context", eyebrow: "מצב הקשר", title: "המשמעות הנכונה, למשפט הנכון.", body: "מדביקים משפט שלם, וגדית בוחר את המשמעות שמתאימה בדיוק להקשר. סוף לבלבול בין משמעויות." },
-  { img: "notebook", eyebrow: "מחברת וחידונים", title: "המילים נשארות, וחוזרות לתרגול.", body: "כל מילה שהילד לומד נשמרת במחברת אישית, וחוזרת בחידונים ובתרגול חכם כדי שהיא באמת תיקבע." },
-  { img: "games", eyebrow: "משחקי מילים", title: "למידה שלא מרגישה כמו שיעורי בית.", body: "משחקי מילים שהופכים את התרגול למשהו שהילד רוצה לחזור אליו, ובונים אוצר מילים תוך כדי." },
-  { img: "profiles", eyebrow: "פרופיל לכל ילד", title: "כל ילד, הקצב שלו, המחברת שלו.", body: "לכל ילד פרופיל נפרד עם היסטוריה, מחברת ורצף ימי למידה משלו. אותה משפחה, מסלול אישי לכל אחד." },
+const CHECKOUT = "/checkout";
+
+type Feat = { img?: string; mock?: "say" | "everyword"; kicker: string; title: string; body: string };
+
+// Existing feature copy is verbatim from the live /families he block; the
+// two `mock` entries (כל מילה, Say it) are the added copy Gadi asked for.
+const FEATURES: Feat[] = [
+  {
+    img: "meanings", kicker: "כל המשמעויות", title: "מילה אחת. כל הפירושים. תמונה לכל אחד.",
+    body: "למילה אחת יש הרבה פעמים כמה משמעויות שונות, ושם ילדים מתבלבלים. Gadit מציג את כולן במקום אחד, כל אחת עם שלוש דוגמאות אמיתיות ותמונה משלה, כי מוח של ילד זוכר תמונות הרבה יותר טוב ממילים.",
+  },
+  {
+    img: "kids-mode", kicker: "מצב ילדים", title: "הסבר בגובה העיניים של הילד",
+    body: "מתג אחד, וכל ההסברים עוברים לשפה שילד בן 8 באמת מבין. בלי מילים קשות שמסבירות מילים קשות, בלי הגדרות מעגליות. פשוט להבין.",
+  },
+  {
+    mock: "everyword", kicker: "כל מילה", title: "לוחצים על כל מילה בתוך ההסבר",
+    body: "גם מילה בתוך ההסבר לא מובנת לילד? לחיצה אחת פותחת אותה מיד, בלי לצאת מהעמוד. ההבנה לא נתקעת באמצע, וכל מילה מובילה בטבעיות למילה הבאה.",
+  },
+  {
+    img: "context", kicker: "הבנת הקשר", title: "מדביקים משפט, מקבלים את הפירוש הנכון",
+    body: "לרוב המילים יש יותר מפירוש אחד, ושם ילדים הולכים לאיבוד. מדביקים את המשפט מהספר או מדף העבודה, ו-Gadit מסמן בדיוק איזו משמעות מתאימה להקשר הזה.",
+  },
+  {
+    mock: "say", kicker: "Say it", title: "לשמוע כל מילה, ולהגיד אותה בקול",
+    body: "הילד שומע איך אומרים כל מילה, אומר אותה בעצמו, ומקבל משוב על ההגייה. ככה נוח לו לדבר ולא רק לקרוא, בלי בושה ובלי פחד לטעות.",
+  },
+  {
+    img: "notebook", kicker: "מחברת אישית", title: "המילים לא בורחות",
+    body: "כל מילה שהילד חיפש נשמרת במחברת האישית שלו, ותרגול קצר וחכם מחזיר אותה בדיוק כשהיא עומדת להישכח. ככה אוצר מילים באמת נבנה, מילה אחרי מילה.",
+  },
+  {
+    img: "profiles", kicker: "פרופיל לכל ילד", title: "לכל ילד המרחב שלו",
+    body: "לכל ילד במשפחה פרופיל נפרד: המחברת שלו, התרגול שלו וההיסטוריה שלו. מצב ילדים מתאים את ההסבר, פשוט וברור לקטנים ומלא יותר לגדולים, ואף אחד לא דורך לאף אחד על המילים.",
+  },
+  {
+    img: "games", kicker: "משחקי מילים", title: "משחקי למידה על המילים של הילד",
+    body: "חידונים ומשחקים קצרים שבנויים על המילים שהילד עצמו חיפש. כמה דקות של משחק, ואוצר המילים גדל בלי מאמץ.",
+  },
+  {
+    img: "english", kicker: "אנגלית", title: "העוזר הכי טוב לשיעורי אנגלית",
+    body: "הילד מקליד מילה באנגלית ומקבל הסבר פשוט בעברית, עם תמונה ודוגמאות. בלי לנדוד בין מילון, גוגל טרנסלייט ויוטיוב. שיעורי אנגלית מפסיקים להיות מלחמה.",
+  },
+];
+
+const CHAIN_STEPS = [
+  "הילד מקליד מילה שהוא לא מבין",
+  "מקבל הסבר בגובה העיניים שלו, תמונה ושלוש דוגמאות",
+  "המילה נשמרת במחברת האישית שלו",
+  "וחוזרת בתרגול קצר, עד שהיא באמת שלו",
+];
+
+const STACK_ITEMS = [
+  "חיפושים בלי הגבלה לכל המשפחה",
+  "כל המשמעויות, עם תמונה לכל משמעות",
+  "מצב ילדים לכל הגילאים",
+  "בדיקת משפטים עם משוב מיידי",
+  "מחברת אישית ותרגול חכם לכל ילד",
+  "משחקי מילים וחידונים",
+  "עד 5 ילדים בפרופילים נפרדים",
+  "30+ שפות, כולל עברית מלאה ואנגלית",
+];
+
+const COMPARE_ROWS: Array<{ label: string; gadit: boolean }> = [
+  { label: "עמוד אחד נקי לכל מילה", gadit: true },
+  { label: "הסבר בגובה העיניים של הילד", gadit: true },
+  { label: "תמונה לכל משמעות", gadit: true },
+  { label: "מחברת ותרגול שנשארים", gadit: true },
+  { label: "בלי פרסומות וקישורים לכל כיוון", gadit: true },
+  { label: "בלי צ'אט פתוח בלי גבולות", gadit: true },
+];
+
+const DASH_KIDS = [
+  { name: "מאיה", total: 63, week: 15, c: "#0EA5A5" },
+  { name: "נועה", total: 47, week: 12, c: "#0891B2" },
+  { name: "עידו", total: 31, week: 8, c: "#D97706" },
+];
+
+const FAQ: Array<[string, string]> = [
+  ["מה אני מקבל ב-Gadit?", "כל מילה שהילד מחפש מקבלת עמוד אחד נקי: כל המשמעויות, הסבר בגובה העיניים של הילד (מצב ילדים), שלוש דוגמאות אמיתיות, ותמונה לכל משמעות. בנוסף, הבנת הקשר (מדביקים משפט ומקבלים את המשמעות הנכונה), מחברת מילים אישית עם תרגול חכם, משחקי מילים וחידונים, לוח בקרה להורה שמראה כמה כל ילד למד, עד 5 ילדים בפרופילים נפרדים, והכול ב-30+ שפות, במרחב סגור ובטוח, בלי צ'אט פתוח ובלי פרסומות."],
+  ["למה לא פשוט לשאול צ'אט או גוגל?", "כי אלה כלים למבוגרים. חיפוש בגוגל מחזיר פרסומות וקישורים לכל כיוון, וצ'אט פתוח הוא שיחה בלי גבולות שאף הורה לא משאיר בה ילד לבד. Gadit בנוי הפוך: עמוד אחד סגור ונקי לכל מילה, בגובה העיניים של הילד, בלי שום דרך ללכת לאיבוד."],
+  ["איך אני יודע שהילד באמת מתקדם?", "יש לכם לוח בקרה להורה. במבט אחד רואים כמה מילים כל ילד למד, כמה נוספו השבוע ואילו מילים אחרונות. כל כלי אחר עונה לילד ושוכח, ו-Gadit שומר כל מילה במחברת האישית של הילד, כך שאתם רואים את אוצר המילים גדל שבוע אחרי שבוע."],
+  ["לאילו גילאים זה מתאים?", "הלב של Gadit הוא ילדים בגיל בית ספר, מכיתה א ועד תיכון. מצב ילדים מסביר בפשטות לקטנים, וההסברים המלאים משרתים גם בני נוער והורים. את החשבון פותח ההורה."],
+  ["זה עוזר גם באנגלית ובשפות נוספות?", "מאוד. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות, בדיוק הכלי שחסר בבית לשיעורי אנגלית. וזה עובד ב-30+ שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית."],
+  ["המחיר באמת בשקלים?", "כן. החיוב בשקלים, בכרטיס ישראלי רגיל, בלי עמלות המרה ובלי הפתעות: ₪199 לשנה או ₪19.90 לחודש, אחרי 14 ימי הניסיון."],
+  ["כמה ילדים אפשר לחבר?", "עד 5 ילדים במנוי משפחתי אחד, לכל ילד פרופיל, מחברת ותרגול משלו."],
+  ["אפשר לנסות בלי להתחייב?", "כן. מתחילים 14 ימי ניסיון עם כרטיס, אבל החיוב הראשון יורד רק בתום הניסיון. מבטלים בכל רגע קודם, בלחיצה אחת, ולא תחויבו בכלום."],
 ];
 
 function MockEveryWord() {
   return (
     <div className="gdx-mock">
-      <div className="gdx-mock-h">מה זה אומר?</div>
-      <p className="gdx-mock-para">
-        התהליך שבו צמח לוקח אור שמש, מים ו
-        <span className="gdx-mock-hl">פחמן דו-חמצני</span>
-        , והופך אותם למזון.
-      </p>
-      <div className="gdx-pop">
-        <div className="gdx-pop-w">פחמן דו-חמצני</div>
-        <div className="gdx-pop-d">גז שנמצא באוויר. צמחים משתמשים בו כדי לייצר מזון.</div>
+      <div className="gdx-mock-bar"><span /><span /><span /></div>
+      <div className="gdx-mock-body">
+        <div className="gdx-mock-h">מה זה אומר?</div>
+        <p className="gdx-mock-para">
+          התהליך שבו צמח לוקח אור שמש, מים ו<span className="gdx-mock-hl">פחמן דו-חמצני</span>, והופך אותם למזון שלו.
+        </p>
+        <div className="gdx-pop">
+          <div className="gdx-pop-w">פחמן דו-חמצני</div>
+          <div className="gdx-pop-d">גז שנמצא באוויר. צמחים משתמשים בו כדי לייצר לעצמם מזון.</div>
+        </div>
       </div>
     </div>
   );
@@ -49,17 +129,20 @@ function MockEveryWord() {
 function MockSay() {
   return (
     <div className="gdx-mock">
-      <div className="gdx-say-w" translate="no">Butterfly</div>
-      <div className="gdx-say-row">
-        <span className="gdx-say-btn">▶</span>
-        <span className="gdx-say-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-        <span className="gdx-say-lbl">כך אומרים</span>
-      </div>
-      <div className="gdx-say-practice">
-        <span className="gdx-say-mic">🎙️</span>
-        <div>
-          <div className="gdx-say-stars">★★★★<span>★</span></div>
-          <div className="gdx-say-heard">שמעתי: batterfly, כמעט מדויק</div>
+      <div className="gdx-mock-bar"><span /><span /><span /></div>
+      <div className="gdx-mock-body">
+        <div className="gdx-say-w" translate="no">Butterfly</div>
+        <div className="gdx-say-row">
+          <span className="gdx-say-btn" aria-hidden>▶</span>
+          <span className="gdx-say-wave"><i /><i /><i /><i /><i /><i /><i /><i /></span>
+          <span className="gdx-say-lbl">כך אומרים</span>
+        </div>
+        <div className="gdx-say-practice">
+          <span className="gdx-say-mic" aria-hidden>🎙️</span>
+          <div>
+            <div className="gdx-say-stars" aria-hidden>★★★★<span>★</span></div>
+            <div className="gdx-say-heard">שמעתי: batterfly, כמעט מדויק</div>
+          </div>
         </div>
       </div>
     </div>
@@ -75,15 +158,10 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       return;
     }
     const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((x) => {
-          if (x.isIntersecting) {
-            x.target.classList.add("is-in");
-            io.unobserve(x.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      (entries) => entries.forEach((x) => {
+        if (x.isIntersecting) { x.target.classList.add("is-in"); io.unobserve(x.target); }
+      }),
+      { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
     );
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
@@ -93,10 +171,9 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
     <div className="gdx">
       <style>{GDX_CSS}</style>
 
-      {/* header */}
       <header className="gdx-head">
         <span className="gdx-logo" translate="no">Gad<i>it</i></span>
-        <Link href="/checkout" className="gdx-head-cta">להתחיל חינם</Link>
+        <Link href={CHECKOUT} className="gdx-head-cta">להתחיל חינם</Link>
       </header>
 
       {/* HERO */}
@@ -104,22 +181,20 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
         <div className="wrap hero-grid">
           <div className="rv">
             <span className="eyebrow">מנוי משפחתי · עד 5 ילדים</span>
-            <h1>שהילד שלך יבין כל מילה בבית הספר, עד הסוף.</h1>
-            <p className="lead">גדית מסביר כל מילה בשפה שמדברים בבית, בגובה של ילד, ובונה אוצר מילים שנשאר. את ההתקדמות של כל ילד רואים בלוח אחד.</p>
+            <h1>די להיות המילון הפרטי של הבית.</h1>
+            <p className="lead">מהיום, כשהילד שואל "מה זה אומר?", יש לו מקום אחד שבו הוא מוצא את התשובה לבד: כל המשמעויות, תמונה לכל משמעות, והסבר בגובה העיניים של הילד. בלי צ'אט פתוח ובלי פרסומות.</p>
             <div className="cta-wrap">
-              <Link href="/checkout" className="btn">להתחיל 14 יום חינם</Link>
-              <div className="btn-sub">בלי כרטיס בהתחלה · אפשר לבטל בכל רגע</div>
+              <Link href={CHECKOUT} className="btn">מתחילים 14 ימי ניסיון חינם</Link>
+              <div className="btn-sub">בלי צ'אט פתוח · בלי פרסומות · ביטול בלחיצה אחת</div>
             </div>
             <div className="chips">
-              <span className="chip">כל מילה, בשפה שלך</span>
-              <span className="chip">לוח בקרה להורה</span>
-              <span className="chip">33 שפות</span>
+              <span className="chip">30+ שפות ממשק</span>
+              <span className="chip">תמונה לכל משמעות</span>
+              <span className="chip">עד 5 ילדים</span>
             </div>
           </div>
           <div className="stage rv">
-            <div className="shot shot-hero">
-              <Image src="/fam/hero.webp" alt="" width={1200} height={900} sizes="(max-width:900px) 92vw, 460px" priority />
-            </div>
+            <div className="shot shot-hero"><Image src="/fam/hero.webp" alt="" width={1200} height={900} sizes="(max-width:900px) 92vw, 460px" priority /></div>
           </div>
         </div>
       </section>
@@ -127,44 +202,50 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       {/* PAIN */}
       <section className="sec surf">
         <div className="narrow rv">
-          <span className="eyebrow">מוכר לך?</span>
-          <h2 className="start">הילד קורא את המילים, אבל לא באמת מבין אותן.</h2>
-          <ul className="pain">
-            <li>שיעורי הבית לוקחים שעתיים, כי כל פסקה מלאה במילים שהוא לא מכיר.</li>
-            <li>הוא שואל "מה זה אומר?", ואין תמיד את המילה המדויקת בשפה שלו.</li>
-            <li>מילון רגיל נותן הגדרה יבשה, והוא סוגר אותה בלי להבין.</li>
-            <li>וקשה לדעת אילו מילים חסרות לו, עד שמגיע המבחן.</li>
-          </ul>
+          <span className="eyebrow">נקודת הכאב האמיתית</span>
+          <h2 className="start">הילד קורא, אבל לא תמיד באמת מבין.</h2>
+          <p className="para">אתם דווקא שמחים כשהילד עוצר ושואל מה זה מילה. הבעיה היא כל המילים שהוא לא עוצר לשאול עליהן. הוא מדלג עליהן, ממשיך לקרוא, והחומר לא נכנס. אוצר המילים נשאר דל, וההבנה נשברת מילה אחרי מילה.</p>
+          <p className="para">וזה נוגע בהרבה יותר מציון. ילד שלא מבין מרגיש שהוא לא מספיק טוב, מתוסכל מהלימודים, ומאבד ביטחון. וזה קורה בשקט, בלי שאף אחד יודע להצביע איפה בדיוק נשבר החוט.</p>
+          <p className="reframe">וזה בדיוק המקום שבו Gadit נכנס.</p>
         </div>
       </section>
 
-      {/* SOLUTION */}
+      {/* PUZZLE */}
       <section className="sec">
         <div className="narrow center rv">
-          <span className="eyebrow">מה זה גדית</span>
-          <h2>כלי אחד שהופך כל מילה לא מובנת למילה שהילד מבין, זוכר, ויודע להשתמש בה.</h2>
+          <span className="eyebrow">מה קורה בראש של הילד</span>
+          <h2>טקסט הוא פאזל. כל מילה היא חתיכה.</h2>
+          <p className="para" style={{ textAlign: "center", marginInline: "auto", maxWidth: 640 }}>כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. כל מילה שהוא מבין היא חתיכה שנכנסת למקום. כל מילה שחסרה היא חור בתמונה. מספיק שלושה-ארבעה חורים, והילד כבר לא רואה את התמונה, גם אם הגה כל אות נכון.</p>
+          <p className="reframe" style={{ textAlign: "center" }}>כשכל המילים ברורות, הילד רואה את התמונה השלמה.</p>
+        </div>
+      </section>
+
+      {/* CHAIN / HOW */}
+      <section className="sec surf">
+        <div className="narrow rv">
+          <div className="center" style={{ marginBottom: 26 }}>
+            <span className="eyebrow">איך זה עובד</span>
+            <h2>על כל מילה, הילד מקבל את כל זה.</h2>
+          </div>
+          <ol className="steps">
+            {CHAIN_STEPS.map((s, i) => <li key={i}><span className="step-n">{i + 1}</span><span>{s}</span></li>)}
+          </ol>
         </div>
       </section>
 
       {/* FEATURES, one section per feature */}
       {FEATURES.map((f, i) => (
-        <section key={i} className={`sec ${i % 2 === 0 ? "surf" : ""}`}>
+        <section key={i} className={`sec ${i % 2 === 0 ? "" : "surf"}`}>
           <div className={`wrap feat ${i % 2 === 1 ? "flip" : ""} rv`}>
             <div className="feat-text">
-              <span className="eyebrow">{f.eyebrow}</span>
+              <span className="eyebrow">{f.kicker}</span>
               <h2 className="start">{f.title}</h2>
               <p className="feat-body">{f.body}</p>
             </div>
             <div className="feat-visual">
               {f.img ? (
-                <div className="shot">
-                  <Image src={`/fam/${f.img}.webp`} alt="" width={1200} height={900} sizes="(max-width:900px) 92vw, 440px" />
-                </div>
-              ) : f.mock === "everyword" ? (
-                <MockEveryWord />
-              ) : (
-                <MockSay />
-              )}
+                <div className="shot"><Image src={`/fam/${f.img}.webp`} alt="" width={1200} height={900} sizes="(max-width:900px) 92vw, 440px" /></div>
+              ) : f.mock === "everyword" ? <MockEveryWord /> : <MockSay />}
             </div>
           </div>
         </section>
@@ -173,18 +254,14 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       {/* PARENT DASHBOARD, the moat */}
       <section className="sec surf">
         <div className="wrap rv">
-          <span className="eyebrow">לוח בקרה להורה</span>
-          <h2 className="start" style={{ marginBottom: 8 }}>לראות בדיוק איפה כל ילד צריך עזרה, בלי לרחף מעליו.</h2>
-          <p className="lead" style={{ marginBottom: 26 }}>כל מילה שילד מחפש נשמרת. הלוח מראה לך מה הוא לומד השבוע, מה חוזר, ומה כדאי לתרגל.</p>
+          <span className="eyebrow">לוח הבקרה להורה</span>
+          <h2 className="start" style={{ marginBottom: 8 }}>אתם רואים בדיוק כמה כל ילד למד.</h2>
+          <p className="lead" style={{ marginBottom: 26 }}>לכל ילד במשפחה מחברת מילים אישית שגדלה. בלוח הבקרה שלכם אתם רואים במבט אחד כמה מילים כל ילד למד, כמה נוספו השבוע, ואת ההתקדמות שבוע אחרי שבוע.</p>
           <div className="dash">
-            {[
-              { n: "מאיה · כיתה ד׳", c: "#0EA5A5", bars: [40, 70, 55, 90, 60] },
-              { n: "יונתן · כיתה ב׳", c: "#0891B2", bars: [30, 45, 35, 50, 65] },
-              { n: "נועה · כיתה ו׳", c: "#D97706", bars: [80, 60, 95, 70, 85] },
-            ].map((k, i) => (
+            {DASH_KIDS.map((k, i) => (
               <div className="drow" key={i}>
-                <span className="kidname"><span className="dot" style={{ background: k.c }}>{k.n[0]}</span>{k.n}</span>
-                <span className="dbars">{k.bars.map((h, j) => <span className="dbar" key={j} style={{ height: `${h}%` }} />)}</span>
+                <span className="kidname"><span className="dot" style={{ background: k.c }}>{k.name[0]}</span>{k.name}</span>
+                <span className="kidnums"><b>{k.total}</b> מילים · <span className="wk">+{k.week} השבוע</span></span>
               </div>
             ))}
           </div>
@@ -194,16 +271,39 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       {/* COMPARE */}
       <section className="sec">
         <div className="narrow rv">
-          <span className="eyebrow">גדית מול מילון רגיל</span>
-          <h2 className="start" style={{ marginBottom: 22 }}>ההבדל בין להגדיר מילה, לבין להבין אותה.</h2>
+          <span className="eyebrow">ההבדל</span>
+          <h2 className="start" style={{ marginBottom: 22 }}>למה לא פשוט לחפש בגוגל או לשאול צ'אט?</h2>
           <table className="cmp">
-            <thead><tr><th>&nbsp;</th><th className="brand">Gadit</th><th>מילון רגיל</th></tr></thead>
+            <thead><tr><th>&nbsp;</th><th className="brand" translate="no">Gadit</th><th>האינטרנט הפתוח</th></tr></thead>
             <tbody>
-              {["הסבר בגובה של ילד", "מוסבר בשפה שמדברים בבית", "לחיצה על כל מילה בתוך ההסבר", "מחברת ותרגול שחוזרים", "לוח בקרה להורה"].map((r, i) => (
-                <tr key={i}><td>{r}</td><td className="yes">✓</td><td className="no">לא</td></tr>
+              {COMPARE_ROWS.map((r, i) => (
+                <tr key={i}><td>{r.label}</td><td className="yes">✓</td><td className="no">לא</td></tr>
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/* SAFE */}
+      <section className="sec surf">
+        <div className="narrow rv">
+          <span className="eyebrow">מרחב בטוח</span>
+          <h2 className="start">אזור נפרד ונקי, לא שער לשום מקום אחר.</h2>
+          <p className="para">Gadit הוא מקום סגור לגמרי: אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. הילד לא נשאב מכאן לטיקטוק או לאף אפליקציה אחרת. יש כאן דבר אחד לעשות: להבין מילה, ולחזור ללימודים.</p>
+          <p className="reframe">מסך אחד שאפשר לתת לילד בראש שקט.</p>
+        </div>
+      </section>
+
+      {/* STACK */}
+      <section className="sec">
+        <div className="narrow rv">
+          <div className="center" style={{ marginBottom: 24 }}>
+            <span className="eyebrow">מה מקבלים</span>
+            <h2>הכול כלול במסלול המשפחתי.</h2>
+          </div>
+          <ul className="stack">
+            {STACK_ITEMS.map((s, i) => <li key={i}><span className="stack-c">✓</span>{s}</li>)}
+          </ul>
         </div>
       </section>
 
@@ -211,10 +311,10 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       <section className="sec surf">
         <div className="narrow rv">
           <div className="guard">
-            <div className="gbadge">✓</div>
+            <div className="gbadge" aria-hidden>✓</div>
             <div>
-              <h3>14 יום להתרשם, בלי סיכון</h3>
-              <p>מתחילים חינם. אם זה לא מתאים, מבטלים לפני תום הניסיון בלחיצה אחת, ולא מחייבים אותך בכלל.</p>
+              <h3>המבחן שלכם: שבועיים</h3>
+              <p>תנו לזה שבועיים בשימוש אמיתי, בחינם. אם עד יום ה-14 לא הצטברו במחברת של הילד לפחות 20 מילים חדשות, מבטלים בלחיצה אחת ולא שילמתם שקל.</p>
             </div>
           </div>
         </div>
@@ -223,13 +323,8 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       {/* FAQ */}
       <section className="sec">
         <div className="narrow rv">
-          <div className="center" style={{ marginBottom: 24 }}><span className="eyebrow">שאלות נפוצות</span><h2>מה שכדאי לדעת לפני שמתחילים.</h2></div>
-          {[
-            ["לכמה ילדים זה מספיק?", "עד 5 ילדים תחת אותו מנוי, כל אחד עם פרופיל, מחברת והתקדמות משלו."],
-            ["הילד שלי לומד בשפה אחרת, זה יעבוד?", "כן. גדית מסביר כל מילה בשפה שבוחרים, מתוך 33 שפות ממשק, ומזהה את שפת הלימוד בנפרד."],
-            ["איך מחייבים אותי?", "בשקלים, בכרטיס ישראלי רגיל, בלי עמלות המרה: ₪199 לשנה או ₪19.90 לחודש, אחרי 14 ימי הניסיון."],
-            ["אפשר לבטל?", "בכל רגע, בלחיצה אחת מהחשבון. אם מבטלים לפני תום הניסיון, לא מחייבים בכלל."],
-          ].map(([q, a], i) => (
+          <div className="center" style={{ marginBottom: 24 }}><span className="eyebrow">שאלות של הורים</span><h2>מה שכדאי לדעת לפני שמתחילים.</h2></div>
+          {FAQ.map(([q, a], i) => (
             <details key={i}><summary>{q}</summary><div className="a">{a}</div></details>
           ))}
         </div>
@@ -238,15 +333,16 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       {/* PRICE, at the very end */}
       <section className="sec">
         <div className="wrap center rv" style={{ marginBottom: 26 }}>
-          <span className="eyebrow">מנוי משפחתי</span>
-          <h2>עכשיו שראית הכל, מחיר אחד לכל המשפחה.</h2>
+          <span className="eyebrow">התמחור</span>
+          <h2>עכשיו שראית הכול, מסלול המשפחה.</h2>
+          <p className="lead" style={{ maxWidth: 560, marginInline: "auto" }}>פחות משיעור פרטי אחד, לשנה שלמה, לכל הילדים בבית.</p>
         </div>
         <div className="pricebox rv">
-          <span className="trial">14 יום חינם, בלי חיוב</span>
+          <span className="trial">14 ימי ניסיון חינם</span>
           <div className="price">19.90<small> ₪ לחודש</small></div>
-          <div className="pricenote">עד 5 ילדים, כל אחד עם פרופיל משלו. או ₪199 לשנה, וחוסכים קרוב לחודשיים.</div>
-          <Link href="/checkout" className="btn">להתחיל 14 יום חינם</Link>
-          <div className="btn-sub">אחרי הניסיון: ₪19.90 לחודש. ביטול בלחיצה אחת מהחשבון, בלי חיוב.</div>
+          <div className="pricenote">עד 5 ילדים, כל אחד עם פרופיל משלו. או ₪199 לשנה, פחות מ-17 ₪ לחודש לכל המשפחה, וחוסכים קרוב לחודשיים.</div>
+          <Link href={CHECKOUT} className="btn">מתחילים את הניסיון</Link>
+          <div className="btn-sub">החיוב בשקלים, רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.</div>
         </div>
       </section>
 
@@ -254,16 +350,16 @@ export default function FamiliesV2Client({ withNav = false }: { withNav?: boolea
       <section className="sec final band">
         <div className="narrow wrap rv">
           <span className="eyebrow">אפשר להתחיל היום</span>
-          <h2>תני לילד שלך את המילים להבין כל שיעור.</h2>
-          <p className="lead" style={{ marginBottom: 26 }}>14 יום חינם. עד 5 ילדים. לוח אחד שרואה את כולם.</p>
-          <Link href="/checkout" className="btn">להתחיל 14 יום חינם</Link>
+          <h2>התחילו היום, וראו את אוצר המילים גדל.</h2>
+          <p className="lead" style={{ marginBottom: 26 }}>שבועיים חינם. ביטול בלחיצה. והילד לומד להבין מילים לבד, ואוצר המילים שלו גדל.</p>
+          <Link href={CHECKOUT} className="btn">מתחילים 14 ימי ניסיון חינם</Link>
         </div>
       </section>
 
       {/* STICKY MOBILE */}
       <div className="sticky">
         <div className="sp">19.90 ₪<span> / חודש · 14 יום חינם</span></div>
-        <Link href="/checkout" className="btn">להתחיל</Link>
+        <Link href={CHECKOUT} className="btn">להתחיל</Link>
       </div>
     </div>
   );
@@ -290,6 +386,8 @@ const GDX_CSS = `
 .gdx .center{text-align:center}
 .gdx .center .eyebrow{justify-content:center}
 .gdx .start{text-align:right}
+.gdx .para{font-size:17px;line-height:1.72;color:var(--soft);margin-top:16px}
+.gdx .reframe{font-size:clamp(19px,2.4vw,23px);font-weight:800;color:var(--teal-deep);margin-top:20px}
 
 .gdx-head{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:0 auto;padding:16px 20px}
 .gdx-logo{font-weight:800;font-size:24px;color:var(--ink);letter-spacing:-.02em;direction:ltr}
@@ -323,23 +421,33 @@ const GDX_CSS = `
 .gdx .feat.flip .feat-text{order:2}
 .gdx .feat.flip .feat-visual{order:1}
 .gdx .feat-body{font-size:16.5px;line-height:1.7;color:var(--soft);margin-top:12px}
-.gdx .feat-visual .shot{max-width:440px;margin-inline:auto}
+.gdx .feat-visual .shot,.gdx .feat-visual .gdx-mock{max-width:440px;margin-inline:auto}
 
-.gdx .pain{display:grid;gap:12px;margin-top:20px;padding:0;list-style:none}
-.gdx .pain li{background:var(--surf);border:1px solid var(--line);border-right:3px solid var(--teal);border-radius:12px;padding:15px 18px;color:var(--soft);font-size:16.5px;box-shadow:0 8px 20px rgba(11,18,32,.05)}
+.gdx .steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+.gdx .steps li{display:flex;align-items:center;gap:14px;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:15px 18px;font-size:16.5px;color:var(--ink);font-weight:600;box-shadow:0 8px 20px rgba(11,18,32,.05)}
+.gdx .step-n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:rgba(14,165,165,.12);color:var(--teal-deep);font-weight:800;font-size:15px;display:grid;place-items:center}
+
+.gdx .stack{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.gdx .stack{grid-template-columns:1fr}}
+.gdx .stack li{display:flex;align-items:flex-start;gap:10px;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:15.5px;color:var(--ink);box-shadow:0 8px 20px rgba(11,18,32,.05)}
+.gdx .stack-c{flex:0 0 auto;color:var(--teal-deep);font-weight:800}
 
 .gdx .dash{background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:clamp(16px,3vw,26px);box-shadow:0 26px 60px rgba(11,18,32,.12)}
-.gdx .drow{display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-bottom:1px solid var(--line2)}
+.gdx .drow{display:flex;align-items:center;justify-content:space-between;padding:15px 4px;border-bottom:1px solid var(--line2);gap:12px;flex-wrap:wrap}
 .gdx .drow:last-child{border-bottom:none}
-.gdx .kidname{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px;font-weight:600}
-.gdx .dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff}
-.gdx .dbars{display:flex;align-items:flex-end;gap:4px;height:36px}
-.gdx .dbar{width:9px;background:var(--teal);border-radius:3px;opacity:.9}
+.gdx .kidname{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:16px;font-weight:700}
+.gdx .dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:800;color:#fff}
+.gdx .kidnums{color:var(--soft);font-size:15px}
+.gdx .kidnums b{color:var(--ink);font-size:19px;font-weight:800}
+.gdx .kidnums .wk{color:var(--teal-deep);font-weight:700}
 
-.gdx-mock{background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 26px 60px rgba(11,18,32,.14);max-width:440px;margin-inline:auto;position:relative}
+.gdx-mock{background:var(--surf);border:1px solid var(--line);border-radius:18px;box-shadow:0 26px 60px rgba(11,18,32,.14);overflow:hidden}
+.gdx-mock-bar{display:flex;gap:6px;padding:12px 16px;border-bottom:1px solid var(--line2);background:#FAFCFB}
+.gdx-mock-bar span{width:10px;height:10px;border-radius:50%;background:#D6DEE4}
+.gdx-mock-body{padding:22px}
 .gdx-mock-h{font-size:13px;font-weight:700;color:var(--teal-deep);margin-bottom:10px}
-.gdx-mock-para{font-size:17px;line-height:1.7;color:var(--ink)}
-.gdx-mock-hl{background:rgba(14,165,165,.16);border-bottom:2px solid var(--teal);border-radius:4px;padding:0 3px;font-weight:700;cursor:pointer}
+.gdx-mock-para{font-size:17px;line-height:1.75;color:var(--ink)}
+.gdx-mock-hl{background:rgba(14,165,165,.16);border-bottom:2px solid var(--teal);border-radius:4px;padding:0 3px;font-weight:700}
 .gdx-pop{margin-top:16px;background:#0B1220;color:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 16px 34px rgba(11,18,32,.25)}
 .gdx-pop-w{font-weight:800;font-size:15px;margin-bottom:4px}
 .gdx-pop-d{font-size:13.5px;color:#C2CCDB;line-height:1.5}
@@ -347,8 +455,8 @@ const GDX_CSS = `
 .gdx-say-row{display:flex;align-items:center;gap:12px;margin:16px 0}
 .gdx-say-btn{width:38px;height:38px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:14px;flex:0 0 auto}
 .gdx-say-wave{display:flex;align-items:center;gap:3px;flex:1}
-.gdx-say-wave i{width:4px;border-radius:2px;background:rgba(14,165,165,.55);height:12px}
-.gdx-say-wave i:nth-child(2){height:22px}.gdx-say-wave i:nth-child(3){height:30px}.gdx-say-wave i:nth-child(4){height:18px}.gdx-say-wave i:nth-child(5){height:26px}.gdx-say-wave i:nth-child(6){height:14px}.gdx-say-wave i:nth-child(7){height:22px}
+.gdx-say-wave i{width:4px;border-radius:2px;background:rgba(14,165,165,.55);height:14px}
+.gdx-say-wave i:nth-child(2){height:24px}.gdx-say-wave i:nth-child(3){height:32px}.gdx-say-wave i:nth-child(4){height:18px}.gdx-say-wave i:nth-child(5){height:28px}.gdx-say-wave i:nth-child(6){height:14px}.gdx-say-wave i:nth-child(7){height:22px}
 .gdx-say-lbl{font-size:12.5px;color:var(--muted);font-weight:600;flex:0 0 auto}
 .gdx-say-practice{display:flex;align-items:center;gap:12px;background:var(--band);border-radius:14px;padding:14px 16px;margin-top:6px}
 .gdx-say-mic{font-size:22px}
@@ -374,13 +482,13 @@ const GDX_CSS = `
 .gdx summary::-webkit-details-marker{display:none}
 .gdx summary::after{content:"+";color:var(--teal-deep);font-weight:800;font-size:22px}
 .gdx details[open] summary::after{content:"\\2212"}
-.gdx details .a{padding:0 20px 18px;color:var(--soft);font-size:15.5px}
+.gdx details .a{padding:0 20px 18px;color:var(--soft);font-size:15.5px;line-height:1.7}
 
 .gdx .pricebox{background:linear-gradient(180deg,#fff,#F3F8F7);border:1px solid var(--line);border-radius:22px;padding:clamp(26px,4vw,40px);text-align:center;max-width:560px;margin:0 auto;box-shadow:0 26px 60px rgba(11,18,32,.12)}
 .gdx .trial{display:inline-block;background:rgba(14,165,165,.10);border:1px solid rgba(14,165,165,.28);color:var(--teal-deep);font-weight:700;font-size:13.5px;border-radius:999px;padding:6px 16px;margin-bottom:18px}
 .gdx .price{color:var(--teal);font-weight:900;font-size:clamp(52px,9vw,84px);line-height:1;letter-spacing:-.02em}
 .gdx .price small{font-size:22px;font-weight:700;color:var(--soft)}
-.gdx .pricenote{color:var(--muted);font-size:15px;margin:10px 0 22px}
+.gdx .pricenote{color:var(--muted);font-size:15px;margin:10px auto 22px;max-width:440px}
 
 .gdx .final{text-align:center;position:relative;overflow:clip}
 .gdx .final .wrap{position:relative}
