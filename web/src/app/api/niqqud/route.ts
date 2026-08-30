@@ -1,12 +1,14 @@
 /**
  * POST /api/niqqud  — body { texts: string[] } → { niqqud: string[] }
  *
- * Adds Hebrew vowel points (niqqud) to text so young readers (grades 1-2) can
- * read a word's meaning and examples. Uses Dicta's Nakdan (purpose-built and
- * far more accurate than an LLM at vocalization); results are deterministic
- * per string, so they are cached in Firestore. Non-Hebrew text is returned
- * unchanged. If Dicta is unreachable, the original text is returned so the UI
- * degrades to plain (un-vowelized) Hebrew rather than breaking. Gadi 2026-08-22.
+ * Adds vowel points to text so young readers (grades 1-2) can read a word's
+ * meaning and examples. Hebrew uses Dicta's Nakdan (purpose-built, far more
+ * accurate than an LLM at vocalization); Arabic uses the LLM tashkeel path
+ * below (Arabic has no Dicta equivalent). Results are deterministic per string
+ * so they are cached in Firestore (Hebrew and Arabic keyed separately). Text
+ * that is neither Hebrew nor Arabic is returned unchanged. If the service is
+ * unreachable the original text is returned so the UI degrades to plain
+ * (un-vowelized) text rather than breaking. Gadi 2026-08-22, Arabic 2026-08-30.
  *
  * Auth: any signed-in user (a light gate so the Dicta proxy isn't public).
  */
@@ -20,9 +22,34 @@ export const maxDuration = 25;
 
 const DICTA_URL = "https://nakdan-u1-0.loadbalancer.dicta.org.il/api";
 const HEBREW = /[֐-׿]/;
+const ARABIC = /[؀-ۿ]/;
 
-function hashKey(text: string): string {
-  return crypto.createHash("sha256").update("v1:" + text).digest("hex").slice(0, 40);
+function hashKey(text: string, prefix = "v1:"): string {
+  return crypto.createHash("sha256").update(prefix + text).digest("hex").slice(0, 40);
+}
+
+/** Add full diacritics (tashkeel/harakat) to Arabic text via the LLM. Arabic
+ *  has no Dicta equivalent; gpt-4o at temperature 0 vocalizes short definition
+ *  and example text well, and every result is cached forever per string.
+ *  Returns only the diacritized text; on any failure the caller falls back to
+ *  plain (un-vocalized) Arabic so the UI never breaks. Gadi 2026-08-30. */
+async function tashkeel(text: string): Promise<string> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: "gpt-4o",
+      temperature: 0,
+      messages: [
+        { role: "system", content: "You add full Arabic diacritics (tashkeel/harakat) to text. Return ONLY the fully vocalized Arabic, with the exact same words, order, punctuation and spacing. Do not translate, explain, or change any wording. Leave any non-Arabic characters untouched." },
+        { role: "user", content: text },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error("openai_" + res.status);
+  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const out = json.choices?.[0]?.message?.content?.trim();
+  return out || text;
 }
 
 /** Call Dicta Nakdan and rebuild the vowelized string from its token stream. */
@@ -72,19 +99,22 @@ export async function POST(req: NextRequest) {
   const niqqud = await Promise.all(
     texts.map(async (text) => {
       const trimmed = (text || "").trim();
-      if (!trimmed || !HEBREW.test(trimmed)) return text; // nothing to vowelize
-      const ref = db.collection("niqqudCache").doc(hashKey(trimmed));
+      if (!trimmed) return text;
+      const isHeb = HEBREW.test(trimmed);
+      const isAr = !isHeb && ARABIC.test(trimmed);
+      if (!isHeb && !isAr) return text; // nothing to vowelize
+      const ref = db.collection("niqqudCache").doc(hashKey(trimmed, isAr ? "ar1:" : "v1:"));
       try {
         const snap = await ref.get();
         if (snap.exists) return (snap.data() as { niqqud?: string }).niqqud ?? text;
       } catch { /* cache read best-effort */ }
       try {
-        const voweled = await vowelize(trimmed);
+        const voweled = isAr ? await tashkeel(trimmed) : await vowelize(trimmed);
         try { await ref.set({ text: trimmed, niqqud: voweled, at: new Date().toISOString() }); } catch { /* ignore */ }
         // Preserve any surrounding whitespace the caller sent.
         return text.replace(trimmed, voweled);
       } catch {
-        return text; // Dicta down → plain Hebrew, no break
+        return text; // service down → plain text, no break
       }
     }),
   );

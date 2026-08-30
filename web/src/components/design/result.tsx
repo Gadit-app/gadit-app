@@ -331,6 +331,9 @@ export function WordHeader({
   onToggleNiqqud?: () => void;
 }) {
   const { lang } = useLang();
+  // The vowel-points toggle labels itself for the WORD's script: Arabic word
+  // shows تشكيل (tashkeel), otherwise Hebrew ניקוד / Latin Niqqud.
+  const isArabicHeadword = /[؀-ۿ]/.test(word);
   const showLang = !langMatchesUi(language, lang);
   // Cross-language anchor: when the word is in another language, show its
   // equivalent in the UI language right under the headword (חלום → Traum),
@@ -378,7 +381,7 @@ export function WordHeader({
               type="button"
               onClick={onToggleNiqqud}
               aria-pressed={niqqudOn}
-              title={lang === "he" ? "ניקוד למי שקורא עם עזרה" : "Vowel points for young readers"}
+              title={isArabicHeadword ? "التشكيل لمن يقرأ بمساعدة" : lang === "he" ? "ניקוד למי שקורא עם עזרה" : "Vowel points for young readers"}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 13px",
                 borderRadius: 999, cursor: "pointer", fontFamily: "inherit", fontSize: 14, fontWeight: 700,
@@ -388,7 +391,7 @@ export function WordHeader({
               }}
             >
               {niqqudOn && <span aria-hidden="true" style={{ fontSize: 15 }}>✓</span>}
-              {lang === "he" ? "ניקוד" : "Niqqud"}
+              {isArabicHeadword ? "تشكيل" : lang === "he" ? "ניקוד" : "Niqqud"}
             </button>
           )}
         </div>

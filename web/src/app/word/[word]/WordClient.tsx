@@ -532,6 +532,7 @@ export function WordClient({
   const [niqqud, setNiqqud] = useState(false);
   const [niqResult, setNiqResult] = useState<WordResult | null>(null);
   const isHebrewWord = !!result && /[֐-׿]/.test(result.word || "");
+  const isArabicWord = !!result && /[؀-ۿ]/.test(result.word || "");
   useEffect(() => {
     try { setNiqqud(localStorage.getItem("gadit-niqqud") === "1"); } catch { /* ignore */ }
   }, []);
@@ -543,11 +544,12 @@ export function WordClient({
     });
   }
   useEffect(() => {
-    if (!niqqud || !isHebrewWord || !result || !user) { setNiqResult(null); return; }
+    if (!niqqud || !(isHebrewWord || isArabicWord) || !result || !user) { setNiqResult(null); return; }
     let cancelled = false;
     (async () => {
       try {
-        const isHeb = (s?: string) => !!s && /[֐-׿]/.test(s);
+        // Vowelizable = Hebrew (Dicta niqqud) or Arabic (LLM tashkeel).
+        const isHeb = (s?: string) => !!s && /[֐-׿؀-ۿ]/.test(s);
         // Collect only the text that's actually SHOWN in the current mode:
         // in Kids Mode the kids explanation replaces the standard meaning.
         const texts: string[] = [];
@@ -597,7 +599,7 @@ export function WordClient({
       }
     })();
     return () => { cancelled = true; };
-  }, [niqqud, isHebrewWord, result, user, kidsMode]);
+  }, [niqqud, isHebrewWord, isArabicWord, result, user, kidsMode]);
   const displayResult = niqqud && niqResult ? niqResult : result;
   const [reportContext, setReportContext] = useState<ReportContext | null>(
     null
@@ -1950,7 +1952,7 @@ export function WordClient({
         ) : (
           <ResultView
             result={displayResult ?? result}
-            showNiqqud={isHebrewWord && !!user}
+            showNiqqud={(isHebrewWord || isArabicWord) && !!user}
             niqqudOn={niqqud}
             onToggleNiqqud={toggleNiqqud}
             plan={plan}
