@@ -61,6 +61,7 @@ type Overview = {
     endedThisWeekCount: number;
     unmappedPriceCount: number;
     unmappedPriceIds: string[];
+    atRisk?: Array<{ email: string | null; tier: string; monthlyUsd: number; currency: string; status: string }>;
   };
   activity: {
     searchesToday: number;
@@ -378,6 +379,20 @@ export default function AdminOverviewClient() {
                   </div>
                 ))}
               </div>
+              {al?.atRisk && al.atRisk.length > 0 && (
+                <div style={{ marginTop: 12, display: "grid", gap: 6 }}>
+                  {al.atRisk.map((s, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "8px 12px", borderRadius: 10, border: "1px solid #FCA5A5", background: "#FFFFFF", fontSize: 13 }}>
+                      {s.email ? (
+                        <a href={`mailto:${s.email}`} dir="ltr" style={{ fontWeight: 600, color: "#B91C1C", textDecoration: "none" }}>{s.email}</a>
+                      ) : (
+                        <span dir="ltr" style={{ color: TOKENS.inkFaint }}>—</span>
+                      )}
+                      <span dir="ltr" style={{ color: TOKENS.inkSoft, whiteSpace: "nowrap" }}>{s.tier} · ${s.monthlyUsd.toFixed(2)}/mo · {s.status}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

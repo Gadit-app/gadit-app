@@ -281,6 +281,15 @@ export async function GET(req: NextRequest) {
       endedThisWeekCount: rev.endedThisWeekCount,
       unmappedPriceCount: rev.unmappedPriceCount,
       unmappedPriceIds: rev.unmappedPriceIds,
+      // The actual at-risk subscribers (email + amount) so the overview can
+      // show WHO failed, not just a count, and Gadi can act from here.
+      atRisk: rev.atRisk.map((s) => ({
+        email: s.email,
+        tier: s.tier,
+        monthlyUsd: s.monthlyUsd,
+        currency: s.currency,
+        status: s.status,
+      })),
     },
     businessTz: rev.businessTz,
     activity: {
