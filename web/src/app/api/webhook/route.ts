@@ -8,6 +8,13 @@ import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
+// Grace period: when a renewal payment fails (past_due), keep the paid plan
+// for up to this long from when the payment was due, instead of cutting access
+// on the first failed charge. Anchored to the subscription's current_period_end
+// so it's stable across Stripe's retry attempts. The grace-expiry cron
+// downgrades once it passes; a recovered payment clears it. Gadi 2026-08-31.
+const GRACE_MS = 7 * 24 * 60 * 60 * 1000;
+
 /**
  * Book a partner (affiliate) commission for a paid invoice.
  *
@@ -529,6 +536,86 @@ async function findUserIdByCustomer(customerId: string): Promise<string | null> 
   return snap.docs[0].id;
 }
 
+/**
+ * Our own Hebrew dunning email (in addition to Stripe's, which is English).
+ * Fires on invoice.payment_failed for a real subscription renewal: tells the
+ * customer the charge did not go through, that access stays for 7 days, and
+ * links to Stripe's hosted page to update the card in one click. Deduped per
+ * invoice so Stripe's per-retry events don't spam. Best-effort. Gadi 2026-08-31.
+ */
+async function notifyPaymentFailed(invoice: Stripe.Invoice) {
+  try {
+    const email = invoice.customer_email;
+    const url = invoice.hosted_invoice_url;
+    if (!email || !url) return;
+    if ((invoice.amount_due ?? 0) <= 0) return; // $0 / first-trial invoice: nothing failed
+
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    let ref: FirebaseFirestore.DocumentReference | null = null;
+    if (customerId) {
+      const uid = await findUserIdByCustomer(customerId);
+      if (uid) {
+        ref = getAdminDb().collection("users").doc(uid);
+        const snap = await ref.get();
+        if (snap.data()?.dunningNotifiedInvoice === invoice.id) return; // once per invoice
+      }
+    }
+
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey) return;
+    const resend = new Resend(resendKey);
+    await resend.emails.send({
+      from: "Gadit <notify@gadit.app>",
+      to: email,
+      subject: "החיוב לא עבר. יש לך 7 ימים לעדכן כרטיס",
+      html: `
+        <div dir="rtl" style="font-family:Rubik,Arial,sans-serif;max-width:520px;margin:0 auto;padding:8px 4px;color:#1f2937;line-height:1.7;">
+          <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></div>
+          <h1 style="font-size:20px;font-weight:800;color:#0B1220;margin:14px 0 10px;">החיוב על המנוי לא עבר</h1>
+          <p style="margin:0 0 12px;">ניסינו לחדש את המנוי שלך ב-Gadit והחיוב לא עבר, כנראה הכרטיס נדחה או פג תוקף.</p>
+          <p style="margin:0 0 18px;"><b>הגישה שלך נשמרת ל-7 ימים.</b> עדכון הכרטיס לוקח פחות מדקה, והכל ממשיך כרגיל, בלי לאבד את המחברות וההתקדמות של הילדים.</p>
+          <p style="margin:0 0 22px;">
+            <a href="${url}" style="display:inline-block;background:#0EA5A5;color:#fff;font-weight:800;font-size:16px;text-decoration:none;padding:14px 30px;border-radius:12px;">עדכון כרטיס</a>
+          </p>
+          <p style="margin:0 0 8px;color:#6b7280;font-size:14px;">אם כבר עדכנת, אפשר להתעלם מהמייל הזה. אם משהו לא ברור, פשוט השב/י למייל ואנחנו כאן.</p>
+          <p style="margin:14px 0 0;color:#9ca3af;font-size:13px;">צוות Gadit</p>
+        </div>`,
+    });
+    if (ref) await ref.set({ dunningNotifiedInvoice: invoice.id }, { merge: true });
+  } catch (err) {
+    console.error("[webhook] payment_failed notify error:", err);
+  }
+}
+
+/**
+ * Apply the 7-day grace on a failed RENEWAL, from the invoice event. Keeps the
+ * paid plan (instead of the old immediate downgrade) and anchors graceUntil to
+ * the invoice date, so it is stable across Stripe's retries. Guards: only for
+ * subscription renewals (never a failed first payment), and never restores a
+ * customer whose window already passed. Idempotent. Gadi 2026-08-31.
+ */
+async function applyGraceFromFailedInvoice(invoice: Stripe.Invoice) {
+  try {
+    if (invoice.billing_reason !== "subscription_cycle") return; // renewals only, not first charge
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (!customerId) return;
+    const uid = await findUserIdByCustomer(customerId);
+    if (!uid) return;
+    // Read the paid plan from the user doc's stored priceId (persisted when the
+    // sub was active) rather than the invoice line, so it works even if the old
+    // logic already downgraded them to basic.
+    const snap = await getAdminDb().collection("users").doc(uid).get();
+    const priceId = (snap.data()?.priceId as string) || "";
+    const plan = getPlanFromPriceId(priceId);
+    if (!plan || plan === "basic") return;
+    const graceUntil = (invoice.created ?? Math.floor(Date.now() / 1000)) * 1000 + GRACE_MS;
+    if (graceUntil <= Date.now()) return; // beyond the 7-day window: leave downgraded
+    await applyPlanToUser(uid, plan, { subscriptionStatus: "past_due", graceUntil });
+  } catch (err) {
+    console.error("[webhook] grace-from-invoice error:", err);
+  }
+}
+
 /** True when subId is the subscription currently recorded on the user
  *  doc (or when no subscription is recorded at all). Downgrade guard:
  *  a dying OLD subscription must never overwrite a live new one. */
@@ -571,10 +658,23 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     // Abandoned Payment-Element subs auto-cancel at trial end
     // (missing_payment_method: cancel); if the user meanwhile paid via
     // another subscription, that cancellation must not clobber it.
-    if (sub.status === "canceled" || sub.status === "unpaid" || sub.status === "past_due") {
+    if (sub.status === "past_due") {
+      // Grace: keep paid access while Stripe retries, up to 7 days from the
+      // renewal date, instead of cutting off on the first failed charge. The
+      // grace-expiry cron downgrades once graceUntil passes; recovery clears it.
+      if (await isCurrentSubscription(uid, sub.id)) {
+        await applyPlanToUser(uid, plan || "basic", {
+          subscriptionStatus: "past_due",
+          graceUntil: Date.now() + GRACE_MS,
+        });
+      }
+      return true;
+    }
+    if (sub.status === "canceled" || sub.status === "unpaid") {
       if (await isCurrentSubscription(uid, sub.id)) {
         await applyPlanToUser(uid, "basic", {
           subscriptionStatus: sub.status,
+          graceUntil: null,
         });
       } else {
         console.log(`[webhook] ignoring ${sub.status} for stale sub ${sub.id} (uid=${uid})`);
@@ -781,8 +881,19 @@ export async function POST(req: NextRequest) {
       if (userId) {
         const priceId = sub.items.data[0]?.price?.id ?? "";
         const plan = getPlanFromPriceId(priceId);
-        // If subscription is not active (past_due, canceled, etc), downgrade to basic
-        const effectivePlan = sub.status === "active" || sub.status === "trialing" ? plan : "basic";
+        // Grace on past_due: keep paid access for up to 7 days while Stripe
+        // retries, instead of downgrading on the first failed charge.
+        // active/trialing clears any grace; canceled/unpaid downgrades now.
+        let effectivePlan: "basic" | "clear" | "deep";
+        let graceUntil: number | null = null;
+        if (sub.status === "active" || sub.status === "trialing") {
+          effectivePlan = plan;
+        } else if (sub.status === "past_due") {
+          effectivePlan = plan;
+          graceUntil = Date.now() + GRACE_MS;
+        } else {
+          effectivePlan = "basic";
+        }
         await applyPlanToUser(userId, effectivePlan, {
           subscriptionId: sub.id,
           subscriptionStatus: sub.status,
@@ -790,6 +901,7 @@ export async function POST(req: NextRequest) {
           // trial_end becomes null once the trial converts to paid; clear it then.
           trialEnd: sub.trial_end ?? null,
           cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
+          graceUntil,
         });
       }
     }
@@ -821,6 +933,12 @@ export async function POST(req: NextRequest) {
       const invoice = event.data.object as Stripe.Invoice;
       await accruePartnerCommission(invoice);
       await creditReferralConversion(invoice);
+    }
+
+    if (event.type === "invoice.payment_failed") {
+      const invoice = event.data.object as Stripe.Invoice;
+      await applyGraceFromFailedInvoice(invoice);
+      await notifyPaymentFailed(invoice);
     }
 
     return NextResponse.json({ received: true });

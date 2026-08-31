@@ -19,6 +19,10 @@
     {
       "path": "/api/cron/dedup-cardless",
       "schedule": "30 3 * * *"
+    },
+    {
+      "path": "/api/cron/grace-expiry",
+      "schedule": "45 3 * * *"
     }
   ]
 }

@@ -6,6 +6,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
 import { CoachSessionBanner } from "@/components/CoachSessionBanner";
 import { AdminImpersonationBanner } from "@/components/AdminImpersonationBanner";
+import { PastDueBanner } from "@/components/PastDueBanner";
 import { KidsModeBar } from "@/components/KidsModeBar";
 import type { Lang } from "@/lib/i18n";
 import { LANGUAGES } from "@/lib/i18n";
@@ -559,6 +560,7 @@ export default async function RootLayout({
                   RefCapture, which is provider-free). */}
               <KidRouteGuard />
               <TwaInit />
+              <PastDueBanner />
               <CoachSessionBanner />
               <AdminImpersonationBanner />
               <KidsModeBar />

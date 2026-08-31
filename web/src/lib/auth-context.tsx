@@ -81,6 +81,10 @@ interface AuthContextType {
    *  (or immediately true when anonymous). Gate paid features on this, not on
    *  `loading`, to avoid a paid-feature flash for subscribers. */
   planReady: boolean;
+  /** True while the subscription is past_due but still inside the 7-day grace
+   *  window (paid access is retained; the banner nudges them to update the card). */
+  pastDue: boolean;
+  graceUntil: number | null;
   /** Owner of a Family subscription has this set to their own uid.
    *  Paired members (kids + secondary parents) have it set to the
    *  family owner's uid. null means no Family membership at all. */
@@ -160,6 +164,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // covers Firebase AUTH, so without this a paid user briefly reads as "basic"
   // between auth-ready and plan-snapshot — which flashes paid-feature gates.
   const [planReady, setPlanReady] = useState(false);
+  const [pastDue, setPastDue] = useState(false);
+  const [graceUntil, setGraceUntil] = useState<number | null>(null);
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
   const [familyRole, setFamilyRole] = useState<"kid" | "parent" | null>(null);
@@ -226,6 +232,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setFamilyId(null);
       setSchoolId(null);
       setFamilyRole(null);
+      setPastDue(false);
+      setGraceUntil(null);
       setPlanReady(true); // anonymous: nothing to resolve, "basic" is final
       return;
     }
@@ -251,10 +259,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const schId = (data?.schoolId as string) ?? null;
         const frRaw = data?.familyRole;
         const fr = frRaw === "kid" || frRaw === "parent" ? frRaw : null;
+        const subStatus = (data?.subscriptionStatus as string) ?? null;
+        const grace = typeof data?.graceUntil === "number" ? data.graceUntil : null;
         setPlan(p);
         setFamilyId(famId);
         setSchoolId(schId);
         setFamilyRole(fr);
+        setPastDue(subStatus === "past_due");
+        setGraceUntil(grace);
         setPlanReady(true);
         writeAuthCache(user.uid, { plan: p, familyId: famId, schoolId: schId, familyRole: fr });
       },
@@ -266,6 +278,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setFamilyId(null);
         setSchoolId(null);
         setFamilyRole(null);
+        setPastDue(false);
+        setGraceUntil(null);
         setPlanReady(true);
       }
     );
@@ -505,7 +519,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
+      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,
