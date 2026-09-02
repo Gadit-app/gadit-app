@@ -19,6 +19,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { stripLookupDiacritics } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
+import { TTSButton } from "./TTSButton";
 
 type Props = {
   /** The word the user tapped. Used to look up the quick definition
@@ -39,6 +40,10 @@ type Props = {
   /** Open the full-definition link in a NEW TAB. Set by the Reader so opening a
    *  word's full page never navigates away from (and loses) the passage. */
   fullInNewTab?: boolean;
+  /** Code/BCP-47 of the WORD's language, so the speaker pronounces it in its
+   *  own language (e.g. a Hebrew word for a Russian-UI reader), not the UI
+   *  language. When absent the speaker falls back to English. */
+  wordLang?: string;
   /** Close-on-outside-click / Escape / link-tap. */
   onClose: () => void;
 };
@@ -85,7 +90,12 @@ const COPY: Record<string, { openFull: string; loading: string; noPreview: strin
   hu: { openFull: "Teljes meghatározás megnyitása", loading: "Betöltés…", noPreview: "Koppintson lentebb a teljes meghatározás megtekintéséhez." },
 };
 
-export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTab, onClose }: Props) {
+const LISTEN: Record<string, string> = {
+  en: "Listen", he: "להאזנה", ar: "استمع", ru: "Прослушать", es: "Escuchar",
+  fr: "Écouter", de: "Anhören", pt: "Ouvir",
+};
+
+export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTab, wordLang, onClose }: Props) {
   const { dir } = useLang();
   const href = useHref();
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
@@ -214,15 +224,20 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 6 }}>
-        <div
-          style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: "var(--ink, #0B1220)",
-            overflowWrap: "anywhere",
-          }}
-        >
-          {word}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+              color: "var(--ink, #0B1220)",
+              overflowWrap: "anywhere",
+            }}
+          >
+            {word}
+          </div>
+          {/* Hear the word pronounced in its OWN language (feature: listen to
+              any word inside a reader passage). Web Speech, free. */}
+          <TTSButton text={word} audioLang={wordLang} ariaLabel={LISTEN[lang] ?? LISTEN.en} />
         </div>
         {/* Explicit close, so tapping a word and getting back to the text is one
             obvious tap (not only an outside-click), especially on touch. */}
