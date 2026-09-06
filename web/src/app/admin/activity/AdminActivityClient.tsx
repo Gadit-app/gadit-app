@@ -112,6 +112,26 @@ export default function AdminActivityClient() {
 
   const planLabel = (p: string) => (he ? (PLAN_LABEL[p]?.he ?? p) : (PLAN_LABEL[p]?.en ?? p));
 
+  // Client-side filters over the loaded rows (use "Load more" to pull more
+  // history into the buffer, then filter). Kept client-side so it works with
+  // no Firestore composite indexes and filters the live stream instantly.
+  const [fType, setFType] = useState<"all" | "word" | "image">("all");
+  const [fLang, setFLang] = useState<string>("");
+  const [fUser, setFUser] = useState<string>("");
+
+  const langs = Array.from(new Set(items.map((i) => i.lang))).sort();
+  const uq = fUser.trim().toLowerCase();
+  const filtered = items.filter((it) => {
+    if (fType !== "all" && it.kind !== fType) return false;
+    if (fLang && it.lang !== fLang) return false;
+    if (uq) {
+      const hay = `${it.email ?? ""} ${it.uid ?? ""}`.toLowerCase();
+      if (!hay.includes(uq)) return false;
+    }
+    return true;
+  });
+  const filterOn = fType !== "all" || !!fLang || !!uq;
+
   return (
     <div dir={he ? "rtl" : "ltr"} style={{ color: INK, fontFamily: "inherit" }}>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 4 }}>
@@ -144,6 +164,36 @@ export default function AdminActivityClient() {
       )}
 
       {items.length > 0 && (
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+          <div style={{ display: "flex", gap: 4 }}>
+            {(["all", "word", "image"] as const).map((k) => (
+              <button key={k} onClick={() => setFType(k)} style={chip(fType === k)}>
+                {k === "all" ? (he ? "הכל" : "All") : k === "word" ? (he ? "🔤 מילים" : "🔤 Words") : (he ? "🖼️ תמונות" : "🖼️ Images")}
+              </button>
+            ))}
+          </div>
+          <select value={fLang} onChange={(e) => setFLang(e.target.value)} style={selectStyle}>
+            <option value="">{he ? "כל השפות" : "All languages"}</option>
+            {langs.map((l) => <option key={l} value={l}>{l.toUpperCase()}</option>)}
+          </select>
+          <input
+            value={fUser}
+            onChange={(e) => setFUser(e.target.value)}
+            placeholder={he ? "חיפוש מנוי (אימייל)" : "Filter subscriber (email)"}
+            style={{ ...selectStyle, minWidth: 200 }}
+          />
+          {filterOn && (
+            <button onClick={() => { setFType("all"); setFLang(""); setFUser(""); }} style={{ ...chip(false), color: "#B91C1C", borderColor: "#FBD5D5" }}>
+              {he ? "נקה" : "Clear"}
+            </button>
+          )}
+          <span style={{ fontSize: 12.5, color: MUTED, marginInlineStart: "auto", fontVariantNumeric: "tabular-nums" }}>
+            {he ? `מציג ${filtered.length} מתוך ${items.length}` : `${filtered.length} of ${items.length}`}
+          </span>
+        </div>
+      )}
+
+      {items.length > 0 && (
         <div style={{ background: "white", border: `1px solid ${RULE}`, borderRadius: 14, overflow: "hidden" }}>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13.5, minWidth: 640 }}>
@@ -157,7 +207,7 @@ export default function AdminActivityClient() {
                 </tr>
               </thead>
               <tbody>
-                {items.map((it, i) => {
+                {filtered.map((it, i) => {
                   const { date, time } = fmt(it.atMs, he);
                   const ps = PLAN_STYLE[it.plan] ?? PLAN_STYLE.unknown;
                   return (
@@ -217,3 +267,15 @@ function btn(primary: boolean): React.CSSProperties {
     fontWeight: 700, fontSize: 13, padding: "8px 18px", borderRadius: 8, cursor: "pointer",
   };
 }
+function chip(active: boolean): React.CSSProperties {
+  return {
+    border: `1px solid ${active ? TEAL : RULE}`,
+    background: active ? "rgba(14,165,165,0.10)" : "white",
+    color: active ? TEAL : MUTED,
+    fontWeight: 700, fontSize: 12.5, padding: "6px 12px", borderRadius: 8, cursor: "pointer",
+  };
+}
+const selectStyle: React.CSSProperties = {
+  border: `1px solid ${RULE}`, background: "white", color: INK,
+  fontSize: 13, padding: "7px 10px", borderRadius: 8, fontFamily: "inherit", outline: "none",
+};
