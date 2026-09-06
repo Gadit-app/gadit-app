@@ -3102,10 +3102,10 @@ const en: V2Strings = {
   practiceWordHint: "A short quiz tuned to how you learn.",
   unlockWithClear: "Unlock with Clear",
   upgradeToClear: "Upgrade to Clear",
-  softWallAnonTitle: "You've used your free searches",
+  softWallAnonTitle: "Keep going, it's still free",
   softWallAnonBody:
-    "Sign up free to search up to 20 words a day, with full definitions, examples, idioms and word origin.",
-  softWallSignupCta: "Sign up, it's free",
+    "A quick free account unlocks up to 20 daily searches, with examples, idioms and word origins.",
+  softWallSignupCta: "Continue for free",
   softWallBasicTitle: "You've reached today's limit",
   softWallBasicBody:
     "Free accounts get 20 searches per day. The limit resets tomorrow, or upgrade to Clear for unlimited searches plus images, kids mode, and grammar feedback.",
@@ -3494,10 +3494,10 @@ const he: V2Strings = {
   practiceWordHint: "שאלון קצר שמותאם לאופן הלמידה שלכם.",
   unlockWithClear: "פתחו עם Clear",
   upgradeToClear: "שדרגו ל־Clear",
-  softWallAnonTitle: "ניצלתם את החיפושים החינמיים",
+  softWallAnonTitle: "ההמשך חינמי, רק צריך חשבון",
   softWallAnonBody:
-    "הירשמו חינם וחפשו עד 20 מילים ביום, עם הגדרות מלאות, דוגמאות, ניבים ומקור המילה.",
-  softWallSignupCta: "הרשמה חינם",
+    "הרשמה מהירה פותחת עד 20 חיפושים ביום, עם הגדרות מלאות, דוגמאות, ניבים ומקור המילה.",
+  softWallSignupCta: "להמשיך בחינם",
   softWallBasicTitle: "הגעתם למכסה היומית",
   softWallBasicBody:
     "חשבון חינם כולל 20 חיפושים ביום. המכסה מתאפסת מחר, או שדרגו ל־Clear לחיפושים ללא הגבלה, תמונות, מצב ילדים ומשוב על משפטים.",
