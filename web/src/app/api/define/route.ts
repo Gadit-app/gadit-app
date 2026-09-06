@@ -6,7 +6,7 @@ import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
-import { recordActivity } from "@/lib/activity-log";
+import { recordActivity, isBotUA } from "@/lib/activity-log";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -1527,6 +1527,16 @@ export async function POST(req: NextRequest) {
           },
         });
       }
+    }
+
+    // Bots never trigger a paid generation. Reaching here means the cache
+    // MISSED (cache hits already returned above, free for everyone). A crawler
+    // indexing an uncached word URL would otherwise run a fresh gpt-4o call for
+    // zero human value, so serve it 204 No Content and never touch OpenAI. Real
+    // browsers always send a rich user-agent, so humans are unaffected; the
+    // event was already recorded above (tagged as a bot) for the activity log.
+    if (isBotUA(req.headers.get("user-agent"))) {
+      return new Response(null, { status: 204 });
     }
 
     // Quota enforcement runs only on cache misses ג€” popular words like
