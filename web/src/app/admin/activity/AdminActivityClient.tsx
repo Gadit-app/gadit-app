@@ -17,6 +17,7 @@ type Item = {
   uid: string | null;
   plan: string;
   email: string | null;
+  country: string | null;
   atMs: number;
   at: string | null;
 };
@@ -228,6 +229,11 @@ export default function AdminActivityClient() {
                           <span style={{ color: it.email ? INK : MUTED, direction: "ltr", unicodeBidi: "isolate" }}>
                             {it.email ?? (it.uid ? it.uid.slice(0, 8) + "…" : (he ? "אנונימי" : "anon"))}
                           </span>
+                          {it.country && (
+                            <span style={{ background: SOFT, color: MUTED, fontSize: 11, fontWeight: 700, padding: "2px 7px", borderRadius: 999 }}>
+                              {it.country}
+                            </span>
+                          )}
                           <span style={{ background: ps.bg, color: ps.fg, fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>
                             {planLabel(it.plan)}
                           </span>

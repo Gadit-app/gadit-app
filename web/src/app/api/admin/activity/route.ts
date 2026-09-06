@@ -22,6 +22,7 @@ type Row = {
   lang?: string;
   uid?: string | null;
   plan?: string | null;
+  country?: string | null;
   atMs?: number;
   at?: string;
 };
@@ -69,6 +70,7 @@ export async function GET(req: NextRequest) {
     uid: r.uid ?? null,
     plan: r.plan ?? (r.uid ? "unknown" : "anon"),
     email: r.uid ? emailByUid[r.uid] ?? null : null,
+    country: r.country ?? null,
     atMs: r.atMs ?? 0,
     at: r.at ?? null,
   }));

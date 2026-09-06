@@ -292,7 +292,7 @@ export async function POST(req: NextRequest) {
       plan: userInfo.plan,
     });
     // Raw per-event feed for /admin/activity.
-    void recordActivity({ kind: "image", word, lang: uiLangCode, uid: userInfo.userId, plan: userInfo.plan });
+    void recordActivity({ kind: "image", word, lang: uiLangCode, uid: userInfo.userId, plan: userInfo.plan, country: req.headers.get("x-vercel-ip-country") });
 
     // Upload to Firebase Storage
     // Unique filename per generation. The files are served with a 1-year

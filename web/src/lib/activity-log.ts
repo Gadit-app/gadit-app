@@ -22,16 +22,21 @@ export async function recordActivity(e: {
   lang: string;
   uid?: string | null;
   plan?: string | null;
+  /** 2-letter country from the request (Vercel x-vercel-ip-country). Lets an
+   *  anonymous row still say WHERE it came from. */
+  country?: string | null;
 }): Promise<void> {
   try {
     const word = (e.word || "").trim().slice(0, 120);
     if (!word) return;
+    const country = (e.country || "").trim().slice(0, 2).toUpperCase() || null;
     await getAdminDb().collection("activityLog").add({
       kind: e.kind,
       word,
       lang: e.lang || "en",
       uid: e.uid ?? null,
       plan: e.plan ?? (e.uid ? "unknown" : "anon"),
+      country,
       atMs: Date.now(),
       at: new Date().toISOString(),
     });
