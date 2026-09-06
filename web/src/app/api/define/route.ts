@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
@@ -1594,6 +1595,10 @@ export async function POST(req: NextRequest) {
         // matches on, plus a UI-language-aware fallback string.
         const upstreamCode = openAIResponse.status;
         console.error(`[define] both models down, upstream code ${upstreamCode}`);
+        // Alert Gadi immediately (deduped to 1/30min) so an outage never
+        // surfaces from a customer first. 429 here is almost always an
+        // OpenAI credit/billing problem, not a code bug.
+        void alertEngineDown({ source: "define (both models)", status: upstreamCode });
         return NextResponse.json(
           {
             error: "service_unavailable",
