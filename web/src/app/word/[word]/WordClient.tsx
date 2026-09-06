@@ -65,24 +65,23 @@ import {
 // what localStorage says); this counter just tells us when to
 // surface the heads-up before that happens.
 //
-// localStorage layout: { date: "2026-04-26", count: 3 }
-// On a UTC date change we reset to 0. Cleared cookies = reset; that's
-// fine, the server still enforces.
+// LIFETIME (not daily) anon allowance, per device. Gadi 2026-09-06: after
+// 3 total searches from the same phone (cache hit OR miss, never resetting by
+// day), the visitor hits a HARD wall and must register (free). This is the
+// primary enforcement — the server still caps cache-MISS generations by IP as
+// a cost backstop. Clearing localStorage / incognito resets it; that's an
+// accepted trade-off (real visitors won't, and signup is free).
+//
+// localStorage layout: { count: 3 }  (a stray legacy `date` field is ignored).
 const ANON_COUNTER_KEY = "gadit-anon-searches";
-// Mirrors ANON_DAILY_LIMIT in /api/define (5 → 2 on 2026-07-08).
-const ANON_DAILY_LIMIT_CLIENT = 2;
-
-function todayUTC(): string {
-  return new Date().toISOString().slice(0, 10);
-}
+const ANON_LIFETIME_LIMIT = 3;
 
 function readAnonCounter(): number {
   if (typeof window === "undefined") return 0;
   try {
     const raw = window.localStorage.getItem(ANON_COUNTER_KEY);
     if (!raw) return 0;
-    const parsed = JSON.parse(raw) as { date?: string; count?: number };
-    if (parsed.date !== todayUTC()) return 0;
+    const parsed = JSON.parse(raw) as { count?: number };
     return Number(parsed.count) || 0;
   } catch {
     return 0;
@@ -93,10 +92,7 @@ function bumpAnonCounter(): number {
   if (typeof window === "undefined") return 0;
   const next = readAnonCounter() + 1;
   try {
-    window.localStorage.setItem(
-      ANON_COUNTER_KEY,
-      JSON.stringify({ date: todayUTC(), count: next })
-    );
+    window.localStorage.setItem(ANON_COUNTER_KEY, JSON.stringify({ count: next }));
   } catch {
     /* localStorage full / blocked, silent */
   }
@@ -338,7 +334,7 @@ export function WordClient({
   initialResult?: WordResult | null;
   preloadLang?: string;
 }) {
-  const { user, plan: authPlan, promptLogin, familyRole, schoolId } = useAuth();
+  const { user, loading: authLoading, plan: authPlan, promptLogin, familyRole, schoolId } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -646,6 +642,13 @@ export function WordClient({
 
   useEffect(() => {
     if (!initialWord) return;
+    // Wait for auth to resolve before deciding anon vs signed-in. Without this
+    // a signed-in visitor whose device still holds an old anon counter could
+    // flash the signup wall during the brief auth-loading window. The
+    // preloaded result (if any) is already on screen from initial state, so
+    // this gate never blanks an SEO landing. authLoading is in the deps so the
+    // effect re-runs the moment auth settles.
+    if (authLoading) return;
     const key = `${initialWord}::${user?.uid ?? "anon"}`;
     if (fetchedFor.current === key) return;
 
@@ -682,6 +685,18 @@ export function WordClient({
       setImageUrl(undefined);
       setKidsImages({});
       setAnonSearchesLeft(null);
+
+      // HARD anon wall (Gadi 2026-09-06): 3 lifetime searches per device, then
+      // registration is required (free). Counts cache hits too, so it fires on
+      // popular words as well, and never resets by day. Block BEFORE the fetch
+      // so search #4 never reaches the engine — the signup softwall renders
+      // instead. The server still caps cache-miss cost by IP separately.
+      if (!user && readAnonCounter() >= ANON_LIFETIME_LIMIT) {
+        // SoftWall tracks "softwall_shown" on render, so don't double-count here.
+        setQuotaState({ reached: true, nextStep: "signup" });
+        setLoading(false);
+        return;
+      }
 
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
@@ -907,7 +922,7 @@ export function WordClient({
         // the user just made a search either way).
         if (!user) {
           const used = bumpAnonCounter();
-          const left = Math.max(0, ANON_DAILY_LIMIT_CLIENT - used);
+          const left = Math.max(0, ANON_LIFETIME_LIMIT - used);
           if (left > 0 && left <= 2) {
             setAnonSearchesLeft(left);
           }
@@ -943,7 +958,7 @@ export function WordClient({
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user, contextSentence, initialResult, preloadLang]);
+  }, [initialWord, lang, user, authLoading, contextSentence, initialResult, preloadLang]);
 
   // Classroom mode: auto-generate the picture so the word shows WITH its
   // image by default on the projector, no click. Prompts with the curated
