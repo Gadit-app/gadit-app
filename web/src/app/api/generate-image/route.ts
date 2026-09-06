@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -123,6 +124,8 @@ async function englishBrief(word: string, meaning: string, example: string, uiLa
     });
     if (!res.ok) return "";
     const data = await res.json();
+    const u = usageFrom(data);
+    void logAiUsage({ feature: "image_brief", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     return String(data?.choices?.[0]?.message?.content || "").replace(/\s+/g, " ").trim().slice(0, 320);
   } catch {
     return "";
@@ -276,6 +279,17 @@ export async function POST(req: NextRequest) {
       console.error("[generate-image] OpenAI response missing both b64_json and url:", JSON.stringify(dalleData).slice(0, 400));
       return NextResponse.json({ error: "no_image_returned" }, { status: 502 });
     }
+
+    // Telemetry: one fresh gpt-image-1 generation. Kids-mode images use a
+    // SEPARATE cache namespace, so the same word viewed in both modes bills
+    // twice — the "image_kids" split lets /admin/ai-costs expose that.
+    void logAiUsage({
+      feature: isKidsMode ? "image_kids" : "image",
+      model: "gpt-image-1",
+      images: 1,
+      imageQuality: "low",
+      plan: userInfo.plan,
+    });
 
     // Upload to Firebase Storage
     // Unique filename per generation. The files are served with a 1-year

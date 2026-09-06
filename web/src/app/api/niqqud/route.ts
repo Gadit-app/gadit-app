@@ -15,6 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,6 +49,8 @@ async function tashkeel(text: string): Promise<string> {
   });
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const u = usageFrom(json);
+  void logAiUsage({ feature: "tashkeel_arabic", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   const out = json.choices?.[0]?.message?.content?.trim();
   return out || text;
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
@@ -933,6 +934,11 @@ async function callOpenAI(model: string, systemPrompt: string, userContent: stri
     }),
   });
   const data = await res.json();
+  // Cost telemetry: these are the non-streamed RETRY passes (a fresh gpt-4o
+  // call each time the streamed first attempt produced degenerate output), so
+  // they meaningfully amplify a hard word's cost. Logged under "define_retry".
+  const u = usageFrom(data);
+  void logAiUsage({ feature: "define_retry", model, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   if (!data.choices?.[0]?.message?.content) {
     throw new Error(`OpenAI ${model} returned no content: ${JSON.stringify(data).slice(0, 200)}`);
   }
@@ -951,6 +957,11 @@ async function openAIStream(model: string, systemPrompt: string, userContent: st
       response_format: STRUCTURED_RESPONSE_FORMAT,
       temperature: 0.2,
       stream: true,
+      // Ask OpenAI to append a final usage chunk (choices:[] + usage:{...})
+      // to the stream so we can attribute the exact token cost of this
+      // definition in /admin/ai-costs. Harmless to the client parser, which
+      // only reads delta.content.
+      stream_options: { include_usage: true },
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userContent },
@@ -1359,6 +1370,8 @@ async function backfillTranslation(word: string, wordLangName: string, uiLangNam
     });
     if (!res.ok) return "";
     const data = await res.json();
+    const u = usageFrom(data);
+    void logAiUsage({ feature: "backfill_gloss", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     return String(data?.choices?.[0]?.message?.content || "").replace(/["'.\n]/g, "").trim().slice(0, 60);
   } catch {
     return "";
@@ -1602,6 +1615,7 @@ export async function POST(req: NextRequest) {
         let accumulated = "";
         let buffer = "";
         let closed = false;
+        let capturedUsage: { prompt_tokens?: number; completion_tokens?: number } | null = null;
         const reader = upstream.getReader();
 
         const safeEnqueue = (chunk: Uint8Array) => {
@@ -1641,6 +1655,8 @@ export async function POST(req: NextRequest) {
 
               try {
                 const json = JSON.parse(data);
+                // Final chunk (include_usage) carries token counts, no delta.
+                if (json.usage) capturedUsage = json.usage;
                 const delta = json.choices?.[0]?.delta?.content;
                 if (typeof delta === "string" && delta.length > 0) {
                   accumulated += delta;
@@ -1652,6 +1668,17 @@ export async function POST(req: NextRequest) {
               }
             }
           }
+
+          // Cost telemetry for the streamed first attempt (the dominant
+          // OpenAI cost). feature splits generic lookups from context
+          // (Reader / "Every Word") lookups; model reflects the fallback.
+          void logAiUsage({
+            feature: contextSentence ? "define_context" : "define",
+            model: usingFallback ? "gpt-4o-mini" : "gpt-4o",
+            tokensIn: capturedUsage?.prompt_tokens ?? 0,
+            tokensOut: capturedUsage?.completion_tokens ?? 0,
+            plan: userInfo?.plan ?? "anon",
+          });
 
           // Stream ended — parse final JSON, validate, retry if degenerate
           let acceptedResult: object | null = null;

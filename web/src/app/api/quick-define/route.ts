@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 /**
  * Quick-define — the lightweight popover sibling of /api/define.
@@ -81,6 +82,7 @@ async function generatePreview(
   word: string,
   langCode: string,
   context?: string,
+  feature = "quick_define",
 ): Promise<{ meaning: string; example: string } | null> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
@@ -114,6 +116,8 @@ async function generatePreview(
     const data = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
+    const u = usageFrom(data);
+    void logAiUsage({ feature, model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const raw = data.choices?.[0]?.message?.content ?? "";
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { meaning?: string; example?: string };
@@ -148,7 +152,7 @@ export async function GET(req: NextRequest) {
   // it directly, bypassing the cache. gpt-4o-mini keeps this cheap; the response
   // is CDN-cached per (word, context) so re-taps don't re-bill.
   if (context) {
-    const preview = await generatePreview(word, lang, context);
+    const preview = await generatePreview(word, lang, context, "reader_word_tap");
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
         { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true, contextual: true },
@@ -182,7 +186,7 @@ export async function GET(req: NextRequest) {
       // because the popover was supposed to BE the definition. The
       // generated reply is intentionally short (no etymology, idioms,
       // examples > 1) — anyone wanting depth taps "Open full".
-      const preview = await generatePreview(word, lang);
+      const preview = await generatePreview(word, lang, undefined, "quick_define_miss");
       if (preview && (preview.meaning || preview.example)) {
         return NextResponse.json(
           {
