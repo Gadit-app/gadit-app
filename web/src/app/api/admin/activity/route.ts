@@ -23,6 +23,8 @@ type Row = {
   uid?: string | null;
   plan?: string | null;
   country?: string | null;
+  ua?: string | null;
+  isBot?: boolean;
   atMs?: number;
   at?: string;
 };
@@ -71,6 +73,8 @@ export async function GET(req: NextRequest) {
     plan: r.plan ?? (r.uid ? "unknown" : "anon"),
     email: r.uid ? emailByUid[r.uid] ?? null : null,
     country: r.country ?? null,
+    ua: r.ua ?? null,
+    isBot: r.isBot === true,
     atMs: r.atMs ?? 0,
     at: r.at ?? null,
   }));

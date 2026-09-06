@@ -18,6 +18,8 @@ type Item = {
   plan: string;
   email: string | null;
   country: string | null;
+  ua: string | null;
+  isBot: boolean;
   atMs: number;
   at: string | null;
 };
@@ -119,10 +121,13 @@ export default function AdminActivityClient() {
   const [fType, setFType] = useState<"all" | "word" | "image">("all");
   const [fLang, setFLang] = useState<string>("");
   const [fUser, setFUser] = useState<string>("");
+  const [hideBots, setHideBots] = useState(true);
 
   const langs = Array.from(new Set(items.map((i) => i.lang))).sort();
   const uq = fUser.trim().toLowerCase();
+  const botCount = items.filter((i) => i.isBot).length;
   const filtered = items.filter((it) => {
+    if (hideBots && it.isBot) return false;
     if (fType !== "all" && it.kind !== fType) return false;
     if (fLang && it.lang !== fLang) return false;
     if (uq) {
@@ -183,6 +188,9 @@ export default function AdminActivityClient() {
             placeholder={he ? "חיפוש מנוי (אימייל)" : "Filter subscriber (email)"}
             style={{ ...selectStyle, minWidth: 200 }}
           />
+          <button onClick={() => setHideBots((v) => !v)} style={chip(hideBots)} title={he ? "הסתרת סורקים ובוטים" : "Hide crawlers and bots"}>
+            {he ? `בני אדם בלבד${botCount ? ` (${botCount} בוטים)` : ""}` : `Humans only${botCount ? ` (${botCount} bots)` : ""}`}
+          </button>
           {filterOn && (
             <button onClick={() => { setFType("all"); setFLang(""); setFUser(""); }} style={{ ...chip(false), color: "#B91C1C", borderColor: "#FBD5D5" }}>
               {he ? "נקה" : "Clear"}
@@ -234,9 +242,15 @@ export default function AdminActivityClient() {
                               {it.country}
                             </span>
                           )}
-                          <span style={{ background: ps.bg, color: ps.fg, fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>
-                            {planLabel(it.plan)}
-                          </span>
+                          {it.isBot ? (
+                            <span title={it.ua ?? ""} style={{ background: "#FEF3C7", color: "#92400E", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>
+                              {he ? "🤖 בוט" : "🤖 bot"}
+                            </span>
+                          ) : (
+                            <span style={{ background: ps.bg, color: ps.fg, fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>
+                              {planLabel(it.plan)}
+                            </span>
+                          )}
                         </div>
                       </td>
                     </tr>

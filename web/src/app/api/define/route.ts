@@ -1486,7 +1486,7 @@ export async function POST(req: NextRequest) {
     // excluded above; invalid inputs short-circuit before this.
     void recordWordSearch({ word, lang: uiLangCode });
     // Raw per-event feed for /admin/activity (who searched what, when).
-    void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country") });
+    void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent") });
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {
