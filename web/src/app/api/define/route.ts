@@ -6,6 +6,7 @@ import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
+import { recordActivity } from "@/lib/activity-log";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -1484,6 +1485,8 @@ export async function POST(req: NextRequest) {
     // reflects real demand, not OpenAI cost. Easter-egg "gadit" is
     // excluded above; invalid inputs short-circuit before this.
     void recordWordSearch({ word, lang: uiLangCode });
+    // Raw per-event feed for /admin/activity (who searched what, when).
+    void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon" });
 
     const cached = await getCachedResult(cacheKey);
     if (cached) {

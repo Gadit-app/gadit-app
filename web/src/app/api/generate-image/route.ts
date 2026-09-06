@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { recordActivity } from "@/lib/activity-log";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -290,6 +291,8 @@ export async function POST(req: NextRequest) {
       imageQuality: "low",
       plan: userInfo.plan,
     });
+    // Raw per-event feed for /admin/activity.
+    void recordActivity({ kind: "image", word, lang: uiLangCode, uid: userInfo.userId, plan: userInfo.plan });
 
     // Upload to Firebase Storage
     // Unique filename per generation. The files are served with a 1-year

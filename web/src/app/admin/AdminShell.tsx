@@ -39,7 +39,8 @@ const STRINGS = {
     campaigns: "Campaigns",
     emails: "Emails",
     emailEditor: "Email editor",
-    activity: "Activity",
+    activity: "Top words",
+    activityLog: "Activity log",
     reports: "Reports",
     partners: "Partners",
     deletions: "Deletions",
@@ -70,7 +71,8 @@ const STRINGS = {
     campaigns: "קמפיינים",
     emails: "מיילים",
     emailEditor: "עריכת מיילים",
-    activity: "פעילות",
+    activity: "מילים מובילות",
+    activityLog: "לוג פעילות",
     reports: "דיווחים",
     partners: "שותפים",
     deletions: "מחיקות",
@@ -109,6 +111,7 @@ const NAV_SECTIONS: NavSection[] = [
   // traffic / billing / settings) are the next build stage, not dead links.
   { titleKey: "secUsers", items: [
     { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
+    { href: "/admin/activity",  labelKey: "activityLog", icon: <IconList />   },
     { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
     { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
   ] },
@@ -498,6 +501,11 @@ function IconTrendUp() {
 function IconGauge() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+  );
+}
+function IconList() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
   );
 }
 function IconSchool() {
