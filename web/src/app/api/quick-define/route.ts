@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
@@ -131,6 +132,43 @@ async function generatePreview(
   }
 }
 
+/**
+ * Persistent preview cache. The reader's tap-any-word previews used to live
+ * only in a 10-minute CDN cache, so re-tapping the same word (or a second
+ * reader hitting the same passage) re-billed gpt-4o-mini every time. Store
+ * each (word, lang, context) preview in Firestore forever so a repeat tap is
+ * a free cache read, not a paid generation. Gadi 2026-09-07 (cost cut).
+ */
+async function cachedPreview(
+  word: string,
+  lang: string,
+  context: string | undefined,
+  feature: string,
+): Promise<{ meaning: string; example: string } | null> {
+  const db = getAdminDb();
+  const key = crypto
+    .createHash("sha256")
+    .update(`pv1:${lang}:${word.toLowerCase()}:${context ?? ""}`)
+    .digest("hex")
+    .slice(0, 40);
+  const ref = db.collection("previewCache").doc(key);
+  try {
+    const snap = await ref.get();
+    if (snap.exists) {
+      const d = snap.data() as { meaning?: string; example?: string } | undefined;
+      if (d && (d.meaning || d.example)) return { meaning: d.meaning ?? "", example: d.example ?? "" };
+    }
+  } catch { /* cache read best-effort */ }
+  const preview = await generatePreview(word, lang, context, feature);
+  if (preview && (preview.meaning || preview.example)) {
+    try {
+      await ref.set({ word, lang, context: context ?? "", meaning: preview.meaning, example: preview.example, at: new Date().toISOString() });
+    } catch { /* cache write best-effort */ }
+    return preview;
+  }
+  return null;
+}
+
 export async function GET(req: NextRequest) {
   const url = req.nextUrl;
   const word = (url.searchParams.get("word") ?? "").trim();
@@ -152,7 +190,7 @@ export async function GET(req: NextRequest) {
   // it directly, bypassing the cache. gpt-4o-mini keeps this cheap; the response
   // is CDN-cached per (word, context) so re-taps don't re-bill.
   if (context) {
-    const preview = await generatePreview(word, lang, context, "reader_word_tap");
+    const preview = await cachedPreview(word, lang, context, "reader_word_tap");
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
         { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true, contextual: true },
@@ -186,7 +224,7 @@ export async function GET(req: NextRequest) {
       // because the popover was supposed to BE the definition. The
       // generated reply is intentionally short (no etymology, idioms,
       // examples > 1) — anyone wanting depth taps "Open full".
-      const preview = await generatePreview(word, lang, undefined, "quick_define_miss");
+      const preview = await cachedPreview(word, lang, undefined, "quick_define_miss");
       if (preview && (preview.meaning || preview.example)) {
         return NextResponse.json(
           {
