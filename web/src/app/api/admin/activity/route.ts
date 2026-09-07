@@ -50,34 +50,44 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "read_failed", details: String(e) }, { status: 500 });
   }
 
-  // Resolve subscriber emails in one batched read.
+  // Resolve subscriber emails + true tier in one batched read. Schools and
+  // Families both store plan="deep" and are distinguished by schoolId/familyId,
+  // so the raw plan field mislabels them (Gadi 2026-09-07: a school owner showed
+  // as "deep"). Reclassify here so the log shows "School"/"Family" correctly.
   const uids = [...new Set(rows.map((r) => r.uid).filter((u): u is string => !!u))];
-  const emailByUid: Record<string, string | null> = {};
+  const infoByUid: Record<string, { email: string | null; tier: string | null }> = {};
   if (uids.length) {
     try {
       const refs = uids.map((u) => db.collection("users").doc(u));
       const docs = await db.getAll(...refs);
       for (const d of docs) {
-        if (d.exists) emailByUid[d.id] = (d.data()?.email as string | undefined) ?? null;
+        if (!d.exists) continue;
+        const data = d.data() ?? {};
+        const tier = data.schoolId ? "schools" : data.familyId ? "family" : null;
+        infoByUid[d.id] = { email: (data.email as string | undefined) ?? null, tier };
       }
     } catch {
-      // best-effort — rows still render with uid short-code if email lookup fails
+      // best-effort — rows still render with uid short-code if the lookup fails
     }
   }
 
-  const items = rows.map((r) => ({
+  const items = rows.map((r) => {
+    const info = r.uid ? infoByUid[r.uid] : undefined;
+    const plan = info?.tier ?? r.plan ?? (r.uid ? "unknown" : "anon");
+    return {
     kind: r.kind ?? "word",
     word: r.word ?? "",
     lang: r.lang ?? "en",
     uid: r.uid ?? null,
-    plan: r.plan ?? (r.uid ? "unknown" : "anon"),
-    email: r.uid ? emailByUid[r.uid] ?? null : null,
+    plan,
+    email: r.uid ? info?.email ?? null : null,
     country: r.country ?? null,
     ua: r.ua ?? null,
     isBot: r.isBot === true,
     atMs: r.atMs ?? 0,
     at: r.at ?? null,
-  }));
+    };
+  });
 
   const nextBefore = items.length === limit ? items[items.length - 1].atMs : null;
 
