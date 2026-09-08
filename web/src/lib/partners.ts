@@ -45,6 +45,7 @@ export interface Partner {
                            // (welcome, future payout notices) renders in it.
                            // Set at creation; defaults to "en" if unknown.
   audience?: string | null; // free-text "where's your audience" from signup
+  payoutEmail?: string | null; // PayPal address for payouts; partner edits it in their portal
   clicks: number;          // referral-link hits
   signups: number;         // referred accounts created
   ownerUid?: string | null; // set if the partner also has a Gadit account

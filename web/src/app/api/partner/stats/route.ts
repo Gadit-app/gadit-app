@@ -98,6 +98,7 @@ export async function GET(req: NextRequest) {
       rateYearOne: partner.rateYearOne ?? 0.25,
       rateLifetime: partner.rateLifetime ?? 0.1,
       status: partner.status,
+      payoutEmail: partner.payoutEmail ?? null,
       link: `https://www.gadit.app/?ref=${partner.code}`,
       clicks: partner.clicks || 0,
       signups: partner.signups || 0,
@@ -114,6 +115,42 @@ export async function GET(req: NextRequest) {
     });
   } catch (err) {
     console.error("[/api/partner/stats] error:", err);
+    return NextResponse.json({ error: "internal_error" }, { status: 500 });
+  }
+}
+
+/**
+ * PATCH /api/partner/stats?t=<dashboardToken>  body { payoutEmail }
+ *
+ * Lets the partner set their own PayPal payout address from the portal. The
+ * dashboardToken is the only credential (same as GET). Nothing else is
+ * writable here — a partner can't change their rate, code, or anyone's data.
+ */
+export async function PATCH(req: NextRequest) {
+  try {
+    const token = req.nextUrl.searchParams.get("t") || "";
+    if (!token) return NextResponse.json({ error: "missing_token" }, { status: 400 });
+
+    let body: { payoutEmail?: unknown } = {};
+    try { body = await req.json(); } catch { /* empty body */ }
+    const raw = typeof body.payoutEmail === "string" ? body.payoutEmail.trim().slice(0, 200) : "";
+    // Allow clearing (empty) or a simple valid-looking email. Not RFC-perfect
+    // on purpose: a partner typo shouldn't 500, and payouts are reviewed by hand.
+    if (raw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) {
+      return NextResponse.json({ error: "invalid_email" }, { status: 400 });
+    }
+
+    const db = getAdminDb();
+    const snap = await db.collection("partners").where("dashboardToken", "==", token).limit(1).get();
+    if (snap.empty) return NextResponse.json({ error: "not_found" }, { status: 404 });
+
+    await snap.docs[0].ref.set(
+      { payoutEmail: raw || null, payoutEmailUpdatedAt: new Date().toISOString() },
+      { merge: true },
+    );
+    return NextResponse.json({ ok: true, payoutEmail: raw || null });
+  } catch (err) {
+    console.error("[/api/partner/stats PATCH] error:", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
   }
 }

@@ -25,6 +25,7 @@ type Stats = {
   rateYearOne: number;
   rateLifetime: number;
   status: string;
+  payoutEmail?: string | null;
   link: string;
   clicks: number;
   signups: number;
@@ -47,6 +48,13 @@ const MORE: Record<string, {
   stPending: string; stAvailable: string; stPaid: string; refEmpty: string;
   greetMorning: string; greetNoon: string; greetEvening: string; greetNight: string;
   linkIndividuals: string;
+  tabHome: string; tabMarketing: string; tabPayments: string;
+  howEarnTitle: string;
+  mktMsgTitle: string; mktMsgHint: string; tmpl1: string; tmpl2: string; tmpl3: string;
+  copyMsg: string; copiedMsg: string;
+  creativesTitle: string; creativesHint: string; download: string;
+  payoutEmailTitle: string; payoutEmailHint: string; payoutEmailPh: string;
+  saveBtn: string; savedBtn: string; emailInvalid: string;
 }> = {
   en: {
     statusActive: "Active", statusPending: "Pending", statusSuspended: "Paused",
@@ -56,6 +64,17 @@ const MORE: Record<string, {
     stPending: "Pending", stAvailable: "Available", stPaid: "Paid", refEmpty: "No paying referrals yet. Share your link to get your first.",
     greetMorning: "Good morning", greetNoon: "Good afternoon", greetEvening: "Good evening", greetNight: "Good night",
     linkIndividuals: "Individuals",
+    tabHome: "Home", tabMarketing: "Marketing", tabPayments: "Payouts",
+    howEarnTitle: "How you earn",
+    mktMsgTitle: "Ready-to-send messages", mktMsgHint: "Copy, paste and share. Your personal link is already inside.",
+    tmpl1: "I found a tool that explains every word to kids in a language they understand and helps them keep up with schoolwork. Worth a look: {link}",
+    tmpl2: "For a child who struggles to understand words while reading: Gadit explains every word all the way through, with examples and a picture. Link: {link}",
+    tmpl3: "Gadit is a dictionary that explains every word in a child's own language and builds their vocabulary. 14 days free: {link}",
+    copyMsg: "Copy message", copiedMsg: "Copied ✓",
+    creativesTitle: "Images to share", creativesHint: "Download and post on social, or send to your group.",
+    download: "Download",
+    payoutEmailTitle: "PayPal for payouts", payoutEmailHint: "Where we send your commission. You can change it anytime.",
+    payoutEmailPh: "you@example.com", saveBtn: "Save", savedBtn: "Saved ✓", emailInvalid: "That doesn't look like a valid email.",
   },
   he: {
     statusActive: "פעיל", statusPending: "ממתין", statusSuspended: "מושהה",
@@ -65,6 +84,17 @@ const MORE: Record<string, {
     stPending: "בהמתנה", stAvailable: "זמין", stPaid: "שולם", refEmpty: "עדיין אין הפניות משלמות. אפשר לשתף את הקישור כדי לקבל את הראשונה.",
     greetMorning: "בוקר טוב", greetNoon: "צהריים טובים", greetEvening: "ערב טוב", greetNight: "לילה טוב",
     linkIndividuals: "יחידים",
+    tabHome: "לוח בית", tabMarketing: "חומרים שיווקיים", tabPayments: "תשלומים",
+    howEarnTitle: "איך מרוויחים",
+    mktMsgTitle: "הודעות מוכנות לשליחה", mktMsgHint: "להעתיק, להדביק ולשתף. הקישור האישי שלך כבר בפנים.",
+    tmpl1: "מצאתי כלי שמסביר כל מילה לילדים בשפה שהם מבינים ועוזר להם עם הלימודים. שווה להיכנס: {link}",
+    tmpl2: "לילד שמתקשה להבין מילים בקריאה: גדית מסביר כל מילה עד הסוף, עם דוגמאות ותמונה. קישור: {link}",
+    tmpl3: "גדית הוא מילון שמסביר כל מילה בשפה של הילד ובונה אוצר מילים. יש 14 ימי ניסיון חינם: {link}",
+    copyMsg: "העתקת ההודעה", copiedMsg: "הועתק ✓",
+    creativesTitle: "תמונות לשיתוף", creativesHint: "אפשר להוריד ולפרסם ברשתות, או לשלוח לקבוצה.",
+    download: "הורדה",
+    payoutEmailTitle: "PayPal לתשלום", payoutEmailHint: "לכאן נשלח את העמלה שלך. אפשר לשנות בכל רגע.",
+    payoutEmailPh: "you@example.com", saveBtn: "שמירה", savedBtn: "נשמר ✓", emailInvalid: "זה לא נראה כמו אימייל תקין.",
   },
 };
 
@@ -769,17 +799,26 @@ export function PartnerDashboardClient() {
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [linkLang, setLinkLang] = useState<string>(lang); // language for the shared links
+  const [tab, setTab] = useState<"home" | "marketing" | "payments">("home");
+  const [msgCopied, setMsgCopied] = useState<number | null>(null);
+  const [token, setToken] = useState<string>("");
+  const [payoutEmail, setPayoutEmail] = useState("");
+  const [savedEmail, setSavedEmail] = useState("");
+  const [emailState, setEmailState] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get("t");
-    if (!token) {
+    const tk = new URLSearchParams(window.location.search).get("t");
+    if (!tk) {
       setState("error");
       return;
     }
-    fetch(`/api/partner/stats?t=${encodeURIComponent(token)}`)
+    setToken(tk);
+    fetch(`/api/partner/stats?t=${encodeURIComponent(tk)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d: Stats) => {
         setStats(d);
+        setPayoutEmail(d.payoutEmail || "");
+        setSavedEmail(d.payoutEmail || "");
         setState("ready");
       })
       .catch(() => setState("error"));
@@ -792,6 +831,37 @@ export function PartnerDashboardClient() {
       setCopiedKey(product);
       setTimeout(() => setCopiedKey((k) => (k === product ? null : k)), 1800);
     } catch { /* clipboard blocked — ignore */ }
+  }
+
+  async function copyMessage(idx: number, text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setMsgCopied(idx);
+      setTimeout(() => setMsgCopied((k) => (k === idx ? null : k)), 1800);
+    } catch { /* clipboard blocked — ignore */ }
+  }
+
+  async function savePayoutEmail() {
+    if (!token) return;
+    const val = payoutEmail.trim();
+    if (val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      setEmailState("error");
+      return;
+    }
+    setEmailState("saving");
+    try {
+      const r = await fetch(`/api/partner/stats?t=${encodeURIComponent(token)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payoutEmail: val }),
+      });
+      if (!r.ok) throw new Error();
+      setSavedEmail(val);
+      setEmailState("saved");
+      setTimeout(() => setEmailState((s) => (s === "saved" ? "idle" : s)), 2000);
+    } catch {
+      setEmailState("error");
+    }
   }
 
   const currencies = stats ? Object.keys(stats.earnings) : [];
@@ -846,27 +916,31 @@ export function PartnerDashboardClient() {
               })()}
             </div>
 
-            {/* KPI row — with conversion % beneath signups and paying. */}
-            <div className="pd-kpi" style={S.kpiGrid}>
-              <Kpi label={t.clicks} value={stats.clicks.toLocaleString()} accent="#0EA5A5" />
-              <Kpi label={t.signups} value={stats.signups.toLocaleString()} accent="#7C3AED"
-                   sub={stats.clicks > 0 ? `${Math.round((stats.signups / stats.clicks) * 100)}% ${m.ofClicks}` : undefined} />
-              <Kpi label={t.paying} value={stats.payingCustomers.toLocaleString()} accent="#0891B2"
-                   sub={stats.signups > 0 ? `${Math.round((stats.payingCustomers / stats.signups) * 100)}% ${m.ofSignups}` : undefined} />
-              <Kpi label={t.available} value={hasEarnings ? money(stats.earnings[currencies[0]].released, currencies[0]) : "—"} accent="#16A34A" />
+            {/* Tab bar — compact + centered, RTL-safe (spec §3). */}
+            <div className="pd-tabs" style={S.tabs}>
+              {([["home", m.tabHome], ["marketing", m.tabMarketing], ["payments", m.tabPayments]] as const).map(([k, label]) => (
+                <button key={k} type="button" onClick={() => setTab(k)}
+                  style={{ ...S.tab, ...(tab === k ? S.tabActive : {}) }}>{label}</button>
+              ))}
             </div>
 
-            {/* Body: links + how (main) · earnings (sidebar) */}
-            <div className="pd-body" style={S.body}>
-              <div style={S.col}>
-                {/* Referral links — one per product, RefCapture attributes
-                    ?ref on any of them. Shared language picker. */}
+            {/* ================= HOME ================= */}
+            {tab === "home" && (
+              <>
+                <div className="pd-kpi" style={S.kpiGrid}>
+                  <Kpi label={t.clicks} value={stats.clicks.toLocaleString()} accent="#0EA5A5" />
+                  <Kpi label={t.signups} value={stats.signups.toLocaleString()} accent="#7C3AED"
+                       sub={stats.clicks > 0 ? `${Math.round((stats.signups / stats.clicks) * 100)}% ${m.ofClicks}` : undefined} />
+                  <Kpi label={t.paying} value={stats.payingCustomers.toLocaleString()} accent="#0891B2"
+                       sub={stats.signups > 0 ? `${Math.round((stats.payingCustomers / stats.signups) * 100)}% ${m.ofSignups}` : undefined} />
+                  <Kpi label={t.available} value={hasEarnings ? money(stats.earnings[currencies[0]].released, currencies[0]) : "—"} accent="#16A34A" />
+                </div>
+
+                {/* Referral links — one per product, RefCapture attributes ?ref
+                    on any of them. Shared language picker (used by templates too). */}
                 <div style={S.card}>
                   <div style={S.cardLabel}>{t.yourLink}</div>
                   <div style={S.subtle}>{t.linksHint}</div>
-                  {/* Families + Schools only (Gadi 2026-08-13): these are the
-                      products we want partners to sell. The general Gadit link
-                      was dropped from the portal and the welcome email. */}
                   {(["individuals", "families", "schools"] as ProductKey[]).map((product) => {
                     const label = product === "individuals" ? m.linkIndividuals : product === "families" ? t.linkFamilies : t.linkSchools;
                     return (
@@ -887,6 +961,125 @@ export function PartnerDashboardClient() {
                       {LINK_LANGS.map((l) => (<option key={l.code} value={l.code}>{l.native}</option>))}
                     </select>
                   </div>
+                </div>
+              </>
+            )}
+
+            {/* ================= MARKETING ================= */}
+            {tab === "marketing" && (
+              <div style={S.col}>
+                {/* How you earn */}
+                <div style={S.card}>
+                  <div style={S.cardLabel}>{m.howEarnTitle}</div>
+                  <ol style={S.ol}>
+                    <li style={S.li}>{t.how1}</li>
+                    <li style={S.li}>{t.how2}</li>
+                    <li style={S.li}>{t.how3}</li>
+                  </ol>
+                </div>
+
+                {/* Ready-to-send messages — the partner's personal link baked in. */}
+                <div style={S.card}>
+                  <div style={S.cardLabel}>{m.mktMsgTitle}</div>
+                  <div style={S.subtle}>{m.mktMsgHint}</div>
+                  {[m.tmpl1, m.tmpl2, m.tmpl3].map((tpl, i) => {
+                    const text = tpl.replace("{link}", buildRefLink(stats.code, linkLang, PRODUCT_PATHS.families));
+                    return (
+                      <div key={i} style={S.tmplCard}>
+                        <div style={S.tmplText} dir={dir}>{text}</div>
+                        <button type="button" onClick={() => copyMessage(i, text)} style={S.copyBtn}>
+                          {msgCopied === i ? m.copiedMsg : m.copyMsg}
+                        </button>
+                      </div>
+                    );
+                  })}
+                  <div style={S.linkLangRow}>
+                    <span style={S.linkLangLabel}>{t.linkLangLabel}</span>
+                    <select value={linkLang} onChange={(e) => setLinkLang(e.target.value)} style={S.linkLangSelect}>
+                      {LINK_LANGS.map((l) => (<option key={l.code} value={l.code}>{l.native}</option>))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Images to share — real product shots, downloadable. */}
+                <div style={S.card}>
+                  <div style={S.cardLabel}>{m.creativesTitle}</div>
+                  <div style={S.subtle}>{m.creativesHint}</div>
+                  <div style={S.creativeGrid}>
+                    {["/fam/hero.webp", "/fam/meanings.webp", "/fam/kids-mode.webp"].map((src) => (
+                      <div key={src} style={S.creativeItem}>
+                        <img src={src} alt="" style={S.creativeImg} loading="lazy" />
+                        <a href={src} download style={S.downloadBtn}>{m.download}</a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ================= PAYMENTS ================= */}
+            {tab === "payments" && (
+              <div style={S.col}>
+                {/* Earnings */}
+                <div style={S.card}>
+                  <div style={S.cardLabel}>{t.earnings}</div>
+                  {!hasEarnings && <div style={S.muted}>{t.empty}</div>}
+                  {currencies.map((cur) => {
+                    const b = stats.earnings[cur];
+                    return (
+                      <div key={cur} style={S.earnBlock}>
+                        <div style={S.earnBig} dir="ltr">{money(b.released, cur)}</div>
+                        <div style={S.earnBigLabel}>{t.available}</div>
+                        <div style={S.earnSplit}>
+                          <EarnCell label={t.pending} value={money(b.pending, cur)} />
+                          <EarnCell label={t.paid} value={money(b.paid, cur)} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {hasEarnings && <div style={S.pendingNote}>{t.pendingNote}</div>}
+                </div>
+
+                {/* Payout threshold + next payout (§10.4) */}
+                {stats.payout && (() => {
+                  const p = stats.payout;
+                  const pct = p.minimumMinor > 0 ? Math.min(100, (p.availableMinor / p.minimumMinor) * 100) : 0;
+                  const ready = p.availableMinor >= p.minimumMinor && p.availableMinor > 0;
+                  return (
+                    <div style={S.card}>
+                      <div style={S.cardLabel}>{m.payoutTitle}</div>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8 }}>
+                        <span style={{ fontSize: 22, fontWeight: 800, color: ready ? "#16A34A" : "#111827" }} dir="ltr">{money(p.availableMinor, p.currency)}</span>
+                        <span style={{ fontSize: 13, color: "#6B7280" }} dir="ltr">{m.payoutOf} {money(p.minimumMinor, p.currency)}</span>
+                      </div>
+                      <div style={S.payoutBar}><div style={{ ...S.payoutFill, width: `${pct}%`, background: ready ? "#16A34A" : "#0EA5A5" }} /></div>
+                      <div style={S.payoutNext}>
+                        {ready ? m.payoutReady : `${m.nextPayout}: ${new Date(p.nextPayoutDate).toLocaleDateString(lang === "he" ? "he-IL" : undefined, { day: "2-digit", month: "short" })}`}
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* PayPal payout email — partner-editable (PATCH). */}
+                <div style={S.card}>
+                  <div style={S.cardLabel}>{m.payoutEmailTitle}</div>
+                  <div style={S.subtle}>{m.payoutEmailHint}</div>
+                  <div style={S.emailRow}>
+                    <input
+                      type="email"
+                      value={payoutEmail}
+                      placeholder={m.payoutEmailPh}
+                      onChange={(e) => { setPayoutEmail(e.target.value); if (emailState !== "idle") setEmailState("idle"); }}
+                      style={S.emailInput}
+                      dir="ltr"
+                    />
+                    <button type="button" onClick={savePayoutEmail}
+                      disabled={emailState === "saving" || payoutEmail.trim() === savedEmail}
+                      style={{ ...S.copyBtn, opacity: (emailState === "saving" || payoutEmail.trim() === savedEmail) ? 0.5 : 1 }}>
+                      {emailState === "saved" ? m.savedBtn : m.saveBtn}
+                    </button>
+                  </div>
+                  {emailState === "error" && <div style={{ fontSize: 12.5, color: "#B91C1C", marginTop: 8 }}>{m.emailInvalid}</div>}
                 </div>
 
                 {/* Who signed up through you (masked, privacy-safe §10.6) */}
@@ -928,60 +1121,8 @@ export function PartnerDashboardClient() {
                     </div>
                   )}
                 </div>
-
-                {/* How it works */}
-                <div style={S.card}>
-                  <div style={S.cardLabel}>{t.howTitle}</div>
-                  <ol style={S.ol}>
-                    <li style={S.li}>{t.how1}</li>
-                    <li style={S.li}>{t.how2}</li>
-                    <li style={S.li}>{t.how3}</li>
-                  </ol>
-                </div>
               </div>
-
-              {/* Earnings sidebar */}
-              <div style={S.col}>
-                <div style={S.card}>
-                  <div style={S.cardLabel}>{t.earnings}</div>
-                  {!hasEarnings && <div style={S.muted}>{t.empty}</div>}
-                  {currencies.map((cur) => {
-                    const b = stats.earnings[cur];
-                    return (
-                      <div key={cur} style={S.earnBlock}>
-                        <div style={S.earnBig} dir="ltr">{money(b.released, cur)}</div>
-                        <div style={S.earnBigLabel}>{t.available}</div>
-                        <div style={S.earnSplit}>
-                          <EarnCell label={t.pending} value={money(b.pending, cur)} />
-                          <EarnCell label={t.paid} value={money(b.paid, cur)} />
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {hasEarnings && <div style={S.pendingNote}>{t.pendingNote}</div>}
-                </div>
-
-                {/* Payout threshold + next payout (§10.4) */}
-                {stats.payout && (() => {
-                  const p = stats.payout;
-                  const pct = p.minimumMinor > 0 ? Math.min(100, (p.availableMinor / p.minimumMinor) * 100) : 0;
-                  const ready = p.availableMinor >= p.minimumMinor && p.availableMinor > 0;
-                  return (
-                    <div style={S.card}>
-                      <div style={S.cardLabel}>{m.payoutTitle}</div>
-                      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8 }}>
-                        <span style={{ fontSize: 22, fontWeight: 800, color: ready ? "#16A34A" : "#111827" }} dir="ltr">{money(p.availableMinor, p.currency)}</span>
-                        <span style={{ fontSize: 13, color: "#6B7280" }} dir="ltr">{m.payoutOf} {money(p.minimumMinor, p.currency)}</span>
-                      </div>
-                      <div style={S.payoutBar}><div style={{ ...S.payoutFill, width: `${pct}%`, background: ready ? "#16A34A" : "#0EA5A5" }} /></div>
-                      <div style={S.payoutNext}>
-                        {ready ? m.payoutReady : `${m.nextPayout}: ${new Date(p.nextPayoutDate).toLocaleDateString(lang === "he" ? "he-IL" : undefined, { day: "2-digit", month: "short" })}`}
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
+            )}
           </>
         )}
       </div>
@@ -1013,6 +1154,7 @@ function EarnCell({ label, value }: { label: string; value: string }) {
 const RESPONSIVE_CSS = `
 @media (min-width: 720px) { .pd-kpi { grid-template-columns: repeat(4, 1fr) !important; } }
 @media (min-width: 900px) { .pd-body { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) !important; } }
+@media (max-width: 520px) { .pd-tabs button { padding: 7px 12px !important; font-size: 12.5px !important; } }
 `;
 
 const S: Record<string, React.CSSProperties> = {
@@ -1022,7 +1164,19 @@ const S: Record<string, React.CSSProperties> = {
     fontFamily: "var(--font-rubik, -apple-system, Segoe UI, Roboto, sans-serif)",
     color: "#111827",
     paddingBottom: 64,
+    overflowX: "hidden",
   },
+  tabs: { display: "flex", gap: 6, justifyContent: "center", background: "#EEF1F4", borderRadius: 999, padding: 4, width: "fit-content", maxWidth: "100%", margin: "0 auto 22px" },
+  tab: { border: "none", background: "transparent", color: "#6B7280", fontFamily: "inherit", fontSize: 14, fontWeight: 700, padding: "8px 18px", borderRadius: 999, cursor: "pointer", whiteSpace: "nowrap" },
+  tabActive: { background: "#fff", color: "#0E7C74", boxShadow: "0 1px 2px rgba(16,24,40,0.08)" },
+  tmplCard: { background: "#F4F6F8", border: "1px solid #E9ECEF", borderRadius: 12, padding: 14, marginBottom: 12 },
+  tmplText: { fontSize: 14, lineHeight: 1.65, color: "#374151", marginBottom: 10, whiteSpace: "pre-wrap", wordBreak: "break-word" },
+  creativeGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12, marginTop: 6 },
+  creativeItem: { display: "flex", flexDirection: "column", gap: 8, alignItems: "stretch" },
+  creativeImg: { width: "100%", height: 100, objectFit: "cover", borderRadius: 10, border: "1px solid #E9ECEF", background: "#fff" },
+  downloadBtn: { display: "inline-block", textAlign: "center", background: "#0EA5A5", color: "#fff", textDecoration: "none", borderRadius: 8, padding: "7px 10px", fontWeight: 700, fontSize: 13 },
+  emailRow: { display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginTop: 4 },
+  emailInput: { flex: 1, minWidth: 200, fontSize: 14, padding: "10px 12px", borderRadius: 9, border: "1px solid #D1D5DB", fontFamily: "inherit", background: "#fff" },
   topbar: { background: "#fff", borderBottom: "1px solid #E9ECEF" },
   topbarInner: { maxWidth: 1120, margin: "0 auto", padding: "14px 22px", display: "flex", alignItems: "center", justifyContent: "space-between" },
   wordmark: { fontSize: 22, fontWeight: 800, color: "#111827", textDecoration: "none", letterSpacing: "-0.02em" },
