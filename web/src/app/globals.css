@@ -5720,6 +5720,15 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     align-items: center;
     gap: 8px;
     margin-inline-start: auto;
+    /* The lang switcher + burger must ALWAYS stay on top and tappable. A
+       crowded signed-in topbar (avatar + share + kids toggle) can let a
+       sibling overflow onto this cluster and swallow the burger's taps
+       (same class of bug as the 2026-08-22 mobile-cta overlap). Pin the
+       cluster above siblings and stop it shrinking so the menu is never
+       blocked. Gadi 2026-09-08. */
+    position: relative;
+    z-index: 4;
+    flex-shrink: 0;
   }
   /* Tighten LangSwitchMobile on mobile so the chip doesn't dominate
      visually next to a smaller burger + share + avatar — Gadi's
