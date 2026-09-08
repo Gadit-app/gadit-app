@@ -83,7 +83,7 @@ const MORE: Record<string, {
     refTitle: "מי נרשם דרכך", refCustomer: "לקוח", refJoined: "הצטרף", refCommission: "עמלה",
     stPending: "בהמתנה", stAvailable: "זמין", stPaid: "שולם", refEmpty: "עדיין אין הפניות משלמות. אפשר לשתף את הקישור כדי לקבל את הראשונה.",
     greetMorning: "בוקר טוב", greetNoon: "צהריים טובים", greetEvening: "ערב טוב", greetNight: "לילה טוב",
-    linkIndividuals: "יחידים",
+    linkIndividuals: "ליחידים",
     tabHome: "לוח בית", tabMarketing: "חומרים שיווקיים", tabPayments: "תשלומים",
     howEarnTitle: "איך מרוויחים",
     mktMsgTitle: "הודעות מוכנות לשליחה", mktMsgHint: "להעתיק, להדביק ולשתף. הקישור האישי שלך כבר בפנים.",
