@@ -1476,6 +1476,24 @@ export function WordClient({
           </Link>
           <WbShellNav />
           <div className="wb-shell-actions">
+            {/* Present mode entry (schools only). Lives in the actions row
+                rather than as a floating corner button so it can never sit
+                on top of the mobile burger — .wb-shell-actions is hidden
+                below 1024px, and projecting to a class screen is not a
+                phone job anyway. Gadi 2026-09-08. */}
+            {user && !!schoolId && !classroomCode && (
+              <button
+                type="button"
+                className="wb-shell-share"
+                onClick={() => setPresent(true)}
+                aria-label="Present mode"
+                title="Present mode, a clean view for the classroom screen"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" />
+                </svg>
+              </button>
+            )}
             {/* Kid skin picker, so a kid can change their look from the word
                 page too (it was on home/notebook/play but missing here, where
                 the skin is most visible). Gadi 2026-08-21. */}
@@ -1562,20 +1580,22 @@ export function WordClient({
         </header>
         )}
 
-        {/* Present-mode toggle (schools council 2026-08-05). A subtle
-            corner button that hides/shows the top chrome so a teacher can
-            project a clean word view to the whole class. SCHOOLS ONLY
-            (Gadi 2026-08-13): it was showing for every signed-in user,
-            where in RTL it sat top-left, covered the hamburger, and a
-            family parent couldn't find her way back — pure confusion for
-            anyone who isn't a teacher. Hidden inside the /c/ classroom kid
-            view too. */}
-        {user && !!schoolId && !classroomCode && (
+        {/* Exit present mode. Only rendered while present mode is ON, when
+            the topbar is hidden and this floating corner button is the only
+            way back. The ENTRY button used to render here too, and that was
+            the white square Gadi photographed on 2026-09-08: fixed
+            insetInlineEnd:12 lands on the visual LEFT in RTL, which is
+            exactly the mobile burger corner, and z-index 50 painted it over
+            the menu cluster (z-index 4) so the menu could not be opened.
+            The entry point now lives inline in .wb-shell-actions (see the
+            topbar above), which is desktop-only — and present mode is a
+            projector feature, so a phone never needed it. */}
+        {user && !!schoolId && !classroomCode && present && (
           <button
             type="button"
             onClick={() => setPresent((p) => !p)}
-            aria-label={present ? "Exit present mode" : "Present mode"}
-            title={present ? "Exit present mode" : "Present mode, a clean view for the classroom screen"}
+            aria-label="Exit present mode"
+            title="Exit present mode"
             style={{
               position: "fixed",
               top: 12,
@@ -1596,15 +1616,9 @@ export function WordClient({
               boxShadow: "0 1px 4px rgba(31,41,55,0.08)",
             }}
           >
-            {present ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" />
-              </svg>
-            )}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
           </button>
         )}
 
