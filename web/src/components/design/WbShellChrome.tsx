@@ -30,7 +30,7 @@
  * surface for shared classroom devices.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -277,8 +277,21 @@ export function WbShellNav({ active }: { active?: NavKey }) {
 
 /** Mobile burger + dropdown. Render inside the topbar's
  *  .wb-shell-mobile-menu-cluster; owns its own open state, closes on
- *  outside tap / Escape / navigation. */
-export function WbShellBurger({ active }: { active?: NavKey }) {
+ *  outside tap / Escape / navigation.
+ *
+ *  `extra` lets one page add its own items to the top of the menu without
+ *  the shared chrome having to know about them. It receives the menu's
+ *  `close` callback so an item can dismiss the dropdown after acting.
+ *  Added for the schools present-mode entry, which has nowhere else to
+ *  live on a phone once it was pulled out of the topbar corner where it
+ *  covered this very button (Gadi 2026-09-08). */
+export function WbShellBurger({
+  active,
+  extra,
+}: {
+  active?: NavKey;
+  extra?: (close: () => void) => ReactNode;
+}) {
   const links = useNavLinks();
   const { user, promptLogin, familyRole } = useAuth();
   const { lang } = useLang();
@@ -343,6 +356,12 @@ export function WbShellBurger({ active }: { active?: NavKey }) {
       </button>
       {open && (
         <div ref={menuRef} className="wb-shell-mobile-menu" role="menu">
+          {extra && (
+            <>
+              {extra(() => setOpen(false))}
+              <div className="wb-shell-mobile-menu-sep" />
+            </>
+          )}
           {active !== "home" && (
             <Link href={href("/")} className="wb-shell-mobile-link" onClick={() => setOpen(false)}>
               {v2(lang, "navSearch")}

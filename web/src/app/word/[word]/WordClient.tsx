@@ -73,6 +73,27 @@ import {
 // accepted trade-off (real visitors won't, and signup is free).
 //
 // localStorage layout: { count: 3 }  (a stray legacy `date` field is ignored).
+// Present mode (schools) labels. Kept local rather than in i18n-v2 so we
+// don't touch 30+ language blocks for two strings on a schools-only
+// control; anything missing falls back to English, same as the other
+// local maps in the chrome. Hebrew is singular and gender-neutral.
+const PRESENT_LABELS: Record<string, { enter: string; exit: string; hint: string }> = {
+  he: { enter: "מצב הקרנה", exit: "יציאה ממצב הקרנה", hint: "תצוגה נקייה למסך הכיתה" },
+  en: { enter: "Present mode", exit: "Exit present mode", hint: "A clean view for the classroom screen" },
+  ar: { enter: "وضع العرض", exit: "الخروج من وضع العرض", hint: "عرض نظيف لشاشة الصف" },
+  ru: { enter: "Режим показа", exit: "Выйти из режима показа", hint: "Чистый вид для экрана класса" },
+  es: { enter: "Modo presentación", exit: "Salir del modo presentación", hint: "Una vista limpia para la pantalla del aula" },
+  pt: { enter: "Modo apresentação", exit: "Sair do modo apresentação", hint: "Uma vista limpa para o ecrã da turma" },
+  fr: { enter: "Mode présentation", exit: "Quitter le mode présentation", hint: "Une vue épurée pour l'écran de la classe" },
+  de: { enter: "Präsentationsmodus", exit: "Präsentationsmodus beenden", hint: "Eine klare Ansicht für den Klassenbildschirm" },
+  it: { enter: "Modalità presentazione", exit: "Esci dalla modalità presentazione", hint: "Una vista pulita per lo schermo della classe" },
+  cs: { enter: "Režim promítání", exit: "Ukončit režim promítání", hint: "Čistý pohled pro školní obrazovku" },
+  sk: { enter: "Režim premietania", exit: "Ukončiť režim premietania", hint: "Čistý pohľad pre školnú obrazovku" },
+};
+function presentLabels(lang: string) {
+  return PRESENT_LABELS[lang] ?? PRESENT_LABELS.en;
+}
+
 const ANON_COUNTER_KEY = "gadit-anon-searches";
 const ANON_LIFETIME_LIMIT = 3;
 
@@ -1486,8 +1507,8 @@ export function WordClient({
                 type="button"
                 className="wb-shell-share"
                 onClick={() => setPresent(true)}
-                aria-label="Present mode"
-                title="Present mode, a clean view for the classroom screen"
+                aria-label={presentLabels(lang).enter}
+                title={`${presentLabels(lang).enter}. ${presentLabels(lang).hint}`}
               >
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" />
@@ -1574,7 +1595,26 @@ export function WordClient({
         </div>
         <div className="wb-shell-mobile-menu-cluster">
           <LangSwitchMobile />
-          <WbShellBurger />
+          {/* Present mode also as a burger entry, so a teacher projecting
+              from a tablet in portrait (under 1024px, where the actions row
+              is hidden) still has a way in. It must NOT go back to being a
+              floating corner button: that is what covered this burger.
+              Gadi 2026-09-08. */}
+          <WbShellBurger
+            extra={
+              user && !!schoolId && !classroomCode
+                ? (close) => (
+                    <button
+                      type="button"
+                      className="wb-shell-mobile-link"
+                      onClick={() => { close(); setPresent(true); }}
+                    >
+                      {presentLabels(lang).enter}
+                    </button>
+                  )
+                : undefined
+            }
+          />
         </div>
 
         </header>
@@ -1594,8 +1634,8 @@ export function WordClient({
           <button
             type="button"
             onClick={() => setPresent((p) => !p)}
-            aria-label="Exit present mode"
-            title="Exit present mode"
+            aria-label={presentLabels(lang).exit}
+            title={presentLabels(lang).exit}
             style={{
               position: "fixed",
               top: 12,
