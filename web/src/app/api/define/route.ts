@@ -1446,6 +1446,16 @@ export async function POST(req: NextRequest) {
     const plan = userInfo?.plan ?? "anonymous";
     const isPaid = plan === "clear" || plan === "deep";
 
+    // Admin refresh (Gadi 2026-09-09): a secret-gated maintenance path used by
+    // the top-words re-generation script (so popular cached words pick up new
+    // schema fields like `opposite`). When the header matches ADMIN_SECRET it
+    // forces a fresh generation (ignores cache), skips the bot 204 guard (the
+    // script has no browser UA), and skips quota. Nothing else changes — the
+    // normal generate + validate + cache-write path runs and overwrites cache.
+    const isRefresh =
+      !!process.env.ADMIN_SECRET &&
+      req.headers.get("x-gadit-refresh") === process.env.ADMIN_SECRET;
+
     // Touch the user doc so the admin dashboard sees a fresh lastSeenAt,
     // captures their country from Vercel's edge header, and bumps the
     // running searchCount. Fire-and-forget — function swallows errors.
@@ -1514,7 +1524,7 @@ export async function POST(req: NextRequest) {
     // Raw per-event feed for /admin/activity (who searched what, when).
     void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent") });
 
-    const cached = await getCachedResult(cacheKey);
+    const cached = isRefresh ? null : await getCachedResult(cacheKey);
     if (cached) {
       // Validate cached result against the same guard we apply to
       // fresh generations. Cache entries written before the guard
@@ -1561,7 +1571,7 @@ export async function POST(req: NextRequest) {
     // zero human value, so serve it 204 No Content and never touch OpenAI. Real
     // browsers always send a rich user-agent, so humans are unaffected; the
     // event was already recorded above (tagged as a bot) for the activity log.
-    if (isBotUA(req.headers.get("user-agent"))) {
+    if (!isRefresh && isBotUA(req.headers.get("user-agent"))) {
       return new Response(null, { status: 204 });
     }
 
@@ -1570,7 +1580,7 @@ export async function POST(req: NextRequest) {
     // an OpenAI call. This also rewards the long-tail SEO play: if
     // millions of visitors search the same 10K popular words, we pay
     // close to nothing.
-    if (!isPaid) {
+    if (!isPaid && !isRefresh) {
       if (plan === "anonymous") {
         const ip = clientIp(req);
         const newCount = await incrementAnonUsage(ip);
