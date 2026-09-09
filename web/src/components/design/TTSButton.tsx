@@ -89,6 +89,30 @@ function toBcp47(audioLang: string | undefined): string {
   return map[short] ?? audioLang;
 }
 
+/**
+ * Resolve the browser's installed voice list. getVoices() is async on some
+ * engines (empty on first call, populated after a "voiceschanged" event), so
+ * wait once for that event, capped at 1s, before giving up. Returns [] when
+ * Web Speech isn't available at all.
+ */
+function getVoicesAsync(): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return resolve([]);
+    const existing = window.speechSynthesis.getVoices();
+    if (existing.length) return resolve(existing);
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      resolve(window.speechSynthesis.getVoices());
+    };
+    try {
+      window.speechSynthesis.addEventListener("voiceschanged", finish, { once: true });
+    } catch { /* older engines: fall through to the timeout */ }
+    setTimeout(finish, 1000);
+  });
+}
+
 export function TTSButton({
   text,
   audioLang,
@@ -124,7 +148,7 @@ export function TTSButton({
   // Clean up if the component unmounts mid-playback (user navigates away).
   useEffect(() => () => stop(), [stop]);
 
-  const playWebSpeech = useCallback(() => {
+  const playWebSpeech = useCallback((voice?: SpeechSynthesisVoice) => {
     if (!("speechSynthesis" in window)) return;
     // Cancel anything already playing — multiple TTS buttons on the
     // page must not stack.
@@ -132,6 +156,9 @@ export function TTSButton({
 
     const u = new SpeechSynthesisUtterance(text);
     u.lang = toBcp47(audioLang);
+    // Pin the matching voice when we found one, so the engine doesn't
+    // silently substitute the system default.
+    if (voice) u.voice = voice;
     // Slightly slower than default so single words land clearly.
     u.rate = 0.95;
     u.pitch = 1.0;
@@ -187,6 +214,27 @@ export function TTSButton({
     }
   }, [text, audioLang, playWebSpeech]);
 
+  // Web Speech, but voice-aware. Many devices ship no voice for less-common
+  // languages (Arabic, Amharic, Persian, Zulu…), and speechSynthesis.speak()
+  // then fails silently — the reported "listen does nothing in Arabic" bug.
+  // When there's no local voice for the word's language, fall back to server
+  // OpenAI TTS (device-independent) for a signed-in user, so listen always
+  // makes a sound. Gadi 2026-09-09.
+  const playSmart = useCallback(async () => {
+    const sub = toBcp47(audioLang).split("-")[0].toLowerCase();
+    const voices = await getVoicesAsync();
+    const match = voices.find((v) => v.lang?.toLowerCase().startsWith(sub));
+    if (match) {
+      playWebSpeech(match);
+    } else if (user) {
+      void playOpenAITTS();
+    } else {
+      // No local voice and not signed in: best-effort attempt so the click
+      // still does something (the engine may substitute a near voice).
+      playWebSpeech();
+    }
+  }, [audioLang, user, playWebSpeech, playOpenAITTS]);
+
   const onClick = useCallback(() => {
     if (state !== "idle") {
       stop();
@@ -195,9 +243,9 @@ export function TTSButton({
     if (useOpenAI) {
       void playOpenAITTS();
     } else {
-      playWebSpeech();
+      void playSmart();
     }
-  }, [state, stop, useOpenAI, playOpenAITTS, playWebSpeech]);
+  }, [state, stop, useOpenAI, playOpenAITTS, playSmart]);
 
   if (!supported) return null;
 
