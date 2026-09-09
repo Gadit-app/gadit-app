@@ -402,6 +402,15 @@ Single-word examples where the figurative/contemporary sense must lead:
 
 ORDERING PRINCIPLE: meanings[0] is what a typical contemporary speaker FIRST thinks of when they hear the word out of context. Only after that come literal, historical, technical, or rare senses.
 
+⚠️ FULL IDIOMS, PROVERBS & SAYINGS (a whole expression searched as the query):
+When the input is a COMPLETE idiom, proverb or fixed saying — not just a word or a two-word collocation — (e.g. Hebrew "על טעם ועל ריח אין להתווכח", "טוב ציפור אחת ביד משתיים על העץ"; English "the early bird catches the worm", "a bird in the hand is worth two in the bush"; and the equivalent in any language), define the WHOLE expression as the entry:
+- meanings[0]: what the saying MEANS — the lesson or point it makes — and WHEN people use it, in plain UI-language. Set that meaning's pos to "idiom". This is the sense the user came for.
+- If the saying also has a natural literal reading, add it as a SECOND meaning (figurative/contemporary FIRST, per rule #4b).
+- examples: real sentences showing the saying used naturally in conversation, NOT a re-explanation of it.
+- etymology: the ORIGIN of the saying (biblical / Talmudic / classical source, a coiner, or the literal picture behind it). The literal word-by-word breakdown belongs here, not in meanings[0].
+- NEVER send a real, recognised saying to the typo path (1b) or the not-found path (1c) just because it is several words long.
+- But if a multi-word input is NOT a recognised set expression, just an arbitrary sentence someone pasted, use the not-found path (1c). Do NOT fabricate an "idiom" for a sentence that isn't one.
+
 ג ן¸ 
 
 ⚠️ CRITICAL RULE #4d, TECHNICAL / SCIENTIFIC LOANWORDS HAVE MULTIPLE SPECIALIZED SENSES:
@@ -1205,9 +1214,12 @@ function looksLikeWord(input: string): boolean {
   if (/[/\\]/.test(w)) return false;
   // Reject long keyboard mashes: same character repeated 6+ times
   if (/(.)\1{5,}/.test(w)) return false;
-  // Reject if more than ~5 word-like tokens (probably a sentence
-  // pasted into the wrong field)
-  if (w.split(/\s+/).length > 5) return false;
+  // Reject only a genuinely long token run. The 60-char cap above already
+  // stops pasted paragraphs; a 5-word cap was rejecting real idioms and
+  // proverbs a teacher looks up (e.g. "על טעם ועל ריח אין להתווכח", "a bird
+  // in the hand is worth two in the bush"), which the define prompt is built
+  // to explain. Allow up to 10 short tokens. Gadi 2026-09-09.
+  if (w.split(/\s+/).length > 10) return false;
   return true;
 }
 
