@@ -35,6 +35,7 @@
  */
 
 import { useState, type ReactNode } from "react";
+import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref, wordPath } from "@/lib/href";
@@ -61,10 +62,26 @@ export interface Idiom {
   meaning: string;
 }
 
+/** "Opposite" chip label per UI language (en fallback). The opposite WORD
+ *  itself comes from the model in the meaning's own language. */
+const OPPOSITE_LABEL: Record<string, string> = {
+  en: "Opposite", he: "הפך", ar: "العكس", ru: "Противоположность", es: "Opuesto",
+  pt: "Oposto", fr: "Contraire", de: "Gegenteil", it: "Contrario", nl: "Tegenovergestelde",
+  cs: "Opak", sk: "Opak", uk: "Протилежність", tr: "Zıt anlamı", pl: "Przeciwieństwo",
+  fa: "متضاد", id: "Lawan kata", el: "Αντίθετο", hi: "विलोम", ja: "反対語",
+  am: "ተቃራኒ", zu: "Okuphambene", vi: "Trái nghĩa", fil: "Kabaligtaran", af: "Teenoorgestelde",
+  sw: "Kinyume", "zh-CN": "反义词", "zh-TW": "反義詞", ko: "반대말", th: "ตรงข้าม",
+  bn: "বিপরীত", da: "Modsætning", hu: "Ellentét",
+};
+
 export interface Meaning {
   meaning: string;
   examples: string[];
   pos?: string;
+  /** A single clean everyday antonym for THIS sense, in the meaning's own
+   *  language, or null/absent when the sense has no clear one-word opposite.
+   *  Rendered as a tappable chip that links to that word's own page. */
+  opposite?: string | null;
   kidsExplanation?: KidsExplanation;
   idioms?: Idiom[];
 }
@@ -664,6 +681,7 @@ function MeaningEntry({
   kidsImageLoading,
 }: MeaningEntryProps) {
   const { lang } = useLang();
+  const href = useHref();
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
   // image + kids render inline; compose + quiz + compare fire route/modal.
   const [openTab, setOpenTab] = useState<"image" | "kids" | null>(null);
@@ -869,6 +887,29 @@ function MeaningEntry({
               <span><TappableText text={ex} skipWord={word} /></span>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Opposite chip — the first edge of the vocabulary graph. Rendered
+          only when the model gave THIS sense a clean antonym (null for most
+          words). Tappable to that word's own page; learning a pair. */}
+      {typeof meaning.opposite === "string" && meaning.opposite.trim() && (
+        <div className="wb-mopposite" style={{ marginTop: 12 }}>
+          <Link
+            href={href(wordPath(meaning.opposite.trim()))}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 7,
+              background: "var(--paper,#F7FAFA)", border: "1px solid var(--hairline,#E5E7EB)",
+              borderRadius: 999, padding: "6px 13px", fontSize: 14, textDecoration: "none",
+              lineHeight: 1.25, color: "var(--ink,#20272E)",
+            }}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep,#0E7490)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M8 3L4 7l4 4" /><path d="M4 7h16" /><path d="M16 21l4-4-4-4" /><path d="M20 17H4" />
+            </svg>
+            <span style={{ color: "var(--ink-muted,#6B7280)", fontSize: 12.5 }}>{OPPOSITE_LABEL[lang] ?? OPPOSITE_LABEL.en}</span>
+            <span style={{ fontWeight: 700 }}>{meaning.opposite.trim()}</span>
+          </Link>
         </div>
       )}
 

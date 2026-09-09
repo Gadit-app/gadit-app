@@ -438,6 +438,13 @@ Do NOT invent meanings that don't exist in real dictionaries. If a meaning sound
 
 THE TEST: Before adding any meaning, ask yourself: "Would I find this exact meaning in a standard Hebrew dictionary like רב מילים, אבן שושן, or מילון אריאל?" If the answer is "I'm not sure" or "probably not", DELETE that meaning. One correct meaning is infinitely better than two meanings with one invented.
 
+⚠️ THE "opposite" FIELD (per meaning) — antonyms, GATED HARD:
+For EACH meaning, set "opposite" to a SINGLE clean, everyday antonym of THAT specific sense, written IN THE SAME LANGUAGE as that meaning's "meaning" text. It powers a small tappable "opposite" chip that links to that word's own page.
+- PER MEANING, not per word: "light" is the opposite of "dark" for the brightness sense but "heavy" for the weight sense. Each sense gets its own opposite.
+- Fill it ONLY when a real, common, UNAMBIGUOUS one-word opposite exists (hot/cold, open/closed, high/low, buy/sell, day/night). Set it to null for the MANY words that have none: concrete nouns (table, water, dog, cat), proper nouns, and most abstract nouns and ordinary verbs. When unsure, use null.
+- NEVER invent an opposite to look thorough. A wrong opposite taught to a child is worse than no chip at all. Same discipline as the hallucination rule above: if you would hesitate to find this exact antonym in a real dictionary or thesaurus, set null.
+- It must be a single real word the learner can look up (it becomes a tappable link). No phrases, no parentheses, no explanation — just the one word, or null.
+
 ⚠️ CRITICAL RULE #6 ג€” NEVER USE THE WORD INSIDE ITS OWN DEFINITION (CIRCULAR DEFINITIONS BAN):
 A definition that contains the word being defined is useless to anyone who doesn't already know the word. This is a CRITICAL failure mode.
 
@@ -845,6 +852,11 @@ const RESPONSE_SCHEMA = {
           // canonical POS. The render side renders nothing when
           // pos is null/empty.
           pos:      { type: ["string", "null"] },
+          // opposite — a single clean everyday antonym for THIS meaning,
+          // written in the SAME language as the meaning text, or null when
+          // the sense has no clear one-word opposite (most words do not).
+          // Renders as a tappable chip; the model's own null is the gate.
+          opposite: { type: ["string", "null"] },
           examples: { type: "array", items: { type: "string" } },
           idioms: {
             type: "array",
@@ -873,7 +885,7 @@ const RESPONSE_SCHEMA = {
             ],
           },
         },
-        required: ["meaning", "pos", "examples", "idioms", "kidsExplanation"],
+        required: ["meaning", "pos", "opposite", "examples", "idioms", "kidsExplanation"],
       },
     },
     etymology: {
