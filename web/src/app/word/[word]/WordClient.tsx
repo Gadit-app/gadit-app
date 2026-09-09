@@ -1501,8 +1501,13 @@ export function WordClient({
                 rather than as a floating corner button so it can never sit
                 on top of the mobile burger — .wb-shell-actions is hidden
                 below 1024px, and projecting to a class screen is not a
-                phone job anyway. Gadi 2026-09-08. */}
-            {user && !!schoolId && !classroomCode && (
+                phone job anyway. Gadi 2026-09-08.
+                Gated to !!wordSet (2026-09-09): a bare unlabelled square on
+                EVERY word page for any school account read as clutter to a
+                parent using Gadit normally. Projecting is a lesson activity,
+                so the entry only belongs when the teacher is actually walking
+                a curated word set (?set=…); a standalone word never shows it. */}
+            {user && !!schoolId && !classroomCode && !!wordSet && (
               <button
                 type="button"
                 className="wb-shell-share"
@@ -1602,7 +1607,7 @@ export function WordClient({
               Gadi 2026-09-08. */}
           <WbShellBurger
             extra={
-              user && !!schoolId && !classroomCode
+              user && !!schoolId && !classroomCode && !!wordSet
                 ? (close) => (
                     <button
                       type="button"
