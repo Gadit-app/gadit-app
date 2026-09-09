@@ -1060,6 +1060,8 @@ Output ONLY the JSON object.`;
         }),
       });
       const data = await res.json();
+      const u = usageFrom(data);
+      void logAiUsage({ feature: "etymology_fallback", model: attempt.model, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
       const content = data?.choices?.[0]?.message?.content;
       if (typeof content !== "string") continue;
       const parsed = JSON.parse(content) as Partial<EtymologyShape>;
@@ -1700,12 +1702,14 @@ export async function POST(req: NextRequest) {
 
           // Stream ended — parse final JSON, validate, retry if degenerate
           let acceptedResult: object | null = null;
-          let parsedOk = false;
+          let streamedParsed: Record<string, unknown> | null = null;
+          let firstReason = "";
           try {
-            const parsed = JSON.parse(accumulated);
-            parsedOk = true;
+            const parsed = JSON.parse(accumulated) as Record<string, unknown>;
+            streamedParsed = parsed;
             const verdict = isDegenerate(parsed, word);
             if (verdict.degenerate) {
+              firstReason = verdict.reason ?? "";
               console.warn(`First-attempt rejected (streaming): ${verdict.reason}`);
             } else {
               acceptedResult = parsed;
@@ -1714,13 +1718,43 @@ export async function POST(req: NextRequest) {
             console.error("Final JSON parse failed on streamed attempt:", e, "head:", accumulated.slice(0, 200));
           }
 
-          // If the streamed first attempt failed (parse error OR guard
-          // rejection), retry up to 2 more times non-streaming with
-          // gpt-4o. This is what stops the user from ever seeing
-          // mojibake: even when OpenAI flakes on one call, the next
+          // Fast path — the dominant rejection reason in production is a
+          // garbled etymology block (dense cantillation / quote soup) while
+          // the meanings, examples and script are perfectly clean. isDegenerate
+          // checks word, script and repetition BEFORE etymology, so an
+          // "etymology.*" reason PROVES the rest of the streamed answer already
+          // passed the guard. In that case, regenerating the whole thing twice
+          // with the full ~20K-token gpt-4o prompt is pure waste: repair only
+          // the small etymology card instead. A cheap dedicated etymology call,
+          // then plain sanitisation. Same guard, same quality bar, a fraction
+          // of the cost — and one small call is faster for the user than two
+          // big ones. Every other reason (wrong script, repetition loop,
+          // unparseable) still falls through to the full retry below.
+          if (!acceptedResult && streamedParsed && firstReason.startsWith("etymology.")) {
+            const fallbackEty = await generateEtymologyFallback(word, uiLangName);
+            if (fallbackEty) {
+              const merged = { ...streamedParsed, etymology: fallbackEty };
+              if (!isDegenerate(merged, word).degenerate) {
+                acceptedResult = merged;
+                console.info("Recovered via etymology-only repair (skipped full retry)");
+              }
+            }
+            if (!acceptedResult) {
+              const sanitised = sanitizeDegenerateEtymology(streamedParsed);
+              if (!isDegenerate(sanitised, word).degenerate) {
+                acceptedResult = sanitised as object;
+                console.info("Recovered by clearing etymology (skipped full retry)");
+              }
+            }
+          }
+
+          // If the streamed first attempt failed for any other reason (wrong
+          // script, repetition loop, unparseable JSON) — or the etymology
+          // repair above could not rescue it — retry up to 2 more times
+          // non-streaming with gpt-4o. This is what stops the user from ever
+          // seeing mojibake: even when OpenAI flakes on one call, the next
           // call almost always produces a clean result.
           if (!acceptedResult) {
-            void parsedOk; // surface log already emitted above
             const retry = await generateValidated(systemPrompt, userContent, word, 2, 3);
             if (retry) {
               console.info(`Recovered via retry on attempt ${retry.attemptsUsed}`);
