@@ -10,6 +10,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { ReaderText } from "@/components/design/ReaderText";
+import { PassageKeyWords } from "@/components/design/PassageKeyWords";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 
@@ -494,8 +495,23 @@ export function ReaderClient() {
                 <div style={{ height: "100%", width: `${total ? Math.round((reviewed.size / total) * 100) : 0}%`, background: allDone ? "#16A34A" : "var(--teal,#0EA5A5)", borderRadius: 999, transition: "width 0.25s" }} />
               </div>
             </div>
-            <p style={{ margin: "0 0 14px", fontSize: 13.5, color: "var(--ink-muted,#9CA3AF)" }}>{t.hint}</p>
-            <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} />
+            {/* Words-first: the on-brand fast help for a parent who won't tap
+                word by word. The key words to learn (primary) + a short gist. */}
+            <PassageKeyWords text={text} lang={lang} />
+            {/* The reading area is now a clearly-bounded sheet, so it's obvious
+                where the text lives on the page (Gadi 2026-09-09). */}
+            <div
+              style={{
+                background: "var(--card,#fff)",
+                border: "1px solid var(--hairline,#E5E7EB)",
+                borderRadius: 18,
+                padding: "22px 22px 26px",
+                boxShadow: "0 1px 2px rgba(16,24,40,0.04), 0 10px 30px rgba(16,24,40,0.04)",
+              }}
+            >
+              <p style={{ margin: "0 0 14px", fontSize: 13.5, color: "var(--ink-muted,#9CA3AF)" }}>{t.hint}</p>
+              <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} />
+            </div>
           </div>
         )}
       </main>
