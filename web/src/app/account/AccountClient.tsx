@@ -35,6 +35,22 @@ import { countCached, setCachedWord } from "@/lib/offline-db";
 
 type Plan = "basic" | "clear" | "deep";
 
+// Monthly price ids for the in-account upgrade buttons. A Basic user who wants
+// to upgrade used to be dumped on /pricing (individual plans on top, Family at
+// the bottom) and had to hunt for the right plan; these send them straight to
+// the card-entry checkout for the plan they picked. Gadi 2026-09-10.
+const CHECKOUT_PRICES = {
+  family: process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "",
+  deep: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "",
+  clear: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY ?? "",
+} as const;
+
+/** "Upgrade to <Plan>" — plan name stays Latin (brand rule). he/ar + en fallback. */
+function upgradeLabel(lang: string, planName: string): string {
+  const prefix = lang === "he" ? "שדרוג ל-" : lang === "ar" ? "الترقية إلى " : "Upgrade to ";
+  return prefix + planName;
+}
+
 // Per-language font stacks. The wordbook surface inherits Inter as
 // default; Hebrew and Arabic explicitly switch to the Rubik / Noto
 // Naskh families so neither display nor body text falls back to a
@@ -530,7 +546,8 @@ export function AccountPage() {
                 data={data}
                 renewalDate={renewalDate}
                 onManageBilling={handleManageBilling}
-                onUpgrade={() => router.push(href("/pricing"))}
+                onUpgradeTo={(priceId: string) =>
+                  router.push(`${href("/checkout")}?price=${encodeURIComponent(priceId)}`)}
                 onChangePlan={() => router.push(href("/pricing"))}
                 onCancel={handleStartCancel}
                 cancelBusy={cancelBusy && !cancelFlow}
@@ -626,12 +643,12 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 function PlanSection({
-  data, renewalDate, onManageBilling, onUpgrade, onChangePlan, onCancel, cancelBusy,
+  data, renewalDate, onManageBilling, onUpgradeTo, onChangePlan, onCancel, cancelBusy,
 }: {
   data: AccountData;
   renewalDate: string | null;
   onManageBilling: () => void;
-  onUpgrade: () => void;
+  onUpgradeTo: (priceId: string) => void;
   onChangePlan: () => void;
   onCancel: () => void;
   cancelBusy: boolean;
@@ -750,10 +767,22 @@ function PlanSection({
           )}
           <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
             {plan === "basic" ? (
-              // Basic only has one direction to go: up. A "Change plan"
-              // ghost button next to Upgrade was redundant (both routed
-              // to /pricing) and read as ambiguous ("change to what?").
-              <span className="gd-buy"><PrimaryBtn onClick={onUpgrade}>{v2(lang, "accountUpgrade")}</PrimaryBtn></span>
+              // Basic only has one direction to go: up. Direct per-plan
+              // upgrade buttons that land straight on the card-entry checkout
+              // for that plan — no detour through /pricing where the user has
+              // to hunt for the right plan (and Family sits at the bottom).
+              // Family first (the flagship, family-first), then Deep, Clear.
+              <>
+                {CHECKOUT_PRICES.family && (
+                  <span className="gd-buy"><PrimaryBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.family)}>{upgradeLabel(lang, "Family")}</PrimaryBtn></span>
+                )}
+                {CHECKOUT_PRICES.deep && (
+                  <GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.deep)}>{upgradeLabel(lang, "Deep")}</GhostBtn>
+                )}
+                {CHECKOUT_PRICES.clear && (
+                  <GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.clear)}>{upgradeLabel(lang, "Clear")}</GhostBtn>
+                )}
+              </>
             ) : (
               <>
                 <GhostBtn onClick={onManageBilling}>{v2(lang, "accountManageBilling")}</GhostBtn>
