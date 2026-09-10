@@ -552,23 +552,35 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
 
     const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
     let ref: FirebaseFirestore.DocumentReference | null = null;
+    let userData: Record<string, unknown> = {};
     if (customerId) {
       const uid = await findUserIdByCustomer(customerId);
       if (uid) {
         ref = getAdminDb().collection("users").doc(uid);
         const snap = await ref.get();
-        if (snap.data()?.dunningNotifiedInvoice === invoice.id) return; // once per invoice
+        userData = snap.data() ?? {};
+        if (userData.dunningNotifiedInvoice === invoice.id) return; // once per invoice
       }
     }
+
+    // Language: Gadit is global, so a Hebrew dunning email must NOT go to
+    // overseas customers. Send Hebrew to a Hebrew-UI user (the language they
+    // actually use the product in) or, when their UI language is unknown, an
+    // Israeli card/account; English to everyone else. (Gadi 2026-09-10.)
+    const invCountry = typeof invoice.customer_address?.country === "string" ? invoice.customer_address.country : "";
+    const he =
+      userData.uiLang === "he" ||
+      (!userData.uiLang && (userData.country === "IL" || invCountry === "IL"));
 
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) return;
     const resend = new Resend(resendKey);
-    await resend.emails.send({
-      from: "Gadit <notify@gadit.app>",
-      to: email,
-      subject: "החיוב לא עבר. יש לך 7 ימים לעדכן כרטיס",
-      html: `
+
+    const subject = he
+      ? "החיוב לא עבר. יש לך 7 ימים לעדכן כרטיס"
+      : "Your payment didn't go through. You have 7 days to update your card";
+    const html = he
+      ? `
         <div dir="rtl" style="font-family:Rubik,Arial,sans-serif;max-width:520px;margin:0 auto;padding:8px 4px;color:#1f2937;line-height:1.7;">
           <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></div>
           <h1 style="font-size:20px;font-weight:800;color:#0B1220;margin:14px 0 10px;">החיוב על המנוי לא עבר</h1>
@@ -579,8 +591,21 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
           </p>
           <p style="margin:0 0 8px;color:#6b7280;font-size:14px;">אם כבר עדכנת, אפשר להתעלם מהמייל הזה. אם משהו לא ברור, פשוט השב/י למייל ואנחנו כאן.</p>
           <p style="margin:14px 0 0;color:#9ca3af;font-size:13px;">צוות Gadit</p>
-        </div>`,
-    });
+        </div>`
+      : `
+        <div dir="ltr" style="font-family:Rubik,Arial,sans-serif;max-width:520px;margin:0 auto;padding:8px 4px;color:#1f2937;line-height:1.7;">
+          <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></div>
+          <h1 style="font-size:20px;font-weight:800;color:#0B1220;margin:14px 0 10px;">Your subscription payment didn't go through</h1>
+          <p style="margin:0 0 12px;">We tried to renew your Gadit subscription and the charge didn't go through, most likely a declined or expired card.</p>
+          <p style="margin:0 0 18px;"><b>Your access stays on for 7 days.</b> Updating your card takes less than a minute, and everything continues as usual, without losing your children's notebooks and progress.</p>
+          <p style="margin:0 0 22px;">
+            <a href="${url}" style="display:inline-block;background:#0EA5A5;color:#fff;font-weight:800;font-size:16px;text-decoration:none;padding:14px 30px;border-radius:12px;">Update card</a>
+          </p>
+          <p style="margin:0 0 8px;color:#6b7280;font-size:14px;">If you already updated it, you can ignore this email. If anything isn't clear, just reply and we're here.</p>
+          <p style="margin:14px 0 0;color:#9ca3af;font-size:13px;">The Gadit team</p>
+        </div>`;
+
+    await resend.emails.send({ from: "Gadit <notify@gadit.app>", to: email, subject, html });
     if (ref) await ref.set({ dunningNotifiedInvoice: invoice.id }, { merge: true });
   } catch (err) {
     console.error("[webhook] payment_failed notify error:", err);
