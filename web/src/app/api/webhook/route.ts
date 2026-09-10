@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { FieldValue } from "firebase-admin/firestore";
@@ -804,6 +805,77 @@ async function creditReferralConversion(invoice: Stripe.Invoice) {
   }
 }
 
+/**
+ * Meta Conversions API — server-side "Purchase" on the FIRST real payment.
+ *
+ * The browser pixel tracks the funnel only up to StartTrial; the actual charge
+ * lands weeks later, server-side (this webhook), so Purchase has to be sent from
+ * here for true ROAS and so Meta can optimise toward real buyers, not just trial
+ * starts (lib/track.ts flags this as "a Conversions API job for later").
+ *
+ * Fires ONCE per customer (first non-zero invoice = the trial-to-paid
+ * conversion), deduped via `capiPurchaseSent` so renewals don't re-fire and
+ * inflate/mis-attribute. Email is SHA-256 hashed (Meta PII rule). No-op without
+ * META_CAPI_TOKEN. Best-effort — never blocks provisioning. Gadi 2026-09-10.
+ */
+async function sendCapiPurchase(invoice: Stripe.Invoice) {
+  try {
+    const token = process.env.META_CAPI_TOKEN;
+    if (!token) return; // not configured yet
+    const gross = invoice.amount_paid ?? 0;
+    if (gross <= 0) return; // trial / $0 invoice: no purchase
+
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (!customerId) return;
+    const db = getAdminDb();
+    const uid = await findUserIdByCustomer(customerId);
+    if (!uid) return;
+    const ref = db.collection("users").doc(uid);
+    const u = (await ref.get()).data() ?? {};
+    if (u.capiPurchaseSent === true) return; // first real payment only (the conversion)
+
+    // Mark first so a webhook retry can't double-fire the Purchase.
+    await ref.set({ capiPurchaseSent: true }, { merge: true });
+
+    const pixelId = process.env.META_PIXEL_ID || "885853537404576";
+    const email = (invoice.customer_email || (u.email as string) || "").trim().toLowerCase();
+    const em = email ? crypto.createHash("sha256").update(email).digest("hex") : undefined;
+    const rawCountry = typeof invoice.customer_address?.country === "string" ? invoice.customer_address.country : (u.country as string) || "";
+    const country = rawCountry ? crypto.createHash("sha256").update(rawCountry.trim().toLowerCase()).digest("hex") : undefined;
+
+    const body = {
+      data: [
+        {
+          event_name: "Purchase",
+          event_time: Math.floor(Date.now() / 1000),
+          action_source: "website",
+          event_id: invoice.id, // idempotency key on Meta's side
+          user_data: {
+            ...(em && { em: [em] }),
+            ...(country && { country: [country] }),
+          },
+          custom_data: {
+            currency: (invoice.currency || "usd").toUpperCase(),
+            value: gross / 100,
+          },
+        },
+      ],
+    };
+
+    const res = await fetch(
+      `https://graph.facebook.com/v21.0/${pixelId}/events?access_token=${encodeURIComponent(token)}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) },
+    );
+    if (!res.ok) {
+      console.warn(`[webhook] CAPI Purchase non-ok ${res.status}:`, (await res.text()).slice(0, 200));
+    } else {
+      console.log(`[webhook] CAPI Purchase sent (uid ${uid}, ${(gross / 100).toFixed(2)} ${invoice.currency})`);
+    }
+  } catch (e) {
+    console.warn("[webhook] CAPI purchase failed (non-blocking):", e);
+  }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -958,6 +1030,7 @@ export async function POST(req: NextRequest) {
       const invoice = event.data.object as Stripe.Invoice;
       await accruePartnerCommission(invoice);
       await creditReferralConversion(invoice);
+      await sendCapiPurchase(invoice);
     }
 
     if (event.type === "invoice.payment_failed") {
