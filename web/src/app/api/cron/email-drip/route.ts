@@ -195,6 +195,23 @@ export async function GET(req: NextRequest) {
       continue; // Family owners skip the general signup drip.
     }
 
+    // Never send the general signup drip (it ends in an upgrade CTA to
+    // Clear/Deep) to someone who ALREADY pays or is trialing a paid plan.
+    // Only `familyActivatedAt` was gating before, so a Clear/Deep subscriber,
+    // a Family owner still in trial, or any paid trialer (plan is stamped
+    // clear/deep the moment a card is attached — see webhook activateFrom…)
+    // kept getting pushed to buy something they already have (Gadi 2026-09-10).
+    // A card-less / free "basic" user is the only correct target for it.
+    const paidOrTrialing =
+      d.plan === "clear" ||
+      d.plan === "deep" ||
+      d.subscriptionStatus === "active" ||
+      d.subscriptionStatus === "trialing" ||
+      d.subscriptionStatus === "past_due" ||
+      !!d.familyId ||
+      !!d.schoolId;
+    if (paidOrTrialing) continue;
+
     const drip = getDripForLang(generalLang);
     if (drip.length === 0) continue;
 
