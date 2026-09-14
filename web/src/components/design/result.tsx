@@ -1690,7 +1690,7 @@ export function ResultView({
 
       <OriginCard etymology={result.etymology} onReport={onReport} plan={plan} />
 
-      <WordQuestions word={result.word} />
+      <WordQuestions word={result.word} wordLang={result.language} />
     </div>
   );
 }

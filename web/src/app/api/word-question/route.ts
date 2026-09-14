@@ -35,14 +35,16 @@ const LANG_NAME: Record<string, string> = {
 };
 
 // The closed set of questions. Each maps to a tight instruction. Keep this list in
-// sync with QUESTION_IDS in WordQuestions.tsx.
+// sync with QUESTION_IDS in WordQuestions.tsx. {LANG} = user's UI language;
+// {WORDLANG} = the word's OWN language (passed in so the model never has to guess it
+// from spelling — "fluid" is English, not French).
 const QUESTIONS: Record<string, string> = {
   synonyms:
-    "List a few words with a similar meaning to this word. Give the related words in the SAME language as the word itself, and after each one add a 2 to 4 word gloss in {LANG}. Prefer the closest, most common synonyms. If the word has no real synonyms, say so plainly in {LANG}.",
+    "List a few words with a similar meaning to this word. The word is written in {WORDLANG}, so give the related words in {WORDLANG}, and after each one add a 2 to 4 word gloss in {LANG}. Prefer the closest, most common synonyms. If the word has no real synonyms, say so plainly in {LANG}.",
   word_family:
-    "List a few words from the same family or root as this word (for example other parts of speech, or words built from the same root). Give them in the SAME language as the word itself, each with a 2 to 4 word gloss in {LANG} explaining how it relates. If there is no meaningful word family, say so plainly in {LANG}.",
+    "List a few words from the same family or root as this word (for example other parts of speech, or words built from the same root). The word is written in {WORDLANG}, so give them in {WORDLANG}, each with a 2 to 4 word gloss in {LANG} explaining how it relates. If there is no meaningful word family, say so plainly in {LANG}.",
   common_mistakes:
-    "Explain the most common mistake or confusion people make with this word (for example a word it is often confused with, or a wrong usage), and how to use it correctly. Keep it concrete and short. Write in {LANG}.",
+    "Explain the most common mistake or confusion people make with this word in {WORDLANG} (for example a word it is often confused with, or a wrong usage), and how to use it correctly. Keep it concrete and short. Write in {LANG}.",
   memory_tip:
     "Give one short, concrete tip to help remember this word and its meaning, simple enough for a child. It can use the word's sound, its origin, or a small mental picture. Write in {LANG}. Do not invent a false etymology.",
 };
@@ -51,8 +53,8 @@ function hashKey(lang: string, word: string, qid: string): string {
   return crypto.createHash("sha256").update("wq1:" + lang + ":" + word + ":" + qid).digest("hex").slice(0, 40);
 }
 
-async function ask(word: string, langName: string, qid: string): Promise<string> {
-  const instruction = QUESTIONS[qid].replaceAll("{LANG}", langName);
+async function ask(word: string, langName: string, wordLangName: string, qid: string): Promise<string> {
+  const instruction = QUESTIONS[qid].replaceAll("{LANG}", langName).replaceAll("{WORDLANG}", wordLangName);
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -64,7 +66,7 @@ async function ask(word: string, langName: string, qid: string): Promise<string>
       messages: [
         {
           role: "system",
-          content: `You help someone learning the word below. Their language is ${langName}; the word may be in a different language. Answer this one question about the word:
+          content: `You help someone learning the word below. Their language is ${langName}. The word itself is written in ${wordLangName}. Answer this one question about the word:
 ${instruction}
 
 Rules: Keep the answer short (at most about 60 words). Plain and clear, no linguistic jargon, no foreign scripts except a light transliteration where helpful. Never make up facts. The answer must be safe and appropriate for children.
@@ -98,11 +100,16 @@ export async function POST(req: NextRequest) {
   let word = "";
   let lang = "en";
   let questionId = "";
+  let wordLangName = "";
   try {
-    const b = (await req.json()) as { word?: unknown; uiLang?: unknown; questionId?: unknown };
+    const b = (await req.json()) as { word?: unknown; uiLang?: unknown; questionId?: unknown; wordLang?: unknown };
     if (typeof b.word === "string") word = b.word.trim().slice(0, 80);
     if (typeof b.uiLang === "string" && LANG_NAME[b.uiLang]) lang = b.uiLang;
     if (typeof b.questionId === "string") questionId = b.questionId;
+    // wordLang arrives as the word's own language NAMED IN ENGLISH (result.language,
+    // e.g. "English", "Hebrew"), so the model never guesses the word's language from
+    // spelling. Sanitize to letters/spaces; fall back to the UI language.
+    if (typeof b.wordLang === "string") wordLangName = b.wordLang.replace(/[^A-Za-z ]/g, "").trim().slice(0, 30);
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }
@@ -120,7 +127,7 @@ export async function POST(req: NextRequest) {
   } catch { /* cache read best-effort */ }
 
   try {
-    const answer = await ask(word, LANG_NAME[lang], questionId);
+    const answer = await ask(word, LANG_NAME[lang], wordLangName || LANG_NAME[lang], questionId);
     if (!answer) return NextResponse.json({ error: "empty" }, { status: 502 });
     try { await ref.set({ lang, word, questionId, answer, at: new Date().toISOString() }); } catch { /* ignore */ }
     return NextResponse.json({ answer });

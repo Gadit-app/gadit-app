@@ -72,7 +72,7 @@ const REPORT: Dict = {
 
 type CellState = { loading: boolean; answer?: string; error?: boolean };
 
-export default function WordQuestions({ word }: { word: string }) {
+export default function WordQuestions({ word, wordLang }: { word: string; wordLang?: string }) {
   const { user } = useAuth();
   const { lang, dir } = useLang();
   const [open, setOpen] = useState<QuestionId | null>(null);
@@ -99,7 +99,7 @@ export default function WordQuestions({ word }: { word: string }) {
       const res = await fetch("/api/word-question", {
         method: "POST",
         headers,
-        body: JSON.stringify({ word, uiLang: lang, questionId: qid }),
+        body: JSON.stringify({ word, uiLang: lang, wordLang, questionId: qid }),
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = (await res.json()) as { answer?: string };
