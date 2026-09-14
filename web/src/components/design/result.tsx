@@ -35,7 +35,6 @@
  */
 
 import { useState, type ReactNode } from "react";
-import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref, wordPath } from "@/lib/href";
@@ -65,7 +64,7 @@ export interface Idiom {
 
 /** "Opposite" chip label per UI language (en fallback). The opposite WORD
  *  itself comes from the model in the meaning's own language. */
-const OPPOSITE_LABEL: Record<string, string> = {
+export const OPPOSITE_LABEL: Record<string, string> = {
   en: "Opposite", he: "הפך", ar: "العكس", ru: "Противоположность", es: "Opuesto",
   pt: "Oposto", fr: "Contraire", de: "Gegenteil", it: "Contrario", nl: "Tegenovergestelde",
   cs: "Opak", sk: "Opak", uk: "Протилежність", tr: "Zıt anlamı", pl: "Przeciwieństwo",
@@ -891,28 +890,10 @@ function MeaningEntry({
         </div>
       )}
 
-      {/* Opposite chip — the first edge of the vocabulary graph. Rendered
-          only when the model gave THIS sense a clean antonym (null for most
-          words). Tappable to that word's own page; learning a pair. */}
-      {typeof meaning.opposite === "string" && meaning.opposite.trim() && (
-        <div className="wb-mopposite" style={{ marginTop: 12 }}>
-          <Link
-            href={href(wordPath(meaning.opposite.trim()))}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 7,
-              background: "var(--paper,#F7FAFA)", border: "1px solid var(--hairline,#E5E7EB)",
-              borderRadius: 999, padding: "6px 13px", fontSize: 14, textDecoration: "none",
-              lineHeight: 1.25, color: "var(--ink,#20272E)",
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep,#0E7490)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M8 3L4 7l4 4" /><path d="M4 7h16" /><path d="M16 21l4-4-4-4" /><path d="M20 17H4" />
-            </svg>
-            <span style={{ color: "var(--ink-muted,#6B7280)", fontSize: 12.5 }}>{OPPOSITE_LABEL[lang] ?? OPPOSITE_LABEL.en}</span>
-            <span style={{ fontWeight: 700 }}>{meaning.opposite.trim()}</span>
-          </Link>
-        </div>
-      )}
+      {/* Opposite moved OUT of the meaning card (Gadi 2026-09-14) — it was
+          stuck in the middle of the definition. Antonyms now render as chips
+          in the WordQuestions block below all meanings, collected across every
+          sense. See ResultView → WordQuestions opposites prop. */}
 
       {/* Idioms have moved OUT of the meaning card. They render as
           a standalone section after all meanings, before Word Origin
@@ -1690,7 +1671,17 @@ export function ResultView({
 
       <OriginCard etymology={result.etymology} onReport={onReport} plan={plan} />
 
-      <WordQuestions word={result.word} wordLang={result.language} />
+      <WordQuestions
+        word={result.word}
+        wordLang={result.language}
+        opposites={Array.from(
+          new Set(
+            (result.meanings ?? [])
+              .map((m) => (typeof m.opposite === "string" ? m.opposite.trim() : ""))
+              .filter((o) => o.length > 0)
+          )
+        )}
+      />
     </div>
   );
 }

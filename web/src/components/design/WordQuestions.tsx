@@ -11,9 +11,12 @@
  */
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { useHref, wordPath } from "@/lib/href";
 import ReportButton from "@/components/ReportButton";
+import { OPPOSITE_LABEL } from "@/components/design/result";
 
 // Keep in sync with QUESTIONS in /api/word-question/route.ts
 const QUESTION_IDS = ["synonyms", "word_family", "common_mistakes", "memory_tip"] as const;
@@ -72,15 +75,30 @@ const REPORT: Dict = {
 
 type CellState = { loading: boolean; answer?: string; error?: boolean };
 
-export default function WordQuestions({ word, wordLang }: { word: string; wordLang?: string }) {
+export default function WordQuestions({
+  word,
+  wordLang,
+  opposites = [],
+}: {
+  word: string;
+  wordLang?: string;
+  /** Distinct antonyms collected across all meanings. Rendered as tappable
+   *  chips here (moved out of the definition card, Gadi 2026-09-14). */
+  opposites?: string[];
+}) {
   const { user } = useAuth();
   const { lang, dir } = useLang();
+  const href = useHref();
   const [open, setOpen] = useState<QuestionId | null>(null);
   const [cells, setCells] = useState<Record<string, CellState>>({});
 
-  // Signed-in only: the endpoint requires auth, and anonymous visitors are
-  // hard-walled well before they'd lean on this. Hide rather than dead-end.
-  if (!user) return null;
+  // The question chips need auth (the endpoint requires it, and anon are
+  // hard-walled well before they'd lean on this). The opposite chips are plain
+  // links and need no auth, so keep them for everyone. Only bail out entirely
+  // when there is nothing to show.
+  if (!user && opposites.length === 0) return null;
+
+  const oppositeLabel = OPPOSITE_LABEL[lang] ?? OPPOSITE_LABEL.en;
 
   async function ask(qid: QuestionId) {
     // Toggle closed if tapping the open one.
@@ -113,22 +131,44 @@ export default function WordQuestions({ word, wordLang }: { word: string; wordLa
 
   return (
     <div className="wb-origin-section" dir={dir}>
-      <div className="wb-eyebrow">
-        <span>
-          <span className="wb-eyebrow-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-              <circle cx="12" cy="12" r="10" />
-            </svg>
+      {user && (
+        <div className="wb-eyebrow">
+          <span>
+            <span className="wb-eyebrow-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+            </span>
+            {pick(HEADING, lang)}
           </span>
-          {pick(HEADING, lang)}
-        </span>
-      </div>
+        </div>
+      )}
 
       <div className="wb-card" style={{ padding: 14 }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {QUESTION_IDS.map((qid) => {
+          {/* Opposite chips — the vocabulary-graph edge, moved here from inside
+              the definition. Each is a link to that word's own page. */}
+          {opposites.map((opp) => (
+            <Link
+              key={"opp-" + opp}
+              href={href(wordPath(opp))}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 7,
+                fontSize: 13.5, padding: "8px 14px", borderRadius: 999,
+                border: "1px solid var(--line,#E2E8E9)", background: "var(--card,#fff)",
+                textDecoration: "none", color: "var(--ink,#16242B)", lineHeight: 1.25,
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep,#0E7490)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M8 3L4 7l4 4" /><path d="M4 7h16" /><path d="M16 21l4-4-4-4" /><path d="M20 17H4" />
+              </svg>
+              <span style={{ color: "var(--ink-muted,#6B7280)", fontSize: 12 }}>{oppositeLabel}</span>
+              <span style={{ fontWeight: 700 }}>{opp}</span>
+            </Link>
+          ))}
+          {user && QUESTION_IDS.map((qid) => {
             const isOpen = open === qid;
             return (
               <button
@@ -155,7 +195,7 @@ export default function WordQuestions({ word, wordLang }: { word: string; wordLa
           })}
         </div>
 
-        {open && (
+        {user && open && (
           <div
             style={{
               marginTop: 12,
