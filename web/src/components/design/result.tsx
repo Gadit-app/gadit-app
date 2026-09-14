@@ -39,6 +39,7 @@ import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref, wordPath } from "@/lib/href";
+import WordQuestions from "@/components/design/WordQuestions";
 import type { Lang } from "@/lib/i18n";
 import { LANGUAGES } from "@/lib/i18n";
 import { isEtymologyFieldGarbled } from "@/lib/define-guard";
@@ -1688,6 +1689,8 @@ export function ResultView({
       />
 
       <OriginCard etymology={result.etymology} onReport={onReport} plan={plan} />
+
+      <WordQuestions word={result.word} />
     </div>
   );
 }
