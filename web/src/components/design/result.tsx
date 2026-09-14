@@ -1674,6 +1674,7 @@ export function ResultView({
       <WordQuestions
         word={result.word}
         wordLang={result.language}
+        plan={plan}
         opposites={Array.from(
           new Set(
             (result.meanings ?? [])

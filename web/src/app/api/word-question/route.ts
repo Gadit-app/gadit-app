@@ -17,7 +17,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
-import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
@@ -91,10 +91,11 @@ export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization") || "";
   const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
   if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
-  try {
-    await getAdminAuth().verifyIdToken(idToken);
-  } catch {
-    return NextResponse.json({ error: "login_required" }, { status: 401 });
+  // Paid only (Clear/Deep), Gadi 2026-09-14 — matches the UI gate.
+  const userInfo = await verifyUserAndGetPlan(idToken);
+  if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
+    return NextResponse.json({ error: "upgrade_required" }, { status: 403 });
   }
 
   let word = "";
