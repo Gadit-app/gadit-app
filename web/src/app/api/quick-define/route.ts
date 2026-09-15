@@ -84,16 +84,22 @@ async function generatePreview(
   langCode: string,
   context?: string,
   feature = "quick_define",
+  kids = false,
 ): Promise<{ meaning: string; example: string } | null> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   const langName = UI_LANG_NAMES[langCode] ?? "English";
+  // Kids Mode: the popover must speak the child's language too (Romi 2026-09-15).
+  // Same word, same sense — just simple words a child of about 8 understands.
+  const kidsClause = kids
+    ? ` Write it for a child about 8 years old: very simple, warm, everyday words, short sentences, no difficult or abstract vocabulary.`
+    : "";
   // With a context sentence (the Reader / "Every Word" taps a word inside a
   // passage), define the word AS USED IN THIS SENTENCE — that is Gadit's whole
   // promise, the RIGHT meaning for the context, not the generic first one.
   const systemPrompt = context
-    ? `You are a fast dictionary. Define the given word AS IT IS USED IN THE PROVIDED SENTENCE: choose the sense that fits this exact context and IGNORE the word's other meanings. Return STRICT JSON: {"meaning":"15-25 word definition of the word in THIS context","example":"one short sentence using the word in the SAME sense"}. Write BOTH fields in ${langName}. Keep the word itself in its original script. No markdown, no extra keys, no preamble.`
-    : `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word"}. Write BOTH fields in ${langName}. Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
+    ? `You are a fast dictionary. Define the given word AS IT IS USED IN THE PROVIDED SENTENCE: choose the sense that fits this exact context and IGNORE the word's other meanings. Return STRICT JSON: {"meaning":"15-25 word definition of the word in THIS context","example":"one short sentence using the word in the SAME sense"}. Write BOTH fields in ${langName}.${kidsClause} Keep the word itself in its original script. No markdown, no extra keys, no preamble.`
+    : `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word"}. Write BOTH fields in ${langName}.${kidsClause} Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
   const userMsg = context ? `Word: ${word}\nSentence: ${context}` : `Word: ${word}`;
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -144,11 +150,12 @@ async function cachedPreview(
   lang: string,
   context: string | undefined,
   feature: string,
+  kids = false,
 ): Promise<{ meaning: string; example: string } | null> {
   const db = getAdminDb();
   const key = crypto
     .createHash("sha256")
-    .update(`pv1:${lang}:${word.toLowerCase()}:${context ?? ""}`)
+    .update(`pv1:${kids ? "k:" : ""}${lang}:${word.toLowerCase()}:${context ?? ""}`)
     .digest("hex")
     .slice(0, 40);
   const ref = db.collection("previewCache").doc(key);
@@ -159,7 +166,7 @@ async function cachedPreview(
       if (d && (d.meaning || d.example)) return { meaning: d.meaning ?? "", example: d.example ?? "" };
     }
   } catch { /* cache read best-effort */ }
-  const preview = await generatePreview(word, lang, context, feature);
+  const preview = await generatePreview(word, lang, context, feature, kids);
   if (preview && (preview.meaning || preview.example)) {
     try {
       await ref.set({ word, lang, context: context ?? "", meaning: preview.meaning, example: preview.example, at: new Date().toISOString() });
@@ -175,6 +182,8 @@ export async function GET(req: NextRequest) {
   const lang = (url.searchParams.get("lang") ?? "").trim().toLowerCase();
   // Context sentence (the Reader passes the phrase around the tapped word).
   const context = (url.searchParams.get("context") ?? "").trim().slice(0, 300);
+  // Kids Mode: the popover must answer in child-friendly language too.
+  const kids = url.searchParams.get("kids") === "1";
 
   if (!word) {
     return NextResponse.json({ error: "word_required" }, { status: 400 });
@@ -190,7 +199,7 @@ export async function GET(req: NextRequest) {
   // it directly, bypassing the cache. gpt-4o-mini keeps this cheap; the response
   // is CDN-cached per (word, context) so re-taps don't re-bill.
   if (context) {
-    const preview = await cachedPreview(word, lang, context, "reader_word_tap");
+    const preview = await cachedPreview(word, lang, context, "reader_word_tap", kids);
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
         { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true, contextual: true },
@@ -198,6 +207,39 @@ export async function GET(req: NextRequest) {
       );
     }
     // Fall through to the cache/generic path if the contextual call failed.
+  }
+
+  // Kids Mode, no context: prefer the already-generated kids-tier cache (full,
+  // high-quality kids explanation) if the word has been looked up by a paid
+  // kids-mode user before. Otherwise fall through to a generated kids preview.
+  if (kids) {
+    try {
+      const kidsSnap = await getAdminDb().collection("cache").doc(`auto2_${lang}_kids_${word.toLowerCase()}`).get();
+      if (kidsSnap.exists) {
+        const kd = kidsSnap.data() as
+          | { word?: string; language?: string; meanings?: Array<{ kidsExplanation?: { explanation?: string; examples?: string[] } }> }
+          | undefined;
+        const km = Array.isArray(kd?.meanings) ? kd!.meanings[0] : undefined;
+        const kMeaning = typeof km?.kidsExplanation?.explanation === "string" ? km.kidsExplanation.explanation : "";
+        const kExample = Array.isArray(km?.kidsExplanation?.examples) && typeof km!.kidsExplanation!.examples![0] === "string"
+          ? km!.kidsExplanation!.examples![0]
+          : "";
+        if (kMeaning) {
+          return NextResponse.json(
+            { word: kd?.word ?? word, language: kd?.language ?? "", meaning: kMeaning, example: kExample, hasMore: (kd?.meanings?.length ?? 0) > 1 },
+            { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } },
+          );
+        }
+      }
+    } catch { /* fall through to generation */ }
+    const preview = await cachedPreview(word, lang, undefined, "quick_define_kids", true);
+    if (preview && (preview.meaning || preview.example)) {
+      return NextResponse.json(
+        { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true },
+        { headers: { "Cache-Control": "public, max-age=300" } },
+      );
+    }
+    // If generation failed, fall through to the adult cache path as a safety net.
   }
 
   // The main /api/define route builds cache keys as either

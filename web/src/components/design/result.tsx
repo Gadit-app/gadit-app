@@ -1245,55 +1245,12 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
   // Legacy: etymology was sometimes a free-text string. Render it as the
   // story paragraph below an empty fields block.
   const isStructured = typeof etymology === "object";
-  // Kids Mode: show the child-friendly origin story ALONE, in place of the
-  // technical fields (source language / breakdown / originally-meant). The
-  // same guard against garbled generations applies. Falls back to the adult
-  // fields when a (usually older cached) entry has no kids version.
+  // Kids Mode keeps the SAME structured origin fields as adults — source
+  // language, original word, breakdown, originally-meant (Romi 2026-09-15:
+  // she wanted to see all of that too, not just a story). ONLY the background
+  // STORY switches to the child-friendly, simpler-language version. See
+  // storyText below.
   const kidsStory = isStructured ? etymology.kidsExplanation?.trim() : "";
-  const showKidsOrigin =
-    kidsOn && !!kidsStory && !isEtymologyFieldGarbled("historyNote", kidsStory!);
-  if (showKidsOrigin) {
-    return (
-      <div className="wb-origin-section">
-        <div className="wb-eyebrow wb-eyebrow-with-flag">
-          <span>
-            <span className="wb-eyebrow-icon"><ScrollIcon /></span>
-            {v2(lang, "wordOriginEyebrow")}
-          </span>
-          <div className="wb-section-controls">
-            <TTSButton
-              text={kidsStory!}
-              audioLang={lang}
-              useOpenAI={ttsUseAI}
-              ariaLabel={v2(lang, "listenToWord")}
-              className="wb-section-listen"
-            />
-            {onReport && (
-              <button
-                type="button"
-                className="wb-section-flag wb-flag-tip"
-                aria-label={v2(lang, "reportLabel")}
-                data-tip={v2(lang, "reportLabel")}
-                onClick={() => onReport("etymology")}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <line x1="4" y1="22" x2="4" y2="15" />
-                  <path d="M4 15c4-4 8 4 16 0V3c-8 4-12-4-16 0z" />
-                </svg>
-              </button>
-            )}
-          </div>
-        </div>
-        <div className="wb-card wb-origin">
-          <div className="wb-origin-fields">
-            <div className="wb-origin-row wb-origin-row-story">
-              <div className="wb-origin-value">{kidsStory}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
   const sourceLanguage = isStructured ? etymology.sourceLanguage?.trim() : "";
   const originalWord = isStructured ? etymology.originalWord?.trim() : "";
   const breakdown = isStructured ? etymology.breakdown?.trim() : "";
@@ -1301,6 +1258,11 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
   const historyNote = isStructured
     ? etymology.historyNote?.trim()
     : (etymology as string).trim();
+  // In Kids Mode the background paragraph uses the simpler kids story when we
+  // have a clean one; otherwise (or in adult mode) the normal historyNote.
+  const useKidsStory =
+    kidsOn && !!kidsStory && !isEtymologyFieldGarbled("historyNote", kidsStory);
+  const storyText = useKidsStory ? kidsStory : historyNote;
 
   // Final render-time guard. The server rejects garbled generations and
   // the SSR preload sanitises the cache, but this is the last line before
@@ -1313,7 +1275,7 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
   const hasOriginal = !!originalWord && !isEtymologyFieldGarbled("originalWord", originalWord);
   const hasBreakdown = !!breakdown && !isEtymologyFieldGarbled("breakdown", breakdown);
   const hasMeant = !!originalMeaning && !isEtymologyFieldGarbled("originalMeaning", originalMeaning);
-  const hasStory = !!historyNote && !isEtymologyFieldGarbled("historyNote", historyNote);
+  const hasStory = !!storyText && !isEtymologyFieldGarbled("historyNote", storyText);
   if (!hasLang && !hasOriginal && !hasBreakdown && !hasMeant && !hasStory) return null;
 
   // Read the origin aloud: each visible field with its label, then the story.
@@ -1322,7 +1284,7 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
     hasOriginal && `${v2(lang, "wordOriginOriginalWord")}: ${originalWord}`,
     hasBreakdown && `${v2(lang, "wordOriginBreakdown")}: ${breakdown}`,
     hasMeant && `${v2(lang, "wordOriginOriginallyMeant")}: ${originalMeaning}`,
-    hasStory && historyNote,
+    hasStory && storyText,
   ].filter(Boolean).join(". ");
 
   return (
@@ -1387,7 +1349,7 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
           {hasStory && (
             <div className="wb-origin-row wb-origin-row-story">
               <div className="wb-origin-label">{v2(lang, "wordOriginBackgroundLabel")}</div>
-              <div className="wb-origin-value">{historyNote}</div>
+              <div className="wb-origin-value">{storyText}</div>
             </div>
           )}
         </div>

@@ -17,6 +17,7 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { useKidsMode } from "@/lib/use-kids-mode";
 import { stripLookupDiacritics } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
 import { TTSButton } from "./TTSButton";
@@ -98,6 +99,7 @@ const LISTEN: Record<string, string> = {
 export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTab, wordLang, onClose }: Props) {
   const { dir } = useLang();
   const href = useHref();
+  const [kidsOn] = useKidsMode();
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
   const popRef = useRef<HTMLDivElement | null>(null);
 
@@ -117,8 +119,9 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
         const ctxParam = context && context.trim()
           ? `&context=${encodeURIComponent(context.trim().slice(0, 300))}`
           : "";
+        const kidsParam = kidsOn ? "&kids=1" : "";
         const res = await fetch(
-          `/api/quick-define?word=${encodeURIComponent(lookupWord)}&lang=${encodeURIComponent(lang)}${ctxParam}`,
+          `/api/quick-define?word=${encodeURIComponent(lookupWord)}&lang=${encodeURIComponent(lang)}${ctxParam}${kidsParam}`,
         );
         if (cancelled) return;
         if (res.status === 404) {
@@ -141,7 +144,7 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
       }
     })();
     return () => { cancelled = true; };
-  }, [lookupWord, lang, context]);
+  }, [lookupWord, lang, context, kidsOn]);
 
   // Close on outside click + Escape
   useEffect(() => {
