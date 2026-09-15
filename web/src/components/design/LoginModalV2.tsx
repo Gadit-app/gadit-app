@@ -52,6 +52,23 @@ function Spinner() {
   );
 }
 
+// "Joining a family?" entry to the pairing-code screen. Critical on iOS: a
+// child who paired in Safari and then "Add to Home Screen" gets a standalone
+// PWA with ISOLATED storage — the Safari login does not carry over, so the
+// installed app opens logged out. The fix is to let them pair from INSIDE the
+// installed app: this link routes to /join where they enter the 6-digit code,
+// and the signInWithCustomToken session then persists in the PWA's own store.
+// he + en authored; every other language falls back to en (local dict, avoids
+// touching the 12 full v2 locales). Gadi 2026-09-15.
+const JOIN_FAMILY_CTA: Record<string, string> = {
+  en: "Joining a family? Enter your code",
+  he: "מצטרפ/ת למשפחה? הזנת קוד",
+  ar: "الانضمام إلى عائلة؟ أدخل الرمز",
+  ru: "Присоединяетесь к семье? Введите код",
+  es: "¿Te unes a una familia? Introduce tu código",
+  fr: "Rejoindre une famille ? Entre ton code",
+};
+
 export function LoginModalV2() {
   const {
     showLoginModal,
@@ -454,6 +471,19 @@ export function LoginModalV2() {
           >
             {v2(lang, toggleKey)}
           </button>
+        </div>
+
+        {/* Family pairing entry — reachable from INSIDE the installed PWA so a
+            child can pair with the 6-digit code where the session will persist
+            (see JOIN_FAMILY_CTA note above). */}
+        <div className="wb-login-toggle" style={{ marginTop: 4 }}>
+          <a
+            href={href("/join")}
+            onClick={() => setShowLoginModal(false)}
+            style={{ fontSize: 13, color: "var(--ink-muted, #6B7280)" }}
+          >
+            {JOIN_FAMILY_CTA[lang] ?? JOIN_FAMILY_CTA.en}
+          </a>
         </div>
       </div>
     </div>
