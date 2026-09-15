@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { avatarUrl } from "@/lib/family";
 import { useLang } from "@/lib/lang-context";
+import { gt } from "@/lib/guide-i18n";
 import { useHref } from "@/lib/href";
 import { useTheme } from "@/lib/appearance";
 import { resolvePartnerArea } from "@/lib/partner-nav";
@@ -364,6 +365,26 @@ export function WbUserMenu() {
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             {c.account}
+          </Link>
+          {/* In-app tutorials index. Label from guide-i18n (he+en, en fallback)
+              so we don't have to add a key to every language in COPY above. */}
+          <Link
+            role="menuitem"
+            href={href("/help")}
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "10px 12px",
+              borderRadius: 8,
+              color: "var(--ink, #111827)",
+              textDecoration: "none",
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {gt(lang, "help.title")}
           </Link>
           {/* Family menu item appears only for owners of a Family
               subscription (familyId === own uid). Paired members (kids
