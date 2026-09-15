@@ -14,8 +14,12 @@ type Dict = Record<string, Entry>;
 
 const G: Dict = {
   // ── page + chrome ──
-  "help.title": { en: "How to use Gadit", he: "איך משתמשים ב-Gadit" },
-  "help.sub": { en: "Short, tap-through guides for everything in the app.", he: "מדריכים קצרים, שלב אחר שלב, לכל מה שיש באפליקציה." },
+  "help.title": { en: "Guides", he: "הדרכות" },
+  "help.sub": { en: "Every action in the app, in a short guide that shows exactly how. No narration, just the screens.", he: "כל פעולה באפליקציה, במדריך קצר שמראה בדיוק איך עושים אותה. בלי קריינות, רק המסכים." },
+  "help.tourTitle": { en: "New here? Start with the basics", he: "חדשים כאן? מתחילים מהבסיס" },
+  "help.tourSub": { en: "A quick guide to searching your first word.", he: "מדריך קצר לחיפוש המילה הראשונה שלכם." },
+  "help.tourBtn": { en: "Start", he: "התחילו" },
+  "help.play": { en: "Play guide", he: "הפעלת ההדרכה" },
 
   // ── sections ──
   "sec.start": { en: "Getting started", he: "מתחילים" },
