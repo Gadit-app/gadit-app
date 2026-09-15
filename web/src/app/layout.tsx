@@ -17,6 +17,7 @@ import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { SayModal } from "@/components/SayModal";
+import { GuideOverlay } from "@/components/GuideOverlay";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
 import { Analytics } from "@vercel/analytics/next";
@@ -567,6 +568,7 @@ export default async function RootLayout({
               {children}
               <VoiceAssistant />
               <SayModal />
+              <GuideOverlay />
               <InstallPwaPrompt />
             </AuthProvider>
           </LangProvider>

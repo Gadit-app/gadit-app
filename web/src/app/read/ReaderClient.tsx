@@ -11,6 +11,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { ReaderText } from "@/components/design/ReaderText";
 import { PassageKeyWords } from "@/components/design/PassageKeyWords";
+import { GuideButton } from "@/components/GuideButton";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 
@@ -417,8 +418,9 @@ export function ReaderClient() {
       </header>
 
       <main style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 96px", fontFamily: fontBody(lang) }}>
-        <h1 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4.5vw,36px)", fontWeight: 800, color: "var(--ink,#20272E)" }}>
+        <h1 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4.5vw,36px)", fontWeight: 800, color: "var(--ink,#20272E)", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           {t.title}
+          <GuideButton guide="reader" size={24} />
         </h1>
         <p style={{ margin: "0 0 26px", fontSize: 16.5, lineHeight: 1.55, color: "var(--ink-muted,#6B7280)", maxWidth: "56ch" }}>
           {t.sub}
