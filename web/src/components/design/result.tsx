@@ -513,6 +513,11 @@ interface MeaningEntryProps {
    *  nothing is happening (which used to make a parent tap the manual
    *  image action and get a second, duplicate picture). */
   kidsImageLoading?: boolean;
+  /** True while the SSE stream is still filling this result. In Kids Mode we
+   *  use it to withhold the ADULT definition text until the kids version has
+   *  streamed in, so a child never sees the grown-up text typed out and then
+   *  swapped (Gadi/Romi 2026-09-15). */
+  streaming?: boolean;
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
@@ -679,6 +684,7 @@ function MeaningEntry({
   onReport,
   kidsImageUrl,
   kidsImageLoading,
+  streaming = false,
 }: MeaningEntryProps) {
   const { lang } = useLang();
   const href = useHref();
@@ -693,7 +699,15 @@ function MeaningEntry({
   // is a free re-render, no re-fetch. Same cached server response
   // carries both versions — see route.ts for the rationale.
   const [kidsOn] = useKidsMode();
-  const showKids = kidsOn && meaning.kidsExplanation;
+  // Kids text for THIS sense, if it has streamed in yet.
+  const kidsText = meaning.kidsExplanation?.explanation?.trim() || "";
+  const showKids = kidsOn && !!kidsText;
+  // In Kids Mode, while the kids text has NOT arrived yet AND we're still
+  // streaming, WITHHOLD the adult definition instead of showing it and then
+  // swapping — a child should never watch the grown-up text get typed out.
+  // Once the stream is done with still no kids version (rare: old cache), we
+  // fall back to the adult text so the card is never empty.
+  const awaitingKids = kidsOn && !kidsText && streaming;
   // POS badge — shown on EVERY meaning that has a pos value (the LLM
   // Council 2026-06-20 ruled: it's not a configuration, it's part of
   // what a dictionary entry IS). Translated into the UI language by
@@ -707,13 +721,19 @@ function MeaningEntry({
   // 2026-07-05 after a paying subscriber reported the part of speech
   // as missing: for a learner, "what kind of word is this" is exactly
   // the information they came for, even when there's only one sense.
+  // POS badge is hidden throughout Kids Mode (not just once kids text lands),
+  // so it doesn't flash during streaming either.
   const posLabel =
-    !showKids && meaning.pos ? formatPos(meaning.pos, lang) : "";
+    !kidsOn && meaning.pos ? formatPos(meaning.pos, lang) : "";
   const effectiveMeaning = showKids
-    ? meaning.kidsExplanation!.explanation
+    ? kidsText
+    : awaitingKids
+    ? ""
     : meaning.meaning;
   const effectiveExamples = showKids
     ? meaning.kidsExplanation!.examples
+    : awaitingKids
+    ? []
     : meaning.examples;
   // Lightbox state — opens when the user taps the generated image
   // inside this meaning's image tab.
@@ -857,6 +877,21 @@ function MeaningEntry({
           <span className="wb-mdef">
             {posLabel && <span className="wb-mpos" aria-label={posLabel}>{posLabel}</span>}
             <TappableText text={effectiveMeaning} skipWord={word} />
+          </span>
+        </div>
+      )}
+
+      {/* Kids Mode, still streaming: the kids text hasn't arrived yet. Show a
+          quiet shimmer in place of the definition rather than the adult text,
+          so a child never sees the grown-up version get typed then swapped. */}
+      {awaitingKids && (
+        <div className="wb-mdef-row" aria-busy="true">
+          <span className="wb-mnum">{n}</span>
+          <span className="wb-mdef" style={{ flex: 1 }}>
+            <span
+              className="wb-mkids-skeleton"
+              style={{ display: "block", height: 15, width: "82%", borderRadius: 6 }}
+            />
           </span>
         </div>
       )}
@@ -1029,10 +1064,12 @@ export function MeaningsBlock({
   onReport,
   kidsImages,
   kidsImagesLoading,
+  streaming = false,
 }: {
   meanings: Meaning[];
   word?: string;
   plan?: Plan;
+  streaming?: boolean;
   classroomInSession?: boolean;
   isSaved?: boolean;
   onSave?: () => void;
@@ -1081,6 +1118,7 @@ export function MeaningsBlock({
             onGenerate={onGenerate}
             kidsImageUrl={kidsImages?.[i]}
             kidsImageLoading={kidsImagesLoading?.[i]}
+            streaming={streaming}
             onUpgrade={onUpgrade}
             onAction={onAction}
             onReport={onReport}
@@ -1567,9 +1605,13 @@ export function ResultView({
   showNiqqud = false,
   niqqudOn = false,
   onToggleNiqqud,
+  streaming = false,
 }: {
   result: WordResult;
   plan: Plan;
+  /** True while the SSE stream is still filling this result — threaded to the
+   *  meanings so Kids Mode can withhold adult text until kids text lands. */
+  streaming?: boolean;
   /** True when this result is being rendered as part of an active
    *  /c/<CODE> classroom session (school hours window open). Unlocks
    *  image / kids' explanation / word games for an anonymous kid the
@@ -1647,6 +1689,7 @@ export function ResultView({
         meanings={result.meanings ?? []}
         word={result.word}
         plan={plan}
+        streaming={streaming}
         classroomInSession={classroomInSession}
         isSaved={isSaved}
         onSave={onSave}

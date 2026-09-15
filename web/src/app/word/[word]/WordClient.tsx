@@ -2026,6 +2026,7 @@ export function WordClient({
         ) : (
           <ResultView
             result={displayResult ?? result}
+            streaming={loading}
             showNiqqud={(isHebrewWord || isArabicWord) && !!user}
             niqqudOn={niqqud}
             onToggleNiqqud={toggleNiqqud}
