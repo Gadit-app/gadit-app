@@ -8,6 +8,7 @@
  */
 
 import type { Lang } from "@/lib/i18n";
+import { TR } from "@/lib/guide-i18n-translations";
 
 type Entry = Partial<Record<Lang, string>> & { en: string };
 type Dict = Record<string, Entry>;
@@ -222,7 +223,11 @@ const G: Dict = {
 export function gt(lang: Lang, key: string): string {
   const e = G[key];
   if (!e) return key;
-  return e[lang] ?? e.en;
+  // he + en are authored in G (the source). Every other language reads from the
+  // generated TR layer, falling back to English until translated.
+  if (lang === "he") return e.he ?? e.en;
+  if (lang === "en") return e.en;
+  return TR[lang]?.[key] ?? e.en;
 }
 
 /** Interpolate {n} etc. */
