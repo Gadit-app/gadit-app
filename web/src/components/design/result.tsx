@@ -60,6 +60,9 @@ export interface KidsExplanation {
 export interface Idiom {
   phrase: string;
   meaning: string;
+  /** The same idiom meaning retold for a child (simpler words), shown in Kids
+   *  Mode in place of `meaning`. Absent on older cached results. */
+  kidsMeaning?: string;
 }
 
 /** "Opposite" chip label per UI language (en fallback). The opposite WORD
@@ -1163,6 +1166,7 @@ export function IdiomsSection({
   plan?: Plan;
 }) {
   const { lang } = useLang();
+  const [kidsOn] = useKidsMode();
   // Combine all idioms — per-meaning first (preserving order), then
   // any general ones at the end. De-dupe by phrase so we don't show
   // the same idiom twice if the model surfaced it in both places.
@@ -1210,13 +1214,21 @@ export function IdiomsSection({
       </div>
       <div className="wb-card wb-idioms-card">
         {all.map((id, j) => {
-          const rowTts = [id.phrase?.trim(), id.meaning?.trim()].filter(Boolean).join(", ");
+          // Kids Mode: use the child-friendly meaning when we have one (Romi
+          // 2026-09-18 hit hard words like "personification"/"illegible" inside
+          // idiom explanations). Falls back to the adult meaning otherwise.
+          const effMeaning =
+            kidsOn && id.kidsMeaning?.trim() ? id.kidsMeaning.trim() : id.meaning;
+          const rowTts = [id.phrase?.trim(), effMeaning?.trim()].filter(Boolean).join(", ");
           return (
             <div className="wb-midiom" key={j}>
               <div className="wb-midiom-text">
                 <span className="wb-midiom-phrase">{id.phrase}</span>
                 <span className="wb-midiom-sep">, </span>
-                <span className="wb-midiom-meaning">{id.meaning}</span>
+                {/* Words inside the meaning are tappable — a child stuck on a
+                    hard word in the explanation can tap it for a quick look
+                    (Kids Mode passes kids=1 to the popover). */}
+                <span className="wb-midiom-meaning"><TappableText text={effMeaning} /></span>
               </div>
               {rowTts && (
                 <TTSButton

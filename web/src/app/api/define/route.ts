@@ -678,7 +678,8 @@ Add idioms (phrases/expressions) that use this word in two places:
 Each idiom has EXACTLY this shape:
 {
   "phrase": "the idiom itself in the original language",
-  "meaning": "what it actually means, in the user's UI language"
+  "meaning": "what it actually means, in the user's UI language",
+  "kidsMeaning": "the SAME meaning retold for a child of about 8, in the user's UI language: very simple, everyday words, no hard or abstract vocabulary"
 }
 
 CRITICAL RULES for idioms:
@@ -693,6 +694,7 @@ CRITICAL RULES for idioms:
 - DO NOT invent phrases that no speaker actually uses. The bar is "recognized in the wild", not "famous nationally".
 - For Hebrew words, prefer Hebrew idioms/collocations. For English words, prefer English ones.
 - Keep "phrase" in the word's original language. Keep "meaning" in the USER'S UI LANGUAGE.
+- "kidsMeaning" is REQUIRED for every idiom, in the user's UI language: the same idea as "meaning" but in words a young child knows. A child hit hard words INSIDE idiom explanations ("personification", "illegible", "frantic", "disorganized", "nurturing"). Replace any such word with a simple everyday phrase (e.g. "illegible" -> "so messy it is hard to read"; "personification" -> "when we talk about it as if it were a person"). If the adult "meaning" is already child-simple, kidsMeaning may repeat it.
 - Prefer well-known, common phrases over obscure ones, but err on the side of INCLUDING when in doubt.
 
 Example ג€” word "׳™׳“" (hand), Hebrew user:
@@ -882,8 +884,9 @@ const RESPONSE_SCHEMA = {
               properties: {
                 phrase:  { type: "string" },
                 meaning: { type: "string" },
+                kidsMeaning: { type: "string" },
               },
-              required: ["phrase", "meaning"],
+              required: ["phrase", "meaning", "kidsMeaning"],
             },
           },
           kidsExplanation: {
@@ -925,8 +928,9 @@ const RESPONSE_SCHEMA = {
         properties: {
           phrase:  { type: "string" },
           meaning: { type: "string" },
+          kidsMeaning: { type: "string" },
         },
-        required: ["phrase", "meaning"],
+        required: ["phrase", "meaning", "kidsMeaning"],
       },
     },
     contextNote: { type: ["string", "null"] },
