@@ -41,17 +41,19 @@ const LANG_NAME: Record<string, string> = {
 type KeyWord = { word: string; meaning: string };
 
 function hashKey(lang: string, text: string): string {
-  return crypto.createHash("sha256").update("pw1:" + lang + ":" + text).digest("hex").slice(0, 40);
+  // pw2: added the `hard` word list (Gadi 2026-09-19) — bump so old cached
+  // docs (which lack `hard`) regenerate with the highlight data.
+  return crypto.createHash("sha256").update("pw2:" + lang + ":" + text).digest("hex").slice(0, 40);
 }
 
-async function analyze(text: string, langName: string): Promise<{ gist: string; words: KeyWord[] }> {
+async function analyze(text: string, langName: string): Promise<{ gist: string; words: KeyWord[]; hard: string[] }> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
       model: "gpt-4o-mini",
       temperature: 0.2,
-      max_tokens: 320,
+      max_tokens: 500,
       response_format: { type: "json_object" },
       messages: [
         {
@@ -59,7 +61,8 @@ async function analyze(text: string, langName: string): Promise<{ gist: string; 
           content: `You help a learner (often a parent helping a child) who is reading a passage in a language that is not their own. Their language is ${langName}. Return a JSON object:
 {
   "gist": "ONE short plain sentence in ${langName} saying what the passage is ABOUT (the situation or topic). At most 30 words. This is an orientation line, NOT a translation and NOT a sentence-by-sentence retelling. Never reproduce the text line by line.",
-  "words": [ up to 5 items, the words from THIS passage most worth learning (the hardest or most useful content words), in the order they appear. Each: { "word": "the word exactly as it appears in the passage", "meaning": "a 2 to 5 word explanation in ${langName}" }. Choose real content words (nouns, verbs, adjectives). Never pick articles, pronouns, prepositions or other function words. Fewer than 5 is fine for a short text. ]
+  "words": [ up to 5 items, the words from THIS passage most worth learning (the hardest or most useful content words), in the order they appear. Each: { "word": "the word exactly as it appears in the passage", "meaning": "a 2 to 5 word explanation in ${langName}" }. Choose real content words (nouns, verbs, adjectives). Never pick articles, pronouns, prepositions or other function words. Fewer than 5 is fine for a short text. ],
+  "hard": [ up to 15 words FROM THIS PASSAGE that a young reader (about 8 to 12) might stumble on and should pay attention to: less-common or advanced vocabulary, technical/subject words, abstract words, and tricky linking/connector words that change the meaning of a sentence. List each word EXACTLY as it appears in the passage (same spelling, same form, including any prefix). Do NOT include very common everyday words. This list is used to highlight the words in the text, so pick the genuinely notable ones only. Fewer is better than padding it. ]
 }
 Output ONLY the JSON object. No markdown, no preamble.`,
         },
@@ -73,7 +76,7 @@ Output ONLY the JSON object. No markdown, no preamble.`,
   void logAiUsage({ feature: "passage_words", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
 
   const content = json.choices?.[0]?.message?.content ?? "{}";
-  let parsed: { gist?: unknown; words?: unknown } = {};
+  let parsed: { gist?: unknown; words?: unknown; hard?: unknown } = {};
   try { parsed = JSON.parse(content); } catch { /* fall through to empty */ }
 
   const gist = typeof parsed.gist === "string" ? parsed.gist.trim() : "";
@@ -89,8 +92,15 @@ Output ONLY the JSON object. No markdown, no preamble.`,
         .filter((w) => w.word.length > 0)
         .slice(0, 5)
     : [];
+  const hard: string[] = Array.isArray(parsed.hard)
+    ? Array.from(new Set(
+        parsed.hard
+          .map((w) => (typeof w === "string" ? w.trim().slice(0, 60) : ""))
+          .filter((w) => w.length > 0),
+      )).slice(0, 15)
+    : [];
 
-  return { gist, words };
+  return { gist, words, hard };
 }
 
 export async function POST(req: NextRequest) {
@@ -122,15 +132,15 @@ export async function POST(req: NextRequest) {
   try {
     const snap = await ref.get();
     if (snap.exists) {
-      const d = snap.data() as { gist?: string; words?: KeyWord[] };
-      if (d.words) return NextResponse.json({ gist: d.gist ?? "", words: d.words, cached: true });
+      const d = snap.data() as { gist?: string; words?: KeyWord[]; hard?: string[] };
+      if (d.words) return NextResponse.json({ gist: d.gist ?? "", words: d.words, hard: d.hard ?? [], cached: true });
     }
   } catch { /* cache read best-effort */ }
 
   try {
     const out = await analyze(text, LANG_NAME[lang]);
     if (out.words.length === 0 && !out.gist) return NextResponse.json({ error: "empty" }, { status: 502 });
-    try { await ref.set({ lang, gist: out.gist, words: out.words, at: new Date().toISOString() }); } catch { /* ignore */ }
+    try { await ref.set({ lang, gist: out.gist, words: out.words, hard: out.hard, at: new Date().toISOString() }); } catch { /* ignore */ }
     return NextResponse.json(out);
   } catch {
     return NextResponse.json({ error: "generate_failed" }, { status: 502 });

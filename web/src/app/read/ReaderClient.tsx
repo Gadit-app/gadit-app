@@ -241,6 +241,10 @@ export function ReaderClient() {
   const total = useMemo(() => (text ? distinctWordCount(text) : 0), [text]);
   const storageKey = useMemo(() => (text ? `gadit-reader-${hashText(text)}` : ""), [text]);
 
+  // The harder words to highlight for attention (Gadi 2026-09-19). Filled in the
+  // background when a text opens; empty until then so the text shows instantly.
+  const [hardKeys, setHardKeys] = useState<Set<string>>(new Set());
+
   // Load persisted progress when a text is opened.
   useEffect(() => {
     if (!storageKey) return;
@@ -249,6 +253,31 @@ export function ReaderClient() {
       setReviewed(raw ? new Set(JSON.parse(raw) as string[]) : new Set());
     } catch { setReviewed(new Set()); }
   }, [storageKey]);
+
+  // Fetch the harder words to highlight, in the background, once per text. Uses
+  // the same /api/passage-words analysis (cached), so it also warms the "key
+  // words" panel. Best-effort: on any failure the text just isn't highlighted.
+  useEffect(() => {
+    setHardKeys(new Set());
+    if (!text || !user) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/passage-words", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ text, lang }),
+        });
+        if (!res.ok || cancelled) return;
+        const data = (await res.json()) as { hard?: string[] };
+        if (!cancelled && Array.isArray(data.hard)) {
+          setHardKeys(new Set(data.hard.map((w) => wordKey(w)).filter(Boolean)));
+        }
+      } catch { /* best-effort */ }
+    })();
+    return () => { cancelled = true; };
+  }, [text, user, lang]);
 
   function markReviewed(word: string) {
     const key = wordKey(word);
@@ -613,7 +642,7 @@ export function ReaderClient() {
               }}
             >
               <p style={{ margin: "0 0 14px", fontSize: 13.5, color: "var(--ink-muted,#9CA3AF)" }}>{t.hint}</p>
-              <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} />
+              <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} hardKeys={hardKeys} />
             </div>
           </div>
         )}

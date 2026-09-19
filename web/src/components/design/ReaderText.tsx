@@ -24,6 +24,9 @@ type Props = {
   reviewed: Set<string>;
   /** Called with the raw word when its popover opens. */
   onReview: (word: string) => void;
+  /** Normalized keys (wordKey) of the harder words to highlight for attention
+   *  (Gadi 2026-09-19). Empty until the background analysis returns. */
+  hardKeys?: Set<string>;
 };
 
 /** Detect the passage's dominant script so TTS speaks each word in the text's
@@ -77,7 +80,7 @@ function toSentences(tokens: Tok[]): Sentence[] {
   return out;
 }
 
-export function ReaderText({ text, reviewed, onReview }: Props) {
+export function ReaderText({ text, reviewed, onReview, hardKeys }: Props) {
   const { lang } = useLang();
   const tokens = useMemo(() => tokenizeWords(text), [text]);
   const textLang = useMemo(() => detectTextLang(text), [text]);
@@ -103,11 +106,13 @@ export function ReaderText({ text, reviewed, onReview }: Props) {
           <span key={si}>
             {s.toks.map(({ tok, gi }) => {
               if (tok.type === "other") return <span key={gi}>{tok.value}</span>;
-              const done = reviewed.has(wordKey(tok.value));
+              const wk = wordKey(tok.value);
+              const done = reviewed.has(wk);
+              const hard = !done && !!hardKeys?.has(wk);
               return (
                 <span
                   key={gi}
-                  className={"wb-tappable-word" + (done ? " wb-reader-done" : "")}
+                  className={"wb-tappable-word" + (done ? " wb-reader-done" : "") + (hard ? " wb-reader-hard" : "")}
                   tabIndex={0}
                   role="button"
                   aria-haspopup="dialog"
