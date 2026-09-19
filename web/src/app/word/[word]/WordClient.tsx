@@ -1599,12 +1599,12 @@ export function WordClient({
           />
         </div>
         <div className="wb-shell-mobile-menu-cluster">
-          <LangSwitchMobile />
-          {/* Present mode also as a burger entry, so a teacher projecting
-              from a tablet in portrait (under 1024px, where the actions row
-              is hidden) still has a way in. It must NOT go back to being a
-              floating corner button: that is what covered this burger.
-              Gadi 2026-09-08. */}
+          {/* Burger FIRST so in RTL it sits at the inline-start (right) of the
+              cluster and stays on-screen even if the row overflows — the lang
+              switcher, less critical, is the one that clips off the left edge if
+              anything does. Fixes the lang covering/hiding the burger on the
+              word page (Gadi 2026-09-19). Present mode also gets a burger entry
+              so a teacher projecting from a portrait tablet still has a way in. */}
           <WbShellBurger
             extra={
               user && !!schoolId && !classroomCode && !!wordSet
@@ -1620,6 +1620,7 @@ export function WordClient({
                 : undefined
             }
           />
+          <LangSwitchMobile />
         </div>
 
         </header>

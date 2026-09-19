@@ -58,6 +58,25 @@ const T = {
 const t = (k: keyof typeof T, lang: string) => pick(T[k], lang);
 const fmt = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
 
+// Kid-friendly, GENDER-NEUTRAL celebrations shown on finishing (Gadi 2026-09-19:
+// avoid gendered 2nd-person verbs; use interjections + neutral phrases). One is
+// picked at random each time.
+const CELEBRATIONS: Record<string, string[]> = {
+  he: [
+    "אליפות! 🏆", "מושלם! ⭐", "כל הכבוד! 👏", "פצצה! 💥", "וואו, איזה יופי!",
+    "אין על זה! 🔥", "מדהים! 🤩", "סחתיין! 💪", "ברמות! 🚀", "עשר מתוך עשר! 🎯",
+    "פשוט מלכות! 👑", "חבל על הזמן! 😍",
+  ],
+  en: [
+    "Awesome! 🏆", "Perfect! ⭐", "Way to go! 👏", "Boom! 💥", "Amazing! 🤩",
+    "Nailed it! 🎯", "You crushed it! 🔥", "Superstar! 🌟", "Incredible! 🚀", "10 out of 10!",
+  ],
+};
+function randomCelebration(lang: string): string {
+  const arr = CELEBRATIONS[lang] ?? CELEBRATIONS.en;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 const TEAL = "#0EA5A5";
 function norm(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
@@ -182,6 +201,7 @@ export function SpellClient() {
   const [typed, setTyped] = useState("");
   const [result, setResult] = useState<null | "correct" | "wrong">(null);
   const [phase, setPhase] = useState<"pick" | "quiz" | "done">("pick");
+  const [celebration, setCelebration] = useState("");
   const [topic, setTopic] = useState("");
   const [creating, setCreating] = useState(false);
   const [createMsg, setCreateMsg] = useState("");
@@ -261,6 +281,7 @@ export function SpellClient() {
       setIdx(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
+      setCelebration(randomCelebration(lang));
       setPhase("done");
     }
   }
@@ -458,7 +479,7 @@ export function SpellClient() {
         {phase === "done" && set && (
           <div style={{ marginTop: 30, textAlign: "center" }}>
             <div style={{ fontSize: 46 }}>🎉</div>
-            <h2 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", margin: "8px 0 6px" }}>{t("doneTitle", lang)}</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 800, color: "var(--ink,#0B1220)", margin: "8px 0 6px" }}>{celebration || t("doneTitle", lang)}</h2>
             <p style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)" }}>{fmt(t("doneBody", lang), { a: total - wrongEver.size, b: total })}</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 18 }}>
               <button type="button" onClick={() => start(set)} style={{ padding: "11px 20px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>{t("again", lang)}</button>

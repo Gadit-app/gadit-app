@@ -136,6 +136,19 @@ export function VoiceAssistant() {
 
   useEffect(() => { setSupported(getSRCtor() !== null); }, []);
 
+  // Mobile: the floating mic is removed entirely (Gadi 2026-09-19). It was
+  // built for a desktop / living-room family computer where the mic can stay
+  // open; on a phone it's redundant and gets confused with the search-bar voice
+  // input. Hidden and inactive under 1024px.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
   const stop = useCallback(() => {
     listeningRef.current = false;
     setStatus("off");
@@ -218,7 +231,7 @@ export function VoiceAssistant() {
   // anywhere on the page (no need to hunt for the mic button).
   useEffect(() => {
     // iOS is tap-to-ask only (no reliable hands-free), so never auto-resume.
-    const elig = !!user && (plan === "clear" || plan === "deep") && supported && !isIOSPlatform();
+    const elig = !!user && (plan === "clear" || plan === "deep") && supported && !isMobile && !isIOSPlatform();
     if (!elig || listeningRef.current) return;
     let saved = false;
     try { saved = localStorage.getItem(PREF_KEY) === "1"; } catch { /* ignore */ }
@@ -235,10 +248,10 @@ export function VoiceAssistant() {
       document.removeEventListener("pointerdown", resume);
       document.removeEventListener("keydown", resume);
     };
-  }, [user, plan, supported, start]);
+  }, [user, plan, supported, start, isMobile]);
 
   // Gate: paying, logged-in users on a supporting browser only.
-  const eligible = !!user && (plan === "clear" || plan === "deep") && supported;
+  const eligible = !!user && (plan === "clear" || plan === "deep") && supported && !isMobile;
   if (!eligible) return null;
 
   const active = status === "listening" || status === "heard";
