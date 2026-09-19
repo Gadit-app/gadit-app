@@ -101,6 +101,66 @@ export async function notifyOwnerInstant(ownerUid: string, kidName: string, word
   }
 }
 
+/**
+ * A learning ACTIVITY finished (a dictation practice or a "Say it" session),
+ * not just a word lookup. Gadi 2026-09-19: parents wanted to feel they see
+ * everything the child does, so the app feels valuable. he/en copy, English
+ * fallback for every other parent language.
+ */
+type ActivityKind = "spell" | "say";
+const ACTIVITY_STRINGS: Record<string, {
+  spellTitle: string; spellLead: string;
+  sayTitle: string; sayLead: string;
+  score: string; // uses {a}/{b}
+}> = {
+  en: {
+    spellTitle: "{kid} practiced a dictation",
+    spellLead: "{kid} just finished a spelling practice:",
+    sayTitle: "{kid} practiced pronunciation",
+    sayLead: "{kid} just practiced saying words out loud:",
+    score: "{a} of {b} correct",
+  },
+  he: {
+    spellTitle: "{kid} תרגל/ה הכתבה",
+    spellLead: "{kid} סיים/ה עכשיו תרגול הכתבה:",
+    sayTitle: "{kid} תרגל/ה הגייה",
+    sayLead: "{kid} תרגל/ה עכשיו להגיד מילים בקול:",
+    score: "{a} מתוך {b} נכון",
+  },
+};
+
+export async function notifyOwnerActivity(
+  ownerUid: string,
+  kidName: string,
+  kind: ActivityKind,
+  opts: { label: string; score?: number; total?: number },
+): Promise<void> {
+  const { email, lang } = await resolveOwner(ownerUid);
+  const t = ACTIVITY_STRINGS[lang] ?? ACTIVITY_STRINGS.en;
+  const title = fill(kind === "spell" ? t.spellTitle : t.sayTitle, { kid: kidName });
+  const lead = fill(kind === "spell" ? t.spellLead : t.sayLead, { kid: kidName });
+  const hasScore = typeof opts.score === "number" && typeof opts.total === "number";
+  const scoreLine = hasScore ? fill(t.score, { a: opts.score!, b: opts.total! }) : "";
+  const bodyLine = opts.label + (scoreLine ? ` · ${scoreLine}` : "");
+
+  await sendPushToOwner(ownerUid, {
+    title,
+    body: bodyLine,
+    url: "/family",
+    tag: `kid-${kind}`,
+  });
+
+  if (email) {
+    const html = emailShell(
+      lang,
+      `<p style="margin:0 0 12px;font-size:15px">${esc(lead)}</p>` +
+        `<p style="margin:0 0 6px;font-size:20px;font-weight:700;color:#0EA5A5">${esc(opts.label)}</p>` +
+        (scoreLine ? `<p style="margin:0;font-size:15px;color:#44403c">${esc(scoreLine)}</p>` : ""),
+    );
+    await sendEmail(email, title, html);
+  }
+}
+
 /** End-of-day summary. items = [{ kidName, word }]. */
 export async function notifyOwnerDigest(
   ownerUid: string,

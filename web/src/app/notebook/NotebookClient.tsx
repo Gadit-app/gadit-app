@@ -525,6 +525,13 @@ export function NotebookPage() {
   }, [loading, user, plan]);
   const dc = DICT_COPY[lang] ?? DICT_COPY.en;
 
+  // Language filter (Gadi 2026-09-19): when a kid has words in several
+  // languages, let them narrow to one. "" = show all.
+  const [langFilter, setLangFilter] = useState<string>("");
+  const groups = items && items.length > 0 ? groupByLanguage(items) : [];
+  const availableLangs = groups.map(([language]) => language);
+  const visibleGroups = langFilter ? groups.filter(([language]) => language === langFilter) : groups;
+
   return (
     <div className={`wordbook wb-shell-page${isKid ? " wb-kid-area" : ""}`} dir={dir}>
       {/* Offline banner, top-of-page strip that appears whenever the
@@ -670,8 +677,33 @@ export function NotebookPage() {
           </section>
         )}
 
+        {/* Language filter — only when there's more than one language to pick. */}
+        {availableLangs.length > 1 && (
+          <div className="wb-nb-filter" role="group">
+            <button
+              type="button"
+              className="wb-nb-filter-chip"
+              aria-pressed={langFilter === ""}
+              onClick={() => setLangFilter("")}
+            >
+              {lang === "he" ? "הכול" : lang === "ar" ? "الكل" : lang === "ru" ? "Все" : "All"}
+            </button>
+            {availableLangs.map((language) => (
+              <button
+                key={language}
+                type="button"
+                className="wb-nb-filter-chip"
+                aria-pressed={langFilter === language}
+                onClick={() => setLangFilter(language)}
+              >
+                {language}
+              </button>
+            ))}
+          </div>
+        )}
+
         {items && items.length > 0 && (
-          groupByLanguage(items).map(([language, group]) => (
+          visibleGroups.map(([language, group]) => (
             <section key={language} className="wb-notebook-langsec">
               <h2 className="wb-notebook-langhead">
                 <span className="wb-notebook-langname">{language}</span>

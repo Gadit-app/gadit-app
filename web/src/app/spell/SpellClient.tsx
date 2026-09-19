@@ -10,12 +10,13 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { TTSButton } from "@/components/design/TTSButton";
+import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { DICTATION_SETS, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 
 type Dir = "he2en" | "en2he";
@@ -216,6 +217,15 @@ export function SpellClient() {
   const [result, setResult] = useState<null | "correct" | "wrong">(null);
   const [phase, setPhase] = useState<"pick" | "quiz" | "done">("pick");
   const [celebration, setCelebration] = useState("");
+  // Bumped on a successful finish → fires the full-screen confetti burst
+  // (same KidsCelebration used on rank-up), Gadi 2026-09-19.
+  const [celebrateId, setCelebrateId] = useState(0);
+  // Previously practiced sets, to re-practice a whole series (esp. missed
+  // words). Shown at the top of the pick screen. Gadi 2026-09-19.
+  const [history, setHistory] = useState<Array<{
+    setId: string; title: string; icon: string; direction?: string;
+    timesPracticed?: number; lastScore?: number; lastTotal?: number;
+  }>>([]);
   const [topic, setTopic] = useState("");
   const [listText, setListText] = useState("");
   const [creating, setCreating] = useState(false);
@@ -293,8 +303,57 @@ export function SpellClient() {
           total: set.words.length,
         }),
       });
+      void loadHistory();
     } catch { /* non-blocking */ }
   }
+
+  // Tell the parent the child finished a dictation (push + email if enabled).
+  // Silent no-op for non-kids — the endpoint decides. Gadi 2026-09-19.
+  async function notifyParentDictation() {
+    if (!user || !set) return;
+    try {
+      const idToken = await user.getIdToken();
+      await fetch("/api/family/notify-activity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({
+          kind: "spell",
+          label: lang === "he" ? set.titleHe : set.titleEn,
+          score: set.words.length - wrongEver.size,
+          total: set.words.length,
+        }),
+      });
+    } catch { /* best-effort */ }
+  }
+
+  // Open a previously practiced set from the history list.
+  async function openSaved(setId: string) {
+    if (!user) return;
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/dictation-sets?id=" + encodeURIComponent(setId), { headers: { Authorization: `Bearer ${idToken}` } });
+      if (!res.ok) return;
+      const data = (await res.json()) as { set?: { setId?: string; title?: string; icon?: string; direction?: string; words?: WordPair[] } };
+      const sv = data.set;
+      if (sv && Array.isArray(sv.words) && sv.words.length >= 2) {
+        if (sv.direction === "he2en" || sv.direction === "en2he") setQdir(sv.direction);
+        start({ id: sv.setId || setId, icon: sv.icon || "📝", titleEn: sv.title || "", titleHe: sv.title || "", words: sv.words });
+      }
+    } catch { /* ignore */ }
+  }
+
+  // Load the kid's practiced-sets history for the pick screen.
+  const loadHistory = useCallback(async () => {
+    if (!user) return;
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/dictation-sets", { headers: { Authorization: `Bearer ${idToken}` } });
+      if (!res.ok) return;
+      const data = (await res.json()) as { sets?: typeof history };
+      if (Array.isArray(data.sets)) setHistory(data.sets);
+    } catch { /* best-effort */ }
+  }, [user]);
+  useEffect(() => { void loadHistory(); }, [loadHistory]);
 
   // Deep link: /spell?set=<id> re-opens a saved set to practice again.
   useEffect(() => {
@@ -369,7 +428,9 @@ export function SpellClient() {
     } else {
       void saveSet();
       setCelebration(randomCelebration(lang));
+      setCelebrateId((n) => n + 1);
       setPhase("done");
+      void notifyParentDictation();
     }
   }
 
@@ -420,6 +481,39 @@ export function SpellClient() {
 
         {phase === "pick" && (
           <>
+            {/* Your dictations — re-practice a whole series (esp. missed words) */}
+            {history.length > 0 && (
+              <div style={{ marginTop: 16 }}>
+                <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "0 0 10px" }}>
+                  {lang === "he" ? "התרגולים שלך" : lang === "ar" ? "تدريباتك" : lang === "ru" ? "Твои тренировки" : "Your dictations"}
+                </h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {history.map((h) => (
+                    <button key={h.setId} type="button" onClick={() => openSaved(h.setId)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 12, textAlign: dir === "rtl" ? "right" : "left",
+                        background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 13,
+                        padding: "11px 13px", cursor: "pointer", fontFamily: "inherit",
+                      }}>
+                      <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 18, background: TEAL + "1A" }}>{h.icon || "✏️"}</span>
+                      <span style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ display: "block", fontSize: 14.5, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{h.title}</span>
+                        {typeof h.lastScore === "number" && typeof h.lastTotal === "number" && (
+                          <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>
+                            <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{h.lastScore}/{h.lastTotal}</span>{" "}
+                            {lang === "he" ? "נכון" : lang === "ar" ? "صحيح" : lang === "ru" ? "верно" : "correct"}
+                          </span>
+                        )}
+                      </span>
+                      <span style={{ flex: "none", fontSize: 13, fontWeight: 700, color: TEAL }}>
+                        {lang === "he" ? "לתרגל שוב" : lang === "ar" ? "تدرّب مجددًا" : lang === "ru" ? "Ещё раз" : "Practice again"}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Direction toggle */}
             <div style={{ display: "flex", gap: 8, margin: "16px 0 6px" }}>
               {(["he2en", "en2he"] as Dir[]).map((d) => (
@@ -463,7 +557,7 @@ export function SpellClient() {
                   onChange={(e) => { setTopic(e.target.value); setCreateMsg(""); }}
                   onKeyDown={(e) => { if (e.key === "Enter") createSet(); }}
                   placeholder={t("topicPlaceholder", lang)}
-                  dir="auto"
+                  dir={dir === "rtl" ? "rtl" : "auto"}
                   maxLength={40}
                   style={{ flex: 1, minWidth: 0, padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)" }}
                 />
@@ -488,7 +582,7 @@ export function SpellClient() {
                 value={listText}
                 onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
                 placeholder={t("pastePlaceholder", lang)}
-                dir="auto"
+                dir={dir === "rtl" ? "rtl" : "auto"}
                 rows={4}
                 maxLength={800}
                 style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
@@ -589,8 +683,8 @@ export function SpellClient() {
 
         {phase === "done" && set && (
           <div style={{ marginTop: 30, textAlign: "center" }}>
-            <div style={{ fontSize: 46 }}>🎉</div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, color: "var(--ink,#0B1220)", margin: "8px 0 6px" }}>{celebration || t("doneTitle", lang)}</h2>
+            <KidsCelebration runId={celebrateId} />
+            <h2 style={{ fontSize: 26, fontWeight: 800, color: "var(--ink,#0B1220)", margin: "8px 0 6px" }}>{celebration || t("doneTitle", lang)}</h2>
             <p style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)" }}>{fmt(t("doneBody", lang), { a: total - wrongEver.size, b: total })}</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 18 }}>
               <button type="button" onClick={() => start(set)} style={{ padding: "11px 20px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>{t("again", lang)}</button>

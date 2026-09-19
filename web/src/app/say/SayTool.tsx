@@ -189,6 +189,28 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
     });
   }, []);
 
+  // Tell the parent when the child nails a word (push + email if enabled).
+  // Once per word, only on a real success (>=3 stars). Endpoint no-ops for
+  // non-kids, so this is safe to fire always. Gadi 2026-09-19.
+  const notifiedSayRef = useRef<string>("");
+  useEffect(() => {
+    if (!pron || !result || !user) return;
+    if (pron.stars < 3) return;
+    const key = `${result.targetLang}|${result.translation}`;
+    if (notifiedSayRef.current === key) return;
+    notifiedSayRef.current = key;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch("/api/family/notify-activity", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ kind: "say", label: result.translation, score: pron.stars, total: 5 }),
+        });
+      } catch { /* best-effort */ }
+    })();
+  }, [pron, result, user]);
+
   const autoPlayedRef = useRef<string>("");
 
   const submit = useCallback(async () => {

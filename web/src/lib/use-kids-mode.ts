@@ -64,18 +64,24 @@ export function readKidsMode(): boolean {
 }
 
 /**
- * When a child signs in with their own profile, Kids Mode should be the
- * DEFAULT (Gadi 2026-08-12) — they still get a toggle to switch to the
- * regular view. We apply the default ONCE per profile per device (tracked
- * by a per-uid marker), so after a kid deliberately turns it off it stays
- * off for them; we never force it back on every navigation.
+ * When a child is in their own personal area, Kids Mode is the DEFAULT
+ * (Gadi 2026-09-19: "Kids Mode is the default when a family member who is
+ * not mom or dad enters"). We turn it ON once PER SESSION per profile — so
+ * every fresh app open starts a kid in Kids Mode, yet within that session a
+ * kid (or an older teen) can switch to the regular view and it sticks until
+ * they close the app. sessionStorage (not localStorage) is what makes this
+ * "default on each entry" rather than "once ever".
  */
 const APPLIED_PREFIX = "gadit-kids-default-applied:";
 export function applyKidsModeDefaultForKid(uid: string): void {
   if (typeof window === "undefined" || !uid) return;
   const marker = APPLIED_PREFIX + uid;
-  if (window.localStorage.getItem(marker) === "1") return; // already applied for this kid here
-  window.localStorage.setItem(marker, "1");
+  try {
+    if (window.sessionStorage.getItem(marker) === "1") return; // already applied this session
+    window.sessionStorage.setItem(marker, "1");
+  } catch {
+    // sessionStorage blocked (rare) — fall through and still default ON.
+  }
   window.localStorage.setItem(KEY, "1");
   window.dispatchEvent(new Event(EVENT_NAME));
 }
