@@ -86,6 +86,51 @@ If the topic IS safe, return {"safe": true, "title": "<the topic as a short clea
   return { safe: true, title, words };
 }
 
+// A pasted list: each line is a single word (Hebrew or English) OR a
+// "word - translation" pair. Return {en, he} for each, filling the missing
+// language, child-safe. Gadi 2026-09-19 ("paste your own list").
+async function generateList(list: string, uiLangName: string): Promise<{ safe: boolean; title: string; words: Pair[] }> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      temperature: 0.2,
+      max_tokens: 900,
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `A user pasted a spelling-practice word list for a child. Turn it into English/Hebrew pairs.
+
+Return STRICT JSON: {"safe": true, "title": "רשימה שלי", "words": [{"en":"...","he":"..."}]}.
+- Each input line is either a single word (in English OR Hebrew) or a "word - translation" pair (separated by -, =, tab, or a dash). For each line, output one item with BOTH "en" (English) and "he" (Hebrew) filled: translate the missing side; if a pair is given, keep it.
+- Keep the user's own words; only add the translation. English lowercase (proper nouns keep their capital). Skip empty lines, numbers-only lines, and duplicates. Up to 20 words.
+- CHILD SAFETY: skip any single word not appropriate for a young child. If the WHOLE list is inappropriate (violence, adult, drugs, hate, etc.), return {"safe": false, "title": "", "words": []}.
+Output ONLY the JSON object.`,
+        },
+        { role: "user", content: list },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error("openai_" + res.status);
+  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const u = usageFrom(json);
+  void logAiUsage({ feature: "spell_set_list", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  const content = json.choices?.[0]?.message?.content ?? "{}";
+  let parsed: { safe?: unknown; title?: unknown; words?: unknown } = {};
+  try { parsed = JSON.parse(content); } catch { /* fall through */ }
+  if (parsed.safe === false) return { safe: false, title: "", words: [] };
+  const words: Pair[] = Array.isArray(parsed.words)
+    ? parsed.words.map((w) => {
+        const o = (w ?? {}) as { en?: unknown; he?: unknown };
+        return { en: typeof o.en === "string" ? o.en.trim().slice(0, 40) : "", he: typeof o.he === "string" ? o.he.trim().slice(0, 40) : "" };
+      }).filter((w) => w.en && w.he).slice(0, 20)
+    : [];
+  if (words.length < 2) return { safe: false, title: "", words: [] };
+  return { safe: true, title: uiLangName === "Hebrew" ? "הרשימה שלי" : "My list", words };
+}
+
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization") || "";
   const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
@@ -97,14 +142,28 @@ export async function POST(req: NextRequest) {
   }
 
   let topic = "";
+  let list = "";
   let lang = "he";
   try {
-    const b = (await req.json()) as { topic?: unknown; uiLang?: unknown };
+    const b = (await req.json()) as { topic?: unknown; list?: unknown; uiLang?: unknown };
     if (typeof b.topic === "string") topic = b.topic.trim().slice(0, 40);
+    if (typeof b.list === "string") list = b.list.trim().slice(0, 800);
     if (typeof b.uiLang === "string" && LANG_NAME[b.uiLang]) lang = b.uiLang;
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }
+
+  // Pasted-list path (not cached — lists are one-off and varied).
+  if (list) {
+    if (list.length < 2) return NextResponse.json({ error: "list_too_short" }, { status: 400 });
+    try {
+      const out = await generateList(list, LANG_NAME[lang]);
+      return NextResponse.json(out);
+    } catch {
+      return NextResponse.json({ error: "generate_failed" }, { status: 502 });
+    }
+  }
+
   if (topic.length < 2) return NextResponse.json({ error: "topic_too_short" }, { status: 400 });
 
   const db = getAdminDb();

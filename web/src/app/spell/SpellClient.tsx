@@ -54,6 +54,10 @@ const T = {
   modeTrace: { en: "Trace it", he: "כתיבה ביד" },
   traceHint: { en: "Trace the word with your finger", he: "עקבו על המילה עם האצבע" },
   clear: { en: "Clear", he: "ניקוי" },
+  pasteTitle: { en: "Paste your own list", he: "הדבקת רשימה משלך" },
+  pasteSub: { en: "One word per line, Hebrew or English.", he: "מילה בכל שורה, בעברית או באנגלית." },
+  pastePlaceholder: { en: "yellow\ndog\nteacher", he: "צהוב\nכלב\nמורה" },
+  pasteBtn: { en: "Create set", he: "יצירת סט" },
 };
 const t = (k: keyof typeof T, lang: string) => pick(T[k], lang);
 const fmt = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
@@ -61,15 +65,17 @@ const fmt = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+
 // Kid-friendly, GENDER-NEUTRAL celebrations shown on finishing (Gadi 2026-09-19:
 // avoid gendered 2nd-person verbs; use interjections + neutral phrases). One is
 // picked at random each time.
+// Kept deliberately SIMPLE and clear for young kids (Gadi 2026-09-19: no slang
+// that could confuse, e.g. "חבל על הזמן" a child could read literally). All
+// gender-neutral (no 2nd-person gendered verbs).
 const CELEBRATIONS: Record<string, string[]> = {
   he: [
-    "אליפות! 🏆", "מושלם! ⭐", "כל הכבוד! 👏", "פצצה! 💥", "וואו, איזה יופי!",
-    "אין על זה! 🔥", "מדהים! 🤩", "סחתיין! 💪", "ברמות! 🚀", "עשר מתוך עשר! 🎯",
-    "פשוט מלכות! 👑", "חבל על הזמן! 😍",
+    "אליפות! 🏆", "מושלם! ⭐", "כל הכבוד! 👏", "מדהים! 🤩", "פצצה! 💥",
+    "וואו, איזה יופי!", "עשר מתוך עשר! 🎯", "יופי של עבודה! 💪", "נהדר! 🌟", "פשוט מעולה!",
   ],
   en: [
-    "Awesome! 🏆", "Perfect! ⭐", "Way to go! 👏", "Boom! 💥", "Amazing! 🤩",
-    "Nailed it! 🎯", "You crushed it! 🔥", "Superstar! 🌟", "Incredible! 🚀", "10 out of 10!",
+    "Awesome! 🏆", "Perfect! ⭐", "Well done! 👏", "Amazing! 🤩", "Great job! 💪",
+    "Wonderful! 🌟", "10 out of 10! 🎯", "Fantastic! ✨", "Brilliant! 💡", "Super work!",
   ],
 };
 function randomCelebration(lang: string): string {
@@ -80,6 +86,13 @@ function randomCelebration(lang: string): string {
 const TEAL = "#0EA5A5";
 function norm(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
+}
+// Stable id for a custom (topic/list) set, so re-practicing upserts one doc.
+function hashWords(words: WordPair[]): string {
+  const s = words.map((w) => w.en.toLowerCase()).join("|");
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return "custom_" + h.toString(36);
 }
 
 /** Finger-tracing canvas: the word is drawn in faint simple print (non-cursive)
@@ -194,6 +207,7 @@ export function SpellClient() {
   const [qdir, setQdir] = useState<Dir>("he2en");
   const [mode, setMode] = useState<"type" | "trace">("type");
   const [set, setSet] = useState<DictationSet | null>(null);
+  const setIdRef = useRef<string>("");
   const [queue, setQueue] = useState<WordPair[]>([]);
   const [idx, setIdx] = useState(0);
   const [misses, setMisses] = useState<WordPair[]>([]);
@@ -203,9 +217,36 @@ export function SpellClient() {
   const [phase, setPhase] = useState<"pick" | "quiz" | "done">("pick");
   const [celebration, setCelebration] = useState("");
   const [topic, setTopic] = useState("");
+  const [listText, setListText] = useState("");
   const [creating, setCreating] = useState(false);
   const [createMsg, setCreateMsg] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  async function createFromList() {
+    const lt = listText.trim();
+    if (lt.length < 2 || creating || !user) return;
+    setCreating(true);
+    setCreateMsg("");
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/spell-set", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ list: lt, uiLang: lang }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { safe?: boolean; title?: string; words?: WordPair[] };
+      if (!res.ok || !data.safe || !Array.isArray(data.words) || data.words.length < 2) {
+        setCreateMsg(data.safe === false ? t("unsafe", lang) : t("createErr", lang));
+        return;
+      }
+      start({ id: "custom", icon: "📝", titleEn: data.title || "My list", titleHe: data.title || "הרשימה שלי", words: data.words });
+      setListText("");
+    } catch {
+      setCreateMsg(t("createErr", lang));
+    } finally {
+      setCreating(false);
+    }
+  }
 
   async function createSet() {
     const tp = topic.trim();
@@ -233,6 +274,50 @@ export function SpellClient() {
     }
   }
 
+  // Save the practiced set to the kid's notebook ("Dictations" section) so they
+  // can come back and re-practice it. Fire-and-forget.
+  async function saveSet() {
+    if (!user || !set || !setIdRef.current) return;
+    try {
+      const idToken = await user.getIdToken();
+      await fetch("/api/dictation-sets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({
+          setId: setIdRef.current,
+          title: lang === "he" ? set.titleHe : set.titleEn,
+          icon: set.icon,
+          direction: qdir,
+          words: set.words,
+          score: set.words.length - wrongEver.size,
+          total: set.words.length,
+        }),
+      });
+    } catch { /* non-blocking */ }
+  }
+
+  // Deep link: /spell?set=<id> re-opens a saved set to practice again.
+  useEffect(() => {
+    if (!user) return;
+    let id = "";
+    try { id = new URLSearchParams(window.location.search).get("set") || ""; } catch { /* ignore */ }
+    if (!id) return;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/dictation-sets?id=" + encodeURIComponent(id), { headers: { Authorization: `Bearer ${idToken}` } });
+        if (!res.ok) return;
+        const data = (await res.json()) as { set?: { setId?: string; title?: string; icon?: string; direction?: string; words?: WordPair[] } };
+        const sv = data.set;
+        if (sv && Array.isArray(sv.words) && sv.words.length >= 2) {
+          if (sv.direction === "he2en" || sv.direction === "en2he") setQdir(sv.direction);
+          start({ id: sv.setId || id, icon: sv.icon || "📝", titleEn: sv.title || "", titleHe: sv.title || "", words: sv.words });
+        }
+      } catch { /* ignore */ }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   const promptOf = (w: WordPair) => (qdir === "he2en" ? w.he : w.en);
   const answerOf = (w: WordPair) => (qdir === "he2en" ? w.en : w.he);
   const answerLang = qdir === "he2en" ? "en" : "he";
@@ -242,6 +327,7 @@ export function SpellClient() {
   const total = set?.words.length ?? 0;
 
   function start(s: DictationSet) {
+    setIdRef.current = s.id === "custom" ? hashWords(s.words) : s.id;
     const shuffled = [...s.words].sort(() => Math.random() - 0.5);
     setSet(s);
     setQueue(shuffled);
@@ -281,6 +367,7 @@ export function SpellClient() {
       setIdx(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
+      void saveSet();
       setCelebration(randomCelebration(lang));
       setPhase("done");
     }
@@ -386,6 +473,30 @@ export function SpellClient() {
                 </button>
               </div>
               {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
+            </div>
+
+            {/* Paste your own list — one word per line, HE or EN, any source */}
+            <div style={{ marginTop: 12, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: "#EEF2F3", display: "grid", placeItems: "center", fontSize: 18 }}>📝</span>
+                <div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("pasteTitle", lang)}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("pasteSub", lang)}</div>
+                </div>
+              </div>
+              <textarea
+                value={listText}
+                onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
+                placeholder={t("pastePlaceholder", lang)}
+                dir="auto"
+                rows={4}
+                maxLength={800}
+                style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
+              />
+              <button type="button" onClick={createFromList} disabled={creating || listText.trim().length < 2}
+                style={{ marginTop: 8, padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
+                {creating ? t("creating", lang) : t("pasteBtn", lang)}
+              </button>
             </div>
 
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>

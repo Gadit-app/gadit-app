@@ -380,6 +380,42 @@ function LangSwitch() {
   );
 }
 
+// "הכתבות" (Dictations) section — a kid's saved spelling-practice series, kept
+// SEPARATE from "My words" so they can re-practice a whole set (especially the
+// words they missed). Gadi 2026-09-19. Small he/en dict, English fallback.
+type DictSet = {
+  setId: string;
+  title: string;
+  icon: string;
+  direction?: string;
+  words?: Array<{ en: string; he: string }>;
+  timesPracticed?: number;
+  lastScore?: number;
+  lastTotal?: number;
+};
+const DICT_COPY: Record<string, {
+  heading: string;
+  sub: string;
+  again: string;
+  times: (n: number) => string;
+  score: (s: number, t: number) => string;
+}> = {
+  he: {
+    heading: "הכתבות",
+    sub: "סדרות שכבר תרגלת. אפשר לחזור ולתרגל אותן שוב.",
+    again: "לתרגל שוב",
+    times: (n) => (n === 1 ? "תורגל פעם אחת" : `תורגל ${n} פעמים`),
+    score: (s, t) => `${s}/${t} נכון`,
+  },
+  en: {
+    heading: "Dictations",
+    sub: "Series you've practiced. Come back and practice them again.",
+    again: "Practice again",
+    times: (n) => (n === 1 ? "Practiced once" : `Practiced ${n} times`),
+    score: (s, t) => `${s}/${t} correct`,
+  },
+};
+
 export function NotebookPage() {
   const { user, plan, planReady, loading, promptLogin, familyRole } = useAuth();
   const { lang, dir } = useLang();
@@ -467,6 +503,28 @@ export function NotebookPage() {
     return () => { cancelled = true; };
   }, [loading, user, plan]);
 
+  // Saved dictation sets (spelling-practice series) — shown under "הכתבות",
+  // separate from the words grid. Best-effort; empty on any failure.
+  const [dictSets, setDictSets] = useState<DictSet[]>([]);
+  useEffect(() => {
+    if (loading || !user) return;
+    if (plan === "basic") return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/dictation-sets", {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (!res.ok || cancelled) return;
+        const data = (await res.json()) as { sets?: DictSet[] };
+        if (!cancelled && Array.isArray(data.sets)) setDictSets(data.sets);
+      } catch { /* best-effort */ }
+    })();
+    return () => { cancelled = true; };
+  }, [loading, user, plan]);
+  const dc = DICT_COPY[lang] ?? DICT_COPY.en;
+
   return (
     <div className={`wordbook wb-shell-page${isKid ? " wb-kid-area" : ""}`} dir={dir}>
       {/* Offline banner, top-of-page strip that appears whenever the
@@ -531,9 +589,11 @@ export function NotebookPage() {
             <WbUserMenu />
           </div>
         )}
+        {/* Burger FIRST so the RTL language switcher never pushes it off the
+            left edge (same fix as the word page, Gadi 2026-09-19). */}
         <div className="wb-shell-mobile-menu-cluster">
-          <LangSwitchMobile />
           <WbShellBurger active="notebook" />
+          <LangSwitchMobile />
         </div>
 
       </header>
@@ -552,7 +612,7 @@ export function NotebookPage() {
           <div className="wb-notebook-error">{fetchError}</div>
         )}
 
-        {items && items.length === 0 && (
+        {items && items.length === 0 && dictSets.length === 0 && (
           <div className="wb-notebook-empty">
             <p>{c.empty}</p>
             <p className="wb-notebook-empty-hint">{c.emptyHint}</p>
@@ -571,6 +631,43 @@ export function NotebookPage() {
             lang={lang}
             dir={dir}
           />
+        )}
+
+        {/* הכתבות — saved spelling-practice series, ABOVE the words grid so a
+            kid can jump straight back into a set (especially the missed words).
+            Kept separate from "My words" by design (Gadi 2026-09-19). */}
+        {dictSets.length > 0 && (
+          <section className="wb-notebook-langsec wb-dict-section">
+            <h2 className="wb-notebook-langhead">
+              <span className="wb-notebook-langname">{dc.heading}</span>
+              <span className="wb-notebook-langcount">{dictSets.length}</span>
+            </h2>
+            <p className="wb-dict-sub">{dc.sub}</p>
+            <ul className="wb-notebook-grid">
+              {dictSets.map((s) => (
+                <li key={s.setId} className="wb-notebook-card wb-dict-card">
+                  <Link
+                    href={href(`/spell?set=${encodeURIComponent(s.setId)}`)}
+                    className="wb-notebook-card-link"
+                  >
+                    <div className="wb-notebook-card-head">
+                      <span className="wb-notebook-card-word">
+                        <span aria-hidden="true" style={{ marginInlineEnd: 8 }}>{s.icon || "✏️"}</span>
+                        {s.title}
+                      </span>
+                    </div>
+                    <p className="wb-notebook-card-meaning">
+                      {dc.times(s.timesPracticed ?? 1)}
+                      {typeof s.lastScore === "number" && typeof s.lastTotal === "number"
+                        ? ` · ${dc.score(s.lastScore, s.lastTotal)}`
+                        : ""}
+                    </p>
+                    <span className="wb-dict-again">{dc.again} →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         {items && items.length > 0 && (
