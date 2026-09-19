@@ -1,6 +1,7 @@
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { sendPushToOwner } from "@/lib/push";
 import { NOTIF_STRINGS } from "@/lib/family-notify-strings";
+import { ACTIVITY_ALERT_EXTRA } from "@/lib/spell-i18n";
 import { Resend } from "resend";
 
 /**
@@ -136,7 +137,7 @@ export async function notifyOwnerActivity(
   opts: { label: string; score?: number; total?: number },
 ): Promise<void> {
   const { email, lang } = await resolveOwner(ownerUid);
-  const t = ACTIVITY_STRINGS[lang] ?? ACTIVITY_STRINGS.en;
+  const t = ACTIVITY_STRINGS[lang] ?? ACTIVITY_ALERT_EXTRA[lang] ?? ACTIVITY_STRINGS.en;
   const title = fill(kind === "spell" ? t.spellTitle : t.sayTitle, { kid: kidName });
   const lead = fill(kind === "spell" ? t.spellLead : t.sayLead, { kid: kidName });
   const hasScore = typeof opts.score === "number" && typeof opts.total === "number";

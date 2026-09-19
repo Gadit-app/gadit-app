@@ -9,7 +9,11 @@
  *
  * A parent (or kid) can still create a CUSTOM set by pasting the teacher's exact
  * words; that path is separate. These built-in sets are the default.
+ *
+ * Note: WordPair.he is the NON-ENGLISH side — the learner's own language, which
+ * is Hebrew for the built-in sets but can be any language for generated sets.
  */
+import { CATEGORY_TITLES_EXTRA } from "@/lib/spell-i18n";
 
 export type WordPair = { en: string; he: string };
 export type DictationSet = {
@@ -112,4 +116,29 @@ export const DICTATION_SETS: DictationSet[] = [
 export function getSet(id: string | null | undefined): DictationSet | null {
   if (!id) return null;
   return DICTATION_SETS.find((s) => s.id === id) ?? null;
+}
+
+/**
+ * Localized category titles shown on the pick screen, so a Spanish/Arabic/… kid
+ * doesn't see English or Hebrew category names (Gadi 2026-09-19). Keyed by
+ * category id → language → title. en/he are seeded here; the rest are appended
+ * from the localization batch. Missing langs fall back to English in getCatTitle.
+ */
+export const CATEGORY_TITLES: Record<string, Record<string, string>> = {
+  colors:  { en: "Colors", he: "צבעים" },
+  numbers: { en: "Numbers", he: "מספרים" },
+  family:  { en: "Family", he: "משפחה" },
+  animals: { en: "Animals", he: "חיות" },
+  body:    { en: "Body", he: "איברי הגוף" },
+  food:    { en: "Food", he: "אוכל" },
+  clothes: { en: "Clothes", he: "בגדים" },
+  weather: { en: "Weather", he: "מזג אוויר" },
+  days:    { en: "Days & Months", he: "ימים וחודשים" },
+  verbs:   { en: "Action verbs", he: "פעלים" },
+};
+
+export function getCatTitle(id: string, lang: string): string {
+  const m = CATEGORY_TITLES[id];
+  if (!m) return id;
+  return m[lang] ?? CATEGORY_TITLES_EXTRA[lang]?.[id] ?? m.en ?? id;
 }

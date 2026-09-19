@@ -24,6 +24,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsGameHeader } from "@/components/design/KidsGameHeader";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
+import { NOTEBOOK_DICT_EXTRA, SPELL_T_EXTRA } from "@/lib/spell-i18n";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -523,7 +524,20 @@ export function NotebookPage() {
     })();
     return () => { cancelled = true; };
   }, [loading, user, plan]);
-  const dc = DICT_COPY[lang] ?? DICT_COPY.en;
+  // Resolve the Dictations-section copy: inline he/en, else the localized
+  // templates from the spell-i18n batch, else English.
+  const dcExtra = NOTEBOOK_DICT_EXTRA[lang];
+  const dc = DICT_COPY[lang] ?? (dcExtra
+    ? {
+        heading: dcExtra.heading,
+        sub: dcExtra.sub,
+        again: dcExtra.again,
+        times: (n: number) => (n === 1 ? dcExtra.timesOne : dcExtra.timesMany.replace("{n}", String(n))),
+        score: (s: number, tt: number) => dcExtra.scoreLine.replace("{a}", String(s)).replace("{b}", String(tt)),
+      }
+    : DICT_COPY.en);
+  const allLabel = SPELL_T_EXTRA[lang]?.allFilter
+    ?? (lang === "he" ? "הכול" : lang === "ar" ? "الكل" : lang === "ru" ? "Все" : "All");
 
   // Language filter (Gadi 2026-09-19): when a kid has words in several
   // languages, let them narrow to one. "" = show all.
@@ -686,7 +700,7 @@ export function NotebookPage() {
               aria-pressed={langFilter === ""}
               onClick={() => setLangFilter("")}
             >
-              {lang === "he" ? "הכול" : lang === "ar" ? "الكل" : lang === "ru" ? "Все" : "All"}
+              {allLabel}
             </button>
             {availableLangs.map((language) => (
               <button
