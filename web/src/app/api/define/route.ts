@@ -1817,6 +1817,23 @@ export async function POST(req: NextRequest) {
           }
 
           if (acceptedResult) {
+            // Spelling correction, decided SERVER-SIDE (the model's own
+            // correctedFrom hallucinated corrections even for correctly-typed
+            // words). Trust only the facts: compare what the user actually
+            // TYPED to the word the model resolved+defined. Set correctedFrom
+            // to the input ONLY when they differ (ignoring case + combining
+            // marks like niqqud/tashkeel), it's a real definition (not the 1b
+            // "did you mean" path), and the two are close enough to be a typo.
+            try {
+              const r = acceptedResult as { word?: string; meanings?: unknown[]; suggestedWord?: string | null; correctedFrom?: string | null };
+              const cn = (s: string) => (s || "").normalize("NFD").replace(/\p{M}/gu, "").trim().toLowerCase();
+              const inN = cn(word);
+              const wN = cn(r.word || "");
+              const hasDef = Array.isArray(r.meanings) && r.meanings.length > 0 && !r.suggestedWord;
+              const typoLike = inN.length > 0 && wN.length > 0 && inN !== wN && Math.abs(inN.length - wN.length) <= 4;
+              r.correctedFrom = hasDef && typoLike ? String(word).trim() : null;
+            } catch { /* leave whatever the model returned */ }
+
             // Cache the validated result regardless of whether it was
             // the streamed attempt or a retry — both produced the same
             // shape and quality bar.
