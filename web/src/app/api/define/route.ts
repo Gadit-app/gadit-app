@@ -115,6 +115,7 @@ IMPORTANT:
 - Rules 1a and 1b are NOT in conflict. If the typed word IS real, use 1a (just define it). If the typed word is NOT real, use 1b (suggest) or 1c (dead end).
 - NON-WORD ANTI-PATTERN (never do this): if the input is not a real word, do NOT return a normal meaning that merely states it is "a fictional character", "an unknown or unfamiliar term", "not a common word", "may be a spelling mistake", or anything similar. Writing such an explanatory pseudo-definition is a hallucination and is forbidden. For a non-word you MUST return the EXACT 1b shape (with a suggestedWord) or the EXACT 1c shape, and nothing else.
 - ALWAYS TRY 1b BEFORE 1c: for a non-word, first search hard for the single nearest REAL word in the SAME language within a 1-2 letter edit (a swapped, missing, extra, or transposed letter) and return it as "suggestedWord" via 1b. Fall back to 1c only when there is genuinely no real word within a small edit distance. Most short mistyped strings have a nearby real word, so 1c should be rare.
+- CORRECTED SPELLING ("correctedFrom", root field): SEPARATELY from 1b/1c — when the input is a clear MISSPELLING of a real word that you can confidently identify, and you go ahead and define that real word directly (a full normal definition, NOT the not-found path), you MUST set "correctedFrom" to the user's input EXACTLY AS TYPED (the wrong spelling) and put the CORRECT spelling in "word". This is how a learner sees they made a spelling mistake and what the right spelling is (critical for a kids' spelling app). Example: input Hebrew "אנצקלופדיה" (missing a letter) -> word: "אנציקלופדיה", correctedFrom: "אנצקלופדיה". Set "correctedFrom" to null when the input is already spelled correctly, or when the only difference is an inflection/lemma, niqqud/vowel marks, or letter case. For a symbol, abbreviation, 1b, or 1c result, "correctedFrom" is null.
 - ABBREVIATIONS, ACRONYMS & INITIALISMS ARE REAL ENTRIES: if the input is a known abbreviation, acronym, initialism, or short form (IRR, NASA, DNA, FBI, CEO, USB, AKA, e.g., etc., lol), treat it as a REAL word and define what it stands for. Do NOT send it to the typo path (1b) or the not-found path (1c). Give the full expansion plus a plain-language explanation of what it means. If it has SEVERAL common expansions, set multiplemeanings=true and list each as its own meaning, ordered by how common it is (e.g. IRR -> 1. Internal Rate of Return, a finance metric; 2. Iranian Rial, the currency code; 3. an informal short form of "irregular"). Include real example sentences that actually use the short form. Only use 1b/1c when the string is neither a real word NOR a known abbreviation.
 - SYMBOLS & SIGNS ARE REAL ENTRIES: if the input is a punctuation mark, a mathematical sign, a currency sign, or any other symbol (for example "-", "*", "x", "/", "%", "@", "&", "#", "+", "=", the multiplication sign, an arrow, a copyright sign, an ellipsis), treat it as a REAL word. Identify the symbol by its name and explain what it means and how it is used. If it has SEVERAL distinct uses, set multiplemeanings=true and list each as its own meaning (for example the hyphen "-": 1. joins words into a compound; 2. the minus sign in arithmetic; 3. a dash that separates parts of a sentence). Provide real example sentences or expressions that actually use the symbol. Do NOT send a symbol to the typo path (1b) or the not-found path (1c) just because it has no letters. Answer in the user's UI language, exactly like any other word.
 - Never silently replace. Only suggest openly via the "׳׳•׳׳™ ׳”׳×׳›׳•׳•׳ ׳× ׳-X" message.
@@ -858,6 +859,12 @@ const RESPONSE_SCHEMA = {
     // Must be listed in `required` too (strict mode); nullable covers the
     // normal case where there's nothing to suggest.
     suggestedWord: { type: ["string", "null"] },
+    // correctedFrom — set to the user's MISSPELLED input (exactly as typed)
+    // when the input is a clear typo of a real word that you still define
+    // directly (so `word` holds the CORRECT spelling and the UI can show the
+    // learner the correction). Null for correct spellings and for lemma /
+    // niqqud / case-only differences. Important for a spelling-learning app.
+    correctedFrom: { type: ["string", "null"] },
     meanings: {
       type: "array",
       items: {
@@ -937,7 +944,7 @@ const RESPONSE_SCHEMA = {
     },
     contextNote: { type: ["string", "null"] },
   },
-  required: ["word", "language", "translation", "ipa", "suggestedWord", "meanings", "etymology", "generalIdioms", "contextNote"],
+  required: ["word", "language", "translation", "ipa", "suggestedWord", "correctedFrom", "meanings", "etymology", "generalIdioms", "contextNote"],
 } as const;
 
 const STRUCTURED_RESPONSE_FORMAT = {

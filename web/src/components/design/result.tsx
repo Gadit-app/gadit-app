@@ -116,6 +116,9 @@ export interface WordResult {
    *  string is not a real word but a nearby real word likely was intended.
    *  Rendered as a clickable chip that searches the suggested word. */
   suggestedWord?: string;
+  /** When the searched word was a misspelling the model auto-corrected: the
+   *  original (wrong) spelling as typed. `word` holds the correct spelling. */
+  correctedFrom?: string | null;
 }
 
 // ActionDef — IDs surfaced by the Take it further tiles. WordClient
@@ -1679,6 +1682,28 @@ export function ResultView({
         niqqudOn={niqqudOn}
         onToggleNiqqud={onToggleNiqqud}
       />
+
+      {/* Spelling correction — when the model auto-corrected a typo, show the
+          learner what they typed vs the correct spelling (the headword above).
+          Important for a kids' spelling app (Gadi 2026-09-19). */}
+      {result.correctedFrom &&
+        result.correctedFrom.trim().toLowerCase() !== (result.word || "").trim().toLowerCase() && (
+        <div
+          dir={dir}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+            margin: "2px 0 4px", padding: "7px 13px", borderRadius: 999,
+            background: "#FEF6E7", border: "1px solid #F6D8A0", fontSize: 13.5,
+          }}
+        >
+          <span style={{ color: "var(--ink-muted,#8a6d3b)" }}>
+            {lang === "he" ? "תיקון כתיב:" : "Spelling fix:"}
+          </span>
+          <span dir="auto" style={{ textDecoration: "line-through", color: "#B45309" }}>{result.correctedFrom}</span>
+          <span aria-hidden="true" style={{ color: "var(--ink-muted,#9CA3AF)" }}>→</span>
+          <span dir="auto" style={{ fontWeight: 800, color: "var(--ink,#0B1220)" }}>{result.word}</span>
+        </div>
+      )}
 
       {/* "Did you mean" — RULE 1b suggestion rendered as a clickable chip
           that searches the corrected word. The localized "did you mean X?"
