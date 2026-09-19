@@ -68,11 +68,19 @@ async function vowelize(text: string): Promise<string> {
   if (!res.ok) throw new Error("dicta_" + res.status);
   const json = (await res.json()) as { data?: Array<{ nakdan?: { word?: string; options?: Array<{ w?: string }> }; word?: string }> };
   const toks = json.data ?? [];
+  // Consonants only (drop niqqud/cantillation + the '|' prefix marker), so we can
+  // check that vocalization never CHANGED a word's letters — only added points.
+  const consonants = (s: string) => s.replace(/\|/g, "").normalize("NFD").replace(/\p{M}/gu, "");
   let out = "";
   for (const t of toks) {
     if (t.nakdan) {
-      const w = t.nakdan.options?.[0]?.w ?? t.nakdan.word ?? "";
-      out += w.replace(/\|/g, ""); // '|' separates prefix from stem in Dicta output
+      const orig = (t.nakdan.word ?? "").replace(/\|/g, "");
+      const voc = (t.nakdan.options?.[0]?.w ?? t.nakdan.word ?? "").replace(/\|/g, "");
+      // Only accept the vocalized form when it keeps the exact same letters as
+      // the input. Dicta can re-spell ktiv male/haser or pick a different word
+      // form (e.g. נגיף → נִגָּף), which would make Gadit show a word that is not
+      // what was written. In that case keep the original letters (Gadi 2026-09-19).
+      out += consonants(voc) === consonants(orig) ? voc : orig;
     } else if (typeof t.word === "string") {
       out += t.word;
     }

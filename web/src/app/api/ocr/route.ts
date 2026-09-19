@@ -27,10 +27,18 @@ const OCR_SYSTEM =
   "You are an OCR engine. Transcribe the text in the image EXACTLY as written, " +
   "in its original language and script. Transcribe EVERY word, in order, and do " +
   "not skip, omit, merge, or drop any word, even if the scan is imperfect or " +
-  "skewed. For HEBREW you do NOT need to include niqqud (vowel points) — focus " +
-  "on getting every letter and word right; the niqqud is added separately. For " +
-  "a multi-page document, transcribe every page in reading order, separated by " +
-  "a blank line. Preserve line breaks and paragraph breaks. Do not translate, " +
+  "skewed. Copy each word letter for letter, exactly as printed. Do NOT 'fix', " +
+  "modernize, or normalize spelling, and do NOT add, drop, or reorder any " +
+  "letter. If a word looks unusual, still transcribe the exact letters you see " +
+  "rather than guessing a more common word. " +
+  "For HEBREW: transcribe the exact consonants only and do NOT include niqqud " +
+  "(vowel points) — the niqqud is added separately. Be especially careful with " +
+  "the mater lectionis letters yod (י) and vav (ו): do not insert an extra yod " +
+  "or vav that is not printed, do not remove one that is printed, and never " +
+  "change a word's spelling to a different but similar-looking word (for " +
+  "example keep נגיף as נגיף, not ניגף). " +
+  "For a multi-page document, transcribe every page in reading order, separated " +
+  "by a blank line. Preserve line breaks and paragraph breaks. Do not translate, " +
   "summarize, correct, explain, apologize, or add any commentary. Return ONLY " +
   "the transcribed text. If there is genuinely no readable text, return an " +
   "empty string (never a sentence explaining that you cannot read it).";
@@ -78,7 +86,13 @@ export async function POST(req: NextRequest) {
           { type: "text", text: "Transcribe the text in this image." },
           {
             type: "image_url",
-            image_url: { url: `data:${file.type && file.type.startsWith("image/") ? file.type : "image/jpeg"};base64,${b64}` },
+            // detail:"high" forces full-resolution analysis instead of the
+            // default down-tiled pass — materially better on small Hebrew print
+            // where a thin yod/vav is easily lost or hallucinated (Gadi 2026-09-19).
+            image_url: {
+              url: `data:${file.type && file.type.startsWith("image/") ? file.type : "image/jpeg"};base64,${b64}`,
+              detail: "high",
+            },
           },
         ];
 
