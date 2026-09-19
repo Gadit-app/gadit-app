@@ -85,6 +85,7 @@ export type NavKey =
   | "play"
   | "say"
   | "read"
+  | "spell"
   | "individuals"
   | "schools"
   | "families"
@@ -144,6 +145,13 @@ const READ_NAV: Record<string, string> = {
   ko: "모든 단어", th: "ทุกคำ", bn: "প্রতিটি শব্দ", da: "Hvert ord", hu: "Minden szó",
 };
 
+// "Spelling practice" nav label for the dictation trainer (/spell). Local map,
+// en fallback (Gadi 2026-09-19, from Ziv's daughter's school dictations).
+const SPELL_NAV: Record<string, string> = {
+  en: "Spelling", he: "הכתבה", ar: "إملاء", ru: "Диктант", es: "Ortografía",
+  pt: "Ortografia", fr: "Dictée", de: "Diktat", it: "Ortografia", nl: "Spelling",
+};
+
 const TREASURE_NAV: Record<string, string> = {
   en: "My words", he: "אוצר המילים", ar: "كلماتي", ru: "Мои слова",
   es: "Mis palabras", pt: "Minhas palavras", fr: "Mes mots", de: "Meine Wörter",
@@ -177,6 +185,7 @@ function useNavLinks(): NavLink[] {
     return [
       { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
       { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
+      { key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en },
       { key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
     ];
@@ -200,6 +209,7 @@ function useNavLinks(): NavLink[] {
       // parents get them too; Clear does not). Gadi 2026-08-26: add the Reader
       // to the Family + Deep nav.
       if (plan === "deep") {
+        links.push({ key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en });
         links.push({ key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en });
         links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
       }
