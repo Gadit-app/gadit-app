@@ -37,6 +37,7 @@ const COPY: Record<string, {
   nameLabel: string;
   namePlaceholder: string;
   colorLabel: string;
+  ageLabel?: string;
   back: string;
   cancel: string;
   add: string;
@@ -54,6 +55,7 @@ const COPY: Record<string, {
     nameLabel: "שם",
     namePlaceholder: "מאיה",
     colorLabel: "צבע אווטאר",
+    ageLabel: "גיל (לא חובה)",
     back: "→ חזרה",
     cancel: "ביטול",
     add: "הוסף למשפחה",
@@ -71,6 +73,7 @@ const COPY: Record<string, {
     nameLabel: "Name",
     namePlaceholder: "Maya",
     colorLabel: "Avatar color",
+    ageLabel: "Age (optional)",
     back: "← Back",
     cancel: "Cancel",
     add: "Add to family",
@@ -184,6 +187,7 @@ export function FamilyAddClient() {
 
   const [role, setRole] = useState<MemberRole | null>(null);
   const [name, setName] = useState("");
+  const [age, setAge] = useState("");
   const [colorIndex, setColorIndex] = useState(0);
   const [saving, setSaving] = useState(false);
   const [childCount, setChildCount] = useState<number | null>(null);
@@ -213,11 +217,15 @@ export function FamilyAddClient() {
     if (atKidCap) return;
     setSaving(true);
     try {
+      // Age is only meaningful for a child, and it's optional. Stored so we
+      // can tune reading level / defaults by age later (Gadi 2026-09-19).
+      const ageNum = !isParentRole(role) && age.trim() ? Math.max(3, Math.min(18, parseInt(age, 10) || 0)) : 0;
       const ref = await addDoc(collection(db, "families", user.uid, "members"), {
         role,
         name: name.trim(),
         colorIndex,
         isOwner: false,
+        ...(ageNum ? { age: ageNum } : {}),
         createdAt: serverTimestamp(),
       });
       router.push(href(`/family/${ref.id}/pair`));
@@ -280,6 +288,23 @@ export function FamilyAddClient() {
                 className="wb-family-field-input"
               />
             </label>
+
+            {role !== null && !isParentRole(role) && (
+              <label className="wb-family-field">
+                <span className="wb-family-field-label">{c.ageLabel ?? COPY.en.ageLabel}</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={3}
+                  max={18}
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="8"
+                  className="wb-family-field-input"
+                  style={{ maxWidth: 120 }}
+                />
+              </label>
+            )}
 
             <div className="wb-family-field">
               <span className="wb-family-field-label">{c.colorLabel}</span>
