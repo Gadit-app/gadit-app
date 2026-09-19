@@ -1,0 +1,127 @@
+/**
+ * POST /api/spell-set  — body { topic, uiLang } → { safe, title, words: [{en, he}] }
+ *
+ * "Create your own set" for the spelling trainer (/spell): a kid types a TOPIC
+ * they want to practice (e.g. "aliens", "dinosaurs", "space") and Gadit
+ * instantly generates ~10 English/Hebrew word pairs on that topic to practice.
+ *
+ * CHILD SAFETY: the topic is FREE TEXT typed by a child, so the model must
+ * refuse anything not appropriate for a young child (violence, adult, drugs,
+ * hate, self-harm, etc.) → returns { safe: false }. The client then asks for a
+ * different topic. Output is a fixed word list, never chat. Gadi 2026-09-19.
+ *
+ * Cached per (lang, topic) so a repeat topic is free. Signed-in only.
+ */
+import { NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const maxDuration = 20;
+
+const LANG_NAME: Record<string, string> = {
+  en: "English", he: "Hebrew", ar: "Arabic", ru: "Russian", es: "Spanish",
+  pt: "Portuguese", fr: "French", de: "German", cs: "Czech", sk: "Slovak",
+  it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic", uk: "Ukrainian",
+  tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch",
+  el: "Greek", zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans",
+  sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese",
+  ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian",
+};
+
+type Pair = { en: string; he: string };
+
+function hashKey(lang: string, topic: string): string {
+  return crypto.createHash("sha256").update("ss1:" + lang + ":" + topic.toLowerCase()).digest("hex").slice(0, 40);
+}
+
+async function generate(topic: string, uiLangName: string): Promise<{ safe: boolean; title: string; words: Pair[] }> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      temperature: 0.4,
+      max_tokens: 500,
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `You build a short spelling-practice word set for a child about 8 to 10 years old, on a topic the CHILD typed. The child reads ${uiLangName}.
+
+CHILD SAFETY FIRST. The topic is free text typed by a child. If it is NOT appropriate for a young child — anything involving violence, weapons, sex or adult content, drugs, alcohol, gambling, hate, self-harm, gore, or otherwise unsafe — return {"safe": false, "title": "", "words": []}. When unsure, refuse.
+
+If the topic IS safe, return {"safe": true, "title": "<the topic as a short clean label in Hebrew>", "words": [ up to 10 items ]}. Each word item is {"en": "<a common English word on this topic>", "he": "<its Hebrew translation>"}. Pick simple, common, concrete words a child would actually learn for this topic (nouns first). English words in lowercase (proper nouns keep their capital). Hebrew in Hebrew script. No phrases longer than 2 words. No duplicates. Output ONLY the JSON object.`,
+        },
+        { role: "user", content: topic },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error("openai_" + res.status);
+  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const u = usageFrom(json);
+  void logAiUsage({ feature: "spell_set", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+
+  const content = json.choices?.[0]?.message?.content ?? "{}";
+  let parsed: { safe?: unknown; title?: unknown; words?: unknown } = {};
+  try { parsed = JSON.parse(content); } catch { /* fall through */ }
+  if (parsed.safe === false) return { safe: false, title: "", words: [] };
+
+  const words: Pair[] = Array.isArray(parsed.words)
+    ? parsed.words
+        .map((w) => {
+          const o = (w ?? {}) as { en?: unknown; he?: unknown };
+          return {
+            en: typeof o.en === "string" ? o.en.trim().slice(0, 40) : "",
+            he: typeof o.he === "string" ? o.he.trim().slice(0, 40) : "",
+          };
+        })
+        .filter((w) => w.en && w.he)
+        .slice(0, 10)
+    : [];
+  const title = typeof parsed.title === "string" ? parsed.title.trim().slice(0, 40) : "";
+  if (words.length < 3) return { safe: false, title: "", words: [] };
+  return { safe: true, title, words };
+}
+
+export async function POST(req: NextRequest) {
+  const authHeader = req.headers.get("authorization") || "";
+  const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
+  if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  try {
+    await getAdminAuth().verifyIdToken(idToken);
+  } catch {
+    return NextResponse.json({ error: "login_required" }, { status: 401 });
+  }
+
+  let topic = "";
+  let lang = "he";
+  try {
+    const b = (await req.json()) as { topic?: unknown; uiLang?: unknown };
+    if (typeof b.topic === "string") topic = b.topic.trim().slice(0, 40);
+    if (typeof b.uiLang === "string" && LANG_NAME[b.uiLang]) lang = b.uiLang;
+  } catch {
+    return NextResponse.json({ error: "bad_body" }, { status: 400 });
+  }
+  if (topic.length < 2) return NextResponse.json({ error: "topic_too_short" }, { status: 400 });
+
+  const db = getAdminDb();
+  const ref = db.collection("spellSets").doc(hashKey(lang, topic));
+  try {
+    const snap = await ref.get();
+    if (snap.exists) {
+      const d = snap.data() as { safe?: boolean; title?: string; words?: Pair[] };
+      return NextResponse.json({ safe: d.safe ?? false, title: d.title ?? "", words: d.words ?? [], cached: true });
+    }
+  } catch { /* cache read best-effort */ }
+
+  try {
+    const out = await generate(topic, LANG_NAME[lang]);
+    try { await ref.set({ lang, topic, ...out, at: new Date().toISOString() }); } catch { /* ignore */ }
+    return NextResponse.json(out);
+  } catch {
+    return NextResponse.json({ error: "generate_failed" }, { status: 502 });
+  }
+}

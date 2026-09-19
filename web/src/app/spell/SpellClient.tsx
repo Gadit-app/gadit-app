@@ -43,6 +43,13 @@ const T = {
   retryMisses: { en: "Now let's fix the ones you missed.", he: "עכשיו נתקן את אלה שטעיתם בהם." },
   loginTitle: { en: "Sign in to practice", he: "התחברו כדי לתרגל" },
   progress: { en: "{a} / {b}", he: "{a} / {b}" },
+  createTitle: { en: "Create your own set", he: "יצירת סט משלך" },
+  createSub: { en: "Type any topic and get 10 words to practice.", he: "הקלידו נושא וקבלו 10 מילים לתרגול." },
+  topicPlaceholder: { en: "A topic, e.g. aliens", he: "נושא, למשל חייזרים" },
+  generate: { en: "Create set", he: "יצירת סט" },
+  creating: { en: "Creating…", he: "יוצר…" },
+  unsafe: { en: "Let's pick a different topic 🙂", he: "בואו נבחר נושא אחר 🙂" },
+  createErr: { en: "Could not create that. Try another topic.", he: "לא הצלחנו. נסו נושא אחר." },
 };
 const t = (k: keyof typeof T, lang: string) => pick(T[k], lang);
 const fmt = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
@@ -66,7 +73,36 @@ export function SpellClient() {
   const [typed, setTyped] = useState("");
   const [result, setResult] = useState<null | "correct" | "wrong">(null);
   const [phase, setPhase] = useState<"pick" | "quiz" | "done">("pick");
+  const [topic, setTopic] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [createMsg, setCreateMsg] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  async function createSet() {
+    const tp = topic.trim();
+    if (tp.length < 2 || creating || !user) return;
+    setCreating(true);
+    setCreateMsg("");
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/spell-set", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ topic: tp, uiLang: lang }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { safe?: boolean; title?: string; words?: WordPair[] };
+      if (!res.ok || !data.safe || !Array.isArray(data.words) || data.words.length < 3) {
+        setCreateMsg(data.safe === false ? t("unsafe", lang) : t("createErr", lang));
+        return;
+      }
+      start({ id: "custom", icon: "✨", titleEn: data.title || tp, titleHe: data.title || tp, words: data.words });
+      setTopic("");
+    } catch {
+      setCreateMsg(t("createErr", lang));
+    } finally {
+      setCreating(false);
+    }
+  }
 
   const promptOf = (w: WordPair) => (qdir === "he2en" ? w.he : w.en);
   const answerOf = (w: WordPair) => (qdir === "he2en" ? w.en : w.he);
@@ -181,7 +217,34 @@ export function SpellClient() {
               ))}
             </div>
 
-            <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "20px 0 12px" }}>{t("pickCat", lang)}</h2>
+            {/* Create your own set — kid types a topic, Gadit generates 10 words */}
+            <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
+                <div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("createTitle", lang)}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("createSub", lang)}</div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                <input
+                  value={topic}
+                  onChange={(e) => { setTopic(e.target.value); setCreateMsg(""); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") createSet(); }}
+                  placeholder={t("topicPlaceholder", lang)}
+                  dir="auto"
+                  maxLength={40}
+                  style={{ flex: 1, minWidth: 0, padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)" }}
+                />
+                <button type="button" onClick={createSet} disabled={creating || topic.trim().length < 2}
+                  style={{ flex: "none", padding: "11px 16px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || topic.trim().length < 2 ? 0.6 : 1 }}>
+                  {creating ? t("creating", lang) : t("generate", lang)}
+                </button>
+              </div>
+              {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
+            </div>
+
+            <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
               {DICTATION_SETS.map((s) => (
                 <button key={s.id} type="button" onClick={() => start(s)}
