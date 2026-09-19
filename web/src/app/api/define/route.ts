@@ -673,7 +673,9 @@ Add idioms (phrases/expressions) that use this word in two places:
 
 1. MEANING-SPECIFIC idioms ג€” inside each meaning item, as an "idioms" array (0-2 items). These are idioms that use THIS specific meaning of the word. Example: meaning "ray of light" ג†’ idiom "׳§׳¨׳ ׳”׳©׳׳© ׳”׳, ׳“׳§׳¨׳”" (a figurative use).
 
-2. GENERAL idioms ג€” at the ROOT of the response (alongside "etymology"), as a "generalIdioms" array (0-3 items). These are well-known phrases/expressions that include the word but don't belong to one specific meaning.
+2. GENERAL idioms ג€” at the ROOT of the response (alongside "etymology"), as a "generalIdioms" array. These are well-known phrases/expressions that include the word but don't belong to one specific meaning.
+
+⚠️ BE GENEROUS AND COMPLETE with idioms. For an idiom-rich word (animals like "chicken"/"dog"/"cat", body parts like "eye"/"hand"/"heart", common verbs, colors, weather), list ALL the well-known expressions a speaker would recognize — commonly 4 to 8 for such words, put them in generalIdioms. Do NOT stop at 2 or 3 when the word clearly has more real, recognized expressions (e.g. "chicken" has "chicken out", "chicken feed", "chicken scratch", "count your chickens before they hatch", "running around like a chicken with its head cut off", "spring chicken", "chicken and egg" — list them all). Only return few or none for words that genuinely have few real expressions. Never invent ones no speaker uses.
 
 Each idiom has EXACTLY this shape:
 {
