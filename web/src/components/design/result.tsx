@@ -34,8 +34,9 @@
  *     design). IdiomsCard export is kept as a no-op for legacy callers.
  */
 
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, useMemo, type ReactNode } from "react";
 import { useLang } from "@/lib/lang-context";
+import { useAuth } from "@/lib/auth-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref, wordPath } from "@/lib/href";
 import WordQuestions from "@/components/design/WordQuestions";
@@ -1157,35 +1158,69 @@ export function MeaningCard({ n, meaning }: { n: number; meaning: Meaning; onRep
 export function IdiomsSection({
   meanings,
   generalIdioms,
+  word = "",
+  wordLang,
   onReport,
   plan = "basic",
 }: {
   meanings: Meaning[];
   generalIdioms?: Idiom[];
+  /** The headword + its language, so the dedicated idiom endpoint can enrich
+   *  the sparse define idioms with a reliable, complete set. */
+  word?: string;
+  wordLang?: string;
   onReport?: (section: string) => void;
   plan?: Plan;
 }) {
   const { lang } = useLang();
   const [kidsOn] = useKidsMode();
-  // Combine all idioms — per-meaning first (preserving order), then
-  // any general ones at the end. De-dupe by phrase so we don't show
-  // the same idiom twice if the model surfaced it in both places.
-  const seen = new Set<string>();
-  const all: Idiom[] = [];
-  for (const m of meanings ?? []) {
-    for (const i of m.idioms ?? []) {
+  const { user } = useAuth();
+
+  // Idioms embedded in the define result — instant, but the big-prompt model
+  // returns them unreliably (often sparse or empty). De-duped by phrase.
+  const defineIdioms: Idiom[] = useMemo(() => {
+    const seen = new Set<string>();
+    const out: Idiom[] = [];
+    for (const m of meanings ?? []) for (const i of m.idioms ?? []) {
       const key = i.phrase?.trim();
       if (!key || seen.has(key)) continue;
       seen.add(key);
-      all.push(i);
+      out.push(i);
     }
-  }
-  for (const i of generalIdioms ?? []) {
-    const key = i.phrase?.trim();
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
-    all.push(i);
-  }
+    for (const i of generalIdioms ?? []) {
+      const key = i.phrase?.trim();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      out.push(i);
+    }
+    return out;
+  }, [meanings, generalIdioms]);
+
+  // The dedicated /api/word-idioms set — reliable and complete (loads a moment
+  // after the page). Replaces the sparse define set once it arrives; a failed
+  // or empty fetch leaves the define idioms in place. Signed-in only.
+  const [fetched, setFetched] = useState<Idiom[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    if (!user || !word) return;
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/word-idioms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ word, uiLang: lang, wordLang }),
+        });
+        if (!res.ok || cancelled) return;
+        const data = (await res.json()) as { idioms?: Idiom[] };
+        if (!cancelled && Array.isArray(data.idioms)) setFetched(data.idioms);
+      } catch { /* keep the define idioms */ }
+    })();
+    return () => { cancelled = true; };
+  }, [user, word, lang, wordLang]);
+
+  // Prefer the dedicated set when it arrives non-empty; otherwise define's.
+  const all = fetched && fetched.length > 0 ? fetched : defineIdioms;
   if (all.length === 0) return null;
 
   // A speaker PER idiom (Gadi 2026-08-12: not one button that reads them
@@ -1682,6 +1717,8 @@ export function ResultView({
       <IdiomsSection
         meanings={result.meanings ?? []}
         generalIdioms={result.generalIdioms}
+        word={result.word}
+        wordLang={result.language}
         onReport={onReport}
         plan={plan}
       />
