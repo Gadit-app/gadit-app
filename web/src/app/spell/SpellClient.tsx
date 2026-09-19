@@ -66,7 +66,7 @@ function norm(s: string) {
 /** Finger-tracing canvas: the word is drawn in faint simple print (non-cursive)
  *  as a guide, and the child traces over it with a finger. Writing practice, no
  *  grading — the type mode is the test. Gadi 2026-09-19. */
-function TraceCanvas({ word, clearLabel }: { word: string; clearLabel: string }) {
+function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; clearLabel: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const drawing = useRef(false);
   const last = useRef<{ x: number; y: number } | null>(null);
@@ -78,7 +78,7 @@ function TraceCanvas({ word, clearLabel }: { word: string; clearLabel: string })
     if (!ctx) return;
     const dpr = window.devicePixelRatio || 1;
     const w = c.clientWidth || 300;
-    const h = c.clientHeight || 130;
+    const h = c.clientHeight || 150;
     c.width = Math.round(w * dpr);
     c.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -86,16 +86,44 @@ function TraceCanvas({ word, clearLabel }: { word: string; clearLabel: string })
     // faint baseline
     ctx.strokeStyle = "#EEF2F3";
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(12, h * 0.78); ctx.lineTo(w - 12, h * 0.78); ctx.stroke();
-    // faint word, shrunk to fit
-    let size = Math.min(h * 0.62, 72);
+    ctx.beginPath(); ctx.moveTo(12, h * 0.80); ctx.lineTo(w - 12, h * 0.80); ctx.stroke();
+
+    // Draw the word letter-by-letter with a GENEROUS gap so a finger has room
+    // between letters (Gadi 2026-09-19). Bigger letters, too. Per-letter draw
+    // also lets us honor RTL (Hebrew answers) by laying out right-to-left.
+    const letters = Array.from(word);
+    const GAP = 0.42; // gap as a fraction of the font size
+    let size = Math.min(h * 0.74, 96); // bigger than before
     const setFont = () => { ctx.font = `700 ${size}px "Rubik", system-ui, sans-serif`; };
+    const totalW = () => {
+      setFont();
+      let s = 0;
+      for (const ch of letters) s += ctx.measureText(ch).width;
+      return s + GAP * size * Math.max(0, letters.length - 1);
+    };
+    while (totalW() > w - 24 && size > 16) size -= 2;
     setFont();
-    while (ctx.measureText(word).width > w - 28 && size > 16) { size -= 2; setFont(); }
-    ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
-    ctx.fillStyle = "#CBD5E1";
-    ctx.fillText(word, w / 2, h * 0.78);
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#CFD8E0";
+    const gap = GAP * size;
+    const tw = totalW();
+    const y = h * 0.80;
+    if (rtl) {
+      let x = (w + tw) / 2; // right edge
+      for (const ch of letters) {
+        const cw = ctx.measureText(ch).width;
+        x -= cw;
+        ctx.fillText(ch, x, y);
+        x -= gap;
+      }
+    } else {
+      let x = (w - tw) / 2; // left edge
+      for (const ch of letters) {
+        ctx.fillText(ch, x, y);
+        x += ctx.measureText(ch).width + gap;
+      }
+    }
   }
 
   useEffect(() => { guide(); /* redraw on word change */ // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,7 +158,7 @@ function TraceCanvas({ word, clearLabel }: { word: string; clearLabel: string })
         onPointerMove={move}
         onPointerUp={up}
         onPointerCancel={up}
-        style={{ width: "100%", height: 130, touchAction: "none", borderRadius: 12, background: "#fff", border: "1px solid var(--hairline,#E5E7EB)", display: "block", cursor: "crosshair" }}
+        style={{ width: "100%", height: 150, touchAction: "none", borderRadius: 12, background: "#fff", border: "1px solid var(--hairline,#E5E7EB)", display: "block", cursor: "crosshair" }}
       />
       <button type="button" onClick={guide} style={{ marginTop: 8, background: "none", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 9, padding: "6px 14px", fontSize: 13, color: "var(--ink-muted,#6B7280)", cursor: "pointer" }}>
         ↺ {clearLabel}
@@ -362,7 +390,7 @@ export function SpellClient() {
         {phase === "quiz" && current && (
           <div style={{ marginTop: 24 }}>
             <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)", fontWeight: 600, marginBottom: 10 }}>
-              {fmt(t("progress", lang), { a: idx + 1, b: queue.length })}
+              <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{idx + 1} / {queue.length}</span>
             </div>
 
             {/* Prompt word + speaker (reads it aloud like a teacher dictating) */}
@@ -412,7 +440,7 @@ export function SpellClient() {
               ) : (
                 <>
                   <div style={{ fontSize: 12.5, color: "var(--ink-muted,#9CA3AF)", margin: "14px 0 8px" }}>{t("traceHint", lang)}</div>
-                  <TraceCanvas key={promptOf(current) + ":" + idx} word={answerOf(current)} clearLabel={t("clear", lang)} />
+                  <TraceCanvas key={promptOf(current) + ":" + idx} word={answerOf(current)} rtl={answerLang === "he"} clearLabel={t("clear", lang)} />
                   <button type="button" onClick={next}
                     style={{ marginTop: 16, width: "100%", padding: "13px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
                     {t("next", lang)}
