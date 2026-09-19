@@ -226,6 +226,14 @@ export function ReaderClient() {
   const [ocrState, setOcrState] = useState<"idle" | "reading" | "error">("idle");
   const cameraRef = useRef<HTMLInputElement>(null);
   const uploadRef = useRef<HTMLInputElement>(null);
+  // In-page camera (Gadi 2026-09-19): on Android, opening the NATIVE camera via
+  // <input capture> lets the OS kill the PWA process while the camera is
+  // foregrounded — on return the app cold-reloads to the home page and the
+  // photo is lost (confirmed on video). Capturing inside the page with
+  // getUserMedia keeps everything in one process, so nothing reloads.
+  const [camOpen, setCamOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const camLabel = t.camera ?? READER_COPY.en.camera ?? "Photograph with camera";
   const uploadLabel = t.upload ?? READER_COPY.en.upload ?? "Upload image or PDF";
   const screenLabel = t.captureScreen ?? READER_COPY.en.captureScreen ?? "Capture screen";
@@ -384,6 +392,66 @@ export function ReaderClient() {
     }
   }
 
+  // Open the in-page camera. Falls back to the native file-input camera if
+  // getUserMedia isn't available or the user blocks it, so capture still works.
+  async function openCamera() {
+    const md = typeof navigator !== "undefined" ? navigator.mediaDevices : undefined;
+    // Desktop: keep the plain file picker (no reason to open a webcam to read a
+    // newspaper). The process-death problem is mobile-only anyway.
+    const isTouch = typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
+    if (!md?.getUserMedia || !isTouch) { cameraRef.current?.click(); return; }
+    try {
+      const stream = await md.getUserMedia({
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 2600 }, height: { ideal: 2600 } },
+        audio: false,
+      });
+      streamRef.current = stream;
+      setCamOpen(true);
+    } catch (err) {
+      // Permission denied → nothing we can do in-page; fall back to the OS camera.
+      if (err && typeof err === "object" && (err as { name?: string }).name === "NotAllowedError") {
+        cameraRef.current?.click();
+      } else {
+        cameraRef.current?.click();
+      }
+    }
+  }
+
+  // Attach the live stream to the <video> once the modal is mounted.
+  useEffect(() => {
+    if (!camOpen) return;
+    const v = videoRef.current;
+    const s = streamRef.current;
+    if (v && s) {
+      v.srcObject = s;
+      v.play().catch(() => { /* autoplay gesture already satisfied by the tap */ });
+    }
+  }, [camOpen]);
+
+  function stopCamera() {
+    streamRef.current?.getTracks().forEach((tk) => tk.stop());
+    streamRef.current = null;
+    setCamOpen(false);
+  }
+
+  // Shutter: grab the current video frame and OCR it, all in-page.
+  async function shootPhoto() {
+    const v = videoRef.current;
+    if (!v || !v.videoWidth) return;
+    const w = v.videoWidth, h = v.videoHeight;
+    const canvas = document.createElement("canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) { stopCamera(); return; }
+    ctx.drawImage(v, 0, 0, w, h);
+    const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/jpeg", 0.92));
+    stopCamera();
+    if (blob) await runOcr(blob); else setOcrState("error");
+  }
+
+  // Release the camera if the component unmounts mid-capture.
+  useEffect(() => () => { streamRef.current?.getTracks().forEach((tk) => tk.stop()); }, []);
+
   const canCaptureScreen = typeof navigator !== "undefined" && !!(navigator.mediaDevices as { getDisplayMedia?: unknown } | undefined)?.getDisplayMedia;
 
   const allDone = total > 0 && reviewed.size >= total;
@@ -450,7 +518,7 @@ export function ReaderClient() {
                 <div style={{ ...ghostBtn, opacity: 0.7, cursor: "default" }}>{t.reading}</div>
               ) : (
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-                  <button type="button" onClick={() => cameraRef.current?.click()} style={ghostBtn}>
+                  <button type="button" onClick={openCamera} style={ghostBtn}>
                     📷 {camLabel}
                   </button>
                   <button type="button" onClick={() => uploadRef.current?.click()} style={ghostBtn}>
@@ -475,6 +543,39 @@ export function ReaderClient() {
               {/* Camera: hints mobile to open the camera. Upload: images + PDF. */}
               <input ref={cameraRef} type="file" accept="image/*" capture="environment" onChange={onPhoto} style={{ display: "none" }} />
               <input ref={uploadRef} type="file" accept="image/*,application/pdf" onChange={onPhoto} style={{ display: "none" }} />
+
+              {/* In-page camera modal — keeps capture in one process so Android
+                  never kills the PWA on return (Gadi 2026-09-19). */}
+              {camOpen && (
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  style={{ position: "fixed", inset: 0, zIndex: 3000, background: "#000", display: "flex", flexDirection: "column" }}
+                >
+                  <video
+                    ref={videoRef}
+                    playsInline
+                    muted
+                    style={{ flex: 1, width: "100%", height: "100%", objectFit: "contain", background: "#000" }}
+                  />
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "18px 22px calc(18px + env(safe-area-inset-bottom))", background: "#000" }}>
+                    <button
+                      type="button"
+                      onClick={stopCamera}
+                      style={{ background: "none", border: "none", color: "#fff", fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: 8 }}
+                    >
+                      {lang === "he" ? "ביטול" : lang === "ar" ? "إلغاء" : lang === "ru" ? "Отмена" : "Cancel"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={shootPhoto}
+                      aria-label={lang === "he" ? "צלם" : "Capture"}
+                      style={{ width: 72, height: 72, borderRadius: "50%", background: "#fff", border: "5px solid rgba(255,255,255,0.45)", cursor: "pointer", boxShadow: "0 0 0 2px #000 inset" }}
+                    />
+                    <span style={{ width: 60 }} aria-hidden="true" />
+                  </div>
+                </div>
+              )}
             </div>
             {ocrState === "error" && (
               <p style={{ marginTop: 12, color: "#B91C1C", fontSize: 14 }}>{t.ocrError}</p>
