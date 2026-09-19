@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
+import { useAuth } from "@/lib/auth-context";
 import { LANGUAGES, langNameIn, getLangDir, type Lang } from "@/lib/i18n";
 
 /**
@@ -31,6 +32,7 @@ import { LANGUAGES, langNameIn, getLangDir, type Lang } from "@/lib/i18n";
  */
 export function LangSwitchMobile() {
   const { lang, setLang } = useLang();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +55,12 @@ export function LangSwitchMobile() {
   }, [open]);
 
   const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+
+  // Signed-in users get the language picker inside the burger menu (keeps the
+  // crowded family/kid topbar from overflowing). Anonymous visitors — whose
+  // topbar is sparse and who may have landed in the wrong locale — keep this
+  // visible affordance. Gadi 2026-09-19.
+  if (user) return null;
 
   return (
     <div ref={wrapRef} className="wb-shell-lang-mobile-wrap">

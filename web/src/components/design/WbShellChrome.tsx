@@ -36,6 +36,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { resolvePartnerArea } from "@/lib/partner-nav";
 import { useLang } from "@/lib/lang-context";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
 import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
@@ -304,11 +305,15 @@ export function WbShellBurger({
 }) {
   const links = useNavLinks();
   const { user, promptLogin, familyRole } = useAuth();
-  const { lang } = useLang();
+  const { lang, setLang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
   const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
+  // Language lives INSIDE the burger now (Gadi 2026-09-19): people open the
+  // hamburger looking for settings, and it frees the crowded mobile topbar
+  // where the standalone globe was clipping off the edge. Collapsed by default.
+  const [langOpen, setLangOpen] = useState(false);
   // Show the install entry only where installing is actually possible:
   // a real mobile browser (not an Instagram/Facebook webview), not
   // already running as the installed app. Resolved post-hydration so
@@ -406,6 +411,46 @@ export function WbShellBurger({
                 {l.label}
               </Link>
             ),
+          )}
+          {/* Language — expandable so the 30+ list doesn't dominate the menu.
+              Names in the viewer's own language (native label as a hint). */}
+          <div className="wb-shell-mobile-menu-sep" />
+          <button
+            type="button"
+            aria-expanded={langOpen}
+            onClick={() => setLangOpen((v) => !v)}
+            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}
+          >
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
+              </svg>
+              {langNameIn(lang, lang)}
+            </span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden="true" style={{ transform: langOpen ? "rotate(180deg)" : "none", transition: "transform .15s" }}>
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          {langOpen && (
+            <div style={{ maxHeight: 260, overflowY: "auto", overscrollBehavior: "contain" }}>
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  className={l.code === lang ? "is-active" : ""}
+                  onClick={() => { setLang(l.code as Lang); setLangOpen(false); setOpen(false); }}
+                  style={{ paddingInlineStart: 30, textAlign: dir === "rtl" ? "right" : "left" }}
+                >
+                  <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                    <span>{langNameIn(l.code, lang)}</span>
+                    {langNameIn(l.code, lang) !== l.label && (
+                      <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                    )}
+                  </span>
+                </button>
+              ))}
+            </div>
           )}
           {showInstall && (
             <>
