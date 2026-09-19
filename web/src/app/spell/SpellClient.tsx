@@ -17,7 +17,7 @@ import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { TTSButton } from "@/components/design/TTSButton";
 import { KidsCelebration } from "@/components/design/KidsCelebration";
-import { LANGUAGES } from "@/lib/i18n";
+import { langNameIn } from "@/lib/i18n";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
 
@@ -26,7 +26,6 @@ import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
 // learner's OWN language, not necessarily Hebrew.
 type Dir = "he2en" | "en2he";
 const RTL_SET = new Set(["he", "ar", "fa"]);
-const langLabel = (code: string) => LANGUAGES.find((l) => l.code === code)?.label ?? code;
 
 // Language-major so translated languages can be appended verbatim from the
 // localization batch (Gadi 2026-09-19). en is the fallback for any missing key.
@@ -247,8 +246,9 @@ export function SpellClient() {
   // feature's original market). Gadi 2026-09-19: make dictation work in every
   // language, not only Hebrew↔English.
   const nativeLang = lang === "en" ? "he" : lang;
-  const nativeName = langLabel(nativeLang);
-  const englishName = langLabel("en");
+  // Language names shown in the VIEWER's language (Hebrew user sees עברית/אנגלית).
+  const nativeName = langNameIn(nativeLang, lang);
+  const englishName = langNameIn("en", lang);
   const arrow = dir === "rtl" ? "←" : "→";
   const dirText = (d: Dir) => (d === "he2en" ? `${nativeName} ${arrow} ${englishName}` : `${englishName} ${arrow} ${nativeName}`);
   // The set's display title: he UI → Hebrew title; en UI → English title; any

@@ -29,7 +29,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { DeleteAccountModal } from "@/components/design/DeleteAccountModal";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
 import { countCached, setCachedWord } from "@/lib/offline-db";
 
@@ -115,7 +115,7 @@ function LangSwitch() {
         onClick={() => setOpen((v) => !v)}
         aria-label="Language"
       >
-        🌐 {current.label}
+        🌐 {langNameIn(current.code, lang)}
       </button>
       {open && (
         <div
@@ -152,7 +152,12 @@ function LangSwitch() {
                 fontFamily: fontBody(lang),
               }}
             >
-              {l.label}
+              <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                <span>{langNameIn(l.code, lang)}</span>
+                {langNameIn(l.code, lang) !== l.label && (
+                  <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                )}
+              </span>
             </button>
           ))}
         </div>

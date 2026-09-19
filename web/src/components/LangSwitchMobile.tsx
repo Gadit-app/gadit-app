@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, getLangDir, type Lang } from "@/lib/i18n";
 
 /**
  * Compact language switcher meant for the mobile topbar.
@@ -90,7 +90,14 @@ export function LangSwitchMobile() {
                 {/* Flag always on the right (uniform column, Gadi 2026-08-20).
                     The row layout is forced RTL in CSS; only the label text
                     keeps its own script direction via dir. */}
-                <span className="wb-shell-lang-mobile-label" dir={l.dir}>{l.label}</span>
+                {/* Primary name in the viewer's language; native label small
+                    below it for anyone who landed in the wrong locale. */}
+                <span className="wb-shell-lang-mobile-label" dir={getLangDir(lang)} style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                  <span>{langNameIn(l.code, lang)}</span>
+                  {langNameIn(l.code, lang) !== l.label && (
+                    <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                  )}
+                </span>
                 <img
                   className="wb-shell-lang-mobile-flag"
                   src={`https://flagcdn.com/40x30/${l.flag}.png`}

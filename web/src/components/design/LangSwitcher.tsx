@@ -22,7 +22,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, getLangDir, type Lang } from "@/lib/i18n";
 
 type Variant = "dark" | "muted";
 type Placement = "bottom" | "top";
@@ -98,7 +98,7 @@ export function LangSwitcher({
             strokeLinecap="round"
           />
         </svg>
-        <span>{active.label}</span>
+        <span>{langNameIn(active.code, lang)}</span>
         <svg
           width="10"
           height="10"
@@ -179,10 +179,9 @@ export function LangSwitcher({
                   background: selected ? "oklch(0.72 0.19 245 / 0.1)" : "transparent",
                   color: selected ? "oklch(0.42 0.15 250)" : "var(--gd-ink-700)",
                   fontWeight: selected ? 600 : 500,
-                  // Native labels include Arabic/Hebrew, so let the
-                  // language's own script render naturally regardless of
-                  // the surrounding UI direction.
-                  direction: l.dir,
+                  // Primary name is in the VIEWER's language, so align to the
+                  // viewer's direction; the native label keeps its own dir below.
+                  direction: getLangDir(lang),
                   cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
@@ -208,7 +207,12 @@ export function LangSwitcher({
                     loading="lazy"
                     style={{ borderRadius: 2, display: "block" }}
                   />
-                  <span>{l.label}</span>
+                  <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                    <span>{langNameIn(l.code, lang)}</span>
+                    {langNameIn(l.code, lang) !== l.label && (
+                      <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                    )}
+                  </span>
                 </span>
                 {selected && (
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

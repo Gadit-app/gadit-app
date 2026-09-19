@@ -13,7 +13,7 @@ import { ReaderText } from "@/components/design/ReaderText";
 import { PassageKeyWords } from "@/components/design/PassageKeyWords";
 import { GuideButton } from "@/components/GuideButton";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -644,7 +644,7 @@ function LangSwitch() {
           <circle cx="12" cy="12" r="9" />
           <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
         </svg>
-        {active.label}
+        {langNameIn(active.code, lang)}
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
@@ -655,7 +655,12 @@ function LangSwitch() {
                 className={l.code === lang ? "is-active" : ""}
                 onClick={() => { setLang(l.code as Lang); setOpen(false); }}
               >
-                {l.label}
+                <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                  <span>{langNameIn(l.code, lang)}</span>
+                  {langNameIn(l.code, lang) !== l.label && (
+                    <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                  )}
+                </span>
               </button>
             </li>
           ))}

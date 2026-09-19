@@ -24,7 +24,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { HelpCenter } from "@/components/HelpCenter";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
@@ -51,7 +51,7 @@ function LangSwitch() {
           <circle cx="12" cy="12" r="9" />
           <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
         </svg>
-        {active.label}
+        {langNameIn(active.code, lang)}
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
@@ -63,7 +63,12 @@ function LangSwitch() {
                 onClick={() => { setLang(l.code as Lang); setOpen(false); }}
               >
                 <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />
-                {l.label}
+                <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                  <span>{langNameIn(l.code, lang)}</span>
+                  {langNameIn(l.code, lang) !== l.label && (
+                    <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                  )}
+                </span>
               </button>
             </li>
           ))}

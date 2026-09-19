@@ -58,6 +58,31 @@ export function getLangDir(lang: Lang) {
   return LANGUAGES.find((l) => l.code === lang)?.dir ?? "ltr";
 }
 
+/**
+ * The name of a language, written in the VIEWER's language (Gadi 2026-09-19:
+ * "when a list of languages is shown, show it in the user's language" — a
+ * Hebrew user should read יפנית/סינית, not 日本語/中文). Uses the browser's
+ * CLDR data via Intl.DisplayNames, which is authoritative and covers all our
+ * UI languages. Falls back to the language's own native label (LANGUAGES) if
+ * DisplayNames is unavailable (very old browsers) or returns nothing.
+ *
+ * Our zh-CN / zh-TW codes are region tags; mapping them to the script tags
+ * zh-Hans / zh-Hant makes DisplayNames say "Simplified / Traditional Chinese"
+ * rather than "Chinese (China) / (Taiwan)".
+ */
+const DISPLAY_CODE: Record<string, string> = { "zh-CN": "zh-Hans", "zh-TW": "zh-Hant" };
+export function langNameIn(code: string, viewerLang: string): string {
+  const native = LANGUAGES.find((l) => l.code === code)?.label ?? code;
+  try {
+    const dn = new Intl.DisplayNames([viewerLang], { type: "language" });
+    const name = dn.of(DISPLAY_CODE[code] ?? code);
+    if (name && name.toLowerCase() !== code.toLowerCase()) return name;
+  } catch {
+    /* Intl.DisplayNames unsupported — fall back to the native label. */
+  }
+  return native;
+}
+
 export function detectBrowserLang(): Lang {
   if (typeof navigator === "undefined") return "en";
   const full = navigator.language?.toLowerCase() ?? "";

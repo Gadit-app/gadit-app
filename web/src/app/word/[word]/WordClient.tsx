@@ -37,7 +37,7 @@ import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/track";
 import { useKidsMode } from "@/lib/use-kids-mode";
 
@@ -272,7 +272,7 @@ function WordbookLangSwitch() {
             strokeLinecap="round"
           />
         </svg>
-        <span>{active.label}</span>
+        <span>{langNameIn(active.code, lang)}</span>
         <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true">
           <path d="M2 4l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -291,7 +291,12 @@ function WordbookLangSwitch() {
                 setOpen(false);
               }}
             >
-              {l.label}
+              <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
+                <span>{langNameIn(l.code, lang)}</span>
+                {langNameIn(l.code, lang) !== l.label && (
+                  <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
+                )}
+              </span>
             </button>
           ))}
         </div>
