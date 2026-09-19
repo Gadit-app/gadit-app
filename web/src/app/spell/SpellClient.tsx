@@ -10,7 +10,7 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -50,6 +50,10 @@ const T = {
   creating: { en: "Creating…", he: "יוצר…" },
   unsafe: { en: "Let's pick a different topic 🙂", he: "בואו נבחר נושא אחר 🙂" },
   createErr: { en: "Could not create that. Try another topic.", he: "לא הצלחנו. נסו נושא אחר." },
+  modeType: { en: "Type it", he: "הקלדה" },
+  modeTrace: { en: "Trace it", he: "כתיבה ביד" },
+  traceHint: { en: "Trace the word with your finger", he: "עקבו על המילה עם האצבע" },
+  clear: { en: "Clear", he: "ניקוי" },
 };
 const t = (k: keyof typeof T, lang: string) => pick(T[k], lang);
 const fmt = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
@@ -59,12 +63,89 @@ function norm(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
 }
 
+/** Finger-tracing canvas: the word is drawn in faint simple print (non-cursive)
+ *  as a guide, and the child traces over it with a finger. Writing practice, no
+ *  grading — the type mode is the test. Gadi 2026-09-19. */
+function TraceCanvas({ word, clearLabel }: { word: string; clearLabel: string }) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const drawing = useRef(false);
+  const last = useRef<{ x: number; y: number } | null>(null);
+
+  function guide() {
+    const c = ref.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    const w = c.clientWidth || 300;
+    const h = c.clientHeight || 130;
+    c.width = Math.round(w * dpr);
+    c.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    // faint baseline
+    ctx.strokeStyle = "#EEF2F3";
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(12, h * 0.78); ctx.lineTo(w - 12, h * 0.78); ctx.stroke();
+    // faint word, shrunk to fit
+    let size = Math.min(h * 0.62, 72);
+    const setFont = () => { ctx.font = `700 ${size}px "Rubik", system-ui, sans-serif`; };
+    setFont();
+    while (ctx.measureText(word).width > w - 28 && size > 16) { size -= 2; setFont(); }
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#CBD5E1";
+    ctx.fillText(word, w / 2, h * 0.78);
+  }
+
+  useEffect(() => { guide(); /* redraw on word change */ // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [word]);
+  useEffect(() => {
+    const onR = () => guide();
+    window.addEventListener("resize", onR);
+    return () => window.removeEventListener("resize", onR);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function xy(e: React.PointerEvent) {
+    const r = ref.current!.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  function down(e: React.PointerEvent) { drawing.current = true; last.current = xy(e); ref.current?.setPointerCapture(e.pointerId); }
+  function move(e: React.PointerEvent) {
+    if (!drawing.current || !last.current) return;
+    const ctx = ref.current!.getContext("2d")!;
+    const p = xy(e);
+    ctx.strokeStyle = TEAL; ctx.lineWidth = 6; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(last.current.x, last.current.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    last.current = p;
+  }
+  function up() { drawing.current = false; last.current = null; }
+
+  return (
+    <div>
+      <canvas
+        ref={ref}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+        onPointerCancel={up}
+        style={{ width: "100%", height: 130, touchAction: "none", borderRadius: 12, background: "#fff", border: "1px solid var(--hairline,#E5E7EB)", display: "block", cursor: "crosshair" }}
+      />
+      <button type="button" onClick={guide} style={{ marginTop: 8, background: "none", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 9, padding: "6px 14px", fontSize: 13, color: "var(--ink-muted,#6B7280)", cursor: "pointer" }}>
+        ↺ {clearLabel}
+      </button>
+    </div>
+  );
+}
+
 export function SpellClient() {
   const { lang, dir } = useLang();
   const href = useHref();
   const { user } = useAuth();
 
   const [qdir, setQdir] = useState<Dir>("he2en");
+  const [mode, setMode] = useState<"type" | "trace">("type");
   const [set, setSet] = useState<DictationSet | null>(null);
   const [queue, setQueue] = useState<WordPair[]>([]);
   const [idx, setIdx] = useState(0);
@@ -217,6 +298,20 @@ export function SpellClient() {
               ))}
             </div>
 
+            {/* Practice mode toggle: type the word, or trace it with a finger */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+              {(["type", "trace"] as const).map((m) => (
+                <button key={m} type="button" onClick={() => setMode(m)}
+                  style={{
+                    flex: 1, padding: "9px 10px", borderRadius: 12, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
+                    border: "1px solid", borderColor: mode === m ? "var(--teal-deep,#0A7472)" : "var(--hairline,#E5E7EB)",
+                    background: mode === m ? "#0A7472" : "var(--surface,#fff)", color: mode === m ? "#fff" : "var(--ink,#0B1220)",
+                  }}>
+                  {m === "type" ? "⌨️ " : "✍️ "}{t(m === "type" ? "modeType" : "modeTrace", lang)}
+                </button>
+              ))}
+            </div>
+
             {/* Create your own set — kid types a topic, Gadit generates 10 words */}
             <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
@@ -277,40 +372,53 @@ export function SpellClient() {
                 <TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} />
               </div>
 
-              <div style={{ fontSize: 12.5, color: "var(--ink-muted,#9CA3AF)", marginTop: 14 }}>
-                {answerLang === "en" ? t("writeEn", lang) : t("writeHe", lang)}
-              </div>
-              <input
-                ref={inputRef}
-                value={typed}
-                onChange={(e) => setTyped(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { result ? next() : check(); } }}
-                dir={answerLang === "he" ? "rtl" : "ltr"}
-                autoCapitalize="off" autoCorrect="off" spellCheck={false}
-                disabled={result === "correct"}
-                style={{
-                  width: "100%", marginTop: 8, padding: "12px 14px", fontSize: 22, fontWeight: 700, textAlign: "center",
-                  borderRadius: 12, border: "2px solid", outline: "none",
-                  borderColor: result === "correct" ? TEAL : result === "wrong" ? "#FCA5A5" : "var(--hairline,#E5E7EB)",
-                  background: result === "correct" ? "#ECFDF5" : "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)",
-                }}
-              />
+              {mode === "type" ? (
+                <>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#9CA3AF)", marginTop: 14 }}>
+                    {answerLang === "en" ? t("writeEn", lang) : t("writeHe", lang)}
+                  </div>
+                  <input
+                    ref={inputRef}
+                    value={typed}
+                    onChange={(e) => setTyped(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { result ? next() : check(); } }}
+                    dir={answerLang === "he" ? "rtl" : "ltr"}
+                    autoCapitalize="off" autoCorrect="off" spellCheck={false}
+                    disabled={result === "correct"}
+                    style={{
+                      width: "100%", marginTop: 8, padding: "12px 14px", fontSize: 22, fontWeight: 700, textAlign: "center",
+                      borderRadius: 12, border: "2px solid", outline: "none",
+                      borderColor: result === "correct" ? TEAL : result === "wrong" ? "#FCA5A5" : "var(--hairline,#E5E7EB)",
+                      background: result === "correct" ? "#ECFDF5" : "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)",
+                    }}
+                  />
 
-              {/* Feedback */}
-              {result === "correct" && (
-                <div style={{ marginTop: 14, fontSize: 16, fontWeight: 800, color: TEAL }}>✓ {t("correct", lang)}</div>
-              )}
-              {result === "wrong" && (
-                <div style={{ marginTop: 14 }}>
-                  <div style={{ fontSize: 13.5, color: "#B91C1C", marginBottom: 6 }}>{t("almost", lang)}</div>
-                  <AnswerDiff answer={answerOf(current)} typedVal={typed} />
-                </div>
-              )}
+                  {/* Feedback */}
+                  {result === "correct" && (
+                    <div style={{ marginTop: 14, fontSize: 16, fontWeight: 800, color: TEAL }}>✓ {t("correct", lang)}</div>
+                  )}
+                  {result === "wrong" && (
+                    <div style={{ marginTop: 14 }}>
+                      <div style={{ fontSize: 13.5, color: "#B91C1C", marginBottom: 6 }}>{t("almost", lang)}</div>
+                      <AnswerDiff answer={answerOf(current)} typedVal={typed} />
+                    </div>
+                  )}
 
-              <button type="button" onClick={() => (result ? next() : check())}
-                style={{ marginTop: 18, width: "100%", padding: "13px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
-                {result ? t("next", lang) : t("check", lang)}
-              </button>
+                  <button type="button" onClick={() => (result ? next() : check())}
+                    style={{ marginTop: 18, width: "100%", padding: "13px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+                    {result ? t("next", lang) : t("check", lang)}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#9CA3AF)", margin: "14px 0 8px" }}>{t("traceHint", lang)}</div>
+                  <TraceCanvas key={promptOf(current) + ":" + idx} word={answerOf(current)} clearLabel={t("clear", lang)} />
+                  <button type="button" onClick={next}
+                    style={{ marginTop: 16, width: "100%", padding: "13px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+                    {t("next", lang)}
+                  </button>
+                </>
+              )}
             </div>
 
             <div style={{ textAlign: "center", marginTop: 14 }}>
