@@ -18,6 +18,7 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { track } from "@/lib/track";
+import { isBlockedSignupEmail } from "@/lib/signup-guard";
 
 function getFirebaseAuth() {
   const firebaseConfig = {
@@ -461,6 +462,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function signUpWithEmail(email: string, password: string) {
+    // Refuse throwaway / relay domains used by signup bots (duck.com alias
+    // spam, Gadi 2026-09). Thrown before Firebase so no account is created.
+    if (isBlockedSignupEmail(email)) {
+      throw new Error("auth/blocked-signup-domain");
+    }
     const auth = getFirebaseAuth();
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     // Fire-and-forget the verification email. We don't block sign-up

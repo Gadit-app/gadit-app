@@ -237,7 +237,10 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
 export function SpellClient() {
   const { lang, dir } = useLang();
   const href = useHref();
-  const { user } = useAuth();
+  const { user, plan, planReady } = useAuth();
+  // Dictation is a Family / Deep feature only (Gadi 2026-09-19): NOT Clear,
+  // NOT Basic. Family and standalone Deep both store plan === "deep".
+  const hasAccess = plan === "deep";
 
   // The non-English side of every pair = the learner's own language. English
   // UI users have no obvious "other" language, so they practice Hebrew (the
@@ -541,6 +544,30 @@ export function SpellClient() {
           <div style={{ textAlign: "center", marginTop: 80 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("loginTitle", lang)}</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Family / Deep only. Wait for the plan to resolve (planReady) so a paying
+  // subscriber never sees the gate flash, then send non-Deep users to pricing.
+  if (planReady && !hasAccess) {
+    return (
+      <div dir={dir} style={page}>
+        <div style={wrap}>
+          <Link href={href("/")} style={{ fontSize: 13, color: "var(--ink-muted,#6B7280)", textDecoration: "none" }}>{dir === "rtl" ? "→" : "←"} Gadit</Link>
+          <div style={{ textAlign: "center", marginTop: 70 }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{t("title", lang)}</h1>
+            <p style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
+              {lang === "he"
+                ? "תרגול ההכתבה זמין למנויי Family. שדרגו כדי לתרגל."
+                : "Dictation practice is available on the Family plan. Upgrade to practice."}
+            </p>
+            <Link href={href("/pricing")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
+              {lang === "he" ? "לתוכניות" : "See plans"}
+            </Link>
           </div>
         </div>
       </div>

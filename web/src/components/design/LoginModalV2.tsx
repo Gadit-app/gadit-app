@@ -96,6 +96,9 @@ export function LoginModalV2() {
   const [showPwd, setShowPwd] = useState(false);
   const [busy, setBusy] = useState(false);
   const [errorKey, setErrorKey] = useState<string>("");
+  // A non-v2 error message (e.g. blocked signup domain) shown in the same slot,
+  // so we don't have to add a key across every language in i18n-v2.
+  const [localError, setLocalError] = useState<string>("");
   // COPPA / GDPR self-attestation — we can't verify age, but we make
   // the user click that they're old enough. Industry-standard minimum.
   const [ageAccepted, setAgeAccepted] = useState(false);
@@ -117,6 +120,7 @@ export function LoginModalV2() {
       setMode(loginMode);
       setBusy(false);
       setErrorKey("");
+      setLocalError("");
       setShowPwd(false);
       setAgeAccepted(false);
     }
@@ -241,12 +245,20 @@ export function LoginModalV2() {
         return;
       }
     }
+    setLocalError("");
     setBusy(true);
     try {
       if (mode === "signin") await signInWithEmail(email, password);
       else await signUpWithEmail(email, password);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("blocked-signup-domain")) {
+        setLocalError(lang === "he"
+          ? "כדי להירשם השתמשו בכתובת אימייל רגילה."
+          : "Please sign up with a regular email address.");
+        setBusy(false);
+        return;
+      }
       // Log the raw Firebase error to the console so we can debug
       // production sign-up failures by asking the user to share their
       // browser console — without exposing the raw text in the UI.
@@ -353,12 +365,12 @@ export function LoginModalV2() {
         )}
 
         <form onSubmit={handleEmail} noValidate>
-          {errorKey && (
+          {(errorKey || localError) && (
             <div
               className={`wb-login-error ${errorKey === "loginResetSent" ? "is-success" : ""}`}
               role="alert"
             >
-              {v2(lang, errorKey as never)}
+              {localError || v2(lang, errorKey as never)}
             </div>
           )}
 
