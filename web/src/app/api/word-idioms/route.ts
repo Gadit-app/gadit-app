@@ -88,13 +88,18 @@ No foreign scripts beyond light transliteration. Everything must be safe for chi
 }
 
 export async function POST(req: NextRequest) {
-  const authHeader = req.headers.get("authorization") || "";
-  const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
-  if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
-  try {
-    await getAdminAuth().verifyIdToken(idToken);
-  } catch {
-    return NextResponse.json({ error: "login_required" }, { status: 401 });
+  // Admin refresh (x-gadit-refresh) bypasses both the cache and the auth gate,
+  // so idiom sets can be pre-warmed from a script without a user token.
+  const isRefresh = !!process.env.ADMIN_SECRET && req.headers.get("x-gadit-refresh") === process.env.ADMIN_SECRET;
+  if (!isRefresh) {
+    const authHeader = req.headers.get("authorization") || "";
+    const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
+    if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
+    try {
+      await getAdminAuth().verifyIdToken(idToken);
+    } catch {
+      return NextResponse.json({ error: "login_required" }, { status: 401 });
+    }
   }
 
   let word = "";
@@ -112,7 +117,6 @@ export async function POST(req: NextRequest) {
 
   const db = getAdminDb();
   const ref = db.collection("wordIdioms").doc(hashKey(lang, word));
-  const isRefresh = !!process.env.ADMIN_SECRET && req.headers.get("x-gadit-refresh") === process.env.ADMIN_SECRET;
   if (!isRefresh) {
     try {
       const snap = await ref.get();
