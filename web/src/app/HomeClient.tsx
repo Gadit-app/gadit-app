@@ -23,7 +23,12 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { KidsGameHeader } from "@/components/design/KidsGameHeader";
-import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
+import nextDynamic from "next/dynamic";
+import { type UpgradeTrigger } from "@/components/UpgradeModal";
+// Code-split the upgrade modal: it's never on the first paint (only shown when
+// a user hits a paid gate), so keep it out of the homepage's critical bundle
+// to lighten mobile load. Gadi 2026-09-23 (PageSpeed pass).
+const UpgradeModal = nextDynamic(() => import("@/components/UpgradeModal").then((m) => m.UpgradeModal), { ssr: false });
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { LANGUAGES } from "@/lib/i18n";
