@@ -28,11 +28,17 @@ import Script from "next/script";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  // Not on the first paint of any page, so don't preload it (Gadi 2026-09-23
+  // PageSpeed fix): every page was preloading all 18 font families, which
+  // dominated the mobile payload and LCP. It loads on demand via swap.
+  preload: false,
+  display: "swap",
 });
 
 const rubik = Rubik({
@@ -43,12 +49,15 @@ const rubik = Rubik({
   // rules render a real italic glyph rather than browser-synthesized
   // skew. The token used to be Lora; now everything routes through Rubik.
   style: ["normal", "italic"],
+  display: "swap", // wordmark is a likely LCP element — never FOIT-block it.
 });
 
 const cairo = Cairo({
   variable: "--font-cairo",
   subsets: ["arabic", "latin"],
   weight: ["400", "500", "600"],
+  preload: false, // Arabic UI only — load on demand (see geistMono note).
+  display: "swap",
 });
 
 // Display serif for word titles, definitions, and "lexical" moments.
@@ -59,6 +68,7 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   axes: ["opsz", "SOFT"],
+  preload: false, // Word-page display serif, not first paint (see geistMono note).
   display: "swap",
 });
 
@@ -70,6 +80,7 @@ const notoNaskhArabic = Noto_Naskh_Arabic({
   variable: "--font-arabic",
   subsets: ["arabic"],
   weight: ["400", "500", "600"],
+  preload: false, // Arabic UI only.
   display: "swap",
 });
 
@@ -81,6 +92,7 @@ const lora = Lora({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
+  preload: false, // Word-page serif only.
   display: "swap",
 });
 
@@ -99,6 +111,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jb-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
+  preload: false, // Rare mono usage, never first paint.
   display: "swap",
 });
 
@@ -122,6 +135,7 @@ const notoSansJp = Noto_Sans_JP({
   variable: "--font-noto-jp",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Japanese UI only — never preload on other languages.
   display: "swap",
 });
 
@@ -135,6 +149,7 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
   variable: "--font-noto-hi",
   subsets: ["latin", "devanagari"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Hindi UI only.
   display: "swap",
 });
 
@@ -146,6 +161,7 @@ const notoSansEthiopic = Noto_Sans_Ethiopic({
   variable: "--font-noto-am",
   subsets: ["latin", "ethiopic"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Amharic UI only.
   display: "swap",
 });
 
@@ -159,6 +175,7 @@ const notoSansSC = Noto_Sans_SC({
   variable: "--font-noto-sc",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Simplified Chinese UI only.
   display: "swap",
 });
 
@@ -166,6 +183,7 @@ const notoSansTC = Noto_Sans_TC({
   variable: "--font-noto-tc",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Traditional Chinese UI only.
   display: "swap",
 });
 
@@ -173,6 +191,7 @@ const notoSansKR = Noto_Sans_KR({
   variable: "--font-noto-kr",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Korean UI only.
   display: "swap",
 });
 
@@ -180,6 +199,7 @@ const notoSansThai = Noto_Sans_Thai({
   variable: "--font-noto-th",
   subsets: ["latin", "thai"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Thai UI only.
   display: "swap",
 });
 
@@ -187,6 +207,7 @@ const notoSansBengali = Noto_Sans_Bengali({
   variable: "--font-noto-bn",
   subsets: ["latin", "bengali"],
   weight: ["400", "500", "600", "700"],
+  preload: false, // Bengali UI only.
   display: "swap",
 });
 
