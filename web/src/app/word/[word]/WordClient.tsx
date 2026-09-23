@@ -1012,6 +1012,7 @@ export function WordClient({
     kidsGenWordRef.current = result.word;
     const meanings = result.meanings ?? [];
     const w = result.word;
+    const authedUser = user; // narrowed non-null above; keep it for the nested workers
     let cancelled = false;
     // Fresh word: clear any stale pictures and mark every meaning as
     // "generating" so each card shows a skeleton until its image lands.
@@ -1021,41 +1022,50 @@ export function WordClient({
       for (let i = 0; i < meanings.length; i++) m[i] = true;
       return m;
     });
-    const clearLoading = (from: number) =>
-      setKidsImgLoading((prev) => {
-        const next = { ...prev };
-        for (let i = from; i < meanings.length; i++) next[i] = false;
-        return next;
-      });
     (async () => {
-      for (let i = 0; i < meanings.length; i++) {
-        if (cancelled) return;
-        try {
-          const idToken = await user.getIdToken();
-          const res = await fetch("/api/generate-image", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-            body: JSON.stringify({
-              word: w,
-              meaning: meanings[i]?.meaning ?? "",
-              example: meanings[i]?.examples?.[0] ?? "",
-              uiLang: lang,
-              kidsMode: true,
-            }),
-          });
-          if (!res.ok) { if (!cancelled) clearLoading(i); return; } // quota / error — stop, drop remaining skeletons
-          const data = (await res.json()) as { url?: string };
-          if (cancelled) return;
-          if (data.url) {
-            const url = data.url;
-            setKidsImages((prev) => ({ ...prev, [i]: url }));
+      // Generate the meanings' pictures CONCURRENTLY (bounded pool) instead of
+      // one-after-another, so a 3-meaning word doesn't take 3x the wait — the
+      // slow part is the image model, and the calls are independent (different
+      // cache keys). Cap concurrency so we don't trip the image-API rate limit.
+      // Gadi 2026-09-23. On a quota (429) we stop starting new ones.
+      const CONCURRENCY = 3;
+      let nextIndex = 0;
+      let stop = false;
+      async function worker() {
+        while (!cancelled && !stop) {
+          const i = nextIndex++;
+          if (i >= meanings.length) return;
+          try {
+            const idToken = await authedUser.getIdToken();
+            const res = await fetch("/api/generate-image", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+              body: JSON.stringify({
+                word: w,
+                meaning: meanings[i]?.meaning ?? "",
+                example: meanings[i]?.examples?.[0] ?? "",
+                uiLang: lang,
+                kidsMode: true,
+              }),
+            });
+            if (!res.ok) {
+              if (res.status === 429) stop = true; // monthly image quota — stop starting new ones
+              if (!cancelled) setKidsImgLoading((prev) => ({ ...prev, [i]: false }));
+              continue;
+            }
+            const data = (await res.json()) as { url?: string };
+            if (cancelled) return;
+            if (data.url) setKidsImages((prev) => ({ ...prev, [i]: data.url as string }));
+            setKidsImgLoading((prev) => ({ ...prev, [i]: false }));
+          } catch {
+            if (!cancelled) setKidsImgLoading((prev) => ({ ...prev, [i]: false }));
+            // network hiccup on one image — keep the others going
           }
-          setKidsImgLoading((prev) => ({ ...prev, [i]: false }));
-        } catch {
-          if (!cancelled) clearLoading(i);
-          return; // network — stop the loop, never disturb the reader
         }
       }
+      await Promise.all(
+        Array.from({ length: Math.min(CONCURRENCY, meanings.length) }, () => worker()),
+      );
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps

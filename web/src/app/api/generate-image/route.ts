@@ -17,7 +17,7 @@ function currentMonthKey(): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
-function cacheKey(word: string, meaning: string, uiLang: string, kidsMode = false): string {
+export function cacheKey(word: string, meaning: string, uiLang: string, kidsMode = false): string {
   const hash = crypto
     .createHash("sha256")
     .update(`${uiLang}|${word.trim().toLowerCase()}|${meaning.trim().toLowerCase()}`)
@@ -52,7 +52,7 @@ function clean(s: string): string {
  * NOT a stack of negations — OpenAI's filter treats long negation lists
  * as risk signals and refuses borderline-fine requests.
  */
-function buildKidsPrompt(word: string, meaning: string): string {
+export function buildKidsPrompt(word: string, meaning: string): string {
   const cleanWord = clean(word);
   const cleanMeaning = clean(meaning.length > 180 ? meaning.slice(0, 180) : meaning);
   return [
@@ -108,7 +108,7 @@ function buildDallePrompt(word: string, meaning: string, example?: string): stri
  * failure so the caller falls back to the legacy prompt. Runs only on a
  * cache miss, so it's one call per unique (word, meaning).
  */
-async function englishBrief(word: string, meaning: string, example: string, uiLang: string): Promise<string> {
+export async function englishBrief(word: string, meaning: string, example: string, uiLang: string): Promise<string> {
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
