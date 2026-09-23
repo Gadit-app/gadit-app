@@ -15,23 +15,25 @@ import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useAuth } from "@/lib/auth-context";
 import { useHref, wordPath } from "@/lib/href";
-import { AppearancePicker } from "@/components/AppearancePicker";
+import nextDynamic from "next/dynamic";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
-import { KidsGameHeader } from "@/components/design/KidsGameHeader";
-import nextDynamic from "next/dynamic";
 import { type UpgradeTrigger } from "@/components/UpgradeModal";
-// Code-split the upgrade modal: it's never on the first paint (only shown when
-// a user hits a paid gate), so keep it out of the homepage's critical bundle
-// to lighten mobile load. Gadi 2026-09-23 (PageSpeed pass).
-const UpgradeModal = nextDynamic(() => import("@/components/UpgradeModal").then((m) => m.UpgradeModal), { ssr: false });
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { LANGUAGES } from "@/lib/i18n";
+
+// Code-split off the anonymous marketing homepage's critical bundle (Gadi
+// 2026-09-23 PageSpeed pass): AppearancePicker + KidsGameHeader render only
+// for kids, and UpgradeModal only on a paid gate, so their JS loads on demand
+// rather than on first paint.
+const AppearancePicker = nextDynamic(() => import("@/components/AppearancePicker").then((m) => m.AppearancePicker), { ssr: false });
+const KidsGameHeader = nextDynamic(() => import("@/components/design/KidsGameHeader").then((m) => m.KidsGameHeader), { ssr: false });
+const UpgradeModal = nextDynamic(() => import("@/components/UpgradeModal").then((m) => m.UpgradeModal), { ssr: false });
 
 // Single source of truth: the shared LANGUAGES registry, so the homepage
 // switcher never drifts behind newly-added UI languages (it used to be a
