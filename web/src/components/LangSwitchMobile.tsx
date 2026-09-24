@@ -69,7 +69,10 @@ export function LangSwitchMobile() {
         className="wb-shell-lang-mobile-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label="Change language"
+        // The accessible name must contain the visible text (the language
+        // code) so voice-control users can say what they see. Lighthouse
+        // a11y fix, Gadi 2026-09-25.
+        aria-label={`${active.code.toUpperCase()}, ${langNameIn(active.code, lang)}`}
         onClick={() => setOpen((v) => !v)}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">

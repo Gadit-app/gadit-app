@@ -5012,14 +5012,21 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   color: var(--ink-muted, #6B7280);
   font-size: 13px;
 }
+/* ipa/pos use the darker muted tokens so the small text meets WCAG AA
+   contrast (Lighthouse a11y pass, Gadi 2026-09-25). */
 .wordbook .wb-verb-stamp-ipa {
   font-style: italic;
-  color: var(--ink-faint, #9CA3AF);
+  color: var(--ink-muted, #5C6270);
 }
 .wordbook .wb-verb-stamp-pos {
-  color: var(--teal, #0EA5A5);
+  color: var(--teal-deep, #0A7472);
   font-weight: 500;
-  opacity: 0.85;
+}
+/* Dark surfaces (adult dark mode + every kid skin) keep a bright accent so the
+   label stays readable there too; each skin defines its own --accent. */
+html[data-theme="dark"] .wordbook .wb-verb-stamp-pos,
+.wb-kid-area .wb-verb-stamp-pos {
+  color: var(--accent, #2DD4BF);
 }
 .wordbook .wb-verb-stamp-dash {
   color: var(--ink-faint, #9CA3AF);
@@ -5140,7 +5147,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   gap: 10px;
   font-family: var(--wb-sans);
   font-size: 12.5px;
-  color: var(--ink-faint);
+  color: var(--ink-muted); /* was --ink-faint: failed AA contrast at 12.5px */
   border-top: 1px solid var(--rule);
 }
 .wordbook .wb-home-footer a {

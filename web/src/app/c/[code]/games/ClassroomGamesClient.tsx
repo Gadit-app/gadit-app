@@ -83,6 +83,131 @@ const COPY: Record<string, {
     hubLede: "ቃላታችሁን ለማጠንከር ጨዋታ ምረጡ",
     backToClassroom: "← ወደ ክፍል ተመለሱ",
   },
+  es: {
+    hubTitle: "Juegos de palabras",
+    hubLede: "Elige un juego para mejorar tu vocabulario",
+    backToClassroom: "← Volver a la clase",
+  },
+  pt: {
+    hubTitle: "Jogos de palavras",
+    hubLede: "Escolha um jogo para treinar seu vocabulário",
+    backToClassroom: "← Voltar para a turma",
+  },
+  fr: {
+    hubTitle: "Jeux de mots",
+    hubLede: "Choisis un jeu pour enrichir ton vocabulaire",
+    backToClassroom: "← Retour à la classe",
+  },
+  de: {
+    hubTitle: "Wortspiele",
+    hubLede: "Wähle ein Spiel und trainiere deinen Wortschatz",
+    backToClassroom: "← Zurück zur Klasse",
+  },
+  cs: {
+    hubTitle: "Slovní hry",
+    hubLede: "Vyber si hru a procvič si slovní zásobu",
+    backToClassroom: "← Zpět do třídy",
+  },
+  sk: {
+    hubTitle: "Slovné hry",
+    hubLede: "Vyber si hru a precvič si slovnú zásobu",
+    backToClassroom: "← Späť do triedy",
+  },
+  it: {
+    hubTitle: "Giochi di parole",
+    hubLede: "Scegli un gioco per allenare il tuo vocabolario",
+    backToClassroom: "← Torna alla classe",
+  },
+  ja: {
+    hubTitle: "ことばゲーム",
+    hubLede: "ゲームをえらんで、ことばの力をきたえよう",
+    backToClassroom: "← クラスにもどる",
+  },
+  uk: {
+    hubTitle: "Ігри зі словами",
+    hubLede: "Обери гру, щоб потренувати свій словниковий запас",
+    backToClassroom: "← Повернутися до класу",
+  },
+  tr: {
+    hubTitle: "Kelime Oyunları",
+    hubLede: "Kelime bilgini geliştirmek için bir oyun seç",
+    backToClassroom: "← Sınıfa dön",
+  },
+  pl: {
+    hubTitle: "Gry słowne",
+    hubLede: "Wybierz grę i poćwicz swoje słownictwo",
+    backToClassroom: "← Wróć do klasy",
+  },
+  fa: {
+    hubTitle: "بازی‌های کلمات",
+    hubLede: "یک بازی انتخاب کن تا دایره واژگانت قوی‌تر شود",
+    backToClassroom: "← بازگشت به کلاس",
+  },
+  id: {
+    hubTitle: "Permainan Kata",
+    hubLede: "Pilih permainan untuk mengasah kosakatamu",
+    backToClassroom: "← Kembali ke kelas",
+  },
+  nl: {
+    hubTitle: "Woordspellen",
+    hubLede: "Kies een spel om je woordenschat te oefenen",
+    backToClassroom: "← Terug naar de klas",
+  },
+  vi: {
+    hubTitle: "Trò chơi từ vựng",
+    hubLede: "Chọn một trò chơi để luyện vốn từ của bạn",
+    backToClassroom: "← Quay lại lớp học",
+  },
+  fil: {
+    hubTitle: "Mga Laro ng Salita",
+    hubLede: "Pumili ng laro para mahasa ang iyong bokabularyo",
+    backToClassroom: "← Bumalik sa klase",
+  },
+  af: {
+    hubTitle: "Woordspeletjies",
+    hubLede: "Kies 'n speletjie om jou woordeskat te oefen",
+    backToClassroom: "← Terug na die klas",
+  },
+  sw: {
+    hubTitle: "Michezo ya Maneno",
+    hubLede: "Chagua mchezo ili kunoa msamiati wako",
+    backToClassroom: "← Rudi darasani",
+  },
+  "zh-CN": {
+    hubTitle: "单词游戏",
+    hubLede: "选一个游戏，练练你的词汇",
+    backToClassroom: "← 返回班级",
+  },
+  "zh-TW": {
+    hubTitle: "單字遊戲",
+    hubLede: "選一個遊戲，練練你的詞彙",
+    backToClassroom: "← 返回班級",
+  },
+  ko: {
+    hubTitle: "단어 게임",
+    hubLede: "게임을 골라 어휘력을 키워 보세요",
+    backToClassroom: "← 반으로 돌아가기",
+  },
+  th: {
+    hubTitle: "เกมคำศัพท์",
+    hubLede: "เลือกเกมมาฝึกคำศัพท์กันเถอะ",
+    backToClassroom: "← กลับไปที่ห้องเรียน",
+  },
+  bn: {
+    hubTitle: "শব্দের খেলা",
+    hubLede: "শব্দভান্ডার বাড়াতে একটা খেলা বেছে নাও",
+    backToClassroom: "← ক্লাসে ফিরে যাও",
+  },
+  da: {
+    hubTitle: "Ordspil",
+    hubLede: "Vælg et spil og træn dit ordforråd",
+    backToClassroom: "← Tilbage til klassen",
+  },
+  hu: {
+    hubTitle: "Szójátékok",
+    hubLede: "Válassz egy játékot, és fejleszd a szókincsedet",
+    backToClassroom: "← Vissza az osztályhoz",
+  },
 };
 
 /** Minimal PlayT factory. We only need the fields the 10 curated games

@@ -49,12 +49,15 @@ export function KidsModeToggle({ plan, onBasicGate }: Props) {
     : v2(lang, "kidsModeTooltipOff");
 
   return (
+    // role="switch" takes aria-checked (not aria-pressed), and the accessible
+    // name comes from the visible "Kids" label so screen-reader and voice-control
+    // users hear/say what they see; the longer explanation stays in `title`.
+    // Lighthouse a11y fix, Gadi 2026-09-25.
     <button
       type="button"
       onClick={handleClick}
       title={tooltip}
-      aria-label={tooltip}
-      aria-pressed={on}
+      aria-checked={on}
       role="switch"
       className={`wb-kids-toggle${on ? " is-on" : ""}`}
     >

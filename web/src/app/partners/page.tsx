@@ -23,6 +23,19 @@ const PARTNERS_OG: Record<string, ShareCopy> = {
   fa: { title: "برنامه همکاری Gadit · از هر اشتراک درآمد کسب کنید", description: "لینک شخصی خود را به اشتراک بگذارید و برای هر مشترک جدید کمیسیون مکرر دریافت کنید: 25% در سال اول، 10% مادام‌العمر. عضویت رایگان است." },
   id: { title: "Program Mitra Gadit · Hasilkan dari setiap langganan", description: "Bagikan tautan pribadi Anda dan dapatkan komisi berulang untuk setiap pelanggan baru: 25% di tahun pertama, 10% seumur hidup. Gratis untuk bergabung." },
   nl: { title: "Gadit Partnerprogramma · Verdien aan elk abonnement", description: "Deel je persoonlijke link en verdien terugkerende commissie voor elke nieuwe abonnee: 25% in het eerste jaar, 10% voor het leven. Gratis deelname." },
+  el: { title: "Πρόγραμμα Συνεργατών Gadit · Κέρδισε από κάθε συνδρομή", description: "Μοιράσου τον προσωπικό σου σύνδεσμο και κέρδισε επαναλαμβανόμενη προμήθεια από κάθε νέο συνδρομητή: 25% τον πρώτο χρόνο, 10% για πάντα. Η συμμετοχή είναι δωρεάν." },
+  zu: { title: "Uhlelo Lozakwethu lwe-Gadit · Zuza kukho konke ukubhalisa", description: "Yabelana ngesixhumanisi sakho somuntu siqu futhi uzuze ikhomishani ebuyayo kuwo wonke umbhalisi omusha: 25% onyakeni wokuqala, 10% impilo yonke. Ukujoyina kumahhala." },
+  vi: { title: "Chương trình Đối tác Gadit · Kiếm tiền từ mỗi gói đăng ký", description: "Chia sẻ liên kết cá nhân của bạn và nhận hoa hồng định kỳ từ mỗi người đăng ký mới: 25% trong năm đầu, 10% trọn đời. Tham gia miễn phí." },
+  fil: { title: "Gadit Partner Program · Kumita sa bawat subscription", description: "Ibahagi ang personal mong link at kumita ng paulit-ulit na komisyon sa bawat bagong subscriber: 25% sa unang taon, 10% habambuhay. Libre ang pagsali." },
+  af: { title: "Gadit Vennootprogram · Verdien op elke intekening", description: "Deel jou persoonlike skakel en verdien herhalende kommissie op elke nuwe intekenaar: 25% in die eerste jaar, 10% lewenslank. Gratis om aan te sluit." },
+  sw: { title: "Mpango wa Washirika wa Gadit · Pata mapato kwa kila usajili", description: "Shiriki kiungo chako binafsi na upate kamisheni inayojirudia kwa kila msajili mpya: 25% mwaka wa kwanza, 10% maisha yote. Kujiunga ni bure." },
+  "zh-CN": { title: "Gadit 合作伙伴计划 · 每笔订阅都有收益", description: "分享你的专属链接，每位新订阅用户都为你带来持续佣金：第一年 25%，之后终身 10%。免费加入。" },
+  "zh-TW": { title: "Gadit 合作夥伴計畫 · 每筆訂閱都有收益", description: "分享你的專屬連結，每位新訂閱者都為你帶來持續佣金：第一年 25%，之後終身 10%。免費加入。" },
+  ko: { title: "Gadit 파트너 프로그램 · 모든 구독에서 수익을", description: "개인 링크를 공유하고 새 구독자마다 반복 수수료를 받으세요. 첫해 25%, 이후 평생 10%. 가입은 무료입니다." },
+  th: { title: "โปรแกรมพาร์ทเนอร์ Gadit · รับรายได้จากทุกการสมัครสมาชิก", description: "แชร์ลิงก์ส่วนตัวของคุณและรับค่าคอมมิชชันต่อเนื่องจากสมาชิกใหม่ทุกคน: 25% ในปีแรก และ 10% ตลอดไป สมัครฟรี" },
+  bn: { title: "Gadit পার্টনার প্রোগ্রাম · প্রতিটি সাবস্ক্রিপশনে আয় করুন", description: "আপনার ব্যক্তিগত লিংক শেয়ার করুন এবং প্রতিটি নতুন সাবস্ক্রাইবারের জন্য নিয়মিত কমিশন পান: প্রথম বছরে 25%, আজীবন 10%। যোগ দেওয়া বিনামূল্যে।" },
+  da: { title: "Gadit Partnerprogram · Tjen på hvert abonnement", description: "Del dit personlige link og tjen tilbagevendende provision på hver ny abonnent: 25% det første år, 10% på livstid. Gratis at deltage." },
+  hu: { title: "Gadit Partnerprogram · Keress minden előfizetésen", description: "Oszd meg a személyes linkedet, és kapj ismétlődő jutalékot minden új előfizető után: 25% az első évben, 10% egy életen át. A csatlakozás ingyenes." },
 };
 
 /**
