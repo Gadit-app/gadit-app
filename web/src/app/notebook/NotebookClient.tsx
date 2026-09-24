@@ -25,6 +25,7 @@ import { KidsGameHeader } from "@/components/design/KidsGameHeader";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
 import { NOTEBOOK_DICT_EXTRA, SPELL_T_EXTRA } from "@/lib/spell-i18n";
+import { misc } from "@/lib/misc-i18n";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -561,19 +562,7 @@ export function NotebookPage() {
             <path d="M1.5 9.5a15 15 0 0 1 21 0" />
             <line x1="2" y1="2" x2="22" y2="22" />
           </svg>
-          {lang === "he" ? `אין חיבור לאינטרנט · ${offlineWords.size} מילים זמינות`
-            : lang === "ar" ? `لا يوجد اتصال · ${offlineWords.size} كلمات متاحة بدون إنترنت`
-            : lang === "ru" ? `Нет интернета · ${offlineWords.size} слов доступны офлайн`
-            : lang === "es" ? `Sin conexión · ${offlineWords.size} palabras disponibles offline`
-            : lang === "pt" ? `Sem conexão · ${offlineWords.size} palavras disponíveis offline`
-            : lang === "fr" ? `Hors ligne · ${offlineWords.size} mots disponibles`
-            : lang === "de" ? `Offline · ${offlineWords.size} Wörter verfügbar`
-            : lang === "cs" ? `Bez připojení · ${offlineWords.size} slov dostupných offline`
-            : lang === "sk" ? `Bez pripojenia · ${offlineWords.size} slov dostupných offline`
-            : lang === "it" ? `Offline · ${offlineWords.size} parole disponibili`
-            : lang === "ja" ? `オフライン · ${offlineWords.size} 語が利用可能`
-            : lang === "hi" ? `ऑफ़लाइन · ${offlineWords.size} शब्द उपलब्ध`
-            : `You're offline · ${offlineWords.size} words available`}
+          {misc("offlineBanner", lang, offlineWords.size)}
         </div>
       )}
       <header className="wb-shell-topbar">
@@ -744,19 +733,7 @@ export function NotebookPage() {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
-                        {lang === "he" ? "זמין אופליין"
-                          : lang === "ar" ? "متاح بدون إنترنت"
-                          : lang === "ru" ? "Доступно офлайн"
-                          : lang === "es" ? "Sin conexión"
-                          : lang === "pt" ? "Offline"
-                          : lang === "fr" ? "Hors ligne"
-                          : lang === "de" ? "Offline"
-                          : lang === "cs" ? "Offline"
-                          : lang === "sk" ? "Offline"
-                          : lang === "it" ? "Offline"
-                          : lang === "ja" ? "オフライン"
-                          : lang === "hi" ? "ऑफ़लाइन"
-                          : "Offline"}
+                        {misc("offlineBadge", lang)}
                       </div>
                     )}
                   </Link>

@@ -1158,6 +1158,512 @@ const GROUP_COPY: Record<string, GroupCopy> = {
     },
     bubble: "Now I gad it!",
   },
+  vi: {
+    groupTitles: {
+      understand: "Hiểu từ",
+      learn: <>Hiểu và <Hl>nhìn thấy</Hl> từ</>,
+      master: <>Hiểu, nhìn thấy và <Hl>nhớ từ mãi mãi</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Mọi nghĩa của từ, câu thật trong ngữ cảnh, các thành ngữ có chứa từ đó và nguồn gốc của nó.",
+      learn:
+        "Hình ảnh cho từ, phiên bản dễ hiểu cho trẻ em, sổ tay cá nhân và một câu do bạn tự viết kèm nhận xét.",
+      master:
+        "Bài kiểm tra cá nhân hóa và trò chơi từ vựng giúp ghi nhớ từ thật lâu.",
+    },
+    family: {
+      title: <>Hiểu, nhìn thấy, ghi nhớ <Hl>cho cả gia đình</Hl></>,
+      sub: "Một gói đăng ký cho mỗi thành viên trong gia đình một tài khoản riêng, với đầy đủ tính năng nâng cao. Tối đa 5 trẻ.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Hồ sơ riêng cho từng thành viên",
+          body: "Sổ tay từ vựng, lịch sử tra cứu và chuỗi ngày học riêng cho từng trẻ và từng phụ huynh.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Kết nối thiết bị bằng mã QR",
+          body: "Con bạn quét mã QR trên điện thoại của mình và đăng nhập. Luôn được kết nối, không cần mật khẩu.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Bảng điều khiển cho phụ huynh",
+          body: "Xem từng từ mỗi trẻ đã tra và vào lúc nào, theo dõi tiến độ của con chỉ trong một cái nhìn.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Tối đa 5 trẻ trong một gói đăng ký",
+          body: "Mỗi trẻ đều có đầy đủ tính năng Deep. Phụ huynh chỉ trả một lần cho cả gia đình.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  fil: {
+    groupTitles: {
+      understand: "Unawain ang salita",
+      learn: <>Unawain at <Hl>makita</Hl> ang salita</>,
+      master: <>Unawain, makita, at <Hl>tandaan ang salita habambuhay</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Bawat kahulugan, totoong mga pangungusap sa konteksto, ang mga idyomang kinabibilangan nito, at kung saan ito nagmula.",
+      learn:
+        "Larawan para sa salita, bersyong madaling maintindihan ng bata, personal na notebook, at pangungusap na isusulat mo na may puna.",
+      master:
+        "Mga personalisadong pagsusulit at laro ng salita na nagpapatatag sa salita sa pangmatagalan.",
+    },
+    family: {
+      title: <>Unawain, makita, tandaan <Hl>para sa buong pamilya</Hl></>,
+      sub: "Sa isang subscription, may sariling account ang bawat miyembro ng pamilya, kasama ang lahat ng advanced na feature. Hanggang 5 bata.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Hiwalay na profile para sa bawat miyembro",
+          body: "Word notebook, kasaysayan ng paghahanap, at sariling learning streak para sa bawat bata at magulang.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Ikonekta ang device gamit ang QR code",
+          body: "I-scan lang ng anak mo ang QR sa kanyang phone at makakapag-sign in na. Nakakonekta na habambuhay, walang password.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Dashboard para sa magulang",
+          body: "Makita ang bawat salitang hinanap ng bawat anak at kung kailan, at subaybayan ang kanilang takbo sa isang tingin.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Hanggang 5 bata sa isang subscription",
+          body: "Kumpleto ang Deep features ng bawat bata. Isang bayad lang ng magulang para sa buong pamilya.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  af: {
+    groupTitles: {
+      understand: "Verstaan die woord",
+      learn: <>Verstaan en <Hl>sien</Hl> die woord</>,
+      master: <>Verstaan, sien en <Hl>onthou die woord vir altyd</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Elke betekenis, regte sinne in konteks, die idiome waarin dit voorkom, en waar dit vandaan kom.",
+      learn:
+        "'n Prent vir die woord, 'n kindervriendelike weergawe, 'n persoonlike notaboek, en 'n sin wat jy skryf met terugvoer.",
+      master:
+        "Persoonlike vasvrae en woordspeletjies wat die woord vir die lang termyn vaslê.",
+    },
+    family: {
+      title: <>Verstaan, sien, onthou <Hl>vir die hele gesin</Hl></>,
+      sub: "Een intekening gee elke gesinslid 'n eie rekening, met al die gevorderde funksies. Tot 5 kinders.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "'n Aparte profiel vir elke gesinslid",
+          body: "Woordnotaboek, soekgeskiedenis en 'n persoonlike leerreeks vir elke kind en ouer.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Koppel 'n toestel met 'n QR-kode",
+          body: "Jou kind skandeer 'n QR op hul foon en meld aan. Bly vir altyd gekoppel, sonder 'n wagwoord.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Ouerpaneel",
+          body: "Sien elke woord wat elke kind opgesoek het en wanneer, en volg hul tempo in een oogopslag.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Tot 5 kinders op een intekening",
+          body: "Elke kind kry al die Deep-funksies. Die ouer betaal een keer vir die hele gesin.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  sw: {
+    groupTitles: {
+      understand: "Elewa neno",
+      learn: <>Elewa na <Hl>uone</Hl> neno</>,
+      master: <>Elewa, uone, na <Hl>ukumbuke neno milele</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Kila maana, sentensi halisi katika muktadha, nahau zinazolitumia, na asili yake.",
+      learn:
+        "Picha ya neno, toleo rahisi kwa watoto, daftari binafsi, na sentensi unayoandika ukipata maoni.",
+      master:
+        "Majaribio binafsi na michezo ya maneno inayoimarisha neno kwa muda mrefu.",
+    },
+    family: {
+      title: <>Elewa, ona, kumbuka <Hl>kwa familia nzima</Hl></>,
+      sub: "Usajili mmoja unampa kila mwanafamilia akaunti yake, pamoja na vipengele vyote vya hali ya juu. Hadi watoto 5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Wasifu tofauti kwa kila mwanafamilia",
+          body: "Daftari la maneno, historia ya utafutaji, na mfululizo binafsi wa kujifunza kwa kila mtoto na mzazi.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Unganisha kifaa kwa msimbo wa QR",
+          body: "Mtoto wako anachanganua QR kwenye simu yake na kuingia. Kinabaki kimeunganishwa milele, bila nenosiri.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Dashibodi ya mzazi",
+          body: "Ona kila neno ambalo kila mtoto alitafuta na lini, fuatilia kasi yao kwa mtazamo mmoja.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Hadi watoto 5 kwa usajili mmoja",
+          body: "Kila mtoto anapata vipengele vyote vya Deep. Mzazi analipa mara moja kwa familia nzima.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  "zh-CN": {
+    groupTitles: {
+      understand: "理解这个词",
+      learn: <>理解并<Hl>看见</Hl>这个词</>,
+      master: <>理解、看见，并<Hl>永远记住这个词</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "每一个词义、真实语境中的例句、包含它的习语，以及它的来源。",
+      learn:
+        "为单词配的图片、适合孩子的简单解释、个人单词本，以及你亲手写下并获得反馈的句子。",
+      master:
+        "个性化测验和单词游戏，让这个词长久牢记。",
+    },
+    family: {
+      title: <>理解、看见、记住，<Hl>全家一起</Hl></>,
+      sub: "一份订阅让每位家庭成员都拥有自己的账户，并享有全部高级功能。最多 5 个孩子。",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "每位家庭成员都有独立档案",
+          body: "每个孩子和家长都有自己的单词本、搜索记录和连续学习记录。",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "扫描二维码连接设备",
+          body: "孩子用自己的手机扫描二维码即可登录。永久保持连接，无需密码。",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "家长面板",
+          body: "查看每个孩子查过的每一个词以及查询时间，一眼掌握孩子的学习节奏。",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "一份订阅最多 5 个孩子",
+          body: "每个孩子都能使用 Deep 的全部功能。家长只需为全家付一次费。",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  "zh-TW": {
+    groupTitles: {
+      understand: "理解這個詞",
+      learn: <>理解並<Hl>看見</Hl>這個詞</>,
+      master: <>理解、看見，並<Hl>永遠記住這個詞</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "每一個詞義、真實語境中的例句、包含它的慣用語，以及它的來源。",
+      learn:
+        "為單字配的圖片、適合孩子的簡單解釋、個人單字本，以及你親手寫下並獲得回饋的句子。",
+      master:
+        "個人化測驗和單字遊戲，讓這個詞長久牢記。",
+    },
+    family: {
+      title: <>理解、看見、記住，<Hl>全家一起</Hl></>,
+      sub: "一份訂閱讓每位家庭成員都擁有自己的帳號，並享有全部進階功能。最多 5 個孩子。",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "每位家庭成員都有獨立檔案",
+          body: "每個孩子和家長都有自己的單字本、搜尋紀錄和連續學習紀錄。",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "掃描 QR 碼連結裝置",
+          body: "孩子用自己的手機掃描 QR 碼即可登入。永久保持連結，不需要密碼。",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "家長儀表板",
+          body: "查看每個孩子查過的每一個詞以及查詢時間，一眼掌握孩子的學習步調。",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "一份訂閱最多 5 個孩子",
+          body: "每個孩子都能使用 Deep 的全部功能。家長只需為全家付一次費用。",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  ko: {
+    groupTitles: {
+      understand: "단어를 이해하기",
+      learn: <>단어를 이해하고 <Hl>눈으로 보기</Hl></>,
+      master: <>이해하고, 보고, <Hl>단어를 오래오래 기억하기</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "모든 뜻, 문맥 속 실제 예문, 그 단어가 쓰이는 관용구, 그리고 어원까지.",
+      learn:
+        "단어 그림, 아이 눈높이에 맞춘 설명, 나만의 단어장, 그리고 직접 쓴 문장에 대한 피드백.",
+      master:
+        "맞춤형 퀴즈와 단어 게임으로 단어를 오래 기억에 남깁니다.",
+    },
+    family: {
+      title: <>이해하고, 보고, 기억하기. <Hl>온 가족이 함께</Hl></>,
+      sub: "구독 하나로 가족 모두가 각자의 계정을 갖고 모든 고급 기능을 사용할 수 있습니다. 자녀는 최대 5명까지.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "가족 구성원마다 별도 프로필",
+          body: "자녀와 부모 모두에게 각자의 단어장, 검색 기록, 학습 연속 기록이 있습니다.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "QR 코드로 기기 연결",
+          body: "자녀가 자기 휴대폰으로 QR을 스캔하면 바로 로그인됩니다. 비밀번호 없이 계속 연결된 상태로 유지됩니다.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "부모 대시보드",
+          body: "자녀가 언제 어떤 단어를 찾아봤는지 확인하고, 학습 속도를 한눈에 살펴볼 수 있습니다.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "구독 하나로 자녀 최대 5명",
+          body: "모든 자녀가 Deep의 전체 기능을 사용합니다. 부모는 가족 전체를 위해 한 번만 결제합니다.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  th: {
+    groupTitles: {
+      understand: "เข้าใจคำศัพท์",
+      learn: <>เข้าใจและ<Hl>มองเห็น</Hl>คำศัพท์</>,
+      master: <>เข้าใจ มองเห็น และ<Hl>จำคำศัพท์ได้ตลอดไป</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "ทุกความหมาย ประโยคจริงในบริบท สำนวนที่ใช้คำนั้น และที่มาของคำ",
+      learn:
+        "ภาพประกอบคำศัพท์ คำอธิบายที่เด็กเข้าใจง่าย สมุดคำศัพท์ส่วนตัว และประโยคที่คุณเขียนเองพร้อมคำแนะนำ",
+      master:
+        "แบบทดสอบเฉพาะตัวและเกมคำศัพท์ที่ช่วยให้จำคำได้ในระยะยาว",
+    },
+    family: {
+      title: <>เข้าใจ มองเห็น จดจำ <Hl>สำหรับทั้งครอบครัว</Hl></>,
+      sub: "สมัครสมาชิกครั้งเดียว สมาชิกทุกคนในครอบครัวได้บัญชีของตัวเอง พร้อมฟีเจอร์ขั้นสูงทั้งหมด รองรับเด็กได้สูงสุด 5 คน",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "โปรไฟล์แยกสำหรับสมาชิกแต่ละคน",
+          body: "สมุดคำศัพท์ ประวัติการค้นหา และสถิติการเรียนต่อเนื่องส่วนตัว สำหรับเด็กและผู้ปกครองทุกคน",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "เชื่อมต่ออุปกรณ์ด้วยคิวอาร์โค้ด",
+          body: "ลูกของคุณสแกนคิวอาร์บนโทรศัพท์ของตัวเองแล้วเข้าสู่ระบบได้ทันที เชื่อมต่อไว้ตลอด ไม่ต้องใช้รหัสผ่าน",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "แดชบอร์ดสำหรับผู้ปกครอง",
+          body: "ดูทุกคำที่ลูกแต่ละคนค้นหาและเวลาที่ค้นหา ติดตามความก้าวหน้าได้ในพริบตา",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "เด็กสูงสุด 5 คนในการสมัครครั้งเดียว",
+          body: "เด็กทุกคนได้ใช้ฟีเจอร์ Deep ครบทุกอย่าง ผู้ปกครองจ่ายครั้งเดียวสำหรับทั้งครอบครัว",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  bn: {
+    groupTitles: {
+      understand: "শব্দটি বোঝো",
+      learn: <>শব্দটি বোঝো এবং <Hl>দেখো</Hl></>,
+      master: <>বোঝো, দেখো এবং <Hl>শব্দটি চিরকাল মনে রাখো</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "প্রতিটি অর্থ, প্রসঙ্গসহ বাস্তব বাক্য, যেসব বাগধারায় শব্দটি থাকে, আর এটি কোথা থেকে এসেছে।",
+      learn:
+        "শব্দের জন্য একটি ছবি, শিশুদের উপযোগী সহজ ব্যাখ্যা, একটি ব্যক্তিগত নোটবুক, আর নিজের লেখা একটি বাক্য, সঙ্গে মতামত।",
+      master:
+        "ব্যক্তিগত কুইজ আর শব্দের খেলা, যা শব্দটিকে দীর্ঘ সময় মনে গেঁথে রাখে।",
+    },
+    family: {
+      title: <>বোঝো, দেখো, মনে রাখো <Hl>পুরো পরিবারের জন্য</Hl></>,
+      sub: "একটি সাবস্ক্রিপশনে পরিবারের প্রত্যেক সদস্য পান নিজের অ্যাকাউন্ট, সব উন্নত ফিচারসহ। সর্বোচ্চ ৫টি শিশু।",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "প্রত্যেক সদস্যের জন্য আলাদা প্রোফাইল",
+          body: "প্রতিটি শিশু ও অভিভাবকের জন্য শব্দের নোটবুক, খোঁজার ইতিহাস এবং ব্যক্তিগত শেখার ধারাবাহিকতা।",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "QR কোড দিয়ে ডিভাইস যুক্ত করুন",
+          body: "আপনার সন্তান নিজের ফোনে QR স্ক্যান করলেই সাইন ইন হয়ে যায়। চিরকাল যুক্ত থাকে, কোনো পাসওয়ার্ড লাগে না।",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "অভিভাবকের ড্যাশবোর্ড",
+          body: "প্রতিটি শিশু কোন শব্দ কখন খুঁজেছে তা দেখুন, এক নজরে তাদের অগ্রগতি অনুসরণ করুন।",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "একটি সাবস্ক্রিপশনে সর্বোচ্চ ৫টি শিশু",
+          body: "প্রতিটি শিশু পায় Deep-এর সব ফিচার। অভিভাবক পুরো পরিবারের জন্য একবারই পেমেন্ট করেন।",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  da: {
+    groupTitles: {
+      understand: "Forstå ordet",
+      learn: <>Forstå og <Hl>se</Hl> ordet</>,
+      master: <>Forstå, se og <Hl>husk ordet for altid</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Alle betydninger, rigtige sætninger i kontekst, de talemåder ordet indgår i, og hvor det kommer fra.",
+      learn:
+        "Et billede til ordet, en børnevenlig version, en personlig notesbog og en sætning, du selv skriver, med feedback.",
+      master:
+        "Personlige quizzer og ordspil, der får ordet til at sidde fast på lang sigt.",
+    },
+    family: {
+      title: <>Forstå, se, husk <Hl>for hele familien</Hl></>,
+      sub: "Ét abonnement giver hvert familiemedlem sin egen konto med alle de avancerede funktioner. Op til 5 børn.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "En separat profil til hvert familiemedlem",
+          body: "Ordnotesbog, søgehistorik og personlig læringsstreak for hvert barn og hver forælder.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Forbind en enhed med en QR-kode",
+          body: "Dit barn scanner en QR-kode på sin telefon og logger ind. Forbundet for altid, uden adgangskode.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Forældreoversigt",
+          body: "Se hvert ord, hvert barn har slået op, og hvornår, og følg deres tempo med ét blik.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Op til 5 børn på ét abonnement",
+          body: "Hvert barn får alle Deep-funktioner. Forælderen betaler én gang for hele familien.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
+  hu: {
+    groupTitles: {
+      understand: "Értsd meg a szót",
+      learn: <>Értsd meg és <Hl>lásd</Hl> a szót</>,
+      master: <>Értsd meg, lásd, és <Hl>jegyezd meg a szót örökre</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Minden jelentés, valódi mondatok szövegkörnyezetben, a szólások, amelyekben előfordul, és hogy honnan ered.",
+      learn:
+        "Kép a szóhoz, gyerekbarát változat, saját szójegyzet, és egy mondat, amelyet te írsz, visszajelzéssel.",
+      master:
+        "Személyre szabott kvízek és szójátékok, amelyek hosszú távon rögzítik a szót.",
+    },
+    family: {
+      title: <>Megérteni, látni, megjegyezni <Hl>az egész családnak</Hl></>,
+      sub: "Egy előfizetéssel minden családtag saját fiókot kap, az összes haladó funkcióval. Legfeljebb 5 gyerek.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Külön profil minden családtagnak",
+          body: "Szójegyzet, keresési előzmények és saját tanulási sorozat minden gyereknek és szülőnek.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Eszköz párosítása QR-kóddal",
+          body: "A gyerek beolvas egy QR-kódot a saját telefonján, és már be is jelentkezett. Örökre párosítva marad, jelszó nélkül.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Szülői irányítópult",
+          body: "Lásd, melyik gyerek milyen szót keresett és mikor, és kövesd a tempójukat egy pillantással.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Legfeljebb 5 gyerek egy előfizetéssel",
+          body: "Minden gyerek megkapja az összes Deep funkciót. A szülő egyszer fizet az egész családért.",
+        },
+      ],
+    },
+    bubble: "Now I gad it!",
+  },
 };
 
 function pickGroupCopy(lang: string): GroupCopy {

@@ -20,6 +20,7 @@ import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { langNameIn } from "@/lib/i18n";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
+import { misc } from "@/lib/misc-i18n";
 
 // Internal direction ids: "he2en" = native → English, "en2he" = English →
 // native. The "he" in the name is legacy — the non-English side is the
@@ -561,12 +562,10 @@ export function SpellClient() {
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{t("title", lang)}</h1>
             <p style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
-              {lang === "he"
-                ? "תרגול ההכתבה זמין למנויי Family. שדרגו כדי לתרגל."
-                : "Dictation practice is available on the Family plan. Upgrade to practice."}
+              {misc("spellGate", lang)}
             </p>
             <Link href={href("/pricing")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
-              {lang === "he" ? "לתוכניות" : "See plans"}
+              {misc("seePlans", lang)}
             </Link>
           </div>
         </div>
@@ -713,7 +712,7 @@ export function SpellClient() {
                   <span style={{ width: 40, height: 40, flex: "none", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 20, background: TEAL + "1A" }}>{loadingCat === s.id ? "⏳" : s.icon}</span>
                   <span>
                     <span style={{ display: "block", fontSize: 15, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{getCatTitle(s.id, lang)}</span>
-                    <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{s.words.length} {lang === "he" ? "מילים" : "words"}</span>
+                    <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{s.words.length} {misc("words", lang)}</span>
                   </span>
                 </button>
               ))}

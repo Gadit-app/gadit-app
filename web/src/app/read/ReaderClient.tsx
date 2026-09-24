@@ -14,6 +14,7 @@ import { PassageKeyWords } from "@/components/design/PassageKeyWords";
 import { GuideButton } from "@/components/GuideButton";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { misc } from "@/lib/misc-i18n";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -593,12 +594,12 @@ export function ReaderClient() {
                       onClick={stopCamera}
                       style={{ background: "none", border: "none", color: "#fff", fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: 8 }}
                     >
-                      {lang === "he" ? "ביטול" : lang === "ar" ? "إلغاء" : lang === "ru" ? "Отмена" : "Cancel"}
+                      {misc("cancel", lang)}
                     </button>
                     <button
                       type="button"
                       onClick={shootPhoto}
-                      aria-label={lang === "he" ? "צלם" : "Capture"}
+                      aria-label={misc("capture", lang)}
                       style={{ width: 72, height: 72, borderRadius: "50%", background: "#fff", border: "5px solid rgba(255,255,255,0.45)", cursor: "pointer", boxShadow: "0 0 0 2px #000 inset" }}
                     />
                     <span style={{ width: 60 }} aria-hidden="true" />
