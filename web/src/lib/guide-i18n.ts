@@ -69,7 +69,7 @@ const G: Dict = {
   "search.title": { en: "Search a word", he: "איך מחפשים מילה" },
   "search.desc": { en: "Type any word and get all its meanings, examples and a picture.", he: "מקלידים מילה ומקבלים את כל המשמעויות, דוגמאות ותמונה." },
   "search.s1": { en: "Type any word you don't understand in the search box.", he: "הקלידו כל מילה שלא הבנתם בתיבת החיפוש." },
-  "search.s2": { en: "Gadit shows every meaning, not just one, each with examples.", he: "גדית מראה את כל המשמעויות, לא רק אחת, כל אחת עם דוגמאות." },
+  "search.s2": { en: "Gadit shows every meaning, not just one, each with examples.", he: "Gadit מראה את כל המשמעויות, לא רק אחת, כל אחת עם דוגמאות." },
   "search.s3": { en: "Scroll down for a picture and where the word comes from.", he: "גוללים למטה לתמונה ולמקור המילה." },
 
   // ── guide: save ──
@@ -176,7 +176,7 @@ const G: Dict = {
   "context.title": { en: "Context mode", he: "מצב הקשר" },
   "context.desc": { en: "Paste a sentence and get the exact meaning that fits it.", he: "מדביקים משפט ומקבלים את המשמעות שמתאימה לו בדיוק." },
   "context.s1": { en: "Paste a sentence from the book into the context box.", he: "מדביקים משפט מהספר בתיבת ההקשר." },
-  "context.s2": { en: "Gadit picks the exact meaning that fits that sentence.", he: "גדית בוחר בדיוק את המשמעות שמתאימה למשפט." },
+  "context.s2": { en: "Gadit picks the exact meaning that fits that sentence.", he: "Gadit בוחר בדיוק את המשמעות שמתאימה למשפט." },
 
   // ── guide: wordExtras ──
   "extras.title": { en: "Opposites & word questions", he: "הפכים ושאלות על המילה" },
