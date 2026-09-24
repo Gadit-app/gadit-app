@@ -40,6 +40,26 @@ import { resolvePartnerArea } from "@/lib/partner-nav";
 const partnerStatusCache = new Map<string, boolean>();
 import type { Lang } from "@/lib/i18n";
 
+const WORD_SETS_COPY: Record<string, string> = {
+  en: "Word sets", he: "קבוצות מילים", ar: "مجموعات كلمات", ru: "Наборы слов", es: "Grupos de palabras",
+  pt: "Conjuntos de palavras", fr: "Listes de mots", de: "Wortlisten", cs: "Sady slov", sk: "Sady slov",
+  it: "Gruppi di parole", ja: "単語セット", hi: "शब्द समूह", am: "የቃላት ስብስቦች", uk: "Набори слів",
+  tr: "Kelime setleri", pl: "Zestawy słów", fa: "مجموعه‌های واژه", id: "Kumpulan kata", nl: "Woordensets",
+  el: "Σύνολα λέξεων", zu: "Amaqoqo amagama", vi: "Bộ từ vựng", fil: "Mga set ng salita", af: "Woordstelle",
+  sw: "Seti za maneno", "zh-CN": "词汇组", "zh-TW": "詞彙組", ko: "단어 세트", th: "ชุดคำศัพท์",
+  bn: "শব্দের সেট", da: "Ordsæt", hu: "Szócsomagok",
+};
+
+const INVITE_FRIENDS_COPY: Record<string, string> = {
+  en: "Invite friends", he: "הזמנת חברים", ar: "دعوة الأصدقاء", ru: "Пригласить друзей", es: "Invitar amigos",
+  pt: "Convidar amigos", fr: "Inviter des amis", de: "Freunde einladen", cs: "Pozvat přátele", sk: "Pozvať priateľov",
+  it: "Invita amici", ja: "友だちを招待", hi: "दोस्तों को आमंत्रित करें", am: "ጓደኞችን ይጋብዙ", uk: "Запросити друзів",
+  tr: "Arkadaşlarını davet et", pl: "Zaproś znajomych", fa: "دعوت از دوستان", id: "Undang teman", nl: "Vrienden uitnodigen",
+  el: "Πρόσκληση φίλων", zu: "Mema abangani", vi: "Mời bạn bè", fil: "Mag-imbita ng mga kaibigan", af: "Nooi vriende",
+  sw: "Alika marafiki", "zh-CN": "邀请好友", "zh-TW": "邀請好友", ko: "친구 초대", th: "ชวนเพื่อน",
+  bn: "বন্ধুদের আমন্ত্রণ জানান", da: "Inviter venner", hu: "Barátok meghívása",
+};
+
 // "Dark mode" label — kept as a small local map (en fallback) so adding
 // the toggle doesn't force a field into every COPY entry. (Gadi 2026-08-18)
 export const DARK_LABEL: Record<string, string> = {
@@ -456,7 +476,7 @@ export function WbUserMenu() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              {lang === "he" ? "קבוצות מילים" : "Word sets"}
+              {WORD_SETS_COPY[lang] ?? WORD_SETS_COPY.en}
             </Link>
           )}
           {/* Invite friends (member-gets-member). Hidden from kids, and from
@@ -479,7 +499,7 @@ export function WbUserMenu() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              {lang === "he" ? "הזמנת חברים" : "Invite friends"}
+              {INVITE_FRIENDS_COPY[lang] ?? INVITE_FRIENDS_COPY.en}
             </Link>
           )}
           {/* Partner area is commercial — never shown to a kid. A user who

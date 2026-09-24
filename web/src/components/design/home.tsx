@@ -595,11 +595,15 @@ export function HomeFooter() {
     pt: "Apresentações", fr: "Présentations", de: "Präsentationen", it: "Presentazioni",
     nl: "Presentaties", pl: "Prezentacje", tr: "Sunumlar", uk: "Презентації",
     cs: "Prezentace", sk: "Prezentácie", el: "Παρουσιάσεις", id: "Presentasi",
+    ja: "資料", hi: "प्रस्तुतियाँ", am: "ማቅረቢያዎች", fa: "ارائه‌ها", zu: "Izethulo",
+    vi: "Bài thuyết trình", fil: "Mga presentasyon", af: "Aanbiedings", sw: "Mawasilisho",
+    "zh-CN": "演示文稿", "zh-TW": "簡報", ko: "소개 자료", th: "งานนำเสนอ", bn: "উপস্থাপনা",
+    da: "Præsentationer", hu: "Bemutatók",
   };
   const deckItems: Array<{ key: string; label: Record<string, string> }> = [
-    { key: "schools", label: { en: "For schools", he: "לבתי ספר", ar: "للمدارس", ru: "Для школ", es: "Para escuelas", pt: "Para escolas", fr: "Pour les écoles", de: "Für Schulen" } },
-    { key: "families", label: { en: "For families", he: "למשפחות", ar: "للعائلات", ru: "Для семей", es: "Para familias", pt: "Para famílias", fr: "Pour les familles", de: "Für Familien" } },
-    { key: "individuals", label: { en: "For you", he: "ליחידים", ar: "للأفراد", ru: "Для вас", es: "Para ti", pt: "Para você", fr: "Pour vous", de: "Für dich" } },
+    { key: "schools", label: { en: "For schools", he: "לבתי ספר", ar: "للمدارس", ru: "Для школ", es: "Para escuelas", pt: "Para escolas", fr: "Pour les écoles", de: "Für Schulen", cs: "Pro školy", sk: "Pre školy", it: "Per le scuole", ja: "学校向け", hi: "स्कूलों के लिए", am: "ለትምህርት ቤቶች", uk: "Для шкіл", tr: "Okullar için", pl: "Dla szkół", fa: "برای مدارس", id: "Untuk sekolah", nl: "Voor scholen", el: "Για σχολεία", zu: "Ezikoleni", vi: "Cho trường học", fil: "Para sa mga paaralan", af: "Vir skole", sw: "Kwa shule", "zh-CN": "面向学校", "zh-TW": "學校適用", ko: "학교용", th: "สำหรับโรงเรียน", bn: "স্কুলের জন্য", da: "Til skoler", hu: "Iskoláknak" } },
+    { key: "families", label: { en: "For families", he: "למשפחות", ar: "للعائلات", ru: "Для семей", es: "Para familias", pt: "Para famílias", fr: "Pour les familles", de: "Für Familien", cs: "Pro rodiny", sk: "Pre rodiny", it: "Per le famiglie", ja: "家族向け", hi: "परिवारों के लिए", am: "ለቤተሰቦች", uk: "Для сімей", tr: "Aileler için", pl: "Dla rodzin", fa: "برای خانواده‌ها", id: "Untuk keluarga", nl: "Voor gezinnen", el: "Για οικογένειες", zu: "Emindenini", vi: "Cho gia đình", fil: "Para sa mga pamilya", af: "Vir gesinne", sw: "Kwa familia", "zh-CN": "面向家庭", "zh-TW": "家庭適用", ko: "가족용", th: "สำหรับครอบครัว", bn: "পরিবারের জন্য", da: "Til familier", hu: "Családoknak" } },
+    { key: "individuals", label: { en: "For you", he: "ליחידים", ar: "للأفراد", ru: "Для вас", es: "Para ti", pt: "Para você", fr: "Pour vous", de: "Für dich", cs: "Pro tebe", sk: "Pre teba", it: "Per te", ja: "あなたに", hi: "आपके लिए", am: "ለእርስዎ", uk: "Для тебе", tr: "Senin için", pl: "Dla ciebie", fa: "برای شما", id: "Untukmu", nl: "Voor jou", el: "Για σένα", zu: "Okwakho", vi: "Dành cho bạn", fil: "Para sa iyo", af: "Vir jou", sw: "Kwa ajili yako", "zh-CN": "适合你", "zh-TW": "適合你", ko: "나를 위한", th: "สำหรับคุณ", bn: "আপনার জন্য", da: "Til dig", hu: "Neked" } },
   ];
   const deckLinks = deckItems.map((it) => ({
     label: it.label[lang] ?? it.label.en,

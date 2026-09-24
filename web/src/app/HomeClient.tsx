@@ -40,6 +40,48 @@ const UpgradeModal = nextDynamic(() => import("@/components/UpgradeModal").then(
 // hand-maintained copy that got stuck at 14).
 const LANGS = LANGUAGES;
 
+// Footer sales-deck labels, all 33 UI languages (English fallback).
+// The deck FILE stays he/en only (see the href ternaries below).
+type DeckKey = "decks" | "schools" | "families" | "individuals";
+const FOOTER_DECK_COPY: Record<string, Record<DeckKey, string>> = {
+  en: { decks: "Decks:", schools: "Schools", families: "Families", individuals: "Individuals" },
+  he: { decks: "מצגות:", schools: "בתי ספר", families: "משפחות", individuals: "יחידים" },
+  ar: { decks: "عروض:", schools: "المدارس", families: "العائلات", individuals: "الأفراد" },
+  ru: { decks: "Презентации:", schools: "Школы", families: "Семьи", individuals: "Частным лицам" },
+  es: { decks: "Presentaciones:", schools: "Escuelas", families: "Familias", individuals: "Particulares" },
+  pt: { decks: "Apresentações:", schools: "Escolas", families: "Famílias", individuals: "Pessoas" },
+  fr: { decks: "Présentations :", schools: "Écoles", families: "Familles", individuals: "Particuliers" },
+  de: { decks: "Präsentationen:", schools: "Schulen", families: "Familien", individuals: "Einzelpersonen" },
+  cs: { decks: "Prezentace:", schools: "Školy", families: "Rodiny", individuals: "Jednotlivci" },
+  sk: { decks: "Prezentácie:", schools: "Školy", families: "Rodiny", individuals: "Jednotlivci" },
+  it: { decks: "Presentazioni:", schools: "Scuole", families: "Famiglie", individuals: "Privati" },
+  ja: { decks: "資料:", schools: "学校", families: "家族", individuals: "個人" },
+  hi: { decks: "प्रस्तुतियाँ:", schools: "स्कूल", families: "परिवार", individuals: "व्यक्तिगत" },
+  am: { decks: "ማቅረቢያዎች:", schools: "ትምህርት ቤቶች", families: "ቤተሰቦች", individuals: "ግለሰቦች" },
+  uk: { decks: "Презентації:", schools: "Школи", families: "Сім'ї", individuals: "Приватним особам" },
+  tr: { decks: "Sunumlar:", schools: "Okullar", families: "Aileler", individuals: "Bireyler" },
+  pl: { decks: "Prezentacje:", schools: "Szkoły", families: "Rodziny", individuals: "Osoby prywatne" },
+  fa: { decks: "ارائه‌ها:", schools: "مدارس", families: "خانواده‌ها", individuals: "افراد" },
+  id: { decks: "Presentasi:", schools: "Sekolah", families: "Keluarga", individuals: "Perorangan" },
+  nl: { decks: "Presentaties:", schools: "Scholen", families: "Gezinnen", individuals: "Particulieren" },
+  el: { decks: "Παρουσιάσεις:", schools: "Σχολεία", families: "Οικογένειες", individuals: "Ιδιώτες" },
+  zu: { decks: "Izethulo:", schools: "Izikole", families: "Imindeni", individuals: "Abantu ngabanye" },
+  vi: { decks: "Bài thuyết trình:", schools: "Trường học", families: "Gia đình", individuals: "Cá nhân" },
+  fil: { decks: "Mga presentasyon:", schools: "Mga paaralan", families: "Mga pamilya", individuals: "Mga indibidwal" },
+  af: { decks: "Aanbiedings:", schools: "Skole", families: "Gesinne", individuals: "Individue" },
+  sw: { decks: "Mawasilisho:", schools: "Shule", families: "Familia", individuals: "Watu binafsi" },
+  "zh-CN": { decks: "演示文稿：", schools: "学校", families: "家庭", individuals: "个人" },
+  "zh-TW": { decks: "簡報：", schools: "學校", families: "家庭", individuals: "個人" },
+  ko: { decks: "소개 자료:", schools: "학교", families: "가족", individuals: "개인" },
+  th: { decks: "งานนำเสนอ:", schools: "โรงเรียน", families: "ครอบครัว", individuals: "บุคคลทั่วไป" },
+  bn: { decks: "উপস্থাপনা:", schools: "স্কুল", families: "পরিবার", individuals: "ব্যক্তিগত" },
+  da: { decks: "Præsentationer:", schools: "Skoler", families: "Familier", individuals: "Privatpersoner" },
+  hu: { decks: "Bemutatók:", schools: "Iskolák", families: "Családok", individuals: "Magánszemélyek" },
+};
+function footerDeck(lang: string, key: DeckKey): string {
+  return (FOOTER_DECK_COPY[lang] ?? FOOTER_DECK_COPY.en)[key];
+}
+
 function LangSwitch() {
   const { lang, setLang } = useLang();
   const [open, setOpen] = useState(false);
@@ -408,12 +450,12 @@ export function HomePage() {
             EN + HE only; other UI languages fall back to the English deck.
             Tagged gd-buy — sales collateral is hidden in the Play app. */}
         <span className="gd-buy">·</span>
-        <span className="gd-buy" style={{ opacity: 0.55 }}>{lang === "he" ? "מצגות:" : "Decks:"}</span>
-        <a className="gd-buy" href={`/decks/schools-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "בתי ספר" : "Schools"}</a>
+        <span className="gd-buy" style={{ opacity: 0.55 }}>{footerDeck(lang, "decks")}</span>
+        <a className="gd-buy" href={`/decks/schools-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{footerDeck(lang, "schools")}</a>
         <span className="gd-buy">·</span>
-        <a className="gd-buy" href={`/decks/families-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "משפחות" : "Families"}</a>
+        <a className="gd-buy" href={`/decks/families-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{footerDeck(lang, "families")}</a>
         <span className="gd-buy">·</span>
-        <a className="gd-buy" href={`/decks/individuals-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{lang === "he" ? "יחידים" : "Individuals"}</a>
+        <a className="gd-buy" href={`/decks/individuals-${lang === "he" ? "he" : "en"}.html`} target="_blank" rel="noopener noreferrer">{footerDeck(lang, "individuals")}</a>
       </footer>
     </div>
   );

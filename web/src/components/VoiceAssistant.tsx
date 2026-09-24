@@ -120,6 +120,280 @@ type Status = "off" | "armed" | "listening" | "heard" | "error";
 
 const PREF_KEY = "gadit-voice-on";
 
+// Status-bubble copy, all 33 UI languages (English fallback). Only en/he
+// have spoken "what is" patterns in extractQuery, so the other languages
+// are told to say the wake word and then the word itself.
+type VaCopy = { denied: string; sayWord: string; sayWake: string; armed: string; tapAsk: string; mode: string };
+const VA_COPY: Record<string, VaCopy> = {
+  en: {
+    denied: "Allow the microphone in your browser (lock icon in the address bar)",
+    sayWord: "Listening… say a word now",
+    sayWake: "Listening… say “Gadit, what is…”",
+    armed: "Listening on · tap anywhere to resume",
+    tapAsk: "Tap and ask",
+    mode: "Listening mode",
+  },
+  he: {
+    denied: "צריך לאשר מיקרופון בדפדפן (סמל המנעול בשורת הכתובת)",
+    sayWord: "מאזינים… אפשר לומר מילה עכשיו",
+    sayWake: "מאזינים… אפשר לומר: “Gadit, מה זה…”",
+    armed: "האזנה מופעלת · נגיעה במסך מחדשת אותה",
+    tapAsk: "לגעת ולשאול",
+    mode: "מצב האזנה",
+  },
+  ar: {
+    denied: "اسمح باستخدام الميكروفون في المتصفح (رمز القفل في شريط العنوان)",
+    sayWord: "جارٍ الاستماع… قل كلمة الآن",
+    sayWake: "جارٍ الاستماع… قل “Gadit” ثم الكلمة",
+    armed: "الاستماع مفعّل · المس الشاشة للمتابعة",
+    tapAsk: "انقر واسأل",
+    mode: "وضع الاستماع",
+  },
+  ru: {
+    denied: "Разрешите доступ к микрофону в браузере (значок замка в адресной строке)",
+    sayWord: "Слушаем… скажите слово",
+    sayWake: "Слушаем… скажите “Gadit” и слово",
+    armed: "Прослушивание включено · коснитесь экрана, чтобы продолжить",
+    tapAsk: "Нажмите и спросите",
+    mode: "Режим прослушивания",
+  },
+  es: {
+    denied: "Permite el micrófono en tu navegador (icono del candado en la barra de direcciones)",
+    sayWord: "Escuchando… di una palabra ahora",
+    sayWake: "Escuchando… di “Gadit” y una palabra",
+    armed: "Escucha activada · toca la pantalla para seguir",
+    tapAsk: "Toca y pregunta",
+    mode: "Modo escucha",
+  },
+  pt: {
+    denied: "Permita o microfone no navegador (ícone de cadeado na barra de endereço)",
+    sayWord: "Ouvindo… diga uma palavra agora",
+    sayWake: "Ouvindo… diga “Gadit” e uma palavra",
+    armed: "Escuta ativada · toque na tela para continuar",
+    tapAsk: "Toque e pergunte",
+    mode: "Modo de escuta",
+  },
+  fr: {
+    denied: "Autorisez le micro dans votre navigateur (icône du cadenas dans la barre d'adresse)",
+    sayWord: "À l'écoute… dites un mot maintenant",
+    sayWake: "À l'écoute… dites “Gadit” puis un mot",
+    armed: "Écoute activée · touchez l'écran pour reprendre",
+    tapAsk: "Touchez et demandez",
+    mode: "Mode écoute",
+  },
+  de: {
+    denied: "Erlaube das Mikrofon im Browser (Schloss-Symbol in der Adressleiste)",
+    sayWord: "Wir hören zu… sag jetzt ein Wort",
+    sayWake: "Wir hören zu… sag “Gadit” und dann ein Wort",
+    armed: "Zuhören aktiv · tippe irgendwo, um fortzufahren",
+    tapAsk: "Tippen und fragen",
+    mode: "Zuhörmodus",
+  },
+  cs: {
+    denied: "Povol mikrofon v prohlížeči (ikona zámku v adresním řádku)",
+    sayWord: "Posloucháme… řekni teď slovo",
+    sayWake: "Posloucháme… řekni “Gadit” a slovo",
+    armed: "Poslech zapnutý · klepni kamkoli pro pokračování",
+    tapAsk: "Klepni a zeptej se",
+    mode: "Režim poslechu",
+  },
+  sk: {
+    denied: "Povoľ mikrofón v prehliadači (ikona zámky v paneli s adresou)",
+    sayWord: "Počúvame… povedz teraz slovo",
+    sayWake: "Počúvame… povedz “Gadit” a slovo",
+    armed: "Počúvanie zapnuté · ťukni kamkoľvek a pokračuj",
+    tapAsk: "Ťukni a opýtaj sa",
+    mode: "Režim počúvania",
+  },
+  it: {
+    denied: "Consenti il microfono nel browser (icona del lucchetto nella barra degli indirizzi)",
+    sayWord: "In ascolto… di' una parola adesso",
+    sayWake: "In ascolto… di' “Gadit” e una parola",
+    armed: "Ascolto attivo · tocca lo schermo per riprendere",
+    tapAsk: "Tocca e chiedi",
+    mode: "Modalità ascolto",
+  },
+  ja: {
+    denied: "ブラウザでマイクを許可してください (アドレスバーの鍵アイコン)",
+    sayWord: "聞いています… 単語を話してください",
+    sayWake: "聞いています… 「Gadit」と言ってから単語を話してください",
+    armed: "聞き取りオン · 画面をタップして再開",
+    tapAsk: "タップして質問",
+    mode: "聞き取りモード",
+  },
+  hi: {
+    denied: "ब्राउज़र में माइक्रोफ़ोन की अनुमति दें (एड्रेस बार में ताले का आइकन)",
+    sayWord: "सुन रहे हैं… अब कोई शब्द बोलें",
+    sayWake: "सुन रहे हैं… “Gadit” कहें, फिर शब्द",
+    armed: "सुनना चालू है · फिर शुरू करने के लिए स्क्रीन पर टैप करें",
+    tapAsk: "टैप करें और पूछें",
+    mode: "सुनने का मोड",
+  },
+  am: {
+    denied: "በአሳሹ ውስጥ ማይክሮፎኑን ይፍቀዱ (በአድራሻ አሞሌው ላይ ያለው የቁልፍ ምልክት)",
+    sayWord: "እያዳመጥን ነው… አሁን አንድ ቃል ይናገሩ",
+    sayWake: "እያዳመጥን ነው… “Gadit” ብለው ቃሉን ይናገሩ",
+    armed: "ማዳመጥ በርቷል · ለመቀጠል ማያውን ይንኩ",
+    tapAsk: "ይንኩና ይጠይቁ",
+    mode: "የማዳመጥ ሁነታ",
+  },
+  uk: {
+    denied: "Дозвольте мікрофон у браузері (значок замка в адресному рядку)",
+    sayWord: "Слухаємо… скажіть слово",
+    sayWake: "Слухаємо… скажіть “Gadit” і слово",
+    armed: "Прослуховування ввімкнено · торкніться екрана, щоб продовжити",
+    tapAsk: "Торкніться й запитайте",
+    mode: "Режим прослуховування",
+  },
+  tr: {
+    denied: "Tarayıcında mikrofona izin ver (adres çubuğundaki kilit simgesi)",
+    sayWord: "Dinliyoruz… şimdi bir kelime söyle",
+    sayWake: "Dinliyoruz… “Gadit” de, ardından kelimeyi söyle",
+    armed: "Dinleme açık · devam etmek için ekrana dokun",
+    tapAsk: "Dokun ve sor",
+    mode: "Dinleme modu",
+  },
+  pl: {
+    denied: "Zezwól na mikrofon w przeglądarce (ikona kłódki na pasku adresu)",
+    sayWord: "Słuchamy… powiedz teraz słowo",
+    sayWake: "Słuchamy… powiedz “Gadit” i słowo",
+    armed: "Słuchanie włączone · dotknij ekranu, aby wznowić",
+    tapAsk: "Dotknij i zapytaj",
+    mode: "Tryb słuchania",
+  },
+  fa: {
+    denied: "اجازهٔ میکروفون را در مرورگر بدهید (نماد قفل در نوار آدرس)",
+    sayWord: "در حال گوش دادن… حالا یک کلمه بگویید",
+    sayWake: "در حال گوش دادن… بگویید “Gadit” و بعد کلمه را",
+    armed: "گوش دادن روشن است · برای ادامه صفحه را لمس کنید",
+    tapAsk: "لمس کنید و بپرسید",
+    mode: "حالت گوش دادن",
+  },
+  id: {
+    denied: "Izinkan mikrofon di browser (ikon gembok di bilah alamat)",
+    sayWord: "Mendengarkan… ucapkan satu kata sekarang",
+    sayWake: "Mendengarkan… ucapkan “Gadit” lalu katanya",
+    armed: "Mendengarkan aktif · ketuk layar untuk melanjutkan",
+    tapAsk: "Ketuk dan tanya",
+    mode: "Mode mendengarkan",
+  },
+  nl: {
+    denied: "Sta de microfoon toe in je browser (slotje in de adresbalk)",
+    sayWord: "We luisteren… zeg nu een woord",
+    sayWake: "We luisteren… zeg “Gadit” en dan een woord",
+    armed: "Luisteren staat aan · tik ergens om verder te gaan",
+    tapAsk: "Tik en vraag",
+    mode: "Luistermodus",
+  },
+  el: {
+    denied: "Επίτρεψε το μικρόφωνο στον browser (εικονίδιο κλειδαριάς στη γραμμή διευθύνσεων)",
+    sayWord: "Ακούμε… πες μια λέξη τώρα",
+    sayWake: "Ακούμε… πες “Gadit” και μετά μια λέξη",
+    armed: "Η ακρόαση είναι ενεργή · πάτησε οπουδήποτε για συνέχεια",
+    tapAsk: "Πάτησε και ρώτα",
+    mode: "Λειτουργία ακρόασης",
+  },
+  zu: {
+    denied: "Vumela imakrofoni kusiphequluli sakho (uphawu lwengidi kubha yekheli)",
+    sayWord: "Siyalalela… sho igama manje",
+    sayWake: "Siyalalela… sho “Gadit” bese usho igama",
+    armed: "Ukulalela kuvuliwe · thinta noma kuphi ukuze uqhubeke",
+    tapAsk: "Thinta ubuze",
+    mode: "Imodi yokulalela",
+  },
+  vi: {
+    denied: "Hãy cho phép micrô trong trình duyệt (biểu tượng ổ khóa trên thanh địa chỉ)",
+    sayWord: "Đang nghe… hãy nói một từ",
+    sayWake: "Đang nghe… hãy nói “Gadit” rồi nói từ",
+    armed: "Đang bật nghe · chạm vào màn hình để tiếp tục",
+    tapAsk: "Chạm và hỏi",
+    mode: "Chế độ nghe",
+  },
+  fil: {
+    denied: "Payagan ang mikropono sa browser (icon ng kandado sa address bar)",
+    sayWord: "Nakikinig… magsabi ng isang salita ngayon",
+    sayWake: "Nakikinig… sabihin ang “Gadit” at ang salita",
+    armed: "Naka-on ang pakikinig · i-tap kahit saan para magpatuloy",
+    tapAsk: "I-tap at magtanong",
+    mode: "Mode ng pakikinig",
+  },
+  af: {
+    denied: "Laat die mikrofoon in jou blaaier toe (slot-ikoon in die adresbalk)",
+    sayWord: "Ons luister… sê nou 'n woord",
+    sayWake: "Ons luister… sê “Gadit” en dan 'n woord",
+    armed: "Luister is aan · tik enige plek om voort te gaan",
+    tapAsk: "Tik en vra",
+    mode: "Luistermodus",
+  },
+  sw: {
+    denied: "Ruhusu maikrofoni kwenye kivinjari (alama ya kufuli kwenye upau wa anwani)",
+    sayWord: "Tunasikiliza… sema neno sasa",
+    sayWake: "Tunasikiliza… sema “Gadit” kisha neno",
+    armed: "Kusikiliza kumewashwa · gusa popote ili kuendelea",
+    tapAsk: "Gusa na uulize",
+    mode: "Hali ya kusikiliza",
+  },
+  "zh-CN": {
+    denied: "请在浏览器中允许使用麦克风（地址栏里的锁形图标）",
+    sayWord: "正在听… 请说一个词",
+    sayWake: "正在听… 先说 “Gadit”，再说一个词",
+    armed: "聆听已开启 · 点按屏幕任意位置继续",
+    tapAsk: "点按提问",
+    mode: "聆听模式",
+  },
+  "zh-TW": {
+    denied: "請在瀏覽器中允許使用麥克風（網址列上的鎖頭圖示）",
+    sayWord: "正在聽… 請說一個詞",
+    sayWake: "正在聽… 先說 “Gadit”，再說一個詞",
+    armed: "聆聽已開啟 · 點一下螢幕任意位置繼續",
+    tapAsk: "點一下提問",
+    mode: "聆聽模式",
+  },
+  ko: {
+    denied: "브라우저에서 마이크를 허용해 주세요 (주소창의 자물쇠 아이콘)",
+    sayWord: "듣고 있어요… 지금 단어를 말해 주세요",
+    sayWake: "듣고 있어요… “Gadit”라고 말한 뒤 단어를 말해 주세요",
+    armed: "듣기 켜짐 · 화면을 탭하면 다시 시작돼요",
+    tapAsk: "탭하고 물어보기",
+    mode: "듣기 모드",
+  },
+  th: {
+    denied: "อนุญาตไมโครโฟนในเบราว์เซอร์ (ไอคอนแม่กุญแจในแถบที่อยู่)",
+    sayWord: "กำลังฟัง… พูดคำศัพท์ได้เลย",
+    sayWake: "กำลังฟัง… พูดว่า “Gadit” แล้วตามด้วยคำศัพท์",
+    armed: "เปิดการฟังอยู่ · แตะที่ใดก็ได้เพื่อฟังต่อ",
+    tapAsk: "แตะแล้วถาม",
+    mode: "โหมดการฟัง",
+  },
+  bn: {
+    denied: "ব্রাউজারে মাইক্রোফোনের অনুমতি দিন (ঠিকানা বারে তালার আইকন)",
+    sayWord: "শুনছি… এখন একটি শব্দ বলুন",
+    sayWake: "শুনছি… “Gadit” বলুন, তারপর শব্দটি",
+    armed: "শোনা চালু আছে · আবার শুরু করতে স্ক্রিনে ট্যাপ করুন",
+    tapAsk: "ট্যাপ করে জিজ্ঞেস করুন",
+    mode: "শোনার মোড",
+  },
+  da: {
+    denied: "Tillad mikrofonen i din browser (hængelåsikonet i adresselinjen)",
+    sayWord: "Vi lytter… sig et ord nu",
+    sayWake: "Vi lytter… sig “Gadit” og så et ord",
+    armed: "Lytning er slået til · tryk hvor som helst for at fortsætte",
+    tapAsk: "Tryk og spørg",
+    mode: "Lyttetilstand",
+  },
+  hu: {
+    denied: "Engedélyezd a mikrofont a böngészőben (lakat ikon a címsorban)",
+    sayWord: "Figyelünk… mondj most egy szót",
+    sayWake: "Figyelünk… mondd, hogy “Gadit”, aztán a szót",
+    armed: "Hallgatás bekapcsolva · koppints bárhová a folytatáshoz",
+    tapAsk: "Koppints és kérdezz",
+    mode: "Hallgatás mód",
+  },
+};
+function vaCopy(lang: string): VaCopy {
+  return VA_COPY[lang] ?? VA_COPY.en;
+}
+
 export function VoiceAssistant() {
   const { user, plan } = useAuth();
   const { lang, dir } = useLang();
@@ -258,15 +532,15 @@ export function VoiceAssistant() {
   const armed = status === "armed";
   const ios = isIOSPlatform(); // tap-to-ask model, no wake word needed
   const label =
-    denied ? (lang === "he" ? "צריך לאשר מיקרופון בדפדפן (סמל המנעול בשורת הכתובת)" : "Allow the microphone in your browser (lock icon in the address bar)")
+    denied ? vaCopy(lang).denied
     : heard ? heard
     : status === "listening"
       ? ios
-        ? (lang === "he" ? "מקשיב… תגיד מילה עכשיו" : "Listening… say a word now")
-        : (lang === "he" ? "מקשיב… אמור: “גדית, מה זה…”" : "Listening… say “Gadit, what is…”")
-    : armed ? (lang === "he" ? "האזנה מופעלת · תגע במסך כדי לחדש" : "Listening on · tap anywhere to resume")
-    : ios ? (lang === "he" ? "הקש ושאל" : "Tap and ask")
-    : (lang === "he" ? "מצב האזנה" : "Listening mode");
+        ? vaCopy(lang).sayWord
+        : vaCopy(lang).sayWake
+    : armed ? vaCopy(lang).armed
+    : ios ? vaCopy(lang).tapAsk
+    : vaCopy(lang).mode;
 
   return (
     <div dir={dir} style={{ position: "fixed", insetInlineEnd: 16, bottom: 16, zIndex: 60, display: "flex", alignItems: "center", gap: 10, flexDirection: dir === "rtl" ? "row-reverse" : "row" }}>

@@ -116,6 +116,347 @@ function presentLabels(lang: string) {
   return PRESENT_LABELS[lang] ?? PRESENT_LABELS.en;
 }
 
+// ─── Inline UI copy (all 33 UI languages, English fallback) ───────
+type QuotaFn = (u?: number, l?: number) => string;
+const IMAGE_QUOTA_COPY: Record<string, QuotaFn> = {
+  en: (u, l) => `You've used your monthly image quota (${u}/${l}). Resets at the start of next month.`,
+  he: (u, l) => `הגעת למגבלת התמונות החודשית (${u}/${l}). מתאפס בתחילת החודש הבא.`,
+  ar: (u, l) => `وصلت إلى حد الصور الشهري (${u}/${l}). يُعاد ضبطه في بداية الشهر القادم.`,
+  ru: (u, l) => `Месячный лимит изображений исчерпан (${u}/${l}). Сбрасывается в начале следующего месяца.`,
+  es: (u, l) => `Has alcanzado el límite mensual de imágenes (${u}/${l}). Se reinicia el próximo mes.`,
+  pt: (u, l) => `Você atingiu o limite mensal de imagens (${u}/${l}). Reinicia no próximo mês.`,
+  fr: (u, l) => `Vous avez atteint la limite mensuelle d'images (${u}/${l}). Réinitialisation au mois prochain.`,
+  de: (u, l) => `Du hast das monatliche Bildlimit erreicht (${u}/${l}). Wird zum Monatsanfang zurückgesetzt.`,
+  cs: (u, l) => `Dosáhl jsi měsíčního limitu obrázků (${u}/${l}). Resetuje se začátkem dalšího měsíce.`,
+  sk: (u, l) => `Dosiahol si mesačný limit obrázkov (${u}/${l}). Resetuje sa začiatkom ďalšieho mesiaca.`,
+  it: (u, l) => `Hai raggiunto il limite mensile di immagini (${u}/${l}). Si resetta all'inizio del prossimo mese.`,
+  ja: (u, l) => `今月の画像枚数の上限に達しました (${u}/${l})。来月初めにリセットされます。`,
+  hi: (u, l) => `आप इस महीने की तस्वीर सीमा तक पहुँच गए (${u}/${l})। अगले महीने की शुरुआत में रीसेट होगी।`,
+  am: (u, l) => `የዚህ ወር የምስል ገደብ ተሞልቷል (${u}/${l})። በሚቀጥለው ወር መጀመሪያ እንደገና ይጀምራል።`,
+  uk: (u, l) => `Місячний ліміт зображень вичерпано (${u}/${l}). Він оновиться на початку наступного місяця.`,
+  tr: (u, l) => `Aylık resim sınırına ulaştın (${u}/${l}). Gelecek ayın başında sıfırlanır.`,
+  pl: (u, l) => `Miesięczny limit obrazków został wykorzystany (${u}/${l}). Odnowi się na początku następnego miesiąca.`,
+  fa: (u, l) => `سقف ماهانهٔ تصویرها پر شده است (${u}/${l}). اول ماه بعد دوباره شروع می‌شود.`,
+  id: (u, l) => `Batas gambar bulanan sudah tercapai (${u}/${l}). Akan diatur ulang di awal bulan depan.`,
+  nl: (u, l) => `Je hebt de maandelijkse limiet voor afbeeldingen bereikt (${u}/${l}). Die wordt begin volgende maand weer aangevuld.`,
+  el: (u, l) => `Έφτασες το μηνιαίο όριο εικόνων (${u}/${l}). Μηδενίζεται στην αρχή του επόμενου μήνα.`,
+  zu: (u, l) => `Usufinyelele umkhawulo wezithombe wale nyanga (${u}/${l}). Uzoqala kabusha ekuqaleni kwenyanga ezayo.`,
+  vi: (u, l) => `Bạn đã dùng hết số hình ảnh của tháng này (${u}/${l}). Hạn mức sẽ được làm mới vào đầu tháng sau.`,
+  fil: (u, l) => `Naabot mo na ang buwanang limitasyon ng larawan (${u}/${l}). Magre-reset ito sa simula ng susunod na buwan.`,
+  af: (u, l) => `Jy het die maandelikse beeldlimiet bereik (${u}/${l}). Dit begin weer aan die begin van volgende maand.`,
+  sw: (u, l) => `Umefikia kikomo cha picha cha mwezi huu (${u}/${l}). Kitaanza upya mwanzoni mwa mwezi ujao.`,
+  "zh-CN": (u, l) => `本月的图片数量已达上限 (${u}/${l})。下个月初会重置。`,
+  "zh-TW": (u, l) => `本月的圖片數量已達上限 (${u}/${l})。下個月初會重置。`,
+  ko: (u, l) => `이번 달 이미지 한도에 도달했어요 (${u}/${l}). 다음 달 초에 초기화돼요.`,
+  th: (u, l) => `ใช้รูปภาพครบโควตาของเดือนนี้แล้ว (${u}/${l}) จะรีเซ็ตเมื่อต้นเดือนหน้า`,
+  bn: (u, l) => `এই মাসের ছবির সীমা পূর্ণ হয়েছে (${u}/${l})। পরের মাসের শুরুতে আবার চালু হবে।`,
+  da: (u, l) => `Du har brugt månedens billedgrænse (${u}/${l}). Den nulstilles i starten af næste måned.`,
+  hu: (u, l) => `Elérted a havi képkeretet (${u}/${l}). A következő hónap elején újraindul.`,
+};
+
+const IMAGE_FAILED_COPY: Record<string, string> = {
+  en: "Could not create the image. Try again in a moment.",
+  he: "התמונה נכשלה ביצירה. נסו שוב בעוד רגע.",
+  ar: "فشل إنشاء الصورة. حاول مرة أخرى بعد قليل.",
+  ru: "Не удалось создать изображение. Попробуйте ещё раз.",
+  es: "No se pudo crear la imagen. Inténtalo de nuevo.",
+  pt: "Não foi possível gerar a imagem. Tente novamente.",
+  fr: "L'image n'a pas pu être créée. Réessayez.",
+  de: "Bild konnte nicht erstellt werden. Versuche es noch einmal.",
+  cs: "Obrázek se nepodařilo vytvořit. Zkus to znovu.",
+  sk: "Obrázok sa nepodarilo vytvoriť. Skús to znova.",
+  it: "Impossibile creare l'immagine. Riprova tra un momento.",
+  ja: "画像を生成できませんでした。少し待ってもう一度お試しください。",
+  hi: "तस्वीर नहीं बन पाई। कुछ देर में फिर कोशिश करें।",
+  am: "ምስሉን መፍጠር አልተቻለም። ትንሽ ቆይተው እንደገና ይሞክሩ።",
+  uk: "Не вдалося створити зображення. Спробуйте ще раз.",
+  tr: "Resim oluşturulamadı. Birazdan tekrar dene.",
+  pl: "Nie udało się utworzyć obrazka. Spróbuj ponownie za chwilę.",
+  fa: "ساختن تصویر ممکن نشد. کمی بعد دوباره امتحان کنید.",
+  id: "Gambar tidak bisa dibuat. Coba lagi sebentar lagi.",
+  nl: "De afbeelding kon niet worden gemaakt. Probeer het zo nog eens.",
+  el: "Δεν ήταν δυνατή η δημιουργία της εικόνας. Δοκίμασε ξανά σε λίγο.",
+  zu: "Asikwazanga ukwenza isithombe. Zama futhi emva kwesikhashana.",
+  vi: "Không tạo được hình ảnh. Hãy thử lại sau giây lát.",
+  fil: "Hindi nagawa ang larawan. Subukan ulit mamaya.",
+  af: "Die prent kon nie geskep word nie. Probeer weer oor 'n oomblik.",
+  sw: "Imeshindikana kutengeneza picha. Jaribu tena baada ya muda mfupi.",
+  "zh-CN": "无法生成图片，请稍后再试。",
+  "zh-TW": "無法產生圖片，請稍後再試。",
+  ko: "이미지를 만들 수 없었어요. 잠시 후 다시 시도해 주세요.",
+  th: "สร้างรูปภาพไม่สำเร็จ ลองใหม่อีกครั้งในอีกสักครู่",
+  bn: "ছবিটি তৈরি করা যায়নি। একটু পরে আবার চেষ্টা করুন।",
+  da: "Billedet kunne ikke laves. Prøv igen om lidt.",
+  hu: "Nem sikerült elkészíteni a képet. Próbáld újra egy kicsit később.",
+};
+
+const GENERIC_ERROR_COPY: Record<string, string> = {
+  en: "Something went wrong. Try again.",
+  he: "משהו השתבש. נסו שוב.",
+  ar: "حدث خطأ ما. حاول مرة أخرى.",
+  ru: "Что-то пошло не так. Попробуйте ещё раз.",
+  es: "Algo salió mal. Inténtalo de nuevo.",
+  pt: "Algo deu errado. Tente novamente.",
+  fr: "Une erreur s'est produite. Réessayez.",
+  de: "Etwas ist schiefgelaufen. Versuche es erneut.",
+  cs: "Něco se pokazilo. Zkus to znovu.",
+  sk: "Niečo sa pokazilo. Skús to znova.",
+  it: "Qualcosa è andato storto. Riprova.",
+  ja: "問題が発生しました。もう一度お試しください。",
+  hi: "कुछ ग़लत हुआ। फिर से कोशिश करें।",
+  am: "የሆነ ችግር ተፈጥሯል። እንደገና ይሞክሩ።",
+  uk: "Щось пішло не так. Спробуйте ще раз.",
+  tr: "Bir şeyler ters gitti. Tekrar dene.",
+  pl: "Coś poszło nie tak. Spróbuj ponownie.",
+  fa: "مشکلی پیش آمد. دوباره امتحان کنید.",
+  id: "Terjadi kesalahan. Coba lagi.",
+  nl: "Er ging iets mis. Probeer het opnieuw.",
+  el: "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
+  zu: "Kukhona okungahambanga kahle. Zama futhi.",
+  vi: "Đã xảy ra lỗi. Hãy thử lại.",
+  fil: "May nangyaring mali. Subukan ulit.",
+  af: "Iets het skeefgeloop. Probeer weer.",
+  sw: "Hitilafu imetokea. Jaribu tena.",
+  "zh-CN": "出了点问题，请再试一次。",
+  "zh-TW": "發生了一點問題，請再試一次。",
+  ko: "문제가 생겼어요. 다시 시도해 주세요.",
+  th: "เกิดข้อผิดพลาด ลองใหม่อีกครั้ง",
+  bn: "কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
+  da: "Noget gik galt. Prøv igen.",
+  hu: "Valami hiba történt. Próbáld újra.",
+};
+
+const NETWORK_LOST_COPY: Record<string, string> = {
+  en: "Lost network connection. Check your internet and try again.",
+  he: "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב.",
+  ar: "انقطع الاتصال بالإنترنت. تحقق من الشبكة وحاول مرة أخرى.",
+  ru: "Пропало подключение к интернету. Проверьте сеть и попробуйте ещё раз.",
+  es: "Se perdió la conexión a internet. Revisa la red e inténtalo de nuevo.",
+  pt: "A conexão com a internet caiu. Verifique a rede e tente novamente.",
+  fr: "Connexion internet perdue. Vérifiez le réseau et réessayez.",
+  de: "Die Internetverbindung ist weg. Prüfe das Netzwerk und versuche es erneut.",
+  cs: "Ztratilo se připojení k internetu. Zkontroluj síť a zkus to znovu.",
+  sk: "Stratilo sa pripojenie k internetu. Skontroluj sieť a skús to znova.",
+  it: "Connessione internet persa. Controlla la rete e riprova.",
+  ja: "インターネット接続が切れました。ネットワークを確認してやり直してください。",
+  hi: "इंटरनेट कनेक्शन टूट गया। नेटवर्क जाँचें और फिर कोशिश करें।",
+  am: "የኢንተርኔት ግንኙነት ተቋርጧል። ኔትወርኩን አረጋግጠው እንደገና ይሞክሩ።",
+  uk: "Зникло з'єднання з інтернетом. Перевірте мережу й спробуйте ще раз.",
+  tr: "İnternet bağlantısı koptu. Ağını kontrol edip tekrar dene.",
+  pl: "Utracono połączenie z internetem. Sprawdź sieć i spróbuj ponownie.",
+  fa: "اتصال اینترنت قطع شد. شبکه را بررسی کنید و دوباره امتحان کنید.",
+  id: "Koneksi internet terputus. Periksa jaringan lalu coba lagi.",
+  nl: "De internetverbinding is weggevallen. Controleer je netwerk en probeer het opnieuw.",
+  el: "Χάθηκε η σύνδεση στο διαδίκτυο. Έλεγξε το δίκτυο και δοκίμασε ξανά.",
+  zu: "Uxhumano lwe-inthanethi lunqamukile. Hlola inethiwekhi bese uzama futhi.",
+  vi: "Mất kết nối internet. Hãy kiểm tra mạng và thử lại.",
+  fil: "Nawala ang koneksyon sa internet. Tingnan ang network at subukan ulit.",
+  af: "Die internetverbinding is verloor. Kyk na jou netwerk en probeer weer.",
+  sw: "Muunganisho wa intaneti umekatika. Angalia mtandao kisha ujaribu tena.",
+  "zh-CN": "网络连接已断开。请检查网络后再试一次。",
+  "zh-TW": "網路連線已中斷。請檢查網路後再試一次。",
+  ko: "인터넷 연결이 끊겼어요. 네트워크를 확인하고 다시 시도해 주세요.",
+  th: "การเชื่อมต่ออินเทอร์เน็ตขาดหาย ตรวจสอบเครือข่ายแล้วลองใหม่อีกครั้ง",
+  bn: "ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়েছে। নেটওয়ার্ক দেখে আবার চেষ্টা করুন।",
+  da: "Internetforbindelsen blev afbrudt. Tjek netværket og prøv igen.",
+  hu: "Megszakadt az internetkapcsolat. Ellenőrizd a hálózatot, és próbáld újra.",
+};
+
+const SAVE_FAILED_COPY: Record<string, string> = {
+  en: "Save failed, try again",
+  he: "השמירה נכשלה, נסו שוב",
+  ar: "فشل الحفظ, حاول مرة أخرى",
+  ru: "Не удалось сохранить, попробуйте снова",
+  es: "Error al guardar, inténtalo de nuevo",
+  pt: "Falha ao salvar, tente novamente",
+  fr: "Échec de l'enregistrement, réessayez",
+  de: "Speichern fehlgeschlagen, erneut versuchen",
+  cs: "Uložení selhalo, zkuste to znovu",
+  sk: "Uloženie zlyhalo, skús to znova",
+  it: "Salvataggio fallito, riprova",
+  ja: "保存に失敗しました。もう一度お試しください",
+  hi: "सहेजना असफल, फिर से कोशिश करें",
+  am: "ማስቀመጥ አልተሳካም፣ እንደገና ይሞክሩ",
+  uk: "Не вдалося зберегти, спробуйте ще раз",
+  tr: "Kaydedilemedi, tekrar dene",
+  pl: "Nie udało się zapisać, spróbuj ponownie",
+  fa: "ذخیره نشد، دوباره امتحان کنید",
+  id: "Gagal menyimpan, coba lagi",
+  nl: "Opslaan mislukt, probeer het opnieuw",
+  el: "Η αποθήκευση απέτυχε, δοκίμασε ξανά",
+  zu: "Ukulondoloza kwehlulekile, zama futhi",
+  vi: "Lưu không thành công, hãy thử lại",
+  fil: "Hindi na-save, subukan ulit",
+  af: "Stoor het misluk, probeer weer",
+  sw: "Imeshindikana kuhifadhi, jaribu tena",
+  "zh-CN": "保存失败，请重试",
+  "zh-TW": "儲存失敗，請重試",
+  ko: "저장하지 못했어요. 다시 시도해 주세요",
+  th: "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง",
+  bn: "সংরক্ষণ করা যায়নি, আবার চেষ্টা করুন",
+  da: "Gemning mislykkedes, prøv igen",
+  hu: "A mentés nem sikerült, próbáld újra",
+};
+
+const SEARCH_DICTIONARY_COPY: Record<string, string> = {
+  en: "Search dictionary",
+  he: "חיפוש במילון",
+  ar: "البحث في القاموس",
+  ru: "Поиск в словаре",
+  es: "Buscar en el diccionario",
+  pt: "Pesquisar no dicionário",
+  fr: "Rechercher dans le dictionnaire",
+  de: "Im Wörterbuch suchen",
+  cs: "Hledat ve slovníku",
+  sk: "Hľadať v slovníku",
+  it: "Cerca nel dizionario",
+  ja: "辞書で検索",
+  hi: "शब्दकोश में खोजें",
+  am: "መዝገበ ቃላት ውስጥ ፈልግ",
+  uk: "Пошук у словнику",
+  tr: "Sözlükte ara",
+  pl: "Szukaj w słowniku",
+  fa: "جستجو در فرهنگ لغت",
+  id: "Cari di kamus",
+  nl: "Zoeken in woordenboek",
+  el: "Αναζήτηση στο λεξικό",
+  zu: "Sesha kusichazamazwi",
+  vi: "Tra từ điển",
+  fil: "Maghanap sa diksyunaryo",
+  af: "Soek in woordeboek",
+  sw: "Tafuta kamusini",
+  "zh-CN": "查词典",
+  "zh-TW": "查字典",
+  ko: "사전 검색",
+  th: "ค้นหาในพจนานุกรม",
+  bn: "অভিধানে খুঁজুন",
+  da: "Søg i ordbogen",
+  hu: "Keresés a szótárban",
+};
+
+// Typo banner: {s1}<strong>{word}</strong>{s2} · <Link>{q1}“{typed}”{q2}</Link>
+type TypoCopy = { s1: string; s2: string; q1: string; q2: string };
+const TYPO_BANNER_COPY: Record<string, TypoCopy> = {
+  en: { s1: "Showing results for ", s2: "", q1: "Search instead for ", q2: "" },
+  he: { s1: "מציג תוצאות עבור ", s2: "", q1: "חפש בכל זאת את ", q2: "" },
+  ar: { s1: "عرض نتائج لـ ", s2: "", q1: "ابحث بدلاً من ذلك عن ", q2: "" },
+  ru: { s1: "Результаты для ", s2: "", q1: "Искать вместо этого ", q2: "" },
+  es: { s1: "Mostrando resultados de ", s2: "", q1: "Buscar en su lugar ", q2: "" },
+  pt: { s1: "Mostrando resultados para ", s2: "", q1: "Pesquisar por ", q2: "" },
+  fr: { s1: "Résultats pour ", s2: "", q1: "Rechercher plutôt ", q2: "" },
+  de: { s1: "Ergebnisse für ", s2: "", q1: "Stattdessen suchen nach ", q2: "" },
+  cs: { s1: "Zobrazeny výsledky pro ", s2: "", q1: "Hledat místo toho ", q2: "" },
+  sk: { s1: "Zobrazujú sa výsledky pre ", s2: "", q1: "Hľadať namiesto toho ", q2: "" },
+  it: { s1: "Risultati per ", s2: "", q1: "Cerca invece ", q2: "" },
+  ja: { s1: "", s2: " の結果を表示しています", q1: "代わりに ", q2: " を検索" },
+  hi: { s1: "", s2: " के परिणाम दिखा रहे हैं", q1: "इसके बजाय ", q2: " खोजें" },
+  am: { s1: "የሚታዩት ውጤቶች: ", s2: "", q1: "በምትኩ ", q2: " ፈልግ" },
+  uk: { s1: "Результати для ", s2: "", q1: "Шукати натомість ", q2: "" },
+  tr: { s1: "", s2: " için sonuçlar gösteriliyor", q1: "Bunun yerine ", q2: " ara" },
+  pl: { s1: "Wyniki dla ", s2: "", q1: "Szukaj zamiast tego ", q2: "" },
+  fa: { s1: "نمایش نتایج برای ", s2: "", q1: "جستجوی ", q2: " به‌جای آن" },
+  id: { s1: "Menampilkan hasil untuk ", s2: "", q1: "Cari ", q2: " sebagai gantinya" },
+  nl: { s1: "Resultaten voor ", s2: "", q1: "Zoek in plaats daarvan naar ", q2: "" },
+  el: { s1: "Αποτελέσματα για ", s2: "", q1: "Αναζήτηση αντί γι' αυτό για ", q2: "" },
+  zu: { s1: "Imiphumela ye: ", s2: "", q1: "Sesha esikhundleni salokho: ", q2: "" },
+  vi: { s1: "Đang hiển thị kết quả cho ", s2: "", q1: "Vẫn tìm ", q2: "" },
+  fil: { s1: "Ipinapakita ang resulta para sa ", s2: "", q1: "Hanapin na lang ang ", q2: "" },
+  af: { s1: "Wys resultate vir ", s2: "", q1: "Soek eerder na ", q2: "" },
+  sw: { s1: "Inaonyesha matokeo ya ", s2: "", q1: "Tafuta badala yake ", q2: "" },
+  "zh-CN": { s1: "正在显示 ", s2: " 的结果", q1: "仍然搜索 ", q2: "" },
+  "zh-TW": { s1: "正在顯示 ", s2: " 的結果", q1: "仍然搜尋 ", q2: "" },
+  ko: { s1: "", s2: " 검색 결과를 보여 드려요", q1: "대신 ", q2: " 검색하기" },
+  th: { s1: "แสดงผลลัพธ์สำหรับ ", s2: "", q1: "ค้นหา ", q2: " แทน" },
+  bn: { s1: "", s2: " এর ফলাফল দেখানো হচ্ছে", q1: "এর বদলে ", q2: " খুঁজুন" },
+  da: { s1: "Viser resultater for ", s2: "", q1: "Søg i stedet efter ", q2: "" },
+  hu: { s1: "Találatok erre: ", s2: "", q1: "Keresés inkább erre: ", q2: "" },
+};
+
+const BACK_TO_COPY: Record<string, string> = {
+  en: "Back to ",
+  he: "חזרה אל ",
+  ar: "العودة إلى ",
+  ru: "Назад к ",
+  es: "Volver a ",
+  pt: "Voltar a ",
+  fr: "Retour à ",
+  de: "Zurück zu ",
+  cs: "Zpět na ",
+  sk: "Späť na ",
+  it: "Torna a ",
+  ja: " に戻る ",
+  hi: " पर वापस ",
+  am: "ተመለስ: ",
+  uk: "Назад до ",
+  tr: "Geri dön: ",
+  pl: "Wróć do ",
+  fa: "بازگشت به ",
+  id: "Kembali ke ",
+  nl: "Terug naar ",
+  el: "Επιστροφή σε ",
+  zu: "Buyela ku ",
+  vi: "Quay lại ",
+  fil: "Bumalik sa ",
+  af: "Terug na ",
+  sw: "Rudi kwa ",
+  "zh-CN": "返回 ",
+  "zh-TW": "返回 ",
+  ko: "돌아가기: ",
+  th: "กลับไปที่ ",
+  bn: "ফিরে যান: ",
+  da: "Tilbage til ",
+  hu: "Vissza ide: ",
+};
+
+const CLOSE_COPY: Record<string, string> = {
+  en: "Close", he: "סגור", ar: "إغلاق", ru: "Закрыть", es: "Cerrar", pt: "Fechar",
+  fr: "Fermer", de: "Schließen", cs: "Zavřít", sk: "Zavrieť", it: "Chiudi", ja: "閉じる",
+  hi: "बंद करें", am: "ዝጋ", uk: "Закрити", tr: "Kapat", pl: "Zamknij", fa: "بستن",
+  id: "Tutup", nl: "Sluiten", el: "Κλείσιμο", zu: "Vala", vi: "Đóng", fil: "Isara",
+  af: "Maak toe", sw: "Funga", "zh-CN": "关闭", "zh-TW": "關閉", ko: "닫기", th: "ปิด",
+  bn: "বন্ধ করুন", da: "Luk", hu: "Bezárás",
+};
+
+const PREPARING_PICTURE_COPY: Record<string, string> = {
+  en: "Preparing a picture...",
+  he: "מכינים תמונה...",
+  ar: "نجهّز صورة...",
+  ru: "Готовим картинку...",
+  es: "Preparando una imagen...",
+  pt: "Preparando uma imagem...",
+  fr: "Préparation d'une image...",
+  de: "Bild wird vorbereitet...",
+  cs: "Připravujeme obrázek...",
+  sk: "Pripravujeme obrázok...",
+  it: "Stiamo preparando un'immagine...",
+  ja: "画像を準備しています...",
+  hi: "तस्वीर तैयार कर रहे हैं...",
+  am: "ምስል እያዘጋጀን ነው...",
+  uk: "Готуємо картинку...",
+  tr: "Resim hazırlanıyor...",
+  pl: "Przygotowujemy obrazek...",
+  fa: "در حال آماده کردن تصویر...",
+  id: "Menyiapkan gambar...",
+  nl: "We maken een afbeelding klaar...",
+  el: "Ετοιμάζουμε μια εικόνα...",
+  zu: "Silungiselela isithombe...",
+  vi: "Đang chuẩn bị hình ảnh...",
+  fil: "Inihahanda ang larawan...",
+  af: "Ons berei 'n prent voor...",
+  sw: "Tunaandaa picha...",
+  "zh-CN": "正在准备图片...",
+  "zh-TW": "正在準備圖片...",
+  ko: "그림을 준비하고 있어요...",
+  th: "กำลังเตรียมรูปภาพ...",
+  bn: "ছবি তৈরি করা হচ্ছে...",
+  da: "Vi gør et billede klar...",
+  hu: "Készítjük a képet...",
+};
+
+function pick<T>(map: Record<string, T>, lang: string): T {
+  return map[lang] ?? map.en;
+}
+
 const ANON_COUNTER_KEY = "gadit-anon-searches";
 const ANON_LIFETIME_LIMIT = 3;
 
@@ -1236,46 +1577,10 @@ export function WordClient({
         const code = bodyJson.error ?? `http_${res.status}`;
         const localised =
           code === "monthly_limit_reached"
-            ? (lang === "he" ? `הגעת למגבלת התמונות החודשית (${bodyJson.used}/${bodyJson.limit}). מתאפס בתחילת החודש הבא.`
-              : lang === "ar" ? `وصلت إلى حد الصور الشهري (${bodyJson.used}/${bodyJson.limit}). يُعاد ضبطه في بداية الشهر القادم.`
-              : lang === "ru" ? `Месячный лимит изображений исчерпан (${bodyJson.used}/${bodyJson.limit}). Сбрасывается в начале следующего месяца.`
-              : lang === "es" ? `Has alcanzado el límite mensual de imágenes (${bodyJson.used}/${bodyJson.limit}). Se reinicia el próximo mes.`
-              : lang === "pt" ? `Você atingiu o limite mensal de imagens (${bodyJson.used}/${bodyJson.limit}). Reinicia no próximo mês.`
-              : lang === "fr" ? `Vous avez atteint la limite mensuelle d'images (${bodyJson.used}/${bodyJson.limit}). Réinitialisation au mois prochain.`
-              : lang === "de" ? `Du hast das monatliche Bildlimit erreicht (${bodyJson.used}/${bodyJson.limit}). Wird zum Monatsanfang zurückgesetzt.`
-              : lang === "cs" ? `Dosáhl jsi měsíčního limitu obrázků (${bodyJson.used}/${bodyJson.limit}). Resetuje se začátkem dalšího měsíce.`
-              : lang === "sk" ? `Dosiahol si mesačný limit obrázkov (${bodyJson.used}/${bodyJson.limit}). Resetuje sa začiatkom ďalšieho mesiaca.`
-              : lang === "it" ? `Hai raggiunto il limite mensile di immagini (${bodyJson.used}/${bodyJson.limit}). Si resetta all'inizio del prossimo mese.`
-              : lang === "ja" ? `今月の画像枚数の上限に達しました (${bodyJson.used}/${bodyJson.limit})。来月初めにリセットされます。`
-              : lang === "hi" ? `आप इस महीने की तस्वीर सीमा तक पहुँच गए (${bodyJson.used}/${bodyJson.limit})। अगले महीने की शुरुआत में रीसेट होगी।`
-              : `You've used your monthly image quota (${bodyJson.used}/${bodyJson.limit}). Resets at the start of next month.`)
+            ? pick(IMAGE_QUOTA_COPY, lang)(bodyJson.used, bodyJson.limit)
             : code === "image_generation_failed" || code === "no_image_returned"
-            ? (lang === "he" ? "התמונה נכשלה ביצירה. נסו שוב בעוד רגע."
-              : lang === "ar" ? "فشل إنشاء الصورة. حاول مرة أخرى بعد قليل."
-              : lang === "ru" ? "Не удалось создать изображение. Попробуйте ещё раз."
-              : lang === "es" ? "No se pudo crear la imagen. Inténtalo de nuevo."
-              : lang === "pt" ? "Não foi possível gerar a imagem. Tente novamente."
-              : lang === "fr" ? "L'image n'a pas pu être créée. Réessayez."
-              : lang === "de" ? "Bild konnte nicht erstellt werden. Versuche es noch einmal."
-              : lang === "cs" ? "Obrázek se nepodařilo vytvořit. Zkus to znovu."
-              : lang === "sk" ? "Obrázok sa nepodarilo vytvoriť. Skús to znova."
-              : lang === "it" ? "Impossibile creare l'immagine. Riprova tra un momento."
-              : lang === "ja" ? "画像を生成できませんでした。少し待ってもう一度お試しください。"
-              : lang === "hi" ? "तस्वीर नहीं बन पाई। कुछ देर में फिर कोशिश करें।"
-              : "Could not create the image. Try again in a moment.")
-            : (lang === "he" ? "משהו השתבש. נסו שוב."
-              : lang === "ar" ? "حدث خطأ ما. حاول مرة أخرى."
-              : lang === "ru" ? "Что-то пошло не так. Попробуйте ещё раз."
-              : lang === "es" ? "Algo salió mal. Inténtalo de nuevo."
-              : lang === "pt" ? "Algo deu errado. Tente novamente."
-              : lang === "fr" ? "Une erreur s'est produite. Réessayez."
-              : lang === "de" ? "Etwas ist schiefgelaufen. Versuche es erneut."
-              : lang === "cs" ? "Něco se pokazilo. Zkus to znovu."
-              : lang === "sk" ? "Niečo sa pokazilo. Skús to znova."
-              : lang === "it" ? "Qualcosa è andato storto. Riprova."
-              : lang === "ja" ? "問題が発生しました。もう一度お試しください。"
-              : lang === "hi" ? "कुछ ग़लत हुआ। फिर से कोशिश करें।"
-              : "Something went wrong. Try again.");
+            ? pick(IMAGE_FAILED_COPY, lang)
+            : pick(GENERIC_ERROR_COPY, lang);
         setImageError(localised);
         console.error("[generate-image] failed:", res.status, bodyJson);
         return;
@@ -1286,13 +1591,7 @@ export function WordClient({
       console.error("generate-image:", e);
       if (opts?.silent) return;
       setImageError(
-        lang === "he" ? "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב."
-        : lang === "cs" ? "Ztratilo se připojení k internetu. Zkontroluj síť a zkus to znovu."
-        : lang === "sk" ? "Stratilo sa pripojenie k internetu. Skontroluj sieť a skús to znova."
-        : lang === "it" ? "Connessione internet persa. Controlla la rete e riprova."
-        : lang === "ja" ? "インターネット接続が切れました。ネットワークを確認してやり直してください。"
-        : lang === "hi" ? "इंटरनेट कनेक्शन टूट गया। नेटवर्क जाँचें और फिर कोशिश करें।"
-        : "Lost network connection. Check your internet and try again."
+        pick(NETWORK_LOST_COPY, lang)
       );
     } finally {
       setImageGenerating(false);
@@ -1497,19 +1796,7 @@ export function WordClient({
           role="status"
         >
           {saveError
-            ? (lang === "he" ? "השמירה נכשלה, נסו שוב" :
-               lang === "ar" ? "فشل الحفظ, حاول مرة أخرى" :
-               lang === "ru" ? "Не удалось сохранить, попробуйте снова" :
-               lang === "es" ? "Error al guardar, inténtalo de nuevo" :
-               lang === "pt" ? "Falha ao salvar, tente novamente" :
-               lang === "fr" ? "Échec de l'enregistrement, réessayez" :
-               lang === "de" ? "Speichern fehlgeschlagen, erneut versuchen" :
-               lang === "cs" ? "Uložení selhalo, zkuste to znovu" :
-               lang === "sk" ? "Uloženie zlyhalo, skús to znova" :
-               lang === "it" ? "Salvataggio fallito, riprova" :
-               lang === "ja" ? "保存に失敗しました。もう一度お試しください" :
-               lang === "hi" ? "सहेजना असफल, फिर से कोशिश करें" :
-               "Save failed, try again")
+            ? pick(SAVE_FAILED_COPY, lang)
             : v2(lang, "savedToWordBook")}
         </div>
       )}
@@ -1736,7 +2023,7 @@ export function WordClient({
             }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
-            {lang === "he" ? "חיפוש במילון" : "Search dictionary"}
+            {pick(SEARCH_DICTIONARY_COPY, lang)}
           </button>
         )}
 
@@ -1927,47 +2214,18 @@ export function WordClient({
             page takes over.  See web/public/gadit-final.html. */}
         {result && typedOriginal && typedOriginal !== result.word && (
           <div className="wb-typo-banner" role="status">
-            {lang === "he" ? (
-              <>
-                מציג תוצאות עבור <strong>{result.word}</strong>
-                {" · "}
-                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
-                  חפש בכל זאת את &ldquo;{typedOriginal}&rdquo;
-                </Link>
-              </>
-            ) : lang === "ar" ? (
-              <>
-                عرض نتائج لـ <strong>{result.word}</strong>
-                {" · "}
-                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
-                  ابحث بدلاً من ذلك عن &ldquo;{typedOriginal}&rdquo;
-                </Link>
-              </>
-            ) : lang === "ru" ? (
-              <>
-                Результаты для <strong>{result.word}</strong>
-                {" · "}
-                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
-                  Искать вместо этого &ldquo;{typedOriginal}&rdquo;
-                </Link>
-              </>
-            ) : lang === "hi" ? (
-              <>
-                <strong>{result.word}</strong> के परिणाम दिखा रहे हैं
-                {" · "}
-                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
-                  इसके बजाय &ldquo;{typedOriginal}&rdquo; खोजें
-                </Link>
-              </>
-            ) : (
-              <>
-                Showing results for <strong>{result.word}</strong>
-                {" · "}
-                <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
-                  Search instead for &ldquo;{typedOriginal}&rdquo;
-                </Link>
-              </>
-            )}
+            {(() => {
+              const t = pick(TYPO_BANNER_COPY, lang);
+              return (
+                <>
+                  {t.s1}<strong>{result.word}</strong>{t.s2}
+                  {" · "}
+                  <Link href={`/word/${encodeURIComponent(typedOriginal)}?stay=1`}>
+                    {t.q1}&ldquo;{typedOriginal}&rdquo;{t.q2}
+                  </Link>
+                </>
+              );
+            })()}
           </div>
         )}
         {/* 'Back to <previous word>' chip, appears whenever the user
@@ -1981,19 +2239,7 @@ export function WordClient({
             <Link href={href(`/word/${encodeURIComponent(backWord)}`)} className="wb-back-chip">
               <span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span>
               <span>
-                {lang === "he" ? "חזרה אל " :
-                 lang === "ar" ? "العودة إلى " :
-                 lang === "ru" ? "Назад к " :
-                 lang === "es" ? "Volver a " :
-                 lang === "pt" ? "Voltar a " :
-                 lang === "fr" ? "Retour à " :
-                 lang === "de" ? "Zurück zu " :
-                 lang === "cs" ? "Zpět na " :
-                 lang === "sk" ? "Späť na " :
-                 lang === "it" ? "Torna a " :
-                 lang === "ja" ? " に戻る "  :
-                 lang === "hi" ? " पर वापस " :
-                 "Back to "}
+                {pick(BACK_TO_COPY, lang)}
                 <strong>{backWord}</strong>
               </span>
             </Link>
@@ -2009,7 +2255,7 @@ export function WordClient({
             <button
               type="button"
               onClick={() => setImageError(null)}
-              aria-label={lang === "he" ? "סגור" : lang === "cs" ? "Zavřít" : lang === "sk" ? "Zavrieť" : lang === "hi" ? "बंद करें" : lang === "ja" ? "閉じる" : "Close"}
+              aria-label={pick(CLOSE_COPY, lang)}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -2041,7 +2287,7 @@ export function WordClient({
                   <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="3" />
                   <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="28 84" />
                 </svg>
-                <span style={{ fontSize: 14 }}>{lang === "he" ? "מכינים תמונה..." : "Preparing a picture..."}</span>
+                <span style={{ fontSize: 14 }}>{pick(PREPARING_PICTURE_COPY, lang)}</span>
               </div>
             ) : null}
             {(() => {

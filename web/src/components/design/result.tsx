@@ -163,6 +163,19 @@ const LANG_NAMES: Record<string, string[]> = {
   hu: ["hungarian", "magyar"],
 };
 
+const SPELLING_FIX_COPY: Record<string, string> = {
+  en: "Spelling fix:", he: "תיקון כתיב:", ar: "تصحيح الإملاء:", ru: "Исправление написания:",
+  es: "Corrección ortográfica:", pt: "Correção ortográfica:", fr: "Correction orthographique :",
+  de: "Rechtschreibkorrektur:", cs: "Oprava pravopisu:", sk: "Oprava pravopisu:",
+  it: "Correzione ortografica:", ja: "スペルの修正:", hi: "वर्तनी सुधार:", am: "የፊደል እርማት:",
+  uk: "Виправлення написання:", tr: "Yazım düzeltmesi:", pl: "Poprawka pisowni:", fa: "اصلاح املا:",
+  id: "Perbaikan ejaan:", nl: "Spelling verbeterd:", el: "Διόρθωση ορθογραφίας:",
+  zu: "Ukulungiswa kopelo:", vi: "Sửa chính tả:", fil: "Pagwawasto sa baybay:",
+  af: "Spelregstelling:", sw: "Marekebisho ya tahajia:", "zh-CN": "拼写更正：", "zh-TW": "拼字更正：",
+  ko: "맞춤법 수정:", th: "แก้คำสะกด:", bn: "বানান সংশোধন:", da: "Stavning rettet:",
+  hu: "Helyesírási javítás:",
+};
+
 function langMatchesUi(language: string, lang: Lang): boolean {
   const langName = (language || "").toLowerCase().trim();
   if (!langName) return true;
@@ -1739,7 +1752,7 @@ export function ResultView({
           }}
         >
           <span style={{ color: "var(--ink-muted,#8a6d3b)" }}>
-            {lang === "he" ? "תיקון כתיב:" : "Spelling fix:"}
+            {SPELLING_FIX_COPY[lang] ?? SPELLING_FIX_COPY.en}
           </span>
           <span dir="auto" style={{ textDecoration: "line-through", color: "#B45309" }}>{result.correctedFrom}</span>
           <span aria-hidden="true" style={{ color: "var(--ink-muted,#9CA3AF)" }}>→</span>
