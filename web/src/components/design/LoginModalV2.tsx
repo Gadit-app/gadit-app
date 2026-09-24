@@ -67,6 +67,70 @@ const JOIN_FAMILY_CTA: Record<string, string> = {
   ru: "Присоединяетесь к семье? Введите код",
   es: "¿Te unes a una familia? Introduce tu código",
   fr: "Rejoindre une famille ? Entre ton code",
+  pt: "Entrando em uma família? Digite seu código",
+  de: "Einer Familie beitreten? Code eingeben",
+  cs: "Připojuješ se k rodině? Zadej svůj kód",
+  sk: "Pripájaš sa k rodine? Zadaj svoj kód",
+  it: "Entri in una famiglia? Inserisci il tuo codice",
+  ja: "家族に参加しますか？コードを入力",
+  hi: "परिवार से जुड़ रहे हैं? अपना कोड डालें",
+  am: "ቤተሰብ ለመቀላቀል? ኮዱን ያስገቡ",
+  uk: "Приєднуєтеся до родини? Введіть код",
+  tr: "Bir aileye mi katılıyorsun? Kodunu gir",
+  pl: "Dołączasz do rodziny? Wpisz swój kod",
+  fa: "به یک خانواده می‌پیوندید؟ کد خود را وارد کنید",
+  id: "Bergabung dengan keluarga? Masukkan kodemu",
+  nl: "Sluit je je aan bij een gezin? Voer je code in",
+  el: "Μπαίνεις σε οικογένεια; Βάλε τον κωδικό σου",
+  zu: "Ujoyina umndeni? Faka ikhodi yakho",
+  vi: "Tham gia một gia đình? Nhập mã của bạn",
+  fil: "Sasali sa isang pamilya? Ilagay ang iyong code",
+  af: "Sluit jy by 'n gesin aan? Voer jou kode in",
+  sw: "Unajiunga na familia? Weka msimbo wako",
+  "zh-CN": "要加入家庭？输入你的代码",
+  "zh-TW": "要加入家庭？輸入你的代碼",
+  ko: "가족에 참여하나요? 코드를 입력하세요",
+  th: "จะเข้าร่วมครอบครัวใช่ไหม ใส่รหัสของคุณ",
+  bn: "পরিবারে যোগ দিচ্ছ? তোমার কোড লেখো",
+  da: "Skal du være med i en familie? Indtast din kode",
+  hu: "Családhoz csatlakozol? Add meg a kódodat",
+};
+
+// Shown when signup is rejected for a blocked (relay/disposable) email domain.
+const BLOCKED_SIGNUP_MSG: Record<string, string> = {
+  en: "Please sign up with a regular email address.",
+  he: "כדי להירשם יש להשתמש בכתובת אימייל רגילה.",
+  ar: "يرجى التسجيل باستخدام عنوان بريد إلكتروني عادي.",
+  ru: "Пожалуйста, зарегистрируйтесь с обычным адресом электронной почты.",
+  es: "Regístrate con una dirección de correo electrónico normal.",
+  pt: "Faça o cadastro com um endereço de e-mail comum.",
+  fr: "Veuillez vous inscrire avec une adresse e-mail classique.",
+  de: "Bitte registriere dich mit einer normalen E-Mail-Adresse.",
+  cs: "Pro registraci použijte běžnou e-mailovou adresu.",
+  sk: "Na registráciu použite bežnú e-mailovú adresu.",
+  it: "Per registrarti usa un normale indirizzo email.",
+  ja: "通常のメールアドレスで登録してください。",
+  hi: "कृपया किसी सामान्य ईमेल पते से साइन अप करें।",
+  am: "እባክዎ በመደበኛ የኢሜይል አድራሻ ይመዝገቡ።",
+  uk: "Будь ласка, зареєструйтеся зі звичайною адресою електронної пошти.",
+  tr: "Lütfen normal bir e-posta adresiyle kaydolun.",
+  pl: "Aby się zarejestrować, użyj zwykłego adresu e-mail.",
+  fa: "لطفاً با یک نشانی ایمیل معمولی ثبت‌نام کنید.",
+  id: "Silakan daftar dengan alamat email biasa.",
+  nl: "Meld je aan met een gewoon e-mailadres.",
+  el: "Κάνε εγγραφή με μια κανονική διεύθυνση email.",
+  zu: "Sicela ubhalise ngekheli le-imeyili elijwayelekile.",
+  vi: "Vui lòng đăng ký bằng một địa chỉ email thông thường.",
+  fil: "Mag-sign up gamit ang isang karaniwang email address.",
+  af: "Registreer asseblief met 'n gewone e-posadres.",
+  sw: "Tafadhali jisajili kwa anwani ya kawaida ya barua pepe.",
+  "zh-CN": "请使用常规邮箱地址注册。",
+  "zh-TW": "請使用一般的電子郵件地址註冊。",
+  ko: "일반 이메일 주소로 가입해 주세요.",
+  th: "โปรดสมัครด้วยที่อยู่อีเมลทั่วไป",
+  bn: "অনুগ্রহ করে একটি সাধারণ ইমেইল ঠিকানা দিয়ে সাইন আপ করুন।",
+  da: "Tilmeld dig med en almindelig e-mailadresse.",
+  hu: "Kérjük, egy szokásos e-mail-címmel regisztrálj.",
 };
 
 export function LoginModalV2() {
@@ -253,9 +317,7 @@ export function LoginModalV2() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("blocked-signup-domain")) {
-        setLocalError(lang === "he"
-          ? "כדי להירשם השתמשו בכתובת אימייל רגילה."
-          : "Please sign up with a regular email address.");
+        setLocalError(BLOCKED_SIGNUP_MSG[lang] ?? BLOCKED_SIGNUP_MSG.en);
         setBusy(false);
         return;
       }
