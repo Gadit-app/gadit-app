@@ -15,11 +15,49 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
+import type { Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { PracticeV2 } from "@/components/design/PracticeV2";
+
+// Footer "Home" link label, every UI language.
+const FOOTER_HOME_COPY: Record<Lang, string> = {
+  en: "Home",
+  he: "בית",
+  ar: "الرئيسية",
+  ru: "Главная",
+  es: "Inicio",
+  pt: "Início",
+  fr: "Accueil",
+  de: "Startseite",
+  cs: "Domů",
+  sk: "Domov",
+  it: "Home",
+  ja: "ホーム",
+  hi: "होम",
+  am: "መነሻ",
+  uk: "Головна",
+  tr: "Ana sayfa",
+  pl: "Strona główna",
+  fa: "خانه",
+  id: "Beranda",
+  nl: "Home",
+  el: "Αρχική",
+  zu: "Ikhaya",
+  vi: "Trang chủ",
+  fil: "Home",
+  af: "Tuis",
+  sw: "Nyumbani",
+  "zh-CN": "首页",
+  "zh-TW": "首頁",
+  ko: "홈",
+  th: "หน้าแรก",
+  bn: "হোম",
+  da: "Forside",
+  hu: "Főoldal",
+};
 
 export function PracticePage() {
   const { user, plan, loading, promptLogin } = useAuth();
@@ -73,7 +111,7 @@ export function PracticePage() {
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
         <span>·</span>
-        <Link href={href("/")}>{lang === "he" ? "בית" : "Home"}</Link>
+        <Link href={href("/")}>{FOOTER_HOME_COPY[lang] ?? FOOTER_HOME_COPY.en}</Link>
       </footer>
     </div>
   );

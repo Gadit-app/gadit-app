@@ -134,9 +134,43 @@ export function syntheticUidFor(familyId: string, memberId: string): string {
 }
 
 /** Default member name when the parent leaves the field blank. */
+const DEFAULT_MEMBER_NAMES: Record<string, Record<MemberRole, string>> = {
+  en: { father: "Dad", mother: "Mom", boy: "My son", girl: "My daughter" },
+  he: { father: "אבא", mother: "אמא", boy: "הבן שלי", girl: "הבת שלי" },
+  ar: { father: "أبي", mother: "أمي", boy: "ابني", girl: "ابنتي" },
+  ru: { father: "Папа", mother: "Мама", boy: "Мой сын", girl: "Моя дочь" },
+  es: { father: "Papá", mother: "Mamá", boy: "Mi hijo", girl: "Mi hija" },
+  pt: { father: "Pai", mother: "Mãe", boy: "Meu filho", girl: "Minha filha" },
+  fr: { father: "Papa", mother: "Maman", boy: "Mon fils", girl: "Ma fille" },
+  de: { father: "Papa", mother: "Mama", boy: "Mein Sohn", girl: "Meine Tochter" },
+  cs: { father: "Táta", mother: "Máma", boy: "Můj syn", girl: "Moje dcera" },
+  sk: { father: "Otec", mother: "Mama", boy: "Môj syn", girl: "Moja dcéra" },
+  it: { father: "Papà", mother: "Mamma", boy: "Mio figlio", girl: "Mia figlia" },
+  ja: { father: "パパ", mother: "ママ", boy: "息子", girl: "娘" },
+  hi: { father: "पापा", mother: "मम्मी", boy: "मेरा बेटा", girl: "मेरी बेटी" },
+  am: { father: "አባት", mother: "እናት", boy: "ወንድ ልጄ", girl: "ሴት ልጄ" },
+  uk: { father: "Тато", mother: "Мама", boy: "Мій син", girl: "Моя донька" },
+  tr: { father: "Baba", mother: "Anne", boy: "Oğlum", girl: "Kızım" },
+  pl: { father: "Tata", mother: "Mama", boy: "Mój syn", girl: "Moja córka" },
+  fa: { father: "بابا", mother: "مامان", boy: "پسرم", girl: "دخترم" },
+  id: { father: "Ayah", mother: "Ibu", boy: "Anak laki-laki saya", girl: "Anak perempuan saya" },
+  nl: { father: "Papa", mother: "Mama", boy: "Mijn zoon", girl: "Mijn dochter" },
+  el: { father: "Μπαμπάς", mother: "Μαμά", boy: "Ο γιος μου", girl: "Η κόρη μου" },
+  zu: { father: "Baba", mother: "Mama", boy: "Indodana yami", girl: "Indodakazi yami" },
+  vi: { father: "Bố", mother: "Mẹ", boy: "Con trai tôi", girl: "Con gái tôi" },
+  fil: { father: "Tatay", mother: "Nanay", boy: "Anak kong lalaki", girl: "Anak kong babae" },
+  af: { father: "Pa", mother: "Ma", boy: "My seun", girl: "My dogter" },
+  sw: { father: "Baba", mother: "Mama", boy: "Mwanangu wa kiume", girl: "Mwanangu wa kike" },
+  "zh-CN": { father: "爸爸", mother: "妈妈", boy: "我的儿子", girl: "我的女儿" },
+  "zh-TW": { father: "爸爸", mother: "媽媽", boy: "我的兒子", girl: "我的女兒" },
+  ko: { father: "아빠", mother: "엄마", boy: "우리 아들", girl: "우리 딸" },
+  th: { father: "พ่อ", mother: "แม่", boy: "ลูกชายของฉัน", girl: "ลูกสาวของฉัน" },
+  bn: { father: "বাবা", mother: "মা", boy: "আমার ছেলে", girl: "আমার মেয়ে" },
+  da: { father: "Far", mother: "Mor", boy: "Min søn", girl: "Min datter" },
+  hu: { father: "Apa", mother: "Anya", boy: "A fiam", girl: "A lányom" },
+};
+
 export function defaultMemberName(role: MemberRole, lang: string): string {
-  const en = { father: "Dad", mother: "Mom", boy: "My son", girl: "My daughter" };
-  const he = { father: "אבא", mother: "אמא", boy: "הבן שלי", girl: "הבת שלי" };
-  const t = lang === "he" ? he : en;
+  const t = DEFAULT_MEMBER_NAMES[lang] ?? DEFAULT_MEMBER_NAMES.en;
   return t[role];
 }

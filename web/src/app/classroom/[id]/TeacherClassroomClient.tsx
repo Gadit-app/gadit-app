@@ -37,6 +37,43 @@ import { db } from "@/lib/firebase";
 import type { Classroom } from "@/lib/school";
 import { computeClassroomInsights, classroomLangLabel } from "@/lib/classroom-insights";
 
+// Relative-time "now" label for the teacher activity feed.
+const JUST_NOW_COPY: Record<string, string> = {
+  en: "now",
+  he: "עכשיו",
+  ar: "الآن",
+  ru: "сейчас",
+  es: "ahora",
+  pt: "agora",
+  fr: "maintenant",
+  de: "jetzt",
+  cs: "teď",
+  sk: "teraz",
+  it: "ora",
+  ja: "たった今",
+  hi: "अभी",
+  am: "አሁን",
+  uk: "зараз",
+  tr: "şimdi",
+  pl: "teraz",
+  fa: "اکنون",
+  id: "baru saja",
+  nl: "nu",
+  el: "τώρα",
+  zu: "manje",
+  vi: "vừa xong",
+  fil: "ngayon",
+  af: "nou",
+  sw: "sasa",
+  "zh-CN": "刚刚",
+  "zh-TW": "剛剛",
+  ko: "방금",
+  th: "เมื่อสักครู่",
+  bn: "এখনই",
+  da: "nu",
+  hu: "most",
+};
+
 interface SearchEntry {
   id: string;
   word: string;
@@ -1627,7 +1664,7 @@ function formatRelativeTime(iso: string, lang: string): string {
   const min = Math.floor(ms / 60_000);
   const hr = Math.floor(ms / 3_600_000);
   const day = Math.floor(ms / 86_400_000);
-  if (min < 1) return lang === "he" ? "עכשיו" : lang === "hi" ? "अभी" : lang === "am" ? "አሁን" : "now";
+  if (min < 1) return JUST_NOW_COPY[lang] ?? JUST_NOW_COPY.en;
   if (min < 60) return `${min}m`;
   if (hr < 24) return `${hr}h`;
   if (day < 7) return `${day}d`;

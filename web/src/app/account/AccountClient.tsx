@@ -33,6 +33,228 @@ import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useHref } from "@/lib/href";
 import { countCached, setCachedWord } from "@/lib/offline-db";
 
+// Upgrade button label template.
+const UPGRADE_TO_COPY: Record<Lang, string> = {
+  en: "Upgrade to {plan}",
+  he: "שדרוג ל-{plan}",
+  ar: "الترقية إلى {plan}",
+  ru: "Перейти на {plan}",
+  es: "Mejorar a {plan}",
+  pt: "Fazer upgrade para {plan}",
+  fr: "Passer à {plan}",
+  de: "Auf {plan} upgraden",
+  cs: "Přejít na {plan}",
+  sk: "Prejsť na {plan}",
+  it: "Passa a {plan}",
+  ja: "{plan}にアップグレード",
+  hi: "{plan} में अपग्रेड करें",
+  am: "ወደ {plan} ያሳድጉ",
+  uk: "Перейти на {plan}",
+  tr: "{plan} planına geç",
+  pl: "Przejdź na {plan}",
+  fa: "ارتقا به {plan}",
+  id: "Tingkatkan ke {plan}",
+  nl: "Upgraden naar {plan}",
+  el: "Αναβάθμιση σε {plan}",
+  zu: "Thuthukela ku-{plan}",
+  vi: "Nâng cấp lên {plan}",
+  fil: "Mag-upgrade sa {plan}",
+  af: "Gradeer op na {plan}",
+  sw: "Pandisha hadi {plan}",
+  "zh-CN": "升级到 {plan}",
+  "zh-TW": "升級至 {plan}",
+  ko: "{plan}(으)로 업그레이드",
+  th: "อัปเกรดเป็น {plan}",
+  bn: "{plan}-এ আপগ্রেড করুন",
+  da: "Opgrader til {plan}",
+  hu: "Váltás erre: {plan}",
+};
+
+// Help-link label pointing to /contact#billing.
+const BILLING_HELP_COPY: Record<Lang, string> = {
+  en: "Need help with billing? See the guide ›",
+  he: "בעיה? המדריך לחיוב ›",
+  ar: "مشكلة؟ دليل الفوترة ›",
+  ru: "Нужна помощь? Руководство по оплате ›",
+  es: "¿Problemas? Guía de facturación ›",
+  pt: "Problema? Guia de faturamento ›",
+  fr: "Un souci ? Guide de facturation ›",
+  de: "Probleme? Hilfe zur Abrechnung ›",
+  cs: "Problém? Návod k fakturaci ›",
+  sk: "Problém? Návod k fakturácii ›",
+  it: "Problemi? Guida alla fatturazione ›",
+  ja: "お困りですか? 請求の手引き ›",
+  hi: "बिलिंग में मदद चाहिए? गाइड देखें ›",
+  am: "ችግር አለ? የክፍያ መመሪያ ›",
+  uk: "Потрібна допомога? Посібник з оплати ›",
+  tr: "Sorun mu var? Faturalandırma rehberi ›",
+  pl: "Problem? Przewodnik po płatnościach ›",
+  fa: "مشکلی هست؟ راهنمای پرداخت ›",
+  id: "Ada kendala? Panduan tagihan ›",
+  nl: "Hulp nodig? Uitleg over betalen ›",
+  el: "Χρειάζεστε βοήθεια; Οδηγός χρέωσης ›",
+  zu: "Udinga usizo ngokukhokha? Bona umhlahlandlela ›",
+  vi: "Cần hỗ trợ? Hướng dẫn thanh toán ›",
+  fil: "May problema? Gabay sa pagsingil ›",
+  af: "Hulp nodig? Gids oor betaling ›",
+  sw: "Unahitaji msaada? Mwongozo wa malipo ›",
+  "zh-CN": "遇到问题？查看付款指南 ›",
+  "zh-TW": "遇到問題？查看付款指南 ›",
+  ko: "문제가 있나요? 결제 안내 ›",
+  th: "มีปัญหาหรือไม่? ดูคู่มือการชำระเงิน ›",
+  bn: "সমস্যা? বিলিং গাইড দেখুন ›",
+  da: "Brug for hjælp? Guide til betaling ›",
+  hu: "Segítség kell? Fizetési útmutató ›",
+};
+
+// Offline pack meter label.
+const OFFLINE_AVAILABLE_COPY: Record<Lang, string> = {
+  en: "Available offline",
+  he: "זמין אופליין",
+  ar: "متاح بدون إنترنت",
+  ru: "Доступно офлайн",
+  es: "Disponible sin conexión",
+  pt: "Disponível offline",
+  fr: "Disponible hors ligne",
+  de: "Offline verfügbar",
+  cs: "Dostupné offline",
+  sk: "Dostupné offline",
+  it: "Disponibile offline",
+  ja: "オフラインで利用可",
+  hi: "ऑफ़लाइन उपलब्ध",
+  am: "ያለ ኢንተርኔት ይገኛል",
+  uk: "Доступно офлайн",
+  tr: "Çevrimdışı kullanılabilir",
+  pl: "Dostępne offline",
+  fa: "در دسترس بدون اینترنت",
+  id: "Tersedia offline",
+  nl: "Offline beschikbaar",
+  el: "Διαθέσιμα εκτός σύνδεσης",
+  zu: "Kuyatholakala ngaphandle kwe-inthanethi",
+  vi: "Dùng được khi ngoại tuyến",
+  fil: "Magagamit offline",
+  af: "Aflyn beskikbaar",
+  sw: "Inapatikana bila mtandao",
+  "zh-CN": "可离线使用",
+  "zh-TW": "可離線使用",
+  ko: "오프라인 사용 가능",
+  th: "ใช้งานออฟไลน์ได้",
+  bn: "অফলাইনে পাওয়া যায়",
+  da: "Tilgængelig offline",
+  hu: "Offline elérhető",
+};
+
+// Unit after the offline word count.
+const WORDS_UNIT_COPY: Record<Lang, string> = {
+  en: "words",
+  he: "מילים",
+  ar: "كلمات",
+  ru: "слов",
+  es: "palabras",
+  pt: "palavras",
+  fr: "mots",
+  de: "Wörter",
+  cs: "slov",
+  sk: "slov",
+  it: "parole",
+  ja: "語",
+  hi: "शब्द",
+  am: "ቃላት",
+  uk: "слів",
+  tr: "kelime",
+  pl: "słów",
+  fa: "واژه",
+  id: "kata",
+  nl: "woorden",
+  el: "λέξεις",
+  zu: "amagama",
+  vi: "từ",
+  fil: "salita",
+  af: "woorde",
+  sw: "maneno",
+  "zh-CN": "个词",
+  "zh-TW": "個詞",
+  ko: "단어",
+  th: "คำ",
+  bn: "শব্দ",
+  da: "ord",
+  hu: "szó",
+};
+
+// Offline pack success line.
+const PACK_ADDED_COPY: Record<Lang, string> = {
+  en: "✓ Added to your Notebook",
+  he: "✓ נוסף למחברת שלכם",
+  ar: "✓ تمت الإضافة إلى دفترك",
+  ru: "✓ Добавлено в тетрадь",
+  es: "✓ Añadido a tu cuaderno",
+  pt: "✓ Adicionado ao seu caderno",
+  fr: "✓ Ajouté à votre carnet",
+  de: "✓ Zum Notizbuch hinzugefügt",
+  cs: "✓ Přidáno do sešitu",
+  sk: "✓ Pridané do zošita",
+  it: "✓ Aggiunto al tuo quaderno",
+  ja: "✓ ノートに追加されました",
+  hi: "✓ आपकी नोटबुक में जोड़ा गया",
+  am: "✓ ወደ ማስታወሻ ደብተርዎ ታክሏል",
+  uk: "✓ Додано до зошита",
+  tr: "✓ Defterine eklendi",
+  pl: "✓ Dodano do zeszytu",
+  fa: "✓ به دفترچه‌ات اضافه شد",
+  id: "✓ Ditambahkan ke Buku Catatan",
+  nl: "✓ Toegevoegd aan je schrift",
+  el: "✓ Προστέθηκε στο τετράδιό σας",
+  zu: "✓ Kungezwe encwadini yakho yokubhala",
+  vi: "✓ Đã thêm vào sổ tay",
+  fil: "✓ Naidagdag sa iyong Notebook",
+  af: "✓ By jou notaboek gevoeg",
+  sw: "✓ Imeongezwa kwenye daftari lako",
+  "zh-CN": "✓ 已加入你的单词本",
+  "zh-TW": "✓ 已加入你的單字本",
+  ko: "✓ 노트에 추가되었어요",
+  th: "✓ เพิ่มลงในสมุดแล้ว",
+  bn: "✓ আপনার নোটবুকে যোগ হয়েছে",
+  da: "✓ Tilføjet til din notesbog",
+  hu: "✓ Hozzáadva a füzetedhez",
+};
+
+// Link from the offline-pack success line to /notebook.
+const OPEN_NOTEBOOK_COPY: Record<Lang, string> = {
+  en: "Open Notebook →",
+  he: "פתח את המחברת ←",
+  ar: "← افتح الدفتر",
+  ru: "Открыть тетрадь →",
+  es: "Abrir cuaderno →",
+  pt: "Abrir caderno →",
+  fr: "Ouvrir le carnet →",
+  de: "Notizbuch öffnen →",
+  cs: "Otevřít sešit →",
+  sk: "Otvoriť zošit →",
+  it: "Apri il quaderno →",
+  ja: "ノートを開く →",
+  hi: "नोटबुक खोलें →",
+  am: "ማስታወሻ ደብተሩን ክፈት →",
+  uk: "Відкрити зошит →",
+  tr: "Defteri aç →",
+  pl: "Otwórz zeszyt →",
+  fa: "← باز کردن دفترچه",
+  id: "Buka Buku Catatan →",
+  nl: "Schrift openen →",
+  el: "Άνοιγμα τετραδίου →",
+  zu: "Vula incwadi yokubhala →",
+  vi: "Mở sổ tay →",
+  fil: "Buksan ang Notebook →",
+  af: "Maak notaboek oop →",
+  sw: "Fungua daftari →",
+  "zh-CN": "打开单词本 →",
+  "zh-TW": "打開單字本 →",
+  ko: "노트 열기 →",
+  th: "เปิดสมุด →",
+  bn: "নোটবুক খুলুন →",
+  da: "Åbn notesbog →",
+  hu: "Füzet megnyitása →",
+};
+
 type Plan = "basic" | "clear" | "deep";
 
 // Monthly price ids for the in-account upgrade buttons. A Basic user who wants
@@ -45,10 +267,10 @@ const CHECKOUT_PRICES = {
   clear: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY ?? "",
 } as const;
 
-/** "Upgrade to <Plan>" — plan name stays Latin (brand rule). he/ar + en fallback. */
+/** "Upgrade to <Plan>" — plan name stays Latin (brand rule). {plan} is swapped in. */
 function upgradeLabel(lang: string, planName: string): string {
-  const prefix = lang === "he" ? "שדרוג ל-" : lang === "ar" ? "الترقية إلى " : "Upgrade to ";
-  return prefix + planName;
+  const tpl = UPGRADE_TO_COPY[lang as Lang] ?? UPGRADE_TO_COPY.en;
+  return tpl.replace("{plan}", planName);
 }
 
 // Per-language font stacks. The wordbook surface inherits Inter as
@@ -670,19 +892,7 @@ function PlanSection({
   // aren't covered fall through to the EN string, which is fine
   // for a small contextual link.
   const billingHelp =
-    lang === "he" ? "בעיה? המדריך לחיוב ›" :
-    lang === "ar" ? "مشكلة؟ دليل الفوترة ›" :
-    lang === "ru" ? "Нужна помощь? Руководство по оплате ›" :
-    lang === "es" ? "¿Problemas? Guía de facturación ›" :
-    lang === "pt" ? "Problema? Guia de faturamento ›" :
-    lang === "fr" ? "Un souci ? Guide de facturation ›" :
-    lang === "de" ? "Probleme? Hilfe zur Abrechnung ›" :
-    lang === "cs" ? "Problém? Návod k fakturaci ›" :
-    lang === "sk" ? "Problém? Návod k fakturácii ›" :
-    lang === "it" ? "Problemi? Guida alla fatturazione ›" :
-    lang === "ja" ? "お困りですか? 請求の手引き ›" :
-    lang === "hi" ? "बिलिंग में मदद चाहिए? गाइड देखें ›" :
-    "Need help with billing? See the guide ›";
+    BILLING_HELP_COPY[lang] ?? BILLING_HELP_COPY.en;
 
   // Every signed-in user is on a plan — Basic is the free baseline, not
   // an absence of subscription. The earlier "No active subscription" empty
@@ -886,36 +1096,12 @@ function UsageSection({
           }}
         >
           <span style={{ fontSize: 14, color: "var(--ink)", fontWeight: 500 }}>
-            {lang === "he" ? "זמין אופליין"
-              : lang === "ar" ? "متاح بدون إنترنت"
-              : lang === "ru" ? "Доступно офлайн"
-              : lang === "es" ? "Disponible sin conexión"
-              : lang === "pt" ? "Disponível offline"
-              : lang === "fr" ? "Disponible hors ligne"
-              : lang === "de" ? "Offline verfügbar"
-              : lang === "cs" ? "Dostupné offline"
-              : lang === "sk" ? "Dostupné offline"
-              : lang === "it" ? "Disponibile offline"
-              : lang === "ja" ? "オフラインで利用可"
-              : lang === "hi" ? "ऑफ़लाइन उपलब्ध"
-              : "Available offline"}
+            {OFFLINE_AVAILABLE_COPY[lang] ?? OFFLINE_AVAILABLE_COPY.en}
           </span>
           <span style={{ fontSize: 14, color: tierColor(data.plan), fontWeight: 600 }}>
             {offlineCount.toLocaleString()}
             {" "}
-            {lang === "he" ? "מילים"
-              : lang === "ar" ? "كلمات"
-              : lang === "ru" ? "слов"
-              : lang === "es" ? "palabras"
-              : lang === "pt" ? "palavras"
-              : lang === "fr" ? "mots"
-              : lang === "de" ? "Wörter"
-              : lang === "cs" ? "slov"
-              : lang === "sk" ? "slov"
-              : lang === "it" ? "parole"
-              : lang === "ja" ? "語"
-              : lang === "hi" ? "शब्द"
-              : "words"}
+            {WORDS_UNIT_COPY[lang] ?? WORDS_UNIT_COPY.en}
           </span>
         </div>
       )}
@@ -959,19 +1145,7 @@ function OfflinePackSection({
             // tap on something and needs the payoff visible.
             <div style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.5 }}>
               <div style={{ color: tierColor(data.plan), fontWeight: 600, marginBottom: 6 }}>
-                {lang === "he" ? "✓ נוסף למחברת שלכם"
-                  : lang === "ar" ? "✓ تمت الإضافة إلى دفترك"
-                  : lang === "ru" ? "✓ Добавлено в тетрадь"
-                  : lang === "es" ? "✓ Añadido a tu cuaderno"
-                  : lang === "pt" ? "✓ Adicionado ao seu caderno"
-                  : lang === "fr" ? "✓ Ajouté à votre carnet"
-                  : lang === "de" ? "✓ Zum Notizbuch hinzugefügt"
-                  : lang === "cs" ? "✓ Přidáno do sešitu"
-                  : lang === "sk" ? "✓ Pridané do zošita"
-                  : lang === "it" ? "✓ Aggiunto al tuo quaderno"
-                  : lang === "ja" ? "✓ ノートに追加されました"
-                  : lang === "hi" ? "✓ आपकी नोटबुक में जोड़ा गया"
-                  : "✓ Added to your Notebook"}
+                {PACK_ADDED_COPY[lang] ?? PACK_ADDED_COPY.en}
               </div>
               <a
                 href={href("/notebook")}
@@ -981,19 +1155,7 @@ function OfflinePackSection({
                   fontWeight: 500,
                 }}
               >
-                {lang === "he" ? "פתח את המחברת ←"
-                  : lang === "ar" ? "← افتح الدفتر"
-                  : lang === "ru" ? "Открыть тетрадь →"
-                  : lang === "es" ? "Abrir cuaderno →"
-                  : lang === "pt" ? "Abrir caderno →"
-                  : lang === "fr" ? "Ouvrir le carnet →"
-                  : lang === "de" ? "Notizbuch öffnen →"
-                  : lang === "cs" ? "Otevřít sešit →"
-                  : lang === "sk" ? "Otvoriť zošit →"
-                  : lang === "it" ? "Apri il quaderno →"
-                  : lang === "ja" ? "ノートを開く →"
-                  : lang === "hi" ? "नोटबुक खोलें →"
-                  : "Open Notebook →"}
+                {OPEN_NOTEBOOK_COPY[lang] ?? OPEN_NOTEBOOK_COPY.en}
               </a>
             </div>
           ) : (

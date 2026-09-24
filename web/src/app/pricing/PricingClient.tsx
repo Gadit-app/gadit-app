@@ -17,7 +17,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePricing } from "@/lib/use-pricing";
-import { LANGUAGES } from "@/lib/i18n";
+import { LANGUAGES, type Lang } from "@/lib/i18n";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -30,6 +30,191 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
+
+// Footer "Home" link label, every UI language.
+const FOOTER_HOME_COPY: Record<Lang, string> = {
+  en: "Home",
+  he: "בית",
+  ar: "الرئيسية",
+  ru: "Главная",
+  es: "Inicio",
+  pt: "Início",
+  fr: "Accueil",
+  de: "Startseite",
+  cs: "Domů",
+  sk: "Domov",
+  it: "Home",
+  ja: "ホーム",
+  hi: "होम",
+  am: "መነሻ",
+  uk: "Головна",
+  tr: "Ana sayfa",
+  pl: "Strona główna",
+  fa: "خانه",
+  id: "Beranda",
+  nl: "Home",
+  el: "Αρχική",
+  zu: "Ikhaya",
+  vi: "Trang chủ",
+  fil: "Home",
+  af: "Tuis",
+  sw: "Nyumbani",
+  "zh-CN": "首页",
+  "zh-TW": "首頁",
+  ko: "홈",
+  th: "หน้าแรก",
+  bn: "হোম",
+  da: "Forside",
+  hu: "Főoldal",
+};
+
+// "Single user" note under each personal-tier price.
+const SINGLE_USER_COPY: Record<Lang, string> = {
+  en: "For one user",
+  he: "למשתמש בודד",
+  ar: "لمستخدم واحد",
+  ru: "Для одного пользователя",
+  es: "Para un usuario",
+  pt: "Para um usuário",
+  fr: "Pour un utilisateur",
+  de: "Für einen Benutzer",
+  cs: "Pro jednoho uživatele",
+  sk: "Pre jedného používateľa",
+  it: "Per un utente",
+  ja: "1ユーザーあたり",
+  hi: "एक यूज़र के लिए",
+  am: "ለአንድ ተጠቃሚ",
+  uk: "Для одного користувача",
+  tr: "Tek kullanıcı için",
+  pl: "Dla jednego użytkownika",
+  fa: "برای یک کاربر",
+  id: "Untuk satu pengguna",
+  nl: "Voor één gebruiker",
+  el: "Για έναν χρήστη",
+  zu: "Kumsebenzisi oyedwa",
+  vi: "Cho một người dùng",
+  fil: "Para sa isang user",
+  af: "Vir een gebruiker",
+  sw: "Kwa mtumiaji mmoja",
+  "zh-CN": "单人使用",
+  "zh-TW": "單人使用",
+  ko: "1인용",
+  th: "สำหรับผู้ใช้ 1 คน",
+  bn: "একজন ব্যবহারকারীর জন্য",
+  da: "Til én bruger",
+  hu: "Egy felhasználónak",
+};
+
+// Family card sub-line.
+const UP_TO_5_KIDS_COPY: Record<Lang, string> = {
+  en: "Up to 5 children",
+  he: "עד 5 ילדים",
+  ar: "حتى 5 أطفال",
+  ru: "До 5 детей",
+  es: "Hasta 5 niños",
+  pt: "Até 5 crianças",
+  fr: "Jusqu'à 5 enfants",
+  de: "Bis zu 5 Kindern",
+  cs: "Až 5 dětí",
+  sk: "Až 5 detí",
+  it: "Fino a 5 bambini",
+  ja: "最大5人の子供",
+  hi: "5 बच्चों तक",
+  am: "እስከ 5 ልጆች",
+  uk: "До 5 дітей",
+  tr: "En fazla 5 çocuk",
+  pl: "Do 5 dzieci",
+  fa: "تا 5 کودک",
+  id: "Hingga 5 anak",
+  nl: "Tot 5 kinderen",
+  el: "Έως 5 παιδιά",
+  zu: "Kuze kube yizingane ezi-5",
+  vi: "Tối đa 5 trẻ",
+  fil: "Hanggang 5 bata",
+  af: "Tot 5 kinders",
+  sw: "Hadi watoto 5",
+  "zh-CN": "最多 5 个孩子",
+  "zh-TW": "最多 5 個孩子",
+  ko: "자녀 최대 5명",
+  th: "เด็กสูงสุด 5 คน",
+  bn: "সর্বোচ্চ 5 শিশু",
+  da: "Op til 5 børn",
+  hu: "Legfeljebb 5 gyerek",
+};
+
+// Schools enterprise line (text before the contact link).
+const SCHOOLS_OVER_1000_COPY: Record<Lang, string> = {
+  en: "More than 1,000 students? ",
+  he: "מעל 1,000 תלמידים? ",
+  ar: "أكثر من 1,000 طالب؟ ",
+  ru: "Более 1 000 учеников? ",
+  es: "¿Más de 1000 alumnos? ",
+  pt: "Mais de 1000 alunos? ",
+  fr: "Plus de 1000 élèves ? ",
+  de: "Mehr als 1000 Schüler? ",
+  cs: "Více než 1000 studentů? ",
+  sk: "Viac ako 1000 študentov? ",
+  it: "Più di 1000 studenti? ",
+  ja: "1,000人を超える生徒? ",
+  hi: "1,000 से ज़्यादा छात्र? ",
+  am: "ከ1,000 በላይ ተማሪዎች? ",
+  uk: "Понад 1 000 учнів? ",
+  tr: "1.000'den fazla öğrenci mi? ",
+  pl: "Ponad 1000 uczniów? ",
+  fa: "بیش از 1,000 دانش‌آموز؟ ",
+  id: "Lebih dari 1.000 siswa? ",
+  nl: "Meer dan 1000 leerlingen? ",
+  el: "Πάνω από 1.000 μαθητές; ",
+  zu: "Abafundi abangaphezu kuka-1,000? ",
+  vi: "Hơn 1.000 học sinh? ",
+  fil: "Higit sa 1,000 estudyante? ",
+  af: "Meer as 1 000 leerders? ",
+  sw: "Wanafunzi zaidi ya 1,000? ",
+  "zh-CN": "学生超过 1,000 人？",
+  "zh-TW": "學生超過 1,000 人？",
+  ko: "학생이 1,000명 이상인가요? ",
+  th: "นักเรียนมากกว่า 1,000 คน? ",
+  bn: "1,000-এর বেশি শিক্ষার্থী? ",
+  da: "Mere end 1.000 elever? ",
+  hu: "Több mint 1000 diák? ",
+};
+
+// Schools enterprise contact link label.
+const CONTACT_QUOTE_COPY: Record<Lang, string> = {
+  en: "Contact us for a quote",
+  he: "צרו קשר לקבלת הצעת מחיר",
+  ar: "تواصلوا معنا للحصول على عرض",
+  ru: "Свяжитесь с нами",
+  es: "Contáctanos para un presupuesto",
+  pt: "Fale conosco para um orçamento",
+  fr: "Contactez-nous pour un devis",
+  de: "Kontaktieren Sie uns für ein Angebot",
+  cs: "Kontaktujte nás pro nabídku",
+  sk: "Kontaktujte nás pre cenovú ponuku",
+  it: "Contattaci per un preventivo",
+  ja: "お問い合わせください",
+  hi: "क़ीमत के लिए संपर्क करें",
+  am: "የዋጋ ቅናሽ ለማግኘት ያግኙን",
+  uk: "Зв'яжіться з нами щодо ціни",
+  tr: "Fiyat teklifi için bize ulaşın",
+  pl: "Skontaktuj się z nami po wycenę",
+  fa: "برای دریافت پیشنهاد قیمت با ما تماس بگیرید",
+  id: "Hubungi kami untuk penawaran harga",
+  nl: "Neem contact op voor een offerte",
+  el: "Επικοινωνήστε μαζί μας για προσφορά",
+  zu: "Xhumana nathi ukuze uthole isilinganiso sentengo",
+  vi: "Liên hệ với chúng tôi để nhận báo giá",
+  fil: "Makipag-ugnayan sa amin para sa quote",
+  af: "Kontak ons vir 'n kwotasie",
+  sw: "Wasiliana nasi upate bei",
+  "zh-CN": "联系我们获取报价",
+  "zh-TW": "聯絡我們取得報價",
+  ko: "견적을 문의해 주세요",
+  th: "ติดต่อเราเพื่อขอใบเสนอราคา",
+  bn: "দামের প্রস্তাবের জন্য যোগাযোগ করুন",
+  da: "Kontakt os for et tilbud",
+  hu: "Kérj árajánlatot tőlünk",
+};
 
 type Billing = "monthly" | "yearly";
 
@@ -3552,19 +3737,7 @@ export function PricingPageRoute() {
           // contrast with Family (unlimited kids) reads at a glance.
           // Falls back to EN if a lang doesn't define its own string.
           const singleUser =
-            lang === "he" ? "למשתמש בודד"
-            : lang === "ar" ? "لمستخدم واحد"
-            : lang === "ru" ? "Для одного пользователя"
-            : lang === "es" ? "Para un usuario"
-            : lang === "pt" ? "Para um usuário"
-            : lang === "fr" ? "Pour un utilisateur"
-            : lang === "de" ? "Für einen Benutzer"
-            : lang === "cs" ? "Pro jednoho uživatele"
-            : lang === "sk" ? "Pre jedného používateľa"
-            : lang === "it" ? "Per un utente"
-            : lang === "ja" ? "1ユーザーあたり"
-            : lang === "hi" ? "एक यूज़र के लिए"
-            : "For one user";
+            SINGLE_USER_COPY[lang] ?? SINGLE_USER_COPY.en;
           // Basic sub is just "for one user" — Gadi 2026-08-15: drop "free
           // forever" so the free tier isn't promoted.
           const basicSub = singleUser;
@@ -3707,19 +3880,7 @@ export function PricingPageRoute() {
                   </div>
                   <div className="wb-family-subprice">
                     {billing === "yearly" ? `≈ $7.42 ${c.mo} · ` : ""}
-                    {lang === "he" ? "עד 5 ילדים"
-                      : lang === "ar" ? "حتى 5 أطفال"
-                      : lang === "ru" ? "До 5 детей"
-                      : lang === "es" ? "Hasta 5 niños"
-                      : lang === "pt" ? "Até 5 crianças"
-                      : lang === "fr" ? "Jusqu'à 5 enfants"
-                      : lang === "de" ? "Bis zu 5 Kindern"
-                      : lang === "cs" ? "Až 5 dětí"
-                      : lang === "sk" ? "Až 5 detí"
-                      : lang === "it" ? "Fino a 5 bambini"
-                      : lang === "ja" ? "最大5人の子供"
-                      : lang === "hi" ? "5 बच्चों तक"
-                      : "Up to 5 children"}
+                    {UP_TO_5_KIDS_COPY[lang] ?? UP_TO_5_KIDS_COPY.en}
                   </div>
                   <button type="button" className="wb-family-cta" onClick={clickFamily}>
                     {f.cta}
@@ -3852,60 +4013,12 @@ export function PricingPageRoute() {
             color: "var(--ink-soft, #6B7280)",
           }}
         >
-          {lang === "he"
-            ? "מעל 1,000 תלמידים? "
-            : lang === "hi"
-            ? "1,000 से ज़्यादा छात्र? "
-            : lang === "ar"
-            ? "أكثر من 1,000 طالب؟ "
-            : lang === "ru"
-            ? "Более 1 000 учеников? "
-            : lang === "es"
-            ? "¿Más de 1000 alumnos? "
-            : lang === "pt"
-            ? "Mais de 1000 alunos? "
-            : lang === "fr"
-            ? "Plus de 1000 élèves ? "
-            : lang === "de"
-            ? "Mehr als 1000 Schüler? "
-            : lang === "cs"
-            ? "Více než 1000 studentů? "
-            : lang === "sk"
-            ? "Viac ako 1000 študentov? "
-            : lang === "it"
-            ? "Più di 1000 studenti? "
-            : lang === "ja"
-            ? "1,000人を超える生徒? "
-            : "More than 1,000 students? "}
+          {SCHOOLS_OVER_1000_COPY[lang] ?? SCHOOLS_OVER_1000_COPY.en}
           <a
             href="mailto:support@gadit.app?subject=Gadit Schools Enterprise"
             style={{ color: "#CA8A04", fontWeight: 600, textDecoration: "underline" }}
           >
-            {lang === "he"
-              ? "צרו קשר לקבלת הצעת מחיר"
-              : lang === "hi"
-              ? "क़ीमत के लिए संपर्क करें"
-              : lang === "ar"
-              ? "تواصلوا معنا للحصول على عرض"
-              : lang === "ru"
-              ? "Свяжитесь с нами"
-              : lang === "es"
-              ? "Contáctanos para un presupuesto"
-              : lang === "pt"
-              ? "Fale conosco para um orçamento"
-              : lang === "fr"
-              ? "Contactez-nous pour un devis"
-              : lang === "de"
-              ? "Kontaktieren Sie uns für ein Angebot"
-              : lang === "cs"
-              ? "Kontaktujte nás pro nabídku"
-              : lang === "sk"
-              ? "Kontaktujte nás pre cenovú ponuku"
-              : lang === "it"
-              ? "Contattaci per un preventivo"
-              : lang === "ja"
-              ? "お問い合わせください"
-              : "Contact us for a quote"}
+            {CONTACT_QUOTE_COPY[lang] ?? CONTACT_QUOTE_COPY.en}
           </a>
         </div>
       </main>
@@ -3915,7 +4028,7 @@ export function PricingPageRoute() {
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
         <span>·</span>
-        <Link href={href("/")}>{lang === "he" ? "בית" : "Home"}</Link>
+        <Link href={href("/")}>{FOOTER_HOME_COPY[lang] ?? FOOTER_HOME_COPY.en}</Link>
         <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>

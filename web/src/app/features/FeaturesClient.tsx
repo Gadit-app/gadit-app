@@ -8,7 +8,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { LANGUAGES } from "@/lib/i18n";
+import { LANGUAGES, type Lang } from "@/lib/i18n";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -21,6 +21,43 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { GaditDemoAnimation } from "@/components/design/GaditDemoAnimation";
+
+// Footer "Home" link label, every UI language.
+const FOOTER_HOME_COPY: Record<Lang, string> = {
+  en: "Home",
+  he: "בית",
+  ar: "الرئيسية",
+  ru: "Главная",
+  es: "Inicio",
+  pt: "Início",
+  fr: "Accueil",
+  de: "Startseite",
+  cs: "Domů",
+  sk: "Domov",
+  it: "Home",
+  ja: "ホーム",
+  hi: "होम",
+  am: "መነሻ",
+  uk: "Головна",
+  tr: "Ana sayfa",
+  pl: "Strona główna",
+  fa: "خانه",
+  id: "Beranda",
+  nl: "Home",
+  el: "Αρχική",
+  zu: "Ikhaya",
+  vi: "Trang chủ",
+  fil: "Home",
+  af: "Tuis",
+  sw: "Nyumbani",
+  "zh-CN": "首页",
+  "zh-TW": "首頁",
+  ko: "홈",
+  th: "หน้าแรก",
+  bn: "হোম",
+  da: "Forside",
+  hu: "Főoldal",
+};
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -2325,7 +2362,7 @@ export function FeaturesPage() {
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
         <span>·</span>
-        <Link href={href("/")}>{lang === "he" ? "בית" : "Home"}</Link>
+        <Link href={href("/")}>{FOOTER_HOME_COPY[lang] ?? FOOTER_HOME_COPY.en}</Link>
         <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>

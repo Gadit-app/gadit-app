@@ -4,7 +4,81 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
-import { LANGUAGES } from "@/lib/i18n";
+import { LANGUAGES, type Lang } from "@/lib/i18n";
+
+// Commission rate line labels ("25% year one · 10% for life").
+const RATE_YEAR_ONE_COPY: Record<Lang, string> = {
+  en: "year one",
+  he: "שנה ראשונה",
+  ar: "السنة الأولى",
+  ru: "первый год",
+  es: "primer año",
+  pt: "primeiro ano",
+  fr: "la première année",
+  de: "im ersten Jahr",
+  cs: "první rok",
+  sk: "prvý rok",
+  it: "primo anno",
+  ja: "初年度",
+  hi: "पहला साल",
+  am: "የመጀመሪያ ዓመት",
+  uk: "перший рік",
+  tr: "ilk yıl",
+  pl: "pierwszy rok",
+  fa: "سال اول",
+  id: "tahun pertama",
+  nl: "eerste jaar",
+  el: "πρώτο έτος",
+  zu: "unyaka wokuqala",
+  vi: "năm đầu",
+  fil: "unang taon",
+  af: "eerste jaar",
+  sw: "mwaka wa kwanza",
+  "zh-CN": "首年",
+  "zh-TW": "首年",
+  ko: "첫해",
+  th: "ปีแรก",
+  bn: "প্রথম বছর",
+  da: "første år",
+  hu: "első év",
+};
+
+// Lifetime commission label.
+const RATE_LIFETIME_COPY: Record<Lang, string> = {
+  en: "for life",
+  he: "לכל החיים",
+  ar: "مدى الحياة",
+  ru: "пожизненно",
+  es: "de por vida",
+  pt: "vitalício",
+  fr: "à vie",
+  de: "lebenslang",
+  cs: "doživotně",
+  sk: "doživotne",
+  it: "a vita",
+  ja: "永続",
+  hi: "हमेशा के लिए",
+  am: "ለዘለቄታው",
+  uk: "довічно",
+  tr: "ömür boyu",
+  pl: "dożywotnio",
+  fa: "مادام‌العمر",
+  id: "seumur hidup",
+  nl: "levenslang",
+  el: "εφ' όρου ζωής",
+  zu: "impilo yonke",
+  vi: "trọn đời",
+  fil: "habambuhay",
+  af: "lewenslank",
+  sw: "maisha yote",
+  "zh-CN": "终身",
+  "zh-TW": "終身",
+  ko: "평생",
+  th: "ตลอดชีพ",
+  bn: "আজীবন",
+  da: "livstid",
+  hu: "élethosszig",
+};
 
 /**
  * Native partner dashboard. Reads the `t` token from the URL (set in the
@@ -1346,7 +1420,7 @@ export function PartnerDashboardClient() {
                 {partnerGreeting(m, hour)}{stats.name ? ` ${stats.name.trim().split(/\s+/)[0]}` : ""}
               </h1>
               <div style={S.rateLine}>
-                {`${Math.round(stats.rateYearOne * 100)}% ${lang === "he" ? "שנה ראשונה" : "year one"} · ${Math.round(stats.rateLifetime * 100)}% ${lang === "he" ? "לכל החיים" : "for life"}`}
+                {`${Math.round(stats.rateYearOne * 100)}% ${RATE_YEAR_ONE_COPY[lang as Lang] ?? RATE_YEAR_ONE_COPY.en} · ${Math.round(stats.rateLifetime * 100)}% ${RATE_LIFETIME_COPY[lang as Lang] ?? RATE_LIFETIME_COPY.en}`}
               </div>
               {(() => {
                 const st = stats.status === "suspended"
