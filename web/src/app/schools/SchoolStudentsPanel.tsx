@@ -103,6 +103,9 @@ const COPY: Record<string, Copy> = {
     colLookups: "Ukubheka",
     filterPh: "Hlunga ngegama…",
     countLabel: (n) => `Abafundi abangu-${n}`,
+    wordsHeading: "Amagama abhekiwe",
+    noWords: "Akukho ukusesha esikhathini sakamuva okwamanje.",
+    closeLabel: "Vala",
   },
   el: {
     loading: "Φόρτωση…",
@@ -119,6 +122,9 @@ const COPY: Record<string, Copy> = {
     colLookups: "Αναζητήσεις",
     filterPh: "Φιλτράρισμα κατά όνομα…",
     countLabel: (n) => `${n} μαθητές`,
+    wordsHeading: "Λέξεις που αναζήτησε",
+    noWords: "Δεν υπάρχουν ακόμη αναζητήσεις στο πρόσφατο διάστημα.",
+    closeLabel: "Κλείσιμο",
   },
   hi: {
     loading: "लोड हो रहा है…",
@@ -135,6 +141,9 @@ const COPY: Record<string, Copy> = {
     colLookups: "खोजें",
     filterPh: "नाम से छानें…",
     countLabel: (n) => `${n} छात्र`,
+    wordsHeading: "खोजे गए शब्द",
+    noWords: "हाल की अवधि में अभी कोई खोज नहीं।",
+    closeLabel: "बंद करें",
   },
   am: {
     loading: "እየተጫነ ነው…",
@@ -151,6 +160,9 @@ const COPY: Record<string, Copy> = {
     colLookups: "ፍለጋዎች",
     filterPh: "በስም አጣራ…",
     countLabel: (n) => `${n} ተማሪዎች`,
+    wordsHeading: "የተፈለጉ ቃላት",
+    noWords: "በቅርብ ጊዜ ውስጥ እስካሁን ፍለጋ የለም።",
+    closeLabel: "ዝጋ",
   },
   ar: {
     loading: "جارٍ التحميل…",
