@@ -6664,9 +6664,11 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
           <div className="fam-section fam-center">
             <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
             <h2 className="fam-h2">{c.painTitle}</h2>
+            {!real && (
             <div className="fam-inline-img">
               <Image src="/fam/pain.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 600px" />
             </div>
+            )}
             <p className="fam-body fam-body-center">{c.painBody1}</p>
             <p className="fam-body fam-body-center fam-body-strong">{c.painBody2}</p>
             <p className="fam-reframe">{c.reframe}</p>
@@ -6698,6 +6700,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <div className="fam-kicker">{real ? real.howKicker : c.chainKicker}</div>
             <h2 className="fam-h2">{real ? real.howTitle : c.chainTitle}</h2>
             {real ? (
+              <>
               <div className="fam-real-steps">
                 {real.steps.map((st, i) => (
                   <div key={i} className="fam-real-step">
@@ -6710,6 +6713,27 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                   </div>
                 ))}
               </div>
+              {/* Summary (Gadi 2026-09-28): the illustrated 8-card "for every
+                  word, the child gets all this" grid stays under the real steps. */}
+              <h2 className="fam-h2" style={{ marginTop: 64 }}>{c.chainTitle}</h2>
+              <div className="fam-how-steps">
+                {c.howBlocks.slice(0, HOW_MOCKS.length).map((blk, i) => {
+                  const Mock = HOW_MOCKS[i];
+                  return (
+                    <div key={i} className="fam-how-step">
+                      <div className="fam-how-step-head">
+                        <span className="fam-how-num">{i + 1}</span>
+                        <span className="fam-how-text">{blk.t}</span>
+                      </div>
+                      <div className="fam-how-visual">
+                        <Mock lang={lang} />
+                      </div>
+                      <p className="fam-how-body">{blk.b}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              </>
             ) : (
             <div className="fam-how-steps">
               {c.howBlocks.map((blk, i) => {
@@ -6881,7 +6905,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <ShieldBigIcon />
             <h2 className="fam-h2">{c.safeTitle}</h2>
             <div className="fam-inline-img">
-              <Image src="/fam/safe.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 560px" />
+              <Image src="/fam/safe.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
             </div>
             <p className="fam-body fam-body-center">{c.safeBody}</p>
             <p className="fam-safe-line">{c.safeLine}</p>
