@@ -14,6 +14,8 @@ import Image from "next/image";
 export type RealStep = { t: string; b: string; img: string };
 export type RealTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
 export type RealCopy = {
+  /** Short proof points under the hero CTA (replace the old trust line + bar). */
+  heroPoints: string[];
   howKicker: string;
   howTitle: string;
   steps: RealStep[];
@@ -24,6 +26,7 @@ export type RealCopy = {
 
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
+    heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "30+ שפות ממשק"],
     howKicker: "איך זה עובד",
     howTitle: "חמישה צעדים, ואוצר המילים מתחיל לגדול",
     shotAlt: "מסך אמיתי מתוך Gadit",
@@ -75,6 +78,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
     ],
   },
   en: {
+    heroPoints: ["Up to 5 children", "A picture for every meaning", "30+ interface languages"],
     howKicker: "How it works",
     howTitle: "Five steps, and the vocabulary starts to grow",
     shotAlt: "A real Gadit screen",
@@ -171,10 +175,14 @@ export const REAL_CSS = `
 .fam-real-step-body { font-size: 16.5px; line-height: 1.7; color: #374151; margin: 0; }
 .fam-real-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
 .fam-real-pair .fam-phone { max-width: 230px; }
+.fam-hero-points { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.fam-hero-points li { display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #1f2937; }
+.fam-hero-points li svg { flex: none; }
 .fam-real-points { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
 .fam-real-points li { display: flex; gap: 8px; align-items: flex-start; font-size: 15.5px; color: #1f2937; font-weight: 600; }
 .fam-real-points li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: #0EA5A5; }
 @media (max-width: 760px) {
+  .fam-hero-points { justify-content: center; }
   .fam-real-step, .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 16px; }
   .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
   .fam-phone { max-width: 250px; }

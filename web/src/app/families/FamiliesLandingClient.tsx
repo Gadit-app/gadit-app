@@ -6612,7 +6612,18 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                 {ctaLabel}
               </button>
               {c.ctaMicro && <div className="fam-cta-micro">{c.ctaMicro}</div>}
-              <div className="fam-trustline">{c.trustLine}</div>
+              {real ? (
+                <ul className="fam-hero-points">
+                  {real.heroPoints.map((pt, i) => (
+                    <li key={i}>
+                      <CheckIcon color="#0b7d7d" />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="fam-trustline">{c.trustLine}</div>
+              )}
             </div>
             <div className="fam-hero-visual">
               {real ? (
@@ -6643,14 +6654,14 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
               )}
             </div>
           </div>
-          <div className="fam-trustbar">
+          {!real && <div className="fam-trustbar">
             {c.stats.map((s, i) => (
               <span key={i} className="fam-trustbar-item">
                 <CheckIcon color="#0b7d7d" />
                 {s}
               </span>
             ))}
-          </div>
+          </div>}
           <div className="fam-credline">{c.credLine}</div>
         </section>
         <div ref={heroEndRef} aria-hidden className="fam-hero-sentinel" />
