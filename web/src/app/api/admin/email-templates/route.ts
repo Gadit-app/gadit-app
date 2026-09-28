@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FAMILY_META, EMAIL_BASE } from "@/lib/email-drip/family-content";
-import { renderEmailHtml, mdLiteToHtml, type EmailContent } from "@/lib/email-drip/render";
+import { type EmailContent } from "@/lib/email-drip/render";
+import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { getOverride, getEffectiveContent, saveOverride, resetOverride } from "@/lib/email-drip/email-templates-store";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
 import { sendDripEmail } from "@/lib/email-drip/send";
@@ -48,18 +49,8 @@ function authed(req: NextRequest): boolean {
 
 function renderPreview(key: string, he: boolean, c: EmailContent): string {
   const m = FAMILY_META.find((x) => x.key === key);
-  const tab = m?.ctaUrlTab ?? "";
-  const base = he ? `${EMAIL_BASE}/he` : EMAIL_BASE;
-  return renderEmailHtml({
-    he,
-    eyebrow: he ? m?.eyebrow.he ?? "" : m?.eyebrow.en ?? "",
-    heading: c.heading,
-    bodyHtml: mdLiteToHtml(he, c.body),
-    ctaText: c.ctaText,
-    ctaUrl: `${base}${m?.ctaPath ?? "/family"}${tab}`,
-    foot: he ? m?.foot.he ?? "" : m?.foot.en ?? "",
-    unsubscribeUrl: `${EMAIL_BASE}/`,
-  });
+  // Same renderer as the real send; the preview shows a sample name.
+  return renderFamilyMail(m, he, c, { unsubscribeUrl: `${EMAIL_BASE}/`, firstName: he ? "דנה" : "Dana" }).html;
 }
 
 export async function GET(req: NextRequest) {

@@ -2148,7 +2148,7 @@ export function FamilyClient() {
               <Link href={href("/kids")} className="fam-set-row fam-set-link" style={{ marginTop: 14 }}>
                 <div className="fam-set-icon" style={{ fontSize: 20 }} aria-hidden="true">🧒</div>
                 <div className="fam-set-main">
-                  <label className="fam-set-label">{lang === "he" ? "מצב ילדים · מסך משותף" : "Kids Mode · shared device"}</label>
+                  <label className="fam-set-label">{lang === "he" ? "מסך משותף לילדים" : "Shared kids screen"}</label>
                 </div>
               </Link>
             </div>

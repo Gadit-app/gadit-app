@@ -174,7 +174,14 @@ export async function GET(req: NextRequest) {
           if (!famCand || m.dayOffset > famCand.dayOffset) famCand = m;
         }
         if (famCand) {
-          const built = await famCand.build({ he, unsubscribeUrl: buildUnsubUrl(u.uid) });
+          // First name for "היי {שם}," (auth displayName, else the user doc's).
+          const famName =
+            (typeof u.displayName === "string" && u.displayName.trim()) ||
+            (typeof d.displayName === "string" && (d.displayName as string).trim()) ||
+            (typeof d.name === "string" && (d.name as string).trim()) ||
+            "";
+          const firstName = famName.split(/\s+/)[0] || null;
+          const built = await famCand.build({ he, unsubscribeUrl: buildUnsubUrl(u.uid), firstName });
           if (dryRun) {
             results.push({ uid: u.uid, email, mailKey: famCand.key, status: "skipped", reason: "dryRun" });
           } else {

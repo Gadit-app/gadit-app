@@ -14,8 +14,8 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 
 const L: Record<string, { label: string; switchKid: string; exit: string }> = {
-  en: { label: "Kids Mode", switchKid: "Switch kid", exit: "Exit" },
-  he: { label: "מצב ילדים", switchKid: "החלף ילד", exit: "יציאה" },
+  en: { label: "Shared kids screen", switchKid: "Switch kid", exit: "Exit" },
+  he: { label: "מסך משותף לילדים", switchKid: "החלפת ילד", exit: "יציאה" },
   ar: { label: "وضع الأطفال", switchKid: "تبديل الطفل", exit: "خروج" },
   ru: { label: "Детский режим", switchKid: "Сменить ребёнка", exit: "Выход" },
   es: { label: "Modo Niños", switchKid: "Cambiar de niño", exit: "Salir" },

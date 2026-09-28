@@ -49,18 +49,18 @@ const T: Record<string, {
   hu: { who: "Ki használja?", signin: "Jelentkezz be a Gyerekmód használatához", enterPin: (n) => `${n} kódja`, wrong: "Próbáld újra", exit: "Kilépés a Gyerekmódból", back: "Vissza" },
   en: {
     who: "Who's using?",
-    signin: "Sign in to use Kids Mode",
+    signin: "Sign in to use the shared kids screen",
     enterPin: (n) => `${n}'s code`,
     wrong: "Try again",
-    exit: "Exit Kids Mode",
+    exit: "Exit shared screen",
     back: "Back",
   },
   he: {
     who: "מי משתמש עכשיו?",
-    signin: "התחבר כדי להשתמש במצב ילדים",
+    signin: "צריך להתחבר כדי להשתמש במסך המשותף",
     enterPin: (n) => `הקוד של ${n}`,
     wrong: "נסה שוב",
-    exit: "יציאה ממצב ילדים",
+    exit: "יציאה מהמסך המשותף",
     back: "חזרה",
   },
 };

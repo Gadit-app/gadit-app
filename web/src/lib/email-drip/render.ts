@@ -12,7 +12,23 @@
  * don't scramble the Hebrew word order.
  */
 
-export type EmailContent = { subject: string; heading: string; body: string; ctaText: string };
+export type EmailContent = {
+  subject: string;
+  heading: string;
+  body: string;
+  ctaText: string;
+  /** v2 (Yooniz-style) series only: the one line under the button that
+   *  bridges to the next email ("מחר נדבר על..."). Empty on the last one. */
+  next?: string;
+};
+
+/** Fill {שם} / {name} with the parent's first name; without a name the
+ *  placeholder (and the space before it) simply drops: "היי {שם}," → "היי,". */
+export function applyName(s: string, firstName?: string | null): string {
+  const n = (firstName ?? "").trim();
+  if (n) return s.replace(/\{(?:שם|name)\}/g, n);
+  return s.replace(/ ?\{(?:שם|name)\}/g, "");
+}
 
 function esc(s: string): string {
   return s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]!));
@@ -20,12 +36,23 @@ function esc(s: string): string {
 
 // Bold, then isolate Latin runs (RTL only). Order matters: escape first.
 function inline(he: boolean, s: string): string {
-  let out = esc(s).replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  // Pull links out first (as private-use markers) so the bold/Latin passes
+  // can't break their hrefs, then put them back as real <a> tags.
+  const links: string[] = [];
+  let out = esc(s).replace(/\bhttps?:\/\/[^\s<]+[^\s<.,:;)"']/g, (url) => {
+    links.push(url);
+    return `\uE000${links.length - 1}\uE001`;
+  });
+  out = out.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
   if (he) {
     // Wrap runs of Latin letters/digits (and internal spaces/&/.) so an
     // embedded brand name keeps its own left-to-right order inside RTL text.
     out = out.replace(/[A-Za-z][A-Za-z0-9]*(?:[ .&][A-Za-z0-9]+)*/g, (m) => `<span dir="ltr">${m}</span>`);
   }
+  out = out.replace(/\uE000(\d+)\uE001/g, (_, i) => {
+    const url = links[Number(i)];
+    return `<a href="${url}" dir="ltr" style="color:#0E7490;word-break:break-all;">${url}</a>`;
+  });
   return out;
 }
 
@@ -99,6 +126,49 @@ export function renderEmailHtml(opts: {
         <p style="margin:0;color:#6B7280;font-size:14px;" dir="${dir}">${he ? "מייסד, " : "Founder, "}<span dir="ltr" translate="no">Gadit</span></p>
       </div>
       <p dir="${dir}" style="text-align:${align};font-size:13px;color:#6B7280;line-height:1.5;margin:22px 0 0;">${esc(opts.foot)}</p>
+      <p dir="${dir}" style="text-align:${align};font-size:11px;color:#B4B4B4;margin:16px 0 0;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
+    </div>
+  </div>
+</body></html>`;
+}
+
+/**
+ * v2 shell for the Yooniz-style Family series (Gadi 2026-09-28): the body
+ * carries its own "היי {שם}," greeting; then one optional button (no button
+ * when the email has nowhere to send), the bridge line to the next email,
+ * "אנחנו כאן לכל שאלה ועזרה.", and the team signature. Same spacing between
+ * every paragraph. Signed by the team, never by a person.
+ */
+export function renderEmailHtmlV2(opts: {
+  he: boolean;
+  bodyHtml: string;
+  ctaText?: string;
+  ctaUrl: string;
+  next?: string;
+  helpUrl: string;
+  unsubscribeUrl: string;
+}): string {
+  const { he } = opts;
+  const dir = he ? "rtl" : "ltr";
+  const align = he ? "right" : "left";
+  const para = (html: string, extra = "") =>
+    `<p dir="${dir}" style="text-align:${align};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;${extra}">${html}</p>`;
+  const cta = opts.ctaText?.trim()
+    ? `<div style="text-align:center;margin:8px 0 22px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${esc(opts.ctaText.trim())}</a></div>`
+    : "";
+  const next = opts.next?.trim() ? para(inline(he, opts.next.trim())) : "";
+  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  <div dir="${dir}" style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
+    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:18px 24px;color:#fff;">
+      <div style="font-size:22px;font-weight:800;" dir="ltr" translate="no">Gadit</div>
+    </div>
+    <div dir="${dir}" style="padding:24px;text-align:${align};">
+      ${opts.bodyHtml}
+      ${cta}
+      ${next}
+      ${para(he ? "אנחנו כאן לכל שאלה ועזרה." : "We're here for any question or help.")}
+      ${para(he ? `הצוות של <span dir="ltr" translate="no">Gadit</span>` : `The <span translate="no">Gadit</span> team`, "font-weight:600;color:#111827;")}
+      <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 14px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל סרטוני ההדרכה" : "All video guides"}</a></p>
       <p dir="${dir}" style="text-align:${align};font-size:11px;color:#B4B4B4;margin:16px 0 0;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
     </div>
   </div>

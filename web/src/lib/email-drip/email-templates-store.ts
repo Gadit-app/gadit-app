@@ -36,6 +36,7 @@ export async function getEffectiveContent(key: string, he: boolean): Promise<Ema
     heading: o?.heading ?? base.heading,
     body: o?.body ?? base.body,
     ctaText: o?.ctaText ?? base.ctaText,
+    next: o?.next ?? base.next,
   };
 }
 
