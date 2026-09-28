@@ -6575,6 +6575,33 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             </div>
           </header>
         </div>
+      ) : real ? (
+        /* Real-screens campaign header (Gadi 2026-09-28, after the Yooniz
+           hero): logo on the start side; start button, the signed-in user's
+           picture, and the language picker on the other side. */
+        <header className="fam-rtop">
+          <Link href={href("/")} className="fam-logo-word" style={{ fontSize: 30 }} aria-label="Gadit" dir="ltr" translate="no">
+            Gad<span className="fam-logo-it">it</span>
+          </Link>
+          <div className="fam-rtop-end">
+            <button type="button" className="fam-rtop-cta" onClick={() => startTrial("top")}>
+              {isOwner ? c.ownerCta : real.topCta}
+            </button>
+            {user && (
+              <Link href={href("/family")} className="fam-rtop-avatar" aria-label={user.displayName ?? "account"}>
+                {user.photoURL ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.photoURL} alt="" width={36} height={36} referrerPolicy="no-referrer" />
+                ) : (
+                  (user.displayName ?? user.email ?? "?").trim().charAt(0).toUpperCase()
+                )}
+              </Link>
+            )}
+            <div className="fam-rtop-lang">
+              <LangSwitcher variant="muted" />
+            </div>
+          </div>
+        </header>
       ) : (
         /* Standalone campaign version (/families/landing): brand only,
            no nav, so a sent link reads as a single product page. A small
@@ -6604,14 +6631,33 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
              then the promise (h1), then a plain what-it-is line, then
              the product itself on a phone so it is instantly clear
              this is a word app, not an abstract idea. */}
-        <section className="fam-hero">
+        <section className={`fam-hero${real ? " fam-hero-real" : ""}`}>
           <div className="fam-hero-grid">
             <div className="fam-hero-text">
+              {real && (
+                <div className="fam-cred-pill">
+                  <span className="fam-cred-dots" aria-hidden>
+                    <i style={{ background: "#0EA5A5" }} />
+                    <i style={{ background: "#F59E0B" }} />
+                    <i style={{ background: "#7C3AED" }} />
+                  </span>
+                  {real.credPill}
+                </div>
+              )}
               <h1 className="fam-h1">{hero.h1}</h1>
               <p className="fam-whatis">{real ? <Lines text={c.whatIs} /> : c.whatIs}</p>
-              <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
-                {ctaLabel}
-              </button>
+              {real ? (
+                <div className="fam-hero-ctas">
+                  <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
+                    {ctaLabel}
+                  </button>
+                  <a href="#fam-how" className="fam-cta-ghost">{real.howCta}</a>
+                </div>
+              ) : (
+                <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
+                  {ctaLabel}
+                </button>
+              )}
               {c.ctaMicro && <div className="fam-cta-micro">{c.ctaMicro}</div>}
               {real ? (
                 <ul className="fam-hero-points">
@@ -6629,7 +6675,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             <div className="fam-hero-visual">
               {real ? (
                 <div className="fam-real-hero">
-                  <PhoneShot lang={lang} name="dashboard" alt={real.shotAlt} priority />
+                  <PhoneShot lang={lang} name="notebook" alt={real.shotAlt} priority />
                   <PhoneShot lang={lang} name="word" alt={real.shotAlt} priority />
                 </div>
               ) : (
@@ -6663,7 +6709,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               </span>
             ))}
           </div>}
-          <div className="fam-credline">{c.credLine}</div>
+          {!real && <div className="fam-credline">{c.credLine}</div>}
         </section>
         <div ref={heroEndRef} aria-hidden className="fam-hero-sentinel" />
 
@@ -6723,7 +6769,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
              ending in the visible-progress payoff + CTA. */}
         <section className="fam-band fam-band-white">
           <div className="fam-section fam-center fam-section-wide">
-            <div className="fam-kicker">{real ? real.howKicker : c.chainKicker}</div>
+            <div className="fam-kicker" id="fam-how">{real ? real.howKicker : c.chainKicker}</div>
             <h2 className="fam-h2">{real ? real.howTitle : c.chainTitle}</h2>
             {real ? (
               <>

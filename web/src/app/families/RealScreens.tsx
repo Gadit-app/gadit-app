@@ -16,6 +16,12 @@ export type RealTool = { kicker: string; title: string; body: string; points: st
 export type RealCopy = {
   /** Short proof points under the hero CTA (replace the old trust line + bar). */
   heroPoints: string[];
+  /** Credibility pill above the H1 (Yooniz-style hero). */
+  credPill: string;
+  /** Secondary hero button that scrolls to "how it works". */
+  howCta: string;
+  /** Header start button label. */
+  topCta: string;
   /** The pain section, in Gadi's own words (2026-09-28). */
   pain: { title: string; lead: string; paras: string[]; strong: string; reframe: string };
   howKicker: string;
@@ -29,6 +35,9 @@ export type RealCopy = {
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
     heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "30+ שפות ממשק"],
+    credPill: "15 שנות ניסיון עם יותר מ-15,000 הורים ותלמידים",
+    howCta: "איך זה עובד",
+    topCta: "התחילו עכשיו",
     pain: {
       title: "למה שיעורי הבית נמרחים?",
       lead: "הוא יודע את החומר. הוא פשוט לא הבין את השאלה.",
@@ -91,6 +100,9 @@ export const REAL_COPY: Record<string, RealCopy> = {
   },
   en: {
     heroPoints: ["Up to 5 children", "A picture for every meaning", "30+ interface languages"],
+    credPill: "15 years of experience with more than 15,000 parents and students",
+    howCta: "How it works",
+    topCta: "Start now",
     pain: {
       title: "Why does homework drag on?",
       lead: "They know the material. They just didn't understand the question.",
@@ -195,8 +207,22 @@ export const REAL_CSS = `
 }
 .fam-phone-screen { border-radius: 30px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 390 / 844; }
 .fam-phone-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-.fam-real-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; max-width: 520px; margin: 0 auto; }
-.fam-real-hero .fam-phone:first-child { transform: translateY(18px); }
+.fam-real-hero { display: flex; justify-content: center; align-items: center; max-width: 560px; margin: 0 auto; padding: 18px 0 26px; }
+.fam-real-hero .fam-phone { max-width: 250px; flex: 1 1 0; }
+.fam-real-hero .fam-phone:first-child { transform: rotate(5deg) translateY(10px); z-index: 2; margin-inline-end: -36px; }
+.fam-real-hero .fam-phone:last-child { transform: rotate(-6deg) translateY(34px); z-index: 1; }
+.fam-rtop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 24px; background: #fff; border-bottom: 1px solid rgba(31,41,55,0.08); }
+.fam-rtop-end { display: flex; align-items: center; gap: 10px; }
+.fam-rtop-cta { background: #0EA5A5; color: #fff; border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 700; font-size: 14.5px; cursor: pointer; box-shadow: 0 6px 16px rgba(14,165,165,0.28); font-family: inherit; }
+.fam-rtop-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: #E3F4F3; color: #0b7d7d; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; text-decoration: none; overflow: hidden; }
+.fam-rtop-lang { border: 1px solid rgba(31,41,55,0.14); border-radius: 999px; padding: 2px 6px; }
+.fam-hero-real { background: radial-gradient(90% 70% at 85% 0%, rgba(14,165,165,0.10) 0%, rgba(14,165,165,0) 60%), linear-gradient(180deg, #EEF7F6 0%, #FFFFFF 70%); max-width: none; }
+.fam-hero-real .fam-hero-grid { max-width: 1060px; margin: 0 auto; }
+.fam-cred-pill { display: inline-flex; align-items: center; gap: 10px; background: #fff; border-radius: 999px; padding: 7px 16px 7px 12px; font-weight: 700; font-size: 14px; color: #1f2937; box-shadow: 0 4px 14px rgba(31,41,55,0.08); margin-bottom: 18px; }
+.fam-cred-dots { display: inline-flex; }
+.fam-cred-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; margin-inline-start: -5px; }
+.fam-hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.fam-cta-ghost { background: #fff; color: #0b7d7d; border: 1.5px solid rgba(14,165,165,0.35); border-radius: 999px; padding: 14px 24px; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none; font-family: inherit; }
 .fam-real-steps { display: grid; gap: 40px; margin: 28px auto 0; max-width: 780px; }
 .fam-real-step { display: grid; grid-template-columns: 1fr 260px; gap: 40px; align-items: center; text-align: start; }
 .fam-real-step:nth-child(even) { grid-template-columns: 260px 1fr; }
@@ -219,6 +245,11 @@ export const REAL_CSS = `
 .fam-real-points li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: #0EA5A5; }
 @media (max-width: 760px) {
   .fam-hero-points { justify-content: center; }
+  .fam-hero-ctas { justify-content: center; }
+  .fam-rtop { padding: 10px 14px; }
+  .fam-cred-pill { font-size: 12px; padding: 6px 12px 6px 10px; gap: 8px; white-space: nowrap; }
+  .fam-cred-dots i { width: 11px; height: 11px; }
+  .fam-real-hero .fam-phone { max-width: 190px; }
   .fam-real-step, .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 16px; }
   .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
   .fam-phone { max-width: 250px; }
