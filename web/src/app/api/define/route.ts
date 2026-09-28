@@ -350,6 +350,12 @@ For Hebrew "׳§׳¨׳", a good dictionary (like ׳׳™׳׳•׳’) list
 
 Your meanings[] MUST cover ALL homonyms and ALL sub-meanings. For common words like ׳§׳¨׳, ׳₪׳¨׳©, ׳¢׳׳”, ׳©׳, ׳™׳“ ג€” expect 5-10+ distinct meanings. DO NOT stop at 3-4 if more exist.
 
+DOCUMENTED CASE — NAMES OF MONTHS, DAYS AND HOLIDAYS ARE MEANINGS TOO (Gadi 2026-09-28: "שבט" came back with only tribe + rod and no month).
+When a word is ALSO the name of a calendar month, a day, a holiday or a festival, that sense is a real, required meanings[] item (pos "proper noun"), never skipped because it is a name. Order it by how common it is for the reader.
+- Hebrew: "שבט" = tribe / rod, staff, whip ("חוסך שבטו") / the month Shevat (the fifth month of the Hebrew calendar, when Tu BiShvat falls). "אב" = father / ancestor / the month Av. "אדר" = the month Adar / (poetic) glorious. "תמוז" = the month Tammuz / the ancient deity.
+- English: "May" = the month / the modal verb ("you may go"); "March" = the month / to walk in step / a protest march; "August" = the month / (adj.) respected and impressive.
+Apply the same in every language.
+
 DOCUMENTED CASE — Hebrew "של" is polysemous, NOT only possession. It marks the genitive across several DISTINCT relational senses; enumerate them as separate meanings[] items (do not collapse to one "possession" item):
 - שייכות/בעלות: "הספר של יוסי" (belongs to).
 - קשר/השתייכות: "המורה של הכיתה", "חבר של דני" (association/relation).
