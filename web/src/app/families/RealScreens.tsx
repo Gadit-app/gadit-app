@@ -255,4 +255,71 @@ export const REAL_CSS = `
   .fam-phone { max-width: 250px; }
   .fam-real-pair .fam-phone { max-width: 170px; }
 }
+
+/* ── Premium layer (Gadi 2026-09-28, modeled on the Yooniz landing): generous
+   section rhythm, white 32px cards on soft-tinted bands, layered shadows,
+   a heavy 60px H1, glowing CTAs, a sticky blurred top bar. Scoped to
+   .fam-premium so the illustrated (classic / other-language) page is untouched. */
+.fam-premium {
+  --pm-card: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 4px rgba(16,40,60,0.06), 0 28px 60px -24px rgba(16,40,60,0.30);
+  --pm-soft: 0 0 0 1px rgba(15,72,68,0.04), 0 1px 2px rgba(15,72,68,0.05), 0 10px 28px -10px rgba(15,72,68,0.12);
+  --pm-ink: #1E293B;
+  --pm-body: #475569;
+  --pm-tint: #F0F8F8;
+}
+.fam-premium .fam-rtop { position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,0.86); backdrop-filter: saturate(160%) blur(12px); -webkit-backdrop-filter: saturate(160%) blur(12px); border-bottom: 1px solid rgba(15,72,68,0.08); padding: 14px 32px; }
+.fam-premium .fam-hero { padding: 76px 24px 104px; }
+.fam-premium .fam-h1 { font-size: clamp(40px, 5.2vw, 62px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; color: var(--pm-ink); margin-bottom: 22px; }
+.fam-premium .fam-whatis { font-size: 18px; line-height: 1.75; color: var(--pm-body); margin-bottom: 30px; }
+.fam-premium .fam-band { padding: 108px 0; border-top: 0; }
+.fam-premium .fam-band-cream { background: var(--pm-tint); }
+.fam-premium .fam-band-white { background: #fff; }
+.fam-premium .fam-band-purple { background: linear-gradient(160deg, #F5F1FF 0%, #FFFFFF 70%); }
+.fam-premium .fam-h2 { font-size: clamp(30px, 3.4vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--pm-ink); margin-bottom: 22px; text-wrap: balance; }
+.fam-premium .fam-kicker { margin-bottom: 16px; letter-spacing: 0.08em; font-size: 13px; }
+.fam-premium .fam-body { font-size: 17.5px; line-height: 1.85; color: var(--pm-body); }
+.fam-premium .fam-reframe { font-size: 24px; line-height: 1.5; margin-top: 34px; }
+.fam-premium .fam-pain-lead { font-size: 22px; margin-bottom: 26px; }
+.fam-premium .fam-cta { box-shadow: 0 12px 26px -8px rgba(14,165,165,0.55); transition: transform .16s ease, box-shadow .16s ease; }
+.fam-premium .fam-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -8px rgba(14,165,165,0.6); }
+.fam-premium .fam-cta-ghost { box-shadow: var(--pm-soft); transition: transform .16s ease; }
+.fam-premium .fam-cta-ghost:hover { transform: translateY(-2px); }
+.fam-premium .fam-phone { box-shadow: 0 34px 70px -24px rgba(16,40,60,0.50), 0 10px 22px rgba(16,40,60,0.12); }
+.fam-premium .fam-cred-pill { box-shadow: var(--pm-soft); }
+/* steps: each a floating white card */
+.fam-premium .fam-real-steps { max-width: 940px; gap: 34px; margin-top: 44px; }
+.fam-premium .fam-real-step { background: #fff; border-radius: 32px; padding: 44px 52px; box-shadow: var(--pm-card); }
+.fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { grid-template-columns: 1fr 1fr; gap: 24px; }
+.fam-premium .fam-real-step > .fam-phone { max-width: 270px; }
+.fam-premium .fam-real-step-text { padding-inline: 12px 8px; }
+.fam-premium .fam-real-step-title { font-size: 26px; color: var(--pm-ink); }
+.fam-premium .fam-real-step-body { font-size: 17px; line-height: 1.8; color: var(--pm-body); }
+.fam-premium .fam-band-white:has(.fam-real-steps) { background: linear-gradient(180deg, #FFFFFF 0%, var(--pm-tint) 18%, var(--pm-tint) 100%); }
+/* features: big white card on the band */
+.fam-premium .fam-feature { max-width: 1100px; background: #fff; border-radius: 32px; padding: 60px 64px; gap: 60px; box-shadow: var(--pm-card); }
+.fam-premium .fam-band-white .fam-feature { box-shadow: var(--pm-card), 0 0 0 1px rgba(15,72,68,0.05); }
+.fam-premium .fam-real-points { margin-top: 22px; gap: 12px; }
+/* summary grid + other cards */
+.fam-premium .fam-how-steps { gap: 22px; margin-top: 34px; }
+.fam-premium .fam-mock { border-radius: 22px; border-color: rgba(15,72,68,0.06); box-shadow: var(--pm-soft); }
+.fam-premium .fam-chain-turn { background: #fff; border-radius: 32px; box-shadow: var(--pm-card); border: 0; padding: 40px 36px; margin-top: 56px; }
+.fam-premium .fam-compare { border-radius: 28px; overflow: hidden; box-shadow: var(--pm-card); border: 0; background: #fff; }
+.fam-premium .fam-price-card { border-radius: 32px; box-shadow: var(--pm-card); }
+.fam-premium .fam-guarantee { border-radius: 24px; box-shadow: var(--pm-soft); }
+.fam-premium .fam-faq-item { border-radius: 20px; box-shadow: var(--pm-soft); border: 0; background: #fff; margin-bottom: 12px; }
+.fam-premium .fam-inline-img img, .fam-premium .fam-final-img { border-radius: 28px; box-shadow: var(--pm-card); overflow: hidden; }
+.fam-premium .fam-list { background: #fff; border-radius: 28px; box-shadow: var(--pm-card); padding: 34px 38px; }
+@media (max-width: 760px) {
+  .fam-premium .fam-rtop { padding: 10px 14px; }
+  .fam-premium .fam-hero { padding: 40px 18px 64px; }
+  .fam-premium .fam-band { padding: 68px 0; }
+  .fam-premium .fam-real-step { padding: 28px 22px; border-radius: 26px; }
+  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 20px; }
+  .fam-premium .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: 230px; }
+  .fam-premium .fam-real-step-title { font-size: 22px; }
+  .fam-premium .fam-feature { padding: 30px 22px; border-radius: 26px; gap: 26px; margin-inline: 14px; }
+  .fam-premium .fam-reframe { font-size: 20px; }
+  .fam-premium .fam-chain-turn { padding: 28px 20px; }
+}
 `;

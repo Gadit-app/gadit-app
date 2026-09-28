@@ -6518,7 +6518,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   const ctaLabel = isOwner ? c.ownerCta : c.heroCta;
 
   return (
-    <div dir={dir} className="fam-page" ref={rootRef}>
+    <div dir={dir} className={`fam-page${real ? " fam-premium" : ""}`} ref={rootRef}>
       <style>{FAM_CSS + REAL_CSS}</style>
 
       {withNav ? (
