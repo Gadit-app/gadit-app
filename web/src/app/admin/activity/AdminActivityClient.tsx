@@ -22,7 +22,31 @@ type Item = {
   isBot: boolean;
   atMs: number;
   at: string | null;
+  /** Events folded into this row (same kind/user/word/lang within 2 min). */
+  count?: number;
 };
+
+/** Fold near-identical rows (older log entries predate the server-side
+ *  2-minute dedupe): a Kids Mode search draws one picture per meaning and the
+ *  word page can re-fetch, so one search showed up 3-4 times. Rows are newest
+ *  first; a row merges into the previous kept row with the same key when it
+ *  is within 2 minutes of it. */
+function foldRepeats(rows: Item[]): Item[] {
+  const out: Item[] = [];
+  const lastByKey = new Map<string, Item>();
+  for (const r of rows) {
+    const key = `${r.kind}|${r.uid ?? r.ua ?? ""}|${r.word.toLowerCase()}|${r.lang}`;
+    const prev = lastByKey.get(key);
+    if (prev && prev.atMs - r.atMs <= 120_000) {
+      prev.count = (prev.count ?? 1) + (r.count ?? 1);
+      continue;
+    }
+    const copy = { ...r, count: r.count ?? 1 };
+    out.push(copy);
+    lastByKey.set(key, copy);
+  }
+  return out;
+}
 
 const TEAL = "#0EA5A5";
 const INK = "#111827";
@@ -126,7 +150,7 @@ export default function AdminActivityClient() {
   const langs = Array.from(new Set(items.map((i) => i.lang))).sort();
   const uq = fUser.trim().toLowerCase();
   const botCount = items.filter((i) => i.isBot).length;
-  const filtered = items.filter((it) => {
+  const filtered = foldRepeats(items).filter((it) => {
     if (hideBots && it.isBot) return false;
     if (fType !== "all" && it.kind !== fType) return false;
     if (fLang && it.lang !== fLang) return false;
@@ -229,6 +253,11 @@ export default function AdminActivityClient() {
                         {it.kind === "image"
                           ? <span title={he ? "תמונה" : "image"} style={{ fontSize: 15 }}>🖼️</span>
                           : <span title={he ? "מילה" : "word"} style={{ fontSize: 15 }}>🔤</span>}
+                        {(it.count ?? 1) > 1 && (
+                          <span title={he ? "מספר אירועים שקובצו לשורה אחת" : "events folded into this row"} style={{ marginInlineStart: 4, fontSize: 11, fontWeight: 700, color: MUTED, fontVariantNumeric: "tabular-nums" }}>
+                            ×{it.count}
+                          </span>
+                        )}
                       </td>
                       <td style={{ ...td(), fontWeight: 700, color: INK }}>{it.word}</td>
                       <td style={td()}><span style={{ textTransform: "uppercase", fontSize: 12, color: MUTED, fontWeight: 600 }}>{it.lang}</span></td>

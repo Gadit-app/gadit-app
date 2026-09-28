@@ -27,6 +27,7 @@ type Row = {
   isBot?: boolean;
   atMs?: number;
   at?: string;
+  count?: number;
 };
 
 export async function GET(req: NextRequest) {
@@ -86,6 +87,7 @@ export async function GET(req: NextRequest) {
     isBot: r.isBot === true,
     atMs: r.atMs ?? 0,
     at: r.at ?? null,
+    count: typeof r.count === "number" && r.count > 1 ? r.count : 1,
     };
   });
 

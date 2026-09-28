@@ -1,3 +1,5 @@
+import { createHash } from "crypto";
+import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "./firebase-admin";
 
 // Known crawler / script user-agents. A real browser always sends a rich UA;
@@ -19,8 +21,12 @@ export function isBotUA(ua: string | null | undefined): boolean {
  * `wordSearches` (an aggregated per-word counter) — here every single event
  * is its own row, so Gadi can watch the app second by second.
  *
- * One auto-id doc per event in `activityLog`:
- *   { kind: "word" | "image", word, lang, uid, plan, atMs, at }
+ * One doc per (kind, who, word, lang, 2-minute window) in `activityLog`:
+ *   { kind: "word" | "image", word, lang, uid, plan, count, atMs, at }
+ * Repeats inside the window (a Kids Mode search draws one picture PER
+ * MEANING, and the word page re-fetches /api/define when lang/user settle)
+ * bump `count` on the same row instead of adding near-identical rows, which
+ * made one search look like 3 or 4 in the log. Gadi 2026-09-28.
  * `atMs` (epoch ms) is the sort + pagination key; `at` is a human ISO string.
  * `uid` is null for anonymous (not-signed-in) visitors; the email is resolved
  * at read time from the users collection so we don't duplicate PII per row.
@@ -45,7 +51,13 @@ export async function recordActivity(e: {
     const word = (e.word || "").trim().slice(0, 120);
     if (!word) return;
     const country = (e.country || "").trim().slice(0, 2).toUpperCase() || null;
-    await getAdminDb().collection("activityLog").add({
+    const who = e.uid || `anon:${country ?? ""}:${(e.ua || "").slice(0, 200)}`;
+    const bucket = Math.floor(Date.now() / 120_000);
+    const id = createHash("sha1")
+      .update(`${e.kind}|${who}|${word.toLowerCase()}|${e.lang || "en"}|${bucket}`)
+      .digest("hex");
+    await getAdminDb().collection("activityLog").doc(id).set({
+      count: FieldValue.increment(1),
       kind: e.kind,
       word,
       lang: e.lang || "en",
@@ -56,7 +68,7 @@ export async function recordActivity(e: {
       isBot: isBotUA(e.ua),
       atMs: Date.now(),
       at: new Date().toISOString(),
-    });
+    }, { merge: true });
   } catch (err) {
     console.warn("[recordActivity] failed:", String(err));
   }
