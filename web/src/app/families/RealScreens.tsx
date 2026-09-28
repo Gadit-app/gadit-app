@@ -1,0 +1,183 @@
+"use client";
+
+import Image from "next/image";
+
+/**
+ * Real app screens for the Families landing page (Gadi 2026-09-28, after the
+ * Yooniz landing): instead of illustrations, every step and every tool is
+ * shown on the actual Gadit screen. Screens are captured from a seeded demo
+ * family (mom מיכל, kids נועה 9 and איתי 11) at phone size and live in
+ * public/fam/screens/{lang}/{name}.webp. he + en for now; other languages
+ * keep the previous illustrated sections until their screens are captured.
+ */
+
+export type RealStep = { t: string; b: string; img: string };
+export type RealTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
+export type RealCopy = {
+  howKicker: string;
+  howTitle: string;
+  steps: RealStep[];
+  dash: RealTool;
+  tools: RealTool[];
+  shotAlt: string;
+};
+
+export const REAL_COPY: Record<string, RealCopy> = {
+  he: {
+    howKicker: "איך זה עובד",
+    howTitle: "חמישה צעדים, ואוצר המילים מתחיל לגדול",
+    shotAlt: "מסך אמיתי מתוך Gadit",
+    steps: [
+      { t: "מוסיפים את בני המשפחה", b: "כל ילד עם שם, גיל וצבע, בפחות מדקה. עד 5 ילדים, וגם ההורה השני.", img: "add" },
+      { t: "מחברים את המכשירים של הילדים", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
+      { t: "הילד מחפש מילה", b: "כל מילה מוסברת בשפה של ילדים, עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
+      { t: "כל מילה נשמרת במחברת שלו", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה, עם רצף ימים ויעד שבועי.", img: "notebook" },
+      { t: "מתרגלים עד שהמילה נשארת", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
+    ],
+    dash: {
+      kicker: "שקיפות מלאה להורה",
+      title: "רואים את אוצר המילים גדל, מילה אחרי מילה",
+      body: "בלוח ההורה רואים את כל הילדים במסך אחד: כמה מילים יש במחברת של כל אחד, כמה נוספו השבוע, רצף הימים והמילים האחרונות שחיפש.",
+      points: ["כל הילדים במבט אחד", "מילים חדשות השבוע", "התראה כשהילד מחפש מילה, מיד או בסיכום יומי"],
+      img: "dashboard",
+      img2: "alerts",
+    },
+    tools: [
+      {
+        kicker: "כל מילה",
+        title: "מצלמים דף מהספר, ומבינים כל מילה בו",
+        body: "מצלמים או מדביקים טקסט, ו-Gadit פותח אותו כך שאפשר ללחוץ על כל מילה ולקבל את המשמעות שלה. המילים הקשות מסומנות, ומילה שכבר פתחו הופכת לירוקה.",
+        points: ["צילום דף ישר מהמצלמה", "לחיצה על כל מילה", "הסבר של משפט שלם"],
+        img: "read",
+        img2: "read-word",
+      },
+      {
+        kicker: "תרגול הכתבה",
+        title: "מתכוננים להכתבה של בית הספר",
+        body: "מדביקים את רשימת המילים של המורה, ו-Gadit מקריא כל מילה בקול. הילד כותב, מקבל תשובה מיד, ומילה שטעה בה חוזרת עד שהיא נכונה.",
+        points: ["הקראה בקול, כמו בכיתה", "בדיקה של כתיב מדויק", "הודעה להורה בסיום"],
+        img: "spell-set",
+      },
+      {
+        kicker: "תגיד את זה",
+        title: "לשמוע משפט, ואז להגיד אותו בעצמך",
+        body: "כותבים משפט ובוחרים את השפה שלומדים. Gadit מראה איך אומרים אותו ומקריא אותו בקול, והילד אומר אותו בעצמו ומקבל כוכבים על ההגייה.",
+        points: ["הקראה בקול", "תרגול הגייה עם ציון", "הודעה להורה"],
+        img: "say",
+      },
+      {
+        kicker: "המשמעות לפי המשפט",
+        title: "מילה אחת, המשמעות הנכונה",
+        body: "להרבה מילים יש כמה משמעויות. כותבים את המשפט שבו המילה הופיעה, ו-Gadit בוחר את המשמעות שמתאימה בדיוק למשפט.",
+        points: ["הגדרה אחת מדויקת", "עובד בכל שפה"],
+        img: "context",
+      },
+    ],
+  },
+  en: {
+    howKicker: "How it works",
+    howTitle: "Five steps, and the vocabulary starts to grow",
+    shotAlt: "A real Gadit screen",
+    steps: [
+      { t: "Add your family members", b: "Each child with a name, age and color, in under a minute. Up to 5 children, plus the other parent.", img: "add" },
+      { t: "Connect your children's devices", b: "Your child signs in on their own phone or tablet with a QR code or a 6-digit code, no password. No device of their own? There's a shared kids screen.", img: "pair" },
+      { t: "Your child looks up a word", b: "Every word is explained in kids' language, with a picture for every meaning, examples and the word's origin.", img: "word" },
+      { t: "Every word is saved to their notebook", b: "Without tapping anything. The notebook grows word by word, with a day streak and a weekly goal.", img: "notebook" },
+      { t: "Practice until the word stays", b: "Games and quizzes built from the words your child looked up.", img: "play" },
+    ],
+    dash: {
+      kicker: "Full transparency for parents",
+      title: "Watch the vocabulary grow, word by word",
+      body: "The parent board shows all your children on one screen: how many words are in each notebook, how many were added this week, the day streak and the latest words they looked up.",
+      points: ["All your children at a glance", "New words this week", "An alert when your child looks up a word, instantly or as a daily summary"],
+      img: "dashboard",
+      img2: "alerts",
+    },
+    tools: [
+      {
+        kicker: "Every Word",
+        title: "Photograph a page, and understand every word on it",
+        body: "Photograph or paste a text, and Gadit opens it so you can tap any word and get its meaning. Hard words are highlighted, and a word you've opened turns green.",
+        points: ["Photograph a page with the camera", "Tap any word", "Understand a whole sentence"],
+        img: "read",
+        img2: "read-word",
+      },
+      {
+        kicker: "Spelling practice",
+        title: "Get ready for the school dictation",
+        body: "Paste the teacher's word list, and Gadit reads each word out loud. Your child writes it, gets an answer right away, and a missed word comes back until it's right.",
+        points: ["Read out loud, like in class", "Exact spelling check", "A message to the parent when done"],
+        img: "spell-set",
+      },
+      {
+        kicker: "Say it",
+        title: "Hear a sentence, then say it yourself",
+        body: "Type a sentence and choose the language you're learning. Gadit shows how to say it and reads it out loud, then your child says it and gets stars for pronunciation.",
+        points: ["Read out loud", "Pronunciation practice with a score", "A message to the parent"],
+        img: "say",
+      },
+      {
+        kicker: "The meaning from the sentence",
+        title: "One word, the right meaning",
+        body: "Many words have more than one meaning. Type the sentence the word appeared in, and Gadit picks the meaning that fits it exactly.",
+        points: ["One precise definition", "Works in any language"],
+        img: "context",
+      },
+    ],
+  },
+};
+
+export function PhoneShot({ lang, name, alt, priority = false }: { lang: string; name: string; alt: string; priority?: boolean }) {
+  return (
+    <div className="fam-phone">
+      <div className="fam-phone-screen">
+        <Image
+          src={`/fam/screens/${lang}/${name}.webp`}
+          alt={alt}
+          width={780}
+          height={1688}
+          sizes="(max-width: 760px) 70vw, 300px"
+          priority={priority}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const REAL_CSS = `
+.fam-phone {
+  width: 100%;
+  max-width: 290px;
+  margin: 0 auto;
+  background: #0E1116;
+  border-radius: 38px;
+  padding: 9px;
+  box-shadow: 0 24px 56px rgba(11,18,32,0.22), 0 6px 16px rgba(11,18,32,0.12);
+}
+.fam-phone-screen { border-radius: 30px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 390 / 844; }
+.fam-phone-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.fam-real-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; max-width: 520px; margin: 0 auto; }
+.fam-real-hero .fam-phone:first-child { transform: translateY(18px); }
+.fam-real-steps { display: grid; gap: 40px; margin: 28px auto 0; max-width: 780px; }
+.fam-real-step { display: grid; grid-template-columns: 1fr 260px; gap: 40px; align-items: center; text-align: start; }
+.fam-real-step:nth-child(even) { grid-template-columns: 260px 1fr; }
+.fam-real-step:nth-child(even) .fam-real-step-text { order: 2; }
+.fam-real-step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #0EA5A5; color: #fff; font-weight: 800; font-size: 16px; margin-bottom: 10px;
+}
+.fam-real-step-title { font-size: 22px; font-weight: 800; color: #111827; margin: 0 0 8px; line-height: 1.3; text-wrap: balance; }
+.fam-real-step-body { font-size: 16.5px; line-height: 1.7; color: #374151; margin: 0; }
+.fam-real-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+.fam-real-pair .fam-phone { max-width: 230px; }
+.fam-real-points { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
+.fam-real-points li { display: flex; gap: 8px; align-items: flex-start; font-size: 15.5px; color: #1f2937; font-weight: 600; }
+.fam-real-points li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: #0EA5A5; }
+@media (max-width: 760px) {
+  .fam-real-step, .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 16px; }
+  .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
+  .fam-phone { max-width: 250px; }
+  .fam-real-pair .fam-phone { max-width: 170px; }
+}
+`;

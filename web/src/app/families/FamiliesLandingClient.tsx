@@ -1,5 +1,6 @@
 "use client";
 
+import { REAL_COPY, REAL_CSS, PhoneShot } from "./RealScreens";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -6410,6 +6411,10 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
   const href = useHref();
   const he = lang === "he";
   const c = (COPY as Record<string, Copy>)[lang] ?? COPY.en;
+  // Real app screens: Hebrew first (captured from the Hebrew demo family).
+  // English copy is ready in REAL_COPY.en but waits for an English demo
+  // family's screens; every other language keeps the illustrations.
+  const real = lang === "he" ? REAL_COPY.he : undefined;
 
   // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
   // is visible vocabulary growth; the pain angles stay as variants).
@@ -6513,7 +6518,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
 
   return (
     <div dir={dir} className="fam-page" ref={rootRef}>
-      <style>{FAM_CSS}</style>
+      <style>{FAM_CSS + REAL_CSS}</style>
 
       {withNav ? (
         /* In-site version (/families): the full Gadit topbar, matching
@@ -6610,6 +6615,12 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
               <div className="fam-trustline">{c.trustLine}</div>
             </div>
             <div className="fam-hero-visual">
+              {real ? (
+                <div className="fam-real-hero">
+                  <PhoneShot lang={lang} name="dashboard" alt={real.shotAlt} priority />
+                  <PhoneShot lang={lang} name="word" alt={real.shotAlt} priority />
+                </div>
+              ) : (
               <div className="fam-hero-stage">
                 <div className="fam-hero-panel" aria-hidden />
                 <PhoneMock lang={lang} />
@@ -6629,6 +6640,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                   </div>
                 </div>
               </div>
+              )}
             </div>
           </div>
           <div className="fam-trustbar">
@@ -6664,6 +6676,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
         {/* 3 · Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every
              word a piece. Missing words are holes and the child stops
              seeing the whole picture. Before (gaps) → after (filled). */}
+        {!real && (
         <section className="fam-band fam-band-cream">
           <div className="fam-section fam-center">
             <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
@@ -6673,6 +6686,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <p className="fam-reframe">{c.puzzleLine}</p>
           </div>
         </section>
+        )}
 
         {/* 4 · How it works (Gadi 2026-07-28, 5-model synthesis): the old
              negative word→sentence→paragraph chain was redundant with the
@@ -6681,8 +6695,22 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
              ending in the visible-progress payoff + CTA. */}
         <section className="fam-band fam-band-white">
           <div className="fam-section fam-center fam-section-wide">
-            <div className="fam-kicker">{c.chainKicker}</div>
-            <h2 className="fam-h2">{c.chainTitle}</h2>
+            <div className="fam-kicker">{real ? real.howKicker : c.chainKicker}</div>
+            <h2 className="fam-h2">{real ? real.howTitle : c.chainTitle}</h2>
+            {real ? (
+              <div className="fam-real-steps">
+                {real.steps.map((st, i) => (
+                  <div key={i} className="fam-real-step">
+                    <div className="fam-real-step-text">
+                      <span className="fam-real-step-num">{i + 1}</span>
+                      <h3 className="fam-real-step-title">{st.t}</h3>
+                      <p className="fam-real-step-body">{st.b}</p>
+                    </div>
+                    <PhoneShot lang={lang} name={st.img} alt={real.shotAlt} />
+                  </div>
+                ))}
+              </div>
+            ) : (
             <div className="fam-how-steps">
               {c.howBlocks.map((blk, i) => {
                 const Mock = HOW_MOCKS[i] ?? HOW_MOCKS[0];
@@ -6700,6 +6728,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                 );
               })}
             </div>
+            )}
             <div className="fam-chain-turn">
               <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
               <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
@@ -6710,10 +6739,38 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
           </div>
         </section>
 
+        {real && [real.dash, ...real.tools].map((f, i) => (
+          <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
+            <div className={`fam-feature ${i % 2 === 1 ? "is-flipped" : ""}`}>
+              <div className="fam-feature-text">
+                <div className="fam-kicker">{f.kicker}</div>
+                <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
+                <p className="fam-body">{f.body}</p>
+                <ul className="fam-real-points">
+                  {f.points.map((pt, j) => (
+                    <li key={j}>{pt}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="fam-feature-visual">
+                {f.img2 ? (
+                  <div className="fam-real-pair">
+                    <PhoneShot lang={lang} name={f.img} alt={real.shotAlt} />
+                    <PhoneShot lang={lang} name={f.img2} alt={real.shotAlt} />
+                  </div>
+                ) : (
+                  <PhoneShot lang={lang} name={f.img} alt={real.shotAlt} />
+                )}
+              </div>
+            </div>
+          </section>
+        ))}
+
         {/* 5 · The parent dashboard (Gadi 2026-07-18): the moat. A mockup
              of the real /family progress view so a parent sees they are
              buying visible, accumulating proof of growth that ChatGPT
              cannot give. */}
+        {!real && (
         <section className="fam-band fam-band-cream">
           <div className="fam-feature">
             <div className="fam-feature-text">
@@ -6753,8 +6810,10 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
           </div>
         </section>
 
+        )}
+
         {/* 4 · Features — one section per feature, alternating */}
-        {c.features.map((f, i) => {
+        {!real && c.features.map((f, i) => {
           const Mock = MOCKUPS[i];
           const flip = i % 2 === 1;
           return (
