@@ -568,9 +568,13 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
     // overseas customers. Send Hebrew to a Hebrew-UI user (the language they
     // actually use the product in) or, when their UI language is unknown, an
     // Israeli card/account; English to everyone else. (Gadi 2026-09-10.)
+    // A shekel invoice is also Hebrew: ₪ billing is only offered in the Hebrew
+    // checkout, and a ₪ Family payer got this email in English because their
+    // stored uiLang was not "he". (Gadi 2026-09-28.)
     const invCountry = typeof invoice.customer_address?.country === "string" ? invoice.customer_address.country : "";
     const he =
       userData.uiLang === "he" ||
+      invoice.currency === "ils" ||
       (!userData.uiLang && (userData.country === "IL" || invCountry === "IL"));
 
     const resendKey = process.env.RESEND_API_KEY;

@@ -29,7 +29,7 @@ const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de",
 // free trial, untouched — Gadit is web-first, the app is convenience only.
 const PLAY_COOKIE = "gadit_play";
 // Consumer purchase surfaces that must not exist inside the Play app.
-const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools"]);
+const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew"]);
 
 function detectPlay(req: NextRequest): boolean {
   if (req.nextUrl.searchParams.get("src") === "play") return true;
