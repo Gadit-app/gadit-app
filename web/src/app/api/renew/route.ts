@@ -56,6 +56,12 @@ export async function POST(req: NextRequest) {
   try {
     const snap = await getAdminDb().collection("users").doc(uid).get();
     const data = snap.data() ?? {};
+    // Already has paid access (incl. plans granted by hand with no Stripe
+    // sub, and a past_due user still inside the grace window is handled
+    // below). A lapsed sub always lands on plan "basic" in the webhook/cron.
+    if (data.plan && data.plan !== "basic" && data.subscriptionStatus !== "past_due") {
+      return NextResponse.json({ status: "active" });
+    }
     let customerId = typeof data.stripeCustomerId === "string" ? data.stripeCustomerId : "";
     if (!customerId && email) {
       const found = await stripe.customers.list({ email, limit: 1 });
@@ -79,7 +85,10 @@ export async function POST(req: NextRequest) {
     const ended = subs.data
       .filter((s) => s.status === "canceled" || s.status === "incomplete_expired")
       .sort((a, b) => (b.canceled_at ?? b.created) - (a.canceled_at ?? a.created))[0];
-    const priceId = ended?.items.data[0]?.price?.id ?? (typeof data.priceId === "string" ? data.priceId : "");
+    // The plan we last provisioned for this account wins over "newest ended
+    // Stripe sub": a Family owner with an older Deep trial must get Family.
+    const storedPrice = typeof data.priceId === "string" && data.priceId.startsWith("price_") ? data.priceId : "";
+    const priceId = storedPrice || ended?.items.data[0]?.price?.id || "";
     if (!priceId) return NextResponse.json({ status: "none" });
 
     // Bill in the currency they paid before (₪ for Hebrew families).
