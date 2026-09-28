@@ -43,12 +43,16 @@ function inline(he: boolean, s: string): string {
     links.push(url);
     return `\uE000${links.length - 1}\uE001`;
   });
-  out = out.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  // Bold as markers too: the Latin pass below must not touch the "b" in <b>
+  // (it rendered a literal "<b>" in Hebrew emails).
+  out = out.replace(/\*\*([^*]+)\*\*/g, "\uE002$1\uE003");
   if (he) {
-    // Wrap runs of Latin letters/digits (and internal spaces/&/.) so an
-    // embedded brand name keeps its own left-to-right order inside RTL text.
-    out = out.replace(/[A-Za-z][A-Za-z0-9]*(?:[ .&][A-Za-z0-9]+)*/g, (m) => `<span dir="ltr">${m}</span>`);
+    // Wrap runs of Latin letters/digits (and internal spaces/&/./slash) so an
+    // embedded brand name or address (gadit.app/join) keeps its own
+    // left-to-right order inside RTL text.
+    out = out.replace(/[A-Za-z][A-Za-z0-9]*(?:[ .&/][A-Za-z0-9]+)*/g, (m) => `<span dir="ltr">${m}</span>`);
   }
+  out = out.replace(/\uE002/g, "<b>").replace(/\uE003/g, "</b>");
   out = out.replace(/\uE000(\d+)\uE001/g, (_, i) => {
     const url = links[Number(i)];
     return `<a href="${url}" dir="ltr" style="color:#0E7490;word-break:break-all;">${url}</a>`;
