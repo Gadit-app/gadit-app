@@ -1,6 +1,6 @@
 "use client";
 
-import { REAL_COPY, REAL_CSS, PhoneShot } from "./RealScreens";
+import { REAL_COPY, REAL_CSS, PhoneShot, Lines } from "./RealScreens";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -6404,7 +6404,7 @@ const FEATURE_IMG: Array<string | null> = [
 
 /* ────────────────────────── page ────────────────────────── */
 
-export default function FamiliesLandingClient({ withNav = false }: { withNav?: boolean }) {
+export default function FamiliesLandingClient({ withNav = false, classic = false }: { withNav?: boolean; classic?: boolean }) {
   const params = useSearchParams();
   const { user, familyId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
@@ -6414,7 +6414,8 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
   // Real app screens: Hebrew first (captured from the Hebrew demo family).
   // English copy is ready in REAL_COPY.en but waits for an English demo
   // family's screens; every other language keeps the illustrations.
-  const real = lang === "he" ? REAL_COPY.he : undefined;
+  // `classic` = the pre-2026-09-28 illustrated page, kept at /families/landing-old.
+  const real = !classic && lang === "he" ? REAL_COPY.he : undefined;
 
   // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
   // is visible vocabulary growth; the pain angles stay as variants).
@@ -6607,7 +6608,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
           <div className="fam-hero-grid">
             <div className="fam-hero-text">
               <h1 className="fam-h1">{hero.h1}</h1>
-              <p className="fam-whatis">{c.whatIs}</p>
+              <p className="fam-whatis">{real ? <Lines text={c.whatIs} /> : c.whatIs}</p>
               <button type="button" className="fam-cta" onClick={() => startTrial("hero")}>
                 {ctaLabel}
               </button>
@@ -6677,12 +6678,12 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             {real ? (
               <>
                 <h2 className="fam-h2">{real.pain.title}</h2>
-                <p className="fam-pain-lead">{real.pain.lead}</p>
+                <p className="fam-pain-lead"><Lines text={real.pain.lead} /></p>
                 {real.pain.paras.map((t, i) => (
-                  <p key={i} className="fam-body fam-body-center">{t}</p>
+                  <p key={i} className="fam-body fam-body-center"><Lines text={t} /></p>
                 ))}
-                <p className="fam-body fam-body-center fam-body-strong">{real.pain.strong}</p>
-                <p className="fam-reframe">{real.pain.reframe}</p>
+                <p className="fam-body fam-body-center fam-body-strong"><Lines text={real.pain.strong} /></p>
+                <p className="fam-reframe"><Lines text={real.pain.reframe} /></p>
               </>
             ) : (
               <>
@@ -6703,14 +6704,14 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
         {/* 3 · Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every
              word a piece. Missing words are holes and the child stops
              seeing the whole picture. Before (gaps) → after (filled). */}
-        {!real && (
+        {(
         <section className="fam-band fam-band-cream">
           <div className="fam-section fam-center">
             <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
             <h2 className="fam-h2">{c.puzzleTitle}</h2>
-            <p className="fam-body fam-body-center">{c.puzzleBody}</p>
+            <p className="fam-body fam-body-center">{real ? <Lines text={c.puzzleBody} /> : c.puzzleBody}</p>
             <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
-            <p className="fam-reframe">{c.puzzleLine}</p>
+            <p className="fam-reframe">{real ? <Lines text={c.puzzleLine} /> : c.puzzleLine}</p>
           </div>
         </section>
         )}
@@ -6732,7 +6733,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
                     <div className="fam-real-step-text">
                       <span className="fam-real-step-num">{i + 1}</span>
                       <h3 className="fam-real-step-title">{st.t}</h3>
-                      <p className="fam-real-step-body">{st.b}</p>
+                      <p className="fam-real-step-body"><Lines text={st.b} /></p>
                     </div>
                     <PhoneShot lang={lang} name={st.img} alt={real.shotAlt} />
                   </div>
@@ -6780,7 +6781,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             )}
             <div className="fam-chain-turn">
               <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
-              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
+              <p className="fam-chain-turn-body">{real ? <Lines text={c.chainTurnBody} /> : c.chainTurnBody}</p>
               <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
                 {ctaLabel}
               </button>
@@ -6794,7 +6795,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
               <div className="fam-feature-text">
                 <div className="fam-kicker">{f.kicker}</div>
                 <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
-                <p className="fam-body">{f.body}</p>
+                <p className="fam-body"><Lines text={f.body} /></p>
                 <ul className="fam-real-points">
                   {f.points.map((pt, j) => (
                     <li key={j}>{pt}</li>
@@ -6932,7 +6933,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <div className="fam-inline-img">
               <Image src="/fam/safe.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
             </div>
-            <p className="fam-body fam-body-center">{c.safeBody}</p>
+            <p className="fam-body fam-body-center">{real ? <Lines text={c.safeBody} /> : c.safeBody}</p>
             <p className="fam-safe-line">{c.safeLine}</p>
           </div>
         </section>
@@ -6961,7 +6962,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
           <div className="fam-section fam-center">
             <div className="fam-kicker">{c.credKicker}</div>
             <h2 className="fam-h2">{c.credTitle}</h2>
-            <p className="fam-body fam-body-center">{c.credBody}</p>
+            <p className="fam-body fam-body-center">{real ? <Lines text={c.credBody} /> : c.credBody}</p>
           </div>
         </section>
 
@@ -7016,7 +7017,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
               <ShieldIcon />
               <div>
                 <div className="fam-guarantee-t">{c.guaranteeTitle}</div>
-                <div className="fam-guarantee-b">{c.guaranteeBody}</div>
+                <div className="fam-guarantee-b">{real ? <Lines text={c.guaranteeBody} /> : c.guaranteeBody}</div>
               </div>
             </div>
           </div>
@@ -7044,7 +7045,7 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
               <Image src="/fam/routine.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
             </div>
             <h2 className="fam-h2 fam-h2-onteal">{c.finalTitle}</h2>
-            <p className="fam-final-sub">{c.finalSub}</p>
+            <p className="fam-final-sub">{real ? <Lines text={c.finalSub} /> : c.finalSub}</p>
             <button type="button" className="fam-cta fam-cta-inverse" onClick={() => startTrial("final")}>
               {isOwner ? c.ownerCta : c.finalCta}
             </button>
