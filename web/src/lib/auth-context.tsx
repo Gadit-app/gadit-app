@@ -209,6 +209,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then((cred) => { if (cred) postGoogleSignIn(cred); })
       .catch((err) => { console.warn("getRedirectResult failed:", err); });
     const unsub = onAuthStateChanged(auth, (u) => {
+      // Mark the plan unresolved IN THE SAME BATCH as the user appearing.
+      // Otherwise the first render with a signed-in user still carries the
+      // anonymous planReady=true + plan="basic", and child pages' gates (their
+      // effects run before this provider's plan effect) bounce a paying user
+      // to /pricing, or a kid home, on a direct load of /notebook or /play.
+      // Found 2026-09-28 while capturing demo screens.
+      if (u) setPlanReady(false);
       setUser(u);
       setLoading(false);
       // Fire any queued post-auth action exactly once. Captured into a
