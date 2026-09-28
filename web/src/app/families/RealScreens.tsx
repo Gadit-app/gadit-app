@@ -16,6 +16,8 @@ export type RealTool = { kicker: string; title: string; body: string; points: st
 export type RealCopy = {
   /** Short proof points under the hero CTA (replace the old trust line + bar). */
   heroPoints: string[];
+  /** The pain section, in Gadi's own words (2026-09-28). */
+  pain: { title: string; lead: string; paras: string[]; strong: string; reframe: string };
   howKicker: string;
   howTitle: string;
   steps: RealStep[];
@@ -27,6 +29,16 @@ export type RealCopy = {
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
     heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "30+ שפות ממשק"],
+    pain: {
+      title: "למה שיעורי הבית נמרחים?",
+      lead: "הוא יודע את החומר. הוא פשוט לא הבין את השאלה.",
+      paras: [
+        "לפעמים מה שעוצר אותו זו מילה אחת. מילה שהוא לא מכיר, או מכיר רק בערך. הוא לא שואל, הוא מנחש וממשיך. וככה, בחשבון, במדעים או בהיסטוריה, הוא עונה לא נכון על חומר שהוא דווקא יודע.",
+        "ואתם? שוב יושבים לידו, מסבירים מילה אחרי מילה, ומנסים להבין מה בדיוק לא ברור.",
+      ],
+      strong: "חסרות לו מילים. וזה נוגע בהרבה יותר מציון: ילד שלא מבין מתחיל להאמין שהוא פשוט לא טוב בזה.",
+      reframe: "Gadit מסביר לו כל מילה בשנייה, במילים פשוטות ועם תמונה. בלי לקרוא לכם, ובלי לנחש.",
+    },
     howKicker: "איך זה עובד",
     howTitle: "חמישה צעדים, ואוצר המילים מתחיל לגדול",
     shotAlt: "מסך אמיתי מתוך Gadit",
@@ -79,6 +91,16 @@ export const REAL_COPY: Record<string, RealCopy> = {
   },
   en: {
     heroPoints: ["Up to 5 children", "A picture for every meaning", "30+ interface languages"],
+    pain: {
+      title: "Why does homework drag on?",
+      lead: "They know the material. They just didn't understand the question.",
+      paras: [
+        "Sometimes what stops them is one word. A word they don't know, or only sort of know. They don't ask, they guess and move on. And so, in math, science or history, they answer wrong on material they actually know.",
+        "And you? Sitting next to them again, explaining word after word, trying to work out what exactly isn't clear.",
+      ],
+      strong: "They're missing words. And it touches far more than a grade: a child who doesn't understand starts to believe they're just not good at this.",
+      reframe: "Gadit explains every word in a second, in simple words and with a picture. Without calling you over, and without guessing.",
+    },
     howKicker: "How it works",
     howTitle: "Five steps, and the vocabulary starts to grow",
     shotAlt: "A real Gadit screen",
@@ -178,6 +200,7 @@ export const REAL_CSS = `
 .fam-hero-points { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
 .fam-hero-points li { display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #1f2937; }
 .fam-hero-points li svg { flex: none; }
+.fam-pain-lead { font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 14px; text-wrap: balance; }
 .fam-real-points { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
 .fam-real-points li { display: flex; gap: 8px; align-items: flex-start; font-size: 15.5px; color: #1f2937; font-weight: 600; }
 .fam-real-points li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: #0EA5A5; }

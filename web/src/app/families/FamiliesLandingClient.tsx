@@ -6674,6 +6674,18 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
         <section className="fam-band fam-band-white">
           <div className="fam-section fam-center">
             <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
+            {real ? (
+              <>
+                <h2 className="fam-h2">{real.pain.title}</h2>
+                <p className="fam-pain-lead">{real.pain.lead}</p>
+                {real.pain.paras.map((t, i) => (
+                  <p key={i} className="fam-body fam-body-center">{t}</p>
+                ))}
+                <p className="fam-body fam-body-center fam-body-strong">{real.pain.strong}</p>
+                <p className="fam-reframe">{real.pain.reframe}</p>
+              </>
+            ) : (
+              <>
             <h2 className="fam-h2">{c.painTitle}</h2>
             {!real && (
             <div className="fam-inline-img">
@@ -6683,6 +6695,8 @@ export default function FamiliesLandingClient({ withNav = false }: { withNav?: b
             <p className="fam-body fam-body-center">{c.painBody1}</p>
             <p className="fam-body fam-body-center fam-body-strong">{c.painBody2}</p>
             <p className="fam-reframe">{c.reframe}</p>
+              </>
+            )}
           </div>
         </section>
 
