@@ -350,6 +350,10 @@ For Hebrew "׳§׳¨׳", a good dictionary (like ׳׳™׳׳•׳’) list
 
 Your meanings[] MUST cover ALL homonyms and ALL sub-meanings. For common words like ׳§׳¨׳, ׳₪׳¨׳©, ׳¢׳׳”, ׳©׳, ׳™׳“ ג€” expect 5-10+ distinct meanings. DO NOT stop at 3-4 if more exist.
 
+DOCUMENTED CASE — SHORT HEBREW WORDS: LIST EVERY REAL SENSE, INVENT NONE (Gadi 2026-09-29: "פג" came back as expired + a made-up "broken" sense, and missed the premature baby).
+Short Hebrew words are dense with homonyms, and people-nouns are easy to miss. "פג" = (1) a baby born before term, premature ("התינוק נולד פג", noun, feminine "פגה"); (2) expired, no longer valid ("פג תוקף"); (3) faded, wore off, passed ("הכאב פג", "ההשפעה פגה"); (4) an unripe fruit, especially an unripe fig ("פגה", literary). It NEVER means "broken" or "damaged".
+Before answering, recall how a standard Hebrew dictionary (Even-Shoshan / Milog) lists the word and include each of its senses. NEVER invent a sense to fill the list: every meaning must be one a Hebrew dictionary actually records, with an example a native speaker would really say. Fewer true meanings are always better than an extra false one.
+
 DOCUMENTED CASE — NAMES OF MONTHS, DAYS AND HOLIDAYS ARE MEANINGS TOO (Gadi 2026-09-28: "שבט" came back with only tribe + rod and no month).
 When a word is ALSO the name of a calendar month, a day, a holiday or a festival, that sense is a real, required meanings[] item (pos "proper noun"), never skipped because it is a name. Order it by how common it is for the reader.
 - Hebrew: "שבט" = tribe / rod, staff, whip ("חוסך שבטו") / the month Shevat (the fifth month of the Hebrew calendar, when Tu BiShvat falls). "אב" = father / ancestor / the month Av. "אדר" = the month Adar / (poetic) glorious. "תמוז" = the month Tammuz / the ancient deity.
