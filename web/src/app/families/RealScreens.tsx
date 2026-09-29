@@ -322,4 +322,26 @@ export const REAL_CSS = `
   .fam-premium .fam-reframe { font-size: 20px; }
   .fam-premium .fam-chain-turn { padding: 28px 20px; }
 }
+
+/* Fit-to-screen (Gadi 2026-09-29, 14.5" laptop): on desktop the hero and every
+   section should fit one screen, like the Yooniz landing. Sizes scale with
+   the viewport HEIGHT as well as width. */
+@media (min-width: 880px) {
+  .fam-premium .fam-hero { min-height: calc(100svh - 68px); display: grid; align-content: center; padding: clamp(20px, 4vh, 48px) 24px clamp(24px, 5vh, 56px); }
+  .fam-premium .fam-h1 { font-size: clamp(34px, min(3.8vw, 7.4vh), 60px); margin-bottom: clamp(12px, 2vh, 20px); }
+  .fam-premium .fam-whatis { font-size: clamp(15px, min(1.25vw, 2.4vh), 18px); line-height: 1.7; margin-bottom: clamp(16px, 3vh, 28px); }
+  .fam-premium .fam-cred-pill { margin-bottom: clamp(10px, 2vh, 18px); font-size: clamp(12px, 1.9vh, 14px); }
+  .fam-premium .fam-cta { padding-block: clamp(11px, 1.9vh, 16px); font-size: clamp(15px, 2.3vh, 18px); }
+  .fam-premium .fam-cta-ghost { padding-block: clamp(10px, 1.8vh, 14px); font-size: clamp(14px, 2.2vh, 16px); }
+  .fam-premium .fam-hero-points { margin-top: clamp(10px, 2vh, 18px); }
+  .fam-premium .fam-real-hero { padding: 0; }
+  .fam-premium .fam-real-hero .fam-phone { max-width: min(240px, 30vh); }
+  .fam-premium .fam-band { padding: clamp(48px, 9vh, 104px) 0; }
+  .fam-premium .fam-h2 { font-size: clamp(26px, min(3vw, 5.4vh), 40px); }
+  .fam-premium .fam-real-step { padding: clamp(24px, 4vh, 44px) 52px; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: min(270px, 30vh); }
+  .fam-premium .fam-feature { padding: clamp(28px, 5vh, 60px) 64px; }
+  .fam-premium .fam-feature-visual > .fam-phone { max-width: min(270px, 31vh); }
+  .fam-premium .fam-real-pair .fam-phone { max-width: min(220px, 27vh); }
+}
 `;
