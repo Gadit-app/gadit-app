@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
-import { Geist, Geist_Mono, Rubik, Cairo, Fraunces, Noto_Naskh_Arabic, Lora, Inter, Heebo, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_Devanagari, Noto_Sans_Ethiopic, Noto_Sans_SC, Noto_Sans_TC, Noto_Sans_KR, Noto_Sans_Thai, Noto_Sans_Bengali } from "next/font/google";
+import "./fonts.css";
 import "./globals.css";
+import { CjkFonts } from "@/components/CjkFonts";
+import { cjkHref } from "@/lib/cjk-fonts";
 import { AuthProvider } from "@/lib/auth-context";
 import { LangProvider } from "@/lib/lang-context";
 import { CoachSessionBanner } from "@/components/CoachSessionBanner";
@@ -25,191 +27,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  // Not on the first paint of any page, so don't preload it (Gadi 2026-09-23
-  // PageSpeed fix): every page was preloading all 18 font families, which
-  // dominated the mobile payload and LCP. It loads on demand via swap.
-  preload: false,
-  display: "swap",
-});
-
-const rubik = Rubik({
-  variable: "--font-rubik",
-  subsets: ["hebrew", "latin"],
-  weight: ["400", "500", "600", "700"],
-  // Italic loaded so the wordmark's "it" and the few italic display
-  // rules render a real italic glyph rather than browser-synthesized
-  // skew. The token used to be Lora; now everything routes through Rubik.
-  style: ["normal", "italic"],
-  display: "swap", // wordmark is a likely LCP element — never FOIT-block it.
-});
-
-const cairo = Cairo({
-  variable: "--font-cairo",
-  subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600"],
-  preload: false, // Arabic UI only — load on demand (see geistMono note).
-  display: "swap",
-});
-
-// Display serif for word titles, definitions, and "lexical" moments.
-// opsz axis (9-144) lets a giant word title feel warm, while 20pt serves
-// body text without feeling stiff. Variable weight is required when axes
-// is supplied — Next.js rejects pinned weights alongside axes.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  axes: ["opsz", "SOFT"],
-  preload: false, // Word-page display serif, not first paint (see geistMono note).
-  display: "swap",
-});
-
-// Native Naskh shapes for Arabic — chosen over Cairo (which is a Latin
-// font adapted to Arabic) after a native reader flagged Cairo as feeling
-// "not natural". Cairo stays loaded for now to avoid regressions in
-// existing components; new design system uses noto.
-const notoNaskhArabic = Noto_Naskh_Arabic({
-  variable: "--font-arabic",
-  subsets: ["arabic"],
-  weight: ["400", "500", "600"],
-  preload: false, // Arabic UI only.
-  display: "swap",
-});
-
-// Wordbook redesign — Lora (Latin display + body italic) replaces Fraunces
-// for the Word Result page only. Fraunces stays loaded for the legacy V2
-// home / pricing / notebook screens until those are ported in a later round.
-const lora = Lora({
-  variable: "--font-lora",
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  preload: false, // Word-page serif only.
-  display: "swap",
-});
-
-// Heebo — Hebrew sans for CrispTech. Modern, geometric, designed
-// specifically for Hebrew (unlike Rubik which is more rounded/friendly).
-const heebo = Heebo({
-  variable: "--font-heebo",
-  subsets: ["hebrew", "latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-// JetBrains Mono — monospace for code-style chrome (kbd hints, file
-// names, version stamps). Used sparingly; signals "this is technical".
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jb-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  preload: false, // Rare mono usage, never first paint.
-  display: "swap",
-});
-
-// Inter — body sans for the wordbook design. Coexists with Geist for now.
-const inter = Inter({
-  variable: "--font-inter",
-  // "greek" added for the el (Greek) UI locale — Inter ships full Greek
-  // glyph coverage, so Greek renders in the brand body font instead of an
-  // inconsistent system fallback. No separate Greek font needed.
-  subsets: ["latin", "latin-ext", "greek"],
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-});
-
-// Noto Sans JP — Japanese body/display sans. Pulled in for the ja UI
-// locale. Inter/Heebo/Cairo render Japanese glyphs from system fallback
-// which is inconsistent across OSes; Noto Sans JP ships a self-contained
-// Japanese glyph set so the experience is stable on Windows, macOS,
-// Android and ChromeOS alike.
-const notoSansJp = Noto_Sans_JP({
-  variable: "--font-noto-jp",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Japanese UI only — never preload on other languages.
-  display: "swap",
-});
-
-// Noto Sans Devanagari — Hindi body/display sans. Inter/Heebo/Cairo
-// render Devanagari glyphs from system fallback which is inconsistent
-// across OSes (Windows ships Mangal, Android Roboto's Devanagari subset,
-// older macOS has no native fallback at all). Noto Sans Devanagari ships
-// a complete Devanagari glyph set so the experience is stable on every
-// platform, matching the same pattern used for Noto Sans JP.
-const notoSansDevanagari = Noto_Sans_Devanagari({
-  variable: "--font-noto-hi",
-  subsets: ["latin", "devanagari"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Hindi UI only.
-  display: "swap",
-});
-
-// Noto Sans Ethiopic — Amharic (Ge'ez script, LTR). Same story as
-// Devanagari/JP: none of the Latin-oriented fonts carry fidel glyphs,
-// and OS fallbacks (Windows Nyala/Ebrima, macOS Kefa) are wildly
-// inconsistent, so the script ships its own self-contained font.
-const notoSansEthiopic = Noto_Sans_Ethiopic({
-  variable: "--font-noto-am",
-  subsets: ["latin", "ethiopic"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Amharic UI only.
-  display: "swap",
-});
-
-// CJK + Thai + Bengali scripts. Same rationale as JP/Devanagari/Ethiopic:
-// the Latin-oriented brand fonts carry no Han/Hangul/Thai/Bengali glyphs and
-// OS fallbacks are wildly inconsistent, so each script ships its own Noto.
-// SC/TC/KR follow the JP pattern (subsets: ["latin"] — the CJK glyph set
-// ships whole, next/font can't unicode-range slice it); Thai and Bengali
-// have named Google-Fonts subsets.
-const notoSansSC = Noto_Sans_SC({
-  variable: "--font-noto-sc",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Simplified Chinese UI only.
-  display: "swap",
-});
-
-const notoSansTC = Noto_Sans_TC({
-  variable: "--font-noto-tc",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Traditional Chinese UI only.
-  display: "swap",
-});
-
-const notoSansKR = Noto_Sans_KR({
-  variable: "--font-noto-kr",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Korean UI only.
-  display: "swap",
-});
-
-const notoSansThai = Noto_Sans_Thai({
-  variable: "--font-noto-th",
-  subsets: ["latin", "thai"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Thai UI only.
-  display: "swap",
-});
-
-const notoSansBengali = Noto_Sans_Bengali({
-  variable: "--font-noto-bn",
-  subsets: ["latin", "bengali"],
-  weight: ["400", "500", "600", "700"],
-  preload: false, // Bengali UI only.
-  display: "swap",
-});
+// Fonts are SELF-HOSTED from /public/fonts via ./fonts.css (downloaded once
+// from Google Fonts, 2026-09-30). The build used to fetch them from
+// fonts.googleapis.com through next/font/google, and a slow Google response
+// failed whole deploys. The CSS variables (--font-rubik, --font-inter, ...)
+// keep their old names, so no component changes. Chinese, Japanese and
+// Korean are loaded at RUNTIME from Google only on those UI languages
+// (CjkFonts), because their glyph sets are tens of MB split into ~100 slices.
 
 // Per-language metadata strings used by generateMetadata below. The
 // description is the same first-person share blurb that ShareButton
@@ -558,8 +382,17 @@ export default async function RootLayout({
       lang={initialLang}
       dir={initialDir}
       {...(playMode ? { "data-play": "1" } : {})}
-      className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${cairo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${lora.variable} ${inter.variable} ${heebo.variable} ${jetbrainsMono.variable} ${notoSansJp.variable} ${notoSansDevanagari.variable} ${notoSansEthiopic.variable} ${notoSansSC.variable} ${notoSansTC.variable} ${notoSansKR.variable} ${notoSansThai.variable} ${notoSansBengali.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
+      <head>
+        {/* First-paint fonts (Hebrew + Latin UI) preloaded, like the old
+            next/font preload set (Geist / Rubik / Inter / Heebo). */}
+        <link rel="preload" href="/fonts/rubik-hebrew-366f4809.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/rubik-latin-0ae40db1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/heebo-hebrew-255b36d2.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/inter-latin-6ab57b19.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {cjkHref(initialLang) && <link rel="stylesheet" href={cjkHref(initialLang)!} />}
+      </head>
       <body className="min-h-full flex flex-col">
           {/* Apply the saved appearance/skin (data-theme) before first paint
               so there is no flash of the default light theme. Kept tiny and
@@ -571,6 +404,7 @@ export default async function RootLayout({
             }}
           />
           <LangProvider initialLang={initialLang}>
+            <CjkFonts />
             <AuthProvider>
               {/* MarketingHeader is rendered per-route from each page's
                   Client component, so it sits inside the dark canvas
