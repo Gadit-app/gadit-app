@@ -7,7 +7,7 @@
  * and gives a one-click way to update the card (Stripe billing portal via
  * /api/portal). Renders nothing for everyone else. Gadi 2026-08-31.
  */
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
@@ -55,6 +55,26 @@ export function PastDueBanner() {
   const { lang, dir } = useLang();
   const [busy, setBusy] = useState(false);
 
+  // Back from the portal's "update card" flow (/account?card=updated): pay the
+  // open invoice with the new card now, instead of waiting days for Stripe's
+  // next retry. The webhook then clears past_due and the banner goes away.
+  const settledRef = useRef(false);
+  useEffect(() => {
+    if (!user || !pastDue || settledRef.current) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("card") !== "updated") return;
+    settledRef.current = true;
+    params.delete("card");
+    const qs = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    void (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch("/api/portal/settle", { method: "POST", headers: { Authorization: `Bearer ${idToken}` } });
+      } catch { /* best effort; Stripe's own retries remain the fallback */ }
+    })();
+  }, [user, pastDue]);
+
   if (!user || !pastDue) return null;
   const c = copyFor(lang);
   const days = graceUntil ? Math.max(1, Math.ceil((graceUntil - Date.now()) / 86_400_000)) : 7;
@@ -64,7 +84,12 @@ export function PastDueBanner() {
     setBusy(true);
     try {
       const idToken = await user.getIdToken();
-      const res = await fetch("/api/portal", { method: "POST", headers: { Authorization: `Bearer ${idToken}` } });
+      // Straight to the card form (portal flow_data payment_method_update).
+      const res = await fetch("/api/portal", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ flow: "update_card" }),
+      });
       const data = (await res.json()) as { url?: string };
       if (data.url) { window.location.href = data.url; return; }
     } catch { /* fall through */ }

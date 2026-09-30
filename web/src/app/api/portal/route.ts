@@ -27,10 +27,33 @@ export async function POST(req: NextRequest) {
         ? `${process.env.NEXT_PUBLIC_APP_URL}/account`
         : "https://www.gadit.app/account";
 
-    const session = await stripe.billingPortal.sessions.create({
-      customer: customerId,
-      return_url: returnUrl,
-    });
+    // The past-due banner asks for the "update card" flow: the portal opens
+    // straight on the payment-method form instead of its home page, and on
+    // completion comes back to /account?card=updated, where the banner calls
+    // /api/portal/settle to pay the open invoice with the new card right away.
+    // Gadi 2026-09-30.
+    const body = (await req.json().catch(() => ({}))) as { flow?: string };
+    let session: Stripe.BillingPortal.Session;
+    if (body.flow === "update_card") {
+      try {
+        session = await stripe.billingPortal.sessions.create({
+          customer: customerId,
+          return_url: returnUrl,
+          flow_data: {
+            type: "payment_method_update",
+            after_completion: { type: "redirect", redirect: { return_url: `${returnUrl}?card=updated` } },
+          },
+        });
+      } catch (e) {
+        console.error("portal update_card flow failed, falling back:", e);
+        session = await stripe.billingPortal.sessions.create({ customer: customerId, return_url: returnUrl });
+      }
+    } else {
+      session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: returnUrl,
+      });
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (err) {

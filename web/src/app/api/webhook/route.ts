@@ -6,6 +6,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
 import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
+import { dunningIsHebrew, buildDunningEmail } from "@/lib/dunning-email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -572,43 +573,14 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
     // checkout, and a ₪ Family payer got this email in English because their
     // stored uiLang was not "he". (Gadi 2026-09-28.)
     const invCountry = typeof invoice.customer_address?.country === "string" ? invoice.customer_address.country : "";
-    const he =
-      userData.uiLang === "he" ||
-      invoice.currency === "ils" ||
-      (!userData.uiLang && (userData.country === "IL" || invCountry === "IL"));
+    const he = dunningIsHebrew(userData, { currency: invoice.currency, country: invCountry });
 
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) return;
     const resend = new Resend(resendKey);
 
-    const subject = he
-      ? "החיוב לא עבר. יש לך 7 ימים לעדכן כרטיס"
-      : "Your payment didn't go through. You have 7 days to update your card";
-    const html = he
-      ? `
-        <div dir="rtl" style="font-family:Rubik,Arial,sans-serif;max-width:520px;margin:0 auto;padding:8px 4px;color:#1f2937;line-height:1.7;">
-          <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></div>
-          <h1 style="font-size:20px;font-weight:800;color:#0B1220;margin:14px 0 10px;">החיוב על המנוי לא עבר</h1>
-          <p style="margin:0 0 12px;">ניסינו לחדש את המנוי שלך ב-Gadit והחיוב לא עבר, כנראה הכרטיס נדחה או פג תוקף.</p>
-          <p style="margin:0 0 18px;"><b>הגישה שלך נשמרת ל-7 ימים.</b> עדכון הכרטיס לוקח פחות מדקה, והכל ממשיך כרגיל, בלי לאבד את המחברות וההתקדמות של הילדים.</p>
-          <p style="margin:0 0 22px;">
-            <a href="${url}" style="display:inline-block;background:#0EA5A5;color:#fff;font-weight:800;font-size:16px;text-decoration:none;padding:14px 30px;border-radius:12px;">עדכון כרטיס</a>
-          </p>
-          <p style="margin:0 0 8px;color:#6b7280;font-size:14px;">אם כבר עדכנת, אפשר להתעלם מהמייל הזה. אם משהו לא ברור, פשוט השב/י למייל ואנחנו כאן.</p>
-          <p style="margin:14px 0 0;color:#9ca3af;font-size:13px;">צוות Gadit</p>
-        </div>`
-      : `
-        <div dir="ltr" style="font-family:Rubik,Arial,sans-serif;max-width:520px;margin:0 auto;padding:8px 4px;color:#1f2937;line-height:1.7;">
-          <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></div>
-          <h1 style="font-size:20px;font-weight:800;color:#0B1220;margin:14px 0 10px;">Your subscription payment didn't go through</h1>
-          <p style="margin:0 0 12px;">We tried to renew your Gadit subscription and the charge didn't go through, most likely a declined or expired card.</p>
-          <p style="margin:0 0 18px;"><b>Your access stays on for 7 days.</b> Updating your card takes less than a minute, and everything continues as usual, without losing your children's notebooks and progress.</p>
-          <p style="margin:0 0 22px;">
-            <a href="${url}" style="display:inline-block;background:#0EA5A5;color:#fff;font-weight:800;font-size:16px;text-decoration:none;padding:14px 30px;border-radius:12px;">Update card</a>
-          </p>
-          <p style="margin:0 0 8px;color:#6b7280;font-size:14px;">If you already updated it, you can ignore this email. If anything isn't clear, just reply and we're here.</p>
-          <p style="margin:14px 0 0;color:#9ca3af;font-size:13px;">The Gadit team</p>
-        </div>`;
+    // Shared with the day-5 reminder in the grace cron (lib/dunning-email).
+    const { subject, html } = buildDunningEmail({ he, url, kind: "first" });
 
     await resend.emails.send({ from: "Gadit <notify@gadit.app>", to: email, subject, html });
     if (ref) await ref.set({ dunningNotifiedInvoice: invoice.id }, { merge: true });
@@ -923,6 +895,18 @@ export async function POST(req: NextRequest) {
           : null;
       const trialEnd = sub?.trial_end ?? null;
       const subscriptionStatus = sub?.status ?? null;
+
+      // Hosted-Checkout subs are created without save_default_payment_method,
+      // so a card the customer later uses on the invoice page (our dunning
+      // email) would NOT become the renewal card. Turn it on, like the
+      // in-app (Payment Element) flow already does. Gadi 2026-09-30.
+      if (sub && sub.payment_settings?.save_default_payment_method !== "on_subscription") {
+        try {
+          await stripe.subscriptions.update(sub.id, { payment_settings: { save_default_payment_method: "on_subscription" } });
+        } catch (e) {
+          console.error("[webhook] save_default_payment_method update failed:", e);
+        }
+      }
 
       const family = isFamilyPriceId(priceId);
       const schools = isSchoolsPriceId(priceId);
