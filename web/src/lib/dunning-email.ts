@@ -1,3 +1,4 @@
+import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
 /**
  * Failed-renewal ("dunning") emails, shared by the Stripe webhook (first
  * email, on invoice.payment_failed) and the daily grace cron (one reminder on
@@ -69,9 +70,11 @@ export function buildDunningEmail(opts: {
       };
 
   const html = `
-        <div dir="${t.dir}" style="font-family:Rubik,Arial,sans-serif;max-width:520px;margin:0 auto;padding:8px 4px;color:#1f2937;line-height:1.7;">
-          <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;" dir="ltr">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></div>
-          <h1 style="font-size:20px;font-weight:800;color:#0B1220;margin:14px 0 10px;">${t.h1}</h1>
+        <div style="margin:0;padding:28px 12px;background:${EMAIL_BG};">
+        <div dir="${t.dir}" style="font-family:Rubik,Arial,sans-serif;max-width:${EMAIL_CARD_MAX}px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #E1EAE7;overflow:hidden;color:#1f2937;line-height:1.7;">
+          ${emailHeaderHtml()}
+          <div style="padding:28px 36px 26px;font-size:16px;">
+          <h1 style="font-size:20px;font-weight:700;color:#0B1220;margin:0 0 12px;">${t.h1}</h1>
           <p style="margin:0 0 12px;">${t.p1}</p>
           <p style="margin:0 0 18px;">${t.p2}</p>
           <p style="margin:0 0 22px;">
@@ -79,6 +82,8 @@ export function buildDunningEmail(opts: {
           </p>
           <p style="margin:0 0 8px;color:#6b7280;font-size:14px;">${t.foot}</p>
           <p style="margin:14px 0 0;color:#9ca3af;font-size:13px;">${t.sign}</p>
+          </div>
+        </div>
         </div>`;
   return { subject: t.subject, html };
 }

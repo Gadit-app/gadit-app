@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
 import { isShabbatIL } from "@/lib/shabbat";
 import crypto from "node:crypto";
 import Stripe from "stripe";
@@ -231,13 +232,11 @@ async function sendFamilyWelcome(uid: string, email: string | null) {
 
     const dir = he ? "rtl" : "ltr";
     const align = he ? "right" : "left";
-    const html = `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
-  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
-    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:26px 24px;color:#fff;">
-      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;" dir="ltr">GADIT FAMILY</div>
-      <div style="font-size:22px;font-weight:700;margin-top:6px;">${c.heading}</div>
-    </div>
-    <div style="padding:24px;">
+    const html = `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">
+  <div style="max-width:${EMAIL_CARD_MAX}px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #E1EAE7;overflow:hidden;text-align:${align};">
+    ${emailHeaderHtml()}
+    <div style="padding:30px 36px 24px;">
+      <div style="font-size:22px;font-weight:700;color:#111827;margin:0 0 16px;">${c.heading}</div>
       <p style="font-size:15px;line-height:1.6;margin:0 0 18px;">${c.intro}</p>
       <ol style="margin:0 0 22px;padding-${he ? "right" : "left"}:20px;font-size:14.5px;line-height:1.7;color:#374151;">
         <li style="margin-bottom:8px;">${c.s1}</li>

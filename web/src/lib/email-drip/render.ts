@@ -15,6 +15,8 @@
  * don't scramble the Hebrew word order.
  */
 
+import { emailHeaderHtml, emailSignatureHtml, EMAIL_BG, EMAIL_CARD_MAX } from "../email-brand";
+
 export type EmailContent = {
   subject: string;
   heading: string;
@@ -79,11 +81,11 @@ function inline(he: boolean, s: string): string {
 }
 
 const P = (he: boolean, html: string) =>
-  `<p dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;">${html}</p>`;
+  `<p dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;margin:0 0 16px;color:#374151;">${html}</p>`;
 const H = (he: boolean, html: string) =>
-  `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;font-weight:700;color:#1C1917;margin:20px 0 8px;">${html}</div>`;
+  `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:17px;font-weight:700;color:#1C1917;margin:24px 0 10px;">${html}</div>`;
 const OL = (he: boolean, items: string[]) =>
-  `<ol dir="${he ? "rtl" : "ltr"}" style="margin:0 0 14px;padding-${he ? "right" : "left"}:22px;text-align:${he ? "right" : "left"};font-size:15px;line-height:1.75;color:#374151;">` +
+  `<ol dir="${he ? "rtl" : "ltr"}" style="margin:0 0 14px;padding-${he ? "right" : "left"}:22px;text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;color:#374151;">` +
   items.map((it) => `<li style="margin-bottom:7px;">${it}</li>`).join("") +
   `</ol>`;
 
@@ -130,17 +132,15 @@ export function renderEmailHtml(opts: {
   const { he } = opts;
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
-  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F9FAFB;color:#111827;">
-  <div dir="${dir}" style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
-    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:26px 24px;color:#fff;">
-      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;" dir="ltr">GADIT FAMILY</div>
-      <div dir="${dir}" style="text-align:${align};font-size:22px;font-weight:700;margin-top:6px;">${esc(opts.heading)}</div>
-    </div>
-    <div dir="${dir}" style="padding:24px;text-align:${align};">
+  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">
+  <div dir="${dir}" style="max-width:${EMAIL_CARD_MAX}px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #E1EAE7;overflow:hidden;text-align:${align};">
+    ${emailHeaderHtml()}
+    <div dir="${dir}" style="padding:30px 36px 24px;text-align:${align};">
+      ${opts.heading ? `<div dir="${dir}" style="text-align:${align};font-size:22px;font-weight:700;color:#111827;margin:0 0 16px;">${esc(opts.heading)}</div>` : ""}
       <div dir="${dir}" style="text-align:${align};font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0EA5A5;margin:0 0 10px;">${esc(opts.eyebrow)}</div>
       ${opts.bodyHtml}
       <div style="text-align:center;margin-top:22px;">
-        <a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${esc(opts.ctaText)}</a>
+        <a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText)}</a>
       </div>
       <div dir="${dir}" style="text-align:${align};margin:26px 0 0;font-size:15px;line-height:1.6;color:#111827;">
         <p style="margin:0;">${he ? "שלך," : "Yours,"}</p>
@@ -176,22 +176,23 @@ export function renderEmailHtmlV2(opts: {
   const para = (html: string, extra = "") =>
     `<p dir="${dir}" style="text-align:${align};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;${extra}">${html}</p>`;
   const cta = opts.ctaText?.trim()
-    ? `<div style="text-align:center;margin:8px 0 22px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${esc(opts.ctaText.trim())}</a></div>`
+    ? `<div style="text-align:center;margin:8px 0 22px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText.trim())}</a></div>`
     : "";
   const next = opts.next?.trim() ? para(inline(he, opts.next.trim())) : "";
-  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F9FAFB;color:#111827;">
-  <div dir="${dir}" style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
-    <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:18px 24px;color:#fff;">
-      <div style="font-size:22px;font-weight:800;" dir="ltr" translate="no">Gadit</div>
-    </div>
-    <div dir="${dir}" style="padding:24px;text-align:${align};">
+  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">
+  <div dir="${dir}" style="max-width:${EMAIL_CARD_MAX}px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #E1EAE7;overflow:hidden;text-align:${align};">
+    ${emailHeaderHtml()}
+    <div dir="${dir}" style="padding:30px 36px 10px;text-align:${align};">
       ${opts.bodyHtml}
       ${cta}
       ${next}
       ${para(he ? "אנחנו כאן לכל שאלה ועזרה." : "We're here for any question or help.")}
-      ${para(he ? `הצוות של <span dir="ltr" translate="no">Gadit</span>` : `The <span translate="no">Gadit</span> team`, "font-weight:600;color:#111827;")}
-      <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 14px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל סרטוני ההדרכה" : "All video guides"}</a></p>
-      <p dir="${dir}" style="text-align:${align};font-size:11px;color:#B4B4B4;margin:16px 0 0;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
+      ${emailSignatureHtml(he)}
+      <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל סרטוני ההדרכה" : "All video guides"}</a></p>
+    </div>
+    <div style="border-top:1px solid #EEF2F1;padding:16px 24px 20px;text-align:center;">
+      <p dir="${dir}" style="margin:0 0 6px;font-size:12px;color:#9CA3AF;">${he ? `<span dir="ltr" translate="no">Gadit</span> · להבין כל מילה עד הסוף` : `<span translate="no">Gadit</span>`}</p>
+      <p style="margin:0;font-size:11px;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
     </div>
   </div>
 </body></html>`;

@@ -1,4 +1,5 @@
 import "server-only";
+import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
 import { Resend } from "resend";
 import { getAdminDb } from "./firebase-admin";
 import { Partner } from "./partners";
@@ -1002,13 +1003,11 @@ export function buildWelcomeEmail(
        <ol style="margin:8px 0 0;padding-inline-start:20px;">${tips.map((tp) => `<li style="margin:0 0 8px;font-size:14.5px;line-height:1.6;">${tb(tp)}</li>`).join("")}</ol>`
     : "";
 
-  const html = `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F6F8FA;color:#111827;">
-  <div dir="${dir}" style="max-width:560px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #EAECEF;overflow:hidden;">
-    <div dir="${dir}" style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:24px;color:#fff;text-align:${align};">
-      <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;">GADIT</div>
-      <div style="font-size:22px;font-weight:800;margin-top:4px;">${t(c.greeting)}</div>
-    </div>
-    <div dir="${dir}" style="padding:24px;font-size:15px;line-height:1.6;text-align:${align};">
+  const html = `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">
+  <div dir="${dir}" style="max-width:${EMAIL_CARD_MAX}px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #E1EAE7;overflow:hidden;">
+    ${emailHeaderHtml()}
+    <div dir="${dir}" style="padding:30px 36px 24px;font-size:16px;line-height:1.7;text-align:${align};">
+      <div style="font-size:22px;font-weight:700;color:#111827;margin:0 0 16px;">${t(c.greeting)}</div>
       <p style="margin:0 0 18px;">${tb(c.opening)}</p>
 
       <div style="font-size:13px;color:#6B7280;margin:0 0 4px;">${linkLabel}</div>

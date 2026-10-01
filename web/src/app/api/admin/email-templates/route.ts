@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FAMILY_META, FAMILY_LABEL_HE, EMAIL_BASE } from "@/lib/email-drip/family-content";
-import { type EmailContent } from "@/lib/email-drip/render";
+import { applyName, type EmailContent } from "@/lib/email-drip/render";
 import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { getOverride, getEffectiveContent, saveOverride, resetOverride } from "@/lib/email-drip/email-templates-store";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
@@ -105,7 +105,8 @@ export async function POST(req: NextRequest) {
     if (isSignup) return renderSignup(body!.key!.slice(7), he);
     const c = body!.content;
     if (!c) return null;
-    return { subject: c.subject, html: renderPreview(body!.key!, he, c) };
+    // Same sample name as the preview body, so a test subject never shows a raw {שם}.
+    return { subject: applyName(c.subject, he ? "דנה" : "Dana"), html: renderPreview(body!.key!, he, c) };
   }
 
   if (body.action === "test") {

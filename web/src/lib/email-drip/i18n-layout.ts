@@ -29,16 +29,19 @@ export function renderDripLayout(opts: {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gadit</title>
 </head>
-<body style="margin:0;padding:0;background:#F9FAFB;font-family:${font};direction:${dir};color:#111827;">
+<body style="margin:0;padding:0;background:#EEF5F3;font-family:${font};direction:${dir};color:#111827;">
   <span style="display:none !important;visibility:hidden;mso-hide:all;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;color:#F9FAFB;">${opts.preheader}</span>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#F9FAFB;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#EEF5F3;">
     <tr>
       <td align="center" style="padding:32px 16px;">
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:#FFFFFF;border-radius:12px;overflow:hidden;border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background:#FFFFFF;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
           <tr>
             <td align="center" style="padding:32px 32px 8px;">
-              <span style="font-family:'Inter',Arial,sans-serif;font-size:32px;font-weight:700;color:#111827;letter-spacing:-0.02em;line-height:1;">Gad<span style="color:#0EA5A5;font-style:italic;">it</span></span>
+              <a href="https://www.gadit.app" style="text-decoration:none;"><img src="https://www.gadit.app/email/gadit-logo.png" width="92" height="45" alt="Gadit" style="display:inline-block;width:92px;height:45px;border:0;outline:none;" /></a>
             </td>
+          </tr>
+          <tr>
+            <td style="padding:14px 32px 0;"><div style="height:1px;line-height:1px;font-size:0;background:#E6ECEA;">&nbsp;</div></td>
           </tr>
           <tr>
             <td style="padding:16px 32px 8px;font-size:16px;line-height:1.65;color:#111827;text-align:${align};">
