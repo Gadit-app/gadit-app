@@ -188,7 +188,7 @@ export function renderEmailHtmlV2(opts: {
       ${next}
       ${para(he ? "אנחנו כאן לכל שאלה ועזרה." : "We're here for any question or help.")}
       ${emailSignatureHtml(he)}
-      <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל סרטוני ההדרכה" : "All video guides"}</a></p>
+      <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל ההדרכות" : "All guides"}</a></p>
     </div>
     <div style="border-top:1px solid #EEF2F1;padding:16px 24px 20px;text-align:center;">
       <p dir="${dir}" style="margin:0 0 6px;font-size:12px;color:#9CA3AF;">${he ? `<span dir="ltr" translate="no">Gadit</span> · להבין כל מילה עד הסוף` : `<span translate="no">Gadit</span>`}</p>

@@ -8,7 +8,6 @@
 export const EMAIL_SITE = "https://www.gadit.app";
 /** 92x45 CSS px, rendered at 3x from the site's wordmark (Inter 600 + teal italic "it"). */
 export const EMAIL_LOGO_URL = `${EMAIL_SITE}/email/gadit-logo.png`;
-export const EMAIL_ICON_URL = `${EMAIL_SITE}/icon-192.png`;
 /** Outer background around the white card. */
 export const EMAIL_BG = "#EEF5F3";
 export const EMAIL_CARD_MAX = 600;
@@ -28,7 +27,10 @@ export function emailSignatureHtml(he: boolean): string {
   const name = he ? `הצוות של <span dir="ltr" translate="no">Gadit</span>` : `The <span translate="no">Gadit</span> team`;
   return `<table role="presentation" dir="${dir}" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 18px;">
       <tr>
-        <td style="padding-${he ? "left" : "right"}:12px;vertical-align:middle;"><img src="${EMAIL_ICON_URL}" width="40" height="40" alt="" style="display:block;width:40px;height:40px;border-radius:10px;border:0;" /></td>
+        <td style="padding-${he ? "left" : "right"}:10px;vertical-align:middle;">
+          <!-- App-icon badge drawn in HTML (no image), so it shows instantly. -->
+          <div style="width:28px;height:28px;line-height:28px;border-radius:7px;background:#0EA5A5;color:#FFFFFF;font-family:Arial,sans-serif;font-size:17px;font-weight:700;text-align:center;" translate="no">G</div>
+        </td>
         <td style="vertical-align:middle;text-align:${align};font-size:15px;font-weight:700;color:#111827;line-height:1.3;">${name}</td>
       </tr>
     </table>`;
