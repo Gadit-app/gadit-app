@@ -132,8 +132,8 @@ export function AdminEmailEditorClient() {
       <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 4px" }}>{he ? "עריכת מיילים" : "Email editor"}</h1>
       <p style={{ fontSize: 13, color: "#6B7280", margin: "0 0 12px" }}>
         {he
-          ? "עריכת סדרת המיילים של Family. שינויים נשמרים ודורסים את ברירת המחדל. ## לכותרת, שורות עם 1. או - לצעדים, **מודגש**. סדרת ההרשמה לצפייה ובדיקה בלבד (עריכה בקוד)."
-          : "Edit the Family email series. Changes override the default. Use ## for a heading, 1. or - for steps, **bold**. The signup series is view + test only (edited in code)."}
+          ? "עריכת סדרת המיילים של Family. שינויים נשמרים ודורסים את ברירת המחדל. ## לכותרת, שורות עם 1. או - לצעדים, **מודגש**, [טקסט](/family?tab=members) לקישור למסך באתר. סדרת ההרשמה לצפייה ובדיקה בלבד (עריכה בקוד)."
+          : "Edit the Family email series. Changes override the default. Use ## for a heading, 1. or - for steps, **bold**, [text](/family?tab=members) for a link to a screen. The signup series is view + test only (edited in code)."}
       </p>
 
       {/* Series switch */}
