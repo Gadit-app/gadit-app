@@ -7,6 +7,9 @@
  *   ## Heading            → section heading
  *   1. step  /  - step    → a numbered/bulleted step list (consecutive lines)
  *   **bold**              → bold
+ *   [text](/family)       → a link with that text; a path starting with "/"
+ *                           opens that screen on gadit.app (in the email's
+ *                           language), a full https:// address is used as is
  *   blank line            → new paragraph
  * Latin runs (Gadit, ChatGPT, ...) are auto-isolated in RTL so brand names
  * don't scramble the Hebrew word order.
@@ -30,6 +33,8 @@ export function applyName(s: string, firstName?: string | null): string {
   return s.replace(/ ?\{(?:שם|name)\}/g, "");
 }
 
+const SITE = "https://www.gadit.app";
+
 function esc(s: string): string {
   return s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]!));
 }
@@ -38,8 +43,16 @@ function esc(s: string): string {
 function inline(he: boolean, s: string): string {
   // Pull links out first (as private-use markers) so the bold/Latin passes
   // can't break their hrefs, then put them back as real <a> tags.
+  // Labeled links [text](url) first, so their URL isn't caught by the bare
+  // URL pass. A "/path" opens that screen in the email's language.
+  const named: { text: string; url: string }[] = [];
+  let out = esc(s).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text: string, url: string) => {
+    const abs = url.startsWith("/") ? `${SITE}${he ? "/he" : ""}${url === "/" && he ? "" : url}` : url;
+    named.push({ text, url: abs });
+    return `\uE004${named.length - 1}\uE005`;
+  });
   const links: string[] = [];
-  let out = esc(s).replace(/\bhttps?:\/\/[^\s<]+[^\s<.,:;)"']/g, (url) => {
+  out = out.replace(/\bhttps?:\/\/[^\s<]+[^\s<.,:;)"']/g, (url) => {
     links.push(url);
     return `\uE000${links.length - 1}\uE001`;
   });
@@ -56,6 +69,11 @@ function inline(he: boolean, s: string): string {
   out = out.replace(/\uE000(\d+)\uE001/g, (_, i) => {
     const url = links[Number(i)];
     return `<a href="${url}" dir="ltr" style="color:#0E7490;word-break:break-all;">${url}</a>`;
+  });
+  out = out.replace(/\uE004(\d+)\uE005/g, (_, i) => {
+    const { text, url } = named[Number(i)];
+    const label = he ? text.replace(/[A-Za-z][A-Za-z0-9]*(?:[ .&/][A-Za-z0-9]+)*/g, (m) => `<span dir="ltr">${m}</span>`) : text;
+    return `<a href="${url}" style="color:#0E7490;font-weight:600;text-decoration:underline;">${label}</a>`;
   });
   return out;
 }

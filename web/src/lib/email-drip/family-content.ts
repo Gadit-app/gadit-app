@@ -95,7 +95,7 @@ export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent
 
 **משתמשי אנדרואיד:**
 
-1. נכנסים לחנות Google Play בקישור: https://play.google.com/store/apps/details?id=com.gadit.app
+1. נכנסים ל[חנות Google Play](https://play.google.com/store/apps/details?id=com.gadit.app).
 2. מורידים את האפליקציה.
 3. מתחברים עם חשבון Google או עם המייל והסיסמה שיצרת.
 
@@ -106,7 +106,7 @@ export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent
 3. לוחצים על "הוסף למסך הבית".
 
 ## הוספת בני המשפחה
-1. נכנסים לאזור המשפחה, ללשונית "בני המשפחה".
+1. נכנסים ל[אזור המשפחה, ללשונית "בני המשפחה"](/family?tab=members).
 2. לוחצים על "הוספת בן משפחה".
 3. בוחרים אבא, אמא, בן או בת, וממלאים שם, גיל וצבע.
 4. לוחצים על "הוסף למשפחה", ובן המשפחה מתווסף מיד.
@@ -114,9 +114,9 @@ export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent
 מומלץ להוסיף גם את ההורה השני, אם זה רלוונטי למשפחה שלכם.
 
 ## חיבור המכשירים של הילדים
-1. באזור המשפחה לוחצים על "חיבור מכשיר" ליד הילד.
+1. ב[אזור המשפחה, בלשונית "בני המשפחה"](/family?tab=members), לוחצים על "חיבור מכשיר" ליד הילד.
 2. נפתח חלון עם שתי אפשרויות: קוד QR, או קישור וקוד בן 6 ספרות.
-3. מהמכשיר של הילד סורקים את קוד ה-QR, או נכנסים ל-gadit.app/join ומקלידים את הקוד.
+3. מהמכשיר של הילד סורקים את קוד ה-QR, או נכנסים ל-[gadit.app/join](https://www.gadit.app/join) ומקלידים את הקוד.
 4. זהו. הילד נכנס לאזור האישי שלו, עם המחברת שלו, בלי גישה להגדרות שלך.
 
 חוזרים על אותם צעדים לכל ילד.
@@ -124,7 +124,7 @@ export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent
 ## אין לילד טלפון או טאבלט משלו?
 אפשר להשתמש במכשיר אחד לכל המשפחה:
 
-1. באזור המשפחה, בלשונית "בני המשפחה", לוחצים על "מסך משותף לילדים".
+1. ב[אזור המשפחה, בלשונית "בני המשפחה"](/family?tab=members), לוחצים על "מסך משותף לילדים".
 2. מוסרים את המכשיר לילד. במסך "מי משתמש עכשיו?" הוא לוחץ על עצמו.
 3. כשהוא מסיים, לוחצים על "יציאה".`,
       "להוספת הילד הראשון",
@@ -147,7 +147,7 @@ These are your first steps:
 
 **Android:**
 
-1. Open Google Play at: https://play.google.com/store/apps/details?id=com.gadit.app
+1. Open [Google Play](https://play.google.com/store/apps/details?id=com.gadit.app).
 2. Download the app.
 3. Sign in with Google, or with the email and password you created.
 
@@ -158,7 +158,7 @@ These are your first steps:
 3. Tap "Add to Home Screen".
 
 ## Add your family members
-1. Open your family area, on the "Family" tab.
+1. Open [your family area, on the "Family" tab](/family?tab=members).
 2. Tap "Add a family member".
 3. Choose Dad, Mom, son or daughter, and fill in a name, age and color.
 4. Tap "Add to family", and they're added right away.
@@ -166,9 +166,9 @@ These are your first steps:
 It's a good idea to add the other parent too, if that fits your family.
 
 ## Connect your children's devices
-1. In the family area, tap "Pair device" next to your child.
+1. In [your family area, on the "Family" tab](/family?tab=members), tap "Pair device" next to your child.
 2. A window opens with two options: a QR code, or a link and a 6-digit code.
-3. On your child's device, scan the QR code, or go to gadit.app/join and type the code.
+3. On your child's device, scan the QR code, or go to [gadit.app/join](https://www.gadit.app/join) and type the code.
 4. That's it. Your child lands in their own space, with their own notebook, and no access to your settings.
 
 Repeat the same steps for each child.
@@ -176,7 +176,7 @@ Repeat the same steps for each child.
 ## No phone or tablet of their own?
 One device can work for the whole family:
 
-1. In the family area, on the "Family" tab, tap "Shared kids screen".
+1. In [your family area, on the "Family" tab](/family?tab=members), tap "Shared kids screen".
 2. Hand the device to your child. On the "Who's using?" screen they tap themselves.
 3. When they're done, tap "Exit".`,
       "Add your first child",
@@ -199,7 +199,7 @@ One device can work for the whole family:
 **מקור המילה:** מאיפה המילה הגיעה ואיך היא השתנתה בדרך.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. נכנסים לדף הבית של Gadit.
+1. נכנסים ל[דף הבית של Gadit](/).
 2. מקלידים מילה בתיבה "הקלידו מילה".
 3. עוברים על "הגדרות", על התמונה ועל "מקור המילה".
 4. מתחת לכל משמעות יש כפתורים כמו "חידון" ו"חברו משפט", כדי לתרגל אותה מיד.
@@ -222,7 +222,7 @@ The heart of Gadit is understanding one word all the way through. All its meanin
 **Word Origin:** where the word came from and how it changed along the way.
 
 ## How to do it, step by step:
-1. Open the Gadit home page.
+1. Open the [Gadit home page](/).
 2. Type a word in the "Type a word" box.
 3. Go through "Definitions", the picture and "Word Origin".
 4. Under each meaning there are buttons like "Quiz" and "Compose a sentence", to practice it right away.
@@ -246,7 +246,7 @@ The heart of Gadit is understanding one word all the way through. All its meanin
 בפרופיל של ילד, מצב ילדים פועל כברירת מחדל בכל פעם שפותחים את Gadit.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. בתיבת החיפוש, ליד המיקרופון, יש מתג "ילדים".
+1. ב[תיבת החיפוש בדף הבית](/), ליד המיקרופון, יש מתג "ילדים".
 2. מדליקים אותו, ומחפשים מילה.
 3. ההסבר והתמונות מגיעים בשפה של ילדים.
 4. רוצים את ההגדרה המלאה? מכבים את המתג ומחפשים שוב.
@@ -267,7 +267,7 @@ With Kids Mode on, every definition is written for a child: simple words, exampl
 On a child's profile, Kids Mode is on by default every time Gadit opens.
 
 ## How to do it, step by step:
-1. In the search box, next to the microphone, there's a "Kids" switch.
+1. In the [search box on the home page](/), next to the microphone, there's a "Kids" switch.
 2. Turn it on and look up a word.
 3. The explanation and the pictures come in kids' language.
 4. Want the full definition? Turn the switch off and search again.
@@ -291,7 +291,7 @@ On a child's profile, Kids Mode is on by default every time Gadit opens.
 כשיש מילים בכמה שפות, מופיע למעלה סינון לפי שפה.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. הילד נכנס ל"אוצר המילים" מהתפריט.
+1. הילד נכנס ל["אוצר המילים"](/notebook) מהתפריט.
 2. רואים את כל המילים שחיפש, מסודרות לפי שפה.
 3. לוחצים על מילה כדי לחזור לדף שלה.
 
@@ -311,7 +311,7 @@ Every word your child looks up is saved to their notebook automatically, without
 When there are words in more than one language, a language filter appears at the top.
 
 ## How to do it, step by step:
-1. Your child opens "My words" from the menu.
+1. Your child opens ["My words"](/notebook) from the menu.
 2. They see every word they looked up, grouped by language.
 3. Tap a word to go back to its page.
 
@@ -334,7 +334,7 @@ When there are words in more than one language, a language filter appears at the
 אפשר גם להבין משפט שלם: בסוף כל משפט יש סימן קטן, ולחיצה עליו פותחת "מה המשפט הזה אומר".
 
 ## איך עושים את זה, שלב אחר שלב:
-1. נכנסים ל"כל מילה" מהתפריט.
+1. נכנסים ל["כל מילה"](/read) מהתפריט.
 2. לוחצים על "לצלם עמוד" ומצלמים את הדף, או מדביקים טקסט בתיבה.
 3. לוחצים על "לפתוח את הטקסט".
 4. לוחצים על כל מילה לא מוכרת. בחלון שנפתח יש גם "פתח הגדרה מלאה".
@@ -355,7 +355,7 @@ Photograph or paste a text, and Gadit opens it so you can tap any word and get i
 You can understand a whole sentence too: at the end of every sentence there's a small icon, and tapping it opens "What this sentence means".
 
 ## How to do it, step by step:
-1. Open "Every Word" from the menu.
+1. Open ["Every Word"](/read) from the menu.
 2. Tap "Photograph with camera" and take a picture of the page, or paste text into the box.
 3. Tap "Open text".
 4. Tap any unfamiliar word. The window that opens also has "Open full definition".
@@ -377,7 +377,7 @@ You can understand a whole sentence too: at the end of every sentence there's a 
 כותבים את המשפט שבו המילה הופיעה, ו-Gadit בוחר את המשמעות שמתאימה למשפט הזה. במקום רשימה של משמעויות, מקבלים הגדרה אחת מדויקת.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. בדף הבית מקלידים את המילה בתיבה "הקלידו מילה".
+1. ב[דף הבית](/) מקלידים את המילה בתיבה "הקלידו מילה".
 2. בתיבה שמתחת כותבים את המשפט שבו המילה מופיעה.
 3. מחפשים.
 4. מקבלים את המשמעות שמתאימה בדיוק למשפט.
@@ -396,7 +396,7 @@ Many words have more than one meaning. The sentence the word appeared in decides
 Type the sentence the word appeared in, and Gadit picks the meaning that fits that sentence. Instead of a list of meanings, you get one precise definition.
 
 ## How to do it, step by step:
-1. On the home page, type the word in the "Type a word" box.
+1. On the [home page](/), type the word in the "Type a word" box.
 2. In the box below it, type the sentence where the word appears.
 3. Search.
 4. You get the meaning that fits the sentence exactly.
@@ -420,7 +420,7 @@ Type the sentence the word appeared in, and Gadit picks the meaning that fits th
 כדי להתחיל, צריך לפחות 4 מילים במחברת.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. הילד נכנס ל"משחקים" מהתפריט.
+1. הילד נכנס ל["משחקים"](/play) מהתפריט.
 2. בוחר משחק מהרשימה.
 3. משחק עם המילים שלו.
 
@@ -440,7 +440,7 @@ The games are built from the words your child looked up and saved in their noteb
 To start, the notebook needs at least 4 words.
 
 ## How to do it, step by step:
-1. Your child opens "Play" from the menu.
+1. Your child opens ["Play"](/play) from the menu.
 2. They pick a game from the list.
 3. They play with their own words.
 
@@ -464,7 +464,7 @@ To start, the notebook needs at least 4 words.
 
 ## איך עושים את זה, שלב אחר שלב:
 1. פותחים את תפריט החשבון.
-2. לוחצים על "הדרכות".
+2. לוחצים על ["הדרכות"](/help).
 3. בוחרים את המדריך שמתאים.
 4. לא מצאת תשובה? אפשר פשוט להשיב למייל הזה, והוא מגיע אלינו.`,
       "להדרכות",
@@ -483,7 +483,7 @@ Some screens also have a small question mark that opens the guide for that scree
 
 ## How to do it, step by step:
 1. Open the account menu.
-2. Tap "Guides".
+2. Tap ["Guides"](/help).
 3. Choose the guide you need.
 4. Didn't find the answer? Just reply to this email and it reaches us.`,
       "Open the guides",
@@ -504,7 +504,7 @@ Some screens also have a small question mark that opens the guide for that scree
 אפשר לתרגל בשני הכיוונים: לשמוע מילה ולכתוב אותה באנגלית, או לכתוב אותה בשפה שלכם. ואפשר להקליד או לכתוב ביד על המסך.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. נכנסים ל"הכתבה" מהתפריט.
+1. נכנסים ל["הכתבה"](/spell) מהתפריט.
 2. לוחצים על "הדבקת רשימה משלך" ומדביקים את המילים, מילה בכל שורה (עד 20).
 3. לוחצים על "יצירת סט".
 4. בוחרים כיוון, והילד מתחיל לכתוב.
@@ -526,7 +526,7 @@ Paste the teacher's list, and Gadit reads each word out loud. Your child writes 
 You can practice in both directions: hear a word and write it in English, or write it in your own language. And your child can type or write by hand on the screen.
 
 ## How to do it, step by step:
-1. Open "Spelling" from the menu.
+1. Open ["Spelling"](/spell) from the menu.
 2. Tap "Paste your own list" and paste the words, one per line (up to 20).
 3. Tap "Create set".
 4. Choose a direction, and your child starts writing.
@@ -549,7 +549,7 @@ You can practice in both directions: hear a word and write it in English, or wri
 כותבים משפט ובוחרים את השפה שלומדים. Gadit מראה איך אומרים אותו בשפה הזאת ומקריא אותו בקול. אחר כך הילד אומר את המשפט בעצמו, ומקבל ציון של 1 עד 5 כוכבים על ההגייה.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. נכנסים ל"תגיד את זה" מהתפריט.
+1. נכנסים ל["תגיד את זה"](/say) מהתפריט.
 2. כותבים משפט ובוחרים את השפה שלומדים.
 3. לוחצים על "תגיד את זה" ומקשיבים.
 4. לוחצים על "תרגול הגייה", אומרים את המשפט, ומקבלים כוכבים.
@@ -569,7 +569,7 @@ Knowing a word is half the way. The other half is saying it out loud, with confi
 Type a sentence and choose the language you're learning. Gadit shows how to say it in that language and reads it out loud. Then your child says the sentence themselves and gets 1 to 5 stars for pronunciation.
 
 ## How to do it, step by step:
-1. Open "Say it" from the menu.
+1. Open ["Say it"](/say) from the menu.
 2. Type a sentence and choose the language you're learning.
 3. Tap "Say it" and listen.
 4. Tap "Practice saying it", say the sentence, and get stars.
@@ -589,12 +589,12 @@ Type a sentence and choose the language you're learning. Gadit shows how to say 
 קשה לדעת מה ילד באמת לומד. בלוח ההורה רואים את זה, מילה אחרי מילה.
 
 ## לוח ההורה
-בלשונית "דף הבית" באזור המשפחה יש סיכום של כל המשפחה: כמה מילים יש במחברות, וכמה מילים חדשות נוספו השבוע.
+בלשונית "דף הבית" ב[אזור המשפחה](/family) יש סיכום של כל המשפחה: כמה מילים יש במחברות, וכמה מילים חדשות נוספו השבוע.
 
 לכל ילד יש כרטיס משלו: כמה מילים במחברת, רצף הימים, הדרגה, כמה מילים נוספו השבוע, והמילים האחרונות שחיפש.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. פותחים את תפריט החשבון ולוחצים על "המשפחה שלי".
+1. פותחים את תפריט החשבון ולוחצים על ["המשפחה שלי"](/family).
 2. בלשונית "דף הבית" רואים את הסיכום.
 3. עוברים על הכרטיס של כל ילד.
 4. ב"חיפושים אחרונים" רואים את המילים האחרונות שחיפשו בבית.
@@ -610,12 +610,12 @@ Type a sentence and choose the language you're learning. Gadit shows how to say 
 It's hard to know what a child is really learning. On the parent board you see it, word by word.
 
 ## The parent board
-On the "Home" tab of your family area there's a summary for the whole family: how many words are in the notebooks, and how many new words were added this week.
+On the "Home" tab of [your family area](/family) there's a summary for the whole family: how many words are in the notebooks, and how many new words were added this week.
 
 Each child has their own card: words in the notebook, their day streak, their rank, how many words were added this week, and the latest words they looked up.
 
 ## How to do it, step by step:
-1. Open the account menu and tap "My family".
+1. Open the account menu and tap ["My family"](/family).
 2. On the "Home" tab, see the summary.
 3. Go through each child's card.
 4. Under "Recent lookups" you see the latest words looked up at home.
@@ -637,7 +637,7 @@ Each child has their own card: words in the notebook, their day streak, their ra
 כשההתראות פועלות, מגיעה אליך הודעה כשהילד מחפש מילה. אפשר לבחור לקבל הודעה על כל מילה, או סיכום אחד ביום. ההודעות מגיעות במייל, ובטלפון גם כהתראה על המסך כשזה אפשרי.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. באזור המשפחה נכנסים ללשונית "הגדרות".
+1. נכנסים ל[לשונית "הגדרות" באזור המשפחה](/family?tab=settings).
 2. בחלק "התראות על מילים" מדליקים את "הודיעו לי כשהילד מחפש מילה".
 3. בוחרים "כל מילה" או "סיכום יומי".
 4. רוצים התראה גם על המסך של הטלפון? פותחים את Gadit בטלפון ולוחצים על "הפעל התראות במכשיר הזה".
@@ -656,7 +656,7 @@ Every word a child looks up is a question they had in mind. Word alerts let you 
 With alerts on, you get a message when your child looks up a word. You can choose a message for every word, or one summary a day. Messages arrive by email, and on your phone as a banner when possible.
 
 ## How to do it, step by step:
-1. In your family area, open the "Settings" tab.
+1. Open the [Settings tab in your family area](/family?tab=settings).
 2. Under "Word alerts", turn on "Notify me when my child looks up a word".
 3. Choose "Every word" or "Daily summary".
 4. Want a banner on your phone too? Open Gadit on your phone and tap "Turn on alerts on this device".
@@ -675,7 +675,7 @@ With alerts on, you get a message when your child looks up a word. You can choos
 הרגל נבנה מהתקדמות שרואים. בשביל זה לכל ילד יש נקודות, דרגות, רצף ימים ויעד שבועי.
 
 ## דרגות, רצף וסקינים
-הילד רואה את ההתקדמות שלו מתחת לחיפוש בדף הבית ובראש המחברת: "רצף ימים", "יעד שבועי" ו"הדרגה שלך".
+הילד רואה את ההתקדמות שלו מתחת לחיפוש ב[דף הבית](/) ובראש [המחברת](/notebook): "רצף ימים", "יעד שבועי" ו"הדרגה שלך".
 
 היעד השבועי מתחיל מ-5 מילים חדשות, ומתאים את עצמו לקצב של הילד. יש 12 דרגות, וחלק מהן פותחות סקינים חדשים, עיצובים שהילד בוחר ל-Gadit שלו.
 
@@ -687,7 +687,7 @@ With alerts on, you get a message when your child looks up a word. You can choos
 
 אין מה להגדיר. הכול עובד לבד מהיום הראשון.
 
-**טיפ מהשטח:** לשים לב לרצף הימים בכרטיס של הילד בלוח ההורה, ולהגיד לו מילה טובה כשהוא שומר עליו.`,
+**טיפ מהשטח:** לשים לב לרצף הימים בכרטיס של הילד ב[לוח ההורה](/family), ולהגיד לו מילה טובה כשהוא שומר עליו.`,
       "",
       "במייל הבא נדבר על השאלות שאפשר לשאול על כל מילה.",
     ),
@@ -698,7 +698,7 @@ With alerts on, you get a message when your child looks up a word. You can choos
 A habit is built from progress you can see. That's why every child has points, ranks, a day streak and a weekly goal.
 
 ## Ranks, streaks and skins
-Your child sees their progress under the search on the home page and at the top of the notebook: their streak, their weekly goal and their rank.
+Your child sees their progress under the search on the [home page](/) and at the top of [the notebook](/notebook): their streak, their weekly goal and their rank.
 
 The weekly goal starts at 5 new words and adjusts itself to your child's pace. There are 12 ranks, and some of them unlock new skins, designs your child picks for their own Gadit.
 
@@ -710,7 +710,7 @@ The weekly goal starts at 5 new words and adjusts itself to your child's pace. T
 
 There's nothing to set up. It all works on its own from day one.
 
-**A tip from other families:** keep an eye on the streak on your child's card in the parent board, and say something kind when they keep it going.`,
+**A tip from other families:** keep an eye on the streak on your child's card in the [parent board](/family), and say something kind when they keep it going.`,
       "",
       "In the next email we'll look at the questions you can ask about any word.",
     ),
@@ -733,7 +733,7 @@ There's nothing to set up. It all works on its own from day one.
 5. "איך לזכור את המילה"
 
 ## איך עושים את זה, שלב אחר שלב:
-1. מחפשים מילה.
+1. [מחפשים מילה](/).
 2. גוללים ל"יש לך שאלה על המילה הזאת?".
 3. לוחצים על השאלה שמעניינת, והתשובה מופיעה מיד.
 
@@ -757,7 +757,7 @@ Every word's page has the section "Have a question about this word?", with ready
 5. "How to remember it"
 
 ## How to do it, step by step:
-1. Look up a word.
+1. [Look up a word](/).
 2. Scroll to "Have a question about this word?".
 3. Tap the question you're curious about, and the answer appears right away.
 
@@ -778,7 +778,7 @@ Every word's page has the section "Have a question about this word?", with ready
 בדף של מילה מופיע החלק "ניבים וצירופים": הביטויים שהמילה מופיעה בהם, ומה כל ביטוי אומר. במצב ילדים ההסבר של כל ביטוי כתוב בשפה של ילדים, וליד כל ביטוי יש כפתור השמעה.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. מחפשים מילה.
+1. [מחפשים מילה](/).
 2. גוללים ל"ניבים וצירופים".
 3. קוראים את הביטוי ואת ההסבר שלו.
 4. לוחצים על כפתור ההשמעה כדי לשמוע איך אומרים אותו.
@@ -797,7 +797,7 @@ Some expressions are made of words you know, and still the meaning isn't clear. 
 A word's page has the section "Idioms & expressions": the expressions the word appears in, and what each one means. In Kids Mode, each explanation is written for kids, and every expression has a listen button.
 
 ## How to do it, step by step:
-1. Look up a word.
+1. [Look up a word](/).
 2. Scroll to "Idioms & expressions".
 3. Read the expression and its explanation.
 4. Tap the listen button to hear how it's said.
@@ -820,7 +820,7 @@ A word's page has the section "Idioms & expressions": the expressions the word a
 
 ## איך עושים את זה, שלב אחר שלב:
 1. בוחרים את שפת הממשק: במחשב, בכפתור השפה בשורה העליונה. בטלפון, בתפריט.
-2. מחפשים מילה בכל שפה, למשל מילה באנגלית משיעורי הבית.
+2. [מחפשים מילה](/) בכל שפה, למשל מילה באנגלית משיעורי הבית.
 3. ההסבר מגיע בשפה שבחרת.
 
 כל אחד במשפחה יכול לבחור את השפה שלו במכשיר שלו.
@@ -840,7 +840,7 @@ In Gadit you can look up a word in any language. The explanation is always writt
 
 ## How to do it, step by step:
 1. Choose the interface language: on a computer, with the language button in the top bar. On a phone, in the menu.
-2. Look up a word in any language, for example an English word from homework.
+2. [Look up a word](/) in any language, for example an English word from homework.
 3. The explanation comes in the language you chose.
 
 Everyone in the family can choose their own language on their own device.
@@ -864,7 +864,7 @@ Everyone in the family can choose their own language on their own device.
 המורה צריך חשבון Gadit משלו.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. באזור המשפחה נכנסים ללשונית "הגדרות".
+1. נכנסים ל[לשונית "הגדרות" באזור המשפחה](/family?tab=settings).
 2. בחלק "מאמן או מורה פרטי" כותבים את האימייל של המאמן.
 3. בוחרים ב"איזה ילד?".
 4. לוחצים על "הענקת גישה".
@@ -886,7 +886,7 @@ You give the teacher access to one child's profile only, by their email. The tea
 The teacher needs their own Gadit account.
 
 ## How to do it, step by step:
-1. In your family area, open the "Settings" tab.
+1. Open the [Settings tab in your family area](/family?tab=settings).
 2. Under "Coach or private teacher", type the coach's email.
 3. Choose which child.
 4. Tap "Grant access".
@@ -909,13 +909,13 @@ On the teacher's side, your child appears under "Your students", and tapping "En
 ב-Gadit אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. הילד פוגש רק מילים, הסברים ותרגול. ההורה רואה מה הילד חיפש, ומחליט מי עוד מקבל גישה.
 
 ## כל הכלים שלכם, במקום אחד
-1. חיפוש מילה עד הסוף, והסבר בשפה של ילדים.
-2. מחברת אישית לכל ילד.
-3. כל מילה: דף שלם מתוך הספר.
-4. משחקי מילים מהמילים של הילד.
-5. תרגול הכתבה ותגיד את זה.
-6. לוח ההורה והתראות על מילים.
-7. 33 שפות, וגישה למורה פרטי.
+1. [חיפוש מילה](/) עד הסוף, והסבר בשפה של ילדים.
+2. [מחברת אישית](/notebook) לכל ילד.
+3. [כל מילה](/read): דף שלם מתוך הספר.
+4. [משחקי מילים](/play) מהמילים של הילד.
+5. [תרגול הכתבה](/spell) ו[תגיד את זה](/say).
+6. [לוח ההורה](/family) ו[התראות על מילים](/family?tab=settings).
+7. 33 שפות, ו[גישה למורה פרטי](/family?tab=settings).
 
 אוצר המילים של הילד ממשיך לגדול, מילה אחרי מילה.`,
       "למשפחה שלי",
@@ -931,13 +931,13 @@ It's been a month since you joined. Time to sum up everything you have in Gadit,
 Gadit has no open chat, no feed, no ads and no links out. Your child meets only words, explanations and practice. You see what your child looked up, and you decide who else gets access.
 
 ## All your tools, in one place
-1. Understanding a word all the way through, and explanations for kids.
-2. A personal notebook for every child.
-3. Every Word: a whole page from a book.
-4. Word games from your child's own words.
-5. Spelling practice and Say it.
-6. The parent board and word alerts.
-7. 33 languages, and access for a private teacher.
+1. [Understanding a word](/) all the way through, and explanations for kids.
+2. A [personal notebook](/notebook) for every child.
+3. [Every Word](/read): a whole page from a book.
+4. [Word games](/play) from your child's own words.
+5. [Spelling practice](/spell) and [Say it](/say).
+6. The [parent board](/family) and [word alerts](/family?tab=settings).
+7. 33 languages, and [access for a private teacher](/family?tab=settings).
 
 Your child's vocabulary keeps growing, word by word.`,
       "Open My family",
