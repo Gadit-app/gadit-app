@@ -42,6 +42,9 @@ export function AdminEmailEditorClient() {
         setEmails(d.emails ?? []);
         setSignup(d.signup ?? []);
         if (d.emails?.[0]) setKey(d.emails[0].key);
+        // Test sends go to Gadi's own inbox by default (server env, never in
+        // this public repo); the field stays editable.
+        if (d.defaultTestTo) setTestTo((v) => v || d.defaultTestTo);
       } catch { /* ignore */ }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

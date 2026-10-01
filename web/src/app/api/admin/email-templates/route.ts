@@ -60,6 +60,7 @@ export async function GET(req: NextRequest) {
   if (!key) {
     return NextResponse.json({
       emails: FAMILY_META.map((m) => ({ key: m.key, label: m.label, labelHe: FAMILY_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset })),
+      defaultTestTo: process.env.NOTIFY_EMAIL ?? "",
       signup: SIGNUP_STEPS.map((s) => ({ key: `signup:${s.step}`, label: s.label, labelHe: s.labelHe, dayOffset: s.dayOffset })),
     });
   }
