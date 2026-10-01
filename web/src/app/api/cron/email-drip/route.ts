@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isShabbatIL } from "@/lib/shabbat";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
@@ -64,6 +65,9 @@ export async function GET(req: NextRequest) {
   if (!authz.ok) return NextResponse.json({ error: authz.reason }, { status: authz.status });
 
   const dryRun = req.nextUrl.searchParams.get("dryRun") === "1";
+  // No emails on Shabbat. Saturday's due mail goes out on Sunday's run
+  // (one day late is well inside STALE_DAYS).
+  if (!dryRun && isShabbatIL()) return NextResponse.json({ ok: true, skipped: "shabbat" });
   const auth = getAdminAuth();
   const db = getAdminDb();
   const now = Date.now();

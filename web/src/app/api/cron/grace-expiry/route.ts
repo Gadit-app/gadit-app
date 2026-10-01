@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isShabbatIL } from "@/lib/shabbat";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -59,7 +60,7 @@ export async function GET(req: NextRequest) {
     // Day-5 reminder: once per failed invoice, only inside the grace window.
     const invoiceId = typeof d.dunningNotifiedInvoice === "string" ? d.dunningNotifiedInvoice : null;
     if (
-      stripe && resend && grace !== null && invoiceId &&
+      stripe && resend && grace !== null && invoiceId && !isShabbatIL() &&
       grace > now && grace - now <= REMIND_WITHIN_MS &&
       d.dunningReminderInvoice !== invoiceId
     ) {

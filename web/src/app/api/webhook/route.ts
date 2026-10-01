@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isShabbatIL } from "@/lib/shabbat";
 import crypto from "node:crypto";
 import Stripe from "stripe";
 import { Resend } from "resend";
@@ -197,6 +198,9 @@ async function sendFamilyWelcome(uid: string, email: string | null) {
     const ref = db.collection("users").doc(uid);
     const snap = await ref.get();
     if (snap.data()?.familyWelcomeSent === true) return; // once per owner
+    // No emails on Shabbat: the family series' first mail (fam2-start) still
+    // reaches them on the first drip run after Shabbat.
+    if (isShabbatIL()) return;
 
     const uiLang = (snap.data()?.uiLang as string | undefined) ?? "";
     const he = uiLang === "he";
