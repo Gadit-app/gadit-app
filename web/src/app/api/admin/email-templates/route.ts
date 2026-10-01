@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FAMILY_META, EMAIL_BASE } from "@/lib/email-drip/family-content";
+import { FAMILY_META, FAMILY_LABEL_HE, EMAIL_BASE } from "@/lib/email-drip/family-content";
 import { type EmailContent } from "@/lib/email-drip/render";
 import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { getOverride, getEffectiveContent, saveOverride, resetOverride } from "@/lib/email-drip/email-templates-store";
@@ -14,12 +14,12 @@ export const runtime = "nodejs";
  * so Gadi can review and test-send it from the same editor. Editing this
  * series still happens in code. Keys are addressed as "signup:<step>".
  */
-const SIGNUP_STEPS: { step: string; dayOffset: number; label: string }[] = [
-  { step: "welcome", dayOffset: 0, label: "Signup · 1 · Welcome" },
-  { step: "meanings", dayOffset: 2, label: "Signup · 2 · Meanings" },
-  { step: "etymology", dayOffset: 5, label: "Signup · 3 · Etymology" },
-  { step: "visual", dayOffset: 9, label: "Signup · 4 · Visual" },
-  { step: "summary", dayOffset: 14, label: "Signup · 5 · Summary" },
+const SIGNUP_STEPS: { step: string; dayOffset: number; label: string; labelHe: string }[] = [
+  { step: "welcome", dayOffset: 0, label: "Signup · 1 · Welcome", labelHe: "1 · ברוכים הבאים" },
+  { step: "meanings", dayOffset: 2, label: "Signup · 2 · Meanings", labelHe: "2 · משמעויות" },
+  { step: "etymology", dayOffset: 5, label: "Signup · 3 · Etymology", labelHe: "3 · מקור המילה" },
+  { step: "visual", dayOffset: 9, label: "Signup · 4 · Visual", labelHe: "4 · תמונות" },
+  { step: "summary", dayOffset: 14, label: "Signup · 5 · Summary", labelHe: "5 · סיכום" },
 ];
 
 function renderSignup(step: string, he: boolean): { subject: string; html: string } | null {
@@ -59,8 +59,8 @@ export async function GET(req: NextRequest) {
 
   if (!key) {
     return NextResponse.json({
-      emails: FAMILY_META.map((m) => ({ key: m.key, label: m.label, dayOffset: m.dayOffset })),
-      signup: SIGNUP_STEPS.map((s) => ({ key: `signup:${s.step}`, label: s.label, dayOffset: s.dayOffset })),
+      emails: FAMILY_META.map((m) => ({ key: m.key, label: m.label, labelHe: FAMILY_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset })),
+      signup: SIGNUP_STEPS.map((s) => ({ key: `signup:${s.step}`, label: s.label, labelHe: s.labelHe, dayOffset: s.dayOffset })),
     });
   }
 

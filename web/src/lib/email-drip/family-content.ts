@@ -68,6 +68,29 @@ export const FAMILY_META: FamilyEmailMeta[] = [
   M("fam2-safe", "Family · 18 · A closed, safe place (last)", 30, "/family"),
 ];
 
+/** Hebrew names for the admin email editor list (the English `label` stays
+ *  for the English admin UI). Gadi 2026-10-01. */
+export const FAMILY_LABEL_HE: Record<string, string> = {
+  "fam2-start": "1 · התחלה: התקנה, בני משפחה ומכשירים",
+  "fam2-word": "2 · להבין מילה עד הסוף",
+  "fam2-kids": "3 · מצב ילדים",
+  "fam2-notebook": "4 · המחברת",
+  "fam2-read": "5 · כל מילה (דף שלם)",
+  "fam2-context": "6 · המשמעות הנכונה לפי המשפט",
+  "fam2-games": "7 · משחקי מילים",
+  "fam2-help": "8 · עזרה והדרכות",
+  "fam2-spell": "9 · תרגול הכתבה",
+  "fam2-say": "10 · תגיד את זה",
+  "fam2-dashboard": "11 · לוח ההורה",
+  "fam2-alerts": "12 · התראות על מילים",
+  "fam2-ranks": "13 · דרגות, רצף וסקינים",
+  "fam2-questions": "14 · שאלות על מילה",
+  "fam2-idioms": "15 · ניבים וצירופים",
+  "fam2-languages": "16 · כל מילה, הסבר בשפה שלך",
+  "fam2-coach": "17 · מורה פרטי או מאמן",
+  "fam2-safe": "18 · מקום סגור ובטוח (אחרון)",
+};
+
 const C = (subject: string, body: string, ctaText: string, next: string): EmailContent => ({
   subject,
   heading: "",

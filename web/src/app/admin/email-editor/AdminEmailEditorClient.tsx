@@ -5,7 +5,7 @@ import { useAdminContext } from "../admin-context";
 
 type Content = { subject: string; heading: string; body: string; ctaText: string; next?: string };
 type LangBlock = { content: Content; overridden: boolean };
-type EmailRow = { key: string; label: string; dayOffset: number };
+type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number };
 type RoMail = { subject: string; html: string };
 
 const EMPTY: Content = { subject: "", heading: "", body: "", ctaText: "" };
@@ -158,7 +158,7 @@ export function AdminEmailEditorClient() {
               background: key === e.key ? "rgba(14,165,165,0.08)" : "#fff",
               color: key === e.key ? "#0E7490" : "#374151",
             }}>
-            {e.label}
+            {he && e.labelHe ? e.labelHe : e.label}
           </button>
         ))}
       </div>
@@ -186,10 +186,10 @@ export function AdminEmailEditorClient() {
         <div dir={fieldDir}>
           <label style={label}>{he ? "נושא המייל" : "Subject"}</label>
           <input style={input} value={content.subject} onChange={(e) => setField("subject", e.target.value)} />
-          <label style={label}>{he ? "כותרת ראשית" : "Heading"}</label>
-          <input style={input} value={content.heading} onChange={(e) => setField("heading", e.target.value)} />
+          {/* The v2 family emails don't render a heading (greeting + body only),
+              so the field is hidden; an empty heading stays empty on save. */}
           <label style={label}>{he ? "גוף המייל" : "Body"}</label>
-          <textarea style={{ ...input, minHeight: 240, lineHeight: 1.6, resize: "vertical" }} value={content.body} onChange={(e) => setField("body", e.target.value)} />
+          <textarea style={{ ...input, minHeight: 560, lineHeight: 1.6, resize: "vertical" }} value={content.body} onChange={(e) => setField("body", e.target.value)} />
           <label style={label}>{he ? "טקסט הכפתור" : "Button text"}</label>
           <input style={{ ...input, maxWidth: 320 }} value={content.ctaText} onChange={(e) => setField("ctaText", e.target.value)} />
           <label style={label}>{he ? "משפט המשך למייל הבא (מתחת לכפתור)" : "Bridge line to the next email (under the button)"}</label>
