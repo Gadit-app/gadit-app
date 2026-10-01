@@ -14,6 +14,7 @@ import { useState, useMemo } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildQuizQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import type { GameResultData } from "./GameResult";
 
 export function GameQuiz({
@@ -27,6 +28,7 @@ export function GameQuiz({
   lang: string;
   t: PlayT;
 }) {
+  const { nq } = useNiqqud(); // display-only vowel points
   const questions = useMemo(
     () => buildQuizQuestions(pool, SESSION_SIZE.quiz),
     [pool],
@@ -79,7 +81,7 @@ export function GameQuiz({
             than the UI (Hebrew word searched under English UI stores an
             English meaning). Let the browser align each per content. */}
         <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
-          {q.prompt}
+          {nq(q.prompt)}
         </div>
       </div>
       <div className="wb-play-options">
@@ -101,7 +103,7 @@ export function GameQuiz({
               disabled={picked !== null}
               dir="auto"
             >
-              {opt}
+              {nq(opt)}
             </button>
           );
         })}
@@ -140,6 +142,7 @@ export function PlayHeader({
       </button>
       <div className="wb-play-header-title">{title}</div>
       <div className="wb-play-header-meta">
+        <NiqqudToggle />
         {progress && <span className="wb-play-progress">{progress}</span>}
         {typeof timeLeft === "number" && (
           <span className={`wb-play-timer ${timeLeft <= 10 ? "is-urgent" : ""}`}>

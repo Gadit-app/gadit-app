@@ -13,6 +13,7 @@ import type { PlayWord, MemoryCard } from "@/lib/play-engine";
 import { buildMemoryDeck, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
+import { useNiqqud } from "@/lib/niqqud-display";
 
 export function GameMemory({
   pool,
@@ -25,6 +26,7 @@ export function GameMemory({
   lang: string;
   t: PlayT;
 }) {
+  const { nq } = useNiqqud(); // display-only vowel points
   const deck = useMemo(
     () => buildMemoryDeck(pool, SESSION_SIZE.memory),
     [pool],
@@ -119,13 +121,15 @@ export function GameMemory({
               disabled={isMatched}
             >
               <span className="wb-play-memcard-back" aria-hidden={open}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 6.5C4 5.7 4.7 5 5.5 5H10v14H5.5C4.7 19 4 18.3 4 17.5V6.5Z" />
-                  <path d="M20 6.5C20 5.7 19.3 5 18.5 5H14v14h4.5C19.3 19 20 18.3 20 17.5V6.5Z" />
+                {/* Open book (spine + curved pages). The old two-rectangle
+                    glyph read as broken "tofu" boxes on phones. Gadi 2026-10-01. */}
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" />
                 </svg>
               </span>
               <span className="wb-play-memcard-face" aria-hidden={!open}>
-                <span className="wb-play-memcard-facetext" dir="auto">{card.text}</span>
+                <span className="wb-play-memcard-facetext" dir="auto">{nq(card.text)}</span>
               </span>
             </button>
           );

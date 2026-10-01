@@ -14,6 +14,7 @@ import type { PlayWord, FillBlankQuestion } from "@/lib/play-engine";
 import { buildFillBlankQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
+import { useNiqqud } from "@/lib/niqqud-display";
 
 export function GameFillBlank({
   pool,
@@ -26,6 +27,7 @@ export function GameFillBlank({
   lang: string;
   t: PlayT;
 }) {
+  const { nq } = useNiqqud(); // display-only vowel points
   const questions = useMemo(
     () => buildFillBlankQuestions(pool, SESSION_SIZE.fillblank),
     [pool],
@@ -85,10 +87,10 @@ export function GameFillBlank({
         <div className="wb-play-sentence" dir="auto">
           {parts.map((part, i) => (
             <span key={i}>
-              {part}
+              {nq(part)}
               {i < parts.length - 1 && (
                 <span className={`wb-play-blank ${picked !== null ? "is-revealed" : ""}`}>
-                  {picked !== null ? q.word.word : ""}
+                  {picked !== null ? nq(q.word.word) : ""}
                 </span>
               )}
             </span>
@@ -114,7 +116,7 @@ export function GameFillBlank({
               disabled={picked !== null}
               dir="auto"
             >
-              {opt}
+              {nq(opt)}
             </button>
           );
         })}

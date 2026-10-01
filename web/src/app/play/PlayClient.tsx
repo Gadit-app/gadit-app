@@ -38,6 +38,7 @@ import {
 import { getStreak, syncFromServer } from "@/lib/play-streak";
 import { GameQuiz, type PlayT } from "@/components/play/GameQuiz";
 import { GameFillBlank } from "@/components/play/GameFillBlank";
+import { NiqqudProvider } from "@/lib/niqqud-display";
 import { GameMemory } from "@/components/play/GameMemory";
 import { GameAnagram } from "@/components/play/GameAnagram";
 import { GameSpeed } from "@/components/play/GameSpeed";
@@ -3668,11 +3669,15 @@ export function PlayPage() {
     const props = { pool: effectivePool, onExit: exit, lang, t };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
-        {stage.game === "quiz" && <GameQuiz {...props} />}
-        {stage.game === "fillblank" && <GameFillBlank {...props} />}
-        {stage.game === "memory" && <GameMemory {...props} />}
-        {stage.game === "anagram" && <GameAnagram {...props} />}
-        {stage.game === "speed" && <GameSpeed {...props} />}
+        {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
+            UI). Anagram is excluded: its tiles are single letters. */}
+        <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
+          {stage.game === "quiz" && <GameQuiz {...props} />}
+          {stage.game === "fillblank" && <GameFillBlank {...props} />}
+          {stage.game === "memory" && <GameMemory {...props} />}
+          {stage.game === "anagram" && <GameAnagram {...props} />}
+          {stage.game === "speed" && <GameSpeed {...props} />}
+        </NiqqudProvider>
       </div>
     );
   }

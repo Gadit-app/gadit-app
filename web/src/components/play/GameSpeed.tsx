@@ -17,6 +17,7 @@ import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildSpeedDeck } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
+import { useNiqqud } from "@/lib/niqqud-display";
 
 const DURATION = 60;
 const WRONG_PENALTY = 1; // seconds
@@ -32,6 +33,7 @@ export function GameSpeed({
   lang: string;
   t: PlayT;
 }) {
+  const { nq } = useNiqqud(); // display-only vowel points
   const deck = useMemo(() => buildSpeedDeck(pool), [pool]);
   const [stage, setStage] = useState<"countdown" | "playing" | "done">("countdown");
   const [countdown, setCountdown] = useState(3);
@@ -135,7 +137,7 @@ export function GameSpeed({
           {q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning}
         </div>
         <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
-          {q.prompt}
+          {nq(q.prompt)}
         </div>
       </div>
       <div className="wb-play-options">
@@ -157,7 +159,7 @@ export function GameSpeed({
               disabled={picked !== null}
               dir="auto"
             >
-              {opt}
+              {nq(opt)}
             </button>
           );
         })}

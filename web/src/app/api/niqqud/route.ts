@@ -55,6 +55,39 @@ async function tashkeel(text: string): Promise<string> {
   return out || text;
 }
 
+const HOLAM = /[ֹֺ]/;
+const KUBUTZ = /ֻ/;
+const I_OR_E = /[ִֵֶ]/;
+
+/** Dicta vocalizes in ktiv haser, dropping the vav/yod that ktiv male uses as
+ *  vowel letters (תקשורת → תִּקְשֹׁרֶת, קיבלתי → קִבַּלְתִּי). Put those letters back
+ *  on top of Dicta's points so the word keeps the spelling the reader saw:
+ *  holam + ו → וֹ, kubutz + ו → וּ, a yod after an i/e vowel stays a bare yod,
+ *  and a doubled consonantal vav/yod (האוויר) gets its second letter back.
+ *  Any other difference means Dicta read a different word (נגיף → נִגָּף), so
+ *  this returns null and the caller keeps the plain letters. Gadi 2026-10-01. */
+function restoreMaleSpelling(orig: string, voc: string): string | null {
+  const O = [...orig.normalize("NFC").replace(/\p{M}/gu, "")];
+  const V = voc.normalize("NFD").match(/\P{M}\p{M}*/gu) ?? [];
+  const out: string[] = [];
+  let i = 0, j = 0;
+  while (i < O.length) {
+    const c = O[i];
+    const v = V[j];
+    if (v && v[0] === c) {
+      if ((c === "ו" || c === "י") && O[i + 1] === c && V[j + 1]?.[0] !== c) { out.push(c); i++; continue; }
+      out.push(v); i++; j++; continue;
+    }
+    const prev = out[out.length - 1] ?? "";
+    if (c === "ו" && HOLAM.test(prev)) { out[out.length - 1] = prev.replace(HOLAM, ""); out.push("וֹ"); i++; continue; }
+    if (c === "ו" && KUBUTZ.test(prev)) { out[out.length - 1] = prev.replace(KUBUTZ, ""); out.push("וּ"); i++; continue; }
+    if (c === "י" && I_OR_E.test(prev)) { out.push("י"); i++; continue; }
+    return null;
+  }
+  if (j !== V.length) return null;
+  return out.join("").normalize("NFC");
+}
+
 /** Call Dicta Nakdan and rebuild the vowelized string from its token stream. */
 async function vowelize(text: string): Promise<string> {
   const res = await fetch(DICTA_URL, {
@@ -79,8 +112,9 @@ async function vowelize(text: string): Promise<string> {
       // Only accept the vocalized form when it keeps the exact same letters as
       // the input. Dicta can re-spell ktiv male/haser or pick a different word
       // form (e.g. נגיף → נִגָּף), which would make Gadit show a word that is not
-      // what was written. In that case keep the original letters (Gadi 2026-09-19).
-      out += consonants(voc) === consonants(orig) ? voc : orig;
+      // what was written. In that case keep the original letters (Gadi 2026-09-19),
+      // unless the only difference is dropped ktiv-male vowel letters.
+      out += consonants(voc) === consonants(orig) ? voc : restoreMaleSpelling(orig, voc) ?? orig;
     } else if (typeof t.word === "string") {
       out += t.word;
     }
@@ -114,7 +148,7 @@ export async function POST(req: NextRequest) {
       const isHeb = HEBREW.test(trimmed);
       const isAr = !isHeb && ARABIC.test(trimmed);
       if (!isHeb && !isAr) return text; // nothing to vowelize
-      const ref = db.collection("niqqudCache").doc(hashKey(trimmed, isAr ? "ar1:" : "v1:"));
+      const ref = db.collection("niqqudCache").doc(hashKey(trimmed, isAr ? "ar1:" : "v2:")); // v2: ktiv-male restore
       try {
         const snap = await ref.get();
         if (snap.exists) return (snap.data() as { niqqud?: string }).niqqud ?? text;
