@@ -63,7 +63,7 @@ function inline(he: boolean, s: string): string {
 const P = (he: boolean, html: string) =>
   `<p dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;">${html}</p>`;
 const H = (he: boolean, html: string) =>
-  `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;font-weight:800;color:#1C1917;margin:20px 0 8px;">${html}</div>`;
+  `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;font-weight:700;color:#1C1917;margin:20px 0 8px;">${html}</div>`;
 const OL = (he: boolean, items: string[]) =>
   `<ol dir="${he ? "rtl" : "ltr"}" style="margin:0 0 14px;padding-${he ? "right" : "left"}:22px;text-align:${he ? "right" : "left"};font-size:15px;line-height:1.75;color:#374151;">` +
   items.map((it) => `<li style="margin-bottom:7px;">${it}</li>`).join("") +
@@ -112,7 +112,7 @@ export function renderEmailHtml(opts: {
   const { he } = opts;
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
-  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F9FAFB;color:#111827;">
   <div dir="${dir}" style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
     <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:26px 24px;color:#fff;">
       <div style="font-size:13px;font-weight:600;letter-spacing:1px;opacity:.85;" dir="ltr">GADIT FAMILY</div>
@@ -161,7 +161,7 @@ export function renderEmailHtmlV2(opts: {
     ? `<div style="text-align:center;margin:8px 0 22px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:650;font-size:15px;">${esc(opts.ctaText.trim())}</a></div>`
     : "";
   const next = opts.next?.trim() ? para(inline(he, opts.next.trim())) : "";
-  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#F9FAFB;color:#111827;">
+  return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F9FAFB;color:#111827;">
   <div dir="${dir}" style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;text-align:${align};">
     <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:18px 24px;color:#fff;">
       <div style="font-size:22px;font-weight:800;" dir="ltr" translate="no">Gadit</div>
