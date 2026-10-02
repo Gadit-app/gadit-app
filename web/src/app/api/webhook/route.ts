@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendMail } from "@/lib/mail";
 import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
-import { isShabbatIL } from "@/lib/shabbat";
 import crypto from "node:crypto";
 import Stripe from "stripe";
-import { Resend } from "resend";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
@@ -147,8 +146,7 @@ async function notifyPaidActivation(
     </div>
   </div>
 </body></html>`;
-    const resend = new Resend(resendKey);
-    const res = await resend.emails.send({
+    const res = await sendMail({
       from: "Gadit <notify@gadit.app>",
       to: notifyTo,
       subject: converted
@@ -199,9 +197,6 @@ async function sendFamilyWelcome(uid: string, email: string | null) {
     const ref = db.collection("users").doc(uid);
     const snap = await ref.get();
     if (snap.data()?.familyWelcomeSent === true) return; // once per owner
-    // No emails on Shabbat: the family series' first mail (fam2-start) still
-    // reaches them on the first drip run after Shabbat.
-    if (isShabbatIL()) return;
 
     const uiLang = (snap.data()?.uiLang as string | undefined) ?? "";
     const he = uiLang === "he";
@@ -251,8 +246,7 @@ async function sendFamilyWelcome(uid: string, email: string | null) {
   </div>
 </body></html>`;
 
-    const resend = new Resend(resendKey);
-    const res = await resend.emails.send({
+    const res = await sendMail({
       from: "Gadit <gadi@gadit.app>",
       replyTo: "gadi@gadit.app",
       to: email,
@@ -303,8 +297,7 @@ async function notifyCancellation(tier: string, email: string | null, status: st
     </div>
   </div>
 </body></html>`;
-    const resend = new Resend(resendKey);
-    const res = await resend.emails.send({
+    const res = await sendMail({
       from: "Gadit <notify@gadit.app>",
       to: notifyTo,
       subject: `⚠️ Canceled ${tier} subscription: ${email ?? "(no email)"}`,
@@ -580,12 +573,11 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
 
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) return;
-    const resend = new Resend(resendKey);
 
     // Shared with the day-5 reminder in the grace cron (lib/dunning-email).
     const { subject, html } = buildDunningEmail({ he, url, kind: "first" });
 
-    await resend.emails.send({ from: "Gadit <notify@gadit.app>", to: email, subject, html });
+    await sendMail({ from: "Gadit <notify@gadit.app>", to: email, subject, html });
     if (ref) await ref.set({ dunningNotifiedInvoice: invoice.id }, { merge: true });
   } catch (err) {
     console.error("[webhook] payment_failed notify error:", err);

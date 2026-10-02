@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendMail } from "@/lib/mail";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isDisposableEmail } from "@/lib/email/disposable";
@@ -218,7 +218,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ sent: false, reason: "not_configured" });
     }
 
-    const resend = new Resend(resendKey);
 
     const signupTime = authUser.metadata.creationTime
       ? new Date(authUser.metadata.creationTime)
@@ -266,7 +265,7 @@ export async function POST(req: NextRequest) {
 
     const subject = `🎉 New Gadit signup: ${email ?? "(no email)"} ${flagEmoji}`;
 
-    const result = await resend.emails.send({
+    const result = await sendMail({
       // Verified sender on gadit.app domain (Resend verified the domain
       // 2026-06-12). The `notify@` mailbox is admin-only so we can
       // separate it from `welcome@`, `support@`, etc. when sequenced

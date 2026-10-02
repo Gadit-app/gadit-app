@@ -11,8 +11,8 @@
  * so a burst of failed requests can't spam the inbox. Entirely best-effort:
  * any failure here is swallowed and never affects the user request.
  */
-import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { sendMail } from "@/lib/mail";
 
 const COOLDOWN_MS = 30 * 60 * 1000;
 
@@ -79,7 +79,7 @@ export async function alertEngineDown(info: {
         </p>
       </div>`;
 
-    await new Resend(resendKey).emails.send({
+    await sendMail({
       from: "Gadit <notify@gadit.app>",
       to,
       replyTo: "gadi@gadit.app",

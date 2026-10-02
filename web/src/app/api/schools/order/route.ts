@@ -11,7 +11,7 @@
  * Response: { ok: true }
  */
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendMail } from "@/lib/mail";
 import { getAdminDb } from "@/lib/firebase-admin";
 
 export const maxDuration = 30;
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
       const notifyTo = process.env.NOTIFY_EMAIL;
       if (resendKey && notifyTo) {
         const esc = (s: string) => s.replace(/</g, "&lt;");
-        await new Resend(resendKey).emails.send({
+        await sendMail({
           from: "Gadit <notify@gadit.app>",
           to: notifyTo,
           replyTo: email,

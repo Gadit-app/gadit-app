@@ -1,4 +1,4 @@
-import { Resend } from "resend";
+import { sendMail } from "@/lib/mail";
 
 /**
  * Thin Resend wrapper used by the drip cron + the welcome hook in
@@ -23,8 +23,8 @@ export async function sendDripEmail(opts: {
     return { ok: false, reason: "RESEND_API_KEY not configured" };
   }
   try {
-    const resend = new Resend(key);
-    const result = await resend.emails.send({
+    // Through the shared door: parked during Shabbat, sent after it.
+    const result = await sendMail({
       from: FROM,
       replyTo: REPLY_TO,
       to: opts.to,

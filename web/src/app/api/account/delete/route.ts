@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendMail } from "@/lib/mail";
 import Stripe from "stripe";
-import { Resend } from "resend";
 import {
   getAdminAuth,
   getAdminDb,
@@ -46,8 +46,7 @@ async function notifyAccountDeleted(email: string | null, plan: string | null, c
     </div>
   </div>
 </body></html>`;
-    const resend = new Resend(resendKey);
-    const res = await resend.emails.send({
+    const res = await sendMail({
       from: "Gadit <notify@gadit.app>",
       to: notifyTo,
       subject: `🗑️ Account deleted: ${email ?? "(no email)"}`,

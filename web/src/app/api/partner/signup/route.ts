@@ -13,7 +13,7 @@
  * /admin/partners.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendMail } from "@/lib/mail";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { sendPartnerWelcome } from "@/lib/partner-email";
 import {
@@ -102,8 +102,7 @@ export async function POST(req: NextRequest) {
       const resendKey = process.env.RESEND_API_KEY;
       const notifyTo = process.env.NOTIFY_EMAIL;
       if (resendKey && notifyTo) {
-        const resend = new Resend(resendKey);
-        await resend.emails.send({
+        await sendMail({
           from: "Gadit <notify@gadit.app>",
           to: notifyTo,
           subject: `🤝 New partner: ${name || email}`,

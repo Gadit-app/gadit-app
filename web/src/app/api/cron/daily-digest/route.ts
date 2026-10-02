@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendMail } from "@/lib/mail";
 import Stripe from "stripe";
-import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { summarizeStripeRevenue } from "@/lib/admin-revenue";
 import { emailHeaderHtml, EMAIL_BG } from "@/lib/email-brand";
@@ -154,7 +154,7 @@ export async function GET(req: NextRequest) {
   if (!resendKey) return NextResponse.json({ ok: false, error: "no_resend_key", yesterdayCost, sevenDayCost });
   const to = process.env.ALERT_EMAIL || "gadi@gadit.app";
   try {
-    await new Resend(resendKey).emails.send({
+    await sendMail({
       from: "Gadit <notify@gadit.app>",
       to,
       replyTo: "gadi@gadit.app",

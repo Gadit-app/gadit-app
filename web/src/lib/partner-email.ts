@@ -1,6 +1,6 @@
 import "server-only";
+import { sendMail } from "@/lib/mail";
 import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
-import { Resend } from "resend";
 import { getAdminDb } from "./firebase-admin";
 import { Partner } from "./partners";
 
@@ -1067,7 +1067,7 @@ export async function sendPartnerWelcome(partner: WelcomePartner, lang: string) 
   try {
     const cfg = await loadWelcomeConfig();
     const { subject, html } = buildWelcomeEmail(partner, lang, cfg);
-    await new Resend(resendKey).emails.send({ from: "Gadit <notify@gadit.app>", to: partner.email, subject, html });
+    await sendMail({ from: "Gadit <notify@gadit.app>", to: partner.email, subject, html });
   } catch (e) {
     console.warn("[partner-email] welcome send failed (non-blocking):", e);
   }
