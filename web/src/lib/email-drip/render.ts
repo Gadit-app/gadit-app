@@ -113,7 +113,16 @@ export function mdLiteToHtml(he: boolean, body: string): string {
       }
       continue;
     }
-    out.push(P(he, inline(he, lines.join(" "))));
+    // A paragraph that opens with a bold label ("**טיפ מהשטח:**", "**מומלץ:**",
+    // "**המחשה:**") puts the label on its own line and the text under it
+    // (Gadi 2026-10-04).
+    const text = lines.join(" ");
+    const lab = text.match(/^\*\*([^*\n]{1,30}?):?\*\*:?\s+([\s\S]+)$/);
+    if (lab && /:\*\*|\*\*:/.test(text.slice(0, lab[1].length + 6))) {
+      out.push(P(he, `${inline(he, `**${lab[1]}:**`)}<br>${inline(he, lab[2])}`));
+      continue;
+    }
+    out.push(P(he, inline(he, text)));
   }
   return out.join("");
 }
