@@ -48,6 +48,7 @@ import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
 import { WordGameModal } from "@/components/design/WordGameModal";
+import { ClassroomStage } from "@/components/classroom/ClassroomStage";
 import { ClassProgressChip, ClassMilestoneOverlay, type ClassProgress, type ClassMilestoneHit } from "@/components/design/ClassMilestone";
 import {
   ReportModalV2,
@@ -791,6 +792,7 @@ export function WordClient({
     if (!wordSet || setIdx < 0) return;
     function onKey(e: KeyboardEvent) {
       if (!wordSet) return;
+      if (document.body.dataset.classPanel === "open") return;
       if (e.key === "ArrowRight" && setIdx < wordSet.words.length - 1) goToSetWord(wordSet.words[setIdx + 1]);
       else if (e.key === "ArrowLeft" && setIdx > 0) goToSetWord(wordSet.words[setIdx - 1]);
     }
@@ -1995,7 +1997,7 @@ export function WordClient({
             The entry point now lives inline in .wb-shell-actions (see the
             topbar above), which is desktop-only — and present mode is a
             projector feature, so a phone never needed it. */}
-        {user && !!schoolId && !classroomCode && present && (
+        {user && !!schoolId && !classroomCode && present && !classroomMode && (
           <button
             type="button"
             onClick={() => setPresent((p) => !p)}
@@ -2030,7 +2032,7 @@ export function WordClient({
         {/* "Open dictionary" button, present mode only. We are showing
             words on the board, not searching, so the search field is
             hidden until the teacher taps this (schools, Gadi 2026-08-09). */}
-        {present && user && !classroomCode && (
+        {present && user && !classroomCode && !classroomMode && (
           <button
             type="button"
             onClick={() => setShowSearch((s) => !s)}
@@ -2065,7 +2067,7 @@ export function WordClient({
         {/* Word-set stepper: prev / position / next, fixed at the bottom
             so a teacher can walk a themed set on the projector. Arrow keys
             page too. */}
-        {wordSet && setIdx >= 0 && (
+        {wordSet && setIdx >= 0 && !classroomMode && (
           <div style={{ position: "fixed", insetInlineStart: 0, insetInlineEnd: 0, bottom: 16, display: "flex", justifyContent: "center", zIndex: 50, pointerEvents: "none" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.94)", border: "1px solid rgba(31,41,55,0.12)", borderRadius: 999, padding: "8px 12px", boxShadow: "0 4px 16px rgba(31,41,55,0.14)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", pointerEvents: "auto", maxWidth: "92vw" }}>
               <button
@@ -2111,7 +2113,7 @@ export function WordClient({
         {/* The searchbar wrap is wrapped in a sticky stage so the input
             stays in view as the reader scrolls past long etymology +
             idiom sections. Gadi 2026-06-26 audit fix M1. */}
-        {classProgress && (
+        {classProgress && !classroomMode && (
           <div style={{ display: "flex", justifyContent: "center", margin: present ? "8px 0 0" : "4px 0 10px" }}>
             <ClassProgressChip progress={classProgress} lang={lang} />
           </div>
@@ -2306,50 +2308,21 @@ export function WordClient({
             </button>
           </div>
         )}
-        {result && (classroomMode ? (
-          <div
-            className="wb-classroom-card"
-            style={{ maxWidth: 760, margin: "0 auto", paddingTop: 72, textAlign: dir === "rtl" ? "right" : "left" }}
-          >
-            {/* The word itself, big — this is what the class is looking at. */}
-            <div style={{ fontSize: 46, lineHeight: 1.1, fontWeight: 800, color: "#0b7d7d", marginBottom: 16 }}>
-              {result.word}
-            </div>
-            <p style={{ fontSize: 24, lineHeight: 1.65, fontWeight: 600, color: "#1f2937", margin: "0 0 20px" }}>
-              {curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? ""}
-            </p>
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={result.word}
-                style={{ display: "block", maxWidth: 380, width: "100%", borderRadius: 14, margin: "0 auto 22px", boxShadow: "0 4px 18px rgba(31,41,55,0.10)" }}
-              />
-            ) : imageGenerating ? (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, padding: "20px 0", color: "#9CA3AF" }} aria-busy="true">
-                <svg className="wb-image-spinner" width="40" height="40" viewBox="0 0 44 44" aria-hidden="true">
-                  <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="3" />
-                  <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="28 84" />
-                </svg>
-                <span style={{ fontSize: 14 }}>{pick(PREPARING_PICTURE_COPY, lang)}</span>
-              </div>
-            ) : null}
-            {(() => {
-              // Prefer the subject-appropriate curated examples; fall back
-              // to the general define examples until (or unless) those land.
-              const shownExamples = classroomExamples.length
-                ? classroomExamples
-                : result.meanings[0]?.examples ?? [];
-              return shownExamples.length ? (
-                <div style={{ marginTop: 6, display: "grid", gap: 10 }}>
-                  {shownExamples.slice(0, 3).map((ex, i) => (
-                    <div key={i} style={{ fontSize: 19, lineHeight: 1.6, color: "#374151" }}>
-                      <span style={{ color: "#0EA5A5", fontWeight: 800, marginInlineEnd: 8 }}>{i + 1}</span>{ex}
-                    </div>
-                  ))}
-                </div>
-              ) : null;
-            })()}
-          </div>
+        {result && (classroomMode && wordSet ? (
+          <ClassroomStage
+            word={result.word}
+            definition={curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? ""}
+            imageUrl={imageUrl ?? null}
+            imageGenerating={imageGenerating}
+            examples={classroomExamples.length ? classroomExamples : result.meanings[0]?.examples ?? []}
+            set={wordSet}
+            idx={setIdx}
+            lang={lang}
+            onNavigate={goToSetWord}
+            onExit={() => setPresent(false)}
+            onSearch={(q) => router.push(href(`/word/${encodeURIComponent(q)}?present=1`))}
+            progress={classProgress}
+          />
         ) : (
           <ResultView
             result={displayResult ?? result}
