@@ -47,6 +47,24 @@ function daysBetween(a: number, b: number): number {
   return Math.floor((b - a) / dayMs);
 }
 
+/** Israel calendar date "YYYY-MM-DD" of a moment. */
+function ilDate(ms: number): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(ms));
+}
+
+/** Series day for the Family drip: Israel calendar days since the start,
+ *  NOT counting Saturdays. We never send on Shabbat, so Shabbat is not a
+ *  series day either and no email is lost to it (Gadi 2026-10-04). The
+ *  start date itself is day 0; a start in the future is negative. */
+function familySeriesDay(startMs: number, nowMs: number): number {
+  const [a, b] = [ilDate(startMs), ilDate(nowMs)];
+  if (b < a) return -1;
+  const toUtc = (d: string) => Date.UTC(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10));
+  let n = 0;
+  for (let t = toUtc(a) + 86_400_000; t <= toUtc(b); t += 86_400_000) if (new Date(t).getUTCDay() !== 6) n++;
+  return n;
+}
+
 function authorise(req: NextRequest): { ok: true } | { ok: false; status: number; reason: string } {
   const auth = req.headers.get("authorization") || "";
   const cronSecret = process.env.CRON_SECRET;
@@ -150,11 +168,15 @@ export async function GET(req: NextRequest) {
     // alerts, how it works) instead of the general signup drip, which
     // ends in an upgrade CTA irrelevant to a paying parent. familyActivatedAt
     // is stamped once by the webhook when the Family plan activates.
+    // familySeriesStart (set by the admin restart, Gadi 2026-10-04) starts
+    // the series over for families that joined before it existed; otherwise
+    // the series runs from the Family activation.
     const famActivatedIso = d.familyActivatedAt as string | undefined;
-    if (famActivatedIso) {
-      const famActivated = Date.parse(famActivatedIso);
+    const famStartIso = (d.familySeriesStart as string | undefined) || famActivatedIso;
+    if (famStartIso) {
+      const famActivated = Date.parse(famStartIso);
       if (Number.isFinite(famActivated)) {
-        const famDayN = daysBetween(famActivated, now);
+        const famDayN = familySeriesDay(famActivated, now);
         const famSent = (d.familyDripSent as Record<string, unknown> | undefined) ?? {};
 
         // Skip-mark any stale unsent mail (due more than STALE_DAYS ago) so a
