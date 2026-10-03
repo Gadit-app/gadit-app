@@ -17,6 +17,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
@@ -593,6 +594,17 @@ export function ClassroomKidClient({ code }: { code: string }) {
   // independent identities. Anonymous kids leave this empty and the
   // search log gets stored without a studentName.
   const [studentName, setStudentName] = useState<string>("");
+  // Class dictionary total (different words), shown above the search box
+  // so the class sees the next milestone coming (Gadi 2026-10-03).
+  const [classProgress, setClassProgress] = useState<ClassProgress | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/school/word-count?cls=${encodeURIComponent(code)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (!cancelled && d && typeof d.count === "number") setClassProgress({ count: d.count, next: d.next, scope: d.scope }); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [code]);
   // Kids Mode is on by default in the classroom view — kids reading on
   // a shared computer get the simpler, more visual renderings without
   // having to flip a switch. The toggle stays visible in the search
@@ -812,6 +824,11 @@ export function ClassroomKidClient({ code }: { code: string }) {
               so a kid can flip it. plan="deep" passed to bypass the
               tier gate — classroom users get paid-tier features via
               the school subscription. */}
+          {classProgress && (data.students.length === 0 || studentName) && (
+            <div style={{ display: "flex", justifyContent: "center", margin: "0 0 12px" }}>
+              <ClassProgressChip progress={classProgress} lang={lang} />
+            </div>
+          )}
           {(data.students.length === 0 || studentName) && (
             <form className="wb-home-search" onSubmit={onSubmit}>
               <div className="wb-home-search-box">

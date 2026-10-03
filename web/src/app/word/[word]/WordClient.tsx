@@ -48,6 +48,7 @@ import { HomeFooter } from "@/components/design/home";
 import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
 import { WordGameModal } from "@/components/design/WordGameModal";
+import { ClassProgressChip, ClassMilestoneOverlay, type ClassProgress, type ClassMilestoneHit } from "@/components/design/ClassMilestone";
 import {
   ReportModalV2,
   type ReportContext,
@@ -1028,6 +1029,40 @@ export function WordClient({
       // Silent. Logging is best-effort, never blocks the result.
     });
   }, [classroomCode, classroomStudentName, initialWord, lang]);
+
+  // Class dictionary (Gadi 2026-10-03): every DIFFERENT word looked up in
+  // class counts toward the class total, from a kid on /c/<CODE> or from
+  // the school's own account on the class computer / projector. When this
+  // word lands the class on a milestone, this screen celebrates.
+  const [classProgress, setClassProgress] = useState<ClassProgress | null>(null);
+  const [classHit, setClassHit] = useState<ClassMilestoneHit | null>(null);
+  const countedWordRef = useRef<string>("");
+  const resultWord = result && (result.meanings?.length ?? 0) > 0 ? result.word : "";
+  useEffect(() => {
+    if (!resultWord) return;
+    const inSchool = !!classroomCode || (!!user && !!schoolId);
+    if (!inSchool) return;
+    const key = `${classroomCode}|${resultWord}`;
+    if (countedWordRef.current === key) return;
+    countedWordRef.current = key;
+    let cancelled = false;
+    (async () => {
+      try {
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (!classroomCode && user) headers.Authorization = `Bearer ${await user.getIdToken()}`;
+        const res = await fetch("/api/school/word-count", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ word: resultWord, ...(classroomCode ? { cls: classroomCode } : {}) }),
+        });
+        if (!res.ok || cancelled) return;
+        const d = (await res.json()) as ClassProgress & { milestone?: ClassMilestoneHit };
+        setClassProgress({ count: d.count, next: d.next, scope: d.scope });
+        if (d.milestone) setClassHit(d.milestone);
+      } catch { /* the counter never blocks the word */ }
+    })();
+    return () => { cancelled = true; };
+  }, [resultWord, classroomCode, user, schoolId]);
 
   useEffect(() => {
     if (!initialWord) return;
@@ -2076,6 +2111,14 @@ export function WordClient({
         {/* The searchbar wrap is wrapped in a sticky stage so the input
             stays in view as the reader scrolls past long etymology +
             idiom sections. Gadi 2026-06-26 audit fix M1. */}
+        {classProgress && (
+          <div style={{ display: "flex", justifyContent: "center", margin: present ? "8px 0 0" : "4px 0 10px" }}>
+            <ClassProgressChip progress={classProgress} lang={lang} />
+          </div>
+        )}
+        {classHit && classProgress && (
+          <ClassMilestoneOverlay hit={classHit} scope={classProgress.scope} lang={lang} onClose={() => setClassHit(null)} />
+        )}
         <div className="wb-word-searchbar-stage" style={present ? (showSearch ? { marginTop: 64, marginBottom: 20 } : { display: "none" }) : undefined}>
         <div className="wb-word-searchbar-wrap">
           <form
