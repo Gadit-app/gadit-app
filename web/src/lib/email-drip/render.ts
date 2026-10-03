@@ -83,7 +83,7 @@ function inline(he: boolean, s: string): string {
 const P = (he: boolean, html: string) =>
   `<p dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;margin:0 0 16px;color:#374151;">${html}</p>`;
 const H = (he: boolean, html: string) =>
-  `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:17px;font-weight:700;color:#1C1917;margin:24px 0 10px;">${html}</div>`;
+  `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;font-weight:700;color:#1C1917;margin:22px 0 8px;">${html}</div>`;
 const OL = (he: boolean, items: string[]) =>
   `<ol dir="${he ? "rtl" : "ltr"}" style="margin:0 0 14px;padding-${he ? "right" : "left"}:22px;text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;color:#374151;">` +
   items.map((it) => `<li style="margin-bottom:7px;">${it}</li>`).join("") +
