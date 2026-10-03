@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAdminContext } from "../admin-context";
 
 type Content = { subject: string; heading: string; body: string; ctaText: string; next?: string };
@@ -79,6 +79,22 @@ export function AdminEmailEditorClient() {
 
   const cur = data ? data[tab] : null;
   const content = cur?.content ?? EMPTY;
+
+  // Bold button (Gadi 2026-10-04): wraps the selected text in **...**,
+  // the email's bold syntax, so nobody has to remember it.
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  function makeBold() {
+    const ta = bodyRef.current;
+    if (!ta) return;
+    const { selectionStart: a, selectionEnd: b, value } = ta;
+    const sel = value.slice(a, b).trim() ? value.slice(a, b) : "";
+    const next = value.slice(0, a) + "**" + sel + "**" + value.slice(b);
+    setField("body", next);
+    requestAnimationFrame(() => {
+      ta.focus();
+      ta.setSelectionRange(a + 2, a + 2 + sel.length);
+    });
+  }
 
   function setField(f: keyof Content, v: string) {
     if (!data) return;
@@ -191,8 +207,18 @@ export function AdminEmailEditorClient() {
           <input style={input} value={content.subject} onChange={(e) => setField("subject", e.target.value)} />
           {/* The v2 family emails don't render a heading (greeting + body only),
               so the field is hidden; an empty heading stays empty on save. */}
-          <label style={label}>{he ? "גוף המייל" : "Body"}</label>
-          <textarea style={{ ...input, minHeight: 560, lineHeight: 1.6, resize: "vertical" }} value={content.body} onChange={(e) => setField("body", e.target.value)} />
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 10 }}>
+            <label style={label}>{he ? "גוף המייל" : "Body"}</label>
+            <button
+              type="button"
+              onClick={makeBold}
+              title={he ? "מסמנים טקסט ולוחצים כדי להדגיש" : "Select text and click to make it bold"}
+              style={{ marginBottom: 6, padding: "5px 12px", borderRadius: 8, border: "1px solid #CBD5D1", background: "#fff", cursor: "pointer", fontWeight: 800, fontSize: 13.5, fontFamily: "inherit" }}
+            >
+              {he ? "B מודגש" : "B Bold"}
+            </button>
+          </div>
+          <textarea ref={bodyRef} style={{ ...input, minHeight: 560, lineHeight: 1.6, resize: "vertical" }} value={content.body} onChange={(e) => setField("body", e.target.value)} />
           <label style={label}>{he ? "טקסט הכפתור" : "Button text"}</label>
           <input style={{ ...input, maxWidth: 320 }} value={content.ctaText} onChange={(e) => setField("ctaText", e.target.value)} />
           <label style={label}>{he ? "משפט המשך למייל הבא (מתחת לכפתור)" : "Bridge line to the next email (under the button)"}</label>

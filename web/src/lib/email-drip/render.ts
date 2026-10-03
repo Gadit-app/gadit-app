@@ -176,7 +176,7 @@ export function renderEmailHtmlV2(opts: {
   const para = (html: string, extra = "") =>
     `<p dir="${dir}" style="text-align:${align};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;${extra}">${html}</p>`;
   const cta = opts.ctaText?.trim()
-    ? `<div style="text-align:center;margin:8px 0 22px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText.trim())}</a></div>`
+    ? `<div style="text-align:center;margin:30px 0 30px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText.trim())}</a></div>`
     : "";
   const next = opts.next?.trim() ? para(inline(he, opts.next.trim())) : "";
   return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">
@@ -186,7 +186,7 @@ export function renderEmailHtmlV2(opts: {
       ${opts.bodyHtml}
       ${cta}
       ${next}
-      ${para(he ? "אנחנו כאן לכל שאלה ועזרה." : "We're here for any question or help.")}
+      ${para(he ? "אנחנו כאן לכל שאלה ועזרה." : "We're here for any question or help.", "margin-top:26px;")}
       ${emailSignatureHtml(he)}
       <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל ההדרכות" : "All guides"}</a></p>
     </div>
