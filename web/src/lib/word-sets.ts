@@ -167,6 +167,27 @@ export function classroomDef(setId: string | null | undefined, word: string): st
 // phonetics), yet the guesses drew a wide-open mouth for עיצור and a car
 // for תנועה. These hints pin down the correct, Hebrew, kid-level concept.
 export const CURATED_IMAGE_HINTS: Record<string, string> = {
+  // Language-structure terms (Gadi 2026-10-03): image models garble written
+  // Hebrew, so these are drawn with blank cards, grey lines and symbols.
+  "משפט":
+    "A child placing a row of five blank, colorful word cards side by side on a classroom board, the cards joined into one line that ends with a big round period dot. The cards are completely blank. Absolutely no letters, words or writing anywhere in the picture.",
+  "פסקה":
+    "An open notebook page showing one block of several plain grey lines (like text seen from far away) with the first line indented, the block gently framed in a soft color to show it is one paragraph. Absolutely no letters, words or writing anywhere in the picture.",
+  "סימני פיסוק":
+    "Big, colorful punctuation marks floating together like friendly characters: a period, a comma, a question mark, an exclamation mark and a pair of quotation marks.",
+  "נקודה":
+    "A row of blank colorful word cards with one big, highlighted round period dot at the end of the row, showing where the sentence stops. Absolutely no letters, words or writing anywhere in the picture.",
+  "פסיק":
+    "Two short rows of blank colorful word cards with one big, highlighted comma between them, showing a short pause. Absolutely no letters, words or writing anywhere in the picture.",
+  "סימן שאלה":
+    "A curious child with a thoughtful face next to one big, friendly question mark.",
+  "סימן קריאה":
+    "An excited, surprised child next to one big, bold exclamation mark.",
+  "מרכאות":
+    "A child speaking, with a blank speech bubble framed by two big quotation marks, one at each side. Absolutely no letters, words or writing anywhere in the picture.",
+  "כותרת":
+    "A story page with one big bold colored bar across the top, highlighted as the title, and plain grey lines below it. Absolutely no letters, words or writing anywhere in the picture.",
+
   "אות":
     "A colorful grid of large, clearly HEBREW alphabet letters (aleph א, bet ב, gimel ג, dalet ד, he ה, vav ו), unmistakably Hebrew script and NOT Latin letters, bright and kid-friendly.",
   "אלף-בית":

@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 import { recordActivity } from "@/lib/activity-log";
+import { curatedImageHint } from "@/lib/word-sets";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -216,7 +217,10 @@ export async function POST(req: NextRequest) {
     // First get an English visual brief so the image actually matches the
     // meaning (crucial for Hebrew grammar/math terms). Falls back to the
     // legacy prompt if the brief call fails.
-    const brief = await englishBrief(word, meaning, safeExample, uiLangCode);
+    // A curated per-word hint (word-sets.ts) wins over the guessed brief,
+    // same as the admin warm path, so the projector and a cache miss here
+    // draw the same pedagogically-checked picture.
+    const brief = curatedImageHint(word) || (await englishBrief(word, meaning, safeExample, uiLangCode));
     const dallePrompt = brief
       ? (isKidsMode
           ? `A modern flat illustration for a children's educational app, ages 5-12. Draw this: ${brief}. Bright cheerful colors, simple geometric shapes, friendly cartoon style with soft outlines, clean white background. The subject fills the frame and is instantly recognizable. Do not add any caption or descriptive words on top of the image.`
