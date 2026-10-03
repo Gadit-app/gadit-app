@@ -185,9 +185,19 @@ function HomeView(props: {
 function LevelTabs({ level, setLevel, counts, unit, only }: {
   level: string; setLevel: (l: string) => void; counts: (l: string) => number; unit: string; only?: string[];
 }) {
+  const tabs = CUR_LEVELS.filter((l) => !only || only.includes(l.key));
+  const idx = Math.max(0, tabs.findIndex((l) => l.key === level));
+  const n = tabs.length;
+  // A white pill slides under the chosen tab; the others keep a thin frame
+  // so they read as clickable (Gadi 2026-10-04).
   return (
-    <div className="cb-levels" role="tablist" aria-label="שכבת גיל" style={{ gridTemplateColumns: `repeat(${only?.length ?? CUR_LEVELS.length}, minmax(0, 1fr))` }}>
-      {CUR_LEVELS.filter((l) => !only || only.includes(l.key)).map((l) => (
+    <div className="cb-levels" role="tablist" aria-label="שכבת גיל" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+      <span
+        className="cb-level-pill"
+        aria-hidden
+        style={{ width: `calc((100% - 10px - ${(n - 1) * 6}px) / ${n})`, transform: `translateX(calc(${-idx} * (100% + 6px)))` }}
+      />
+      {tabs.map((l) => (
         <button
           key={l.key}
           type="button"
@@ -466,13 +476,14 @@ const CSS = `
 .cb-search input{flex:1;min-width:0;border:none;outline:none;background:transparent;font:inherit;font-size:16px;color:var(--ink);padding:14px 0}
 .cb-search.small{max-width:420px;margin-bottom:14px}
 .cb-search.small input{padding:10px 0;font-size:15px}
-.cb-levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;background:var(--paper-deep);padding:5px;border-radius:16px;margin-bottom:18px}
-.cb-level{border:none;background:transparent;border-radius:12px;padding:10px 6px;font:inherit;font-weight:700;font-size:16px;color:var(--ink-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:background .15s,color .15s}
+.cb-levels{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;background:var(--paper-deep);padding:5px;border-radius:16px;margin-bottom:18px}
+.cb-level-pill{position:absolute;top:5px;bottom:5px;inset-inline-start:5px;background:var(--surface);border-radius:12px;box-shadow:0 2px 6px rgba(11,18,32,.12);transition:transform .32s cubic-bezier(.3,.9,.3,1);pointer-events:none}
+.cb-level{position:relative;z-index:1;border:1px solid #CBD8D2;background:rgba(255,255,255,.35);border-radius:12px;padding:10px 6px;font:inherit;font-weight:700;font-size:16px;color:var(--ink-soft);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:background .15s,color .15s,border-color .15s}
 .cb-level b{font-weight:700}
 .cb-level .short{display:none}
 .cb-level span{font-size:12.5px;font-weight:600;color:var(--ink-faint)}
-.cb-level:hover{color:var(--ink)}
-.cb-level.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(11,18,32,.1)}
+.cb-level:hover{color:var(--ink);border-color:#0EA5A5;background:rgba(255,255,255,.6)}
+.cb-level.on{background:transparent;border-color:transparent;color:var(--ink)}
 .cb-level.on span{color:#0E8A8A}
 .cb-cats{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 10px;margin-bottom:12px}
 .cb-cat-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--rule);color:var(--ink-soft);font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
@@ -546,5 +557,5 @@ const CSS = `
   .cb-level span{font-size:11px}
   .cb-hero-img{width:88px;height:88px;border-radius:22px}
 }
-@media (prefers-reduced-motion:reduce){.cb-card,.cb-spin{transition:none;animation:none}}
+@media (prefers-reduced-motion:reduce){.cb-level-pill,.cb-card,.cb-spin{transition:none;animation:none}}
 `;
