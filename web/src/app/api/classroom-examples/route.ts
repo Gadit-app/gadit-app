@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getWordSet, classroomDef } from "@/lib/word-sets";
+import { classroomDef } from "@/lib/word-sets";
+import { loadWordSet } from "@/lib/curriculum-sets";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 
 /**
@@ -35,7 +36,7 @@ async function resolve(params: {
   let uiLang = (params.uiLang ?? "").trim();
 
   if (params.setId) {
-    const set = getWordSet(params.setId);
+    const set = await loadWordSet(params.setId);
     if (set && !uiLang) uiLang = set.lang;
   }
   if (!meaning) meaning = classroomDef(params.setId, word) ?? "";

@@ -1,0 +1,911 @@
+{
+ "subjects": [
+  {
+   "key": "architecture-and-interior-design",
+   "name": "אדריכלות ועיצוב פנים",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "design-arts",
+   "name": "אומנויות העיצוב",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "optometry-and-vision-sciences",
+   "name": "אופטומטריה ומדעי הראייה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "fashion-and-costume-design",
+   "name": "עיצוב אופנה",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "digital-literacy",
+   "name": "אוריינות דיגיטלית",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "civics",
+   "name": "אזרחות",
+   "category": "היסטוריה, חברה ואזרחות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "italian",
+   "name": "איטלקית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "amharic",
+   "name": "אמהרית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "art",
+   "name": "אמנות",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "english",
+   "name": "אנגלית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "animation-and-interactive-media",
+   "name": "אנימציה ומדיה אינטראקטיבית",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "bioinformatics",
+   "name": "ביו אינפורמטיקה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "biotechnology",
+   "name": "ביוטכנולוגיה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "biology",
+   "name": "ביולוגיה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "geography",
+   "name": "גאוגרפיה",
+   "category": "גאוגרפיה וסביבה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "gemara",
+   "name": "גמרא",
+   "category": "יהדות ומורשת",
+   "stream": "ממ\"ד"
+  },
+  {
+   "key": "german",
+   "name": "גרמנית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "computer-graphics-and-game-development",
+   "name": "גרפיקה ממוחשבת ופיתוח משחקים",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "jewish-law-and-halakha",
+   "name": "דינים והלכה",
+   "category": "יהדות ומורשת",
+   "stream": "ממ\"ד"
+  },
+  {
+   "key": "diplomacy-and-international-relations",
+   "name": "דיפלומטיה ויחסים בינלאומיים",
+   "category": "היסטוריה, חברה ואזרחות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "cyber-defense-and-networks",
+   "name": "הגנת סייבר ורשתות",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "history",
+   "name": "היסטוריה",
+   "category": "היסטוריה, חברה ואזרחות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "scientific-technological-track",
+   "name": "המגמה המדעית טכנולוגית",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "biomedical-engineering",
+   "name": "הנדסה ביו רפואית",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "chemical-industrial-engineering",
+   "name": "הנדסה כימית תעשייתית",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "electronics-and-computer-engineering",
+   "name": "הנדסת אלקטרוניקה ומחשבים",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "civil-engineering-and-architecture",
+   "name": "הנדסת בנייה ואדריכלות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "materials-engineering-and-nanotechnology",
+   "name": "הנדסת חומרים וננוטכנולוגיה",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "space-and-satellite-engineering",
+   "name": "הנדסת חלל ולוויינות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "electrical-control-and-energy-engineering",
+   "name": "הנדסת חשמל, בקרה ואנרגיה",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "mechanical-engineering",
+   "name": "הנדסת מכונות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "systems-engineering",
+   "name": "הנדסת מערכות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "software-engineering",
+   "name": "הנדסת תוכנה",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "industrial-engineering-and-management",
+   "name": "הנדסת תעשייה וניהול",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "radio-and-podcast-production",
+   "name": "הפקת רדיו ופודקאסטים",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "road-safety",
+   "name": "זהירות בדרכים וחינוך תעבורתי",
+   "category": "גוף, בריאות וכישורי חיים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "israeli-holidays-and-festivals",
+   "name": "חגי ישראל ומועדיו",
+   "category": "יהדות ומורשת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "physical-education",
+   "name": "חינוך גופני",
+   "category": "גוף, בריאות וכישורי חיים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "early-childhood-education",
+   "name": "חינוך לגיל הרך",
+   "category": "גיל הרך",
+   "stream": "שניהם"
+  },
+  {
+   "key": "financial-education",
+   "name": "חינוך פיננסי",
+   "category": "גוף, בריאות וכישורי חיים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "agriculture",
+   "name": "חקלאות",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "accounting",
+   "name": "חשבונאות",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "computational-thinking",
+   "name": "חשיבה מחשובית",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "communication-technologies",
+   "name": "טכנולוגיות תקשורת",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "entrepreneurship-and-business-innovation",
+   "name": "יזמות וחדשנות עסקית",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "yiddish",
+   "name": "יידיש",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "chemistry",
+   "name": "כימיה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "life-skills",
+   "name": "כישורי חיים ובריאות",
+   "category": "גוף, בריאות וכישורי חיים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "economics",
+   "name": "כלכלה",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "latin-and-classical-languages",
+   "name": "לטינית ושפות קלאסיות",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "land-of-israel-studies",
+   "name": "לימודי ארץ ישראל וארכיאולוגיה",
+   "category": "גאוגרפיה וסביבה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "science-introduction",
+   "name": "מבוא למדעים",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "political-science",
+   "name": "מדע המדינה",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "science-and-technology",
+   "name": "מדע וטכנולוגיה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "computational-science",
+   "name": "מדע חישובי",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "data-science",
+   "name": "מדע נתונים",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "agricultural-sciences",
+   "name": "מדעי החקלאות",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "neuroscience",
+   "name": "מדעי המוח",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "computer-science",
+   "name": "מדעי המחשב",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "police-sciences-and-criminology",
+   "name": "קרימינולוגיה",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "environmental-sciences",
+   "name": "מדעי הסביבה",
+   "category": "גאוגרפיה וסביבה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "earth-sciences",
+   "name": "מדעי כדור הארץ",
+   "category": "גאוגרפיה וסביבה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "music",
+   "name": "מוזיקה",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "homeland-society-and-civics",
+   "name": "מולדת, חברה ואזרחות",
+   "category": "היסטוריה, חברה ואזרחות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "dance",
+   "name": "מחול",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "jewish-thought",
+   "name": "מחשבת ישראל",
+   "category": "יהדות ומורשת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "mechatronics",
+   "name": "מכטרוניקה",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "instrumentation-and-industrial-control",
+   "name": "מכשור ובקרה תעשייתית",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "hospitality",
+   "name": "מלונאות",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "business-management",
+   "name": "מנהל עסקים",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "social-involvement-and-leadership",
+   "name": "מעורבות חברתית ומנהיגות",
+   "category": "היסטוריה, חברה ואזרחות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "green-energy-and-electric-systems",
+   "name": "מערכות אנרגיה ירוקה וחשמל",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "health-systems",
+   "name": "מערכות בריאות",
+   "category": "גוף, בריאות וכישורי חיים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "heating-and-air-conditioning-systems",
+   "name": "מערכות חימום ומיזוג אוויר",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "computerized-manufacturing-systems",
+   "name": "מערכות ייצור ממוחשבות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "marine-systems",
+   "name": "מערכות ימיות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "aviation-systems",
+   "name": "מערכות תעופה",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "mishna",
+   "name": "משנה",
+   "category": "יהדות ומורשת",
+   "stream": "ממ\"ד"
+  },
+  {
+   "key": "law",
+   "name": "משפטים",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "mathematics",
+   "name": "מתמטיקה",
+   "category": "מתמטיקה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "human-resources-management",
+   "name": "ניהול משאבי אנוש ויחסי עבודה",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "sociology",
+   "name": "סוציולוגיה",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "chinese",
+   "name": "סינית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "spanish",
+   "name": "ספרדית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "literature",
+   "name": "ספרות",
+   "category": "שפה וספרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "hebrew",
+   "name": "עברית ולשון",
+   "category": "שפה וספרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "arab-world-and-islam",
+   "name": "עולם הערבים, האסלאם והמזרח התיכון",
+   "category": "היסטוריה, חברה ואזרחות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "graphic-design",
+   "name": "עיצוב גרפי",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "product-design",
+   "name": "עיצוב המוצר",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "hair-design-and-beauty",
+   "name": "עיצוב שיער וטיפוח החן",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "arabic",
+   "name": "ערבית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "portuguese",
+   "name": "פורטוגזית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "physics",
+   "name": "פיזיקה",
+   "category": "מדעים",
+   "stream": "שניהם"
+  },
+  {
+   "key": "philosophy",
+   "name": "פילוסופיה",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "psychology",
+   "name": "פסיכולוגיה",
+   "category": "מדעי החברה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "persian",
+   "name": "פרסית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "weekly-torah-portion",
+   "name": "פרשת השבוע",
+   "category": "יהדות ומורשת",
+   "stream": "ממ\"ד"
+  },
+  {
+   "key": "photography",
+   "name": "צילום",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "french",
+   "name": "צרפתית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "cinema",
+   "name": "קולנוע",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "robotics-and-autonomous-systems",
+   "name": "רובוטיקה ומערכות אוטונומיות",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "russian",
+   "name": "רוסית",
+   "category": "שפות זרות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "heritage-paths",
+   "name": "שבילי מורשת",
+   "category": "יהדות ומורשת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "climate-change",
+   "name": "שינוי אקלים",
+   "category": "גאוגרפיה וסביבה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "shalach",
+   "name": "של\"ח",
+   "category": "גאוגרפיה וסביבה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "jewish-oral-law",
+   "name": "תורה שבעל פה",
+   "category": "יהדות ומורשת",
+   "stream": "ממ\"ד"
+  },
+  {
+   "key": "advanced-transportation",
+   "name": "תחבורה מתקדמת ורכב",
+   "category": "הנדסה ומגמות טכנולוגיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "theater",
+   "name": "תיאטרון",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "tourism",
+   "name": "תיירות",
+   "category": "מגמות מקצועיות",
+   "stream": "שניהם"
+  },
+  {
+   "key": "bible",
+   "name": "תנ\"ך",
+   "category": "יהדות ומורשת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "prayer",
+   "name": "תפילה",
+   "category": "יהדות ומורשת",
+   "stream": "ממ\"ד"
+  },
+  {
+   "key": "ict",
+   "name": "תקשוב",
+   "category": "מחשבים וטכנולוגיה",
+   "stream": "שניהם"
+  },
+  {
+   "key": "communication",
+   "name": "תקשורת",
+   "category": "אמנויות ותקשורת",
+   "stream": "שניהם"
+  },
+  {
+   "key": "jewish-israeli-culture",
+   "name": "תרבות יהודית ישראלית",
+   "category": "יהדות ומורשת",
+   "stream": "שניהם"
+  }
+ ],
+ "alias": {
+  "אדריכלות ועיצוב פנים": "architecture-and-interior-design",
+  "אומנויות העיצוב": "design-arts",
+  "אומנות חזותית": "art",
+  "אמנות חזותית": "art",
+  "אופטומטריה ומדעי הראייה": "optometry-and-vision-sciences",
+  "אופנה ועיצוב תלבושות": "fashion-and-costume-design",
+  "אוריינות דיגיטלית": "digital-literacy",
+  "אזרחות": "civics",
+  "איטלקית": "italian",
+  "איסלאם ותרבותו": "arab-world-and-islam",
+  "אלקטרוניקה": "electronics-and-computer-engineering",
+  "אלקטרוניקה ומחשבים": "electronics-and-computer-engineering",
+  "אלקטרוניקה ומחשבים (מגמה)": "electronics-and-computer-engineering",
+  "אמהרית": "amharic",
+  "אמנות": "art",
+  "אנגלית": "english",
+  "אנימציה ומדיה אינטראקטיבית": "animation-and-interactive-media",
+  "ביו אינפורמטיקה": "bioinformatics",
+  "ביוטכנולוגיה": "biotechnology",
+  "ביוטכנולוגיה (מגמה)": "biotechnology",
+  "ביוטכנולוגיה סביבתית וחקלאית": "biotechnology",
+  "ביולוגיה": "biology",
+  "בריאות": "life-skills",
+  "גאוגרפיה": "geography",
+  "גאוגרפיה אדם וסביבה": "geography",
+  "גאוגרפיה, אדם וסביבה": "geography",
+  "גיאוגרפיה, אדם וסביבה": "geography",
+  "גמרא": "gemara",
+  "גמרא (תלמוד)": "gemara",
+  "גרמנית": "german",
+  "גרפיקה ממוחשבת ופיתוח משחקים": "computer-graphics-and-game-development",
+  "דינים והלכה": "jewish-law-and-halakha",
+  "הלכה ודינים": "jewish-law-and-halakha",
+  "הלכה למעשה מוגבר (ממ\"ד)": "jewish-law-and-halakha",
+  "דיפלומטיה ויחסים בינלאומיים": "diplomacy-and-international-relations",
+  "הגות ומחשבה יהודית מוגבר (ממ\"ד)": "jewish-thought",
+  "הגנת סייבר ורשתות": "cyber-defense-and-networks",
+  "היסטוריה": "history",
+  "היסטוריה ותולדות ישראל (ממ\"ד)": "history",
+  "היסטוריה חמ\"ד": "history",
+  "היסטוריה מוגברת": "history",
+  "היסטוריה ממלכתי": "history",
+  "המגמה המדעית טכנולוגית": "scientific-technological-track",
+  "הנדסה ביו רפואית": "biomedical-engineering",
+  "הנדסה כימית תעשייתית": "chemical-industrial-engineering",
+  "הנדסת אלקטרוניקה ומחשבים": "electronics-and-computer-engineering",
+  "הנדסת בנייה ואדריכלות": "civil-engineering-and-architecture",
+  "הנדסת בנייה ואדריכלות (הנדסה אזרחית)": "civil-engineering-and-architecture",
+  "הנדסת חומרים וננוטכנולוגיה": "materials-engineering-and-nanotechnology",
+  "הנדסת חלל ולוויינות": "space-and-satellite-engineering",
+  "הנדסת חשמל, בקרה ואנרגיה": "electrical-control-and-energy-engineering",
+  "הנדסת מכונות": "mechanical-engineering",
+  "הנדסת מכונות ומכטרוניקה": "mechanical-engineering",
+  "הנדסת מערכות": "systems-engineering",
+  "הנדסת מערכות / הנדסת תעשייה וניהול": "systems-engineering",
+  "הנדסת רכב ומערכות תחבורה": "advanced-transportation",
+  "הנדסת תוכנה": "software-engineering",
+  "הנדסת תוכנה וסייבר (מגמה)": "software-engineering",
+  "הנדסת תעשייה וניהול": "industrial-engineering-and-management",
+  "הפקת רדיו ופודקאסטים": "radio-and-podcast-production",
+  "זהירות בדרכים": "road-safety",
+  "זהירות בדרכים וחינוך תעבורתי": "road-safety",
+  "חגי ישראל ומועדיו": "israeli-holidays-and-festivals",
+  "חינוך גופני": "physical-education",
+  "חינוך לגיל הרך (גני ילדים)": "early-childhood-education",
+  "חינוך פיננסי": "financial-education",
+  "חינוך תעבורתי": "road-safety",
+  "חינוך תעבורתי מוגבר": "road-safety",
+  "חקלאות": "agriculture",
+  "חקלאות וסביבה (יסודי וחט\"ב)": "agriculture",
+  "חשבונאות": "accounting",
+  "חשיבה מחשובית": "computational-thinking",
+  "טכנולוגיות תקשורת": "communication-technologies",
+  "ידיעת הארץ וארכאולוגיה": "land-of-israel-studies",
+  "יזמות וחדשנות עסקית": "entrepreneurship-and-business-innovation",
+  "יידיש": "yiddish",
+  "כימיה": "chemistry",
+  "כישורי חיים": "life-skills",
+  "כישורי חיים וחינוך חברתי": "life-skills",
+  "כישורי חיים וחינוך לבריאות": "life-skills",
+  "כלכלה": "economics",
+  "כלכלה ומנהל עסקים מוגבר": "economics",
+  "לטינית ושפות קלאסיות": "latin-and-classical-languages",
+  "לימודי ארץ ישראל": "land-of-israel-studies",
+  "לימודי ארץ ישראל וארכיאולוגיה": "land-of-israel-studies",
+  "לימודי המזרח התיכון": "arab-world-and-islam",
+  "לשון": "hebrew",
+  "לשון והבעה": "hebrew",
+  "לשון עברית": "hebrew",
+  "מבוא למדעים": "science-introduction",
+  "מדיה ופרסום": "communication",
+  "מדע המדינה": "political-science",
+  "מדע וטכנולוגיה": "science-and-technology",
+  "מדע וטכנולוגיה (יסודי וחט\"ב)": "science-and-technology",
+  "מדע וטכנולוגיה לכל (מוט\"ל)": "science-and-technology",
+  "מדע וטכנולוגיה לכל בחינוך הטכנולוגי": "science-and-technology",
+  "מדע וטכנולוגיה לכל, עיוני": "science-and-technology",
+  "מדע חישובי": "computational-science",
+  "מדע נתונים": "data-science",
+  "מדעי החינוך הגופני (מגמה)": "physical-education",
+  "מדעי החקלאות": "agricultural-sciences",
+  "מדעי החקלאות (אגרו-אקולוגיה)": "agricultural-sciences",
+  "מדעי המוח": "neuroscience",
+  "מדעי המחשב": "computer-science",
+  "מדעי המחשב ואוריינות דיגיטלית": "computer-science",
+  "מדעי המחשב, בינה מלאכותית, הנדסת תוכנה וסייבר": "computer-science",
+  "מדעי המשטרה והקרימינולוגיה": "police-sciences-and-criminology",
+  "מדעי הסביבה": "environmental-sciences",
+  "מדעי כדור הארץ": "earth-sciences",
+  "מוזיקה": "music",
+  "מוזיקולוגיה וקומפוזיציה": "music",
+  "מולדת, חברה ואזרחות": "homeland-society-and-civics",
+  "מחול": "dance",
+  "מחשבת ישראל": "jewish-thought",
+  "מחשבת ישראל ותרבות יהודית": "jewish-thought",
+  "מחשבת ישראל חמ\"ד": "jewish-thought",
+  "מחשבת ישראל ממלכתי": "jewish-thought",
+  "מידע ונתונים": "data-science",
+  "מכטרוניקה": "mechatronics",
+  "מכשור ובקרה תעשייתית": "instrumentation-and-industrial-control",
+  "מלונאות": "hospitality",
+  "מנהיגות ויזמות": "entrepreneurship-and-business-innovation",
+  "מנהל עסקים": "business-management",
+  "ניהול (מנהל עסקים)": "business-management",
+  "ניהול עסקי": "business-management",
+  "מעורבות חברתית ומנהיגות": "social-involvement-and-leadership",
+  "מערכות אוטונומיות ורחפנים": "robotics-and-autonomous-systems",
+  "מערכות אנרגיה ירוקה וחשמל": "green-energy-and-electric-systems",
+  "מערכות בריאות": "health-systems",
+  "מערכות בריאות ורפואה": "health-systems",
+  "מערכות חימום ומיזוג אוויר": "heating-and-air-conditioning-systems",
+  "מערכות חשמל": "electrical-control-and-energy-engineering",
+  "מערכות ייצור ממוחשבות": "computerized-manufacturing-systems",
+  "מערכות ימיות": "marine-systems",
+  "מערכות ימיות וימאות": "marine-systems",
+  "מערכות תעופה": "aviation-systems",
+  "מערכות תעופה וחלל": "aviation-systems",
+  "משנה": "mishna",
+  "משפטים": "law",
+  "מתמטיקה": "mathematics",
+  "ניהול משאבי אנוש ויחסי עבודה": "human-resources-management",
+  "סוציולוגיה": "sociology",
+  "סייבר ואבטחת מערכות מורחב": "cyber-defense-and-networks",
+  "סינית": "chinese",
+  "סינית (מנדרינית)": "chinese",
+  "ספרדית": "spanish",
+  "ספרות": "literature",
+  "ספרות דתית (ממ\"ד)": "literature",
+  "ספרות חמ\"ד": "literature",
+  "ספרות מוגברת": "literature",
+  "ספרות ממלכתי": "literature",
+  "עברית": "hebrew",
+  "עברית (חינוך לשוני / לשון והבעה)": "hebrew",
+  "עברית, הבנה, הבעה ולשון": "hebrew",
+  "עברית, חינוך לשוני": "hebrew",
+  "עברית: הבנה, הבעה ולשון": "hebrew",
+  "עברית: חינוך לשוני": "hebrew",
+  "עברית: שפה, ספרות ותרבות": "hebrew",
+  "עולם הערבים והאסלאם": "arab-world-and-islam",
+  "עיצוב אופנה": "fashion-and-costume-design",
+  "עיצוב גרפי (תקשורת חזותית)": "graphic-design",
+  "עיצוב גרפי ואמנות דיגיטלית (חט\"ב)": "graphic-design",
+  "עיצוב המוצר (עיצוב תעשייתי)": "product-design",
+  "עיצוב שיער וטיפוח החן": "hair-design-and-beauty",
+  "עיתונאות ותקשורת חוקרת": "communication",
+  "ערבית": "arabic",
+  "ערבית (שפה זרה / שפת בחירה)": "arabic",
+  "ערבית בבתי הספר העבריים": "arabic",
+  "פורטוגזית": "portuguese",
+  "פיזיקה": "physics",
+  "פילוסופיה": "philosophy",
+  "פסיכולוגיה": "psychology",
+  "פרסית": "persian",
+  "פרשת השבוע": "weekly-torah-portion",
+  "פרשת השבוע ומדרשי חז\"ל": "weekly-torah-portion",
+  "צילום": "photography",
+  "צילום ומדיה דיגיטלית": "photography",
+  "צרפתית": "french",
+  "קולנוע": "cinema",
+  "קולנוע (מגמה)": "cinema",
+  "קולנוע ותקשורת": "cinema",
+  "קרימינולוגיה ומשפט מוגבר": "police-sciences-and-criminology",
+  "רובוטיקה ומערכות אוטונומיות": "robotics-and-autonomous-systems",
+  "רוסית": "russian",
+  "שבילי מורשת": "heritage-paths",
+  "שינוי אקלים": "climate-change",
+  "של\"ח (שדה, לאום, חברה)": "shalach",
+  "של\"ח וידיעת הארץ": "shalach",
+  "תורה שבעל פה": "jewish-oral-law",
+  "תורה שבעל פה (תושב\"ע / תלמוד)": "jewish-oral-law",
+  "תורה שבעל פה ומשפט עברי, ממלכתי": "jewish-oral-law",
+  "תושב\"ע": "jewish-oral-law",
+  "תושב\"ע ודינים (תורה שבעל פה והלכה)": "jewish-oral-law",
+  "תחבורה מתקדמת": "advanced-transportation",
+  "תיאטרון": "theater",
+  "תיאטרון מוגבר": "theater",
+  "תיירות": "tourism",
+  "תיירות ופנאי": "tourism",
+  "תלמוד (גמרא)": "gemara",
+  "תלמוד ותושב\"ע חמ\"ד": "gemara",
+  "תלמוד מוגבר (ישיבות ואולפנות)": "gemara",
+  "תנ\"ך": "bible",
+  "תנ\"ך (ממ\"ד)": "bible",
+  "תנ\"ך חמ\"ד": "bible",
+  "תנ\"ך ממ\"ד": "bible",
+  "תנ\"ך ממלכתי": "bible",
+  "תפילה": "prayer",
+  "תפילה ופרשת השבוע": "prayer",
+  "תקשוב": "ict",
+  "תקשורת": "communication",
+  "תקשורת (מגמה)": "communication",
+  "תקשורת אופטית": "communication",
+  "תקשורת דיגיטלית ויחסי ציבור": "communication",
+  "תקשורת וחברה": "communication",
+  "תקשורת חזותית וגרפיקה ממוחשבת": "communication",
+  "תרבות יהודית ישראלית": "jewish-israeli-culture",
+  "תרבות יהודית-ישראלית": "jewish-israeli-culture",
+  "מדעי החברה": "sociology",
+  "מנהל וכלכלה (ניהול עסקי)": "business-management",
+  "שפה ואוריינות (גן)": "early-childhood-education",
+  "תולדות עם ישראל": "history"
+ }
+}

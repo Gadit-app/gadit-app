@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { getWordSet, classroomDef } from "@/lib/word-sets";
+import { classroomDef } from "@/lib/word-sets";
+import { loadWordSet } from "@/lib/curriculum-sets";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 /**
@@ -33,6 +34,12 @@ function shuffleQuiz(items: QuizItem[], seed: string): QuizItem[] {
   });
 }
 
+// Curriculum sets of foreign-language subjects (lib/curriculum-catalog.ts).
+const LANG_NAME: Record<string, string> = {
+  ar: "Arabic", fr: "French", es: "Spanish", ru: "Russian", de: "German", it: "Italian",
+  "zh-CN": "Simplified Chinese", am: "Amharic", pt: "Portuguese", fa: "Persian",
+};
+
 function clean(s: unknown, max: number): string {
   return String(s ?? "").replace(/[–—]/g, ",").replace(/\s+/g, " ").trim().slice(0, max);
 }
@@ -45,7 +52,7 @@ async function generate(word: string, meaning: string, lang: string, grade: stri
 החזר JSON בלבד.`
     : `You write short whole-class activities for ${grade || "primary school"} students, in clear, simple English. The activity is projected and the teacher runs it with the whole class.
 Rules: age-appropriate wording. No long dashes. Exactly one correct answer per question, and it must match the given meaning exactly; distractors are plausible but clearly wrong to someone who understood. Every "true" statement must be fully true according to the given meaning. Test understanding of the meaning, not spelling trivia.
-Return JSON only.`;
+Return JSON only.${lang !== "en" && LANG_NAME[lang] ? ` Write every question, option, statement and explanation in simple ${LANG_NAME[lang]}.` : ""}`;
   const user = he
     ? `המילה: "${word}"\nהמשמעות בשיעור (נושא: ${topic}): ${meaning}\n\nכתוב:\n1. "quiz": 3 שאלות בחירה, לכל אחת 4 תשובות. שאלה 1 על המשמעות, שאלה 2 על שימוש במילה במשפט או במצב מהחיים, שאלה 3 שמבדילה בינה לבין מילה דומה או קשורה. שדות: q (עד 90 תווים), options (4, עד 45 תווים כל אחת), answer (מספר התשובה הנכונה 0-3), explain (משפט אחד קצר שמסביר למה).\n2. "game": 5 משפטי "נכון או לא נכון" על המילה, 3 נכונים ו־2 לא נכונים, בסדר מעורבב. שדות: s (עד 90 תווים), t (true/false), explain (משפט אחד קצר).`
     : `Word: "${word}"\nMeaning in this lesson (topic: ${topic}): ${meaning}\n\nWrite:\n1. "quiz": 3 multiple-choice questions, 4 options each. Q1 about the meaning, Q2 about using the word in a sentence or real situation, Q3 telling it apart from a similar or related word. Fields: q (max 90 chars), options (4, max 45 chars each), answer (index 0-3 of the correct option), explain (one short sentence why).\n2. "game": 5 true-or-false statements about the word, 3 true and 2 false, mixed order. Fields: s (max 90 chars), t (true/false), explain (one short sentence).`;
@@ -81,7 +88,7 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const setId = (sp.get("set") ?? "").trim();
   const word = (sp.get("word") ?? "").trim();
-  const set = setId ? getWordSet(setId) : undefined;
+  const set = setId ? await loadWordSet(setId) : undefined;
   if (!set || !word) return NextResponse.json({ error: "bad_params" }, { status: 400 });
   if (!set.words.some((w) => w.trim().toLowerCase() === word.toLowerCase())) {
     return NextResponse.json({ error: "not_in_set" }, { status: 404 });

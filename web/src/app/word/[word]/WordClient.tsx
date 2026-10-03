@@ -30,7 +30,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { getWordSet, classroomDef } from "@/lib/word-sets";
+import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
@@ -777,6 +777,22 @@ export function WordClient({
   // show a prev/next stepper (and arrow-key paging) that keeps present +
   // set params so the whole lesson stays clean on the projector.
   const setId = searchParams?.get("set")?.trim() || "";
+  // Curriculum sets (cur-...) are generated server side; fetch and register
+  // them once so getWordSet / classroomDef see them (Gadi 2026-10-03).
+  const [, setCurLoaded] = useState(0);
+  useEffect(() => {
+    if (!isCurriculumSetId(setId) || getWordSet(setId)) return;
+    let alive = true;
+    fetch(`/api/curriculum-set?id=${encodeURIComponent(setId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { set?: WordSet; defs?: Record<string, string> } | null) => {
+        if (!alive || !d?.set) return;
+        registerWordSet(d.set, d.defs ?? {});
+        setCurLoaded((n) => n + 1);
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, [setId]);
   const wordSet = setId ? getWordSet(setId) : undefined;
   const setIdx = wordSet
     ? wordSet.words.findIndex((w) => w.trim().toLowerCase() === initialWord.trim().toLowerCase())

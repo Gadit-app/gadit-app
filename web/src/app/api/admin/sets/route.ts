@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { getWordSet } from "@/lib/word-sets";
+import { loadWordSet } from "@/lib/curriculum-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateWordImage, imageCacheKey } from "@/lib/word-image";
 import { exampleCacheKey, getOrGenerateExamples } from "@/lib/word-examples";
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   if (unauth) return unauth;
 
   const setId = req.nextUrl.searchParams.get("set") ?? "";
-  const set = getWordSet(setId);
+  const set = await loadWordSet(setId);
   if (!set) return NextResponse.json({ error: "set_not_found", setId }, { status: 404 });
 
   const db = getAdminDb();
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
   };
   const action = body.action ?? "image";
   const word = (body.word ?? "").trim();
-  const set = getWordSet(body.set ?? "");
+  const set = await loadWordSet(body.set ?? "");
   if (!word) return NextResponse.json({ error: "word required" }, { status: 400 });
   if (!set) return NextResponse.json({ error: "set_not_found" }, { status: 404 });
 

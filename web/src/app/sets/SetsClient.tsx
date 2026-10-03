@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
 import { useLang } from "@/lib/lang-context";
 import { setsBySubject, type WordSet } from "@/lib/word-sets";
+import CurriculumBrowser from "./CurriculumBrowser";
 
 // One color per subject, so the sections read as clearly separate topics.
 const SUBJECT_COLORS: Record<string, { accent: string; soft: string; border: string }> = {
@@ -233,6 +234,8 @@ export default function SetsClient() {
   const { lang, dir } = useLang();
   const c = COPY[lang] ?? COPY.en;
   const groups = setsBySubject();
+  // Hebrew: the full Israeli curriculum catalog (Gadi 2026-10-03).
+  if (lang === "he") return <CurriculumBrowser />;
 
   const presentSet = (set: WordSet) =>
     router.push(href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`));

@@ -1,0 +1,5250 @@
+[
+  {
+    "level": "elementary",
+    "subject": "עברית, חינוך לשוני",
+    "subjectKey": "hebrew-language",
+    "topics": [
+      {
+        "title": "אותיות וצלילים, מודעות פונולוגית",
+        "grades": "א",
+        "source": "knowledge"
+      },
+      {
+        "title": "ניקוד ותנועות",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "קריאה שוטפת ודיוק בקריאה",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבנת הנקרא, טקסט סיפורי",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבנת הנקרא, טקסט מידעי",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "סוגות טקסט: סיפור, שיר, מכתב, הוראות, כתבה",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבה תמה וכתב יד",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת סיפור",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת טקסט מידעי ותיאור",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת טיעון והבעת עמדה",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "סימני פיסוק",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "כללי כתיב, כתיב מלא וחסר",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "שורש ומשפחת מילים",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "שם עצם: יחיד ורבים, זכר ונקבה",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "הפועל וזמני הפועל",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "שם תואר והתאם",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "כינויי גוף ומילות יחס",
+        "grades": "ג-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "בניינים, היכרות ראשונית",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפט הפשוט: נושא ונשוא",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מילות קישור ולכידות הטקסט",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אוצר מילים: מילים נרדפות והפכים",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "צירופים כבולים וניבים",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "שימוש במילון",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "שיח, האזנה והצגה בעל פה",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות ילדים ושירה",
+        "grades": "א-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "מתמטיקה",
+    "subjectKey": "mathematics",
+    "topics": [
+      {
+        "title": "מספרים עד 20",
+        "grades": "א",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים עד 100",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה עשרוני וערך המקום",
+        "grades": "ב-ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/"
+      },
+      {
+        "title": "חיבור וחיסור",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כפל וחילוק",
+        "grades": "ב-ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/"
+      },
+      {
+        "title": "לוח הכפל",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים עד רבבה (10,000)",
+        "grades": "ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/"
+      },
+      {
+        "title": "מספרים גדולים עד מיליון",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "חילוק עם שארית",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "כפל וחילוק במאונך",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "סדר פעולות חשבון",
+        "grades": "ג-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "סימני התחלקות, מספרים ראשוניים ופריקים",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "שברים פשוטים",
+        "grades": "ג-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרחבה וצמצום של שברים",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "פעולות בשברים",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים עשרוניים",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אחוזים",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "יחס ופרופורציה",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אומדן ותובנה מספרית",
+        "grades": "א-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/noseem_nilmadim/omdan-tovana-misparit/"
+      },
+      {
+        "title": "מדידות: אורך, משקל וזמן",
+        "grades": "א-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "מצולעים ומשולשים",
+        "grades": "ב-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "זוויות",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מרובעים",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "היקף ושטח",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מעגל",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "גופים: נפח ושטח פנים",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "סימטריה",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "חקר נתונים, דיאגרמות וממוצע",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "בעיות מילוליות",
+        "grades": "א-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "אנגלית",
+    "subjectKey": "english",
+    "topics": [
+      {
+        "title": "אותיות וצלילים באנגלית (Phonics)",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "קריאה ראשונית",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "ברכות והיכרות",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים, צבעים וצורות",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפחה שלי",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבית והחדר",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "בית הספר וחפצי כיתה",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "חלקי הגוף",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "בגדים",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "אוכל ומשקאות",
+        "grades": "ג-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "בעלי חיים",
+        "grades": "ג-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "ימים, חודשים ועונות",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "מזג אוויר",
+        "grades": "ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "השעה והזמן",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "תחביבים וספורט",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מקצועות",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "העיר ותחבורה",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "חגים ומועדים",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "דקדוק: be ו-have, הווה פשוט",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "דקדוק: עבר פשוט ושאלות",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "טבע וסביבה",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "קריאת סיפורים ושירים באנגלית",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "ערבית",
+    "subjectKey": "arabic",
+    "topics": [
+      {
+        "title": "אותיות האלף בית הערבי",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "ברכות ונימוסים",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "היכרות: שם, גיל ומשפחה",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "צבעים",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "בית הספר והכיתה",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אוכל ומשקאות",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "גוף ובריאות",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "ימות השבוע והזמן",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "חגים ומנהגים",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "השכונה והיישוב",
+        "grades": "ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "מדע וטכנולוגיה",
+    "subjectKey": "science-technology",
+    "topics": [
+      {
+        "title": "חומרים ותכונותיהם",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מצבי צבירה",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "נפח וכמות חומר של גופים",
+        "grades": "ג-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/volume-mass/"
+      },
+      {
+        "title": "תערובות והפרדתן",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "שינויים בחומר: שינוי פיזיקלי ושינוי כימי",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אנרגיה וצורותיה",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "חשמל ומעגל חשמלי",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "אור וצל",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "קול",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "כוחות ותנועה",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "מגנטים",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "חום ומעבר חום",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מאפייני יצורים חיים",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "צמחים: חלקי הצמח והתפתחות",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "בעלי חיים: מיון ותכונות",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "מחזור חיים",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "יחסי גומלין בין יצורים חיים ובינם לבין סביבתם",
+        "grades": "ג-ה",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/yehasey-gomlin-yetzurim-haim/"
+      },
+      {
+        "title": "מערכות אקולוגיות ושרשרת מזון",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "גוף האדם ובריאות",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת ההובלה באדם",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/maarechet-hovala-baadam/"
+      },
+      {
+        "title": "מערכת העיכול ותזונה",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת הנשימה",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "התא, היכרות",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכות בכדור הארץ: גאוספירה, סלעים וקרקע",
+        "grades": "ג-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/geosfera/"
+      },
+      {
+        "title": "מחזור המים",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "מזג אוויר ואקלים",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "שינוי אקלים",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/climate-changing/"
+      },
+      {
+        "title": "כדור הארץ והחלל: יום ולילה, עונות השנה",
+        "grades": "ב-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת השמש",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מהות הטכנולוגיה",
+        "grades": "א-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/technology-essence/"
+      },
+      {
+        "title": "הפתרון הטכנולוגי ותהליך התיכון",
+        "grades": "ג-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/noseem_nilmadim/pitaron-technology/"
+      },
+      {
+        "title": "מכונות פשוטות",
+        "grades": "ד-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנים וחומרי בנייה",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "פסולת ומחזור",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "משאבי טבע וקיימות",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "מולדת, חברה ואזרחות",
+    "subjectKey": "homeland-society-citizenship",
+    "topics": [
+      {
+        "title": "הבית והסביבה הקרובה",
+        "grades": "ב",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/second-class/"
+      },
+      {
+        "title": "שינויים בבית ובסביבה הקרובה",
+        "grades": "ב",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/second-class/"
+      },
+      {
+        "title": "סיפור המשפחה שלי בהקשר תולדות ארץ ישראל",
+        "grades": "ב",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/second-class/"
+      },
+      {
+        "title": "בית הספר כקהילה",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "היישוב שלי",
+        "grades": "ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/noseem_nilmadim/hayeshuv_sheli/"
+      },
+      {
+        "title": "סוגי יישובים: עיר, כפר, קיבוץ ומושב",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "שירותים ומוסדות ביישוב",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרשות המקומית",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "סביבות חיים משתנות",
+        "grades": "ג-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/noseem_nilmadim/svivot_haim_mishtanot"
+      },
+      {
+        "title": "מפה, כיווני אוויר ומקרא",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "יחידות נוף בישראל",
+        "grades": "ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/noseem_nilmadim/israel-landscape-units/"
+      },
+      {
+        "title": "ירושלים בירת ישראל",
+        "grades": "ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "סמלי המדינה",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "כללים, חוקים וזכויות",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "זכויות הילד",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "להיות אזרחים במדינת ישראל",
+        "grades": "ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/"
+      },
+      {
+        "title": "דמוקרטיה ובחירות, היכרות",
+        "grades": "ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "חינוך פיננסי: כסף, הכנסות והוצאות",
+        "grades": "ג-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/noseem_nilmadim/hinuch_pinansi/"
+      },
+      {
+        "title": "עלייה, עולים וקיבוץ גלויות",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "חגי ישראל ומועדי המדינה",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "חברה רב תרבותית בישראל",
+        "grades": "ד",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "גאוגרפיה, אדם וסביבה",
+    "subjectKey": "geography",
+    "topics": [
+      {
+        "title": "המפה והאטלס",
+        "grades": "ה",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/noseem_nilmadim/"
+      },
+      {
+        "title": "קווי רוחב וקווי אורך",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "יבשות ואוקיינוסים",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "אזורי אקלים בעולם",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרי געש",
+        "grades": "ה",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/noseem_nilmadim/"
+      },
+      {
+        "title": "רעידות אדמה",
+        "grades": "ה",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/noseem_nilmadim/"
+      },
+      {
+        "title": "אוכלוסיית העולם",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "ישראל ואזוריה העיקריים",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/curriculum/sixth-class/"
+      },
+      {
+        "title": "רצועות הנוף: מישור החוף, ההר ובקעת הירדן",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/curriculum/sixth-class/"
+      },
+      {
+        "title": "הנגב והערבה",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "האזור שלי",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/curriculum/sixth-class/"
+      },
+      {
+        "title": "ירושלים בירת ישראל",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/curriculum/sixth-class/"
+      },
+      {
+        "title": "מים בישראל",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "תיירות בישראל",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/yesodi/noseem_nilmadim/"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "היסטוריה",
+    "subjectKey": "history",
+    "topics": [
+      {
+        "title": "מהי היסטוריה: זמן, ציר זמן ומקורות",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "המהפכה החקלאית וראשית היישובים",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "התרבויות העתיקות: מצרים ומסופוטמיה",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "המצאת הכתב",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "יוון העתיקה וראשית הדמוקרטיה",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/elementary/pedagogy/teaching-units/"
+      },
+      {
+        "title": "רומא העתיקה",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "עם ישראל בתקופת המקרא",
+        "grades": "ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "תנ\"ך",
+    "subjectKey": "bible",
+    "topics": [
+      {
+        "title": "בריאת העולם",
+        "grades": "ב",
+        "source": "https://pop.education.gov.il/tchumey_daat/tanach_mamlachti/yesodi/noseem_nilmadim/creation-of-the-world/"
+      },
+      {
+        "title": "גן עדן, קין והבל",
+        "grades": "ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "נח והמבול, מגדל בבל",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "אברהם אבינו",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "יצחק ורבקה",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "יעקב ועשו",
+        "grades": "ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "יוסף ואחיו",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "שעבוד מצרים ויציאת מצרים",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "מעמד הר סיני ועשרת הדיברות",
+        "grades": "ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "הנדודים במדבר",
+        "grades": "ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "חציית הירדן וכיבוש הארץ (ספר יהושע)",
+        "grades": "ד-ה",
+        "source": "https://pop.education.gov.il/tchumey_daat/tanach_mamlachti/yesodi/noseem_nilmadim/haziyat-yarden/"
+      },
+      {
+        "title": "ספר שופטים: דבורה, גדעון ושמשון",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מגילת רות",
+        "grades": "ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "שמואל ושאול",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "דוד המלך",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "שלמה ובניין המקדש",
+        "grades": "ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "פילוג הממלכה ואליהו הנביא",
+        "grades": "ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "תרבות יהודית ישראלית",
+    "subjectKey": "jewish-israeli-culture",
+    "topics": [
+      {
+        "title": "שבת",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "חגי תשרי: ראש השנה, יום כיפור וסוכות",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "חנוכה",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "ט\"ו בשבט",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "פורים",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "פסח וההגדה",
+        "grades": "א-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספירת העומר ושבועות",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "ימי זיכרון ויום העצמאות",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "הלוח העברי",
+        "grades": "ב-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "מעגל החיים: לידה, בר ובת מצווה, חתונה",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "בית הכנסת ותפילה",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "ערכים: כבוד הורים, צדקה וגמילות חסדים",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "פרקי אבות ואגדות חז\"ל",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "משנה ותלמוד, היכרות",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "דמויות במורשת ישראל",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "אמנות",
+    "subjectKey": "art",
+    "topics": [
+      {
+        "title": "קו, צורה וכתם",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "צבעי יסוד וצבעים משניים",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "גלגל הצבעים: צבעים חמים וקרים",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "מרקם",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "קומפוזיציה",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "פרספקטיבה: קדמה ורקע",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "דיוקן ודיוקן עצמי",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "נוף וטבע דומם",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "פיסול ותלת ממד",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "הדפס וקולאז'",
+        "grades": "ב-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנים וזרמים מרכזיים",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "התבוננות ביצירה במוזיאון",
+        "grades": "א-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "מוזיקה",
+    "subjectKey": "music",
+    "topics": [
+      {
+        "title": "האזנה, ביצוע ויצירה",
+        "grades": "א-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "דופק, קצב ומשקל",
+        "grades": "א-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "משכי צלילים ותווים",
+        "grades": "ב-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "גובה צליל ומנעד",
+        "grades": "א-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "כיווני מנגינה",
+        "grades": "א-ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "עוצמה (דינמיקה)",
+        "grades": "א-ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "מפעם (טמפו)",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "גוון צליל וכלי נגינה",
+        "grades": "א-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "משפחות כלי התזמורת",
+        "grades": "ג-ה",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה יצירה: חזרה וניגוד",
+        "grades": "ג-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "מרקם מוזיקלי",
+        "grades": "ד-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/music/elementary/pedagogy-of-music/curriculum/"
+      },
+      {
+        "title": "קול האדם ושירה במקהלה",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "שיר עם ושיר ארץ ישראלי",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מלחינים ויצירות מופת",
+        "grades": "ד-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "חינוך גופני",
+    "subjectKey": "physical-education",
+    "topics": [
+      {
+        "title": "מיומנויות תנועה בסיסיות",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כושר גופני ובריאות",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "התעמלות קרקע",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "אתלטיקה קלה",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "משחקי כדור",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "שחייה ובטיחות במים",
+        "grades": "ג-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "ריקוד ותנועה",
+        "grades": "א-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "זהירות בדרכים",
+    "subjectKey": "road-safety",
+    "topics": [
+      {
+        "title": "הכרת הסביבה התעבורתית",
+        "grades": "א-ב",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/noseem_nilmadim/hakarat-sviva-taaburatit/"
+      },
+      {
+        "title": "הולך הרגל וחציית כביש",
+        "grades": "א-ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/pedagogy-road-safety-elementary/road-safety-curriculum/"
+      },
+      {
+        "title": "הנוסע ברכב: חגורת בטיחות ומושב בטיחות",
+        "grades": "א-ג",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/pedagogy-road-safety-elementary/road-safety-curriculum/"
+      },
+      {
+        "title": "הנוסע בתחבורה ציבורית ובהסעה",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "תמרורים ורמזורים",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "ראות ונראות",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "רוכב האופניים: קסדה וציוד מגן",
+        "grades": "ג-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/pedagogy-road-safety-elementary/road-safety-curriculum/"
+      },
+      {
+        "title": "כלי רכב דו גלגליים חשמליים",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/noseem_nilmadim/road-safety-week-2022/"
+      },
+      {
+        "title": "מעטפת הבטיחות הפיזית",
+        "grades": "ד-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/noseem_nilmadim/maatefet-betihut/"
+      },
+      {
+        "title": "מהירות ומרחק עצירה",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/pedagogy-road-safety-elementary/road-safety-curriculum/"
+      },
+      {
+        "title": "עצמאים בשטח",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/zehirot-drahim/yesodi/noseem_nilmadim/atzmaim-bashetah/"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "חינוך פיננסי",
+    "subjectKey": "financial-education",
+    "topics": [
+      {
+        "title": "מהו כסף",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "צרכים ורצונות",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמצעי תשלום",
+        "grades": "ג-ד",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "הכנסות והוצאות",
+        "grades": "ג-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "תקציב אישי",
+        "grades": "ד-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "חיסכון",
+        "grades": "ג-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "צרכנות נבונה",
+        "grades": "ד-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "הלוואות והשקעות, היכרות",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "תקציב המדינה",
+        "grades": "ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      },
+      {
+        "title": "עבודה ופרנסה",
+        "grades": "ה-ו",
+        "source": "https://pop.education.gov.il/tchumey_daat/financial-education/junior-high/enrichment/financial-education-elementary/"
+      }
+    ]
+  },
+  {
+    "level": "elementary",
+    "subject": "כישורי חיים וחינוך לבריאות",
+    "subjectKey": "life-skills-health",
+    "topics": [
+      {
+        "title": "היכרות עם עצמי וחוזקות",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "זיהוי רגשות וויסות רגשי",
+        "grades": "א-ג",
+        "source": "knowledge"
+      },
+      {
+        "title": "חברות ויחסים בין אישיים",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקשורת בין אישית והקשבה",
+        "grades": "ב-ד",
+        "source": "knowledge"
+      },
+      {
+        "title": "פתרון קונפליקטים",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מוגנות ושמירה על הגוף",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "מוגנות ברשת",
+        "grades": "ג-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "תזונה נבונה ואורח חיים בריא",
+        "grades": "א-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "היגיינה אישית",
+        "grades": "א-ב",
+        "source": "knowledge"
+      },
+      {
+        "title": "התבגרות ושינויים בגוף",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      },
+      {
+        "title": "קבלת החלטות",
+        "grades": "ה-ו",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "לשון והבעה",
+    "subjectKey": "hebrew-language",
+    "topics": [
+      {
+        "title": "חלקי הדיבר",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "שורש ומשקל",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/ivrit_havana_habaa_lashon/chativat-beynayim/noseem_nilmadim/lashon/"
+      },
+      {
+        "title": "מערכת הפועל: בניינים",
+        "grades": "ז-ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/ivrit_havana_habaa_lashon/chativat-beynayim/noseem_nilmadim/lashon/"
+      },
+      {
+        "title": "זמנים וגופים בפועל",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/ivrit_havana_habaa_lashon/chativat-beynayim/noseem_nilmadim/lashon/"
+      },
+      {
+        "title": "גזרות הפועל",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת השם: משקלים ונטיית השם",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "סמיכות",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "מילות יחס ונטייתן",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "כינויי גוף וכינויים חבורים",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/ivrit_havana_habaa_lashon/chativat-beynayim/noseem_nilmadim/lashon/"
+      },
+      {
+        "title": "דרכי תצורה: הלחם, נוטריקון ושאילה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפט הפשוט: נושא ונשוא",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "חלקי המשפט: מושא, תיאור ולוואי",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפט המורכב ופסוקיות",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפט המאוחה ומילות קישור",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "סימני פיסוק",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "משלב לשוני",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "סמנטיקה: נרדפות, הפכים ורב משמעות",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/ivrit_havana_habaa_lashon/chativat-beynayim/noseem_nilmadim/lashon/"
+      },
+      {
+        "title": "פונולוגיה: עיצורים ותנועות, בג\"ד כפ\"ת",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/ivrit_havana_habaa_lashon/chativat-beynayim/noseem_nilmadim/lashon/"
+      },
+      {
+        "title": "הבנת הנקרא: טקסט מידעי וטקסט טיעוני",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת טיעון",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת סיכום ומיזוג",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה טקסט ולכידות",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "טקסט חזותי ומולטימודלי",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "ספרות",
+    "subjectKey": "literature",
+    "topics": [
+      {
+        "title": "סוגות ספרותיות",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "הסיפור הקצר",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה העלילה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "דמות ואפיון",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "המספר ונקודת התצפית",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "זמן ומקום בסיפור",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "השיר הלירי",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הדובר והנמען בשיר",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמצעים אמנותיים: דימוי, מטפורה והאנשה",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "משקל, חריזה ומצלול",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "המחזה והדרמה",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרומן לנוער",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אגדה, משל ומעשייה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "סיפורי חז\"ל ומדרש",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות השואה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "שירת ארץ ישראל",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אירוניה והומור",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "מתמטיקה",
+    "subjectKey": "mathematics",
+    "topics": [
+      {
+        "title": "מספרים מכוונים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "ביטויים אלגבריים",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/funkciya_kavit/"
+      },
+      {
+        "title": "חוק הפילוג וכינוס איברים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "משוואות ממעלה ראשונה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/teaching-mathematics/question-files/"
+      },
+      {
+        "title": "פתרון שאלות מילוליות",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/pitaron-shelot-miluliyot/"
+      },
+      {
+        "title": "יחס, פרופורציה וקנה מידה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/mishakim/"
+      },
+      {
+        "title": "אחוזים",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/teaching-mathematics/literacy-assignments-mathematics/"
+      },
+      {
+        "title": "מושג הפונקציה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/funkciya_kavit/"
+      },
+      {
+        "title": "פונקציה קווית ושיפוע",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/funkciya_kavit/"
+      },
+      {
+        "title": "מערכת משוואות",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אי שוויונות",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "חזקות ושורשים",
+        "grades": "ח-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/roots-rules-actions/"
+      },
+      {
+        "title": "נוסחאות הכפל המקוצר",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "פירוק לגורמים",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "פונקציה ריבועית ופרבולה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "משוואה ריבועית",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "זוויות וישרים מקבילים",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/online-lessons-eigth-grade/"
+      },
+      {
+        "title": "משולשים: סוגים ותכונות",
+        "grades": "ז-ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/meshulash/"
+      },
+      {
+        "title": "חפיפת משולשים",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/online-lessons-eigth-grade/"
+      },
+      {
+        "title": "משולש שווה שוקיים ודלתון",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/dalton-meshulas"
+      },
+      {
+        "title": "מרובעים: מקבילית, מלבן, מעוין וטרפז",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "משפט פיתגורס",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/noseem_nilmadim/online-lessons-eigth-grade/"
+      },
+      {
+        "title": "דמיון משולשים",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/matmatika/chativat-beynayim/teaching-mathematics/literacy-assignments-mathematics/"
+      },
+      {
+        "title": "מעגל: היקף ושטח",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "גופים במרחב: נפח ושטח פנים",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "סטטיסטיקה והסתברות",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "טריגונומטריה, היכרות",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "אנגלית",
+    "subjectKey": "english",
+    "topics": [
+      {
+        "title": "Present simple ו-Present progressive",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "Past simple ו-Past progressive",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "זמן עתיד: will ו-going to",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "Present perfect",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "תארים: השוואה והפלגה",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "פעלים מודאליים (Modals)",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "סביל (Passive)",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "משפטי תנאי",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "זמן פנוי ובידור",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "טכנולוגיה ורשתות חברתיות",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "סביבה וטבע",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "בריאות ותזונה",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "טיולים ותיירות",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "תרבויות ומנהגים בעולם",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אנשים מפורסמים וביוגרפיה",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מילות קישור וכתיבת פסקה",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "קריאת טקסט מידעי",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות: סיפור קצר ושיר",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "ערבית",
+    "subjectKey": "arabic",
+    "topics": [
+      {
+        "title": "האלף בית: קריאה וכתיבה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "סימני תנועה: פתחה, כסרה, צ'מה ושדה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "היכרות ופרטים אישיים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "משפחה ובית",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "בית הספר והלימודים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים ושעה",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "כינויי גוף וכינויים חבורים",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "יידוע ושם תואר",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפט השמני",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "הפועל בעבר",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "הפועל בהווה עתיד",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "שורש ומשקל בערבית",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "ערבית מדוברת: שיחה יומיומית",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/arabic-for-hebrew-speakers/junior-high/teaching-materials/spoken-arabic-8th-grade"
+      },
+      {
+        "title": "אוכל ומסעדה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "קניות ושוק",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "חגים ומנהגים בחברה הערבית",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הכפר והעיר",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "עיתונות וחדשות, היכרות",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "מדע וטכנולוגיה",
+    "subjectKey": "science-technology",
+    "topics": [
+      {
+        "title": "מבנה החומר ותורת החלקיקים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "אטומים, יסודות ומולקולות",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "הטבלה המחזורית",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "תרכובות ותערובות",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "תמיסות ומסיסות",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "תגובות כימיות וחוק שימור המסה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "חומצות ובסיסים",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "חום וטמפרטורה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "התא: יחידת החיים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "המיקרוסקופ",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "נשימה תאית ופוטוסינתזה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "עולם התזונה: הזנה באדם ובצמח",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/chativat-beynayim/noseem_nilmadim/olam-tzuna/"
+      },
+      {
+        "title": "מערכות בגוף האדם: עיכול, נשימה והובלה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת העצבים והחושים",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "רבייה והתפתחות",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "תורשה וגנטיקה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אבולוציה ומגוון ביולוגי",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אקולוגיה ומערכות אקולוגיות",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אנרגיה: המרה ושימור",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/chativat-beynayim/noseem_nilmadim/energy-mot/"
+      },
+      {
+        "title": "אנרגיה חשמלית ומקורות אנרגיה",
+        "grades": "ח-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/chativat-beynayim/noseem_nilmadim/energy-mot/"
+      },
+      {
+        "title": "חשמל ומעגלים חשמליים",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "כוחות ותנועה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "גלים, אור וקול",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "טכנולוגיה ותהליך התיכון",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/chativat-beynayim/noseem_nilmadim/technology/"
+      },
+      {
+        "title": "מערכות טכנולוגיות ובקרה",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "קיימות ומשאבי טבע",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "כדור הארץ והחלל",
+        "grades": "ז",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "גאוגרפיה, אדם וסביבה",
+    "subjectKey": "geography",
+    "topics": [
+      {
+        "title": "כלים גאוגרפיים: מפה ו-GIS",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "גלובליזציה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/noseem_nilmadim/globalizatia/"
+      },
+      {
+        "title": "אוכלוסייה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/noseem_nilmadim/population/"
+      },
+      {
+        "title": "עיור וערים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "הגירה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "כלכלה עולמית, פיתוח ופערים",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "תיירות",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה כדור הארץ",
+        "grades": "ח",
+        "source": "https://meyda.education.gov.il/files/Pop/0files/geography_adam_sviva/Chativat-Beynayim/tohnit-limudim-kitah.pdf"
+      },
+      {
+        "title": "לוחות טקטוניים",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרי געש",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/noseem_nilmadim/harey_gaash/"
+      },
+      {
+        "title": "רעידות אדמה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "סלעים ותהליכי בליה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אטמוספרה ומזג אוויר",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אקלים ואזורי אקלים",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "מחזור המים ומשאבי מים",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אסונות טבע",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "שינוי אקלים",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "ישראל: גבולות ומיקום",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "יחידות נוף ומבנה הנוף בישראל",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "אוכלוסיית ישראל והיישובים",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      },
+      {
+        "title": "משק המים בישראל",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנון ופיתוח במרחב",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativat-beynayim/"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "היסטוריה",
+    "subjectKey": "history",
+    "topics": [
+      {
+        "title": "מושגי יסוד בהיסטוריה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/chativat-beynayim/pedagogia-historia/annual-plan"
+      },
+      {
+        "title": "תקופת בית שני: השלטון ההלניסטי והחשמונאים",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "השלטון הרומי, המרד הגדול וחורבן הבית",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקופת המשנה והתלמוד, יבנה",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya-hemed/junior-high/curriculum/grade-9/"
+      },
+      {
+        "title": "הופעת הנצרות",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "הופעת האסלאם",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "ימי הביניים: פאודליזם וכנסייה",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya-hemed/junior-high/curriculum/grade-9/"
+      },
+      {
+        "title": "היהודים בימי הביניים: מעמד המיעוט",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya-hemed/junior-high/curriculum/grade-9/"
+      },
+      {
+        "title": "מסעי הצלב",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "תור הגילויים והרנסנס",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya-hemed/junior-high/curriculum/grade-8/"
+      },
+      {
+        "title": "המהפכה המדעית והנאורות",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "המהפכה הצרפתית",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "המהפכה התעשייתית",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/chativat-beynayim/pedagogia-historia/annual-plan"
+      },
+      {
+        "title": "האמנציפציה ותנועת ההשכלה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "לאומיות ותנועות לאומיות",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "האנטישמיות המודרנית",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "התנועה הציונית והרצל",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "העלייה הראשונה והעלייה השנייה",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "מלחמת העולם הראשונה",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/chativat-beynayim/pedagogia-historia/annual-plan"
+      },
+      {
+        "title": "המאבק על אירופה",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/chativat-beynayim/pedagogia-historia/annual-plan"
+      },
+      {
+        "title": "העלייה השלישית והמנדט הבריטי",
+        "grades": "ח-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/chativat-beynayim/pedagogia-historia/annual-plan"
+      },
+      {
+        "title": "עליית הנאצים לשלטון",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מלחמת העולם השנייה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "השואה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מאבק היישוב והקמת המדינה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מלחמת העצמאות",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "תנ\"ך",
+    "subjectKey": "bible",
+    "topics": [
+      {
+        "title": "ספר בראשית: סיפורי ראשית בעיון מחודש",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "חטאי בית עלי (שמואל א ב)",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/tanach_mamlachti/chativat-beynayim/noseem_nilmadim/hatey-bney-eli/"
+      },
+      {
+        "title": "המעבר משלטון שבטי לשלטון מלוכה",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/tanach_mamlachti/chativat-beynayim/noseem_nilmadim/hatey-bney-eli/"
+      },
+      {
+        "title": "שאול, המלך הראשון",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "משיחת דוד למלך (שמואל א טז)",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/tanach_mamlachti/chativat-beynayim/noseem_nilmadim/shmuel-a-perek-tz/"
+      },
+      {
+        "title": "דוד וגלית",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "דוד המלך ובית דוד",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "חטא דוד ובת שבע, משל כבשת הרש",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "מרד אבשלום",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "שלמה ובניין המקדש",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "פילוג הממלכה",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אליהו הנביא ואחאב",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "נבואת עמוס וצדק חברתי",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "ישעיהו וחזון אחרית הימים",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "חורבן ממלכת ישראל וממלכת יהודה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "חוקי התורה: משפט וצדק",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות החוכמה: משלי",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מגילת אסתר",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "תרבות יהודית ישראלית",
+    "subjectKey": "jewish-israeli-culture",
+    "topics": [
+      {
+        "title": "אחריות ומעורבות",
+        "grades": "ז",
+        "source": "https://pop.education.gov.il/tchumey_daat/israeli-jewish-culture/junior-high/curriculum/grade7/"
+      },
+      {
+        "title": "מעגל השנה והלוח העברי",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/israeli-jewish-culture/junior-high/"
+      },
+      {
+        "title": "בר ובת מצווה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "תפילה וסידור",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "מעגלי חיים וקהילה",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/israeli-jewish-culture/junior-high/curriculum/grade8/"
+      },
+      {
+        "title": "מודלים של קהילה",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/israeli-jewish-culture/junior-high/curriculum/grade8/"
+      },
+      {
+        "title": "תיקון עולם",
+        "grades": "ח",
+        "source": "https://pop.education.gov.il/tchumey_daat/israeli-jewish-culture/junior-high/curriculum/grade8/"
+      },
+      {
+        "title": "פרקי אבות",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות חז\"ל: משנה, תלמוד ומדרש",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "זהות יהודית, ישראלית, לאומית ותרבותית",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/israeli-jewish-culture/junior-high/"
+      },
+      {
+        "title": "מגילת העצמאות כמסמך זהות",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הציונות והתרבות העברית",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הוגים ורעיונות בהגות היהודית",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "אזרחות",
+    "subjectKey": "civics",
+    "topics": [
+      {
+        "title": "מגילת העצמאות",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "מדינה יהודית ודמוקרטית",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "מאפיינים יהודיים של המדינה",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "עקרונות הדמוקרטיה",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "זכויות האדם והאזרח",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "שלוש רשויות השלטון",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "הרשות המחוקקת: הכנסת",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "הרשות המבצעת: הממשלה",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "הרשות השופטת: בתי המשפט",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "השלטון המקומי",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "אזרחות טובה ומעורבות",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "החברה בישראל",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/curriculum/required-subjects/"
+      },
+      {
+        "title": "בחירות ומפלגות",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "מדעי המחשב ואוריינות דיגיטלית",
+    "subjectKey": "computer-science",
+    "topics": [
+      {
+        "title": "אלגוריתם ופתרון בעיות",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנות בסביבה חזותית (Scratch)",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "משתנים ותנאים",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "לולאות",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנות בפייתון, היכרות",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "רובוטיקה",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "האינטרנט ורשתות מחשבים",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אבטחת מידע ופרטיות",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "בינה מלאכותית, היכרות",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "צריכה ויצירה של תוכן במדיה הדיגיטלית",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/oryanot-digitalit/chativat-beynayim/noseem_nilmadim/oryanut-media-digital/"
+      },
+      {
+        "title": "תפעול ופתרון בעיות בטכנולוגיות תקשוב",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/tchumey_daat/oryanot-digitalit/chativat-beynayim/noseem_nilmadim/oryanut-tehnologiot-tikshuv/"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "חינוך פיננסי",
+    "subjectKey": "financial-education",
+    "topics": [
+      {
+        "title": "כלכלת המשפחה וניהול תקציב",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "הצבת יעדים פיננסיים",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "אמצעי תשלום",
+        "grades": "ז-ח",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "ניהול חשבון בנק",
+        "grades": "ח-ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "צרכנות נבונה",
+        "grades": "ז-ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "פרסום והשפעתו על הצרכן",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "ריבית",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "חיסכון והשקעה",
+        "grades": "ח-ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "הלוואות ואשראי",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "עובדים ועבודה, תלוש שכר",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "כלכלה עולמית וקיימות",
+        "grades": "ט",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "זהירות בדרכים",
+    "subjectKey": "road-safety",
+    "topics": [
+      {
+        "title": "משתמש הדרך האחראי",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אופניים חשמליים וקורקינטים",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "חוקי התנועה ותמרורים",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "גורמי סיכון בדרך: מהירות והסחת דעת",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הנוסע האחראי ולחץ חברתי",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אלכוהול וסמים ובטיחות בדרכים",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "הכנה לחינוך התעבורתי",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "כישורי חיים וחינוך לבריאות",
+    "subjectKey": "life-skills-health",
+    "topics": [
+      {
+        "title": "זהות ודימוי עצמי",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "גיל ההתבגרות ושינויים בגוף",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "יחסים, גבולות ומוגנות",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "לחץ חברתי והתמודדות",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מניעת עישון, אלכוהול וסמים",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מוגנות ברשת ובריונות רשת",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "תזונה ואורח חיים פעיל",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "ויסות רגשי וחוסן נפשי",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "קבלת החלטות ובחירת מגמה",
+        "grades": "ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "אמנות",
+    "subjectKey": "art",
+    "topics": [
+      {
+        "title": "יסודות השפה החזותית",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות פרהיסטורית ואמנות העולם העתיק",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות הרנסנס",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "האימפרסיוניזם",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות מודרנית: קוביזם, אקספרסיוניזם וסוריאליזם",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות ישראלית",
+        "grades": "ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "עיצוב גרפי ופרסום",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "צילום ואמנות דיגיטלית",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "פיסול ומיצב",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "middle",
+    "subject": "מוזיקה",
+    "subjectKey": "music",
+    "topics": [
+      {
+        "title": "תווים וכתב מוזיקלי",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "סולמות מז'ור ומינור",
+        "grades": "ז-ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "אקורדים והרמוניה בסיסית",
+        "grades": "ח",
+        "source": "knowledge"
+      },
+      {
+        "title": "התזמורת וכלי הנגינה",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה שיר: בית ופזמון",
+        "grades": "ז",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקופות במוזיקה: בארוק, קלאסית ורומנטית",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "מוזיקה ישראלית",
+        "grades": "ז-ט",
+        "source": "knowledge"
+      },
+      {
+        "title": "סגנונות פופולריים: ג'אז, רוק והיפ הופ",
+        "grades": "ח-ט",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "לשון",
+    "subjectKey": "hebrew-language",
+    "topics": [
+      {
+        "title": "הבנת הנקרא: טקסט עיוני וטיעוני",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת סיכום ומיזוג",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבה עיונית ומאמר עמדה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "רטוריקה ואמצעי שכנוע",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תחביר: המשפט הפשוט וחלקי המשפט",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "תחביר: המשפט המורכב ופסוקיות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תחביר: המשפט המאוחה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת הפועל: בניינים וגזרות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת השם: משקלים ומשפחות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "נטיית השם והפועל, כינויים חבורים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "דרכי תצורה של מילים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "סמנטיקה ומשמעות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "משלב ולשון תקנית",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פיסוק וכתיב תקני",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "העברית לתקופותיה: מקרא, חז\"ל, ימי הביניים והחייאה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פונולוגיה וניקוד",
+        "grades": "יא",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "ספרות",
+    "subjectKey": "literature",
+    "topics": [
+      {
+        "title": "מושגי יסוד בניתוח טקסט ספרותי",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "עיון ופרשנות",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/pedagogia-safrut2/study-interpretation/"
+      },
+      {
+        "title": "הסיפור העברי הקצר",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/sipur-ivri-katzar/"
+      },
+      {
+        "title": "סיפורים מתורגמים מספרות העולם",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/translated-stories/"
+      },
+      {
+        "title": "הנובלה",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/pedagogia-safrut2/flexible-program/"
+      },
+      {
+        "title": "הרומן",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/pedagogia-safrut2/flexible-program/"
+      },
+      {
+        "title": "דרמה קלאסית: הטרגדיה היוונית ושייקספיר",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/drama-klasit/"
+      },
+      {
+        "title": "דרמה מודרנית",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/drama-modernit/"
+      },
+      {
+        "title": "שירת ספרד בימי הביניים",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "שירת התחייה: ביאליק וטשרניחובסקי",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "שירת המודרנה: אלתרמן, שלונסקי ולאה גולדברג",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "שירת דור המדינה: עמיחי, זך ורביקוביץ",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "שירה עברית עכשווית",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות חז\"ל ומדרש",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/"
+      },
+      {
+        "title": "מן המיתולוגי אל הפנטסטי: מיתוס ומעשייה",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/mythological/"
+      },
+      {
+        "title": "כתיבה יצירתית",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/creative-writing/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מתמטיקה",
+    "subjectKey": "mathematics",
+    "topics": [
+      {
+        "title": "משוואות ואי שוויונות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "פונקציה ריבועית",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "בעיות מילוליות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "סדרות חשבוניות והנדסיות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גאומטריה אוקלידית: משולשים ומעגל",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גאומטריה אנליטית: הישר והמעגל",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "טריגונומטריה במישור",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "סטטיסטיקה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "הסתברות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "התפלגות נורמלית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פונקציות: פולינום, רציונלית ושורש",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "חשבון דיפרנציאלי: הנגזרת",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "חקירת פונקציה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "בעיות קיצון",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "גדילה ודעיכה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "טריגונומטריה במרחב",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "חשבון אינטגרלי",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "פונקציות מעריכיות ולוגריתמיות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "וקטורים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים מרוכבים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "פרבולה ואליפסה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אינדוקציה מתמטית",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "אנגלית",
+    "subjectKey": "english",
+    "topics": [
+      {
+        "title": "הבנת הנקרא: טקסט עיוני ואקדמי",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת חיבור טיעוני",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כתיבת מכתב ומייל רשמי",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות: הסיפור הקצר",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות: שירה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות: מחזה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מיומנויות חשיבה מסדר גבוה (HOTS)",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "דקדוק: זמנים מתקדמים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "דקדוק: סביל ודיבור עקיף",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "דקדוק: משפטי תנאי ומשפטי זיקה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מילות קישור ולוגיקה בטקסט",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מדע וטכנולוגיה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "חברה וזכויות אדם",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "סביבה ושינוי אקלים",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "בריאות ופסיכולוגיה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקשורת ומדיה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבעה בעל פה ופרויקט",
+        "grades": "י-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "ערבית",
+    "subjectKey": "arabic",
+    "topics": [
+      {
+        "title": "בנייני הפועל",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "גזרות הפועל",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "המשפט הפועלי והמשפט השמני",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "סמיכות ושם תואר",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מספרים ומניין",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "משפטי זיקה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבנת הנקרא: עיתונות ערבית",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תרגום מערבית לעברית",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות ערבית: שירה וסיפור",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הקוראן והאסלאם, היכרות",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ערבית מדוברת",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/arabic-for-hebrew-speakers/high-school/teaching-materials/spoken-arabic/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "ביולוגיה",
+    "subjectKey": "biology",
+    "topics": [
+      {
+        "title": "התא: מבנה ותפקוד",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "מולקולות החיים: פחמימות, חלבונים ושומנים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "אנזימים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "נשימה תאית",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פוטוסינתזה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גוף האדם והומאוסטזיס",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "מערכת העיכול",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת הדם וההובלה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת הנשימה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת ההפרשה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת העצבים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת ההורמונים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת החיסון",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "אקולוגיה",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "מחזורי חומרים במערכת אקולוגית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גנטיקה ותורשה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "DNA וסינתזת חלבונים",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "בקרת ביטוי גנים והנדסה גנטית",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "פיזיולוגיה השוואתית",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "חיידקים ונגיפים בגוף האדם",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "מיקרואורגניזמים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "התנהגות בעלי חיים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "התפתחות ורבייה בצמחים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "אבולוציה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"
+      },
+      {
+        "title": "עבודת חקר (ביוחקר)",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "כימיה",
+    "subjectKey": "chemistry",
+    "topics": [
+      {
+        "title": "מושגי יסוד בכימיה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "מבנה האטום והטבלה המחזורית",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבנה וקישור: קשר יוני",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "מבנה וקישור: קשר קוולנטי וחומרים מולקולריים",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "קשר מתכתי",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "כוחות בין מולקולריים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "סטוכיומטריה והמול",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "תמיסות וריכוז",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "חמצון חיזור",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "חומצות ובסיסים",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "אנרגטיקה: תגובות אקסותרמיות ואנדותרמיות",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "קצב תגובה ודינמיקה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "שיווי משקל כימי",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כימיה של תרכובות פחמן",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "כימיה של מזון",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "פולימרים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "כימיה ירוקה וסביבה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מעבדה וניסויים בכימיה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "פיזיקה",
+    "subjectKey": "physics",
+    "topics": [
+      {
+        "title": "קינמטיקה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "חוקי ניוטון",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "תנועה מעגלית",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "כבידה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "עבודה ואנרגיה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "מתקף ותנע",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "תנועה הרמונית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "אלקטרוסטטיקה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "זרם חשמלי ומעגלים חשמליים",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "מגנטיות",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "השראה אלקטרומגנטית",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אופטיקה גאומטרית",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "אופטיקה פיזיקלית וגלים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "האטום",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "הגרעין ורדיואקטיביות",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "פיזיקה מודרנית: האפקט הפוטואלקטרי וקוונטים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "תורת היחסות, היכרות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מעבדה בפיזיקה",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מדעי כדור הארץ",
+    "subjectKey": "earth-sciences",
+    "topics": [
+      {
+        "title": "מבנה כדור הארץ",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מינרלים וסלעים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מחזור הסלע",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "טקטוניקת לוחות",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/lochot_taktonym/"
+      },
+      {
+        "title": "רעידות אדמה והרי געש",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תנועות כדור הארץ והירח",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/tnuot-kadur-yareah/"
+      },
+      {
+        "title": "בליה, סחיפה והשקעה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "זמן גאולוגי ומאובנים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "האטמוספרה ומבנה האטמוספרה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מזג אוויר ואקלים",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/earth-climate/"
+      },
+      {
+        "title": "אוקיינוסים וזרמי ים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מי תהום והידרולוגיה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הגאולוגיה של ישראל",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכת השמש ואסטרונומיה",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מדעי הסביבה",
+    "subjectKey": "environmental-sciences",
+    "topics": [
+      {
+        "title": "מערכות אקולוגיות ויחסי אדם וסביבה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/learning-plans/environmental-sciences/high-school/core-subjects/"
+      },
+      {
+        "title": "שינוי אקלים",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/learning-plans/environmental-sciences/high-school/core-subjects/"
+      },
+      {
+        "title": "משאבי מים",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/learning-plans/environmental-sciences/high-school/core-subjects/"
+      },
+      {
+        "title": "משאבי אוויר וזיהום אוויר",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/environmental-sciences/high-school/core-subjects/"
+      },
+      {
+        "title": "פסולת כמשאב",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/environmental-sciences/high-school/core-subjects/"
+      },
+      {
+        "title": "מגוון ביולוגי ושמירת טבע",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אנרגיה וסביבה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "קרקע וחקלאות בת קיימא",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנון סביבתי",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מדיניות ומשפט סביבתי",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "עבודת גמר במדעי הסביבה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/final-theses/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "גאוגרפיה, אדם וסביבה",
+    "subjectKey": "geography",
+    "topics": [
+      {
+        "title": "גבולות ישראל",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/gvolot-israel-new/"
+      },
+      {
+        "title": "ישראל במזרח התיכון: ארץ קטנה במרחב מורכב",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/israel-middle-east/"
+      },
+      {
+        "title": "מבנה הנוף בישראל",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/mivne-nof-hata/"
+      },
+      {
+        "title": "אקלים כדור הארץ",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/earth-climate/"
+      },
+      {
+        "title": "עננים ומשקעים",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/ananim1/"
+      },
+      {
+        "title": "לוחות טקטוניים",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/lochot_taktonym/"
+      },
+      {
+        "title": "תנועות כדור הארץ והירח",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/tnuot-kadur-yareah/"
+      },
+      {
+        "title": "אוכלוסייה ודמוגרפיה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "עיור וגאוגרפיה עירונית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גלובליזציה ומרחב",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גאוגרפיה כלכלית ופיתוח",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "משאבי מים וקיימות",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנון מרחבי בישראל",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכות מידע גאוגרפיות (GIS)",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "סיור ועבודת שדה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "היסטוריה",
+    "subjectKey": "history",
+    "topics": [
+      {
+        "title": "תקופת בית שני",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "ימי הביניים ויהודי אירופה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "לאומיות ותנועות לאומיות באירופה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "הציונות: רקע, הרצל והקונגרס הציוני",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "העלייה הראשונה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya-hemed/chativa-elyona/noseem_nilmadim/aliya-rishona"
+      },
+      {
+        "title": "העלייה השנייה וההתיישבות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "הצהרת בלפור והמנדט הבריטי",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "בניית מדינות לאום במזרח התיכון אחרי התמוטטות האימפריה העות'מאנית",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "האידאולוגיה הנאצית והאנטישמיות המודרנית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "מעבר גרמניה מדמוקרטיה לנאציזם",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "מלחמת העולם השנייה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "השואה: גטאות, הפתרון הסופי ומחנות",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "תגובות היהודים: מרד, הצלה וחסידי אומות העולם",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "יהדות צפון אפריקה והמזרח התיכון",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "מאבק היישוב בבריטים",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תוכנית החלוקה והחלטת האו\"ם",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מלחמת העצמאות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "העלייה בשנות החמישים והשישים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/historya/chativa-elyona/noseem_nilmadim/aliot-50-50/"
+      },
+      {
+        "title": "סוגיות נבחרות בתולדות מדינת ישראל",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/learning-plans/history/high-school/examinations/"
+      },
+      {
+        "title": "המלחמה הקרה",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "תנ\"ך",
+    "subjectKey": "bible",
+    "topics": [
+      {
+        "title": "סיפורי הבריאה בספר בראשית",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "סיפורי האבות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "משה ויציאת מצרים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "חוקי התורה ופרשת משפטים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספר דברים והברית",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "נבואה ונביאים: מושגי יסוד",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספר מלכים ב",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/bible-hemed/high-school/teaching-materials/isaiah-kings/"
+      },
+      {
+        "title": "ספר ישעיהו",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/bible-hemed/high-school/teaching-materials/isaiah-kings/"
+      },
+      {
+        "title": "ספר ירמיהו",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "נבואת עמוס והושע",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספר תהלים",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מגילות: רות, אסתר ושיר השירים",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "שיבת ציון: עזרא ונחמיה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספר איוב ושאלת הצדקה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "קהלת",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מחשבת ישראל ותרבות יהודית",
+    "subjectKey": "jewish-thought",
+    "topics": [
+      {
+        "title": "מעגל השנה ומעגל החיים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "תפילה ומצוות ומשמעותן",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "ספרות חז\"ל: משנה ותלמוד",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמונה ומושג האל",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבחירה החופשית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ריה\"ל וספר הכוזרי",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרמב\"ם ומורה הנבוכים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "זרמים ביהדות המודרנית",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הוגי הציונות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "דת ומדינה",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "אזרחות",
+    "subjectKey": "civics",
+    "topics": [
+      {
+        "title": "מגילת העצמאות",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime/"
+      },
+      {
+        "title": "מדינת לאום יהודית: הגדרות וסוגיות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "חוק השבות ומאפייני המדינה היהודית",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "עקרונות הדמוקרטיה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תפיסות דמוקרטיות: ליברלית ורפובליקנית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "זכויות האדם והאזרח",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime/"
+      },
+      {
+        "title": "הגבלת זכויות וזכויות מתנגשות",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "שלטון החוק והפרדת רשויות",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime/"
+      },
+      {
+        "title": "הכנסת ותהליך החקיקה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime/"
+      },
+      {
+        "title": "הממשלה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime/"
+      },
+      {
+        "title": "בית המשפט העליון וביקורת שיפוטית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime/"
+      },
+      {
+        "title": "נשיא המדינה ומבקר המדינה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "חוקי יסוד והחוקה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "בחירות ומפלגות",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "השלטון המקומי",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "התקשורת בדמוקרטיה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "קבוצות אינטרס וחברה אזרחית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "שסעים בחברה הישראלית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מיעוטים במדינת ישראל",
+        "grades": "יא",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מדעי המחשב",
+    "subjectKey": "computer-science",
+    "topics": [
+      {
+        "title": "יסודות מדעי המחשב: אלגוריתמים",
+        "grades": "י",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "משתנים וטיפוסים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "הוראות תנאי",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "לולאות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מחרוזות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פעולות ופרמטרים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנות מונחה עצמים: מחלקות ועצמים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "רקורסיה",
+        "grades": "יא",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "יעילות וסיבוכיות זמן",
+        "grades": "יא",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "שרשרת חוליות",
+        "grades": "יא-יב",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "מחסנית ותור",
+        "grades": "יא-יב",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "עץ בינרי",
+        "grades": "יב",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "מודלים חישוביים: אוטומטים",
+        "grades": "יב",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "מכונת טיורינג",
+        "grades": "יב",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "תכנות לרשת (Web)",
+        "grades": "יב",
+        "source": "https://meyda.education.gov.il/files/CSIT/CS_1-2-4_ver_2-63.pdf"
+      },
+      {
+        "title": "סייבר ואבטחת מידע",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "בינה מלאכותית ולמידת מכונה",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "כלכלה",
+    "subjectKey": "economics",
+    "topics": [
+      {
+        "title": "מבוא לכלכלה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "כלכלת המשפחה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "תופעת המחסור: בחירה ותחלופה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "עקומת התמורה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "ביקוש והיצע",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "שיווי משקל ומחיר בשוק",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גמישות",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הון אנושי וצמיחה כלכלית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "כשלי שוק והתערבות ממשלתית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "אי שוויון ועוני",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "מושגי יסוד במאקרו: תוצר, אבטלה ואינפלציה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "תקציב המדינה ומיסים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      },
+      {
+        "title": "בנק ישראל ומדיניות מוניטרית",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "סחר בינלאומי",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "גלובליזציה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מנהל עסקים",
+    "subjectKey": "business-management",
+    "topics": [
+      {
+        "title": "צורות התאגדות עסקית",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "יזמות ותוכנית עסקית",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "שיווק ותמהיל שיווקי",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ניהול משאבי אנוש",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "חשבונאות: מאזן ודוח רווח והפסד",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מימון ותזרים מזומנים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "התנהגות ארגונית",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אתיקה ואחריות חברתית של עסקים",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "פסיכולוגיה",
+    "subjectKey": "psychology",
+    "topics": [
+      {
+        "title": "פסיכולוגיה כמדע ושיטות מחקר",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "תפיסה",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "קשב",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "זיכרון",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "שיפוט וקבלת החלטות",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "למידה: התניה קלאסית והתניה אופרנטית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "מוטיבציה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "רגש",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "תיאוריות אישיות",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "תיאוריות התפתחות: פרויד, אריקסון ופיאז'ה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "חוסן נפשי ואושר",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/psychology-curriculum/"
+      },
+      {
+        "title": "פסיכולוגיה חברתית: עמדות, קונפורמיות וציות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "לחץ והתמודדות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הפרעות נפשיות, היכרות",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "סוציולוגיה",
+    "subjectKey": "sociology",
+    "topics": [
+      {
+        "title": "מבוא לסוציולוגיה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "שיטות מחקר במדעי החברה",
+        "grades": "י-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/methodology/"
+      },
+      {
+        "title": "תרבות",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "יחסי תרבויות בחברה הטרוגנית",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "חיברות וזהות",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "המשפחה",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "קבוצות, מנהיגות וקבלת החלטות",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "עולם העבודה וארגונים",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/sociology/high-school/work-organization/"
+      },
+      {
+        "title": "תרבות ארגונית",
+        "grades": "יא",
+        "source": "https://pop.education.gov.il/learning-plans/sociology/high-school/work-organization/"
+      },
+      {
+        "title": "ריבוד חברתי ואי שוויון",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "סטייה ופיקוח חברתי",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הגירה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "גלובליזציה ותרבות",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/sociology-curriculum/"
+      },
+      {
+        "title": "מגדר וחברה",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "אמנות",
+    "subjectKey": "art",
+    "topics": [
+      {
+        "title": "אמנות העולם העתיק",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות ימי הביניים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרנסנס",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הבארוק",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ניאו קלאסיציזם ורומנטיקה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ריאליזם ואימפרסיוניזם",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פוסט אימפרסיוניזם",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "קוביזם ואקספרסיוניזם",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "דאדא וסוריאליזם",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אקספרסיוניזם מופשט ופופ ארט",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות עכשווית ומיצב",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אמנות ישראלית: בצלאל ואופקים חדשים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ניתוח יצירה: קומפוזיציה, צבע ואור",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תיק עבודות ופרויקט גמר",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "מוזיקה",
+    "subjectKey": "music",
+    "topics": [
+      {
+        "title": "תורת המוזיקה: סולמות ומרווחים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "הרמוניה ואקורדים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פיתוח שמיעה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מוזיקה בימי הביניים וברנסנס",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקופת הבארוק",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "התקופה הקלאסית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "התקופה הרומנטית",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "צורות מוזיקליות: סונטה, רונדו ופוגה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "המוזיקה במאה ה-20",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מוזיקה ישראלית",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ג'אז ומוזיקה פופולרית",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "טכנולוגיה מוזיקלית והפקה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "חינוך פיננסי",
+    "subjectKey": "financial-education",
+    "topics": [
+      {
+        "title": "תכנון פיננסי וצרכנות נבונה",
+        "grades": "י-יא",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "תלוש שכר וזכויות עובדים",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מיסים ומס הכנסה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אשראי, הלוואות ומשכנתה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "ביטוחים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "חיסכון פנסיוני",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      },
+      {
+        "title": "השקעות ושוק ההון",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/financial-education/financial-education-middle-high-school/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "חינוך תעבורתי",
+    "subjectKey": "road-safety",
+    "topics": [
+      {
+        "title": "חוקי התנועה ותורת הנהיגה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "גורמים לתאונות דרכים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מהירות וזמן תגובה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הסחת דעת וטלפון נייד בנהיגה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "אלכוהול, סמים ונהיגה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "עייפות בנהיגה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הנהג הצעיר ותקופת הליווי",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הנוסע האחראי עם נהג צעיר",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "כישורי חיים וחינוך לבריאות",
+    "subjectKey": "life-skills-health",
+    "topics": [
+      {
+        "title": "זהות ובחירת דרך",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "יחסים בריאים ומוגנות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "התמכרויות וסמים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "בריאות נפשית ופנייה לעזרה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הכנה לשירות צבאי ולשירות לאומי",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "קבלת החלטות ותכנון העתיד",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "ידיעת הארץ וארכאולוגיה",
+    "subjectKey": "israel-studies-archaeology",
+    "topics": [
+      {
+        "title": "התקופות הארכאולוגיות",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "שיטות חפירה ותיארוך",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "ירושלים לדורותיה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "אתרים מרכזיים בארץ ישראל",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ההתיישבות בארץ ישראל במאה ה-19",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "סיור ועבודת שדה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "הנדסת תוכנה וסייבר (מגמה)",
+    "subjectKey": "software-engineering",
+    "topics": [
+      {
+        "title": "תכנות מונחה עצמים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מבני נתונים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מסדי נתונים ו-SQL",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקשורת מחשבים ורשתות",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תכנות צד שרת",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "פיתוח אפליקציות לנייד",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכות הפעלה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "סייבר: הגנה ותקיפה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הנדסת תוכנה: ניתוח דרישות ותכנון",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "פרויקט גמר בהנדסת תוכנה",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "אלקטרוניקה ומחשבים (מגמה)",
+    "subjectKey": "electronics",
+    "topics": [
+      {
+        "title": "חוק אוהם ומעגלים חשמליים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "נגדים, קבלים וסלילים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "זרם חילופין",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "אלקטרוניקה ספרתית: שערים לוגיים",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "אלגברה בוליאנית",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "דיודות ומיישרים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "טרנזיסטורים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מונים ורגיסטרים",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "מגברי שרת",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מיקרו בקרים ומערכות משובצות מחשב",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מערכות בקרה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "מכשירי מדידה ומעבדה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "ביוטכנולוגיה (מגמה)",
+    "subjectKey": "biotechnology",
+    "topics": [
+      {
+        "title": "מערכות ביוטכנולוגיות, מבוא",
+        "grades": "י",
+        "source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "מיקרוביולוגיה ותרביות חיידקים",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "אנזימים בתעשייה",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הנדסה גנטית ו-DNA רקומביננטי",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "הגברת DNA בשיטת PCR",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תרביות תאים ורקמות",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ביוטכנולוגיה של מזון",
+        "grades": "יא-יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "ביוטכנולוגיה בחקלאות",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "ביוטכנולוגיה רפואית: תרופות, אבחון וחיסונים",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "ננו ביוטכנולוגיה",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/pedagogy/curriculum/"
+      },
+      {
+        "title": "ביואינפורמטיקה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אתיקה בביוטכנולוגיה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "עבודת חקר מעבדתית",
+        "grades": "יב",
+        "source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/pedagogy/curriculum/"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "תקשורת (מגמה)",
+    "subjectKey": "communication",
+    "topics": [
+      {
+        "title": "מהי תקשורת: מודלים של תקשורת",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקשורת המונים ותפקידיה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "עיתונות וחדשות",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "קביעת סדר היום",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "אתיקה עיתונאית וחופש העיתונות",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "פרסומת ושיווק",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "רשתות חברתיות ומדיה חדשה",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "תקשורת ופוליטיקה",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "ייצוג קבוצות בתקשורת וסטריאוטיפים",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "אוריינות מדיה",
+        "grades": "י-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הפקת תוכן: וידאו ושידור",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      }
+    ]
+  },
+  {
+    "level": "high",
+    "subject": "קולנוע (מגמה)",
+    "subjectKey": "cinema",
+    "topics": [
+      {
+        "title": "שפת הקולנוע: שוט, זווית ותנועת מצלמה",
+        "grades": "י",
+        "source": "knowledge"
+      },
+      {
+        "title": "עריכה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תסריט ומבנה עלילה",
+        "grades": "י-יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "ז'אנרים בקולנוע",
+        "grades": "יא",
+        "source": "knowledge"
+      },
+      {
+        "title": "תולדות הקולנוע",
+        "grades": "יא-יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הקולנוע הישראלי",
+        "grades": "יב",
+        "source": "knowledge"
+      },
+      {
+        "title": "הפקת סרט גמר",
+        "grades": "יב",
+        "source": "knowledge"
+      }
+    ]
+  }
+]

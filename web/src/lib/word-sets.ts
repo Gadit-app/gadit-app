@@ -148,8 +148,19 @@ export function curatedDef(word: string): string | undefined {
  *  different lessons (Gadi 2026-10-03). */
 export function classroomDef(setId: string | null | undefined, word: string): string | undefined {
   const w = word.trim();
-  return (setId ? SET_DEFS[setId]?.[w] : undefined) ?? CURATED_DEFS[w];
+  return (setId ? SET_DEFS[setId]?.[w] ?? DYNAMIC_SETS[setId]?.defs[w] : undefined) ?? CURATED_DEFS[w];
 }
+
+// Curriculum sets (ids "cur-...") are generated on first open and kept in
+// Firestore curriculumSets/{id}. Whoever loads one (the browser via
+// /api/curriculum-set, the server via loadWordSet in curriculum-sets.ts)
+// registers it here, so getWordSet and classroomDef work the same for
+// generated and hand-made sets.
+const DYNAMIC_SETS: Record<string, { set: WordSet; defs: Record<string, string> }> = {};
+export function registerWordSet(set: WordSet, defs: Record<string, string>) {
+  DYNAMIC_SETS[set.id] = { set, defs };
+}
+export const isCurriculumSetId = (id: string | null | undefined) => !!id && id.startsWith("cur-");
 
 // Curated per-word IMAGE HINTS (Gadi 2026-08-08). An explicit ENGLISH
 // art-direction sentence that OVERRIDES the AI-guessed englishBrief in
@@ -212,7 +223,7 @@ export function curatedImageHint(word: string): string | undefined {
 }
 
 export function getWordSet(id: string): WordSet | undefined {
-  return WORD_SETS.find((s) => s.id === id);
+  return WORD_SETS.find((s) => s.id === id) ?? DYNAMIC_SETS[id]?.set;
 }
 export function subjectLabel(key: string): string {
   return SET_SUBJECTS.find((s) => s.key === key)?.he ?? key;
