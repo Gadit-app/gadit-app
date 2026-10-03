@@ -58,7 +58,7 @@ export function ClassMilestoneOverlay({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={c.wow(scope, hit.count)}
+      aria-label={`${c.wow(scope)} ${c.reached(hit.count)}`}
       dir={lang === "he" ? "rtl" : "ltr"}
       onClick={onClose}
       style={{
@@ -75,8 +75,11 @@ export function ClassMilestoneOverlay({
         }}
       >
         <div aria-hidden="true" style={{ fontSize: "clamp(64px, 12vw, 120px)", lineHeight: 1 }}>🎉</div>
-        <div style={{ fontSize: "clamp(30px, 5.4vw, 56px)", fontWeight: 800, lineHeight: 1.15, textWrap: "balance" }}>
-          {c.wow(scope, hit.count)}
+        <div style={{ fontSize: "clamp(28px, 4.6vw, 50px)", fontWeight: 800, lineHeight: 1.15, textWrap: "balance" }}>
+          {c.wow(scope)}
+        </div>
+        <div style={{ fontSize: "clamp(40px, 8vw, 84px)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.01em" }}>
+          {c.reached(hit.count)}
         </div>
         <div style={{
           fontSize: "clamp(18px, 2.6vw, 26px)", fontWeight: 700, background: "rgba(255,255,255,.16)",
