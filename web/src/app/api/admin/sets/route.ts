@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 
   const rows: WordRow[] = await Promise.all(
     set.words.map(async (word) => {
-      const resolved = await resolveClassroomMeaning(word, lang);
+      const resolved = await resolveClassroomMeaning(word, lang, set.id);
       if (!resolved) {
         return { word, meaning: "", meaningSource: null, imageUrl: null, examples: [] };
       }
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
   if (!set) return NextResponse.json({ error: "set_not_found" }, { status: 404 });
 
   const lang = set.lang;
-  const resolved = await resolveClassroomMeaning(word, lang);
+  const resolved = await resolveClassroomMeaning(word, lang, set.id);
   if (!resolved) {
     return NextResponse.json(
       { error: "no_meaning", detail: "No curated def and no cached define result to key on." },

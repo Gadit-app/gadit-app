@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getWordSet, curatedDef } from "@/lib/word-sets";
+import { getWordSet, classroomDef } from "@/lib/word-sets";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 
 /**
@@ -38,7 +38,7 @@ async function resolve(params: {
     const set = getWordSet(params.setId);
     if (set && !uiLang) uiLang = set.lang;
   }
-  if (!meaning) meaning = curatedDef(word) ?? "";
+  if (!meaning) meaning = classroomDef(params.setId, word) ?? "";
   if (!uiLang) uiLang = "he";
 
   if (!meaning) {

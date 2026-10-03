@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { getWordSet, curatedDef } from "@/lib/word-sets";
+import { getWordSet, classroomDef } from "@/lib/word-sets";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 /**
@@ -21,7 +21,7 @@ export const maxDuration = 45;
 export type QuizItem = { q: string; options: string[]; answer: number; explain: string };
 export type GameItem = { s: string; t: boolean; explain: string };
 
-const VERSION = "v1";
+const VERSION = "v2"; // v2: stricter grammar + answers must match the given meaning
 
 function shuffleQuiz(items: QuizItem[], seed: string): QuizItem[] {
   // Deterministic per word so a re-render never reshuffles mid-lesson.
@@ -41,10 +41,10 @@ async function generate(word: string, meaning: string, lang: string, grade: stri
   const he = lang === "he";
   const sys = he
     ? `אתה כותב פעילויות כיתתיות קצרות לתלמידי ${grade || "בית ספר יסודי"} בישראל, בעברית תקנית בכתיב מלא. הפעילות מוקרנת על הלוח והמורה מנהלת אותה מול כל הכיתה.
-כללים: שפה פשוטה שמתאימה לגיל. בלי מקפים ארוכים. בלי פנייה בגוף שני יחיד (אפשר בלשון רבים לכיתה או בניסוח כללי). רק תשובה נכונה אחת בכל שאלה, והמסיחים סבירים אבל ברור שהם שגויים למי שהבין. בודקים הבנה של המשמעות, לא ידע על אותיות המילה.
+כללים: שפה פשוטה שמתאימה לגיל. בלי מקפים ארוכים. בלי פנייה בגוף שני יחיד (אפשר בלשון רבים לכיתה או בניסוח כללי). רק תשובה נכונה אחת בכל שאלה, והיא חייבת להתאים בדיוק להגדרה שקיבלת, בלי לשנות אותה. המסיחים סבירים אבל ברור שהם שגויים למי שהבין. בודקים הבנה של המשמעות, לא ידע על אותיות המילה. בדוק דקדוק לפני שאתה מחזיר: התאמה במין ובמספר (למשל "שתי מילים", לא "שני מילים"), וכל משפט "נכון" חייב להיות נכון לגמרי לפי ההגדרה.
 החזר JSON בלבד.`
     : `You write short whole-class activities for ${grade || "primary school"} students, in clear, simple English. The activity is projected and the teacher runs it with the whole class.
-Rules: age-appropriate wording. No long dashes. Exactly one correct answer per question; distractors are plausible but clearly wrong to someone who understood. Test understanding of the meaning, not spelling trivia.
+Rules: age-appropriate wording. No long dashes. Exactly one correct answer per question, and it must match the given meaning exactly; distractors are plausible but clearly wrong to someone who understood. Every "true" statement must be fully true according to the given meaning. Test understanding of the meaning, not spelling trivia.
 Return JSON only.`;
   const user = he
     ? `המילה: "${word}"\nהמשמעות בשיעור (נושא: ${topic}): ${meaning}\n\nכתוב:\n1. "quiz": 3 שאלות בחירה, לכל אחת 4 תשובות. שאלה 1 על המשמעות, שאלה 2 על שימוש במילה במשפט או במצב מהחיים, שאלה 3 שמבדילה בינה לבין מילה דומה או קשורה. שדות: q (עד 90 תווים), options (4, עד 45 תווים כל אחת), answer (מספר התשובה הנכונה 0-3), explain (משפט אחד קצר שמסביר למה).\n2. "game": 5 משפטי "נכון או לא נכון" על המילה, 3 נכונים ו־2 לא נכונים, בסדר מעורבב. שדות: s (עד 90 תווים), t (true/false), explain (משפט אחד קצר).`
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
   if (!set.words.some((w) => w.trim().toLowerCase() === word.toLowerCase())) {
     return NextResponse.json({ error: "not_in_set" }, { status: 404 });
   }
-  const meaning = (curatedDef(word) ?? sp.get("meaning") ?? "").trim().slice(0, 300);
+  const meaning = (classroomDef(set.id, word) ?? sp.get("meaning") ?? "").trim().slice(0, 300);
   if (!meaning) return NextResponse.json({ error: "no_meaning" }, { status: 404 });
 
   const db = getAdminDb();

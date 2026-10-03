@@ -30,7 +30,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { getWordSet, curatedDef } from "@/lib/word-sets";
+import { getWordSet, classroomDef } from "@/lib/word-sets";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
@@ -1391,7 +1391,7 @@ export function WordClient({
   // definition so the picture matches the subject-relevant sense.
   useEffect(() => {
     if (!classroomMode || !result || imageUrl || imageGenerating || !user) return;
-    const def = curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? "";
+    const def = classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? "";
     void handleGenerate({ meaning: def, example: result.meanings[0]?.examples?.[0] ?? "" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classroomMode, result, imageUrl, imageGenerating, user]);
@@ -1543,7 +1543,7 @@ export function WordClient({
       return;
     }
     let cancelled = false;
-    const meaning = curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? "";
+    const meaning = classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? "";
     const exLang = wordSet?.lang ?? lang;
     const params = new URLSearchParams({ word: initialWord, uiLang: exLang });
     if (setId) params.set("set", setId);
@@ -1596,7 +1596,10 @@ export function WordClient({
           // prompt (Style B, locked 2026-06-19) and stores the result
           // in a separate img_kids_<lang>_* cache namespace so adult
           // and kid users of the same word each get the right look.
-          kidsMode,
+          // The projector always uses the set's own picture (adult style,
+          // the same cache key the admin sets grid reviews), never the
+          // Kids Mode one.
+          kidsMode: classroomMode ? false : kidsMode,
         }),
       });
       if (!res.ok) {
@@ -2311,7 +2314,7 @@ export function WordClient({
         {result && (classroomMode && wordSet ? (
           <ClassroomStage
             word={result.word}
-            definition={curatedDef(initialWord) ?? result.meanings[0]?.meaning ?? ""}
+            definition={classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? ""}
             imageUrl={imageUrl ?? null}
             imageGenerating={imageGenerating}
             examples={classroomExamples.length ? classroomExamples : result.meanings[0]?.examples ?? []}

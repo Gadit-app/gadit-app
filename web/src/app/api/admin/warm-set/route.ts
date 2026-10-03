@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { WORD_SETS, getWordSet } from "@/lib/word-sets";
+import { WORD_SETS, getWordSet, classroomDef } from "@/lib/word-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateWordImage } from "@/lib/word-image";
 import { getOrGenerateExamples } from "@/lib/word-examples";
@@ -43,7 +43,8 @@ function buildTargets(setId: string): WordTarget[] | null {
     const out: WordTarget[] = [];
     for (const s of WORD_SETS) {
       for (const w of s.words) {
-        const k = `${s.lang}|${w.trim().toLowerCase()}`;
+        // Same word in two sets can mean two things (per-set definitions).
+        const k = `${s.lang}|${w.trim().toLowerCase()}|${classroomDef(s.id, w) ?? ""}`;
         if (seen.has(k)) continue;
         seen.add(k);
         out.push({ word: w, lang: s.lang, setId: s.id });
@@ -85,10 +86,10 @@ export async function GET(req: NextRequest) {
   let i = offset;
   for (; i < targets.length && processed < limit; i++) {
     if (Date.now() - started > TIME_BUDGET_MS) break;
-    const { word, lang } = targets[i];
+    const { word, lang, setId: tSet } = targets[i];
     processed++;
 
-    const resolved = await resolveClassroomMeaning(word, lang);
+    const resolved = await resolveClassroomMeaning(word, lang, tSet);
     if (!resolved) {
       // No curated def and no cached define result — nothing to key the
       // image/examples on. It still generates live on first projector

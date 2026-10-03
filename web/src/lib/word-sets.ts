@@ -1,3 +1,5 @@
+import { SET_DEFS } from "./word-set-defs";
+
 // Curated themed vocabulary sets for schools (Gadi 2026-08-05, schools
 // council). A teacher opens a set and steps through the words in present
 // mode on the classroom screen; each word runs through Gadit's normal
@@ -138,6 +140,15 @@ export const CURATED_DEFS: Record<string, string> = {
 /** Curated single classroom definition for a word, if we have one. */
 export function curatedDef(word: string): string | undefined {
   return CURATED_DEFS[word.trim()];
+}
+
+/** The classroom definition of a word INSIDE a given set (its subject and
+ *  grade), falling back to the word-level curated definition. Use this
+ *  wherever a set is known: the same word can mean different things in
+ *  different lessons (Gadi 2026-10-03). */
+export function classroomDef(setId: string | null | undefined, word: string): string | undefined {
+  const w = word.trim();
+  return (setId ? SET_DEFS[setId]?.[w] : undefined) ?? CURATED_DEFS[w];
 }
 
 // Curated per-word IMAGE HINTS (Gadi 2026-08-08). An explicit ENGLISH

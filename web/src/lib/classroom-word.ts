@@ -1,5 +1,5 @@
 import { getAdminDb } from "@/lib/firebase-admin";
-import { curatedDef } from "@/lib/word-sets";
+import { classroomDef } from "@/lib/word-sets";
 
 /**
  * Resolve the single "classroom meaning" for a set word — the exact
@@ -47,8 +47,9 @@ export async function cachedDefineFirstMeaning(
 export async function resolveClassroomMeaning(
   word: string,
   lang: string,
+  setId?: string,
 ): Promise<ResolvedMeaning | null> {
-  const cd = curatedDef(word);
+  const cd = classroomDef(setId, word);
   if (cd) return { meaning: cd, example: "", source: "curated" };
   const cached = await cachedDefineFirstMeaning(word, lang);
   if (cached) return { meaning: cached.meaning, example: cached.example, source: "cache" };
