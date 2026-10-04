@@ -23,13 +23,14 @@ function clean(s: unknown, max: number): string {
   return String(s ?? "").replace(/\s*[–—]\s*/g, ", ").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
-async function chat(sys: string, user: string): Promise<Array<{ w?: unknown; d?: unknown }>> {
+async function chat(sys: string, user: string, model = "gpt-4o"): Promise<Array<{ w?: unknown; d?: unknown }>> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o",
-      temperature: 0.2,
+      model,
+      // Reasoning models take an effort level instead of a temperature.
+      ...(model.startsWith("gpt-5") ? { reasoning_effort: "low" } : { temperature: 0.2 }),
       response_format: { type: "json_object" },
       messages: [{ role: "system", content: sys }, { role: "user", content: user }],
     }),
@@ -37,7 +38,7 @@ async function chat(sys: string, user: string): Promise<Array<{ w?: unknown; d?:
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "curriculum_set", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "curriculum_set", model, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   return (JSON.parse(json.choices?.[0]?.message?.content ?? "{}") as { words?: Array<{ w?: unknown; d?: unknown }> }).words ?? [];
 }
 
@@ -91,7 +92,9 @@ ${rules}
 - One definition per word: one or two sentences (up to 160 characters) explaining its meaning in this unit only.
 - No long dashes. General wording, not addressing the student.
 Return: {"words":[{"w":"","d":""}]}`;
-  const rows = await chat(sys, user);
+  // gpt-5.4 (Gadi 2026-10-04): in a side-by-side test it gave the unit's
+  // real grammar terms where gpt-4o stayed generic, at about 1 cent a unit.
+  const rows = await chat(sys, user, "gpt-5.4");
   return toDoc(rows, { id: t.id, subject: subj.key, title: t.t, grade, lang }, lang === "ar");
 }
 

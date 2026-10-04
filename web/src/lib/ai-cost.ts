@@ -36,6 +36,7 @@ export const PRICING: Record<string, { in: number; out: number }> = {
   "gpt-4o": { in: 2.5, out: 10 },
   "gpt-4o-mini": { in: 0.15, out: 0.6 },
   "gpt-4o-mini-tts": { in: 0.6, out: 0 },
+  "gpt-5.4": { in: 2.5, out: 15 },
 };
 
 /** Flat USD per generated image (gpt-image-1, 1024x1024), keyed by quality. */
