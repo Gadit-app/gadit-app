@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAdminContext } from "../admin-context";
 import {
-  CUR_LEVELS, CUR_SUBJECTS, CUR_TOPICS, curSubject, gradeLabel, type CurTopic,
+  CATALOG_IDS, catalogView, arSubject, arLevel, arTopic, type CatalogId, type ViewTopic,
 } from "@/lib/curriculum-catalog";
 
 /**
@@ -11,8 +11,28 @@ import {
  * curriculum unit without asking for a code change. Pick a level and a
  * subject (or search), open a unit, edit its key words and in-lesson
  * definitions, save. A save takes effect at once on the projector, and the
- * picture, examples, quiz and game follow the new definition.
+ * picture, examples, quiz and game follow the new definition. Every
+ * catalog: Israel (Hebrew), Arab state education, South Africa CAPS.
  */
+
+const CAT_NAME: Record<CatalogId, { he: string; en: string }> = {
+  "il-he": { he: "ישראל, עברית", en: "Israel, Hebrew" },
+  "il-ar": { he: "חינוך ערבי ממלכתי", en: "Arab state education" },
+  "za-caps": { he: "דרום אפריקה, CAPS", en: "South Africa, CAPS" },
+};
+/** Names for the admin: the Arab catalog shown with its Hebrew names. */
+function adminCatalog(id: CatalogId, he: boolean) {
+  const v = catalogView(id);
+  const ar = id === "il-ar" && he;
+  return {
+    levels: v.levels.map((l) => ({ key: l.key, name: ar ? arLevel(l.key)?.he ?? l.name : l.name })),
+    subjects: v.subjects.map((x) => ({ key: x.key, name: ar ? arSubject(x.key)?.he ?? x.name : x.name })),
+    topics: v.topics,
+    defaultLevel: v.defaultLevel,
+    gradeLabel: v.gradeLabel,
+    sub: (t: ViewTopic) => (id === "il-ar" ? arTopic(t.id)?.th ?? "" : ""),
+  };
+}
 
 const SECRET_KEY = "gadit_admin_secret_v1";
 type Row = { w: string; d: string };
@@ -21,7 +41,7 @@ const STR = {
   he: {
     title: "קטלוג תוכנית הלימודים",
     sub: "כל נושא בכל מקצוע: מילות המפתח וההגדרה של כל מילה בתוך השיעור. משנים, שומרים, וזה מופיע מיד במקרן.",
-    level: "שכבה", subject: "מקצוע", all: "כל המקצועות", search: "חיפוש נושא",
+    catalog: "תוכנית", level: "שכבה", subject: "מקצוע", all: "כל המקצועות", search: "חיפוש נושא",
     units: "נושאים", ready: "מוכן", edited: "נערך", none: "בחר נושא מהרשימה",
     word: "מילה", def: "ההגדרה בשיעור", add: "הוספת מילה", save: "שמירה", saving: "שומר...", saved: "נשמר",
     regen: "יצירה מחדש", regenAsk: "ליצור את כל המילים מחדש? השינויים שלך בנושא הזה יימחקו.", yes: "כן, ליצור מחדש", no: "ביטול",
@@ -30,7 +50,7 @@ const STR = {
   en: {
     title: "Curriculum catalog",
     sub: "Every unit in every subject: its key words and each word's in-lesson definition. Edit, save, and the projector shows it at once.",
-    level: "Level", subject: "Subject", all: "All subjects", search: "Search units",
+    catalog: "Curriculum", level: "Level", subject: "Subject", all: "All subjects", search: "Search units",
     units: "units", ready: "ready", edited: "edited", none: "Pick a unit from the list",
     word: "Word", def: "Definition in the lesson", add: "Add a word", save: "Save", saving: "Saving...", saved: "Saved",
     regen: "Generate again", regenAsk: "Generate all words again? Your edits to this unit will be lost.", yes: "Yes, generate again", no: "Cancel",
@@ -42,6 +62,8 @@ export default function AdminCurriculumClient() {
   const { secret, lang } = useAdminContext();
   const t = STR[lang];
   const he = lang === "he";
+  const [catId, setCatId] = useState<CatalogId>("il-he");
+  const cat = useMemo(() => adminCatalog(catId, he), [catId, he]);
   const [level, setLevel] = useState("elementary");
   const [subject, setSubject] = useState("");
   const [q, setQ] = useState("");
@@ -67,19 +89,20 @@ export default function AdminCurriculumClient() {
     return () => { alive = false; };
   }, [api]);
 
+  const subjectName = useCallback((key: string) => cat.subjects.find((x) => x.key === key)?.name ?? key, [cat]);
   const subjects = useMemo(
-    () => CUR_SUBJECTS.filter((s) => CUR_TOPICS.some((x) => x.s === s.key && x.l === level)),
-    [level],
+    () => cat.subjects.filter((s) => cat.topics.some((x) => x.s === s.key && x.l === level)),
+    [cat, level],
   );
   const topics = useMemo(() => {
-    const needle = q.trim();
-    return CUR_TOPICS.filter((x) =>
+    const needle = q.trim().toLowerCase();
+    return cat.topics.filter((x) =>
       needle
-        ? x.t.includes(needle) || (curSubject(x.s)?.he ?? "").includes(needle)
+        ? x.t.toLowerCase().includes(needle) || cat.sub(x).includes(needle) || subjectName(x.s).toLowerCase().includes(needle)
         : x.l === level && (!subject || x.s === subject),
     ).slice(0, 400);
-  }, [level, subject, q]);
-  const open = openId ? CUR_TOPICS.find((x) => x.id === openId) : undefined;
+  }, [cat, level, subject, q, subjectName]);
+  const open = openId ? cat.topics.find((x) => x.id === openId) : undefined;
 
   const sel: React.CSSProperties = { padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", background: "#fff" };
 
@@ -91,14 +114,21 @@ export default function AdminCurriculumClient() {
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginBottom: 14 }}>
+        <label style={{ fontSize: 13, color: "#6B7280" }}>{t.catalog}</label>
+        <select style={sel} value={catId} onChange={(e) => {
+          const id = e.target.value as CatalogId;
+          setCatId(id); setLevel(catalogView(id).defaultLevel); setSubject(""); setOpenId("");
+        }}>
+          {CATALOG_IDS.map((id) => <option key={id} value={id}>{CAT_NAME[id][he ? "he" : "en"]}</option>)}
+        </select>
         <label style={{ fontSize: 13, color: "#6B7280" }}>{t.level}</label>
         <select style={sel} value={level} onChange={(e) => { setLevel(e.target.value); setSubject(""); }}>
-          {CUR_LEVELS.map((l) => <option key={l.key} value={l.key}>{l.he}</option>)}
+          {cat.levels.map((l) => <option key={l.key} value={l.key}>{l.name}</option>)}
         </select>
         <label style={{ fontSize: 13, color: "#6B7280" }}>{t.subject}</label>
         <select style={{ ...sel, minWidth: 200 }} value={subject} onChange={(e) => setSubject(e.target.value)}>
           <option value="">{t.all}</option>
-          {subjects.map((s) => <option key={s.key} value={s.key}>{s.he}</option>)}
+          {subjects.map((s) => <option key={s.key} value={s.key}>{s.name}</option>)}
         </select>
         <input style={{ ...sel, flex: "1 1 200px", minWidth: 0 }} type="search" placeholder={t.search} value={q} onChange={(e) => setQ(e.target.value)} />
       </div>
@@ -118,10 +148,11 @@ export default function AdminCurriculumClient() {
                 borderBottom: "1px solid #F3F4F6", background: x.id === openId ? "#ECFEFF" : "transparent", cursor: "pointer", fontFamily: "inherit",
               }}
             >
-              <div style={{ fontWeight: 600, fontSize: 14, color: "#111827" }}>{x.t}</div>
+              <div style={{ fontWeight: 600, fontSize: 14, color: "#111827" }} dir="auto">{x.t}</div>
+              {cat.sub(x) && <div style={{ fontSize: 12.5, color: "#374151", marginTop: 1 }}>{cat.sub(x)}</div>}
               <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2, display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <span>{curSubject(x.s)?.he}</span>
-                {x.g && <span>{gradeLabel(x.g)}</span>}
+                <span>{subjectName(x.s)}</span>
+                {x.g && <span>{cat.gradeLabel(x.g)}</span>}
                 {edited.has(x.id) ? (
                   <span style={{ color: "#7C3AED", fontWeight: 700 }}>{t.edited}</span>
                 ) : ready.has(x.id) ? (
@@ -137,6 +168,8 @@ export default function AdminCurriculumClient() {
             <UnitEditor
               key={open.id}
               topic={open}
+              head={[subjectName(open.s), open.g ? cat.gradeLabel(open.g) : ""].filter(Boolean).join(" · ")}
+              sub={cat.sub(open)}
               api={api}
               t={t}
               he={he}
@@ -152,8 +185,10 @@ export default function AdminCurriculumClient() {
   );
 }
 
-function UnitEditor({ topic, api, t, he, onSaved, onRegen }: {
-  topic: CurTopic;
+function UnitEditor({ topic, head, sub, api, t, he, onSaved, onRegen }: {
+  topic: ViewTopic;
+  head: string;
+  sub: string;
   api: (qs: string) => string;
   t: (typeof STR)["he"];
   he: boolean;
@@ -212,8 +247,9 @@ function UnitEditor({ topic, api, t, he, onSaved, onRegen }: {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
         <div>
-          <div style={{ fontSize: 12.5, color: "#0E8A8A", fontWeight: 700 }}>{curSubject(topic.s)?.he} · {gradeLabel(topic.g)}</div>
-          <h2 style={{ margin: "2px 0 0", fontSize: 20, color: "#111827" }}>{topic.t}</h2>
+          <div style={{ fontSize: 12.5, color: "#0E8A8A", fontWeight: 700 }}>{head}</div>
+          <h2 style={{ margin: "2px 0 0", fontSize: 20, color: "#111827" }} dir="auto">{topic.t}</h2>
+          {sub && <div style={{ fontSize: 13.5, color: "#374151", marginTop: 2 }}>{sub}</div>}
         </div>
         {rows && rows[0]?.w && (
           <a href={`${base}/word/${encodeURIComponent(rows[0].w)}?present=1&set=${encodeURIComponent(topic.id)}`} target="_blank" rel="noreferrer" style={{ fontSize: 14, color: "#0E7490", fontWeight: 600 }}>
