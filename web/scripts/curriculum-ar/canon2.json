@@ -1,0 +1,478 @@
+{
+ "subjects": [
+  {
+   "key": "civics",
+   "name_he": "אזרחות",
+   "name_ar": "المدنيات",
+   "category": "history-civics",
+   "reuse": true
+  },
+  {
+   "key": "electronics-and-computer-engineering",
+   "name_he": "אלקטרוניקה",
+   "name_ar": "الإلكترونيكا",
+   "category": "engineering",
+   "reuse": true
+  },
+  {
+   "key": "art",
+   "name_he": "אמנויות",
+   "name_ar": "الفنون",
+   "category": "arts-media",
+   "reuse": true
+  },
+  {
+   "key": "english",
+   "name_he": "אנגלית",
+   "name_ar": "اللغة الإنجليزية",
+   "category": "foreign-languages",
+   "reuse": true
+  },
+  {
+   "key": "biotechnology",
+   "name_he": "ביוטכנולוגיה",
+   "name_ar": "التكنولوجيا الحيويّة",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "biology",
+   "name_he": "ביולוגיה",
+   "name_ar": "علم الأحياء",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "geography",
+   "name_he": "גאוגרפיה",
+   "name_ar": "الجغرافيا",
+   "category": "geography-environment",
+   "reuse": true
+  },
+  {
+   "key": "islam",
+   "name_he": "דת האסלאם",
+   "name_ar": "التربية الإسلاميّة",
+   "category": "religion",
+   "reuse": false
+  },
+  {
+   "key": "history-arab",
+   "name_he": "היסטוריה בחינוך הערבי",
+   "name_ar": "التاريخ في التعليم العربي",
+   "category": "history-civics",
+   "reuse": false
+  },
+  {
+   "key": "scientific-technological-track",
+   "name_he": "המגמה המדעית טכנולוגית",
+   "name_ar": "المسار العلميّ التكنولوجيّ",
+   "category": "engineering",
+   "reuse": true
+  },
+  {
+   "key": "applied-engineering",
+   "name_he": "הנדסה יישומית",
+   "name_ar": "الهندسة التطبيقيّة",
+   "category": "engineering",
+   "reuse": false
+  },
+  {
+   "key": "civil-engineering-and-architecture",
+   "name_he": "הנדסת בנייה ואדריכלות",
+   "name_ar": "هندسة البناء والعمارة",
+   "category": "engineering",
+   "reuse": true
+  },
+  {
+   "key": "electrical-control-and-energy-engineering",
+   "name_he": "הנדסת חשמל, בקרה ואנרגיה",
+   "name_ar": "هندسة الكهرباء والتحكّم والطاقة",
+   "category": "engineering",
+   "reuse": true
+  },
+  {
+   "key": "software-engineering",
+   "name_he": "הנדסת תוכנה",
+   "name_ar": "هندسة البرمجيّات",
+   "category": "computers",
+   "reuse": true
+  },
+  {
+   "key": "industrial-engineering-and-management",
+   "name_he": "הנדסת תעשייה וניהול",
+   "name_ar": "الهندسة الصناعيّة والإدارة",
+   "category": "engineering",
+   "reuse": true
+  },
+  {
+   "key": "road-safety",
+   "name_he": "זהירות בדרכים",
+   "name_ar": "السلامة على الطرق",
+   "category": "body-health",
+   "reuse": true
+  },
+  {
+   "key": "physical-education",
+   "name_he": "חינוך גופני",
+   "name_ar": "التربية البدنيّة",
+   "category": "body-health",
+   "reuse": true
+  },
+  {
+   "key": "technological-education",
+   "name_he": "חינוך טכנולוגי",
+   "name_ar": "التربية التكنولوجية",
+   "category": "engineering",
+   "reuse": false
+  },
+  {
+   "key": "health-education",
+   "name_he": "חינוך לבריאות",
+   "name_ar": "التربية الصحّيّة",
+   "category": "body-health",
+   "reuse": false
+  },
+  {
+   "key": "christianity",
+   "name_he": "דת הנצרות",
+   "name_ar": "التربية المسيحيّة",
+   "category": "religion",
+   "reuse": false
+  },
+  {
+   "key": "financial-education",
+   "name_he": "חינוך פיננסי",
+   "name_ar": "التربية الماليّة",
+   "category": "body-health",
+   "reuse": true
+  },
+  {
+   "key": "agriculture",
+   "name_he": "חקלאות",
+   "name_ar": "الزراعة",
+   "category": "vocational",
+   "reuse": true
+  },
+  {
+   "key": "computational-thinking",
+   "name_he": "חשיבה מחשובית ורובוטיקה",
+   "name_ar": "التفكير الحاسوبيّ والروبوتيكا",
+   "category": "computers",
+   "reuse": true
+  },
+  {
+   "key": "chemistry",
+   "name_he": "כימיה",
+   "name_ar": "الكيمياء",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "life-skills",
+   "name_he": "כישורי חיים",
+   "name_ar": "مهارات الحياة",
+   "category": "body-health",
+   "reuse": true
+  },
+  {
+   "key": "economics",
+   "name_he": "כלכלה",
+   "name_ar": "الاقتصاد",
+   "category": "social-sciences",
+   "reuse": true
+  },
+  {
+   "key": "science-introduction",
+   "name_he": "מבוא למדעים",
+   "name_ar": "مقدمة في العلوم",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "education-track",
+   "name_he": "מגמת חינוך",
+   "name_ar": "التربية",
+   "category": "vocational",
+   "reuse": false
+  },
+  {
+   "key": "science-and-technology",
+   "name_he": "מדע וטכנולוגיה",
+   "name_ar": "العلوم والتكنولوجيا",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "health-systems",
+   "name_he": "מדעי הבריאות",
+   "name_ar": "علوم الصحّة",
+   "category": "body-health",
+   "reuse": true
+  },
+  {
+   "key": "sociology",
+   "name_he": "מדעי החברה",
+   "name_ar": "العلوم الاجتماعيّة",
+   "category": "social-sciences",
+   "reuse": true
+  },
+  {
+   "key": "computer-science",
+   "name_he": "מדעי המחשב",
+   "name_ar": "علوم الحاسوب",
+   "category": "computers",
+   "reuse": true
+  },
+  {
+   "key": "environmental-sciences",
+   "name_he": "מדעי הסביבה",
+   "name_ar": "علوم البيئة",
+   "category": "geography-environment",
+   "reuse": true
+  },
+  {
+   "key": "earth-sciences",
+   "name_he": "מדעי כדור הארץ",
+   "name_ar": "علوم الأرض",
+   "category": "geography-environment",
+   "reuse": true
+  },
+  {
+   "key": "music",
+   "name_he": "מוזיקה",
+   "name_ar": "الموسيقى",
+   "category": "arts-media",
+   "reuse": true
+  },
+  {
+   "key": "homeland-society-and-civics",
+   "name_he": "מולדת, חברה ואזרחות",
+   "name_ar": "الموطن، المجتمع والمواطنة",
+   "category": "history-civics",
+   "reuse": true
+  },
+  {
+   "key": "dance",
+   "name_he": "מחול",
+   "name_ar": "الرقص",
+   "category": "arts-media",
+   "reuse": true
+  },
+  {
+   "key": "data-science",
+   "name_he": "מידע ונתונים",
+   "name_ar": "المعلومات والبيانات",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "academic-skills",
+   "name_he": "מיומנויות אקדמיות",
+   "name_ar": "المهارات الأكاديمية",
+   "category": "vocational",
+   "reuse": false
+  },
+  {
+   "key": "entrepreneurship-and-business-innovation",
+   "name_he": "מנהיגות ויזמות",
+   "name_ar": "القيادة والريادة",
+   "category": "vocational",
+   "reuse": true
+  },
+  {
+   "key": "business-management",
+   "name_he": "מנהל עסקים וכלכלה",
+   "name_ar": "إدارة الأعمال والاقتصاد",
+   "category": "vocational",
+   "reuse": true
+  },
+  {
+   "key": "mathematics",
+   "name_he": "מתמטיקה",
+   "name_ar": "الرياضيات",
+   "category": "math",
+   "reuse": true
+  },
+  {
+   "key": "hebrew-second-language",
+   "name_he": "עברית כשפה שנייה",
+   "name_ar": "اللغة العبريّة كلغة ثانية",
+   "category": "foreign-languages",
+   "reuse": false
+  },
+  {
+   "key": "design-arts",
+   "name_he": "עיצוב ואמנויות שימושיות",
+   "name_ar": "التصميم والفنون التطبيقيّة",
+   "category": "arts-media",
+   "reuse": true
+  },
+  {
+   "key": "arabic-language",
+   "name_he": "שפה וספרות ערבית",
+   "name_ar": "اللغة العربيّة وآدابها",
+   "category": "language",
+   "reuse": false
+  },
+  {
+   "key": "physics",
+   "name_he": "פיזיקה",
+   "name_ar": "الفيزياء",
+   "category": "sciences",
+   "reuse": true
+  },
+  {
+   "key": "cinema",
+   "name_he": "קולנוע",
+   "name_ar": "السينما",
+   "category": "arts-media",
+   "reuse": true
+  },
+  {
+   "key": "advanced-transportation",
+   "name_he": "תחבורה מתקדמת",
+   "name_ar": "النقل المتقدّم",
+   "category": "engineering",
+   "reuse": true
+  },
+  {
+   "key": "theater",
+   "name_he": "תיאטרון",
+   "name_ar": "المسرح",
+   "category": "arts-media",
+   "reuse": true
+  },
+  {
+   "key": "tourism",
+   "name_he": "תיירות ופנאי",
+   "name_ar": "السياحة وأوقات الفراغ",
+   "category": "vocational",
+   "reuse": true
+  },
+  {
+   "key": "ict",
+   "name_he": "תקשוב",
+   "name_ar": "تكنولوجيا المعلومات والاتّصالات",
+   "category": "computers",
+   "reuse": true
+  },
+  {
+   "key": "communication",
+   "name_he": "תקשורת",
+   "name_ar": "التواصل والإعلام",
+   "category": "arts-media",
+   "reuse": true
+  }
+ ],
+ "alias": {
+  "אזרחות | المدنيات": "civics",
+  "אזרחות | المدنيات / التربية المدنية": "civics",
+  "אזרחות | المدنيّات": "civics",
+  "אזרחות | المواطنة": "civics",
+  "אזרחות לבגרות | المدنيات": "civics",
+  "אלקטרוניקה | الإلكترونيكا": "electronics-and-computer-engineering",
+  "אמנויות | التربية الفنية": "art",
+  "אמנויות | الفنون": "art",
+  "אמנות חזותית | الفنون البصريّة": "art",
+  "אמנות חזותית | الفنون التشكيلية والتعبيرية": "art",
+  "אנגלית | الإنجليزية": "english",
+  "אנגלית | اللغة الإنجليزية": "english",
+  "אנגלית | اللغة الإنجليزيّة": "english",
+  "ביוטכנולוגיה (מגמה טכנולוגית) | البيوتكنولوجيا (علم التقانة الحيوية)": "biotechnology",
+  "ביוטכנולוגיה | أنظمة التكنولوجيا الحيويّة": "biotechnology",
+  "ביוטכנולוגיה | التكنولوجيا الحيويّة": "biotechnology",
+  "ביולוגיה | البيولوجيا": "biology",
+  "ביולוגיה | البيولوجيا (علم الأحياء)": "biology",
+  "ביולוגיה | علم الأحياء": "biology",
+  "גאוגרפיה | الجغرافيا": "geography",
+  "גאוגרפיה, אדם וסביבה | الجغرافيا والإنسان والبيئة": "geography",
+  "גאוגרפיה, אדם וסביבה | الجغرافيا، الإنسان والبيئة": "geography",
+  "דת האסלאם | التربية الإسلامية": "islam",
+  "חינוך אסלאמי / דת האסלאם | التربية الإسلامية (الدين الإسلامي)": "islam",
+  "חינוך אסלאמי | التربية الإسلامية": "islam",
+  "היסטוריה (חינוך ערבי/בדואי) | التاريخ (للتعليم العربي/البدوي)": "history-arab",
+  "היסטוריה | التاريخ": "history-arab",
+  "היסטוריה בחינוך הערבי | التاريخ في التعليم العربي": "history-arab",
+  "היסטוריה בחינוך הערבי | التاريخ في المدارس العربيّة": "history-arab",
+  "היסטוריה לחברה הערבית | التاريخ للوسط العربي": "history-arab",
+  "המגמה המדעית טכנולוגית | المسار العلميّ التكنولوجيّ": "scientific-technological-track",
+  "הנדסה יישומית | الهندسة التطبيقيّة": "applied-engineering",
+  "הנדסת אלקטרוניקה ומחשבים | هندسة الإلكترونيات والحواسيب": "electronics-and-computer-engineering",
+  "הנדסת בנייה ואדריכלות | هندسة البناء والعمارة": "civil-engineering-and-architecture",
+  "הנדסת חשמל, בקרה ואנרגיה | هندسة الكهرباء والتحكّم والطاقة": "electrical-control-and-energy-engineering",
+  "הנדסת תוכנה (מגמה טכנולוגית) | هندسة البرمجيات": "software-engineering",
+  "הנדסת תוכנה | هندسة البرمجيّات": "software-engineering",
+  "הנדסת תעשייה וניהול | الهندسة الصناعيّة والإدارة": "industrial-engineering-and-management",
+  "זהירות בדרכים | التربية المرورية": "road-safety",
+  "זהירות בדרכים | الحذر والسلامة على الطرق": "road-safety",
+  "זהירות בדרכים | السلامة على الطرق": "road-safety",
+  "זהירות בדרכים וחינוך תעבורתי | الحذر على الطرق والتربية المروريّة": "road-safety",
+  "חינוך גופני | التربية البدنية": "physical-education",
+  "חינוך גופני | التربية البدنيّة": "physical-education",
+  "חינוך טכנולוגי | التربية التكنولوجية": "technological-education",
+  "חינוך לבריאות | التربية الصحّيّة": "health-education",
+  "חינוך נוצרי (בבתי ספר ממלכתיים) | التربية المسيحية": "christianity",
+  "חינוך פיננסי | التربية المالية": "financial-education",
+  "חינוך פיננסי | التربية الماليّة": "financial-education",
+  "חקלאות | الزراعة": "agriculture",
+  "חשיבה מחשובית ורובוטיקה | التفكير الحاسوبيّ والروبوتيكا": "computational-thinking",
+  "טכנולוגיה והנדסה | التكنولوجيا والهندسة": "technological-education",
+  "כימיה | الكيمياء": "chemistry",
+  "כישורי חיים | مهارات الحياة": "life-skills",
+  "כישורי חיים | مهارات الحياة والتربية الاجتماعية": "life-skills",
+  "כישורי חיים וחינוך חברתי | المهارات الحياتيّة والتربية الاجتماعيّة": "life-skills",
+  "כישורי חיים וחינוך לבריאות | مهارات الحياة والتربية الصحيّة": "life-skills",
+  "כלכלה | الاقتصاد": "economics",
+  "מבוא למדעים | مقدمة في العلوم": "science-introduction",
+  "מגמת חינוך | التربية": "education-track",
+  "מדע וטכנולוגיה | العلوم والتكنولوجيا": "science-and-technology",
+  "מדעי הבריאות | علوم الصحّة": "health-systems",
+  "מדעי הבריאות ומערכות רפואיות (מגמה) | النظم الصحية والطبية": "health-systems",
+  "מדעי החברה | العلوم الاجتماعيّة": "sociology",
+  "מדעי המחשב | علم الحاسوب وتكنولوجيا المعلومات": "computer-science",
+  "מדעי המחשב | علوم الحاسوب": "computer-science",
+  "מדעי הסביבה | علوم البيئة": "environmental-sciences",
+  "מדעי כדור הארץ | علوم الأرض": "earth-sciences",
+  "מוזיקה | التربية الموسيقية": "music",
+  "מוזיקה | الموسيقى": "music",
+  "מולדת חברה ואזרחות | التربية الوطنية والاجتماعية": "homeland-society-and-civics",
+  "מולדת חברה ואזרחות | المجتمع والوطن": "homeland-society-and-civics",
+  "מולדת, חברה ואזרחות | الموطن، المجتمع والمدنيات": "homeland-society-and-civics",
+  "מולדת, חברה ואזרחות | الموطن، المجتمع والمواطنة": "homeland-society-and-civics",
+  "מורשת דת נצרות | التراث والدين المسيحيّ": "christianity",
+  "מורשת ודת הנצרות | التراث والدين المسيحيّ": "christianity",
+  "מורשת ודת האסלאם | التراث والدين الإسلاميّ": "islam",
+  "מחול | الرقص": "dance",
+  "מידע ונתונים | المعلومات والبيانات": "data-science",
+  "מיומנויות אקדמיות | المهارات الأكاديمية": "academic-skills",
+  "מנהיגות ויזמות | القيادة والريادة": "entrepreneurship-and-business-innovation",
+  "מנהל עסקים וכלכלה | إدارة الأعمال والاقتصاد": "business-management",
+  "ניהול עסקי וכלכלה (מגמה) | إدارة الأعمال والاقتصاد": "business-management",
+  "מערכות בריאות | أنظمة الصحّة": "health-systems",
+  "מתמטיקה | الرياضيات": "mathematics",
+  "מתמטיקה | الرياضيّات": "mathematics",
+  "ניהול עסקי | الإدارة التجاريّة": "business-management",
+  "עברית | اللغة العبرية": "hebrew-second-language",
+  "עברית כשפה שנייה | العبرية كلغة ثانية": "hebrew-second-language",
+  "עברית כשפה שנייה | اللغة العبرية لغة ثانية": "hebrew-second-language",
+  "עברית כשפה שנייה | اللغة العبريّة كلغة ثانية": "hebrew-second-language",
+  "עברית כשפה שנייה | اللغة العبريّة للناطقين بالعربيّة": "hebrew-second-language",
+  "עיצוב ואמנויות שימושיות | التصميم والفنون التطبيقيّة": "design-arts",
+  "שפה וספרות ערבית | اللغة العربية وآدابها": "arabic-language",
+  "שפה ערבית | اللغة العربيّة": "arabic-language",
+  "שפה ערבית | اللّغة العربيّة": "arabic-language",
+  "שפה ערבית ושפת הוראה | اللغة العربية ولغة التدريس": "arabic-language",
+  "ערבית | اللغة العربية": "arabic-language",
+  "ערבית שפת אם (לשון, הבנה והבעה, ספרות) | اللغة العربية (لغة أم: لسان، فهم وتعبير، أدب)": "arabic-language",
+  "פיזיקה | الفيزياء": "physics",
+  "קולנוע | السينما": "cinema",
+  "תחבורה מתקדמת | النقل المتقدّم": "advanced-transportation",
+  "תיאטרון | المسرح": "theater",
+  "תיירות ופנאי | السياحة وأوقات الفراغ": "tourism",
+  "תקשוב | تكنولوجيا المعلومات والاتّصالات": "ict",
+  "תקשורת | الإعلام والاتّصال": "communication",
+  "תקשורת | التواصل والإعلام": "communication",
+  "תקשורת וחברה (מגמה) | الاتصال والإعلام": "communication"
+ }
+}

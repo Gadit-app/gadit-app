@@ -1,0 +1,4574 @@
+[
+{
+"subject_ar": "اللغة العربيّة",
+"subject_he": "שפה ערבית",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الوعي الصوتيّ",
+"title_he": "מודעות פונולוגית",
+"level": "גן",
+"grades": "גן",
+"source": "https://meyda.education.gov.il/files/PreSchool/AravitZohiRakHathaka.pdf",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المهارات الألفبائيّة وبدايات القراءة والكتابة",
+"title_he": "מיומנויות אלפביתיות וראשית קריאה וכתיבה",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحروف وأشكالها وأصواتها",
+"title_he": "האותיות, צורותיהן וצליליהן",
+"level": "יסודי",
+"grades": "א-ב",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/pedagogy-arabic-arab-bedouin/curriculum-arabic/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القراءة الجهريّة والطلاقة",
+"title_he": "קריאה בקול ושטף קריאה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/pedagogy-arabic-arab-bedouin/curriculum-arabic/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "فهم المقروء",
+"title_he": "הבנת הנקרא",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/pedagogy-arabic-arab-bedouin/curriculum-arabic/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاستماع والتكلّم",
+"title_he": "האזנה ודיבור",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/pedagogy-arabic-arab-bedouin/curriculum-arabic/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التعبير الشفهيّ",
+"title_he": "הבעה בעל פה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/pedagogy-arabic-arab-bedouin/curriculum-arabic/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التعبير الكتابيّ",
+"title_he": "הבעה בכתב",
+"level": "יסודי",
+"grades": "ב-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/pedagogy-arabic-arab-bedouin/curriculum-arabic/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإملاء وعلامات الترقيم",
+"title_he": "כתיב וסימני פיסוק",
+"level": "יסודי",
+"grades": "ב-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أقسام الكلام",
+"title_he": "חלקי הדיבר",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاسم والفعل والحرف",
+"title_he": "שם, פועל ומילת יחס או מילת תפקוד",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجملة الاسميّة والجملة الفعليّة",
+"title_he": "משפט שמני ומשפט פועלי",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الفعل الماضي والمضارع والأمر",
+"title_he": "עבר, הווה וציווי בפועל",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجذر والاشتقاق",
+"title_he": "שורש וגזירה",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/yesodi/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "النحو والصرف",
+"title_he": "תחביר ומורפולוגיה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/junior-high/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المرفوعات والمنصوبات والمجرورات",
+"title_he": "נושאים תחביריים ביחסות הרפעה, נצב וג'ר",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/junior-high/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الفاعل والمفعول به",
+"title_he": "נושא ומושא ישיר",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/junior-high/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المبتدأ والخبر",
+"title_he": "מובטדא וח'בר",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/junior-high/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "النصوص الأدبيّة: القصّة والشعر",
+"title_he": "טקסטים ספרותיים: סיפור ושירה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/junior-high/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "فهم النصوص المعلوماتيّة والحجاجيّة",
+"title_he": "הבנת טקסט מידע וטקסט טיעוני",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/junior-high/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأدب العربيّ القديم والحديث",
+"title_he": "ספרות ערבית קלאסית ומודרנית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الشعر العربيّ وتحليله",
+"title_he": "שירה ערבית וניתוחה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القصّة والرواية والمقالة",
+"title_he": "סיפור, רומן ומאמר",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البلاغة والأساليب اللغويّة",
+"title_he": "רטוריקה ואמצעים סגנוניים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الكتابة الوظيفيّة والإقناعيّة",
+"title_he": "כתיבה שימושית ושכנועית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/arvit-migzar-aravi/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "اللغة العبريّة كلغة ثانية",
+"subject_he": "עברית כשפה שנייה",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الاستماع والفهم",
+"title_he": "האזנה והבנה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المحادثة والتفاعل الشفهيّ",
+"title_he": "שיחה ואינטראקציה בעל פה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحروف العبريّة",
+"title_he": "האותיות העבריות",
+"level": "יסודי",
+"grades": "א-ג",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القراءة الأساسيّة",
+"title_he": "קריאה בסיסית",
+"level": "יסודי",
+"grades": "ב-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "فهم المقروء",
+"title_he": "הבנת הנקרא",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/noseem_nilmadim/reading-comprehension/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكتابة والتعبير",
+"title_he": "כתיבה והבעה",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أنا وبيئتي",
+"title_he": "אני והסביבה שלי",
+"level": "יסודי",
+"grades": "ה",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الصداقة",
+"title_he": "חברות",
+"level": "יסודי",
+"grades": "יסודי",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/yesodi/noseem_nilmadim/friednship/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "اللغة المحكيّة",
+"title_he": "עברית דבורה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativat-beynayim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "فهم المقروء والنصوص الوظيفيّة",
+"title_he": "הבנת הנקרא וטקסטים שימושיים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativat-beynayim/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التعبير الكتابيّ",
+"title_he": "הבעה בכתב",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativat-beynayim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المفردات والقواعد في السياق",
+"title_he": "אוצר מילים ודקדוק בהקשר",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativat-beynayim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "اللغة العبريّة المحكيّة المتقدّمة",
+"title_he": "עברית דבורה מתקדמת",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativa-elyona/pedagogy-hebrew-arab/spoken-hebrew/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الفهم والتعبير",
+"title_he": "הבנה והבעה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativa-elyona/teaching-materials/understanding-expression/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأدب العبريّ",
+"title_he": "ספרות עברית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativa-elyona/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدلالة",
+"title_he": "סמנטיקה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativa-elyona/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الصحافة",
+"title_he": "עיתונות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativa-elyona/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "كتابات عرب باللغة العبريّة",
+"title_he": "כתיבה של ערבים בעברית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/ivrit-dovrey-aravit/chativa-elyona/pedagogy-hebrew-arab/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "اللغة الإنجليزيّة",
+"subject_he": "אנגלית",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الاستماع والتحدّث في مستوى ما قبل A1",
+"title_he": "האזנה ודיבור ברמת Pre-A1",
+"level": "יסודי",
+"grades": "ג-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/english/yesodi/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القراءة والكتابة الأساسيّة",
+"title_he": "קריאה וכתיבה בסיסית",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/english/yesodi/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المفردات: Band I وBand II",
+"title_he": "אוצר מילים Band I ו-Band II",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/english/yesodi/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القواعد الأساسيّة في السياق",
+"title_he": "דקדוק בסיסי בהקשר",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/english/yesodi/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مهارات التواصل في مستوى A1",
+"title_he": "מיומנויות תקשורת ברמת A1",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/english/yesodi/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "فهم المقروء والمسموع في مستوى A2",
+"title_he": "הבנת הנקרא והנשמע ברמת A2",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativat-beynayim/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التفاعل الشفهيّ والكتابة في مستوى A2",
+"title_he": "שיח וכתיבה ברמת A2",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativat-beynayim/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المفردات والقواعد في المستوى المتوسّط",
+"title_he": "אוצר מילים ודקדוק ברמת ביניים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativat-beynayim/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النصوص الأدبيّة",
+"title_he": "טקסטים ספרותיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativa-elyona/english-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مستوى A2 للبجروت 3 وحدات",
+"title_he": "רמת A2 לבגרות 3 יחידות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativa-elyona/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مستوى B1 للبجروت 4 وحدات",
+"title_he": "רמת B1 לבגרות 4 יחידות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativa-elyona/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مستوى B2 للبجروت 5 وحدات",
+"title_he": "רמת B2 לבגרות 5 יחידות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/english/chativa-elyona/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "التراث والدين الإسلاميّ",
+"subject_he": "מורשת ודת האסלאם",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "القرآن الكريم",
+"title_he": "הקוראן",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السيرة النبويّة",
+"title_he": "הסירה של הנביא מוחמד",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/pedagogy/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أركان الإسلام",
+"title_he": "חמשת עמודי האסלאם",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الصلاة",
+"title_he": "התפילה",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الصوم وشهر رمضان",
+"title_he": "צום וחודש רמדאן",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/pedagogy/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزكاة والصدقة",
+"title_he": "זכאת וצדקה",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحجّ وعيد الأضحى",
+"title_he": "חג' ועיד אל-אדחא",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/pedagogy/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "تحيّة السلام",
+"title_he": "ברכת השלום",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/pedagogy/values/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الصدق",
+"title_he": "יושר ואמת",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/pedagogy/values/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكافل الاجتماعيّ",
+"title_he": "ערבות ועזרה חברתית",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/elementary/pedagogy/values/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العبادات",
+"title_he": "מצוות הפולחן",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/junior-high/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الفقه الإسلاميّ",
+"title_he": "הלכה אסלאמית",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/junior-high/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "قيم الإسلام وآدابه",
+"title_he": "ערכי האסלאם ונימוסיו",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/junior-high/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأخوّة والتسامح",
+"title_he": "אחווה וסובלנות",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/junior-high/annual-plan/values/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "توثيق العلاقات بين الناس",
+"title_he": "חיזוק היחסים בין בני אדם",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/junior-high/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "رمضان والصوم وصلاة التراويح وعيد الفطر",
+"title_he": "רמדאן, צום, תפילת תראוויח ועיד אל-פיטר",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/junior-high/annual-plan/ramadan/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العقيدة الإسلاميّة",
+"title_he": "עיקרי האמונה האסלאמית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "القرآن والحديث",
+"title_he": "קוראן וחדית'",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الفقه وقضايا معاصرة",
+"title_he": "הלכה וסוגיות עכשוויות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الفكر والحضارة الإسلاميّة",
+"title_he": "הגות וציוויליזציה אסלאמית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/islam/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التراث والدين المسيحيّ",
+"subject_he": "מורשת דת נצרות",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الكتاب المقدّس",
+"title_he": "כתבי הקודש",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "يوسف الصدّيق والنبي موسى",
+"title_he": "יוסף הצדיק והנביא משה",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المسيح، حياته وتعاليمه",
+"title_he": "ישו, חייו ותורתו",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أمثال المسيح",
+"title_he": "משלי ישו",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/junior-high/annual-plan/annual-plan-christianity-religion/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أمثال الزرع",
+"title_he": "משלי הזריעה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "معجزات المسيح",
+"title_he": "ניסי ישו",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأعياد المسيحيّة",
+"title_he": "החגים הנוצריים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عيد دخول السيّد إلى الهيكل",
+"title_he": "חג כניסת האדון להיכל",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عيد التجلّي",
+"title_he": "חג ההשתנות",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عيد الصليب",
+"title_he": "חג הצלב",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العهد القديم والعهد الجديد",
+"title_he": "הברית הישנה והברית החדשה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/teaching-units/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكنيسة والأسرار المقدّسة",
+"title_he": "הכנסייה והסקרמנטים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/high-school/pedagogy/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التاريخ المسيحيّ والتراث الكنسيّ",
+"title_he": "היסטוריה נוצרית ומורשת הכנסייה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأخلاق المسيحيّة",
+"title_he": "מוסר נוצרי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/christianity-religion/high-school/pedagogy/curriculum/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الرياضيّات",
+"subject_he": "מתמטיקה",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مفهوم العدد والكمّيّة",
+"title_he": "מושג המספר והכמות",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإدراك المكانيّ والهندسيّ",
+"title_he": "תפיסה מרחבית וגאומטרית",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المصطلحات الكمّيّة",
+"title_he": "מושגי כמות",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأعداد الطبيعيّة",
+"title_he": "מספרים טבעיים",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجمع والطرح",
+"title_he": "חיבור וחיסור",
+"level": "יסודי",
+"grades": "א-ב",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الضرب والقسمة",
+"title_he": "כפל וחילוק",
+"level": "יסודי",
+"grades": "ב-ג",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القيمة المكانيّة",
+"title_he": "ערך המקום",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكسور العاديّة",
+"title_he": "שברים פשוטים",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكسور العشريّة",
+"title_he": "שברים עשרוניים",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النسب المئويّة",
+"title_he": "אחוזים",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القياس: الطول والمساحة والحجم والزمن",
+"title_he": "מדידות: אורך, שטח, נפח וזמן",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأشكال الهندسيّة",
+"title_he": "צורות גאומטריות",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزوايا",
+"title_he": "זוויות",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإحصاء والتمثيل البيانيّ",
+"title_he": "סטטיסטיקה וייצוג גרפי",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/yesodi/oraat-math/tohnit-limudim/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأعداد الموجبة والسالبة",
+"title_he": "מספרים חיוביים ושליליים",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التعابير الجبريّة",
+"title_he": "ביטויים אלגבריים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المعادلات والمتباينات",
+"title_he": "משוואות ואי שוויונות",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النسبة والتناسب",
+"title_he": "יחס ופרופורציה",
+"level": "חטיבת ביניים",
+"grades": "ז-ח",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدوالّ",
+"title_he": "פונקציות",
+"level": "חטיבת ביניים",
+"grades": "ח-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التطابق والتشابه",
+"title_he": "חפיפה ודמיון",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "نظرية فيثاغورس",
+"title_he": "משפט פיתגורס",
+"level": "חטיבת ביניים",
+"grades": "ח-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاحتمال والإحصاء",
+"title_he": "הסתברות וסטטיסטיקה",
+"level": "חטיבת ביניים",
+"grades": "ח-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدوالّ الخطيّة والتربيعيّة",
+"title_he": "פונקציות ליניאריות וריבועיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الهندسة التحليليّة",
+"title_he": "גאומטריה אנליטית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "حساب المثلثات",
+"title_he": "טריגונומטריה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التفاضل والتكامل",
+"title_he": "חשבון דיפרנציאלי ואינטגרלי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاحتمال والإحصاء المتقدّم",
+"title_he": "הסתברות וסטטיסטיקה מתקדמת",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/matmatika/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "العلوم والتكنولوجيا",
+"subject_he": "מדע וטכנולוגיה",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים"
+],
+"topics": [
+{
+"title_ar": "الكائنات الحيّة: الحيوانات والنباتات",
+"title_he": "יצורים חיים: בעלי חיים וצמחים",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أجرام السماء والطقس",
+"title_he": "גרמי שמיים ומזג האוויר",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عالم من صنع الإنسان",
+"title_he": "עולם מעשה ידי אדם",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التربية البيئيّة",
+"title_he": "חינוך סביבתי",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "خصائص الموادّ",
+"title_he": "תכונות חומרים",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الماء وحالات المادّة",
+"title_he": "מים ומצבי צבירה",
+"level": "יסודי",
+"grades": "ב-ה",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "دورة الماء",
+"title_he": "מחזור המים",
+"level": "יסודי",
+"grades": "ג-ה",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النباتات وأجزاؤها واحتياجاتها",
+"title_he": "צמחים, חלקיהם וצורכיהם",
+"level": "יסודי",
+"grades": "א-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحيوانات وبيئات حياتها",
+"title_he": "בעלי חיים וסביבות חייהם",
+"level": "יסודי",
+"grades": "א-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "جسم الإنسان والصحّة",
+"title_he": "גוף האדם ובריאות",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأنظمة البيئيّة والسلاسل الغذائيّة",
+"title_he": "מערכות אקולוגיות ושרשרות מזון",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الطاقة وتحولاتها",
+"title_he": "אנרגיה והמרות אנרגיה",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكهرباء والمغناطيسيّة",
+"title_he": "חשמל ומגנטיות",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأرض والكون",
+"title_he": "כדור הארץ והיקום",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عملية التصميم التكنولوجيّ",
+"title_he": "תהליך התיכון הטכנולוגי",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/yesodi/technology-science-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الخليّة ومبنى الكائنات الحيّة",
+"title_he": "התא ומבנה יצורים חיים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكاثر والوراثة",
+"title_he": "רבייה ותורשה",
+"level": "חטיבת ביניים",
+"grades": "ח-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المادّة ومبناها",
+"title_he": "החומר ומבנהו",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التفاعلات الكيميائيّة",
+"title_he": "תגובות כימיות",
+"level": "חטיבת ביניים",
+"grades": "ח-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القوى والحركة والطاقة",
+"title_he": "כוחות, תנועה ואנרגיה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البيئة والاستدامة وتغيّر المناخ",
+"title_he": "סביבה, קיימות ושינוי אקלים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/mada-tehnologia/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "التاريخ في المدارس العربيّة",
+"subject_he": "היסטוריה בחינוך הערבי",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "ما هو التاريخ؟ المصادر والخطّ الزمنيّ",
+"title_he": "מהי היסטוריה? מקורות וציר זמן",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "اليونان القديمة",
+"title_he": "יוון העתיקה",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مقدونيا والعصر الهلنستيّ",
+"title_he": "מקדוניה והעידן ההלניסטי",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإمبراطوريّة الرومانيّة",
+"title_he": "האימפריה הרומית",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التراث التاريخيّ والدينيّ للشعب اليهوديّ حتى سنة 70م",
+"title_he": "מורשתו ההיסטורית והדתית של העם היהודי עד שנת 70 לספירה",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "ظهور المسيحيّة وانتشارها",
+"title_he": "הופעת הנצרות והתפשטותה",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العرب في العصر الجاهليّ",
+"title_he": "הערבים בתקופת הג'אהליה",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مولد النبي محمد وظهور الإسلام والخلفاء الراشدون",
+"title_he": "לידת מוחמד, עליית האסלאם והח'ליפים הראשונים",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "اليهود والمسيحيّون في الدولة الإسلاميّة الأولى",
+"title_he": "יהודים ונוצרים במדינה האסלאמית הראשונה",
+"level": "יסודי",
+"grades": "ו",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/six-grade-ar/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإمبراطوريّة الإسلاميّة في العصور الوسطى",
+"title_he": "האימפריה האסלאמית בימי הביניים",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدولة الأمويّة",
+"title_he": "המדינה האומיית",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدولة العباسيّة",
+"title_he": "המדינה העבאסית",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأمويّون في الأندلس",
+"title_he": "האומיים באנדלוסיה",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أوروبا في العصور الوسطى",
+"title_he": "אירופה בימי הביניים",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحروب الصليبيّة",
+"title_he": "מסעי הצלב",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدولة الفاطميّة والأيوبيّة والمملوكيّة",
+"title_he": "המדינות הפאטמית, האיובית והממלוכית",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "اليهود في بلاد الإسلام في العصور الوسطى",
+"title_he": "יהודים בארצות האסלאם בימי הביניים",
+"level": "חטיבת ביניים",
+"grades": "ז",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/seven-grade/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النهضة والإنسانيّة",
+"title_he": "הרנסנס וההומניזם",
+"level": "חטיבת ביניים",
+"grades": "ח",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-8/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإصلاح الدينيّ",
+"title_he": "הרפורמציה הדתית",
+"level": "חטיבת ביניים",
+"grades": "ח",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-8/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاكتشافات الجغرافيّة",
+"title_he": "הגילויים הגאוגרפיים",
+"level": "חטיבת ביניים",
+"grades": "ח",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-8/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الثورة الفرنسيّة",
+"title_he": "המהפכה הצרפתית",
+"level": "חטיבת ביניים",
+"grades": "ח",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-8/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "إمبراطوريّة نابليون",
+"title_he": "האימפריה של נפוליאון",
+"level": "חטיבת ביניים",
+"grades": "ח",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-8/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الدولة العثمانيّة حتى أواخر القرن الثامن عشر",
+"title_he": "האימפריה העות'מאנית עד סוף המאה ה-18",
+"level": "חטיבת ביניים",
+"grades": "ח",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-8/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الثورة الصناعيّة",
+"title_he": "המהפכה התעשייתית",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-9/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "القوميّة والإمبرياليّة",
+"title_he": "לאומיות ואימפריאליזם",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-9/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحرب العالميّة الأولى",
+"title_he": "מלחמת העולם הראשונה",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-9/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "تسويات السلام سنة 1919",
+"title_he": "הסדרי השלום של 1919",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-9/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الشرق الأوسط في القرن التاسع عشر حتى نهاية الحرب العالميّة الأولى",
+"title_he": "המזרח התיכון במאה ה-19 עד סוף מלחמת העולם הראשונה",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/junior-high/curriculum/grade-9/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "تاريخ العرب والشرق الأوسط في العصر الحديث",
+"title_he": "היסטוריה של הערבים והמזרח התיכון בעת החדשה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/high-school/pedagogy-of-history/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الحرب العالميّة الثانية والتحوّلات السياسيّة",
+"title_he": "מלחמת העולם השנייה ותמורות פוליטיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/history-arab-bedouin-sector/high-school/pedagogy-of-history/curriculum/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الموطن، المجتمع والمواطنة",
+"subject_he": "מולדת, חברה ואזרחות",
+"levels": [
+"יסודי"
+],
+"topics": [
+{
+"title_ar": "أنا وعائلتي ومحيطي القريب",
+"title_he": "אני, משפחתי והסביבה הקרובה",
+"level": "יסודי",
+"grades": "ב",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحيّ والبلدة",
+"title_he": "השכונה והיישוב",
+"level": "יסודי",
+"grades": "ב-ג",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الخدمات والمؤسّسات في البلدة",
+"title_he": "שירותים ומוסדות ביישוב",
+"level": "יסודי",
+"grades": "ג",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المجتمع والتنوّع الثقافيّ والدينيّ",
+"title_he": "חברה ומגוון תרבותי ודתי",
+"level": "יסודי",
+"grades": "ג-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحقوق والواجبات والقواعد",
+"title_he": "זכויות, חובות וכללים",
+"level": "יסודי",
+"grades": "ג-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السلطة المحليّة والمشاركة المجتمعيّة",
+"title_he": "שלטון מקומי ומעורבות קהילתית",
+"level": "יסודי",
+"grades": "ד",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الخريطة والحيّز المحليّ",
+"title_he": "מפה והמרחב המקומי",
+"level": "יסודי",
+"grades": "ג-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/curriculum/foreword/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الجغرافيا، الإنسان والبيئة",
+"subject_he": "גאוגרפיה, אדם וסביבה",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "قراءة الخرائط والرموز والاتّجاهات",
+"title_he": "קריאת מפות, סימנים וכיוונים",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التضاريس ومناطق البلاد",
+"title_he": "צורות נוף ואזורי הארץ",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المناخ والطقس",
+"title_he": "אקלים ומזג אוויר",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السكان والبلدات",
+"title_he": "אוכלוסייה ויישובים",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "موارد المياه",
+"title_he": "משאבי מים",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البيئة والاستدامة",
+"title_he": "סביבה וקיימות",
+"level": "יסודי",
+"grades": "ה-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الشرق الأوسط",
+"title_he": "המזרח התיכון",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السكان والهجرة والتحضّر",
+"title_he": "אוכלוסייה, הגירה ועיור",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المناخ والموارد الطبيعيّة",
+"title_he": "אקלים ומשאבי טבע",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاقتصاد والعولمة",
+"title_he": "כלכלה וגלובליזציה",
+"level": "חטיבת ביניים",
+"grades": "ח-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "إسرائيل: أقاليم وسكان واقتصاد",
+"title_he": "ישראל: אזורים, אוכלוסייה וכלכלה",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجغرافيا البشريّة والتنمية",
+"title_he": "גאוגרפיה אנושית ופיתוח",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجغرافيا الفيزيائيّة والمناخ",
+"title_he": "גאוגרפיה פיזית ואקלים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التخطيط المكانيّ والاستدامة",
+"title_he": "תכנון מרחבי וקיימות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/geography/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "المدنيّات",
+"subject_he": "אזרחות",
+"levels": [
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "المواطن والدولة",
+"title_he": "האזרח והמדינה",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحقوق والحريّات",
+"title_he": "זכויות וחירויות",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الديمقراطيّة والمشاركة المدنيّة",
+"title_he": "דמוקרטיה והשתתפות אזרחית",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السلطات وفصل السلطات",
+"title_he": "רשויות והפרדת רשויות",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المجتمع المتعدّد",
+"title_he": "חברה רב-גונית",
+"level": "חטיבת ביניים",
+"grades": "ט",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/junior-high/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مبادئ الديمقراطيّة",
+"title_he": "עקרונות הדמוקרטיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "حقوق الإنسان والمواطن",
+"title_he": "זכויות האדם והאזרח",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مؤسّسات الحكم في إسرائيل",
+"title_he": "מוסדות השלטון בישראל",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الانتخابات والأحزاب",
+"title_he": "בחירות ומפלגות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأقلّيّات والمجتمع العربيّ في إسرائيل",
+"title_he": "מיעוטים והחברה הערבית בישראל",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "دولة إسرائيل كدولة يهوديّة وديمقراطيّة",
+"title_he": "מדינת ישראל כמדינה יהודית ודמוקרטית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "البيولوجيا",
+"subject_he": "ביולוגיה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الخليّة ومكوّناتها",
+"title_he": "התא ומרכיביו",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الوراثة والـDNA",
+"title_he": "תורשה ו-DNA",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكاثر والتطوّر",
+"title_he": "רבייה והתפתחות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أجهزة جسم الإنسان",
+"title_he": "מערכות גוף האדם",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاتّزان الداخليّ",
+"title_he": "הומאוסטזיס",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأنظمة البيئيّة والعلاقات بين الكائنات",
+"title_he": "מערכות אקולוגיות ויחסי גומלין",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التطوّر والانتخاب الطبيعيّ",
+"title_he": "אבולוציה וברירה טבעית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإنزيمات والتمثيل الغذائيّ",
+"title_he": "אנזימים וחילוף חומרים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البحث العلميّ والعمل المخبريّ",
+"title_he": "חקר מדעי ועבודת מעבדה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biology/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الكيمياء",
+"subject_he": "כימיה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مبنى الذرّة",
+"title_he": "מבנה האטום",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجدول الدوريّ",
+"title_he": "הטבלה המחזורית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الروابط الكيميائيّة",
+"title_he": "קשרים כימיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المول والحسابات الكيميائيّة",
+"title_he": "המול וחישובים כימיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التفاعلات الكيميائيّة",
+"title_he": "תגובות כימיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأحماض والقواعد",
+"title_he": "חומצות ובסיסים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأكسدة والاختزال",
+"title_he": "חמצון חיזור",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الطاقة في التفاعلات الكيميائيّة",
+"title_he": "אנרגיה בתגובות כימיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكيمياء العضويّة",
+"title_he": "כימיה אורגנית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البحث المخبريّ",
+"title_he": "חקר במעבדה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/chemistry/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الفيزياء",
+"subject_he": "פיזיקה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الحركة في خطّ مستقيم",
+"title_he": "תנועה בקו ישר",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "قوانين نيوتن والقوى",
+"title_he": "חוקי ניוטון וכוחות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الشغل والطاقة",
+"title_he": "עבודה ואנרגיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزخم والتصادمات",
+"title_he": "תנע והתנגשויות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحركة الدائريّة والجاذبيّة",
+"title_he": "תנועה מעגלית וכבידה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الكهرباء الساكنة والتيّار الكهربائيّ",
+"title_he": "אלקטרוסטטיקה וזרם חשמלי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المجالات الكهربائيّة والمغناطيسيّة",
+"title_he": "שדות חשמליים ומגנטיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحثّ الكهرومغناطيسيّ",
+"title_he": "השראה אלקטרומגנטית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأمواج والضوء",
+"title_he": "גלים ואור",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإشعاع والمادّة",
+"title_he": "קרינה וחומר",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المختبر الفيزيائيّ",
+"title_he": "מעבדת פיזיקה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/physics/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "علوم البيئة",
+"subject_he": "מדעי הסביבה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الأنظمة البيئيّة",
+"title_he": "מערכות אקולוגיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التنوّع الحيويّ",
+"title_he": "מגוון ביולוגי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المياه وجودتها",
+"title_he": "מים ואיכות מים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الهواء وتلوّثه",
+"title_he": "אוויר וזיהום אוויר",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التربة واستعمالات الأرض",
+"title_he": "קרקע ושימושי קרקע",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النفايات وإعادة التدوير",
+"title_he": "פסולת ומיחזור",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الطاقة والموارد",
+"title_he": "אנרגיה ומשאבים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "تغيّر المناخ",
+"title_he": "שינוי אקלים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التنمية المستدامة",
+"title_he": "פיתוח בר קיימא",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البحث البيئيّ",
+"title_he": "חקר סביבתי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/environment-studies/high-school/pedagogy-of-environment-studies/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "مقدمة في العلوم",
+"subject_he": "מבוא למדעים",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مهارات البحث العلميّ",
+"title_he": "מיומנויות חקר מדעי",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/introduction-to-science/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "قراءة البيانات وتمثيلها",
+"title_he": "קריאת נתונים וייצוגם",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/introduction-to-science/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التفكير العلميّ والنقديّ",
+"title_he": "חשיבה מדעית וביקורתית",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/introduction-to-science/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "تغيّر المناخ",
+"title_he": "שינוי אקלים",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/introduction-to-science/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مقدمة في البيولوجيا أو الكيمياء أو الفيزياء أو علوم البيئة أو علوم الأرض",
+"title_he": "מבוא בביולוגיה, כימיה, פיזיקה, מדעי הסביבה או מדעי כדור הארץ",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/introduction-to-science/high-school/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "علوم الحاسوب",
+"subject_he": "מדעי המחשב",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الخوارزميّات وحلّ المشكلات",
+"title_he": "אלגוריתמים ופתרון בעיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المتغيّرات وأنواع البيانات",
+"title_he": "משתנים וסוגי נתונים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الشروط والحلقات",
+"title_he": "תנאים ולולאות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الدوالّ والإجراءات",
+"title_he": "פונקציות ופרוצדורות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المصفوفات والقوائم",
+"title_he": "מערכים ורשימות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "البرمجة كائنيّة التوجّه",
+"title_he": "תכנות מונחה עצמים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "هياكل البيانات",
+"title_he": "מבני נתונים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الكفاءة والتعقيد الخوارزميّ",
+"title_he": "יעילות וסיבוכיות אלגוריתמית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التفكير الحاسوبيّ والروبوتيكا",
+"subject_he": "חשיבה מחשובית ורובוטיקה",
+"levels": [
+"יסודי",
+"חטיבת ביניים"
+],
+"topics": [
+{
+"title_ar": "التفكير الخوارزميّ",
+"title_he": "חשיבה אלגוריתמית",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التسلسل والأنماط",
+"title_he": "רצפים ודפוסים",
+"level": "יסודי",
+"grades": "א-ד",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "البرمجة المرئيّة",
+"title_he": "תכנות חזותי",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المستشعرات والمحرّكات",
+"title_he": "חיישנים ומנועים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "بناء روبوت وبرمجته",
+"title_he": "בניית רובוט ותכנותו",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التصميم الهندسيّ وحلّ المشكلات",
+"title_he": "תיכון הנדסי ופתרון בעיות",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "أنظمة التكنولوجيا الحيويّة",
+"subject_he": "ביוטכנולוגיה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "البيولوجيا الجزيئيّة",
+"title_he": "ביולוגיה מולקולרית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "DNA وRNA والبروتينات",
+"title_he": "DNA, RNA וחלבונים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الهندسة الوراثيّة",
+"title_he": "הנדסה גנטית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكنولوجيا الحيويّة الطبيّة",
+"title_he": "ביוטכנולוגיה רפואית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكنولوجيا الحيويّة الغذائيّة",
+"title_he": "ביוטכנולוגיה של מזון",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكنولوجيا الحيويّة الزراعيّة",
+"title_he": "ביוטכנולוגיה חקלאית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التكنولوجيا الحيويّة والبيئة",
+"title_he": "ביוטכנולוגיה וסביבה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأساليب المخبريّة",
+"title_he": "שיטות מעבדה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مشروع بحث تطبيقيّ",
+"title_he": "פרויקט חקר יישומי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/biotechnology/high-school/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "هندسة الإلكترونيات والحواسيب",
+"subject_he": "הנדסת אלקטרוניקה ומחשבים",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "أسس الكهرباء والإلكترونيات",
+"title_he": "יסודות החשמל והאלקטרוניקה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الدوائر الكهربائيّة",
+"title_he": "מעגלים חשמליים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإلكترونيات الرقميّة",
+"title_he": "אלקטרוניקה ספרתית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المتحكّمات الدقيقة",
+"title_he": "מיקרו-בקרים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أنظمة الاتّصال",
+"title_he": "מערכות תקשורת",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الأنظمة المدمجة",
+"title_he": "מערכות משובצות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع هندسيّ",
+"title_he": "פרויקט הנדסי",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "هندسة البرمجيّات",
+"subject_he": "הנדסת תוכנה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "تحليل المشكلة وتصميم الحلّ",
+"title_he": "ניתוח בעיה ותכנון פתרון",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "البرمجة كائنيّة التوجّه",
+"title_he": "תכנות מונחה עצמים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "هياكل البيانات والخوارزميّات",
+"title_he": "מבני נתונים ואלגוריתמים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "قواعد البيانات",
+"title_he": "מסדי נתונים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تطوير تطبيقات الويب",
+"title_he": "פיתוח יישומי ווב",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اختبار البرمجيّات",
+"title_he": "בדיקות תוכנה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع تخرّج برمجيّ",
+"title_he": "פרויקט גמר בתוכנה",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "أنظمة الصحّة",
+"subject_he": "מערכות בריאות",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "علوم الصحّة",
+"title_he": "מדעי הבריאות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "تشريح جسم الإنسان ووظائف الأعضاء",
+"title_he": "אנטומיה ופיזיולוגיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأمراض وعوامل الخطر",
+"title_he": "מחלות וגורמי סיכון",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الوقاية والصحّة العامّة",
+"title_he": "מניעה ובריאות הציבור",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأنظمة الطبيّة",
+"title_he": "מערכות רפואיות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التشخيص والفحوص الطبيّة",
+"title_he": "אבחון ובדיקות רפואיות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التجربة السريريّة",
+"title_he": "התנסות קלינית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الذكاء الاصطناعيّ في الأنظمة الطبيّة",
+"title_he": "בינה מלאכותית במערכות רפואיות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/health-systems-engineering/high-school/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "العلوم الاجتماعيّة",
+"subject_he": "מדעי החברה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "علم النفس",
+"title_he": "פסיכולוגיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "علم الاجتماع",
+"title_he": "סוציולוגיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العلوم السياسيّة",
+"title_he": "מדעי המדינה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/political-science-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الاقتصاد",
+"title_he": "כלכלה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "طرق البحث",
+"title_he": "שיטות מחקר",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/methodology/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الفرد والمجتمع",
+"title_he": "הפרט והחברה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الجماعات والمؤسّسات الاجتماعيّة",
+"title_he": "קבוצות ומוסדות חברתיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "بحث تطبيقيّ في العلوم الاجتماعيّة",
+"title_he": "עבודת חקר במדעי החברה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الاقتصاد",
+"subject_he": "כלכלה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الندرة والاختيار",
+"title_he": "מחסור ובחירה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العرض والطلب",
+"title_he": "היצע וביקוש",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السوق والأسعار",
+"title_he": "שוק ומחירים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الناتج والنموّ الاقتصاديّ",
+"title_he": "תוצר וצמיחה כלכלית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البطالة والتضخّم",
+"title_he": "אבטלה ואינפלציה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "دور الحكومة والضرائب",
+"title_he": "תפקיד הממשלה ומסים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التجارة الدوليّة والعولمة",
+"title_he": "סחר בינלאומי וגלובליזציה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عدم المساواة والسياسة الاجتماعيّة",
+"title_he": "אי שוויון ומדיניות חברתית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/social-sciences/high-school/pedagogy-of-social-sciences/economy-curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الإعلام والاتّصال",
+"subject_he": "תקשורת",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "اللغة والواقع",
+"title_he": "שפה ומציאות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإعلام والديمقراطيّة",
+"title_he": "תקשורת ודמוקרטיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإعلام كثقافة",
+"title_he": "תקשורת כתרבות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإعلام الجديد",
+"title_he": "מדיה חדשה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الأخبار والصحافة",
+"title_he": "חדשות ועיתונות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإعلان والإقناع",
+"title_he": "פרסום ושכנוע",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الشبكات الاجتماعيّة",
+"title_he": "רשתות חברתיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإنتاج الإعلاميّ العمليّ",
+"title_he": "הפקה תקשורתית מעשית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/communication/high-school/communication-instruction-high-school/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الزراعة",
+"subject_he": "חקלאות",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "النباتات والزراعة المدرسيّة",
+"title_he": "צמחים וחקלאות בית ספרית",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/elementary/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الحيوانات ورعايتها",
+"title_he": "בעלי חיים וטיפול בהם",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/elementary/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التربة والماء",
+"title_he": "קרקע ומים",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/elementary/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزراعة والبيئة",
+"title_he": "חקלאות וסביבה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/junior-high/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التقنيات الزراعيّة",
+"title_he": "טכנולוגיות חקלאיות",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/junior-high/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مقدمة في النبات والحيوان",
+"title_he": "מבוא לצומח ולבעלי חיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/curriculum/program-structure/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "نشأة الزراعة",
+"title_he": "ראשית החקלאות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/curriculum/program-structure/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزراعة الحديثة",
+"title_he": "חקלאות מודרנית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/curriculum/modern-agriculture/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزراعة والبيئة",
+"title_he": "חקלאות וסביבה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/curriculum/agriculture-environment/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزراعة في إسرائيل",
+"title_he": "חקלאות בישראל",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/curriculum/program-structure/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الزراعة وتغذية الإنسان",
+"title_he": "חקלאות והזנת האדם",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/curriculum/program-structure/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مجال النبات",
+"title_he": "תחום הצומח",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مجال تربية الحيوان",
+"title_he": "תחום בעלי החיים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التغذية",
+"title_he": "תזונה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/agriculture/high-school/pedagogy/curriculum/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "الفنون البصريّة",
+"subject_he": "אמנות חזותית",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "التعبير والإبداع بالموادّ",
+"title_he": "ביטוי ויצירה בחומרים",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التعرّف إلى صور وأعمال فنيّة",
+"title_he": "היכרות עם דימויים ויצירות אמנות",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الرسم واللون",
+"title_he": "ציור וצבע",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الشكل والتركيب",
+"title_he": "צורה וקומפוזיציה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "النحت والعمل ثلاثيّ الأبعاد",
+"title_he": "פיסול ועבודה תלת ממדית",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تاريخ الفنّ والثقافة البصريّة",
+"title_he": "תולדות האמנות ותרבות חזותית",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التصوير والفنون الرقميّة",
+"title_he": "צילום ואמנות דיגיטלית",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع فنّي شخصيّ",
+"title_he": "פרויקט אמנות אישי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الموسيقى",
+"subject_he": "מוזיקה",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الإصغاء الفعّال",
+"title_he": "האזנה פעילה",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الغناء والعزف",
+"title_he": "שירה ונגינה",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الارتجال والتسجيل",
+"title_he": "אלתור והקלטה",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإيقاع",
+"title_he": "קצב",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اللحن والسلم الموسيقيّ",
+"title_he": "מלודיה וסולם מוזיקלי",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الآلات الموسيقيّة",
+"title_he": "כלי נגינה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الموسيقى العربيّة",
+"title_he": "מוזיקה ערבית",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "قراءة النوتة والنظريّة الموسيقيّة",
+"title_he": "קריאת תווים ותאוריה מוזיקלית",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تاريخ الموسيقى وتحليل الأعمال",
+"title_he": "תולדות המוזיקה וניתוח יצירות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الأداء والتأليف",
+"title_he": "ביצוע והלחנה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التربية البدنيّة",
+"subject_he": "חינוך גופני",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "دمج الحركة في البيئة الماديّة والاجتماعيّة",
+"title_he": "שילוב תנועה בסביבה הפיזית והחברתית",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التربية الحركيّة",
+"title_he": "חינוך לתנועה",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المهارات الحركيّة الأساسيّة",
+"title_he": "מיומנויות תנועה בסיסיות",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الألعاب الجماعيّة",
+"title_he": "משחקי קבוצה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اللياقة البدنيّة",
+"title_he": "כושר גופני",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "ألعاب القوى",
+"title_he": "אתלטיקה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الألعاب الرياضيّة الجماعيّة",
+"title_he": "משחקי כדור קבוצתיים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اللياقة والصحّة ونمط الحياة النشط",
+"title_he": "כושר, בריאות ואורח חיים פעיל",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "المهارات الحياتيّة والتربية الاجتماعيّة",
+"subject_he": "כישורי חיים וחינוך חברתי",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "محور الأنا والوعي الذاتيّ",
+"title_he": "העצמי ומודעות עצמית",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التحكّم بالمشاعر وتوجيهها",
+"title_he": "ויסות והכוונת רגשות",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "المهارات بين الشخصيّة",
+"title_he": "מיומנויות בין אישיות",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التعرّف إلى المشاعر والتعبير عنها",
+"title_he": "זיהוי רגשות והבעתם",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصداقة والتواصل",
+"title_he": "חברות ותקשורת",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "حلّ النزاعات",
+"title_he": "פתרון קונפליקטים",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اتخاذ القرارات",
+"title_he": "קבלת החלטות",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الضغط والمرونة النفسيّة",
+"title_he": "לחץ וחוסן נפשי",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/global-subjects/annual-theme/resilience-circles/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العلاقات والحدود الشخصيّة",
+"title_he": "יחסים וגבולות אישיים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الاستعداد للحياة المستقلّة",
+"title_he": "הכנה לחיים עצמאיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "القيادة والمشاركة المجتمعيّة",
+"title_he": "מנהיגות ומעורבות קהילתית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الحذر على الطرق والتربية المروريّة",
+"subject_he": "זהירות בדרכים וחינוך תעבורתי",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الأمان في الطريق",
+"title_he": "בטיחות בדרך",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "عبور الشارع بأمان",
+"title_he": "חציית כביש בטוחה",
+"level": "יסודי",
+"grades": "א-ג",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المشاة والرصيف",
+"title_he": "הולכי רגל ומדרכה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الركوب الآمن وحزام الأمان",
+"title_he": "נסיעה בטוחה וחגורת בטיחות",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "ركوب الدراجة بأمان",
+"title_he": "רכיבה בטוחה באופניים",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مخاطر الطريق وسلوك المراهقين",
+"title_he": "סיכוני דרך והתנהגות מתבגרים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "السلامة كراكب شابّ",
+"title_he": "בטיחות כנוסע צעיר",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التربية للقيادة الآمنة",
+"title_he": "חינוך לנהיגה בטוחה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التربية الماليّة",
+"subject_he": "חינוך פיננסי",
+"levels": [
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "النقود وقيمتها",
+"title_he": "כסף וערכו",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الحاجات والرغبات",
+"title_he": "צרכים ורצונות",
+"level": "יסודי",
+"grades": "ד-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الميزانيّة الشخصيّة",
+"title_he": "תקציב אישי",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الادّخار",
+"title_he": "חיסכון",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الاستهلاك الذكيّ",
+"title_he": "צרכנות נבונה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "البنوك والحسابات",
+"title_he": "בנקים וחשבונות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الائتمان والفائدة",
+"title_he": "אשראי וריבית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الضرائب والتأمين",
+"title_he": "מסים וביטוח",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الاستثمار والمخاطر",
+"title_he": "השקעות וסיכון",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/curriculum/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "المسرح",
+"subject_he": "תיאטרון",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "عناصر المسرح",
+"title_he": "יסודות התיאטרון",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "مشاهدة عرض مسرحيّ",
+"title_he": "צפייה בהצגת תיאטרון",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "اللعب الدراميّ",
+"title_he": "משחק דרמטי",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الشخصيّة والحوار",
+"title_he": "דמות ודיאלוג",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الحركة والصوت على الخشبة",
+"title_he": "תנועה וקול על הבמה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "قراءة نصّ مسرحيّ وتحليله",
+"title_he": "קריאה וניתוח של מחזה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإخراج والتمثيل",
+"title_he": "בימוי ומשחק",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإنتاج المسرحيّ",
+"title_he": "הפקה תיאטרונית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الرقص",
+"subject_he": "מחול",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "المشاهدة والحركة في البستان",
+"title_he": "צפייה ותנועה בגן",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإيقاع والحركة",
+"title_he": "קצב ותנועה",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الارتجال الحركيّ",
+"title_he": "אלתור תנועתי",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التكوين الراقص",
+"title_he": "קומפוזיציה במחול",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تاريخ الرقص وتحليل الأداء",
+"title_he": "תולדות המחול וניתוח ביצוע",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "السينما",
+"subject_he": "קולנוע",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "لغة السينما",
+"title_he": "שפת הקולנוע",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصورة واللقطة والمونتاج",
+"title_he": "פריים, שוט ועריכה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصوت في السينما",
+"title_he": "סאונד בקולנוע",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "السيناريو",
+"title_he": "תסריט",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تاريخ السينما",
+"title_he": "תולדות הקולנוע",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تحليل الأفلام",
+"title_he": "ניתוח סרטים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "إنتاج فيلم قصير",
+"title_he": "הפקת סרט קצר",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التصميم والفنون التطبيقيّة",
+"subject_he": "עיצוב ואמנויות שימושיות",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "أسس التصميم",
+"title_he": "יסודות העיצוב",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التفكير التصميميّ",
+"title_he": "חשיבה עיצובית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الاتّصال البصريّ",
+"title_he": "תקשורת חזותית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الطباعة والطبوغرافيا",
+"title_he": "דפוס וטיפוגרפיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التصميم الرقميّ",
+"title_he": "עיצוב דיגיטלי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تصميم المنتج",
+"title_he": "עיצוב מוצר",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع تصميم",
+"title_he": "פרויקט עיצוב",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الهندسة الصناعيّة والإدارة",
+"subject_he": "הנדסת תעשייה וניהול",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مبادئ الإدارة والإنتاج",
+"title_he": "עקרונות ניהול וייצור",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "بحوث العمليّات",
+"title_he": "חקר ביצועים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإحصاء وضبط الجودة",
+"title_he": "סטטיסטיקה ובקרת איכות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اللوجستيات وسلسلة الإمداد",
+"title_he": "לוגיסטיקה ושרשרת אספקה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أنظمة المعلومات الإداريّة",
+"title_he": "מערכות מידע ניהוליות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "إدارة المشاريع",
+"title_he": "ניהול פרויקטים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع تطبيقيّ",
+"title_he": "פרויקט יישומי",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "هندسة الكهرباء والتحكّم والطاقة",
+"subject_he": "הנדסת חשמל, בקרה ואנרגיה",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "أسس الكهرباء",
+"title_he": "יסודות החשמל",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الدوائر الكهربائيّة",
+"title_he": "מעגלים חשמליים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الآلات الكهربائيّة",
+"title_he": "מכונות חשמליות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أنظمة التحكّم",
+"title_he": "מערכות בקרה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإلكترونيات الصناعيّة",
+"title_he": "אלקטרוניקה תעשייתית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الطاقة المتجدّدة",
+"title_he": "אנרגיה מתחדשת",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع هندسيّ",
+"title_he": "פרויקט הנדסי",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "هندسة البناء والعمارة",
+"subject_he": "הנדסת בנייה ואדריכלות",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "الرسم الهندسيّ",
+"title_he": "שרטוט הנדסי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مبادئ العمارة",
+"title_he": "יסודות האדריכלות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مواد البناء",
+"title_he": "חומרי בנייה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإنشاءات والاستاتيكا",
+"title_he": "קונסטרוקציה וסטטיקה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التخطيط المعماريّ",
+"title_he": "תכנון אדריכלי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التصميم المحوسب",
+"title_he": "תכנון ממוחשב",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع تخطيط",
+"title_he": "פרויקט תכנון",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "المعلومات والبيانات",
+"subject_he": "מידע ונתונים",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "جمع البيانات وتنظيمها",
+"title_he": "איסוף נתונים וארגונם",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "قواعد البيانات",
+"title_he": "מסדי נתונים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تحليل البيانات",
+"title_he": "ניתוח נתונים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التصوير البيانيّ للبيانات",
+"title_he": "המחשת נתונים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإحصاء التطبيقيّ",
+"title_he": "סטטיסטיקה יישומית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "البيانات الضخمة والذكاء الاصطناعيّ",
+"title_he": "ביג דאטה ובינה מלאכותית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع بيانات",
+"title_he": "פרויקט נתונים",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/data-analysis/high-school/teaching-data-analysis/about/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "علوم الأرض",
+"subject_he": "מדעי כדור הארץ",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مبنى الكرة الأرضيّة",
+"title_he": "מבנה כדור הארץ",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصخور والمعادن",
+"title_he": "סלעים ומינרלים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصفائح التكتونيّة",
+"title_he": "טקטוניקת הלוחות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الزلازل والبراكين",
+"title_he": "רעידות אדמה והרי געש",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الغلاف الجوّي والمناخ",
+"title_he": "אטמוספרה ואקלים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المياه والأنظمة الجيولوجيّة",
+"title_he": "מים ומערכות גאולוגיות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الكون والنظام الشمسيّ",
+"title_he": "היקום ומערכת השמש",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التربية الصحّيّة",
+"subject_he": "חינוך לבריאות",
+"levels": [
+"גן",
+"יסודי",
+"חטיבת ביניים",
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "التغذية الصحّيّة",
+"title_he": "תזונה בריאה",
+"level": "גן",
+"grades": "גן",
+"source": "https://pop.education.gov.il/kindergarten/magar-ganey-yeladim/sessions-teaching-supporters/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "النظافة الشخصيّة",
+"title_he": "היגיינה אישית",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "النشاط البدنيّ والصحّة",
+"title_he": "פעילות גופנית ובריאות",
+"level": "יסודי",
+"grades": "א-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "النوم والعادات الصحّيّة",
+"title_he": "שינה והרגלים בריאים",
+"level": "יסודי",
+"grades": "ג-ו",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الوقاية من التدخين والموادّ الضارّة",
+"title_he": "מניעת עישון וחומרים מזיקים",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصحة النفسيّة والرفاه",
+"title_he": "בריאות נפשית ורווחה",
+"level": "חטיבת ביניים",
+"grades": "ז-ט",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصحّة الجنسيّة والمسؤوليّة الشخصيّة",
+"title_he": "בריאות מינית ואחריות אישית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الصحة العامّة والوقاية",
+"title_he": "בריאות הציבור ומניעה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "التربية",
+"subject_he": "מגמת חינוך",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "علم النفس التطوّريّ",
+"title_he": "פסיכולוגיה התפתחותית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "نظريّات التعلّم والتطوّر",
+"title_he": "תיאוריות למידה והתפתחות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التربية الإنسانيّة",
+"title_he": "חינוך הומניסטי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أدب الأطفال في المجتمع العربيّ",
+"title_he": "ספרות ילדים בחברה הערבית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/textbooks-links-websites/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "أجناس أدب الأطفال العربيّ",
+"title_he": "ז'אנרים בספרות ילדים ערבית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/textbooks-links-websites/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "العمل التربويّ في الطفولة المبكّرة",
+"title_he": "עשייה חינוכית בגיל הרך",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/early-childhood-education/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التخطيط والإرشاد التربويّ",
+"title_he": "תכנון והדרכה חינוכית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "علم الأعصاب والتربية",
+"title_he": "נוירופדגוגיה ולמידה",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/general-education/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإبداع والبيداغوجيا",
+"title_he": "יצירתיות ופדגוגיה",
+"level": "תיכון",
+"grades": "י",
+"source": "https://pop.education.gov.il/tchumey_daat/education/high-school/pedagogy/general-education/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "السياحة وأوقات الفراغ",
+"subject_he": "תיירות ופנאי",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مقدمة في السياحة",
+"title_he": "מבוא לתיירות",
+"level": "תיכון",
+"grades": "י-יא",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السياحة الوافدة",
+"title_he": "תיירות נכנסת",
+"level": "תיכון",
+"grades": "י-יא",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التسويق السياحيّ",
+"title_he": "שיווק תיירותי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "دراسات أوقات الفراغ",
+"title_he": "לימודי פנאי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "التخطيط السياحيّ",
+"title_he": "תכנון תיירות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "البلدان والوجهات السياحيّة",
+"title_he": "ארצות ויעדי תיירות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "إدارة السفر والاستشارة السياحيّة",
+"title_he": "ניהול נסיעות וייעוץ תיירותי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/about/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "الإدارة الفندقيّة",
+"title_he": "ניהול מלונאי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/high-school-studies/",
+"confidence": "גבוה"
+},
+{
+"title_ar": "السياحة الرقميّة",
+"title_he": "תיירות דיגיטלית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/tourism-leisure/high-school/pedagogy-of/high-school-curricula-exams-certificates/",
+"confidence": "גבוה"
+}
+]
+},
+{
+"subject_ar": "تكنولوجيا المعلومات والاتّصالات",
+"subject_he": "תקשוב",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "أنظمة الحاسوب",
+"title_he": "מערכות מחשוב",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الشبكات والاتّصالات",
+"title_he": "רשתות ותקשורת",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أنظمة التشغيل",
+"title_he": "מערכות הפעלה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أمن المعلومات",
+"title_he": "אבטחת מידע",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الخدمات السحابيّة",
+"title_he": "שירותי ענן",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الدعم والصيانة",
+"title_he": "תמיכה ותחזוקה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع تكشوف",
+"title_he": "פרויקט תקשוב",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الإدارة التجاريّة",
+"subject_he": "ניהול עסקי",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مبادئ الإدارة",
+"title_he": "עקרונות ניהול",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "اقتصاد الأعمال",
+"title_he": "כלכלה עסקית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المحاسبة",
+"title_he": "חשבונאות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التسويق",
+"title_he": "שיווק",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "إدارة الموارد البشريّة",
+"title_he": "ניהול משאבי אנוש",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الإدارة الماليّة",
+"title_he": "ניהול פיננסי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع إدارة أعمال",
+"title_he": "פרויקט בניהול עסקי",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "المسار العلميّ التكنولوجيّ",
+"subject_he": "המגמה המדעית טכנולוגית",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "البحث العلميّ",
+"title_he": "חקר מדעי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التصميم الهندسيّ",
+"title_he": "תיכון הנדסי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "دمج العلوم والتكنولوجيا",
+"title_he": "שילוב מדע וטכנולוגיה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الأنظمة التكنولوجيّة",
+"title_he": "מערכות טכנולוגיות",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التحليل الكمّي والبيانات",
+"title_he": "ניתוח כמותי ונתונים",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع علميّ تكنولوجيّ",
+"title_he": "פרויקט מדעי טכנולוגי",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "الهندسة التطبيقيّة",
+"subject_he": "הנדסה יישומית",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "مبادئ هندسيّة",
+"title_he": "עקרונות הנדסיים",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الرسم والتصميم الهندسيّ",
+"title_he": "שרטוט ותכנון הנדסי",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الميكانيكا التطبيقيّة",
+"title_he": "מכניקה יישומית",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الكهرباء والإلكترونيات الأساسيّة",
+"title_he": "יסודות חשמל ואלקטרוניקה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أنظمة التحكّم",
+"title_he": "מערכות בקרה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع هندسيّ تطبيقيّ",
+"title_he": "פרויקט הנדסי יישומי",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "النقل المتقدّم",
+"subject_he": "תחבורה מתקדמת",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "أنظمة المركبة",
+"title_he": "מערכות הרכב",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المحرّكات وأنظمة الدفع",
+"title_he": "מנועים ומערכות הנעה",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "الكهرباء والإلكترونيات في المركبة",
+"title_he": "חשמל ואלקטרוניקה ברכב",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "المركبات الهجينة والكهربائيّة",
+"title_he": "רכב היברידי וחשמלי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "أنظمة السلامة ومساعدة السائق",
+"title_he": "מערכות בטיחות וסיוע לנהג",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التشخيص والصيانة",
+"title_he": "אבחון ותחזוקה",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "مشروع تطبيقيّ في النقل",
+"title_he": "פרויקט יישומי בתחבורה",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+},
+{
+"subject_ar": "القيادة والريادة",
+"subject_he": "מנהיגות ויזמות",
+"levels": [
+"תיכון"
+],
+"topics": [
+{
+"title_ar": "القيادة الشخصيّة",
+"title_he": "מנהיגות אישית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "قيادة الفريق",
+"title_he": "מנהיגות צוות",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "التفكير الرياديّ",
+"title_he": "חשיבה יזמית",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تحديد مشكلة وحاجة",
+"title_he": "זיהוי בעיה וצורך",
+"level": "תיכון",
+"grades": "י-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "تطوير مبادرة",
+"title_he": "פיתוח מיזם",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "نموذج العمل",
+"title_he": "מודל עסקי",
+"level": "תיכון",
+"grades": "יא-יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+},
+{
+"title_ar": "عرض المبادرة وإدارتها",
+"title_he": "הצגת המיזם וניהולו",
+"level": "תיכון",
+"grades": "יב",
+"source": "https://pop.education.gov.il/tchumey_daat/",
+"confidence": "בינוני"
+}
+]
+}
+]
