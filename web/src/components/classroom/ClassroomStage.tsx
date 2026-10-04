@@ -237,7 +237,7 @@ function StageInner({
         </div>
       </header>
 
-      {progress && <div className="cs-progress"><ClassProgressChip progress={progress} lang={he ? "he" : "en"} /></div>}
+      {progress && <div className="cs-progress"><ClassProgressChip progress={progress} lang={L} /></div>}
 
       {/* The word */}
       <main className={`cs-main${!imageUrl && !imageGenerating ? " no-pic" : ""}`}>

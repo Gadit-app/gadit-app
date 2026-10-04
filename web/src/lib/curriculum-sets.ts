@@ -1,14 +1,15 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 import { getWordSet, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
-import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic } from "@/lib/curriculum-catalog";
+import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, arTopic, arSubject, arLevel, arGradeLabel } from "@/lib/curriculum-catalog";
 import zaSets from "@/lib/curriculum-sets-za.json";
 
 // Server side of the curriculum catalog (Gadi 2026-10-03). A topic's key
 // words and their in-lesson definitions are generated once with gpt-4o the
 // first time anyone opens the topic, then served from Firestore
 // curriculumSets/{topicId} forever. Only ids that exist in the catalog can
-// be generated, so the total cost is bounded (~1,600 topics, ~1¢ each).
+// be generated, so the total cost is bounded (~1,600 Hebrew and ~800 Arab
+// education topics, ~1¢ each).
 
 export type CurriculumSetDoc = { set: WordSet; defs: Record<string, string> };
 
@@ -22,7 +23,75 @@ function clean(s: unknown, max: number): string {
   return String(s ?? "").replace(/\s*[–—]\s*/g, ", ").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
+async function chat(sys: string, user: string): Promise<Array<{ w?: unknown; d?: unknown }>> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: "gpt-4o",
+      temperature: 0.2,
+      response_format: { type: "json_object" },
+      messages: [{ role: "system", content: sys }, { role: "user", content: user }],
+    }),
+  });
+  if (!res.ok) throw new Error("openai_" + res.status);
+  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const u = usageFrom(json);
+  void logAiUsage({ feature: "curriculum_set", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  return (JSON.parse(json.choices?.[0]?.message?.content ?? "{}") as { words?: Array<{ w?: unknown; d?: unknown }> }).words ?? [];
+}
+
+function toDoc(rows: Array<{ w?: unknown; d?: unknown }>, set: Omit<WordSet, "words">, marks = false): CurriculumSetDoc {
+  const defs: Record<string, string> = {};
+  for (const x of rows) {
+    let w = clean(x.w, 40).replace(/[.,;:،]+$/, "");
+    // Words are stored bare; the teacher adds tashkeel on the projector.
+    if (marks) w = w.replace(/[ً-ٰٟ]/g, "");
+    const d = clean(x.d, 220);
+    if (w && d && !defs[w]) defs[w] = d;
+  }
+  const words = Object.keys(defs).slice(0, 12);
+  if (words.length < 5) throw new Error("too_few_words");
+  return { set: { ...set, words }, defs: Object.fromEntries(words.map((w) => [w, defs[w]])) };
+}
+
+// Arab state education (Gadi 2026-10-04): words in Modern Standard Arabic,
+// except the Hebrew and English subjects, whose words are in that language.
+const AR_SUBJECT_LANG: Record<string, string> = { "hebrew-second-language": "he", english: "en" };
+async function generateAr(topicId: string): Promise<CurriculumSetDoc | null> {
+  const t = arTopic(topicId);
+  const subj = t ? arSubject(t.s) : undefined;
+  if (!t || !subj) return null;
+  const lang = AR_SUBJECT_LANG[subj.key] ?? "ar";
+  const arGrade = arGradeLabel(t.g) || arLevel(t.l)?.ar || "";
+  const grade = lang === "ar" ? arGrade
+    : lang === "he" ? gradeLabel(t.g) || curLevelHe(t.l)
+    : arGrade.replace("الصفوف", "Grades").replace(" إلى ", " to ").replace("الصف", "Grade").replace("الروضة", "Kindergarten");
+  const sys = "You are an expert on the curriculum of Arab state schools in Israel (the Ministry of Education's Arab sector programs) and you build lists of a lesson's key words. Return JSON only.";
+  const where = `Subject: ${subj.ar} (${subj.he}). Stage: ${arLevel(t.l)?.ar ?? t.l}, ${arGrade}.\nLearning unit: "${t.t}" (${t.th}).`;
+  const rules = lang === "ar"
+    ? `- The words themselves in Modern Standard Arabic (الفصحى), in their dictionary form: singular, without the article ال unless it is part of the term, without tashkeel.
+- Each definition in clear, simple Modern Standard Arabic suited to ${arGrade}, without tashkeel.`
+    : lang === "he"
+      ? `- This is Hebrew taught as a second language to Arabic-speaking students. The words in standard Hebrew (full spelling, no niqqud, dictionary form), at the level of ${grade} in an Arab school.
+- Each definition in very simple Hebrew that an Arabic-speaking student learning Hebrew can follow.`
+      : `- This is English taught as a foreign language to Arabic-speaking students. The words in English, at the level of ${grade} in an Arab school in Israel.
+- Each definition in very simple English.`;
+  const user = `${where}
+
+Choose 10 to 12 key words: the concepts the teacher teaches in this unit and that a student must understand to follow the lesson.
+Rules:
+- Only real concepts of this unit, from basic to advanced, no general words every student already knows, no duplicates.
+${rules}
+- One definition per word: one or two sentences (up to 160 characters) explaining its meaning in this unit only.
+- No long dashes. General wording, not addressing the student.
+Return: {"words":[{"w":"","d":""}]}`;
+  const rows = await chat(sys, user);
+  return toDoc(rows, { id: t.id, subject: subj.key, title: t.t, grade, lang }, lang === "ar");
+}
+
 async function generate(topicId: string): Promise<CurriculumSetDoc | null> {
+  if (topicId.startsWith("cur-ar-")) return generateAr(topicId);
   const t = curTopic(topicId);
   const subj = t ? curSubject(t.s) : undefined;
   if (!t || !subj) return null;
@@ -42,31 +111,8 @@ ${foreign
 - לכל מילה הגדרה אחת: משפט אחד או שניים (עד 160 תווים) שמסבירים את המשמעות שלה ביחידה הזו בלבד, ברמה שמתאימה ל${grade}.
 - בלי מקפים ארוכים. ניסוח כללי, בלי פנייה לתלמיד.
 החזר: {"words":[{"w":"","d":""}]}`;
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-    body: JSON.stringify({
-      model: "gpt-4o",
-      temperature: 0.2,
-      response_format: { type: "json_object" },
-      messages: [{ role: "system", content: sys }, { role: "user", content: user }],
-    }),
-  });
-  if (!res.ok) throw new Error("openai_" + res.status);
-  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-  const u = usageFrom(json);
-  void logAiUsage({ feature: "curriculum_set", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
-  const raw = JSON.parse(json.choices?.[0]?.message?.content ?? "{}") as { words?: Array<{ w?: unknown; d?: unknown }> };
-  const defs: Record<string, string> = {};
-  for (const x of raw.words ?? []) {
-    const w = clean(x.w, 40).replace(/[.,;:]+$/, "");
-    const d = clean(x.d, 220);
-    if (w && d && !defs[w]) defs[w] = d;
-  }
-  const words = Object.keys(defs).slice(0, 12);
-  if (words.length < 5) throw new Error("too_few_words");
-  const set: WordSet = { id: t.id, subject: subj.key, title: t.t, grade, lang, words };
-  return { set, defs: Object.fromEntries(words.map((w) => [w, defs[w]])) };
+  const rows = await chat(sys, user);
+  return toDoc(rows, { id: t.id, subject: subj.key, title: t.t, grade, lang });
 }
 
 /** A curriculum set with its definitions, generated on first request when
@@ -81,7 +127,7 @@ function zaDoc(id: string): CurriculumSetDoc | null {
 
 export async function getCurriculumSetDoc(id: string, create = false): Promise<CurriculumSetDoc | null> {
   const isZa = id.startsWith("cur-za-");
-  if (!isCurriculumSetId(id) || !(isZa ? zaTopic(id) : curTopic(id))) return null;
+  if (!isCurriculumSetId(id) || !(isZa ? zaTopic(id) : arTopic(id) ?? curTopic(id))) return null;
   const ref = getAdminDb().collection("curriculumSets").doc(id);
   const snap = await ref.get();
   // An admin edit lives in Firestore; a CAPS unit otherwise uses its built-in words.
@@ -122,7 +168,7 @@ export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: 
 
 /** Admin: throw away a unit's words and generate them again. */
 export async function regenerateCurriculumSet(id: string): Promise<CurriculumSetDoc | null> {
-  if (!isCurriculumSetId(id) || !(curTopic(id) || zaTopic(id))) return null;
+  if (!isCurriculumSetId(id) || !(curTopic(id) || zaTopic(id) || arTopic(id))) return null;
   await getAdminDb().collection("curriculumSets").doc(id).delete();
   return getCurriculumSetDoc(id, true);
 }

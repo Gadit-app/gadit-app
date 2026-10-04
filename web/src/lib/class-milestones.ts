@@ -11,31 +11,31 @@
 
 export const CLASS_THRESHOLDS = [50, 100, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
-type RankName = { he: string; en: string };
+type RankName = { he: string; en: string; ar: string };
 const RANK_NAMES: RankName[] = [
-  { he: "צעדים ראשונים", en: "First Steps" },          // 50
-  { he: "מועדון המאה", en: "The 100 Club" },           // 100
-  { he: "חוקרי מילים", en: "Word Explorers" },         // 200
-  { he: "בוני מילים", en: "Word Builders" },           // 300
-  { he: "אלופי הסקרנות", en: "Curiosity Champions" },  // 400
-  { he: "מועדון ה־500", en: "The 500 Club" },          // 500
-  { he: "אדריכלי מילים", en: "Word Architects" },      // 750
-  { he: "מועדון האלף", en: "The 1,000 Club" },         // 1000
-  { he: "ציידי מילים", en: "Word Hunters" },           // 1250
-  { he: "שומרי המילים", en: "Word Keepers" },          // 1500
-  { he: "מגלי עולמות", en: "World Discoverers" },      // 1750
-  { he: "אלופי המילים", en: "Word Masters" },          // 2000
-  { he: "מגדלור המילים", en: "Word Lighthouse" },      // 2500
-  { he: "מועדון ה־3,000", en: "The 3,000 Club" },      // 3000
-  { he: "שומרי האוצר", en: "Treasure Keepers" },       // 3500
-  { he: "ענקי המילים", en: "Word Giants" },            // 4000
-  { he: "כוכבי השפה", en: "Language Stars" },          // 4500
-  { he: "אגדת המילים", en: "Word Legends" },           // 5000
+  { he: "צעדים ראשונים", en: "First Steps", ar: "الخطوات الأولى" },          // 50
+  { he: "מועדון המאה", en: "The 100 Club", ar: "نادي المئة" },           // 100
+  { he: "חוקרי מילים", en: "Word Explorers", ar: "مستكشفو الكلمات" },         // 200
+  { he: "בוני מילים", en: "Word Builders", ar: "بناة الكلمات" },           // 300
+  { he: "אלופי הסקרנות", en: "Curiosity Champions", ar: "أبطال الفضول" },  // 400
+  { he: "מועדון ה־500", en: "The 500 Club", ar: "نادي الخمسمئة" },          // 500
+  { he: "אדריכלי מילים", en: "Word Architects", ar: "مهندسو الكلمات" },      // 750
+  { he: "מועדון האלף", en: "The 1,000 Club", ar: "نادي الألف" },         // 1000
+  { he: "ציידי מילים", en: "Word Hunters", ar: "صيّادو الكلمات" },           // 1250
+  { he: "שומרי המילים", en: "Word Keepers", ar: "حرّاس الكلمات" },          // 1500
+  { he: "מגלי עולמות", en: "World Discoverers", ar: "مكتشفو العوالم" },      // 1750
+  { he: "אלופי המילים", en: "Word Masters", ar: "أبطال الكلمات" },          // 2000
+  { he: "מגדלור המילים", en: "Word Lighthouse", ar: "منارة الكلمات" },      // 2500
+  { he: "מועדון ה־3,000", en: "The 3,000 Club", ar: "نادي الثلاثة آلاف" },      // 3000
+  { he: "שומרי האוצר", en: "Treasure Keepers", ar: "حرّاس الكنز" },       // 3500
+  { he: "ענקי המילים", en: "Word Giants", ar: "عمالقة الكلمات" },            // 4000
+  { he: "כוכבי השפה", en: "Language Stars", ar: "نجوم اللغة" },          // 4500
+  { he: "אגדת המילים", en: "Word Legends", ar: "أساطير الكلمات" },           // 5000
 ];
 
 export function rankNameAt(index: number, lang: string): string {
   const r = RANK_NAMES[Math.min(Math.max(index, 0), RANK_NAMES.length - 1)];
-  return lang === "he" ? r.he : r.en;
+  return lang === "he" ? r.he : lang === "ar" ? r.ar : r.en;
 }
 
 /** Next threshold above `count` (null past the last one). */
@@ -84,8 +84,18 @@ const COPY = {
     tell: "Tell the whole class 🎉",
     close: "Continue",
   },
+  ar: {
+    label: { class: "صفّكم", school: "مدرستكم" },
+    words: (n: number) => `${n.toLocaleString("en-US")} كلمة`,
+    toNext: (n: number) => `بقي ${n.toLocaleString("en-US")} للدرجة التالية`,
+    wow: (scope: ClassScope) => `رائع! ${scope === "class" ? "وصل صفّكم" : "وصلت مدرستكم"} إلى درجة جديدة!`,
+    reached: (n: number) => `${n.toLocaleString("en-US")} كلمة مختلفة`,
+    rank: (name: string) => `الدرجة الجديدة: ${name}`,
+    tell: "أخبروا الصف كله 🎉",
+    close: "متابعة",
+  },
 };
 
 export function classCopy(lang: string) {
-  return lang === "he" ? COPY.he : COPY.en;
+  return lang === "he" ? COPY.he : lang === "ar" ? COPY.ar : COPY.en;
 }

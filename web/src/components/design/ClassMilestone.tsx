@@ -19,7 +19,7 @@ export function ClassProgressChip({ progress, lang }: { progress: ClassProgress;
   const pct = progress.next ? Math.min(100, Math.round((progress.count / progress.next) * 100)) : 100;
   return (
     <div
-      dir={lang === "he" ? "rtl" : "ltr"}
+      dir={lang === "he" || lang === "ar" ? "rtl" : "ltr"}
       style={{
         display: "inline-flex", alignItems: "center", gap: 10, padding: "7px 14px", borderRadius: 999,
         background: "var(--surface, #fff)", border: "1px solid var(--rule, #E4EAE8)", fontSize: 14,
@@ -59,7 +59,7 @@ export function ClassMilestoneOverlay({
       role="dialog"
       aria-modal="true"
       aria-label={`${c.wow(scope)} ${c.reached(hit.count)}`}
-      dir={lang === "he" ? "rtl" : "ltr"}
+      dir={lang === "he" || lang === "ar" ? "rtl" : "ltr"}
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center", padding: 16,

@@ -16,7 +16,8 @@ import {
 /**
  * /sets: the national curriculum of the school (Gadi 2026-10-03/04). The
  * Israeli catalog (גן to תיכון, Hebrew, RTL) or South Africa's CAPS (Grades
- * 4 to 9, English, LTR), every subject with its own soft-3D icon. Level
+ * 4 to 9, English, LTR) or Israel's Arab state education (Arabic, RTL),
+ * every subject with its own soft-3D icon. Level
  * tabs, subjects grouped by field, then the subject's units; opening a unit
  * loads its key words, and "Present to class" walks the class through them
  * on the projector. A school picks its curriculum and type once
@@ -101,7 +102,45 @@ const STR = {
     err: "Something went wrong. Please try again.",
     catalog: "Curriculum",
   },
+  // Arabic UI for the Arab state education catalog: verbal nouns and
+  // impersonal wording, so it fits a man and a woman alike.
+  ar: {
+    title: "مجموعات كلمات لكلّ المواضيع الدراسيّة",
+    sub1: "اختيار المرحلة والموضوع، فتح الوحدة وعرضها على الصفّ.",
+    sub2: "لكلّ كلمة تعريف وصورة وأمثلة واختبار ولعبة.",
+    search: "بحث عن موضوع أو وحدة، مثلًا الكسور",
+    searchAria: "بحث عن موضوع أو وحدة",
+    levelsAria: "المرحلة",
+    subjectsUnit: "مواضيع",
+    topicsUnit: "وحدات",
+    fields: "المجالات",
+    all: "الكلّ",
+    empty: "لم نجد موضوعًا أو وحدة كهذه. يمكن تجربة كلمة أخرى أو أقصر.",
+    subjectsH: "المواضيع",
+    topicsH: "الوحدات",
+    back: "كلّ المواضيع",
+    readyH: "مجموعات جاهزة",
+    topicsIn: (lv: string) => `وحدات التعلّم في المرحلة ${lv}`,
+    topicSearch: "بحث عن وحدة",
+    dati: "",
+    datiLong: "",
+    present: "عرض على الصفّ",
+    words: "كلمات",
+    loading: "نحضّر الكلمات المفتاحيّة للوحدة...",
+    fail: "لم نتمكّن من تحضير الكلمات المفتاحيّة الآن. يمكن المحاولة مرّة أخرى بعد قليل.",
+    term: (n: number) => `الفصل ${n}`,
+    curH: "أيّ منهاج تعليميّ؟",
+    typeH: "ما نوع المدرسة؟",
+    pick1: "تُفتح مجموعات الكلمات حسب المنهاج والصفوف في المدرسة.",
+    pick2: "الاختيار مرّة واحدة، وللتغيير يمكن التواصل معنا.",
+    notOwnerH: "مجموعات الكلمات لم تُفتح بعد",
+    notOwnerP: "يجب أوّلًا اختيار نوع المدرسة في حساب المدرسة، وبعدها تُفتح مجموعات الصفوف المناسبة.",
+    err: "حدث خطأ ما. يمكن المحاولة مرّة أخرى.",
+    catalog: "المنهاج",
+  },
 };
+type Ui = keyof typeof STR;
+const uiOf = (lang: string): Ui => (lang === "he" ? "he" : lang === "ar" ? "ar" : "en");
 type T = (typeof STR)["en"];
 
 type Ctx = { view: CatalogView; T: T; allowed: string[] };
@@ -110,7 +149,7 @@ const useCat = () => useContext(CatCtx)!;
 const inAllowed = (allowed: string[], t: ViewTopic) => allowed.includes(t.l);
 
 function norm(s: string) {
-  return s.replace(/[֑-ׇ"״׳']/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+  return s.replace(/[֑-ׇً-ٰٟـ"״׳']/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/\s+/g, " ").trim().toLowerCase();
 }
 /** Query matches at the start of a word, or after one Hebrew prefix letter
  *  (ו ה ב ל כ), so "שברים" finds "בשברים" but not "משברים". */
@@ -118,7 +157,10 @@ function matches(text: string, q: string) {
   if (!q) return true;
   const t = norm(text);
   if (q.includes(" ")) return t.includes(q);
-  return t.split(/[\s,:.()-]+/).some((w) => w.startsWith(q) || (/^[והבלכ]/.test(w) && w.slice(1).startsWith(q)));
+  const qa = q.replace(/^ال/, "");
+  return t.split(/[\s,:.()،-]+/).some((w) => w.startsWith(q) || (/^[והבלכ]/.test(w) && w.slice(1).startsWith(q))
+    // Arabic: also after و ف ب ل ك and the article ال.
+    || w.replace(/^[وفبلك]?(ال|ل)?/, "").startsWith(qa));
 }
 const topicsOf = (view: CatalogView, subject: string, level?: string) =>
   view.topics.filter((t) => t.s === subject && (!level || t.l === level));
@@ -144,8 +186,9 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   }, [user]);
 
   // "all" schools (Gadi's own) can switch catalogs; everyone else sees theirs.
-  const [viewPick, setViewPick] = useState<CatalogId>(() => (lang === "he" ? "il-he" : "za-caps"));
-  const viewId: CatalogId = school?.curriculum === "il-he" || school?.curriculum === "za-caps" ? school.curriculum : viewPick;
+  const [viewPick, setViewPick] = useState<CatalogId>(() => (lang === "he" ? "il-he" : lang === "ar" ? "il-ar" : "za-caps"));
+  const sc = school?.curriculum;
+  const viewId: CatalogId = sc === "il-he" || sc === "il-ar" || sc === "za-caps" ? sc : viewPick;
   const view = catalogView(viewId);
   const T = STR[view.ui];
   const storeKey = `gadit-sets-level-${viewId}`;
@@ -175,8 +218,8 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   };
 
   if (school?.curriculum === "legacy" && legacy) return <>{legacy}</>;
-  const pickUi = school && !allowed.length ? STR[lang === "he" ? "he" : "en"] : T;
-  const dir = school && !allowed.length ? (lang === "he" ? "rtl" : "ltr") : view.dir;
+  const pickUi = school && !allowed.length ? STR[uiOf(lang)] : T;
+  const dir = school && !allowed.length ? (uiOf(lang) === "en" ? "ltr" : "rtl") : view.dir;
 
   return (
     <div className="wordbook cb" dir={dir}>
@@ -198,7 +241,7 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
       <main className="cb-main">
         <CatCtx.Provider value={{ view, T, allowed }}>
           {!school ? null : !allowed.length ? (
-            <SchoolTypePicker T={pickUi} uiLang={lang === "he" ? "he" : "en"} owner={school.owner} onSet={(levels, curriculum) => setSchool({ ...school, levels, curriculum })} />
+            <SchoolTypePicker T={pickUi} uiLang={uiOf(lang)} owner={school.owner} onSet={(levels, curriculum) => setSchool({ ...school, levels, curriculum })} />
           ) : subject ? (
             <SubjectView
               subject={subject}
@@ -472,10 +515,13 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
 
 /** One-time choice of the curriculum and school type; later changes only via Gadi. */
 function SchoolTypePicker({ T, uiLang, owner, onSet }: {
-  T: T; uiLang: "he" | "en"; owner: boolean; onSet: (levels: string[], curriculum: Curriculum) => void;
+  T: T; uiLang: Ui; owner: boolean; onSet: (levels: string[], curriculum: Curriculum) => void;
 }) {
   const { user } = useAuth();
-  const [cur, setCur] = useState<string>(uiLang === "he" ? "" : "za-caps");
+  const [cur, setCur] = useState<string>(uiLang === "ar" ? "il-ar" : uiLang === "en" ? "za-caps" : "");
+  // A type's name in the picker's language (South African types stay English).
+  const typeName = (x: (typeof SCHOOL_TYPES)[number]) =>
+    uiLang === "he" && x.curriculum !== "za-caps" ? x.he : uiLang === "ar" && x.ar ? x.ar : x.en;
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState(false);
   const pick = async (type: string) => {
@@ -520,11 +566,11 @@ function SchoolTypePicker({ T, uiLang, owner, onSet }: {
           : SCHOOL_TYPES.filter((x) => x.curriculum === cur).map((x) => (
               <button key={x.key} type="button" className="cb-pick-btn" disabled={!!busy} onClick={() => pick(x.key)}>
                 {busy === x.key ? <span className="cb-spin" aria-hidden /> : null}
-                {uiLang === "he" && cur === "il-he" ? x.he : x.en}
+                {typeName(x)}
               </button>
             ))}
       </div>
-      {cur && uiLang === "he" && (
+      {cur && (
         <button type="button" className="cb-back" style={{ marginTop: 14 }} onClick={() => setCur("")}>
           <Chevron flip /> {T.curH}
         </button>
