@@ -781,9 +781,10 @@ export function WordClient({
   // them once so getWordSet / classroomDef see them (Gadi 2026-10-03).
   const [, setCurLoaded] = useState(0);
   useEffect(() => {
-    if (!isCurriculumSetId(setId) || getWordSet(setId)) return;
+    if (!isCurriculumSetId(setId) || getWordSet(setId) || !user) return;
     let alive = true;
-    fetch(`/api/curriculum-set?id=${encodeURIComponent(setId)}`)
+    user.getIdToken()
+      .then((tk) => fetch(`/api/curriculum-set?id=${encodeURIComponent(setId)}`, { headers: { Authorization: `Bearer ${tk}` } }))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { set?: WordSet; defs?: Record<string, string> } | null) => {
         if (!alive || !d?.set) return;
@@ -792,7 +793,7 @@ export function WordClient({
       })
       .catch(() => {});
     return () => { alive = false; };
-  }, [setId]);
+  }, [setId, user]);
   const wordSet = setId ? getWordSet(setId) : undefined;
   const setIdx = wordSet
     ? wordSet.words.findIndex((w) => w.trim().toLowerCase() === initialWord.trim().toLowerCase())

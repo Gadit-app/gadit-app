@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useHref } from "@/lib/href";
+import { useAuth } from "@/lib/auth-context";
+import { SCHOOL_TYPES } from "@/lib/school-levels";
 import { getWordSet, registerWordSet, type WordSet } from "@/lib/word-sets";
 import {
   CUR_LEVELS, CUR_CATEGORIES, CUR_SUBJECTS, CUR_TOPICS, curSubject, topicsOf, readySetsOf,
@@ -27,6 +29,11 @@ const CAT_COLOR: Record<string, string> = {
   "body-health": "#C2414B", engineering: "#4A6378", vocational: "#7A6A3A", "early-childhood": "#C27A1F",
 };
 const DEFAULT_LEVEL = "elementary";
+// The levels this school's sets open to (schools/{sid}.levels, Gadi
+// 2026-10-04): an elementary school sees elementary only, and so on.
+const AllowedCtx = createContext<string[]>(CUR_LEVELS.map((l) => l.key));
+const useAllowed = () => useContext(AllowedCtx);
+const inAllowed = (allowed: string[], t: CurTopic) => allowed.includes(t.l);
 const LEVEL_STORE = "gadit-sets-level";
 
 function norm(s: string) {
@@ -59,6 +66,20 @@ export default function CurriculumBrowser() {
     return DEFAULT_LEVEL;
   });
   const [query, setQuery] = useState("");
+  const { user } = useAuth();
+  const [school, setSchool] = useState<{ levels: string[]; owner: boolean } | null>(null);
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    user.getIdToken()
+      .then((tk) => fetch("/api/school/levels", { headers: { Authorization: `Bearer ${tk}` } }))
+      .then((r) => (r.ok ? r.json() : { levels: [], owner: false }))
+      .then((j: { levels: string[]; owner: boolean }) => { if (alive) setSchool({ levels: j.levels ?? [], owner: !!j.owner }); })
+      .catch(() => { if (alive) setSchool({ levels: [], owner: false }); });
+    return () => { alive = false; };
+  }, [user]);
+  const allowed = CUR_LEVELS.map((l) => l.key).filter((k) => school?.levels.includes(k));
+  const lvl = allowed.includes(level) ? level : allowed[0] ?? DEFAULT_LEVEL;
 
   const go = (params: Record<string, string | undefined>, push = true) => {
     const q = new URLSearchParams();
@@ -82,25 +103,29 @@ export default function CurriculumBrowser() {
         </Link>
       </header>
       <main className="cb-main">
-        {subject ? (
+        <AllowedCtx.Provider value={allowed}>
+        {!school ? null : !allowed.length ? (
+          <SchoolTypePicker owner={school.owner} onSet={(levels) => setSchool({ ...school, levels })} />
+        ) : subject ? (
           <SubjectView
             subject={subject}
-            level={level}
+            level={lvl}
             setLevel={setLevel}
             openTopic={sp?.get("t") ?? ""}
-            onBack={() => go({ l: level })}
-            onTopic={(t) => go({ s: subject.key, l: level, t: t || undefined }, false)}
+            onBack={() => go({ l: lvl })}
+            onTopic={(t) => go({ s: subject.key, l: lvl, t: t || undefined }, false)}
           />
         ) : (
           <HomeView
-            level={level}
+            level={lvl}
             setLevel={setLevel}
             query={query}
             setQuery={setQuery}
-            openSubject={(s, l) => go({ s, l: l ?? level })}
+            openSubject={(s, l) => go({ s, l: l ?? lvl })}
             openTopic={(t) => go({ s: t.s, l: t.l, t: t.id })}
           />
         )}
+        </AllowedCtx.Provider>
       </main>
     </div>
   );
@@ -117,6 +142,7 @@ function HomeView(props: {
   openTopic: (t: CurTopic) => void;
 }) {
   const { level, setLevel, query, setQuery, openSubject, openTopic } = props;
+  const allowed = useAllowed();
   const counts = useMemo(() => {
     const c: Record<string, Record<string, number>> = {};
     for (const t of CUR_TOPICS) ((c[t.l] ||= {})[t.s] = (c[t.l]?.[t.s] ?? 0) + 1);
@@ -158,7 +184,9 @@ function HomeView(props: {
         <SearchResults q={q} openSubject={openSubject} openTopic={openTopic} />
       ) : (
         <>
-          <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} unit="מקצועות" />
+          {allowed.length > 1 && (
+            <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} unit="מקצועות" only={allowed} />
+          )}
           <nav className="cb-cats" aria-label="תחומים">
             <button type="button" className={"cb-cat-chip" + (cat === "all" ? " on" : "")} aria-pressed={cat === "all"} onClick={() => setCat("all")} style={{ ["--c" as string]: "#0E8A8A" }}>
               <AllIcon />
@@ -243,8 +271,10 @@ function SubjectCard({ s, n, onClick, big }: { s: CurSubject; n: number; onClick
 function SearchResults({ q, openSubject, openTopic }: {
   q: string; openSubject: (s: string, l?: string) => void; openTopic: (t: CurTopic) => void;
 }) {
-  const subjects = CUR_SUBJECTS.filter((s) => matches(s.he, q)).slice(0, 12);
-  const topics = CUR_TOPICS.filter((t) => matches(t.t, q)).slice(0, 60);
+  const allowed = useAllowed();
+  const mine = (key: string) => topicsOf(key).filter((t) => inAllowed(allowed, t));
+  const subjects = CUR_SUBJECTS.filter((s) => matches(s.he, q) && mine(s.key).length > 0).slice(0, 12);
+  const topics = CUR_TOPICS.filter((t) => inAllowed(allowed, t) && matches(t.t, q)).slice(0, 60);
   if (!subjects.length && !topics.length) {
     return <p className="cb-empty">לא מצאנו מקצוע או נושא כזה. כדאי לנסות מילה אחרת או קצרה יותר.</p>;
   }
@@ -259,8 +289,8 @@ function SearchResults({ q, openSubject, openTopic }: {
                 big
                 key={s.key}
                 s={s}
-                n={topicsOf(s.key).length}
-                onClick={() => openSubject(s.key, topicsOf(s.key)[0]?.l)}
+                n={mine(s.key).length}
+                onClick={() => openSubject(s.key, mine(s.key)[0]?.l)}
               />
             ))}
           </div>
@@ -298,7 +328,8 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
   subject: CurSubject; level: string; setLevel: (l: string) => void; openTopic: string;
   onBack: () => void; onTopic: (id: string) => void;
 }) {
-  const levels = CUR_LEVELS.map((l) => l.key).filter((l) => topicsOf(subject.key, l).length > 0);
+  const allowed = useAllowed();
+  const levels = CUR_LEVELS.map((l) => l.key).filter((l) => allowed.includes(l) && topicsOf(subject.key, l).length > 0);
   const lv = levels.includes(level) ? level : levels[0];
   const topics = topicsOf(subject.key, lv);
   const ready = readySetsOf(subject.key, lv);
@@ -320,7 +351,7 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
           {cat && cat.he !== subject.he && <div className="cb-hero-cat">{cat.he}</div>}
           <h1 className="cb-h1 tight">{subject.he}</h1>
           <div className="cb-hero-meta">
-            {topicsOf(subject.key).length} נושאים
+            {topicsOf(subject.key).filter((t) => inAllowed(allowed, t)).length} נושאים
             {subject.dati ? <span className="cb-dati">חינוך ממלכתי דתי</span> : null}
           </div>
         </div>
@@ -362,6 +393,56 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
   );
 }
 
+/** One-time choice of the school type; later changes only via Gadi. */
+function SchoolTypePicker({ owner, onSet }: { owner: boolean; onSet: (levels: string[]) => void }) {
+  const { user } = useAuth();
+  const [busy, setBusy] = useState("");
+  const [err, setErr] = useState(false);
+  const pick = async (type: string) => {
+    if (!user) return;
+    setBusy(type);
+    setErr(false);
+    try {
+      const tk = await user.getIdToken();
+      const r = await fetch("/api/school/levels", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tk}` }, body: JSON.stringify({ type }) });
+      const j = await r.json();
+      if (!r.ok && !j.levels) throw new Error(j.error);
+      onSet(j.levels);
+    } catch {
+      setErr(true);
+    } finally {
+      setBusy("");
+    }
+  };
+  if (!owner) {
+    return (
+      <div className="cb-pick">
+        <h1 className="cb-h1">קבוצות המילים עוד לא נפתחו</h1>
+        <p className="cb-sub">קודם צריך לבחור את סוג בית הספר בחשבון של בית הספר, ואז ייפתחו הקבוצות של השכבות המתאימות.</p>
+      </div>
+    );
+  }
+  return (
+    <div className="cb-pick">
+      <h1 className="cb-h1">מה סוג בית הספר?</h1>
+      <p className="cb-sub">
+        קבוצות המילים נפתחות לפי השכבות של בית הספר.
+        <br />
+        בוחרים פעם אחת, ולשינוי אפשר לפנות אלינו.
+      </p>
+      <div className="cb-pick-grid">
+        {SCHOOL_TYPES.filter((x) => x.key !== "all").map((x) => (
+          <button key={x.key} type="button" className="cb-pick-btn" disabled={!!busy} onClick={() => pick(x.key)}>
+            {busy === x.key ? <span className="cb-spin" aria-hidden /> : null}
+            {x.he}
+          </button>
+        ))}
+      </div>
+      {err && <p className="cb-note" style={{ marginTop: 14, justifyContent: "center" }}>משהו השתבש. אפשר לנסות שוב.</p>}
+    </div>
+  );
+}
+
 function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onToggle: () => void }) {
   const href = useHref();
   return (
@@ -383,13 +464,15 @@ function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onTogg
 
 function TopicRow({ t, open, onToggle }: { t: CurTopic; open: boolean; onToggle: () => void }) {
   const href = useHref();
+  const { user } = useAuth();
   const [set, setSet] = useState<WordSet | undefined>(() => getWordSet(t.id));
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (!open || set) return;
+    if (!open || set || !user) return;
     let alive = true;
-    fetch(`/api/curriculum-set?id=${encodeURIComponent(t.id)}`)
+    user.getIdToken()
+      .then((tk) => fetch(`/api/curriculum-set?id=${encodeURIComponent(t.id)}`, { headers: { Authorization: `Bearer ${tk}` } }))
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((d: { set: WordSet; defs: Record<string, string> }) => {
         if (!alive) return;
@@ -398,7 +481,7 @@ function TopicRow({ t, open, onToggle }: { t: CurTopic; open: boolean; onToggle:
       })
       .catch(() => alive && setFailed(true));
     return () => { alive = false; };
-  }, [open, set, t.id]);
+  }, [open, set, t.id, user]);
 
   return (
     <li className={"cb-topic" + (open ? " open" : "")}>
@@ -564,6 +647,12 @@ const CSS = `
 .cb-present span{font-size:12.5px;font-weight:600;opacity:.85}
 .cb-present:hover{filter:brightness(1.07)}
 .cb-ready-card .cb-present{margin-top:auto;align-self:stretch;justify-content:center}
+.cb-pick{max-width:640px;margin:24px auto 0;text-align:center}
+.cb-pick .cb-sub{margin-inline:auto}
+.cb-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:8px;--c:#0E8A8A}
+.cb-pick-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 14px;border-radius:14px;border:1px solid var(--rule);background:var(--surface);font:inherit;font-weight:700;font-size:16px;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.cb-pick-btn:hover{border-color:#0EA5A5;background:color-mix(in srgb,#0EA5A5 6%,#fff)}
+.cb-pick-btn:disabled{opacity:.6;cursor:default}
 .cb-note{display:flex;align-items:center;gap:10px;margin:0;color:var(--ink-muted);font-size:14.5px}
 .cb-spin{width:16px;height:16px;border-radius:50%;border:2px solid color-mix(in srgb,var(--c) 25%,#fff);border-top-color:var(--c);animation:cbspin .8s linear infinite}
 @keyframes cbspin{to{transform:rotate(360deg)}}

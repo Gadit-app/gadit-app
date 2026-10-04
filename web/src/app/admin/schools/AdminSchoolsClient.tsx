@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useAdminContext } from "../admin-context";
+import { SCHOOL_TYPES, schoolTypeOf } from "@/lib/school-levels";
 import { classroomLangLabel } from "@/lib/classroom-insights";
 
 /**
@@ -67,6 +68,7 @@ type SchoolDetail = {
     ownerSearches: number;
     logoUrl: string | null;
     ownerRecentWords: { word: string; lang: string; at: string }[];
+    levels?: string[];
   };
   totalAllTime: number;
   classroomCount: number;
@@ -383,6 +385,33 @@ export default function AdminSchoolsClient() {
                   </p>
                 </div>
               </div>
+              {/* Which levels the word sets open to (Gadi 2026-10-04). */}
+              <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, fontSize: 13, color: "#374151" }}>
+                {lang === "he" ? "סוג בית הספר (קבוצות המילים):" : "School type (word sets):"}
+                <select
+                  value={schoolTypeOf(detail.school.levels ?? [])?.key ?? ""}
+                  onChange={async (e) => {
+                    if (!user) return;
+                    const type = e.target.value;
+                    const idToken = await user.getIdToken();
+                    const r = await fetch("/api/admin/schools", {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+                      body: JSON.stringify({ schoolId: detail.school.id, type }),
+                    });
+                    if (r.ok) {
+                      const j = (await r.json()) as { levels: string[] };
+                      setDetail((d) => (d ? { ...d, school: { ...d.school, levels: j.levels } } : d));
+                    }
+                  }}
+                  style={{ padding: "6px 8px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 13 }}
+                >
+                  <option value="">{lang === "he" ? "לא נבחר (בית הספר יבחר)" : "Not chosen (the school picks)"}</option>
+                  {SCHOOL_TYPES.map((x) => (
+                    <option key={x.key} value={x.key}>{lang === "he" ? x.he : x.en}</option>
+                  ))}
+                </select>
+              </label>
               <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <button
                   onClick={enterDashboard}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { computeSchoolInsights } from "@/lib/school-insights";
+import { SCHOOL_TYPES, cleanLevels } from "@/lib/school-levels";
 
 /**
  * Admin-only cross-school view.
@@ -62,6 +63,7 @@ export async function GET(req: NextRequest) {
       plan?: string;
       createdAt?: string;
       logoUrl?: string | null;
+      levels?: unknown;
     };
     const ownerSnap = await db.collection("users").doc(schoolId).get();
     const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
@@ -100,6 +102,7 @@ export async function GET(req: NextRequest) {
         id: schoolId,
         name: (meta.name ?? "").trim(),
         contactEmail: meta.contactEmail ?? null,
+        levels: cleanLevels(meta.levels),
         plan: meta.plan ?? "",
         createdAt: meta.createdAt ?? null,
         logoUrl: meta.logoUrl ?? null,
@@ -169,6 +172,25 @@ export async function GET(req: NextRequest) {
  *
  * For clearing out test/duplicate schools. Admin-gated, irreversible.
  */
+/** PATCH { schoolId, type } sets which school levels the word sets open
+ *  to (lib/school-levels.ts). type "" clears it, so the school picks again. */
+export async function PATCH(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+  const { schoolId, type } = (await req.json().catch(() => ({}))) as { schoolId?: string; type?: string };
+  if (!schoolId) return NextResponse.json({ error: "schoolId required" }, { status: 400 });
+  const ref = getAdminDb().collection("schools").doc(schoolId);
+  if (!(await ref.get()).exists) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  if (!type) {
+    await ref.set({ levels: FieldValue.delete(), schoolType: FieldValue.delete() }, { merge: true });
+    return NextResponse.json({ levels: [] });
+  }
+  const t = SCHOOL_TYPES.find((x) => x.key === type);
+  if (!t) return NextResponse.json({ error: "bad_type" }, { status: 400 });
+  await ref.set({ levels: t.levels, schoolType: t.key, levelsSetAt: new Date().toISOString() }, { merge: true });
+  return NextResponse.json({ levels: t.levels });
+}
+
 export async function DELETE(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
