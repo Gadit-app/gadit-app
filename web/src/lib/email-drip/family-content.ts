@@ -58,8 +58,7 @@ export const FAMILY_META: FamilyEmailMeta[] = [
   M("fam2-help", "Family · 8 · Help and guides", 7, "/help"),
   M("fam2-spell", "Family · 9 · School dictation practice", 8, "/spell"),
   M("fam2-say", "Family · 10 · Say it", 10, "/say"),
-  M("fam2-dashboard", "Family · 11 · Parent board", 11, "/family"),
-  M("fam2-alerts", "Family · 12 · Word alerts", 13, "/family", "?tab=settings"),
+  M("fam2-dashboard", "Family · 11 · Parent board and word alerts", 11, "/family"),
   M("fam2-ranks", "Family · 13 · Ranks, streaks, skins", 15),
   M("fam2-questions", "Family · 14 · Questions about a word", 17, "/"),
   M("fam2-idioms", "Family · 15 · Idioms and expressions", 19, "/"),
@@ -81,8 +80,7 @@ export const FAMILY_LABEL_HE: Record<string, string> = {
   "fam2-help": "8 · עזרה והדרכות",
   "fam2-spell": "9 · תרגול הכתבה",
   "fam2-say": "10 · תגיד את זה",
-  "fam2-dashboard": "11 · לוח ההורה",
-  "fam2-alerts": "12 · התראות על מילים",
+  "fam2-dashboard": "11 · לוח ההורה והתראות על מילים",
   "fam2-ranks": "13 · דרגות, רצף וסקינים",
   "fam2-questions": "14 · שאלות על מילה",
   "fam2-idioms": "15 · ניבים וצירופים",
@@ -604,6 +602,8 @@ Type a sentence and choose the language you're learning. Gadit shows how to say 
     ),
   },
 
+  // Parent board + word alerts in one email (Gadi 2026-10-05): the alerts
+  // are part of the parent board, set up from the start.
   "fam2-dashboard": {
     he: C(
       "היי {שם}, ככה רואים את אוצר המילים של הילד גדל",
@@ -616,15 +616,20 @@ Type a sentence and choose the language you're learning. Gadit shows how to say 
 
 לכל ילד יש כרטיס משלו: כמה מילים במחברת, רצף הימים, הדרגה, כמה מילים נוספו השבוע, והמילים האחרונות שחיפש.
 
+## התראות על מילים
+כל מילה שילד מחפש היא שאלה שהייתה לו בראש. כשההתראות פועלות, מגיעה אליך הודעה כשהילד מחפש מילה. אפשר לבחור הודעה על כל מילה, או סיכום אחד ביום. ההודעות מגיעות במייל, ובטלפון גם כהתראה על המסך כשזה אפשרי.
+
 ## איך עושים את זה, שלב אחר שלב:
 1. פותחים את תפריט החשבון ולוחצים על ["המשפחה שלי"](/family).
-2. בלשונית "דף הבית" רואים את הסיכום.
-3. עוברים על הכרטיס של כל ילד.
-4. ב"חיפושים אחרונים" רואים את המילים האחרונות שחיפשו בבית.
+2. בלשונית "דף הבית" רואים את הסיכום ואת הכרטיס של כל ילד.
+3. ב"חיפושים אחרונים" רואים את המילים האחרונות שחיפשו בבית.
+4. עוברים ל[לשונית "הגדרות"](/family?tab=settings), ובחלק "התראות על מילים" מדליקים את "הודיעו לי כשהילד מחפש מילה".
+5. בוחרים "כל מילה" או "סיכום יומי". "סיכום יומי" מתאים לרוב המשפחות: הודעה אחת בערב, עם כל המילים של היום.
+6. רוצים התראה גם על המסך של הטלפון? פותחים את Gadit בטלפון ולוחצים על "הפעל התראות במכשיר הזה".
 
 **טיפ מהשטח:** לבחור מילה אחת מהכרטיס של הילד ולשאול אותו עליה בארוחת הערב. ילד שמסביר מילה להורה, זוכר אותה.`,
       "למשפחה שלי",
-      "במייל הבא נדבר על התראות: איך יודעים מה מסקרן את הילד.",
+      "במייל הבא נדבר על מה שמחזיר את הילד ל-Gadit כל יום.",
     ),
     en: C(
       "Hi {name}, here's how to watch your child's vocabulary grow",
@@ -637,55 +642,19 @@ On the "Home" tab of [your family area](/family) there's a summary for the whole
 
 Each child has their own card: words in the notebook, their day streak, their rank, how many words were added this week, and the latest words they looked up.
 
+## Word alerts
+Every word a child looks up is a question they had in mind. With alerts on, you get a message when your child looks up a word. You can choose a message for every word, or one summary a day. Messages arrive by email, and on your phone as a banner when possible.
+
 ## How to do it, step by step:
 1. Open the account menu and tap ["My family"](/family).
-2. On the "Home" tab, see the summary.
-3. Go through each child's card.
-4. Under "Recent lookups" you see the latest words looked up at home.
+2. On the "Home" tab, see the summary and each child's card.
+3. Under "Recent lookups" you see the latest words looked up at home.
+4. Go to the [Settings tab](/family?tab=settings) and, under "Word alerts", turn on "Notify me when my child looks up a word".
+5. Choose "Every word" or "Daily summary". "Daily summary" suits most families: one message in the evening, with all of the day's words.
+6. Want a banner on your phone too? Open Gadit on your phone and tap "Turn on alerts on this device".
 
 **A tip from other families:** pick one word from your child's card and ask them about it at dinner. A child who explains a word to a parent remembers it.`,
       "Open My family",
-      "In the next email we'll look at alerts: knowing what sparks your child's curiosity.",
-    ),
-  },
-
-  "fam2-alerts": {
-    he: C(
-      "היי {שם}, ככה יודעים מה מסקרן את הילד",
-      `היי {שם},
-
-כל מילה שילד מחפש היא שאלה שהייתה לו בראש. התראות על מילים נותנות לך לראות את השאלות האלה.
-
-## התראות על מילים
-כשההתראות פועלות, מגיעה אליך הודעה כשהילד מחפש מילה. אפשר לבחור לקבל הודעה על כל מילה, או סיכום אחד ביום. ההודעות מגיעות במייל, ובטלפון גם כהתראה על המסך כשזה אפשרי.
-
-## איך עושים את זה, שלב אחר שלב:
-1. נכנסים ל[לשונית "הגדרות" באזור המשפחה](/family?tab=settings).
-2. בחלק "התראות על מילים" מדליקים את "הודיעו לי כשהילד מחפש מילה".
-3. בוחרים "כל מילה" או "סיכום יומי".
-4. רוצים התראה גם על המסך של הטלפון? פותחים את Gadit בטלפון ולוחצים על "הפעל התראות במכשיר הזה".
-
-**טיפ מהשטח:** "סיכום יומי" מתאים לרוב המשפחות. הודעה אחת בערב, עם כל המילים של היום.`,
-      "להגדרות ההתראות",
-      "במייל הבא נדבר על מה שמחזיר את הילד ל-Gadit כל יום.",
-    ),
-    en: C(
-      "Hi {name}, here's how to know what sparks your child's curiosity",
-      `Hi {name},
-
-Every word a child looks up is a question they had in mind. Word alerts let you see those questions.
-
-## Word alerts
-With alerts on, you get a message when your child looks up a word. You can choose a message for every word, or one summary a day. Messages arrive by email, and on your phone as a banner when possible.
-
-## How to do it, step by step:
-1. Open the [Settings tab in your family area](/family?tab=settings).
-2. Under "Word alerts", turn on "Notify me when my child looks up a word".
-3. Choose "Every word" or "Daily summary".
-4. Want a banner on your phone too? Open Gadit on your phone and tap "Turn on alerts on this device".
-
-**A tip from other families:** "Daily summary" suits most families. One message in the evening, with all of the day's words.`,
-      "Open alert settings",
       "In the next email we'll look at what brings your child back to Gadit every day.",
     ),
   },
