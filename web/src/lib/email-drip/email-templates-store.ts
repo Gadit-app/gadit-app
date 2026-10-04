@@ -1,5 +1,5 @@
 import { getAdminDb } from "@/lib/firebase-admin";
-import type { EmailContent } from "./render";
+import { V2_DEFAULTS, type EmailContent } from "./render";
 import { FAMILY_CONTENT } from "./family-content";
 
 /**
@@ -37,6 +37,9 @@ export async function getEffectiveContent(key: string, he: boolean): Promise<Ema
     body: o?.body ?? base.body,
     ctaText: o?.ctaText ?? base.ctaText,
     next: o?.next ?? base.next,
+    closing: o?.closing ?? base.closing ?? V2_DEFAULTS[he ? "he" : "en"].closing,
+    signature: o?.signature ?? base.signature ?? V2_DEFAULTS[he ? "he" : "en"].signature,
+    helpText: o?.helpText ?? base.helpText ?? V2_DEFAULTS[he ? "he" : "en"].helpText,
   };
 }
 

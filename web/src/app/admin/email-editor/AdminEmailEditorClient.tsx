@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAdminContext } from "../admin-context";
 
-type Content = { subject: string; heading: string; body: string; ctaText: string; next?: string };
+type Content = { subject: string; heading: string; body: string; ctaText: string; next?: string; closing?: string; signature?: string; helpText?: string };
 type LangBlock = { content: Content; overridden: boolean };
 type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number };
 type RoMail = { subject: string; html: string };
@@ -223,6 +223,13 @@ export function AdminEmailEditorClient() {
           <input style={{ ...input, maxWidth: 320 }} value={content.ctaText} onChange={(e) => setField("ctaText", e.target.value)} />
           <label style={label}>{he ? "משפט המשך למייל הבא (מתחת לכפתור)" : "Bridge line to the next email (under the button)"}</label>
           <input style={input} value={content.next ?? ""} onChange={(e) => setField("next", e.target.value)} />
+          <label style={label}>{he ? "משפט סיום (לפני החתימה)" : "Closing line (before the signature)"}</label>
+          <input style={input} value={content.closing ?? ""} onChange={(e) => setField("closing", e.target.value)} />
+          <label style={label}>{he ? "חתימה" : "Signature"}</label>
+          <input style={{ ...input, maxWidth: 320 }} value={content.signature ?? ""} onChange={(e) => setField("signature", e.target.value)} />
+          <label style={label}>{he ? "טקסט הקישור להדרכות (בסוף המייל)" : "Guides link text (end of the email)"}</label>
+          <input style={{ ...input, maxWidth: 320 }} value={content.helpText ?? ""} onChange={(e) => setField("helpText", e.target.value)} />
+          <p style={{ fontSize: 12.5, color: "#6B7280", margin: "6px 0 0" }}>{he ? "שדה שמרוקנים לגמרי יורד מהמייל." : "A field left empty is removed from the email."}</p>
         </div>
       )}
 

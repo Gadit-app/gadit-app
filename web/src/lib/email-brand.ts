@@ -21,10 +21,14 @@ export function emailHeaderHtml(): string {
 }
 
 /** Team signature with the app icon (like the Yooniz signature block). */
-export function emailSignatureHtml(he: boolean): string {
+export function emailSignatureHtml(he: boolean, text?: string): string {
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
-  const name = he ? `הצוות של <span dir="ltr" translate="no">Gadit</span>` : `The <span translate="no">Gadit</span> team`;
+  // An edited signature: plain text, with the brand kept Latin and isolated.
+  const name = text
+    ? text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string)
+        .replace(/Gadit/g, he ? `<span dir="ltr" translate="no">Gadit</span>` : `<span translate="no">Gadit</span>`)
+    : he ? `הצוות של <span dir="ltr" translate="no">Gadit</span>` : `The <span translate="no">Gadit</span> team`;
   return `<table role="presentation" dir="${dir}" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 18px;">
       <tr>
         <td style="padding-${he ? "left" : "right"}:10px;vertical-align:middle;">

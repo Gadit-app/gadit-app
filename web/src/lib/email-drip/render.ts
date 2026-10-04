@@ -25,6 +25,18 @@ export type EmailContent = {
   /** v2 (Yooniz-style) series only: the one line under the button that
    *  bridges to the next email ("מחר נדבר על..."). Empty on the last one. */
   next?: string;
+  /** v2 only, editable since 2026-10-04 (Gadi: every part of the email):
+   *  the closing line, the team signature and the guides link text. An
+   *  empty string removes that part from the email. */
+  closing?: string;
+  signature?: string;
+  helpText?: string;
+};
+
+/** What the v2 email says when a field was never edited. */
+export const V2_DEFAULTS: Record<"he" | "en", { closing: string; signature: string; helpText: string }> = {
+  he: { closing: "אנחנו כאן לכל שאלה ועזרה.", signature: "הצוות של Gadit", helpText: "לכל ההדרכות" },
+  en: { closing: "We're here for any question or help.", signature: "The Gadit team", helpText: "All guides" },
 };
 
 /** Fill {שם} / {name} with the parent's first name; without a name the
@@ -176,10 +188,17 @@ export function renderEmailHtmlV2(opts: {
   ctaText?: string;
   ctaUrl: string;
   next?: string;
+  closing?: string;
+  signature?: string;
+  helpText?: string;
   helpUrl: string;
   unsubscribeUrl: string;
 }): string {
   const { he } = opts;
+  const D = V2_DEFAULTS[he ? "he" : "en"];
+  const closing = (opts.closing ?? D.closing).trim();
+  const signature = (opts.signature ?? D.signature).trim();
+  const helpText = (opts.helpText ?? D.helpText).trim();
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
   const para = (html: string, extra = "") =>
@@ -195,9 +214,9 @@ export function renderEmailHtmlV2(opts: {
       ${opts.bodyHtml}
       ${cta}
       ${next}
-      ${para(he ? "אנחנו כאן לכל שאלה ועזרה." : "We're here for any question or help.", "margin-top:26px;")}
-      ${emailSignatureHtml(he)}
-      <p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${he ? "לכל ההדרכות" : "All guides"}</a></p>
+      ${closing ? para(inline(he, closing), "margin-top:26px;") : ""}
+      ${signature ? emailSignatureHtml(he, signature) : ""}
+      ${helpText ? `<p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${esc(helpText)}</a></p>` : ""}
     </div>
     <div style="border-top:1px solid #EEF2F1;padding:16px 24px 20px;text-align:center;">
       <p dir="${dir}" style="margin:0 0 6px;font-size:12px;color:#9CA3AF;">${he ? `<span dir="ltr" translate="no">Gadit</span> · להבין כל מילה עד הסוף` : `<span translate="no">Gadit</span>`}</p>

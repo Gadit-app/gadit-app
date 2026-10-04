@@ -142,6 +142,12 @@ export async function POST(req: NextRequest) {
       heading: (c.heading ?? "").slice(0, 200),
       body: c.body.slice(0, 8000),
       ctaText: (c.ctaText ?? "").slice(0, 120),
+      // These were dropped on save before (Gadi 2026-10-04: "it goes back
+      // to the old text"): every editable part is saved now.
+      next: (c.next ?? "").slice(0, 400),
+      closing: (c.closing ?? "").slice(0, 300),
+      signature: (c.signature ?? "").slice(0, 120),
+      helpText: (c.helpText ?? "").slice(0, 120),
     });
     return NextResponse.json({ ok: true, saved: true });
   }
