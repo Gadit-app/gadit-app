@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { getCurriculumSetDoc } from "@/lib/curriculum-sets";
-import { curTopic } from "@/lib/curriculum-catalog";
-import { cleanLevels } from "@/lib/school-levels";
+import { catalogOfTopic, topicLevel } from "@/lib/curriculum-catalog";
+import { cleanLevels, cleanCurriculum, curriculumAllows } from "@/lib/school-levels";
 
 /**
  * GET /api/curriculum-set?id=cur-xxxxxxxxxx   (Bearer: a school account)
@@ -16,8 +16,9 @@ export const maxDuration = 45;
 
 export async function GET(req: NextRequest) {
   const id = (req.nextUrl.searchParams.get("id") ?? "").trim();
-  const topic = curTopic(id);
-  if (!topic) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  const catalog = catalogOfTopic(id);
+  const level = topicLevel(id);
+  if (!catalog || !level) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
   const h = req.headers.get("Authorization") || "";
   const token = h.startsWith("Bearer ") ? h.slice(7) : "";
@@ -30,8 +31,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
   }
   if (!schoolId) return NextResponse.json({ error: "schools_only" }, { status: 403 });
-  const levels = cleanLevels((await getAdminDb().collection("schools").doc(schoolId).get()).data()?.levels);
-  if (!levels.includes(topic.l)) return NextResponse.json({ error: "level_not_open", levels }, { status: 403 });
+  const sd = (await getAdminDb().collection("schools").doc(schoolId).get()).data() ?? {};
+  const levels = cleanLevels(sd.levels);
+  if (!curriculumAllows(cleanCurriculum(sd.curriculum, levels), catalog)) return NextResponse.json({ error: "curriculum_not_open" }, { status: 403 });
+  if (!levels.includes(level)) return NextResponse.json({ error: "level_not_open", levels }, { status: 403 });
 
   try {
     const doc = await getCurriculumSetDoc(id, true);

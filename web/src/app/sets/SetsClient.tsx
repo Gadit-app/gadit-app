@@ -240,12 +240,13 @@ export default function SetsClient() {
   // accounts get in. Hebrew shows the full Israeli curriculum catalog.
   if (!planReady) return <div className="wordbook" style={S.page} />;
   if (!user || !schoolId) return <SchoolsOnly he={lang === "he"} dir={dir} />;
-  if (lang === "he") return <CurriculumBrowser />;
 
   const presentSet = (set: WordSet) =>
     router.push(href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`));
 
-  return (
+  // The school's national curriculum (Israel, South Africa CAPS...); the old
+  // hand-made view stays for schools marked "legacy" (Greenwarth for now).
+  const legacy = (
     <div className="wordbook" dir={dir} style={S.page}>
       <header style={S.header}>
         <Link href={href("/")} style={S.wordmark} dir="ltr" aria-label="Gadit home">
@@ -295,6 +296,7 @@ export default function SetsClient() {
       </main>
     </div>
   );
+  return <CurriculumBrowser legacy={legacy} />;
 }
 
 function SchoolsOnly({ he, dir }: { he: boolean; dir: "rtl" | "ltr" }) {

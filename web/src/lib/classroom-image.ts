@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { logAiUsage } from "@/lib/ai-cost";
 import { curatedImageHint, type WordSet } from "@/lib/word-sets";
-import { curTopic } from "@/lib/curriculum-catalog";
+import { topicLevel } from "@/lib/curriculum-catalog";
 
 /**
  * The Gadit house style for word-set pictures (Gadi 2026-10-04). One
@@ -25,9 +25,9 @@ export type ClassroomStyle = "kids" | "teen";
 const SITE = "https://www.gadit.app";
 
 export function classroomStyle(set: Pick<WordSet, "id">): ClassroomStyle {
-  const t = curTopic(set.id);
-  if (!t) return "kids"; // the hand-made sets are all elementary
-  return t.l === "middle" || t.l === "high" ? "teen" : "kids";
+  const l = topicLevel(set.id);
+  if (!l) return "kids"; // the hand-made sets are all elementary
+  return l === "middle" || l === "high" || l === "senior" ? "teen" : "kids";
 }
 
 export function classroomImageKey(word: string, meaning: string, lang: string, style: ClassroomStyle): string {

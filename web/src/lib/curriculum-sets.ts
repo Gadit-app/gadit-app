@@ -1,7 +1,8 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 import { getWordSet, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
-import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG } from "@/lib/curriculum-catalog";
+import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic } from "@/lib/curriculum-catalog";
+import zaSets from "@/lib/curriculum-sets-za.json";
 
 // Server side of the curriculum catalog (Gadi 2026-10-03). A topic's key
 // words and their in-lesson definitions are generated once with gpt-4o the
@@ -70,11 +71,21 @@ ${foreign
 
 /** A curriculum set with its definitions, generated on first request when
  *  `create`. Registers it so getWordSet/classroomDef see it. */
+/** A South African CAPS unit's built-in words (scripts/curriculum-za). */
+function zaDoc(id: string): CurriculumSetDoc | null {
+  const t = zaTopic(id);
+  const w = (zaSets as Record<string, { words: string[]; defs: Record<string, string> }>)[id];
+  if (!t || !w) return null;
+  return { set: { id, subject: t.s, title: t.t, grade: `Grade ${t.g}`, lang: "en", words: w.words }, defs: w.defs };
+}
+
 export async function getCurriculumSetDoc(id: string, create = false): Promise<CurriculumSetDoc | null> {
-  if (!isCurriculumSetId(id) || !curTopic(id)) return null;
+  const isZa = id.startsWith("cur-za-");
+  if (!isCurriculumSetId(id) || !(isZa ? zaTopic(id) : curTopic(id))) return null;
   const ref = getAdminDb().collection("curriculumSets").doc(id);
   const snap = await ref.get();
-  let doc = snap.exists ? (snap.data() as CurriculumSetDoc) : null;
+  // An admin edit lives in Firestore; a CAPS unit otherwise uses its built-in words.
+  let doc = snap.exists ? (snap.data() as CurriculumSetDoc) : isZa ? zaDoc(id) : null;
   if (!doc && create) {
     doc = await generate(id);
     if (doc) await ref.set({ ...doc, version: VERSION, at: new Date().toISOString() });
@@ -111,7 +122,7 @@ export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: 
 
 /** Admin: throw away a unit's words and generate them again. */
 export async function regenerateCurriculumSet(id: string): Promise<CurriculumSetDoc | null> {
-  if (!isCurriculumSetId(id) || !curTopic(id)) return null;
+  if (!isCurriculumSetId(id) || !(curTopic(id) || zaTopic(id))) return null;
   await getAdminDb().collection("curriculumSets").doc(id).delete();
   return getCurriculumSetDoc(id, true);
 }

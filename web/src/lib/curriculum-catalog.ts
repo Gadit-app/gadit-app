@@ -1,4 +1,5 @@
 import data from "./curriculum-catalog.json";
+import za from "./curriculum-catalog-za.json";
 import { WORD_SETS, type WordSet } from "./word-sets";
 
 // The full Israeli school curriculum (Gadi 2026-10-03): every subject and
@@ -62,3 +63,67 @@ export const SUBJECT_LANG: Record<string, string> = {
   english: "en", arabic: "ar", french: "fr", spanish: "es", russian: "ru", german: "de",
   italian: "it", chinese: "zh-CN", amharic: "am", portuguese: "pt", persian: "fa",
 };
+
+// ── Several national curricula (Gadi 2026-10-04) ──────────────────────────
+// A school picks its curriculum once (schools/{sid}.curriculum); the /sets
+// browser shows that catalog in its own UI language. "il-he" is the Israeli
+// catalog above; "za-caps" is South Africa's CAPS (grades 4-9, English),
+// built from the official DBE documents in scripts/curriculum-za/.
+export type CatalogId = "il-he" | "za-caps";
+export type ViewLevel = { key: string; name: string; short: string };
+export type ViewCategory = { key: string; name: string };
+export type ViewSubject = { key: string; name: string; cat: string; dati?: number };
+export type ViewTopic = { id: string; s: string; l: string; t: string; g: string; term?: number | null };
+export type CatalogView = {
+  id: CatalogId;
+  ui: "he" | "en";
+  dir: "rtl" | "ltr";
+  defaultLevel: string;
+  levels: ViewLevel[];
+  categories: ViewCategory[];
+  subjects: ViewSubject[];
+  topics: ViewTopic[];
+  gradeLabel: (g: string) => string;
+};
+
+type ZaTopic = { id: string; s: string; l: string; g: string; t: string; term?: number | null; strand?: string };
+const ZA_TOPICS = za.topics as ZaTopic[];
+const ZA_BY_ID = new Map(ZA_TOPICS.map((t) => [t.id, t]));
+
+const VIEWS: Record<CatalogId, CatalogView> = {
+  "il-he": {
+    id: "il-he",
+    ui: "he",
+    dir: "rtl",
+    defaultLevel: "elementary",
+    levels: CUR_LEVELS.map((l) => ({ key: l.key, name: l.he, short: l.key === "middle" ? "חטיבה" : l.he })),
+    categories: CUR_CATEGORIES.map((c) => ({ key: c.key, name: c.he })),
+    subjects: CUR_SUBJECTS.map((s) => ({ key: s.key, name: s.he, cat: s.cat, dati: s.dati })),
+    topics: CUR_TOPICS,
+    gradeLabel,
+  },
+  "za-caps": {
+    id: "za-caps",
+    ui: "en",
+    dir: "ltr",
+    defaultLevel: "intermediate",
+    levels: za.levels.map((l) => ({ key: l.key, name: l.en, short: l.en.replace(/ Phase.*/, "") })),
+    categories: za.categories.map((c) => ({ key: c.key, name: c.en })),
+    subjects: za.subjects.map((s) => ({ key: s.key, name: s.en, cat: s.cat })),
+    topics: ZA_TOPICS,
+    gradeLabel: (g: string) => (g ? `Grade ${g}` : ""),
+  },
+};
+export const CATALOG_IDS = Object.keys(VIEWS) as CatalogId[];
+export const catalogView = (id: CatalogId) => VIEWS[id];
+
+/** Which catalog a curriculum topic id belongs to. */
+export function catalogOfTopic(id: string): CatalogId | undefined {
+  if (id.startsWith("cur-za-")) return ZA_BY_ID.has(id) ? "za-caps" : undefined;
+  return curTopic(id) ? "il-he" : undefined;
+}
+/** A South African CAPS unit by id (server: words live in curriculum-sets-za.json). */
+export const zaTopic = (id: string) => ZA_BY_ID.get(id);
+export const zaSubjectName = (key: string) => za.subjects.find((s) => s.key === key)?.en ?? key;
+/** The level of any curriculum topic, in its own catalog's level keys. */
+export const topicLevel = (id: string) => (ZA_BY_ID.get(id) ?? curTopic(id))?.l;

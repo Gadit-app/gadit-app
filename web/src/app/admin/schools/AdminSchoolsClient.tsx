@@ -69,6 +69,7 @@ type SchoolDetail = {
     logoUrl: string | null;
     ownerRecentWords: { word: string; lang: string; at: string }[];
     levels?: string[];
+    curriculum?: string;
   };
   totalAllTime: number;
   classroomCount: number;
@@ -389,7 +390,7 @@ export default function AdminSchoolsClient() {
               <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, fontSize: 13, color: "#374151" }}>
                 {lang === "he" ? "סוג בית הספר (קבוצות המילים):" : "School type (word sets):"}
                 <select
-                  value={schoolTypeOf(detail.school.levels ?? [])?.key ?? ""}
+                  value={detail.school.curriculum === "legacy" ? "" : schoolTypeOf(detail.school.levels ?? [], detail.school.curriculum)?.key ?? ""}
                   onChange={async (e) => {
                     if (!user) return;
                     const type = e.target.value;
@@ -400,8 +401,8 @@ export default function AdminSchoolsClient() {
                       body: JSON.stringify({ schoolId: detail.school.id, type }),
                     });
                     if (r.ok) {
-                      const j = (await r.json()) as { levels: string[] };
-                      setDetail((d) => (d ? { ...d, school: { ...d.school, levels: j.levels } } : d));
+                      const j = (await r.json()) as { levels: string[]; curriculum?: string };
+                      setDetail((d) => (d ? { ...d, school: { ...d.school, levels: j.levels, curriculum: j.curriculum } } : d));
                     }
                   }}
                   style={{ padding: "6px 8px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 13 }}

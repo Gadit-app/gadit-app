@@ -1,25 +1,46 @@
-// Which school levels a school's word sets open to (Gadi 2026-10-04): an
-// elementary school gets the elementary units, a high school the high
-// school units, and so on. Stored on schools/{sid}.levels (keys of
-// CUR_LEVELS); chosen once by the school, changed only from /admin/schools.
+// Which curriculum and which school levels a school's word sets open to
+// (Gadi 2026-10-04): an elementary school gets the elementary units, a high
+// school the high school units, a South African school the CAPS catalog,
+// and so on. Stored on schools/{sid}.curriculum + schools/{sid}.levels;
+// chosen once by the school, changed only from /admin/schools.
+//   curriculum "il-he"   Israeli catalog (Hebrew)
+//   curriculum "za-caps" South Africa CAPS (English)
+//   curriculum "all"     every catalog (Gadi's own school, for demos)
+//   curriculum "legacy"  the old hand-made sets only (Greenwarth for now)
 
-export type SchoolType = { key: string; he: string; en: string; levels: string[] };
+export type Curriculum = "il-he" | "za-caps" | "all" | "legacy";
+export type SchoolType = { key: string; curriculum: Curriculum; he: string; en: string; levels: string[] };
 
 export const SCHOOL_TYPES: SchoolType[] = [
-  { key: "gan", he: "גן ילדים", en: "Kindergarten", levels: ["gan"] },
-  { key: "elementary", he: "בית ספר יסודי (א עד ו)", en: "Elementary school (grades 1 to 6)", levels: ["elementary"] },
-  { key: "middle", he: "חטיבת ביניים (ז עד ט)", en: "Middle school (grades 7 to 9)", levels: ["middle"] },
-  { key: "high", he: "תיכון (י עד יב)", en: "High school (grades 10 to 12)", levels: ["high"] },
-  { key: "six-year", he: "שש־שנתי (ז עד יב)", en: "Six-year school (grades 7 to 12)", levels: ["middle", "high"] },
-  { key: "eight-year", he: "בית ספר א עד ח", en: "Grades 1 to 8", levels: ["elementary", "middle"] },
-  { key: "all", he: "כל השכבות (גן עד יב)", en: "All levels", levels: ["gan", "elementary", "middle", "high"] },
+  { key: "gan", curriculum: "il-he", he: "גן ילדים", en: "Kindergarten", levels: ["gan"] },
+  { key: "elementary", curriculum: "il-he", he: "בית ספר יסודי (א עד ו)", en: "Elementary school (grades 1 to 6)", levels: ["elementary"] },
+  { key: "middle", curriculum: "il-he", he: "חטיבת ביניים (ז עד ט)", en: "Middle school (grades 7 to 9)", levels: ["middle"] },
+  { key: "high", curriculum: "il-he", he: "תיכון (י עד יב)", en: "High school (grades 10 to 12)", levels: ["high"] },
+  { key: "six-year", curriculum: "il-he", he: "שש־שנתי (ז עד יב)", en: "Six-year school (grades 7 to 12)", levels: ["middle", "high"] },
+  { key: "eight-year", curriculum: "il-he", he: "בית ספר א עד ח", en: "Grades 1 to 8", levels: ["elementary", "middle"] },
+  { key: "za-primary", curriculum: "za-caps", he: "דרום אפריקה: בית ספר יסודי (עד כיתה 7)", en: "Primary school (Grades 4 to 7)", levels: ["intermediate", "senior"] },
+  { key: "za-high", curriculum: "za-caps", he: "דרום אפריקה: תיכון (מכיתה 8)", en: "High school (Grades 8 and 9)", levels: ["senior"] },
+  { key: "za-combined", curriculum: "za-caps", he: "דרום אפריקה: בית ספר משולב", en: "Combined school (Grades 4 to 9)", levels: ["intermediate", "senior"] },
+  { key: "all", curriculum: "all", he: "כל התוכניות וכל השכבות", en: "Every curriculum, all levels", levels: ["gan", "elementary", "middle", "high", "intermediate", "senior"] },
 ];
 
-const VALID = new Set(["gan", "elementary", "middle", "high"]);
+export const CURRICULA: Array<{ key: Exclude<Curriculum, "all" | "legacy">; he: string; en: string }> = [
+  { key: "il-he", he: "ישראל, תוכנית הלימודים בעברית", en: "Israel, Hebrew curriculum" },
+  { key: "za-caps", he: "דרום אפריקה, CAPS", en: "South Africa, CAPS" },
+];
+
+const VALID = new Set(["gan", "elementary", "middle", "high", "intermediate", "senior"]);
 export function cleanLevels(v: unknown): string[] {
   return Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === "string" && VALID.has(x)))] : [];
 }
-export function schoolTypeOf(levels: string[]): SchoolType | undefined {
-  const k = [...levels].sort().join(",");
-  return SCHOOL_TYPES.find((t) => [...t.levels].sort().join(",") === k);
+/** A stored curriculum, with old schools (levels but no curriculum) read as Israeli. */
+export function cleanCurriculum(v: unknown, levels: string[]): Curriculum | "" {
+  if (v === "il-he" || v === "za-caps" || v === "all" || v === "legacy") return v;
+  return levels.length ? "il-he" : "";
 }
+export function schoolTypeOf(levels: string[], curriculum?: string): SchoolType | undefined {
+  const k = [...levels].sort().join(",");
+  return SCHOOL_TYPES.find((t) => (!curriculum || t.curriculum === curriculum) && [...t.levels].sort().join(",") === k);
+}
+/** May a school with this curriculum open a topic from that catalog? */
+export const curriculumAllows = (school: string, catalog: string) => school === "all" || school === catalog;

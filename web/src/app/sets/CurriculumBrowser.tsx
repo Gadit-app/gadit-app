@@ -1,24 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
-import { SCHOOL_TYPES } from "@/lib/school-levels";
+import { useLang } from "@/lib/lang-context";
+import { SCHOOL_TYPES, CURRICULA, type Curriculum } from "@/lib/school-levels";
 import { getWordSet, registerWordSet, type WordSet } from "@/lib/word-sets";
 import {
-  CUR_LEVELS, CUR_CATEGORIES, CUR_SUBJECTS, CUR_TOPICS, curSubject, topicsOf, readySetsOf,
-  subjectIcon, categoryIcon, gradeLabel, curLevelHe, type CurSubject, type CurTopic,
+  CATALOG_IDS, catalogView, readySetsOf, subjectIcon, categoryIcon,
+  type CatalogId, type CatalogView, type ViewSubject, type ViewTopic,
 } from "@/lib/curriculum-catalog";
 
 /**
- * /sets in Hebrew: the full Israeli curriculum (Gadi 2026-10-03), גן to
- * תיכון, every subject with its own soft-3D icon. Level tabs, then subjects
- * grouped by field, then the subject's units; opening a unit loads (or
- * generates once) its key words, and "הצגה בכיתה" walks the class through
- * them on the projector. The hand-made sets show first under their subject.
- * State lives in the URL (?l=&s=&t=) so the back button and shared links work.
+ * /sets: the national curriculum of the school (Gadi 2026-10-03/04). The
+ * Israeli catalog (גן to תיכון, Hebrew, RTL) or South Africa's CAPS (Grades
+ * 4 to 9, English, LTR), every subject with its own soft-3D icon. Level
+ * tabs, subjects grouped by field, then the subject's units; opening a unit
+ * loads its key words, and "Present to class" walks the class through them
+ * on the projector. A school picks its curriculum and type once
+ * (/api/school/levels). State lives in the URL (?l=&s=&t=).
  */
 
 // One soft accent per field, so the sections read as separate worlds.
@@ -27,19 +29,90 @@ const CAT_COLOR: Record<string, string> = {
   "jewish-studies": "#B0573F", "history-civics": "#9A6B1F", "geography-environment": "#3B8A4E",
   "social-sciences": "#A0487A", computers: "#3E5BB0", "arts-media": "#C0522F",
   "body-health": "#C2414B", engineering: "#4A6378", vocational: "#7A6A3A", "early-childhood": "#C27A1F",
+  religion: "#8A5A2B",
 };
-const DEFAULT_LEVEL = "elementary";
-// The levels this school's sets open to (schools/{sid}.levels, Gadi
-// 2026-10-04): an elementary school sees elementary only, and so on.
-const AllowedCtx = createContext<string[]>(CUR_LEVELS.map((l) => l.key));
-const useAllowed = () => useContext(AllowedCtx);
-const inAllowed = (allowed: string[], t: CurTopic) => allowed.includes(t.l);
-const LEVEL_STORE = "gadit-sets-level";
+
+const STR = {
+  he: {
+    title: "קבוצות מילים לכל מקצועות הלימוד",
+    sub1: "בוחרים שכבה ומקצוע, פותחים נושא ומקרינים לכיתה.",
+    sub2: "לכל מילה יש הגדרה, תמונה, דוגמאות, חידון ומשחק.",
+    search: "חיפוש מקצוע או נושא, למשל שברים",
+    searchAria: "חיפוש מקצוע או נושא",
+    levelsAria: "שכבת גיל",
+    subjectsUnit: "מקצועות",
+    topicsUnit: "נושאים",
+    fields: "תחומים",
+    all: "הכל",
+    empty: "לא מצאנו מקצוע או נושא כזה. כדאי לנסות מילה אחרת או קצרה יותר.",
+    subjectsH: "מקצועות",
+    topicsH: "נושאים",
+    back: "כל המקצועות",
+    readyH: "קבוצות מוכנות",
+    topicsIn: (lv: string) => `נושאי הלימוד ב${lv}`,
+    topicSearch: "חיפוש נושא",
+    dati: "ממ״ד",
+    datiLong: "חינוך ממלכתי דתי",
+    present: "הצגה בכיתה",
+    words: "מילים",
+    loading: "מכינים את מילות המפתח של הנושא...",
+    fail: "לא הצלחנו להכין את מילות המפתח כרגע. אפשר לנסות שוב בעוד רגע.",
+    term: (n: number) => `תקופה ${n}`,
+    curH: "איזו תוכנית לימודים?",
+    typeH: "מה סוג בית הספר?",
+    pick1: "קבוצות המילים נפתחות לפי תוכנית הלימודים והשכבות של בית הספר.",
+    pick2: "בוחרים פעם אחת, ולשינוי אפשר לפנות אלינו.",
+    notOwnerH: "קבוצות המילים עוד לא נפתחו",
+    notOwnerP: "קודם צריך לבחור את סוג בית הספר בחשבון של בית הספר, ואז ייפתחו הקבוצות של השכבות המתאימות.",
+    err: "משהו השתבש. אפשר לנסות שוב.",
+    catalog: "תוכנית לימודים",
+  },
+  en: {
+    title: "Word sets for every subject",
+    sub1: "Pick a phase and a subject, open a topic, and project it to the class.",
+    sub2: "Every word comes with a definition, a picture, examples, a quiz and a game.",
+    search: "Search a subject or topic, e.g. fractions",
+    searchAria: "Search a subject or topic",
+    levelsAria: "Phase",
+    subjectsUnit: "subjects",
+    topicsUnit: "topics",
+    fields: "Learning areas",
+    all: "All",
+    empty: "No subject or topic found. Try another or a shorter word.",
+    subjectsH: "Subjects",
+    topicsH: "Topics",
+    back: "All subjects",
+    readyH: "Ready-made sets",
+    topicsIn: (lv: string) => `Topics: ${lv}`,
+    topicSearch: "Search topics",
+    dati: "",
+    datiLong: "",
+    present: "Present to class",
+    words: "words",
+    loading: "Preparing the topic's key words...",
+    fail: "We couldn't load the key words right now. Please try again in a moment.",
+    term: (n: number) => `Term ${n}`,
+    curH: "Which curriculum does your school follow?",
+    typeH: "What kind of school is it?",
+    pick1: "The word sets open by your school's curriculum and grades.",
+    pick2: "You choose once; to change it later, contact us.",
+    notOwnerH: "The word sets aren't open yet",
+    notOwnerP: "The school account first chooses the school type, and then the sets for its grades open.",
+    err: "Something went wrong. Please try again.",
+    catalog: "Curriculum",
+  },
+};
+type T = (typeof STR)["en"];
+
+type Ctx = { view: CatalogView; T: T; allowed: string[] };
+const CatCtx = createContext<Ctx | null>(null);
+const useCat = () => useContext(CatCtx)!;
+const inAllowed = (allowed: string[], t: ViewTopic) => allowed.includes(t.l);
 
 function norm(s: string) {
   return s.replace(/[֑-ׇ"״׳']/g, "").replace(/\s+/g, " ").trim().toLowerCase();
 }
-/** Query matches at the start of a word, or after one prefix letter
+/** Query matches at the start of a word, or after one Hebrew prefix letter
  *  (ו ה ב ל כ), so "שברים" finds "בשברים" but not "משברים". */
 function matches(text: string, q: string) {
   if (!q) return true;
@@ -47,39 +120,46 @@ function matches(text: string, q: string) {
   if (q.includes(" ")) return t.includes(q);
   return t.split(/[\s,:.()-]+/).some((w) => w.startsWith(q) || (/^[והבלכ]/.test(w) && w.slice(1).startsWith(q)));
 }
+const topicsOf = (view: CatalogView, subject: string, level?: string) =>
+  view.topics.filter((t) => t.s === subject && (!level || t.l === level));
 
-export default function CurriculumBrowser() {
+export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   const href = useHref();
   const router = useRouter();
   const sp = useSearchParams();
-  const subjectKey = sp?.get("s") ?? "";
-  const subject = subjectKey ? curSubject(subjectKey) : undefined;
-  // useSearchParams keeps this page client-rendered, so reading the
-  // remembered level in the initializer is safe.
-  const [level, setLevelState] = useState(() => {
-    const fromUrl = sp?.get("l");
-    if (fromUrl) return fromUrl;
-    try {
-      const saved = typeof window !== "undefined" ? localStorage.getItem(LEVEL_STORE) : null;
-      if (saved && CUR_LEVELS.some((l) => l.key === saved)) return saved;
-    } catch { /* storage blocked */ }
-    return DEFAULT_LEVEL;
-  });
-  const [query, setQuery] = useState("");
+  const { lang } = useLang();
   const { user } = useAuth();
-  const [school, setSchool] = useState<{ levels: string[]; owner: boolean } | null>(null);
+  const [school, setSchool] = useState<{ levels: string[]; curriculum: Curriculum | ""; owner: boolean } | null>(null);
   useEffect(() => {
     if (!user) return;
     let alive = true;
     user.getIdToken()
       .then((tk) => fetch("/api/school/levels", { headers: { Authorization: `Bearer ${tk}` } }))
-      .then((r) => (r.ok ? r.json() : { levels: [], owner: false }))
-      .then((j: { levels: string[]; owner: boolean }) => { if (alive) setSchool({ levels: j.levels ?? [], owner: !!j.owner }); })
-      .catch(() => { if (alive) setSchool({ levels: [], owner: false }); });
+      .then((r) => (r.ok ? r.json() : { levels: [], curriculum: "", owner: false }))
+      .then((j: { levels: string[]; curriculum: Curriculum | ""; owner: boolean }) => {
+        if (alive) setSchool({ levels: j.levels ?? [], curriculum: j.curriculum ?? "", owner: !!j.owner });
+      })
+      .catch(() => { if (alive) setSchool({ levels: [], curriculum: "", owner: false }); });
     return () => { alive = false; };
   }, [user]);
-  const allowed = CUR_LEVELS.map((l) => l.key).filter((k) => school?.levels.includes(k));
-  const lvl = allowed.includes(level) ? level : allowed[0] ?? DEFAULT_LEVEL;
+
+  // "all" schools (Gadi's own) can switch catalogs; everyone else sees theirs.
+  const [viewPick, setViewPick] = useState<CatalogId>(() => (lang === "he" ? "il-he" : "za-caps"));
+  const viewId: CatalogId = school?.curriculum === "il-he" || school?.curriculum === "za-caps" ? school.curriculum : viewPick;
+  const view = catalogView(viewId);
+  const T = STR[view.ui];
+  const storeKey = `gadit-sets-level-${viewId}`;
+  const [levelState, setLevelState] = useState<string>(() => {
+    const fromUrl = sp?.get("l");
+    if (fromUrl) return fromUrl;
+    try {
+      return (typeof window !== "undefined" ? localStorage.getItem(storeKey) : null) || "";
+    } catch { return ""; }
+  });
+  const allowed = view.levels.map((l) => l.key).filter((k) => school?.levels.includes(k));
+  const lvl = allowed.includes(levelState) ? levelState : allowed.includes(view.defaultLevel) ? view.defaultLevel : allowed[0] ?? view.defaultLevel;
+  const subjectKey = sp?.get("s") ?? "";
+  const subject = subjectKey ? view.subjects.find((s) => s.key === subjectKey) : undefined;
 
   const go = (params: Record<string, string | undefined>, push = true) => {
     const q = new URLSearchParams();
@@ -90,42 +170,53 @@ export default function CurriculumBrowser() {
   };
   const setLevel = (l: string) => {
     setLevelState(l);
-    try { localStorage.setItem(LEVEL_STORE, l); } catch { /* storage blocked */ }
+    try { localStorage.setItem(storeKey, l); } catch { /* storage blocked */ }
     if (subject) go({ s: subject.key, l }, false);
   };
 
+  if (school?.curriculum === "legacy" && legacy) return <>{legacy}</>;
+  const pickUi = school && !allowed.length ? STR[lang === "he" ? "he" : "en"] : T;
+  const dir = school && !allowed.length ? (lang === "he" ? "rtl" : "ltr") : view.dir;
+
   return (
-    <div className="wordbook cb" dir="rtl">
+    <div className="wordbook cb" dir={dir}>
       <style>{CSS}</style>
       <header className="cb-top">
         <Link href={href("/")} className="cb-wordmark" dir="ltr" aria-label="Gadit home">
           Gad<span>it</span>
         </Link>
+        {school?.curriculum === "all" && (
+          <div className="cb-switch" role="group" aria-label={T.catalog}>
+            {CATALOG_IDS.map((id) => (
+              <button key={id} type="button" className={id === viewId ? "on" : ""} onClick={() => { setViewPick(id); go({}, false); }}>
+                {CURRICULA.find((c) => c.key === id)?.[view.ui] ?? id}
+              </button>
+            ))}
+          </div>
+        )}
       </header>
       <main className="cb-main">
-        <AllowedCtx.Provider value={allowed}>
-        {!school ? null : !allowed.length ? (
-          <SchoolTypePicker owner={school.owner} onSet={(levels) => setSchool({ ...school, levels })} />
-        ) : subject ? (
-          <SubjectView
-            subject={subject}
-            level={lvl}
-            setLevel={setLevel}
-            openTopic={sp?.get("t") ?? ""}
-            onBack={() => go({ l: lvl })}
-            onTopic={(t) => go({ s: subject.key, l: lvl, t: t || undefined }, false)}
-          />
-        ) : (
-          <HomeView
-            level={lvl}
-            setLevel={setLevel}
-            query={query}
-            setQuery={setQuery}
-            openSubject={(s, l) => go({ s, l: l ?? lvl })}
-            openTopic={(t) => go({ s: t.s, l: t.l, t: t.id })}
-          />
-        )}
-        </AllowedCtx.Provider>
+        <CatCtx.Provider value={{ view, T, allowed }}>
+          {!school ? null : !allowed.length ? (
+            <SchoolTypePicker T={pickUi} uiLang={lang === "he" ? "he" : "en"} owner={school.owner} onSet={(levels, curriculum) => setSchool({ ...school, levels, curriculum })} />
+          ) : subject ? (
+            <SubjectView
+              subject={subject}
+              level={lvl}
+              setLevel={setLevel}
+              openTopic={sp?.get("t") ?? ""}
+              onBack={() => go({ l: lvl })}
+              onTopic={(t) => go({ s: subject.key, l: lvl, t: t || undefined }, false)}
+            />
+          ) : (
+            <HomeView
+              level={lvl}
+              setLevel={setLevel}
+              openSubject={(s, l) => go({ s, l: l ?? lvl })}
+              openTopic={(t) => go({ s: t.s, l: t.l, t: t.id })}
+            />
+          )}
+        </CatCtx.Provider>
       </main>
     </div>
   );
@@ -136,48 +227,40 @@ export default function CurriculumBrowser() {
 function HomeView(props: {
   level: string;
   setLevel: (l: string) => void;
-  query: string;
-  setQuery: (q: string) => void;
   openSubject: (s: string, l?: string) => void;
-  openTopic: (t: CurTopic) => void;
+  openTopic: (t: ViewTopic) => void;
 }) {
-  const { level, setLevel, query, setQuery, openSubject, openTopic } = props;
-  const allowed = useAllowed();
+  const { level, setLevel, openSubject, openTopic } = props;
+  const { view, T, allowed } = useCat();
+  const [query, setQuery] = useState("");
   const counts = useMemo(() => {
     const c: Record<string, Record<string, number>> = {};
-    for (const t of CUR_TOPICS) ((c[t.l] ||= {})[t.s] = (c[t.l]?.[t.s] ?? 0) + 1);
+    for (const t of view.topics) ((c[t.l] ||= {})[t.s] = (c[t.l]?.[t.s] ?? 0) + 1);
     return c;
-  }, []);
+  }, [view]);
   const q = norm(query);
-  const sections = CUR_CATEGORIES.map((cat) => ({
+  const sections = view.categories.map((cat) => ({
     cat,
-    subjects: CUR_SUBJECTS.filter((s) => s.cat === cat.key && counts[level]?.[s.key]),
+    subjects: view.subjects.filter((s) => s.cat === cat.key && counts[level]?.[s.key]),
   })).filter((x) => x.subjects.length > 0);
-  // Field filter (Gadi 2026-10-04): "הכל" shows every field, a field chip
-  // shows only that field, so a principal or teacher isn't faced with every
-  // icon at once.
+  // Field filter (Gadi 2026-10-04): "All" shows every field, a field chip
+  // shows only that field.
   const [catState, setCat] = useState("all");
   const cat = sections.some((x) => x.cat.key === catState) ? catState : "all";
   const shownSections = cat === "all" ? sections : sections.filter((x) => x.cat.key === cat);
 
   return (
     <>
-      <h1 className="cb-h1">קבוצות מילים לכל מקצועות הלימוד</h1>
+      <h1 className="cb-h1">{T.title}</h1>
       <p className="cb-sub">
-        בוחרים שכבה ומקצוע, פותחים נושא ומקרינים לכיתה.
+        {T.sub1}
         <br />
-        לכל מילה יש הגדרה, תמונה, דוגמאות, חידון ומשחק.
+        {T.sub2}
       </p>
 
       <div className="cb-search">
         <SearchIcon />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="חיפוש מקצוע או נושא, למשל שברים"
-          aria-label="חיפוש מקצוע או נושא"
-        />
+        <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={T.search} aria-label={T.searchAria} />
       </div>
 
       {q ? (
@@ -185,17 +268,17 @@ function HomeView(props: {
       ) : (
         <>
           {allowed.length > 1 && (
-            <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} unit="מקצועות" only={allowed} />
+            <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} unit={T.subjectsUnit} only={allowed} />
           )}
-          <nav className="cb-cats" aria-label="תחומים">
+          <nav className="cb-cats" aria-label={T.fields}>
             <button type="button" className={"cb-cat-chip" + (cat === "all" ? " on" : "")} aria-pressed={cat === "all"} onClick={() => setCat("all")} style={{ ["--c" as string]: "#0E8A8A" }}>
               <AllIcon />
-              הכל
+              {T.all}
             </button>
             {sections.map(({ cat: c }) => (
               <button type="button" key={c.key} className={"cb-cat-chip" + (cat === c.key ? " on" : "")} aria-pressed={cat === c.key} onClick={() => setCat(c.key)} style={{ ["--c" as string]: CAT_COLOR[c.key] }}>
                 <img src={categoryIcon(c.key)} alt="" width={22} height={22} loading="lazy" />
-                {c.he}
+                {c.name}
               </button>
             ))}
           </nav>
@@ -204,7 +287,7 @@ function HomeView(props: {
               <section key={cat.key} id={`cat-${cat.key}`} className="cb-panel" style={{ ["--c" as string]: CAT_COLOR[cat.key] }}>
                 <h2 className="cb-h2">
                   <img src={categoryIcon(cat.key)} alt="" width={32} height={32} loading="lazy" />
-                  {cat.he}
+                  {cat.name}
                 </h2>
                 <div className="cb-tiles">
                   {subjects.map((s) => (
@@ -223,29 +306,24 @@ function HomeView(props: {
 function LevelTabs({ level, setLevel, counts, unit, only }: {
   level: string; setLevel: (l: string) => void; counts: (l: string) => number; unit: string; only?: string[];
 }) {
-  const tabs = CUR_LEVELS.filter((l) => !only || only.includes(l.key));
+  const { view, T } = useCat();
+  const tabs = view.levels.filter((l) => !only || only.includes(l.key));
   const idx = Math.max(0, tabs.findIndex((l) => l.key === level));
   const n = tabs.length;
+  const sign = view.dir === "rtl" ? -1 : 1;
   // A white pill slides under the chosen tab; the others keep a thin frame
   // so they read as clickable (Gadi 2026-10-04).
   return (
-    <div className="cb-levels" role="tablist" aria-label="שכבת גיל" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+    <div className="cb-levels" role="tablist" aria-label={T.levelsAria} style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
       <span
         className="cb-level-pill"
         aria-hidden
-        style={{ width: `calc((100% - 10px - ${(n - 1) * 6}px) / ${n})`, transform: `translateX(calc(${-idx} * (100% + 6px)))` }}
+        style={{ width: `calc((100% - 10px - ${(n - 1) * 6}px) / ${n})`, transform: `translateX(calc(${sign * idx} * (100% + 6px)))` }}
       />
       {tabs.map((l) => (
-        <button
-          key={l.key}
-          type="button"
-          role="tab"
-          aria-selected={l.key === level}
-          className={"cb-level" + (l.key === level ? " on" : "")}
-          onClick={() => setLevel(l.key)}
-        >
-          <b className="full">{l.he}</b>
-          <b className="short">{l.key === "middle" ? "חטיבה" : l.he}</b>
+        <button key={l.key} type="button" role="tab" aria-selected={l.key === level} className={"cb-level" + (l.key === level ? " on" : "")} onClick={() => setLevel(l.key)}>
+          <b className="full">{l.name}</b>
+          <b className="short">{l.short}</b>
           <span>{counts(l.key)} {unit}</span>
         </button>
       ))}
@@ -253,62 +331,60 @@ function LevelTabs({ level, setLevel, counts, unit, only }: {
   );
 }
 
-function SubjectCard({ s, n, onClick, big }: { s: CurSubject; n: number; onClick: () => void; big?: boolean }) {
+function SubjectCard({ s, n, onClick, big }: { s: ViewSubject; n: number; onClick: () => void; big?: boolean }) {
+  const { T } = useCat();
   return (
     <button type="button" className={"cb-card" + (big ? " big" : "")} onClick={onClick} style={big ? { ["--c" as string]: CAT_COLOR[s.cat] } : undefined}>
       <span className="cb-card-img">
         <img src={subjectIcon(s.key)} alt="" width={72} height={72} loading="lazy" />
       </span>
-      <span className="cb-card-name">{s.he}</span>
+      <span className="cb-card-name">{s.name}</span>
       <span className="cb-card-meta">
-        {n} נושאים
-        {s.dati ? <span className="cb-dati">ממ״ד</span> : null}
+        {n} {T.topicsUnit}
+        {s.dati && T.dati ? <span className="cb-dati">{T.dati}</span> : null}
       </span>
     </button>
   );
 }
 
+function topicMeta(view: CatalogView, T: T, t: ViewTopic) {
+  return [t.g ? view.gradeLabel(t.g) : "", t.term ? T.term(t.term) : ""].filter(Boolean).join(" · ");
+}
+
 function SearchResults({ q, openSubject, openTopic }: {
-  q: string; openSubject: (s: string, l?: string) => void; openTopic: (t: CurTopic) => void;
+  q: string; openSubject: (s: string, l?: string) => void; openTopic: (t: ViewTopic) => void;
 }) {
-  const allowed = useAllowed();
-  const mine = (key: string) => topicsOf(key).filter((t) => inAllowed(allowed, t));
-  const subjects = CUR_SUBJECTS.filter((s) => matches(s.he, q) && mine(s.key).length > 0).slice(0, 12);
-  const topics = CUR_TOPICS.filter((t) => inAllowed(allowed, t) && matches(t.t, q)).slice(0, 60);
-  if (!subjects.length && !topics.length) {
-    return <p className="cb-empty">לא מצאנו מקצוע או נושא כזה. כדאי לנסות מילה אחרת או קצרה יותר.</p>;
-  }
+  const { view, T, allowed } = useCat();
+  const mine = (key: string) => topicsOf(view, key).filter((t) => inAllowed(allowed, t));
+  const subjects = view.subjects.filter((s) => matches(s.name, q) && mine(s.key).length > 0).slice(0, 12);
+  const topics = view.topics.filter((t) => inAllowed(allowed, t) && matches(t.t, q)).slice(0, 60);
+  if (!subjects.length && !topics.length) return <p className="cb-empty">{T.empty}</p>;
   return (
     <>
       {subjects.length > 0 && (
         <section className="cb-section">
-          <h2 className="cb-h2 plain">מקצועות</h2>
+          <h2 className="cb-h2 plain">{T.subjectsH}</h2>
           <div className="cb-grid">
             {subjects.map((s) => (
-              <SubjectCard
-                big
-                key={s.key}
-                s={s}
-                n={mine(s.key).length}
-                onClick={() => openSubject(s.key, mine(s.key)[0]?.l)}
-              />
+              <SubjectCard big key={s.key} s={s} n={mine(s.key).length} onClick={() => openSubject(s.key, mine(s.key)[0]?.l)} />
             ))}
           </div>
         </section>
       )}
       {topics.length > 0 && (
         <section className="cb-section">
-          <h2 className="cb-h2 plain">נושאים</h2>
+          <h2 className="cb-h2 plain">{T.topicsH}</h2>
           <ul className="cb-results">
             {topics.map((t) => {
-              const s = curSubject(t.s)!;
+              const s = view.subjects.find((x) => x.key === t.s)!;
+              const lv = view.levels.find((l) => l.key === t.l)?.name ?? "";
               return (
                 <li key={t.id}>
                   <button type="button" className="cb-result" onClick={() => openTopic(t)} style={{ ["--c" as string]: CAT_COLOR[s.cat] }}>
                     <img src={subjectIcon(s.key)} alt="" width={40} height={40} loading="lazy" />
                     <span className="cb-result-text">
                       <span className="cb-result-title">{t.t}</span>
-                      <span className="cb-result-meta">{s.he} · {curLevelHe(t.l)}{t.g ? ` · ${gradeLabel(t.g)}` : ""}</span>
+                      <span className="cb-result-meta">{[s.name, lv, topicMeta(view, T, t)].filter(Boolean).join(" · ")}</span>
                     </span>
                     <Chevron />
                   </button>
@@ -325,45 +401,46 @@ function SearchResults({ q, openSubject, openTopic }: {
 /* ── Subject: its levels, ready sets, and units ──────────────────────── */
 
 function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
-  subject: CurSubject; level: string; setLevel: (l: string) => void; openTopic: string;
+  subject: ViewSubject; level: string; setLevel: (l: string) => void; openTopic: string;
   onBack: () => void; onTopic: (id: string) => void;
 }) {
-  const allowed = useAllowed();
-  const levels = CUR_LEVELS.map((l) => l.key).filter((l) => allowed.includes(l) && topicsOf(subject.key, l).length > 0);
+  const { view, T, allowed } = useCat();
+  const levels = view.levels.map((l) => l.key).filter((l) => allowed.includes(l) && topicsOf(view, subject.key, l).length > 0);
   const lv = levels.includes(level) ? level : levels[0];
-  const topics = topicsOf(subject.key, lv);
-  const ready = readySetsOf(subject.key, lv);
-  const cat = CUR_CATEGORIES.find((c) => c.key === subject.cat);
+  const topics = topicsOf(view, subject.key, lv);
+  const ready = view.id === "il-he" ? readySetsOf(subject.key, lv) : [];
+  const cat = view.categories.find((c) => c.key === subject.cat);
   const [filter, setFilter] = useState("");
   const f = norm(filter);
   const shown = f ? topics.filter((t) => matches(t.t, f)) : topics;
+  const lvName = view.levels.find((l) => l.key === lv)?.name ?? "";
 
   return (
     <div style={{ ["--c" as string]: CAT_COLOR[subject.cat] }}>
       <button type="button" className="cb-back" onClick={onBack}>
-        <Chevron flip /> כל המקצועות
+        <Chevron flip /> {T.back}
       </button>
       <div className="cb-hero">
         <span className="cb-hero-img">
           <img src={subjectIcon(subject.key)} alt="" width={120} height={120} />
         </span>
         <div>
-          {cat && cat.he !== subject.he && <div className="cb-hero-cat">{cat.he}</div>}
-          <h1 className="cb-h1 tight">{subject.he}</h1>
+          {cat && cat.name !== subject.name && <div className="cb-hero-cat">{cat.name}</div>}
+          <h1 className="cb-h1 tight">{subject.name}</h1>
           <div className="cb-hero-meta">
-            {topicsOf(subject.key).filter((t) => inAllowed(allowed, t)).length} נושאים
-            {subject.dati ? <span className="cb-dati">חינוך ממלכתי דתי</span> : null}
+            {topicsOf(view, subject.key).filter((t) => inAllowed(allowed, t)).length} {T.topicsUnit}
+            {subject.dati && T.datiLong ? <span className="cb-dati">{T.datiLong}</span> : null}
           </div>
         </div>
       </div>
 
       {levels.length > 1 && (
-        <LevelTabs level={lv} setLevel={setLevel} counts={(l) => topicsOf(subject.key, l).length} unit="נושאים" only={levels} />
+        <LevelTabs level={lv} setLevel={setLevel} counts={(l) => topicsOf(view, subject.key, l).length} unit={T.topicsUnit} only={levels} />
       )}
 
       {ready.length > 0 && (
         <section className="cb-section">
-          <h2 className="cb-h2 plain">קבוצות מוכנות</h2>
+          <h2 className="cb-h2 plain">{T.readyH}</h2>
           <ul className="cb-topics">
             {ready.map((set) => (
               <ReadyRow key={set.id} set={set} open={openTopic === set.id} onToggle={() => onTopic(openTopic === set.id ? "" : set.id)} />
@@ -374,13 +451,13 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
 
       <section className="cb-section">
         <h2 className="cb-h2 plain">
-          נושאי הלימוד ב{curLevelHe(lv)}
+          {T.topicsIn(lvName)}
           <span className="cb-h2-count">{topics.length}</span>
         </h2>
         {topics.length > 12 && (
           <div className="cb-search small">
             <SearchIcon />
-            <input type="search" value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="חיפוש נושא" aria-label="חיפוש נושא" />
+            <input type="search" value={filter} onChange={(e) => setFilter(e.target.value)} placeholder={T.topicSearch} aria-label={T.topicSearch} />
           </div>
         )}
         <ul className="cb-topics">
@@ -393,9 +470,12 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
   );
 }
 
-/** One-time choice of the school type; later changes only via Gadi. */
-function SchoolTypePicker({ owner, onSet }: { owner: boolean; onSet: (levels: string[]) => void }) {
+/** One-time choice of the curriculum and school type; later changes only via Gadi. */
+function SchoolTypePicker({ T, uiLang, owner, onSet }: {
+  T: T; uiLang: "he" | "en"; owner: boolean; onSet: (levels: string[], curriculum: Curriculum) => void;
+}) {
   const { user } = useAuth();
+  const [cur, setCur] = useState<string>(uiLang === "he" ? "" : "za-caps");
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState(false);
   const pick = async (type: string) => {
@@ -407,7 +487,7 @@ function SchoolTypePicker({ owner, onSet }: { owner: boolean; onSet: (levels: st
       const r = await fetch("/api/school/levels", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tk}` }, body: JSON.stringify({ type }) });
       const j = await r.json();
       if (!r.ok && !j.levels) throw new Error(j.error);
-      onSet(j.levels);
+      onSet(j.levels, j.curriculum ?? cur);
     } catch {
       setErr(true);
     } finally {
@@ -417,39 +497,51 @@ function SchoolTypePicker({ owner, onSet }: { owner: boolean; onSet: (levels: st
   if (!owner) {
     return (
       <div className="cb-pick">
-        <h1 className="cb-h1">קבוצות המילים עוד לא נפתחו</h1>
-        <p className="cb-sub">קודם צריך לבחור את סוג בית הספר בחשבון של בית הספר, ואז ייפתחו הקבוצות של השכבות המתאימות.</p>
+        <h1 className="cb-h1">{T.notOwnerH}</h1>
+        <p className="cb-sub">{T.notOwnerP}</p>
       </div>
     );
   }
   return (
     <div className="cb-pick">
-      <h1 className="cb-h1">מה סוג בית הספר?</h1>
+      <h1 className="cb-h1">{cur ? T.typeH : T.curH}</h1>
       <p className="cb-sub">
-        קבוצות המילים נפתחות לפי השכבות של בית הספר.
+        {T.pick1}
         <br />
-        בוחרים פעם אחת, ולשינוי אפשר לפנות אלינו.
+        {T.pick2}
       </p>
       <div className="cb-pick-grid">
-        {SCHOOL_TYPES.filter((x) => x.key !== "all").map((x) => (
-          <button key={x.key} type="button" className="cb-pick-btn" disabled={!!busy} onClick={() => pick(x.key)}>
-            {busy === x.key ? <span className="cb-spin" aria-hidden /> : null}
-            {x.he}
-          </button>
-        ))}
+        {!cur
+          ? CURRICULA.map((c) => (
+              <button key={c.key} type="button" className="cb-pick-btn" onClick={() => setCur(c.key)}>
+                {c[uiLang]}
+              </button>
+            ))
+          : SCHOOL_TYPES.filter((x) => x.curriculum === cur).map((x) => (
+              <button key={x.key} type="button" className="cb-pick-btn" disabled={!!busy} onClick={() => pick(x.key)}>
+                {busy === x.key ? <span className="cb-spin" aria-hidden /> : null}
+                {uiLang === "he" && cur === "il-he" ? x.he : x.en}
+              </button>
+            ))}
       </div>
-      {err && <p className="cb-note" style={{ marginTop: 14, justifyContent: "center" }}>משהו השתבש. אפשר לנסות שוב.</p>}
+      {cur && uiLang === "he" && (
+        <button type="button" className="cb-back" style={{ marginTop: 14 }} onClick={() => setCur("")}>
+          <Chevron flip /> {T.curH}
+        </button>
+      )}
+      {err && <p className="cb-note" style={{ marginTop: 14, justifyContent: "center" }}>{T.err}</p>}
     </div>
   );
 }
 
 function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onToggle: () => void }) {
   const href = useHref();
+  const { view } = useCat();
   return (
     <li className={"cb-topic" + (open ? " open" : "")}>
       <button type="button" className="cb-topic-head" onClick={onToggle} aria-expanded={open}>
         <span className="cb-topic-title">{set.title}</span>
-        {set.grade && <span className="cb-grade">{set.grade.startsWith("כית") ? set.grade : gradeLabel(set.grade)}</span>}
+        {set.grade && <span className="cb-grade">{set.grade.startsWith("כית") ? set.grade : view.gradeLabel(set.grade)}</span>}
         <Chevron down={open} />
       </button>
       {open && (
@@ -462,9 +554,10 @@ function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onTogg
   );
 }
 
-function TopicRow({ t, open, onToggle }: { t: CurTopic; open: boolean; onToggle: () => void }) {
+function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle: () => void }) {
   const href = useHref();
   const { user } = useAuth();
+  const { view, T } = useCat();
   const [set, setSet] = useState<WordSet | undefined>(() => getWordSet(t.id));
   const [failed, setFailed] = useState(false);
 
@@ -483,11 +576,12 @@ function TopicRow({ t, open, onToggle }: { t: CurTopic; open: boolean; onToggle:
     return () => { alive = false; };
   }, [open, set, t.id, user]);
 
+  const meta = topicMeta(view, T, t);
   return (
     <li className={"cb-topic" + (open ? " open" : "")}>
       <button type="button" className="cb-topic-head" onClick={onToggle} aria-expanded={open}>
         <span className="cb-topic-title">{t.t}</span>
-        {t.g && <span className="cb-grade">{gradeLabel(t.g)}</span>}
+        {meta && <span className="cb-grade">{meta}</span>}
         <Chevron down={open} />
       </button>
       {open && (
@@ -498,9 +592,9 @@ function TopicRow({ t, open, onToggle }: { t: CurTopic; open: boolean; onToggle:
               <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} />
             </>
           ) : failed ? (
-            <p className="cb-note">לא הצלחנו להכין את מילות המפתח כרגע. אפשר לנסות שוב בעוד רגע.</p>
+            <p className="cb-note">{T.fail}</p>
           ) : (
-            <p className="cb-note"><span className="cb-spin" aria-hidden /> מכינים את מילות המפתח של הנושא...</p>
+            <p className="cb-note"><span className="cb-spin" aria-hidden /> {T.loading}</p>
           )}
         </div>
       )}
@@ -522,9 +616,10 @@ function WordChips({ set }: { set: WordSet }) {
 }
 
 function PresentButton({ href, n }: { href: string; n: number }) {
+  const { T } = useCat();
   return (
     <Link href={href} className="cb-present">
-      <ScreenIcon /> הצגה בכיתה <span>· {n} מילים</span>
+      <ScreenIcon /> {T.present} <span>· {n} {T.words}</span>
     </Link>
   );
 }
@@ -548,8 +643,9 @@ function SearchIcon() {
   );
 }
 function Chevron({ flip, down }: { flip?: boolean; down?: boolean }) {
-  // RTL: "forward" points left.
-  const rot = down ? -90 : flip ? 180 : 0;
+  // "Forward" points left in RTL and right in LTR; flip = back.
+  const ltr = useContext(CatCtx)?.view.dir === "ltr";
+  const rot = down ? -90 : (!!flip !== ltr) ? 180 : 0;
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ transform: `rotate(${rot}deg)`, transition: "transform .2s", flexShrink: 0 }}>
       <path d="m15 18-6-6 6-6" />
@@ -569,6 +665,10 @@ const CSS = `
 .cb-top{padding:18px 24px;border-bottom:1px solid var(--rule);background:var(--surface)}
 .cb-wordmark{font-weight:800;font-size:20px;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
 .cb-wordmark span{font-style:italic;color:#0EA5A5}
+.cb-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cb-switch{display:inline-flex;gap:4px;background:var(--paper-deep);padding:4px;border-radius:999px}
+.cb-switch button{border:none;background:transparent;font:inherit;font-size:13.5px;font-weight:700;color:var(--ink-soft);padding:6px 12px;border-radius:999px;cursor:pointer}
+.cb-switch button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(11,18,32,.1)}
 .cb-main{max-width:1120px;margin:0 auto;padding:28px 20px 72px}
 .cb-h1{font-size:clamp(24px,3.4vw,32px);font-weight:800;margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
 .cb-h1.tight{margin:2px 0 4px}
