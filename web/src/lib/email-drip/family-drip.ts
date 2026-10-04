@@ -1,6 +1,6 @@
 import { renderEmailHtml, renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
 import { FAMILY_META, EMAIL_BASE, type FamilyEmailMeta } from "./family-content";
-import { getEffectiveContent } from "./email-templates-store";
+import { getEffectiveContent, hasLang } from "./email-templates-store";
 
 /**
  * Family onboarding email series. Fires AFTER a Family subscription
@@ -17,19 +17,22 @@ import { getEffectiveContent } from "./email-templates-store";
 export type FamilyDripMail = {
   key: string;
   dayOffset: number;
-  build(opts: { he: boolean; unsubscribeUrl: string; firstName?: string | null }): Promise<{ subject: string; html: string }>;
+  /** `lang` (any UI language) wins over `he`; untranslated → English. */
+  build(opts: { he: boolean; lang?: string; unsubscribeUrl: string; firstName?: string | null }): Promise<{ subject: string; html: string }>;
 };
 
 export function renderFamilyMail(
   m: FamilyEmailMeta | undefined,
-  he: boolean,
+  heOrLang: boolean | string,
   c: EmailContent,
   opts: { unsubscribeUrl: string; firstName?: string | null },
 ): { subject: string; html: string } {
+  const lang = heOrLang === true ? "he" : heOrLang === false ? "en" : heOrLang;
+  const he = lang === "he";
   // CTA links to /family by default; a feature-specific email can point at
   // its own page (e.g. /read, /say, /play) via ctaPath. he uses the /he
   // locale prefix, en is unprefixed.
-  const base = he ? `${EMAIL_BASE}/he` : EMAIL_BASE;
+  const base = lang === "en" ? EMAIL_BASE : `${EMAIL_BASE}/${lang}`;
   const link = `${base}${m?.ctaPath ?? "/family"}${m?.ctaUrlTab ?? ""}`;
   const subject = applyName(c.subject, opts.firstName);
   const body = applyName(c.body, opts.firstName);
@@ -38,7 +41,8 @@ export function renderFamilyMail(
       subject,
       html: renderEmailHtmlV2({
         he,
-        bodyHtml: mdLiteToHtml(he, body),
+        lang,
+        bodyHtml: mdLiteToHtml(lang, body),
         ctaText: c.ctaText,
         ctaUrl: link,
         next: c.next,
@@ -68,8 +72,11 @@ export function renderFamilyMail(
 export const FAMILY_DRIP: FamilyDripMail[] = FAMILY_META.map((m) => ({
   key: m.key,
   dayOffset: m.dayOffset,
-  async build({ he, unsubscribeUrl, firstName }) {
-    const c = await getEffectiveContent(m.key, he);
-    return renderFamilyMail(m, he, c, { unsubscribeUrl, firstName });
+  async build({ he, lang, unsubscribeUrl, firstName }) {
+    // A language with no translation of this email gets it in English.
+    const want = lang ?? (he ? "he" : "en");
+    const use = (await hasLang(m.key, want)) ? want : "en";
+    const c = await getEffectiveContent(m.key, use);
+    return renderFamilyMail(m, use, c, { unsubscribeUrl, firstName });
   },
 }));

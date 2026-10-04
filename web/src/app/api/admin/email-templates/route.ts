@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { FAMILY_META, FAMILY_LABEL_HE, EMAIL_BASE } from "@/lib/email-drip/family-content";
 import { applyName, type EmailContent } from "@/lib/email-drip/render";
 import { renderFamilyMail } from "@/lib/email-drip/family-drip";
-import { getOverride, getEffectiveContent, saveOverride, resetOverride } from "@/lib/email-drip/email-templates-store";
+import { getOverride, getEffectiveContent, saveOverride, resetOverride, hasLang } from "@/lib/email-drip/email-templates-store";
+import { isFamilyLang } from "@/lib/email-drip/family-i18n";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
 import { sendDripEmail } from "@/lib/email-drip/send";
 
@@ -47,10 +48,10 @@ function authed(req: NextRequest): boolean {
   return !!process.env.ADMIN_SECRET && s === process.env.ADMIN_SECRET;
 }
 
-function renderPreview(key: string, he: boolean, c: EmailContent): string {
+function renderPreview(key: string, lang: string, c: EmailContent): string {
   const m = FAMILY_META.find((x) => x.key === key);
   // Same renderer as the real send; the preview shows a sample name.
-  return renderFamilyMail(m, he, c, { unsubscribeUrl: `${EMAIL_BASE}/`, firstName: he ? "דנה" : "Dana" }).html;
+  return renderFamilyMail(m, lang, c, { unsubscribeUrl: `${EMAIL_BASE}/`, firstName: lang === "he" ? "דנה" : "Dana" }).html;
 }
 
 export async function GET(req: NextRequest) {
@@ -79,10 +80,17 @@ export async function GET(req: NextRequest) {
   const ov = await getOverride(key);
   const he = await getEffectiveContent(key, true);
   const en = await getEffectiveContent(key, false);
+  // Any other UI language (Gadi 2026-10-05): its translation, or the English
+  // email to start from when it isn't translated yet.
+  const other = req.nextUrl.searchParams.get("lang") ?? "";
+  const extra = isFamilyLang(other) && other !== "he" && other !== "en"
+    ? { [other]: { content: await getEffectiveContent(key, other), overridden: await hasLang(key, other), translated: await hasLang(key, other) } }
+    : {};
   return NextResponse.json({
     key,
     he: { content: he, overridden: !!ov?.he },
     en: { content: en, overridden: !!ov?.en },
+    ...extra,
   });
 }
 
@@ -96,7 +104,7 @@ export async function POST(req: NextRequest) {
   if (!body?.action || !body.key || !known) {
     return NextResponse.json({ error: "bad_request" }, { status: 400 });
   }
-  const lang = body.lang === "he" ? "he" : "en";
+  const lang = isFamilyLang(body.lang) ? body.lang : "en";
   const he = lang === "he";
 
   // Render this email exactly as it would send: signup = code-rendered,
@@ -106,7 +114,7 @@ export async function POST(req: NextRequest) {
     const c = body!.content;
     if (!c) return null;
     // Same sample name as the preview body, so a test subject never shows a raw {שם}.
-    return { subject: applyName(c.subject, he ? "דנה" : "Dana"), html: renderPreview(body!.key!, he, c) };
+    return { subject: applyName(c.subject, he ? "דנה" : "Dana"), html: renderPreview(body!.key!, lang, c) };
   }
 
   if (body.action === "test") {

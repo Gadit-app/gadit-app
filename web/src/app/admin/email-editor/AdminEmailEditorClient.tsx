@@ -2,9 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { FAMILY_LANGS, RTL_LANGS } from "@/lib/email-drip/family-i18n";
 
 type Content = { subject: string; heading: string; body: string; ctaText: string; next?: string; closing?: string; signature?: string; helpText?: string };
-type LangBlock = { content: Content; overridden: boolean };
+type LangBlock = { content: Content; overridden: boolean; translated?: boolean };
+// The family series in every UI language (Gadi 2026-10-05): Hebrew and
+// English as tabs, the other 31 from a picker.
+const OTHER_LANGS = FAMILY_LANGS.filter((l) => l !== "he" && l !== "en");
+function langName(code: string, inLang: string): string {
+  try { return new Intl.DisplayNames([inLang], { type: "language" }).of(code) ?? code; } catch { return code; }
+}
 type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number };
 type RoMail = { subject: string; html: string };
 
@@ -19,8 +26,8 @@ export function AdminEmailEditorClient() {
   const [signup, setSignup] = useState<EmailRow[]>([]);
   const [series, setSeries] = useState<"family" | "signup">("family");
   const [key, setKey] = useState<string>("");
-  const [tab, setTab] = useState<"he" | "en">("he");
-  const [data, setData] = useState<{ he: LangBlock; en: LangBlock } | null>(null);
+  const [tab, setTab] = useState<string>("he");
+  const [data, setData] = useState<Record<string, LangBlock> | null>(null);
   const [ro, setRo] = useState<RoMail | null>(null); // read-only signup render
   const [preview, setPreview] = useState<string>("");
   const [status, setStatus] = useState<string>("");
@@ -51,7 +58,7 @@ export function AdminEmailEditorClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secret]);
 
-  const loadKey = useCallback(async (k: string, forSeries: "family" | "signup", forTab: "he" | "en", keepStatus = false) => {
+  const loadKey = useCallback(async (k: string, forSeries: "family" | "signup", forTab: string, keepStatus = false) => {
     setPreview("");
     if (!keepStatus) { setStatus(""); setSaveMsg(null); }
     try {
@@ -61,10 +68,10 @@ export function AdminEmailEditorClient() {
         setData(null);
         setRo(d?.readonly ? { subject: d.subject, html: d.html } : null);
       } else {
-        const r = await fetch(`${api}&key=${encodeURIComponent(k)}`);
+        const r = await fetch(`${api}&key=${encodeURIComponent(k)}&lang=${encodeURIComponent(forTab)}`);
         const d = await r.json();
         setRo(null);
-        setData({ he: d.he, en: d.en });
+        setData({ he: d.he, en: d.en, ...(d[forTab] ? { [forTab]: d[forTab] } : {}) });
       }
     } catch { setData(null); setRo(null); }
   }, [api]);
@@ -74,12 +81,13 @@ export function AdminEmailEditorClient() {
   function pickSeries(s: "family" | "signup") {
     if (s === series) return;
     setSeries(s);
+    if (s === "signup" && tab !== "he" && tab !== "en") setTab("he"); // the signup series is he/en only
     const first = (s === "signup" ? signup : emails)[0];
     setKey(first?.key ?? "");
     setPreview(""); setStatus("");
   }
 
-  const cur = data ? data[tab] : null;
+  const cur = data ? data[tab] ?? null : null;
   const content = cur?.content ?? EMPTY;
 
   // Bold button (Gadi 2026-10-04): wraps the selected text in **...**,
@@ -101,6 +109,7 @@ export function AdminEmailEditorClient() {
   function setField(f: keyof Content, v: string) {
     if (!data) return;
     setSaveMsg(null); // an edit after saving: the "saved" note no longer applies
+    if (!data[tab]) return;
     setData({ ...data, [tab]: { ...data[tab], content: { ...data[tab].content, [f]: v } } });
     setPreview("");
   }
@@ -149,7 +158,8 @@ export function AdminEmailEditorClient() {
   }
 
   const dir = he ? "rtl" : "ltr";
-  const fieldDir = tab === "he" ? "rtl" : "ltr";
+  const fieldDir = RTL_LANGS.has(tab) ? "rtl" : "ltr";
+  const isOther = tab !== "he" && tab !== "en";
   const label: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: "#6B7280", margin: "14px 0 4px", display: "block" };
   const input: React.CSSProperties = { width: "100%", padding: "9px 11px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", boxSizing: "border-box" };
   const list = isSignup ? signup : emails;
@@ -199,12 +209,25 @@ export function AdminEmailEditorClient() {
               padding: "5px 16px", borderRadius: 999, cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: "inherit",
               border: "none", background: tab === l ? "#0EA5A5" : "#F3F4F6", color: tab === l ? "#fff" : "#374151",
             }}>
-            {l === "he" ? "עברית" : "English"}{!isSignup && data && ((l === "he" ? data.he.overridden : data.en.overridden) ? " •" : "")}
+            {l === "he" ? "עברית" : "English"}{!isSignup && data && (data[l]?.overridden ? " •" : "")}
           </button>
         ))}
         {!isSignup && (
+          <select
+            value={isOther ? tab : ""}
+            onChange={(e) => { if (e.target.value) { setTab(e.target.value); setPreview(""); } }}
+            aria-label={he ? "שפה אחרת" : "Other language"}
+            style={{ padding: "5px 10px", borderRadius: 999, fontSize: 13, fontWeight: 700, fontFamily: "inherit", border: "none", cursor: "pointer", background: isOther ? "#0EA5A5" : "#F3F4F6", color: isOther ? "#fff" : "#374151" }}
+          >
+            <option value="">{he ? "שפה אחרת..." : "Other language..."}</option>
+            {OTHER_LANGS.map((l) => <option key={l} value={l}>{langName(l, he ? "he" : "en")}</option>)}
+          </select>
+        )}
+        {!isSignup && (
           <span style={{ marginInlineStart: "auto", fontSize: 12, color: cur?.overridden ? "#0EA5A5" : "#9CA3AF", alignSelf: "center" }}>
-            {cur?.overridden ? (he ? "מותאם אישית" : "customised") : (he ? "ברירת מחדל" : "default")}
+            {isOther
+              ? cur?.translated ? (he ? "מתורגם" : "translated") : (he ? "עוד לא תורגם: מוצג הנוסח באנגלית, והמשפחות בשפה הזו מקבלות אותו באנגלית" : "not translated yet: showing the English email, which these families receive")
+              : cur?.overridden ? (he ? "מותאם אישית" : "customised") : (he ? "ברירת מחדל" : "default")}
           </span>
         )}
       </div>

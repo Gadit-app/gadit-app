@@ -207,7 +207,9 @@ export async function GET(req: NextRequest) {
             (typeof d.name === "string" && (d.name as string).trim()) ||
             "";
           const firstName = famName.split(/\s+/)[0] || null;
-          const built = await famCand.build({ he, unsubscribeUrl: buildUnsubUrl(u.uid), firstName });
+          // The family's own UI language when this email is translated into
+          // it, else English (Hebrew families keep Hebrew).
+          const built = await famCand.build({ he, lang: he ? "he" : generalLang, unsubscribeUrl: buildUnsubUrl(u.uid), firstName });
           if (dryRun) {
             results.push({ uid: u.uid, email, mailKey: famCand.key, status: "skipped", reason: "dryRun" });
           } else {

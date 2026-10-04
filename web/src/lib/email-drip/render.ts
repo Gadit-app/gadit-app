@@ -16,6 +16,15 @@
  */
 
 import { emailHeaderHtml, emailSignatureHtml, EMAIL_BG, EMAIL_CARD_MAX } from "../email-brand";
+import { FAMILY_FIXED, RTL_LANGS, isFamilyLang } from "./family-i18n";
+
+/** The email's language: `true`/`false` are the old Hebrew/English flag,
+ *  a string is any UI language (Gadi 2026-10-05, family series in all 33). */
+type LangArg = boolean | string;
+function loc(l: LangArg) {
+  const lang = l === true ? "he" : l === false ? "en" : l;
+  return { lang, rtl: RTL_LANGS.has(lang), prefix: lang === "en" ? "" : `/${lang}` };
+}
 
 export type EmailContent = {
   subject: string;
@@ -33,11 +42,11 @@ export type EmailContent = {
   helpText?: string;
 };
 
-/** What the v2 email says when a field was never edited. */
-export const V2_DEFAULTS: Record<"he" | "en", { closing: string; signature: string; helpText: string }> = {
-  he: { closing: "אנחנו כאן לכל שאלה ועזרה.", signature: "הצוות של Gadit", helpText: "לכל ההדרכות" },
-  en: { closing: "We're here for any question or help.", signature: "The Gadit team", helpText: "All guides" },
-};
+/** What the v2 email says when a field was never edited, per language. */
+export function v2Defaults(l: LangArg): { closing: string; signature: string; helpText: string } {
+  const { lang } = loc(l);
+  return FAMILY_FIXED[isFamilyLang(lang) ? lang : "en"];
+}
 
 /** Fill {שם} / {name} with the parent's first name; without a name the
  *  placeholder (and the space before it) simply drops: "היי {שם}," → "היי,". */
@@ -54,14 +63,15 @@ function esc(s: string): string {
 }
 
 // Bold, then isolate Latin runs (RTL only). Order matters: escape first.
-function inline(he: boolean, s: string): string {
+function inline(l: LangArg, s: string): string {
+  const L = loc(l);
   // Pull links out first (as private-use markers) so the bold/Latin passes
   // can't break their hrefs, then put them back as real <a> tags.
   // Labeled links [text](url) first, so their URL isn't caught by the bare
   // URL pass. A "/path" opens that screen in the email's language.
   const named: { text: string; url: string }[] = [];
   let out = esc(s).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text: string, url: string) => {
-    const abs = url.startsWith("/") ? `${SITE}${he ? "/he" : ""}${url === "/" && he ? "" : url}` : url;
+    const abs = url.startsWith("/") ? `${SITE}${L.prefix}${url === "/" && L.prefix ? "" : url}` : url;
     named.push({ text, url: abs });
     return `\uE004${named.length - 1}\uE005`;
   });
@@ -73,7 +83,7 @@ function inline(he: boolean, s: string): string {
   // Bold as markers too: the Latin pass below must not touch the "b" in <b>
   // (it rendered a literal "<b>" in Hebrew emails).
   out = out.replace(/\*\*([^*]+)\*\*/g, "\uE002$1\uE003");
-  if (he) {
+  if (L.rtl) {
     // Wrap runs of Latin letters/digits (and internal spaces/&/./slash) so an
     // embedded brand name or address (gadit.app/join) keeps its own
     // left-to-right order inside RTL text.
@@ -86,24 +96,25 @@ function inline(he: boolean, s: string): string {
   });
   out = out.replace(/\uE004(\d+)\uE005/g, (_, i) => {
     const { text, url } = named[Number(i)];
-    const label = he ? text.replace(/[A-Za-z][A-Za-z0-9]*(?:[ .&/][A-Za-z0-9]+)*/g, (m) => `<span dir="ltr">${m}</span>`) : text;
+    const label = L.rtl ? text.replace(/[A-Za-z][A-Za-z0-9]*(?:[ .&/][A-Za-z0-9]+)*/g, (m) => `<span dir="ltr">${m}</span>`) : text;
     return `<a href="${url}" style="color:#0E7490;font-weight:600;text-decoration:underline;">${label}</a>`;
   });
   return out;
 }
 
-const P = (he: boolean, html: string) =>
+const rtlOf = (l: LangArg) => loc(l).rtl;
+const P = (l: LangArg, html: string, he = rtlOf(l)) =>
   `<p dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;margin:0 0 16px;color:#374151;">${html}</p>`;
-const H = (he: boolean, html: string) =>
+const H = (l: LangArg, html: string, he = rtlOf(l)) =>
   `<div dir="${he ? "rtl" : "ltr"}" style="text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;font-weight:700;color:#1C1917;margin:22px 0 8px;">${html}</div>`;
-const OL = (he: boolean, items: string[]) =>
+const OL = (l: LangArg, items: string[], he = rtlOf(l)) =>
   `<ol dir="${he ? "rtl" : "ltr"}" style="margin:0 0 14px;padding-${he ? "right" : "left"}:22px;text-align:${he ? "right" : "left"};font-size:16px;line-height:1.75;color:#374151;">` +
   items.map((it) => `<li style="margin-bottom:7px;">${it}</li>`).join("") +
   `</ol>`;
 
 const STEP_RE = /^\s*(?:\d+\.|-)\s+(.*)$/;
 
-export function mdLiteToHtml(he: boolean, body: string): string {
+export function mdLiteToHtml(he: LangArg, body: string): string {
   const blocks = body.replace(/\r\n/g, "\n").split(/\n\s*\n/); // blank-line separated
   const out: string[] = [];
   for (const raw of blocks) {
@@ -193,9 +204,13 @@ export function renderEmailHtmlV2(opts: {
   helpText?: string;
   helpUrl: string;
   unsubscribeUrl: string;
+  /** Any UI language; overrides `he` when given. */
+  lang?: string;
 }): string {
-  const { he } = opts;
-  const D = V2_DEFAULTS[he ? "he" : "en"];
+  const L = loc(opts.lang ?? opts.he);
+  const he = L.rtl; // direction below; texts come from the language
+  const F = FAMILY_FIXED[isFamilyLang(L.lang) ? L.lang : "en"];
+  const D = v2Defaults(L.lang);
   const closing = (opts.closing ?? D.closing).trim();
   const signature = (opts.signature ?? D.signature).trim();
   const helpText = (opts.helpText ?? D.helpText).trim();
@@ -206,7 +221,7 @@ export function renderEmailHtmlV2(opts: {
   const cta = opts.ctaText?.trim()
     ? `<div style="text-align:center;margin:30px 0 30px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText.trim())}</a></div>`
     : "";
-  const next = opts.next?.trim() ? para(inline(he, opts.next.trim())) : "";
+  const next = opts.next?.trim() ? para(inline(L.lang, opts.next.trim())) : "";
   return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">
   <div dir="${dir}" style="max-width:${EMAIL_CARD_MAX}px;margin:0 auto;background:#fff;border-radius:16px;border:1px solid #E1EAE7;overflow:hidden;text-align:${align};">
     ${emailHeaderHtml()}
@@ -214,13 +229,13 @@ export function renderEmailHtmlV2(opts: {
       ${opts.bodyHtml}
       ${cta}
       ${next}
-      ${closing ? para(inline(he, closing), "margin-top:26px;") : ""}
+      ${closing ? para(inline(L.lang, closing), "margin-top:26px;") : ""}
       ${signature ? emailSignatureHtml(he, signature) : ""}
       ${helpText ? `<p dir="${dir}" style="text-align:${align};font-size:14px;margin:0 0 22px;"><a href="${opts.helpUrl}" style="color:#0E7490;">${esc(helpText)}</a></p>` : ""}
     </div>
     <div style="border-top:1px solid #EEF2F1;padding:16px 24px 20px;text-align:center;">
-      <p dir="${dir}" style="margin:0 0 6px;font-size:12px;color:#9CA3AF;">${he ? `<span dir="ltr" translate="no">Gadit</span> · להבין כל מילה עד הסוף` : `<span translate="no">Gadit</span>`}</p>
-      <p style="margin:0;font-size:11px;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${he ? "להסרה מרשימת התפוצה" : "Unsubscribe"}</a></p>
+      <p dir="${dir}" style="margin:0 0 6px;font-size:12px;color:#9CA3AF;"><span dir="ltr" translate="no">Gadit</span>${F.tagline ? ` · ${esc(F.tagline)}` : ""}</p>
+      <p style="margin:0;font-size:11px;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${esc(F.unsub)}</a></p>
     </div>
   </div>
 </body></html>`;

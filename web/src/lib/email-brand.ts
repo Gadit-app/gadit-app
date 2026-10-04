@@ -21,7 +21,7 @@ export function emailHeaderHtml(): string {
 }
 
 /** Team signature with the app icon (like the Yooniz signature block). */
-export function emailSignatureHtml(he: boolean, text?: string): string {
+export function emailSignatureHtml(he: boolean /* right-to-left */, text?: string): string {
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
   // An edited signature: plain text, with the brand kept Latin and isolated.
