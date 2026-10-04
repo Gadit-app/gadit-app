@@ -468,7 +468,7 @@ const CSS = `
 .cs-search input{border:0;outline:0;font:inherit;font-size:16px;padding:0 16px;width:min(300px,30vw);background:transparent;color:var(--ink)}
 .cs-search button{border:0;background:var(--teal);color:#fff;height:100%;width:48px;display:grid;place-items:center;cursor:pointer}
 .cs-progress{grid-row:2;display:flex;justify-content:center;margin-top:10px;position:relative}
-.cs-main{grid-row:3;position:relative;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);align-items:center;gap:clamp(24px,5vw,90px);
+.cs-main{grid-row:3;position:relative;display:grid;grid-template-columns:minmax(0,auto) auto;justify-content:center;align-items:center;gap:clamp(28px,4.5vw,80px);
   padding:clamp(10px,2vh,24px) clamp(48px,6vw,110px);min-height:0}
 .cs-main.no-pic{grid-template-columns:minmax(0,1fr);text-align:center;justify-items:center}
 .cs-text{min-width:0}
@@ -480,7 +480,7 @@ const CSS = `
 .cs-tts svg{width:26px;height:26px}
 .cs-def{margin:clamp(14px,2.6vh,28px) 0 0;font-size:clamp(22px,min(2.5vw,4.4vh),42px);line-height:1.45;font-weight:600;color:#1E293B;max-width:30ch;text-wrap:pretty}
 .cs-main.no-pic .cs-def{max-width:36ch}
-.cs-pic{margin:0;justify-self:center;width:min(100%,52vh,560px);aspect-ratio:1/1;border-radius:32px;overflow:hidden;background:#fff;
+.cs-pic{margin:0;justify-self:center;width:min(42vw,52vh,560px);aspect-ratio:1/1;border-radius:32px;overflow:hidden;background:#fff;
   box-shadow:0 30px 60px -28px rgba(15,50,60,.38),0 0 0 10px #fff,0 0 0 11px var(--line)}
 .cs-pic img{width:100%;height:100%;object-fit:cover;display:block}
 .cs-pic-wait{height:100%;display:grid;place-items:center;align-content:center;gap:14px;color:#94A3B8;font-size:16px;

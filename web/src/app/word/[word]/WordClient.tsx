@@ -769,6 +769,7 @@ export function WordClient({
   // format as always, just without the top menu. Initialised from
   // ?present=1 (shareable link) and toggled live by the corner button.
   const [present, setPresent] = useState(searchParams?.get("present") === "1");
+  const openedPresent = searchParams?.get("present") === "1";
   // In present mode the search bar is hidden (we are showing words, not
   // searching). A small "open dictionary" button reveals it on demand.
   const [showSearch, setShowSearch] = useState(false);
@@ -798,6 +799,17 @@ export function WordClient({
   const setIdx = wordSet
     ? wordSet.words.findIndex((w) => w.trim().toLowerCase() === initialWord.trim().toLowerCase())
     : -1;
+  // Closing the projector goes back to the unit list it was opened from
+  // (Gadi 2026-10-04), or to the word's dictionary page when the teacher
+  // switched to present mode from here.
+  const exitPresent = () => {
+    try {
+      const r = JSON.parse(sessionStorage.getItem("gadit-sets-return") || "null") as { setId?: string; url?: string } | null;
+      if (r?.url && r.setId === setId && r.url.includes("/sets")) return router.push(r.url);
+    } catch { /* storage blocked */ }
+    if (setId && openedPresent) return router.push(href("/sets"));
+    setPresent(false);
+  };
   const goToSetWord = (w: string) =>
     router.push(href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(setId)}`));
   // Classroom mode: a set word shown on the projector. Show ONE relevant
@@ -2341,7 +2353,7 @@ export function WordClient({
             idx={setIdx}
             lang={lang}
             onNavigate={goToSetWord}
-            onExit={() => setPresent(false)}
+            onExit={exitPresent}
             onSearch={(q) => router.push(href(`/word/${encodeURIComponent(q)}?present=1`))}
             progress={classProgress}
           />

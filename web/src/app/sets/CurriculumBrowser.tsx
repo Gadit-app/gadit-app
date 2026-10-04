@@ -202,7 +202,10 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   }, [user]);
 
   // "all" schools (Gadi's own) can switch catalogs; everyone else sees theirs.
-  const [viewPick, setViewPick] = useState<CatalogId>(() => (lang === "he" ? "il-he" : lang === "ar" ? "il-ar" : "za-caps"));
+  const [viewPick, setViewPick] = useState<CatalogId>(() => {
+    const c = sp?.get("c") as CatalogId | null;
+    return c && CATALOG_IDS.includes(c) ? c : lang === "he" ? "il-he" : lang === "ar" ? "il-ar" : "za-caps";
+  });
   const sc = school?.curriculum;
   const viewId: CatalogId = sc === "il-he" || sc === "il-ar" || sc === "za-caps" ? sc : viewPick;
   const view = catalogView(viewId);
@@ -223,6 +226,9 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   const go = (params: Record<string, string | undefined>, push = true) => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(params)) if (v) q.set(k, v);
+    // A school with every catalog keeps the one it is looking at in the URL,
+    // so coming back from the projector lands on the same catalog.
+    if (school?.curriculum === "all" && !q.has("c")) q.set("c", viewId);
     const url = href(`/sets${q.toString() ? `?${q}` : ""}`);
     if (push) router.push(url, { scroll: true });
     else router.replace(url, { scroll: false });
@@ -247,7 +253,7 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
         {school?.curriculum === "all" && (
           <div className="cb-switch" role="group" aria-label={T.catalog}>
             {CATALOG_IDS.map((id) => (
-              <button key={id} type="button" className={id === viewId ? "on" : ""} onClick={() => { setViewPick(id); go({}, false); }}>
+              <button key={id} type="button" className={id === viewId ? "on" : ""} onClick={() => { setViewPick(id); go({ c: id }, false); }}>
                 {CURRICULA.find((c) => c.key === id)?.[view.ui] ?? id}
               </button>
             ))}
@@ -609,7 +615,7 @@ function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onTogg
       {open && (
         <div className="cb-topic-body">
           <WordChips set={set} />
-          <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} />
+          <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} setId={set.id} />
         </div>
       )}
     </li>
@@ -651,7 +657,7 @@ function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle
           {set ? (
             <>
               <WordChips set={set} />
-              <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} />
+              <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} setId={set.id} />
             </>
           ) : failed ? (
             <p className="cb-note">{T.fail}</p>
@@ -669,7 +675,7 @@ function WordChips({ set }: { set: WordSet }) {
   return (
     <div className="cb-chips" dir={set.lang === "he" || set.lang === "ar" || set.lang === "fa" ? "rtl" : "ltr"}>
       {set.words.map((w) => (
-        <Link key={w} href={href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(set.id)}`)} className="cb-chip">
+        <Link key={w} href={href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(set.id)}`)} className="cb-chip" onClick={() => rememberReturn(set.id)}>
           {w}
         </Link>
       ))}
@@ -677,10 +683,19 @@ function WordChips({ set }: { set: WordSet }) {
   );
 }
 
-function PresentButton({ href, n }: { href: string; n: number }) {
+/** Where the projector's close button returns: this page, with the unit open
+ *  (Gadi 2026-10-04). Read by the word page in present mode. */
+export const SETS_RETURN_KEY = "gadit-sets-return";
+function rememberReturn(setId: string) {
+  try {
+    sessionStorage.setItem(SETS_RETURN_KEY, JSON.stringify({ setId, url: window.location.pathname + window.location.search }));
+  } catch { /* storage blocked */ }
+}
+
+function PresentButton({ href, n, setId }: { href: string; n: number; setId: string }) {
   const { T } = useCat();
   return (
-    <Link href={href} className="cb-present">
+    <Link href={href} className="cb-present" onClick={() => rememberReturn(setId)}>
       <ScreenIcon /> {T.present} <span>· {count(T, n, "words")}</span>
     </Link>
   );
