@@ -70,7 +70,7 @@ async function generateAr(topicId: string): Promise<CurriculumSetDoc | null> {
   const sys = "You are an expert on the curriculum of Arab state schools in Israel (the Ministry of Education's Arab sector programs) and you build lists of a lesson's key words. Return JSON only.";
   const where = `Subject: ${subj.ar} (${subj.he}). Stage: ${arLevel(t.l)?.ar ?? t.l}, ${arGrade}.\nLearning unit: "${t.t}" (${t.th}).`;
   const rules = lang === "ar"
-    ? `- The words themselves in Modern Standard Arabic (الفصحى), in their dictionary form: singular, without the article ال unless it is part of the term, without tashkeel.
+    ? `- The words themselves in Modern Standard Arabic (الفصحى), in their dictionary form: singular, without the article ال unless it is part of the term, without tashkeel, with standard hamza spelling (أ إ ؤ ئ).
 - Each definition in clear, simple Modern Standard Arabic suited to ${arGrade}, without tashkeel.`
     : lang === "he"
       ? `- This is Hebrew taught as a second language to Arabic-speaking students. The words in standard Hebrew (full spelling, no niqqud, dictionary form), at the level of ${grade} in an Arab school.
@@ -83,7 +83,10 @@ Choose 10 to 12 key words: the concepts the teacher teaches in this unit and tha
 Rules:
 - Only real concepts of this unit, from basic to advanced, no general words every student already knows, no duplicates.
 - Prefer the terms specific to this unit over words that come up in every lesson of the subject. No general study words (learning, practice, training, correct, mistake, understanding, beginning, end) unless the unit is about exactly that.
-- A term of more than one word stays whole, exactly as it is taught (for example أحرف العلّة, فكّ الشيفرة, جذر ثلاثيّ, تاء التأنيث). Never split a term into separate words, and never list a bare word that only makes sense as part of a longer term.
+- A term of more than one word stays whole, exactly as it is taught in this unit. Never split a term into separate words, and never list a bare word that only makes sense as part of a longer term.
+- No near-duplicates: one entry per idea, not the same idea in singular and plural or with a small variation.
+- Every word must belong to THIS unit's content; do not bring in terms from other units of the subject.
+- The definition does not start by repeating the word ("X is..."); it explains the meaning directly.
 ${rules}
 - One definition per word: one or two sentences (up to 160 characters) explaining its meaning in this unit only.
 - No long dashes. General wording, not addressing the student.
