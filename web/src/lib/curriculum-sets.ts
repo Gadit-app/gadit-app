@@ -82,6 +82,8 @@ async function generateAr(topicId: string): Promise<CurriculumSetDoc | null> {
 Choose 10 to 12 key words: the concepts the teacher teaches in this unit and that a student must understand to follow the lesson.
 Rules:
 - Only real concepts of this unit, from basic to advanced, no general words every student already knows, no duplicates.
+- Prefer the terms specific to this unit over words that come up in every lesson of the subject. No general study words (learning, practice, training, correct, mistake, understanding, beginning, end) unless the unit is about exactly that.
+- A term of more than one word stays whole, exactly as it is taught (for example أحرف العلّة, فكّ الشيفرة, جذر ثلاثيّ, تاء التأنيث). Never split a term into separate words, and never list a bare word that only makes sense as part of a longer term.
 ${rules}
 - One definition per word: one or two sentences (up to 160 characters) explaining its meaning in this unit only.
 - No long dashes. General wording, not addressing the student.
