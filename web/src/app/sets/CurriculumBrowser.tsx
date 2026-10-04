@@ -140,6 +140,22 @@ const STR = {
   },
 };
 type Ui = keyof typeof STR;
+type Kind = "subjects" | "topics" | "words";
+// Arabic counted nouns: 1 and 2 have their own forms, 3 to 10 take the
+// plural, 11 to 99 the singular accusative, round hundreds the singular.
+const AR_COUNT: Record<Kind, [string, string, string, string, string]> = {
+  subjects: ["موضوع واحد", "موضوعان", "مواضيع", "موضوعًا", "موضوع"],
+  topics: ["وحدة واحدة", "وحدتان", "وحدات", "وحدةً", "وحدة"],
+  words: ["كلمة واحدة", "كلمتان", "كلمات", "كلمةً", "كلمة"],
+};
+function count(T: T, n: number, kind: Kind): string {
+  if (T !== STR.ar) return `${n} ${kind === "words" ? T.words : kind === "subjects" ? T.subjectsUnit : T.topicsUnit}`;
+  const f = AR_COUNT[kind];
+  if (n === 1) return f[0];
+  if (n === 2) return f[1];
+  const r = n % 100;
+  return `${n} ${r >= 3 && r <= 10 ? f[2] : r >= 11 ? f[3] : f[4]}`;
+}
 const uiOf = (lang: string): Ui => (lang === "he" ? "he" : lang === "ar" ? "ar" : "en");
 type T = (typeof STR)["en"];
 
@@ -311,7 +327,7 @@ function HomeView(props: {
       ) : (
         <>
           {allowed.length > 1 && (
-            <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} unit={T.subjectsUnit} only={allowed} />
+            <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} kind="subjects" only={allowed} />
           )}
           <nav className="cb-cats" aria-label={T.fields}>
             <button type="button" className={"cb-cat-chip" + (cat === "all" ? " on" : "")} aria-pressed={cat === "all"} onClick={() => setCat("all")} style={{ ["--c" as string]: "#0E8A8A" }}>
@@ -346,8 +362,8 @@ function HomeView(props: {
   );
 }
 
-function LevelTabs({ level, setLevel, counts, unit, only }: {
-  level: string; setLevel: (l: string) => void; counts: (l: string) => number; unit: string; only?: string[];
+function LevelTabs({ level, setLevel, counts, kind, only }: {
+  level: string; setLevel: (l: string) => void; counts: (l: string) => number; kind: Kind; only?: string[];
 }) {
   const { view, T } = useCat();
   const tabs = view.levels.filter((l) => !only || only.includes(l.key));
@@ -367,7 +383,7 @@ function LevelTabs({ level, setLevel, counts, unit, only }: {
         <button key={l.key} type="button" role="tab" aria-selected={l.key === level} className={"cb-level" + (l.key === level ? " on" : "")} onClick={() => setLevel(l.key)}>
           <b className="full">{l.name}</b>
           <b className="short">{l.short}</b>
-          <span>{counts(l.key)} {unit}</span>
+          <span>{count(T, counts(l.key), kind)}</span>
         </button>
       ))}
     </div>
@@ -383,7 +399,7 @@ function SubjectCard({ s, n, onClick, big }: { s: ViewSubject; n: number; onClic
       </span>
       <span className="cb-card-name">{s.name}</span>
       <span className="cb-card-meta">
-        {n} {T.topicsUnit}
+        {count(T, n, "topics")}
         {s.dati && T.dati ? <span className="cb-dati">{T.dati}</span> : null}
       </span>
     </button>
@@ -471,14 +487,14 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
           {cat && cat.name !== subject.name && <div className="cb-hero-cat">{cat.name}</div>}
           <h1 className="cb-h1 tight">{subject.name}</h1>
           <div className="cb-hero-meta">
-            {topicsOf(view, subject.key).filter((t) => inAllowed(allowed, t)).length} {T.topicsUnit}
+            {count(T, topicsOf(view, subject.key).filter((t) => inAllowed(allowed, t)).length, "topics")}
             {subject.dati && T.datiLong ? <span className="cb-dati">{T.datiLong}</span> : null}
           </div>
         </div>
       </div>
 
       {levels.length > 1 && (
-        <LevelTabs level={lv} setLevel={setLevel} counts={(l) => topicsOf(view, subject.key, l).length} unit={T.topicsUnit} only={levels} />
+        <LevelTabs level={lv} setLevel={setLevel} counts={(l) => topicsOf(view, subject.key, l).length} kind="topics" only={levels} />
       )}
 
       {ready.length > 0 && (
@@ -665,7 +681,7 @@ function PresentButton({ href, n }: { href: string; n: number }) {
   const { T } = useCat();
   return (
     <Link href={href} className="cb-present">
-      <ScreenIcon /> {T.present} <span>· {n} {T.words}</span>
+      <ScreenIcon /> {T.present} <span>· {count(T, n, "words")}</span>
     </Link>
   );
 }
