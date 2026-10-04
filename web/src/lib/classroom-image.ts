@@ -11,8 +11,9 @@ import { topicLevel } from "@/lib/curriculum-catalog";
  *                           and ALWAYS the same boy, drawn from a fixed
  *                           character reference (public/img-refs/kid.png)
  *   teen  (חטיבה, תיכון)    the same soft 3D, cleaner and older
- * Hebrew letters can't be drawn by the image model, so concepts that ARE
- * letters (אות, ניקוד, אלף-בית, דגושה...) start from the letters set in a
+ * Hebrew and Arabic letters can't be drawn by the image model, so concepts
+ * that ARE letters (אות, ניקוד, דגושה... حرف, حركة, شدة, تاء مربوطة...)
+ * start from the letters set in a
  * real font (public/img-refs/*.png) and the model only turns them into 3D,
  * at medium quality so the shapes survive.
  *
@@ -42,7 +43,7 @@ export function classroomImageKey(word: string, meaning: string, lang: string, s
 const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Visual teaching cues make the idea obvious at a glance: clearly countable objects, soft glowing arrows, gentle highlights on what matters. Palette only teal, mint, warm amber and soft coral.";
 const KID_CHILD = "The child in the scene is EXACTLY the boy from the reference image: same face, same short brown hair, same teal t-shirt, natural slim proportions. Use the reference only for how the boy looks: he is busy doing the action in the description, a supporting part of the scene, never standing idle at the side, and the idea itself stays the large hero.";
 const TEEN = "Gadit house style: a clean modern soft 3D render, smooth matte rounded shapes like premium app icons, soft global illumination and gentle shadows. The idea itself is the hero, large, sharp and centered, on a calm plain warm off-white background, with soft glowing cues on what matters. Palette only teal, mint, warm amber and soft coral. People, when needed, are stylized friendly 3D teenagers.";
-const LETTERS = "Keep EVERY Hebrew letter, dot and vowel line in the reference image EXACTLY as drawn: same shapes, same order, same positions, nothing added, removed or changed. Turn them into big, chunky, smooth, matte 3D letters in teal and mint.";
+const LETTERS = "Keep EVERY letter, dot and vowel mark in the reference image EXACTLY as drawn: same shapes, same order, same positions, nothing added, removed or changed. Turn them into big, chunky, smooth, matte 3D letters in teal and mint.";
 const NO_TEXT = "Square composition. No letters, words, labels, chemical symbols or formulas anywhere; digits only when the idea itself is about numbers.";
 const NO_OTHER_TEXT = "Square composition. No other letters, words, numbers or writing anywhere.";
 
@@ -57,6 +58,26 @@ const LETTER_REFS: Record<string, { ref: string; child?: boolean; extra: string 
   "אותיות אהו\"י": { ref: "ehevi.png", extra: "Four friendly 3D letters side by side, gently glowing." },
   "צליל": { ref: "tzlil.png", child: true, extra: "The boy reads the big 3D letter aloud, soft glowing musical notes flowing from his open mouth." },
 };
+
+// Arabic letter concepts (Gadi 2026-10-04), set in Noto Naskh Arabic. Words
+// are stored without tashkeel; each concept is listed in its common forms.
+const MARK = "The vowel marks on the letters are bold soft-coral 3D shapes that gently glow; they are the focus. Keep a generous empty margin, nothing touches the edges.";
+const AR_LETTER_REFS: Array<[string[], { ref: string; child?: boolean; extra: string }]> = [
+  [["حرف", "حروف", "أحرف", "الحرف", "الحروف", "شكل الحرف", "اسم الحرف"], { ref: "ar-letters-6.png", extra: "Six friendly 3D letter blocks in three rows standing on a soft surface." }],
+  [["صوت الحرف"], { ref: "ar-letters-6.png", child: true, extra: "The boy reads the big 3D letters aloud, soft glowing musical notes flowing from his open mouth." }],
+  [["أبجدية", "الأبجدية", "حروف الهجاء", "الحروف الهجائية", "ترتيب الحروف"], { ref: "ar-alphabet.png", extra: "A neat alphabet wall chart with a soft rounded board behind the letters." }],
+  [["حركة", "حركات", "الحركات", "حركة قصيرة", "حركات قصيرة", "الحركات القصيرة", "تشكيل", "التشكيل"], { ref: "ar-harakat.png", extra: MARK }],
+  [["فتحة", "الفتحة"], { ref: "ar-fatha.png", extra: MARK }],
+  [["ضمة", "الضمة"], { ref: "ar-damma.png", extra: MARK }],
+  [["كسرة", "الكسرة"], { ref: "ar-kasra.png", extra: MARK }],
+  [["سكون", "السكون"], { ref: "ar-sukun.png", extra: "The small round mark above the letter is a bold soft-coral 3D ring that gently glows, clearly standing out." }],
+  [["شدة", "الشدة"], { ref: "ar-shadda.png", extra: "The small mark above the letter is a bold soft-coral 3D shape that gently glows, clearly standing out." }],
+  [["تنوين", "التنوين"], { ref: "ar-tanwin.png", extra: "The doubled vowel marks are bold soft-coral 3D shapes that gently glow; they are the focus. Keep a generous empty margin." }],
+  [["حرف مد", "حرف المد", "حروف المد", "حركة طويلة", "الحركة الطويلة", "حرف علة", "حرف العلة", "حروف العلة", "أحرف العلة", "احرف العلة"], { ref: "ar-madd.png", extra: "Three friendly 3D letters side by side, gently glowing, with a soft glowing line stretching from each to show a long sound." }],
+  [["تاء مربوطة", "التاء المربوطة", "علامة التأنيث"], { ref: "ar-taa.png", extra: "The two dots on top of the letter are bold round soft-coral balls that gently glow, clearly standing out." }],
+  [["همزة", "الهمزة"], { ref: "ar-hamza.png", extra: "The small hamza marks are bold soft-coral 3D shapes that gently glow; they are the focus." }],
+];
+for (const [words, v] of AR_LETTER_REFS) for (const w of words) LETTER_REFS[w] = v;
 
 async function brief(word: string, meaning: string, lang: string): Promise<string> {
   try {
@@ -141,7 +162,7 @@ export async function generateClassroomImage(opts: {
   }
   try {
     const w = word.trim();
-    const letter = LETTER_REFS[w];
+    const letter = LETTER_REFS[w] ?? LETTER_REFS[w.replace(/[ً-ٰٟ]/g, "")];
     const base = style === "kids" ? KIDS : TEEN;
     let prompt: string;
     let refs: string[];
