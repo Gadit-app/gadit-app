@@ -310,8 +310,10 @@ function SchoolsOnly({ he, dir }: { he: boolean; dir: "rtl" | "ltr" }) {
         <h1 style={S.h1}>{he ? "קבוצות המילים פתוחות לבתי ספר" : "Word sets are for schools"}</h1>
         <p style={{ ...S.subtitle, margin: "0 auto 26px" }}>
           {he
-            ? "כל מקצועות הלימוד, מגן ועד תיכון, עם מילות מפתח להקרנה בכיתה. הגישה פתוחה לבתי ספר שעובדים עם Gadit."
-            : "Every subject with key words to project in class. Access is open to schools that work with Gadit."}
+            ? "כל מקצועות הלימוד, מגן ועד תיכון, עם מילות מפתח להקרנה בכיתה."
+            : "Every subject with key words to project in class."}
+          <br />
+          {he ? "הגישה פתוחה לבתי ספר שעובדים עם Gadit." : "Access is open to schools that work with Gadit."}
         </p>
         <Link href={href("/schools")} style={{ ...S.presentBtn, display: "inline-flex", width: "auto", padding: "12px 26px", textDecoration: "none" }}>
           {he ? "לפרטים על Gadit לבתי ספר" : "Gadit for schools"}

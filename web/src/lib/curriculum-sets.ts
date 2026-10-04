@@ -83,7 +83,35 @@ export async function getCurriculumSetDoc(id: string, create = false): Promise<C
   return doc ? { set: doc.set, defs: doc.defs } : null;
 }
 
-/** Any set by id: hand-made sets from code, curriculum sets from Firestore. */
+/** Any set by id: hand-made sets from code, curriculum sets from Firestore.
+ *  Curriculum sets are always re-read (one doc), so an edit made in
+ *  /admin/curriculum shows up at once on every server instance. */
 export async function loadWordSet(id: string): Promise<WordSet | undefined> {
-  return getWordSet(id) ?? (await getCurriculumSetDoc(id))?.set;
+  if (isCurriculumSetId(id)) return (await getCurriculumSetDoc(id))?.set;
+  return getWordSet(id);
+}
+
+/** Admin edit (Gadi 2026-10-04): replace a unit's words and definitions. */
+export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: string }>): Promise<CurriculumSetDoc | null> {
+  const cur = await getCurriculumSetDoc(id, true);
+  if (!cur) return null;
+  const defs: Record<string, string> = {};
+  for (const r of rows) {
+    const w = clean(r.w, 40);
+    const d = clean(r.d, 300);
+    if (w && !defs[w]) defs[w] = d;
+  }
+  const words = Object.keys(defs);
+  if (!words.length) throw new Error("no_words");
+  const doc: CurriculumSetDoc = { set: { ...cur.set, words }, defs };
+  await getAdminDb().collection("curriculumSets").doc(id).set({ ...doc, version: VERSION, editedAt: new Date().toISOString() });
+  registerWordSet(doc.set, doc.defs);
+  return doc;
+}
+
+/** Admin: throw away a unit's words and generate them again. */
+export async function regenerateCurriculumSet(id: string): Promise<CurriculumSetDoc | null> {
+  if (!isCurriculumSetId(id) || !curTopic(id)) return null;
+  await getAdminDb().collection("curriculumSets").doc(id).delete();
+  return getCurriculumSetDoc(id, true);
 }

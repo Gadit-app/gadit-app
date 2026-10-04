@@ -45,6 +45,7 @@ const STRINGS = {
     partners: "Partners",
     deletions: "Deletions",
     wordsets: "Word sets",
+    curriculum: "Curriculum",
     schools: "Schools",
     secMarketing: "Marketing",
     secGrowth: "Growth",
@@ -77,6 +78,7 @@ const STRINGS = {
     partners: "שותפים",
     deletions: "מחיקות",
     wordsets: "מערכי מילים",
+    curriculum: "קטלוג תוכנית הלימודים",
     schools: "בתי ספר",
     secMarketing: "שיווק",
     secGrowth: "צמיחה",
@@ -132,6 +134,7 @@ const NAV_SECTIONS: NavSection[] = [
   ] },
   { titleKey: "secContent", items: [
     { href: "/admin/sets",      labelKey: "wordsets",  icon: <IconGrid /> },
+    { href: "/admin/curriculum", labelKey: "curriculum", icon: <IconGrid /> },
     { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail /> },
     { href: "/admin/email-editor", labelKey: "emailEditor", icon: <IconMail /> },
     { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag /> },
