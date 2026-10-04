@@ -48,7 +48,8 @@ const NO_TEXT = "Square composition. No letters, words, labels, chemical symbols
 const NO_OTHER_TEXT = "Square composition. No other letters, words, numbers or writing anywhere.";
 
 /** Concepts that are letters themselves: a typeset reference + what to do with it. */
-const LETTER_REFS: Record<string, { ref: string; child?: boolean; extra: string }> = {
+type LetterRef = { ref: string; child?: boolean; extra: string; high?: boolean };
+const LETTER_REFS: Record<string, LetterRef> = {
   "אות": { ref: "letters-6.png", extra: "Six friendly 3D letter blocks in two rows standing on a soft surface." },
   "אלף-בית": { ref: "alphabet.png", extra: "A neat alphabet wall chart with a soft rounded board behind the letters." },
   "סדר האלף-בית": { ref: "alphabet.png", extra: "A neat alphabet wall chart with a soft rounded board behind the letters, a soft glowing arrow running along the rows from right to left." },
@@ -62,10 +63,10 @@ const LETTER_REFS: Record<string, { ref: string; child?: boolean; extra: string 
 // Arabic letter concepts (Gadi 2026-10-04), set in Noto Naskh Arabic. Words
 // are stored without tashkeel; each concept is listed in its common forms.
 const MARK = "The vowel marks on the letters are bold soft-coral 3D shapes that gently glow; they are the focus. Keep a generous empty margin, nothing touches the edges.";
-const AR_LETTER_REFS: Array<[string[], { ref: string; child?: boolean; extra: string }]> = [
+const AR_LETTER_REFS: Array<[string[], LetterRef]> = [
   [["حرف", "حروف", "أحرف", "الحرف", "الحروف", "شكل الحرف", "اسم الحرف"], { ref: "ar-letters-6.png", extra: "Six friendly 3D letter blocks in three rows standing on a soft surface." }],
   [["صوت الحرف"], { ref: "ar-letters-6.png", child: true, extra: "The boy reads the big 3D letters aloud, soft glowing musical notes flowing from his open mouth." }],
-  [["أبجدية", "الأبجدية", "حروف الهجاء", "الحروف الهجائية", "ترتيب الحروف"], { ref: "ar-alphabet.png", extra: "A neat alphabet wall chart with a soft rounded board behind the letters." }],
+  [["أبجدية", "الأبجدية", "حروف الهجاء", "الحروف الهجائية", "ترتيب الحروف"], { ref: "ar-alphabet.png", high: true, extra: "A neat alphabet wall chart with a soft rounded board behind the letters." }],
   [["حركة", "حركات", "الحركات", "حركة قصيرة", "حركات قصيرة", "الحركات القصيرة", "تشكيل", "التشكيل"], { ref: "ar-harakat.png", extra: MARK }],
   [["فتحة", "الفتحة"], { ref: "ar-fatha.png", extra: MARK }],
   [["ضمة", "الضمة"], { ref: "ar-damma.png", extra: MARK }],
@@ -113,7 +114,7 @@ type Usage = { input_tokens_details?: { image_tokens?: number; text_tokens?: num
 const usageCost = (u?: Usage) =>
   u ? ((u.input_tokens_details?.text_tokens ?? 0) * 5 + (u.input_tokens_details?.image_tokens ?? 0) * 10 + (u.output_tokens ?? 0) * 40) / 1e6 : undefined;
 
-async function render(prompt: string, refs: string[], quality: "low" | "medium"): Promise<{ b64: string; cost?: number }> {
+async function render(prompt: string, refs: string[], quality: "low" | "medium" | "high"): Promise<{ b64: string; cost?: number }> {
   let res: Response;
   if (refs.length) {
     const fd = new FormData();
@@ -166,11 +167,12 @@ export async function generateClassroomImage(opts: {
     const base = style === "kids" ? KIDS : TEEN;
     let prompt: string;
     let refs: string[];
-    let quality: "low" | "medium" = "low";
+    let quality: "low" | "medium" | "high" = "low";
     if (letter) {
       refs = [letter.ref, ...(letter.child && style === "kids" ? ["kid.png"] : [])];
       prompt = `${base} ${LETTERS} ${letter.child && style === "kids" ? KID_CHILD : ""} ${letter.extra} ${NO_OTHER_TEXT}`;
-      quality = "medium";
+      // 28 Arabic letters only survive at high quality (~17¢, drawn once).
+      quality = letter.high ? "high" : "medium";
     } else {
       const b = curatedImageHint(w) || (await brief(w, meaning, lang)) || `${w}: ${meaning}`;
       // The fixed boy only when the scene has a person in it; a picture of
