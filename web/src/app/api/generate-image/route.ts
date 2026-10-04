@@ -172,6 +172,9 @@ export async function POST(req: NextRequest) {
         }
         return NextResponse.json({ url: img.url, cached: img.status === "cached" });
       }
+      // A projector request for a word that isn't in the set (a partial
+      // word mid-stream, say) never falls through to a dictionary picture.
+      if (set) return NextResponse.json({ error: "not_in_set" }, { status: 400 });
     }
 
     const uiLangCode = typeof uiLang === "string" ? uiLang : "en";

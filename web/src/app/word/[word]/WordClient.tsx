@@ -1419,11 +1419,13 @@ export function WordClient({
   // image by default on the projector, no click. Prompts with the curated
   // definition so the picture matches the subject-relevant sense.
   useEffect(() => {
-    if (!classroomMode || !result || imageUrl || imageGenerating || !user) return;
+    // Complete result only: mid-stream result.word is a partial prefix
+    // ("main" for "main idea"), which drew a generic dictionary picture.
+    if (!classroomMode || loading || !result || imageUrl || imageGenerating || !user) return;
     const def = classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? "";
     void handleGenerate({ meaning: def, example: result.meanings[0]?.examples?.[0] ?? "" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, result, imageUrl, imageGenerating, user]);
+  }, [classroomMode, loading, result, imageUrl, imageGenerating, user]);
 
   // Kids Mode: generate a picture for EACH meaning, shown inline under its
   // definition with no "Generate" click. Sequential + silent: the first kid
@@ -1436,7 +1438,7 @@ export function WordClient({
   useEffect(() => {
     // Complete result only — mid-stream result.word is a partial prefix,
     // so without this we'd generate images for ח, חפ, חפץ.
-    if (loading || !kidsMode || classroomMode || !result?.word || !user || plan === "basic") return;
+    if (loading || !kidsMode || classroomMode || (present && setId) || !result?.word || !user || plan === "basic") return;
     if (kidsGenWordRef.current === result.word) return;
     kidsGenWordRef.current = result.word;
     const meanings = result.meanings ?? [];
@@ -1611,7 +1613,8 @@ export function WordClient({
           Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({
-          word: result.word,
+          // A set word is asked for by its own spelling in the set.
+          word: classroomMode && wordSet ? initialWord : result.word,
           // Classroom mode passes the curated (subject-relevant) definition
           // so the picture depicts the right sense of the word.
           meaning: opts?.meaning ?? result.meanings[0]?.meaning ?? "",
