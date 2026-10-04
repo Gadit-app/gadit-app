@@ -66,22 +66,38 @@ export function readKidsMode(): boolean {
 /**
  * When a child is in their own personal area, Kids Mode is the DEFAULT
  * (Gadi 2026-09-19: "Kids Mode is the default when a family member who is
- * not mom or dad enters"). We turn it ON once PER SESSION per profile — so
- * every fresh app open starts a kid in Kids Mode, yet within that session a
- * kid (or an older teen) can switch to the regular view and it sticks until
- * they close the app. sessionStorage (not localStorage) is what makes this
- * "default on each entry" rather than "once ever".
+ * not mom or dad enters"). It turns ON on EVERY entry into a child's profile
+ * (Gadi 2026-10-04: it used to fire once per browser session, so a second
+ * switch to the same child, after the parent turned it off, stayed off).
+ * Inside one visit the child can still switch to the regular view, and a
+ * reload keeps that choice. Back to a grown-up's profile, Kids Mode returns
+ * to what that grown-up had before the child came in.
  */
-const APPLIED_PREFIX = "gadit-kids-default-applied:";
-export function applyKidsModeDefaultForKid(uid: string): void {
+const CURRENT_KID = "gadit-kids-current-kid";
+const BEFORE_KID = "gadit-kids-before-kid";
+export function syncKidsModeForProfile(uid: string, isKid: boolean): void {
   if (typeof window === "undefined" || !uid) return;
-  const marker = APPLIED_PREFIX + uid;
-  try {
-    if (window.sessionStorage.getItem(marker) === "1") return; // already applied this session
-    window.sessionStorage.setItem(marker, "1");
-  } catch {
-    // sessionStorage blocked (rare) — fall through and still default ON.
+  let current: string | null = null;
+  try { current = window.sessionStorage.getItem(CURRENT_KID); } catch { /* blocked */ }
+  if (isKid) {
+    if (current === uid) return; // same visit (a reload): keep the child's own choice
+    try {
+      // Coming from a grown-up: remember their setting to restore later.
+      if (!current) window.sessionStorage.setItem(BEFORE_KID, readKidsMode() ? "1" : "0");
+      window.sessionStorage.setItem(CURRENT_KID, uid);
+    } catch { /* blocked: still default ON */ }
+    window.localStorage.setItem(KEY, "1");
+    window.dispatchEvent(new Event(EVENT_NAME));
+    return;
   }
-  window.localStorage.setItem(KEY, "1");
+  if (!current) return; // a grown-up who never left their profile: untouched
+  let before = "0";
+  try {
+    before = window.sessionStorage.getItem(BEFORE_KID) ?? "0";
+    window.sessionStorage.removeItem(CURRENT_KID);
+    window.sessionStorage.removeItem(BEFORE_KID);
+  } catch { /* blocked */ }
+  if (before === "1") window.localStorage.setItem(KEY, "1");
+  else window.localStorage.removeItem(KEY);
   window.dispatchEvent(new Event(EVENT_NAME));
 }

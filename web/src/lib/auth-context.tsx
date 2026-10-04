@@ -294,14 +294,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsub;
   }, [user]);
 
-  // Kids Mode defaults ON for a child's own profile (Gadi 2026-08-12).
-  // Applied once per profile per device; the kid can still switch to the
-  // regular view and that choice sticks.
+  // Kids Mode turns ON on every entry into a child's profile, and back to
+  // the grown-up's own setting when they return (Gadi 2026-10-04). Waits for
+  // the authoritative role so a loading frame is never read as "not a kid".
   useEffect(() => {
-    if (user && familyRole === "kid") {
-      void import("./use-kids-mode").then((m) => m.applyKidsModeDefaultForKid(user.uid));
-    }
-  }, [user, familyRole]);
+    if (!user || !planReady) return;
+    const isKid = familyRole === "kid";
+    void import("./use-kids-mode").then((m) => m.syncKidsModeForProfile(user.uid, isKid));
+  }, [user, planReady, familyRole]);
 
   // A kid's own avatar (picked character / photo) lives on their member doc.
   // Rules let a kid read ONLY their own member (token.memberId), so we read
