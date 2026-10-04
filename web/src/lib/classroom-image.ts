@@ -40,10 +40,11 @@ export function classroomImageKey(word: string, meaning: string, lang: string, s
 }
 
 const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Visual teaching cues make the idea obvious at a glance: clearly countable objects, soft glowing arrows, gentle highlights on what matters. Palette only teal, mint, warm amber and soft coral.";
-const KID_CHILD = "Only if the idea needs a person, show a child, and then it is EXACTLY the boy from the reference image: same face, same short brown hair, same teal t-shirt, natural slim proportions. Use the reference only for how the boy looks; his pose and the scene come from the description.";
+const KID_CHILD = "The child in the scene is EXACTLY the boy from the reference image: same face, same short brown hair, same teal t-shirt, natural slim proportions. Use the reference only for how the boy looks: he is busy doing the action in the description, a supporting part of the scene, never standing idle at the side, and the idea itself stays the large hero.";
 const TEEN = "Gadit house style: a clean modern soft 3D render, smooth matte rounded shapes like premium app icons, soft global illumination and gentle shadows. The idea itself is the hero, large, sharp and centered, on a calm plain warm off-white background, with soft glowing cues on what matters. Palette only teal, mint, warm amber and soft coral. People, when needed, are stylized friendly 3D teenagers.";
 const LETTERS = "Keep EVERY Hebrew letter, dot and vowel line in the reference image EXACTLY as drawn: same shapes, same order, same positions, nothing added, removed or changed. Turn them into big, chunky, smooth, matte 3D letters in teal and mint.";
-const NO_TEXT = "Square composition. No other letters, words, numbers or writing anywhere.";
+const NO_TEXT = "Square composition. No letters, words, labels, chemical symbols or formulas anywhere; digits only when the idea itself is about numbers.";
+const NO_OTHER_TEXT = "Square composition. No other letters, words, numbers or writing anywhere.";
 
 /** Concepts that are letters themselves: a typeset reference + what to do with it. */
 const LETTER_REFS: Record<string, { ref: string; child?: boolean; extra: string }> = {
@@ -67,7 +68,7 @@ async function brief(word: string, meaning: string, lang: string): Promise<strin
         temperature: 0.3,
         max_tokens: 110,
         messages: [
-          { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject, with simple visual teaching cues (countable objects, arrows, a highlight) that let a student understand it at a glance. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." },
+          { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject, with simple visual teaching cues (countable objects, arrows, a highlight) that let a student understand it at a glance. Include a child only when the idea is an action or experience a person does; otherwise show no people. Never use digits unless the idea is about numbers, and never chemical symbols or labels; show amounts as countable objects and substances as simple drops, bubbles or particles. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." },
           { role: "user", content: `Word (${lang}): ${word}\nMeaning in the lesson: ${meaning}\n\nDescribe the illustration:` },
         ],
       }),
@@ -147,12 +148,15 @@ export async function generateClassroomImage(opts: {
     let quality: "low" | "medium" = "low";
     if (letter) {
       refs = [letter.ref, ...(letter.child && style === "kids" ? ["kid.png"] : [])];
-      prompt = `${base} ${LETTERS} ${letter.child && style === "kids" ? KID_CHILD : ""} ${letter.extra} ${NO_TEXT}`;
+      prompt = `${base} ${LETTERS} ${letter.child && style === "kids" ? KID_CHILD : ""} ${letter.extra} ${NO_OTHER_TEXT}`;
       quality = "medium";
     } else {
       const b = curatedImageHint(w) || (await brief(w, meaning, lang)) || `${w}: ${meaning}`;
-      refs = style === "kids" ? ["kid.png"] : [];
-      prompt = `${base} ${style === "kids" ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
+      // The fixed boy only when the scene has a person in it; a picture of
+      // a thing stays a picture of the thing.
+      const person = /(child|children|boy|girl|kid|kids|student|students|person|people|teacher|man|woman|family)/i.test(b);
+      refs = style === "kids" && person ? ["kid.png"] : [];
+      prompt = `${base} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
     }
     const out = await render(prompt.replace(/\s+/g, " "), refs, quality);
     void logAiUsage({ feature: "image_classroom", model: "gpt-image-1", images: 1, imageQuality: quality, costUsd: out.cost });
