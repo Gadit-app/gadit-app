@@ -24,6 +24,7 @@ export function AdminEmailEditorClient() {
   const [ro, setRo] = useState<RoMail | null>(null); // read-only signup render
   const [preview, setPreview] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [saveMsg, setSaveMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [testTo, setTestTo] = useState<string>("");
 
@@ -50,8 +51,9 @@ export function AdminEmailEditorClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secret]);
 
-  const loadKey = useCallback(async (k: string, forSeries: "family" | "signup", forTab: "he" | "en") => {
-    setPreview(""); setStatus("");
+  const loadKey = useCallback(async (k: string, forSeries: "family" | "signup", forTab: "he" | "en", keepStatus = false) => {
+    setPreview("");
+    if (!keepStatus) { setStatus(""); setSaveMsg(null); }
     try {
       if (forSeries === "signup") {
         const r = await fetch(`${api}&key=${encodeURIComponent(k)}&lang=${forTab}`);
@@ -98,6 +100,7 @@ export function AdminEmailEditorClient() {
 
   function setField(f: keyof Content, v: string) {
     if (!data) return;
+    setSaveMsg(null); // an edit after saving: the "saved" note no longer applies
     setData({ ...data, [tab]: { ...data[tab], content: { ...data[tab].content, [f]: v } } });
     setPreview("");
   }
@@ -121,14 +124,20 @@ export function AdminEmailEditorClient() {
     if (d?.html) setPreview(d.html);
   }
   async function doSave() {
+    setSaveMsg({ ok: true, text: he ? "שומר..." : "Saving..." });
     const d = await post("save", { content });
-    if (d?.saved) { setStatus(he ? "נשמר ✓" : "Saved ✓"); loadKey(key, series, tab); }
-    else setStatus(he ? "שגיאה בשמירה" : "Save failed");
+    // The note sits next to the button and survives the reload that follows
+    // (it used to be wiped by it, so a save looked like nothing happened).
+    if (d?.saved) {
+      const t = new Date().toLocaleTimeString(he ? "he-IL" : "en-US", { hour: "2-digit", minute: "2-digit" });
+      setSaveMsg({ ok: true, text: he ? `נשמר ✓ (${t})` : `Saved ✓ (${t})` });
+      loadKey(key, series, tab, true);
+    } else setSaveMsg({ ok: false, text: he ? "השמירה נכשלה, כדאי לנסות שוב" : "Save failed, please try again" });
   }
   async function doReset() {
     if (!window.confirm(he ? "לשחזר את הטקסט המקורי לשפה הזו?" : "Reset this language to the default text?")) return;
     const d = await post("reset");
-    if (d?.reset) { setStatus(he ? "שוחזר לברירת מחדל ✓" : "Reset to default ✓"); loadKey(key, series, tab); }
+    if (d?.reset) { setSaveMsg({ ok: true, text: he ? "שוחזר לברירת מחדל ✓" : "Reset to default ✓" }); loadKey(key, series, tab, true); }
   }
   async function doTest() {
     const to = testTo.trim();
@@ -257,6 +266,9 @@ export function AdminEmailEditorClient() {
               style={{ padding: "9px 16px", borderRadius: 8, cursor: cur?.overridden ? "pointer" : "default", fontWeight: 600, fontSize: 13, fontFamily: "inherit", border: "1px solid #E5E7EB", background: "#fff", color: cur?.overridden ? "#B45309" : "#D1D5DB" }}>
               {he ? "שחזור לברירת מחדל" : "Reset to default"}
             </button>
+            {saveMsg && (
+              <span role="status" style={{ fontSize: 14, fontWeight: 700, color: saveMsg.ok ? "#0B8A8A" : "#DC2626" }}>{saveMsg.text}</span>
+            )}
           </>
         )}
       </div>
