@@ -50,3 +50,4 @@ next-env.d.ts
 # Throwaway A/B-test outputs from scripts/kids-style-test.mjs etc.
 # (PNGs, dozens of MB; kept locally for visual review only)
 /scripts/kids-style-test/
+/scripts/family-emails/out/
