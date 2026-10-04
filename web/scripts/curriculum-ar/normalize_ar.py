@@ -12,6 +12,9 @@ def grade_letters(g):
     """[3,4,5] -> 'ג-ה'; 'ג-ד' stays; 'גן' stays."""
     if isinstance(g, list) and g:
         nums = sorted(int(x) for x in g if str(x).isdigit())
+        if nums == [0]:
+            return "גן"  # some answers mark kindergarten as grade 0
+        nums = [n for n in nums if n > 0]
         def let(n):
             return {10: "י", 11: "יא", 12: "יב"}.get(n, HEB[n - 1] if 1 <= n <= 9 else str(n))
         if not nums:
