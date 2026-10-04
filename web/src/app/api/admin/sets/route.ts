@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
-import { generateWordImage, imageCacheKey } from "@/lib/word-image";
+import { generateClassroomImage, classroomImageKey, classroomStyle } from "@/lib/classroom-image";
 import { exampleCacheKey, getOrGenerateExamples } from "@/lib/word-examples";
 
 /**
@@ -22,7 +22,6 @@ import { exampleCacheKey, getOrGenerateExamples } from "@/lib/word-examples";
  */
 export const maxDuration = 60;
 
-const KIDS_MODE = false;
 
 function auth(req: NextRequest): NextResponse | null {
   const secret = req.nextUrl.searchParams.get("secret") ?? "";
@@ -57,7 +56,7 @@ export async function GET(req: NextRequest) {
       if (!resolved) {
         return { word, meaning: "", meaningSource: null, imageUrl: null, examples: [] };
       }
-      const imgKey = imageCacheKey(word, resolved.meaning, lang, KIDS_MODE);
+      const imgKey = classroomImageKey(word, resolved.meaning, lang, classroomStyle(set));
       const exKey = exampleCacheKey(word, resolved.meaning, lang);
       const [imgSnap, exSnap] = await Promise.all([
         db.collection("imageCache").doc(imgKey).get(),
@@ -105,14 +104,7 @@ export async function POST(req: NextRequest) {
   let examples: string[] = [];
 
   if (action === "image" || action === "both") {
-    const img = await generateWordImage({
-      word,
-      meaning: resolved.meaning,
-      example: resolved.example,
-      uiLang: lang,
-      kidsMode: KIDS_MODE,
-      force: true,
-    });
+    const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set, force: true });
     imageStatus = img.status;
     if (img.status !== "error") imageUrl = img.url;
     else return NextResponse.json({ error: "image_failed", detail: img.error }, { status: 502 });

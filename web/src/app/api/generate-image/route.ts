@@ -3,7 +3,9 @@ import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 import { recordActivity } from "@/lib/activity-log";
-import { curatedImageHint } from "@/lib/word-sets";
+import { curatedImageHint, classroomDef } from "@/lib/word-sets";
+import { loadWordSet } from "@/lib/curriculum-sets";
+import { generateClassroomImage } from "@/lib/classroom-image";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -136,7 +138,7 @@ export async function englishBrief(word: string, meaning: string, example: strin
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang, example, kidsMode } = await req.json();
+    const { word, meaning, uiLang, example, kidsMode, setId } = await req.json();
 
     if (!word?.trim() || !meaning?.trim()) {
       return NextResponse.json({ error: "word and meaning required" }, { status: 400 });
@@ -153,6 +155,23 @@ export async function POST(req: NextRequest) {
     }
     if (userInfo.plan === "basic") {
       return NextResponse.json({ error: "upgrade_required", requiredPlan: "clear" }, { status: 402 });
+    }
+
+    // A word-set word on the projector (Gadi 2026-10-04): the set picture in
+    // the Gadit house style (lib/classroom-image.ts), keyed on the word's
+    // meaning inside the set and shared by every class, so it is not
+    // counted against the teacher's monthly image quota.
+    if (typeof setId === "string" && setId) {
+      const set = await loadWordSet(setId);
+      const w = String(word).trim();
+      if (set && set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase())) {
+        const img = await generateClassroomImage({ word: w, meaning: classroomDef(set.id, w) ?? meaning, lang: set.lang, set, uid: userInfo.userId });
+        if (img.status === "error") {
+          console.error("[generate-image] classroom:", img.error);
+          return NextResponse.json({ error: "image_generation_failed" }, { status: 502 });
+        }
+        return NextResponse.json({ url: img.url, cached: img.status === "cached" });
+      }
     }
 
     const uiLangCode = typeof uiLang === "string" ? uiLang : "en";

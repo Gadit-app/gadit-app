@@ -1608,6 +1608,8 @@ export function WordClient({
           // buildDallePrompt comment for the why.
           example: opts?.example ?? result.meanings[0]?.examples?.[0] ?? "",
           uiLang: lang,
+          // Projector word-set picture in the house style, per set level.
+          setId: classroomMode && wordSet ? wordSet.id : undefined,
           // Kids Mode → server swaps to the modern-flat illustration
           // prompt (Style B, locked 2026-06-19) and stores the result
           // in a separate img_kids_<lang>_* cache namespace so adult

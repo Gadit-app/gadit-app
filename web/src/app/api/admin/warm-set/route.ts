@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WORD_SETS, getWordSet, classroomDef } from "@/lib/word-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
-import { generateWordImage } from "@/lib/word-image";
+import { generateClassroomImage } from "@/lib/classroom-image";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 
 /**
@@ -29,7 +29,6 @@ export const maxDuration = 60;
 // Non-kids projector key: WordClient's classroom auto-generate sends the
 // live kidsMode value, but per the schools guardrail the projector warms
 // the adult img_<lang>_* namespace.
-const KIDS_MODE = false;
 // Soft wall-clock budget; leave headroom under maxDuration=60 for the
 // final response + a straggler image call already in flight.
 const TIME_BUDGET_MS = 48_000;
@@ -102,14 +101,7 @@ export async function GET(req: NextRequest) {
     let image: "cached" | "generated" | "error" = "error";
     let imgError: string | undefined;
     try {
-      const img = await generateWordImage({
-        word,
-        meaning: resolved.meaning,
-        example: resolved.example,
-        uiLang: lang,
-        kidsMode: KIDS_MODE,
-        force,
-      });
+      const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set: { id: tSet }, force });
       if (img.status === "cached") image = "cached";
       else if (img.status === "generated") image = "generated";
       else { image = "error"; imgError = img.error; }
