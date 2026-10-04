@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
@@ -628,6 +628,12 @@ function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle
   const { view, T } = useCat();
   const [set, setSet] = useState<WordSet | undefined>(() => getWordSet(t.id));
   const [failed, setFailed] = useState(false);
+  // Back from the projector the unit is already open: bring it into view.
+  const li = useRef<HTMLLIElement>(null);
+  const openAtMount = useRef(open);
+  useEffect(() => {
+    if (openAtMount.current) li.current?.scrollIntoView({ block: "center" });
+  }, []);
 
   useEffect(() => {
     if (!open || set || !user) return;
@@ -646,7 +652,7 @@ function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle
 
   const meta = topicMeta(view, T, t);
   return (
-    <li className={"cb-topic" + (open ? " open" : "")}>
+    <li ref={li} className={"cb-topic" + (open ? " open" : "")}>
       <button type="button" className="cb-topic-head" onClick={onToggle} aria-expanded={open}>
         <span className="cb-topic-title">{t.t}</span>
         {meta && <span className="cb-grade">{meta}</span>}
