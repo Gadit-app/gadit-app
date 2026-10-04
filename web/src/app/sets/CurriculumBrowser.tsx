@@ -127,6 +127,12 @@ function HomeView(props: {
     cat,
     subjects: CUR_SUBJECTS.filter((s) => s.cat === cat.key && counts[level]?.[s.key]),
   })).filter((x) => x.subjects.length > 0);
+  // Field filter (Gadi 2026-10-04): "הכל" shows every field, a field chip
+  // shows only that field, so a principal or teacher isn't faced with every
+  // icon at once.
+  const [catState, setCat] = useState("all");
+  const cat = sections.some((x) => x.cat.key === catState) ? catState : "all";
+  const shownSections = cat === "all" ? sections : sections.filter((x) => x.cat.key === cat);
 
   return (
     <>
@@ -154,15 +160,19 @@ function HomeView(props: {
         <>
           <LevelTabs level={level} setLevel={setLevel} counts={(l) => Object.keys(counts[l] ?? {}).length} unit="מקצועות" />
           <nav className="cb-cats" aria-label="תחומים">
-            {sections.map(({ cat }) => (
-              <a key={cat.key} href={`#cat-${cat.key}`} className="cb-cat-chip" style={{ ["--c" as string]: CAT_COLOR[cat.key] }}>
-                <img src={categoryIcon(cat.key)} alt="" width={22} height={22} loading="lazy" />
-                {cat.he}
-              </a>
+            <button type="button" className={"cb-cat-chip" + (cat === "all" ? " on" : "")} aria-pressed={cat === "all"} onClick={() => setCat("all")} style={{ ["--c" as string]: "#0E8A8A" }}>
+              <AllIcon />
+              הכל
+            </button>
+            {sections.map(({ cat: c }) => (
+              <button type="button" key={c.key} className={"cb-cat-chip" + (cat === c.key ? " on" : "")} aria-pressed={cat === c.key} onClick={() => setCat(c.key)} style={{ ["--c" as string]: CAT_COLOR[c.key] }}>
+                <img src={categoryIcon(c.key)} alt="" width={22} height={22} loading="lazy" />
+                {c.he}
+              </button>
             ))}
           </nav>
-          <div className="cb-board">
-            {sections.map(({ cat, subjects }) => (
+          <div className={"cb-board" + (cat === "all" ? "" : " solo")}>
+            {shownSections.map(({ cat, subjects }) => (
               <section key={cat.key} id={`cat-${cat.key}`} className="cb-panel" style={{ ["--c" as string]: CAT_COLOR[cat.key] }}>
                 <h2 className="cb-h2">
                   <img src={categoryIcon(cat.key)} alt="" width={32} height={32} loading="lazy" />
@@ -438,6 +448,15 @@ function PresentButton({ href, n }: { href: string; n: number }) {
 
 /* ── Icons (inline, no icon font) ─────────────────────────────────────── */
 
+function AllIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <rect x="4" y="4" width="6.5" height="6.5" rx="1.6" /><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6" />
+      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6" /><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6" />
+    </svg>
+  );
+}
+
 function SearchIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
@@ -486,8 +505,11 @@ const CSS = `
 .cb-level.on{background:transparent;border-color:transparent;color:var(--ink)}
 .cb-level.on span{color:#0E8A8A}
 .cb-cats{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 10px;margin-bottom:12px}
-.cb-cat-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--rule);color:var(--ink-soft);font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
+.cb-cat-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--rule);color:var(--ink-soft);font:inherit;font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
 .cb-cat-chip:hover{border-color:var(--c);color:var(--c)}
+.cb-cat-chip.on{background:color-mix(in srgb,var(--c) 10%,#fff);border-color:var(--c);color:var(--c);font-weight:700}
+.cb-board.solo{columns:auto}
+.cb-board.solo .cb-tiles{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
 .cb-cat-chip img{border-radius:6px}
 .cb-section{margin-bottom:34px;scroll-margin-top:16px}
 .cb-h2{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;margin:0 0 14px;color:var(--c,var(--ink))}

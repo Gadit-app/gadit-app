@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
 import { useLang } from "@/lib/lang-context";
+import { useAuth } from "@/lib/auth-context";
 import { setsBySubject, type WordSet } from "@/lib/word-sets";
 import CurriculumBrowser from "./CurriculumBrowser";
 
@@ -234,7 +235,11 @@ export default function SetsClient() {
   const { lang, dir } = useLang();
   const c = COPY[lang] ?? COPY.en;
   const groups = setsBySubject();
-  // Hebrew: the full Israeli curriculum catalog (Gadi 2026-10-03).
+  const { user, schoolId, planReady } = useAuth();
+  // Word sets are a schools product (Gadi 2026-10-04): only school
+  // accounts get in. Hebrew shows the full Israeli curriculum catalog.
+  if (!planReady) return <div className="wordbook" style={S.page} />;
+  if (!user || !schoolId) return <SchoolsOnly he={lang === "he"} dir={dir} />;
   if (lang === "he") return <CurriculumBrowser />;
 
   const presentSet = (set: WordSet) =>
@@ -287,6 +292,30 @@ export default function SetsClient() {
           </section>
           );
         })}
+      </main>
+    </div>
+  );
+}
+
+function SchoolsOnly({ he, dir }: { he: boolean; dir: "rtl" | "ltr" }) {
+  const href = useHref();
+  return (
+    <div className="wordbook" dir={dir} style={S.page}>
+      <header style={S.header}>
+        <Link href={href("/")} style={S.wordmark} dir="ltr" aria-label="Gadit home">
+          Gad<span style={{ fontStyle: "italic", color: "#0EA5A5" }}>it</span>
+        </Link>
+      </header>
+      <main style={{ ...S.main, textAlign: "center", paddingTop: 72 }}>
+        <h1 style={S.h1}>{he ? "קבוצות המילים פתוחות לבתי ספר" : "Word sets are for schools"}</h1>
+        <p style={{ ...S.subtitle, margin: "0 auto 26px" }}>
+          {he
+            ? "כל מקצועות הלימוד, מגן ועד תיכון, עם מילות מפתח להקרנה בכיתה. הגישה פתוחה לבתי ספר שעובדים עם Gadit."
+            : "Every subject with key words to project in class. Access is open to schools that work with Gadit."}
+        </p>
+        <Link href={href("/schools")} style={{ ...S.presentBtn, display: "inline-flex", width: "auto", padding: "12px 26px", textDecoration: "none" }}>
+          {he ? "לפרטים על Gadit לבתי ספר" : "Gadit for schools"}
+        </Link>
       </main>
     </div>
   );
