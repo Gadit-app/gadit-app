@@ -5,6 +5,7 @@ import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { TTSButton } from "@/components/design/TTSButton";
 import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
 import type { WordSet } from "@/lib/word-sets";
+import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 
 /**
  * The teacher's projector screen for a word-set word (Gadi 2026-10-03:
@@ -68,23 +69,71 @@ const COPY = {
     exit: "Exit present mode", prev: "Previous word", next: "Next word", listen: "Listen",
     letters: ["A", "B", "C", "D"],
   },
+  ar: {
+    wordOf: (i: number, n: number) => `كلمة ${i} من ${n}`,
+    examples: "أمثلة", quiz: "اختبار للصف", game: "لعبة للصف",
+    nextExample: "المثال التالي",
+    question: (i: number, n: number) => `سؤال ${i} من ${n}`,
+    statement: (i: number, n: number) => `جملة ${i} من ${n}`,
+    nextQ: "السؤال التالي", nextS: "الجملة التالية", toSummary: "إلى النتيجة",
+    tf: "صحيح أم خطأ؟", yes: "صحيح", no: "خطأ",
+    timeUp: "انتهى الوقت. ما رأيكم؟",
+    correct: "صحيح!", wrong: "ليس تمامًا",
+    score: (s: number, t: number) => `أجبتم إجابة صحيحة عن ${s} من ${t}`,
+    great: "أحسنتم! فهمتم الكلمة",
+    almost: "اقتربتم! لنراجع الكلمة مرة أخرى",
+    again: "مرة أخرى", nextWord: "الكلمة التالية", done: "إنهاء", close: "إغلاق",
+    preparing: "نحضّر النشاط...",
+    failed: "لم نتمكن من تحضير النشاط.", retry: "حاول مرة أخرى",
+    preparingPic: "نحضّر صورة...",
+    search: "بحث في القاموس", searchPh: "كلمة لشرحها أمام الصف",
+    exit: "الخروج من وضع العرض", prev: "الكلمة السابقة", next: "الكلمة التالية", listen: "استماع",
+    letters: ["أ", "ب", "ج", "د"],
+  },
 };
 
+// Niqqud and tashkeel marks, so the word is still found in a voweled example.
+const MARKS = "\u0591-\u05C7\u064B-\u065F\u0670";
 function Highlight({ text, word }: { text: string; word: string }) {
-  const w = word.trim();
+  const w = word.trim().replace(new RegExp(`[${MARKS}]`, "g"), "");
   if (!w) return <>{text}</>;
-  const parts = text.split(w);
+  const pat = [...w].map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join(`[${MARKS}]*`);
+  const parts = text.split(new RegExp(`(${pat}[${MARKS}]*)`));
   if (parts.length < 2) return <>{text}</>;
   return (
     <>
-      {parts.map((p, i) => (
-        <span key={i}>{p}{i < parts.length - 1 && <mark className="cs-mark">{w}</mark>}</span>
-      ))}
+      {parts.map((p, i) => (i % 2 ? <mark key={i} className="cs-mark">{p}</mark> : <span key={i}>{p}</span>))}
     </>
   );
 }
 
-export function ClassroomStage({
+type StageProps = {
+  word: string;
+  definition: string;
+  imageUrl: string | null;
+  imageGenerating: boolean;
+  examples: string[];
+  set: WordSet;
+  idx: number;
+  lang: string;
+  onNavigate: (w: string) => void;
+  onExit: () => void;
+  onSearch: (q: string) => void;
+  progress?: ClassProgress | null;
+};
+
+/** Hebrew and Arabic sets get a niqqud / tashkeel switch the teacher
+ *  turns on or off for the class (Gadi 2026-10-04). Display only. */
+export function ClassroomStage(props: StageProps) {
+  const l = props.set.lang || props.lang;
+  return (
+    <NiqqudProvider available={l === "he" || l === "ar"} lang={l === "ar" ? "ar" : "he"}>
+      <StageInner {...props} />
+    </NiqqudProvider>
+  );
+}
+
+function StageInner({
   word, definition, imageUrl, imageGenerating, examples, set, idx, lang, onNavigate, onExit, onSearch, progress,
 }: {
   word: string;
@@ -100,9 +149,11 @@ export function ClassroomStage({
   onSearch: (q: string) => void;
   progress?: ClassProgress | null;
 }) {
-  const he = (set.lang || lang) === "he";
-  const c = he ? COPY.he : COPY.en;
-  const dir = he ? "rtl" : "ltr";
+  const L = (set.lang || lang) === "he" ? "he" : (set.lang || lang) === "ar" ? "ar" : "en";
+  const he = L === "he";
+  const c = COPY[L];
+  const dir = L === "en" ? "ltr" : "rtl";
+  const { nq } = useNiqqud();
   const total = set.words.length;
   const hasPrev = idx > 0, hasNext = idx < total - 1;
 
@@ -145,7 +196,7 @@ export function ClassroomStage({
   const go = (w: string) => { setPanel(null); onNavigate(w); };
 
   return (
-    <div className="cs-root" dir={dir} lang={he ? "he" : "en"}>
+    <div className="cs-root" dir={dir} lang={L}>
       <style>{CSS}</style>
       <div className="cs-glow" aria-hidden="true" />
 
@@ -170,6 +221,7 @@ export function ClassroomStage({
           <span className="cs-pos">{c.wordOf(idx + 1, total)}</span>
         </nav>
         <div className="cs-tools">
+          <NiqqudToggle />
           {searchOpen ? (
             <form
               className="cs-search"
@@ -191,10 +243,10 @@ export function ClassroomStage({
       <main className={`cs-main${!imageUrl && !imageGenerating ? " no-pic" : ""}`}>
         <section className="cs-text">
           <div className="cs-word-row">
-            <h1 className="cs-word">{word}</h1>
-            <TTSButton text={word} audioLang={he ? "he" : "en"} useOpenAI ariaLabel={c.listen} className="cs-tts" />
+            <h1 className="cs-word">{nq(word)}</h1>
+            <TTSButton text={word} audioLang={L} useOpenAI ariaLabel={c.listen} className="cs-tts" />
           </div>
-          <p className="cs-def">{definition}</p>
+          <p className="cs-def">{nq(definition)}</p>
         </section>
         {(imageUrl || imageGenerating) && (
           <figure className="cs-pic">
@@ -253,6 +305,7 @@ export function ClassroomStage({
 type C = typeof COPY.he;
 
 function ExamplesPanel({ examples, word, c }: { examples: string[]; word: string; c: C }) {
+  const { nq } = useNiqqud();
   const list = examples.slice(0, 3);
   const [shown, setShown] = useState(1);
   return (
@@ -260,7 +313,7 @@ function ExamplesPanel({ examples, word, c }: { examples: string[]; word: string
       <div className="cs-eyebrow">{c.examples}</div>
       <ol className="cs-ex-list">
         {list.slice(0, shown).map((ex, i) => (
-          <li key={i} className="cs-ex-item"><span className="cs-ex-n">{i + 1}</span><span><Highlight text={ex} word={word} /></span></li>
+          <li key={i} className="cs-ex-item"><span className="cs-ex-n">{i + 1}</span><span><Highlight text={nq(ex)} word={word} /></span></li>
         ))}
       </ol>
       {shown < list.length && (
@@ -293,6 +346,7 @@ function Summary({ score, total, c, onAgain, onNextWord, onDone }: {
 }
 
 function QuizPanel({ items, c, onNextWord, onDone }: { items: QuizItem[]; c: C; onNextWord?: () => void; onDone: () => void }) {
+  const { nq } = useNiqqud();
   const [i, setI] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -306,13 +360,13 @@ function QuizPanel({ items, c, onNextWord, onDone }: { items: QuizItem[]; c: C; 
   return (
     <div className="cs-card cs-quiz">
       <div className="cs-eyebrow">{c.quiz} · {c.question(i + 1, items.length)}</div>
-      <div className="cs-q">{it.q}</div>
+      <div className="cs-q">{nq(it.q)}</div>
       <div className="cs-tiles">
         {it.options.map((o, k) => {
           const state = picked === null ? "" : k === it.answer ? " is-right" : k === picked ? " is-wrong" : " is-dim";
           return (
             <button key={k} type="button" className={`cs-tile t${k}${state}`} onClick={() => pick(k)} disabled={picked !== null}>
-              <span className="cs-letter">{c.letters[k]}</span><span className="cs-tile-text">{o}</span>
+              <span className="cs-letter">{c.letters[k]}</span><span className="cs-tile-text">{nq(o)}</span>
             </button>
           );
         })}
@@ -320,7 +374,7 @@ function QuizPanel({ items, c, onNextWord, onDone }: { items: QuizItem[]; c: C; 
       {picked !== null && (
         <div className="cs-reveal">
           <span className={`cs-verdict${picked === it.answer ? " ok" : " no"}`}>{picked === it.answer ? c.correct : c.wrong}</span>
-          <span className="cs-explain">{it.explain}</span>
+          <span className="cs-explain">{nq(it.explain)}</span>
           <button type="button" className="cs-btn" onClick={() => { if (last) setOver(true); else { setI(i + 1); setPicked(null); } }}>{last ? c.toSummary : c.nextQ}</button>
         </div>
       )}
@@ -331,6 +385,7 @@ function QuizPanel({ items, c, onNextWord, onDone }: { items: QuizItem[]; c: C; 
 const GAME_SECONDS = 10;
 
 function GamePanel({ items, c, onNextWord, onDone }: { items: GameItem[]; c: C; onNextWord?: () => void; onDone: () => void }) {
+  const { nq } = useNiqqud();
   const [i, setI] = useState(0);
   const [picked, setPicked] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
@@ -354,7 +409,7 @@ function GamePanel({ items, c, onNextWord, onDone }: { items: GameItem[]; c: C; 
         <div className="cs-eyebrow">{c.tf} · {c.statement(i + 1, items.length)}</div>
         <div className="cs-timer" style={{ ["--p" as string]: `${pct}%` }} aria-label={`${left}`}><span>{left}</span></div>
       </div>
-      <div className="cs-q cs-statement">{it.s}</div>
+      <div className="cs-q cs-statement">{nq(it.s)}</div>
       {picked === null && left === 0 && <div className="cs-muted cs-timeup">{c.timeUp}</div>}
       <div className="cs-tf">
         <button type="button" className={`cs-tf-btn yes${picked === null ? "" : it.t ? " is-right" : picked ? " is-wrong" : " is-dim"}`} onClick={() => pick(true)} disabled={picked !== null}>
@@ -367,7 +422,7 @@ function GamePanel({ items, c, onNextWord, onDone }: { items: GameItem[]; c: C; 
       {picked !== null && (
         <div className="cs-reveal">
           <span className={`cs-verdict${picked === it.t ? " ok" : " no"}`}>{picked === it.t ? c.correct : c.wrong}</span>
-          <span className="cs-explain">{it.explain}</span>
+          <span className="cs-explain">{nq(it.explain)}</span>
           <button type="button" className="cs-btn" onClick={() => { if (last) setOver(true); else { setI(i + 1); setPicked(null); setLeft(GAME_SECONDS); } }}>{last ? c.toSummary : c.nextS}</button>
         </div>
       )}
