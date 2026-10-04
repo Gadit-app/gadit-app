@@ -72,7 +72,8 @@ async function generateAr(topicId: string): Promise<CurriculumSetDoc | null> {
   const where = `Subject: ${subj.ar} (${subj.he}). Stage: ${arLevel(t.l)?.ar ?? t.l}, ${arGrade}.\nLearning unit: "${t.t}" (${t.th}).`;
   const rules = lang === "ar"
     ? `- The words themselves in Modern Standard Arabic (الفصحى), in their dictionary form: singular, without the article ال unless it is part of the term, without tashkeel, with standard hamza spelling (أ إ ؤ ئ).
-- Each definition in clear, simple Modern Standard Arabic suited to ${arGrade}, without tashkeel.`
+- Each definition in clear, simple Modern Standard Arabic suited to ${arGrade}, without tashkeel.
+- Use each term exactly as it is worded in the most recent Arabic-language bagrut exams and Ministry materials for Arab schools in Israel. When the same term has another common wording, end its definition with that wording: "ويسمى أيضا ...", so a student recognizes both.`
     : lang === "he"
       ? `- This is Hebrew taught as a second language to Arabic-speaking students. The words in standard Hebrew (full spelling, no niqqud, dictionary form), at the level of ${grade} in an Arab school.
 - Each definition in very simple Hebrew that an Arabic-speaking student learning Hebrew can follow.`
