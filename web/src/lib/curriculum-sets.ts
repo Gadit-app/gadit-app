@@ -94,8 +94,16 @@ ${rules}
 Return: {"words":[{"w":"","d":""}]}`;
   // gpt-5.4 (Gadi 2026-10-04): in a side-by-side test it gave the unit's
   // real grammar terms where gpt-4o stayed generic, at about 1 cent a unit.
-  const rows = await chat(sys, user, "gpt-5.4");
-  return toDoc(rows, { id: t.id, subject: subj.key, title: t.t, grade, lang }, lang === "ar");
+  // It now and then returns an empty list: try once more, then gpt-4o.
+  const meta = { id: t.id, subject: subj.key, title: t.t, grade, lang };
+  for (const model of ["gpt-5.4", "gpt-5.4", "gpt-4o"]) {
+    try {
+      return toDoc(await chat(sys, user, model), meta, lang === "ar");
+    } catch (e) {
+      if (String(e).includes("openai_") || model === "gpt-4o") throw e;
+    }
+  }
+  return null;
 }
 
 async function generate(topicId: string): Promise<CurriculumSetDoc | null> {
