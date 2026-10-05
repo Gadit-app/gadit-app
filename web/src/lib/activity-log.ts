@@ -7,7 +7,7 @@ import { getAdminDb } from "./firebase-admin";
 // is how the activity log tells apart real humans from search-engine crawlers
 // walking the public per-language word URLs.
 const BOT_UA =
-  /bot|crawl|spider|slurp|mediapartners|bingpreview|facebookexternalhit|whatsapp|telegram|discordbot|yandex|baiduspider|duckduckbot|semrush|ahrefs|mj12bot|dotbot|petalbot|applebot|headless|phantomjs|python-requests|python-urllib|curl\/|wget|axios\/|node-fetch|go-http-client|java\/|okhttp|scrapy/i;
+  /bot|crawl|spider|slurp|mediapartners|bingpreview|facebookexternalhit|discordbot|yandex|baiduspider|duckduckbot|semrush|ahrefs|mj12bot|dotbot|petalbot|applebot|headless|phantomjs|python-requests|python-urllib|curl\/|wget|axios\/|node-fetch|go-http-client|java\/|okhttp|scrapy/i;
 
 export function isBotUA(ua: string | null | undefined): boolean {
   if (!ua || ua.trim().length < 8) return true; // no/absurdly-short UA = script

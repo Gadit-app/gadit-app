@@ -1258,6 +1258,13 @@ export function WordClient({
         setLoading(false);
         return;
       }
+      if (res.status === 204) {
+        // The server declined to generate (it took this visitor for a bot).
+        // A calm message, never the raw stream text (Gadi 2026-10-06).
+        setErrorMsg("Something went wrong. Please try again in a moment.");
+        setLoading(false);
+        return;
+      }
       if (!res.ok || !res.body) {
         // Generic last-resort fallback for any unexpected non-2xx —
         // still less scary than "HTTP 500".
@@ -1270,6 +1277,7 @@ export function WordClient({
       const decoder = new TextDecoder();
       let buffer = "";
       let finalResult: (WordResult & { fromCache?: boolean }) | null = null;
+      let streamError = false; // the server sent its own (friendly) error
 
       while (true) {
         const { done, value } = await reader.read();
@@ -1335,6 +1343,7 @@ export function WordClient({
           } else if (event.type === "done") {
             finalResult = event.result;
           } else if (event.type === "error") {
+            streamError = true;
             setErrorMsg(event.message);
           }
         }
@@ -1382,8 +1391,10 @@ export function WordClient({
             setAnonSearchesLeft(left);
           }
         }
-      } else if (!cancelled) {
-        setErrorMsg("Stream ended without final result");
+      } else if (!cancelled && !streamError) {
+        // Keep the server's message when it sent one; otherwise a calm one
+        // instead of the raw "Stream ended without final result".
+        setErrorMsg("Something went wrong. Please try again in a moment.");
       }
       setLoading(false);
     }

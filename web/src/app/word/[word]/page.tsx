@@ -152,6 +152,9 @@ export async function generateMetadata({
   return {
     title: `${decoded}, Gadit`,
     description,
+    // Without a saved definition the page has nothing to show a crawler (it
+    // is not generated for bots), so Google must not index an empty card.
+    ...(preloaded ? {} : { robots: { index: false, follow: true } }),
     alternates: {
       canonical: urlForLang(urlLang),
       languages: {
