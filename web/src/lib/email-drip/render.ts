@@ -138,11 +138,13 @@ export function mdLiteToHtml(he: LangArg, body: string): string {
     }
     // A paragraph that opens with a bold label ("**טיפ מהשטח:**", "**מומלץ:**",
     // "**המחשה:**") puts the label on its own line and the text under it
-    // (Gadi 2026-10-04).
+    // (Gadi 2026-10-04), and each sentence of that text on a line of its own
+    // so a tip never runs into one long line (Gadi 2026-10-05).
     const text = lines.join(" ");
     const lab = text.match(/^\*\*([^*\n]{1,30}?):?\*\*:?\s+([\s\S]+)$/);
     if (lab && /:\*\*|\*\*:/.test(text.slice(0, lab[1].length + 6))) {
-      out.push(P(he, `${inline(he, `**${lab[1]}:**`)}<br>${inline(he, lab[2])}`));
+      const sentences = lab[2].trim().split(/(?<=[.!?]["”׳']?)\s+(?=\S)/);
+      out.push(P(he, `${inline(he, `**${lab[1]}:**`)}<br>${sentences.map((x) => inline(he, x)).join("<br>")}`));
       continue;
     }
     out.push(P(he, inline(he, text)));
