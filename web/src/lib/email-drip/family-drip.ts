@@ -1,6 +1,7 @@
 import { renderEmailHtml, renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
 import { FAMILY_META, EMAIL_BASE, type FamilyEmailMeta } from "./family-content";
 import { getEffectiveContent, hasLang } from "./email-templates-store";
+import { fillChildren, sampleChildrenSummary } from "./family-summary";
 
 /**
  * Family onboarding email series. Fires AFTER a Family subscription
@@ -18,14 +19,14 @@ export type FamilyDripMail = {
   key: string;
   dayOffset: number;
   /** `lang` (any UI language) wins over `he`; untranslated → English. */
-  build(opts: { he: boolean; lang?: string; unsubscribeUrl: string; firstName?: string | null }): Promise<{ subject: string; html: string }>;
+  build(opts: { he: boolean; lang?: string; unsubscribeUrl: string; firstName?: string | null; childrenSummary?: string }): Promise<{ subject: string; html: string }>;
 };
 
 export function renderFamilyMail(
   m: FamilyEmailMeta | undefined,
   heOrLang: boolean | string,
   c: EmailContent,
-  opts: { unsubscribeUrl: string; firstName?: string | null },
+  opts: { unsubscribeUrl: string; firstName?: string | null; childrenSummary?: string },
 ): { subject: string; html: string } {
   const lang = heOrLang === true ? "he" : heOrLang === false ? "en" : heOrLang;
   const he = lang === "he";
@@ -35,7 +36,9 @@ export function renderFamilyMail(
   const base = lang === "en" ? EMAIL_BASE : `${EMAIL_BASE}/${lang}`;
   const link = `${base}${m?.ctaPath ?? "/family"}${m?.ctaUrlTab ?? ""}`;
   const subject = applyName(c.subject, opts.firstName);
-  const body = applyName(c.body, opts.firstName);
+  // {ילדים}/{children}: each child's numbers (real on send, a sample in the
+  // editor preview and test sends).
+  const body = fillChildren(applyName(c.body, opts.firstName), opts.childrenSummary ?? sampleChildrenSummary(lang));
   if (m?.v2) {
     return {
       subject,
@@ -72,11 +75,11 @@ export function renderFamilyMail(
 export const FAMILY_DRIP: FamilyDripMail[] = FAMILY_META.map((m) => ({
   key: m.key,
   dayOffset: m.dayOffset,
-  async build({ he, lang, unsubscribeUrl, firstName }) {
+  async build({ he, lang, unsubscribeUrl, firstName, childrenSummary }) {
     // A language with no translation of this email gets it in English.
     const want = lang ?? (he ? "he" : "en");
     const use = (await hasLang(m.key, want)) ? want : "en";
     const c = await getEffectiveContent(m.key, use);
-    return renderFamilyMail(m, use, c, { unsubscribeUrl, firstName });
+    return renderFamilyMail(m, use, c, { unsubscribeUrl, firstName, childrenSummary });
   },
 }));

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { familyChildrenSummary } from "@/lib/email-drip/family-summary";
 import { isShabbatIL } from "@/lib/shabbat";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
@@ -209,7 +210,12 @@ export async function GET(req: NextRequest) {
           const firstName = famName.split(/\s+/)[0] || null;
           // The family's own UI language when this email is translated into
           // it, else English (Hebrew families keep Hebrew).
-          const built = await famCand.build({ he, lang: he ? "he" : generalLang, unsubscribeUrl: buildUnsubUrl(u.uid), firstName });
+          const famLang = he ? "he" : generalLang;
+          // The "first two weeks" email carries each child's own numbers.
+          const childrenSummary = famCand.key === "fam2-progress"
+            ? await familyChildrenSummary((d.familyId as string | undefined) || u.uid, famLang)
+            : undefined;
+          const built = await famCand.build({ he, lang: famLang, unsubscribeUrl: buildUnsubUrl(u.uid), firstName, childrenSummary });
           if (dryRun) {
             results.push({ uid: u.uid, email, mailKey: famCand.key, status: "skipped", reason: "dryRun" });
           } else {

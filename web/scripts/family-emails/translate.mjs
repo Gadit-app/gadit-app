@@ -39,7 +39,7 @@ const FIELDS = ["subject", "body", "ctaText", "next", "closing", "signature", "h
 const SYS = `You localize the onboarding emails of Gadit, a family vocabulary app for children, from Hebrew. Write as a native speaker writing to parents: warm, plain, short sentences, natural rather than literal. The emails speak as the team ("we"), never "I".
 Hard rules:
 - Keep the markup exactly: "## " headings, numbered steps "1. ", "**bold**", links [text](/path) with the /path unchanged, blank lines between paragraphs, one sentence per line where the source has it.
-- "{שם}" becomes "{name}".
+- "{שם}" becomes "{name}", and "{ילדים}" becomes "{children}" (it is filled at send time with each child's numbers; keep it on its own line).
 - Gadit stays in Latin letters. Never write the word AI or artificial intelligence.
 - No long dashes (no — or –). Use commas or periods.
 - When the source quotes a button, tab or screen name, use the exact label from the glossary for that language. Labels not in the glossary: translate naturally.
@@ -53,6 +53,7 @@ function check(src, t, lang) {
   if (/[֐-׿]/.test(all)) errs.push("hebrew letters left");
   if (/[—–]/.test(all)) errs.push("long dash");
   if (/\{שם\}/.test(src.subject + src.body) && !/\{name\}/.test((t.subject ?? "") + (t.body ?? ""))) errs.push("{name} missing");
+  if (/\{ילדים\}/.test(src.body) && !/\{children\}/.test(t.body ?? "")) errs.push("{children} missing");
   const links = (s) => [...(s ?? "").matchAll(/\]\(([^)]+)\)/g)].map((m) => m[1]).sort().join(" ");
   if (links(src.body) !== links(t.body)) errs.push("links changed");
   const count = (s, re) => ((s ?? "").match(re) ?? []).length;

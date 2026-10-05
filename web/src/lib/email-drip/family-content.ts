@@ -47,46 +47,45 @@ const M = (key: string, label: string, dayOffset: number, ctaPath = "/family", c
   v2: true,
 });
 
+// Order approved by Gadi 2026-10-06 after a review by seven assistants:
+// the child's first word on day 0, the habit tools in the first week, and a
+// summary with the child's own numbers before the 14-day trial ends. Kids
+// Mode lives in email 2, the notebook games in 3, idioms in 11, and help is a
+// line in every email (reply to it) instead of an email of its own.
 export const FAMILY_META: FamilyEmailMeta[] = [
-  M("fam2-start", "Family · 1 · Getting started (install, members, devices)", 0, "/family", "?tab=members"),
-  M("fam2-word", "Family · 2 · Understand a word all the way", 1, "/"),
-  M("fam2-kids", "Family · 3 · Kids Mode", 2, "/"),
-  M("fam2-notebook", "Family · 4 · The notebook", 3, "/notebook"),
+  M("fam2-start", "Family · 1 · Getting started: connect the child, first word", 0, "/family", "?tab=members"),
+  M("fam2-word", "Family · 2 · Understand a word all the way + Kids Mode", 1, "/"),
+  M("fam2-notebook", "Family · 3 · The notebook and its games", 2, "/notebook"),
+  M("fam2-dashboard", "Family · 4 · Parent board and word alerts", 3, "/family"),
   M("fam2-read", "Family · 5 · Every Word (a whole page)", 4, "/read"),
-  M("fam2-context", "Family · 6 · The right meaning from the sentence", 5, "/"),
-  M("fam2-games", "Family · 7 · Games and quizzes", 6, "/play"),
-  M("fam2-help", "Family · 8 · Help and guides", 7, "/help"),
-  M("fam2-spell", "Family · 9 · School dictation practice", 8, "/spell"),
-  M("fam2-say", "Family · 10 · Say it", 10, "/say"),
-  M("fam2-dashboard", "Family · 11 · Parent board and word alerts", 11, "/family"),
-  M("fam2-ranks", "Family · 13 · Ranks, streaks, skins", 15),
-  M("fam2-questions", "Family · 14 · Questions about a word", 17, "/"),
-  M("fam2-idioms", "Family · 15 · Idioms and expressions", 19, "/"),
-  M("fam2-languages", "Family · 16 · Any word, explained in your language", 21),
-  M("fam2-coach", "Family · 17 · Private teacher or coach", 24, "/family", "?tab=settings"),
-  M("fam2-safe", "Family · 18 · A closed, safe place (last)", 30, "/family"),
+  M("fam2-spell", "Family · 6 · School dictation practice", 5, "/spell"),
+  M("fam2-ranks", "Family · 7 · Ranks, streaks, weekly goal", 6, "/family"),
+  M("fam2-context", "Family · 8 · The right meaning from the sentence", 7, "/"),
+  M("fam2-say", "Family · 9 · Say it", 8, "/say"),
+  M("fam2-progress", "Family · 10 · The child's first two weeks in numbers", 10, "/family"),
+  M("fam2-questions", "Family · 11 · Questions about a word, idioms", 12, "/"),
+  M("fam2-languages", "Family · 12 · Any word, explained in your language", 15, "/"),
+  M("fam2-coach", "Family · 13 · Private teacher or coach", 18, "/family", "?tab=settings"),
+  M("fam2-safe", "Family · 14 · A closed, safe place, and the next month (last)", 24, "/family"),
 ];
 
 /** Hebrew names for the admin email editor list (the English `label` stays
  *  for the English admin UI). Gadi 2026-10-01. */
 export const FAMILY_LABEL_HE: Record<string, string> = {
-  "fam2-start": "1 · התחלה: התקנה, בני משפחה ומכשירים",
-  "fam2-word": "2 · להבין מילה עד הסוף",
-  "fam2-kids": "3 · מצב ילדים",
-  "fam2-notebook": "4 · המחברת",
+  "fam2-start": "1 · התחלה: מחברים את הילד, מילה ראשונה",
+  "fam2-word": "2 · להבין מילה עד הסוף, ומצב ילדים",
+  "fam2-notebook": "3 · המחברת והמשחקים שלה",
+  "fam2-dashboard": "4 · לוח ההורה והתראות על מילים",
   "fam2-read": "5 · כל מילה (דף שלם)",
-  "fam2-context": "6 · המשמעות הנכונה לפי המשפט",
-  "fam2-games": "7 · משחקים וחידונים",
-  "fam2-help": "8 · עזרה והדרכות",
-  "fam2-spell": "9 · תרגול הכתבה",
-  "fam2-say": "10 · תגיד את זה",
-  "fam2-dashboard": "11 · לוח ההורה והתראות על מילים",
-  "fam2-ranks": "13 · דרגות, רצף וסקינים",
-  "fam2-questions": "14 · שאלות על מילה",
-  "fam2-idioms": "15 · ניבים וצירופים",
-  "fam2-languages": "16 · כל מילה, הסבר בשפה שלך",
-  "fam2-coach": "17 · מורה פרטי או מאמן",
-  "fam2-safe": "18 · מקום סגור ובטוח (אחרון)",
+  "fam2-spell": "6 · תרגול הכתבה",
+  "fam2-ranks": "7 · דרגות, רצף ויעד שבועי",
+  "fam2-context": "8 · המשמעות הנכונה לפי המשפט",
+  "fam2-say": "9 · תגיד את זה",
+  "fam2-progress": "10 · השבועיים הראשונים של הילד במספרים",
+  "fam2-questions": "11 · שאלות על מילה, ניבים וצירופים",
+  "fam2-languages": "12 · כל מילה, הסבר בשפה שלך",
+  "fam2-coach": "13 · מורה פרטי או מאמן",
+  "fam2-safe": "14 · מקום סגור ובטוח, והחודש הבא (אחרון)",
 };
 
 const C = (subject: string, body: string, ctaText: string, next: string): EmailContent => ({
@@ -98,6 +97,48 @@ const C = (subject: string, body: string, ctaText: string, next: string): EmailC
 });
 
 export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = {
+  // {ילדים} / {children} is filled at send time with each child's numbers
+  // (lib/email-drip/family-summary.ts). Gadi 2026-10-06.
+  "fam2-progress": {
+    he: C(
+      "היי {שם}, השבועיים הראשונים של הילד ב-Gadit",
+      `היי {שם},
+
+עברו שבועיים מאז שהצטרפת ל-Gadit.
+זה הזמן לראות מה הילד כבר בנה.
+
+## מה קרה בשבועיים האלה
+{ילדים}
+
+## איך ממשיכים מכאן
+1. פותחים יחד עם הילד את המחברת, ובוחרים מילה אחת שהוא כבר חיפש.
+2. מבקשים ממנו להסביר אותה במילים שלו.
+3. מחפשים יחד מילה חדשה אחת מהשיעורים של היום.
+
+**טיפ מהשטח:** מילה אחת ביום מספיקה. ככה אוצר המילים גדל, מילה אחרי מילה.`,
+      "לראות את ההתקדמות של הילד",
+      "במייל הבא נדבר על השאלות שאפשר לשאול על כל מילה, ועל ביטויים שלא מבינים רק מהמילים.",
+    ),
+    en: C(
+      "Hi {name}, your child's first two weeks on Gadit",
+      `Hi {name},
+
+Two weeks have passed since you joined Gadit.
+It's a good moment to see what your child has already built.
+
+## What happened in these two weeks
+{children}
+
+## How to keep going
+1. Open the notebook together and pick one word your child already looked up.
+2. Ask them to explain it in their own words.
+3. Look up one new word together from today's lessons.
+
+**A tip from other families:** one word a day is enough. That's how a vocabulary grows, word by word.`,
+      "See your child's progress",
+      "In the next email we'll look at the questions you can ask about any word, and at expressions you can't understand from the words alone.",
+    ),
+  },
   "fam2-start": {
     he: C(
       "היי {שם}, ככה מתחילים עם Gadit",
