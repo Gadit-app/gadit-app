@@ -204,7 +204,7 @@ export function SchoolsRealLanding() {
           <div className="sch-narrow">
             <h2 className="sch-h2 sch-center">{C.pain.title}</h2>
             <p className="sch-lead sch-center">{C.pain.lead}</p>
-            {C.pain.paras.map((p, i) => <p key={i} className="sch-body"><Lines text={p} /></p>)}
+            {C.pain.paras.map((p, i) => <p key={i} className="sch-body sch-center"><Lines text={p} /></p>)}
             <p className="sch-strong"><Lines text={C.pain.strong} /></p>
             <p className="sch-reframe"><Lines text={C.pain.reframe} /></p>
           </div>
@@ -329,7 +329,7 @@ const CSS = `
 .sch-points li { display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #1f2937; }
 .sch-hero-visual { position: relative; display: flex; justify-content: center; padding-bottom: 24px; }
 .sch-hero-visual .sch-laptop { max-width: 640px; }
-.sch-hero-phone { position: absolute; bottom: -10px; inset-inline-end: -8px; width: 34%; max-width: 190px; transform: rotate(-4deg); }
+.sch-hero-phone { position: absolute; bottom: -34px; inset-inline-end: -7%; width: 23%; max-width: 160px; transform: rotate(-4deg); }
 .sch-hero-phone .sch-phone { max-width: none; }
 @media (min-width: 980px) {
   .sch-hero { min-height: calc(100svh - 62px); display: grid; align-content: center; padding: clamp(24px, 4vh, 48px) 32px clamp(32px, 6vh, 64px); }
@@ -404,6 +404,7 @@ const CSS = `
   .sch-hero { padding: 36px 16px 64px; }
   .sch-pill { font-size: 12.5px; }
   .sch-whatis { font-size: 16.5px; }
+  .sch-hero-phone { display: none; }
   .sch-step, .sch-step.is-phone { grid-template-columns: 1fr; padding: 28px 20px; border-radius: 26px; gap: 22px; }
   .sch-feature, .sch-feature.is-phone { grid-template-columns: 1fr; padding: 28px 20px; border-radius: 26px; gap: 26px; }
   .sch-feature.is-flipped .sch-feature-text { order: 0; }

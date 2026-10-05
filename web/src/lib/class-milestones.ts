@@ -8,6 +8,11 @@
  *
  * Shared by the server (counting) and the client (labels), no server deps.
  */
+import I18N from "./class-milestones-i18n.json";
+
+/** The other UI languages (Gadi 2026-10-06), from scripts/class-milestones-i18n.mjs. */
+type I18nCopy = { labelClass: string; labelSchool: string; words: string; toNext: string; wowClass: string; wowSchool: string; reached: string; rank: string; tell: string; close: string; ranks: string[] };
+const MORE = I18N as Record<string, I18nCopy>;
 
 export const CLASS_THRESHOLDS = [50, 100, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
@@ -34,8 +39,9 @@ const RANK_NAMES: RankName[] = [
 ];
 
 export function rankNameAt(index: number, lang: string): string {
-  const r = RANK_NAMES[Math.min(Math.max(index, 0), RANK_NAMES.length - 1)];
-  return lang === "he" ? r.he : lang === "ar" ? r.ar : r.en;
+  const i = Math.min(Math.max(index, 0), RANK_NAMES.length - 1);
+  const r = RANK_NAMES[i];
+  return lang === "he" ? r.he : lang === "ar" ? r.ar : MORE[lang]?.ranks[i] ?? r.en;
 }
 
 /** Next threshold above `count` (null past the last one). */
@@ -96,6 +102,23 @@ const COPY = {
   },
 };
 
+function fromI18n(lang: string, c: I18nCopy): typeof COPY.en {
+  const num = (n: number) => { try { return n.toLocaleString(lang); } catch { return n.toLocaleString("en-US"); } };
+  return {
+    label: { class: c.labelClass, school: c.labelSchool },
+    words: (n: number) => c.words.replace("{n}", num(n)),
+    toNext: (n: number) => c.toNext.replace("{n}", num(n)),
+    wow: (scope: ClassScope) => (scope === "class" ? c.wowClass : c.wowSchool),
+    reached: (n: number) => c.reached.replace("{n}", num(n)),
+    rank: (name: string) => c.rank.replace("{name}", name),
+    tell: c.tell,
+    close: c.close,
+  };
+}
+
 export function classCopy(lang: string) {
-  return lang === "he" ? COPY.he : lang === "ar" ? COPY.ar : COPY.en;
+  if (lang === "he") return COPY.he;
+  if (lang === "ar") return COPY.ar;
+  const c = MORE[lang];
+  return c ? fromI18n(lang, c) : COPY.en;
 }
