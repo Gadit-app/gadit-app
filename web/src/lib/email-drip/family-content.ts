@@ -101,10 +101,10 @@ export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent
   // (lib/email-drip/family-summary.ts). Gadi 2026-10-06.
   "fam2-progress": {
     he: C(
-      "היי {שם}, השבועיים הראשונים של הילד ב-Gadit",
+      "היי {שם}, כמעט שבועיים עם Gadit, הנה מה שהילד כבר בנה",
       `היי {שם},
 
-עברו שבועיים מאז שהצטרפת ל-Gadit.
+עברו כמעט שבועיים מאז שהצטרפת ל-Gadit.
 זה הזמן לראות מה הילד כבר בנה.
 
 ## מה קרה בשבועיים האלה
@@ -120,10 +120,10 @@ export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent
       "במייל הבא נדבר על השאלות שאפשר לשאול על כל מילה, ועל ביטויים שלא מבינים רק מהמילים.",
     ),
     en: C(
-      "Hi {name}, your child's first two weeks on Gadit",
+      "Hi {name}, almost two weeks on Gadit, here's what your child has built",
       `Hi {name},
 
-Two weeks have passed since you joined Gadit.
+Almost two weeks have passed since you joined Gadit.
 It's a good moment to see what your child has already built.
 
 ## What happened in these two weeks
