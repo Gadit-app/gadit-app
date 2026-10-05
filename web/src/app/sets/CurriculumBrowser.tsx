@@ -7,7 +7,7 @@ import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { SCHOOL_TYPES, CURRICULA, type Curriculum } from "@/lib/school-levels";
-import { getWordSet, registerWordSet, type WordSet } from "@/lib/word-sets";
+import { WORD_SETS, getWordSet, registerWordSet, type WordSet } from "@/lib/word-sets";
 import {
   CATALOG_IDS, catalogView, readySetsOf, subjectIcon, categoryIcon,
   type CatalogId, type CatalogView, type ViewSubject, type ViewTopic,
@@ -473,7 +473,13 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
   const levels = view.levels.map((l) => l.key).filter((l) => allowed.includes(l) && topicsOf(view, subject.key, l).length > 0);
   const lv = levels.includes(level) ? level : levels[0];
   const topics = topicsOf(view, subject.key, lv);
-  const ready = view.id === "il-he" ? readySetsOf(subject.key, lv) : [];
+  // The hand-made English sets stay available to English (CAPS) schools as
+  // ready-made sets under English (Gadi 2026-10-05, Greenwarth's move to CAPS).
+  const ready = view.id === "il-he"
+    ? readySetsOf(subject.key, lv)
+    : view.id === "za-caps" && subject.key === "english-home-language" && lv === "intermediate"
+      ? WORD_SETS.filter((w) => w.lang === "en")
+      : [];
   const cat = view.categories.find((c) => c.key === subject.cat);
   const [filter, setFilter] = useState("");
   const f = norm(filter);
@@ -609,7 +615,7 @@ function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onTogg
     <li className={"cb-topic" + (open ? " open" : "")}>
       <button type="button" className="cb-topic-head" onClick={onToggle} aria-expanded={open}>
         <span className="cb-topic-title">{set.title}</span>
-        {set.grade && <span className="cb-grade">{set.grade.startsWith("כית") ? set.grade : view.gradeLabel(set.grade)}</span>}
+        {set.grade && view.id === "il-he" && <span className="cb-grade">{set.grade.startsWith("כית") ? set.grade : view.gradeLabel(set.grade)}</span>}
         <Chevron down={open} />
       </button>
       {open && (
