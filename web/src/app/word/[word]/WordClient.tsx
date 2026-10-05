@@ -1174,6 +1174,9 @@ export function WordClient({
             word: initialWord,
             uiLang: lang,
             ...(contextSentence ? { contextSentence } : {}),
+            // A student on a class code has no account: the server checks
+            // the code and unlocks the lookup on the school's plan.
+            ...(classroomCode ? { cls: classroomCode } : {}),
           }),
           signal: controller.signal,
         });
@@ -1608,7 +1611,9 @@ export function WordClient({
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
-    if (!result || !user) {
+    // A student on a class code has no account; the server unlocks the
+    // picture on the school's plan during class hours.
+    if (!result || (!user && !classroomCode)) {
       if (!opts?.silent) promptLogin(v2(lang, "generateImage"));
       return;
     }
@@ -1616,12 +1621,12 @@ export function WordClient({
     setImageGenerating(true);
     setImageError(null);
     try {
-      const idToken = await user.getIdToken();
+      const idToken = user ? await user.getIdToken() : null;
       const res = await fetch("/api/generate-image", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
         },
         body: JSON.stringify({
           // A set word is asked for by its own spelling in the set.
@@ -1637,6 +1642,7 @@ export function WordClient({
           uiLang: lang,
           // Projector word-set picture in the house style, per set level.
           setId: classroomMode && wordSet ? wordSet.id : undefined,
+          ...(classroomCode ? { cls: classroomCode } : {}),
           // Kids Mode → server swaps to the modern-flat illustration
           // prompt (Style B, locked 2026-06-19) and stores the result
           // in a separate img_kids_<lang>_* cache namespace so adult

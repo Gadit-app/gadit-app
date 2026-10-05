@@ -6,6 +6,7 @@ import { recordActivity } from "@/lib/activity-log";
 import { curatedImageHint, classroomDef } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage } from "@/lib/classroom-image";
+import { classroomAccess } from "@/lib/classroom-access";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -138,7 +139,7 @@ export async function englishBrief(word: string, meaning: string, example: strin
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang, example, kidsMode, setId } = await req.json();
+    const { word, meaning, uiLang, example, kidsMode, setId, cls } = await req.json();
 
     if (!word?.trim() || !meaning?.trim()) {
       return NextResponse.json({ error: "word and meaning required" }, { status: 400 });
@@ -149,7 +150,13 @@ export async function POST(req: NextRequest) {
     // Auth check
     const authHeader = req.headers.get("Authorization") || "";
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-    const userInfo = await verifyUserAndGetPlan(idToken);
+    let userInfo = await verifyUserAndGetPlan(idToken);
+    // A student on a class code during class hours (Gadi 2026-10-05): the
+    // picture counts against the school's own monthly image quota.
+    if (!userInfo && cls) {
+      const classroom = await classroomAccess(cls);
+      if (classroom?.inSession) userInfo = { userId: classroom.schoolId, plan: "deep" };
+    }
     if (!userInfo) {
       return NextResponse.json({ error: "login_required" }, { status: 401 });
     }

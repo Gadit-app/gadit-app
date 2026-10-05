@@ -7,6 +7,7 @@ import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } fr
 import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
 import { recordActivity, isBotUA } from "@/lib/activity-log";
+import { classroomAccess } from "@/lib/classroom-access";
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -25,6 +26,9 @@ import { recordActivity, isBotUA } from "@/lib/activity-log";
 // Paid (Clear/Deep) is unmetered — handled by an isPaid bypass below.
 const ANON_DAILY_LIMIT = 2;
 const BASIC_DAILY_LIMIT = 20;
+// A class code outside school hours: a basic dictionary for the whole class,
+// metered per class instead of per IP (Gadi 2026-10-05).
+const CLASS_OFFHOURS_DAILY_LIMIT = 60;
 
 function todayUTC(): string {
   // UTC date in YYYY-MM-DD so the daily counter resets at a consistent global
@@ -1439,7 +1443,7 @@ async function backfillTranslation(word: string, wordLangName: string, uiLangNam
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, contextSentence, uiLang } = await req.json();
+    const { word, contextSentence, uiLang, cls } = await req.json();
     // NOTE on Kids Mode: the global toggle is intentionally a CLIENT
     // render-time decision now, not a server prompt change. The same
     // cached response carries both the adult "meaning" + "examples"
@@ -1475,7 +1479,11 @@ export async function POST(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = idToken ? await verifyUserAndGetPlan(idToken) : null;
     const plan = userInfo?.plan ?? "anonymous";
-    const isPaid = plan === "clear" || plan === "deep";
+    // A student on a class code (no account, Gadi 2026-10-05): the school's
+    // plan during class hours. Before this a whole school shared the per-IP
+    // anonymous quota and the class hit the sign-up wall after two words.
+    const classroom = plan === "anonymous" && cls ? await classroomAccess(cls) : null;
+    const isPaid = plan === "clear" || plan === "deep" || !!classroom?.inSession;
 
     // Admin refresh (Gadi 2026-09-09): a secret-gated maintenance path used by
     // the top-words re-generation script (so popular cached words pick up new
@@ -1612,7 +1620,15 @@ export async function POST(req: NextRequest) {
     // millions of visitors search the same 10K popular words, we pay
     // close to nothing.
     if (!isPaid && !isRefresh) {
-      if (plan === "anonymous") {
+      if (plan === "anonymous" && classroom) {
+        const newCount = await incrementAnonUsage(`cls_${classroom.code}`);
+        if (newCount > CLASS_OFFHOURS_DAILY_LIMIT) {
+          return NextResponse.json(
+            { error: "daily_limit_reached", limit: CLASS_OFFHOURS_DAILY_LIMIT, plan: "anonymous", nextStep: "signup" },
+            { status: 429 }
+          );
+        }
+      } else if (plan === "anonymous") {
         const ip = clientIp(req);
         const newCount = await incrementAnonUsage(ip);
         if (newCount > ANON_DAILY_LIMIT) {
