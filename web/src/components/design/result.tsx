@@ -41,7 +41,7 @@ import { v2 } from "@/lib/i18n-v2";
 import { useHref, wordPath } from "@/lib/href";
 import WordQuestions from "@/components/design/WordQuestions";
 import type { Lang } from "@/lib/i18n";
-import { LANGUAGES } from "@/lib/i18n";
+import { LANGUAGES, langNameIn } from "@/lib/i18n";
 import { isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
@@ -185,6 +185,17 @@ function langMatchesUi(language: string, lang: Lang): boolean {
 // Reverse: take the language label /api/define returns ("English",
 // "German", "Čeština", "العربية") and return our 2-letter Lang code.
 // Used to pick the right TTS voice locale for the speaker button.
+/** The word's language named in the viewer's own language (Gadi 2026-10-06:
+ *  a Russian student saw "Hebrew"). Falls back to the model's label when the
+ *  language is not one of ours. */
+function wordLangLabel(language: string, lang: Lang): string {
+  const langName = (language || "").toLowerCase().trim();
+  for (const [code, names] of Object.entries(LANG_NAMES)) {
+    if (names.some((n) => langName.includes(n))) return langNameIn(code, lang);
+  }
+  return language;
+}
+
 function detectWordLang(language: string): string {
   const langName = (language || "").toLowerCase().trim();
   for (const [code, names] of Object.entries(LANG_NAMES)) {
@@ -425,7 +436,7 @@ export function WordHeader({
           <div className="wb-word-meta">
             {pos && <em>{pos}</em>}
             {pos && showLang && <span className="wb-meta-dot" />}
-            {showLang && <span>{language}</span>}
+            {showLang && <span>{wordLangLabel(language, lang)}</span>}
           </div>
         )}
         <div className="wb-word-title-row">
