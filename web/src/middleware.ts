@@ -66,7 +66,10 @@ export function middleware(req: NextRequest) {
     if (routeFirst && BLOCKED_IN_PLAY.has(routeFirst)) {
       const home = req.nextUrl.clone();
       home.pathname = langPrefixed ? `/${first}` : "/";
-      home.search = "";
+      // Remember where this request was going: a NORMAL browser tab that only
+      // inherited the app's cookie clears it client-side and goes back there
+      // (see the Play-mode script in layout.tsx). Inside the app it is unused.
+      home.search = `?from=${encodeURIComponent(pathname + req.nextUrl.search)}`;
       const redirect = NextResponse.redirect(home);
       redirect.cookies.set(PLAY_COOKIE, "1", { maxAge: 60 * 60 * 24 * 365, sameSite: "lax", path: "/" });
       return redirect;

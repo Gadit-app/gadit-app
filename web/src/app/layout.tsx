@@ -384,6 +384,7 @@ export default async function RootLayout({
       dir={initialDir}
       {...(playMode ? { "data-play": "1" } : {})}
       className="h-full antialiased"
+      suppressHydrationWarning
     >
       <head>
         {/* First-paint fonts (Hebrew + Latin UI) preloaded, like the old
@@ -398,6 +399,21 @@ export default async function RootLayout({
           {/* Apply the saved appearance/skin (data-theme) before first paint
               so there is no flash of the default light theme. Kept tiny and
               inline; the React useTheme() hook keeps it in sync afterwards. */}
+          {/* Play mode is PER TAB (Gadi 2026-10-06). The Play app (TWA) and
+              Chrome on the same phone share one cookie jar, so the sticky
+              gadit_play cookie set inside the app also blocked buying in the
+              phone's normal Chrome, for a year. Now the app's own tab carries
+              the mark (sessionStorage, set from ?src=play or the
+              android-app:// referrer, kept for a standalone window), keeps the
+              cookie and data-play on; a normal browser tab that inherits the
+              cookie clears it, drops data-play, and returns to the page the
+              server bounced it from (?from=). */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "try{var q=new URLSearchParams(location.search),r=document.referrer||'',d=document.documentElement,c=/(?:^|; )gadit_play=1/.test(document.cookie),s=window.matchMedia&&matchMedia('(display-mode: standalone)').matches;if(q.get('src')==='play'||r.indexOf('android-app://')===0||(c&&s))sessionStorage.setItem('gadit_play_tab','1');if(sessionStorage.getItem('gadit_play_tab')==='1'){d.setAttribute('data-play','1');if(!c)document.cookie='gadit_play=1; path=/; max-age=31536000; samesite=lax';}else if(c){document.cookie='gadit_play=; path=/; max-age=0; samesite=lax';d.removeAttribute('data-play');var f=q.get('from');if(f&&f.charAt(0)==='/'&&f.charAt(1)!=='/')location.replace(f);}}catch(e){}",
+            }}
+          />
           <script
             dangerouslySetInnerHTML={{
               __html:
