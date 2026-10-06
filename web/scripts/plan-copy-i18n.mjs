@@ -34,6 +34,9 @@ function bad(k, t) {
   if (typeof t !== "string" || !t.trim()) return "empty";
   if (vars(t) !== vars(EN[k])) return "placeholders";
   if (/[–—]/.test(t)) return "long dash";
+  const links = (x) => (x.match(/\]\([^)]+\)/g) ?? []).join(",");
+  if (links(t) !== links(EN[k])) return "links";
+  if ((t.match(/\n/g) ?? []).length !== (EN[k].match(/\n/g) ?? []).length) return "line breaks";
   if (/[֐-׿]/.test(t)) return "hebrew letters";
   for (const brand of ["Gadit", "Individual", "Family", "Basic"]) if (EN[k].includes(brand) && !t.includes(brand)) return `lost ${brand}`;
   return null;

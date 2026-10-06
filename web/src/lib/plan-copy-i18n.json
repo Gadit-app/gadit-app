@@ -53,7 +53,12 @@
   "helpCompareQ": "66a41de0",
   "helpCompareA1": "17e480ad",
   "helpCompareA2": "dd86b368",
-  "helpCompareA3": "f958da39"
+  "helpCompareA3": "f958da39",
+  "remSubject": "03c98907",
+  "remBody": "140ef853",
+  "remCta": "8f941d6b",
+  "remCycleMonth": "1f6df70e",
+  "remCycleYear": "fbe0b376"
  },
  "ar": {
   "nbFreeCount": "{n} من {max} كلمة في الدفتر المجاني",
@@ -109,7 +114,12 @@
   "helpCompareQ": "ما الفرق بين Basic وIndividual وFamily؟",
   "helpCompareA1": "Basic (مجانًا): حتى 10 عمليات بحث عن الكلمات يوميًا، كل المعاني، أمثلة، تعابير وعبارات، أصل الكلمة، والدفتر حتى 30 كلمة.",
   "helpCompareA2": "Individual ($3.99 شهريًا أو $39.99 سنويًا، ₪14.90 أو ₪149 في إسرائيل): لشخص واحد، مع كل الأدوات. بحث غير محدود، صورة لكل معنى، المعنى الصحيح من الجملة، كل كلمة، قلها، اكتب جملة مع ملاحظات، تدريب ذكي، ألعاب واختبارات، ومقارنة الكلمات المتشابهة.",
-  "helpCompareA3": "Family ($5.99 شهريًا أو $59 سنويًا، ₪19.90 أو ₪199 في إسرائيل): كل ما في Individual لما يصل إلى 5 أطفال وكلا الوالدين، بالإضافة إلى وضع أطفال، ومساحة خاصة لكل طفل، ولوحة الوالدين مع تنبيهات الكلمات، وإملاء."
+  "helpCompareA3": "Family ($5.99 شهريًا أو $59 سنويًا، ₪19.90 أو ₪199 في إسرائيل): كل ما في Individual لما يصل إلى 5 أطفال وكلا الوالدين، بالإضافة إلى وضع أطفال، ومساحة خاصة لكل طفل، ولوحة الوالدين مع تنبيهات الكلمات، وإملاء.",
+  "remSubject": "مرحبًا {name}، تنتهي تجربتك في Gadit خلال يومين",
+  "remBody": "مرحبًا {name}،\n\nتنتهي تجربتك المجانية في Gadit بتاريخ {date}.\n\n## ماذا يحدث بعد ذلك\nفي ذلك اليوم، سيتم خصم {amount} {cycle} من بطاقتك مقابل {plan}.\nلا تحتاج إلى فعل أي شيء للمتابعة.\n\n## كيف تلغي\nيمكنك الإلغاء في أي وقت قبل {date}، ولن يتم خصم أي مبلغ.\n1. افتح [صفحة الحساب](/account).\n2. اضغط على \"إدارة الفوترة\".\n3. في الصفحة التي تفتح، اختر إلغاء الاشتراك.",
+  "remCta": "انتقل إلى حسابي",
+  "remCycleMonth": "شهريًا",
+  "remCycleYear": "سنويًا"
  },
  "ru": {
   "nbFreeCount": "{n} из {max} слов в твоей бесплатной тетради",
@@ -165,7 +175,12 @@
   "helpCompareQ": "Чем отличаются Basic, Individual и Family?",
   "helpCompareA1": "Basic (бесплатно): до 10 поисков слов в день, все значения, примеры, Идиомы и выражения, Происхождение слова и Тетрадь до 30 слов.",
   "helpCompareA2": "Individual ($3.99 в месяц или $39.99 в год, ₪14.90 или ₪149 в Израиле): один человек, все инструменты. Безлимитный поиск, картинка к каждому значению, выбор нужного значения по предложению, Каждое слово, Скажи это, Составить предложение с обратной связью, умная практика, игры, тесты и сравнение похожих слов.",
-  "helpCompareA3": "Family ($5.99 в месяц или $59 в год, ₪19.90 или ₪199 в Израиле): всё из Individual для 5 детей и обоих родителей, плюс режим Дети, отдельное пространство для каждого ребёнка, родительская панель с оповещениями о словах и Диктант."
+  "helpCompareA3": "Family ($5.99 в месяц или $59 в год, ₪19.90 или ₪199 в Израиле): всё из Individual для 5 детей и обоих родителей, плюс режим Дети, отдельное пространство для каждого ребёнка, родительская панель с оповещениями о словах и Диктант.",
+  "remSubject": "Привет, {name}, твой пробный период Gadit закончится через два дня",
+  "remBody": "Привет, {name},\n\nТвой бесплатный пробный период Gadit закончится {date}.\n\n## Что будет дальше\nВ этот день с твоей карты спишется {amount} {cycle} за {plan}.\nЧтобы продолжить, ничего делать не нужно.\n\n## Как отменить\nТы можешь отменить подписку в любой момент до {date}, и тогда ничего не спишется.\n1. Открой [страницу аккаунта](/account).\n2. Нажми \"Управлять оплатой\".\n3. На открывшейся странице выбери отмену подписки.",
+  "remCta": "Перейти в аккаунт",
+  "remCycleMonth": "в месяц",
+  "remCycleYear": "в год"
  },
  "es": {
   "nbFreeCount": "{n} de {max} palabras en tu Cuaderno gratis",
@@ -221,7 +236,12 @@
   "helpCompareQ": "¿Qué diferencia hay entre Basic, Individual y Family?",
   "helpCompareA1": "Basic (gratis): hasta 10 búsquedas de palabras al día, todos los significados, ejemplos, Modismos y expresiones, Origen de la palabra y un Cuaderno de hasta 30 palabras.",
   "helpCompareA2": "Individual (3,99 $ al mes o 39,99 $ al año, ₪14.90 o ₪149 en Israel): una persona, todas las herramientas. Búsquedas ilimitadas, una imagen para cada significado, el significado correcto a partir de una frase, Cada palabra, Dilo, Componer una oración con comentarios, práctica inteligente, juegos, tests y comparación de palabras parecidas.",
-  "helpCompareA3": "Family (5,99 $ al mes o 59 $ al año, ₪19.90 o ₪199 en Israel): todo lo de Individual para hasta 5 niños y ambos padres, más el modo Niños, un espacio propio para cada niño, el panel para madres y padres con alertas de palabras y Ortografía."
+  "helpCompareA3": "Family (5,99 $ al mes o 59 $ al año, ₪19.90 o ₪199 en Israel): todo lo de Individual para hasta 5 niños y ambos padres, más el modo Niños, un espacio propio para cada niño, el panel para madres y padres con alertas de palabras y Ortografía.",
+  "remSubject": "Hola {name}, tu prueba de Gadit termina en dos días",
+  "remBody": "Hola {name},\n\nTu prueba gratuita de Gadit termina el {date}.\n\n## Qué pasa después\nEse día se te cobrará {amount} {cycle} por {plan}.\nNo tienes que hacer nada para seguir.\n\n## Cómo cancelar\nPuedes cancelar en cualquier momento antes del {date} y no se te cobrará nada.\n1. Abre tu [página de cuenta](/account).\n2. Toca \"Gestionar facturación\".\n3. En la página que se abre, elige cancelar la suscripción.",
+  "remCta": "Ir a mi cuenta",
+  "remCycleMonth": "al mes",
+  "remCycleYear": "al año"
  },
  "pt": {
   "nbFreeCount": "{n} de {max} palavras no teu Caderno gratuito",
@@ -277,7 +297,12 @@
   "helpCompareQ": "Qual é a diferença entre Basic, Individual e Family?",
   "helpCompareA1": "Basic (grátis): até 10 pesquisas de palavras por dia, todos os significados, exemplos, Expressões idiomáticas, Origem da palavra e um Caderno com até 30 palavras.",
   "helpCompareA2": "Individual (US$3,99 por mês ou US$39,99 por ano, ₪14.90 ou ₪149 em Israel): uma pessoa, todas as ferramentas. Pesquisas ilimitadas, uma imagem para cada significado, o significado certo a partir de uma frase, Cada palavra, Diga, Compor uma frase com feedback, prática inteligente, jogos e quizzes, e comparar palavras parecidas.",
-  "helpCompareA3": "Family (US$5,99 por mês ou US$59 por ano, ₪19.90 ou ₪199 em Israel): tudo o que há no Individual para até 5 crianças e ambos os pais, mais o modo Crianças, um espaço próprio para cada criança, o painel dos pais com alertas de palavras e Ortografia."
+  "helpCompareA3": "Family (US$5,99 por mês ou US$59 por ano, ₪19.90 ou ₪199 em Israel): tudo o que há no Individual para até 5 crianças e ambos os pais, mais o modo Crianças, um espaço próprio para cada criança, o painel dos pais com alertas de palavras e Ortografia.",
+  "remSubject": "Olá {name}, a tua avaliação do Gadit termina em dois dias",
+  "remBody": "Olá {name},\n\nA tua avaliação gratuita do Gadit termina em {date}.\n\n## O que acontece depois\nNesse dia, será cobrado {amount} {cycle} no teu cartão pelo plano {plan}.\nNão precisas de fazer nada para continuar.\n\n## Como cancelar\nPodes cancelar a qualquer momento antes de {date} e nada será cobrado.\n1. Abre a tua [página da conta](/account).\n2. Toca em \"Gerenciar faturamento\".\n3. Na página que abrir, escolhe cancelar a subscrição.",
+  "remCta": "Ir para a minha conta",
+  "remCycleMonth": "por mês",
+  "remCycleYear": "por ano"
  },
  "fr": {
   "nbFreeCount": "{n} mots sur {max} dans ton carnet gratuit",
@@ -333,7 +358,12 @@
   "helpCompareQ": "Quelle est la différence entre Basic, Individual et Family ?",
   "helpCompareA1": "Basic (gratuit) : jusqu’à 10 recherches de mots par jour, tous les sens, des exemples, les Idiomes et expressions, l’Origine du mot, et un Carnet de 30 mots maximum.",
   "helpCompareA2": "Individual (3,99 $ par mois ou 39,99 $ par an, 14,90 ₪ ou 149 ₪ en Israël) : une personne, tous les outils. Recherches illimitées, une image pour chaque sens, le bon sens à partir d’une phrase, Chaque mot, Dis-le, Composer une phrase avec retour, entraînement intelligent, jeux et quiz, et comparaison de mots proches.",
-  "helpCompareA3": "Family (5,99 $ par mois ou 59 $ par an, 19,90 ₪ ou 199 ₪ en Israël) : tout ce qu’il y a dans Individual pour jusqu’à 5 enfants et les deux parents, plus le mode Enfants, un espace à part pour chaque enfant, le tableau parent avec alertes de mots, et Dictée."
+  "helpCompareA3": "Family (5,99 $ par mois ou 59 $ par an, 19,90 ₪ ou 199 ₪ en Israël) : tout ce qu’il y a dans Individual pour jusqu’à 5 enfants et les deux parents, plus le mode Enfants, un espace à part pour chaque enfant, le tableau parent avec alertes de mots, et Dictée.",
+  "remSubject": "Salut {name}, ton essai de Gadit se termine dans deux jours",
+  "remBody": "Salut {name},\n\nTon essai gratuit de Gadit se termine le {date}.\n\n## Ensuite\nCe jour-là, ta carte sera débitée de {amount} {cycle} pour {plan}.\nTu n'as rien à faire pour continuer.\n\n## Comment annuler\nTu peux annuler à tout moment avant le {date}, et rien ne sera facturé.\n1. Ouvre ta [page Compte](/account).\n2. Appuie sur « Gérer la facturation ».\n3. Sur la page qui s'ouvre, choisis d'annuler l'abonnement.",
+  "remCta": "Aller à mon compte",
+  "remCycleMonth": "par mois",
+  "remCycleYear": "par an"
  },
  "de": {
   "nbFreeCount": "{n} von {max} Wörtern in deinem kostenlosen Notizbuch",
@@ -389,7 +419,12 @@
   "helpCompareQ": "Was ist der Unterschied zwischen Basic, Individual und Family?",
   "helpCompareA1": "Basic (kostenlos): bis zu 10 Wörternachschläge pro Tag, jede Bedeutung, Beispiele, Redewendungen & Ausdrücke, Wortursprung und ein Notizbuch mit bis zu 30 Wörtern.",
   "helpCompareA2": "Individual (3,99 $ im Monat oder 39,99 $ im Jahr, 14,90 ₪ oder 149 ₪ in Israel): eine Person, jedes Tool. Unbegrenzte Nachschläge, ein Bild zu jeder Bedeutung, die richtige Bedeutung aus einem Satz, Jedes Wort, Sag es, Satz schreiben mit Feedback, smartes Üben, Spiele und Quizze sowie das Vergleichen ähnlicher Wörter.",
-  "helpCompareA3": "Family (5,99 $ im Monat oder 59 $ im Jahr, 19,90 ₪ oder 199 ₪ in Israel): alles aus Individual für bis zu 5 Kinder und beide Eltern, plus Kinder-Modus, ein eigener Bereich für jedes Kind, das Eltern-Dashboard mit Worthinweisen und Diktat."
+  "helpCompareA3": "Family (5,99 $ im Monat oder 59 $ im Jahr, 19,90 ₪ oder 199 ₪ in Israel): alles aus Individual für bis zu 5 Kinder und beide Eltern, plus Kinder-Modus, ein eigener Bereich für jedes Kind, das Eltern-Dashboard mit Worthinweisen und Diktat.",
+  "remSubject": "Hallo {name}, deine Gadit-Testphase endet in zwei Tagen",
+  "remBody": "Hallo {name},\n\ndeine kostenlose Testphase von Gadit endet am {date}.\n\n## Was dann passiert\nAn diesem Tag wird deine Karte mit {amount} {cycle} für {plan} belastet.\nDu musst nichts tun, um Gadit weiter zu nutzen.\n\n## So kündigst du\nDu kannst jederzeit vor dem {date} kündigen, dann wird dir nichts berechnet.\n1. Öffne deine [Account-Seite](/account).\n2. Tippe auf „Abrechnung verwalten“.\n3. Wähle auf der Seite, die sich öffnet, die Kündigung des Abos aus.",
+  "remCta": "Zu meinem Account",
+  "remCycleMonth": "pro Monat",
+  "remCycleYear": "pro Jahr"
  },
  "cs": {
   "nbFreeCount": "{n} z {max} slov ve tvém bezplatném Sešitu",
@@ -445,7 +480,12 @@
   "helpCompareQ": "Jaký je rozdíl mezi Basic, Individual a Family?",
   "helpCompareA1": "Basic (zdarma): až 10 vyhledání slov denně, všechny významy, příklady, Idiomy a výrazy, Původ slova a Sešit až pro 30 slov.",
   "helpCompareA2": "Individual (3,99 $ měsíčně nebo 39,99 $ ročně, v Izraeli 14,90 ₪ nebo 149 ₪): pro jednu osobu, všechny nástroje. Neomezené vyhledávání, obrázek ke každému významu, správný význam podle věty, Každé slovo, Řekni to, Napsat větu se zpětnou vazbou, chytré procvičování, hry a kvízy a porovnávání podobných slov.",
-  "helpCompareA3": "Family (5,99 $ měsíčně nebo 59 $ ročně, v Izraeli 19,90 ₪ nebo 199 ₪): všechno z Individual až pro 5 dětí a oba rodiče, navíc režim Děti, vlastní prostor pro každé dítě, rodičovský přehled s upozorněními na slova a Diktát."
+  "helpCompareA3": "Family (5,99 $ měsíčně nebo 59 $ ročně, v Izraeli 19,90 ₪ nebo 199 ₪): všechno z Individual až pro 5 dětí a oba rodiče, navíc režim Děti, vlastní prostor pro každé dítě, rodičovský přehled s upozorněními na slova a Diktát.",
+  "remSubject": "Ahoj {name}, tvoje zkušební verze Gadit končí za dva dny",
+  "remBody": "Ahoj {name},\n\nTvoje bezplatná zkušební verze Gadit končí {date}.\n\n## Co se stane potom\nV ten den ti z karty strhneme {amount} {cycle} za tarif {plan}.\nAbys mohl(a) pokračovat, nemusíš nic dělat.\n\n## Jak zrušit předplatné\nPřed {date} ho můžeš kdykoli zrušit a nic ti nestrhneme.\n1. Otevři svou [stránku účtu](/account).\n2. Klepni na „Spravovat fakturaci“.\n3. Na stránce, která se otevře, vyber zrušení předplatného.",
+  "remCta": "Přejít na můj účet",
+  "remCycleMonth": "měsíčně",
+  "remCycleYear": "ročně"
  },
  "sk": {
   "nbFreeCount": "{n} z {max} slov v tvojom bezplatnom zošite",
@@ -501,7 +541,12 @@
   "helpCompareQ": "Aký je rozdiel medzi Basic, Individual a Family?",
   "helpCompareA1": "Basic (zadarmo): až 10 vyhľadaní slov denne, všetky významy, príklady, Idiómy a výrazy, Pôvod slova a Zošit až na 30 slov.",
   "helpCompareA2": "Individual (3,99 USD mesačne alebo 39,99 USD ročne, v Izraeli 14,90 ₪ alebo 149 ₪): pre jedného, všetky nástroje. Neobmedzené vyhľadávanie, obrázok ku každému významu, správny význam podľa vety, Každé slovo, Povedz to, Napísať vetu so spätnou väzbou, inteligentné precvičovanie, hry a kvízy a porovnávanie podobných slov.",
-  "helpCompareA3": "Family (5,99 USD mesačne alebo 59 USD ročne, v Izraeli 19,90 ₪ alebo 199 ₪): všetko z Individual až pre 5 detí a oboch rodičov, navyše režim Deti, vlastný priestor pre každé dieťa, rodičovský panel s upozorneniami na slová a Diktát."
+  "helpCompareA3": "Family (5,99 USD mesačne alebo 59 USD ročne, v Izraeli 19,90 ₪ alebo 199 ₪): všetko z Individual až pre 5 detí a oboch rodičov, navyše režim Deti, vlastný priestor pre každé dieťa, rodičovský panel s upozorneniami na slová a Diktát.",
+  "remSubject": "Ahoj {name}, tvoja skúšobná verzia Gadit končí o dva dni",
+  "remBody": "Ahoj {name},\n\nTvoja bezplatná skúšobná verzia Gadit končí {date}.\n\n## Čo sa stane potom\nV ten deň ti z karty strhneme {amount} {cycle} za plán {plan}.\nAk chceš pokračovať, nemusíš nič robiť.\n\n## Ako zrušiť predplatné\nPred {date} ho môžeš kedykoľvek zrušiť a nič ti nenaúčtujeme.\n1. Otvor si [stránku účtu](/account).\n2. Ťukni na „Spravovať fakturáciu“.\n3. Na otvorenej stránke vyber zrušenie predplatného.",
+  "remCta": "Prejsť na môj účet",
+  "remCycleMonth": "mesačne",
+  "remCycleYear": "ročne"
  },
  "it": {
   "nbFreeCount": "{n} di {max} parole nel tuo Quaderno gratuito",
@@ -557,7 +602,12 @@
   "helpCompareQ": "Che differenza c'è tra Basic, Individual e Family?",
   "helpCompareA1": "Basic (gratis): fino a 10 ricerche di parole al giorno, tutti i significati, esempi, Modi di dire ed espressioni, Origine della parola e un Quaderno con fino a 30 parole.",
   "helpCompareA2": "Individual (3,99 $ al mese o 39,99 $ all'anno, 14,90 ₪ o 149 ₪ in Israele): per una persona, con tutti gli strumenti. Ricerche illimitate, un'immagine per ogni significato, il significato giusto da una frase, Ogni parola, Dillo, Scrivi una frase con feedback, esercizi intelligenti, giochi e quiz, e confronto tra parole simili.",
-  "helpCompareA3": "Family (5,99 $ al mese o 59 $ all'anno, 19,90 ₪ o 199 ₪ in Israele): tutto quello che c'è in Individual per fino a 5 bambini e entrambi i genitori, più la modalità Bambini, uno spazio dedicato per ogni bambino, il pannello del genitore con avvisi sulle parole e Ortografia."
+  "helpCompareA3": "Family (5,99 $ al mese o 59 $ all'anno, 19,90 ₪ o 199 ₪ in Israele): tutto quello che c'è in Individual per fino a 5 bambini e entrambi i genitori, più la modalità Bambini, uno spazio dedicato per ogni bambino, il pannello del genitore con avvisi sulle parole e Ortografia.",
+  "remSubject": "Ciao {name}, la tua prova di Gadit termina tra due giorni",
+  "remBody": "Ciao {name},\n\nLa tua prova gratuita di Gadit termina il {date}.\n\n## Cosa succede dopo\nQuel giorno la tua carta verrà addebitata di {amount} {cycle} per {plan}.\nNon devi fare nulla per continuare.\n\n## Come annullare\nPuoi annullare in qualsiasi momento prima del {date} e non ti verrà addebitato nulla.\n1. Apri la tua [pagina Account](/account).\n2. Tocca \"Gestisci fatturazione\".\n3. Nella pagina che si apre, scegli di annullare l'abbonamento.",
+  "remCta": "Vai al mio account",
+  "remCycleMonth": "al mese",
+  "remCycleYear": "all'anno"
  },
  "ja": {
   "nbFreeCount": "無料のノート: {max}語中{n}語",
@@ -613,7 +663,12 @@
   "helpCompareQ": "Basic、Individual、Familyの違いは？",
   "helpCompareA1": "Basic（無料）: 1日10回まで単語を調べられます。すべての意味、例文、イディオムと表現、語源、最大30語のノートが使えます。",
   "helpCompareA2": "Individual（月額$3.99または年額$39.99、イスラエルでは₪14.90または₪149）: 1人用、すべての機能が使えます。検索回数は無制限。すべての意味の画像、文に合う意味の判定、すべての単語、言ってみて、フィードバック付きの文を書く、スマート練習、ゲームとクイズ、似た単語の比較が使えます。",
-  "helpCompareA3": "Family（月額$5.99または年額$59、イスラエルでは₪19.90または₪199）: Individualの全機能を、子ども5人までと両親2人で使えます。さらに、子どもモード、子どもごとの専用スペース、単語アラート付きの保護者ボード、書き取りも使えます。"
+  "helpCompareA3": "Family（月額$5.99または年額$59、イスラエルでは₪19.90または₪199）: Individualの全機能を、子ども5人までと両親2人で使えます。さらに、子どもモード、子どもごとの専用スペース、単語アラート付きの保護者ボード、書き取りも使えます。",
+  "remSubject": "こんにちは {name}さん、Gaditの無料トライアルはあと2日で終了します",
+  "remBody": "こんにちは {name}さん\n\nGaditの無料トライアルは{date}に終了します。\n\n## その後について\nその日に、{plan}の料金として{amount}/{cycle}がカードに請求されます。\n続けるために必要な手続きはありません。\n\n## キャンセル方法\n{date}までならいつでもキャンセルでき、料金は請求されません。\n1. [アカウントページ](/account)を開きます。\n2. 「お支払いを管理」をタップします。\n3. 開いたページで、サブスクリプションのキャンセルを選びます。",
+  "remCta": "アカウントへ",
+  "remCycleMonth": "月額",
+  "remCycleYear": "年額"
  },
  "hi": {
   "nbFreeCount": "तुम्हारी मुफ्त नोटबुक में {max} में से {n} शब्द",
@@ -669,7 +724,12 @@
   "helpCompareQ": "Basic, Individual और Family में क्या फर्क है?",
   "helpCompareA1": "Basic (मुफ्त): दिन में 10 तक शब्द खोज, हर अर्थ, उदाहरण, मुहावरे और अभिव्यक्तियाँ, शब्द की उत्पत्ति, और 30 शब्दों तक की नोटबुक.",
   "helpCompareA2": "Individual ($3.99 महीना या $39.99 सालाना, Israel में ₪14.90 या ₪149): एक व्यक्ति, हर टूल. अनलिमिटेड खोज, हर अर्थ के लिए एक तस्वीर, वाक्य से सही अर्थ, हर शब्द, कहो, फीडबैक के साथ एक वाक्य लिखें, स्मार्ट प्रैक्टिस, गेम और क्विज़, और मिलते-जुलते शब्दों की तुलना.",
-  "helpCompareA3": "Family ($5.99 महीना या $59 सालाना, Israel में ₪19.90 या ₪199): 5 बच्चों और दोनों माता-पिता तक के लिए Individual की हर चीज़, साथ में बच्चे मोड, हर बच्चे के लिए अपनी अलग जगह, शब्द अलर्ट के साथ माता-पिता का बोर्ड, और वर्तनी."
+  "helpCompareA3": "Family ($5.99 महीना या $59 सालाना, Israel में ₪19.90 या ₪199): 5 बच्चों और दोनों माता-पिता तक के लिए Individual की हर चीज़, साथ में बच्चे मोड, हर बच्चे के लिए अपनी अलग जगह, शब्द अलर्ट के साथ माता-पिता का बोर्ड, और वर्तनी.",
+  "remSubject": "हाय {name}, तुम्हारा Gadit ट्रायल दो दिन में खत्म हो जाएगा",
+  "remBody": "हाय {name},\n\nतुम्हारा Gadit का मुफ़्त ट्रायल {date} को खत्म हो जाएगा.\n\n## इसके बाद क्या होगा\nउस दिन तुम्हारे कार्ड से {plan} के लिए {amount} {cycle} का शुल्क लिया जाएगा.\nइसे जारी रखने के लिए तुम्हें कुछ भी करने की ज़रूरत नहीं है.\n\n## कैसे रद्द करें\nतुम {date} से पहले कभी भी रद्द कर सकते हो, और कोई शुल्क नहीं लिया जाएगा.\n1. अपना [अकाउंट पेज](/account) खोलो.\n2. \"बिलिंग प्रबंधित करें\" पर टैप करो.\n3. खुलने वाले पेज पर सदस्यता रद्द करने का विकल्प चुनो.",
+  "remCta": "मेरे अकाउंट पर जाएँ",
+  "remCycleMonth": "प्रति माह",
+  "remCycleYear": "प्रति वर्ष"
  },
  "am": {
   "nbFreeCount": "በነጻ ደብተርህ ውስጥ {max} ቃላት ከ{n}",
@@ -725,7 +785,12 @@
   "helpCompareQ": "Basic፣ Individual እና Family ልዩነታቸው ምንድን ነው?",
   "helpCompareA1": "Basic (ነጻ)፦ በቀን እስከ 10 የቃል ፍለጋዎች፣ ሁሉም ትርጉሞች፣ ምሳሌዎች፣ ፈሊጦች እና አገላለጾች፣ ሥርወ ቃል፣ እና እስከ 30 ቃላት የሚይዝ ደብተር።",
   "helpCompareA2": "Individual ($3.99 በወር ወይም $39.99 በዓመት፣ በእስራኤል ₪14.90 ወይም ₪149)፦ ለአንድ ሰው፣ ሁሉንም መሣሪያ። ያልተገደበ ፍለጋ፣ ለእያንዳንዱ ትርጉም ስዕል፣ ከዓረፍተ ነገር ትክክለኛውን ትርጉም ማግኘት፣ እያንዳንዱ ቃል፣ ተናገረው፣ ዓረፍተ ነገር ይጻፉ ከአስተያየት ጋር፣ ብልህ ልምምድ፣ ጨዋታዎች እና ጥያቄዎች፣ እና ተመሳሳይ ቃላትን ማወዳደር።",
-  "helpCompareA3": "Family ($5.99 በወር ወይም $59 በዓመት፣ በእስራኤል ₪19.90 ወይም ₪199)፦ በIndividual ያለው ሁሉ ለእስከ 5 ልጆች እና ለሁለቱም ወላጆች፣ በተጨማሪም ልጆች ሞድ፣ ለእያንዳንዱ ልጅ የራሱ ቦታ፣ ለወላጅ የቃል ማንቂያዎች ያሉበት ፓነል፣ እና ፊደል አጻጻፍ።"
+  "helpCompareA3": "Family ($5.99 በወር ወይም $59 በዓመት፣ በእስራኤል ₪19.90 ወይም ₪199)፦ በIndividual ያለው ሁሉ ለእስከ 5 ልጆች እና ለሁለቱም ወላጆች፣ በተጨማሪም ልጆች ሞድ፣ ለእያንዳንዱ ልጅ የራሱ ቦታ፣ ለወላጅ የቃል ማንቂያዎች ያሉበት ፓነል፣ እና ፊደል አጻጻፍ።",
+  "remSubject": "ሰላም {name}፣ የGadit ሙከራህ ከሁለት ቀን በኋላ ያበቃል",
+  "remBody": "ሰላም {name}፣\n\nየGadit ነጻ ሙከራህ በ{date} ያበቃል።\n\n## ከዚያ በኋላ ምን ይሆናል\nበዚያ ቀን ለ{plan} ከካርድህ {amount} {cycle} ይከፈላል።\nለመቀጠል ምንም ማድረግ አያስፈልግህም።\n\n## እንዴት መሰረዝ እንደምትችል\nከ{date} በፊት በማንኛውም ጊዜ መሰረዝ ትችላለህ፣ እና ምንም ክፍያ አይደረግም።\n1. የ[መለያ ገጽህን](/account) ክፈት።\n2. \"ክፍያን ያስተዳድሩ\" ንካ።\n3. በሚከፈተው ገጽ ላይ ምዝገባውን ለመሰረዝ ምረጥ።",
+  "remCta": "ወደ መለያዬ ሂድ",
+  "remCycleMonth": "በወር",
+  "remCycleYear": "በዓመት"
  },
  "uk": {
   "nbFreeCount": "{n} із {max} слів у твоєму безкоштовному Зошиті",
@@ -781,7 +846,12 @@
   "helpCompareQ": "Яка різниця між Basic, Individual і Family?",
   "helpCompareA1": "Basic (безкоштовно): до 10 пошуків слів на день, усі значення, приклади, Ідіоми та вислови, Походження слова і Зошит до 30 слів.",
   "helpCompareA2": "Individual ($3.99 на місяць або $39.99 на рік, ₪14.90 або ₪149 в Ізраїлі): для однієї людини, усі інструменти. Необмежений пошук, зображення до кожного значення, правильне значення за реченням, Кожне слово, Скажи це, Скласти речення зі зворотним зв’язком, розумна практика, ігри, тести й порівняння схожих слів.",
-  "helpCompareA3": "Family ($5.99 на місяць або $59 на рік, ₪19.90 або ₪199 в Ізраїлі): усе з Individual для до 5 дітей і двох батьків, а ще режим Діти, окремий простір для кожної дитини, батьківська панель зі сповіщеннями про слова та Диктант."
+  "helpCompareA3": "Family ($5.99 на місяць або $59 на рік, ₪19.90 або ₪199 в Ізраїлі): усе з Individual для до 5 дітей і двох батьків, а ще режим Діти, окремий простір для кожної дитини, батьківська панель зі сповіщеннями про слова та Диктант.",
+  "remSubject": "Привіт, {name}, твій пробний період Gadit закінчується за два дні",
+  "remBody": "Привіт, {name},\n\nТвій безкоштовний пробний період Gadit закінчується {date}.\n\n## Що буде далі\nЦього дня з твоєї картки спишеться {amount} {cycle} за план {plan}.\nЩоб продовжити, нічого робити не потрібно.\n\n## Як скасувати\nТи можеш скасувати будь-коли до {date}, і тоді нічого не спишеться.\n1. Відкрий свою [сторінку акаунта](/account).\n2. Натисни \"Керувати оплатою\".\n3. На сторінці, що відкриється, вибери скасування підписки.",
+  "remCta": "Перейти в акаунт",
+  "remCycleMonth": "на місяць",
+  "remCycleYear": "на рік"
  },
  "tr": {
   "nbFreeCount": "Ücretsiz Defterinde {max} kelimeden {n} tanesi var",
@@ -837,7 +907,12 @@
   "helpCompareQ": "Basic, Individual ve Family arasındaki fark nedir?",
   "helpCompareA1": "Basic (ücretsiz): günde en fazla 10 kelime araması, tüm anlamlar, örnekler, Deyimler ve ifadeler, Kelime Kökeni ve en fazla 30 kelimelik bir Defter.",
   "helpCompareA2": "Individual (aylık $3.99 veya yıllık $39.99, İsrail'de ₪14.90 veya ₪149): tek kişi için, tüm araçlar. Sınırsız arama, her anlam için bir görsel, cümleden doğru anlamı bulma, Her kelime, Söyle, geri bildirimle Bir cümle yaz, akıllı alıştırma, oyunlar ve testler, ayrıca benzer kelimeleri karşılaştırma.",
-  "helpCompareA3": "Family (aylık $5.99 veya yıllık $59, İsrail'de ₪19.90 veya ₪199): 5 çocuğa ve iki ebeveyne kadar Individual'daki her şey, ayrıca Çocuklar modu, her çocuk için ayrı bir alan, kelime bildirimleri olan ebeveyn paneli ve Yazım."
+  "helpCompareA3": "Family (aylık $5.99 veya yıllık $59, İsrail'de ₪19.90 veya ₪199): 5 çocuğa ve iki ebeveyne kadar Individual'daki her şey, ayrıca Çocuklar modu, her çocuk için ayrı bir alan, kelime bildirimleri olan ebeveyn paneli ve Yazım.",
+  "remSubject": "Merhaba {name}, Gadit denemen 2 gün sonra bitiyor",
+  "remBody": "Merhaba {name},\n\nGadit ücretsiz denemen {date} tarihinde sona eriyor.\n\n## Sonra ne olur\nO gün kartından {plan} için {amount} {cycle} çekilir.\nDevam etmek için bir şey yapmana gerek yok.\n\n## Nasıl iptal edilir\n{date} tarihinden önce istediğin zaman iptal edebilirsin, senden hiçbir ücret alınmaz.\n1. [Hesap sayfanı](/account) aç.\n2. \"Faturalandırmayı yönet\" seçeneğine dokun.\n3. Açılan sayfada aboneliği iptal etmeyi seç.",
+  "remCta": "Hesabıma git",
+  "remCycleMonth": "aylık",
+  "remCycleYear": "yıllık"
  },
  "pl": {
   "nbFreeCount": "{n} z {max} słów w Twoim darmowym Notatniku",
@@ -893,7 +968,12 @@
   "helpCompareQ": "Jaka jest różnica między Basic, Individual i Family?",
   "helpCompareA1": "Basic (bezpłatny): do 10 wyszukań słów dziennie, wszystkie znaczenia, przykłady, Idiomy i wyrażenia, Pochodzenie słowa oraz Notatnik do 30 słów.",
   "helpCompareA2": "Individual (3,99 USD miesięcznie lub 39,99 USD rocznie, w Izraelu 14,90 ₪ lub 149 ₪): jedna osoba, wszystkie narzędzia. Nielimitowane wyszukiwania, obrazek do każdego znaczenia, właściwe znaczenie z kontekstu zdania, Każde słowo, Powiedz to, Ułóż zdanie z informacją zwrotną, inteligentne ćwiczenia, gry i quizy oraz porównywanie podobnych słów.",
-  "helpCompareA3": "Family (5,99 USD miesięcznie lub 59 USD rocznie, w Izraelu 19,90 ₪ lub 199 ₪): wszystko z Individual dla maksymalnie 5 dzieci i obojga rodziców, a do tego tryb Dzieci, osobna przestrzeń dla każdego dziecka, panel rodzica z alertami o słowach oraz Dyktando."
+  "helpCompareA3": "Family (5,99 USD miesięcznie lub 59 USD rocznie, w Izraelu 19,90 ₪ lub 199 ₪): wszystko z Individual dla maksymalnie 5 dzieci i obojga rodziców, a do tego tryb Dzieci, osobna przestrzeń dla każdego dziecka, panel rodzica z alertami o słowach oraz Dyktando.",
+  "remSubject": "Cześć {name}, Twój okres próbny Gadit kończy się za dwa dni",
+  "remBody": "Cześć {name},\n\nTwój darmowy okres próbny Gadit kończy się {date}.\n\n## Co się stanie potem\nTego dnia obciążymy Twoją kartę kwotą {amount} za {cycle} w planie {plan}.\nNie musisz nic robić, żeby dalej korzystać z aplikacji.\n\n## Jak anulować\nMożesz anulować w dowolnym momencie przed {date}, a nic nie pobierzemy.\n1. Otwórz [stronę konta](/account).\n2. Kliknij „Zarządzaj płatnościami”.\n3. Na otwartej stronie wybierz anulowanie subskrypcji.",
+  "remCta": "Przejdź do mojego konta",
+  "remCycleMonth": "miesiąc",
+  "remCycleYear": "rok"
  },
  "fa": {
   "nbFreeCount": "{n} از {max} واژه در دفترچه رایگان تو",
@@ -949,7 +1029,12 @@
   "helpCompareQ": "فرق Basic، Individual و Family چیست؟",
   "helpCompareA1": "Basic (رایگان): روزی تا ۱۰ جست‌وجوی واژه، همه معنی‌ها، مثال‌ها، اصطلاح‌ها و عبارت‌ها، خاستگاه واژه، و دفترچه‌ای با حداکثر ۳۰ واژه.",
   "helpCompareA2": "Individual (ماهی ۳٫۹۹ دلار یا سالی ۳۹٫۹۹ دلار، در اسرائیل ۱۴٫۹۰₪ یا ۱۴۹₪): برای یک نفر، با همه ابزارها. جست‌وجوی نامحدود، تصویر برای هر معنی، پیدا کردن معنی درست از روی جمله، هر واژه، بگو، یک جمله بنویس با بازخورد، تمرین هوشمند، بازی‌ها و آزمون‌ها، و مقایسه واژه‌های مشابه.",
-  "helpCompareA3": "Family (ماهی ۵٫۹۹ دلار یا سالی ۵۹ دلار، در اسرائیل ۱۹٫۹۰₪ یا ۱۹۹₪): همه چیزِ Individual برای حداکثر ۵ کودک و هر دو والد، به‌علاوه حالت کودکان، فضای جدا برای هر کودک، پنل والدین با هشدار واژه‌ها، و دیکته."
+  "helpCompareA3": "Family (ماهی ۵٫۹۹ دلار یا سالی ۵۹ دلار، در اسرائیل ۱۹٫۹۰₪ یا ۱۹۹₪): همه چیزِ Individual برای حداکثر ۵ کودک و هر دو والد، به‌علاوه حالت کودکان، فضای جدا برای هر کودک، پنل والدین با هشدار واژه‌ها، و دیکته.",
+  "remSubject": "{name}، آزمایش رایگان Gadit تو دو روز دیگه تموم می‌شود",
+  "remBody": "{name}، سلام\n\nآزمایش رایگان Gadit تو در {date} تمام می‌شود.\n\n## بعدش چه می‌شود\nدر آن روز، برای {plan} مبلغ {amount} {cycle} از کارتت کم می‌شود.\nبرای ادامه دادن لازم نیست کاری انجام بدهی.\n\n## چطور لغو کنی\nمی‌توانی هر زمان قبل از {date} لغو کنی و هیچ مبلغی از تو گرفته نمی‌شود.\n1. [صفحه حساب](/account) را باز کن.\n2. روی «مدیریت صورت‌حساب» بزن.\n3. در صفحه‌ای که باز می‌شود، گزینه لغو اشتراک را انتخاب کن.",
+  "remCta": "برو به حساب من",
+  "remCycleMonth": "در ماه",
+  "remCycleYear": "در سال"
  },
  "id": {
   "nbFreeCount": "{n} dari {max} kata di Buku Catatan gratismu",
@@ -1005,7 +1090,12 @@
   "helpCompareQ": "Apa bedanya Basic, Individual, dan Family?",
   "helpCompareA1": "Basic (gratis): hingga 10 pencarian kata per hari, semua makna, contoh, Idiom & ungkapan, Asal-usul Kata, dan Buku Catatan hingga 30 kata.",
   "helpCompareA2": "Individual ($3.99 per bulan atau $39.99 per tahun, ₪14.90 atau ₪149 di Israel): untuk satu orang, semua alat. Pencarian tanpa batas, gambar untuk setiap makna, makna yang tepat dari sebuah kalimat, Setiap kata, Ucapkan, Susun kalimat dengan masukan, latihan pintar, game dan kuis, serta membandingkan kata yang mirip.",
-  "helpCompareA3": "Family ($5.99 per bulan atau $59 per tahun, ₪19.90 atau ₪199 di Israel): semua yang ada di Individual untuk hingga 5 anak dan kedua orang tua, ditambah mode Anak, ruang sendiri untuk tiap anak, panel orang tua dengan notifikasi kata, dan Ejaan."
+  "helpCompareA3": "Family ($5.99 per bulan atau $59 per tahun, ₪19.90 atau ₪199 di Israel): semua yang ada di Individual untuk hingga 5 anak dan kedua orang tua, ditambah mode Anak, ruang sendiri untuk tiap anak, panel orang tua dengan notifikasi kata, dan Ejaan.",
+  "remSubject": "Hai {name}, uji coba Gadit kamu berakhir dalam dua hari",
+  "remBody": "Hai {name},\n\nUji coba gratis Gadit kamu berakhir pada {date}.\n\n## Apa yang terjadi setelah itu\nPada hari itu, kartu kamu akan ditagih {amount} {cycle} untuk paket {plan}.\nKamu tidak perlu melakukan apa pun untuk tetap lanjut.\n\n## Cara membatalkan\nKamu bisa membatalkan kapan saja sebelum {date}, dan tidak akan ada tagihan.\n1. Buka [halaman Akun](/account).\n2. Ketuk \"Kelola tagihan\".\n3. Di halaman yang terbuka, pilih untuk membatalkan langganan.",
+  "remCta": "Buka akun saya",
+  "remCycleMonth": "per bulan",
+  "remCycleYear": "per tahun"
  },
  "nl": {
   "nbFreeCount": "{n} van {max} woorden in je gratis notitieboek",
@@ -1061,7 +1151,12 @@
   "helpCompareQ": "Wat is het verschil tussen Basic, Individual en Family?",
   "helpCompareA1": "Basic (gratis): tot 10 woorden per dag opzoeken, elke betekenis, voorbeelden, Uitdrukkingen en zegswijzen, Woordherkomst en een Notitieboek met maximaal 30 woorden.",
   "helpCompareA2": "Individual ($3.99 per maand of $39.99 per jaar, ₪14.90 of ₪149 in Israël): één persoon, alle tools. Onbeperkt opzoeken, een afbeelding bij elke betekenis, de juiste betekenis uit een zin, Elk woord, Zeg het, Een zin schrijven met feedback, slim oefenen, games en quizzen, en vergelijkbare woorden vergelijken.",
-  "helpCompareA3": "Family ($5.99 per maand of $59 per jaar, ₪19.90 of ₪199 in Israël): alles in Individual voor maximaal 5 kinderen en beide ouders, plus Kinderen-modus, een eigen plek voor elk kind, het ouderdashboard met woordmeldingen en Spelling."
+  "helpCompareA3": "Family ($5.99 per maand of $59 per jaar, ₪19.90 of ₪199 in Israël): alles in Individual voor maximaal 5 kinderen en beide ouders, plus Kinderen-modus, een eigen plek voor elk kind, het ouderdashboard met woordmeldingen en Spelling.",
+  "remSubject": "Hoi {name}, je proefperiode van Gadit eindigt over twee dagen",
+  "remBody": "Hoi {name},\n\nJe gratis proefperiode van Gadit eindigt op {date}.\n\n## Wat gebeurt er daarna\nOp die dag wordt {amount} {cycle} voor {plan} van je kaart afgeschreven.\nJe hoeft niets te doen om door te gaan.\n\n## Zo zeg je op\nJe kunt op elk moment vóór {date} opzeggen, dan wordt er niets in rekening gebracht.\n1. Open je [accountpagina](/account).\n2. Tik op \"Facturering beheren\".\n3. Kies op de pagina die opent om je abonnement op te zeggen.",
+  "remCta": "Naar mijn account",
+  "remCycleMonth": "per maand",
+  "remCycleYear": "per jaar"
  },
  "el": {
   "nbFreeCount": "{n} από {max} λέξεις στο δωρεάν τετράδιό σου",
@@ -1117,7 +1212,12 @@
   "helpCompareQ": "Ποια είναι η διαφορά ανάμεσα στα Basic, Individual και Family;",
   "helpCompareA1": "Basic (δωρεάν): έως 10 αναζητήσεις λέξεων τη μέρα, όλες οι σημασίες, παραδείγματα, Ιδιωματισμοί και εκφράσεις, Προέλευση λέξης και Τετράδιο με έως 30 λέξεις.",
   "helpCompareA2": "Individual (3,99 $ τον μήνα ή 39,99 $ τον χρόνο, 14,90 ₪ ή 149 ₪ στο Ισραήλ): για 1 άτομο, με όλα τα εργαλεία. Απεριόριστες αναζητήσεις, εικόνα για κάθε σημασία, τη σωστή σημασία μέσα από πρόταση, Κάθε λέξη, Πες το, Σύνθεσε μια πρόταση με σχόλια, έξυπνη εξάσκηση, παιχνίδια και κουίζ, και σύγκριση παρόμοιων λέξεων.",
-  "helpCompareA3": "Family (5,99 $ τον μήνα ή 59 $ τον χρόνο, 19,90 ₪ ή 199 ₪ στο Ισραήλ): όλα όσα έχει το Individual για έως 5 παιδιά και τους 2 γονείς, συν λειτουργία Παιδιά, ξεχωριστό χώρο για κάθε παιδί, τον πίνακα γονέα με ειδοποιήσεις λέξεων και Ορθογραφία."
+  "helpCompareA3": "Family (5,99 $ τον μήνα ή 59 $ τον χρόνο, 19,90 ₪ ή 199 ₪ στο Ισραήλ): όλα όσα έχει το Individual για έως 5 παιδιά και τους 2 γονείς, συν λειτουργία Παιδιά, ξεχωριστό χώρο για κάθε παιδί, τον πίνακα γονέα με ειδοποιήσεις λέξεων και Ορθογραφία.",
+  "remSubject": "Γεια σου {name}, η δοκιμή σου στο Gadit λήγει σε δύο μέρες",
+  "remBody": "Γεια σου {name},\n\nΗ δωρεάν δοκιμή σου στο Gadit λήγει στις {date}.\n\n## Τι γίνεται μετά\nΕκείνη την ημέρα η κάρτα σου θα χρεωθεί με {amount} {cycle} για το πρόγραμμα {plan}.\nΔεν χρειάζεται να κάνεις τίποτα για να συνεχίσεις.\n\n## Πώς να ακυρώσεις\nΜπορείς να ακυρώσεις οποιαδήποτε στιγμή πριν από τις {date} και δεν θα χρεωθείς τίποτα.\n1. Άνοιξε τη [σελίδα λογαριασμού](/account).\n2. Πάτησε «Διαχείριση χρέωσης».\n3. Στη σελίδα που ανοίγει, επίλεξε να ακυρώσεις τη συνδρομή.",
+  "remCta": "Πήγαινε στον λογαριασμό μου",
+  "remCycleMonth": "τον μήνα",
+  "remCycleYear": "τον χρόνο"
  },
  "zu": {
   "nbFreeCount": "{n} kwamagama angu-{max} encwadini yakho yamanothi yamahhala",
@@ -1173,7 +1273,12 @@
   "helpCompareQ": "Uyini umehluko phakathi kwe-Basic, Individual ne-Family?",
   "helpCompareA1": "I-Basic (mahhala): kufika ekubhekeni amagama angu-10 ngosuku, zonke izincazelo, izibonelo, Izisho namatemu, Umsuka Wegama, ne-Incwadi yamanothi enamagama afinyelela ku-30.",
   "helpCompareA2": "I-Individual ($3.99 ngenyanga noma u-$39.99 ngonyaka, ₪14.90 noma ₪149 kwa-Israel): umuntu oyedwa, wonke amathuluzi. Ukubheka amagama okungenamkhawulo, isithombe sencazelo ngayinye, incazelo efanele evela emshweni, Wonke amagama, Yisho, Bhala umusho enempedulo, ukuzilolonga okuhlakaniphile, imidlalo nama-quiz, nokuqhathanisa amagama afanayo.",
-  "helpCompareA3": "I-Family ($5.99 ngenyanga noma u-$59 ngonyaka, ₪19.90 noma ₪199 kwa-Israel): konke okuku-Individual kwezingane ezifika ku-5 nabazali bobabili, kanye nemodi yezingane, indawo yayo siqu yengane ngayinye, ibhodi yomzali enezaziso zamagama, no-Ukupela."
+  "helpCompareA3": "I-Family ($5.99 ngenyanga noma u-$59 ngonyaka, ₪19.90 noma ₪199 kwa-Israel): konke okuku-Individual kwezingane ezifika ku-5 nabazali bobabili, kanye nemodi yezingane, indawo yayo siqu yengane ngayinye, ibhodi yomzali enezaziso zamagama, no-Ukupela.",
+  "remSubject": "Sawubona {name}, isivivinyo sakho se-Gadit siphela ezinsukwini ezimbili",
+  "remBody": "Sawubona {name},\n\nIsivivinyo sakho samahhala se-Gadit siphela ngo-{date}.\n\n## Kuzokwenzekani ngemva kwalokho\nNgalolo suku ikhadi lakho lizokhokhiswa u-{amount} {cycle} nge-{plan}.\nAkukho okudingeka ukwenze ukuze uqhubeke.\n\n## Ukukhansela kanjani\nUngakhansela noma nini ngaphambi kuka-{date}, futhi akukho ozokhokhiswa khona.\n1. Vula [ikhasi lakho le-akhawunti](/account).\n2. Thepha okuthi \"Phatha ukukhokha\".\n3. Ekhasini elivulekayo, khetha ukukhansela ukubhalisa.",
+  "remCta": "Iya ku-akhawunti yami",
+  "remCycleMonth": "ngenyanga",
+  "remCycleYear": "ngonyaka"
  },
  "vi": {
   "nbFreeCount": "{n} trên {max} từ trong sổ tay miễn phí của bạn",
@@ -1229,7 +1334,12 @@
   "helpCompareQ": "Basic, Individual và Family khác nhau thế nào?",
   "helpCompareA1": "Basic (miễn phí): tối đa 10 lượt tra từ mỗi ngày, mọi nghĩa, ví dụ, Thành ngữ & cách diễn đạt, Nguồn gốc từ và Sổ tay tối đa 30 từ.",
   "helpCompareA2": "Individual ($3.99/tháng hoặc $39.99/năm, ₪14.90 hoặc ₪149 ở Israel): cho 1 người, có đủ mọi công cụ. Tra từ không giới hạn, hình ảnh cho mọi nghĩa, chọn đúng nghĩa từ câu, Mọi từ, Nói thử, Đặt một câu kèm nhận xét, luyện tập thông minh, trò chơi, câu đố và so sánh các từ giống nhau.",
-  "helpCompareA3": "Family ($5.99/tháng hoặc $59/năm, ₪19.90 hoặc ₪199 ở Israel): có mọi thứ trong Individual cho tối đa 5 trẻ và cả bố mẹ, thêm chế độ Trẻ em, không gian riêng cho từng bé, bảng điều khiển cho phụ huynh với cảnh báo từ và Chính tả."
+  "helpCompareA3": "Family ($5.99/tháng hoặc $59/năm, ₪19.90 hoặc ₪199 ở Israel): có mọi thứ trong Individual cho tối đa 5 trẻ và cả bố mẹ, thêm chế độ Trẻ em, không gian riêng cho từng bé, bảng điều khiển cho phụ huynh với cảnh báo từ và Chính tả.",
+  "remSubject": "Chào {name}, gói dùng thử Gadit của bạn sẽ kết thúc sau hai ngày nữa",
+  "remBody": "Chào {name},\n\nGói dùng thử miễn phí của bạn trên Gadit sẽ kết thúc vào {date}.\n\n## Sau đó sẽ thế nào\nVào ngày đó, thẻ của bạn sẽ bị tính {amount} mỗi {cycle} cho gói {plan}.\nBạn không cần làm gì để tiếp tục dùng.\n\n## Cách hủy\nBạn có thể hủy bất cứ lúc nào trước {date} và sẽ không bị tính phí.\n1. Mở [trang Tài khoản](/account).\n2. Nhấn \"Quản lý thanh toán\".\n3. Trên trang mở ra, chọn hủy gói đăng ký.",
+  "remCta": "Đi tới tài khoản của tôi",
+  "remCycleMonth": "tháng",
+  "remCycleYear": "năm"
  },
  "fil": {
   "nbFreeCount": "{n} sa {max} na salita sa libre mong Kwaderno",
@@ -1285,7 +1395,12 @@
   "helpCompareQ": "Ano ang diperensya ng Basic, Individual, at Family?",
   "helpCompareA1": "Basic (libre): hanggang 10 paghahanap ng salita bawat araw, lahat ng kahulugan, mga halimbawa, Mga idyoma at ekspresyon, Pinagmulan ng Salita, at isang Kwaderno na may hanggang 30 salita.",
   "helpCompareA2": "Individual ($3.99 bawat buwan o $39.99 bawat taon, ₪14.90 o ₪149 sa Israel): para sa isang tao, lahat ng tool. Walang limitasyong paghahanap, larawan para sa bawat kahulugan, ang tamang kahulugan mula sa isang pangungusap, Bawat salita, Sabihin, Bumuo ng pangungusap na may feedback, smart practice, mga laro at quiz, at paghahambing ng magkakatulad na salita.",
-  "helpCompareA3": "Family ($5.99 bawat buwan o $59 bawat taon, ₪19.90 o ₪199 sa Israel): lahat ng nasa Individual para sa hanggang 5 bata at parehong magulang, kasama pa ang mode na Bata, hiwalay na espasyo para sa bawat bata, board ng magulang na may mga alerto sa salita, at Pagbaybay."
+  "helpCompareA3": "Family ($5.99 bawat buwan o $59 bawat taon, ₪19.90 o ₪199 sa Israel): lahat ng nasa Individual para sa hanggang 5 bata at parehong magulang, kasama pa ang mode na Bata, hiwalay na espasyo para sa bawat bata, board ng magulang na may mga alerto sa salita, at Pagbaybay.",
+  "remSubject": "Hi {name}, magtatapos ang trial mo sa Gadit sa loob ng dalawang araw",
+  "remBody": "Hi {name},\n\nMagtatapos ang libreng trial mo sa Gadit sa {date}.\n\n## Ano ang mangyayari pagkatapos\nSa araw na iyon, sisingilin ang card mo ng {amount} {cycle} para sa {plan}.\nWala kang kailangang gawin para magpatuloy.\n\n## Paano magkansela\nPuwede kang magkansela anumang oras bago ang {date}, at wala kang babayaran.\n1. Buksan ang [pahina ng account](/account).\n2. I-tap ang \"Pamahalaan ang pagsingil\".\n3. Sa bubukas na pahina, piliing kanselahin ang subscription.",
+  "remCta": "Pumunta sa account ko",
+  "remCycleMonth": "bawat buwan",
+  "remCycleYear": "bawat taon"
  },
  "af": {
   "nbFreeCount": "{n} van {max} woorde in jou gratis boekie",
@@ -1341,7 +1456,12 @@
   "helpCompareQ": "Wat is die verskil tussen Basic, Individual en Family?",
   "helpCompareA1": "Basic (gratis): tot 10 woordnaslae per dag, elke betekenis, voorbeelde, Idiome & uitdrukkings, Woordherkoms, en 'n Boekie van tot 30 woorde.",
   "helpCompareA2": "Individual ($3.99 per maand of $39.99 per jaar, ₪14.90 of ₪149 in Israel): een persoon, elke hulpmiddel. Onbeperkte naslae, 'n prent by elke betekenis, die regte betekenis uit 'n sin, Elke woord, Sê dit, Skryf 'n sin met terugvoer, slim oefening, speletjies en vasvrae, en om soortgelyke woorde te vergelyk.",
-  "helpCompareA3": "Family ($5.99 per maand of $59 per jaar, ₪19.90 of ₪199 in Israel): alles in Individual vir tot 5 kinders en albei ouers, plus Kinders-modus, 'n eie plek vir elke kind, die ouerpaneel met woordkennisgewings, en Spelling."
+  "helpCompareA3": "Family ($5.99 per maand of $59 per jaar, ₪19.90 of ₪199 in Israel): alles in Individual vir tot 5 kinders en albei ouers, plus Kinders-modus, 'n eie plek vir elke kind, die ouerpaneel met woordkennisgewings, en Spelling.",
+  "remSubject": "Hallo {name}, jou Gadit-proeftydperk eindig oor twee dae",
+  "remBody": "Hallo {name},\n\nJou gratis proeftydperk van Gadit eindig op {date}.\n\n## Wat gebeur dan\nOp daardie dag word jou kaart met {amount} {cycle} vir {plan} gedebiteer.\nJy hoef niks te doen om aan te gaan nie.\n\n## Hoe om te kanselleer\nJy kan enige tyd voor {date} kanselleer, en niks word gehef nie.\n1. Maak jou [Rekeningblad](/account) oop.\n2. Tik \"Bestuur fakturering\".\n3. Kies op die bladsy wat oopmaak om die intekening te kanselleer.",
+  "remCta": "Gaan na my rekening",
+  "remCycleMonth": "per maand",
+  "remCycleYear": "per jaar"
  },
  "sw": {
   "nbFreeCount": "{n} ya maneno {max} kwenye Daftari lako la bure",
@@ -1397,7 +1517,12 @@
   "helpCompareQ": "Kuna tofauti gani kati ya Basic, Individual na Family?",
   "helpCompareA1": "Basic (bila malipo): hadi utafutaji 10 wa maneno kwa siku, kila maana, mifano, Nahau na misemo, Chimbuko la Neno, na Daftari la hadi maneno 30.",
   "helpCompareA2": "Individual ($3.99 kwa mwezi au $39.99 kwa mwaka, ₪14.90 au ₪149 nchini Israeli): mtu mmoja, kila zana. Utafutaji usio na kikomo, picha kwa kila maana, maana sahihi kutoka kwenye sentensi, Kila neno, Sema, Tunga sentensi na maoni, mazoezi mahiri, michezo na maswali, na kulinganisha maneno yanayofanana.",
-  "helpCompareA3": "Family ($5.99 kwa mwezi au $59 kwa mwaka, ₪19.90 au ₪199 nchini Israeli): kila kitu cha Individual kwa hadi watoto 5 na wazazi wote wawili, pamoja na modi ya Watoto, nafasi yake mwenyewe kwa kila mtoto, paneli ya mzazi yenye arifa za maneno, na Tahajia."
+  "helpCompareA3": "Family ($5.99 kwa mwezi au $59 kwa mwaka, ₪19.90 au ₪199 nchini Israeli): kila kitu cha Individual kwa hadi watoto 5 na wazazi wote wawili, pamoja na modi ya Watoto, nafasi yake mwenyewe kwa kila mtoto, paneli ya mzazi yenye arifa za maneno, na Tahajia.",
+  "remSubject": "Habari {name}, kipindi chako cha majaribio cha Gadit kinaisha baada ya siku mbili",
+  "remBody": "Habari {name},\n\nKipindi chako cha majaribio cha bure cha Gadit kinaisha tarehe {date}.\n\n## Nini hutokea baadaye\nSiku hiyo kadi yako itatozwa {amount} {cycle} kwa {plan}.\nHuhitaji kufanya chochote ili uendelee.\n\n## Jinsi ya kughairi\nUnaweza kughairi wakati wowote kabla ya {date}, na hutatozwa chochote.\n1. Fungua [ukurasa wa Akaunti](/account).\n2. Gusa \"Dhibiti malipo\".\n3. Kwenye ukurasa unaofunguka, chagua kughairi usajili.",
+  "remCta": "Nenda kwenye akaunti yangu",
+  "remCycleMonth": "kwa mwezi",
+  "remCycleYear": "kwa mwaka"
  },
  "zh-CN": {
   "nbFreeCount": "你的免费生词本已用 {n}/{max} 个词",
@@ -1453,7 +1578,12 @@
   "helpCompareQ": "Basic、Individual 和 Family 有什么区别？",
   "helpCompareA1": "Basic（免费）：每天最多查 10 个词，包含所有释义、例句、习语与表达、词语来源，以及最多可保存 30 个词的生词本。",
   "helpCompareA2": "Individual（每月 $3.99 或每年 $39.99；在以色列为 ₪14.90 或 ₪149）：1 人使用，包含所有工具。不限查词、每个释义都有图片、根据句子判断正确释义、每个词、说一说、造一个句子并获得反馈、智能练习、游戏和测验，以及相近词对比。",
-  "helpCompareA3": "Family（每月 $5.99 或每年 $59；在以色列为 ₪19.90 或 ₪199）：包含 Individual 的全部内容，最多可供 5 个孩子和两位家长使用，另外还有儿童模式、每个孩子独立的空间、带单词提醒的家长面板，以及听写。"
+  "helpCompareA3": "Family（每月 $5.99 或每年 $59；在以色列为 ₪19.90 或 ₪199）：包含 Individual 的全部内容，最多可供 5 个孩子和两位家长使用，另外还有儿童模式、每个孩子独立的空间、带单词提醒的家长面板，以及听写。",
+  "remSubject": "嗨，{name}，你的 Gadit 试用将在两天后结束",
+  "remBody": "嗨，{name}，\n\n你的 Gadit 免费试用将于 {date} 结束。\n\n## 之后会怎样\n当天，你的卡将被扣款 {amount} {cycle}，用于 {plan}。\n你无需进行任何操作，即可继续使用。\n\n## 如何取消\n你可以在 {date} 前随时取消，不会产生任何费用。\n1. 打开你的[账户页面](/account)。\n2. 点按“管理账单”。\n3. 在打开的页面中，选择取消订阅。",
+  "remCta": "前往我的账户",
+  "remCycleMonth": "每月",
+  "remCycleYear": "每年"
  },
  "zh-TW": {
   "nbFreeCount": "你的免費生詞本已用 {n}/{max} 個詞",
@@ -1509,7 +1639,12 @@
   "helpCompareQ": "Basic、Individual 和 Family 有什麼差別？",
   "helpCompareA1": "Basic（免費）：每天最多查 10 個詞，提供所有詞義、例句、慣用語與說法、詞語來源，以及最多可存 30 個詞的生詞本。",
   "helpCompareA2": "Individual（每月 $3.99 或每年 $39.99；在以色列為 ₪14.90 或 ₪149）：1 人使用，全部工具都能用。可無限查詞、查看每個詞義的圖片、從句子判斷正確詞義、使用每個詞、說一說、造一個句子並獲得回饋，還有智慧練習、遊戲、測驗和相似詞比較。",
-  "helpCompareA3": "Family（每月 $5.99 或每年 $59；在以色列為 ₪19.90 或 ₪199）：包含 Individual 的全部內容，最多可供 5 個孩子和雙親使用，另外還有兒童模式、每個孩子各自的空間、帶有詞語提醒的家長面板，以及聽寫。"
+  "helpCompareA3": "Family（每月 $5.99 或每年 $59；在以色列為 ₪19.90 或 ₪199）：包含 Individual 的全部內容，最多可供 5 個孩子和雙親使用，另外還有兒童模式、每個孩子各自的空間、帶有詞語提醒的家長面板，以及聽寫。",
+  "remSubject": "嗨 {name}，你的 Gadit 試用將在兩天後結束",
+  "remBody": "嗨 {name}，\n\n你的 Gadit 免費試用將於 {date} 結束。\n\n## 接下來會怎樣\n當天你的卡片將會被收取 {amount} {cycle}，方案為 {plan}。\n如果你想繼續使用，不需要做任何事。\n\n## 如何取消\n你可以在 {date} 前隨時取消，且不會被收費。\n1. 開啟你的[帳戶頁面](/account)。\n2. 點一下「管理帳單」。\n3. 在開啟的頁面中，選擇取消訂閱。",
+  "remCta": "前往我的帳戶",
+  "remCycleMonth": "每月",
+  "remCycleYear": "每年"
  },
  "ko": {
   "nbFreeCount": "무료 단어장에 {max}개 중 {n}개 단어 저장됨",
@@ -1565,7 +1700,12 @@
   "helpCompareQ": "Basic, Individual, Family의 차이는 무엇인가요?",
   "helpCompareA1": "Basic(무료): 하루 최대 10번 단어 조회, 모든 뜻, 예문, 관용구 & 표현, 단어의 유래, 최대 30개 단어를 담을 수 있는 단어장.",
   "helpCompareA2": "Individual(월 $3.99 또는 연 $39.99, 이스라엘에서는 ₪14.90 또는 ₪149): 1인용, 모든 도구 제공. 무제한 조회, 모든 뜻에 대한 그림, 문장에서 맞는 뜻 찾기, 모든 단어, 말해 보기, 피드백이 있는 문장 만들기, 스마트 연습, 게임과 퀴즈, 비슷한 단어 비교를 사용할 수 있어요.",
-  "helpCompareA3": "Family(월 $5.99 또는 연 $59, 이스라엘에서는 ₪19.90 또는 ₪199): 최대 5명의 아이와 부모 2명이 Individual의 모든 기능을 함께 써요. 여기에 아이 모드, 아이마다 따로 쓰는 공간, 단어 알림이 있는 부모 보드, 받아쓰기가 추가돼요."
+  "helpCompareA3": "Family(월 $5.99 또는 연 $59, 이스라엘에서는 ₪19.90 또는 ₪199): 최대 5명의 아이와 부모 2명이 Individual의 모든 기능을 함께 써요. 여기에 아이 모드, 아이마다 따로 쓰는 공간, 단어 알림이 있는 부모 보드, 받아쓰기가 추가돼요.",
+  "remSubject": "안녕 {name}, Gadit 체험판이 이틀 뒤에 끝나",
+  "remBody": "안녕 {name},\n\nGadit 무료 체험판이 {date}에 종료돼.\n\n## 그다음에는\n그날 {plan}에 대해 {amount}{cycle}가 카드로 청구돼.\n계속 이용하려면 따로 할 일은 없어.\n\n## 취소 방법\n{date} 전까지 언제든 취소할 수 있고, 요금은 청구되지 않아.\n1. [계정 페이지](/account)를 열어.\n2. \"결제 관리\"를 눌러.\n3. 열리는 페이지에서 구독 취소를 선택해.",
+  "remCta": "내 계정으로 가기",
+  "remCycleMonth": "/월",
+  "remCycleYear": "/년"
  },
  "th": {
   "nbFreeCount": "{n} จาก {max} คำในสมุดฟรีของคุณ",
@@ -1621,7 +1761,12 @@
   "helpCompareQ": "Basic, Individual และ Family ต่างกันยังไง?",
   "helpCompareA1": "Basic (ฟรี): ค้นคำได้สูงสุดวันละ 10 คำ ดูได้ทุกความหมาย ตัวอย่าง สำนวนและวลี ที่มาของคำ และสมุดที่เก็บได้สูงสุด 30 คำ",
   "helpCompareA2": "Individual ($3.99 ต่อเดือน หรือ $39.99 ต่อปี, ₪14.90 หรือ ₪149 ในอิสราเอล): สำหรับ 1 คน ใช้ได้ทุกเครื่องมือ ค้นคำได้ไม่จำกัด มีรูปสำหรับทุกความหมาย เลือกความหมายที่ถูกจากประโยค, ทุกคำ, ลองพูด, แต่งประโยคพร้อมคำแนะนำ, แบบฝึกอัจฉริยะ, เกมและควิซ และการเปรียบเทียบคำที่คล้ายกัน",
-  "helpCompareA3": "Family ($5.99 ต่อเดือน หรือ $59 ต่อปี, ₪19.90 หรือ ₪199 ในอิสราเอล): ได้ทุกอย่างใน Individual สำหรับเด็กได้สูงสุด 5 คนและผู้ปกครองทั้ง 2 คน พร้อมโหมดเด็ก พื้นที่แยกสำหรับเด็กแต่ละคน หน้าผู้ปกครองพร้อมการแจ้งเตือนคำศัพท์ และเขียนตามคำบอก"
+  "helpCompareA3": "Family ($5.99 ต่อเดือน หรือ $59 ต่อปี, ₪19.90 หรือ ₪199 ในอิสราเอล): ได้ทุกอย่างใน Individual สำหรับเด็กได้สูงสุด 5 คนและผู้ปกครองทั้ง 2 คน พร้อมโหมดเด็ก พื้นที่แยกสำหรับเด็กแต่ละคน หน้าผู้ปกครองพร้อมการแจ้งเตือนคำศัพท์ และเขียนตามคำบอก",
+  "remSubject": "สวัสดี {name} การทดลองใช้ฟรี Gadit ของคุณจะหมดในอีก 2 วัน",
+  "remBody": "สวัสดี {name}\n\nทดลองใช้ฟรีของ Gadit จะสิ้นสุดในวันที่ {date}\n\n## หลังจากนั้นจะเกิดอะไรขึ้น\nในวันนั้น ระบบจะเรียกเก็บเงินจากบัตรของคุณ {amount} ต่อ {cycle} สำหรับแพ็กเกจ {plan}\nคุณไม่ต้องทำอะไรเพิ่มเติมเพื่อใช้งานต่อ\n\n## วิธียกเลิก\nคุณยกเลิกได้ทุกเมื่อก่อนวันที่ {date} และจะไม่มีการเรียกเก็บเงิน\n1. เปิด[หน้าบัญชี](/account)\n2. แตะ \"จัดการการเรียกเก็บเงิน\"\n3. ในหน้าที่เปิดขึ้นมา ให้เลือกยกเลิกการสมัครสมาชิก",
+  "remCta": "ไปที่บัญชีของฉัน",
+  "remCycleMonth": "เดือน",
+  "remCycleYear": "ปี"
  },
  "bn": {
   "nbFreeCount": "তোমার ফ্রি নোটবুকে {max}টির মধ্যে {n}টি শব্দ",
@@ -1677,7 +1822,12 @@
   "helpCompareQ": "Basic, Individual আর Family-এর মধ্যে পার্থক্য কী?",
   "helpCompareA1": "Basic (ফ্রি): দিনে 10টা পর্যন্ত শব্দ খোঁজা, সব অর্থ, উদাহরণ, বাগধারা ও প্রবাদ, শব্দের উৎপত্তি, আর 30টা পর্যন্ত শব্দের নোটবুক।",
   "helpCompareA2": "Individual (মাসে $3.99 বা বছরে $39.99, ইসরায়েলে ₪14.90 বা ₪149): একজনের জন্য, সব টুল। আনলিমিটেড শব্দ খোঁজা, প্রতিটি অর্থের জন্য ছবি, বাক্য থেকে সঠিক অর্থ, প্রতিটি শব্দ, বলে দেখো, প্রতিক্রিয়াসহ একটি বাক্য লিখুন, স্মার্ট প্র্যাকটিস, গেম আর কুইজ, আর মিল আছে এমন শব্দের তুলনা।",
-  "helpCompareA3": "Family (মাসে $5.99 বা বছরে $59, ইসরায়েলে ₪19.90 বা ₪199): 5 জন পর্যন্ত শিশু আর দুজন অভিভাবকের জন্য Individual-এর সবকিছু, সঙ্গে শিশু মোড, প্রতিটি শিশুর জন্য আলাদা জায়গা, শব্দ সতর্কতাসহ অভিভাবক বোর্ড, আর বানান।"
+  "helpCompareA3": "Family (মাসে $5.99 বা বছরে $59, ইসরায়েলে ₪19.90 বা ₪199): 5 জন পর্যন্ত শিশু আর দুজন অভিভাবকের জন্য Individual-এর সবকিছু, সঙ্গে শিশু মোড, প্রতিটি শিশুর জন্য আলাদা জায়গা, শব্দ সতর্কতাসহ অভিভাবক বোর্ড, আর বানান।",
+  "remSubject": "হাই {name}, তোমার Gadit ট্রায়াল আর দুই দিনে শেষ হবে",
+  "remBody": "হাই {name},\n\nGadit-এর তোমার ফ্রি ট্রায়াল {date}-এ শেষ হবে।\n\n## এরপর কী হবে\nসেদিন তোমার কার্ডে {plan}-এর জন্য {amount} {cycle} চার্জ করা হবে।\nচালিয়ে যেতে তোমার কিছুই করতে হবে না।\n\n## কীভাবে বাতিল করবে\nতুমি {date}-এর আগে যেকোনো সময় বাতিল করতে পারো, আর কিছুই চার্জ করা হবে না।\n1. তোমার [অ্যাকাউন্ট পেজ](/account) খোলো।\n2. \"বিলিং পরিচালনা করুন\"-এ ট্যাপ করো।\n3. যে পেজটি খুলবে, সেখানে সাবস্ক্রিপশন বাতিল করার অপশন বেছে নাও।",
+  "remCta": "আমার অ্যাকাউন্টে যাও",
+  "remCycleMonth": "মাসে",
+  "remCycleYear": "বছরে"
  },
  "da": {
   "nbFreeCount": "{n} af {max} ord i din gratis notesbog",
@@ -1733,7 +1883,12 @@
   "helpCompareQ": "Hvad er forskellen på Basic, Individual og Family?",
   "helpCompareA1": "Basic (gratis): op til 10 ordopslag om dagen, alle betydninger, eksempler, Udtryk og vendinger, Ordets oprindelse og en Notesbog med op til 30 ord.",
   "helpCompareA2": "Individual ($3.99 om måneden eller $39.99 om året, ₪14.90 eller ₪149 i Israel): én person, alle værktøjer. Ubegrænsede opslag, et billede til hver betydning, den rigtige betydning ud fra en sætning, Hvert ord, Sig det, Skriv en sætning med feedback, smart øvelse, spil og quizzer samt sammenligning af lignende ord.",
-  "helpCompareA3": "Family ($5.99 om måneden eller $59 om året, ₪19.90 eller ₪199 i Israel): alt i Individual for op til 5 børn og begge forældre, plus Børn-tilstand, et eget område til hvert barn, forældrepanelet med ordadvarsler og Stavning."
+  "helpCompareA3": "Family ($5.99 om måneden eller $59 om året, ₪19.90 eller ₪199 i Israel): alt i Individual for op til 5 børn og begge forældre, plus Børn-tilstand, et eget område til hvert barn, forældrepanelet med ordadvarsler og Stavning.",
+  "remSubject": "Hej {name}, din prøveperiode på Gadit slutter om to dage",
+  "remBody": "Hej {name},\n\nDin gratis prøveperiode på Gadit slutter den {date}.\n\n## Hvad sker der så\nDen dag bliver dit kort debiteret med {amount} {cycle} for {plan}.\nDu behøver ikke gøre noget for at fortsætte.\n\n## Sådan opsiger du\nDu kan opsige når som helst før {date}, og så bliver der ikke trukket noget.\n1. Åbn din [kontoside](/account).\n2. Tryk på \"Administrer betaling\".\n3. Vælg at opsige abonnementet på siden, der åbner.",
+  "remCta": "Gå til min konto",
+  "remCycleMonth": "om måneden",
+  "remCycleYear": "om året"
  },
  "hu": {
   "nbFreeCount": "{n}/{max} szó az ingyenes Füzetedben",
@@ -1789,6 +1944,11 @@
   "helpCompareQ": "Mi a különbség a Basic, az Individual és a Family között?",
   "helpCompareA1": "Basic (ingyenes): napi legfeljebb 10 szókeresés, minden jelentés, példák, Szólások és kifejezések, A szó eredete, valamint egy legfeljebb 30 szavas Füzet.",
   "helpCompareA2": "Individual (havi 3,99 USD vagy évi 39,99 USD, Izraelben 14,90 ₪ vagy 149 ₪): egy személynek, minden eszközzel. Korlátlan keresés, kép minden jelentéshez, a helyes jelentés egy mondat alapján, Minden szó, Mondd ki, Írj egy mondatot visszajelzéssel, okos gyakorlás, játékok és kvízek, valamint hasonló szavak összehasonlítása.",
-  "helpCompareA3": "Family (havi 5,99 USD vagy évi 59 USD, Izraelben 19,90 ₪ vagy 199 ₪): minden, ami az Individual csomagban benne van, legfeljebb 5 gyereknek és mindkét szülőnek, plusz Gyerekek mód, külön saját tér minden gyereknek, szülői felület szóértesítésekkel, és Helyesírás."
+  "helpCompareA3": "Family (havi 5,99 USD vagy évi 59 USD, Izraelben 19,90 ₪ vagy 199 ₪): minden, ami az Individual csomagban benne van, legfeljebb 5 gyereknek és mindkét szülőnek, plusz Gyerekek mód, külön saját tér minden gyereknek, szülői felület szóértesítésekkel, és Helyesírás.",
+  "remSubject": "Szia {name}, a Gadit próbaidőszakod két nap múlva lejár",
+  "remBody": "Szia {name},\n\nA Gadit ingyenes próbaidőszaka {date} napon lejár.\n\n## Mi történik ezután\nAznap a kártyádat {amount} összeggel terheljük, {cycle} a(z) {plan} csomagért.\nSemmit sem kell tenned, hogy tovább használd.\n\n## Lemondás\nBármikor lemondhatod {date} előtt, és nem számítunk fel semmit.\n1. Nyisd meg a [fiókod oldalát](/account).\n2. Koppints a(z) \"Számlázás kezelése\" elemre.\n3. A megnyíló oldalon válaszd az előfizetés lemondását.",
+  "remCta": "Ugrás a fiókomhoz",
+  "remCycleMonth": "havonta",
+  "remCycleYear": "évente"
  }
 }

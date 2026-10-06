@@ -10,6 +10,7 @@ import { INDIV_DRIP } from "@/lib/email-drip/indiv-drip";
 import { INDIV_SERIES_LIVE } from "@/lib/email-drip/indiv-content";
 import { indivNumbersSummary } from "@/lib/email-drip/indiv-summary";
 import { sendDripEmail } from "@/lib/email-drip/send";
+import { trialReminderDue, buildTrialReminder } from "@/lib/email-drip/trial-reminder";
 
 /**
  * Daily drip cron. Vercel Cron hits this at 07:00 UTC (10:00 IL DST).
@@ -135,6 +136,33 @@ export async function GET(req: NextRequest) {
     const email = u.email;
     if (!email) continue;
     const d = userDocs.get(u.uid) ?? {};
+
+    // Billing reminder two days before a free trial is charged (Gadi
+    // 2026-10-06). Transactional, so it is checked before the marketing
+    // unsubscribe below; never to a junk/bounced address.
+    if (d.emailSuppressed !== true && trialReminderDue(d, now)) {
+      const rl: string =
+        typeof d.uiLang === "string" && d.uiLang ? (d.uiLang as string) : d.dripLang === "he" || d.country === "IL" ? "he" : "en";
+      const nm =
+        (typeof u.displayName === "string" && u.displayName.trim()) ||
+        (typeof d.displayName === "string" && (d.displayName as string).trim()) ||
+        "";
+      const built = await buildTrialReminder(d, rl, nm.split(/\s+/)[0] || null);
+      if (built) {
+        if (dryRun) {
+          results.push({ uid: u.uid, email, mailKey: "trial-reminder", status: "skipped", reason: "dryRun" });
+        } else {
+          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+          if (r.ok) {
+            realSends++;
+            await db.collection("users").doc(u.uid).set({ trialReminderFor: d.trialEnd, trialReminderAt: FieldValue.serverTimestamp() }, { merge: true });
+            results.push({ uid: u.uid, email, mailKey: "trial-reminder", status: "sent" });
+          } else {
+            results.push({ uid: u.uid, email, mailKey: "trial-reminder", status: "failed", reason: r.reason });
+          }
+        }
+      }
+    }
 
     // Respect unsubscribe.
     if (d.dripUnsubscribed === true) continue;

@@ -49,6 +49,7 @@ export function featureNames(lang) {
     idioms: v2key("idiomsEyebrow"),
     origin: v2key("wordOriginEyebrow"),
     toFamily: v2key("accountUpgradeToFamily"),
+    billing: v2key("accountManageBilling"),
   };
   const c = cache;
   const pick = (t) => t[lang] ?? t.en;
@@ -62,6 +63,7 @@ export function featureNames(lang) {
     "Idioms and phrases": pick(c.idioms),
     "Word origin": pick(c.origin),
     "Switch to Family (account button)": pick(c.toFamily),
+    "Manage billing (account button)": pick(c.billing),
   };
 }
 

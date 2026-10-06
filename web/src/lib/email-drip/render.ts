@@ -237,7 +237,7 @@ export function renderEmailHtmlV2(opts: {
     </div>
     <div style="border-top:1px solid #EEF2F1;padding:16px 24px 20px;text-align:center;">
       <p dir="${dir}" style="margin:0 0 6px;font-size:12px;color:#9CA3AF;"><span dir="ltr" translate="no">Gadit</span>${F.tagline ? ` · ${esc(F.tagline)}` : ""}</p>
-      <p style="margin:0;font-size:11px;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${esc(F.unsub)}</a></p>
+      ${opts.unsubscribeUrl ? `<p style="margin:0;font-size:11px;"><a href="${opts.unsubscribeUrl}" style="color:#B4B4B4;">${esc(F.unsub)}</a></p>` : ""}
     </div>
   </div>
 </body></html>`;
