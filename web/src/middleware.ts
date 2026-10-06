@@ -31,6 +31,17 @@ const PLAY_COOKIE = "gadit_play";
 // Consumer purchase surfaces that must not exist inside the Play app.
 const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew"]);
 
+// ── Purchase host: https://gadit.app (no www) ───────────────────────
+// The Play app (TWA) claims ONLY www.gadit.app (twa/twa-manifest.json), so on
+// a phone with the app installed every www link, from an email, WhatsApp or
+// even Chrome, opens the app, where nothing may be sold (Gadi 2026-10-06,
+// Johanna could not pay). The bare domain is not claimed: it always opens in
+// the browser. So purchase links point at gadit.app (lib/pay-url.ts), which
+// serves ONLY the purchase surfaces below, never in Play mode, never indexed;
+// any other page on it goes back to www.
+const PAY_HOST = "gadit.app";
+const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account"]);
+
 function detectPlay(req: NextRequest): boolean {
   if (req.nextUrl.searchParams.get("src") === "play") return true;
   if ((req.headers.get("referer") || "").startsWith("android-app://")) return true;
@@ -38,6 +49,23 @@ function detectPlay(req: NextRequest): boolean {
 }
 
 export function middleware(req: NextRequest) {
+  const payHost = (req.headers.get("host") || "").split(":")[0] === PAY_HOST;
+  if (payHost) {
+    const segs = req.nextUrl.pathname.split("/").filter(Boolean);
+    const routeFirst = segs[0] && SUPPORTED_LANGS.has(segs[0]) ? segs[1] : segs[0];
+    if (!routeFirst || !PAY_ROUTES.has(routeFirst)) {
+      const www = req.nextUrl.clone();
+      www.host = "www.gadit.app";
+      www.port = "";
+      return NextResponse.redirect(www, 308);
+    }
+  }
+  const res = route(req, payHost);
+  if (payHost) res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return res;
+}
+
+function route(req: NextRequest, payHost: boolean): NextResponse {
   const { pathname } = req.nextUrl;
 
   // Malformed paths — a stray backslash (crawlers hit "/individuals\" =
@@ -59,7 +87,7 @@ export function middleware(req: NextRequest) {
 
   // Play mode: sticky cookie + block purchase surfaces server-side (never a
   // client-only hide — the price must not exist in the HTML the reviewer gets).
-  const playMode = detectPlay(req);
+  const playMode = !payHost && detectPlay(req);
   if (playMode) {
     const langPrefixed = !!first && SUPPORTED_LANGS.has(first);
     const routeFirst = langPrefixed ? segments[1] : first;

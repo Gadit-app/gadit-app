@@ -11,6 +11,7 @@ import { INDIV_SERIES_LIVE } from "@/lib/email-drip/indiv-content";
 import { indivNumbersSummary } from "@/lib/email-drip/indiv-summary";
 import { sendDripEmail } from "@/lib/email-drip/send";
 import { trialReminderDue, buildTrialReminder } from "@/lib/email-drip/trial-reminder";
+import { playUpgradeDue, buildPlayUpgrade } from "@/lib/email-drip/play-upgrade";
 
 /**
  * Daily drip cron. Vercel Cron hits this at 07:00 UTC (10:00 IL DST).
@@ -182,6 +183,27 @@ export async function GET(req: NextRequest) {
           : "en";
 
     const he = lang === "he"; // binary, used only by the family drip below
+
+    // A free user from the Play app gets ONE upgrade email (nothing can be
+    // bought in the app). Takes this user's slot for the day.
+    if (playUpgradeDue(d, now)) {
+      const pl: string = typeof d.uiLang === "string" && d.uiLang ? (d.uiLang as string) : lang;
+      const nm = (typeof u.displayName === "string" && u.displayName.trim()) || "";
+      const built = buildPlayUpgrade(pl, nm.split(/\s+/)[0] || null, buildUnsubUrl(u.uid));
+      if (dryRun) {
+        results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "skipped", reason: "dryRun" });
+      } else {
+        const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+        if (r.ok) {
+          realSends++;
+          await db.collection("users").doc(u.uid).set({ playUpgradeSentAt: FieldValue.serverTimestamp() }, { merge: true });
+          results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "sent" });
+        } else {
+          results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "failed", reason: r.reason });
+        }
+      }
+      continue;
+    }
 
     // The general signup drip ships in the user's real UI language (33-lang
     // path), falling back to English inside getDripForLang for languages whose

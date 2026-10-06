@@ -237,6 +237,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (u) setPlanReady(false);
       setUser(u);
       setLoading(false);
+      // Inside the Play app (Android), tell the server once per app session
+      // that this person uses the app: nothing can be bought there, so they
+      // get one upgrade email (Gadi 2026-10-06). Covers people who signed in
+      // long ago, not only fresh sign-ins.
+      try {
+        if (u && sessionStorage.getItem("gadit_play_tab") === "1" && sessionStorage.getItem("gadit_play_marked") !== "1") {
+          sessionStorage.setItem("gadit_play_marked", "1");
+          void notifySignupSafely(u);
+        }
+      } catch { /* storage blocked */ }
       // Fire any queued post-auth action exactly once. Captured into a
       // local first so a re-entrant promptLogin during the action
       // can't loop.
@@ -379,6 +389,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const payload: Record<string, unknown> = {};
       if (utm) payload.utm = utm;
       if (lang) payload.lang = lang;
+      try { if (sessionStorage.getItem("gadit_play_tab") === "1") payload.play = true; } catch { /* storage blocked */ }
       // GA client id, so the first real payment (sent server-side from the
       // Stripe webhook) joins this visitor's GA journey.
       const { gaClientId } = await import("./ga");

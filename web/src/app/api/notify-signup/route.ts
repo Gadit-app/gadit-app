@@ -50,11 +50,13 @@ export async function POST(req: NextRequest) {
     } | null = null;
     let signupLang: string | null = null;
     let gaClientId: string | null = null;
+    let fromPlay = false;
     try {
       const body = await req.json().catch(() => null);
       if (body && typeof body === "object" && typeof body.lang === "string" && body.lang.length <= 8) {
         signupLang = body.lang;
       }
+      if (body && typeof body === "object" && body.play === true) fromPlay = true;
       if (body && typeof body === "object" && typeof body.gaClientId === "string" && /^\d{1,12}\.\d{1,12}$/.test(body.gaClientId)) {
         gaClientId = body.gaClientId;
       }
@@ -83,6 +85,12 @@ export async function POST(req: NextRequest) {
     const userRef = db.collection("users").doc(uid);
     const userSnap = await userRef.get();
     const data = userSnap.data() ?? {};
+
+    // Seen in the Play app (Android): nothing can be bought there, so the drip
+    // cron sends this person one upgrade email (lib/email-drip/play-upgrade.ts).
+    if (fromPlay) {
+      await userRef.set({ playUser: true, playLastSeenAt: Date.now(), ...(data.playFirstSeenAt ? {} : { playFirstSeenAt: Date.now() }) }, { merge: true });
+    }
 
     // GA client id (first one wins), for the server-side GA purchase event.
     if (gaClientId && !data.gaClientId) {

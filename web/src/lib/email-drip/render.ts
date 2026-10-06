@@ -15,6 +15,7 @@
  * don't scramble the Hebrew word order.
  */
 
+import { payifyUrl } from "@/lib/pay-url";
 import { emailHeaderHtml, emailSignatureHtml, EMAIL_BG, EMAIL_CARD_MAX } from "../email-brand";
 import { FAMILY_FIXED, RTL_LANGS, isFamilyLang } from "./family-i18n";
 
@@ -57,6 +58,8 @@ export function applyName(s: string, firstName?: string | null): string {
 }
 
 const SITE = "https://www.gadit.app";
+// Purchase links go to the purchase host (opens in the browser even when the
+// Play app is installed); see lib/pay-url.ts.
 
 function esc(s: string): string {
   return s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]!));
@@ -72,7 +75,7 @@ function inline(l: LangArg, s: string): string {
   const named: { text: string; url: string }[] = [];
   let out = esc(s).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text: string, url: string) => {
     const abs = url.startsWith("/") ? `${SITE}${L.prefix}${url === "/" && L.prefix ? "" : url}` : url;
-    named.push({ text, url: abs });
+    named.push({ text, url: payifyUrl(abs) });
     return `\uE004${named.length - 1}\uE005`;
   });
   const links: string[] = [];
@@ -92,7 +95,7 @@ function inline(l: LangArg, s: string): string {
   out = out.replace(/\uE002/g, "<b>").replace(/\uE003/g, "</b>");
   out = out.replace(/\uE000(\d+)\uE001/g, (_, i) => {
     const url = links[Number(i)];
-    return `<a href="${url}" dir="ltr" style="color:#0E7490;word-break:break-all;">${url}</a>`;
+    return `<a href="${payifyUrl(url)}" dir="ltr" style="color:#0E7490;word-break:break-all;">${url}</a>`;
   });
   out = out.replace(/\uE004(\d+)\uE005/g, (_, i) => {
     const { text, url } = named[Number(i)];
@@ -174,7 +177,7 @@ export function renderEmailHtml(opts: {
       <div dir="${dir}" style="text-align:${align};font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0EA5A5;margin:0 0 10px;">${esc(opts.eyebrow)}</div>
       ${opts.bodyHtml}
       <div style="text-align:center;margin-top:22px;">
-        <a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText)}</a>
+        <a href="${payifyUrl(opts.ctaUrl)}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText)}</a>
       </div>
       <div dir="${dir}" style="text-align:${align};margin:26px 0 0;font-size:15px;line-height:1.6;color:#111827;">
         <p style="margin:0;">${he ? "שלך," : "Yours,"}</p>
@@ -221,7 +224,7 @@ export function renderEmailHtmlV2(opts: {
   const para = (html: string, extra = "") =>
     `<p dir="${dir}" style="text-align:${align};font-size:15px;line-height:1.7;margin:0 0 14px;color:#374151;${extra}">${html}</p>`;
   const cta = opts.ctaText?.trim()
-    ? `<div style="text-align:center;margin:30px 0 30px;"><a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText.trim())}</a></div>`
+    ? `<div style="text-align:center;margin:30px 0 30px;"><a href="${payifyUrl(opts.ctaUrl)}" style="display:inline-block;background:#0EA5A5;color:#fff;padding:13px 32px;border-radius:999px;text-decoration:none;font-weight:650;font-size:16px;">${esc(opts.ctaText.trim())}</a></div>`
     : "";
   const next = opts.next?.trim() ? para(inline(L.lang, opts.next.trim())) : "";
   return `<!DOCTYPE html><html dir="${dir}"><body style="margin:0;padding:28px 12px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:${EMAIL_BG};color:#111827;">

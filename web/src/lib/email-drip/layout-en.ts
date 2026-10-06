@@ -7,6 +7,7 @@
  * Tables for layout because Outlook still ignores flex.
  */
 
+import { payifyUrl } from "@/lib/pay-url";
 export function layoutEn(opts: {
   preheader: string;
   /** Raw HTML for the body (already wrapped in <p> tags, etc.) */
@@ -44,7 +45,7 @@ export function layoutEn(opts: {
           </tr>
           <tr>
             <td align="center" style="padding:16px 32px 24px;">
-              <a href="${opts.ctaUrl}" style="display:inline-block;background:#0EA5A5;color:#FFFFFF;text-decoration:none;padding:14px 32px;border-radius:999px;font-weight:600;font-size:15px;">${opts.ctaText}</a>
+              <a href="${payifyUrl(opts.ctaUrl)}" style="display:inline-block;background:#0EA5A5;color:#FFFFFF;text-decoration:none;padding:14px 32px;border-radius:999px;font-weight:600;font-size:15px;">${opts.ctaText}</a>
             </td>
           </tr>
           ${opts.signature ? `<tr>
