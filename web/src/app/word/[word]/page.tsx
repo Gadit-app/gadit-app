@@ -6,6 +6,7 @@ import type { WordResult } from "@/components/design/result";
 import { WordClient } from "./WordClient";
 import { LANGUAGES } from "@/lib/i18n";
 import { sanitizeDegenerateEtymology } from "@/lib/define-guard";
+import { wordTitle } from "@/lib/word-title";
 
 /**
  * /word/[word] — result screen.
@@ -175,7 +176,9 @@ export async function generateMetadata(
   const langs = preloaded ? await getLangsWithDefinition(decoded) : [];
   const canonical = urlForLang(urlLang);
   const prevOg = (await parent).openGraph;
-  const title = `${decoded}, Gadit`;
+  // Localized search title (lib/word-title.ts); "{word}, Gadit" without a
+  // definition or in a language whose wording is not approved yet.
+  const title = wordTitle(lang, decoded, preloaded as unknown as { language?: unknown; translation?: unknown } | null);
 
   return {
     title,
