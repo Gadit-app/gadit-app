@@ -61,7 +61,12 @@
   "remCycleYear": "fbe0b376",
   "pupSubject": "09e191e1",
   "pupBody": "f750f87d",
-  "pupCta": "da3f7d51"
+  "pupCta": "da3f7d51",
+  "wlMore": "9e9ff4a7",
+  "wlOtherLangs": "a2518391",
+  "wlAll": "7e6e65f7",
+  "wlHubTitle": "b1ab0634",
+  "wlHubSub": "3ef34097"
  },
  "ar": {
   "nbFreeCount": "{n} من {max} كلمة في الدفتر المجاني",
@@ -125,7 +130,12 @@
   "remCycleYear": "سنويًا",
   "pupSubject": "كيفية ترقية حسابك في Gadit",
   "pupBody": "مرحبًا {name}،\n\nشكرًا لاستخدامك Gadit على Android.\n\nحسابك الآن على خطة Basic.\n\nيمكنك الحصول على كل الأدوات مع خطتَي Individual وFamily.\n\n## Family\n\nللأهل والأطفال.\n\nحتى 5 أطفال، ولكل واحد منهم الدفتر الخاص به ووضع أطفال ولوحة تحكم للأهل.\n\n## Individual\n\nلشخص واحد.\n\nعمليات بحث غير محدودة وكل الأدوات.\n\nكلتاهما تبدأان بـ 14 يومًا مجانًا.\n\nيمكنك الإلغاء في أي وقت قبل انتهاء الفترة التجريبية، ولن يتم تحصيل أي رسوم.\n\nبمجرد اشتراكك، سيتحدّث التطبيق تلقائيًا.\n\nفقط سجّل الدخول بالحساب نفسه.",
-  "pupCta": "عرض الخطط"
+  "pupCta": "عرض الخطط",
+  "wlMore": "مزيد من الكلمات",
+  "wlOtherLangs": "هذه الكلمة بلغات أخرى",
+  "wlAll": "كل الكلمات",
+  "wlHubTitle": "كل الكلمات في Gadit",
+  "wlHubSub": "لكل كلمة هنا صفحة كاملة فيها كل معانيها وأمثلتها وأصلها."
  },
  "ru": {
   "nbFreeCount": "{n} из {max} слов в твоей бесплатной тетради",
@@ -189,7 +199,12 @@
   "remCycleYear": "в год",
   "pupSubject": "Как перейти на другой план Gadit",
   "pupBody": "Привет, {name},\n\nСпасибо, что пользуешься Gadit на Android.\n\nСейчас у тебя план Basic.\n\nВсе инструменты доступны в планах Individual и Family.\n\n## Family\n\nДля родителей и детей.\n\nДо 5 детей, у каждого своя Тетрадь, режим «Дети» и панель для родителей.\n\n## Individual\n\nДля одного человека.\n\nБезлимитные поиски и все инструменты.\n\nОба плана начинаются с 14 бесплатных дней.\n\nТы можешь отменить подписку в любой момент до конца пробного периода, и ничего не спишется.\n\nПосле оформления подписки приложение обновится само.\n\nПросто войди в тот же аккаунт.",
-  "pupCta": "Посмотреть планы"
+  "pupCta": "Посмотреть планы",
+  "wlMore": "Ещё слова",
+  "wlOtherLangs": "Это слово на других языках",
+  "wlAll": "Все слова",
+  "wlHubTitle": "Все слова в Gadit",
+  "wlHubSub": "У каждого слова здесь есть своя страница: все значения, примеры и Происхождение слова."
  },
  "es": {
   "nbFreeCount": "{n} de {max} palabras en tu Cuaderno gratis",
@@ -253,7 +268,12 @@
   "remCycleYear": "al año",
   "pupSubject": "Cómo mejorar tu cuenta de Gadit",
   "pupBody": "Hola, {name}:\n\nGracias por usar Gadit en Android.\n\nTu cuenta está ahora mismo en el plan Basic.\n\nPuedes tener todas las herramientas con los planes Individual y Family.\n\n## Family\n\nPara padres y niños.\n\nHasta 5 niños, cada uno con su propio Cuaderno, modo Niños y un panel para padres.\n\n## Individual\n\nPara una persona.\n\nBúsquedas ilimitadas y todas las herramientas.\n\nAmbos empiezan con 14 días gratis.\n\nPuedes cancelar en cualquier momento antes de que termine la prueba y no se te cobrará nada.\n\nCuando te suscribas, la app se actualizará sola.\n\nSolo inicia sesión con la misma cuenta.",
-  "pupCta": "Ver planes"
+  "pupCta": "Ver planes",
+  "wlMore": "Más palabras",
+  "wlOtherLangs": "Esta palabra en otros idiomas",
+  "wlAll": "Todas las palabras",
+  "wlHubTitle": "Todas las palabras de Gadit",
+  "wlHubSub": "Cada palabra aquí tiene una página completa, con todos sus significados, ejemplos y su origen."
  },
  "pt": {
   "nbFreeCount": "{n} de {max} palavras no teu Caderno gratuito",
@@ -317,7 +337,12 @@
   "remCycleYear": "por ano",
   "pupSubject": "Como fazer upgrade da tua conta Gadit",
   "pupBody": "Olá {name},\n\nObrigado por usar o Gadit no Android.\n\nNo momento, a tua conta está no plano Basic.\n\nPodes ter acesso a todas as ferramentas com os planos Individual e Family.\n\n## Family\n\nPara pais e filhos.\n\nAté 5 crianças, cada uma com o seu próprio Caderno, modo Crianças e um painel para os pais.\n\n## Individual\n\nPara uma pessoa.\n\nPesquisas ilimitadas e todas as ferramentas.\n\nAmbos começam com 14 dias grátis.\n\nPodes cancelar a qualquer momento antes de o teste terminar, e nada será cobrado.\n\nAssim que fizeres a subscrição, a app atualiza-se sozinha.\n\nBasta iniciares sessão com a mesma conta.",
-  "pupCta": "Ver os planos"
+  "pupCta": "Ver os planos",
+  "wlMore": "Mais palavras",
+  "wlOtherLangs": "Esta palavra noutros idiomas",
+  "wlAll": "Todas as palavras",
+  "wlHubTitle": "Todas as palavras no Gadit",
+  "wlHubSub": "Cada palavra aqui tem uma página completa, com todos os seus significados, exemplos e origem."
  },
  "fr": {
   "nbFreeCount": "{n} mots sur {max} dans ton carnet gratuit",
@@ -381,7 +406,12 @@
   "remCycleYear": "par an",
   "pupSubject": "Comment passer à un compte Gadit supérieur",
   "pupBody": "Salut {name},\n\nMerci d'utiliser Gadit sur Android.\n\nTon compte est actuellement sur le plan Basic.\n\nTu peux accéder à tous les outils avec les plans Individual et Family.\n\n## Family\n\nPour les parents et les enfants.\n\nJusqu'à 5 enfants, chacun avec son propre Carnet, le mode Enfants et un tableau de bord parent.\n\n## Individual\n\nPour une personne.\n\nRecherches illimitées et tous les outils.\n\nLes deux commencent par 14 jours gratuits.\n\nTu peux annuler à tout moment avant la fin de l'essai, et rien ne sera facturé.\n\nUne fois abonné, l'app se met à jour toute seule.\n\nConnecte-toi simplement avec le même compte.",
-  "pupCta": "Voir les offres"
+  "pupCta": "Voir les offres",
+  "wlMore": "Plus de mots",
+  "wlOtherLangs": "Ce mot dans d'autres langues",
+  "wlAll": "Tous les mots",
+  "wlHubTitle": "Tous les mots dans Gadit",
+  "wlHubSub": "Chaque mot ici a une page complète, avec tous ses sens, des exemples et son Origine du mot."
  },
  "de": {
   "nbFreeCount": "{n} von {max} Wörtern in deinem kostenlosen Notizbuch",
@@ -445,7 +475,12 @@
   "remCycleYear": "pro Jahr",
   "pupSubject": "So kannst du dein Gadit-Konto upgraden",
   "pupBody": "Hallo {name},\n\nvielen Dank, dass du Gadit auf Android nutzt.\n\nDein Konto ist derzeit im Basic Tarif.\n\nMit den Tarifen Individual und Family bekommst du alle Tools.\n\n## Family\n\nFür Eltern und Kinder.\n\nBis zu 5 Kinder, jedes mit eigenem Notizbuch, Kinder-Modus und einem Eltern-Dashboard.\n\n## Individual\n\nFür eine Person.\n\nUnbegrenzte Suchanfragen und alle Tools.\n\nBeide starten mit 14 Tagen kostenlos.\n\nDu kannst jederzeit vor dem Ende der Testphase kündigen, dann wird nichts berechnet.\n\nSobald du ein Abo abschließt, aktualisiert sich die App automatisch.\n\nMelde dich einfach mit demselben Konto an.",
-  "pupCta": "Pläne ansehen"
+  "pupCta": "Pläne ansehen",
+  "wlMore": "Mehr Wörter",
+  "wlOtherLangs": "Dieses Wort in anderen Sprachen",
+  "wlAll": "Alle Wörter",
+  "wlHubTitle": "Alle Wörter in Gadit",
+  "wlHubSub": "Jedes Wort hier hat eine eigene Seite mit allen Bedeutungen, Beispielen und seinem Wortursprung."
  },
  "cs": {
   "nbFreeCount": "{n} z {max} slov ve tvém bezplatném Sešitu",
@@ -509,7 +544,12 @@
   "remCycleYear": "ročně",
   "pupSubject": "Jak upgradovat svůj účet Gadit",
   "pupBody": "Ahoj {name},\n\nDíky, že používáš Gadit na Androidu.\n\nTvůj účet je teď na tarifu Basic.\n\nS tarify Individual a Family získáš všechny nástroje.\n\n## Family\n\nPro rodiče a děti.\n\nAž 5 dětí, každé svůj Sešit, režim Děti a rodičovský přehled.\n\n## Individual\n\nPro jednoho.\n\nNeomezené vyhledávání a všechny nástroje.\n\nOba začínají 14 dny zdarma.\n\nKdykoli před koncem zkušební doby můžeš předplatné zrušit a nic se ti nenaúčtuje.\n\nJakmile se přihlásíš k odběru, aplikace se sama aktualizuje.\n\nStačí se přihlásit stejným účtem.",
-  "pupCta": "Zobrazit plány"
+  "pupCta": "Zobrazit plány",
+  "wlMore": "Další slova",
+  "wlOtherLangs": "Toto slovo v jiných jazycích",
+  "wlAll": "Všechna slova",
+  "wlHubTitle": "Všechna slova v Gadit",
+  "wlHubSub": "Každé slovo tu má vlastní stránku se všemi významy, příklady a Původem slova."
  },
  "sk": {
   "nbFreeCount": "{n} z {max} slov v tvojom bezplatnom zošite",
@@ -573,7 +613,12 @@
   "remCycleYear": "ročne",
   "pupSubject": "Ako si upgradovať účet Gadit",
   "pupBody": "Ahoj {name},\n\nďakujeme, že používaš Gadit na Androide.\n\nTvoj účet je momentálne na pláne Basic.\n\nSo plánmi Individual a Family získaš všetky nástroje.\n\n## Family\n\nPre rodičov a deti.\n\nAž 5 detí, každé so svojím vlastným zošitom, režimom Deti a rodičovským panelom.\n\n## Individual\n\nPre jedného človeka.\n\nNeobmedzené vyhľadávanie a všetky nástroje.\n\nOba plány začínajú 14 dňami zadarmo.\n\nPred koncom skúšobného obdobia ich môžeš kedykoľvek zrušiť a nič ti nebude účtované.\n\nKeď si predplatíš plán, aplikácia sa aktualizuje sama.\n\nStačí sa prihlásiť do rovnakého účtu.",
-  "pupCta": "Zobraziť plány"
+  "pupCta": "Zobraziť plány",
+  "wlMore": "Viac slov",
+  "wlOtherLangs": "Toto slovo v iných jazykoch",
+  "wlAll": "Všetky slová",
+  "wlHubTitle": "Všetky slová v Gadit",
+  "wlHubSub": "Každé slovo tu má vlastnú stránku so všetkými významami, príkladmi a pôvodom."
  },
  "it": {
   "nbFreeCount": "{n} di {max} parole nel tuo Quaderno gratuito",
@@ -637,7 +682,12 @@
   "remCycleYear": "all'anno",
   "pupSubject": "Come passare a un piano superiore del tuo account Gadit",
   "pupBody": "Ciao {name},\n\nGrazie per usare Gadit su Android.\n\nIl tuo account è al momento sul piano Basic.\n\nPuoi avere tutti gli strumenti con i piani Individual e Family.\n\n## Family\n\nPer genitori e figli.\n\nFino a 5 bambini, ognuno con il proprio Quaderno, la modalità Bambini e un pannello genitore.\n\n## Individual\n\nPer una persona.\n\nRicerche illimitate e tutti gli strumenti.\n\nEntrambi iniziano con 14 giorni gratis.\n\nPuoi annullare in qualsiasi momento prima della fine della prova e non ti verrà addebitato nulla.\n\nQuando ti abboni, l'app si aggiorna da sola.\n\nTi basta accedere con lo stesso account.",
-  "pupCta": "Vedi i piani"
+  "pupCta": "Vedi i piani",
+  "wlMore": "Più parole",
+  "wlOtherLangs": "Questa parola in altre lingue",
+  "wlAll": "Tutte le parole",
+  "wlHubTitle": "Tutte le parole di Gadit",
+  "wlHubSub": "Ogni parola qui ha una pagina completa, con tutti i suoi significati, esempi e l’Origine della parola."
  },
  "ja": {
   "nbFreeCount": "無料のノート: {max}語中{n}語",
@@ -701,7 +751,12 @@
   "remCycleYear": "年額",
   "pupSubject": "Gaditアカウントをアップグレードする方法",
   "pupBody": "{name}さん、こんにちは。\n\nAndroid版のGaditを使ってくれてありがとう。\n\n今のアカウントはBasicプランです。\n\nIndividualとFamilyなら、すべての機能が使えます。\n\n## Family\n\n保護者と子ども向け。\n\n子どもは最大5人まで。それぞれに自分のノート、子どもモード、保護者ダッシュボードがあります。\n\n## Individual\n\n1人向け。\n\n検索は無制限、すべての機能が使えます。\n\nどちらも最初の14日間は無料です。\n\n無料期間が終わる前にキャンセルすれば、料金はかかりません。\n\n登録すると、アプリは自動で更新されます。\n\n同じアカウントでログインするだけです。",
-  "pupCta": "プランを見る"
+  "pupCta": "プランを見る",
+  "wlMore": "もっと単語を見る",
+  "wlOtherLangs": "この単語をほかの言語で見る",
+  "wlAll": "すべての単語",
+  "wlHubTitle": "Gaditのすべての単語",
+  "wlHubSub": "ここにある単語はどれも、意味や例文、語源までわかる詳しいページつきです。"
  },
  "hi": {
   "nbFreeCount": "तुम्हारी मुफ्त नोटबुक में {max} में से {n} शब्द",
@@ -765,7 +820,12 @@
   "remCycleYear": "प्रति वर्ष",
   "pupSubject": "अपना Gadit खाता कैसे अपग्रेड करें",
   "pupBody": "नमस्ते {name},\n\nAndroid पर Gadit इस्तेमाल करने के लिए धन्यवाद.\n\nअभी आपका अकाउंट Basic प्लान पर है.\n\nIndividual और Family प्लान के साथ आपको हर टूल मिल जाता है.\n\n## Family\n\nमाता-पिता और बच्चों के लिए.\n\n5 बच्चों तक, और हर बच्चे के लिए अपनी नोटबुक, बच्चे मोड और पैरेंट डैशबोर्ड.\n\n## Individual\n\nएक व्यक्ति के for.\n\nअनलिमिटेड लुकअप और हर टूल.\n\nदोनों 14 दिनों के फ्री ट्रायल के साथ शुरू होते हैं.\n\nट्रायल खत्म होने से पहले आप कभी भी कैंसल कर सकते हैं, और कोई शुल्क नहीं लगेगा.\n\nसब्सक्राइब करते ही ऐप अपने आप अपडेट हो जाएगा.\n\nबस उसी अकाउंट से साइन इन करें.",
-  "pupCta": "प्लान देखें"
+  "pupCta": "प्लान देखें",
+  "wlMore": "और शब्द",
+  "wlOtherLangs": "यह शब्द दूसरी भाषाओं में",
+  "wlAll": "सभी शब्द",
+  "wlHubTitle": "Gadit के सभी शब्द",
+  "wlHubSub": "यहाँ हर शब्द का अपना पूरा पेज है, जिसमें उसके सभी अर्थ, उदाहरण और शब्द की उत्पत्ति दी गई है।"
  },
  "am": {
   "nbFreeCount": "በነጻ ደብተርህ ውስጥ {max} ቃላት ከ{n}",
@@ -829,7 +889,12 @@
   "remCycleYear": "በዓመት",
   "pupSubject": "የGadit መለያህን እንዴት እንደምታሻሽል",
   "pupBody": "ሰላም {name},\n\nGaditን በAndroid ላይ ስለምትጠቀም እናመሰግንሃለን።\n\nአሁን መለያህ በBasic እቅድ ላይ ነው።\n\nሁሉንም መሣሪያዎች በIndividual እና Family እቅዶች ማግኘት ትችላለህ።\n\n## Family\n\nለወላጆች እና ልጆች።\n\nእስከ 5 ልጆች፣ እያንዳንዳቸውም የራሳቸው ደብተር፣ የልጆች ሁነታ እና የወላጅ መቆጣጠሪያ ሰሌዳ አላቸው።\n\n## Individual\n\nለአንድ ሰው።\n\nያልተገደበ ፍለጋ እና ሁሉም መሣሪያዎች።\n\nሁለቱም በ14 ቀናት ነጻ ሙከራ ይጀምራሉ።\n\nሙከራው ከማለቁ በፊት በማንኛውም ጊዜ መሰረዝ ትችላለህ፣ ምንም ክፍያ አይከፈልም።\n\nአንዴ ከተመዘገብክ በኋላ መተግበሪያው ራሱ ይዘምናል።\n\nበተመሳሳይ መለያ ብቻ ግባ።",
-  "pupCta": "እቅዶቹን ተመልከት"
+  "pupCta": "እቅዶቹን ተመልከት",
+  "wlMore": "ተጨማሪ ቃላት",
+  "wlOtherLangs": "ይህ ቃል በሌሎች ቋንቋዎች",
+  "wlAll": "ሁሉም ቃላት",
+  "wlHubTitle": "በ Gadit ውስጥ ያሉ ሁሉም ቃላት",
+  "wlHubSub": "እዚህ ያለ እያንዳንዱ ቃል ሙሉ ገጽ አለው፣ ከሁሉም ትርጉሞቹ፣ ምሳሌዎቹ እና ሥርወ ቃሉ ጋር።"
  },
  "uk": {
   "nbFreeCount": "{n} із {max} слів у твоєму безкоштовному Зошиті",
@@ -893,7 +958,12 @@
   "remCycleYear": "на рік",
   "pupSubject": "Як оновити твій обліковий запис Gadit",
   "pupBody": "Привіт, {name},\n\nДякуємо, що користуєшся Gadit на Android.\n\nЗараз у тебе план Basic.\n\nУсі інструменти доступні в планах Individual і Family.\n\n## Family\n\nДля батьків і дітей.\n\nДо 5 дітей, у кожної свій Зошит, режим Діти та батьківська панель.\n\n## Individual\n\nДля однієї людини.\n\nНеобмежені пошуки й усі інструменти.\n\nОбидва плани починаються з 14 безкоштовних днів.\n\nМожеш скасувати будь-коли до завершення пробного періоду, і нічого не спишеться.\n\nЩойно оформиш підписку, застосунок оновиться сам.\n\nПросто увійди в той самий акаунт.",
-  "pupCta": "Переглянути плани"
+  "pupCta": "Переглянути плани",
+  "wlMore": "Більше слів",
+  "wlOtherLangs": "Це слово іншими мовами",
+  "wlAll": "Усі слова",
+  "wlHubTitle": "Усі слова в Gadit",
+  "wlHubSub": "Кожне слово тут має окрему сторінку, з усіма значеннями, прикладами й походженням."
  },
  "tr": {
   "nbFreeCount": "Ücretsiz Defterinde {max} kelimeden {n} tanesi var",
@@ -957,7 +1027,12 @@
   "remCycleYear": "yıllık",
   "pupSubject": "Gadit hesabını nasıl yükseltebilirsin",
   "pupBody": "Merhaba {name},\n\nAndroid'de Gadit'i kullandığın için teşekkürler.\n\nHesabın şu anda Basic planda.\n\nIndividual ve Family planlarıyla tüm araçlara erişebilirsin.\n\n## Family\n\nEbeveynler ve çocuklar için.\n\nEn fazla 5 çocuk, her birinin kendi Defter'i, Çocuklar modu ve ebeveyn paneli olur.\n\n## Individual\n\nTek kişi için.\n\nSınırsız arama ve tüm araçlar.\n\nİkisi de 14 gün ücretsiz başlar.\n\nDeneme bitmeden istediğin zaman iptal edebilirsin, ücret alınmaz.\n\nAbone olduktan sonra uygulama kendiliğinden güncellenir.\n\nAynı hesapla giriş yapman yeterli.",
-  "pupCta": "Planları gör"
+  "pupCta": "Planları gör",
+  "wlMore": "Daha fazla kelime",
+  "wlOtherLangs": "Bu kelimenin diğer dillerdeki karşılıkları",
+  "wlAll": "Tüm kelimeler",
+  "wlHubTitle": "Gadit'teki tüm kelimeler",
+  "wlHubSub": "Buradaki her kelimenin tüm anlamları, örnekleri ve Kelime Kökeni ile tam bir sayfası var."
  },
  "pl": {
   "nbFreeCount": "{n} z {max} słów w Twoim darmowym Notatniku",
@@ -1021,7 +1096,12 @@
   "remCycleYear": "rok",
   "pupSubject": "Jak przejść na wyższy plan konta Gadit",
   "pupBody": "Cześć {name},\n\nDzięki za korzystanie z Gadit na Androidzie.\n\nTwoje konto jest teraz w planie Basic.\n\nWszystkie narzędzia dostaniesz w planach Individual i Family.\n\n## Family\n\nDla rodziców i dzieci.\n\nDo 5 dzieci, a każde ma własny Notatnik, tryb Dzieci i panel rodzica.\n\n## Individual\n\nDla jednej osoby.\n\nNielimitowane wyszukiwania i wszystkie narzędzia.\n\nOba plany zaczynają się od 14 dni za darmo.\n\nMożesz anulować w dowolnym momencie przed końcem okresu próbnego i nic nie zapłacisz.\n\nGdy zasubskrybujesz, aplikacja zaktualizuje się sama.\n\nPo prostu zaloguj się na to samo konto.",
-  "pupCta": "Zobacz plany"
+  "pupCta": "Zobacz plany",
+  "wlMore": "Więcej słów",
+  "wlOtherLangs": "To słowo w innych językach",
+  "wlAll": "Wszystkie słowa",
+  "wlHubTitle": "Wszystkie słowa w Gadit",
+  "wlHubSub": "Każde słowo ma tu własną stronę ze wszystkimi znaczeniami, przykładami i informacją o jego pochodzeniu."
  },
  "fa": {
   "nbFreeCount": "{n} از {max} واژه در دفترچه رایگان تو",
@@ -1085,7 +1165,12 @@
   "remCycleYear": "در سال",
   "pupSubject": "چطور حسابت را در Gadit ارتقا بدهی",
   "pupBody": "سلام {name}،\n\nممنون که از Gadit در Android استفاده می‌کنی.\n\nحساب تو الان روی طرح Basic است.\n\nبا طرح‌های Individual و Family می‌تونی به همه ابزارها دسترسی داشته باشی.\n\n## Family\n\nبرای والدین و بچه‌ها.\n\nتا 5 کودک، هرکدام با دفترچه خودشان، حالت کودکان و داشبورد والدین.\n\n## Individual\n\nبرای یک نفر.\n\nجست‌وجوی نامحدود و همه ابزارها.\n\nهر دو با 14 روز استفاده رایگان شروع می‌شوند.\n\nمی‌تونی هر وقت خواستی قبل از پایان دوره آزمایشی لغو کنی و چیزی ازت گرفته نمی‌شود.\n\nوقتی مشترک شوی، برنامه خودش به‌روزرسانی می‌شود.\n\nفقط با همان حساب وارد شو.",
-  "pupCta": "دیدن پلن‌ها"
+  "pupCta": "دیدن پلن‌ها",
+  "wlMore": "واژه‌های بیشتر",
+  "wlOtherLangs": "این واژه به زبان‌های دیگر",
+  "wlAll": "همه واژه‌ها",
+  "wlHubTitle": "همه واژه‌ها در Gadit",
+  "wlHubSub": "هر واژه اینجا یک صفحه کامل دارد؛ با همه معنی‌ها، مثال‌ها و خاستگاه واژه."
  },
  "id": {
   "nbFreeCount": "{n} dari {max} kata di Buku Catatan gratismu",
@@ -1149,7 +1234,12 @@
   "remCycleYear": "per tahun",
   "pupSubject": "Cara upgrade akun Gadit-mu",
   "pupBody": "Hai {name},\n\nTerima kasih sudah memakai Gadit di Android.\n\nAkunmu saat ini ada di paket Basic.\n\nKamu bisa mendapatkan semua alat dengan paket Individual dan Family.\n\n## Family\n\nUntuk orang tua dan anak.\n\nHingga 5 anak, masing-masing dengan Buku Catatan sendiri, mode Anak, dan dasbor orang tua.\n\n## Individual\n\nUntuk satu orang.\n\nPencarian tanpa batas dan semua alat.\n\nKeduanya dimulai dengan gratis 14 hari.\n\nKamu bisa membatalkan kapan saja sebelum masa uji coba berakhir, dan tidak akan dikenai biaya.\n\nSetelah berlangganan, aplikasi akan diperbarui secara otomatis.\n\nCukup masuk dengan akun yang sama.",
-  "pupCta": "Lihat paket"
+  "pupCta": "Lihat paket",
+  "wlMore": "Kata lainnya",
+  "wlOtherLangs": "Kata ini dalam bahasa lain",
+  "wlAll": "Semua kata",
+  "wlHubTitle": "Semua kata di Gadit",
+  "wlHubSub": "Setiap kata di sini punya halaman lengkap, dengan semua arti, contoh, dan Asal-usul Kata."
  },
  "nl": {
   "nbFreeCount": "{n} van {max} woorden in je gratis notitieboek",
@@ -1213,7 +1303,12 @@
   "remCycleYear": "per jaar",
   "pupSubject": "Zo upgrade je je Gadit-account",
   "pupBody": "Hoi {name},\n\nBedankt dat je Gadit op Android gebruikt.\n\nJe account zit nu op het Basic-abonnement.\n\nMet de abonnementen Individual en Family krijg je alle functies.\n\n## Family\n\nVoor ouders en kinderen.\n\nTot 5 kinderen, elk met een eigen Notitieboek, kindermodus en een dashboard voor ouders.\n\n## Individual\n\nVoor één persoon.\n\nOnbeperkt opzoeken en alle functies.\n\nJe begint bij allebei met 14 dagen gratis.\n\nJe kunt op elk moment opzeggen voordat de proefperiode eindigt, dan wordt er niets in rekening gebracht.\n\nZodra je je abonneert, wordt de app vanzelf bijgewerkt.\n\nLog gewoon in met hetzelfde account.",
-  "pupCta": "Bekijk de abonnementen"
+  "pupCta": "Bekijk de abonnementen",
+  "wlMore": "Meer woorden",
+  "wlOtherLangs": "Dit woord in andere talen",
+  "wlAll": "Alle woorden",
+  "wlHubTitle": "Alle woorden in Gadit",
+  "wlHubSub": "Elk woord hier heeft een volledige pagina met alle betekenissen, voorbeelden en waar het vandaan komt."
  },
  "el": {
   "nbFreeCount": "{n} από {max} λέξεις στο δωρεάν τετράδιό σου",
@@ -1277,7 +1372,12 @@
   "remCycleYear": "τον χρόνο",
   "pupSubject": "Πώς να αναβαθμίσεις τον λογαριασμό σου στο Gadit",
   "pupBody": "Γεια σου {name},\n\nΕυχαριστούμε που χρησιμοποιείς το Gadit σε Android.\n\nΟ λογαριασμός σου είναι αυτή τη στιγμή στο πρόγραμμα Basic.\n\nΜπορείς να αποκτήσεις όλα τα εργαλεία με τα προγράμματα Individual και Family.\n\n## Family\n\nΓια γονείς και παιδιά.\n\nΈως 5 παιδιά, το καθένα με το δικό του Τετράδιο, τη λειτουργία Παιδιά και έναν πίνακα γονέα.\n\n## Individual\n\nΓια ένα άτομο.\n\nΑπεριόριστες αναζητήσεις και όλα τα εργαλεία.\n\nΚαι τα δύο ξεκινούν με 14 ημέρες δωρεάν.\n\nΜπορείς να ακυρώσεις όποτε θέλεις πριν τελειώσει η δοκιμή και δεν θα χρεωθείς τίποτα.\n\nΜόλις κάνεις συνδρομή, η εφαρμογή ενημερώνεται μόνη της.\n\nΑπλώς συνδέσου με τον ίδιο λογαριασμό.",
-  "pupCta": "Δες τα πλάνα"
+  "pupCta": "Δες τα πλάνα",
+  "wlMore": "Περισσότερες λέξεις",
+  "wlOtherLangs": "Αυτή η λέξη σε άλλες γλώσσες",
+  "wlAll": "Όλες οι λέξεις",
+  "wlHubTitle": "Όλες οι λέξεις στο Gadit",
+  "wlHubSub": "Κάθε λέξη εδώ έχει δική της σελίδα, με όλες τις σημασίες, τα παραδείγματα και την Προέλευση λέξης."
  },
  "zu": {
   "nbFreeCount": "{n} kwamagama angu-{max} encwadini yakho yamanothi yamahhala",
@@ -1341,7 +1441,12 @@
   "remCycleYear": "ngonyaka",
   "pupSubject": "Uyithuthukisa kanjani i-akhawunti yakho ye-Gadit",
   "pupBody": "Sawubona {name},\n\nSiyabonga ngokusebenzisa i-Gadit ku-Android.\n\nI-akhawunti yakho okwamanje iku-Basic plan.\n\nUngathola wonke amathuluzi nge-Individual ne-Family plan.\n\n## Family\n\nEyabazali nezingane.\n\nKufika ezinganeni ezingu-5, ngayinye ine-Incwadi yamanothi yayo, imodi Izingane ne-dashboard yomzali.\n\n## Individual\n\nEyomuntu oyedwa.\n\nUkubheka amagama okungenamkhawulo nawo wonke amathuluzi.\n\nZombili ziqala ngezinsuku eziyi-14 zamahhala.\n\nUngakhansela noma nini ngaphambi kokuphela kwesivivinyo, futhi ngeke ukhokhiswe lutho.\n\nUma usubhalisile, uhlelo lokusebenza luzivuselela lona lodwa.\n\nVele ungene ngemvume nge-akhawunti efanayo.",
-  "pupCta": "Bona amapulani"
+  "pupCta": "Bona amapulani",
+  "wlMore": "Amagama amaningi",
+  "wlOtherLangs": "Leli gama kwezinye izilimi",
+  "wlAll": "Wonke amagama",
+  "wlHubTitle": "Wonke amagama ku-Gadit",
+  "wlHubSub": "Wonke amagama lapha anekhasi lawo eliphelele, elinezincazelo zawo zonke, izibonelo nokuthi livela kuphi."
  },
  "vi": {
   "nbFreeCount": "{n} trên {max} từ trong sổ tay miễn phí của bạn",
@@ -1405,7 +1510,12 @@
   "remCycleYear": "năm",
   "pupSubject": "Cách nâng cấp tài khoản Gadit",
   "pupBody": "Chào {name},\n\nCảm ơn bạn đã dùng Gadit trên Android.\n\nTài khoản của bạn hiện đang ở gói Basic.\n\nBạn có thể dùng mọi công cụ với gói Individual và Family.\n\n## Family\n\nDành cho bố mẹ và con.\n\nTối đa 5 trẻ, mỗi bé có Sổ tay riêng, chế độ Trẻ em và bảng điều khiển cho phụ huynh.\n\n## Individual\n\nDành cho 1 người.\n\nTra cứu không giới hạn và mọi công cụ.\n\nCả hai đều có 14 ngày dùng thử miễn phí.\n\nBạn có thể hủy bất cứ lúc nào trước khi thời gian dùng thử kết thúc và sẽ không bị tính phí.\n\nKhi bạn đăng ký, ứng dụng sẽ tự cập nhật.\n\nChỉ cần đăng nhập bằng cùng một tài khoản.",
-  "pupCta": "Xem các gói"
+  "pupCta": "Xem các gói",
+  "wlMore": "Thêm từ",
+  "wlOtherLangs": "Từ này trong các ngôn ngữ khác",
+  "wlAll": "Tất cả từ",
+  "wlHubTitle": "Tất cả từ trong Gadit",
+  "wlHubSub": "Mỗi từ ở đây đều có một trang riêng, với đầy đủ nghĩa, ví dụ và nguồn gốc từ."
  },
  "fil": {
   "nbFreeCount": "{n} sa {max} na salita sa libre mong Kwaderno",
@@ -1469,7 +1579,12 @@
   "remCycleYear": "bawat taon",
   "pupSubject": "Paano i-upgrade ang Gadit account mo",
   "pupBody": "Hi {name},\n\nSalamat sa paggamit ng Gadit sa Android.\n\nNasa Basic plan ang account mo ngayon.\n\nMakukuha mo ang lahat ng tool sa Individual at Family plans.\n\n## Family\n\nPara sa mga magulang at anak.\n\nHanggang 5 bata, bawat isa may sarili nilang kwaderno, Bata mode, at parent dashboard.\n\n## Individual\n\nPara sa isang tao.\n\nWalang limitasyong lookups at lahat ng tool.\n\nParehong may 14 na araw na libre.\n\nPuwede kang magkansela anumang oras bago matapos ang trial, at wala kang babayaran.\n\nKapag nag-subscribe ka na, kusang mag-a-update ang app.\n\nMag-sign in ka lang gamit ang parehong account.",
-  "pupCta": "Tingnan ang mga plan"
+  "pupCta": "Tingnan ang mga plan",
+  "wlMore": "Mas maraming salita",
+  "wlOtherLangs": "Ang salitang ito sa iba pang wika",
+  "wlAll": "Lahat ng salita",
+  "wlHubTitle": "Lahat ng salita sa Gadit",
+  "wlHubSub": "Bawat salita rito ay may sariling buong pahina, kasama ang lahat ng kahulugan, mga halimbawa, at kung saan ito nagmula."
  },
  "af": {
   "nbFreeCount": "{n} van {max} woorde in jou gratis boekie",
@@ -1533,7 +1648,12 @@
   "remCycleYear": "per jaar",
   "pupSubject": "Hoe om jou Gadit-rekening op te gradeer",
   "pupBody": "Hallo {name},\n\nDankie dat jy Gadit op Android gebruik.\n\nJou rekening is tans op die Basic-plan.\n\nJy kry elke hulpmiddel met die Individual- en Family-planne.\n\n## Family\n\nVir ouers en kinders.\n\nTot 5 kinders, elk met hul eie Boekie, Kinders-modus en 'n ouer-paneel.\n\n## Individual\n\nVir een persoon.\n\nOnbeperkte naslae en elke hulpmiddel.\n\nAlbei begin met 14 dae gratis.\n\nJy kan enige tyd kanselleer voor die proeftyd eindig, en niks word gehef nie.\n\nSodra jy inteken, werk die app vanself by.\n\nMeld net aan met dieselfde rekening.",
-  "pupCta": "Sien die planne"
+  "pupCta": "Sien die planne",
+  "wlMore": "Meer woorde",
+  "wlOtherLangs": "Hierdie woord in ander tale",
+  "wlAll": "Alle woorde",
+  "wlHubTitle": "Al die woorde in Gadit",
+  "wlHubSub": "Elke woord hier het 'n volledige bladsy, met al sy betekenisse, voorbeelde en waar dit vandaan kom."
  },
  "sw": {
   "nbFreeCount": "{n} ya maneno {max} kwenye Daftari lako la bure",
@@ -1597,7 +1717,12 @@
   "remCycleYear": "kwa mwaka",
   "pupSubject": "Jinsi ya kuboresha akaunti yako ya Gadit",
   "pupBody": "Hujambo {name},\n\nAsante kwa kutumia Gadit kwenye Android.\n\nAkaunti yako iko kwenye mpango wa Basic kwa sasa.\n\nUnaweza kupata zana zote kwa mipango ya Individual na Family.\n\n## Family\n\nKwa wazazi na watoto.\n\nHadi watoto 5, kila mmoja akiwa na daftari lake, hali ya Watoto na dashibodi ya mzazi.\n\n## Individual\n\nKwa mtu mmoja.\n\nUtafutaji usio na kikomo na zana zote.\n\nZote mbili huanza kwa siku 14 bila malipo.\n\nUnaweza kughairi wakati wowote kabla kipindi cha majaribio hakiisha, na hutatozwa chochote.\n\nUkishajisajili, programu itajisasisha yenyewe.\n\nIngia tu kwa akaunti hiyo hiyo.",
-  "pupCta": "Tazama mipango"
+  "pupCta": "Tazama mipango",
+  "wlMore": "Maneno zaidi",
+  "wlOtherLangs": "Neno hili katika lugha nyingine",
+  "wlAll": "Maneno yote",
+  "wlHubTitle": "Maneno yote katika Gadit",
+  "wlHubSub": "Kila neno hapa lina ukurasa wake kamili, wenye maana zake zote, mifano na linapotoka."
  },
  "zh-CN": {
   "nbFreeCount": "你的免费生词本已用 {n}/{max} 个词",
@@ -1661,7 +1786,12 @@
   "remCycleYear": "每年",
   "pupSubject": "如何升级你的 Gadit 账户",
   "pupBody": "嗨，{name}，\n\n感谢你在 Android 上使用 Gadit。\n\n你当前使用的是 Basic 方案。\n\n升级到 Individual 或 Family 方案，即可使用全部工具。\n\n## Family\n\n适合家长和孩子。\n\n最多可添加 5 个孩子，每个孩子都有自己的生词本、儿童模式和家长面板。\n\n## Individual\n\n适合 1 人使用。\n\n可无限查词，并使用全部工具。\n\n两个方案都提供 14 天免费试用。\n\n你可以在试用结束前随时取消，不会收取任何费用。\n\n订阅后，App 会自动更新。\n\n只要用同一个账号登录即可。",
-  "pupCta": "查看方案"
+  "pupCta": "查看方案",
+  "wlMore": "更多单词",
+  "wlOtherLangs": "这个词的其他语言",
+  "wlAll": "全部单词",
+  "wlHubTitle": "Gadit 里的所有单词",
+  "wlHubSub": "这里的每个词都有完整页面，包含所有释义、例句和词语来源。"
  },
  "zh-TW": {
   "nbFreeCount": "你的免費生詞本已用 {n}/{max} 個詞",
@@ -1725,7 +1855,12 @@
   "remCycleYear": "每年",
   "pupSubject": "如何升級你的 Gadit 帳戶",
   "pupBody": "嗨 {name}，\n\n感謝你在 Android 上使用 Gadit。\n\n你目前使用的是 Basic 方案。\n\n升級到 Individual 或 Family 方案，就能使用所有工具。\n\n## Family\n\n適合家長和孩子。\n\n最多可加入 5 位孩子，每位孩子都有自己的生詞本、兒童模式和家長儀表板。\n\n## Individual\n\n適合個人使用。\n\n可無限查詞，並使用所有工具。\n\n兩種方案都提供 14 天免費試用。\n\n只要在試用結束前取消，就不會收費。\n\n訂閱後，App 會自動更新。\n\n只要用同一個帳號登入即可。",
-  "pupCta": "查看方案"
+  "pupCta": "查看方案",
+  "wlMore": "更多詞語",
+  "wlOtherLangs": "這個詞的其他語言",
+  "wlAll": "所有詞語",
+  "wlHubTitle": "Gadit 裡的所有詞語",
+  "wlHubSub": "這裡的每個詞都有完整頁面，包含所有意思、例句和詞語來源。"
  },
  "ko": {
   "nbFreeCount": "무료 단어장에 {max}개 중 {n}개 단어 저장됨",
@@ -1789,7 +1924,12 @@
   "remCycleYear": "/년",
   "pupSubject": "Gadit 계정 업그레이드 방법",
   "pupBody": "{name}님, 안녕하세요.\n\nAndroid에서 Gadit을 이용해 주셔서 감사합니다.\n\n현재 계정은 Basic 플랜을 이용 중이에요.\n\nIndividual 및 Family 플랜에서는 모든 도구를 사용할 수 있어요.\n\n## Family\n\n부모와 아이를 위한 플랜이에요.\n\n최대 5명의 아이가 각자 단어장, 아이 모드, 부모용 대시보드를 사용할 수 있어요.\n\n## Individual\n\n1인용 플랜이에요.\n\n검색 무제한, 모든 도구 제공.\n\n두 플랜 모두 14일 무료로 시작해요.\n\n체험 기간이 끝나기 전에 언제든 취소할 수 있고, 요금은 청구되지 않아요.\n\n구독하면 앱이 자동으로 업데이트돼요.\n\n같은 계정으로 로그인만 하면 돼요.",
-  "pupCta": "플랜 보기"
+  "pupCta": "플랜 보기",
+  "wlMore": "단어 더 보기",
+  "wlOtherLangs": "다른 언어로 된 이 단어",
+  "wlAll": "모든 단어",
+  "wlHubTitle": "Gadit의 모든 단어",
+  "wlHubSub": "여기 있는 모든 단어에는 뜻, 예문, 단어의 유래를 담은 전체 페이지가 있어."
  },
  "th": {
   "nbFreeCount": "{n} จาก {max} คำในสมุดฟรีของคุณ",
@@ -1853,7 +1993,12 @@
   "remCycleYear": "ปี",
   "pupSubject": "วิธีอัปเกรดบัญชี Gadit ของคุณ",
   "pupBody": "สวัสดี {name},\n\nขอบคุณที่ใช้ Gadit บน Android\n\nตอนนี้บัญชีของคุณอยู่ในแพ็กเกจ Basic\n\nคุณจะใช้เครื่องมือทั้งหมดได้ด้วยแพ็กเกจ Individual และ Family\n\n## Family\n\nสำหรับพ่อแม่และลูก\n\nเพิ่มเด็กได้สูงสุด 5 คน แต่ละคนมีสมุดของตัวเอง โหมดเด็ก และแดชบอร์ดสำหรับผู้ปกครอง\n\n## Individual\n\nสำหรับ 1 คน\n\nค้นหาได้ไม่จำกัดและใช้เครื่องมือทั้งหมดได้\n\nทั้งสองแพ็กเกจเริ่มต้นด้วยช่วงทดลองใช้ฟรี 14 วัน\n\nคุณยกเลิกได้ทุกเมื่อก่อนช่วงทดลองจะสิ้นสุด และจะไม่มีการเรียกเก็บเงิน\n\nเมื่อคุณสมัครแล้ว แอปจะอัปเดตให้อัตโนมัติ\n\nแค่ลงชื่อเข้าใช้ด้วยบัญชีเดิม",
-  "pupCta": "ดูแพ็กเกจ"
+  "pupCta": "ดูแพ็กเกจ",
+  "wlMore": "คำเพิ่มเติม",
+  "wlOtherLangs": "คำนี้ในภาษาอื่น",
+  "wlAll": "ทุกคำ",
+  "wlHubTitle": "ทุกคำใน Gadit",
+  "wlHubSub": "ทุกคำที่นี่มีหน้าข้อมูลครบ พร้อมความหมายทั้งหมด ตัวอย่าง และที่มาของคำ"
  },
  "bn": {
   "nbFreeCount": "তোমার ফ্রি নোটবুকে {max}টির মধ্যে {n}টি শব্দ",
@@ -1917,7 +2062,12 @@
   "remCycleYear": "বছরে",
   "pupSubject": "তোমার Gadit অ্যাকাউন্ট কীভাবে আপগ্রেড করবে",
   "pupBody": "হাই {name},\n\nAndroid-এ Gadit ব্যবহার করার জন্য ধন্যবাদ।\n\nএই মুহূর্তে তোমার অ্যাকাউন্ট Basic প্ল্যানে আছে।\n\nIndividual আর Family প্ল্যানে তুমি সব টুল পাবে।\n\n## Family\n\nবাবা-মা আর বাচ্চাদের জন্য।\n\nসর্বোচ্চ ৫ জন বাচ্চা, প্রত্যেকের জন্য আলাদা নোটবুক, শিশু মোড আর প্যারেন্ট ড্যাশবোর্ড।\n\n## Individual\n\nএকজনের জন্য।\n\nআনলিমিটেড লুকআপ আর সব টুল।\n\nদুটোই ১৪ দিন ফ্রি দিয়ে শুরু হয়।\n\nট্রায়াল শেষ হওয়ার আগে যেকোনো সময় বাতিল করতে পারো, আর কোনো চার্জ হবে না।\n\nসাবস্ক্রাইব করলে অ্যাপ নিজে থেকেই আপডেট হবে।\n\nশুধু একই অ্যাকাউন্ট দিয়ে সাইন ইন করো।",
-  "pupCta": "প্ল্যানগুলো দেখো"
+  "pupCta": "প্ল্যানগুলো দেখো",
+  "wlMore": "আরও শব্দ",
+  "wlOtherLangs": "অন্য ভাষায় এই শব্দ",
+  "wlAll": "সব শব্দ",
+  "wlHubTitle": "Gadit-এর সব শব্দ",
+  "wlHubSub": "এখানকার প্রতিটি শব্দের জন্য একটি পূর্ণ পাতা আছে, যেখানে আছে সব অর্থ, উদাহরণ আর শব্দের উৎপত্তি।"
  },
  "da": {
   "nbFreeCount": "{n} af {max} ord i din gratis notesbog",
@@ -1981,7 +2131,12 @@
   "remCycleYear": "om året",
   "pupSubject": "Sådan opgraderer du din Gadit-konto",
   "pupBody": "Hej {name},\n\nTak, fordi du bruger Gadit på Android.\n\nDin konto er på Basic lige nu.\n\nDu får alle værktøjer med Individual og Family.\n\n## Family\n\nTil forældre og børn.\n\nOp til 5 børn, hver med deres egen Notesbog, Børn-tilstand og en forældreoversigt.\n\n## Individual\n\nTil én person.\n\nUbegrænsede opslag og alle værktøjer.\n\nBegge starter med 14 dage gratis.\n\nDu kan til enhver tid afmelde, før prøveperioden slutter, og så bliver du ikke opkrævet.\n\nNår du abonnerer, opdateres appen automatisk.\n\nLog bare ind med den samme konto.",
-  "pupCta": "Se planerne"
+  "pupCta": "Se planerne",
+  "wlMore": "Flere ord",
+  "wlOtherLangs": "Dette ord på andre sprog",
+  "wlAll": "Alle ord",
+  "wlHubTitle": "Alle ordene i Gadit",
+  "wlHubSub": "Hvert ord her har sin egen side med alle betydninger, eksempler og ordets oprindelse."
  },
  "hu": {
   "nbFreeCount": "{n}/{max} szó az ingyenes Füzetedben",
@@ -2045,6 +2200,11 @@
   "remCycleYear": "évente",
   "pupSubject": "Hogyan válts magasabb Gadit csomagra",
   "pupBody": "Szia {name}!\n\nKöszönjük, hogy Androidon a Gaditot használod.\n\nA fiókod most a Basic csomagban van.\n\nAz összes eszközt az Individual és a Family csomaggal kapod meg.\n\n## Family\n\nSzülőknek és gyerekeknek.\n\nLegfeljebb 5 gyerek, mindegyiknek saját Füzet, gyerek mód és szülői irányítópult.\n\n## Individual\n\nEgy embernek.\n\nKorlátlan keresés és az összes eszköz.\n\nMindkettő 14 napig ingyenes.\n\nA próbaidőszak vége előtt bármikor lemondhatod, és nem számítunk fel semmit.\n\nHa előfizetsz, az app magától frissül.\n\nCsak jelentkezz be ugyanazzal a fiókkal.",
-  "pupCta": "Csomagok megtekintése"
+  "pupCta": "Csomagok megtekintése",
+  "wlMore": "Több szó",
+  "wlOtherLangs": "Ez a szó más nyelveken",
+  "wlAll": "Minden szó",
+  "wlHubTitle": "Az összes szó a Gaditben",
+  "wlHubSub": "Itt minden szónak saját oldala van, az összes jelentésével, példáival és A szó eredete résszel."
  }
 }

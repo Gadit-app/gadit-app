@@ -7,6 +7,7 @@ import { WordClient } from "./WordClient";
 import { LANGUAGES } from "@/lib/i18n";
 import { sanitizeDegenerateEtymology } from "@/lib/define-guard";
 import { wordTitle } from "@/lib/word-title";
+import { WordLinks } from "./WordLinks";
 
 /**
  * /word/[word] — result screen.
@@ -248,6 +249,7 @@ export default async function WordRoute({
       initialResult={preloaded}
       preloadLang={lang}
     />
+    {preloaded && <WordLinks lang={lang} word={decoded} langs={await getLangsWithDefinition(decoded)} />}
     </>
   );
 }
