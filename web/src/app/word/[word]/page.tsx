@@ -118,8 +118,8 @@ const getLangsWithDefinition = cache(async (word: string): Promise<string[]> => 
     const db = getAdminDb();
     const w = word.toLowerCase().trim();
     const refs = ALL_LANGS.map((l) => db.collection("cache").doc(`auto2_${l}_base_${w}`));
-    const snaps = await db.getAll(...refs, { fieldMask: ["word"] });
-    return ALL_LANGS.filter((_, i) => snaps[i]?.exists);
+    const snaps = await db.getAll(...refs, { fieldMask: ["indexOk"] });
+    return ALL_LANGS.filter((_, i) => snaps[i]?.exists && snaps[i].get("indexOk") !== false);
   } catch (e) {
     console.error("word hreflang lookup failed:", e);
     return [];
@@ -186,7 +186,9 @@ export async function generateMetadata(
     description,
     // Without a saved definition the page has nothing to show a crawler (it
     // is not generated for bots), so Google must not index an empty card.
-    ...(preloaded ? {} : { robots: { index: false, follow: true } }),
+    // A word vetted as gibberish or a private name (indexOk false) is
+    // served but not indexed.
+    ...(preloaded && (preloaded as { indexOk?: unknown }).indexOk !== false ? {} : { robots: { index: false, follow: true } }),
     alternates: {
       canonical,
       ...(langs.length > 1

@@ -23,9 +23,12 @@ export async function wordIndex(lang: string): Promise<string[]> {
       .collection("cache")
       .where(FieldPath.documentId(), ">=", prefix)
       .where(FieldPath.documentId(), "<", `${prefix}`)
-      .select()
+      .select("indexOk")
       .get();
+    // Only words vetted as real (indexOk, scripts/seo/vet-index-words.mjs):
+    // no gibberish or private names in the hub or the links.
     const words = snap.docs
+      .filter((d) => d.get("indexOk") === true)
       .map((d) => d.id.slice(prefix.length))
       .filter((w) => w.length >= 2 && w.length <= 40 && !/https?:|www\.|@|\/|\d/.test(w))
       .sort((a, b) => a.localeCompare(b, lang));

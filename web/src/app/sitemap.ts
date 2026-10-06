@@ -85,13 +85,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .collection("cache")
       .where(FieldPath.documentId(), ">=", "auto2_")
       .where(FieldPath.documentId(), "<", "auto2`")
-      .select("word")
+      .select("indexOk")
       .get();
     const langSet = new Set(ALL_LANGS);
     const byWord = new Map<string, string[]>();
     for (const doc of snap.docs) {
       const m = doc.id.match(/^auto2_(.+?)_base_(.+)$/);
-      if (!m || !langSet.has(m[1])) continue;
+      // Only words vetted as real (indexOk): no gibberish or private names.
+      if (!m || !langSet.has(m[1]) || doc.get("indexOk") !== true) continue;
       const word = m[2].trim().toLowerCase();
       if (!looksLikeWord(word)) continue;
       const langs = byWord.get(word) ?? [];
