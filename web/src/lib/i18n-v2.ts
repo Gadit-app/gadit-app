@@ -3356,7 +3356,7 @@ const he: V2Strings = {
 
   // Compare Page (Screen 7)
   compareEyebrow: "השוואה",
-  compareTitle: "הבחינו בין מילים דומות",
+  compareTitle: "להבחין בין מילים דומות",
   compareSubtitle:
     "אומנות מול אמנות, affect מול effect, המילים שמבלבלות אפילו דוברים שוטפים.",
   compareWord1Label: "מילה 1",
