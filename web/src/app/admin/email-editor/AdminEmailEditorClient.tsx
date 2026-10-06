@@ -12,7 +12,10 @@ const OTHER_LANGS = FAMILY_LANGS.filter((l) => l !== "he" && l !== "en");
 function langName(code: string, inLang: string): string {
   try { return new Intl.DisplayNames([inLang], { type: "language" }).of(code) ?? code; } catch { return code; }
 }
-type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number };
+type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number; plans?: string[] };
+// Family, the individual Clear/Deep series (Gadi 2026-10-06), and the
+// read-only signup series.
+type Series = "family" | "indiv" | "signup";
 type RoMail = { subject: string; html: string };
 
 const EMPTY: Content = { subject: "", heading: "", body: "", ctaText: "" };
@@ -24,7 +27,10 @@ export function AdminEmailEditorClient() {
 
   const [emails, setEmails] = useState<EmailRow[]>([]);
   const [signup, setSignup] = useState<EmailRow[]>([]);
-  const [series, setSeries] = useState<"family" | "signup">("family");
+  const [indiv, setIndiv] = useState<EmailRow[]>([]);
+  const [series, setSeries] = useState<Series>("family");
+  // The Clear/Deep series is previewed and test-sent as one plan at a time.
+  const [plan, setPlan] = useState<"clear" | "deep">("deep");
   const [key, setKey] = useState<string>("");
   const [tab, setTab] = useState<string>("he");
   const [data, setData] = useState<Record<string, LangBlock> | null>(null);
@@ -49,6 +55,7 @@ export function AdminEmailEditorClient() {
         const d = await r.json();
         setEmails(d.emails ?? []);
         setSignup(d.signup ?? []);
+        setIndiv(d.indiv ?? []);
         if (d.emails?.[0]) setKey(d.emails[0].key);
         // Test sends go to Gadi's own inbox by default (server env, never in
         // this public repo); the field stays editable.
@@ -58,7 +65,7 @@ export function AdminEmailEditorClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secret]);
 
-  const loadKey = useCallback(async (k: string, forSeries: "family" | "signup", forTab: string, keepStatus = false) => {
+  const loadKey = useCallback(async (k: string, forSeries: Series, forTab: string, keepStatus = false) => {
     setPreview("");
     if (!keepStatus) { setStatus(""); setSaveMsg(null); }
     try {
@@ -78,11 +85,11 @@ export function AdminEmailEditorClient() {
 
   useEffect(() => { if (key) loadKey(key, series, tab); }, [key, series, tab, loadKey]);
 
-  function pickSeries(s: "family" | "signup") {
+  function pickSeries(s: Series) {
     if (s === series) return;
     setSeries(s);
     if (s === "signup" && tab !== "he" && tab !== "en") setTab("he"); // the signup series is he/en only
-    const first = (s === "signup" ? signup : emails)[0];
+    const first = (s === "signup" ? signup : s === "indiv" ? indiv : emails)[0];
     setKey(first?.key ?? "");
     setPreview(""); setStatus("");
   }
@@ -114,13 +121,19 @@ export function AdminEmailEditorClient() {
     setPreview("");
   }
 
+  // A Deep-only email is always shown as Deep.
+  function effPlan(): "clear" | "deep" {
+    const row = indiv.find((e) => e.key === key);
+    return row?.plans && !row.plans.includes(plan) ? (row.plans[0] as "clear" | "deep") : plan;
+  }
+
   async function post(action: string, extra: Record<string, unknown> = {}) {
     setBusy(true); setStatus("");
     try {
       const r = await fetch(api, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, key, lang: tab, ...extra }),
+        body: JSON.stringify({ action, key, lang: tab, ...(series === "indiv" ? { plan: effPlan() } : {}), ...extra }),
       });
       const d = await r.json();
       setBusy(false);
@@ -162,7 +175,8 @@ export function AdminEmailEditorClient() {
   const isOther = tab !== "he" && tab !== "en";
   const label: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: "#6B7280", margin: "14px 0 4px", display: "block" };
   const input: React.CSSProperties = { width: "100%", padding: "9px 11px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", boxSizing: "border-box" };
-  const list = isSignup ? signup : emails;
+  const list = isSignup ? signup : series === "indiv" ? indiv : emails;
+  const curRow = list.find((e) => e.key === key);
   const previewHtml = preview || (isSignup ? ro?.html ?? "" : "");
 
   return (
@@ -176,13 +190,13 @@ export function AdminEmailEditorClient() {
 
       {/* Series switch */}
       <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-        {(["family", "signup"] as const).map((s) => (
+        {(["family", "indiv", "signup"] as const).map((s) => (
           <button key={s} type="button" onClick={() => pickSeries(s)}
             style={{
               padding: "6px 16px", borderRadius: 999, cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: "inherit",
               border: "none", background: series === s ? "#0EA5A5" : "#F3F4F6", color: series === s ? "#fff" : "#374151",
             }}>
-            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : (he ? "סדרת הרשמה" : "Signup series")}
+            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Clear ו-Deep" : "Clear & Deep series") : (he ? "סדרת הרשמה" : "Signup series")}
           </button>
         ))}
       </div>
@@ -200,6 +214,32 @@ export function AdminEmailEditorClient() {
           </button>
         ))}
       </div>
+
+      {/* Clear/Deep series: which plan the preview and test show. An email
+          for Deep only can't be shown as Clear. Lines marked [[clear]] or
+          [[deep]] in the text go only to that plan. */}
+      {series === "indiv" && (
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginBottom: 12 }}>
+          <span style={{ fontSize: 12.5, fontWeight: 700, color: "#6B7280" }}>{he ? "תצוגה ובדיקה בתור:" : "Preview and test as:"}</span>
+          {(["clear", "deep"] as const).map((p) => {
+            const allowed = !curRow?.plans || curRow.plans.includes(p);
+            return (
+              <button key={p} type="button" disabled={!allowed} onClick={() => { setPlan(p); setPreview(""); }}
+                style={{
+                  padding: "5px 14px", borderRadius: 999, fontSize: 13, fontWeight: 700, fontFamily: "inherit", border: "none",
+                  cursor: allowed ? "pointer" : "default", opacity: allowed ? 1 : 0.4,
+                  background: effPlan() === p ? (p === "deep" ? "#7C3AED" : "#0EA5A5") : "#F3F4F6",
+                  color: effPlan() === p ? "#fff" : "#374151",
+                }}>
+                {p === "clear" ? "Clear" : "Deep"}
+              </button>
+            );
+          })}
+          <span style={{ fontSize: 12, color: "#9CA3AF" }}>
+            {he ? "שורה בין [[clear]] ל-[[/clear]] יוצאת רק למנויי Clear, ובין [[deep]] ל-[[/deep]] רק ל-Deep." : "A line between [[clear]] and [[/clear]] goes to Clear only, between [[deep]] and [[/deep]] to Deep only."}
+          </span>
+        </div>
+      )}
 
       {/* Language tabs (both series) */}
       <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
@@ -226,7 +266,7 @@ export function AdminEmailEditorClient() {
         {!isSignup && (
           <span style={{ marginInlineStart: "auto", fontSize: 12, color: cur?.overridden ? "#0EA5A5" : "#9CA3AF", alignSelf: "center" }}>
             {isOther
-              ? cur?.translated ? (he ? "מתורגם" : "translated") : (he ? "עוד לא תורגם: מוצג הנוסח באנגלית, והמשפחות בשפה הזו מקבלות אותו באנגלית" : "not translated yet: showing the English email, which these families receive")
+              ? cur?.translated ? (he ? "מתורגם" : "translated") : (he ? "עוד לא תורגם: מוצג הנוסח באנגלית, ומי שבשפה הזו מקבל אותו באנגלית" : "not translated yet: showing the English email, which people in this language receive")
               : cur?.overridden ? (he ? "מותאם אישית" : "customised") : (he ? "ברירת מחדל" : "default")}
           </span>
         )}

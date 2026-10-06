@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FAMILY_META, FAMILY_LABEL_HE, EMAIL_BASE } from "@/lib/email-drip/family-content";
+import { INDIV_META, INDIV_LABEL_HE, type IndivPlan } from "@/lib/email-drip/indiv-content";
+
+// The editable series: Family + individual Clear/Deep (Gadi 2026-10-06).
+const ALL_META = [...FAMILY_META, ...INDIV_META];
 import { applyName, type EmailContent } from "@/lib/email-drip/render";
 import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { getOverride, getEffectiveContent, saveOverride, resetOverride, hasLang } from "@/lib/email-drip/email-templates-store";
@@ -48,10 +52,10 @@ function authed(req: NextRequest): boolean {
   return !!process.env.ADMIN_SECRET && s === process.env.ADMIN_SECRET;
 }
 
-function renderPreview(key: string, lang: string, c: EmailContent): string {
-  const m = FAMILY_META.find((x) => x.key === key);
+function renderPreview(key: string, lang: string, c: EmailContent, plan?: IndivPlan): string {
+  const m = ALL_META.find((x) => x.key === key);
   // Same renderer as the real send; the preview shows a sample name.
-  return renderFamilyMail(m, lang, c, { unsubscribeUrl: `${EMAIL_BASE}/`, firstName: lang === "he" ? "דנה" : "Dana" }).html;
+  return renderFamilyMail(m, lang, c, { unsubscribeUrl: `${EMAIL_BASE}/`, firstName: lang === "he" ? "דנה" : "Dana", plan }).html;
 }
 
 export async function GET(req: NextRequest) {
@@ -63,6 +67,7 @@ export async function GET(req: NextRequest) {
       emails: FAMILY_META.map((m) => ({ key: m.key, label: m.label, labelHe: FAMILY_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset })),
       defaultTestTo: process.env.NOTIFY_EMAIL ?? "",
       signup: SIGNUP_STEPS.map((s) => ({ key: `signup:${s.step}`, label: s.label, labelHe: s.labelHe, dayOffset: s.dayOffset })),
+      indiv: INDIV_META.map((m) => ({ key: m.key, label: m.label, labelHe: INDIV_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset, plans: m.plans })),
     });
   }
 
@@ -74,7 +79,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ key, readonly: true, subject: r.subject, html: r.html });
   }
 
-  if (!FAMILY_META.find((m) => m.key === key)) {
+  if (!ALL_META.find((m) => m.key === key)) {
     return NextResponse.json({ error: "unknown key" }, { status: 404 });
   }
   const ov = await getOverride(key);
@@ -97,10 +102,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   if (!authed(req)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const body = (await req.json().catch(() => null)) as
-    | { action?: string; key?: string; lang?: string; content?: EmailContent; to?: string }
+    | { action?: string; key?: string; lang?: string; content?: EmailContent; to?: string; plan?: string }
     | null;
   const isSignup = !!body?.key?.startsWith("signup:");
-  const known = !!body?.key && (isSignup ? !!renderSignup(body.key.slice(7), true) : !!FAMILY_META.find((m) => m.key === body!.key));
+  const known = !!body?.key && (isSignup ? !!renderSignup(body.key.slice(7), true) : !!ALL_META.find((m) => m.key === body!.key));
   if (!body?.action || !body.key || !known) {
     return NextResponse.json({ error: "bad_request" }, { status: 400 });
   }
@@ -114,7 +119,8 @@ export async function POST(req: NextRequest) {
     const c = body!.content;
     if (!c) return null;
     // Same sample name as the preview body, so a test subject never shows a raw {שם}.
-    return { subject: applyName(c.subject, he ? "דנה" : "Dana"), html: renderPreview(body!.key!, lang, c) };
+    const plan: IndivPlan | undefined = body!.plan === "clear" || body!.plan === "deep" ? body!.plan : undefined;
+    return { subject: applyName(c.subject, he ? "דנה" : "Dana"), html: renderPreview(body!.key!, lang, c, plan) };
   }
 
   if (body.action === "test") {

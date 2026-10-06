@@ -1,6 +1,10 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { v2Defaults, type EmailContent } from "./render";
 import { FAMILY_CONTENT } from "./family-content";
+import { INDIV_CONTENT } from "./indiv-content";
+
+// Every editable series shares one store: Family + individual Clear/Deep.
+const CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = { ...FAMILY_CONTENT, ...INDIV_CONTENT };
 
 /**
  * Firestore overrides for the editable emails. A doc at
@@ -36,7 +40,7 @@ export async function getOverride(key: string): Promise<StoredTemplate | null> {
  *  and a language with no translation yet gets the English email. */
 export async function getEffectiveContent(key: string, he: boolean | string): Promise<EmailContent> {
   const lang = he === true ? "he" : he === false ? "en" : he;
-  const def = FAMILY_CONTENT[key];
+  const def = CONTENT[key];
   const ov = await getOverride(key);
   const own = lang !== "he" && lang !== "en" ? block(ov, lang) : undefined;
   const useLang = lang === "he" ? "he" : own ? lang : "en";

@@ -2,6 +2,8 @@ import { renderEmailHtml, renderEmailHtmlV2, mdLiteToHtml, applyName, type Email
 import { FAMILY_META, EMAIL_BASE, type FamilyEmailMeta } from "./family-content";
 import { getEffectiveContent, hasLang } from "./email-templates-store";
 import { fillChildren, sampleChildrenSummary } from "./family-summary";
+import { forPlan, type IndivPlan } from "./indiv-content";
+import { fillNumbers, sampleNumbersSummary } from "./indiv-summary";
 
 /**
  * Family onboarding email series. Fires AFTER a Family subscription
@@ -26,7 +28,7 @@ export function renderFamilyMail(
   m: FamilyEmailMeta | undefined,
   heOrLang: boolean | string,
   c: EmailContent,
-  opts: { unsubscribeUrl: string; firstName?: string | null; childrenSummary?: string },
+  opts: { unsubscribeUrl: string; firstName?: string | null; childrenSummary?: string; plan?: IndivPlan; numbers?: string },
 ): { subject: string; html: string } {
   const lang = heOrLang === true ? "he" : heOrLang === false ? "en" : heOrLang;
   const he = lang === "he";
@@ -38,7 +40,12 @@ export function renderFamilyMail(
   const subject = applyName(c.subject, opts.firstName);
   // {ילדים}/{children}: each child's numbers (real on send, a sample in the
   // editor preview and test sends).
-  const body = fillChildren(applyName(c.body, opts.firstName), opts.childrenSummary ?? sampleChildrenSummary(lang));
+  const body = fillNumbers(
+    fillChildren(applyName(forPlan(c.body, opts.plan), opts.firstName), opts.childrenSummary ?? sampleChildrenSummary(lang)),
+    opts.numbers ?? sampleNumbersSummary(lang),
+  );
+  // Clear/Deep series: a bridge line may differ per plan ([[clear]]/[[deep]]).
+  const next = c.next ? forPlan(c.next, opts.plan).trim() : c.next;
   if (m?.v2) {
     return {
       subject,
@@ -48,7 +55,7 @@ export function renderFamilyMail(
         bodyHtml: mdLiteToHtml(lang, body),
         ctaText: c.ctaText,
         ctaUrl: link,
-        next: c.next,
+        next,
         closing: c.closing,
         signature: c.signature,
         helpText: c.helpText,

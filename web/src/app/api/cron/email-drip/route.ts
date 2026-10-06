@@ -6,6 +6,9 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
 import { FAMILY_DRIP } from "@/lib/email-drip/family-drip";
+import { INDIV_DRIP } from "@/lib/email-drip/indiv-drip";
+import { INDIV_SERIES_LIVE } from "@/lib/email-drip/indiv-content";
+import { indivNumbersSummary } from "@/lib/email-drip/indiv-summary";
 import { sendDripEmail } from "@/lib/email-drip/send";
 
 /**
@@ -234,6 +237,63 @@ export async function GET(req: NextRequest) {
         }
       }
       continue; // Family owners skip the general signup drip.
+    }
+
+    // ── Individual Clear/Deep onboarding (Gadi 2026-10-06) ───────
+    // A subscriber on Clear or Deep (not a family, not a school) gets the
+    // Clear/Deep series from the first day the cron sees them paid
+    // (indivSeriesStart, stamped once). Saturdays are not series days, like
+    // the Family series. Each email goes only to the plans it lists. Off
+    // until Gadi approves the texts (INDIV_SERIES_LIVE).
+    const indivPlan = d.plan === "clear" || d.plan === "deep" ? (d.plan as "clear" | "deep") : null;
+    const indivPaying = d.subscriptionStatus === "active" || d.subscriptionStatus === "trialing" || d.subscriptionStatus === "past_due";
+    if (INDIV_SERIES_LIVE && indivPlan && indivPaying && !d.familyId && !d.schoolId) {
+      let startIso = d.indivSeriesStart as string | undefined;
+      if (!startIso) {
+        startIso = new Date(now).toISOString();
+        if (!dryRun) await db.collection("users").doc(u.uid).set({ indivSeriesStart: startIso }, { merge: true });
+      }
+      const dayN = familySeriesDay(Date.parse(startIso), now);
+      const sent = (d.indivDripSent as Record<string, unknown> | undefined) ?? {};
+      const mine = INDIV_DRIP.filter((m) => m.plans.includes(indivPlan));
+      const stale = mine.filter((m) => !sent[m.key] && m.dayOffset <= dayN && dayN - m.dayOffset > STALE_DAYS);
+      if (stale.length && !dryRun) {
+        const patch: Record<string, unknown> = {};
+        for (const m of stale) patch[m.key] = { skippedAt: FieldValue.serverTimestamp() };
+        await db.collection("users").doc(u.uid).set({ indivDripSent: patch }, { merge: true });
+        for (const m of stale) sent[m.key] = true;
+      }
+      let cand: (typeof INDIV_DRIP)[number] | null = null;
+      for (const m of mine) {
+        if (m.dayOffset > dayN || sent[m.key] || dayN - m.dayOffset > STALE_DAYS) continue;
+        if (!cand || m.dayOffset > cand.dayOffset) cand = m;
+      }
+      if (cand) {
+        const fullName =
+          (typeof u.displayName === "string" && u.displayName.trim()) ||
+          (typeof d.displayName === "string" && (d.displayName as string).trim()) ||
+          "";
+        const firstName = fullName.split(/\s+/)[0] || null;
+        const indivLang = he ? "he" : generalLang;
+        const numbers = cand.key === "ind-progress" ? await indivNumbersSummary(u.uid, indivLang) : undefined;
+        const built = await cand.build({ lang: indivLang, plan: indivPlan, unsubscribeUrl: buildUnsubUrl(u.uid), firstName, numbers });
+        if (dryRun) {
+          results.push({ uid: u.uid, email, mailKey: cand.key, status: "skipped", reason: "dryRun" });
+        } else {
+          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+          if (r.ok) {
+            realSends++;
+            await db.collection("users").doc(u.uid).set(
+              { indivDripSent: { [cand.key]: { sentAt: FieldValue.serverTimestamp(), messageId: r.id ?? null } } },
+              { merge: true },
+            );
+            results.push({ uid: u.uid, email, mailKey: cand.key, status: "sent" });
+          } else {
+            results.push({ uid: u.uid, email, mailKey: cand.key, status: "failed", reason: r.reason });
+          }
+        }
+      }
+      continue; // Clear/Deep subscribers never get the general signup drip.
     }
 
     // Never send the general signup drip (it ends in an upgrade CTA to
