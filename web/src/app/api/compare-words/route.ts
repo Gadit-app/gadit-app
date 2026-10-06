@@ -138,35 +138,47 @@ export async function POST(req: NextRequest) {
     const uiLangCode = typeof uiLang === "string" && UI_LANG_NAMES[uiLang] ? uiLang : "en";
     const uiLangName = UI_LANG_NAMES[uiLangCode];
 
+    // Two words in the same script are one language (Gadi 2026-10-06:
+    // "affect" vs "effect" from the Hebrew UI came back as "different
+    // languages"). Say so to the model, and retry once on the stronger model
+    // if it still refuses.
+    const script = (w: string) =>
+      /[\u0590-\u05FF]/.test(w) ? "hebrew" : /[\u0600-\u06FF]/.test(w) ? "arabic" : /[\u0400-\u04FF]/.test(w) ? "cyrillic"
+        : /[\u0370-\u03FF]/.test(w) ? "greek" : /[\u3040-\u30FF\u4E00-\u9FFF\uAC00-\uD7AF]/.test(w) ? "cjk" : /[A-Za-z\u00C0-\u024F]/.test(w) ? "latin" : "other";
+    const sameScript = script(wordA) === script(wordB) && script(wordA) !== "other";
     const userContent = `Word A: "${wordA.trim()}"
 Word B: "${wordB.trim()}"
 User's UI language (write all explanations in this): ${uiLangName}
-
+${sameScript ? "Both words are written in the same alphabet: treat them as words of the same language. The UI language is only the language of your explanations, not of the words.\n" : ""}
 Compare these two words.`;
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        response_format: { type: "json_object" },
-        temperature: 0.3,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userContent },
-        ],
-      }),
-    });
+    const ask = async (model: string) => {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model,
+          response_format: { type: "json_object" },
+          temperature: 0.3,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userContent },
+          ],
+        }),
+      });
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content;
+      return text ? JSON.parse(text) : null;
+    };
 
-    const data = await res.json();
-    const text = data.choices?.[0]?.message?.content;
-    if (!text) {
+    let parsed = await ask("gpt-4o-mini");
+    if (sameScript && parsed?.error === "different_languages") parsed = await ask("gpt-4o");
+    if (!parsed) {
       return NextResponse.json({ error: "ai_no_content" }, { status: 500 });
     }
-    const parsed = JSON.parse(text);
 
     return NextResponse.json(parsed);
   } catch (err) {

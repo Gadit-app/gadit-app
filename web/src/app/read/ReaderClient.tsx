@@ -643,7 +643,11 @@ export function ReaderClient() {
               }}
             >
               <p style={{ margin: "0 0 14px", fontSize: 13.5, color: "var(--ink-muted,#9CA3AF)" }}>{t.hint}</p>
-              <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} hardKeys={hardKeys} />
+              {/* The text's own direction (English inside the Hebrew UI read
+                  right-to-left, so a full stop jumped to the line start). */}
+              <div dir="auto" style={{ textAlign: "start" }}>
+                <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} hardKeys={hardKeys} />
+              </div>
             </div>
           </div>
         )}
