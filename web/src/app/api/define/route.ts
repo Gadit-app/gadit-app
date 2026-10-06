@@ -1559,9 +1559,11 @@ export async function POST(req: NextRequest) {
     // Fires for both cache hits AND live generations so popularity
     // reflects real demand, not OpenAI cost. Easter-egg "gadit" is
     // excluded above; invalid inputs short-circuit before this.
-    void recordWordSearch({ word, lang: uiLangCode });
+    // An admin refresh / cache warm-up is not a real search: keep it out of
+    // both feeds (the 2026-10-06 SEO warm-up would add thousands).
+    if (!isRefresh) void recordWordSearch({ word, lang: uiLangCode });
     // Raw per-event feed for /admin/activity (who searched what, when).
-    void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent") });
+    if (!isRefresh) void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent") });
 
     const cached = isRefresh ? null : await getCachedResult(cacheKey);
     if (cached) {
