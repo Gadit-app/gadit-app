@@ -3,6 +3,9 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { LANGUAGES } from "@/lib/i18n";
 
 const BASE = "https://www.gadit.app";
+
+// Rebuilt at most once a day (one Firestore read of the cache index).
+export const revalidate = 86400;
 const ALL_LANGS: string[] = LANGUAGES.map((l) => l.code);
 
 /** URL for a path in a given UI language. English is the unprefixed canonical
@@ -67,23 +70,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return true;
   };
 
+  // Word pages: ONLY (language, word) pairs that really serve a definition,
+  // i.e. have a public cache doc auto2_<lang>_base_<word> (the same doc the
+  // word page server-renders; without it the page is noindex). Gadi
+  // 2026-10-06: the old list re-emitted every cached word in all 33 languages,
+  // ~104k URLs of which ~92% were noindex empty pages. Each pair is listed
+  // once under its own language, lowercased, with hreflang only between the
+  // languages that exist for that word.
   let wordEntries: MetadataRoute.Sitemap = [];
   try {
-    const snap = await getAdminDb().collection("cache").select("word").limit(5000).get();
-    const seen = new Set<string>();
+    const FieldPath = (await import("firebase-admin/firestore")).FieldPath;
+    const snap = await getAdminDb()
+      .collection("cache")
+      .where(FieldPath.documentId(), ">=", "auto2_")
+      .where(FieldPath.documentId(), "<", "auto2`")
+      .select("word")
+      .get();
+    const langSet = new Set(ALL_LANGS);
+    const byWord = new Map<string, string[]>();
     for (const doc of snap.docs) {
-      const word = (doc.data().word as string | undefined)?.trim();
-      if (!word || seen.has(word) || !looksLikeWord(word)) continue;
-      seen.add(word);
+      const m = doc.id.match(/^auto2_(.+?)_base_(.+)$/);
+      if (!m || !langSet.has(m[1])) continue;
+      const word = m[2].trim().toLowerCase();
+      if (!looksLikeWord(word)) continue;
+      const langs = byWord.get(word) ?? [];
+      if (!langs.includes(m[1])) langs.push(m[1]);
+      byWord.set(word, langs);
+    }
+    for (const [word, langs] of byWord) {
       const path = `/word/${encodeURIComponent(word)}`;
-      wordEntries.push({
-        url: langUrl(path, "en"),
-        changeFrequency: "monthly",
-        priority: 0.6,
-        // Each word page exists in all 33 languages and is self-canonical per
-        // language; declare the alternates so every market's version is found.
-        alternates: alternatesFor(path),
-      });
+      const alternates =
+        langs.length > 1
+          ? {
+              languages: {
+                ...Object.fromEntries(langs.map((l) => [l, langUrl(path, l)])),
+                ...(langs.includes("en") ? { "x-default": langUrl(path, "en") } : {}),
+              },
+            }
+          : undefined;
+      for (const l of langs) {
+        wordEntries.push({
+          url: langUrl(path, l),
+          changeFrequency: "monthly",
+          priority: 0.6,
+          ...(alternates ? { alternates } : {}),
+        });
+      }
     }
   } catch (e) {
     console.error("sitemap word enumeration failed:", e);
