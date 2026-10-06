@@ -12,6 +12,7 @@
  * GameResult, which calls back to onExit → returns here to "menu").
  */
 
+import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LANGUAGES } from "@/lib/i18n";
 import Link from "next/link";
@@ -3224,7 +3225,7 @@ function LangSwitch() {
 }
 
 export function PlayPage() {
-  const { user, plan, planReady, loading, promptLogin, familyRole } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess } = useAuth();
   const isKidPlayer = familyRole === "kid";
   const { lang, dir } = useLang();
   const router = useRouter();
@@ -3766,15 +3767,16 @@ export function PlayPage() {
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
         {(() => {
           const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
-          if (!isPaid) {
+          // Kids Mode is a Family tool (Gadi 2026-10-06).
+          if (!isPaid || !kidsAccess) {
             return (
               <div className="wb-play-kids-banner is-gate" dir={dir}>
                 <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
                 <div className="wb-play-kids-banner-text">
                   <div className="wb-play-kids-banner-title">{bannerCopy.gateTitle}</div>
-                  <div className="wb-play-kids-banner-desc">{bannerCopy.gateDesc}</div>
+                  <div className="wb-play-kids-banner-desc">{planCopy(lang, "kidsGate")}</div>
                 </div>
-                <Link href={href("/pricing")} className="wb-play-kids-banner-cta">
+                <Link href={href("/families")} className="wb-play-kids-banner-cta">
                   {bannerCopy.gateCTA}
                 </Link>
               </div>

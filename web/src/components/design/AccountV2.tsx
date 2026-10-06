@@ -158,6 +158,7 @@ function PlanSection({
   const script = scriptFor(lang);
 
   const plan = data.plan;
+  const { isIndividual } = useAuth();
   const noSubscription = !data.stripeCustomerId && plan === "basic";
 
   const tierColor =
@@ -167,7 +168,9 @@ function PlanSection({
         ? "oklch(0.5 0.18 250)"
         : "oklch(0.4 0.02 265)";
   const tierName =
-    plan === "deep"
+    isIndividual
+      ? "Individual"
+      : plan === "deep"
       ? "Deep"
       : plan === "clear"
         ? "Clear"

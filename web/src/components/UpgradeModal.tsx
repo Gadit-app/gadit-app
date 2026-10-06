@@ -18,6 +18,8 @@
  * callback (signature widened in result.tsx to pass tab + tier).
  */
 
+import { planCopy } from "@/lib/plan-copy";
+import { INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
@@ -932,12 +934,19 @@ export function UpgradeModal({
   if (!trigger) return null;
 
   const c = COPY[lang] ?? COPY.en;
-  const { feature, tier } = trigger;
+  const { feature } = trigger;
+  // New plans (Gadi 2026-10-06): Kids Mode is a Family tool; every other
+  // locked tool is in Individual. The card keeps its two colours (teal for
+  // Individual, purple for Family) through the old tier class names.
+  const fam = feature === "kids";
+  const tier: UpgradeTier = fam ? "deep" : "clear";
   const featureName = c.featureNames[feature];
   const blurb = c.featureBlurbs[feature];
-  const tierLabel = c.tierLabels[tier];
-  const tierIs = c.tierIs[tier];
-  const price = c.pricePerMonth[tier];
+  const tierLabel = fam ? "Family" : "Individual";
+  const tierIs = planCopy(lang, fam ? "modalIsFam" : "modalIsInd");
+  const he = lang === "he";
+  const amount = fam ? (he ? "₪19.90" : "$5.99") : he ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly;
+  const price = planCopy(lang, "modalPerMonth", { price: amount });
 
   return (
     <div
@@ -983,7 +992,7 @@ export function UpgradeModal({
           onClick={() => {
             track("upgrade_prompt_clicked", { feature, tier, lang });
             onClose();
-            router.push(href("/pricing"));
+            router.push(href(fam ? "/families" : "/pricing"));
           }}
         >
           {c.primaryCta}

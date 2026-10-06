@@ -1,5 +1,7 @@
 "use client";
 
+import { INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
+import { planCopy } from "@/lib/plan-copy";
 import { REAL_COPY, REAL_CSS, PhoneShot, Lines } from "./RealScreens";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -7054,7 +7056,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
             {!isOwner && (
               <button type="button" className="fam-single-link" onClick={startDeep}>
-                {c.singleChild}
+                {planCopy(lang, "famSingleChild", { price: lang === "he" ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly })}
               </button>
             )}
 

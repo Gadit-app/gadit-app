@@ -6,10 +6,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { featureNames } from "./ui-feature-names.mjs";
 const HERE = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1"));
 const env = fs.readFileSync(path.join(HERE, "../.env.local"), "utf8");
 const KEY = (env.match(/^OPENAI_API_KEY=(.*)$/m)?.[1] ?? "").trim().replace(/^["']|["']$/g, "");
-const src = fs.readFileSync(path.join(HERE, "../src/lib/plan-copy.ts"), "utf8");
+const src = fs.readFileSync(path.join(HERE, "../src/lib/plan-copy.ts"), "utf8").replace(/\r\n/g, "\n");
 // Pull the en / he object literals out of the TS file.
 function block(name) {
   const m = src.match(new RegExp(`\\n  ${name}: \\{([\\s\\S]*?)\\n  \\},`));
@@ -42,8 +43,13 @@ for (const [code, name] of Object.entries(LANGS)) {
   const cur = out[code] ?? {};
   const todo = Object.keys(EN).filter((k) => !cur[k] || out._hash[k] !== hash(EN[k]));
   if (!todo.length) continue;
-  const items = Object.fromEntries(todo.map((k) => [k, { en: EN[k], he: HE[k] }]));
-  const user = `Translate these short UI strings of Gadit (a vocabulary app for families and learners) into ${name} (${code}). Each item has the English source and the Hebrew version for meaning. Keep {placeholders} exactly. Keep the plan names Gadit, Individual, Family, Basic, Schools in Latin letters, never translated. Address the user in the friendly singular form that app UIs use in ${name}. No long dashes. Natural, short, the way a native product writer would put it. Return JSON with the same keys and the translated string as each value.\n\n${JSON.stringify(items, null, 1)}`;
+  const items = Object.fromEntries(todo.map((k) => [k, EN[k]]));
+  const user = `Translate these short UI strings of Gadit (a vocabulary app for families and learners) from English into ${name} (${code}). Keep {placeholders} exactly. Keep the plan names Gadit, Individual, Family, Basic, Schools in Latin letters, never translated. The app's own feature names in ${name} are listed below: whenever a string mentions one of these features, use exactly that name (Kids Mode is the mode behind the switch named there; write it naturally, e.g. the word for kids plus the word for mode). Address the user in the friendly singular form that app UIs use in ${name}. No long dashes. Natural and short, the way a native product writer would put it. Return JSON with the same keys, each value a plain translated string.
+
+Feature names: ${JSON.stringify(featureNames(code))}
+
+Strings:
+${JSON.stringify(items, null, 1)}`;
   let done = false;
   for (let a = 0; a < 3 && !done; a++) {
     try {

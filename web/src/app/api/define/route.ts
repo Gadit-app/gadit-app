@@ -25,7 +25,7 @@ import { classroomAccess } from "@/lib/classroom-access";
 //   the whole signup pitch. Fixed 2026-07-08.
 // Paid (Clear/Deep) is unmetered — handled by an isPaid bypass below.
 const ANON_DAILY_LIMIT = 2;
-const BASIC_DAILY_LIMIT = 20;
+const BASIC_DAILY_LIMIT = 10; // 20 → 10 with the new plans (Gadi 2026-10-06)
 // A class code outside school hours: a basic dictionary for the whole class,
 // metered per class instead of per IP (Gadi 2026-10-05).
 const CLASS_OFFHOURS_DAILY_LIMIT = 60;

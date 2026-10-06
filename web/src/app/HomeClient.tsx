@@ -8,6 +8,7 @@
  * No marketing fluff, no animated chrome, no V2 navy.
  */
 
+import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -356,10 +357,10 @@ export function HomePage() {
                   plan={plan}
                   onBasicGate={() => {
                     if (!user) {
-                      promptLogin(v2(lang, "kidsModeBasicGate"));
+                      promptLogin(planCopy(lang, "kidsGate"));
                       return;
                     }
-                    setUpgradeTrigger({ feature: "kids", tier: "clear" });
+                    setUpgradeTrigger({ feature: "kids", tier: "deep" });
                   }}
                 />
               </div>

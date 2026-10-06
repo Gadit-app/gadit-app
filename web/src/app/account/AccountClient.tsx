@@ -18,6 +18,8 @@
  *   5. Delete account — small low-prominence link under a dashed rule.
  */
 
+import { planCopy } from "@/lib/plan-copy";
+import { INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -261,10 +263,10 @@ type Plan = "basic" | "clear" | "deep";
 // to upgrade used to be dumped on /pricing (individual plans on top, Family at
 // the bottom) and had to hunt for the right plan; these send them straight to
 // the card-entry checkout for the plan they picked. Gadi 2026-09-10.
+// Clear and Deep became one Individual plan (Gadi 2026-10-06).
 const CHECKOUT_PRICES = {
   family: process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "",
-  deep: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "",
-  clear: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY ?? "",
+  individual: INDIVIDUAL_MONTHLY,
 } as const;
 
 /** "Upgrade to <Plan>" — plan name stays Latin (brand rule). {plan} is swapped in. */
@@ -883,6 +885,7 @@ function PlanSection({
   const { lang } = useLang();
   const href = useHref();
   const plan = data.plan;
+  const { isIndividual } = useAuth();
 
   // Help-link text for the "Need help with billing?" deep-link to
   // /contact#billing. We add this for paying users because that's
@@ -899,7 +902,7 @@ function PlanSection({
   // state confused first-time signed-in users into thinking something
   // was wrong; now we always show the plan name with a context-appropriate
   // CTA below.
-  const tierName = plan === "deep" ? "Deep" : plan === "clear" ? "Clear" : "Basic";
+  const tierName = isIndividual ? "Individual" : plan === "deep" ? "Deep" : plan === "clear" ? "Clear" : "Basic";
 
   const tColor = tierColor(plan);
   const tBg = tierBg(plan);
@@ -962,7 +965,8 @@ function PlanSection({
               fontFamily: fontBody(lang),
             }}
           >
-            {plan === "deep"  ? v2(lang, "tierDeepPitch")
+            {isIndividual ? planCopy(lang, "prIndSub")
+              : plan === "deep"  ? v2(lang, "tierDeepPitch")
               : plan === "clear" ? v2(lang, "tierClearPitch")
               :                    v2(lang, "tierBasicPitch")}
           </p>
@@ -991,12 +995,7 @@ function PlanSection({
                 {CHECKOUT_PRICES.family && (
                   <span className="gd-buy"><PrimaryBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.family)}>{upgradeLabel(lang, "Family")}</PrimaryBtn></span>
                 )}
-                {CHECKOUT_PRICES.deep && (
-                  <GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.deep)}>{upgradeLabel(lang, "Deep")}</GhostBtn>
-                )}
-                {CHECKOUT_PRICES.clear && (
-                  <GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.clear)}>{upgradeLabel(lang, "Clear")}</GhostBtn>
-                )}
+                <GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.individual)}>{upgradeLabel(lang, "Individual")}</GhostBtn>
               </>
             ) : (
               <>

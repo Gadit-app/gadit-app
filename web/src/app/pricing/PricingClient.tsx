@@ -15,6 +15,8 @@
  * /checkout (in-app Payment Element page, user's own language).
  */
 
+import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
+import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { usePricing } from "@/lib/use-pricing";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
@@ -218,10 +220,6 @@ const CONTACT_QUOTE_COPY: Record<Lang, string> = {
 
 type Billing = "monthly" | "yearly";
 
-const PRICE_CLEAR_MONTHLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY  ?? "";
-const PRICE_CLEAR_YEARLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY   ?? "";
-const PRICE_DEEP_MONTHLY   = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY   ?? "";
-const PRICE_DEEP_YEARLY    = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY    ?? "";
 const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 const PRICE_FAMILY_YEARLY  = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY  ?? "";
 // Schools prices are the 3-tier ladder in @/lib/schools-prices (hardcoded
@@ -3610,12 +3608,8 @@ export function PricingPageRoute() {
   function clickBasic() {
     promptLogin({ mode: "signup", onSuccess: () => { window.location.href = "/"; } });
   }
-  function clickClear() {
-    const priceId = billing === "yearly" ? PRICE_CLEAR_YEARLY : PRICE_CLEAR_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
-  }
-  function clickDeep() {
-    const priceId = billing === "yearly" ? PRICE_DEEP_YEARLY : PRICE_DEEP_MONTHLY;
+  function clickIndividual() {
+    const priceId = billing === "yearly" ? INDIVIDUAL_YEARLY : INDIVIDUAL_MONTHLY;
     promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
   }
   function clickFamily() {
@@ -3642,10 +3636,6 @@ export function PricingPageRoute() {
   // requirement). Family history: $8.99 → $6.99 (2026-07-08) → $5.99
   // (2026-07-16); existing subscribers keep their old Stripe prices via the
   // webhook's retired-price mapping.
-  const clearMonthly   = px.clearMonthly;
-  const clearYearly    = px.clearYearly;
-  const deepMonthly    = px.deepMonthly;
-  const deepYearly     = px.deepYearly;
   const familyMonthly  = px.familyMonthly;
   const familyYearly   = px.familyYearly;
 
@@ -3731,28 +3721,56 @@ export function PricingPageRoute() {
           <div className="wb-pricing-toggle-top">{billingToggle}</div>
         </div>
 
-        <h2 className="wb-pricing-section-h">{sh.ind}</h2>
+        {/* Free, Individual, Family in one table (Gadi 2026-10-06, after the
+            7-assistant council): Clear and Deep became one Individual plan,
+            and Family sits next to it so the small step up is visible. The
+            child tools (Kids Mode, children, parent board, dictation) are
+            Family only. Hebrew is billed in shekels, so it shows shekels. */}
+        <h2 className="wb-pricing-section-h">{planCopy(lang, "prHead")}</h2>
         {(() => {
-          // "Single user" reminder under each personal-tier price so the
-          // contrast with Family (unlimited kids) reads at a glance.
-          // Falls back to EN if a lang doesn't define its own string.
-          const singleUser =
-            SINGLE_USER_COPY[lang] ?? SINGLE_USER_COPY.en;
-          // Basic sub is just "for one user" — Gadi 2026-08-15: drop "free
-          // forever" so the free tier isn't promoted.
-          const basicSub = singleUser;
-          const clearSub = billing === "yearly" ? `≈ ${px.clearYearlyPerMo} ${c.mo} · ${singleUser}` : singleUser;
-          const deepSub  = billing === "yearly" ? `≈ ${px.deepYearlyPerMo} ${c.mo} · ${singleUser}` : singleUser;
-          const clearPrice = billing === "yearly" ? clearYearly : clearMonthly;
-          const deepPrice = billing === "yearly" ? deepYearly : deepMonthly;
-          const period = billing === "yearly" ? c.yr : c.mo;
+          const he = lang === "he";
+          const yearly = billing === "yearly";
+          const period = yearly ? c.yr : c.mo;
+          const indPrice = he
+            ? (yearly ? INDIVIDUAL_DISPLAY.ilsYearly : INDIVIDUAL_DISPLAY.ilsMonthly)
+            : (yearly ? INDIVIDUAL_DISPLAY.usdYearly : INDIVIDUAL_DISPLAY.usdMonthly);
+          const famPrice = he ? (yearly ? "₪199" : "₪19.90") : (yearly ? familyYearly : familyMonthly);
+          const famYearNum = he ? 199 : px.n.familyYearly;
+          const perMonth = (v: string) => planCopy(lang, "prYearlyPerMonth", { price: v });
+          const indPerMonth = he ? INDIVIDUAL_DISPLAY.ilsYearlyPerMonth : INDIVIDUAL_DISPLAY.usdYearlyPerMonth;
+          const famPerMonth = `${he ? "₪" : "$"}${(famYearNum / 12).toFixed(2)}`;
+          const basicSub = planCopy(lang, "prBasicSub");
+          const indSub = yearly ? `${perMonth(indPerMonth)} · ${planCopy(lang, "prIndSub")}` : planCopy(lang, "prIndSub");
+          const famSub = yearly ? `${perMonth(famPerMonth)} · ${planCopy(lang, "prFamSub")}` : planCopy(lang, "prFamSub");
+          const terms = (price: string) => (c.trialTerms ?? COPY.en.trialTerms ?? "").replace("{price}", `${price}${period}`);
+          // Each row: label, and what Basic / Individual / Family get
+          // (true = check, false = dash, string = a short value).
+          type Cell = boolean | string;
+          const rows: Array<{ l: string; b: Cell; i: Cell; f: Cell }> = [
+            { l: planCopy(lang, "prRowSearches"), b: planCopy(lang, "prSearchesBasic"), i: planCopy(lang, "prUnlimited"), f: planCopy(lang, "prUnlimited") },
+            { l: planCopy(lang, "prRowCore"), b: true, i: true, f: true },
+            { l: planCopy(lang, "prRowNotebook"), b: planCopy(lang, "prNotebookBasic"), i: true, f: true },
+            { l: planCopy(lang, "prRowImages"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowContext"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowRead"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowSay"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowCompose"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowPractice"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowCompare"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowKids"), b: false, i: false, f: true },
+            { l: planCopy(lang, "prRowChildren"), b: false, i: false, f: true },
+            { l: planCopy(lang, "prRowParent"), b: false, i: false, f: true },
+            { l: planCopy(lang, "prRowDictation"), b: false, i: false, f: true },
+          ];
           const dash = <span className="wb-pc-dash">·</span>;
+          const cell = (v: Cell, strong = false) =>
+            v === true ? <span className="wb-pc-check"><CheckIcon /></span> : v === false ? dash : <span className={strong ? "wb-pc-strong" : undefined}>{v}</span>;
+          const list = (k: "b" | "i" | "f") =>
+            rows.filter((r) => r[k] !== false).map((r) => (typeof r[k] === "string" ? `${r.l}: ${r[k]}` : r.l));
           return (
             <>
-              {/* Subscription-terms disclosure — required by Google Play's
-                  Subscriptions policy: the trial length, the price after it
-                  ends, and how to cancel must be called out clearly in the
-                  offer itself, not only in the payment cart. */}
+              {/* Subscription-terms disclosure (Google Play Subscriptions
+                  policy): trial length, the price after it, how to cancel. */}
               <p className="wb-pricing-terms" style={{
                 maxWidth: 720, margin: "0 auto 18px", padding: "12px 16px",
                 background: "var(--surface, #fff)", border: "1px solid var(--rule, #E4EAE8)",
@@ -3761,133 +3779,49 @@ export function PricingPageRoute() {
               }}>
                 {c.trialTermsFull ?? COPY.en.trialTermsFull}
               </p>
-              {/* DESKTOP: one comparison table with checkmarks. Hidden on
-                  mobile (see .wb-pc CSS) where the stacked cards render. */}
               <div className="wb-pc">
                 <div className="wb-pc-row wb-pc-headrow">
                   <div className="wb-pc-cell wb-pc-corner">{billingToggle}</div>
                   <div className="wb-pc-cell wb-pc-col wb-pc-t-basic">
                     <div className="wb-pc-name">{c.tierBasic.name}</div>
-                    <div className="wb-pc-price">$0</div>
+                    <div className="wb-pc-price">{he ? "₪0" : "$0"}</div>
                     <div className="wb-pc-sub">{basicSub}</div>
-                    <button type="button" className="wb-pc-cta" onClick={clickBasic}>{c.tierBasic.cta}</button>
+                    <button type="button" className="wb-pc-cta" onClick={clickBasic}>{planCopy(lang, "prBasicCta")}</button>
                   </div>
-                  <div className="wb-pc-cell wb-pc-col wb-pc-t-clear is-pop">
-                    <div className="wb-pc-name">{c.tierClear.name}</div>
-                    <div className="wb-pc-price">{clearPrice}<span className="wb-pc-period">{period}</span></div>
-                    <div className="wb-pc-sub">{clearSub}</div>
-                    <button type="button" className="wb-pc-cta" onClick={clickClear}>{c.tierClear.cta}</button>
+                  <div className="wb-pc-cell wb-pc-col wb-pc-t-clear">
+                    <div className="wb-pc-name">Individual</div>
+                    <div className="wb-pc-price" dir="ltr">{indPrice}<span className="wb-pc-period">{period}</span></div>
+                    <div className="wb-pc-sub">{indSub}</div>
+                    <button type="button" className="wb-pc-cta" onClick={clickIndividual}>{planCopy(lang, "prTrialCta")}</button>
                   </div>
-                  <div className="wb-pc-cell wb-pc-col wb-pc-t-deep">
-                    <div className="wb-pc-name">{c.tierDeep.name}</div>
-                    <div className="wb-pc-price">{deepPrice}<span className="wb-pc-period">{period}</span></div>
-                    <div className="wb-pc-sub">{deepSub}</div>
-                    <button type="button" className="wb-pc-cta" onClick={clickDeep}>{c.tierDeep.cta}</button>
+                  <div className="wb-pc-cell wb-pc-col wb-pc-t-deep is-pop">
+                    <div className="wb-pc-badge">{planCopy(lang, "prFamBadge")}</div>
+                    <div className="wb-pc-name">Family</div>
+                    <div className="wb-pc-price" dir="ltr">{famPrice}<span className="wb-pc-period">{period}</span></div>
+                    <div className="wb-pc-sub">{famSub}</div>
+                    <button type="button" className="wb-pc-cta" onClick={clickFamily}>{planCopy(lang, "prTrialCta")}</button>
                   </div>
                 </div>
-                <div className="wb-pc-row">
-                  <div className="wb-pc-cell wb-pc-feat">{fm.searchesLabel}</div>
-                  <div className="wb-pc-cell wb-pc-val wb-pc-t-basic">{fm.searchesBasic}</div>
-                  <div className="wb-pc-cell wb-pc-val wb-pc-t-clear wb-pc-strong">{fm.unlimited}</div>
-                  <div className="wb-pc-cell wb-pc-val wb-pc-t-deep wb-pc-strong">{fm.unlimited}</div>
-                </div>
-                {fm.rows.map((r, i) => (
-                  <div className="wb-pc-row" key={i}>
+                {rows.map((r, k) => (
+                  <div className="wb-pc-row" key={k}>
                     <div className="wb-pc-cell wb-pc-feat">{r.l}</div>
-                    <div className="wb-pc-cell wb-pc-val wb-pc-t-basic">{r.t.includes("b") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
-                    <div className="wb-pc-cell wb-pc-val wb-pc-t-clear">{r.t.includes("c") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
-                    <div className="wb-pc-cell wb-pc-val wb-pc-t-deep">{r.t.includes("d") ? <span className="wb-pc-check"><CheckIcon /></span> : dash}</div>
+                    <div className="wb-pc-cell wb-pc-val wb-pc-t-basic">{cell(r.b)}</div>
+                    <div className="wb-pc-cell wb-pc-val wb-pc-t-clear">{cell(r.i, true)}</div>
+                    <div className="wb-pc-cell wb-pc-val wb-pc-t-deep">{cell(r.f, true)}</div>
                   </div>
                 ))}
               </div>
 
-              {/* MOBILE: the original stacked cards (checkmark tables don't
-                  read on a phone). Hidden on desktop. */}
+              {/* MOBILE: stacked cards. */}
               <div className="wb-pricing-grid">
-                <TierCard
-                  id="basic"
-                  name={c.tierBasic.name}
-                  tagline={c.tierBasic.tagline}
-                  price={"$0"}
-                  period={""}
-                  subPrice={basicSub}
-                  features={c.tierBasic.features}
-                  cta={c.tierBasic.cta}
-                  onCta={clickBasic}
-                />
-                <TierCard
-                  id="clear"
-                  name={c.tierClear.name}
-                  tagline={c.tierClear.tagline}
-                  price={clearPrice}
-                  period={period}
-                  subPrice={clearSub}
-                  badge={c.tierClear.badge}
-                  features={c.tierClear.features}
-                  cta={c.tierClear.cta}
-                  ctaSub={(c.trialTerms ?? COPY.en.trialTerms ?? "").replace("{price}", `${clearPrice}${period}`)}
-                  onCta={clickClear}
-                />
-                <TierCard
-                  id="deep"
-                  name={c.tierDeep.name}
-                  tagline={c.tierDeep.tagline}
-                  price={deepPrice}
-                  period={period}
-                  subPrice={deepSub}
-                  features={c.tierDeep.features}
-                  cta={c.tierDeep.cta}
-                  ctaSub={(c.trialTerms ?? COPY.en.trialTerms ?? "").replace("{price}", `${deepPrice}${period}`)}
-                  onCta={clickDeep}
-                />
+                <TierCard id="basic" name={c.tierBasic.name} tagline={c.tierBasic.tagline} price={he ? "₪0" : "$0"} period="" subPrice={basicSub}
+                  features={list("b")} cta={planCopy(lang, "prBasicCta")} onCta={clickBasic} />
+                <TierCard id="clear" name="Individual" tagline={planCopy(lang, "prIndSub")} price={indPrice} period={period} subPrice={indSub}
+                  features={list("i")} cta={planCopy(lang, "prTrialCta")} ctaSub={terms(indPrice)} onCta={clickIndividual} />
+                <TierCard id="deep" name="Family" tagline={planCopy(lang, "prFamSub")} price={famPrice} period={period} subPrice={famSub}
+                  badge={planCopy(lang, "prFamBadge")} features={list("f")} cta={planCopy(lang, "prTrialCta")} ctaSub={terms(famPrice)} onCta={clickFamily} />
               </div>
             </>
-          );
-        })()}
-
-        <h2 className="wb-pricing-section-h">{sh.fam}</h2>
-        <div className="wb-section-toggle">{billingToggle}</div>
-        {/* Family — a single horizontal card below the three personal tiers.
-            This is the volume play: one no-brainer price for the whole
-            household. Falls back to EN copy for any UI language that
-            hasn't supplied its own family strings yet. */}
-        {(() => {
-          const f = c.family ?? COPY.en.family!;
-          return (
-            <div className="wb-family-card-wrap">
-              <div className="wb-family-card">
-                <div className="wb-family-card-head">
-                  <div className="wb-family-eyebrow">{f.eyebrow}</div>
-                  <h3 className="wb-family-name">{f.name}</h3>
-                  <p className="wb-family-tagline">{f.tagline}</p>
-                </div>
-                <ul className="wb-family-features">
-                  {f.features.map((feat, i) => (
-                    <li key={i}>
-                      <span className="wb-family-check"><CheckIcon /></span>
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="wb-family-cta-col">
-                  <div className="wb-family-price-row">
-                    <span className="wb-family-price">
-                      {billing === "yearly" ? familyYearly : familyMonthly}
-                    </span>
-                    <span className="wb-family-period">
-                      {billing === "yearly" ? c.yr : c.mo}
-                    </span>
-                  </div>
-                  <div className="wb-family-subprice">
-                    {billing === "yearly" ? `≈ $7.42 ${c.mo} · ` : ""}
-                    {UP_TO_5_KIDS_COPY[lang] ?? UP_TO_5_KIDS_COPY.en}
-                  </div>
-                  <button type="button" className="wb-family-cta" onClick={clickFamily}>
-                    {f.cta}
-                  </button>
-                </div>
-              </div>
-            </div>
           );
         })()}
 

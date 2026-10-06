@@ -12,6 +12,8 @@
  * to English until we replicate.
  */
 
+import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
+import { planCopy } from "@/lib/plan-copy";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
@@ -25,8 +27,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { HomeFooter } from "@/components/design/home";
 
-const PRICE_CLEAR = process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY ?? "";
-const PRICE_DEEP = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "";
+const PRICE_FAMILY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 
 type Feature = { t: string; b: string };
 type Copy = {
@@ -224,8 +225,9 @@ export function IndividualsLandingClient() {
             <Eyebrow>{t.pricingEyebrow}</Eyebrow>
             <h2 style={h2s}>{t.pricingTitle}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginTop: 28 }}>
-              <PriceCard name={t.clearName} price="$2.99" per={t.perMonth} desc={t.clearDesc} accent="var(--teal-deep, #0F766E)" cta={t.choose} onClick={() => buy(PRICE_CLEAR)} />
-              <PriceCard name={t.deepName} price="$4.99" per={t.perMonth} desc={t.deepDesc} accent="#6D28D9" cta={t.choose} onClick={() => buy(PRICE_DEEP)} featured />
+              {/* Clear and Deep became one Individual plan (Gadi 2026-10-06). */}
+              <PriceCard name="Individual" price={lang === "he" ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly} per={t.perMonth} desc={planCopy(lang, "prIndSub")} accent="var(--teal-deep, #0F766E)" cta={t.choose} onClick={() => buy(INDIVIDUAL_MONTHLY)} featured />
+              <PriceCard name="Family" price={lang === "he" ? "₪19.90" : "$5.99"} per={t.perMonth} desc={planCopy(lang, "prFamSub")} accent="#6D28D9" cta={t.choose} onClick={() => buy(PRICE_FAMILY)} />
             </div>
           </div>
         </Band>

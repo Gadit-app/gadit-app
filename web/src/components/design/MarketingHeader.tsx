@@ -117,7 +117,7 @@ function NavLink({
 }
 
 export function MarketingHeader() {
-  const { user, plan, promptLogin } = useAuth();
+  const { user, plan, promptLogin, isIndividual } = useAuth();
   const { lang } = useLang();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -219,14 +219,18 @@ export function MarketingHeader() {
             <Link
               href={href("/account")}
               aria-label={
-                plan === "deep"
+                isIndividual
+                  ? "Account · Individual"
+                  : plan === "deep"
                   ? "Account · Deep"
                   : plan === "clear"
                     ? "Account · Clear"
                     : "Account"
               }
               title={
-                plan === "deep"
+                isIndividual
+                  ? "Individual"
+                  : plan === "deep"
                   ? "Deep"
                   : plan === "clear"
                     ? "Clear"

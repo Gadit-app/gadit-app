@@ -15,6 +15,7 @@
  * modal layered above the result.
  */
 
+import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parse as parsePartialJson, Allow } from "partial-json";
@@ -547,7 +548,7 @@ function SoftWall({
           lineHeight: 1.55,
         }}
       >
-        {v2(lang, isSignup ? "softWallAnonBody" : "softWallBasicBody")}
+        {planCopy(lang, isSignup ? "wallAnonBody" : "wallBasicBody")}
       </p>
       {isSignup ? (
         <button
@@ -585,7 +586,7 @@ function SoftWall({
             background: "rgb(14, 165, 165)",
           }}
         >
-          {v2(lang, "upgradeToClear")}
+          {planCopy(lang, "wallCta")}
         </Link>
       )}
     </div>
@@ -1944,10 +1945,10 @@ export function WordClient({
               plan={plan}
               onBasicGate={() => {
                 if (!user) {
-                  promptLogin(v2(lang, "kidsModeBasicGate"));
+                  promptLogin(planCopy(lang, "kidsGate"));
                   return;
                 }
-                setUpgradeTrigger({ feature: "kids", tier: "clear" });
+                setUpgradeTrigger({ feature: "kids", tier: "deep" });
               }}
             />
             {user && (
@@ -2007,10 +2008,10 @@ export function WordClient({
             plan={plan}
             onBasicGate={() => {
               if (!user) {
-                promptLogin(v2(lang, "kidsModeBasicGate"));
+                promptLogin(planCopy(lang, "kidsGate"));
                 return;
               }
-              setUpgradeTrigger({ feature: "kids", tier: "clear" });
+              setUpgradeTrigger({ feature: "kids", tier: "deep" });
             }}
           />
         </div>

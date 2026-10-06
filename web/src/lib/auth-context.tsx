@@ -1,4 +1,5 @@
 "use client";
+import { AudienceQuestion } from "@/components/AudienceQuestion";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
@@ -106,6 +107,8 @@ interface AuthContextType {
    *  older Clear/Deep plans (they keep what they had). False for the
    *  Individual plan and for free accounts. */
   kidsAccess: boolean;
+  /** On the Individual plan (Gadi 2026-10-06), shown as "Individual". */
+  isIndividual: boolean;
   /** For a paired KID: their picked illustrated avatar id + uploaded photo,
    *  read from their own member doc so their identity (the topbar avatar,
    *  etc.) shows the character they chose. null for everyone else. */
@@ -193,6 +196,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setWelcomeOpen(true);
     setTimeout(() => setWelcomeOpen(false), 6000);
   }
+  // "Who is Gadit for?" after a brand-new sign-up (Gadi 2026-10-06). Not
+  // when the sign-up was a step on the way to something (a checkout, a
+  // saved word): that flow continues untouched and gets the welcome pill.
+  const [audienceFor, setAudienceFor] = useState<User | null>(null);
+  function afterNewSignup(u: User, hadPending: boolean) {
+    if (hadPending) showWelcome();
+    else setAudienceFor(u);
+  }
+  const hadPendingRef = useRef(false);
   // Pending action runs once after the next successful auth event.
   // Stored in a ref so React state churn during the auth flow doesn't
   // race the firing condition.
@@ -429,7 +441,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       void notifySignupSafely(cred.user);
       trackAffonsoSignup(cred.user);
       track("signup_completed", { method: "google" });
-      showWelcome();
+      afterNewSignup(cred.user, hadPendingRef.current);
     }
     setShowLoginModal(false);
   }
@@ -451,6 +463,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     try {
+      hadPendingRef.current = !!pendingActionRef.current;
       const cred = await signInWithPopup(auth, provider);
       postGoogleSignIn(cred);
     } catch (e) {
@@ -483,6 +496,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error("auth/blocked-signup-domain");
     }
     const auth = getFirebaseAuth();
+    const hadPending = !!pendingActionRef.current;
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     // Fire-and-forget the verification email. We don't block sign-up
     // on it succeeding — the network call is unreliable and we'd
@@ -496,7 +510,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     trackAffonsoSignup(cred.user);
     track("signup_completed", { method: "email" });
     setShowLoginModal(false);
-    showWelcome();
+    afterNewSignup(cred.user, hadPending);
   }
 
   async function sendPasswordReset(email: string) {
@@ -551,6 +565,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider value={{
       user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
       kidsAccess,
+      isIndividual: !familyId && !schoolId && isIndividualPriceId(priceId),
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,
@@ -558,6 +573,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
       {welcomeOpen && (
         <SignupWelcomeToast onClose={() => setWelcomeOpen(false)} />
+      )}
+      {audienceFor && (
+        <AudienceQuestion user={audienceFor} onDone={() => { setAudienceFor(null); showWelcome(); }} />
       )}
     </AuthContext.Provider>
   );

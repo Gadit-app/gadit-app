@@ -15,6 +15,7 @@ import { LANGUAGES, type Lang } from "@/lib/i18n";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
+import { planCopy } from "@/lib/plan-copy";
 import { TTSButton } from "@/components/design/TTSButton";
 import VoiceInput from "@/components/VoiceInput";
 
@@ -289,7 +290,7 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
       ) : !paid ? (
         <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.paidTitle}</div>
-          <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{t.paidBody}</div>
+          <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{planCopy(lang, "sayPaidBody")}</div>
           <a href={href("/pricing")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.paidCta}</a>
         </div>
       ) : (
