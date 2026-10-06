@@ -34,6 +34,7 @@
  * Hover pauses. Click a dot to jump.
  */
 
+import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import type { Lang } from "@/lib/i18n";
@@ -2734,8 +2735,8 @@ export function GaditDemoAnimation() {
           </div>
           <div className={`wb-demo-anim-tier wb-demo-anim-tier-${scene}`}>
             {scene === "basic" ? c.tierBasic :
-             scene === "clear" ? c.tierClear :
-             scene === "deep" ? c.tierDeep :
+             scene === "clear" ? "Individual" :
+             scene === "deep" ? "Individual" :
              c.tierPartner}
           </div>
         </div>
@@ -2761,7 +2762,7 @@ export function GaditDemoAnimation() {
         <div className="wb-demo-anim-stage">
           {scene === "basic" && <BasicScene d={d} c={c} />}
           {scene === "clear" && <ClearScene d={d} c={c} />}
-          {scene === "deep" && <DeepScene d={d} c={c} />}
+          {scene === "deep" && <DeepScene d={d} c={c} lang={lang} />}
           {scene === "partner" && <PartnerScene d={d} c={c} />}
         </div>
 
@@ -2774,8 +2775,8 @@ export function GaditDemoAnimation() {
               aria-selected={scene === s}
               aria-label={
                 s === "basic" ? c.tierBasic :
-                s === "clear" ? c.tierClear :
-                s === "deep" ? c.tierDeep :
+                s === "clear" ? "Individual" :
+                s === "deep" ? "Individual" :
                 c.tierPartner
               }
               className={`wb-demo-anim-dot${scene === s ? " is-active" : ""}`}
@@ -2907,7 +2908,7 @@ function ClearScene({ d, c }: { d: DemoContent; c: DemoContent["l"] }) {
   );
 }
 
-function DeepScene({ d, c }: { d: DemoContent; c: DemoContent["l"] }) {
+function DeepScene({ d, c, lang }: { d: DemoContent; c: DemoContent["l"]; lang: string }) {
   return (
     <div className="wb-demo-anim-scene">
       <div className="wb-demo-anim-word" style={{ animationDelay: "0ms" }}>
@@ -2947,7 +2948,7 @@ function DeepScene({ d, c }: { d: DemoContent; c: DemoContent["l"] }) {
       </div>
 
       <div className="wb-demo-anim-fineprint" style={{ animationDelay: "2400ms" }}>
-        {c.plusClear}
+        {planCopy(lang, "demoPlusMore")}
       </div>
     </div>
   );

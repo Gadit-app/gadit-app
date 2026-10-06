@@ -13,8 +13,8 @@ export function summaryHe(opts: { displayName?: string; unsubscribeUrl: string }
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 16px;">בשבועיים האחרונים למדנו להכיר את הצדדים השונים של מילה. את כל המשמעויות שלה, ואת ההיסטוריה שלה.</p>
     <p style="margin:0 0 16px;">לצד זה, הכרנו את היכולות שהופכות את Gadit לכלי שיכול להעמיק את ההבנה: מצב ילדים, ויצירת תמונה לצד המילה.</p>
-    <p style="margin:0 0 16px;">חלק מהיכולות פתוחות לכל משתמש, וחלק נפתחות במסלולים <strong>Clear</strong> ו-<strong>Deep</strong>. שם יש חיפושים בלי הגבלה, תמונות, חיבור משפט, ותרגול חכם של חידונים ומשחקי מילים. אם Gadit הפכה לחלק מהיומיום, אלה היכולות שעושות את ההבדל.</p>
-    <p style="margin:0 0 16px;">ולמנויי <strong>Clear</strong> ו-<strong>Deep</strong> יש גם לינק אישי שמזכה אותך בעמלה על כל מי שנרשם דרכו. דרך נוחה לחלוק עם חברים, וגם להרוויח בדרך.</p>
+    <p style="margin:0 0 16px;">חלק מהיכולות פתוחות לכל משתמש, וחלק נפתחות במסלול <strong>Individual</strong>. שם יש חיפושים בלי הגבלה, תמונות, חיבור משפט, ותרגול חכם של חידונים ומשחקי מילים. אם Gadit הפכה לחלק מהיומיום, אלה היכולות שעושות את ההבדל.</p>
+    <p style="margin:0 0 16px;">ויש לנו גם תוכנית שותפים: לינק אישי שמזכה אותך בעמלה על כל מי שנרשם ומשלם דרכו. דרך נוחה לחלוק עם חברים, וגם להרוויח בדרך.</p>
   `;
 
   const signature = `
@@ -30,7 +30,7 @@ export function summaryHe(opts: { displayName?: string; unsubscribeUrl: string }
     html: layoutHe({
       preheader: "סיכום המסע, ושתי דרכים להמשיך מכאן.",
       bodyHtml,
-      ctaText: "להכיר את Clear ו-Deep",
+      ctaText: "להכיר את Individual",
       ctaUrl: "https://www.gadit.app/he/pricing?utm_source=email&utm_medium=drip&utm_campaign=summary",
       unsubscribeUrl: opts.unsubscribeUrl,
       signature,

@@ -343,7 +343,7 @@ export function accountSteps(lang: Lang): WalkStep[] {
           <div style={{ border: `2px solid ${WT.teal}`, borderRadius: 12 }}>
             <Row icon="👨‍👩‍👧" label={gt(lang, "ui.planFamily")} iconBg="#EAF6F3" trailing={<span style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: WT.teal, borderRadius: 999, padding: "5px 12px" }}>{gt(lang, "ui.upgrade")}</span>} />
           </div>
-          <Row icon="🟣" label="Deep" iconBg="#F1EBFD" trailing={<span style={{ fontSize: 12.5, fontWeight: 700, color: WT.muted, border: `1px solid ${WT.line}`, borderRadius: 999, padding: "5px 12px" }}>{gt(lang, "ui.upgrade")}</span>} />
+          <Row icon="🟣" label="Individual" iconBg="#F1EBFD" trailing={<span style={{ fontSize: 12.5, fontWeight: 700, color: WT.muted, border: `1px solid ${WT.line}`, borderRadius: 999, padding: "5px 12px" }}>{gt(lang, "ui.upgrade")}</span>} />
         </Screen>
       ),
     },

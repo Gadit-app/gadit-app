@@ -48,6 +48,7 @@ export function featureNames(lang) {
     notebook: v2key("navNotebook"),
     idioms: v2key("idiomsEyebrow"),
     origin: v2key("wordOriginEyebrow"),
+    toFamily: v2key("accountUpgradeToFamily"),
   };
   const c = cache;
   const pick = (t) => t[lang] ?? t.en;
@@ -60,6 +61,7 @@ export function featureNames(lang) {
     "Notebook": pick(c.notebook),
     "Idioms and phrases": pick(c.idioms),
     "Word origin": pick(c.origin),
+    "Switch to Family (account button)": pick(c.toFamily),
   };
 }
 

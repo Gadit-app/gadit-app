@@ -7,6 +7,7 @@
  * paired with the tier badge that unlocks it.
  */
 
+import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 import Link from "next/link";
@@ -144,7 +145,8 @@ type GroupKey = "understand" | "learn" | "master";
 
 const FEATURE_GROUPS: Record<GroupKey, Feature["id"][]> = {
   understand: ["definitions", "examples", "idioms", "origin"],
-  learn:      ["kids", "image", "notebook", "compose"],
+  // Kids Mode moved to the Family group (Gadi 2026-10-06).
+  learn:      ["image", "notebook", "compose"],
   master:     ["quiz", "compare"],
 };
 
@@ -2278,7 +2280,8 @@ export function FeaturesPage() {
               <div key={groupKey} className={`wb-feat-group wb-feat-group-${groupTier}`}>
                 <div className="wb-feat-group-head">
                   <span className={`wb-feat-tier-chip wb-feat-tier-chip-${groupTier}`}>
-                    {c.tierLabel[groupTier]}
+                    {/* Clear and Deep are one Individual plan now. */}
+                    {groupTier === "basic" ? c.tierLabel.basic : "Individual"}
                   </span>
                   <h2 className="wb-feat-group-title">{gc.groupTitles[groupKey]}</h2>
                   <p className="wb-feat-group-sub">{gc.groupSubs[groupKey]}</p>
@@ -2317,7 +2320,11 @@ export function FeaturesPage() {
               <p className="wb-feat-group-sub">{gc.family.sub}</p>
             </div>
             <div className="wb-feat-group-cards">
-              {gc.family.features.map((f) => {
+              {[
+                // Kids Mode is a Family tool: its card leads the Family group.
+                ...c.list.filter((f) => f.id === "kids").map((f) => ({ id: f.id, icon: f.icon, title: f.title, body: f.body })),
+                ...gc.family.features.map((f) => (f.id === "people" ? { ...f, body: planCopy(lang, "featFamPeople") } : f)),
+              ].map((f) => {
                 const t = TIER_COLOR.family;
                 return (
                   <article key={f.id} className="wb-feat-card">

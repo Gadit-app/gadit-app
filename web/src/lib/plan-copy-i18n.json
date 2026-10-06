@@ -42,7 +42,18 @@
   "audMe": "ed02ae29",
   "audChild": "c36f4aab",
   "audClass": "61138f51",
-  "audSkip": "3da47453"
+  "audSkip": "3da47453",
+  "featFamPeople": "1b88a467",
+  "demoPlusMore": "e68de3f9",
+  "partnersCalcNote": "f4411847",
+  "helpSwitchQ": "90659703",
+  "helpSwitchA1": "4f16e568",
+  "helpSwitchA2": "aebb740f",
+  "helpChargeA1": "57e63ef3",
+  "helpCompareQ": "66a41de0",
+  "helpCompareA1": "17e480ad",
+  "helpCompareA2": "dd86b368",
+  "helpCompareA3": "f958da39"
  },
  "ar": {
   "nbFreeCount": "{n} من {max} كلمة في الدفتر المجاني",
@@ -87,7 +98,18 @@
   "audMe": "لي",
   "audChild": "لطفلي",
   "audClass": "لفصل أو مدرسة",
-  "audSkip": "تخطي"
+  "audSkip": "تخطي",
+  "featFamPeople": "كل طفل يحصل على كل الأدوات، مع وضع أطفال. ويدفع ولي الأمر مرة واحدة للعائلة كلها.",
+  "demoPlusMore": "والمزيد: اختبارات وألعاب ومقارنة الكلمات",
+  "partnersCalcNote": "تقدير مبني على خطة Individual ونسبة 25%. عملاء الاشتراك السنوي وFamily وSchools يرفعونه.",
+  "helpSwitchQ": "كيف أبدّل إلى Family؟",
+  "helpSwitchA1": "افتح صفحة الحساب واضغط على \"التبديل إلى Family\". يتم تحديث اشتراكك الحالي على البطاقة نفسها، من دون إدخالها مرة أخرى.",
+  "helpSwitchA2": "يحسب Stripe الفرق حسب الأيام المتبقية في الفترة الحالية، لذلك تدفع فقط الفرق.",
+  "helpChargeA1": "تظهر الرسوم باسم GADIT أو GADIT.APP. تكلفة Individual هي $3.99 شهريًا أو $39.99 سنويًا، وFamily هي $5.99 شهريًا أو $59 سنويًا. في إسرائيل تكون الرسوم بالشيكل: ₪14.90 أو ₪149 لـ Individual، و₪19.90 أو ₪199 لـ Family. الاشتراكات التي بدأت قبل أكتوبر 2026 تحتفظ بالسعر الذي بدأت به. إذا لم يطابق المبلغ ذلك، فقد يكون من خدمة أخرى.",
+  "helpCompareQ": "ما الفرق بين Basic وIndividual وFamily؟",
+  "helpCompareA1": "Basic (مجانًا): حتى 10 عمليات بحث عن الكلمات يوميًا، كل المعاني، أمثلة، تعابير وعبارات، أصل الكلمة، والدفتر حتى 30 كلمة.",
+  "helpCompareA2": "Individual ($3.99 شهريًا أو $39.99 سنويًا، ₪14.90 أو ₪149 في إسرائيل): لشخص واحد، مع كل الأدوات. بحث غير محدود، صورة لكل معنى، المعنى الصحيح من الجملة، كل كلمة، قلها، اكتب جملة مع ملاحظات، تدريب ذكي، ألعاب واختبارات، ومقارنة الكلمات المتشابهة.",
+  "helpCompareA3": "Family ($5.99 شهريًا أو $59 سنويًا، ₪19.90 أو ₪199 في إسرائيل): كل ما في Individual لما يصل إلى 5 أطفال وكلا الوالدين، بالإضافة إلى وضع أطفال، ومساحة خاصة لكل طفل، ولوحة الوالدين مع تنبيهات الكلمات، وإملاء."
  },
  "ru": {
   "nbFreeCount": "{n} из {max} слов в твоей бесплатной тетради",
@@ -132,7 +154,18 @@
   "audMe": "Для меня",
   "audChild": "Для моего ребёнка",
   "audClass": "Для класса или школы",
-  "audSkip": "Пропустить"
+  "audSkip": "Пропустить",
+  "featFamPeople": "У каждого ребёнка есть все инструменты и режим Дети. Родитель платит один раз за всю семью.",
+  "demoPlusMore": "И ещё: тесты, игры и сравнение слов",
+  "partnersCalcNote": "Оценка по плану Individual и ставке 25%. Клиенты с годовыми планами, Family и Schools повышают её.",
+  "helpSwitchQ": "Как перейти на Family?",
+  "helpSwitchA1": "Открой страницу аккаунта и нажми «Перейти на Family». Твоя текущая подписка обновится на той же карте, без повторного ввода данных.",
+  "helpSwitchA2": "Stripe сам посчитает разницу за оставшиеся дни текущего периода, так что ты оплатишь только разницу.",
+  "helpChargeA1": "Списание отображается как GADIT или GADIT.APP. Individual стоит $3.99 в месяц или $39.99 в год, а Family - $5.99 в месяц или $59 в год. В Израиле списание в шекелях: ₪14.90 или ₪149 за Individual, ₪19.90 или ₪199 за Family. Подписки, оформленные до октября 2026 года, сохраняют цену на момент оформления. Если сумма не совпадает, возможно, это другой сервис.",
+  "helpCompareQ": "Чем отличаются Basic, Individual и Family?",
+  "helpCompareA1": "Basic (бесплатно): до 10 поисков слов в день, все значения, примеры, Идиомы и выражения, Происхождение слова и Тетрадь до 30 слов.",
+  "helpCompareA2": "Individual ($3.99 в месяц или $39.99 в год, ₪14.90 или ₪149 в Израиле): один человек, все инструменты. Безлимитный поиск, картинка к каждому значению, выбор нужного значения по предложению, Каждое слово, Скажи это, Составить предложение с обратной связью, умная практика, игры, тесты и сравнение похожих слов.",
+  "helpCompareA3": "Family ($5.99 в месяц или $59 в год, ₪19.90 или ₪199 в Израиле): всё из Individual для 5 детей и обоих родителей, плюс режим Дети, отдельное пространство для каждого ребёнка, родительская панель с оповещениями о словах и Диктант."
  },
  "es": {
   "nbFreeCount": "{n} de {max} palabras en tu Cuaderno gratis",
@@ -177,7 +210,18 @@
   "audMe": "Para mí",
   "audChild": "Para mi hijo",
   "audClass": "Para una clase o un colegio",
-  "audSkip": "Omitir"
+  "audSkip": "Omitir",
+  "featFamPeople": "Cada niño tiene todas las herramientas, con el modo Niños. La madre o el padre paga una vez por toda la familia.",
+  "demoPlusMore": "Y más: tests, juegos y comparación de palabras",
+  "partnersCalcNote": "Estimación basada en el plan Individual y una tasa del 25%. Los clientes de anual, Family y Schools la aumentan.",
+  "helpSwitchQ": "¿Cómo cambio a Family?",
+  "helpSwitchA1": "Abre tu página de Cuenta y toca \"Cambiar a Family\". Tu suscripción actual se actualiza en la misma tarjeta, sin volver a introducirla.",
+  "helpSwitchA2": "Stripe calcula la diferencia por los días que quedan del período actual, así que solo pagas la diferencia.",
+  "helpChargeA1": "Los cargos aparecen como GADIT o GADIT.APP. Individual cuesta 3,99 $ al mes o 39,99 $ al año, y Family 5,99 $ al mes o 59 $ al año. En Israel el cargo es en séqueles: ₪14.90 o ₪149 para Individual, ₪19.90 o ₪199 para Family. Las suscripciones de antes de octubre de 2026 mantienen el precio con el que empezaron. Si el importe no coincide, puede ser de otro servicio.",
+  "helpCompareQ": "¿Qué diferencia hay entre Basic, Individual y Family?",
+  "helpCompareA1": "Basic (gratis): hasta 10 búsquedas de palabras al día, todos los significados, ejemplos, Modismos y expresiones, Origen de la palabra y un Cuaderno de hasta 30 palabras.",
+  "helpCompareA2": "Individual (3,99 $ al mes o 39,99 $ al año, ₪14.90 o ₪149 en Israel): una persona, todas las herramientas. Búsquedas ilimitadas, una imagen para cada significado, el significado correcto a partir de una frase, Cada palabra, Dilo, Componer una oración con comentarios, práctica inteligente, juegos, tests y comparación de palabras parecidas.",
+  "helpCompareA3": "Family (5,99 $ al mes o 59 $ al año, ₪19.90 o ₪199 en Israel): todo lo de Individual para hasta 5 niños y ambos padres, más el modo Niños, un espacio propio para cada niño, el panel para madres y padres con alertas de palabras y Ortografía."
  },
  "pt": {
   "nbFreeCount": "{n} de {max} palavras no teu Caderno gratuito",
@@ -222,7 +266,18 @@
   "audMe": "Para mim",
   "audChild": "Para o meu filho",
   "audClass": "Para uma turma ou uma escola",
-  "audSkip": "Ignorar"
+  "audSkip": "Ignorar",
+  "featFamPeople": "Cada criança tem todas as ferramentas, com o modo Crianças. O adulto paga uma vez por toda a família.",
+  "demoPlusMore": "E mais: quizzes, jogos e comparar palavras",
+  "partnersCalcNote": "Estimativa com base no plano Individual e numa taxa de 25%. Os clientes anuais, Family e Schools aumentam esse valor.",
+  "helpSwitchQ": "Como mudo para Family?",
+  "helpSwitchA1": "Abre a página da tua conta e toca em \"Mudar para Family\". A tua subscrição atual é atualizada no mesmo cartão, sem precisares de o voltar a introduzir.",
+  "helpSwitchA2": "A Stripe calcula a diferença pelos dias que faltam no período atual, por isso só pagas a diferença.",
+  "helpChargeA1": "As cobranças aparecem como GADIT ou GADIT.APP. Individual custa US$3,99 por mês ou US$39,99 por ano, e Family custa US$5,99 por mês ou US$59 por ano. Em Israel, a cobrança é em shekels: ₪14.90 ou ₪149 para Individual, ₪19.90 ou ₪199 para Family. As subscrições anteriores a outubro de 2026 mantêm o preço com que começaram. Se o valor não corresponder, pode ser de outro serviço.",
+  "helpCompareQ": "Qual é a diferença entre Basic, Individual e Family?",
+  "helpCompareA1": "Basic (grátis): até 10 pesquisas de palavras por dia, todos os significados, exemplos, Expressões idiomáticas, Origem da palavra e um Caderno com até 30 palavras.",
+  "helpCompareA2": "Individual (US$3,99 por mês ou US$39,99 por ano, ₪14.90 ou ₪149 em Israel): uma pessoa, todas as ferramentas. Pesquisas ilimitadas, uma imagem para cada significado, o significado certo a partir de uma frase, Cada palavra, Diga, Compor uma frase com feedback, prática inteligente, jogos e quizzes, e comparar palavras parecidas.",
+  "helpCompareA3": "Family (US$5,99 por mês ou US$59 por ano, ₪19.90 ou ₪199 em Israel): tudo o que há no Individual para até 5 crianças e ambos os pais, mais o modo Crianças, um espaço próprio para cada criança, o painel dos pais com alertas de palavras e Ortografia."
  },
  "fr": {
   "nbFreeCount": "{n} mots sur {max} dans ton carnet gratuit",
@@ -267,7 +322,18 @@
   "audMe": "Pour moi",
   "audChild": "Pour mon enfant",
   "audClass": "Pour une classe ou une école",
-  "audSkip": "Passer"
+  "audSkip": "Passer",
+  "featFamPeople": "Avec le mode Enfants, chaque enfant a tous les outils. Le parent paie une seule fois pour toute la famille.",
+  "demoPlusMore": "Et aussi : quiz, jeux et comparaison de mots",
+  "partnersCalcNote": "Estimation basée sur le plan Individual et un taux de 25 %. Les clients annuels, Family et Schools l’augmentent.",
+  "helpSwitchQ": "Comment passer à Family ?",
+  "helpSwitchA1": "Ouvre la page Compte et touche « Passer à Family ». Ton abonnement actuel est mis à jour sur la même carte, sans avoir à la saisir de nouveau.",
+  "helpSwitchA2": "Stripe calcule la différence pour les jours restants de la période en cours, donc tu ne paies que la différence.",
+  "helpChargeA1": "Les paiements apparaissent comme GADIT ou GADIT.APP. Individual coûte 3,99 $ par mois ou 39,99 $ par an, et Family 5,99 $ par mois ou 59 $ par an. En Israël, le paiement est en shekels : 14,90 ₪ ou 149 ₪ pour Individual, 19,90 ₪ ou 199 ₪ pour Family. Les abonnements commencés avant octobre 2026 gardent leur prix de départ. Si le montant ne correspond pas, il vient peut-être d’un autre service.",
+  "helpCompareQ": "Quelle est la différence entre Basic, Individual et Family ?",
+  "helpCompareA1": "Basic (gratuit) : jusqu’à 10 recherches de mots par jour, tous les sens, des exemples, les Idiomes et expressions, l’Origine du mot, et un Carnet de 30 mots maximum.",
+  "helpCompareA2": "Individual (3,99 $ par mois ou 39,99 $ par an, 14,90 ₪ ou 149 ₪ en Israël) : une personne, tous les outils. Recherches illimitées, une image pour chaque sens, le bon sens à partir d’une phrase, Chaque mot, Dis-le, Composer une phrase avec retour, entraînement intelligent, jeux et quiz, et comparaison de mots proches.",
+  "helpCompareA3": "Family (5,99 $ par mois ou 59 $ par an, 19,90 ₪ ou 199 ₪ en Israël) : tout ce qu’il y a dans Individual pour jusqu’à 5 enfants et les deux parents, plus le mode Enfants, un espace à part pour chaque enfant, le tableau parent avec alertes de mots, et Dictée."
  },
  "de": {
   "nbFreeCount": "{n} von {max} Wörtern in deinem kostenlosen Notizbuch",
@@ -312,7 +378,18 @@
   "audMe": "Für mich",
   "audChild": "Für mein Kind",
   "audClass": "Für eine Klasse oder eine Schule",
-  "audSkip": "Überspringen"
+  "audSkip": "Überspringen",
+  "featFamPeople": "Jedes Kind bekommt jedes Tool - mit Kinder-Modus. Die Eltern zahlen einmal für die ganze Familie.",
+  "demoPlusMore": "Und mehr: Quizze, Spiele und ähnliche Wörter vergleichen",
+  "partnersCalcNote": "Schätzung auf Basis des Individual-Abos und eines Satzes von 25 %. Kund:innen mit Jahresabo, Family und Schools erhöhen ihn.",
+  "helpSwitchQ": "Wie wechsle ich zu Family?",
+  "helpSwitchA1": "Öffne deine Kontoseite und tippe auf „Zu Family wechseln“. Dein aktuelles Abo wird auf derselben Karte aktualisiert, ohne dass du sie noch mal eingeben musst.",
+  "helpSwitchA2": "Stripe berechnet die Differenz für die verbleibenden Tage im aktuellen Zeitraum, du zahlst also nur die Differenz.",
+  "helpChargeA1": "Belastungen erscheinen als GADIT oder GADIT.APP. Individual kostet 3,99 $ im Monat oder 39,99 $ im Jahr, Family 5,99 $ im Monat oder 59 $ im Jahr. In Israel erfolgt die Abbuchung in Schekel: 14,90 ₪ oder 149 ₪ für Individual, 19,90 ₪ oder 199 ₪ für Family. Abos von vor Oktober 2026 behalten den Preis, mit dem sie begonnen haben. Wenn der Betrag nicht passt, stammt er vielleicht von einem anderen Dienst.",
+  "helpCompareQ": "Was ist der Unterschied zwischen Basic, Individual und Family?",
+  "helpCompareA1": "Basic (kostenlos): bis zu 10 Wörternachschläge pro Tag, jede Bedeutung, Beispiele, Redewendungen & Ausdrücke, Wortursprung und ein Notizbuch mit bis zu 30 Wörtern.",
+  "helpCompareA2": "Individual (3,99 $ im Monat oder 39,99 $ im Jahr, 14,90 ₪ oder 149 ₪ in Israel): eine Person, jedes Tool. Unbegrenzte Nachschläge, ein Bild zu jeder Bedeutung, die richtige Bedeutung aus einem Satz, Jedes Wort, Sag es, Satz schreiben mit Feedback, smartes Üben, Spiele und Quizze sowie das Vergleichen ähnlicher Wörter.",
+  "helpCompareA3": "Family (5,99 $ im Monat oder 59 $ im Jahr, 19,90 ₪ oder 199 ₪ in Israel): alles aus Individual für bis zu 5 Kinder und beide Eltern, plus Kinder-Modus, ein eigener Bereich für jedes Kind, das Eltern-Dashboard mit Worthinweisen und Diktat."
  },
  "cs": {
   "nbFreeCount": "{n} z {max} slov ve tvém bezplatném Sešitu",
@@ -357,7 +434,18 @@
   "audMe": "Pro mě",
   "audChild": "Pro moje dítě",
   "audClass": "Pro třídu nebo školu",
-  "audSkip": "Přeskočit"
+  "audSkip": "Přeskočit",
+  "featFamPeople": "Každé dítě má se zapnutým režimem Děti všechny nástroje. Rodič zaplatí jednou za celou rodinu.",
+  "demoPlusMore": "A ještě víc: kvízy, hry a porovnávání slov",
+  "partnersCalcNote": "Odhad vychází z plánu Individual a sazby 25 %. U ročních plánů a zákazníků Family a Schools je vyšší.",
+  "helpSwitchQ": "Jak přejdu na Family?",
+  "helpSwitchA1": "Otevři stránku Účet a klepni na „Přejít na Family“. Tvoje současné předplatné se aktualizuje na stejné kartě, bez dalšího zadávání.",
+  "helpSwitchA2": "Stripe spočítá rozdíl za zbývající dny v aktuálním období, takže zaplatíš jen rozdíl.",
+  "helpChargeA1": "Platby se zobrazují jako GADIT nebo GADIT.APP. Individual stojí 3,99 $ měsíčně nebo 39,99 $ ročně a Family 5,99 $ měsíčně nebo 59 $ ročně. V Izraeli se platba účtuje v šekelech: 14,90 ₪ nebo 149 ₪ za Individual, 19,90 ₪ nebo 199 ₪ za Family. Předplatná uzavřená před říjnem 2026 si ponechávají původní cenu. Pokud částka nesedí, může jít o jinou službu.",
+  "helpCompareQ": "Jaký je rozdíl mezi Basic, Individual a Family?",
+  "helpCompareA1": "Basic (zdarma): až 10 vyhledání slov denně, všechny významy, příklady, Idiomy a výrazy, Původ slova a Sešit až pro 30 slov.",
+  "helpCompareA2": "Individual (3,99 $ měsíčně nebo 39,99 $ ročně, v Izraeli 14,90 ₪ nebo 149 ₪): pro jednu osobu, všechny nástroje. Neomezené vyhledávání, obrázek ke každému významu, správný význam podle věty, Každé slovo, Řekni to, Napsat větu se zpětnou vazbou, chytré procvičování, hry a kvízy a porovnávání podobných slov.",
+  "helpCompareA3": "Family (5,99 $ měsíčně nebo 59 $ ročně, v Izraeli 19,90 ₪ nebo 199 ₪): všechno z Individual až pro 5 dětí a oba rodiče, navíc režim Děti, vlastní prostor pro každé dítě, rodičovský přehled s upozorněními na slova a Diktát."
  },
  "sk": {
   "nbFreeCount": "{n} z {max} slov v tvojom bezplatnom zošite",
@@ -402,7 +490,18 @@
   "audMe": "Pre mňa",
   "audChild": "Pre moje dieťa",
   "audClass": "Pre triedu alebo školu",
-  "audSkip": "Preskočiť"
+  "audSkip": "Preskočiť",
+  "featFamPeople": "Každé dieťa dostane všetky nástroje, s režimom Deti. Rodič zaplatí raz za celú rodinu.",
+  "demoPlusMore": "A ešte viac: kvízy, hry a porovnávanie slov",
+  "partnersCalcNote": "Odhad podľa plánu Individual a sadzby 25 %. Viac prinášajú zákazníci s plánmi Yearly, Family a Schools.",
+  "helpSwitchQ": "Ako prejdem na Family?",
+  "helpSwitchA1": "Otvor stránku Účet a ťukni na „Prejsť na Family“. Tvoje aktuálne predplatné sa aktualizuje na tej istej karte, bez toho, aby si ju zadával znova.",
+  "helpSwitchA2": "Stripe vypočíta rozdiel za dni, ktoré zostávajú v aktuálnom období, takže zaplatíš len rozdiel.",
+  "helpChargeA1": "Platby sa zobrazujú ako GADIT alebo GADIT.APP. Individual stojí 3,99 USD mesačne alebo 39,99 USD ročne a Family 5,99 USD mesačne alebo 59 USD ročne. V Izraeli je platba v šekeloch: 14,90 ₪ alebo 149 ₪ za Individual, 19,90 ₪ alebo 199 ₪ za Family. Predplatné spustené pred októbrom 2026 si nechávajú cenu, s ktorou začali. Ak suma nesedí, môže ísť o inú službu.",
+  "helpCompareQ": "Aký je rozdiel medzi Basic, Individual a Family?",
+  "helpCompareA1": "Basic (zadarmo): až 10 vyhľadaní slov denne, všetky významy, príklady, Idiómy a výrazy, Pôvod slova a Zošit až na 30 slov.",
+  "helpCompareA2": "Individual (3,99 USD mesačne alebo 39,99 USD ročne, v Izraeli 14,90 ₪ alebo 149 ₪): pre jedného, všetky nástroje. Neobmedzené vyhľadávanie, obrázok ku každému významu, správny význam podľa vety, Každé slovo, Povedz to, Napísať vetu so spätnou väzbou, inteligentné precvičovanie, hry a kvízy a porovnávanie podobných slov.",
+  "helpCompareA3": "Family (5,99 USD mesačne alebo 59 USD ročne, v Izraeli 19,90 ₪ alebo 199 ₪): všetko z Individual až pre 5 detí a oboch rodičov, navyše režim Deti, vlastný priestor pre každé dieťa, rodičovský panel s upozorneniami na slová a Diktát."
  },
  "it": {
   "nbFreeCount": "{n} di {max} parole nel tuo Quaderno gratuito",
@@ -447,7 +546,18 @@
   "audMe": "Per me",
   "audChild": "Per mio figlio",
   "audClass": "Per una classe o una scuola",
-  "audSkip": "Salta"
+  "audSkip": "Salta",
+  "featFamPeople": "Con Bambini, ogni bambino ha tutti gli strumenti. Il genitore paga una sola volta per tutta la famiglia.",
+  "demoPlusMore": "E altro ancora: quiz, giochi e confronto tra parole",
+  "partnersCalcNote": "Stima basata sul piano Individual e su una tariffa del 25%. I clienti con piano annuale, Family e Schools la aumentano.",
+  "helpSwitchQ": "Come faccio a passare a Family?",
+  "helpSwitchA1": "Apri la pagina Account e tocca \"Passa a Family\". Il tuo abbonamento attuale viene aggiornato sulla stessa carta, senza reinserirla.",
+  "helpSwitchA2": "Stripe calcola la differenza per i giorni rimanenti del periodo attuale, quindi paghi solo la differenza.",
+  "helpChargeA1": "Gli addebiti compaiono come GADIT o GADIT.APP. Individual costa 3,99 $ al mese o 39,99 $ all'anno, e Family 5,99 $ al mese o 59 $ all'anno. In Israele l'addebito è in shekel: 14,90 ₪ o 149 ₪ per Individual, 19,90 ₪ o 199 ₪ per Family. Gli abbonamenti attivati prima di ottobre 2026 mantengono il prezzo iniziale. Se l'importo non corrisponde, potrebbe riferirsi a un altro servizio.",
+  "helpCompareQ": "Che differenza c'è tra Basic, Individual e Family?",
+  "helpCompareA1": "Basic (gratis): fino a 10 ricerche di parole al giorno, tutti i significati, esempi, Modi di dire ed espressioni, Origine della parola e un Quaderno con fino a 30 parole.",
+  "helpCompareA2": "Individual (3,99 $ al mese o 39,99 $ all'anno, 14,90 ₪ o 149 ₪ in Israele): per una persona, con tutti gli strumenti. Ricerche illimitate, un'immagine per ogni significato, il significato giusto da una frase, Ogni parola, Dillo, Scrivi una frase con feedback, esercizi intelligenti, giochi e quiz, e confronto tra parole simili.",
+  "helpCompareA3": "Family (5,99 $ al mese o 59 $ all'anno, 19,90 ₪ o 199 ₪ in Israele): tutto quello che c'è in Individual per fino a 5 bambini e entrambi i genitori, più la modalità Bambini, uno spazio dedicato per ogni bambino, il pannello del genitore con avvisi sulle parole e Ortografia."
  },
  "ja": {
   "nbFreeCount": "無料のノート: {max}語中{n}語",
@@ -492,7 +602,18 @@
   "audMe": "自分向け",
   "audChild": "子ども向け",
   "audClass": "クラスや学校向け",
-  "audSkip": "スキップ"
+  "audSkip": "スキップ",
+  "featFamPeople": "子どもモードで、どの子もすべての機能を使えます。支払いは親が家族分をまとめて1回だけ。",
+  "demoPlusMore": "そのほかにも、クイズ、ゲーム、単語の比較など",
+  "partnersCalcNote": "Individualプランと25%の料率をもとにした見積もりです。年額、Family、Schoolsの利用者はこれを上げます。",
+  "helpSwitchQ": "Familyに切り替えるには？",
+  "helpSwitchA1": "アカウントページを開いて「Familyに切り替え」をタップしてね。今のサブスクが同じカードで更新されるので、再入力は不要です。",
+  "helpSwitchA2": "今の利用期間の残り日数ぶんの差額はStripeが計算するので、支払うのは差額だけです。",
+  "helpChargeA1": "請求にはGADITまたはGADIT.APPと表示されます。Individualは月額$3.99または年額$39.99、Familyは月額$5.99または年額$59です。イスラエルではシェケルで請求されます。Individualは₪14.90または₪149、Familyは₪19.90または₪199です。2026年10月より前のサブスクは、開始時の料金のままです。金額が一致しない場合は、別のサービスの請求かもしれません。",
+  "helpCompareQ": "Basic、Individual、Familyの違いは？",
+  "helpCompareA1": "Basic（無料）: 1日10回まで単語を調べられます。すべての意味、例文、イディオムと表現、語源、最大30語のノートが使えます。",
+  "helpCompareA2": "Individual（月額$3.99または年額$39.99、イスラエルでは₪14.90または₪149）: 1人用、すべての機能が使えます。検索回数は無制限。すべての意味の画像、文に合う意味の判定、すべての単語、言ってみて、フィードバック付きの文を書く、スマート練習、ゲームとクイズ、似た単語の比較が使えます。",
+  "helpCompareA3": "Family（月額$5.99または年額$59、イスラエルでは₪19.90または₪199）: Individualの全機能を、子ども5人までと両親2人で使えます。さらに、子どもモード、子どもごとの専用スペース、単語アラート付きの保護者ボード、書き取りも使えます。"
  },
  "hi": {
   "nbFreeCount": "तुम्हारी मुफ्त नोटबुक में {max} में से {n} शब्द",
@@ -537,7 +658,18 @@
   "audMe": "मेरे लिए",
   "audChild": "मेरे बच्चे के लिए",
   "audClass": "किसी कक्षा या स्कूल के लिए",
-  "audSkip": "छोड़ें"
+  "audSkip": "छोड़ें",
+  "featFamPeople": "हर बच्चे को बच्चे मोड के साथ हर टूल मिलता है. पूरे परिवार के लिए माता-पिता एक बार भुगतान करते हैं.",
+  "demoPlusMore": "और भी: क्विज़, गेम और शब्दों की तुलना",
+  "partnersCalcNote": "अनुमान Individual प्लान और 25% दर पर आधारित है. Yearly, Family और Schools ग्राहक इसे बढ़ाते हैं.",
+  "helpSwitchQ": "मैं Family में कैसे बदलूं?",
+  "helpSwitchA1": "अपना Account पेज खोलें और \"Family में बदलें\" पर टैप करें. आपका मौजूदा सब्सक्रिप्शन उसी कार्ड पर अपडेट हो जाएगा, उसे फिर से डाले बिना.",
+  "helpSwitchA2": "मौजूदा अवधि में बचे दिनों का अंतर Stripe अपने आप निकालता है, इसलिए आप सिर्फ अंतर ही चुकाते हैं.",
+  "helpChargeA1": "चार्ज GADIT या GADIT.APP के नाम से दिखते हैं. Individual की कीमत $3.99 महीना या $39.99 सालाना है, और Family की $5.99 महीना या $59 सालाना. Israel में चार्ज शेकेल में होता है: Individual के लिए ₪14.90 या ₪149, Family के लिए ₪19.90 या ₪199. October 2026 से पहले लिए गए सब्सक्रिप्शन उसी कीमत पर बने रहते हैं जिस पर वे शुरू हुए थे. अगर रकम मेल नहीं खाती, तो वह किसी दूसरी सेवा की हो सकती है.",
+  "helpCompareQ": "Basic, Individual और Family में क्या फर्क है?",
+  "helpCompareA1": "Basic (मुफ्त): दिन में 10 तक शब्द खोज, हर अर्थ, उदाहरण, मुहावरे और अभिव्यक्तियाँ, शब्द की उत्पत्ति, और 30 शब्दों तक की नोटबुक.",
+  "helpCompareA2": "Individual ($3.99 महीना या $39.99 सालाना, Israel में ₪14.90 या ₪149): एक व्यक्ति, हर टूल. अनलिमिटेड खोज, हर अर्थ के लिए एक तस्वीर, वाक्य से सही अर्थ, हर शब्द, कहो, फीडबैक के साथ एक वाक्य लिखें, स्मार्ट प्रैक्टिस, गेम और क्विज़, और मिलते-जुलते शब्दों की तुलना.",
+  "helpCompareA3": "Family ($5.99 महीना या $59 सालाना, Israel में ₪19.90 या ₪199): 5 बच्चों और दोनों माता-पिता तक के लिए Individual की हर चीज़, साथ में बच्चे मोड, हर बच्चे के लिए अपनी अलग जगह, शब्द अलर्ट के साथ माता-पिता का बोर्ड, और वर्तनी."
  },
  "am": {
   "nbFreeCount": "በነጻ ደብተርህ ውስጥ {max} ቃላት ከ{n}",
@@ -582,7 +714,18 @@
   "audMe": "ለእኔ",
   "audChild": "ለልጄ",
   "audClass": "ለክፍል ወይም ለትምህርት ቤት",
-  "audSkip": "ዝለል"
+  "audSkip": "ዝለል",
+  "featFamPeople": "እያንዳንዱ ልጅ በልጆች ሞድ ሁሉንም መሣሪያ ያገኛል። ወላጅ ለመላው ቤተሰብ አንድ ጊዜ ብቻ ይከፍላል።",
+  "demoPlusMore": "እና ሌሎችም፦ ጥያቄዎች፣ ጨዋታዎች እና ቃላትን ማወዳደር",
+  "partnersCalcNote": "ግምቱ በIndividual እቅድ እና በ25% መጠን ላይ የተመሠረተ ነው። ዓመታዊ፣ Family እና Schools ደንበኞች ይህን ያሳድጉታል።",
+  "helpSwitchQ": "ወደ Family እንዴት እቀይራለሁ?",
+  "helpSwitchA1": "የአካውንት ገጽህን ክፈትና \"ወደ Family ቀይር\" የሚለውን ንካ። ያለህበት ምዝገባ ያለ ካርዱን ዳግም ሳታስገባ በዚያው ካርድ ላይ ይታደሳል።",
+  "helpSwitchA2": "Stripe በአሁኑ ጊዜ ውስጥ ለቀሩት ቀናት ያለውን ልዩነት ያሰላል፣ ስለዚህ የምትከፍለው ልዩነቱን ብቻ ነው።",
+  "helpChargeA1": "ክፍያዎች እንደ GADIT ወይም GADIT.APP ይታያሉ። Individual በወር $3.99 ወይም በዓመት $39.99 ነው፣ Family ደግሞ በወር $5.99 ወይም በዓመት $59 ነው። በእስራኤል ክፍያው በሸኬል ነው፦ ለIndividual ₪14.90 ወይም ₪149፣ ለFamily ₪19.90 ወይም ₪199። ከኦክቶበር 2026 በፊት የተጀመሩ ምዝገባዎች የጀመሩበትን ዋጋ ይቀጥላሉ። መጠኑ ካልተመሳሰለ፣ ከሌላ አገልግሎት ሊሆን ይችላል።",
+  "helpCompareQ": "Basic፣ Individual እና Family ልዩነታቸው ምንድን ነው?",
+  "helpCompareA1": "Basic (ነጻ)፦ በቀን እስከ 10 የቃል ፍለጋዎች፣ ሁሉም ትርጉሞች፣ ምሳሌዎች፣ ፈሊጦች እና አገላለጾች፣ ሥርወ ቃል፣ እና እስከ 30 ቃላት የሚይዝ ደብተር።",
+  "helpCompareA2": "Individual ($3.99 በወር ወይም $39.99 በዓመት፣ በእስራኤል ₪14.90 ወይም ₪149)፦ ለአንድ ሰው፣ ሁሉንም መሣሪያ። ያልተገደበ ፍለጋ፣ ለእያንዳንዱ ትርጉም ስዕል፣ ከዓረፍተ ነገር ትክክለኛውን ትርጉም ማግኘት፣ እያንዳንዱ ቃል፣ ተናገረው፣ ዓረፍተ ነገር ይጻፉ ከአስተያየት ጋር፣ ብልህ ልምምድ፣ ጨዋታዎች እና ጥያቄዎች፣ እና ተመሳሳይ ቃላትን ማወዳደር።",
+  "helpCompareA3": "Family ($5.99 በወር ወይም $59 በዓመት፣ በእስራኤል ₪19.90 ወይም ₪199)፦ በIndividual ያለው ሁሉ ለእስከ 5 ልጆች እና ለሁለቱም ወላጆች፣ በተጨማሪም ልጆች ሞድ፣ ለእያንዳንዱ ልጅ የራሱ ቦታ፣ ለወላጅ የቃል ማንቂያዎች ያሉበት ፓነል፣ እና ፊደል አጻጻፍ።"
  },
  "uk": {
   "nbFreeCount": "{n} із {max} слів у твоєму безкоштовному Зошиті",
@@ -627,7 +770,18 @@
   "audMe": "Для мене",
   "audChild": "Для моєї дитини",
   "audClass": "Для класу або школи",
-  "audSkip": "Пропустити"
+  "audSkip": "Пропустити",
+  "featFamPeople": "Кожна дитина отримує всі інструменти в режимі Діти. Один із батьків платить один раз за всю сім’ю.",
+  "demoPlusMore": "І ще: тести, ігри й порівняння слів",
+  "partnersCalcNote": "Оцінка на основі плану Individual і ставки 25%. Клієнти з річним, Family і Schools планами підвищують її.",
+  "helpSwitchQ": "Як перейти на Family?",
+  "helpSwitchA1": "Відкрий сторінку облікового запису й натисни \"Перейти на Family\". Твою поточну підписку оновлять на тій самій картці, без повторного введення даних.",
+  "helpSwitchA2": "Stripe сам рахує різницю за дні, що лишилися в поточному періоді, тож ти платиш лише різницю.",
+  "helpChargeA1": "Списання відображаються як GADIT або GADIT.APP. Individual коштує $3.99 на місяць або $39.99 на рік, а Family - $5.99 на місяць або $59 на рік. В Ізраїлі списання в шекелях: ₪14.90 або ₪149 за Individual, ₪19.90 або ₪199 за Family. Підписки, оформлені до жовтня 2026 року, зберігають початкову ціну. Якщо сума не збігається, це може бути інший сервіс.",
+  "helpCompareQ": "Яка різниця між Basic, Individual і Family?",
+  "helpCompareA1": "Basic (безкоштовно): до 10 пошуків слів на день, усі значення, приклади, Ідіоми та вислови, Походження слова і Зошит до 30 слів.",
+  "helpCompareA2": "Individual ($3.99 на місяць або $39.99 на рік, ₪14.90 або ₪149 в Ізраїлі): для однієї людини, усі інструменти. Необмежений пошук, зображення до кожного значення, правильне значення за реченням, Кожне слово, Скажи це, Скласти речення зі зворотним зв’язком, розумна практика, ігри, тести й порівняння схожих слів.",
+  "helpCompareA3": "Family ($5.99 на місяць або $59 на рік, ₪19.90 або ₪199 в Ізраїлі): усе з Individual для до 5 дітей і двох батьків, а ще режим Діти, окремий простір для кожної дитини, батьківська панель зі сповіщеннями про слова та Диктант."
  },
  "tr": {
   "nbFreeCount": "Ücretsiz Defterinde {max} kelimeden {n} tanesi var",
@@ -672,7 +826,18 @@
   "audMe": "Benim için",
   "audChild": "Çocuğum için",
   "audClass": "Bir sınıf veya okul için",
-  "audSkip": "Geç"
+  "audSkip": "Geç",
+  "featFamPeople": "Çocuklar ile her çocuk tüm araçlara erişir. Ebeveyn tüm aile için tek ödeme yapar.",
+  "demoPlusMore": "Ve daha fazlası: testler, oyunlar ve kelimeleri karşılaştırma",
+  "partnersCalcNote": "Hesaplama, Individual planı ve %25 oranına göre tahminidir. Yıllık, Family ve Schools müşterileri bunu artırır.",
+  "helpSwitchQ": "Family'ye nasıl geçerim?",
+  "helpSwitchA1": "Hesap sayfanı aç ve \"Family'ye geç\"e dokun. Mevcut aboneliğin, kartını yeniden girmeden aynı kart üzerinden güncellenir.",
+  "helpSwitchA2": "Stripe, mevcut dönemde kalan günlerin farkını hesaplar, bu yüzden yalnızca farkı ödersin.",
+  "helpChargeA1": "Ödemeler GADIT veya GADIT.APP olarak görünür. Individual aylık $3.99 veya yıllık $39.99, Family ise aylık $5.99 veya yıllık $59'dur. İsrail'de ödeme şekel olarak alınır: Individual için ₪14.90 veya ₪149, Family için ₪19.90 veya ₪199. Ekim 2026'dan önce başlatılan abonelikler, başladıkları fiyatı korur. Tutar uymuyorsa başka bir hizmetten kaynaklanıyor olabilir.",
+  "helpCompareQ": "Basic, Individual ve Family arasındaki fark nedir?",
+  "helpCompareA1": "Basic (ücretsiz): günde en fazla 10 kelime araması, tüm anlamlar, örnekler, Deyimler ve ifadeler, Kelime Kökeni ve en fazla 30 kelimelik bir Defter.",
+  "helpCompareA2": "Individual (aylık $3.99 veya yıllık $39.99, İsrail'de ₪14.90 veya ₪149): tek kişi için, tüm araçlar. Sınırsız arama, her anlam için bir görsel, cümleden doğru anlamı bulma, Her kelime, Söyle, geri bildirimle Bir cümle yaz, akıllı alıştırma, oyunlar ve testler, ayrıca benzer kelimeleri karşılaştırma.",
+  "helpCompareA3": "Family (aylık $5.99 veya yıllık $59, İsrail'de ₪19.90 veya ₪199): 5 çocuğa ve iki ebeveyne kadar Individual'daki her şey, ayrıca Çocuklar modu, her çocuk için ayrı bir alan, kelime bildirimleri olan ebeveyn paneli ve Yazım."
  },
  "pl": {
   "nbFreeCount": "{n} z {max} słów w Twoim darmowym Notatniku",
@@ -717,7 +882,18 @@
   "audMe": "Dla mnie",
   "audChild": "Dla mojego dziecka",
   "audClass": "Dla klasy lub szkoły",
-  "audSkip": "Pomiń"
+  "audSkip": "Pomiń",
+  "featFamPeople": "Każde dziecko dostaje wszystkie narzędzia, z trybem Dzieci. Rodzic płaci raz za całą rodzinę.",
+  "demoPlusMore": "I więcej: quizy, gry i porównywanie słów",
+  "partnersCalcNote": "Szacunek na podstawie planu Individual i stawki 25%. Klienci Yearly, Family i Schools zwiększają tę kwotę.",
+  "helpSwitchQ": "Jak przejść na Family?",
+  "helpSwitchA1": "Otwórz stronę Konto i stuknij „Przejdź na Family”. Twoja obecna subskrypcja zostanie zaktualizowana na tej samej karcie, bez ponownego wpisywania danych.",
+  "helpSwitchA2": "Stripe wylicza różnicę za dni pozostałe w bieżącym okresie, więc płacisz tylko różnicę.",
+  "helpChargeA1": "Opłaty pojawiają się jako GADIT lub GADIT.APP. Individual kosztuje 3,99 USD miesięcznie lub 39,99 USD rocznie, a Family 5,99 USD miesięcznie lub 59 USD rocznie. W Izraelu opłata jest w szeklach: 14,90 ₪ lub 149 ₪ za Individual, 19,90 ₪ lub 199 ₪ za Family. Subskrypcje sprzed października 2026 zachowują cenę, od której się zaczęły. Jeśli kwota się nie zgadza, może pochodzić z innej usługi.",
+  "helpCompareQ": "Jaka jest różnica między Basic, Individual i Family?",
+  "helpCompareA1": "Basic (bezpłatny): do 10 wyszukań słów dziennie, wszystkie znaczenia, przykłady, Idiomy i wyrażenia, Pochodzenie słowa oraz Notatnik do 30 słów.",
+  "helpCompareA2": "Individual (3,99 USD miesięcznie lub 39,99 USD rocznie, w Izraelu 14,90 ₪ lub 149 ₪): jedna osoba, wszystkie narzędzia. Nielimitowane wyszukiwania, obrazek do każdego znaczenia, właściwe znaczenie z kontekstu zdania, Każde słowo, Powiedz to, Ułóż zdanie z informacją zwrotną, inteligentne ćwiczenia, gry i quizy oraz porównywanie podobnych słów.",
+  "helpCompareA3": "Family (5,99 USD miesięcznie lub 59 USD rocznie, w Izraelu 19,90 ₪ lub 199 ₪): wszystko z Individual dla maksymalnie 5 dzieci i obojga rodziców, a do tego tryb Dzieci, osobna przestrzeń dla każdego dziecka, panel rodzica z alertami o słowach oraz Dyktando."
  },
  "fa": {
   "nbFreeCount": "{n} از {max} واژه در دفترچه رایگان تو",
@@ -762,7 +938,18 @@
   "audMe": "برای خودم",
   "audChild": "برای فرزندم",
   "audClass": "برای یک کلاس یا مدرسه",
-  "audSkip": "رد کردن"
+  "audSkip": "رد کردن",
+  "featFamPeople": "با حالت کودکان، هر بچه به همه ابزارها دسترسی دارد. والد یک بار برای کل خانواده پرداخت می‌کند.",
+  "demoPlusMore": "و بیشتر: آزمون‌ها، بازی‌ها و مقایسه واژه‌ها",
+  "partnersCalcNote": "این برآورد بر پایه طرح Individual و نرخ ۲۵٪ است. مشتریان Yearly، Family و Schools آن را بالاتر می‌برند.",
+  "helpSwitchQ": "چطور به Family تغییر بدم؟",
+  "helpSwitchA1": "صفحه Account را باز کن و روی «تغییر به Family» بزن. اشتراک فعلی‌ات روی همان کارت به‌روزرسانی می‌شود و لازم نیست دوباره آن را وارد کنی.",
+  "helpSwitchA2": "Stripe اختلاف مبلغ را بر اساس روزهای باقی‌مانده از دوره فعلی حساب می‌کند، پس فقط تفاوت را می‌پردازی.",
+  "helpChargeA1": "تراکنش‌ها با نام GADIT یا GADIT.APP ثبت می‌شوند. Individual ماهی ۳٫۹۹ دلار یا سالی ۳۹٫۹۹ دلار است و Family ماهی ۵٫۹۹ دلار یا سالی ۵۹ دلار. در اسرائیل مبلغ به شکل شکل است: ۱۴٫۹۰₪ یا ۱۴۹₪ برای Individual، و ۱۹٫۹۰₪ یا ۱۹۹₪ برای Family. اشتراک‌هایی که قبل از اکتبر ۲۰۲۶ شروع شده‌اند، همان قیمت شروع را نگه می‌دارند. اگر مبلغ جور نیست، ممکن است مربوط به سرویس دیگری باشد.",
+  "helpCompareQ": "فرق Basic، Individual و Family چیست؟",
+  "helpCompareA1": "Basic (رایگان): روزی تا ۱۰ جست‌وجوی واژه، همه معنی‌ها، مثال‌ها، اصطلاح‌ها و عبارت‌ها، خاستگاه واژه، و دفترچه‌ای با حداکثر ۳۰ واژه.",
+  "helpCompareA2": "Individual (ماهی ۳٫۹۹ دلار یا سالی ۳۹٫۹۹ دلار، در اسرائیل ۱۴٫۹۰₪ یا ۱۴۹₪): برای یک نفر، با همه ابزارها. جست‌وجوی نامحدود، تصویر برای هر معنی، پیدا کردن معنی درست از روی جمله، هر واژه، بگو، یک جمله بنویس با بازخورد، تمرین هوشمند، بازی‌ها و آزمون‌ها، و مقایسه واژه‌های مشابه.",
+  "helpCompareA3": "Family (ماهی ۵٫۹۹ دلار یا سالی ۵۹ دلار، در اسرائیل ۱۹٫۹۰₪ یا ۱۹۹₪): همه چیزِ Individual برای حداکثر ۵ کودک و هر دو والد، به‌علاوه حالت کودکان، فضای جدا برای هر کودک، پنل والدین با هشدار واژه‌ها، و دیکته."
  },
  "id": {
   "nbFreeCount": "{n} dari {max} kata di Buku Catatan gratismu",
@@ -807,7 +994,18 @@
   "audMe": "Untuk saya",
   "audChild": "Untuk anak saya",
   "audClass": "Untuk kelas atau sekolah",
-  "audSkip": "Lewati"
+  "audSkip": "Lewati",
+  "featFamPeople": "Setiap anak mendapat semua alat, dengan mode Anak. Orang tua membayar sekali untuk seluruh keluarga.",
+  "demoPlusMore": "Dan masih banyak lagi: kuis, game, dan membandingkan kata",
+  "partnersCalcNote": "Perkiraan berdasarkan paket Individual dan tarif 25%. Pelanggan tahunan, Family, dan Schools menaikkannya.",
+  "helpSwitchQ": "Bagaimana cara beralih ke Family?",
+  "helpSwitchA1": "Buka halaman Akunmu lalu ketuk \"Beralih ke Family\". Langgananmu saat ini akan diperbarui di kartu yang sama, tanpa perlu memasukkannya lagi.",
+  "helpSwitchA2": "Stripe menghitung selisih untuk sisa hari dalam periode saat ini, jadi kamu hanya membayar selisihnya.",
+  "helpChargeA1": "Tagihan akan muncul sebagai GADIT atau GADIT.APP. Individual harganya $3.99 per bulan atau $39.99 per tahun, dan Family $5.99 per bulan atau $59 per tahun. Di Israel, tagihan dikenakan dalam shekel: ₪14.90 atau ₪149 untuk Individual, ₪19.90 atau ₪199 untuk Family. Langganan dari sebelum Oktober 2026 tetap memakai harga saat mulai. Jika jumlahnya tidak cocok, mungkin itu dari layanan lain.",
+  "helpCompareQ": "Apa bedanya Basic, Individual, dan Family?",
+  "helpCompareA1": "Basic (gratis): hingga 10 pencarian kata per hari, semua makna, contoh, Idiom & ungkapan, Asal-usul Kata, dan Buku Catatan hingga 30 kata.",
+  "helpCompareA2": "Individual ($3.99 per bulan atau $39.99 per tahun, ₪14.90 atau ₪149 di Israel): untuk satu orang, semua alat. Pencarian tanpa batas, gambar untuk setiap makna, makna yang tepat dari sebuah kalimat, Setiap kata, Ucapkan, Susun kalimat dengan masukan, latihan pintar, game dan kuis, serta membandingkan kata yang mirip.",
+  "helpCompareA3": "Family ($5.99 per bulan atau $59 per tahun, ₪19.90 atau ₪199 di Israel): semua yang ada di Individual untuk hingga 5 anak dan kedua orang tua, ditambah mode Anak, ruang sendiri untuk tiap anak, panel orang tua dengan notifikasi kata, dan Ejaan."
  },
  "nl": {
   "nbFreeCount": "{n} van {max} woorden in je gratis notitieboek",
@@ -852,7 +1050,18 @@
   "audMe": "Voor mij",
   "audChild": "Voor mijn kind",
   "audClass": "Voor een klas of school",
-  "audSkip": "Overslaan"
+  "audSkip": "Overslaan",
+  "featFamPeople": "Met Kinderen krijgt elk kind alle tools. De ouder betaalt één keer voor het hele gezin.",
+  "demoPlusMore": "En meer: quizzen, games en woorden vergelijken",
+  "partnersCalcNote": "Schatting op basis van het Individual-abonnement en een tarief van 25%. Jaarlijkse klanten en klanten met Family en Schools verhogen dit.",
+  "helpSwitchQ": "Hoe stap ik over naar Family?",
+  "helpSwitchA1": "Open je accountpagina en tik op \"Overstappen naar Family\". Je huidige abonnement wordt op dezelfde kaart bijgewerkt, zonder dat je die opnieuw hoeft in te voeren.",
+  "helpSwitchA2": "Stripe berekent het verschil voor de dagen die nog over zijn in de huidige periode, dus je betaalt alleen het verschil.",
+  "helpChargeA1": "Afschrijvingen verschijnen als GADIT of GADIT.APP. Individual kost $3.99 per maand of $39.99 per jaar, en Family $5.99 per maand of $59 per jaar. In Israël is de afschrijving in sjekels: ₪14.90 of ₪149 voor Individual, ₪19.90 of ₪199 voor Family. Abonnementen van vóór oktober 2026 houden de prijs waarmee ze zijn begonnen. Als het bedrag niet klopt, kan het van een andere dienst zijn.",
+  "helpCompareQ": "Wat is het verschil tussen Basic, Individual en Family?",
+  "helpCompareA1": "Basic (gratis): tot 10 woorden per dag opzoeken, elke betekenis, voorbeelden, Uitdrukkingen en zegswijzen, Woordherkomst en een Notitieboek met maximaal 30 woorden.",
+  "helpCompareA2": "Individual ($3.99 per maand of $39.99 per jaar, ₪14.90 of ₪149 in Israël): één persoon, alle tools. Onbeperkt opzoeken, een afbeelding bij elke betekenis, de juiste betekenis uit een zin, Elk woord, Zeg het, Een zin schrijven met feedback, slim oefenen, games en quizzen, en vergelijkbare woorden vergelijken.",
+  "helpCompareA3": "Family ($5.99 per maand of $59 per jaar, ₪19.90 of ₪199 in Israël): alles in Individual voor maximaal 5 kinderen en beide ouders, plus Kinderen-modus, een eigen plek voor elk kind, het ouderdashboard met woordmeldingen en Spelling."
  },
  "el": {
   "nbFreeCount": "{n} από {max} λέξεις στο δωρεάν τετράδιό σου",
@@ -897,7 +1106,18 @@
   "audMe": "Για μένα",
   "audChild": "Για το παιδί μου",
   "audClass": "Για μια τάξη ή ένα σχολείο",
-  "audSkip": "Παράλειψη"
+  "audSkip": "Παράλειψη",
+  "featFamPeople": "Κάθε παιδί έχει όλα τα εργαλεία, με τη λειτουργία Παιδιά. Ο γονιός πληρώνει μία φορά για όλη την οικογένεια.",
+  "demoPlusMore": "Και ακόμη: κουίζ, παιχνίδια και σύγκριση λέξεων",
+  "partnersCalcNote": "Εκτίμηση με βάση το πλάνο Individual και ποσοστό 25%. Οι πελάτες με ετήσιο, Family και Schools το αυξάνουν.",
+  "helpSwitchQ": "Πώς αλλάζω σε Family;",
+  "helpSwitchA1": "Άνοιξε τη σελίδα Λογαριασμός και πάτησε «Άλλαξε σε Family». Η τωρινή συνδρομή σου ενημερώνεται στην ίδια κάρτα, χωρίς να την ξαναβάλεις.",
+  "helpSwitchA2": "Το Stripe υπολογίζει τη διαφορά για τις μέρες που απομένουν στην τρέχουσα περίοδο, οπότε πληρώνεις μόνο τη διαφορά.",
+  "helpChargeA1": "Οι χρεώσεις εμφανίζονται ως GADIT ή GADIT.APP. Το Individual κοστίζει 3,99 $ τον μήνα ή 39,99 $ τον χρόνο, και το Family 5,99 $ τον μήνα ή 59 $ τον χρόνο. Στο Ισραήλ η χρέωση είναι σε σέκελ: 14,90 ₪ ή 149 ₪ για το Individual, 19,90 ₪ ή 199 ₪ για το Family. Οι συνδρομές από πριν τον Οκτώβριο του 2026 κρατούν την τιμή με την οποία ξεκίνησαν. Αν το ποσό δεν ταιριάζει, μπορεί να είναι από άλλη υπηρεσία.",
+  "helpCompareQ": "Ποια είναι η διαφορά ανάμεσα στα Basic, Individual και Family;",
+  "helpCompareA1": "Basic (δωρεάν): έως 10 αναζητήσεις λέξεων τη μέρα, όλες οι σημασίες, παραδείγματα, Ιδιωματισμοί και εκφράσεις, Προέλευση λέξης και Τετράδιο με έως 30 λέξεις.",
+  "helpCompareA2": "Individual (3,99 $ τον μήνα ή 39,99 $ τον χρόνο, 14,90 ₪ ή 149 ₪ στο Ισραήλ): για 1 άτομο, με όλα τα εργαλεία. Απεριόριστες αναζητήσεις, εικόνα για κάθε σημασία, τη σωστή σημασία μέσα από πρόταση, Κάθε λέξη, Πες το, Σύνθεσε μια πρόταση με σχόλια, έξυπνη εξάσκηση, παιχνίδια και κουίζ, και σύγκριση παρόμοιων λέξεων.",
+  "helpCompareA3": "Family (5,99 $ τον μήνα ή 59 $ τον χρόνο, 19,90 ₪ ή 199 ₪ στο Ισραήλ): όλα όσα έχει το Individual για έως 5 παιδιά και τους 2 γονείς, συν λειτουργία Παιδιά, ξεχωριστό χώρο για κάθε παιδί, τον πίνακα γονέα με ειδοποιήσεις λέξεων και Ορθογραφία."
  },
  "zu": {
   "nbFreeCount": "{n} kwamagama angu-{max} encwadini yakho yamanothi yamahhala",
@@ -942,7 +1162,18 @@
   "audMe": "Yami",
   "audChild": "Yengane yami",
   "audClass": "Yekilasi noma yesikole",
-  "audSkip": "Yeqa"
+  "audSkip": "Yeqa",
+  "featFamPeople": "Yonke ingane ithola wonke amathuluzi, ngemodi yezingane. Umzali ukhokha kanye kuphela ngomndeni wonke.",
+  "demoPlusMore": "Futhi okunye: ama-quiz, imidlalo nokuqhathanisa amagama",
+  "partnersCalcNote": "Isilinganiso sisuselwa kuhlelo lwe-Individual kanye nezinga lika-25%. Amakhasimende e-Yearly, Family ne-Schools akhuphula lokhu.",
+  "helpSwitchQ": "Ngishintshela kanjani ku-Family?",
+  "helpSwitchA1": "Vula ikhasi le-akhawunti yakho bese uthepha okuthi \"Shintshela ku-Family\". Ukubhalisa kwakho kwamanje kubuyekezwa ekhadini elifanayo, ngaphandle kokulifaka futhi.",
+  "helpSwitchA2": "I-Stripe ibala umehluko wezinsuku ezisele esikhathini samanje, ngakho ukhokha umehluko kuphela.",
+  "helpChargeA1": "Izinkokhiso zivela njenge-GADIT noma i-GADIT.APP. I-Individual ingu-$3.99 ngenyanga noma u-$39.99 ngonyaka, kanti i-Family ingu-$5.99 ngenyanga noma u-$59 ngonyaka. Kwa-Israel inkokhiso iba ngamashekeli: ₪14.90 noma ₪149 ye-Individual, ₪19.90 noma ₪199 ye-Family. Okubhaliswe ngaphambi kuka-Okthoba 2026 kugcina intengo eyaqala ngayo. Uma inani lingafani, kungenzeka livela kwenye isevisi.",
+  "helpCompareQ": "Uyini umehluko phakathi kwe-Basic, Individual ne-Family?",
+  "helpCompareA1": "I-Basic (mahhala): kufika ekubhekeni amagama angu-10 ngosuku, zonke izincazelo, izibonelo, Izisho namatemu, Umsuka Wegama, ne-Incwadi yamanothi enamagama afinyelela ku-30.",
+  "helpCompareA2": "I-Individual ($3.99 ngenyanga noma u-$39.99 ngonyaka, ₪14.90 noma ₪149 kwa-Israel): umuntu oyedwa, wonke amathuluzi. Ukubheka amagama okungenamkhawulo, isithombe sencazelo ngayinye, incazelo efanele evela emshweni, Wonke amagama, Yisho, Bhala umusho enempedulo, ukuzilolonga okuhlakaniphile, imidlalo nama-quiz, nokuqhathanisa amagama afanayo.",
+  "helpCompareA3": "I-Family ($5.99 ngenyanga noma u-$59 ngonyaka, ₪19.90 noma ₪199 kwa-Israel): konke okuku-Individual kwezingane ezifika ku-5 nabazali bobabili, kanye nemodi yezingane, indawo yayo siqu yengane ngayinye, ibhodi yomzali enezaziso zamagama, no-Ukupela."
  },
  "vi": {
   "nbFreeCount": "{n} trên {max} từ trong sổ tay miễn phí của bạn",
@@ -987,7 +1218,18 @@
   "audMe": "Cho tôi",
   "audChild": "Cho con tôi",
   "audClass": "Cho lớp học hoặc trường học",
-  "audSkip": "Bỏ qua"
+  "audSkip": "Bỏ qua",
+  "featFamPeople": "Mỗi bé đều có đủ mọi công cụ, kèm chế độ Trẻ em. Phụ huynh chỉ trả tiền một lần cho cả gia đình.",
+  "demoPlusMore": "Và còn nữa: câu đố, trò chơi và so sánh từ",
+  "partnersCalcNote": "Ước tính dựa trên gói Individual và mức 25%. Khách hàng Yearly, Family và Schools sẽ làm tăng con số này.",
+  "helpSwitchQ": "Làm sao để chuyển sang Family?",
+  "helpSwitchA1": "Mở trang Tài khoản rồi nhấn \"Chuyển sang gói Family\". Gói hiện tại của bạn sẽ được cập nhật trên cùng thẻ, không cần nhập lại.",
+  "helpSwitchA2": "Stripe sẽ tính phần chênh lệch theo số ngày còn lại của kỳ hiện tại, nên bạn chỉ trả phần chênh lệch.",
+  "helpChargeA1": "Khoản thanh toán sẽ hiện là GADIT hoặc GADIT.APP. Individual là $3.99/tháng hoặc $39.99/năm, còn Family là $5.99/tháng hoặc $59/năm. Ở Israel, khoản thanh toán sẽ tính bằng shekel: ₪14.90 hoặc ₪149 cho Individual, ₪19.90 hoặc ₪199 cho Family. Các gói đăng ký từ trước tháng 10 năm 2026 vẫn giữ mức giá ban đầu. Nếu số tiền không khớp, có thể đó là từ một dịch vụ khác.",
+  "helpCompareQ": "Basic, Individual và Family khác nhau thế nào?",
+  "helpCompareA1": "Basic (miễn phí): tối đa 10 lượt tra từ mỗi ngày, mọi nghĩa, ví dụ, Thành ngữ & cách diễn đạt, Nguồn gốc từ và Sổ tay tối đa 30 từ.",
+  "helpCompareA2": "Individual ($3.99/tháng hoặc $39.99/năm, ₪14.90 hoặc ₪149 ở Israel): cho 1 người, có đủ mọi công cụ. Tra từ không giới hạn, hình ảnh cho mọi nghĩa, chọn đúng nghĩa từ câu, Mọi từ, Nói thử, Đặt một câu kèm nhận xét, luyện tập thông minh, trò chơi, câu đố và so sánh các từ giống nhau.",
+  "helpCompareA3": "Family ($5.99/tháng hoặc $59/năm, ₪19.90 hoặc ₪199 ở Israel): có mọi thứ trong Individual cho tối đa 5 trẻ và cả bố mẹ, thêm chế độ Trẻ em, không gian riêng cho từng bé, bảng điều khiển cho phụ huynh với cảnh báo từ và Chính tả."
  },
  "fil": {
   "nbFreeCount": "{n} sa {max} na salita sa libre mong Kwaderno",
@@ -1032,7 +1274,18 @@
   "audMe": "Para sa akin",
   "audChild": "Para sa anak ko",
   "audClass": "Para sa klase o paaralan",
-  "audSkip": "Laktawan"
+  "audSkip": "Laktawan",
+  "featFamPeople": "Bawat bata ay may lahat ng tool, kasama ang mode na Bata. Isang beses lang magbabayad ang magulang para sa buong pamilya.",
+  "demoPlusMore": "At higit pa: mga quiz, laro, at paghahambing ng mga salita",
+  "partnersCalcNote": "Tantiya ito batay sa planong Individual at 25% na rate. Mas mataas ito para sa mga customer ng Yearly, Family, at Schools.",
+  "helpSwitchQ": "Paano ako lilipat sa Family?",
+  "helpSwitchA1": "Buksan ang page ng Account mo at i-tap ang \"Lumipat sa Family\". Ia-update ang kasalukuyan mong subscription sa parehong card, nang hindi na ito ilalagay ulit.",
+  "helpSwitchA2": "Kinukuwenta ng Stripe ang diperensya batay sa mga araw na natitira sa kasalukuyang period, kaya ang diperensya lang ang babayaran mo.",
+  "helpChargeA1": "Lalabas ang charge bilang GADIT o GADIT.APP. Ang Individual ay $3.99 bawat buwan o $39.99 bawat taon, at ang Family ay $5.99 bawat buwan o $59 bawat taon. Sa Israel, shekel ang charge: ₪14.90 o ₪149 para sa Individual, ₪19.90 o ₪199 para sa Family. Ang mga subscription mula bago ang Oktubre 2026 ay mananatili sa presyong sinimulan nila. Kung hindi tugma ang halaga, baka mula ito sa ibang serbisyo.",
+  "helpCompareQ": "Ano ang diperensya ng Basic, Individual, at Family?",
+  "helpCompareA1": "Basic (libre): hanggang 10 paghahanap ng salita bawat araw, lahat ng kahulugan, mga halimbawa, Mga idyoma at ekspresyon, Pinagmulan ng Salita, at isang Kwaderno na may hanggang 30 salita.",
+  "helpCompareA2": "Individual ($3.99 bawat buwan o $39.99 bawat taon, ₪14.90 o ₪149 sa Israel): para sa isang tao, lahat ng tool. Walang limitasyong paghahanap, larawan para sa bawat kahulugan, ang tamang kahulugan mula sa isang pangungusap, Bawat salita, Sabihin, Bumuo ng pangungusap na may feedback, smart practice, mga laro at quiz, at paghahambing ng magkakatulad na salita.",
+  "helpCompareA3": "Family ($5.99 bawat buwan o $59 bawat taon, ₪19.90 o ₪199 sa Israel): lahat ng nasa Individual para sa hanggang 5 bata at parehong magulang, kasama pa ang mode na Bata, hiwalay na espasyo para sa bawat bata, board ng magulang na may mga alerto sa salita, at Pagbaybay."
  },
  "af": {
   "nbFreeCount": "{n} van {max} woorde in jou gratis boekie",
@@ -1077,7 +1330,18 @@
   "audMe": "Vir my",
   "audChild": "Vir my kind",
   "audClass": "Vir 'n klas of 'n skool",
-  "audSkip": "Slaan oor"
+  "audSkip": "Slaan oor",
+  "featFamPeople": "Elke kind kry elke hulpmiddel, met Kinders-modus. Die ouer betaal een keer vir die hele gesin.",
+  "demoPlusMore": "En nog meer: vasvrae, speletjies en om woorde te vergelyk",
+  "partnersCalcNote": "Skatting gebaseer op die Individual-plan en 'n koers van 25%. Kliënte met Yearly, Family en Schools verhoog dit.",
+  "helpSwitchQ": "Hoe skakel ek oor na Family?",
+  "helpSwitchA1": "Maak jou Rekening-bladsy oop en tik op \"Skakel oor na Family\". Jou huidige intekening word op dieselfde kaart opgedateer, sonder om dit weer in te voer.",
+  "helpSwitchA2": "Stripe werk die verskil uit vir die dae wat in die huidige tydperk oor is, so jy betaal net die verskil.",
+  "helpChargeA1": "Heffings verskyn as GADIT of GADIT.APP. Individual is $3.99 per maand of $39.99 per jaar, en Family is $5.99 per maand of $59 per jaar. In Israel is die heffing in sikkel: ₪14.90 of ₪149 vir Individual, ₪19.90 of ₪199 vir Family. Intekeninge van voor Oktober 2026 behou die prys waarmee hulle begin het. As die bedrag nie ooreenstem nie, kan dit van 'n ander diens wees.",
+  "helpCompareQ": "Wat is die verskil tussen Basic, Individual en Family?",
+  "helpCompareA1": "Basic (gratis): tot 10 woordnaslae per dag, elke betekenis, voorbeelde, Idiome & uitdrukkings, Woordherkoms, en 'n Boekie van tot 30 woorde.",
+  "helpCompareA2": "Individual ($3.99 per maand of $39.99 per jaar, ₪14.90 of ₪149 in Israel): een persoon, elke hulpmiddel. Onbeperkte naslae, 'n prent by elke betekenis, die regte betekenis uit 'n sin, Elke woord, Sê dit, Skryf 'n sin met terugvoer, slim oefening, speletjies en vasvrae, en om soortgelyke woorde te vergelyk.",
+  "helpCompareA3": "Family ($5.99 per maand of $59 per jaar, ₪19.90 of ₪199 in Israel): alles in Individual vir tot 5 kinders en albei ouers, plus Kinders-modus, 'n eie plek vir elke kind, die ouerpaneel met woordkennisgewings, en Spelling."
  },
  "sw": {
   "nbFreeCount": "{n} ya maneno {max} kwenye Daftari lako la bure",
@@ -1122,7 +1386,18 @@
   "audMe": "Kwa ajili yangu",
   "audChild": "Kwa ajili ya mtoto wangu",
   "audClass": "Kwa darasa au shule",
-  "audSkip": "Ruka"
+  "audSkip": "Ruka",
+  "featFamPeople": "Kila mtoto anapata kila zana, kwa modi ya Watoto. Mzazi analipa mara moja tu kwa familia yote.",
+  "demoPlusMore": "Na zaidi: maswali, michezo na kulinganisha maneno",
+  "partnersCalcNote": "Makadirio yanategemea mpango wa Individual na kiwango cha 25%. Wateja wa yearly, Family na Schools huongeza kiasi hicho.",
+  "helpSwitchQ": "Ninabadilishaje hadi Family?",
+  "helpSwitchA1": "Fungua ukurasa wa Account kisha uguse \"Badili hadi Family\". Usajili wako wa sasa utasasishwa kwenye kadi hiyo hiyo, bila kuiingiza tena.",
+  "helpSwitchA2": "Stripe hukokotoa tofauti ya siku zilizobaki kwenye kipindi cha sasa, kwa hivyo unalipa tofauti tu.",
+  "helpChargeA1": "Malipo huonekana kama GADIT au GADIT.APP. Individual ni $3.99 kwa mwezi au $39.99 kwa mwaka, na Family ni $5.99 kwa mwezi au $59 kwa mwaka. Nchini Israeli malipo ni kwa shekeli: ₪14.90 au ₪149 kwa Individual, ₪19.90 au ₪199 kwa Family. Usajili wa kabla ya Oktoba 2026 huendelea na bei uliyoanza nayo. Kama kiasi hakilingani, huenda ni huduma nyingine.",
+  "helpCompareQ": "Kuna tofauti gani kati ya Basic, Individual na Family?",
+  "helpCompareA1": "Basic (bila malipo): hadi utafutaji 10 wa maneno kwa siku, kila maana, mifano, Nahau na misemo, Chimbuko la Neno, na Daftari la hadi maneno 30.",
+  "helpCompareA2": "Individual ($3.99 kwa mwezi au $39.99 kwa mwaka, ₪14.90 au ₪149 nchini Israeli): mtu mmoja, kila zana. Utafutaji usio na kikomo, picha kwa kila maana, maana sahihi kutoka kwenye sentensi, Kila neno, Sema, Tunga sentensi na maoni, mazoezi mahiri, michezo na maswali, na kulinganisha maneno yanayofanana.",
+  "helpCompareA3": "Family ($5.99 kwa mwezi au $59 kwa mwaka, ₪19.90 au ₪199 nchini Israeli): kila kitu cha Individual kwa hadi watoto 5 na wazazi wote wawili, pamoja na modi ya Watoto, nafasi yake mwenyewe kwa kila mtoto, paneli ya mzazi yenye arifa za maneno, na Tahajia."
  },
  "zh-CN": {
   "nbFreeCount": "你的免费生词本已用 {n}/{max} 个词",
@@ -1167,7 +1442,18 @@
   "audMe": "给我自己",
   "audChild": "给我的孩子",
   "audClass": "给班级或学校",
-  "audSkip": "跳过"
+  "audSkip": "跳过",
+  "featFamPeople": "每个孩子都能用到所有工具，包括儿童模式。家长一次付费，全家都能用。",
+  "demoPlusMore": "还有更多：测验、游戏和词语对比",
+  "partnersCalcNote": "按 Individual 套餐和 25% 比例估算。年付、Family 和 Schools 用户会提高这个数字。",
+  "helpSwitchQ": "怎么切换到 Family？",
+  "helpSwitchA1": "打开你的账户页面，点“切换到 Family”。你当前的订阅会更新到同一张卡上，不用重新输入。",
+  "helpSwitchA2": "Stripe 会按当前周期剩余天数计算差额，所以你只需支付差额。",
+  "helpChargeA1": "账单上会显示为 GADIT 或 GADIT.APP。Individual 为每月 $3.99 或每年 $39.99，Family 为每月 $5.99 或每年 $59。在以色列，费用按新谢克尔收取：Individual 为 ₪14.90 或 ₪149，Family 为 ₪19.90 或 ₪199。2026 年 10 月前开通的订阅，保持开通时的价格。如果金额对不上，可能是其他服务的扣费。",
+  "helpCompareQ": "Basic、Individual 和 Family 有什么区别？",
+  "helpCompareA1": "Basic（免费）：每天最多查 10 个词，包含所有释义、例句、习语与表达、词语来源，以及最多可保存 30 个词的生词本。",
+  "helpCompareA2": "Individual（每月 $3.99 或每年 $39.99；在以色列为 ₪14.90 或 ₪149）：1 人使用，包含所有工具。不限查词、每个释义都有图片、根据句子判断正确释义、每个词、说一说、造一个句子并获得反馈、智能练习、游戏和测验，以及相近词对比。",
+  "helpCompareA3": "Family（每月 $5.99 或每年 $59；在以色列为 ₪19.90 或 ₪199）：包含 Individual 的全部内容，最多可供 5 个孩子和两位家长使用，另外还有儿童模式、每个孩子独立的空间、带单词提醒的家长面板，以及听写。"
  },
  "zh-TW": {
   "nbFreeCount": "你的免費生詞本已用 {n}/{max} 個詞",
@@ -1212,7 +1498,18 @@
   "audMe": "給我自己用",
   "audChild": "給我的孩子用",
   "audClass": "給班級或學校使用",
-  "audSkip": "略過"
+  "audSkip": "略過",
+  "featFamPeople": "每個孩子都有全部工具，還有兒童模式。家長只要付一次，就能全家使用。",
+  "demoPlusMore": "還有更多：測驗、遊戲和詞語比較",
+  "partnersCalcNote": "此為依 Individual 方案和 25% 比例的估算。選擇年繳、Family 和 Schools 的用戶可提高收益。",
+  "helpSwitchQ": "我怎麼改用 Family？",
+  "helpSwitchA1": "打開你的帳戶頁面，點一下「改用 Family 方案」。你目前的訂閱會直接更新到同一張卡，不用重新輸入。",
+  "helpSwitchA2": "Stripe 會依目前週期剩餘天數計算差額，所以你只要補差額。",
+  "helpChargeA1": "帳單上會顯示為 GADIT 或 GADIT.APP。Individual 為每月 $3.99 或每年 $39.99，Family 為每月 $5.99 或每年 $59。在以色列則會以謝克爾扣款：Individual 為 ₪14.90 或 ₪149，Family 為 ₪19.90 或 ₪199。2026 年 10 月前開始的訂閱會維持當時的價格。如果金額不符，可能是其他服務的扣款。",
+  "helpCompareQ": "Basic、Individual 和 Family 有什麼差別？",
+  "helpCompareA1": "Basic（免費）：每天最多查 10 個詞，提供所有詞義、例句、慣用語與說法、詞語來源，以及最多可存 30 個詞的生詞本。",
+  "helpCompareA2": "Individual（每月 $3.99 或每年 $39.99；在以色列為 ₪14.90 或 ₪149）：1 人使用，全部工具都能用。可無限查詞、查看每個詞義的圖片、從句子判斷正確詞義、使用每個詞、說一說、造一個句子並獲得回饋，還有智慧練習、遊戲、測驗和相似詞比較。",
+  "helpCompareA3": "Family（每月 $5.99 或每年 $59；在以色列為 ₪19.90 或 ₪199）：包含 Individual 的全部內容，最多可供 5 個孩子和雙親使用，另外還有兒童模式、每個孩子各自的空間、帶有詞語提醒的家長面板，以及聽寫。"
  },
  "ko": {
   "nbFreeCount": "무료 단어장에 {max}개 중 {n}개 단어 저장됨",
@@ -1257,7 +1554,18 @@
   "audMe": "나를 위해",
   "audChild": "내 아이를 위해",
   "audClass": "학급 또는 학교를 위해",
-  "audSkip": "건너뛰기"
+  "audSkip": "건너뛰기",
+  "featFamPeople": "모든 아이가 아이 모드와 함께 모든 도구를 써요. 부모는 가족 전체에 대해 한 번만 결제하면 돼요.",
+  "demoPlusMore": "그 외에도 퀴즈, 게임, 비슷한 단어 비교가 있어요",
+  "partnersCalcNote": "Individual 플랜과 25% 비율을 기준으로 한 예상치예요. 연간, Family, Schools 고객은 이보다 더 높아요.",
+  "helpSwitchQ": "Family로 어떻게 전환하나요?",
+  "helpSwitchA1": "계정 페이지를 열고 \"Family로 전환\"을 탭하세요. 현재 구독이 같은 카드로 바로 업데이트되며, 카드를 다시 입력할 필요는 없어요.",
+  "helpSwitchA2": "Stripe가 현재 기간에 남은 날짜를 기준으로 차액을 계산하므로, 차액만 결제하면 돼요.",
+  "helpChargeA1": "청구 내역에는 GADIT 또는 GADIT.APP로 표시돼요. Individual은 월 $3.99 또는 연 $39.99, Family는 월 $5.99 또는 연 $59예요. 이스라엘에서는 셰켈로 청구돼요: Individual은 ₪14.90 또는 ₪149, Family는 ₪19.90 또는 ₪199예요. 2026년 10월 이전에 시작한 구독은 시작 당시 가격이 유지돼요. 금액이 맞지 않으면 다른 서비스 청구일 수 있어요.",
+  "helpCompareQ": "Basic, Individual, Family의 차이는 무엇인가요?",
+  "helpCompareA1": "Basic(무료): 하루 최대 10번 단어 조회, 모든 뜻, 예문, 관용구 & 표현, 단어의 유래, 최대 30개 단어를 담을 수 있는 단어장.",
+  "helpCompareA2": "Individual(월 $3.99 또는 연 $39.99, 이스라엘에서는 ₪14.90 또는 ₪149): 1인용, 모든 도구 제공. 무제한 조회, 모든 뜻에 대한 그림, 문장에서 맞는 뜻 찾기, 모든 단어, 말해 보기, 피드백이 있는 문장 만들기, 스마트 연습, 게임과 퀴즈, 비슷한 단어 비교를 사용할 수 있어요.",
+  "helpCompareA3": "Family(월 $5.99 또는 연 $59, 이스라엘에서는 ₪19.90 또는 ₪199): 최대 5명의 아이와 부모 2명이 Individual의 모든 기능을 함께 써요. 여기에 아이 모드, 아이마다 따로 쓰는 공간, 단어 알림이 있는 부모 보드, 받아쓰기가 추가돼요."
  },
  "th": {
   "nbFreeCount": "{n} จาก {max} คำในสมุดฟรีของคุณ",
@@ -1302,7 +1610,18 @@
   "audMe": "สำหรับฉัน",
   "audChild": "สำหรับลูกของฉัน",
   "audClass": "สำหรับชั้นเรียนหรือโรงเรียน",
-  "audSkip": "ข้าม"
+  "audSkip": "ข้าม",
+  "featFamPeople": "เด็กแต่ละคนได้ใช้ทุกเครื่องมือ พร้อมโหมดเด็ก ผู้ปกครองจ่ายครั้งเดียวได้ทั้งครอบครัว",
+  "demoPlusMore": "และอีกมากมาย: ควิซ เกม และการเปรียบเทียบคำ",
+  "partnersCalcNote": "ประเมินจากแพ็กเกจ Individual และอัตรา 25% ลูกค้าแบบรายปี, Family และ Schools ช่วยเพิ่มยอดนี้",
+  "helpSwitchQ": "เปลี่ยนเป็น Family ยังไง?",
+  "helpSwitchA1": "เปิดหน้าบัญชีแล้วแตะ \"เปลี่ยนเป็น Family\" ระบบจะอัปเดตการสมัครปัจจุบันของคุณด้วยบัตรใบเดิม โดยไม่ต้องกรอกใหม่",
+  "helpSwitchA2": "Stripe จะคำนวณส่วนต่างตามวันที่เหลือในรอบปัจจุบัน คุณจึงจ่ายแค่ส่วนต่าง",
+  "helpChargeA1": "รายการเรียกเก็บจะแสดงเป็น GADIT หรือ GADIT.APP Individual ราคา $3.99 ต่อเดือน หรือ $39.99 ต่อปี และ Family ราคา $5.99 ต่อเดือน หรือ $59 ต่อปี ในอิสราเอล ระบบจะเรียกเก็บเป็นเชเกล: ₪14.90 หรือ ₪149 สำหรับ Individual, ₪19.90 หรือ ₪199 สำหรับ Family การสมัครที่เริ่มก่อนเดือนตุลาคม 2026 จะยังใช้ราคาเดิมที่เริ่มไว้ ถ้ายอดไม่ตรง อาจเป็นค่าบริการจากบริการอื่น",
+  "helpCompareQ": "Basic, Individual และ Family ต่างกันยังไง?",
+  "helpCompareA1": "Basic (ฟรี): ค้นคำได้สูงสุดวันละ 10 คำ ดูได้ทุกความหมาย ตัวอย่าง สำนวนและวลี ที่มาของคำ และสมุดที่เก็บได้สูงสุด 30 คำ",
+  "helpCompareA2": "Individual ($3.99 ต่อเดือน หรือ $39.99 ต่อปี, ₪14.90 หรือ ₪149 ในอิสราเอล): สำหรับ 1 คน ใช้ได้ทุกเครื่องมือ ค้นคำได้ไม่จำกัด มีรูปสำหรับทุกความหมาย เลือกความหมายที่ถูกจากประโยค, ทุกคำ, ลองพูด, แต่งประโยคพร้อมคำแนะนำ, แบบฝึกอัจฉริยะ, เกมและควิซ และการเปรียบเทียบคำที่คล้ายกัน",
+  "helpCompareA3": "Family ($5.99 ต่อเดือน หรือ $59 ต่อปี, ₪19.90 หรือ ₪199 ในอิสราเอล): ได้ทุกอย่างใน Individual สำหรับเด็กได้สูงสุด 5 คนและผู้ปกครองทั้ง 2 คน พร้อมโหมดเด็ก พื้นที่แยกสำหรับเด็กแต่ละคน หน้าผู้ปกครองพร้อมการแจ้งเตือนคำศัพท์ และเขียนตามคำบอก"
  },
  "bn": {
   "nbFreeCount": "তোমার ফ্রি নোটবুকে {max}টির মধ্যে {n}টি শব্দ",
@@ -1347,7 +1666,18 @@
   "audMe": "আমার জন্য",
   "audChild": "আমার বাচ্চার জন্য",
   "audClass": "একটি ক্লাস বা স্কুলের জন্য",
-  "audSkip": "এড়িয়ে যাও"
+  "audSkip": "এড়িয়ে যাও",
+  "featFamPeople": "শিশু মোডসহ, প্রতিটি শিশু সব টুল পায়। পুরো পরিবারের জন্য অভিভাবক একবারই টাকা দেন।",
+  "demoPlusMore": "আরও আছে: কুইজ, গেম আর শব্দ তুলনা",
+  "partnersCalcNote": "Individual প্ল্যান আর 25% হার ধরে এই হিসাব। Yearly, Family আর Schools গ্রাহকদের ক্ষেত্রে এটা আরও বাড়ে।",
+  "helpSwitchQ": "আমি কীভাবে Family-তে যাব?",
+  "helpSwitchA1": "তোমার Account পেজ খুলে \"Family-তে যান\"-এ ট্যাপ করো। একই কার্ডে তোমার বর্তমান সাবস্ক্রিপশন আপডেট হবে, আবার কার্ডের তথ্য দিতে হবে না।",
+  "helpSwitchA2": "বর্তমান সময়সীমার বাকি দিনের হিসাব Stripe নিজেই করে, তাই তুমি শুধু পার্থক্যটাই দাও।",
+  "helpChargeA1": "চার্জে GADIT বা GADIT.APP দেখা যায়। Individual-এর দাম মাসে $3.99 বা বছরে $39.99, আর Family-এর দাম মাসে $5.99 বা বছরে $59। ইসরায়েলে চার্জ শেকেলে হয়: Individual-এর জন্য ₪14.90 বা ₪149, Family-এর জন্য ₪19.90 বা ₪199। অক্টোবর 2026-এর আগে নেওয়া সাবস্ক্রিপশনে শুরুর দামই থাকে। টাকার অঙ্ক না মিললে, সেটা অন্য কোনো পরিষেবারও হতে পারে।",
+  "helpCompareQ": "Basic, Individual আর Family-এর মধ্যে পার্থক্য কী?",
+  "helpCompareA1": "Basic (ফ্রি): দিনে 10টা পর্যন্ত শব্দ খোঁজা, সব অর্থ, উদাহরণ, বাগধারা ও প্রবাদ, শব্দের উৎপত্তি, আর 30টা পর্যন্ত শব্দের নোটবুক।",
+  "helpCompareA2": "Individual (মাসে $3.99 বা বছরে $39.99, ইসরায়েলে ₪14.90 বা ₪149): একজনের জন্য, সব টুল। আনলিমিটেড শব্দ খোঁজা, প্রতিটি অর্থের জন্য ছবি, বাক্য থেকে সঠিক অর্থ, প্রতিটি শব্দ, বলে দেখো, প্রতিক্রিয়াসহ একটি বাক্য লিখুন, স্মার্ট প্র্যাকটিস, গেম আর কুইজ, আর মিল আছে এমন শব্দের তুলনা।",
+  "helpCompareA3": "Family (মাসে $5.99 বা বছরে $59, ইসরায়েলে ₪19.90 বা ₪199): 5 জন পর্যন্ত শিশু আর দুজন অভিভাবকের জন্য Individual-এর সবকিছু, সঙ্গে শিশু মোড, প্রতিটি শিশুর জন্য আলাদা জায়গা, শব্দ সতর্কতাসহ অভিভাবক বোর্ড, আর বানান।"
  },
  "da": {
   "nbFreeCount": "{n} af {max} ord i din gratis notesbog",
@@ -1392,7 +1722,18 @@
   "audMe": "Til mig",
   "audChild": "Til mit barn",
   "audClass": "Til en klasse eller en skole",
-  "audSkip": "Spring over"
+  "audSkip": "Spring over",
+  "featFamPeople": "Hvert barn får alle værktøjer med Børn-tilstand. Forælderen betaler én gang for hele familien.",
+  "demoPlusMore": "Og mere: quizzer, spil og sammenligning af ord",
+  "partnersCalcNote": "Skøn baseret på Individual-abonnementet og en sats på 25 %. Kunder med årsabonnement, Family og Schools løfter den.",
+  "helpSwitchQ": "Hvordan skifter jeg til Family?",
+  "helpSwitchA1": "Åbn siden Konto, og tryk på \"Skift til Family\". Dit nuværende abonnement opdateres på det samme kort, uden at du skal indtaste det igen.",
+  "helpSwitchA2": "Stripe regner forskellen ud for de dage, der er tilbage i den nuværende periode, så du kun betaler forskellen.",
+  "helpChargeA1": "Betalinger vises som GADIT eller GADIT.APP. Individual koster $3.99 om måneden eller $39.99 om året, og Family koster $5.99 om måneden eller $59 om året. I Israel trækkes beløbet i shekel: ₪14.90 eller ₪149 for Individual, ₪19.90 eller ₪199 for Family. Abonnementer fra før oktober 2026 beholder den pris, de startede med. Hvis beløbet ikke passer, kan det være fra en anden tjeneste.",
+  "helpCompareQ": "Hvad er forskellen på Basic, Individual og Family?",
+  "helpCompareA1": "Basic (gratis): op til 10 ordopslag om dagen, alle betydninger, eksempler, Udtryk og vendinger, Ordets oprindelse og en Notesbog med op til 30 ord.",
+  "helpCompareA2": "Individual ($3.99 om måneden eller $39.99 om året, ₪14.90 eller ₪149 i Israel): én person, alle værktøjer. Ubegrænsede opslag, et billede til hver betydning, den rigtige betydning ud fra en sætning, Hvert ord, Sig det, Skriv en sætning med feedback, smart øvelse, spil og quizzer samt sammenligning af lignende ord.",
+  "helpCompareA3": "Family ($5.99 om måneden eller $59 om året, ₪19.90 eller ₪199 i Israel): alt i Individual for op til 5 børn og begge forældre, plus Børn-tilstand, et eget område til hvert barn, forældrepanelet med ordadvarsler og Stavning."
  },
  "hu": {
   "nbFreeCount": "{n}/{max} szó az ingyenes Füzetedben",
@@ -1437,6 +1778,17 @@
   "audMe": "Nekem",
   "audChild": "A gyermekemnek",
   "audClass": "Osztálynak vagy iskolának",
-  "audSkip": "Kihagyás"
+  "audSkip": "Kihagyás",
+  "featFamPeople": "A Gyerekek móddal minden gyerek minden eszközt megkap. A szülő egyszer fizet az egész családért.",
+  "demoPlusMore": "És még több: kvízek, játékok és szavak összehasonlítása",
+  "partnersCalcNote": "A becslés az Individual csomag és egy 25%-os arány alapján készült. Az éves, Family és Schools ügyfelek növelik ezt.",
+  "helpSwitchQ": "Hogyan váltsak Family csomagra?",
+  "helpSwitchA1": "Nyisd meg a Fiók oldalt, és koppints erre: „Váltás a Family csomagra”. A mostani előfizetésed ugyanazon a kártyán frissül, nem kell újra megadnod.",
+  "helpSwitchA2": "A Stripe kiszámolja a különbséget az aktuális időszakból hátralévő napok alapján, így csak a különbözetet fizeted.",
+  "helpChargeA1": "A terhelés GADIT vagy GADIT.APP néven jelenik meg. Az Individual ára havi 3,99 USD vagy évi 39,99 USD, a Familyé havi 5,99 USD vagy évi 59 USD. Izraelben a terhelés sékelben történik: Individual esetén 14,90 ₪ vagy 149 ₪, Family esetén 19,90 ₪ vagy 199 ₪. A 2026 októbere előtti előfizetések megtartják az induló árukat. Ha az összeg nem egyezik, lehet, hogy egy másik szolgáltatástól származik.",
+  "helpCompareQ": "Mi a különbség a Basic, az Individual és a Family között?",
+  "helpCompareA1": "Basic (ingyenes): napi legfeljebb 10 szókeresés, minden jelentés, példák, Szólások és kifejezések, A szó eredete, valamint egy legfeljebb 30 szavas Füzet.",
+  "helpCompareA2": "Individual (havi 3,99 USD vagy évi 39,99 USD, Izraelben 14,90 ₪ vagy 149 ₪): egy személynek, minden eszközzel. Korlátlan keresés, kép minden jelentéshez, a helyes jelentés egy mondat alapján, Minden szó, Mondd ki, Írj egy mondatot visszajelzéssel, okos gyakorlás, játékok és kvízek, valamint hasonló szavak összehasonlítása.",
+  "helpCompareA3": "Family (havi 5,99 USD vagy évi 59 USD, Izraelben 19,90 ₪ vagy 199 ₪): minden, ami az Individual csomagban benne van, legfeljebb 5 gyereknek és mindkét szülőnek, plusz Gyerekek mód, külön saját tér minden gyereknek, szülői felület szóértesítésekkel, és Helyesírás."
  }
 }

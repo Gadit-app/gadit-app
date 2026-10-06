@@ -132,7 +132,8 @@ export function TierBadge({
           boxShadow: isDeep ? "0 0 6px var(--gd-electric)" : "none",
         }}
       />
-      {isDeep ? "Deep" : "Clear"}
+      {/* Clear and Deep are one Individual plan now (Gadi 2026-10-06). */}
+      Individual
     </span>
   );
 }

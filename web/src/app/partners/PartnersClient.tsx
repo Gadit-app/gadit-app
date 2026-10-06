@@ -1,5 +1,6 @@
 "use client";
 
+import { planCopy } from "@/lib/plan-copy";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
@@ -32,7 +33,7 @@ const COPY = {
   uk: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Головна",
     heroTitle: "Рекомендуйте Gadit. Заробляйте регулярний дохід.",
     heroSub: "Кожен, хто зареєструється й заплатить через ваше особисте посилання, приносить вам 25% регулярної комісії в перший рік і 10% довічно.",
@@ -87,7 +88,7 @@ const COPY = {
   tr: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Ana Sayfa",
     heroTitle: "Gadit'i önerin. Düzenli gelir kazanın.",
     heroSub: "Kişisel bağlantınız üzerinden kaydolup ödeme yapan herkes, ilk yıl için size %25, ömür boyu için %10 düzenli komisyon kazandırır.",
@@ -142,7 +143,7 @@ const COPY = {
   pl: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Strona główna",
     heroTitle: "Polecaj Gadit. Zarabiaj cyklicznie.",
     heroSub: "Każdy, kto zapisze się i zapłaci przez Twój osobisty link, przynosi Ci 25% cyklicznej prowizji w pierwszym roku i 10% dożywotnio.",
@@ -197,7 +198,7 @@ const COPY = {
   fa: {
     dir: "rtl" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "خانه",
     heroTitle: "Gadit را توصیه کن. درآمد بازگشتی کسب کن.",
     heroSub: "هرکس از راه لینک شخصی تو ثبت‌نام و پرداخت کند، در سال اول 25% کمیسیون بازگشتی و برای همیشه 10% برایت می‌سازد.",
@@ -252,7 +253,7 @@ const COPY = {
   id: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Beranda",
     heroTitle: "Rekomendasikan Gadit. Dapatkan penghasilan berulang.",
     heroSub: "Setiap orang yang mendaftar dan membayar melalui tautan pribadi Anda memberi Anda komisi berulang 25% di tahun pertama, dan 10% seumur hidup.",
@@ -307,7 +308,7 @@ const COPY = {
   he: {
     dir: "rtl" as const,
     curSym: "₪",
-    monthlyPrice: 19.9, // Deep monthly, ILS
+    monthlyPrice: 14.9, // Individual monthly, ILS
     nav: "לאתר",
     heroTitle: "להמליץ על Gadit, לקבל הכנסה חוזרת.",
     heroSub: "כל מי שנרשם ומשלם דרך הקישור האישי שלך מזכה אותך ב-25% עמלה חוזרת בשנה הראשונה, ו-10% לכל החיים.",
@@ -362,7 +363,7 @@ const COPY = {
   en: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
     heroTitle: "Recommend Gadit. Earn recurring income.",
     heroSub: "Everyone who signs up and pays through your personal link earns you 25% recurring commission in year one, and 10% for life.",
@@ -417,7 +418,7 @@ const COPY = {
   zu: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: " Ikhaya",
     heroTitle: "Tusa i-Gadit. Thola imali ebuyayo njalo.",
     heroSub: "Wonke umuntu obhalisayo futhi akhokhe ngesixhumanisi sakho somuntu siqu ukuzuzela ikhomishini ebuyayo engu-25% ngonyaka wokuqala, kanye no-10% impilo yakho yonke.",
@@ -472,7 +473,7 @@ const COPY = {
   el: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Αρχική",
     heroTitle: "Σύστησε το Gadit. Κέρδισε επαναλαμβανόμενο εισόδημα.",
     heroSub: "Όποιος εγγράφεται και πληρώνει μέσα από το προσωπικό σου σύνδεσμο σου αποφέρει 25% επαναλαμβανόμενη προμήθεια τον πρώτο χρόνο, και 10% εφ' όρου ζωής.",
@@ -527,7 +528,7 @@ const COPY = {
   nl: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
     heroTitle: "Beveel Gadit aan. Verdien terugkerend inkomen.",
     heroSub: "Iedereen die zich aanmeldt en betaalt via jouw persoonlijke link levert je 25% terugkerende commissie op in het eerste jaar, en 10% levenslang.",
@@ -582,7 +583,7 @@ const COPY = {
   ar: {
     dir: "rtl" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "الرئيسية",
     heroTitle: "أوصِ بـ Gadit. واكسب دخلاً متكرراً.",
     heroSub: "كل من يسجّل ويدفع عبر رابطك الشخصي يكسب لك عمولة متكررة بنسبة 25% في السنة الأولى، و10% مدى الحياة.",
@@ -637,7 +638,7 @@ const COPY = {
   ru: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Главная",
     heroTitle: "Рекомендуйте Gadit. Получайте регулярный доход.",
     heroSub: "Каждый, кто зарегистрируется и оплатит по вашей персональной ссылке, приносит вам 25% регулярной комиссии в первый год и 10% пожизненно.",
@@ -692,7 +693,7 @@ const COPY = {
   es: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Inicio",
     heroTitle: "Recomienda Gadit. Gana ingresos recurrentes.",
     heroSub: "Cada persona que se registra y paga a través de tu enlace personal te genera un 25% de comisión recurrente el primer año, y un 10% de por vida.",
@@ -747,7 +748,7 @@ const COPY = {
   pt: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Início",
     heroTitle: "Recomende o Gadit. Ganhe renda recorrente.",
     heroSub: "Cada pessoa que se cadastra e paga pelo seu link pessoal gera para você 25% de comissão recorrente no primeiro ano, e 10% para sempre.",
@@ -802,7 +803,7 @@ const COPY = {
   fr: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Accueil",
     heroTitle: "Recommandez Gadit. Gagnez un revenu récurrent.",
     heroSub: "Toute personne qui s'inscrit et paie via votre lien personnel vous rapporte une commission récurrente de 25% la première année, et 10% à vie.",
@@ -857,7 +858,7 @@ const COPY = {
   de: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Startseite",
     heroTitle: "Empfiehl Gadit. Verdiene laufend mit.",
     heroSub: "Für jede Person, die sich über deinen persönlichen Link anmeldet und zahlt, erhältst du im ersten Jahr 25% wiederkehrende Provision und danach 10% ein Leben lang.",
@@ -912,7 +913,7 @@ const COPY = {
   cs: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Domů",
     heroTitle: "Doporučte Gadit. Vydělávejte opakovaný příjem.",
     heroSub: "Každý, kdo se zaregistruje a zaplatí přes váš osobní odkaz, vám vynese 25% opakovanou provizi v prvním roce a 10% napořád.",
@@ -967,7 +968,7 @@ const COPY = {
   sk: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Domov",
     heroTitle: "Odporúčaj Gadit. Zarábaj opakovaný príjem.",
     heroSub: "Každý, kto sa cez tvoj osobný odkaz zaregistruje a zaplatí, ti prinesie 25% opakovanú províziu v prvom roku a 10% navždy.",
@@ -1022,7 +1023,7 @@ const COPY = {
   it: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
     heroTitle: "Consiglia Gadit. Guadagna un reddito ricorrente.",
     heroSub: "Ogni persona che si iscrive e paga tramite il tuo link personale ti fa guadagnare il 25% di commissione ricorrente il primo anno, e il 10% a vita.",
@@ -1077,7 +1078,7 @@ const COPY = {
   ja: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "ホーム",
     heroTitle: "Gadit をおすすめして、継続収入を得ましょう。",
     heroSub: "あなた専用のリンクから登録して支払ったすべての方から、初年度は25%、その後は生涯10%の継続報酬が得られます。",
@@ -1132,7 +1133,7 @@ const COPY = {
   hi: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "होम",
     heroTitle: "Gadit की सिफारिश करें। हर महीने कमाई पाएं।",
     heroSub: "जो भी आपके निजी लिंक से साइन अप करके भुगतान करता है, उससे आपको पहले साल में 25% रेकरिंग कमीशन मिलता है, और जीवन भर 10%।",
@@ -1187,7 +1188,7 @@ const COPY = {
   am: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "መነሻ",
     heroTitle: "Gadit ን ይምከሩ። ተደጋጋሚ ገቢ ያግኙ።",
     heroSub: "በግል አገናኝዎ በኩል ተመዝግቦ የሚከፍል እያንዳንዱ ሰው በመጀመሪያው ዓመት 25% ተደጋጋሚ ኮሚሽን፣ ለዘላለም ደግሞ 10% ያስገኝልዎታል።",
@@ -1242,7 +1243,7 @@ const COPY = {
   vi: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Trang chủ",
     heroTitle: "Giới thiệu Gadit. Nhận thu nhập định kỳ.",
     heroSub: "Mỗi người đăng ký và thanh toán qua liên kết cá nhân của bạn sẽ mang lại cho bạn 25% hoa hồng định kỳ trong năm đầu, và 10% trọn đời.",
@@ -1297,7 +1298,7 @@ const COPY = {
   fil: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
     heroTitle: "Irekomenda ang Gadit. Kumita nang paulit-ulit.",
     heroSub: "Bawat taong mag-sign up at magbayad gamit ang personal mong link ay magbibigay sa iyo ng 25% paulit-ulit na komisyon sa unang taon, at 10% habambuhay.",
@@ -1352,7 +1353,7 @@ const COPY = {
   af: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Tuis",
     heroTitle: "Beveel Gadit aan. Verdien herhalende inkomste.",
     heroSub: "Elke persoon wat deur jou persoonlike skakel inteken en betaal, verdien vir jou 25% herhalende kommissie in die eerste jaar, en 10% lewenslank.",
@@ -1407,7 +1408,7 @@ const COPY = {
   sw: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Nyumbani",
     heroTitle: "Pendekeza Gadit. Pata mapato yanayojirudia.",
     heroSub: "Kila mtu anayejisajili na kulipa kupitia kiungo chako binafsi anakuletea kamisheni ya 25% inayojirudia katika mwaka wa kwanza, na 10% maisha yote.",
@@ -1462,7 +1463,7 @@ const COPY = {
   "zh-CN": {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "首页",
     heroTitle: "推荐 Gadit，获得持续收入。",
     heroSub: "每位通过你的专属链接注册并付费的用户，都会在第一年为你带来 25% 的持续佣金，之后终身 10%。",
@@ -1517,7 +1518,7 @@ const COPY = {
   "zh-TW": {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "首頁",
     heroTitle: "推薦 Gadit，獲得持續收入。",
     heroSub: "每位透過你的專屬連結註冊並付費的使用者，都會在第一年為你帶來 25% 的持續佣金，之後終身 10%。",
@@ -1572,7 +1573,7 @@ const COPY = {
   ko: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "홈",
     heroTitle: "Gadit을 추천하세요. 꾸준한 수익을 얻으세요.",
     heroSub: "개인 링크를 통해 가입하고 결제한 모든 분에게서 첫해 25%의 반복 수수료, 이후 평생 10%를 받습니다.",
@@ -1627,7 +1628,7 @@ const COPY = {
   th: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "หน้าแรก",
     heroTitle: "แนะนำ Gadit แล้วรับรายได้ต่อเนื่อง",
     heroSub: "ทุกคนที่สมัครและชำระเงินผ่านลิงก์ส่วนตัวของคุณ จะทำให้คุณได้รับค่าคอมมิชชันต่อเนื่อง 25% ในปีแรก และ 10% ตลอดไป",
@@ -1682,7 +1683,7 @@ const COPY = {
   bn: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "হোম",
     heroTitle: "Gadit সুপারিশ করুন। নিয়মিত আয় করুন।",
     heroSub: "আপনার ব্যক্তিগত লিংকের মাধ্যমে যে-ই সাইন আপ করে পেমেন্ট করেন, তাঁর থেকে আপনি প্রথম বছরে 25% নিয়মিত কমিশন এবং আজীবন 10% পান।",
@@ -1737,7 +1738,7 @@ const COPY = {
   da: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Forside",
     heroTitle: "Anbefal Gadit. Tjen en fast indkomst.",
     heroSub: "Alle, der tilmelder sig og betaler via dit personlige link, giver dig 25% tilbagevendende provision det første år og 10% på livstid.",
@@ -1792,7 +1793,7 @@ const COPY = {
   hu: {
     dir: "ltr" as const,
     curSym: "$",
-    monthlyPrice: 4.99, // Deep monthly, USD
+    monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Főoldal",
     heroTitle: "Ajánld a Gaditot. Legyen rendszeres bevételed.",
     heroSub: "Mindenki, aki a személyes linkeden keresztül regisztrál és fizet, az első évben 25% ismétlődő jutalékot hoz neked, utána pedig egy életen át 10%-ot.",
@@ -1987,7 +1988,7 @@ export function PartnersClient() {
               <div style={S.calcLabel}>{t.calcYearly}</div>
             </div>
           </div>
-          <div style={S.calcNote}>{t.calcNote}</div>
+          <div style={S.calcNote}>{planCopy(lang, "partnersCalcNote")}</div>
         </div>
       </section>
 

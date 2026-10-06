@@ -29,6 +29,7 @@
  * - General last. What Gadit is, languages, kids safety, data.
  */
 
+import { planCopy } from "./plan-copy";
 import type { Lang } from "./i18n";
 
 export interface HelpItem {
@@ -1485,4 +1486,25 @@ const fallback = HELP.en;
 for (const code of ["ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"] as Lang[]) {
   // "el" (Greek) intentionally omitted here: it has a full native block above.
   HELP[code] = fallback;
+}
+
+
+// New plans (Gadi 2026-10-06): the plan answers come from plan-copy, so the
+// help center says Basic / Individual / Family in every language.
+for (const code of Object.keys(HELP) as Lang[]) {
+  const h = HELP[code];
+  const billing = h?.categories?.find((c) => c.id === "billing");
+  if (!billing) continue;
+  const L = h === HELP.en ? "en" : code;
+  for (const it of billing.items) {
+    if (it.id === "switch-plan") {
+      it.q = planCopy(L, "helpSwitchQ");
+      it.a = [planCopy(L, "helpSwitchA1"), planCopy(L, "helpSwitchA2")];
+    } else if (it.id === "unknown-charge") {
+      it.a = [planCopy(L, "helpChargeA1"), ...it.a.slice(1)];
+    } else if (it.id === "plan-comparison") {
+      it.q = planCopy(L, "helpCompareQ");
+      it.a = [planCopy(L, "helpCompareA1"), planCopy(L, "helpCompareA2"), planCopy(L, "helpCompareA3")];
+    }
+  }
 }
