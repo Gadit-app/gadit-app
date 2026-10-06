@@ -98,24 +98,24 @@ const C = {
     "מחברת לכל המילים, ותרגול חכם",
     "כל מילה: מצלמים דף ולוחצים על כל מילה",
     "תגיד את זה: תרגול הגייה עם ציון",
-    "חברו משפט וקבלו משוב",
+    "לחבר משפט ולקבל משוב",
     "משחקים, חידונים והשוואת מילים",
   ],
   priceCta: "14 יום ניסיון חינם",
-  priceTerms: "14 יום ניסיון חינם, ואחריהם {price} לחודש. אפשר לבטל בכל רגע לפני תום הניסיון, בלחיצה אחת מעמוד החשבון, ולא יהיה שום חיוב.",
-  familyNote: "יש ילדים בבית? Family עולה ₪19.90 לחודש, ומצרף עד 5 ילדים עם מצב ילדים ולוח הורה.",
+  priceTerms: "14 יום ניסיון חינם, ואחריהם {price} לחודש.\nאפשר לבטל בכל רגע לפני תום הניסיון, בלחיצה אחת מעמוד החשבון, ולא יהיה שום חיוב.",
+  familyNote: "יש ילדים בבית?\nFamily עולה ₪19.90 לחודש, ומצרף עד 5 ילדים עם מצב ילדים ולוח הורה.",
   familyLink: "להכיר את Family",
   faqKicker: "שאלות נפוצות",
   faqTitle: "מה שואלים לפני שמתחילים",
   faq: [
-    { q: "זה מתרגם?", a: "לא. Gadit מסביר מילים. לכל מילה הוא נותן את כל המשמעויות, דוגמאות, תמונה ומקור המילה, ובוחר את המשמעות שמתאימה למשפט. כשהמילה בשפה אחרת מופיעה גם מילה מקבילה, אבל העיקר הוא להבין אותה עד הסוף." },
-    { q: "באילו שפות זה עובד?", a: "אפשר לחפש מילה בכל שפה. ההסבר נכתב בשפת הממשק שבחרת, ו-Gadit עובד ב-33 שפות." },
-    { q: "אפשר להשתמש בחינם?", a: "כן. בחשבון חינמי יש 10 חיפושים ביום, ומחברת עד 30 מילים. Individual פותח חיפושים ללא הגבלה ואת כל הכלים." },
-    { q: "איך מבטלים?", a: "בעמוד החשבון, בלחיצה על \"ניהול חיוב\". אם מבטלים לפני תום 14 ימי הניסיון, לא יהיה שום חיוב. יומיים לפני סוף הניסיון יגיע אליך מייל תזכורת עם התאריך והסכום." },
-    { q: "מה ההבדל בין Individual ל-Family?", a: "Individual הוא לאדם אחד, עם כל הכלים. Family מתאים כשיש ילדים בבית: עד 5 ילדים וגם ההורה השני, לכל ילד אזור משלו, מצב ילדים, לוח הורה ותרגול הכתבה." },
+    { q: "זה מתרגם?", a: "לא.\nGadit מסביר מילים.\nלכל מילה הוא נותן את כל המשמעויות, דוגמאות, תמונה ומקור המילה, ובוחר את המשמעות שמתאימה למשפט.\nכשהמילה בשפה אחרת מופיעה גם מילה מקבילה, אבל העיקר הוא להבין אותה עד הסוף." },
+    { q: "באילו שפות זה עובד?", a: "אפשר לחפש מילה בכל שפה.\nההסבר נכתב בשפת הממשק שבחרת, ו-Gadit עובד ב-33 שפות." },
+    { q: "אפשר להשתמש בחינם?", a: "כן.\nבחשבון חינמי יש 10 חיפושים ביום, ומחברת עד 30 מילים.\nIndividual פותח חיפושים ללא הגבלה ואת כל הכלים." },
+    { q: "איך מבטלים?", a: "בעמוד החשבון, בלחיצה על \"ניהול חיוב\".\nאם מבטלים לפני תום 14 ימי הניסיון, לא יהיה שום חיוב.\nיומיים לפני סוף הניסיון יגיע אליך מייל תזכורת עם התאריך והסכום." },
+    { q: "מה ההבדל בין Individual ל-Family?", a: "Individual הוא לאדם אחד, עם כל הכלים.\nFamily מתאים כשיש ילדים בבית: עד 5 ילדים וגם ההורה השני, לכל ילד אזור משלו, מצב ילדים, לוח הורה ותרגול הכתבה." },
   ],
   finalTitle: "המילה הבאה שתעצור אותך, כבר לא תעצור.",
-  finalBody: "14 יום ניסיון חינם. ביטול בלחיצה אחת.",
+  finalBody: "14 יום ניסיון חינם.\nביטול בלחיצה אחת.",
   finalCta: "להתחיל עכשיו",
 };
 
@@ -248,10 +248,10 @@ export function IndividualsRealLanding() {
             <div className="ind-price-year">{C.yearlyOr} <span dir="ltr">{INDIVIDUAL_DISPLAY.ilsYearly}</span> {C.yearly}</div>
             <ul className="ind-includes">{C.includes.map((p) => <li key={p}><Check />{p}</li>)}</ul>
             <button type="button" className="ind-cta ind-cta-wide" onClick={() => start("price")}>{C.priceCta}</button>
-            <p className="ind-terms">{C.priceTerms.replace("{price}", INDIVIDUAL_DISPLAY.ilsMonthly)}</p>
+            <p className="ind-terms"><Lines text={C.priceTerms.replace("{price}", INDIVIDUAL_DISPLAY.ilsMonthly)} /></p>
           </div>
           <p className="ind-family-note">
-            {C.familyNote} <Link href={href("/families")}>{C.familyLink}</Link>
+            <Lines text={C.familyNote} /><br /><Link href={href("/families")}>{C.familyLink}</Link>
           </p>
         </section>
 
@@ -272,7 +272,7 @@ export function IndividualsRealLanding() {
 
         <section className="ind-final">
           <h2 className="ind-h2 ind-center">{C.finalTitle}</h2>
-          <p className="ind-body ind-center">{C.finalBody}</p>
+          <p className="ind-body ind-center"><Lines text={C.finalBody} /></p>
           <button type="button" className="ind-cta" onClick={() => start("final")}>{C.finalCta}</button>
         </section>
       </main>
