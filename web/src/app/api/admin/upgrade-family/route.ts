@@ -49,6 +49,10 @@ export async function POST(req: NextRequest) {
   // price. We attach a forever coupon for exactly the price difference so
   // Gadi absorbs it as a gift, and DON'T charge the proration now.
   const gift = req.nextUrl.searchParams.get("gift") === "1";
+  // target=deep (Gadi 2026-10-06): same move to the full individual plan
+  // instead of Family, e.g. a Clear subscriber gifted everything at their
+  // current price.
+  const toDeep = req.nextUrl.searchParams.get("target") === "deep";
 
   let email = "";
   let uidParam = "";
@@ -99,8 +103,8 @@ export async function POST(req: NextRequest) {
   const interval = currentPrice?.recurring?.interval; // "month" | "year"
   if (!item || !interval) return NextResponse.json({ error: "could not read current price/interval" }, { status: 500 });
 
-  const familyMonthly = process.env.STRIPE_PRICE_FAMILY_MONTHLY;
-  const familyYearly = process.env.STRIPE_PRICE_FAMILY_YEARLY;
+  const familyMonthly = toDeep ? process.env.STRIPE_PRICE_DEEP_MONTHLY : process.env.STRIPE_PRICE_FAMILY_MONTHLY;
+  const familyYearly = toDeep ? process.env.STRIPE_PRICE_DEEP_YEARLY : process.env.STRIPE_PRICE_FAMILY_YEARLY;
   const familyPrice = interval === "year" ? familyYearly : familyMonthly;
   if (!familyPrice) return NextResponse.json({ error: "Family price env var not set" }, { status: 503 });
 
@@ -120,7 +124,7 @@ export async function POST(req: NextRequest) {
     const familyAmount = fp.unit_amount ?? 0;
     giftCurrency = (fp.currency ?? "usd").toLowerCase();
     giftDiff = Math.max(0, familyAmount - currentAmount);
-    giftCouponId = `family_gift_${giftCurrency}_${giftDiff}`;
+    giftCouponId = `${toDeep ? "deep" : "family"}_gift_${giftCurrency}_${giftDiff}`;
   }
 
   const plan = {
@@ -150,7 +154,7 @@ export async function POST(req: NextRequest) {
         amount_off: giftDiff,
         currency: giftCurrency,
         duration: "forever",
-        name: `Family gift (${giftDiff / 100} ${giftCurrency.toUpperCase()}/cycle off)`,
+        name: `${toDeep ? "Deep" : "Family"} gift (${giftDiff / 100} ${giftCurrency.toUpperCase()}/cycle off)`,
       });
     }
   }
