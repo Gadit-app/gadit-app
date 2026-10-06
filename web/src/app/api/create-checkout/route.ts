@@ -1,3 +1,4 @@
+import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth } from "@/lib/firebase-admin";
@@ -63,6 +64,7 @@ const ALL_PAID_PRICE_IDS = new Set(
     SCHOOLS_LARGE_MONTHLY_PRICE_ID,
     SCHOOLS_LARGE_YEARLY_PRICE_ID,
     ...NEW_SCHOOLS_PRICE_IDS,
+    ...INDIVIDUAL_PRICE_IDS,
   ].filter(Boolean),
 );
 

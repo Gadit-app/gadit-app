@@ -1,3 +1,4 @@
+import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import Stripe from "stripe";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { CAC_USD, GROSS_MARGIN, BUSINESS_TZ } from "@/lib/admin-config";
@@ -26,7 +27,7 @@ import { CAC_USD, GROSS_MARGIN, BUSINESS_TZ } from "@/lib/admin-config";
  *     canceled are never in MRR.
  */
 
-export type Tier = "clear" | "deep" | "family" | "schools";
+export type Tier = "clear" | "deep" | "individual" | "family" | "schools";
 export type Billing = "monthly" | "yearly";
 
 export type RevenueSubscriber = {
@@ -141,6 +142,7 @@ function buildTierMap(): Record<string, Tier> {
   add(process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY, "schools");
   add(process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY, "schools");
   for (const id of NEW_SCHOOLS_PRICE_IDS) m[id] = "schools";
+  for (const id of INDIVIDUAL_PRICE_IDS) m[id] = "individual";
   return m;
 }
 
@@ -157,6 +159,7 @@ async function buildProductTierMap(stripe: Stripe): Promise<Record<string, Tier>
     const t: Tier | null =
       n.includes("family") ? "family" :
       n.includes("school") ? "schools" :
+      n.includes("individual") ? "individual" :
       n.includes("deep") ? "deep" :
       n.includes("clear") ? "clear" : null;
     if (t) m[p.id] = t;
@@ -294,8 +297,8 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   let trialResolvedCount = 0;
   let trialConvertedCount = 0;
 
-  const payingByTier: Record<Tier, number> = { clear: 0, deep: 0, family: 0, schools: 0 };
-  const trialingByTier: Record<Tier, number> = { clear: 0, deep: 0, family: 0, schools: 0 };
+  const payingByTier: Record<Tier, number> = { clear: 0, deep: 0, individual: 0, family: 0, schools: 0 };
+  const trialingByTier: Record<Tier, number> = { clear: 0, deep: 0, individual: 0, family: 0, schools: 0 };
   const payingCustomers = new Set<string>();
 
   // Per-customer bookkeeping for new / churned customer detection. "Paying

@@ -1,3 +1,4 @@
+import { isIndividualPriceId } from "@/lib/individual-prices";
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
@@ -428,6 +429,8 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
   };
   if (LEGACY_FAMILY_PRICE_IDS.includes(priceId)) return "deep";
   if (isNewSchoolsPrice(priceId)) return "deep";
+  // Individual = every tool for one person (Gadi 2026-10-06).
+  if (isIndividualPriceId(priceId)) return "deep";
   return map[priceId] ?? "basic";
 }
 

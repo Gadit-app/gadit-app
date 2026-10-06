@@ -14,7 +14,7 @@ import { TOKENS } from "@/lib/admin-config";
  * Reads /api/admin/overview, which aggregates everything in one pass.
  */
 
-type ByTier = { clear: number; deep: number; family: number; schools: number };
+type ByTier = { clear: number; deep: number; individual?: number; family: number; schools: number };
 
 type Overview = {
   generatedAt: string;
@@ -493,6 +493,7 @@ function tierBreakdown(t?: ByTier): string {
   const parts: string[] = [];
   if (t.clear)   parts.push(`${t.clear} Clear`);
   if (t.deep)    parts.push(`${t.deep} Deep`);
+  if (t.individual) parts.push(`${t.individual} Individual`);
   if (t.family)  parts.push(`${t.family} Family`);
   if (t.schools) parts.push(`${t.schools} Schools`);
   return parts.join(" · ");

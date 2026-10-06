@@ -1,3 +1,4 @@
+import { isIndividualPriceId } from "@/lib/individual-prices";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -59,6 +60,7 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
     [process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY!]: "deep",
   };
   if (LEGACY_FAMILY_PRICE_IDS.includes(priceId)) return "deep";
+  if (isIndividualPriceId(priceId)) return "deep";
   return map[priceId] ?? "basic";
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -84,6 +85,8 @@ function tierForPrice(priceId: string): TierInfo | null {
     };
   }
   const map: Array<[string | undefined, TierInfo]> = [
+    [INDIVIDUAL_MONTHLY, { name: "Individual", cycle: "monthly", amount: INDIVIDUAL_DISPLAY.usdMonthly, amountIls: INDIVIDUAL_DISPLAY.ilsMonthly, kind: "deep" }],
+    [INDIVIDUAL_YEARLY, { name: "Individual", cycle: "yearly", amount: INDIVIDUAL_DISPLAY.usdYearly, amountIls: INDIVIDUAL_DISPLAY.ilsYearly, kind: "deep" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, { name: "Clear", cycle: "monthly", amount: "$2.99", amountIls: "₪9.90", kind: "clear" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY, { name: "Clear", cycle: "yearly", amount: "$29.99", amountIls: "₪99", kind: "clear" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, { name: "Deep", cycle: "monthly", amount: "$4.99", amountIls: "₪16.90", kind: "deep" }],
@@ -110,6 +113,7 @@ function counterpartPrice(current: TierInfo): string | null {
     return target === "yearly" ? t.yearly : t.monthly;
   }
   const byName: Record<string, { monthly?: string; yearly?: string }> = {
+    Individual: { monthly: INDIVIDUAL_MONTHLY, yearly: INDIVIDUAL_YEARLY },
     Clear: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY },
     Deep: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_YEARLY },
     Family: { monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY, yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY },
