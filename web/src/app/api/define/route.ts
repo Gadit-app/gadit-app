@@ -1867,11 +1867,14 @@ export async function POST(req: NextRequest) {
             // the streamed attempt or a retry — both produced the same
             // shape and quality bar.
             void usingFallback;
-            setCachedResult(cacheKey, acceptedResult).catch((e) =>
-              console.error("Cache write failed:", e),
-            );
+            // The write is AWAITED below, after the client has its answer: a
+            // fire-and-forget write was often cut off when the function froze
+            // after the stream closed, so a paid generation was lost and
+            // bought again on the next search (found 2026-10-06).
+            const cacheWrite = setCachedResult(cacheKey, acceptedResult);
             const doneEvent = `data: ${JSON.stringify({ type: "done", result: acceptedResult })}\n\n`;
             safeEnqueue(encoder.encode(doneEvent));
+            await cacheWrite;
           } else {
             // All main retries failed validation. Three-step salvage,
             // each step more aggressive than the last:
@@ -1923,11 +1926,10 @@ export async function POST(req: NextRequest) {
             }
 
             if (salvaged) {
-              setCachedResult(cacheKey, salvaged).catch((e) =>
-                console.error("Cache write failed:", e),
-              );
+              const salvagedWrite = setCachedResult(cacheKey, salvaged);
               const doneEvent = `data: ${JSON.stringify({ type: "done", result: salvaged })}\n\n`;
               safeEnqueue(encoder.encode(doneEvent));
+              await salvagedWrite;
             } else {
               console.error("All attempts (1 streamed + 2 retries + etymology fallback + sanitise) failed, surfacing error");
               const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;
