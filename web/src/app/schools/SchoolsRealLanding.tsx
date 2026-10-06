@@ -6,6 +6,7 @@ import { Lines } from "../families/RealScreens";
 import { SchoolOrderForm } from "./SchoolOrderForm";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { useHref } from "@/lib/href";
+import { useAuth } from "@/lib/auth-context";
 import { track } from "@/lib/track";
 
 /**
@@ -22,6 +23,7 @@ type Tool = { kicker: string; title: string; body: string; points: string[]; img
 
 const C = {
   topCta: "להזמנה לבית הספר",
+  dashCta: "ללוח הבקרה",
   credPill: "לפי תוכניות הלימודים, מגן ועד י״ב",
   h1: "כל תלמיד מבין את השיעור.",
   whatIs: "המילים החשובות של כל יחידת לימוד, מוכנות להקרנה בכיתה. וכל תלמיד מקבל הסבר לכל מילה קשה, גם בשפה שלו.",
@@ -158,6 +160,8 @@ function Check() {
 
 export function SchoolsRealLanding() {
   const href = useHref();
+  // A school that already subscribes gets its dashboard in the top bar.
+  const { schoolId } = useAuth();
   const toOrder = (where: string) => {
     track("schools_order_click", { where, page: "schools-real" });
     document.getElementById("order")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -170,7 +174,11 @@ export function SchoolsRealLanding() {
           Gad<span>it</span>
         </Link>
         <div className="sch-top-end">
-          <button type="button" className="sch-top-cta" onClick={() => toOrder("top")}>{C.topCta}</button>
+          {schoolId ? (
+            <Link href={href("/schools/manage")} className="sch-top-cta" style={{ textDecoration: "none" }}>{C.dashCta}</Link>
+          ) : (
+            <button type="button" className="sch-top-cta" onClick={() => toOrder("top")}>{C.topCta}</button>
+          )}
           <div className="sch-top-lang"><LangSwitcher variant="muted" /></div>
         </div>
       </header>

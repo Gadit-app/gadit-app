@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SchoolsLandingClient } from "./SchoolsLandingClient";
+import { SchoolsLandingSwitch } from "./SchoolsLandingSwitch";
 import { shareMetadata, type ShareCopy } from "@/lib/landing-metadata";
 
 /** Localized share (OG/WhatsApp) copy for the Schools landing, reused by
@@ -64,5 +64,5 @@ export function generateMetadata(): Promise<Metadata> {
 }
 
 export default function SchoolsLandingRoute() {
-  return <SchoolsLandingClient />;
+  return <SchoolsLandingSwitch />;
 }

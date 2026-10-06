@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SchoolsLandingClient } from "../SchoolsLandingClient";
+import { SchoolsLandingSwitch } from "../SchoolsLandingSwitch";
 import { shareMetadata } from "@/lib/landing-metadata";
 import { SCHOOLS_OG } from "../page";
 
@@ -13,5 +13,5 @@ export function generateMetadata(): Promise<Metadata> {
 }
 
 export default function SchoolsLandingRoute() {
-  return <SchoolsLandingClient standalone />;
+  return <SchoolsLandingSwitch standalone />;
 }
