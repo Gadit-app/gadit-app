@@ -68,7 +68,7 @@ export const PLAN_COPY = {
     // Upgrade email for people who use Gadit in the Android (Play) app, where
     // nothing can be bought (Gadi 2026-10-06). Sent by email, outside the app.
     pupSubject: "How to upgrade your Gadit account",
-    pupBody: "Hi {name},\n\nThanks for using Gadit on Android.\n\nUpgrades are not available inside the app, so here is a direct link that opens in your browser.\n\n## Family\nFor parents and children.\nUp to 5 kids, each with their own notebook, Kids Mode and a parent dashboard.\n\n## Individual\nFor one person.\nUnlimited lookups and every tool.\n\nBoth start with 14 days free.\nYou can cancel any time before the trial ends, and nothing is charged.\n\nOnce you subscribe, the app updates on its own.\nJust sign in with the same account.",
+    pupBody: "Hi {name},\n\nThanks for using Gadit on Android.\n\nUpgrades are not available inside the app, so here is a direct link that opens in your browser.\n\n## Family\n\nFor parents and children.\n\nUp to 5 kids, each with their own notebook, Kids Mode and a parent dashboard.\n\n## Individual\n\nFor one person.\n\nUnlimited lookups and every tool.\n\nBoth start with 14 days free.\n\nYou can cancel any time before the trial ends, and nothing is charged.\n\nOnce you subscribe, the app updates on its own.\n\nJust sign in with the same account.",
     pupCta: "See the plans",
     helpCompareA3: "Family ($5.99 a month or $59 a year, ₪19.90 or ₪199 in Israel): everything in Individual for up to 5 children and both parents, plus Kids Mode, a space of its own for every child, the parent board with word alerts, and dictation practice.",
     famSingleChild: "Just one learner at home? Individual is {price} a month. For a little more, Family adds up to 5 children.",
@@ -132,7 +132,7 @@ export const PLAN_COPY = {
     remCycleMonth: "לחודש",
     remCycleYear: "לשנה",
     pupSubject: "איך משדרגים את החשבון ב-Gadit",
-    pupBody: "היי {name},\n\nתודה שבחרת להשתמש ב-Gadit באנדרואיד.\n\nבתוך האפליקציה אי אפשר לשדרג, ולכן שלחנו לך קישור ישיר שנפתח בדפדפן.\n\n## Family\nלהורים ולילדים.\nעד 5 ילדים, לכל ילד מחברת משלו, מצב ילדים ולוח הורה.\n\n## Individual\nלאדם אחד.\nחיפושים ללא הגבלה וכל הכלים.\n\nבשני המסלולים 14 הימים הראשונים חינם.\nאפשר לבטל בכל רגע לפני סוף הניסיון, ולא יהיה שום חיוב.\n\nאחרי ההרשמה האפליקציה מתעדכנת לבד.\nרק צריך להתחבר עם אותו חשבון.",
+    pupBody: "היי {name},\n\nתודה שבחרת להשתמש ב-Gadit באנדרואיד.\n\nבתוך האפליקציה אי אפשר לשדרג, ולכן שלחנו לך קישור ישיר שנפתח בדפדפן.\n\n## Family\n\nלהורים ולילדים.\n\nעד 5 ילדים, לכל ילד מחברת משלו, מצב ילדים ולוח הורה.\n\n## Individual\n\nלאדם אחד.\n\nחיפושים ללא הגבלה וכל הכלים.\n\nבשני המסלולים 14 הימים הראשונים חינם.\n\nאפשר לבטל בכל רגע לפני סוף הניסיון, ולא יהיה שום חיוב.\n\nאחרי ההרשמה האפליקציה מתעדכנת לבד.\n\nרק צריך להתחבר עם אותו חשבון.",
     pupCta: "לראות את המסלולים",
     helpCompareA3: "Family (₪19.90 לחודש או ₪199 לשנה): כל מה שיש ב-Individual לעד 5 ילדים ולשני ההורים, ובנוסף מצב ילדים, אזור משלו לכל ילד, לוח הורה עם התראות על מילים, ותרגול הכתבה.",
     famSingleChild: "יש בבית לומד אחד? Individual עולה {price} לחודש. בעוד קצת, Family מצרף עד 5 ילדים.",

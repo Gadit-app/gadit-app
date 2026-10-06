@@ -124,7 +124,7 @@
   "remCycleMonth": "شهريًا",
   "remCycleYear": "سنويًا",
   "pupSubject": "كيفية ترقية حسابك في Gadit",
-  "pupBody": "مرحبًا {name}،\n\nشكرًا لاستخدامك Gadit على Android.\n\nالترقية غير متاحة من داخل التطبيق، لذلك إليك رابطًا مباشرًا يفتح في المتصفح.\n\n## Family\nللآباء والأطفال.\nحتى 5 أطفال، ولكل واحد الدفتر الخاص به، ووضع أطفال، ولوحة تحكم للوالدَين.\n\n## Individual\nلشخص واحد.\nعمليات بحث غير محدودة وكل الأدوات.\n\nكلتا الخطتين تبدأان بـ 14 يومًا مجانًا.\nيمكنك الإلغاء في أي وقت قبل انتهاء الفترة التجريبية، ولن يتم تحصيل أي رسوم.\n\nبمجرد الاشتراك، سيتحدّث التطبيق تلقائيًا.\nفقط سجّل الدخول بالحساب نفسه.",
+  "pupBody": "مرحبًا {name}،\n\nشكرًا لاستخدامك Gadit على Android.\n\nالترقية غير متاحة من داخل التطبيق، لذلك إليك رابطًا مباشرًا يفتح في المتصفح.\n\n## Family\n\nللآباء والأطفال.\n\nحتى 5 أطفال، ولكل واحد الدفتر الخاص به، ووضع أطفال، ولوحة تحكم للوالدَين.\n\n## Individual\n\nلشخص واحد.\n\nعمليات بحث غير محدودة وكل الأدوات.\n\nكلتا الخطتين تبدأان بـ 14 يومًا مجانًا.\n\nيمكنك الإلغاء في أي وقت قبل انتهاء الفترة التجريبية، ولن يتم تحصيل أي رسوم.\n\nبمجرد الاشتراك، سيتحدّث التطبيق تلقائيًا.\n\nفقط سجّل الدخول بالحساب نفسه.",
   "pupCta": "عرض الخطط"
  },
  "ru": {
@@ -188,7 +188,7 @@
   "remCycleMonth": "в месяц",
   "remCycleYear": "в год",
   "pupSubject": "Как перейти на другой план Gadit",
-  "pupBody": "Привет, {name}!\n\nСпасибо, что пользуешься Gadit на Android.\n\nОформить другой план в приложении нельзя, поэтому вот прямая ссылка, которая откроется в браузере.\n\n## Family\nДля родителей и детей.\nДо 5 детей, у каждого свои Тетрадь, режим Дети и панель для родителей.\n\n## Individual\nДля одного человека.\nБезлимитные поиски и все инструменты.\n\nОба плана начинаются с 14 дней бесплатно.\nТы можешь отменить подписку в любой момент до конца пробного периода, и ничего не спишется.\n\nПосле оформления подписки приложение обновится само.\nПросто войди в тот же аккаунт.",
+  "pupBody": "Привет, {name}!\n\nСпасибо, что пользуешься Gadit на Android.\n\nОформить другой план в приложении нельзя, поэтому вот прямая ссылка, которая откроется в браузере.\n\n## Family\n\nДля родителей и детей.\n\nДо 5 детей, у каждого свои Тетрадь, режим Дети и панель для родителей.\n\n## Individual\n\nДля одного человека.\n\nБезлимитные поиски и все инструменты.\n\nОба плана начинаются с 14 дней бесплатно.\n\nТы можешь отменить подписку в любой момент до конца пробного периода, и ничего не спишется.\n\nПосле оформления подписки приложение обновится само.\n\nПросто войди в тот же аккаунт.",
   "pupCta": "Посмотреть планы"
  },
  "es": {
@@ -252,7 +252,7 @@
   "remCycleMonth": "al mes",
   "remCycleYear": "al año",
   "pupSubject": "Cómo mejorar tu cuenta de Gadit",
-  "pupBody": "Hola, {name}:\n\nGracias por usar Gadit en Android.\n\nNo puedes mejorar tu plan dentro de la app, así que aquí tienes un enlace directo que se abre en tu navegador.\n\n## Family\nPara padres e hijos.\nHasta 5 niños, cada uno con su propio Cuaderno, modo Niños y un panel para padres.\n\n## Individual\nPara una persona.\nConsultas ilimitadas y todas las herramientas.\n\nAmbos empiezan con 14 días gratis.\nPuedes cancelar en cualquier momento antes de que termine la prueba y no se te cobrará nada.\n\nCuando te suscribas, la app se actualizará sola.\nSolo inicia sesión con la misma cuenta.",
+  "pupBody": "Hola, {name}:\n\nGracias por usar Gadit en Android.\n\nNo puedes mejorar tu plan dentro de la app, así que aquí tienes un enlace directo que se abre en tu navegador.\n\n## Family\n\nPara padres e hijos.\n\nHasta 5 niños, cada uno con su propio Cuaderno, modo Niños y un panel para padres.\n\n## Individual\n\nPara una persona.\n\nConsultas ilimitadas y todas las herramientas.\n\nAmbos empiezan con 14 días gratis.\n\nPuedes cancelar en cualquier momento antes de que termine la prueba y no se te cobrará nada.\n\nCuando te suscribas, la app se actualizará sola.\n\nSolo inicia sesión con la misma cuenta.",
   "pupCta": "Ver planes"
  },
  "pt": {
@@ -316,7 +316,7 @@
   "remCycleMonth": "por mês",
   "remCycleYear": "por ano",
   "pupSubject": "Como fazer upgrade da tua conta Gadit",
-  "pupBody": "Olá, {name},\n\nObrigado por usares o Gadit no Android.\n\nOs upgrades não estão disponíveis na app, por isso aqui tens um link direto que abre no teu browser.\n\n## Family\nPara pais e filhos.\nAté 5 crianças, cada uma com o seu próprio Caderno, modo Crianças e painel dos pais.\n\n## Individual\nPara uma pessoa.\nPesquisas ilimitadas e todas as ferramentas.\n\nAmbos começam com 14 dias grátis.\nPodes cancelar a qualquer momento antes do fim do teste, e nada será cobrado.\n\nAssim que subscreveres, a app atualiza-se sozinha.\nBasta iniciares sessão com a mesma conta.",
+  "pupBody": "Olá, {name},\n\nObrigado por usares o Gadit no Android.\n\nOs upgrades não estão disponíveis na app, por isso aqui tens um link direto que abre no teu browser.\n\n## Family\n\nPara pais e filhos.\n\nAté 5 crianças, cada uma com o seu próprio Caderno, modo Crianças e painel dos pais.\n\n## Individual\n\nPara uma pessoa.\n\nPesquisas ilimitadas e todas as ferramentas.\n\nAmbos começam com 14 dias grátis.\n\nPodes cancelar a qualquer momento antes do fim do teste, e nada será cobrado.\n\nAssim que subscreveres, a app atualiza-se sozinha.\n\nBasta iniciares sessão com a mesma conta.",
   "pupCta": "Ver os planos"
  },
  "fr": {
@@ -380,7 +380,7 @@
   "remCycleMonth": "par mois",
   "remCycleYear": "par an",
   "pupSubject": "Comment passer à un compte Gadit supérieur",
-  "pupBody": "Salut {name},\n\nMerci d’utiliser Gadit sur Android.\n\nIl n’est pas possible de changer d’offre dans l’app, voici donc un lien direct qui s’ouvre dans ton navigateur.\n\n## Family\nPour les parents et les enfants.\nJusqu’à 5 enfants, chacun avec son propre Carnet, le mode Enfants et un tableau de bord parent.\n\n## Individual\nPour une personne.\nRecherches illimitées et tous les outils.\n\nLes deux offres commencent par 14 jours gratuits.\nTu peux annuler à tout moment avant la fin de l’essai, et rien ne sera facturé.\n\nUne fois ton abonnement activé, l’app se met à jour toute seule.\nConnecte-toi simplement avec le même compte.",
+  "pupBody": "Salut {name},\n\nMerci d’utiliser Gadit sur Android.\n\nIl n’est pas possible de changer d’offre dans l’app, voici donc un lien direct qui s’ouvre dans ton navigateur.\n\n## Family\n\nPour les parents et les enfants.\n\nJusqu’à 5 enfants, chacun avec son propre Carnet, le mode Enfants et un tableau de bord parent.\n\n## Individual\n\nPour une personne.\n\nRecherches illimitées et tous les outils.\n\nLes deux offres commencent par 14 jours gratuits.\n\nTu peux annuler à tout moment avant la fin de l’essai, et rien ne sera facturé.\n\nUne fois ton abonnement activé, l’app se met à jour toute seule.\n\nConnecte-toi simplement avec le même compte.",
   "pupCta": "Voir les offres"
  },
  "de": {
@@ -444,7 +444,7 @@
   "remCycleMonth": "pro Monat",
   "remCycleYear": "pro Jahr",
   "pupSubject": "So kannst du dein Gadit-Konto upgraden",
-  "pupBody": "Hallo {name},\n\nvielen Dank, dass du Gadit auf Android nutzt.\n\nUpgrades sind in der App nicht verfügbar. Hier ist daher ein direkter Link, der sich in deinem Browser öffnet.\n\n## Family\nFür Eltern und Kinder.\nBis zu 5 Kinder, jedes mit eigenem Notizbuch, Kinder-Modus und Eltern-Dashboard.\n\n## Individual\nFür eine Person.\nUnbegrenzte Suchanfragen und alle Tools.\n\nBeide starten mit 14 Tagen gratis.\nDu kannst jederzeit vor Ablauf der Testphase kündigen, dann wird dir nichts berechnet.\n\nSobald du ein Abo abschließt, aktualisiert sich die App automatisch.\nMelde dich einfach mit demselben Konto an.",
+  "pupBody": "Hallo {name},\n\nvielen Dank, dass du Gadit auf Android nutzt.\n\nUpgrades sind in der App nicht verfügbar. Hier ist daher ein direkter Link, der sich in deinem Browser öffnet.\n\n## Family\n\nFür Eltern und Kinder.\n\nBis zu 5 Kinder, jedes mit eigenem Notizbuch, Kinder-Modus und Eltern-Dashboard.\n\n## Individual\n\nFür eine Person.\n\nUnbegrenzte Suchanfragen und alle Tools.\n\nBeide starten mit 14 Tagen gratis.\n\nDu kannst jederzeit vor Ablauf der Testphase kündigen, dann wird dir nichts berechnet.\n\nSobald du ein Abo abschließt, aktualisiert sich die App automatisch.\n\nMelde dich einfach mit demselben Konto an.",
   "pupCta": "Pläne ansehen"
  },
  "cs": {
@@ -508,7 +508,7 @@
   "remCycleMonth": "měsíčně",
   "remCycleYear": "ročně",
   "pupSubject": "Jak upgradovat svůj účet Gadit",
-  "pupBody": "Ahoj {name},\n\nDíky, že používáš Gadit na Androidu.\n\nUpgrade není dostupný přímo v aplikaci, takže tady je přímý odkaz, který se otevře v prohlížeči.\n\n## Family\nPro rodiče a děti.\nAž 5 dětí, každé se svým vlastním Sešitem, režimem Děti a rodičovským přehledem.\n\n## Individual\nPro jednoho člověka.\nNeomezené vyhledávání a všechny nástroje.\n\nOba plány začínají 14 dny zdarma.\nPřed koncem zkušebního období můžeš kdykoli zrušit předplatné a nic ti nenaúčtujeme.\n\nJakmile se přihlásíš k odběru, aplikace se sama aktualizuje.\nStačí se přihlásit stejným účtem.",
+  "pupBody": "Ahoj {name},\n\nDíky, že používáš Gadit na Androidu.\n\nUpgrade není dostupný přímo v aplikaci, takže tady je přímý odkaz, který se otevře v prohlížeči.\n\n## Family\n\nPro rodiče a děti.\n\nAž 5 dětí, každé se svým vlastním Sešitem, režimem Děti a rodičovským přehledem.\n\n## Individual\n\nPro jednoho člověka.\n\nNeomezené vyhledávání a všechny nástroje.\n\nOba plány začínají 14 dny zdarma.\n\nPřed koncem zkušebního období můžeš kdykoli zrušit předplatné a nic ti nenaúčtujeme.\n\nJakmile se přihlásíš k odběru, aplikace se sama aktualizuje.\n\nStačí se přihlásit stejným účtem.",
   "pupCta": "Zobrazit plány"
  },
  "sk": {
@@ -572,7 +572,7 @@
   "remCycleMonth": "mesačne",
   "remCycleYear": "ročne",
   "pupSubject": "Ako si upgradovať účet Gadit",
-  "pupBody": "Ahoj {name},\n\nďakujeme, že používaš Gadit v Androide.\n\nUpgrade nie je dostupný priamo v aplikácii, preto tu máš priamy odkaz, ktorý sa otvorí v prehliadači.\n\n## Family\nPre rodičov a deti.\nAž pre 5 detí, každé s vlastným Zošitom, režimom Deti a rodičovským prehľadom.\n\n## Individual\nPre jedného.\nNeobmedzené vyhľadávanie a všetky nástroje.\n\nOba plány začínajú 14 dňami zadarmo.\nKedykoľvek pred koncom skúšobného obdobia môžeš zrušiť a nič ti nebude účtované.\n\nKeď sa prihlásiš na odber, aplikácia sa aktualizuje sama.\nStačí sa prihlásiť do rovnakého účtu.",
+  "pupBody": "Ahoj {name},\n\nďakujeme, že používaš Gadit v Androide.\n\nUpgrade nie je dostupný priamo v aplikácii, preto tu máš priamy odkaz, ktorý sa otvorí v prehliadači.\n\n## Family\n\nPre rodičov a deti.\n\nAž pre 5 detí, každé s vlastným Zošitom, režimom Deti a rodičovským prehľadom.\n\n## Individual\n\nPre jedného.\n\nNeobmedzené vyhľadávanie a všetky nástroje.\n\nOba plány začínajú 14 dňami zadarmo.\n\nKedykoľvek pred koncom skúšobného obdobia môžeš zrušiť a nič ti nebude účtované.\n\nKeď sa prihlásiš na odber, aplikácia sa aktualizuje sama.\n\nStačí sa prihlásiť do rovnakého účtu.",
   "pupCta": "Zobraziť plány"
  },
  "it": {
@@ -636,7 +636,7 @@
   "remCycleMonth": "al mese",
   "remCycleYear": "all'anno",
   "pupSubject": "Come passare a un piano superiore del tuo account Gadit",
-  "pupBody": "Ciao {name},\n\nGrazie per usare Gadit su Android.\n\nNon puoi passare a un piano superiore dall'app, quindi ecco un link diretto che si apre nel browser.\n\n## Family\nPer genitori e figli.\nFino a 5 bambini, ognuno con il proprio Quaderno, la modalità Bambini e un pannello per i genitori.\n\n## Individual\nPer una persona.\nRicerche illimitate e tutti gli strumenti.\n\nEntrambi partono con 14 giorni gratis.\nPuoi annullare in qualsiasi momento prima della fine della prova e non ti verrà addebitato nulla.\n\nDopo l'abbonamento, l'app si aggiorna da sola.\nTi basta accedere con lo stesso account.",
+  "pupBody": "Ciao {name},\n\nGrazie per usare Gadit su Android.\n\nNon puoi passare a un piano superiore dall'app, quindi ecco un link diretto che si apre nel browser.\n\n## Family\n\nPer genitori e figli.\n\nFino a 5 bambini, ognuno con il proprio Quaderno, la modalità Bambini e un pannello per i genitori.\n\n## Individual\n\nPer una persona.\n\nRicerche illimitate e tutti gli strumenti.\n\nEntrambi partono con 14 giorni gratis.\n\nPuoi annullare in qualsiasi momento prima della fine della prova e non ti verrà addebitato nulla.\n\nDopo l'abbonamento, l'app si aggiorna da sola.\n\nTi basta accedere con lo stesso account.",
   "pupCta": "Vedi i piani"
  },
  "ja": {
@@ -700,7 +700,7 @@
   "remCycleMonth": "月額",
   "remCycleYear": "年額",
   "pupSubject": "Gaditアカウントをアップグレードする方法",
-  "pupBody": "{name}さん、こんにちは。\n\nAndroidでGaditを使ってくれてありがとう。\n\nアップグレードはアプリ内ではできないため、ブラウザで開く直接リンクを案内するね。\n\n## Family\n保護者と子ども向け。\n子どもは最大5人まで。1人ずつ自分のノート、子どもモード、保護者ダッシュボードを使えます。\n\n## Individual\n1人用。\n検索は無制限、すべてのツールが使えます。\n\nどちらも14日間無料で始められます。\nトライアル終了前ならいつでもキャンセルでき、その場合は料金はかかりません。\n\n登録すると、アプリは自動で更新されます。\n同じアカウントでサインインするだけです。",
+  "pupBody": "{name}さん、こんにちは。\n\nAndroidでGaditを使ってくれてありがとう。\n\nアップグレードはアプリ内ではできないため、ブラウザで開く直接リンクを案内するね。\n\n## Family\n\n保護者と子ども向け。\n\n子どもは最大5人まで。1人ずつ自分のノート、子どもモード、保護者ダッシュボードを使えます。\n\n## Individual\n\n1人用。\n\n検索は無制限、すべてのツールが使えます。\n\nどちらも14日間無料で始められます。\n\nトライアル終了前ならいつでもキャンセルでき、その場合は料金はかかりません。\n\n登録すると、アプリは自動で更新されます。\n\n同じアカウントでサインインするだけです。",
   "pupCta": "プランを見る"
  },
  "hi": {
@@ -764,7 +764,7 @@
   "remCycleMonth": "प्रति माह",
   "remCycleYear": "प्रति वर्ष",
   "pupSubject": "अपना Gadit खाता कैसे अपग्रेड करें",
-  "pupBody": "नमस्ते {name},\n\nAndroid पर Gadit इस्तेमाल करने के लिए धन्यवाद.\n\nऐप के अंदर अपग्रेड उपलब्ध नहीं हैं, इसलिए यहाँ एक सीधा लिंक है जो आपके ब्राउज़र में खुलेगा.\n\n## Family\nमाता-पिता और बच्चों के लिए.\n5 बच्चों तक, और हर बच्चे के लिए अपनी नोटबुक, बच्चे मोड और एक पैरेंट डैशबोर्ड.\n\n## Individual\nएक व्यक्ति के for.\nअनलिमिटेड लुकअप और हर टूल.\n\nदोनों 14 दिन मुफ्त से शुरू होते हैं.\nट्रायल खत्म होने से पहले आप कभी भी कैंसल कर सकते हैं, और कोई शुल्क नहीं लगेगा.\n\nसब्सक्राइब करते ही ऐप अपने आप अपडेट हो जाएगा.\nबस उसी खाते से साइन इन करें.",
+  "pupBody": "नमस्ते {name},\n\nAndroid पर Gadit इस्तेमाल करने के लिए धन्यवाद.\n\nऐप के अंदर अपग्रेड उपलब्ध नहीं हैं, इसलिए यहाँ एक सीधा लिंक है जो आपके ब्राउज़र में खुलेगा.\n\n## Family\n\nमाता-पिता और बच्चों के लिए.\n\n5 बच्चों तक, और हर बच्चे के लिए अपनी नोटबुक, बच्चे मोड और एक पैरेंट डैशबोर्ड.\n\n## Individual\n\nएक व्यक्ति के for.\n\nअनलिमिटेड लुकअप और हर टूल.\n\nदोनों 14 दिन मुफ्त से शुरू होते हैं.\n\nट्रायल खत्म होने से पहले आप कभी भी कैंसल कर सकते हैं, और कोई शुल्क नहीं लगेगा.\n\nसब्सक्राइब करते ही ऐप अपने आप अपडेट हो जाएगा.\n\nबस उसी खाते से साइन इन करें.",
   "pupCta": "प्लान देखें"
  },
  "am": {
@@ -828,7 +828,7 @@
   "remCycleMonth": "በወር",
   "remCycleYear": "በዓመት",
   "pupSubject": "የGadit መለያህን እንዴት እንደምታሻሽል",
-  "pupBody": "ሰላም {name},\n\nGaditን በAndroid ላይ ስለምትጠቀም እናመሰግናለን።\n\nማሻሻያዎች በመተግበሪያው ውስጥ አይገኙም፣ ስለዚህ በአሳሽህ የሚከፈት ቀጥተኛ ሊንክ ይህ ነው።\n\n## Family\nለወላጆች እና ለልጆች።\nእስከ 5 ልጆች፣ እያንዳንዳቸውም የራሳቸው ደብተር፣ የልጆች ሞድ እና የወላጅ ዳሽቦርድ ይኖራቸዋል።\n\n## Individual\nለአንድ ሰው።\nያልተገደበ ፍለጋ እና ሁሉም መሣሪያዎች።\n\nሁለቱም በ14 ቀናት ነጻ ይጀምራሉ።\nየሙከራ ጊዜው ሳያበቃ በፊት በማንኛውም ጊዜ መሰረዝ ትችላለህ፣ እና ምንም ክፍያ አይከፈልም።\n\nአንዴ ከተመዘገብክ በኋላ፣ መተግበሪያው ራሱ ይዘምናል።\nበተመሳሳይ መለያ ብቻ ግባ።",
+  "pupBody": "ሰላም {name},\n\nGaditን በAndroid ላይ ስለምትጠቀም እናመሰግናለን።\n\nማሻሻያዎች በመተግበሪያው ውስጥ አይገኙም፣ ስለዚህ በአሳሽህ የሚከፈት ቀጥተኛ ሊንክ ይህ ነው።\n\n## Family\n\nለወላጆች እና ለልጆች።\n\nእስከ 5 ልጆች፣ እያንዳንዳቸውም የራሳቸው ደብተር፣ የልጆች ሞድ እና የወላጅ ዳሽቦርድ ይኖራቸዋል።\n\n## Individual\n\nለአንድ ሰው።\n\nያልተገደበ ፍለጋ እና ሁሉም መሣሪያዎች።\n\nሁለቱም በ14 ቀናት ነጻ ይጀምራሉ።\n\nየሙከራ ጊዜው ሳያበቃ በፊት በማንኛውም ጊዜ መሰረዝ ትችላለህ፣ እና ምንም ክፍያ አይከፈልም።\n\nአንዴ ከተመዘገብክ በኋላ፣ መተግበሪያው ራሱ ይዘምናል።\n\nበተመሳሳይ መለያ ብቻ ግባ።",
   "pupCta": "እቅዶቹን ተመልከት"
  },
  "uk": {
@@ -892,7 +892,7 @@
   "remCycleMonth": "на місяць",
   "remCycleYear": "на рік",
   "pupSubject": "Як оновити твій обліковий запис Gadit",
-  "pupBody": "Привіт, {name},\n\nДякуємо, що користуєшся Gadit на Android.\n\nОновити план у застосунку не можна, тож ось пряме посилання, яке відкриється в браузері.\n\n## Family\nДля батьків і дітей.\nДо 5 дітей, у кожної свій Зошит, режим Діти та батьківська панель.\n\n## Individual\nДля однієї людини.\nНеобмежені пошуки й усі інструменти.\n\nОбидва плани мають 14 днів безкоштовно.\nТи можеш скасувати будь-коли до завершення пробного періоду, і з тебе нічого не спишеться.\n\nЩойно ти оформиш підписку, застосунок оновиться сам.\nПросто увійди в той самий обліковий запис.",
+  "pupBody": "Привіт, {name},\n\nДякуємо, що користуєшся Gadit на Android.\n\nОновити план у застосунку не можна, тож ось пряме посилання, яке відкриється в браузері.\n\n## Family\n\nДля батьків і дітей.\n\nДо 5 дітей, у кожної свій Зошит, режим Діти та батьківська панель.\n\n## Individual\n\nДля однієї людини.\n\nНеобмежені пошуки й усі інструменти.\n\nОбидва плани мають 14 днів безкоштовно.\n\nТи можеш скасувати будь-коли до завершення пробного періоду, і з тебе нічого не спишеться.\n\nЩойно ти оформиш підписку, застосунок оновиться сам.\n\nПросто увійди в той самий обліковий запис.",
   "pupCta": "Переглянути плани"
  },
  "tr": {
@@ -956,7 +956,7 @@
   "remCycleMonth": "aylık",
   "remCycleYear": "yıllık",
   "pupSubject": "Gadit hesabını nasıl yükseltebilirsin",
-  "pupBody": "Merhaba {name},\n\nGadit'i Android'de kullandığın için teşekkürler.\n\nYükseltme işlemi uygulama içinde yapılamıyor, bu yüzden tarayıcında açılacak doğrudan bağlantıyı burada bulabilirsin.\n\n## Family\nEbeveynler ve çocuklar için.\nEn fazla 5 çocuk, her biri için kendi Defter'i, Çocuklar modu ve ebeveyn paneli.\n\n## Individual\nTek kişi için.\nSınırsız arama ve tüm araçlar.\n\nİkisi de 14 gün ücretsiz başlar.\nDeneme bitmeden istediğin zaman iptal edebilirsin, ücret alınmaz.\n\nAbone olduktan sonra uygulama kendiliğinden güncellenir.\nSadece aynı hesapla giriş yapman yeterli.",
+  "pupBody": "Merhaba {name},\n\nGadit'i Android'de kullandığın için teşekkürler.\n\nYükseltme işlemi uygulama içinde yapılamıyor, bu yüzden tarayıcında açılacak doğrudan bağlantıyı burada bulabilirsin.\n\n## Family\n\nEbeveynler ve çocuklar için.\n\nEn fazla 5 çocuk, her biri için kendi Defter'i, Çocuklar modu ve ebeveyn paneli.\n\n## Individual\n\nTek kişi için.\n\nSınırsız arama ve tüm araçlar.\n\nİkisi de 14 gün ücretsiz başlar.\n\nDeneme bitmeden istediğin zaman iptal edebilirsin, ücret alınmaz.\n\nAbone olduktan sonra uygulama kendiliğinden güncellenir.\n\nSadece aynı hesapla giriş yapman yeterli.",
   "pupCta": "Planları gör"
  },
  "pl": {
@@ -1020,7 +1020,7 @@
   "remCycleMonth": "miesiąc",
   "remCycleYear": "rok",
   "pupSubject": "Jak przejść na wyższy plan konta Gadit",
-  "pupBody": "Cześć {name},\n\nDzięki, że używasz Gadit na Androidzie.\n\nZmiana planu nie jest dostępna w aplikacji, więc tutaj masz bezpośredni link, który otworzy się w przeglądarce.\n\n## Family\nDla rodziców i dzieci.\nDo 5 dzieci, każde z własnym Notatnikiem, trybem Dzieci i panelem rodzica.\n\n## Individual\nDla jednej osoby.\nNielimitowane wyszukiwanie i wszystkie narzędzia.\n\nOba plany zaczynają się od 14 dni za darmo.\nMożesz zrezygnować w dowolnym momencie przed końcem okresu próbnego, a nic nie zostanie naliczone.\n\nGdy zasubskrybujesz plan, aplikacja zaktualizuje się sama.\nWystarczy, że zalogujesz się na to samo konto.",
+  "pupBody": "Cześć {name},\n\nDzięki, że używasz Gadit na Androidzie.\n\nZmiana planu nie jest dostępna w aplikacji, więc tutaj masz bezpośredni link, który otworzy się w przeglądarce.\n\n## Family\n\nDla rodziców i dzieci.\n\nDo 5 dzieci, każde z własnym Notatnikiem, trybem Dzieci i panelem rodzica.\n\n## Individual\n\nDla jednej osoby.\n\nNielimitowane wyszukiwanie i wszystkie narzędzia.\n\nOba plany zaczynają się od 14 dni za darmo.\n\nMożesz zrezygnować w dowolnym momencie przed końcem okresu próbnego, a nic nie zostanie naliczone.\n\nGdy zasubskrybujesz plan, aplikacja zaktualizuje się sama.\n\nWystarczy, że zalogujesz się na to samo konto.",
   "pupCta": "Zobacz plany"
  },
  "fa": {
@@ -1084,7 +1084,7 @@
   "remCycleMonth": "در ماه",
   "remCycleYear": "در سال",
   "pupSubject": "چطور حسابت را در Gadit ارتقا بدهی",
-  "pupBody": "سلام {name}،\n\nممنون که از Gadit در Android استفاده می‌کنی.\n\nارتقا داخل برنامه در دسترس نیست، برای همین اینجا یک لینک مستقیم گذاشته‌ایم که در مرورگرت باز می‌شود.\n\n## Family\nبرای والدین و بچه‌ها.\nتا ۵ کودک، هر کدام با دفترچه، حالت کودکان و داشبورد والدینِ خودشان.\n\n## Individual\nبرای یک نفر.\nجست‌وجوی نامحدود و همهٔ ابزارها.\n\nهر دو با ۱۴ روز رایگان شروع می‌شوند.\nمی‌توانی هر زمان قبل از پایان دورهٔ آزمایشی لغو کنی و چیزی از تو کم نمی‌شود.\n\nوقتی اشتراک بگیری، برنامه خودش به‌روزرسانی می‌شود.\nفقط با همان حساب وارد شو.",
+  "pupBody": "سلام {name}،\n\nممنون که از Gadit در Android استفاده می‌کنی.\n\nارتقا داخل برنامه در دسترس نیست، برای همین اینجا یک لینک مستقیم گذاشته‌ایم که در مرورگرت باز می‌شود.\n\n## Family\n\nبرای والدین و بچه‌ها.\n\nتا ۵ کودک، هر کدام با دفترچه، حالت کودکان و داشبورد والدینِ خودشان.\n\n## Individual\n\nبرای یک نفر.\n\nجست‌وجوی نامحدود و همهٔ ابزارها.\n\nهر دو با ۱۴ روز رایگان شروع می‌شوند.\n\nمی‌توانی هر زمان قبل از پایان دورهٔ آزمایشی لغو کنی و چیزی از تو کم نمی‌شود.\n\nوقتی اشتراک بگیری، برنامه خودش به‌روزرسانی می‌شود.\n\nفقط با همان حساب وارد شو.",
   "pupCta": "دیدن پلن‌ها"
  },
  "id": {
@@ -1148,7 +1148,7 @@
   "remCycleMonth": "per bulan",
   "remCycleYear": "per tahun",
   "pupSubject": "Cara upgrade akun Gadit-mu",
-  "pupBody": "Hai {name},\n\nTerima kasih sudah pakai Gadit di Android.\n\nUpgrade belum tersedia di dalam aplikasi, jadi ini tautan langsung yang akan terbuka di browser-mu.\n\n## Family\nUntuk orang tua dan anak.\nSampai 5 anak, masing-masing dengan Buku Catatan sendiri, mode Anak, dan dasbor orang tua.\n\n## Individual\nUntuk satu orang.\nPencarian tanpa batas dan semua alat.\n\nKeduanya diawali dengan gratis 14 hari.\nKamu bisa batal kapan saja sebelum masa uji coba berakhir, dan tidak akan dikenai biaya.\n\nSetelah berlangganan, aplikasi akan diperbarui otomatis.\nCukup masuk dengan akun yang sama.",
+  "pupBody": "Hai {name},\n\nTerima kasih sudah pakai Gadit di Android.\n\nUpgrade belum tersedia di dalam aplikasi, jadi ini tautan langsung yang akan terbuka di browser-mu.\n\n## Family\n\nUntuk orang tua dan anak.\n\nSampai 5 anak, masing-masing dengan Buku Catatan sendiri, mode Anak, dan dasbor orang tua.\n\n## Individual\n\nUntuk satu orang.\n\nPencarian tanpa batas dan semua alat.\n\nKeduanya diawali dengan gratis 14 hari.\n\nKamu bisa batal kapan saja sebelum masa uji coba berakhir, dan tidak akan dikenai biaya.\n\nSetelah berlangganan, aplikasi akan diperbarui otomatis.\n\nCukup masuk dengan akun yang sama.",
   "pupCta": "Lihat paket"
  },
  "nl": {
@@ -1212,7 +1212,7 @@
   "remCycleMonth": "per maand",
   "remCycleYear": "per jaar",
   "pupSubject": "Zo upgrade je je Gadit-account",
-  "pupBody": "Hoi {name},\n\nBedankt dat je Gadit op Android gebruikt.\n\nUpgrades zijn niet beschikbaar in de app, dus hier is een directe link die in je browser opent.\n\n## Family\nVoor ouders en kinderen.\nTot 5 kinderen, elk met een eigen notitieboek, Kinderen-modus en een dashboard voor ouders.\n\n## Individual\nVoor één persoon.\nOnbeperkt opzoeken en alle tools.\n\nBeide beginnen met 14 dagen gratis.\nJe kunt op elk moment annuleren voordat de proefperiode eindigt, en er wordt niets in rekening gebracht.\n\nZodra je een abonnement neemt, wordt de app vanzelf bijgewerkt.\nLog gewoon in met hetzelfde account.",
+  "pupBody": "Hoi {name},\n\nBedankt dat je Gadit op Android gebruikt.\n\nUpgrades zijn niet beschikbaar in de app, dus hier is een directe link die in je browser opent.\n\n## Family\n\nVoor ouders en kinderen.\n\nTot 5 kinderen, elk met een eigen notitieboek, Kinderen-modus en een dashboard voor ouders.\n\n## Individual\n\nVoor één persoon.\n\nOnbeperkt opzoeken en alle tools.\n\nBeide beginnen met 14 dagen gratis.\n\nJe kunt op elk moment annuleren voordat de proefperiode eindigt, en er wordt niets in rekening gebracht.\n\nZodra je een abonnement neemt, wordt de app vanzelf bijgewerkt.\n\nLog gewoon in met hetzelfde account.",
   "pupCta": "Bekijk de abonnementen"
  },
  "el": {
@@ -1276,7 +1276,7 @@
   "remCycleMonth": "τον μήνα",
   "remCycleYear": "τον χρόνο",
   "pupSubject": "Πώς να αναβαθμίσεις τον λογαριασμό σου στο Gadit",
-  "pupBody": "Γεια σου {name},\n\nΕυχαριστούμε που χρησιμοποιείς το Gadit σε Android.\n\nΟι αναβαθμίσεις δεν είναι διαθέσιμες μέσα από την εφαρμογή, οπότε εδώ είναι ένας απευθείας σύνδεσμος που ανοίγει στον browser σου.\n\n## Family\nΓια γονείς και παιδιά.\nΈως 5 παιδιά, το καθένα με το δικό του Τετράδιο, λειτουργία για Παιδιά και πίνακα γονέα.\n\n## Individual\nΓια ένα άτομο.\nΑπεριόριστες αναζητήσεις και όλα τα εργαλεία.\n\nΚαι τα δύο ξεκινούν με 14 ημέρες δωρεάν.\nΜπορείς να ακυρώσεις όποτε θέλεις πριν τελειώσει η δοκιμή και δεν θα χρεωθείς τίποτα.\n\nΜόλις κάνεις συνδρομή, η εφαρμογή ενημερώνεται μόνη της.\nΑπλώς συνδέσου με τον ίδιο λογαριασμό.",
+  "pupBody": "Γεια σου {name},\n\nΕυχαριστούμε που χρησιμοποιείς το Gadit σε Android.\n\nΟι αναβαθμίσεις δεν είναι διαθέσιμες μέσα από την εφαρμογή, οπότε εδώ είναι ένας απευθείας σύνδεσμος που ανοίγει στον browser σου.\n\n## Family\n\nΓια γονείς και παιδιά.\n\nΈως 5 παιδιά, το καθένα με το δικό του Τετράδιο, λειτουργία για Παιδιά και πίνακα γονέα.\n\n## Individual\n\nΓια ένα άτομο.\n\nΑπεριόριστες αναζητήσεις και όλα τα εργαλεία.\n\nΚαι τα δύο ξεκινούν με 14 ημέρες δωρεάν.\n\nΜπορείς να ακυρώσεις όποτε θέλεις πριν τελειώσει η δοκιμή και δεν θα χρεωθείς τίποτα.\n\nΜόλις κάνεις συνδρομή, η εφαρμογή ενημερώνεται μόνη της.\n\nΑπλώς συνδέσου με τον ίδιο λογαριασμό.",
   "pupCta": "Δες τα πλάνα"
  },
  "zu": {
@@ -1340,7 +1340,7 @@
   "remCycleMonth": "ngenyanga",
   "remCycleYear": "ngonyaka",
   "pupSubject": "Uyithuthukisa kanjani i-akhawunti yakho ye-Gadit",
-  "pupBody": "Sawubona {name},\n\nSiyabonga ngokusebenzisa i-Gadit ku-Android.\n\nUkuthuthukisa akutholakali ngaphakathi kohlelo lokusebenza, ngakho nali ilinki eqondile ezovuleka kusiphequluli sakho.\n\n## Family\nOkwabazali nezingane.\nKufika ezinganeni ezi-5, ngayinye ine-Incwadi yamanothi yayo, imodi ye-Izingane, nephaneli yabazali.\n\n## Individual\nOkomuntu oyedwa.\nUkusesha okungenamkhawulo nawo wonke amathuluzi.\n\nKokubili kuqala ngezinsuku eziyi-14 zamahhala.\nUngakhansela noma nini ngaphambi kokuphela kwesikhathi sokuzama, futhi ngeke ukhokhiswe lutho.\n\nUma usubhalisile, uhlelo lokusebenza luzibuyekeza lona lodwa.\nVele ungene ngemvume nge-akhawunti efanayo.",
+  "pupBody": "Sawubona {name},\n\nSiyabonga ngokusebenzisa i-Gadit ku-Android.\n\nUkuthuthukisa akutholakali ngaphakathi kohlelo lokusebenza, ngakho nali ilinki eqondile ezovuleka kusiphequluli sakho.\n\n## Family\n\nOkwabazali nezingane.\n\nKufika ezinganeni ezi-5, ngayinye ine-Incwadi yamanothi yayo, imodi ye-Izingane, nephaneli yabazali.\n\n## Individual\n\nOkomuntu oyedwa.\n\nUkusesha okungenamkhawulo nawo wonke amathuluzi.\n\nKokubili kuqala ngezinsuku eziyi-14 zamahhala.\n\nUngakhansela noma nini ngaphambi kokuphela kwesikhathi sokuzama, futhi ngeke ukhokhiswe lutho.\n\nUma usubhalisile, uhlelo lokusebenza luzibuyekeza lona lodwa.\n\nVele ungene ngemvume nge-akhawunti efanayo.",
   "pupCta": "Bona amapulani"
  },
  "vi": {
@@ -1404,7 +1404,7 @@
   "remCycleMonth": "tháng",
   "remCycleYear": "năm",
   "pupSubject": "Cách nâng cấp tài khoản Gadit",
-  "pupBody": "Chào {name},\n\nCảm ơn bạn đã dùng Gadit trên Android.\n\nBạn không thể nâng cấp ngay trong ứng dụng, nên đây là liên kết trực tiếp để mở trong trình duyệt.\n\n## Family\nDành cho phụ huynh và con.\nTối đa 5 trẻ, mỗi bé có Sổ tay riêng, chế độ Trẻ em và bảng điều khiển cho phụ huynh.\n\n## Individual\nDành cho một người.\nTra cứu không giới hạn và đầy đủ mọi công cụ.\n\nCả hai đều có 14 ngày dùng thử miễn phí.\nBạn có thể hủy bất cứ lúc nào trước khi thời gian dùng thử kết thúc và sẽ không bị tính phí.\n\nSau khi đăng ký, ứng dụng sẽ tự cập nhật.\nChỉ cần đăng nhập bằng cùng một tài khoản.",
+  "pupBody": "Chào {name},\n\nCảm ơn bạn đã dùng Gadit trên Android.\n\nBạn không thể nâng cấp ngay trong ứng dụng, nên đây là liên kết trực tiếp để mở trong trình duyệt.\n\n## Family\n\nDành cho phụ huynh và con.\n\nTối đa 5 trẻ, mỗi bé có Sổ tay riêng, chế độ Trẻ em và bảng điều khiển cho phụ huynh.\n\n## Individual\n\nDành cho một người.\n\nTra cứu không giới hạn và đầy đủ mọi công cụ.\n\nCả hai đều có 14 ngày dùng thử miễn phí.\n\nBạn có thể hủy bất cứ lúc nào trước khi thời gian dùng thử kết thúc và sẽ không bị tính phí.\n\nSau khi đăng ký, ứng dụng sẽ tự cập nhật.\n\nChỉ cần đăng nhập bằng cùng một tài khoản.",
   "pupCta": "Xem các gói"
  },
  "fil": {
@@ -1468,7 +1468,7 @@
   "remCycleMonth": "bawat buwan",
   "remCycleYear": "bawat taon",
   "pupSubject": "Paano i-upgrade ang Gadit account mo",
-  "pupBody": "Hi {name},\n\nSalamat sa paggamit ng Gadit sa Android.\n\nHindi available ang pag-upgrade sa loob ng app, kaya narito ang direktang link na bubukas sa browser mo.\n\n## Family\nPara sa mga magulang at anak.\nHanggang 5 bata, bawat isa ay may sariling Kwaderno, Bata mode, at dashboard para sa magulang.\n\n## Individual\nPara sa isang tao.\nWalang limit na paghahanap at lahat ng tool.\n\nParehong may 14 na araw na libre.\nPuwede kang magkansela anumang oras bago matapos ang trial, at wala kang babayaran.\n\nKapag naka-subscribe ka na, kusang mag-a-update ang app.\nMag-sign in ka lang gamit ang parehong account.",
+  "pupBody": "Hi {name},\n\nSalamat sa paggamit ng Gadit sa Android.\n\nHindi available ang pag-upgrade sa loob ng app, kaya narito ang direktang link na bubukas sa browser mo.\n\n## Family\n\nPara sa mga magulang at anak.\n\nHanggang 5 bata, bawat isa ay may sariling Kwaderno, Bata mode, at dashboard para sa magulang.\n\n## Individual\n\nPara sa isang tao.\n\nWalang limit na paghahanap at lahat ng tool.\n\nParehong may 14 na araw na libre.\n\nPuwede kang magkansela anumang oras bago matapos ang trial, at wala kang babayaran.\n\nKapag naka-subscribe ka na, kusang mag-a-update ang app.\n\nMag-sign in ka lang gamit ang parehong account.",
   "pupCta": "Tingnan ang mga plan"
  },
  "af": {
@@ -1532,7 +1532,7 @@
   "remCycleMonth": "per maand",
   "remCycleYear": "per jaar",
   "pupSubject": "Hoe om jou Gadit-rekening op te gradeer",
-  "pupBody": "Hi {name},\n\nDankie dat jy Gadit op Android gebruik.\n\nOpgraderings is nie in die app beskikbaar nie, so hier is 'n direkte skakel wat in jou blaaier oopmaak.\n\n## Family\nVir ouers en kinders.\nTot 5 kinders, elk met hul eie Boekie, Kinders-modus en 'n ouer-paneel.\n\n## Individual\nVir een persoon.\nOnbeperkte naslae en elke hulpmiddel.\n\nAlbei begin met 14 dae gratis.\nJy kan enige tyd kanselleer voor die proeftydperk eindig, en niks word gehef nie.\n\nSodra jy inteken, werk die app vanself by.\nMeld net aan met dieselfde rekening.",
+  "pupBody": "Hi {name},\n\nDankie dat jy Gadit op Android gebruik.\n\nOpgraderings is nie in die app beskikbaar nie, so hier is 'n direkte skakel wat in jou blaaier oopmaak.\n\n## Family\n\nVir ouers en kinders.\n\nTot 5 kinders, elk met hul eie Boekie, Kinders-modus en 'n ouer-paneel.\n\n## Individual\n\nVir een persoon.\n\nOnbeperkte naslae en elke hulpmiddel.\n\nAlbei begin met 14 dae gratis.\n\nJy kan enige tyd kanselleer voor die proeftydperk eindig, en niks word gehef nie.\n\nSodra jy inteken, werk die app vanself by.\n\nMeld net aan met dieselfde rekening.",
   "pupCta": "Sien die planne"
  },
  "sw": {
@@ -1596,7 +1596,7 @@
   "remCycleMonth": "kwa mwezi",
   "remCycleYear": "kwa mwaka",
   "pupSubject": "Jinsi ya kuboresha akaunti yako ya Gadit",
-  "pupBody": "Habari {name},\n\nAsante kwa kutumia Gadit kwenye Android.\n\nUboreshaji haupatikani ndani ya programu, kwa hiyo hapa kuna kiungo cha moja kwa moja kitakachofunguka kwenye kivinjari chako.\n\n## Family\nKwa wazazi na watoto.\nHadi watoto 5, kila mmoja akiwa na Daftari yake, modi ya Watoto na dashibodi ya mzazi.\n\n## Individual\nKwa mtu mmoja.\nUtafutaji usio na kikomo na zana zote.\n\nZote mbili zinaanza na siku 14 za bure.\nUnaweza kughairi wakati wowote kabla ya kipindi cha majaribio kuisha, na hutatozwa chochote.\n\nUkishajisajili, programu itajisasisha yenyewe.\nIngia tu kwa akaunti hiyo hiyo.",
+  "pupBody": "Habari {name},\n\nAsante kwa kutumia Gadit kwenye Android.\n\nUboreshaji haupatikani ndani ya programu, kwa hiyo hapa kuna kiungo cha moja kwa moja kitakachofunguka kwenye kivinjari chako.\n\n## Family\n\nKwa wazazi na watoto.\n\nHadi watoto 5, kila mmoja akiwa na Daftari yake, modi ya Watoto na dashibodi ya mzazi.\n\n## Individual\n\nKwa mtu mmoja.\n\nUtafutaji usio na kikomo na zana zote.\n\nZote mbili zinaanza na siku 14 za bure.\n\nUnaweza kughairi wakati wowote kabla ya kipindi cha majaribio kuisha, na hutatozwa chochote.\n\nUkishajisajili, programu itajisasisha yenyewe.\n\nIngia tu kwa akaunti hiyo hiyo.",
   "pupCta": "Tazama mipango"
  },
  "zh-CN": {
@@ -1660,7 +1660,7 @@
   "remCycleMonth": "每月",
   "remCycleYear": "每年",
   "pupSubject": "如何升级你的 Gadit 账户",
-  "pupBody": "嗨，{name}，\n\n感谢你在 Android 上使用 Gadit。\n\n应用内暂不支持升级，所以这里有一个会在浏览器中打开的直接链接。\n\n## Family\n适合家长和孩子。\n最多可添加 5 个孩子，每个孩子都有自己的生词本、儿童模式和家长面板。\n\n## Individual\n适合一个人使用。\n不限查词次数，所有工具都能用。\n\n两种方案都可免费试用 14 天。\n你可以在试用结束前随时取消，不会产生任何费用。\n\n订阅后，应用会自动更新。\n只需使用同一个账户登录即可。",
+  "pupBody": "嗨，{name}，\n\n感谢你在 Android 上使用 Gadit。\n\n应用内暂不支持升级，所以这里有一个会在浏览器中打开的直接链接。\n\n## Family\n\n适合家长和孩子。\n\n最多可添加 5 个孩子，每个孩子都有自己的生词本、儿童模式和家长面板。\n\n## Individual\n\n适合一个人使用。\n\n不限查词次数，所有工具都能用。\n\n两种方案都可免费试用 14 天。\n\n你可以在试用结束前随时取消，不会产生任何费用。\n\n订阅后，应用会自动更新。\n\n只需使用同一个账户登录即可。",
   "pupCta": "查看方案"
  },
  "zh-TW": {
@@ -1724,7 +1724,7 @@
   "remCycleMonth": "每月",
   "remCycleYear": "每年",
   "pupSubject": "如何升級你的 Gadit 帳戶",
-  "pupBody": "嗨 {name}，\n\n感謝你在 Android 上使用 Gadit。\n\nApp 內不能升級，所以這裡有一個可直接在瀏覽器開啟的連結。\n\n## Family\n適合家長和孩子。\n最多可加入 5 位孩子，每位孩子都有自己的生詞本、兒童模式和家長主控台。\n\n## Individual\n適合一個人使用。\n查詢次數不限，所有工具都能用。\n\n兩種方案都可先免費試用 14 天。\n試用結束前隨時都能取消，不會收費。\n\n訂閱後，App 會自動更新。\n只要用同一個帳戶登入即可。",
+  "pupBody": "嗨 {name}，\n\n感謝你在 Android 上使用 Gadit。\n\nApp 內不能升級，所以這裡有一個可直接在瀏覽器開啟的連結。\n\n## Family\n\n適合家長和孩子。\n\n最多可加入 5 位孩子，每位孩子都有自己的生詞本、兒童模式和家長主控台。\n\n## Individual\n\n適合一個人使用。\n\n查詢次數不限，所有工具都能用。\n\n兩種方案都可先免費試用 14 天。\n\n試用結束前隨時都能取消，不會收費。\n\n訂閱後，App 會自動更新。\n\n只要用同一個帳戶登入即可。",
   "pupCta": "查看方案"
  },
  "ko": {
@@ -1788,7 +1788,7 @@
   "remCycleMonth": "/월",
   "remCycleYear": "/년",
   "pupSubject": "Gadit 계정 업그레이드 방법",
-  "pupBody": "안녕 {name},\n\nAndroid에서 Gadit을 사용해 줘서 고마워.\n\n업그레이드는 앱 안에서 할 수 없어서, 브라우저에서 열리는 직접 링크를 준비했어.\n\n## Family\n부모와 아이를 위한 플랜.\n최대 5명의 아이가 각자 단어장, 아이 모드, 부모용 대시보드를 사용할 수 있어.\n\n## Individual\n1인을 위한 플랜.\n검색은 무제한, 모든 도구를 사용할 수 있어.\n\n두 플랜 모두 14일 무료로 시작해.\n체험 기간이 끝나기 전에 언제든 취소할 수 있고, 요금은 청구되지 않아.\n\n구독하면 앱은 자동으로 업데이트돼.\n같은 계정으로 로그인만 하면 돼.",
+  "pupBody": "안녕 {name},\n\nAndroid에서 Gadit을 사용해 줘서 고마워.\n\n업그레이드는 앱 안에서 할 수 없어서, 브라우저에서 열리는 직접 링크를 준비했어.\n\n## Family\n\n부모와 아이를 위한 플랜.\n\n최대 5명의 아이가 각자 단어장, 아이 모드, 부모용 대시보드를 사용할 수 있어.\n\n## Individual\n\n1인을 위한 플랜.\n\n검색은 무제한, 모든 도구를 사용할 수 있어.\n\n두 플랜 모두 14일 무료로 시작해.\n\n체험 기간이 끝나기 전에 언제든 취소할 수 있고, 요금은 청구되지 않아.\n\n구독하면 앱은 자동으로 업데이트돼.\n\n같은 계정으로 로그인만 하면 돼.",
   "pupCta": "플랜 보기"
  },
  "th": {
@@ -1852,7 +1852,7 @@
   "remCycleMonth": "เดือน",
   "remCycleYear": "ปี",
   "pupSubject": "วิธีอัปเกรดบัญชี Gadit ของคุณ",
-  "pupBody": "สวัสดี {name},\n\nขอบคุณที่ใช้ Gadit บน Android\n\nยังอัปเกรดในแอปไม่ได้ เลยมีลิงก์ตรงให้เปิดในเบราว์เซอร์\n\n## Family\nสำหรับพ่อแม่และลูก\nเพิ่มเด็กได้สูงสุด 5 คน แต่ละคนมีสมุดของตัวเอง โหมดเด็ก และหน้าควบคุมสำหรับผู้ปกครอง\n\n## Individual\nสำหรับ 1 คน\nค้นหาได้ไม่จำกัดและใช้ได้ทุกเครื่องมือ\n\nทั้งสองแพ็กเกจเริ่มต้นด้วยทดลองใช้ฟรี 14 วัน\nยกเลิกได้ทุกเมื่อก่อนช่วงทดลองใช้จะสิ้นสุด และจะไม่มีการเรียกเก็บเงิน\n\nพอสมัครแล้ว แอปจะอัปเดตให้อัตโนมัติ\nแค่ลงชื่อเข้าใช้ด้วยบัญชีเดิม",
+  "pupBody": "สวัสดี {name},\n\nขอบคุณที่ใช้ Gadit บน Android\n\nยังอัปเกรดในแอปไม่ได้ เลยมีลิงก์ตรงให้เปิดในเบราว์เซอร์\n\n## Family\n\nสำหรับพ่อแม่และลูก\n\nเพิ่มเด็กได้สูงสุด 5 คน แต่ละคนมีสมุดของตัวเอง โหมดเด็ก และหน้าควบคุมสำหรับผู้ปกครอง\n\n## Individual\n\nสำหรับ 1 คน\n\nค้นหาได้ไม่จำกัดและใช้ได้ทุกเครื่องมือ\n\nทั้งสองแพ็กเกจเริ่มต้นด้วยทดลองใช้ฟรี 14 วัน\n\nยกเลิกได้ทุกเมื่อก่อนช่วงทดลองใช้จะสิ้นสุด และจะไม่มีการเรียกเก็บเงิน\n\nพอสมัครแล้ว แอปจะอัปเดตให้อัตโนมัติ\n\nแค่ลงชื่อเข้าใช้ด้วยบัญชีเดิม",
   "pupCta": "ดูแพ็กเกจ"
  },
  "bn": {
@@ -1916,7 +1916,7 @@
   "remCycleMonth": "মাসে",
   "remCycleYear": "বছরে",
   "pupSubject": "তোমার Gadit অ্যাকাউন্ট কীভাবে আপগ্রেড করবে",
-  "pupBody": "হাই {name},\n\nAndroid-এ Gadit ব্যবহার করার জন্য ধন্যবাদ।\n\nঅ্যাপের ভেতরে আপগ্রেড করা যায় না, তাই এখানে একটি সরাসরি লিঙ্ক দিলাম, যা তোমার ব্রাউজারে খুলবে।\n\n## Family\nঅভিভাবক ও শিশুদের জন্য।\nসর্বোচ্চ 5 জন শিশু, প্রত্যেকের জন্য আলাদা নোটবুক, শিশু মোড এবং অভিভাবকদের ড্যাশবোর্ড।\n\n## Individual\nএকজনের জন্য।\nআনলিমিটেড খোঁজ এবং সব টুল।\n\nদুটিই 14 দিন ফ্রি দিয়ে শুরু হয়।\nট্রায়াল শেষ হওয়ার আগে যেকোনো সময় বাতিল করতে পারো, আর কোনো চার্জ কাটা হবে না।\n\nসাবস্ক্রাইব করলেই অ্যাপ নিজে থেকেই আপডেট হয়ে যাবে।\nশুধু একই অ্যাকাউন্ট দিয়ে সাইন ইন করো।",
+  "pupBody": "হাই {name},\n\nAndroid-এ Gadit ব্যবহার করার জন্য ধন্যবাদ।\n\nঅ্যাপের ভেতরে আপগ্রেড করা যায় না, তাই এখানে একটি সরাসরি লিঙ্ক দিলাম, যা তোমার ব্রাউজারে খুলবে।\n\n## Family\n\nঅভিভাবক ও শিশুদের জন্য।\n\nসর্বোচ্চ 5 জন শিশু, প্রত্যেকের জন্য আলাদা নোটবুক, শিশু মোড এবং অভিভাবকদের ড্যাশবোর্ড।\n\n## Individual\n\nএকজনের জন্য।\n\nআনলিমিটেড খোঁজ এবং সব টুল।\n\nদুটিই 14 দিন ফ্রি দিয়ে শুরু হয়।\n\nট্রায়াল শেষ হওয়ার আগে যেকোনো সময় বাতিল করতে পারো, আর কোনো চার্জ কাটা হবে না।\n\nসাবস্ক্রাইব করলেই অ্যাপ নিজে থেকেই আপডেট হয়ে যাবে।\n\nশুধু একই অ্যাকাউন্ট দিয়ে সাইন ইন করো।",
   "pupCta": "প্ল্যানগুলো দেখো"
  },
  "da": {
@@ -1980,7 +1980,7 @@
   "remCycleMonth": "om måneden",
   "remCycleYear": "om året",
   "pupSubject": "Sådan opgraderer du din Gadit-konto",
-  "pupBody": "Hej {name},\n\nTak fordi du bruger Gadit på Android.\n\nDu kan ikke opgradere i appen, så her er et direkte link, der åbner i din browser.\n\n## Family\nTil forældre og børn.\nOp til 5 børn, hver med deres egen Notesbog, Børnetilstand og et forældrepanel.\n\n## Individual\nTil én person.\nUbegrænsede opslag og alle værktøjer.\n\nBegge starter med 14 dage gratis.\nDu kan når som helst annullere, før prøveperioden slutter, og så bliver du ikke opkrævet.\n\nNår du har abonneret, opdateres appen automatisk.\nDu skal bare logge ind med den samme konto.",
+  "pupBody": "Hej {name},\n\nTak fordi du bruger Gadit på Android.\n\nDu kan ikke opgradere i appen, så her er et direkte link, der åbner i din browser.\n\n## Family\n\nTil forældre og børn.\n\nOp til 5 børn, hver med deres egen Notesbog, Børnetilstand og et forældrepanel.\n\n## Individual\n\nTil én person.\n\nUbegrænsede opslag og alle værktøjer.\n\nBegge starter med 14 dage gratis.\n\nDu kan når som helst annullere, før prøveperioden slutter, og så bliver du ikke opkrævet.\n\nNår du har abonneret, opdateres appen automatisk.\n\nDu skal bare logge ind med den samme konto.",
   "pupCta": "Se planerne"
  },
  "hu": {
@@ -2044,7 +2044,7 @@
   "remCycleMonth": "havonta",
   "remCycleYear": "évente",
   "pupSubject": "Hogyan válts magasabb Gadit csomagra",
-  "pupBody": "Szia {name},\n\nKöszönjük, hogy Androidon használod a Gaditot.\n\nAz appban nem lehet csomagot váltani, ezért itt egy közvetlen link, ami a böngésződben nyílik meg.\n\n## Family\nSzülőknek és gyerekeknek.\nLegfeljebb 5 gyerek, mindegyiknek saját Füzet, Gyerekek mód és szülői irányítópult.\n\n## Individual\nEgy embernek.\nKorlátlan keresés és az összes eszköz.\n\nMindkettő 14 napos ingyenes próbaidőszakkal indul.\nA próbaidőszak vége előtt bármikor lemondhatod, és nem számítunk fel semmit.\n\nMiután előfizetsz, az app magától frissül.\nCsak jelentkezz be ugyanazzal a fiókkal.",
+  "pupBody": "Szia {name},\n\nKöszönjük, hogy Androidon használod a Gaditot.\n\nAz appban nem lehet csomagot váltani, ezért itt egy közvetlen link, ami a böngésződben nyílik meg.\n\n## Family\n\nSzülőknek és gyerekeknek.\n\nLegfeljebb 5 gyerek, mindegyiknek saját Füzet, Gyerekek mód és szülői irányítópult.\n\n## Individual\n\nEgy embernek.\n\nKorlátlan keresés és az összes eszköz.\n\nMindkettő 14 napos ingyenes próbaidőszakkal indul.\n\nA próbaidőszak vége előtt bármikor lemondhatod, és nem számítunk fel semmit.\n\nMiután előfizetsz, az app magától frissül.\n\nCsak jelentkezz be ugyanazzal a fiókkal.",
   "pupCta": "Csomagok megtekintése"
  }
 }
