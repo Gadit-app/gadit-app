@@ -196,7 +196,7 @@ export function AdminEmailEditorClient() {
               padding: "6px 16px", borderRadius: 999, cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: "inherit",
               border: "none", background: series === s ? "#0EA5A5" : "#F3F4F6", color: series === s ? "#fff" : "#374151",
             }}>
-            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Clear ו-Deep" : "Clear & Deep series") : (he ? "סדרת הרשמה" : "Signup series")}
+            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Individual" : "Individual series") : (he ? "סדרת הרשמה" : "Signup series")}
           </button>
         ))}
       </div>

@@ -2,7 +2,8 @@ import type { EmailContent } from "./render";
 import type { FamilyEmailMeta } from "./family-content";
 
 /**
- * Onboarding series for individual Clear and Deep subscribers (Gadi
+ * Onboarding series for the Individual plan (and the older Clear and Deep
+ * subscribers), Gadi
  * 2026-10-06), on the same rules as the Family series (family-content.ts):
  * one email = one tool and one small task, the first word on day 0, the
  * daily tools in the first week, the subscriber's own numbers before the
@@ -32,19 +33,19 @@ const M = (key: string, label: string, dayOffset: number, ctaPath: string, plans
 });
 
 export const INDIV_META: IndivEmailMeta[] = [
-  M("ind-start", "Clear/Deep · 1 · Getting started, first word", 0, "/"),
-  M("ind-word", "Clear/Deep · 2 · Understand a word all the way", 1, "/"),
-  M("ind-notebook", "Clear/Deep · 3 · The notebook", 2, "/notebook"),
-  M("ind-context", "Clear/Deep · 4 · The right meaning from the sentence", 3, "/"),
-  M("ind-read", "Clear/Deep · 5 · Every Word (a whole page)", 4, "/read"),
-  M("ind-compose", "Clear/Deep · 6 · Compose a sentence, get feedback", 5, "/"),
-  M("ind-say", "Clear/Deep · 7 · Say it", 6, "/say"),
-  M("ind-practice", "Deep · 8 · Smart practice, games, compare words", 7, "/notebook", ["deep"]),
-  M("ind-progress", "Clear/Deep · 9 · Your first two weeks in numbers", 10, "/notebook"),
-  M("ind-questions", "Clear/Deep · 10 · Questions about a word, idioms", 12, "/"),
-  M("ind-languages", "Clear/Deep · 11 · Any word, explained in your language", 15, "/"),
-  M("ind-family", "Clear/Deep · 12 · Gadit for the whole family, and for schools", 18, "/families"),
-  M("ind-month", "Clear/Deep · 13 · Everything you have, and the next month (last)", 24, "/"),
+  M("ind-start", "Individual · 1 · Getting started, first word", 0, "/"),
+  M("ind-word", "Individual · 2 · Understand a word all the way", 1, "/"),
+  M("ind-notebook", "Individual · 3 · The notebook", 2, "/notebook"),
+  M("ind-context", "Individual · 4 · The right meaning from the sentence", 3, "/"),
+  M("ind-read", "Individual · 5 · Every Word (a whole page)", 4, "/read"),
+  M("ind-compose", "Individual · 6 · Compose a sentence, get feedback", 5, "/"),
+  M("ind-say", "Individual · 7 · Say it", 6, "/say"),
+  M("ind-practice", "Individual · 8 · Smart practice, games, compare words", 7, "/notebook", ["deep"]),
+  M("ind-progress", "Individual · 9 · Your first two weeks in numbers", 10, "/notebook"),
+  M("ind-questions", "Individual · 10 · Questions about a word, idioms", 12, "/"),
+  M("ind-languages", "Individual · 11 · Any word, explained in your language", 15, "/"),
+  M("ind-family", "Individual · 12 · Gadit for the whole family, and for schools", 18, "/families"),
+  M("ind-month", "Individual · 13 · Everything you have, and the next month (last)", 24, "/"),
 ];
 
 export const INDIV_LABEL_HE: Record<string, string> = {
@@ -55,7 +56,7 @@ export const INDIV_LABEL_HE: Record<string, string> = {
   "ind-read": "5 · כל מילה (דף שלם)",
   "ind-compose": "6 · חברו משפט ומשוב",
   "ind-say": "7 · תגיד את זה",
-  "ind-practice": "8 · Deep בלבד: תרגול חכם, משחקים, השוואה",
+  "ind-practice": "8 · תרגול חכם, משחקים, השוואה (לא ל-Clear הוותיק)",
   "ind-progress": "9 · השבועיים הראשונים במספרים",
   "ind-questions": "10 · שאלות על מילה, ניבים וצירופים",
   "ind-languages": "11 · כל מילה, הסבר בשפה שלך",
@@ -182,11 +183,6 @@ That's where you discover the most.`,
 3. עוברים על "הגדרות", על התמונה ועל "מקור המילה".
 4. רוצים תמונה למשמעות מסוימת? לוחצים על "צרו תמונה".
 
-## הסבר פשוט, כשצריך
-ב[תיבת החיפוש בדף הבית](/), ליד המיקרופון, יש מתג "ילדים".
-כשמדליקים אותו, ההגדרה נכתבת במילים פשוטות ועם דוגמאות מהחיים.
-זה עוזר גם למבוגרים, במיוחד במילים מקצועיות ובשפה שעוד לומדים.
-
 **טיפ מהשטח:**
 "מקור המילה" הוא הדרך הכי טובה לזכור מילה.
 מילה שיודעים מאיפה היא הגיעה, קשה לשכוח.`,
@@ -218,11 +214,6 @@ The heart of Gadit is understanding every word all the way through.
 2. Type a word in the "Type a word" box.
 3. Go through "Definitions", the picture and "Word Origin".
 4. Want a picture for a particular meaning? Tap "Generate image".
-
-## A simple explanation, when you need one
-In the [search box on the home page](/), next to the microphone, there's a "Kids" switch.
-Turn it on and the definition is written in simple words, with examples from everyday life.
-It helps adults too, especially with professional terms and a language you're still learning.
 
 **A tip from other users:**
 "Word Origin" is the best way to remember a word.
@@ -531,7 +522,7 @@ A real sentence stays much faster.`,
 מילה שחיפשנו פעם אחת נשכחת מהר.
 מילה שחוזרים אליה בזמן הנכון נשארת.
 
-ב-Deep יש שלושה כלים בשביל זה.
+יש לך שלושה כלים בשביל זה.
 
 ## תרגול חכם
 במחברת יש כפתור "תרגול עכשיו".
@@ -564,7 +555,7 @@ Gadit מציג מילה מהמחברת שלך, ונזכרים מה היא אומ
 A word you looked up once is soon forgotten.
 A word you come back to at the right time stays.
 
-Deep has three tools for this.
+You have three tools for this.
 
 ## Smart practice
 The notebook has a "Practice now" button.
@@ -848,10 +839,7 @@ You can also send them [the Gadit for schools page](/schools).`,
 מספיק שניים או שלושה שעובדים טוב בשבילך, והופכים להרגל.
 השבוע אפשר לבחור יעד קטן אחד, למשל חמש מילים חדשות.
 
-[[clear]]**לתרגול המילים לאורך זמן:**
-ב-Deep יש גם תרגול חכם מהמחברת, משחקים וחידונים מהמילים שלך, והשוואת מילים דומות.
-
-[[/clear]]אוצר המילים שלך ממשיך לגדול, מילה אחרי מילה.`,
+אוצר המילים שלך ממשיך לגדול, מילה אחרי מילה.`,
       "לחיפוש מילה",
       "",
     ),
@@ -878,10 +866,7 @@ You don't need to use every tool.
 Two or three that work well for you, and become a habit, are enough.
 This week you can pick one small goal, for example five new words.
 
-[[clear]]**To practice your words over time:**
-Deep also has smart practice from your notebook, games and quizzes from your words, and a comparison of similar words.
-
-[[/clear]]Your vocabulary keeps growing, word by word.`,
+Your vocabulary keeps growing, word by word.`,
       "Look up a word",
       "",
     ),
