@@ -60,7 +60,7 @@ const FOOTER_HOME_COPY: Record<Lang, string> = {
 };
 
 export function PracticePage() {
-  const { user, plan, loading, promptLogin } = useAuth();
+  const { user, plan, planReady, loading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
@@ -71,10 +71,12 @@ export function PracticePage() {
       promptLogin(v2(lang, "srEyebrow"));
       return;
     }
+    // Wait for the plan snapshot, or a paying user is bounced for a beat.
+    if (!planReady) return;
     if (plan !== "deep") {
       router.replace(href("/pricing"));
     }
-  }, [loading, user, plan, lang, promptLogin, router, href]);
+  }, [loading, planReady, user, plan, lang, promptLogin, router, href]);
 
   return (
     <div

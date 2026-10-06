@@ -837,6 +837,11 @@ export function NotebookPage() {
         <div className="wb-notebook-hero">
           <h1 className="wb-notebook-title">{pageTitle}</h1>
           <p className="wb-notebook-sub">{pageSubtitle}</p>
+          {/* Smart practice (spaced repetition) lives at /practice; it had no
+              way in from the notebook (Gadi 2026-10-06). Full plans only. */}
+          {plan === "deep" && items && items.length > 0 && (
+            <Link href={href("/practice")} className="wb-notebook-practice">{v2(lang, "notebookPracticeNow")}</Link>
+          )}
         </div>
 
         {/* Free notebook (Gadi 2026-10-06): how full it is, and the plan

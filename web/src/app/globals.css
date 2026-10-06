@@ -5201,6 +5201,12 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos,
   padding: 28px;
 }
 .wordbook .wb-notebook-error { color: #B91C1C; }
+/* Notebook "Practice now" (Gadi 2026-10-06): the way into smart practice. */
+.wordbook .wb-notebook-practice {
+  display: inline-block; margin-top: 14px; padding: 10px 22px; border-radius: 999px;
+  background: #7C3AED; color: #fff; font-weight: 700; font-size: 15px; text-decoration: none;
+  box-shadow: 0 8px 20px -8px rgba(124,58,237,0.6);
+}
 /* Free notebook bar (Gadi 2026-10-06): how full it is + the Individual link. */
 .wordbook .wb-notebook-free {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px;
