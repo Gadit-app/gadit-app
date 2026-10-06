@@ -11,7 +11,8 @@ import { sendMail } from "@/lib/mail";
  *               the day reaches it. No script can run away again.
  *   ALERT       (AI_DAILY_ALERT_USD, default $15): one email to NOTIFY_EMAIL the
  *               first time the day's total passes it.
- *   HARD STOP   (AI_DAILY_HARD_CAP_USD, default $60): above it, new generations
+ *   HARD STOP   (AI_DAILY_HARD_CAP_USD, default $60, real use without admin
+ *               runs): above it, new generations
  *               for non-paying visitors stop (cached words still load);
  *               paying subscribers are always served.
  *
@@ -49,8 +50,11 @@ export async function adminBudgetExceeded(): Promise<boolean> {
   return (await todaySpend()).admin >= ADMIN_DAILY_CAP;
 }
 
+/** Real use only: admin runs have their own cap and never push real users
+ *  over the hard stop. */
 export async function hardCapReached(): Promise<boolean> {
-  return (await todaySpend()).total >= DAILY_HARD_CAP;
+  const t = await todaySpend();
+  return t.total - t.admin >= DAILY_HARD_CAP;
 }
 
 /** After a cost is logged: email once per day when the total passes the alert line. */
