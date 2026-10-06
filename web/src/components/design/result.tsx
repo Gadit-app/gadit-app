@@ -188,7 +188,7 @@ function langMatchesUi(language: string, lang: Lang): boolean {
 /** The word's language named in the viewer's own language (Gadi 2026-10-06:
  *  a Russian student saw "Hebrew"). Falls back to the model's label when the
  *  language is not one of ours. */
-function wordLangLabel(language: string, lang: Lang): string {
+export function wordLangLabel(language: string, lang: Lang): string {
   const langName = (language || "").toLowerCase().trim();
   for (const [code, names] of Object.entries(LANG_NAMES)) {
     if (names.some((n) => langName.includes(n))) return langNameIn(code, lang);

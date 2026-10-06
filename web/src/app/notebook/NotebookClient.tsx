@@ -9,6 +9,7 @@
  * meaning summary; the card whole-area links to /word/<word>.
  */
 
+import { wordLangLabel } from "@/components/design/result";
 import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { LANGUAGES } from "@/lib/i18n";
@@ -942,7 +943,7 @@ export function NotebookPage() {
                 aria-pressed={langFilter === language}
                 onClick={() => setLangFilter(language)}
               >
-                {language}
+                {wordLangLabel(language, lang)}
               </button>
             ))}
           </div>
@@ -952,7 +953,7 @@ export function NotebookPage() {
           visibleGroups.map(([language, group]) => (
             <section key={language} className="wb-notebook-langsec">
               <h2 className="wb-notebook-langhead">
-                <span className="wb-notebook-langname">{language}</span>
+                <span className="wb-notebook-langname">{wordLangLabel(language, lang)}</span>
                 <span className="wb-notebook-langcount">{group.length}</span>
               </h2>
               <ul className="wb-notebook-grid">
@@ -966,7 +967,7 @@ export function NotebookPage() {
                   >
                     <div className="wb-notebook-card-head">
                       <span className="wb-notebook-card-word">{item.word}</span>
-                      <span className="wb-notebook-card-lang">{item.language}</span>
+                      <span className="wb-notebook-card-lang">{wordLangLabel(item.language, lang)}</span>
                     </div>
                     {item.meaning && (
                       <p className="wb-notebook-card-meaning">{item.meaning}</p>
