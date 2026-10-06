@@ -49,10 +49,14 @@ export async function POST(req: NextRequest) {
       term?: string; content?: string; landingPath?: string;
     } | null = null;
     let signupLang: string | null = null;
+    let gaClientId: string | null = null;
     try {
       const body = await req.json().catch(() => null);
       if (body && typeof body === "object" && typeof body.lang === "string" && body.lang.length <= 8) {
         signupLang = body.lang;
+      }
+      if (body && typeof body === "object" && typeof body.gaClientId === "string" && /^\d{1,12}\.\d{1,12}$/.test(body.gaClientId)) {
+        gaClientId = body.gaClientId;
       }
       if (body && typeof body === "object" && body.utm) {
         const u = body.utm as Record<string, unknown>;
@@ -79,6 +83,11 @@ export async function POST(req: NextRequest) {
     const userRef = db.collection("users").doc(uid);
     const userSnap = await userRef.get();
     const data = userSnap.data() ?? {};
+
+    // GA client id (first one wins), for the server-side GA purchase event.
+    if (gaClientId && !data.gaClientId) {
+      await userRef.set({ gaClientId }, { merge: true });
+    }
 
     // Persist UTM (first-touch) even if we've already notified — the
     // client only sends one in the first ~30 days post-signup anyway,

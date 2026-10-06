@@ -379,6 +379,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const payload: Record<string, unknown> = {};
       if (utm) payload.utm = utm;
       if (lang) payload.lang = lang;
+      // GA client id, so the first real payment (sent server-side from the
+      // Stripe webhook) joins this visitor's GA journey.
+      const { gaClientId } = await import("./ga");
+      const gaCid = gaClientId();
+      if (gaCid) payload.gaClientId = gaCid;
       await fetch("/api/notify-signup", {
         method: "POST",
         headers: {

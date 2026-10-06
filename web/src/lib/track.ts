@@ -1,6 +1,7 @@
 "use client";
 import { track as vercelTrack } from "@vercel/analytics";
 import { fbqTrack } from "@/components/MetaPixel";
+import { gaEvent } from "@/lib/ga";
 
 /**
  * Wrapper around Vercel Analytics' track() that:
@@ -22,6 +23,21 @@ const META_STANDARD_EVENTS: Record<string, string> = {
   checkout_completed: "StartTrial",
 };
 
+// Product event -> GA4 recommended event (key events in the Gadit property).
+// purchase, the first real charge, is sent server-side from the Stripe webhook
+// (Measurement Protocol), since it happens after the trial with no browser.
+function sendGa(eventName: string, p: Record<string, string | number | boolean | null>) {
+  if (eventName === "signup_completed") {
+    gaEvent("sign_up", { method: p.method ?? "unknown" });
+  } else if (eventName === "checkout_started") {
+    gaEvent("begin_checkout", {
+      ...(typeof p.value === "number" ? { value: p.value } : {}),
+      ...(typeof p.currency === "string" ? { currency: p.currency } : {}),
+      items: [{ item_id: p.priceId ?? "", item_name: p.plan ?? "" }],
+    });
+  }
+}
+
 export function track(
   eventName: string,
   properties?: Record<string, string | number | boolean | null | undefined>
@@ -39,6 +55,7 @@ export function track(
     vercelTrack(`gadit_${eventName}`, cleaned);
     const metaEvent = META_STANDARD_EVENTS[eventName];
     if (metaEvent) fbqTrack(metaEvent, cleaned);
+    sendGa(eventName, cleaned);
   } catch (e) {
     // Never let analytics break user flows
     console.warn("track failed:", e);

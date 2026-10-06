@@ -23,6 +23,7 @@ import { GuideOverlay } from "@/components/GuideOverlay";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
 import { Analytics } from "@vercel/analytics/next";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
@@ -425,6 +426,10 @@ export default async function RootLayout({
               <SayModal />
               <GuideOverlay />
               <InstallPwaPrompt />
+              {/* GA4 (G-28987K226D). Inside AuthProvider: it waits for the
+                  role, and never loads or sends a hit for a child (kid
+                  routes, a kid session, Kids Mode). See the component. */}
+              <GoogleAnalytics />
             </AuthProvider>
           </LangProvider>
           <ServiceWorkerRegister />

@@ -461,7 +461,17 @@ export default function CheckoutClient() {
         });
         elementsRef.current = elements;
         setPhase("form");
-        track("checkout_started", { priceId, surface: "payment_element", lang });
+        {
+          // Value + currency for GA's begin_checkout: the amount this person is
+          // shown (shekels in Hebrew, dollars elsewhere).
+          const t = tierForPrice(priceId);
+          const shown = t ? (lang === "he" ? t.amountIls : t.amount) : "";
+          const value = Number(shown.replace(/[^0-9.]/g, "")) || undefined;
+          track("checkout_started", {
+            priceId, surface: "payment_element", lang,
+            plan: t?.name, value, currency: lang === "he" ? "ILS" : "USD",
+          });
+        }
       } catch (err) {
         console.error("[checkout] init failed:", err);
         if (!cancelled) {

@@ -850,6 +850,60 @@ async function sendCapiPurchase(invoice: Stripe.Invoice) {
   }
 }
 
+/**
+ * GA4 "purchase" on the FIRST real payment (the trial-to-paid conversion),
+ * via the Measurement Protocol: the charge happens weeks after checkout, with
+ * no browser, so it can only be sent from here. Joined to the visitor's GA
+ * journey through users.gaClientId (saved at signup); without one, a stable
+ * id derived from the uid still records the conversion and its value. Once
+ * per customer (gaPurchaseSent). No-op without GA_API_SECRET (GA4 Admin, Data
+ * streams, Measurement Protocol API secrets). Best-effort, never blocks.
+ */
+async function sendGaPurchase(invoice: Stripe.Invoice) {
+  try {
+    const secret = process.env.GA_API_SECRET;
+    if (!secret) return; // not configured yet
+    const gross = invoice.amount_paid ?? 0;
+    if (gross <= 0) return; // trial / $0 invoice
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (!customerId) return;
+    const db = getAdminDb();
+    const uid = await findUserIdByCustomer(customerId);
+    if (!uid) return;
+    const ref = db.collection("users").doc(uid);
+    const u = (await ref.get()).data() ?? {};
+    if (u.gaPurchaseSent === true) return;
+    await ref.set({ gaPurchaseSent: true }, { merge: true });
+
+    const clientId =
+      (typeof u.gaClientId === "string" && u.gaClientId) ||
+      `${parseInt(crypto.createHash("sha256").update(uid).digest("hex").slice(0, 8), 16)}.1`;
+    const line = invoice.lines?.data?.[0];
+    const body = {
+      client_id: clientId,
+      events: [
+        {
+          name: "purchase",
+          params: {
+            transaction_id: invoice.id,
+            value: gross / 100,
+            currency: (invoice.currency || "usd").toUpperCase(),
+            items: [{ item_id: line?.pricing?.price_details?.price ?? "", item_name: line?.description ?? "", price: gross / 100, quantity: 1 }],
+          },
+        },
+      ],
+    };
+    const res = await fetch(
+      `https://www.google-analytics.com/mp/collect?measurement_id=G-28987K226D&api_secret=${encodeURIComponent(secret)}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) },
+    );
+    if (!res.ok) console.warn(`[webhook] GA purchase non-ok ${res.status}`);
+    else console.log(`[webhook] GA purchase sent (uid ${uid}, ${(gross / 100).toFixed(2)} ${invoice.currency})`);
+  } catch (e) {
+    console.warn("[webhook] GA purchase failed (non-blocking):", e);
+  }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -1017,6 +1071,7 @@ export async function POST(req: NextRequest) {
       await accruePartnerCommission(invoice);
       await creditReferralConversion(invoice);
       await sendCapiPurchase(invoice);
+      await sendGaPurchase(invoice);
     }
 
     if (event.type === "invoice.payment_failed") {
