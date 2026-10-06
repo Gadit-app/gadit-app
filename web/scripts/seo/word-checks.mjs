@@ -3,6 +3,14 @@ import fs from "node:fs";
 import path from "node:path";
 const HERE = path.dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Z]:)/, "$1");
 const env = fs.readFileSync(path.join(HERE, "../../.env.local"), "utf8");
+// Running cost of every call made through these checks (USD), from the
+// usage OpenAI returns: gpt-4o-mini $0.15/$0.60 and gpt-4o $2.50/$10 per 1M tokens.
+export const spend = { usd: 0 };
+const PRICE = { "gpt-4o-mini": [0.15, 0.6], "gpt-4o": [2.5, 10] };
+function addUsage(model, j) {
+  const u = j && j.usage; const p = PRICE[model];
+  if (u && p) spend.usd += (u.prompt_tokens * p[0] + u.completion_tokens * p[1]) / 1e6;
+}
 const KEY = (env.match(/^OPENAI_API_KEY=(.*)$/m)?.[1] ?? "").trim().replace(/^["']|["']$/g, "");
 
 export function looksLikeWord(w) {
@@ -43,6 +51,7 @@ export async function classify(batch) {
     }),
   });
   const j = await res.json();
+  addUsage("gpt-4o-mini", j);
   try {
     const obj = JSON.parse(j.choices[0].message.content);
     const map = obj.labels && typeof obj.labels === "object" ? obj.labels : obj;
@@ -68,6 +77,7 @@ export async function spellCheck(batch) {
     }),
   });
   const j = await res.json();
+  addUsage("gpt-4o", j);
   try {
     const map = JSON.parse(j.choices[0].message.content);
     return batch.map((_, i) => String(map[String(i + 1)] ?? "unknown").toLowerCase());

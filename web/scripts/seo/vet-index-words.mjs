@@ -9,9 +9,12 @@
 //   node scripts/seo/vet-index-words.mjs [--recheck]
 // Needs GOOGLE_APPLICATION_CREDENTIALS (runtime only) and OPENAI_API_KEY in .env.local.
 import admin from "firebase-admin";
-import { looksLikeWord, classify, spellCheck } from "./word-checks.mjs";
+import { looksLikeWord, classify, spellCheck, spend } from "./word-checks.mjs";
 
 const RECHECK = process.argv.includes("--recheck");
+// --limit N: vet only N docs (measure the cost on a sample first).
+const LI = process.argv.indexOf("--limit");
+const LIMIT = LI > 0 ? Number(process.argv[LI + 1]) : Infinity;
 admin.initializeApp({ credential: admin.credential.applicationDefault() });
 const db = admin.firestore();
 const FP = admin.firestore.FieldPath;
@@ -23,6 +26,7 @@ for (const d of snap.docs) {
   if (!m) continue;
   if (!RECHECK && typeof d.get("indexOk") === "boolean") continue;
   docs.push({ ref: d.ref, lang: m[1], word: m[2], wordLanguage: d.get("language") || "" });
+  if (docs.length >= LIMIT) break;
 }
 console.log("to check", docs.length);
 
@@ -53,5 +57,5 @@ for (const c of docs) {
   writer.set(c.ref, { indexOk: v }, { merge: true });
 }
 await writer.close();
-console.log(`indexOk true=${ok} false=${no}`);
+console.log(`indexOk true=${ok} false=${no}  cost $${spend.usd.toFixed(4)}`);
 process.exit(0);
