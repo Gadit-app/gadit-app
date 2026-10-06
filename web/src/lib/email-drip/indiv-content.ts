@@ -43,7 +43,8 @@ export const INDIV_META: IndivEmailMeta[] = [
   M("ind-progress", "Clear/Deep · 9 · Your first two weeks in numbers", 10, "/notebook"),
   M("ind-questions", "Clear/Deep · 10 · Questions about a word, idioms", 12, "/"),
   M("ind-languages", "Clear/Deep · 11 · Any word, explained in your language", 15, "/"),
-  M("ind-month", "Clear/Deep · 12 · Everything you have, and the next month (last)", 24, "/"),
+  M("ind-family", "Clear/Deep · 12 · Gadit for the whole family, and for schools", 18, "/families"),
+  M("ind-month", "Clear/Deep · 13 · Everything you have, and the next month (last)", 24, "/"),
 ];
 
 export const INDIV_LABEL_HE: Record<string, string> = {
@@ -58,7 +59,8 @@ export const INDIV_LABEL_HE: Record<string, string> = {
   "ind-progress": "9 · השבועיים הראשונים במספרים",
   "ind-questions": "10 · שאלות על מילה, ניבים וצירופים",
   "ind-languages": "11 · כל מילה, הסבר בשפה שלך",
-  "ind-month": "12 · כל מה שיש לך, והחודש הבא (אחרון)",
+  "ind-family": "12 · Gadit לכל המשפחה, ולבתי ספר",
+  "ind-month": "13 · כל מה שיש לך, והחודש הבא (אחרון)",
 };
 
 const C = (subject: string, body: string, ctaText: string, next: string): EmailContent => ({
@@ -729,7 +731,7 @@ Simple words like "break", "hand" and "head" open up a lot of them.`,
 מי שלומד שפה חדשה יכול לחפש בה מילים ולקבל את ההסבר בשפה שלו.
 ככה מבינים את המילה עד הסוף, עם כל המשמעויות והדוגמאות, ולא רק מילה אחת מקבילה.`,
       "לחיפוש מילה בכל שפה",
-      "במייל הבא נסכם את כל מה שיש לך ב-Gadit, ואיך ממשיכים מכאן.",
+      "במייל הבא נדבר על Gadit לכל המשפחה, ועל Gadit לבתי ספר.",
     ),
     en: C(
       "Hi {name}, words in any language, explained in yours",
@@ -749,6 +751,75 @@ On Gadit you can look up a word in any language. The explanation is always writt
 If you're learning a new language, look up words in it and get the explanation in your own.
 That way you understand the word all the way through, with every meaning and example, not just one matching word.`,
       "Look up a word in any language",
+      "In the next email we'll look at Gadit for the whole family, and Gadit for schools.",
+    ),
+  },
+
+  "ind-family": {
+    he: C(
+      "היי {שם}, Gadit לכל המשפחה, ולבתי ספר",
+      `היי {שם},
+
+הרבה מאוד מהמנויים שלנו הם הורים.
+ילד שמבין כל מילה בשיעור, מבין גם את החומר.
+
+## Gadit Family
+חבילה אחת לכל המשפחה: עד 5 ילדים, וגם ההורה השני.
+
+1. לכל ילד אזור אישי משלו, עם מחברת שנקראת **אוצר המילים שלי**.
+2. מצב ילדים פועל אצל הילד כברירת מחדל: הסבר פשוט ותמונה לכל משמעות.
+3. משחקים, חידונים ותרגול הכתבה מהמילים שהילד עצמו חיפש.
+4. בלוח ההורה רואים את כל הילדים במסך אחד, ואפשר לקבל התראה על כל מילה שהילד מחפש.
+5. מקום סגור ובטוח: בלי צ'אט, בלי פרסומות ובלי קישורים החוצה.
+
+הילד מתחבר מהמכשיר שלו עם קוד, בלי סיסמה.
+אין לו מכשיר משלו? יש מסך משותף לילדים.
+
+## Gadit לבתי ספר
+גם בכיתה, הרבה פעמים מה שעוצר תלמיד זו מילה אחת.
+
+1. המילים החשובות של כל יחידת לימוד, לפי תוכניות הלימודים מגן ועד י״ב, מוכנות להקרנה בכיתה.
+2. חידון ומשחק לכל הכיתה מהמילים של השיעור.
+3. כל תלמיד נכנס עם קוד הכיתה, בלי חשבון, ומקבל הסבר לכל מילה, גם בשפה שלו.
+4. ההנהלה והצוות רואים אילו מילים כל כיתה התקשתה בהן.
+
+**מכירים בית ספר שזה יכול לעזור לו?**
+אפשר להשיב למייל הזה עם שם בית הספר ופרטים של מישהו מהצוות, ואנחנו נמשיך משם.
+אפשר גם לשלוח להם את [הדף של Gadit לבתי ספר](/schools).`,
+      "להכיר את Gadit Family",
+      "במייל הבא נסכם את כל מה שיש לך ב-Gadit, ואיך ממשיכים מכאן.",
+    ),
+    en: C(
+      "Hi {name}, Gadit for the whole family, and for schools",
+      `Hi {name},
+
+Many of our subscribers are parents.
+A child who understands every word in the lesson understands the material too.
+
+## Gadit Family
+One plan for the whole family: up to 5 children, plus the other parent.
+
+1. Each child gets a space of their own, with a notebook called **My words**.
+2. Kids Mode is on by default for the child: a simple explanation and a picture for every meaning.
+3. Games, quizzes and dictation practice built from the words the child looked up.
+4. The parent board shows all the children on one screen, and you can get an alert for every word your child looks up.
+5. A closed, safe place: no chat, no ads and no links out.
+
+A child signs in on their own device with a code, no password.
+No device of their own? There's a shared kids screen.
+
+## Gadit for schools
+In class too, what stops a student is often one word.
+
+1. The key words of every unit, by the curriculum from kindergarten to grade 12, ready to project in class.
+2. A quiz and a game for the whole class from the lesson's words.
+3. Every student joins with the class code, no account, and gets an explanation of every word, in their own language too.
+4. The school's leadership and staff see which words each class struggled with.
+
+**Know a school this could help?**
+Reply to this email with the school's name and someone on the staff to talk to, and we'll take it from there.
+You can also send them [the Gadit for schools page](/schools).`,
+      "Meet Gadit Family",
       "In the next email we'll sum up everything you have on Gadit, and how to keep going from here.",
     ),
   },
