@@ -11,14 +11,18 @@
  * same-language shape is used. The language name is always in the page's
  * language ("in English" on the English page, "בעברית" on the Hebrew page).
  *
- * Only languages whose wording Gadi approved get the new title; the others keep
- * "{w}, Gadit" until their wording is approved.
+ * All 33 languages approved by Gadi (he/en/es here, the other 30 in
+ * word-title-i18n.json, with his fixes for el/hi/ja/ko/tr). In the smaller
+ * languages a stored translation is used only once verified
+ * (titleTranslationOk, set by scripts/seo/verify-title-translations.mjs);
+ * otherwise the title has no translation.
  */
+import OTHER_TITLES from "./word-title-i18n.json";
 
 type Tpl = { same: string[]; foreign: string[] };
 
 // {w} = the word, {t} = translation. Longest first.
-const TITLES: Record<string, Tpl> = {
+const BASE_TITLES: Record<string, Tpl> = {
   he: {
     same: ["{w}: פירוש, משמעויות ודוגמאות", "{w}: פירוש ומשמעויות", "{w}: משמעויות"],
     foreign: ["{w} בעברית: {t}, פירוש ודוגמאות", "{w} בעברית: {t}, פירוש", "{w} בעברית: {t}"],
@@ -32,6 +36,11 @@ const TITLES: Record<string, Tpl> = {
     foreign: ["{w} en español: {t}, significado y ejemplos", "{w} en español: {t}, significado", "{w} en español: {t}"],
   },
 };
+
+const TITLES: Record<string, Tpl> = { ...(OTHER_TITLES as Record<string, Tpl>), ...BASE_TITLES };
+
+/** Languages whose stored translations need a verified flag before a title uses them. */
+const VERIFY_TRANSLATION = new Set(["zu", "am", "sw", "af", "fil"]);
 
 /** The English name the definition engine stores in `language`, per UI language. */
 const ENGLISH_NAME: Record<string, string> = {
@@ -55,19 +64,24 @@ function shortTranslation(t: unknown): string {
 export function wordTitle(
   lang: string,
   word: string,
-  result: { language?: unknown; translation?: unknown } | null,
+  result: { language?: unknown; translation?: unknown; titleTranslationOk?: unknown } | null,
 ): string {
   const tpl = TITLES[lang];
   if (!tpl || !result) return `${word}, Gadit`;
   const wordLang = typeof result.language === "string" ? result.language.trim().toLowerCase() : "";
   const pageLang = (ENGLISH_NAME[lang] ?? "").toLowerCase();
   const foreign = !!wordLang && wordLang !== "unknown" && !!pageLang && !wordLang.startsWith(pageLang);
-  const t = foreign ? shortTranslation(result.translation) : "";
+  const trusted = !VERIFY_TRANSLATION.has(lang) || result.titleTranslationOk === true;
+  const t = foreign && trusted ? shortTranslation(result.translation) : "";
   const variants = t ? tpl.foreign : tpl.same;
-  const fill = (v: string) => v.replace("{w}", word).replace("{t}", t) + SUFFIX;
-  for (const v of variants) {
-    const s = fill(v);
-    if (s.length <= MAX) return s;
-  }
-  return fill(variants[variants.length - 1]);
+  const fill = (v: string) => v.split("{w}").join(word).split("{t}").join(t) + SUFFIX;
+  const pick = (() => {
+    for (const v of variants) {
+      const s = fill(v);
+      if (s.length <= MAX) return s;
+    }
+    return fill(variants[variants.length - 1]);
+  })();
+  // A template placeholder must never reach the page (Gadi 2026-10-06).
+  return /\{[wt]\}|\{word\}/.test(pick.replace(word, "")) ? `${word}, Gadit` : pick;
 }

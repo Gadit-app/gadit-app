@@ -178,7 +178,7 @@ export async function generateMetadata(
   const prevOg = (await parent).openGraph;
   // Localized search title (lib/word-title.ts); "{word}, Gadit" without a
   // definition or in a language whose wording is not approved yet.
-  const title = wordTitle(lang, decoded, preloaded as unknown as { language?: unknown; translation?: unknown } | null);
+  const title = wordTitle(lang, decoded, preloaded as unknown as { language?: unknown; translation?: unknown; titleTranslationOk?: unknown } | null);
 
   return {
     title,
