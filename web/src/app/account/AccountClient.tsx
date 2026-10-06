@@ -995,7 +995,9 @@ function PlanSection({
                 {CHECKOUT_PRICES.family && (
                   <span className="gd-buy"><PrimaryBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.family)}>{upgradeLabel(lang, "Family")}</PrimaryBtn></span>
                 )}
-                <GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.individual)}>{upgradeLabel(lang, "Individual")}</GhostBtn>
+                {/* .gd-buy: hidden in the Play app like every buy button (it
+                    leaked there on 2026-10-06; the app never sells). */}
+                <span className="gd-buy"><GhostBtn onClick={() => onUpgradeTo(CHECKOUT_PRICES.individual)}>{upgradeLabel(lang, "Individual")}</GhostBtn></span>
               </>
             ) : (
               <>
