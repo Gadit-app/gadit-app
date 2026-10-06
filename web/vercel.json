@@ -35,6 +35,10 @@
     {
       "path": "/api/cron/flush-deferred-mail",
       "schedule": "20 4 * * *"
+    },
+    {
+      "path": "/api/cron/vet-words",
+      "schedule": "15 3 * * 1"
     }
   ]
 }
