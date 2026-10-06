@@ -407,11 +407,12 @@ export default async function RootLayout({
               android-app:// referrer, kept for a standalone window), keeps the
               cookie and data-play on; a normal browser tab that inherits the
               cookie clears it, drops data-play, and returns to the page the
-              server bounced it from (?from=). */}
+              server bounced it from (?from=). Never on the purchase host gadit.app,
+              which is never Play mode (middleware.ts). */}
           <script
             dangerouslySetInnerHTML={{
               __html:
-                "try{var q=new URLSearchParams(location.search),r=document.referrer||'',d=document.documentElement,c=/(?:^|; )gadit_play=1/.test(document.cookie),s=window.matchMedia&&matchMedia('(display-mode: standalone)').matches;if(q.get('src')==='play'||r.indexOf('android-app://')===0||(c&&s))sessionStorage.setItem('gadit_play_tab','1');if(sessionStorage.getItem('gadit_play_tab')==='1'){d.setAttribute('data-play','1');if(!c)document.cookie='gadit_play=1; path=/; max-age=31536000; samesite=lax';}else if(c){document.cookie='gadit_play=; path=/; max-age=0; samesite=lax';d.removeAttribute('data-play');var f=q.get('from');if(f&&f.charAt(0)==='/'&&f.charAt(1)!=='/')location.replace(f);}}catch(e){}",
+                "try{if(location.hostname!=='gadit.app'){var q=new URLSearchParams(location.search),r=document.referrer||'',d=document.documentElement,c=/(?:^|; )gadit_play=1/.test(document.cookie),s=window.matchMedia&&matchMedia('(display-mode: standalone)').matches;if(q.get('src')==='play'||r.indexOf('android-app://')===0||(c&&s))sessionStorage.setItem('gadit_play_tab','1');if(sessionStorage.getItem('gadit_play_tab')==='1'){d.setAttribute('data-play','1');if(!c)document.cookie='gadit_play=1; path=/; max-age=31536000; samesite=lax';}else if(c){document.cookie='gadit_play=; path=/; max-age=0; samesite=lax';d.removeAttribute('data-play');var f=q.get('from');if(f&&f.charAt(0)==='/'&&f.charAt(1)!=='/')location.replace(f);}}}catch(e){}",
             }}
           />
           <script

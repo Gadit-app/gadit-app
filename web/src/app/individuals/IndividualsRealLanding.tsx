@@ -276,6 +276,14 @@ export function IndividualsRealLanding() {
           <button type="button" className="ind-cta" onClick={() => start("final")}>{C.finalCta}</button>
         </section>
       </main>
+      {/* Legal links on a page that starts a trial / collects details (QA 2026-10-07). */}
+      <footer style={{ textAlign: "center", padding: "26px 16px 34px", fontSize: 13.5, color: "#6B7A80" }}>
+        <a href={href("/terms")} style={{ color: "inherit" }}>תנאי שימוש</a>
+        <span style={{ margin: "0 10px" }}>·</span>
+        <a href={href("/privacy")} style={{ color: "inherit" }}>מדיניות פרטיות</a>
+        <span style={{ margin: "0 10px" }}>·</span>
+        <span dir="ltr">© Gadit 2026</span>
+      </footer>
     </div>
   );
 }
@@ -291,6 +299,10 @@ const CSS = `
 .ind-top-end { display: flex; align-items: center; gap: 10px; }
 .ind-top-cta { background: var(--teal); color: #fff; border: 0; border-radius: 999px; padding: 10px 20px; font: inherit; font-weight: 700; font-size: 14.5px; cursor: pointer; box-shadow: 0 6px 16px rgba(14,165,165,0.28); }
 .ind-top-lang { border: 1px solid rgba(31,41,55,0.14); border-radius: 999px; padding: 2px 6px; }
+/* The sticky header must not cover an anchor target, and its CTA stays on one
+   line on narrow phones (QA 2026-10-07). */
+#how { scroll-margin-top: 88px; }
+@media (max-width: 400px) { .ind-top .ind-top-cta { white-space: nowrap; padding: 8px 11px; font-size: 12.5px; } }
 .ind-hero { background: radial-gradient(90% 70% at 85% 0%, rgba(14,165,165,0.10) 0%, rgba(14,165,165,0) 60%), linear-gradient(180deg, #EEF7F6 0%, #FFFFFF 70%); padding: 56px 24px 84px; }
 .ind-hero-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 36px; align-items: center; text-align: center; }
 .ind-pill { display: inline-flex; align-items: center; gap: 10px; background: #fff; border-radius: 999px; padding: 7px 16px 7px 12px; font-weight: 700; font-size: 14px; color: #1f2937; box-shadow: var(--soft); margin-bottom: 18px; }

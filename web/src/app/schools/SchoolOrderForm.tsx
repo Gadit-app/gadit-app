@@ -97,7 +97,7 @@ export function SchoolOrderForm() {
         <div>
           <label style={label}>גודל בית הספר</label>
           <select style={input} value={form.size} onChange={(e) => set("size", e.target.value)}>
-            <option value="">—</option>
+            <option value="">בחירה</option>
             {SIZES.map((s) => <option key={s.v} value={s.v}>{s.label}</option>)}
           </select>
         </div>

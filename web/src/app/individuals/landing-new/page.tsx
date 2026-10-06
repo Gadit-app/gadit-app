@@ -8,6 +8,7 @@ import { IndividualsRealLanding } from "../IndividualsRealLanding";
  */
 export const metadata: Metadata = {
   title: "Gadit Individual · להבין כל מילה עד הסוף",
+  description: "כל המשמעויות של כל מילה, עם דוגמאות, תמונה ומקור המילה, ומחברת שזוכרת כל מילה. 14 יום ניסיון חינם.",
   robots: { index: false, follow: false },
 };
 

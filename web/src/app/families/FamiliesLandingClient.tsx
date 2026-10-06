@@ -1,6 +1,6 @@
 "use client";
 
-import { INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
+import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
 import { REAL_COPY, REAL_CSS, PhoneShot, Lines } from "./RealScreens";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -17,6 +17,7 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import { v2 } from "@/lib/i18n-v2";
 
 /**
  * Family-plan campaign landing page, v2 (2026-07-16).
@@ -39,7 +40,6 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 
 const PRICE_FAMILY_YEARLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_YEARLY ?? "";
 const PRICE_FAMILY_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
-const PRICE_DEEP_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY ?? "";
 
 type Angle = "vocab" | "relief" | "anxiety" | "safe";
 const ANGLES: Angle[] = ["vocab", "relief", "anxiety", "safe"];
@@ -6475,7 +6475,10 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
     const sentinel = heroEndRef.current;
     if (sentinel && "IntersectionObserver" in window) {
       stickyObs = new IntersectionObserver(
-        ([e]) => setShowSticky(!e.isIntersecting),
+        // Only once the hero is scrolled PAST (sentinel above the viewport),
+        // not at load while it is still below it (QA 2026-10-07: the bar
+        // sat next to the hero CTA on first paint).
+        ([e]) => setShowSticky(!e.isIntersecting && e.boundingClientRect.top < 0),
         { threshold: 0 },
       );
       stickyObs.observe(sentinel);
@@ -6506,13 +6509,14 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
     });
   }
 
+  // One learner at home: the Individual plan (it used to send people to the
+  // retired Deep price; found in QA 2026-10-07).
   function startDeep() {
-    track("families_lp_cta", { angle, billing: "deep_monthly", source: "single_child" });
-    if (!PRICE_DEEP_MONTHLY) return;
+    track("families_lp_cta", { angle, billing: "individual_monthly", source: "single_child" });
     promptLogin({
       mode: "signup",
       onSuccess: () => {
-        window.location.href = `${href("/checkout")}?price=${encodeURIComponent(PRICE_DEEP_MONTHLY)}`;
+        window.location.href = `${href("/checkout")}?price=${encodeURIComponent(INDIVIDUAL_MONTHLY)}`;
       },
     });
   }
@@ -6555,7 +6559,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                     className="wb-shell-link"
                     onClick={() => promptLogin({ mode: "signin" })}
                   >
-                    Sign in
+                    {v2(lang, "signIn")}
                   </button>
                 </>
               )}

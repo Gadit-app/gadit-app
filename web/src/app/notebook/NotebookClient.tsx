@@ -668,10 +668,14 @@ export function NotebookPage() {
   // Network status — drives the 'you're offline' banner at the top.
   // Initialised from navigator.onLine and kept fresh via the online /
   // offline events the browser fires.
-  const [online, setOnline] = useState<boolean>(
-    typeof navigator === "undefined" ? true : navigator.onLine,
-  );
+  // Starts true on BOTH server and client: Node has a global navigator with
+  // no onLine, so the server rendered the offline banner and every notebook
+  // load threw a hydration error (React #418, QA 2026-10-07). The real value
+  // is read after mount.
+  const [online, setOnline] = useState<boolean>(true);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reading the browser's real status once after mount
+    if (navigator.onLine === false) setOnline(false);
     const onOnline = () => setOnline(true);
     const onOffline = () => setOnline(false);
     window.addEventListener("online", onOnline);
