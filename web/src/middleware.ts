@@ -85,6 +85,21 @@ function route(req: NextRequest, payHost: boolean): NextResponse {
   const segments = pathname.split("/").filter(Boolean);
   const first = segments[0];
 
+  // One URL per word: the definition is stored lowercased, so /word/Water and
+  // /word/water are the same page. 301 mixed case to lowercase (SEO plan,
+  // Gadi 2026-10-06) so search engines keep one version.
+  {
+    const wi = segments[0] === "word" ? 1 : SUPPORTED_LANGS.has(first ?? "") && segments[1] === "word" ? 2 : -1;
+    if (wi > 0 && segments.length === wi + 1) {
+      const raw = decodedPath.split("/").filter(Boolean)[wi];
+      if (raw && raw !== raw.toLowerCase()) {
+        const lower = req.nextUrl.clone();
+        lower.pathname = "/" + [...segments.slice(0, wi), encodeURIComponent(raw.toLowerCase())].join("/");
+        return NextResponse.redirect(lower, 301);
+      }
+    }
+  }
+
   // Play mode: sticky cookie + block purchase surfaces server-side (never a
   // client-only hide — the price must not exist in the HTML the reviewer gets).
   const playMode = !payHost && detectPlay(req);

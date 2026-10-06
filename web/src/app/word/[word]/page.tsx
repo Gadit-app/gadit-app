@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
 import { headers, cookies } from "next/headers";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -108,13 +108,32 @@ const getPreloadedResult = cache(
   },
 );
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ word: string }>;
-  searchParams: Promise<{ [k: string]: string | string[] | undefined }>;
-}): Promise<Metadata> {
+/** The UI languages that have a public definition of this word (a base cache
+ *  doc), so hreflang points only at pages that really show it. One batched
+ *  read, field-masked to a single small field. */
+const getLangsWithDefinition = cache(async (word: string): Promise<string[]> => {
+  try {
+    const db = getAdminDb();
+    const w = word.toLowerCase().trim();
+    const refs = ALL_LANGS.map((l) => db.collection("cache").doc(`auto2_${l}_base_${w}`));
+    const snaps = await db.getAll(...refs, { fieldMask: ["word"] });
+    return ALL_LANGS.filter((_, i) => snaps[i]?.exists);
+  } catch (e) {
+    console.error("word hreflang lookup failed:", e);
+    return [];
+  }
+});
+
+export async function generateMetadata(
+  {
+    params,
+    searchParams,
+  }: {
+    params: Promise<{ word: string }>;
+    searchParams: Promise<{ [k: string]: string | string[] | undefined }>;
+  },
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const decoded = await resolveWord(params, searchParams);
   const lang = await resolveLang();
   const preloaded = await getPreloadedResult(decoded, lang);
@@ -144,23 +163,46 @@ export async function generateMetadata({
   const trimmed = rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
   const firstSeg = trimmed.split("/").filter(Boolean)[0];
   const urlLang = firstSeg && ALL_LANGS.includes(firstSeg) ? firstSeg : "en";
-  const wordEnc = encodeURIComponent(decoded);
+  // Lowercase: the definition is stored lowercased, so /word/Water and
+  // /word/water are one page (middleware 301s mixed case to lowercase).
+  const wordEnc = encodeURIComponent(decoded.toLowerCase());
   const BASE = "https://www.gadit.app";
   const urlForLang = (l: string) =>
     l === "en" ? `${BASE}/word/${wordEnc}` : `${BASE}/${l}/word/${wordEnc}`;
 
+  // hreflang only between languages that really show this word (SEO plan,
+  // Gadi 2026-10-06); a noindex page declares none.
+  const langs = preloaded ? await getLangsWithDefinition(decoded) : [];
+  const canonical = urlForLang(urlLang);
+  const prevOg = (await parent).openGraph;
+  const title = `${decoded}, Gadit`;
+
   return {
-    title: `${decoded}, Gadit`,
+    title,
     description,
     // Without a saved definition the page has nothing to show a crawler (it
     // is not generated for bots), so Google must not index an empty card.
     ...(preloaded ? {} : { robots: { index: false, follow: true } }),
     alternates: {
-      canonical: urlForLang(urlLang),
-      languages: {
-        ...Object.fromEntries(ALL_LANGS.map((l) => [l, urlForLang(l)])),
-        "x-default": urlForLang("en"),
-      },
+      canonical,
+      ...(langs.length > 1
+        ? {
+            languages: {
+              ...Object.fromEntries(langs.map((l) => [l, urlForLang(l)])),
+              ...(langs.includes("en") ? { "x-default": urlForLang("en") } : {}),
+            },
+          }
+        : {}),
+    },
+    // og:url = the canonical, og:title = the word (the layout's were the
+    // generic site ones); keep the site image.
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "Gadit",
+      type: "website",
+      ...(prevOg?.images ? { images: prevOg.images } : {}),
     },
   };
 }
@@ -175,11 +217,34 @@ export default async function WordRoute({
   const decoded = await resolveWord(params, searchParams);
   const lang = await resolveLang();
   const preloaded = await getPreloadedResult(decoded, lang);
+  // Structured data for a page that shows a real definition: the word as a
+  // DefinedTerm in Gadit's term set (helps search and answer engines read it).
+  const firstMeaning =
+    (preloaded?.meanings?.[0] as { meaning?: string } | undefined)?.meaning?.trim() ?? "";
+  const ld = preloaded && firstMeaning
+    ? {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        name: decoded,
+        description: firstMeaning,
+        inLanguage: lang,
+        url: `https://www.gadit.app${lang === "en" ? "" : `/${lang}`}/word/${encodeURIComponent(decoded.toLowerCase())}`,
+        inDefinedTermSet: { "@type": "DefinedTermSet", name: "Gadit", url: "https://www.gadit.app" },
+      }
+    : null;
   return (
+    <>
+    {ld && (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, String.fromCharCode(92) + "u003c") }}
+      />
+    )}
     <WordClient
       initialWord={decoded}
       initialResult={preloaded}
       preloadLang={lang}
     />
+    </>
   );
 }
