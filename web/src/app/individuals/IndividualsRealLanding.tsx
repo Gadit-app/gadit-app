@@ -231,7 +231,7 @@ export function IndividualsRealLanding() {
             {C.who.map((w) => (
               <div key={w.t} className="ind-who-card">
                 <h3 className="ind-who-t">{w.t}</h3>
-                <p className="ind-who-b">{w.b}</p>
+                <p className="ind-who-b"><Lines text={w.b} /></p>
               </div>
             ))}
           </div>
@@ -239,7 +239,7 @@ export function IndividualsRealLanding() {
 
         <section className="ind-band ind-tint" id="price">
           <div className="ind-kicker">{C.priceKicker}</div>
-          <h2 className="ind-h2 ind-center">{C.priceTitle}</h2>
+          <h2 className="ind-h2 ind-center"><Lines text={C.priceTitle} /></h2>
           <div className="ind-price-card">
             <div className="ind-price-row">
               <span className="ind-price" dir="ltr">{INDIVIDUAL_DISPLAY.ilsMonthly}</span>
