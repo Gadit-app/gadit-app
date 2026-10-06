@@ -554,6 +554,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
       }
 
       // Fetch distractors from notebook (Deep is required by route)
+      let picks: string[] = [];
       try {
         if (!user) {
           if (!cancelled) setDistractors([]);
@@ -564,14 +565,13 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
           });
           if (res.ok) {
             const data = (await res.json()) as { items: NotebookItem[] };
-            // Same-language candidates first; fall back to any if too few.
+            // Same-language words ONLY. The old "fall back to any language"
+            // put Hebrew options into a Spanish sentence (Gadi 2026-10-06,
+            // "mundo" with ריח / מפלצת). Fewer than 3 = the round is skipped.
             const same = (data.items ?? [])
               .filter((it) => it.word.toLowerCase() !== word.toLowerCase())
               .filter((it) => normalize(it.language) === normalize(language));
-            const any = (data.items ?? [])
-              .filter((it) => it.word.toLowerCase() !== word.toLowerCase());
-            const pool = same.length >= 3 ? same : any;
-            const picks = sample(pool, 3).map((it) => it.word);
+            picks = same.length >= 3 ? sample(same, 3).map((it) => it.word) : [];
             if (!cancelled) setDistractors(picks);
           } else {
             if (!cancelled) setDistractors([]);
@@ -584,7 +584,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
       // Decide opening stage
       if (anagramEligible) {
         if (!cancelled) setStage("anagram");
-      } else if (fillblankEligible) {
+      } else if (fillblankEligible && picks.length >= 3) {
         if (!cancelled) setStage("fillblank");
       } else {
         if (!cancelled) setStage("result");
@@ -706,7 +706,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
       const scrambled = shuffleUntilDifferent(letters);
       setTiles(scrambled.map((l, i) => ({ letter: l, slot: -1, id: `t-${i}-${Date.now()}` })));
       setStage("anagram");
-    } else if (fillblankEligible) {
+    } else if (fillblankEligible && (distractors?.length ?? 0) >= 3) {
       setStage("fillblank");
     } else {
       setStage("result");
@@ -841,7 +841,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
                 <span className="wb-wgm-result-denom">/{totalRounds.current}</span>
               </div>
               <div className="wb-wgm-result-line">{c.scoreLine(score, totalRounds.current)}</div>
-              {!(anagramEligible && fillblankEligible) && (
+              {!(anagramEligible && fillblankEligible && (distractors?.length ?? 0) >= 3) && (
                 <div className="wb-wgm-result-notice">
                   <div className="wb-wgm-result-notice-title">{c.notEnough}</div>
                   <div className="wb-wgm-result-notice-hint">{c.notEnoughHint}</div>
