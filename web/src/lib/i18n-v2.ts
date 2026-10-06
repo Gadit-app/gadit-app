@@ -3400,7 +3400,7 @@ const he: V2Strings = {
   srEyebrow: "תרגול",
   srWordNofMTemplate: (n, m) => `מילה ${n} מתוך ${m}`,
   srSkip: "דילוג",
-  srClickToReveal: "לחצו כדי לראות",
+  srClickToReveal: "לחיצה כדי לראות",
   srTapToReveal: "הקישו כדי לראות",
   srPrimaryMeaningLabel: "משמעות עיקרית",
   srExamplesLabel: "דוגמאות",

@@ -101,7 +101,9 @@ export function ReaderText({ text, reviewed, onReview, hardKeys }: Props) {
 
   return (
     <>
-      <div className="wb-reader-body">
+      {/* The passage's own direction, set from its script (dir="auto" on a
+          wrapper still read English right-to-left inside the Hebrew UI). */}
+      <div className="wb-reader-body" dir={textLang === "he" || textLang === "ar" ? "rtl" : "ltr"} style={{ textAlign: "start" }}>
         {sentences.map((s, si) => (
           <span key={si}>
             {s.toks.map(({ tok, gi }) => {

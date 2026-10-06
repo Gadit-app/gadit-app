@@ -150,6 +150,8 @@ export async function POST(req: NextRequest) {
 Word B: "${wordB.trim()}"
 User's UI language (write all explanations in this): ${uiLangName}
 ${sameScript ? "Both words are written in the same alphabet: treat them as words of the same language. The UI language is only the language of your explanations, not of the words.\n" : ""}
+Write summaryA, summaryB, keyDifference and commonMistake in ${uiLangName}, even when the words are English (the worked example in your instructions is in English only because its UI was English).
+
 Compare these two words.`;
 
     const ask = async (model: string) => {
@@ -174,8 +176,18 @@ Compare these two words.`;
       return text ? JSON.parse(text) : null;
     };
 
+    // An explanation that came back in the words' language instead of a
+    // non-Latin UI language (affect / effect from Hebrew answered in English).
+    const UI_SCRIPT: Record<string, RegExp> = {
+      he: /[֐-׿]/, ar: /[؀-ۿ]/, fa: /[؀-ۿ]/, ru: /[Ѐ-ӿ]/, uk: /[Ѐ-ӿ]/,
+      el: /[Ͱ-Ͽ]/, hi: /[ऀ-ॿ]/, bn: /[ঀ-৿]/, th: /[฀-๿]/, am: /[ሀ-፿]/,
+      ja: /[぀-ヿ一-鿿]/, ko: /[가-힯]/, "zh-CN": /[一-鿿]/, "zh-TW": /[一-鿿]/,
+    };
+    const wrongLang = (p: { summaryA?: string } | null) =>
+      !!p && !(p as { error?: string }).error && !!UI_SCRIPT[uiLangCode] && !UI_SCRIPT[uiLangCode].test(String(p.summaryA ?? ""));
+
     let parsed = await ask("gpt-4o-mini");
-    if (sameScript && parsed?.error === "different_languages") parsed = await ask("gpt-4o");
+    if ((sameScript && parsed?.error === "different_languages") || wrongLang(parsed)) parsed = await ask("gpt-4o");
     if (!parsed) {
       return NextResponse.json({ error: "ai_no_content" }, { status: 500 });
     }
