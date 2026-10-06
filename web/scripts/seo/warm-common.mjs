@@ -84,6 +84,9 @@ if (cmd === "run") {
   const todo = jobs.slice(0, limit);
   console.log("to generate", todo.length, "of", words.length * LANGS.length);
   let done = 0, failed = 0, idx = 0;
+  // The site's daily admin cap (lib/ai-budget.ts) answers 429; out of credit
+  // or the hard cap answers 503. Either one stops the whole run at once.
+  let stop = "";
   async function one(job) {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
@@ -97,20 +100,21 @@ if (cmd === "run") {
           body: JSON.stringify({ word: job.word, uiLang: job.lang }),
         });
         const text = await res.text();
+        if (res.status === 429 || res.status === 503) { stop = `server said ${res.status}: ${text.slice(0, 80)}`; return false; }
         if (res.ok && text.includes('"type":"done"')) return true;
       } catch {}
     }
     return false;
   }
   async function worker() {
-    while (idx < todo.length) {
+    while (idx < todo.length && !stop) {
       const job = todo[idx++];
       if (await one(job)) done++; else { failed++; console.log("fail", job.lang, job.word); }
       if ((done + failed) % 100 === 0) console.log(`progress ${done + failed}/${todo.length} ok=${done} fail=${failed}`);
     }
   }
   await Promise.all(Array.from({ length: 6 }, worker));
-  console.log(`finished ok=${done} fail=${failed}`);
+  console.log(`finished ok=${done} fail=${failed}${stop ? ` STOPPED: ${stop}` : ""}`);
   process.exit(0);
 }
 console.log("usage: list <freq.txt> <out.json> | run <list.json> [--limit N]");

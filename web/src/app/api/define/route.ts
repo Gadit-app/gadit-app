@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { adminBudgetExceeded, hardCapReached, ADMIN_DAILY_CAP } from "@/lib/ai-budget";
 import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
 import { recordUserActivity } from "@/lib/user-activity";
@@ -1616,6 +1617,20 @@ export async function POST(req: NextRequest) {
       return new Response(null, { status: 204 });
     }
 
+    // Spend guard (lib/ai-budget.ts, Gadi 2026-10-06). An admin refresh or
+    // bulk warm-up stops at the daily admin cap; above the daily hard cap,
+    // new generations stop for non-paying visitors (paying users always get
+    // theirs, cached words always load).
+    if (isRefresh && (await adminBudgetExceeded())) {
+      return NextResponse.json({ error: "admin_budget", capUsd: ADMIN_DAILY_CAP }, { status: 429 });
+    }
+    if (!isPaid && !isRefresh && (await hardCapReached())) {
+      return NextResponse.json(
+        { error: "engine_unavailable", message: "Our definition engine is temporarily unavailable. Please try again in a few minutes." },
+        { status: 503 },
+      );
+    }
+
     // Quota enforcement runs only on cache misses ג€” popular words like
     // "love", "dream", "ephemeral" stay free because they don't cost
     // an OpenAI call. This also rewards the long-tail SEO play: if
@@ -1780,7 +1795,8 @@ export async function POST(req: NextRequest) {
             model: usingFallback ? "gpt-4o-mini" : "gpt-4o",
             tokensIn: capturedUsage?.prompt_tokens ?? 0,
             tokensOut: capturedUsage?.completion_tokens ?? 0,
-            plan: userInfo?.plan ?? "anon",
+            plan: isRefresh ? "admin" : userInfo?.plan ?? "anon",
+            admin: isRefresh,
           });
 
           // Stream ended — parse final JSON, validate, retry if degenerate

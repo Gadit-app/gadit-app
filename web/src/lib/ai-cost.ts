@@ -30,6 +30,7 @@
  */
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { maybeAlertSpend } from "@/lib/ai-budget";
 
 /** USD per 1,000,000 tokens. Update when OpenAI list prices change. */
 export const PRICING: Record<string, { in: number; out: number }> = {
@@ -82,6 +83,9 @@ type LogArgs = {
   costUsd?: number;
   /** User plan at call time: basic/clear/deep/family/schools/anon. */
   plan?: string;
+  /** An admin refresh / bulk warm-up: also counted in adminCost, which the
+   *  daily admin cap reads (lib/ai-budget.ts). */
+  admin?: boolean;
 };
 
 /**
@@ -114,6 +118,7 @@ export async function logAiUsage(a: LogArgs): Promise<void> {
           updatedAt: new Date().toISOString(),
           totalCost: inc(cost),
           totalCalls: inc(1),
+          ...(a.admin ? { adminCost: inc(cost) } : {}),
           features: {
             [feat]: {
               cost: inc(cost),
@@ -128,6 +133,7 @@ export async function logAiUsage(a: LogArgs): Promise<void> {
         },
         { merge: true },
       );
+    await maybeAlertSpend();
   } catch {
     // Telemetry is best-effort. Never let a logging failure surface to the user.
   }
