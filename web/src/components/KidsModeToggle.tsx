@@ -10,7 +10,9 @@
  *     UpgradeModal with feature="kids"). The toggle never enters the
  *     "on" state for these users — we only commit the localStorage
  *     write when the upgrade actually happens.
- *   - Clear / Deep: tap flips the boolean.
+ *   - Family, schools and the older Clear / Deep plans: tap flips the
+ *     boolean. The Individual plan gets the gate too: Kids Mode is a
+ *     Family tool (Gadi 2026-10-06), so the caller shows the Family offer.
  *
  * Visual:
  *   - off: muted grey track + label in neutral ink. Quiet enough that
@@ -24,17 +26,21 @@
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { useAuth } from "@/lib/auth-context";
 
 interface Props {
   plan: "basic" | "clear" | "deep";
   onBasicGate?: () => void;
+  /** Always allowed (a class code on the classroom computer). */
+  allowed?: boolean;
 }
 
-export function KidsModeToggle({ plan, onBasicGate }: Props) {
+export function KidsModeToggle({ plan, onBasicGate, allowed }: Props) {
   const { lang } = useLang();
   const [on, setOn] = useKidsMode();
+  const { kidsAccess } = useAuth();
 
-  const isPaid = plan === "clear" || plan === "deep";
+  const isPaid = allowed || ((plan === "clear" || plan === "deep") && kidsAccess);
 
   const handleClick = () => {
     if (!isPaid) {

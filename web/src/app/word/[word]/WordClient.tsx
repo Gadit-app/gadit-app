@@ -1519,12 +1519,13 @@ export function WordClient({
   // Auto-save every looked-up word to the notebook, silently, once per word.
   // Kids never have to tap "Save" (and the parent dashboard captures what
   // they explored); paying adults (Clear / Deep / Family) also get every
-  // word saved the moment they look it up (Gadi 2026-08-17). Non-basic only
-  // — the notebook is a paid feature.
+  // word saved the moment they look it up (Gadi 2026-08-17). Free accounts
+  // too, up to their notebook limit (Gadi 2026-10-06); the server answers
+  // 402 notebook_full past it and nothing else happens.
   const autoSavedRef = useRef<string>("");
   useEffect(() => {
     // Complete result only — mid-stream result.word is a partial prefix.
-    if (loading || !result?.word || !user || plan === "basic") return;
+    if (loading || !result?.word || !user) return;
     if (autoSavedRef.current === result.word) return;
     autoSavedRef.current = result.word;
     (async () => {

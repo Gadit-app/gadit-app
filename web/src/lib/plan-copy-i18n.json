@@ -1,0 +1,162 @@
+{
+ "_hash": {
+  "nbFreeCount": "b85f4390",
+  "nbFreeFull": "4349ae4c",
+  "nbFreeCta": "8ebe2567"
+ },
+ "ar": {
+  "nbFreeCount": "{n} من {max} كلمة في دفترك المجاني",
+  "nbFreeFull": "دفترك المجاني ممتلئ ({max} كلمة). مع Individual، تُحفَظ كل كلمة تبحث عنها.",
+  "nbFreeCta": "تعرّف على Individual"
+ },
+ "ru": {
+  "nbFreeCount": "{n} из {max} слов в твоей бесплатной тетради",
+  "nbFreeFull": "Твоя бесплатная тетрадь заполнена ({max} слов). С Individual сохраняется каждое слово, которое ты ищешь.",
+  "nbFreeCta": "Посмотреть Individual"
+ },
+ "es": {
+  "nbFreeCount": "{n} de {max} palabras en tu cuaderno gratuito",
+  "nbFreeFull": "Tu cuaderno gratuito está lleno ({max} palabras). Con Individual, se guarda cada palabra que buscas.",
+  "nbFreeCta": "Ver Individual"
+ },
+ "pt": {
+  "nbFreeCount": "{n} de {max} palavras no teu caderno gratuito",
+  "nbFreeFull": "O teu caderno gratuito está cheio ({max} palavras). Com Individual, cada palavra que procuras fica guardada.",
+  "nbFreeCta": "Ver Individual"
+ },
+ "fr": {
+  "nbFreeCount": "{n} mots sur {max} dans ton carnet gratuit",
+  "nbFreeFull": "Ton carnet gratuit est plein ({max} mots). Avec Individual, chaque mot que tu recherches est enregistré.",
+  "nbFreeCta": "Découvrir Individual"
+ },
+ "de": {
+  "nbFreeCount": "{n} von {max} Wörtern in deinem kostenlosen Notizbuch",
+  "nbFreeFull": "Dein kostenloses Notizbuch ist voll ({max} Wörter). Mit Individual wird jedes Wort gespeichert, das du nachschlägst.",
+  "nbFreeCta": "Individual ansehen"
+ },
+ "cs": {
+  "nbFreeCount": "{n} z {max} slov v tvém bezplatném sešitě",
+  "nbFreeFull": "Tvůj bezplatný sešit je plný ({max} slov). S Individual se uloží každé slovo, které vyhledáš.",
+  "nbFreeCta": "Zjistit víc o Individual"
+ },
+ "sk": {
+  "nbFreeCount": "{n} z {max} slov v tvojej bezplatnej poznámke",
+  "nbFreeFull": "Tvoja bezplatná poznámka je plná ({max} slov). S Individual sa uloží každé slovo, ktoré si vyhľadáš.",
+  "nbFreeCta": "Pozri si Individual"
+ },
+ "it": {
+  "nbFreeCount": "{n} parole su {max} nel tuo quaderno gratuito",
+  "nbFreeFull": "Il tuo quaderno gratuito è pieno ({max} parole). Con Individual, ogni parola che cerchi viene salvata.",
+  "nbFreeCta": "Scopri Individual"
+ },
+ "ja": {
+  "nbFreeCount": "{max}語中{n}語を無料ノートに保存中",
+  "nbFreeFull": "無料ノートがいっぱいです（{max}語）。Individualなら、調べた単語はすべて保存されます。",
+  "nbFreeCta": "Individualを見る"
+ },
+ "hi": {
+  "nbFreeCount": "{max} में से {n} शब्द तुम्हारी मुफ़्त नोटबुक में",
+  "nbFreeFull": "तुम्हारी मुफ़्त नोटबुक भर गई है ({max} शब्द)। Individual के साथ, जो भी शब्द तुम खोजते हो, वह सेव हो जाता है।",
+  "nbFreeCta": "Individual देखें"
+ },
+ "am": {
+  "nbFreeCount": "{n} ከ {max} ቃላት በነጻ ደብተርህ ውስጥ",
+  "nbFreeFull": "ነጻ ደብተርህ ሞልቷል ({max} ቃላት)። በ Individual የምትፈልገው እያንዳንዱ ቃል ይቀመጣል።",
+  "nbFreeCta": "Individualን እይ"
+ },
+ "uk": {
+  "nbFreeCount": "{n} з {max} слів у твоєму безкоштовному блокноті",
+  "nbFreeFull": "Твій безкоштовний блокнот заповнений ({max} слів). З Individual зберігається кожне слово, яке ти шукаєш.",
+  "nbFreeCta": "Подивитися Individual"
+ },
+ "tr": {
+  "nbFreeCount": "{n}/{max} kelime ücretsiz defterinde",
+  "nbFreeFull": "Ücretsiz defterin dolu ({max} kelime). Individual ile baktığın her kelime kaydedilir.",
+  "nbFreeCta": "Individual'u keşfet"
+ },
+ "pl": {
+  "nbFreeCount": "{n} z {max} słów w Twoim bezpłatnym notatniku",
+  "nbFreeFull": "Twój bezpłatny notatnik jest pełny ({max} słów). Z planem Individual zapisuje się każde wyszukane słowo.",
+  "nbFreeCta": "Zobacz Individual"
+ },
+ "fa": {
+  "nbFreeCount": "{n} از {max} واژه در دفترچه رایگان تو",
+  "nbFreeFull": "دفترچه رایگان تو پر شده ({max} واژه). با Individual هر واژه‌ای که جستجو می‌کنی ذخیره می‌شود.",
+  "nbFreeCta": "دیدن Individual"
+ },
+ "id": {
+  "nbFreeCount": "{n} dari {max} kata di buku catatan gratismu",
+  "nbFreeFull": "Buku catatan gratismu penuh ({max} kata). Dengan Individual, setiap kata yang kamu cari akan disimpan.",
+  "nbFreeCta": "Lihat Individual"
+ },
+ "nl": {
+  "nbFreeCount": "{n} van {max} woorden in je gratis notitieboek",
+  "nbFreeFull": "Je gratis notitieboek is vol ({max} woorden). Met Individual wordt elk woord dat je opzoekt opgeslagen.",
+  "nbFreeCta": "Bekijk Individual"
+ },
+ "el": {
+  "nbFreeCount": "{n} από τις {max} λέξεις στο δωρεάν σημειωματάριό σου",
+  "nbFreeFull": "Το δωρεάν σημειωματάριό σου είναι γεμάτο ({max} λέξεις). Με το Individual, αποθηκεύεται κάθε λέξη που αναζητάς.",
+  "nbFreeCta": "Δες το Individual"
+ },
+ "zu": {
+  "nbFreeCount": "{n} kwamagama angu-{max} encwadini yakho yamahhala",
+  "nbFreeFull": "Incwadi yakho yamahhala isigcwele (amagama angu-{max}). Nge-Individual, wonke amagama owafunayo ayagcinwa.",
+  "nbFreeCta": "Bheka i-Individual"
+ },
+ "vi": {
+  "nbFreeCount": "{n} trên {max} từ trong sổ tay miễn phí của bạn",
+  "nbFreeFull": "Sổ tay miễn phí của bạn đã đầy ({max} từ). Với Individual, mọi từ bạn tra đều được lưu.",
+  "nbFreeCta": "Xem Individual"
+ },
+ "fil": {
+  "nbFreeCount": "{n} sa {max} na salita sa libre mong notebook",
+  "nbFreeFull": "Puno na ang libre mong notebook ({max} salita). Sa Individual, nase-save ang bawat salitang hinahanap mo.",
+  "nbFreeCta": "Tingnan ang Individual"
+ },
+ "af": {
+  "nbFreeCount": "{n} van {max} woorde in jou gratis notaboek",
+  "nbFreeFull": "Jou gratis notaboek is vol ({max} woorde). Met Individual word elke woord wat jy opsoek, gestoor.",
+  "nbFreeCta": "Sien Individual"
+ },
+ "sw": {
+  "nbFreeCount": "{n} kati ya maneno {max} kwenye daftari lako la bure",
+  "nbFreeFull": "Daftari lako la bure limejaa (maneno {max}). Ukiwa na Individual, kila neno unalotafuta huhifadhiwa.",
+  "nbFreeCta": "Tazama Individual"
+ },
+ "zh-CN": {
+  "nbFreeCount": "{n}/{max} 个单词已保存在你的免费笔记本中",
+  "nbFreeFull": "你的免费笔记本已满（{max} 个单词）。使用 Individual 后，你查过的每个单词都会保存。",
+  "nbFreeCta": "查看 Individual"
+ },
+ "zh-TW": {
+  "nbFreeCount": "你的免費筆記本已有 {n}/{max} 個單字",
+  "nbFreeFull": "你的免費筆記本已滿（{max} 個單字）。使用 Individual，你查過的每個單字都會儲存。",
+  "nbFreeCta": "看看 Individual"
+ },
+ "ko": {
+  "nbFreeCount": "{n}/{max}개 단어가 무료 노트에 있어",
+  "nbFreeFull": "무료 노트가 가득 찼어 ({max}개 단어). Individual에서는 찾는 모든 단어가 저장돼.",
+  "nbFreeCta": "Individual 보기"
+ },
+ "th": {
+  "nbFreeCount": "{n} จาก {max} คำในสมุดโน้ตฟรีของคุณ",
+  "nbFreeFull": "สมุดโน้ตฟรีของคุณเต็มแล้ว ({max} คำ) ใช้ Individual แล้วทุกคำที่คุณค้นหาจะถูกบันทึก",
+  "nbFreeCta": "ดู Individual"
+ },
+ "bn": {
+  "nbFreeCount": "{max}টির মধ্যে {n}টি শব্দ তোমার ফ্রি নোটবুকে আছে",
+  "nbFreeFull": "তোমার ফ্রি নোটবুক ভর্তি ({max}টি শব্দ)। Individual-এ তুমি যে শব্দই খুঁজো, সব সেভ হয়।",
+  "nbFreeCta": "Individual দেখো"
+ },
+ "da": {
+  "nbFreeCount": "{n} ud af {max} ord i din gratis notesbog",
+  "nbFreeFull": "Din gratis notesbog er fuld ({max} ord). Med Individual bliver alle ord, du slår op, gemt.",
+  "nbFreeCta": "Se Individual"
+ },
+ "hu": {
+  "nbFreeCount": "{n} / {max} szó az ingyenes jegyzetfüzetedben",
+  "nbFreeFull": "Megtelt az ingyenes jegyzetfüzeted ({max} szó). Az Individual csomaggal minden kikeresett szavad mentésre kerül.",
+  "nbFreeCta": "Nézd meg az Individual csomagot"
+ }
+}

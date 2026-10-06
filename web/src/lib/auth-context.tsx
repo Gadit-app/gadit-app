@@ -1,4 +1,5 @@
 "use client";
+import { isIndividualPriceId } from "@/lib/individual-prices";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   User,
@@ -100,6 +101,11 @@ interface AuthContextType {
    *  who is not a paired family member. Kids get a stripped-down,
    *  commerce-free UI (nav + route guard). */
   familyRole: "kid" | "parent" | null;
+  /** The child-facing tools (Kids Mode, dictation practice) belong to
+   *  Family (Gadi 2026-10-06): true for a family, a school, and anyone on the
+   *  older Clear/Deep plans (they keep what they had). False for the
+   *  Individual plan and for free accounts. */
+  kidsAccess: boolean;
   /** For a paired KID: their picked illustrated avatar id + uploaded photo,
    *  read from their own member doc so their identity (the topbar avatar,
    *  etc.) shows the character they chose. null for everyone else. */
@@ -170,6 +176,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
   const [familyRole, setFamilyRole] = useState<"kid" | "parent" | null>(null);
+  const [priceId, setPriceId] = useState<string | null>(null);
   const [avatarId, setAvatarId] = useState<string | null>(null);
   const [avatarPhotoUrl, setAvatarPhotoUrl] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -273,6 +280,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setFamilyId(famId);
         setSchoolId(schId);
         setFamilyRole(fr);
+        setPriceId((data?.priceId as string) ?? null);
         setPastDue(subStatus === "past_due");
         setGraceUntil(grace);
         setPlanReady(true);
@@ -530,9 +538,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     track("signup_started", { mode, reason: reason.slice(0, 40) });
   }
 
+  const kidsAccess = !!familyId || !!schoolId || ((plan === "clear" || plan === "deep") && !isIndividualPriceId(priceId));
+  // Close the Kids Mode gate only once the plan is known, for a signed-in
+  // account without the Family tools (dynamic import, same as the profile
+  // sync above, to keep the hook module out of this one's import graph).
+  useEffect(() => {
+    const closed = !!user && planReady && !kidsAccess;
+    void import("./use-kids-mode").then((m) => m.setKidsModeGate(closed));
+  }, [user, planReady, kidsAccess]);
+
   return (
     <AuthContext.Provider value={{
       user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
+      kidsAccess,
       signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,

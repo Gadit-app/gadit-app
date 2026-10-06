@@ -9,6 +9,7 @@
  * meaning summary; the card whole-area links to /word/<word>.
  */
 
+import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { LANGUAGES } from "@/lib/i18n";
 import Link from "next/link";
@@ -702,16 +703,13 @@ export function NotebookPage() {
     // Wait for the plan to actually resolve. `loading` only covers Firebase
     // auth; `plan` defaults to "basic" until the Firestore snapshot lands, so
     // without this a paying subscriber gets bounced to /pricing for a beat.
-    if (!planReady) return;
-    if (plan === "basic") {
-      router.replace(href("/pricing"));
-    }
+    // Free accounts have a notebook too, up to FREE_NOTEBOOK_MAX words
+    // (Gadi 2026-10-06), so nobody is sent away from here any more.
   }, [loading, planReady, user, plan, c.title, promptLogin, router, href]);
 
   // Load notebook contents once authorized
   useEffect(() => {
     if (loading || !user) return;
-    if (plan === "basic") return;
     let cancelled = false;
     (async () => {
       try {
@@ -840,6 +838,19 @@ export function NotebookPage() {
           <h1 className="wb-notebook-title">{pageTitle}</h1>
           <p className="wb-notebook-sub">{pageSubtitle}</p>
         </div>
+
+        {/* Free notebook (Gadi 2026-10-06): how full it is, and the plan
+            that saves every word. */}
+        {plan === "basic" && planReady && items && (
+          <div className="wb-notebook-free" role="note">
+            <span>
+              {items.length >= FREE_NOTEBOOK_MAX
+                ? planCopy(lang, "nbFreeFull", { max: FREE_NOTEBOOK_MAX })
+                : planCopy(lang, "nbFreeCount", { n: items.length, max: FREE_NOTEBOOK_MAX })}
+            </span>
+            <Link href={href("/pricing")} className="wb-notebook-free-cta">{planCopy(lang, "nbFreeCta")}</Link>
+          </div>
+        )}
 
         {items === null && !fetchError && (
           <div className="wb-notebook-loading">…</div>

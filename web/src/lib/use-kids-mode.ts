@@ -21,18 +21,29 @@ const KEY = "gadit-kids-mode";
 // a custom event so every mounted useKidsMode receives the new value.
 const EVENT_NAME = "gadit-kids-mode-change";
 
+// Kids Mode is a Family tool (Gadi 2026-10-06). The auth provider closes this
+// gate for a signed-in account without it (the Individual plan, free
+// accounts), so a stored "on" never renders kids content for them. Signed-out
+// visitors (a class code on the classroom computer) are not gated here.
+let gateClosed = false;
+export function setKidsModeGate(closed: boolean) {
+  if (gateClosed === closed) return;
+  gateClosed = closed;
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(EVENT_NAME));
+}
+
 export function useKidsMode(): [boolean, (next: boolean) => void] {
   // Lazy initializer reads localStorage synchronously, so the very first render
   // already has the real value — no OFF-then-ON flash on kids-mode surfaces
   // (Gadi 2026-08-27). SSR returns false; the client hydrates with the real one.
-  const [on, setOn] = useState<boolean>(() => readKidsMode());
+  const [on, setOn] = useState<boolean>(() => readKidsMode() && !gateClosed);
 
   // Re-sync on mount + listen for cross-tab and same-tab updates.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setOn(window.localStorage.getItem(KEY) === "1");
+    setOn(window.localStorage.getItem(KEY) === "1" && !gateClosed);
     const onChange = () => {
-      setOn(window.localStorage.getItem(KEY) === "1");
+      setOn(window.localStorage.getItem(KEY) === "1" && !gateClosed);
     };
     window.addEventListener("storage", onChange);
     window.addEventListener(EVENT_NAME, onChange);

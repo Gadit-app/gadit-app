@@ -842,7 +842,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
                   aria-label={c.searchPh}
                 />
                 <div className="wb-home-search-kids">
-                  <KidsModeToggle plan="deep" />
+                  <KidsModeToggle plan="deep" allowed />
                 </div>
                 <div className="wb-home-search-mic">
                   <VoiceInput

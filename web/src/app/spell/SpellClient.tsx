@@ -237,10 +237,11 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
 export function SpellClient() {
   const { lang, dir } = useLang();
   const href = useHref();
-  const { user, plan, planReady } = useAuth();
-  // Dictation is a Family / Deep feature only (Gadi 2026-09-19): NOT Clear,
-  // NOT Basic. Family and standalone Deep both store plan === "deep".
-  const hasAccess = plan === "deep";
+  const { user, plan, planReady, kidsAccess } = useAuth();
+  // Dictation is a Family tool (Gadi 2026-09-19, narrowed 2026-10-06): the
+  // Family plan, schools, and the older standalone Deep plan. Not the
+  // Individual plan, not Clear, not Basic.
+  const hasAccess = plan === "deep" && kidsAccess;
 
   // The non-English side of every pair = the learner's own language. English
   // UI users have no obvious "other" language, so they practice Hebrew (the
@@ -564,7 +565,7 @@ export function SpellClient() {
             <p style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
               {misc("spellGate", lang)}
             </p>
-            <Link href={href("/pricing")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
+            <Link href={href("/families")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
               {misc("seePlans", lang)}
             </Link>
           </div>

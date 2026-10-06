@@ -265,7 +265,7 @@ const TREASURE_NAV: Record<string, string> = {
 };
 
 function useNavLinks(): NavLink[] {
-  const { user, plan, planReady, loading, familyRole } = useAuth();
+  const { user, plan, planReady, loading, familyRole, kidsAccess } = useAuth();
   const { lang } = useLang();
   const href = useHref();
 
@@ -312,14 +312,19 @@ function useNavLinks(): NavLink[] {
       // parents get them too; Clear does not). Gadi 2026-08-26: add the Reader
       // to the Family + Deep nav.
       if (plan === "deep") {
-        links.push({ key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en });
+        // Dictation is a Family tool (not on the Individual plan).
+        if (kidsAccess) links.push({ key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en });
         links.push({ key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en });
         links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
       }
       return links;
     }
-    // Basic (signed in, free) — no paid tools yet, so a single gentle upsell.
-    return [{ key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") }];
+    // Basic (signed in, free): their free notebook (Gadi 2026-10-06) and a
+    // single gentle upsell.
+    return [
+      { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
+      { key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") },
+    ];
   }
 
   // Anonymous — the marketing nav.

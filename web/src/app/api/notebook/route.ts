@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
 
 /**
- * Word notebook (Deep tier).
+ * Word notebook. Paid plans unlimited; free accounts up to FREE_NOTEBOOK_MAX
+ * words (Gadi 2026-10-06).
  *
  * Schema: users/{uid}/notebook/{wordId} where wordId is a sanitized
  * representation of `${language}_${word}` (lowercased, trimmed).
@@ -36,12 +38,8 @@ export async function GET(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
-    if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
-      return NextResponse.json(
-        { error: "upgrade_required", requiredPlan: "clear" },
-        { status: 402 }
-      );
-    }
+    // Free accounts have a notebook too, up to FREE_NOTEBOOK_MAX words
+    // (Gadi 2026-10-06); reading it is open to every signed-in account.
 
     const db = getAdminDb();
     const snap = await db
@@ -81,12 +79,8 @@ export async function POST(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
-    if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
-      return NextResponse.json(
-        { error: "upgrade_required", requiredPlan: "clear" },
-        { status: 402 }
-      );
-    }
+    // Free accounts save up to FREE_NOTEBOOK_MAX words (Gadi 2026-10-06).
+    const isFree = userInfo.plan !== "clear" && userInfo.plan !== "deep";
 
     const wordId = makeWordId(language, word);
     const db = getAdminDb();
@@ -99,6 +93,12 @@ export async function POST(req: NextRequest) {
     const existing = await ref.get();
     if (existing.exists) {
       return NextResponse.json({ id: wordId, alreadySaved: true });
+    }
+    if (isFree) {
+      const count = (await db.collection("users").doc(userInfo.userId).collection("notebook").count().get()).data().count;
+      if (count >= FREE_NOTEBOOK_MAX) {
+        return NextResponse.json({ error: "notebook_full", limit: FREE_NOTEBOOK_MAX }, { status: 402 });
+      }
     }
 
     const now = new Date().toISOString();
@@ -226,12 +226,7 @@ export async function DELETE(req: NextRequest) {
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
-    if (userInfo.plan !== "clear" && userInfo.plan !== "deep") {
-      return NextResponse.json(
-        { error: "upgrade_required", requiredPlan: "clear" },
-        { status: 402 }
-      );
-    }
+    // Removing a word is open to free accounts as well.
 
     const db = getAdminDb();
     await db
