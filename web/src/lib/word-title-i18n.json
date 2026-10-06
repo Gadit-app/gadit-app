@@ -1,0 +1,362 @@
+{
+ "ar": {
+  "same": [
+   "{w}: المعنى، التعريفات والأمثلة",
+   "{w}: المعنى والتعريفات",
+   "{w}: التعريفات"
+  ],
+  "foreign": [
+   "{w} بالعربية: {t}، المعنى والأمثلة",
+   "{w} بالعربية: {t}، المعنى",
+   "{w} بالعربية: {t}"
+  ]
+ },
+ "ru": {
+  "same": [
+   "{w}: значение, определения и примеры",
+   "{w}: значение и определения",
+   "{w}: определения"
+  ],
+  "foreign": [
+   "{w} на русском: {t}, значение и примеры",
+   "{w} на русском: {t}, значение",
+   "{w} на русском: {t}"
+  ]
+ },
+ "pt": {
+  "same": [
+   "{w}: significado, definições e exemplos",
+   "{w}: significado e definições",
+   "{w}: definições"
+  ],
+  "foreign": [
+   "{w} em português: {t}, significado e exemplos",
+   "{w} em português: {t}, significado",
+   "{w} em português: {t}"
+  ]
+ },
+ "fr": {
+  "same": [
+   "{w} : signification, définitions et exemples",
+   "{w} : signification et définitions",
+   "{w} : définitions"
+  ],
+  "foreign": [
+   "{w} en français : {t}, signification et exemples",
+   "{w} en français : {t}, signification",
+   "{w} en français : {t}"
+  ]
+ },
+ "de": {
+  "same": [
+   "{w}: Bedeutung, Definitionen und Beispiele",
+   "{w}: Bedeutung und Definitionen",
+   "{w}: Definitionen"
+  ],
+  "foreign": [
+   "{w} auf Deutsch: {t}, Bedeutung und Beispiele",
+   "{w} auf Deutsch: {t}, Bedeutung",
+   "{w} auf Deutsch: {t}"
+  ]
+ },
+ "cs": {
+  "same": [
+   "{w}: význam, definice a příklady",
+   "{w}: význam a definice",
+   "{w}: definice"
+  ],
+  "foreign": [
+   "{w} v češtině: {t}, význam a příklady",
+   "{w} v češtině: {t}, význam",
+   "{w} v češtině: {t}"
+  ]
+ },
+ "sk": {
+  "same": [
+   "{w}: význam, definície a príklady",
+   "{w}: význam a definície",
+   "{w}: definície"
+  ],
+  "foreign": [
+   "{w} po slovensky: {t}, význam a príklady",
+   "{w} po slovensky: {t}, význam",
+   "{w} po slovensky: {t}"
+  ]
+ },
+ "it": {
+  "same": [
+   "{w}: significato, definizioni ed esempi",
+   "{w}: significato e definizioni",
+   "{w}: definizioni"
+  ],
+  "foreign": [
+   "{w} in italiano: {t}, significato ed esempi",
+   "{w} in italiano: {t}, significato",
+   "{w} in italiano: {t}"
+  ]
+ },
+ "ja": {
+  "same": [
+   "{w}: 意味、定義、例",
+   "{w}: 意味と定義",
+   "{w}: 定義"
+  ],
+  "foreign": [
+   "{w}の日本語: {t}、意味と例",
+   "{w}の日本語: {t}、意味",
+   "{w}の日本語: {t}"
+  ]
+ },
+ "hi": {
+  "same": [
+   "{w}: अर्थ, परिभाषाएँ और उदाहरण",
+   "{w}: अर्थ और परिभाषाएँ",
+   "{w}: परिभाषाएँ"
+  ],
+  "foreign": [
+   "{w} का हिंदी में अर्थ: {t}, अर्थ और उदाहरण",
+   "{w} का हिंदी में अर्थ: {t}, अर्थ",
+   "{w} का हिंदी में अर्थ: {t}"
+  ]
+ },
+ "am": {
+  "same": [
+   "{w}: ትርጉም፣ ትርጓሜዎች እና ምሳሌዎች",
+   "{w}: ትርጉም እና ትርጓሜዎች",
+   "{w}: ትርጓሜዎች"
+  ],
+  "foreign": [
+   "{w} በአማርኛ: {t}፣ ትርጉም እና ምሳሌዎች",
+   "{w} በአማርኛ: {t}፣ ትርጉም",
+   "{w} በአማርኛ: {t}"
+  ]
+ },
+ "uk": {
+  "same": [
+   "{w}: значення, визначення та приклади",
+   "{w}: значення та визначення",
+   "{w}: визначення"
+  ],
+  "foreign": [
+   "{w} українською: {t}, значення та приклади",
+   "{w} українською: {t}, значення",
+   "{w} українською: {t}"
+  ]
+ },
+ "tr": {
+  "same": [
+   "{w}: anlamı, tanımlar ve örnekler",
+   "{w}: anlamı ve tanımlar",
+   "{w}: tanımlar"
+  ],
+  "foreign": [
+   "{w} Türkçe: {t}, anlamı ve örnekler",
+   "{w} Türkçe: {t}, anlamı",
+   "{w} Türkçe: {t}"
+  ]
+ },
+ "pl": {
+  "same": [
+   "{w}: znaczenie, definicje i przykłady",
+   "{w}: znaczenie i definicje",
+   "{w}: definicje"
+  ],
+  "foreign": [
+   "{w} po polsku: {t}, znaczenie i przykłady",
+   "{w} po polsku: {t}, znaczenie",
+   "{w} po polsku: {t}"
+  ]
+ },
+ "fa": {
+  "same": [
+   "{w}: معنی، تعاریف و مثال‌ها",
+   "{w}: معنی و تعاریف",
+   "{w}: تعاریف"
+  ],
+  "foreign": [
+   "{w} به فارسی: {t}، معنی و مثال‌ها",
+   "{w} به فارسی: {t}، معنی",
+   "{w} به فارسی: {t}"
+  ]
+ },
+ "id": {
+  "same": [
+   "{w}: arti, definisi dan contoh",
+   "{w}: arti dan definisi",
+   "{w}: definisi"
+  ],
+  "foreign": [
+   "{w} dalam bahasa Indonesia: {t}, arti dan contoh",
+   "{w} dalam bahasa Indonesia: {t}, arti",
+   "{w} dalam bahasa Indonesia: {t}"
+  ]
+ },
+ "nl": {
+  "same": [
+   "{w}: betekenis, definities en voorbeelden",
+   "{w}: betekenis en definities",
+   "{w}: definities"
+  ],
+  "foreign": [
+   "{w} in het Nederlands: {t}, betekenis en voorbeelden",
+   "{w} in het Nederlands: {t}, betekenis",
+   "{w} in het Nederlands: {t}"
+  ]
+ },
+ "el": {
+  "same": [
+   "{w}: meaning, definitions and examples",
+   "{w}: meaning and definitions",
+   "{w}: definitions"
+  ],
+  "foreign": [
+   "{w} στα ελληνικά: {t}, σημασία και παραδείγματα",
+   "{w} στα ελληνικά: {t}, σημασία",
+   "{w} στα ελληνικά: {t}"
+  ]
+ },
+ "zu": {
+  "same": [
+   "{w}: incazelo, izincazelo nezibonelo",
+   "{w}: incazelo nezincazelo",
+   "{w}: izincazelo"
+  ],
+  "foreign": [
+   "{w} ngesiZulu: {t}, incazelo nezibonelo",
+   "{w} ngesiZulu: {t}, incazelo",
+   "{w} ngesiZulu: {t}"
+  ]
+ },
+ "vi": {
+  "same": [
+   "{w}: nghĩa, định nghĩa và ví dụ",
+   "{w}: nghĩa và định nghĩa",
+   "{w}: định nghĩa"
+  ],
+  "foreign": [
+   "{w} trong tiếng Việt: {t}, nghĩa và ví dụ",
+   "{w} trong tiếng Việt: {t}, nghĩa",
+   "{w} trong tiếng Việt: {t}"
+  ]
+ },
+ "fil": {
+  "same": [
+   "{w}: kahulugan, mga depinisyon at halimbawa",
+   "{w}: kahulugan at mga depinisyon",
+   "{w}: mga depinisyon"
+  ],
+  "foreign": [
+   "{w} sa Filipino: {t}, kahulugan at mga halimbawa",
+   "{w} sa Filipino: {t}, kahulugan",
+   "{w} sa Filipino: {t}"
+  ]
+ },
+ "af": {
+  "same": [
+   "{w}: betekenis, definisies en voorbeelde",
+   "{w}: betekenis en definisies",
+   "{w}: definisies"
+  ],
+  "foreign": [
+   "{w} in Afrikaans: {t}, betekenis en voorbeelde",
+   "{w} in Afrikaans: {t}, betekenis",
+   "{w} in Afrikaans: {t}"
+  ]
+ },
+ "sw": {
+  "same": [
+   "{w}: maana, tafsiri na mifano",
+   "{w}: maana na tafsiri",
+   "{w}: tafsiri"
+  ],
+  "foreign": [
+   "{w} kwa Kiswahili: {t}, maana na mifano",
+   "{w} kwa Kiswahili: {t}, maana",
+   "{w} kwa Kiswahili: {t}"
+  ]
+ },
+ "zh-CN": {
+  "same": [
+   "{w}：含义、定义和例子",
+   "{w}：含义和定义",
+   "{w}：定义"
+  ],
+  "foreign": [
+   "{w}的中文：{t}，含义和例子",
+   "{w}的中文：{t}，含义",
+   "{w}的中文：{t}"
+  ]
+ },
+ "zh-TW": {
+  "same": [
+   "{w}：意義、定義和例子",
+   "{w}：意義和定義",
+   "{w}：定義"
+  ],
+  "foreign": [
+   "{w} 中文意思：{t}，意義和例子",
+   "{w} 中文意思：{t}，意義",
+   "{w} 中文意思：{t}"
+  ]
+ },
+ "ko": {
+  "same": [
+   "{w}: 의미, 정의 및 예문",
+   "{w}: 의미 및 정의",
+   "{w}: 정의"
+  ],
+  "foreign": [
+   "{w}의 한국어: {t}, 의미 및 예문",
+   "{w}의 한국어: {t}, 의미",
+   "{w}의 한국어: {t}"
+  ]
+ },
+ "th": {
+  "same": [
+   "{w}: ความหมาย คำจำกัดความ และตัวอย่าง",
+   "{w}: ความหมาย และคำจำกัดความ",
+   "{w}: คำจำกัดความ"
+  ],
+  "foreign": [
+   "{w} เป็นภาษาไทย: {t} ความหมาย และตัวอย่าง",
+   "{w} เป็นภาษาไทย: {t} ความหมาย",
+   "{w} เป็นภาษาไทย: {t}"
+  ]
+ },
+ "bn": {
+  "same": [
+   "{w}: অর্থ, সংজ্ঞা এবং উদাহরণ",
+   "{w}: অর্থ এবং সংজ্ঞা",
+   "{w}: সংজ্ঞা"
+  ],
+  "foreign": [
+   "{w} বাংলায়: {t}, অর্থ এবং উদাহরণ",
+   "{w} বাংলায়: {t}, অর্থ",
+   "{w} বাংলায়: {t}"
+  ]
+ },
+ "da": {
+  "same": [
+   "{w}: betydning, definitioner og eksempler",
+   "{w}: betydning og definitioner",
+   "{w}: definitioner"
+  ],
+  "foreign": [
+   "{w} på dansk: {t}, betydning og eksempler",
+   "{w} på dansk: {t}, betydning",
+   "{w} på dansk: {t}"
+  ]
+ },
+ "hu": {
+  "same": [
+   "{w}: jelentés, definíciók és példák",
+   "{w}: jelentés és definíciók",
+   "{w}: definíciók"
+  ],
+  "foreign": [
+   "{w} magyarul: {t}, jelentés és példák",
+   "{w} magyarul: {t}, jelentés",
+   "{w} magyarul: {t}"
+  ]
+ }
+}
