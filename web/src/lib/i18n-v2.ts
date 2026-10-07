@@ -3356,7 +3356,7 @@ const he: V2Strings = {
 
   // Compare Page (Screen 7)
   compareEyebrow: "השוואה",
-  compareTitle: "להבחין בין מילים דומות",
+  compareTitle: "הבחינו בין מילים דומות",
   compareSubtitle:
     "אומנות מול אמנות, affect מול effect, המילים שמבלבלות אפילו דוברים שוטפים.",
   compareWord1Label: "מילה 1",
@@ -3400,7 +3400,7 @@ const he: V2Strings = {
   srEyebrow: "תרגול",
   srWordNofMTemplate: (n, m) => `מילה ${n} מתוך ${m}`,
   srSkip: "דילוג",
-  srClickToReveal: "לחיצה כדי לראות",
+  srClickToReveal: "לחצו כדי לראות",
   srTapToReveal: "הקישו כדי לראות",
   srPrimaryMeaningLabel: "משמעות עיקרית",
   srExamplesLabel: "דוגמאות",

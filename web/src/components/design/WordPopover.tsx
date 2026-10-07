@@ -59,7 +59,7 @@ const COPY: Record<string, { openFull: string; loading: string; noPreview: strin
   en: { openFull: "Open full definition",   loading: "Loading…",   noPreview: "Tap below to see the full definition." },
   zu: { openFull: "Vula incazelo egcwele",  loading: "Iyalayisha…", noPreview: "Thinta ngezansi ukuze ubone incazelo egcwele." },
   el: { openFull: "Άνοιξε τον πλήρη ορισμό", loading: "Φόρτωση…",    noPreview: "Πάτησε παρακάτω για να δεις τον πλήρη ορισμό." },
-  he: { openFull: "להגדרה המלאה",          loading: "טוען...",     noPreview: "ההגדרה המלאה נמצאת בקישור למטה." },
+  he: { openFull: "פתחו את ההגדרה המלאה",          loading: "טוען...",     noPreview: "הקישו למטה כדי לראות את ההגדרה המלאה." },
   ar: { openFull: "افتح التعريف الكامل",     loading: "جارٍ التحميل…", noPreview: "اضغط أدناه لعرض التعريف الكامل." },
   ru: { openFull: "Открыть полностью",       loading: "Загрузка…",   noPreview: "Нажмите ниже, чтобы открыть полное определение." },
   es: { openFull: "Ver definición completa", loading: "Cargando…",   noPreview: "Toca abajo para ver la definición completa." },
