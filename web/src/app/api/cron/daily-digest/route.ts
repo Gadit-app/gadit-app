@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 type Bucket = { cost?: number; calls?: number };
-type DayDoc = { day: string; totalCost?: number; totalCalls?: number; features?: Record<string, Bucket> };
+type DayDoc = { day: string; totalCost?: number; adminCost?: number; totalCalls?: number; features?: Record<string, Bucket> };
 
 function dayKey(offsetDays = 0): string {
   const d = new Date();
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
   const db = getAdminDb();
 
   // --- Engine spend (our aiUsage rollups) ---
-  let yesterdayCost = 0, sevenDayCost = 0;
+  let yesterdayCost = 0, sevenDayCost = 0, yesterdayAdmin = 0, routineDaily = 0;
   let topFeatures: Array<[string, number]> = [];
   try {
     const snap = await db.collection("aiUsage").orderBy("day", "desc").limit(8).get();
@@ -63,15 +63,23 @@ export async function GET(req: NextRequest) {
     const yKey = dayKey(-1);
     const yDoc = docs.find((d) => d.day === yKey);
     yesterdayCost = yDoc?.totalCost ?? 0;
+    yesterdayAdmin = yDoc?.adminCost ?? 0;
     // 7-day total = the 7 most recent days excluding today (partial).
-    sevenDayCost = docs.filter((d) => d.day !== dayKey(0)).slice(0, 7).reduce((s, d) => s + (d.totalCost ?? 0), 0);
+    const week = docs.filter((d) => d.day !== dayKey(0)).slice(0, 7);
+    sevenDayCost = week.reduce((s, d) => s + (d.totalCost ?? 0), 0);
+    // The forecast is ROUTINE use only (Gadi 2026-10-07: one SEO warm-up day
+    // of $138 turned into a $799 monthly forecast). Admin runs and bulk jobs
+    // (adminCost) are left out, and the median day is used, so a single
+    // one-off spike does not move it.
+    const routine = week.map((d) => Math.max(0, (d.totalCost ?? 0) - (d.adminCost ?? 0))).sort((a, b) => a - b);
+    routineDaily = routine.length ? routine[Math.floor(routine.length / 2)] : 0;
     if (yDoc?.features) {
       topFeatures = Object.entries(yDoc.features)
         .map(([k, v]) => [k, v.cost ?? 0] as [string, number])
         .sort((a, b) => b[1] - a[1]).slice(0, 4);
     }
   } catch { /* engine data best-effort */ }
-  const projMonthly = (sevenDayCost / 7) * 30;
+  const projMonthly = routineDaily * 30;
 
   // --- Subscription state (Stripe, live) ---
   let rev: Awaited<ReturnType<typeof summarizeStripeRevenue>> | null = null;
@@ -108,8 +116,9 @@ export async function GET(req: NextRequest) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;"><tr>
       ${tile("אתמול", num(usd(yesterdayCost)), { big: true })}
       ${tile("7 ימים", num(usd(sevenDayCost)))}
-      ${tile("תחזית לחודש", num(usd(projMonthly)))}
+      ${tile("תחזית לחודש", `${num(usd(projMonthly))}<div style="font-size:11.5px;font-weight:500;color:#6B7280;margin-top:2px;">לפי שימוש רגיל</div>`)}
     </tr></table>
+    ${yesterdayAdmin >= 0.01 ? `<div style="margin:10px 4px 0;font-size:13px;color:#8A5A00;">מתוך אתמול, הרצות מנהל חד פעמיות: <b>${num(usd(yesterdayAdmin))}</b>. הן לא נכללות בתחזית.</div>` : ""}
     ${featureRows ? `<div style="margin:14px 4px 0;font-size:12.5px;font-weight:700;color:#6B7280;">לפי כלי (אתמול)</div>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:4px 0 0;">${featureRows}</table>` : ""}
     <div style="margin:12px 4px 0;font-size:12px;color:#8A9693;line-height:1.5;">יתרת הקרדיט לא זמינה אוטומטית. אם היא נגמרת, תגיע התראה נפרדת.</div>`;
