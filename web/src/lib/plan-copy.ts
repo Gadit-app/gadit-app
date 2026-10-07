@@ -146,7 +146,7 @@ export const PLAN_COPY = {
     wlHubTitle: "כל המילים ב-Gadit",
     wlHubSub: "לכל מילה כאן יש עמוד מלא, עם כל המשמעויות, דוגמאות ומקור המילה.",
     helpCompareA3: "Family (₪19.90 לחודש או ₪199 לשנה): כל מה שיש ב-Individual לעד 5 ילדים ולשני ההורים, ובנוסף מצב ילדים, אזור משלו לכל ילד, לוח הורה עם התראות על מילים, ותרגול הכתבה.",
-    famSingleChild: "יש בבית לומד אחד? Individual עולה {price} לחודש. בעוד קצת, Family מצרף עד 5 ילדים.",
+    famSingleChild: "יש בבית לומד אחד? Individual עולה {price} לחודש. בתוספת קטנה, Family מצרף עד 5 ילדים.",
   },
 };
 

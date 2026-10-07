@@ -84,7 +84,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
       },
       {
         kicker: "תגיד את זה",
-        title: "לשמוע משפט, ואז להגיד אותו בעצמך",
+        title: "שמעו משפט, ואז אמרו אותו בעצמכם",
         body: "כותבים משפט ובוחרים את השפה שלומדים. Gadit מראה איך אומרים אותו ומקריא אותו בקול. הילד אומר אותו בעצמו ומקבל כוכבים על ההגייה.",
         points: ["הקראה בקול", "תרגול הגייה עם ציון", "הודעה להורה"],
         img: "say",
@@ -213,6 +213,8 @@ export const REAL_CSS = `
 .fam-real-hero .fam-phone:last-child { transform: rotate(-6deg) translateY(34px); z-index: 1; }
 .fam-rtop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 24px; background: #fff; border-bottom: 1px solid rgba(31,41,55,0.08); }
 .fam-rtop-end { display: flex; align-items: center; gap: 10px; }
+/* Keep the header CTA on one line on narrow phones (QA 2026-10-08). */
+@media (max-width: 400px) { .fam-rtop .fam-rtop-cta { white-space: nowrap; padding: 8px 11px; font-size: 12.5px; } }
 .fam-rtop-cta { background: #0EA5A5; color: #fff; border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 700; font-size: 14.5px; cursor: pointer; box-shadow: 0 6px 16px rgba(14,165,165,0.28); font-family: inherit; }
 .fam-rtop-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: #E3F4F3; color: #0b7d7d; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; text-decoration: none; overflow: hidden; }
 .fam-rtop-lang { border: 1px solid rgba(31,41,55,0.14); border-radius: 999px; padding: 2px 6px; }
