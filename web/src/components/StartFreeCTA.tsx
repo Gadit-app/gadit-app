@@ -29,7 +29,7 @@ import { v2 } from "@/lib/i18n-v2";
 // pill doesn't eat the narrow row. Desktop keeps the full "startFree" label.
 // Gadi 2026-08-22. Falls back to "Start".
 const START_SHORT: Record<string, string> = {
-  en: "Start", he: "התחל", ar: "ابدأ", ru: "Начать", es: "Empezar",
+  en: "Start", he: "התחילו", ar: "ابدأ", ru: "Начать", es: "Empezar",
   pt: "Começar", fr: "Commencer", de: "Starten", it: "Inizia", nl: "Beginnen",
   cs: "Začít", sk: "Začať", uk: "Почати", tr: "Başla", pl: "Zacznij",
   fa: "شروع", id: "Mulai", el: "Ξεκίνα", ja: "始める", hi: "शुरू करें",

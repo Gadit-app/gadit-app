@@ -39,7 +39,7 @@ const C = {
       "תלמיד שלא הבין אחת מהן לא מרים יד. הוא מנחש וממשיך, והפער גדל משיעור לשיעור.",
       "והמורה מסבירה את אותה מילה שוב ושוב, ועדיין לא יודעת מי באמת הבין.",
     ],
-    strong: "הבעיה היא לא החומר. חסרות המילים.",
+    strong: "חסרות המילים של השיעור.",
     reframe: "Gadit נותן לכל כיתה את המילים של השיעור, ולכל תלמיד הסבר לכל מילה ברגע שהוא צריך אותו.",
   },
   howKicker: "איך זה עובד",
@@ -88,7 +88,7 @@ const C = {
     "החיפושים מתויגים רק לפי שם פרטי מרשימת הכיתה.",
     "קוד הכיתה פעיל בשעות הלימודים.",
     "בלי פרסומות ובלי תוכן שלא מתאים לילדים.",
-    "בלי התקנה ובלי צוות מחשוב. עובד בכל דפדפן.",
+    "עובד בכל דפדפן, בלי התקנה ובלי צוות מחשוב.",
   ],
   priceKicker: "מחירים",
   priceTitle: "מחיר לפי גודל בית הספר",
@@ -274,7 +274,7 @@ export function SchoolsRealLanding() {
             <div className="sch-includes-title">{C.includesTitle}</div>
             <ul>{C.includes.map((p) => <li key={p}><Check />{p}</li>)}</ul>
           </div>
-          <p className="sch-larger">{C.larger}</p>
+          <p className="sch-larger"><Lines text={C.larger} /></p>
         </section>
 
         <section className="sch-band sch-white" id="order">

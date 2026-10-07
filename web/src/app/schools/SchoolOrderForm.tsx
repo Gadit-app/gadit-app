@@ -8,6 +8,7 @@
  */
 
 import { useState } from "react";
+import { Lines } from "../families/RealScreens";
 
 const SIZES = [
   { v: "s", label: "עד 100 תלמידים" },
@@ -57,7 +58,7 @@ export function SchoolOrderForm() {
           קיבלנו את ההרשמה 🎉
         </div>
         <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#44403C", margin: 0 }}>
-          נפתח את בית הספר ונשלח פרטי כניסה וחשבונית מס תוך יום עסקים. אפשר לשלם בהעברה בנקאית או בהזמנת רכש.
+          <Lines text="נפתח את בית הספר ונשלח פרטי כניסה וחשבונית מס תוך יום עסקים. אפשר לשלם בהעברה בנקאית או בהזמנת רכש." />
         </p>
       </div>
     );
@@ -109,7 +110,7 @@ export function SchoolOrderForm() {
 
       {state === "error" && (
         <div style={{ fontSize: 13, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "9px 11px" }}>
-          משהו השתבש. אפשר לנסות שוב, או לכתוב לנו ל-support@gadit.app.
+          <Lines text="משהו השתבש. אפשר לנסות שוב, או לכתוב לנו ל-support@gadit.app." />
         </div>
       )}
 
@@ -122,7 +123,7 @@ export function SchoolOrderForm() {
           padding: "12px 20px", borderRadius: 10, cursor: state === "sending" ? "default" : "pointer",
         }}
       >
-        {state === "sending" ? "שולח..." : "שליחת הרשמה"}
+        {state === "sending" ? "שולחים..." : "שליחת הרשמה"}
       </button>
     </form>
   );

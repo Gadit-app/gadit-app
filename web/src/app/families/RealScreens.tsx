@@ -34,7 +34,7 @@ export type RealCopy = {
 
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
-    heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "30+ שפות ממשק"],
+    heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "33 שפות ממשק"],
     credPill: "15 שנות ניסיון עם יותר מ-15,000 הורים ותלמידים",
     howCta: "איך זה עובד",
     topCta: "התחילו עכשיו",

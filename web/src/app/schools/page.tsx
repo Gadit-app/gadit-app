@@ -5,7 +5,7 @@ import { shareMetadata, type ShareCopy } from "@/lib/landing-metadata";
 /** Localized share (OG/WhatsApp) copy for the Schools landing, reused by
  *  the in-site page and the standalone /schools/landing campaign page. */
 export const SCHOOLS_OG: Record<string, ShareCopy> = {
-  he: { title: "Gadit לבתי ספר · כל תלמיד מבין את השיעור", description: "כשתלמיד לא מבין מילה, הוא לא מבין את החומר. Gadit נותן לכל תלמיד להבין כל מילה קשה, בשפה שלו, ב-30+ שפות. בלי חשבונות לתלמידים, בלי הקמה. מנוי שנתי, הזמנה פשוטה." },
+  he: { title: "Gadit לבתי ספר · כל תלמיד מבין את השיעור", description: "כשתלמיד לא מבין מילה, הוא לא מבין את החומר. Gadit נותן לכל תלמיד להבין כל מילה קשה, בשפה שלו, ב-30+ שפות. בלי חשבונות לתלמידים, הקמה בכמה דקות. מנוי שנתי, הזמנה פשוטה." },
   en: { title: "Gadit for Schools · Every student understands the lesson", description: "When a student doesn't understand a word, they don't understand the material. Gadit explains any hard word, in the student's own language, across 30+ languages. No student accounts, no setup. Simple annual plan." },
   ar: { title: "Gadit للمدارس · كل طالب يفهم الدرس", description: "حين لا يفهم الطالب كلمة، لا يفهم المادة. يشرح Gadit أي كلمة صعبة، بلغة الطالب نفسه، بـ 30+ لغة. بلا حسابات للطلاب، بلا إعداد. خطة سنوية بسيطة." },
   ru: { title: "Gadit для школ · Каждый ученик понимает урок", description: "Когда ученик не понимает слово, он не понимает материал. Gadit объясняет любое трудное слово на языке самого ученика, на 30+ языках. Без аккаунтов для учеников, без настройки. Простой годовой план." },
