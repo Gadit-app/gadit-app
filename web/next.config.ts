@@ -65,6 +65,16 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_ID: process.env.VERCEL_GIT_COMMIT_SHA || "dev",
   },
+  // The review addresses of the new landing pages became the real pages
+  // (Gadi 2026-10-07): keep any shared review link working.
+  async redirects() {
+    return [
+      { source: "/:lang/individuals/landing-new", destination: "/:lang/individuals", permanent: true },
+      { source: "/individuals/landing-new", destination: "/individuals", permanent: true },
+      { source: "/:lang/schools/landing-new", destination: "/:lang/schools", permanent: true },
+      { source: "/schools/landing-new", destination: "/schools", permanent: true },
+    ];
+  },
   async rewrites() {
     return [...AFFONSO_REWRITES, ...FIREBASE_AUTH_REWRITES];
   },
