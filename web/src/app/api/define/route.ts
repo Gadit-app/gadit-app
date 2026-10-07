@@ -1161,11 +1161,12 @@ async function generateValidated(
   inputWord: string,
   startAttempt = 1,
   maxAttempts = 3,
+  uiLang?: string,
 ): Promise<{ result: object; attemptsUsed: number } | null> {
   for (let attempt = startAttempt; attempt <= maxAttempts; attempt++) {
     try {
       const result = await callOpenAI("gpt-4o", systemPrompt, userContent);
-      const verdict = isDegenerate(result, inputWord);
+      const verdict = isDegenerate(result, inputWord, uiLang);
       if (!verdict.degenerate) {
         return { result, attemptsUsed: attempt };
       }
@@ -1573,7 +1574,7 @@ export async function POST(req: NextRequest) {
       // existed (or before guard heuristics were tightened) may carry
       // mojibake. If so, drop the corrupted entry and fall through to
       // the live-generation path so the user gets a clean result.
-      const cachedVerdict = isDegenerate(cached, word);
+      const cachedVerdict = isDegenerate(cached, word, uiLangCode);
       if (cachedVerdict.degenerate) {
         console.warn(`Dropping corrupted cache entry [${cacheKey}]: ${cachedVerdict.reason}`);
         await deleteCachedResult(cacheKey);
@@ -1806,7 +1807,7 @@ export async function POST(req: NextRequest) {
           try {
             const parsed = JSON.parse(accumulated) as Record<string, unknown>;
             streamedParsed = parsed;
-            const verdict = isDegenerate(parsed, word);
+            const verdict = isDegenerate(parsed, word, uiLangCode);
             if (verdict.degenerate) {
               firstReason = verdict.reason ?? "";
               console.warn(`First-attempt rejected (streaming): ${verdict.reason}`);
@@ -1833,14 +1834,14 @@ export async function POST(req: NextRequest) {
             const fallbackEty = await generateEtymologyFallback(word, uiLangName);
             if (fallbackEty) {
               const merged = { ...streamedParsed, etymology: fallbackEty };
-              if (!isDegenerate(merged, word).degenerate) {
+              if (!isDegenerate(merged, word, uiLangCode).degenerate) {
                 acceptedResult = merged;
                 console.info("Recovered via etymology-only repair (skipped full retry)");
               }
             }
             if (!acceptedResult) {
               const sanitised = sanitizeDegenerateEtymology(streamedParsed);
-              if (!isDegenerate(sanitised, word).degenerate) {
+              if (!isDegenerate(sanitised, word, uiLangCode).degenerate) {
                 acceptedResult = sanitised as object;
                 console.info("Recovered by clearing etymology (skipped full retry)");
               }
@@ -1854,7 +1855,7 @@ export async function POST(req: NextRequest) {
           // seeing mojibake: even when OpenAI flakes on one call, the next
           // call almost always produces a clean result.
           if (!acceptedResult) {
-            const retry = await generateValidated(systemPrompt, userContent, word, 2, 3);
+            const retry = await generateValidated(systemPrompt, userContent, word, 2, 3, uiLangCode);
             if (retry) {
               console.info(`Recovered via retry on attempt ${retry.attemptsUsed}`);
               acceptedResult = retry.result;
@@ -1924,7 +1925,7 @@ export async function POST(req: NextRequest) {
               const fallbackEty = await generateEtymologyFallback(word, uiLangName);
               if (fallbackEty) {
                 const merged = { ...parsedResult, etymology: fallbackEty };
-                const mergedVerdict = isDegenerate(merged, word);
+                const mergedVerdict = isDegenerate(merged, word, uiLangCode);
                 if (!mergedVerdict.degenerate) {
                   salvaged = merged;
                   console.info(`Salvaged result via dedicated etymology fallback call`);
@@ -1933,7 +1934,7 @@ export async function POST(req: NextRequest) {
               // (b) Sanitisation fallback.
               if (!salvaged) {
                 const sanitised = sanitizeDegenerateEtymology(parsedResult);
-                const reVerdict = isDegenerate(sanitised, word);
+                const reVerdict = isDegenerate(sanitised, word, uiLangCode);
                 if (!reVerdict.degenerate) {
                   salvaged = sanitised as object;
                   console.warn(`Salvaged result by clearing degenerate etymology fields`);

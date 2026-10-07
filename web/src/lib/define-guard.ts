@@ -127,7 +127,17 @@ export function isEtymologyFieldGarbled(field: string, raw: unknown): boolean {
   );
 }
 
-export function isDegenerate(result: unknown, inputWord: string): GuardResult {
+// Script the DEFINITIONS must contain, per UI language (the explanation is
+// always written in the UI language, whatever the word's language).
+const UI_SCRIPT: Record<string, { name: string; rx: RegExp }> = {
+  he: { name: "Hebrew", rx: HEBREW_RX },
+  ar: { name: "Arabic", rx: ARABIC_RX },
+  fa: { name: "Arabic", rx: ARABIC_RX },
+  ru: { name: "Cyrillic", rx: CYRILLIC_RX },
+  uk: { name: "Cyrillic", rx: CYRILLIC_RX },
+};
+
+export function isDegenerate(result: unknown, inputWord: string, uiLang?: string): GuardResult {
   if (!result || typeof result !== "object") {
     return { degenerate: true, reason: "result is not an object" };
   }
@@ -161,12 +171,17 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
     }
   }
 
-  // (3) Wrong-script for non-Latin inputs
-  const scriptForInput =
-    HEBREW_RX.test(inputWord)   ? { name: "Hebrew",   rx: HEBREW_RX }   :
-    ARABIC_RX.test(inputWord)   ? { name: "Arabic",   rx: ARABIC_RX }   :
-    CYRILLIC_RX.test(inputWord) ? { name: "Cyrillic", rx: CYRILLIC_RX } :
-    null;
+  // (3) Wrong script. With the UI language known, the definitions must be in
+  // the UI language's script (a Hebrew word explained in Russian is CORRECT:
+  // the old input-script check rejected every such result 3 times, paid for
+  // each attempt and never cached it, found 2026-10-08). Without it (legacy
+  // callers), fall back to the input word's script.
+  const scriptForInput = uiLang !== undefined
+    ? (UI_SCRIPT[uiLang] ?? null)
+    : HEBREW_RX.test(inputWord)   ? { name: "Hebrew",   rx: HEBREW_RX }   :
+      ARABIC_RX.test(inputWord)   ? { name: "Arabic",   rx: ARABIC_RX }   :
+      CYRILLIC_RX.test(inputWord) ? { name: "Cyrillic", rx: CYRILLIC_RX } :
+      null;
   if (scriptForInput && meanings.length > 0) {
     const anyHit = meanings.some((m) =>
       typeof m?.meaning === "string" && scriptForInput.rx.test(m.meaning),
@@ -174,7 +189,7 @@ export function isDegenerate(result: unknown, inputWord: string): GuardResult {
     if (!anyHit) {
       return {
         degenerate: true,
-        reason: `input was ${scriptForInput.name} but no definition has ${scriptForInput.name} chars`,
+        reason: `expected ${scriptForInput.name} definitions but none has ${scriptForInput.name} chars`,
       };
     }
   }

@@ -91,7 +91,10 @@ export async function GET(req: NextRequest) {
     // mojibake'd echoed word would pass the script check on itself.
     const inputWord = wordFromCacheKey(id) ?? "";
 
-    const verdict = isDegenerate(data, inputWord);
+    // The doc's UI language (auto2_<lang>_...), so a Hebrew word explained in
+    // Russian is judged by Russian, not deleted as "wrong script".
+    const docLang = /^(?:auto2|ctx2)_(.+?)_(?:base|kids)_/.exec(id)?.[1];
+    const verdict = isDegenerate(data, inputWord, docLang);
     if (verdict.degenerate) {
       deleted++;
       reasonCounts[verdict.reason] = (reasonCounts[verdict.reason] ?? 0) + 1;
