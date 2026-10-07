@@ -150,7 +150,7 @@ export function SchoolOrderForm() {
           padding: "12px 20px", borderRadius: 10, cursor: state === "sending" ? "default" : "pointer",
         }}
       >
-        {state === "sending" ? "שולחים..." : "שליחת הרשמה"}
+        {state === "sending" ? "שולחים..." : kind === "pilot" ? "שלחו בקשה לפיילוט" : "שלחו הזמנה"}
       </button>
     </form>
   );

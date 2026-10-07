@@ -61,6 +61,11 @@ function hasMojibakeDensity(text: string, threshold = 0.4): boolean {
   // Decisive marker first — no density threshold needed. Two "×"/"Ö"-class
   // chars in a field that should read as a language means it's mojibake.
   if ((text.match(HARD_MOJIBAKE_RX) ?? []).length >= 2) return true;
+  // UTF-8 read as the Hebrew code page (cp1255): an accented Latin letter
+  // turns into a Hebrew vowel point glued to a Latin letter, e.g. Greek
+  // "phōs" stored as "phֳ“s" (Oct 8 2026). Real text never puts a niqqud
+  // mark right after a Latin letter.
+  if (/[A-Za-z][ְ-ׇ]/.test(text)) return true;
   const cp1252Count = (text.match(MOJIBAKE_CHARS) ?? []).length;
   if (cp1252Count / text.length > threshold) return true;
   const decorCount = (text.match(HEBREW_DECORATIVE_RX) ?? []).length;
