@@ -7,7 +7,7 @@
  * tax invoice. Payment is annual, by bank transfer / PO. Hebrew only.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Lines } from "../families/RealScreens";
 
 const SIZES = [
@@ -22,6 +22,14 @@ export function SchoolOrderForm() {
     schoolName: "", contactName: "", role: "", email: "", phone: "", city: "", size: "", notes: "",
   });
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
+  // A free 30-day pilot for one grade (default) or a straight order / quote
+  // (Gadi 2026-10-08). The page's CTAs preselect it.
+  const [kind, setKind] = useState<"pilot" | "order">("pilot");
+  useEffect(() => {
+    const on = (e: Event) => setKind((e as CustomEvent).detail === "order" ? "order" : "pilot");
+    window.addEventListener("gadit-school-order-kind", on);
+    return () => window.removeEventListener("gadit-school-order-kind", on);
+  }, []);
 
   function set(k: keyof typeof form, v: string) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -35,7 +43,7 @@ export function SchoolOrderForm() {
       const res = await fetch("/api/schools/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, lang: "he" }),
+        body: JSON.stringify({ ...form, kind, lang: "he" }),
       });
       if (!res.ok) throw new Error("bad status");
       setState("done");
@@ -55,10 +63,12 @@ export function SchoolOrderForm() {
     return (
       <div style={{ textAlign: "center", padding: "10px 4px" }}>
         <div style={{ fontFamily: "var(--wb-serif)", fontSize: 22, fontWeight: 700, color: "#1C1917", marginBottom: 8 }}>
-          קיבלנו את ההרשמה 🎉
+          {kind === "pilot" ? "קיבלנו את הבקשה לפיילוט 🎉" : "קיבלנו את ההרשמה 🎉"}
         </div>
         <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#44403C", margin: 0 }}>
-          <Lines text="נפתח את בית הספר ונשלח פרטי כניסה וחשבונית מס תוך יום עסקים. אפשר לשלם בהעברה בנקאית או בהזמנת רכש." />
+          <Lines text={kind === "pilot"
+            ? "נחזור אליכם תוך יום עסקים לתיאום הפיילוט ולקביעת פגישת הסיכום. הפיילוט חינם ל-30 יום, לשכבה אחת."
+            : "נפתח את בית הספר ונשלח פרטי כניסה וחשבונית מס תוך יום עסקים. אפשר לשלם בהעברה בנקאית או בהזמנת רכש."} />
         </p>
       </div>
     );
@@ -66,6 +76,23 @@ export function SchoolOrderForm() {
 
   return (
     <form onSubmit={submit} dir="rtl" style={{ display: "grid", gap: 13, marginTop: 14, textAlign: "start" }}>
+      <div role="radiogroup" aria-label="סוג הבקשה" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {([["pilot", "פיילוט חינם ל-30 יום"], ["order", "הזמנה והצעת מחיר"]] as const).map(([v, l]) => (
+          <button
+            key={v}
+            type="button"
+            role="radio"
+            aria-checked={kind === v}
+            onClick={() => setKind(v)}
+            style={{
+              flex: "1 1 160px", padding: "10px 12px", borderRadius: 10, fontFamily: "inherit", fontSize: 14.5, fontWeight: 700, cursor: "pointer",
+              border: kind === v ? "2px solid #0EA5A5" : "1px solid #D6D3D1", background: kind === v ? "#E8F6F6" : "#fff", color: "#1C1917",
+            }}
+          >
+            {l}
+          </button>
+        ))}
+      </div>
       <div>
         <label style={label}>שם בית הספר *</label>
         <input required style={input} value={form.schoolName} onChange={(e) => set("schoolName", e.target.value)} />

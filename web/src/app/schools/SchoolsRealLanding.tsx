@@ -22,12 +22,12 @@ type Step = { t: string; b: string; img: string; phone?: boolean };
 type Tool = { kicker: string; title: string; body: string; points: string[]; img: string; phone?: boolean };
 
 const C = {
-  topCta: "להזמנה לבית הספר",
+  topCta: "פיילוט חינם",
   dashCta: "ללוח הבקרה",
   credPill: "לפי תוכניות הלימודים, מגן ועד י״ב",
   h1: "כל תלמיד מבין את השיעור.",
   whatIs: "המילים החשובות של כל יחידת לימוד, מוכנות להקרנה בכיתה. וכל תלמיד מקבל הסבר לכל מילה קשה, גם בשפה שלו.",
-  heroCta: "להזמנה לבית הספר",
+  heroCta: "לתיאום פיילוט לבית הספר",
   howCta: "איך זה עובד",
   heroPoints: ["114 מקצועות, 1,626 יחידות לימוד", "בלי חשבונות לתלמידים", "גם לחינוך הערבי"],
   shotAlt: "מסך אמיתי מתוך Gadit",
@@ -92,11 +92,15 @@ const C = {
   ],
   priceKicker: "מחירים",
   priceTitle: "מחיר לפי גודל בית הספר",
-  priceSub: "ממלאים טופס קצר, ואנחנו פותחים את בית הספר ושולחים חשבונית מס. תשלום שנתי בהעברה בנקאית או בהזמנת רכש.",
-  perMonth: "לחודש",
-  orYearly: "או",
-  perYear: "לשנה",
+  // Israel: paid per school year by tax invoice, bank transfer or purchase
+  // order, never by card; a free 30-day pilot for one grade comes first
+  // (Gadi 2026-10-08, after a 7-AI council).
+  priceSub: "לפני מע״מ · חשבונית מס · העברה בנקאית או הזמנת רכש.\nמצטרפים במהלך השנה? משלמים רק על התקופה שנשארה.\nמי שמצטרף השנה נועל את המחיר גם לשנה הבאה.",
+  perYear: "לשנת לימודים",
   plusVat: "+ מע״מ",
+  pilotLine: "פיילוט חינם ל-30 יום לשכבה אחת",
+  pilotCta: "לתיאום פיילוט לבית הספר",
+  quoteLink: "קבלו הצעת מחיר להזמנת רכש",
   tiers: [
     { label: "עד 100 תלמידים", monthly: 349, yearly: 3490 },
     { label: "101 עד 500 תלמידים", monthly: 649, yearly: 6490 },
@@ -112,8 +116,8 @@ const C = {
     "הסבר בשפת הבית של התלמיד",
   ],
   larger: "יותר מ-1,000 תלמידים או רשת בתי ספר? נשמח להכין הצעה מותאמת.",
-  orderTitle: "להזמנה לבית הספר",
-  orderSub: "משאירים פרטים, ואנחנו חוזרים אליך עם פתיחת בית הספר וחשבונית מס.",
+  orderTitle: "פיילוט חינם או הזמנה",
+  orderSub: "השאירו פרטים, ונחזור אליכם תוך יום עסקים לתיאום הפיילוט, או עם הצעת מחיר וחשבונית מס.",
   faqKicker: "שאלות נפוצות",
   faqTitle: "מה מנהלים שואלים לפני שמזמינים",
   faq: [
@@ -126,7 +130,7 @@ const C = {
   ],
   finalTitle: "בשיעור הבא, כל תלמיד יכול להבין כל מילה.",
   finalBody: "ההקמה לוקחת כמה דקות. בלי התקנה, בלי צוות מחשוב ובלי טפסי הורים.",
-  finalCta: "להזמנה לבית הספר",
+  finalCta: "לתיאום פיילוט לבית הספר",
 };
 
 function Shot({ name, phone, priority = false }: { name: string; phone?: boolean; priority?: boolean }) {
@@ -162,8 +166,9 @@ export function SchoolsRealLanding() {
   const href = useHref();
   // A school that already subscribes gets its dashboard in the top bar.
   const { schoolId } = useAuth();
-  const toOrder = (where: string) => {
-    track("schools_order_click", { where, page: "schools-real" });
+  const toOrder = (where: string, kind: "pilot" | "order" = "pilot") => {
+    track("schools_order_click", { where, kind, page: "schools-real" });
+    window.dispatchEvent(new CustomEvent("gadit-school-order-kind", { detail: kind }));
     document.getElementById("order")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   return (
@@ -265,10 +270,15 @@ export function SchoolsRealLanding() {
             {C.tiers.map((t) => (
               <div key={t.label} className="sch-tier">
                 <div className="sch-tier-label">{t.label}</div>
-                <div className="sch-tier-price"><span dir="ltr">₪{t.monthly.toLocaleString("en-US")}</span> <small>{C.perMonth}</small></div>
-                <div className="sch-tier-year">{C.orYearly} <span dir="ltr">₪{t.yearly.toLocaleString("en-US")}</span> {C.perYear} {C.plusVat}</div>
+                <div className="sch-tier-price"><span dir="ltr">₪{t.yearly.toLocaleString("en-US")}</span> <small>{C.perYear}</small></div>
+                <div className="sch-tier-year">{C.plusVat}</div>
               </div>
             ))}
+          </div>
+          <div className="sch-pilot">
+            <div className="sch-pilot-line">{C.pilotLine}</div>
+            <button type="button" className="sch-cta" onClick={() => toOrder("pricing", "pilot")}>{C.pilotCta}</button>
+            <button type="button" className="sch-quote-link" onClick={() => toOrder("pricing", "order")}>{C.quoteLink}</button>
           </div>
           <div className="sch-includes">
             <div className="sch-includes-title">{C.includesTitle}</div>
@@ -408,6 +418,9 @@ const CSS = `
 .sch-includes-title { font-weight: 800; margin-bottom: 14px; }
 .sch-includes ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; }
 .sch-includes li { display: flex; gap: 8px; align-items: center; font-weight: 600; font-size: 15.5px; }
+.sch-pilot { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 26px 0 6px; }
+.sch-pilot-line { font-size: 19px; font-weight: 800; color: var(--ink, #0B1220); text-align: center; }
+.sch-quote-link { background: none; border: 0; font: inherit; font-size: 15px; color: var(--teal-deep, #0B6E6E); text-decoration: underline; cursor: pointer; padding: 4px; }
 .sch-larger { text-align: center; margin: 20px 0 0; color: var(--body); font-size: 15px; }
 .sch-order { max-width: 720px; margin: 0 auto; }
 

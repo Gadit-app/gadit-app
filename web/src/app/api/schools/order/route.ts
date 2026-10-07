@@ -42,6 +42,8 @@ export async function POST(req: NextRequest) {
     const size = clean(body?.size, 4);
     const notes = clean(body?.notes, 1000);
     const lang = clean(body?.lang, 8) || "he";
+    // "pilot" = free 30-day pilot for one grade; "order" = straight order (Gadi 2026-10-08).
+    const kind = body?.kind === "order" ? "order" : "pilot";
 
     if (!schoolName || !contactName || !isEmail(email)) {
       return NextResponse.json({ error: "missing_fields" }, { status: 400 });
@@ -58,6 +60,7 @@ export async function POST(req: NextRequest) {
       sizeLabel: SIZE_LABELS[size] || null,
       notes: notes || null,
       lang,
+      kind,
       status: "pending" as const,
       createdAt: new Date().toISOString(),
     };
@@ -80,8 +83,8 @@ export async function POST(req: NextRequest) {
           from: "Gadit <notify@gadit.app>",
           to: notifyTo,
           replyTo: email,
-          subject: `🏫 New school order: ${schoolName}`,
-          html: `<p>A school registered to order Gadit Schools.</p>
+          subject: kind === "pilot" ? `🏫 Pilot request: ${schoolName}` : `🏫 New school order: ${schoolName}`,
+          html: `<p>${kind === "pilot" ? "A school asked for a FREE 30-day pilot (one grade, up to 3 classes). Book the summary meeting for day 25 when you set it up." : "A school registered to order Gadit Schools."}</p>
 <p><b>School:</b> ${esc(schoolName)}<br/>
 <b>Contact:</b> ${esc(contactName)}${role ? ` (${esc(role)})` : ""}<br/>
 <b>Email:</b> ${esc(email)}<br/>
