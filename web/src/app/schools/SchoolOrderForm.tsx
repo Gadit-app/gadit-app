@@ -10,6 +10,7 @@
 import { useEffect, useState } from "react";
 import { Lines } from "../families/RealScreens";
 
+// Students in the PARTICIPATING grades, not the whole school (Gadi 2026-10-08).
 const SIZES = [
   { v: "s", label: "עד 100 תלמידים" },
   { v: "m", label: "101 עד 500 תלמידים" },
@@ -19,7 +20,7 @@ const SIZES = [
 
 export function SchoolOrderForm() {
   const [form, setForm] = useState({
-    schoolName: "", contactName: "", role: "", email: "", phone: "", city: "", size: "", notes: "",
+    schoolName: "", contactName: "", role: "", email: "", phone: "", city: "", size: "", grade: "", schoolType: "", notes: "",
   });
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   // A free 30-day pilot for one grade (default) or a straight order / quote
@@ -99,7 +100,7 @@ export function SchoolOrderForm() {
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         <div>
-          <label style={label}>איש קשר *</label>
+          <label style={label}>שם מלא *</label>
           <input required style={input} value={form.contactName} onChange={(e) => set("contactName", e.target.value)} />
         </div>
         <div>
@@ -113,7 +114,7 @@ export function SchoolOrderForm() {
           <input required type="email" dir="ltr" style={input} value={form.email} onChange={(e) => set("email", e.target.value)} />
         </div>
         <div>
-          <label style={label}>טלפון {opt}</label>
+          <label style={label}>טלפון לתיאום בוואטסאפ {opt}</label>
           <input type="tel" dir="ltr" style={input} value={form.phone} onChange={(e) => set("phone", e.target.value)} />
         </div>
       </div>
@@ -123,10 +124,26 @@ export function SchoolOrderForm() {
           <input style={input} value={form.city} onChange={(e) => set("city", e.target.value)} />
         </div>
         <div>
-          <label style={label}>גודל בית הספר</label>
+          <label style={label}>מספר התלמידים בשכבות המשתתפות</label>
           <select style={input} value={form.size} onChange={(e) => set("size", e.target.value)}>
             <option value="">בחירה</option>
             {SIZES.map((s) => <option key={s.v} value={s.v}>{s.label}</option>)}
+          </select>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div>
+          <label style={label}>באיזו שכבה תרצו להתחיל? {opt}</label>
+          <input style={input} value={form.grade} placeholder="למשל: ז׳" onChange={(e) => set("grade", e.target.value)} />
+        </div>
+        <div>
+          <label style={label}>סוג בית הספר {opt}</label>
+          <select style={input} value={form.schoolType} onChange={(e) => set("schoolType", e.target.value)}>
+            <option value="">בחירה</option>
+            <option value="state">ממלכתי</option>
+            <option value="state-religious">ממלכתי דתי</option>
+            <option value="arab">ערבי</option>
+            <option value="other">אחר</option>
           </select>
         </div>
       </div>

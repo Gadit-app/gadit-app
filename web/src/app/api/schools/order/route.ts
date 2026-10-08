@@ -41,6 +41,8 @@ export async function POST(req: NextRequest) {
     const city = clean(body?.city, 80);
     const size = clean(body?.size, 4);
     const notes = clean(body?.notes, 1000);
+    const grade = clean(body?.grade, 40);
+    const schoolType = clean(body?.schoolType, 24);
     const lang = clean(body?.lang, 8) || "he";
     // "pilot" = free 30-day pilot for one grade; "order" = straight order (Gadi 2026-10-08).
     const kind = body?.kind === "order" ? "order" : "pilot";
@@ -58,6 +60,8 @@ export async function POST(req: NextRequest) {
       city: city || null,
       size: size || null,
       sizeLabel: SIZE_LABELS[size] || null,
+      grade: grade || null,
+      schoolType: schoolType || null,
       notes: notes || null,
       lang,
       kind,
@@ -90,7 +94,9 @@ export async function POST(req: NextRequest) {
 <b>Email:</b> ${esc(email)}<br/>
 <b>Phone:</b> ${esc(phone || "(none)")}<br/>
 <b>City:</b> ${esc(city || "(none)")}<br/>
-<b>Size:</b> ${esc(SIZE_LABELS[size] || size || "(none)")}<br/>
+<b>Size (participating grades):</b> ${esc(SIZE_LABELS[size] || size || "(none)")}<br/>
+<b>Start grade:</b> ${esc(grade || "(none)")}<br/>
+<b>School type:</b> ${esc(schoolType || "(none)")}<br/>
 <b>Notes:</b> ${esc(notes || "(none)")}</p>
 <p>Next: open the school account + one-time code, and send the tax invoice.</p>`,
         });

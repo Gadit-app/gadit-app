@@ -10,124 +10,140 @@ import { useAuth } from "@/lib/auth-context";
 import { track } from "@/lib/track";
 
 /**
- * The new Hebrew Schools landing (Gadi 2026-10-05), built like the Families
+ * The Hebrew Schools landing (Gadi 2026-10-05), built like the Families
  * real-screens page: every claim is shown on the actual Gadit screen, captured
  * from a seeded demo school (fictional, never a real school). The buyer is a
- * principal; the one action is the order form at #order (₪ annual, tax
- * invoice). Screens live in public/sch/screens/he/{name}.webp: desktop shots
- * at 16:10 (projector, catalog, dashboards) and phone shots at 390x844.
+ * principal; the one action is the pilot / order form at #order. Screens live
+ * in public/sch/screens/he/{name}.webp.
+ *
+ * Revised per the 7-AI review + council verdict Gadi approved on 2026-10-08:
+ * teacher-only model stated as facts (no legal claims), no Gadit Family in the
+ * body, "not in Gefen" said plainly, prices INCLUDING VAT by the participating
+ * grades (₪3,950 / ₪6,950 / ₪9,950), a "what the pilot includes" section and a
+ * "who we are" line before the price.
  */
 
 type Step = { t: string; b: string; img: string; phone?: boolean };
 type Tool = { kicker: string; title: string; body: string; points: string[]; img: string; phone?: boolean };
 
+/** Israeli school prices per school year, VAT included (Gadi 2026-10-08). */
+export const IL_SCHOOL_PRICES = [
+  { key: "s", label: "עד 100 תלמידים", yearly: 3950 },
+  { key: "m", label: "101 עד 500 תלמידים", yearly: 6950 },
+  { key: "l", label: "501 עד 1,000 תלמידים", yearly: 9950 },
+];
+
 const C = {
   topCta: "פיילוט חינם",
   dashCta: "ללוח הבקרה",
   credPill: "לפי תוכניות הלימודים, מגן ועד י״ב",
-  h1: "כל תלמיד מבין את השיעור.",
-  whatIs: "המילים החשובות של כל יחידת לימוד, מוכנות להקרנה בכיתה. המורה מקרינה, וכל הכיתה מבינה כל מילה קשה, עם תמונה, דוגמאות והסבר גם בשפת הבית.",
-  heroCta: "לתיאום פיילוט לבית הספר",
+  h1: "המילים של כל שיעור, מוכנות להקרנה בכיתה.",
+  whatIs: "המורה בוחרת יחידת לימוד ומקרינה את מילות המפתח שלה. לכל מילה יש תמונה, הגדרה שמתאימה לשיעור ודוגמאות, וגם הסבר בשפת הבית. כך כל הכיתה לומדת את המילים שהשיעור נשען עליהן.",
+  heroCta: "לתיאום פיילוט חינם",
+  ctaNote: "פיילוט חינם ל-30 יום. אחר כך מ-₪3,950 לשנת לימודים, כולל מע״מ.",
   howCta: "איך זה עובד",
-  heroPoints: ["114 מקצועות, 1,626 יחידות לימוד", "המורה מקרינה, בלי מכשירים לתלמידים", "גם לחינוך הערבי"],
+  heroPoints: ["114 מקצועות, 1,626 יחידות לימוד", "בלי מכשירים, בלי חשבונות ובלי מידע על תלמידים", "גם לחינוך הערבי"],
   shotAlt: "מסך אמיתי מתוך Gadit",
   pain: {
     title: "למה תלמיד שיודע את החומר נכשל במבחן?",
-    lead: "הוא לא הבין מילה אחת, וכל השאלה נשענה עליה.",
+    lead: "הייתה בשאלה מילה אחת שהוא לא הבין, וכל השאלה נשענה עליה.",
     paras: [
       "בכל שיעור יש כמה מילים שכל השיעור בנוי עליהן: פוטוסינתזה, ריבונות, מכנה משותף.",
       "תלמיד שלא הבין אחת מהן לא מרים יד. הוא מנחש וממשיך, והפער גדל משיעור לשיעור.",
-      "והמורה מסבירה את אותה מילה שוב ושוב, ועדיין לא יודעת מי באמת הבין.",
     ],
-    strong: "חסרות המילים של השיעור.",
-    reframe: "Gadit נותן למורה את המילים של השיעור על המסך הגדול, עם הסבר שכל תלמיד מבין.",
+    reframe: "Gadit נותן למורה את המילים של השיעור על המסך הגדול, עם הסבר שמתאים לשיעור.",
   },
   howKicker: "איך זה עובד",
   howTitle: "שלושה צעדים, מיחידת הלימוד ועד ההבנה",
   steps: [
-    { t: "בוחרים מקצוע ויחידת לימוד", b: "כל המקצועות מגן ועד י״ב, בחינוך הממלכתי ובממלכתי דתי. בכל יחידה 10 עד 12 מילות מפתח, עם הגדרה שמתאימה בדיוק לשיעור.", img: "sets" },
+    { t: "בוחרים מקצוע ויחידת לימוד", b: "114 מקצועות מגן ועד י״ב, בחינוך הממלכתי ובממלכתי דתי. בכל יחידה 10 עד 12 מילות מפתח, עם הגדרה שמתאימה בדיוק לשיעור.", img: "sets" },
     { t: "מקרינים את המילים בכיתה", b: "כל מילה על המסך הגדול, עם תמונה, הגדרה ודוגמאות. בכיתות הנמוכות אפשר להציג עם ניקוד.", img: "stage" },
-    { t: "חידון ומשחק לכל הכיתה", b: "הכיתה עונה יחד על חידון ומשחק שנבנים מהמילים של היחידה. ככה רואים מיד אם המילים נקלטו.", img: "quiz" },
+    { t: "חידון ומשחק לכל הכיתה", b: "הכיתה עונה יחד על חידון ומשחק שנבנים מהמילים של היחידה. ככה המורה רואה מיד אם המילים נקלטו.", img: "quiz" },
   ] as Step[],
+  prep: {
+    kicker: "למורים",
+    title: "פחות זמן בהכנת מילים, יותר זמן ללמד",
+    body: "המילים החשובות של כל יחידה כבר מוכנות, עם הגדרות, תמונות ודוגמאות שמתאימות לנושא. המורה בוחרת יחידה ומתחילה ללמד.",
+  },
   tools: [
     {
+      kicker: "להנהלה ולצוות",
+      title: "רואים מה כל כיתה למדה, ולאן כדאי לחזור",
+      body: "בלוח ההנהלה רואים כמה מילים כל כיתה כבר למדה, ואילו מילים הוקרנו יותר מפעם אחת. ככה יודעים איפה כדאי לחזק.",
+      points: ["כל הכיתות במסך אחד", "מילים שהוקרנו יותר מפעם אחת בכל כיתה", "מילון כיתה עם יעדים, בלי תחרות בין תלמידים"],
+      img: "overview",
+    },
+    {
       kicker: "גם בשפת הבית",
-      title: "תלמיד שחושב ברוסית, באמהרית או בערבית מבין את השיעור",
-      body: "הוא קורא את החומר בעברית, אבל עדיין חושב בשפת הבית. המורה מציגה את ההסבר המלא גם בשפה שלו, והמילה בעברית נשארת במרכז. ובבית הוא ממשיך עם Gadit Family.",
+      title: "תלמיד שחושב ברוסית, באמהרית או בערבית יכול להבין את השיעור",
+      body: "הוא קורא את החומר בעברית, אבל עדיין חושב בשפת הבית. המורה מציגה את ההסבר המלא גם בשפה שלו, והמילה בעברית נשארת במרכז.",
       points: ["הסבר מלא, לא מילה מתורגמת", "המילה בעברית נשארת במרכז", "עולים חדשים וכל תלמיד שמתקשה בשפה"],
       img: "teacher-lang",
-    },
-    {
-      kicker: "מילון הכיתה",
-      title: "הכיתה בונה מילון משלה",
-      body: "כל מילה שהכיתה לומדת על המסך נכנסת למילון של הכיתה. כשהמילון מגיע ליעד חדש, כל הכיתה חוגגת יחד.",
-      points: ["כל המילים שהכיתה למדה במקום אחד", "דרגות ויעדים לכיתה כולה", "מוטיבציה בלי תחרות בין תלמידים"],
-      img: "dictionary",
-    },
-    {
-      kicker: "להנהלה ולצוות",
-      title: "רואים מה כל כיתה לא הבינה",
-      body: "בלוח של בית הספר רואים כמה מילים כל כיתה כבר למדה, ואילו מילים הוקרנו יותר מפעם אחת. ככה יודעים מה כדאי ללמד מחדש.",
-      points: ["כל הכיתות במסך אחד", "המילים שהכי קשות לכל כיתה", "מילה שחוזרים אליה מסמנת מילה שעוד לא הובנה"],
-      img: "overview",
     },
     {
       kicker: "החינוך הערבי",
       title: "אותו כלי, בתוכניות הלימודים של החינוך הערבי",
       body: "52 מקצועות ו-1,410 יחידות לימוד לפי תוכניות הלימודים של החינוך הערבי. ממשק בערבית, מילים בערבית תקנית, ואפשרות להציג עם תשכיל.",
-      points: ["ממשק מלא בערבית", "תשכיל לכיתות הנמוכות", "עברית ואנגלית כשפה נוספת"],
+      points: ["ממשק מלא בערבית", "תשכיל לכיתות הנמוכות", "כולל עברית ואנגלית כמקצועות"],
       img: "ar-stage",
     },
   ] as Tool[],
   safeKicker: "פרטיות ובטיחות",
   safeTitle: "בטוח לבית הספר מהיום הראשון",
   safe: [
-    "המורה מפעילה את Gadit ומקרינה לכיתה, והתלמידים לא משתמשים במכשירים.",
-    "בלי חשבונות לתלמידים ובלי שום מידע על תלמידים.",
-    "בלי פרסומות ובלי תוכן שלא מתאים לילדים.",
+    "בתוכנית לבתי ספר רק המורים משתמשים ב-Gadit, ומקרינים לכיתה.",
+    "לתלמידים אין חשבונות, ולא נאסף עליהם מידע.",
+    "בלי פרסומות ובלי תוכן שאינו מתאים לילדים.",
     "עובד בכל דפדפן, בלי התקנה ובלי צוות מחשוב.",
   ],
-  priceKicker: "מחירים",
-  priceTitle: "מחיר לפי גודל בית הספר",
-  // Israel: paid per school year by tax invoice, bank transfer or purchase
-  // order, never by card; a free 30-day pilot for one grade comes first
-  // (Gadi 2026-10-08, after a 7-AI council).
-  priceSub: "לפני מע״מ · חשבונית מס · העברה בנקאית או הזמנת רכש.\nמצטרפים במהלך השנה? משלמים רק על התקופה שנשארה.\nמצטרפים השנה? נועלים את המחיר גם לשנה הבאה.",
-  perYear: "לשנת לימודים",
-  plusVat: "+ מע״מ",
-  pilotLine: "פיילוט חינם ל-30 יום לשכבה אחת",
-  pilotCta: "לתיאום פיילוט לבית הספר",
-  quoteLink: "קבלו הצעת מחיר להזמנת רכש",
-  tiers: [
-    { label: "עד 100 תלמידים", monthly: 349, yearly: 3490 },
-    { label: "101 עד 500 תלמידים", monthly: 649, yearly: 6490 },
-    { label: "501 עד 1,000 תלמידים", monthly: 949, yearly: 9490 },
+  whoKicker: "מי אנחנו",
+  whoTitle: "צוות של אנשי חינוך",
+  whoBody: "הצוות של Gadit לימד יותר מ-15,000 לומדים ב-15 שנה. בנינו את Gadit כדי שלמורים יהיו המילים של השיעור מוכנות על המסך.",
+  pilotKicker: "פיילוט",
+  pilotTitle: "מה כולל הפיילוט",
+  pilotItems: [
+    "30 יום, שכבה אחת, עד 3 כיתות.",
+    "בלי עלות ובלי התחייבות, ובלי חיוב אוטומטי בסוף.",
+    "כל המורים של השכבה מקבלים גישה לכל המקצועות.",
+    "אנחנו מקימים את הכול איתכם בשיחה קצרה.",
+    "ביום ה-25 נפגשים לסיכום, עם הנתונים מלוח ההנהלה.",
+    "ממשיכים רק אם מחליטים להזמין.",
   ],
+  priceKicker: "מחירים",
+  priceTitle: "מחיר לפי מספר התלמידים בשכבות המשתתפות",
+  priceSub: "המחירים כוללים מע״מ.\nתשלום בהעברה בנקאית או בהזמנת רכש, מול חשבונית מס.\nמצטרפים במהלך השנה משלמים רק על התקופה שנשארה.\nמצטרפים בשנת הלימודים תשפ״ז? המחיר נשאר זהה גם בתשפ״ח.",
+  perYear: "לשנת לימודים",
+  inclVat: "כולל מע״מ",
+  pilotLine: "פיילוט חינם ל-30 יום לשכבה אחת",
+  pilotCta: "לתיאום פיילוט חינם",
+  quoteLink: "קבלו הצעת מחיר להזמנת רכש",
   includesTitle: "בכל התוכניות",
   includes: [
-    "כל תוכנית הלימודים, מגן ועד י״ב",
+    "114 מקצועות ו-1,626 יחידות, מגן ועד י״ב",
     "מסך מקרן, חידון ומשחק לכיתה",
-    "כיתות ללא הגבלה",
+    "כיתות ללא הגבלה בשכבות המשתתפות",
     "מילון כיתה, דרגות ויעדים",
-    "לוח בית ספר ולוח מורה",
+    "לוח ההנהלה",
     "הסבר בשפת הבית של התלמיד",
   ],
-  larger: "יותר מ-1,000 תלמידים או רשת בתי ספר? נשמח להכין הצעה מותאמת.",
+  larger: "יותר מ-1,000 תלמידים או רשת בתי ספר?\nנשמח להכין הצעה מותאמת.",
   orderTitle: "פיילוט חינם או הזמנה",
-  orderSub: "השאירו פרטים, ונחזור אליכם תוך יום עסקים לתיאום הפיילוט, או עם הצעת מחיר וחשבונית מס.",
+  orderSub: "השאירו פרטים, ונחזור אליכם תוך יום עסקים לתיאום הפיילוט, או עם הצעת מחיר.",
   faqKicker: "שאלות נפוצות",
   faqTitle: "מה מנהלים שואלים לפני שמזמינים",
   faq: [
-    { q: "המילים מתאימות למה שהמורה מלמדת?", a: "כן. כל יחידה נבנתה לפי תוכנית הלימודים של המקצוע והשכבה, עם הגדרה שמתאימה להקשר של השיעור. אותה מילה מקבלת משמעות אחרת במדעים ובהיסטוריה, ו-Gadit מגדיר אותה לפי השיעור." },
-    { q: "התלמידים צריכים מכשירים?", a: "לא. המורה מקרינה את Gadit על המסך בכיתה, וכל הכיתה לומדת יחד. התלמידים לא נכנסים ל-Gadit בבית הספר, ולא נאסף עליהם שום מידע." },
-    { q: "צריך להתקין משהו?", a: "לא. Gadit עובד בכל דפדפן, על מחשב הכיתה ועל המקרן. אין צורך בצוות מחשוב." },
-    { q: "זה תרגום?", a: "לא. Gadit מסביר מילים. לכל מילה הוא נותן את המשמעות שמתאימה לשיעור, דוגמאות, תמונה ומקור המילה. המורה יכולה להציג את אותו הסבר גם בשפת הבית של תלמיד שעוד לא שולט בעברית, והמילה בעברית נשארת במרכז." },
-    { q: "התלמידים יכולים להמשיך בבית?", a: "כן. הורים יכולים לפתוח Gadit Family, והילד ממשיך בבית עם מצב ילדים, מחברת אישית ותרגול. 14 יום ניסיון חינם." },
-    { q: "איך משלמים?", a: "תשלום שנתי בהעברה בנקאית או בהזמנת רכש, מול חשבונית מס." },
+    { q: "המילים מתאימות למה שהמורה מלמדת?", a: "כן.\nכל יחידה נבנתה לפי תוכנית הלימודים של המקצוע והשכבה, עם הגדרה שמתאימה להקשר של השיעור.\nאותה מילה מקבלת משמעות אחרת במדעים ובהיסטוריה, ו-Gadit מגדיר אותה לפי השיעור." },
+    { q: "מאיזה תקציב משלמים?", a: "מתקציב בית הספר, מול חשבונית מס, בהעברה בנקאית או בהזמנת רכש.\nGadit לא נמצא כרגע במאגר גפ״ן." },
+    { q: "איך סופרים את מספר התלמידים?", a: "לפי מספר התלמידים בשכבות שמשתמשות ב-Gadit, ולא לפי כל בית הספר.\nאפשר להוסיף שכבות בכל שלב." },
+    { q: "מה קורה בסוף הפיילוט?", a: "הגישה נסגרת, בלי שום חיוב.\nאם מחליטים להמשיך, שולחים הזמנה ומקבלים חשבונית." },
+    { q: "והמנוי מתחדש לבד?", a: "לא.\nכל שנה מחדשים בהזמנה חדשה, במחיר הנעול." },
+    { q: "אילו שפות בית יש?", a: "ההסבר זמין ב-33 שפות, ביניהן רוסית, אמהרית, ערבית, אנגלית, צרפתית, ספרדית ואוקראינית." },
+    { q: "זה תרגום?", a: "לא.\nGadit מסביר מילים.\nלכל מילה הוא נותן את המשמעות שמתאימה לשיעור, דוגמאות, תמונה ומקור המילה.\nהמורה יכולה להציג את אותו הסבר גם בשפת הבית של תלמיד שעוד לא שולט בעברית, והמילה בעברית נשארת במרכז." },
+    { q: "התלמידים יכולים להמשיך בבית?", a: "כן.\nהורים יכולים לפתוח Gadit Family, והילד ממשיך בבית עם מצב ילדים, מחברת אישית ותרגול.\nזה מסלול נפרד של ההורים, לא חלק מההזמנה של בית הספר." },
   ],
-  finalTitle: "בשיעור הבא, כל תלמיד יכול להבין כל מילה.",
-  finalBody: "ההקמה לוקחת כמה דקות. בלי התקנה, בלי צוות מחשוב ובלי טפסי הורים.",
-  finalCta: "לתיאום פיילוט לבית הספר",
+  finalTitle: "בשיעור הבא, המילים של השיעור כבר יכולות להיות על המסך.",
+  finalBody: "ההקמה לוקחת כמה דקות.\nבלי התקנה, בלי צוות מחשוב, ובלי חשבונות לתלמידים.",
+  finalCta: "לתיאום פיילוט חינם",
 };
 
 function Shot({ name, phone, priority = false }: { name: string; phone?: boolean; priority?: boolean }) {
@@ -170,7 +186,7 @@ export function SchoolsRealLanding() {
   };
   return (
     <div className="sch" dir="rtl" lang="he">
-      <style>{CSS}</style>
+      <style>{CSS + CSS2}</style>
       <header className="sch-top">
         <Link href={href("/")} className="sch-logo" aria-label="Gadit" dir="ltr" translate="no">
           Gad<span>it</span>
@@ -199,6 +215,7 @@ export function SchoolsRealLanding() {
                 <button type="button" className="sch-cta" onClick={() => toOrder("hero")}>{C.heroCta}</button>
                 <a href="#how" className="sch-ghost">{C.howCta}</a>
               </div>
+              <p className="sch-cta-note"><Lines text={C.ctaNote} /></p>
               <ul className="sch-points">
                 {C.heroPoints.map((p) => <li key={p}><Check />{p}</li>)}
               </ul>
@@ -214,7 +231,6 @@ export function SchoolsRealLanding() {
             <h2 className="sch-h2 sch-center">{C.pain.title}</h2>
             <p className="sch-lead sch-center">{C.pain.lead}</p>
             {C.pain.paras.map((p, i) => <p key={i} className="sch-body sch-center"><Lines text={p} /></p>)}
-            <p className="sch-strong"><Lines text={C.pain.strong} /></p>
             <p className="sch-reframe"><Lines text={C.pain.reframe} /></p>
           </div>
         </section>
@@ -236,8 +252,16 @@ export function SchoolsRealLanding() {
           </div>
         </section>
 
+        <section className="sch-band sch-white">
+          <div className="sch-narrow">
+            <div className="sch-kicker">{C.prep.kicker}</div>
+            <h2 className="sch-h2 sch-center">{C.prep.title}</h2>
+            <p className="sch-body sch-center"><Lines text={C.prep.body} /></p>
+          </div>
+        </section>
+
         {C.tools.map((t, i) => (
-          <section key={t.img} className={`sch-band ${i % 2 ? "sch-tint" : "sch-white"}`}>
+          <section key={t.img} className={`sch-band ${i % 2 ? "sch-white" : "sch-tint"}`}>
             <div className={`sch-feature${t.phone ? " is-phone" : ""}${i % 2 ? " is-flipped" : ""}`}>
               <div className="sch-feature-text">
                 <div className="sch-kicker sch-start">{t.kicker}</div>
@@ -258,16 +282,35 @@ export function SchoolsRealLanding() {
           </div>
         </section>
 
+        <section className="sch-band sch-tint">
+          <div className="sch-narrow">
+            <div className="sch-kicker">{C.whoKicker}</div>
+            <h2 className="sch-h2 sch-center">{C.whoTitle}</h2>
+            <p className="sch-body sch-center"><Lines text={C.whoBody} /></p>
+          </div>
+        </section>
+
+        <section className="sch-band sch-white">
+          <div className="sch-narrow">
+            <div className="sch-kicker">{C.pilotKicker}</div>
+            <h2 className="sch-h2 sch-center">{C.pilotTitle}</h2>
+            <ul className="sch-safe">{C.pilotItems.map((p) => <li key={p}><Check /><span>{p}</span></li>)}</ul>
+            <div className="sch-center" style={{ marginTop: 26 }}>
+              <button type="button" className="sch-cta" onClick={() => toOrder("pilot-box", "pilot")}>{C.pilotCta}</button>
+            </div>
+          </div>
+        </section>
+
         <section className="sch-band sch-tint" id="pricing">
           <div className="sch-kicker">{C.priceKicker}</div>
           <h2 className="sch-h2 sch-center">{C.priceTitle}</h2>
           <p className="sch-body sch-center sch-narrow"><Lines text={C.priceSub} /></p>
           <div className="sch-tiers">
-            {C.tiers.map((t) => (
-              <div key={t.label} className="sch-tier">
+            {IL_SCHOOL_PRICES.map((t) => (
+              <div key={t.key} className="sch-tier">
                 <div className="sch-tier-label">{t.label}</div>
                 <div className="sch-tier-price"><span dir="ltr">₪{t.yearly.toLocaleString("en-US")}</span> <small>{C.perYear}</small></div>
-                <div className="sch-tier-year">{C.plusVat}</div>
+                <div className="sch-tier-year">{C.inclVat}</div>
               </div>
             ))}
           </div>
@@ -323,6 +366,11 @@ export function SchoolsRealLanding() {
     </div>
   );
 }
+
+const CSS2 = `
+.sch-cta-note { margin: 12px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--body); max-width: 460px; }
+@media (max-width: 860px) { .sch-cta-note { margin-inline: auto; text-align: center; } }
+`;
 
 const CSS = `
 .sch { --ink: #1E293B; --body: #475569; --teal: #0EA5A5; --teal-d: #0b7d7d; --tint: #F0F8F8;
