@@ -4,6 +4,7 @@ import {
   DEFAULT_SCHOOL_HOURS,
   isClassroomInSession,
   normalizeClassCode,
+  studentCodesOff,
   type ActiveHours,
 } from "@/lib/school";
 
@@ -52,6 +53,11 @@ export async function GET(req: NextRequest) {
 
   if (!schoolSnap.exists || !classroomSnap.exists) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
+  }
+
+  // Israeli schools are teacher-only: no student entry by code.
+  if (studentCodesOff((schoolSnap.data() as { curriculum?: string }).curriculum)) {
+    return NextResponse.json({ error: "teacher_only" }, { status: 403 });
   }
 
   const school = schoolSnap.data() as {

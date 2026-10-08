@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { normalizeClassCode } from "@/lib/school";
+import { normalizeClassCode, studentCodesOff } from "@/lib/school";
 
 /**
  * POST /api/classroom/log-search
@@ -55,6 +55,11 @@ export async function POST(req: NextRequest) {
     schoolId: string;
     classroomId: string;
   };
+  // Israeli schools are teacher-only: no student searches are logged.
+  const schoolDoc = await db.collection("schools").doc(schoolId).get();
+  if (studentCodesOff((schoolDoc.data() as { curriculum?: string } | undefined)?.curriculum)) {
+    return NextResponse.json({ error: "teacher_only" }, { status: 403 });
+  }
 
   const classroomRef = db
     .collection("schools")

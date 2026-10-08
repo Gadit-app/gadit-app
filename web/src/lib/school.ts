@@ -30,8 +30,19 @@
  *     a Kahoot room code.
  */
 
+/** Israeli schools are teacher-only (Gadi 2026-10-08): the teacher projects
+ *  to the class and students never use Gadit at school, so their class codes
+ *  are off (no /c/<CODE> entry, no code-unlocked lookups, no codes shown to
+ *  the teacher). Keyed on the school's curriculum ("il-he" / "il-ar"); other
+ *  countries (e.g. "za-caps") keep student codes. */
+export function studentCodesOff(curriculum?: string | null): boolean {
+  return typeof curriculum === "string" && curriculum.startsWith("il-");
+}
+
 export interface School {
   ownerUid: string;
+  /** Curriculum key, e.g. "il-he", "il-ar", "za-caps", "all". */
+  curriculum?: string;
   plan: "monthly" | "yearly";
   /** Display name of the school. Shown to teachers + on /c/<CODE>. */
   name: string;

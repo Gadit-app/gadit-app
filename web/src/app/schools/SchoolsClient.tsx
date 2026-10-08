@@ -33,6 +33,7 @@ import { useHref } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
+import { studentCodesOff } from "@/lib/school";
 import {
   ALLOWED_LOGO_MIMES,
   CLASSROOM_COLORS,
@@ -2195,6 +2196,8 @@ export function SchoolsClient() {
 
   const [tab, setTab] = useState<"home" | "classrooms" | "students" | "settings">("home");
   const [school, setSchool] = useState<School | null>(null);
+  // Israeli schools are teacher-only: no student class codes or links shown.
+  const codesOff = studentCodesOff(school?.curriculum);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   // The school account's own lookups (general use, not through a classroom).
   const [ownerSearches, setOwnerSearches] = useState(0);
@@ -3182,7 +3185,7 @@ export function SchoolsClient() {
                       flexShrink: 0,
                     }}
                   />
-                  <span className="wb-classroom-code">{cls.code}</span>
+                  {!codesOff && <span className="wb-classroom-code">{cls.code}</span>}
                   <span className="wb-classroom-name">
                     {cls.name || c.classroomsHeading}
                   </span>
@@ -3256,6 +3259,7 @@ export function SchoolsClient() {
                       teacher knows what they're about to copy. Click
                       anywhere on the link row to copy. The button +
                       URL both turn green for 1.5s after copy. */}
+                  {!codesOff && (
                   <button
                     type="button"
                     onClick={() => copyKidsLink(cls)}
@@ -3333,6 +3337,7 @@ export function SchoolsClient() {
                       )}
                     </span>
                   </button>
+                  )}
                 </div>
               );
               })}
