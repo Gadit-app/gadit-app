@@ -15,108 +15,101 @@ import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib
  * screen, captured from a demo Individual subscriber ("דנה"). The one action
  * is the 14-day Individual trial. Screens: public/ind/screens/he/{name}.webp
  * (phone, 780x1688).
+ *
+ * Revised per the 7-AI review + council verdict Gadi approved on 2026-10-08:
+ * card and reminder line under the hero CTA, "who it's for" right after the
+ * pain, the secondary tools in one block, a 5-line price list with the
+ * yearly saving, a quiet free-account link next to the price, new FAQs.
  */
 
 type Step = { t: string; b: string; img: string };
 type Tool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
+type MiniTool = { kicker: string; title: string; body: string; img: string };
 
 const C = {
-  topCta: "14 יום ניסיון חינם",
-  credPill: "15 שנות ניסיון עם יותר מ-15,000 לומדים",
+  topCta: "ניסיון חינם",
+  credPill: "הצוות של Gadit לימד יותר מ-15,000 לומדים ב-15 שנה",
   h1: "להבין כל מילה עד הסוף.",
-  whatIs: "הקלידו מילה בכל שפה, וקבלו את כל המשמעויות שלה, דוגמאות, תמונה ומקור המילה. כל מילה נשמרת במחברת שלכם, ו-Gadit עוזר לכם לזכור אותה.",
-  heroCta: "14 יום ניסיון חינם",
+  whatIs: "נתקעתם על מילה במכתב מהבנק, במאמר או בחוזה? תקבלו את כל המשמעויות, דוגמאות ומקור המילה, בהסבר בשפה שלכם. כל מילה נשמרת במחברת, ו-Gadit מחזיר אותה עד שהיא נשארת.",
+  heroCta: "התחילו 14 ימי ניסיון חינם",
+  ctaNote: "נדרש כרטיס אשראי, והחיוב הראשון רק בתום 14 הימים. יומיים לפני כן נשלח תזכורת במייל. ביטול בלחיצה, בלי טלפון.",
   howCta: "איך זה עובד",
-  heroPoints: [`${INDIVIDUAL_DISPLAY.ilsMonthly} לחודש`, "33 שפות", "בלי פרסומות"],
+  heroPoints: [`${INDIVIDUAL_DISPLAY.ilsMonthly} לחודש`, "הסבר ב-33 שפות", "בלי פרסומות"],
   shotAlt: "מסך אמיתי מתוך Gadit",
   pain: {
     title: "מבינים את הרעיון, אבל מילה אחת עוצרת הכול",
     lead: "מילה שמבינים רק בערך נשארת בערך.",
     paras: [
-      "במאמר באנגלית, במכתב מהבנק, בשיעור או בפגישה. מילה אחת לא ברורה, ומשפט שלם מתפספס.",
+      "במאמר באנגלית, במכתב מהבנק, בשיעור או בפגישה, מילה אחת לא ברורה מפילה משפט שלם.",
       "מתרגם נותן מילה מקבילה. הוא לא מסביר מה המילה אומרת במשפט הזה, ולא עוזר לזכור אותה בפעם הבאה.",
     ],
-    strong: "מה שחסר זה להבין את המילה.",
-    reframe: "Gadit מסביר כל מילה עד הסוף, לפי המשפט שבו היא הופיעה, ושומר אותה בשבילכם.",
+    reframe: "Gadit מסביר כל מילה עד הסוף, מוצא את המשמעות שמתאימה למשפט, ושומר אותה בשבילכם.",
   },
+  whoKicker: "בשביל מי",
+  whoTitle: "קוראים, לומדים או עובדים בשפה שעוד לא שולטים בה?",
+  who: [
+    { t: "עולים חדשים", b: "מכתבים מהבנק, טפסים ומיילים מהעבודה. כל מילה בעברית מוסברת בשפה שלכם." },
+    { t: "סטודנטים", b: "מאמרים באנגלית ומושגים מקצועיים, עם המשמעות המדויקת לפי המשפט." },
+    { t: "אנשי מקצוע", b: "חוזים, מסמכים ומיילים, בלי לנחש מה מילה אחת אומרת." },
+    { t: "לומדי שפות", b: "מילים, ניבים והגייה, ומחברת שמחזירה כל מילה עד שהיא נשארת." },
+  ],
   howKicker: "איך זה עובד",
   howTitle: "ארבעה צעדים, ואוצר המילים שלכם גדל",
   steps: [
     { t: "חפשו מילה, בכל שפה", b: "כל המשמעויות של המילה, דוגמאות לכל משמעות, תמונה ומקור המילה. ההסבר תמיד בשפה שלכם.", img: "word" },
     { t: "המשמעות הנכונה לפי המשפט", b: "כתבו את המשפט שבו המילה הופיעה, ו-Gadit יבחר את המשמעות שמתאימה בדיוק למשפט הזה.", img: "context" },
-    { t: "כל מילה נשמרת במחברת שלכם", b: "בלי ללחוץ על כלום. אוצר המילים שלכם נבנה במקום אחד, ואפשר לחזור לכל מילה.", img: "notebook" },
+    { t: "כל מילה נשמרת במחברת שלכם", b: "כל מילה שחיפשתם נשמרת מעצמה. אוצר המילים שלכם נבנה במקום אחד, ואפשר לחזור לכל מילה.", img: "notebook" },
     { t: "תרגלו עד שהמילה נשארת", b: "תרגול חכם מחזיר כל מילה בזמן הנכון: מילה ששכחתם חוזרת מהר, ומילה שידעתם חוזרת בעוד כמה ימים.", img: "practice" },
   ] as Step[],
-  tools: [
-    {
-      kicker: "כל מילה",
-      title: "צלמו דף, והבינו כל מילה בו",
-      body: "מאמר, חוזה, מכתב או פרק מספר. צלמו או הדביקו את הטקסט, ולחצו על כל מילה כדי לקבל את המשמעות שלה. אפשר גם להבין משפט שלם בלחיצה.",
-      points: ["צילום דף ישר מהמצלמה", "לחיצה על כל מילה", "המילים החשובות בקטע, לפני שמתחילים לקרוא"],
-      img: "read",
-      img2: "read-word",
-    },
-    {
-      kicker: "תגיד את זה",
-      title: "שמעו משפט, ואז אמרו אותו בעצמכם",
-      body: "כתבו משפט ובחרו את השפה שאתם לומדים. Gadit מראה איך אומרים אותו ומקריא אותו בקול. אחר כך אמרו אותו בעצמכם, וקבלו ציון על ההגייה.",
-      points: ["הקראה בקול", "תרגול הגייה עם ציון", "בכל שפה שאתם לומדים"],
-      img: "say",
-    },
-    {
-      kicker: "השוואת מילים",
-      title: "שתי מילים דומות, וההבדל ביניהן",
-      body: "affect או effect? אומנות או אמנות? כתבו שתי מילים, וקבלו את ההבדל ביניהן, דוגמאות וטעות נפוצה.",
-      points: ["ההבדל במשפט אחד", "דוגמאות לכל מילה", "הטעות שכולם עושים"],
-      img: "compare",
-    },
-    {
-      kicker: "משחקים וחידונים",
-      title: "תרגול קצר מהמילים שלכם",
-      body: "חידונים, משחק זיכרון, ערבול אותיות והשלמת משפט. הכול נבנה מהמילים שחיפשתם ונשמרו במחברת שלכם.",
-      points: ["כמה דקות ביום", "רק המילים שלכם", "בלי פרסומות ובלי הסחות"],
-      img: "play",
-    },
-  ] as Tool[],
-  whoKicker: "בשביל מי",
-  whoTitle: "לכל מי שקורא, לומד או עובד בשפה שעוד לומדים",
-  who: [
-    { t: "עולים חדשים", b: "מכתבים מהבנק, טפסים ומיילים מהעבודה. כל מילה בעברית מוסברת בשפה שלכם." },
-    { t: "סטודנטים ותלמידים", b: "מאמרים באנגלית ומושגים מקצועיים, עם המשמעות המדויקת לפי המשפט." },
-    { t: "אנשי מקצוע", b: "חוזים, מסמכים ומיילים, בלי לנחש מה מילה אחת אומרת." },
-    { t: "לומדי שפות", b: "מילים, ניבים והגייה, ומחברת שמחזירה כל מילה עד שהיא נשארת." },
-  ],
+  stepsCta: "התחילו 14 ימי ניסיון חינם",
+  photo: {
+    kicker: "צילום דף",
+    title: "צלמו דף, והבינו כל מילה בו",
+    body: "מאמר, חוזה, מכתב או פרק מספר. צלמו או הדביקו את הטקסט, ולחצו על כל מילה כדי לקבל את המשמעות שלה. אפשר גם להבין משפט שלם בלחיצה.",
+    points: ["צילום דף ישר מהמצלמה", "לחיצה על כל מילה", "המילים החשובות בקטע, לפני שמתחילים לקרוא"],
+    img: "read",
+    img2: "read-word",
+  } as Tool,
+  moreKicker: "עוד כלים",
+  moreTitle: "עוד כלים שעוזרים לזכור",
+  more: [
+    { kicker: "תגיד את זה", title: "שמעו משפט, ואמרו אותו בעצמכם", body: "Gadit מקריא את המשפט בקול, ואתם מקבלים ציון על ההגייה.", img: "say" },
+    { kicker: "השוואת מילים", title: "שתי מילים דומות, וההבדל ביניהן", body: "ההבדל בין affect ל-effect, או בין אומנות לאמנות, עם דוגמאות והטעות הנפוצה.", img: "compare" },
+    { kicker: "משחקים וחידונים", title: "תרגול קצר מהמילים שלכם", body: "חידונים ומשחקים שנבנים מהמילים שחיפשתם ושנשמרו במחברת שלכם.", img: "play" },
+  ] as MiniTool[],
   priceKicker: "מחיר",
   priceTitle: "Individual: כל הכלים, לאדם אחד",
   monthly: "לחודש",
-  yearlyOr: "או",
-  yearly: "לשנה",
+  yearlyLine: `או ${INDIVIDUAL_DISPLAY.ilsYearly} לשנה, חודשיים מתנה`,
+  bothTrial: "בשני המסלולים 14 ימי ניסיון חינם.",
   includes: [
-    "חיפושים ללא הגבלה",
-    "כל המשמעויות, דוגמאות, תמונה ומקור המילה",
-    "המשמעות הנכונה לפי המשפט",
-    "מחברת לכל המילים, ותרגול חכם",
-    "כל מילה: מצלמים דף ולוחצים על כל מילה",
+    "חיפושים ללא הגבלה, עם המשמעות לפי המשפט",
+    "מחברת לכל המילים ותרגול חכם",
+    "צילום דף ולחיצה על כל מילה",
     "תגיד את זה: תרגול הגייה עם ציון",
-    "חברו משפט וקבלו משוב",
     "משחקים, חידונים והשוואת מילים",
   ],
-  priceCta: "14 יום ניסיון חינם",
-  priceTerms: "14 יום ניסיון חינם, ואחריהם {price} לחודש.\nאפשר לבטל בכל רגע לפני תום הניסיון, בלחיצה אחת מעמוד החשבון, ולא יהיה שום חיוב.",
-  familyNote: "יש ילדים בבית?\nFamily עולה ₪19.90 לחודש, ומצרף עד 5 ילדים עם מצב ילדים ולוח הורה.",
+  priceCta: "התחילו 14 ימי ניסיון חינם",
+  priceTerms: "14 ימי ניסיון חינם, ואחריהם {price} לחודש.\nנדרש כרטיס אשראי, ויומיים לפני החיוב נשלח תזכורת במייל.\nמבטלים בכל רגע מעמוד החשבון, בלי לפנות לאף אחד.",
+  freeLink: "עדיין לא רוצים להזין כרטיס? התחילו בחשבון חינמי, 10 חיפושים ביום.",
+  familyNote: "יש ילדים בבית?\nFamily עולה ₪19.90 לחודש, ומצרף עד 5 ילדים וגם את ההורה השני, עם מצב ילדים ולוח הורה.",
   familyLink: "להכיר את Family",
   faqKicker: "שאלות נפוצות",
   faqTitle: "מה שואלים לפני שמתחילים",
   faq: [
-    { q: "זה מתרגם?", a: "לא.\nGadit מסביר מילים.\nלכל מילה הוא נותן את כל המשמעויות, דוגמאות, תמונה ומקור המילה, ובוחר את המשמעות שמתאימה למשפט.\nכשהמילה בשפה אחרת מופיעה גם מילה מקבילה, אבל העיקר הוא להבין אותה עד הסוף." },
-    { q: "באילו שפות זה עובד?", a: "אפשר לחפש מילה בכל שפה.\nההסבר נכתב בשפת הממשק שבחרתם, ו-Gadit עובד ב-33 שפות." },
+    { q: "מה ההבדל בין Gadit למתרגם?", a: "Gadit מסביר מילים.\nלכל מילה הוא נותן את כל המשמעויות, דוגמאות, תמונה ומקור המילה, ובוחר את המשמעות שמתאימה למשפט.\nכשהמילה בשפה אחרת מופיעה גם מילה מקבילה, אבל העיקר הוא להבין אותה עד הסוף." },
+    { q: "באילו שפות זה עובד?", a: "מחפשים מילה בכל שפה.\nההסבר נכתב באחת מ-33 שפות, ביניהן עברית, אנגלית, רוסית, ערבית, אמהרית, צרפתית וספרדית." },
+    { q: "על אילו מכשירים זה עובד?", a: "בכל דפדפן, בטלפון ובמחשב, בלי התקנה.\nבאנדרואיד יש גם אפליקציה ב-Google Play." },
+    { q: "מה קורה לדף שצילמתי?", a: "התמונה משמשת רק כדי לקרוא את הטקסט, ולא נשמרת אצלנו." },
     { q: "אפשר להשתמש בחינם?", a: "כן.\nבחשבון חינמי יש 10 חיפושים ביום, ומחברת עד 30 מילים.\nIndividual פותח חיפושים ללא הגבלה ואת כל הכלים." },
+    { q: "מה קורה למילים אם לא ממשיכים?", a: "כל המילים שכבר שמרתם נשארות במחברת.\nבחשבון החינמי אפשר להמשיך לחפש 10 מילים ביום." },
+    { q: "כמה זמן לוקחת ההרשמה?", a: "פחות מדקה, עם מייל או עם חשבון Google." },
     { q: "איך מבטלים?", a: "בעמוד החשבון, בלחיצה על \"ניהול חיוב\".\nאם מבטלים לפני תום 14 ימי הניסיון, לא יהיה שום חיוב.\nיומיים לפני סוף הניסיון יגיע אליכם מייל תזכורת עם התאריך והסכום." },
     { q: "מה ההבדל בין Individual ל-Family?", a: "Individual הוא לאדם אחד, עם כל הכלים.\nFamily מתאים כשיש ילדים בבית: עד 5 ילדים וגם ההורה השני, לכל ילד אזור משלו, מצב ילדים, לוח הורה ותרגול הכתבה." },
   ],
-  finalTitle: "המילה הבאה שתעצור אתכם כבר לא תעצור.",
-  finalBody: "14 יום ניסיון חינם.\nביטול בלחיצה אחת.",
-  finalCta: "התחילו עכשיו",
+  finalTitle: "המילה הבאה כבר לא תעצור אתכם.",
+  finalBody: "14 ימי ניסיון חינם.\nביטול בכל רגע, בלי טלפון.",
+  finalCta: "התחילו 14 ימי ניסיון חינם",
 };
 
 function Phone({ name, priority = false }: { name: string; priority?: boolean }) {
@@ -142,14 +135,21 @@ export function IndividualsRealLanding() {
   const href = useHref();
   const { promptLogin } = useAuth();
   const start = (where: string, yearly = false) => {
-    track("individual_trial_click", { where, page: "individuals-real" });
+    track("individual_trial_click", { where, page: "individuals-real", billing: yearly ? "yearly" : "monthly" });
     const priceId = yearly ? INDIVIDUAL_YEARLY : INDIVIDUAL_MONTHLY;
     const checkoutUrl = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
     promptLogin({ mode: "signup", resumeUrl: checkoutUrl, onSuccess: () => { window.location.href = checkoutUrl; } });
   };
+  // The free account, offered only next to the price (council 2026-10-08).
+  const startFree = () => {
+    track("individual_free_click", { page: "individuals-real" });
+    const home = href("/");
+    promptLogin({ mode: "signup", resumeUrl: home, onSuccess: () => { window.location.href = home; } });
+  };
+  const t = C.photo;
   return (
     <div className="ind" dir="rtl" lang="he">
-      <style>{CSS}</style>
+      <style>{CSS + CSS2}</style>
       <header className="ind-top">
         <Link href={href("/")} className="ind-logo" aria-label="Gadit" dir="ltr" translate="no">Gad<span>it</span></Link>
         <div className="ind-top-end">
@@ -172,6 +172,7 @@ export function IndividualsRealLanding() {
                 <button type="button" className="ind-cta" onClick={() => start("hero")}>{C.heroCta}</button>
                 <a href="#how" className="ind-ghost">{C.howCta}</a>
               </div>
+              <p className="ind-cta-note"><Lines text={C.ctaNote} /></p>
               <ul className="ind-points">{C.heroPoints.map((p) => <li key={p}><Check />{p}</li>)}</ul>
             </div>
             <div className="ind-hero-visual">
@@ -186,12 +187,24 @@ export function IndividualsRealLanding() {
             <h2 className="ind-h2 ind-center">{C.pain.title}</h2>
             <p className="ind-lead ind-center">{C.pain.lead}</p>
             {C.pain.paras.map((p, i) => <p key={i} className="ind-body ind-center"><Lines text={p} /></p>)}
-            <p className="ind-strong"><Lines text={C.pain.strong} /></p>
             <p className="ind-reframe"><Lines text={C.pain.reframe} /></p>
           </div>
         </section>
 
-        <section className="ind-band ind-tint" id="how">
+        <section className="ind-band ind-tint">
+          <div className="ind-kicker">{C.whoKicker}</div>
+          <h2 className="ind-h2 ind-center">{C.whoTitle}</h2>
+          <div className="ind-who">
+            {C.who.map((w) => (
+              <div key={w.t} className="ind-who-card">
+                <h3 className="ind-who-t">{w.t}</h3>
+                <p className="ind-who-b"><Lines text={w.b} /></p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="ind-band ind-white" id="how">
           <div className="ind-kicker">{C.howKicker}</div>
           <h2 className="ind-h2 ind-center">{C.howTitle}</h2>
           <div className="ind-steps">
@@ -206,33 +219,36 @@ export function IndividualsRealLanding() {
               </div>
             ))}
           </div>
+          <div className="ind-steps-cta">
+            <button type="button" className="ind-cta" onClick={() => start("steps")}>{C.stepsCta}</button>
+          </div>
         </section>
 
-        {C.tools.map((t, i) => (
-          <section key={t.img} className={`ind-band ${i % 2 ? "ind-tint" : "ind-white"}`}>
-            <div className={`ind-feature${i % 2 ? " is-flipped" : ""}`}>
-              <div className="ind-feature-text">
-                <div className="ind-kicker ind-start">{t.kicker}</div>
-                <h2 className="ind-h2">{t.title}</h2>
-                <p className="ind-body"><Lines text={t.body} /></p>
-                <ul className="ind-list">{t.points.map((p) => <li key={p}>{p}</li>)}</ul>
-              </div>
-              <div className={`ind-feature-visual${t.img2 ? " is-pair" : ""}`}>
-                <Phone name={t.img} />
-                {t.img2 && <Phone name={t.img2} />}
-              </div>
+        <section className="ind-band ind-tint">
+          <div className="ind-feature">
+            <div className="ind-feature-text">
+              <div className="ind-kicker ind-start">{t.kicker}</div>
+              <h2 className="ind-h2">{t.title}</h2>
+              <p className="ind-body"><Lines text={t.body} /></p>
+              <ul className="ind-list">{t.points.map((p) => <li key={p}>{p}</li>)}</ul>
             </div>
-          </section>
-        ))}
+            <div className="ind-feature-visual is-pair">
+              <Phone name={t.img} />
+              {t.img2 && <Phone name={t.img2} />}
+            </div>
+          </div>
+        </section>
 
         <section className="ind-band ind-white">
-          <div className="ind-kicker">{C.whoKicker}</div>
-          <h2 className="ind-h2 ind-center">{C.whoTitle}</h2>
-          <div className="ind-who">
-            {C.who.map((w) => (
-              <div key={w.t} className="ind-who-card">
-                <h3 className="ind-who-t">{w.t}</h3>
-                <p className="ind-who-b"><Lines text={w.b} /></p>
+          <div className="ind-kicker">{C.moreKicker}</div>
+          <h2 className="ind-h2 ind-center">{C.moreTitle}</h2>
+          <div className="ind-more">
+            {C.more.map((m) => (
+              <div key={m.img} className="ind-more-card">
+                <div className="ind-kicker ind-start">{m.kicker}</div>
+                <h3 className="ind-h3">{m.title}</h3>
+                <p className="ind-body"><Lines text={m.body} /></p>
+                <Phone name={m.img} />
               </div>
             ))}
           </div>
@@ -246,11 +262,13 @@ export function IndividualsRealLanding() {
               <span className="ind-price" dir="ltr">{INDIVIDUAL_DISPLAY.ilsMonthly}</span>
               <span className="ind-price-per">{C.monthly}</span>
             </div>
-            <div className="ind-price-year">{C.yearlyOr} <span dir="ltr">{INDIVIDUAL_DISPLAY.ilsYearly}</span> {C.yearly}</div>
+            <button type="button" className="ind-price-year ind-yearly-btn" onClick={() => start("price-yearly", true)}>{C.yearlyLine}</button>
+            <div className="ind-both-trial">{C.bothTrial}</div>
             <ul className="ind-includes">{C.includes.map((p) => <li key={p}><Check />{p}</li>)}</ul>
             <button type="button" className="ind-cta ind-cta-wide" onClick={() => start("price")}>{C.priceCta}</button>
             <p className="ind-terms"><Lines text={C.priceTerms.replace("{price}", INDIVIDUAL_DISPLAY.ilsMonthly)} /></p>
           </div>
+          <button type="button" className="ind-free-link" onClick={startFree}>{C.freeLink}</button>
           <p className="ind-family-note">
             <Lines text={C.familyNote} /><br /><Link href={href("/families")}>{C.familyLink}</Link>
           </p>
@@ -288,6 +306,21 @@ export function IndividualsRealLanding() {
     </div>
   );
 }
+
+const CSS2 = `
+.ind-cta-note { margin: 12px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--body); max-width: 460px; }
+.ind-steps-cta { text-align: center; margin-top: 40px; }
+.ind-more { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1060px; margin: 34px auto 0; }
+.ind-more-card { background: #fff; border-radius: 28px; padding: 26px 22px 30px; box-shadow: var(--card), 0 0 0 1px rgba(15,72,68,0.05); display: grid; gap: 6px; align-content: start; }
+.ind-more-card .ind-phone { max-width: 210px; margin-top: 14px; }
+.ind-yearly-btn { display: block; margin: 6px auto 0; background: none; border: 0; padding: 0; font: inherit; font-size: 15px; color: var(--teal-d); font-weight: 700; text-decoration: underline; cursor: pointer; }
+.ind-both-trial { margin-top: 4px; font-size: 13.5px; color: var(--body); }
+.ind-free-link { display: block; margin: 18px auto 0; background: none; border: 0; font: inherit; font-size: 14px; color: var(--body); text-decoration: underline; cursor: pointer; text-align: center; max-width: 520px; }
+@media (max-width: 860px) {
+  .ind-cta-note { margin-inline: auto; text-align: center; }
+  .ind-more { grid-template-columns: 1fr; padding-inline: 16px; }
+}
+`;
 
 const CSS = `
 .ind { --ink: #1E293B; --body: #475569; --teal: #0EA5A5; --teal-d: #0b7d7d; --tint: #F0F8F8;
