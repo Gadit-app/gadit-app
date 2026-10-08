@@ -3610,11 +3610,11 @@ export function PricingPageRoute() {
   }
   function clickIndividual() {
     const priceId = billing === "yearly" ? INDIVIDUAL_YEARLY : INDIVIDUAL_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
+    promptLogin({ mode: "signup", resumeUrl: `${href("/checkout")}?price=${encodeURIComponent(priceId)}`, onSuccess: () => startCheckout(priceId) });
   }
   function clickFamily() {
     const priceId = billing === "yearly" ? PRICE_FAMILY_YEARLY : PRICE_FAMILY_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
+    promptLogin({ mode: "signup", resumeUrl: `${href("/checkout")}?price=${encodeURIComponent(priceId)}`, onSuccess: () => startCheckout(priceId) });
   }
   function clickSchoolsTier(tier: SchoolsTierKey) {
     // Hebrew schools go through the ₪ order form on /schools (Invoice4U
@@ -3626,7 +3626,7 @@ export function PricingPageRoute() {
     }
     const t = SCHOOLS_TIERS[tier];
     const priceId = billing === "yearly" ? t.yearly : t.monthly;
-    promptLogin({ mode: "signup", onSuccess: () => startCheckout(priceId) });
+    promptLogin({ mode: "signup", resumeUrl: `${href("/checkout")}?price=${encodeURIComponent(priceId)}`, onSuccess: () => startCheckout(priceId) });
   }
 
   // Prices come from the country currency engine (lib/pricing-currency.ts),

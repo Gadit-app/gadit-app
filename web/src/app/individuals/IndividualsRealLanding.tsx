@@ -144,7 +144,8 @@ export function IndividualsRealLanding() {
   const start = (where: string, yearly = false) => {
     track("individual_trial_click", { where, page: "individuals-real" });
     const priceId = yearly ? INDIVIDUAL_YEARLY : INDIVIDUAL_MONTHLY;
-    promptLogin({ mode: "signup", onSuccess: () => { window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`; } });
+    const checkoutUrl = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
+    promptLogin({ mode: "signup", resumeUrl: checkoutUrl, onSuccess: () => { window.location.href = checkoutUrl; } });
   };
   return (
     <div className="ind" dir="rtl" lang="he">

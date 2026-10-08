@@ -74,6 +74,12 @@ interface PromptLoginOpts {
    *  runs immediately — which is exactly what we want for "Subscribe"
    *  buttons clicked by an already-signed-in visitor. */
   onSuccess?: AuthAction;
+  /** Where onSuccess leads (e.g. the checkout URL). A Google sign-in that
+   *  falls back to the full-page redirect reloads the page and loses
+   *  onSuccess; this URL is kept in sessionStorage across the redirect and
+   *  opened on return, so a signup never strands short of checkout
+   *  (Gadi 2026-10-08). */
+  resumeUrl?: string;
 }
 
 interface AuthContextType {
@@ -209,6 +215,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Stored in a ref so React state churn during the auth flow doesn't
   // race the firing condition.
   const pendingActionRef = useRef<AuthAction | null>(null);
+  const pendingResumeRef = useRef<string | null>(null);
 
   // Capture UTM params on first page load — feeds /admin/campaigns
   // attribution. First-touch attribution policy lives inside captureUtm:
@@ -256,6 +263,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         Promise.resolve(action(u)).catch((err) => {
           console.error("Pending auth action failed:", err);
         });
+      } else if (u) {
+        try {
+          const saved = sessionStorage.getItem("gadit_resume");
+          if (saved) {
+            sessionStorage.removeItem("gadit_resume");
+            const { url, at } = JSON.parse(saved) as { url?: string; at?: number };
+            if (url && url.startsWith("/") && at && Date.now() - at < 15 * 60 * 1000) window.location.href = url;
+          }
+        } catch { /* storage blocked */ }
       }
     });
     return unsub;
@@ -462,6 +478,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setShowLoginModal(false);
   }
 
+  function saveResume() {
+    if (!pendingResumeRef.current) return;
+    try {
+      sessionStorage.setItem("gadit_resume", JSON.stringify({ url: pendingResumeRef.current, at: Date.now() }));
+    } catch { /* storage blocked */ }
+  }
+
   async function signInWithGoogle() {
     const auth = getFirebaseAuth();
     const provider = new GoogleAuthProvider();
@@ -475,6 +498,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ((window.matchMedia?.("(display-mode: standalone)")?.matches ?? false) ||
         (window.navigator as unknown as { standalone?: boolean }).standalone === true);
     if (standalone) {
+      saveResume();
       await signInWithRedirect(auth, provider);
       return;
     }
@@ -492,6 +516,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         code === "auth/operation-not-supported-in-this-environment" ||
         code === "auth/internal-error"
       ) {
+        saveResume();
         await signInWithRedirect(auth, provider);
         return;
       }
@@ -546,7 +571,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function promptLogin(opts?: PromptLoginOpts | string) {
     const normalized: PromptLoginOpts =
       typeof opts === "string" ? { reason: opts } : opts ?? {};
-    const { reason = "", mode = "signin", onSuccess } = normalized;
+    const { reason = "", mode = "signin", onSuccess, resumeUrl } = normalized;
 
     // If the user is already signed in, skip the modal and run the
     // action immediately — opening a login wall to a signed-in user
@@ -559,6 +584,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     pendingActionRef.current = onSuccess ?? null;
+    pendingResumeRef.current = resumeUrl ?? null;
     setLoginReason(reason);
     setLoginMode(mode);
     setShowLoginModal(true);

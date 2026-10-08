@@ -546,6 +546,7 @@ export function PricingTiers({ billing }: { billing: Billing }) {
     promptLogin({
       reason: v2(lang, "tierClearCta"),
       mode: "signup",
+      resumeUrl: `${buildHref(lang, "/checkout")}?price=${encodeURIComponent(priceId)}`,
       onSuccess: () => startCheckout(priceId),
     });
   }
@@ -556,6 +557,7 @@ export function PricingTiers({ billing }: { billing: Billing }) {
     promptLogin({
       reason: v2(lang, "tierDeepCta"),
       mode: "signup",
+      resumeUrl: `${buildHref(lang, "/checkout")}?price=${encodeURIComponent(priceId)}`,
       onSuccess: () => startCheckout(priceId),
     });
   }

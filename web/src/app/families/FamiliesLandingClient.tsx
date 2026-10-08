@@ -6501,10 +6501,12 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
       window.alert("Pricing is misconfigured. Please contact support.");
       return;
     }
+    const checkoutUrl = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
     promptLogin({
       mode: "signup",
+      resumeUrl: checkoutUrl,
       onSuccess: () => {
-        window.location.href = `${href("/checkout")}?price=${encodeURIComponent(priceId)}`;
+        window.location.href = checkoutUrl;
       },
     });
   }
@@ -6513,10 +6515,12 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   // retired Deep price; found in QA 2026-10-07).
   function startDeep() {
     track("families_lp_cta", { angle, billing: "individual_monthly", source: "single_child" });
+    const checkoutUrl = `${href("/checkout")}?price=${encodeURIComponent(INDIVIDUAL_MONTHLY)}`;
     promptLogin({
       mode: "signup",
+      resumeUrl: checkoutUrl,
       onSuccess: () => {
-        window.location.href = `${href("/checkout")}?price=${encodeURIComponent(INDIVIDUAL_MONTHLY)}`;
+        window.location.href = checkoutUrl;
       },
     });
   }

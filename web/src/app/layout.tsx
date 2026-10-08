@@ -24,7 +24,6 @@ import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
 import { Analytics } from "@vercel/analytics/next";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
 
@@ -453,10 +452,6 @@ export default async function RootLayout({
           <AutoUpdater />
           <RefCapture />
           <Analytics />
-          {/* Full 100% collection: Gadi upgraded to Speed Insights Plus
-              (2026-08-25), so no need to sample. Plus keeps collecting past
-              the free 10k/30-day cap ($0.65/10k over the 10k included). */}
-          <SpeedInsights />
           {/* Meta Pixel — base code + funnel standard events (see
               components/MetaPixel.tsx). Never loads on /c/ classroom
               routes: kids on school devices are not ad-tracking
