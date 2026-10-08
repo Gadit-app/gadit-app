@@ -45,7 +45,7 @@ function idiomsForWord(word: string, idioms: Idiom[]): Idiom[] {
   const w = fold(word.trim());
   const ALPHA = /^[\p{Script=Latin}\p{Script=Cyrillic}\p{Script=Greek}' -]+$/u;
   // A single word only: a phrase typed as the search keeps its own list.
-  if (w.length < 3 || /s/.test(w) || !ALPHA.test(w)) return idioms;
+  if (w.length < 3 || w.includes(" ") || !ALPHA.test(w)) return idioms;
   const head = w.slice(0, 3);
   return idioms.filter((i) => {
     const ph = fold(i.phrase);
