@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
-import { logAiUsage } from "@/lib/ai-cost";
+import { logAiUsage, IMAGE_MODEL } from "@/lib/ai-cost";
 import { curatedImageHint, type WordSet } from "@/lib/word-sets";
 import { topicLevel } from "@/lib/curriculum-catalog";
 
@@ -110,26 +110,25 @@ async function refBlob(name: string): Promise<Blob> {
 }
 
 type Usage = { input_tokens_details?: { image_tokens?: number; text_tokens?: number }; output_tokens?: number };
-/** gpt-image-1 token pricing: text in $5/M, image in $10/M, image out $40/M. */
+/** IMAGE_MODEL token pricing: text in $5/M, image in $8/M, image out $30/M. */
 const usageCost = (u?: Usage) =>
-  u ? ((u.input_tokens_details?.text_tokens ?? 0) * 5 + (u.input_tokens_details?.image_tokens ?? 0) * 10 + (u.output_tokens ?? 0) * 40) / 1e6 : undefined;
+  u ? ((u.input_tokens_details?.text_tokens ?? 0) * 5 + (u.input_tokens_details?.image_tokens ?? 0) * 8 + (u.output_tokens ?? 0) * 30) / 1e6 : undefined;
 
 async function render(prompt: string, refs: string[], quality: "low" | "medium" | "high"): Promise<{ b64: string; cost?: number }> {
   let res: Response;
   if (refs.length) {
     const fd = new FormData();
-    fd.append("model", "gpt-image-1");
+    fd.append("model", IMAGE_MODEL);
     for (const r of refs) fd.append("image[]", await refBlob(r), r);
     fd.append("prompt", prompt);
     fd.append("size", "1024x1024");
     fd.append("quality", quality);
-    fd.append("input_fidelity", "high");
     res = await fetch("https://api.openai.com/v1/images/edits", { method: "POST", headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }, body: fd });
   } else {
     res = await fetch("https://api.openai.com/v1/images/generations", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-      body: JSON.stringify({ model: "gpt-image-1", prompt, n: 1, size: "1024x1024", quality }),
+      body: JSON.stringify({ model: IMAGE_MODEL, prompt, n: 1, size: "1024x1024", quality }),
     });
   }
   const j = await res.json();
@@ -182,7 +181,7 @@ export async function generateClassroomImage(opts: {
       prompt = `${base} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
     }
     const out = await render(prompt.replace(/\s+/g, " "), refs, quality);
-    void logAiUsage({ feature: "image_classroom", model: "gpt-image-1", images: 1, imageQuality: quality, costUsd: out.cost });
+    void logAiUsage({ feature: "image_classroom", model: IMAGE_MODEL, images: 1, imageQuality: quality, costUsd: out.cost });
 
     const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
     const bucket = getDefaultBucket();

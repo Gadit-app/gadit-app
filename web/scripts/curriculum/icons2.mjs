@@ -31,7 +31,7 @@ await Promise.all(Array.from({ length: 5 }, async () => {
   while (i < jobs.length) {
     const [k, c] = jobs[i++];
     const r = await fetch("https://api.openai.com/v1/images/generations", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
-      body: JSON.stringify({ model: "gpt-image-1", prompt: `${STYLE} The object: ${c}. Absolutely no letters, numbers, words or writing anywhere.`, size: "1024x1024", quality: "low", n: 1 }) });
+      body: JSON.stringify({ model: "gpt-image-2.5-flare", prompt: `${STYLE} The object: ${c}. Absolutely no letters, numbers, words or writing anywhere.`, size: "1024x1024", quality: "low", n: 1 }) });
     const j = await r.json();
     if (!r.ok) { console.log("FAIL", k, JSON.stringify(j).slice(0, 120)); continue; }
     const png = PUB + k + ".png";

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, IMAGE_MODEL } from "@/lib/ai-cost";
 import { recordActivity } from "@/lib/activity-log";
 import { curatedImageHint, classroomDef } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
@@ -235,7 +235,7 @@ export async function POST(req: NextRequest) {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gpt-image-1",
+          model: IMAGE_MODEL,
           prompt,
           n: 1,
           size: "1024x1024",
@@ -314,12 +314,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "no_image_returned" }, { status: 502 });
     }
 
-    // Telemetry: one fresh gpt-image-1 generation. Kids-mode images use a
+    // Telemetry: one fresh image generation. Kids-mode images use a
     // SEPARATE cache namespace, so the same word viewed in both modes bills
     // twice — the "image_kids" split lets /admin/ai-costs expose that.
     void logAiUsage({
       feature: isKidsMode ? "image_kids" : "image",
-      model: "gpt-image-1",
+      model: IMAGE_MODEL,
       images: 1,
       imageQuality: "low",
       plan: userInfo.plan,

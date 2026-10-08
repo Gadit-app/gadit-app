@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
-import { logAiUsage } from "@/lib/ai-cost";
+import { logAiUsage, IMAGE_MODEL } from "@/lib/ai-cost";
 import { cacheKey, buildKidsPrompt, englishBrief } from "@/app/api/generate-image/route";
 
 /**
@@ -38,7 +38,7 @@ async function renderKidsImage(word: string, meaning: string, lang: string): Pro
   const res = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-    body: JSON.stringify({ model: "gpt-image-1", prompt, n: 1, size: "1024x1024", quality: "low" }),
+    body: JSON.stringify({ model: IMAGE_MODEL, prompt, n: 1, size: "1024x1024", quality: "low" }),
   });
   if (!res.ok) return null;
   const data = await res.json();
@@ -51,7 +51,7 @@ async function renderKidsImage(word: string, meaning: string, lang: string): Pro
     buffer = Buffer.from(await imgRes.arrayBuffer());
   } else return null;
 
-  void logAiUsage({ feature: "image_kids", model: "gpt-image-1", images: 1, imageQuality: "low", plan: "deep" });
+  void logAiUsage({ feature: "image_kids", model: IMAGE_MODEL, images: 1, imageQuality: "low", plan: "deep" });
 
   const cKey = cacheKey(word, meaning, lang, true);
   const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;

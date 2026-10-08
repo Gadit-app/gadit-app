@@ -1,12 +1,13 @@
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { curatedImageHint } from "@/lib/word-sets";
+import { IMAGE_MODEL } from "@/lib/ai-cost";
 
 /**
  * Admin-side image generation for classroom word sets.
  *
  * This is a DELIBERATE, minimal REPLICATION of the core of
- * /api/generate-image (englishBrief -> gpt-image-1 -> Firebase Storage
+ * /api/generate-image (englishBrief -> IMAGE_MODEL -> Firebase Storage
  * -> imageCache doc). The live user route is left completely untouched
  * (its auth + monthly rate-limit + response shape must not change), but
  * this helper writes the SAME imageCache/<cacheKey> docs with the SAME
@@ -59,7 +60,7 @@ function buildDallePrompt(word: string, meaning: string, example?: string): stri
   return `A clean, realistic photograph of ${cleanWord}. Context: ${cleanMeaning}. Show the actual everyday object or scene, well-lit, with a plain neutral background. The subject fills the frame and is instantly recognizable. The image contains no text, no letters, no numbers, and no written characters.`;
 }
 
-/** English visual brief so gpt-image-1 understands non-English terms. */
+/** English visual brief so the image model understands non-English terms. */
 async function englishBrief(word: string, meaning: string, example: string, uiLang: string): Promise<string> {
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -91,7 +92,7 @@ async function callGptImage(prompt: string) {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "gpt-image-1",
+      model: IMAGE_MODEL,
       prompt,
       n: 1,
       size: "1024x1024",
@@ -138,7 +139,7 @@ export async function generateWordImage(opts: {
   // A curated per-word hint (word-sets.ts) OVERRIDES the AI-guessed brief:
   // it pins the exact, pedagogically-correct picture (Hebrew letters, the
   // right open/closed mouth for vowel/consonant, etc.). Everything else
-  // below — the kids/adult wrapper, gpt-image-1 call, versioned storage
+  // below — the kids/adult wrapper, image model call, versioned storage
   // path, cacheKey and imageCache write — stays identical, so a warmed
   // image is still found by the classroom on a cache hit.
   const hint = curatedImageHint(word);

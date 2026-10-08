@@ -41,7 +41,7 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
   quick_define: { he: "תצוגה מקדימה", en: "Quick preview" },
   quick_define_miss: { he: "תצוגה מקדימה (לא במטמון)", en: "Quick preview (miss)" },
   reader_sentence: { he: "הבנת משפט (קורא)", en: "Sentence (Reader)" },
-  image: { he: "תמונה", en: "Image", note: { he: "gpt-image-1", en: "gpt-image-1" } },
+  image: { he: "תמונה", en: "Image", note: { he: "gpt-image-2.5-flare", en: "gpt-image-2.5-flare" } },
   image_kids: { he: "תמונה (מצב ילדים)", en: "Image (Kids Mode)", note: { he: "מטמון נפרד = חיוב כפול לאותה מילה", en: "separate cache = double bill per word" } },
   image_brief: { he: "תיאור לתמונה", en: "Image brief" },
   tashkeel_arabic: { he: "ניקוד ערבי", en: "Arabic tashkeel", note: { he: "gpt-4o", en: "gpt-4o" } },
@@ -180,8 +180,8 @@ export default function AdminAiCostsClient() {
 
           <p style={{ fontSize: 12, color: MUTED, marginTop: 18, lineHeight: 1.7 }}>
             {he
-              ? "מחירון מוערך: gpt-4o $2.50/$10 לכל מיליון טוקן (קלט/פלט), gpt-4o-mini $0.15/$0.60, gpt-image-1 (low) ~$0.011 לתמונה. עלויות נרשמות רק על קריאה אמיתית ל-OpenAI, לא על תוצאה מהמטמון. עדכן את המחירון ב-lib/ai-cost.ts אם OpenAI משנה מחירים."
-              : "Estimated prices: gpt-4o $2.50/$10 per 1M tokens (in/out), gpt-4o-mini $0.15/$0.60, gpt-image-1 (low) ~$0.011/image. Only real OpenAI calls are logged, never cache hits. Update the table in lib/ai-cost.ts when OpenAI changes prices."}
+              ? "מחירון מוערך: gpt-4o $2.50/$10 לכל מיליון טוקן (קלט/פלט), gpt-4o-mini $0.15/$0.60, gpt-image-2.5-flare (low) ~$0.0065 לתמונה. עלויות נרשמות רק על קריאה אמיתית ל-OpenAI, לא על תוצאה מהמטמון. עדכן את המחירון ב-lib/ai-cost.ts אם OpenAI משנה מחירים."
+              : "Estimated prices: gpt-4o $2.50/$10 per 1M tokens (in/out), gpt-4o-mini $0.15/$0.60, gpt-image-2.5-flare (low) ~$0.0065/image. Only real OpenAI calls are logged, never cache hits. Update the table in lib/ai-cost.ts when OpenAI changes prices."}
           </p>
         </>
       )}

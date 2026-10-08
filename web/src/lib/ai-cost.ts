@@ -40,11 +40,19 @@ export const PRICING: Record<string, { in: number; out: number }> = {
   "gpt-5.4": { in: 2.5, out: 15 },
 };
 
-/** Flat USD per generated image (gpt-image-1, 1024x1024), keyed by quality. */
+/** The image model every surface draws with. gpt-image-1 is shut down on
+ *  2026-10-23; gpt-image-2.5-flare was picked on 2026-10-08 (same speed,
+ *  about half the price, cleaner pictures). It does NOT accept
+ *  input_fidelity on /images/edits. */
+export const IMAGE_MODEL = "gpt-image-2.5-flare";
+
+/** Flat USD per generated image (IMAGE_MODEL, 1024x1024), keyed by quality.
+ *  low is measured (196 output tokens at $30/M plus the prompt); medium and
+ *  high are estimates scaled from gpt-image-1's token counts. */
 export const IMAGE_COST: Record<string, number> = {
-  low: 0.011,
-  medium: 0.042,
-  high: 0.167,
+  low: 0.0065,
+  medium: 0.024,
+  high: 0.095,
 };
 
 export function chatCostUsd(model: string, tokensIn: number, tokensOut: number): number {
@@ -71,11 +79,11 @@ function safeKey(s: string): string {
 type LogArgs = {
   /** Product-feature label, e.g. "define", "reader_word_tap", "image". */
   feature: string;
-  /** OpenAI model id, e.g. "gpt-4o", "gpt-image-1". */
+  /** OpenAI model id, e.g. "gpt-4o", IMAGE_MODEL. */
   model: string;
   tokensIn?: number;
   tokensOut?: number;
-  /** Number of images generated (for gpt-image-1). */
+  /** Number of images generated (for IMAGE_MODEL). */
   images?: number;
   /** Image quality, drives per-image price. Defaults to "low". */
   imageQuality?: string;
