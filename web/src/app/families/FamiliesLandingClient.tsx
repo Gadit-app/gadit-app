@@ -1137,13 +1137,13 @@ const COPY: Record<string, Copy> = {
   },
   he: {
     heroBadge: "מילון חכם שבונה את אוצר המילים של המשפחה",
-    whatIs: "Gadit בונה את אוצר המילים של המשפחה, מילה אחרי מילה, עם מילון חכם וחזותי ותרגולים ייחודיים לילדים. כל מילה מקבלת הסבר בגובה העיניים של הילד, תמונה, דוגמאות, ומשחקים וחידונים שהופכים לימוד מילים לכיף. אוצר המילים גדל, הילד מבין את הנקרא ומצליח יותר בלימודים.",
+    whatIs: "Gadit בונה את אוצר המילים של המשפחה, מילה אחרי מילה, עם מילון חכם וחזותי ותרגולים ייחודיים לילדים. כל מילה מקבלת הסבר בגובה העיניים של הילד, תמונה, דוגמאות, ומשחקים וחידונים שהופכים לימוד מילים לכיף. ובלוח ההורה אתם רואים כל מילה חדשה שנוספה.",
     ctaMicro: "",
     trustLine: "עד 5 ילדים במשפחה, כל אחד ברמה שלו",
     credLine: "מבוסס על 15 שנות ניסיון עם למעלה מ-15,000 הורים, תלמידים ואנשי חינוך",
     credKicker: "מי אנחנו",
-    credTitle: "15 שנה בחינוך, בכלי אחד לילד.",
-    credBody: "Gadit נבנה על ידי צוות עם 15 שנות ניסיון בחינוך, שליווה למעלה מ-15,000 הורים, תלמידים ואנשי חינוך. את מה שראינו עובד שוב ושוב, בכיתה ובבית, הכנסנו לתוך כלי אחד פשוט שהילד יכול להשתמש בו לבד.",
+    credTitle: "15 שנה בחינוך, בכלי אחד לילד",
+    credBody: "Gadit נבנה על ידי צוות עם 15 שנות ניסיון בחינוך, שלימד יותר מ-15,000 לומדים. את מה שראינו עובד שוב ושוב, בכיתה ובבית, הכנסנו לתוך כלי אחד פשוט שהילד יכול להשתמש בו לבד.",
     proofTitle: "מחברת מילים · דוגמה",
     proofBig: "12 מילים חדשות השבוע",
     proofWords: ["חלום", "מרהיב", "נחוש"],
@@ -1171,14 +1171,14 @@ const COPY: Record<string, Copy> = {
     stats: ["33 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
     demoKicker: "התוצאה",
     demoTitle: "הילד מבין כל מילה, ואוצר המילים שלו גדל כל יום",
-    painKicker: "נקודת הכאב האמיתית",
+    painKicker: "שיעורי הבית",
     painTitle: "הילד קורא, אבל לא תמיד באמת מבין",
     painBody1: "אתם דווקא שמחים כשהילד עוצר ושואל מה זה מילה. הבעיה היא כל המילים שהוא לא עוצר לשאול עליהן. הוא מדלג עליהן, ממשיך לקרוא, והחומר לא נכנס. אוצר המילים נשאר דל, וההבנה נשברת מילה אחרי מילה.",
     painBody2: "וזה נוגע בהרבה יותר מציון. ילד שלא מבין מרגיש שהוא לא מספיק טוב, מתוסכל מהלימודים, ומאבד ביטחון. וזה קורה בשקט, בלי שאף אחד יודע להצביע איפה בדיוק נשבר החוט.",
     reframe: "וזה בדיוק המקום שבו Gadit נכנס.",
     puzzleKicker: "מה קורה בראש של הילד",
     puzzleTitle: "טקסט הוא פאזל, וכל מילה היא חתיכה.",
-    puzzleBody: "כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. כל מילה שהוא מבין היא חתיכה שנכנסת למקום. כל מילה שחסרה היא חור בתמונה. מספיק שלושה-ארבעה חורים, והילד כבר לא רואה את התמונה, גם אם הגה כל אות נכון.",
+    puzzleBody: "כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. מספיק שלושה או ארבעה חורים, והילד כבר לא רואה את התמונה.",
     puzzleBefore: "פסקה עם מילים חסרות",
     puzzleAfter: "עם Gadit, כל חתיכה במקום",
     puzzleLine: "כשכל המילים ברורות, הילד רואה את התמונה השלמה.",
@@ -1194,16 +1194,16 @@ const COPY: Record<string, Copy> = {
       { t: "הקלדת המילה", b: "הילד מקליד כל מילה שהוא לא מבין, במצב ילדים, במקום נקי ובטוח." },
       { t: "הגדרה ברורה", b: "הסבר בגובה העיניים של הילד, בלי מילים קשות שמסבירות מילים קשות." },
       { t: "שלוש דוגמאות", b: "משפטים אמיתיים שמראים איך המילה חיה בתוך טקסט, לצד תמונה שממחישה אותה." },
-      { t: "תמונה לכל משמעות", b: "כי ילדים זוכרים מה שהם רואים, הרבה יותר טוב ממה שכתוב להם." },
+      { t: "תמונה לכל משמעות", b: "תמונה עוזרת לילד לחבר בין המילה למשמעות שלה." },
       { t: "הבנת הקשר", b: "מדביקים משפט מהספר, ו-Gadit מסמן בדיוק את המשמעות שמתאימה לו." },
-      { t: "מחברת אישית", b: "כל מילה שהילד חיפש נשמרת במחברת שלו, ולא בורחת." },
+      { t: "מחברת אישית", b: "כל מילה שהילד חיפש נשמרת במחברת האישית שלו." },
       { t: "חידון קצר", b: "שאלה קצרה שמחזירה את המילה בדיוק כשהיא עומדת להישכח." },
       { t: "משחק", b: "לומדים תוך כדי משחק, על המילים שהילד עצמו חיפש." },
       { t: "לשמוע, וגם להגיד", b: "הילד שומע כל מילה ומתאמן להגיד אותה בקול, כך שנוח לו לדבר ולא רק לקרוא." },
     ],
     chainCost: "",
     chainTurnTitle: "וזה מה שאתם מקבלים",
-    chainTurnBody: "כל מילה שהילד נתקע בה הופכת למילה שהוא יודע, ואתם רואים את זה שחור על גבי לבן: כמה מילים הוא סגר, שבוע אחרי שבוע. במקום לקוות שמשהו משתפר, אתם פשוט רואים את זה קורה.",
+    chainTurnBody: "כל מילה שהילד נתקע בה נכנסת למחברת, וחוזרת בתרגול עד שהוא מבין אותה. ואתם רואים את זה שחור על גבי לבן: כמה מילים חדשות נכנסו למחברת שלו, שבוע אחרי שבוע.",
     dashKicker: "לוח הבקרה להורה",
     dashTitle: "אתם רואים בדיוק כמה כל ילד למד",
     dashBody: "לכל ילד במשפחה יש מחברת מילים אישית שגדלה. בלוח הבקרה שלכם אתם רואים במבט אחד כמה מילים כל ילד למד, כמה נוספו השבוע, ואילו מילים אחרונות. כל כלי אחר עונה לילד ושוכח. Gadit שומר, ואתם רואים את ההתקדמות שבוע אחרי שבוע.",
@@ -1267,18 +1267,20 @@ const COPY: Record<string, Copy> = {
       { label: "צ'אט פתוח בלי גבולות", gadit: false, other: true },
     ],
     safeTitle: "אזור נפרד ונקי, לא שער לשום מקום אחר",
-    safeBody: "Gadit הוא מקום סגור לגמרי: אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. הילד לא נשאב מכאן לטיקטוק או לאף אפליקציה אחרת. יש כאן דבר אחד לעשות: להבין מילה, ולחזור ללימודים.",
+    safeBody: "Gadit הוא מקום סגור לגמרי: אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. יש כאן דבר אחד לעשות: להבין מילה, ולחזור ללימודים.",
     safeLine: "מסך אחד שאפשר לתת לילד בראש שקט.",
     stackTitle: "מה מקבלים במסלול המשפחתי",
     stackItems: [
       "חיפושים בלי הגבלה לכל המשפחה",
       "כל המשמעויות, עם תמונה לכל משמעות",
-      "מצב ילדים לכל הגילאים",
-      "בדיקת משפטים עם משוב מיידי",
+      "מצב ילדים לקטנים, והסבר מלא לגדולים",
       "מחברת אישית ותרגול חכם לכל ילד",
+      "לוח בקרה להורה",
+      "צילום דף מהספר ולחיצה על כל מילה",
+      "תרגול הכתבה ו\"תגיד את זה\"",
       "משחקי מילים וחידונים",
       "עד 5 ילדים בפרופילים נפרדים",
-      "33 שפות, כולל עברית מלאה ואנגלית",
+      "הסבר ב-33 שפות",
     ],
     priceKicker: "התמחור",
     priceTitle: "מסלול המשפחה",
@@ -1289,17 +1291,17 @@ const COPY: Record<string, Copy> = {
     monthly: "₪19.90 לחודש",
     billedYearly: "שנתי",
     billedMonthly: "חודשי",
-    yearlySave: "-17%",
+    yearlySave: "חוסכים ₪39.80",
     priceCta: "התחילו את הניסיון",
-    cancelNote: "החיוב בשקלים, רק בתום 14 הימים. מבטלים בלחיצה אחת מדף החשבון, מתי שרוצים.",
+    cancelNote: "החיוב בשקלים, רק בתום 14 הימים. יומיים לפני כן נשלח אליכם תזכורת במייל. מבטלים בלחיצה מדף החשבון, בלי טלפון.",
     singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש. בשלושה שקלים נוספים מצרפים עד 5 ילדים.",
-    guaranteeTitle: "המבחן שלכם: שבועיים",
-    guaranteeBody: "תנו לזה שבועיים בשימוש אמיתי, בחינם. אם עד יום ה-14 לא הצטברו במחברת של הילד לפחות 20 מילים חדשות, מבטלים בלחיצה אחת ולא שילמתם שקל.",
+    guaranteeTitle: "היעד לשבועיים: 20 מילים חדשות במחברת",
+    guaranteeBody: "בלוח ההורה תראו כמה מילים נוספו, ותחליטו לפני החיוב.",
     faqTitle: "שאלות של הורים",
     faq: [
       {
         q: "מה תקבלו ב-Gadit?",
-        a: "כל מילה שהילד מחפש מקבלת עמוד אחד נקי: כל המשמעויות, הסבר בגובה העיניים של הילד (מצב ילדים), שלוש דוגמאות אמיתיות, ותמונה לכל משמעות. בנוסף, הבנת הקשר (מדביקים משפט ומקבלים את המשמעות הנכונה), מחברת מילים אישית עם תרגול חכם, משחקי מילים וחידונים, לוח בקרה להורה שמראה כמה כל ילד למד, עד 5 ילדים בפרופילים נפרדים, והכול ב-33 שפות, במרחב סגור ובטוח, בלי צ'אט פתוח ובלי פרסומות.",
+        a: "כל מילה שהילד מחפש מקבלת עמוד אחד נקי: כל המשמעויות, הסבר בגובה העיניים של הילד, שלוש דוגמאות ותמונה לכל משמעות. ומעבר לזה: מחברת אישית עם תרגול, משחקים, צילום דף, תרגול הכתבה ולוח בקרה להורה. עד 5 ילדים, במרחב סגור ובטוח.",
       },
       {
         q: "למה לא פשוט לשאול צ'אט או גוגל?",
@@ -1307,15 +1309,15 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "איך תדעו שהילד באמת מתקדם?",
-        a: "יש לכם לוח בקרה להורה. במבט אחד רואים כמה מילים כל ילד למד, כמה נוספו השבוע ואילו מילים אחרונות. כל כלי אחר עונה לילד ושוכח, ו-Gadit שומר כל מילה במחברת האישית של הילד, כך שאתם רואים את אוצר המילים גדל שבוע אחרי שבוע.",
+        a: "יש לכם לוח בקרה להורה. במבט אחד רואים כמה מילים כל ילד למד, כמה נוספו השבוע ואילו מילים אחרונות. כלים אחרים עונים לילד ושוכחים. Gadit שומר כל מילה במחברת האישית של הילד, כך שאתם רואים את אוצר המילים גדל שבוע אחרי שבוע.",
       },
       {
-        q: "לאילו גילאים זה מתאים?",
+        q: "לאילו גילים זה מתאים?",
         a: "הלב של Gadit הוא ילדים בגיל בית ספר, מכיתה א ועד תיכון. מצב ילדים מסביר בפשטות לקטנים, וההסברים המלאים משרתים גם בני נוער והורים. את החשבון פותח ההורה.",
       },
       {
         q: "זה עוזר גם באנגלית ובשפות נוספות?",
-        a: "מאוד. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות, בדיוק הכלי שחסר בבית לשיעורי אנגלית. וזה עובד ב-33 שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית.",
+        a: "כן. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות. וזה עובד ב-33 שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית.",
       },
       {
         q: "המחיר באמת בשקלים?",
@@ -1327,7 +1329,19 @@ const COPY: Record<string, Copy> = {
       },
       {
         q: "אפשר לנסות בלי להתחייב?",
-        a: "כן. מתחילים 14 ימי ניסיון עם כרטיס, אבל החיוב הראשון יורד רק בתום הניסיון. מבטלים בכל רגע קודם, בלחיצה אחת, ולא תחויבו בכלום.",
+        a: "כן. מתחילים 14 ימי ניסיון עם כרטיס, והחיוב הראשון יורד רק בתום הניסיון. יומיים לפני כן נשלח אליכם תזכורת במייל. מבטלים בכל רגע קודם, בלחיצה, ולא תחויבו בכלום.",
+      },
+      {
+        q: "על אילו מכשירים זה עובד?",
+        a: "בכל דפדפן, בטלפון, בטאבלט ובמחשב, בלי התקנה. באנדרואיד יש גם אפליקציה ב-Google Play.",
+      },
+      {
+        q: "איזה מידע נשמר על הילד?",
+        a: "השם, הגיל והמילים שחיפש, כדי לבנות את המחברת שלו ואת לוח ההורה. לא מוכרים ולא משתפים מידע על ילדים. אפשר למחוק את החשבון ואת כל הנתונים בכל רגע.",
+      },
+      {
+        q: "מה קורה למחברות אם מבטלים?",
+        a: "המילים לא נמחקות. אם תחזרו בהמשך, הכול מחכה לכם.",
       },
     ],
     finalTitle: "התחילו היום, וראו את אוצר המילים גדל",
@@ -4569,7 +4583,7 @@ const FAM_MOCK: Record<string, FamMock> = {
     dreamWord: "חלום",
     dreamPos: "שם עצם",
     dreamMeaningFull: "תמונות ומחשבות שעוברות בראש בזמן השינה",
-    dreamExample: "\"אתמול בלילה חלמתי חלום על מסע רחוק.\"",
+    dreamExample: "\"אתמול בלילה חלמתי חלום על מסע ארוך.\"",
     dreamMeaningShort: "תמונות ומחשבות שעוברות בראש בזמן השינה",
     dreamKidDef: "\"חלום\" הוא התמונות והסיפורים שרצים לך בראש בזמן השינה. לפעמים שמחים, לפעמים מוזרים, והם נמוגים ברגע שמתעוררים.",
     dreamEx1: "\"אתמול בלילה חלמתי חלום על מסע ארוך.\"",
@@ -6388,6 +6402,9 @@ const HOW_MOCKS = [
   MockSearch, MockDefinition, MockExamples, MockPicture,
   MockContext, MockNotebook, MockQuiz, MockGames,
 ];
+// The 4 cards shown first on the real-screens page: definition, picture,
+// notebook, quiz (council 2026-10-08); "לכל היכולות" opens all 8.
+const FEATURED_CARDS = [1, 3, 5, 6];
 
 // Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
 // /public/fam as compressed WebP). One per feature; the 7th (English
@@ -6429,6 +6446,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   // cold visitor. Show the small monthly price first; the yearly tab wears
   // a discount badge so the saving is visible before they even click it.
   const [billing, setBilling] = useState<"yearly" | "monthly">("monthly");
+  // Hebrew real-screens page shows 4 key cards first (council 2026-10-08).
+  const [showAllCards, setShowAllCards] = useState(false);
   const isOwner = !!user && familyId === user.uid;
 
   const viewedRef = useRef(false);
@@ -6668,6 +6687,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                   {ctaLabel}
                 </button>
               )}
+              {real?.ctaNote && <p className="fam-cta-note"><Lines text={real.ctaNote} /></p>}
               {c.ctaMicro && <div className="fam-cta-micro">{c.ctaMicro}</div>}
               {real ? (
                 <ul className="fam-hero-points">
@@ -6757,10 +6777,75 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </div>
         </section>
 
+        {/* Real-screens order (council 2026-10-08): the parent pays and the
+             parent dashboard is the moat, so it comes right after the pain,
+             then the 4 key "for every word" cards, the puzzle, and the
+             immigrant-family section. Other languages keep the old order. */}
+        {real && (
+          <>
+            <section className="fam-band fam-band-cream">
+              <div className="fam-feature">
+                <div className="fam-feature-text">
+                  <div className="fam-kicker">{real.dash.kicker}</div>
+                  <h2 className="fam-h2 fam-h2-start">{real.dash.title}</h2>
+                  <p className="fam-body"><Lines text={real.dash.body} /></p>
+                  <ul className="fam-real-points">
+                    {real.dash.points.map((pt, j) => (
+                      <li key={j}>{pt}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="fam-feature-visual">
+                  <div className="fam-real-pair">
+                    <PhoneShot lang={lang} name={real.dash.img} alt={real.shotAlt} />
+                    {real.dash.img2 && <PhoneShot lang={lang} name={real.dash.img2} alt={real.shotAlt} />}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="fam-band fam-band-white">
+              <div className="fam-section fam-center fam-section-wide">
+                <h2 className="fam-h2">{c.chainTitle}</h2>
+                <div className="fam-how-steps">
+                  {(showAllCards ? HOW_MOCKS.map((_, i) => i) : FEATURED_CARDS).map((i, n) => {
+                    const blk = c.howBlocks[i];
+                    const Mock = HOW_MOCKS[i];
+                    if (!blk || !Mock) return null;
+                    return (
+                      <div key={i} className="fam-how-step">
+                        <div className="fam-how-step-head">
+                          <span className="fam-how-num">{n + 1}</span>
+                          <span className="fam-how-text">{blk.t}</span>
+                        </div>
+                        <div className="fam-how-visual">
+                          <Mock lang={lang} />
+                        </div>
+                        <p className="fam-how-body">{blk.b}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                {!showAllCards && (
+                  <button type="button" className="fam-cta-ghost fam-cards-more" onClick={() => setShowAllCards(true)}>
+                    לכל היכולות
+                  </button>
+                )}
+                <div className="fam-chain-turn">
+                  <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
+                  <p className="fam-chain-turn-body"><Lines text={c.chainTurnBody} /></p>
+                  <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
+                    {ctaLabel}
+                  </button>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
         {/* 3 · Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every
              word a piece. Missing words are holes and the child stops
              seeing the whole picture. Before (gaps) → after (filled). */}
-        {(
         <section className="fam-band fam-band-cream">
           <div className="fam-section fam-center">
             <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
@@ -6770,6 +6855,15 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             <p className="fam-reframe">{real ? <Lines text={c.puzzleLine} /> : c.puzzleLine}</p>
           </div>
         </section>
+
+        {real?.olim && (
+          <section className="fam-band fam-band-white">
+            <div className="fam-section fam-center">
+              <div className="fam-kicker">{real.olim.kicker}</div>
+              <h2 className="fam-h2">{real.olim.title}</h2>
+              <p className="fam-body fam-body-center"><Lines text={real.olim.body} /></p>
+            </div>
+          </section>
         )}
 
         {/* 4 · How it works (Gadi 2026-07-28, 5-model synthesis): the old
@@ -6795,26 +6889,6 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                   </div>
                 ))}
               </div>
-              {/* Summary (Gadi 2026-09-28): the illustrated 8-card "for every
-                  word, the child gets all this" grid stays under the real steps. */}
-              <h2 className="fam-h2" style={{ marginTop: 64 }}>{c.chainTitle}</h2>
-              <div className="fam-how-steps">
-                {c.howBlocks.slice(0, HOW_MOCKS.length).map((blk, i) => {
-                  const Mock = HOW_MOCKS[i];
-                  return (
-                    <div key={i} className="fam-how-step">
-                      <div className="fam-how-step-head">
-                        <span className="fam-how-num">{i + 1}</span>
-                        <span className="fam-how-text">{blk.t}</span>
-                      </div>
-                      <div className="fam-how-visual">
-                        <Mock lang={lang} />
-                      </div>
-                      <p className="fam-how-body">{blk.b}</p>
-                    </div>
-                  );
-                })}
-              </div>
               </>
             ) : (
             <div className="fam-how-steps">
@@ -6835,17 +6909,19 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               })}
             </div>
             )}
+            {!real && (
             <div className="fam-chain-turn">
               <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
-              <p className="fam-chain-turn-body">{real ? <Lines text={c.chainTurnBody} /> : c.chainTurnBody}</p>
+              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
               <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
                 {ctaLabel}
               </button>
             </div>
+            )}
           </div>
         </section>
 
-        {real && [real.dash, ...real.tools].map((f, i) => (
+        {real && real.tools.map((f, i) => (
           <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
             <div className={`fam-feature ${i % 2 === 1 ? "is-flipped" : ""}`}>
               <div className="fam-feature-text">
@@ -7048,7 +7124,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                   onClick={() => setBilling("yearly")}
                 >
                   {c.billedYearly}
-                  <span className="fam-billing-save" dir="ltr">{c.yearlySave}</span>
+                  <span className="fam-billing-save" dir={he ? undefined : "ltr"}>{c.yearlySave}</span>
                 </button>
               </div>
 
