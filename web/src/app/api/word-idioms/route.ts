@@ -34,6 +34,26 @@ const LANG_NAME: Record<string, string> = {
 
 type Idiom = { phrase: string; meaning: string; kidsMeaning: string };
 
+/** Drop a phrase that belongs to a sound-alike word (Gadi 2026-10-08: the
+ *  idioms for "whether" were the idioms of "weather"). Only a phrase written
+ *  in the word's own alphabet is judged, and it is kept when it holds the
+ *  word's first three letters, so "make friends" stays for "friendship".
+ *  Hebrew, Arabic and the other scripts change letters when inflected and
+ *  are left as they are. */
+function idiomsForWord(word: string, idioms: Idiom[]): Idiom[] {
+  const fold = (x: string) => x.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  const w = fold(word.trim());
+  const ALPHA = /^[\p{Script=Latin}\p{Script=Cyrillic}\p{Script=Greek}' -]+$/u;
+  // A single word only: a phrase typed as the search keeps its own list.
+  if (w.length < 3 || /s/.test(w) || !ALPHA.test(w)) return idioms;
+  const head = w.slice(0, 3);
+  return idioms.filter((i) => {
+    const ph = fold(i.phrase);
+    if (!ALPHA.test(ph.replace(/[^\p{L}' -]/gu, ""))) return true;
+    return ph.includes(head);
+  });
+}
+
 function hashKey(lang: string, word: string): string {
   return crypto.createHash("sha256").update("wi1:" + lang + ":" + word.toLowerCase()).digest("hex").slice(0, 40);
 }
@@ -57,7 +77,8 @@ Return STRICT JSON: {"idioms":[{"phrase":"...","meaning":"...","kidsMeaning":"..
 - "meaning": what it actually means, in ${uiLangName}. Plain and clear.
 - "kidsMeaning": the SAME meaning for a child of about 8, in ${uiLangName}: very simple everyday words, no hard or abstract vocabulary (e.g. replace "illegible" with "so messy it is hard to read").
 
-BE COMPLETE for idiom-rich words (animals, body parts, common verbs, colors, weather): list ALL the expressions a fluent speaker would recognize, commonly 4 to 8. For "chicken" that includes: chicken out, chicken feed, chicken scratch, count your chickens before they hatch, don't count your chickens before they hatch, running around like a chicken with its head cut off, spring chicken, chicken and egg. Only return few or none for words that genuinely have no real expressions. NEVER invent an expression that no one actually uses. For a ${wordLangName} word, prefer ${wordLangName} expressions.
+BE COMPLETE for idiom-rich words (animals, body parts, common verbs, colors, weather): list ALL the expressions a fluent speaker would recognize, commonly 4 to 8. For "chicken" that includes: chicken out, chicken feed, chicken scratch, count your chickens before they hatch, don't count your chickens before they hatch, running around like a chicken with its head cut off, spring chicken, chicken and egg. Only return few or none for words that genuinely have no real expressions. NEVER invent an expression that no one actually uses.
+EVERY phrase must contain the given word itself (or an inflected form of it). NEVER list expressions of a different word that sounds or looks similar: "whether" is not "weather", "their" is not "there", "flour" is not "flower". If the word has no expressions of its own, return {"idioms":[]}. For a ${wordLangName} word, prefer ${wordLangName} expressions.
 
 No foreign scripts beyond light transliteration. Everything must be safe for children. Output ONLY the JSON object.`,
         },
@@ -122,13 +143,13 @@ export async function POST(req: NextRequest) {
       const snap = await ref.get();
       if (snap.exists) {
         const d = snap.data() as { idioms?: Idiom[] };
-        if (Array.isArray(d.idioms)) return NextResponse.json({ idioms: d.idioms, cached: true });
+        if (Array.isArray(d.idioms)) return NextResponse.json({ idioms: idiomsForWord(word, d.idioms), cached: true });
       }
     } catch { /* cache read best-effort */ }
   }
 
   try {
-    const idioms = await generate(word, LANG_NAME[lang], wordLangName || LANG_NAME[lang]);
+    const idioms = idiomsForWord(word, await generate(word, LANG_NAME[lang], wordLangName || LANG_NAME[lang]));
     try { await ref.set({ lang, word, idioms, at: new Date().toISOString() }); } catch { /* ignore */ }
     return NextResponse.json({ idioms });
   } catch {
