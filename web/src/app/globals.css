@@ -7648,6 +7648,14 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
 .wordbook .wb-play-lang { font: inherit; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(15, 111, 108, 0.25); background: var(--surface, #fff); color: #0F6F6C; cursor: pointer; }
 .wordbook .wb-play-lang.is-on { background: #0F6F6C; border-color: #0F6F6C; color: #fff; }
 .wordbook .wb-play-lang:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 2px; }
+/* Under a dark theme or a kid skin the teal-on-surface chips were nearly
+   unreadable (Gadi 2026-10-10): take the theme ink instead. */
+html[data-theme] .wordbook .wb-play-lang:not(.is-on) {
+  color: var(--ink, #172320);
+  border-color: color-mix(in srgb, var(--ink, #172320) 28%, transparent);
+  background: color-mix(in srgb, var(--surface, #fff) 70%, transparent);
+}
+html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66); }
 .wordbook .wb-play-sections > .wb-play-section > .wb-play-grid {
   grid-column: 1 / -1;
   grid-template-columns: subgrid;

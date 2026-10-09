@@ -78,7 +78,7 @@ type KidsBannerCopy = {
 };
 const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
   it: {
-    offTitle: "Stai giocando con un bambino?",
+    offTitle: "Modalità Bambini disattivata",
     offDesc: "Attiva la Modalità Bambini per vedere giochi e un linguaggio pensati per i 6-12 anni.",
     offCTA: "Attiva la Modalità Bambini",
     onTitle: "✓ Modalità Bambini attiva",
@@ -89,7 +89,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Vedi i piani",
   },
   ja: {
-    offTitle: "お子さまと遊んでいますか？",
+    offTitle: "キッズモードはオフです",
     offDesc: "キッズモードをオンにすると、6-12歳向けに調整されたゲームと言葉が表示されます。",
     offCTA: "キッズモードをオンにする",
     onTitle: "✓ キッズモードがオンです",
@@ -100,7 +100,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "プランを見る",
   },
   uk: {
-    offTitle: "Граєш з дитиною?",
+    offTitle: "Дитячий режим вимкнено",
     offDesc: "Увімкни Дитячий режим, щоб побачити ігри та мову, налаштовані для віку 6-12 років.",
     offCTA: "Увімкнути Дитячий режим",
     onTitle: "✓ Дитячий режим увімкнено",
@@ -111,7 +111,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Переглянути плани",
   },
   tr: {
-    offTitle: "Bir çocukla mı oynuyorsun?",
+    offTitle: "Çocuk Modu kapalı",
     offDesc: "6-12 yaş için uyarlanmış oyunları ve dili görmek için Çocuk Modu'nu aç.",
     offCTA: "Çocuk Modu'nu aç",
     onTitle: "✓ Çocuk Modu açık",
@@ -122,7 +122,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Planları gör",
   },
   pl: {
-    offTitle: "Grasz z dzieckiem?",
+    offTitle: "Tryb dla dzieci jest wyłączony",
     offDesc: "Włącz Tryb dla dzieci, aby zobaczyć gry i język dopasowane do wieku 6-12 lat.",
     offCTA: "Włącz Tryb dla dzieci",
     onTitle: "✓ Tryb dla dzieci jest włączony",
@@ -133,7 +133,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Zobacz plany",
   },
   fa: {
-    offTitle: "با یک کودک بازی می‌کنی؟",
+    offTitle: "حالت کودکان خاموش است",
     offDesc: "حالت کودکان را روشن کن تا بازی‌ها و زبانی متناسب با سنین 6-12 سال ببینی.",
     offCTA: "روشن کردن حالت کودکان",
     onTitle: "✓ حالت کودکان روشن است",
@@ -144,7 +144,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "دیدن پلن‌ها",
   },
   id: {
-    offTitle: "Sedang bermain dengan anak?",
+    offTitle: "Mode Anak nonaktif",
     offDesc: "Aktifkan Mode Anak untuk melihat permainan dan bahasa yang disesuaikan untuk usia 6-12 tahun.",
     offCTA: "Aktifkan Mode Anak",
     onTitle: "✓ Mode Anak aktif",
@@ -155,7 +155,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Lihat paket",
   },
   nl: {
-    offTitle: "Speel je met een kind?",
+    offTitle: "Kindermodus staat uit",
     offDesc: "Zet de Kindermodus aan om spellen en taal te zien die zijn afgestemd op 6-12 jaar.",
     offCTA: "Kindermodus aanzetten",
     onTitle: "✓ Kindermodus staat aan",
@@ -166,7 +166,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Bekijk abonnementen",
   },
   he: {
-    offTitle: "משחקים עם ילד?",
+    offTitle: "מצב ילדים כבוי",
     offDesc: "הפעילו מצב ילדים, ונציג רק משחקים ושפה שמתאימים לגילאי 6 עד 12.",
     offCTA: "הפעלת מצב ילדים",
     onTitle: "✓ מצב ילדים פועל",
@@ -177,7 +177,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "לתכניות",
   },
   en: {
-    offTitle: "Playing with a child?",
+    offTitle: "Kids Mode is off",
     offDesc: "Turn on Kids Mode to see games and language tuned for ages 6–12.",
     offCTA: "Turn on Kids Mode",
     onTitle: "✓ Kids Mode is on",
@@ -188,7 +188,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "See plans",
   },
   zu: {
-    offTitle: "Udlala nengane?",
+    offTitle: "I-Kids Mode ivaliwe",
     offDesc: "Vula i-Kids Mode ukuze ubone imidlalo nolimi olulungiselelwe iminyaka engu-6 kuya ku-12.",
     offCTA: "Vula i-Kids Mode",
     onTitle: "✓ I-Kids Mode ivuliwe",
@@ -199,7 +199,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Bona amahlelo",
   },
   el: {
-    offTitle: "Παίζεις με ένα παιδί;",
+    offTitle: "Η Λειτουργία για παιδιά είναι ανενεργή",
     offDesc: "Ενεργοποίησε τη Λειτουργία για παιδιά για παιχνίδια και γλώσσα προσαρμοσμένα για ηλικίες 6-12.",
     offCTA: "Ενεργοποίηση Λειτουργίας για παιδιά",
     onTitle: "✓ Η Λειτουργία για παιδιά είναι ενεργή",
@@ -210,7 +210,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Δες τα πλάνα",
   },
   ar: {
-    offTitle: "تلعب مع طفل؟",
+    offTitle: "وضع الأطفال متوقف",
     offDesc: "فعّل وضع الأطفال لرؤية ألعاب ولغة مناسبة لأعمار 6-12.",
     offCTA: "فعّل وضع الأطفال",
     onTitle: "✓ وضع الأطفال مفعّل",
@@ -221,7 +221,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "شاهد الخطط",
   },
   ru: {
-    offTitle: "Играете с ребёнком?",
+    offTitle: "Детский режим выключен",
     offDesc: "Включите детский режим — увидите игры и язык для возраста 6-12.",
     offCTA: "Включить детский режим",
     onTitle: "✓ Детский режим включён",
@@ -232,7 +232,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Смотреть тарифы",
   },
   es: {
-    offTitle: "¿Juegas con un niño?",
+    offTitle: "Modo niños desactivado",
     offDesc: "Activa el modo niños para ver juegos y lenguaje para 6-12 años.",
     offCTA: "Activar modo niños",
     onTitle: "✓ Modo niños activado",
@@ -243,7 +243,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Ver planes",
   },
   pt: {
-    offTitle: "Jogando com uma criança?",
+    offTitle: "Modo crianças desativado",
     offDesc: "Ative o modo crianças para ver jogos e linguagem para 6-12 anos.",
     offCTA: "Ativar modo crianças",
     onTitle: "✓ Modo crianças ativado",
@@ -254,7 +254,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Ver planos",
   },
   fr: {
-    offTitle: "Vous jouez avec un enfant ?",
+    offTitle: "Mode enfants désactivé",
     offDesc: "Activez le mode enfants pour des jeux et un langage adaptés aux 6-12 ans.",
     offCTA: "Activer le mode enfants",
     onTitle: "✓ Mode enfants activé",
@@ -265,7 +265,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Voir les formules",
   },
   de: {
-    offTitle: "Spielst du mit einem Kind?",
+    offTitle: "Kinder-Modus aus",
     offDesc: "Aktiviere den Kinder-Modus für Spiele und Sprache für 6- bis 12-Jährige.",
     offCTA: "Kinder-Modus aktivieren",
     onTitle: "✓ Kinder-Modus aktiv",
@@ -276,7 +276,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Pläne ansehen",
   },
   cs: {
-    offTitle: "Hraješ s dítětem?",
+    offTitle: "Dětský režim je vypnutý",
     offDesc: "Zapni Dětský režim — uvidíš hry a jazyk pro věk 6–12.",
     offCTA: "Zapnout Dětský režim",
     onTitle: "✓ Dětský režim je zapnutý",
@@ -287,7 +287,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Zobrazit tarify",
   },
   sk: {
-    offTitle: "Hráš s dieťaťom?",
+    offTitle: "Detský režim je vypnutý",
     offDesc: "Zapni Detský režim — uvidíš hry a jazyk pre vek 6–12.",
     offCTA: "Zapnúť Detský režim",
     onTitle: "✓ Detský režim je zapnutý",
@@ -298,7 +298,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Zobraziť plány",
   },
   hi: {
-    offTitle: "बच्चे के साथ खेल रहे हैं?",
+    offTitle: "Kids Mode बंद है",
     offDesc: "6-12 वर्ष के लिए उपयुक्त गेम और भाषा देखने के लिए Kids Mode चालू करें।",
     offCTA: "Kids Mode चालू करें",
     onTitle: "✓ Kids Mode चालू है",
@@ -309,7 +309,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "प्लान देखें",
   },
   am: {
-    offTitle: "ከልጅ ጋር እየተጫወቱ ነው?",
+    offTitle: "Kids Mode ጠፍቷል",
     offDesc: "ለ 6-12 ዓመት ልጆች የተስተካከሉ ጨዋታዎችን እና ቋንቋ ለማየት Kids Mode ያብሩ።",
     offCTA: "Kids Mode ያብሩ",
     onTitle: "✓ Kids Mode በርቷል",
@@ -320,7 +320,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "ዕቅዶችን ይመልከቱ",
   },
   vi: {
-    offTitle: "Đang chơi cùng một bạn nhỏ?",
+    offTitle: "Chế độ Trẻ em đang tắt",
     offDesc: "Bật Chế độ Trẻ em để xem trò chơi và ngôn ngữ phù hợp cho các bạn 6-12 tuổi.",
     offCTA: "Bật Chế độ Trẻ em",
     onTitle: "✓ Chế độ Trẻ em đang bật",
@@ -331,7 +331,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Xem các gói",
   },
   fil: {
-    offTitle: "Kasama mo bang maglaro ang isang bata?",
+    offTitle: "Naka-off ang Kids Mode",
     offDesc: "I-on ang Kids Mode para makita ang mga laro at salitang angkop sa edad 6-12.",
     offCTA: "I-on ang Kids Mode",
     onTitle: "✓ Naka-on ang Kids Mode",
@@ -342,7 +342,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Tingnan ang mga plan",
   },
   af: {
-    offTitle: "Speel jy saam met 'n kind?",
+    offTitle: "Kindermodus is af",
     offDesc: "Skakel Kindermodus aan om speletjies en taal te sien wat vir ouderdomme 6-12 ingestel is.",
     offCTA: "Skakel Kindermodus aan",
     onTitle: "✓ Kindermodus is aan",
@@ -353,7 +353,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Sien planne",
   },
   sw: {
-    offTitle: "Unacheza na mtoto?",
+    offTitle: "Hali ya Watoto imezimwa",
     offDesc: "Washa Hali ya Watoto uone michezo na lugha iliyoandaliwa kwa umri wa miaka 6-12.",
     offCTA: "Washa Hali ya Watoto",
     onTitle: "✓ Hali ya Watoto imewashwa",
@@ -364,7 +364,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Tazama mipango",
   },
   "zh-CN": {
-    offTitle: "在和孩子一起玩吗？",
+    offTitle: "儿童模式已关闭",
     offDesc: "打开儿童模式，就能看到专为 6-12 岁孩子调整的游戏和语言。",
     offCTA: "打开儿童模式",
     onTitle: "✓ 儿童模式已开启",
@@ -375,7 +375,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "查看方案",
   },
   "zh-TW": {
-    offTitle: "正在和孩子一起玩嗎？",
+    offTitle: "兒童模式已關閉",
     offDesc: "開啟兒童模式，就能看到專為 6-12 歲孩子調整的遊戲和語言。",
     offCTA: "開啟兒童模式",
     onTitle: "✓ 兒童模式已開啟",
@@ -386,7 +386,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "查看方案",
   },
   ko: {
-    offTitle: "아이와 함께 놀고 있나요?",
+    offTitle: "키즈 모드가 꺼져 있어요",
     offDesc: "키즈 모드를 켜면 6-12세에 맞춘 게임과 말투를 볼 수 있어요.",
     offCTA: "키즈 모드 켜기",
     onTitle: "✓ 키즈 모드가 켜져 있어요",
@@ -397,7 +397,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "요금제 보기",
   },
   th: {
-    offTitle: "กำลังเล่นกับเด็กอยู่ใช่ไหม?",
+    offTitle: "ปิดโหมดเด็กอยู่",
     offDesc: "เปิดโหมดเด็กเพื่อดูเกมและภาษาที่ปรับให้เหมาะกับอายุ 6-12 ปี",
     offCTA: "เปิดโหมดเด็ก",
     onTitle: "✓ เปิดโหมดเด็กอยู่",
@@ -408,7 +408,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "ดูแพ็กเกจ",
   },
   bn: {
-    offTitle: "কোনো শিশুর সাথে খেলছ?",
+    offTitle: "কিডস মোড বন্ধ আছে",
     offDesc: "কিডস মোড চালু করো, ৬-১২ বছর বয়সীদের জন্য সাজানো খেলা আর ভাষা দেখতে।",
     offCTA: "কিডস মোড চালু করো",
     onTitle: "✓ কিডস মোড চালু আছে",
@@ -419,7 +419,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "প্ল্যানগুলো দেখো",
   },
   da: {
-    offTitle: "Spiller du med et barn?",
+    offTitle: "Børnetilstand er slået fra",
     offDesc: "Slå Børnetilstand til for at se spil og sprog tilpasset alderen 6-12 år.",
     offCTA: "Slå Børnetilstand til",
     onTitle: "✓ Børnetilstand er slået til",
@@ -430,7 +430,7 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
     gateCTA: "Se abonnementer",
   },
   hu: {
-    offTitle: "Egy gyerekkel játszol?",
+    offTitle: "A Gyerek mód ki van kapcsolva",
     offDesc: "Kapcsold be a Gyerek módot, és 6-12 éveseknek szabott játékokat és nyelvezetet látsz.",
     offCTA: "Gyerek mód bekapcsolása",
     onTitle: "✓ A Gyerek mód be van kapcsolva",
