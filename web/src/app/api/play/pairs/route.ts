@@ -31,7 +31,22 @@ const LANG_NAME: Record<string, string> = {
 };
 const MAX_ITEMS = 20;
 
-type Pair = { pair: string; pairLang: string };
+type Pair = { pair: string; pairLang: string; wordLang: string };
+
+/** The letters of each UI language that has its own script. A notebook
+ *  entry's `language` is not always the English name ("עברית" showed up),
+ *  so the letters decide: a word written in the UI language's script IS in
+ *  the UI language. Without this, Hebrew words were "translated" to Hebrew
+ *  and the card showed the same word on both sides (Gadi 2026-10-09). */
+const range = (a: number, b: number) => new RegExp(`[${String.fromCharCode(a)}-${String.fromCharCode(b)}]`);
+const SCRIPT: Record<string, RegExp> = {
+  he: range(0x05d0, 0x05ea), ar: range(0x0620, 0x064a), fa: range(0x0620, 0x06cc),
+  ru: range(0x0400, 0x04ff), uk: range(0x0400, 0x04ff), el: range(0x0370, 0x03ff),
+  hi: range(0x0900, 0x097f), bn: range(0x0980, 0x09ff), am: range(0x1200, 0x137f),
+  th: range(0x0e00, 0x0e7f), ko: range(0xac00, 0xd7af), ja: range(0x3040, 0x30ff),
+  "zh-CN": range(0x4e00, 0x9fff), "zh-TW": range(0x4e00, 0x9fff),
+};
+const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
 
 const keyOf = (ui: string, w: string) => `${ui}_${w.trim().toLowerCase()}`.slice(0, 300).replace(/\//g, "_");
 
@@ -61,10 +76,12 @@ export async function POST(req: NextRequest) {
   const pairs: Record<string, Pair> = {};
 
   // 1 + 2: free sources.
-  const need: Array<{ word: string; target: string }> = [];
+  const need: Array<{ word: string; target: string; wordLang: string }> = [];
   await Promise.all(items.map(async ({ word, language }) => {
-    const foreign = language && language !== uiName;
+    const script = SCRIPT[uiLang];
+    const foreign = script ? !script.test(word) : !!language && language !== uiName;
     const target = foreign ? uiName : uiLang === "en" ? "" : "English";
+    const wordLang = foreign ? (language && language !== uiName ? language : "English") : uiName;
     if (!target) return;
     const w = word.toLowerCase();
     if (foreign) {
@@ -74,13 +91,13 @@ export async function POST(req: NextRequest) {
       );
       for (const d of docs) {
         const tr = d.exists ? ((d.data()?.result ?? d.data()) as { translation?: unknown }).translation : null;
-        if (typeof tr === "string" && tr.trim()) { pairs[word] = { pair: tr.trim(), pairLang: target }; return; }
+        if (typeof tr === "string" && tr.trim() && !same(tr, word)) { pairs[word] = { pair: tr.trim(), pairLang: target, wordLang }; return; }
       }
     }
     const own = await db.collection("wordPairs").doc(keyOf(uiLang, word)).get();
     const p = own.exists ? (own.data() as { pair?: string; pairLang?: string }) : null;
-    if (p?.pair && p.pairLang === target) { pairs[word] = { pair: p.pair, pairLang: target }; return; }
-    need.push({ word, target });
+    if (p?.pair && p.pairLang === target && !same(p.pair, word)) { pairs[word] = { pair: p.pair, pairLang: target, wordLang }; return; }
+    need.push({ word, target, wordLang });
   }));
 
   // 3: one small call for whatever is still missing.
@@ -109,9 +126,9 @@ export async function POST(req: NextRequest) {
         try { map = JSON.parse(json.choices?.[0]?.message?.content ?? "{}"); } catch { /* ignore */ }
         await Promise.all(need.map(async (n, i) => {
           const v = map[String(i + 1)];
-          if (typeof v !== "string" || !v.trim() || v.length > 60) return;
+          if (typeof v !== "string" || !v.trim() || v.length > 60 || same(v, n.word)) return;
           const pair = v.trim();
-          pairs[n.word] = { pair, pairLang: n.target };
+          pairs[n.word] = { pair, pairLang: n.target, wordLang: n.wordLang };
           try { await db.collection("wordPairs").doc(keyOf(uiLang, n.word)).set({ word: n.word, uiLang, pair, pairLang: n.target, at: new Date().toISOString() }); } catch { /* ignore */ }
         }));
       }

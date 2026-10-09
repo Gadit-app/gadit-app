@@ -15,6 +15,11 @@
  * After the flip: "ידעתי" or "עוד לא". A card you didn't know comes back
  * once at the end of the deck. Score = cards known the first time.
  * `focusWord` (the notebook's "practice this word") puts that word first.
+ *
+ * Where the words come from is always on screen (Gadi 2026-10-09: "לפי מה
+ * בחרת את המילים"). Word cards in Hebrew open on a picker: the notebook, or
+ * a topic (colors, animals, family...) from the dictation trainer's built-in
+ * Hebrew/English sets, which need no lookup at all.
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -24,6 +29,7 @@ import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
+import { DICTATION_SETS, getCatTitle } from "@/lib/dictation-sets";
 
 export type FlashMode = "words" | "meanings";
 
@@ -31,14 +37,15 @@ type FlashCopy = {
   wordsTitle: string; wordsDesc: string; defsTitle: string; defsDesc: string;
   tapToFlip: string; tapBack: string; sayIn: (l: string) => string; knew: string; notYet: string; again: string;
   swap: string; loading: string; none: string; result: (k: number, n: number) => string;
+  pick: string; mine: string; mineCount: (n: number) => string; topics: string; srcMine: string; srcTopic: (t: string) => string;
 };
 
 export const FLASH_COPY: Record<string, FlashCopy> = {
-  he: { wordsTitle: "כרטיסיות מילים", wordsDesc: "רואים מילה, אומרים אותה בשפה השנייה, והופכים את הכרטיס לבדוק.", defsTitle: "כרטיסיות הגדרות", defsDesc: "רואים מילה, נזכרים מה היא אומרת, והופכים את הכרטיס לבדוק.", tapToFlip: "לחצו על הכרטיס כדי להפוך אותו", tapBack: "לחצו כדי לחזור למילה", sayIn: (l) => `איך אומרים את זה ב${l}?`, knew: "ידעתי", notYet: "עוד לא", again: "שוב", swap: "להחליף כיוון", loading: "מכינים את הכרטיסים...", none: "עוד אין מילים לכרטיסים. חפשו מילה באנגלית או בעברית, והיא תופיע כאן.", result: (k, n) => `ידעתם ${k} מתוך ${n} כבר בפעם הראשונה` },
-  en: { wordsTitle: "Word cards", wordsDesc: "See a word, say it in the other language, then flip the card to check.", defsTitle: "Definition cards", defsDesc: "See a word, recall what it means, then flip the card to check.", tapToFlip: "Tap the card to flip it", tapBack: "Tap to go back to the word", sayIn: (l) => `How do you say it in ${l}?`, knew: "I knew it", notYet: "Not yet", again: "Again", swap: "Swap direction", loading: "Getting your cards ready...", none: "No words for cards yet. Look up a word in another language and it will show up here.", result: (k, n) => `You knew ${k} of ${n} the first time` },
-  ar: { wordsTitle: "بطاقات الكلمات", wordsDesc: "ترى كلمة، تقولها باللغة الأخرى، ثم تقلب البطاقة لتتحقق.", defsTitle: "بطاقات التعريفات", defsDesc: "ترى كلمة، تتذكّر معناها، ثم تقلب البطاقة لتتحقق.", tapToFlip: "اضغط على البطاقة لقلبها", tapBack: "اضغط للعودة إلى الكلمة", sayIn: (l) => `كيف تقولها بـ${l}؟`, knew: "عرفتها", notYet: "ليس بعد", again: "مرة أخرى", swap: "عكس الاتجاه", loading: "نجهّز البطاقات...", none: "لا توجد كلمات للبطاقات بعد. ابحث عن كلمة بلغة أخرى وستظهر هنا.", result: (k, n) => `عرفت ${k} من ${n} من المرة الأولى` },
-  ru: { wordsTitle: "Карточки слов", wordsDesc: "Видите слово, говорите его на другом языке и переворачиваете карточку.", defsTitle: "Карточки значений", defsDesc: "Видите слово, вспоминаете значение и переворачиваете карточку.", tapToFlip: "Нажмите на карточку, чтобы перевернуть", tapBack: "Нажмите, чтобы вернуться к слову", sayIn: (l) => `Как это сказать (${l})?`, knew: "Знал(а)", notYet: "Ещё нет", again: "Ещё раз", swap: "Поменять направление", loading: "Готовим карточки...", none: "Пока нет слов для карточек. Найдите слово на другом языке, и оно появится здесь.", result: (k, n) => `Вы знали ${k} из ${n} с первого раза` },
-  es: { wordsTitle: "Tarjetas de palabras", wordsDesc: "Ves una palabra, la dices en el otro idioma y das la vuelta para comprobar.", defsTitle: "Tarjetas de definiciones", defsDesc: "Ves una palabra, recuerdas su significado y das la vuelta para comprobar.", tapToFlip: "Toca la tarjeta para darle la vuelta", tapBack: "Toca para volver a la palabra", sayIn: (l) => `¿Cómo se dice en ${l}?`, knew: "La sabía", notYet: "Todavía no", again: "Otra vez", swap: "Cambiar dirección", loading: "Preparando tus tarjetas...", none: "Aún no hay palabras para tarjetas. Busca una palabra en otro idioma y aparecerá aquí.", result: (k, n) => `Sabías ${k} de ${n} a la primera` },
+  he: { wordsTitle: "כרטיסיות מילים", wordsDesc: "רואים מילה, אומרים אותה בשפה השנייה, והופכים את הכרטיס לבדוק.", defsTitle: "כרטיסיות הגדרות", defsDesc: "רואים מילה, נזכרים מה היא אומרת, והופכים את הכרטיס לבדוק.", tapToFlip: "לחצו על הכרטיס כדי להפוך אותו", tapBack: "לחצו כדי לחזור למילה", sayIn: (l) => `איך אומרים את זה ב${l}?`, knew: "ידעתי", notYet: "עוד לא", again: "שוב", swap: "להחליף כיוון", loading: "מכינים את הכרטיסים...", none: "עוד אין מילים לכרטיסים. חפשו מילה באנגלית או בעברית, והיא תופיע כאן.", result: (k, n) => `ידעתם ${k} מתוך ${n} כבר בפעם הראשונה`, pick: "מאיפה המילים?", mine: "המילים שלכם מהמחברת", mineCount: (n) => `${n} מילים, בסדר אקראי`, topics: "או בחרו נושא", srcMine: "מילים מהמחברת שלכם, בסדר אקראי", srcTopic: (t) => `נושא: ${t}` },
+  en: { wordsTitle: "Word cards", wordsDesc: "See a word, say it in the other language, then flip the card to check.", defsTitle: "Definition cards", defsDesc: "See a word, recall what it means, then flip the card to check.", tapToFlip: "Tap the card to flip it", tapBack: "Tap to go back to the word", sayIn: (l) => `How do you say it in ${l}?`, knew: "I knew it", notYet: "Not yet", again: "Again", swap: "Swap direction", loading: "Getting your cards ready...", none: "No words for cards yet. Look up a word in another language and it will show up here.", result: (k, n) => `You knew ${k} of ${n} the first time`, pick: "Where should the words come from?", mine: "Your notebook words", mineCount: (n) => `${n} words, in random order`, topics: "Or pick a topic", srcMine: "Words from your notebook, in random order", srcTopic: (t) => `Topic: ${t}` },
+  ar: { wordsTitle: "بطاقات الكلمات", wordsDesc: "ترى كلمة، تقولها باللغة الأخرى، ثم تقلب البطاقة لتتحقق.", defsTitle: "بطاقات التعريفات", defsDesc: "ترى كلمة، تتذكّر معناها، ثم تقلب البطاقة لتتحقق.", tapToFlip: "اضغط على البطاقة لقلبها", tapBack: "اضغط للعودة إلى الكلمة", sayIn: (l) => `كيف تقولها بـ${l}؟`, knew: "عرفتها", notYet: "ليس بعد", again: "مرة أخرى", swap: "عكس الاتجاه", loading: "نجهّز البطاقات...", none: "لا توجد كلمات للبطاقات بعد. ابحث عن كلمة بلغة أخرى وستظهر هنا.", result: (k, n) => `عرفت ${k} من ${n} من المرة الأولى`, pick: "من أين الكلمات؟", mine: "كلماتك من الدفتر", mineCount: (n) => `${n} كلمة، بترتيب عشوائي`, topics: "أو اختر موضوعًا", srcMine: "كلمات من دفترك، بترتيب عشوائي", srcTopic: (t) => `الموضوع: ${t}` },
+  ru: { wordsTitle: "Карточки слов", wordsDesc: "Видите слово, говорите его на другом языке и переворачиваете карточку.", defsTitle: "Карточки значений", defsDesc: "Видите слово, вспоминаете значение и переворачиваете карточку.", tapToFlip: "Нажмите на карточку, чтобы перевернуть", tapBack: "Нажмите, чтобы вернуться к слову", sayIn: (l) => `Как это сказать (${l})?`, knew: "Знал(а)", notYet: "Ещё нет", again: "Ещё раз", swap: "Поменять направление", loading: "Готовим карточки...", none: "Пока нет слов для карточек. Найдите слово на другом языке, и оно появится здесь.", result: (k, n) => `Вы знали ${k} из ${n} с первого раза`, pick: "Откуда взять слова?", mine: "Слова из вашей тетради", mineCount: (n) => `${n} слов, в случайном порядке`, topics: "Или выберите тему", srcMine: "Слова из вашей тетради, в случайном порядке", srcTopic: (t) => `Тема: ${t}` },
+  es: { wordsTitle: "Tarjetas de palabras", wordsDesc: "Ves una palabra, la dices en el otro idioma y das la vuelta para comprobar.", defsTitle: "Tarjetas de definiciones", defsDesc: "Ves una palabra, recuerdas su significado y das la vuelta para comprobar.", tapToFlip: "Toca la tarjeta para darle la vuelta", tapBack: "Toca para volver a la palabra", sayIn: (l) => `¿Cómo se dice en ${l}?`, knew: "La sabía", notYet: "Todavía no", again: "Otra vez", swap: "Cambiar dirección", loading: "Preparando tus tarjetas...", none: "Aún no hay palabras para tarjetas. Busca una palabra en otro idioma y aparecerá aquí.", result: (k, n) => `Sabías ${k} de ${n} a la primera`, pick: "¿De dónde salen las palabras?", mine: "Las palabras de tu cuaderno", mineCount: (n) => `${n} palabras, en orden aleatorio`, topics: "O elige un tema", srcMine: "Palabras de tu cuaderno, en orden aleatorio", srcTopic: (t) => `Tema: ${t}` },
 };
 
 export function flashCopy(lang: string): FlashCopy {
@@ -61,7 +68,12 @@ function langLabel(name: string, ui: string): string {
   }
 }
 
-type Card = { key: string; word: PlayWord; pair?: { pair: string; pairLang: string }; repeat: boolean };
+type PairInfo = { pair: string; pairLang: string; wordLang?: string };
+type Card = { key: string; word: PlayWord; pair?: PairInfo; repeat: boolean };
+
+/** Topics offered for word cards: the dictation trainer's built-in sets
+ *  are Hebrew/English pairs, so they are offered in the Hebrew UI only. */
+const TOPIC_LANGS = new Set(["he"]);
 
 export function GameFlashcards({
   pool,
@@ -85,6 +97,10 @@ export function GameFlashcards({
   // Freeze the words at mount: the page tops the pool up with examples a
   // moment later, and that must not reshuffle a deck mid-game.
   const [startPool] = useState(pool);
+  // Where the words come from: the notebook, or a built-in topic.
+  const offerTopics = mode === "words" && !focusWord && TOPIC_LANGS.has(lang);
+  const [source, setSource] = useState<string | null>(offerTopics ? null : "mine");
+  const topic = source && source !== "mine" ? DICTATION_SETS.find((s) => s.id === source) ?? null : null;
 
   // The candidate words: unique, with a meaning, the focus word first.
   const candidates = useMemo<PlayWord[]>(() => {
@@ -101,9 +117,9 @@ export function GameFlashcards({
   }, [startPool, focusWord, mode]);
 
   // Word cards need the other-language word for each card.
-  const [pairs, setPairs] = useState<Record<string, { pair: string; pairLang: string }> | null>(mode === "words" ? null : {});
+  const [pairs, setPairs] = useState<Record<string, PairInfo> | null>(mode === "words" ? null : {});
   useEffect(() => {
-    if (mode !== "words") return;
+    if (mode !== "words" || source !== "mine") return;
     let cancelled = false;
     (async () => {
       try {
@@ -113,28 +129,62 @@ export function GameFlashcards({
           headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
           body: JSON.stringify({ uiLang: lang, items: candidates.map((w) => ({ word: w.word, language: w.language })) }),
         });
-        const data = res.ok ? ((await res.json()) as { pairs?: Record<string, { pair: string; pairLang: string }> }) : {};
+        const data = res.ok ? ((await res.json()) as { pairs?: Record<string, PairInfo> }) : {};
         if (!cancelled) setPairs(data.pairs ?? {});
       } catch {
         if (!cancelled) setPairs({});
       }
     })();
     return () => { cancelled = true; };
-  }, [mode, candidates, lang, user]);
+  }, [mode, source, candidates, lang, user]);
 
   const first = useMemo<Card[]>(() => {
+    if (topic) {
+      // A topic brings its own pairs: the Hebrew word and its English.
+      return shuffle(topic.words).slice(0, SESSION_SIZE.flashcards).map((p, i) => ({
+        key: `t${i}`,
+        word: { word: p.he, language: "Hebrew", meaning: "", examples: [], uiLang: lang },
+        pair: { pair: p.en, pairLang: "English", wordLang: "Hebrew" },
+        repeat: false,
+      }));
+    }
     if (!pairs) return [];
     const list = mode === "words" ? candidates.filter((w) => pairs[w.word]?.pair) : candidates;
     return list.slice(0, SESSION_SIZE.flashcards).map((w, i) => ({ key: `c${i}`, word: w, pair: pairs[w.word], repeat: false }));
-  }, [pairs, candidates, mode]);
+  }, [pairs, candidates, mode, topic, lang]);
 
   const [deck, setDeck] = useState<Card[] | null>(null);
-  useEffect(() => { if (pairs) setDeck(first); }, [first, pairs]);
+  useEffect(() => { if (topic || pairs) setDeck(first); }, [first, pairs, topic]);
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reverse, setReverse] = useState(false);
   const [known, setKnown] = useState(0);
   const [missed, setMissed] = useState<Card[]>([]);
+
+  if (!source) {
+    return (
+      <div className="wb-play-stage">
+        <style>{FLASH_CSS}</style>
+        <PlayHeader title={title} progress="" score={0} onExit={onExit} t={t} />
+        <div className="wb-play-question"><div className="wb-play-question-eyebrow">{f.pick}</div></div>
+        <div className="wb-flash-pick">
+          <button type="button" className="wb-flash-src wb-flash-src-mine" onClick={() => setSource("mine")} disabled={candidates.length === 0}>
+            <span className="wb-flash-src-title">{f.mine}</span>
+            <span className="wb-flash-src-sub">{f.mineCount(candidates.length)}</span>
+          </button>
+          <div className="wb-flash-topics-label">{f.topics}</div>
+          <div className="wb-flash-topics">
+            {DICTATION_SETS.map((s) => (
+              <button key={s.id} type="button" className="wb-flash-src" onClick={() => setSource(s.id)}>
+                <span className="wb-flash-src-icon" aria-hidden>{s.icon}</span>
+                <span className="wb-flash-src-title">{getCatTitle(s.id, lang)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!deck) {
     return (
@@ -187,7 +237,8 @@ export function GameFlashcards({
   }
 
   // Front / back text for the current card.
-  const wordLangName = card.word.language;
+  const wordLangName = card.pair?.wordLang || card.word.language;
+  const sourceLabel = topic ? f.srcTopic(getCatTitle(topic.id, lang)) : f.srcMine;
   const pair = card.pair;
   const frontText = mode === "words" && pair && reverse ? pair.pair : card.word.word;
   const backText = mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
@@ -199,6 +250,7 @@ export function GameFlashcards({
       <style>{FLASH_CSS}</style>
       <PlayHeader title={title} progress={`${Math.min(i + 1, deck.length)}/${deck.length}`} score={known} onExit={onExit} t={t} />
       <div className="wb-play-question">
+        <div className="wb-flash-source">{sourceLabel}</div>
         <div className="wb-play-question-eyebrow">{flipped ? f.tapBack : mode === "words" && askLang ? f.sayIn(askLang) : f.tapToFlip}</div>
         {mode === "words" && !flipped && (
           <button type="button" className="wb-flash-swap" onClick={() => setReverse((r) => !r)}>{f.swap}</button>
@@ -249,5 +301,16 @@ const FLASH_CSS = `
 .wb-flash-btn { min-width: 130px; padding: 12px 20px; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
 .wb-flash-yes { background: #0EA5A5; color: #fff; box-shadow: 0 10px 22px -10px rgba(14,165,165,0.6); }
 .wb-flash-no { background: #fff; color: #374151; box-shadow: 0 0 0 1.5px #D1D5DB inset; }
+.wb-flash-source { font-size: 13px; font-weight: 700; color: #6D28D9; margin-bottom: 6px; }
+.wb-flash-pick { display: grid; gap: 12px; width: min(100%, 560px); margin: 18px auto 0; }
+.wb-flash-src { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 14px 12px; border-radius: 16px; border: 0; background: #fff; box-shadow: 0 0 0 1px rgba(15,72,68,0.12), 0 8px 18px -12px rgba(16,40,60,0.3); font: inherit; cursor: pointer; color: #0f172a; }
+.wb-flash-src:hover:not(:disabled) { box-shadow: 0 0 0 2px #0EA5A5, 0 8px 18px -12px rgba(16,40,60,0.3); }
+.wb-flash-src:disabled { opacity: 0.5; cursor: default; }
+.wb-flash-src-mine { padding: 18px 16px; background: linear-gradient(160deg, #E8F6F6 0%, #FFFFFF 75%); }
+.wb-flash-src-title { font-size: 16px; font-weight: 700; }
+.wb-flash-src-sub { font-size: 13px; color: #6b7280; }
+.wb-flash-src-icon { font-size: 26px; line-height: 1; }
+.wb-flash-topics-label { font-size: 13px; font-weight: 700; color: #6b7280; text-align: center; margin-top: 6px; }
+.wb-flash-topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
 @media (prefers-reduced-motion: reduce) { .wb-flash-inner { transition: none; } }
 `;

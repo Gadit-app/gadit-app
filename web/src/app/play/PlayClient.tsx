@@ -3398,7 +3398,7 @@ export function PlayPage() {
       id: "flashcards",
       title: flashCopy(lang).wordsTitle,
       desc: flashCopy(lang).wordsDesc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.flashcards,
+      enabled: lang === "he" || effectivePool.length >= MIN_WORDS_FOR_GAME.flashcards, // Hebrew also offers built-in topics
       accent: "teal",
       category: "notebook",
       kidsFriendly: true,
