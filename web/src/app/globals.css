@@ -7777,14 +7777,16 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   min-height: 0;
   overflow: hidden;
   border-radius: 16px;
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 6px 16px -10px rgba(15, 23, 42, 0.22);
-  background: var(--wb-play-band);
+  /* No border: a translucent border over the band colour drew a coloured
+     rim. A hairline neutral ring in the shadow keeps the edge thin. */
+  border: 0;
+  box-shadow: 0 0 0 0.5px rgba(15, 23, 42, 0.14), 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px -10px rgba(15, 23, 42, 0.22);
+  /* The pictures' own light ground, so no band colour peeks round the picture. */
+  background: #F6FAF9;
 }
 .wordbook .wb-play-card.has-cover:hover {
   transform: translateY(-3px);
-  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08), 0 14px 28px -14px rgba(15, 23, 42, 0.38);
-  border-color: rgba(15, 23, 42, 0.16);
+  box-shadow: 0 0 0 0.5px rgba(15, 23, 42, 0.18), 0 2px 4px rgba(15, 23, 42, 0.08), 0 14px 28px -14px rgba(15, 23, 42, 0.38);
 }
 .wordbook .wb-play-card.has-cover:focus-visible { outline: 3px solid var(--wb-play-band); outline-offset: 3px; }
 .wordbook .wb-play-card.has-cover .wb-play-card-text {

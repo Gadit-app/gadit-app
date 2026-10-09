@@ -57,7 +57,7 @@ const DIR_COPY: Record<string, DirCopy> = {
 };
 
 export const FLASH_COPY: Record<string, FlashCopy> = {
-  he: { wordsTitle: "כרטיסיות מילים", wordsDesc: "רואים מילה, אומרים אותה בשפה השנייה, והופכים את הכרטיס לבדוק.", defsTitle: "כרטיסיות הגדרות", defsDesc: "רואים מילה, נזכרים מה היא אומרת, והופכים את הכרטיס לבדוק.", tapToFlip: "לחצו על הכרטיס כדי להפוך אותו", tapBack: "לחצו כדי לחזור למילה", sayIn: (l) => `איך אומרים את זה ב${l}?`, knew: "ידעתי", notYet: "עוד לא", again: "שוב", swap: "להחליף כיוון", loading: "מכינים את הכרטיסים...", none: "עוד אין מילים לכרטיסים. חפשו מילה באנגלית או בעברית, והיא תופיע כאן.", result: (k, n) => `ידעתם ${k} מתוך ${n} כבר בפעם הראשונה`, pick: "מאיפה המילים?", mine: "המילים שלכם מהמחברת", mineCount: (n) => `${n} מילים, בסדר אקראי`, topics: "או בחרו נושא", srcMine: "מילים מהמחברת שלכם, בסדר אקראי", srcTopic: (t) => `נושא: ${t}` },
+  he: { wordsTitle: "כרטיסיות מילים", wordsDesc: "רואים מילה, אומרים אותה בשפה השנייה, והופכים את הכרטיס לבדוק.", defsTitle: "כרטיסיות הגדרות", defsDesc: "רואים מילה, נזכרים מה היא אומרת, והופכים את הכרטיס לבדוק.", tapToFlip: "לחצו על הכרטיס כדי להפוך אותו", tapBack: "לחצו כדי לחזור למילה", sayIn: (l) => `איך אומרים את זה ב${l}?`, knew: "ידעתי", notYet: "עוד לא", again: "שוב", swap: "להחליף כיוון", loading: "מכינים את הכרטיסים...", none: "עוד אין מילים לכרטיסים. חפשו מילה באנגלית או בעברית, והיא תופיע כאן.", result: (k, n) => `ידעתם ${k} מתוך ${n} כבר בפעם הראשונה`, pick: "מאיפה המילים?", mine: "המילים שלכם מהמחברת", mineCount: (n) => (n === 1 ? "מילה אחת" : `${n} מילים, בסדר אקראי`), topics: "או בחרו נושא", srcMine: "מילים מהמחברת שלכם, בסדר אקראי", srcTopic: (t) => `נושא: ${t}` },
   en: { wordsTitle: "Word cards", wordsDesc: "See a word, say it in the other language, then flip the card to check.", defsTitle: "Definition cards", defsDesc: "See a word, recall what it means, then flip the card to check.", tapToFlip: "Tap the card to flip it", tapBack: "Tap to go back to the word", sayIn: (l) => `How do you say it in ${l}?`, knew: "I knew it", notYet: "Not yet", again: "Again", swap: "Swap direction", loading: "Getting your cards ready...", none: "No words for cards yet. Look up a word in another language and it will show up here.", result: (k, n) => `You knew ${k} of ${n} the first time`, pick: "Where should the words come from?", mine: "Your notebook words", mineCount: (n) => `${n} words, in random order`, topics: "Or pick a topic", srcMine: "Words from your notebook, in random order", srcTopic: (t) => `Topic: ${t}` },
   ar: { wordsTitle: "بطاقات الكلمات", wordsDesc: "ترى كلمة، تقولها باللغة الأخرى، ثم تقلب البطاقة لتتحقق.", defsTitle: "بطاقات التعريفات", defsDesc: "ترى كلمة، تتذكّر معناها، ثم تقلب البطاقة لتتحقق.", tapToFlip: "اضغط على البطاقة لقلبها", tapBack: "اضغط للعودة إلى الكلمة", sayIn: (l) => `كيف تقولها بـ${l}؟`, knew: "عرفتها", notYet: "ليس بعد", again: "مرة أخرى", swap: "عكس الاتجاه", loading: "نجهّز البطاقات...", none: "لا توجد كلمات للبطاقات بعد. ابحث عن كلمة بلغة أخرى وستظهر هنا.", result: (k, n) => `عرفت ${k} من ${n} من المرة الأولى`, pick: "من أين الكلمات؟", mine: "كلماتك من الدفتر", mineCount: (n) => `${n} كلمة، بترتيب عشوائي`, topics: "أو اختر موضوعًا", srcMine: "كلمات من دفترك، بترتيب عشوائي", srcTopic: (t) => `الموضوع: ${t}` },
   ru: { wordsTitle: "Карточки слов", wordsDesc: "Видите слово, говорите его на другом языке и переворачиваете карточку.", defsTitle: "Карточки значений", defsDesc: "Видите слово, вспоминаете значение и переворачиваете карточку.", tapToFlip: "Нажмите на карточку, чтобы перевернуть", tapBack: "Нажмите, чтобы вернуться к слову", sayIn: (l) => `Как это сказать (${l})?`, knew: "Знал(а)", notYet: "Ещё нет", again: "Ещё раз", swap: "Поменять направление", loading: "Готовим карточки...", none: "Пока нет слов для карточек. Найдите слово на другом языке, и оно появится здесь.", result: (k, n) => `Вы знали ${k} из ${n} с первого раза`, pick: "Откуда взять слова?", mine: "Слова из вашей тетради", mineCount: (n) => `${n} слов, в случайном порядке`, topics: "Или выберите тему", srcMine: "Слова из вашей тетради, в случайном порядке", srcTopic: (t) => `Тема: ${t}` },
@@ -146,6 +146,9 @@ export function GameFlashcards({
   // moment later, and that must not reshuffle a deck mid-game.
   const [startPool] = useState(pool);
   const pc = PICK_COPY[lang] ?? PICK_COPY.en;
+  // Text fields follow the UI direction, so in Hebrew the examples and the
+  // typing start on the right (Gadi 2026-10-09), whatever gets pasted.
+  const fieldDir = ["he", "ar", "fa"].includes(lang) ? "rtl" : "ltr";
   // Where the words come from: the notebook, or a set picked on the start screen.
   const offerPick = mode === "words" && !focusWord;
   const offerSets = offerPick && lang !== "en";
@@ -342,7 +345,7 @@ export function GameFlashcards({
               >
                 <label className="wb-flash-make-title" htmlFor="wb-flash-topic">{pc.ownTopic}</label>
                 <div className="wb-flash-make-row">
-                  <input id="wb-flash-topic" className="wb-flash-input" value={ownTopic} onChange={(e) => setOwnTopic(e.target.value)} placeholder={pc.ownTopicPh} maxLength={40} dir="auto" />
+                  <input id="wb-flash-topic" className="wb-flash-input" value={ownTopic} onChange={(e) => setOwnTopic(e.target.value)} placeholder={pc.ownTopicPh} maxLength={40} dir={fieldDir} />
                   <button type="submit" className="wb-flash-make-btn" disabled={ownTopic.trim().length < 2 || !!busy}>{busy === "topic" ? pc.creating : pc.make}</button>
                 </div>
               </form>
@@ -352,7 +355,7 @@ export function GameFlashcards({
               >
                 <label className="wb-flash-make-title" htmlFor="wb-flash-list">{pc.pasteTitle}</label>
                 <div className="wb-flash-make-sub">{pc.pasteSub}</div>
-                <textarea id="wb-flash-list" className="wb-flash-input wb-flash-textarea" value={listText} onChange={(e) => setListText(e.target.value)} placeholder={pc.pastePh} maxLength={800} rows={5} dir="auto" />
+                <textarea id="wb-flash-list" className="wb-flash-input wb-flash-textarea" value={listText} onChange={(e) => setListText(e.target.value)} placeholder={pc.pastePh} maxLength={800} rows={5} dir={fieldDir} />
                 <button type="submit" className="wb-flash-make-btn" disabled={listText.trim().length < 2 || !!busy}>{busy === "list" ? pc.creating : pc.pasteBtn}</button>
               </form>
             </>
