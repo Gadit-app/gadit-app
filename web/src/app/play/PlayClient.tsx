@@ -3234,7 +3234,7 @@ const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "ana
  *  Add an id here once its picture is in place; others keep their icon. */
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
-  "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist",
+  "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse",
 ]);
 
 /** A pool that is sure to include the focus word: the word first, then
@@ -3951,13 +3951,13 @@ export function PlayPage() {
                     <li key={g.id}>
                       <button
                         type="button"
-                        className={`wb-play-card wb-play-card-${g.accent} ${g.enabled ? "" : "is-disabled"}`}
+                        className={`wb-play-card wb-play-card-${g.accent} wb-play-cat-${g.category}${GAME_COVERS.has(g.id) ? " has-cover" : ""} ${g.enabled ? "" : "is-disabled"}`}
                         onClick={() => g.enabled && setStage({ kind: "playing", game: g.id })}
                         disabled={!g.enabled}
                       >
                         {GAME_COVERS.has(g.id) ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img className="wb-play-card-cover" src={`/play/${g.id}.webp`} alt="" loading="lazy" width={512} height={512} />
+                          <img className="wb-play-card-cover" src={`/play/${g.id}.webp`} alt="" loading="lazy" width={720} height={480} />
                         ) : (
                           <span className="wb-play-card-icon">{g.icon}</span>
                         )}

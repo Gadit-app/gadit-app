@@ -7747,10 +7747,67 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
 .wordbook .wb-play-card-cover {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
-  border-radius: 10px;
-  background: rgba(14, 165, 165, 0.08);
+  background: #F6FAF9;
+}
+
+/* Picture cards (Gadi 2026-10-09): the picture fills the top edge to edge,
+   the name sits on a solid band in the category's colour with white text.
+   The band has a fixed height (title on one line, description on two) so
+   every card is exactly the same size, and the colour tells the groups
+   apart at a glance. Colours are deep and slightly muted so white text
+   passes AA on all of them, under every kid skin too. */
+.wordbook .wb-play-cat-notebook  { --wb-play-band: #0F6F6C; }
+.wordbook .wb-play-cat-origin    { --wb-play-band: #6B4A9B; }
+.wordbook .wb-play-cat-precision { --wb-play-band: #2F5D8C; }
+.wordbook .wb-play-cat-structure { --wb-play-band: #9A4F3C; }
+.wordbook .wb-play-card.has-cover {
+  padding: 0;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 6px 16px -10px rgba(15, 23, 42, 0.22);
+  background: var(--wb-play-band);
+}
+.wordbook .wb-play-card.has-cover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08), 0 14px 28px -14px rgba(15, 23, 42, 0.38);
+  border-color: rgba(15, 23, 42, 0.16);
+}
+.wordbook .wb-play-card.has-cover:focus-visible { outline: 3px solid var(--wb-play-band); outline-offset: 3px; }
+.wordbook .wb-play-card.has-cover .wb-play-card-text {
+  flex: none;
+  width: 100%;
+  height: 76px;
+  padding: 10px 12px;
+  gap: 3px;
+  background: var(--wb-play-band);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.wordbook .wb-play-card.has-cover .wb-play-card-title {
+  color: #FFFFFF;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wordbook .wb-play-card.has-cover .wb-play-card-desc {
+  color: rgba(255, 255, 255, 0.86);
+  -webkit-line-clamp: 2;
+}
+.wordbook .wb-play-card.has-cover .wb-play-card-locked {
+  top: 10px;
+  inset-inline-end: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #334155;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-play-card.has-cover .wb-play-card-text { height: 84px; padding: 12px 14px; }
+  .wordbook .wb-play-card.has-cover .wb-play-card-desc { -webkit-line-clamp: 2; }
 }
 .wordbook .wb-play-card-text {
   display: flex;
