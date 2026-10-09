@@ -17,14 +17,18 @@ export async function sendDripEmail(opts: {
   to: string;
   subject: string;
   html: string;
+  /** The drip cron's own sends: they wait out Shabbat. A welcome that
+   *  follows a signup leaves it unset and goes out at once. */
+  scheduled?: boolean;
 }): Promise<{ ok: true; id?: string } | { ok: false; reason: string }> {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     return { ok: false, reason: "RESEND_API_KEY not configured" };
   }
   try {
-    // Through the shared door: parked during Shabbat, sent after it.
+    // Through the shared door; only scheduled sends wait out Shabbat.
     const result = await sendMail({
+      scheduled: opts.scheduled,
       from: FROM,
       replyTo: REPLY_TO,
       to: opts.to,

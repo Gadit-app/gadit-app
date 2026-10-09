@@ -3,13 +3,15 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { isShabbatIL } from "@/lib/shabbat";
 
 /**
- * One door for outgoing email, with the Shabbat rule built in (Gadi
- * 2026-10-01/02): during Shabbat (lib/shabbat.ts) a message is not sent; it
- * is parked in Firestore `deferredEmails` and the flush cron sends it after
- * Shabbat ends, so nothing is lost. Applies to customer emails AND the
- * notices to Gadi. The one exception is a parent's own word alerts
- * (lib/family-notify.ts), which go out when the child searches, by the
- * parent's choice.
+ * One door for outgoing email, with the Shabbat rule built in.
+ *
+ * The rule (Gadi 2026-10-09, narrowing the 2026-10-01/02 version): an email
+ * that FOLLOWS SOMEONE'S ACTION always goes out immediately, Shabbat or not
+ * (a signup, a purchase, a cancellation, a school order, a partner welcome,
+ * an admin pressing send). Only SCHEDULED mail, sent by a cron on its own
+ * (drip series, digests, automatic payment-failure notices), passes
+ * `scheduled: true`; during Shabbat (lib/shabbat.ts) that is parked in
+ * Firestore `deferredEmails` and the flush cron sends it after Shabbat ends.
  *
  * Returns the same { data, error } shape as Resend so call sites keep their
  * error handling.
@@ -21,6 +23,8 @@ export type MailMsg = {
   subject: string;
   html: string;
   replyTo?: string;
+  /** Sent by a cron on its own, not by someone's action: waits out Shabbat. */
+  scheduled?: boolean;
 };
 
 type MailResult = {
@@ -46,7 +50,7 @@ async function sendNow(key: string, msg: MailMsg): Promise<MailResult> {
 export async function sendMail(msg: MailMsg): Promise<MailResult> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return { data: null, error: { message: "RESEND_API_KEY not configured" } };
-  if (isShabbatIL()) {
+  if (msg.scheduled && isShabbatIL()) {
     try {
       const ref = await getAdminDb().collection("deferredEmails").add({
         from: msg.from,

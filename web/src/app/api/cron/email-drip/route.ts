@@ -153,7 +153,7 @@ export async function GET(req: NextRequest) {
         if (dryRun) {
           results.push({ uid: u.uid, email, mailKey: "trial-reminder", status: "skipped", reason: "dryRun" });
         } else {
-          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
           if (r.ok) {
             realSends++;
             await db.collection("users").doc(u.uid).set({ trialReminderFor: d.trialEnd, trialReminderAt: FieldValue.serverTimestamp() }, { merge: true });
@@ -193,7 +193,7 @@ export async function GET(req: NextRequest) {
       if (dryRun) {
         results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "skipped", reason: "dryRun" });
       } else {
-        const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+        const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
         if (r.ok) {
           realSends++;
           await db.collection("users").doc(u.uid).set({ playUpgradeSentAt: FieldValue.serverTimestamp() }, { merge: true });
@@ -272,7 +272,7 @@ export async function GET(req: NextRequest) {
           if (dryRun) {
             results.push({ uid: u.uid, email, mailKey: famCand.key, status: "skipped", reason: "dryRun" });
           } else {
-            const sent = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+            const sent = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
             if (sent.ok) {
               realSends++;
               await db.collection("users").doc(u.uid).set(
@@ -330,7 +330,7 @@ export async function GET(req: NextRequest) {
         if (dryRun) {
           results.push({ uid: u.uid, email, mailKey: cand.key, status: "skipped", reason: "dryRun" });
         } else {
-          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html });
+          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
           if (r.ok) {
             realSends++;
             await db.collection("users").doc(u.uid).set(
@@ -430,6 +430,7 @@ export async function GET(req: NextRequest) {
       to: email,
       subject: built.subject,
       html: built.html,
+      scheduled: true,
     });
 
     if (sent.ok) {

@@ -580,7 +580,8 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
     // Shared with the day-5 reminder in the grace cron (lib/dunning-email).
     const { subject, html } = buildDunningEmail({ he, url, kind: "first" });
 
-    await sendMail({ from: "Gadit <notify@gadit.app>", to: email, subject, html });
+    // An automatic renewal failure, not someone's action: waits out Shabbat.
+    await sendMail({ scheduled: true, from: "Gadit <notify@gadit.app>", to: email, subject, html });
     if (ref) await ref.set({ dunningNotifiedInvoice: invoice.id }, { merge: true });
   } catch (err) {
     console.error("[webhook] payment_failed notify error:", err);

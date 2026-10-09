@@ -66,7 +66,7 @@ async function sendDigestEmail(to: string, schoolName: string, words: { word: st
     <div style="margin-top:22px;font-size:12px;color:#a8a29e">You can turn this daily summary off in your Gadit school settings.</div>
   </div>`;
   try {
-    await sendMail({ from: "Gadit <notify@gadit.app>", to, subject: `Gadit · ${name}: ${total} word${total === 1 ? "" : "s"} today`, html });
+    await sendMail({ scheduled: true, from: "Gadit <notify@gadit.app>", to, subject: `Gadit · ${name}: ${total} word${total === 1 ? "" : "s"} today`, html });
   } catch (e) {
     console.error("[school-digest] email error:", e);
   }

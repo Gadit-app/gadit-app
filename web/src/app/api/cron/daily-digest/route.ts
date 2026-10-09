@@ -164,6 +164,7 @@ export async function GET(req: NextRequest) {
   const to = process.env.ALERT_EMAIL || "gadi@gadit.app";
   try {
     await sendMail({
+      scheduled: true,
       from: "Gadit <notify@gadit.app>",
       to,
       replyTo: "gadi@gadit.app",
