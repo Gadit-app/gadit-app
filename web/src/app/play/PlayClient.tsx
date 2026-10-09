@@ -3227,7 +3227,7 @@ function LangSwitch() {
 }
 
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
-const FOCUS_GAMES: GameId[] = ["flashcards", "quiz", "memory", "anagram"];
+const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3238,7 +3238,7 @@ const GAME_COVERS = new Set<GameId>([]);
 function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
   const key = word.trim().toLowerCase();
   const hit = pool.find((p) => p.word.trim().toLowerCase() === key);
-  if (!hit || game === "flashcards") return pool;
+  if (!hit || game === "flashcards" || game === "flashdefs") return pool;
   const others = pool.filter((p) => p !== hit).sort(() => Math.random() - 0.5);
   const size = Math.max(SESSION_SIZE[game], MIN_WORDS_FOR_GAME[game]);
   return [hit, ...others.slice(0, Math.max(0, size - 1))];
@@ -3396,8 +3396,8 @@ export function PlayPage() {
   }> = [
     {
       id: "flashcards",
-      title: flashCopy(lang).title,
-      desc: flashCopy(lang).desc,
+      title: flashCopy(lang).wordsTitle,
+      desc: flashCopy(lang).wordsDesc,
       enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.flashcards,
       accent: "teal",
       category: "notebook",
@@ -3407,6 +3407,22 @@ export function PlayPage() {
           <rect x="3" y="6" width="14" height="12" rx="2" />
           <path d="M7 4h12a2 2 0 0 1 2 2v10" />
           <path d="M7 12h6" />
+        </svg>
+      ),
+    },
+    {
+      id: "flashdefs",
+      title: flashCopy(lang).defsTitle,
+      desc: flashCopy(lang).defsDesc,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.flashdefs,
+      accent: "indigo",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="6" width="14" height="12" rx="2" />
+          <path d="M7 4h12a2 2 0 0 1 2 2v10" />
+          <path d="M6.5 10.5h7M6.5 13.5h5" />
         </svg>
       ),
     },
@@ -3729,7 +3745,8 @@ export function PlayPage() {
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
             UI). Anagram is excluded: its tiles are single letters. */}
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
-          {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} />}
+          {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} mode="words" />}
+          {stage.game === "flashdefs" && <GameFlashcards {...props} focusWord={focusWord} mode="meanings" />}
           {stage.game === "quiz" && <GameQuiz {...props} />}
           {stage.game === "fillblank" && <GameFillBlank {...props} />}
           {stage.game === "memory" && <GameMemory {...props} />}

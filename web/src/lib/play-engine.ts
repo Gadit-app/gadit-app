@@ -13,11 +13,13 @@
  */
 
 import { getCachedWord } from "@/lib/offline-db";
+import { looksLikeCp1255Hebrew } from "@/lib/define-guard";
 import type { WordResult } from "@/components/design/result";
 
 export type GameId =
   | "quiz"
-  | "flashcards" // Flash cards: word on the front, flip for the meaning
+  | "flashcards" // Word cards: say the word in the other language, flip to check
+  | "flashdefs"  // Definition cards: word on the front, flip for the meaning
   | "fillblank"
   | "memory"
   | "anagram"
@@ -60,6 +62,7 @@ type NotebookItem = {
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   quiz: 4,
   flashcards: 1,
+  flashdefs: 1,
   fillblank: 4, // and we need examples, checked separately
   memory: 4,
   anagram: 1,
@@ -81,6 +84,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
 export const SESSION_SIZE: Record<GameId, number> = {
   quiz: 5,
   flashcards: 10,
+  flashdefs: 10,
   fillblank: 5,
   memory: 4, // 4 pairs = 8 cards
   anagram: 5,
@@ -168,7 +172,9 @@ export async function loadPlayWords(
   // Entries with an empty word or meaning can't participate in any
   // game — drop them at the source instead of guarding every builder.
   // QA 2026-07-03.
-  return hydrated.filter((p) => p.word.trim().length > 0 && p.meaning.trim().length > 0);
+  // A garbled meaning (Hebrew read through the wrong code page) never
+  // reaches a game card (2026-10-09).
+  return hydrated.filter((p) => p.word.trim().length > 0 && p.meaning.trim().length > 0 && !looksLikeCp1255Hebrew(p.meaning));
 }
 
 /**

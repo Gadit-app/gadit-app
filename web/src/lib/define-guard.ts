@@ -116,6 +116,16 @@ function hasSymbolNoise(text: string): boolean {
   return count >= 4 && count / text.length > 0.2;
 }
 
+/** Hebrew UTF-8 read as Windows-1255: every letter turns into a geresh (׳,
+ *  U+05F3) plus a symbol, e.g. "׳׳•׳©׳’". Found 2026-10-09 in two notebook
+ *  meanings ("Gung") that a game then showed. Real Hebrew uses a geresh
+ *  rarely, so 3+ of them making up over 15% of the text is the signature. */
+export function looksLikeCp1255Hebrew(text: unknown): boolean {
+  if (typeof text !== "string" || text.length < 6) return false;
+  const n = (text.match(/׳/g) ?? []).length;
+  return n >= 3 && n / text.length > 0.15;
+}
+
 // Single source of truth for "is this one etymology sub-field garbled?".
 // Shared by isDegenerate (server reject/cache-drop), the SSR preload
 // sanitiser, and the client render guard so all three agree on exactly
@@ -174,6 +184,11 @@ export function isDegenerate(result: unknown, inputWord: string, uiLang?: string
     if (hasMojibakeDensity(fr.word)) {
       return { degenerate: true, reason: "echoed word is mostly mojibake chars" };
     }
+  }
+
+  // (2b) Hebrew read through the wrong code page in any meaning.
+  if (meanings.some((m) => looksLikeCp1255Hebrew(m?.meaning))) {
+    return { degenerate: true, reason: "a meaning is cp1255 mojibake" };
   }
 
   // (3) Wrong script. With the UI language known, the definitions must be in
