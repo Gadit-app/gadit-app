@@ -1295,7 +1295,8 @@ const LINK_LANGS: Array<{ code: string; native: string }> =
 // RefCapture (mounted in the root layout) reads ?ref on EVERY page, so the
 // referral is attributed no matter which product page they land on.
 const PRODUCT_PATHS = {
-  individuals: "/pricing",
+  // The Individual plan ($3.99 / ₪14.90) has its own landing (Gadi 2026-10-09).
+  individuals: "/individuals/landing",
   families: "/families/landing",
   schools: "/schools/landing",
 } as const;
