@@ -17,19 +17,22 @@
  * `focusWord` (the notebook's "practice this word") puts that word first.
  *
  * Where the words come from is always on screen (Gadi 2026-10-09: "לפי מה
- * בחרת את המילים"). Word cards in Hebrew open on a picker: the notebook, or
- * a topic (colors, animals, family...) from the dictation trainer's built-in
- * Hebrew/English sets, which need no lookup at all.
+ * בחרת את המילים"). Word cards open on a picker, the same choices as the
+ * dictation trainer (/spell): the notebook, the sets saved there, a built-in
+ * topic (colors, animals, family...), a topic of your own, or a pasted list
+ * from school. Topic and list pairs come from /api/spell-set (topics cached
+ * per language); a set you made is saved with your dictation sets, so the
+ * school list is there next time in both games.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { PlayWord } from "@/lib/play-engine";
 import { shuffle, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
-import { DICTATION_SETS, getCatTitle } from "@/lib/dictation-sets";
+import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 
 export type FlashMode = "words" | "meanings";
 
@@ -71,9 +74,41 @@ function langLabel(name: string, ui: string): string {
 type PairInfo = { pair: string; pairLang: string; wordLang?: string };
 type Card = { key: string; word: PlayWord; pair?: PairInfo; repeat: boolean };
 
-/** Topics offered for word cards: the dictation trainer's built-in sets
- *  are Hebrew/English pairs, so they are offered in the Hebrew UI only. */
-const TOPIC_LANGS = new Set(["he"]);
+/** A word set picked on the start screen: the native-language word (the
+ *  "he" slot, see WordPair) and its English. `save` = keep it with the
+ *  user's dictation sets at the end (sets they made or reopened). */
+type Picked = { id: string; title: string; icon: string; words: WordPair[]; save: boolean };
+type SavedSet = { setId: string; title: string; icon: string };
+
+const NL = String.fromCharCode(10);
+
+type PickCopy = {
+  mySets: string; ownTopic: string; ownTopicPh: string; make: string;
+  pasteTitle: string; pasteSub: string; pastePh: string; pasteBtn: string;
+  creating: string; unsafe: string; createErr: string;
+};
+const PICK_COPY: Record<string, PickCopy> = {
+  he: { mySets: "הסטים ששמרתם", ownTopic: "נושא משלכם", ownTopicPh: "למשל: חלל, דינוזאורים, ים", make: "יצירה", pasteTitle: "רשימה מבית הספר", pasteSub: "הדביקו את המילים שקיבלתם, מילה בכל שורה. אפשר גם מילה ותרגום.", pastePh: ["צהוב", "כלב", "מורה"].join(NL), pasteBtn: "יצירת כרטיסיות", creating: "יוצרים...", unsafe: "בואו נבחר נושא אחר.", createErr: "לא הצלחנו ליצור את זה. נסו שוב או נושא אחר." },
+  en: { mySets: "Your saved sets", ownTopic: "Your own topic", ownTopicPh: "e.g. space, dinosaurs, the sea", make: "Create", pasteTitle: "A list from school", pasteSub: "Paste the words you got, one per line. A word and its translation works too.", pastePh: ["yellow", "dog", "teacher"].join(NL), pasteBtn: "Make cards", creating: "Creating...", unsafe: "Let's pick a different topic.", createErr: "We couldn't create that. Try again or another topic." },
+  ar: { mySets: "مجموعاتك المحفوظة", ownTopic: "موضوع من اختيارك", ownTopicPh: "مثلًا: الفضاء، الديناصورات، البحر", make: "إنشاء", pasteTitle: "قائمة من المدرسة", pasteSub: "الصق الكلمات التي حصلت عليها، كلمة في كل سطر. يمكن أيضًا كلمة وترجمتها.", pastePh: ["أصفر", "كلب", "معلم"].join(NL), pasteBtn: "إنشاء البطاقات", creating: "جارٍ الإنشاء...", unsafe: "لنختر موضوعًا آخر.", createErr: "لم نتمكن من إنشاء ذلك. حاول مرة أخرى أو اختر موضوعًا آخر." },
+  ru: { mySets: "Ваши сохранённые наборы", ownTopic: "Своя тема", ownTopicPh: "например: космос, динозавры, море", make: "Создать", pasteTitle: "Список из школы", pasteSub: "Вставьте слова, по одному в строке. Можно слово и перевод.", pastePh: ["жёлтый", "собака", "учитель"].join(NL), pasteBtn: "Создать карточки", creating: "Создаём...", unsafe: "Давайте выберем другую тему.", createErr: "Не получилось. Попробуйте ещё раз или другую тему." },
+  es: { mySets: "Tus conjuntos guardados", ownTopic: "Tu propio tema", ownTopicPh: "p. ej.: espacio, dinosaurios, el mar", make: "Crear", pasteTitle: "Una lista de la escuela", pasteSub: "Pega las palabras que te dieron, una por línea. También palabra y traducción.", pastePh: ["amarillo", "perro", "maestro"].join(NL), pasteBtn: "Crear tarjetas", creating: "Creando...", unsafe: "Elijamos otro tema.", createErr: "No pudimos crearlo. Inténtalo de nuevo u otro tema." },
+};
+
+/** Topics, own topics and pasted lists pair a word with its English, so
+ *  they are offered whenever the UI language isn't English itself. */
+const codeLabel = (code: string, ui: string) => {
+  try { return new Intl.DisplayNames([ui], { type: "language" }).of(code) ?? code; } catch { return code; }
+};
+
+/** Stable id for a set someone made, the same as /spell's, so one school
+ *  list is one saved set in both games. */
+function hashWords(words: WordPair[]): string {
+  const s = words.map((w) => w.en.toLowerCase()).join("|");
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return "custom_" + h.toString(36);
+}
 
 export function GameFlashcards({
   pool,
@@ -97,10 +132,79 @@ export function GameFlashcards({
   // Freeze the words at mount: the page tops the pool up with examples a
   // moment later, and that must not reshuffle a deck mid-game.
   const [startPool] = useState(pool);
-  // Where the words come from: the notebook, or a built-in topic.
-  const offerTopics = mode === "words" && !focusWord && TOPIC_LANGS.has(lang);
-  const [source, setSource] = useState<string | null>(offerTopics ? null : "mine");
-  const topic = source && source !== "mine" ? DICTATION_SETS.find((s) => s.id === source) ?? null : null;
+  const pc = PICK_COPY[lang] ?? PICK_COPY.en;
+  // Where the words come from: the notebook, or a set picked on the start screen.
+  const offerPick = mode === "words" && !focusWord;
+  const offerSets = offerPick && lang !== "en";
+  const [source, setSource] = useState<"mine" | Picked | null>(offerPick ? null : "mine");
+  const picked = source && source !== "mine" ? source : null;
+  const [saved, setSaved] = useState<SavedSet[]>([]);
+  const [ownTopic, setOwnTopic] = useState("");
+  const [listText, setListText] = useState("");
+  const [busy, setBusy] = useState("");
+  const [pickErr, setPickErr] = useState("");
+  const mineTotal = useMemo(() => new Set(startPool.filter((w) => w.meaning).map((w) => w.word.trim().toLowerCase())).size, [startPool]);
+
+  // The sets saved with the dictation trainer (and by this game).
+  useEffect(() => {
+    if (!offerPick || !user) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/dictation-sets", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const data = res.ok ? ((await res.json()) as { sets?: SavedSet[] }) : {};
+        if (!cancelled && Array.isArray(data.sets)) setSaved(data.sets.filter((s) => s.setId).slice(0, 8));
+      } catch { /* the picker works without them */ }
+    })();
+    return () => { cancelled = true; };
+  }, [offerPick, user]);
+
+  // Ask /api/spell-set for pairs: a topic (cached per language) or a list.
+  async function makeSet(body: { topic?: string; list?: string }, key: string, icon: string, fallbackTitle: string, save: boolean, keepId?: string) {
+    if (!user || busy) return;
+    setBusy(key);
+    setPickErr("");
+    try {
+      const res = await fetch("/api/spell-set", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ ...body, uiLang: lang, nativeLang: lang }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { safe?: boolean; title?: string; words?: WordPair[] };
+      if (!res.ok || !data.safe || !Array.isArray(data.words) || data.words.length < 2) {
+        setPickErr(data.safe === false ? pc.unsafe : pc.createErr);
+        return;
+      }
+      setSource({ id: keepId ?? hashWords(data.words), title: data.title || fallbackTitle, icon, words: data.words, save });
+    } catch {
+      setPickErr(pc.createErr);
+    } finally {
+      setBusy("");
+    }
+  }
+
+  function pickTopic(s: DictationSet) {
+    // The built-in sets are Hebrew/English; other languages get the same
+    // topic generated in their language (as /spell does).
+    if (lang === "he") setSource({ id: s.id, title: getCatTitle(s.id, lang), icon: s.icon, words: s.words, save: false });
+    else void makeSet({ topic: s.titleEn }, s.id, s.icon, getCatTitle(s.id, lang), false, s.id);
+  }
+
+  async function openSaved(setId: string) {
+    if (!user || busy) return;
+    setBusy(setId);
+    try {
+      const res = await fetch("/api/dictation-sets?id=" + encodeURIComponent(setId), { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+      const data = res.ok ? ((await res.json()) as { set?: { setId?: string; title?: string; icon?: string; words?: WordPair[] } }) : {};
+      const sv = data.set;
+      if (sv && Array.isArray(sv.words) && sv.words.length >= 2) setSource({ id: sv.setId || setId, title: sv.title || "", icon: sv.icon || "📝", words: sv.words, save: true });
+      else setPickErr(pc.createErr);
+    } catch {
+      setPickErr(pc.createErr);
+    } finally {
+      setBusy("");
+    }
+  }
 
   // The candidate words: unique, with a meaning, the focus word first.
   const candidates = useMemo<PlayWord[]>(() => {
@@ -139,27 +243,47 @@ export function GameFlashcards({
   }, [mode, source, candidates, lang, user]);
 
   const first = useMemo<Card[]>(() => {
-    if (topic) {
-      // A topic brings its own pairs: the Hebrew word and its English.
-      return shuffle(topic.words).slice(0, SESSION_SIZE.flashcards).map((p, i) => ({
+    if (picked) {
+      // A picked set brings its own pairs: the word in your language and its
+      // English. All of it is used: a school list is practiced whole.
+      const own = codeLabel(lang, lang);
+      return shuffle(picked.words).map((p, i) => ({
         key: `t${i}`,
-        word: { word: p.he, language: "Hebrew", meaning: "", examples: [], uiLang: lang },
-        pair: { pair: p.en, pairLang: "English", wordLang: "Hebrew" },
+        word: { word: p.he, language: own, meaning: "", examples: [], uiLang: lang },
+        pair: { pair: p.en, pairLang: "English", wordLang: own },
         repeat: false,
       }));
     }
     if (!pairs) return [];
     const list = mode === "words" ? candidates.filter((w) => pairs[w.word]?.pair) : candidates;
     return list.slice(0, SESSION_SIZE.flashcards).map((w, i) => ({ key: `c${i}`, word: w, pair: pairs[w.word], repeat: false }));
-  }, [pairs, candidates, mode, topic, lang]);
+  }, [pairs, candidates, mode, picked, lang]);
 
   const [deck, setDeck] = useState<Card[] | null>(null);
-  useEffect(() => { if (topic || pairs) setDeck(first); }, [first, pairs, topic]);
+  useEffect(() => { if (picked || pairs) setDeck(first); }, [first, pairs, picked]);
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reverse, setReverse] = useState(false);
   const [known, setKnown] = useState(0);
   const [missed, setMissed] = useState<Card[]>([]);
+
+  // A set someone made (or reopened) is saved with their dictation sets at
+  // the end, so it's waiting next time here and in /spell.
+  const finished = !!deck && deck.length > 0 && i >= deck.length;
+  const savedRef = useRef(false);
+  useEffect(() => {
+    if (!finished || savedRef.current || !picked?.save || !user) return;
+    savedRef.current = true;
+    void (async () => {
+      try {
+        await fetch("/api/dictation-sets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+          body: JSON.stringify({ setId: picked.id, title: picked.title, icon: picked.icon, direction: "he2en", words: picked.words, score: known, total: first.length }),
+        });
+      } catch { /* best-effort */ }
+    })();
+  }, [finished, picked, user, known, first.length]);
 
   if (!source) {
     return (
@@ -168,19 +292,56 @@ export function GameFlashcards({
         <PlayHeader title={title} progress="" score={0} onExit={onExit} t={t} />
         <div className="wb-play-question"><div className="wb-play-question-eyebrow">{f.pick}</div></div>
         <div className="wb-flash-pick">
-          <button type="button" className="wb-flash-src wb-flash-src-mine" onClick={() => setSource("mine")} disabled={candidates.length === 0}>
+          <button type="button" className="wb-flash-src wb-flash-src-mine" onClick={() => setSource("mine")} disabled={mineTotal === 0}>
             <span className="wb-flash-src-title">{f.mine}</span>
-            <span className="wb-flash-src-sub">{f.mineCount(candidates.length)}</span>
+            <span className="wb-flash-src-sub">{f.mineCount(mineTotal)}</span>
           </button>
-          <div className="wb-flash-topics-label">{f.topics}</div>
-          <div className="wb-flash-topics">
-            {DICTATION_SETS.map((s) => (
-              <button key={s.id} type="button" className="wb-flash-src" onClick={() => setSource(s.id)}>
-                <span className="wb-flash-src-icon" aria-hidden>{s.icon}</span>
-                <span className="wb-flash-src-title">{getCatTitle(s.id, lang)}</span>
-              </button>
-            ))}
-          </div>
+          {saved.length > 0 && (
+            <>
+              <div className="wb-flash-topics-label">{pc.mySets}</div>
+              <div className="wb-flash-topics">
+                {saved.map((s) => (
+                  <button key={s.setId} type="button" className="wb-flash-src" onClick={() => void openSaved(s.setId)} disabled={!!busy}>
+                    <span className="wb-flash-src-icon" aria-hidden>{s.icon || "📝"}</span>
+                    <span className="wb-flash-src-title" dir="auto">{busy === s.setId ? pc.creating : s.title || "📝"}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+          {offerSets && (
+            <>
+              <div className="wb-flash-topics-label">{f.topics}</div>
+              <div className="wb-flash-topics">
+                {DICTATION_SETS.map((s) => (
+                  <button key={s.id} type="button" className="wb-flash-src" onClick={() => pickTopic(s)} disabled={!!busy}>
+                    <span className="wb-flash-src-icon" aria-hidden>{s.icon}</span>
+                    <span className="wb-flash-src-title">{busy === s.id ? pc.creating : getCatTitle(s.id, lang)}</span>
+                  </button>
+                ))}
+              </div>
+              <form
+                className="wb-flash-make"
+                onSubmit={(e) => { e.preventDefault(); const tp = ownTopic.trim(); if (tp.length >= 2) void makeSet({ topic: tp }, "topic", "✨", tp, true); }}
+              >
+                <label className="wb-flash-make-title" htmlFor="wb-flash-topic">{pc.ownTopic}</label>
+                <div className="wb-flash-make-row">
+                  <input id="wb-flash-topic" className="wb-flash-input" value={ownTopic} onChange={(e) => setOwnTopic(e.target.value)} placeholder={pc.ownTopicPh} maxLength={40} dir="auto" />
+                  <button type="submit" className="wb-flash-make-btn" disabled={ownTopic.trim().length < 2 || !!busy}>{busy === "topic" ? pc.creating : pc.make}</button>
+                </div>
+              </form>
+              <form
+                className="wb-flash-make"
+                onSubmit={(e) => { e.preventDefault(); const lt = listText.trim(); if (lt.length >= 2) void makeSet({ list: lt }, "list", "📝", pc.pasteTitle, true); }}
+              >
+                <label className="wb-flash-make-title" htmlFor="wb-flash-list">{pc.pasteTitle}</label>
+                <div className="wb-flash-make-sub">{pc.pasteSub}</div>
+                <textarea id="wb-flash-list" className="wb-flash-input wb-flash-textarea" value={listText} onChange={(e) => setListText(e.target.value)} placeholder={pc.pastePh} maxLength={800} rows={5} dir="auto" />
+                <button type="submit" className="wb-flash-make-btn" disabled={listText.trim().length < 2 || !!busy}>{busy === "list" ? pc.creating : pc.pasteBtn}</button>
+              </form>
+            </>
+          )}
+          {pickErr && <div className="wb-flash-err" role="alert">{pickErr}</div>}
         </div>
       </div>
     );
@@ -238,7 +399,7 @@ export function GameFlashcards({
 
   // Front / back text for the current card.
   const wordLangName = card.pair?.wordLang || card.word.language;
-  const sourceLabel = topic ? f.srcTopic(getCatTitle(topic.id, lang)) : f.srcMine;
+  const sourceLabel = picked ? f.srcTopic(picked.title) : f.srcMine;
   const pair = card.pair;
   const frontText = mode === "words" && pair && reverse ? pair.pair : card.word.word;
   const backText = mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
@@ -312,5 +473,15 @@ const FLASH_CSS = `
 .wb-flash-src-icon { font-size: 26px; line-height: 1; }
 .wb-flash-topics-label { font-size: 13px; font-weight: 700; color: #6b7280; text-align: center; margin-top: 6px; }
 .wb-flash-topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.wb-flash-make { display: grid; gap: 8px; padding: 14px 16px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px rgba(15,72,68,0.12); margin-top: 6px; }
+.wb-flash-make-title { font-size: 15px; font-weight: 700; color: #0f172a; }
+.wb-flash-make-sub { font-size: 13px; color: #6b7280; line-height: 1.5; }
+.wb-flash-make-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.wb-flash-input { flex: 1 1 180px; min-width: 0; font: inherit; font-size: 16px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #D1D5DB; background: #fff; color: #0f172a; }
+.wb-flash-input:focus { outline: none; border-color: #0EA5A5; }
+.wb-flash-textarea { resize: vertical; line-height: 1.5; }
+.wb-flash-make-btn { font: inherit; font-size: 15px; font-weight: 700; padding: 10px 18px; border-radius: 999px; border: 0; background: #0EA5A5; color: #fff; cursor: pointer; justify-self: start; }
+.wb-flash-make-btn:disabled { opacity: 0.5; cursor: default; }
+.wb-flash-err { font-size: 14px; font-weight: 600; color: #b45309; text-align: center; }
 @media (prefers-reduced-motion: reduce) { .wb-flash-inner { transition: none; } }
 `;
