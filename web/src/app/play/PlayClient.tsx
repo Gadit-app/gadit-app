@@ -3908,7 +3908,8 @@ export function PlayPage() {
           if (!isPaid || !kidsAccess) {
             return (
               <div className="wb-play-kids-banner is-gate" dir={dir}>
-                <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-off.webp" alt="" width={240} height={240} />
                 <div className="wb-play-kids-banner-text">
                   <div className="wb-play-kids-banner-title">{bannerCopy.gateTitle}</div>
                   <div className="wb-play-kids-banner-desc">{planCopy(lang, "kidsGate")}</div>
@@ -3922,31 +3923,39 @@ export function PlayPage() {
           if (kidsMode) {
             return (
               <div className="wb-play-kids-banner is-on" dir={dir}>
-                <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot.webp" alt="" width={240} height={240} />
                 <div className="wb-play-kids-banner-text">
                   <div className="wb-play-kids-banner-title">{bannerCopy.onTitle}</div>
                   <div className="wb-play-kids-banner-desc">{bannerCopy.onDesc}</div>
                 </div>
                 <button
                   type="button"
-                  className="wb-play-kids-banner-cta is-ghost"
+                  role="switch"
+                  aria-checked="true"
+                  aria-label={bannerCopy.onCTA}
+                  className="wb-play-kids-switch is-on"
                   onClick={() => setKidsMode(false)}
                 >
-                  {bannerCopy.onCTA}
+                  <span className="wb-play-kids-switch-knob" />
                 </button>
               </div>
             );
           }
           return (
             <div className="wb-play-kids-banner" dir={dir}>
-              <div className="wb-play-kids-banner-icon" aria-hidden="true">🧒</div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-off.webp" alt="" width={240} height={240} />
               <div className="wb-play-kids-banner-text">
                 <div className="wb-play-kids-banner-title">{bannerCopy.offTitle}</div>
                 <div className="wb-play-kids-banner-desc">{bannerCopy.offDesc}</div>
               </div>
               <button
                 type="button"
-                className="wb-play-kids-banner-cta"
+                role="switch"
+                aria-checked="false"
+                aria-label={bannerCopy.offCTA}
+                className="wb-play-kids-switch"
                 onClick={() => {
                   // Defensive second gate: the button is already only
                   // rendered when isPaid, but explicit check inside the
@@ -3956,7 +3965,7 @@ export function PlayPage() {
                   setKidsMode(true);
                 }}
               >
-                {bannerCopy.offCTA}
+                <span className="wb-play-kids-switch-knob" />
               </button>
             </div>
           );
