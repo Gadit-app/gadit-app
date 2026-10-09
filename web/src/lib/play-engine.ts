@@ -17,6 +17,7 @@ import type { WordResult } from "@/components/design/result";
 
 export type GameId =
   | "quiz"
+  | "flashcards" // Flash cards: word on the front, flip for the meaning
   | "fillblank"
   | "memory"
   | "anagram"
@@ -58,6 +59,7 @@ type NotebookItem = {
  *  content and don't depend on the notebook. */
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   quiz: 4,
+  flashcards: 1,
   fillblank: 4, // and we need examples, checked separately
   memory: 4,
   anagram: 1,
@@ -78,6 +80,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
  *  pool; notebook games scale down if the pool is smaller. */
 export const SESSION_SIZE: Record<GameId, number> = {
   quiz: 5,
+  flashcards: 10,
   fillblank: 5,
   memory: 4, // 4 pairs = 8 cards
   anagram: 5,

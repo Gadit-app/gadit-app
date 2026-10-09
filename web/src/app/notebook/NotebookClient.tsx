@@ -647,12 +647,31 @@ const DICT_COPY: Record<string, {
   },
 };
 
+/** Games that open on one notebook word (see FOCUS_GAMES in /play). */
+const PRACTICE_GAMES = ["flashcards", "quiz", "memory", "anagram"] as const;
+type PracticeCopy = { practice: string; flashcards: string; quiz: string; memory: string; anagram: string };
+const PRACTICE_COPY: Record<string, PracticeCopy> = {
+  he: { practice: "תרגול", flashcards: "כרטיסיות", quiz: "חידון הגדרות", memory: "משחק זיכרון", anagram: "ערבול אותיות" },
+  en: { practice: "Practice", flashcards: "Flash cards", quiz: "Definition quiz", memory: "Memory game", anagram: "Letter scramble" },
+  ar: { practice: "تدريب", flashcards: "بطاقات", quiz: "اختبار التعريفات", memory: "لعبة الذاكرة", anagram: "خلط الحروف" },
+  ru: { practice: "Тренировка", flashcards: "Карточки", quiz: "Викторина", memory: "Игра на память", anagram: "Анаграмма" },
+  es: { practice: "Practicar", flashcards: "Tarjetas", quiz: "Quiz de definiciones", memory: "Memoria", anagram: "Letras revueltas" },
+  pt: { practice: "Praticar", flashcards: "Cartões", quiz: "Quiz de definições", memory: "Jogo da memória", anagram: "Letras embaralhadas" },
+  fr: { practice: "S’entraîner", flashcards: "Cartes mémoire", quiz: "Quiz des définitions", memory: "Memory", anagram: "Lettres mélangées" },
+  de: { practice: "Üben", flashcards: "Karteikarten", quiz: "Definitionsquiz", memory: "Memory", anagram: "Buchstabensalat" },
+};
+
 export function NotebookPage() {
   const { user, plan, planReady, loading, promptLogin, familyRole } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
   const c = COPY[lang] ?? COPY.en;
+  // "Practice this word" (Gadi 2026-10-09): games open on one word. The
+  // games page needs a paid plan, so the button shows only there.
+  const pc = PRACTICE_COPY[lang] ?? PRACTICE_COPY.en;
+  const canPlay = plan === "deep";
+  const [practiceOpen, setPracticeOpen] = useState<string | null>(null);
   // In the kids' area the notebook is reframed as a "treasure box" (Gadi
   // 2026-08-12, from the moms' feedback) — same page, warmer name for a kid.
   const isKid = familyRole === "kid";
@@ -985,6 +1004,31 @@ export function NotebookPage() {
                       </div>
                     )}
                   </Link>
+                  {canPlay && (
+                    <div className="wb-nb-practice">
+                      <button
+                        type="button"
+                        className="wb-nb-practice-btn"
+                        aria-expanded={practiceOpen === item.id}
+                        onClick={() => setPracticeOpen((cur) => (cur === item.id ? null : item.id))}
+                      >
+                        {pc.practice}
+                      </button>
+                      {practiceOpen === item.id && (
+                        <div className="wb-nb-practice-games">
+                          {PRACTICE_GAMES.filter((g) => g !== "anagram" || !item.word.trim().includes(" ")).map((g) => (
+                            <Link
+                              key={g}
+                              className="wb-nb-practice-game"
+                              href={href(`/play?game=${g}&word=${encodeURIComponent(item.word)}`)}
+                            >
+                              {pc[g]}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </li>
               );
                 })}

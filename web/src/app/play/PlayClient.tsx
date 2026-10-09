@@ -33,6 +33,7 @@ import {
   hydrateExamples,
   usableFillBlankExamples,
   MIN_WORDS_FOR_GAME,
+  SESSION_SIZE,
   type GameId,
   type PlayWord,
 } from "@/lib/play-engine";
@@ -41,6 +42,7 @@ import { GameQuiz, type PlayT } from "@/components/play/GameQuiz";
 import { GameFillBlank } from "@/components/play/GameFillBlank";
 import { NiqqudProvider } from "@/lib/niqqud-display";
 import { GameMemory } from "@/components/play/GameMemory";
+import { GameFlashcards, flashCopy } from "@/components/play/GameFlashcards";
 import { GameAnagram } from "@/components/play/GameAnagram";
 import { GameSpeed } from "@/components/play/GameSpeed";
 import { GameTwinTrap } from "@/components/play/GameTwinTrap";
@@ -3224,6 +3226,24 @@ function LangSwitch() {
   );
 }
 
+/** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
+const FOCUS_GAMES: GameId[] = ["flashcards", "quiz", "memory", "anagram"];
+
+/** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
+ *  Add an id here once its picture is in place; others keep their icon. */
+const GAME_COVERS = new Set<GameId>([]);
+
+/** A pool that is sure to include the focus word: the word first, then
+ *  random others, sized to one session so the game's builder uses them all. */
+function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
+  const key = word.trim().toLowerCase();
+  const hit = pool.find((p) => p.word.trim().toLowerCase() === key);
+  if (!hit || game === "flashcards") return pool;
+  const others = pool.filter((p) => p !== hit).sort(() => Math.random() - 0.5);
+  const size = Math.max(SESSION_SIZE[game], MIN_WORDS_FOR_GAME[game]);
+  return [hit, ...others.slice(0, Math.max(0, size - 1))];
+}
+
 export function PlayPage() {
   const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess } = useAuth();
   const isKidPlayer = familyRole === "kid";
@@ -3234,6 +3254,17 @@ export function PlayPage() {
 
   type Stage = { kind: "menu" } | { kind: "playing"; game: GameId };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
+  // "Practice this word" from the notebook (Gadi 2026-10-09):
+  // /play?game=<id>&word=<word> opens that game with the word in it.
+  const [focus, setFocus] = useState<{ game: GameId; word: string } | null>(null);
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const g = q.get("game") as GameId | null;
+      const w = (q.get("word") ?? "").trim();
+      if (g && w && FOCUS_GAMES.includes(g)) setFocus({ game: g, word: w });
+    } catch { /* no URL */ }
+  }, []);
   const [pool, setPool] = useState<PlayWord[] | null>(null);
   const [fetchError, setFetchError] = useState<string>("");
   const [streak, setStreak] = useState(() => getStreak());
@@ -3330,6 +3361,14 @@ export function PlayPage() {
     }
     return merged;
   }, [pool, lang, kidsMode]);
+  // Open the focus game once the notebook has loaded (so the word is in it).
+  const focusStartedRef = useRef(false);
+  useEffect(() => {
+    if (!focus || focusStartedRef.current || pool === null) return;
+    focusStartedRef.current = true;
+    setStage({ kind: "playing", game: focus.game });
+  }, [focus, pool]);
+
   const poolWithExamples = useMemo(
     () => effectivePool.filter((p) => usableFillBlankExamples(p).length > 0).length,
     [effectivePool],
@@ -3355,6 +3394,22 @@ export function PlayPage() {
      *  is on, the menu shows only these games. */
     kidsFriendly?: boolean;
   }> = [
+    {
+      id: "flashcards",
+      title: flashCopy(lang).title,
+      desc: flashCopy(lang).desc,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.flashcards,
+      accent: "teal",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="6" width="14" height="12" rx="2" />
+          <path d="M7 4h12a2 2 0 0 1 2 2v10" />
+          <path d="M7 12h6" />
+        </svg>
+      ),
+    },
     {
       id: "quiz",
       title: t.quizTitle,
@@ -3667,12 +3722,14 @@ export function PlayPage() {
     // don't need a null guard here anymore. Games take the pool as-is;
     // they don't care whether the words came from the notebook or the
     // curated fallback. Gadi 2026-07-03.
-    const props = { pool: effectivePool, onExit: exit, lang, t };
+    const focusWord = focus && focus.game === stage.game ? focus.word : undefined;
+    const props = { pool: focusWord ? focusPool(effectivePool, focusWord, stage.game) : effectivePool, onExit: exit, lang, t };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
             UI). Anagram is excluded: its tiles are single letters. */}
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
+          {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} />}
           {stage.game === "quiz" && <GameQuiz {...props} />}
           {stage.game === "fillblank" && <GameFillBlank {...props} />}
           {stage.game === "memory" && <GameMemory {...props} />}
@@ -3861,7 +3918,12 @@ export function PlayPage() {
                         onClick={() => g.enabled && setStage({ kind: "playing", game: g.id })}
                         disabled={!g.enabled}
                       >
-                        <span className="wb-play-card-icon">{g.icon}</span>
+                        {GAME_COVERS.has(g.id) ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img className="wb-play-card-cover" src={`/play/${g.id}.webp`} alt="" loading="lazy" width={512} height={512} />
+                        ) : (
+                          <span className="wb-play-card-icon">{g.icon}</span>
+                        )}
                         <span className="wb-play-card-text">
                           <span className="wb-play-card-title">{g.title}</span>
                           <span className="wb-play-card-desc">{g.desc}</span>

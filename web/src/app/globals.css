@@ -5327,6 +5327,14 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos,
   border-color: var(--accent, #0EA5A5);
   color: var(--accent, #0EA5A5);
 }
+/* Per-word practice (Gadi 2026-10-09): a small button under each notebook
+   card that opens the games playable on that word. */
+.wordbook .wb-nb-practice { padding: 0 14px 12px; }
+.wordbook .wb-nb-practice-btn { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 13px; font-weight: 700; color: rgb(13, 148, 148); background: rgba(14, 165, 165, 0.10); border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.wordbook .wb-nb-practice-btn[aria-expanded="true"] { background: rgb(14, 165, 165); color: #fff; }
+.wordbook .wb-nb-practice-games { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.wordbook .wb-nb-practice-game { font-size: 13px; font-weight: 600; color: var(--wb-ink); background: var(--surface); border: 1px solid var(--wb-border); border-radius: 999px; padding: 6px 12px; text-decoration: none; }
+.wordbook .wb-nb-practice-game:hover { border-color: rgb(14, 165, 165); color: rgb(13, 148, 148); }
 .wordbook .wb-notebook-card {
   background: var(--surface);
   border: 1px solid var(--rule);
@@ -7692,6 +7700,16 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   height: 34px;
   border-radius: 10px;
   flex-shrink: 0;
+}
+/* Game cover picture (Gadi 2026-10-09): replaces the small icon when a
+   game has public/play/<id>.webp. Full width on top of the tile. */
+.wordbook .wb-play-card-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  background: rgba(14, 165, 165, 0.08);
 }
 .wordbook .wb-play-card-text {
   display: flex;
