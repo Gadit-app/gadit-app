@@ -27,7 +27,7 @@ const PRICES = {
 const COPY = {
   he: {
     title: "מחשבון הכנסות",
-    hint: "כמה תרוויחו לפי מספר המנויים שיגיעו דרככם. החישוב לפי אחוזי העמלה שלכם.",
+    hint: "שחקו עם המספרים כדי לראות כמה תרוויחו לפי מספר המנויים שיגיעו דרככם. החישוב לפי אחוזי העמלה שלכם.",
     families: "משפחות",
     familiesSub: "מנוי Family ב-₪19.90 לחודש",
     familiesSubUsd: "מנוי Family ב-$5.99 לחודש",
@@ -50,7 +50,7 @@ const COPY = {
   },
   en: {
     title: "Earnings calculator",
-    hint: "See what you can earn from the subscribers who join through you, at your own commission rates.",
+    hint: "Play with the numbers to see what you could earn from the subscribers who join through you, at your own commission rates.",
     families: "Families",
     familiesSub: "Family, ₪19.90 a month",
     familiesSubUsd: "Family, $5.99 a month",
@@ -116,9 +116,9 @@ export function EarningsCalculator({ lang, rateYearOne, rateLifetime }: { lang: 
   const big: React.CSSProperties = { fontSize: 26, fontWeight: 800, letterSpacing: -0.5 };
 
   return (
-    <div style={{ background: "#fff", border: "1px solid #E9ECEF", borderRadius: 16, padding: 22, boxShadow: "0 1px 2px rgba(16,24,40,0.04)" }}>
+    <div style={{ background: "linear-gradient(180deg, #F2FBFA 0%, #FFFFFF 140px)", border: "1.5px solid #BFE7E5", borderRadius: 18, padding: 22, marginTop: 10, boxShadow: "0 1px 2px rgba(16,24,40,0.04)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#6B7280", letterSpacing: 0.4, textTransform: "uppercase" }}>{t.title}</div>
+        <h2 style={{ margin: 0, fontSize: 21, fontWeight: 800, color: "#111827", display: "flex", alignItems: "center", gap: 8 }}>{t.title}</h2>
         <div role="radiogroup" aria-label={t.currency} style={{ display: "inline-flex", border: "1px solid #D1D5DB", borderRadius: 999, overflow: "hidden" }}>
           {(["ILS", "USD"] as Cur[]).map((c) => (
             <button
@@ -134,7 +134,7 @@ export function EarningsCalculator({ lang, rateYearOne, rateLifetime }: { lang: 
           ))}
         </div>
       </div>
-      <div style={{ fontSize: 12.5, color: "#6B7280", margin: "8px 0 6px", lineHeight: 1.5 }}>{t.hint}</div>
+      <div style={{ fontSize: 14, color: "#4B5563", margin: "8px 0 10px", lineHeight: 1.55 }}>{t.hint}</div>
 
       <div style={row}>
         <div>
@@ -168,15 +168,15 @@ export function EarningsCalculator({ lang, rateYearOne, rateLifetime }: { lang: 
       </div>
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 14 }}>
-        <div style={{ ...box, background: "#E8F6F6" }}>
-          <div style={{ fontSize: 12.5, fontWeight: 700, color: "#0b7d7d" }}>{t.yearOne} · {Math.round(rateYearOne * 100)}%</div>
-          <div style={{ ...big, color: "#0b7d7d" }} dir="ltr">{fmt(y1Month, cur)}</div>
-          <div style={{ fontSize: 13, color: "#0b7d7d" }}>{t.perMonth} · <span dir="ltr">{fmt(y1Month * 12, cur)}</span> {t.perYear}</div>
+        <div style={{ ...box, background: "#E8F6F6", textAlign: "center" }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#0b7d7d" }}>{t.yearOne} · {Math.round(rateYearOne * 100)}%</div>
+          <div style={{ color: "#0b7d7d", marginTop: 6 }}><span style={big} dir="ltr">{fmt(y1Month, cur)}</span> <span style={{ fontSize: 17, fontWeight: 700 }}>{t.perMonth}</span></div>
+          <div style={{ fontSize: 14, color: "#0b7d7d", marginTop: 2 }}><span dir="ltr">{fmt(y1Month * 12, cur)}</span> {t.perYear}</div>
         </div>
-        <div style={{ ...box, background: "#F5F1FF" }}>
-          <div style={{ fontSize: 12.5, fontWeight: 700, color: "#6D28D9" }}>{t.later} · {Math.round(rateLifetime * 100)}%</div>
-          <div style={{ ...big, color: "#6D28D9" }} dir="ltr">{fmt(laterMonth, cur)}</div>
-          <div style={{ fontSize: 13, color: "#6D28D9" }}>{t.perMonth} · <span dir="ltr">{fmt(laterMonth * 12, cur)}</span> {t.perYear}</div>
+        <div style={{ ...box, background: "#F5F1FF", textAlign: "center" }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#6D28D9" }}>{t.later} · {Math.round(rateLifetime * 100)}%</div>
+          <div style={{ color: "#6D28D9", marginTop: 6 }}><span style={big} dir="ltr">{fmt(laterMonth, cur)}</span> <span style={{ fontSize: 17, fontWeight: 700 }}>{t.perMonth}</span></div>
+          <div style={{ fontSize: 14, color: "#6D28D9", marginTop: 2 }}><span dir="ltr">{fmt(laterMonth * 12, cur)}</span> {t.perYear}</div>
         </div>
       </div>
       <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 12, lineHeight: 1.55 }}>{t.note}</div>
