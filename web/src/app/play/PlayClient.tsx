@@ -167,14 +167,14 @@ const KIDS_BANNER_COPY: Record<string, KidsBannerCopy> = {
   },
   he: {
     offTitle: "משחקים עם ילד?",
-    offDesc: "הפעל מצב ילדים כדי לראות משחקים ושפה שמתאימים לגילאי 6-12.",
-    offCTA: "הפעל מצב ילדים",
+    offDesc: "הפעילו מצב ילדים, ונציג רק משחקים ושפה שמתאימים לגילאי 6 עד 12.",
+    offCTA: "הפעלת מצב ילדים",
     onTitle: "✓ מצב ילדים פועל",
     onDesc: "מציגים כרגע רק את המשחקים המתאימים לילדים.",
-    onCTA: "כבה",
+    onCTA: "כיבוי מצב ילדים",
     gateTitle: "משחקים עם ילד?",
     gateDesc: "מצב ילדים זמין למנויים בתכניות Clear ו-Deep.",
-    gateCTA: "צפה בתכניות",
+    gateCTA: "לתכניות",
   },
   en: {
     offTitle: "Playing with a child?",
@@ -3270,6 +3270,13 @@ export function PlayPage() {
   const t = COPY[lang] ?? COPY.en;
 
   type Stage = { kind: "menu" } | { kind: "playing"; game: GameId };
+  const [kbVariant, setKbVariant] = useState<"a" | "b" | "c">("b");
+  useEffect(() => {
+    try {
+      const v = new URLSearchParams(window.location.search).get("kb");
+      if (v === "a" || v === "b" || v === "c") setKbVariant(v);
+    } catch { /* no URL */ }
+  }, []);
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
@@ -3904,12 +3911,14 @@ export function PlayPage() {
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
         {(() => {
           const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
+          // Background option for the "on" banner while Gadi picks one
+          // (2026-10-09): /play?kb=a|b|c, default b (deep teal).
           // Kids Mode is a Family tool (Gadi 2026-10-06).
           if (!isPaid || !kidsAccess) {
             return (
               <div className="wb-play-kids-banner is-gate" dir={dir}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-off.webp" alt="" width={240} height={240} />
+                <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-sleep.webp" alt="" width={240} height={240} />
                 <div className="wb-play-kids-banner-text">
                   <div className="wb-play-kids-banner-title">{bannerCopy.gateTitle}</div>
                   <div className="wb-play-kids-banner-desc">{planCopy(lang, "kidsGate")}</div>
@@ -3922,7 +3931,7 @@ export function PlayPage() {
           }
           if (kidsMode) {
             return (
-              <div className="wb-play-kids-banner is-on" dir={dir}>
+              <div className={`wb-play-kids-banner is-on kb-${kbVariant}`} dir={dir}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot.webp" alt="" width={240} height={240} />
                 <div className="wb-play-kids-banner-text">
@@ -3945,7 +3954,7 @@ export function PlayPage() {
           return (
             <div className="wb-play-kids-banner" dir={dir}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-off.webp" alt="" width={240} height={240} />
+              <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-sleep.webp" alt="" width={240} height={240} />
               <div className="wb-play-kids-banner-text">
                 <div className="wb-play-kids-banner-title">{bannerCopy.offTitle}</div>
                 <div className="wb-play-kids-banner-desc">{bannerCopy.offDesc}</div>
