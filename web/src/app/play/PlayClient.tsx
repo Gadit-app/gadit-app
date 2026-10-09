@@ -3270,13 +3270,6 @@ export function PlayPage() {
   const t = COPY[lang] ?? COPY.en;
 
   type Stage = { kind: "menu" } | { kind: "playing"; game: GameId };
-  const [kbVariant, setKbVariant] = useState<"a" | "b" | "c">("b");
-  useEffect(() => {
-    try {
-      const v = new URLSearchParams(window.location.search).get("kb");
-      if (v === "a" || v === "b" || v === "c") setKbVariant(v);
-    } catch { /* no URL */ }
-  }, []);
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
@@ -3911,8 +3904,6 @@ export function PlayPage() {
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
         {(() => {
           const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
-          // Background option for the "on" banner while Gadi picks one
-          // (2026-10-09): /play?kb=a|b|c, default b (deep teal).
           // Kids Mode is a Family tool (Gadi 2026-10-06).
           if (!isPaid || !kidsAccess) {
             return (
@@ -3931,7 +3922,7 @@ export function PlayPage() {
           }
           if (kidsMode) {
             return (
-              <div className={`wb-play-kids-banner is-on kb-${kbVariant}`} dir={dir}>
+              <div className="wb-play-kids-banner is-on" dir={dir}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot.webp" alt="" width={240} height={240} />
                 <div className="wb-play-kids-banner-text">

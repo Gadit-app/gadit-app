@@ -8619,30 +8619,12 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   border-radius: 16px;
   box-shadow: 0 0 0 0.5px rgba(15, 23, 42, 0.14), 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px -10px rgba(15, 23, 42, 0.22);
 }
-/* "On" background, three options while Gadi picks (?kb=a|b|c):
-   b (default) deep teal like the card bands, white text, mustard switch;
-   a soft mint; c white with a teal halo behind the mascot. */
-.wordbook .wb-play-kids-banner.is-on { background: #0F6F6C; box-shadow: 0 6px 16px -10px rgba(15, 60, 58, 0.55); border: 0; }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-banner-title { color: #FFFFFF; }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-banner-desc { color: rgba(255, 255, 255, 0.86); }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-switch.is-on { background: #F2B544; }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-switch.is-on .wb-play-kids-switch-knob { background: #0F6F6C; }
-.wordbook .wb-play-kids-banner.is-on.kb-a { background: #E7F4F2; box-shadow: 0 0 0 1px #BCE0DA; }
-.wordbook .wb-play-kids-banner.is-on.kb-c {
-  background: radial-gradient(140px 100px at calc(100% - 52px) 50%, rgba(14, 165, 165, 0.18), transparent 70%), #FFFFFF;
-  box-shadow: 0 0 0 0.5px rgba(15, 23, 42, 0.14), 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px -10px rgba(15, 23, 42, 0.22);
-}
-.wordbook .wb-play-kids-banner.is-on.kb-c[dir="ltr"] {
-  background: radial-gradient(140px 100px at 52px 50%, rgba(14, 165, 165, 0.18), transparent 70%), #FFFFFF;
-}
-.wordbook .wb-play-kids-banner.is-on.kb-a .wb-play-kids-banner-title,
-.wordbook .wb-play-kids-banner.is-on.kb-c .wb-play-kids-banner-title { color: #0F3B39; }
-.wordbook .wb-play-kids-banner.is-on.kb-a .wb-play-kids-banner-desc,
-.wordbook .wb-play-kids-banner.is-on.kb-c .wb-play-kids-banner-desc { color: #4A6461; }
-.wordbook .wb-play-kids-banner.is-on.kb-a .wb-play-kids-switch.is-on,
-.wordbook .wb-play-kids-banner.is-on.kb-c .wb-play-kids-switch.is-on { background: #0F6F6C; }
-.wordbook .wb-play-kids-banner.is-on.kb-a .wb-play-kids-switch.is-on .wb-play-kids-switch-knob,
-.wordbook .wb-play-kids-banner.is-on.kb-c .wb-play-kids-switch.is-on .wb-play-kids-switch-knob { background: #FFFFFF; }
+/* "On" background (Gadi picked it 2026-10-09, of three): soft mint from
+   the notebook-card family, dark teal text, teal switch. */
+.wordbook .wb-play-kids-banner.is-on { background: #E7F4F2; box-shadow: 0 0 0 1px #BCE0DA; border: 0; }
+.wordbook .wb-play-kids-banner.is-on .wb-play-kids-banner-title { color: #0F3B39; }
+.wordbook .wb-play-kids-banner.is-on .wb-play-kids-banner-desc { color: #4A6461; }
+.wordbook .wb-play-kids-banner.is-on .wb-play-kids-switch.is-on { background: #0F6F6C; }
 .wordbook .wb-play-kids-banner.is-gate { background: #FFFFFF; border: 0; }
 .wordbook .wb-play-kids-banner-mascot {
   /* Full square canvas (not trimmed) so both poses keep the same scale. */
