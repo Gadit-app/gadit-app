@@ -3735,70 +3735,70 @@ export function PlayPage() {
     const curatedProps = { onExit: exit, lang, t };
     if (stage.game === "twin") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameTwinTrap {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "time") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameTimeTraveler {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "passport") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameWordPassport {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "friends") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameFalseFriends {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "root") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameRootRush {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "shade") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameShadeSlider {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "build") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameBuildAWord {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "idiom") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameIdiomDecoder {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "lens") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameMeaningLens {...curatedProps} />
         </div>
       );
     }
     if (stage.game === "artist") {
       return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
           <GameEtymologyArtist {...curatedProps} />
         </div>
       );
@@ -3810,7 +3810,7 @@ export function PlayPage() {
     const focusWord = focus && focus.game === stage.game ? focus.word : undefined;
     const props = { pool: focusWord ? focusPool(effectivePool, focusWord, stage.game) : gamePool, onExit: exit, lang, t };
     return (
-      <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+      <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
             UI). Anagram is excluded: its tiles are single letters. */}
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
@@ -3829,7 +3829,7 @@ export function PlayPage() {
 
   // ─── Menu stage ────────────────────────────────────────────────
   return (
-    <div className={`wordbook wb-shell-page wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
+    <div className={`wordbook wb-shell-page wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
       <header className="wb-shell-topbar">
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>

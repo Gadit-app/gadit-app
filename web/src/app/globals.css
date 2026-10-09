@@ -7511,6 +7511,19 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
 .wordbook .wb-play-page {
   background: var(--wb-canvas);
 }
+/* Kids Mode changes the whole page, not just the banner (Gadi 2026-10-09):
+   soft washes of the cover palette (teal, mustard, purple) over the usual
+   canvas. Painted over a light mint ground (--wb-canvas is never defined). A kid account with
+   a chosen skin keeps its skin. */
+.wordbook.wb-play-page.is-kids-mode:not(.wb-kid-area),
+.wordbook .wb-play-page.is-kids-mode:not(.wb-kid-area) {
+  background:
+    radial-gradient(700px 360px at 88% -4%, rgba(14, 165, 165, 0.26), transparent 64%),
+    radial-gradient(560px 320px at 6% 22%, rgba(242, 181, 68, 0.22), transparent 64%),
+    radial-gradient(680px 420px at 72% 96%, rgba(124, 58, 237, 0.14), transparent 64%),
+    #EAF5F2;
+  background-attachment: fixed;
+}
 
 .wordbook .wb-play-main {
   max-width: 880px;
