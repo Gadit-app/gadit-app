@@ -7605,6 +7605,47 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   margin-top: 28px;
 }
 .wordbook .wb-play-section:first-of-type { margin-top: 0; }
+/* All sections share one grid (Gadi 2026-10-09): a category with one or
+   two games sits beside the next category instead of taking a whole row,
+   so the menu reads as one compact set of cards. Each section spans as
+   many columns as it has games (capped at the row) and lines its cards up
+   with the shared columns through subgrid. */
+.wordbook .wb-play-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 10px;
+  row-gap: 26px;
+  align-items: start;
+}
+.wordbook .wb-play-sections > .wb-play-section {
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: span 2;
+  min-width: 0;
+}
+.wordbook .wb-play-sections > .wb-play-span-1 { grid-column: span 1; }
+.wordbook .wb-play-sections > .wb-play-section > .wb-play-section-heading { grid-column: 1 / -1; }
+.wordbook .wb-play-sections > .wb-play-section > .wb-play-grid {
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  row-gap: 10px;
+}
+@media (min-width: 600px) {
+  .wordbook .wb-play-sections { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 12px; }
+  .wordbook .wb-play-sections > .wb-play-section { grid-column: span 3; }
+  .wordbook .wb-play-sections > .wb-play-span-2 { grid-column: span 2; }
+  .wordbook .wb-play-sections > .wb-play-span-1 { grid-column: span 1; }
+  .wordbook .wb-play-sections > .wb-play-section > .wb-play-grid { row-gap: 12px; }
+}
+@media (min-width: 900px) {
+  .wordbook .wb-play-sections { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 14px; }
+  .wordbook .wb-play-sections > .wb-play-section { grid-column: span 4; }
+  .wordbook .wb-play-sections > .wb-play-span-3 { grid-column: span 3; }
+  .wordbook .wb-play-sections > .wb-play-span-2 { grid-column: span 2; }
+  .wordbook .wb-play-sections > .wb-play-span-1 { grid-column: span 1; }
+  .wordbook .wb-play-sections > .wb-play-section > .wb-play-grid { row-gap: 14px; }
+}
 .wordbook .wb-play-section-heading {
   font-size: 12px;
   font-weight: 600;

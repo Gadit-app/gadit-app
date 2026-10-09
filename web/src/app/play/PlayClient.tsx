@@ -43,6 +43,7 @@ import { GameFillBlank } from "@/components/play/GameFillBlank";
 import { NiqqudProvider } from "@/lib/niqqud-display";
 import { GameMemory } from "@/components/play/GameMemory";
 import { GameFlashcards, flashCopy } from "@/components/play/GameFlashcards";
+import { GameTrueFalse, tfCopy } from "@/components/play/GameTrueFalse";
 import { GameAnagram } from "@/components/play/GameAnagram";
 import { GameSpeed } from "@/components/play/GameSpeed";
 import { GameTwinTrap } from "@/components/play/GameTwinTrap";
@@ -3231,7 +3232,10 @@ const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "ana
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
-const GAME_COVERS = new Set<GameId>([]);
+const GAME_COVERS = new Set<GameId>([
+  "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
+  "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist",
+]);
 
 /** A pool that is sure to include the focus word: the word first, then
  *  random others, sized to one session so the game's builder uses them all. */
@@ -3423,6 +3427,21 @@ export function PlayPage() {
           <rect x="3" y="6" width="14" height="12" rx="2" />
           <path d="M7 4h12a2 2 0 0 1 2 2v10" />
           <path d="M6.5 10.5h7M6.5 13.5h5" />
+        </svg>
+      ),
+    },
+    {
+      id: "truefalse",
+      title: tfCopy(lang).title,
+      desc: tfCopy(lang).desc,
+      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.truefalse,
+      accent: "teal",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 12.5l3.5 3.5L14 9.5" />
+          <path d="M15 15l5-5M20 15l-5-5" />
         </svg>
       ),
     },
@@ -3747,6 +3766,7 @@ export function PlayPage() {
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
           {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} mode="words" />}
           {stage.game === "flashdefs" && <GameFlashcards {...props} focusWord={focusWord} mode="meanings" />}
+          {stage.game === "truefalse" && <GameTrueFalse {...props} />}
           {stage.game === "quiz" && <GameQuiz {...props} />}
           {stage.game === "fillblank" && <GameFillBlank {...props} />}
           {stage.game === "memory" && <GameMemory {...props} />}
@@ -3911,7 +3931,7 @@ export function PlayPage() {
             { id: "precision", label: t.catPrecision },
             { id: "structure", label: t.catStructure },
           ];
-          return sections.map((section) => {
+          return <div className="wb-play-sections">{sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
             // younger players. The 5 notebook games always qualify
             // (auto-adapt from the child's own vocabulary); the 4
@@ -3924,7 +3944,7 @@ export function PlayPage() {
             // fallback means these games are always playable, even
             // with an empty notebook.
             return (
-              <section key={section.id} className="wb-play-section">
+              <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
                 <h2 className="wb-play-section-heading">{section.label}</h2>
                 <ul className="wb-play-grid">
                   {sectionGames.map((g) => (
@@ -3954,7 +3974,7 @@ export function PlayPage() {
                 </ul>
               </section>
             );
-          });
+          })}</div>;
         })()}
       </main>
 

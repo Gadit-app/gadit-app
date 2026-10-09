@@ -20,6 +20,7 @@ export type GameId =
   | "quiz"
   | "flashcards" // Word cards: say the word in the other language, flip to check
   | "flashdefs"  // Definition cards: word on the front, flip for the meaning
+  | "truefalse"  // True or false: does this meaning belong to this word?
   | "fillblank"
   | "memory"
   | "anagram"
@@ -63,6 +64,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   quiz: 4,
   flashcards: 1,
   flashdefs: 1,
+  truefalse: 2,
   fillblank: 4, // and we need examples, checked separately
   memory: 4,
   anagram: 1,
@@ -85,6 +87,7 @@ export const SESSION_SIZE: Record<GameId, number> = {
   quiz: 5,
   flashcards: 10,
   flashdefs: 10,
+  truefalse: 10,
   fillblank: 5,
   memory: 4, // 4 pairs = 8 cards
   anagram: 5,
@@ -338,6 +341,30 @@ export function buildQuizQuestions(
     if (q) questions.push(q);
   }
   return questions;
+}
+
+/** One round of True or false: the word with its own meaning, or with a
+ *  meaning of another word in the same script (so the language alone never
+ *  gives the answer away). 2026-10-09. */
+export type TrueFalseRound = { word: PlayWord; shown: string; isTrue: boolean };
+
+export function buildTrueFalseRounds(pool: PlayWord[], count: number): TrueFalseRound[] {
+  const seen = new Set<string>();
+  const usable = pool.filter((p) => {
+    const k = p.word.trim().toLowerCase();
+    if (!p.meaning.trim() || seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  const rounds: TrueFalseRound[] = [];
+  for (const target of sample(usable, count)) {
+    const decoys = usable.filter(
+      (p) => p !== target && scriptOf(p.meaning) === scriptOf(target.meaning) && p.meaning.trim() !== target.meaning.trim(),
+    );
+    const isTrue = decoys.length === 0 || Math.random() < 0.5;
+    rounds.push({ word: target, shown: isTrue ? target.meaning : sample(decoys, 1)[0].meaning, isTrue });
+  }
+  return rounds;
 }
 
 function buildOneQuizQuestion(pool: PlayWord[], target: PlayWord): QuizQuestion | null {
