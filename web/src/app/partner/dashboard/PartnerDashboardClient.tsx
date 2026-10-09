@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { EarningsCalculator } from "./EarningsCalculator";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
@@ -1484,6 +1485,8 @@ export function PartnerDashboardClient() {
                     </select>
                   </div>
                 </div>
+
+                <EarningsCalculator lang={lang} rateYearOne={stats.rateYearOne} rateLifetime={stats.rateLifetime} />
               </>
             )}
 
