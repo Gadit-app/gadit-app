@@ -7625,7 +7625,16 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   min-width: 0;
 }
 .wordbook .wb-play-sections > .wb-play-span-1 { grid-column: span 1; }
-.wordbook .wb-play-sections > .wb-play-section > .wb-play-section-heading { grid-column: 1 / -1; }
+.wordbook .wb-play-sections > .wb-play-section > .wb-play-section-heading,
+.wordbook .wb-play-sections > .wb-play-section > .wb-play-section-head { grid-column: 1 / -1; }
+/* "Words in" language chips beside the notebook heading (2026-10-09). */
+.wordbook .wb-play-section-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; margin: 0 0 12px; }
+.wordbook .wb-play-section-head .wb-play-section-heading { margin: 0; }
+.wordbook .wb-play-langs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.wordbook .wb-play-langs-label { font-size: 13px; font-weight: 600; color: var(--wb-ink-soft); }
+.wordbook .wb-play-lang { font: inherit; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(15, 111, 108, 0.25); background: var(--surface, #fff); color: #0F6F6C; cursor: pointer; }
+.wordbook .wb-play-lang.is-on { background: #0F6F6C; border-color: #0F6F6C; color: #fff; }
+.wordbook .wb-play-lang:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 2px; }
 .wordbook .wb-play-sections > .wb-play-section > .wb-play-grid {
   grid-column: 1 / -1;
   grid-template-columns: subgrid;

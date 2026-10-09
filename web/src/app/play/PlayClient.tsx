@@ -34,6 +34,7 @@ import {
   usableFillBlankExamples,
   MIN_WORDS_FOR_GAME,
   SESSION_SIZE,
+  wordLangOf,
   type GameId,
   type PlayWord,
 } from "@/lib/play-engine";
@@ -3227,6 +3228,18 @@ function LangSwitch() {
   );
 }
 
+/** The "words in" chips above the notebook games. */
+const WORDS_IN: Record<string, [string, string]> = {
+  he: ["המילים ב:", "כל השפות"], en: ["Words in:", "All languages"], ar: ["الكلمات بـ:", "كل اللغات"],
+  ru: ["Слова на:", "Все языки"], es: ["Palabras en:", "Todos los idiomas"], pt: ["Palavras em:", "Todos os idiomas"],
+  fr: ["Mots en :", "Toutes les langues"], de: ["Wörter auf:", "Alle Sprachen"],
+};
+const wordsInLabel = (ui: string) => (WORDS_IN[ui] ?? WORDS_IN.en)[0];
+const allLangsLabel = (ui: string) => (WORDS_IN[ui] ?? WORDS_IN.en)[1];
+function langNameIn(code: string, ui: string): string {
+  try { return new Intl.DisplayNames([ui], { type: "language" }).of(code) ?? code; } catch { return code; }
+}
+
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
 const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
 
@@ -3365,6 +3378,36 @@ export function PlayPage() {
     }
     return merged;
   }, [pool, lang, kidsMode]);
+
+  // "Words in": which language the notebook games use (Gadi 2026-10-09: a
+  // Hebrew UI showed English rounds). The languages present in the pool
+  // become chips; the default is the UI language when it has enough words.
+  // The choice is remembered on this device.
+  const langCounts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of effectivePool) { const c = wordLangOf(p); m.set(c, (m.get(c) ?? 0) + 1); }
+    // Only languages with enough words for a game get a chip; the rest
+    // stay under "all languages".
+    return [...m.entries()].filter(([, n]) => n >= MIN_WORDS_FOR_GAME.quiz).sort((a, b) => b[1] - a[1]);
+  }, [effectivePool]);
+  const [wordLang, setWordLang] = useState<string | null>(null);
+  useEffect(() => {
+    try { const v = localStorage.getItem("gadit.play.wordLang"); if (v) setWordLang(v); } catch { /* private mode */ }
+  }, []);
+  const activeWordLang = useMemo(() => {
+    if (wordLang === "all") return "all";
+    if (wordLang && langCounts.some(([c]) => c === wordLang)) return wordLang;
+    const ui = langCounts.find(([c]) => c === lang);
+    return ui && ui[1] >= MIN_WORDS_FOR_GAME.quiz ? lang : "all";
+  }, [wordLang, langCounts, lang]);
+  const chooseWordLang = (v: string) => {
+    setWordLang(v);
+    try { localStorage.setItem("gadit.play.wordLang", v); } catch { /* private mode */ }
+  };
+  const gamePool = useMemo(
+    () => (activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
+    [effectivePool, activeWordLang],
+  );
   // Open the focus game once the notebook has loaded (so the word is in it).
   const focusStartedRef = useRef(false);
   useEffect(() => {
@@ -3374,8 +3417,8 @@ export function PlayPage() {
   }, [focus, pool]);
 
   const poolWithExamples = useMemo(
-    () => effectivePool.filter((p) => usableFillBlankExamples(p).length > 0).length,
-    [effectivePool],
+    () => gamePool.filter((p) => usableFillBlankExamples(p).length > 0).length,
+    [gamePool],
   );
 
   // Game catalogue — grouped on the menu by category. Order within
@@ -3402,7 +3445,7 @@ export function PlayPage() {
       id: "flashcards",
       title: flashCopy(lang).wordsTitle,
       desc: flashCopy(lang).wordsDesc,
-      enabled: lang !== "en" || effectivePool.length >= MIN_WORDS_FOR_GAME.flashcards, // topics and pasted lists need no notebook
+      enabled: lang !== "en" || gamePool.length >= MIN_WORDS_FOR_GAME.flashcards, // topics and pasted lists need no notebook
       accent: "teal",
       category: "notebook",
       kidsFriendly: true,
@@ -3418,7 +3461,7 @@ export function PlayPage() {
       id: "flashdefs",
       title: flashCopy(lang).defsTitle,
       desc: flashCopy(lang).defsDesc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.flashdefs,
+      enabled: gamePool.length >= MIN_WORDS_FOR_GAME.flashdefs,
       accent: "indigo",
       category: "notebook",
       kidsFriendly: true,
@@ -3434,7 +3477,7 @@ export function PlayPage() {
       id: "truefalse",
       title: tfCopy(lang).title,
       desc: tfCopy(lang).desc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.truefalse,
+      enabled: gamePool.length >= MIN_WORDS_FOR_GAME.truefalse,
       accent: "teal",
       category: "notebook",
       kidsFriendly: true,
@@ -3449,7 +3492,7 @@ export function PlayPage() {
       id: "quiz",
       title: t.quizTitle,
       desc: t.quizDesc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.quiz,
+      enabled: gamePool.length >= MIN_WORDS_FOR_GAME.quiz,
       accent: "teal",
       category: "notebook",
       kidsFriendly: true,
@@ -3481,7 +3524,7 @@ export function PlayPage() {
       id: "memory",
       title: t.memoryTitle,
       desc: t.memoryDesc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.memory,
+      enabled: gamePool.length >= MIN_WORDS_FOR_GAME.memory,
       accent: "purple",
       category: "notebook",
       kidsFriendly: true,
@@ -3498,7 +3541,7 @@ export function PlayPage() {
       id: "anagram",
       title: t.anagramTitle,
       desc: t.anagramDesc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.anagram,
+      enabled: gamePool.length >= MIN_WORDS_FOR_GAME.anagram,
       accent: "amber",
       category: "notebook",
       kidsFriendly: true,
@@ -3515,7 +3558,7 @@ export function PlayPage() {
       id: "speed",
       title: t.speedTitle,
       desc: t.speedDesc,
-      enabled: effectivePool.length >= MIN_WORDS_FOR_GAME.speed,
+      enabled: gamePool.length >= MIN_WORDS_FOR_GAME.speed,
       accent: "rose",
       category: "notebook",
       kidsFriendly: true,
@@ -3758,7 +3801,7 @@ export function PlayPage() {
     // they don't care whether the words came from the notebook or the
     // curated fallback. Gadi 2026-07-03.
     const focusWord = focus && focus.game === stage.game ? focus.word : undefined;
-    const props = { pool: focusWord ? focusPool(effectivePool, focusWord, stage.game) : effectivePool, onExit: exit, lang, t };
+    const props = { pool: focusWord ? focusPool(effectivePool, focusWord, stage.game) : gamePool, onExit: exit, lang, t };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}`} dir={dir}>
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
@@ -3945,7 +3988,28 @@ export function PlayPage() {
             // with an empty notebook.
             return (
               <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                <h2 className="wb-play-section-heading">{section.label}</h2>
+                {section.id === "notebook" && langCounts.length >= 2 ? (
+                  <div className="wb-play-section-head">
+                    <h2 className="wb-play-section-heading">{section.label}</h2>
+                    <div className="wb-play-langs" role="radiogroup" aria-label={wordsInLabel(lang)}>
+                      <span className="wb-play-langs-label">{wordsInLabel(lang)}</span>
+                      {[...langCounts.map(([c]) => c), "all"].map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          role="radio"
+                          aria-checked={activeWordLang === c}
+                          className={`wb-play-lang${activeWordLang === c ? " is-on" : ""}`}
+                          onClick={() => chooseWordLang(c)}
+                        >
+                          {c === "all" ? allLangsLabel(lang) : langNameIn(c, lang)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <h2 className="wb-play-section-heading">{section.label}</h2>
+                )}
                 <ul className="wb-play-grid">
                   {sectionGames.map((g) => (
                     <li key={g.id}>

@@ -43,6 +43,19 @@ type FlashCopy = {
   pick: string; mine: string; mineCount: (n: number) => string; topics: string; srcMine: string; srcTopic: (t: string) => string;
 };
 
+/** Definition cards go both ways (Gadi 2026-10-09): see the word and say
+ *  the definition, or see the definition and say the word. "Mixed" (the
+ *  default) picks a direction per card, like the definitions quiz. */
+type DefDir = "mix" | "word" | "meaning";
+type DirCopy = { mix: string; word: string; meaning: string; askMeaning: string; askWord: string };
+const DIR_COPY: Record<string, DirCopy> = {
+  he: { mix: "מעורב", word: "מילה ← הגדרה", meaning: "הגדרה ← מילה", askMeaning: "מה המילה אומרת?", askWord: "איזו מילה מתאימה להגדרה?" },
+  en: { mix: "Mixed", word: "Word → meaning", meaning: "Meaning → word", askMeaning: "What does the word mean?", askWord: "Which word fits this meaning?" },
+  ar: { mix: "مختلط", word: "كلمة ← معنى", meaning: "معنى ← كلمة", askMeaning: "ماذا تعني الكلمة؟", askWord: "أي كلمة تناسب هذا المعنى؟" },
+  ru: { mix: "Вперемешку", word: "Слово → значение", meaning: "Значение → слово", askMeaning: "Что значит это слово?", askWord: "Какое слово подходит к значению?" },
+  es: { mix: "Mezclado", word: "Palabra → significado", meaning: "Significado → palabra", askMeaning: "¿Qué significa la palabra?", askWord: "¿Qué palabra encaja con el significado?" },
+};
+
 export const FLASH_COPY: Record<string, FlashCopy> = {
   he: { wordsTitle: "כרטיסיות מילים", wordsDesc: "רואים מילה, אומרים אותה בשפה השנייה, והופכים את הכרטיס לבדוק.", defsTitle: "כרטיסיות הגדרות", defsDesc: "רואים מילה, נזכרים מה היא אומרת, והופכים את הכרטיס לבדוק.", tapToFlip: "לחצו על הכרטיס כדי להפוך אותו", tapBack: "לחצו כדי לחזור למילה", sayIn: (l) => `איך אומרים את זה ב${l}?`, knew: "ידעתי", notYet: "עוד לא", again: "שוב", swap: "להחליף כיוון", loading: "מכינים את הכרטיסים...", none: "עוד אין מילים לכרטיסים. חפשו מילה באנגלית או בעברית, והיא תופיע כאן.", result: (k, n) => `ידעתם ${k} מתוך ${n} כבר בפעם הראשונה`, pick: "מאיפה המילים?", mine: "המילים שלכם מהמחברת", mineCount: (n) => `${n} מילים, בסדר אקראי`, topics: "או בחרו נושא", srcMine: "מילים מהמחברת שלכם, בסדר אקראי", srcTopic: (t) => `נושא: ${t}` },
   en: { wordsTitle: "Word cards", wordsDesc: "See a word, say it in the other language, then flip the card to check.", defsTitle: "Definition cards", defsDesc: "See a word, recall what it means, then flip the card to check.", tapToFlip: "Tap the card to flip it", tapBack: "Tap to go back to the word", sayIn: (l) => `How do you say it in ${l}?`, knew: "I knew it", notYet: "Not yet", again: "Again", swap: "Swap direction", loading: "Getting your cards ready...", none: "No words for cards yet. Look up a word in another language and it will show up here.", result: (k, n) => `You knew ${k} of ${n} the first time`, pick: "Where should the words come from?", mine: "Your notebook words", mineCount: (n) => `${n} words, in random order`, topics: "Or pick a topic", srcMine: "Words from your notebook, in random order", srcTopic: (t) => `Topic: ${t}` },
@@ -72,7 +85,7 @@ function langLabel(name: string, ui: string): string {
 }
 
 type PairInfo = { pair: string; pairLang: string; wordLang?: string };
-type Card = { key: string; word: PlayWord; pair?: PairInfo; repeat: boolean };
+type Card = { key: string; word: PlayWord; pair?: PairInfo; repeat: boolean; alt?: boolean };
 
 /** A word set picked on the start screen: the native-language word (the
  *  "he" slot, see WordPair) and its English. `save` = keep it with the
@@ -256,7 +269,8 @@ export function GameFlashcards({
     }
     if (!pairs) return [];
     const list = mode === "words" ? candidates.filter((w) => pairs[w.word]?.pair) : candidates;
-    return list.slice(0, SESSION_SIZE.flashcards).map((w, i) => ({ key: `c${i}`, word: w, pair: pairs[w.word], repeat: false }));
+    // `alt`: in mixed definition cards, this card shows the meaning first.
+    return list.slice(0, SESSION_SIZE.flashcards).map((w, i) => ({ key: `c${i}`, word: w, pair: pairs[w.word], repeat: false, alt: Math.random() < 0.5 }));
   }, [pairs, candidates, mode, picked, lang]);
 
   const [deck, setDeck] = useState<Card[] | null>(null);
@@ -264,6 +278,8 @@ export function GameFlashcards({
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reverse, setReverse] = useState(false);
+  const [defDir, setDefDir] = useState<DefDir>("mix");
+  const dc = DIR_COPY[lang] ?? DIR_COPY.en;
   const [known, setKnown] = useState(0);
   const [missed, setMissed] = useState<Card[]>([]);
 
@@ -401,10 +417,12 @@ export function GameFlashcards({
   const wordLangName = card.pair?.wordLang || card.word.language;
   const sourceLabel = picked ? f.srcTopic(picked.title) : f.srcMine;
   const pair = card.pair;
-  const frontText = mode === "words" && pair && reverse ? pair.pair : card.word.word;
-  const backText = mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
+  const meaningFirst = mode === "meanings" && (defDir === "meaning" || (defDir === "mix" && !!card.alt));
+  const frontText = meaningFirst ? card.word.meaning : mode === "words" && pair && reverse ? pair.pair : card.word.word;
+  const backText = meaningFirst ? card.word.word : mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
   const askLang = mode === "words" && pair ? langLabel(reverse ? wordLangName : pair.pairLang, lang) : "";
-  const example = mode === "meanings" ? card.word.examples?.[0] : undefined;
+  const example = mode === "meanings" && !meaningFirst ? card.word.examples?.[0] : undefined;
+  const ask = flipped ? f.tapBack : mode === "words" ? (askLang ? f.sayIn(askLang) : f.tapToFlip) : meaningFirst ? dc.askWord : dc.askMeaning;
 
   return (
     <div className="wb-play-stage">
@@ -412,9 +430,18 @@ export function GameFlashcards({
       <PlayHeader title={title} progress={`${Math.min(i + 1, deck.length)}/${deck.length}`} score={known} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-flash-source">{sourceLabel}</div>
-        <div className="wb-play-question-eyebrow">{flipped ? f.tapBack : mode === "words" && askLang ? f.sayIn(askLang) : f.tapToFlip}</div>
+        <div className="wb-play-question-eyebrow">{ask}</div>
         {mode === "words" && !flipped && (
           <button type="button" className="wb-flash-swap" onClick={() => setReverse((r) => !r)}>{f.swap}</button>
+        )}
+        {mode === "meanings" && !flipped && (
+          <div className="wb-flash-dirs" role="radiogroup">
+            {(["mix", "word", "meaning"] as DefDir[]).map((d) => (
+              <button key={d} type="button" role="radio" aria-checked={defDir === d} className={`wb-flash-dir${defDir === d ? " is-on" : ""}`} onClick={() => setDefDir(d)}>
+                {dc[d]}
+              </button>
+            ))}
+          </div>
         )}
       </div>
       <button
@@ -426,11 +453,11 @@ export function GameFlashcards({
         <span className="wb-flash-inner">
           <span className="wb-flash-face wb-flash-front" aria-hidden={flipped}>
             {card.repeat && <span className="wb-flash-again">{f.again}</span>}
-            <span className="wb-flash-word" dir="auto">{nq(frontText)}</span>
+            <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{nq(frontText)}</span>
           </span>
           <span className="wb-flash-face wb-flash-back" aria-hidden={!flipped}>
-            <span className="wb-flash-backword" dir="auto">{nq(frontText)}</span>
-            <span className={mode === "words" ? "wb-flash-word" : "wb-flash-meaning"} dir="auto">{nq(backText)}</span>
+            <span className={meaningFirst ? "wb-flash-example" : "wb-flash-backword"} dir="auto">{nq(frontText)}</span>
+            <span className={mode === "words" || meaningFirst ? "wb-flash-word" : "wb-flash-meaning"} dir="auto">{nq(backText)}</span>
             {example && <span className="wb-flash-example" dir="auto">{nq(example)}</span>}
           </span>
         </span>
@@ -462,6 +489,9 @@ const FLASH_CSS = `
 .wb-flash-btn { min-width: 130px; padding: 12px 20px; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
 .wb-flash-yes { background: #0EA5A5; color: #fff; box-shadow: 0 10px 22px -10px rgba(14,165,165,0.6); }
 .wb-flash-no { background: #fff; color: #374151; box-shadow: 0 0 0 1.5px #D1D5DB inset; }
+.wb-flash-dirs { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
+.wb-flash-dir { font: inherit; font-size: 13px; font-weight: 700; color: #0b7d7d; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.wb-flash-dir.is-on { background: #0EA5A5; color: #fff; }
 .wb-flash-source { font-size: 13px; font-weight: 700; color: #6D28D9; margin-bottom: 6px; }
 .wb-flash-pick { display: grid; gap: 12px; width: min(100%, 560px); margin: 18px auto 0; }
 .wb-flash-src { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 14px 12px; border-radius: 16px; border: 0; background: #fff; box-shadow: 0 0 0 1px rgba(15,72,68,0.12), 0 8px 18px -12px rgba(16,40,60,0.3); font: inherit; cursor: pointer; color: #0f172a; }

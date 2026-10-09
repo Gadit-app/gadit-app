@@ -286,6 +286,32 @@ function scriptOf(s: string): Script {
   return "unknown";
 }
 
+/** Language of a word, for the games' "words in" filter (Gadi 2026-10-09:
+ *  Hebrew UI showed English rounds). The letters decide the script; the
+ *  notebook's language field (an English name, a code like "he", or once
+ *  "עברית") only picks among languages that share a script. Returns an
+ *  ISO code ("he", "en", "ar"...). */
+const LANG_FIELD_CODE: Record<string, string> = {
+  hebrew: "he", "עברית": "he", english: "en", arabic: "ar", russian: "ru", ukrainian: "uk", spanish: "es",
+  portuguese: "pt", french: "fr", german: "de", italian: "it", dutch: "nl", polish: "pl", czech: "cs",
+  slovak: "sk", turkish: "tr", persian: "fa", hindi: "hi", japanese: "ja", chinese: "zh", korean: "ko",
+  greek: "el", yiddish: "yi", zulu: "zu", tswana: "tn", afrikaans: "af", swahili: "sw", indonesian: "id",
+  vietnamese: "vi", filipino: "fil", danish: "da", hungarian: "hu", amharic: "am", thai: "th", bengali: "bn",
+};
+const SCRIPT_DEFAULT: Partial<Record<Script, string>> = { hebrew: "he", arabic: "ar", cyrillic: "ru", devanagari: "hi", cjk: "ja", latin: "en" };
+const SCRIPT_OF_CODE: Record<string, Script> = {
+  he: "hebrew", yi: "hebrew", ar: "arabic", fa: "arabic", ru: "cyrillic", uk: "cyrillic", hi: "devanagari", ja: "cjk", zh: "cjk", ko: "cjk",
+};
+export function wordLangOf(p: PlayWord): string {
+  const field = (p.language || "").trim();
+  const code = LANG_FIELD_CODE[field.toLowerCase()] ?? (field.length <= 3 ? field.toLowerCase() : "");
+  const sc = scriptOf(p.word);
+  if (sc === "unknown") return code || "en";
+  const codeScript = code ? (SCRIPT_OF_CODE[code] ?? "latin") : null;
+  if (code && codeScript === sc) return code;
+  return SCRIPT_DEFAULT[sc] ?? (code || "en");
+}
+
 /** DOMINANT script of a whole string — counts every letter and returns
  *  the script with the most. Right for sentences, where the first word
  *  can be a Latin brand name inside an otherwise-Hebrew sentence (or
