@@ -107,6 +107,22 @@ function route(req: NextRequest, payHost: boolean): NextResponse {
     const langPrefixed = !!first && SUPPORTED_LANGS.has(first);
     const routeFirst = langPrefixed ? segments[1] : first;
     if (routeFirst && BLOCKED_IN_PLAY.has(routeFirst)) {
+      // A link someone was SENT (WhatsApp, email) opens inside the app on a
+      // phone that has it, and used to land on the home page instead (Gadi
+      // 2026-10-10: shared landing pages would not open for app users). Only
+      // a click inside the app itself carries a www referrer; anything else
+      // came from outside, so hand it to the purchase host, which the app
+      // does not claim and the phone opens in the browser. Nothing is sold
+      // inside the app: in-app clicks still go home below.
+      const ref = req.headers.get("referer") || "";
+      if (!ref.startsWith("https://www.gadit.app")) {
+        const pay = req.nextUrl.clone();
+        pay.protocol = "https:";
+        pay.host = PAY_HOST;
+        pay.port = "";
+        pay.searchParams.delete("src");
+        return NextResponse.redirect(pay, 307);
+      }
       const home = req.nextUrl.clone();
       home.pathname = langPrefixed ? `/${first}` : "/";
       // Remember where this request was going: a NORMAL browser tab that only
