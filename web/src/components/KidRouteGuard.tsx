@@ -21,18 +21,19 @@ import { useHref } from "@/lib/href";
 // URL prefixes (all UI langs) so we can strip the locale segment.
 const LANGS = new Set(["he", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "en", "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw", "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu"]);
 
-// First path segment (after any locale) a kid must never reach.
+// First path segment (after any locale) a kid must never reach. The
+// landing pages (families, individuals, schools) are NOT here: a parent
+// switched into a child profile, or anyone sent a link, must be able to
+// open them (Gadi 2026-10-10). Buying still cannot happen from a kid
+// session, because /pricing and /checkout stay blocked.
 const BLOCKED = new Set([
   "pricing",
-  "individuals",
   "partner",
   "partners",
   "affiliate",
   "affiliates",
   "checkout",
-  "families",
   "family",
-  "schools",
 ]);
 
 export function KidRouteGuard() {
