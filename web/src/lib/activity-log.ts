@@ -52,9 +52,12 @@ export async function recordActivity(e: {
     if (!word) return;
     const country = (e.country || "").trim().slice(0, 2).toUpperCase() || null;
     const who = e.uid || `anon:${country ?? ""}:${(e.ua || "").slice(0, 200)}`;
-    const bucket = Math.floor(Date.now() / 120_000);
+    // 10-minute windows, language left out of the key (2026-10-10): the
+    // word page re-fetches on sign-in, a language switch or coming back to
+    // it, and those read as duplicate rows.
+    const bucket = Math.floor(Date.now() / 600_000);
     const id = createHash("sha1")
-      .update(`${e.kind}|${who}|${word.toLowerCase()}|${e.lang || "en"}|${bucket}`)
+      .update(`${e.kind}|${who}|${word.toLowerCase()}|${bucket}`)
       .digest("hex");
     await getAdminDb().collection("activityLog").doc(id).set({
       count: FieldValue.increment(1),

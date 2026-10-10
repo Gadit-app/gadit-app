@@ -35,9 +35,9 @@ function foldRepeats(rows: Item[]): Item[] {
   const out: Item[] = [];
   const lastByKey = new Map<string, Item>();
   for (const r of rows) {
-    const key = `${r.kind}|${r.uid ?? r.ua ?? ""}|${r.word.toLowerCase()}|${r.lang}`;
+    const key = `${r.kind}|${r.uid ?? r.ua ?? ""}|${r.word.toLowerCase()}`;
     const prev = lastByKey.get(key);
-    if (prev && prev.atMs - r.atMs <= 120_000) {
+    if (prev && prev.atMs - r.atMs <= 600_000) {
       prev.count = (prev.count ?? 1) + (r.count ?? 1);
       continue;
     }
@@ -81,6 +81,68 @@ function fmt(atMs: number, he: boolean): { date: string; time: string } {
   const date = d.toLocaleDateString(he ? "he-IL" : "en-GB", { timeZone: "Asia/Jerusalem", day: "2-digit", month: "2-digit", year: "2-digit" });
   const time = d.toLocaleTimeString(he ? "he-IL" : "en-GB", { timeZone: "Asia/Jerusalem", hour: "2-digit", minute: "2-digit", second: "2-digit" });
   return { date, time };
+}
+
+type StatRange = "day" | "week" | "month" | "year";
+type StatBucket = { key: string; searches: number; images: number; people: number; words: number };
+
+/** Activity by day, week, month or year (Gadi 2026-10-10). Humans only,
+ *  our own accounts left out. */
+function ActivityStats({ secret, he }: { secret: string; he: boolean }) {
+  const [range, setRange] = useState<StatRange>("day");
+  const [data, setData] = useState<{ buckets: StatBucket[]; current?: StatBucket; previous?: StatBucket | null } | null>(null);
+  const [metric, setMetric] = useState<"searches" | "people" | "words" | "images">("searches");
+  useEffect(() => {
+    let cancelled = false;
+    setData(null);
+    fetch(`/api/admin/activity-stats?secret=${encodeURIComponent(secret)}&range=${range}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (!cancelled) setData(j); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [secret, range]);
+  const L = he
+    ? { day: "יום", week: "שבוע", month: "חודש", year: "שנה", searches: "חיפושים", people: "אנשים", words: "מילים שונות", images: "תמונות", vs: "לעומת הקודם", loading: "טוען…", cur: { day: "היום", week: "השבוע", month: "החודש", year: "השנה" } }
+    : { day: "Day", week: "Week", month: "Month", year: "Year", searches: "Searches", people: "People", words: "Different words", images: "Images", vs: "vs previous", loading: "Loading…", cur: { day: "Today", week: "This week", month: "This month", year: "This year" } };
+  const label = (k: string) => (range === "year" ? k : range === "month" ? `${k.slice(5, 7)}/${k.slice(2, 4)}` : `${k.slice(8, 10)}/${k.slice(5, 7)}`);
+  const buckets = data?.buckets ?? [];
+  const max = Math.max(1, ...buckets.map((b) => b[metric]));
+  const delta = (k: keyof StatBucket) => {
+    const c = Number(data?.current?.[k] ?? 0), p = Number(data?.previous?.[k] ?? 0);
+    if (!p) return "";
+    const d = Math.round(((c - p) / p) * 100);
+    return `${d > 0 ? "+" : ""}${d}%`;
+  };
+  const btn = (on: boolean): React.CSSProperties => ({ font: "inherit", fontSize: 13, fontWeight: 700, padding: "6px 14px", borderRadius: 999, cursor: "pointer", border: on ? "1px solid #0EA5A5" : "1px solid #E5E7EB", background: on ? "rgba(14,165,165,0.10)" : "#fff", color: on ? "#0B7D7D" : "#374151" });
+  return (
+    <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 14, padding: 16, marginBottom: 16, display: "grid", gap: 14 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {(["day", "week", "month", "year"] as StatRange[]).map((r) => <button key={r} type="button" style={btn(range === r)} onClick={() => setRange(r)}>{L[r]}</button>)}
+      </div>
+      {!data ? <div style={{ color: "#9CA3AF", fontSize: 13 }}>{L.loading}</div> : (
+        <>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
+            {(["searches", "people", "words", "images"] as const).map((k) => (
+              <button key={k} type="button" onClick={() => setMetric(k)} style={{ textAlign: "start", background: metric === k ? "rgba(14,165,165,0.06)" : "#F9FAFB", border: metric === k ? "1px solid #0EA5A5" : "1px solid #F3F4F6", borderRadius: 10, padding: "10px 12px", cursor: "pointer", font: "inherit" }}>
+                <div style={{ fontSize: 12, color: "#6B7280" }}>{L.cur[range]} · {L[k]}</div>
+                <div style={{ fontSize: 24, fontWeight: 800, color: "#111827", fontVariantNumeric: "tabular-nums" }}>{(data.current?.[k] ?? 0).toLocaleString()}</div>
+                <div style={{ fontSize: 12, color: "#6B7280" }}>{delta(k) ? `${delta(k)} ${L.vs}` : "\u00a0"}</div>
+              </button>
+            ))}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${buckets.length}, minmax(0, 1fr))`, gap: 4, alignItems: "end", height: 150 }} role="img" aria-label={L[metric]}>
+            {buckets.map((b) => (
+              <div key={b.key} title={`${label(b.key)}: ${b[metric]} ${L[metric]}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%", gap: 3, minWidth: 0 }}>
+                <span style={{ fontSize: 10, color: "#374151", fontVariantNumeric: "tabular-nums" }}>{buckets.length <= 14 && b[metric] ? b[metric] : ""}</span>
+                <div style={{ width: "72%", minHeight: 2, height: `${Math.round((b[metric] / max) * 100)}%`, background: "#0F6F6C", borderRadius: "4px 4px 1px 1px" }} />
+                <span style={{ fontSize: 9.5, color: "#9CA3AF", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{buckets.length > 14 && buckets.indexOf(b) % 3 !== 0 ? "" : label(b.key)}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default function AdminActivityClient() {
@@ -180,6 +242,8 @@ export default function AdminActivityClient() {
           ? "כל חיפוש מילה וכל תמונה, מהחדש לישן: תאריך, שעה, מילה, שפה, ומי המנוי. הנתונים מצטברים מרגע הפריסה."
           : "Every word search and image, newest first: date, time, word, language, and which subscriber. Data accrues from deploy."}
       </p>
+
+      {secret && <ActivityStats secret={secret} he={he} />}
 
       {loading && <div style={{ color: MUTED, fontSize: 14 }}>{he ? "טוען..." : "Loading..."}</div>}
       {err && (
