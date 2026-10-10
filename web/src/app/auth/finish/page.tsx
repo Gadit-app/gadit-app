@@ -8,7 +8,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { isSignInWithEmailLink, signInWithEmailLink, signInWithCustomToken } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -33,6 +33,18 @@ export default function AuthFinish() {
   }
 
   useEffect(() => {
+    // The login-reminder email's week-long link arrives as a custom token
+    // (/api/auth/remind).
+    const ct = new URLSearchParams(window.location.search).get("ct");
+    if (ct) {
+      signInWithCustomToken(auth, ct)
+        .then(() => {
+          const next = new URLSearchParams(window.location.search).get("next") || "";
+          window.location.replace(next.startsWith("/") && !next.startsWith("//") ? next : href("/"));
+        })
+        .catch(() => setState("failed"));
+      return;
+    }
     if (!isSignInWithEmailLink(auth, window.location.href)) { setState("failed"); return; }
     const e = new URLSearchParams(window.location.search).get("e") || "";
     if (e) void finish(e);

@@ -12,6 +12,7 @@ import { indivNumbersSummary } from "@/lib/email-drip/indiv-summary";
 import { sendDripEmail } from "@/lib/email-drip/send";
 import { trialReminderDue, buildTrialReminder } from "@/lib/email-drip/trial-reminder";
 import { playUpgradeDue, buildPlayUpgrade } from "@/lib/email-drip/play-upgrade";
+import { loginReminderDue, buildLoginReminder } from "@/lib/email-drip/login-reminder";
 
 /**
  * Daily drip cron. Vercel Cron hits this at 07:00 UTC (10:00 IL DST).
@@ -200,6 +201,27 @@ export async function GET(req: NextRequest) {
           results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "sent" });
         } else {
           results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "failed", reason: r.reason });
+        }
+      }
+      continue;
+    }
+
+    // Signed up and never came back: ONE email whose button signs them in
+    // for a week, no password (Gadi 2026-10-10). Takes this user's slot for
+    // the day, so nobody gets two emails in one day.
+    if (loginReminderDue(u.metadata, d, now)) {
+      const ll: string = typeof d.uiLang === "string" && d.uiLang ? (d.uiLang as string) : lang;
+      const built = buildLoginReminder(u.uid, ll, buildUnsubUrl(u.uid));
+      if (dryRun) {
+        results.push({ uid: u.uid, email, mailKey: "login-reminder", status: "skipped", reason: "dryRun" });
+      } else {
+        const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
+        if (r.ok) {
+          realSends++;
+          await db.collection("users").doc(u.uid).set({ loginReminderSentAt: FieldValue.serverTimestamp() }, { merge: true });
+          results.push({ uid: u.uid, email, mailKey: "login-reminder", status: "sent" });
+        } else {
+          results.push({ uid: u.uid, email, mailKey: "login-reminder", status: "failed", reason: r.reason });
         }
       }
       continue;
