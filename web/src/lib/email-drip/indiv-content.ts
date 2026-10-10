@@ -17,7 +17,8 @@ import type { FamilyEmailMeta } from "./family-content";
  * Not sent to anyone until Gadi approves (INDIV_SERIES_LIVE).
  */
 
-export const INDIV_SERIES_LIVE = false;
+// Live since 2026-10-10 (Gadi approved the texts).
+export const INDIV_SERIES_LIVE = true;
 
 export type IndivPlan = "clear" | "deep";
 export type IndivEmailMeta = FamilyEmailMeta & { plans: IndivPlan[] };

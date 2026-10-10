@@ -319,7 +319,11 @@ export async function GET(req: NextRequest) {
     // until Gadi approves the texts (INDIV_SERIES_LIVE).
     const indivPlan = d.plan === "clear" || d.plan === "deep" ? (d.plan as "clear" | "deep") : null;
     const indivPaying = d.subscriptionStatus === "active" || d.subscriptionStatus === "trialing" || d.subscriptionStatus === "past_due";
-    if (INDIV_SERIES_LIVE && indivPlan && indivPaying && !d.familyId && !d.schoolId) {
+    // Only for NEW subscribers (account under 21 days old when the series
+    // first meets them): it is an onboarding series ("your first word", "your
+    // first two weeks"), wrong for someone subscribed since June (2026-10-10).
+    const indivNew = !!d.indivSeriesStart || now - (Date.parse(u.metadata.creationTime ?? "") || 0) < 21 * 86_400_000;
+    if (INDIV_SERIES_LIVE && indivPlan && indivPaying && !d.familyId && !d.schoolId && indivNew) {
       let startIso = d.indivSeriesStart as string | undefined;
       if (!startIso) {
         startIso = new Date(now).toISOString();
