@@ -15,6 +15,21 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { detectInAppBrowser } from "@/lib/in-app-browser";
+import { loginHelp } from "@/lib/login-help-copy";
+
+/** Every failed sign-in is noted (address, error code, page; never the
+ *  password) so a locked-out person shows up in /admin/auth-errors before
+ *  they have to complain (Gadi 2026-10-10). Fire-and-forget. */
+function logAuthError(email: string, code: string, mode: string, lang: string) {
+  try {
+    void fetch("/api/auth/log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code, mode, lang, page: window.location.host + window.location.pathname }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch { /* never block sign-in */ }
+}
 
 type Mode = "signin" | "signup";
 
@@ -163,6 +178,10 @@ export function LoginModalV2() {
   // A non-v2 error message (e.g. blocked signup domain) shown in the same slot,
   // so we don't have to add a key across every language in i18n-v2.
   const [localError, setLocalError] = useState<string>("");
+  // Wrong password: a way out instead of a bare error (Gadi 2026-10-10).
+  const [wrongPwd, setWrongPwd] = useState(false);
+  const [notice, setNotice] = useState("");
+  const lh = loginHelp(lang);
   // COPPA / GDPR self-attestation — we can't verify age, but we make
   // the user click that they're old enough. Industry-standard minimum.
   const [ageAccepted, setAgeAccepted] = useState(false);
@@ -185,6 +204,8 @@ export function LoginModalV2() {
       setBusy(false);
       setErrorKey("");
       setLocalError("");
+      setWrongPwd(false);
+      setNotice("");
       setShowPwd(false);
       setAgeAccepted(false);
     }
@@ -280,7 +301,8 @@ export function LoginModalV2() {
     setErrorKey("");
     try {
       await signInWithGoogle();
-    } catch {
+    } catch (err) {
+      logAuthError("", err instanceof Error ? err.message : "google", "google", lang);
       setErrorKey("loginErrorGoogleFailed");
     } finally {
       setBusy(false);
@@ -310,6 +332,8 @@ export function LoginModalV2() {
       }
     }
     setLocalError("");
+    setWrongPwd(false);
+    setNotice("");
     setBusy(true);
     try {
       if (mode === "signin") await signInWithEmail(email, password);
@@ -325,7 +349,57 @@ export function LoginModalV2() {
       // production sign-up failures by asking the user to share their
       // browser console — without exposing the raw text in the UI.
       console.error("[auth] mode=" + mode + " error:", msg);
-      setErrorKey(mapAuthError(msg, mode));
+      logAuthError(email.trim(), msg, mode, lang);
+      const mapped = mapAuthError(msg, mode);
+      if (mapped === "loginErrorWrongCredentials" && mode === "signin") setWrongPwd(true);
+      else setErrorKey(mapped);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // "Email me a sign-in link": in by email, no password. Only works for an
+  // existing account (the server checks, and answers the same either way).
+  async function sendMagicLink() {
+    const addr = email.trim();
+    if (!addr) {
+      setWrongPwd(false);
+      setErrorKey("loginForgotPasswordEnterEmail");
+      return;
+    }
+    setBusy(true);
+    setErrorKey("");
+    try {
+      await fetch("/api/auth/email-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: addr, lang, next: window.location.pathname + window.location.search }),
+      });
+      setWrongPwd(false);
+      setNotice(lh.magicSent.replace("{email}", addr));
+    } catch {
+      setErrorKey("loginResetError");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function sendReset() {
+    if (!email.trim()) {
+      setWrongPwd(false);
+      setErrorKey("loginForgotPasswordEnterEmail");
+      return;
+    }
+    setBusy(true);
+    setErrorKey("");
+    try {
+      await sendPasswordReset(email.trim(), lang);
+      setWrongPwd(false);
+      setNotice("");
+      setErrorKey("loginResetSent");
+    } catch (err) {
+      console.error("[auth] password-reset error:", err);
+      setErrorKey("loginResetError");
     } finally {
       setBusy(false);
     }
@@ -427,14 +501,24 @@ export function LoginModalV2() {
         )}
 
         <form onSubmit={handleEmail} noValidate>
-          {(errorKey || localError) && (
+          {wrongPwd ? (
+            <div className="wb-login-error wb-login-help" role="alert">
+              <span>{lh.wrongHelp}</span>
+              <span className="wb-login-help-actions">
+                <button type="button" className="wb-login-help-btn is-primary" onClick={() => void sendMagicLink()} disabled={busy}>{lh.magicLink}</button>
+                <button type="button" className="wb-login-help-btn" onClick={() => void sendReset()} disabled={busy}>{lh.resetNow}</button>
+              </span>
+            </div>
+          ) : notice ? (
+            <div className="wb-login-error is-success" role="status">{notice}</div>
+          ) : (errorKey || localError) ? (
             <div
               className={`wb-login-error ${errorKey === "loginResetSent" ? "is-success" : ""}`}
               role="alert"
             >
               {localError || v2(lang, errorKey as never)}
             </div>
-          )}
+          ) : null}
 
           <div className="wb-login-field">
             <label className="wb-login-label">{v2(lang, "loginEmailLabel")}</label>
@@ -507,32 +591,19 @@ export function LoginModalV2() {
             user to fill it first instead of sending a malformed
             request. */}
         {mode === "signin" && (
-          <div className="wb-login-forgot">
-            <button
-              type="button"
-              className="wb-login-forgot-btn"
-              disabled={busy}
-              onClick={async () => {
-                if (!email.trim()) {
-                  setErrorKey("loginForgotPasswordEnterEmail");
-                  return;
-                }
-                setBusy(true);
-                setErrorKey("");
-                try {
-                  await sendPasswordReset(email.trim());
-                  setErrorKey("loginResetSent");
-                } catch (err) {
-                  console.error("[auth] password-reset error:", err);
-                  setErrorKey("loginResetError");
-                } finally {
-                  setBusy(false);
-                }
-              }}
-            >
-              {v2(lang, "loginForgotPassword")}
+          <>
+            <button type="button" className="wb-login-magic" disabled={busy} onClick={() => void sendMagicLink()}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" />
+              </svg>
+              {lh.magicLink}
             </button>
-          </div>
+            <div className="wb-login-forgot">
+              <button type="button" className="wb-login-forgot-btn" disabled={busy} onClick={() => void sendReset()}>
+                {v2(lang, "loginForgotPassword")}
+              </button>
+            </div>
+          </>
         )}
 
         <div className="wb-login-toggle">

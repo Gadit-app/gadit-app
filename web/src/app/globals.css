@@ -6459,6 +6459,48 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos,
   border-color: rgba(14, 165, 165, 0.22);
 }
 .wordbook .wb-login-error.is-success::before { content: "✓"; }
+/* Sign in without a password + the wrong-password way out (2026-10-10). */
+.wordbook .wb-login-magic {
+  width: 100%;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(14, 165, 165, 0.08);
+  color: #0F6F6C;
+  font-family: var(--wb-he);
+  font-size: 14.5px;
+  font-weight: 600;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(14, 165, 165, 0.28);
+  cursor: pointer;
+}
+.wordbook .wb-login-magic:hover:not(:disabled) { background: rgba(14, 165, 165, 0.14); }
+.wordbook .wb-login-magic:disabled { opacity: 0.55; cursor: default; }
+.wordbook .wb-login-error.wb-login-help {
+  flex-direction: column;
+  gap: 10px;
+  color: #92400E;
+  background: rgba(245, 158, 11, 0.10);
+  border-color: rgba(245, 158, 11, 0.32);
+}
+.wordbook .wb-login-error.wb-login-help::before { display: none; }
+.wordbook .wb-login-help-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.wordbook .wb-login-help-btn {
+  font-family: var(--wb-he);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(146, 64, 14, 0.35);
+  background: #fff;
+  color: #92400E;
+  cursor: pointer;
+}
+.wordbook .wb-login-help-btn.is-primary { background: #0F6F6C; border-color: #0F6F6C; color: #fff; }
+.wordbook .wb-login-help-btn:disabled { opacity: 0.55; cursor: default; }
 
 /* Floating signup-welcome toast — pinned to the top centre of the
    viewport so it appears exactly where the just-closed login modal

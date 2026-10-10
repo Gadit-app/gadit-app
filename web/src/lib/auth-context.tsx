@@ -123,7 +123,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
-  sendPasswordReset: (email: string) => Promise<void>;
+  sendPasswordReset: (email: string, lang?: string) => Promise<void>;
   logout: () => Promise<void>;
   showLoginModal: boolean;
   setShowLoginModal: (v: boolean) => void;
@@ -554,8 +554,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     afterNewSignup(cred.user, hadPending);
   }
 
-  async function sendPasswordReset(email: string) {
+  async function sendPasswordReset(email: string, lang?: string) {
     const auth = getFirebaseAuth();
+    // The reset email and its page come in the visitor's language, not
+    // English (Gadi 2026-10-10).
+    if (lang) auth.languageCode = lang;
     // Firebase sends the reset email to whatever address we pass —
     // even one that's not registered, with NO error (intentional
     // anti-enumeration default). Caller gets a generic "if an account

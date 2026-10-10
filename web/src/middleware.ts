@@ -40,7 +40,9 @@ const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals
 // serves ONLY the purchase surfaces below, never in Play mode, never indexed;
 // any other page on it goes back to www.
 const PAY_HOST = "gadit.app";
-const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account"]);
+// "auth": the emailed sign-in link and the session bridge must also work
+// on this host (2026-10-10).
+const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "auth"]);
 
 function detectPlay(req: NextRequest): boolean {
   if (req.nextUrl.searchParams.get("src") === "play") return true;

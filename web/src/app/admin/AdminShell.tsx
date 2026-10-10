@@ -44,6 +44,7 @@ const STRINGS = {
     reports: "Reports",
     partners: "Partners",
     deletions: "Deletions",
+    authErrors: "Sign-in problems",
     wordsets: "Word sets",
     curriculum: "Curriculum",
     schools: "Schools",
@@ -77,6 +78,7 @@ const STRINGS = {
     reports: "דיווחים",
     partners: "שותפים",
     deletions: "מחיקות",
+    authErrors: "בעיות התחברות",
     wordsets: "מערכי מילים",
     curriculum: "קטלוג תוכנית הלימודים",
     schools: "בתי ספר",
@@ -116,6 +118,7 @@ const NAV_SECTIONS: NavSection[] = [
     { href: "/admin/activity",  labelKey: "activityLog", icon: <IconList />   },
     { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
     { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
+    { href: "/admin/auth-errors", labelKey: "authErrors", icon: <IconLock /> },
   ] },
   { titleKey: "secSchools", items: [
     { href: "/admin/schools",   labelKey: "schools",   icon: <IconSchool /> },
@@ -514,6 +517,11 @@ function IconList() {
 function IconSchool() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 22v-4a2 2 0 0 0-4 0v4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M18 5v17"/><path d="m4 6 8-4 8 4"/><path d="M6 5v17"/><circle cx="12" cy="9" r="2"/></svg>
+  );
+}
+function IconLock() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
   );
 }
 function IconTrash() {
