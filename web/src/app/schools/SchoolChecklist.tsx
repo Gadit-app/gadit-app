@@ -27,7 +27,7 @@ const COPY = {
     sub: (d: number, n: number) => `${d} מתוך ${n} הושלמו`,
     steps: {
       curriculum: ["בחירת תוכנית הלימודים וסוג בית הספר", "לקבוצות המילים"],
-      classroom: ["הוספת כיתה ראשונה", "לכיתות"],
+      classroom: ["הוספת הכיתות שבפיילוט, עם שם המורה של כל כיתה", "לכיתות"],
       lesson: ["הקרנת שיעור ראשון בכיתה", "לקבוצות המילים"],
       activity: ["חידון או משחק לכיתה", "לקבוצות המילים"],
       teachers: ["מסירת פרטי הכניסה למורים בשכבות המשתתפות", "סיימתי"],
@@ -39,7 +39,7 @@ const COPY = {
     sub: (d: number, n: number) => `${d} of ${n} done`,
     steps: {
       curriculum: ["Choose your curriculum and school type", "Word sets"],
-      classroom: ["Add your first class", "Classes"],
+      classroom: ["Add the pilot classes, each with its teacher", "Classes"],
       lesson: ["Project your first lesson in class", "Word sets"],
       activity: ["Run a class quiz or game", "Word sets"],
       teachers: ["Give the login to teachers in the participating grades", "Done"],

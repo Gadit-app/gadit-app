@@ -32,13 +32,17 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "שלום,",
       "שמחים שאתם איתנו.",
       "ב-30 הימים הקרובים נעזור לכם להכניס את Gadit לשיעורים, צעד אחר צעד.",
-      "הצעד להיום הוא אחד: להיכנס ללוח הבקרה של בית הספר, ולבחור את תוכנית הלימודים ואת סוג בית הספר.",
+      "להיום יש שני צעדים קצרים.",
+      "הראשון: להיכנס ללוח הבקרה של בית הספר, ולבחור את תוכנית הלימודים ואת סוג בית הספר.",
+      "השני: בלשונית \"כיתות\", להוסיף את הכיתות שמשתתפות בפיילוט, ולכל כיתה את שם המורה שמלמדת בה.",
       "אחרי זה כל המקצועות והיחידות של השכבות שלכם מוכנים להקרנה.") },
     en: { subject: "Welcome to your Gadit pilot", cta: "Open the dashboard", body: P(
       "Hi,",
       "We're glad you're with us.",
       "Over the next 30 days we'll help you bring Gadit into your lessons, one step at a time.",
-      "Today there's just one step: open the school dashboard and choose your curriculum and school type.",
+      "Today there are two short steps.",
+      "First: open the school dashboard and choose your curriculum and school type.",
+      "Second: on the \"Classes\" tab, add the classes taking part in the pilot, each with the name of its teacher.",
       "After that, every subject and unit for your grades is ready to project.") },
   },
   {
@@ -75,14 +79,20 @@ export const SCHOOL_DRIP: SchoolMail[] = [
   },
   {
     key: "sch-quiz", dayOffset: 6, path: "/sets",
-    he: { subject: "חידון ומשחק לכל הכיתה", cta: "לקבוצות המילים", body: P(
-      "אחרי שהמילים הוקרנו, כדאי לבדוק שהן נקלטו.",
-      "במסך ההקרנה יש שני כפתורים: \"חידון לכיתה\" עם שלוש שאלות, ו\"משחק לכיתה\" של נכון או לא נכון נגד השעון.",
+    he: { subject: "דוגמאות, חידון ומשחק לכל הכיתה", cta: "לקבוצות המילים", body: P(
+      "אחרי שהמילים הוקרנו, כדאי לבדוק שהתלמידים בכיתה באמת הבינו אותן.",
+      "במסך ההקרנה יש שלושה כפתורים.",
+      "\"דוגמאות\" מציג משפטים עם המילה, אחד אחרי השני.",
+      "\"חידון לכיתה\" הוא שלוש שאלות על המילה.",
+      "\"משחק לכיתה\" הוא נכון או לא נכון, נגד השעון.",
       "הכיתה עונה יחד, והמסך מראה כמה תשובות נכונות היו.",
       "חמש דקות בסוף השיעור, והמילים נשארות.") },
-    en: { subject: "A quiz and a game for the whole class", cta: "Open the word sets", body: P(
-      "Once the words are on the board, check that they stuck.",
-      "The projector screen has two buttons: \"Class quiz\" with three questions, and \"Class game\", true or false against the clock.",
+    en: { subject: "Examples, a quiz and a game for the whole class", cta: "Open the word sets", body: P(
+      "Once the words are on the board, check that the students really understood them.",
+      "The projector screen has three buttons.",
+      "\"Examples\" shows sentences with the word, one at a time.",
+      "\"Class quiz\" asks three questions about the word.",
+      "\"Class game\" is true or false, against the clock.",
       "The class answers together, and the screen shows how many they got right.",
       "Five minutes at the end of the lesson, and the words stay.") },
   },
