@@ -9,8 +9,11 @@ type LangBlock = { content: Content; overridden: boolean; translated?: boolean }
 // The family series in every UI language (Gadi 2026-10-05): Hebrew and
 // English as tabs, the other 31 from a picker.
 const OTHER_LANGS = FAMILY_LANGS.filter((l) => l !== "he" && l !== "en");
+// zh-CN / zh-TW are region tags; the script tags read as "Simplified /
+// Traditional Chinese" instead of "Chinese (China) / (Taiwan)".
+const DISPLAY_CODE: Record<string, string> = { "zh-CN": "zh-Hans", "zh-TW": "zh-Hant" };
 function langName(code: string, inLang: string): string {
-  try { return new Intl.DisplayNames([inLang], { type: "language" }).of(code) ?? code; } catch { return code; }
+  try { return new Intl.DisplayNames([inLang], { type: "language" }).of(DISPLAY_CODE[code] ?? code) ?? code; } catch { return code; }
 }
 type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number; plans?: string[] };
 // Family, the individual Clear/Deep series (Gadi 2026-10-06), and the
@@ -184,8 +187,8 @@ export function AdminEmailEditorClient() {
       <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 4px" }}>{he ? "עריכת מיילים" : "Email editor"}</h1>
       <p style={{ fontSize: 13, color: "#6B7280", margin: "0 0 12px" }}>
         {he
-          ? "עריכת סדרת המיילים של Family. שינויים נשמרים ודורסים את ברירת המחדל. ## לכותרת, שורות עם 1. או - לצעדים, **מודגש**, [טקסט](/family?tab=members) לקישור למסך באתר. סדרת ההרשמה לצפייה ובדיקה בלבד (עריכה בקוד)."
-          : "Edit the Family email series. Changes override the default. Use ## for a heading, 1. or - for steps, **bold**, [text](/family?tab=members) for a link to a screen. The signup series is view + test only (edited in code)."}
+          ? "עריכת סדרות המיילים: Family, Individual והרשמה. שינויים נשמרים ודורסים את ברירת המחדל. ## לכותרת, שורות עם 1. או - לצעדים, **מודגש**, [טקסט](/family?tab=members) לקישור למסך באתר. סדרת ההרשמה לצפייה ובדיקה בלבד (עריכה בקוד)."
+          : "Edit the email series: Family, Individual and Signup. Changes override the default. Use ## for a heading, 1. or - for steps, **bold**, [text](/family?tab=members) for a link to a screen. The signup series is view + test only (edited in code)."}
       </p>
 
       {/* Series switch */}
@@ -345,7 +348,7 @@ export function AdminEmailEditorClient() {
         />
         <button type="button" onClick={doTest} disabled={busy}
           style={{ padding: "9px 18px", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", border: "1.5px solid #7C3AED", background: "#fff", color: "#6D28D9" }}>
-          {he ? `שלח בדיקה (${tab === "he" ? "עברית" : "אנגלית"})` : `Send test (${tab.toUpperCase()})`}
+          {he ? `שלח בדיקה (${langName(tab, "he")})` : `Send test (${langName(tab, "en")})`}
         </button>
         {status && <span style={{ fontSize: 13, fontWeight: 600, color: "#0EA5A5" }}>{status}</span>}
       </div>

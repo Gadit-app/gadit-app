@@ -62,6 +62,9 @@ export type UserPlan = "basic" | "clear" | "deep";
 export async function verifyUserAndGetPlan(idToken: string | undefined | null): Promise<{
   userId: string;
   plan: UserPlan;
+  /** Gadi inside a school's dashboard from the admin ("Enter dashboard"):
+   *  his activity must not be recorded as the school's. */
+  impersonating?: boolean;
 } | null> {
   if (!idToken) return null;
   try {
@@ -69,7 +72,7 @@ export async function verifyUserAndGetPlan(idToken: string | undefined | null): 
     const userId = decoded.uid;
     const userDoc = await getAdminDb().collection("users").doc(userId).get();
     const plan = (userDoc.data()?.plan as UserPlan) || "basic";
-    return { userId, plan };
+    return { userId, plan, impersonating: decoded.adminImpersonation === true };
   } catch (e) {
     console.error("verifyUserAndGetPlan failed:", e);
     return null;

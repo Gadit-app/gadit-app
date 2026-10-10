@@ -3,8 +3,9 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { PRICING, IMAGE_COST } from "@/lib/ai-cost";
 
 /**
- * Admin tool — engine (OpenAI) cost breakdown, read from the `aiUsage`
- * daily rollups written by lib/ai-cost.ts. OpenAI's own dashboard can only
+ * Admin tool — engine cost breakdown (OpenAI plus the Gemini Hebrew voice),
+ * read from the `aiUsage` daily rollups written by lib/ai-cost.ts. The
+ * providers' own dashboards can only
  * split by model; this splits by PRODUCT FEATURE (full definition vs Reader
  * word-tap vs image vs Arabic tashkeel) so Gadi can decide what to price.
  *
@@ -92,6 +93,7 @@ export async function GET(req: NextRequest) {
     models: toSorted(models),
     plans: toSorted(plans),
     series,
+    // The price table the costs were estimated from; the page footer renders it.
     pricing: { chat: PRICING, image: IMAGE_COST },
   });
 }

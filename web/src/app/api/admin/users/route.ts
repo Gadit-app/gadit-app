@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { customerCategory, isInternalEmail } from "@/lib/internal-accounts";
+import { customerCategory, internalUids, isPayingStatus } from "@/lib/internal-accounts";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
 
@@ -171,9 +171,13 @@ export async function GET(req: NextRequest) {
       // accounts, which are listed but never counted.
       category: customerCategory(d, u.uid),
       familyId: typeof d.familyId === "string" ? (d.familyId as string) : null,
-      internal: isInternalEmail(u.email ?? (typeof d.email === "string" ? (d.email as string) : null)),
+      internal: false,
     };
   });
+  // Our own accounts and everyone attached to them (Gadi's family members,
+  // accounts inside the demo / college schools): listed, never counted.
+  const internalSet = internalUids(rows.map((r) => ({ uid: r.uid, email: r.email, familyId: r.familyId, schoolId: userDocs.get(r.uid)?.schoolId })));
+  for (const r of rows) r.internal = internalSet.has(r.uid);
 
   const filtered = rows.filter((r) => {
     if (searchQ && !(r.email ?? "").toLowerCase().includes(searchQ)) return false;
@@ -204,9 +208,12 @@ export async function GET(req: NextRequest) {
   // demo schools, the Play reviewer) never count. A family counts once,
   // however many of its members have accounts.
   const counted = rows.filter((r) => !r.internal);
-  const isPayingRow = (r: typeof rows[number]) =>
-    !r.comp && (r.subscriptionStatus === "active" || r.subscriptionStatus === "trialing");
+  // Paying = active, or past_due inside the grace period; trials apart
+  // (isPayingStatus, the same rule as Overview and Revenue).
+  const isPayingRow = (r: typeof rows[number]) => !r.comp && isPayingStatus(r.subscriptionStatus);
   const paying = counted.filter(isPayingRow);
+  const trialing = counted.filter((r) => !r.comp && r.subscriptionStatus === "trialing" && r.category !== "basic");
+  const trialFamilies = new Set(trialing.filter((r) => r.category === "family").map((r) => r.familyId ?? r.uid)).size;
   const payingIndividual = paying.filter((r) => r.category === "individual").length;
   const payingFamily = new Set(paying.filter((r) => r.category === "family").map((r) => r.familyId ?? r.uid)).size;
   const payingSchools = paying.filter((r) => r.category === "schools").length;
@@ -221,6 +228,12 @@ export async function GET(req: NextRequest) {
       individual: payingIndividual,
       family: payingFamily,
       schools: payingSchools,
+    },
+    trialing: {
+      total: trialing.filter((r) => r.category !== "family").length + trialFamilies,
+      individual: trialing.filter((r) => r.category === "individual").length,
+      family: trialFamilies,
+      schools: trialing.filter((r) => r.category === "schools").length,
     },
     byCountry: Object.fromEntries(
       Object.entries(

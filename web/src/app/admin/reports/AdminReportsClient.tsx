@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useAuth } from "@/lib/auth-context";
-import { useLang } from "@/lib/lang-context";
+import { useAdminContext, type AdminLang } from "../admin-context";
+import { CATEGORY_LABEL, customerCategory, type CustomerCategory } from "@/lib/internal-accounts";
 
 interface Report {
   id: string;
@@ -15,6 +15,8 @@ interface Report {
   userId: string | null;
   userEmail: string | null;
   userPlan: string;
+  /** From the reporter's user doc (route); null when it could not be read. */
+  userCategory?: CustomerCategory | null;
   createdAt: string;
   status: "open" | "reviewed" | "fixed" | "wontfix";
   adminNote: string;
@@ -30,68 +32,116 @@ interface Counts {
   total: number;
 }
 
-const ADMIN_EMAIL = "gadibenlavi@gmail.com";
+type ReportStatus = Report["status"];
+
+/** Admin copy in the admin language (he/en), independent of the site language. */
+const STRINGS: Record<AdminLang, {
+  title: string;
+  loading: string;
+  noReports: string;
+  word: string;
+  anonymous: string;
+  error: string;
+  updateFailed: string;
+  showContext: string;
+  hideContext: string;
+  openPage: string;
+  tabs: Record<ReportStatus | "all", string>;
+  mark: Record<ReportStatus, string>;
+  counts: (c: Counts) => string;
+}> = {
+  en: {
+    title: "Reports",
+    loading: "Loading…",
+    noReports: "No reports.",
+    word: "Word",
+    anonymous: "anonymous",
+    error: "Error",
+    updateFailed: "Update failed",
+    showContext: "Show context",
+    hideContext: "Hide context",
+    openPage: "Open page",
+    tabs: { open: "Open", reviewed: "Reviewed", fixed: "Fixed", wontfix: "Won't fix", all: "All" },
+    mark: { open: "Mark open", reviewed: "Mark reviewed", fixed: "Mark fixed", wontfix: "Mark won't fix" },
+    counts: (c) => `${c.total} total · ${c.open} open · ${c.reviewed} reviewed · ${c.fixed} fixed · ${c.wontfix} won't fix`,
+  },
+  he: {
+    title: "דיווחים",
+    loading: "טוען…",
+    noReports: "אין דיווחים.",
+    word: "מילה",
+    anonymous: "אנונימי",
+    error: "שגיאה",
+    updateFailed: "העדכון נכשל",
+    showContext: "הצג הקשר",
+    hideContext: "הסתר הקשר",
+    openPage: "פתח עמוד",
+    tabs: { open: "פתוחים", reviewed: "נבדקו", fixed: "תוקנו", wontfix: "לא יטופלו", all: "הכל" },
+    mark: { open: "סמן כפתוח", reviewed: "סמן כנבדק", fixed: "סמן כתוקן", wontfix: "סמן כלא יטופל" },
+    counts: (c) => `${c.total} סה"כ · ${c.open} פתוחים · ${c.reviewed} נבדקו · ${c.fixed} תוקנו · ${c.wontfix} לא יטופלו`,
+  },
+};
+
+/** The reporter as one of the four customer categories. Prefers the route's
+ *  userCategory (read from the user doc); otherwise maps the stored plan, so
+ *  legacy clear/deep never show as labels. */
+function planLabel(r: Report, t: (typeof STRINGS)[AdminLang]): string {
+  if (r.userCategory) return CATEGORY_LABEL[r.userCategory];
+  if (!r.userId || !r.userPlan || r.userPlan === "anonymous") return t.anonymous;
+  return CATEGORY_LABEL[customerCategory({ plan: r.userPlan }, r.userId)];
+}
 
 export default function AdminReportsClient() {
-  const { user, loading: authLoading, promptLogin } = useAuth();
-  const { t, dir } = useLang();
+  const { secret, lang } = useAdminContext();
+  const t = STRINGS[lang];
+  const dir: "ltr" | "rtl" = lang === "he" ? "rtl" : "ltr";
   const [reports, setReports] = useState<Report[]>([]);
   const [counts, setCounts] = useState<Counts | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-  const [filter, setFilter] = useState<"all" | "open" | "reviewed" | "fixed" | "wontfix">(
-    "open"
-  );
+  const [actionErr, setActionErr] = useState("");
+  const [filter, setFilter] = useState<"all" | ReportStatus>("open");
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
-
   const loadReports = useCallback(async () => {
-    if (!user || !isAdmin) return;
     setLoading(true);
     try {
-      const idToken = await user.getIdToken();
-      const url =
-        filter === "all"
-          ? "/api/admin/reports"
-          : `/api/admin/reports?status=${filter}`;
-      const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${idToken}` },
-      });
-      if (!res.ok) throw new Error("HTTP " + res.status);
+      const qs = new URLSearchParams({ secret });
+      if (filter !== "all") qs.set("status", filter);
+      const res = await fetch(`/api/admin/reports?${qs.toString()}`);
+      if (!res.ok) {
+        const j = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(j?.error ?? "HTTP " + res.status);
+      }
       const json = await res.json();
       setReports(json.items as Report[]);
       setCounts(json.counts as Counts);
+      setErrorMsg("");
     } catch (e) {
       console.error("admin reports load:", e);
-      setErrorMsg(String(e));
+      setErrorMsg(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }
-  }, [user, isAdmin, filter]);
+  }, [secret, filter]);
 
   useEffect(() => {
-    if (authLoading) return;
-    if (!user) {
-      promptLogin("Sign in as admin");
-      return;
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadReports();
-  }, [authLoading, user, promptLogin, loadReports]);
+  }, [loadReports]);
 
-  async function updateReport(id: string, status?: Report["status"], adminNote?: string) {
-    if (!user) return;
+  async function updateReport(id: string, status?: ReportStatus, adminNote?: string) {
+    setActionErr("");
     try {
-      const idToken = await user.getIdToken();
-      await fetch("/api/admin/reports", {
+      const res = await fetch(`/api/admin/reports?secret=${encodeURIComponent(secret)}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, status, adminNote }),
       });
-      // Optimistic update
+      if (!res.ok) {
+        const j = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(j?.error ?? "HTTP " + res.status);
+      }
       setReports((prev) =>
         prev.map((r) =>
           r.id === id
@@ -103,46 +153,13 @@ export default function AdminReportsClient() {
       loadReports();
     } catch (e) {
       console.error("update report:", e);
+      setActionErr(`${t.updateFailed}: ${e instanceof Error ? e.message : String(e)}`);
     }
   }
 
-  if (authLoading) {
-    return <Frame dir={dir}>{t.adminLoading}</Frame>;
-  }
-  if (!user) {
-    return <Frame dir={dir}>{t.adminPleaseSignIn}</Frame>;
-  }
-  if (!isAdmin) {
-    return <Frame dir={dir}>{t.adminForbidden}</Frame>;
-  }
   if (errorMsg) {
-    return <Frame dir={dir}>Error: {errorMsg}</Frame>;
+    return <Frame dir={dir}>{t.error}: {errorMsg}</Frame>;
   }
-
-  // Status label per filter tab
-  const tabLabels: Record<typeof filter, string> = {
-    open: t.adminTabOpen,
-    reviewed: t.adminTabReviewed,
-    fixed: t.adminTabFixed,
-    wontfix: t.adminTabWontfix,
-    all: t.adminTabAll,
-  };
-
-  // Status label per badge (lowercased ones used as report.status)
-  const statusLabels: Record<Report["status"], string> = {
-    open: t.adminTabOpen,
-    reviewed: t.adminTabReviewed,
-    fixed: t.adminTabFixed,
-    wontfix: t.adminTabWontfix,
-  };
-
-  // Mark button label per status
-  const markLabels: Record<Report["status"], string> = {
-    open: t.adminMarkOpen,
-    reviewed: t.adminMarkReviewed,
-    fixed: t.adminMarkFixed,
-    wontfix: t.adminMarkWontfix,
-  };
 
   return (
     // Rendered inside the AdminShell layout, which already provides
@@ -152,30 +169,23 @@ export default function AdminReportsClient() {
       <div>
         <div className="mb-6 flex items-baseline justify-between flex-wrap gap-3">
           <div>
-            {/* Title hardcoded to mirror the sidebar nav label exactly
-                ("דיווחים" / "Reports") — Gadi 2026-06-22 ask for
-                visual consistency across all admin pages. The i18n
-                key t.adminReportsTitle is "Error reports" / "דיווחי
-                שגיאות" which is more descriptive but doesn't match
-                the sidebar word-for-word. */}
+            {/* Title mirrors the sidebar nav label ("דיווחים" / "Reports"). */}
             <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>
-              {dir === "rtl" ? "דיווחים" : "Reports"}
+              {t.title}
             </h1>
-            <p className="text-sm text-slate-500 mt-1">
-              {t.adminLoggedInAs} {user.email}
-            </p>
           </div>
           {counts && (
             <p className="text-xs text-slate-500">
-              {t.adminCountsLine
-                .replace("{total}", String(counts.total))
-                .replace("{open}", String(counts.open))
-                .replace("{reviewed}", String(counts.reviewed))
-                .replace("{fixed}", String(counts.fixed))
-                .replace("{wontfix}", String(counts.wontfix))}
+              {t.counts(counts)}
             </p>
           )}
         </div>
+
+        {actionErr && (
+          <div role="alert" style={{ background: "#FEF2F2", color: "#991B1B", padding: 12, borderRadius: 8, marginBottom: 16, fontSize: 14 }}>
+            {actionErr}
+          </div>
+        )}
 
         {/* Filter tabs */}
         <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 inline-flex border border-slate-200 flex-wrap">
@@ -190,7 +200,7 @@ export default function AdminReportsClient() {
                 fontWeight: filter === f ? 600 : 400,
               }}
             >
-              {tabLabels[f]}{" "}
+              {t.tabs[f]}{" "}
               {counts && f !== "all" && counts[f as keyof Omit<Counts, "total">] !== undefined && (
                 <span className="ms-1 opacity-70">({counts[f as keyof Omit<Counts, "total">]})</span>
               )}
@@ -200,9 +210,9 @@ export default function AdminReportsClient() {
 
         {/* Reports table */}
         {loading ? (
-          <p className="text-sm text-slate-500 py-12 text-center">{t.adminLoading}</p>
+          <p className="text-sm text-slate-500 py-12 text-center">{t.loading}</p>
         ) : reports.length === 0 ? (
-          <p className="text-sm text-slate-500 py-12 text-center">{t.adminNoReports}</p>
+          <p className="text-sm text-slate-500 py-12 text-center">{t.noReports}</p>
         ) : (
           <div className="space-y-3">
             {reports.map((r) => (
@@ -217,19 +227,19 @@ export default function AdminReportsClient() {
                 <div className="flex items-start justify-between gap-4 mb-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-2">
-                      <StatusBadge status={r.status} label={statusLabels[r.status]} />
+                      <StatusBadge status={r.status} label={t.tabs[r.status] ?? r.status} />
                       <span className="text-xs text-slate-400">
-                        {new Date(r.createdAt).toLocaleString()}
+                        {new Date(r.createdAt).toLocaleString(lang === "he" ? "he-IL" : "en-GB")}
                       </span>
                       <span className="text-xs text-slate-400">·</span>
                       <span className="text-xs text-slate-500">
-                        {r.userEmail ?? t.adminAnonymous} ({r.userPlan})
+                        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{r.userEmail ?? t.anonymous}</span> ({planLabel(r, t)})
                       </span>
                       <span className="text-xs text-slate-400">·</span>
                       <span className="text-xs text-slate-500">{r.uiLang}</span>
                     </div>
                     <p className="text-base font-semibold mb-1" style={{ color: "#0F172A" }}>
-                      {t.adminWordLabel}: <span dir="auto">{r.word || ", "}</span>
+                      {t.word}: <span dir="auto">{r.word || "-"}</span>
                     </p>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {r.categories.map((c) => (
@@ -258,7 +268,7 @@ export default function AdminReportsClient() {
                         className="text-xs text-blue-600 hover:underline"
                         dir="ltr"
                       >
-                        {t.adminOpenPage} →
+                        {t.openPage} →
                       </a>
                     )}
                   </div>
@@ -278,14 +288,14 @@ export default function AdminReportsClient() {
                         border: "1px solid rgb(226 232 240)",
                       }}
                     >
-                      {markLabels[s]}
+                      {t.mark[s]}
                     </button>
                   ))}
                   <button
                     onClick={() => setExpanded(expanded === r.id ? null : r.id)}
                     className="text-xs px-2.5 py-1 ms-auto text-slate-500 hover:text-slate-800"
                   >
-                    {expanded === r.id ? t.adminHideContext : t.adminShowContext}
+                    {expanded === r.id ? t.hideContext : t.showContext}
                   </button>
                 </div>
 

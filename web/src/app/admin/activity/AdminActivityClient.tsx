@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { CATEGORY_LABEL, type CustomerCategory } from "@/lib/internal-accounts";
 
 /**
  * Admin — live activity log. Every word search and image generation, newest
@@ -15,22 +16,25 @@ type Item = {
   word: string;
   lang: string;
   uid: string | null;
+  /** Customer category from the shared helper, or anon / unknown. */
   plan: string;
   email: string | null;
+  /** One of our own accounts (lib/internal-accounts.ts). */
+  internal?: boolean;
   country: string | null;
   ua: string | null;
   isBot: boolean;
   atMs: number;
   at: string | null;
-  /** Events folded into this row (same kind/user/word/lang within 2 min). */
+  /** Events folded into this row (same kind/user/word/lang within 10 min). */
   count?: number;
 };
 
 /** Fold near-identical rows (older log entries predate the server-side
- *  2-minute dedupe): a Kids Mode search draws one picture per meaning and the
+ *  10-minute dedupe): a Kids Mode search draws one picture per meaning and the
  *  word page can re-fetch, so one search showed up 3-4 times. Rows are newest
  *  first; a row merges into the previous kept row with the same key when it
- *  is within 2 minutes of it. */
+ *  is within 10 minutes of it. */
 function foldRepeats(rows: Item[]): Item[] {
   const out: Item[] = [];
   const lastByKey = new Map<string, Item>();
@@ -56,21 +60,16 @@ const SOFT = "#F3F4F6";
 
 const PLAN_STYLE: Record<string, { bg: string; fg: string }> = {
   basic: { bg: "#F3F4F6", fg: "#6B7280" },
-  clear: { bg: "rgba(124,58,237,0.12)", fg: "#6D28D9" },
-  deep: { bg: "rgba(124,58,237,0.12)", fg: "#6D28D9" },
+  individual: { bg: "rgba(124,58,237,0.12)", fg: "#6D28D9" },
   family: { bg: "#E3F5EC", fg: "#0E7A52" },
   schools: { bg: "#FEF6EC", fg: "#B45309" },
   anon: { bg: "#F3F4F6", fg: "#9CA3AF" },
   unknown: { bg: "#F3F4F6", fg: "#9CA3AF" },
 };
 
-const PLAN_LABEL: Record<string, { he: string; en: string }> = {
-  basic: { he: "חינם", en: "Basic" },
-  // Legacy Clear and Deep are both Individual (Gadi 2026-10-10).
-  clear: { he: "Individual", en: "Individual" },
-  deep: { he: "Individual", en: "Individual" },
-  family: { he: "Family", en: "Family" },
-  schools: { he: "בתי ספר", en: "Schools" },
+/** Category names come from CATEGORY_LABEL (product names, same in both
+ *  languages); only the non-customer states are translated here. */
+const EXTRA_LABEL: Record<string, { he: string; en: string }> = {
   anon: { he: "אנונימי", en: "Anon" },
   unknown: { he: "לא ידוע", en: "Unknown" },
 };
@@ -200,7 +199,8 @@ export default function AdminActivityClient() {
     }
   };
 
-  const planLabel = (p: string) => (he ? (PLAN_LABEL[p]?.he ?? p) : (PLAN_LABEL[p]?.en ?? p));
+  const planLabel = (p: string) =>
+    CATEGORY_LABEL[p as CustomerCategory] ?? (EXTRA_LABEL[p] ? (he ? EXTRA_LABEL[p].he : EXTRA_LABEL[p].en) : p);
 
   // Client-side filters over the loaded rows (use "Load more" to pull more
   // history into the buffer, then filter). Kept client-side so it works with
@@ -343,6 +343,11 @@ export default function AdminActivityClient() {
                           ) : (
                             <span style={{ background: ps.bg, color: ps.fg, fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>
                               {planLabel(it.plan)}
+                            </span>
+                          )}
+                          {it.internal && (
+                            <span title={he ? "חשבון שלנו, לא נספר" : "Our own account, not counted"} style={{ background: "#EEF2FF", color: "#4338CA", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 }}>
+                              {he ? "פנימי" : "internal"}
                             </span>
                           )}
                         </div>

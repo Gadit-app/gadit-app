@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { summarizeStripeRevenue } from "@/lib/admin-revenue";
+import { customerCategory, internalUids, isPayingStatus, type CustomerCategory } from "@/lib/internal-accounts";
 import type { UserRecord } from "firebase-admin/auth";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -10,52 +11,33 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
  * Admin tool — single overview endpoint that the /admin main dashboard
  * consumes. Returns everything a "morning glance" view needs:
  *
- *   - User counts: total, by-plan, new this week, new this month
- *   - MRR + revenue: monthly recurring revenue, projected month revenue
- *   - Activity: searches today / this week / this month (signed-in +
- *     anonymous), top searched words, top languages
- *   - Conversion funnel: anonymous users → signed-up → paid (this month)
- *   - Geo: top countries
+ *   - Money (Stripe, same helper as the Revenue page)
+ *   - Accounts: total, by customer category, signups today / 7 / 30 days
+ *   - Activity: searches and people today / 7 days, from the activity log
+ *     (the same source as the Activity page, humans only)
+ *   - Conversion funnel: anonymous visitors → signups → paying, 30 days
  *
- * Single endpoint instead of N small ones because the dashboard wants
- * all of these on one page and rendering N spinners would be ugly.
- * One bulk RPC per Firestore collection keeps it cheap.
+ * One definition everywhere (Gadi 2026-10-10): our own accounts and everyone
+ * attached to them are never counted, the four customer categories are
+ * Basic / Individual / Family / Schools, a family counts once, and paying
+ * means active or past_due in the grace period (trials apart). Top words,
+ * languages and countries live on their own pages, not here.
  *
  * USAGE:
  *   GET /api/admin/overview?secret=$ADMIN_SECRET
- *
- * Auth: ADMIN_SECRET env var (same as the other admin endpoints).
  */
 
 export const maxDuration = 60;
 
-type Plan = "basic" | "clear" | "deep";
+const DAY = 86_400_000;
 
-// Money (MRR, paying/trialing counts, tier breakdowns) now comes LIVE from
-// Stripe via summarizeStripeRevenue, the same helper the Revenue page uses,
-// so the two pages report identical figures. The Overview used to compute
-// MRR from the Firestore user doc's subscriptionStatus and counted TRIALING
-// subs as revenue, inflating "monthly revenue" (Gadi 2026-08-12).
-
-function tsToMs(v: unknown): number | null {
-  if (!v) return null;
-  if (typeof v === "object" && v !== null && "toDate" in v && typeof (v as { toDate: () => Date }).toDate === "function") {
-    return (v as { toDate: () => Date }).toDate().getTime();
-  }
-  if (v instanceof Date) return v.getTime();
-  if (typeof v === "number") return v;
-  if (typeof v === "string") {
-    const t = new Date(v).getTime();
-    return Number.isNaN(t) ? null : t;
-  }
-  return null;
-}
-
-function startOfDayUTC(daysAgo: number): number {
-  const d = new Date();
-  d.setUTCHours(0, 0, 0, 0);
-  d.setUTCDate(d.getUTCDate() - daysAgo);
-  return d.getTime();
+/** Midnight today, Israel time, as epoch ms. */
+function israelDayStart(now: number): number {
+  const p = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now));
+  const guess = Date.parse(`${p}T00:00:00+03:00`);
+  // +02:00 in winter: if that midnight is still "yesterday" in Israel, move an hour.
+  const back = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(guess));
+  return back === p ? guess : guess + 3_600_000;
 }
 
 export async function GET(req: NextRequest) {
@@ -76,9 +58,9 @@ export async function GET(req: NextRequest) {
   // Money from Stripe (source of truth), same helper as the Revenue page.
   const rev = await summarizeStripeRevenue(stripe);
   const now = Date.now();
-  const todayStart = startOfDayUTC(0);
-  const weekStart  = startOfDayUTC(7);
-  const monthStart = startOfDayUTC(30);
+  const todayStart = israelDayStart(now);
+  const weekStart = now - 7 * DAY;
+  const monthStart = now - 30 * DAY;
 
   // ---------- 1) All Auth users + their Firestore docs ----------
   const allAuthUsers: UserRecord[] = [];
@@ -90,9 +72,8 @@ export async function GET(req: NextRequest) {
     if (allAuthUsers.length >= 5000) break;
   } while (pageToken);
 
-  // Exclude synthetic family-member (kid) uids `${familyId}_${memberId}`:
-  // device-paired child sessions, not real accounts, so they must not
-  // inflate total users / byPlan / signups (Gadi 2026-07-27).
+  // Synthetic family-member (kid) uids `${familyId}_${memberId}` are
+  // device-paired child sessions, not accounts (Gadi 2026-07-27).
   const authUsers = allAuthUsers.filter((u) => !u.uid.includes("_"));
 
   const userDocs = new Map<string, FirebaseFirestore.DocumentData>();
@@ -107,137 +88,96 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // ---------- 2) User aggregates (accounts only; money comes from Stripe) ----------
-  const byPlan = { basic: 0, clear: 0, deep: 0 };
+  const internal = internalUids(authUsers.map((u) => {
+    const d = userDocs.get(u.uid) ?? {};
+    return { uid: u.uid, email: u.email ?? (typeof d.email === "string" ? d.email : null), familyId: d.familyId, schoolId: d.schoolId };
+  }));
+  const counted = authUsers.filter((u) => !internal.has(u.uid));
+
+  // ---------- 2) Accounts (money comes from Stripe) ----------
+  const byCategory: Record<CustomerCategory, number> = { basic: 0, individual: 0, family: 0, schools: 0 };
+  const families = new Set<string>();
   let signupsToday = 0;
   let signupsWeek = 0;
   let signupsMonth = 0;
-  let compAccounts = 0;
-  const byCountry = new Map<string, number>();
+  // Signups of the last 30 days who pay now / are in a trial (the funnel).
+  const signupPaying = new Set<string>();
+  const signupTrialing = new Set<string>();
 
-  for (const u of authUsers) {
+  for (const u of counted) {
     const d = userDocs.get(u.uid) ?? {};
-    const plan = (d.plan as Plan) || "basic";
-    byPlan[plan] = (byPlan[plan] ?? 0) + 1;
-    const country = (d.country as string) || "?";
-    byCountry.set(country, (byCountry.get(country) ?? 0) + 1);
+    const cat = customerCategory(d, u.uid);
+    // A family counts once, however many of its members have accounts.
+    if (cat === "family") {
+      const fid = typeof d.familyId === "string" ? d.familyId : u.uid;
+      if (!families.has(fid)) { families.add(fid); byCategory.family += 1; }
+    } else {
+      byCategory[cat] += 1;
+    }
 
     const created = u.metadata.creationTime ? new Date(u.metadata.creationTime).getTime() : 0;
     if (created >= todayStart) signupsToday++;
-    if (created >= weekStart)  signupsWeek++;
-    if (created >= monthStart) signupsMonth++;
-
-    // Comp / internal accounts (owner, testing) — tracked separately.
-    if (d.comp === true) compAccounts++;
+    if (created >= weekStart) signupsWeek++;
+    if (created >= monthStart) {
+      signupsMonth++;
+      if (cat !== "basic" && d.comp !== true) {
+        const key = cat === "family" && typeof d.familyId === "string" ? `f:${d.familyId}` : u.uid;
+        if (isPayingStatus(d.subscriptionStatus)) signupPaying.add(key);
+        else if (d.subscriptionStatus === "trialing") signupTrialing.add(key);
+      }
+    }
   }
 
-  const sortedCountries = Array.from(byCountry.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([code, count]) => ({ code, count }));
-
-  // ---------- 3) Activity (signed-in dailyUsage + anonymous anonUsage) ----------
-  const sevenDaysAgoIso = new Date(weekStart).toISOString().slice(0, 10);
-  const thirtyDaysAgoIso = new Date(monthStart).toISOString().slice(0, 10);
-
-  const dailyUsageSnap = await db
-    .collection("dailyUsage")
-    .where("date", ">=", thirtyDaysAgoIso)
+  // ---------- 3) Activity, from the activity log (humans, not us) ----------
+  const actSnap = await db.collection("activityLog")
+    .where("atMs", ">=", monthStart)
+    .select("kind", "count", "uid", "ua", "country", "isBot", "atMs")
     .get();
+  const act = { today: 0, week: 0, month: 0 };
+  const peopleToday = new Set<string>();
+  const peopleWeek = new Set<string>();
+  for (const doc of actSnap.docs) {
+    const x = doc.data() as { kind?: string; count?: number; uid?: string | null; ua?: string | null; country?: string | null; isBot?: boolean; atMs?: number };
+    if (x.isBot || x.kind === "image") continue;
+    if (x.uid && (internal.has(x.uid) || internal.has(x.uid.split("_")[0]))) continue;
+    const n = Number(x.count ?? 1);
+    const at = x.atMs ?? 0;
+    const who = x.uid || `anon:${x.country ?? ""}:${x.ua ?? ""}`;
+    act.month += n;
+    if (at >= weekStart) { act.week += n; peopleWeek.add(who); }
+    if (at >= todayStart) { act.today += n; peopleToday.add(who); }
+  }
+
+  // ---------- 4) Conversion funnel, 30 days ----------
+  // Anonymous = distinct IPs that searched without an account. Paying =
+  // of the people who signed up in the window, how many pay now (never more
+  // than the signups, unlike the old "any paid account seen this month").
   const anonUsageSnap = await db
     .collection("anonUsage")
-    .where("date", ">=", thirtyDaysAgoIso)
+    .where("date", ">=", new Date(monthStart).toISOString().slice(0, 10))
     .get();
-
-  let searchesToday = 0;
-  let searchesWeek = 0;
-  let searchesMonth = 0;
-  const todayIso = new Date(todayStart).toISOString().slice(0, 10);
-
-  for (const doc of [...dailyUsageSnap.docs, ...anonUsageSnap.docs]) {
-    const data = doc.data();
-    const count = typeof data.count === "number" ? data.count : 0;
-    const date = data.date as string;
-    if (date === todayIso) searchesToday += count;
-    if (date >= sevenDaysAgoIso) searchesWeek += count;
-    searchesMonth += count;
-  }
-
-  // ---------- 4) Top searched words + top languages ----------
-  // wordSearches has a `lastAt` field — we can sort by count without
-  // worrying about freshness for the leaderboard. For language
-  // distribution we sum counts grouped by lang.
-  const wordSnap = await db
-    .collection("wordSearches")
-    .orderBy("count", "desc")
-    .limit(20)
-    .get();
-  const topWords = wordSnap.docs.map((doc) => {
-    const d = doc.data();
-    return {
-      word: (d.word as string) ?? "",
-      lang: (d.lang as string) ?? "",
-      count: typeof d.count === "number" ? d.count : 0,
-    };
-  });
-
-  // For language distribution, scan ALL wordSearches once. Acceptable
-  // at our scale (thousands of docs). Cheap and gives us accurate
-  // by-lang totals.
-  const allWordSnap = await db.collection("wordSearches").get();
-  const byLang = new Map<string, number>();
-  for (const doc of allWordSnap.docs) {
-    const d = doc.data();
-    const lang = (d.lang as string) || "?";
-    const count = typeof d.count === "number" ? d.count : 0;
-    byLang.set(lang, (byLang.get(lang) ?? 0) + count);
-  }
-  const sortedLangs = Array.from(byLang.entries())
-    .sort((a, b) => b[1] - a[1])
-    .map(([lang, count]) => ({ lang, count }));
-
-  // ---------- 5) Conversion funnel (this month) ----------
-  // Anonymous = distinct IPs in anonUsage this month.
-  // Signed-up = users whose createdAt is in this month.
-  // Paid = users currently on a paid plan whose lastSeenAt or
-  //   createdAt is in this month (good enough — measures "people
-  //   who became paying customers in this window").
   const distinctIps = new Set<string>();
   for (const doc of anonUsageSnap.docs) {
     const d = doc.data();
-    const ip = (d.ip as string) || doc.id.split("_")[0];
-    distinctIps.add(ip);
+    distinctIps.add((d.ip as string) || doc.id.split("_")[0]);
   }
   const anonsMonth = distinctIps.size;
-
-  let paidThisMonth = 0;
-  for (const u of authUsers) {
-    const d = userDocs.get(u.uid) ?? {};
-    const plan = (d.plan as Plan) || "basic";
-    if (plan === "basic") continue;
-    const created = u.metadata.creationTime ? new Date(u.metadata.creationTime).getTime() : 0;
-    const lastSeen = tsToMs(d.lastSeenAt) ?? created;
-    if (lastSeen >= monthStart || created >= monthStart) paidThisMonth++;
-  }
+  const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 1000) / 10 : 0);
 
   const funnel = {
     anonymousMonth: anonsMonth,
     signedUpMonth: signupsMonth,
-    paidMonth: paidThisMonth,
-    // Conversion rates, rounded to 0.1%
-    anonToSignup: anonsMonth > 0
-      ? Math.round((signupsMonth / anonsMonth) * 1000) / 10
-      : 0,
-    signupToPaid: signupsMonth > 0
-      ? Math.round((paidThisMonth / signupsMonth) * 1000) / 10
-      : 0,
+    paidMonth: signupPaying.size,
+    trialingMonth: signupTrialing.size,
+    anonToSignup: pct(signupsMonth, anonsMonth),
+    signupToPaid: pct(signupPaying.size, signupsMonth),
   };
 
   return NextResponse.json({
     generatedAt: new Date(now).toISOString(),
     users: {
-      total: authUsers.length,
-      byPlan,
+      total: counted.length,
+      byCategory,
       signupsToday,
       signupsWeek,
       signupsMonth,
@@ -250,6 +190,8 @@ export async function GET(req: NextRequest) {
       atRiskMrrUsd: rev.atRiskMrrUsd,
       trialingMrrUsd: rev.trialingMrrUsd,
       trialingArrUsd: rev.trialingArrUsd,
+      trialingCardedCount: rev.trialingCardedCount,
+      trialingCardlessCount: rev.trialingCardlessCount,
       totalMrrUsd: rev.totalMrrUsd,
       totalArrUsd: rev.totalArrUsd,
       newMrrUsd: rev.newMrrUsd,
@@ -257,12 +199,13 @@ export async function GET(req: NextRequest) {
       netNewMrrUsd: rev.netNewMrrUsd,
       payingSubscriptions: rev.activePayingCount,
       payingCustomers: rev.activePayingCustomers,
+      // Kept for the Strategy page, which reads this name.
+      activeSubscriptions: rev.activePayingCustomers,
       newCustomersThisMonth: rev.newCustomersThisMonth,
       churnedCustomersThisMonth: rev.churnedCustomersThisMonth,
       trialingSubscriptions: rev.trialingCount,
       payingByTier: rev.payingByTier,
       trialingByTier: rev.trialingByTier,
-      compAccounts,
     },
     // Three decision metrics (spec §13): trial→paid, ARPU, CAC payback.
     decision: {
@@ -276,13 +219,14 @@ export async function GET(req: NextRequest) {
     },
     // Operational alerts (spec §3.6) — only rendered when a counter > 0.
     alerts: {
+      // Every subscription with a payment problem (past_due, unpaid,
+      // incomplete), so the count matches the list under it.
+      paymentProblemCount: rev.atRisk.length,
       pastDueCount: rev.pastDueCount,
       scheduledCancelCount: rev.scheduledCancelCount,
       endedThisWeekCount: rev.endedThisWeekCount,
       unmappedPriceCount: rev.unmappedPriceCount,
       unmappedPriceIds: rev.unmappedPriceIds,
-      // The actual at-risk subscribers (email + amount) so the overview can
-      // show WHO failed, not just a count, and Gadi can act from here.
       atRisk: rev.atRisk.map((s) => ({
         email: s.email,
         tier: s.tier,
@@ -293,15 +237,12 @@ export async function GET(req: NextRequest) {
     },
     businessTz: rev.businessTz,
     activity: {
-      searchesToday,
-      searchesWeek,
-      searchesMonth,
-      topWords,
-      byLang: sortedLangs,
+      searchesToday: act.today,
+      searchesWeek: act.week,
+      searchesMonth: act.month,
+      peopleToday: peopleToday.size,
+      peopleWeek: peopleWeek.size,
     },
     funnel,
-    geo: {
-      topCountries: sortedCountries,
-    },
   });
 }

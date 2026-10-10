@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { customerCategory, isInternalEmail, type CustomerCategory } from "@/lib/internal-accounts";
 
 /**
  * Admin — raw activity log. Every word search and image generation as its
@@ -51,12 +52,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "read_failed", details: String(e) }, { status: 500 });
   }
 
-  // Resolve subscriber emails + true tier in one batched read. Schools and
-  // Families both store plan="deep" and are distinguished by schoolId/familyId,
-  // so the raw plan field mislabels them (Gadi 2026-09-07: a school owner showed
-  // as "deep"). Reclassify here so the log shows "School"/"Family" correctly.
+  // Resolve subscriber emails + customer category in one batched read. The
+  // category comes from the shared customerCategory() helper (Basic /
+  // Individual / Family / Schools), so legacy plan values clear/deep never
+  // show as labels and Family/School owners (who also store plan="deep")
+  // are told apart by familyId / schoolId.
   const uids = [...new Set(rows.map((r) => r.uid).filter((u): u is string => !!u))];
-  const infoByUid: Record<string, { email: string | null; tier: string | null }> = {};
+  const infoByUid: Record<string, { email: string | null; category: CustomerCategory; internal: boolean }> = {};
   if (uids.length) {
     try {
       const refs = uids.map((u) => db.collection("users").doc(u));
@@ -64,17 +66,25 @@ export async function GET(req: NextRequest) {
       for (const d of docs) {
         if (!d.exists) continue;
         const data = d.data() ?? {};
-        const tier = data.schoolId ? "schools" : data.familyId ? "family" : null;
-        infoByUid[d.id] = { email: (data.email as string | undefined) ?? null, tier };
+        const email = (data.email as string | undefined) ?? null;
+        infoByUid[d.id] = { email, category: customerCategory(data, d.id), internal: isInternalEmail(email) };
       }
     } catch {
-      // best-effort — rows still render with uid short-code if the lookup fails
+      // best-effort: rows still render with uid short-code if the lookup fails
     }
   }
 
   const items = rows.map((r) => {
     const info = r.uid ? infoByUid[r.uid] : undefined;
-    const plan = info?.tier ?? r.plan ?? (r.uid ? "unknown" : "anon");
+    // No user doc (deleted account or failed lookup): fall back to the plan
+    // stamped on the row, run through the same helper.
+    const plan: CustomerCategory | "anon" | "unknown" = info
+      ? info.category
+      : !r.uid
+        ? "anon"
+        : r.plan
+          ? customerCategory({ plan: r.plan }, r.uid)
+          : "unknown";
     return {
     kind: r.kind ?? "word",
     word: r.word ?? "",
@@ -82,6 +92,7 @@ export async function GET(req: NextRequest) {
     uid: r.uid ?? null,
     plan,
     email: r.uid ? info?.email ?? null : null,
+    internal: info?.internal ?? false,
     country: r.country ?? null,
     ua: r.ua ?? null,
     isBot: r.isBot === true,

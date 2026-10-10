@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
 import { LANGUAGES } from "@/lib/i18n";
+import { DEFAULT_RATE_YEAR_ONE, DEFAULT_RATE_LIFETIME } from "@/lib/partners";
+
+/** Program defaults as whole percentages, for the add form. */
+const DEFAULT_Y1_PCT = String(Math.round(DEFAULT_RATE_YEAR_ONE * 100));
+const DEFAULT_LIFE_PCT = String(Math.round(DEFAULT_RATE_LIFETIME * 100));
 
 /**
  * /admin/partners — run the in-house partner (affiliate) program.
@@ -11,7 +16,7 @@ import { LANGUAGES } from "@/lib/i18n";
  * them self-signup at /partners. Each card shows clicks / signups / paying
  * customers and an earnings breakdown by currency; the payable balance is
  * each currency's `released` bucket (held 30 days, not yet paid). Actions:
- * mark paid (the monthly payout), promote to founder, set rates, suspend,
+ * mark paid (the monthly payout), promote to founder, edit rates inline, suspend,
  * copy the referral / dashboard links, and re-send the welcome email.
  */
 
@@ -94,6 +99,15 @@ const T = {
     emailPreviewNote: "Reflects the SAVED template. Save to refresh.",
     emailRestore: "Restore defaults",
     emailRestoreConfirm: "Replace this language's fields with the default template? Unsaved edits will be lost (nothing is saved until you press Save).",
+    edit: "Edit",
+    editName: "Name",
+    editEmail: "Email",
+    save: "Save",
+    cancel: "Cancel",
+    editRates: "Edit rates",
+    ratesHint: "Whole percentages, 0 to 100.",
+    errRates: "Enter whole percentages between 0 and 100.",
+    actionFailed: "Action failed",
   },
   he: {
     title: "שותפים",
@@ -153,6 +167,15 @@ const T = {
     emailPreviewNote: "מציג את התבנית השמורה. לחצו שמירה כדי לרענן.",
     emailRestore: "שחזור ברירת מחדל",
     emailRestoreConfirm: "להחליף את שדות השפה הזו בתבנית ברירת המחדל? עריכות שלא נשמרו יאבדו (שום דבר לא נשמר עד לחיצה על שמירה).",
+    edit: "עריכה",
+    editName: "שם",
+    editEmail: "אימייל",
+    save: "שמירה",
+    cancel: "ביטול",
+    editRates: "עריכת אחוזים",
+    ratesHint: "אחוזים שלמים, 0 עד 100.",
+    errRates: "הזינו אחוזים שלמים בין 0 ל-100.",
+    actionFailed: "הפעולה נכשלה",
   },
 };
 
@@ -210,8 +233,8 @@ export default function AdminPartnersClient() {
   const [fName, setFName] = useState("");
   const [fEmail, setFEmail] = useState("");
   const [fCode, setFCode] = useState("");
-  const [fY1, setFY1] = useState("25");
-  const [fLife, setFLife] = useState("10");
+  const [fY1, setFY1] = useState(DEFAULT_Y1_PCT);
+  const [fLife, setFLife] = useState(DEFAULT_LIFE_PCT);
   const [fSend, setFSend] = useState(true);
   // The PARTNER's language (for their welcome email), NOT the admin's UI
   // language. Defaults to the admin lang for convenience but is a visible,
@@ -234,6 +257,12 @@ export default function AdminPartnersClient() {
   const [editId, setEditId] = useState<string | null>(null);
   const [eName, setEName] = useState("");
   const [eEmail, setEEmail] = useState("");
+  // Inline per-partner rates editor (year one % / lifetime %), uses setRates.
+  const [rateId, setRateId] = useState<string | null>(null);
+  const [rY1, setRY1] = useState("");
+  const [rLife, setRLife] = useState("");
+  // Last failed card action, shown on that partner's card.
+  const [actErr, setActErr] = useState<{ id: string; msg: string } | null>(null);
 
   const load = useCallback(async (): Promise<string | null> => {
     const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`);
@@ -303,7 +332,7 @@ export default function AdminPartnersClient() {
       if (res.status === 409) { setAddErr(t.errExists); setAddState("error"); return; }
       if (!res.ok) { setAddErr(t.errGeneric); setAddState("error"); return; }
       setAddState("done");
-      setFName(""); setFEmail(""); setFY1("25"); setFLife("10");
+      setFName(""); setFEmail(""); setFY1(DEFAULT_Y1_PCT); setFLife(DEFAULT_LIFE_PCT);
       // Reload and explicitly move the REF field to the fresh next number,
       // so it never sticks on the number we just used.
       const nr = await load();
@@ -314,11 +343,14 @@ export default function AdminPartnersClient() {
     }
   }
 
-  async function act(partnerId: string, action: string, extra?: Record<string, unknown>) {
-    if (action === "markPaid" && !window.confirm(t.confirmPaid)) return;
+  /** One PATCH action on one partner. Returns true on success; on failure
+   *  the error is shown on that partner's card. */
+  async function act(partnerId: string, action: string, extra?: Record<string, unknown>): Promise<boolean> {
+    if (action === "markPaid" && !window.confirm(t.confirmPaid)) return false;
     setBusy(partnerId + action);
+    setActErr(null);
     try {
-      await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
+      const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         // Deliberately NOT sending the admin's `lang` here: resendEmail must
@@ -326,8 +358,17 @@ export default function AdminPartnersClient() {
         // travels when explicitly placed in `extra` (setLang / fix + resend).
         body: JSON.stringify({ partnerId, action, ...extra }),
       });
+      if (!res.ok) {
+        const j = (await res.json().catch(() => null)) as { error?: string } | null;
+        setActErr({ id: partnerId, msg: `${t.actionFailed}: ${j?.error ?? `HTTP ${res.status}`}` });
+        return false;
+      }
       if (action === "resendEmail") { setFlash(partnerId + ":sent"); setTimeout(() => setFlash(null), 1600); }
       await load();
+      return true;
+    } catch (e) {
+      setActErr({ id: partnerId, msg: `${t.actionFailed}: ${e instanceof Error ? e.message : String(e)}` });
+      return false;
     } finally {
       setBusy(null);
     }
@@ -335,16 +376,35 @@ export default function AdminPartnersClient() {
 
   async function saveEdit(id: string) {
     if (!eName.trim() && !eEmail.trim()) return;
-    await act(id, "updateDetails", { name: eName.trim(), email: eEmail.trim() });
-    setEditId(null);
+    if (await act(id, "updateDetails", { name: eName.trim(), email: eEmail.trim() })) setEditId(null);
+  }
+
+  function openRates(r: Row) {
+    setRateId(r.id);
+    setRY1(String(Math.round(r.rateYearOne * 100)));
+    setRLife(String(Math.round(r.rateLifetime * 100)));
+  }
+
+  async function saveRates(id: string) {
+    const ok = (v: string) => /^\d{1,3}$/.test(v.trim()) && Number(v) <= 100;
+    if (!ok(rY1) || !ok(rLife)) { setActErr({ id, msg: t.errRates }); return; }
+    if (await act(id, "setRates", { rateYearOne: Number(rY1), rateLifetime: Number(rLife) })) setRateId(null);
   }
 
   async function delPartner(partnerId: string) {
     if (!window.confirm(t.confirmDel)) return;
     setBusy(partnerId + "delete");
+    setActErr(null);
     try {
-      await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}&partnerId=${encodeURIComponent(partnerId)}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}&partnerId=${encodeURIComponent(partnerId)}`, { method: "DELETE" });
+      if (!res.ok) {
+        const j = (await res.json().catch(() => null)) as { error?: string } | null;
+        setActErr({ id: partnerId, msg: `${t.actionFailed}: ${j?.error ?? `HTTP ${res.status}`}` });
+        return;
+      }
       await load();
+    } catch (e) {
+      setActErr({ id: partnerId, msg: `${t.actionFailed}: ${e instanceof Error ? e.message : String(e)}` });
     } finally {
       setBusy(null);
     }
@@ -538,15 +598,38 @@ export default function AdminPartnersClient() {
 
                 {editId === r.id && (
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
-                    <input value={eName} onChange={(e) => setEName(e.target.value)} placeholder="שם" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", minWidth: 160 }} />
-                    <input value={eEmail} onChange={(e) => setEEmail(e.target.value)} placeholder="email" dir="ltr" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", minWidth: 200 }} />
-                    <button style={btnPrimary} disabled={busy === r.id + "updateDetails"} onClick={() => saveEdit(r.id)}>שמירה</button>
-                    <button style={btn} onClick={() => setEditId(null)}>ביטול</button>
+                    <input value={eName} onChange={(e) => setEName(e.target.value)} placeholder={t.editName} aria-label={t.editName} dir={lang === "he" ? "rtl" : "ltr"} style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", minWidth: 160 }} />
+                    <input value={eEmail} onChange={(e) => setEEmail(e.target.value)} placeholder={t.editEmail} aria-label={t.editEmail} dir="ltr" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", minWidth: 200 }} />
+                    <button style={btnPrimary} disabled={busy === r.id + "updateDetails"} onClick={() => saveEdit(r.id)}>{t.save}</button>
+                    <button style={btn} onClick={() => setEditId(null)}>{t.cancel}</button>
+                  </div>
+                )}
+
+                {rateId === r.id && (
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#374151" }}>
+                      {t.fY1}
+                      <input value={rY1} onChange={(e) => setRY1(e.target.value)} inputMode="numeric" dir="ltr" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", width: 70 }} />
+                    </label>
+                    <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#374151" }}>
+                      {t.fLife}
+                      <input value={rLife} onChange={(e) => setRLife(e.target.value)} inputMode="numeric" dir="ltr" style={{ fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", width: 70 }} />
+                    </label>
+                    <button style={btnPrimary} disabled={busy === r.id + "setRates"} onClick={() => saveRates(r.id)}>{t.save}</button>
+                    <button style={btn} onClick={() => setRateId(null)}>{t.cancel}</button>
+                    <span style={{ fontSize: 12, color: "#9CA3AF" }}>{t.ratesHint}</span>
+                  </div>
+                )}
+
+                {actErr?.id === r.id && (
+                  <div role="alert" style={{ marginTop: 12, background: "#FEF2F2", color: "#991B1B", border: "1px solid #FECACA", borderRadius: 8, padding: "8px 12px", fontSize: 13 }}>
+                    {actErr.msg}
                   </div>
                 )}
 
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
-                  <button style={btn} onClick={() => { setEditId(r.id); setEName(r.name); setEEmail(r.email); }}>עריכה</button>
+                  <button style={btn} onClick={() => { setEditId(r.id); setEName(r.name); setEEmail(r.email); }}>{t.edit}</button>
+                  <button style={btn} onClick={() => openRates(r)}>{t.editRates}</button>
                   {payable.length > 0 && (
                     <button style={btnPrimary} disabled={busy === r.id + "markPaid"} onClick={() => act(r.id, "markPaid")}>{t.markPaid}</button>
                   )}
@@ -585,9 +668,9 @@ export default function AdminPartnersClient() {
   );
 }
 
-/** Render a currency-bucket list as one line, or an em-free dash when empty. */
+/** Render a currency-bucket list as one line, or a plain hyphen when empty. */
 function fmtMoney(items: { cur: string; val: number }[]): string {
-  return items.length === 0 ? "—" : items.map((x) => money(x.val, x.cur)).join(" · ");
+  return items.length === 0 ? "-" : items.map((x) => money(x.val, x.cur)).join(" · ");
 }
 
 const card: React.CSSProperties = { background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: 18 };

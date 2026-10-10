@@ -1565,7 +1565,7 @@ export async function POST(req: NextRequest) {
     // both feeds (the 2026-10-06 SEO warm-up would add thousands).
     if (!isRefresh) void recordWordSearch({ word, lang: uiLangCode });
     // Raw per-event feed for /admin/activity (who searched what, when).
-    if (!isRefresh) void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent") });
+    if (!isRefresh) void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent"), impersonating: userInfo?.impersonating });
 
     const cached = isRefresh ? null : await getCachedResult(cacheKey);
     if (cached) {

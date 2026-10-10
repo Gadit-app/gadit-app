@@ -24,8 +24,9 @@
  *   email spam-folder issue, and so on.
  * - Product / usage third. Kids mode, voice, offline, reporting
  *   wrong content.
- * - Partner program fourth. Affonso embed plus 30% / 10% lifetime
- *   model and payout question.
+ * - Partner program fourth. The in-house program (/partners, /p/<code>,
+ *   partner dashboard): standard 25% year one, 10% for life after,
+ *   plus payout questions.
  * - General last. What Gadit is, languages, kids safety, data.
  */
 
@@ -324,15 +325,16 @@ Object.assign(HELP, {
             q: "How do I become a Gadit partner?",
             a: [
               "Open /partners from any page and click \"Become a partner\". Sign up with your name and email, and your unique referral link plus a dashboard to track clicks and commissions are ready right away. No waiting for approval.",
-              "The partner program is for Clear or Deep subscribers only. To recommend Gadit credibly, we ask that you use it yourself first. Upgrade from Pricing if you're on Basic.",
+              "Joining is free and open to anyone. You don't need a Gadit subscription to become a partner.",
             ],
           },
           {
             id: "commission-model",
             q: "How are commissions calculated?",
             a: [
-              "Standard partners earn 30% of every subscription paid via their link, every month, for the first 12 months of each subscriber. After 12 months that drops to 0%. If you've hit Active Partner status (10 paying subscribers active at once), you keep 10% lifetime commission on all of your subscribers, even after the first 12 months are up.",
-              "Annual subscriptions get a one-time 15% commission on the first payment, instead of the 30% monthly rate spread across the year.",
+              "The standard terms are 25% of every payment a customer makes in their first year. After that first year, you earn 10% of every payment for as long as the customer keeps paying.",
+              "This works the same for monthly and annual plans, because commission is counted on each actual payment. If a customer cancels, your commission stops with their last payment.",
+              "The team can set different rates for specific partners. Your own rates always show in your partner dashboard, which you can reach from /partners.",
             ],
           },
           {
@@ -677,15 +679,16 @@ Object.assign(HELP, {
             q: "Ngiba kanjani umlingani we-Gadit?",
             a: [
               "Vula i-/partners kusuka kunoma yiliphi ikhasi bese uchofoza \"Become a partner\". Bhalisa ngegama nge-imeyili yakho, futhi isixhumanisi sakho esiyingqayizivele sokudlulisela kanye nedeshibhodi yokulandelela ukuchofoza namakhomishini kulungile ngokushesha. Akukho ukulinda ukugunyazwa.",
-              "Uhlelo lwabalingani lungolwababhalisi be-Clear noma be-Deep kuphela. Ukuze utuse i-Gadit ngokwethembeka, sicela ukuthi uyisebenzise wena kuqala. Thuthukisa kusuka ku-Pricing uma uku-Basic.",
+              "Ukujoyina kumahhala futhi kuvulekele wonke umuntu. Awudingi ukubhalisela i-Gadit ukuze ube umlingani.",
             ],
           },
           {
             id: "commission-model",
             q: "Amakhomishini abalwa kanjani?",
             a: [
-              "Abalingani abajwayelekile bahola u-30% wakho konke ukubhalisa okukhokhwa ngesixhumanisi sabo, njalo ngenyanga, ezinyangeni ezingu-12 zokuqala zombhalisi ngamunye. Ngemva kwezinyanga ezingu-12 lokho kwehla kuya ku-0%. Uma ufinyelele esimweni se-Active Partner (ababhalisi abangu-10 abakhokhayo abasebenzayo ngasikhathi sinye), ugcina ikhomishini engu-10% impilo yonke kubo bonke ababhalisi bakho, ngisho nangemva kokuphela kwezinyanga ezingu-12 zokuqala.",
-              "Ukubhalisa konyaka kuthola ikhomishini engu-15% kanye enkokhelweni yokuqala, esikhundleni sezinga langenyanga elingu-30% elisatshalaliswe unyaka wonke.",
+              "Imigomo ejwayelekile ingu-25% wayo yonke inkokhelo eyenziwa yikhasimende onyakeni walo wokuqala. Ngemva kwalowo nyaka wokuqala, uhola u-10% wayo yonke inkokhelo inqobo nje uma ikhasimende liqhubeka likhokha.",
+              "Lokhu kusebenza ngendlela efanayo ezinhlelweni zenyanga nezonyaka, ngoba ikhomishini ibalwa enkokhelweni ngayinye eyenziwe ngempela. Uma ikhasimende likhansela, ikhomishini yakho iyama ngenkokhelo yalo yokugcina.",
+              "Iqembu lingasetha amazinga ahlukile kwabalingani abathile. Amazinga akho ahlala ebonakala kudeshibhodi yakho yabalingani, ongayifinyelela kusuka ku-/partners.",
             ],
           },
           {
@@ -1030,15 +1033,16 @@ Object.assign(HELP, {
             q: "Πώς γίνομαι συνεργάτης του Gadit;",
             a: [
               "Άνοιξε το /partners από οποιαδήποτε σελίδα και πάτησε \"Γίνε συνεργάτης\". Κάνε εγγραφή με το όνομα και το email σου, και ο μοναδικός σου σύνδεσμος παραπομπής μαζί με έναν πίνακα για την παρακολούθηση κλικ και προμηθειών είναι έτοιμα αμέσως. Χωρίς αναμονή για έγκριση.",
-              "Το πρόγραμμα συνεργατών είναι μόνο για συνδρομητές Clear ή Deep. Για να προτείνεις το Gadit αξιόπιστα, σου ζητάμε να το χρησιμοποιείς πρώτα εσύ ο ίδιος. Αναβάθμισε από το Pricing αν είσαι στο Basic.",
+              "Η συμμετοχή είναι δωρεάν και ανοιχτή σε όλους. Δεν χρειάζεσαι συνδρομή στο Gadit για να γίνεις συνεργάτης.",
             ],
           },
           {
             id: "commission-model",
             q: "Πώς υπολογίζονται οι προμήθειες;",
             a: [
-              "Οι τυπικοί συνεργάτες κερδίζουν 30% από κάθε συνδρομή που πληρώνεται μέσω του συνδέσμου τους, κάθε μήνα, για τους πρώτους 12 μήνες κάθε συνδρομητή. Μετά τους 12 μήνες αυτό πέφτει στο 0%. Αν έχεις φτάσει στην κατάσταση Active Partner (10 πληρωμένοι συνδρομητές ενεργοί ταυτόχρονα), κρατάς 10% προμήθεια εφ' όρου ζωής σε όλους τους συνδρομητές σου, ακόμα και μετά τη λήξη των πρώτων 12 μηνών.",
-              "Οι ετήσιες συνδρομές λαμβάνουν μια εφάπαξ προμήθεια 15% στην πρώτη πληρωμή, αντί για το μηνιαίο ποσοστό 30% κατανεμημένο στη διάρκεια του έτους.",
+              "Οι τυπικοί όροι είναι 25% από κάθε πληρωμή που κάνει ένας πελάτης τον πρώτο του χρόνο. Μετά τον πρώτο χρόνο, κερδίζεις 10% από κάθε πληρωμή για όσο ο πελάτης συνεχίζει να πληρώνει.",
+              "Αυτό ισχύει το ίδιο για μηνιαία και ετήσια πλάνα, γιατί η προμήθεια υπολογίζεται σε κάθε πραγματική πληρωμή. Αν ένας πελάτης ακυρώσει, η προμήθειά σου σταματά με την τελευταία του πληρωμή.",
+              "Η ομάδα μπορεί να ορίσει διαφορετικά ποσοστά για συγκεκριμένους συνεργάτες. Τα δικά σου ποσοστά φαίνονται πάντα στον πίνακα συνεργατών σου, στον οποίο φτάνεις από το /partners.",
             ],
           },
           {
@@ -1383,15 +1387,16 @@ Object.assign(HELP, {
             q: "איך אני נהיה שותף של Gadit?",
             a: [
               "פתיחת /partners מכל עמוד, ולחיצה על \"הצטרפות כשותף\". ההרשמה היא עם שם ואימייל, והלינק הייחודי מגיע מיד יחד עם דשבורד למעקב אחרי קליקים ועמלות. אין המתנה לאישור.",
-              "תוכנית השותפים היא רק למנויי Clear או Deep. כדי להמליץ על Gadit בצורה אמינה, אנחנו מבקשים שתשתמשו בעצמכם קודם. שדרגו מ-Pricing אם אתם ב-Basic.",
+              "ההצטרפות חינמית ופתוחה לכולם. לא צריך מנוי ל-Gadit כדי להיות שותפים.",
             ],
           },
           {
             id: "commission-model",
             q: "איך מחושבות העמלות?",
             a: [
-              "שותפים רגילים מקבלים 30% מכל מנוי ששולם דרך הלינק שלכם, כל חודש, ב-12 החודשים הראשונים. אחרי 12 חודשים העמלה יורדת ל-0%. אם הגעתם לסטטוס Active Partner (10 מנויים פעילים), אתם ממשיכים לקבל 10% עמלה לכל החיים מכל המנויים שלכם, גם אחרי 12 החודשים.",
-              "במנויים שנתיים מקבלים עמלה חד פעמית של 15% על התשלום הראשון, במקום 30% חודשי לאורך השנה.",
+              "התנאים הרגילים הם 25% מכל תשלום של לקוח בשנה הראשונה שלו. אחרי השנה הראשונה תקבלו 10% מכל תשלום, כל עוד הלקוח ממשיך לשלם.",
+              "זה עובד אותו דבר במנוי חודשי ובמנוי שנתי, כי העמלה מחושבת על כל תשלום בפועל. אם לקוח מבטל, העמלה שלכם נעצרת בתשלום האחרון שלו.",
+              "הצוות יכול לקבוע אחוזים אחרים לשותפים מסוימים. האחוזים שלכם תמיד מופיעים בלוח השותפים שלכם, שאפשר להגיע אליו מ-/partners.",
             ],
           },
           {

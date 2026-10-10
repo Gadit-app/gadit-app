@@ -21,7 +21,7 @@ type Overview = {
   businessTz?: string;
   users: {
     total: number;
-    byPlan: { basic: number; clear: number; deep: number };
+    byCategory?: { basic: number; individual: number; family: number; schools: number };
     signupsToday: number;
     signupsWeek: number;
     signupsMonth: number;
@@ -32,6 +32,8 @@ type Overview = {
     atRiskMrrUsd: number;
     trialingMrrUsd: number;
     trialingArrUsd: number;
+    trialingCardedCount?: number;
+    trialingCardlessCount?: number;
     totalMrrUsd: number;
     totalArrUsd: number;
     newMrrUsd: number;
@@ -42,7 +44,6 @@ type Overview = {
     newCustomersThisMonth: number;
     churnedCustomersThisMonth: number;
     trialingSubscriptions: number;
-    compAccounts?: number;
     payingByTier?: ByTier;
     trialingByTier?: ByTier;
   };
@@ -56,6 +57,7 @@ type Overview = {
     cacPaybackMonths: number | null;
   };
   alerts: {
+    paymentProblemCount?: number;
     pastDueCount: number;
     scheduledCancelCount: number;
     endedThisWeekCount: number;
@@ -67,18 +69,16 @@ type Overview = {
     searchesToday: number;
     searchesWeek: number;
     searchesMonth: number;
-    topWords: Array<{ word: string; lang: string; count: number }>;
-    byLang: Array<{ lang: string; count: number }>;
+    peopleToday?: number;
+    peopleWeek?: number;
   };
   funnel: {
     anonymousMonth: number;
     signedUpMonth: number;
     paidMonth: number;
+    trialingMonth?: number;
     anonToSignup: number;
     signupToPaid: number;
-  };
-  geo: {
-    topCountries: Array<{ code: string; count: number }>;
   };
 };
 
@@ -129,7 +129,7 @@ const STRINGS = {
     noData: "no data yet",
     // alerts
     alertsTitle: "Needs attention",
-    aPastDue: "Failed payments",
+    aPastDue: "Payment problems",
     aScheduled: "Scheduled cancels",
     aEnded: "Ended this week",
     aUnmapped: "Unmapped prices",
@@ -137,15 +137,19 @@ const STRINGS = {
     funnelTitle: "Conversion funnel · 30 days",
     funnelAnonymous: "Anonymous visitors who searched",
     funnelSignedUp: "Signed up",
-    funnelPaid: "Paying customers",
+    funnelPaid: "Of them paying now",
+    funnelTrialing: "of them in a trial now",
+    cardSplit: "%a with a card · %b without",
+    usersTitle: "Accounts",
+    usersSub: "+%t today · +%w in 7 days · +%m in 30 days",
+    searchesTitle: "Searches today",
+    searchesSub: "%p people · %w searches in 7 days",
+    peopleWeekTitle: "Active people · 7 days",
+    peopleWeekSub: "humans only, without our own accounts",
+    catLine: "Basic %b · Individual %i · Family %f · Schools %s",
     funnelAnonToSignup: "Anonymous → signup",
     funnelSignupToPaid: "Signup → paid",
-    topLangsTitle: "Searches by language",
-    topWordsTitle: "Top searched words",
-    topCountriesTitle: "Top countries",
-    noActivity: "No activity yet",
     generatedAtLabel: "Updated",
-    thisWeek: "this week",
     perYear: "≈ $%/yr",
   },
   he: {
@@ -188,45 +192,29 @@ const STRINGS = {
     cacBasis: "CAC $% · %m שולי רווח",
     noData: "אין נתונים עדיין",
     alertsTitle: "דורש טיפול",
-    aPastDue: "תשלומים שנכשלו",
+    aPastDue: "בעיות תשלום",
     aScheduled: "ביטולים מתוזמנים",
     aEnded: "הסתיימו השבוע",
     aUnmapped: "מחירים לא ממופים",
     funnelTitle: "משפך המרה · 30 ימים",
     funnelAnonymous: "אנונימיים שחיפשו",
     funnelSignedUp: "נרשמו",
-    funnelPaid: "משלמים",
+    funnelPaid: "מתוכם משלמים עכשיו",
+    funnelTrialing: "מתוכם בתקופת ניסיון עכשיו",
+    cardSplit: "%a עם כרטיס · %b בלי",
+    usersTitle: "חשבונות",
+    usersSub: "+%t היום · +%w ב-7 ימים · +%m ב-30 ימים",
+    searchesTitle: "חיפושים היום",
+    searchesSub: "%p אנשים · %w חיפושים ב-7 ימים",
+    peopleWeekTitle: "אנשים פעילים · 7 ימים",
+    peopleWeekSub: "בני אדם בלבד, בלי החשבונות שלנו",
+    catLine: "Basic %b · Individual %i · Family %f · Schools %s",
     funnelAnonToSignup: "אנונימי → רישום",
     funnelSignupToPaid: "רישום → תשלום",
-    topLangsTitle: "חיפושים לפי שפה",
-    topWordsTitle: "מילים פופולריות",
-    topCountriesTitle: "מדינות מובילות",
-    noActivity: "אין פעילות עדיין",
     generatedAtLabel: "עודכן",
-    thisWeek: "השבוע",
     perYear: "≈ $%/שנה",
   },
 } as const;
-
-const LANG_NAMES: Record<string, string> = {
-  he: "עברית", en: "English", ar: "العربية", ru: "Русский",
-  es: "Español", pt: "Português", fr: "Français", de: "Deutsch",
-  cs: "Čeština", sk: "Slovenčina", it: "Italiano", ja: "日本語",
-};
-
-function FlagImg({ iso2 }: { iso2: string }) {
-  return (
-    <img
-      src={`https://flagcdn.com/40x30/${iso2.toLowerCase()}.png`}
-      srcSet={`https://flagcdn.com/80x60/${iso2.toLowerCase()}.png 2x`}
-      width={18}
-      height={13}
-      alt=""
-      loading="lazy"
-      style={{ borderRadius: 2, display: "inline-block", verticalAlign: "middle", boxShadow: "0 0 0 0.5px rgba(15,23,42,0.18)" }}
-    />
-  );
-}
 
 export default function AdminOverviewClient() {
   const { secret, lang } = useAdminContext();
@@ -264,7 +252,7 @@ export default function AdminOverviewClient() {
 
   const alertItems = al
     ? [
-        { label: t.aPastDue, count: al.pastDueCount },
+        { label: t.aPastDue, count: al.paymentProblemCount ?? al.pastDueCount },
         { label: t.aScheduled, count: al.scheduledCancelCount },
         { label: t.aEnded, count: al.endedThisWeekCount },
         { label: t.aUnmapped, count: al.unmappedPriceCount },
@@ -317,6 +305,9 @@ export default function AdminOverviewClient() {
               <div style={{ fontSize: 14, fontWeight: 700, color: TOKENS.amber, marginTop: 2 }} dir="ltr">{perYear(rev.trialingMrrUsd)}</div>
               <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 5 }}>{t.pendingSub.replace("%n", String(rev.trialingSubscriptions))}</div>
               <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }} dir="ltr">{tierBreakdown(rev.trialingByTier)}</div>
+              {rev.trialingCardedCount != null && rev.trialingSubscriptions > 0 && (
+                <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }}>{t.cardSplit.replace("%a", String(rev.trialingCardedCount)).replace("%b", String(rev.trialingCardlessCount ?? 0))}</div>
+              )}
             </div>
             {/* Total — confirmed + pending, the number Gadi asked for */}
             <div style={{ ...cardStyle, padding: "14px 18px", textAlign: "center", borderColor: TOKENS.purpleBright, background: "rgba(124,58,237,0.06)" }}>
@@ -388,7 +379,7 @@ export default function AdminOverviewClient() {
                       ) : (
                         <span dir="ltr" style={{ color: TOKENS.inkFaint }}>—</span>
                       )}
-                      <span dir="ltr" style={{ color: TOKENS.inkSoft, whiteSpace: "nowrap" }}>{s.tier === "clear" || s.tier === "deep" ? "individual" : s.tier} · ${s.monthlyUsd.toFixed(2)}/mo · {s.status}</span>
+                      <span dir="ltr" style={{ color: TOKENS.inkSoft, whiteSpace: "nowrap" }}>{s.tier === "clear" || s.tier === "deep" ? "Individual" : s.tier.charAt(0).toUpperCase() + s.tier.slice(1)} · ${s.monthlyUsd.toFixed(2)}/mo · {s.status}</span>
                     </div>
                   ))}
                 </div>
@@ -396,90 +387,36 @@ export default function AdminOverviewClient() {
             </div>
           )}
 
-          {/* Existing operational sections kept below the money layer */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 12 }}>
-            <Kpi label={STRINGS[lang].title === "סקירה" ? "סך משתמשים" : "Total users"} value={data.users.total} accent={TOKENS.ink} detail={`+${data.users.signupsWeek} ${t.thisWeek}`} />
-            <Kpi label={lang === "he" ? "הרשמות · 7 ימים" : "Signups · 7 days"} value={data.users.signupsWeek} accent={TOKENS.teal} />
-            <Kpi label={lang === "he" ? "חיפושים היום" : "Searches today"} value={data.activity.searchesToday} accent={TOKENS.ink} detail={`${data.activity.searchesWeek} ${t.thisWeek}`} />
-          </div>
-
-          <div className="ov-two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
-            <div style={cardStyle}>
-              <div style={sectionTitleStyle}>{t.funnelTitle}</div>
-              <FunnelRow label={t.funnelAnonymous} value={data.funnel.anonymousMonth} color={TOKENS.inkFaint} max={Math.max(data.funnel.anonymousMonth, 1)} />
-              <FunnelRow label={t.funnelSignedUp} value={data.funnel.signedUpMonth} color={TOKENS.tealBright} max={Math.max(data.funnel.anonymousMonth, 1)} />
-              <FunnelRow label={t.funnelPaid} value={data.funnel.paidMonth} color={TOKENS.purpleBright} max={Math.max(data.funnel.anonymousMonth, 1)} />
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px dashed #E5E7EB" }}>
-                <span style={{ fontSize: 12, color: TOKENS.inkSoft }}>{t.funnelAnonToSignup}</span>
-                <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{data.funnel.anonToSignup}%</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-                <span style={{ fontSize: 12, color: TOKENS.inkSoft }}>{t.funnelSignupToPaid}</span>
-                <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{data.funnel.signupToPaid}%</span>
-              </div>
-            </div>
-
-            <div style={cardStyle}>
-              <div style={sectionTitleStyle}>{t.topLangsTitle}</div>
-              {data.activity.byLang.length === 0 ? (
-                <div style={{ color: TOKENS.inkFaint, fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
-              ) : (
-                <div>
-                  {data.activity.byLang.slice(0, 8).map((row) => {
-                    const max = data.activity.byLang[0].count;
-                    const pct = (row.count / max) * 100;
-                    return (
-                      <div key={row.lang} style={{ marginBottom: 8 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                          <span style={{ fontSize: 13, color: "#374151" }}>{LANG_NAMES[row.lang] ?? row.lang}</span>
-                          <span style={{ fontSize: 13, color: TOKENS.inkSoft }}>{row.count}</span>
-                        </div>
-                        <div style={{ background: "#F3F4F6", borderRadius: 4, height: 6, overflow: "hidden" }}>
-                          <div style={{ width: `${pct}%`, height: "100%", background: TOKENS.tealBright }} />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+          {/* Accounts and activity (Gadi 2026-10-10): one row, no number twice.
+              Top words, languages and countries live on Activity and
+              Subscribers. */}
+          <div className="ov-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 12 }}>
+            <Kpi label={t.usersTitle} value={data.users.total} accent={TOKENS.ink}
+                 hint={t.usersSub.replace("%t", String(data.users.signupsToday)).replace("%w", String(data.users.signupsWeek)).replace("%m", String(data.users.signupsMonth))}
+                 detail={data.users.byCategory ? t.catLine.replace("%b", String(data.users.byCategory.basic)).replace("%i", String(data.users.byCategory.individual)).replace("%f", String(data.users.byCategory.family)).replace("%s", String(data.users.byCategory.schools)) : undefined}
+                 detailLtr />
+            <Kpi label={t.searchesTitle} value={data.activity.searchesToday} accent={TOKENS.teal}
+                 detail={t.searchesSub.replace("%p", String(data.activity.peopleToday ?? 0)).replace("%w", String(data.activity.searchesWeek))} />
+            <Kpi label={t.peopleWeekTitle} value={data.activity.peopleWeek ?? 0} accent={TOKENS.ink} detail={t.peopleWeekSub} />
           </div>
 
           <div style={{ ...cardStyle, marginBottom: 14 }}>
-            <div style={sectionTitleStyle}>{t.topWordsTitle}</div>
-            {data.activity.topWords.length === 0 ? (
-              <div style={{ color: TOKENS.inkFaint, fontSize: 13, padding: "12px 0" }}>{t.noActivity}</div>
-            ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
-                {data.activity.topWords.map((w, i) => (
-                  <div key={`${w.lang}_${w.word}_${i}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 10px", background: TOKENS.bg, borderRadius: 6, fontSize: 13 }}>
-                    <span>
-                      <span style={{ color: TOKENS.inkFaint, marginInlineEnd: 8 }}>#{i + 1}</span>
-                      <span style={{ fontWeight: 500, color: TOKENS.ink }}>{w.word}</span>
-                      <span style={{ color: TOKENS.inkFaint, marginInlineStart: 6, fontSize: 11 }}>{w.lang}</span>
-                    </span>
-                    <span style={{ color: TOKENS.inkSoft, fontWeight: 600 }}>{w.count}</span>
-                  </div>
-                ))}
-              </div>
+            <div style={sectionTitleStyle}>{t.funnelTitle}</div>
+            <FunnelRow label={t.funnelAnonymous} value={data.funnel.anonymousMonth} color={TOKENS.inkFaint} max={Math.max(data.funnel.anonymousMonth, data.funnel.signedUpMonth, 1)} />
+            <FunnelRow label={t.funnelSignedUp} value={data.funnel.signedUpMonth} color={TOKENS.tealBright} max={Math.max(data.funnel.anonymousMonth, data.funnel.signedUpMonth, 1)} />
+            <FunnelRow label={t.funnelPaid} value={data.funnel.paidMonth} color={TOKENS.purpleBright} max={Math.max(data.funnel.anonymousMonth, data.funnel.signedUpMonth, 1)} />
+            {(data.funnel.trialingMonth ?? 0) > 0 && (
+              <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: -4 }}>+{data.funnel.trialingMonth} {t.funnelTrialing}</div>
             )}
-          </div>
-
-          {data.geo.topCountries.length > 0 && (
-            <div style={cardStyle}>
-              <div style={sectionTitleStyle}>{t.topCountriesTitle}</div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {data.geo.topCountries.map(({ code, count }) => (
-                  <div key={code} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 999, border: "1px solid #E5E7EB", background: "#FFFFFF", fontSize: 13, color: "#374151" }}>
-                    {code === "?" ? <span>🌐</span> : <FlagImg iso2={code} />}
-                    <span style={{ fontWeight: 500 }}>{code}</span>
-                    <span style={{ color: TOKENS.inkFaint }}>·</span>
-                    <span style={{ color: TOKENS.inkSoft }}>{count}</span>
-                  </div>
-                ))}
-              </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px dashed #E5E7EB" }}>
+              <span style={{ fontSize: 12, color: TOKENS.inkSoft }}>{t.funnelAnonToSignup}</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{data.funnel.anonToSignup}%</span>
             </div>
-          )}
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+              <span style={{ fontSize: 12, color: TOKENS.inkSoft }}>{t.funnelSignupToPaid}</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: TOKENS.ink }}>{data.funnel.signupToPaid}%</span>
+            </div>
+          </div>
         </>
       )}
       <style>{OV_CSS}</style>

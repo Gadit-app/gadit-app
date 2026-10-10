@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { CATEGORY_LABEL } from "@/lib/internal-accounts";
+import { DEFAULT_RATE_LIFETIME, DEFAULT_RATE_YEAR_ONE } from "@/lib/partners";
 
 type Plan = "basic" | "clear" | "deep";
 // Filter values: real plans plus the two identities that both store
@@ -47,16 +49,13 @@ const STRINGS: Record<AdminLang, {
   statSignups7: string;
   statSignups30: string;
   statBasic: string;
-  statClear: string;
-  statDeep: string;
   statPaying: string;
   statPayingTooltip: string;
+  trialingNote: (n: number) => string;
   byCountry: string;
   searchPlaceholder: string;
   allPlans: string;
   basic: string;
-  clear: string;
-  deep: string;
   family: string;
   schools: string;
   allTime: string;
@@ -101,16 +100,13 @@ const STRINGS: Record<AdminLang, {
     statSignups7: "Signups · 7 days",
     statSignups30: "Signups · 30 days",
     statBasic: "Basic",
-    statClear: "Clear",
-    statDeep: "Deep",
     statPaying: "Paying",
-    statPayingTooltip: "Active or trialing Stripe subscriptions. Excludes family members and manual grants.",
+    statPayingTooltip: "Active subscriptions, or a failed payment still inside the 7-day grace period. Trials are counted apart. A family counts once. Our own accounts never count.",
+    trialingNote: (n: number) => `+${n} in a trial`,
     byCountry: "BY COUNTRY",
     searchPlaceholder: "Search email or uid…",
     allPlans: "All plans",
     basic: "Basic",
-    clear: "Clear",
-    deep: "Deep",
     family: "Family",
     schools: "Schools",
     allTime: "All time",
@@ -155,16 +151,13 @@ const STRINGS: Record<AdminLang, {
     statSignups7: "הרשמות · 7 ימים",
     statSignups30: "הרשמות · 30 ימים",
     statBasic: "Basic",
-    statClear: "Clear",
-    statDeep: "Deep",
     statPaying: "משלמים בפועל",
-    statPayingTooltip: "מנויי Stripe פעילים או בתקופת ניסיון. ללא בני משפחה והקצאות ידניות.",
+    statPayingTooltip: "מנויים פעילים, או תשלום שנכשל ועדיין בתוך 7 ימי החסד. תקופות ניסיון נספרות בנפרד. משפחה נספרת פעם אחת. החשבונות שלנו לא נספרים.",
+    trialingNote: (n: number) => `+${n} בתקופת ניסיון`,
     byCountry: "לפי מדינה",
     searchPlaceholder: "חיפוש לפי אימייל או מזהה…",
     allPlans: "כל המסלולים",
     basic: "Basic",
-    clear: "Clear",
-    deep: "Deep",
     family: "Family",
     schools: "Schools",
     allTime: "כל הזמן",
@@ -207,6 +200,7 @@ type ApiResponse = {
     filtered: number;
     byCategory: { basic: number };
     paying: { total: number; individual: number; family: number; schools: number };
+    trialing?: { total: number; individual: number; family: number; schools: number };
     byCountry: Record<string, number>;
     signupsLast7Days: number;
     signupsLast30Days: number;
@@ -350,8 +344,8 @@ export default function AdminUsersClient() {
   // language are already known, so only the two rates are asked.
   const [partnerEmails, setPartnerEmails] = useState<Set<string>>(new Set());
   const [partnerFor, setPartnerFor] = useState<AdminUserRow | null>(null);
-  const [pRateOne, setPRateOne] = useState("25");
-  const [pRateLife, setPRateLife] = useState("10");
+  const [pRateOne, setPRateOne] = useState(String(Math.round(DEFAULT_RATE_YEAR_ONE * 100)));
+  const [pRateLife, setPRateLife] = useState(String(Math.round(DEFAULT_RATE_LIFETIME * 100)));
   const [pLang, setPLang] = useState("he");
   const [pSend, setPSend] = useState(true);
   const [pBusy, setPBusy] = useState(false);
@@ -368,8 +362,8 @@ export default function AdminUsersClient() {
   }, [secret]);
   const openPartner = (u: AdminUserRow) => {
     setPartnerFor(u);
-    setPRateOne("25");
-    setPRateLife("10");
+    setPRateOne(String(Math.round(DEFAULT_RATE_YEAR_ONE * 100)));
+    setPRateLife(String(Math.round(DEFAULT_RATE_LIFETIME * 100)));
     setPLang(u.country === "IL" || !u.country ? "he" : "en");
     setPSend(true);
     setPMsg("");
@@ -625,14 +619,13 @@ export default function AdminUsersClient() {
               value={data.counts.paying.total}
               accent="#059669"
               title={t.statPayingTooltip}
-              sublabel={payingBreakdown(data.counts.paying)}
+              sublabel={data.counts.trialing?.total ? t.trialingNote(data.counts.trialing.total) : undefined}
             />
-            {/* By tier, in the tier colours (Gadi 2026-07-28). Basic = free
-                accounts. Clear/Deep/Family/Schools are PAYING subscribers
-                per real tier (Family/Schools both bill as deep but are
-                counted separately), so they sum to the Paying total above. */}
+            {/* The four customer categories, in their colours. Basic = free
+                accounts; Individual / Family / Schools are PAYING customers,
+                so they sum to the Paying total (Gadi 2026-10-10). */}
             <StatCard label={t.statBasic} value={data.counts.byCategory.basic} accent="#9CA3AF" />
-            <StatCard label="Individual" value={data.counts.paying.individual} accent="#7C3AED" />
+            <StatCard label={CATEGORY_LABEL.individual} value={data.counts.paying.individual} accent="#7C3AED" />
             <StatCard label={t.family}     value={data.counts.paying.family}  accent="#1D4ED8" />
             <StatCard label={t.schools}    value={data.counts.paying.schools} accent="#D97706" />
           </div>
@@ -685,7 +678,7 @@ export default function AdminUsersClient() {
           >
             <option value="">{t.allPlans}</option>
             <option value="basic">{t.basic}</option>
-            <option value="individual">Individual</option>
+            <option value="individual">{CATEGORY_LABEL.individual}</option>
             <option value="family">{t.family}</option>
             <option value="schools">{t.schools}</option>
           </select>
@@ -986,13 +979,6 @@ function Th({
 // Paying subscribers by real tier, e.g. "5 Clear · 3 Deep · 2 Family".
 // Only non-zero tiers, Latin labels kept (brand rule) so the caller
 // renders it LTR to stop the numbers scrambling in the RTL admin.
-function payingBreakdown(p: { individual: number; family: number; schools: number }): string {
-  const parts: string[] = [];
-  if (p.individual) parts.push(`${p.individual} Individual`);
-  if (p.family)  parts.push(`${p.family} Family`);
-  if (p.schools) parts.push(`${p.schools} Schools`);
-  return parts.join(" · ");
-}
 
 function StatCard({
   label,

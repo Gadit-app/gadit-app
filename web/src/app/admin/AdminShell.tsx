@@ -54,6 +54,26 @@ const STRINGS = {
     secSchools: "Schools",
     secFinance: "Finance",
     secContent: "Content & support",
+    gUsers: "Subscribers",
+    gActivity: "Activity",
+    gSchools: "Schools",
+    gPartners: "Partners",
+    gEmails: "Emails",
+    gFinance: "Finance",
+    gMarketing: "Marketing",
+    gContent: "Content",
+    gSupport: "Support",
+    tabUsers: "Subscribers",
+    tabDeleted: "Deleted",
+    tabLog: "Log & statistics",
+    tabTopWords: "Top words",
+    tabSchools: "Schools",
+    tabOrders: "Pilot requests",
+    tabLedger: "Send log",
+    tabEditor: "Edit emails",
+    tabCurriculum: "Curriculum",
+    tabLegacySets: "Hand-made sets",
+    tabReports: "Content reports",
     backToApp: "Back to app",
     signOut: "Sign out",
     langToggle: "עברית",
@@ -88,6 +108,26 @@ const STRINGS = {
     secSchools: "בתי ספר",
     secFinance: "כספים",
     secContent: "תוכן ותמיכה",
+    gUsers: "מנויים",
+    gActivity: "פעילות",
+    gSchools: "בתי ספר",
+    gPartners: "שותפים",
+    gEmails: "מיילים",
+    gFinance: "כספים",
+    gMarketing: "שיווק",
+    gContent: "תוכן",
+    gSupport: "תמיכה",
+    tabUsers: "מנויים",
+    tabDeleted: "נמחקו",
+    tabLog: "לוג וסטטיסטיקות",
+    tabTopWords: "מילים מובילות",
+    tabSchools: "בתי ספר",
+    tabOrders: "בקשות פיילוט",
+    tabLedger: "יומן שליחות",
+    tabEditor: "עריכת מיילים",
+    tabCurriculum: "תוכנית הלימודים",
+    tabLegacySets: "סטים ידניים",
+    tabReports: "דיווחים על תוכן",
     backToApp: "חזרה לאפליקציה",
     signOut: "התנתק",
     langToggle: "English",
@@ -95,54 +135,62 @@ const STRINGS = {
   },
 } as const satisfies Record<AdminLang, Record<string, string>>;
 
-type NavItem = {
-  href: string;
-  labelKey: keyof typeof STRINGS["en"];
-  icon: React.ReactNode;
-};
+type Label = keyof typeof STRINGS["en"];
+type NavTab = { href: string; labelKey: Label };
+type NavGroup = { labelKey: Label; icon: React.ReactNode; tabs: NavTab[] };
 
-// Grouped nav (Gadi 2026-08-05, modelled on the Yooniz admin sidebar):
-// section headers by topic so it's easier to navigate. A null title = the
-// top group (Overview / Strategy) with no header.
-type NavSection = { titleKey: keyof typeof STRINGS["en"] | null; items: NavItem[] };
-
-const NAV_SECTIONS: NavSection[] = [
-  { titleKey: null, items: [
-    { href: "/admin",           labelKey: "overview",  icon: <IconHome />   },
+// Ten menu items, related pages as tabs inside them (Gadi 2026-10-10: the
+// menu had 18 items, several repeating each other). The first tab is where
+// the menu item leads. Every old URL still works and lands on its tab.
+const NAV_GROUPS: NavGroup[] = [
+  { labelKey: "overview", icon: <IconHome />, tabs: [{ href: "/admin", labelKey: "overview" }] },
+  { labelKey: "gUsers", icon: <IconUsers />, tabs: [
+    { href: "/admin/users", labelKey: "tabUsers" },
+    { href: "/admin/deletions", labelKey: "tabDeleted" },
   ] },
-  // Group order is locked by the admin spec (§9). Only pages that exist
-  // are listed — the spec's not-yet-built pages (leads / referrals / posts /
-  // traffic / billing / settings) are the next build stage, not dead links.
-  { titleKey: "secUsers", items: [
-    { href: "/admin/users",     labelKey: "users",     icon: <IconUsers />    },
-    { href: "/admin/activity",  labelKey: "activityLog", icon: <IconList />   },
-    { href: "/admin/searches",  labelKey: "activity",  icon: <IconActivity /> },
-    { href: "/admin/deletions", labelKey: "deletions", icon: <IconTrash />    },
-    { href: "/admin/auth-errors", labelKey: "authErrors", icon: <IconLock /> },
+  { labelKey: "gActivity", icon: <IconActivity />, tabs: [
+    { href: "/admin/activity", labelKey: "tabLog" },
+    { href: "/admin/searches", labelKey: "tabTopWords" },
   ] },
-  { titleKey: "secSchools", items: [
-    { href: "/admin/schools",   labelKey: "schools",   icon: <IconSchool /> },
+  { labelKey: "gSchools", icon: <IconSchool />, tabs: [
+    { href: "/admin/schools", labelKey: "tabSchools" },
+    { href: "/admin/schools/orders", labelKey: "tabOrders" },
   ] },
-  { titleKey: "secMarketing", items: [
-    { href: "/admin/strategy",  labelKey: "strategy",  icon: <IconTarget /> },
-    { href: "/admin/campaigns", labelKey: "campaigns", icon: <IconMegaphone /> },
+  { labelKey: "gPartners", icon: <IconHandshake />, tabs: [{ href: "/admin/partners", labelKey: "partners" }] },
+  { labelKey: "gEmails", icon: <IconMail />, tabs: [
+    { href: "/admin/emails", labelKey: "tabLedger" },
+    { href: "/admin/email-editor", labelKey: "tabEditor" },
   ] },
-  { titleKey: "secGrowth", items: [
-    { href: "/admin/partners",  labelKey: "partners",  icon: <IconHandshake /> },
+  { labelKey: "gFinance", icon: <IconCoins />, tabs: [
+    { href: "/admin/revenue", labelKey: "revenue" },
+    { href: "/admin/forecast", labelKey: "forecast" },
+    { href: "/admin/ai-costs", labelKey: "aiCosts" },
   ] },
-  { titleKey: "secFinance", items: [
-    { href: "/admin/revenue",   labelKey: "revenue",   icon: <IconCoins /> },
-    { href: "/admin/forecast",  labelKey: "forecast",  icon: <IconTrendUp /> },
-    { href: "/admin/ai-costs",  labelKey: "aiCosts",   icon: <IconGauge /> },
+  { labelKey: "gMarketing", icon: <IconMegaphone />, tabs: [
+    { href: "/admin/campaigns", labelKey: "campaigns" },
+    { href: "/admin/strategy", labelKey: "strategy" },
   ] },
-  { titleKey: "secContent", items: [
-    { href: "/admin/sets",      labelKey: "wordsets",  icon: <IconGrid /> },
-    { href: "/admin/curriculum", labelKey: "curriculum", icon: <IconGrid /> },
-    { href: "/admin/emails",    labelKey: "emails",    icon: <IconMail /> },
-    { href: "/admin/email-editor", labelKey: "emailEditor", icon: <IconMail /> },
-    { href: "/admin/reports",   labelKey: "reports",   icon: <IconFlag /> },
+  { labelKey: "gContent", icon: <IconGrid />, tabs: [
+    { href: "/admin/curriculum", labelKey: "tabCurriculum" },
+    { href: "/admin/sets", labelKey: "tabLegacySets" },
+  ] },
+  { labelKey: "gSupport", icon: <IconFlag />, tabs: [
+    { href: "/admin/reports", labelKey: "tabReports" },
+    { href: "/admin/auth-errors", labelKey: "authErrors" },
   ] },
 ];
+
+/** The tab the current path belongs to: the longest matching href. */
+function activeTab(pathname: string): { group: NavGroup; tab: NavTab } | null {
+  let best: { group: NavGroup; tab: NavTab } | null = null;
+  for (const group of NAV_GROUPS) {
+    for (const tab of group.tabs) {
+      const hit = tab.href === "/admin" ? pathname === "/admin" : pathname === tab.href || pathname.startsWith(tab.href + "/");
+      if (hit && (!best || tab.href.length > best.tab.href.length)) best = { group, tab };
+    }
+  }
+  return best;
+}
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const [secret, setSecret] = useState<string | null>(null);
@@ -197,6 +245,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   const t = STRINGS[adminLang];
   const isRtl = adminLang === "he";
+  const current = activeTab(pathname);
 
   // Secret gate — no sidebar yet, just the unlock card.
   if (!secret) {
@@ -329,63 +378,34 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
             {/* Nav items */}
             <nav className="admin-shell-nav" style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 8 }}>
-              {NAV_SECTIONS.map((section, si) => (
-                <div key={si} className="admin-nav-group" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {section.titleKey && (
-                    <div
-                      className="admin-nav-section-title"
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        // Hebrew has no case, so uppercase is meaningless there
-                        // (spec §9). Keep it for the Latin admin only.
-                        letterSpacing: isRtl ? "0.04em" : "0.05em",
-                        textTransform: isRtl ? "none" : "uppercase",
-                        color: "#9CA3AF",
-                        padding: "14px 10px 4px",
-                      }}
-                    >
-                      {t[section.titleKey]}
-                    </div>
-                  )}
-                  {section.items.map((item) => {
-                    const active =
-                      item.href === "/admin"
-                        ? pathname === "/admin"
-                        : pathname === item.href || pathname.startsWith(item.href + "/");
-                    return (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 10,
-                          padding: "9px 10px",
-                          borderRadius: 8,
-                          fontSize: 13,
-                          fontWeight: 600,
-                          textDecoration: "none",
-                          // Active = subtle teal wash + white text + teal icon
-                          // + a 3px indicator on the item's inner edge (spec
-                          // §9): a solid teal fill reads as noise across 18
-                          // items. transparent border when inactive keeps the
-                          // text from shifting on select.
-                          color: active ? "#FFFFFF" : "#E5E7EB",
-                          background: active ? "rgba(14,165,165,0.14)" : "transparent",
-                          borderInlineEnd: `3px solid ${active ? "#0EA5A5" : "transparent"}`,
-                          transition: "background 0.15s, color 0.15s",
-                        }}
-                      >
-                        <span style={{ width: 16, height: 16, display: "inline-flex", alignItems: "center", justifyContent: "center", color: active ? "#0EA5A5" : "#E5E7EB" }}>
-                          {item.icon}
-                        </span>
-                        <span>{t[item.labelKey]}</span>
-                      </a>
-                    );
-                  })}
-                </div>
-              ))}
+              {NAV_GROUPS.map((group) => {
+                const active = current?.group === group;
+                return (
+                  <a
+                    key={group.labelKey}
+                    href={group.tabs[0].href}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "9px 10px",
+                      borderRadius: 8,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      color: active ? "#FFFFFF" : "#E5E7EB",
+                      background: active ? "rgba(14,165,165,0.14)" : "transparent",
+                      borderInlineEnd: `3px solid ${active ? "#0EA5A5" : "transparent"}`,
+                      transition: "background 0.15s, color 0.15s",
+                    }}
+                  >
+                    <span style={{ width: 16, height: 16, display: "inline-flex", alignItems: "center", justifyContent: "center", color: active ? "#0EA5A5" : "#E5E7EB" }}>
+                      {group.icon}
+                    </span>
+                    <span>{t[group.labelKey]}</span>
+                  </a>
+                );
+              })}
             </nav>
 
             {/* Bottom, back to app + sign out, pinned to the bottom
@@ -438,6 +458,31 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           {/* Main content area */}
           <div className="admin-shell-content" style={{ flex: 1, padding: "24px 16px 64px", minWidth: 0 }}>
             <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              {current && current.group.tabs.length > 1 && (
+                <nav className="admin-tabs" style={{ display: "flex", gap: 4, flexWrap: "wrap", borderBottom: "1px solid #E5E7EB", marginBottom: 18 }}>
+                  {current.group.tabs.map((tab) => {
+                    const on = tab === current.tab;
+                    return (
+                      <a
+                        key={tab.href}
+                        href={tab.href}
+                        aria-current={on ? "page" : undefined}
+                        style={{
+                          padding: "8px 14px",
+                          fontSize: 14,
+                          fontWeight: on ? 700 : 600,
+                          color: on ? "#0F6F6C" : "#6B7280",
+                          textDecoration: "none",
+                          borderBottom: `2px solid ${on ? "#0EA5A5" : "transparent"}`,
+                          marginBottom: -1,
+                        }}
+                      >
+                        {t[tab.labelKey]}
+                      </a>
+                    );
+                  })}
+                </nav>
+              )}
               {children}
             </div>
           </div>
@@ -457,11 +502,6 @@ function IconHome() {
 function IconUsers() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-  );
-}
-function IconTarget() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
   );
 }
 function IconCoins() {
@@ -499,34 +539,9 @@ function IconGrid() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
   );
 }
-function IconTrendUp() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-  );
-}
-function IconGauge() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
-  );
-}
-function IconList() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-  );
-}
 function IconSchool() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 22v-4a2 2 0 0 0-4 0v4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M18 5v17"/><path d="m4 6 8-4 8 4"/><path d="M6 5v17"/><circle cx="12" cy="9" r="2"/></svg>
-  );
-}
-function IconLock() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-  );
-}
-function IconTrash() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
   );
 }
 function IconArrowOut() {

@@ -1,3 +1,4 @@
+import { isInternalEmail } from "./internal-accounts";
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import Stripe from "stripe";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
@@ -182,7 +183,7 @@ function monthsInInterval(price: Stripe.Price | undefined): number {
 }
 
 /** Loose narrowing of subscription-level coupons without `any`. */
-function couponsOn(sub: Stripe.Subscription): Stripe.Coupon[] {
+export function couponsOn(sub: Stripe.Subscription): Stripe.Coupon[] {
   const out: Stripe.Coupon[] = [];
   const s = sub as unknown as { discount?: unknown; discounts?: unknown };
   const push = (d: unknown) => {
@@ -202,7 +203,7 @@ function couponsOn(sub: Stripe.Subscription): Stripe.Coupon[] {
  * price); percent_off and amount_off both handled. amount_off is per
  * invoice, so it's divided across the interval's months.
  */
-function applyDiscounts(monthlyNative: number, months: number, coupons: Stripe.Coupon[]): number {
+export function applyDiscounts(monthlyNative: number, months: number, coupons: Stripe.Coupon[]): number {
   let m = monthlyNative;
   for (const c of coupons) {
     if (c.duration === "once") continue; // no recurring effect
@@ -345,10 +346,15 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     const monthlyUsd = toUsd(monthlyNative, currency);
 
     const prodId = typeof primary?.product === "string" ? primary.product : primary?.product?.id ?? "";
-    const tier: Tier = productTier[prodId] ?? tierMap[priceId] ?? "clear";
+    // Four customer categories only (Gadi 2026-10-10): the legacy Clear and
+    // Deep prices are both Individual, and so is an unmapped product.
+    const rawTier: Tier = productTier[prodId] ?? tierMap[priceId] ?? "individual";
+    const tier: Tier = rawTier === "clear" || rawTier === "deep" ? "individual" : rawTier;
 
     const cust = typeof s.customer === "object" && s.customer && !("deleted" in s.customer) ? s.customer : null;
     const email = cust?.email ?? (s.metadata?.email as string | undefined) ?? null;
+    // Our own accounts are never revenue (internal-accounts.ts).
+    if (isInternalEmail(email)) continue;
     const country = cust?.address?.country ?? null;
     const stripeCustomerId = typeof s.customer === "string" ? s.customer : s.customer?.id ?? null;
     const custKey = stripeCustomerId ?? s.id;
@@ -468,7 +474,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   atRisk.sort((a, b) => (b.signedUpAt ?? "").localeCompare(a.signedUpAt ?? ""));
   recentlyCanceled.sort((a, b) => (b.signedUpAt ?? "").localeCompare(a.signedUpAt ?? ""));
 
-  const TIER_ORDER: Tier[] = ["clear", "deep", "family", "schools"];
+  const TIER_ORDER: Tier[] = ["individual", "family", "schools", "clear", "deep"];
   const toArray = (map: Map<string, BreakdownEntry>) =>
     [...map.values()]
       .map((b) => ({ ...b, mrr: Math.round(b.mrr * 100) / 100 }))

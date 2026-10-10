@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { SetMediaPanel } from "../sets/AdminSetsClient";
 import {
   CATALOG_IDS, catalogView, arSubject, arLevel, arTopic, type CatalogId, type ViewTopic,
 } from "@/lib/curriculum-catalog";
@@ -292,6 +293,11 @@ function UnitEditor({ topic, head, sub, api, t, he, onSaved, onRegen }: {
             )}
           </div>
           {status && <p style={{ marginTop: 10, fontSize: 13.5, color: status.startsWith(t.error) ? "#DC2626" : "#0E8A8A" }}>{status}</p>}
+          {rows.some((x) => x.w.trim()) && (
+            <div style={{ marginTop: 18 }}>
+              <SetMediaPanel id={topic.id} words={rows.map((x) => x.w).filter((w) => w.trim())} />
+            </div>
+          )}
         </>
       )}
     </>

@@ -31,14 +31,14 @@ const COPY = {
     title: "Cash flow", sub: "What lands in your account, and when — live from Stripe.",
     loading: "Loading…", win7: "Next 7 days", win30: "Next 30 days", win90: "Next 90 days",
     conversions: "New (trials converting)", renewals: "Renewals", total: "Total incoming",
-    colDate: "Date", colWhat: "What", colIn: "Incoming", conv: "conversion", renew: "renewal", retry: "retry",
+    colDate: "Date", colWhat: "What", colIn: "Incoming", conv: "conversion", renew: "renewal", retry: "retry", convN: "conversions", renewN: "renewals",
     today: "Today", tomorrow: "Tomorrow", note: (n: number, s: number) => `${n} upcoming charges across ${s} subscriptions.`,
   },
   he: {
     title: "תזרים עתידי", sub: "כמה כסף נכנס לחשבון, ומתי — חי מ-Stripe.",
     loading: "טוען…", win7: "7 ימים קדימה", win30: "30 יום קדימה", win90: "90 יום קדימה",
     conversions: "חדש (ניסיונות שממירים)", renewals: "חידושים", total: "סך נכנס",
-    colDate: "תאריך", colWhat: "מה", colIn: "נכנס", conv: "המרה", renew: "חידוש", retry: "ניסיון חוזר",
+    colDate: "תאריך", colWhat: "מה", colIn: "נכנס", conv: "המרה", renew: "חידוש", retry: "ניסיון חוזר", convN: "המרות", renewN: "חידושים",
     today: "היום", tomorrow: "מחר", note: (n: number, s: number) => `${n} חיובים צפויים מתוך ${s} מנויים.`,
   },
 };
@@ -144,9 +144,9 @@ function FragmentRow({ d, isOpen, total, nConv, nRenew, t, dir, isToday, onToggl
           {isToday ? `${t.today} · ` : ""}{d.date}
         </td>
         <td style={{ ...td, color: "#6B7280", fontSize: 13 }}>
-          {nConv > 0 && <span style={{ color: "#16A34A", fontWeight: 600 }}>{nConv} {t.conv}{nConv > 1 ? "s" : ""}</span>}
+          {nConv > 0 && <span style={{ color: "#16A34A", fontWeight: 600 }}>{nConv} {nConv > 1 ? t.convN : t.conv}</span>}
           {nConv > 0 && nRenew > 0 && " · "}
-          {nRenew > 0 && <span>{nRenew} {t.renew}{nRenew > 1 ? "s" : ""}</span>}
+          {nRenew > 0 && <span>{nRenew} {nRenew > 1 ? t.renewN : t.renew}</span>}
           <span style={{ marginInlineStart: 8, color: "#9CA3AF" }}>{isOpen ? "▲" : "▼"}</span>
         </td>
         <td style={{ ...td, textAlign: "end", fontWeight: 800, color: "#0E7490", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{money(total)}</td>

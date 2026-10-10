@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { LANGUAGES } from "@/lib/i18n";
 
 type WordRow = {
   word: string;
@@ -27,26 +28,12 @@ type AdminLang = "en" | "he";
 const ADMIN_LANG_KEY = "gadit_admin_lang_v1";
 const SECRET_KEY = "gadit_admin_secret_v1";
 
-// Order the language tabs the way the marketing site lists them. Any
-// language present in the API but missing here will be appended at the
-// end alphabetically.
-const LANG_ORDER = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"];
+// Language tabs follow the shared LANGUAGES registry (Hebrew first), so
+// every UI language shows. Any language present in the API but missing
+// from the registry is appended at the end.
+const LANG_ORDER: string[] = ["he", ...LANGUAGES.map((l) => l.code).filter((c) => c !== "he")];
 
-const LANG_LABEL: Record<string, string> = {
-  he: "עברית",
-  en: "English",
-  ar: "العربية",
-  ru: "Русский",
-  es: "Español",
-  pt: "Português",
-  fr: "Français",
-  de: "Deutsch",
-  cs: "Čeština",
-  sk: "Slovenčina",
-  it: "Italiano",
-  ja: "日本語",
-  hi: "हिन्दी",
-};
+const LANG_LABEL: Record<string, string> = Object.fromEntries(LANGUAGES.map((l) => [l.code, l.label]));
 
 const STRINGS: Record<AdminLang, {
   title: string;
@@ -74,7 +61,7 @@ const STRINGS: Record<AdminLang, {
   showingFooter: (n: number, total: number) => string;
 }> = {
   en: {
-    title: "Activity",
+    title: "Top words",
     loading: "Loading…",
     signOut: "Sign out",
     langToggle: "עברית",
@@ -99,7 +86,7 @@ const STRINGS: Record<AdminLang, {
     showingFooter: (n, total) => `Showing ${n} of ${total} words.`,
   },
   he: {
-    title: "פעילות",
+    title: "מילים מובילות",
     loading: "טוען…",
     signOut: "התנתקות",
     langToggle: "English",
@@ -126,7 +113,7 @@ const STRINGS: Record<AdminLang, {
 };
 
 function formatRelative(iso: string | null, lang: AdminLang): string {
-  if (!iso) return ", ";
+  if (!iso) return "-";
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
   if (diff < 60_000) return lang === "he" ? "עכשיו" : "now";

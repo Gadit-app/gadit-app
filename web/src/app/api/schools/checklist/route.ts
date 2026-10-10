@@ -16,7 +16,10 @@ export async function POST(req: NextRequest) {
   if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
   let uid: string;
   try {
-    uid = (await getAdminAuth().verifyIdToken(idToken)).uid;
+    const decoded = await getAdminAuth().verifyIdToken(idToken);
+    // Admin impersonation ("Enter dashboard") never ticks the school's steps.
+    if (decoded.adminImpersonation === true) return NextResponse.json({ ok: true, skipped: "impersonation" });
+    uid = decoded.uid;
   } catch {
     return NextResponse.json({ error: "invalid_token" }, { status: 401 });
   }

@@ -8,10 +8,14 @@ export const INTERNAL_EMAILS = new Set<string>([
   "demo.school@gadit.app",
   "demo.school.ar@gadit.app",
   "googleplay-review@gadit.app",
+  "demo.individual@gadit.app",
 ]);
 
 export function isInternalEmail(email: string | null | undefined): boolean {
-  return !!email && INTERNAL_EMAILS.has(email.trim().toLowerCase());
+  if (!email) return false;
+  const e = email.trim().toLowerCase();
+  // Every @gadit.app address is ours (demo accounts, the Play reviewer).
+  return INTERNAL_EMAILS.has(e) || e.endsWith("@gadit.app");
 }
 
 /** The four customer categories Gadit sells today (Gadi 2026-10-10). Legacy
@@ -32,3 +36,28 @@ export const CATEGORY_LABEL: Record<CustomerCategory, string> = {
   family: "Family",
   schools: "Schools",
 };
+
+/** Paying = a live subscription that collects money: active, or past_due
+ *  inside the 7-day grace period (the account keeps access). Trials are the
+ *  pipeline, counted apart. One definition for every admin page (Gadi
+ *  2026-10-10: Overview read 40 while Subscribers read 45). */
+export function isPayingStatus(status: unknown): boolean {
+  return status === "active" || status === "past_due";
+}
+
+/** Our own accounts plus everyone attached to them: members of an internal
+ *  owner's family, and accounts inside an internal owner's school. */
+export function internalUids(rows: Array<{ uid: string; email?: string | null; familyId?: unknown; schoolId?: unknown }>): Set<string> {
+  const out = new Set<string>();
+  const fams = new Set<string>();
+  for (const r of rows) {
+    if (!isInternalEmail(r.email)) continue;
+    out.add(r.uid);
+    if (typeof r.familyId === "string" && r.familyId) fams.add(r.familyId);
+  }
+  for (const r of rows) {
+    if (typeof r.familyId === "string" && fams.has(r.familyId)) out.add(r.uid);
+    if (typeof r.schoolId === "string" && out.has(r.schoolId)) out.add(r.uid);
+  }
+  return out;
+}

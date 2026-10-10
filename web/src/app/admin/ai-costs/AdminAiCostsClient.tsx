@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { CATEGORY_LABEL } from "@/lib/internal-accounts";
 
 /**
- * Admin — Engine (OpenAI) cost breakdown.
+ * Admin — Engine cost breakdown (OpenAI plus the Gemini Hebrew voice).
  *
- * Answers the question OpenAI's own dashboard can't: WHICH product feature
+ * Answers the question the providers' own dashboards can't: WHICH product feature
  * burned the money. Reads /api/admin/ai-costs (the aiUsage daily rollups).
  * The feature table is the decision surface — e.g. it shows what the Reader
  * "understand every word" taps actually cost, to price them if needed.
@@ -25,6 +26,8 @@ type Payload = {
   models: Bucket[];
   plans: Bucket[];
   series: Series[];
+  /** The price table the costs were estimated from (lib/ai-cost.ts). */
+  pricing?: { chat?: Record<string, { in: number; out: number }>; image?: Record<string, number> };
 };
 
 const TEAL = "#0EA5A5";
@@ -46,17 +49,35 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
   image_brief: { he: "תיאור לתמונה", en: "Image brief" },
   tashkeel_arabic: { he: "ניקוד ערבי", en: "Arabic tashkeel", note: { he: "gpt-4o", en: "gpt-4o" } },
   backfill_gloss: { he: "השלמת תרגום", en: "Gloss backfill" },
+  etymology_fallback: { he: "אטימולוגיה (גיבוי)", en: "Etymology fallback", note: { he: "מקור המילה נשלח שוב", en: "origin re-asked" } },
+  quick_define_kids: { he: "תצוגה מקדימה (ילדים)", en: "Quick preview (Kids)" },
+  tts_he: { he: "הקראה בעברית", en: "Hebrew read-aloud", note: { he: "Gemini", en: "Gemini" } },
+  word_idioms: { he: "ניבים וביטויים", en: "Idioms" },
+  word_question: { he: "שאלות על מילה", en: "Word questions" },
+  spell_set: { he: "תרגול כתיב", en: "Spelling set" },
+  spell_set_list: { he: "רשימת כתיב", en: "Spelling list" },
+  play_pairs: { he: "משחק זוגות", en: "Pairs game" },
+  passage_words: { he: "מילים מטקסט", en: "Passage words" },
+  image_classroom: { he: "תמונה (כיתה)", en: "Image (classroom)" },
+  curriculum_set: { he: "סט מתוכנית לימודים", en: "Curriculum set" },
+  class_activity: { he: "פעילות כיתתית", en: "Class activity" },
+  seo_vet: { he: "בדיקת מילים (אדמין)", en: "Word vetting (admin)" },
 };
 
+/** Plan keys as logged at call time, shown as the four customer categories.
+ *  Legacy "clear" is Individual. "deep" is logged by Individual, Family and
+ *  Schools alike, so that row can only be named as all three. */
 const PLAN_LABELS: Record<string, { he: string; en: string }> = {
-  basic: { he: "חינם", en: "Basic (free)" },
-  // Legacy Clear and Deep are both Individual (Gadi 2026-10-10). Family and
-  // Schools also log plan "deep", so this row is every paid account.
-  clear: { he: "Individual", en: "Individual" },
-  deep: { he: "משלמים (Individual, Family, Schools)", en: "Paid (Individual, Family, Schools)" },
-  family: { he: "Family", en: "Family" },
-  schools: { he: "בתי ספר", en: "Schools" },
-  anon: { he: "אנונימי", en: "Anonymous" },
+  basic: { he: CATEGORY_LABEL.basic, en: CATEGORY_LABEL.basic },
+  clear: { he: CATEGORY_LABEL.individual, en: CATEGORY_LABEL.individual },
+  deep: {
+    he: `${CATEGORY_LABEL.individual}, ${CATEGORY_LABEL.family}, ${CATEGORY_LABEL.schools}`,
+    en: `${CATEGORY_LABEL.individual}, ${CATEGORY_LABEL.family}, ${CATEGORY_LABEL.schools}`,
+  },
+  family: { he: CATEGORY_LABEL.family, en: CATEGORY_LABEL.family },
+  schools: { he: CATEGORY_LABEL.schools, en: CATEGORY_LABEL.schools },
+  admin: { he: "כלי אדמין", en: "Admin tools" },
+  anon: { he: "אנונימי", en: "anonymous" },
   unknown: { he: "לא ידוע", en: "Unknown" },
 };
 
@@ -96,6 +117,10 @@ export default function AdminAiCostsClient() {
   const featLabel = (k: string) => FEATURE_LABELS[k] ?? { he: k, en: k };
   const planLabel = (k: string) => PLAN_LABELS[k] ?? { he: k, en: k };
 
+  // Footer price list, from the table the API estimated with.
+  const chatPrices = Object.entries(data?.pricing?.chat ?? {});
+  const imagePrices = Object.entries(data?.pricing?.image ?? {});
+
   return (
     <div dir={he ? "rtl" : "ltr"} style={{ color: INK, fontFamily: "inherit" }}>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 4 }}>
@@ -121,8 +146,8 @@ export default function AdminAiCostsClient() {
       </div>
       <p style={{ margin: "0 0 20px", fontSize: 14, color: MUTED }}>
         {he
-          ? "מאיפה בדיוק הלך הכסף ל-OpenAI, מפורק לפי פיצ'ר. המספרים מוערכים ממחירון קבוע (ראה תחתית) לצורך שיוך יחסי."
-          : "Exactly where OpenAI spend went, split by feature. Figures are estimated from a fixed price table (see footer) for relative attribution."}
+          ? "מאיפה בדיוק הלך הכסף על המנוע (OpenAI ו-Gemini), מפורק לפי פיצ'ר. המספרים מוערכים ממחירון קבוע (ראו תחתית) לצורך שיוך יחסי."
+          : "Exactly where engine spend (OpenAI and Gemini) went, split by feature. Figures are estimated from a fixed price table (see footer) for relative attribution."}
       </p>
 
       {loading && <div style={{ color: MUTED, fontSize: 14 }}>{he ? "טוען..." : "Loading..."}</div>}
@@ -165,26 +190,52 @@ export default function AdminAiCostsClient() {
               total={data.totalCost}
               he={he}
               labelFor={(k) => t(featLabel(k))}
+              isKnown={(k) => k in FEATURE_LABELS}
               noteFor={(k) => { const n = featLabel(k).note; return n ? t(n) : ""; }}
               showUnits
             />
           </Card>
 
           {/* MODEL breakdown — cross-checks against OpenAI's own dashboard */}
-          <Card title={he ? "לפי מודל (להשוואה מול OpenAI)" : "By model (cross-check vs OpenAI)"}>
+          <Card title={he ? "לפי מודל (להשוואה מול לוחות הספקים)" : "By model (cross-check vs the providers)"}>
             <BreakdownTable rows={data.models} total={data.totalCost} he={he} labelFor={(k) => k} />
           </Card>
 
           {/* PLAN breakdown — who generates the cost */}
           <Card title={he ? "לפי תוכנית (מי מייצר את העלות)" : "By plan (who drives cost)"}>
-            <BreakdownTable rows={data.plans} total={data.totalCost} he={he} labelFor={(k) => t(planLabel(k))} />
+            <BreakdownTable rows={data.plans} total={data.totalCost} he={he} labelFor={(k) => t(planLabel(k))} isKnown={(k) => k in PLAN_LABELS} />
           </Card>
 
-          <p style={{ fontSize: 12, color: MUTED, marginTop: 18, lineHeight: 1.7 }}>
-            {he
-              ? "מחירון מוערך: gpt-4o $2.50/$10 לכל מיליון טוקן (קלט/פלט), gpt-4o-mini $0.15/$0.60, gpt-image-2.5-flare (low) ~$0.0065 לתמונה. עלויות נרשמות רק על קריאה אמיתית ל-OpenAI, לא על תוצאה מהמטמון. עדכן את המחירון ב-lib/ai-cost.ts אם OpenAI משנה מחירים."
-              : "Estimated prices: gpt-4o $2.50/$10 per 1M tokens (in/out), gpt-4o-mini $0.15/$0.60, gpt-image-2.5-flare (low) ~$0.0065/image. Only real OpenAI calls are logged, never cache hits. Update the table in lib/ai-cost.ts when OpenAI changes prices."}
-          </p>
+          <div style={{ fontSize: 12, color: MUTED, marginTop: 18, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, marginBottom: 4 }}>
+              {he ? "מחירון מוערך (lib/ai-cost.ts):" : "Estimated prices (lib/ai-cost.ts):"}
+            </div>
+            {chatPrices.length === 0 && imagePrices.length === 0 ? (
+              <div>{he ? "המחירון לא הוחזר מהשרת." : "The server returned no price table."}</div>
+            ) : (
+              <ul style={{ margin: 0, paddingInlineStart: 18 }}>
+                {chatPrices.map(([model, p]) => (
+                  <li key={model}>
+                    <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{model}</span>
+                    {": "}
+                    <span dir="ltr" style={{ unicodeBidi: "isolate" }}>${p.in} / ${p.out}</span>
+                    {he ? " לכל מיליון טוקן (קלט / פלט)" : " per 1M tokens (in / out)"}
+                  </li>
+                ))}
+                {imagePrices.map(([quality, cost]) => (
+                  <li key={quality}>
+                    {he ? "תמונה" : "Image"} ({quality}): <span dir="ltr" style={{ unicodeBidi: "isolate" }}>~${cost}</span>
+                    {he ? " לתמונה" : " per image"}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div style={{ marginTop: 4 }}>
+              {he
+                ? "עלויות נרשמות רק על קריאה אמיתית למנוע, לא על תוצאה מהמטמון. כשספק משנה מחירים, מעדכנים את המחירון ב-lib/ai-cost.ts."
+                : "Only real engine calls are logged, never cache hits. Update the table in lib/ai-cost.ts when a provider changes prices."}
+            </div>
+          </div>
         </>
       )}
     </div>
@@ -211,12 +262,14 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 }
 
 function BreakdownTable({
-  rows, total, he, labelFor, noteFor, showUnits,
+  rows, total, he, labelFor, isKnown, noteFor, showUnits,
 }: {
   rows: Bucket[];
   total: number;
   he: boolean;
   labelFor: (k: string) => string;
+  /** False for a key with no label yet: it shows raw and muted. */
+  isKnown?: (k: string) => boolean;
   noteFor?: (k: string) => string;
   showUnits?: boolean;
 }) {
@@ -235,7 +288,11 @@ function BreakdownTable({
           <div key={r.key} style={{ padding: "9px 4px", borderBottom: `1px solid ${SOFT}` }}>
             <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
               <div style={{ minWidth: 0 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: INK }}>{labelFor(r.key)}</span>
+                {isKnown && !isKnown(r.key) ? (
+                  <span dir="ltr" title={he ? "מפתח ללא תווית" : "unlabelled key"} style={{ fontSize: 13, fontWeight: 600, color: MUTED, fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", unicodeBidi: "isolate" }}>{r.key}</span>
+                ) : (
+                  <span style={{ fontSize: 14, fontWeight: 700, color: INK }}>{labelFor(r.key)}</span>
+                )}
                 {noteFor && noteFor(r.key) && (
                   <span style={{ fontSize: 11.5, color: MUTED, marginInlineStart: 8 }}>{noteFor(r.key)}</span>
                 )}

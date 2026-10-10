@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { BUSINESS_TZ } from "@/lib/admin-config";
+import { applyDiscounts, couponsOn } from "@/lib/admin-revenue";
+import { isInternalEmail } from "@/lib/internal-accounts";
 
 /**
  * Cash-flow forecast, read LIVE from Stripe. Answers "how much money lands in my
@@ -10,8 +12,10 @@ import { BUSINESS_TZ } from "@/lib/admin-config";
  *   - retries: past_due subs Stripe will retry.
  *
  * Card-less trials are excluded (they expire without charging). Amounts use the
- * recurring price (× quantity, minus any recurring discount) — the standing
- * charge, not the invoice, so intro coupons don't distort the forecast.
+ * recurring price (× quantity, minus any recurring discount, the same rule as
+ * the Revenue page) so intro coupons don't distort the forecast. A monthly
+ * sub charges again every month inside the window, not just once. Our own
+ * accounts are never counted (Gadi 2026-10-10).
  *
  * Currencies are kept separate (never fake-converted). Admin-gated by ADMIN_SECRET.
  * USAGE: GET /api/admin/forecast?secret=$ADMIN_SECRET
@@ -34,7 +38,27 @@ function subAmount(s: Stripe.Subscription): { amount: number; currency: string }
     currency = p.currency;
   }
   if (!currency) return null;
-  return { amount: total / 100, currency };
+  const coupons = couponsOn(s);
+  const months = monthsOf(s);
+  const native = total / 100;
+  // applyDiscounts works on a monthly figure; convert there and back.
+  const amount = coupons.length ? applyDiscounts(native / months, months, coupons) * months : native;
+  return { amount: Math.round(amount * 100) / 100, currency };
+}
+
+/** Months between charges (1 for monthly, 12 for yearly). */
+function monthsOf(s: Stripe.Subscription): number {
+  const r = s.items.data[0]?.price?.recurring;
+  if (!r) return 1;
+  const n = r.interval_count || 1;
+  return r.interval === "year" ? 12 * n : r.interval === "month" ? n : 1;
+}
+
+/** The same calendar day, `months` later. */
+function addMonths(ms: number, months: number): number {
+  const d = new Date(ms);
+  d.setUTCMonth(d.getUTCMonth() + months);
+  return d.getTime();
 }
 
 // Newer Stripe API keeps the period end on the subscription ITEM, not the sub.
@@ -86,8 +110,11 @@ export async function GET(req: NextRequest) {
   } while (startingAfter);
 
   const now = Date.now();
+  const horizon = now + 92 * 86_400_000;
   const charges: Charge[] = [];
   for (const s of subs) {
+    const custEmail = typeof s.customer === "object" && s.customer && !("deleted" in s.customer) ? (s.customer as Stripe.Customer).email : null;
+    if (isInternalEmail(custEmail ?? (s.metadata?.email as string | undefined))) continue;
     const amt = subAmount(s);
     if (!amt || amt.amount <= 0) continue;
     let at: number | null = null;
@@ -107,7 +134,14 @@ export async function GET(req: NextRequest) {
       continue;
     }
     if (!at) continue;
-    charges.push({ at, kind, amount: amt.amount, currency: amt.currency, email: (typeof s.customer === "object" && s.customer && !("deleted" in s.customer) ? (s.customer as Stripe.Customer).email : null) ?? null, tier: tierFromSub(s) });
+    const base = { amount: amt.amount, currency: amt.currency, email: custEmail ?? null, tier: tierFromSub(s) };
+    charges.push({ at, kind, ...base });
+    // Later charges inside the window are renewals (unless set to cancel).
+    if (s.cancel_at_period_end) continue;
+    const step = monthsOf(s);
+    for (let next = addMonths(at, step); next <= horizon; next = addMonths(next, step)) {
+      charges.push({ at: next, kind: "renewal", ...base });
+    }
   }
 
   // Group into days. Each day: per-currency sums split by kind, plus the items.
@@ -134,7 +168,8 @@ export async function GET(req: NextRequest) {
     const renew: Record<string, number> = {};
     for (const ch of charges) {
       if (ch.at > cutoff || ch.at < now - 3 * 86_400_000) continue;
-      const b = ch.kind === "renewal" ? renew : conv; // retries counted as conversions-side incoming
+      if (ch.kind === "retry") continue; // a failed payment is not expected money
+      const b = ch.kind === "renewal" ? renew : conv;
       b[ch.currency] = (b[ch.currency] ?? 0) + ch.amount;
     }
     return { conversions: conv, renewals: renew };

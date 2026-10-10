@@ -71,7 +71,7 @@ const STRINGS = {
     loading: "Loading…",
     cardMRR: "Monthly recurring",
     cardFuture: "Future (pipeline)",
-    cardlessNote: (n: number, mrr: string) => `+ ${mrr} card-less (${n}, won't charge)`,
+    cardlessNote: (a: number, b: number, mrr: string) => `${a} with a card · ${b} without (${mrr}, won't charge)`,
     cardTotal: "Total (incl. trials)",
     cardARR: "Annual recurring",
     cardActive: "Active (paying)",
@@ -105,7 +105,7 @@ const STRINGS = {
     loading: "טוען…",
     cardMRR: "הכנסה חודשית",
     cardFuture: "הכנסה עתידית",
-    cardlessNote: (n: number, mrr: string) => `${mrr} ללא כרטיס (${n}, לא ייגבו) +`,
+    cardlessNote: (a: number, b: number, mrr: string) => `${a} עם כרטיס · ${b} בלי (${mrr}, לא ייגבו)`,
     cardTotal: "סכום כולל",
     cardARR: "הכנסה שנתית",
     cardActive: "משלמים פעילים",
@@ -241,10 +241,10 @@ export default function AdminRevenueClient() {
             <BigCard label={t.cardMRR} value={`$${data.summary.mrrUsd.toFixed(2)}`} accent="#0EA5A5" />
             <BigCard
               label={t.cardFuture}
-              value={`$${data.summary.trialingCardedMrrUsd.toFixed(2)}`}
+              value={`${data.summary.trialingMrrUsd.toFixed(2)}`}
               accent="#F59E0B"
               sub={data.summary.trialingCardlessCount > 0
-                ? t.cardlessNote(data.summary.trialingCardlessCount, `$${data.summary.trialingCardlessMrrUsd.toFixed(2)}`)
+                ? t.cardlessNote(data.summary.trialingCardedCount, data.summary.trialingCardlessCount, `${data.summary.trialingCardlessMrrUsd.toFixed(2)}`)
                 : undefined}
             />
             <BigCard label={t.cardTotal} value={`$${data.summary.totalMrrUsd.toFixed(2)}`} accent="#7C3AED" />

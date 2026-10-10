@@ -29,7 +29,7 @@ export const dynamic = "force-dynamic";
 
 type Target = { ref: DocumentReference; scope: ClassScope };
 
-async function resolveTargets(req: NextRequest, cls: string): Promise<{ display: Target; extra: Target[] } | null> {
+async function resolveTargets(req: NextRequest, cls: string): Promise<{ display: Target; extra: Target[]; readOnly?: boolean } | null> {
   const db = getAdminDb();
   const code = cls ? normalizeClassCode(cls) : null;
   if (code) {
@@ -46,14 +46,20 @@ async function resolveTargets(req: NextRequest, cls: string): Promise<{ display:
   const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
   if (!idToken) return null;
   let uid: string;
-  try { uid = (await getAdminAuth().verifyIdToken(idToken)).uid; } catch { return null; }
+  // Admin impersonation ("Enter dashboard"): shows the count, adds nothing.
+  let readOnly = false;
+  try {
+    const decoded = await getAdminAuth().verifyIdToken(idToken);
+    uid = decoded.uid;
+    readOnly = decoded.adminImpersonation === true;
+  } catch { return null; }
   const user = await db.collection("users").doc(uid).get();
   const schoolId = user.get("schoolId");
   if (typeof schoolId !== "string" || !schoolId) return null;
   const schoolRef = db.collection("schools").doc(schoolId);
   // A school with a single classroom is, for the kids, "our class".
   const classes = await schoolRef.collection("classrooms").count().get();
-  return { display: { ref: schoolRef, scope: classes.data().count <= 1 ? "class" : "school" }, extra: [] };
+  return { display: { ref: schoolRef, scope: classes.data().count <= 1 ? "class" : "school" }, extra: [], readOnly };
 }
 
 async function addWord(t: Target, wordId: string, word: string): Promise<{ count: number; isNew: boolean }> {
@@ -76,6 +82,10 @@ export async function POST(req: NextRequest) {
   if (!word) return NextResponse.json({ error: "no_word" }, { status: 400 });
   const targets = await resolveTargets(req, String(body.cls ?? ""));
   if (!targets) return NextResponse.json({ error: "not_school" }, { status: 404 });
+  if (targets.readOnly) {
+    const count = Number((await targets.display.ref.get()).get("uniqueWordCount") ?? 0);
+    return NextResponse.json({ count, next: nextThreshold(count), scope: targets.display.scope });
+  }
 
   const wordId = crypto.createHash("sha1").update(word).digest("hex");
   const [main] = await Promise.all([

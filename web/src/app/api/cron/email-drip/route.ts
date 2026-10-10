@@ -14,6 +14,7 @@ import { trialReminderDue, buildTrialReminder } from "@/lib/email-drip/trial-rem
 import { playUpgradeDue, buildPlayUpgrade } from "@/lib/email-drip/play-upgrade";
 import { loginReminderDue, buildLoginReminder } from "@/lib/email-drip/login-reminder";
 import { SCHOOL_DRIP, SCHOOL_SERIES_LIVE, SCHOOL_SERIES_FROM, schoolLang, buildSchoolMail } from "@/lib/email-drip/school-drip";
+import { isInternalEmail } from "@/lib/internal-accounts";
 
 /**
  * Daily drip cron. Vercel Cron hits this at 07:00 UTC (10:00 IL DST).
@@ -224,7 +225,7 @@ export async function GET(req: NextRequest) {
         const created = typeof sd.createdAt === "string" ? sd.createdAt : (sd.createdAt?.toDate?.()?.toISOString?.() ?? u.metadata.creationTime ?? "");
         const openedMs = Date.parse(created);
         const opened = Number.isFinite(openedMs) ? new Date(openedMs).toISOString().slice(0, 10) : "";
-        if (sd.isDemo === true || !opened || opened < SCHOOL_SERIES_FROM) break schoolSeries;
+        if (sd.isDemo === true || isInternalEmail(email) || !opened || opened < SCHOOL_SERIES_FROM) break schoolSeries;
         startIso = new Date(now).toISOString();
         if (!dryRun) await db.collection("users").doc(u.uid).set({ schoolSeriesStart: startIso }, { merge: true });
       }

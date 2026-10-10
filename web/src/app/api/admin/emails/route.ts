@@ -1,41 +1,55 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { LANGUAGES } from "@/lib/i18n";
+import { isInternalEmail } from "@/lib/internal-accounts";
+import { schoolLang } from "@/lib/email-drip/school-drip";
+import { dunningIsHebrew } from "@/lib/dunning-email";
+import {
+  LEDGER_SERIES,
+  SIGNUP_STEPS,
+  humanizeKey,
+  ledgerLabels,
+  ledgerSeriesConfig,
+  type LedgerKeyCount,
+  type LedgerResponse,
+  type LedgerSend,
+  type LedgerSeries,
+  type LedgerSeriesInfo,
+  type LedgerUserRow,
+} from "@/lib/email-drip/ledger";
 
 /**
  * Admin — email delivery ledger for /admin/emails.
  *
- * Source of truth is OUR Firestore data, not Resend: every drip send
- * stamps dripSent.<mailKey>.sentAt on the user doc (that stamp is also
- * the duplicate-send guard), and the signup notification stamps
- * notifiedSignup/notifiedSignupAt. Resend's own dashboard only retains
- * history for a short window on the free plan; this ledger is
- * permanent. Gadi 2026-07-08, pre-marketing-campaign visibility ask.
+ * Source of truth is OUR Firestore data, not Resend: every automated email
+ * leaves a stamp on the user doc (that stamp is also its duplicate-send
+ * guard). Resend's own dashboard only keeps a short window; this ledger is
+ * permanent. Gadi 2026-07-08; widened 2026-10-10 from the signup series
+ * alone to every series that sends today (Family, Individual, schools and
+ * the one-off reminders). The stamp shapes are listed in
+ * lib/email-drip/ledger.ts.
+ *
+ * Internal accounts (lib/internal-accounts) are listed, flagged internal,
+ * and left out of every count.
  *
  * Auth: same ADMIN_SECRET query-param gate as every /api/admin route.
- *
- * Returns:
- *   counts: per-mail-key totals + funnel (how many users got 1st, 2nd,
- *           ... 5th drip mail), split by drip language
- *   users:  one row per user who received at least one email, with a
- *           sentAt timestamp per mail key
  */
 
 export const maxDuration = 60;
 
-// Keep in sync with web/src/lib/email-drip/registry.ts. Order matters:
-// this is the funnel order the dashboard renders.
-const DRIP_STEPS = ["welcome", "meanings", "etymology", "visual", "summary"] as const;
-const DRIP_LANGS = ["he", "en"] as const;
+const DAY = 86_400_000;
+const GRACE_MS = 7 * DAY; // webhook: graceUntil = failed invoice date + 7 days
 
-type EmailUserRow = {
-  uid: string;
-  email: string | null;
-  createdAt: string | null;
-  dripLang: "he" | "en" | null;
-  /** mail key → ISO timestamp of the send. */
-  sent: Record<string, string>;
-  notifiedSignupAt: string | null;
-};
+// Longest first so "zh-CN" wins over any shorter code.
+const LANG_CODES = LANGUAGES.map((l) => l.code as string).sort((a, b) => b.length - a.length);
+
+function splitLang(rawKey: string): { key: string; lang: string | null } {
+  for (const code of LANG_CODES) {
+    const suffix = `-${code}`;
+    if (rawKey.endsWith(suffix) && rawKey.length > suffix.length) return { key: rawKey.slice(0, -suffix.length), lang: code };
+  }
+  return { key: rawKey, lang: null };
+}
 
 function tsToIso(v: unknown): string | null {
   if (!v) return null;
@@ -48,104 +62,217 @@ function tsToIso(v: unknown): string | null {
   return null;
 }
 
+/** One entry of a <series>DripSent map: { sentAt, messageId } | { skippedAt } | true (old). */
+function readMapEntry(v: unknown): { sent: boolean; at: string | null } {
+  if (v === true) return { sent: true, at: null };
+  if (v && typeof v === "object") {
+    const o = v as { sentAt?: unknown; skippedAt?: unknown };
+    if (o.sentAt) return { sent: true, at: tsToIso(o.sentAt) };
+    if (o.skippedAt) return { sent: false, at: tsToIso(o.skippedAt) };
+  }
+  return { sent: false, at: null };
+}
+
+function docLangOf(d: FirebaseFirestore.DocumentData): string | null {
+  if (typeof d.uiLang === "string" && d.uiLang) return d.uiLang;
+  if (typeof d.dripLang === "string" && d.dripLang) return d.dripLang;
+  if (d.country === "IL") return "he";
+  return null;
+}
+
+const MAP_FIELDS: Array<[string, LedgerSeries]> = [
+  ["dripSent", "signup"],
+  ["familyDripSent", "family"],
+  ["indivDripSent", "individual"],
+  ["schoolDripSent", "school"],
+];
+
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get("secret") ?? "";
   const expected = process.env.ADMIN_SECRET;
   if (!expected) {
-    return NextResponse.json(
-      { error: "ADMIN_SECRET env var not configured, refusing to run" },
-      { status: 503 },
-    );
+    return NextResponse.json({ error: "ADMIN_SECRET env var not configured, refusing to run" }, { status: 503 });
   }
   if (secret !== expected) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
   const db = getAdminDb();
-  // One collection scan. dripSent is a map field, so we can't filter
-  // server-side without a composite index per key — at the current
-  // user count (<10k) a full scan is cheap and keeps this simple.
-  const snap = await db.collection("users").select("email", "dripSent", "createdAt", "notifiedSignupAt").limit(20000).get();
+  // One collection scan (map fields can't be filtered server-side without an
+  // index per key; at our size a full scan is cheap).
+  const [snap, schoolsSnap] = await Promise.all([
+    db
+      .collection("users")
+      .select(
+        "email", "createdAt", "notifiedSignupAt", "uiLang", "dripLang", "country",
+        "dripSent", "familyDripSent", "indivDripSent", "schoolDripSent",
+        "loginReminderSentAt", "trialReminderAt", "playUpgradeSentAt",
+        "familyWelcomeSent", "familyWelcomeSentAt",
+        "dunningNotifiedInvoice", "dunningReminderInvoice", "graceUntil",
+      )
+      .limit(20000)
+      .get(),
+    db.collection("schools").select("curriculum").get(),
+  ]);
+  const curriculumBySchool = new Map<string, string | undefined>();
+  for (const s of schoolsSnap.docs) curriculumBySchool.set(s.id, s.data().curriculum as string | undefined);
 
-  const users: EmailUserRow[] = [];
-  const perKey: Record<string, number> = {};
-
+  const users: LedgerUserRow[] = [];
   for (const doc of snap.docs) {
     const d = doc.data();
-    const dripSent = (d.dripSent as Record<string, { sentAt?: unknown }> | undefined) ?? {};
-    const notifiedSignupAt = tsToIso(d.notifiedSignupAt);
-    const keys = Object.keys(dripSent);
-    // Only users who actually RECEIVED a drip email belong in this
-    // ledger. notifiedSignupAt alone doesn't qualify: that email goes
-    // to the ADMIN (new-signup alert), not to the user, and part of
-    // those stamps came from the historical backfill that never sent
-    // anything. Counting them inflated "users reached" to 60 when only
-    // 24 welcome emails had gone out. Gadi 2026-07-08.
-    if (keys.length === 0) continue;
+    const docLang = docLangOf(d);
+    const sends: LedgerSend[] = [];
 
-    const sent: Record<string, string> = {};
-    for (const k of keys) {
-      const iso = tsToIso(dripSent[k]?.sentAt);
-      if (iso) {
-        sent[k] = iso;
-        perKey[k] = (perKey[k] ?? 0) + 1;
+    for (const [field, series] of MAP_FIELDS) {
+      const map = d[field] as Record<string, unknown> | undefined;
+      if (!map || typeof map !== "object") continue;
+      for (const rawKey of Object.keys(map)) {
+        const e = readMapEntry(map[rawKey]);
+        if (!e.sent && !e.at) continue;
+        const { key, lang } = splitLang(rawKey);
+        const lng =
+          lang ?? (series === "school" ? schoolLang(curriculumBySchool.get(doc.id)) : docLang);
+        sends.push({ series, key, rawKey, lang: lng, at: e.at, ...(e.sent ? {} : { skipped: true }) });
       }
     }
-    if (Object.keys(sent).length === 0) continue;
 
-    // Drip language: inferred from whichever key family the user is in.
-    const dripLang = keys.some((k) => k.endsWith("-he"))
-      ? ("he" as const)
-      : keys.some((k) => k.endsWith("-en"))
-        ? ("en" as const)
-        : null;
+    const heOrEn = docLang === "he" ? "he" : "en";
+    const one = (key: string, at: string | null, lang: string | null, extra: Partial<LedgerSend> = {}) =>
+      sends.push({ series: "reminders", key, rawKey: key, lang, at, ...extra });
+    if (d.loginReminderSentAt) one("login-reminder", tsToIso(d.loginReminderSentAt), docLang ?? "en");
+    if (d.trialReminderAt) one("trial-reminder", tsToIso(d.trialReminderAt), docLang ?? "en");
+    if (d.playUpgradeSentAt) one("play-upgrade", tsToIso(d.playUpgradeSentAt), docLang ?? "en");
+    if (d.familyWelcomeSentAt || d.familyWelcomeSent === true) one("family-welcome", tsToIso(d.familyWelcomeSentAt), heOrEn);
+    if (typeof d.dunningNotifiedInvoice === "string" && d.dunningNotifiedInvoice) {
+      // No time is stamped; while a grace window is open it dates the failure.
+      const grace = typeof d.graceUntil === "number" ? d.graceUntil : null;
+      one(
+        "payment-failed",
+        grace ? new Date(grace - GRACE_MS).toISOString() : null,
+        dunningIsHebrew(d, {}) ? "he" : "en",
+        grace ? { approx: true } : {},
+      );
+    }
+    if (typeof d.dunningReminderInvoice === "string" && d.dunningReminderInvoice) {
+      one("payment-reminder", null, dunningIsHebrew(d, {}) ? "he" : "en");
+    }
 
+    if (!sends.some((s) => !s.skipped)) continue; // only people who actually got an email
+    sends.sort((a, b) => (b.at ?? "").localeCompare(a.at ?? ""));
+    const email = typeof d.email === "string" && d.email ? d.email : null;
     users.push({
       uid: doc.id,
-      email: (d.email as string) ?? null,
+      email,
+      internal: false,
       createdAt: tsToIso(d.createdAt),
-      dripLang,
-      sent,
-      notifiedSignupAt,
+      docLang,
+      notifiedSignupAt: tsToIso(d.notifiedSignupAt),
+      sends,
     });
   }
 
-  // Funnel: for each drip step, how many users (per language) got it.
-  const funnel = DRIP_STEPS.map((step) => {
-    const row: Record<string, number | string> = { step };
-    let total = 0;
-    for (const l of DRIP_LANGS) {
-      const n = perKey[`${step}-${l}`] ?? 0;
-      row[l] = n;
-      total += n;
+  // Some user docs carry no email; take it from Auth (also needed to spot
+  // internal accounts).
+  const auth = getAdminAuth();
+  const missing = users.filter((u) => !u.email);
+  for (let i = 0; i < missing.length; i += 100) {
+    const chunk = missing.slice(i, i + 100);
+    try {
+      const res = await auth.getUsers(chunk.map((u) => ({ uid: u.uid })));
+      const byUid = new Map(res.users.map((r) => [r.uid, r.email ?? null]));
+      for (const u of chunk) u.email = byUid.get(u.uid) ?? null;
+    } catch {
+      /* listing still works without these emails */
     }
-    row.total = total;
-    return row;
+  }
+  for (const u of users) u.internal = isInternalEmail(u.email);
+
+  // ── Aggregates (internal accounts excluded) ──
+  const now = Date.now();
+  const config = ledgerSeriesConfig();
+  const perKey = Object.fromEntries(LEDGER_SERIES.map((s) => [s, {} as Record<string, LedgerKeyCount>])) as Record<
+    LedgerSeries,
+    Record<string, LedgerKeyCount>
+  >;
+  const seriesInfo = new Map<LedgerSeries, LedgerSeriesInfo>(
+    LEDGER_SERIES.map((s) => [
+      s,
+      { id: s, live: config[s].live, from: config[s].from, order: [...config[s].order], legacy: [], usersReached: 0, sends: 0, sends7d: 0, skipped: 0, lastSentAt: null },
+    ]),
+  );
+  let totalSends = 0;
+  let sentLast7Days = 0;
+  let usersWithEmails = 0;
+
+  for (const u of users) {
+    if (u.internal) continue;
+    usersWithEmails++;
+    const reached = new Set<LedgerSeries>();
+    for (const s of u.sends) {
+      const info = seriesInfo.get(s.series)!;
+      if (s.skipped) {
+        info.skipped++;
+        continue;
+      }
+      reached.add(s.series);
+      info.sends++;
+      totalSends++;
+      if (s.at && now - Date.parse(s.at) < 7 * DAY) {
+        info.sends7d++;
+        sentLast7Days++;
+      }
+      if (s.at && !s.approx && (!info.lastSentAt || s.at > info.lastSentAt)) info.lastSentAt = s.at;
+      const kc = (perKey[s.series][s.key] ??= { total: 0, byLang: {} });
+      kc.total++;
+      const l = s.lang ?? "?";
+      kc.byLang[l] = (kc.byLang[l] ?? 0) + 1;
+    }
+    for (const r of reached) seriesInfo.get(r)!.usersReached++;
+  }
+
+  // Keys found in the data that the content modules no longer list (older
+  // series) go after the known ones, with a humanized label.
+  const labels = ledgerLabels();
+  for (const u of users) {
+    for (const s of u.sends) {
+      const info = seriesInfo.get(s.series)!;
+      if (!info.order.includes(s.key)) {
+        info.order.push(s.key);
+        info.legacy.push(s.key);
+      }
+      if (!labels[s.series][s.key]) {
+        const h = humanizeKey(s.key);
+        labels[s.series][s.key] = { he: `ישן · ${h}`, en: `old · ${h}` };
+      }
+    }
+  }
+
+  // Signup funnel, every language: he / en / other / total per step.
+  const funnel = SIGNUP_STEPS.map((step) => {
+    const by = perKey.signup[step]?.byLang ?? {};
+    const he = by.he ?? 0;
+    const en = by.en ?? 0;
+    const total = perKey.signup[step]?.total ?? 0;
+    return { step, he, en, other: total - he - en, total };
   });
 
   // Most recent sends first.
-  users.sort((a, b) => {
-    const aLast = Object.values(a.sent).sort().pop() ?? a.notifiedSignupAt ?? "";
-    const bLast = Object.values(b.sent).sort().pop() ?? b.notifiedSignupAt ?? "";
-    return bLast.localeCompare(aLast);
-  });
+  const lastOf = (u: LedgerUserRow) => u.sends.find((s) => s.at && !s.skipped)?.at ?? "";
+  users.sort((a, b) => lastOf(b).localeCompare(lastOf(a)));
 
-  const now = Date.now();
-  const sentLast7Days = users.reduce((acc, u) => {
-    return (
-      acc +
-      Object.values(u.sent).filter((iso) => now - new Date(iso).getTime() < 7 * 86_400_000).length
-    );
-  }, 0);
-
-  return NextResponse.json({
+  const body: LedgerResponse = {
+    generatedAt: new Date(now).toISOString(),
+    series: LEDGER_SERIES.map((s) => seriesInfo.get(s)!),
+    labels,
     counts: {
-      usersWithEmails: users.length,
-      totalSends: Object.values(perKey).reduce((a, b) => a + b, 0),
+      usersWithEmails,
+      totalSends,
       sentLast7Days,
+      internalUsers: users.filter((u) => u.internal).length,
       perKey,
       funnel,
     },
     users,
-  });
+  };
+  return NextResponse.json(body);
 }

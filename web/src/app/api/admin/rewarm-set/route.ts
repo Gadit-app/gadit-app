@@ -1,18 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { WORD_SETS, getWordSet } from "@/lib/word-sets";
+import { WORD_SETS, type WordSet } from "@/lib/word-sets";
+import { loadWordSet } from "@/lib/curriculum-sets";
+import { classroomStyle } from "@/lib/classroom-image";
 
 /**
- * Admin: bust the cached images for a word set (or every set), so they
- * regenerate with the improved image pipeline (English visual brief). The
- * imageCache doc stores `word`, so we delete every cached image for each
- * word in the set regardless of meaning / language / kids-mode. After
- * running this, walk the set once in present mode and each word
- * regenerates a fresh, on-topic picture (then caches).
+ * Admin: bust the cached CLASSROOM images for a word set (or every set), so
+ * they regenerate in the current house style. Only the projector's own
+ * namespace is touched, imageCache/img_cls2_<style>_<lang>_<hash> (written by
+ * lib/classroom-image.ts), for the set's style and language. Users' own word
+ * pictures and Kids Mode pictures (other key prefixes) are never deleted.
+ * After running this, walk the set in present mode (or run warm-set) and each
+ * word draws a fresh picture (then caches).
  *
  * USAGE: GET /api/admin/rewarm-set?secret=$ADMIN_SECRET&set=<setId|all>
+ * A curriculum set id (cur-*) works too.
  */
 export const maxDuration = 60;
+
+const BATCH = 400;
 
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get("secret") ?? "";
@@ -21,36 +27,52 @@ export async function GET(req: NextRequest) {
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const setId = req.nextUrl.searchParams.get("set") ?? "all";
-  const targetSets =
-    setId === "all"
-      ? WORD_SETS
-      : (getWordSet(setId) ? [getWordSet(setId)!] : []);
+  let targetSets: WordSet[];
+  if (setId === "all") targetSets = WORD_SETS;
+  else {
+    const one = await loadWordSet(setId);
+    targetSets = one ? [one] : [];
+  }
   if (targetSets.length === 0) {
     return NextResponse.json({ error: "set_not_found", setId }, { status: 404 });
   }
 
-  const words = Array.from(new Set(targetSets.flatMap((s) => s.words)));
+  // word -> the classroom key prefixes it may live under (style + language).
+  const prefixes = new Map<string, Set<string>>();
+  for (const s of targetSets) {
+    const p = `img_cls2_${classroomStyle(s)}_${s.lang}_`;
+    for (const w of s.words) {
+      if (!prefixes.has(w)) prefixes.set(w, new Set());
+      prefixes.get(w)!.add(p);
+    }
+  }
+
   const db = getAdminDb();
   let deletedImages = 0;
   const perWord: Record<string, number> = {};
+  let batch = db.batch();
+  let n = 0;
 
-  for (const w of words) {
+  for (const [w, pre] of prefixes) {
     const snap = await db.collection("imageCache").where("word", "==", w).get();
-    perWord[w] = snap.size;
-    if (snap.empty) continue;
-    const batch = db.batch();
-    snap.docs.forEach((d) => batch.delete(d.ref));
-    await batch.commit();
-    deletedImages += snap.size;
+    const hits = snap.docs.filter((d) => [...pre].some((p) => d.id.startsWith(p)));
+    perWord[w] = hits.length;
+    for (const d of hits) {
+      batch.delete(d.ref);
+      n++;
+      deletedImages++;
+      if (n >= BATCH) { await batch.commit(); batch = db.batch(); n = 0; }
+    }
   }
+  if (n > 0) await batch.commit();
 
   return NextResponse.json({
     ok: true,
     set: setId,
     sets: targetSets.length,
-    words: words.length,
+    words: prefixes.size,
     deletedImages,
     perWord,
-    next: "Open the set in present mode to regenerate fresh images (they cache on first view).",
+    next: "Open the set in present mode (or run warm-set) to draw fresh images; they cache on first view.",
   });
 }

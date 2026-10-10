@@ -5,6 +5,9 @@
  *           (pending / released / paid) plus the payable balance owed.
  *   PATCH → one action on one partner:
  *             promote  → founder tier      demote  → standard tier
+ *                        (demote keeps a custom standard rate; only a
+ *                        founder-level rate is reset to the default)
+ *             setRates → explicit year-one / lifetime percentages
  *             suspend  → status suspended  activate → status active
  *             markPaid → stamp paidAt on every currently-released
  *                        commission (the monthly payout action)
@@ -256,9 +259,14 @@ export async function PATCH(req: NextRequest) {
   if (!snap.exists) return NextResponse.json({ error: "partner_not_found" }, { status: 404 });
 
   if (action === "promote" || action === "demote") {
-    const rateYearOne = action === "promote" ? FOUNDER_RATE_YEAR_ONE : DEFAULT_RATE_YEAR_ONE;
+    // Demote only resets a founder-level rate (>= FOUNDER_RATE_YEAR_ONE) to
+    // the default; a custom standard rate Gadi typed (e.g. 20%) is kept.
+    const current = (snap.data() as Partial<Partner>).rateYearOne ?? DEFAULT_RATE_YEAR_ONE;
+    const rateYearOne = action === "promote"
+      ? FOUNDER_RATE_YEAR_ONE
+      : tierFor(current) === "founder" ? DEFAULT_RATE_YEAR_ONE : current;
     await ref.update({ rateYearOne, tier: tierFor(rateYearOne) });
-    return NextResponse.json({ ok: true, tier: tierFor(rateYearOne) });
+    return NextResponse.json({ ok: true, tier: tierFor(rateYearOne), rateYearOne });
   }
 
   // Set explicit rates (percentages) on a partner.

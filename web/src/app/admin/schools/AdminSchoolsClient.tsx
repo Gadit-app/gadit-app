@@ -27,9 +27,31 @@ type SchoolRow = {
   contactEmail: string | null;
   plan: string;
   createdAt: string | null;
+  /** Owned by one of our own accounts (lib/internal-accounts.ts). */
+  internal: boolean;
+  isDemo: boolean;
+  curriculum: string;
+  /** Teacher-only school (Israel): no student class codes. */
+  codesOff: boolean;
+  pilotDay: number | null;
+  seriesStarted: boolean;
+  seriesSent: number;
+  seriesTotal: number;
+  checklistDone: number;
+  checklistTotal: number;
+  uniqueWordCount: number;
+  projections7d: number;
   classroomCount: number;
   totalSearches: number;
   ownerSearches: number;
+};
+
+type SchoolList = {
+  schools: SchoolRow[];
+  totalSchools: number;
+  internalSchools: number;
+  totalSearches: number;
+  totalProjections7d: number;
 };
 
 type WordCount = { word: string; count: number };
@@ -65,6 +87,7 @@ type SchoolDetail = {
     contactEmail: string | null;
     plan: string;
     createdAt: string | null;
+    isDemo?: boolean;
     ownerSearches: number;
     logoUrl: string | null;
     ownerRecentWords: { word: string; lang: string; at: string }[];
@@ -84,11 +107,26 @@ type SchoolDetail = {
 const COPY = {
   en: {
     title: "Schools",
-    subtitle: (n: number, s: number) => `${n} schools · ${s.toLocaleString()} lookups all-time`,
+    subtitle: (n: number, p: number, i: number) => `${n} schools · ${p.toLocaleString()} projector uses in 7 days${i ? ` · ${i} of ours or demo, not counted` : ""}`,
     loading: "Loading…",
     signInAdmin: "Sign in as admin",
     notAdmin: "This account is not an administrator.",
-    empty: "No schools yet. Schools appear here after the first Schools checkout.",
+    empty: "No schools yet. A school appears here once its account is opened, by checkout or by hand (bank transfer).",
+    colCurriculum: "Curriculum",
+    colCodes: "Codes",
+    codesOn: "On",
+    codesOff: "Off",
+    colPilot: "Pilot day",
+    colSeries: "Emails",
+    colSteps: "Steps",
+    colWords: "Words",
+    colProj: "Projector 7d",
+    badgeInternal: "Ours",
+    badgeDemo: "Demo",
+    demoOn: "Demo",
+    demoOff: "Mark demo",
+    demoTitle: "A demo school gets no pilot emails and is not counted",
+    pilotOver: "ended",
     colSchool: "School",
     colContact: "Contact",
     colPlan: "Plan",
@@ -137,11 +175,26 @@ const COPY = {
   },
   he: {
     title: "בתי ספר",
-    subtitle: (n: number, s: number) => `${n} בתי ספר · ${s.toLocaleString()} חיפושים מאז ומעולם`,
+    subtitle: (n: number, p: number, i: number) => `${n} בתי ספר · ${p.toLocaleString()} הקרנות ב-7 ימים${i ? ` · ${i} שלנו או דמו, לא נספרים` : ""}`,
     loading: "טוען…",
     signInAdmin: "התחבר כאדמין",
     notAdmin: "החשבון הזה אינו מנהל מערכת.",
-    empty: "אין עדיין בתי ספר. בית ספר יופיע כאן אחרי הרכישה הראשונה.",
+    empty: "אין עדיין בתי ספר. בית ספר מופיע כאן כשנפתח לו חשבון, ברכישה או ידנית (העברה בנקאית).",
+    colCurriculum: "תוכנית",
+    colCodes: "קודים",
+    codesOn: "פעילים",
+    codesOff: "כבויים",
+    colPilot: "יום בפיילוט",
+    colSeries: "מיילים",
+    colSteps: "צעדים",
+    colWords: "מילים",
+    colProj: "הקרנות 7 ימים",
+    badgeInternal: "שלנו",
+    badgeDemo: "דמו",
+    demoOn: "דמו",
+    demoOff: "סימון כדמו",
+    demoTitle: "בית ספר דמו לא מקבל מיילי פיילוט ולא נספר",
+    pilotOver: "הסתיים",
     colSchool: "בית ספר",
     colContact: "איש קשר",
     colPlan: "מסלול",
@@ -201,7 +254,7 @@ export default function AdminSchoolsClient() {
   const t = COPY[lang];
   const dir: "rtl" | "ltr" = lang === "he" ? "rtl" : "ltr";
 
-  const [list, setList] = useState<{ schools: SchoolRow[]; totalSchools: number; totalSearches: number } | null>(null);
+  const [list, setList] = useState<SchoolList | null>(null);
   const [detail, setDetail] = useState<SchoolDetail | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -337,6 +390,27 @@ export default function AdminSchoolsClient() {
     }
   };
 
+  const [demoBusy, setDemoBusy] = useState<string | null>(null);
+  const toggleDemo = async (schoolId: string, isDemo: boolean) => {
+    if (!user || demoBusy) return;
+    setDemoBusy(schoolId);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/admin/schools", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ schoolId, isDemo }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      setDetail((d) => (d && d.school.id === schoolId ? { ...d, school: { ...d.school, isDemo } } : d));
+      if (list) void loadList(); // the totals change
+    } catch (e) {
+      setError(String(e instanceof Error ? e.message : e));
+    } finally {
+      setDemoBusy(null);
+    }
+  };
+
   const openSchool = (id: string) => {
     setDetail(null);
     setSelected(id);
@@ -426,6 +500,14 @@ export default function AdminSchoolsClient() {
                   style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid #7C3AED", background: "#F5F3FF", color: "#6D28D9", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
                 >
                   {t.mergeBtn}
+                </button>
+                <button
+                  onClick={() => void toggleDemo(detail.school.id, !detail.school.isDemo)}
+                  disabled={demoBusy === detail.school.id}
+                  title={t.demoTitle}
+                  style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid #D1D5DB", background: detail.school.isDemo ? "#FEF3C7" : "white", color: detail.school.isDemo ? "#92400E" : "#374151", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+                >
+                  {detail.school.isDemo ? `✓ ${t.demoOn}` : t.demoOff}
                 </button>
               </div>
             </div>
@@ -664,7 +746,7 @@ export default function AdminSchoolsClient() {
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
         <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
-          {loading ? t.loading : list ? t.subtitle(list.totalSchools, list.totalSearches) : ""}
+          {loading && !list ? t.loading : list ? t.subtitle(list.totalSchools, list.totalProjections7d, list.internalSchools) : ""}
         </p>
       </div>
 
@@ -673,13 +755,19 @@ export default function AdminSchoolsClient() {
       {list && list.schools.length === 0 && <div style={emptyBox}>{t.empty}</div>}
 
       {list && list.schools.length > 0 && (
-        <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, overflow: "hidden" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 12, overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980 }}>
             <thead style={{ background: "#F9FAFB" }}>
               <tr>
                 <th style={th}>{t.colSchool}</th>
                 <th style={th}>{t.colContact}</th>
-                <th style={th}>{t.colPlan}</th>
+                <th style={th}>{t.colCurriculum}</th>
+                <th style={th}>{t.colCodes}</th>
+                <th style={{ ...th, textAlign: "end" }}>{t.colPilot}</th>
+                <th style={{ ...th, textAlign: "end" }}>{t.colSeries}</th>
+                <th style={{ ...th, textAlign: "end" }}>{t.colSteps}</th>
+                <th style={{ ...th, textAlign: "end" }}>{t.colWords}</th>
+                <th style={{ ...th, textAlign: "end" }}>{t.colProj}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colClasses}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colLookups}</th>
                 <th style={{ ...th, textAlign: "end" }}>{t.colOwner}</th>
@@ -687,39 +775,61 @@ export default function AdminSchoolsClient() {
               </tr>
             </thead>
             <tbody>
-              {list.schools.map((s) => (
-                <tr
-                  key={s.id}
-                  onClick={() => openSchool(s.id)}
-                  style={{ borderTop: "1px solid #F3F4F6", cursor: "pointer" }}
-                >
-                  <td style={{ ...td, color: "#111827", fontWeight: 600 }} dir="auto">
-                    {s.name || t.unnamed}
-                  </td>
-                  <td style={{ ...td, color: "#6B7280", fontSize: 13 }} dir="ltr">
-                    {s.contactEmail || "—"}
-                  </td>
-                  <td style={{ ...td, color: "#6B7280", fontSize: 13 }}>{s.plan || "—"}</td>
-                  <td style={{ ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#374151" }}>
-                    {s.classroomCount}
-                  </td>
-                  <td style={{ ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#0E7490", fontWeight: 700 }}>
-                    {s.totalSearches.toLocaleString()}
-                  </td>
-                  <td style={{ ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#7C3AED", fontWeight: 700 }}>
-                    {s.ownerSearches.toLocaleString()}
-                  </td>
-                  <td style={{ ...td, textAlign: "end", width: 40 }}>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setDelTarget(s); setDelText(""); }}
-                      title={t.del}
-                      style={{ background: "none", border: "none", cursor: "pointer", color: "#DC2626", fontSize: 13, padding: "4px 6px" }}
-                    >
-                      🗑
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {list.schools.map((s) => {
+                const muted = s.internal || s.isDemo;
+                const num: React.CSSProperties = { ...td, textAlign: "end", fontVariantNumeric: "tabular-nums", color: "#374151" };
+                return (
+                  <tr
+                    key={s.id}
+                    onClick={() => openSchool(s.id)}
+                    style={{ borderTop: "1px solid #F3F4F6", cursor: "pointer", background: muted ? "#FAFAFA" : undefined, opacity: muted ? 0.75 : 1 }}
+                  >
+                    <td style={{ ...td, color: "#111827", fontWeight: 600 }}>
+                      <span dir="auto">{s.name || t.unnamed}</span>
+                      {s.internal && <span style={{ ...badge, background: "#EDE9FE", color: "#5B21B6" }}>{t.badgeInternal}</span>}
+                      {s.isDemo && <span style={{ ...badge, background: "#FEF3C7", color: "#92400E" }}>{t.badgeDemo}</span>}
+                    </td>
+                    <td style={{ ...td, color: "#6B7280", fontSize: 13 }} dir="ltr">
+                      {s.contactEmail || ""}
+                    </td>
+                    <td style={{ ...td, color: "#6B7280", fontSize: 13 }} dir="ltr">{s.curriculum || ""}</td>
+                    <td style={{ ...td, fontSize: 13, color: s.codesOff ? "#6B7280" : "#0E7490" }}>
+                      {s.codesOff ? t.codesOff : t.codesOn}
+                    </td>
+                    <td style={num}>
+                      {s.pilotDay == null ? "" : s.pilotDay > 30 ? t.pilotOver : `${s.pilotDay}/30`}
+                    </td>
+                    <td style={{ ...num, color: s.seriesStarted ? "#374151" : "#9CA3AF" }}>
+                      {s.seriesSent}/{s.seriesTotal}
+                    </td>
+                    <td style={{ ...num, color: s.checklistDone === s.checklistTotal ? "#047857" : "#374151" }}>
+                      {s.checklistDone}/{s.checklistTotal}
+                    </td>
+                    <td style={{ ...num, color: "#0E7490", fontWeight: 700 }}>{s.uniqueWordCount.toLocaleString()}</td>
+                    <td style={{ ...num, color: "#B45309", fontWeight: 700 }}>{s.projections7d.toLocaleString()}</td>
+                    <td style={num}>{s.codesOff ? "" : s.classroomCount}</td>
+                    <td style={{ ...num, color: "#0E7490" }}>{s.codesOff ? "" : s.totalSearches.toLocaleString()}</td>
+                    <td style={{ ...num, color: "#7C3AED" }}>{s.ownerSearches.toLocaleString()}</td>
+                    <td style={{ ...td, textAlign: "end", whiteSpace: "nowrap" }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); void toggleDemo(s.id, !s.isDemo); }}
+                        disabled={demoBusy === s.id}
+                        title={t.demoTitle}
+                        style={{ background: s.isDemo ? "#FEF3C7" : "none", border: "1px solid #E5E7EB", borderRadius: 6, cursor: "pointer", color: s.isDemo ? "#92400E" : "#6B7280", fontSize: 12, padding: "3px 8px", marginInlineEnd: 4 }}
+                      >
+                        {s.isDemo ? `✓ ${t.demoOn}` : t.demoOn}
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setDelTarget(s); setDelText(""); }}
+                        title={t.del}
+                        style={{ background: "none", border: "none", cursor: "pointer", color: "#DC2626", fontSize: 13, padding: "4px 6px" }}
+                      >
+                        🗑
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -787,8 +897,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-const th: React.CSSProperties = { padding: "10px 16px", textAlign: "start", fontSize: 11, fontWeight: 600, color: "#6B7280", letterSpacing: 0.5, textTransform: "uppercase" };
-const td: React.CSSProperties = { padding: "12px 16px", fontSize: 14, textAlign: "start" };
+const badge: React.CSSProperties = { display: "inline-block", marginInlineStart: 6, fontSize: 10, fontWeight: 700, padding: "1px 7px", borderRadius: 999, verticalAlign: "middle" };
+const th: React.CSSProperties = { padding: "10px 12px", whiteSpace: "nowrap", textAlign: "start", fontSize: 11, fontWeight: 600, color: "#6B7280", letterSpacing: 0.5, textTransform: "uppercase" };
+const td: React.CSSProperties = { padding: "12px 12px", fontSize: 14, textAlign: "start" };
 const card: React.CSSProperties = { background: "white", border: "1px solid #E5E7EB", borderRadius: 10, padding: 12 };
 const chip: React.CSSProperties = {
   display: "inline-flex",

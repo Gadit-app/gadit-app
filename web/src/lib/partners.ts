@@ -2,11 +2,12 @@
  * Partner (affiliate) program — shared types + helpers.
  *
  * This is Gadit's in-house affiliate system, modelled on the one Gadi
- * runs on Yooniz (which works without a third party). It lives ALONGSIDE
- * the existing Affonso integration for now (Gadi 2026-07-30): Affonso
- * keeps its reserved `/r/*` prefix and its `/affiliates` surface; this
- * native system uses `/p/<code>` referral links and the `/partners`
- * marketing page, so the two never collide.
+ * runs on Yooniz (which works without a third party). It is the ONLY
+ * partner program: the old Affonso program is retired (its `/affiliates`
+ * and `/affiliate/dashboard` pages redirect to `/partners`; only the Affonso signup tracking
+ * pixel in auth-context is kept on purpose). This system uses
+ * `/p/<code>` referral links, the `/partners` marketing page and the
+ * `/partner/dashboard` portal.
  *
  * Model (mirrors Yooniz):
  *   - Standard partner: 25% recurring in year one, 10% for life after.

@@ -108,6 +108,17 @@ export default function AdminSetsClient() {
   );
 }
 
+/**
+ * Pictures and examples for any set, curriculum units included (Gadi
+ * 2026-10-10: the Curriculum page shows them under each unit, so the
+ * catalog and the set review are one place). Read-only until a button.
+ */
+export function SetMediaPanel({ id, words }: { id: string; words: string[] }) {
+  const { secret, lang } = useAdminContext();
+  const set: WordSet = { id, subject: "", title: lang === "he" ? "תמונות ודוגמאות" : "Pictures & examples", lang: "", words };
+  return <SetCard set={set} secret={secret} t={STR[lang]} lang={lang} />;
+}
+
 function handle401(r: Response) {
   if (r.status === 401 && typeof window !== "undefined") {
     localStorage.removeItem(SECRET_KEY);

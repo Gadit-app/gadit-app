@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { WORD_SETS, getWordSet, classroomDef } from "@/lib/word-sets";
+import { WORD_SETS, classroomDef } from "@/lib/word-sets";
+import { loadWordSet } from "@/lib/curriculum-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateClassroomImage } from "@/lib/classroom-image";
 import { getOrGenerateExamples } from "@/lib/word-examples";
@@ -8,14 +9,15 @@ import { getOrGenerateExamples } from "@/lib/word-examples";
  * Admin: batch-warm a classroom word set (or every set). For each word:
  *   - resolve the classroom meaning (curated def, else cached define
  *     first-meaning) — the EXACT meaning the projector shows;
- *   - generate + cache the IMAGE (non-kids img_<lang>_* key, which is
- *     what the projector requests) if not already cached;
+ *   - generate + cache the classroom IMAGE (imageCache/img_cls2_<style>_
+ *     <lang>_*, lib/classroom-image.ts, what the projector requests) if not
+ *     already cached;
  *   - generate + cache subject-appropriate EXAMPLES.
  * This removes the need to manually walk a set in present mode.
  *
  * Images warmed here write the SAME imageCache/<cacheKey> docs (same key
- * formula) the live /api/generate-image route writes, so the classroom
- * finds them on a cache hit. The live route itself is untouched.
+ * formula, generateClassroomImage) the projector reads, so the classroom
+ * finds them on a cache hit. A curriculum set id (cur-*) works too.
  *
  * USAGE:
  *   GET /api/admin/warm-set?secret=$ADMIN_SECRET&set=<setId|all>
@@ -26,9 +28,6 @@ import { getOrGenerateExamples } from "@/lib/word-examples";
  */
 export const maxDuration = 60;
 
-// Non-kids projector key: WordClient's classroom auto-generate sends the
-// live kidsMode value, but per the schools guardrail the projector warms
-// the adult img_<lang>_* namespace.
 // Soft wall-clock budget; leave headroom under maxDuration=60 for the
 // final response + a straggler image call already in flight.
 const TIME_BUDGET_MS = 48_000;
@@ -36,7 +35,7 @@ const DEFAULT_LIMIT = 6;
 
 type WordTarget = { word: string; lang: string; setId: string };
 
-function buildTargets(setId: string): WordTarget[] | null {
+async function buildTargets(setId: string): Promise<WordTarget[] | null> {
   if (setId === "all") {
     const seen = new Set<string>();
     const out: WordTarget[] = [];
@@ -51,7 +50,9 @@ function buildTargets(setId: string): WordTarget[] | null {
     }
     return out;
   }
-  const set = getWordSet(setId);
+  // Async: curriculum sets (cur-*) live in Firestore, and loading one also
+  // registers its per-set definitions for resolveClassroomMeaning.
+  const set = await loadWordSet(setId);
   if (!set) return null;
   return set.words.map((w) => ({ word: w, lang: set.lang, setId: set.id }));
 }
@@ -64,7 +65,7 @@ export async function GET(req: NextRequest) {
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const setId = sp.get("set") ?? "all";
-  const targets = buildTargets(setId);
+  const targets = await buildTargets(setId);
   if (!targets) return NextResponse.json({ error: "set_not_found", setId }, { status: 404 });
 
   const offset = Math.max(0, parseInt(sp.get("offset") ?? "0", 10) || 0);

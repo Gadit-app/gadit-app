@@ -46,7 +46,12 @@ export async function recordActivity(e: {
   /** Raw request user-agent, used to flag crawlers so the log can show only
    *  real humans by default. */
   ua?: string | null;
+  /** True when the request's ID token carries the adminImpersonation claim
+   *  (Gadi inside a school via "Enter dashboard"): nothing is logged, so his
+   *  clicks never show as the school's activity. */
+  impersonating?: boolean;
 }): Promise<void> {
+  if (e.impersonating) return;
   try {
     const word = (e.word || "").trim().slice(0, 120);
     if (!word) return;

@@ -3,12 +3,30 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { computeSchoolInsights } from "@/lib/school-insights";
 import { SCHOOL_TYPES, cleanLevels, cleanCurriculum } from "@/lib/school-levels";
+import { isInternalEmail } from "@/lib/internal-accounts";
+import { studentCodesOff } from "@/lib/school";
+import { SCHOOL_DRIP } from "@/lib/email-drip/school-drip";
+
+/** Y-M-D in Israel, the same day key /api/schools/projection writes. */
+function ilDay(ms: number): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(ms));
+}
+
+/** createdAt is an ISO string on most schools, a Timestamp on a few. */
+function isoOf(v: unknown): string | null {
+  if (typeof v === "string") return v;
+  const t = v as { toDate?: () => Date } | null;
+  return t?.toDate ? t.toDate().toISOString() : null;
+}
 
 /**
  * Admin-only cross-school view.
  *
  * GET /api/admin/schools               → list every school (name, contact,
- *                                          plan, classroom count, total lookups)
+ *                                          plan, curriculum, pilot day, series
+ *                                          emails, checklist, words, projector
+ *                                          use this week; internal + demo
+ *                                          schools flagged, kept out of totals)
  * GET /api/admin/schools?schoolId=UID  → the FULL insights for one school,
  *                                          exactly what that principal sees
  *                                          (overview + classrooms + students +
@@ -65,6 +83,7 @@ export async function GET(req: NextRequest) {
       logoUrl?: string | null;
       levels?: unknown;
       curriculum?: unknown;
+      isDemo?: boolean;
     };
     const ownerSnap = await db.collection("users").doc(schoolId).get();
     const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
@@ -106,7 +125,8 @@ export async function GET(req: NextRequest) {
         levels: cleanLevels(meta.levels),
         curriculum: cleanCurriculum(meta.curriculum, cleanLevels(meta.levels)),
         plan: meta.plan ?? "",
-        createdAt: meta.createdAt ?? null,
+        createdAt: isoOf(meta.createdAt),
+        isDemo: meta.isDemo === true,
         logoUrl: meta.logoUrl ?? null,
         ownerSearches,
         ownerRecentWords,
@@ -119,33 +139,93 @@ export async function GET(req: NextRequest) {
 
   // --- All schools: the administrator roll-up -----------------------------
   const schoolsSnap = await db.collection("schools").get();
+  const now = Date.now();
+  const since7 = ilDay(now - 6 * 86_400_000);
+  // Owner emails in one call (the school id is the owner's uid), so a school
+  // whose doc has no contactEmail can still be recognised as internal.
+  const authEmails = new Map<string, string>();
+  for (let i = 0; i < schoolsSnap.docs.length; i += 100) {
+    const ids = schoolsSnap.docs.slice(i, i + 100).map((d) => ({ uid: d.id }));
+    try {
+      const r = await getAdminAuth().getUsers(ids);
+      for (const u of r.users) if (u.email) authEmails.set(u.uid, u.email);
+    } catch { /* emails fall back to the docs */ }
+  }
+
   const schools = await Promise.all(
     schoolsSnap.docs.map(async (doc) => {
       const d = doc.data() as {
         name?: string;
         contactEmail?: string | null;
         plan?: string;
-        createdAt?: string;
+        createdAt?: unknown;
+        curriculum?: string;
+        logoUrl?: string | null;
+        uniqueWordCount?: number;
+        checklist?: { activity?: string; teachers?: string };
+        isDemo?: boolean;
       };
       // Cheap roll-up: read classroom docs only (not their searches) so the
       // list stays fast no matter how much a school has searched.
-      const classroomsSnap = await doc.ref.collection("classrooms").get();
+      const [classroomsSnap, ownerSnap, projSnap] = await Promise.all([
+        doc.ref.collection("classrooms").get(),
+        db.collection("users").doc(doc.id).get(),
+        doc.ref.collection("projections").where("day", ">=", since7).select("count").get(),
+      ]);
       let totalSearches = 0;
       for (const c of classroomsSnap.docs) {
         totalSearches += (c.data() as { searchCount?: number }).searchCount ?? 0;
       }
-      // The owner's OWN lookups (users/{schoolId}.searchCount) — a teacher or
-      // principal trying Gadit while signed in. These never touch the /c/CODE
-      // classroom logs, so a school can show 0 classroom searches yet a high
-      // owner count (e.g. Corinne's 99). Surface both so activity is visible.
-      const ownerSnap = await db.collection("users").doc(doc.id).get();
-      const ownerSearches = (ownerSnap.data()?.searchCount as number) ?? 0;
+      const owner = ownerSnap.data() ?? {};
+      // The owner's OWN lookups (users/{schoolId}.searchCount): a teacher or
+      // principal using Gadit while signed in (the projector, in Israel).
+      const ownerSearches = (owner.searchCount as number) ?? 0;
+      const ownerEmail = authEmails.get(doc.id) ?? (typeof owner.email === "string" ? owner.email : null) ?? d.contactEmail ?? null;
+      const internal = isInternalEmail(ownerEmail) || isInternalEmail(d.contactEmail);
+
+      const createdAt = isoOf(d.createdAt);
+      const curriculum = typeof d.curriculum === "string" ? d.curriculum : "";
+      const codesOff = studentCodesOff(curriculum);
+
+      // Pilot day N of 30: from the day the onboarding series started, else
+      // from the day the school was opened.
+      const seriesStart = typeof owner.schoolSeriesStart === "string" ? owner.schoolSeriesStart : null;
+      const startMs = Date.parse(seriesStart ?? createdAt ?? "");
+      const pilotDay = Number.isFinite(startMs) ? Math.max(1, Math.floor((now - startMs) / 86_400_000) + 1) : null;
+
+      const sent = (owner.schoolDripSent ?? {}) as Record<string, { sentAt?: unknown } | undefined>;
+      const seriesSent = SCHOOL_DRIP.filter((m) => !!sent[m.key]?.sentAt).length;
+
+      const uniqueWordCount = Number(d.uniqueWordCount ?? 0);
+      const steps = {
+        curriculum: !!curriculum,
+        classroom: classroomsSnap.size > 0,
+        lesson: uniqueWordCount > 0,
+        activity: !!d.checklist?.activity,
+        teachers: !!d.checklist?.teachers,
+        logo: !!d.logoUrl,
+      };
+      const projections7d = projSnap.docs.reduce((n, p) => n + Number(p.get("count") ?? 0), 0);
+
       return {
         id: doc.id,
         name: (d.name ?? "").trim(),
-        contactEmail: d.contactEmail ?? null,
+        contactEmail: d.contactEmail ?? ownerEmail,
         plan: d.plan ?? "",
-        createdAt: d.createdAt ?? null,
+        createdAt,
+        internal,
+        isDemo: d.isDemo === true,
+        curriculum,
+        codesOff,
+        pilotDay,
+        seriesStarted: !!seriesStart,
+        seriesSent,
+        seriesTotal: SCHOOL_DRIP.length,
+        checklistDone: Object.values(steps).filter(Boolean).length,
+        checklistTotal: Object.keys(steps).length,
+        steps,
+        uniqueWordCount,
+        projections7d,
         classroomCount: classroomsSnap.size,
         totalSearches,
         ownerSearches,
@@ -153,14 +233,21 @@ export async function GET(req: NextRequest) {
     }),
   );
 
-  // Most active schools first by TOTAL activity (classroom + owner's own
-  // lookups); blank/idle schools sink to the bottom.
-  schools.sort((a, b) => (b.totalSearches + b.ownerSearches) - (a.totalSearches + a.ownerSearches));
+  // Customers first, most active first (projector this week, then lookups);
+  // our own and demo schools sink to the bottom.
+  schools.sort((a, b) =>
+    Number(a.internal || a.isDemo) - Number(b.internal || b.isDemo) ||
+    b.projections7d - a.projections7d ||
+    (b.totalSearches + b.ownerSearches) - (a.totalSearches + a.ownerSearches));
 
+  // Totals count real schools only: never ours, never a demo.
+  const real = schools.filter((x) => !x.internal && !x.isDemo);
   return NextResponse.json({
     schools,
-    totalSchools: schools.length,
-    totalSearches: schools.reduce((s, x) => s + x.totalSearches, 0),
+    totalSchools: real.length,
+    internalSchools: schools.length - real.length,
+    totalSearches: real.reduce((s, x) => s + x.totalSearches, 0),
+    totalProjections7d: real.reduce((s, x) => s + x.projections7d, 0),
   });
 }
 
@@ -175,14 +262,21 @@ export async function GET(req: NextRequest) {
  * For clearing out test/duplicate schools. Admin-gated, irreversible.
  */
 /** PATCH { schoolId, type } sets which school levels the word sets open
- *  to (lib/school-levels.ts). type "" clears it, so the school picks again. */
+ *  to (lib/school-levels.ts). type "" clears it, so the school picks again.
+ *  PATCH { schoolId, isDemo } turns the demo flag on or off. */
 export async function PATCH(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
-  const { schoolId, type } = (await req.json().catch(() => ({}))) as { schoolId?: string; type?: string };
+  const { schoolId, type, isDemo } = (await req.json().catch(() => ({}))) as { schoolId?: string; type?: string; isDemo?: unknown };
   if (!schoolId) return NextResponse.json({ error: "schoolId required" }, { status: 400 });
   const ref = getAdminDb().collection("schools").doc(schoolId);
   if (!(await ref.get()).exists) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  // { schoolId, isDemo } marks a demo school: it never gets the pilot email
+  // series (cron/email-drip) and never counts in the admin totals.
+  if (typeof isDemo === "boolean") {
+    await ref.set({ isDemo: isDemo ? true : FieldValue.delete() }, { merge: true });
+    return NextResponse.json({ isDemo });
+  }
   if (!type) {
     await ref.set({ levels: FieldValue.delete(), schoolType: FieldValue.delete(), curriculum: FieldValue.delete() }, { merge: true });
     return NextResponse.json({ levels: [] });

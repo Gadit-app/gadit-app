@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import { CATEGORY_LABEL, customerCategory, isInternalEmail } from "@/lib/internal-accounts";
 
 /**
  * Deletion audit log — every account removal, self-service or admin,
@@ -22,6 +23,8 @@ type DeletionRow = {
   subscriptionStatus?: string | null;
   isFamily?: boolean;
   isSchool?: boolean;
+  familyId?: string | null;
+  schoolId?: string | null;
   canceledSubs?: number;
   reason?: string | null;
   comment?: string | null;
@@ -30,11 +33,26 @@ type DeletionRow = {
 
 type ApiResponse = { rows: DeletionRow[] };
 
+/** The route returns at most this many rows (newest first). */
+const LOG_LIMIT = 300;
+
+/** The plan as one of the four customer categories. The log stores the raw
+ *  plan field, so legacy clear/deep read as Individual unless the row says
+ *  the account was a Family or a School. */
+function rowCategory(r: DeletionRow): string | null {
+  if (r.isSchool || r.schoolId) return CATEGORY_LABEL.schools;
+  if (r.isFamily || r.familyId) return CATEGORY_LABEL.family;
+  if (!r.plan) return null;
+  return CATEGORY_LABEL[customerCategory({ plan: r.plan }, r.uid ?? "")];
+}
+
 type AdminLang = "en" | "he";
 
 const STRINGS: Record<AdminLang, {
   title: string;
   subtitle: (n: number) => string;
+  internal: string;
+  internalTitle: string;
   loading: string;
   empty: string;
   colWhen: string;
@@ -54,7 +72,12 @@ const STRINGS: Record<AdminLang, {
 }> = {
   en: {
     title: "Deletions",
-    subtitle: (n) => `${n.toLocaleString()} account${n === 1 ? "" : "s"} removed`,
+    subtitle: (n) =>
+      n >= LOG_LIMIT
+        ? `Showing the latest ${LOG_LIMIT} deletions, newest first.`
+        : `${n.toLocaleString()} account${n === 1 ? "" : "s"} removed, newest first.`,
+    internal: "internal",
+    internalTitle: "Our own account",
     loading: "Loading…",
     empty: "No deletions recorded yet. The log starts filling on the next account removal after this deploys.",
     colWhen: "When",
@@ -70,11 +93,16 @@ const STRINGS: Record<AdminLang, {
     reasonsTitle: "Why people leave",
     noReasons: "No reasons given yet.",
     colReason: "Reason",
-    noReasonGiven: "—",
+    noReasonGiven: "-",
   },
   he: {
     title: "מחיקות",
-    subtitle: (n) => `${n.toLocaleString()} ${n === 1 ? "חשבון נמחק" : "חשבונות נמחקו"}`,
+    subtitle: (n) =>
+      n >= LOG_LIMIT
+        ? `מוצגות ${LOG_LIMIT} המחיקות האחרונות, מהחדשה לישנה.`
+        : `${n.toLocaleString()} ${n === 1 ? "חשבון נמחק" : "חשבונות נמחקו"}, מהחדש לישן.`,
+    internal: "פנימי",
+    internalTitle: "חשבון שלנו",
     loading: "טוען…",
     empty: "אין עדיין מחיקות ביומן. היומן יתחיל להתמלא במחיקת החשבון הבאה לאחר שהקוד יעלה לפרודקשן.",
     colWhen: "מתי",
@@ -90,12 +118,12 @@ const STRINGS: Record<AdminLang, {
     reasonsTitle: "למה אנשים עוזבים",
     noReasons: "עדיין לא נבחרו סיבות.",
     colReason: "סיבה",
-    noReasonGiven: "—",
+    noReasonGiven: "-",
   },
 };
 
 function formatWhen(iso: string | undefined, lang: AdminLang): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
   if (diff < 60_000) return lang === "he" ? "עכשיו" : "now";
@@ -223,7 +251,12 @@ export default function AdminDeletionsClient() {
                     {formatWhen(r.at, adminLang)}
                   </td>
                   <td style={{ ...tdStyle, color: "#111827", fontWeight: 500 }} dir="ltr">
-                    {r.email || <span style={{ color: "#9CA3AF" }}>{r.uid ?? "—"}</span>}
+                    {r.email || <span style={{ color: "#9CA3AF" }}>{r.uid ?? "-"}</span>}
+                    {isInternalEmail(r.email) && (
+                      <span title={t.internalTitle} style={{ marginInlineStart: 6, display: "inline-block", padding: "1px 7px", borderRadius: 999, fontSize: 11, fontWeight: 700, background: "#EEF2FF", color: "#4338CA" }}>
+                        {t.internal}
+                      </span>
+                    )}
                   </td>
                   <td style={tdStyle}>
                     <span
@@ -241,7 +274,7 @@ export default function AdminDeletionsClient() {
                     </span>
                   </td>
                   <td style={{ ...tdStyle, color: "#374151", fontSize: 13 }} dir="ltr">
-                    {r.plan || "—"}
+                    {rowCategory(r) ?? "-"}
                     {r.subscriptionStatus ? (
                       <span style={{ color: "#9CA3AF" }}> · {r.subscriptionStatus}</span>
                     ) : null}
@@ -260,7 +293,7 @@ export default function AdminDeletionsClient() {
                     <span style={{ display: "inline-flex", gap: 4 }}>
                       {r.isFamily && <Flag label={t.family} color="#0E7490" bg="#ECFEFF" />}
                       {r.isSchool && <Flag label={t.school} color="#92400E" bg="#FEF3C7" />}
-                      {!r.isFamily && !r.isSchool && <span style={{ color: "#D1D5DB" }}>—</span>}
+                      {!r.isFamily && !r.isSchool && <span style={{ color: "#D1D5DB" }}>-</span>}
                     </span>
                   </td>
                   <td style={{ ...tdStyle, textAlign: "end", fontVariantNumeric: "tabular-nums", color: r.canceledSubs ? "#0E7490" : "#9CA3AF", fontWeight: r.canceledSubs ? 600 : 400 }}>

@@ -27,7 +27,11 @@ export async function POST(req: NextRequest) {
   if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
   let uid: string;
   try {
-    uid = (await getAdminAuth().verifyIdToken(idToken)).uid;
+    const decoded = await getAdminAuth().verifyIdToken(idToken);
+    // Gadi inside a school via "Enter dashboard" (admin impersonation): his
+    // clicks are not the school's teaching, so nothing is recorded.
+    if (decoded.adminImpersonation === true) return NextResponse.json({ ok: true, skipped: "impersonation" });
+    uid = decoded.uid;
   } catch {
     return NextResponse.json({ error: "invalid_token" }, { status: 401 });
   }

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { customerCategory, type CustomerCategory } from "@/lib/internal-accounts";
 
 /**
  * Admin-only API to list and update error reports.
  *
- * Authentication: requires a valid Firebase ID token AND the email on the
- * decoded token must be in ADMIN_EMAILS. Anyone else gets 403.
+ * Authentication, either of:
+ *   - ADMIN_SECRET via ?secret= (same as the sibling admin routes; this is
+ *     what /admin/reports uses), or
+ *   - a Firebase ID token (Authorization: Bearer) whose email is in
+ *     ADMIN_EMAILS. Anyone else gets 401/403.
  *
  * GET  /api/admin/reports                  → list all reports, newest first
  * GET  /api/admin/reports?status=open     → filter by status
@@ -22,6 +26,17 @@ async function requireAdmin(req: NextRequest): Promise<
   | { ok: true; email: string }
   | { ok: false; response: NextResponse }
 > {
+  const secret = req.nextUrl.searchParams.get("secret");
+  if (secret !== null) {
+    const expected = process.env.ADMIN_SECRET;
+    if (!expected) {
+      return { ok: false, response: NextResponse.json({ error: "ADMIN_SECRET not configured" }, { status: 503 }) };
+    }
+    if (secret !== expected) {
+      return { ok: false, response: NextResponse.json({ error: "unauthorized" }, { status: 401 }) };
+    }
+    return { ok: true, email: "admin-secret" };
+  }
   const authHeader = req.headers.get("Authorization") || "";
   const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
   if (!idToken) {
@@ -70,13 +85,29 @@ export async function GET(req: NextRequest) {
       .limit(500)
       .get();
 
-    const allItems = snap.docs.map((d) => ({ id: d.id, ...d.data() } as { id: string; status?: string }));
+    const allItems = snap.docs.map((d) => ({ id: d.id, ...d.data() } as { id: string; status?: string; userId?: string | null; userPlan?: string }));
 
     let items = allItems;
     if (statusFilter && ALLOWED_STATUSES.includes(statusFilter as ReportStatus)) {
       items = allItems.filter((r) => (r.status ?? "open") === statusFilter);
     }
     items = items.slice(0, limit);
+
+    // The customer category (Basic / Individual / Family / Schools) of each
+    // reporter, from their user doc: the stored userPlan is the raw plan
+    // field, and Family / Schools also store "deep". Best-effort; the client
+    // falls back to the stored plan when this is missing.
+    const uids = [...new Set(items.map((r) => r.userId).filter((u): u is string => !!u))];
+    const catByUid: Record<string, CustomerCategory> = {};
+    if (uids.length) {
+      try {
+        const docs = await db.getAll(...uids.map((u) => db.collection("users").doc(u)));
+        for (const d of docs) if (d.exists) catByUid[d.id] = customerCategory(d.data() ?? {}, d.id);
+      } catch {
+        // rows still render with the stored plan
+      }
+    }
+    const withCategory = items.map((r) => ({ ...r, userCategory: (r.userId && catByUid[r.userId]) || null }));
 
     // Counts per status from the same dataset
     const counts: Record<string, number> = { open: 0, reviewed: 0, fixed: 0, wontfix: 0, total: allItems.length };
@@ -85,7 +116,7 @@ export async function GET(req: NextRequest) {
       if (s in counts) counts[s]++;
     }
 
-    return NextResponse.json({ items, counts });
+    return NextResponse.json({ items: withCategory, counts });
   } catch (err) {
     console.error("admin reports GET error:", err);
     return NextResponse.json({ error: "internal_error", details: String(err) }, { status: 500 });
