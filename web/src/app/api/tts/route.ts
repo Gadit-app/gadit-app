@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { verifyUserAndGetPlan, getDefaultBucket } from "@/lib/firebase-admin";
+import { logAiUsage } from "@/lib/ai-cost";
 
 /**
  * Text-to-speech for paid tiers (Clear/Deep).
@@ -75,6 +76,42 @@ const AUDIO_FORMAT = "aac" as const;
 const AUDIO_EXT = "aac";
 const AUDIO_MIME = "audio/aac";
 
+// Hebrew voice (see the Hebrew branch in POST).
+const GEMINI_TTS_MODEL = "gemini-3.8-flash-tts";
+const GEMINI_VOICE = "Aoede";
+const HEBREW_RE = /[א-ת]/;
+
+/** Gemini speech for `text` as a WAV file (Gemini returns raw 24 kHz 16-bit
+ *  mono PCM, which every browser plays once it has a WAV header). */
+async function geminiSpeech(text: string, apiKey: string): Promise<{ wav: Buffer; tokensIn: number; tokensOut: number }> {
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TTS_MODEL}:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text }] }],
+        generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: GEMINI_VOICE } } } },
+      }),
+    },
+  );
+  if (!res.ok) throw new Error(`gemini_${res.status}`);
+  const json = (await res.json()) as {
+    candidates?: Array<{ content?: { parts?: Array<{ inlineData?: { data?: string; mimeType?: string } }> } }>;
+    usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number };
+  };
+  const inline = json.candidates?.[0]?.content?.parts?.find((p) => p.inlineData?.data)?.inlineData;
+  if (!inline?.data) throw new Error("gemini_no_audio");
+  const pcm = Buffer.from(inline.data, "base64");
+  const rate = Number((inline.mimeType ?? "").match(/rate=(\d+)/)?.[1] ?? 24000);
+  const h = Buffer.alloc(44);
+  h.write("RIFF", 0); h.writeUInt32LE(36 + pcm.length, 4); h.write("WAVE", 8);
+  h.write("fmt ", 12); h.writeUInt32LE(16, 16); h.writeUInt16LE(1, 20); h.writeUInt16LE(1, 22);
+  h.writeUInt32LE(rate, 24); h.writeUInt32LE(rate * 2, 28); h.writeUInt16LE(2, 32); h.writeUInt16LE(16, 34);
+  h.write("data", 36); h.writeUInt32LE(pcm.length, 40);
+  return { wav: Buffer.concat([h, pcm]), tokensIn: json.usageMetadata?.promptTokenCount ?? 0, tokensOut: json.usageMetadata?.candidatesTokenCount ?? 0 };
+}
+
 function contentHash(text: string, voice: string, model: string, format: string): string {
   return crypto
     .createHash("sha256")
@@ -115,6 +152,47 @@ export async function POST(req: NextRequest) {
       { error: "text_too_long", limit: MAX_TEXT_LENGTH },
       { status: 400 },
     );
+  }
+
+  // Hebrew is read by Gemini's "Aoede" voice (Gadi 2026-10-10): the OpenAI
+  // voices read Hebrew with an American accent ("זהבי" came out "סבאבי"),
+  // while Aoede reads it like a native speaker, even without niqqud. Plain
+  // text only: a style instruction in the prompt was sometimes read aloud.
+  // Any failure (the key's rate limit, an outage) falls through to OpenAI
+  // below, so the speaker always plays something.
+  if (!requestedVoice && (lang === "he" || HEBREW_RE.test(text)) && process.env.GEMINI_API_KEY) {
+    const gHash = contentHash(text, GEMINI_VOICE, GEMINI_TTS_MODEL, "wav");
+    const gPath = `tts-cache/${gHash}.wav`;
+    const audioHeaders = (cache: string) => ({
+      "Content-Type": "audio/wav",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      ETag: `"${gHash}"`,
+      "X-Gadit-TTS-Cache": cache,
+    });
+    try {
+      const file = getDefaultBucket().file(gPath);
+      const [exists] = await file.exists();
+      if (exists) {
+        const [buffer] = await file.download();
+        return new Response(buffer as unknown as BodyInit, { headers: audioHeaders("HIT") });
+      }
+    } catch (err) {
+      console.warn("[tts] storage read failed (gemini):", err);
+    }
+    try {
+      const { wav, tokensIn, tokensOut } = await geminiSpeech(text, process.env.GEMINI_API_KEY);
+      void logAiUsage({ feature: "tts_he", model: GEMINI_TTS_MODEL, tokensIn, tokensOut, plan: userInfo.plan });
+      void getDefaultBucket()
+        .file(gPath)
+        .save(wav, {
+          contentType: "audio/wav",
+          metadata: { cacheControl: "public, max-age=31536000, immutable", metadata: { voice: GEMINI_VOICE, model: GEMINI_TTS_MODEL, lang: lang ?? "", textPreview: text.slice(0, 100) } },
+        })
+        .catch((err: unknown) => console.warn("[tts] storage write failed (gemini):", err));
+      return new Response(wav as unknown as BodyInit, { headers: audioHeaders("MISS") });
+    } catch (err) {
+      console.warn("[tts] gemini failed, falling back to OpenAI:", err);
+    }
   }
 
   const voice = requestedVoice ?? pickVoice(lang);

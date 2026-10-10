@@ -37,6 +37,9 @@ export const PRICING: Record<string, { in: number; out: number }> = {
   "gpt-4o": { in: 2.5, out: 10 },
   "gpt-4o-mini": { in: 0.15, out: 0.6 },
   "gpt-4o-mini-tts": { in: 0.6, out: 0 },
+  // Hebrew read-aloud voice (2026-10-10). ESTIMATE from gemini-2.5-flash-tts
+  // list prices (text in $0.50/M, audio out $10/M): about 0.6c a sentence.
+  "gemini-3.8-flash-tts": { in: 0.5, out: 10 },
   "gpt-5.4": { in: 2.5, out: 15 },
 };
 
