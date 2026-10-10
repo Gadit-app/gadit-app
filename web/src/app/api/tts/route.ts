@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { verifyUserAndGetPlan, getDefaultBucket } from "@/lib/firebase-admin";
-import { logAiUsage } from "@/lib/ai-cost";
+import { logAiUsage, ttsCostUsd } from "@/lib/ai-cost";
 
 /**
  * Text-to-speech for paid tiers (Clear/Deep).
@@ -278,6 +278,8 @@ export async function POST(req: NextRequest) {
     }
     const arrayBuffer = await ttsResp.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    // Cache hits return before this point, so only real generations log.
+    void logAiUsage({ feature: lang === "he" ? "tts_he_fallback" : "tts", model, costUsd: ttsCostUsd(text.length), plan: userInfo.plan });
 
     // Write to Storage cache fire-and-forget — we don't want a slow
     // cache write to delay the user's playback.

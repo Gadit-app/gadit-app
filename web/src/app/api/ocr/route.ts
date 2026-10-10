@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 /**
  * POST /api/ocr — extract the text from a photographed page OR an uploaded PDF
@@ -119,6 +120,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+    { const u = usageFrom(data); void logAiUsage({ feature: "ocr", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
     let text = (data.choices?.[0]?.message?.content ?? "").trim();
     // A blank/black frame makes the model reply with a refusal ("I'm sorry, I
     // can't transcribe…") instead of empty. Treat that as no text so the client

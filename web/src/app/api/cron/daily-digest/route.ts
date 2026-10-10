@@ -36,11 +36,11 @@ function usd(n: number): string {
 const FEATURE_HE: Record<string, string> = {
   define: "הגדרה מלאה", define_context: "הגדרה לפי הקשר", define_retry: "ניסיון חוזר",
   reader_word_tap: "מילה בקורא", quick_define_miss: "תצוגה מקדימה", reader_sentence: "משפט בקורא",
-  image: "תמונה", image_kids: "תמונה (ילדים)", image_brief: "תיאור תמונה",
+  image: "תמונה", image_kids: "תמונה (ילדים)", image_brief: "תיאור תמונה", tts: "הקראה", tts_he_fallback: "הקראה בעברית (גיבוי)", transcribe: "הקלדה בקול", check_sentence: "בדיקת משפט", compare_words: "השוואת מילים", ocr: "סריקת טקסט", quiz: "חידון אישי", say: "תרגול הגייה", class_examples: "דוגמאות לכיתה",
   tashkeel_arabic: "ניקוד ערבי", backfill_gloss: "השלמת תרגום",
   word_idioms: "ניבים וצירופים", word_question: "שאלות על מילה", passage_words: "מילים חשובות בקטע",
   spell_set: "תרגול הכתבה", spell_set_list: "רשימת הכתבה", etymology_fallback: "מקור המילה",
-  kids: "הסבר לילדים", notebook: "מחברת", tts: "הקראה",
+  kids: "הסבר לילדים", notebook: "מחברת",
 };
 
 export async function GET(req: NextRequest) {

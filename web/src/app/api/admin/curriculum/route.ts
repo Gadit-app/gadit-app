@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { getCurriculumSetDoc, saveCurriculumSet, regenerateCurriculumSet } from "@/lib/curriculum-sets";
+import { adminBudgetExceeded } from "@/lib/ai-budget";
 
 /**
  * Admin API behind /admin/curriculum (Gadi 2026-10-04): edit the key words
@@ -33,8 +34,10 @@ export async function GET(req: NextRequest) {
   }
   const id = req.nextUrl.searchParams.get("id") ?? "";
   try {
-    const doc = await getCurriculumSetDoc(id, true);
-    if (!doc) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    // Opening a unit that was never generated writes it (gpt-5.4), an admin
+    // run under the admin daily cap.
+    const doc = (await getCurriculumSetDoc(id)) ?? ((await adminBudgetExceeded()) ? null : await getCurriculumSetDoc(id, true, true));
+    if (!doc) return NextResponse.json({ error: (await adminBudgetExceeded()) ? "admin_budget" : "not_found" }, { status: 404 });
     const snap = await getAdminDb().collection("curriculumSets").doc(id).get();
     return NextResponse.json({ ...doc, editedAt: snap.get("editedAt") ?? null });
   } catch (e) {
@@ -48,6 +51,7 @@ export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => ({}))) as { id?: string; action?: string; rows?: Array<{ w: string; d: string }> };
   const id = body.id ?? "";
   try {
+    if (body.action === "regen" && (await adminBudgetExceeded())) return NextResponse.json({ error: "admin_budget" }, { status: 429 });
     const doc = body.action === "regen" ? await regenerateCurriculumSet(id) : await saveCurriculumSet(id, body.rows ?? []);
     if (!doc) return NextResponse.json({ error: "not_found" }, { status: 404 });
     return NextResponse.json(doc);

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 /**
  * Strip stray CJK characters that gpt-4o-mini occasionally injects INTO a word
@@ -151,6 +152,7 @@ User's UI language (write all feedback in this): ${uiLangName}`;
     });
 
     const data = await res.json();
+    { const u = usageFrom(data); void logAiUsage({ feature: "check_sentence", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
     const text = data.choices?.[0]?.message?.content;
     if (!text) {
       return NextResponse.json(

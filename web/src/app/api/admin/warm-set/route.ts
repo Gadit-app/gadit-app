@@ -4,6 +4,7 @@ import { loadWordSet } from "@/lib/curriculum-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateClassroomImage } from "@/lib/classroom-image";
 import { getOrGenerateExamples } from "@/lib/word-examples";
+import { adminBudgetExceeded } from "@/lib/ai-budget";
 
 /**
  * Admin: batch-warm a classroom word set (or every set). For each word:
@@ -64,6 +65,9 @@ export async function GET(req: NextRequest) {
   if (!expected) return NextResponse.json({ error: "ADMIN_SECRET not configured" }, { status: 503 });
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
+  // Admin runs have their own daily cap (lib/ai-budget.ts, $5).
+  if (await adminBudgetExceeded()) return NextResponse.json({ error: "admin_budget", detail: "Today's admin spend cap is reached. Try again tomorrow." }, { status: 429 });
+
   const setId = sp.get("set") ?? "all";
   const targets = await buildTargets(setId);
   if (!targets) return NextResponse.json({ error: "set_not_found", setId }, { status: 404 });
@@ -102,7 +106,7 @@ export async function GET(req: NextRequest) {
     let image: "cached" | "generated" | "error" = "error";
     let imgError: string | undefined;
     try {
-      const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set: { id: tSet }, force });
+      const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set: { id: tSet }, force, admin: true });
       if (img.status === "cached") image = "cached";
       else if (img.status === "generated") image = "generated";
       else { image = "error"; imgError = img.error; }
@@ -113,7 +117,7 @@ export async function GET(req: NextRequest) {
     // Examples
     let exCount = 0;
     try {
-      const ex = await getOrGenerateExamples(word, resolved.meaning, lang, { force });
+      const ex = await getOrGenerateExamples(word, resolved.meaning, lang, { force, admin: true });
       exCount = ex.examples.length;
     } catch {
       /* examples best-effort */

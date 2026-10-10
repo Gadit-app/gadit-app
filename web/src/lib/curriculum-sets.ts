@@ -23,7 +23,7 @@ function clean(s: unknown, max: number): string {
   return String(s ?? "").replace(/\s*[–—]\s*/g, ", ").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
-async function chat(sys: string, user: string, model = "gpt-4o"): Promise<Array<{ w?: unknown; d?: unknown }>> {
+async function chat(sys: string, user: string, model = "gpt-4o", admin = false): Promise<Array<{ w?: unknown; d?: unknown }>> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -38,7 +38,7 @@ async function chat(sys: string, user: string, model = "gpt-4o"): Promise<Array<
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "curriculum_set", model, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "curriculum_set", model, tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin });
   return (JSON.parse(json.choices?.[0]?.message?.content ?? "{}") as { words?: Array<{ w?: unknown; d?: unknown }> }).words ?? [];
 }
 
@@ -59,7 +59,7 @@ function toDoc(rows: Array<{ w?: unknown; d?: unknown }>, set: Omit<WordSet, "wo
 // Arab state education (Gadi 2026-10-04): words in Modern Standard Arabic,
 // except the Hebrew and English subjects, whose words are in that language.
 const AR_SUBJECT_LANG: Record<string, string> = { "hebrew-second-language": "he", english: "en" };
-async function generateAr(topicId: string): Promise<CurriculumSetDoc | null> {
+async function generateAr(topicId: string, admin = false): Promise<CurriculumSetDoc | null> {
   const t = arTopic(topicId);
   const subj = t ? arSubject(t.s) : undefined;
   if (!t || !subj) return null;
@@ -99,7 +99,7 @@ Return: {"words":[{"w":"","d":""}]}`;
   const meta = { id: t.id, subject: subj.key, title: t.t, grade, lang };
   for (const model of ["gpt-5.4", "gpt-5.4", "gpt-4o"]) {
     try {
-      return toDoc(await chat(sys, user, model), meta, lang === "ar");
+      return toDoc(await chat(sys, user, model, admin), meta, lang === "ar");
     } catch (e) {
       if (String(e).includes("openai_") || model === "gpt-4o") throw e;
     }
@@ -107,8 +107,8 @@ Return: {"words":[{"w":"","d":""}]}`;
   return null;
 }
 
-async function generate(topicId: string): Promise<CurriculumSetDoc | null> {
-  if (topicId.startsWith("cur-ar-")) return generateAr(topicId);
+async function generate(topicId: string, admin = false): Promise<CurriculumSetDoc | null> {
+  if (topicId.startsWith("cur-ar-")) return generateAr(topicId, admin);
   const t = curTopic(topicId);
   const subj = t ? curSubject(t.s) : undefined;
   if (!t || !subj) return null;
@@ -128,7 +128,7 @@ ${foreign
 - לכל מילה הגדרה אחת: משפט אחד או שניים (עד 160 תווים) שמסבירים את המשמעות שלה ביחידה הזו בלבד, ברמה שמתאימה ל${grade}.
 - בלי מקפים ארוכים. ניסוח כללי, בלי פנייה לתלמיד.
 החזר: {"words":[{"w":"","d":""}]}`;
-  const rows = await chat(sys, user);
+  const rows = await chat(sys, user, undefined, admin);
   return toDoc(rows, { id: t.id, subject: subj.key, title: t.t, grade, lang });
 }
 
@@ -142,7 +142,7 @@ function zaDoc(id: string): CurriculumSetDoc | null {
   return { set: { id, subject: t.s, title: t.t, grade: `Grade ${t.g}`, lang: "en", words: w.words }, defs: w.defs };
 }
 
-export async function getCurriculumSetDoc(id: string, create = false): Promise<CurriculumSetDoc | null> {
+export async function getCurriculumSetDoc(id: string, create = false, admin = false): Promise<CurriculumSetDoc | null> {
   const isZa = id.startsWith("cur-za-");
   if (!isCurriculumSetId(id) || !(isZa ? zaTopic(id) : arTopic(id) ?? curTopic(id))) return null;
   const ref = getAdminDb().collection("curriculumSets").doc(id);
@@ -150,7 +150,7 @@ export async function getCurriculumSetDoc(id: string, create = false): Promise<C
   // An admin edit lives in Firestore; a CAPS unit otherwise uses its built-in words.
   let doc = snap.exists ? (snap.data() as CurriculumSetDoc) : isZa ? zaDoc(id) : null;
   if (!doc && create) {
-    doc = await generate(id);
+    doc = await generate(id, admin);
     if (doc) await ref.set({ ...doc, version: VERSION, at: new Date().toISOString() });
   }
   if (doc) registerWordSet(doc.set, doc.defs);
@@ -167,7 +167,7 @@ export async function loadWordSet(id: string): Promise<WordSet | undefined> {
 
 /** Admin edit (Gadi 2026-10-04): replace a unit's words and definitions. */
 export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: string }>): Promise<CurriculumSetDoc | null> {
-  const cur = await getCurriculumSetDoc(id, true);
+  const cur = await getCurriculumSetDoc(id, true, true);
   if (!cur) return null;
   const defs: Record<string, string> = {};
   for (const r of rows) {
@@ -187,5 +187,5 @@ export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: 
 export async function regenerateCurriculumSet(id: string): Promise<CurriculumSetDoc | null> {
   if (!isCurriculumSetId(id) || !(curTopic(id) || zaTopic(id) || arTopic(id))) return null;
   await getAdminDb().collection("curriculumSets").doc(id).delete();
-  return getCurriculumSetDoc(id, true);
+  return getCurriculumSetDoc(id, true, true);
 }

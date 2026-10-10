@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 const UI_LANG_NAMES: Record<string, string> = {
   he: "Hebrew",
@@ -172,6 +173,7 @@ Compare these two words.`;
         }),
       });
       const data = await res.json();
+      { const u = usageFrom(data); void logAiUsage({ feature: "compare_words", model, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
       const text = data.choices?.[0]?.message?.content;
       return text ? JSON.parse(text) : null;
     };

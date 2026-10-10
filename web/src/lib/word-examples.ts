@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { logAiUsage, usageFrom } from "@/lib/ai-cost";
 
 /**
  * Subject-appropriate example sentences for classroom / present mode.
@@ -87,7 +88,7 @@ function parseExamples(raw: string): string[] {
  * in EXACTLY the given `meaning`. No caching. Returns [] on any failure
  * so callers can fall back to the general define examples.
  */
-export async function generateExamples(word: string, meaning: string, uiLang: string): Promise<string[]> {
+export async function generateExamples(word: string, meaning: string, uiLang: string, admin = false): Promise<string[]> {
   const langName = uiLangName(uiLang);
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -115,6 +116,7 @@ export async function generateExamples(word: string, meaning: string, uiLang: st
     });
     if (!res.ok) return [];
     const data = await res.json();
+    { const u = usageFrom(data); void logAiUsage({ feature: "class_examples", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin }); }
     const raw = String(data?.choices?.[0]?.message?.content || "");
     return parseExamples(raw);
   } catch {
@@ -138,7 +140,8 @@ export async function getOrGenerateExamples(
   word: string,
   meaning: string,
   uiLang: string,
-  opts: { generate?: boolean; force?: boolean } = {},
+  /** admin = a run from /admin: counted against the admin daily cap. */
+  opts: { generate?: boolean; force?: boolean; admin?: boolean } = {},
 ): Promise<ExampleResult> {
   const { generate = true, force = false } = opts;
   const db = getAdminDb();
@@ -157,7 +160,7 @@ export async function getOrGenerateExamples(
     return { examples: [], cached: false, generated: false };
   }
 
-  const examples = await generateExamples(word, meaning, uiLang);
+  const examples = await generateExamples(word, meaning, uiLang, opts.admin === true);
   if (examples.length === 0) {
     return { examples: [], cached: false, generated: false };
   }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { logAiUsage, whisperCostUsd } from "@/lib/ai-cost";
 
 // Whisper expects ISO-639-1 language hints; map our UI codes
 const LANG_HINT: Record<string, string> = {
@@ -84,7 +85,8 @@ export async function POST(req: NextRequest) {
       : "webm";
     upstreamForm.append("file", audioFile, `audio.${ext}`);
     upstreamForm.append("model", "whisper-1");
-    upstreamForm.append("response_format", "json");
+    // verbose_json adds the audio duration, which prices the call.
+    upstreamForm.append("response_format", "verbose_json");
     if (langHint) upstreamForm.append("language", langHint);
 
     const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
@@ -104,7 +106,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const data = (await res.json()) as { text?: string };
+    const data = (await res.json()) as { text?: string; duration?: number };
+    void logAiUsage({ feature: "transcribe", model: "whisper-1", costUsd: whisperCostUsd(Number(data.duration ?? 0)), plan: userInfo.plan });
     return NextResponse.json({ text: (data.text || "").trim() });
   } catch (err) {
     console.error("transcribe error:", err);

@@ -36,7 +36,9 @@ import { maybeAlertSpend } from "@/lib/ai-budget";
 export const PRICING: Record<string, { in: number; out: number }> = {
   "gpt-4o": { in: 2.5, out: 10 },
   "gpt-4o-mini": { in: 0.15, out: 0.6 },
-  "gpt-4o-mini-tts": { in: 0.6, out: 0 },
+  // Read-aloud, non-Hebrew (and the Hebrew fallback). The speech endpoint
+  // returns no token count, so calls log ttsCostUsd() instead.
+  "gpt-4o-mini-tts": { in: 0.6, out: 12 },
   // Hebrew read-aloud voice (2026-10-10). ESTIMATE from gemini-2.5-flash-tts
   // list prices (text in $0.50/M, audio out $10/M): about 0.6c a sentence.
   "gemini-3.8-flash-tts": { in: 0.5, out: 10 },
@@ -62,6 +64,17 @@ export function chatCostUsd(model: string, tokensIn: number, tokensOut: number):
   const p = PRICING[model];
   if (!p) return 0;
   return (tokensIn * p.in + tokensOut * p.out) / 1_000_000;
+}
+
+/** gpt-4o-mini-tts, about $0.015 a minute of speech; ~14 characters are
+ *  spoken per second, so the text length is a fair stand-in. ESTIMATE. */
+export function ttsCostUsd(chars: number): number {
+  return (Math.max(0, chars) / 14 / 60) * 0.015;
+}
+
+/** whisper-1 list price: $0.006 per minute of audio. */
+export function whisperCostUsd(seconds: number): number {
+  return (Math.max(0, seconds) / 60) * 0.006;
 }
 
 export function imageCostUsd(quality = "low"): number {

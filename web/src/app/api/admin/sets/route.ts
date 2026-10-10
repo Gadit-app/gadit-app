@@ -4,6 +4,7 @@ import { loadWordSet } from "@/lib/curriculum-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateClassroomImage, classroomImageKey, classroomStyle } from "@/lib/classroom-image";
 import { exampleCacheKey, getOrGenerateExamples } from "@/lib/word-examples";
+import { adminBudgetExceeded } from "@/lib/ai-budget";
 
 /**
  * Admin API backing the /admin/sets review grid.
@@ -84,6 +85,8 @@ export async function POST(req: NextRequest) {
     set?: string;
     word?: string;
   };
+  // Admin runs have their own daily cap (lib/ai-budget.ts, $5).
+  if (await adminBudgetExceeded()) return NextResponse.json({ error: "admin_budget", detail: "Today's admin spend cap is reached. Try again tomorrow." }, { status: 429 });
   const action = body.action ?? "image";
   const word = (body.word ?? "").trim();
   const set = await loadWordSet(body.set ?? "");
@@ -104,14 +107,14 @@ export async function POST(req: NextRequest) {
   let examples: string[] = [];
 
   if (action === "image" || action === "both") {
-    const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set, force: true });
+    const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set, force: true, admin: true });
     imageStatus = img.status;
     if (img.status !== "error") imageUrl = img.url;
     else return NextResponse.json({ error: "image_failed", detail: img.error }, { status: 502 });
   }
 
   if (action === "examples" || action === "both") {
-    const ex = await getOrGenerateExamples(word, resolved.meaning, lang, { force: true });
+    const ex = await getOrGenerateExamples(word, resolved.meaning, lang, { force: true, admin: true });
     examples = ex.examples;
   }
 

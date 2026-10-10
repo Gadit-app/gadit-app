@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
-import { logAiUsage, IMAGE_MODEL } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, IMAGE_MODEL } from "@/lib/ai-cost";
 import { curatedImageHint, type WordSet } from "@/lib/word-sets";
 import { topicLevel } from "@/lib/curriculum-catalog";
 
@@ -80,7 +80,7 @@ const AR_LETTER_REFS: Array<[string[], LetterRef]> = [
 ];
 for (const [words, v] of AR_LETTER_REFS) for (const w of words) LETTER_REFS[w] = v;
 
-async function brief(word: string, meaning: string, lang: string): Promise<string> {
+async function brief(word: string, meaning: string, lang: string, admin = false): Promise<string> {
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -97,6 +97,7 @@ async function brief(word: string, meaning: string, lang: string): Promise<strin
     });
     if (!res.ok) return "";
     const data = await res.json();
+    { const u = usageFrom(data); void logAiUsage({ feature: "image_brief", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin }); }
     return String(data?.choices?.[0]?.message?.content || "").replace(/\s+/g, " ").trim().slice(0, 360);
   } catch {
     return "";
@@ -151,6 +152,8 @@ export async function generateClassroomImage(opts: {
   set: Pick<WordSet, "id">;
   force?: boolean;
   uid?: string;
+  /** A run from /admin: counted against the admin daily cap. */
+  admin?: boolean;
 }): Promise<ClassroomImageResult> {
   const { word, meaning, lang } = opts;
   const style = classroomStyle(opts.set);
@@ -173,7 +176,7 @@ export async function generateClassroomImage(opts: {
       // 28 Arabic letters only survive at high quality (~17¢, drawn once).
       quality = letter.high ? "high" : "medium";
     } else {
-      const b = curatedImageHint(w) || (await brief(w, meaning, lang)) || `${w}: ${meaning}`;
+      const b = curatedImageHint(w) || (await brief(w, meaning, lang, opts.admin === true)) || `${w}: ${meaning}`;
       // The fixed boy only when the scene has a person in it; a picture of
       // a thing stays a picture of the thing.
       const person = /(child|children|boy|girl|kid|kids|student|students|person|people|teacher|man|woman|family)/i.test(b);
@@ -181,7 +184,7 @@ export async function generateClassroomImage(opts: {
       prompt = `${base} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
     }
     const out = await render(prompt.replace(/\s+/g, " "), refs, quality);
-    void logAiUsage({ feature: "image_classroom", model: IMAGE_MODEL, images: 1, imageQuality: quality, costUsd: out.cost });
+    void logAiUsage({ feature: "image_classroom", model: IMAGE_MODEL, images: 1, imageQuality: quality, costUsd: out.cost, admin: opts.admin === true });
 
     const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
     const bucket = getDefaultBucket();

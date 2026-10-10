@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { logAiUsage, IMAGE_MODEL } from "@/lib/ai-cost";
+import { adminBudgetExceeded } from "@/lib/ai-budget";
 import { cacheKey, buildKidsPrompt, englishBrief } from "@/app/api/generate-image/route";
 
 /**
@@ -51,7 +52,7 @@ async function renderKidsImage(word: string, meaning: string, lang: string): Pro
     buffer = Buffer.from(await imgRes.arrayBuffer());
   } else return null;
 
-  void logAiUsage({ feature: "image_kids", model: IMAGE_MODEL, images: 1, imageQuality: "low", plan: "deep" });
+  void logAiUsage({ feature: "image_kids", model: IMAGE_MODEL, images: 1, imageQuality: "low", plan: "deep", admin: true });
 
   const cKey = cacheKey(word, meaning, lang, true);
   const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
@@ -74,6 +75,9 @@ export async function POST(req: NextRequest) {
   const expected = process.env.ADMIN_SECRET;
   if (!expected) return NextResponse.json({ error: "ADMIN_SECRET not configured" }, { status: 503 });
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+
+  // Admin runs have their own daily cap (lib/ai-budget.ts, $5).
+  if (await adminBudgetExceeded()) return NextResponse.json({ error: "admin_budget", detail: "Today's admin spend cap is reached. Try again tomorrow." }, { status: 429 });
 
   let words: string[] = [];
   let lang = "he";
