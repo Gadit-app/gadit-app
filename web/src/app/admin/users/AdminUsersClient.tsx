@@ -312,6 +312,13 @@ function FlagImg({ iso2 }: { iso2: string }) {
   );
 }
 
+const PARTNER_STRINGS: Record<AdminLang, { add: string; addShort: string; isPartner: string; title: string; yearOne: string; later: string; lang: string; send: string; save: string; close: string; exists: string; error: string; done: (code: string) => string }> = {
+  en: { add: "Add as partner", addShort: "+ Partner", isPartner: "Partner ✓", title: "Add as partner", yearOne: "Commission, first year (%)", later: "Commission, from the second year (%)", lang: "Partner's language (welcome email)", send: "Send the welcome email with their link", save: "Add partner", close: "Close", exists: "Already a partner.", error: "Error", done: (c) => `Added${c ? ` · code ${c}` : ""}.` },
+  he: { add: "הוספה כשותף", addShort: "+ שותף", isPartner: "שותף ✓", title: "הוספה כשותף", yearOne: "עמלה בשנה הראשונה (%)", later: "עמלה מהשנה השנייה (%)", lang: "שפת השותף (למייל הפתיחה)", send: "לשלוח מייל פתיחה עם הקישור שלו", save: "הוספת שותף", close: "סגירה", exists: "כבר שותף.", error: "שגיאה", done: (c) => `נוסף${c ? ` · קוד ${c}` : ""}.` },
+};
+const pInputStyle: React.CSSProperties = { font: "inherit", fontSize: 14, padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB" };
+const btnStyle: React.CSSProperties = { font: "inherit", fontSize: 14, fontWeight: 600, padding: "8px 14px", borderRadius: 8, cursor: "pointer" };
+
 export default function AdminUsersClient() {
   // Secret + lang come from AdminContext now (the layout's AdminShell
   // handles the unlock gate + lang toggle + sidebar). This page just
@@ -336,6 +343,65 @@ export default function AdminUsersClient() {
   const [deletingUids, setDeletingUids] = useState<Set<string>>(new Set());
   const [upgradingUids, setUpgradingUids] = useState<Set<string>>(new Set());
   const t = STRINGS[adminLang];
+
+  // "Add partner" next to every user (Gadi 2026-10-10): name, email and
+  // language are already known, so only the two rates are asked.
+  const [partnerEmails, setPartnerEmails] = useState<Set<string>>(new Set());
+  const [partnerFor, setPartnerFor] = useState<AdminUserRow | null>(null);
+  const [pRateOne, setPRateOne] = useState("25");
+  const [pRateLife, setPRateLife] = useState("10");
+  const [pLang, setPLang] = useState("he");
+  const [pSend, setPSend] = useState(true);
+  const [pBusy, setPBusy] = useState(false);
+  const [pMsg, setPMsg] = useState("");
+  const pt = PARTNER_STRINGS[adminLang];
+  useEffect(() => {
+    if (!secret) return;
+    fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j: { partners?: Array<{ email?: string }> } | null) => {
+        if (j?.partners) setPartnerEmails(new Set(j.partners.map((p) => (p.email ?? "").toLowerCase()).filter(Boolean)));
+      })
+      .catch(() => {});
+  }, [secret]);
+  const openPartner = (u: AdminUserRow) => {
+    setPartnerFor(u);
+    setPRateOne("25");
+    setPRateLife("10");
+    setPLang(u.country === "IL" || !u.country ? "he" : "en");
+    setPSend(true);
+    setPMsg("");
+  };
+  const savePartner = async () => {
+    if (!partnerFor?.email || !secret || pBusy) return;
+    setPBusy(true);
+    setPMsg("");
+    try {
+      const res = await fetch(`/api/admin/partners?secret=${encodeURIComponent(secret)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: (partnerFor.displayName || partnerFor.email.split("@")[0]).trim(),
+          email: partnerFor.email,
+          rateYearOne: Number(pRateOne),
+          rateLifetime: Number(pRateLife),
+          sendEmail: pSend,
+          lang: pLang,
+        }),
+      });
+      const j = (await res.json().catch(() => null)) as { error?: string; partner?: { code?: string }; code?: string } | null;
+      if (!res.ok) {
+        setPMsg(j?.error === "email_exists" ? pt.exists : `${pt.error}: ${j?.error ?? res.status}`);
+        return;
+      }
+      setPartnerEmails((s) => new Set(s).add(partnerFor.email!.toLowerCase()));
+      setPMsg(pt.done(j?.partner?.code ?? j?.code ?? ""));
+    } catch (e) {
+      setPMsg(`${pt.error}: ${String(e instanceof Error ? e.message : e)}`);
+    } finally {
+      setPBusy(false);
+    }
+  };
 
   // Delete a user via /api/admin/delete-user. The endpoint nukes the
   // Firebase Auth account, the /users/{uid} doc, and the entire
@@ -497,6 +563,42 @@ export default function AdminUsersClient() {
   // renders the page-specific content as a fragment.
   return (
     <>
+      {partnerFor && (
+        <div role="dialog" aria-modal="true" onClick={() => !pBusy && setPartnerFor(null)}
+          style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", zIndex: 1000, display: "grid", placeItems: "center", padding: 16 }}>
+          <div onClick={(e) => e.stopPropagation()} dir={adminLang === "he" ? "rtl" : "ltr"}
+            style={{ background: "white", borderRadius: 14, padding: 22, width: "min(100%, 420px)", display: "grid", gap: 12, boxShadow: "0 20px 50px -20px rgba(0,0,0,0.4)" }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: "#111827" }}>{pt.title}</div>
+            <div style={{ fontSize: 14, color: "#374151" }}>
+              <div style={{ fontWeight: 600 }}>{partnerFor.displayName || partnerFor.email?.split("@")[0]}</div>
+              <div dir="ltr" style={{ color: "#6B7280", textAlign: adminLang === "he" ? "right" : "left" }}>{partnerFor.email}</div>
+            </div>
+            <label style={{ display: "grid", gap: 4, fontSize: 13, color: "#374151" }}>
+              {pt.yearOne}
+              <input type="number" min={0} max={100} value={pRateOne} onChange={(e) => setPRateOne(e.target.value)} style={pInputStyle} />
+            </label>
+            <label style={{ display: "grid", gap: 4, fontSize: 13, color: "#374151" }}>
+              {pt.later}
+              <input type="number" min={0} max={100} value={pRateLife} onChange={(e) => setPRateLife(e.target.value)} style={pInputStyle} />
+            </label>
+            <label style={{ display: "grid", gap: 4, fontSize: 13, color: "#374151" }}>
+              {pt.lang}
+              <select value={pLang} onChange={(e) => setPLang(e.target.value)} style={pInputStyle}>
+                {["he", "en", "ar", "ru", "es", "fr", "pt", "de", "cs", "sk", "it", "nl", "af", "zu"].map((l) => <option key={l} value={l}>{l}</option>)}
+              </select>
+            </label>
+            <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 13, color: "#374151" }}>
+              <input type="checkbox" checked={pSend} onChange={(e) => setPSend(e.target.checked)} />
+              {pt.send}
+            </label>
+            {pMsg && <div style={{ fontSize: 13, fontWeight: 600, color: pMsg.startsWith(pt.error) || pMsg === pt.exists ? "#B91C1C" : "#047857" }}>{pMsg}</div>}
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button type="button" onClick={() => setPartnerFor(null)} disabled={pBusy} style={{ ...btnStyle, background: "white", color: "#374151", border: "1px solid #D1D5DB" }}>{pt.close}</button>
+              <button type="button" onClick={() => void savePartner()} disabled={pBusy || partnerEmails.has((partnerFor.email ?? "").toLowerCase())} style={{ ...btnStyle, background: "#0F766E", color: "white", border: 0, opacity: pBusy ? 0.6 : 1 }}>{pBusy ? "…" : pt.save}</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>{t.title}</h1>
         <p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>
@@ -718,6 +820,21 @@ export default function AdminUsersClient() {
                       </td>
                       <td style={{ padding: "12px 8px", textAlign: "center" }}>
                         <div style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+                        {u.email && (partnerEmails.has(u.email.toLowerCase()) ? (
+                          <span title={pt.isPartner} style={{ background: "#ECFDF5", border: "1px solid #A7F3D0", color: "#047857", borderRadius: 6, padding: "5px 8px", fontSize: 11.5, fontWeight: 700, whiteSpace: "nowrap" }}>
+                            {pt.isPartner}
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => openPartner(u)}
+                            title={pt.add}
+                            aria-label={pt.add}
+                            style={{ background: "#F0FDFA", border: "1px solid #5EEAD4", color: "#0F766E", borderRadius: 6, padding: "5px 8px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}
+                          >
+                            {pt.addShort}
+                          </button>
+                        ))}
                         {(u.plan === "clear" || u.plan === "deep") && !u.isFamily && !u.isSchool && (
                           <button
                             type="button"
