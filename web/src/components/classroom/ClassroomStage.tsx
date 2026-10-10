@@ -6,6 +6,7 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
 import type { WordSet } from "@/lib/word-sets";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
+import { useAuth } from "@/lib/auth-context";
 
 /**
  * The teacher's projector screen for a word-set word (Gadi 2026-10-03:
@@ -194,6 +195,19 @@ function StageInner({
   }, [panel]);
 
   const go = (w: string) => { setPanel(null); onNavigate(w); };
+
+  // The first class quiz or game ticks that step in the school dashboard's
+  // checklist (Gadi 2026-10-10). Once per session; the server keeps the first.
+  const { user } = useAuth();
+  useEffect(() => {
+    if ((panel !== "quiz" && panel !== "game") || !user) return;
+    try { if (sessionStorage.getItem("gadit_cls_activity")) return; sessionStorage.setItem("gadit_cls_activity", "1"); } catch { /* ignore */ }
+    void user.getIdToken().then((t) => fetch("/api/schools/checklist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
+      body: JSON.stringify({ step: "activity" }),
+    })).catch(() => {});
+  }, [panel, user]);
 
   return (
     <div className="cs-root" dir={dir} lang={L}>

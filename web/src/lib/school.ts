@@ -68,6 +68,12 @@ export interface School {
    *  enabled !== false counts as on). `hour` is 0-23 in the school's timezone
    *  (default 15). */
   dailyDigest?: { enabled?: boolean; hour?: number };
+  /** Different words this school's classes have met (class dictionary). */
+  uniqueWordCount?: number;
+  /** Dashboard "first steps" that can't be read from the school itself
+   *  (/api/schools/checklist): ISO time of the first class quiz or game,
+   *  and of the principal ticking "teachers have the login". */
+  checklist?: { activity?: string; teachers?: string };
   /** Local Y-M-D of the last digest sent, so the hourly cron fires once a day. */
   lastDigestDate?: string;
   createdAt: string;

@@ -13,6 +13,7 @@ import { sendDripEmail } from "@/lib/email-drip/send";
 import { trialReminderDue, buildTrialReminder } from "@/lib/email-drip/trial-reminder";
 import { playUpgradeDue, buildPlayUpgrade } from "@/lib/email-drip/play-upgrade";
 import { loginReminderDue, buildLoginReminder } from "@/lib/email-drip/login-reminder";
+import { SCHOOL_DRIP, SCHOOL_SERIES_LIVE, SCHOOL_SERIES_FROM, schoolLang, buildSchoolMail } from "@/lib/email-drip/school-drip";
 
 /**
  * Daily drip cron. Vercel Cron hits this at 07:00 UTC (10:00 IL DST).
@@ -201,6 +202,59 @@ export async function GET(req: NextRequest) {
           results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "sent" });
         } else {
           results.push({ uid: u.uid, email, mailKey: "play-upgrade", status: "failed", reason: r.reason });
+        }
+      }
+      continue;
+    }
+
+    // ── School pilot onboarding (Gadi 2026-10-10) ───────────────
+    // The school account (schoolId === uid) gets the 7-email pilot series
+    // from the day the cron first meets it (schoolSeriesStart). Only schools
+    // opened from SCHOOL_SERIES_FROM on, never demos. Saturdays are not
+    // series days. A school in the series gets nothing else from the drip;
+    // an older school account (e.g. Gadi's own, also a family) goes on as
+    // before.
+    schoolSeries: if (d.schoolId === u.uid && SCHOOL_SERIES_LIVE) {
+      let startIso = d.schoolSeriesStart as string | undefined;
+      // The school doc gives the curriculum (email language) and, the first
+      // time, whether this school is new enough for the series.
+      const sd = (await db.collection("schools").doc(u.uid).get()).data() ?? {};
+      const curriculum = sd.curriculum as string | undefined;
+      if (!startIso) {
+        const created = typeof sd.createdAt === "string" ? sd.createdAt : (sd.createdAt?.toDate?.()?.toISOString?.() ?? u.metadata.creationTime ?? "");
+        const openedMs = Date.parse(created);
+        const opened = Number.isFinite(openedMs) ? new Date(openedMs).toISOString().slice(0, 10) : "";
+        if (sd.isDemo === true || !opened || opened < SCHOOL_SERIES_FROM) break schoolSeries;
+        startIso = new Date(now).toISOString();
+        if (!dryRun) await db.collection("users").doc(u.uid).set({ schoolSeriesStart: startIso }, { merge: true });
+      }
+      const dayN = familySeriesDay(Date.parse(startIso), now);
+      const sent = (d.schoolDripSent as Record<string, unknown> | undefined) ?? {};
+      const stale = SCHOOL_DRIP.filter((m) => !sent[m.key] && m.dayOffset <= dayN && dayN - m.dayOffset > STALE_DAYS);
+      if (stale.length && !dryRun) {
+        const patch: Record<string, unknown> = {};
+        for (const m of stale) patch[m.key] = { skippedAt: FieldValue.serverTimestamp() };
+        await db.collection("users").doc(u.uid).set({ schoolDripSent: patch }, { merge: true });
+        for (const m of stale) sent[m.key] = true;
+      }
+      let cand: (typeof SCHOOL_DRIP)[number] | null = null;
+      for (const m of SCHOOL_DRIP) {
+        if (m.dayOffset > dayN || sent[m.key] || dayN - m.dayOffset > STALE_DAYS) continue;
+        if (!cand || m.dayOffset > cand.dayOffset) cand = m;
+      }
+      if (cand) {
+        const built = buildSchoolMail(cand, schoolLang(curriculum), buildUnsubUrl(u.uid));
+        if (dryRun) {
+          results.push({ uid: u.uid, email, mailKey: cand.key, status: "skipped", reason: "dryRun" });
+        } else {
+          const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
+          if (r.ok) {
+            realSends++;
+            await db.collection("users").doc(u.uid).set({ schoolDripSent: { [cand.key]: { sentAt: FieldValue.serverTimestamp() } } }, { merge: true });
+            results.push({ uid: u.uid, email, mailKey: cand.key, status: "sent" });
+          } else {
+            results.push({ uid: u.uid, email, mailKey: cand.key, status: "failed", reason: r.reason });
+          }
         }
       }
       continue;

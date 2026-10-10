@@ -27,6 +27,7 @@ import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
+import { SchoolChecklist } from "./SchoolChecklist";
 import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
 import { DEFAULT_ACCENT, dominantColorFromImage, darkenHex, isHex, skinStyleVars } from "@/lib/school-skin";
 import { useHref } from "@/lib/href";
@@ -2872,6 +2873,17 @@ export function SchoolsClient() {
           </div>
         )}
 
+        {tab === "home" && school && (
+          <SchoolChecklist
+            lang={lang}
+            curriculum={school.curriculum}
+            classrooms={classrooms.length}
+            words={school.uniqueWordCount ?? 0}
+            logo={!!school.logoUrl}
+            checklist={school.checklist}
+            onTab={(t) => setTab(t)}
+          />
+        )}
         {tab === "home" && <PrincipalOverview lang={lang} />}
 
         {tab === "students" && <SchoolStudentsPanel lang={lang} />}
