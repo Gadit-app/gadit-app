@@ -295,7 +295,12 @@ export function GameFlashcards({
           body: JSON.stringify({ words }),
         });
         const data = res.ok ? ((await res.json()) as { images?: Record<string, string> }) : {};
-        if (!cancelled && data.images) setPics(data.images);
+        if (!cancelled && data.images) {
+          // Load every picture up front, so the next card never waits on its
+          // picture (and never shows the previous one while it loads).
+          for (const u of Object.values(data.images)) { const im = new Image(); im.src = u; }
+          setPics(data.images);
+        }
       } catch { /* cards work without pictures */ }
     })();
     return () => { cancelled = true; };
@@ -482,8 +487,10 @@ export function GameFlashcards({
           <span className={`wb-flash-face wb-flash-front${pic ? " has-pic" : ""}`} aria-hidden={flipped}>
             {card.repeat && <span className="wb-flash-again">{f.again}</span>}
             {pic && (
+              // key: a fresh element per card, so the previous card's picture is
+              // never left on screen under the new word (Gadi 2026-10-10).
               // eslint-disable-next-line @next/next/no-img-element
-              <img className="wb-flash-pic" src={pic} alt="" />
+              <img key={card.key} className="wb-flash-pic" src={pic} alt="" />
             )}
             <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{nq(frontText)}</span>
           </span>
