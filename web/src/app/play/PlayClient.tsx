@@ -57,6 +57,9 @@ import { GameBuildAWord } from "@/components/play/GameBuildAWord";
 import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
 import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
+import { DuelHub } from "@/components/play/duel/DuelHub";
+import { duelCopy } from "@/components/play/duel/duel-i18n";
+import { DUEL_CSS } from "@/components/play/duel/duel-css";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -3278,7 +3281,7 @@ export function PlayPage() {
   const href = useHref();
   const t = COPY[lang] ?? COPY.en;
 
-  type Stage = { kind: "menu" } | { kind: "playing"; game: GameId };
+  type Stage = { kind: "menu" } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
@@ -3728,6 +3731,15 @@ export function PlayPage() {
     },
   ];
 
+  // ─── Word Duel (Gadi 2026-10-11) ───────────────────────────────
+  if (stage.kind === "duel") {
+    return (
+      <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
+        <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} />
+      </div>
+    );
+  }
+
   // ─── Active game stage ─────────────────────────────────────────
   // Curated games (twin, time) don't depend on the notebook pool, so they
   // render even when pool is still null. Notebook games gate on `pool` to
@@ -3976,6 +3988,22 @@ export function PlayPage() {
               >
                 <span className="wb-play-kids-switch-knob" />
               </button>
+            </div>
+          );
+        })()}
+
+        {/* Word Duel: play each other (Gadi 2026-10-11). */}
+        {isPaid && (() => {
+          const dc = duelCopy(lang);
+          return (
+            <div className="wb-play-duel-banner" dir={dir}>
+              <style>{DUEL_CSS}</style>
+              <span className="wb-play-duel-icon" aria-hidden="true">⚔️</span>
+              <div className="wb-play-duel-text">
+                <b>{dc.title}</b>
+                <span>{dc.bannerDesc}</span>
+              </div>
+              <button type="button" className="duel-btn" onClick={() => setStage({ kind: "duel" })}>{dc.bannerCta}</button>
             </div>
           );
         })()}

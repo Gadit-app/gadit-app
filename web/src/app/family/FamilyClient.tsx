@@ -27,6 +27,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
+import { DuelPermission } from "@/components/play/duel/DuelPermission";
 import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
@@ -2159,6 +2160,7 @@ export function FamilyClient() {
           {tab === "settings" && (
             <div className="fam-tab fam-settings">
               <NotifSettings user={user} lang={lang} dir={dir} />
+              <DuelPermission user={user} lang={lang} dir={dir} />
               <CoachesSection />
               <div className="fam-set-row">
                 <div className="fam-set-icon"><NavIcon name="settings" /></div>
