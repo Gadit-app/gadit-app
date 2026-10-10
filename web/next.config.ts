@@ -75,6 +75,19 @@ const nextConfig: NextConfig = {
       { source: "/schools/landing-new", destination: "/schools", permanent: true },
     ];
   },
+  // The session bridge is framed only by the purchase host (SessionBridge)
+  // and never indexed.
+  async headers() {
+    return [
+      {
+        source: "/auth/bridge",
+        headers: [
+          { key: "Content-Security-Policy", value: "frame-ancestors https://gadit.app" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [...AFFONSO_REWRITES, ...FIREBASE_AUTH_REWRITES];
   },

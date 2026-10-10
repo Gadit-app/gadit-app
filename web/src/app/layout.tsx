@@ -22,6 +22,7 @@ import { SayModal } from "@/components/SayModal";
 import { GuideOverlay } from "@/components/GuideOverlay";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
+import { SessionBridge } from "@/components/SessionBridge";
 import { Analytics } from "@vercel/analytics/next";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MetaPixel from "@/components/MetaPixel";
@@ -433,6 +434,7 @@ export default async function RootLayout({
                   RefCapture, which is provider-free). */}
               <KidRouteGuard />
               <TwaInit />
+              <SessionBridge />
               <PastDueBanner />
               <CoachSessionBanner />
               <AdminImpersonationBanner />
