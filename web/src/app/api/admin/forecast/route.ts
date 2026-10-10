@@ -58,7 +58,8 @@ function tierFromSub(s: Stripe.Subscription): string {
   // No product expand (that would push the expand past Stripe's 4-level cap and
   // 500 the whole call). The price nickname is enough for a label.
   const nick = s.items.data[0]?.price?.nickname || "";
-  return (nick || "Subscription").replace(/^Gadit\s+/i, "");
+  // Legacy Clear / Deep prices read as Individual (Gadi 2026-10-10).
+  return (nick || "Subscription").replace(/^Gadit\s+/i, "").replace(/\b(Clear|Deep)\b/g, "Individual");
 }
 
 function dayKey(ms: number): string {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { customerCategory, isInternalEmail } from "@/lib/internal-accounts";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
 
@@ -57,6 +58,9 @@ type AdminUserRow = {
   lastSearchAt: string | null;     // ISO
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+  category: import("@/lib/internal-accounts").CustomerCategory;
+  familyId: string | null;
+  internal: boolean;
 };
 
 function tsToIso(v: unknown): string | null {
@@ -163,6 +167,11 @@ export async function GET(req: NextRequest) {
       lastSearchAt: tsToIso(d.lastSearchAt),
       stripeCustomerId: (d.stripeCustomerId as string) ?? null,
       subscriptionStatus: (d.subscriptionStatus as string) ?? null,
+      // Basic / Individual / Family / Schools (Gadi 2026-10-10), and our own
+      // accounts, which are listed but never counted.
+      category: customerCategory(d, u.uid),
+      familyId: typeof d.familyId === "string" ? (d.familyId as string) : null,
+      internal: isInternalEmail(u.email ?? (typeof d.email === "string" ? (d.email as string) : null)),
     };
   });
 
@@ -190,43 +199,44 @@ export async function GET(req: NextRequest) {
   // lumped Family into Deep). Broken out by REAL tier: Family/Schools both
   // store plan="deep", so classify by familyId/schoolId first; "Deep" here
   // means an individual Deep account.
+  // Four categories now (Gadi 2026-10-10): Basic, Individual (the legacy
+  // Clear and Deep plans too), Family, Schools. Our own accounts (Gadi, the
+  // demo schools, the Play reviewer) never count. A family counts once,
+  // however many of its members have accounts.
+  const counted = rows.filter((r) => !r.internal);
   const isPayingRow = (r: typeof rows[number]) =>
     !r.comp && (r.subscriptionStatus === "active" || r.subscriptionStatus === "trialing");
-  const paying = rows.filter(isPayingRow);
-  const payingClear   = paying.filter((r) => !r.isFamily && !r.isSchool && r.plan === "clear").length;
-  const payingDeep    = paying.filter((r) => !r.isFamily && !r.isSchool && r.plan === "deep").length;
-  const payingFamily  = paying.filter((r) => r.isFamily).length;
-  const payingSchools = paying.filter((r) => r.isSchool).length;
+  const paying = counted.filter(isPayingRow);
+  const payingIndividual = paying.filter((r) => r.category === "individual").length;
+  const payingFamily = new Set(paying.filter((r) => r.category === "family").map((r) => r.familyId ?? r.uid)).size;
+  const payingSchools = paying.filter((r) => r.category === "schools").length;
   const counts = {
-    total: rows.length,
+    total: counted.length,
     filtered: filtered.length,
-    byPlan: {
-      basic: rows.filter((r) => r.plan === "basic").length,
-      clear: rows.filter((r) => r.plan === "clear").length,
-      deep:  rows.filter((r) => r.plan === "deep").length,
+    byCategory: {
+      basic: counted.filter((r) => r.category === "basic").length,
     },
     paying: {
-      total: payingClear + payingDeep + payingFamily + payingSchools,
-      clear: payingClear,
-      deep:  payingDeep,
+      total: payingIndividual + payingFamily + payingSchools,
+      individual: payingIndividual,
       family: payingFamily,
       schools: payingSchools,
     },
     byCountry: Object.fromEntries(
       Object.entries(
-        rows.reduce<Record<string, number>>((acc, r) => {
+        counted.reduce<Record<string, number>>((acc, r) => {
           const k = r.country ?? "?";
           acc[k] = (acc[k] ?? 0) + 1;
           return acc;
         }, {}),
       ).sort((a, b) => b[1] - a[1]),
     ),
-    signupsLast7Days: rows.filter((r) => {
+    signupsLast7Days: counted.filter((r) => {
       if (!r.createdAt) return false;
       const t = new Date(r.createdAt).getTime();
       return Date.now() - t < 7 * 86_400_000;
     }).length,
-    signupsLast30Days: rows.filter((r) => {
+    signupsLast30Days: counted.filter((r) => {
       if (!r.createdAt) return false;
       const t = new Date(r.createdAt).getTime();
       return Date.now() - t < 30 * 86_400_000;

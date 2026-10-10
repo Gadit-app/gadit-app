@@ -50,8 +50,10 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
 
 const PLAN_LABELS: Record<string, { he: string; en: string }> = {
   basic: { he: "חינם", en: "Basic (free)" },
-  clear: { he: "Clear", en: "Clear" },
-  deep: { he: "Deep", en: "Deep" },
+  // Legacy Clear and Deep are both Individual (Gadi 2026-10-10). Family and
+  // Schools also log plan "deep", so this row is every paid account.
+  clear: { he: "Individual", en: "Individual" },
+  deep: { he: "משלמים (Individual, Family, Schools)", en: "Paid (Individual, Family, Schools)" },
   family: { he: "Family", en: "Family" },
   schools: { he: "בתי ספר", en: "Schools" },
   anon: { he: "אנונימי", en: "Anonymous" },

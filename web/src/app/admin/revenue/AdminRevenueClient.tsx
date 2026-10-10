@@ -3,7 +3,24 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
 
-type Tier = "clear" | "deep" | "family" | "schools";
+type Tier = "clear" | "deep" | "individual" | "family" | "schools";
+
+/** Four categories (Gadi 2026-10-10): legacy Clear and Deep are Individual. */
+const showTier = (t: Tier): "individual" | "family" | "schools" => (t === "family" || t === "schools" ? t : "individual");
+
+/** Breakdown rows merged by the shown category and billing. */
+function mergeRows(rows: BreakdownEntry[]): BreakdownEntry[] {
+  const m = new Map<string, BreakdownEntry>();
+  for (const r of rows) {
+    const tier = showTier(r.tier);
+    const k = `${tier}_${r.billing}`;
+    const cur = m.get(k) ?? { tier, billing: r.billing, count: 0, mrr: 0 };
+    cur.count += r.count;
+    cur.mrr += r.mrr;
+    m.set(k, cur);
+  }
+  return [...m.values()].sort((a, b) => b.mrr - a.mrr);
+}
 
 type Subscriber = {
   uid: string;
@@ -62,7 +79,7 @@ const STRINGS = {
     cardAtRisk: "At risk",
     breakdownTitle: "MRR breakdown (paying)",
     trialBreakdownTitle: "Trial pipeline (not yet paying)",
-    tierClear: "Clear", tierDeep: "Deep", tierFamily: "Family", tierSchools: "Schools",
+    tierIndividual: "Individual", tierFamily: "Family", tierSchools: "Schools",
     activeTitle: "Active subscribers",
     atRiskTitle: "At-risk subscriptions",
     recentlyCanceledTitle: "Recently canceled (30 days)",
@@ -96,7 +113,7 @@ const STRINGS = {
     cardAtRisk: "בסיכון",
     breakdownTitle: "פירוט הכנסה חודשית (משלמים)",
     trialBreakdownTitle: "פייפליין ניסיונות (עדיין לא משלמים)",
-    tierClear: "Clear", tierDeep: "Deep", tierFamily: "Family", tierSchools: "בתי ספר",
+    tierIndividual: "Individual", tierFamily: "Family", tierSchools: "בתי ספר",
     activeTitle: "מנויים פעילים",
     atRiskTitle: "מנויים בסיכון",
     recentlyCanceledTitle: "בוטלו לאחרונה (30 ימים)",
@@ -133,12 +150,11 @@ function FlagImg({ iso2 }: { iso2: string }) {
 function tierBadge(tier: Tier) {
   if (tier === "schools") return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
   if (tier === "family")  return { label: "Family",  bg: "#DCFCE7", fg: "#166534" };
-  if (tier === "deep")    return { label: "Deep",    bg: "#EDE9FE", fg: "#5B21B6" };
-  return                        { label: "Clear",   bg: "#CFFAFE", fg: "#0E7490" };
+  return                        { label: "Individual", bg: "#EDE9FE", fg: "#5B21B6" };
 }
 
 const TIER_COLOR: Record<Tier, string> = {
-  clear: "#0EA5A5", deep: "#7C3AED", family: "#16A34A", schools: "#CA8A04",
+  clear: "#7C3AED", deep: "#7C3AED", individual: "#7C3AED", family: "#16A34A", schools: "#CA8A04",
 };
 
 function formatDate(iso: string | null): string {
@@ -243,11 +259,8 @@ export default function AdminRevenueClient() {
             {data.breakdown.length === 0 ? (
               <div style={{ color: "#9CA3AF", fontSize: 13, padding: "12px 0" }}>{t.emptyActive}</div>
             ) : (
-              data.breakdown.map((b) => {
-                const tierLabel =
-                  b.tier === "clear" ? t.tierClear :
-                  b.tier === "deep" ? t.tierDeep :
-                  b.tier === "family" ? t.tierFamily : t.tierSchools;
+              mergeRows(data.breakdown).map((b) => {
+                const tierLabel = b.tier === "family" ? t.tierFamily : b.tier === "schools" ? t.tierSchools : t.tierIndividual;
                 const billingLabel = b.billing === "monthly" ? t.billingMonthly : t.billingYearly;
                 return (
                   <BreakdownRow
@@ -265,11 +278,8 @@ export default function AdminRevenueClient() {
           {data.trialingBreakdown.length > 0 && (
             <div style={{ ...cardStyle, marginBottom: 24 }}>
               <div style={sectionTitleStyle}>{t.trialBreakdownTitle}</div>
-              {data.trialingBreakdown.map((b) => {
-                const tierLabel =
-                  b.tier === "clear" ? t.tierClear :
-                  b.tier === "deep" ? t.tierDeep :
-                  b.tier === "family" ? t.tierFamily : t.tierSchools;
+              {mergeRows(data.trialingBreakdown).map((b) => {
+                const tierLabel = b.tier === "family" ? t.tierFamily : b.tier === "schools" ? t.tierSchools : t.tierIndividual;
                 const billingLabel = b.billing === "monthly" ? t.billingMonthly : t.billingYearly;
                 return (
                   <BreakdownRow

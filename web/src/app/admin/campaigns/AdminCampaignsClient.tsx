@@ -96,8 +96,8 @@ function FlagImg({ iso2 }: { iso2: string }) {
 }
 
 function planBadge(plan: Plan) {
-  if (plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
-  if (plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
+  // Legacy Clear and Deep are both shown as paid (Gadi 2026-10-10).
+  if (plan === "deep" || plan === "clear") return { label: "Paid", bg: "#EDE9FE", fg: "#5B21B6" };
   return                       { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
 

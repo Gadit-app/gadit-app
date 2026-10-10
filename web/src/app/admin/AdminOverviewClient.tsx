@@ -388,7 +388,7 @@ export default function AdminOverviewClient() {
                       ) : (
                         <span dir="ltr" style={{ color: TOKENS.inkFaint }}>—</span>
                       )}
-                      <span dir="ltr" style={{ color: TOKENS.inkSoft, whiteSpace: "nowrap" }}>{s.tier} · ${s.monthlyUsd.toFixed(2)}/mo · {s.status}</span>
+                      <span dir="ltr" style={{ color: TOKENS.inkSoft, whiteSpace: "nowrap" }}>{s.tier === "clear" || s.tier === "deep" ? "individual" : s.tier} · ${s.monthlyUsd.toFixed(2)}/mo · {s.status}</span>
                     </div>
                   ))}
                 </div>
@@ -491,9 +491,9 @@ export default function AdminOverviewClient() {
 function tierBreakdown(t?: ByTier): string {
   if (!t) return "";
   const parts: string[] = [];
-  if (t.clear)   parts.push(`${t.clear} Clear`);
-  if (t.deep)    parts.push(`${t.deep} Deep`);
-  if (t.individual) parts.push(`${t.individual} Individual`);
+  // Four categories (Gadi 2026-10-10): the legacy Clear and Deep are Individual.
+  const individual = (t.clear ?? 0) + (t.deep ?? 0) + (t.individual ?? 0);
+  if (individual) parts.push(`${individual} Individual`);
   if (t.family)  parts.push(`${t.family} Family`);
   if (t.schools) parts.push(`${t.schools} Schools`);
   return parts.join(" · ");

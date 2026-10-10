@@ -56,7 +56,7 @@ const SOFT = "#F3F4F6";
 
 const PLAN_STYLE: Record<string, { bg: string; fg: string }> = {
   basic: { bg: "#F3F4F6", fg: "#6B7280" },
-  clear: { bg: "rgba(14,165,165,0.12)", fg: "#0B8A8A" },
+  clear: { bg: "rgba(124,58,237,0.12)", fg: "#6D28D9" },
   deep: { bg: "rgba(124,58,237,0.12)", fg: "#6D28D9" },
   family: { bg: "#E3F5EC", fg: "#0E7A52" },
   schools: { bg: "#FEF6EC", fg: "#B45309" },
@@ -66,8 +66,9 @@ const PLAN_STYLE: Record<string, { bg: string; fg: string }> = {
 
 const PLAN_LABEL: Record<string, { he: string; en: string }> = {
   basic: { he: "חינם", en: "Basic" },
-  clear: { he: "Clear", en: "Clear" },
-  deep: { he: "Deep", en: "Deep" },
+  // Legacy Clear and Deep are both Individual (Gadi 2026-10-10).
+  clear: { he: "Individual", en: "Individual" },
+  deep: { he: "Individual", en: "Individual" },
   family: { he: "Family", en: "Family" },
   schools: { he: "בתי ספר", en: "Schools" },
   anon: { he: "אנונימי", en: "Anon" },

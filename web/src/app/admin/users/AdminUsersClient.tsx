@@ -6,7 +6,7 @@ import { useAdminContext } from "../admin-context";
 type Plan = "basic" | "clear" | "deep";
 // Filter values: real plans plus the two identities that both store
 // plan="deep" (Family via familyId, Schools via schoolId).
-type PlanFilter = "" | Plan | "family" | "schools";
+type PlanFilter = "" | "basic" | "individual" | "family" | "schools";
 
 type AdminUserRow = {
   uid: string;
@@ -26,6 +26,9 @@ type AdminUserRow = {
   lastSearchAt: string | null;
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+  category?: "basic" | "individual" | "family" | "schools";
+  familyId?: string | null;
+  internal?: boolean;
 };
 
 type AdminLang = "en" | "he";
@@ -202,8 +205,8 @@ type ApiResponse = {
   counts: {
     total: number;
     filtered: number;
-    byPlan: { basic: number; clear: number; deep: number };
-    paying: { total: number; clear: number; deep: number; family: number; schools: number };
+    byCategory: { basic: number };
+    paying: { total: number; individual: number; family: number; schools: number };
     byCountry: Record<string, number>;
     signupsLast7Days: number;
     signupsLast30Days: number;
@@ -283,13 +286,12 @@ function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string }
   // Family and Schools both store plan="deep" (identical feature set);
   // the distinct identity lives in familyId / schoolId. Surface it so
   // a Family owner reads as "Family", not "Deep".
-  if (row.isSchool) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
-  // Family = the brand blue on a light-blue (תכלת) tint (Gadi
-  // 2026-07-23). Teal belongs to Clear; Family owns blue.
-  if (row.isFamily) return { label: "Family",  bg: "#DBEAFE", fg: "#1D4ED8" };
-  if (row.plan === "deep")  return { label: "Deep",  bg: "#EDE9FE", fg: "#5B21B6" };
-  if (row.plan === "clear") return { label: "Clear", bg: "#CFFAFE", fg: "#0E7490" };
-  return                          { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
+  // Four categories (Gadi 2026-10-10): the legacy Clear and Deep plans are
+  // both Individual.
+  if (row.category === "schools" || (!row.category && row.isSchool)) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
+  if (row.category === "family" || (!row.category && row.isFamily)) return { label: "Family",  bg: "#DBEAFE", fg: "#1D4ED8" };
+  if (row.plan === "deep" || row.plan === "clear") return { label: "Individual", bg: "#EDE9FE", fg: "#5B21B6" };
+  return { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
 
 // flagcdn.com returns real flag PNGs that render the same on Windows,
@@ -527,10 +529,7 @@ export default function AdminUsersClient() {
         // Family / Schools both store plan="deep"; distinguish by
         // familyId / schoolId. "Deep" means an INDIVIDUAL Deep account
         // (deep plan, no family or school identity).
-        if (planFilter === "family") { if (!r.isFamily) return false; }
-        else if (planFilter === "schools") { if (!r.isSchool) return false; }
-        else if (planFilter === "deep") { if (!(r.plan === "deep" && !r.isFamily && !r.isSchool)) return false; }
-        else if (r.plan !== planFilter) return false;
+        if ((r.category ?? "basic") !== planFilter) return false;
       }
       if (countryFilter && (r.country ?? "") !== countryFilter) return false;
       if (rangeMs) {
@@ -546,8 +545,8 @@ export default function AdminUsersClient() {
         // Plan sort: order tiers semantically (basic < clear < deep)
         // rather than alphabetically. Reading "deep first when sorted
         // desc" matches the expectation.
-        const rank = { basic: 0, clear: 1, deep: 2 };
-        return dir * (rank[a.plan] - rank[b.plan]);
+        const rank = { basic: 0, individual: 1, family: 2, schools: 3 };
+        return dir * (rank[a.category ?? "basic"] - rank[b.category ?? "basic"]);
       }
       if (sortBy === "country") return dir * ((a.country ?? "zz").localeCompare(b.country ?? "zz"));
       const av = a[sortBy] ?? "";
@@ -632,9 +631,8 @@ export default function AdminUsersClient() {
                 accounts. Clear/Deep/Family/Schools are PAYING subscribers
                 per real tier (Family/Schools both bill as deep but are
                 counted separately), so they sum to the Paying total above. */}
-            <StatCard label={t.statBasic} value={data.counts.byPlan.basic} accent="#9CA3AF" />
-            <StatCard label={t.statClear}  value={data.counts.paying.clear}   accent="#0EA5A5" />
-            <StatCard label={t.statDeep}   value={data.counts.paying.deep}    accent="#7C3AED" />
+            <StatCard label={t.statBasic} value={data.counts.byCategory.basic} accent="#9CA3AF" />
+            <StatCard label="Individual" value={data.counts.paying.individual} accent="#7C3AED" />
             <StatCard label={t.family}     value={data.counts.paying.family}  accent="#1D4ED8" />
             <StatCard label={t.schools}    value={data.counts.paying.schools} accent="#D97706" />
           </div>
@@ -687,8 +685,7 @@ export default function AdminUsersClient() {
           >
             <option value="">{t.allPlans}</option>
             <option value="basic">{t.basic}</option>
-            <option value="clear">{t.clear}</option>
-            <option value="deep">{t.deep}</option>
+            <option value="individual">Individual</option>
             <option value="family">{t.family}</option>
             <option value="schools">{t.schools}</option>
           </select>
@@ -773,6 +770,11 @@ export default function AdminUsersClient() {
                         <span style={{ background: badge.bg, color: badge.fg, padding: "2px 8px", borderRadius: 4, fontSize: 12, fontWeight: 600 }}>
                           {badge.label}
                         </span>
+                        {u.internal && (
+                          <div style={{ marginTop: 4, fontSize: 11, color: "#6B7280" }} title={adminLang === "he" ? "חשבון שלנו, לא נספר" : "Our own account, not counted"}>
+                            {adminLang === "he" ? "פנימי" : "internal"}
+                          </div>
+                        )}
                       </td>
                       <td style={{ padding: "12px 16px", color: "#374151", textAlign: "center" }}>
                         {/* Country: real flag image + ISO code once.
@@ -984,10 +986,9 @@ function Th({
 // Paying subscribers by real tier, e.g. "5 Clear · 3 Deep · 2 Family".
 // Only non-zero tiers, Latin labels kept (brand rule) so the caller
 // renders it LTR to stop the numbers scrambling in the RTL admin.
-function payingBreakdown(p: { clear: number; deep: number; family: number; schools: number }): string {
+function payingBreakdown(p: { individual: number; family: number; schools: number }): string {
   const parts: string[] = [];
-  if (p.clear)   parts.push(`${p.clear} Clear`);
-  if (p.deep)    parts.push(`${p.deep} Deep`);
+  if (p.individual) parts.push(`${p.individual} Individual`);
   if (p.family)  parts.push(`${p.family} Family`);
   if (p.schools) parts.push(`${p.schools} Schools`);
   return parts.join(" · ");
