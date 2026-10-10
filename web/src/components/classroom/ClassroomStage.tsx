@@ -196,18 +196,23 @@ function StageInner({
 
   const go = (w: string) => { setPanel(null); onNavigate(w); };
 
-  // The first class quiz or game ticks that step in the school dashboard's
-  // checklist (Gadi 2026-10-10). Once per session; the server keeps the first.
+  // What the teacher projects feeds the principal dashboard (Gadi
+  // 2026-10-10): each word shown, and each class quiz or game opened. The
+  // server counts one per school, day, kind, set and word, and the first
+  // quiz or game also ticks the dashboard checklist.
   const { user } = useAuth();
-  useEffect(() => {
-    if ((panel !== "quiz" && panel !== "game") || !user) return;
-    try { if (sessionStorage.getItem("gadit_cls_activity")) return; sessionStorage.setItem("gadit_cls_activity", "1"); } catch { /* ignore */ }
-    void user.getIdToken().then((t) => fetch("/api/schools/checklist", {
+  const report = useCallback((kind: "word" | "quiz" | "game") => {
+    if (!user) return;
+    void user.getIdToken().then((t) => fetch("/api/schools/projection", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
-      body: JSON.stringify({ step: "activity" }),
+      body: JSON.stringify({ kind, word, setId: set.id, subject: set.subject, title: set.title, grade: set.grade ?? "" }),
     })).catch(() => {});
-  }, [panel, user]);
+  }, [user, word, set.id, set.subject, set.title, set.grade]);
+  useEffect(() => { report("word"); }, [word, set.id, user]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (panel === "quiz" || panel === "game") report(panel);
+  }, [panel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="cs-root" dir={dir} lang={L}>

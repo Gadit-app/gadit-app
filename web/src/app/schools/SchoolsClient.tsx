@@ -28,6 +28,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
 import { SchoolChecklist } from "./SchoolChecklist";
+import { TeacherActivity } from "./TeacherActivity";
 import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
 import { DEFAULT_ACCENT, dominantColorFromImage, darkenHex, isHex, skinStyleVars } from "@/lib/school-skin";
 import { useHref } from "@/lib/href";
@@ -2884,7 +2885,9 @@ export function SchoolsClient() {
             onTab={(t) => setTab(t)}
           />
         )}
-        {tab === "home" && <PrincipalOverview lang={lang} />}
+        {/* Schools without student codes (Israel) see what the teachers
+            projected; the others keep the student-search overview. */}
+        {tab === "home" && (codesOff ? <TeacherActivity lang={lang} /> : <PrincipalOverview lang={lang} />)}
 
         {tab === "students" && <SchoolStudentsPanel lang={lang} />}
 
