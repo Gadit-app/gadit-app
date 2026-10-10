@@ -894,9 +894,14 @@ function MeaningEntry({
   // the user hears the definition in context, not just a bare phrase.
   // Uses the effective (mode-swapped) fields so TTS in Kids Mode reads
   // the kids text aloud, not the adult one.
+  // The example joins the read-aloud only when it is in the same script as
+  // the meaning: an English word under a Hebrew UI has English examples,
+  // and one voice reading Hebrew then English sounded like the explanation
+  // was "in English" (Gadi 2026-10-10).
+  const firstExample = (effectiveExamples ?? [])[0];
   const ttsText = [
     effectiveMeaning ?? "",
-    ...(effectiveExamples ?? []).slice(0, 1),
+    ...(firstExample && sameScript(firstExample, effectiveMeaning ?? "") ? [firstExample] : []),
   ]
     .filter(Boolean)
     .join(". ");
@@ -1830,4 +1835,11 @@ export function ResultView({
       />
     </div>
   );
+}
+
+/** True when two texts are written in the same script (Hebrew, Arabic,
+ *  Cyrillic or Latin letters), by their first letter. */
+function sameScript(a: string, b: string): boolean {
+  const sc = (t: string) => { for (const ch of t) { const c = ch.codePointAt(0) ?? 0; if (c >= 0x0590 && c <= 0x05ff) return "he"; if (c >= 0x0600 && c <= 0x06ff) return "ar"; if (c >= 0x0400 && c <= 0x04ff) return "cy"; if ((c >= 0x41 && c <= 0x5a) || (c >= 0x61 && c <= 0x7a) || (c >= 0xc0 && c <= 0x24f)) return "la"; } return ""; };
+  return sc(a) === sc(b);
 }
