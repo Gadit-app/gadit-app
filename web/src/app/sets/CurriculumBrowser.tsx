@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useHref } from "@/lib/href";
+import { canStepBack } from "@/lib/back-nav";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { SCHOOL_TYPES, CURRICULA, type Curriculum } from "@/lib/school-levels";
@@ -270,7 +271,9 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
               level={lvl}
               setLevel={setLevel}
               openTopic={sp?.get("t") ?? ""}
-              onBack={() => go({ l: lvl })}
+              // Step back when the catalog home is the previous page, so the
+              // browser Back afterwards does not reopen this subject.
+              onBack={() => (canStepBack(undefined, (u) => /\/sets\/?$/.test(u.pathname) && !u.searchParams.has("s")) ? router.back() : go({ l: lvl }))}
               onTopic={(t) => go({ s: subject.key, l: lvl, t: t || undefined }, false)}
             />
           ) : (

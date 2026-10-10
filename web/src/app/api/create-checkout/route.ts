@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     }
     const { priceId, lang: rawLang } = await req.json();
     if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
-    const lang = typeof rawLang === "string" && /^[a-z]{2}$/.test(rawLang) ? rawLang : "en";
+    const lang = typeof rawLang === "string" && /^[a-z]{2,3}(-[A-Z]{2})?$/.test(rawLang) ? rawLang : "en";
 
     // Resolve user from the verified Firebase ID token, NOT from a client-supplied
     // userId. Otherwise a malicious user could start a checkout that credits a
@@ -146,12 +146,43 @@ export async function POST(req: NextRequest) {
     // returns to /he/... and not the English site. Launch QA 2026-07-03.
     // Google Play Subscriptions policy wants the trial/renewal terms called out
     // in the payment cart itself, not only on the offer page. Stripe surfaces
-    // this via custom_text.submit.message. he + en; other langs fall back to en.
-    const cartTerms: Record<"he" | "en", string> = {
+    // this via custom_text.submit.message. All 33 UI languages (en is the fallback).
+    const cartTerms: Record<string, string> = {
       he: "14 יום ניסיון חינם. במהלך הניסיון לא מחייבים אותך. בסיום, הכרטיס מחויב בסכום המוצג למעלה, והמנוי מתחדש בכל תקופה עד שמבטלים. אפשר לבטל בכל רגע לפני תום הניסיון, מהחשבון שלך ב-Gadit, בלי חיוב.",
       en: "14-day free trial. You are not charged during the trial. When it ends, your card is charged the amount shown above and the subscription renews each period until you cancel. Cancel anytime before the trial ends, from your Gadit account, and you won't be charged.",
+      ar: "تجربة مجانية لمدة 14 يوماً. لا يتم خصم أي مبلغ خلال التجربة. عند انتهائها يُخصم من بطاقتك المبلغ المعروض أعلاه، ويتجدد الاشتراك في كل فترة حتى تلغيه. يمكنك الإلغاء في أي وقت قبل انتهاء التجربة، من حسابك في Gadit، ولن يتم خصم أي مبلغ.",
+      ru: "14 дней бесплатно. Во время пробного периода деньги не списываются. Когда он закончится, с карты спишется сумма, указанная выше, и подписка будет продлеваться каждый период, пока вы её не отмените. Отменить можно в любой момент до конца пробного периода в аккаунте Gadit, и списания не будет.",
+      es: "14 días de prueba gratis. No se te cobra nada durante la prueba. Cuando termina, se cobra en tu tarjeta el importe indicado arriba y la suscripción se renueva cada periodo hasta que canceles. Cancela cuando quieras antes de que termine la prueba, desde tu cuenta de Gadit, y no se te cobrará.",
+      pt: "14 dias de teste grátis. Não é cobrado nada durante o teste. Quando termina, o seu cartão é cobrado pelo valor indicado acima e a assinatura renova-se a cada período até cancelar. Cancele quando quiser antes do fim do teste, na sua conta Gadit, e não será cobrado.",
+      fr: "14 jours d'essai gratuit. Vous n'êtes pas débité pendant l'essai. À la fin, votre carte est débitée du montant indiqué ci-dessus et l'abonnement se renouvelle à chaque période jusqu'à ce que vous annuliez. Annulez à tout moment avant la fin de l'essai, depuis votre compte Gadit, et vous ne serez pas débité.",
+      de: "14 Tage kostenlos testen. Während der Testphase wird nichts berechnet. Danach wird Ihre Karte mit dem oben angezeigten Betrag belastet, und das Abo verlängert sich jeden Zeitraum, bis Sie kündigen. Kündigen Sie jederzeit vor Ende der Testphase in Ihrem Gadit-Konto, dann wird nichts berechnet.",
+      cs: "14 dní zdarma. Během zkušební doby vám nic neúčtujeme. Po jejím skončení vám z karty strhneme částku uvedenou výše a předplatné se každé období obnovuje, dokud ho nezrušíte. Zrušit můžete kdykoli před koncem zkušební doby ve svém účtu Gadit, a nic vám nebude účtováno.",
+      sk: "14 dní zadarmo. Počas skúšobnej doby vám nič neúčtujeme. Po jej skončení vám z karty strhneme sumu uvedenú vyššie a predplatné sa každé obdobie obnovuje, kým ho nezrušíte. Zrušiť môžete kedykoľvek pred koncom skúšobnej doby vo svojom účte Gadit, a nič vám nebude účtované.",
+      it: "14 giorni di prova gratuita. Durante la prova non ti viene addebitato nulla. Alla fine, sulla tua carta viene addebitato l'importo indicato sopra e l'abbonamento si rinnova a ogni periodo finché non annulli. Annulla quando vuoi prima della fine della prova, dal tuo account Gadit, e non ti verrà addebitato nulla.",
+      ja: "14日間の無料トライアルです。トライアル中は料金はかかりません。終了後、上に表示された金額がカードに請求され、解約するまで期間ごとに自動更新されます。トライアル終了前ならいつでもGaditのアカウントから解約でき、料金はかかりません。",
+      hi: "14 दिन का मुफ़्त ट्रायल। ट्रायल के दौरान कोई शुल्क नहीं लिया जाता। ट्रायल ख़त्म होने पर ऊपर दिखाई गई राशि आपके कार्ड से ली जाती है, और रद्द करने तक हर अवधि में नवीनीकरण होता है। ट्रायल ख़त्म होने से पहले कभी भी अपने Gadit खाते से रद्द करें, कोई शुल्क नहीं लगेगा।",
+      am: "የ14 ቀን ነጻ ሙከራ። በሙከራው ወቅት ምንም ክፍያ አይጠየቁም። ሲያበቃ ከላይ የሚታየው መጠን ከካርድዎ ይቆረጣል፣ እስኪሰርዙም ድረስ በየጊዜው ይታደሳል። ሙከራው ከማብቃቱ በፊት በማንኛውም ጊዜ ከGadit መለያዎ መሰረዝ ይችላሉ፣ ክፍያም አይጠየቁም።",
+      uk: "14 днів безкоштовно. Під час пробного періоду кошти не списуються. Коли він завершиться, з картки спишеться сума, вказана вище, і підписка подовжуватиметься щоперіоду, доки ви її не скасуєте. Скасувати можна будь-коли до кінця пробного періоду в акаунті Gadit, і списання не буде.",
+      tr: "14 gün ücretsiz deneme. Deneme süresince ücret alınmaz. Deneme bittiğinde yukarıda gösterilen tutar kartından tahsil edilir ve abonelik iptal edene kadar her dönem yenilenir. Deneme bitmeden önce istediğin zaman Gadit hesabından iptal edebilirsin, ücret alınmaz.",
+      pl: "14 dni za darmo. W okresie próbnym nic nie pobieramy. Po jego zakończeniu z Twojej karty zostanie pobrana kwota podana powyżej, a subskrypcja odnawia się co okres, dopóki jej nie anulujesz. Możesz anulować w dowolnym momencie przed końcem okresu próbnego, na swoim koncie Gadit, i nic nie zapłacisz.",
+      fa: "14 روز آزمایش رایگان. در دوره آزمایشی هزینه‌ای کسر نمی‌شود. پس از پایان آن، مبلغ نمایش‌داده‌شده در بالا از کارت شما کسر می‌شود و اشتراک در هر دوره تمدید می‌شود تا زمانی که لغوش کنید. هر زمان پیش از پایان دوره آزمایشی می‌توانید از حساب Gadit خود لغو کنید، و هزینه‌ای کسر نمی‌شود.",
+      id: "Uji coba gratis 14 hari. Anda tidak ditagih selama uji coba. Setelah berakhir, kartu Anda ditagih sebesar jumlah di atas dan langganan diperpanjang setiap periode sampai Anda membatalkannya. Batalkan kapan saja sebelum uji coba berakhir, dari akun Gadit Anda, dan Anda tidak akan ditagih.",
+      nl: "14 dagen gratis proberen. Tijdens de proefperiode betaal je niets. Daarna wordt het bedrag hierboven van je kaart afgeschreven en wordt het abonnement elke periode verlengd tot je opzegt. Zeg op elk moment op voor het einde van de proefperiode, in je Gadit-account, en je betaalt niets.",
+      el: "14 ημέρες δωρεάν δοκιμή. Κατά τη δοκιμή δεν χρεώνεσαι. Όταν λήξει, η κάρτα σου χρεώνεται το ποσό που εμφανίζεται παραπάνω και η συνδρομή ανανεώνεται κάθε περίοδο μέχρι να την ακυρώσεις. Ακύρωσε οποιαδήποτε στιγμή πριν λήξει η δοκιμή, από τον λογαριασμό σου στο Gadit, και δεν θα χρεωθείς.",
+      zu: "Izinsuku ezingu-14 zokuzama mahhala. Awukhokhiswa lutho ngesikhathi sokuzama. Uma kuphela, ikhadi lakho likhokhiswa inani elikhonjiswe ngenhla, futhi okubhaliselwe kuvuseleleka isikhathi ngasinye uze ukhansele. Khansela noma nini ngaphambi kokuthi isikhathi sokuzama siphele, ku-akhawunti yakho ye-Gadit, futhi ngeke ukhokhiswe.",
+      vi: "Dùng thử miễn phí 14 ngày. Bạn không bị tính phí trong thời gian dùng thử. Khi kết thúc, thẻ của bạn sẽ bị trừ số tiền hiển thị ở trên và gói đăng ký tự gia hạn mỗi kỳ cho đến khi bạn hủy. Hủy bất cứ lúc nào trước khi hết thời gian dùng thử, trong tài khoản Gadit của bạn, và bạn sẽ không bị tính phí.",
+      fil: "14 na araw na libreng trial. Hindi ka sisingilin habang trial. Pagkatapos nito, sisingilin sa card mo ang halagang nakikita sa itaas at magre-renew ang subscription bawat panahon hanggang mag-cancel ka. Mag-cancel anumang oras bago matapos ang trial, mula sa Gadit account mo, at hindi ka sisingilin.",
+      af: "14 dae gratis proeftydperk. Jy word nie tydens die proeftydperk gehef nie. Wanneer dit eindig, word die bedrag hierbo van jou kaart gehef en die intekening hernu elke tydperk totdat jy kanselleer. Kanselleer enige tyd voor die proeftydperk eindig, in jou Gadit-rekening, en jy word niks gehef nie.",
+      sw: "Jaribio la bure la siku 14. Hutozwi chochote wakati wa jaribio. Likiisha, kadi yako inatozwa kiasi kilichoonyeshwa hapo juu na usajili unajirudia kila kipindi hadi utakapoughairi. Ghairi wakati wowote kabla jaribio halijaisha, kutoka kwenye akaunti yako ya Gadit, na hutatozwa.",
+      "zh-CN": "14 天免费试用。试用期间不会扣费。试用结束后，将按上方显示的金额从你的卡中扣款，订阅会在每个周期自动续订，直到你取消。在试用结束前随时可以在你的 Gadit 账户中取消，不会产生任何费用。",
+      "zh-TW": "14 天免費試用。試用期間不會收費。試用結束後，將依上方顯示的金額從你的卡片扣款，訂閱會在每個週期自動續訂，直到你取消。在試用結束前隨時可以在你的 Gadit 帳戶中取消，不會產生任何費用。",
+      ko: "14일 무료 체험입니다. 체험 기간에는 요금이 청구되지 않습니다. 체험이 끝나면 위에 표시된 금액이 카드로 청구되며, 해지할 때까지 기간마다 자동 갱신됩니다. 체험이 끝나기 전에 언제든 Gadit 계정에서 해지하면 요금이 청구되지 않습니다.",
+      th: "ทดลองใช้ฟรี 14 วัน ระหว่างทดลองใช้จะไม่มีการเรียกเก็บเงิน เมื่อสิ้นสุด บัตรของคุณจะถูกเรียกเก็บตามจำนวนที่แสดงด้านบน และการสมัครสมาชิกจะต่ออายุทุกรอบจนกว่าคุณจะยกเลิก ยกเลิกได้ทุกเมื่อก่อนสิ้นสุดการทดลองใช้ จากบัญชี Gadit ของคุณ และจะไม่มีการเรียกเก็บเงิน",
+      bn: "14 দিনের বিনামূল্যে ট্রায়াল। ট্রায়ালের সময় কোনো টাকা কাটা হয় না। ট্রায়াল শেষ হলে ওপরে দেখানো পরিমাণ আপনার কার্ড থেকে কাটা হয়, আর বাতিল না করা পর্যন্ত প্রতি মেয়াদে সাবস্ক্রিপশন নবায়ন হয়। ট্রায়াল শেষ হওয়ার আগে যেকোনো সময় আপনার Gadit অ্যাকাউন্ট থেকে বাতিল করুন, কোনো টাকা কাটা হবে না।",
+      da: "14 dages gratis prøveperiode. Du bliver ikke opkrævet i prøveperioden. Når den slutter, trækkes beløbet ovenfor fra dit kort, og abonnementet fornyes hver periode, indtil du opsiger det. Opsig når som helst inden prøveperioden slutter, fra din Gadit-konto, så bliver du ikke opkrævet.",
+      hu: "14 napos ingyenes próbaidő. A próbaidő alatt nem terhelünk semmit. Amikor lejár, a fent látható összeget terheljük a kártyádra, és az előfizetés minden időszakban megújul, amíg le nem mondod. A próbaidő vége előtt bármikor lemondhatod a Gadit-fiókodban, és nem terhelünk semmit.",
     };
-    const trialMessage = grantsTrial ? cartTerms[lang === "he" ? "he" : "en"] : null;
+    const trialMessage = grantsTrial ? (cartTerms[lang] ?? cartTerms.en) : null;
 
     const prefix = langPrefix(lang);
     const successPath = isSchools

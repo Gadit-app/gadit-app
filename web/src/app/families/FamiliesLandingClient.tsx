@@ -4032,7 +4032,7 @@ const COPY: Record<string, Copy> = {
     yearly: "$59 / year",
     yearlyNote: "家族みんなで月あたり$4.92。月々払いに比べて2か月分近くおトクです",
     priceAnchor: "家庭教師1回分より安く、家じゅうのどのお子さまも、まる1年使えます",
-    monthly: "$5.99 / month",
+    monthly: "$5.99 / 月",
     billedYearly: "年払い",
     billedMonthly: "月払い",
     yearlySave: "-18%",
@@ -4434,7 +4434,7 @@ const COPY: Record<string, Copy> = {
     yearly: "$59 / year",
     yearlyNote: "ይህ ለመላው ቤተሰብ በወር $4.92 ነው፣ ከወርሃዊ ክፍያ ጋር ሲነጻጸርም ወደ ሁለት ወር የሚጠጋ ገንዘብ ይቆጥብልዎታል",
     priceAnchor: "ከአንድ የግል ትምህርት ክፍለ ጊዜ ባነሰ፣ ለአንድ ሙሉ ዓመት፣ በቤት ውስጥ ላለ ለእያንዳንዱ ልጅ",
-    monthly: "$5.99 / month",
+    monthly: "$5.99 / በወር",
     billedYearly: "ዓመታዊ",
     billedMonthly: "ወርሃዊ",
     yearlySave: "-18%",
@@ -6393,6 +6393,43 @@ function MockQuiz({ lang }: { lang: string }) {
   );
 }
 
+/** Label under the family total in the dashboard mockup (same wording as /family). */
+const FAMILY_TOTAL_LABEL: Record<string, string> = {
+  fr: "mots dans les carnets de la famille",
+  es: "palabras en los cuadernos de la familia",
+  pt: "palavras nos cadernos da família",
+  it: "parole nei quaderni della famiglia",
+  de: "Wörter in den Notizbüchern der Familie",
+  nl: "woorden in de notitieboekjes van het gezin",
+  cs: "slov v poznámkových blocích rodiny",
+  sk: "slov v poznámkových blokoch rodiny",
+  uk: "слів у сімейних зошитах",
+  pl: "słów w rodzinnych zeszytach",
+  tr: "ailenin defterlerindeki kelime",
+  ja: "家族のノートにある単語",
+  hi: "परिवार की नोटबुक में शब्द",
+  fa: "واژه‌ها در دفترچه‌های خانواده",
+  id: "kata di buku catatan keluarga",
+  am: "በቤተሰቡ ማስታወሻ ደብተሮች ውስጥ ያሉ ቃላት",
+  he: "מילים במחברות המשפחה",
+  en: "words in the family's notebooks",
+  zu: "amagama asezincwadini zamanothi zomndeni",
+  el: "λέξεις στα τετράδια της οικογένειας",
+  ru: "слов в тетрадях семьи",
+  ar: "كلمة في دفاتر العائلة",
+  vi: "từ trong sổ tay của cả gia đình",
+  fil: "salita sa mga notebook ng pamilya",
+  af: "woorde in die gesin se notaboeke",
+  sw: "maneno katika madaftari ya familia",
+  "zh-CN": "家庭单词本中的词",
+  "zh-TW": "家庭單字本中的字詞",
+  ko: "가족 단어장의 단어",
+  th: "คำในสมุดคำศัพท์ของครอบครัว",
+  bn: "পরিবারের নোটবুকে থাকা শব্দ",
+  da: "ord i familiens notesbøger",
+  hu: "szó a család füzeteiben",
+};
+
 const MOCKUPS = [MockMeanings, MockKids, MockContext, MockNotebook, MockProfiles, MockGames, MockEnglish];
 
 // One block per feature, in order, each with its own real product screen
@@ -6964,7 +7001,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               <div className="fam-dashmock">
                 <div className="fam-dashmock-sum">
                   <div className="fam-dashmock-sumnum">141</div>
-                  <div className="fam-dashmock-sumlabel">{he ? "מילים במחברות המשפחה" : "words in the family's notebooks"}</div>
+                  <div className="fam-dashmock-sumlabel">{FAMILY_TOTAL_LABEL[lang] ?? FAMILY_TOTAL_LABEL.en}</div>
                 </div>
                 {c.dashKids.map((k, i) => {
                   const colors = ["#0EA5A5", "#7C3AED", "#D97706"];

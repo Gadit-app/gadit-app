@@ -19,12 +19,14 @@
  */
 
 import { useEffect, useState } from "react";
+import { familyUi } from "@/lib/family-ui-i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
@@ -1839,13 +1841,13 @@ export function FamilyClient() {
         setEditAvatarId(m.avatarId || "");
         setEditOpen(true);
       }}
-      editLabel={lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
+      editLabel={familyUi(lang).edit}
       onDelete={!m.isOwner ? () => {
         const label = m.name || roleLabel[m.role];
-        const msg = lang === "he" ? `להסיר את ${label} מהמשפחה?` : `Remove ${label} from the family?`;
+        const msg = familyUi(lang).removeConfirm(label);
         if (window.confirm(msg)) void deleteMember(m.id);
       } : undefined}
-      deleteLabel={lang === "he" ? "הסרה" : lang === "ar" ? "إزالة" : lang === "ru" ? "Удалить" : "Remove"}
+      deleteLabel={familyUi(lang).remove}
     />
   );
 
@@ -1926,10 +1928,10 @@ export function FamilyClient() {
             style={{ background: "var(--surface)", borderRadius: 16, padding: "22px 20px", width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(17,24,39,0.25)" }}
           >
             <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "var(--ink)" }}>
-              {lang === "he" ? "עריכה" : lang === "ar" ? "تعديل" : lang === "ru" ? "Изменить" : "Edit"}
+              {familyUi(lang).edit}
             </h3>
             <p style={{ margin: "0 0 16px", fontSize: 13.5, color: "#6b7280" }}>
-              {lang === "he" ? "השם, התמונה והתפקיד שיוצגו." : "The name, photo and role to show."}
+              {familyUi(lang).editSub}
             </p>
             {/* Profile photo: helps a parent recognize each child at a glance
                 in the profile switcher. Optional; falls back to the chip. */}
@@ -1944,10 +1946,10 @@ export function FamilyClient() {
               <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "start" }}>
                 <label style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 12px", borderRadius: 9, border: "1px solid rgba(14,165,165,0.4)", background: "rgba(14,165,165,0.06)", color: "#0E7490", fontWeight: 700, fontSize: 13, cursor: editPhotoBusy ? "default" : "pointer", fontFamily: "inherit", opacity: editPhotoBusy ? 0.6 : 1 }}>
                   {editPhotoBusy
-                    ? (lang === "he" ? "טוען…" : lang === "ar" ? "جارٍ التحميل…" : lang === "ru" ? "Загрузка…" : "Loading…")
+                    ? familyUi(lang).loading
                     : editPhoto
-                      ? (lang === "he" ? "החלפת תמונה" : lang === "ar" ? "تغيير الصورة" : lang === "ru" ? "Заменить фото" : "Change photo")
-                      : (lang === "he" ? "הוספת תמונה" : lang === "ar" ? "إضافة صورة" : lang === "ru" ? "Добавить фото" : "Add a photo")}
+                      ? familyUi(lang).changePhoto
+                      : familyUi(lang).addPhoto}
                   <input
                     type="file"
                     accept="image/*"
@@ -1962,7 +1964,7 @@ export function FamilyClient() {
                     onClick={() => setEditPhoto("")}
                     style={{ background: "none", border: "none", padding: "2px 2px", color: "var(--ink-faint)", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
                   >
-                    {lang === "he" ? "הסרת התמונה" : lang === "ar" ? "إزالة الصورة" : lang === "ru" ? "Удалить фото" : "Remove photo"}
+                    {familyUi(lang).removePhoto}
                   </button>
                 )}
               </div>
@@ -1971,7 +1973,7 @@ export function FamilyClient() {
                 A real photo above still wins; this is the fun default. */}
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: "var(--ink-soft)", marginBottom: 8 }}>
-                {lang === "he" ? "או בחרו דמות" : lang === "ar" ? "أو اختر شخصية" : lang === "ru" ? "Или выберите персонажа" : "Or pick a character"}
+                {familyUi(lang).pickCharacter}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {avatarsForRole(editRole).map((a) => {
@@ -1994,7 +1996,7 @@ export function FamilyClient() {
             <input
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              placeholder={lang === "he" ? "שם" : "Name"}
+              placeholder={familyUi(lang).name}
               style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", marginBottom: 12, boxSizing: "border-box" }}
             />
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
@@ -2011,10 +2013,10 @@ export function FamilyClient() {
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <button type="button" onClick={() => setEditOpen(false)} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", background: "var(--surface)", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", color: "var(--ink-soft)" }}>
-                {lang === "he" ? "ביטול" : "Cancel"}
+                {familyUi(lang).cancel}
               </button>
               <button type="button" onClick={saveMember} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", fontFamily: "inherit", opacity: editSaving ? 0.6 : 1 }}>
-                {editSaving ? "…" : (lang === "he" ? "שמירה" : "Save")}
+                {editSaving ? "…" : familyUi(lang).save}
               </button>
             </div>
           </div>
@@ -2040,10 +2042,10 @@ export function FamilyClient() {
             ))}
           </nav>
           <div className="fam-shell-side-foot">
-            <Link href={href("/")} className="fam-nav-item fam-nav-back">
+            <BackLink href={href("/")} className="fam-nav-item fam-nav-back">
               <NavIcon name="dictionary" />
               <span>{nav.dictionary}</span>
-            </Link>
+            </BackLink>
           </div>
         </aside>
 
@@ -2148,7 +2150,7 @@ export function FamilyClient() {
               <Link href={href("/kids")} className="fam-set-row fam-set-link" style={{ marginTop: 14 }}>
                 <div className="fam-set-icon" style={{ fontSize: 20 }} aria-hidden="true">🧒</div>
                 <div className="fam-set-main">
-                  <label className="fam-set-label">{lang === "he" ? "מסך משותף לילדים" : "Shared kids screen"}</label>
+                  <label className="fam-set-label">{familyUi(lang).kidsScreen}</label>
                 </div>
               </Link>
             </div>

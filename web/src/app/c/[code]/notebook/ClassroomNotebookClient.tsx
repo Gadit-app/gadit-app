@@ -13,10 +13,12 @@
  */
 
 import { useEffect, useMemo, useState } from "react";
+import { miscUi } from "@/lib/misc-ui-i18n";
 import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 
 type SearchEntry = {
   word: string;
@@ -482,9 +484,9 @@ export function ClassroomNotebookClient({ code }: { code: string }) {
           Gad<span className="wb-classroom-wordmark-it">it</span>
         </Link>
         <nav className="wb-classroom-nav">
-          <Link href={href(`/c/${code}`)} className="wb-classroom-nav-link">
+          <BackLink href={href(`/c/${code}`)} className="wb-classroom-nav-link">
             {c.backToClassroom}
-          </Link>
+          </BackLink>
         </nav>
       </header>
 
@@ -615,7 +617,7 @@ function formatRelativeTime(iso: string, lang: string): string {
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
   if (minutes < 1) {
-    return lang === "he" ? "עכשיו" : lang === "ar" ? "الآن" : lang === "ru" ? "сейчас" : lang === "hi" ? "अभी" : lang === "am" ? "አሁን" : "now";
+    return miscUi(lang).now;
   }
   if (minutes < 60) return `${minutes}m`;
   if (hours < 24) return `${hours}h`;

@@ -33,6 +33,7 @@ import {
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import { db } from "@/lib/firebase";
 import type { Classroom } from "@/lib/school";
 import { computeClassroomInsights, classroomLangLabel } from "@/lib/classroom-insights";
@@ -1283,7 +1284,7 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
     return (
       <div className="wordbook wb-school-page" dir={dir}>
         <main className="wb-school-main">
-          <Link href={href("/schools")} className="wb-family-back">{c.back}</Link>
+          <BackLink href={href("/schools/manage")} className="wb-family-back">{c.back}</BackLink>
           <p style={{ marginTop: 16 }}>{c.notFound}</p>
         </main>
       </div>
@@ -1315,7 +1316,7 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
         .school-admin-mustard .wb-school-cta:focus-visible { outline: 2px solid #CA8A04 !important; }
       `}</style>
       <main className="wb-school-main">
-        <Link href={href("/schools")} className="wb-family-back">{c.back}</Link>
+        <BackLink href={href("/schools/manage")} className="wb-family-back">{c.back}</BackLink>
 
         <h1 className="wb-school-title" style={{ marginBottom: 32 }}>
           {classroom.name || c.title}

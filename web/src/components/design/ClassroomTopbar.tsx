@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 
 /**
  * The classroom topbar for the /c/<CODE> surface: Gadit wordmark, Class
@@ -70,8 +71,9 @@ export function ClassroomTopbar({ code, lang }: { code: string; lang: string }) 
       {/* Explicit back-to-classroom control: a clear arrowed button, distinct
           from the logo. */}
       <div className="wb-shell-actions">
-        <Link
+        <BackLink
           href={href(`/c/${code}`)}
+          anyPrevious
           style={{
             display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none",
             fontSize: 14, fontWeight: 600, color: "var(--teal, #0EA5A5)",
@@ -79,7 +81,7 @@ export function ClassroomTopbar({ code, lang }: { code: string; lang: string }) 
           }}
         >
           <span aria-hidden="true">{rtl ? "→" : "←"}</span>{c.back}
-        </Link>
+        </BackLink>
       </div>
     </header>
   );

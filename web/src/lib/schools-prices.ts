@@ -85,8 +85,7 @@ export function isNewSchoolsPrice(priceId: string | null | undefined): boolean {
 }
 
 /** "up to N students" for a tier header, one template instead of a per-tier
- *  ternary. Native for the languages listed, English fallback for the rest
- *  (matches the he+en-primary pattern used across the Schools surfaces). */
+ *  ternary. Native in all 33 UI languages; English is only the safety net. */
 export function studentsUpTo(n: number, lang: string): string {
   switch (lang) {
     case "he": return `עד ${n} תלמידים`;
@@ -110,6 +109,17 @@ export function studentsUpTo(n: number, lang: string): string {
     case "nl": return `tot ${n} leerlingen`;
     case "el": return `έως ${n} μαθητές`;
     case "zu": return `kufika kubafundi abangu-${n}`;
+    case "vi": return `tối đa ${n} học sinh`;
+    case "fil": return `hanggang ${n} estudyante`;
+    case "af": return `tot ${n} leerders`;
+    case "sw": return `hadi wanafunzi ${n}`;
+    case "zh-CN": return `最多 ${n} 名学生`;
+    case "zh-TW": return `最多 ${n} 名學生`;
+    case "ko": return `학생 최대 ${n}명`;
+    case "th": return `นักเรียนสูงสุด ${n} คน`;
+    case "bn": return `সর্বোচ্চ ${n} জন শিক্ষার্থী`;
+    case "da": return `op til ${n} elever`;
+    case "hu": return `legfeljebb ${n} diák`;
     default: return `up to ${n} students`;
   }
 }

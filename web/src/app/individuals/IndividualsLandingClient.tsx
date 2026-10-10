@@ -8,8 +8,8 @@
  * the single-learner story, with pricing at the bottom; /pricing stays
  * separate. Marketing landing, so it's force-light in all themes.
  *
- * EN + HE first (Gadi to approve the structure); other languages fall back
- * to English until we replicate.
+ * EN + HE here; the other 31 UI languages live in individuals-copy-i18n.ts
+ * (2026-10-10). Hebrew visitors get IndividualsRealLanding instead.
  */
 
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
@@ -26,6 +26,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { HomeFooter } from "@/components/design/home";
+import { INDIVIDUALS_MORE } from "./individuals-copy-i18n";
 
 const PRICE_FAMILY = process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILY_MONTHLY ?? "";
 
@@ -38,7 +39,8 @@ type Copy = {
   featuresEyebrow: string; featuresTitle: string; features: Feature[];
   whoEyebrow: string; whoTitle: string; who: string[];
   pricingEyebrow: string; pricingTitle: string;
-  clearName: string; clearDesc: string; deepName: string; deepDesc: string;
+  /** Unused since Clear and Deep became one Individual plan (2026-10-06). */
+  clearName?: string; clearDesc?: string; deepName?: string; deepDesc?: string;
   perMonth: string; choose: string;
   finalTitle: string; heroCta: string;
 };
@@ -68,7 +70,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     whoTitle: "Made for anyone who loves to understand",
     who: ["Language learners", "New immigrants", "Curious minds", "Parents teaching one child"],
     pricingEyebrow: "Pricing",
-    pricingTitle: "Start free. Go deeper from $2.99.",
+    pricingTitle: "Start free. Go deeper from {price}.",
     clearName: "Clear", clearDesc: "The full dictionary. Every meaning, examples, image and origin.",
     deepName: "Deep", deepDesc: "Everything in Clear, plus the notebook, practice and games.",
     perMonth: "/mo", choose: "Choose",
@@ -99,7 +101,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     whoTitle: "בשביל כל מי שאוהב להבין",
     who: ["לומדי שפות", "עולים חדשים", "סקרנים", "הורים שמלמדים ילד"],
     pricingEyebrow: "מחירים",
-    pricingTitle: "להתחיל בחינם. להעמיק מ-$2.99.",
+    pricingTitle: "להתחיל בחינם. להעמיק מ-{price}.",
     clearName: "Clear", clearDesc: "המילון המלא. כל משמעות, דוגמאות, תמונה ומקור.",
     deepName: "Deep", deepDesc: "כל מה שב-Clear, ועוד המחברת, תרגול ומשחקים.",
     perMonth: "/חודש", choose: "בחירה",
@@ -107,7 +109,7 @@ const COPY: Partial<Record<Lang, Copy>> = {
     finalTitle: "רוצה להבין כל מילה?",
   },
 };
-function copy(lang: Lang): Copy { return COPY[lang] ?? COPY.en!; }
+function copy(lang: Lang): Copy { return COPY[lang] ?? INDIVIDUALS_MORE[lang] ?? COPY.en!; }
 
 export function IndividualsLandingClient() {
   const { lang, dir } = useLang();
@@ -223,7 +225,7 @@ export function IndividualsLandingClient() {
         <Band bg="var(--mist)" id="pricing">
           <div style={{ maxWidth: 720, margin: "0 auto", width: "100%", textAlign: "center" }}>
             <Eyebrow>{t.pricingEyebrow}</Eyebrow>
-            <h2 style={h2s}>{t.pricingTitle}</h2>
+            <h2 style={h2s}>{t.pricingTitle.replace("{price}", lang === "he" ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly)}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginTop: 28 }}>
               {/* Clear and Deep became one Individual plan (Gadi 2026-10-06). */}
               <PriceCard name="Individual" price={lang === "he" ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly} per={t.perMonth} desc={planCopy(lang, "prIndSub")} accent="var(--teal-deep, #0F766E)" cta={t.choose} onClick={() => buy(INDIVIDUAL_MONTHLY)} featured />

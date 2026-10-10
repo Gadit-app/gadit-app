@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-titles";
 import { Suspense } from "react";
 import CheckoutClient from "./CheckoutClient";
 
@@ -14,10 +15,15 @@ import CheckoutClient from "./CheckoutClient";
  * noindex: a payment form is never a search result.
  */
 
-export const metadata: Metadata = {
+const BASE_METADATA: Metadata = {
   title: "Checkout | Gadit",
   robots: { index: false, follow: false },
 };
+
+/** Same metadata, with the tab title in the visitor's UI language. */
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("checkout", BASE_METADATA);
+}
 
 export default function CheckoutPage() {
   return (

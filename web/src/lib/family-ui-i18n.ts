@@ -1,0 +1,97 @@
+/**
+ * Small /family dashboard strings that used to be inline he/ar/ru/en
+ * ternaries (member edit sheet, kids-screen link) plus the avatar names,
+ * in all 33 UI languages (2026-10-10 i18n sweep).
+ */
+
+export type FamilyUi = {
+  edit: string; remove: string; removeConfirm: (name: string) => string;
+  editSub: string; loading: string; changePhoto: string; addPhoto: string; removePhoto: string;
+  pickCharacter: string; name: string; cancel: string; save: string; kidsScreen: string;
+};
+
+export const FAMILY_UI: Record<string, FamilyUi> = {
+  en: { edit: "Edit", remove: "Remove", removeConfirm: (n) => `Remove ${n} from the family?`, editSub: "The name, photo and role to show.", loading: "Loading…", changePhoto: "Change photo", addPhoto: "Add a photo", removePhoto: "Remove photo", pickCharacter: "Or pick a character", name: "Name", cancel: "Cancel", save: "Save", kidsScreen: "Shared kids screen" },
+  he: { edit: "עריכה", remove: "הסרה", removeConfirm: (n) => `להסיר את ${n} מהמשפחה?`, editSub: "השם, התמונה והתפקיד שיוצגו.", loading: "טוען…", changePhoto: "החלפת תמונה", addPhoto: "הוספת תמונה", removePhoto: "הסרת התמונה", pickCharacter: "או בחרו דמות", name: "שם", cancel: "ביטול", save: "שמירה", kidsScreen: "מסך משותף לילדים" },
+  ar: { edit: "تعديل", remove: "إزالة", removeConfirm: (n) => `إزالة ${n} من العائلة؟`, editSub: "الاسم والصورة والدور الذي سيظهر.", loading: "جارٍ التحميل…", changePhoto: "تغيير الصورة", addPhoto: "إضافة صورة", removePhoto: "إزالة الصورة", pickCharacter: "أو اختر شخصية", name: "الاسم", cancel: "إلغاء", save: "حفظ", kidsScreen: "شاشة مشتركة للأطفال" },
+  ru: { edit: "Изменить", remove: "Удалить", removeConfirm: (n) => `Удалить ${n} из семьи?`, editSub: "Имя, фото и роль, которые будут показаны.", loading: "Загрузка…", changePhoto: "Заменить фото", addPhoto: "Добавить фото", removePhoto: "Удалить фото", pickCharacter: "Или выберите персонажа", name: "Имя", cancel: "Отмена", save: "Сохранить", kidsScreen: "Общий экран для детей" },
+  es: { edit: "Editar", remove: "Quitar", removeConfirm: (n) => `¿Quitar a ${n} de la familia?`, editSub: "El nombre, la foto y el rol que se muestran.", loading: "Cargando…", changePhoto: "Cambiar foto", addPhoto: "Añadir una foto", removePhoto: "Quitar foto", pickCharacter: "O elige un personaje", name: "Nombre", cancel: "Cancelar", save: "Guardar", kidsScreen: "Pantalla compartida para niños" },
+  pt: { edit: "Editar", remove: "Remover", removeConfirm: (n) => `Remover ${n} da família?`, editSub: "O nome, a foto e o papel a mostrar.", loading: "A carregar…", changePhoto: "Mudar foto", addPhoto: "Adicionar foto", removePhoto: "Remover foto", pickCharacter: "Ou escolha uma personagem", name: "Nome", cancel: "Cancelar", save: "Guardar", kidsScreen: "Ecrã partilhado para crianças" },
+  fr: { edit: "Modifier", remove: "Retirer", removeConfirm: (n) => `Retirer ${n} de la famille ?`, editSub: "Le nom, la photo et le rôle affichés.", loading: "Chargement…", changePhoto: "Changer la photo", addPhoto: "Ajouter une photo", removePhoto: "Retirer la photo", pickCharacter: "Ou choisissez un personnage", name: "Nom", cancel: "Annuler", save: "Enregistrer", kidsScreen: "Écran partagé pour les enfants" },
+  de: { edit: "Bearbeiten", remove: "Entfernen", removeConfirm: (n) => `${n} aus der Familie entfernen?`, editSub: "Name, Foto und Rolle, die angezeigt werden.", loading: "Lädt…", changePhoto: "Foto ändern", addPhoto: "Foto hinzufügen", removePhoto: "Foto entfernen", pickCharacter: "Oder eine Figur wählen", name: "Name", cancel: "Abbrechen", save: "Speichern", kidsScreen: "Gemeinsamer Kinderbildschirm" },
+  cs: { edit: "Upravit", remove: "Odebrat", removeConfirm: (n) => `Odebrat ${n} z rodiny?`, editSub: "Jméno, fotka a role, které se zobrazí.", loading: "Načítání…", changePhoto: "Změnit fotku", addPhoto: "Přidat fotku", removePhoto: "Odebrat fotku", pickCharacter: "Nebo vyberte postavičku", name: "Jméno", cancel: "Zrušit", save: "Uložit", kidsScreen: "Sdílená obrazovka pro děti" },
+  sk: { edit: "Upraviť", remove: "Odobrať", removeConfirm: (n) => `Odobrať ${n} z rodiny?`, editSub: "Meno, fotka a rola, ktoré sa zobrazia.", loading: "Načítava sa…", changePhoto: "Zmeniť fotku", addPhoto: "Pridať fotku", removePhoto: "Odobrať fotku", pickCharacter: "Alebo vyberte postavičku", name: "Meno", cancel: "Zrušiť", save: "Uložiť", kidsScreen: "Zdieľaná obrazovka pre deti" },
+  it: { edit: "Modifica", remove: "Rimuovi", removeConfirm: (n) => `Rimuovere ${n} dalla famiglia?`, editSub: "Il nome, la foto e il ruolo da mostrare.", loading: "Caricamento…", changePhoto: "Cambia foto", addPhoto: "Aggiungi una foto", removePhoto: "Rimuovi foto", pickCharacter: "Oppure scegli un personaggio", name: "Nome", cancel: "Annulla", save: "Salva", kidsScreen: "Schermo condiviso per i bambini" },
+  ja: { edit: "編集", remove: "削除", removeConfirm: (n) => `${n}さんを家族から削除しますか？`, editSub: "表示する名前、写真、役割。", loading: "読み込み中…", changePhoto: "写真を変更", addPhoto: "写真を追加", removePhoto: "写真を削除", pickCharacter: "またはキャラクターを選ぶ", name: "名前", cancel: "キャンセル", save: "保存", kidsScreen: "子ども用の共有画面" },
+  hi: { edit: "संपादित करें", remove: "हटाएँ", removeConfirm: (n) => `${n} को परिवार से हटाएँ?`, editSub: "दिखाया जाने वाला नाम, फ़ोटो और भूमिका।", loading: "लोड हो रहा है…", changePhoto: "फ़ोटो बदलें", addPhoto: "फ़ोटो जोड़ें", removePhoto: "फ़ोटो हटाएँ", pickCharacter: "या कोई किरदार चुनें", name: "नाम", cancel: "रद्द करें", save: "सहेजें", kidsScreen: "बच्चों की साझा स्क्रीन" },
+  am: { edit: "አርትዕ", remove: "አስወግድ", removeConfirm: (n) => `${n}ን ከቤተሰቡ ማስወገድ ይፈልጋሉ?`, editSub: "የሚታየው ስም፣ ፎቶ እና ሚና።", loading: "በመጫን ላይ…", changePhoto: "ፎቶ ቀይር", addPhoto: "ፎቶ አክል", removePhoto: "ፎቶ አስወግድ", pickCharacter: "ወይም ገጸ ባሕሪ ይምረጡ", name: "ስም", cancel: "ሰርዝ", save: "አስቀምጥ", kidsScreen: "የልጆች የጋራ ማያ" },
+  uk: { edit: "Змінити", remove: "Вилучити", removeConfirm: (n) => `Вилучити ${n} з родини?`, editSub: "Ім'я, фото і роль, які буде показано.", loading: "Завантаження…", changePhoto: "Замінити фото", addPhoto: "Додати фото", removePhoto: "Видалити фото", pickCharacter: "Або оберіть персонажа", name: "Ім'я", cancel: "Скасувати", save: "Зберегти", kidsScreen: "Спільний екран для дітей" },
+  tr: { edit: "Düzenle", remove: "Kaldır", removeConfirm: (n) => `${n} aileden kaldırılsın mı?`, editSub: "Gösterilecek ad, fotoğraf ve rol.", loading: "Yükleniyor…", changePhoto: "Fotoğrafı değiştir", addPhoto: "Fotoğraf ekle", removePhoto: "Fotoğrafı kaldır", pickCharacter: "Ya da bir karakter seç", name: "Ad", cancel: "İptal", save: "Kaydet", kidsScreen: "Çocuklar için ortak ekran" },
+  pl: { edit: "Edytuj", remove: "Usuń", removeConfirm: (n) => `Usunąć ${n} z rodziny?`, editSub: "Imię, zdjęcie i rola, które będą widoczne.", loading: "Ładowanie…", changePhoto: "Zmień zdjęcie", addPhoto: "Dodaj zdjęcie", removePhoto: "Usuń zdjęcie", pickCharacter: "Albo wybierz postać", name: "Imię", cancel: "Anuluj", save: "Zapisz", kidsScreen: "Wspólny ekran dla dzieci" },
+  fa: { edit: "ویرایش", remove: "حذف", removeConfirm: (n) => `${n} از خانواده حذف شود؟`, editSub: "نام، عکس و نقشی که نمایش داده می‌شود.", loading: "در حال بارگذاری…", changePhoto: "تغییر عکس", addPhoto: "افزودن عکس", removePhoto: "حذف عکس", pickCharacter: "یا یک شخصیت انتخاب کنید", name: "نام", cancel: "لغو", save: "ذخیره", kidsScreen: "صفحه مشترک کودکان" },
+  id: { edit: "Edit", remove: "Hapus", removeConfirm: (n) => `Hapus ${n} dari keluarga?`, editSub: "Nama, foto, dan peran yang ditampilkan.", loading: "Memuat…", changePhoto: "Ganti foto", addPhoto: "Tambah foto", removePhoto: "Hapus foto", pickCharacter: "Atau pilih karakter", name: "Nama", cancel: "Batal", save: "Simpan", kidsScreen: "Layar bersama untuk anak" },
+  nl: { edit: "Bewerken", remove: "Verwijderen", removeConfirm: (n) => `${n} uit het gezin verwijderen?`, editSub: "De naam, foto en rol die getoond worden.", loading: "Laden…", changePhoto: "Foto wijzigen", addPhoto: "Foto toevoegen", removePhoto: "Foto verwijderen", pickCharacter: "Of kies een figuurtje", name: "Naam", cancel: "Annuleren", save: "Opslaan", kidsScreen: "Gedeeld kinderscherm" },
+  el: { edit: "Επεξεργασία", remove: "Αφαίρεση", removeConfirm: (n) => `Αφαίρεση του/της ${n} από την οικογένεια;`, editSub: "Το όνομα, η φωτογραφία και ο ρόλος που θα εμφανίζονται.", loading: "Φόρτωση…", changePhoto: "Αλλαγή φωτογραφίας", addPhoto: "Προσθήκη φωτογραφίας", removePhoto: "Αφαίρεση φωτογραφίας", pickCharacter: "Ή διάλεξε χαρακτήρα", name: "Όνομα", cancel: "Ακύρωση", save: "Αποθήκευση", kidsScreen: "Κοινή οθόνη για τα παιδιά" },
+  zu: { edit: "Hlela", remove: "Susa", removeConfirm: (n) => `Susa u-${n} emndenini?`, editSub: "Igama, isithombe nendima ezoboniswa.", loading: "Iyalayisha…", changePhoto: "Shintsha isithombe", addPhoto: "Engeza isithombe", removePhoto: "Susa isithombe", pickCharacter: "Noma khetha umlingiswa", name: "Igama", cancel: "Khansela", save: "Londoloza", kidsScreen: "Isikrini sezingane esabelwanayo" },
+  vi: { edit: "Sửa", remove: "Xóa", removeConfirm: (n) => `Xóa ${n} khỏi gia đình?`, editSub: "Tên, ảnh và vai trò sẽ hiển thị.", loading: "Đang tải…", changePhoto: "Đổi ảnh", addPhoto: "Thêm ảnh", removePhoto: "Xóa ảnh", pickCharacter: "Hoặc chọn một nhân vật", name: "Tên", cancel: "Hủy", save: "Lưu", kidsScreen: "Màn hình chung cho trẻ" },
+  fil: { edit: "I-edit", remove: "Alisin", removeConfirm: (n) => `Alisin si ${n} sa pamilya?`, editSub: "Ang pangalan, larawan at papel na ipapakita.", loading: "Naglo-load…", changePhoto: "Palitan ang larawan", addPhoto: "Magdagdag ng larawan", removePhoto: "Alisin ang larawan", pickCharacter: "O pumili ng karakter", name: "Pangalan", cancel: "Kanselahin", save: "I-save", kidsScreen: "Pinagsasaluhang screen ng mga bata" },
+  af: { edit: "Wysig", remove: "Verwyder", removeConfirm: (n) => `Verwyder ${n} uit die gesin?`, editSub: "Die naam, foto en rol wat gewys word.", loading: "Laai…", changePhoto: "Verander foto", addPhoto: "Voeg 'n foto by", removePhoto: "Verwyder foto", pickCharacter: "Of kies 'n karakter", name: "Naam", cancel: "Kanselleer", save: "Stoor", kidsScreen: "Gedeelde kinderskerm" },
+  sw: { edit: "Hariri", remove: "Ondoa", removeConfirm: (n) => `Ondoa ${n} kwenye familia?`, editSub: "Jina, picha na jukumu litakaloonyeshwa.", loading: "Inapakia…", changePhoto: "Badilisha picha", addPhoto: "Ongeza picha", removePhoto: "Ondoa picha", pickCharacter: "Au chagua mhusika", name: "Jina", cancel: "Ghairi", save: "Hifadhi", kidsScreen: "Skrini ya pamoja ya watoto" },
+  "zh-CN": { edit: "编辑", remove: "移除", removeConfirm: (n) => `要把 ${n} 从家庭中移除吗？`, editSub: "要显示的名字、照片和角色。", loading: "加载中…", changePhoto: "更换照片", addPhoto: "添加照片", removePhoto: "移除照片", pickCharacter: "或选择一个角色", name: "名字", cancel: "取消", save: "保存", kidsScreen: "孩子共用屏幕" },
+  "zh-TW": { edit: "編輯", remove: "移除", removeConfirm: (n) => `要把 ${n} 從家庭中移除嗎？`, editSub: "要顯示的名字、照片和角色。", loading: "載入中…", changePhoto: "更換照片", addPhoto: "新增照片", removePhoto: "移除照片", pickCharacter: "或選擇一個角色", name: "名字", cancel: "取消", save: "儲存", kidsScreen: "孩子共用螢幕" },
+  ko: { edit: "편집", remove: "삭제", removeConfirm: (n) => `${n} 님을 가족에서 삭제할까요?`, editSub: "표시할 이름, 사진, 역할.", loading: "불러오는 중…", changePhoto: "사진 바꾸기", addPhoto: "사진 추가", removePhoto: "사진 삭제", pickCharacter: "또는 캐릭터 고르기", name: "이름", cancel: "취소", save: "저장", kidsScreen: "아이들 공용 화면" },
+  th: { edit: "แก้ไข", remove: "นำออก", removeConfirm: (n) => `นำ ${n} ออกจากครอบครัวหรือไม่?`, editSub: "ชื่อ รูป และบทบาทที่จะแสดง", loading: "กำลังโหลด…", changePhoto: "เปลี่ยนรูป", addPhoto: "เพิ่มรูป", removePhoto: "ลบรูป", pickCharacter: "หรือเลือกตัวละคร", name: "ชื่อ", cancel: "ยกเลิก", save: "บันทึก", kidsScreen: "หน้าจอเด็กแบบใช้ร่วมกัน" },
+  bn: { edit: "সম্পাদনা", remove: "সরান", removeConfirm: (n) => `${n}-কে পরিবার থেকে সরাবেন?`, editSub: "যে নাম, ছবি ও ভূমিকা দেখানো হবে।", loading: "লোড হচ্ছে…", changePhoto: "ছবি বদলান", addPhoto: "ছবি যোগ করুন", removePhoto: "ছবি সরান", pickCharacter: "অথবা একটি চরিত্র বেছে নিন", name: "নাম", cancel: "বাতিল", save: "সংরক্ষণ", kidsScreen: "শিশুদের শেয়ার করা স্ক্রিন" },
+  da: { edit: "Rediger", remove: "Fjern", removeConfirm: (n) => `Fjern ${n} fra familien?`, editSub: "Navnet, billedet og rollen, der vises.", loading: "Indlæser…", changePhoto: "Skift billede", addPhoto: "Tilføj et billede", removePhoto: "Fjern billede", pickCharacter: "Eller vælg en figur", name: "Navn", cancel: "Annuller", save: "Gem", kidsScreen: "Fælles børneskærm" },
+  hu: { edit: "Szerkesztés", remove: "Eltávolítás", removeConfirm: (n) => `Eltávolítod ${n} nevű tagot a családból?`, editSub: "A megjelenő név, fotó és szerep.", loading: "Betöltés…", changePhoto: "Fotó cseréje", addPhoto: "Fotó hozzáadása", removePhoto: "Fotó törlése", pickCharacter: "Vagy válassz egy figurát", name: "Név", cancel: "Mégse", save: "Mentés", kidsScreen: "Közös gyerekképernyő" },
+};
+
+export function familyUi(lang: string): FamilyUi {
+  return FAMILY_UI[lang] ?? FAMILY_UI.en;
+}
+
+/** Avatar names for the 29 languages beyond he/en/ar/ru (title/alt text).
+ *  Order: kid1..kid12, then dad, mom. */
+const AVATAR_NAMES: Record<string, string[]> = {
+  es: ["Lectora", "Científico", "Artista", "Explorador", "Música", "Escritor", "Soñadora", "Gamer", "Inventora", "Deportista", "Risueña", "Genio", "Papá", "Mamá"],
+  pt: ["Leitora", "Cientista", "Artista", "Explorador", "Música", "Escritor", "Sonhadora", "Gamer", "Inventora", "Atleta", "Risonha", "Génio", "Pai", "Mãe"],
+  fr: ["Lectrice", "Scientifique", "Artiste", "Explorateur", "Musicienne", "Écrivain", "Rêveuse", "Gamer", "Inventrice", "Sportif", "Rigolote", "Génie", "Papa", "Maman"],
+  de: ["Leserin", "Forscher", "Künstlerin", "Entdecker", "Musikerin", "Schreiber", "Träumerin", "Gamer", "Erfinderin", "Sportler", "Lachmaus", "Genie", "Papa", "Mama"],
+  cs: ["Čtenářka", "Vědec", "Umělkyně", "Průzkumník", "Muzikantka", "Spisovatel", "Snílek", "Hráč", "Vynálezkyně", "Sportovec", "Smíšek", "Génius", "Táta", "Máma"],
+  sk: ["Čitateľka", "Vedec", "Umelkyňa", "Prieskumník", "Muzikantka", "Spisovateľ", "Snílek", "Hráč", "Vynálezkyňa", "Športovec", "Smiešik", "Génius", "Otec", "Mama"],
+  it: ["Lettrice", "Scienziato", "Artista", "Esploratore", "Musicista", "Scrittore", "Sognatrice", "Gamer", "Inventrice", "Sportivo", "Ridarella", "Genio", "Papà", "Mamma"],
+  ja: ["読書家", "科学者", "アーティスト", "探検家", "音楽家", "作家", "夢見る子", "ゲーマー", "発明家", "スポーツ選手", "笑い上戸", "天才", "パパ", "ママ"],
+  hi: ["पाठक", "वैज्ञानिक", "कलाकार", "खोजी", "संगीतकार", "लेखक", "सपने देखने वाली", "गेमर", "आविष्कारक", "खिलाड़ी", "हँसमुख", "प्रतिभाशाली", "पापा", "मम्मी"],
+  am: ["አንባቢ", "ሳይንቲስት", "ሠዓሊ", "አሳሽ", "ሙዚቀኛ", "ጸሐፊ", "ሕልመኛ", "ተጫዋች", "ፈጣሪ", "ስፖርተኛ", "ሳቂታ", "ብልህ", "አባ", "እማ"],
+  uk: ["Читачка", "Науковець", "Художниця", "Дослідник", "Музикантка", "Письменник", "Мрійниця", "Геймер", "Винахідниця", "Спортсмен", "Сміхотунка", "Геній", "Тато", "Мама"],
+  tr: ["Okur", "Bilim insanı", "Sanatçı", "Kâşif", "Müzisyen", "Yazar", "Hayalperest", "Oyuncu", "Mucit", "Sporcu", "Gülücük", "Dahi", "Baba", "Anne"],
+  pl: ["Czytelniczka", "Naukowiec", "Artystka", "Odkrywca", "Muzyczka", "Pisarz", "Marzycielka", "Gracz", "Wynalazczyni", "Sportowiec", "Śmieszka", "Geniusz", "Tata", "Mama"],
+  fa: ["کتاب‌خوان", "دانشمند", "هنرمند", "کاشف", "نوازنده", "نویسنده", "رؤیاپرداز", "گیمر", "مخترع", "ورزشکار", "خندان", "نابغه", "بابا", "مامان"],
+  id: ["Pembaca", "Ilmuwan", "Seniman", "Penjelajah", "Musisi", "Penulis", "Pemimpi", "Gamer", "Penemu", "Atlet", "Si Ceria", "Jenius", "Ayah", "Ibu"],
+  nl: ["Lezer", "Wetenschapper", "Kunstenaar", "Ontdekker", "Muzikant", "Schrijver", "Dromer", "Gamer", "Uitvinder", "Sporter", "Giechelaar", "Genie", "Papa", "Mama"],
+  el: ["Αναγνώστρια", "Επιστήμονας", "Καλλιτέχνιδα", "Εξερευνητής", "Μουσικός", "Συγγραφέας", "Ονειροπόλα", "Gamer", "Εφευρέτρια", "Αθλητής", "Γελαστή", "Ιδιοφυΐα", "Μπαμπάς", "Μαμά"],
+  zu: ["Umfundi", "Usosayensi", "Umdwebi", "Umhloli", "Umculi", "Umbhali", "Umphuphi", "Umdlali wegeyimu", "Umsunguli", "Umgijimi", "Ohlekayo", "Ihlakani", "Baba", "Mama"],
+  vi: ["Mọt sách", "Nhà khoa học", "Họa sĩ", "Nhà thám hiểm", "Nhạc sĩ", "Nhà văn", "Người mơ mộng", "Game thủ", "Nhà phát minh", "Vận động viên", "Cô bé hay cười", "Thiên tài", "Bố", "Mẹ"],
+  fil: ["Mambabasa", "Siyentipiko", "Pintor", "Manlalakbay", "Musikero", "Manunulat", "Mapangarapin", "Gamer", "Imbentor", "Atleta", "Masayahin", "Henyo", "Tatay", "Nanay"],
+  af: ["Leser", "Wetenskaplike", "Kunstenaar", "Ontdekker", "Musikant", "Skrywer", "Dromer", "Gamer", "Uitvinder", "Atleet", "Giggelaar", "Genie", "Pa", "Ma"],
+  sw: ["Msomaji", "Mwanasayansi", "Msanii", "Mvumbuzi", "Mwanamuziki", "Mwandishi", "Mwotaji", "Mchezaji wa gemu", "Mbunifu", "Mwanamichezo", "Mcheshi", "Gwiji", "Baba", "Mama"],
+  "zh-CN": ["小读者", "科学家", "小画家", "探险家", "音乐家", "小作家", "梦想家", "游戏玩家", "发明家", "运动员", "开心果", "小天才", "爸爸", "妈妈"],
+  "zh-TW": ["小讀者", "科學家", "小畫家", "探險家", "音樂家", "小作家", "夢想家", "遊戲玩家", "發明家", "運動員", "開心果", "小天才", "爸爸", "媽媽"],
+  ko: ["책벌레", "과학자", "화가", "탐험가", "음악가", "작가", "몽상가", "게이머", "발명가", "운동선수", "웃음꾼", "천재", "아빠", "엄마"],
+  th: ["นักอ่าน", "นักวิทยาศาสตร์", "ศิลปิน", "นักสำรวจ", "นักดนตรี", "นักเขียน", "นักฝัน", "เกมเมอร์", "นักประดิษฐ์", "นักกีฬา", "เด็กขี้หัวเราะ", "อัจฉริยะ", "พ่อ", "แม่"],
+  bn: ["পাঠক", "বিজ্ঞানী", "শিল্পী", "অভিযাত্রী", "সংগীতশিল্পী", "লেখক", "স্বপ্নবাজ", "গেমার", "উদ্ভাবক", "খেলোয়াড়", "হাসিখুশি", "প্রতিভা", "বাবা", "মা"],
+  da: ["Læser", "Forsker", "Kunstner", "Opdagelsesrejsende", "Musiker", "Forfatter", "Drømmer", "Gamer", "Opfinder", "Atlet", "Fnisemus", "Geni", "Far", "Mor"],
+  hu: ["Olvasó", "Tudós", "Művész", "Felfedező", "Zenész", "Író", "Álmodozó", "Gamer", "Feltaláló", "Sportoló", "Kacagó", "Zseni", "Apa", "Anya"],
+};
+
+/** Fill the extra languages into an avatar list's `name` maps in place. */
+export function addAvatarNames(defs: { id: string; name: Record<string, string> }[]): void {
+  for (const d of defs) {
+    const m = d.id.match(/^kid(\d+)$/);
+    const idx = m ? Number(m[1]) - 1 : d.id.startsWith("dad") ? 12 : d.id.startsWith("mom") ? 13 : -1;
+    if (idx < 0) continue;
+    for (const [lang, names] of Object.entries(AVATAR_NAMES)) {
+      if (!d.name[lang] && names[idx]) d.name[lang] = names[idx];
+    }
+  }
+}

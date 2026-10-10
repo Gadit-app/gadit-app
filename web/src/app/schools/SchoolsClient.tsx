@@ -21,6 +21,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { miscUi } from "@/lib/misc-ui-i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
@@ -32,6 +33,7 @@ import { TeacherActivity } from "./TeacherActivity";
 import { SchoolStudentsPanel } from "./SchoolStudentsPanel";
 import { DEFAULT_ACCENT, dominantColorFromImage, darkenHex, isHex, skinStyleVars } from "@/lib/school-skin";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import { LANGUAGES } from "@/lib/i18n";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
@@ -2559,10 +2561,10 @@ export function SchoolsClient() {
             ))}
           </nav>
           <div className="school-shell-side-foot">
-            <Link href={href("/")} className="school-nav-item school-nav-back">
+            <BackLink href={href("/")} anyPrevious className="school-nav-item school-nav-back">
               <SchoolNavIcon name="dictionary" />
               <span>{c.back}</span>
-            </Link>
+            </BackLink>
           </div>
         </aside>
 
@@ -2578,7 +2580,7 @@ export function SchoolsClient() {
             </div>
             <div>
               <h1>{school.name || c.title}</h1>
-              <p>{classrooms.length} {c.classroomsHeading} · {totalSearches.toLocaleString()} {lang === "he" ? "חיפושים" : lang === "hi" ? "खोजें" : lang === "am" ? "ፍለጋዎች" : "lookups"}</p>
+              <p>{classrooms.length} {c.classroomsHeading} · {totalSearches.toLocaleString()} {miscUi(lang).lookups}</p>
             </div>
           </div>
 
@@ -2920,7 +2922,7 @@ export function SchoolsClient() {
             >
               <span aria-hidden style={{ fontSize: 18 }}>🔎</span>
               <span style={{ flex: 1, fontWeight: 600, color: "var(--ink)" }}>
-                {lang === "he" ? "חיפושים כלליים של החשבון" : "The account's own searches"}
+                {miscUi(lang).ownSearches}
               </span>
               <span style={{ fontWeight: 700, color: "var(--ink)" }}>
                 {ownerSearches.toLocaleString()} {c.wordsLabel}
@@ -3305,7 +3307,7 @@ export function SchoolsClient() {
                         flexShrink: 0,
                       }}
                     >
-                      {lang === "he" ? "לינק לכיתה" : lang === "hi" ? "कक्षा लिंक" : "Class link"}
+                      {miscUi(lang).classLink}
                     </span>
                     <span
                       dir="ltr"
@@ -3347,7 +3349,7 @@ export function SchoolsClient() {
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                           </svg>
-                          {lang === "he" ? "העתק" : lang === "hi" ? "कॉपी" : "Copy"}
+                          {miscUi(lang).copy}
                         </>
                       )}
                     </span>

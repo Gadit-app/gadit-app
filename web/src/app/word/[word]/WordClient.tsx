@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parse as parsePartialJson, Allow } from "partial-json";
 import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -36,6 +37,7 @@ import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
+import { goBackOr } from "@/lib/back-nav";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
@@ -806,9 +808,11 @@ export function WordClient({
   const exitPresent = () => {
     try {
       const r = JSON.parse(sessionStorage.getItem("gadit-sets-return") || "null") as { setId?: string; url?: string } | null;
-      if (r?.url && r.setId === setId && r.url.includes("/sets")) return router.push(r.url);
+      // Step back when the unit list is the previous page (Back then keeps
+      // going back instead of reopening the projector).
+      if (r?.url && r.setId === setId && r.url.includes("/sets")) return goBackOr(router, r.url);
     } catch { /* storage blocked */ }
-    if (setId && openedPresent) return router.push(href("/sets"));
+    if (setId && openedPresent) return goBackOr(router, href("/sets"));
     setPresent(false);
   };
   const goToSetWord = (w: string) =>
@@ -2337,13 +2341,13 @@ export function WordClient({
             search flow when there's no back context. */}
         {result && backWord && backWord.toLowerCase() !== result.word.toLowerCase() && (
           <div className="wb-back-chip-wrap">
-            <Link href={href(`/word/${encodeURIComponent(backWord)}`)} className="wb-back-chip">
+            <BackLink href={href(`/word/${encodeURIComponent(backWord)}`)} className="wb-back-chip">
               <span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span>
               <span>
                 {pick(BACK_TO_COPY, lang)}
                 <strong>{backWord}</strong>
               </span>
-            </Link>
+            </BackLink>
           </div>
         )}
         {/* Inline image-gen error, surfaces the quota / failure /

@@ -19,6 +19,7 @@
  */
 
 import { planCopy } from "@/lib/plan-copy";
+import { miscUi } from "@/lib/misc-ui-i18n";
 import { INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -528,14 +529,8 @@ export function AccountPage() {
       if (json.url) { window.location.href = json.url; return; }
       const friendly =
         json.error === "no_subscription"
-          ? lang === "he" ? "לא נמצא חשבון Stripe פעיל." :
-            lang === "ar" ? "لا يوجد حساب Stripe نشط." :
-            lang === "hi" ? "कोई सक्रिय Stripe सब्सक्रिप्शन नहीं मिला।" :
-            "No active Stripe subscription found."
-          : lang === "he" ? "לא הצלחנו לפתוח את עמוד הבילינג." :
-            lang === "ar" ? "تعذر فتح صفحة الفوترة." :
-            lang === "hi" ? "बिलिंग पोर्टल नहीं खुल पाया।" :
-            "Could not open the billing portal.";
+          ? miscUi(lang).billingNoSub
+          : miscUi(lang).billingFail;
       window.alert(friendly);
     } catch (err) {
       console.error("Portal request failed:", err);
@@ -603,7 +598,7 @@ export function AccountPage() {
   }
   async function handleAccountDeleted() {
     await logout();
-    router.push(href("/"));
+    router.replace(href("/"));
   }
 
   // Renewal date string from trial end timestamp

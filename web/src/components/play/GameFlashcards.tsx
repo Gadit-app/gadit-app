@@ -33,6 +33,7 @@ import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
+import { FLASH_MORE, DIR_MORE, PICK_MORE } from "./play-games-i18n";
 
 export type FlashMode = "words" | "meanings";
 
@@ -63,6 +64,10 @@ export const FLASH_COPY: Record<string, FlashCopy> = {
   ru: { wordsTitle: "Карточки слов", wordsDesc: "Видите слово, говорите его на другом языке и переворачиваете карточку.", defsTitle: "Карточки значений", defsDesc: "Видите слово, вспоминаете значение и переворачиваете карточку.", tapToFlip: "Нажмите на карточку, чтобы перевернуть", tapBack: "Нажмите, чтобы вернуться к слову", sayIn: (l) => `Как это сказать (${l})?`, knew: "Знал(а)", notYet: "Ещё нет", again: "Ещё раз", swap: "Поменять направление", loading: "Готовим карточки...", none: "Пока нет слов для карточек. Найдите слово на другом языке, и оно появится здесь.", result: (k, n) => `Вы знали ${k} из ${n} с первого раза`, pick: "Откуда взять слова?", mine: "Слова из вашей тетради", mineCount: (n) => `${n} слов, в случайном порядке`, topics: "Или выберите тему", srcMine: "Слова из вашей тетради, в случайном порядке", srcTopic: (t) => `Тема: ${t}` },
   es: { wordsTitle: "Tarjetas de palabras", wordsDesc: "Ves una palabra, la dices en el otro idioma y das la vuelta para comprobar.", defsTitle: "Tarjetas de definiciones", defsDesc: "Ves una palabra, recuerdas su significado y das la vuelta para comprobar.", tapToFlip: "Toca la tarjeta para darle la vuelta", tapBack: "Toca para volver a la palabra", sayIn: (l) => `¿Cómo se dice en ${l}?`, knew: "La sabía", notYet: "Todavía no", again: "Otra vez", swap: "Cambiar dirección", loading: "Preparando tus tarjetas...", none: "Aún no hay palabras para tarjetas. Busca una palabra en otro idioma y aparecerá aquí.", result: (k, n) => `Sabías ${k} de ${n} a la primera`, pick: "¿De dónde salen las palabras?", mine: "Las palabras de tu cuaderno", mineCount: (n) => `${n} palabras, en orden aleatorio`, topics: "O elige un tema", srcMine: "Palabras de tu cuaderno, en orden aleatorio", srcTopic: (t) => `Tema: ${t}` },
 };
+
+// The other 28 UI languages (2026-10-10).
+Object.assign(FLASH_COPY, FLASH_MORE);
+Object.assign(DIR_COPY, DIR_MORE);
 
 export function flashCopy(lang: string): FlashCopy {
   return FLASH_COPY[lang] ?? FLASH_COPY.en;
@@ -107,6 +112,8 @@ const PICK_COPY: Record<string, PickCopy> = {
   ru: { mySets: "Ваши сохранённые наборы", ownTopic: "Своя тема", ownTopicPh: "например: космос, динозавры, море", make: "Создать", pasteTitle: "Список из школы", pasteSub: "Вставьте слова, по одному в строке. Можно слово и перевод.", pastePh: ["жёлтый", "собака", "учитель"].join(NL), pasteBtn: "Создать карточки", creating: "Создаём...", unsafe: "Давайте выберем другую тему.", createErr: "Не получилось. Попробуйте ещё раз или другую тему." },
   es: { mySets: "Tus conjuntos guardados", ownTopic: "Tu propio tema", ownTopicPh: "p. ej.: espacio, dinosaurios, el mar", make: "Crear", pasteTitle: "Una lista de la escuela", pasteSub: "Pega las palabras que te dieron, una por línea. También palabra y traducción.", pastePh: ["amarillo", "perro", "maestro"].join(NL), pasteBtn: "Crear tarjetas", creating: "Creando...", unsafe: "Elijamos otro tema.", createErr: "No pudimos crearlo. Inténtalo de nuevo u otro tema." },
 };
+
+Object.assign(PICK_COPY, PICK_MORE);
 
 /** Topics, own topics and pasted lists pair a word with its English, so
  *  they are offered whenever the UI language isn't English itself. */

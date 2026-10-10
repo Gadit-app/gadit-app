@@ -3868,6 +3868,43 @@ const SCHOOL_TIERS = [
 // @/lib/schools-prices, the same source /pricing uses (Gadi 2026-08-15,
 // raised from the old flat $69/$149). Hebrew keeps the ₪ order form below.
 
+/** Small labels in the classic Schools landing (2026-10-10 i18n sweep). */
+const LANDING_BITS: Record<string, { step: (n: number) => string; example: string; moreLangs: string }> = {
+  en: { step: (n) => `Step ${n}`, example: "Example", moreLangs: "+ 11 more languages" },
+  he: { step: (n) => `שלב ${n}`, example: "דוגמה", moreLangs: "ועוד 11 שפות" },
+  ar: { step: (n) => `الخطوة ${n}`, example: "مثال", moreLangs: "و11 لغة أخرى" },
+  ru: { step: (n) => `Шаг ${n}`, example: "Пример", moreLangs: "и ещё 11 языков" },
+  es: { step: (n) => `Paso ${n}`, example: "Ejemplo", moreLangs: "+ 11 idiomas más" },
+  pt: { step: (n) => `Passo ${n}`, example: "Exemplo", moreLangs: "+ 11 outros idiomas" },
+  fr: { step: (n) => `Étape ${n}`, example: "Exemple", moreLangs: "+ 11 autres langues" },
+  de: { step: (n) => `Schritt ${n}`, example: "Beispiel", moreLangs: "+ 11 weitere Sprachen" },
+  cs: { step: (n) => `Krok ${n}`, example: "Příklad", moreLangs: "+ 11 dalších jazyků" },
+  sk: { step: (n) => `Krok ${n}`, example: "Príklad", moreLangs: "+ 11 ďalších jazykov" },
+  it: { step: (n) => `Passo ${n}`, example: "Esempio", moreLangs: "+ altre 11 lingue" },
+  ja: { step: (n) => `ステップ ${n}`, example: "例", moreLangs: "ほか11言語" },
+  hi: { step: (n) => `चरण ${n}`, example: "उदाहरण", moreLangs: "+ 11 और भाषाएँ" },
+  am: { step: (n) => `ደረጃ ${n}`, example: "ምሳሌ", moreLangs: "+ ሌሎች 11 ቋንቋዎች" },
+  uk: { step: (n) => `Крок ${n}`, example: "Приклад", moreLangs: "і ще 11 мов" },
+  tr: { step: (n) => `Adım ${n}`, example: "Örnek", moreLangs: "+ 11 dil daha" },
+  pl: { step: (n) => `Krok ${n}`, example: "Przykład", moreLangs: "+ 11 innych języków" },
+  fa: { step: (n) => `مرحله ${n}`, example: "مثال", moreLangs: "و 11 زبان دیگر" },
+  id: { step: (n) => `Langkah ${n}`, example: "Contoh", moreLangs: "+ 11 bahasa lainnya" },
+  nl: { step: (n) => `Stap ${n}`, example: "Voorbeeld", moreLangs: "+ 11 andere talen" },
+  el: { step: (n) => `Βήμα ${n}`, example: "Παράδειγμα", moreLangs: "+ 11 ακόμη γλώσσες" },
+  zu: { step: (n) => `Isinyathelo ${n}`, example: "Isibonelo", moreLangs: "+ nezinye izilimi ezingu-11" },
+  vi: { step: (n) => `Bước ${n}`, example: "Ví dụ", moreLangs: "+ 11 ngôn ngữ khác" },
+  fil: { step: (n) => `Hakbang ${n}`, example: "Halimbawa", moreLangs: "+ 11 pang wika" },
+  af: { step: (n) => `Stap ${n}`, example: "Voorbeeld", moreLangs: "+ 11 ander tale" },
+  sw: { step: (n) => `Hatua ya ${n}`, example: "Mfano", moreLangs: "+ lugha nyingine 11" },
+  "zh-CN": { step: (n) => `第 ${n} 步`, example: "例句", moreLangs: "还有 11 种语言" },
+  "zh-TW": { step: (n) => `第 ${n} 步`, example: "例句", moreLangs: "還有 11 種語言" },
+  ko: { step: (n) => `${n}단계`, example: "예문", moreLangs: "+ 11개 언어 더" },
+  th: { step: (n) => `ขั้นตอนที่ ${n}`, example: "ตัวอย่าง", moreLangs: "+ อีก 11 ภาษา" },
+  bn: { step: (n) => `ধাপ ${n}`, example: "উদাহরণ", moreLangs: "+ আরও 11টি ভাষা" },
+  da: { step: (n) => `Trin ${n}`, example: "Eksempel", moreLangs: "+ 11 sprog mere" },
+  hu: { step: (n) => `${n}. lépés`, example: "Példa", moreLangs: "+ még 11 nyelv" },
+};
+
 type PricingUI = {
   perYear: string;
   orderCta: string;
@@ -4534,6 +4571,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
   const t = COPY[lang] ?? COPY.en;
   const xt = XLANG[lang] ?? XLANG.en;
   const pu = PRICING_UI[lang] ?? PRICING_UI.en;
+  const bits = LANDING_BITS[lang] ?? LANDING_BITS.en;
   const upu = USD_PRICING_UI[lang] ?? USD_PRICING_UI.en;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   // Monthly-first billing toggle for the international USD pricing (non-Hebrew).
@@ -4603,6 +4641,25 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
     de: { text: "Sie haben den Schools-Tarif aktiv.", cta: "Zum Dashboard →" },
     it: { text: "Hai il piano Schools attivo.", cta: "Vai alla mia dashboard →" },
     ja: { text: "Schoolsプランがアクティブです。", cta: "ダッシュボードへ →" },
+    uk: { text: "У вас активний тариф Schools.", cta: "До моєї панелі →" },
+    tr: { text: "Schools planınız etkin.", cta: "Panelime git →" },
+    pl: { text: "Masz aktywny plan Schools.", cta: "Przejdź do panelu →" },
+    fa: { text: "طرح Schools برای شما فعال است.", cta: "رفتن به داشبورد من ←" },
+    id: { text: "Paket Schools Anda aktif.", cta: "Ke dasbor saya →" },
+    nl: { text: "Je hebt het Schools-abonnement.", cta: "Naar mijn dashboard →" },
+    el: { text: "Έχετε ενεργό το πρόγραμμα Schools.", cta: "Στον πίνακά μου →" },
+    zu: { text: "Uhlelo lwe-Schools luyasebenza kuwe.", cta: "Iya kudeshibhodi yami →" },
+    vi: { text: "Bạn đang dùng gói Schools.", cta: "Đến bảng điều khiển →" },
+    fil: { text: "Aktibo ang Schools plan mo.", cta: "Pumunta sa dashboard ko →" },
+    af: { text: "Jy is op die Schools-plan.", cta: "Gaan na my paneelbord →" },
+    sw: { text: "Mpango wa Schools uko hai kwako.", cta: "Nenda kwenye dashibodi yangu →" },
+    "zh-CN": { text: "你的 Schools 方案已启用。", cta: "前往我的控制台 →" },
+    "zh-TW": { text: "你的 Schools 方案已啟用。", cta: "前往我的控制台 →" },
+    ko: { text: "Schools 요금제를 이용 중입니다.", cta: "내 대시보드로 →" },
+    th: { text: "คุณใช้แพ็กเกจ Schools อยู่", cta: "ไปที่แดชบอร์ดของฉัน →" },
+    bn: { text: "আপনার Schools প্ল্যান সক্রিয় আছে।", cta: "আমার ড্যাশবোর্ডে যান →" },
+    da: { text: "Du har Schools-abonnementet.", cta: "Gå til mit dashboard →" },
+    hu: { text: "A Schools csomagod aktív.", cta: "Irány az irányítópult →" },
   };
   const banner = ownerBannerCopy[lang] ?? ownerBannerCopy.en;
 
@@ -4652,7 +4709,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 className="wb-shell-link"
                 onClick={() => promptLogin({ mode: "signin" })}
               >
-                Sign in
+                {v2(lang, "signIn")}
               </button>
             </>
           )}
@@ -4977,7 +5034,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 <div className="wb-schools-mockup-meaning-text">{t.mockupExampleDef}</div>
               </div>
               <div className="wb-schools-mockup-example">
-                <div className="wb-schools-mockup-example-label">Example</div>
+                <div className="wb-schools-mockup-example-label">{bits.example}</div>
                 <div className="wb-schools-mockup-example-text">{t.mockupExampleEx}</div>
               </div>
             </div>
@@ -5051,7 +5108,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               ))}
             </div>
             <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #FEF3C7", fontSize: 12.5, color: "#A16207", fontWeight: 600 }}>
-              {lang === "ar" ? "و11 لغة أخرى" : lang === "ru" ? "и ещё 11 языков" : "+ 11 more languages"}
+              {bits.moreLangs}
             </div>
           </div>
 
@@ -5073,7 +5130,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
               <div className="wb-schools-step-icon">
                 <div className="wb-schools-code-chip" lang="en" dir="ltr">XYZ123</div>
               </div>
-              <div className="wb-schools-step-num">Step 1</div>
+              <div className="wb-schools-step-num">{bits.step(1)}</div>
               <div className="wb-schools-step-title">{t.howStep1Title}</div>
               <div className="wb-schools-step-body">{t.howStep1Body}</div>
             </div>
@@ -5087,7 +5144,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                   <circle cx="32" cy="44" r="3" fill="#0EA5A5" />
                 </svg>
               </div>
-              <div className="wb-schools-step-num">Step 2</div>
+              <div className="wb-schools-step-num">{bits.step(2)}</div>
               <div className="wb-schools-step-title">{t.howStep2Title}</div>
               <div className="wb-schools-step-body">{t.howStep2Body}</div>
             </div>
@@ -5101,7 +5158,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                   <rect x="12" y="42" width="32" height="3" rx="1.5" fill="#0EA5A5" opacity="0.4" />
                 </svg>
               </div>
-              <div className="wb-schools-step-num">Step 3</div>
+              <div className="wb-schools-step-num">{bits.step(3)}</div>
               <div className="wb-schools-step-title">{t.howStep3Title}</div>
               <div className="wb-schools-step-body">{t.howStep3Body}</div>
             </div>
@@ -5474,7 +5531,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
         <span>·</span>
-        <Link href={href("/pricing")}>Pricing</Link>
+        <Link href={href("/pricing")}>{v2(lang, "footerPricing")}</Link>
         <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>

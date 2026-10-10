@@ -3233,6 +3233,15 @@ const WORDS_IN: Record<string, [string, string]> = {
   he: ["המילים ב:", "כל השפות"], en: ["Words in:", "All languages"], ar: ["الكلمات بـ:", "كل اللغات"],
   ru: ["Слова на:", "Все языки"], es: ["Palabras en:", "Todos los idiomas"], pt: ["Palavras em:", "Todos os idiomas"],
   fr: ["Mots en :", "Toutes les langues"], de: ["Wörter auf:", "Alle Sprachen"],
+  cs: ["Jazyk slov:", "Všechny jazyky"], sk: ["Jazyk slov:", "Všetky jazyky"], it: ["Parole in:", "Tutte le lingue"],
+  ja: ["単語の言語：", "すべての言語"], hi: ["शब्दों की भाषा:", "सभी भाषाएँ"], am: ["የቃላት ቋንቋ:", "ሁሉም ቋንቋዎች"],
+  uk: ["Мова слів:", "Усі мови"], tr: ["Kelimelerin dili:", "Tüm diller"], pl: ["Język słów:", "Wszystkie języki"],
+  fa: ["زبان واژه‌ها:", "همه‌ی زبان‌ها"], id: ["Bahasa kata:", "Semua bahasa"], nl: ["Woorden in:", "Alle talen"],
+  el: ["Γλώσσα λέξεων:", "Όλες οι γλώσσες"], zu: ["Ulimi lwamagama:", "Zonke izilimi"], vi: ["Ngôn ngữ của từ:", "Tất cả ngôn ngữ"],
+  fil: ["Wika ng mga salita:", "Lahat ng wika"], af: ["Woorde in:", "Alle tale"], sw: ["Lugha ya maneno:", "Lugha zote"],
+  "zh-CN": ["词语语言：", "所有语言"], "zh-TW": ["詞語語言：", "所有語言"], ko: ["단어 언어:", "모든 언어"],
+  th: ["ภาษาของคำ:", "ทุกภาษา"], bn: ["শব্দের ভাষা:", "সব ভাষা"], da: ["Ord på:", "Alle sprog"],
+  hu: ["Szavak nyelve:", "Minden nyelv"],
 };
 const wordsInLabel = (ui: string) => (WORDS_IN[ui] ?? WORDS_IN.en)[0];
 const allLangsLabel = (ui: string) => (WORDS_IN[ui] ?? WORDS_IN.en)[1];

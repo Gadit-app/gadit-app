@@ -390,6 +390,8 @@ const COPY: Record<string, {
   trialTermsFull?: string;
 }> = {
   uk: {
+    trialTerms: "14 днів безкоштовно, потім {price}. Скасуйте будь-коли до завершення, і списання не буде.",
+    trialTermsFull: "Усі платні тарифи починаються з 14 безкоштовних днів. Під час пробного періоду кошти не списуються. Коли він завершиться, з картки спишеться вказана ціна за обраний тариф і період оплати, і підписка подовжуватиметься щоперіоду, доки ви її не скасуєте. Скасувати можна будь-коли до кінця пробного періоду, у своєму акаунті одним натисканням, і списання не буде.",
     heroTitle: "Почни безкоштовно.",
     heroSub: "Переходь на вищий рівень лише тоді, коли хочеш глибини.",
     monthly: "Щомісяця", yearly: "Щороку",
@@ -468,6 +470,8 @@ const COPY: Record<string, {
     },
   },
   tr: {
+    trialTerms: "14 gün ücretsiz deneme, ardından {price}. Bitmeden önce istediğin zaman iptal et, ücret alınmaz.",
+    trialTermsFull: "Tüm ücretli planlar 14 günlük ücretsiz denemeyle başlar. Deneme süresince ücret alınmaz. Deneme bittiğinde, seçtiğin plan ve ödeme dönemi için gösterilen fiyat kartından tahsil edilir ve iptal edene kadar her dönem yenilenir. Deneme bitmeden önce istediğin zaman hesabından tek tıkla iptal edebilirsin, ücret alınmaz.",
     heroTitle: "Ücretsiz başla.",
     heroSub: "Yalnızca derinlik istediğinde yükselt.",
     monthly: "Aylık", yearly: "Yıllık",
@@ -546,6 +550,8 @@ const COPY: Record<string, {
     },
   },
   pl: {
+    trialTerms: "14 dni za darmo, potem {price}. Anuluj w dowolnym momencie przed końcem, a nic nie zapłacisz.",
+    trialTermsFull: "Wszystkie płatne plany zaczynają się od 14-dniowego bezpłatnego okresu próbnego. W okresie próbnym nic nie pobieramy. Po jego zakończeniu z Twojej karty zostanie pobrana podana cena za wybrany plan i okres rozliczeniowy, a subskrypcja odnawia się co okres, dopóki jej nie anulujesz. Możesz anulować w dowolnym momencie przed końcem okresu próbnego, na swoim koncie jednym kliknięciem, i nic nie zapłacisz.",
     heroTitle: "Zacznij za darmo.",
     heroSub: "Przejdź na wyższy plan, gdy zechcesz głębi.",
     monthly: "Miesięcznie", yearly: "Rocznie",
@@ -624,6 +630,8 @@ const COPY: Record<string, {
     },
   },
   fa: {
+    trialTerms: "14 روز آزمایش رایگان، سپس {price}. هر زمان پیش از پایان لغو کنید، هزینه‌ای کسر نمی‌شود.",
+    trialTermsFull: "همه طرح‌های پولی با 14 روز آزمایش رایگان شروع می‌شوند. در دوره آزمایشی هزینه‌ای از شما کسر نمی‌شود. پس از پایان آن، قیمت نمایش‌داده‌شده برای طرح و دوره پرداختی که انتخاب کرده‌اید از کارت شما کسر می‌شود و اشتراک در هر دوره تمدید می‌شود تا زمانی که لغوش کنید. هر زمان پیش از پایان دوره آزمایشی می‌توانید از حساب خود با یک کلیک لغو کنید، و هزینه‌ای کسر نمی‌شود.",
     heroTitle: "رایگان شروع کن.",
     heroSub: "فقط وقتی عمق بیشتری خواستی ارتقا بده.",
     monthly: "ماهانه", yearly: "سالانه",
@@ -702,6 +710,8 @@ const COPY: Record<string, {
     },
   },
   id: {
+    trialTerms: "Uji coba gratis 14 hari, lalu {price}. Batalkan kapan saja sebelum berakhir dan Anda tidak akan ditagih.",
+    trialTermsFull: "Semua paket berbayar dimulai dengan uji coba gratis 14 hari. Anda tidak ditagih selama uji coba. Setelah berakhir, kartu Anda ditagih sesuai harga yang ditampilkan untuk paket dan siklus penagihan yang Anda pilih, dan langganan diperpanjang setiap periode sampai Anda membatalkannya. Batalkan kapan saja sebelum uji coba berakhir, dari akun Anda dengan satu klik, dan Anda tidak akan ditagih.",
     heroTitle: "Mulai gratis.",
     heroSub: "Tingkatkan hanya saat kamu ingin lebih mendalam.",
     monthly: "Bulanan", yearly: "Tahunan",
@@ -780,6 +790,8 @@ const COPY: Record<string, {
     },
   },
   nl: {
+    trialTerms: "14 dagen gratis proberen, daarna {price}. Zeg op elk moment op voor het einde en je betaalt niets.",
+    trialTermsFull: "Alle betaalde abonnementen beginnen met een gratis proefperiode van 14 dagen. Tijdens de proefperiode betaal je niets. Daarna wordt de getoonde prijs voor het gekozen abonnement en de gekozen betaalperiode van je kaart afgeschreven, en het abonnement wordt elke periode verlengd tot je opzegt. Je kunt op elk moment voor het einde van de proefperiode opzeggen, met één klik in je account, en je betaalt niets.",
     heroTitle: "Begin gratis.",
     heroSub: "Upgrade alleen wanneer je diepgang wilt.",
     monthly: "Maandelijks", yearly: "Jaarlijks",
@@ -1022,6 +1034,8 @@ const COPY: Record<string, {
     },
   },
   zu: {
+    trialTerms: "Izinsuku ezingu-14 zokuzama mahhala, bese {price}. Khansela noma nini ngaphambi kokuthi ziphele futhi ngeke ukhokhiswe.",
+    trialTermsFull: "Wonke amapulani akhokhelwayo aqala ngezinsuku ezingu-14 zokuzama mahhala. Awukhokhiswa lutho ngesikhathi sokuzama. Uma kuphela, ikhadi lakho likhokhiswa inani elikhonjisiwe lepulani nomjikelezo wokukhokha owukhethile, futhi kuvuseleleka isikhathi ngasinye uze ukhansele. Khansela noma nini ngaphambi kokuthi isikhathi sokuzama siphele, ku-akhawunti yakho ngokuchofoza kanye, futhi ngeke ukhokhiswe.",
     heroTitle: "Qala mahhala.",
     heroSub: "Khuphukela ezingeni eliphezulu kuphela lapho ufuna ukujula.",
     monthly: "Nyanga zonke", yearly: "Nyaka zonke",
@@ -1100,6 +1114,8 @@ const COPY: Record<string, {
     },
   },
   el: {
+    trialTerms: "14 ημέρες δωρεάν δοκιμή, μετά {price}. Ακύρωσε οποιαδήποτε στιγμή πριν λήξει και δεν θα χρεωθείς.",
+    trialTermsFull: "Όλα τα επί πληρωμή προγράμματα ξεκινούν με 14 ημέρες δωρεάν δοκιμή. Κατά τη δοκιμή δεν χρεώνεσαι. Όταν λήξει, η κάρτα σου χρεώνεται την τιμή που εμφανίζεται για το πρόγραμμα και τον κύκλο χρέωσης που επέλεξες, και η συνδρομή ανανεώνεται κάθε περίοδο μέχρι να την ακυρώσεις. Μπορείς να ακυρώσεις οποιαδήποτε στιγμή πριν λήξει η δοκιμή, από τον λογαριασμό σου με ένα κλικ, και δεν θα χρεωθείς.",
     heroTitle: "Ξεκίνα δωρεάν.",
     heroSub: "Αναβάθμισε μόνο όταν θέλεις βάθος.",
     monthly: "Μηνιαία", yearly: "Ετήσια",
@@ -1178,6 +1194,22 @@ const COPY: Record<string, {
     },
   },
   ar: {
+    trialTerms: "تجربة مجانية لمدة 14 يوماً، ثم {price}. يمكنك الإلغاء في أي وقت قبل انتهائها ولن يتم خصم أي مبلغ.",
+    trialTermsFull: "تبدأ كل الخطط المدفوعة بتجربة مجانية لمدة 14 يوماً. لا يتم خصم أي مبلغ خلال التجربة. عند انتهائها تُخصم من بطاقتك قيمة السعر المعروض للخطة ودورة الدفع التي اخترتها، ويتجدد الاشتراك في كل فترة حتى تلغيه. يمكنك الإلغاء في أي وقت قبل انتهاء التجربة، من حسابك بنقرة واحدة، ولن يتم خصم أي مبلغ.",
+    school: {
+      name: "Schools",
+      eyebrow: "خطة المدارس",
+      tagline: <>كل الصفوف، كل المعلمين، كل الأطفال، <Hl>بلا حدود</Hl></>,
+      cta: "جرّب 14 يوماً مجاناً",
+      features: [
+        "صفوف ومعلمون وطلاب بلا حدود",
+        "رمز صف بسيط من 6 أحرف، يفتح الأطفال الرابط على حاسوب الصف بلا اسم مستخدم أو كلمة مرور",
+        "كل طفل يحصل على كل الميزات المتقدمة: شرح للأطفال، صورة لكل كلمة، تعابير، أصل الكلمة",
+        "يرى المعلم كل كلمة بحث عنها صفه اليوم",
+        "شعار مدرستك على شاشة الأطفال، كأنه جزء من مدرستك",
+        "فاتورة يمكنك تقديمها لإدارة المدرسة",
+      ],
+    },
     heroTitle: "ابدأ مجانًا.",
     heroSub: "ارتقِ متى أردت التعمّق.",
     monthly: "شهري", yearly: "سنوي",
@@ -1229,6 +1261,22 @@ const COPY: Record<string, {
     },
   },
   ru: {
+    trialTerms: "14 дней бесплатно, затем {price}. Отмените в любой момент до окончания, и списания не будет.",
+    trialTermsFull: "Все платные тарифы начинаются с 14 бесплатных дней. Во время пробного периода деньги не списываются. Когда он закончится, с карты спишется указанная цена за выбранный тариф и период оплаты, и подписка будет продлеваться каждый период, пока вы её не отмените. Отменить можно в любой момент до конца пробного периода, в своём аккаунте одним нажатием, и списания не будет.",
+    school: {
+      name: "Schools",
+      eyebrow: "Тариф для школ",
+      tagline: <>Каждый класс, каждый учитель, каждый ребёнок, <Hl>без ограничений</Hl></>,
+      cta: "14 дней бесплатно",
+      features: [
+        "Без ограничений по классам, учителям и ученикам",
+        "Простой код класса из 6 символов, дети открывают ссылку на компьютере в классе без логина и пароля",
+        "Каждый ребёнок получает все расширенные функции: объяснение для детей, картинку к каждому слову, идиомы, происхождение слова",
+        "Учитель видит каждое слово, которое его класс искал сегодня",
+        "Логотип вашей школы на детском экране, как часть вашей школы",
+        "Счёт, который можно передать администрации школы",
+      ],
+    },
     heroTitle: "Начните бесплатно.",
     heroSub: "Обновите подписку, когда захотите углубиться.",
     monthly: "Ежемесячно", yearly: "Ежегодно",
@@ -1280,6 +1328,22 @@ const COPY: Record<string, {
     },
   },
   es: {
+    trialTerms: "14 días de prueba gratis y después {price}. Cancela cuando quieras antes de que termine y no se te cobrará.",
+    trialTermsFull: "Todos los planes de pago empiezan con 14 días de prueba gratis. No se te cobra nada durante la prueba. Cuando termina, se cobra en tu tarjeta el precio indicado para el plan y el ciclo de facturación que elegiste, y se renueva cada periodo hasta que canceles. Puedes cancelar cuando quieras antes de que termine la prueba, desde tu cuenta con un clic, y no se te cobrará.",
+    school: {
+      name: "Schools",
+      eyebrow: "Plan para colegios",
+      tagline: <>Cada aula, cada docente, cada niño, <Hl>sin límites</Hl></>,
+      cta: "Prueba 14 días gratis",
+      features: [
+        "Aulas, docentes y alumnos ilimitados",
+        "Un código de clase sencillo de 6 caracteres, los niños abren el enlace en el ordenador del aula sin usuario ni contraseña",
+        "Cada niño recibe todas las funciones avanzadas: explicación para niños, imagen por palabra, modismos, etimología",
+        "El docente ve cada palabra que su clase buscó hoy",
+        "El logo de tu colegio en la pantalla de los niños, se siente parte de tu colegio",
+        "Factura que puedes entregar a la administración del colegio",
+      ],
+    },
     heroTitle: "Empieza gratis.",
     heroSub: "Actualiza solo cuando quieras profundizar.",
     monthly: "Mensual", yearly: "Anual",
@@ -1331,6 +1395,22 @@ const COPY: Record<string, {
     },
   },
   pt: {
+    trialTerms: "14 dias de teste grátis e depois {price}. Cancele quando quiser antes do fim e não será cobrado.",
+    trialTermsFull: "Todos os planos pagos começam com 14 dias de teste grátis. Não é cobrado nada durante o teste. Quando termina, o seu cartão é cobrado pelo preço indicado para o plano e o ciclo de faturação que escolheu, e a assinatura renova-se a cada período até cancelar. Pode cancelar quando quiser antes do fim do teste, na sua conta com um clique, e não será cobrado.",
+    school: {
+      name: "Schools",
+      eyebrow: "Plano para escolas",
+      tagline: <>Cada turma, cada professor, cada criança, <Hl>sem limites</Hl></>,
+      cta: "Experimente 14 dias grátis",
+      features: [
+        "Turmas, professores e alunos ilimitados",
+        "Código de turma simples de 6 caracteres, as crianças abrem o link no computador da sala sem utilizador nem palavra-passe",
+        "Cada criança recebe todas as funcionalidades avançadas: explicação para crianças, imagem por palavra, expressões, etimologia",
+        "O professor vê cada palavra que a turma pesquisou hoje",
+        "O logótipo da sua escola no ecrã das crianças, parece parte da sua escola",
+        "Fatura que pode entregar à administração da escola",
+      ],
+    },
     heroTitle: "Comece grátis.",
     heroSub: "Atualize só quando quiser aprofundar.",
     monthly: "Mensal", yearly: "Anual",
@@ -1382,6 +1462,22 @@ const COPY: Record<string, {
     },
   },
   fr: {
+    trialTerms: "14 jours d'essai gratuit, puis {price}. Annulez à tout moment avant la fin et vous ne serez pas débité.",
+    trialTermsFull: "Toutes les formules payantes commencent par 14 jours d'essai gratuit. Vous n'êtes pas débité pendant l'essai. À la fin, votre carte est débitée du prix indiqué pour la formule et la période de facturation choisies, et l'abonnement se renouvelle à chaque période jusqu'à ce que vous annuliez. Vous pouvez annuler à tout moment avant la fin de l'essai, depuis votre compte en un clic, et vous ne serez pas débité.",
+    school: {
+      name: "Schools",
+      eyebrow: "Formule écoles",
+      tagline: <>Chaque classe, chaque enseignant, chaque enfant, <Hl>sans limite</Hl></>,
+      cta: "Essayez 14 jours gratuits",
+      features: [
+        "Classes, enseignants et élèves illimités",
+        "Un code de classe simple de 6 caractères, les enfants ouvrent le lien sur l'ordinateur de la classe sans identifiant ni mot de passe",
+        "Chaque enfant a toutes les fonctions avancées : explication pour enfants, image pour chaque mot, expressions, étymologie",
+        "L'enseignant voit chaque mot que sa classe a cherché aujourd'hui",
+        "Le logo de votre école sur l'écran des enfants, comme une partie de votre école",
+        "Une facture à remettre à l'administration de l'école",
+      ],
+    },
     heroTitle: "Commencez gratuitement.",
     heroSub: "Passez au supérieur seulement quand vous voulez approfondir.",
     monthly: "Mensuel", yearly: "Annuel",
@@ -1433,6 +1529,22 @@ const COPY: Record<string, {
     },
   },
   de: {
+    trialTerms: "14 Tage kostenlos testen, danach {price}. Kündigen Sie jederzeit vor Ablauf, dann wird nichts berechnet.",
+    trialTermsFull: "Alle kostenpflichtigen Tarife beginnen mit einer 14-tägigen kostenlosen Testphase. Während der Testphase wird nichts berechnet. Danach wird Ihre Karte mit dem angezeigten Preis für den gewählten Tarif und Abrechnungszeitraum belastet, und das Abo verlängert sich jeden Zeitraum, bis Sie kündigen. Sie können jederzeit vor Ende der Testphase in Ihrem Konto mit einem Klick kündigen, dann wird nichts berechnet.",
+    school: {
+      name: "Schools",
+      eyebrow: "Tarif für Schulen",
+      tagline: <>Jede Klasse, jede Lehrkraft, jedes Kind, <Hl>unbegrenzt</Hl></>,
+      cta: "14 Tage kostenlos testen",
+      features: [
+        "Unbegrenzt viele Klassen, Lehrkräfte und Schüler",
+        "Einfacher 6-stelliger Klassencode, die Kinder öffnen den Link am Klassencomputer ohne Benutzername oder Passwort",
+        "Jedes Kind bekommt alle erweiterten Funktionen: kindgerechte Erklärung, ein Bild pro Wort, Redewendungen, Wortherkunft",
+        "Die Lehrkraft sieht jedes Wort, das ihre Klasse heute gesucht hat",
+        "Das Logo Ihrer Schule auf dem Kinderbildschirm, fühlt sich wie ein Teil Ihrer Schule an",
+        "Eine Rechnung, die Sie der Schulverwaltung vorlegen können",
+      ],
+    },
     heroTitle: "Kostenlos starten.",
     heroSub: "Upgrade nur, wenn du tiefer eintauchen willst.",
     monthly: "Monatlich", yearly: "Jährlich",
@@ -1484,6 +1596,22 @@ const COPY: Record<string, {
     },
   },
   cs: {
+    trialTerms: "14 dní zdarma, pak {price}. Zrušte kdykoli před koncem a nic vám nebude účtováno.",
+    trialTermsFull: "Všechny placené tarify začínají 14denní zkušební dobou zdarma. Během zkušební doby vám nic neúčtujeme. Po jejím skončení vám z karty strhneme uvedenou cenu za zvolený tarif a fakturační období a předplatné se každé období obnovuje, dokud ho nezrušíte. Zrušit můžete kdykoli před koncem zkušební doby, ve svém účtu jedním kliknutím, a nic vám nebude účtováno.",
+    school: {
+      name: "Schools",
+      eyebrow: "Tarif pro školy",
+      tagline: <>Každá třída, každý učitel, každé dítě, <Hl>bez omezení</Hl></>,
+      cta: "Vyzkoušejte 14 dní zdarma",
+      features: [
+        "Neomezený počet tříd, učitelů a žáků",
+        "Jednoduchý 6místný kód třídy, děti otevřou odkaz na počítači ve třídě bez uživatelského jména a hesla",
+        "Každé dítě dostane všechny pokročilé funkce: vysvětlení pro děti, obrázek ke každému slovu, idiomy, původ slova",
+        "Učitel vidí každé slovo, které jeho třída dnes hledala",
+        "Logo vaší školy na dětské obrazovce, působí jako součást vaší školy",
+        "Faktura, kterou můžete předat vedení školy",
+      ],
+    },
     heroTitle: "Začni zdarma.",
     heroSub: "Upgraduj, jen když budeš chtít jít hlouběji.",
     monthly: "Měsíčně", yearly: "Ročně",
@@ -1535,6 +1663,22 @@ const COPY: Record<string, {
     },
   },
   sk: {
+    trialTerms: "14 dní zadarmo, potom {price}. Zrušte kedykoľvek pred koncom a nič vám nebude účtované.",
+    trialTermsFull: "Všetky platené tarify začínajú 14-dňovou skúšobnou dobou zadarmo. Počas skúšobnej doby vám nič neúčtujeme. Po jej skončení vám z karty strhneme uvedenú cenu za zvolený tarif a fakturačné obdobie a predplatné sa každé obdobie obnovuje, kým ho nezrušíte. Zrušiť môžete kedykoľvek pred koncom skúšobnej doby, vo svojom účte jedným kliknutím, a nič vám nebude účtované.",
+    school: {
+      name: "Schools",
+      eyebrow: "Tarif pre školy",
+      tagline: <>Každá trieda, každý učiteľ, každé dieťa, <Hl>bez obmedzení</Hl></>,
+      cta: "Vyskúšajte 14 dní zadarmo",
+      features: [
+        "Neobmedzený počet tried, učiteľov a žiakov",
+        "Jednoduchý 6-miestny kód triedy, deti otvoria odkaz na počítači v triede bez používateľského mena a hesla",
+        "Každé dieťa dostane všetky pokročilé funkcie: vysvetlenie pre deti, obrázok ku každému slovu, idiómy, pôvod slova",
+        "Učiteľ vidí každé slovo, ktoré jeho trieda dnes hľadala",
+        "Logo vašej školy na detskej obrazovke, pôsobí ako súčasť vašej školy",
+        "Faktúra, ktorú môžete odovzdať vedeniu školy",
+      ],
+    },
     heroTitle: "Začni zadarmo.",
     heroSub: "Upgraduj, len keď budeš chcieť ísť hlbšie.",
     monthly: "Mesačne", yearly: "Ročne",
@@ -1586,6 +1730,8 @@ const COPY: Record<string, {
     },
   },
   it: {
+    trialTerms: "14 giorni di prova gratuita, poi {price}. Annulla quando vuoi prima della fine e non ti verrà addebitato nulla.",
+    trialTermsFull: "Tutti i piani a pagamento iniziano con 14 giorni di prova gratuita. Durante la prova non ti viene addebitato nulla. Alla fine, sulla tua carta viene addebitato il prezzo indicato per il piano e il ciclo di fatturazione che hai scelto, e l'abbonamento si rinnova a ogni periodo finché non annulli. Puoi annullare quando vuoi prima della fine della prova, dal tuo account con un clic, e non ti verrà addebitato nulla.",
     heroTitle: "Inizia gratis.",
     heroSub: "Fai l'upgrade solo quando vuoi andare più a fondo.",
     monthly: "Mensile", yearly: "Annuale",
@@ -1664,6 +1810,8 @@ const COPY: Record<string, {
     },
   },
   ja: {
+    trialTerms: "14日間の無料トライアル後、{price}。終了前にいつでも解約でき、料金はかかりません。",
+    trialTermsFull: "すべての有料プランは14日間の無料トライアルから始まります。トライアル中は料金はかかりません。終了後、選択したプランと請求サイクルに表示された料金がカードに請求され、解約するまで期間ごとに自動更新されます。トライアル終了前ならいつでも、アカウントからワンクリックで解約でき、料金はかかりません。",
     heroTitle: "無料で始めましょう。",
     heroSub: "もっと深く学びたくなったときに、アップグレードしてください。",
     monthly: "月払い", yearly: "年払い",
@@ -1742,6 +1890,8 @@ const COPY: Record<string, {
     },
   },
   hi: {
+    trialTerms: "14 दिन का मुफ़्त ट्रायल, फिर {price}। ख़त्म होने से पहले कभी भी रद्द करें, कोई शुल्क नहीं लगेगा।",
+    trialTermsFull: "सभी पेड प्लान 14 दिन के मुफ़्त ट्रायल से शुरू होते हैं। ट्रायल के दौरान कोई शुल्क नहीं लिया जाता। ट्रायल ख़त्म होने पर आपके चुने हुए प्लान और बिलिंग अवधि की दिखाई गई कीमत आपके कार्ड से ली जाती है, और रद्द करने तक हर अवधि में नवीनीकरण होता है। ट्रायल ख़त्म होने से पहले कभी भी अपने खाते से एक क्लिक में रद्द करें, कोई शुल्क नहीं लगेगा।",
     heroTitle: "मुफ्त शुरू करें।",
     heroSub: "अपग्रेड सिर्फ़ तब करें जब आप गहराई चाहें।",
     monthly: "मासिक", yearly: "सालाना",
@@ -1820,6 +1970,8 @@ const COPY: Record<string, {
     },
   },
   am: {
+    trialTerms: "የ14 ቀን ነጻ ሙከራ፣ ከዚያ {price}። ከማብቃቱ በፊት በማንኛውም ጊዜ ይሰርዙ፣ ክፍያ አይጠየቁም።",
+    trialTermsFull: "ሁሉም የሚከፈልባቸው ዕቅዶች በ14 ቀን ነጻ ሙከራ ይጀምራሉ። በሙከራው ወቅት ምንም ክፍያ አይጠየቁም። ሲያበቃ ለመረጡት ዕቅድና የክፍያ ዑደት የሚታየው ዋጋ ከካርድዎ ይቆረጣል፣ እስኪሰርዙም ድረስ በየጊዜው ይታደሳል። ሙከራው ከማብቃቱ በፊት በማንኛውም ጊዜ ከመለያዎ በአንድ ጠቅታ መሰረዝ ይችላሉ፣ ክፍያም አይጠየቁም።",
     heroTitle: "በነጻ ይጀምሩ።",
     heroSub: "ጥልቀት ሲፈልጉ ብቻ ያሻሽሉ።",
     monthly: "ወርሃዊ", yearly: "ዓመታዊ",

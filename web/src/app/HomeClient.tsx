@@ -373,7 +373,7 @@ export function HomePage() {
                     go(text);
                   }}
                   enabled={true}
-                  title="חיפוש קולי"
+                  title={v2(lang, "voiceInputTitle")}
                   size="sm"
                 />
               </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-titles";
 import { ContactClient } from "./ContactClient";
 
 /**
@@ -10,10 +11,15 @@ import { ContactClient } from "./ContactClient";
  * we never built it; beta security review caught the broken footer
  * link, hence this thin landing.
  */
-export const metadata: Metadata = {
+const BASE_METADATA: Metadata = {
   title: "Contact, Gadit",
   description: "Contact Gadit support.",
 };
+
+/** Same metadata, with the tab title in the visitor's UI language. */
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("contact", BASE_METADATA);
+}
 
 export default function ContactRoute() {
   return <ContactClient />;

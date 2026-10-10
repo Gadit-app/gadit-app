@@ -1,6 +1,7 @@
 "use client";
 
 import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
+import { miscUi } from "@/lib/misc-ui-i18n";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -354,7 +355,9 @@ export default function CheckoutClient() {
   function switchCycle(toId: string) {
     const url = new URL(window.location.href);
     url.searchParams.set("price", toId);
-    window.location.href = url.toString();
+    // replace: the same checkout with another cycle, so Back still leaves
+    // checkout in one press instead of stepping through each toggle.
+    window.location.replace(url.toString());
   }
 
   function applyPromo() {
@@ -362,7 +365,7 @@ export default function CheckoutClient() {
     if (!v) return;
     const url = new URL(window.location.href);
     url.searchParams.set("code", v);
-    window.location.href = url.toString();
+    window.location.replace(url.toString());
   }
 
   const stripeRef = useRef<StripeJs | null>(null);
@@ -553,12 +556,10 @@ export default function CheckoutClient() {
         <main style={styles.main}>
           <div style={{ ...styles.card, textAlign: "center" }}>
             <h1 style={{ fontSize: 20, fontWeight: 800, margin: "0 0 10px", color: "#1C1917" }}>
-              {lang === "he" ? "ממשיכים לתשלום בדפדפן" : "Continue to payment in the browser"}
+              {miscUi(lang).payInBrowserTitle}
             </h1>
             <p style={{ fontSize: 14.5, color: "#57534E", lineHeight: 1.7, margin: "0 0 18px" }}>
-              {lang === "he"
-                ? "התשלום מתבצע בדפדפן, בצורה מאובטחת. לחיצה על הכפתור תפתח את עמוד התשלום."
-                : "Payment is completed securely in your browser. Tap the button to open the payment page."}
+              {miscUi(lang).payInBrowserBody}
             </p>
 
             {twaTier && (
@@ -607,7 +608,7 @@ export default function CheckoutClient() {
             >
               {twaBusy
                 ? c.processing
-                : lang === "he" ? "פתח את עמוד התשלום" : "Open the payment page"}
+                : miscUi(lang).openPayPage}
             </button>
             {twaErr && (
               <p role="alert" style={{ color: "#b91c1c", fontSize: 14, margin: "14px 0 0" }}>{twaErr}</p>

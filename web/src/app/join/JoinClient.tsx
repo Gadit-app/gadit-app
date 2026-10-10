@@ -477,7 +477,9 @@ export function JoinClient() {
       setStatus("success");
       // Land on the main app — kids/parents both use the dictionary
       // search as their primary surface for v1.
-      setTimeout(() => router.push(href("/")), 600);
+      // replace: /join?code= redeems on mount, and the code is single use,
+      // so Back must not land on it again (it would retry and show an error).
+      setTimeout(() => router.replace(href("/")), 600);
     } catch (e) {
       console.error("redeem failed:", e);
       setErrorMsg(c.errGeneric);

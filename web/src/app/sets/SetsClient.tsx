@@ -239,7 +239,7 @@ export default function SetsClient() {
   // Word sets are a schools product (Gadi 2026-10-04): only school
   // accounts get in. Hebrew shows the full Israeli curriculum catalog.
   if (!planReady) return <div className="wordbook" style={S.page} />;
-  if (!user || !schoolId) return <SchoolsOnly he={lang === "he"} dir={dir} />;
+  if (!user || !schoolId) return <SchoolsOnly lang={lang} dir={dir} />;
 
   const presentSet = (set: WordSet) =>
     router.push(href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`));
@@ -299,8 +299,45 @@ export default function SetsClient() {
   return <CurriculumBrowser legacy={legacy} />;
 }
 
-function SchoolsOnly({ he, dir }: { he: boolean; dir: "rtl" | "ltr" }) {
+const SCHOOLS_ONLY_COPY: Record<string, [string, string, string, string]> = {
+  en: ["Word sets are for schools","Every subject with key words to project in class.","Access is open to schools that work with Gadit.","Gadit for schools"],
+  he: ["קבוצות המילים פתוחות לבתי ספר","כל מקצועות הלימוד, מגן ועד תיכון, עם מילות מפתח להקרנה בכיתה.","הגישה פתוחה לבתי ספר שעובדים עם Gadit.","לפרטים על Gadit לבתי ספר"],
+  ar: ["مجموعات الكلمات مخصّصة للمدارس","كل المواد الدراسية مع كلمات مفتاحية لعرضها في الصف.","الوصول متاح للمدارس التي تعمل مع Gadit.","Gadit للمدارس"],
+  ru: ["Наборы слов для школ","Все предметы с ключевыми словами для показа в классе.","Доступ открыт школам, которые работают с Gadit.","Gadit для школ"],
+  es: ["Los conjuntos de palabras son para colegios","Todas las asignaturas con palabras clave para proyectar en clase.","El acceso está abierto a los colegios que trabajan con Gadit.","Gadit para colegios"],
+  pt: ["Os conjuntos de palavras são para escolas","Todas as disciplinas com palavras-chave para projetar na aula.","O acesso está aberto às escolas que trabalham com o Gadit.","Gadit para escolas"],
+  fr: ["Les listes de mots sont réservées aux écoles","Chaque matière avec ses mots clés à projeter en classe.","L'accès est ouvert aux écoles qui travaillent avec Gadit.","Gadit pour les écoles"],
+  de: ["Wortsammlungen sind für Schulen","Jedes Fach mit Schlüsselwörtern zum Projizieren im Unterricht.","Der Zugang steht Schulen offen, die mit Gadit arbeiten.","Gadit für Schulen"],
+  cs: ["Sady slov jsou pro školy","Každý předmět s klíčovými slovy k promítání ve třídě.","Přístup mají školy, které s Gadit spolupracují.","Gadit pro školy"],
+  sk: ["Sady slov sú pre školy","Každý predmet s kľúčovými slovami na premietanie v triede.","Prístup majú školy, ktoré s Gadit spolupracujú.","Gadit pre školy"],
+  it: ["Le raccolte di parole sono per le scuole","Ogni materia con le parole chiave da proiettare in classe.","L'accesso è aperto alle scuole che lavorano con Gadit.","Gadit per le scuole"],
+  ja: ["単語セットは学校向けです","すべての教科のキーワードを授業で投影できます。","Gaditを導入している学校が利用できます。","学校向けGadit"],
+  hi: ["शब्द-सेट स्कूलों के लिए हैं","हर विषय, कक्षा में दिखाने के लिए मुख्य शब्दों के साथ।","यह सुविधा उन स्कूलों के लिए है जो Gadit के साथ काम करते हैं।","स्कूलों के लिए Gadit"],
+  am: ["የቃላት ስብስቦች ለትምህርት ቤቶች ናቸው","እያንዳንዱ የትምህርት ዓይነት በክፍል ውስጥ የሚታዩ ቁልፍ ቃላት አሉት።","ከGadit ጋር ለሚሰሩ ትምህርት ቤቶች ክፍት ነው።","Gadit ለትምህርት ቤቶች"],
+  uk: ["Набори слів для шкіл","Усі предмети з ключовими словами для показу в класі.","Доступ відкритий школам, які працюють із Gadit.","Gadit для шкіл"],
+  tr: ["Kelime setleri okullar içindir","Her ders, sınıfta yansıtılacak anahtar kelimelerle.","Erişim, Gadit ile çalışan okullara açıktır.","Okullar için Gadit"],
+  pl: ["Zestawy słów są dla szkół","Każdy przedmiot ze słowami kluczowymi do wyświetlenia w klasie.","Dostęp mają szkoły, które współpracują z Gadit.","Gadit dla szkół"],
+  fa: ["مجموعه‌های واژه برای مدارس است","همه درس‌ها با واژه‌های کلیدی برای نمایش در کلاس.","دسترسی برای مدارسی است که با Gadit کار می‌کنند.","Gadit برای مدارس"],
+  id: ["Set kata khusus untuk sekolah","Setiap mata pelajaran dengan kata kunci untuk ditampilkan di kelas.","Akses terbuka untuk sekolah yang bekerja sama dengan Gadit.","Gadit untuk sekolah"],
+  nl: ["Woordensets zijn voor scholen","Elk vak met kernwoorden om in de klas te projecteren.","De toegang staat open voor scholen die met Gadit werken.","Gadit voor scholen"],
+  el: ["Τα σύνολα λέξεων είναι για σχολεία","Κάθε μάθημα με λέξεις-κλειδιά για προβολή στην τάξη.","Η πρόσβαση είναι ανοιχτή στα σχολεία που συνεργάζονται με το Gadit.","Gadit για σχολεία"],
+  zu: ["Amaqoqo amagama awezikole","Zonke izifundo ezinamagama abalulekile okuwaveza ekilasini.","Ukufinyelela kuvulelwe izikole ezisebenza ne-Gadit.","I-Gadit yezikole"],
+  vi: ["Bộ từ dành cho trường học","Mọi môn học với các từ khóa để trình chiếu trên lớp.","Quyền truy cập dành cho các trường hợp tác với Gadit.","Gadit cho trường học"],
+  fil: ["Para sa mga paaralan ang mga word set","Bawat asignatura na may mga susing salita na ipapakita sa klase.","Bukas ang access sa mga paaralang nakikipagtulungan sa Gadit.","Gadit para sa mga paaralan"],
+  af: ["Woordstelle is vir skole","Elke vak met sleutelwoorde om in die klas te projekteer.","Toegang is oop vir skole wat met Gadit werk.","Gadit vir skole"],
+  sw: ["Seti za maneno ni kwa ajili ya shule","Kila somo pamoja na maneno muhimu ya kuonyesha darasani.","Ufikiaji uko wazi kwa shule zinazofanya kazi na Gadit.","Gadit kwa shule"],
+  "zh-CN": ["词汇集面向学校","每个学科都有可在课堂上投屏的关键词。","与 Gadit 合作的学校可以使用。","Gadit 学校版"],
+  "zh-TW": ["詞彙集專為學校提供","每個學科都有可在課堂上投影的關鍵詞。","與 Gadit 合作的學校可以使用。","Gadit 學校版"],
+  ko: ["단어 세트는 학교용입니다","모든 과목의 핵심 단어를 수업 시간에 화면에 띄울 수 있습니다.","Gadit과 함께하는 학교에 열려 있습니다.","학교용 Gadit"],
+  th: ["ชุดคำศัพท์สำหรับโรงเรียน","ทุกวิชาพร้อมคำสำคัญสำหรับฉายในห้องเรียน","เปิดให้โรงเรียนที่ทำงานร่วมกับ Gadit ใช้งาน","Gadit สำหรับโรงเรียน"],
+  bn: ["শব্দ-সেট স্কুলের জন্য","প্রতিটি বিষয়, ক্লাসে দেখানোর জন্য মূল শব্দসহ।","Gadit-এর সাথে কাজ করা স্কুলগুলোর জন্য প্রবেশাধিকার খোলা।","স্কুলের জন্য Gadit"],
+  da: ["Ordsæt er til skoler","Alle fag med nøgleord, der kan vises i klassen.","Adgangen er åben for skoler, der arbejder med Gadit.","Gadit til skoler"],
+  hu: ["A szókészletek iskoláknak szólnak","Minden tantárgy kulcsszavakkal, amelyeket az órán ki lehet vetíteni.","A hozzáférés a Gadittel dolgozó iskolák számára nyitott.","Gadit iskoláknak"],
+};
+
+function SchoolsOnly({ lang, dir }: { lang: string; dir: "rtl" | "ltr" }) {
   const href = useHref();
+  const [title, sub1, sub2, cta] = SCHOOLS_ONLY_COPY[lang] ?? SCHOOLS_ONLY_COPY.en;
   return (
     <div className="wordbook" dir={dir} style={S.page}>
       <header style={S.header}>
@@ -309,16 +346,14 @@ function SchoolsOnly({ he, dir }: { he: boolean; dir: "rtl" | "ltr" }) {
         </Link>
       </header>
       <main style={{ ...S.main, textAlign: "center", paddingTop: 72 }}>
-        <h1 style={S.h1}>{he ? "קבוצות המילים פתוחות לבתי ספר" : "Word sets are for schools"}</h1>
+        <h1 style={S.h1}>{title}</h1>
         <p style={{ ...S.subtitle, margin: "0 auto 26px" }}>
-          {he
-            ? "כל מקצועות הלימוד, מגן ועד תיכון, עם מילות מפתח להקרנה בכיתה."
-            : "Every subject with key words to project in class."}
+          {sub1}
           <br />
-          {he ? "הגישה פתוחה לבתי ספר שעובדים עם Gadit." : "Access is open to schools that work with Gadit."}
+          {sub2}
         </p>
         <Link href={href("/schools")} style={{ ...S.presentBtn, display: "inline-flex", width: "auto", padding: "12px 26px", textDecoration: "none" }}>
-          {he ? "לפרטים על Gadit לבתי ספר" : "Gadit for schools"}
+          {cta}
         </Link>
       </main>
     </div>

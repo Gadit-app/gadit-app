@@ -23,6 +23,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
+import { goBackOr } from "@/lib/back-nav";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -837,7 +838,7 @@ export function PracticeV2() {
   }
 
   if (phase.kind === "empty") {
-    return <EmptyState onBack={() => router.push("/notebook")} />;
+    return <EmptyState onBack={() => goBackOr(router, href("/notebook"))} />;
   }
 
   if (phase.kind === "summary") {
@@ -845,7 +846,7 @@ export function PracticeV2() {
       <Summary
         knew={results.knew}
         forgot={results.forgot}
-        onDone={() => router.push("/notebook")}
+        onDone={() => goBackOr(router, href("/notebook"))}
       />
     );
   }

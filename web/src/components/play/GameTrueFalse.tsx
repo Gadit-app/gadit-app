@@ -14,6 +14,7 @@ import { buildTrueFalseRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
+import { TF_MORE } from "./play-games-i18n";
 
 type TfCopy = { title: string; desc: string; ask: string; yes: string; no: string; right: string; wrong: string; real: string };
 
@@ -24,6 +25,9 @@ export const TF_COPY: Record<string, TfCopy> = {
   ru: { title: "Верно или нет?", desc: "Слово и значение. Подходит ли значение к слову?", ask: "Это значение этого слова?", yes: "Верно", no: "Неверно", right: "Правильно!", wrong: "Не в этот раз.", real: "Что значит слово:" },
   es: { title: "¿Verdadero o falso?", desc: "Una palabra y un significado. ¿El significado es de esa palabra?", ask: "¿Es esto lo que significa la palabra?", yes: "Verdadero", no: "Falso", right: "¡Correcto!", wrong: "Esta vez no.", real: "Lo que significa la palabra:" },
 };
+
+// The other 28 UI languages (2026-10-10).
+Object.assign(TF_COPY, TF_MORE);
 
 export function tfCopy(lang: string): TfCopy {
   return TF_COPY[lang] ?? TF_COPY.en;

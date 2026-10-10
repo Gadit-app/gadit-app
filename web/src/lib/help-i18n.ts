@@ -31,7 +31,12 @@
  */
 
 import { planCopy } from "./plan-copy";
-import type { Lang } from "./i18n";
+import { LANGUAGES, type Lang } from "./i18n";
+import { HELP_MORE_1 } from "./help-i18n-more-1";
+import { HELP_MORE_2 } from "./help-i18n-more-2";
+import { HELP_MORE_3 } from "./help-i18n-more-3";
+import { HELP_MORE_4 } from "./help-i18n-more-4";
+import { HELP_MORE_5 } from "./help-i18n-more-5";
 
 export interface HelpItem {
   /** Stable id so we can deep-link via #q-<id>. */
@@ -1484,13 +1489,11 @@ Object.assign(HELP, {
   },
 } satisfies Partial<Record<Lang, HelpContent>>);
 
-// Other 10 languages fall back to English until a translation pass.
-// Slovak (Andrea's market) is the next-priority translate target;
-// add it to the Object.assign block above when the strings are ready.
-const fallback = HELP.en;
-for (const code of ["ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja"] as Lang[]) {
-  // "el" (Greek) intentionally omitted here: it has a full native block above.
-  HELP[code] = fallback;
+// The other 29 UI languages, one file per group (2026-10-10 i18n sweep).
+Object.assign(HELP, HELP_MORE_1, HELP_MORE_2, HELP_MORE_3, HELP_MORE_4, HELP_MORE_5);
+// Safety net: a language without its own block reads English.
+for (const { code } of LANGUAGES) {
+  if (!HELP[code]) HELP[code] = HELP.en;
 }
 
 

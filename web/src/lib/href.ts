@@ -69,7 +69,13 @@ export function buildHref(lang: Lang, path: string): string {
   // Defensive: if the caller already added a lang prefix (e.g. the user
   // wrote href("/he/pricing"), or middleware-rewritten paths leaked in),
   // strip it before re-applying so we don't end up with /he/de/pricing.
-  const SUPPORTED = ["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am"];
+  // Every UI language (keep in sync with middleware.ts SUPPORTED_LANGS): a
+  // missing one here gave /fr/uk/... for an already-prefixed path.
+  const SUPPORTED = [
+    "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
+    "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw",
+    "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu",
+  ];
   const segs = path.split("/").filter(Boolean);
   if (segs[0] && SUPPORTED.includes(segs[0])) segs.shift();
 

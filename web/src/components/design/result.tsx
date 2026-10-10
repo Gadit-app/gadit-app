@@ -35,6 +35,7 @@
  */
 
 import { useState, useEffect, useMemo, type ReactNode } from "react";
+import { miscUi } from "@/lib/misc-ui-i18n";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -452,7 +453,7 @@ export function WordHeader({
               type="button"
               onClick={onToggleNiqqud}
               aria-pressed={niqqudOn}
-              title={isArabicHeadword ? "التشكيل لمن يقرأ بمساعدة" : lang === "he" ? "ניקוד למי שקורא עם עזרה" : "Vowel points for young readers"}
+              title={isArabicHeadword ? "التشكيل لمن يقرأ بمساعدة" : miscUi(lang).niqqudTitle}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 13px",
                 borderRadius: 999, cursor: "pointer", fontFamily: "inherit", fontSize: 14, fontWeight: 700,
@@ -462,7 +463,7 @@ export function WordHeader({
               }}
             >
               {niqqudOn && <span aria-hidden="true" style={{ fontSize: 15 }}>✓</span>}
-              {isArabicHeadword ? "تشكيل" : lang === "he" ? "ניקוד" : "Niqqud"}
+              {isArabicHeadword ? "تشكيل" : miscUi(lang).niqqud}
             </button>
           )}
         </div>

@@ -23,6 +23,7 @@ import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import { db } from "@/lib/firebase";
 import { MemberRole, MEMBER_COLORS, MAX_KIDS_PER_FAMILY, isParentRole } from "@/lib/family";
 
@@ -701,7 +702,9 @@ export function FamilyAddClient() {
         ...(ageNum ? { age: ageNum } : {}),
         createdAt: serverTimestamp(),
       });
-      router.push(href(`/family/${ref.id}/pair`));
+      // replace: the filled-in form is finished, so Back from the pairing
+      // screen returns to the family page, not to a stale add form.
+      router.replace(href(`/family/${ref.id}/pair`));
     } catch (e) {
       console.error("add member failed:", e);
       setSaving(false);
@@ -715,7 +718,7 @@ export function FamilyAddClient() {
   return (
     <div className="wordbook wb-family-page" dir={dir}>
       <main className="wb-family-main">
-        <Link href={href("/family")} className="wb-family-back">{c.back}</Link>
+        <BackLink href={href("/family")} anyPrevious className="wb-family-back">{c.back}</BackLink>
 
         <header className="wb-family-header">
           <h1 className="wb-family-title">{c.title}</h1>

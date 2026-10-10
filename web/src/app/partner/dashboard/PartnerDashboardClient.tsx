@@ -5,6 +5,7 @@ import Link from "next/link";
 import { EarningsCalculator } from "./EarningsCalculator";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
 
 // Commission rate line labels ("25% year one · 10% for life").
@@ -1401,7 +1402,7 @@ export function PartnerDashboardClient() {
           <Link href={href("/")} style={S.wordmark} translate="no">
             Gad<span style={{ color: "#0EA5A5", fontStyle: "italic", fontWeight: 600 }}>it</span>
           </Link>
-          <Link href={href("/")} style={S.topBack}>{t.back} →</Link>
+          <BackLink href={href("/")} style={S.topBack}>{t.back} →</BackLink>
         </div>
       </div>
 

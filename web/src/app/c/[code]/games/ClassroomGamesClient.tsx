@@ -19,6 +19,7 @@ import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import type { PlayT } from "@/components/play/GameQuiz";
 import { GameTwinTrap } from "@/components/play/GameTwinTrap";
 import { GameTimeTraveler } from "@/components/play/GameTimeTraveler";
@@ -352,9 +353,9 @@ export function ClassroomGamesClient({ code }: { code: string }) {
           Gad<span className="wb-classroom-wordmark-it">it</span>
         </Link>
         <nav className="wb-classroom-nav">
-          <Link href={href(`/c/${code}`)} className="wb-classroom-nav-link">
+          <BackLink href={href(`/c/${code}`)} className="wb-classroom-nav-link">
             {c.backToClassroom}
-          </Link>
+          </BackLink>
         </nav>
       </header>
 

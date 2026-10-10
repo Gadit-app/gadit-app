@@ -23,6 +23,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
+import { BackLink } from "@/components/BackLink";
 import { db } from "@/lib/firebase";
 import { FamilyMember, PAIRING_CODE_TTL_MS } from "@/lib/family";
 
@@ -812,7 +813,7 @@ export function FamilyPairClient() {
           <div className="wb-family-pair-card">
             <h1 className="wb-family-title">{c.pairedTitle}</h1>
             <p className="wb-family-sub">{c.pairedSub}</p>
-            <Link href={href("/family")} className="wb-family-cta">{c.done}</Link>
+            <BackLink href={href("/family")} className="wb-family-cta">{c.done}</BackLink>
           </div>
         </main>
       </div>
@@ -825,7 +826,7 @@ export function FamilyPairClient() {
   return (
     <div className="wordbook wb-family-page" dir={dir}>
       <main className="wb-family-main">
-        <Link href={href("/family")} className="wb-family-back">{c.back}</Link>
+        <BackLink href={href("/family")} anyPrevious className="wb-family-back">{c.back}</BackLink>
 
         <header className="wb-family-header">
           <h1 className="wb-family-title">{c.title}</h1>
