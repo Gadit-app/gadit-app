@@ -278,6 +278,30 @@ export function GameFlashcards({
 
   const [deck, setDeck] = useState<Card[] | null>(null);
   useEffect(() => { if (picked || pairs) setDeck(first); }, [first, pairs, picked]);
+
+  // Each card shows its picture with the word, before the flip (Gadi
+  // 2026-10-10). Only pictures already in the shared cache: free, and a
+  // word without one simply shows the word.
+  const [pics, setPics] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (!user || first.length === 0) return;
+    const words = first.flatMap((c) => [c.word.word, ...(c.pair ? [c.pair.pair] : [])]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/play/images", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+          body: JSON.stringify({ words }),
+        });
+        const data = res.ok ? ((await res.json()) as { images?: Record<string, string> }) : {};
+        if (!cancelled && data.images) setPics(data.images);
+      } catch { /* cards work without pictures */ }
+    })();
+    return () => { cancelled = true; };
+  }, [first, user]);
+  const picOf = (c: Card) => pics[c.word.word] || (c.pair ? pics[c.pair.pair] : undefined);
+  const deckHasPics = first.some((c) => !!picOf(c));
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reverse, setReverse] = useState(false);
@@ -425,6 +449,7 @@ export function GameFlashcards({
   const backText = meaningFirst ? card.word.word : mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
   const askLang = mode === "words" && pair ? langLabel(reverse ? wordLangName : pair.pairLang, lang) : "";
   const example = mode === "meanings" && !meaningFirst ? card.word.examples?.[0] : undefined;
+  const pic = picOf(card);
   const ask = flipped ? f.tapBack : mode === "words" ? (askLang ? f.sayIn(askLang) : f.tapToFlip) : meaningFirst ? dc.askWord : dc.askMeaning;
 
   return (
@@ -449,13 +474,17 @@ export function GameFlashcards({
       </div>
       <button
         type="button"
-        className={`wb-flash-card${flipped ? " is-flipped" : ""}`}
+        className={`wb-flash-card${flipped ? " is-flipped" : ""}${deckHasPics ? " has-pics" : ""}`}
         onClick={() => setFlipped((x) => !x)}
         aria-pressed={flipped}
       >
         <span className="wb-flash-inner">
-          <span className="wb-flash-face wb-flash-front" aria-hidden={flipped}>
+          <span className={`wb-flash-face wb-flash-front${pic ? " has-pic" : ""}`} aria-hidden={flipped}>
             {card.repeat && <span className="wb-flash-again">{f.again}</span>}
+            {pic && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="wb-flash-pic" src={pic} alt="" />
+            )}
             <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{nq(frontText)}</span>
           </span>
           <span className="wb-flash-face wb-flash-back" aria-hidden={!flipped}>
@@ -475,7 +504,7 @@ export function GameFlashcards({
   );
 }
 
-const FLASH_CSS = `
+export const FLASH_CSS = `
 .wb-flash-card { display: block; width: min(100%, 440px); margin: 18px auto 0; aspect-ratio: 4 / 3; padding: 0; border: 0; background: none; cursor: pointer; perspective: 1200px; font: inherit; }
 .wb-flash-inner { position: relative; display: block; width: 100%; height: 100%; transition: transform 420ms cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; }
 .wb-flash-card.is-flipped .wb-flash-inner { transform: rotateY(180deg); }
@@ -492,6 +521,13 @@ const FLASH_CSS = `
 .wb-flash-btn { min-width: 130px; padding: 12px 20px; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
 .wb-flash-yes { background: #0EA5A5; color: #fff; box-shadow: 0 10px 22px -10px rgba(14,165,165,0.6); }
 .wb-flash-no { background: #fff; color: #374151; box-shadow: 0 0 0 1.5px #D1D5DB inset; }
+.wb-flash-card.has-pics { aspect-ratio: 1 / 1; }
+.wb-flash-front.has-pic { justify-content: flex-start; padding: 0 0 6px; gap: 0; }
+.wb-flash-pic { display: block; width: 100%; height: 70%; object-fit: cover; background: #F6FAF9; flex: none; }
+.wb-flash-front.has-pic .wb-flash-word { font-size: clamp(28px, 7vw, 40px); margin-block: auto; }
+.wb-flash-front.has-pic .wb-flash-meaning { margin-block: auto; }
+.wb-flash-front.has-pic .wb-flash-meaning { padding-inline: 20px; font-size: clamp(15px, 4vw, 18px); }
+.wb-flash-front.has-pic .wb-flash-again { z-index: 1; }
 .wb-flash-dirs { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
 .wb-flash-dir { font: inherit; font-size: 13px; font-weight: 700; color: #0b7d7d; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
 .wb-flash-dir.is-on { background: #0EA5A5; color: #fff; }
