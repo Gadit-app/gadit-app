@@ -70,4 +70,13 @@ export const DUEL_CSS = `
 .wb-play-duel-banner b { font-size: 18px; }
 .wb-play-duel-banner span { font-size: 14.5px; color: var(--wb-ink-soft, #55625f); line-height: 1.45; }
 @media (max-width: 560px) { .wb-play-duel-banner { flex-wrap: wrap; } .wb-play-duel-banner .duel-btn { width: 100%; } }
+.duel-stats { margin-top: 14px; }
+.duel-table { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.duel-table li { display: grid; grid-template-columns: 32px 40px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 14px; background: #F7FAF9; }
+.duel-table.is-vs li { grid-template-columns: 40px minmax(0,1fr) auto; }
+.duel-table li.is-me { background: rgba(14,165,165,0.12); }
+.duel-rank { text-align: center; font-weight: 900; font-size: 18px; font-variant-numeric: tabular-nums; }
+.duel-table-name { font-weight: 800; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-table-num { font-size: 13.5px; font-weight: 700; color: #0F6F6C; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 420px) { .duel-table li { grid-template-columns: 28px 36px minmax(0,1fr); } .duel-table.is-vs li { grid-template-columns: 36px minmax(0,1fr); } .duel-table-num { grid-column: 1 / -1; text-align: end; } }
 `;

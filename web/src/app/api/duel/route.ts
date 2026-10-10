@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { DecodedIdToken } from "firebase-admin/auth";
+import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import {
   COUNTDOWN_MS, DUEL_ROUNDS, DUEL_TTL_MS, ROUND_MS,
   botScript, cleanQuestions, newDuelCode, nicknameFor, seatResult, timeline, topicQuestions,
-  type DuelAnswer, type DuelMode, type DuelPlayerPublic, type DuelQuestion, type DuelView, type ScriptStep, type Seat,
+  shuffleDuel,
+  type DuelAnswer, type DuelMode, type DuelPlayerPublic, type DuelQuestion, type DuelStatRow, type DuelView, type DuelVsRow, type ScriptStep, type Seat,
 } from "@/lib/duel";
 
 /**
@@ -52,6 +54,13 @@ type DuelDoc = {
   players: { a: PlayerDoc; b: PlayerDoc | null };
   answers: Record<Seat, DuelAnswer[]>;
   archived?: boolean;
+  /** Where the questions came from, so a rematch can make new ones. */
+  source?: "own" | "topic";
+  /** "Play again": the new room and who asked first. */
+  rematch?: { code: string; by: Seat };
+  rematchOf?: string;
+  /** In a rematch room: who said yes (it starts when both did). */
+  ready?: Partial<Record<Seat, boolean>>;
 };
 
 type Me = {
@@ -178,6 +187,8 @@ function viewFor(d: DuelDoc, seat: Seat, now: number): DuelView {
       b: seatResult("b", phase.round, q, starts[phase.round], d.answers, scripts, now),
     };
   }
+  if (d.rematch) v.rematch = { code: d.rematch.code, mine: d.rematch.by === seat };
+  if (d.rematchOf) v.rematchOf = true;
   if (phase.kind === "done") {
     v.recap = d.questions.map((q, r) => ({
       prompt: q.prompt,
@@ -208,6 +219,45 @@ async function archive(d: DuelDoc, now: number) {
       bucket: d.bucket, questions: d.questions, script,
       name: p.name, avatar: p.avatar, uid: p.uid, familyKey: p.familyKey, at: now,
     });
+  }
+}
+
+const STATS = "duelStats";
+
+/** Who won, by final score. */
+function finalScores(d: DuelDoc, now: number): Record<Seat, number> {
+  const scripts = scriptsOf(d);
+  const { starts } = timeline(d.startAt, d.questions.length, d.answers, scripts, now);
+  const out: Record<Seat, number> = { a: 0, b: 0 };
+  d.questions.forEach((q, r) => {
+    for (const s of ["a", "b"] as Seat[]) out[s] += seatResult(s, r, q, starts[r], d.answers, scripts, now).points;
+  });
+  return out;
+}
+
+/** The wins table: one doc per player, totals against people (and
+ *  recorded games of people), and a record against each opponent. Games
+ *  against Word Bot are kept apart so they never fill the family table. */
+async function recordStats(d: DuelDoc, now: number) {
+  if (!d.players.b) return;
+  const db = getAdminDb();
+  const sc = finalScores(d, now);
+  const inc = (n: number) => FieldValue.increment(n);
+  for (const s of ["a", "b"] as Seat[]) {
+    const p = d.players[s];
+    const o = d.players[s === "a" ? "b" : "a"];
+    if (!p || !o || p.kind !== "person") continue;
+    // Didn't answer a single question: left the game, not a result.
+    if (!(d.answers[s] ?? []).some(Boolean)) continue;
+    const res = sc[s] > sc[s === "a" ? "b" : "a"] ? "w" : sc[s] < sc[s === "a" ? "b" : "a"] ? "l" : "t";
+    const oppKey = o.kind === "person" ? o.uid : o.kind === "bot" ? "bot" : "ghost";
+    const shown = publicPlayer(o, d.mode, d.lang);
+    const human = o.kind !== "bot";
+    await db.collection(STATS).doc(p.uid).set({
+      ...(d.mode === "invite" && p.name ? { name: p.name } : {}), avatar: p.avatar, familyKey: p.familyKey, updatedAt: now,
+      ...(human ? { games: inc(1), wins: inc(res === "w" ? 1 : 0), losses: inc(res === "l" ? 1 : 0), ties: inc(res === "t" ? 1 : 0) } : { botGames: inc(1), botWins: inc(res === "w" ? 1 : 0) }),
+      vs: { [oppKey.replace(/[.$/[\]#]/g, "_")]: { name: shown.name, avatar: shown.avatar, kind: o.kind, w: inc(res === "w" ? 1 : 0), l: inc(res === "l" ? 1 : 0), t: inc(res === "t" ? 1 : 0), at: now } },
+    }, { merge: true });
   }
 }
 
@@ -261,6 +311,32 @@ export async function GET(req: NextRequest) {
     const fam = await db.collection("families").doc(me.familyId).get();
     return NextResponse.json({ allow: fam.get("allowOnlineDuels") === true, owner: me.familyId === me.uid });
   }
+  if (req.nextUrl.searchParams.get("stats") === "1") {
+    const me = await whoAmI(req, tok);
+    if (!me) return NextResponse.json({ error: "login_required" }, { status: 401 });
+    // The family: the owner and every member with a device.
+    const people: Array<{ uid: string; name: string; avatar: string | null }> = [];
+    if (me.familyId) {
+      const members = await db.collection("families").doc(me.familyId).collection("members").get();
+      for (const m of members.docs) {
+        const uid = m.get("isOwner") ? me.familyId : (m.get("userId") as string | null);
+        if (uid) people.push({ uid, name: String(m.get("name") ?? ""), avatar: (m.get("avatarId") as string | null) ?? null });
+      }
+    }
+    if (!people.some((p) => p.uid === me.uid)) people.push({ uid: me.uid, name: me.name, avatar: me.avatar });
+    const snaps = await db.getAll(...people.map((p) => db.collection(STATS).doc(p.uid)));
+    const rows: DuelStatRow[] = people.map((p, i) => {
+      const x = snaps[i].data() ?? {};
+      return { name: p.name || String(x.name ?? ""), avatar: p.avatar ?? (x.avatar as string | null) ?? null,
+        wins: Number(x.wins ?? 0), losses: Number(x.losses ?? 0), ties: Number(x.ties ?? 0), games: Number(x.games ?? 0), isMe: p.uid === me.uid };
+    }).sort((a, b) => b.wins - a.wins || b.games - a.games);
+    const mine = snaps[people.findIndex((p) => p.uid === me.uid)]?.data() ?? {};
+    const vs: DuelVsRow[] = Object.values((mine.vs ?? {}) as Record<string, DuelVsRow>)
+      .map((v) => ({ name: String(v.name ?? ""), avatar: v.avatar ?? null, kind: v.kind ?? "person", w: Number(v.w ?? 0), l: Number(v.l ?? 0), t: Number(v.t ?? 0), at: Number(v.at ?? 0) }))
+      .sort((a, b) => b.at - a.at)
+      .slice(0, 12);
+    return NextResponse.json({ rows, vs, bot: { games: Number(mine.botGames ?? 0), wins: Number(mine.botWins ?? 0) } });
+  }
   const code = (req.nextUrl.searchParams.get("code") ?? "").replace(/\D/g, "");
   if (!code) return NextResponse.json({ error: "code_required" }, { status: 400 });
   const snap = await db.collection(DUELS).doc(code).get();
@@ -275,8 +351,17 @@ export async function GET(req: NextRequest) {
   }
   const view = viewFor(d, seat, now);
   if (view.phase.kind === "done" && !d.archived) {
-    await snap.ref.update({ archived: true });
-    void archive(d, now).catch(() => { /* a recorded opponent is a bonus, never a failure */ });
+    // Exactly once per game, however many screens are polling.
+    const claimed = await db.runTransaction(async (tx) => {
+      const s = await tx.get(snap.ref);
+      if (s.get("archived")) return false;
+      tx.update(snap.ref, { archived: true });
+      return true;
+    });
+    if (claimed) {
+      await recordStats(d, now).catch(() => { /* the table is a bonus, never a failure */ });
+      void archive(d, now).catch(() => { /* a recorded opponent is a bonus, never a failure */ });
+    }
   }
   return NextResponse.json(view);
 }
@@ -307,7 +392,7 @@ export async function POST(req: NextRequest) {
     const questions = own ?? (typeof body.topic === "string" ? topicQuestions(body.topic === "all" ? undefined : body.topic) : null);
     if (!questions || questions.length < 3) return NextResponse.json({ error: "no_questions" }, { status: 400 });
     const code = await createRoom({
-      mode: "invite", lang, createdAt: now, startAt: null, questions,
+      mode: "invite", lang, createdAt: now, startAt: null, questions, source: own ? "own" : "topic",
       players: { a: personDoc(me, "invite", lang), b: null }, answers: emptyAnswers(),
     });
     return NextResponse.json({ code });
@@ -325,6 +410,49 @@ export async function POST(req: NextRequest) {
       if (d.players.b) return { error: "full", status: 409 };
       tx.update(ref, { "players.b": personDoc(me, d.mode, d.lang), startAt: now + COUNTDOWN_MS });
       return { ok: true };
+    });
+    return NextResponse.json(res, { status: "status" in res ? res.status : 200 });
+  }
+
+  if (action === "rematch") {
+    const oldCode = String(body.code ?? "").replace(/\D/g, "");
+    const oldRef = db.collection(DUELS).doc(oldCode);
+    const res = await db.runTransaction(async (tx) => {
+      const snap = await tx.get(oldRef);
+      if (!snap.exists) return { error: "not_found", status: 404 };
+      const d = snap.data() as DuelDoc;
+      const seat = seatOf(d, me.uid);
+      if (!seat || !d.players.b) return { error: "not_in_game", status: 403 };
+      if (d.players.a.kind !== "person" || d.players.b.kind !== "person") return { error: "not_people", status: 400 };
+      if (timeline(d.startAt, d.questions.length, d.answers, scriptsOf(d), now).phase.kind !== "done") return { error: "not_done", status: 409 };
+      if (d.rematch) {
+        // The other player already asked: say yes, and the game starts.
+        const nref = db.collection(DUELS).doc(d.rematch.code);
+        const n = await tx.get(nref);
+        if (!n.exists) return { error: "not_found", status: 404 };
+        const ready = { ...((n.get("ready") as Partial<Record<Seat, boolean>>) ?? {}), [seat]: true };
+        tx.update(nref, { ready, ...(ready.a && ready.b && !n.get("startAt") ? { startAt: now + COUNTDOWN_MS } : {}) });
+        return { code: d.rematch.code };
+      }
+      // First to ask: open the next room with the same two players.
+      let code = "";
+      for (let i = 0; i < 6 && !code; i++) {
+        const c = newDuelCode();
+        const e = await tx.get(db.collection(DUELS).doc(c));
+        if (!e.exists || now - Number(e.get("createdAt") ?? 0) > DUEL_TTL_MS) code = c;
+      }
+      if (!code) return { error: "no_code", status: 503 };
+      // New questions from the topics; the host's own words come back in a new order.
+      const questions = d.source === "own"
+        ? shuffleDuel(d.questions).map((q) => { const opts = shuffleDuel(q.options); return { prompt: q.prompt, options: opts, correctIdx: opts.indexOf(q.options[q.correctIdx]) }; })
+        : topicQuestions();
+      const next: DuelDoc = {
+        code, mode: d.mode, lang: d.lang, ...(d.bucket ? { bucket: d.bucket } : {}), createdAt: now, startAt: null, questions,
+        source: d.source ?? "topic", players: d.players, answers: emptyAnswers(), rematchOf: d.code, ready: { [seat]: true },
+      };
+      tx.set(db.collection(DUELS).doc(code), next);
+      tx.update(oldRef, { rematch: { code, by: seat } });
+      return { code };
     });
     return NextResponse.json(res, { status: "status" in res ? res.status : 200 });
   }

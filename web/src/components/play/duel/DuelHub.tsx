@@ -8,6 +8,7 @@ import { duelCopy } from "./duel-i18n";
 import { DUEL_CSS } from "./duel-css";
 import { DuelGame } from "./DuelGame";
 import { DuelLocal } from "./DuelLocal";
+import { DuelStats } from "./DuelStats";
 
 /**
  * Word Duel hub on /play (Gadi 2026-10-11): play on one device, invite with
@@ -165,6 +166,7 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode }: {
           {msg && <p className="duel-note">{msg}</p>}
         </div>
       )}
+      {screen.kind === "menu" && <DuelStats lang={lang} />}
 
       {screen.kind === "source" && (
         <div className="duel-card">

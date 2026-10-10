@@ -12,7 +12,7 @@ import { DUEL_CSS } from "./duel-css";
  * The server owns the clock: we poll the room, keep the offset between our
  * clock and the server's, and only draw timers from it.
  */
-export function DuelGame({ code, lang, dir, onExit, onAgain }: {
+export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
   code: string;
   lang: string;
   dir: "rtl" | "ltr";
@@ -27,6 +27,9 @@ export function DuelGame({ code, lang, dir, onExit, onAgain }: {
   const [, setTick] = useState(0);
   const offset = useRef(0);
   const [copied, setCopied] = useState(false);
+  // "Play again" moves this screen to the next room with the same opponent.
+  const [code, setCode] = useState(firstCode);
+  const [asking, setAsking] = useState(false);
 
   const load = useCallback(async () => {
     if (!user) return;
@@ -48,9 +51,9 @@ export function DuelGame({ code, lang, dir, onExit, onAgain }: {
     const loop = async () => {
       await load();
       if (!alive) return;
-      const done = view?.phase.kind === "done";
-      if (done) return;
-      timer = setTimeout(loop, view?.phase.kind === "waiting" ? 1500 : 700);
+      // After the game: slower, to see whether the other player wants a rematch.
+      const k = view?.phase.kind;
+      timer = setTimeout(loop, k === "done" ? 2500 : k === "waiting" ? 1500 : 700);
     };
     void loop();
     return () => { alive = false; clearTimeout(timer); };
@@ -74,6 +77,20 @@ export function DuelGame({ code, lang, dir, onExit, onAgain }: {
       });
     } catch { /* the reveal shows what the server took */ }
     void load();
+  };
+
+  const rematch = async () => {
+    if (!user || asking) return;
+    setAsking(true);
+    try {
+      const r = await fetch("/api/duel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ action: "rematch", code }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.code) { setView(null); setPicked(null); setCode(String(j.code)); }
+    } finally { setAsking(false); }
   };
 
   if (error) {
@@ -113,7 +130,15 @@ export function DuelGame({ code, lang, dir, onExit, onAgain }: {
         <span className="duel-title">{t.title}</span>
       </div>
 
-      {ph.kind === "waiting" && (
+      {ph.kind === "waiting" && view.rematchOf && (
+        <div className="duel-card">
+          {board}
+          <p className="duel-wait">{t.rematchWaiting(otherP?.name ?? "")}</p>
+          <div className="duel-row"><button type="button" className="duel-btn is-soft" onClick={onExit}>{t.backToGames}</button></div>
+        </div>
+      )}
+
+      {ph.kind === "waiting" && !view.rematchOf && (
         <div className="duel-card">
           <h2 className="duel-h">{t.shareTitle}</h2>
           <div className="duel-code" dir="ltr">{view.code}</div>
@@ -185,14 +210,21 @@ export function DuelGame({ code, lang, dir, onExit, onAgain }: {
               {view.recap.map((r, i) => (
                 <div key={i} className="duel-recap-row">
                   <span className={r[me] === r.correctIdx ? "is-good" : "is-bad"}>{r[me] === r.correctIdx ? "✓" : "✗"}</span>
-                  <b dir="auto">{r.prompt}</b>
-                  <span dir="auto">{r.answer}</span>
+                  <b><bdi>{r.prompt}</bdi></b>
+                  <span><bdi>{r.answer}</bdi></span>
                 </div>
               ))}
             </div>
           )}
+          {otherP.kind === "person" && view.rematch && !view.rematch.mine && (
+            <p className="duel-note">{t.rematchAsked(otherP.name)}</p>
+          )}
           <div className="duel-row">
-            {onAgain && <button type="button" className="duel-btn" onClick={onAgain}>{t.playAgain}</button>}
+            {otherP.kind === "person"
+              ? <button type="button" className="duel-btn" disabled={asking} onClick={() => void rematch()}>
+                  {view.rematch && !view.rematch.mine ? t.rematchYes : t.rematchBtn(otherP.name)}
+                </button>
+              : onAgain && <button type="button" className="duel-btn" onClick={onAgain}>{t.playAgain}</button>}
             <button type="button" className="duel-btn is-soft" onClick={onExit}>{t.backToGames}</button>
           </div>
         </div>

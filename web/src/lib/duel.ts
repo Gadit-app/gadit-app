@@ -136,7 +136,16 @@ export type DuelView = {
   reveal?: { correctIdx: number; a: { choice: number | null; points: number }; b: { choice: number | null; points: number } };
   /** At the end: every round, for the recap. */
   recap?: Array<{ prompt: string; answer: string; a: number | null; b: number | null; correctIdx: number }>;
+  /** "Play again" with the same opponent: the new room, and whether I asked. */
+  rematch?: { code: string; mine: boolean };
+  /** This room is a rematch (waiting means: for the other player to say yes). */
+  rematchOf?: boolean;
 };
+
+/** One row of the wins table. */
+export type DuelStatRow = { name: string; avatar: string | null; wins: number; losses: number; ties: number; games: number; isMe: boolean };
+/** My record against one opponent. */
+export type DuelVsRow = { name: string; avatar: string | null; kind: "person" | "ghost" | "bot"; w: number; l: number; t: number; at: number };
 
 /** Six-digit room code, easy to read out loud. */
 export function newDuelCode(): string {

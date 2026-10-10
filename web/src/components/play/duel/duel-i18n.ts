@@ -75,6 +75,16 @@ export type DuelCopy = {
   permDesc: string;
   permOn: string;
   permOff: string;
+  rematchBtn: (name: string) => string;
+  rematchAsked: (name: string) => string;
+  rematchYes: string;
+  rematchWaiting: (name: string) => string;
+  statsTitle: string;
+  statsEmpty: string;
+  statsLine: (wins: number, games: number) => string;
+  vsTitle: string;
+  vsLine: (w: number, l: number, t: number) => string;
+  vsBot: (wins: number, games: number) => string;
 };
 
 const he: DuelCopy = {
@@ -149,6 +159,16 @@ const he: DuelCopy = {
   permDesc: "כשזה פעיל, הילדים יכולים לשחק בדו-קרב מילים מול ילדים אחרים בגילם שמחוברים באותו רגע. הם רואים רק כינוי ודמות. אין שמות, אין צ'אט ואין הודעות. משחק בתוך המשפחה ועם קוד פתוח תמיד.",
   permOn: "פעיל",
   permOff: "כבוי",
+  rematchBtn: (name) => `עוד משחק עם ${name}`,
+  rematchAsked: (name) => `${name} רוצים עוד משחק`,
+  rematchYes: "כן, עוד משחק",
+  rematchWaiting: (name) => `מחכים ש${name} יאשרו…`,
+  statsTitle: "טבלת הניצחונות",
+  statsEmpty: "עוד לא שיחקתם. הדו-קרב הראשון ייכנס לכאן.",
+  statsLine: (wins, games) => `${wins === 1 ? "ניצחון אחד" : `${wins} ניצחונות`} · ${games === 1 ? "משחק אחד" : `${games} משחקים`}`,
+  vsTitle: "מול מי שיחקתם",
+  vsLine: (w, l, t) => `${w === 1 ? "ניצחון אחד" : `${w} ניצחונות`} · ${l === 1 ? "הפסד אחד" : `${l} הפסדים`}${t ? ` · ${t} תיקו` : ""}`,
+  vsBot: (wins, games) => `נגד רובוט המילים: ${wins === 1 ? "ניצחון אחד" : `${wins} ניצחונות`} מתוך ${games}`,
 };
 
 const en: DuelCopy = {
@@ -223,6 +243,16 @@ const en: DuelCopy = {
   permDesc: "When this is on, your kids can play Word Duel with other kids their age who are online at the same moment. They only see a nickname and an avatar. No names, no chat, no messages. Playing inside the family and with a code always works.",
   permOn: "On",
   permOff: "Off",
+  rematchBtn: (name) => `Play ${name} again`,
+  rematchAsked: (name) => `${name} wants another game`,
+  rematchYes: "Yes, play again",
+  rematchWaiting: (name) => `Waiting for ${name} to say yes…`,
+  statsTitle: "Wins table",
+  statsEmpty: "No games yet. Your first duel will show up here.",
+  statsLine: (wins, games) => `${wins} ${wins === 1 ? "win" : "wins"} · ${games} ${games === 1 ? "game" : "games"}`,
+  vsTitle: "Who you played",
+  vsLine: (w, l, t) => `${w} ${w === 1 ? "win" : "wins"} · ${l} ${l === 1 ? "loss" : "losses"}${t ? ` · ${t} ${t === 1 ? "tie" : "ties"}` : ""}`,
+  vsBot: (wins, games) => `Against Word Bot: ${wins} ${wins === 1 ? "win" : "wins"} out of ${games}`,
 };
 
 const ar: DuelCopy = {
@@ -297,6 +327,16 @@ const ar: DuelCopy = {
   permDesc: "عند التفعيل، يمكن لأطفالكم لعب مبارزة الكلمات مع أطفال آخرين في مثل عمرهم متصلين في اللحظة نفسها. يرون فقط اسمًا مستعارًا وصورة رمزية. بلا أسماء، بلا دردشة، بلا رسائل. اللعب داخل العائلة وبرمز يعمل دائمًا.",
   permOn: "مفعّل",
   permOff: "متوقف",
+  rematchBtn: (name) => `مباراة أخرى مع ${name}`,
+  rematchAsked: (name) => `${name} يريدون مباراة أخرى`,
+  rematchYes: "نعم، مباراة أخرى",
+  rematchWaiting: (name) => `ننتظر موافقة ${name}…`,
+  statsTitle: "جدول الانتصارات",
+  statsEmpty: "لم تلعبوا بعد. ستظهر أول مبارزة هنا.",
+  statsLine: (wins, games) => `${wins} انتصارات · ${games} مباريات`,
+  vsTitle: "من لعبتم ضده",
+  vsLine: (w, l, t) => `${w} انتصارات · ${l} هزائم` + (t ? ` · ${t} تعادل` : ""),
+  vsBot: (wins, games) => "ضد روبوت الكلمات · " + `${wins} انتصارات · ${games} مباريات`,
 };
 
 const ru: DuelCopy = {
@@ -371,6 +411,16 @@ const ru: DuelCopy = {
   permDesc: "Когда это включено, ваши дети могут играть в Дуэль слов с другими детьми своего возраста, которые сейчас онлайн. Они видят только ник и аватар. Без имён, без чата, без сообщений. Игра внутри семьи и по коду работает всегда.",
   permOn: "Вкл",
   permOff: "Выкл",
+  rematchBtn: (name) => `Ещё игра с ${name}`,
+  rematchAsked: (name) => `${name} предлагает ещё одну игру`,
+  rematchYes: "Да, ещё игра",
+  rematchWaiting: (name) => `Ждём согласия ${name}…`,
+  statsTitle: "Таблица побед",
+  statsEmpty: "Игр пока нет. Первая дуэль появится здесь.",
+  statsLine: (wins, games) => `Побед: ${wins} · Игр: ${games}`,
+  vsTitle: "С кем вы играли",
+  vsLine: (w, l, t) => `Побед: ${w} · Поражений: ${l}` + (t ? ` · Ничьих: ${t}` : ""),
+  vsBot: (wins, games) => "Против Словобота · " + `Побед: ${wins} · Игр: ${games}`,
 };
 
 const es: DuelCopy = {
@@ -445,6 +495,16 @@ const es: DuelCopy = {
   permDesc: "Cuando está activado, tus hijos pueden jugar Duelo de palabras con otros niños de su edad que están conectados en ese momento. Solo ven un apodo y un avatar. Sin nombres, sin chat, sin mensajes. Jugar dentro de la familia y con un código siempre funciona.",
   permOn: "Activado",
   permOff: "Desactivado",
+  rematchBtn: (name) => `Otra partida con ${name}`,
+  rematchAsked: (name) => `${name} quiere otra partida`,
+  rematchYes: "Sí, otra partida",
+  rematchWaiting: (name) => `Esperando a que ${name} acepte…`,
+  statsTitle: "Tabla de victorias",
+  statsEmpty: "Aún no hay partidas. Tu primer duelo aparecerá aquí.",
+  statsLine: (wins, games) => `${wins} victorias · ${games} partidas`,
+  vsTitle: "Contra quién jugaste",
+  vsLine: (w, l, t) => `${w} victorias · ${l} derrotas` + (t ? ` · ${t} empates` : ""),
+  vsBot: (wins, games) => "Contra el Robot de palabras · " + `${wins} victorias · ${games} partidas`,
 };
 
 const pt: DuelCopy = {
@@ -519,6 +579,16 @@ const pt: DuelCopy = {
   permDesc: "Quando ativado, seus filhos podem jogar o Duelo de Palavras com outras crianças da mesma idade que estão online no mesmo momento. Eles só veem um apelido e um avatar. Sem nomes, sem chat, sem mensagens. Jogar em família e com código sempre funciona.",
   permOn: "Ativado",
   permOff: "Desativado",
+  rematchBtn: (name) => `Mais uma partida com ${name}`,
+  rematchAsked: (name) => `${name} quer mais uma partida`,
+  rematchYes: "Sim, mais uma partida",
+  rematchWaiting: (name) => `Esperando ${name} aceitar…`,
+  statsTitle: "Tabela de vitórias",
+  statsEmpty: "Ainda não há partidas. Seu primeiro duelo aparece aqui.",
+  statsLine: (wins, games) => `${wins} vitórias · ${games} partidas`,
+  vsTitle: "Contra quem você jogou",
+  vsLine: (w, l, t) => `${w} vitórias · ${l} derrotas` + (t ? ` · ${t} empates` : ""),
+  vsBot: (wins, games) => "Contra o Robô das Palavras · " + `${wins} vitórias · ${games} partidas`,
 };
 
 const fr: DuelCopy = {
@@ -593,6 +663,16 @@ const fr: DuelCopy = {
   permDesc: "Quand c'est activé, tes enfants peuvent jouer au Duel de mots avec d'autres enfants de leur âge connectés au même moment. Ils voient seulement un pseudo et un avatar. Pas de noms, pas de chat, pas de messages. Jouer en famille et avec un code fonctionne toujours.",
   permOn: "Activé",
   permOff: "Désactivé",
+  rematchBtn: (name) => `Rejouer avec ${name}`,
+  rematchAsked: (name) => `${name} veut rejouer`,
+  rematchYes: "Oui, on rejoue",
+  rematchWaiting: (name) => `En attente de la réponse de ${name}…`,
+  statsTitle: "Tableau des victoires",
+  statsEmpty: "Pas encore de partie. Le premier duel apparaîtra ici.",
+  statsLine: (wins, games) => `${wins} victoires · ${games} parties`,
+  vsTitle: "Les adversaires",
+  vsLine: (w, l, t) => `${w} victoires · ${l} défaites` + (t ? ` · ${t} égalités` : ""),
+  vsBot: (wins, games) => "Contre le Robot des mots · " + `${wins} victoires · ${games} parties`,
 };
 
 const de: DuelCopy = {
@@ -667,6 +747,16 @@ const de: DuelCopy = {
   permDesc: "Wenn das eingeschaltet ist, können deine Kinder das Wortduell gegen andere Kinder in ihrem Alter spielen, die gerade online sind. Sie sehen nur einen Spitznamen und einen Avatar. Keine Namen, kein Chat, keine Nachrichten. Spielen in der Familie und mit Code funktioniert immer.",
   permOn: "An",
   permOff: "Aus",
+  rematchBtn: (name) => `Noch ein Spiel mit ${name}`,
+  rematchAsked: (name) => `${name} möchte noch ein Spiel`,
+  rematchYes: "Ja, noch ein Spiel",
+  rematchWaiting: (name) => `Warten, bis ${name} zustimmt…`,
+  statsTitle: "Siegertabelle",
+  statsEmpty: "Noch keine Spiele. Dein erstes Duell erscheint hier.",
+  statsLine: (wins, games) => `${wins} Siege · ${games} Spiele`,
+  vsTitle: "Gegen wen du gespielt hast",
+  vsLine: (w, l, t) => `${w} Siege · ${l} Niederlagen` + (t ? ` · ${t} Unentschieden` : ""),
+  vsBot: (wins, games) => "Gegen den Wortroboter · " + `${wins} Siege · ${games} Spiele`,
 };
 
 const cs: DuelCopy = {
@@ -741,6 +831,16 @@ const cs: DuelCopy = {
   permDesc: "Když je to zapnuté, děti mohou hrát Slovní souboj s jinými dětmi stejného věku, které jsou právě online. Vidí jen přezdívku a avatar. Žádná jména, žádný chat, žádné zprávy. Hra v rodině a s kódem funguje vždy.",
   permOn: "Zapnuto",
   permOff: "Vypnuto",
+  rematchBtn: (name) => `Další hra s: ${name}`,
+  rematchAsked: (name) => `${name} chce další hru`,
+  rematchYes: "Ano, další hra",
+  rematchWaiting: (name) => `Čekáme na souhlas: ${name}…`,
+  statsTitle: "Tabulka vítězství",
+  statsEmpty: "Zatím žádné hry. Tvůj první duel se objeví tady.",
+  statsLine: (wins, games) => `Výhry: ${wins} · Hry: ${games}`,
+  vsTitle: "S kým jsi hrál(a)",
+  vsLine: (w, l, t) => `Výhry: ${w} · Prohry: ${l}` + (t ? ` · Remízy: ${t}` : ""),
+  vsBot: (wins, games) => "Proti Slovnímu robotovi · " + `Výhry: ${wins} · Hry: ${games}`,
 };
 
 const sk: DuelCopy = {
@@ -815,6 +915,16 @@ const sk: DuelCopy = {
   permDesc: "Keď je to zapnuté, deti môžu hrať Slovný súboj s inými deťmi v ich veku, ktoré sú práve online. Vidia len prezývku a avatar. Žiadne mená, žiadny chat, žiadne správy. Hra v rodine a s kódom funguje vždy.",
   permOn: "Zapnuté",
   permOff: "Vypnuté",
+  rematchBtn: (name) => `Ďalšia hra s: ${name}`,
+  rematchAsked: (name) => `${name} chce ďalšiu hru`,
+  rematchYes: "Áno, ďalšia hra",
+  rematchWaiting: (name) => `Čakáme na súhlas: ${name}…`,
+  statsTitle: "Tabuľka víťazstiev",
+  statsEmpty: "Zatiaľ žiadne hry. Tvoj prvý duel sa objaví tu.",
+  statsLine: (wins, games) => `Výhry: ${wins} · Hry: ${games}`,
+  vsTitle: "S kým si hral(a)",
+  vsLine: (w, l, t) => `Výhry: ${w} · Prehry: ${l}` + (t ? ` · Remízy: ${t}` : ""),
+  vsBot: (wins, games) => "Proti Slovnému robotovi · " + `Výhry: ${wins} · Hry: ${games}`,
 };
 
 const it: DuelCopy = {
@@ -889,6 +999,16 @@ const it: DuelCopy = {
   permDesc: "Quando è attivo, i tuoi figli possono giocare a Duello di parole con altri bambini della loro età online nello stesso momento. Vedono solo un soprannome e un avatar. Niente nomi, niente chat, niente messaggi. Giocare in famiglia e con un codice funziona sempre.",
   permOn: "Attivo",
   permOff: "Disattivato",
+  rematchBtn: (name) => `Un'altra partita con ${name}`,
+  rematchAsked: (name) => `${name} vuole un'altra partita`,
+  rematchYes: "Sì, un'altra partita",
+  rematchWaiting: (name) => `Aspettiamo che ${name} accetti…`,
+  statsTitle: "Classifica delle vittorie",
+  statsEmpty: "Ancora nessuna partita. Il tuo primo duello apparirà qui.",
+  statsLine: (wins, games) => `${wins} vittorie · ${games} partite`,
+  vsTitle: "Contro chi hai giocato",
+  vsLine: (w, l, t) => `${w} vittorie · ${l} sconfitte` + (t ? ` · ${t} pareggi` : ""),
+  vsBot: (wins, games) => "Contro il Robot delle parole · " + `${wins} vittorie · ${games} partite`,
 };
 
 const ja: DuelCopy = {
@@ -963,6 +1083,16 @@ const ja: DuelCopy = {
   permDesc: "オンにすると、お子さまは同じ時間にオンラインの同じくらいの年の子どもとことばバトルで遊べます。見えるのはニックネームとアバターだけです。名前、チャット、メッセージはありません。家族内での対戦とコードでの対戦はいつでも利用できます。",
   permOn: "オン",
   permOff: "オフ",
+  rematchBtn: (name) => `${name}さんともう一度`,
+  rematchAsked: (name) => `${name}さんがもう一度遊びたがっています`,
+  rematchYes: "はい、もう一度",
+  rematchWaiting: (name) => `${name}さんの返事を待っています…`,
+  statsTitle: "勝利ランキング",
+  statsEmpty: "まだ対戦はありません。最初の対戦がここに表示されます。",
+  statsLine: (wins, games) => `${wins}勝 · ${games}試合`,
+  vsTitle: "対戦した相手",
+  vsLine: (w, l, t) => `${w}勝 · ${l}敗` + (t ? ` · ${t}引き分け` : ""),
+  vsBot: (wins, games) => "ことばロボットと対戦 · " + `${wins}勝 · ${games}試合`,
 };
 
 const hi: DuelCopy = {
@@ -1037,6 +1167,16 @@ const hi: DuelCopy = {
   permDesc: "चालू होने पर, आपके बच्चे अपनी उम्र के उन दूसरे बच्चों के साथ शब्द मुकाबला खेल सकते हैं जो उसी समय ऑनलाइन हैं। उन्हें सिर्फ़ उपनाम और अवतार दिखता है। न नाम, न चैट, न संदेश। परिवार के अंदर और कोड से खेलना हमेशा चलता है।",
   permOn: "चालू",
   permOff: "बंद",
+  rematchBtn: (name) => `${name} के साथ एक और खेल`,
+  rematchAsked: (name) => `${name} एक और खेल चाहते हैं`,
+  rematchYes: "हाँ, एक और खेल",
+  rematchWaiting: (name) => `${name} की हाँ का इंतज़ार…`,
+  statsTitle: "जीत की तालिका",
+  statsEmpty: "अभी कोई खेल नहीं हुआ। आपका पहला मुकाबला यहाँ दिखेगा।",
+  statsLine: (wins, games) => `${wins} जीत · ${games} खेल`,
+  vsTitle: "आप किसके साथ खेले",
+  vsLine: (w, l, t) => `${w} जीत · ${l} हार` + (t ? ` · ${t} बराबरी` : ""),
+  vsBot: (wins, games) => "शब्द रोबोट के खिलाफ़ · " + `${wins} जीत · ${games} खेल`,
 };
 
 const am: DuelCopy = {
@@ -1111,6 +1251,16 @@ const am: DuelCopy = {
   permDesc: "ይህ ሲበራ፣ ልጆችዎ በተመሳሳይ ሰዓት በመስመር ላይ ካሉ በዕድሜያቸው ካሉ ሌሎች ልጆች ጋር የቃላት ውድድር መጫወት ይችላሉ። የሚያዩት ቅጽል ስምና አቫታር ብቻ ነው። ስም የለም፣ ቻት የለም፣ መልዕክት የለም። በቤተሰብ ውስጥ እና በኮድ መጫወት ሁልጊዜ ይሠራል።",
   permOn: "በርቷል",
   permOff: "ጠፍቷል",
+  rematchBtn: (name) => `ከ${name} ጋር ሌላ ጨዋታ`,
+  rematchAsked: (name) => `${name} ሌላ ጨዋታ ይፈልጋሉ`,
+  rematchYes: "አዎ፣ ሌላ ጨዋታ",
+  rematchWaiting: (name) => `${name} እስኪስማሙ እየጠበቅን ነው…`,
+  statsTitle: "የድል ሰንጠረዥ",
+  statsEmpty: "ገና ጨዋታ የለም። የመጀመሪያው ውድድር እዚህ ይታያል።",
+  statsLine: (wins, games) => `${wins} ድሎች · ${games} ጨዋታዎች`,
+  vsTitle: "የተጫወቱት ከማን ጋር ነው",
+  vsLine: (w, l, t) => `${w} ድሎች · ${l} ሽንፈቶች` + (t ? ` · ${t} አቻ` : ""),
+  vsBot: (wins, games) => "ከቃላት ሮቦት ጋር · " + `${wins} ድሎች · ${games} ጨዋታዎች`,
 };
 
 const uk: DuelCopy = {
@@ -1185,6 +1335,16 @@ const uk: DuelCopy = {
   permDesc: "Коли це ввімкнено, ваші діти можуть грати в Дуель слів з іншими дітьми свого віку, які саме зараз онлайн. Вони бачать лише нікнейм і аватар. Без імен, без чату, без повідомлень. Гра в родині та за кодом працює завжди.",
   permOn: "Увімк.",
   permOff: "Вимк.",
+  rematchBtn: (name) => `Ще гра з ${name}`,
+  rematchAsked: (name) => `${name} пропонує ще одну гру`,
+  rematchYes: "Так, ще гра",
+  rematchWaiting: (name) => `Чекаємо на згоду ${name}…`,
+  statsTitle: "Таблиця перемог",
+  statsEmpty: "Ігор поки немає. Перша дуель з'явиться тут.",
+  statsLine: (wins, games) => `Перемог: ${wins} · Ігор: ${games}`,
+  vsTitle: "З ким ви грали",
+  vsLine: (w, l, t) => `Перемог: ${w} · Поразок: ${l}` + (t ? ` · Нічиїх: ${t}` : ""),
+  vsBot: (wins, games) => "Проти Словобота · " + `Перемог: ${wins} · Ігор: ${games}`,
 };
 
 const tr: DuelCopy = {
@@ -1259,6 +1419,16 @@ const tr: DuelCopy = {
   permDesc: "Açık olduğunda çocukların, aynı anda çevrimiçi olan yaşıtlarıyla Kelime Düellosu oynayabilir. Sadece bir takma ad ve avatar görürler. İsim yok, sohbet yok, mesaj yok. Aile içinde ve kodla oynamak her zaman çalışır.",
   permOn: "Açık",
   permOff: "Kapalı",
+  rematchBtn: (name) => `${name} ile bir oyun daha`,
+  rematchAsked: (name) => `${name} bir oyun daha istiyor`,
+  rematchYes: "Evet, bir oyun daha",
+  rematchWaiting: (name) => `${name} onay verene kadar bekliyoruz…`,
+  statsTitle: "Galibiyet tablosu",
+  statsEmpty: "Henüz oyun yok. İlk düellon burada görünecek.",
+  statsLine: (wins, games) => `${wins} galibiyet · ${games} oyun`,
+  vsTitle: "Kimlerle oynadın",
+  vsLine: (w, l, t) => `${w} galibiyet · ${l} mağlubiyet` + (t ? ` · ${t} beraberlik` : ""),
+  vsBot: (wins, games) => "Kelime Robotuna karşı · " + `${wins} galibiyet · ${games} oyun`,
 };
 
 const pl: DuelCopy = {
@@ -1333,6 +1503,16 @@ const pl: DuelCopy = {
   permDesc: "Gdy to jest włączone, dzieci mogą grać w Pojedynek słów z innymi dziećmi w swoim wieku, które są online w tej samej chwili. Widzą tylko pseudonim i awatar. Bez imion, bez czatu, bez wiadomości. Gra w rodzinie i z kodem działa zawsze.",
   permOn: "Włączone",
   permOff: "Wyłączone",
+  rematchBtn: (name) => `Jeszcze jedna gra: ${name}`,
+  rematchAsked: (name) => `${name} chce jeszcze jedną grę`,
+  rematchYes: "Tak, jeszcze jedna",
+  rematchWaiting: (name) => `Czekamy na zgodę: ${name}…`,
+  statsTitle: "Tabela zwycięstw",
+  statsEmpty: "Jeszcze nie ma gier. Twój pierwszy pojedynek pojawi się tutaj.",
+  statsLine: (wins, games) => `Wygrane: ${wins} · Gry: ${games}`,
+  vsTitle: "Z kim grasz",
+  vsLine: (w, l, t) => `Wygrane: ${w} · Przegrane: ${l}` + (t ? ` · Remisy: ${t}` : ""),
+  vsBot: (wins, games) => "Z Robotem Słów · " + `Wygrane: ${wins} · Gry: ${games}`,
 };
 
 const fa: DuelCopy = {
@@ -1407,6 +1587,16 @@ const fa: DuelCopy = {
   permDesc: "وقتی روشن باشد، بچه‌هایتان می‌توانند با بچه‌های هم‌سن خود که همان لحظه آنلاین هستند دوئل کلمات بازی کنند. آن‌ها فقط یک نام مستعار و آواتار می‌بینند. بدون نام، بدون چت، بدون پیام. بازی در خانواده و با کد همیشه کار می‌کند.",
   permOn: "روشن",
   permOff: "خاموش",
+  rematchBtn: (name) => `یک بازی دیگر با ${name}`,
+  rematchAsked: (name) => `${name} یک بازی دیگر می‌خواهند`,
+  rematchYes: "بله، یک بازی دیگر",
+  rematchWaiting: (name) => `منتظر موافقت ${name} هستیم…`,
+  statsTitle: "جدول بردها",
+  statsEmpty: "هنوز بازی‌ای نکرده‌اید. اولین دوئل اینجا نمایش داده می‌شود.",
+  statsLine: (wins, games) => `${wins} برد · ${games} بازی`,
+  vsTitle: "با چه کسانی بازی کرده‌اید",
+  vsLine: (w, l, t) => `${w} برد · ${l} باخت` + (t ? ` · ${t} مساوی` : ""),
+  vsBot: (wins, games) => "در برابر ربات کلمات · " + `${wins} برد · ${games} بازی`,
 };
 
 const id: DuelCopy = {
@@ -1481,6 +1671,16 @@ const id: DuelCopy = {
   permDesc: "Jika aktif, anak-anak bisa bermain Duel Kata dengan anak lain seusia mereka yang sedang online pada saat yang sama. Mereka hanya melihat nama panggilan dan avatar. Tanpa nama, tanpa obrolan, tanpa pesan. Bermain dalam keluarga dan dengan kode selalu bisa.",
   permOn: "Aktif",
   permOff: "Mati",
+  rematchBtn: (name) => `Main lagi dengan ${name}`,
+  rematchAsked: (name) => `${name} ingin main lagi`,
+  rematchYes: "Ya, main lagi",
+  rematchWaiting: (name) => `Menunggu ${name} setuju…`,
+  statsTitle: "Tabel kemenangan",
+  statsEmpty: "Belum ada permainan. Duel pertamamu akan muncul di sini.",
+  statsLine: (wins, games) => `${wins} menang · ${games} permainan`,
+  vsTitle: "Lawan yang pernah kamu hadapi",
+  vsLine: (w, l, t) => `${w} menang · ${l} kalah` + (t ? ` · ${t} seri` : ""),
+  vsBot: (wins, games) => "Lawan Robot Kata · " + `${wins} menang · ${games} permainan`,
 };
 
 const nl: DuelCopy = {
@@ -1555,6 +1755,16 @@ const nl: DuelCopy = {
   permDesc: "Als dit aan staat, kunnen je kinderen Woordduel spelen met andere kinderen van hun leeftijd die op hetzelfde moment online zijn. Ze zien alleen een bijnaam en een avatar. Geen namen, geen chat, geen berichten. Spelen binnen het gezin en met een code werkt altijd.",
   permOn: "Aan",
   permOff: "Uit",
+  rematchBtn: (name) => `Nog een potje met ${name}`,
+  rematchAsked: (name) => `${name} wil nog een potje`,
+  rematchYes: "Ja, nog een potje",
+  rematchWaiting: (name) => `Wachten tot ${name} ja zegt…`,
+  statsTitle: "Winnaarstabel",
+  statsEmpty: "Nog geen spellen. Je eerste duel komt hier te staan.",
+  statsLine: (wins, games) => `${wins} gewonnen · ${games} gespeeld`,
+  vsTitle: "Tegen wie je speelde",
+  vsLine: (w, l, t) => `${w} gewonnen · ${l} verloren` + (t ? ` · ${t} gelijk` : ""),
+  vsBot: (wins, games) => "Tegen de Woordrobot · " + `${wins} gewonnen · ${games} gespeeld`,
 };
 
 const el: DuelCopy = {
@@ -1629,6 +1839,16 @@ const el: DuelCopy = {
   permDesc: "Όταν είναι ενεργό, τα παιδιά σου μπορούν να παίζουν Μονομαχία λέξεων με άλλα παιδιά της ηλικίας τους που είναι online την ίδια στιγμή. Βλέπουν μόνο ψευδώνυμο και avatar. Χωρίς ονόματα, χωρίς chat, χωρίς μηνύματα. Το παιχνίδι μέσα στην οικογένεια και με κωδικό λειτουργεί πάντα.",
   permOn: "Ενεργό",
   permOff: "Ανενεργό",
+  rematchBtn: (name) => `Άλλο ένα παιχνίδι με: ${name}`,
+  rematchAsked: (name) => `${name}: θέλει άλλο ένα παιχνίδι`,
+  rematchYes: "Ναι, άλλο ένα",
+  rematchWaiting: (name) => `Περιμένουμε την απάντηση: ${name}…`,
+  statsTitle: "Πίνακας νικών",
+  statsEmpty: "Δεν υπάρχουν ακόμα παιχνίδια. Η πρώτη σου μονομαχία θα φανεί εδώ.",
+  statsLine: (wins, games) => `${wins} νίκες · ${games} παιχνίδια`,
+  vsTitle: "Με ποιους έπαιξες",
+  vsLine: (w, l, t) => `${w} νίκες · ${l} ήττες` + (t ? ` · ${t} ισοπαλίες` : ""),
+  vsBot: (wins, games) => "Με το Ρομπότ των λέξεων · " + `${wins} νίκες · ${games} παιχνίδια`,
 };
 
 const zu: DuelCopy = {
@@ -1703,6 +1923,16 @@ const zu: DuelCopy = {
   permDesc: "Uma lokhu kuvuliwe, izingane zakho zingadlala Umncintiswano Wamagama nezinye izingane zobudala bazo eziku-inthanethi ngesikhathi esifanayo. Zibona igama lokudlala ne-avatar kuphela. Awekho amagama, ayikho ingxoxo, ayikho imilayezo. Ukudlala ngaphakathi emndenini nangekhodi kuhlala kusebenza.",
   permOn: "Kuvuliwe",
   permOff: "Kuvaliwe",
+  rematchBtn: (name) => `Omunye umdlalo no-${name}`,
+  rematchAsked: (name) => `U-${name} ufuna omunye umdlalo`,
+  rematchYes: "Yebo, omunye umdlalo",
+  rematchWaiting: (name) => `Silinde u-${name} avume…`,
+  statsTitle: "Ithebula lokunqoba",
+  statsEmpty: "Ayikho imidlalo okwamanje. Umdlalo wakho wokuqala uzovela lapha.",
+  statsLine: (wins, games) => `Ukunqoba: ${wins} · Imidlalo: ${games}`,
+  vsTitle: "Odlale nabo",
+  vsLine: (w, l, t) => `Ukunqoba: ${w} · Ukuhlulwa: ${l}` + (t ? ` · Okulinganayo: ${t}` : ""),
+  vsBot: (wins, games) => "Bhekana neRobhothi Lamagama · " + `Ukunqoba: ${wins} · Imidlalo: ${games}`,
 };
 
 const vi: DuelCopy = {
@@ -1777,6 +2007,16 @@ const vi: DuelCopy = {
   permDesc: "Khi bật, con bạn có thể chơi Đấu từ vựng với các bạn cùng tuổi đang trực tuyến cùng lúc. Các con chỉ thấy biệt danh và hình đại diện. Không có tên, không có trò chuyện, không có tin nhắn. Chơi trong gia đình và chơi bằng mã luôn hoạt động.",
   permOn: "Bật",
   permOff: "Tắt",
+  rematchBtn: (name) => `Chơi lại với ${name}`,
+  rematchAsked: (name) => `${name} muốn chơi thêm một ván`,
+  rematchYes: "Vâng, chơi thêm",
+  rematchWaiting: (name) => `Đang chờ ${name} đồng ý…`,
+  statsTitle: "Bảng thắng",
+  statsEmpty: "Chưa có ván nào. Trận đấu đầu tiên sẽ hiện ở đây.",
+  statsLine: (wins, games) => `${wins} thắng · ${games} ván`,
+  vsTitle: "Bạn đã đấu với ai",
+  vsLine: (w, l, t) => `${w} thắng · ${l} thua` + (t ? ` · ${t} hòa` : ""),
+  vsBot: (wins, games) => "Đấu với Robot Từ vựng · " + `${wins} thắng · ${games} ván`,
 };
 
 const fil: DuelCopy = {
@@ -1851,6 +2091,16 @@ const fil: DuelCopy = {
   permDesc: "Kapag naka-on ito, puwedeng maglaro ang mga anak mo ng Duwelo ng Salita kasama ang ibang batang kaedad nila na online sa parehong oras. Palayaw at avatar lang ang nakikita nila. Walang pangalan, walang chat, walang mensahe. Laging gumagana ang paglalaro sa loob ng pamilya at gamit ang code.",
   permOn: "Naka-on",
   permOff: "Naka-off",
+  rematchBtn: (name) => `Isa pang laro kasama si ${name}`,
+  rematchAsked: (name) => `Gusto ni ${name} ng isa pang laro`,
+  rematchYes: "Oo, isa pa",
+  rematchWaiting: (name) => `Hinihintay na pumayag si ${name}…`,
+  statsTitle: "Talaan ng panalo",
+  statsEmpty: "Wala pang laro. Dito lalabas ang una mong duel.",
+  statsLine: (wins, games) => `${wins} panalo · ${games} laro`,
+  vsTitle: "Mga nakalaban mo",
+  vsLine: (w, l, t) => `${w} panalo · ${l} talo` + (t ? ` · ${t} tabla` : ""),
+  vsBot: (wins, games) => "Laban sa Word Bot · " + `${wins} panalo · ${games} laro`,
 };
 
 const af: DuelCopy = {
@@ -1925,6 +2175,16 @@ const af: DuelCopy = {
   permDesc: "Wanneer dit aan is, kan jou kinders Woordtweestryd speel teen ander kinders van hul ouderdom wat op dieselfde oomblik aanlyn is. Hulle sien net 'n bynaam en 'n avatar. Geen name, geen klets, geen boodskappe nie. Speel binne die gesin en met 'n kode werk altyd.",
   permOn: "Aan",
   permOff: "Af",
+  rematchBtn: (name) => `Nog 'n spel met ${name}`,
+  rematchAsked: (name) => `${name} wil nog 'n spel speel`,
+  rematchYes: "Ja, nog een",
+  rematchWaiting: (name) => `Wag dat ${name} ja sê…`,
+  statsTitle: "Wentabel",
+  statsEmpty: "Nog geen spele nie. Jou eerste tweestryd kom hier.",
+  statsLine: (wins, games) => `${wins} oorwinnings · ${games} spele`,
+  vsTitle: "Teen wie jy gespeel het",
+  vsLine: (w, l, t) => `${w} oorwinnings · ${l} nederlae` + (t ? ` · ${t} gelykop` : ""),
+  vsBot: (wins, games) => "Teen Woordrobot · " + `${wins} oorwinnings · ${games} spele`,
 };
 
 const sw: DuelCopy = {
@@ -1999,6 +2259,16 @@ const sw: DuelCopy = {
   permDesc: "Hili likiwashwa, watoto wako wanaweza kucheza Pambano la Maneno na watoto wengine wa umri wao walio mtandaoni wakati huo huo. Wanaona jina la utani na avatar tu. Hakuna majina, hakuna gumzo, hakuna ujumbe. Kucheza ndani ya familia na kwa msimbo hufanya kazi kila wakati.",
   permOn: "Imewashwa",
   permOff: "Imezimwa",
+  rematchBtn: (name) => `Mchezo mwingine na ${name}`,
+  rematchAsked: (name) => `${name} anataka mchezo mwingine`,
+  rematchYes: "Ndiyo, mchezo mwingine",
+  rematchWaiting: (name) => `Tunasubiri ${name} akubali…`,
+  statsTitle: "Jedwali la ushindi",
+  statsEmpty: "Bado hakuna michezo. Pambano lako la kwanza litaonekana hapa.",
+  statsLine: (wins, games) => `Ushindi ${wins} · Michezo ${games}`,
+  vsTitle: "Uliocheza nao",
+  vsLine: (w, l, t) => `Ushindi ${w} · Kushindwa ${l}` + (t ? ` · Sare ${t}` : ""),
+  vsBot: (wins, games) => "Dhidi ya Roboti ya Maneno · " + `Ushindi ${wins} · Michezo ${games}`,
 };
 
 const zhCN: DuelCopy = {
@@ -2073,6 +2343,16 @@ const zhCN: DuelCopy = {
   permDesc: "开启后，孩子可以和同一时间在线的同龄小朋友玩单词对决。他们只能看到昵称和头像。没有名字，没有聊天，没有消息。家庭内的对决和用代码的对决始终可用。",
   permOn: "开启",
   permOff: "关闭",
+  rematchBtn: (name) => `和${name}再来一局`,
+  rematchAsked: (name) => `${name}想再来一局`,
+  rematchYes: "好，再来一局",
+  rematchWaiting: (name) => `等待${name}同意…`,
+  statsTitle: "胜利榜",
+  statsEmpty: "还没有对局。第一场对战会显示在这里。",
+  statsLine: (wins, games) => `${wins}胜 · ${games}局`,
+  vsTitle: "你的对手",
+  vsLine: (w, l, t) => `${w}胜 · ${l}负` + (t ? ` · ${t}平` : ""),
+  vsBot: (wins, games) => "挑战单词机器人 · " + `${wins}胜 · ${games}局`,
 };
 
 const zhTW: DuelCopy = {
@@ -2147,6 +2427,16 @@ const zhTW: DuelCopy = {
   permDesc: "開啟後，孩子可以和同一時間在線上的同齡小朋友玩單字對決。他們只看得到暱稱和頭像。沒有名字，沒有聊天，沒有訊息。家庭內的對決和用代碼的對決隨時都能玩。",
   permOn: "開啟",
   permOff: "關閉",
+  rematchBtn: (name) => `和${name}再來一局`,
+  rematchAsked: (name) => `${name}想再來一局`,
+  rematchYes: "好，再來一局",
+  rematchWaiting: (name) => `等待${name}同意…`,
+  statsTitle: "勝利榜",
+  statsEmpty: "還沒有對局。第一場對戰會顯示在這裡。",
+  statsLine: (wins, games) => `${wins}勝 · ${games}局`,
+  vsTitle: "你的對手",
+  vsLine: (w, l, t) => `${w}勝 · ${l}負` + (t ? ` · ${t}和` : ""),
+  vsBot: (wins, games) => "挑戰單字機器人 · " + `${wins}勝 · ${games}局`,
 };
 
 const ko: DuelCopy = {
@@ -2221,6 +2511,16 @@ const ko: DuelCopy = {
   permDesc: "켜면 아이가 같은 시간에 접속한 또래 아이들과 단어 대결을 할 수 있어요. 닉네임과 아바타만 보여요. 이름, 채팅, 메시지는 없어요. 가족끼리 하는 게임과 코드로 하는 게임은 언제나 할 수 있어요.",
   permOn: "켜짐",
   permOff: "꺼짐",
+  rematchBtn: (name) => `${name}님과 한 판 더`,
+  rematchAsked: (name) => `${name}님이 한 판 더 원해요`,
+  rematchYes: "좋아요, 한 판 더",
+  rematchWaiting: (name) => `${name}님의 수락을 기다리는 중…`,
+  statsTitle: "승리 순위표",
+  statsEmpty: "아직 대결이 없어요. 첫 대결이 여기에 표시돼요.",
+  statsLine: (wins, games) => `${wins}승 · ${games}판`,
+  vsTitle: "대결한 상대",
+  vsLine: (w, l, t) => `${w}승 · ${l}패` + (t ? ` · ${t}무` : ""),
+  vsBot: (wins, games) => "단어 로봇과 대결 · " + `${wins}승 · ${games}판`,
 };
 
 const th: DuelCopy = {
@@ -2295,6 +2595,16 @@ const th: DuelCopy = {
   permDesc: "เมื่อเปิดไว้ ลูกของคุณจะเล่นดวลคำศัพท์กับเด็กวัยเดียวกันที่ออนไลน์อยู่ในเวลาเดียวกันได้ เด็ก ๆ เห็นแค่ชื่อเล่นและอวาตาร์ ไม่มีชื่อ ไม่มีแชต ไม่มีข้อความ การเล่นในครอบครัวและการเล่นด้วยรหัสใช้ได้เสมอ",
   permOn: "เปิด",
   permOff: "ปิด",
+  rematchBtn: (name) => `เล่นอีกตากับ ${name}`,
+  rematchAsked: (name) => `${name} อยากเล่นอีกตา`,
+  rematchYes: "ได้เลย เล่นอีกตา",
+  rematchWaiting: (name) => `กำลังรอ ${name} ตอบรับ…`,
+  statsTitle: "ตารางชัยชนะ",
+  statsEmpty: "ยังไม่มีการแข่ง การดวลครั้งแรกจะแสดงที่นี่",
+  statsLine: (wins, games) => `ชนะ ${wins} · เล่น ${games}`,
+  vsTitle: "คนที่คุณเคยดวลด้วย",
+  vsLine: (w, l, t) => `ชนะ ${w} · แพ้ ${l}` + (t ? ` · เสมอ ${t}` : ""),
+  vsBot: (wins, games) => "ดวลกับหุ่นยนต์คำศัพท์ · " + `ชนะ ${wins} · เล่น ${games}`,
 };
 
 const bn: DuelCopy = {
@@ -2369,6 +2679,16 @@ const bn: DuelCopy = {
   permDesc: "চালু থাকলে, বাচ্চারা একই সময়ে অনলাইনে থাকা তাদের বয়সী অন্য বাচ্চাদের সাথে শব্দ লড়াই খেলতে পারবে। তারা শুধু ডাকনাম আর অবতার দেখে। কোনো নাম নেই, কোনো চ্যাট নেই, কোনো মেসেজ নেই। পরিবারের ভেতরে আর কোড দিয়ে খেলা সবসময় চলে।",
   permOn: "চালু",
   permOff: "বন্ধ",
+  rematchBtn: (name) => `${name}-এর সাথে আরেকটি খেলা`,
+  rematchAsked: (name) => `${name} আরেকটি খেলা চায়`,
+  rematchYes: "হ্যাঁ, আরেকটি খেলা",
+  rematchWaiting: (name) => `${name}-এর সম্মতির অপেক্ষা…`,
+  statsTitle: "জয়ের তালিকা",
+  statsEmpty: "এখনও কোনো খেলা হয়নি। প্রথম দ্বন্দ্ব এখানে দেখা যাবে।",
+  statsLine: (wins, games) => `${wins} জয় · ${games} খেলা`,
+  vsTitle: "যাদের সাথে খেলেছ",
+  vsLine: (w, l, t) => `${w} জয় · ${l} হার` + (t ? ` · ${t} ড্র` : ""),
+  vsBot: (wins, games) => "শব্দ রোবটের বিরুদ্ধে · " + `${wins} জয় · ${games} খেলা`,
 };
 
 const da: DuelCopy = {
@@ -2443,6 +2763,16 @@ const da: DuelCopy = {
   permDesc: "Når det er slået til, kan dine børn spille Ordduel mod andre børn på deres alder, som er online i samme øjeblik. De ser kun et kaldenavn og en avatar. Ingen navne, ingen chat, ingen beskeder. Spil i familien og med en kode virker altid.",
   permOn: "Til",
   permOff: "Fra",
+  rematchBtn: (name) => `Et spil mere med ${name}`,
+  rematchAsked: (name) => `${name} vil spille igen`,
+  rematchYes: "Ja, et spil mere",
+  rematchWaiting: (name) => `Venter på at ${name} siger ja…`,
+  statsTitle: "Vindertabel",
+  statsEmpty: "Ingen spil endnu. Din første duel kommer her.",
+  statsLine: (wins, games) => `${wins} sejre · ${games} spil`,
+  vsTitle: "Hvem du har spillet mod",
+  vsLine: (w, l, t) => `${w} sejre · ${l} nederlag` + (t ? ` · ${t} uafgjort` : ""),
+  vsBot: (wins, games) => "Mod Ordrobotten · " + `${wins} sejre · ${games} spil`,
 };
 
 const hu: DuelCopy = {
@@ -2517,6 +2847,16 @@ const hu: DuelCopy = {
   permDesc: "Ha be van kapcsolva, a gyerekeid Szópárbajt játszhatnak más, velük egykorú gyerekekkel, akik ugyanabban a pillanatban online vannak. Csak egy becenevet és egy avatart látnak. Nincsenek nevek, nincs chat, nincsenek üzenetek. A családon belüli és a kódos játék mindig működik.",
   permOn: "Be",
   permOff: "Ki",
+  rematchBtn: (name) => `Még egy játék vele: ${name}`,
+  rematchAsked: (name) => `${name} még egy játékot szeretne`,
+  rematchYes: "Igen, még egyet",
+  rematchWaiting: (name) => `Várjuk, hogy ${name} igent mondjon…`,
+  statsTitle: "Győzelmi tábla",
+  statsEmpty: "Még nincs játék. Az első párbajod itt jelenik meg.",
+  statsLine: (wins, games) => `${wins} győzelem · ${games} játék`,
+  vsTitle: "Kikkel játszottál",
+  vsLine: (w, l, t) => `${w} győzelem · ${l} vereség` + (t ? ` · ${t} döntetlen` : ""),
+  vsBot: (wins, games) => "A Szórobot ellen · " + `${wins} győzelem · ${games} játék`,
 };
 
 export const DUEL_COPY: Record<string, DuelCopy> = {
