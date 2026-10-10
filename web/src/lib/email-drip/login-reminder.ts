@@ -18,7 +18,8 @@ export function loginReminderDue(
   d: FirebaseFirestore.DocumentData,
   now: number,
 ): boolean {
-  if (d.loginReminderSentAt || d.familyRole === "kid") return false;
+  // Not for a school owner: schools get their own onboarding (2026-10-10).
+  if (d.loginReminderSentAt || d.familyRole === "kid" || d.schoolId) return false;
   const created = Date.parse(meta.creationTime ?? "");
   if (!Number.isFinite(created)) return false;
   const age = now - created;
