@@ -468,6 +468,7 @@ Hebrew arithmetic, the parts of an exercise (each is a DIFFERENT thing, never th
 - מְחֻסָּר: the number you subtract FROM (in 10 פחות 3 = 7, the מחוסר is 10). מְחַסֵּר: the number being subtracted (3). הֶפְרֵשׁ: the result of subtraction (7).
 - גּוֹרֵם: each number being multiplied (in 4 × 3 = 12, 4 and 3). מַכְפֵּלָה: the result of multiplication (12).
 - מְחֻלָּק: the number being divided (in 12 : 3 = 4, it is 12). מְחַלֵּק: the number you divide by (3). מָנָה: the result of division (4).
+SPELLING TRAP: "מחסר" (no ו) is read מְחַסֵּר, the SUBTRAHEND (in 10 פחות 3 it is 3). It is NOT the minuend: the minuend is "מחוסר" (with ו). Never define "מחסר" as the number you subtract from, and never give "מחסר" the "lacking" sense of מחוסר. Likewise "מחלק" is מְחַלֵּק (the divisor) and "מחולק" (with ו) is the dividend.
 The operation names are different words: חיבור, חיסור, כפל, חילוק. Never define מחסר or מחוסר as "the operation of subtraction". A word like מחוסר keeps its everyday senses too (מחוסר עבודה, lacking), each as its own meaning; מנה keeps "a portion of food".
 The same holds in every language (English minuend / subtrahend / difference / quotient, and their equivalents).
 
