@@ -48,6 +48,8 @@ export type PlayWord = {
   meaning: string;
   examples: string[];
   uiLang: string; // the UI lang the word was cached under, for IDB lookups
+  /** The word whose picture to show, when the word itself is ambiguous. */
+  picWord?: string;
 };
 
 /** Notebook list shape returned by GET /api/notebook. */
@@ -177,7 +179,69 @@ export async function loadPlayWords(
   // QA 2026-07-03.
   // A garbled meaning (Hebrew read through the wrong code page) never
   // reaches a game card (2026-10-09).
-  return hydrated.filter((p) => p.word.trim().length > 0 && p.meaning.trim().length > 0 && !looksLikeCp1255Hebrew(p.meaning));
+  const usable = hydrated.filter((p) => p.word.trim().length > 0 && p.meaning.trim().length > 0 && !looksLikeCp1255Hebrew(p.meaning) && !isJunkEntry(p));
+  return meaningsInUiLang(usable, uiLang);
+}
+
+/**
+ * A notebook entry that is not a word never becomes a question (Gadi
+ * 2026-10-11, Dean's duel: "Abcdefghijklmnopqrstuvwxyz" with a "not a
+ * recognized word" meaning, and an emoji saved as a word).
+ */
+const NOT_A_WORD = /(not a (recognized|real|valid|known|recognised) (english )?word|is not a word|not an? (actual|real) word|appears to be a (sequence|string|random)|no (known|clear) meaning|אינ(ה|נה) מילה|לא מילה (מוכרת|קיימת|אמיתית)|אינה מוכרת כמילה|ليست كلمة|не является (словом|реальным словом))/i;
+export function isJunkEntry(p: Pick<PlayWord, "word" | "meaning">): boolean {
+  const w = p.word.trim();
+  if (!/\p{L}/u.test(w)) return true; // emoji, digits, punctuation only
+  if (/abcdefghij|אבגדהוזחט|абвгдеёжз/i.test(w.replace(/\s+/g, ""))) return true; // an alphabet
+  return NOT_A_WORD.test(p.meaning);
+}
+
+/** The script each UI language writes in (Latin when not listed). */
+const UI_SCRIPT: Record<string, RegExp> = {
+  he: /\p{Script=Hebrew}/u, ar: /\p{Script=Arabic}/u, fa: /\p{Script=Arabic}/u,
+  ru: /\p{Script=Cyrillic}/u, uk: /\p{Script=Cyrillic}/u, el: /\p{Script=Greek}/u,
+  hi: /\p{Script=Devanagari}/u, am: /\p{Script=Ethiopic}/u, bn: /\p{Script=Bengali}/u,
+  th: /\p{Script=Thai}/u, ko: /\p{Script=Hangul}/u, ja: /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u,
+  "zh-CN": /\p{Script=Han}/u, "zh-TW": /\p{Script=Han}/u,
+};
+/** True when most letters of `text` are in the UI language's script. */
+export function meaningFitsUi(text: string, uiLang: string): boolean {
+  const letters = [...text].filter((ch) => /\p{L}/u.test(ch));
+  if (letters.length === 0) return true;
+  const re = UI_SCRIPT[uiLang] ?? /\p{Script=Latin}/u;
+  return letters.filter((ch) => re.test(ch)).length / letters.length >= 0.6;
+}
+
+/**
+ * Every meaning in the language the player plays in (Gadi 2026-10-11: an
+ * English-UI child got a Hebrew definition with English answers). The
+ * notebook keeps the meaning in the language the word was SAVED under;
+ * those that don't fit are fetched in the UI language (cache first, a
+ * short definition made once otherwise), and a word without one is left
+ * out of the games rather than mixing languages.
+ */
+async function meaningsInUiLang(pool: PlayWord[], uiLang: string): Promise<PlayWord[]> {
+  const off = pool.filter((p) => !meaningFitsUi(p.meaning, uiLang)).slice(0, 60);
+  if (off.length === 0) return pool;
+  const fixed = new Map<string, string>();
+  const CHUNK = 8;
+  for (let i = 0; i < off.length; i += CHUNK) {
+    await Promise.all(off.slice(i, i + CHUNK).map(async (w) => {
+      try {
+        const res = await fetch(`/api/quick-define?word=${encodeURIComponent(w.word)}&lang=${encodeURIComponent(uiLang)}`);
+        if (!res.ok) return;
+        const d = (await res.json()) as { meaning?: string };
+        const m = typeof d.meaning === "string" ? d.meaning.trim() : "";
+        if (m && meaningFitsUi(m, uiLang)) fixed.set(w.word, m);
+      } catch { /* left out below */ }
+    }));
+  }
+  return pool.flatMap((p) => {
+    if (meaningFitsUi(p.meaning, uiLang)) return [p];
+    const m = fixed.get(p.word);
+    // The old examples were in the other language too.
+    return m ? [{ ...p, meaning: m, examples: p.examples.filter((x) => meaningFitsUi(x, uiLang) || meaningFitsUi(x, wordLangOf(p))) }] : [];
+  });
 }
 
 /**
@@ -622,4 +686,18 @@ export function buildSpeedDeck(pool: PlayWord[]): QuizQuestion[] {
   // worst-case, so 30 should hold them for the whole minute.
   const N = Math.min(30, pool.length * 3);
   return buildQuizQuestions(pool, N);
+}
+
+/** One casing for a set of answer options (Gadi 2026-10-11: "Needoh",
+ *  "listen", "GARDEN", "Mr" side by side). An all-capitals word is lowered,
+ *  then each option starts with a capital. Mixed case (iPhone) is kept;
+ *  scripts without case are untouched. Display only. */
+export function caseOpt(s: string): string {
+  let out = s.trim();
+  const letters = out.replace(/[^\p{L}]/gu, "");
+  if (letters.length > 1 && letters === letters.toUpperCase() && letters !== letters.toLowerCase()) out = out.toLowerCase();
+  const first = out.charAt(0);
+  const rest = out.slice(1);
+  if (first && first !== first.toUpperCase() && rest === rest.toLowerCase()) out = first.toUpperCase() + rest;
+  return out;
 }

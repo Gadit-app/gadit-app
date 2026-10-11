@@ -19,6 +19,8 @@ import {
   pickMeaningLensRounds,
   type MeaningLensRound,
 } from "@/lib/play-content/meaning-lens";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 type RuntimeRound = {
   word: string;
@@ -130,12 +132,12 @@ export function GameMeaningLens({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.lensPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.lensPrompt} /></div>
         <div className="wb-play-lens-word" lang={contentLang} dir={contentDir}>
           {r.word}
         </div>
         <div className="wb-play-lens-sentence" lang={contentLang} dir={contentDir}>
-          {r.sentence}
+          <QText text={r.sentence} skip={[r.word]} />
         </div>
       </div>
       <div className="wb-play-options">
@@ -158,7 +160,7 @@ export function GameMeaningLens({
               lang={contentLang}
               dir={contentDir}
             >
-              {opt}
+              {caseOpt(opt)}
             </button>
           );
         })}

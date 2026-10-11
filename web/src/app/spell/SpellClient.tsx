@@ -729,7 +729,7 @@ export function SpellClient() {
                   style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
                   📷 {t("photoBtn", lang)}
                 </button>
-                <input ref={photoRef} type="file" accept="image/*" capture="environment" hidden
+                <input ref={photoRef} type="file" accept="image/*" hidden
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
               </div>
             </div>

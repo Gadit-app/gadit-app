@@ -7553,6 +7553,9 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
 .wordbook .wb-play-page {
   background: var(--wb-canvas);
 }
+/* The page ground reaches the bottom of the screen even when a game or the
+   duel is short (Gadi 2026-10-11: on a tablet the skin stopped mid-screen). */
+.wordbook.wb-play-page, .wordbook .wb-play-page { min-height: 100dvh; }
 /* Kids Mode changes the whole page, not just the banner (Gadi 2026-10-09):
    soft washes of the cover palette (teal, mustard, purple) over the usual
    canvas. Painted over a light mint ground (--wb-canvas is never defined). A kid account with
@@ -14652,4 +14655,48 @@ html[data-play="1"] .gd-buy { display: none !important; }
 }
 @media (max-width: 380px) {
   .wordbook .wb-shell-mobile-cta .wb-shell-signin-mobile { display: none; }
+}
+
+/* Right / wrong stay visible on every skin and in dark mode (Gadi
+   2026-10-11: on a dark tablet the answered options all looked the same,
+   because the skin rule for options wiped the state colours). A tint of
+   the state colour over the skin's own surface, its strong border, and the
+   skin's ink for the text, so it reads on light and dark skins alike. */
+html[data-theme] .wb-kid-area .wb-play-option.is-correct,
+html[data-theme] .wb-kid-area .wb-play-root-tile.is-correct,
+html[data-theme] .wb-kid-area .wb-play-root-tile.is-correct-reveal,
+html[data-theme] .wb-kid-area .wb-play-build-slot.is-correct,
+html[data-theme] .wb-kid-area .wb-play-anagram-slots.is-correct,
+html[data-theme] .wb-kid-area .wb-play-shade-slot.is-correct,
+html[data-theme="dark"] .wordbook .wb-play-option.is-correct,
+html[data-theme="dark"] .wordbook .wb-play-root-tile.is-correct,
+html[data-theme="dark"] .wordbook .wb-play-root-tile.is-correct-reveal,
+html[data-theme="dark"] .wordbook .wb-play-build-slot.is-correct {
+  background: color-mix(in srgb, #10B981 24%, var(--surface));
+  border-color: #10B981;
+  color: var(--ink);
+  font-weight: 700;
+}
+html[data-theme] .wb-kid-area .wb-play-option.is-wrong,
+html[data-theme] .wb-kid-area .wb-play-root-tile.is-wrong,
+html[data-theme] .wb-kid-area .wb-play-build-slot.is-wrong,
+html[data-theme] .wb-kid-area .wb-play-anagram-slots.is-wrong,
+html[data-theme] .wb-kid-area .wb-play-shade-slot.is-wrong,
+html[data-theme="dark"] .wordbook .wb-play-option.is-wrong,
+html[data-theme="dark"] .wordbook .wb-play-root-tile.is-wrong,
+html[data-theme="dark"] .wordbook .wb-play-build-slot.is-wrong {
+  background: color-mix(in srgb, #F43F5E 22%, var(--surface));
+  border-color: #F43F5E;
+  color: var(--ink);
+}
+html[data-theme="dark"] .wordbook .wb-play-build-result.is-correct { color: #6EE7B7; }
+html[data-theme="dark"] .wordbook .wb-play-build-result.is-wrong { color: #FDA4AF; }
+
+/* Words in a game question can be tapped for their meaning (Gadi
+   2026-10-11). A tablet has no hover, so a faint dotted line shows it. */
+.wordbook .wb-q-word {
+  text-decoration: underline dotted color-mix(in srgb, currentColor 38%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.28em;
+  border-radius: 4px;
 }

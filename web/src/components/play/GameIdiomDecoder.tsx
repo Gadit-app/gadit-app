@@ -19,6 +19,8 @@ import {
   pickIdiomDecoderRounds,
   type IdiomDecoderRound,
 } from "@/lib/play-content/idiom-decoder";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 type RuntimeRound = {
   idiom: string;
@@ -121,9 +123,9 @@ export function GameIdiomDecoder({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.idiomPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.idiomPrompt} /></div>
         <div className="wb-play-idiom-literal" lang={contentLang} dir={contentDir}>
-          {r.literal}
+          <QText text={r.literal} />
         </div>
         {picked !== null && (
           <div className="wb-play-idiom-reveal" lang={contentLang} dir={contentDir}>
@@ -151,7 +153,7 @@ export function GameIdiomDecoder({
               lang={contentLang}
               dir={contentDir}
             >
-              {opt}
+              {caseOpt(opt)}
             </button>
           );
         })}

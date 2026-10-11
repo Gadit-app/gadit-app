@@ -23,6 +23,7 @@ import {
   pickBuildAWordRounds,
   type BuildAWordRound,
 } from "@/lib/play-content/build-a-word";
+import { QText } from "./QText";
 
 type RuntimeRound = {
   target: string;
@@ -145,9 +146,9 @@ export function GameBuildAWord({
         t={t}
       />
       <div className="wb-play-question wb-play-question-build">
-        <div className="wb-play-question-eyebrow">{t.buildPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.buildPrompt} /></div>
         <div className="wb-play-build-clue" lang={contentLang} dir={contentDir}>
-          &ldquo;{r.clue}&rdquo;
+          &ldquo;<QText text={r.clue} skip={[r.target]} />&rdquo;
         </div>
       </div>
       {/* Slot row */}

@@ -19,6 +19,8 @@ import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 const DURATION = 60;
 const WRONG_PENALTY = 1; // seconds
@@ -136,10 +138,10 @@ export function GameSpeed({
       <PlayHeader title={t.speedTitle} timeLeft={timeLeft} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">
-          {q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning}
+          <QText text={q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning} />
         </div>
         <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
-          {nq(q.prompt)}
+          {q.promptKind === "word" ? nq(q.prompt) : <QText text={nq(q.prompt)} skip={[q.word.word]} />}
         </div>
       </div>
       <div className="wb-play-options">
@@ -161,7 +163,7 @@ export function GameSpeed({
               disabled={picked !== null}
               dir="auto"
             >
-              {nq(opt)}
+              {nq(caseOpt(opt))}
             </button>
           );
         })}

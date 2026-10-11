@@ -15,6 +15,7 @@ import { reportAnswer } from "@/lib/learn/report";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
+import { QText } from "./QText";
 
 export function GameMemory({
   pool,
@@ -107,7 +108,7 @@ export function GameMemory({
     <div className="wb-play-stage">
       <PlayHeader title={t.memoryTitle} progress={`${matched.length}/${totalPairs}`} score={moves} onExit={onExit} t={t} />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.memoryFlipPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.memoryFlipPrompt} /></div>
       </div>
       <div className="wb-play-memory-grid">
         {deck.map((card) => {

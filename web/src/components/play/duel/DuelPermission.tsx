@@ -50,7 +50,7 @@ export function DuelPermission({ user, lang, dir }: {
 
   return (
     <div className="fam-set-row duel-perm" dir={dir}>
-      <style>{`.duel-perm{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}.duel-perm-text{flex:1 1 260px;min-width:0;display:grid;gap:4px}.duel-perm-text b{font-size:16px}.duel-perm-text span{font-size:14px;line-height:1.55;color:var(--wb-ink-soft,#55625f)}.duel-perm-switch{flex:none;min-width:84px;min-height:40px;border-radius:999px;border:0;font:inherit;font-weight:800;cursor:pointer;background:rgba(15,111,108,.12);color:#0F6F6C}.duel-perm-switch.is-on{background:#0F6F6C;color:#fff}`}</style>
+      <style>{`.duel-perm{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}.duel-perm-text{flex:1 1 260px;min-width:0;display:grid;gap:4px}.duel-perm-text b{font-size:16px}.duel-perm-text span{font-size:14px;line-height:1.55;color:var(--wb-ink-soft,#55625f)}.duel-perm-switch{flex:none;min-width:84px;min-height:40px;border-radius:999px;border:0;font:inherit;font-weight:800;cursor:pointer;background:rgba(15,111,108,.12);color:#0F6F6C}.duel-perm-switch.is-on{background:#0F6F6C;color:#fff}html[data-theme="dark"] .duel-perm-switch{background:rgba(45,212,191,.14);color:#5EEAD4}html[data-theme="dark"] .duel-perm-switch.is-on{background:#2DD4BF;color:#04241F}`}</style>
       <span aria-hidden="true" style={{ fontSize: 24 }}>⚔️</span>
       <div className="duel-perm-text">
         <b>{t.permTitle}</b>

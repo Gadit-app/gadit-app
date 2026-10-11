@@ -16,6 +16,8 @@ import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 export function GameFillBlank({
   pool,
@@ -83,13 +85,13 @@ export function GameFillBlank({
     <div className="wb-play-stage">
       <PlayHeader title={t.fillblankTitle} progress={`${idx + 1}/${questions.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.fillblankPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.fillblankPrompt} /></div>
         {/* dir=auto: the carrier sentence is in the WORD's language,
             which can differ from the UI language. */}
         <div className="wb-play-sentence" dir="auto">
           {parts.map((part, i) => (
             <span key={i}>
-              {nq(part)}
+              <QText text={nq(part)} skip={[q.word.word]} context={parts.join(" ")} />
               {i < parts.length - 1 && (
                 <span className={`wb-play-blank ${picked !== null ? "is-revealed" : ""}`}>
                   {picked !== null ? nq(q.word.word) : ""}
@@ -118,7 +120,7 @@ export function GameFillBlank({
               disabled={picked !== null}
               dir="auto"
             >
-              {nq(opt)}
+              {nq(caseOpt(opt))}
             </button>
           );
         })}

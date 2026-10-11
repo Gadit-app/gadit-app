@@ -24,6 +24,8 @@ import {
   pickEtymologyArtistRounds,
   type EtymologyArtistRound,
 } from "@/lib/play-content/etymology-artist";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 type RuntimeRound = {
   literal: string;
@@ -138,10 +140,10 @@ export function GameEtymologyArtist({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.artistPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.artistPrompt} /></div>
         <div className="wb-play-artist-origin">{r.origin}</div>
         <div className="wb-play-artist-literal" lang={contentLang} dir={contentDir}>
-          &ldquo;{r.literal}&rdquo;
+          &ldquo;<QText text={r.literal} skip={[r.displayed[r.correctIdx]]} />&rdquo;
         </div>
       </div>
       <div className="wb-play-options">
@@ -164,7 +166,7 @@ export function GameEtymologyArtist({
               lang={contentLang}
               dir={contentDir}
             >
-              {opt}
+              {caseOpt(opt)}
             </button>
           );
         })}

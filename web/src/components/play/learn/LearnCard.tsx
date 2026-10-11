@@ -37,6 +37,12 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  // "Not now" folds the question into one small link (Gadi 2026-10-11: a
+  // child who just wants to play in their own language). Per device.
+  const HIDE_KEY = "gadit-learn-hidden";
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => { try { setHidden(localStorage.getItem(HIDE_KEY) === "1"); } catch { /* shown */ } }, []);
+  const hide = (v: boolean) => { setHidden(v); try { if (v) localStorage.setItem(HIDE_KEY, "1"); else localStorage.removeItem(HIDE_KEY); } catch { /* this visit only */ } };
   const onStateRef = useRef(onState);
   onStateRef.current = onState;
 
@@ -97,16 +103,23 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
   if (!targets.length || !state) return null;
   const name = (l: LearnLang) => (l === "en" ? t.english : t.hebrew);
 
-  // Choosing what to learn.
+  // Choosing what to learn: one quiet row, since most players just want to
+  // play (Gadi 2026-10-11: the big card pulled the eye from Kids Mode and
+  // Word Duel, and read like the notebook's language filter).
+  if (!state.lang && step === "view" && hidden) {
+    return (
+      <button type="button" className="wb-learn-reopen" dir={dir} onClick={() => hide(false)}>
+        <span aria-hidden="true">🎒</span> {t.reopen}
+      </button>
+    );
+  }
   if (step === "pick" || (!state.lang && step === "view")) {
     return (
-      <section className="wb-learn-card" dir={dir}>
-        <div className="wb-learn-head">
-          <span className="wb-learn-icon" aria-hidden="true">🎒</span>
-          <div className="wb-learn-text">
-            <b>{t.question}</b>
-            <span>{t.questionSub}</span>
-          </div>
+      <section className="wb-learn-card is-slim" dir={dir}>
+        <span className="wb-learn-icon" aria-hidden="true">🎒</span>
+        <div className="wb-learn-text">
+          <b>{t.question}</b>
+          <span>{t.questionSub}</span>
         </div>
         <div className="wb-learn-chips" role="radiogroup" aria-label={t.question}>
           {targets.map((l) => (
@@ -115,8 +128,10 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
               {name(l)}{l === "he" ? <small>{t.beta}</small> : null}
             </button>
           ))}
-          {state.lang && (
+          {state.lang ? (
             <button type="button" className="wb-learn-chip is-soft" disabled={busy} onClick={() => void setup(null, state.reads ?? "little")}>{t.stop}</button>
+          ) : (
+            <button type="button" className="wb-learn-chip is-soft" onClick={() => hide(true)}>{t.notNow}</button>
           )}
         </div>
       </section>
@@ -157,7 +172,7 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
         <textarea id="learn-list" className="wb-learn-text-area" dir="auto" rows={5} value={text} placeholder={t.listPlaceholder} onChange={(e) => setText(e.target.value)} />
         <div className="wb-learn-row">
           <button type="button" className="wb-learn-chip" disabled={busy} onClick={() => fileRef.current?.click()}>📷 {t.photo}</button>
-          <input ref={fileRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void photo(f); e.target.value = ""; }} />
+          <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void photo(f); e.target.value = ""; }} />
           <label className="wb-learn-date">
             <span>{t.testDate}</span>
             <input id="learn-test-date" type="date" value={testDate} onChange={(e) => setTestDate(e.target.value)} />

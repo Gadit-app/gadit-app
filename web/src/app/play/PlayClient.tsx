@@ -3428,7 +3428,7 @@ export function PlayPage() {
   const [learnRefresh, setLearnRefresh] = useState(0);
   const learning = !!learn?.lang && learn.pool.length >= 4;
   const learnPool = useMemo<PlayWord[]>(
-    () => (learn?.lang ? learn.pool.map((x) => ({ word: x.w, meaning: x.t, examples: [], language: learn.lang!, uiLang: learn.lang! })) : []),
+    () => (learn?.lang ? learn.pool.map((x) => ({ word: x.w, meaning: x.t, examples: [], language: learn.lang!, uiLang: learn.lang!, ...(x.en ? { picWord: x.en } : {}) })) : []),
     [learn],
   );
   const gamePool = useMemo(
@@ -3990,14 +3990,6 @@ export function PlayPage() {
             unpaid user (gentle upsell). Non-signed-in and Basic-plan
             users see the gate state; only Clear/Deep can actually
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
-        {/* "What are you learning now?" (Gadi 2026-10-11). */}
-        {isPaid && (
-          <>
-            <style>{LEARN_CSS}</style>
-            <LearnCard lang={lang} dir={dir} refreshKey={learnRefresh} onState={setLearn} />
-          </>
-        )}
-
         {/* Kids Mode and Word Duel side by side, one card family (Gadi
             2026-10-11: the duel strip looked unrelated to the Kids banner). */}
         <div className={`wb-play-banners${isPaid ? " has-duel" : ""}`}>
@@ -4086,6 +4078,15 @@ export function PlayPage() {
           );
         })()}
         </div>
+
+        {/* Learn a language through the games: one quiet row under Kids Mode
+            and Word Duel, most players just play (Gadi 2026-10-11). */}
+        {isPaid && (
+          <>
+            <style>{LEARN_CSS}</style>
+            <LearnCard lang={lang} dir={dir} refreshKey={learnRefresh} onState={setLearn} />
+          </>
+        )}
 
         {/* Games rendered as grouped grids by category. We render each
             category as its own grid so the section heading sits cleanly

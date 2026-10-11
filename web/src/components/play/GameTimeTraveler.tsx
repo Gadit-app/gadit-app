@@ -23,6 +23,8 @@ import {
   pickTimeTravelerRounds,
   type TimeTravelerRound,
 } from "@/lib/play-content/time-traveler";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 type RuntimeRound = {
   oldMeaning: string;
@@ -125,10 +127,10 @@ export function GameTimeTraveler({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.timePrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.timePrompt} /></div>
         <div className="wb-play-era">{r.era}</div>
         <div className="wb-play-old-meaning" lang={contentLang} dir={contentDir}>
-          &ldquo;{r.oldMeaning}&rdquo;
+          &ldquo;<QText text={r.oldMeaning} skip={[r.displayed[r.correctIdx]]} />&rdquo;
         </div>
       </div>
       <div className="wb-play-options">
@@ -151,7 +153,7 @@ export function GameTimeTraveler({
               lang={contentLang}
               dir={contentDir}
             >
-              {opt}
+              {caseOpt(opt)}
             </button>
           );
         })}

@@ -1,5 +1,6 @@
 "use client";
 
+import { DuelPrompt, duelOpt } from "./DuelPrompt";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { avatarUrl } from "@/lib/family";
@@ -169,7 +170,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
           {ph.kind === "round" && (
             <div className="duel-timer"><span style={{ width: `${Math.max(0, Math.min(100, ((ph.endsAt - now) / ROUND_MS) * 100))}%` }} /></div>
           )}
-          <div className={`duel-prompt${(view.question.prompt).length > 40 ? " is-long" : ""}`} dir="auto">{view.question.prompt}</div>
+          <DuelPrompt prompt={view.question.prompt} options={view.question.options} />
           <div className="duel-options">
             {view.question.options.map((o, i) => {
               const mine = picked?.round === ph.round ? picked.choice : null;
@@ -183,7 +184,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
                 <button key={i} type="button" className={cls} dir="auto"
                   disabled={ph.kind !== "round" || mine != null}
                   onClick={() => ph.kind === "round" && void answer(ph.round, i)}>
-                  <span>{o}</span>
+                  <span>{duelOpt(o)}</span>
                   {theirs && otherP && <span className="duel-their" aria-label={otherP.name}><Face p={otherP} /></span>}
                 </button>
               );

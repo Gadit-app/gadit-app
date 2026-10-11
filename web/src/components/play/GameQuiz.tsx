@@ -19,6 +19,8 @@ import { wordLangOf } from "@/lib/play-engine";
 import { reportAnswer } from "@/lib/learn/report";
 import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import type { GameResultData } from "./GameResult";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 export function GameQuiz({
   pool,
@@ -79,13 +81,13 @@ export function GameQuiz({
       <PlayHeader title={t.quizTitle} progress={`${idx + 1}/${questions.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">
-          {q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning}
+          <QText text={q.promptKind === "word" ? t.quizPromptWord : t.quizPromptMeaning} />
         </div>
         {/* dir=auto: prompt and options can be in a different language
             than the UI (Hebrew word searched under English UI stores an
             English meaning). Let the browser align each per content. */}
         <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
-          {nq(q.prompt)}
+          {q.promptKind === "word" ? nq(q.prompt) : <QText text={nq(q.prompt)} skip={[q.word.word]} />}
           {/* Hear the word (Gadi 2026-10-11, learning mode: pictures and sound first). */}
           {q.promptKind === "word" && <TTSButton text={q.word.word} audioLang={wordLangOf(q.word)} useOpenAI ariaLabel={q.word.word} className="wb-word-act-icon wb-play-speak" />}
         </div>
@@ -109,7 +111,7 @@ export function GameQuiz({
               disabled={picked !== null}
               dir="auto"
             >
-              {nq(opt)}
+              {nq(caseOpt(opt))}
             </button>
           );
         })}

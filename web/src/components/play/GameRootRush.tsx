@@ -23,6 +23,7 @@ import {
   pickRootRushRounds,
   type RootRushRound,
 } from "@/lib/play-content/root-rush";
+import { QText } from "./QText";
 
 type Tile = {
   word: string;
@@ -169,12 +170,12 @@ export function GameRootRush({
         t={t}
       />
       <div className="wb-play-question wb-play-question-root">
-        <div className="wb-play-question-eyebrow">{t.rootPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.rootPrompt} /></div>
         <div className="wb-play-root-card">
           <div className="wb-play-root-glyph" lang={contentLang} dir={contentDir}>{r.root}</div>
           <div className="wb-play-root-origin">{r.origin}</div>
           <div className="wb-play-root-meaning" lang={contentLang} dir={contentDir}>
-            &ldquo;{r.meaning}&rdquo;
+            &ldquo;<QText text={r.meaning} />&rdquo;
           </div>
         </div>
         <div className="wb-play-root-progress">

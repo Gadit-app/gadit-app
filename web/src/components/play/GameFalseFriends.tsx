@@ -19,6 +19,7 @@ import {
   pickFalseFriendsRounds,
   type FalseFriendsRound,
 } from "@/lib/play-content/false-friends";
+import { QText } from "./QText";
 
 export function GameFalseFriends({
   onExit,
@@ -103,7 +104,7 @@ export function GameFalseFriends({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.friendsPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.friendsPrompt} /></div>
         <div className="wb-play-friends-card">
           <div className="wb-play-friends-foreign">
             <img

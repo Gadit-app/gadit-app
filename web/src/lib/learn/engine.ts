@@ -18,7 +18,9 @@ export type Reads = "no" | "little" | "yes";
 
 /** One word to practise, ready for the games: the target word, its
  *  translation into the kid's own language, and (Hebrew) its niqqud. */
-export type LearnItem = { w: string; t: string; nq?: string; d: number; topic: string; src: "bank" | "list" };
+/** `en`: the English of a Hebrew bank word, so its picture is the right
+ *  meaning (חום is brown here, not heat). */
+export type LearnItem = { w: string; t: string; nq?: string; en?: string; d: number; topic: string; src: "bank" | "list" };
 
 /** Mastery of one word. box 0 = new or just missed, 3+ = learned. */
 export type WordState = { box: number; right: number; wrong: number; due: number; lastAt: number; learnedAt?: number; d?: number };
@@ -43,7 +45,7 @@ export function bankFor(lang: LearnLang, uiLang: string): LearnItem[] {
     return ENGLISH_BANK.map((x) => ({ w: x.w, t: x[k], d: x.d, topic: x.topic, src: "bank" as const }));
   }
   const k = uiLang === "ar" ? "ar" : uiLang === "ru" ? "ru" : "en";
-  return HEBREW_BANK.map((x) => ({ w: x.w, nq: x.nq, t: x[k], d: x.d, topic: x.topic, src: "bank" as const }));
+  return HEBREW_BANK.map((x) => ({ w: x.w, nq: x.nq, t: x[k], en: x.en, d: x.d, topic: x.topic, src: "bank" as const }));
 }
 
 export function topicsFor(lang: LearnLang) {

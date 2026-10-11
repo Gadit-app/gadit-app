@@ -4,7 +4,7 @@
  * reader in the plural; no dashes.
  */
 export type LearnCopy = {
-  question: string; questionSub: string;
+  question: string; questionSub: string; notNow: string; reopen: string;
   english: string; hebrew: string; beta: string; stop: string;
   readsQ: (lang: string) => string; readsSub: string; reads: { no: string; little: string; yes: string };
   learning: (lang: string) => string; learningSub: string; change: string;
@@ -20,8 +20,9 @@ const fmt = (d: string, locale: string) => {
 };
 
 const he: LearnCopy = {
-  question: "מה לומדים עכשיו?",
-  questionSub: "המשחקים יתאימו את עצמם למילים שלומדים, והממשק נשאר בעברית.",
+  question: "רוצים שהמשחקים יעזרו ללמוד שפה?",
+  questionSub: "המשחקים יתאימו את עצמם למילים בשפה שרוצים להשתפר בה.",
+  notNow: "לא עכשיו", reopen: "ללמוד שפה דרך המשחקים",
   english: "אנגלית", hebrew: "עברית", beta: "בטא", stop: "בלי, רק לשחק",
   readsQ: (l) => `כבר קוראים ב${l}?`,
   readsSub: "ככה נדע אם להתחיל מתמונות וקול, או גם מקריאה.",
@@ -50,8 +51,9 @@ const he: LearnCopy = {
 };
 
 const en: LearnCopy = {
-  question: "What are you learning now?",
-  questionSub: "The games adapt to the words you're learning, and the app stays in English.",
+  question: "Want the games to help you learn a language?",
+  questionSub: "The games adapt to words in the language you want to get better at.",
+  notNow: "Not now", reopen: "Learn a language through the games",
   english: "English", hebrew: "Hebrew", beta: "beta", stop: "Nothing, just play",
   readsQ: (l) => `Do you already read ${l}?`,
   readsSub: "So we know whether to start with pictures and sound, or with reading too.",
@@ -80,8 +82,9 @@ const en: LearnCopy = {
 };
 
 const ar: LearnCopy = {
-  question: "ماذا تتعلّمون الآن؟",
-  questionSub: "تتكيّف الألعاب مع الكلمات التي تتعلّمونها، وتبقى الواجهة بالعربية.",
+  question: "هل تريدون أن تساعدكم الألعاب في تعلّم لغة؟",
+  questionSub: "تتكيّف الألعاب مع كلمات اللغة التي تريدون التحسّن فيها.",
+  notNow: "ليس الآن", reopen: "تعلّم لغة من خلال الألعاب",
   english: "الإنجليزية", hebrew: "العبرية", beta: "تجريبي", stop: "لا شيء، فقط نلعب",
   readsQ: (l) => `هل تقرؤون ${l} الآن؟`,
   readsSub: "هكذا نعرف هل نبدأ بالصور والصوت، أم بالقراءة أيضًا.",
@@ -110,8 +113,9 @@ const ar: LearnCopy = {
 };
 
 const ru: LearnCopy = {
-  question: "Что ты сейчас учишь?",
-  questionSub: "Игры подстроятся под слова, которые ты учишь, а приложение останется на русском.",
+  question: "Хочешь, чтобы игры помогали учить язык?",
+  questionSub: "Игры подстроятся под слова языка, который ты хочешь подтянуть.",
+  notNow: "Не сейчас", reopen: "Учить язык через игры",
   english: "английский", hebrew: "иврит", beta: "бета", stop: "Ничего, просто играть",
   readsQ: (l) => `Ты уже читаешь: ${l}?`,
   readsSub: "Так мы поймём, начинать с картинок и звука или сразу с чтения.",

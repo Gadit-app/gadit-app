@@ -22,6 +22,7 @@ import {
   pickShadeSliderRounds,
   type ShadeSliderRound,
 } from "@/lib/play-content/shade-slider";
+import { QText } from "./QText";
 
 type RuntimeRound = {
   axis: string;
@@ -147,9 +148,9 @@ export function GameShadeSlider({
         t={t}
       />
       <div className="wb-play-question wb-play-question-shade">
-        <div className="wb-play-question-eyebrow">{t.shadePrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.shadePrompt} /></div>
         <div className="wb-play-shade-axis" lang={contentLang} dir={contentDir}>
-          {r.axis}
+          <QText text={r.axis} />
         </div>
         <div className="wb-play-shade-axis-labels">
           <span>{t.shadeMild}</span>

@@ -16,6 +16,7 @@ import { buildAnagramRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
+import { QText } from "./QText";
 
 type TileState = {
   letter: string;
@@ -146,13 +147,13 @@ export function GameAnagram({
     <div className="wb-play-stage">
       <PlayHeader title={t.anagramTitle} progress={`${roundIdx + 1}/${rounds.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.anagramPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.anagramPrompt} /></div>
         <div className="wb-play-anagram-hint">
           <span className="wb-play-anagram-hint-label">{t.anagramHint}</span>
           {/* dir=auto: the meaning can be in a different language than
               the UI (notebook meanings are stored in the UI language
               the word was searched under). */}
-          <span className="wb-play-anagram-hint-text" dir="auto">{word.word.meaning}</span>
+          <span className="wb-play-anagram-hint-text" dir="auto"><QText text={word.word.meaning} skip={[word.word.word]} /></span>
         </div>
       </div>
       <div className={`wb-play-anagram-slots is-${resultState}`}>

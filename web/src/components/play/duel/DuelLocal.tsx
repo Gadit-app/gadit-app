@@ -1,5 +1,6 @@
 "use client";
 
+import { DuelPrompt, duelOpt } from "./DuelPrompt";
 import { useEffect, useRef, useState } from "react";
 import { ROUND_MS, roundPoints, type DuelQuestion } from "@/lib/duel";
 import { duelCopy } from "./duel-i18n";
@@ -96,10 +97,10 @@ export function DuelLocal({ questions, lang, dir, onExit, defaultNames }: {
         <div className="duel-card">
           <div className="duel-progress">{t.turnOf(label(step.who))} · {t.round(step.round + 1, questions.length)}</div>
           <div className="duel-timer"><span style={{ width: `${Math.max(0, 100 - ((Date.now() - step.startedAt) / ROUND_MS) * 100)}%` }} /></div>
-          <div className={`duel-prompt${(questions[step.round].prompt).length > 40 ? " is-long" : ""}`} dir="auto">{questions[step.round].prompt}</div>
+          <DuelPrompt prompt={questions[step.round].prompt} options={questions[step.round].options} />
           <div className="duel-options">
             {questions[step.round].options.map((o, i) => (
-              <button key={i} type="button" className="duel-opt" dir="auto" onClick={() => record(step.round, step.who, i, step.startedAt)}>{o}</button>
+              <button key={i} type="button" className="duel-opt" dir="auto" onClick={() => record(step.round, step.who, i, step.startedAt)}>{duelOpt(o)}</button>
             ))}
           </div>
         </div>
@@ -118,10 +119,10 @@ export function DuelLocal({ questions, lang, dir, onExit, defaultNames }: {
             ))}
             <span className="duel-vs" style={{ gridColumn: 2, gridRow: 1 }}>VS</span>
           </div>
-          <div className={`duel-prompt${(questions[step.round].prompt).length > 40 ? " is-long" : ""}`} dir="auto">{questions[step.round].prompt}</div>
+          <DuelPrompt prompt={questions[step.round].prompt} options={questions[step.round].options} />
           <div className="duel-options">
             {questions[step.round].options.map((o, i) => (
-              <div key={i} className={`duel-opt${i === questions[step.round].correctIdx ? " is-right" : ""}`} dir="auto">{o}</div>
+              <div key={i} className={`duel-opt${i === questions[step.round].correctIdx ? " is-right" : ""}`} dir="auto">{duelOpt(o)}</div>
             ))}
           </div>
           <div className="duel-row">

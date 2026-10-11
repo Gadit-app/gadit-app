@@ -19,6 +19,7 @@ import {
   getLangLabel,
   type OriginCountry,
 } from "@/lib/play-content/word-passport";
+import { QText } from "./QText";
 
 type RuntimeRound = {
   word: string;
@@ -119,7 +120,7 @@ export function GameWordPassport({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.passportPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.passportPrompt} /></div>
         <div className="wb-play-prompt wb-play-prompt-word" lang={contentLang} dir={contentDir}>
           {r.word}
         </div>

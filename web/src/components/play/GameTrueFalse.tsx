@@ -16,6 +16,7 @@ import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { TF_MORE } from "./play-games-i18n";
+import { QText } from "./QText";
 
 type TfCopy = { title: string; desc: string; ask: string; yes: string; no: string; right: string; wrong: string; real: string };
 
@@ -70,9 +71,9 @@ export function GameTrueFalse({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
     <div className="wb-play-stage">
       <PlayHeader title={c.title} progress={`${idx + 1}/${rounds.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{c.ask}</div>
+        <div className="wb-play-question-eyebrow"><QText text={c.ask} /></div>
         <div className="wb-play-prompt wb-play-prompt-word" lang={lang} dir="auto">{nq(r.word.word)}</div>
-        <div className="wb-tf-meaning" dir="auto">{nq(r.shown)}</div>
+        <div className="wb-tf-meaning" dir="auto"><QText text={nq(r.shown)} skip={[r.word.word]} /></div>
       </div>
       <div className="wb-tf-actions">
         {[true, false].map((v) => {

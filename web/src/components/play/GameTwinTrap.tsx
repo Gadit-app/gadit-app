@@ -22,6 +22,8 @@ import {
   pickTwinTrapRounds,
   type TwinTrapRound,
 } from "@/lib/play-content/twin-trap";
+import { QText } from "./QText";
+import { caseOpt } from "@/lib/play-engine";
 
 type RuntimeRound = {
   sentence: string;
@@ -136,7 +138,7 @@ export function GameTwinTrap({
         t={t}
       />
       <div className="wb-play-question">
-        <div className="wb-play-question-eyebrow">{t.twinPrompt}</div>
+        <div className="wb-play-question-eyebrow"><QText text={t.twinPrompt} /></div>
         <div
           className="wb-play-prompt wb-play-prompt-sentence"
           lang={contentLang}
@@ -144,7 +146,7 @@ export function GameTwinTrap({
         >
           {parts.map((part, i) => (
             <span key={i}>
-              {part}
+              <QText text={part} skip={[...r.displayed]} context={parts.join(" ")} />
               {i < parts.length - 1 && (
                 <span className="wb-play-blank" aria-label="blank" />
               )}
@@ -172,7 +174,7 @@ export function GameTwinTrap({
               lang="en"
               dir="ltr"
             >
-              {opt}
+              {caseOpt(opt)}
             </button>
           );
         })}

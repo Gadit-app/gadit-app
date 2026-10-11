@@ -37,6 +37,8 @@ import { useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 import { FLASH_MORE, DIR_MORE, PICK_MORE } from "./play-games-i18n";
+import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
+import { QText } from "./QText";
 
 export type FlashMode = "words" | "meanings";
 
@@ -120,6 +122,14 @@ Object.assign(PICK_COPY, PICK_MORE);
 
 /** Topics, own topics and pasted lists pair a word with its English, so
  *  they are offered whenever the UI language isn't English itself. */
+/** "Photo from the workbook" on the school list, the same words as /spell. */
+const PHOTO_INLINE: Record<string, Record<"photoBtn" | "photoReading" | "photoFail", string>> = {
+  en: { photoBtn: "Photo from the workbook", photoReading: "Reading the page…", photoFail: "We couldn't read the photo. Try a sharper one, or type the words." },
+  he: { photoBtn: "צילום מהחוברת", photoReading: "קוראים את הדף…", photoFail: "לא הצלחנו לקרוא את התמונה. נסו צילום חד יותר, או הקלידו את המילים." },
+};
+const photoT = (k: "photoBtn" | "photoReading" | "photoFail", lang: string) =>
+  PHOTO_INLINE[lang]?.[k] ?? SPELL_T_EXTRA[lang]?.[k] ?? PHOTO_INLINE.en[k];
+
 const codeLabel = (code: string, ui: string) => {
   try { return new Intl.DisplayNames([ui], { type: "language" }).of(code) ?? code; } catch { return code; }
 };
@@ -189,7 +199,7 @@ export function GameFlashcards({
   }, [offerPick, user]);
 
   // Ask /api/spell-set for pairs: a topic (cached per language) or a list.
-  async function makeSet(body: { topic?: string; list?: string }, key: string, icon: string, fallbackTitle: string, save: boolean, keepId?: string) {
+  async function makeSet(body: { topic?: string; list?: string; fromPhoto?: boolean }, key: string, icon: string, fallbackTitle: string, save: boolean, keepId?: string) {
     if (!user || busy) return;
     setBusy(key);
     setPickErr("");
@@ -210,6 +220,30 @@ export function GameFlashcards({
     } finally {
       setBusy("");
     }
+  }
+
+  // Photograph or upload a workbook page (Gadi 2026-10-11): the page is
+  // read and its words become the cards, as in /spell. No `capture`, so a
+  // phone offers both the camera and the gallery.
+  const photoRef = useRef<HTMLInputElement>(null);
+  const [photoMsg, setPhotoMsg] = useState("");
+  async function fromPhoto(file: File) {
+    if (!user || busy) return;
+    setBusy("photo");
+    setPickErr("");
+    setPhotoMsg(photoT("photoReading", lang));
+    let text = "";
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const r = await fetch("/api/ocr", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` }, body: fd });
+      const j = (await r.json().catch(() => ({}))) as { text?: string };
+      text = r.ok ? (j.text ?? "").trim() : "";
+    } catch { /* handled below */ }
+    setBusy("");
+    setPhotoMsg("");
+    if (text.length < 2) { setPickErr(photoT("photoFail", lang)); return; }
+    await makeSet({ list: text.slice(0, 800), fromPhoto: true }, "list", "📷", pc.pasteTitle, true);
   }
 
   function pickTopic(s: DictationSet) {
@@ -298,7 +332,7 @@ export function GameFlashcards({
   const [pics, setPics] = useState<Record<string, string>>({});
   useEffect(() => {
     if (!user || first.length === 0) return;
-    const words = first.flatMap((c) => [c.word.word, ...(c.pair ? [c.pair.pair] : [])]);
+    const words = first.flatMap((c) => [c.word.word, ...(c.pair ? [c.pair.pair] : []), ...(c.word.picWord ? [c.word.picWord] : [])]);
     let cancelled = false;
     (async () => {
       try {
@@ -318,7 +352,13 @@ export function GameFlashcards({
     })();
     return () => { cancelled = true; };
   }, [first, user]);
-  const picOf = (c: Card) => pics[c.word.word] || (c.pair ? pics[c.pair.pair] : undefined);
+  // The picture follows the English side when there is one (Gadi 2026-10-11:
+  // חום the colour showed a picture of heat). The picture cache is keyed by
+  // the word only, and English is far less ambiguous than Hebrew.
+  const picOf = (c: Card) => {
+    const en = c.word.picWord || (c.pair?.pairLang === "English" ? c.pair.pair : /^english$/i.test(c.word.language) ? c.word.word : undefined);
+    return (en && pics[en]) || pics[c.word.word] || (c.pair ? pics[c.pair.pair] : undefined);
+  };
   const deckHasPics = first.some((c) => !!picOf(c));
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -351,7 +391,9 @@ export function GameFlashcards({
       <div className="wb-play-stage">
         <style>{FLASH_CSS}</style>
         <PlayHeader title={title} progress="" score={0} onExit={onExit} t={t} />
-        <div className="wb-play-question"><div className="wb-play-question-eyebrow">{f.pick}</div></div>
+        {/* The title of this screen: pick which words the cards use (Gadi
+            2026-10-11: as a big empty card it read like a broken box). */}
+        <h2 className="wb-flash-pick-h">{f.pick}</h2>
         <div className="wb-flash-pick">
           <button type="button" className="wb-flash-src wb-flash-src-mine" onClick={() => setSource("mine")} disabled={mineTotal === 0}>
             <span className="wb-flash-src-title">{f.mine}</span>
@@ -398,7 +440,14 @@ export function GameFlashcards({
                 <label className="wb-flash-make-title" htmlFor="wb-flash-list">{pc.pasteTitle}</label>
                 <div className="wb-flash-make-sub">{pc.pasteSub}</div>
                 <textarea id="wb-flash-list" className="wb-flash-input wb-flash-textarea" value={listText} onChange={(e) => setListText(e.target.value)} placeholder={pc.pastePh} maxLength={800} rows={5} dir={fieldDir} />
-                <button type="submit" className="wb-flash-make-btn" disabled={listText.trim().length < 2 || !!busy}>{busy === "list" ? pc.creating : pc.pasteBtn}</button>
+                <div className="wb-flash-make-row">
+                  <button type="submit" className="wb-flash-make-btn" disabled={listText.trim().length < 2 || !!busy}>{busy === "list" ? pc.creating : pc.pasteBtn}</button>
+                  <button type="button" className="wb-flash-make-btn is-ghost" onClick={() => photoRef.current?.click()} disabled={!!busy}>
+                    <span aria-hidden>📷</span> {busy === "photo" ? photoMsg : photoT("photoBtn", lang)}
+                  </button>
+                  <input ref={photoRef} type="file" accept="image/*" hidden
+                    onChange={(e) => { const fl = e.target.files?.[0]; if (fl) void fromPhoto(fl); e.target.value = ""; }} />
+                </div>
               </form>
             </>
           )}
@@ -477,7 +526,7 @@ export function GameFlashcards({
       <PlayHeader title={title} progress={`${Math.min(i + 1, deck.length)}/${deck.length}`} score={known} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-flash-source">{sourceLabel}</div>
-        <div className="wb-play-question-eyebrow">{ask}</div>
+        <div className="wb-play-question-eyebrow"><QText text={ask} /></div>
         {mode === "words" && !flipped && (
           <button type="button" className="wb-flash-swap" onClick={() => setReverse((r) => !r)}>{f.swap}</button>
         )}
@@ -544,9 +593,11 @@ export const FLASH_CSS = `
 .wb-flash-btn { min-width: 130px; padding: 12px 20px; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
 .wb-flash-yes { background: #0EA5A5; color: #fff; box-shadow: 0 10px 22px -10px rgba(14,165,165,0.6); }
 .wb-flash-no { background: #fff; color: #374151; box-shadow: 0 0 0 1.5px #D1D5DB inset; }
-.wb-flash-card.has-pics { aspect-ratio: 1 / 1; }
+.wb-flash-card.has-pics { aspect-ratio: 4 / 5; }
 .wb-flash-front.has-pic { justify-content: flex-start; padding: 0 0 6px; gap: 0; }
-.wb-flash-pic { display: block; width: 100%; height: 70%; object-fit: cover; background: #F6FAF9; flex: none; }
+/* The pictures are square: a square frame shows all of it (Gadi 2026-10-11:
+   on a tablet the 70% strip cut the top and bottom off). */
+.wb-flash-pic { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; background: #F6FAF9; flex: none; }
 .wb-flash-front.has-pic .wb-flash-word { font-size: clamp(28px, 7vw, 40px); margin-block: auto; }
 .wb-flash-front.has-pic .wb-flash-meaning { margin-block: auto; }
 .wb-flash-front.has-pic .wb-flash-meaning { padding-inline: 20px; font-size: clamp(15px, 4vw, 18px); }
@@ -555,6 +606,8 @@ export const FLASH_CSS = `
 .wb-flash-dir { font: inherit; font-size: 13px; font-weight: 700; color: #0b7d7d; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
 .wb-flash-dir.is-on { background: #0EA5A5; color: #fff; }
 .wb-flash-source { font-size: 13px; font-weight: 700; color: #6D28D9; margin-bottom: 6px; }
+.wb-flash-pick-h { margin: 22px 0 0; text-align: center; font-size: 20px; font-weight: 800; color: var(--ink, #0f172a); text-wrap: balance; }
+.wb-flash-make-btn.is-ghost { background: transparent; color: #0b7d7d; box-shadow: 0 0 0 1.5px #0EA5A5 inset; }
 .wb-flash-pick { display: grid; gap: 12px; width: min(100%, 560px); margin: 18px auto 0; }
 .wb-flash-src { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 14px 12px; border-radius: 16px; border: 0; background: #fff; box-shadow: 0 0 0 1px rgba(15,72,68,0.12), 0 8px 18px -12px rgba(16,40,60,0.3); font: inherit; cursor: pointer; color: #0f172a; }
 .wb-flash-src:hover:not(:disabled) { box-shadow: 0 0 0 2px #0EA5A5, 0 8px 18px -12px rgba(16,40,60,0.3); }
