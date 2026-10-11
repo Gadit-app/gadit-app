@@ -17,6 +17,7 @@ import { recordPlay } from "@/lib/play-streak";
 import { dirForLang } from "@/lib/play-engine";
 import type { PlayT } from "./GameQuiz";
 import { getDuelLauncher } from "@/lib/duel-launch";
+import { getLessonNext } from "@/lib/lesson-flow";
 
 export type GameResultData = {
   title: string;
@@ -42,6 +43,7 @@ export function GameResult({
   lang: string;
   t: PlayT;
 }) {
+  const lessonNext = getLessonNext();
   const { user } = useAuth();
   useEffect(() => {
     recordPlay(user);
@@ -97,6 +99,17 @@ export function GameResult({
         </div>
       )}
 
+      {lessonNext ? (
+        // Inside a workbook lesson: on to the next step (Gadi 2026-10-11).
+        <div className="wb-play-result-actions">
+          <button type="button" className="wb-play-cta-primary" onClick={onExit}>
+            {lessonNext}
+          </button>
+          <button type="button" className="wb-play-cta-ghost" onClick={onReplay}>
+            {t.resultPlayAgain}
+          </button>
+        </div>
+      ) : (
       <div className="wb-play-result-actions">
         <button type="button" className="wb-play-cta-primary" onClick={onReplay}>
           {t.resultPlayAgain}
@@ -105,8 +118,9 @@ export function GameResult({
           {t.resultBackToGames}
         </button>
       </div>
+      )}
       {/* Play the same game against someone (Gadi 2026-10-11). */}
-      {(() => {
+      {!lessonNext && (() => {
         const duel = getDuelLauncher();
         return duel ? (
           <button type="button" className="wb-play-cta-duel" onClick={duel.launch}>

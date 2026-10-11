@@ -35,5 +35,7 @@ export const LEARN_CSS = `
 .wb-learn-card.is-slim .wb-learn-chip small { color: var(--ink-soft, #8A5A00); }
 .wb-learn-card.is-slim .wb-learn-chip.is-soft { background: transparent; color: var(--ink-soft, #0F6F6C); }
 .wb-learn-reopen { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 2px; border: 0; background: none; font: inherit; font-size: 13.5px; font-weight: 700; color: var(--ink-soft, #55625f); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.wb-learn-lesson { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; padding: 12px 14px; border-radius: 14px; background: #E8F6F4; }
+.wb-learn-lesson .wb-learn-text b { color: #0F3B39; }
 .wb-learn-chip:focus-visible, .wb-learn-btn:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 2px; }
 `;

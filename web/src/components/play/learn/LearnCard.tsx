@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import type { LearnItem, LearnLang, Reads } from "@/lib/learn/engine";
 import { learnCopy } from "./learn-i18n";
+import { lessonCopy } from "./lesson-i18n";
+import type { Lesson } from "./LessonPath";
 
 /**
  * "What are you learning now?" on /play (Gadi 2026-10-11; the council's
@@ -17,17 +19,23 @@ export type LearnState = {
   reads: Reads | null;
   pool: LearnItem[];
   stats: { learnedTotal: number; learnedWeek: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
+  /** A lesson built from workbook pages, while its list is active. */
+  lesson: Lesson | null;
 };
 
-export function LearnCard({ lang, dir, refreshKey, onState }: {
+export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
   lang: string;
   dir: "rtl" | "ltr";
   /** Bump to reload the next words (after a game). */
   refreshKey: number;
   onState: (s: LearnState) => void;
+  /** Open the workbook lesson (Gadi 2026-10-11). */
+  onLesson?: () => void;
 }) {
   const { user } = useAuth();
   const t = learnCopy(lang);
+  const lc = lessonCopy(lang);
+  const pagesRef = useRef<HTMLInputElement>(null);
   const [targets, setTargets] = useState<LearnLang[]>([]);
   const [state, setState] = useState<LearnState | null>(null);
   const [step, setStep] = useState<"view" | "pick" | "reads" | "list">("view");
@@ -55,7 +63,7 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
       const j = await r.json();
       if (!r.ok) return;
       setTargets(j.targets ?? []);
-      const s: LearnState = { lang: j.profile?.lang ?? null, reads: j.profile?.reads ?? null, pool: j.pool ?? [], stats: j.stats ?? null };
+      const s: LearnState = { lang: j.profile?.lang ?? null, reads: j.profile?.reads ?? null, pool: j.pool ?? [], stats: j.stats ?? null, lesson: j.lesson ?? null };
       setState(s);
       onStateRef.current(s);
     } catch { /* the card stays as it was */ }
@@ -98,6 +106,28 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
       if (r.ok && j.text) { setText((x) => (x ? `${x}\n` : "") + String(j.text)); setMsg(t.checkWords); }
       else setMsg(t.photoFail);
     } catch { setMsg(t.photoFail); } finally { setBusy(false); }
+  };
+
+  // Workbook pages to a lesson: read every page, then one call builds the
+  // words, the sentences and the grammar point (Gadi 2026-10-11).
+  const pages = async (files: FileList) => {
+    if (!state?.lang) return;
+    setBusy(true); setMsg(lc.reading);
+    try {
+      let all = "";
+      for (const f of Array.from(files).slice(0, 6)) {
+        const fd = new FormData();
+        fd.append("image", f);
+        const r = await fetch("/api/ocr", { method: "POST", headers: await auth(), body: fd });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok && j.text) all += `\n${String(j.text)}`;
+      }
+      if (all.trim().length < 20) { setMsg(lc.fail); return; }
+      setMsg(lc.building);
+      await post({ action: "unit", lang: state.lang, text: all, testDate: testDate || null });
+      setText(""); setTestDate(""); setStep("view"); setMsg("");
+      await load();
+    } catch { setMsg(lc.fail); } finally { setBusy(false); }
   };
 
   if (!targets.length || !state) return null;
@@ -173,6 +203,8 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
         <div className="wb-learn-row">
           <button type="button" className="wb-learn-chip" disabled={busy} onClick={() => fileRef.current?.click()}>📷 {t.photo}</button>
           <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void photo(f); e.target.value = ""; }} />
+          <button type="button" className="wb-learn-chip" disabled={busy} onClick={() => pagesRef.current?.click()}>📘 {lc.photoBtn}</button>
+          <input ref={pagesRef} type="file" accept="image/*" multiple hidden onChange={(e) => { const f = e.target.files; if (f?.length) void pages(f); e.target.value = ""; }} />
           <label className="wb-learn-date">
             <span>{t.testDate}</span>
             <input id="learn-test-date" type="date" value={testDate} onChange={(e) => setTestDate(e.target.value)} />
@@ -204,6 +236,15 @@ export function LearnCard({ lang, dir, refreshKey, onState }: {
           <span><b>{s.learnedWeek}</b> {t.learnedWeek}</span>
           <span><b>{s.reinforce}</b> {t.reinforce}</span>
           {s.list && <span className="is-list"><b>{s.list.ready}/{s.list.total}</b> {t.listReady(s.list.testDate)}</span>}
+        </div>
+      )}
+      {state.lesson && onLesson && (
+        <div className="wb-learn-lesson">
+          <div className="wb-learn-text">
+            <b>📘 {lc.title(state.lesson.topic)}</b>
+            <span>{lc.meta(state.lesson.items.length)}</span>
+          </div>
+          <button type="button" className="wb-learn-btn" onClick={onLesson}>{lc.start}</button>
         </div>
       )}
       <div className="wb-learn-row">

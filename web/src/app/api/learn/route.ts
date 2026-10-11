@@ -14,6 +14,7 @@ import {
  *   POST {action:"setup", lang|null, reads, ui}
  *   POST {action:"results", lang, results:[{w, ok}]}
  *   POST {action:"list", lang, text, testDate?, ui}   this week's school list
+ *   POST {action:"unit", lang, text, testDate?, ui}   a lesson from workbook pages
  *   POST {action:"clearList"}
  *
  * Stored on users/{uid}.learn (lang, reads, d per language, the list) and
@@ -23,7 +24,11 @@ import {
 export const dynamic = "force-dynamic";
 const DAY = 86_400_000;
 
-type ListDoc = { lang: LearnLang; items: Array<{ w: string; t: string; nq?: string }>; testDate?: string | null; at: number };
+/** A lesson built from photographed workbook pages (Gadi 2026-10-11, Ziv's
+ *  English workbook): the unit's words, its own sentences, and the grammar
+ *  point it practices, played as one ordered path. */
+export type LessonUnit = { topic: string; sentences: string[]; pronouns: Array<{ phrase: string; answer: string }> };
+type ListDoc = { lang: LearnLang; items: Array<{ w: string; t: string; nq?: string }>; testDate?: string | null; at: number; unit?: LessonUnit | null };
 type LearnDoc = {
   lang?: LearnLang | null;
   reads?: Reads;
@@ -85,7 +90,10 @@ export async function GET(req: NextRequest) {
       testDate: doc?.list?.testDate ?? null,
     } : null,
   };
-  return NextResponse.json({ profile: { lang, reads: doc?.reads ?? null }, targets, pool, stats });
+  // The whole lesson (all its words, not just today's session) when the
+  // active list came from workbook pages.
+  const lesson = list && doc?.list?.unit ? { ...doc.list.unit, items: doc.list.items } : null;
+  return NextResponse.json({ profile: { lang, reads: doc?.reads ?? null }, targets, pool, stats, lesson });
 }
 
 /** Words of a pasted or photographed list: one per line, or separated by
@@ -138,6 +146,48 @@ async function translateMissing(words: string[], lang: LearnLang, ui: string): P
     for (const x of items) if (x.w && x.t) out[x.w.trim().toLowerCase()] = { t: String(x.t).slice(0, 60), ...(x.nq ? { nq: String(x.nq).slice(0, 60) } : {}) };
     return out;
   } catch { return {}; }
+}
+
+/** One call: the unit's words (translated to the child's language), the
+ *  pages' own sentences completed and cleaned, and the pronoun items when
+ *  the pages practice he/she/it. */
+async function extractUnit(text: string, lang: LearnLang, ui: string): Promise<{ topic: string; items: ListDoc["items"]; sentences: string[]; pronouns: LessonUnit["pronouns"] } | null> {
+  if (!process.env.OPENAI_API_KEY) return null;
+  const learn = lang === "en" ? "English" : "Hebrew";
+  const to = LANG_NAME[ui] ?? "English";
+  const sys = `You turn the text of photographed pages from a children's ${learn} school workbook into one lesson. The text came from OCR: fix obvious OCR mistakes, ignore page numbers, instructions and the ${to} translations of instructions.
+Return JSON only:
+{"topic": "<the unit's topic, 1-3 words, in ${to}>",
+ "words": [{"w": "<a vocabulary word of the unit, in ${learn}, dictionary form>", "t": "<its child-friendly translation in ${to}>"${lang === "he" ? ', "nq": "<the Hebrew word with full niqqud>"' : ""}}],
+ "sentences": ["<a complete, correct ${learn} sentence from the pages>"],
+ "pronouns": [{"phrase": "<a noun phrase from the pages, e.g. My grandmother>", "answer": "<the pronoun that replaces it: He, She, It, They, I, You or We>"}]}
+Rules: 8 to 20 words, the ones the unit teaches (not "the", "is", names). Up to 20 sentences of 3 to 10 words, taken from the exercises and reading texts, with every blank filled with the correct answer and every choice resolved to the right option. "pronouns" only when the pages practice pronouns (he, she, it...), up to 12 items, otherwise []. No long dashes.`;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({ model: "gpt-4o-mini", temperature: 0, response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: text }] }),
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const u = usageFrom(data);
+  void logAiUsage({ feature: "learn_unit", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  try {
+    const j = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as { topic?: string; words?: Array<{ w?: string; t?: string; nq?: string }>; sentences?: string[]; pronouns?: Array<{ phrase?: string; answer?: string }> };
+    const seen = new Set<string>();
+    const items = (j.words ?? []).flatMap((x) => {
+      const w = String(x.w ?? "").trim().slice(0, 40);
+      const t = String(x.t ?? "").trim().slice(0, 60);
+      if (!w || !t || seen.has(w.toLowerCase())) return [];
+      seen.add(w.toLowerCase());
+      return [{ w, t, ...(x.nq ? { nq: String(x.nq).slice(0, 60) } : {}) }];
+    }).slice(0, 24);
+    const clean = (x: string) => x.replace(/[–—]/g, ",").replace(/\s+/g, " ").trim();
+    const sentences = (j.sentences ?? []).map((x) => clean(String(x))).filter((x) => { const n = x.split(" ").length; return n >= 3 && n <= 12; }).slice(0, 20);
+    const PR = new Set(["He", "She", "It", "They", "I", "You", "We"]);
+    const pronouns = (j.pronouns ?? []).map((x) => ({ phrase: clean(String(x.phrase ?? "")), answer: String(x.answer ?? "").trim().replace(/^./, (c) => c.toUpperCase()) }))
+      .filter((x) => x.phrase && PR.has(x.answer)).slice(0, 12);
+    return { topic: clean(String(j.topic ?? "")).slice(0, 40), items, sentences, pronouns };
+  } catch { return null; }
 }
 
 export async function POST(req: NextRequest) {
@@ -211,6 +261,20 @@ export async function POST(req: NextRequest) {
     const list: ListDoc = { lang, items, testDate, at: now };
     await ref.set({ learn: { list } }, { merge: true });
     return NextResponse.json({ ok: true, list, translated: missing.length });
+  }
+
+  if (action === "unit") {
+    const lang = isLearnLang(body.lang) ? body.lang : null;
+    const ui = typeof body.ui === "string" ? body.ui.slice(0, 8) : "he";
+    const text = String(body.text ?? "").slice(0, 12000);
+    if (!lang) return NextResponse.json({ error: "lang_required" }, { status: 400 });
+    if (text.trim().length < 20) return NextResponse.json({ error: "too_few_words" }, { status: 400 });
+    const unit = await extractUnit(text, lang, ui);
+    if (!unit || unit.items.length < 2) return NextResponse.json({ error: "too_few_words" }, { status: 400 });
+    const testDate = typeof body.testDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.testDate) ? body.testDate : null;
+    const list: ListDoc = { lang, items: unit.items, testDate, at: now, unit: { topic: unit.topic, sentences: unit.sentences, pronouns: unit.pronouns } };
+    await ref.set({ learn: { list } }, { merge: true });
+    return NextResponse.json({ ok: true, list });
   }
 
   if (action === "clearList") {
