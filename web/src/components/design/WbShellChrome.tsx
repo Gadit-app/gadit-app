@@ -30,10 +30,6 @@
  * surface for shared classroom devices.
  */
 
-import { ToolIcon, type ToolIconId } from "@/components/design/ToolIcon";
-
-/** The learning tools carry their icon in the bar (Gadi 2026-10-11, a trial). */
-const TOOL_KEYS = new Set(["notebook", "spell", "read", "say", "play"]);
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -359,7 +355,6 @@ export function WbShellNav({ active }: { active?: NavKey }) {
             href={l.href}
             className={`wb-shell-navlink${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
           >
-            {TOOL_KEYS.has(l.key) && <ToolIcon id={l.key as ToolIconId} size={17} className="wb-nav-icon" />}
             {l.label}
           </Link>
         ),
@@ -481,7 +476,6 @@ export function WbShellBurger({
                 className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
                 onClick={() => setOpen(false)}
               >
-                {TOOL_KEYS.has(l.key) && <ToolIcon id={l.key as ToolIconId} size={20} className="wb-nav-icon" />}
                 {l.label}
               </Link>
             ),

@@ -5204,8 +5204,9 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos,
 /* Notebook "Practice now" (Gadi 2026-10-06): the way into smart practice. */
 .wordbook .wb-notebook-practice {
   display: inline-block; margin-top: 14px; padding: 10px 22px; border-radius: 999px;
-  background: #7C3AED; color: #fff; font-weight: 700; font-size: 15px; text-decoration: none;
-  box-shadow: 0 8px 20px -8px rgba(124,58,237,0.6);
+  /* One accent on the page (Gadi 2026-10-12: purple next to teal and orange was a jumble). */
+  background: #0F6F6C; color: #fff; font-weight: 700; font-size: 15px; text-decoration: none;
+  box-shadow: 0 8px 20px -10px rgba(15,111,108,0.55);
 }
 /* Free notebook bar (Gadi 2026-10-06): how full it is + the Individual link. */
 .wordbook .wb-notebook-free {
@@ -14875,3 +14876,12 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-homework-strip-text { flex: 1; min-width: 0; }
 .wordbook .wb-homework-strip-go { font-size: 14px; color: var(--accent, #0F6F6C); white-space: nowrap; }
 .wordbook .wb-homework-strip-go { color: var(--ink-soft, #475569); }
+/* The Kids Mode strip under each tool's title: the mascot, on/off, a switch. */
+.wordbook .wb-kids-strip { display: inline-flex; align-items: center; gap: 10px; padding: 4px 14px 4px 6px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink, #0f172a); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.wordbook .wb-kids-strip img { width: 36px; height: 36px; object-fit: contain; flex: none; }
+.wordbook .wb-kids-strip.is-on { border-color: color-mix(in srgb, var(--accent, #0EA5A5) 45%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
+.wordbook .wb-kids-strip-track { width: 34px; height: 20px; border-radius: 999px; background: #CBD5E1; position: relative; flex: none; transition: background 160ms; }
+.wordbook .wb-kids-strip-track span { position: absolute; top: 2px; inset-inline-start: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: inset-inline-start 160ms; }
+.wordbook .wb-kids-strip.is-on .wb-kids-strip-track { background: var(--accent, #0EA5A5); }
+.wordbook .wb-kids-strip.is-on .wb-kids-strip-track span { inset-inline-start: 16px; }
+.wordbook .wb-tool-sub { white-space: pre-line; }
