@@ -248,9 +248,15 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
         </div>
       )}
       <div className="wb-learn-row">
-        <button type="button" className="wb-learn-btn" onClick={() => { setStep("list"); setMsg(""); }}>📝 {s?.list ? t.listReplace : t.listAdd}</button>
+        {/* Workbook pages straight from the card (Gadi 2026-10-11: it was
+            three steps deep, inside the school-list screen). */}
+        <button type="button" className="wb-learn-btn" disabled={busy} onClick={() => pagesRef.current?.click()}>📘 {lc.photoBtn}</button>
+        <input ref={pagesRef} type="file" accept="image/*" multiple hidden onChange={(e) => { const f = e.target.files; if (f?.length) void pages(f); e.target.value = ""; }} />
+        <button type="button" className="wb-learn-chip" onClick={() => { setStep("list"); setMsg(""); }}>📝 {s?.list ? t.listReplace : t.listAdd}</button>
         {s?.list && <button type="button" className="wb-learn-chip is-soft" disabled={busy} onClick={async () => { setBusy(true); try { await post({ action: "clearList" }); await load(); } finally { setBusy(false); } }}>{t.listClear}</button>}
       </div>
+      {busy && msg && <p className="wb-learn-msg">{msg}</p>}
+      {!busy && msg && step === "view" && <p className="wb-learn-msg">{msg}</p>}
     </section>
   );
 }
