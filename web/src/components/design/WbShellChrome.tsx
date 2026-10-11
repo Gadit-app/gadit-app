@@ -30,6 +30,10 @@
  * surface for shared classroom devices.
  */
 
+import { ToolIcon, type ToolIconId } from "@/components/design/ToolIcon";
+
+/** The learning tools carry their icon in the bar (Gadi 2026-10-11, a trial). */
+const TOOL_KEYS = new Set(["notebook", "spell", "read", "say", "play"]);
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -211,32 +215,16 @@ const READ_NAV: Record<string, string> = {
 
 // "Spelling practice" nav label for the dictation trainer (/spell). Local map,
 // en fallback (Gadi 2026-09-19, from Ziv's daughter's school dictations).
+// "Homework" (Gadi 2026-10-11): dictation, workbook lessons and lessons by
+// topic, everything school sent home. Replaced "Dictation".
 const SPELL_NAV: Record<string, string> = {
-  en: "Spelling", he: "הכתבה", ar: "إملاء", ru: "Диктант", es: "Ortografía",
-  pt: "Ortografia", fr: "Dictée", de: "Diktat", it: "Ortografia", nl: "Spelling",
-  cs: "Diktát",
-  sk: "Diktát",
-  ja: "書き取り",
-  hi: "वर्तनी",
-  am: "ፊደል አጻጻፍ",
-  uk: "Диктант",
-  tr: "Yazım",
-  pl: "Dyktando",
-  fa: "دیکته",
-  id: "Ejaan",
-  el: "Ορθογραφία",
-  zu: "Ukupela",
-  vi: "Chính tả",
-  fil: "Pagbaybay",
-  af: "Spelling",
-  sw: "Tahajia",
-  "zh-CN": "听写",
-  "zh-TW": "聽寫",
-  ko: "받아쓰기",
-  th: "เขียนตามคำบอก",
-  bn: "বানান",
-  da: "Stavning",
-  hu: "Helyesírás",
+  en: "Homework", he: "שיעורי בית", ar: "الواجبات", ru: "Домашка", es: "Deberes",
+  pt: "Tarefas", fr: "Devoirs", de: "Hausaufgaben", it: "Compiti", nl: "Huiswerk",
+  cs: "Úkoly", sk: "Úlohy", ja: "宿題", hi: "होमवर्क", am: "የቤት ሥራ", uk: "Домашка",
+  tr: "Ödevler", pl: "Prace domowe", fa: "تکالیف", id: "PR", el: "Εργασίες",
+  zu: "Umsebenzi wasekhaya", vi: "Bài tập", fil: "Takdang-aralin", af: "Huiswerk",
+  sw: "Kazi ya nyumbani", "zh-CN": "作业", "zh-TW": "作業", ko: "숙제", th: "การบ้าน",
+  bn: "বাড়ির কাজ", da: "Lektier", hu: "Házi feladat",
 };
 
 const TREASURE_NAV: Record<string, string> = {
@@ -281,10 +269,13 @@ function useNavLinks(): NavLink[] {
     // in the stripped kid nav alongside their words + games. Still no
     // commercial links (KidRouteGuard backstops the address bar).
     return [
+      // The nav council's order (Gadi 2026-10-11): your words, tonight's
+      // homework, the tools for words you meet (reading, then speaking),
+      // and the games last, as the reward.
       { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
-      { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       { key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en },
       { key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en },
+      { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
     ];
   }
@@ -299,19 +290,16 @@ function useNavLinks(): NavLink[] {
     if (paid) {
       // Paying member — their tools only. No Features/Pricing/Individuals/
       // Schools (noise once subscribed).
+      // Same order as the kid nav (Gadi 2026-10-11). Reader + games are
+      // deep-tier tools (Family maps to deep); Homework is a Family tool.
+      const deep = plan === "deep";
       const links: NavLink[] = [
         { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
+        ...(deep && kidsAccess ? [{ key: "spell" as const, href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }] : []),
+        ...(deep ? [{ key: "read" as const, href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en }] : []),
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
+        ...(deep ? [{ key: "play" as const, href: href("/play"), label: v2(lang, "navPlay") }] : []),
       ];
-      // Reader + games are deep-tier tools (Family maps to deep, so Family
-      // parents get them too; Clear does not). Gadi 2026-08-26: add the Reader
-      // to the Family + Deep nav.
-      if (plan === "deep") {
-        // Dictation is a Family tool (not on the Individual plan).
-        if (kidsAccess) links.push({ key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en });
-        links.push({ key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en });
-        links.push({ key: "play", href: href("/play"), label: v2(lang, "navPlay") });
-      }
       return links;
     }
     // Basic (signed in, free): their free notebook (Gadi 2026-10-06) and a
@@ -371,6 +359,7 @@ export function WbShellNav({ active }: { active?: NavKey }) {
             href={l.href}
             className={`wb-shell-navlink${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
           >
+            {TOOL_KEYS.has(l.key) && <ToolIcon id={l.key as ToolIconId} size={17} className="wb-nav-icon" />}
             {l.label}
           </Link>
         ),
@@ -492,6 +481,7 @@ export function WbShellBurger({
                 className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
                 onClick={() => setOpen(false)}
               >
+                {TOOL_KEYS.has(l.key) && <ToolIcon id={l.key as ToolIconId} size={20} className="wb-nav-icon" />}
                 {l.label}
               </Link>
             ),

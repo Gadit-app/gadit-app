@@ -20,15 +20,15 @@ const fmt = (d: string, locale: string) => {
 };
 
 const he: LearnCopy = {
-  question: "רוצים שהמשחקים יעזרו ללמוד שפה?",
-  questionSub: "המשחקים יתאימו את עצמם למילים בשפה שרוצים להשתפר בה.",
+  question: "לומדים שפה בבית הספר?",
+  questionSub: "בחרו את השפה, ונכין שיעורים ותרגול ברמה המתאימה.",
   notNow: "לא עכשיו", reopen: "ללמוד שפה דרך המשחקים",
   english: "אנגלית", hebrew: "עברית", beta: "בטא", stop: "בלי, רק לשחק",
   readsQ: (l) => `כבר קוראים ב${l}?`,
   readsSub: "ככה נדע אם להתחיל מתמונות וקול, או גם מקריאה.",
   reads: { no: "עוד לא", little: "קצת", yes: "כן" },
   learning: (l) => `לומדים ${l}`,
-  learningSub: "כל המשחקים למטה משחקים עכשיו על המילים האלה, עם תרגום, תמונה וקול.",
+  learningSub: "השיעורים כאן מותאמים לרמה, עם תרגום, תמונה וקול.",
   change: "לשנות",
   learnedWeek: "מילים נלמדו השבוע",
   reinforce: "מילים לחיזוק",
@@ -51,15 +51,15 @@ const he: LearnCopy = {
 };
 
 const en: LearnCopy = {
-  question: "Want the games to help you learn a language?",
-  questionSub: "The games adapt to words in the language you want to get better at.",
+  question: "Learning a language at school?",
+  questionSub: "Pick it, and we will prepare lessons and practice at the right level.",
   notNow: "Not now", reopen: "Learn a language through the games",
   english: "English", hebrew: "Hebrew", beta: "beta", stop: "Nothing, just play",
   readsQ: (l) => `Do you already read ${l}?`,
   readsSub: "So we know whether to start with pictures and sound, or with reading too.",
   reads: { no: "Not yet", little: "A little", yes: "Yes" },
   learning: (l) => `Learning ${l}`,
-  learningSub: "All the games below now play on these words, with a translation, a picture and sound.",
+  learningSub: "The lessons here match the level, with a translation, a picture and sound.",
   change: "Change",
   learnedWeek: "words learned this week",
   reinforce: "words to practise again",
@@ -82,15 +82,15 @@ const en: LearnCopy = {
 };
 
 const ar: LearnCopy = {
-  question: "هل تريدون أن تساعدكم الألعاب في تعلّم لغة؟",
-  questionSub: "تتكيّف الألعاب مع كلمات اللغة التي تريدون التحسّن فيها.",
+  question: "تتعلّمون لغة في المدرسة؟",
+  questionSub: "اختاروها، وسنحضّر دروسًا وتدريبًا بالمستوى المناسب.",
   notNow: "ليس الآن", reopen: "تعلّم لغة من خلال الألعاب",
   english: "الإنجليزية", hebrew: "العبرية", beta: "تجريبي", stop: "لا شيء، فقط نلعب",
   readsQ: (l) => `هل تقرؤون ${l} الآن؟`,
   readsSub: "هكذا نعرف هل نبدأ بالصور والصوت، أم بالقراءة أيضًا.",
   reads: { no: "ليس بعد", little: "قليلًا", yes: "نعم" },
   learning: (l) => `نتعلّم ${l}`,
-  learningSub: "كل الألعاب أدناه تلعب الآن بهذه الكلمات، مع ترجمة وصورة وصوت.",
+  learningSub: "الدروس هنا تناسب المستوى، مع ترجمة وصورة وصوت.",
   change: "تغيير",
   learnedWeek: "كلمات تعلّمناها هذا الأسبوع",
   reinforce: "كلمات للتمرين من جديد",
@@ -113,15 +113,15 @@ const ar: LearnCopy = {
 };
 
 const ru: LearnCopy = {
-  question: "Хочешь, чтобы игры помогали учить язык?",
-  questionSub: "Игры подстроятся под слова языка, который ты хочешь подтянуть.",
+  question: "Учишь язык в школе?",
+  questionSub: "Выбери его, и мы подготовим уроки и практику нужного уровня.",
   notNow: "Не сейчас", reopen: "Учить язык через игры",
   english: "английский", hebrew: "иврит", beta: "бета", stop: "Ничего, просто играть",
   readsQ: (l) => `Ты уже читаешь: ${l}?`,
   readsSub: "Так мы поймём, начинать с картинок и звука или сразу с чтения.",
   reads: { no: "Ещё нет", little: "Немного", yes: "Да" },
   learning: (l) => `Учим ${l}`,
-  learningSub: "Все игры ниже теперь идут на этих словах, с переводом, картинкой и звуком.",
+  learningSub: "Уроки здесь подстроены под уровень: с переводом, картинкой и звуком.",
   change: "Изменить",
   learnedWeek: "слов выучено за неделю",
   reinforce: "слов повторить",

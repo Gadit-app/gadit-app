@@ -19,6 +19,8 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger, type NavKey } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { AppearancePicker } from "@/components/AppearancePicker";
+import { ToolIcon } from "@/components/design/ToolIcon";
+import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 
 export function ToolPage({ active, title, titleExtra, sub, width = 880, children }: {
   active: NavKey;
@@ -65,10 +67,12 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
         {title && (
           <div className="wb-tool-hero">
             <h1 className="wb-tool-title">
+              {(active === "notebook" || active === "spell" || active === "read" || active === "say" || active === "play") && <ToolIcon id={active} size={36} className="wb-title-icon" />}
               {title}
               {titleExtra}
             </h1>
             {sub && <p className="wb-tool-sub">{sub}</p>}
+            <ToolKidsToggle />
           </div>
         )}
         {children}

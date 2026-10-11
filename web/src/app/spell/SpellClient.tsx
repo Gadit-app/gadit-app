@@ -10,6 +10,10 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
+import { useRouter } from "next/navigation";
+import { homeworkCopy } from "@/lib/homework-i18n";
+import { LearnCard } from "@/components/play/learn/LearnCard";
+import { LEARN_CSS } from "@/components/play/learn/learn-css";
 import { ToolPage } from "@/components/design/ToolPage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -241,6 +245,7 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
 export function SpellClient() {
   const { lang, dir } = useLang();
   const href = useHref();
+  const router = useRouter();
   const { user, plan, planReady, kidsAccess } = useAuth();
   // Dictation is a Family tool (Gadi 2026-09-19, narrowed 2026-10-06): the
   // Family plan, schools, and the older standalone Deep plan. Not the
@@ -600,8 +605,17 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={t("title", lang)} sub={phase === "pick" ? t("sub", lang) : undefined}>
+    <ToolPage active="spell" width={640} title={homeworkCopy(lang).title} sub={phase === "pick" ? homeworkCopy(lang).sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
+        {/* Learning a language at school: lessons by topic and lessons from
+            the workbook's pages live here since 2026-10-11 (the nav council).
+            A lesson plays on the games page and comes back here. */}
+        {phase === "pick" && (
+          <>
+            <style>{LEARN_CSS}</style>
+            <LearnCard lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
+          </>
+        )}
 
         {phase === "pick" && (
           <>

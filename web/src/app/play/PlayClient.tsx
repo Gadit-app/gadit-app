@@ -12,6 +12,8 @@
  * GameResult, which calls back to onExit → returns here to "menu").
  */
 
+import { ToolIcon } from "@/components/design/ToolIcon";
+import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LANGUAGES } from "@/lib/i18n";
@@ -58,10 +60,9 @@ import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
 import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
-import { LearnCard, type LearnState } from "@/components/play/learn/LearnCard";
+import { HomeworkStrip } from "@/components/play/learn/HomeworkStrip";
 import { setAnswerListener } from "@/lib/learn/report";
 import { setDuelLauncher } from "@/lib/duel-launch";
-import { LEARN_CSS } from "@/components/play/learn/learn-css";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
 import { DUEL_GAMES, duelQuestionsFor } from "@/lib/duel-games";
 import type { DuelQuestion } from "@/lib/duel";
@@ -3289,7 +3290,7 @@ export function PlayPage() {
   const href = useHref();
   const t = COPY[lang] ?? COPY.en;
 
-  type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
+  type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson; learnLang: string } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
@@ -3424,10 +3425,9 @@ export function PlayPage() {
     setWordLang(v);
     try { localStorage.setItem("gadit.play.wordLang", v); } catch { /* private mode */ }
   };
-  // Learning mode (Gadi 2026-10-11): the kid picked a language to learn,
-  // so the word games play on that language's words at the kid's edge.
-  const [learn, setLearn] = useState<LearnState | null>(null);
-  const [learnRefresh, setLearnRefresh] = useState(0);
+  // Learning mode lives in Homework since 2026-10-11 (the nav council): the
+  // games always play on the child's own words; a lesson opens here from
+  // Homework (?lesson=<id> or ?lesson=photo) and reports its answers.
   // The curated games' own-language rounds for the 29 languages beyond
   // he/en/ar/ru load as files; their cards wait for them (Gadi 2026-10-11).
   const [curatedReady, setCuratedReady] = useState(["en", "he", "ar", "ru"].includes(lang));
@@ -3436,19 +3436,15 @@ export function PlayPage() {
     void ensurePlayContent(lang).then(() => { if (alive) setCuratedReady(true); });
     return () => { alive = false; };
   }, [lang]);
-  const learning = !!learn?.lang && learn.pool.length >= 4;
-  const learnPool = useMemo<PlayWord[]>(
-    () => (learn?.lang ? learn.pool.map((x) => ({ word: x.w, meaning: x.t, examples: [], language: learn.lang!, uiLang: learn.lang!, ...(x.en ? { picWord: x.en } : {}) })) : []),
-    [learn],
-  );
   const gamePool = useMemo(
-    () => (learning ? learnPool : activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
-    [learning, learnPool, effectivePool, activeWordLang],
+    () => (activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
+    [effectivePool, activeWordLang],
   );
+  const lessonLang = stage.kind === "lesson" ? stage.learnLang : null;
   // Every answer in learning mode goes to /api/learn, a few at a time.
   const learnBuf = useRef<Array<{ w: string; ok: boolean }>>([]);
   const flushLearn = useCallback(async () => {
-    const lang = learn?.lang;
+    const lang = lessonLang;
     const batch = learnBuf.current.splice(0);
     if (!lang || !batch.length || !user) return;
     try {
@@ -3458,15 +3454,32 @@ export function PlayPage() {
         body: JSON.stringify({ action: "results", lang, results: batch }),
       });
     } catch { /* the next batch carries on */ }
-  }, [learn?.lang, user]);
+  }, [lessonLang, user]);
   useEffect(() => {
-    if (!learning) { setAnswerListener(null); return; }
+    if (!lessonLang) { setAnswerListener(null); return; }
     setAnswerListener((w, ok) => {
       learnBuf.current.push({ w, ok });
       if (learnBuf.current.length >= 6) void flushLearn();
     });
     return () => setAnswerListener(null);
-  }, [learning, flushLearn]);
+  }, [lessonLang, flushLearn]);
+  // Open the lesson Homework sent us to.
+  const lessonOpenedRef = useRef(false);
+  useEffect(() => {
+    const lessonParam = new URLSearchParams(window.location.search).get("lesson");
+    if (!lessonParam || !user || lessonOpenedRef.current) return;
+    lessonOpenedRef.current = true;
+    void (async () => {
+      try {
+        const q = lessonParam === "photo" ? `/api/learn?ui=${encodeURIComponent(lang)}` : `/api/learn?ui=${encodeURIComponent(lang)}&lesson=${encodeURIComponent(lessonParam)}`;
+        const r = await fetch(q, { headers: { Authorization: `Bearer ${await user.getIdToken()}` }, cache: "no-store" });
+        const j = await r.json();
+        const l = j.lesson as Lesson | undefined;
+        const ll = (j.lang ?? j.profile?.lang) as string | undefined;
+        if (l && ll) setStage({ kind: "lesson", lesson: l, learnLang: ll });
+      } catch { /* stays on the menu */ }
+    })();
+  }, [user, lang]);
   // Open the focus game once the notebook has loaded (so the word is in it).
   const focusStartedRef = useRef(false);
   useEffect(() => {
@@ -3801,7 +3814,7 @@ export function PlayPage() {
   }, [playingGame, isPaid, lang, gamePool, kidsMode, playingTitle]);
 
   // ─── A lesson from workbook pages (Gadi 2026-10-11) ─────────────
-  if (stage.kind === "lesson" && learn?.lang) {
+  if (stage.kind === "lesson") {
     const lessonId = stage.lesson.id;
     const markDone = async () => {
       if (!lessonId || !user) return;
@@ -3811,7 +3824,7 @@ export function PlayPage() {
     };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <LessonPath lesson={stage.lesson} learnLang={learn.lang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => { setLearnRefresh((x) => x + 1); setStage({ kind: "menu" }); }} />
+        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => { void flushLearn(); router.push(href("/spell")); }} />
       </div>
     );
   }
@@ -3835,7 +3848,6 @@ export function PlayPage() {
   if (stage.kind === "playing") {
     const exit = () => {
       setStage({ kind: "menu" });
-      if (learning) void flushLearn().then(() => setLearnRefresh((n) => n + 1));
     };
     const curatedProps = { onExit: exit, lang, t };
     if (stage.game === "twin") {
@@ -3919,9 +3931,7 @@ export function PlayPage() {
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
             UI). Anagram is excluded: its tiles are single letters. */}
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
-          {stage.game === "flashcards" && (learning
-            ? <GameFlashcards {...props} mode="meanings" skipPicker />
-            : <GameFlashcards {...props} focusWord={focusWord} mode="words" />)}
+          {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} mode="words" />}
           {stage.game === "flashdefs" && <GameFlashcards {...props} focusWord={focusWord} mode="meanings" />}
           {stage.game === "truefalse" && <GameTrueFalse {...props} />}
           {stage.game === "quiz" && <GameQuiz {...props} />}
@@ -3978,8 +3988,9 @@ export function PlayPage() {
 
       <main className="wb-play-main">
         <div className="wb-play-hero">
-          <h1 className="wb-play-title">{t.menuTitle}</h1>
+          <h1 className="wb-play-title"><ToolIcon id="play" size={36} className="wb-title-icon" />{t.menuTitle}</h1>
           <p className="wb-play-lede">{t.menuLede}</p>
+          <ToolKidsToggle />
           {streak.current > 0 && (
             <div className="wb-play-streak">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -4018,75 +4029,9 @@ export function PlayPage() {
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
         {/* Kids Mode and Word Duel side by side, one card family (Gadi
             2026-10-11: the duel strip looked unrelated to the Kids banner). */}
-        <div className={`wb-play-banners${isPaid ? " has-duel" : ""}`}>
-        {(() => {
-          const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
-          // Kids Mode is a Family tool (Gadi 2026-10-06).
-          if (!isPaid || !kidsAccess) {
-            return (
-              <div className="wb-play-kids-banner is-gate" dir={dir}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-sleep.webp" alt="" width={240} height={240} />
-                <div className="wb-play-kids-banner-text">
-                  <div className="wb-play-kids-banner-title">{bannerCopy.gateTitle}</div>
-                  <div className="wb-play-kids-banner-desc">{planCopy(lang, "kidsGate")}</div>
-                </div>
-                <Link href={href("/families")} className="wb-play-kids-banner-cta">
-                  {bannerCopy.gateCTA}
-                </Link>
-              </div>
-            );
-          }
-          if (kidsMode) {
-            return (
-              <div className="wb-play-kids-banner is-on" dir={dir}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot.webp" alt="" width={240} height={240} />
-                <div className="wb-play-kids-banner-text">
-                  <div className="wb-play-kids-banner-title">{bannerCopy.onTitle}</div>
-                  <div className="wb-play-kids-banner-desc">{bannerCopy.onDesc}</div>
-                </div>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked="true"
-                  aria-label={bannerCopy.onCTA}
-                  className="wb-play-kids-switch is-on"
-                  onClick={() => setKidsMode(false)}
-                >
-                  <span className="wb-play-kids-switch-knob" />
-                </button>
-              </div>
-            );
-          }
-          return (
-            <div className="wb-play-kids-banner" dir={dir}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="wb-play-kids-banner-mascot" src="/play/kids-mascot-sleep.webp" alt="" width={240} height={240} />
-              <div className="wb-play-kids-banner-text">
-                <div className="wb-play-kids-banner-title">{bannerCopy.offTitle}</div>
-                <div className="wb-play-kids-banner-desc">{bannerCopy.offDesc}</div>
-              </div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked="false"
-                aria-label={bannerCopy.offCTA}
-                className="wb-play-kids-switch"
-                onClick={() => {
-                  // Defensive second gate: the button is already only
-                  // rendered when isPaid, but explicit check inside the
-                  // handler blocks any theoretical race between plan
-                  // change and click. Audit 2026-07-03.
-                  if (!isPaid) return;
-                  setKidsMode(true);
-                }}
-              >
-                <span className="wb-play-kids-switch-knob" />
-              </button>
-            </div>
-          );
-        })()}
+        <div className="wb-play-banners">
+        {/* Kids Mode lives under every tool's title now (Gadi 2026-10-11:
+            it applies to every section, not only the games). */}
 
         {/* Word Duel: play each other (Gadi 2026-10-11). */}
         {isPaid && (() => {
@@ -4105,14 +4050,8 @@ export function PlayPage() {
         })()}
         </div>
 
-        {/* Learn a language through the games: one quiet row under Kids Mode
-            and Word Duel, most players just play (Gadi 2026-10-11). */}
-        {isPaid && (
-          <>
-            <style>{LEARN_CSS}</style>
-            <LearnCard lang={lang} dir={dir} refreshKey={learnRefresh} onState={setLearn} onLesson={(lesson) => setStage({ kind: "lesson", lesson })} />
-          </>
-        )}
+        {/* Tonight's practice: one strip to Homework when a lesson is due. */}
+        {isPaid && <HomeworkStrip />}
 
         {/* Games rendered as grouped grids by category. We render each
             category as its own grid so the section heading sits cleanly
@@ -4140,7 +4079,7 @@ export function PlayPage() {
             // with an empty notebook.
             return (
               <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                {section.id === "notebook" && langCounts.length >= 2 && !learning ? (
+                {section.id === "notebook" && langCounts.length >= 2 ? (
                   <div className="wb-play-section-head">
                     <h2 className="wb-play-section-heading">{section.label}</h2>
                     <div className="wb-play-langs" role="radiogroup" aria-label={wordsInLabel(lang)}>

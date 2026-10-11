@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
   if (lessonId) {
     const l = isLearnLang(qLang) ? qLang : doc?.lang;
     const data = l ? lessonData(l, ui, lessonId) : null;
-    return data ? NextResponse.json({ lesson: data }) : NextResponse.json({ error: "not_found" }, { status: 404 });
+    return data ? NextResponse.json({ lesson: data, lang: l }) : NextResponse.json({ error: "not_found" }, { status: 404 });
   }
   const lang = isLearnLang(qLang) ? qLang : doc?.lang ?? null;
   const targets = learnTargets(ui);
