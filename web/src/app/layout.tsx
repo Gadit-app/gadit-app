@@ -18,7 +18,6 @@ import { AutoUpdater } from "@/components/AutoUpdater";
 import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
-import { SayModal } from "@/components/SayModal";
 import { GuideOverlay } from "@/components/GuideOverlay";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
@@ -441,7 +440,6 @@ export default async function RootLayout({
               <KidsModeBar />
               {children}
               <VoiceAssistant />
-              <SayModal />
               <GuideOverlay />
               <InstallPwaPrompt />
               {/* GA4 (G-28987K226D). Inside AuthProvider: it waits for the

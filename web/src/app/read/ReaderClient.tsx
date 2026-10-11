@@ -1,19 +1,16 @@
 "use client";
 
+import { ToolPage } from "@/components/design/ToolPage";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
-import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
-import { LangSwitchMobile } from "@/components/LangSwitchMobile";
-import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { ReaderText } from "@/components/design/ReaderText";
 import { PassageKeyWords } from "@/components/design/PassageKeyWords";
 import { GuideButton } from "@/components/GuideButton";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
-import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
 
 /**
@@ -487,43 +484,9 @@ export function ReaderClient() {
   const allDone = total > 0 && reviewed.size >= total;
 
   return (
-    <div className="wordbook wb-shell-page" dir={dir}>
-      <header className="wb-shell-topbar">
-        <Link href={href("/")} className="wb-wordmark" dir="ltr">
-          Gad<span className="wb-wordmark-it">it</span>
-        </Link>
-        <WbShellNav />
-        <div className="wb-shell-actions">
-          <ShareButton
-            url="https://www.gadit.app/"
-            title={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).title}
-            text=""
-            shareLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).shareLabel}
-            copiedLabel={(APP_SHARE_COPY[lang] ?? APP_SHARE_COPY.en).copiedLabel}
-          />
-          <LangSwitch />
-          {user ? <WbUserMenu /> : null}
-        </div>
-        {user && (
-          <div className="wb-shell-mobile-identity">
-            <WbUserMenu />
-          </div>
-        )}
-        <div className="wb-shell-mobile-menu-cluster">
-          <LangSwitchMobile />
-          <WbShellBurger />
-        </div>
-      </header>
-
-      <main style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 96px", fontFamily: fontBody(lang) }}>
-        <h1 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4.5vw,36px)", fontWeight: 800, color: "var(--ink,#20272E)", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          {t.title}
-          <GuideButton guide="reader" size={24} />
-        </h1>
-        <p style={{ margin: "0 0 26px", fontSize: 16.5, lineHeight: 1.55, color: "var(--ink-muted,#6B7280)", maxWidth: "56ch" }}>
-          {t.sub}
-        </p>
-
+    // The shared tool frame (Gadi 2026-10-11): same bar, same centred title.
+    <ToolPage active="read" width={760} title={t.title} titleExtra={<GuideButton guide="reader" size={24} />} sub={t.sub}>
+      <div style={{ fontFamily: fontBody(lang) }}>
         {authLoading || (user && !planReady) ? (
           <div style={{ color: "var(--ink-muted,#6B7280)" }}>{t.loading}</div>
         ) : !user ? (
@@ -651,56 +614,8 @@ export function ReaderClient() {
             </div>
           </div>
         )}
-      </main>
-    </div>
-  );
-}
-
-// Desktop language chip — same look/behavior as the one on /notebook and
-// /account (there's no shared component; each surface carries its own).
-function LangSwitch() {
-  const { lang, setLang } = useLang();
-  const [open, setOpen] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!open) return;
-    function onClick(e: MouseEvent) {
-      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
-    }
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
-  }, [open]);
-  const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
-  return (
-    <div ref={wrapRef} className="wb-lang-chip-wrap">
-      <button type="button" className="wb-lang-chip" onClick={() => setOpen((v) => !v)}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-          <circle cx="12" cy="12" r="9" />
-          <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" />
-        </svg>
-        {langNameIn(active.code, lang)}
-      </button>
-      {open && (
-        <ul className="wb-lang-menu" role="listbox">
-          {LANGUAGES.map((l) => (
-            <li key={l.code}>
-              <button
-                type="button"
-                className={l.code === lang ? "is-active" : ""}
-                onClick={() => { setLang(l.code as Lang); setOpen(false); }}
-              >
-                <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
-                  <span>{langNameIn(l.code, lang)}</span>
-                  {langNameIn(l.code, lang) !== l.label && (
-                    <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>
-                  )}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+      </div>
+    </ToolPage>
   );
 }
 

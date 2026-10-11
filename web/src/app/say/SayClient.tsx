@@ -1,28 +1,22 @@
 "use client";
 
 /**
- * /say page wrapper. The tool itself lives in SayTool (shared with the
- * global SayModal, which is how it opens for logged-in users over their
- * own themed screen). This standalone page stays for direct-link access.
+ * /say: the Say-it tool as a page in the shared tool frame (Gadi
+ * 2026-10-11: it opened as a popup while every other tool is a page; the
+ * frame keeps a kid's skin and the top bar, the two things the popup was
+ * for).
  */
 
 import { useLang } from "@/lib/lang-context";
-import { useHref } from "@/lib/href";
-import { SayTool } from "./SayTool";
+import { ToolPage } from "@/components/design/ToolPage";
+import { SayTool, sayHeading } from "./SayTool";
 
 export function SayClient() {
-  const { dir } = useLang();
-  const href = useHref();
+  const { lang } = useLang();
+  const h = sayHeading(lang);
   return (
-    <div className="wordbook" dir={dir} style={{ minHeight: "100dvh", background: "var(--paper, #F7F7F5)", color: "var(--ink, #14181F)" }}>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: 760, margin: "0 auto" }}>
-        <a href={href("/")} style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.02em", textDecoration: "none", color: "inherit" }}>
-          Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span>
-        </a>
-      </header>
-      <main style={{ maxWidth: 640, margin: "0 auto", padding: "8px 20px 64px" }}>
-        <SayTool />
-      </main>
-    </div>
+    <ToolPage active="say" width={640} title={h.title} sub={h.sub}>
+      <SayTool framed />
+    </ToolPage>
   );
 }

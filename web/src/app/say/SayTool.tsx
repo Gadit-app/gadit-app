@@ -164,7 +164,14 @@ function scoreStars(target: string, spoken: string): { stars: number; tier: "cor
   return { stars, tier };
 }
 
-export function SayTool({ onClose }: { onClose?: () => void }) {
+/** The tool's title and subtitle, for the page frame that shows them. */
+export function sayHeading(lang: Lang): { title: string; sub: string } {
+  const t = copy(lang);
+  return { title: t.title, sub: t.sub };
+}
+
+/** `framed`: inside the shared tool frame, which shows the title itself. */
+export function SayTool({ onClose, framed = false }: { onClose?: () => void; framed?: boolean }) {
   const { lang, dir } = useLang();
   const { user, plan } = useAuth();
   const href = useHref();
@@ -278,8 +285,12 @@ export function SayTool({ onClose }: { onClose?: () => void }) {
         </button>
       )}
 
-      <h1 style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.15, margin: "0 0 8px", textWrap: "balance", paddingInlineEnd: onClose ? 32 : 0 }}>{t.title}</h1>
-      <p style={{ fontSize: 15, opacity: 0.7, margin: "0 0 22px" }}>{t.sub}</p>
+      {!framed && (
+        <>
+          <h1 style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.15, margin: "0 0 8px", textWrap: "balance", paddingInlineEnd: onClose ? 32 : 0 }}>{t.title}</h1>
+          <p style={{ fontSize: 15, opacity: 0.7, margin: "0 0 22px" }}>{t.sub}</p>
+        </>
+      )}
 
       {!user ? (
         <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>

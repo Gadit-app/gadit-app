@@ -43,7 +43,6 @@ import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
 import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { track } from "@/lib/track";
-import { OPEN_SAY_EVENT } from "@/components/SayModal";
 
 // Nav keys that lead to a purchase surface — tagged .gd-buy so they are
 // hidden inside the Google Play consumption-only TWA (html[data-play="1"]).
@@ -51,12 +50,8 @@ const BUY_NAV_KEYS = new Set(["pricing", "families", "individuals", "schools"]);
 import { useTheme } from "@/lib/appearance";
 import { DARK_LABEL } from "@/components/design/WbUserMenu";
 
-// "Say it" opens as a modal over the current (themed) screen rather than
-// routing to a separate page, so a kid keeps their skin and a clear way
-// back (Gadi 2026-08-18).
-function openSay() {
-  if (typeof window !== "undefined") window.dispatchEvent(new Event(OPEN_SAY_EVENT));
-}
+// "Say it" is a page in the shared tool frame since 2026-10-11 (it was a
+// popup so a kid kept their skin and a way back; the frame does both).
 
 // "Install the app" burger entry — permanent, discoverable install
 // path. Users kept asking Gadi "how do I download it?" because the
@@ -361,16 +356,7 @@ export function WbShellNav({ active }: { active?: NavKey }) {
         </Link>
       )}
       {links.map((l) =>
-        l.key === "say" ? (
-          <button
-            key={l.key}
-            type="button"
-            className={`wb-shell-navlink${active === l.key ? " is-active" : ""}`}
-            onClick={openSay}
-          >
-            {l.label}
-          </button>
-        ) : l.key === "affiliates" ? (
+        l.key === "affiliates" ? (
           <button
             key={l.key}
             type="button"
@@ -490,16 +476,7 @@ export function WbShellBurger({
             </Link>
           )}
           {links.map((l) =>
-            l.key === "say" ? (
-              <button
-                key={l.key}
-                type="button"
-                className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}`}
-                onClick={() => { setOpen(false); openSay(); }}
-              >
-                {l.label}
-              </button>
-            ) : l.key === "affiliates" ? (
+            l.key === "affiliates" ? (
               <button
                 key={l.key}
                 type="button"

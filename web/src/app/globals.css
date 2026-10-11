@@ -14810,3 +14810,49 @@ html[data-theme="aurora"] .wb-kid-area .wb-tf-wrong,
 html[data-theme="cosmos"] .wb-kid-area .wb-tf-wrong,
 html[data-theme="lava"] .wb-kid-area .wb-tf-wrong,
 html[data-theme="royal"] .wb-kid-area .wb-tf-wrong { color: #FCD34D; }
+
+/* One frame for the learning tools (Gadi 2026-10-11): the word bank, the
+   games, dictation, Every Word and Say it share the same title, subtitle
+   and spacing. ToolPage uses .wb-tool-*; the word bank and the games keep
+   their class names and take the same values. */
+.wordbook .wb-tool-main {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 24px 22px 60px;
+}
+.wordbook .wb-play-main { padding-top: 24px; }
+@media (min-width: 768px) {
+  .wordbook .wb-tool-main { padding: 32px 32px 80px; }
+  .wordbook .wb-play-main { padding-top: 32px; }
+}
+.wordbook .wb-tool-hero,
+.wordbook .wb-play-hero { text-align: center; margin-bottom: 28px; }
+.wordbook .wb-tool-title,
+.wordbook .wb-play-title {
+  font-family: var(--wb-he);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.wordbook .wb-tool-title { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+@media (min-width: 768px) {
+  .wordbook .wb-tool-title,
+  .wordbook .wb-play-title { font-size: 44px; }
+}
+.wordbook .wb-tool-sub,
+.wordbook .wb-play-lede {
+  font-family: var(--wb-he);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  margin: 0 auto;
+  max-width: 540px;
+}
+.wordbook .wb-play-lede { margin-bottom: 20px; }
+html[data-theme] .wb-kid-area .wb-tool-title { color: var(--ink); }
+html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }

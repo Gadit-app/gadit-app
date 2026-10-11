@@ -10,7 +10,8 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { ToolPage } from "@/components/design/ToolPage";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -561,20 +562,17 @@ export function SpellClient() {
     );
   }
 
-  const page: CSSProperties = { minHeight: "100dvh", background: "var(--paper,#F2F6F4)", fontFamily: '"Rubik", system-ui, sans-serif' };
-  const wrap: CSSProperties = { maxWidth: 640, margin: "0 auto", padding: "18px 16px 72px" };
 
   if (!user) {
     return (
-      <div dir={dir} style={page}>
-        <div style={wrap}>
-          <Link href={href("/")} style={{ fontSize: 13, color: "var(--ink-muted,#6B7280)", textDecoration: "none" }}>{dir === "rtl" ? "→" : "←"} Gadit</Link>
+      <ToolPage active="spell" width={640}>
+        <div>
           <div style={{ textAlign: "center", marginTop: 80 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("loginTitle", lang)}</h1>
           </div>
         </div>
-      </div>
+      </ToolPage>
     );
   }
 
@@ -582,9 +580,8 @@ export function SpellClient() {
   // subscriber never sees the gate flash, then send non-Deep users to pricing.
   if (planReady && !hasAccess) {
     return (
-      <div dir={dir} style={page}>
-        <div style={wrap}>
-          <Link href={href("/")} style={{ fontSize: 13, color: "var(--ink-muted,#6B7280)", textDecoration: "none" }}>{dir === "rtl" ? "→" : "←"} Gadit</Link>
+      <ToolPage active="spell" width={640}>
+        <div>
           <div style={{ textAlign: "center", marginTop: 70 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{t("title", lang)}</h1>
@@ -596,21 +593,15 @@ export function SpellClient() {
             </Link>
           </div>
         </div>
-      </div>
+      </ToolPage>
     );
   }
 
+  // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
+  // looks like every other tool's.
   return (
-    <div dir={dir} style={page}>
-      <div style={wrap}>
-        <Link href={href("/")} style={{ fontSize: 13, color: "var(--ink-muted,#6B7280)", textDecoration: "none" }}>{dir === "rtl" ? "→" : "←"} Gadit</Link>
-
-        <header style={{ padding: "16px 0 6px" }}>
-          <h1 style={{ fontSize: 26, fontWeight: 800, margin: 0, color: "var(--ink,#0B1220)", display: "flex", alignItems: "center", gap: 10 }}>
-            <span>✍️</span>{t("title", lang)}
-          </h1>
-          {phase === "pick" && <p style={{ fontSize: 14.5, color: "var(--ink-muted,#6B7280)", margin: "8px 0 0", maxWidth: "52ch" }}>{t("sub", lang)}</p>}
-        </header>
+    <ToolPage active="spell" width={640} title={t("title", lang)} sub={phase === "pick" ? t("sub", lang) : undefined}>
+      <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
 
         {phase === "pick" && (
           <>
@@ -835,6 +826,6 @@ export function SpellClient() {
           </div>
         )}
       </div>
-    </div>
+    </ToolPage>
   );
 }
