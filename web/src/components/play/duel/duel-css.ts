@@ -52,7 +52,9 @@ export const DUEL_CSS = `
 .duel-recap-h { font-weight: 800; font-size: 14px; color: var(--wb-ink-soft, #55625f); }
 .duel-recap-row { display: grid; grid-template-columns: 20px minmax(0,1fr) minmax(0,1fr); gap: 8px; font-size: 15px; align-items: baseline; }
 .duel-recap-row > * { min-width: 0; overflow-wrap: anywhere; }
-.duel-modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.duel-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.duel-modes > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+@media (max-width: 560px) { .duel-modes { grid-template-columns: 1fr; } }
 .duel-mode { display: grid; gap: 4px; text-align: start; padding: 16px; border-radius: 18px; border: 2px solid rgba(15,111,108,0.16); background: #fff; font: inherit; color: inherit; cursor: pointer; }
 .duel-mode:hover { border-color: #0EA5A5; }
 .duel-mode b { font-size: 17px; }
@@ -79,4 +81,33 @@ export const DUEL_CSS = `
 .duel-table-name { font-weight: 800; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .duel-table-num { font-size: 13.5px; font-weight: 700; color: #0F6F6C; font-variant-numeric: tabular-nums; white-space: nowrap; }
 @media (max-width: 420px) { .duel-table li { grid-template-columns: 28px 36px minmax(0,1fr); } .duel-table.is-vs li { grid-template-columns: 36px minmax(0,1fr); } .duel-table-num { grid-column: 1 / -1; text-align: end; } }
+.duel-end { gap: 16px; }
+.duel-end-banner { display: grid; justify-items: center; gap: 4px; padding: 14px 12px 6px; border-radius: 18px; }
+.duel-end-banner.is-win { background: linear-gradient(160deg, #FFF6DA, #FFFFFF); }
+.duel-end-banner.is-lose { background: linear-gradient(160deg, #EAF4FF, #FFFFFF); }
+.duel-end-banner.is-tie { background: linear-gradient(160deg, #EEF7F5, #FFFFFF); }
+.duel-end-emoji { font-size: 44px; line-height: 1; }
+.duel-end-scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.duel-end-player { display: grid; justify-items: center; gap: 4px; padding: 14px 10px; border-radius: 18px; background: #F4F8F7; border: 2px solid transparent; min-width: 0; }
+.duel-end-player.is-me { background: rgba(14,165,165,0.10); }
+.duel-end-player.is-lead { border-color: #E3B341; }
+.duel-end-player .duel-face { width: 52px; height: 52px; font-size: 22px; }
+.duel-end-name { font-weight: 800; font-size: 15px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-end-score { font-size: 34px; font-weight: 900; color: #0F6F6C; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.duel-end-right { font-size: 13px; font-weight: 700; color: var(--wb-ink-soft, #55625f); }
+.duel-rtable-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid rgba(15,111,108,0.14); }
+.duel-rtable { width: 100%; border-collapse: collapse; font-size: 15px; }
+.duel-rtable caption { caption-side: top; text-align: start; font-weight: 800; font-size: 14px; color: var(--wb-ink-soft, #55625f); padding: 12px 14px 8px; }
+.duel-rtable th { text-align: start; font-size: 12.5px; font-weight: 800; color: var(--wb-ink-soft, #55625f); padding: 8px 14px; background: #F4F8F7; border-bottom: 1px solid rgba(15,111,108,0.12); white-space: nowrap; }
+.duel-rtable td { text-align: start; padding: 10px 14px; border-bottom: 1px solid rgba(15,111,108,0.08); vertical-align: middle; }
+.duel-rtable tbody tr:nth-child(even) td { background: #FAFCFB; }
+.duel-rtable tbody tr:last-child td { border-bottom: 0; }
+.duel-rt-word { font-weight: 800; }
+.duel-mark { display: inline-flex; align-items: baseline; gap: 6px; font-weight: 900; font-size: 16px; }
+.duel-mark small { font-size: 12px; font-weight: 700; }
+.duel-mark.is-good { color: #15803D; }
+.duel-mark.is-bad { color: #B91C1C; }
+.duel-mark.is-bad small { color: #9B5C5C; text-decoration: line-through; text-decoration-color: rgba(185,28,28,0.4); }
+.duel-mark.is-none { color: #9AA7A4; }
+@media (max-width: 480px) { .duel-rtable { font-size: 14px; } .duel-rtable th, .duel-rtable td { padding: 8px 10px; } .duel-mark small { display: none; } }
 `;

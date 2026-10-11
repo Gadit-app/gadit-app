@@ -4,7 +4,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import {
   COUNTDOWN_MS, DUEL_ROUNDS, DUEL_TTL_MS, ROUND_MS,
-  botScript, cleanQuestions, newDuelCode, nicknameFor, seatResult, timeline, topicQuestions,
+  botScript, cleanQuestions, newDuelCode, nicknameFor, scriptedAt, seatResult, timeline, topicQuestions,
   shuffleDuel,
   type DuelAnswer, type DuelMode, type DuelPlayerPublic, type DuelQuestion, type DuelStatRow, type DuelView, type DuelVsRow, type ScriptStep, type Seat,
 } from "@/lib/duel";
@@ -175,7 +175,8 @@ function viewFor(d: DuelDoc, seat: Seat, now: number): DuelView {
     v.question = { prompt: q.prompt, options: q.options };
     for (const s of ["a", "b"] as Seat[]) {
       const sc = scripts[s]?.[phase.round];
-      v.answered[s] = sc ? phase.startedAt + sc.ms <= now && sc.ms < ROUND_MS : !!d.answers[s]?.[phase.round];
+      if (sc) { const at = scriptedAt(s, phase.round, phase.startedAt, d.answers, scripts); v.answered[s] = at != null && at <= now && sc.ms < ROUND_MS; }
+      else v.answered[s] = !!d.answers[s]?.[phase.round];
     }
   }
   if (phase.kind === "reveal") {
@@ -190,13 +191,19 @@ function viewFor(d: DuelDoc, seat: Seat, now: number): DuelView {
   if (d.rematch) v.rematch = { code: d.rematch.code, mine: d.rematch.by === seat };
   if (d.rematchOf) v.rematchOf = true;
   if (phase.kind === "done") {
-    v.recap = d.questions.map((q, r) => ({
-      prompt: q.prompt,
-      answer: q.options[q.correctIdx],
-      correctIdx: q.correctIdx,
-      a: seatResult("a", r, q, starts[r], d.answers, scripts, now).choice,
-      b: seatResult("b", r, q, starts[r], d.answers, scripts, now).choice,
-    }));
+    v.recap = d.questions.map((q, r) => {
+      const ra = seatResult("a", r, q, starts[r], d.answers, scripts, now);
+      const rb = seatResult("b", r, q, starts[r], d.answers, scripts, now);
+      return {
+        prompt: q.prompt,
+        answer: q.options[q.correctIdx],
+        correctIdx: q.correctIdx,
+        a: ra.choice, b: rb.choice,
+        aText: ra.choice == null ? null : q.options[ra.choice] ?? null,
+        bText: rb.choice == null ? null : q.options[rb.choice] ?? null,
+        aPoints: ra.points, bPoints: rb.points,
+      };
+    });
   }
   return v;
 }

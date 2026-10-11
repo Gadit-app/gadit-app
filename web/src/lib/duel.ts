@@ -50,6 +50,28 @@ export type Phase =
   | { kind: "reveal"; round: number; startedAt: number; nextAt: number }
   | { kind: "done" };
 
+/** A computer or recorded opponent never keeps a person waiting (Gadi
+ *  2026-10-11: the bot felt slow): once the person answered, its answer
+ *  arrives within this much. Its points still come from its own time. */
+export const SCRIPT_CATCHUP_MS = 700;
+
+/** When a scripted seat's answer shows (null = not yet decided). */
+export function scriptedAt(
+  seat: Seat,
+  r: number,
+  start: number,
+  answers: Record<Seat, DuelAnswer[]>,
+  scripts: Partial<Record<Seat, ScriptStep[]>>,
+): number | null {
+  const sc = scripts[seat]?.[r];
+  if (!sc) return null;
+  const other: Seat = seat === "a" ? "b" : "a";
+  const oa = scripts[other] ? null : answers[other]?.[r]?.at ?? null;
+  const own = sc.ms < ROUND_MS ? start + sc.ms : null;
+  if (oa == null) return own;
+  return own == null ? oa + SCRIPT_CATCHUP_MS : Math.min(own, oa + SCRIPT_CATCHUP_MS);
+}
+
 /** When each seat answered round r, as absolute ms (null = not yet / never). */
 function answeredAt(
   r: number,
@@ -59,8 +81,7 @@ function answeredAt(
 ): Record<Seat, number | null> {
   const out: Record<Seat, number | null> = { a: null, b: null };
   for (const s of ["a", "b"] as Seat[]) {
-    const sc = scripts[s]?.[r];
-    if (sc) out[s] = sc.ms < ROUND_MS ? start + sc.ms : null;
+    if (scripts[s]?.[r]) out[s] = scriptedAt(s, r, start, answers, scripts);
     else out[s] = answers[s]?.[r]?.at ?? null;
   }
   return out;
@@ -110,7 +131,8 @@ export function seatResult(
 ): { choice: number | null; points: number } {
   const sc = scripts[seat]?.[r];
   if (sc) {
-    if (sc.ms >= ROUND_MS || start + sc.ms > now) return { choice: null, points: 0 };
+    const at = scriptedAt(seat, r, start, answers, scripts);
+    if (sc.ms >= ROUND_MS || sc.choice < 0 || at == null || at > now) return { choice: null, points: 0 };
     return { choice: sc.choice, points: roundPoints(sc.choice === q.correctIdx, sc.ms) };
   }
   const a = answers[seat]?.[r];
@@ -135,7 +157,7 @@ export type DuelView = {
   /** In the reveal: what each chose and earned. */
   reveal?: { correctIdx: number; a: { choice: number | null; points: number }; b: { choice: number | null; points: number } };
   /** At the end: every round, for the recap. */
-  recap?: Array<{ prompt: string; answer: string; a: number | null; b: number | null; correctIdx: number }>;
+  recap?: Array<{ prompt: string; answer: string; a: number | null; b: number | null; correctIdx: number; aText?: string | null; bText?: string | null; aPoints?: number; bPoints?: number }>;
   /** "Play again" with the same opponent: the new room, and whether I asked. */
   rematch?: { code: string; mine: boolean };
   /** This room is a rematch (waiting means: for the other player to say yes). */

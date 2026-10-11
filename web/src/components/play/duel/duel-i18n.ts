@@ -85,6 +85,9 @@ export type DuelCopy = {
   vsTitle: string;
   vsLine: (w: number, l: number, t: number) => string;
   vsBot: (wins: number, games: number) => string;
+  correctCount: (n: number, total: number) => string;
+  colWord: string;
+  colAnswer: string;
 };
 
 const he: DuelCopy = {
@@ -95,7 +98,7 @@ const he: DuelCopy = {
   optLocal: "על אותו מכשיר", optLocalDesc: "מעבירים את המכשיר בין השחקנים בכל שאלה.",
   optInvite: "להזמין למשחק", optInviteDesc: "שולחים קוד או קישור לבן משפחה או לחבר.",
   optJoin: "יש לי קוד", optJoinDesc: "מצטרפים למשחק שמישהו פתח.",
-  optOnline: "מישהו מחובר עכשיו", optOnlineDesc: "יריב אקראי בגילכם. רק כינוי ודמות, בלי שמות ובלי צ'אט.",
+  optOnline: "מישהו שמחובר עכשיו", optOnlineDesc: "יריב אקראי בגילכם. רק כינוי ודמות, בלי שמות ובלי צ'אט.",
   optBot: "נגד רובוט המילים", optBotDesc: "תרגול מהיר, בכל שעה.",
   back: "חזרה",
   sourceTitle: "על אילו מילים משחקים?",
@@ -169,6 +172,9 @@ const he: DuelCopy = {
   vsTitle: "מול מי שיחקתם",
   vsLine: (w, l, t) => `${w === 1 ? "ניצחון אחד" : `${w} ניצחונות`} · ${l === 1 ? "הפסד אחד" : `${l} הפסדים`}${t ? ` · ${t} תיקו` : ""}`,
   vsBot: (wins, games) => `נגד רובוט המילים: ${wins === 1 ? "ניצחון אחד" : `${wins} ניצחונות`} מתוך ${games}`,
+  correctCount: (n, total) => `${n} מתוך ${total} נכונות`,
+  colWord: "המילה",
+  colAnswer: "התשובה הנכונה",
 };
 
 const en: DuelCopy = {
@@ -253,6 +259,9 @@ const en: DuelCopy = {
   vsTitle: "Who you played",
   vsLine: (w, l, t) => `${w} ${w === 1 ? "win" : "wins"} · ${l} ${l === 1 ? "loss" : "losses"}${t ? ` · ${t} ${t === 1 ? "tie" : "ties"}` : ""}`,
   vsBot: (wins, games) => `Against Word Bot: ${wins} ${wins === 1 ? "win" : "wins"} out of ${games}`,
+  correctCount: (n, total) => `${n} of ${total} right`,
+  colWord: "Word",
+  colAnswer: "Right answer",
 };
 
 const ar: DuelCopy = {
@@ -337,6 +346,9 @@ const ar: DuelCopy = {
   vsTitle: "من لعبتم ضده",
   vsLine: (w, l, t) => `${w} انتصارات · ${l} هزائم` + (t ? ` · ${t} تعادل` : ""),
   vsBot: (wins, games) => "ضد روبوت الكلمات · " + `${wins} انتصارات · ${games} مباريات`,
+  correctCount: (n, total) => `${n} من ${total} صحيحة`,
+  colWord: "الكلمة",
+  colAnswer: "الإجابة الصحيحة",
 };
 
 const ru: DuelCopy = {
@@ -421,6 +433,9 @@ const ru: DuelCopy = {
   vsTitle: "С кем вы играли",
   vsLine: (w, l, t) => `Побед: ${w} · Поражений: ${l}` + (t ? ` · Ничьих: ${t}` : ""),
   vsBot: (wins, games) => "Против Словобота · " + `Побед: ${wins} · Игр: ${games}`,
+  correctCount: (n, total) => `Верно: ${n} из ${total}`,
+  colWord: "Слово",
+  colAnswer: "Правильный ответ",
 };
 
 const es: DuelCopy = {
@@ -505,6 +520,9 @@ const es: DuelCopy = {
   vsTitle: "Contra quién jugaste",
   vsLine: (w, l, t) => `${w} victorias · ${l} derrotas` + (t ? ` · ${t} empates` : ""),
   vsBot: (wins, games) => "Contra el Robot de palabras · " + `${wins} victorias · ${games} partidas`,
+  correctCount: (n, total) => `${n} de ${total} correctas`,
+  colWord: "Palabra",
+  colAnswer: "Respuesta correcta",
 };
 
 const pt: DuelCopy = {
@@ -589,6 +607,9 @@ const pt: DuelCopy = {
   vsTitle: "Contra quem você jogou",
   vsLine: (w, l, t) => `${w} vitórias · ${l} derrotas` + (t ? ` · ${t} empates` : ""),
   vsBot: (wins, games) => "Contra o Robô das Palavras · " + `${wins} vitórias · ${games} partidas`,
+  correctCount: (n, total) => `${n} de ${total} certas`,
+  colWord: "Palavra",
+  colAnswer: "Resposta certa",
 };
 
 const fr: DuelCopy = {
@@ -673,6 +694,9 @@ const fr: DuelCopy = {
   vsTitle: "Les adversaires",
   vsLine: (w, l, t) => `${w} victoires · ${l} défaites` + (t ? ` · ${t} égalités` : ""),
   vsBot: (wins, games) => "Contre le Robot des mots · " + `${wins} victoires · ${games} parties`,
+  correctCount: (n, total) => `${n} sur ${total} justes`,
+  colWord: "Mot",
+  colAnswer: "Bonne réponse",
 };
 
 const de: DuelCopy = {
@@ -757,6 +781,9 @@ const de: DuelCopy = {
   vsTitle: "Gegen wen du gespielt hast",
   vsLine: (w, l, t) => `${w} Siege · ${l} Niederlagen` + (t ? ` · ${t} Unentschieden` : ""),
   vsBot: (wins, games) => "Gegen den Wortroboter · " + `${wins} Siege · ${games} Spiele`,
+  correctCount: (n, total) => `${n} von ${total} richtig`,
+  colWord: "Wort",
+  colAnswer: "Richtige Antwort",
 };
 
 const cs: DuelCopy = {
@@ -841,6 +868,9 @@ const cs: DuelCopy = {
   vsTitle: "S kým jsi hrál(a)",
   vsLine: (w, l, t) => `Výhry: ${w} · Prohry: ${l}` + (t ? ` · Remízy: ${t}` : ""),
   vsBot: (wins, games) => "Proti Slovnímu robotovi · " + `Výhry: ${wins} · Hry: ${games}`,
+  correctCount: (n, total) => `Správně: ${n} z ${total}`,
+  colWord: "Slovo",
+  colAnswer: "Správná odpověď",
 };
 
 const sk: DuelCopy = {
@@ -925,6 +955,9 @@ const sk: DuelCopy = {
   vsTitle: "S kým si hral(a)",
   vsLine: (w, l, t) => `Výhry: ${w} · Prehry: ${l}` + (t ? ` · Remízy: ${t}` : ""),
   vsBot: (wins, games) => "Proti Slovnému robotovi · " + `Výhry: ${wins} · Hry: ${games}`,
+  correctCount: (n, total) => `Správne: ${n} z ${total}`,
+  colWord: "Slovo",
+  colAnswer: "Správna odpoveď",
 };
 
 const it: DuelCopy = {
@@ -1009,6 +1042,9 @@ const it: DuelCopy = {
   vsTitle: "Contro chi hai giocato",
   vsLine: (w, l, t) => `${w} vittorie · ${l} sconfitte` + (t ? ` · ${t} pareggi` : ""),
   vsBot: (wins, games) => "Contro il Robot delle parole · " + `${wins} vittorie · ${games} partite`,
+  correctCount: (n, total) => `${n} su ${total} giuste`,
+  colWord: "Parola",
+  colAnswer: "Risposta giusta",
 };
 
 const ja: DuelCopy = {
@@ -1093,6 +1129,9 @@ const ja: DuelCopy = {
   vsTitle: "対戦した相手",
   vsLine: (w, l, t) => `${w}勝 · ${l}敗` + (t ? ` · ${t}引き分け` : ""),
   vsBot: (wins, games) => "ことばロボットと対戦 · " + `${wins}勝 · ${games}試合`,
+  correctCount: (n, total) => `${total}問中${n}問正解`,
+  colWord: "ことば",
+  colAnswer: "正しい答え",
 };
 
 const hi: DuelCopy = {
@@ -1177,6 +1216,9 @@ const hi: DuelCopy = {
   vsTitle: "आप किसके साथ खेले",
   vsLine: (w, l, t) => `${w} जीत · ${l} हार` + (t ? ` · ${t} बराबरी` : ""),
   vsBot: (wins, games) => "शब्द रोबोट के खिलाफ़ · " + `${wins} जीत · ${games} खेल`,
+  correctCount: (n, total) => `${total} में से ${n} सही`,
+  colWord: "शब्द",
+  colAnswer: "सही उत्तर",
 };
 
 const am: DuelCopy = {
@@ -1261,6 +1303,9 @@ const am: DuelCopy = {
   vsTitle: "የተጫወቱት ከማን ጋር ነው",
   vsLine: (w, l, t) => `${w} ድሎች · ${l} ሽንፈቶች` + (t ? ` · ${t} አቻ` : ""),
   vsBot: (wins, games) => "ከቃላት ሮቦት ጋር · " + `${wins} ድሎች · ${games} ጨዋታዎች`,
+  correctCount: (n, total) => `ከ${total} ${n} ትክክል`,
+  colWord: "ቃል",
+  colAnswer: "ትክክለኛው መልስ",
 };
 
 const uk: DuelCopy = {
@@ -1345,6 +1390,9 @@ const uk: DuelCopy = {
   vsTitle: "З ким ви грали",
   vsLine: (w, l, t) => `Перемог: ${w} · Поразок: ${l}` + (t ? ` · Нічиїх: ${t}` : ""),
   vsBot: (wins, games) => "Проти Словобота · " + `Перемог: ${wins} · Ігор: ${games}`,
+  correctCount: (n, total) => `Правильно: ${n} з ${total}`,
+  colWord: "Слово",
+  colAnswer: "Правильна відповідь",
 };
 
 const tr: DuelCopy = {
@@ -1429,6 +1477,9 @@ const tr: DuelCopy = {
   vsTitle: "Kimlerle oynadın",
   vsLine: (w, l, t) => `${w} galibiyet · ${l} mağlubiyet` + (t ? ` · ${t} beraberlik` : ""),
   vsBot: (wins, games) => "Kelime Robotuna karşı · " + `${wins} galibiyet · ${games} oyun`,
+  correctCount: (n, total) => `${total} sorudan ${n} doğru`,
+  colWord: "Kelime",
+  colAnswer: "Doğru cevap",
 };
 
 const pl: DuelCopy = {
@@ -1513,6 +1564,9 @@ const pl: DuelCopy = {
   vsTitle: "Z kim grasz",
   vsLine: (w, l, t) => `Wygrane: ${w} · Przegrane: ${l}` + (t ? ` · Remisy: ${t}` : ""),
   vsBot: (wins, games) => "Z Robotem Słów · " + `Wygrane: ${wins} · Gry: ${games}`,
+  correctCount: (n, total) => `Poprawnie: ${n} z ${total}`,
+  colWord: "Słowo",
+  colAnswer: "Poprawna odpowiedź",
 };
 
 const fa: DuelCopy = {
@@ -1597,6 +1651,9 @@ const fa: DuelCopy = {
   vsTitle: "با چه کسانی بازی کرده‌اید",
   vsLine: (w, l, t) => `${w} برد · ${l} باخت` + (t ? ` · ${t} مساوی` : ""),
   vsBot: (wins, games) => "در برابر ربات کلمات · " + `${wins} برد · ${games} بازی`,
+  correctCount: (n, total) => `${n} از ${total} درست`,
+  colWord: "کلمه",
+  colAnswer: "پاسخ درست",
 };
 
 const id: DuelCopy = {
@@ -1681,6 +1738,9 @@ const id: DuelCopy = {
   vsTitle: "Lawan yang pernah kamu hadapi",
   vsLine: (w, l, t) => `${w} menang · ${l} kalah` + (t ? ` · ${t} seri` : ""),
   vsBot: (wins, games) => "Lawan Robot Kata · " + `${wins} menang · ${games} permainan`,
+  correctCount: (n, total) => `${n} dari ${total} benar`,
+  colWord: "Kata",
+  colAnswer: "Jawaban benar",
 };
 
 const nl: DuelCopy = {
@@ -1765,6 +1825,9 @@ const nl: DuelCopy = {
   vsTitle: "Tegen wie je speelde",
   vsLine: (w, l, t) => `${w} gewonnen · ${l} verloren` + (t ? ` · ${t} gelijk` : ""),
   vsBot: (wins, games) => "Tegen de Woordrobot · " + `${wins} gewonnen · ${games} gespeeld`,
+  correctCount: (n, total) => `${n} van ${total} goed`,
+  colWord: "Woord",
+  colAnswer: "Goed antwoord",
 };
 
 const el: DuelCopy = {
@@ -1849,6 +1912,9 @@ const el: DuelCopy = {
   vsTitle: "Με ποιους έπαιξες",
   vsLine: (w, l, t) => `${w} νίκες · ${l} ήττες` + (t ? ` · ${t} ισοπαλίες` : ""),
   vsBot: (wins, games) => "Με το Ρομπότ των λέξεων · " + `${wins} νίκες · ${games} παιχνίδια`,
+  correctCount: (n, total) => `${n} από ${total} σωστές`,
+  colWord: "Λέξη",
+  colAnswer: "Σωστή απάντηση",
 };
 
 const zu: DuelCopy = {
@@ -1933,6 +1999,9 @@ const zu: DuelCopy = {
   vsTitle: "Odlale nabo",
   vsLine: (w, l, t) => `Ukunqoba: ${w} · Ukuhlulwa: ${l}` + (t ? ` · Okulinganayo: ${t}` : ""),
   vsBot: (wins, games) => "Bhekana neRobhothi Lamagama · " + `Ukunqoba: ${wins} · Imidlalo: ${games}`,
+  correctCount: (n, total) => `${n} kwezi-${total} kulungile`,
+  colWord: "Igama",
+  colAnswer: "Impendulo efanele",
 };
 
 const vi: DuelCopy = {
@@ -2017,6 +2086,9 @@ const vi: DuelCopy = {
   vsTitle: "Bạn đã đấu với ai",
   vsLine: (w, l, t) => `${w} thắng · ${l} thua` + (t ? ` · ${t} hòa` : ""),
   vsBot: (wins, games) => "Đấu với Robot Từ vựng · " + `${wins} thắng · ${games} ván`,
+  correctCount: (n, total) => `Đúng ${n}/${total}`,
+  colWord: "Từ",
+  colAnswer: "Đáp án đúng",
 };
 
 const fil: DuelCopy = {
@@ -2101,6 +2173,9 @@ const fil: DuelCopy = {
   vsTitle: "Mga nakalaban mo",
   vsLine: (w, l, t) => `${w} panalo · ${l} talo` + (t ? ` · ${t} tabla` : ""),
   vsBot: (wins, games) => "Laban sa Word Bot · " + `${wins} panalo · ${games} laro`,
+  correctCount: (n, total) => `${n} sa ${total} ang tama`,
+  colWord: "Salita",
+  colAnswer: "Tamang sagot",
 };
 
 const af: DuelCopy = {
@@ -2185,6 +2260,9 @@ const af: DuelCopy = {
   vsTitle: "Teen wie jy gespeel het",
   vsLine: (w, l, t) => `${w} oorwinnings · ${l} nederlae` + (t ? ` · ${t} gelykop` : ""),
   vsBot: (wins, games) => "Teen Woordrobot · " + `${wins} oorwinnings · ${games} spele`,
+  correctCount: (n, total) => `${n} uit ${total} reg`,
+  colWord: "Woord",
+  colAnswer: "Regte antwoord",
 };
 
 const sw: DuelCopy = {
@@ -2269,6 +2347,9 @@ const sw: DuelCopy = {
   vsTitle: "Uliocheza nao",
   vsLine: (w, l, t) => `Ushindi ${w} · Kushindwa ${l}` + (t ? ` · Sare ${t}` : ""),
   vsBot: (wins, games) => "Dhidi ya Roboti ya Maneno · " + `Ushindi ${wins} · Michezo ${games}`,
+  correctCount: (n, total) => `${n} kati ya ${total} sahihi`,
+  colWord: "Neno",
+  colAnswer: "Jibu sahihi",
 };
 
 const zhCN: DuelCopy = {
@@ -2353,6 +2434,9 @@ const zhCN: DuelCopy = {
   vsTitle: "你的对手",
   vsLine: (w, l, t) => `${w}胜 · ${l}负` + (t ? ` · ${t}平` : ""),
   vsBot: (wins, games) => "挑战单词机器人 · " + `${wins}胜 · ${games}局`,
+  correctCount: (n, total) => `答对 ${n}/${total}`,
+  colWord: "单词",
+  colAnswer: "正确答案",
 };
 
 const zhTW: DuelCopy = {
@@ -2437,6 +2521,9 @@ const zhTW: DuelCopy = {
   vsTitle: "你的對手",
   vsLine: (w, l, t) => `${w}勝 · ${l}負` + (t ? ` · ${t}和` : ""),
   vsBot: (wins, games) => "挑戰單字機器人 · " + `${wins}勝 · ${games}局`,
+  correctCount: (n, total) => `答對 ${n}/${total}`,
+  colWord: "單字",
+  colAnswer: "正確答案",
 };
 
 const ko: DuelCopy = {
@@ -2521,6 +2608,9 @@ const ko: DuelCopy = {
   vsTitle: "대결한 상대",
   vsLine: (w, l, t) => `${w}승 · ${l}패` + (t ? ` · ${t}무` : ""),
   vsBot: (wins, games) => "단어 로봇과 대결 · " + `${wins}승 · ${games}판`,
+  correctCount: (n, total) => `${total}문제 중 ${n}개 정답`,
+  colWord: "단어",
+  colAnswer: "정답",
 };
 
 const th: DuelCopy = {
@@ -2605,6 +2695,9 @@ const th: DuelCopy = {
   vsTitle: "คนที่คุณเคยดวลด้วย",
   vsLine: (w, l, t) => `ชนะ ${w} · แพ้ ${l}` + (t ? ` · เสมอ ${t}` : ""),
   vsBot: (wins, games) => "ดวลกับหุ่นยนต์คำศัพท์ · " + `ชนะ ${wins} · เล่น ${games}`,
+  correctCount: (n, total) => `ถูก ${n} จาก ${total}`,
+  colWord: "คำ",
+  colAnswer: "คำตอบที่ถูก",
 };
 
 const bn: DuelCopy = {
@@ -2689,6 +2782,9 @@ const bn: DuelCopy = {
   vsTitle: "যাদের সাথে খেলেছ",
   vsLine: (w, l, t) => `${w} জয় · ${l} হার` + (t ? ` · ${t} ড্র` : ""),
   vsBot: (wins, games) => "শব্দ রোবটের বিরুদ্ধে · " + `${wins} জয় · ${games} খেলা`,
+  correctCount: (n, total) => `${total}টির মধ্যে ${n}টি সঠিক`,
+  colWord: "শব্দ",
+  colAnswer: "সঠিক উত্তর",
 };
 
 const da: DuelCopy = {
@@ -2773,6 +2869,9 @@ const da: DuelCopy = {
   vsTitle: "Hvem du har spillet mod",
   vsLine: (w, l, t) => `${w} sejre · ${l} nederlag` + (t ? ` · ${t} uafgjort` : ""),
   vsBot: (wins, games) => "Mod Ordrobotten · " + `${wins} sejre · ${games} spil`,
+  correctCount: (n, total) => `${n} af ${total} rigtige`,
+  colWord: "Ord",
+  colAnswer: "Rigtigt svar",
 };
 
 const hu: DuelCopy = {
@@ -2857,6 +2956,9 @@ const hu: DuelCopy = {
   vsTitle: "Kikkel játszottál",
   vsLine: (w, l, t) => `${w} győzelem · ${l} vereség` + (t ? ` · ${t} döntetlen` : ""),
   vsBot: (wins, games) => "A Szórobot ellen · " + `${wins} győzelem · ${games} játék`,
+  correctCount: (n, total) => `${total}-ből ${n} helyes`,
+  colWord: "Szó",
+  colAnswer: "Helyes válasz",
 };
 
 export const DUEL_COPY: Record<string, DuelCopy> = {

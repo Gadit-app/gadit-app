@@ -198,22 +198,55 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
         </div>
       )}
 
-      {ph.kind === "done" && otherP && (
-        <div className="duel-card">
-          {board}
-          <h2 className="duel-h duel-final">
-            {view.scores[me] > view.scores[other] ? t.win : view.scores[me] < view.scores[other] ? t.lose(otherP.name) : t.tie}
-          </h2>
-          {view.recap && (
-            <div className="duel-recap">
-              <div className="duel-recap-h">{t.recapTitle}</div>
-              {view.recap.map((r, i) => (
-                <div key={i} className="duel-recap-row">
-                  <span className={r[me] === r.correctIdx ? "is-good" : "is-bad"}>{r[me] === r.correctIdx ? "✓" : "✗"}</span>
-                  <b><bdi>{r.prompt}</bdi></b>
-                  <span><bdi>{r.answer}</bdi></span>
+      {ph.kind === "done" && otherP && (() => {
+        const outcome = view.scores[me] > view.scores[other] ? "win" : view.scores[me] < view.scores[other] ? "lose" : "tie";
+        const rights = (s: Seat) => (view.recap ?? []).filter((r) => r[s] === r.correctIdx).length;
+        const mark = (r: NonNullable<DuelView["recap"]>[number], s: Seat) => {
+          const choice = r[s];
+          const text = s === "a" ? r.aText : r.bText;
+          const pts = s === "a" ? r.aPoints : r.bPoints;
+          if (choice == null) return <span className="duel-mark is-none" title={t.noAnswer}>⏱</span>;
+          if (choice === r.correctIdx) return <span className="duel-mark is-good">✓{pts ? <small>+{pts}</small> : null}</span>;
+          return <span className="duel-mark is-bad">✗{text ? <small><bdi>{text}</bdi></small> : null}</span>;
+        };
+        return (
+        <div className="duel-card duel-end">
+          <div className={`duel-end-banner is-${outcome}`}>
+            <span className="duel-end-emoji" aria-hidden="true">{outcome === "win" ? "🏆" : outcome === "lose" ? "💪" : "🤝"}</span>
+            <h2 className="duel-h duel-final">{outcome === "win" ? t.win : outcome === "lose" ? t.lose(otherP.name) : t.tie}</h2>
+          </div>
+          <div className="duel-end-scores">
+            {([me, other] as Seat[]).map((s) => {
+              const p = view.players[s] ?? meP;
+              const lead = view.scores[s] > view.scores[s === "a" ? "b" : "a"];
+              return (
+                <div key={s} className={`duel-end-player${s === me ? " is-me" : ""}${lead ? " is-lead" : ""}`}>
+                  <Face p={p} />
+                  <span className="duel-end-name" dir="auto">{s === me ? t.you : p.name}</span>
+                  <span className="duel-end-score">{view.scores[s]}</span>
+                  <span className="duel-end-right">{t.correctCount(rights(s), view.total)}</span>
                 </div>
-              ))}
+              );
+            })}
+          </div>
+          {view.recap && (
+            <div className="duel-rtable-wrap">
+              <table className="duel-rtable">
+                <caption>{t.recapTitle}</caption>
+                <thead>
+                  <tr><th scope="col">{t.colWord}</th><th scope="col">{t.colAnswer}</th><th scope="col">{t.you}</th><th scope="col"><bdi>{otherP.name}</bdi></th></tr>
+                </thead>
+                <tbody>
+                  {view.recap.map((r, i) => (
+                    <tr key={i}>
+                      <td className="duel-rt-word"><bdi>{r.prompt}</bdi></td>
+                      <td><bdi>{r.answer}</bdi></td>
+                      <td>{mark(r, me)}</td>
+                      <td>{mark(r, other)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
           {otherP.kind === "person" && view.rematch && !view.rematch.mine && (
@@ -228,7 +261,8 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
             <button type="button" className="duel-btn is-soft" onClick={onExit}>{t.backToGames}</button>
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
