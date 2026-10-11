@@ -1,3 +1,4 @@
+import { curriculumHint } from "@/lib/curriculum-words";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
@@ -1096,7 +1097,7 @@ If you find yourself emitting more than two quote-like marks in any field, you a
 
 Output ONLY the JSON object.`;
 
-  const userMessage = `Word: "${word}"\nUI language: ${uiLangName}`;
+  const userMessage = `Word: "${word}"\nUI language: ${uiLangName}${await curriculumHint(word)}`;
 
   // Two gpt-4o passes at different temperatures — the goal is variance,
   // not redundancy. gpt-4o-mini was the SECOND attempt until 2026-08-01,
@@ -1696,7 +1697,7 @@ export async function POST(req: NextRequest) {
     const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
       ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
-      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`;
+      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}${await curriculumHint(word)}`;
 
     // Stream from OpenAI
     let openAIResponse: Response;
