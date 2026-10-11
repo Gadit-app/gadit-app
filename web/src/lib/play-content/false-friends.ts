@@ -574,6 +574,15 @@ const ROUNDS_BY_LANG: Record<string, FalseFriendsRound[]> = {
   ru: FALSE_FRIENDS_ROUNDS_RU,
 };
 
+
+/** Content for a language that ships as a file (Gadi 2026-10-11: native
+ *  rounds for the 29 languages beyond he/en/ar/ru, loaded on the play page
+ *  by lib/play-content/remote.ts). */
+export function registerFalseFriendsRounds(lang: string, rounds: FalseFriendsRound[], kids?: FalseFriendsRound[]): void {
+  if (rounds.length) ROUNDS_BY_LANG[lang] = rounds;
+  void kids;
+}
+
 export function pickFalseFriendsRounds(
   count: number,
   lang: string = "en",

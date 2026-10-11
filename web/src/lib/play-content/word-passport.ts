@@ -149,6 +149,11 @@ const LANG_LABEL_BY_CONTENT_LANG: Record<string, Record<OriginCountry, string>> 
   ru: LANG_LABEL_RU,
 };
 
+/** Origin-language names for a language whose content ships as a file. */
+export function registerPassportLabels(lang: string, labels: Partial<Record<OriginCountry, string>>): void {
+  LANG_LABEL_BY_CONTENT_LANG[lang] = { ...LANG_LABEL_EN, ...labels };
+}
+
 export function getLangLabel(country: OriginCountry, contentLang: string): string {
   const map = LANG_LABEL_BY_CONTENT_LANG[contentLang] ?? LANG_LABEL_EN;
   return map[country];
@@ -592,6 +597,15 @@ const ROUNDS_BY_LANG: Record<string, WordPassportRound[]> = {
   ar: WORD_PASSPORT_ROUNDS_AR,
   ru: WORD_PASSPORT_ROUNDS_RU,
 };
+
+
+/** Content for a language that ships as a file (Gadi 2026-10-11: native
+ *  rounds for the 29 languages beyond he/en/ar/ru, loaded on the play page
+ *  by lib/play-content/remote.ts). */
+export function registerWordPassportRounds(lang: string, rounds: WordPassportRound[], kids?: WordPassportRound[]): void {
+  if (rounds.length) ROUNDS_BY_LANG[lang] = rounds;
+  void kids;
+}
 
 export function pickWordPassportRounds(
   count: number,

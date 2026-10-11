@@ -855,14 +855,25 @@ const ROUNDS_BY_LANG_KIDS: Record<string, MeaningLensRound[]> = {
   he: MEANING_LENS_ROUNDS_KIDS_HE,
 };
 
+
+/** Content for a language that ships as a file (Gadi 2026-10-11: native
+ *  rounds for the 29 languages beyond he/en/ar/ru, loaded on the play page
+ *  by lib/play-content/remote.ts). */
+export function registerMeaningLensRounds(lang: string, rounds: MeaningLensRound[], kids?: MeaningLensRound[]): void {
+  if (rounds.length) ROUNDS_BY_LANG[lang] = rounds;
+  if (kids?.length) ROUNDS_BY_LANG_KIDS[lang] = kids;
+}
+
 export function pickMeaningLensRounds(
   count: number,
   lang: string = "en",
   kids: boolean = false,
 ): { rounds: MeaningLensRound[]; contentLang: string } {
   if (kids) {
-    const kidsLang = ROUNDS_BY_LANG_KIDS[lang] ? lang : "en";
-    const kidsPool = ROUNDS_BY_LANG_KIDS[kidsLang];
+    // A language with its own content but no kids set plays the regular
+    // set in its own language, never English (Gadi 2026-10-11: ar, ru).
+    const kidsLang = ROUNDS_BY_LANG_KIDS[lang] ? lang : ROUNDS_BY_LANG[lang] ? "" : "en";
+    const kidsPool = kidsLang ? ROUNDS_BY_LANG_KIDS[kidsLang] : undefined;
     if (kidsPool && kidsPool.length > 0) {
       const shuffled = kidsPool.slice();
       for (let i = shuffled.length - 1; i > 0; i--) {

@@ -66,6 +66,7 @@ import { duelCopy } from "@/components/play/duel/duel-i18n";
 import { DUEL_GAMES, duelQuestionsFor } from "@/lib/duel-games";
 import type { DuelQuestion } from "@/lib/duel";
 import { TF_COPY } from "@/components/play/GameTrueFalse";
+import { ensurePlayContent } from "@/lib/play-content/remote";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -3426,6 +3427,14 @@ export function PlayPage() {
   // so the word games play on that language's words at the kid's edge.
   const [learn, setLearn] = useState<LearnState | null>(null);
   const [learnRefresh, setLearnRefresh] = useState(0);
+  // The curated games' own-language rounds for the 29 languages beyond
+  // he/en/ar/ru load as files; their cards wait for them (Gadi 2026-10-11).
+  const [curatedReady, setCuratedReady] = useState(["en", "he", "ar", "ru"].includes(lang));
+  useEffect(() => {
+    let alive = true;
+    void ensurePlayContent(lang).then(() => { if (alive) setCuratedReady(true); });
+    return () => { alive = false; };
+  }, [lang]);
   const learning = !!learn?.lang && learn.pool.length >= 4;
   const learnPool = useMemo<PlayWord[]>(
     () => (learn?.lang ? learn.pool.map((x) => ({ word: x.w, meaning: x.t, examples: [], language: learn.lang!, uiLang: learn.lang!, ...(x.en ? { picWord: x.en } : {}) })) : []),
@@ -3622,7 +3631,7 @@ export function PlayPage() {
       id: "twin",
       title: t.twinTitle,
       desc: t.twinDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "sky",
       category: "precision",
       kidsFriendly: true,
@@ -3637,7 +3646,7 @@ export function PlayPage() {
       id: "time",
       title: t.timeTitle,
       desc: t.timeDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "emerald",
       category: "origin",
       icon: (
@@ -3651,7 +3660,7 @@ export function PlayPage() {
       id: "passport",
       title: t.passportTitle,
       desc: t.passportDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "violet",
       category: "origin",
       icon: (
@@ -3665,7 +3674,7 @@ export function PlayPage() {
       id: "friends",
       title: t.friendsTitle,
       desc: t.friendsDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "coral",
       category: "precision",
       icon: (
@@ -3679,7 +3688,7 @@ export function PlayPage() {
       id: "root",
       title: t.rootTitle,
       desc: t.rootDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "lime",
       category: "origin",
       icon: (
@@ -3696,7 +3705,7 @@ export function PlayPage() {
       id: "shade",
       title: t.shadeTitle,
       desc: t.shadeDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "amber",
       category: "precision",
       icon: (
@@ -3710,7 +3719,7 @@ export function PlayPage() {
       id: "build",
       title: t.buildTitle,
       desc: t.buildDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "indigo",
       category: "structure",
       icon: (
@@ -3725,7 +3734,7 @@ export function PlayPage() {
       id: "idiom",
       title: t.idiomTitle,
       desc: t.idiomDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "fuchsia",
       category: "structure",
       kidsFriendly: true,
@@ -3739,7 +3748,7 @@ export function PlayPage() {
       id: "lens",
       title: t.lensTitle,
       desc: t.lensDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "cyan",
       category: "structure",
       kidsFriendly: true,
@@ -3754,7 +3763,7 @@ export function PlayPage() {
       id: "artist",
       title: t.artistTitle,
       desc: t.artistDesc,
-      enabled: true,
+      enabled: curatedReady,
       accent: "pink",
       category: "origin",
       kidsFriendly: true,
