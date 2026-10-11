@@ -16,6 +16,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildSpeedDeck } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 
@@ -81,6 +82,7 @@ export function GameSpeed({
     const q = deck[idx];
     if (!q) return;
     setPicked(i);
+    reportAnswer(q.word.word, i === q.correctIdx);
     if (i === q.correctIdx) setScore((s) => s + 1);
     else setTimeLeft((t) => Math.max(0, t - WRONG_PENALTY));
     // Quick advance — 220ms reveal then next.

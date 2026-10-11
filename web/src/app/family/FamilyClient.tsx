@@ -28,6 +28,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
 import { DuelPermission } from "@/components/play/duel/DuelPermission";
+import { learnCopy } from "@/components/play/learn/learn-i18n";
 import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
@@ -679,6 +680,7 @@ type ChildProgress = {
   recent: string[];
   streak: number;
   rankKey: RankKey;
+  learning?: { lang: "en" | "he"; learnedWeek: number; learnedTotal: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
 };
 
 const PROGRESS_COPY: Record<string, {
@@ -1147,7 +1149,7 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
           <Link href={href(`/family/${c.memberId}/pair`)} className="fam-dash-pair">{t.pairCta}</Link>
         </>
       ) : c.total === 0 ? (
-        <div className="fam-dash-note">{t.noneYet}</div>
+        !c.learning && <div className="fam-dash-note">{t.noneYet}</div>
       ) : (
         <>
           <div className="fam-dash-hero">
@@ -1176,6 +1178,18 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
           )}
         </>
       )}
+      {/* Learning mode (Gadi 2026-10-11): real numbers, never a level. */}
+      {c.linked && c.learning && (() => {
+        const lc = learnCopy(lang);
+        const L = c.learning;
+        return (
+          <div className="fam-dash-learn">
+            <b>🎒 {lc.learning(L.lang === "en" ? lc.english : lc.hebrew)}</b>
+            <span>{L.learnedWeek} {lc.learnedWeek} · {L.reinforce} {lc.reinforce}</span>
+            {L.list && <span className="is-list">📝 {L.list.ready}/{L.list.total} {lc.listReady(L.list.testDate)}</span>}
+          </div>
+        );
+      })()}
     </div>
   );
 }
@@ -3345,6 +3359,9 @@ const FAM_DASH_CSS = `
 .fam-dash-badge-rank   { background: rgba(124,58,237,0.11); color: #6d28d9; }
 .fam-dash-badge-week   { background: rgba(14,165,165,0.12); color: #0f766e; }
 .fam-dash-recent { margin-top: 18px; border-top: 1px dashed rgba(31,41,55,0.12); padding-top: 14px; }
+.fam-dash-learn { margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: #FFF8E8; display: grid; gap: 3px; font-size: 13.5px; color: #4A5A55; }
+.fam-dash-learn b { font-size: 14.5px; color: #172320; }
+.fam-dash-learn .is-list { color: #8A5A00; font-weight: 700; }
 .fam-dash-recent-label { font-size: 12px; color: var(--ink-faint); font-weight: 700; margin-bottom: 8px; }
 .fam-dash-chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .fam-dash-chip {

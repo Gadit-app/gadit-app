@@ -29,6 +29,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { PlayWord } from "@/lib/play-engine";
 import { shuffle, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { TTSButton } from "@/components/design/TTSButton";
+import { wordLangOf } from "@/lib/play-engine";
+import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
@@ -137,6 +140,7 @@ export function GameFlashcards({
   t,
   focusWord,
   mode = "words",
+  skipPicker = false,
 }: {
   pool: PlayWord[];
   onExit: () => void;
@@ -144,6 +148,8 @@ export function GameFlashcards({
   t: PlayT;
   focusWord?: string;
   mode?: FlashMode;
+  /** Learning mode: play the given words straight away (no source picker). */
+  skipPicker?: boolean;
 }) {
   const f = flashCopy(lang);
   const title = mode === "words" ? f.wordsTitle : f.defsTitle;
@@ -157,7 +163,7 @@ export function GameFlashcards({
   // typing start on the right (Gadi 2026-10-09), whatever gets pasted.
   const fieldDir = ["he", "ar", "fa"].includes(lang) ? "rtl" : "ltr";
   // Where the words come from: the notebook, or a set picked on the start screen.
-  const offerPick = mode === "words" && !focusWord;
+  const offerPick = mode === "words" && !focusWord && !skipPicker;
   const offerSets = offerPick && lang !== "en";
   const [source, setSource] = useState<"mine" | Picked | null>(offerPick ? null : "mine");
   const picked = source && source !== "mine" ? source : null;
@@ -443,6 +449,7 @@ export function GameFlashcards({
   function answer(knew: boolean) {
     if (!card || !deck) return;
     if (!card.repeat) {
+      reportAnswer(card.word.word, knew);
       if (knew) setKnown((k) => k + 1);
       else setMissed((m) => [...m, card]);
     }
@@ -508,6 +515,8 @@ export function GameFlashcards({
           </span>
         </span>
       </button>
+      {/* Hear the word, outside the card so a tap never flips it (Gadi 2026-10-11). */}
+      <div className="wb-flash-say"><TTSButton text={card.word.word} audioLang={wordLangOf(card.word)} useOpenAI ariaLabel={card.word.word} className="wb-word-act-icon wb-play-speak" /></div>
       {flipped && (
         <div className="wb-flash-actions">
           <button type="button" className="wb-flash-btn wb-flash-no" onClick={() => answer(false)}>{f.notYet}</button>

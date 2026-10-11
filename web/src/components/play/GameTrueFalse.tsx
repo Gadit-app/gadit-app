@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import type { PlayWord, TrueFalseRound } from "@/lib/play-engine";
 import { buildTrueFalseRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { TF_MORE } from "./play-games-i18n";
@@ -59,6 +60,7 @@ export function GameTrueFalse({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
   function pick(v: boolean) {
     if (answer !== null || !r) return;
     setAnswer(v);
+    reportAnswer(r.word.word, v === r.isTrue);
     if (v === r.isTrue) setScore((s) => s + 1);
     else setMissed((m) => [...m, r]);
   }

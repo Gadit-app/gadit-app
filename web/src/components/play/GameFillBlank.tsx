@@ -13,6 +13,7 @@ import { useState, useMemo } from "react";
 import type { PlayWord, FillBlankQuestion } from "@/lib/play-engine";
 import { buildFillBlankQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
 
@@ -42,6 +43,7 @@ export function GameFillBlank({
     if (picked !== null) return;
     setPicked(i);
     const q = questions[idx];
+    reportAnswer(q.word.word, i === q.correctIdx);
     if (i === q.correctIdx) setScore((s) => s + 1);
     else setMissed((m) => [...m, q]);
   }

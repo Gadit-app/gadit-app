@@ -14,6 +14,9 @@ import { useState, useMemo } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildQuizQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { TTSButton } from "@/components/design/TTSButton";
+import { wordLangOf } from "@/lib/play-engine";
+import { reportAnswer } from "@/lib/learn/report";
 import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import type { GameResultData } from "./GameResult";
 
@@ -43,6 +46,7 @@ export function GameQuiz({
     if (picked !== null) return;
     setPicked(i);
     const q = questions[idx];
+    reportAnswer(q.word.word, i === q.correctIdx);
     if (i === q.correctIdx) setScore((s) => s + 1);
     else setMissed((m) => [...m, q]);
   }
@@ -82,6 +86,8 @@ export function GameQuiz({
             English meaning). Let the browser align each per content. */}
         <div className={`wb-play-prompt wb-play-prompt-${q.promptKind}`} lang={lang} dir="auto">
           {nq(q.prompt)}
+          {/* Hear the word (Gadi 2026-10-11, learning mode: pictures and sound first). */}
+          {q.promptKind === "word" && <TTSButton text={q.word.word} audioLang={wordLangOf(q.word)} useOpenAI ariaLabel={q.word.word} className="wb-word-act-icon wb-play-speak" />}
         </div>
       </div>
       <div className="wb-play-options">

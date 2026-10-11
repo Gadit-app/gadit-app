@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import type { PlayWord, MemoryCard } from "@/lib/play-engine";
 import { buildMemoryDeck, SESSION_SIZE } from "@/lib/play-engine";
+import { reportAnswer } from "@/lib/learn/report";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { useNiqqud } from "@/lib/niqqud-display";
@@ -67,6 +68,7 @@ export function GameMemory({
       const a = deck.find((c) => c.id === aId)!;
       const b = deck.find((c) => c.id === bId)!;
       if (a.pairKey === b.pairKey) {
+        reportAnswer(a.word.word, true);
         setMatched((m) => [...m, a.pairKey]);
         setFlipped([]);
       } else {

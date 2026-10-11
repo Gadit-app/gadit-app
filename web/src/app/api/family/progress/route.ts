@@ -37,7 +37,31 @@ type ChildProgress = {
   // computed from the same notebook addedAt dates. 0 / "scout" when empty.
   streak: number;
   rankKey: RankKey;
+  /** Learning mode (Gadi 2026-10-11): real numbers only, never a level. */
+  learning?: { lang: "en" | "he"; learnedWeek: number; learnedTotal: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
 };
+
+/** A child's learning-mode numbers, or null when not learning a language. */
+async function learningOf(uid: string): Promise<ChildProgress["learning"]> {
+  const db = getAdminDb();
+  const learn = (await db.collection("users").doc(uid).get()).get("learn") as
+    { lang?: "en" | "he" | null; list?: { lang: string; items: Array<{ w: string }>; testDate?: string | null; at: number } | null } | undefined;
+  const lang = learn?.lang;
+  if (lang !== "en" && lang !== "he") return null;
+  const snap = await db.collection("users").doc(uid).collection("learnWords").where("lang", "==", lang).get();
+  const now = Date.now();
+  const rows = snap.docs.map((d) => d.data() as { box?: number; wrong?: number; learnedAt?: number; w?: string });
+  const byWord = new Map(rows.map((r) => [String(r.w ?? "").toLowerCase(), r]));
+  const l = learn?.list && learn.list.lang === lang ? learn.list : null;
+  const listOn = !!l && (l.testDate ? now <= Date.parse(`${l.testDate}T23:59:59+03:00`) + 86_400_000 : now - l.at < 14 * 86_400_000);
+  return {
+    lang,
+    learnedWeek: rows.filter((r) => (r.learnedAt ?? 0) >= now - WEEK_MS).length,
+    learnedTotal: rows.filter((r) => (r.box ?? 0) >= 3).length,
+    reinforce: rows.filter((r) => (r.box ?? 0) < 3 && (r.wrong ?? 0) > 0).length,
+    list: listOn && l ? { total: l.items.length, ready: l.items.filter((x) => (byWord.get(x.w.toLowerCase())?.box ?? 0) >= 2).length, testDate: l.testDate ?? null } : null,
+  };
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -91,6 +115,7 @@ export async function GET(req: NextRequest) {
           };
           const uid = m.userId;
           if (!uid) return base;
+          base.learning = await learningOf(uid).catch(() => null);
 
           const notebook = db.collection("users").doc(uid).collection("notebook");
           try {

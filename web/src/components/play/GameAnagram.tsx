@@ -14,6 +14,7 @@ import { useState, useEffect, useMemo } from "react";
 import type { PlayWord, AnagramRound } from "@/lib/play-engine";
 import { buildAnagramRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
+import { reportAnswer } from "@/lib/learn/report";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 
 type TileState = {
@@ -97,9 +98,11 @@ export function GameAnagram({
     const guess = placed.map((t) => t.letter).join("");
     if (guess.toLowerCase() === word.word.word.toLowerCase()) {
       setResultState("correct");
+      reportAnswer(word.word.word, true);
       setScore((s) => s + 1);
     } else {
       setResultState("wrong");
+      reportAnswer(word.word.word, false);
       setMissed((m) => [...m, word]);
     }
   }, [tiles, word, targetLen, resultState]);

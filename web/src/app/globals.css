@@ -8716,6 +8716,9 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 @media (max-width: 599px) {
   .wordbook .wb-play-kids-banner-mascot { width: 76px; height: 76px; margin-top: -30px; }
 }
+/* Hear the word in the games (Gadi 2026-10-11). */
+.wordbook .wb-play-prompt .wb-play-speak { margin-inline-start: 10px; vertical-align: middle; }
+.wordbook .wb-flash-say { display: flex; justify-content: center; margin-top: 10px; }
 /* "Play someone" chip on each multiple-choice game card (Gadi 2026-10-11). */
 .wordbook .wb-play-grid > li.has-duel { position: relative; }
 .wordbook .wb-play-card-duel {

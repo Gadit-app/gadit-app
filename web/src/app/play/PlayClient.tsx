@@ -13,7 +13,7 @@
  */
 
 import { planCopy } from "@/lib/plan-copy";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LANGUAGES } from "@/lib/i18n";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -58,6 +58,9 @@ import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
 import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
+import { LearnCard, type LearnState } from "@/components/play/learn/LearnCard";
+import { setAnswerListener } from "@/lib/learn/report";
+import { LEARN_CSS } from "@/components/play/learn/learn-css";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
 import { DUEL_GAMES, duelQuestionsFor } from "@/lib/duel-games";
 import type { DuelQuestion } from "@/lib/duel";
@@ -3418,10 +3421,41 @@ export function PlayPage() {
     setWordLang(v);
     try { localStorage.setItem("gadit.play.wordLang", v); } catch { /* private mode */ }
   };
-  const gamePool = useMemo(
-    () => (activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
-    [effectivePool, activeWordLang],
+  // Learning mode (Gadi 2026-10-11): the kid picked a language to learn,
+  // so the word games play on that language's words at the kid's edge.
+  const [learn, setLearn] = useState<LearnState | null>(null);
+  const [learnRefresh, setLearnRefresh] = useState(0);
+  const learning = !!learn?.lang && learn.pool.length >= 4;
+  const learnPool = useMemo<PlayWord[]>(
+    () => (learn?.lang ? learn.pool.map((x) => ({ word: x.w, meaning: x.t, examples: [], language: learn.lang!, uiLang: learn.lang! })) : []),
+    [learn],
   );
+  const gamePool = useMemo(
+    () => (learning ? learnPool : activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
+    [learning, learnPool, effectivePool, activeWordLang],
+  );
+  // Every answer in learning mode goes to /api/learn, a few at a time.
+  const learnBuf = useRef<Array<{ w: string; ok: boolean }>>([]);
+  const flushLearn = useCallback(async () => {
+    const lang = learn?.lang;
+    const batch = learnBuf.current.splice(0);
+    if (!lang || !batch.length || !user) return;
+    try {
+      await fetch("/api/learn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ action: "results", lang, results: batch }),
+      });
+    } catch { /* the next batch carries on */ }
+  }, [learn?.lang, user]);
+  useEffect(() => {
+    if (!learning) { setAnswerListener(null); return; }
+    setAnswerListener((w, ok) => {
+      learnBuf.current.push({ w, ok });
+      if (learnBuf.current.length >= 6) void flushLearn();
+    });
+    return () => setAnswerListener(null);
+  }, [learning, flushLearn]);
   // Open the focus game once the notebook has loaded (so the word is in it).
   const focusStartedRef = useRef(false);
   useEffect(() => {
@@ -3747,7 +3781,10 @@ export function PlayPage() {
   // render even when pool is still null. Notebook games gate on `pool` to
   // avoid passing undefined to their builders.
   if (stage.kind === "playing") {
-    const exit = () => setStage({ kind: "menu" });
+    const exit = () => {
+      setStage({ kind: "menu" });
+      if (learning) void flushLearn().then(() => setLearnRefresh((n) => n + 1));
+    };
     const curatedProps = { onExit: exit, lang, t };
     if (stage.game === "twin") {
       return (
@@ -3830,7 +3867,9 @@ export function PlayPage() {
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
             UI). Anagram is excluded: its tiles are single letters. */}
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
-          {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} mode="words" />}
+          {stage.game === "flashcards" && (learning
+            ? <GameFlashcards {...props} mode="meanings" skipPicker />
+            : <GameFlashcards {...props} focusWord={focusWord} mode="words" />)}
           {stage.game === "flashdefs" && <GameFlashcards {...props} focusWord={focusWord} mode="meanings" />}
           {stage.game === "truefalse" && <GameTrueFalse {...props} />}
           {stage.game === "quiz" && <GameQuiz {...props} />}
@@ -3925,6 +3964,14 @@ export function PlayPage() {
             unpaid user (gentle upsell). Non-signed-in and Basic-plan
             users see the gate state; only Clear/Deep can actually
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
+        {/* "What are you learning now?" (Gadi 2026-10-11). */}
+        {isPaid && (
+          <>
+            <style>{LEARN_CSS}</style>
+            <LearnCard lang={lang} dir={dir} refreshKey={learnRefresh} onState={setLearn} />
+          </>
+        )}
+
         {/* Kids Mode and Word Duel side by side, one card family (Gadi
             2026-10-11: the duel strip looked unrelated to the Kids banner). */}
         <div className={`wb-play-banners${isPaid ? " has-duel" : ""}`}>
@@ -4040,7 +4087,7 @@ export function PlayPage() {
             // with an empty notebook.
             return (
               <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                {section.id === "notebook" && langCounts.length >= 2 ? (
+                {section.id === "notebook" && langCounts.length >= 2 && !learning ? (
                   <div className="wb-play-section-head">
                     <h2 className="wb-play-section-heading">{section.label}</h2>
                     <div className="wb-play-langs" role="radiogroup" aria-label={wordsInLabel(lang)}>
