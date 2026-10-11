@@ -188,6 +188,33 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ sent: false, reason: "already_notified", utmStored: !!utm });
     }
 
+    // A family member's device joining with a pairing code is not a new
+    // signup (Gadi 2026-10-11: two "(no email)" signups were the Koren kids'
+    // tablets). Tell Gadi which family and who, and send nothing else.
+    const famId = typeof decoded.familyId === "string" ? decoded.familyId : "";
+    const memberId = typeof decoded.memberId === "string" ? decoded.memberId : "";
+    if (!email && famId && memberId) {
+      await userRef.set({ notifiedSignup: true, notifiedSignupAt: FieldValue.serverTimestamp() }, { merge: true });
+      const resendKey = process.env.RESEND_API_KEY;
+      const notifyTo = process.env.NOTIFY_EMAIL;
+      if (resendKey && notifyTo) {
+        const [m, owner] = await Promise.all([
+          db.collection("families").doc(famId).collection("members").doc(memberId).get(),
+          db.collection("users").doc(famId).get(),
+        ]);
+        const name = String(m.get("name") ?? "") || memberId;
+        const role = String(decoded.role ?? m.get("role") ?? "");
+        const ownerEmail = String(owner.get("email") ?? famId);
+        await sendMail({
+          from: "Gadit <notify@gadit.app>",
+          to: notifyTo,
+          subject: `🔗 Device connected: ${name} (${role || "member"}) · family of ${ownerEmail}`,
+          html: `<div style="font-family:system-ui,sans-serif;font-size:15px;color:#111827;line-height:1.6;"><b>${escapeHtml(name)}</b> (${escapeHtml(role || "member")}) connected a device to the family of <b>${escapeHtml(ownerEmail)}</b> with a pairing code.<br><span style="color:#6B7280;font-size:13px;">Not a new signup. UID ${escapeHtml(uid)}</span></div>`,
+        }).catch(() => null);
+      }
+      return NextResponse.json({ sent: true, reason: "family_device" });
+    }
+
     // Throwaway inbox → suppress ALL mail (admin notify + welcome + drip).
     // We still keep the account (they can use the app), but mailing a
     // disposable address bounces and poisons the gadit.app sender
