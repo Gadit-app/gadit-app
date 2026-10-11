@@ -3,7 +3,7 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { LANGUAGES } from "@/lib/i18n";
 import { isInternalEmail } from "@/lib/internal-accounts";
 import { schoolLang } from "@/lib/email-drip/school-drip";
-import { dunningIsHebrew } from "@/lib/dunning-email";
+import { dunningLang } from "@/lib/dunning-email";
 import {
   LEDGER_SERIES,
   SIGNUP_STEPS,
@@ -149,12 +149,12 @@ export async function GET(req: NextRequest) {
       one(
         "payment-failed",
         grace ? new Date(grace - GRACE_MS).toISOString() : null,
-        dunningIsHebrew(d, {}) ? "he" : "en",
+        dunningLang(d, {}),
         grace ? { approx: true } : {},
       );
     }
     if (typeof d.dunningReminderInvoice === "string" && d.dunningReminderInvoice) {
-      one("payment-reminder", null, dunningIsHebrew(d, {}) ? "he" : "en");
+      one("payment-reminder", null, dunningLang(d, {}));
     }
 
     if (!sends.some((s) => !s.skipped)) continue; // only people who actually got an email

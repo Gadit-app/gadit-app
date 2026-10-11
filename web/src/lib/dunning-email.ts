@@ -1,4 +1,5 @@
 import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
+import BILLING_I18N from "@/lib/billing-email-i18n.json";
 /**
  * Failed-renewal ("dunning") emails, shared by the Stripe webhook (first
  * email, on invoice.payment_failed) and the daily grace cron (one reminder on
@@ -24,50 +25,43 @@ export function dunningIsHebrew(
   );
 }
 
+/** The email's language (Gadi 2026-10-11, all 33): Hebrew by the rule above,
+ *  otherwise the user's UI language when we have copy for it, else English. */
+export function dunningLang(
+  user: { uiLang?: unknown; country?: unknown },
+  invoice: { currency?: string | null; country?: string | null },
+): string {
+  if (dunningIsHebrew(user, invoice)) return "he";
+  const l = typeof user.uiLang === "string" ? user.uiLang : "";
+  return l && l in COPY ? l : "en";
+}
+
+type DunningCopy = (typeof BILLING_I18N)["en"]["dunning"];
+const COPY = BILLING_I18N as Record<string, { dunning: DunningCopy }>;
+const RTL = new Set(["he", "ar", "fa"]);
+
 export function buildDunningEmail(opts: {
-  he: boolean;
+  lang: string;
   url: string;
   kind: "first" | "reminder";
   /** Whole days of access left (reminder only). */
   daysLeft?: number;
 }): { subject: string; html: string } {
-  const { he, url, kind } = opts;
+  const { url, kind } = opts;
   const days = Math.max(1, opts.daysLeft ?? 2);
   const first = kind === "first";
-
-  const t = he
-    ? {
-        subject: first
-          ? "החיוב לא עבר. יש לך 7 ימים לעדכן כרטיס"
-          : `תזכורת: נשארו ${days} ימים לעדכן את הכרטיס`,
-        h1: first ? "החיוב על המנוי לא עבר" : "הכרטיס עדיין לא עודכן",
-        p1: first
-          ? "ניסינו לחדש את המנוי שלך ב-Gadit והחיוב לא עבר, כנראה הכרטיס נדחה או פג תוקף."
-          : "החיוב על המנוי שלך ב-Gadit עדיין לא עבר.",
-        p2: first
-          ? "<b>הגישה שלך נשמרת ל-7 ימים.</b> עדכון הכרטיס לוקח פחות מדקה, והכל ממשיך כרגיל, בלי לאבד את המחברות וההתקדמות של הילדים."
-          : `<b>בעוד ${days} ימים הגישה יורדת למסלול החינמי.</b> עדכון הכרטיס לוקח פחות מדקה, והמחברות וההתקדמות של הילדים נשמרות.`,
-        cta: "עדכון כרטיס",
-        foot: "אם כבר עדכנת, אפשר להתעלם מהמייל הזה. אם משהו לא ברור, אפשר פשוט להשיב למייל ואנחנו כאן.",
-        sign: "צוות Gadit",
-        dir: "rtl",
-      }
-    : {
-        subject: first
-          ? "Your payment didn't go through. You have 7 days to update your card"
-          : `Reminder: ${days} ${days === 1 ? "day" : "days"} left to update your card`,
-        h1: first ? "Your subscription payment didn't go through" : "Your card still needs updating",
-        p1: first
-          ? "We tried to renew your Gadit subscription and the charge didn't go through, most likely a declined or expired card."
-          : "The payment for your Gadit subscription still hasn't gone through.",
-        p2: first
-          ? "<b>Your access stays on for 7 days.</b> Updating your card takes less than a minute, and everything continues as usual, without losing your children's notebooks and progress."
-          : `<b>In ${days} ${days === 1 ? "day" : "days"} your access moves to the free plan.</b> Updating your card takes less than a minute, and your children's notebooks and progress are kept.`,
-        cta: "Update card",
-        foot: "If you already updated it, you can ignore this email. If anything isn't clear, just reply and we're here.",
-        sign: "The Gadit team",
-        dir: "ltr",
-      };
+  const c = (COPY[opts.lang] ?? COPY.en).dunning;
+  const n = (x: string) => x.replace("{days}", String(days));
+  const t = {
+    subject: first ? c.subjectFirst : days === 1 ? c.subjectReminderOne : n(c.subjectReminder),
+    h1: first ? c.h1First : c.h1Reminder,
+    p1: first ? c.p1First : c.p1Reminder,
+    p2: first ? c.p2First : days === 1 ? c.p2ReminderOne : n(c.p2Reminder),
+    cta: c.cta,
+    foot: c.foot,
+    sign: c.sign,
+    dir: RTL.has(opts.lang) ? "rtl" : "ltr",
+  };
 
   const html = `
         <div style="margin:0;padding:28px 12px;background:${EMAIL_BG};">

@@ -30,7 +30,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Як скасувати підписку?",
             a: [
-              "Самостійно, будь-коли. Увійдіть, відкрийте «Акаунт», натисніть «Керування оплатою», а потім «Скасувати підписку».",
+              "Самостійно, будь-коли. Увійдіть, відкрийте «Обліковий запис» і натисніть «Скасувати підписку» під своїм планом.",
               "Доступ зберігається до кінця вже оплаченого періоду. Після цього акаунт повертається на Basic (безкоштовний). Ваші збережені слова, історія і записник залишаються в безпеці та доступні.",
               "Якщо ви скасували помилково або передумали, можна відновити підписку на тій самій сторінці до завершення періоду.",
             ],
@@ -384,7 +384,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Aboneliğimi nasıl iptal ederim?",
             a: [
-              "Kendiniz, istediğiniz zaman. Oturum açın, Hesap'ı açın, Faturalandırmayı yönet'e ve ardından Aboneliği iptal et'e tıklayın.",
+              "Kendiniz, istediğiniz zaman. Giriş yapın, Hesap sayfasını açın ve planınızın altındaki Aboneliği iptal et seçeneğine dokunun.",
               "Erişiminiz, ödemesini yaptığınız dönemin sonuna kadar devam eder. Ardından hesap Basic'e (ücretsiz) döner. Kaydettiğiniz kelimeler, geçmişiniz ve defteriniz güvende ve erişilebilir kalır.",
               "Yanlışlıkla iptal ettiyseniz veya fikrinizi değiştirdiyseniz, dönem bitmeden aynı sayfadan aboneliği sürdürebilirsiniz.",
             ],
@@ -738,7 +738,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Jak anulować subskrypcję?",
             a: [
-              "Samodzielnie, w dowolnym momencie. Zaloguj się, otwórz Konto, kliknij Zarządzaj płatnościami, a potem Anuluj subskrypcję.",
+              "Samodzielnie, w dowolnym momencie. Zaloguj się, otwórz Konto i dotknij Anuluj subskrypcję pod swoim planem.",
               "Dostęp trwa do końca okresu, za który już zapłacono. Potem konto wraca do planu Basic (bezpłatnego). Twoje zapisane słowa, historia i notatnik pozostają bezpieczne i dostępne.",
               "Jeśli anulujesz przez pomyłkę lub zmienisz zdanie, możesz wznowić subskrypcję na tej samej stronie przed końcem okresu.",
             ],
@@ -1092,7 +1092,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "چطور اشتراکم را لغو کنم؟",
             a: [
-              "خودتان، هر زمان. وارد شوید، «حساب» را باز کنید، روی «مدیریت پرداخت» و سپس «لغو اشتراک» کلیک کنید.",
+              "خودتان، هر زمان که بخواهید. وارد شوید، بخش حساب را باز کنید و زیر طرح خود روی «لغو اشتراک» بزنید.",
               "دسترسی شما تا پایان دوره‌ای که پرداخت کرده‌اید ادامه دارد. بعد از آن حساب به Basic (رایگان) برمی‌گردد. واژه‌های ذخیره‌شده، تاریخچه و دفترچه‌تان امن و در دسترس می‌مانند.",
               "اگر اشتباهی لغو کردید یا نظرتان عوض شد، می‌توانید پیش از پایان دوره از همان صفحه اشتراک را از سر بگیرید.",
             ],
@@ -1446,7 +1446,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Bagaimana cara membatalkan langganan saya?",
             a: [
-              "Bisa sendiri, kapan saja. Masuk, buka Akun, klik Kelola tagihan, lalu Batalkan langganan.",
+              "Bisa sendiri, kapan saja. Masuk, buka Akun, lalu ketuk Batalkan langganan di bawah paket Anda.",
               "Akses Anda tetap berlaku hingga akhir periode yang sudah dibayar. Setelah itu akun kembali ke Basic (gratis). Kata tersimpan, riwayat, dan buku catatan Anda tetap aman dan bisa diakses.",
               "Jika Anda membatalkan secara tidak sengaja atau berubah pikiran, Anda bisa melanjutkan langganan dari halaman yang sama sebelum periodenya berakhir.",
             ],
@@ -1800,7 +1800,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Hoe zeg ik mijn abonnement op?",
             a: [
-              "Zelf, op elk moment. Log in, open Account, klik op Facturering beheren en daarna op Abonnement opzeggen.",
+              "Zelf, op elk moment. Log in, open Account en tik onder je abonnement op Abonnement opzeggen.",
               "Je toegang loopt door tot het einde van de periode die je al hebt betaald. Daarna valt het account terug naar Basic (gratis). Je opgeslagen woorden, geschiedenis en notitieboek blijven veilig en toegankelijk.",
               "Heb je per ongeluk opgezegd of ben je van gedachten veranderd? Dan kun je het abonnement op dezelfde pagina hervatten voordat de periode afloopt.",
             ],

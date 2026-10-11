@@ -98,7 +98,7 @@ Object.assign(HELP, {
             id: "cancel",
             q: "How do I cancel my subscription?",
             a: [
-              "Self-serve, any time. Sign in, open Account, click Manage billing, then Cancel subscription.",
+              "Self-serve, any time. Sign in, open Account, and tap Cancel subscription under your plan.",
               "Your access continues until the end of the period you already paid for. After that the account drops back to Basic (free). Your saved words, history, and notebook stay safe and accessible.",
               "If you cancel by mistake or change your mind, you can resume the subscription from the same page before the period ends.",
             ],
@@ -452,7 +452,7 @@ Object.assign(HELP, {
             id: "cancel",
             q: "Ngikukhansela kanjani ukubhalisa kwami?",
             a: [
-              "Uzenzela wena, nganoma yisiphi isikhathi. Ngena, vula i-Account, chofoza Manage billing, bese uchofoza Cancel subscription.",
+              "Ungakwenza wena, noma nini. Ngena ngemvume, vula i-Akhawunti, bese uthepha okuthi Khansela ukubhalisa ngaphansi kohlelo lwakho.",
               "Ukufinyelela kwakho kuqhubeka kuze kube sekupheleni kwesikhathi osuvele usikhokhele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (yamahhala). Amagama akho awagcinile, umlando, nencwadi yamanothi kuhlala kuphephile futhi kufinyeleleka.",
               "Uma ukhansela ngephutha noma ushintsha umqondo, ungaqhubeka nokubhalisa kusuka kuleli khasi elifanayo ngaphambi kokuphela kwesikhathi.",
             ],
@@ -806,7 +806,7 @@ Object.assign(HELP, {
             id: "cancel",
             q: "Πώς ακυρώνω τη συνδρομή μου;",
             a: [
-              "Το κάνεις μόνος σου, όποτε θέλεις. Συνδέσου, άνοιξε τον λογαριασμό, πάτησε Διαχείριση χρέωσης και μετά Ακύρωση συνδρομής.",
+              "Μόνοι σας, οποιαδήποτε στιγμή. Συνδεθείτε, ανοίξτε τον Λογαριασμό και πατήστε Ακύρωση συνδρομής κάτω από το πρόγραμμά σας.",
               "Η πρόσβασή σου συνεχίζει μέχρι το τέλος της περιόδου που έχεις ήδη πληρώσει. Μετά, ο λογαριασμός επιστρέφει στο Basic (δωρεάν). Οι αποθηκευμένες λέξεις, το ιστορικό και το σημειωματάριό σου μένουν ασφαλή και προσβάσιμα.",
               "Αν ακυρώσεις κατά λάθος ή αλλάξεις γνώμη, μπορείς να συνεχίσεις τη συνδρομή από την ίδια σελίδα πριν λήξει η περίοδος.",
             ],
@@ -1160,7 +1160,7 @@ Object.assign(HELP, {
             id: "cancel",
             q: "איך מבטלים מנוי?",
             a: [
-              "אתם יכולים לבטל לבד, בכל רגע. היכנסו, פתחו את עמוד החשבון, לחצו ניהול חיוב, ואחר כך Cancel subscription.",
+              "בעצמכם, בכל רגע. מתחברים, נכנסים לחשבון ולוחצים \"ביטול המנוי\" מתחת למסלול.",
               "הגישה ממשיכה עד סוף התקופה ששילמתם עליה. אחר כך החשבון יורד ל-Basic (חינמי). המילים השמורות, היסטוריה והמחברת נשמרים ונשארים נגישים.",
               "אם ביטלתם בטעות או שינתם דעתכם, אפשר לחדש את המנוי מאותו עמוד לפני שהתקופה מסתיימת.",
             ],

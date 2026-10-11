@@ -30,7 +30,7 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "كيف ألغي اشتراكي؟",
             a: [
-              "بنفسك، في أي وقت. سجّل الدخول، وافتح صفحة الحساب، وانقر على إدارة الفوترة، ثم إلغاء الاشتراك.",
+              "بنفسك، في أي وقت. سجّل الدخول، وافتح الحساب، ثم اضغط على إلغاء الاشتراك أسفل خطتك.",
               "يستمر وصولك حتى نهاية الفترة التي دفعت ثمنها مسبقًا. بعد ذلك يعود الحساب إلى خطة Basic (المجانية). كلماتك المحفوظة وسجلّك ودفترك تبقى آمنة ومتاحة.",
               "إذا ألغيت عن طريق الخطأ أو غيّرت رأيك، يمكنك استئناف الاشتراك من الصفحة نفسها قبل انتهاء الفترة.",
             ],
@@ -384,7 +384,7 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Как отменить подписку?",
             a: [
-              "Самостоятельно, в любой момент. Войдите, откройте «Аккаунт», нажмите «Управление оплатой», затем «Отменить подписку».",
+              "Самостоятельно, в любое время. Войдите, откройте раздел «Аккаунт» и нажмите «Отменить подписку» под своим планом.",
               "Доступ сохраняется до конца уже оплаченного периода. После этого аккаунт возвращается на Basic (бесплатный). Ваши сохранённые слова, история и тетрадь остаются в сохранности и доступны.",
               "Если вы отменили подписку по ошибке или передумали, вы можете возобновить её на той же странице до конца периода.",
             ],
@@ -738,7 +738,7 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "¿Cómo cancelo mi suscripción?",
             a: [
-              "Tú mismo, en cualquier momento. Inicia sesión, abre Cuenta, haz clic en Gestionar facturación y luego en Cancelar suscripción.",
+              "Tú mismo, en cualquier momento. Inicia sesión, abre Cuenta y toca Cancelar suscripción debajo de tu plan.",
               "Tu acceso continúa hasta el final del periodo que ya pagaste. Después, la cuenta vuelve a Basic (gratis). Tus palabras guardadas, tu historial y tu cuaderno siguen a salvo y accesibles.",
               "Si cancelas por error o cambias de opinión, puedes reanudar la suscripción desde la misma página antes de que termine el periodo.",
             ],
@@ -1092,7 +1092,7 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Como cancelo minha assinatura?",
             a: [
-              "Você mesmo cancela, a qualquer momento. Entre, abra Conta, clique em Gerenciar cobrança e depois em Cancelar assinatura.",
+              "Você mesmo cancela, a qualquer momento. Entre, abra Conta e toque em Cancelar assinatura, abaixo do seu plano.",
               "Seu acesso continua até o fim do período que você já pagou. Depois disso, a conta volta para o Basic (gratuito). Suas palavras salvas, seu histórico e seu caderno continuam seguros e acessíveis.",
               "Se cancelar por engano ou mudar de ideia, você pode retomar a assinatura na mesma página antes do fim do período.",
             ],
@@ -1446,7 +1446,7 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Comment résilier mon abonnement ?",
             a: [
-              "Vous-même, à tout moment. Connectez-vous, ouvrez Compte, cliquez sur Gérer la facturation, puis sur Annuler l'abonnement.",
+              "Vous-même, à tout moment. Connectez-vous, ouvrez Compte et touchez Résilier l'abonnement sous votre forfait.",
               "Votre accès continue jusqu'à la fin de la période déjà payée. Ensuite, le compte repasse en Basic (gratuit). Vos mots enregistrés, votre historique et votre carnet restent en sécurité et accessibles.",
               "Si vous résiliez par erreur ou changez d'avis, vous pouvez réactiver l'abonnement depuis la même page avant la fin de la période.",
             ],
@@ -1800,7 +1800,7 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Wie kündige ich mein Abo?",
             a: [
-              "Selbst, jederzeit. Melden Sie sich an, öffnen Sie Konto, klicken Sie auf Abrechnung verwalten und dann auf Abo kündigen.",
+              "Selbst, jederzeit. Melden Sie sich an, öffnen Sie Konto und tippen Sie unter Ihrem Tarif auf Abo kündigen.",
               "Ihr Zugang bleibt bis zum Ende des bereits bezahlten Zeitraums bestehen. Danach wechselt das Konto zurück zu Basic (kostenlos). Ihre gespeicherten Wörter, Ihr Verlauf und Ihr Notizbuch bleiben sicher erhalten und abrufbar.",
               "Wenn Sie versehentlich gekündigt haben oder es sich anders überlegen, können Sie das Abo vor Ende des Zeitraums auf derselben Seite fortsetzen.",
             ],

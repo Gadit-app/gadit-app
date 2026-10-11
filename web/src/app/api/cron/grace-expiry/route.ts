@@ -3,7 +3,7 @@ import { isShabbatIL } from "@/lib/shabbat";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { dunningIsHebrew, buildDunningEmail } from "@/lib/dunning-email";
+import { dunningLang, buildDunningEmail } from "@/lib/dunning-email";
 
 const DAY = 86_400_000;
 /** Reminder window: the last ~2.5 days of the 7-day grace (so it lands on
@@ -70,9 +70,9 @@ export async function GET(req: NextRequest) {
         if (inv.status === "open" && (inv.amount_due ?? 0) > 0 && inv.hosted_invoice_url && to) {
           reminded.push(doc.id);
           if (!dryRun) {
-            const he = dunningIsHebrew(d, { currency: inv.currency, country: inv.customer_address?.country ?? null });
+            const lang = dunningLang(d, { currency: inv.currency, country: inv.customer_address?.country ?? null });
             const { subject, html } = buildDunningEmail({
-              he,
+              lang,
               url: inv.hosted_invoice_url,
               kind: "reminder",
               daysLeft: Math.ceil((grace - now) / DAY),

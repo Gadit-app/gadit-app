@@ -30,7 +30,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Jak zruším předplatné?",
             a: [
-              "Sami, kdykoli. Přihlaste se, otevřete Účet, klikněte na Spravovat platby a pak na Zrušit předplatné.",
+              "Sami, kdykoli. Přihlaste se, otevřete Účet a pod svým tarifem klepněte na Zrušit předplatné.",
               "Přístup vám zůstane do konce období, které už máte zaplacené. Poté se účet vrátí na Basic (zdarma). Vaše uložená slova, historie i sešit zůstanou v bezpečí a dostupné.",
               "Pokud zrušíte omylem nebo si to rozmyslíte, můžete předplatné na stejné stránce obnovit, dokud období neskončí.",
             ],
@@ -384,7 +384,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Ako zruším predplatné?",
             a: [
-              "Sami, kedykoľvek. Prihláste sa, otvorte Účet, kliknite na Spravovať platby a potom na Zrušiť predplatné.",
+              "Sami, kedykoľvek. Prihláste sa, otvorte Účet a pod svojím plánom ťuknite na Zrušiť predplatné.",
               "Prístup vám zostane do konca obdobia, ktoré už máte zaplatené. Potom sa účet vráti na Basic (zadarmo). Vaše uložené slová, história aj zošit zostanú v bezpečí a dostupné.",
               "Ak zrušíte omylom alebo si to rozmyslíte, predplatné môžete na tej istej stránke obnoviť, kým obdobie neskončí.",
             ],
@@ -738,7 +738,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Come annullo il mio abbonamento?",
             a: [
-              "In autonomia, in qualsiasi momento. Accedi, apri Account, clicca su Gestisci pagamenti e poi su Annulla abbonamento.",
+              "In autonomia, in qualsiasi momento. Accedi, apri Account e tocca Annulla abbonamento sotto il tuo piano.",
               "L'accesso resta attivo fino alla fine del periodo che hai già pagato. Dopo, l'account torna a Basic (gratuito). Le parole salvate, la cronologia e il quaderno restano al sicuro e accessibili.",
               "Se annulli per sbaglio o cambi idea, puoi riattivare l'abbonamento dalla stessa pagina prima che il periodo finisca.",
             ],
@@ -1092,7 +1092,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "サブスクリプションを解約するには？",
             a: [
-              "いつでもご自身で手続きできます。ログインしてアカウントを開き、「お支払いの管理」、続いて「サブスクリプションを解約」をクリックします。",
+              "いつでもご自身で解約できます。ログインして「アカウント」を開き、ご利用中のプランの下にある「サブスクリプションを解約」をタップしてください。",
               "すでにお支払い済みの期間が終わるまで、引き続きご利用いただけます。その後、アカウントは Basic（無料）に戻ります。保存した単語、履歴、ノートはそのまま安全に保たれ、引き続き利用できます。",
               "誤って解約した場合や気が変わった場合は、期間が終わる前に同じページからサブスクリプションを再開できます。",
             ],
@@ -1446,7 +1446,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "मैं अपनी सदस्यता कैसे रद्द करूँ?",
             a: [
-              "आप खुद, कभी भी। साइन इन करें, अकाउंट खोलें, बिलिंग प्रबंधित करें पर क्लिक करें, फिर सदस्यता रद्द करें।",
+              "आप खुद, कभी भी कर सकते हैं। साइन इन करें, खाता खोलें, और अपने प्लान के नीचे \"सदस्यता रद्द करें\" पर टैप करें।",
               "आपकी पहुँच उस अवधि के अंत तक बनी रहती है जिसका आप भुगतान कर चुके हैं। उसके बाद अकाउंट Basic (मुफ़्त) पर लौट आता है। आपके सहेजे हुए शब्द, इतिहास और नोटबुक सुरक्षित और उपलब्ध रहते हैं।",
               "अगर आपने गलती से रद्द कर दिया या आपका इरादा बदल गया, तो अवधि खत्म होने से पहले आप उसी पेज से सदस्यता फिर से शुरू कर सकते हैं।",
             ],
@@ -1800,7 +1800,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "ምዝገባዬን እንዴት መሰረዝ እችላለሁ?",
             a: [
-              "በራስዎ፣ በማንኛውም ጊዜ። ይግቡ፣ መለያን ይክፈቱ፣ ክፍያን ያስተዳድሩ የሚለውን ይጫኑ፣ ከዚያም ምዝገባ ሰርዝ የሚለውን ይጫኑ።",
+              "በራስዎ፣ በማንኛውም ጊዜ። ይግቡ፣ መለያን ይክፈቱ፣ እና በእቅድዎ ስር \"ምዝገባውን ይሰርዙ\" የሚለውን ይንኩ።",
               "አስቀድመው የከፈሉበት ጊዜ እስኪያልቅ ድረስ መጠቀምዎን ይቀጥላሉ። ከዚያ በኋላ መለያው ወደ Basic (ነጻ) ይመለሳል። ያስቀመጧቸው ቃላት፣ ታሪክዎና ማስታወሻ ደብተርዎ ደህንነታቸው ተጠብቆ ተደራሽ ሆነው ይቆያሉ።",
               "በስህተት ከሰረዙ ወይም ሐሳብዎን ከቀየሩ፣ ጊዜው ከማለቁ በፊት ከዚያው ገጽ ምዝገባውን መቀጠል ይችላሉ።",
             ],

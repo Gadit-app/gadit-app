@@ -30,7 +30,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Làm sao để hủy gói đăng ký?",
             a: [
-              "Bạn tự làm được, bất cứ lúc nào. Đăng nhập, mở Tài khoản, nhấn Quản lý thanh toán, rồi chọn Hủy gói đăng ký.",
+              "Bạn tự làm được, bất cứ lúc nào. Đăng nhập, mở Tài khoản và chạm vào Hủy gói đăng ký bên dưới gói của bạn.",
               "Bạn vẫn được sử dụng đến hết kỳ đã thanh toán. Sau đó tài khoản sẽ trở về gói Basic (miễn phí). Các từ đã lưu, lịch sử và sổ tay của bạn vẫn được giữ an toàn và truy cập được.",
               "Nếu bạn lỡ hủy hoặc đổi ý, bạn có thể tiếp tục gói đăng ký ngay trên cùng trang đó trước khi kỳ hiện tại kết thúc.",
             ],
@@ -384,7 +384,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Paano ko ika-cancel ang subscription ko?",
             a: [
-              "Ikaw mismo ang makakagawa nito, anumang oras. Mag-sign in, buksan ang Account, i-click ang Manage billing, tapos Cancel subscription.",
+              "Kaya mo itong gawin mismo, anumang oras. Mag-sign in, buksan ang Account, at i-tap ang Kanselahin ang subscription sa ilalim ng iyong plan.",
               "Tuloy ang access mo hanggang matapos ang period na nabayaran mo na. Pagkatapos noon, babalik ang account sa Basic (libre). Ligtas at magagamit pa rin ang mga na-save mong salita, history, at notebook.",
               "Kung na-cancel mo nang hindi sinasadya o nagbago ang isip mo, puwede mong ituloy ulit ang subscription mula sa parehong page bago matapos ang period.",
             ],
@@ -738,7 +738,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Hoe kanselleer ek my intekening?",
             a: [
-              "Self, enige tyd. Teken in, maak Rekening oop, klik op Bestuur betaling en dan Kanselleer intekening.",
+              "Jy doen dit self, enige tyd. Meld aan, maak Rekening oop en tik op Kanselleer intekening onder jou plan.",
               "Jou toegang duur voort tot aan die einde van die tydperk waarvoor jy reeds betaal het. Daarna val die rekening terug na Basic (gratis). Jou gestoorde woorde, geskiedenis en notaboek bly veilig en toeganklik.",
               "As jy per ongeluk kanselleer of van plan verander, kan jy die intekening op dieselfde bladsy hervat voordat die tydperk eindig.",
             ],
@@ -1092,7 +1092,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Ninaghairi vipi usajili wangu?",
             a: [
-              "Unaweza kufanya mwenyewe, wakati wowote. Ingia, fungua Akaunti, bofya Dhibiti malipo, kisha Ghairi usajili.",
+              "Unaweza kufanya mwenyewe, wakati wowote. Ingia, fungua Akaunti, kisha gusa Ghairi usajili chini ya mpango wako.",
               "Utaendelea kutumia huduma hadi mwisho wa kipindi ulichokwisha kulipia. Baada ya hapo akaunti inarudi kwenye Basic (bure). Maneno uliyohifadhi, historia, na daftari lako vinabaki salama na unaweza kuvifikia.",
               "Ukighairi kwa makosa au ukibadili nia, unaweza kuendelea na usajili kutoka ukurasa huo huo kabla kipindi hakijaisha.",
             ],
@@ -1446,7 +1446,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Hvordan opsiger jeg mit abonnement?",
             a: [
-              "Du klarer det selv, når som helst. Log ind, åbn Konto, klik på Administrer betaling og derefter Opsig abonnement.",
+              "Du gør det selv, når som helst. Log ind, åbn Konto, og tryk på Opsig abonnement under din plan.",
               "Din adgang fortsætter til udgangen af den periode, du allerede har betalt for. Derefter går kontoen tilbage til Basic (gratis). Dine gemte ord, din historik og din notesbog forbliver sikre og tilgængelige.",
               "Hvis du opsiger ved en fejl eller fortryder, kan du genoptage abonnementet fra samme side, før perioden udløber.",
             ],
@@ -1800,7 +1800,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "cancel",
             q: "Hogyan mondhatom le az előfizetésemet?",
             a: [
-              "Önállóan, bármikor. Jelentkezz be, nyisd meg a Fiókot, kattints a Számlázás kezelése gombra, majd az Előfizetés lemondása lehetőségre.",
+              "Saját magad, bármikor. Jelentkezz be, nyisd meg a Fiók oldalt, és koppints a csomagod alatti Előfizetés lemondása gombra.",
               "A hozzáférésed a már kifizetett időszak végéig megmarad. Ezután a fiók visszaáll Basic (ingyenes) csomagra. A mentett szavaid, az előzményeid és a füzeted biztonságban és elérhetők maradnak.",
               "Ha véletlenül mondtad le, vagy meggondoltad magad, az időszak vége előtt ugyanazon az oldalon folytathatod az előfizetést.",
             ],

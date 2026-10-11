@@ -8,7 +8,8 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
 import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
-import { dunningIsHebrew, buildDunningEmail } from "@/lib/dunning-email";
+import { dunningLang, buildDunningEmail } from "@/lib/dunning-email";
+import BILLING_I18N from "@/lib/billing-email-i18n.json";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -199,32 +200,14 @@ async function sendFamilyWelcome(uid: string, email: string | null) {
     const snap = await ref.get();
     if (snap.data()?.familyWelcomeSent === true) return; // once per owner
 
+    // Every UI language (Gadi 2026-10-11); Hebrew in the plural.
     const uiLang = (snap.data()?.uiLang as string | undefined) ?? "";
-    const he = uiLang === "he";
+    const FW = BILLING_I18N as Record<string, { familyWelcome: (typeof BILLING_I18N)["en"]["familyWelcome"] }>;
+    const lang = uiLang in FW ? uiLang : "en";
+    const he = lang === "he" || lang === "ar" || lang === "fa"; // right-to-left
     const base = "https://www.gadit.app";
-    const link = he ? `${base}/he/family` : `${base}/family`;
-
-    const c = he
-      ? {
-          subject: "המנוי המשפחתי שלך ב-Gadit פעיל 🎉",
-          heading: "המשפחה מוכנה לצאת לדרך",
-          intro: "שמחים שהצטרפת ל-Gadit Family. המנוי המשפחתי שלך פעיל. הנה שלושת הצעדים הראשונים כדי שכל המשפחה תהיה מוכנה:",
-          s1: "לחבר את ההורה השני, כדי ששניכם תראו את ההתקדמות של הילדים.",
-          s2: "לחבר את הילדים, לכל אחד מכשיר משלו בלי סיסמה, עם קוד חיבור פשוט.",
-          s3: "לשמור את Gadit על מסך הבית, בטלפון, בטאבלט או במחשב.",
-          cta: "לצעדים הראשונים",
-          foot: "כאן בשבילך בכל שאלה. אפשר פשוט להשיב למייל הזה.",
-        }
-      : {
-          subject: "Your Gadit Family plan is live 🎉",
-          heading: "Your family is ready to go",
-          intro: "Welcome to Gadit Family. Your family plan is active. Here are the first three steps to get everyone set up:",
-          s1: "Connect the second parent, so you both follow the kids' progress.",
-          s2: "Connect the kids, each on their own device with no password, just a short pairing code.",
-          s3: "Save Gadit to the home screen, on a phone, tablet or computer.",
-          cta: "Start the first steps",
-          foot: "We're here for any question. Just reply to this email.",
-        };
+    const link = lang === "en" ? `${base}/family` : `${base}/${lang}/family`;
+    const c = FW[lang].familyWelcome;
 
     const dir = he ? "rtl" : "ltr";
     const align = he ? "right" : "left";
@@ -572,13 +555,13 @@ async function notifyPaymentFailed(invoice: Stripe.Invoice) {
     // checkout, and a ₪ Family payer got this email in English because their
     // stored uiLang was not "he". (Gadi 2026-09-28.)
     const invCountry = typeof invoice.customer_address?.country === "string" ? invoice.customer_address.country : "";
-    const he = dunningIsHebrew(userData, { currency: invoice.currency, country: invCountry });
+    const lang = dunningLang(userData, { currency: invoice.currency, country: invCountry });
 
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) return;
 
     // Shared with the day-5 reminder in the grace cron (lib/dunning-email).
-    const { subject, html } = buildDunningEmail({ he, url, kind: "first" });
+    const { subject, html } = buildDunningEmail({ lang, url, kind: "first" });
 
     // An automatic renewal failure, not someone's action: waits out Shabbat.
     await sendMail({ scheduled: true, from: "Gadit <notify@gadit.app>", to: email, subject, html });

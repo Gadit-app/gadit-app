@@ -18,6 +18,7 @@
  *   5. Delete account — small low-prominence link under a dashed rule.
  */
 
+import RETENTION_I18N from "@/lib/retention-i18n.json";
 import { planCopy } from "@/lib/plan-copy";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
@@ -500,13 +501,13 @@ export function AccountPage() {
           headers: { Authorization: `Bearer ${idToken}` },
         });
         if (!res.ok) {
-          if (!cancelled) setErrorMsg("Could not load account data.");
+          if (!cancelled) setErrorMsg(RETENTION_COPY(lang).loadErr);
           return;
         }
         const json = (await res.json()) as AccountData;
         if (!cancelled) setData(json);
       } catch {
-        if (!cancelled) setErrorMsg("Could not load account data.");
+        if (!cancelled) setErrorMsg(RETENTION_COPY(lang).loadErr);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -606,19 +607,8 @@ export function AccountPage() {
     if (!data?.trialEnd) return null;
     try {
       const d = new Date(data.trialEnd * 1000);
-      const localeId =
-        lang === "he" ? "he-IL" :
-        lang === "ar" ? "ar" :
-        lang === "ru" ? "ru-RU" :
-        lang === "de" ? "de-DE" :
-        lang === "cs" ? "cs-CZ" :
-        lang === "sk" ? "sk-SK" :
-        lang === "es" ? "es-ES" :
-        lang === "pt" ? "pt-BR" :
-        lang === "fr" ? "fr-FR" :
-        lang === "it" ? "it-IT" :
-        lang === "ja" ? "ja-JP" :
-        lang === "hi" ? "hi-IN" : "en-US";
+      // Every UI language is a valid Intl locale (Gadi 2026-10-11).
+      const localeId = lang === "he" ? "he-IL" : lang === "en" ? "en-US" : lang === "pt" ? "pt-BR" : lang;
       return new Intl.DateTimeFormat(localeId, {
         year: "numeric", month: "short", day: "numeric",
       }).format(d);
@@ -1405,52 +1395,11 @@ function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick?: 
 }
 
 // ── Cancellation save-flow copy + modal ──────────────────────────────────────
-// he + en authored; every other language falls back to en (the account surface
-// follows the he+en-primary pattern, more languages can be added in a wave).
-// Hebrew is gender-neutral singular (fits a man or a woman): no gendered
-// imperatives, uses infinitives and "שלך".
-function RETENTION_COPY(lang: Lang) {
-  const en = {
-    cancelLink: "Cancel subscription",
-    offerTitle: "Before you go — 14 more days, free",
-    offerBody:
-      "Take two more weeks on us. It's worth setting up your second child and opening the parent dashboard to see the words each child is learning. Nothing to pay until the extended trial ends.",
-    offerAccept: "Yes, give me 14 more days",
-    offerDecline: "No thanks, cancel",
-    confirmTitle: "Cancel your subscription?",
-    confirmBody:
-      "You keep full access until the end of your current period. You can resume any time before then.",
-    keepBtn: "Keep my subscription",
-    confirmCancelBtn: "Cancel subscription",
-    extendedTitle: "Done — 14 days added",
-    extendedBody:
-      "Your free trial now runs two weeks longer. Nothing to pay in the meantime.",
-    canceledTitle: "Subscription canceled",
-    canceledBody:
-      "You keep access until the end of the period you already paid for. Changed your mind? You can resume from this page any time before then.",
-    closeBtn: "Close",
-  };
-  const he: typeof en = {
-    cancelLink: "ביטול המנוי",
-    offerTitle: "רגע לפני — עוד 14 יום, חינם",
-    offerBody:
-      "אפשר לקבל עוד שבועיים על חשבוננו. שווה להגדיר את הילד השני ולפתוח את דשבורד ההורה כדי לראות את המילים שכל ילד לומד. אין מה לשלם עד שהניסיון המוארך מסתיים.",
-    offerAccept: "כן, אשמח לעוד 14 יום",
-    offerDecline: "לא תודה, לבטל",
-    confirmTitle: "לבטל את המנוי?",
-    confirmBody:
-      "הגישה המלאה נשמרת עד סוף התקופה הנוכחית. אפשר לחדש בכל רגע לפני כן.",
-    keepBtn: "להשאיר את המנוי",
-    confirmCancelBtn: "לבטל את המנוי",
-    extendedTitle: "מעולה, נוספו 14 יום",
-    extendedBody:
-      "הניסיון החינמי שלך ארוך עכשיו בשבועיים. אין מה לשלם בינתיים.",
-    canceledTitle: "המנוי בוטל",
-    canceledBody:
-      "הגישה נשמרת עד סוף התקופה ששילמת עליה. שינית את דעתך? אפשר לחדש מהעמוד הזה בכל רגע לפני כן.",
-    closeBtn: "סגירה",
-  };
-  return lang === "he" ? he : en;
+// All 33 languages (Gadi 2026-10-11), in lib/retention-i18n.json; Hebrew
+// speaks to the reader in the plural.
+type RetentionCopy = (typeof RETENTION_I18N)["en"];
+function RETENTION_COPY(lang: Lang): RetentionCopy {
+  return (RETENTION_I18N as Record<string, RetentionCopy>)[lang] ?? RETENTION_I18N.en;
 }
 
 function RetentionModal({

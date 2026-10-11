@@ -1,0 +1,893 @@
+{
+ "en": {
+  "dunning": {
+   "subjectFirst": "Your payment didn't go through. You have 7 days to update your card",
+   "subjectReminder": "Reminder: {days} days left to update your card",
+   "subjectReminderOne": "Reminder: 1 day left to update your card",
+   "h1First": "Your subscription payment didn't go through",
+   "h1Reminder": "Your card still needs updating",
+   "p1First": "We tried to renew your Gadit subscription and the charge didn't go through, most likely a declined or expired card.",
+   "p1Reminder": "The payment for your Gadit subscription still hasn't gone through.",
+   "p2First": "<b>Your access stays on for 7 days.</b> Updating your card takes less than a minute, and everything continues as usual, without losing your children's notebooks and progress.",
+   "p2Reminder": "<b>In {days} days your access moves to the free plan.</b> Updating your card takes less than a minute, and your children's notebooks and progress are kept.",
+   "p2ReminderOne": "<b>In 1 day your access moves to the free plan.</b> Updating your card takes less than a minute, and your children's notebooks and progress are kept.",
+   "cta": "Update card",
+   "foot": "If you already updated it, you can ignore this email. If anything isn't clear, just reply and we're here.",
+   "sign": "The Gadit team"
+  },
+  "familyWelcome": {
+   "subject": "Your Gadit Family plan is live 🎉",
+   "heading": "Your family is ready to go",
+   "intro": "Welcome to Gadit Family. Your family plan is active. Here are the first three steps to get everyone set up:",
+   "s1": "Connect the second parent, so you both follow the kids' progress.",
+   "s2": "Connect the kids, each on their own device with no password, just a short pairing code.",
+   "s3": "Save Gadit to the home screen, on a phone, tablet or computer.",
+   "cta": "Start the first steps",
+   "foot": "We're here for any question. Just reply to this email."
+  }
+ },
+ "he": {
+  "dunning": {
+   "subjectFirst": "החיוב לא עבר. יש לכם 7 ימים לעדכן כרטיס",
+   "subjectReminder": "תזכורת: נשארו {days} ימים לעדכן את הכרטיס",
+   "subjectReminderOne": "תזכורת: נשאר יום אחד לעדכן את הכרטיס",
+   "h1First": "החיוב על המנוי לא עבר",
+   "h1Reminder": "הכרטיס עדיין לא עודכן",
+   "p1First": "ניסינו לחדש את המנוי שלכם ב-Gadit והחיוב לא עבר, כנראה הכרטיס נדחה או שפג תוקפו.",
+   "p1Reminder": "החיוב על המנוי שלכם ב-Gadit עדיין לא עבר.",
+   "p2First": "<b>הגישה שלכם נשמרת ל-7 ימים.</b> עדכון הכרטיס לוקח פחות מדקה, והכל ממשיך כרגיל, בלי לאבד את המחברות וההתקדמות של הילדים.",
+   "p2Reminder": "<b>בעוד {days} ימים הגישה עוברת למסלול החינמי.</b> עדכון הכרטיס לוקח פחות מדקה, והמחברות וההתקדמות של הילדים נשמרות.",
+   "p2ReminderOne": "<b>מחר הגישה עוברת למסלול החינמי.</b> עדכון הכרטיס לוקח פחות מדקה, והמחברות וההתקדמות של הילדים נשמרות.",
+   "cta": "עדכון כרטיס",
+   "foot": "אם כבר עדכנתם, אפשר להתעלם מהמייל הזה. אם משהו לא ברור, אפשר פשוט להשיב למייל ואנחנו כאן.",
+   "sign": "צוות Gadit"
+  },
+  "familyWelcome": {
+   "subject": "המנוי המשפחתי שלכם ב-Gadit פעיל 🎉",
+   "heading": "המשפחה מוכנה לצאת לדרך",
+   "intro": "שמחים שהצטרפתם ל-Gadit Family. המנוי המשפחתי שלכם פעיל. הנה שלושת הצעדים הראשונים כדי שכל המשפחה תהיה מוכנה:",
+   "s1": "לחבר את ההורה השני, כדי ששניכם תראו את ההתקדמות של הילדים.",
+   "s2": "לחבר את הילדים, לכל אחד מכשיר משלו בלי סיסמה, עם קוד חיבור קצר.",
+   "s3": "לשמור את Gadit על מסך הבית, בטלפון, בטאבלט או במחשב.",
+   "cta": "לצעדים הראשונים",
+   "foot": "אנחנו כאן לכל שאלה. אפשר פשוט להשיב למייל הזה."
+  }
+ },
+ "ar": {
+  "dunning": {
+   "subjectFirst": "لم تتم عملية الدفع. لديك 7 أيام لتحديث بطاقتك",
+   "subjectReminder": "تذكير: الأيام المتبقية لتحديث بطاقتك: {days}",
+   "subjectReminderOne": "تذكير: بقي يوم واحد لتحديث بطاقتك",
+   "h1First": "لم تتم عملية دفع اشتراكك",
+   "h1Reminder": "بطاقتك ما زالت بحاجة إلى تحديث",
+   "p1First": "حاولنا تجديد اشتراكك في Gadit ولم تتم عملية الدفع، والسبب على الأرجح بطاقة مرفوضة أو منتهية الصلاحية.",
+   "p1Reminder": "لم تتم عملية دفع اشتراكك في Gadit حتى الآن.",
+   "p2First": "<b>يبقى وصولك مفعّلًا لمدة 7 أيام.</b> تحديث البطاقة يستغرق أقل من دقيقة، ويستمر كل شيء كالمعتاد دون أن تفقد دفاتر أطفالك وتقدمهم.",
+   "p2Reminder": "<b>الأيام المتبقية قبل انتقال وصولك إلى الخطة المجانية: {days}.</b> تحديث البطاقة يستغرق أقل من دقيقة، ودفاتر أطفالك وتقدمهم محفوظة.",
+   "p2ReminderOne": "<b>بعد يوم واحد ينتقل وصولك إلى الخطة المجانية.</b> تحديث البطاقة يستغرق أقل من دقيقة، ودفاتر أطفالك وتقدمهم محفوظة.",
+   "cta": "تحديث البطاقة",
+   "foot": "إذا كنت قد حدّثتها بالفعل، يمكنك تجاهل هذه الرسالة. وإذا كان هناك شيء غير واضح، فقط رُدّ علينا ونحن هنا.",
+   "sign": "فريق Gadit"
+  },
+  "familyWelcome": {
+   "subject": "خطة Gadit Family الخاصة بك مفعّلة الآن 🎉",
+   "heading": "عائلتك جاهزة للانطلاق",
+   "intro": "مرحبًا بك في Gadit Family. خطتك العائلية مفعّلة. إليك الخطوات الثلاث الأولى لتجهيز الجميع:",
+   "s1": "اربط الوالد الثاني، لتتابعا معًا تقدم الأطفال.",
+   "s2": "اربط الأطفال، كل واحد على جهازه دون كلمة مرور، فقط برمز ربط قصير.",
+   "s3": "أضف Gadit إلى الشاشة الرئيسية، على الهاتف أو الجهاز اللوحي أو الكمبيوتر.",
+   "cta": "ابدأ الخطوات الأولى",
+   "foot": "نحن هنا لأي سؤال. فقط رُدّ على هذه الرسالة."
+  }
+ },
+ "ru": {
+  "dunning": {
+   "subjectFirst": "Оплата не прошла. У вас есть 7 дней, чтобы обновить карту",
+   "subjectReminder": "Напоминание: осталось {days} дн., чтобы обновить карту",
+   "subjectReminderOne": "Напоминание: остался 1 день, чтобы обновить карту",
+   "h1First": "Оплата подписки не прошла",
+   "h1Reminder": "Карту всё ещё нужно обновить",
+   "p1First": "Мы попытались продлить вашу подписку Gadit, но списание не прошло. Скорее всего, карта отклонена или срок её действия истёк.",
+   "p1Reminder": "Оплата вашей подписки Gadit всё ещё не прошла.",
+   "p2First": "<b>Доступ сохраняется ещё 7 дней.</b> Обновить карту можно меньше чем за минуту, и всё продолжится как обычно, без потери тетрадей и прогресса ваших детей.",
+   "p2Reminder": "<b>Через {days} дн. доступ перейдёт на бесплатный план.</b> Обновить карту можно меньше чем за минуту, а тетради и прогресс ваших детей сохранятся.",
+   "p2ReminderOne": "<b>Через 1 день доступ перейдёт на бесплатный план.</b> Обновить карту можно меньше чем за минуту, а тетради и прогресс ваших детей сохранятся.",
+   "cta": "Обновить карту",
+   "foot": "Если вы уже обновили карту, просто проигнорируйте это письмо. Если что-то непонятно, ответьте на него, мы на связи.",
+   "sign": "Команда Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Ваш план Gadit Family активирован 🎉",
+   "heading": "Ваша семья готова к старту",
+   "intro": "Добро пожаловать в Gadit Family. Семейный план активен. Вот три первых шага, чтобы всё настроить для всех:",
+   "s1": "Подключите второго родителя, чтобы вы оба следили за прогрессом детей.",
+   "s2": "Подключите детей, каждого на своём устройстве и без пароля, только с коротким кодом привязки.",
+   "s3": "Добавьте Gadit на главный экран телефона, планшета или компьютера.",
+   "cta": "Начать первые шаги",
+   "foot": "Мы рядом, если появятся вопросы. Просто ответьте на это письмо."
+  }
+ },
+ "es": {
+  "dunning": {
+   "subjectFirst": "Tu pago no se procesó. Tienes 7 días para actualizar tu tarjeta",
+   "subjectReminder": "Recordatorio: te quedan {days} días para actualizar tu tarjeta",
+   "subjectReminderOne": "Recordatorio: te queda 1 día para actualizar tu tarjeta",
+   "h1First": "El pago de tu suscripción no se procesó",
+   "h1Reminder": "Tu tarjeta todavía necesita actualizarse",
+   "p1First": "Intentamos renovar tu suscripción a Gadit y el cobro no se procesó, probablemente por una tarjeta rechazada o vencida.",
+   "p1Reminder": "El pago de tu suscripción a Gadit todavía no se ha procesado.",
+   "p2First": "<b>Tu acceso sigue activo durante 7 días.</b> Actualizar la tarjeta lleva menos de un minuto y todo continúa como siempre, sin perder los cuadernos ni el progreso de tus hijos.",
+   "p2Reminder": "<b>En {days} días tu acceso pasará al plan gratuito.</b> Actualizar la tarjeta lleva menos de un minuto, y los cuadernos y el progreso de tus hijos se conservan.",
+   "p2ReminderOne": "<b>En 1 día tu acceso pasará al plan gratuito.</b> Actualizar la tarjeta lleva menos de un minuto, y los cuadernos y el progreso de tus hijos se conservan.",
+   "cta": "Actualizar tarjeta",
+   "foot": "Si ya la actualizaste, puedes ignorar este correo. Si algo no queda claro, responde y te ayudamos.",
+   "sign": "El equipo de Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Tu plan Gadit Family ya está activo 🎉",
+   "heading": "Tu familia está lista para empezar",
+   "intro": "Te damos la bienvenida a Gadit Family. Tu plan familiar está activo. Estos son los tres primeros pasos para configurarlo todo:",
+   "s1": "Conecta al otro progenitor, para que los dos sigan el progreso de los niños.",
+   "s2": "Conecta a los niños, cada uno en su propio dispositivo y sin contraseña, solo con un código corto de vinculación.",
+   "s3": "Guarda Gadit en la pantalla de inicio, en el móvil, la tableta o el ordenador.",
+   "cta": "Empezar los primeros pasos",
+   "foot": "Estamos aquí para cualquier duda. Solo responde a este correo."
+  }
+ },
+ "pt": {
+  "dunning": {
+   "subjectFirst": "Seu pagamento não foi aprovado. Você tem 7 dias para atualizar o cartão",
+   "subjectReminder": "Lembrete: faltam {days} dias para atualizar seu cartão",
+   "subjectReminderOne": "Lembrete: falta 1 dia para atualizar seu cartão",
+   "h1First": "O pagamento da sua assinatura não foi aprovado",
+   "h1Reminder": "Seu cartão ainda precisa ser atualizado",
+   "p1First": "Tentamos renovar sua assinatura do Gadit e a cobrança não foi aprovada, provavelmente por um cartão recusado ou vencido.",
+   "p1Reminder": "O pagamento da sua assinatura do Gadit ainda não foi aprovado.",
+   "p2First": "<b>Seu acesso continua ativo por 7 dias.</b> Atualizar o cartão leva menos de um minuto, e tudo segue normalmente, sem perder os cadernos e o progresso dos seus filhos.",
+   "p2Reminder": "<b>Em {days} dias seu acesso passa para o plano gratuito.</b> Atualizar o cartão leva menos de um minuto, e os cadernos e o progresso dos seus filhos ficam guardados.",
+   "p2ReminderOne": "<b>Em 1 dia seu acesso passa para o plano gratuito.</b> Atualizar o cartão leva menos de um minuto, e os cadernos e o progresso dos seus filhos ficam guardados.",
+   "cta": "Atualizar cartão",
+   "foot": "Se você já atualizou, pode ignorar este e-mail. Se algo não estiver claro, é só responder que estamos aqui.",
+   "sign": "Equipe Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Seu plano Gadit Family está ativo 🎉",
+   "heading": "Sua família está pronta para começar",
+   "intro": "Boas-vindas ao Gadit Family. Seu plano familiar está ativo. Aqui estão os três primeiros passos para deixar todo mundo pronto:",
+   "s1": "Conecte o outro responsável, para que vocês dois acompanhem o progresso das crianças.",
+   "s2": "Conecte as crianças, cada uma no próprio aparelho e sem senha, só com um código curto de pareamento.",
+   "s3": "Adicione o Gadit à tela inicial, no celular, tablet ou computador.",
+   "cta": "Começar os primeiros passos",
+   "foot": "Estamos aqui para qualquer dúvida. É só responder a este e-mail."
+  }
+ },
+ "fr": {
+  "dunning": {
+   "subjectFirst": "Votre paiement n'est pas passé. Vous avez 7 jours pour mettre à jour votre carte",
+   "subjectReminder": "Rappel : plus que {days} jours pour mettre à jour votre carte",
+   "subjectReminderOne": "Rappel : plus qu'un jour pour mettre à jour votre carte",
+   "h1First": "Le paiement de votre abonnement n'est pas passé",
+   "h1Reminder": "Votre carte doit toujours être mise à jour",
+   "p1First": "Nous avons essayé de renouveler votre abonnement Gadit et le prélèvement n'est pas passé, probablement à cause d'une carte refusée ou expirée.",
+   "p1Reminder": "Le paiement de votre abonnement Gadit n'est toujours pas passé.",
+   "p2First": "<b>Votre accès reste actif pendant 7 jours.</b> Mettre à jour votre carte prend moins d'une minute, et tout continue normalement, sans perdre les carnets ni les progrès de vos enfants.",
+   "p2Reminder": "<b>Dans {days} jours, votre accès passera au forfait gratuit.</b> Mettre à jour votre carte prend moins d'une minute, et les carnets et les progrès de vos enfants sont conservés.",
+   "p2ReminderOne": "<b>Dans 1 jour, votre accès passera au forfait gratuit.</b> Mettre à jour votre carte prend moins d'une minute, et les carnets et les progrès de vos enfants sont conservés.",
+   "cta": "Mettre à jour la carte",
+   "foot": "Si vous l'avez déjà mise à jour, vous pouvez ignorer cet e-mail. Si quelque chose n'est pas clair, répondez simplement, nous sommes là.",
+   "sign": "L'équipe Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Votre forfait Gadit Family est actif 🎉",
+   "heading": "Votre famille est prête à démarrer",
+   "intro": "Bienvenue dans Gadit Family. Votre forfait famille est actif. Voici les trois premières étapes pour que tout le monde soit prêt :",
+   "s1": "Connectez le second parent, pour suivre tous les deux les progrès des enfants.",
+   "s2": "Connectez les enfants, chacun sur son propre appareil et sans mot de passe, avec un simple code d'association.",
+   "s3": "Ajoutez Gadit à l'écran d'accueil, sur téléphone, tablette ou ordinateur.",
+   "cta": "Commencer les premières étapes",
+   "foot": "Nous sommes là pour toute question. Répondez simplement à cet e-mail."
+  }
+ },
+ "de": {
+  "dunning": {
+   "subjectFirst": "Deine Zahlung ist nicht durchgegangen. Du hast 7 Tage, um deine Karte zu aktualisieren",
+   "subjectReminder": "Erinnerung: Noch {days} Tage, um deine Karte zu aktualisieren",
+   "subjectReminderOne": "Erinnerung: Noch 1 Tag, um deine Karte zu aktualisieren",
+   "h1First": "Die Zahlung für dein Abo ist nicht durchgegangen",
+   "h1Reminder": "Deine Karte muss noch aktualisiert werden",
+   "p1First": "Wir wollten dein Gadit Abo verlängern, aber die Abbuchung ist nicht durchgegangen. Wahrscheinlich wurde die Karte abgelehnt oder ist abgelaufen.",
+   "p1Reminder": "Die Zahlung für dein Gadit Abo ist noch immer nicht durchgegangen.",
+   "p2First": "<b>Dein Zugang bleibt 7 Tage aktiv.</b> Die Karte zu aktualisieren dauert keine Minute, und alles läuft wie gewohnt weiter, ohne dass die Hefte und Fortschritte deiner Kinder verloren gehen.",
+   "p2Reminder": "<b>In {days} Tagen wechselt dein Zugang in den kostenlosen Plan.</b> Die Karte zu aktualisieren dauert keine Minute, und die Hefte und Fortschritte deiner Kinder bleiben erhalten.",
+   "p2ReminderOne": "<b>In 1 Tag wechselt dein Zugang in den kostenlosen Plan.</b> Die Karte zu aktualisieren dauert keine Minute, und die Hefte und Fortschritte deiner Kinder bleiben erhalten.",
+   "cta": "Karte aktualisieren",
+   "foot": "Falls du sie schon aktualisiert hast, kannst du diese E-Mail ignorieren. Wenn etwas unklar ist, antworte einfach, wir sind für dich da.",
+   "sign": "Dein Gadit Team"
+  },
+  "familyWelcome": {
+   "subject": "Dein Gadit Family Plan ist aktiv 🎉",
+   "heading": "Deine Familie kann loslegen",
+   "intro": "Willkommen bei Gadit Family. Dein Familienplan ist aktiv. Hier sind die ersten drei Schritte, damit alle startklar sind:",
+   "s1": "Verbinde den zweiten Elternteil, damit ihr beide die Fortschritte der Kinder verfolgt.",
+   "s2": "Verbinde die Kinder, jedes auf seinem eigenen Gerät und ohne Passwort, nur mit einem kurzen Kopplungscode.",
+   "s3": "Leg Gadit auf den Startbildschirm, auf Handy, Tablet oder Computer.",
+   "cta": "Erste Schritte starten",
+   "foot": "Wir sind für jede Frage da. Antworte einfach auf diese E-Mail."
+  }
+ },
+ "cs": {
+  "dunning": {
+   "subjectFirst": "Vaše platba neprošla. Na aktualizaci karty máte 7 dní",
+   "subjectReminder": "Připomínka: počet dní na aktualizaci karty: {days}",
+   "subjectReminderOne": "Připomínka: na aktualizaci karty zbývá 1 den",
+   "h1First": "Platba za vaše předplatné neprošla",
+   "h1Reminder": "Vaši kartu je stále potřeba aktualizovat",
+   "p1First": "Pokusili jsme se obnovit vaše předplatné Gadit, ale platba neprošla. Nejspíš byla karta zamítnuta nebo jí skončila platnost.",
+   "p1Reminder": "Platba za vaše předplatné Gadit stále neprošla.",
+   "p2First": "<b>Přístup vám zůstane aktivní 7 dní.</b> Aktualizace karty zabere méně než minutu a vše pokračuje jako obvykle, aniž byste přišli o sešity a pokroky svých dětí.",
+   "p2Reminder": "<b>Počet dní, než váš přístup přejde na bezplatný tarif: {days}.</b> Aktualizace karty zabere méně než minutu a sešity i pokroky vašich dětí zůstanou zachované.",
+   "p2ReminderOne": "<b>Za 1 den váš přístup přejde na bezplatný tarif.</b> Aktualizace karty zabere méně než minutu a sešity i pokroky vašich dětí zůstanou zachované.",
+   "cta": "Aktualizovat kartu",
+   "foot": "Pokud jste kartu už aktualizovali, tento e-mail můžete ignorovat. Pokud vám něco není jasné, stačí odpovědět, jsme tu pro vás.",
+   "sign": "Tým Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Váš tarif Gadit Family je aktivní 🎉",
+   "heading": "Vaše rodina může začít",
+   "intro": "Vítejte v Gadit Family. Váš rodinný tarif je aktivní. Tady jsou první tři kroky, aby bylo vše připravené pro všechny:",
+   "s1": "Připojte druhého rodiče, abyste oba sledovali pokroky dětí.",
+   "s2": "Připojte děti, každé na vlastním zařízení a bez hesla, jen s krátkým párovacím kódem.",
+   "s3": "Uložte si Gadit na plochu telefonu, tabletu nebo počítače.",
+   "cta": "Začít s prvními kroky",
+   "foot": "Jsme tu pro jakýkoli dotaz. Stačí odpovědět na tento e-mail."
+  }
+ },
+ "sk": {
+  "dunning": {
+   "subjectFirst": "Vaša platba neprešla. Na aktualizáciu karty máte 7 dní",
+   "subjectReminder": "Pripomienka: počet dní na aktualizáciu karty: {days}",
+   "subjectReminderOne": "Pripomienka: na aktualizáciu karty zostáva 1 deň",
+   "h1First": "Platba za vaše predplatné neprešla",
+   "h1Reminder": "Vašu kartu je stále potrebné aktualizovať",
+   "p1First": "Pokúsili sme sa obnoviť vaše predplatné Gadit, ale platba neprešla. Najskôr bola karta zamietnutá alebo jej skončila platnosť.",
+   "p1Reminder": "Platba za vaše predplatné Gadit stále neprešla.",
+   "p2First": "<b>Prístup vám zostane aktívny 7 dní.</b> Aktualizácia karty trvá menej ako minútu a všetko pokračuje ako zvyčajne, bez toho, aby ste prišli o zošity a pokroky svojich detí.",
+   "p2Reminder": "<b>Počet dní, kým váš prístup prejde na bezplatný plán: {days}.</b> Aktualizácia karty trvá menej ako minútu a zošity aj pokroky vašich detí zostanú zachované.",
+   "p2ReminderOne": "<b>O 1 deň váš prístup prejde na bezplatný plán.</b> Aktualizácia karty trvá menej ako minútu a zošity aj pokroky vašich detí zostanú zachované.",
+   "cta": "Aktualizovať kartu",
+   "foot": "Ak ste kartu už aktualizovali, tento e-mail môžete ignorovať. Ak vám niečo nie je jasné, stačí odpovedať, sme tu pre vás.",
+   "sign": "Tím Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Váš plán Gadit Family je aktívny 🎉",
+   "heading": "Vaša rodina môže začať",
+   "intro": "Vitajte v Gadit Family. Váš rodinný plán je aktívny. Tu sú prvé tri kroky, aby bolo všetko pripravené pre všetkých:",
+   "s1": "Pripojte druhého rodiča, aby ste obaja sledovali pokroky detí.",
+   "s2": "Pripojte deti, každé na vlastnom zariadení a bez hesla, len s krátkym párovacím kódom.",
+   "s3": "Uložte si Gadit na plochu telefónu, tabletu alebo počítača.",
+   "cta": "Začať s prvými krokmi",
+   "foot": "Sme tu pre akúkoľvek otázku. Stačí odpovedať na tento e-mail."
+  }
+ },
+ "it": {
+  "dunning": {
+   "subjectFirst": "Il pagamento non è andato a buon fine. Hai 7 giorni per aggiornare la carta",
+   "subjectReminder": "Promemoria: ti restano {days} giorni per aggiornare la carta",
+   "subjectReminderOne": "Promemoria: ti resta 1 giorno per aggiornare la carta",
+   "h1First": "Il pagamento del tuo abbonamento non è andato a buon fine",
+   "h1Reminder": "La tua carta va ancora aggiornata",
+   "p1First": "Abbiamo provato a rinnovare il tuo abbonamento Gadit e l'addebito non è andato a buon fine, molto probabilmente per una carta rifiutata o scaduta.",
+   "p1Reminder": "Il pagamento del tuo abbonamento Gadit non è ancora andato a buon fine.",
+   "p2First": "<b>Il tuo accesso resta attivo per 7 giorni.</b> Aggiornare la carta richiede meno di un minuto e tutto continua come sempre, senza perdere i quaderni e i progressi dei tuoi figli.",
+   "p2Reminder": "<b>Tra {days} giorni il tuo accesso passerà al piano gratuito.</b> Aggiornare la carta richiede meno di un minuto, e i quaderni e i progressi dei tuoi figli restano salvati.",
+   "p2ReminderOne": "<b>Tra 1 giorno il tuo accesso passerà al piano gratuito.</b> Aggiornare la carta richiede meno di un minuto, e i quaderni e i progressi dei tuoi figli restano salvati.",
+   "cta": "Aggiorna carta",
+   "foot": "Se l'hai già aggiornata, puoi ignorare questa email. Se qualcosa non è chiaro, rispondi pure, siamo qui.",
+   "sign": "Il team di Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Il tuo piano Gadit Family è attivo 🎉",
+   "heading": "La tua famiglia è pronta a partire",
+   "intro": "Benvenuto in Gadit Family. Il tuo piano famiglia è attivo. Ecco i primi tre passi per preparare tutti:",
+   "s1": "Collega l'altro genitore, così seguite entrambi i progressi dei bambini.",
+   "s2": "Collega i bambini, ognuno sul proprio dispositivo e senza password, solo con un breve codice di abbinamento.",
+   "s3": "Aggiungi Gadit alla schermata Home, su telefono, tablet o computer.",
+   "cta": "Inizia i primi passi",
+   "foot": "Siamo qui per qualsiasi domanda. Basta rispondere a questa email."
+  }
+ },
+ "ja": {
+  "dunning": {
+   "subjectFirst": "お支払いが完了しませんでした。7日以内にカードを更新してください",
+   "subjectReminder": "リマインダー：カードの更新期限まであと{days}日です",
+   "subjectReminderOne": "リマインダー：カードの更新期限まであと1日です",
+   "h1First": "サブスクリプションのお支払いが完了しませんでした",
+   "h1Reminder": "カードの更新がまだ必要です",
+   "p1First": "Gaditのサブスクリプションを更新しようとしましたが、決済が完了しませんでした。カードが承認されなかったか、有効期限が切れている可能性があります。",
+   "p1Reminder": "Gaditのサブスクリプションのお支払いが、まだ完了していません。",
+   "p2First": "<b>7日間はこれまでどおりご利用いただけます。</b>カードの更新は1分もかかりません。お子さまのノートや学習の記録はそのまま、すべていつもどおり続けられます。",
+   "p2Reminder": "<b>あと{days}日で無料プランに切り替わります。</b>カードの更新は1分もかかりません。お子さまのノートや学習の記録はそのまま保存されます。",
+   "p2ReminderOne": "<b>あと1日で無料プランに切り替わります。</b>カードの更新は1分もかかりません。お子さまのノートや学習の記録はそのまま保存されます。",
+   "cta": "カードを更新",
+   "foot": "すでに更新済みの場合は、このメールは無視してください。ご不明な点があれば、このメールにご返信ください。",
+   "sign": "Gaditチーム"
+  },
+  "familyWelcome": {
+   "subject": "Gadit Familyプランのご利用が始まりました 🎉",
+   "heading": "ご家族の準備が整いました",
+   "intro": "Gadit Familyへようこそ。ファミリープランが有効になりました。みなさんで使い始めるための最初の3ステップはこちらです：",
+   "s1": "もう一人の保護者を招待して、お二人でお子さまの成長を見守りましょう。",
+   "s2": "お子さまを接続しましょう。それぞれ自分の端末で、パスワード不要、短いペアリングコードだけで始められます。",
+   "s3": "スマートフォン、タブレット、パソコンのホーム画面にGaditを追加しましょう。",
+   "cta": "最初のステップを始める",
+   "foot": "ご質問があれば、いつでもこのメールにご返信ください。"
+  }
+ },
+ "hi": {
+  "dunning": {
+   "subjectFirst": "आपका भुगतान नहीं हो पाया। कार्ड अपडेट करने के लिए आपके पास 7 दिन हैं",
+   "subjectReminder": "याद दिला रहे हैं: कार्ड अपडेट करने के लिए {days} दिन बचे हैं",
+   "subjectReminderOne": "याद दिला रहे हैं: कार्ड अपडेट करने के लिए 1 दिन बचा है",
+   "h1First": "आपकी सदस्यता का भुगतान नहीं हो पाया",
+   "h1Reminder": "आपका कार्ड अभी भी अपडेट करना बाकी है",
+   "p1First": "हमने आपकी Gadit सदस्यता रिन्यू करने की कोशिश की, लेकिन भुगतान नहीं हो पाया। सबसे संभावित वजह यह है कि कार्ड अस्वीकार हो गया या उसकी वैधता ख़त्म हो गई।",
+   "p1Reminder": "आपकी Gadit सदस्यता का भुगतान अभी तक नहीं हुआ है।",
+   "p2First": "<b>आपकी पहुँच 7 दिनों तक बनी रहेगी।</b> कार्ड अपडेट करने में एक मिनट से भी कम लगता है, और सब कुछ पहले की तरह चलता रहेगा, बच्चों की नोटबुक और प्रगति खोए बिना।",
+   "p2Reminder": "<b>{days} दिनों में आपकी पहुँच मुफ़्त प्लान पर चली जाएगी।</b> कार्ड अपडेट करने में एक मिनट से भी कम लगता है, और बच्चों की नोटबुक और प्रगति सुरक्षित रहती है।",
+   "p2ReminderOne": "<b>1 दिन में आपकी पहुँच मुफ़्त प्लान पर चली जाएगी।</b> कार्ड अपडेट करने में एक मिनट से भी कम लगता है, और बच्चों की नोटबुक और प्रगति सुरक्षित रहती है।",
+   "cta": "कार्ड अपडेट करें",
+   "foot": "अगर आप कार्ड पहले ही अपडेट कर चुके हैं, तो इस ईमेल को अनदेखा कर दें। कुछ भी साफ़ न हो, तो बस जवाब दें, हम यहाँ हैं।",
+   "sign": "Gadit टीम"
+  },
+  "familyWelcome": {
+   "subject": "आपका Gadit Family प्लान शुरू हो गया है 🎉",
+   "heading": "आपका परिवार शुरू करने के लिए तैयार है",
+   "intro": "Gadit Family में आपका स्वागत है। आपका फ़ैमिली प्लान सक्रिय है। सबको सेट अप करने के लिए ये पहले तीन कदम हैं:",
+   "s1": "दूसरे अभिभावक को जोड़ें, ताकि आप दोनों बच्चों की प्रगति देख सकें।",
+   "s2": "बच्चों को जोड़ें, हर बच्चा अपने डिवाइस पर, बिना पासवर्ड के, बस एक छोटे पेयरिंग कोड से।",
+   "s3": "Gadit को होम स्क्रीन पर सेव करें, फ़ोन, टैबलेट या कंप्यूटर पर।",
+   "cta": "पहले कदम शुरू करें",
+   "foot": "किसी भी सवाल के लिए हम यहाँ हैं। बस इस ईमेल का जवाब दें।"
+  }
+ },
+ "am": {
+  "dunning": {
+   "subjectFirst": "ክፍያዎ አልተሳካም። ካርድዎን ለማዘመን 7 ቀናት አሉዎት",
+   "subjectReminder": "ማስታወሻ፦ ካርድዎን ለማዘመን {days} ቀናት ቀርተዋል",
+   "subjectReminderOne": "ማስታወሻ፦ ካርድዎን ለማዘመን 1 ቀን ቀርቷል",
+   "h1First": "የደንበኝነት ምዝገባዎ ክፍያ አልተሳካም",
+   "h1Reminder": "ካርድዎ አሁንም መዘመን አለበት",
+   "p1First": "የGadit ምዝገባዎን ለማደስ ሞክረን ነበር፣ ነገር ግን ክፍያው አልተሳካም። ምናልባት ካርዱ ውድቅ ተደርጓል ወይም ጊዜው አልፎበታል።",
+   "p1Reminder": "የGadit ምዝገባዎ ክፍያ እስካሁን አልተሳካም።",
+   "p2First": "<b>መዳረሻዎ ለ7 ቀናት ይቆያል።</b> ካርድዎን ማዘመን ከአንድ ደቂቃ ያነሰ ጊዜ ይወስዳል፣ እና የልጆችዎን ማስታወሻ ደብተሮች እና እድገት ሳያጡ ሁሉም ነገር እንደተለመደው ይቀጥላል።",
+   "p2Reminder": "<b>በ{days} ቀናት ውስጥ መዳረሻዎ ወደ ነጻው እቅድ ይዛወራል።</b> ካርድዎን ማዘመን ከአንድ ደቂቃ ያነሰ ጊዜ ይወስዳል፣ የልጆችዎ ማስታወሻ ደብተሮች እና እድገትም ይጠበቃሉ።",
+   "p2ReminderOne": "<b>በ1 ቀን ውስጥ መዳረሻዎ ወደ ነጻው እቅድ ይዛወራል።</b> ካርድዎን ማዘመን ከአንድ ደቂቃ ያነሰ ጊዜ ይወስዳል፣ የልጆችዎ ማስታወሻ ደብተሮች እና እድገትም ይጠበቃሉ።",
+   "cta": "ካርድ ያዘምኑ",
+   "foot": "አስቀድመው ካዘመኑት ይህን ኢሜይል ችላ ማለት ይችላሉ። ግልጽ ያልሆነ ነገር ካለ፣ በቀላሉ ምላሽ ይስጡ፣ እኛ እዚህ ነን።",
+   "sign": "የGadit ቡድን"
+  },
+  "familyWelcome": {
+   "subject": "የGadit Family እቅድዎ ስራ ጀምሯል 🎉",
+   "heading": "ቤተሰብዎ ለመጀመር ዝግጁ ነው",
+   "intro": "እንኳን ወደ Gadit Family በደህና መጡ። የቤተሰብ እቅድዎ ንቁ ነው። ሁሉንም ለማዘጋጀት የመጀመሪያዎቹ ሦስት እርምጃዎች እነሆ፦",
+   "s1": "ሁለተኛውን ወላጅ ያገናኙ፣ ሁለታችሁም የልጆቹን እድገት እንድትከታተሉ።",
+   "s2": "ልጆቹን ያገናኙ፣ እያንዳንዱን በራሱ መሣሪያ ላይ፣ ያለ የይለፍ ቃል፣ በአጭር የማጣመሪያ ኮድ ብቻ።",
+   "s3": "Gaditን በስልክ፣ በታብሌት ወይም በኮምፒውተር የመነሻ ገጽ ላይ ያስቀምጡ።",
+   "cta": "የመጀመሪያ እርምጃዎችን ይጀምሩ",
+   "foot": "ለማንኛውም ጥያቄ እዚህ ነን። በቀላሉ ለዚህ ኢሜይል ምላሽ ይስጡ።"
+  }
+ },
+ "uk": {
+  "dunning": {
+   "subjectFirst": "Оплата не пройшла. У вас є 7 днів, щоб оновити картку",
+   "subjectReminder": "Нагадування: ще {days} дн., щоб оновити картку",
+   "subjectReminderOne": "Нагадування: залишився 1 день, щоб оновити картку",
+   "h1First": "Оплата підписки не пройшла",
+   "h1Reminder": "Картку досі потрібно оновити",
+   "p1First": "Ми спробували продовжити вашу підписку Gadit, але оплата не пройшла. Найімовірніше, картку відхилено або строк її дії минув.",
+   "p1Reminder": "Оплата вашої підписки Gadit досі не пройшла.",
+   "p2First": "<b>Доступ зберігається ще 7 днів.</b> Оновлення картки займає менше хвилини, і все працюватиме як завжди, без втрати зошитів і прогресу ваших дітей.",
+   "p2Reminder": "<b>Через {days} дн. ваш доступ перейде на безкоштовний план.</b> Оновлення картки займає менше хвилини, а зошити й прогрес ваших дітей збережуться.",
+   "p2ReminderOne": "<b>Через 1 день ваш доступ перейде на безкоштовний план.</b> Оновлення картки займає менше хвилини, а зошити й прогрес ваших дітей збережуться.",
+   "cta": "Оновити картку",
+   "foot": "Якщо ви вже оновили картку, просто проігноруйте цей лист. Якщо щось незрозуміло, відповідайте на цей лист, ми на зв'язку.",
+   "sign": "Команда Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Ваш план Gadit Family активовано 🎉",
+   "heading": "Ваша родина готова до старту",
+   "intro": "Вітаємо в Gadit Family. Ваш сімейний план активний. Ось перші три кроки, щоб налаштувати все для всієї родини:",
+   "s1": "Підключіть другого з батьків, щоб ви обоє стежили за прогресом дітей.",
+   "s2": "Підключіть дітей: кожна дитина на своєму пристрої, без пароля, лише з коротким кодом підключення.",
+   "s3": "Додайте Gadit на головний екран телефона, планшета чи комп'ютера.",
+   "cta": "Почати перші кроки",
+   "foot": "Ми на зв'язку з будь-яких питань. Просто відповідайте на цей лист."
+  }
+ },
+ "tr": {
+  "dunning": {
+   "subjectFirst": "Ödemeniz gerçekleşmedi. Kartınızı güncellemek için 7 gününüz var",
+   "subjectReminder": "Hatırlatma: Kartınızı güncellemek için {days} gün kaldı",
+   "subjectReminderOne": "Hatırlatma: Kartınızı güncellemek için 1 gün kaldı",
+   "h1First": "Abonelik ödemeniz gerçekleşmedi",
+   "h1Reminder": "Kartınızın hâlâ güncellenmesi gerekiyor",
+   "p1First": "Gadit aboneliğinizi yenilemeye çalıştık ancak ödeme gerçekleşmedi. Büyük olasılıkla kart reddedildi ya da süresi doldu.",
+   "p1Reminder": "Gadit aboneliğinizin ödemesi hâlâ gerçekleşmedi.",
+   "p2First": "<b>Erişiminiz 7 gün boyunca açık kalacak.</b> Kartı güncellemek bir dakikadan kısa sürer ve çocuklarınızın defterleri ile ilerlemesi kaybolmadan her şey her zamanki gibi devam eder.",
+   "p2Reminder": "<b>{days} gün içinde erişiminiz ücretsiz plana geçecek.</b> Kartı güncellemek bir dakikadan kısa sürer, çocuklarınızın defterleri ve ilerlemesi korunur.",
+   "p2ReminderOne": "<b>1 gün içinde erişiminiz ücretsiz plana geçecek.</b> Kartı güncellemek bir dakikadan kısa sürer, çocuklarınızın defterleri ve ilerlemesi korunur.",
+   "cta": "Kartı güncelle",
+   "foot": "Kartınızı zaten güncellediyseniz bu e-postayı dikkate almayabilirsiniz. Anlaşılmayan bir şey olursa yanıtlamanız yeterli, buradayız.",
+   "sign": "Gadit ekibi"
+  },
+  "familyWelcome": {
+   "subject": "Gadit Family planınız etkin 🎉",
+   "heading": "Aileniz başlamaya hazır",
+   "intro": "Gadit Family'ye hoş geldiniz. Aile planınız etkin. Herkesi hazırlamak için ilk üç adım şunlar:",
+   "s1": "İkinci ebeveyni bağlayın, böylece ikiniz de çocukların ilerlemesini takip edebilirsiniz.",
+   "s2": "Çocukları bağlayın: her biri kendi cihazında, şifre olmadan, yalnızca kısa bir eşleştirme koduyla.",
+   "s3": "Gadit'i telefon, tablet ya da bilgisayarda ana ekrana ekleyin.",
+   "cta": "İlk adımlara başla",
+   "foot": "Her sorunuz için buradayız. Bu e-postayı yanıtlamanız yeterli."
+  }
+ },
+ "pl": {
+  "dunning": {
+   "subjectFirst": "Płatność nie przeszła. Masz 7 dni na aktualizację karty",
+   "subjectReminder": "Przypomnienie: masz {days} dni na aktualizację karty",
+   "subjectReminderOne": "Przypomnienie: masz 1 dzień na aktualizację karty",
+   "h1First": "Płatność za subskrypcję nie przeszła",
+   "h1Reminder": "Karta nadal wymaga aktualizacji",
+   "p1First": "Próbowaliśmy odnowić Twoją subskrypcję Gadit, ale płatność nie przeszła. Najpewniej karta została odrzucona lub straciła ważność.",
+   "p1Reminder": "Płatność za Twoją subskrypcję Gadit nadal nie przeszła.",
+   "p2First": "<b>Dostęp pozostaje aktywny przez 7 dni.</b> Aktualizacja karty zajmuje mniej niż minutę i wszystko działa dalej jak zwykle, bez utraty zeszytów i postępów Twoich dzieci.",
+   "p2Reminder": "<b>Za {days} dni Twój dostęp przejdzie na plan darmowy.</b> Aktualizacja karty zajmuje mniej niż minutę, a zeszyty i postępy Twoich dzieci zostaną zachowane.",
+   "p2ReminderOne": "<b>Za 1 dzień Twój dostęp przejdzie na plan darmowy.</b> Aktualizacja karty zajmuje mniej niż minutę, a zeszyty i postępy Twoich dzieci zostaną zachowane.",
+   "cta": "Zaktualizuj kartę",
+   "foot": "Jeśli karta jest już zaktualizowana, możesz zignorować tę wiadomość. Jeśli coś jest niejasne, po prostu odpisz, jesteśmy tu dla Ciebie.",
+   "sign": "Zespół Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Twój plan Gadit Family jest aktywny 🎉",
+   "heading": "Twoja rodzina jest gotowa do startu",
+   "intro": "Witamy w Gadit Family. Twój plan rodzinny jest aktywny. Oto trzy pierwsze kroki, żeby przygotować całą rodzinę:",
+   "s1": "Połącz drugiego rodzica, żebyście oboje śledzili postępy dzieci.",
+   "s2": "Połącz dzieci, każde na własnym urządzeniu, bez hasła, tylko za pomocą krótkiego kodu parowania.",
+   "s3": "Dodaj Gadit do ekranu głównego telefonu, tabletu lub komputera.",
+   "cta": "Zacznij pierwsze kroki",
+   "foot": "Chętnie odpowiemy na każde pytanie. Po prostu odpisz na tego maila."
+  }
+ },
+ "fa": {
+  "dunning": {
+   "subjectFirst": "پرداخت شما انجام نشد. ۷ روز برای به‌روزرسانی کارت فرصت دارید",
+   "subjectReminder": "یادآوری: {days} روز برای به‌روزرسانی کارت باقی مانده است",
+   "subjectReminderOne": "یادآوری: فقط ۱ روز برای به‌روزرسانی کارت باقی مانده است",
+   "h1First": "پرداخت اشتراک شما انجام نشد",
+   "h1Reminder": "کارت شما هنوز باید به‌روزرسانی شود",
+   "p1First": "تلاش کردیم اشتراک Gadit شما را تمدید کنیم، اما پرداخت انجام نشد. به احتمال زیاد کارت رد شده یا منقضی شده است.",
+   "p1Reminder": "پرداخت اشتراک Gadit شما هنوز انجام نشده است.",
+   "p2First": "<b>دسترسی شما تا ۷ روز فعال می‌ماند.</b> به‌روزرسانی کارت کمتر از یک دقیقه طول می‌کشد و همه‌چیز مثل همیشه ادامه پیدا می‌کند، بدون اینکه دفترها و پیشرفت فرزندانتان از دست برود.",
+   "p2Reminder": "<b>تا {days} روز دیگر دسترسی شما به طرح رایگان منتقل می‌شود.</b> به‌روزرسانی کارت کمتر از یک دقیقه طول می‌کشد و دفترها و پیشرفت فرزندانتان حفظ می‌شود.",
+   "p2ReminderOne": "<b>تا ۱ روز دیگر دسترسی شما به طرح رایگان منتقل می‌شود.</b> به‌روزرسانی کارت کمتر از یک دقیقه طول می‌کشد و دفترها و پیشرفت فرزندانتان حفظ می‌شود.",
+   "cta": "به‌روزرسانی کارت",
+   "foot": "اگر کارت را به‌روزرسانی کرده‌اید، این ایمیل را نادیده بگیرید. اگر چیزی روشن نیست، کافی است پاسخ دهید، ما در کنارتان هستیم.",
+   "sign": "تیم Gadit"
+  },
+  "familyWelcome": {
+   "subject": "طرح Gadit Family شما فعال شد 🎉",
+   "heading": "خانواده‌ی شما آماده‌ی شروع است",
+   "intro": "به Gadit Family خوش آمدید. طرح خانوادگی شما فعال است. این سه قدم اول برای آماده کردن همه است:",
+   "s1": "والد دوم را متصل کنید تا هر دو پیشرفت بچه‌ها را دنبال کنید.",
+   "s2": "بچه‌ها را متصل کنید، هر کدام روی دستگاه خودش، بدون رمز عبور، فقط با یک کد اتصال کوتاه.",
+   "s3": "Gadit را روی صفحه‌ی اصلی گوشی، تبلت یا رایانه ذخیره کنید.",
+   "cta": "شروع قدم‌های اول",
+   "foot": "برای هر پرسشی در کنارتان هستیم. کافی است به همین ایمیل پاسخ دهید."
+  }
+ },
+ "id": {
+  "dunning": {
+   "subjectFirst": "Pembayaran Anda gagal. Anda punya 7 hari untuk memperbarui kartu",
+   "subjectReminder": "Pengingat: tersisa {days} hari untuk memperbarui kartu Anda",
+   "subjectReminderOne": "Pengingat: tersisa 1 hari untuk memperbarui kartu Anda",
+   "h1First": "Pembayaran langganan Anda gagal",
+   "h1Reminder": "Kartu Anda masih perlu diperbarui",
+   "p1First": "Kami mencoba memperpanjang langganan Gadit Anda, tetapi pembayarannya gagal, kemungkinan besar karena kartu ditolak atau sudah kedaluwarsa.",
+   "p1Reminder": "Pembayaran langganan Gadit Anda masih belum berhasil.",
+   "p2First": "<b>Akses Anda tetap aktif selama 7 hari.</b> Memperbarui kartu butuh kurang dari satu menit, dan semuanya berjalan seperti biasa tanpa kehilangan buku catatan dan kemajuan anak-anak Anda.",
+   "p2Reminder": "<b>Dalam {days} hari, akses Anda akan beralih ke paket gratis.</b> Memperbarui kartu butuh kurang dari satu menit, dan buku catatan serta kemajuan anak-anak Anda tetap tersimpan.",
+   "p2ReminderOne": "<b>Dalam 1 hari, akses Anda akan beralih ke paket gratis.</b> Memperbarui kartu butuh kurang dari satu menit, dan buku catatan serta kemajuan anak-anak Anda tetap tersimpan.",
+   "cta": "Perbarui kartu",
+   "foot": "Jika Anda sudah memperbaruinya, abaikan saja email ini. Jika ada yang kurang jelas, cukup balas email ini, kami siap membantu.",
+   "sign": "Tim Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Paket Gadit Family Anda sudah aktif 🎉",
+   "heading": "Keluarga Anda siap memulai",
+   "intro": "Selamat datang di Gadit Family. Paket keluarga Anda sudah aktif. Berikut tiga langkah pertama untuk menyiapkan semua anggota keluarga:",
+   "s1": "Hubungkan orang tua kedua, agar Anda berdua bisa mengikuti kemajuan anak-anak.",
+   "s2": "Hubungkan anak-anak, masing-masing di perangkatnya sendiri tanpa kata sandi, cukup dengan kode pemasangan singkat.",
+   "s3": "Simpan Gadit di layar utama ponsel, tablet, atau komputer.",
+   "cta": "Mulai langkah pertama",
+   "foot": "Kami siap membantu untuk pertanyaan apa pun. Cukup balas email ini."
+  }
+ },
+ "nl": {
+  "dunning": {
+   "subjectFirst": "Je betaling is niet gelukt. Je hebt 7 dagen om je kaart bij te werken",
+   "subjectReminder": "Herinnering: nog {days} dagen om je kaart bij te werken",
+   "subjectReminderOne": "Herinnering: nog 1 dag om je kaart bij te werken",
+   "h1First": "De betaling van je abonnement is niet gelukt",
+   "h1Reminder": "Je kaart moet nog worden bijgewerkt",
+   "p1First": "We hebben geprobeerd je Gadit-abonnement te verlengen, maar de betaling is niet gelukt. Waarschijnlijk is je kaart geweigerd of verlopen.",
+   "p1Reminder": "De betaling voor je Gadit-abonnement is nog steeds niet gelukt.",
+   "p2First": "<b>Je toegang blijft 7 dagen actief.</b> Je kaart bijwerken kost minder dan een minuut, en alles gaat gewoon door, zonder dat de schriften en voortgang van je kinderen verloren gaan.",
+   "p2Reminder": "<b>Over {days} dagen gaat je toegang over naar het gratis abonnement.</b> Je kaart bijwerken kost minder dan een minuut, en de schriften en voortgang van je kinderen blijven bewaard.",
+   "p2ReminderOne": "<b>Over 1 dag gaat je toegang over naar het gratis abonnement.</b> Je kaart bijwerken kost minder dan een minuut, en de schriften en voortgang van je kinderen blijven bewaard.",
+   "cta": "Kaart bijwerken",
+   "foot": "Heb je je kaart al bijgewerkt? Dan kun je deze e-mail negeren. Is iets niet duidelijk? Stuur gewoon een reactie, we helpen je graag.",
+   "sign": "Het Gadit-team"
+  },
+  "familyWelcome": {
+   "subject": "Je Gadit Family-abonnement is actief 🎉",
+   "heading": "Je gezin kan van start",
+   "intro": "Welkom bij Gadit Family. Je gezinsabonnement is actief. Dit zijn de eerste drie stappen om iedereen op weg te helpen:",
+   "s1": "Koppel de tweede ouder, zodat jullie allebei de voortgang van de kinderen volgen.",
+   "s2": "Koppel de kinderen, elk op een eigen apparaat, zonder wachtwoord, alleen met een korte koppelcode.",
+   "s3": "Zet Gadit op het beginscherm van je telefoon, tablet of computer.",
+   "cta": "Begin met de eerste stappen",
+   "foot": "We helpen je graag met elke vraag. Beantwoord gewoon deze e-mail."
+  }
+ },
+ "el": {
+  "dunning": {
+   "subjectFirst": "Η πληρωμή σας δεν ολοκληρώθηκε. Έχετε 7 ημέρες για να ενημερώσετε την κάρτα σας",
+   "subjectReminder": "Υπενθύμιση: απομένουν {days} ημέρες για να ενημερώσετε την κάρτα σας",
+   "subjectReminderOne": "Υπενθύμιση: απομένει 1 ημέρα για να ενημερώσετε την κάρτα σας",
+   "h1First": "Η πληρωμή της συνδρομής σας δεν ολοκληρώθηκε",
+   "h1Reminder": "Η κάρτα σας χρειάζεται ακόμη ενημέρωση",
+   "p1First": "Προσπαθήσαμε να ανανεώσουμε τη συνδρομή σας στο Gadit, αλλά η χρέωση δεν ολοκληρώθηκε, πιθανότατα επειδή η κάρτα απορρίφθηκε ή έχει λήξει.",
+   "p1Reminder": "Η πληρωμή της συνδρομής σας στο Gadit δεν έχει ολοκληρωθεί ακόμη.",
+   "p2First": "<b>Η πρόσβασή σας παραμένει ενεργή για 7 ημέρες.</b> Η ενημέρωση της κάρτας παίρνει λιγότερο από ένα λεπτό και όλα συνεχίζονται κανονικά, χωρίς να χαθούν τα τετράδια και η πρόοδος των παιδιών σας.",
+   "p2Reminder": "<b>Σε {days} ημέρες η πρόσβασή σας θα μεταφερθεί στο δωρεάν πρόγραμμα.</b> Η ενημέρωση της κάρτας παίρνει λιγότερο από ένα λεπτό, και τα τετράδια και η πρόοδος των παιδιών σας διατηρούνται.",
+   "p2ReminderOne": "<b>Σε 1 ημέρα η πρόσβασή σας θα μεταφερθεί στο δωρεάν πρόγραμμα.</b> Η ενημέρωση της κάρτας παίρνει λιγότερο από ένα λεπτό, και τα τετράδια και η πρόοδος των παιδιών σας διατηρούνται.",
+   "cta": "Ενημέρωση κάρτας",
+   "foot": "Αν την έχετε ήδη ενημερώσει, μπορείτε να αγνοήσετε αυτό το email. Αν κάτι δεν είναι σαφές, απλώς απαντήστε, είμαστε εδώ.",
+   "sign": "Η ομάδα του Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Το πρόγραμμα Gadit Family σας είναι ενεργό 🎉",
+   "heading": "Η οικογένειά σας είναι έτοιμη να ξεκινήσει",
+   "intro": "Καλώς ήρθατε στο Gadit Family. Το οικογενειακό σας πρόγραμμα είναι ενεργό. Αυτά είναι τα τρία πρώτα βήματα για να ξεκινήσουν όλοι:",
+   "s1": "Συνδέστε τον δεύτερο γονέα, ώστε να παρακολουθείτε και οι δύο την πρόοδο των παιδιών.",
+   "s2": "Συνδέστε τα παιδιά, το καθένα στη δική του συσκευή, χωρίς κωδικό πρόσβασης, μόνο με έναν σύντομο κωδικό σύζευξης.",
+   "s3": "Προσθέστε το Gadit στην αρχική οθόνη του κινητού, του tablet ή του υπολογιστή.",
+   "cta": "Ξεκινήστε τα πρώτα βήματα",
+   "foot": "Είμαστε εδώ για κάθε ερώτηση. Απλώς απαντήστε σε αυτό το email."
+  }
+ },
+ "zu": {
+  "dunning": {
+   "subjectFirst": "Inkokhelo yakho ayiphumelelanga. Unezinsuku ezingu-7 zokubuyekeza ikhadi lakho",
+   "subjectReminder": "Isikhumbuzo: kusele izinsuku ezingu-{days} zokubuyekeza ikhadi lakho",
+   "subjectReminderOne": "Isikhumbuzo: kusele usuku olulodwa lokubuyekeza ikhadi lakho",
+   "h1First": "Inkokhelo yokubhalisa kwakho ayiphumelelanga",
+   "h1Reminder": "Ikhadi lakho lisadinga ukubuyekezwa",
+   "p1First": "Sizamile ukuvuselela ukubhalisa kwakho kwe-Gadit kodwa inkokhelo ayiphumelelanga, mhlawumbe ikhadi lenqatshiwe noma liphelelwe yisikhathi.",
+   "p1Reminder": "Inkokhelo yokubhalisa kwakho kwe-Gadit ayikaphumeleli.",
+   "p2First": "<b>Ukufinyelela kwakho kuhlala kuvuliwe izinsuku ezingu-7.</b> Ukubuyekeza ikhadi kuthatha ngaphansi komzuzu, futhi konke kuqhubeka njengenjwayelo, ngaphandle kokulahlekelwa yizincwadi zamagama nenqubekela phambili yezingane zakho.",
+   "p2Reminder": "<b>Emva kwezinsuku ezingu-{days} ukufinyelela kwakho kuzodlulela ohlelweni lwamahhala.</b> Ukubuyekeza ikhadi kuthatha ngaphansi komzuzu, futhi izincwadi zamagama nenqubekela phambili yezingane zakho kuyagcinwa.",
+   "p2ReminderOne": "<b>Emva kosuku olulodwa ukufinyelela kwakho kuzodlulela ohlelweni lwamahhala.</b> Ukubuyekeza ikhadi kuthatha ngaphansi komzuzu, futhi izincwadi zamagama nenqubekela phambili yezingane zakho kuyagcinwa.",
+   "cta": "Buyekeza ikhadi",
+   "foot": "Uma usulibuyekezile, ungayishaya indiva le imeyili. Uma kukhona okungacacile, vele uphendule, sikhona.",
+   "sign": "Ithimba le-Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Uhlelo lwakho lwe-Gadit Family selusebenza 🎉",
+   "heading": "Umndeni wakho usukulungele ukuqala",
+   "intro": "Siyakwamukela ku-Gadit Family. Uhlelo lwakho lomndeni luyasebenza. Nazi izinyathelo ezintathu zokuqala zokulungiselela wonke umuntu:",
+   "s1": "Xhuma umzali wesibili, ukuze nobabili nilandelele inqubekela phambili yezingane.",
+   "s2": "Xhuma izingane, ngayinye kudivayisi yayo, ngaphandle kwephasiwedi, ngekhodi emfushane yokuxhuma nje.",
+   "s3": "Gcina i-Gadit esikrinini sasekhaya, efonini, kuthebhulethi noma kukhompyutha.",
+   "cta": "Qala izinyathelo zokuqala",
+   "foot": "Sikhona kunoma yimuphi umbuzo. Vele uphendule le imeyili."
+  }
+ },
+ "vi": {
+  "dunning": {
+   "subjectFirst": "Thanh toán của bạn không thành công. Bạn có 7 ngày để cập nhật thẻ",
+   "subjectReminder": "Nhắc nhở: còn {days} ngày để cập nhật thẻ của bạn",
+   "subjectReminderOne": "Nhắc nhở: còn 1 ngày để cập nhật thẻ của bạn",
+   "h1First": "Thanh toán gói đăng ký của bạn không thành công",
+   "h1Reminder": "Thẻ của bạn vẫn cần được cập nhật",
+   "p1First": "Chúng tôi đã thử gia hạn gói Gadit của bạn nhưng giao dịch không thành công, nhiều khả năng do thẻ bị từ chối hoặc đã hết hạn.",
+   "p1Reminder": "Khoản thanh toán cho gói Gadit của bạn vẫn chưa thành công.",
+   "p2First": "<b>Quyền truy cập của bạn vẫn được giữ trong 7 ngày.</b> Cập nhật thẻ chỉ mất chưa đến một phút, và mọi thứ vẫn tiếp tục như bình thường, không mất sổ từ và tiến độ học của các con.",
+   "p2Reminder": "<b>Sau {days} ngày, quyền truy cập của bạn sẽ chuyển sang gói miễn phí.</b> Cập nhật thẻ chỉ mất chưa đến một phút, và sổ từ cùng tiến độ học của các con vẫn được giữ nguyên.",
+   "p2ReminderOne": "<b>Sau 1 ngày, quyền truy cập của bạn sẽ chuyển sang gói miễn phí.</b> Cập nhật thẻ chỉ mất chưa đến một phút, và sổ từ cùng tiến độ học của các con vẫn được giữ nguyên.",
+   "cta": "Cập nhật thẻ",
+   "foot": "Nếu bạn đã cập nhật rồi, bạn có thể bỏ qua email này. Nếu có gì chưa rõ, chỉ cần trả lời email, chúng tôi luôn sẵn sàng hỗ trợ.",
+   "sign": "Đội ngũ Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Gói Gadit Family của bạn đã được kích hoạt 🎉",
+   "heading": "Gia đình bạn đã sẵn sàng",
+   "intro": "Chào mừng bạn đến với Gadit Family. Gói gia đình của bạn đã được kích hoạt. Đây là ba bước đầu tiên để thiết lập cho cả nhà:",
+   "s1": "Kết nối phụ huynh thứ hai để cả hai cùng theo dõi tiến độ của các con.",
+   "s2": "Kết nối các con, mỗi bé trên thiết bị riêng, không cần mật khẩu, chỉ cần một mã ghép nối ngắn.",
+   "s3": "Lưu Gadit vào màn hình chính trên điện thoại, máy tính bảng hoặc máy tính.",
+   "cta": "Bắt đầu các bước đầu tiên",
+   "foot": "Chúng tôi luôn sẵn sàng giải đáp mọi thắc mắc. Chỉ cần trả lời email này."
+  }
+ },
+ "fil": {
+  "dunning": {
+   "subjectFirst": "Hindi natuloy ang bayad mo. May 7 araw ka para i-update ang iyong card",
+   "subjectReminder": "Paalala: {days} araw na lang para i-update ang iyong card",
+   "subjectReminderOne": "Paalala: 1 araw na lang para i-update ang iyong card",
+   "h1First": "Hindi natuloy ang bayad sa iyong subscription",
+   "h1Reminder": "Kailangan pa ring i-update ang iyong card",
+   "p1First": "Sinubukan naming i-renew ang iyong Gadit subscription pero hindi natuloy ang singil, malamang dahil na-decline o expired na ang card.",
+   "p1Reminder": "Hindi pa rin natutuloy ang bayad para sa iyong Gadit subscription.",
+   "p2First": "<b>Mananatiling bukas ang access mo nang 7 araw.</b> Wala pang isang minuto ang pag-update ng card, at tuloy-tuloy ang lahat gaya ng dati, nang hindi nawawala ang mga notebook at progreso ng iyong mga anak.",
+   "p2Reminder": "<b>Pagkalipas ng {days} araw, lilipat ang access mo sa libreng plan.</b> Wala pang isang minuto ang pag-update ng card, at mananatili ang mga notebook at progreso ng iyong mga anak.",
+   "p2ReminderOne": "<b>Pagkalipas ng 1 araw, lilipat ang access mo sa libreng plan.</b> Wala pang isang minuto ang pag-update ng card, at mananatili ang mga notebook at progreso ng iyong mga anak.",
+   "cta": "I-update ang card",
+   "foot": "Kung na-update mo na ito, puwede mong balewalain ang email na ito. Kung may hindi malinaw, mag-reply ka lang at nandito kami.",
+   "sign": "Ang Gadit team"
+  },
+  "familyWelcome": {
+   "subject": "Live na ang iyong Gadit Family plan 🎉",
+   "heading": "Handa na ang pamilya mo",
+   "intro": "Maligayang pagdating sa Gadit Family. Aktibo na ang iyong family plan. Narito ang unang tatlong hakbang para ma-set up ang lahat:",
+   "s1": "Ikonekta ang pangalawang magulang, para pareho ninyong masubaybayan ang progreso ng mga bata.",
+   "s2": "Ikonekta ang mga bata, bawat isa sa sarili niyang device, walang password, isang maikling pairing code lang.",
+   "s3": "I-save ang Gadit sa home screen, sa phone, tablet o computer.",
+   "cta": "Simulan ang unang mga hakbang",
+   "foot": "Nandito kami para sa anumang tanong. Mag-reply ka lang sa email na ito."
+  }
+ },
+ "af": {
+  "dunning": {
+   "subjectFirst": "Jou betaling het nie deurgegaan nie. Jy het 7 dae om jou kaart by te werk",
+   "subjectReminder": "Herinnering: nog {days} dae om jou kaart by te werk",
+   "subjectReminderOne": "Herinnering: nog 1 dag om jou kaart by te werk",
+   "h1First": "Jou intekeningbetaling het nie deurgegaan nie",
+   "h1Reminder": "Jou kaart moet nog bygewerk word",
+   "p1First": "Ons het probeer om jou Gadit-intekening te hernu, maar die betaling het nie deurgegaan nie, heel waarskynlik weens 'n geweierde of verstreke kaart.",
+   "p1Reminder": "Die betaling vir jou Gadit-intekening het steeds nie deurgegaan nie.",
+   "p2First": "<b>Jou toegang bly 7 dae lank aktief.</b> Dit neem minder as 'n minuut om jou kaart by te werk, en alles gaan soos gewoonlik voort, sonder dat jy jou kinders se notaboeke en vordering verloor.",
+   "p2Reminder": "<b>Oor {days} dae skuif jou toegang na die gratis plan.</b> Dit neem minder as 'n minuut om jou kaart by te werk, en jou kinders se notaboeke en vordering word bewaar.",
+   "p2ReminderOne": "<b>Oor 1 dag skuif jou toegang na die gratis plan.</b> Dit neem minder as 'n minuut om jou kaart by te werk, en jou kinders se notaboeke en vordering word bewaar.",
+   "cta": "Werk kaart by",
+   "foot": "As jy dit reeds bygewerk het, kan jy hierdie e-pos ignoreer. As iets nie duidelik is nie, antwoord net, ons is hier.",
+   "sign": "Die Gadit-span"
+  },
+  "familyWelcome": {
+   "subject": "Jou Gadit Family-plan is aktief 🎉",
+   "heading": "Jou gesin is gereed",
+   "intro": "Welkom by Gadit Family. Jou gesinsplan is aktief. Hier is die eerste drie stappe om almal op te stel:",
+   "s1": "Koppel die tweede ouer, sodat julle albei die kinders se vordering kan volg.",
+   "s2": "Koppel die kinders, elkeen op sy eie toestel, sonder 'n wagwoord, net 'n kort koppelkode.",
+   "s3": "Stoor Gadit op die tuisskerm, op 'n foon, tablet of rekenaar.",
+   "cta": "Begin met die eerste stappe",
+   "foot": "Ons is hier vir enige vraag. Antwoord net op hierdie e-pos."
+  }
+ },
+ "sw": {
+  "dunning": {
+   "subjectFirst": "Malipo yako hayakufanikiwa. Una siku 7 za kusasisha kadi yako",
+   "subjectReminder": "Kikumbusho: zimebaki siku {days} za kusasisha kadi yako",
+   "subjectReminderOne": "Kikumbusho: imebaki siku 1 ya kusasisha kadi yako",
+   "h1First": "Malipo ya usajili wako hayakufanikiwa",
+   "h1Reminder": "Kadi yako bado inahitaji kusasishwa",
+   "p1First": "Tulijaribu kuhuisha usajili wako wa Gadit lakini malipo hayakufanikiwa, huenda kadi ilikataliwa au muda wake umeisha.",
+   "p1Reminder": "Malipo ya usajili wako wa Gadit bado hayajafanikiwa.",
+   "p2First": "<b>Ufikiaji wako utaendelea kwa siku 7.</b> Kusasisha kadi yako huchukua chini ya dakika moja, na kila kitu kinaendelea kama kawaida, bila kupoteza madaftari na maendeleo ya watoto wako.",
+   "p2Reminder": "<b>Baada ya siku {days} ufikiaji wako utahamia kwenye mpango wa bure.</b> Kusasisha kadi yako huchukua chini ya dakika moja, na madaftari na maendeleo ya watoto wako yatahifadhiwa.",
+   "p2ReminderOne": "<b>Baada ya siku 1 ufikiaji wako utahamia kwenye mpango wa bure.</b> Kusasisha kadi yako huchukua chini ya dakika moja, na madaftari na maendeleo ya watoto wako yatahifadhiwa.",
+   "cta": "Sasisha kadi",
+   "foot": "Ikiwa tayari umeisasisha, unaweza kupuuza barua pepe hii. Kama kuna jambo lisilo wazi, jibu tu na tuko hapa.",
+   "sign": "Timu ya Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Mpango wako wa Gadit Family sasa unatumika 🎉",
+   "heading": "Familia yako iko tayari",
+   "intro": "Karibu Gadit Family. Mpango wako wa familia unatumika. Hizi ndizo hatua tatu za kwanza za kumwandaa kila mtu:",
+   "s1": "Unganisha mzazi wa pili, ili nyote wawili mfuatilie maendeleo ya watoto.",
+   "s2": "Unganisha watoto, kila mmoja kwenye kifaa chake, bila nenosiri, ni msimbo mfupi wa kuoanisha tu.",
+   "s3": "Hifadhi Gadit kwenye skrini ya mwanzo, kwenye simu, kompyuta kibao au kompyuta.",
+   "cta": "Anza hatua za kwanza",
+   "foot": "Tuko hapa kwa swali lolote. Jibu tu barua pepe hii."
+  }
+ },
+ "zh-CN": {
+  "dunning": {
+   "subjectFirst": "你的付款未成功，请在 7 天内更新银行卡",
+   "subjectReminder": "提醒：还剩 {days} 天更新银行卡",
+   "subjectReminderOne": "提醒：只剩 1 天更新银行卡",
+   "h1First": "你的订阅付款未成功",
+   "h1Reminder": "你的银行卡仍需更新",
+   "p1First": "我们尝试为你续订 Gadit，但扣款未成功，很可能是银行卡被拒或已过期。",
+   "p1Reminder": "你的 Gadit 订阅付款仍未成功。",
+   "p2First": "<b>你的使用权限将保留 7 天。</b>更新银行卡不到一分钟，一切照常继续，孩子们的单词本和学习进度都不会丢失。",
+   "p2Reminder": "<b>{days} 天后，你的使用权限将转为免费方案。</b>更新银行卡不到一分钟，孩子们的单词本和学习进度都会保留。",
+   "p2ReminderOne": "<b>1 天后，你的使用权限将转为免费方案。</b>更新银行卡不到一分钟，孩子们的单词本和学习进度都会保留。",
+   "cta": "更新银行卡",
+   "foot": "如果你已经更新，可以忽略这封邮件。如有任何疑问，直接回复即可，我们随时都在。",
+   "sign": "Gadit 团队"
+  },
+  "familyWelcome": {
+   "subject": "你的 Gadit Family 方案已开通 🎉",
+   "heading": "你的家庭已准备就绪",
+   "intro": "欢迎使用 Gadit Family。你的家庭方案已生效。按照下面三个步骤，让每位家庭成员都设置好：",
+   "s1": "连接另一位家长，这样你们俩都能关注孩子的进度。",
+   "s2": "连接孩子们，每人使用自己的设备，无需密码，只需一个简短的配对码。",
+   "s3": "将 Gadit 添加到主屏幕，手机、平板或电脑均可。",
+   "cta": "开始第一步",
+   "foot": "有任何问题，我们都在。直接回复这封邮件即可。"
+  }
+ },
+ "zh-TW": {
+  "dunning": {
+   "subjectFirst": "你的付款未成功，請在 7 天內更新信用卡",
+   "subjectReminder": "提醒：還剩 {days} 天可以更新信用卡",
+   "subjectReminderOne": "提醒：只剩 1 天可以更新信用卡",
+   "h1First": "你的訂閱付款未成功",
+   "h1Reminder": "你的信用卡仍需更新",
+   "p1First": "我們嘗試為你續訂 Gadit，但扣款未成功，很可能是信用卡遭拒或已過期。",
+   "p1Reminder": "你的 Gadit 訂閱付款仍未成功。",
+   "p2First": "<b>你的使用權限會保留 7 天。</b>更新信用卡不到一分鐘，一切照常進行，孩子們的單字本和學習進度都不會遺失。",
+   "p2Reminder": "<b>{days} 天後，你的使用權限將轉為免費方案。</b>更新信用卡不到一分鐘，孩子們的單字本和學習進度都會保留。",
+   "p2ReminderOne": "<b>1 天後，你的使用權限將轉為免費方案。</b>更新信用卡不到一分鐘，孩子們的單字本和學習進度都會保留。",
+   "cta": "更新信用卡",
+   "foot": "如果你已經更新，可以忽略這封信。如有任何不清楚的地方，直接回信就好，我們隨時都在。",
+   "sign": "Gadit 團隊"
+  },
+  "familyWelcome": {
+   "subject": "你的 Gadit Family 方案已啟用 🎉",
+   "heading": "你的家庭已準備就緒",
+   "intro": "歡迎使用 Gadit Family。你的家庭方案已啟用。以下是讓每個人完成設定的前三個步驟：",
+   "s1": "連結另一位家長，讓你們兩人都能追蹤孩子的進度。",
+   "s2": "連結孩子們，每人使用自己的裝置，不需要密碼，只要一組簡短的配對碼。",
+   "s3": "將 Gadit 加入主畫面，手機、平板或電腦都可以。",
+   "cta": "開始第一步",
+   "foot": "有任何問題，我們都在。直接回覆這封信就可以了。"
+  }
+ },
+ "ko": {
+  "dunning": {
+   "subjectFirst": "결제가 완료되지 않았어요. 7일 안에 카드를 업데이트해 주세요",
+   "subjectReminder": "알림: 카드 업데이트까지 {days}일 남았어요",
+   "subjectReminderOne": "알림: 카드 업데이트까지 하루 남았어요",
+   "h1First": "구독 결제가 완료되지 않았어요",
+   "h1Reminder": "아직 카드 업데이트가 필요해요",
+   "p1First": "Gadit 구독을 갱신하려 했지만 결제가 완료되지 않았어요. 카드가 거절되었거나 만료되었을 가능성이 커요.",
+   "p1Reminder": "Gadit 구독 결제가 아직 완료되지 않았어요.",
+   "p2First": "<b>이용 권한은 7일 동안 유지돼요.</b> 카드 업데이트는 1분도 걸리지 않고, 아이들의 단어장과 학습 기록을 잃지 않은 채 모든 것이 평소처럼 이어져요.",
+   "p2Reminder": "<b>{days}일 후에는 무료 요금제로 전환돼요.</b> 카드 업데이트는 1분도 걸리지 않고, 아이들의 단어장과 학습 기록은 그대로 보관돼요.",
+   "p2ReminderOne": "<b>하루 뒤에는 무료 요금제로 전환돼요.</b> 카드 업데이트는 1분도 걸리지 않고, 아이들의 단어장과 학습 기록은 그대로 보관돼요.",
+   "cta": "카드 업데이트",
+   "foot": "이미 업데이트했다면 이 메일은 무시해도 돼요. 궁금한 점이 있으면 답장만 주세요. 저희가 도와드릴게요.",
+   "sign": "Gadit 팀"
+  },
+  "familyWelcome": {
+   "subject": "Gadit Family 요금제가 시작됐어요 🎉",
+   "heading": "가족 모두 시작할 준비가 됐어요",
+   "intro": "Gadit Family에 오신 것을 환영해요. 가족 요금제가 활성화됐어요. 모두가 시작할 수 있도록 첫 세 단계를 안내해 드릴게요:",
+   "s1": "다른 보호자를 연결해서 두 분이 함께 아이들의 진도를 확인하세요.",
+   "s2": "아이들을 연결하세요. 각자 자기 기기에서, 비밀번호 없이 짧은 연결 코드만 입력하면 돼요.",
+   "s3": "휴대폰, 태블릿, 컴퓨터의 홈 화면에 Gadit을 추가하세요.",
+   "cta": "첫 단계 시작하기",
+   "foot": "궁금한 점이 있으면 언제든 이 메일에 답장해 주세요."
+  }
+ },
+ "th": {
+  "dunning": {
+   "subjectFirst": "การชำระเงินของคุณไม่สำเร็จ คุณมีเวลา 7 วันในการอัปเดตบัตร",
+   "subjectReminder": "แจ้งเตือน: เหลือเวลาอีก {days} วันในการอัปเดตบัตร",
+   "subjectReminderOne": "แจ้งเตือน: เหลือเวลาอีก 1 วันในการอัปเดตบัตร",
+   "h1First": "การชำระค่าสมาชิกของคุณไม่สำเร็จ",
+   "h1Reminder": "บัตรของคุณยังต้องอัปเดต",
+   "p1First": "เราพยายามต่ออายุการสมัครสมาชิก Gadit ของคุณ แต่การเรียกเก็บเงินไม่สำเร็จ ซึ่งน่าจะเป็นเพราะบัตรถูกปฏิเสธหรือหมดอายุ",
+   "p1Reminder": "การชำระค่าสมาชิก Gadit ของคุณยังไม่สำเร็จ",
+   "p2First": "<b>คุณยังใช้งานได้ต่ออีก 7 วัน</b> การอัปเดตบัตรใช้เวลาไม่ถึงหนึ่งนาที และทุกอย่างจะดำเนินต่อตามปกติ โดยสมุดคำศัพท์และความก้าวหน้าของลูกๆ จะไม่หายไป",
+   "p2Reminder": "<b>อีก {days} วัน บัญชีของคุณจะเปลี่ยนเป็นแพ็กเกจฟรี</b> การอัปเดตบัตรใช้เวลาไม่ถึงหนึ่งนาที และสมุดคำศัพท์กับความก้าวหน้าของลูกๆ จะยังเก็บไว้ครบ",
+   "p2ReminderOne": "<b>อีก 1 วัน บัญชีของคุณจะเปลี่ยนเป็นแพ็กเกจฟรี</b> การอัปเดตบัตรใช้เวลาไม่ถึงหนึ่งนาที และสมุดคำศัพท์กับความก้าวหน้าของลูกๆ จะยังเก็บไว้ครบ",
+   "cta": "อัปเดตบัตร",
+   "foot": "หากคุณอัปเดตแล้ว ไม่ต้องสนใจอีเมลนี้ หากมีอะไรไม่ชัดเจน ตอบกลับอีเมลนี้ได้เลย เราพร้อมช่วยเสมอ",
+   "sign": "ทีม Gadit"
+  },
+  "familyWelcome": {
+   "subject": "แพ็กเกจ Gadit Family ของคุณพร้อมใช้งานแล้ว 🎉",
+   "heading": "ครอบครัวของคุณพร้อมแล้ว",
+   "intro": "ยินดีต้อนรับสู่ Gadit Family แพ็กเกจครอบครัวของคุณเปิดใช้งานแล้ว นี่คือสามขั้นตอนแรกเพื่อตั้งค่าให้ทุกคน:",
+   "s1": "เชื่อมต่อผู้ปกครองอีกคน เพื่อให้ทั้งสองคนติดตามความก้าวหน้าของลูกๆ ได้",
+   "s2": "เชื่อมต่อลูกๆ แต่ละคนใช้อุปกรณ์ของตัวเอง ไม่ต้องใช้รหัสผ่าน ใช้แค่รหัสจับคู่สั้นๆ",
+   "s3": "บันทึก Gadit ไว้ที่หน้าจอหลัก บนโทรศัพท์ แท็บเล็ต หรือคอมพิวเตอร์",
+   "cta": "เริ่มขั้นตอนแรก",
+   "foot": "เราพร้อมตอบทุกคำถาม แค่ตอบกลับอีเมลนี้"
+  }
+ },
+ "bn": {
+  "dunning": {
+   "subjectFirst": "আপনার পেমেন্ট সম্পন্ন হয়নি। কার্ড আপডেট করতে আপনার হাতে 7 দিন আছে",
+   "subjectReminder": "রিমাইন্ডার: কার্ড আপডেট করতে আর {days} দিন বাকি",
+   "subjectReminderOne": "রিমাইন্ডার: কার্ড আপডেট করতে আর 1 দিন বাকি",
+   "h1First": "আপনার সাবস্ক্রিপশনের পেমেন্ট সম্পন্ন হয়নি",
+   "h1Reminder": "আপনার কার্ড এখনও আপডেট করা দরকার",
+   "p1First": "আমরা আপনার Gadit সাবস্ক্রিপশন নবায়ন করার চেষ্টা করেছিলাম, কিন্তু চার্জটি সম্পন্ন হয়নি, সম্ভবত কার্ডটি প্রত্যাখ্যাত হয়েছে বা মেয়াদ শেষ হয়ে গেছে।",
+   "p1Reminder": "আপনার Gadit সাবস্ক্রিপশনের পেমেন্ট এখনও সম্পন্ন হয়নি।",
+   "p2First": "<b>আপনার অ্যাক্সেস 7 দিন চালু থাকবে।</b> কার্ড আপডেট করতে এক মিনিটেরও কম সময় লাগে, আর সবকিছু আগের মতোই চলবে, আপনার সন্তানদের নোটবুক ও অগ্রগতি হারাবে না।",
+   "p2Reminder": "<b>{days} দিন পর আপনার অ্যাক্সেস ফ্রি প্ল্যানে চলে যাবে।</b> কার্ড আপডেট করতে এক মিনিটেরও কম সময় লাগে, আর আপনার সন্তানদের নোটবুক ও অগ্রগতি সংরক্ষিত থাকবে।",
+   "p2ReminderOne": "<b>1 দিন পর আপনার অ্যাক্সেস ফ্রি প্ল্যানে চলে যাবে।</b> কার্ড আপডেট করতে এক মিনিটেরও কম সময় লাগে, আর আপনার সন্তানদের নোটবুক ও অগ্রগতি সংরক্ষিত থাকবে।",
+   "cta": "কার্ড আপডেট করুন",
+   "foot": "যদি ইতিমধ্যে আপডেট করে থাকেন, এই ইমেইলটি উপেক্ষা করতে পারেন। কিছু অস্পষ্ট থাকলে শুধু রিপ্লাই করুন, আমরা আছি।",
+   "sign": "Gadit টিম"
+  },
+  "familyWelcome": {
+   "subject": "আপনার Gadit Family প্ল্যান চালু হয়েছে 🎉",
+   "heading": "আপনার পরিবার শুরু করার জন্য প্রস্তুত",
+   "intro": "Gadit Family-তে স্বাগতম। আপনার ফ্যামিলি প্ল্যান সক্রিয় হয়েছে। সবাইকে সেট আপ করার প্রথম তিনটি ধাপ এখানে:",
+   "s1": "দ্বিতীয় অভিভাবককে যুক্ত করুন, যাতে আপনারা দুজনেই সন্তানদের অগ্রগতি দেখতে পারেন।",
+   "s2": "সন্তানদের যুক্ত করুন, প্রত্যেকে নিজের ডিভাইসে, কোনো পাসওয়ার্ড ছাড়াই, শুধু একটি ছোট পেয়ারিং কোড দিয়ে।",
+   "s3": "ফোন, ট্যাবলেট বা কম্পিউটারের হোম স্ক্রিনে Gadit সেভ করুন।",
+   "cta": "প্রথম ধাপগুলো শুরু করুন",
+   "foot": "যেকোনো প্রশ্নে আমরা আছি। শুধু এই ইমেইলের রিপ্লাই দিন।"
+  }
+ },
+ "da": {
+  "dunning": {
+   "subjectFirst": "Din betaling gik ikke igennem. Du har 7 dage til at opdatere dit kort",
+   "subjectReminder": "Påmindelse: {days} dage tilbage til at opdatere dit kort",
+   "subjectReminderOne": "Påmindelse: 1 dag tilbage til at opdatere dit kort",
+   "h1First": "Betalingen for dit abonnement gik ikke igennem",
+   "h1Reminder": "Dit kort mangler stadig at blive opdateret",
+   "p1First": "Vi forsøgte at forny dit Gadit-abonnement, men betalingen gik ikke igennem, sandsynligvis på grund af et afvist eller udløbet kort.",
+   "p1Reminder": "Betalingen for dit Gadit-abonnement er stadig ikke gået igennem.",
+   "p2First": "<b>Din adgang forbliver aktiv i 7 dage.</b> Det tager under et minut at opdatere dit kort, og alt fortsætter som normalt, uden at dine børns notesbøger og fremskridt går tabt.",
+   "p2Reminder": "<b>Om {days} dage overgår din adgang til den gratis plan.</b> Det tager under et minut at opdatere dit kort, og dine børns notesbøger og fremskridt bliver gemt.",
+   "p2ReminderOne": "<b>Om 1 dag overgår din adgang til den gratis plan.</b> Det tager under et minut at opdatere dit kort, og dine børns notesbøger og fremskridt bliver gemt.",
+   "cta": "Opdater kort",
+   "foot": "Hvis du allerede har opdateret det, kan du se bort fra denne e-mail. Hvis noget er uklart, så svar bare, vi er her.",
+   "sign": "Gadit-teamet"
+  },
+  "familyWelcome": {
+   "subject": "Din Gadit Family-plan er aktiv 🎉",
+   "heading": "Din familie er klar",
+   "intro": "Velkommen til Gadit Family. Din familieplan er aktiv. Her er de første tre trin, så alle kommer godt i gang:",
+   "s1": "Forbind den anden forælder, så I begge kan følge børnenes fremskridt.",
+   "s2": "Forbind børnene, hver på sin egen enhed, uden adgangskode, kun med en kort parringskode.",
+   "s3": "Gem Gadit på hjemmeskærmen, på telefon, tablet eller computer.",
+   "cta": "Kom i gang med de første trin",
+   "foot": "Vi er her, hvis du har spørgsmål. Svar bare på denne e-mail."
+  }
+ },
+ "hu": {
+  "dunning": {
+   "subjectFirst": "Nem sikerült a fizetés. 7 napod van a kártyád frissítésére",
+   "subjectReminder": "Emlékeztető: még {days} napod van a kártyád frissítésére",
+   "subjectReminderOne": "Emlékeztető: már csak 1 napod van a kártyád frissítésére",
+   "h1First": "Nem sikerült levonni az előfizetésed díját",
+   "h1Reminder": "A kártyádat még mindig frissíteni kell",
+   "p1First": "Megpróbáltuk megújítani a Gadit-előfizetésedet, de a terhelés nem sikerült, valószínűleg elutasított vagy lejárt kártya miatt.",
+   "p1Reminder": "A Gadit-előfizetésed díját még mindig nem sikerült levonni.",
+   "p2First": "<b>A hozzáférésed 7 napig megmarad.</b> A kártya frissítése kevesebb mint egy percet vesz igénybe, és minden a megszokott módon folytatódik, a gyerekeid füzetei és haladása nem vesznek el.",
+   "p2Reminder": "<b>{days} nap múlva a hozzáférésed átkerül az ingyenes csomagra.</b> A kártya frissítése kevesebb mint egy percet vesz igénybe, és a gyerekeid füzetei és haladása megmaradnak.",
+   "p2ReminderOne": "<b>1 nap múlva a hozzáférésed átkerül az ingyenes csomagra.</b> A kártya frissítése kevesebb mint egy percet vesz igénybe, és a gyerekeid füzetei és haladása megmaradnak.",
+   "cta": "Kártya frissítése",
+   "foot": "Ha már frissítetted, nyugodtan hagyd figyelmen kívül ezt az e-mailt. Ha valami nem világos, csak válaszolj, itt vagyunk.",
+   "sign": "A Gadit csapata"
+  },
+  "familyWelcome": {
+   "subject": "Elindult a Gadit Family csomagod 🎉",
+   "heading": "A családod készen áll",
+   "intro": "Üdvözlünk a Gadit Family csomagban. A családi előfizetésed aktív. Íme az első három lépés, hogy mindenki be legyen állítva:",
+   "s1": "Csatlakoztasd a másik szülőt, hogy mindketten követhessétek a gyerekek haladását.",
+   "s2": "Csatlakoztasd a gyerekeket, mindenkit a saját eszközén, jelszó nélkül, csak egy rövid párosítókóddal.",
+   "s3": "Mentsd a Gadit-ot a kezdőképernyőre, telefonon, tableten vagy számítógépen.",
+   "cta": "Kezdjük az első lépésekkel",
+   "foot": "Bármilyen kérdéssel fordulj hozzánk bátran. Csak válaszolj erre az e-mailre."
+  }
+ }
+}
