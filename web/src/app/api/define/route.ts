@@ -461,12 +461,23 @@ CROSS-REFERENCE TEST: If the user looked the word up in a Hebrew dictionary like
 
 The same principle applies in every UI language. English "aberration", Spanish "aberración", Russian "аберрация" all carry the same multi-field meaning cluster. List each field's sense as its own entry, do not summarise into one generic line.
 
+⚠️ CRITICAL RULE #4e, SCHOOL-SUBJECT TERMS ARE ALWAYS INCLUDED, AND PRECISE:
+Children look words up from their workbooks. When a word is also an established term in a school subject (arithmetic, geometry, grammar, science), that term sense MUST be one of the meanings, labelled with its field, and defined exactly as the textbook uses it, with a tiny worked example.
+Hebrew arithmetic, the parts of an exercise (each is a DIFFERENT thing, never the operation itself):
+- מְחֻבָּר: each of the numbers being added (in 4 + 3 = 7, the addends are 4 and 3). סְכוּם: the result of addition (7).
+- מְחֻסָּר: the number you subtract FROM (in 10 פחות 3 = 7, the מחוסר is 10). מְחַסֵּר: the number being subtracted (3). הֶפְרֵשׁ: the result of subtraction (7).
+- גּוֹרֵם: each number being multiplied (in 4 × 3 = 12, 4 and 3). מַכְפֵּלָה: the result of multiplication (12).
+- מְחֻלָּק: the number being divided (in 12 : 3 = 4, it is 12). מְחַלֵּק: the number you divide by (3). מָנָה: the result of division (4).
+The operation names are different words: חיבור, חיסור, כפל, חילוק. Never define מחסר or מחוסר as "the operation of subtraction". A word like מחוסר keeps its everyday senses too (מחוסר עבודה, lacking), each as its own meaning; מנה keeps "a portion of food".
+The same holds in every language (English minuend / subtrahend / difference / quotient, and their equivalents).
+
 ⚠️ CRITICAL RULE #5, NEVER HALLUCINATE MEANINGS:
 Do NOT invent meanings that don't exist in real dictionaries. If a meaning sounds odd, borderline, or you're not sure, OMIT IT. Better to return 1 real meaning than 2 with one invented. When in doubt, cross-reference: would a native speaker actually use this word this way in a real sentence?
 
 ⚠️ Documented hallucinations, NEVER repeat these:
 - "חתול" (Hebrew) means CAT (the animal). ONE main meaning. It does NOT mean a lifting device, a jack, a hoist, a construction tool, or anything used to lift heavy objects. The Hebrew word for a mechanical jack/lifting device is "מגבה" (or borrowed "ג'ק"), NOT "חתול". If you find yourself about to write a second meaning for "חתול" describing it as a tool for lifting or placing heavy objects, STOP, that is a known hallucination. Delete it. Return only the animal meaning.
 - "קרן" (Hebrew) does NOT have a meaning like "foundation for donating to animals", that was a hallucination from confusing English "foundation" senses.
+- "הפרש" (Hebrew) does NOT mean "to withdraw / spread out" (that is the verb לפרוש, a different word). הפרש = difference (in math, the result of subtraction); read as הַפָּרָשׁ it can also be "the rider".
 - Standard concrete animal names in Hebrew (חתול, כלב, פיל, אריה when not the proper name, etc.) almost always have exactly ONE main meaning (the animal). Do not pad with invented second meanings to "look thorough".
 
 THE TEST: Before adding any meaning, ask yourself: "Would I find this exact meaning in a standard Hebrew dictionary like רב מילים, אבן שושן, or מילון אריאל?" If the answer is "I'm not sure" or "probably not", DELETE that meaning. One correct meaning is infinitely better than two meanings with one invented.
