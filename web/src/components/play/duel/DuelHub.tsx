@@ -25,12 +25,14 @@ type Screen =
   | { kind: "nobody" }
   | { kind: "game"; code: string; again?: () => void };
 
-export function DuelHub({ pool, lang, dir, onExit, initialCode }: {
+export function DuelHub({ pool, lang, dir, onExit, initialCode, preset }: {
   pool: PlayWord[];
   lang: string;
   dir: "rtl" | "ltr";
   onExit: () => void;
   initialCode?: string;
+  /** Opened from a game card: that game's questions (Gadi 2026-10-11). */
+  preset?: { title: string; questions: DuelQuestion[] };
 }) {
   const { user } = useAuth();
   const t = duelCopy(lang);
@@ -66,15 +68,15 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode }: {
       : m === "plan_required" ? t.errPlan : m === "parent_permission" ? t.parentNeeded : m === "lang_unsupported" ? t.onlineHeOnly : t.errGeneric;
   };
 
-  const startWith = async (mode: Mode, source: "own" | "topic") => {
+  const startWith = async (mode: Mode, source: "own" | "topic" | "preset") => {
     setMsg("");
-    const questions = source === "own" ? ownQuestions() : topicQuestions();
+    const questions = source === "preset" ? preset?.questions ?? null : source === "own" ? ownQuestions() : topicQuestions();
     if (!questions) { setMsg(t.notEnough); return; }
     if (mode === "local") { setScreen({ kind: "local", questions }); return; }
     setBusy(true);
     try {
       if (mode === "invite") {
-        const j = await api({ action: "create", ...(source === "own" ? { questions } : { topic: "all" }) });
+        const j = await api({ action: "create", ...(source === "topic" ? { topic: "all" } : { questions }) });
         setScreen({ kind: "game", code: String(j.code) });
       } else {
         const j = await api({ action: "ghost", bot: true, questions });
@@ -153,7 +155,21 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode }: {
         <span className="duel-title">{t.title}</span>
       </div>
 
-      {screen.kind === "menu" && (
+      {screen.kind === "menu" && preset && (
+        <div className="duel-card">
+          <h2 className="duel-h">{preset.title}</h2>
+          <p className="duel-sub">{t.hubSub}</p>
+          <div className="duel-modes">
+            <ModeCard icon="📱" title={t.optLocal} desc={t.optLocalDesc} disabled={busy} onClick={() => void startWith("local", "preset")} />
+            <ModeCard icon="✉️" title={t.optInvite} desc={t.optInviteDesc} disabled={busy} onClick={() => void startWith("invite", "preset")} />
+            <ModeCard icon="🤖" title={t.optBot} desc={t.optBotDesc} disabled={busy} onClick={() => void startWith("bot", "preset")} />
+          </div>
+          {busy && <p className="duel-wait">{t.creating}</p>}
+          {msg && <p className="duel-note">{msg}</p>}
+        </div>
+      )}
+
+      {screen.kind === "menu" && !preset && (
         <div className="duel-card">
           <p className="duel-sub">{t.hubSub}</p>
           <div className="duel-modes">
@@ -166,7 +182,7 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode }: {
           {msg && <p className="duel-note">{msg}</p>}
         </div>
       )}
-      {screen.kind === "menu" && <DuelStats lang={lang} />}
+      {screen.kind === "menu" && !preset && <DuelStats lang={lang} />}
 
       {screen.kind === "source" && (
         <div className="duel-card">

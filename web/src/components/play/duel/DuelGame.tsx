@@ -169,7 +169,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
           {ph.kind === "round" && (
             <div className="duel-timer"><span style={{ width: `${Math.max(0, Math.min(100, ((ph.endsAt - now) / ROUND_MS) * 100))}%` }} /></div>
           )}
-          <div className="duel-prompt" dir="auto">{view.question.prompt}</div>
+          <div className={`duel-prompt${(view.question.prompt).length > 40 ? " is-long" : ""}`} dir="auto">{view.question.prompt}</div>
           <div className="duel-options">
             {view.question.options.map((o, i) => {
               const mine = picked?.round === ph.round ? picked.choice : null;

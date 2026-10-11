@@ -88,6 +88,7 @@ export type DuelCopy = {
   correctCount: (n: number, total: number) => string;
   colWord: string;
   colAnswer: string;
+  vsSomeone: string;
 };
 
 const he: DuelCopy = {
@@ -175,6 +176,7 @@ const he: DuelCopy = {
   correctCount: (n, total) => `${n} מתוך ${total} נכונות`,
   colWord: "המילה",
   colAnswer: "התשובה הנכונה",
+  vsSomeone: "נגד מישהו",
 };
 
 const en: DuelCopy = {
@@ -262,6 +264,7 @@ const en: DuelCopy = {
   correctCount: (n, total) => `${n} of ${total} right`,
   colWord: "Word",
   colAnswer: "Right answer",
+  vsSomeone: "Play someone",
 };
 
 const ar: DuelCopy = {
@@ -349,6 +352,7 @@ const ar: DuelCopy = {
   correctCount: (n, total) => `${n} من ${total} صحيحة`,
   colWord: "الكلمة",
   colAnswer: "الإجابة الصحيحة",
+  vsSomeone: "ضد شخص آخر",
 };
 
 const ru: DuelCopy = {
@@ -436,6 +440,7 @@ const ru: DuelCopy = {
   correctCount: (n, total) => `Верно: ${n} из ${total}`,
   colWord: "Слово",
   colAnswer: "Правильный ответ",
+  vsSomeone: "С соперником",
 };
 
 const es: DuelCopy = {
@@ -523,6 +528,7 @@ const es: DuelCopy = {
   correctCount: (n, total) => `${n} de ${total} correctas`,
   colWord: "Palabra",
   colAnswer: "Respuesta correcta",
+  vsSomeone: "Contra alguien",
 };
 
 const pt: DuelCopy = {
@@ -610,6 +616,7 @@ const pt: DuelCopy = {
   correctCount: (n, total) => `${n} de ${total} certas`,
   colWord: "Palavra",
   colAnswer: "Resposta certa",
+  vsSomeone: "Contra alguém",
 };
 
 const fr: DuelCopy = {
@@ -697,6 +704,7 @@ const fr: DuelCopy = {
   correctCount: (n, total) => `${n} sur ${total} justes`,
   colWord: "Mot",
   colAnswer: "Bonne réponse",
+  vsSomeone: "À deux",
 };
 
 const de: DuelCopy = {
@@ -784,6 +792,7 @@ const de: DuelCopy = {
   correctCount: (n, total) => `${n} von ${total} richtig`,
   colWord: "Wort",
   colAnswer: "Richtige Antwort",
+  vsSomeone: "Zu zweit",
 };
 
 const cs: DuelCopy = {
@@ -871,6 +880,7 @@ const cs: DuelCopy = {
   correctCount: (n, total) => `Správně: ${n} z ${total}`,
   colWord: "Slovo",
   colAnswer: "Správná odpověď",
+  vsSomeone: "Proti někomu",
 };
 
 const sk: DuelCopy = {
@@ -958,6 +968,7 @@ const sk: DuelCopy = {
   correctCount: (n, total) => `Správne: ${n} z ${total}`,
   colWord: "Slovo",
   colAnswer: "Správna odpoveď",
+  vsSomeone: "Proti niekomu",
 };
 
 const it: DuelCopy = {
@@ -1045,6 +1056,7 @@ const it: DuelCopy = {
   correctCount: (n, total) => `${n} su ${total} giuste`,
   colWord: "Parola",
   colAnswer: "Risposta giusta",
+  vsSomeone: "Contro qualcuno",
 };
 
 const ja: DuelCopy = {
@@ -1132,6 +1144,7 @@ const ja: DuelCopy = {
   correctCount: (n, total) => `${total}問中${n}問正解`,
   colWord: "ことば",
   colAnswer: "正しい答え",
+  vsSomeone: "対戦する",
 };
 
 const hi: DuelCopy = {
@@ -1219,6 +1232,7 @@ const hi: DuelCopy = {
   correctCount: (n, total) => `${total} में से ${n} सही`,
   colWord: "शब्द",
   colAnswer: "सही उत्तर",
+  vsSomeone: "किसी से मुकाबला",
 };
 
 const am: DuelCopy = {
@@ -1306,6 +1320,7 @@ const am: DuelCopy = {
   correctCount: (n, total) => `ከ${total} ${n} ትክክል`,
   colWord: "ቃል",
   colAnswer: "ትክክለኛው መልስ",
+  vsSomeone: "ከሌላ ሰው ጋር",
 };
 
 const uk: DuelCopy = {
@@ -1393,6 +1408,7 @@ const uk: DuelCopy = {
   correctCount: (n, total) => `Правильно: ${n} з ${total}`,
   colWord: "Слово",
   colAnswer: "Правильна відповідь",
+  vsSomeone: "Із суперником",
 };
 
 const tr: DuelCopy = {
@@ -1480,6 +1496,7 @@ const tr: DuelCopy = {
   correctCount: (n, total) => `${total} sorudan ${n} doğru`,
   colWord: "Kelime",
   colAnswer: "Doğru cevap",
+  vsSomeone: "Birine karşı",
 };
 
 const pl: DuelCopy = {
@@ -1567,6 +1584,7 @@ const pl: DuelCopy = {
   correctCount: (n, total) => `Poprawnie: ${n} z ${total}`,
   colWord: "Słowo",
   colAnswer: "Poprawna odpowiedź",
+  vsSomeone: "Z kimś",
 };
 
 const fa: DuelCopy = {
@@ -1654,6 +1672,7 @@ const fa: DuelCopy = {
   correctCount: (n, total) => `${n} از ${total} درست`,
   colWord: "کلمه",
   colAnswer: "پاسخ درست",
+  vsSomeone: "در برابر کسی",
 };
 
 const id: DuelCopy = {
@@ -1741,6 +1760,7 @@ const id: DuelCopy = {
   correctCount: (n, total) => `${n} dari ${total} benar`,
   colWord: "Kata",
   colAnswer: "Jawaban benar",
+  vsSomeone: "Lawan teman",
 };
 
 const nl: DuelCopy = {
@@ -1828,6 +1848,7 @@ const nl: DuelCopy = {
   correctCount: (n, total) => `${n} van ${total} goed`,
   colWord: "Woord",
   colAnswer: "Goed antwoord",
+  vsSomeone: "Tegen iemand",
 };
 
 const el: DuelCopy = {
@@ -1915,6 +1936,7 @@ const el: DuelCopy = {
   correctCount: (n, total) => `${n} από ${total} σωστές`,
   colWord: "Λέξη",
   colAnswer: "Σωστή απάντηση",
+  vsSomeone: "Με αντίπαλο",
 };
 
 const zu: DuelCopy = {
@@ -2002,6 +2024,7 @@ const zu: DuelCopy = {
   correctCount: (n, total) => `${n} kwezi-${total} kulungile`,
   colWord: "Igama",
   colAnswer: "Impendulo efanele",
+  vsSomeone: "Bhekana nomunye",
 };
 
 const vi: DuelCopy = {
@@ -2089,6 +2112,7 @@ const vi: DuelCopy = {
   correctCount: (n, total) => `Đúng ${n}/${total}`,
   colWord: "Từ",
   colAnswer: "Đáp án đúng",
+  vsSomeone: "Đấu với ai đó",
 };
 
 const fil: DuelCopy = {
@@ -2176,6 +2200,7 @@ const fil: DuelCopy = {
   correctCount: (n, total) => `${n} sa ${total} ang tama`,
   colWord: "Salita",
   colAnswer: "Tamang sagot",
+  vsSomeone: "Laban sa iba",
 };
 
 const af: DuelCopy = {
@@ -2263,6 +2288,7 @@ const af: DuelCopy = {
   correctCount: (n, total) => `${n} uit ${total} reg`,
   colWord: "Woord",
   colAnswer: "Regte antwoord",
+  vsSomeone: "Teen iemand",
 };
 
 const sw: DuelCopy = {
@@ -2350,6 +2376,7 @@ const sw: DuelCopy = {
   correctCount: (n, total) => `${n} kati ya ${total} sahihi`,
   colWord: "Neno",
   colAnswer: "Jibu sahihi",
+  vsSomeone: "Dhidi ya mtu",
 };
 
 const zhCN: DuelCopy = {
@@ -2437,6 +2464,7 @@ const zhCN: DuelCopy = {
   correctCount: (n, total) => `答对 ${n}/${total}`,
   colWord: "单词",
   colAnswer: "正确答案",
+  vsSomeone: "找人对战",
 };
 
 const zhTW: DuelCopy = {
@@ -2524,6 +2552,7 @@ const zhTW: DuelCopy = {
   correctCount: (n, total) => `答對 ${n}/${total}`,
   colWord: "單字",
   colAnswer: "正確答案",
+  vsSomeone: "找人對戰",
 };
 
 const ko: DuelCopy = {
@@ -2611,6 +2640,7 @@ const ko: DuelCopy = {
   correctCount: (n, total) => `${total}문제 중 ${n}개 정답`,
   colWord: "단어",
   colAnswer: "정답",
+  vsSomeone: "대결하기",
 };
 
 const th: DuelCopy = {
@@ -2698,6 +2728,7 @@ const th: DuelCopy = {
   correctCount: (n, total) => `ถูก ${n} จาก ${total}`,
   colWord: "คำ",
   colAnswer: "คำตอบที่ถูก",
+  vsSomeone: "ดวลกับเพื่อน",
 };
 
 const bn: DuelCopy = {
@@ -2785,6 +2816,7 @@ const bn: DuelCopy = {
   correctCount: (n, total) => `${total}টির মধ্যে ${n}টি সঠিক`,
   colWord: "শব্দ",
   colAnswer: "সঠিক উত্তর",
+  vsSomeone: "কারও সাথে লড়াই",
 };
 
 const da: DuelCopy = {
@@ -2872,6 +2904,7 @@ const da: DuelCopy = {
   correctCount: (n, total) => `${n} af ${total} rigtige`,
   colWord: "Ord",
   colAnswer: "Rigtigt svar",
+  vsSomeone: "Mod en anden",
 };
 
 const hu: DuelCopy = {
@@ -2959,6 +2992,7 @@ const hu: DuelCopy = {
   correctCount: (n, total) => `${total}-ből ${n} helyes`,
   colWord: "Szó",
   colAnswer: "Helyes válasz",
+  vsSomeone: "Valaki ellen",
 };
 
 export const DUEL_COPY: Record<string, DuelCopy> = {

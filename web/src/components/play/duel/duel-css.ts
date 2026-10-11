@@ -34,7 +34,8 @@ export const DUEL_CSS = `
 .duel-progress { text-align: center; font-size: 13.5px; font-weight: 700; color: var(--wb-ink-soft, #55625f); }
 .duel-timer { height: 8px; border-radius: 999px; background: rgba(14,165,165,0.12); overflow: hidden; }
 .duel-timer span { display: block; height: 100%; background: linear-gradient(90deg, #0EA5A5, #0F6F6C); border-radius: 999px; transition: width 100ms linear; }
-.duel-prompt { font-size: 30px; font-weight: 800; text-align: center; padding: 10px 0; overflow-wrap: anywhere; }
+.duel-prompt { font-size: 30px; font-weight: 800; text-align: center; padding: 10px 0; overflow-wrap: anywhere; white-space: pre-line; line-height: 1.35; }
+.duel-prompt.is-long { font-size: 20px; font-weight: 700; }
 .duel-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 @media (max-width: 520px) { .duel-options { grid-template-columns: 1fr; } .duel-prompt { font-size: 26px; } }
 .duel-opt { position: relative; min-height: 64px; padding: 12px 16px; border-radius: 16px; border: 2px solid rgba(15,111,108,0.18); background: #fff; font: inherit; font-size: 17px; font-weight: 700; color: inherit; cursor: pointer; text-align: center; overflow-wrap: anywhere; }

@@ -59,6 +59,9 @@ import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
+import { DUEL_GAMES, duelQuestionsFor } from "@/lib/duel-games";
+import type { DuelQuestion } from "@/lib/duel";
+import { TF_COPY } from "@/components/play/GameTrueFalse";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -3280,7 +3283,7 @@ export function PlayPage() {
   const href = useHref();
   const t = COPY[lang] ?? COPY.en;
 
-  type Stage = { kind: "menu" } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string };
+  type Stage = { kind: "menu" } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
@@ -3734,7 +3737,7 @@ export function PlayPage() {
   if (stage.kind === "duel") {
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} />
+        <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} />
       </div>
     );
   }
@@ -4061,7 +4064,7 @@ export function PlayPage() {
                 )}
                 <ul className="wb-play-grid">
                   {sectionGames.map((g) => (
-                    <li key={g.id}>
+                    <li key={g.id} className={isPaid && g.enabled && DUEL_GAMES.has(g.id) ? "has-duel" : undefined}>
                       <button
                         type="button"
                         className={`wb-play-card wb-play-card-${g.accent} wb-play-cat-${g.category}${GAME_COVERS.has(g.id) ? " has-cover" : ""} ${g.enabled ? "" : "is-disabled"}`}
@@ -4082,6 +4085,21 @@ export function PlayPage() {
                           <span className="wb-play-card-locked">{t.comingSoon}</span>
                         )}
                       </button>
+                      {/* Play this game against someone (Gadi 2026-10-11). */}
+                      {isPaid && g.enabled && DUEL_GAMES.has(g.id) && (
+                        <button
+                          type="button"
+                          className="wb-play-card-duel"
+                          aria-label={`${duelCopy(lang).vsSomeone}: ${g.title}`}
+                          onClick={() => {
+                            const tf = TF_COPY[lang] ?? TF_COPY.en;
+                            const questions = duelQuestionsFor(g.id, { pool: gamePool, lang, kids: kidsMode, yes: tf.yes, no: tf.no, real: t.friendsTrue, trap: t.friendsFalse });
+                            if (questions) setStage({ kind: "duel", preset: { title: g.title, questions } });
+                          }}
+                        >
+                          <span aria-hidden="true">⚔️</span> {duelCopy(lang).vsSomeone}
+                        </button>
+                      )}
                     </li>
                   ))}
                 </ul>
