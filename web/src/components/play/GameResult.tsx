@@ -16,6 +16,7 @@ import { useAuth } from "@/lib/auth-context";
 import { recordPlay } from "@/lib/play-streak";
 import { dirForLang } from "@/lib/play-engine";
 import type { PlayT } from "./GameQuiz";
+import { getDuelLauncher } from "@/lib/duel-launch";
 
 export type GameResultData = {
   title: string;
@@ -104,6 +105,15 @@ export function GameResult({
           {t.resultBackToGames}
         </button>
       </div>
+      {/* Play the same game against someone (Gadi 2026-10-11). */}
+      {(() => {
+        const duel = getDuelLauncher();
+        return duel ? (
+          <button type="button" className="wb-play-cta-duel" onClick={duel.launch}>
+            <span aria-hidden="true">⚔️</span> {duel.label}
+          </button>
+        ) : null;
+      })()}
     </div>
   );
 }

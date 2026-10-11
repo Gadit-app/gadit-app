@@ -25,14 +25,16 @@ type Screen =
   | { kind: "nobody" }
   | { kind: "game"; code: string; again?: () => void };
 
-export function DuelHub({ pool, lang, dir, onExit, initialCode, preset }: {
+export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }: {
   pool: PlayWord[];
   lang: string;
   dir: "rtl" | "ltr";
   onExit: () => void;
   initialCode?: string;
-  /** Opened from a game card: that game's questions (Gadi 2026-10-11). */
+  /** Opened from a game's results screen: that game's questions (Gadi 2026-10-11). */
   preset?: { title: string; questions: DuelQuestion[] };
+  /** The games that can be duelled, offered in the "which words" step. */
+  games?: Array<{ id: string; title: string; cover: string; build: () => DuelQuestion[] | null }>;
 }) {
   const { user } = useAuth();
   const t = duelCopy(lang);
@@ -68,9 +70,9 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset }: {
       : m === "plan_required" ? t.errPlan : m === "parent_permission" ? t.parentNeeded : m === "lang_unsupported" ? t.onlineHeOnly : t.errGeneric;
   };
 
-  const startWith = async (mode: Mode, source: "own" | "topic" | "preset") => {
+  const startWith = async (mode: Mode, source: "own" | "topic" | "preset", given?: DuelQuestion[] | null) => {
     setMsg("");
-    const questions = source === "preset" ? preset?.questions ?? null : source === "own" ? ownQuestions() : topicQuestions();
+    const questions = given !== undefined ? given : source === "preset" ? preset?.questions ?? null : source === "own" ? ownQuestions() : topicQuestions();
     if (!questions) { setMsg(t.notEnough); return; }
     if (mode === "local") { setScreen({ kind: "local", questions }); return; }
     setBusy(true);
@@ -191,6 +193,21 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset }: {
             <ModeCard icon="📒" title={t.srcOwn} desc={t.srcOwnDesc} disabled={busy} onClick={() => void startWith(screen.mode, "own")} />
             {canTopics && <ModeCard icon="🎨" title={t.srcTopic} desc={t.srcTopicDesc} disabled={busy} onClick={() => void startWith(screen.mode, "topic")} />}
           </div>
+          {games && games.length > 0 && (
+            <>
+              <div className="duel-recap-h">{t.srcGame}</div>
+              <div className="duel-games">
+                {games.map((g) => (
+                  <button key={g.id} type="button" className="duel-game" disabled={busy}
+                    onClick={() => { const qs = g.build(); if (qs) void startWith(screen.mode, "preset", qs); else setMsg(t.notEnough); }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={g.cover} alt="" loading="lazy" width={72} height={48} />
+                    <span>{g.title}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
           {busy && <p className="duel-wait">{t.creating}</p>}
           {msg && <p className="duel-note">{msg}</p>}
         </div>

@@ -105,4 +105,9 @@ export const DUEL_CSS = `
 .duel-mark.is-bad small { color: #9B5C5C; text-decoration: line-through; text-decoration-color: rgba(185,28,28,0.4); }
 .duel-mark.is-none { color: #9AA7A4; }
 @media (max-width: 480px) { .duel-rtable { font-size: 14px; } .duel-rtable th, .duel-rtable td { padding: 8px 10px; } .duel-mark small { display: none; } }
+.duel-games { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.duel-game { display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 6px; border-radius: 14px; border: 1.5px solid rgba(15,111,108,0.16); background: #fff; font: inherit; font-size: 14px; font-weight: 700; color: inherit; cursor: pointer; text-align: start; min-width: 0; }
+.duel-game:hover { border-color: #0EA5A5; }
+.duel-game img { width: 56px; height: 40px; object-fit: cover; border-radius: 9px; flex: none; background: #F4F8F7; }
+.duel-game span { min-width: 0; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 `;

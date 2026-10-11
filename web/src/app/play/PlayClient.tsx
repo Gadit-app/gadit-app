@@ -60,6 +60,7 @@ import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { LearnCard, type LearnState } from "@/components/play/learn/LearnCard";
 import { setAnswerListener } from "@/lib/learn/report";
+import { setDuelLauncher } from "@/lib/duel-launch";
 import { LEARN_CSS } from "@/components/play/learn/learn-css";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
 import { DUEL_GAMES, duelQuestionsFor } from "@/lib/duel-games";
@@ -3767,11 +3768,36 @@ export function PlayPage() {
     },
   ];
 
+  // Word Duel questions for one game, and "play this against someone" on
+  // the results screen of a duel-able game (Gadi 2026-10-11: no chips on
+  // the cards, they hid the pictures).
+  const buildDuelFor = (id: GameId) => {
+    const tf = TF_COPY[lang] ?? TF_COPY.en;
+    return duelQuestionsFor(id, { pool: gamePool, lang, kids: kidsMode, yes: tf.yes, no: tf.no, real: t.friendsTrue, trap: t.friendsFalse });
+  };
+  const playingGame = stage.kind === "playing" ? stage.game : null;
+  const playingTitle = playingGame ? games.find((g) => g.id === playingGame)?.title ?? "" : "";
+  useEffect(() => {
+    if (!playingGame || !isPaid || !DUEL_GAMES.has(playingGame)) { setDuelLauncher(null); return; }
+    setDuelLauncher({
+      label: duelCopy(lang).playThisVs,
+      launch: () => {
+        const questions = buildDuelFor(playingGame);
+        if (questions) setStage({ kind: "duel", preset: { title: playingTitle, questions } });
+      },
+    });
+    return () => setDuelLauncher(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playingGame, isPaid, lang, gamePool, kidsMode, playingTitle]);
+
   // ─── Word Duel (Gadi 2026-10-11) ───────────────────────────────
   if (stage.kind === "duel") {
+    const duelGames = games
+      .filter((g) => g.enabled && DUEL_GAMES.has(g.id) && (!kidsMode || g.kidsFriendly))
+      .map((g) => ({ id: g.id, title: g.title, cover: `/play/${g.id}.webp`, build: () => buildDuelFor(g.id) }));
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} />
+        <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} games={duelGames} />
       </div>
     );
   }
@@ -4111,7 +4137,7 @@ export function PlayPage() {
                 )}
                 <ul className="wb-play-grid">
                   {sectionGames.map((g) => (
-                    <li key={g.id} className={isPaid && g.enabled && DUEL_GAMES.has(g.id) ? "has-duel" : undefined}>
+                    <li key={g.id}>
                       <button
                         type="button"
                         className={`wb-play-card wb-play-card-${g.accent} wb-play-cat-${g.category}${GAME_COVERS.has(g.id) ? " has-cover" : ""} ${g.enabled ? "" : "is-disabled"}`}
@@ -4132,21 +4158,6 @@ export function PlayPage() {
                           <span className="wb-play-card-locked">{t.comingSoon}</span>
                         )}
                       </button>
-                      {/* Play this game against someone (Gadi 2026-10-11). */}
-                      {isPaid && g.enabled && DUEL_GAMES.has(g.id) && (
-                        <button
-                          type="button"
-                          className="wb-play-card-duel"
-                          aria-label={`${duelCopy(lang).vsSomeone}: ${g.title}`}
-                          onClick={() => {
-                            const tf = TF_COPY[lang] ?? TF_COPY.en;
-                            const questions = duelQuestionsFor(g.id, { pool: gamePool, lang, kids: kidsMode, yes: tf.yes, no: tf.no, real: t.friendsTrue, trap: t.friendsFalse });
-                            if (questions) setStage({ kind: "duel", preset: { title: g.title, questions } });
-                          }}
-                        >
-                          <span aria-hidden="true">⚔️</span> {duelCopy(lang).vsSomeone}
-                        </button>
-                      )}
                     </li>
                   ))}
                 </ul>
