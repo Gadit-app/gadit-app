@@ -7937,7 +7937,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-card-rose    .wb-play-card-icon { background: rgba(225, 29, 72, 0.12);  color: rgb(190, 18, 60); }
 /* Curated-content game accents — one colored background per game */
 .wordbook .wb-play-card-sky     .wb-play-card-icon { background: rgba(14, 165, 233, 0.12); color: rgb(2, 132, 199); }
-.wordbook .wb-play-card-emerald .wb-play-card-icon { background: rgba(16, 185, 129, 0.12); color: rgb(5, 150, 105); }
+.wordbook .wb-play-card-emerald .wb-play-card-icon { background: rgba(16, 185, 129, 0.12); color: #047857; }
 .wordbook .wb-play-card-violet  .wb-play-card-icon { background: rgba(139, 92, 246, 0.12); color: rgb(124, 58, 237); }
 .wordbook .wb-play-card-coral   .wb-play-card-icon { background: rgba(251, 113, 133, 0.14); color: rgb(225, 29, 72); }
 .wordbook .wb-play-card-lime    .wb-play-card-icon { background: rgba(132, 204, 22, 0.14); color: rgb(101, 163, 13); }
@@ -8069,7 +8069,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(5, 150, 105);
+  color: #047857;
   background: rgba(16, 185, 129, 0.10);
   border-radius: 999px;
   padding: 4px 10px;
@@ -8240,12 +8240,12 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-root-tile.is-correct {
   background: rgba(16, 185, 129, 0.12);
   border-color: rgba(16, 185, 129, 0.55);
-  color: rgb(5, 150, 105);
+  color: #047857;
 }
 .wordbook .wb-play-root-tile.is-correct-reveal {
   background: rgba(16, 185, 129, 0.06);
   border-color: rgba(16, 185, 129, 0.35);
-  color: rgb(5, 150, 105);
+  color: #047857;
   font-weight: 600;
 }
 .wordbook .wb-play-root-tile.is-wrong {
@@ -8390,7 +8390,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
   margin-top: 6px;
   font-size: 14px;
   font-weight: 600;
-  color: rgb(5, 150, 105);
+  color: #047857;
 }
 .wordbook .wb-play-shade-canonical-sep {
   margin: 0 4px;
@@ -8443,7 +8443,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-build-slot.is-correct {
   background: rgba(16, 185, 129, 0.12);
   border-color: rgba(16, 185, 129, 0.55);
-  color: rgb(5, 150, 105);
+  color: #047857;
 }
 .wordbook .wb-play-build-slot.is-wrong {
   background: rgba(225, 29, 72, 0.08);
@@ -8466,7 +8466,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
   font-size: clamp(20px, 3.5vw, 26px);
   font-weight: 700;
 }
-.wordbook .wb-play-build-result.is-correct { color: rgb(5, 150, 105); }
+.wordbook .wb-play-build-result.is-correct { color: #047857; }
 .wordbook .wb-play-build-result.is-wrong { color: rgb(190, 18, 60); }
 .wordbook .wb-play-build-pool {
   display: flex;
@@ -8800,7 +8800,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-option.is-correct {
   background: rgba(16, 185, 129, 0.10);
   border-color: rgba(16, 185, 129, 0.5);
-  color: rgb(5, 150, 105);
+  color: #047857;
   font-weight: 600;
 }
 .wordbook .wb-play-option.is-wrong {
@@ -8832,7 +8832,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-blank.is-revealed {
   background: rgba(16, 185, 129, 0.10);
   border-bottom-color: rgba(16, 185, 129, 0.5);
-  color: rgb(5, 150, 105);
+  color: #047857;
 }
 
 .wordbook .wb-play-memory-grid {
@@ -8916,7 +8916,7 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-memcard.is-matched .wb-play-memcard-face {
   background: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.5);
-  color: rgb(5, 150, 105);
+  color: #047857;
   font-weight: 600;
 }
 .wordbook .wb-play-memcard-word .wb-play-memcard-face {
@@ -9467,7 +9467,7 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 .wb-wgm-blank.is-revealed {
   background: rgba(16, 185, 129, 0.10);
   border-bottom-color: rgba(16, 185, 129, 0.5);
-  color: rgb(5, 150, 105);
+  color: #047857;
 }
 .wb-wgm-options {
   display: flex;
@@ -9501,7 +9501,7 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 .wb-wgm-option.is-correct {
   background: rgba(16, 185, 129, 0.10);
   border-color: rgba(16, 185, 129, 0.5);
-  color: rgb(5, 150, 105);
+  color: #047857;
   font-weight: 600;
 }
 .wb-wgm-option.is-wrong {
@@ -14700,3 +14700,113 @@ html[data-theme="dark"] .wordbook .wb-play-build-result.is-wrong { color: #FDA4A
   text-underline-offset: 0.28em;
   border-radius: 4px;
 }
+
+/* Contrast pass, games (Gadi 2026-10-11, tablet scan of every game in six
+   skins). Light: the few teal and grey texts under 4.5:1 get darker. Dark
+   skins and dark mode: fixed light-mode colours swap to the skin's own. */
+.wordbook .wb-play-timer { color: #0B7171; }
+.wordbook .wb-play-next { background: #0B7F7F; border-color: #0B7F7F; }
+.wordbook .wb-play-next:hover { background: #096B6B; border-color: #096B6B; }
+html[data-theme] .wb-kid-area .wb-play-blank.is-revealed { color: color-mix(in srgb, var(--accent) 65%, var(--ink)); }
+html[data-theme="dark"] .wordbook .wb-play-next,
+html[data-theme="space"] .wb-kid-area .wb-play-next,
+html[data-theme="ocean"] .wb-kid-area .wb-play-next,
+html[data-theme="jungle"] .wb-kid-area .wb-play-next,
+html[data-theme="neon"] .wb-kid-area .wb-play-next,
+html[data-theme="sunset"] .wb-kid-area .wb-play-next,
+html[data-theme="aurora"] .wb-kid-area .wb-play-next,
+html[data-theme="cosmos"] .wb-kid-area .wb-play-next,
+html[data-theme="lava"] .wb-kid-area .wb-play-next,
+html[data-theme="royal"] .wb-kid-area .wb-play-next {
+  background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+}
+html[data-theme="dark"] .wordbook .wb-play-timer,
+html[data-theme="space"] .wb-kid-area .wb-play-timer,
+html[data-theme="ocean"] .wb-kid-area .wb-play-timer,
+html[data-theme="jungle"] .wb-kid-area .wb-play-timer,
+html[data-theme="neon"] .wb-kid-area .wb-play-timer,
+html[data-theme="sunset"] .wb-kid-area .wb-play-timer,
+html[data-theme="aurora"] .wb-kid-area .wb-play-timer,
+html[data-theme="cosmos"] .wb-kid-area .wb-play-timer,
+html[data-theme="lava"] .wb-kid-area .wb-play-timer,
+html[data-theme="royal"] .wb-kid-area .wb-play-timer { color: var(--accent); background: rgba(255,255,255,0.08); }
+html[data-theme="dark"] .wordbook .wb-flash-dir,
+html[data-theme="dark"] .wordbook  .wb-flash-swap,
+html[data-theme="space"] .wb-kid-area .wb-flash-dir,
+html[data-theme="space"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="ocean"] .wb-kid-area .wb-flash-dir,
+html[data-theme="ocean"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="jungle"] .wb-kid-area .wb-flash-dir,
+html[data-theme="jungle"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="neon"] .wb-kid-area .wb-flash-dir,
+html[data-theme="neon"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="sunset"] .wb-kid-area .wb-flash-dir,
+html[data-theme="sunset"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="aurora"] .wb-kid-area .wb-flash-dir,
+html[data-theme="aurora"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="cosmos"] .wb-kid-area .wb-flash-dir,
+html[data-theme="cosmos"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="lava"] .wb-kid-area .wb-flash-dir,
+html[data-theme="lava"] .wb-kid-area  .wb-flash-swap,
+html[data-theme="royal"] .wb-kid-area .wb-flash-dir,
+html[data-theme="royal"] .wb-kid-area  .wb-flash-swap { color: var(--accent); background: rgba(255,255,255,0.08); }
+html[data-theme="dark"] .wordbook .wb-flash-dir.is-on,
+html[data-theme="space"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="ocean"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="jungle"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="neon"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="sunset"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="aurora"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="cosmos"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="lava"] .wb-kid-area .wb-flash-dir.is-on,
+html[data-theme="royal"] .wb-kid-area .wb-flash-dir.is-on { background: var(--accent); color: var(--accent-ink); }
+html[data-theme="dark"] .wordbook .wb-flash-source,
+html[data-theme="dark"] .wordbook  .wb-tf-real span,
+html[data-theme="space"] .wb-kid-area .wb-flash-source,
+html[data-theme="space"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="ocean"] .wb-kid-area .wb-flash-source,
+html[data-theme="ocean"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="jungle"] .wb-kid-area .wb-flash-source,
+html[data-theme="jungle"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="neon"] .wb-kid-area .wb-flash-source,
+html[data-theme="neon"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="sunset"] .wb-kid-area .wb-flash-source,
+html[data-theme="sunset"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="aurora"] .wb-kid-area .wb-flash-source,
+html[data-theme="aurora"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="cosmos"] .wb-kid-area .wb-flash-source,
+html[data-theme="cosmos"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="lava"] .wb-kid-area .wb-flash-source,
+html[data-theme="lava"] .wb-kid-area  .wb-tf-real span,
+html[data-theme="royal"] .wb-kid-area .wb-flash-source,
+html[data-theme="royal"] .wb-kid-area  .wb-tf-real span { color: #C4B5FD; }
+html[data-theme="dark"] .wordbook .wb-play-artist-origin,
+html[data-theme="space"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="ocean"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="jungle"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="neon"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="sunset"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="aurora"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="cosmos"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="lava"] .wb-kid-area .wb-play-artist-origin,
+html[data-theme="royal"] .wb-kid-area .wb-play-artist-origin { color: #F9A8D4; background: rgba(236,72,153,0.16); }
+html[data-theme="dark"] .wordbook .wb-tf-right,
+html[data-theme="space"] .wb-kid-area .wb-tf-right,
+html[data-theme="ocean"] .wb-kid-area .wb-tf-right,
+html[data-theme="jungle"] .wb-kid-area .wb-tf-right,
+html[data-theme="neon"] .wb-kid-area .wb-tf-right,
+html[data-theme="sunset"] .wb-kid-area .wb-tf-right,
+html[data-theme="aurora"] .wb-kid-area .wb-tf-right,
+html[data-theme="cosmos"] .wb-kid-area .wb-tf-right,
+html[data-theme="lava"] .wb-kid-area .wb-tf-right,
+html[data-theme="royal"] .wb-kid-area .wb-tf-right { color: #5EEAD4; }
+html[data-theme="dark"] .wordbook .wb-tf-wrong,
+html[data-theme="space"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="ocean"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="jungle"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="neon"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="sunset"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="aurora"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="cosmos"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="lava"] .wb-kid-area .wb-tf-wrong,
+html[data-theme="royal"] .wb-kid-area .wb-tf-wrong { color: #FCD34D; }

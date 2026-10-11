@@ -586,9 +586,9 @@ export const FLASH_CSS = `
 .wb-flash-word { font-size: clamp(30px, 8vw, 46px); font-weight: 800; color: #0f172a; line-height: 1.15; word-break: break-word; }
 .wb-flash-backword { font-size: 16px; font-weight: 700; color: #6D28D9; }
 .wb-flash-meaning { font-size: clamp(17px, 4.4vw, 21px); font-weight: 600; color: #1f2937; line-height: 1.55; }
-.wb-flash-example { font-size: 15px; color: #6b7280; line-height: 1.5; font-style: italic; }
+.wb-flash-example { font-size: 15px; color: #4B5563; line-height: 1.5; font-style: italic; }
 .wb-flash-again { position: absolute; top: 14px; inset-inline-start: 14px; font-size: 12px; font-weight: 700; color: #b45309; background: #FEF3C7; border-radius: 999px; padding: 3px 10px; }
-.wb-flash-swap { display: inline-block; margin-top: 10px; font: inherit; font-size: 13px; font-weight: 700; color: #0b7d7d; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.wb-flash-swap { display: inline-block; margin-top: 10px; font: inherit; font-size: 13px; font-weight: 700; color: #086868; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .wb-flash-actions { display: flex; gap: 12px; justify-content: center; margin-top: 18px; }
 .wb-flash-btn { min-width: 130px; padding: 12px 20px; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
 .wb-flash-yes { background: #0EA5A5; color: #fff; box-shadow: 0 10px 22px -10px rgba(14,165,165,0.6); }
@@ -603,8 +603,8 @@ export const FLASH_CSS = `
 .wb-flash-front.has-pic .wb-flash-meaning { padding-inline: 20px; font-size: clamp(15px, 4vw, 18px); }
 .wb-flash-front.has-pic .wb-flash-again { z-index: 1; }
 .wb-flash-dirs { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
-.wb-flash-dir { font: inherit; font-size: 13px; font-weight: 700; color: #0b7d7d; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-.wb-flash-dir.is-on { background: #0EA5A5; color: #fff; }
+.wb-flash-dir { font: inherit; font-size: 13px; font-weight: 700; color: #086868; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.wb-flash-dir.is-on { background: #0B7F7F; color: #fff; }
 .wb-flash-source { font-size: 13px; font-weight: 700; color: #6D28D9; margin-bottom: 6px; }
 .wb-flash-pick-h { margin: 22px 0 0; text-align: center; font-size: 20px; font-weight: 800; color: var(--ink, #0f172a); text-wrap: balance; }
 .wb-flash-make-btn.is-ghost { background: transparent; color: #0b7d7d; box-shadow: 0 0 0 1.5px #0EA5A5 inset; }
@@ -614,9 +614,9 @@ export const FLASH_CSS = `
 .wb-flash-src:disabled { opacity: 0.5; cursor: default; }
 .wb-flash-src-mine { padding: 18px 16px; background: linear-gradient(160deg, #E8F6F6 0%, #FFFFFF 75%); }
 .wb-flash-src-title { font-size: 16px; font-weight: 700; }
-.wb-flash-src-sub { font-size: 13px; color: #6b7280; }
+.wb-flash-src-sub { font-size: 13px; color: #4B5563; }
 .wb-flash-src-icon { font-size: 26px; line-height: 1; }
-.wb-flash-topics-label { font-size: 13px; font-weight: 700; color: #6b7280; text-align: center; margin-top: 6px; }
+.wb-flash-topics-label { font-size: 13px; font-weight: 700; color: var(--ink-soft, #4B5563); text-align: center; margin-top: 6px; }
 .wb-flash-topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
 .wb-flash-make { display: grid; gap: 8px; padding: 14px 16px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px rgba(15,72,68,0.12); margin-top: 6px; }
 .wb-flash-make-title { font-size: 15px; font-weight: 700; color: #0f172a; }
