@@ -67,7 +67,7 @@ import { DUEL_GAMES, duelQuestionsFor } from "@/lib/duel-games";
 import type { DuelQuestion } from "@/lib/duel";
 import { TF_COPY } from "@/components/play/GameTrueFalse";
 import { ensurePlayContent } from "@/lib/play-content/remote";
-import { LessonPath } from "@/components/play/learn/LessonPath";
+import { LessonPath, type Lesson } from "@/components/play/learn/LessonPath";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -3289,7 +3289,7 @@ export function PlayPage() {
   const href = useHref();
   const t = COPY[lang] ?? COPY.en;
 
-  type Stage = { kind: "menu" } | { kind: "lesson" } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
+  type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
@@ -3801,10 +3801,17 @@ export function PlayPage() {
   }, [playingGame, isPaid, lang, gamePool, kidsMode, playingTitle]);
 
   // ─── A lesson from workbook pages (Gadi 2026-10-11) ─────────────
-  if (stage.kind === "lesson" && learn?.lesson && learn.lang) {
+  if (stage.kind === "lesson" && learn?.lang) {
+    const lessonId = stage.lesson.id;
+    const markDone = async () => {
+      if (!lessonId || !user) return;
+      try {
+        await fetch("/api/learn", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` }, body: JSON.stringify({ action: "lessonDone", id: lessonId }) });
+      } catch { /* best-effort */ }
+    };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <LessonPath lesson={learn.lesson} learnLang={learn.lang} lang={lang} t={t} onExit={() => { setLearnRefresh((x) => x + 1); setStage({ kind: "menu" }); }} />
+        <LessonPath lesson={stage.lesson} learnLang={learn.lang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => { setLearnRefresh((x) => x + 1); setStage({ kind: "menu" }); }} />
       </div>
     );
   }
@@ -4103,7 +4110,7 @@ export function PlayPage() {
         {isPaid && (
           <>
             <style>{LEARN_CSS}</style>
-            <LearnCard lang={lang} dir={dir} refreshKey={learnRefresh} onState={setLearn} onLesson={() => setStage({ kind: "lesson" })} />
+            <LearnCard lang={lang} dir={dir} refreshKey={learnRefresh} onState={setLearn} onLesson={(lesson) => setStage({ kind: "lesson", lesson })} />
           </>
         )}
 

@@ -510,7 +510,8 @@ export function GameFlashcards({
 
   // Front / back text for the current card.
   const wordLangName = card.pair?.wordLang || card.word.language;
-  const sourceLabel = picked ? f.srcTopic(picked.title) : f.srcMine;
+  // A learning session or a lesson brings its own words, not the notebook.
+  const sourceLabel = picked ? f.srcTopic(picked.title) : skipPicker ? "" : f.srcMine;
   const pair = card.pair;
   const meaningFirst = mode === "meanings" && (defDir === "meaning" || (defDir === "mix" && !!card.alt));
   const frontText = meaningFirst ? card.word.meaning : mode === "words" && pair && reverse ? pair.pair : card.word.word;
@@ -525,7 +526,7 @@ export function GameFlashcards({
       <style>{FLASH_CSS}</style>
       <PlayHeader title={title} progress={`${Math.min(i + 1, deck.length)}/${deck.length}`} score={known} onExit={onExit} t={t} />
       <div className="wb-play-question">
-        <div className="wb-flash-source">{sourceLabel}</div>
+        {sourceLabel && <div className="wb-flash-source">{sourceLabel}</div>}
         <div className="wb-play-question-eyebrow"><QText text={ask} /></div>
         {mode === "words" && !flipped && (
           <button type="button" className="wb-flash-swap" onClick={() => setReverse((r) => !r)}>{f.swap}</button>

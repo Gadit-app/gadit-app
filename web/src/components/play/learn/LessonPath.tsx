@@ -16,21 +16,25 @@ import { GameFillBlank } from "../GameFillBlank";
 import { GameTrueFalse } from "../GameTrueFalse";
 import { GamePronoun } from "./GamePronoun";
 import { GameSentenceBuilder } from "./GameSentenceBuilder";
+import { GameReading } from "./GameReading";
 import { setLessonNext } from "@/lib/lesson-flow";
 import { lessonCopy } from "./lesson-i18n";
 
 export type Lesson = {
+  /** A built-in lesson's id (a photographed one has none). */
+  id?: string;
   topic: string;
   items: Array<{ w: string; t: string; nq?: string }>;
   sentences: string[];
   pronouns: Array<{ phrase: string; answer: string }>;
+  reading?: { title: string; text: string; checks: Array<{ s: string; yes: boolean }> } | null;
 };
 
-type StepId = "cards" | "match" | "fill" | "truefalse" | "pronoun" | "build";
+type StepId = "cards" | "match" | "fill" | "truefalse" | "reading" | "pronoun" | "build";
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-export function LessonPath({ lesson, learnLang, lang, t, onExit }: {
+export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
   lesson: Lesson;
   /** The language being learned ("en" or "he"). */
   learnLang: string;
@@ -38,6 +42,8 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit }: {
   lang: string;
   t: PlayT;
   onExit: () => void;
+  /** Called once when the last step ends. */
+  onDone?: () => void;
 }) {
   const c = lessonCopy(lang);
   const audioLang = learnLang === "he" ? "he-IL" : "en-US";
@@ -57,6 +63,7 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit }: {
     const out: StepId[] = ["cards", "match"];
     if (pool.filter((p) => p.examples.length > 0).length >= 4) out.push("fill");
     out.push("truefalse");
+    if (lesson.reading && lesson.reading.checks.length >= 3) out.push("reading");
     if (lesson.pronouns.length >= 4) out.push("pronoun");
     if (lesson.sentences.length >= 4) out.push("build");
     return out;
@@ -64,6 +71,7 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit }: {
 
   const [i, setI] = useState(0);
   const done = i >= steps.length;
+  useEffect(() => { if (done) onDone?.(); }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
   // The results screen of each game offers the next step.
   useEffect(() => {
     setLessonNext(!done && i + 1 < steps.length ? c.next(c.steps[steps[i + 1]]) : !done ? c.doneTitle : null);
@@ -99,6 +107,7 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit }: {
         {step === "match" && <GameQuiz {...props} />}
         {step === "fill" && <GameFillBlank {...props} />}
         {step === "truefalse" && <GameTrueFalse {...props} />}
+        {step === "reading" && lesson.reading && <GameReading reading={lesson.reading} onExit={next} lang={lang} t={t} audioLang={audioLang} dirText={learnLang === "he" ? "rtl" : "ltr"} />}
         {step === "pronoun" && <GamePronoun items={lesson.pronouns} onExit={next} lang={lang} t={t} audioLang={audioLang} />}
         {step === "build" && <GameSentenceBuilder sentences={lesson.sentences} onExit={next} lang={lang} t={t} audioLang={audioLang} />}
       </div>

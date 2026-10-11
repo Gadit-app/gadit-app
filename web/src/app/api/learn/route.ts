@@ -5,6 +5,7 @@ import {
   applyAnswer, bankFor, isLearnLang, learnTargets, LEARNED_BOX, movePointer, pickSession, wordKey,
   type LearnItem, type LearnLang, type Reads, type WordState,
 } from "@/lib/learn/engine";
+import { lessonData, lessonList } from "@/lib/learn/lessons";
 
 /**
  * Learning mode (Gadi 2026-10-11): "what are you learning now?" for a kid
@@ -36,6 +37,8 @@ type LearnDoc = {
   answered?: Partial<Record<LearnLang, number>>;
   streak?: Partial<Record<LearnLang, number>>;
   list?: ListDoc | null;
+  /** Built-in lessons finished, by id (ms). */
+  lessonsDone?: Record<string, number>;
 };
 
 async function uidOf(req: NextRequest): Promise<string | null> {
@@ -65,6 +68,13 @@ export async function GET(req: NextRequest) {
   const ui = (req.nextUrl.searchParams.get("ui") ?? "he").slice(0, 8);
   const doc = (await getAdminDb().collection("users").doc(uid).get()).get("learn") as LearnDoc | undefined;
   const qLang = req.nextUrl.searchParams.get("lang");
+  // One built-in lesson, ready to play.
+  const lessonId = req.nextUrl.searchParams.get("lesson");
+  if (lessonId) {
+    const l = isLearnLang(qLang) ? qLang : doc?.lang;
+    const data = l ? lessonData(l, ui, lessonId) : null;
+    return data ? NextResponse.json({ lesson: data }) : NextResponse.json({ error: "not_found" }, { status: 404 });
+  }
   const lang = isLearnLang(qLang) ? qLang : doc?.lang ?? null;
   const targets = learnTargets(ui);
   if (!lang || !targets.includes(lang)) {
@@ -93,7 +103,8 @@ export async function GET(req: NextRequest) {
   // The whole lesson (all its words, not just today's session) when the
   // active list came from workbook pages.
   const lesson = list && doc?.list?.unit ? { ...doc.list.unit, items: doc.list.items } : null;
-  return NextResponse.json({ profile: { lang, reads: doc?.reads ?? null }, targets, pool, stats, lesson });
+  const lessons = lessonList(lang, ui, doc?.lessonsDone ?? {});
+  return NextResponse.json({ profile: { lang, reads: doc?.reads ?? null }, targets, pool, stats, lesson, lessons });
 }
 
 /** Words of a pasted or photographed list: one per line, or separated by
@@ -275,6 +286,12 @@ export async function POST(req: NextRequest) {
     const list: ListDoc = { lang, items: unit.items, testDate, at: now, unit: { topic: unit.topic, sentences: unit.sentences, pronouns: unit.pronouns } };
     await ref.set({ learn: { list } }, { merge: true });
     return NextResponse.json({ ok: true, list });
+  }
+
+  if (action === "lessonDone") {
+    const id = String(body.id ?? "").slice(0, 60);
+    if (id) await ref.set({ learn: { lessonsDone: { [id]: now } } }, { merge: true });
+    return NextResponse.json({ ok: true });
   }
 
   if (action === "clearList") {

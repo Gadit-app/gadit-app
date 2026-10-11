@@ -23,10 +23,17 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
   const [seed, setSeed] = useState(0);
   const rounds = useMemo(() => shuffle(items).slice(0, 8), [items, seed]); // eslint-disable-line react-hooks/exhaustive-deps
   // The choices: the pronouns this unit uses, at least He / She / It.
+  // Hebrew lessons pick from הוא / היא / הם / הן, English ones from He, She, It, They.
+  const hebrew = items.some((x) => /[֐-׿]/.test(x.answer));
   const options = useMemo(() => {
+    if (hebrew) {
+      const used = new Set(["הוא", "היא", "הם", ...items.map((x) => x.answer)]);
+      return ["הוא", "היא", "הם", "הן"].filter((p) => used.has(p));
+    }
     const used = new Set(["He", "She", "It", ...items.map((x) => x.answer)]);
     return ["I", "You", "He", "She", "It", "We", "They"].filter((p) => used.has(p));
-  }, [items]);
+  }, [items, hebrew]);
+  const textDir = hebrew ? "rtl" : "ltr";
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -57,12 +64,12 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
       <PlayHeader title={c.pronounTitle} progress={`${idx + 1}/${rounds.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{c.pronounPrompt}</div>
-        <div className="wb-play-prompt wb-play-prompt-word" dir="ltr" lang={audioLang}>
+        <div className="wb-play-prompt wb-play-prompt-word" dir={textDir} lang={audioLang}>
           {r.phrase}
           <TTSButton text={r.phrase} audioLang={audioLang} useOpenAI ariaLabel={r.phrase} className="wb-word-act-icon wb-play-speak" />
         </div>
       </div>
-      <div className="wb-play-options wb-play-options-pair" dir="ltr">
+      <div className="wb-play-options wb-play-options-pair" dir={textDir}>
         {options.map((p) => {
           let cls = "wb-play-option";
           if (picked) {

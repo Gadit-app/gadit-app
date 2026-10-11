@@ -37,5 +37,11 @@ export const LEARN_CSS = `
 .wb-learn-reopen { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 2px; border: 0; background: none; font: inherit; font-size: 13.5px; font-weight: 700; color: var(--ink-soft, #55625f); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .wb-learn-lesson { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; padding: 12px 14px; border-radius: 14px; background: #E8F6F4; }
 .wb-learn-lesson .wb-learn-text b { color: #0F3B39; }
+.wb-learn-lessons { display: grid; gap: 10px; justify-items: start; }
+.wb-learn-lessons .wb-learn-lesson { width: 100%; box-sizing: border-box; }
+.wb-learn-lesson-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.wb-learn-lesson-chip { font: inherit; font-size: 14px; font-weight: 700; min-height: 38px; padding: 0 14px; border-radius: 999px; border: 1.5px solid rgba(15,111,108,0.25); background: #FFFFFF; color: #0F3B39; cursor: pointer; }
+.wb-learn-lesson-chip.is-done { background: #E8F6F4; color: #0F6F6C; }
+.wb-learn-lesson-chip.is-next { border-color: #0F6F6C; box-shadow: 0 0 0 2px rgba(15,111,108,0.25); }
 .wb-learn-chip:focus-visible, .wb-learn-btn:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 2px; }
 `;

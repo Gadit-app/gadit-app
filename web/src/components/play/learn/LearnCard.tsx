@@ -21,6 +21,8 @@ export type LearnState = {
   stats: { learnedTotal: number; learnedWeek: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
   /** A lesson built from workbook pages, while its list is active. */
   lesson: Lesson | null;
+  /** The built-in lessons, and which one comes next. */
+  lessons: { list: Array<{ id: string; topic: string; title: string; icon: string; d: number; done: boolean }>; next: string | null } | null;
 };
 
 export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
@@ -30,12 +32,13 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
   refreshKey: number;
   onState: (s: LearnState) => void;
   /** Open the workbook lesson (Gadi 2026-10-11). */
-  onLesson?: () => void;
+  onLesson?: (lesson: Lesson) => void;
 }) {
   const { user } = useAuth();
   const t = learnCopy(lang);
   const lc = lessonCopy(lang);
   const pagesRef = useRef<HTMLInputElement>(null);
+  const [showAll, setShowAll] = useState(false);
   const [targets, setTargets] = useState<LearnLang[]>([]);
   const [state, setState] = useState<LearnState | null>(null);
   const [step, setStep] = useState<"view" | "pick" | "reads" | "list">("view");
@@ -63,7 +66,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
       const j = await r.json();
       if (!r.ok) return;
       setTargets(j.targets ?? []);
-      const s: LearnState = { lang: j.profile?.lang ?? null, reads: j.profile?.reads ?? null, pool: j.pool ?? [], stats: j.stats ?? null, lesson: j.lesson ?? null };
+      const s: LearnState = { lang: j.profile?.lang ?? null, reads: j.profile?.reads ?? null, pool: j.pool ?? [], stats: j.stats ?? null, lesson: j.lesson ?? null, lessons: j.lessons ?? null };
       setState(s);
       onStateRef.current(s);
     } catch { /* the card stays as it was */ }
@@ -128,6 +131,17 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
       setText(""); setTestDate(""); setStep("view"); setMsg("");
       await load();
     } catch { setMsg(lc.fail); } finally { setBusy(false); }
+  };
+
+  // A built-in lesson: fetch its words and content, then play it.
+  const openLesson = async (id: string) => {
+    if (!state?.lang || !onLesson) return;
+    setBusy(true); setMsg(lc.loading);
+    try {
+      const r = await fetch(`/api/learn?ui=${encodeURIComponent(lang)}&lang=${state.lang}&lesson=${encodeURIComponent(id)}`, { headers: await auth(), cache: "no-store" });
+      const j = await r.json();
+      if (r.ok && j.lesson) { setMsg(""); onLesson(j.lesson as Lesson); } else setMsg(t.error);
+    } catch { setMsg(t.error); } finally { setBusy(false); }
   };
 
   if (!targets.length || !state) return null;
@@ -238,13 +252,39 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
           {s.list && <span className="is-list"><b>{s.list.ready}/{s.list.total}</b> {t.listReady(s.list.testDate)}</span>}
         </div>
       )}
+      {state.lessons && state.lessons.list.length > 0 && onLesson && (() => {
+        const next = state.lessons.list.find((l) => l.id === state.lessons!.next);
+        return (
+          <div className="wb-learn-lessons">
+            {next && (
+              <div className="wb-learn-lesson">
+                <div className="wb-learn-text">
+                  <span>{lc.nextLesson}</span>
+                  <b>{next.icon} {next.title}</b>
+                </div>
+                <button type="button" className="wb-learn-btn" disabled={busy} onClick={() => void openLesson(next.id)}>{lc.startBtn}</button>
+              </div>
+            )}
+            <button type="button" className="wb-learn-chip is-soft" onClick={() => setShowAll((v) => !v)}>{showAll ? lc.hideLessons : lc.allLessons}</button>
+            {showAll && (
+              <div className="wb-learn-lesson-grid">
+                {state.lessons.list.map((l) => (
+                  <button key={l.id} type="button" className={`wb-learn-lesson-chip${l.done ? " is-done" : ""}${l.id === state.lessons!.next ? " is-next" : ""}`} disabled={busy} onClick={() => void openLesson(l.id)}>
+                    <span aria-hidden="true">{l.done ? "✓" : l.icon}</span> {l.title}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })()}
       {state.lesson && onLesson && (
         <div className="wb-learn-lesson">
           <div className="wb-learn-text">
             <b>📘 {lc.title(state.lesson.topic)}</b>
             <span>{lc.meta(state.lesson.items.length)}</span>
           </div>
-          <button type="button" className="wb-learn-btn" onClick={onLesson}>{lc.start}</button>
+          <button type="button" className="wb-learn-btn" onClick={() => onLesson(state.lesson!)}>{lc.start}</button>
         </div>
       )}
       <div className="wb-learn-row">
