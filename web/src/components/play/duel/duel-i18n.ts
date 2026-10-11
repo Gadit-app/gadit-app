@@ -92,7 +92,7 @@ export type DuelCopy = {
 
 const he: DuelCopy = {
   title: "דו-קרב מילים",
-  bannerDesc: "שחקו אחד נגד השני על אותן מילים: הורה נגד ילד, אחים, חברים, או מישהו שמחובר עכשיו.",
+  bannerDesc: "שחקו אחד נגד השני: הורה נגד ילד, אחים או חברים.",
   bannerCta: "לדו-קרב",
   hubSub: "אותן שאלות לשני השחקנים. מי שעונה נכון ומהר יותר, מנצח.",
   optLocal: "על אותו מכשיר", optLocalDesc: "מעבירים את המכשיר בין השחקנים בכל שאלה.",
@@ -179,7 +179,7 @@ const he: DuelCopy = {
 
 const en: DuelCopy = {
   title: "Word Duel",
-  bannerDesc: "Play each other on the same words: a parent against a kid, siblings, friends, or someone online right now.",
+  bannerDesc: "Play each other: a parent against a kid, siblings or friends.",
   bannerCta: "Start a duel",
   hubSub: "The same questions for both players. Right and fast wins.",
   optLocal: "On this device", optLocalDesc: "Pass the device between players on every question.",

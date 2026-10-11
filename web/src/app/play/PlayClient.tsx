@@ -59,7 +59,6 @@ import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
-import { DUEL_CSS } from "@/components/play/duel/duel-css";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -3923,6 +3922,9 @@ export function PlayPage() {
             unpaid user (gentle upsell). Non-signed-in and Basic-plan
             users see the gate state; only Clear/Deep can actually
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
+        {/* Kids Mode and Word Duel side by side, one card family (Gadi
+            2026-10-11: the duel strip looked unrelated to the Kids banner). */}
+        <div className={`wb-play-banners${isPaid ? " has-duel" : ""}`}>
         {(() => {
           const bannerCopy = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
           // Kids Mode is a Family tool (Gadi 2026-10-06).
@@ -3996,17 +3998,18 @@ export function PlayPage() {
         {isPaid && (() => {
           const dc = duelCopy(lang);
           return (
-            <div className="wb-play-duel-banner" dir={dir}>
-              <style>{DUEL_CSS}</style>
-              <span className="wb-play-duel-icon" aria-hidden="true">⚔️</span>
-              <div className="wb-play-duel-text">
-                <b>{dc.title}</b>
-                <span>{dc.bannerDesc}</span>
+            <div className="wb-play-kids-banner is-duel" dir={dir}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="wb-play-kids-banner-mascot" src="/play/duel-mascot.webp" alt="" width={240} height={240} />
+              <div className="wb-play-kids-banner-text">
+                <div className="wb-play-kids-banner-title">{dc.title}</div>
+                <div className="wb-play-kids-banner-desc">{dc.bannerDesc}</div>
               </div>
-              <button type="button" className="duel-btn" onClick={() => setStage({ kind: "duel" })}>{dc.bannerCta}</button>
+              <button type="button" className="wb-play-kids-banner-cta is-duel" onClick={() => setStage({ kind: "duel" })}>{dc.bannerCta}</button>
             </div>
           );
         })()}
+        </div>
 
         {/* Games rendered as grouped grids by category. We render each
             category as its own grid so the section heading sits cleanly

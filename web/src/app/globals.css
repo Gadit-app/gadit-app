@@ -8716,6 +8716,16 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 @media (max-width: 599px) {
   .wordbook .wb-play-kids-banner-mascot { width: 76px; height: 76px; margin-top: -30px; }
 }
+/* Kids Mode + Word Duel as a pair of equal cards (Gadi 2026-10-11). */
+.wordbook .wb-play-banners { margin: 26px 0 20px; display: grid; gap: 14px; }
+.wordbook .wb-play-banners.has-duel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.wordbook .wb-play-banners .wb-play-kids-banner { margin: 0; min-width: 0; }
+.wordbook .wb-play-kids-banner.is-duel { background: #FFFFFF; }
+.wordbook .wb-play-kids-banner-cta.is-duel { background: #0F6F6C; border-color: #0F6F6C; font-weight: 700; white-space: nowrap; }
+.wordbook .wb-play-kids-banner-cta.is-duel:hover { background: #0B5A57; border-color: #0B5A57; }
+@media (max-width: 860px) {
+  .wordbook .wb-play-banners.has-duel { grid-template-columns: 1fr; row-gap: 34px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .wordbook .wb-play-kids-switch, .wordbook .wb-play-kids-switch-knob { transition: none; }
 }

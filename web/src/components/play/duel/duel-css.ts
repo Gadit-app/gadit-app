@@ -66,12 +66,6 @@ export const DUEL_CSS = `
 .duel-names input { padding: 12px 14px; font: inherit; font-size: 17px; border-radius: 14px; border: 2px solid rgba(15,111,108,0.25); }
 .duel-pass { min-height: 260px; display: grid; place-items: center; text-align: center; gap: 10px; cursor: pointer; border: 0; width: 100%; background: linear-gradient(160deg, #E6F6F4, #fff); border-radius: 22px; font: inherit; color: inherit; }
 .duel-pass b { font-size: 26px; }
-.wb-play-duel-banner { display: flex; align-items: center; gap: 16px; padding: 16px 18px; margin: 0 0 18px; border-radius: 22px; background: linear-gradient(120deg, #FFF4E0, #E8F7F5); border: 1px solid rgba(180,83,9,0.15); }
-.wb-play-duel-banner .wb-play-duel-icon { font-size: 34px; flex: none; }
-.wb-play-duel-banner .wb-play-duel-text { flex: 1; min-width: 0; display: grid; gap: 2px; }
-.wb-play-duel-banner b { font-size: 18px; }
-.wb-play-duel-banner span { font-size: 14.5px; color: var(--wb-ink-soft, #55625f); line-height: 1.45; }
-@media (max-width: 560px) { .wb-play-duel-banner { flex-wrap: wrap; } .wb-play-duel-banner .duel-btn { width: 100%; } }
 .duel-stats { margin-top: 14px; }
 .duel-table { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .duel-table li { display: grid; grid-template-columns: 32px 40px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 14px; background: #F7FAF9; }
