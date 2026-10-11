@@ -89,7 +89,7 @@ If the topic IS safe, return {"safe": true, "title": "<the topic as a short clea
 // A pasted list: each line is a single word (Hebrew or English) OR a
 // "word - translation" pair. Return {en, he} for each, filling the missing
 // language, child-safe. Gadi 2026-09-19 ("paste your own list").
-async function generateList(list: string, uiLangName: string, nativeLangName: string): Promise<{ safe: boolean; title: string; words: Pair[] }> {
+async function generateList(list: string, uiLangName: string, nativeLangName: string, fromPhoto = false): Promise<{ safe: boolean; title: string; words: Pair[] }> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -105,9 +105,10 @@ async function generateList(list: string, uiLangName: string, nativeLangName: st
 
 Return STRICT JSON: {"safe": true, "title": "My list", "words": [{"en":"...","he":"..."}]}.
 - Each input line is either a single word (in English OR ${nativeLangName}) or a "word - translation" pair (separated by -, =, tab, or a dash). For each line, output one item with BOTH "en" (the English word) and "he" (the ${nativeLangName} word) filled: translate the missing side; if a pair is given, keep it.
-- IMPORTANT: the "he" field must hold the ${nativeLangName} word (NOT necessarily Hebrew — the field is named "he" for legacy reasons).
+- IMPORTANT: the "he" field must hold the ${nativeLangName} word (NOT necessarily Hebrew — the field is named "he" for legacy reasons), written in ${nativeLangName} letters: never copy the English word into it (zebra → the ${nativeLangName} word for zebra).
 - Keep the user's own words; only add the translation. English lowercase (proper nouns keep their capital). Skip empty lines, numbers-only lines, and duplicates. Up to 20 words.
-- CHILD SAFETY: skip any single word not appropriate for a young child. If the WHOLE list is inappropriate (violence, adult, drugs, hate, etc.), return {"safe": false, "title": "", "words": []}.
+${fromPhoto ? `- This text was PHOTOGRAPHED from a school workbook page (read by OCR), so it may hold instructions, exercise numbers, sentences and page furniture. Pick only the vocabulary words the page is teaching: a word list, a word bank, highlighted or new words. If there is no clear list, take the key words of the passage. Fix obvious OCR misspellings. Ignore instructions such as "read", "circle", "fill in".
+` : ""}- CHILD SAFETY: skip any single word not appropriate for a young child. If the WHOLE list is inappropriate (violence, adult, drugs, hate, etc.), return {"safe": false, "title": "", "words": []}.
 Output ONLY the JSON object.`,
         },
         { role: "user", content: list },
@@ -129,6 +130,33 @@ Output ONLY the JSON object.`,
       }).filter((w) => w.en && w.he).slice(0, 20)
     : [];
   if (words.length < 2) return { safe: false, title: "", words: [] };
+  // A word the model left untranslated (e.g. "zebra" → "zebra" for Hebrew):
+  // ask once more for just those words (Gadi 2026-10-11).
+  if (nativeLangName !== "English") {
+    const stuck = words.filter((w) => w.he.toLowerCase() === w.en.toLowerCase());
+    if (stuck.length) {
+      try {
+        const r2 = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            temperature: 0,
+            response_format: { type: "json_object" },
+            messages: [
+              { role: "system", content: `Translate each English word into ${nativeLangName}, the common word a child knows, in ${nativeLangName} letters. Reply as JSON {"t": {"<english>": "<${nativeLangName}>"}}.` },
+              { role: "user", content: stuck.map((w) => w.en).join("\n") },
+            ],
+          }),
+        });
+        const j2 = await r2.json();
+        const u2 = usageFrom(j2);
+        void logAiUsage({ feature: "spell_set_list", model: "gpt-4o-mini", tokensIn: u2.tokensIn, tokensOut: u2.tokensOut });
+        const map = (JSON.parse(j2.choices?.[0]?.message?.content ?? "{}").t ?? {}) as Record<string, string>;
+        for (const w of stuck) { const v = map[w.en]; if (typeof v === "string" && v.trim()) w.he = v.trim().slice(0, 40); }
+      } catch { /* keep the list as it is */ }
+    }
+  }
   const t = typeof parsed.title === "string" ? parsed.title.trim().slice(0, 40) : "";
   return { safe: true, title: t || (uiLangName === "Hebrew" ? "הרשימה שלי" : "My list"), words };
 }
@@ -149,10 +177,13 @@ export async function POST(req: NextRequest) {
   // The NON-English side of every pair is the learner's own language. Defaults
   // to uiLang; English UI falls back to Hebrew (there's no en↔en dictation).
   let nativeLang = "he";
+  let fromPhoto = false;
   try {
-    const b = (await req.json()) as { topic?: unknown; list?: unknown; uiLang?: unknown; nativeLang?: unknown };
+    const b = (await req.json()) as { topic?: unknown; list?: unknown; uiLang?: unknown; nativeLang?: unknown; fromPhoto?: unknown };
     if (typeof b.topic === "string") topic = b.topic.trim().slice(0, 40);
-    if (typeof b.list === "string") list = b.list.trim().slice(0, 800);
+    fromPhoto = b.fromPhoto === true;
+    // A photographed page carries more text around the words.
+    if (typeof b.list === "string") list = b.list.trim().slice(0, fromPhoto ? 2500 : 800);
     if (typeof b.uiLang === "string" && LANG_NAME[b.uiLang]) lang = b.uiLang;
     if (typeof b.nativeLang === "string" && LANG_NAME[b.nativeLang]) nativeLang = b.nativeLang;
     else nativeLang = lang === "en" ? "he" : lang;
@@ -165,7 +196,7 @@ export async function POST(req: NextRequest) {
   if (list) {
     if (list.length < 2) return NextResponse.json({ error: "list_too_short" }, { status: 400 });
     try {
-      const out = await generateList(list, LANG_NAME[lang], nativeName);
+      const out = await generateList(list, LANG_NAME[lang], nativeName, fromPhoto);
       return NextResponse.json(out);
     } catch {
       return NextResponse.json({ error: "generate_failed" }, { status: 502 });

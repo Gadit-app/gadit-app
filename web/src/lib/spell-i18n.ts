@@ -45,7 +45,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "الإملاءات الخاصة بك",
     "practiceAgain": "التدرب من جديد",
     "correctWord": "صحيحة",
-    "allFilter": "الكل"
+    "allFilter": "الكل",
+    "photoBtn": "تصوير من الكراسة",
+    "photoReading": "نقرأ الصفحة…",
+    "photoFail": "لم نستطع قراءة الصورة. جرّبوا صورة أوضح، أو اكتبوا الكلمات."
   },
   "ru": {
     "title": "Тренировка правописания",
@@ -82,7 +85,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Твои диктанты",
     "practiceAgain": "Тренироваться снова",
     "correctWord": "верно",
-    "allFilter": "Все"
+    "allFilter": "Все",
+    "photoBtn": "Фото из тетради",
+    "photoReading": "Читаем страницу…",
+    "photoFail": "Не получилось прочитать фото. Попробуй сделать его чётче или впиши слова."
   },
   "es": {
     "title": "Práctica de ortografía",
@@ -119,7 +125,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Tus dictados",
     "practiceAgain": "Practicar de nuevo",
     "correctWord": "correctas",
-    "allFilter": "Todos"
+    "allFilter": "Todos",
+    "photoBtn": "Foto del cuaderno",
+    "photoReading": "Leyendo la página…",
+    "photoFail": "No pudimos leer la foto. Prueba con una más nítida o escribe las palabras."
   },
   "pt": {
     "title": "Prática de ortografia",
@@ -156,7 +165,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Seus ditados",
     "practiceAgain": "Praticar de novo",
     "correctWord": "certas",
-    "allFilter": "Todos"
+    "allFilter": "Todos",
+    "photoBtn": "Foto do caderno",
+    "photoReading": "Lendo a página…",
+    "photoFail": "Não conseguimos ler a foto. Tente uma mais nítida ou digite as palavras."
   },
   "fr": {
     "title": "Entraînement à l'orthographe",
@@ -193,7 +205,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Tes dictées",
     "practiceAgain": "S'entraîner encore",
     "correctWord": "justes",
-    "allFilter": "Tous"
+    "allFilter": "Tous",
+    "photoBtn": "Photo du cahier",
+    "photoReading": "Lecture de la page…",
+    "photoFail": "Impossible de lire la photo. Essaie une photo plus nette ou tape les mots."
   },
   "de": {
     "title": "Rechtschreibung üben",
@@ -230,7 +245,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Deine Diktate",
     "practiceAgain": "Noch einmal üben",
     "correctWord": "richtig",
-    "allFilter": "Alle"
+    "allFilter": "Alle",
+    "photoBtn": "Foto aus dem Heft",
+    "photoReading": "Seite wird gelesen…",
+    "photoFail": "Wir konnten das Foto nicht lesen. Versuch ein schärferes oder tippe die Wörter."
   },
   "cs": {
     "title": "Procvičování pravopisu",
@@ -267,7 +285,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Tvoje diktáty",
     "practiceAgain": "Procvičovat znovu",
     "correctWord": "správně",
-    "allFilter": "Vše"
+    "allFilter": "Vše",
+    "photoBtn": "Fotka ze sešitu",
+    "photoReading": "Čteme stránku…",
+    "photoFail": "Fotku se nepodařilo přečíst. Zkus ostřejší, nebo slova napiš."
   },
   "sk": {
     "title": "Precvičovanie pravopisu",
@@ -304,7 +325,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Tvoje diktáty",
     "practiceAgain": "Precvičovať znova",
     "correctWord": "správne",
-    "allFilter": "Všetko"
+    "allFilter": "Všetko",
+    "photoBtn": "Fotka zo zošita",
+    "photoReading": "Čítame stránku…",
+    "photoFail": "Fotku sa nepodarilo prečítať. Skús ostrejšiu alebo slová napíš."
   },
   "it": {
     "title": "Pratica di ortografia",
@@ -341,7 +365,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "I tuoi dettati",
     "practiceAgain": "Esercitarsi di nuovo",
     "correctWord": "giuste",
-    "allFilter": "Tutti"
+    "allFilter": "Tutti",
+    "photoBtn": "Foto dal quaderno",
+    "photoReading": "Leggiamo la pagina…",
+    "photoFail": "Non siamo riusciti a leggere la foto. Prova una più nitida o scrivi le parole."
   },
   "ja": {
     "title": "つづりの練習",
@@ -378,7 +405,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "あなたのディクテーション",
     "practiceAgain": "もう一度練習する",
     "correctWord": "正解",
-    "allFilter": "すべて"
+    "allFilter": "すべて",
+    "photoBtn": "ワークブックを撮影",
+    "photoReading": "ページを読んでいます…",
+    "photoFail": "写真を読めませんでした。もっとはっきり撮るか、単語を入力してください。"
   },
   "hi": {
     "title": "वर्तनी अभ्यास",
@@ -415,7 +445,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "तुम्हारे श्रुतलेख",
     "practiceAgain": "फिर से अभ्यास करना",
     "correctWord": "सही",
-    "allFilter": "सभी"
+    "allFilter": "सभी",
+    "photoBtn": "कॉपी से फ़ोटो",
+    "photoReading": "पेज पढ़ रहे हैं…",
+    "photoFail": "फ़ोटो पढ़ नहीं पाए। साफ़ फ़ोटो लें या शब्द टाइप करें।"
   },
   "am": {
     "title": "የፊደል አጻጻፍ ልምምድ",
@@ -452,7 +485,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "የአንተ ጽሁፎች",
     "practiceAgain": "እንደገና መለማመድ",
     "correctWord": "ትክክል",
-    "allFilter": "ሁሉም"
+    "allFilter": "ሁሉም",
+    "photoBtn": "ከመልመጃ ደብተር ፎቶ",
+    "photoReading": "ገጹን እያነበብን ነው…",
+    "photoFail": "ፎቶውን ማንበብ አልቻልንም። ይበልጥ ግልጽ ፎቶ ይሞክሩ ወይም ቃላቱን ይጻፉ።"
   },
   "uk": {
     "title": "Тренування правопису",
@@ -489,7 +525,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Твої диктанти",
     "practiceAgain": "Тренуватися знову",
     "correctWord": "правильно",
-    "allFilter": "Усі"
+    "allFilter": "Усі",
+    "photoBtn": "Фото із зошита",
+    "photoReading": "Читаємо сторінку…",
+    "photoFail": "Не вдалося прочитати фото. Спробуй чіткіше або впиши слова."
   },
   "tr": {
     "title": "Yazım alıştırması",
@@ -526,7 +565,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Senin dikteleri",
     "practiceAgain": "Yeniden çalışmak",
     "correctWord": "doğru",
-    "allFilter": "Tümü"
+    "allFilter": "Tümü",
+    "photoBtn": "Kitaptan fotoğraf",
+    "photoReading": "Sayfa okunuyor…",
+    "photoFail": "Fotoğrafı okuyamadık. Daha net bir tane dene ya da kelimeleri yaz."
   },
   "pl": {
     "title": "Ćwiczenie pisowni",
@@ -563,7 +605,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Twoje dyktanda",
     "practiceAgain": "Ćwiczyć jeszcze raz",
     "correctWord": "poprawnie",
-    "allFilter": "Wszystkie"
+    "allFilter": "Wszystkie",
+    "photoBtn": "Zdjęcie z zeszytu",
+    "photoReading": "Czytamy stronę…",
+    "photoFail": "Nie udało się odczytać zdjęcia. Spróbuj ostrzejszego albo wpisz słowa."
   },
   "fa": {
     "title": "تمرین املا",
@@ -600,7 +645,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "دیکته‌های تو",
     "practiceAgain": "تمرین دوباره",
     "correctWord": "درست",
-    "allFilter": "همه"
+    "allFilter": "همه",
+    "photoBtn": "عکس از کتاب کار",
+    "photoReading": "در حال خواندن صفحه…",
+    "photoFail": "نتوانستیم عکس را بخوانیم. عکس واضح‌تری بگیرید یا کلمه‌ها را بنویسید."
   },
   "id": {
     "title": "Latihan ejaan",
@@ -637,7 +685,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Diktemu",
     "practiceAgain": "Berlatih lagi",
     "correctWord": "benar",
-    "allFilter": "Semua"
+    "allFilter": "Semua",
+    "photoBtn": "Foto dari buku latihan",
+    "photoReading": "Membaca halaman…",
+    "photoFail": "Fotonya tidak terbaca. Coba yang lebih tajam, atau ketik kata-katanya."
   },
   "nl": {
     "title": "Spellingoefening",
@@ -674,7 +725,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Jouw dictees",
     "practiceAgain": "Opnieuw oefenen",
     "correctWord": "goed",
-    "allFilter": "Alle"
+    "allFilter": "Alle",
+    "photoBtn": "Foto uit het werkboek",
+    "photoReading": "Pagina wordt gelezen…",
+    "photoFail": "We konden de foto niet lezen. Probeer een scherpere of typ de woorden."
   },
   "el": {
     "title": "Εξάσκηση ορθογραφίας",
@@ -711,7 +765,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Οι υπαγορεύσεις σου",
     "practiceAgain": "Εξάσκηση ξανά",
     "correctWord": "σωστά",
-    "allFilter": "Όλα"
+    "allFilter": "Όλα",
+    "photoBtn": "Φωτογραφία από το τετράδιο",
+    "photoReading": "Διαβάζουμε τη σελίδα…",
+    "photoFail": "Δεν μπορέσαμε να διαβάσουμε τη φωτογραφία. Δοκίμασε πιο καθαρή ή γράψε τις λέξεις."
   },
   "zu": {
     "title": "Ukuzilolonga kokupela",
@@ -748,7 +805,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Ama-dikteshini akho",
     "practiceAgain": "Zilolonge futhi",
     "correctWord": "kulungile",
-    "allFilter": "Konke"
+    "allFilter": "Konke",
+    "photoBtn": "Isithombe sencwadi yokusebenza",
+    "photoReading": "Sifunda ikhasi…",
+    "photoFail": "Asikwazanga ukufunda isithombe. Zama esicacile, noma ubhale amagama."
   },
   "vi": {
     "title": "Luyện chính tả",
@@ -785,7 +845,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Các bài chính tả của bạn",
     "practiceAgain": "Luyện lại",
     "correctWord": "đúng",
-    "allFilter": "Tất cả"
+    "allFilter": "Tất cả",
+    "photoBtn": "Chụp từ vở bài tập",
+    "photoReading": "Đang đọc trang…",
+    "photoFail": "Không đọc được ảnh. Hãy chụp rõ hơn hoặc gõ các từ."
   },
   "fil": {
     "title": "Pagsasanay sa pagbaybay",
@@ -822,7 +885,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Ang iyong mga dikta",
     "practiceAgain": "Magsanay ulit",
     "correctWord": "tama",
-    "allFilter": "Lahat"
+    "allFilter": "Lahat",
+    "photoBtn": "Kuha mula sa workbook",
+    "photoReading": "Binabasa ang pahina…",
+    "photoFail": "Hindi namin mabasa ang larawan. Subukan ang mas malinaw, o i-type ang mga salita."
   },
   "af": {
     "title": "Speloefening",
@@ -859,7 +925,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Jou diktate",
     "practiceAgain": "Oefen weer",
     "correctWord": "reg",
-    "allFilter": "Almal"
+    "allFilter": "Almal",
+    "photoBtn": "Foto uit die werkboek",
+    "photoReading": "Lees die bladsy…",
+    "photoFail": "Ons kon nie die foto lees nie. Probeer 'n skerper een of tik die woorde."
   },
   "sw": {
     "title": "Mazoezi ya tahajia",
@@ -896,7 +965,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Imla zako",
     "practiceAgain": "Fanya mazoezi tena",
     "correctWord": "sahihi",
-    "allFilter": "Zote"
+    "allFilter": "Zote",
+    "photoBtn": "Picha ya kitabu cha mazoezi",
+    "photoReading": "Tunasoma ukurasa…",
+    "photoFail": "Hatukuweza kusoma picha. Jaribu iliyo wazi zaidi, au andika maneno."
   },
   "zh-CN": {
     "title": "拼写练习",
@@ -933,7 +1005,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "你的听写",
     "practiceAgain": "再次练习",
     "correctWord": "正确",
-    "allFilter": "全部"
+    "allFilter": "全部",
+    "photoBtn": "拍摄练习册",
+    "photoReading": "正在读取页面…",
+    "photoFail": "无法读取照片。请拍得更清晰一些，或直接输入单词。"
   },
   "zh-TW": {
     "title": "拼字練習",
@@ -970,7 +1045,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "你的聽寫",
     "practiceAgain": "再次練習",
     "correctWord": "正確",
-    "allFilter": "全部"
+    "allFilter": "全部",
+    "photoBtn": "拍攝練習簿",
+    "photoReading": "正在讀取頁面…",
+    "photoFail": "無法讀取照片。請拍得更清楚一些，或直接輸入單字。"
   },
   "ko": {
     "title": "철자 연습",
@@ -1007,7 +1085,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "나의 받아쓰기",
     "practiceAgain": "다시 연습하기",
     "correctWord": "정답",
-    "allFilter": "전체"
+    "allFilter": "전체",
+    "photoBtn": "워크북 사진 찍기",
+    "photoReading": "페이지를 읽는 중…",
+    "photoFail": "사진을 읽지 못했어요. 더 선명하게 찍거나 단어를 입력해 주세요."
   },
   "th": {
     "title": "ฝึกสะกดคำ",
@@ -1044,7 +1125,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "การเขียนตามคำบอกของคุณ",
     "practiceAgain": "ฝึกอีกครั้ง",
     "correctWord": "ถูก",
-    "allFilter": "ทั้งหมด"
+    "allFilter": "ทั้งหมด",
+    "photoBtn": "ถ่ายจากแบบฝึกหัด",
+    "photoReading": "กำลังอ่านหน้า…",
+    "photoFail": "อ่านรูปไม่ได้ ลองถ่ายให้ชัดขึ้น หรือพิมพ์คำเอง"
   },
   "bn": {
     "title": "বানান অনুশীলন",
@@ -1081,7 +1165,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "তোমার শ্রুতিলিখন",
     "practiceAgain": "আবার অনুশীলন",
     "correctWord": "সঠিক",
-    "allFilter": "সব"
+    "allFilter": "সব",
+    "photoBtn": "খাতা থেকে ছবি",
+    "photoReading": "পাতা পড়া হচ্ছে…",
+    "photoFail": "ছবিটি পড়া গেল না। আরও পরিষ্কার ছবি তোলো অথবা শব্দগুলো লেখো।"
   },
   "da": {
     "title": "Staveøvelse",
@@ -1118,7 +1205,10 @@ export const SPELL_T_EXTRA: Record<string, Record<string, string>> = {
     "yourDictations": "Dine diktater",
     "practiceAgain": "Øv igen",
     "correctWord": "rigtige",
-    "allFilter": "Alle"
+    "allFilter": "Alle",
+    "photoBtn": "Foto fra arbejdsbogen",
+    "photoReading": "Læser siden…",
+    "photoFail": "Vi kunne ikke læse billedet. Prøv et skarpere eller skriv ordene."
   },
   "hu": {
     "title": "Helyesírás gyakorlása",
@@ -1547,7 +1637,10 @@ export const CATEGORY_TITLES_EXTRA: Record<string, Record<string, string>> = {
     "clothes": "الملابس",
     "weather": "الطقس",
     "days": "الأيام والأشهر",
-    "verbs": "أفعال الحركة"
+    "verbs": "أفعال الحركة",
+    "photoBtn": "Fotó a munkafüzetből",
+    "photoReading": "Olvassuk az oldalt…",
+    "photoFail": "Nem sikerült beolvasni a fotót. Próbálj élesebbet, vagy írd be a szavakat."
   },
   "ru": {
     "colors": "Цвета",

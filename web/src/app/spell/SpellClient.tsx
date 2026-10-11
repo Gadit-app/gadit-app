@@ -36,7 +36,8 @@ type SpellKey =
   | "retryMisses" | "loginTitle" | "createTitle" | "createSub" | "topicPlaceholder"
   | "generate" | "creating" | "unsafe" | "createErr" | "modeType" | "modeTrace"
   | "traceHint" | "clear" | "pasteTitle" | "pasteSub" | "pastePlaceholder"
-  | "pasteBtn" | "yourDictations" | "practiceAgain" | "correctWord" | "allFilter";
+  | "pasteBtn" | "yourDictations" | "practiceAgain" | "correctWord" | "allFilter"
+  | "photoBtn" | "photoReading" | "photoFail";
 const SPELL_STRINGS: Record<string, Record<SpellKey, string>> = {
   en: {
     title: "Spelling practice",
@@ -62,6 +63,7 @@ const SPELL_STRINGS: Record<string, Record<SpellKey, string>> = {
     pasteTitle: "Paste your own list",
     pasteSub: "One word per line, in your language or English.",
     pastePlaceholder: "yellow\ndog\nteacher", pasteBtn: "Create set",
+    photoBtn: "Photo from the workbook", photoReading: "Reading the page…", photoFail: "We couldn't read the photo. Try a sharper one, or type the words.",
     yourDictations: "Your dictations", practiceAgain: "Practice again",
     correctWord: "correct", allFilter: "All",
   },
@@ -89,6 +91,7 @@ const SPELL_STRINGS: Record<string, Record<SpellKey, string>> = {
     pasteTitle: "הדבקת רשימה משלך",
     pasteSub: "מילה בכל שורה, בשפה שלכם או באנגלית.",
     pastePlaceholder: "צהוב\nכלב\nמורה", pasteBtn: "יצירת סט",
+    photoBtn: "צילום מהחוברת", photoReading: "קוראים את הדף…", photoFail: "לא הצלחנו לקרוא את התמונה. נסו צילום חד יותר, או הקלידו את המילים.",
     yourDictations: "התרגולים שלך", practiceAgain: "לתרגל שוב",
     correctWord: "נכון", allFilter: "הכול",
   },
@@ -284,8 +287,31 @@ export function SpellClient() {
   const [createMsg, setCreateMsg] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  async function createFromList() {
-    const lt = listText.trim();
+  // Photograph a workbook page (Gadi 2026-10-11, the same reader as "every
+  // word"): the page is read, its words become the dictation straight away.
+  const photoRef = useRef<HTMLInputElement>(null);
+  async function fromPhoto(file: File) {
+    if (!user || creating) return;
+    setCreating(true);
+    setCreateMsg(t("photoReading", lang));
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const r = await fetch("/api/ocr", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` }, body: fd });
+      const j = (await r.json().catch(() => ({}))) as { text?: string };
+      const text = (j.text ?? "").trim();
+      if (!r.ok || text.length < 2) { setCreateMsg(t("photoFail", lang)); return; }
+      setCreating(false);
+      await createFromList(text, true);
+    } catch {
+      setCreateMsg(t("photoFail", lang));
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  async function createFromList(override?: string, photo = false) {
+    const lt = (override ?? listText).trim();
     if (lt.length < 2 || creating || !user) return;
     setCreating(true);
     setCreateMsg("");
@@ -294,7 +320,7 @@ export function SpellClient() {
       const res = await fetch("/api/spell-set", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ list: lt, uiLang: lang, nativeLang }),
+        body: JSON.stringify({ list: lt, uiLang: lang, nativeLang, ...(photo ? { fromPhoto: true } : {}) }),
       });
       const data = (await res.json().catch(() => ({}))) as { safe?: boolean; title?: string; words?: WordPair[] };
       if (!res.ok || !data.safe || !Array.isArray(data.words) || data.words.length < 2) {
@@ -694,10 +720,18 @@ export function SpellClient() {
                 maxLength={800}
                 style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
               />
-              <button type="button" onClick={createFromList} disabled={creating || listText.trim().length < 2}
-                style={{ marginTop: 8, padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
-                {creating ? t("creating", lang) : t("pasteBtn", lang)}
-              </button>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
+                  style={{ padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
+                  {creating ? t("creating", lang) : t("pasteBtn", lang)}
+                </button>
+                <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
+                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  📷 {t("photoBtn", lang)}
+                </button>
+                <input ref={photoRef} type="file" accept="image/*" capture="environment" hidden
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
+              </div>
             </div>
 
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
