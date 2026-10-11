@@ -127,6 +127,12 @@ function randomCelebration(lang: string): string {
 }
 
 const TEAL = "#0EA5A5";
+
+/** "2026-10-14" → "14/10" (the test date on the "for tonight" strip). */
+function fmtDate(d: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
+  return m ? `${+m[3]}/${+m[2]}` : d;
+}
 function norm(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -244,6 +250,7 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
 
 export function SpellClient() {
   const { lang, dir } = useLang();
+  const hc = homeworkCopy(lang);
   const href = useHref();
   const router = useRouter();
   const { user, plan, planReady, kidsAccess } = useAuth();
@@ -277,6 +284,46 @@ export function SpellClient() {
   const [typed, setTyped] = useState("");
   const [result, setResult] = useState<null | "correct" | "wrong">(null);
   const [phase, setPhase] = useState<"pick" | "quiz" | "done">("pick");
+  // Homework is four cards (Gadi 2026-10-12): getting ready for a test,
+  // dictation, learning languages, reading texts. Each opens its own view;
+  // the browser's back button returns to the cards.
+  type HwView = "hub" | "test" | "dict" | "langs";
+  const [hw, setHwState] = useState<HwView>("hub");
+  const setHw = useCallback((v: HwView) => {
+    setHwState(v);
+    try {
+      const u = new URL(window.location.href);
+      if (v === "hub") u.searchParams.delete("v"); else u.searchParams.set("v", v);
+      window.history.pushState({ hw: v }, "", u.toString());
+      window.scrollTo({ top: 0 });
+    } catch { /* view still switches */ }
+  }, []);
+  useEffect(() => {
+    const read = () => {
+      const v = new URLSearchParams(window.location.search).get("v");
+      setHwState(v === "test" || v === "dict" || v === "langs" ? v : "hub");
+    };
+    read();
+    window.addEventListener("popstate", read);
+    return () => window.removeEventListener("popstate", read);
+  }, []);
+  // "For tonight": only what a grown-up set (a word list with its test date,
+  // or a lesson from workbook pages), never a generic suggestion.
+  const [tonight, setTonight] = useState<null | { title: string; words: number; testDate: string | null; lesson: boolean }>(null);
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    void (async () => {
+      try {
+        const r = await fetch(`/api/learn?ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` }, cache: "no-store" });
+        const j = await r.json();
+        const list = j?.stats?.list as { total: number; testDate: string | null } | null | undefined;
+        if (!alive || !list || !list.total) return;
+        setTonight({ title: j.lesson?.topic ?? "", words: list.total, testDate: list.testDate ?? null, lesson: !!j.lesson });
+      } catch { /* no strip */ }
+    })();
+    return () => { alive = false; };
+  }, [user, lang]);
   const [celebration, setCelebration] = useState("");
   // Bumped on a successful finish → fires the full-screen confetti burst
   // (same KidsCelebration used on rank-up), Gadi 2026-09-19.
@@ -605,20 +652,91 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={homeworkCopy(lang).title} sub={phase === "pick" ? homeworkCopy(lang).sub : undefined}>
+    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
-        {/* Learning a language at school: lessons by topic and lessons from
-            the workbook's pages live here since 2026-10-11 (the nav council).
-            A lesson plays on the games page and comes back here. */}
-        {phase === "pick" && (
+        {phase === "pick" && hw === "hub" && (
+          <div className="wb-hw-hub">
+            {tonight && (
+              <button type="button" className="wb-hw-tonight"
+                onClick={() => (tonight.lesson ? router.push(href("/play?lesson=photo")) : setHw("langs"))}>
+                <span className="wb-hw-tonight-k">{hc.tonight}</span>
+                <span className="wb-hw-tonight-t">
+                  {tonight.title || <><span dir="ltr" style={{ unicodeBidi: "isolate" }}>{tonight.words}</span> {misc("words", lang)}</>}
+                  {tonight.testDate && <span className="wb-hw-tonight-d"> · {hc.testOn} <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{fmtDate(tonight.testDate)}</span></span>}
+                </span>
+                <span className="wb-hw-tonight-go">{hc.start}</span>
+              </button>
+            )}
+            <div className="wb-hw-grid">
+              {([
+                { k: "test", icon: "📝", t: hc.test, d: hc.testD },
+                { k: "dict", icon: "✏️", t: hc.dict, d: hc.dictD },
+                { k: "langs", icon: "🌍", t: hc.langs, d: hc.langsD },
+              ] as const).map((c) => (
+                <button key={c.k} type="button" className="wb-hw-card" onClick={() => setHw(c.k)}>
+                  <span className="wb-hw-card-i" aria-hidden>{c.icon}</span>
+                  <span className="wb-hw-card-t">{c.t}</span>
+                  <span className="wb-hw-card-d">{c.d}</span>
+                </button>
+              ))}
+              <Link href={href("/read")} className="wb-hw-card">
+                <span className="wb-hw-card-i" aria-hidden>📖</span>
+                <span className="wb-hw-card-t">{hc.read}</span>
+                <span className="wb-hw-card-d">{hc.readD}</span>
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {phase === "pick" && hw !== "hub" && (
+          <button type="button" className="wb-hw-back" onClick={() => setHw("hub")}>
+            {dir === "rtl" ? "→" : "←"} {hc.back}
+          </button>
+        )}
+
+        {/* Learning languages: lessons by topic and a lesson from workbook
+            pages. A lesson plays on the games page and comes back here. */}
+        {phase === "pick" && hw === "langs" && (
           <>
             <style>{LEARN_CSS}</style>
             <LearnCard lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
           </>
         )}
 
-        {phase === "pick" && (
+        {phase === "pick" && (hw === "test" || hw === "dict") && (
           <>
+            {/* Getting ready for a test: paste or photograph the word list */}
+            {hw === "test" && <div style={{ marginTop: 4, marginBottom: 4, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: "#EEF2F3", display: "grid", placeItems: "center", fontSize: 18 }}>📝</span>
+                <div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("pasteTitle", lang)}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("pasteSub", lang)}</div>
+                </div>
+              </div>
+              <textarea
+                value={listText}
+                onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
+                placeholder={t("pastePlaceholder", lang)}
+                dir={dir === "rtl" ? "rtl" : "auto"}
+                rows={4}
+                maxLength={800}
+                style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
+              />
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
+                  style={{ padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
+                  {creating ? t("creating", lang) : t("pasteBtn", lang)}
+                </button>
+                <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
+                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  📷 {t("photoBtn", lang)}
+                </button>
+                <input ref={photoRef} type="file" accept="image/*" hidden
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
+              </div>
+            </div>}
+
             {/* Your dictations — re-practice a whole series (esp. missed words) */}
             {history.length > 0 && (
               <div style={{ marginTop: 16 }}>
@@ -681,7 +799,7 @@ export function SpellClient() {
             </div>
 
             {/* Create your own set — kid types a topic, Gadit generates 10 words */}
-            <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
+            {hw === "dict" && <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                 <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
                 <div>
@@ -705,40 +823,9 @@ export function SpellClient() {
                 </button>
               </div>
               {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
-            </div>
+            </div>}
 
-            {/* Paste your own list — one word per line, HE or EN, any source */}
-            <div style={{ marginTop: 12, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: "#EEF2F3", display: "grid", placeItems: "center", fontSize: 18 }}>📝</span>
-                <div>
-                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("pasteTitle", lang)}</div>
-                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("pasteSub", lang)}</div>
-                </div>
-              </div>
-              <textarea
-                value={listText}
-                onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
-                placeholder={t("pastePlaceholder", lang)}
-                dir={dir === "rtl" ? "rtl" : "auto"}
-                rows={4}
-                maxLength={800}
-                style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
-              />
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
-                <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
-                  style={{ padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
-                  {creating ? t("creating", lang) : t("pasteBtn", lang)}
-                </button>
-                <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
-                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
-                  📷 {t("photoBtn", lang)}
-                </button>
-                <input ref={photoRef} type="file" accept="image/*" hidden
-                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
-              </div>
-            </div>
-
+            {hw === "dict" && <>
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
               {DICTATION_SETS.map((s) => (
@@ -757,6 +844,7 @@ export function SpellClient() {
                 </button>
               ))}
             </div>
+            </>}
           </>
         )}
 

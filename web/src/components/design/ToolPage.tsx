@@ -43,6 +43,7 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
+        <ToolKidsToggle />
         <WbShellNav active={active} />
         <div className="wb-shell-actions">
           {isKid && <AppearancePicker scope="kid" />}
@@ -72,7 +73,6 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
               {titleExtra}
             </h1>
             {sub && <p className="wb-tool-sub">{sub}</p>}
-            <ToolKidsToggle />
           </div>
         )}
         {children}

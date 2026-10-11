@@ -14885,3 +14885,50 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-kids-strip.is-on .wb-kids-strip-track { background: var(--accent, #0EA5A5); }
 .wordbook .wb-kids-strip.is-on .wb-kids-strip-track span { inset-inline-start: 16px; }
 .wordbook .wb-tool-sub { white-space: pre-line; }
+/* Kids Mode beside the logo (Gadi 2026-10-12): the mascot awake = on,
+   asleep = off; the label hides on narrow screens. */
+.wordbook .wb-shell-topbar { position: sticky; }
+.wordbook .wb-kids-mini { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 4px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink-soft, #475569); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; flex: none; margin-inline-start: 10px; margin-inline-end: auto; }
+.wordbook .wb-kids-mini img { width: 28px; height: 28px; object-fit: contain; filter: grayscale(0.85) opacity(0.75); transition: filter 160ms; }
+.wordbook .wb-kids-mini.is-on { color: var(--ink, #0f172a); border-color: color-mix(in srgb, var(--accent, #0EA5A5) 50%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
+.wordbook .wb-kids-mini.is-on img { filter: none; }
+@media (max-width: 640px) {
+  .wordbook .wb-kids-mini { padding: 2px; margin-inline-start: 6px; }
+  .wordbook .wb-kids-mini-label { display: none; }
+}
+.wordbook .wb-play-card-cover.is-mascot { object-fit: contain; background: linear-gradient(160deg, #FFF6DA, #FFFFFF); padding: 10px; box-sizing: border-box; }
+
+/* Homework: four identical cards, one teal accent (Gadi 2026-10-12). */
+.wb-hw-hub { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; }
+.wb-hw-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.wb-hw-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0;
+  text-align: start; font-family: inherit; cursor: pointer; text-decoration: none;
+  background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px;
+  padding: 18px 16px 16px; color: var(--ink, #0B1220);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.wb-hw-card:hover { border-color: #0EA5A5; }
+.wb-hw-card:active { transform: scale(.98); }
+.wb-hw-card:focus-visible { outline: 2px solid #0EA5A5; outline-offset: 2px; }
+.wb-hw-card-i { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: rgba(14, 165, 165, .1); }
+.wb-hw-card-t { font-size: 16.5px; font-weight: 800; line-height: 1.3; }
+.wb-hw-card-d { font-size: 13px; line-height: 1.5; color: var(--ink-muted, #6B7280); }
+.wb-hw-tonight {
+  display: flex; align-items: center; gap: 12px; width: 100%; font-family: inherit; cursor: pointer; text-align: start;
+  background: rgba(14, 165, 165, .08); border: 1px solid rgba(14, 165, 165, .35); border-radius: 14px;
+  padding: 12px 14px; color: var(--ink, #0B1220);
+}
+.wb-hw-tonight-k { flex: none; font-size: 12px; font-weight: 800; letter-spacing: .04em; color: #0A7472; }
+.wb-hw-tonight-t { flex: 1; min-width: 0; font-size: 15px; font-weight: 700; }
+.wb-hw-tonight-d { font-weight: 500; color: var(--ink-muted, #6B7280); }
+.wb-hw-tonight-go { flex: none; background: #0EA5A5; color: #fff; font-size: 13.5px; font-weight: 700; border-radius: 10px; padding: 7px 14px; }
+.wb-hw-back {
+  display: inline-flex; align-items: center; gap: 6px; margin: 0 0 12px; padding: 6px 2px; background: none; border: none;
+  font-family: inherit; font-size: 14px; font-weight: 700; color: #0A7472; cursor: pointer;
+}
+html[data-theme="dark"] .wb-hw-tonight-k, html[data-theme="dark"] .wb-hw-back, html[data-theme="space"] .wb-hw-tonight-k, html[data-theme="space"] .wb-hw-back, html[data-theme="ocean"] .wb-hw-tonight-k, html[data-theme="ocean"] .wb-hw-back, html[data-theme="jungle"] .wb-hw-tonight-k, html[data-theme="jungle"] .wb-hw-back, html[data-theme="neon"] .wb-hw-tonight-k, html[data-theme="neon"] .wb-hw-back, html[data-theme="sunset"] .wb-hw-tonight-k, html[data-theme="sunset"] .wb-hw-back, html[data-theme="aurora"] .wb-hw-tonight-k, html[data-theme="aurora"] .wb-hw-back, html[data-theme="cosmos"] .wb-hw-tonight-k, html[data-theme="cosmos"] .wb-hw-back, html[data-theme="lava"] .wb-hw-tonight-k, html[data-theme="lava"] .wb-hw-back, html[data-theme="royal"] .wb-hw-tonight-k, html[data-theme="royal"] .wb-hw-back { color: #5EEAD4; }
+@media (max-width: 420px) {
+  .wb-hw-card { padding: 14px 12px; }
+  .wb-hw-card-t { font-size: 15px; }
+}

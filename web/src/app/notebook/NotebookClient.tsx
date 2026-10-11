@@ -845,6 +845,7 @@ export function NotebookPage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
+        <ToolKidsToggle />
         <WbShellNav active="notebook" />
         <div className="wb-shell-actions">
           {isKid && <AppearancePicker scope="kid" />}
@@ -888,7 +889,6 @@ export function NotebookPage() {
         <div className="wb-notebook-hero">
           <h1 className="wb-notebook-title"><ToolIcon id="notebook" size={36} className="wb-title-icon" />{pageTitle}</h1>
           <p className="wb-notebook-sub">{pageSubtitle}</p>
-          <ToolKidsToggle />
           {/* Smart practice (spaced repetition) lives at /practice; it had no
               way in from the notebook (Gadi 2026-10-06). Full plans only. */}
           {plan === "deep" && items && items.length > 0 && (

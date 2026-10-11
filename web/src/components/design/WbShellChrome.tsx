@@ -34,6 +34,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { useKidsMode } from "@/lib/use-kids-mode";
 import { resolvePartnerArea } from "@/lib/partner-nav";
 import { useLang } from "@/lib/lang-context";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
@@ -245,6 +246,7 @@ const TREASURE_NAV: Record<string, string> = {
 
 function useNavLinks(): NavLink[] {
   const { user, plan, planReady, loading, familyRole, kidsAccess } = useAuth();
+  const [kidsMode] = useKidsMode();
   const { lang } = useLang();
   const href = useHref();
 
@@ -291,7 +293,9 @@ function useNavLinks(): NavLink[] {
       const deep = plan === "deep";
       const links: NavLink[] = [
         { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
-        ...(deep && kidsAccess ? [{ key: "spell" as const, href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }] : []),
+        // Homework is for children only (Gadi 2026-10-12): a grown-up sees
+        // it only while Kids Mode is on, i.e. a child is at the screen.
+        ...(deep && kidsAccess && kidsMode ? [{ key: "spell" as const, href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }] : []),
         ...(deep ? [{ key: "read" as const, href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en }] : []),
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
         ...(deep ? [{ key: "play" as const, href: href("/play"), label: v2(lang, "navPlay") }] : []),

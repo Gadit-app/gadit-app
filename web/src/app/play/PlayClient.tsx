@@ -60,7 +60,6 @@ import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
 import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
-import { HomeworkStrip } from "@/components/play/learn/HomeworkStrip";
 import { setAnswerListener } from "@/lib/learn/report";
 import { setDuelLauncher } from "@/lib/duel-launch";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
@@ -3571,6 +3570,7 @@ export function PlayPage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
+        <ToolKidsToggle />
         <WbShellNav active="play" />
         <div className="wb-shell-actions">
           {isKidPlayer && <AppearancePicker scope="kid" />}
@@ -3610,20 +3610,6 @@ export function PlayPage() {
         <div className="wb-play-hero">
           <h1 className="wb-play-title"><ToolIcon id="play" size={36} className="wb-title-icon" />{t.menuTitle}</h1>
           <p className="wb-play-lede">{t.menuLede}</p>
-          <ToolKidsToggle />
-          {streak.current > 0 && (
-            <div className="wb-play-streak">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M13 2c1 3-1 4-1 6 0 2 2 3 2 5 0 3-2 4-2 7 0 1 1 2 1 2s-7-1-7-7c0-2 1-3 1-5 0-3-2-4-2-6 0 0 4 1 5 4 1-2 2-4 3-6Z" />
-              </svg>
-              <span>
-                {streak.current === 1 ? t.streakOne : t.streakMany(streak.current)}
-              </span>
-              {streak.best > streak.current && (
-                <span className="wb-play-streak-best">{t.bestEver(streak.best)}</span>
-              )}
-            </div>
-          )}
         </div>
 
         {pool === null && !fetchError && (
@@ -3649,29 +3635,8 @@ export function PlayPage() {
             switch the mode. Gadi 2026-06-29 tablet audit fix. */}
         {/* Kids Mode and Word Duel side by side, one card family (Gadi
             2026-10-11: the duel strip looked unrelated to the Kids banner). */}
-        <div className="wb-play-banners">
-        {/* Kids Mode lives under every tool's title now (Gadi 2026-10-11:
-            it applies to every section, not only the games). */}
-
-        {/* Word Duel: play each other (Gadi 2026-10-11). */}
-        {isPaid && (() => {
-          const dc = duelCopy(lang);
-          return (
-            <div className="wb-play-kids-banner is-duel" dir={dir}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="wb-play-kids-banner-mascot" src="/play/duel-mascot.webp" alt="" width={240} height={240} />
-              <div className="wb-play-kids-banner-text">
-                <div className="wb-play-kids-banner-title">{dc.title}</div>
-                <div className="wb-play-kids-banner-desc">{dc.bannerDesc}</div>
-              </div>
-              <button type="button" className="wb-play-kids-banner-cta is-duel" onClick={() => setStage({ kind: "duel" })}>{dc.bannerCta}</button>
-            </div>
-          );
-        })()}
-        </div>
-
-        {/* Tonight's practice: one strip to Homework when a lesson is due. */}
-        {isPaid && <HomeworkStrip />}
+        {/* Word Duel is a card among the games, not a banner above them
+            (Gadi 2026-10-12). Tonight's practice lives in Homework. */}
 
         {/* Games rendered as grouped grids by category. We render each
             category as its own grid so the section heading sits cleanly
@@ -3722,6 +3687,21 @@ export function PlayPage() {
                   <h2 className="wb-play-section-heading">{section.label}</h2>
                 )}
                 <ul className="wb-play-grid">
+                  {isPaid && section.id === "notebook" && (() => {
+                    const dc = duelCopy(lang);
+                    return (
+                      <li key="duel">
+                        <button type="button" className="wb-play-card wb-play-card-duel wb-play-cat-notebook has-cover" onClick={() => setStage({ kind: "duel" })}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img className="wb-play-card-cover is-mascot" src="/play/duel-mascot.webp" alt="" loading="lazy" width={720} height={480} />
+                          <span className="wb-play-card-text">
+                            <span className="wb-play-card-title">{dc.title}</span>
+                            <span className="wb-play-card-desc">{dc.bannerDesc}</span>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })()}
                   {sectionGames.map((g) => (
                     <li key={g.id}>
                       <button
