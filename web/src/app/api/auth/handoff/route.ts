@@ -19,7 +19,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   // Only the bridge page on www asks for this.
   const origin = req.headers.get("origin") || "";
-  if (origin && origin !== "https://www.gadit.app" && !origin.startsWith("http://localhost")) {
+  // Both hosts of the pair: the bridge runs both ways (2026-10-11).
+  if (origin && origin !== "https://www.gadit.app" && origin !== "https://gadit.app" && !origin.startsWith("http://localhost")) {
     return NextResponse.json({ error: "forbidden" }, { status: 403 });
   }
   const authHeader = req.headers.get("authorization") || "";
