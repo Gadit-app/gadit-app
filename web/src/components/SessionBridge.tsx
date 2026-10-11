@@ -15,17 +15,26 @@ import { auth } from "@/lib/firebase";
 import { useAuth } from "@/lib/auth-context";
 
 const WWW = "https://www.gadit.app";
+const PAY = "https://gadit.app";
 
 export function SessionBridge() {
   const { user, loading } = useAuth();
   useEffect(() => {
-    if (loading || user || window.location.hostname !== "gadit.app") return;
+    // Both ways (Gadi 2026-10-11): a family that bought on gadit.app and then
+    // opens an email link on www must arrive signed in too (Yehuda Koren saw
+    // a blank family page).
+    // Never inside a frame: the bridge page itself runs in one, and two-way
+    // bridging must not nest frames.
+    if (window.parent !== window) return;
+    const host = window.location.hostname;
+    if (loading || user || (host !== "gadit.app" && host !== "www.gadit.app")) return;
+    const other = host === "gadit.app" ? WWW : PAY;
     try {
       if (sessionStorage.getItem("gadit_bridge_done")) return;
     } catch { /* private mode: try once per page load */ }
     const done = () => { try { sessionStorage.setItem("gadit_bridge_done", "1"); } catch { /* ignore */ } };
     const frame = document.createElement("iframe");
-    frame.src = `${WWW}/auth/bridge`;
+    frame.src = `${other}/auth/bridge`;
     frame.setAttribute("aria-hidden", "true");
     frame.tabIndex = -1;
     frame.style.cssText = "position:absolute;width:0;height:0;border:0;visibility:hidden";
@@ -36,7 +45,7 @@ export function SessionBridge() {
       frame.remove();
     };
     const onMessage = (e: MessageEvent) => {
-      if (e.origin !== WWW || (e.data as { type?: string })?.type !== "gadit-session") return;
+      if (e.origin !== other || (e.data as { type?: string })?.type !== "gadit-session") return;
       const token = (e.data as { token?: string | null }).token;
       done();
       cleanup();

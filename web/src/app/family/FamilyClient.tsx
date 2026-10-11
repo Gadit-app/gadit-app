@@ -1686,8 +1686,8 @@ function NavIcon({ name }: { name: FamTab | "dictionary" }) {
 }
 
 export function FamilyClient() {
-  const { user, loading } = useAuth();
-  const { lang, dir, setLang } = useLang();
+  const { user, loading, setShowLoginModal } = useAuth();
+  const { lang, dir, setLang, t: ui } = useLang();
   const href = useHref();
   const router = useRouter();
   const search = useSearchParams();
@@ -1796,13 +1796,29 @@ export function FamilyClient() {
     };
   }, [user]);
 
-  if (loading || !familyChecked) {
+  if (loading) {
     return <div className="wordbook wb-family-page" dir={dir}>&nbsp;</div>;
   }
 
+  // Not signed in on this host (e.g. bought on gadit.app, opened an email
+  // link on www): ask to sign in instead of a blank page or a bounce to
+  // pricing (Gadi 2026-10-11, Yehuda Koren). The session bridge may still
+  // sign them in a moment later; the page then fills in by itself.
   if (!user) {
-    router.replace(href("/pricing"));
-    return null;
+    return (
+      <div className="wordbook wb-family-page" dir={dir}>
+        <main className="wb-family-main">
+          <div className="wb-family-empty-state">
+            <p style={{ fontSize: 40, margin: 0 }} aria-hidden="true">👨‍👩‍👧</p>
+            <button type="button" className="wb-family-cta" onClick={() => setShowLoginModal(true)}>{ui.login}</button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!familyChecked) {
+    return <div className="wordbook wb-family-page" dir={dir}>&nbsp;</div>;
   }
 
   // No family doc = no Family subscription. Soft redirect with a message.

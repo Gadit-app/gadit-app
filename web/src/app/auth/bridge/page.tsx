@@ -12,7 +12,8 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
-const PAY_ORIGIN = "https://gadit.app";
+/** The page that framed this bridge: the other host of the pair. */
+const parentOrigin = () => (window.location.hostname === "gadit.app" ? "https://www.gadit.app" : "https://gadit.app");
 
 export default function AuthBridge() {
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function AuthBridge() {
           if (res.ok) token = ((await res.json()) as { token?: string }).token ?? null;
         } catch { /* stay signed out on gadit.app */ }
       }
-      window.parent.postMessage({ type: "gadit-session", token }, PAY_ORIGIN);
+      window.parent.postMessage({ type: "gadit-session", token }, parentOrigin());
     });
     return () => unsub();
   }, []);
