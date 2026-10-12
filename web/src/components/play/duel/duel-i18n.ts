@@ -179,7 +179,7 @@ const he: DuelCopy = {
   colWord: "המילה",
   colAnswer: "התשובה הנכונה",
   vsSomeone: "נגד מישהו",
-  playThisVs: "לשחק את זה נגד מישהו",
+  playThisVs: "שחקו עם מישהו",
   srcGame: "או אחד המשחקים",
 };
 
@@ -269,7 +269,7 @@ const en: DuelCopy = {
   colWord: "Word",
   colAnswer: "Right answer",
   vsSomeone: "Play someone",
-  playThisVs: "Play this against someone",
+  playThisVs: "Play with someone",
   srcGame: "Or one of the games",
 };
 
@@ -359,7 +359,7 @@ const ar: DuelCopy = {
   colWord: "الكلمة",
   colAnswer: "الإجابة الصحيحة",
   vsSomeone: "ضد شخص آخر",
-  playThisVs: "العبوا هذه ضد شخص آخر",
+  playThisVs: "العبوا مع شخص آخر",
   srcGame: "أو إحدى الألعاب",
 };
 
@@ -449,7 +449,7 @@ const ru: DuelCopy = {
   colWord: "Слово",
   colAnswer: "Правильный ответ",
   vsSomeone: "С соперником",
-  playThisVs: "Сыграть в это с соперником",
+  playThisVs: "Сыграй с кем-нибудь",
   srcGame: "Или одна из игр",
 };
 
@@ -539,7 +539,7 @@ const es: DuelCopy = {
   colWord: "Palabra",
   colAnswer: "Respuesta correcta",
   vsSomeone: "Contra alguien",
-  playThisVs: "Jugar esto contra alguien",
+  playThisVs: "Juega con alguien",
   srcGame: "O uno de los juegos",
 };
 
@@ -629,7 +629,7 @@ const pt: DuelCopy = {
   colWord: "Palavra",
   colAnswer: "Resposta certa",
   vsSomeone: "Contra alguém",
-  playThisVs: "Jogar isto contra alguém",
+  playThisVs: "Jogue com alguém",
   srcGame: "Ou um dos jogos",
 };
 
@@ -719,7 +719,7 @@ const fr: DuelCopy = {
   colWord: "Mot",
   colAnswer: "Bonne réponse",
   vsSomeone: "À deux",
-  playThisVs: "Jouer à ça à deux",
+  playThisVs: "Joue avec quelqu'un",
   srcGame: "Ou l'un des jeux",
 };
 
@@ -809,7 +809,7 @@ const de: DuelCopy = {
   colWord: "Wort",
   colAnswer: "Richtige Antwort",
   vsSomeone: "Zu zweit",
-  playThisVs: "Das zu zweit spielen",
+  playThisVs: "Spiel mit jemandem",
   srcGame: "Oder eines der Spiele",
 };
 
@@ -899,7 +899,7 @@ const cs: DuelCopy = {
   colWord: "Slovo",
   colAnswer: "Správná odpověď",
   vsSomeone: "Proti někomu",
-  playThisVs: "Zahrát si to proti někomu",
+  playThisVs: "Zahraj si s někým",
   srcGame: "Nebo jedna z her",
 };
 
@@ -989,7 +989,7 @@ const sk: DuelCopy = {
   colWord: "Slovo",
   colAnswer: "Správna odpoveď",
   vsSomeone: "Proti niekomu",
-  playThisVs: "Zahrať si to proti niekomu",
+  playThisVs: "Zahraj si s niekým",
   srcGame: "Alebo jedna z hier",
 };
 
@@ -1079,7 +1079,7 @@ const it: DuelCopy = {
   colWord: "Parola",
   colAnswer: "Risposta giusta",
   vsSomeone: "Contro qualcuno",
-  playThisVs: "Giocalo contro qualcuno",
+  playThisVs: "Gioca con qualcuno",
   srcGame: "Oppure uno dei giochi",
 };
 
@@ -1169,7 +1169,7 @@ const ja: DuelCopy = {
   colWord: "ことば",
   colAnswer: "正しい答え",
   vsSomeone: "対戦する",
-  playThisVs: "これでだれかと対戦する",
+  playThisVs: "だれかといっしょに遊ぶ",
   srcGame: "またはゲームから選ぶ",
 };
 
@@ -1259,7 +1259,7 @@ const hi: DuelCopy = {
   colWord: "शब्द",
   colAnswer: "सही उत्तर",
   vsSomeone: "किसी से मुकाबला",
-  playThisVs: "इसे किसी के साथ खेलें",
+  playThisVs: "किसी के साथ खेलो",
   srcGame: "या कोई एक खेल",
 };
 
@@ -1349,7 +1349,7 @@ const am: DuelCopy = {
   colWord: "ቃል",
   colAnswer: "ትክክለኛው መልስ",
   vsSomeone: "ከሌላ ሰው ጋር",
-  playThisVs: "ይህንን ከሌላ ሰው ጋር ይጫወቱ",
+  playThisVs: "ከሌላ ሰው ጋር ተጫወቱ",
   srcGame: "ወይም ከጨዋታዎቹ አንዱ",
 };
 
@@ -1439,7 +1439,7 @@ const uk: DuelCopy = {
   colWord: "Слово",
   colAnswer: "Правильна відповідь",
   vsSomeone: "Із суперником",
-  playThisVs: "Зіграти в це із суперником",
+  playThisVs: "Зіграй з кимось",
   srcGame: "Або одна з ігор",
 };
 
@@ -1529,7 +1529,7 @@ const tr: DuelCopy = {
   colWord: "Kelime",
   colAnswer: "Doğru cevap",
   vsSomeone: "Birine karşı",
-  playThisVs: "Bunu birine karşı oyna",
+  playThisVs: "Biriyle oyna",
   srcGame: "Ya da oyunlardan biri",
 };
 
@@ -1619,7 +1619,7 @@ const pl: DuelCopy = {
   colWord: "Słowo",
   colAnswer: "Poprawna odpowiedź",
   vsSomeone: "Z kimś",
-  playThisVs: "Zagraj w to z kimś",
+  playThisVs: "Zagraj z kimś",
   srcGame: "Albo jedna z gier",
 };
 
@@ -1709,7 +1709,7 @@ const fa: DuelCopy = {
   colWord: "کلمه",
   colAnswer: "پاسخ درست",
   vsSomeone: "در برابر کسی",
-  playThisVs: "این را با کسی بازی کنید",
+  playThisVs: "با کسی بازی کن",
   srcGame: "یا یکی از بازی‌ها",
 };
 
@@ -1799,7 +1799,7 @@ const id: DuelCopy = {
   colWord: "Kata",
   colAnswer: "Jawaban benar",
   vsSomeone: "Lawan teman",
-  playThisVs: "Mainkan ini melawan teman",
+  playThisVs: "Main bersama teman",
   srcGame: "Atau salah satu permainan",
 };
 
@@ -1889,7 +1889,7 @@ const nl: DuelCopy = {
   colWord: "Woord",
   colAnswer: "Goed antwoord",
   vsSomeone: "Tegen iemand",
-  playThisVs: "Speel dit tegen iemand",
+  playThisVs: "Speel met iemand",
   srcGame: "Of een van de spellen",
 };
 
@@ -1979,7 +1979,7 @@ const el: DuelCopy = {
   colWord: "Λέξη",
   colAnswer: "Σωστή απάντηση",
   vsSomeone: "Με αντίπαλο",
-  playThisVs: "Παίξε το με αντίπαλο",
+  playThisVs: "Παίξε με κάποιον",
   srcGame: "Ή ένα από τα παιχνίδια",
 };
 
@@ -2069,7 +2069,7 @@ const zu: DuelCopy = {
   colWord: "Igama",
   colAnswer: "Impendulo efanele",
   vsSomeone: "Bhekana nomunye",
-  playThisVs: "Dlala lokhu nomunye",
+  playThisVs: "Dlala nomunye",
   srcGame: "Noma omunye wemidlalo",
 };
 
@@ -2159,7 +2159,7 @@ const vi: DuelCopy = {
   colWord: "Từ",
   colAnswer: "Đáp án đúng",
   vsSomeone: "Đấu với ai đó",
-  playThisVs: "Chơi trò này với ai đó",
+  playThisVs: "Chơi cùng ai đó",
   srcGame: "Hoặc một trong các trò chơi",
 };
 
@@ -2249,7 +2249,7 @@ const fil: DuelCopy = {
   colWord: "Salita",
   colAnswer: "Tamang sagot",
   vsSomeone: "Laban sa iba",
-  playThisVs: "Laruin ito laban sa iba",
+  playThisVs: "Makipaglaro sa iba",
   srcGame: "O isa sa mga laro",
 };
 
@@ -2339,7 +2339,7 @@ const af: DuelCopy = {
   colWord: "Woord",
   colAnswer: "Regte antwoord",
   vsSomeone: "Teen iemand",
-  playThisVs: "Speel dit teen iemand",
+  playThisVs: "Speel saam met iemand",
   srcGame: "Of een van die speletjies",
 };
 
@@ -2429,7 +2429,7 @@ const sw: DuelCopy = {
   colWord: "Neno",
   colAnswer: "Jibu sahihi",
   vsSomeone: "Dhidi ya mtu",
-  playThisVs: "Cheza hii dhidi ya mtu",
+  playThisVs: "Cheza na mtu",
   srcGame: "Au mojawapo ya michezo",
 };
 
@@ -2519,7 +2519,7 @@ const zhCN: DuelCopy = {
   colWord: "单词",
   colAnswer: "正确答案",
   vsSomeone: "找人对战",
-  playThisVs: "和别人对战这个游戏",
+  playThisVs: "和别人一起玩",
   srcGame: "或选一个游戏",
 };
 
@@ -2609,7 +2609,7 @@ const zhTW: DuelCopy = {
   colWord: "單字",
   colAnswer: "正確答案",
   vsSomeone: "找人對戰",
-  playThisVs: "和別人對戰這個遊戲",
+  playThisVs: "和別人一起玩",
   srcGame: "或選一個遊戲",
 };
 
@@ -2699,7 +2699,7 @@ const ko: DuelCopy = {
   colWord: "단어",
   colAnswer: "정답",
   vsSomeone: "대결하기",
-  playThisVs: "이 게임으로 대결하기",
+  playThisVs: "다른 사람과 같이 하기",
   srcGame: "또는 게임 하나 고르기",
 };
 
@@ -2789,7 +2789,7 @@ const th: DuelCopy = {
   colWord: "คำ",
   colAnswer: "คำตอบที่ถูก",
   vsSomeone: "ดวลกับเพื่อน",
-  playThisVs: "เล่นเกมนี้ดวลกับคนอื่น",
+  playThisVs: "เล่นกับคนอื่น",
   srcGame: "หรือเลือกเกม",
 };
 
@@ -2879,7 +2879,7 @@ const bn: DuelCopy = {
   colWord: "শব্দ",
   colAnswer: "সঠিক উত্তর",
   vsSomeone: "কারও সাথে লড়াই",
-  playThisVs: "এটা কারও সাথে খেলো",
+  playThisVs: "কারও সাথে খেলো",
   srcGame: "অথবা একটি খেলা",
 };
 
@@ -2969,7 +2969,7 @@ const da: DuelCopy = {
   colWord: "Ord",
   colAnswer: "Rigtigt svar",
   vsSomeone: "Mod en anden",
-  playThisVs: "Spil det mod en anden",
+  playThisVs: "Spil med en anden",
   srcGame: "Eller et af spillene",
 };
 
@@ -3059,7 +3059,7 @@ const hu: DuelCopy = {
   colWord: "Szó",
   colAnswer: "Helyes válasz",
   vsSomeone: "Valaki ellen",
-  playThisVs: "Játszd valaki ellen",
+  playThisVs: "Játssz valakivel",
   srcGame: "Vagy az egyik játék",
 };
 

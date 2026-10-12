@@ -128,7 +128,7 @@ export function GameResult({
         const duel = getDuelLauncher();
         return duel ? (
           <button type="button" className="wb-play-cta-duel" onClick={duel.launch}>
-            <span aria-hidden="true">⚔️</span> {duel.label}
+            <span aria-hidden="true">🤝</span> {duel.label}
           </button>
         ) : null;
       })()}
