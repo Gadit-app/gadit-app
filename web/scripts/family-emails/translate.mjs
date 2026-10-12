@@ -63,6 +63,8 @@ function check(src, t, lang) {
   return errs;
 }
 
+// Real token use, priced like lib/ai-cost.ts (gpt-5.4: $2.5 in, $15 out per 1M).
+const TOK = { in: 0, out: 0 };
 async function translate(key, lang) {
   const src = he[key];
   const g = Object.fromEntries(Object.entries(glossary).filter(([, v]) => v[lang]).map(([k, v]) => [k, v[lang]]));
@@ -81,6 +83,7 @@ async function translate(key, lang) {
     });
     const j = await r.json();
     if (!r.ok) throw new Error(`${key}/${lang}: ${JSON.stringify(j).slice(0, 200)}`);
+    TOK.in += j.usage?.prompt_tokens ?? 0; TOK.out += j.usage?.completion_tokens ?? 0;
     const t = JSON.parse(j.choices[0].message.content);
     last = check(src, t, lang);
     if (!last.length) return { ...t, heading: "" };
@@ -110,3 +113,4 @@ await Promise.all(Array.from({ length: 6 }, async () => {
 fs.writeFileSync(path.join(OUT, "translations.json"), JSON.stringify(out, null, 1));
 console.log(`done ${done}, failed ${failed.length}${SAVE ? ", saved to the editor" : " (dry run, nothing saved)"}`);
 if (failed.length) console.log(failed.join("\n"));
+console.log(`tokens in ${TOK.in}, out ${TOK.out}, cost $${((TOK.in * 2.5 + TOK.out * 15) / 1e6).toFixed(4)}`);

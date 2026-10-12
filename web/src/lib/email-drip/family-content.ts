@@ -58,7 +58,7 @@ export const FAMILY_META: FamilyEmailMeta[] = [
   M("fam2-notebook", "Family · 3 · The notebook and its games", 2, "/notebook"),
   M("fam2-dashboard", "Family · 4 · Parent board and word alerts", 3, "/family"),
   M("fam2-read", "Family · 5 · Every Word (a whole page)", 4, "/read"),
-  M("fam2-spell", "Family · 6 · School dictation practice", 5, "/homework"),
+  M("fam2-spell", "Family · 6 · Homework: dictation, lessons, a photo of the page", 5, "/homework"),
   M("fam2-ranks", "Family · 7 · Ranks, streaks, weekly goal", 6, "/family"),
   M("fam2-context", "Family · 8 · The right meaning from the sentence", 7, "/"),
   M("fam2-say", "Family · 9 · Say it", 8, "/say"),
@@ -77,7 +77,7 @@ export const FAMILY_LABEL_HE: Record<string, string> = {
   "fam2-notebook": "3 · המחברת והמשחקים שלה",
   "fam2-dashboard": "4 · לוח ההורה והתראות על מילים",
   "fam2-read": "5 · כל מילה (דף שלם)",
-  "fam2-spell": "6 · תרגול הכתבה",
+  "fam2-spell": "6 · שיעורי בית",
   "fam2-ranks": "7 · דרגות, רצף ויעד שבועי",
   "fam2-context": "8 · המשמעות הנכונה לפי המשפט",
   "fam2-say": "9 · תגיד את זה",
@@ -530,7 +530,7 @@ To start, the notebook needs at least 4 words.
 3. בוחרים את המדריך שמתאים.
 4. לא מצאת תשובה? אפשר פשוט להשיב למייל הזה, והוא מגיע אלינו.`,
       "להדרכות",
-      "מחר נדבר על תרגול ההכתבה של בית הספר.",
+      "מחר נכיר את שיעורי הבית: הכתבה, שיעורים ותרגול מתוך הדף שהילד הביא הביתה.",
     ),
     en: C(
       "Hi {name}, here's how to get help at every step",
@@ -549,53 +549,51 @@ Some screens also have a small question mark that opens the guide for that scree
 3. Choose the guide you need.
 4. Didn't find the answer? Just reply to this email and it reaches us.`,
       "Open the guides",
-      "Tomorrow we'll look at practicing for school dictations.",
+      "Tomorrow: Homework, for dictations, lessons and practice from the page your child brought home.",
     ),
   },
 
   "fam2-spell": {
     he: C(
-      "היי {שם}, ככה מתכוננים להכתבה של בית הספר",
+      "היי {שם}, ככה מכינים שיעורי בית ב-Gadit",
       `היי {שם},
 
-הרבה ילדים מקבלים כל שבוע רשימת מילים להכתבה. בהכתבה אין "כמעט". צריך לכתוב כל מילה בדיוק.
+הרבה ילדים חוזרים הביתה עם רשימת מילים להכתבה, דף מהחוברת או קטע קריאה. בשביל זה יש ב-Gadit אזור משלו: **שיעורי בית**. הוא מופיע בתפריט העליון אצל הילד (או כשמצב ילדים פועל).
 
-## תרגול הכתבה
-מדביקים את הרשימה של המורה, ו-Gadit מקריא כל מילה בקול. הילד כותב, ומקבל תשובה מיד. מילה שטעה בה חוזרת בסוף, עד שהיא נכונה.
+## מוסיפים את שיעורי הבית בשנייה
+מצלמים את הדף, מעלים תמונה או מדביקים רשימה. מסמנים אם זו רשימת מילים, טקסט לקריאה או דפי חוברת, ובוחרים מתי המבחן. הילד רואה מיד כרטיס "מה צריך להכין", ולוחץ "מתחילים".
 
-אפשר לתרגל בשני הכיוונים: לשמוע מילה ולכתוב אותה באנגלית, או לכתוב אותה בשפה שלכם. ואפשר להקליד או לכתוב ביד על המסך.
+## שלושה אזורים, לפי מה שצריך
+1. **לומדים מילים:** שיעורי אנגלית צעד אחר צעד, הכתבה (גם לשמוע מילה בעברית ולכתוב אותה בעברית), והתרגול "הקשיבו ובחרו". יש גם נושאים מוכנים מרשימות משרד החינוך באנגלית.
+2. **קוראים טקסט:** מצלמים קטע קריאה, ולוחצים על כל מילה שלא ברורה.
+3. **מתכוננים למבחן:** מדביקים את המילים ומתרגלים עד היום עצמו. מילה שהילד טעה בה חוזרת בסוף, עד שהיא נכונה.
 
-## איך עושים את זה, שלב אחר שלב:
-1. נכנסים ל["הכתבה"](/spell) מהתפריט.
-2. לוחצים על "הדבקת רשימה משלך" ומדביקים את המילים, מילה בכל שורה (עד 20).
-3. לוחצים על "יצירת סט".
-4. בוחרים כיוון, והילד מתחיל לכתוב.
-5. כשהילד מסיים, מגיעה אליך הודעה עם התוצאה.
+## ואתם יודעים מה קרה
+כשהילד מסיים הכתבה, שיעור או משחק, מגיעה אליכם הודעה. אפשר לבחור מיד או בסיכום יומי, ועל מה לקבל הודעה, ב[הגדרות של לוח ההורים](/family?tab=settings).
 
-**טיפ מהשטח:** שני תרגולים קצרים במהלך השבוע עובדים יותר טוב מתרגול אחד ארוך ערב לפני ההכתבה. כל תרגול נשמר ב"הכתבות" במחברת, עם הכפתור "לתרגל שוב".`,
-      "לתרגול הכתבה",
+**טיפ מהשטח:** שני תרגולים קצרים במהלך השבוע עובדים יותר טוב מתרגול אחד ארוך ערב לפני המבחן.`,
+      "לשיעורי הבית",
       "במייל הבא נדבר על תגיד את זה: לשמוע משפט, ואז להגיד אותו בעצמך.",
     ),
     en: C(
-      "Hi {name}, here's how to prepare for school dictations",
+      "Hi {name}, here's how homework works in Gadit",
       `Hi {name},
 
-Many children get a weekly list of words for a dictation. In a dictation there's no "almost". Every word has to be written exactly.
+Many children come home with a word list for a dictation, a workbook page or a passage to read. Gadit has its own area for that: **Homework**. It's in the top menu on your child's profile (or while Kids Mode is on).
 
-## Spelling practice
-Paste the teacher's list, and Gadit reads each word out loud. Your child writes it and gets an answer right away. A word they missed comes back at the end, until it's right.
+## Add the homework in a second
+Photograph the page, upload a picture or paste a list. Mark whether it's a word list, a text to read or workbook pages, and pick the test day. Your child sees a "To do" card right away and taps "Start".
 
-You can practice in both directions: hear a word and write it in English, or write it in your own language. And your child can type or write by hand on the screen.
+## Three areas, for what's needed
+1. **Learning words:** step-by-step English lessons, dictation (including hearing a word and writing it in the same language), and "Listen and pick".
+2. **Reading a text:** photograph a passage and tap any word that isn't clear.
+3. **Getting ready for a test:** paste the words and practise until the day. A word your child missed comes back at the end, until it's right.
 
-## How to do it, step by step:
-1. Open ["Spelling"](/spell) from the menu.
-2. Tap "Paste your own list" and paste the words, one per line (up to 20).
-3. Tap "Create set".
-4. Choose a direction, and your child starts writing.
-5. When your child finishes, you get a message with the result.
+## And you know what happened
+When your child finishes a dictation, a lesson or a game, you get a message. Choose right away or one daily summary, and what to hear about, in the [parent board settings](/family?tab=settings).
 
-**A tip from other families:** two short practices during the week work better than one long one the night before. Every practice is saved under "Dictations" in the notebook, with a "Practice again" button.`,
-      "Open Spelling practice",
+**A tip from other families:** two short practices during the week work better than one long one the night before the test.`,
+      "Open Homework",
       "In the next email we'll look at Say it: hearing a sentence, then saying it yourself.",
     ),
   },
@@ -946,8 +944,8 @@ On the teacher's side, your child appears under "Your students", and tapping "En
 2. [מחברת אישית](/notebook) לכל ילד.
 3. [כל מילה](/read): דף שלם מתוך הספר.
 4. [משחקי מילים](/play) מהמילים של הילד.
-5. [תרגול הכתבה](/spell) ו[תגיד את זה](/say).
-6. [לוח ההורה](/family) ו[התראות על מילים](/family?tab=settings).
+5. [שיעורי בית](/homework): הכתבה, שיעורים ותרגול מהדף מהחוברת, ו[תגיד את זה](/say).
+6. [לוח ההורה](/family) ו[התראות על כל מה שהילד עושה](/family?tab=settings).
 7. 33 שפות, ו[גישה למורה פרטי](/family?tab=settings).
 
 אוצר המילים של הילד ממשיך לגדול, מילה אחרי מילה.`,
@@ -968,8 +966,8 @@ Gadit has no open chat, no feed, no ads and no links out. Your child meets only 
 2. A [personal notebook](/notebook) for every child.
 3. [Every Word](/read): a whole page from a book.
 4. [Word games](/play) from your child's own words.
-5. [Spelling practice](/spell) and [Say it](/say).
-6. The [parent board](/family) and [word alerts](/family?tab=settings).
+5. [Homework](/homework): dictation, lessons and practice from the workbook page, and [Say it](/say).
+6. The [parent board](/family) and [alerts on everything your child does](/family?tab=settings).
 7. 33 languages, and [access for a private teacher](/family?tab=settings).
 
 Your child's vocabulary keeps growing, word by word.`,
