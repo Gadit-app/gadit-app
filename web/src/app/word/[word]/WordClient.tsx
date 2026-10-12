@@ -15,6 +15,7 @@
  * modal layered above the result.
  */
 
+import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -1916,6 +1917,7 @@ export function WordClient({
           <Link href={href("/")} className="wb-wordmark" dir="ltr" aria-label="Gadit home">
             Gad<span className="wb-wordmark-it">it</span>
           </Link>
+          <ToolKidsToggle />
           <WbShellNav />
           <div className="wb-shell-actions">
             {/* Present mode entry (schools only). Lives in the actions row

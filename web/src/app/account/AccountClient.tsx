@@ -18,6 +18,7 @@
  *   5. Delete account — small low-prominence link under a dashed rule.
  */
 
+import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import RETENTION_I18N from "@/lib/retention-i18n.json";
 import { planCopy } from "@/lib/plan-copy";
 import { miscUi } from "@/lib/misc-ui-i18n";
@@ -656,6 +657,7 @@ export function AccountPage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
+        <ToolKidsToggle />
         <WbShellNav />
         <div className="wb-shell-actions">
           <ShareButton

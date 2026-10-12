@@ -8,6 +8,7 @@
  * No marketing fluff, no animated chrome, no V2 navy.
  */
 
+import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -262,6 +263,7 @@ export function HomePage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr" translate="no">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
+        <ToolKidsToggle />
         <WbShellNav active="home" />
         <div className="wb-shell-actions">
           {familyRole === "kid" && <AppearancePicker scope="kid" />}

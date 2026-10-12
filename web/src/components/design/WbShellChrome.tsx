@@ -330,10 +330,11 @@ export function WbShellNav({ active }: { active?: NavKey }) {
   const router = useRouter();
   return (
     <nav className="wb-shell-nav">
-      {active !== "home" && (
+      {/* Always there, so the bar sits the same on every page (Gadi 2026-10-12). */}
+      {(
         <Link
           href={href("/")}
-          className="wb-shell-navlink wb-shell-navlink-icon"
+          className={`wb-shell-navlink wb-shell-navlink-icon${active === "home" ? " is-active" : ""}`}
           aria-label={v2(lang, "navSearch")}
           title={v2(lang, "navSearch")}
         >

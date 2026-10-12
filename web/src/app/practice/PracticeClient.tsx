@@ -9,6 +9,7 @@
  *   Deep → renders PracticeV2
  */
 
+import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -88,6 +89,7 @@ export function PracticePage() {
         <Link href={href("/")} className="wb-wordmark" dir="ltr">
           Gad<span className="wb-wordmark-it">it</span>
         </Link>
+        <ToolKidsToggle />
         <WbShellNav />
         <div className="wb-shell-actions">
           <LangSwitcher variant="muted" />
