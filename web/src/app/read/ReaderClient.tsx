@@ -1,5 +1,6 @@
 "use client";
 
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { ToolPage } from "@/components/design/ToolPage";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
@@ -82,8 +83,8 @@ const READER_COPY: Record<string, ReaderStrings> = {
   he: {
     title: "להבין כל מילה",
     sub: "הדביקו טקסט, צלמו עמוד, העלו תמונה או צלמו את המסך שלכם.\nהטקסט ייכנס לאזור הלבן, וכל מילה בו תהיה לחיצה עם ההגדרה שלה.",
-    placeholder: "להדביק כאן טקסט או צילום מסך…",
-    load: "לפתוח את הטקסט",
+    placeholder: "הדביקו כאן טקסט, או השתמשו בכפתורים שלמטה: צלמו עמוד, העלו תמונה או PDF, או צלמו מסך.",
+    load: "פתחו את הטקסט",
     photo: "צילום, תמונה או PDF",
     reading: "קורא את הקובץ…",
     ocrError: "לא הצלחנו לקרוא את הקובץ. כדאי צילום ברור יותר, או PDF/תמונה עם טקסט קריא.",
@@ -96,9 +97,9 @@ const READER_COPY: Record<string, ReaderStrings> = {
     upgradeTitle: "קריאת טקסט היא תכונה בתשלום",
     upgradeBtn: "לצפייה במסלולים",
     loading: "טוען…",
-    camera: "לצלם עמוד",
-    upload: "להעלות תמונה או PDF",
-    captureScreen: "צילום מסך",
+    camera: "צלמו עמוד",
+    upload: "העלו תמונה או PDF",
+    captureScreen: "צלמו מסך",
   },
   "ar": {"title":"افهم كل كلمة","sub":"الصق نصًا، أو صوّر صفحة، أو ارفع صورة، أو التقط شاشتك.\nيظهر النص في المربع الأبيض، ويمكنك النقر على أي كلمة لمعرفة معناها.","placeholder":"الصق نصك هنا…","load":"افتح النص","photo":"صورة أو ملف PDF","reading":"جارٍ قراءة الملف…","ocrError":"تعذّرت علينا قراءة هذا الملف. جرّب صورة أوضح، أو ملف PDF أو صورة بنص مقروء.","newText":"نص جديد","progress":"{a} من {b} كلمة","doneAll":"عمل رائع. لقد مررت على كل كلمة.","hint":"انقر على أي كلمة لرؤية معانيها. الكلمات التي فتحتها تتحول إلى الأخضر.","loginTitle":"سجّل الدخول لقراءة نص","loginBtn":"تسجيل الدخول","upgradeTitle":"قراءة نص ميزة مدفوعة","upgradeBtn":"اطّلع على الخطط","loading":"جارٍ التحميل…","camera":"التقاط بالكاميرا","upload":"رفع صورة أو PDF"},
   "ru": {"title":"Понять каждое слово","sub":"Вставьте текст, сфотографируйте страницу, загрузите изображение или сделайте снимок экрана.\nТекст появится в белом поле, и вы сможете нажать на любое слово, чтобы узнать его значение.","placeholder":"Вставьте свой текст сюда…","load":"Открыть текст","photo":"Фото, изображение или PDF","reading":"Читаем файл…","ocrError":"Не удалось прочитать этот файл. Попробуйте более четкое фото или PDF либо изображение с читаемым текстом.","newText":"Новый текст","progress":"{a} из {b} слов","doneAll":"Отличная работа. Вы прошли по всем словам.","hint":"Нажмите на любое слово, чтобы увидеть его значения. Открытые слова становятся зелеными.","loginTitle":"Войдите, чтобы читать текст","loginBtn":"Войти","upgradeTitle":"Чтение текста, это платная функция","upgradeBtn":"Посмотреть тарифы","loading":"Загрузка…","camera":"Сфотографировать камерой","upload":"Загрузить изображение или PDF"},
@@ -528,14 +529,14 @@ export function ReaderClient() {
               ) : (
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                   <button type="button" onClick={openCamera} style={ghostBtn}>
-                    📷 {camLabel}
+                    <GaditIcon name="photo" size={28} className="wb-read-btn-ico" /> {camLabel}
                   </button>
                   <button type="button" onClick={() => uploadRef.current?.click()} style={ghostBtn}>
-                    📄 {uploadLabel}
+                    <GaditIcon name="upload" size={28} className="wb-read-btn-ico" /> {uploadLabel}
                   </button>
                   {canCaptureScreen && (
                     <button type="button" onClick={onCaptureScreen} style={ghostBtn}>
-                      🖥️ {screenLabel}
+                      <GaditIcon name="screen" size={28} className="wb-read-btn-ico" /> {screenLabel}
                     </button>
                   )}
                 </div>

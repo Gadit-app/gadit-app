@@ -7,7 +7,7 @@ export type GaditIconName =
   | "notebook" | "spell" | "read" | "say" | "play"
   | "photo" | "upload" | "paste" | "todo" | "workbook" | "topics" | "test"
   | "duel" | "same-device" | "invite" | "code" | "online" | "bot"
-  | "streak" | "goal" | "rank";
+  | "streak" | "goal" | "rank" | "screen";
 
 export function GaditIcon({ name, size = 24, className }: { name: GaditIconName; size?: number; className?: string }) {
   return (

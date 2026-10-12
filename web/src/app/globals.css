@@ -15085,3 +15085,4 @@ a.wb-play-card { text-decoration: none; }
 .wb-hw-intake-photo, .wb-hw-add-btn, .wb-learn-chip, .wb-learn-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
 /* The rank name: smaller and allowed to wrap, never cut off (Gadi 2026-10-12). */
 .wordbook .wb-kids-tile-num.is-rank { font-size: 14.5px; line-height: 1.25; white-space: normal; overflow: visible; text-overflow: clip; }
+.wb-read-btn-ico { margin-inline-end: 6px; margin-block: -6px; }

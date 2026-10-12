@@ -3706,7 +3706,7 @@ export function PlayPage() {
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img className="wb-play-card-cover is-mascot" src="/play/duel-mascot.webp" alt="" loading="lazy" width={720} height={480} />
                           <span className="wb-play-card-text">
-                            <span className="wb-play-card-title">{dc.title}</span>
+                            <span className="wb-play-card-title">{dc.playThisVs}</span>
                             <span className="wb-play-card-desc">{dc.bannerDesc}</span>
                           </span>
                         </button>
