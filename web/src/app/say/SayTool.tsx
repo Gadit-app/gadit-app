@@ -173,7 +173,7 @@ export function sayHeading(lang: Lang): { title: string; sub: string } {
 /** `framed`: inside the shared tool frame, which shows the title itself. */
 export function SayTool({ onClose, framed = false }: { onClose?: () => void; framed?: boolean }) {
   const { lang, dir } = useLang();
-  const { user, plan } = useAuth();
+  const { user, plan, loading: authLoading } = useAuth();
   const href = useHref();
   const t = copy(lang);
   const paid = plan === "clear" || plan === "deep";
@@ -292,7 +292,9 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
         </>
       )}
 
-      {!user ? (
+      {/* While sign-in is still being restored, show nothing rather than the
+          sign-in box (Gadi 2026-10-12: it flashed for signed-in users). */}
+      {authLoading ? null : !user ? (
         <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.loginTitle}</div>
           <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{t.loginBody}</div>

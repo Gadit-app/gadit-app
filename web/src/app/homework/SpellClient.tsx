@@ -306,7 +306,7 @@ export function SpellClient() {
   const dc = dictCopy(lang);
   const href = useHref();
   const router = useRouter();
-  const { user, plan, planReady, kidsAccess } = useAuth();
+  const { user, plan, planReady, kidsAccess, loading: authLoading } = useAuth();
   // Dictation is a Family tool (Gadi 2026-09-19, narrowed 2026-10-06): the
   // Family plan, schools, and the older standalone Deep plan. Not the
   // Individual plan, not Clear, not Basic.
@@ -831,6 +831,11 @@ export function SpellClient() {
   }
 
 
+  // Sign-in is still being restored: a quiet frame, never the sign-in
+  // prompt (Gadi 2026-10-12: it flashed for signed-in users).
+  if (authLoading) {
+    return <ToolPage active="spell" width={640}><div style={{ minHeight: 240 }} /></ToolPage>;
+  }
   if (!user) {
     return (
       <ToolPage active="spell" width={640}>

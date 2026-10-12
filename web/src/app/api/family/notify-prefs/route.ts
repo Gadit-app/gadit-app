@@ -11,9 +11,11 @@ import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
  */
 
 type Mode = "instant" | "daily";
-export type NotifyPrefs = { enabled: boolean; mode: Mode };
+/** What the parent wants to hear about (Gadi 2026-10-12); all on by default. */
+type Cats = { search: boolean; games: boolean; homework: boolean };
+export type NotifyPrefs = { enabled: boolean; mode: Mode; cats?: Cats };
 
-const DEFAULT_PREFS: NotifyPrefs = { enabled: false, mode: "instant" };
+const DEFAULT_PREFS: NotifyPrefs = { enabled: false, mode: "instant", cats: { search: true, games: true, homework: true } };
 
 async function requireOwner(req: NextRequest) {
   const authHeader = req.headers.get("Authorization") || "";
@@ -29,7 +31,10 @@ async function requireOwner(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const owner = await requireOwner(req);
   if (!owner) return NextResponse.json({ error: "not_family_owner" }, { status: 403 });
-  const prefs = (owner.fam.data()?.notifyPrefs as NotifyPrefs | undefined) ?? DEFAULT_PREFS;
+  const stored = owner.fam.data()?.notifyPrefs as Partial<NotifyPrefs> | undefined;
+  const prefs: NotifyPrefs = stored
+    ? { enabled: !!stored.enabled, mode: stored.mode === "daily" ? "daily" : "instant", cats: { search: stored.cats?.search !== false, games: stored.cats?.games !== false, homework: stored.cats?.homework !== false } }
+    : DEFAULT_PREFS;
   return NextResponse.json({ prefs });
 }
 
@@ -40,9 +45,11 @@ export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => null)) as (Partial<NotifyPrefs> & { lang?: string }) | null;
   if (!body) return NextResponse.json({ error: "bad_body" }, { status: 400 });
 
+  const c = (body.cats ?? {}) as Partial<Cats>;
   const prefs: NotifyPrefs = {
     enabled: !!body.enabled,
     mode: body.mode === "daily" ? "daily" : "instant",
+    cats: { search: c.search !== false, games: c.games !== false, homework: c.homework !== false },
   };
 
   // Capture the language the parent is using right now, so every alert

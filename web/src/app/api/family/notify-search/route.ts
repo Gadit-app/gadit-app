@@ -90,7 +90,9 @@ export async function POST(req: NextRequest) {
       await famRef.set({ notifyPrefs: { ...prefs, lang: uiLang } }, { merge: true });
     }
 
-    if (prefs?.enabled && prefs.mode !== "daily") {
+    // The parent can untick "words looked up" (Gadi 2026-10-12).
+    const searchOn = (prefs as { cats?: { search?: boolean } } | undefined)?.cats?.search !== false;
+    if (prefs?.enabled && searchOn && prefs.mode !== "daily") {
       // Instant mode (default when enabled): notify right away. The lang
       // we may have just written is picked up inside notifyOwnerInstant.
       await notifyOwnerInstant(ownerUid, kidName, word);

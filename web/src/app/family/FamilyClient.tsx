@@ -3027,6 +3027,45 @@ const NOTIF_COPY: Record<string, {
   },
 };
 
+/** What the parent wants alerts about (Gadi 2026-10-12): q, search, games, homework. */
+const NOTIF_CATS: Record<string, [string, string, string, string]> = {
+  en: ["What should we tell you about?", "Words they look up", "Games and duels", "Homework and practice"],
+  he: ["על מה לעדכן אתכם?", "מילים שחיפשו", "משחקים ודו-קרב", "שיעורי בית ותרגולים"],
+  ar: ["عمّ نخبركم؟", "الكلمات التي بحثوا عنها", "الألعاب والمبارزات", "الواجبات والتمارين"],
+  ru: ["О чём сообщать?", "Слова, которые искали", "Игры и дуэли", "Домашка и занятия"],
+  es: ["¿De qué te avisamos?", "Palabras que buscan", "Juegos y duelos", "Deberes y prácticas"],
+  pt: ["Sobre o que avisamos?", "Palavras que procuram", "Jogos e duelos", "Tarefas e práticas"],
+  fr: ["De quoi vous informer ?", "Les mots cherchés", "Jeux et duels", "Devoirs et exercices"],
+  de: ["Worüber sollen wir euch informieren?", "Gesuchte Wörter", "Spiele und Duelle", "Hausaufgaben und Übungen"],
+  it: ["Su cosa ti avvisiamo?", "Parole cercate", "Giochi e sfide", "Compiti ed esercizi"],
+  nl: ["Waarover laten we het je weten?", "Opgezochte woorden", "Spellen en duels", "Huiswerk en oefenen"],
+  cs: ["O čem vám dát vědět?", "Hledaná slova", "Hry a souboje", "Úkoly a procvičování"],
+  sk: ["O čom vám dať vedieť?", "Hľadané slová", "Hry a súboje", "Úlohy a precvičovanie"],
+  uk: ["Про що повідомляти?", "Слова, які шукали", "Ігри та дуелі", "Домашка й заняття"],
+  pl: ["O czym was informować?", "Wyszukane słowa", "Gry i pojedynki", "Prace domowe i ćwiczenia"],
+  tr: ["Size neyi bildirelim?", "Aradıkları kelimeler", "Oyunlar ve düellolar", "Ödevler ve çalışmalar"],
+  ja: ["何をお知らせしますか？", "調べた単語", "ゲームと対戦", "宿題と練習"],
+  hi: ["किस बारे में बताएँ?", "खोजे गए शब्द", "खेल और मुकाबले", "होमवर्क और अभ्यास"],
+  fa: ["دربارهٔ چه چیزی خبرتان کنیم؟", "کلمه‌هایی که جستجو کردند", "بازی‌ها و دوئل‌ها", "تکالیف و تمرین‌ها"],
+  id: ["Tentang apa kami beri tahu?", "Kata yang dicari", "Permainan dan duel", "PR dan latihan"],
+  am: ["ስለ ምን እናሳውቃችሁ?", "የፈለጓቸው ቃላት", "ጨዋታዎችና ውድድሮች", "የቤት ሥራና ልምምድ"],
+  el: ["Για τι να σας ενημερώνουμε;", "Λέξεις που αναζητούν", "Παιχνίδια και μονομαχίες", "Εργασίες και εξάσκηση"],
+  zu: ["Sinazise ngani?", "Amagama abawafunayo", "Imidlalo nemincintiswano", "Umsebenzi wasekhaya nokuzijwayeza"],
+  vi: ["Thông báo cho bạn về điều gì?", "Từ các con đã tra", "Trò chơi và thi đấu", "Bài tập và luyện tập"],
+  fil: ["Tungkol saan ka namin aabisuhan?", "Mga salitang hinahanap", "Mga laro at duelo", "Takdang-aralin at pagsasanay"],
+  af: ["Waaroor moet ons julle laat weet?", "Woorde wat hulle opsoek", "Speletjies en tweestryde", "Huiswerk en oefening"],
+  sw: ["Tukujulishe kuhusu nini?", "Maneno wanayotafuta", "Michezo na mashindano", "Kazi ya nyumbani na mazoezi"],
+  "zh-CN": ["要通知您哪些内容？", "查过的词", "游戏和对战", "作业和练习"],
+  "zh-TW": ["要通知您哪些內容？", "查過的詞", "遊戲和對戰", "作業和練習"],
+  ko: ["무엇을 알려 드릴까요?", "찾아본 단어", "게임과 대결", "숙제와 연습"],
+  th: ["ให้แจ้งเรื่องอะไรบ้าง?", "คำที่ค้นหา", "เกมและการแข่งขัน", "การบ้านและการฝึก"],
+  bn: ["কোন বিষয়ে জানাব?", "খোঁজা শব্দ", "খেলা ও প্রতিযোগিতা", "বাড়ির কাজ ও অনুশীলন"],
+  da: ["Hvad skal vi give besked om?", "Ord de slår op", "Spil og dueller", "Lektier og øvelser"],
+  hu: ["Miről értesítsünk?", "Keresett szavak", "Játékok és párbajok", "Házi feladat és gyakorlás"],
+};
+
+type NotifCats = { search: boolean; games: boolean; homework: boolean };
+
 function NotifSettings({
   user,
   lang,
@@ -3039,6 +3078,8 @@ function NotifSettings({
   const t = NOTIF_COPY[lang] ?? NOTIF_COPY.en;
   const [enabled, setEnabled] = useState(false);
   const [mode, setMode] = useState<"instant" | "daily">("instant");
+  const [cats, setCats] = useState<NotifCats>({ search: true, games: true, homework: true });
+  const tc = NOTIF_CATS[lang] ?? NOTIF_CATS.en;
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
   // The real on/off value only arrives after the notify-prefs fetch. Until
@@ -3068,6 +3109,8 @@ function NotifSettings({
             if (data?.prefs) {
               setEnabled(!!data.prefs.enabled);
               setMode(data.prefs.mode === "daily" ? "daily" : "instant");
+              const c = data.prefs.cats ?? {};
+              setCats({ search: c.search !== false, games: c.games !== false, homework: c.homework !== false });
             }
           }
         } catch {
@@ -3099,7 +3142,7 @@ function NotifSettings({
     }
   }
 
-  async function savePrefs(nextEnabled: boolean, nextMode: "instant" | "daily") {
+  async function savePrefs(nextEnabled: boolean, nextMode: "instant" | "daily", nextCats: NotifCats = cats) {
     if (!user) return;
     const idToken = await user.getIdToken();
     await fetch("/api/family/notify-prefs", {
@@ -3107,7 +3150,7 @@ function NotifSettings({
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
       // lang travels with every save so alerts always match the parent's
       // current language, even if they switch it later.
-      body: JSON.stringify({ enabled: nextEnabled, mode: nextMode, lang }),
+      body: JSON.stringify({ enabled: nextEnabled, mode: nextMode, cats: nextCats, lang }),
     });
   }
 
@@ -3134,6 +3177,13 @@ function NotifSettings({
     } finally {
       setBusy(false);
     }
+  }
+
+  async function toggleCat(k: keyof NotifCats) {
+    if (busy) return;
+    const next = { ...cats, [k]: !cats[k] };
+    setCats(next);
+    if (enabled) await savePrefs(enabled, mode, next);
   }
 
   async function pickMode(m: "instant" | "daily") {
@@ -3242,6 +3292,16 @@ function NotifSettings({
               </button>
             );
           })}
+          {/* What to hear about: tick any of the three (all on at first). */}
+          <div style={{ marginTop: 6, fontSize: 13.5, fontWeight: 700, color: "var(--ink)" }}>{tc[0]}</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {(["search", "games", "homework"] as const).map((k, i) => (
+              <label key={k} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 10, cursor: "pointer", border: `1.5px solid ${cats[k] ? TEAL : "var(--rule)"}`, background: cats[k] ? "rgba(14,165,165,0.06)" : "var(--surface)", fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>
+                <input type="checkbox" checked={cats[k]} onChange={() => void toggleCat(k)} style={{ accentColor: TEAL, width: 16, height: 16, margin: 0 }} />
+                {tc[i + 1]}
+              </label>
+            ))}
+          </div>
           {localSubscribed === false && (
             <div style={{ marginTop: 6 }}>
               <button

@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
   let activities = 0;
 
   for (const fam of fams.docs) {
-    const prefs = fam.data()?.notifyPrefs as { mode?: string } | undefined;
+    const prefs = fam.data()?.notifyPrefs as { mode?: string; cats?: { search?: boolean } } | undefined;
     if (prefs?.mode !== "daily") continue;
     families++;
 
@@ -55,7 +55,9 @@ export async function GET(req: NextRequest) {
       .get();
     if (pending.empty && pendingActs.empty) continue;
 
-    const items = pending.docs.map((d) => {
+    // Words looked up only when the parent kept them ticked; they are
+    // marked reported either way, so they never pile up.
+    const items = prefs?.cats?.search === false ? [] : pending.docs.map((d) => {
       const x = d.data() as { kidName?: string; word?: string };
       return { kidName: x.kidName || "Your child", word: x.word || "" };
     });
@@ -67,7 +69,7 @@ export async function GET(req: NextRequest) {
     activities += acts.length;
 
     if (!dryRun) {
-      await notifyOwnerDigest(fam.id, items, acts);
+      if (items.length || acts.length) await notifyOwnerDigest(fam.id, items, acts);
       // Mark reported (chunk to stay under the 500-write batch cap).
       const done = [...pending.docs, ...pendingActs.docs];
       for (let i = 0; i < done.length; i += 450) {

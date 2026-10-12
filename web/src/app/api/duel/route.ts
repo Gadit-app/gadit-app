@@ -1,3 +1,4 @@
+import { kidOf, recordKidActivity } from "@/lib/kid-activity";
 import { NextRequest, NextResponse } from "next/server";
 import type { DecodedIdToken } from "firebase-admin/auth";
 import { FieldValue } from "firebase-admin/firestore";
@@ -268,6 +269,31 @@ async function recordStats(d: DuelDoc, now: number) {
   }
 }
 
+/** A duel between people ended: each child's parent hears who played and
+ *  the score (Gadi 2026-10-12: "the two siblings played each other and who
+ *  won"). One alert per family, even when both players are its children. */
+async function tellParents(d: DuelDoc, now: number) {
+  if (!d.players.b) return;
+  const sc = finalScores(d, now);
+  const seats: Seat[] = ["a", "b"];
+  const kids = await Promise.all(seats.map((s) => {
+    const p = d.players[s];
+    return p && p.kind === "person" && (d.answers[s] ?? []).some(Boolean) ? kidOf(p.uid) : Promise.resolve(null);
+  }));
+  const nameOf = (i: number) => kids[i]?.kidName ?? publicPlayer(d.players[seats[i]]!, d.mode, d.lang).name;
+  const label = `${nameOf(0)} ${sc.a} : ${sc.b} ${nameOf(1)}`;
+  const told = new Set<string>();
+  for (let i = 0; i < 2; i++) {
+    const k = kids[i];
+    if (!k || told.has(k.ownerUid)) continue;
+    told.add(k.ownerUid);
+    // Same family, two children: name the winner as the one who finished.
+    const both = kids[1 - i]?.ownerUid === k.ownerUid;
+    const who = both && sc.a !== sc.b ? kids[sc.a > sc.b ? 0 : 1]! : k;
+    await recordKidActivity(who, "duel", { label });
+  }
+}
+
 function seatOf(d: DuelDoc, uid: string): Seat | null {
   if (d.players.a.uid === uid) return "a";
   if (d.players.b?.uid === uid) return "b";
@@ -367,6 +393,7 @@ export async function GET(req: NextRequest) {
     });
     if (claimed) {
       await recordStats(d, now).catch(() => { /* the table is a bonus, never a failure */ });
+      void tellParents(d, now).catch(() => { /* an alert is a bonus, never a failure */ });
       void archive(d, now).catch(() => { /* a recorded opponent is a bonus, never a failure */ });
     }
   }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
-import { notifyOwnerActivity } from "@/lib/family-notify";
+import { getAdminAuth } from "@/lib/firebase-admin";
+import { kidOf, recordKidActivity } from "@/lib/kid-activity";
 
 /**
  * Called by the client when a CHILD finishes a learning ACTIVITY that isn't a
@@ -37,40 +37,9 @@ export async function POST(req: NextRequest) {
     const score = typeof body?.score === "number" ? Math.max(0, Math.floor(body.score)) : undefined;
     const total = typeof body?.total === "number" ? Math.max(0, Math.floor(body.total)) : undefined;
 
-    const db = getAdminDb();
-    const userDoc = await db.collection("users").doc(uid).get();
-    const u = userDoc.data() as
-      | { familyRole?: string; familyId?: string; memberId?: string }
-      | undefined;
-    if (!u || u.familyRole !== "kid" || !u.familyId) {
-      return NextResponse.json({ ok: true, skipped: "not_kid" });
-    }
-    const ownerUid = u.familyId;
-
-    let kidName = "Your child";
-    if (u.memberId) {
-      const member = await db.collection("families").doc(ownerUid).collection("members").doc(u.memberId).get();
-      const mn = member.data()?.name;
-      if (typeof mn === "string" && mn.trim()) kidName = mn.trim();
-    }
-
-    const famRef = db.collection("families").doc(ownerUid);
-    const prefs = (await famRef.get()).data()?.notifyPrefs as
-      | { enabled?: boolean; mode?: string }
-      | undefined;
-    const daily = !!prefs?.enabled && prefs.mode === "daily";
-
-    const nowIso = new Date().toISOString();
-    await famRef.collection("kidActivity").add({
-      kind, label, score: score ?? null, total: total ?? null,
-      memberId: u.memberId ?? null, kidName, at: nowIso,
-      // Waits for the daily summary only when the parent chose it.
-      notified: !daily,
-    });
-
-    if (prefs?.enabled && !daily) {
-      await notifyOwnerActivity(ownerUid, kidName, kind, { label, score, total });
-    }
+    const kid = await kidOf(uid);
+    if (!kid) return NextResponse.json({ ok: true, skipped: "not_kid" });
+    await recordKidActivity(kid, kind, { label, score, total });
 
     return NextResponse.json({ ok: true });
   } catch (e) {

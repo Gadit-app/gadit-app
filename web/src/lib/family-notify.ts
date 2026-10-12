@@ -3,6 +3,7 @@ import { sendPushToOwner } from "@/lib/push";
 import { NOTIF_STRINGS } from "@/lib/family-notify-strings";
 import { ACTIVITY_ALERT_EXTRA } from "@/lib/spell-i18n";
 import { activityNotifyCopy } from "@/lib/activity-notify-i18n";
+import { duelCopy } from "@/components/play/duel/duel-i18n";
 import { Resend } from "resend";
 
 /**
@@ -109,7 +110,7 @@ export async function notifyOwnerInstant(ownerUid: string, kidName: string, word
  * everything the child does, so the app feels valuable. he/en copy, English
  * fallback for every other parent language.
  */
-export type ActivityKind = "spell" | "say" | "pick" | "lesson" | "game" | "read";
+export type ActivityKind = "spell" | "say" | "pick" | "lesson" | "game" | "read" | "duel";
 const ACTIVITY_STRINGS: Record<string, {
   spellTitle: string; spellLead: string;
   sayTitle: string; sayLead: string;
@@ -359,7 +360,7 @@ export async function notifyOwnerActivity(
   // Dictation and Say it keep their own lines; everything else a child
   // finishes (Gadi 2026-10-12) uses one "{kid} finished: {act}" line.
   const a = activityNotifyCopy(lang);
-  const act = kind === "spell" || kind === "say" ? "" : a[kind];
+  const act = kind === "spell" || kind === "say" ? "" : kind === "duel" ? duelCopy(lang).title : a[kind];
   const title = kind === "spell" ? fill(t.spellTitle, { kid: kidName })
     : kind === "say" ? fill(t.sayTitle, { kid: kidName })
     : fill(a.title, { kid: kidName, act });
@@ -396,6 +397,7 @@ function activityLine(lang: string, x: DigestActivity): string {
   const a = activityNotifyCopy(lang);
   const name = x.kind === "spell" ? fill(t.spellTitle, { kid: "" }).replace(/^[\s:：,،]+|[\s:：,،]+$/g, "")
     : x.kind === "say" ? fill(t.sayTitle, { kid: "" }).replace(/^[\s:：,،]+|[\s:：,،]+$/g, "")
+    : x.kind === "duel" ? duelCopy(lang).title
     : a[x.kind];
   const score = typeof x.score === "number" && typeof x.total === "number" ? ` · ${fill(t.score, { a: x.score, b: x.total })}` : "";
   return `${name}${x.label ? `: ${x.label}` : ""}${score}`;
