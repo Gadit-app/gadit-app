@@ -20,7 +20,7 @@ const fmt = (d: string, locale: string) => {
 };
 
 const he: LearnCopy = {
-  question: "לומדים שפה בבית הספר?",
+  question: "איזו שפה לומדים?",
   questionSub: "בחרו את השפה, ונכין שיעורים ותרגול ברמה המתאימה.",
   notNow: "לא עכשיו", reopen: "ללמוד שפה דרך המשחקים",
   english: "אנגלית", hebrew: "עברית", beta: "בטא", stop: "בלי, רק לשחק",
@@ -33,10 +33,10 @@ const he: LearnCopy = {
   learnedWeek: "מילים נלמדו השבוע",
   reinforce: "מילים לחיזוק",
   listReady: (d) => (d ? `מוכנות למבחן ב-${fmt(d, "he-IL")}` : "מילים מהרשימה מוכנות"),
-  listAdd: "רשימת המילים מבית הספר",
-  listReplace: "רשימה חדשה מבית הספר",
+  listAdd: "רשימת מילים למבחן",
+  listReplace: "רשימה חדשה",
   listClear: "לסיים את הרשימה",
-  listTitle: "רשימת המילים מבית הספר",
+  listTitle: "רשימת המילים למבחן",
   listSub: (l) => `הדביקו את המילים ב${l}, אחת בכל שורה, או צלמו את הדף. אפשר גם "מילה - תרגום".`,
   listPlaceholder: "apple\nschool\nfriend",
   photo: "צילום הרשימה",
@@ -51,7 +51,7 @@ const he: LearnCopy = {
 };
 
 const en: LearnCopy = {
-  question: "Learning a language at school?",
+  question: "Which language are you learning?",
   questionSub: "Pick it, and we will prepare lessons and practice at the right level.",
   notNow: "Not now", reopen: "Learn a language through the games",
   english: "English", hebrew: "Hebrew", beta: "beta", stop: "Nothing, just play",
@@ -64,10 +64,10 @@ const en: LearnCopy = {
   learnedWeek: "words learned this week",
   reinforce: "words to practise again",
   listReady: (d) => (d ? `ready for the test on ${fmt(d, "en-GB")}` : "list words ready"),
-  listAdd: "Word list from school",
-  listReplace: "New list from school",
+  listAdd: "Word list for a test",
+  listReplace: "New list",
   listClear: "Finish this list",
-  listTitle: "Word list from school",
+  listTitle: "Word list for a test",
   listSub: (l) => `Paste the ${l} words, one per line, or photograph the page. "word - translation" works too.`,
   listPlaceholder: "שולחן\nספר\nחבר",
   photo: "Photograph the list",
@@ -82,7 +82,7 @@ const en: LearnCopy = {
 };
 
 const ar: LearnCopy = {
-  question: "تتعلّمون لغة في المدرسة؟",
+  question: "أيّ لغة تتعلّمون؟",
   questionSub: "اختاروها، وسنحضّر دروسًا وتدريبًا بالمستوى المناسب.",
   notNow: "ليس الآن", reopen: "تعلّم لغة من خلال الألعاب",
   english: "الإنجليزية", hebrew: "العبرية", beta: "تجريبي", stop: "لا شيء، فقط نلعب",
@@ -95,10 +95,10 @@ const ar: LearnCopy = {
   learnedWeek: "كلمات تعلّمناها هذا الأسبوع",
   reinforce: "كلمات للتمرين من جديد",
   listReady: (d) => (d ? `جاهزة لاختبار ${fmt(d, "ar")}` : "كلمات من القائمة جاهزة"),
-  listAdd: "قائمة الكلمات من المدرسة",
-  listReplace: "قائمة جديدة من المدرسة",
+  listAdd: "قائمة كلمات للامتحان",
+  listReplace: "قائمة جديدة",
   listClear: "إنهاء القائمة",
-  listTitle: "قائمة الكلمات من المدرسة",
+  listTitle: "قائمة الكلمات للامتحان",
   listSub: (l) => `الصقوا كلمات ${l}، كلمة في كل سطر، أو صوّروا الصفحة. يمكن أيضًا "كلمة - ترجمة".`,
   listPlaceholder: "apple\nschool\nfriend",
   photo: "تصوير القائمة",
@@ -113,7 +113,7 @@ const ar: LearnCopy = {
 };
 
 const ru: LearnCopy = {
-  question: "Учишь язык в школе?",
+  question: "Какой язык учишь?",
   questionSub: "Выбери его, и мы подготовим уроки и практику нужного уровня.",
   notNow: "Не сейчас", reopen: "Учить язык через игры",
   english: "английский", hebrew: "иврит", beta: "бета", stop: "Ничего, просто играть",
@@ -126,10 +126,10 @@ const ru: LearnCopy = {
   learnedWeek: "слов выучено за неделю",
   reinforce: "слов повторить",
   listReady: (d) => (d ? `готово к проверочной ${fmt(d, "ru-RU")}` : "слов из списка готово"),
-  listAdd: "Список слов из школы",
-  listReplace: "Новый список из школы",
+  listAdd: "Список слов к контрольной",
+  listReplace: "Новый список",
   listClear: "Закончить список",
-  listTitle: "Список слов из школы",
+  listTitle: "Список слов к контрольной",
   listSub: (l) => `Вставь слова (${l}), по одному в строке, или сфотографируй страницу. Можно и «слово - перевод».`,
   listPlaceholder: "apple\nschool\nfriend",
   photo: "Сфотографировать список",

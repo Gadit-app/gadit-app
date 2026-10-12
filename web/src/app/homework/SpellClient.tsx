@@ -284,10 +284,11 @@ export function SpellClient() {
   const [typed, setTyped] = useState("");
   const [result, setResult] = useState<null | "correct" | "wrong">(null);
   const [phase, setPhase] = useState<"pick" | "quiz" | "done">("pick");
-  // Homework is four cards (Gadi 2026-10-12): getting ready for a test,
-  // dictation, learning languages, reading texts. Each opens its own view;
-  // the browser's back button returns to the cards.
-  type HwView = "hub" | "test" | "dict" | "langs";
+  // Homework is three sections (Gadi 2026-10-12, after the six-AI council):
+  // getting ready for a test (a dictation is a test too), learning words,
+  // reading a text. Dictation is a way to practise, not a place. Each opens
+  // its own view; the browser's back button returns to the sections.
+  type HwView = "hub" | "test" | "learn";
   const [hw, setHwState] = useState<HwView>("hub");
   const setHw = useCallback((v: HwView) => {
     setHwState(v);
@@ -301,13 +302,14 @@ export function SpellClient() {
   useEffect(() => {
     const read = () => {
       const v = new URLSearchParams(window.location.search).get("v");
-      setHwState(v === "test" || v === "dict" || v === "langs" ? v : "hub");
+      // ?v=dict and ?v=langs were the old four cards' views.
+      setHwState(v === "test" ? "test" : v === "learn" || v === "dict" || v === "langs" ? "learn" : "hub");
     };
     read();
     window.addEventListener("popstate", read);
     return () => window.removeEventListener("popstate", read);
   }, []);
-  // "For tonight": only what a grown-up set (a word list with its test date,
+  // "To do": only what a grown-up set (a word list with its test date,
   // or a lesson from workbook pages), never a generic suggestion.
   const [tonight, setTonight] = useState<null | { title: string; words: number; testDate: string | null; lesson: boolean }>(null);
   useEffect(() => {
@@ -658,7 +660,7 @@ export function SpellClient() {
           <div className="wb-hw-hub">
             {tonight && (
               <button type="button" className="wb-hw-tonight"
-                onClick={() => (tonight.lesson ? router.push(href("/play?lesson=photo")) : setHw("langs"))}>
+                onClick={() => (tonight.lesson ? router.push(href("/play?lesson=photo")) : setHw("learn"))}>
                 <span className="wb-hw-tonight-k">{hc.tonight}</span>
                 <span className="wb-hw-tonight-t">
                   {tonight.title || <><span dir="ltr" style={{ unicodeBidi: "isolate" }}>{tonight.words}</span> {misc("words", lang)}</>}
@@ -670,8 +672,7 @@ export function SpellClient() {
             <div className="wb-hw-grid">
               {([
                 { k: "test", icon: "📝", t: hc.test, d: hc.testD },
-                { k: "dict", icon: "✏️", t: hc.dict, d: hc.dictD },
-                { k: "langs", icon: "🌍", t: hc.langs, d: hc.langsD },
+                { k: "learn", icon: "🌍", t: hc.learn, d: hc.learnD },
               ] as const).map((c) => (
                 <button key={c.k} type="button" className="wb-hw-card" onClick={() => setHw(c.k)}>
                   <span className="wb-hw-card-i" aria-hidden>{c.icon}</span>
@@ -679,7 +680,8 @@ export function SpellClient() {
                   <span className="wb-hw-card-d">{c.d}</span>
                 </button>
               ))}
-              <Link href={href("/read")} className="wb-hw-card">
+              {/* Every Word inside Homework: the reader keeps a way back. */}
+              <Link href={href("/read?from=homework")} className="wb-hw-card">
                 <span className="wb-hw-card-i" aria-hidden>📖</span>
                 <span className="wb-hw-card-t">{hc.read}</span>
                 <span className="wb-hw-card-d">{hc.readD}</span>
@@ -694,17 +696,15 @@ export function SpellClient() {
           </button>
         )}
 
-        {/* Learning languages: lessons by topic and a lesson from workbook
-            pages. A lesson plays on the games page and comes back here. */}
-        {phase === "pick" && hw === "langs" && (
+        {phase === "pick" && (hw === "test" || hw === "learn") && (
           <>
-            <style>{LEARN_CSS}</style>
-            <LearnCard lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
-          </>
-        )}
-
-        {phase === "pick" && (hw === "test" || hw === "dict") && (
-          <>
+            {/* Learning words: lessons by topic and a lesson from workbook
+                pages (a lesson plays on the games page and comes back here),
+                then a set from a topic and the ready topics below. */}
+            {hw === "learn" && <>
+              <style>{LEARN_CSS}</style>
+              <LearnCard lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
+            </>}
             {/* Getting ready for a test: paste or photograph the word list */}
             {hw === "test" && <div style={{ marginTop: 4, marginBottom: 4, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
@@ -738,7 +738,7 @@ export function SpellClient() {
             </div>}
 
             {/* Your dictations — re-practice a whole series (esp. missed words) */}
-            {history.length > 0 && (
+            {hw === "test" && history.length > 0 && (
               <div style={{ marginTop: 16 }}>
                 <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "0 0 10px" }}>
                   {t("yourDictations", lang)}
@@ -799,7 +799,7 @@ export function SpellClient() {
             </div>
 
             {/* Create your own set — kid types a topic, Gadit generates 10 words */}
-            {hw === "dict" && <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
+            {hw === "learn" && <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                 <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
                 <div>
@@ -825,7 +825,7 @@ export function SpellClient() {
               {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
             </div>}
 
-            {hw === "dict" && <>
+            {hw === "learn" && <>
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
               {DICTATION_SETS.map((s) => (

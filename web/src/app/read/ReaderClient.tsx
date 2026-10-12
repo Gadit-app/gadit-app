@@ -12,6 +12,7 @@ import { GuideButton } from "@/components/GuideButton";
 import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
 import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
+import { homeworkCopy } from "@/lib/homework-i18n";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -207,6 +208,15 @@ export function ReaderClient() {
   const { lang, dir } = useLang();
   const href = useHref();
   const t = copy(lang);
+  // Opened from Homework ("Reading a text", Gadi 2026-10-12): the same
+  // reader, with the Homework tab lit, a way back and a "done reading" button.
+  // Grown-ups open /read on its own and see none of this.
+  const hc = homeworkCopy(lang);
+  const [fromHw, setFromHw] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the address
+    try { setFromHw(new URLSearchParams(window.location.search).get("from") === "homework"); } catch { /* plain reader */ }
+  }, []);
 
   const [draft, setDraft] = useState("");
   // Restore the open passage from the session so a refresh, or opening a word's
@@ -485,8 +495,13 @@ export function ReaderClient() {
 
   return (
     // The shared tool frame (Gadi 2026-10-11): same bar, same centred title.
-    <ToolPage active="read" width={760} title={t.title} titleExtra={<GuideButton guide="reader" size={24} />} sub={t.sub}>
+    <ToolPage active={fromHw ? "spell" : "read"} width={760} title={fromHw ? hc.read : t.title} titleExtra={<GuideButton guide="reader" size={24} />} sub={t.sub}>
       <div style={{ fontFamily: fontBody(lang) }}>
+        {fromHw && (
+          <Link href={href("/homework")} className="wb-hw-back">
+            {dir === "rtl" ? "→" : "←"} {hc.home}
+          </Link>
+        )}
         {authLoading || (user && !planReady) ? (
           <div style={{ color: "var(--ink-muted,#6B7280)" }}>{t.loading}</div>
         ) : !user ? (
@@ -612,6 +627,9 @@ export function ReaderClient() {
                 <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} hardKeys={hardKeys} />
               </div>
             </div>
+            {fromHw && (
+              <Link href={href("/homework")} className="wb-hw-done">{hc.doneRead}</Link>
+            )}
           </div>
         )}
       </div>

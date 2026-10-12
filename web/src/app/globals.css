@@ -14900,7 +14900,8 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 
 /* Homework: four identical cards, one teal accent (Gadi 2026-10-12). */
 .wb-hw-hub { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; }
-.wb-hw-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.wb-hw-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 600px) { .wb-hw-grid { grid-template-columns: minmax(0, 1fr); } }
 .wb-hw-card {
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0;
   text-align: start; font-family: inherit; cursor: pointer; text-decoration: none;
@@ -14932,3 +14933,11 @@ html[data-theme="dark"] .wb-hw-tonight-k, html[data-theme="dark"] .wb-hw-back, h
   .wb-hw-card { padding: 14px 12px; }
   .wb-hw-card-t { font-size: 15px; }
 }
+
+/* Every Word opened from Homework: the way back and "done reading". */
+a.wb-hw-back { text-decoration: none; }
+.wb-hw-done {
+  display: block; width: fit-content; margin: 18px auto 0; padding: 12px 28px; border-radius: 12px;
+  background: #0EA5A5; color: #fff; font-size: 15.5px; font-weight: 700; text-decoration: none;
+}
+.wb-hw-done:focus-visible { outline: 2px solid #0A7472; outline-offset: 3px; }
