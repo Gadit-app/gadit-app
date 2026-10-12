@@ -1,5 +1,6 @@
 "use client";
 
+import { GaditIcon, type GaditIconName } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { buildQuizQuestions, type PlayWord } from "@/lib/play-engine";
@@ -154,7 +155,7 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
       <style>{DUEL_CSS}</style>
       <div className="duel-top">
         <button type="button" className="duel-link" onClick={screen.kind === "menu" ? onExit : () => { setMsg(""); setScreen({ kind: "menu" }); }}>{t.back}</button>
-        <span className="duel-title">{t.title}</span>
+        <span className="duel-title"><GaditIcon name="duel" size={30} className="duel-title-ico" />{t.title}</span>
       </div>
 
       {screen.kind === "menu" && preset && (
@@ -162,9 +163,9 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
           <h2 className="duel-h">{preset.title}</h2>
           <p className="duel-sub">{t.hubSub}</p>
           <div className="duel-modes">
-            <ModeCard icon="📱" title={t.optLocal} desc={t.optLocalDesc} disabled={busy} onClick={() => void startWith("local", "preset")} />
-            <ModeCard icon="✉️" title={t.optInvite} desc={t.optInviteDesc} disabled={busy} onClick={() => void startWith("invite", "preset")} />
-            <ModeCard icon="🤖" title={t.optBot} desc={t.optBotDesc} disabled={busy} onClick={() => void startWith("bot", "preset")} />
+            <ModeCard icon="same-device" title={t.optLocal} desc={t.optLocalDesc} disabled={busy} onClick={() => void startWith("local", "preset")} />
+            <ModeCard icon="invite" title={t.optInvite} desc={t.optInviteDesc} disabled={busy} onClick={() => void startWith("invite", "preset")} />
+            <ModeCard icon="bot" title={t.optBot} desc={t.optBotDesc} disabled={busy} onClick={() => void startWith("bot", "preset")} />
           </div>
           {busy && <p className="duel-wait">{t.creating}</p>}
           {msg && <p className="duel-note">{msg}</p>}
@@ -175,11 +176,11 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
         <div className="duel-card">
           <p className="duel-sub">{t.hubSub}</p>
           <div className="duel-modes">
-            <ModeCard icon="📱" title={t.optLocal} desc={t.optLocalDesc} onClick={() => setScreen({ kind: "source", mode: "local" })} />
-            <ModeCard icon="✉️" title={t.optInvite} desc={t.optInviteDesc} onClick={() => setScreen({ kind: "source", mode: "invite" })} />
-            <ModeCard icon="🔢" title={t.optJoin} desc={t.optJoinDesc} onClick={() => setScreen({ kind: "join" })} />
-            {lang === "he" && <ModeCard icon="🌍" title={t.optOnline} desc={t.optOnlineDesc} onClick={() => void searchOnline()} />}
-            <ModeCard icon="🤖" title={t.optBot} desc={t.optBotDesc} onClick={() => (lang === "he" ? void playGhost(true) : setScreen({ kind: "source", mode: "bot" }))} />
+            <ModeCard icon="same-device" title={t.optLocal} desc={t.optLocalDesc} onClick={() => setScreen({ kind: "source", mode: "local" })} />
+            <ModeCard icon="invite" title={t.optInvite} desc={t.optInviteDesc} onClick={() => setScreen({ kind: "source", mode: "invite" })} />
+            <ModeCard icon="code" title={t.optJoin} desc={t.optJoinDesc} onClick={() => setScreen({ kind: "join" })} />
+            {lang === "he" && <ModeCard icon="online" title={t.optOnline} desc={t.optOnlineDesc} onClick={() => void searchOnline()} />}
+            <ModeCard icon="bot" title={t.optBot} desc={t.optBotDesc} onClick={() => (lang === "he" ? void playGhost(true) : setScreen({ kind: "source", mode: "bot" }))} />
           </div>
           {msg && <p className="duel-note">{msg}</p>}
         </div>
@@ -190,8 +191,8 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
         <div className="duel-card">
           <h2 className="duel-h">{t.sourceTitle}</h2>
           <div className="duel-modes">
-            <ModeCard icon="📒" title={t.srcOwn} desc={t.srcOwnDesc} disabled={busy} onClick={() => void startWith(screen.mode, "own")} />
-            {canTopics && <ModeCard icon="🎨" title={t.srcTopic} desc={t.srcTopicDesc} disabled={busy} onClick={() => void startWith(screen.mode, "topic")} />}
+            <ModeCard icon="notebook" title={t.srcOwn} desc={t.srcOwnDesc} disabled={busy} onClick={() => void startWith(screen.mode, "own")} />
+            {canTopics && <ModeCard icon="topics" title={t.srcTopic} desc={t.srcTopicDesc} disabled={busy} onClick={() => void startWith(screen.mode, "topic")} />}
           </div>
           {games && games.length > 0 && (
             <>
@@ -249,10 +250,10 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
   );
 }
 
-function ModeCard({ icon, title, desc, onClick, disabled }: { icon: string; title: string; desc: string; onClick: () => void; disabled?: boolean }) {
+function ModeCard({ icon, title, desc, onClick, disabled }: { icon: string | GaditIconName; title: string; desc: string; onClick: () => void; disabled?: boolean }) {
   return (
     <button type="button" className="duel-mode" onClick={onClick} disabled={disabled}>
-      <span className="duel-mode-icon" aria-hidden="true">{icon}</span>
+      {/^[a-z-]+$/.test(icon) ? <GaditIcon name={icon as GaditIconName} size={44} className="duel-mode-ico" /> : <span className="duel-mode-icon" aria-hidden="true">{icon}</span>}
       <b>{title}</b>
       <span>{desc}</span>
     </button>

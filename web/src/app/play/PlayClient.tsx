@@ -12,7 +12,7 @@
  * GameResult, which calls back to onExit → returns here to "menu").
  */
 
-import { ToolIcon } from "@/components/design/ToolIcon";
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -3619,7 +3619,7 @@ export function PlayPage() {
 
       <main className="wb-play-main">
         <div className="wb-play-hero">
-          <h1 className="wb-play-title"><ToolIcon id="play" size={36} className="wb-title-icon" />{t.menuTitle}</h1>
+          <h1 className="wb-play-title"><GaditIcon name="play" size={48} className="wb-title-icon is-3d" />{t.menuTitle}</h1>
           <p className="wb-play-lede">{t.menuLede}</p>
         </div>
 

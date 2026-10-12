@@ -15070,3 +15070,16 @@ a.wb-play-card { text-decoration: none; }
 .wb-say-go:disabled { opacity: .5; cursor: default; box-shadow: none; }
 @media (max-width: 480px) { .wb-say-cover { height: 130px; } .wb-learn-simple-cover { height: 120px; } }
 @media (max-width: 600px) { .wordbook .wb-hw-grid > .wb-play-card.has-cover .wb-play-card-cover { aspect-ratio: auto; height: 140px; object-fit: contain; background: #F3F8F7; } }
+
+/* Gadit's 3D icons (Gadi 2026-10-12). */
+.gd-icon { display: inline-block; vertical-align: middle; object-fit: contain; flex: none; }
+.wb-title-icon.is-3d { width: 48px; height: 48px; margin-inline-end: 4px; }
+@media (max-width: 600px) { .wb-title-icon.is-3d { width: 38px; height: 38px; } }
+.wb-hw-add-btn .gd-icon, .wb-hw-intake-photo .gd-icon, .wb-hw-chip .gd-icon, .wb-learn-chip .gd-icon, .wb-learn-btn .gd-icon { width: 28px !important; height: 28px !important; min-width: 28px; margin-inline-end: 4px; margin-block: -6px; }
+.wb-hw-tonight-ico { width: 40px; height: 40px; }
+@media (max-width: 520px) { .wb-hw-tonight-ico { display: none; } }
+.wb-h-ico { margin-inline-end: 6px; margin-block: -6px; }
+.duel-mode .duel-mode-ico { width: 44px; height: 44px; }
+.duel-title { display: inline-flex; align-items: center; gap: 6px; }
+.duel-title-ico { width: 30px; height: 30px; }
+.wb-hw-intake-photo, .wb-hw-add-btn, .wb-learn-chip, .wb-learn-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }

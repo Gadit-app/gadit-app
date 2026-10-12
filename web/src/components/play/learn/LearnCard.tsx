@@ -1,5 +1,6 @@
 "use client";
 
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import type { LearnItem, LearnLang, Reads } from "@/lib/learn/engine";
@@ -221,7 +222,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: 
         <div className="wb-learn-row">
           <button type="button" className="wb-learn-chip" disabled={busy} onClick={() => fileRef.current?.click()}>📷 {t.photo}</button>
           <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void photo(f); e.target.value = ""; }} />
-          <button type="button" className="wb-learn-chip" disabled={busy} onClick={() => pagesRef.current?.click()}>📘 {lc.photoBtn}</button>
+          <button type="button" className="wb-learn-chip" disabled={busy} onClick={() => pagesRef.current?.click()}><GaditIcon name="workbook" size={24} /> {lc.photoBtn}</button>
           <input ref={pagesRef} type="file" accept="image/*" multiple hidden onChange={(e) => { const f = e.target.files; if (f?.length) void pages(f); e.target.value = ""; }} />
           <label className="wb-learn-date">
             <span>{t.testDate}</span>
@@ -333,7 +334,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: 
       <div className="wb-learn-row">
         {/* Workbook pages straight from the card (Gadi 2026-10-11: it was
             three steps deep, inside the school-list screen). */}
-        <button type="button" className="wb-learn-btn" disabled={busy} onClick={() => pagesRef.current?.click()}>📘 {lc.photoBtn}</button>
+        <button type="button" className="wb-learn-btn" disabled={busy} onClick={() => pagesRef.current?.click()}><GaditIcon name="workbook" size={24} /> {lc.photoBtn}</button>
         <input ref={pagesRef} type="file" accept="image/*" multiple hidden onChange={(e) => { const f = e.target.files; if (f?.length) void pages(f); e.target.value = ""; }} />
         <button type="button" className="wb-learn-chip" onClick={() => { setStep("list"); setMsg(""); }}>📝 {s?.list ? t.listReplace : t.listAdd}</button>
         {s?.list && <button type="button" className="wb-learn-chip is-soft" disabled={busy} onClick={async () => { setBusy(true); try { await post({ action: "clearList" }); await load(); } finally { setBusy(false); } }}>{t.listClear}</button>}

@@ -7,6 +7,7 @@
  * same centred title and subtitle, the same footer, and a kid's skin.
  * Pages pass their own content width; the frame is identical.
  */
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
@@ -19,7 +20,6 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger, type NavKey } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { AppearancePicker } from "@/components/AppearancePicker";
-import { ToolIcon } from "@/components/design/ToolIcon";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 
 export function ToolPage({ active, title, titleExtra, sub, width = 880, children }: {
@@ -68,7 +68,7 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
         {title && (
           <div className="wb-tool-hero">
             <h1 className="wb-tool-title">
-              {(active === "notebook" || active === "spell" || active === "read" || active === "say" || active === "play") && <ToolIcon id={active} size={36} className="wb-title-icon" />}
+              {(active === "notebook" || active === "spell" || active === "read" || active === "say" || active === "play") && <GaditIcon name={active} size={48} className="wb-title-icon is-3d" />}
               {title}
               {titleExtra}
             </h1>

@@ -10,6 +10,7 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 import { toLocalDateStr } from "@/lib/gamification";
 import { useRouter } from "next/navigation";
@@ -913,9 +914,9 @@ export function SpellClient() {
             {task && (
               <div className="wb-hw-tonight">
                 <button type="button" className="wb-hw-tonight-main" onClick={() => openTask(task)}>
+                  <GaditIcon name="todo" size={40} className="wb-hw-tonight-ico" />
                   <span className="wb-hw-tonight-k">{hc.tonight}</span>
                   <span className="wb-hw-tonight-t">
-                    {task.kind === "list" ? "📝 " : task.kind === "text" ? "📖 " : "📘 "}
                     {task.title || (task.kind === "list" ? ic.kList : task.kind === "text" ? ic.kText : ic.kPages)}
                     {task.kind === "list" && task.words && <span className="wb-hw-tonight-d"> · <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{task.words.length}</span> {misc("words", lang)}</span>}
                     {task.testDate && <span className="wb-hw-tonight-d"> · {hc.testOn} <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{fmtDate(task.testDate)}</span></span>}
@@ -944,14 +945,14 @@ export function SpellClient() {
                 <div className="wb-hw-add-btns">
                   {canCamera && (
                     <button type="button" className="wb-hw-add-btn" onClick={() => camRef.current?.click()}>
-                      <span aria-hidden="true">📷</span> {ic.photo}
+                      <GaditIcon name="photo" size={26} /> {ic.photo}
                     </button>
                   )}
                   <button type="button" className="wb-hw-add-btn" onClick={() => bigPhotoRef.current?.click()}>
-                    <span aria-hidden="true">⬆️</span> {ic.upload}
+                    <GaditIcon name="upload" size={26} /> {ic.upload}
                   </button>
                   <button type="button" className="wb-hw-add-btn" onClick={() => { setIntakeFiles(null); setHw("add"); }}>
-                    <span aria-hidden="true">📋</span> {ic.pasteBtn}
+                    <GaditIcon name="paste" size={26} /> {ic.pasteBtn}
                   </button>
                 </div>
               </div>
@@ -1129,7 +1130,7 @@ export function SpellClient() {
             {/* The Ministry of Education's English lists, by Band (Israel). */}
             {BAND_COPY[lang] && (
               <>
-                <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", color: "var(--teal-deep,#0A7472)", margin: "26px 0 10px" }}>{BAND_COPY[lang].title}</h2>
+                <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", color: "var(--teal-deep,#0A7472)", margin: "26px 0 10px" }}><GaditIcon name="topics" size={26} className="wb-h-ico" />{BAND_COPY[lang].title}</h2>
                 <div className="wb-hw-intake-chips" role="radiogroup" aria-label={BAND_COPY[lang].title} style={{ marginBottom: 12 }}>
                   {(["band1", "band2"] as const).map((b) => (
                     <button key={b} type="button" role="radio" aria-checked={bandSel === b} className={`wb-hw-chip${bandSel === b ? " is-on" : ""}`} onClick={() => { setBandSel(b); setBandTopic(null); }}>{BAND_COPY[lang][b]}</button>

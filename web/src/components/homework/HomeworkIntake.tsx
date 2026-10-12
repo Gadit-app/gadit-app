@@ -11,6 +11,7 @@
  * /api/spell-set, workbook pages become a lesson through /api/learn, and the
  * task itself is stored by /api/homework-task.
  */
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
@@ -178,11 +179,11 @@ export function HomeworkIntake({ lang, dir, nativeLang, learnLang, initialFiles,
         {/* Photograph (camera, on phones and tablets) or upload a picture. */}
         {canCamera && (
           <button type="button" className="wb-hw-intake-photo" disabled={busy} onClick={() => camRef.current?.click()}>
-            📷 {pages ? c.more : c.photo}
+            <GaditIcon name="photo" size={24} /> {pages ? c.more : c.photo}
           </button>
         )}
         <button type="button" className={canCamera ? "wb-hw-chip" : "wb-hw-intake-photo"} disabled={busy} onClick={() => fileRef.current?.click()}>
-          ⬆️ {c.upload}
+          <GaditIcon name="upload" size={24} /> {c.upload}
         </button>
         <input ref={camRef} type="file" accept="image/*" capture="environment" hidden
           onChange={(e) => { const f = e.target.files ? Array.from(e.target.files) : []; e.target.value = ""; void readPhotos(f); }} />

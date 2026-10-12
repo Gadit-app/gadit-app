@@ -9,7 +9,7 @@
  * meaning summary; the card whole-area links to /word/<word>.
  */
 
-import { ToolIcon } from "@/components/design/ToolIcon";
+import { GaditIcon } from "@/components/design/GaditIcon";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { wordLangLabel } from "@/components/design/result";
 import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
@@ -887,7 +887,7 @@ export function NotebookPage() {
 
       <main className="wb-notebook-main">
         <div className="wb-notebook-hero">
-          <h1 className="wb-notebook-title"><ToolIcon id="notebook" size={36} className="wb-title-icon" />{pageTitle}</h1>
+          <h1 className="wb-notebook-title"><GaditIcon name="notebook" size={48} className="wb-title-icon is-3d" />{pageTitle}</h1>
           <p className="wb-notebook-sub">{pageSubtitle}</p>
           {/* Smart practice (spaced repetition) lives at /practice; it had no
               way in from the notebook (Gadi 2026-10-06). Full plans only. */}
