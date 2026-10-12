@@ -1,5 +1,6 @@
 "use client";
 
+import { GaditIcon } from "./GaditIcon";
 import { useEffect, useMemo, useState } from "react";
 import { computeGamification, toLocalDateStr, RANKS } from "@/lib/gamification";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
@@ -166,7 +167,7 @@ export function KidsGameHeader({
         {/* Streak */}
         <div className="wb-kids-tile">
           <div className="wb-kids-tile-head">
-            <Chip color={TEAL} emoji="🔥" dim={g.streak === 0} />
+            <Chip icon="streak" dim={g.streak === 0} />
             <div>
               <div className="wb-kids-tile-label">{c.streakTitle}</div>
               <div className="wb-kids-tile-num" style={{ color: TEAL }}>{g.streak}</div>
@@ -179,7 +180,7 @@ export function KidsGameHeader({
         {/* Weekly goal */}
         <div className="wb-kids-tile">
           <div className="wb-kids-tile-head">
-            <Chip color={AMBER} emoji="🎯" />
+            <Chip icon="goal" />
             <div>
               <div className="wb-kids-tile-label">{c.weeklyTitle}</div>
               <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.weekly}<span className="wb-kids-tile-of">/{g.weeklyGoal}</span></div>
@@ -192,10 +193,10 @@ export function KidsGameHeader({
         {/* Explorer rank — tap for the full ranks table */}
         <button type="button" className="wb-kids-tile wb-kids-tile-btn" onClick={() => setRanksOpen(true)}>
           <div className="wb-kids-tile-head">
-            <Chip color={PURPLE} emoji={RANK_EMOJI[g.rank.index] ?? "🏅"} />
+            <Chip icon="rank" />
             <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
               <div className="wb-kids-tile-label">{c.rankTitle}</div>
-              <div className="wb-kids-tile-num" style={{ color: PURPLE }}>{rankLabel(g.rank.key, lang)}</div>
+              <div className="wb-kids-tile-num is-rank" style={{ color: PURPLE }}>{rankLabel(g.rank.key, lang)}</div>
             </div>
           </div>
           <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />
@@ -216,16 +217,12 @@ export function KidsGameHeader({
   );
 }
 
-function Chip({ color, emoji, dim }: { color: string; emoji: string; dim?: boolean }) {
+/** The tile's icon: Gadit's own 3D icons (Gadi 2026-10-12), grey while the streak is 0. */
+function Chip({ icon, dim }: { icon: "streak" | "goal" | "rank"; dim?: boolean }) {
   return (
-    <span
-      style={{
-        width: 44, height: 44, flexShrink: 0, borderRadius: 13,
-        background: `color-mix(in srgb, ${color} 16%, transparent)`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 22, lineHeight: 1, filter: dim ? "grayscale(1) opacity(0.55)" : "none",
-      }}
-    >{emoji}</span>
+    <span style={{ width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", filter: dim ? "grayscale(1) opacity(0.55)" : "none" }}>
+      <GaditIcon name={icon} size={46} />
+    </span>
   );
 }
 
