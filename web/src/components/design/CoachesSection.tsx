@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 
-type Member = { id: string; name: string; isOwner: boolean };
+type Member = { id: string; name: string; isOwner: boolean; role?: string };
 type Grant = { id: string; coachEmail: string; memberId: string; memberName: string };
 
 const T: Record<string, {
@@ -101,7 +101,8 @@ export function CoachesSection() {
       ]);
       if (mRes.ok) {
         const d = (await mRes.json()) as { members?: Member[] };
-        setKids((d.members ?? []).filter((m) => !m.isOwner));
+        // Children only: a coach never gets a parent's profile.
+        setKids((d.members ?? []).filter((m) => !m.isOwner && m.role !== "father" && m.role !== "mother"));
       }
       if (gRes.ok) {
         const d = (await gRes.json()) as { grants?: Grant[] };

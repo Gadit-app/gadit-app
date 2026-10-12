@@ -17,6 +17,8 @@ type Student = {
   avatarPhotoUrl: string;
   avatarId: string;
   colorIndex: number;
+  /** The family stopped paying: access is paused. */
+  inactive?: boolean;
 };
 
 const T: Record<string, {
@@ -387,6 +389,43 @@ const T: Record<string, {
     signedInAs: "Bejelentkezve mint",
   },
 };
+/** The family stopped paying, so coach access is paused (Gadi 2026-10-12). */
+const FAMILY_INACTIVE: Record<string, string> = {
+  en: "The family's plan isn't active right now, so access is paused.",
+  he: "המנוי של המשפחה לא פעיל כרגע, ולכן הגישה מושהית.",
+  ar: "اشتراك العائلة غير نشط حاليًا، لذلك الوصول متوقف مؤقتًا.",
+  ru: "Подписка семьи сейчас не активна, поэтому доступ приостановлен.",
+  es: "El plan de la familia no está activo ahora, así que el acceso está en pausa.",
+  pt: "O plano da família não está ativo agora, por isso o acesso está pausado.",
+  fr: "L'abonnement de la famille n'est pas actif pour le moment, l'accès est donc suspendu.",
+  de: "Das Abo der Familie ist gerade nicht aktiv, daher ist der Zugang pausiert.",
+  cs: "Předplatné rodiny teď není aktivní, proto je přístup pozastaven.",
+  sk: "Predplatné rodiny teraz nie je aktívne, preto je prístup pozastavený.",
+  it: "L'abbonamento della famiglia ora non è attivo, quindi l'accesso è in pausa.",
+  ja: "ご家族のプランが現在有効ではないため、アクセスは一時停止中です。",
+  hi: "परिवार का प्लान अभी सक्रिय नहीं है, इसलिए पहुँच रुकी हुई है।",
+  am: "የቤተሰቡ ምዝገባ አሁን ንቁ ስላልሆነ መዳረሻው ለጊዜው ቆሟል።",
+  uk: "Підписка родини зараз не активна, тому доступ призупинено.",
+  tr: "Ailenin planı şu anda etkin değil, bu yüzden erişim duraklatıldı.",
+  pl: "Plan rodziny nie jest teraz aktywny, więc dostęp jest wstrzymany.",
+  fa: "اشتراک خانواده در حال حاضر فعال نیست، به همین دلیل دسترسی متوقف شده است.",
+  id: "Paket keluarga sedang tidak aktif, jadi akses dijeda.",
+  nl: "Het abonnement van het gezin is nu niet actief, dus de toegang is gepauzeerd.",
+  el: "Η συνδρομή της οικογένειας δεν είναι ενεργή αυτή τη στιγμή, γι' αυτό η πρόσβαση έχει παυθεί.",
+  zu: "Uhlelo lomndeni alusebenzi manje, ngakho ukufinyelela kumisiwe okwesikhashana.",
+  vi: "Gói của gia đình hiện không hoạt động, nên quyền truy cập tạm dừng.",
+  fil: "Hindi aktibo ngayon ang plano ng pamilya, kaya naka-pause ang access.",
+  af: "Die gesin se plan is nou nie aktief nie, daarom is toegang tydelik gestaak.",
+  sw: "Mpango wa familia haufanyi kazi sasa, kwa hiyo ufikiaji umesitishwa.",
+  "zh-CN": "这个家庭的订阅目前未生效，因此访问已暂停。",
+  "zh-TW": "這個家庭的訂閱目前未生效，因此存取已暫停。",
+  ko: "가족 요금제가 지금 활성 상태가 아니어서 접근이 일시 중지되었어요.",
+  th: "แพ็กเกจของครอบครัวยังไม่ได้ใช้งานอยู่ตอนนี้ จึงหยุดการเข้าถึงไว้ชั่วคราว",
+  bn: "পরিবারের প্ল্যান এখন সক্রিয় নয়, তাই অ্যাক্সেস সাময়িকভাবে বন্ধ।",
+  da: "Familiens abonnement er ikke aktivt lige nu, så adgangen er sat på pause.",
+  hu: "A család előfizetése most nem aktív, ezért a hozzáférés szünetel.",
+};
+
 /** A coach needs a paid plan (Gadi 2026-10-12). [message, button] */
 const NEEDS_PLAN: Record<string, [string, string]> = {
   en: ["To coach students on Gadit you need an Individual or Family plan.", "Choose a plan"],
@@ -522,15 +561,18 @@ export function CoachClient() {
                   <span style={{ width: 48, height: 48, flexShrink: 0, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: memberColorFor({ colorIndex: s.colorIndex }), color: "#fff", fontSize: 20, fontWeight: 800 }}>
                     {photo ? <img src={photo} alt="" width={48} height={48} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (s.memberName || "?").charAt(0).toUpperCase()}
                   </span>
-                  <span style={{ flex: 1, minWidth: 0, fontSize: 17, fontWeight: 700, color: "var(--ink)" }}>{s.memberName || "—"}</span>
-                  <button
+                  <span style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 3 }}>
+                    <span style={{ fontSize: 17, fontWeight: 700, color: "var(--ink)" }}>{s.memberName || "?"}</span>
+                    {s.inactive && <span style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.5 }}>{FAMILY_INACTIVE[lang] ?? FAMILY_INACTIVE.en}</span>}
+                  </span>
+                  {!s.inactive && <button
                     type="button"
                     onClick={() => enter(s)}
                     disabled={!!entering}
                     style={{ background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 999, padding: "10px 20px", fontSize: 15, fontWeight: 700, cursor: entering ? "default" : "pointer", opacity: entering && entering !== s.grantId ? 0.5 : 1, fontFamily: "inherit", flexShrink: 0 }}
                   >
                     {entering === s.grantId ? c.entering : c.enter}
-                  </button>
+                  </button>}
                 </div>
               );
             })}

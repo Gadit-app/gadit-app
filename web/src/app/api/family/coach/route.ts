@@ -48,8 +48,10 @@ export async function POST(req: NextRequest) {
   // The child must be a real, non-owner member of THIS family.
   const memberSnap = await db.collection("families").doc(ctx.familyId).collection("members").doc(memberId).get();
   if (!memberSnap.exists) return NextResponse.json({ error: "member_not_found" }, { status: 404 });
-  const member = memberSnap.data() as { name?: string; isOwner?: boolean };
+  const member = memberSnap.data() as { name?: string; isOwner?: boolean; role?: string };
   if (member.isOwner) return NextResponse.json({ error: "cannot_grant_owner" }, { status: 400 });
+  // Children only: a coach never gets a parent's profile (Gadi 2026-10-12).
+  if (member.role === "father" || member.role === "mother") return NextResponse.json({ error: "kid_only" }, { status: 400 });
 
   // Idempotent: reuse an existing active grant for the same (email, child).
   const existing = await db

@@ -74,6 +74,20 @@ export async function coachHasPlan(uid: string, email: string): Promise<boolean>
   return false;
 }
 
+/**
+ * Coach access follows the FAMILY's payment (Gadi 2026-10-12): when the
+ * family stops paying, the coach can no longer enter the child's profile.
+ * The family id is the owner's uid; the owner must be on a live plan
+ * (active, past_due in grace, or trialing), gifted (comp), or one of ours.
+ */
+export async function familyIsPaying(familyId: string): Promise<boolean> {
+  const o = (await getAdminDb().collection("users").doc(familyId).get()).data() as Record<string, unknown> | undefined;
+  if (!o) return false;
+  if (o.comp === true) return true;
+  if (typeof o.email === "string" && isInternalEmail(o.email)) return true;
+  return isPayingStatus(o.subscriptionStatus) || o.subscriptionStatus === "trialing";
+}
+
 export function bearer(req: { headers: { get(name: string): string | null } }): string | null {
   const h = req.headers.get("authorization") || "";
   return h.toLowerCase().startsWith("bearer ") ? h.slice(7).trim() : null;

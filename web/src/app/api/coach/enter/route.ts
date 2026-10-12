@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { syntheticUidFor, isParentRole, type MemberRole } from "@/lib/family";
-import { verifyCoach, bearer, coachHasPlan } from "@/lib/coach";
+import { verifyCoach, bearer, coachHasPlan, familyIsPaying } from "@/lib/coach";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -41,6 +41,10 @@ export async function POST(req: NextRequest) {
   if (!memberSnap.exists) return NextResponse.json({ error: "member_not_found" }, { status: 404 });
   const member = memberSnap.data() as { role: MemberRole; name: string; isOwner?: boolean };
   if (member.isOwner) return NextResponse.json({ error: "cannot_enter_owner" }, { status: 400 });
+  // A coach works with a CHILD only, never a parent's profile (Gadi 2026-10-12).
+  if (isParentRole(member.role)) return NextResponse.json({ error: "kid_only" }, { status: 400 });
+  // Access follows the family's payment: no paying family, no coach access.
+  if (!(await familyIsPaying(familyId))) return NextResponse.json({ error: "family_inactive" }, { status: 402 });
 
   const auth = getAdminAuth();
   const role: "kid" | "parent" = isParentRole(member.role) ? "parent" : "kid";

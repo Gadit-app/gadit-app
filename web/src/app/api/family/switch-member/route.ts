@@ -31,6 +31,9 @@ async function resolveFamily(req: NextRequest): Promise<{ familyId: string } | n
   if (!idToken) return null;
   try {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
+    // A coach inside a child's profile sees that child only: no siblings and
+    // never the parent's account (Gadi 2026-10-12).
+    if (decoded.coach === true) return null;
     const db = getAdminDb();
     const snap = await db.collection("users").doc(decoded.uid).get();
     const familyId = snap.data()?.familyId as string | undefined;

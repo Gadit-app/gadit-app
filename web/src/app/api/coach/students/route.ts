@@ -5,7 +5,8 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { verifyCoach, bearer, coachHasPlan } from "@/lib/coach";
+import { verifyCoach, bearer, coachHasPlan, familyIsPaying } from "@/lib/coach";
+import { isParentRole, type MemberRole } from "@/lib/family";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,23 +22,29 @@ export async function GET(req: NextRequest) {
     .where("revoked", "==", false)
     .get();
 
-  const students = await Promise.all(
+  const paying = new Map<string, Promise<boolean>>();
+  const rows = await Promise.all(
     snap.docs.map(async (d) => {
       const g = d.data() as { familyId: string; memberId: string; memberName: string };
-      let avatarPhotoUrl = "", avatarId = "", colorIndex = 0, name = g.memberName || "";
+      let avatarPhotoUrl = "", avatarId = "", colorIndex = 0, name = g.memberName || "", parent = false;
       try {
         const mSnap = await db.collection("families").doc(g.familyId).collection("members").doc(g.memberId).get();
         if (mSnap.exists) {
-          const m = mSnap.data() as { name?: string; avatarPhotoUrl?: string; avatarId?: string; colorIndex?: number };
+          const m = mSnap.data() as { name?: string; avatarPhotoUrl?: string; avatarId?: string; colorIndex?: number; role?: MemberRole };
           name = m.name || name;
+          parent = !!m.role && isParentRole(m.role);
           avatarPhotoUrl = m.avatarPhotoUrl || "";
           avatarId = m.avatarId || "";
           colorIndex = m.colorIndex ?? 0;
         }
       } catch { /* member read best-effort */ }
-      return { grantId: d.id, familyId: g.familyId, memberId: g.memberId, memberName: name, avatarPhotoUrl, avatarId, colorIndex };
+      if (!paying.has(g.familyId)) paying.set(g.familyId, familyIsPaying(g.familyId));
+      const inactive = !(await paying.get(g.familyId));
+      return parent ? null : { grantId: d.id, familyId: g.familyId, memberId: g.memberId, memberName: name, avatarPhotoUrl, avatarId, colorIndex, inactive };
     }),
   );
+  // Children only (a coach never enters a parent's profile).
+  const students = rows.filter((r): r is NonNullable<typeof r> => r !== null);
   students.sort((a, b) => a.memberName.localeCompare(b.memberName));
   // The list shows, but entering a profile needs a paid plan.
   const needsPlan = students.length > 0 && !(await coachHasPlan(coach.uid, coach.email));
