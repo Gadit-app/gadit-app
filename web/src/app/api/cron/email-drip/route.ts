@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { CONNECT_KEY, CONNECT_META, CONNECT_CONTENT } from "@/lib/email-drip/family-connect";
+import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { familyChildrenSummary } from "@/lib/email-drip/family-summary";
 import { isShabbatIL } from "@/lib/shabbat";
 import { FieldValue } from "firebase-admin/firestore";
@@ -321,6 +323,32 @@ export async function GET(req: NextRequest) {
           for (const m of famStale) patch[m.key] = { skippedAt: FieldValue.serverTimestamp() };
           await db.collection("users").doc(u.uid).set({ familyDripSent: patch }, { merge: true });
           for (const m of famStale) famSent[m.key] = true;
+        }
+
+        // Rescue (Gadi 2026-10-12): no child connected by day 2 of the series
+        // gets one short "connect your child" email, once, instead of that
+        // day's series email. A family with a child connected never gets it.
+        if (famDayN >= 2 && !famSent[CONNECT_KEY]) {
+          const kids = (await db.collection("users").where("familyId", "==", u.uid).count().get()).data().count - 1;
+          if (kids <= 0) {
+            const nm = (typeof u.displayName === "string" && u.displayName.trim()) || (typeof d.displayName === "string" && (d.displayName as string).trim()) || "";
+            const cl = he ? "he" : "en";
+            const built = renderFamilyMail(CONNECT_META, cl, CONNECT_CONTENT[cl], { unsubscribeUrl: buildUnsubUrl(u.uid), firstName: nm.split(/\s+/)[0] || null });
+            if (dryRun) {
+              results.push({ uid: u.uid, email, mailKey: CONNECT_KEY, status: "skipped", reason: "dryRun" });
+            } else {
+              const sent = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
+              if (sent.ok) {
+                realSends++;
+                await db.collection("users").doc(u.uid).set({ familyDripSent: { [CONNECT_KEY]: { sentAt: FieldValue.serverTimestamp(), messageId: sent.id ?? null } } }, { merge: true });
+                results.push({ uid: u.uid, email, mailKey: CONNECT_KEY, status: "sent" });
+              } else {
+                results.push({ uid: u.uid, email, mailKey: CONNECT_KEY, status: "failed", reason: sent.reason });
+              }
+            }
+            continue;
+          }
+          if (!dryRun) await db.collection("users").doc(u.uid).set({ familyDripSent: { [CONNECT_KEY]: { skippedAt: FieldValue.serverTimestamp() } } }, { merge: true });
         }
 
         let famCand: (typeof FAMILY_DRIP)[number] | null = null;

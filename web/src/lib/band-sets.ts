@@ -31,7 +31,7 @@ export function bandSetTitle(s: BandSet, lang: string): string {
 
 /** The section's words, for the Israeli interface languages only. */
 export const BAND_COPY: Record<string, { title: string; band1: string; band2: string }> = {
-  he: { title: "רשימות משרד החינוך באנגלית", band1: "Band I · יסודי", band2: "Band II · חטיבת ביניים" },
-  ar: { title: "قوائم وزارة التربية بالإنجليزية", band1: "Band I · ابتدائي", band2: "Band II · إعدادي" },
-  ru: { title: "Списки Министерства образования по английскому", band1: "Band I · начальная школа", band2: "Band II · средняя школа" },
+  he: { title: "מילים באנגלית מתוכנית משרד החינוך", band1: "יסודי", band2: "חטיבת ביניים" },
+  ar: { title: "كلمات إنجليزية من منهاج وزارة التربية", band1: "ابتدائي", band2: "إعدادي" },
+  ru: { title: "Английские слова из программы Минобразования", band1: "Начальная школа", band2: "Средняя школа" },
 };

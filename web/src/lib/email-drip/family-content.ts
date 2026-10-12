@@ -564,9 +564,11 @@ Some screens also have a small question mark that opens the guide for that scree
 מצלמים את הדף, מעלים תמונה או מדביקים רשימה. מסמנים אם זו רשימת מילים, טקסט לקריאה או דפי חוברת, ובוחרים מתי המבחן. הילד רואה מיד כרטיס "מה צריך להכין", ולוחץ "מתחילים".
 
 ## שלושה אזורים, לפי מה שצריך
-1. **לומדים מילים:** שיעורי אנגלית צעד אחר צעד, הכתבה (גם לשמוע מילה בעברית ולכתוב אותה בעברית), והתרגול "הקשיבו ובחרו". יש גם נושאים מוכנים מרשימות משרד החינוך באנגלית.
+1. **לומדים מילים:** הכתבה בעברית, באנגלית ובכל שפה (שומעים מילה וכותבים אותה), והתרגול "הקשיבו ובחרו".
 2. **קוראים טקסט:** מצלמים קטע קריאה, ולוחצים על כל מילה שלא ברורה.
-3. **מתכוננים למבחן:** מדביקים את המילים ומתרגלים עד היום עצמו. מילה שהילד טעה בה חוזרת בסוף, עד שהיא נכונה.
+3. **מתכוננים למבחן:** בכל מקצוע, מדביקים את המילים ומתרגלים עד היום עצמו. מילה שהילד טעה בה חוזרת בסוף, עד שהיא נכונה.
+
+**ולמי שלומד אנגלית:** שיעורים צעד אחר צעד, ומילים מוכנות לפי נושאים מתוכנית משרד החינוך ליסודי ולחטיבת הביניים.
 
 ## ואתם יודעים מה קרה
 כשהילד מסיים הכתבה, שיעור או משחק, מגיעה אליכם הודעה. אפשר לבחור מיד או בסיכום יומי, ועל מה לקבל הודעה, ב[הגדרות של לוח ההורים](/family?tab=settings).
@@ -585,9 +587,11 @@ Many children come home with a word list for a dictation, a workbook page or a p
 Photograph the page, upload a picture or paste a list. Mark whether it's a word list, a text to read or workbook pages, and pick the test day. Your child sees a "To do" card right away and taps "Start".
 
 ## Three areas, for what's needed
-1. **Learning words:** step-by-step English lessons, dictation (including hearing a word and writing it in the same language), and "Listen and pick".
+1. **Learning words:** dictation in your language, in English or any language (hear a word and write it), and "Listen and pick".
 2. **Reading a text:** photograph a passage and tap any word that isn't clear.
-3. **Getting ready for a test:** paste the words and practise until the day. A word your child missed comes back at the end, until it's right.
+3. **Getting ready for a test:** for any subject, paste the words and practise until the day. A word your child missed comes back at the end, until it's right.
+
+**And for children learning English:** step-by-step lessons.
 
 ## And you know what happened
 When your child finishes a dictation, a lesson or a game, you get a message. Choose right away or one daily summary, and what to hear about, in the [parent board settings](/family?tab=settings).

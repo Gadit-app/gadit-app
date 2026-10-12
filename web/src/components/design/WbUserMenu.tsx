@@ -147,6 +147,9 @@ function tierStyle(
 
 import { FamilyProfileSwitcher, prefetchSwitchMembers } from "./FamilyProfileSwitcher";
 
+/** "My students" for a coach (Gadi 2026-10-12): /coach was linked from nowhere. */
+const COACH_LINK: Record<string, string> = {"en": "My students", "he": "התלמידים שלי", "ar": "طلابي", "ru": "Мои ученики", "es": "Mis alumnos", "pt": "Meus alunos", "fr": "Mes élèves", "de": "Meine Schüler", "cs": "Moji žáci", "sk": "Moji žiaci", "it": "I miei studenti", "ja": "私の生徒", "hi": "मेरे छात्र", "am": "የእኔ ተማሪዎች", "uk": "Мої учні", "tr": "Öğrencilerim", "pl": "Moi uczniowie", "fa": "شاگردان من", "id": "Murid saya", "nl": "Mijn leerlingen", "el": "Οι μαθητές μου", "zu": "Abafundi bami", "vi": "Học sinh của tôi", "fil": "Aking mga estudyante", "af": "My leerders", "sw": "Wanafunzi wangu", "zh-CN": "我的学生", "zh-TW": "我的學生", "ko": "내 학생", "th": "นักเรียนของฉัน", "bn": "আমার শিক্ষার্থীরা", "da": "Mine elever", "hu": "Tanítványaim"};
+
 export function WbUserMenu() {
   const { user, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout, isIndividual } = useAuth();
   const { lang, dir } = useLang();
@@ -154,6 +157,21 @@ export function WbUserMenu() {
   const router = useRouter();
   const href = useHref();
   const [open, setOpen] = useState(false);
+  // A coach (anyone a parent added by email) sees "My students" in the
+  // menu. Checked once per visit, the first time the menu opens.
+  const [coachN, setCoachN] = useState<number>(() => { try { return Number(sessionStorage.getItem("gadit-coach-n") ?? "0") || 0; } catch { return 0; } });
+  useEffect(() => {
+    if (!open || !user || familyRole === "kid") return;
+    try { if (sessionStorage.getItem("gadit-coach-n") !== null) return; } catch { /* check */ }
+    void (async () => {
+      try {
+        const r = await fetch("/api/coach/students", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const n = r.ok ? ((await r.json()).students ?? []).length : 0;
+        setCoachN(n);
+        try { sessionStorage.setItem("gadit-coach-n", String(n)); } catch { /* this visit */ }
+      } catch { /* no link */ }
+    })();
+  }, [open, user, familyRole]);
 
   // Warm the family-switcher cache as soon as we know there's a family, so the
   // menu opens with the members already in place instead of popping them in.
@@ -428,6 +446,18 @@ export function WbUserMenu() {
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {c.family}
+            </Link>
+          )}
+          {coachN > 0 && (
+            <Link
+              role="menuitem"
+              href={href("/coach")}
+              onClick={() => setOpen(false)}
+              style={{ display: "block", padding: "10px 12px", borderRadius: 8, color: "var(--ink, #111827)", textDecoration: "none", fontSize: 14, fontWeight: 500 }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {COACH_LINK[lang] ?? COACH_LINK.en}
             </Link>
           )}
           {/* My school menu item appears only for owners of a Schools

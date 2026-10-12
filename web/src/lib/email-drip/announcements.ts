@@ -39,10 +39,11 @@ export const ANNOUNCEMENTS: Announcement[] = [
 הילד רואה מיד כרטיס "מה צריך להכין", ולוחץ "מתחילים".
 
 ## מה יש בפנים
-1. **לומדים מילים:** שיעורי אנגלית צעד אחר צעד, הכתבה (גם לשמוע מילה בעברית ולכתוב אותה בעברית), והתרגול החדש "הקשיבו ובחרו".
-2. **רשימות משרד החינוך באנגלית:** כל המילים של Band I ו-Band II, מסודרות לפי נושאים.
-3. **קוראים טקסט:** מצלמים קטע קריאה, ולוחצים על כל מילה שלא ברורה.
-4. **מתכוננים למבחן:** מדביקים את המילים ומתרגלים עד היום עצמו.
+1. **לומדים מילים:** הכתבה בעברית, באנגלית ובכל שפה (שומעים מילה וכותבים אותה), והתרגול החדש "הקשיבו ובחרו".
+2. **קוראים טקסט:** מצלמים קטע קריאה, ולוחצים על כל מילה שלא ברורה.
+3. **מתכוננים למבחן:** בכל מקצוע, מדביקים את המילים ומתרגלים עד היום עצמו.
+
+**ולמי שלומד אנגלית:** שיעורים צעד אחר צעד, ומילים מוכנות לפי נושאים מתוכנית משרד החינוך ליסודי ולחטיבת הביניים.
 
 ## ואתם יודעים מה קרה
 כשהילד מסיים הכתבה, שיעור או משחק, ואפילו דו-קרב בין האחים, מגיעה אליכם הודעה עם התוצאה.
@@ -62,9 +63,11 @@ Mark whether it's a word list, a text to read or workbook pages, and pick the te
 Your child sees a "To do" card right away and taps "Start".
 
 ## What's inside
-1. **Learning words:** step-by-step English lessons, dictation (including hearing a word and writing it in the same language), and the new "Listen and pick".
+1. **Learning words:** dictation in your language, in English or any language (hear a word and write it), and the new "Listen and pick".
 2. **Reading a text:** photograph a passage and tap any word that isn't clear.
-3. **Getting ready for a test:** paste the words and practise until the day.
+3. **Getting ready for a test:** for any subject, paste the words and practise until the day.
+
+**And for children learning English:** step-by-step lessons.
 
 ## And you know what happened
 When your child finishes a dictation, a lesson or a game, even a duel between siblings, you get a message with the result.

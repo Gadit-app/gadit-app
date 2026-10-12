@@ -1,5 +1,6 @@
 "use client";
 
+import { Testimonials, SCHOOL_TESTIMONIALS_HE } from "@/components/design/Testimonials";
 import Image from "next/image";
 import Link from "next/link";
 import { Lines } from "../families/RealScreens";
@@ -291,7 +292,14 @@ export function SchoolsRealLanding() {
           </div>
         </section>
 
+        {/* Real words from a teacher (Gadi 2026-10-12). */}
         <section className="sch-band sch-white">
+          <div className="sch-narrow">
+            <Testimonials kicker="מהכיתה" title="מה מספרת המורה" items={SCHOOL_TESTIMONIALS_HE} />
+          </div>
+        </section>
+
+        <section className="sch-band sch-tint">
           <div className="sch-narrow">
             <div className="sch-kicker">{C.pilotKicker}</div>
             <h2 className="sch-h2 sch-center">{C.pilotTitle}</h2>
@@ -302,7 +310,7 @@ export function SchoolsRealLanding() {
           </div>
         </section>
 
-        <section className="sch-band sch-tint" id="pricing">
+        <section className="sch-band sch-white" id="pricing">
           <div className="sch-kicker">{C.priceKicker}</div>
           <h2 className="sch-h2 sch-center">{C.priceTitle}</h2>
           <p className="sch-body sch-center sch-narrow"><Lines text={C.priceSub} /></p>
@@ -327,7 +335,7 @@ export function SchoolsRealLanding() {
           <p className="sch-larger"><Lines text={C.larger} /></p>
         </section>
 
-        <section className="sch-band sch-white" id="order">
+        <section className="sch-band sch-tint" id="order">
           <div className="sch-order">
             <h2 className="sch-h2 sch-center">{C.orderTitle}</h2>
             <p className="sch-body sch-center">{C.orderSub}</p>
@@ -335,7 +343,7 @@ export function SchoolsRealLanding() {
           </div>
         </section>
 
-        <section className="sch-band sch-tint">
+        <section className="sch-band sch-white">
           <div className="sch-narrow">
             <div className="sch-kicker">{C.faqKicker}</div>
             <h2 className="sch-h2 sch-center">{C.faqTitle}</h2>

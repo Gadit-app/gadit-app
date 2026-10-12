@@ -15033,3 +15033,14 @@ html[data-theme="dark"] .wb-learn-simple-link, html[data-theme="dark"] .wb-dict-
 .wb-pick-opt.is-wrong { border-color: #DC2626; background: #FEF2F2; color: #7F1D1D; }
 .wb-pick-ok { font-size: 17px; font-weight: 800; color: #0A7472; }
 .wb-pick .wb-learn-simple-go { max-width: 420px; }
+
+/* Testimonials on the landing pages (Gadi 2026-10-12): real words, quiet cards. */
+.gt-quotes { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.gt-quotes-kicker { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: #0A7472; }
+.gt-quotes-title { margin: 0 0 12px; font-size: clamp(24px, 4vw, 32px); font-weight: 800; color: #1C1917; text-align: center; text-wrap: balance; }
+.gt-quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; width: 100%; max-width: 920px; }
+.gt-quote { margin: 0; display: flex; flex-direction: column; gap: 14px; background: #fff; border: 1px solid #E7E5E4; border-radius: 18px; padding: 22px 22px 18px; box-shadow: 0 8px 24px -18px rgba(28, 25, 23, .35); }
+.gt-quote blockquote { margin: 0; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.65; color: #292524; }
+.gt-quote blockquote p { margin: 0; }
+.gt-quote blockquote p:first-child::before { content: "\201D"; display: block; font-size: 44px; line-height: .7; color: #0EA5A5; font-family: Georgia, serif; margin-bottom: 6px; }
+.gt-quote figcaption { font-size: 14px; font-weight: 700; color: #0A7472; }

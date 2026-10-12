@@ -1,5 +1,6 @@
 "use client";
 
+import { Testimonials, FAMILY_TESTIMONIALS_HE } from "@/components/design/Testimonials";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
 import { REAL_COPY, REAL_CSS, PhoneShot, Lines } from "./RealScreens";
@@ -7134,6 +7135,15 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             <p className="fam-body fam-body-center">{real ? <Lines text={c.credBody} /> : c.credBody}</p>
           </div>
         </section>
+
+        {/* 8.6 · Real words from families (Gadi 2026-10-12), Hebrew page. */}
+        {lang === "he" && (
+          <section className="fam-band fam-band-white">
+            <div className="fam-section">
+              <Testimonials kicker="מהשטח" title="מה מספרות המשפחות" items={FAMILY_TESTIMONIALS_HE} />
+            </div>
+          </section>
+        )}
 
         {/* 9 · Pricing */}
         <section className="fam-band fam-band-white" id="fam-pricing">

@@ -6,7 +6,8 @@
  * Auth: Firebase ID token; the caller must OWN the family (owner uid = familyId).
  */
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { sendCoachInvite } from "@/lib/coach-invite-email";
 import { resolveOwner, bearer, type CoachGrant } from "@/lib/coach";
 
 export const runtime = "nodejs";
@@ -30,9 +31,10 @@ export async function POST(req: NextRequest) {
   const ctx = await resolveOwner(bearer(req));
   if (!ctx) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
-  let coachEmail = "", memberId = "";
+  let coachEmail = "", memberId = "", lang = "en";
   try {
-    const b = (await req.json()) as { coachEmail?: string; memberId?: string };
+    const b = (await req.json()) as { coachEmail?: string; memberId?: string; lang?: string };
+    if (typeof b.lang === "string") lang = b.lang.slice(0, 8);
     coachEmail = (b.coachEmail ?? "").toLowerCase().trim();
     memberId = (b.memberId ?? "").trim();
   } catch {
@@ -74,5 +76,11 @@ export async function POST(req: NextRequest) {
     revoked: false,
   };
   const ref = await db.collection("coachGrants").add(data);
+  // Tell the coach (Gadi 2026-10-12): who added them, which child, and a
+  // button to /coach. Best-effort; the grant stands either way.
+  try {
+    const parent = await getAdminAuth().getUser(ctx.familyId).catch(() => null);
+    await sendCoachInvite({ to: coachEmail, parentName: parent?.displayName ?? "", childName: data.memberName, lang });
+  } catch { /* the coach can still sign in at /coach */ }
   return NextResponse.json({ grant: { id: ref.id, ...data } });
 }

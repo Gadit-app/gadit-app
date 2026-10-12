@@ -123,7 +123,7 @@ export function CoachesSection() {
       const res = await fetch("/api/family/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ coachEmail: e, memberId }),
+        body: JSON.stringify({ coachEmail: e, memberId, lang }),
       });
       if (!res.ok) throw new Error();
       setEmail(""); setMemberId("");
@@ -174,7 +174,7 @@ export function CoachesSection() {
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
         <input
           type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          placeholder={c.emailPh} style={{ ...inputStyle, flexBasis: 220 }} dir="ltr"
+          placeholder={c.emailPh} style={{ ...inputStyle, flexBasis: 220, textAlign: "start" }} dir={dir}
         />
         <select value={memberId} onChange={(e) => setMemberId(e.target.value)} style={{ ...inputStyle, flexBasis: 150 }}>
           <option value="">{c.childPh}</option>

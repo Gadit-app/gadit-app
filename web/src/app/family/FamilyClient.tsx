@@ -1685,6 +1685,43 @@ function NavIcon({ name }: { name: FamTab | "dictionary" }) {
   return (<svg {...p}><path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z" /><path d="M9 3v18" /></svg>);
 }
 
+/** A prominent first step when no child is connected yet (Gadi 2026-10-12). */
+const CONNECT_CARD: Record<string, [string, string, string]> = {
+  en: ["You haven't connected a child yet", "It takes a minute, and from then on you'll see every word your child learns right here.", "Connect your child"],
+  he: ["עוד לא חיברתם ילד", "זה לוקח דקה, ומהרגע הזה תראו כאן כל מילה שהילד לומד.", "חברו את הילד"],
+  ar: ["لم تربطوا طفلًا بعد", "يستغرق ذلك دقيقة، ومن بعدها سترون هنا كل كلمة يتعلمها طفلكم.", "اربطوا طفلكم"],
+  ru: ["Вы ещё не подключили ребёнка", "Это займёт минуту, и потом вы будете видеть здесь каждое слово, которое учит ребёнок.", "Подключить ребёнка"],
+  es: ["Todavía no has conectado a un niño", "Lleva un minuto, y desde entonces verás aquí cada palabra que aprende tu hijo.", "Conectar a tu hijo"],
+  pt: ["Você ainda não conectou uma criança", "Leva um minuto, e a partir daí você verá aqui cada palavra que seu filho aprende.", "Conectar seu filho"],
+  fr: ["Vous n'avez pas encore connecté d'enfant", "Cela prend une minute, et ensuite vous verrez ici chaque mot appris par votre enfant.", "Connecter votre enfant"],
+  de: ["Ihr habt noch kein Kind verbunden", "Das dauert eine Minute, und danach seht ihr hier jedes Wort, das euer Kind lernt.", "Kind verbinden"],
+  cs: ["Zatím jste nepřipojili dítě", "Zabere to minutu a pak tady uvidíte každé slovo, které se dítě naučí.", "Připojit dítě"],
+  sk: ["Zatiaľ ste nepripojili dieťa", "Zaberie to minútu a potom tu uvidíte každé slovo, ktoré sa dieťa naučí.", "Pripojiť dieťa"],
+  it: ["Non hai ancora collegato un bambino", "Ci vuole un minuto, e da lì vedrai qui ogni parola che tuo figlio impara.", "Collega tuo figlio"],
+  ja: ["まだお子さんがつながっていません", "1分で終わります。その後はお子さんが覚えた単語をここで見られます。", "お子さんをつなぐ"],
+  hi: ["आपने अभी तक बच्चे को नहीं जोड़ा है", "इसमें एक मिनट लगता है, फिर आप यहाँ बच्चे का सीखा हर शब्द देखेंगे।", "बच्चे को जोड़ें"],
+  am: ["እስካሁን ልጅ አላገናኛችሁም", "አንድ ደቂቃ ይወስዳል፣ ከዚያ ልጁ የሚማረውን እያንዳንዱን ቃል እዚህ ታያላችሁ።", "ልጁን አገናኙ"],
+  uk: ["Ви ще не під'єднали дитину", "Це займе хвилину, і потім ви бачитимете тут кожне слово, яке вивчає дитина.", "Під'єднати дитину"],
+  tr: ["Henüz bir çocuk bağlamadınız", "Bir dakika sürer, sonra çocuğunuzun öğrendiği her kelimeyi burada görürsünüz.", "Çocuğunuzu bağlayın"],
+  pl: ["Nie połączyliście jeszcze dziecka", "To zajmie minutę, a potem zobaczycie tu każde słowo, którego uczy się dziecko.", "Połącz dziecko"],
+  fa: ["هنوز کودکی را وصل نکرده‌اید", "یک دقیقه طول می‌کشد و از آن به بعد هر کلمه‌ای را که کودک یاد می‌گیرد اینجا می‌بینید.", "کودک را وصل کنید"],
+  id: ["Anda belum menghubungkan anak", "Hanya satu menit, lalu Anda akan melihat setiap kata yang dipelajari anak di sini.", "Hubungkan anak"],
+  nl: ["Je hebt nog geen kind gekoppeld", "Het duurt een minuut, en daarna zie je hier elk woord dat je kind leert.", "Kind koppelen"],
+  el: ["Δεν έχετε συνδέσει ακόμα παιδί", "Παίρνει ένα λεπτό, και μετά θα βλέπετε εδώ κάθε λέξη που μαθαίνει το παιδί.", "Σύνδεση παιδιού"],
+  zu: ["Anikayixhumi ingane okwamanje", "Kuthatha umzuzu, bese nibona lapha wonke amagama ingane ewafundayo.", "Xhumani ingane"],
+  vi: ["Bạn chưa kết nối con", "Chỉ mất một phút, sau đó bạn sẽ thấy ở đây mọi từ con học.", "Kết nối con"],
+  fil: ["Hindi ka pa nakakakonekta ng bata", "Isang minuto lang, at mula noon makikita mo rito ang bawat salitang natututunan ng anak mo.", "Ikonekta ang anak mo"],
+  af: ["Julle het nog nie 'n kind gekoppel nie", "Dit neem 'n minuut, en daarna sien julle hier elke woord wat julle kind leer.", "Koppel julle kind"],
+  sw: ["Bado hamjamuunganisha mtoto", "Inachukua dakika moja, kisha mtaona hapa kila neno mtoto analojifunza.", "Unganisheni mtoto"],
+  "zh-CN": ["您还没有连接孩子", "只需一分钟，之后您就能在这里看到孩子学的每个词。", "连接孩子"],
+  "zh-TW": ["您還沒有連接孩子", "只需一分鐘，之後您就能在這裡看到孩子學的每個詞。", "連接孩子"],
+  ko: ["아직 아이를 연결하지 않았어요", "1분이면 돼요. 그다음부터 아이가 배우는 모든 단어를 여기서 볼 수 있어요.", "아이 연결하기"],
+  th: ["คุณยังไม่ได้เชื่อมต่อลูก", "ใช้เวลาแค่นาทีเดียว หลังจากนั้นคุณจะเห็นทุกคำที่ลูกเรียนที่นี่", "เชื่อมต่อลูก"],
+  bn: ["আপনি এখনও সন্তানকে যুক্ত করেননি", "এক মিনিট লাগে, তারপর থেকে সন্তান যে শব্দই শিখুক, এখানে দেখতে পাবেন।", "সন্তানকে যুক্ত করুন"],
+  da: ["I har ikke forbundet et barn endnu", "Det tager et minut, og derefter ser I her hvert ord, jeres barn lærer.", "Forbind jeres barn"],
+  hu: ["Még nem kapcsoltatok gyereket", "Egy perc az egész, utána itt láthatjátok minden szót, amit a gyerek tanul.", "Gyerek kapcsolása"],
+};
+
 export function FamilyClient() {
   const { user, loading, setShowLoginModal } = useAuth();
   const { lang, dir, setLang, t: ui } = useLang();
@@ -2105,6 +2142,15 @@ export function FamilyClient() {
 
           {tab === "home" && (
             <div className="fam-tab">
+              {/* No child yet: one clear first step on top (Gadi 2026-10-12:
+                  14 of 18 idle paying families had never connected a child). */}
+              {children.length === 0 && (
+                <div className="fam-connect-card">
+                  <b>{(CONNECT_CARD[lang] ?? CONNECT_CARD.en)[0]}</b>
+                  <span>{(CONNECT_CARD[lang] ?? CONNECT_CARD.en)[1]}</span>
+                  <Link href={href("/family/add")} className="fam-connect-go">{(CONNECT_CARD[lang] ?? CONNECT_CARD.en)[2]}</Link>
+                </div>
+              )}
               {/* First-steps checklist — hides itself once the family is
                   set up or the owner dismisses it. */}
               <FamilySetupChecklist members={members} lang={lang} />
