@@ -10,6 +10,7 @@
  * Pass `onClose` to show a close (X) button (modal use).
  */
 
+import { SAY_NAV } from "@/components/design/WbShellChrome";
 import { toLocalDateStr } from "@/lib/gamification";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
@@ -168,7 +169,8 @@ function scoreStars(target: string, spoken: string): { stars: number; tier: "cor
 /** The tool's title and subtitle, for the page frame that shows them. */
 export function sayHeading(lang: Lang): { title: string; sub: string } {
   const t = copy(lang);
-  return { title: t.title, sub: t.sub };
+  // The title is the menu's name, "Say it" (Gadi 2026-10-12: it is our slogan).
+  return { title: SAY_NAV[lang] ?? SAY_NAV.en ?? t.title, sub: t.sub };
 }
 
 /** `framed`: inside the shared tool frame, which shows the title itself. */
@@ -308,7 +310,10 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
           <a href={href("/pricing")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.paidCta}</a>
         </div>
       ) : (
-        <>
+        <div className="wb-say-card">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="wb-say-cover" src="/play/say.webp" alt="" width={720} height={480} />
+          <div className="wb-say-body">
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
             <label style={{ flex: "1 1 180px", fontSize: 13, fontWeight: 600, opacity: 0.75 }}>
               {t.from}
@@ -345,18 +350,14 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={submit}
-            disabled={busy || !text.trim()}
-            style={{
-              marginTop: 14, width: "100%", background: busy || !text.trim() ? "#9CA3AF" : "#0EA5A5",
-              color: "#fff", fontWeight: 700, fontSize: 17, padding: "14px", borderRadius: 999,
-              border: "none", cursor: busy || !text.trim() ? "default" : "pointer",
-            }}
-          >
+          <button type="button" className="wb-say-go" onClick={submit} disabled={busy || !text.trim()}>
             {busy ? t.loading : t.button}
           </button>
+          </div>
+        </div>
+      )}
+      {user && paid && (
+        <>
 
           {error && <div style={{ marginTop: 16, color: "#DC2626", fontSize: 15 }}>{error}</div>}
 

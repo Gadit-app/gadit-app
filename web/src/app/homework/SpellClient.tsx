@@ -962,21 +962,21 @@ export function SpellClient() {
             <input ref={camRef} type="file" accept="image/*" capture="environment" hidden onChange={takeFiles} />
             {/* Order (Gadi 2026-10-12): learn the words, read, then get ready for the test. */}
             <div className="wb-hw-grid">
-              <button type="button" className="wb-hw-card" onClick={() => setHw("learn")}>
-                <span className="wb-hw-card-i" aria-hidden>🌍</span>
-                <span className="wb-hw-card-t">{hc.learn}</span>
-                <span className="wb-hw-card-d">{hc.learnD}</span>
+              <button type="button" className="wb-play-card has-cover wb-play-cat-notebook" onClick={() => setHw("learn")}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-card-cover" src="/play/hw-learn.webp" alt="" width={720} height={480} />
+                <span className="wb-play-card-text"><span className="wb-play-card-title">{hc.learn}</span><span className="wb-play-card-desc">{hc.learnD}</span></span>
               </button>
               {/* Every Word inside Homework: the reader keeps a way back. */}
-              <Link href={href("/read?from=homework")} className="wb-hw-card">
-                <span className="wb-hw-card-i" aria-hidden>📖</span>
-                <span className="wb-hw-card-t">{hc.read}</span>
-                <span className="wb-hw-card-d">{hc.readD}</span>
+              <Link href={href("/read?from=homework")} className="wb-play-card has-cover wb-play-cat-precision">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-card-cover" src="/play/hw-read.webp" alt="" width={720} height={480} />
+                <span className="wb-play-card-text"><span className="wb-play-card-title">{hc.read}</span><span className="wb-play-card-desc">{hc.readD}</span></span>
               </Link>
-              <button type="button" className="wb-hw-card" onClick={() => setHw("test")}>
-                <span className="wb-hw-card-i" aria-hidden>📝</span>
-                <span className="wb-hw-card-t">{hc.test}</span>
-                <span className="wb-hw-card-d">{hc.testD}</span>
+              <button type="button" className="wb-play-card has-cover wb-play-cat-origin" onClick={() => setHw("test")}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-card-cover" src="/play/hw-test.webp" alt="" width={720} height={480} />
+                <span className="wb-play-card-text"><span className="wb-play-card-title">{hc.test}</span><span className="wb-play-card-desc">{hc.testD}</span></span>
               </button>
             </div>
           </div>
@@ -1046,8 +1046,9 @@ export function SpellClient() {
             <style>{LEARN_CSS}</style>
             <LearnCard simple lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}&from=learn`))} />
             <section className="wb-learn-simple" dir={dir}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="wb-learn-simple-cover" src="/play/hw-dict.webp" alt="" width={720} height={480} />
               <div className="wb-learn-simple-head">
-                <span className="wb-learn-simple-icon" aria-hidden="true">✏️</span>
                 <div className="wb-learn-text">
                   <b>{dc.name}</b>
                   <span>{dc.sub}</span>
@@ -1059,8 +1060,9 @@ export function SpellClient() {
               )}
             </section>
             <section className="wb-learn-simple" dir={dir}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="wb-learn-simple-cover" src="/play/hw-pick.webp" alt="" width={720} height={480} />
               <div className="wb-learn-simple-head">
-                <span className="wb-learn-simple-icon" aria-hidden="true">👂</span>
                 <div className="wb-learn-text">
                   <b>{dc.pickName}</b>
                   <span>{dc.pickSub}</span>

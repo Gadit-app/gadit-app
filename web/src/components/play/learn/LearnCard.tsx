@@ -244,8 +244,9 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: 
     const started = !!L?.list.some((l) => l.done);
     return (
       <section className="wb-learn-simple" dir={dir}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="wb-learn-simple-cover" src="/play/hw-lessons.webp" alt="" width={720} height={480} />
         <div className="wb-learn-simple-head">
-          <span className="wb-learn-simple-icon" aria-hidden="true">📖</span>
           <div className="wb-learn-text">
             <b>{t.learning(name(state.lang))}{state.lang === "he" ? <small className="wb-learn-beta">{t.beta}</small> : null}</b>
             <span>{t.simpleSub}</span>

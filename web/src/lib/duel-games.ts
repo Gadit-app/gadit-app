@@ -7,7 +7,10 @@
  * Games that need another mechanic (memory, anagram, build-a-word, root
  * rush, shade slider) and the self-checked flashcards are not here.
  */
-import { buildFillBlankQuestions, buildQuizQuestions, buildTrueFalseRounds, type GameId, type PlayWord } from "@/lib/play-engine";
+import { buildAnagramRounds, buildFillBlankQuestions, buildQuizQuestions, buildTrueFalseRounds, sample, type GameId, type PlayWord } from "@/lib/play-engine";
+import { pickBuildAWordRounds } from "@/lib/play-content/build-a-word";
+import { pickRootRushRounds } from "@/lib/play-content/root-rush";
+import { pickShadeSliderRounds } from "@/lib/play-content/shade-slider";
 import { DUEL_ROUNDS, shuffleDuel, type DuelQuestion } from "@/lib/duel";
 import { pickTwinTrapRounds } from "@/lib/play-content/twin-trap";
 import { pickTimeTravelerRounds } from "@/lib/play-content/time-traveler";
@@ -20,7 +23,47 @@ import { pickEtymologyArtistRounds } from "@/lib/play-content/etymology-artist";
 export const DUEL_GAMES: ReadonlySet<GameId> = new Set<GameId>([
   "quiz", "truefalse", "fillblank", "speed",
   "twin", "time", "passport", "friends", "idiom", "lens", "artist",
+  // Every game (Gadi 2026-10-12): the other six as one question with options.
+  "flashcards", "memory", "anagram", "build", "root", "shade",
 ]);
+
+/** The question line for root rush and shade slider in a duel (Gadi 2026-10-12). */
+const DUEL_Q: Record<string, [string, string]> = {
+  en: ["Which word comes from this root?", "Which one is the strongest?"],
+  he: ["איזו מילה באה מהשורש הזה?", "איזו מילה הכי חזקה?"],
+  ar: ["أي كلمة تأتي من هذا الجذر؟", "أي كلمة هي الأقوى؟"],
+  ru: ["Какое слово от этого корня?", "Какое слово самое сильное?"],
+  es: ["¿Qué palabra viene de esta raíz?", "¿Cuál es la más fuerte?"],
+  pt: ["Qual palavra vem desta raiz?", "Qual é a mais forte?"],
+  fr: ["Quel mot vient de cette racine ?", "Lequel est le plus fort ?"],
+  de: ["Welches Wort kommt von dieser Wurzel?", "Welches ist das stärkste?"],
+  cs: ["Které slovo pochází z tohoto kořene?", "Které je nejsilnější?"],
+  sk: ["Ktoré slovo pochádza z tohto koreňa?", "Ktoré je najsilnejšie?"],
+  it: ["Quale parola viene da questa radice?", "Qual è la più forte?"],
+  ja: ["この語根から来たことばはどれ？", "いちばん強いのはどれ？"],
+  hi: ["कौन-सा शब्द इस मूल से बना है?", "सबसे तेज़ कौन-सा है?"],
+  am: ["ከዚህ ሥር የመጣው የትኛው ቃል ነው?", "በጣም ጠንካራው የትኛው ነው?"],
+  uk: ["Яке слово від цього кореня?", "Яке слово найсильніше?"],
+  tr: ["Hangi kelime bu kökten geliyor?", "En güçlüsü hangisi?"],
+  pl: ["Które słowo pochodzi od tego rdzenia?", "Które jest najmocniejsze?"],
+  fa: ["کدام کلمه از این ریشه است؟", "کدام از همه قوی‌تر است؟"],
+  id: ["Kata mana yang berasal dari akar ini?", "Mana yang paling kuat?"],
+  nl: ["Welk woord komt van deze stam?", "Welke is het sterkst?"],
+  el: ["Ποια λέξη βγαίνει από αυτή τη ρίζα;", "Ποια είναι η πιο δυνατή;"],
+  zu: ["Yiliphi igama elivela kulo mpande?", "Yiliphi elinamandla kakhulu?"],
+  vi: ["Từ nào đến từ gốc này?", "Từ nào mạnh nhất?"],
+  fil: ["Aling salita ang galing sa ugat na ito?", "Alin ang pinakamatindi?"],
+  af: ["Watter woord kom van hierdie stam?", "Watter een is die sterkste?"],
+  sw: ["Neno lipi linatokana na mzizi huu?", "Lipi lina nguvu zaidi?"],
+  "zh-CN": ["哪个词来自这个词根？", "哪个最强烈？"],
+  "zh-TW": ["哪個詞來自這個詞根？", "哪個最強烈？"],
+  ko: ["이 어근에서 온 단어는?", "가장 강한 것은?"],
+  th: ["คำไหนมาจากรากคำนี้?", "คำไหนแรงที่สุด?"],
+  bn: ["কোন শব্দটি এই মূল থেকে এসেছে?", "কোনটি সবচেয়ে জোরালো?"],
+  da: ["Hvilket ord kommer fra denne rod?", "Hvilket er det stærkeste?"],
+  hu: ["Melyik szó ebből a tőből jön?", "Melyik a legerősebb?"],
+};
+
 
 /** Shuffle the options of a question and keep the right answer right. */
 function mix(prompt: string, options: readonly string[], correctIdx: number): DuelQuestion {
@@ -39,6 +82,8 @@ export function duelQuestionsFor(
   switch (game) {
     case "quiz":
     case "speed":
+    case "flashcards":
+    case "memory":
       qs = buildQuizQuestions(pool, n).map((q) => ({ prompt: q.prompt, options: q.options, correctIdx: q.correctIdx }));
       break;
     case "truefalse":
@@ -75,6 +120,39 @@ export function duelQuestionsFor(
     case "artist":
       qs = pickEtymologyArtistRounds(n, lang, kids).rounds.map((r) => mix(`${r.literal}\n(${r.origin})`, r.options, r.correctIdx));
       break;
+    case "anagram": {
+      // The scrambled letters; pick the word they make.
+      const rounds = buildAnagramRounds(pool, n);
+      const words = pool.map((p) => p.word);
+      qs = rounds.flatMap((r) => {
+        const right = r.word.word;
+        const others = sample(words.filter((w) => w !== right), 3);
+        return others.length < 1 ? [] : [mix(r.scrambled.join(" "), [right, ...others], 0)];
+      });
+      break;
+    }
+    case "build": {
+      // The clue; pick the word it describes.
+      const { rounds } = pickBuildAWordRounds(n + 3, lang);
+      const targets = rounds.map((r) => r.target);
+      qs = rounds.slice(0, n).map((r) => mix(r.clue, [r.target, ...sample(targets.filter((x) => x !== r.target), 3)], 0));
+      break;
+    }
+    case "root": {
+      // The root and its meaning; pick the one word that comes from it.
+      const q = (DUEL_Q[lang] ?? DUEL_Q.en)[0];
+      qs = pickRootRushRounds(n, lang).rounds.map((r) => mix(`${r.root} (${r.meaning})\n${q}`, [r.correct[0], ...r.distractors], 0));
+      break;
+    }
+    case "shade": {
+      // Four words from the same ladder; pick the strongest.
+      const q = (DUEL_Q[lang] ?? DUEL_Q.en)[1];
+      qs = pickShadeSliderRounds(n, lang).rounds.map((r) => {
+        const lower = sample(r.ladder.slice(0, 4), 3);
+        return mix(`${r.axis}\n${q}`, [r.ladder[4], ...lower], 0);
+      });
+      break;
+    }
     default:
       return null;
   }

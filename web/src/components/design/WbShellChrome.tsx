@@ -175,7 +175,7 @@ const INDIVIDUALS_LABEL: Record<string, string> = {
 // "Say it" nav label — the pronunciation-practice tool (/say). Local map
 // like the others so a new tool doesn't force a full i18n sweep;
 // en fallback for the rest. (Gadi 2026-08-18)
-const SAY_NAV: Record<string, string> = {
+export const SAY_NAV: Record<string, string> = {
   en: "Say it", he: "תגיד את זה", ar: "قلها", ru: "Скажи это",
   es: "Dilo", pt: "Diga", fr: "Dis-le", de: "Sag es", cs: "Řekni to",
   sk: "Povedz to", it: "Dillo", nl: "Zeg het", uk: "Скажи це",
