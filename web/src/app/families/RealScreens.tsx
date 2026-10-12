@@ -13,6 +13,9 @@ import Image from "next/image";
 
 export type RealStep = { t: string; b: string; img: string };
 export type RealTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
+/** The Homework showcase (Gadi 2026-10-12): one deep-teal band with the three
+ *  homework paths, in the order the child meets them. */
+export type RealHomework = { kicker: string; title: string; body: string; cards: { icon: string; t: string; b: string }[]; points: string[]; img: string; img2: string };
 export type RealCopy = {
   /** Short proof points under the hero CTA (replace the old trust line + bar). */
   heroPoints: string[];
@@ -33,6 +36,9 @@ export type RealCopy = {
   steps: RealStep[];
   dash: RealTool;
   tools: RealTool[];
+  homework?: RealHomework;
+  /** Games and sibling duels, on a warm band (Gadi 2026-10-12). */
+  games?: RealTool;
   shotAlt: string;
 };
 
@@ -73,7 +79,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
       kicker: "שקיפות מלאה להורה",
       title: "רואים את אוצר המילים גדל מילה אחרי מילה",
       body: "בלוח ההורה רואים את כל הילדים במסך אחד: כמה מילים יש במחברת של כל אחד, כמה נוספו השבוע, רצף הימים והמילים האחרונות שחיפש.",
-      points: ["כל הילדים במבט אחד", "מילים חדשות השבוע", "התראה כשהילד מחפש מילה, מיד או בסיכום יומי, ואפשר לכבות בכל רגע"],
+      points: ["כל הילדים במבט אחד", "מילים חדשות השבוע", "התראה על כל מה שהילד סיים: מילים, משחקים ושיעורי בית", "מיד או בסיכום יומי, ואתם בוחרים על מה"],
       img: "dashboard",
       img2: "alerts",
     },
@@ -87,13 +93,6 @@ export const REAL_COPY: Record<string, RealCopy> = {
         img2: "read-word",
       },
       {
-        kicker: "תרגול הכתבה",
-        title: "מתכוננים להכתבה של בית הספר",
-        body: "מדביקים את רשימת המילים של המורה ו-Gadit מקריא כל מילה בקול. הילד כותב ומקבל תשובה מיד. מילה שטעה בה חוזרת עד שהיא נכונה.",
-        points: ["הקראה בקול, כמו בכיתה", "בדיקה של כתיב מדויק", "הודעה להורה בסיום"],
-        img: "spell-set",
-      },
-      {
         kicker: "תגיד את זה",
         title: "שמעו משפט, ואז אמרו אותו בעצמכם",
         body: "כותבים משפט ובוחרים את השפה שלומדים. Gadit מקריא אותו בקול. הילד אומר אותו בעצמו ומקבל כוכבים על ההגייה.",
@@ -101,6 +100,27 @@ export const REAL_COPY: Record<string, RealCopy> = {
         img: "say",
       },
     ],
+    homework: {
+      kicker: "שיעורי בית",
+      title: "מצלמים את שיעורי הבית, ו-Gadit מכין את הילד",
+      body: "מצלמים, מעלים או מדביקים את דף שיעורי הבית. Gadit מזהה אם זו רשימת מילים, טקסט לקריאה או חומר למבחן. הילד רואה בדיוק מה צריך להכין, ומתחיל בלחיצה.",
+      cards: [
+        { icon: "🌍", t: "לומדים מילים", b: "הכתבה בכל שפה, גם בעברית. משחק \"הקשיבו ובחרו\" לקטנים. שיעורים באנגלית צעד אחר צעד, ונושאים מוכנים ליסודי ולחטיבת הביניים." },
+        { icon: "📖", t: "קוראים טקסט", b: "מצלמים דף מהספר ולוחצים על כל מילה. מילה שלא ברורה מקבלת הסבר ותמונה." },
+        { icon: "📝", t: "מתכוננים למבחן", b: "מבחן או הכתבה? מוסיפים את המילים ומתרגלים עד היום עצמו. מילה שטעו בה חוזרת עד שהיא נכונה." },
+      ],
+      points: ["צילום, העלאה או הדבקה", "מה צריך להכין, בכרטיס אחד", "הודעה להורה כשמסיימים"],
+      img: "homework",
+      img2: "homework-learn",
+    },
+    games: {
+      kicker: "משחקים ודו-קרב",
+      title: "משחקים במילים של הילד, ומתחרים באחים",
+      body: "כל משחק נבנה מהמילים שהילד עצמו חיפש. אפשר לשחק דו-קרב מול אח או אחות, על אותו מכשיר או עם קוד הזמנה. ואתם מקבלים הודעה מי ניצח.",
+      points: ["יעד שבועי ורצף ימים", "דו-קרב בין אחים, או נגד רובוט המילים", "הודעה להורה עם התוצאה"],
+      img: "duel",
+      img2: "play",
+    },
   },
   en: {
     heroPoints: ["Up to 5 children", "A picture for every meaning", "30+ interface languages"],
@@ -352,5 +372,67 @@ export const REAL_CSS = `
   .fam-premium .fam-feature { padding: clamp(28px, 5vh, 60px) 64px; }
   .fam-premium .fam-feature-visual > .fam-phone { max-width: min(270px, 31vh); }
   .fam-premium .fam-real-pair .fam-phone { max-width: min(220px, 27vh); }
+}
+
+/* ── Less white, less repetition (Gadi 2026-10-12: "too white, it repeats
+   itself"). The five steps become one row of compact cards with the phone
+   peeking from the bottom, Homework gets a deep-teal band, games a warm band,
+   testimonials a sand band, and cards get clearer shadows. */
+.fam-premium {
+  --pm-card: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 6px rgba(16,40,60,0.08), 0 30px 64px -22px rgba(16,40,60,0.38);
+}
+.fam-premium .fam-real-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; max-width: 1180px; margin-top: 40px; }
+.fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) {
+  display: flex; flex-direction: column; gap: 18px; grid-template-columns: none;
+  padding: 24px 18px 0; border-radius: 26px; overflow: hidden; min-height: 470px;
+}
+.fam-premium .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
+.fam-premium .fam-real-step-text { padding: 0; }
+.fam-premium .fam-real-step-title { font-size: 18px; margin-bottom: 6px; }
+.fam-premium .fam-real-step-body { font-size: 14.5px; line-height: 1.65; }
+.fam-premium .fam-real-step > .fam-phone { max-width: 190px; width: 100%; margin: auto auto -150px; }
+.fam-premium .fam-real-step-num { width: 30px; height: 30px; font-size: 15px; }
+@media (max-width: 1180px) {
+  .fam-premium .fam-real-steps { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 20px 30px; margin-inline: -20px; scrollbar-width: thin; }
+  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { flex: 0 0 min(78vw, 250px); scroll-snap-align: center; }
+}
+@media (min-width: 880px) {
+  .fam-premium .fam-real-step { padding: 24px 18px 0; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: 190px; }
+}
+
+/* Homework: deep teal, white text, white cards */
+.fam-premium .fam-band-hw { background: radial-gradient(80% 60% at 90% 0%, rgba(94,234,212,0.22) 0%, rgba(94,234,212,0) 60%), linear-gradient(155deg, #0B5F5E 0%, #0B7D7C 55%, #0EA5A5 100%); color: #fff; }
+.fam-hw { max-width: 1140px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 56px; align-items: center; }
+.fam-hw .fam-kicker { color: #99F6E4; text-align: start; }
+.fam-premium .fam-hw .fam-h2 { color: #fff; }
+.fam-premium .fam-hw .fam-body { color: rgba(255,255,255,0.88); }
+.fam-hw-cards { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 12px; }
+.fam-hw-card { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; background: #fff; color: #1E293B; border-radius: 20px; padding: 16px 18px; box-shadow: 0 18px 40px -20px rgba(2,30,30,0.55), 0 2px 6px rgba(2,30,30,0.12); }
+.fam-hw-card-icon { width: 46px; height: 46px; border-radius: 14px; background: #E6F6F5; display: grid; place-items: center; font-size: 22px; }
+.fam-hw-card-num { font-size: 12px; font-weight: 800; color: #0B7D7C; letter-spacing: .04em; }
+.fam-hw-card-t { font-size: 18px; font-weight: 800; margin: 2px 0 4px; }
+.fam-hw-card-b { font-size: 14.5px; line-height: 1.65; color: #475569; margin: 0; }
+.fam-hw .fam-real-points li { color: #fff; }
+.fam-hw .fam-real-points li::before { background: #5EEAD4; }
+.fam-hw .fam-real-pair .fam-phone { box-shadow: 0 34px 70px -20px rgba(0,20,20,0.7), 0 10px 22px rgba(0,20,20,0.3); }
+
+/* Games: warm amber band */
+.fam-premium .fam-band-sun { background: linear-gradient(160deg, #FFF1D6 0%, #FFF8EA 55%, #FFFFFF 100%); }
+.fam-band-sun .fam-kicker { color: #B45309; }
+.fam-band-sun .fam-real-points li::before { background: #F59E0B; }
+.fam-games-mascot { width: 72px; height: 72px; display: block; margin-bottom: 10px; }
+
+/* Testimonials: sand band, three cards in a row */
+.fam-premium .fam-band-sand { background: linear-gradient(180deg, #FBF5EA 0%, #FFFFFF 100%); }
+.fam-band-sand .gt-quotes-grid { align-items: start; max-width: 1040px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+.fam-band-sand .gt-quote { border-color: rgba(180,83,9,0.10); box-shadow: 0 2px 6px rgba(60,40,10,0.06), 0 24px 50px -24px rgba(60,40,10,0.35); }
+.fam-band-sand .fam-section { max-width: 1080px; }
+
+@media (max-width: 760px) {
+  .fam-hw { grid-template-columns: 1fr; gap: 30px; padding: 0 16px; }
+  .fam-hw .fam-h2, .fam-hw .fam-body, .fam-hw .fam-kicker { text-align: center; }
+  .fam-hw .fam-real-points { justify-items: center; }
+  .fam-games-mascot { margin-inline: auto; }
 }
 `;

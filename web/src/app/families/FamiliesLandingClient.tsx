@@ -1276,10 +1276,10 @@ const COPY: Record<string, Copy> = {
       "כל המשמעויות, עם תמונה לכל משמעות",
       "מצב ילדים לקטנים, והסבר מלא לגדולים",
       "מחברת אישית ותרגול חכם לכל ילד",
-      "לוח בקרה להורה",
+      "לוח בקרה להורה, עם התראות על כל מה שהילד סיים",
+      "שיעורי בית: הכתבה בכל שפה, שיעורים והכנה למבחן",
       "צילום דף מהספר ולחיצה על כל מילה",
-      "תרגול הכתבה ו\"תגיד את זה\"",
-      "משחקי מילים וחידונים",
+      "משחקים, ודו-קרב מילים בין אחים",
       "עד 5 ילדים בפרופילים נפרדים",
       "הסבר ב-33 שפות",
     ],
@@ -6959,6 +6959,39 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </div>
         </section>
 
+        {/* Homework showcase (Gadi 2026-10-12): the three paths on one
+             deep-teal band, so the page is not white card after white card. */}
+        {real?.homework && (
+          <section className="fam-band fam-band-hw">
+            <div className="fam-hw">
+              <div>
+                <div className="fam-kicker">{real.homework.kicker}</div>
+                <h2 className="fam-h2 fam-h2-start">{real.homework.title}</h2>
+                <p className="fam-body"><Lines text={real.homework.body} /></p>
+                <ol className="fam-hw-cards">
+                  {real.homework.cards.map((cd, j) => (
+                    <li key={j} className="fam-hw-card">
+                      <span className="fam-hw-card-icon" aria-hidden>{cd.icon}</span>
+                      <div>
+                        <div className="fam-hw-card-num">{j + 1}</div>
+                        <div className="fam-hw-card-t">{cd.t}</div>
+                        <p className="fam-hw-card-b"><Lines text={cd.b} /></p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                <ul className="fam-real-points">
+                  {real.homework.points.map((pt, j) => <li key={j}>{pt}</li>)}
+                </ul>
+              </div>
+              <div className="fam-real-pair">
+                <PhoneShot lang={lang} name={real.homework.img} alt={real.shotAlt} />
+                <PhoneShot lang={lang} name={real.homework.img2} alt={real.shotAlt} />
+              </div>
+            </div>
+          </section>
+        )}
+
         {real && real.tools.map((f, i) => (
           <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
             <div className={`fam-feature ${i % 2 === 1 ? "is-flipped" : ""}`}>
@@ -6985,6 +7018,29 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             </div>
           </section>
         ))}
+
+        {/* Games and sibling duels, on a warm band (Gadi 2026-10-12). */}
+        {real?.games && (
+          <section className="fam-band fam-band-sun">
+            <div className="fam-feature">
+              <div className="fam-feature-text">
+                <Image src="/play/duel-mascot.webp" alt="" width={240} height={240} className="fam-games-mascot" />
+                <div className="fam-kicker">{real.games.kicker}</div>
+                <h2 className="fam-h2 fam-h2-start">{real.games.title}</h2>
+                <p className="fam-body"><Lines text={real.games.body} /></p>
+                <ul className="fam-real-points">
+                  {real.games.points.map((pt, j) => <li key={j}>{pt}</li>)}
+                </ul>
+              </div>
+              <div className="fam-feature-visual">
+                <div className="fam-real-pair">
+                  <PhoneShot lang={lang} name={real.games.img} alt={real.shotAlt} />
+                  {real.games.img2 && <PhoneShot lang={lang} name={real.games.img2} alt={real.shotAlt} />}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* 5 · The parent dashboard (Gadi 2026-07-18): the moat. A mockup
              of the real /family progress view so a parent sees they are
@@ -7138,7 +7194,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
         {/* 8.6 · Real words from families (Gadi 2026-10-12), Hebrew page. */}
         {lang === "he" && (
-          <section className="fam-band fam-band-white">
+          <section className="fam-band fam-band-sand">
             <div className="fam-section">
               <Testimonials kicker="מהשטח" title="מה מספרות המשפחות" items={FAMILY_TESTIMONIALS_HE} />
             </div>
