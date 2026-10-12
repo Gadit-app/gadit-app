@@ -3443,7 +3443,7 @@ export function PlayPage() {
     };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => { void flushLearn(); router.push(href("/spell")); }} />
+        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => { void flushLearn(); router.push(href("/homework")); }} />
       </div>
     );
   }

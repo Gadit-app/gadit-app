@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * /spell — the spelling / dictation trainer. A kid practices ALONE (like "Say
+ * /homework (was /spell) — the spelling / dictation trainer. A kid practices ALONE (like "Say
  * it"): pick a category, pick a direction (Hebrew->English or English->Hebrew),
  * the app reads each word aloud (TTS, like a teacher dictating) and the kid types
  * the answer. Exact spelling only, with letter-level feedback, and it re-quizzes
@@ -516,7 +516,7 @@ export function SpellClient() {
   }, [user]);
   useEffect(() => { void loadHistory(); }, [loadHistory]);
 
-  // Deep link: /spell?set=<id> re-opens a saved set to practice again.
+  // Deep link: /homework?set=<id> re-opens a saved set to practice again.
   useEffect(() => {
     if (!user) return;
     let id = "";

@@ -73,6 +73,9 @@ const nextConfig: NextConfig = {
       { source: "/individuals/landing-new", destination: "/individuals", permanent: true },
       { source: "/:lang/schools/landing-new", destination: "/:lang/schools", permanent: true },
       { source: "/schools/landing-new", destination: "/schools", permanent: true },
+      // Dictation became Homework (Gadi 2026-10-12): the address says so too.
+      { source: "/:lang/spell", destination: "/:lang/homework", permanent: true },
+      { source: "/spell", destination: "/homework", permanent: true },
     ];
   },
   // The session bridge is framed by the other host of the pair (SessionBridge

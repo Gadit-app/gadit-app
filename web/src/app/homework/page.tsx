@@ -3,9 +3,9 @@ import { pageMetadata } from "@/lib/page-titles";
 import { SpellClient } from "./SpellClient";
 
 const BASE_METADATA: Metadata = {
-  title: "Spelling practice, Gadit",
+  title: "Homework, Gadit",
   description:
-    "Practice your school spelling and dictation words. Gadit reads a word aloud and you write it, in Hebrew or English, with instant feedback.",
+    "Tonight's practice in one place: getting ready for a test, dictation, learning languages and reading texts.",
 };
 
 /** Same metadata, with the tab title in the visitor's UI language. */
@@ -13,6 +13,6 @@ export function generateMetadata(): Promise<Metadata> {
   return pageMetadata("spell", BASE_METADATA);
 }
 
-export default function SpellPage() {
+export default function HomeworkPage() {
   return <SpellClient />;
 }

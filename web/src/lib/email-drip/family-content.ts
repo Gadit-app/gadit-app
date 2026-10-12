@@ -58,7 +58,7 @@ export const FAMILY_META: FamilyEmailMeta[] = [
   M("fam2-notebook", "Family · 3 · The notebook and its games", 2, "/notebook"),
   M("fam2-dashboard", "Family · 4 · Parent board and word alerts", 3, "/family"),
   M("fam2-read", "Family · 5 · Every Word (a whole page)", 4, "/read"),
-  M("fam2-spell", "Family · 6 · School dictation practice", 5, "/spell"),
+  M("fam2-spell", "Family · 6 · School dictation practice", 5, "/homework"),
   M("fam2-ranks", "Family · 7 · Ranks, streaks, weekly goal", 6, "/family"),
   M("fam2-context", "Family · 8 · The right meaning from the sentence", 7, "/"),
   M("fam2-say", "Family · 9 · Say it", 8, "/say"),

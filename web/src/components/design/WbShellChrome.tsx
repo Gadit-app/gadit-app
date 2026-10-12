@@ -271,7 +271,7 @@ function useNavLinks(): NavLink[] {
       // homework, the tools for words you meet (reading, then speaking),
       // and the games last, as the reward.
       { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
-      { key: "spell", href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en },
+      { key: "spell", href: href("/homework"), label: SPELL_NAV[lang] ?? SPELL_NAV.en },
       { key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en },
       { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
@@ -295,7 +295,7 @@ function useNavLinks(): NavLink[] {
         { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
         // Homework is for children only (Gadi 2026-10-12): a grown-up sees
         // it only while Kids Mode is on, i.e. a child is at the screen.
-        ...(deep && kidsAccess && kidsMode ? [{ key: "spell" as const, href: href("/spell"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }] : []),
+        ...(deep && kidsAccess && kidsMode ? [{ key: "spell" as const, href: href("/homework"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }] : []),
         ...(deep ? [{ key: "read" as const, href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en }] : []),
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
         ...(deep ? [{ key: "play" as const, href: href("/play"), label: v2(lang, "navPlay") }] : []),

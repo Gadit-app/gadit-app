@@ -11,7 +11,7 @@ import { readKidsMode } from "./use-kids-mode";
 export const GA_ID = "G-28987K226D";
 const DISABLE_KEY = `ga-disable-${GA_ID}`;
 
-const KID_PATH = /^\/(?:[a-z]{2,3}(?:-[A-Z]{2})?\/)?(?:c|kids|spell)(?:\/|$)/;
+const KID_PATH = /^\/(?:[a-z]{2,3}(?:-[A-Z]{2})?\/)?(?:c|kids|spell|homework)(?:\/|$)/;
 export function isKidPath(path: string): boolean {
   return KID_PATH.test(path);
 }

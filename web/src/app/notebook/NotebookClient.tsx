@@ -952,7 +952,7 @@ export function NotebookPage() {
               {dictSets.map((s) => (
                 <li key={s.setId} className="wb-notebook-card wb-dict-card">
                   <Link
-                    href={href(`/spell?set=${encodeURIComponent(s.setId)}`)}
+                    href={href(`/homework?set=${encodeURIComponent(s.setId)}`)}
                     className="wb-notebook-card-link"
                   >
                     <div className="wb-notebook-card-head">

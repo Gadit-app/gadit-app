@@ -43,7 +43,7 @@ export function HomeworkStrip() {
   }, [user, lang, c]);
   if (!c || !title) return null;
   return (
-    <Link href={href("/spell")} className="wb-homework-strip" dir={dir}>
+    <Link href={href("/homework")} className="wb-homework-strip" dir={dir}>
       <ToolIcon id="spell" size={22} />
       <span className="wb-homework-strip-text">{c.tonight(title)}</span>
       <span className="wb-homework-strip-go">{c.go}</span>

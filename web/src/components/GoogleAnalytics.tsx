@@ -15,7 +15,7 @@ import { GA_ID, gaAllowed, setGaDisabled, setGaRoleIsKid, installGaHistoryGuard 
  * Kid-safety carve-out, the same policy as the Meta Pixel: GA never loads and
  * never sends a hit while a child is using Gadit. That means
  *   - kid routes: /c/<CODE> (classroom), /kids (shared-device switcher),
- *     /spell (the kids' dictation trainer), with or without a language prefix;
+ *     /homework (was /spell, the kids' homework), with or without a language prefix;
  *   - a kid session (familyRole === "kid");
  *   - Kids Mode switched on.
  * GA is loaded only once one of those is known NOT to be true (for a
