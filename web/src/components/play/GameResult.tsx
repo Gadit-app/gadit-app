@@ -18,6 +18,7 @@ import { dirForLang } from "@/lib/play-engine";
 import type { PlayT } from "./GameQuiz";
 import { getDuelLauncher } from "@/lib/duel-launch";
 import { getLessonNext } from "@/lib/lesson-flow";
+import { notifyActivity } from "@/lib/notify-activity-client";
 
 export type GameResultData = {
   title: string;
@@ -47,6 +48,9 @@ export function GameResult({
   const { user } = useAuth();
   useEffect(() => {
     recordPlay(user);
+    // The parent hears about every finished game (Gadi 2026-10-12), but
+    // not about each step inside a lesson: the lesson reports once.
+    if (!lessonNext) void notifyActivity(user, { kind: "game", label: data.title, score: data.score, total: data.total });
     // user is intentionally omitted from deps — we only want to record
     // once on mount; if auth pops in mid-result-screen we'd otherwise
     // double-record.

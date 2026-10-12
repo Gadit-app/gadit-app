@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { notifyOwnerDigest } from "@/lib/family-notify";
+import { notifyOwnerDigest, type DigestActivity } from "@/lib/family-notify";
 
 /**
  * Daily digest for families on "daily" notification mode. Runs from a
@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
   let families = 0;
   let digestsSent = 0;
   let searches = 0;
+  let activities = 0;
 
   for (const fam of fams.docs) {
     const prefs = fam.data()?.notifyPrefs as { mode?: string } | undefined;
@@ -46,25 +47,37 @@ export async function GET(req: NextRequest) {
       .collection("kidSearches")
       .where("notified", "==", false)
       .get();
-    if (pending.empty) continue;
+    // Everything finished today too (Gadi 2026-10-12): dictations, lessons,
+    // games, listen and pick, reading a text, Say it.
+    const pendingActs = await fam.ref
+      .collection("kidActivity")
+      .where("notified", "==", false)
+      .get();
+    if (pending.empty && pendingActs.empty) continue;
 
     const items = pending.docs.map((d) => {
       const x = d.data() as { kidName?: string; word?: string };
       return { kidName: x.kidName || "Your child", word: x.word || "" };
     });
+    const acts: DigestActivity[] = pendingActs.docs
+      .map((d) => d.data() as DigestActivity & { at?: string })
+      .sort((a, b) => String(a.at ?? "").localeCompare(String(b.at ?? "")))
+      .map((x) => ({ kidName: x.kidName || "Your child", kind: x.kind, label: x.label || "", score: x.score ?? null, total: x.total ?? null }));
     searches += items.length;
+    activities += acts.length;
 
     if (!dryRun) {
-      await notifyOwnerDigest(fam.id, items);
+      await notifyOwnerDigest(fam.id, items, acts);
       // Mark reported (chunk to stay under the 500-write batch cap).
-      for (let i = 0; i < pending.docs.length; i += 450) {
+      const done = [...pending.docs, ...pendingActs.docs];
+      for (let i = 0; i < done.length; i += 450) {
         const batch = db.batch();
-        for (const d of pending.docs.slice(i, i + 450)) batch.update(d.ref, { notified: true });
+        for (const d of done.slice(i, i + 450)) batch.update(d.ref, { notified: true });
         await batch.commit();
       }
     }
     digestsSent++;
   }
 
-  return NextResponse.json({ ok: true, dryRun, families, digestsSent, searches });
+  return NextResponse.json({ ok: true, dryRun, families, digestsSent, searches, activities });
 }

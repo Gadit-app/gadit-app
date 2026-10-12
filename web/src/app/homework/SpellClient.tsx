@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
 import { dictCopy } from "@/lib/dictation-i18n";
+import { notifyActivity } from "@/lib/notify-activity-client";
 import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIntake";
 import { LearnCard } from "@/components/play/learn/LearnCard";
 import { LEARN_CSS } from "@/components/play/learn/learn-css";
@@ -800,12 +801,14 @@ export function SpellClient() {
       setIdx(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
-      // "Listen and pick" is not a dictation: not saved under "my dictations".
+      // "Listen and pick" is not a dictation: not saved under "my dictations",
+      // reported to the parent as its own activity.
       if (drill !== "pick") void saveSet();
       setCelebration(randomCelebration(lang));
       setCelebrateId((n) => n + 1);
       setPhase("done");
       if (drill !== "pick") void notifyParentDictation();
+      else if (set) void notifyActivity(user, { kind: "pick", label: setTitle(set), score: set.words.length - wrongEver.size, total: set.words.length });
     }
   }
   const nextRef = useRef(next);

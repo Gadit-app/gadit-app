@@ -13,6 +13,7 @@ import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
 import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
 import { homeworkCopy } from "@/lib/homework-i18n";
+import { notifyActivity } from "@/lib/notify-activity-client";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -628,7 +629,8 @@ export function ReaderClient() {
               </div>
             </div>
             {fromHw && (
-              <Link href={href("/homework")} className="wb-hw-done">{hc.doneRead}</Link>
+              <Link href={href("/homework")} className="wb-hw-done"
+                onClick={() => void notifyActivity(user, { kind: "read", label: text.trim().split(/\s+/).slice(0, 6).join(" ") })}>{hc.doneRead}</Link>
             )}
           </div>
         )}

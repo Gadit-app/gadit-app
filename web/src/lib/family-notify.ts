@@ -2,6 +2,7 @@ import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { sendPushToOwner } from "@/lib/push";
 import { NOTIF_STRINGS } from "@/lib/family-notify-strings";
 import { ACTIVITY_ALERT_EXTRA } from "@/lib/spell-i18n";
+import { activityNotifyCopy } from "@/lib/activity-notify-i18n";
 import { Resend } from "resend";
 
 /**
@@ -108,7 +109,7 @@ export async function notifyOwnerInstant(ownerUid: string, kidName: string, word
  * everything the child does, so the app feels valuable. he/en copy, English
  * fallback for every other parent language.
  */
-type ActivityKind = "spell" | "say";
+export type ActivityKind = "spell" | "say" | "pick" | "lesson" | "game" | "read";
 const ACTIVITY_STRINGS: Record<string, {
   spellTitle: string; spellLead: string;
   sayTitle: string; sayLead: string;
@@ -355,8 +356,16 @@ export async function notifyOwnerActivity(
 ): Promise<void> {
   const { email, lang } = await resolveOwner(ownerUid);
   const t = ACTIVITY_STRINGS[lang] ?? ACTIVITY_ALERT_EXTRA[lang] ?? ACTIVITY_STRINGS.en;
-  const title = fill(kind === "spell" ? t.spellTitle : t.sayTitle, { kid: kidName });
-  const lead = fill(kind === "spell" ? t.spellLead : t.sayLead, { kid: kidName });
+  // Dictation and Say it keep their own lines; everything else a child
+  // finishes (Gadi 2026-10-12) uses one "{kid} finished: {act}" line.
+  const a = activityNotifyCopy(lang);
+  const act = kind === "spell" || kind === "say" ? "" : a[kind];
+  const title = kind === "spell" ? fill(t.spellTitle, { kid: kidName })
+    : kind === "say" ? fill(t.sayTitle, { kid: kidName })
+    : fill(a.title, { kid: kidName, act });
+  const lead = kind === "spell" ? fill(t.spellLead, { kid: kidName })
+    : kind === "say" ? fill(t.sayLead, { kid: kidName })
+    : `${fill(a.lead, { kid: kidName })} ${act}`;
   const hasScore = typeof opts.score === "number" && typeof opts.total === "number";
   const scoreLine = hasScore ? fill(t.score, { a: opts.score!, b: opts.total! }) : "";
   const bodyLine = opts.label + (scoreLine ? ` · ${scoreLine}` : "");
@@ -379,16 +388,32 @@ export async function notifyOwnerActivity(
   }
 }
 
-/** End-of-day summary. items = [{ kidName, word }]. */
+export type DigestActivity = { kidName: string; kind: ActivityKind; label: string; score?: number | null; total?: number | null };
+
+/** One readable line for an activity in the daily summary. */
+function activityLine(lang: string, x: DigestActivity): string {
+  const t = ACTIVITY_STRINGS[lang] ?? ACTIVITY_ALERT_EXTRA[lang] ?? ACTIVITY_STRINGS.en;
+  const a = activityNotifyCopy(lang);
+  const name = x.kind === "spell" ? fill(t.spellTitle, { kid: "" }).replace(/^[\s:：,،]+|[\s:：,،]+$/g, "")
+    : x.kind === "say" ? fill(t.sayTitle, { kid: "" }).replace(/^[\s:：,،]+|[\s:：,،]+$/g, "")
+    : a[x.kind];
+  const score = typeof x.score === "number" && typeof x.total === "number" ? ` · ${fill(t.score, { a: x.score, b: x.total })}` : "";
+  return `${name}${x.label ? `: ${x.label}` : ""}${score}`;
+}
+
+/** End-of-day summary: the words looked up and everything finished
+ *  (Gadi 2026-10-12). items = [{ kidName, word }]. */
 export async function notifyOwnerDigest(
   ownerUid: string,
   items: { kidName: string; word: string }[],
+  acts: DigestActivity[] = [],
 ): Promise<void> {
-  if (items.length === 0) return;
+  if (items.length === 0 && acts.length === 0) return;
   const { email, lang } = await resolveOwner(ownerUid);
   const t = NOTIF_STRINGS[lang] ?? NOTIF_STRINGS.en;
-  const title = fill(t.digestTitle, { n: items.length });
-  const preview = items.slice(0, 4).map((i) => i.word).join(", ");
+  const a = activityNotifyCopy(lang);
+  const title = items.length ? fill(t.digestTitle, { n: items.length }) : fill(a.actsTitle, { n: acts.length });
+  const preview = items.length ? items.slice(0, 4).map((i) => i.word).join(", ") : acts.slice(0, 3).map((x) => activityLine(lang, x)).join(" · ");
 
   await sendPushToOwner(ownerUid, { title, body: preview, url: "/family", tag: "kid-digest" });
 
@@ -407,7 +432,24 @@ export async function notifyOwnerDigest(
           `<p style="margin:0 0 16px;font-size:15px;color:#44403c;line-height:1.7">${words.map(esc).join(" · ")}</p>`,
       )
       .join("");
-    const html = emailShell(lang, `<p style="margin:0 0 14px;font-size:15px">${esc(fill(t.digestLead, {}))}</p>${blocks}`);
+    const actsByKid = new Map<string, string[]>();
+    for (const x of acts) {
+      const arr = actsByKid.get(x.kidName) ?? [];
+      arr.push(activityLine(lang, x));
+      actsByKid.set(x.kidName, arr);
+    }
+    const actBlocks = Array.from(actsByKid.entries())
+      .map(
+        ([kid, lines]) =>
+          `<p style="margin:0 0 6px;font-weight:600;font-size:14px">${esc(kid)}</p>` +
+          `<p style="margin:0 0 16px;font-size:15px;color:#44403c;line-height:1.8">${lines.map((l) => `✓ ${esc(l)}`).join("<br>")}</p>`,
+      )
+      .join("");
+    const html = emailShell(
+      lang,
+      (items.length ? `<p style="margin:0 0 14px;font-size:15px">${esc(fill(t.digestLead, {}))}</p>${blocks}` : "") +
+        (acts.length ? `<p style="margin:${items.length ? "8px" : "0"} 0 14px;font-size:15px">${esc(a.actsLead)}</p>${actBlocks}` : ""),
+    );
     await sendEmail(email, title, html);
   }
 }

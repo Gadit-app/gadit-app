@@ -40,6 +40,7 @@ import {
   type GameId,
   type PlayWord,
 } from "@/lib/play-engine";
+import { notifyActivity } from "@/lib/notify-activity-client";
 import { getStreak, syncFromServer } from "@/lib/play-streak";
 import { GameQuiz, type PlayT } from "@/components/play/GameQuiz";
 import { GameFillBlank } from "@/components/play/GameFillBlank";
@@ -3436,10 +3437,13 @@ export function PlayPage() {
   if (stage.kind === "lesson") {
     const lessonId = stage.lesson.id;
     const markDone = async () => {
-      if (!lessonId || !user) return;
+      if (!user) return;
+      // A lesson from workbook pages has no id: nothing to mark, still reported.
+      if (!lessonId) { void notifyActivity(user, { kind: "lesson", label: stage.lesson.topic }); return; }
       try {
         await fetch("/api/learn", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` }, body: JSON.stringify({ action: "lessonDone", id: lessonId }) });
       } catch { /* best-effort */ }
+      void notifyActivity(user, { kind: "lesson", label: stage.lesson.topic });
     };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>

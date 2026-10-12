@@ -4,13 +4,15 @@ import { notifyOwnerActivity } from "@/lib/family-notify";
 
 /**
  * Called by the client when a CHILD finishes a learning ACTIVITY that isn't a
- * plain word lookup: a dictation practice (/spell) or a "Say it" pronunciation
- * session. Records it to the family activity feed and, in instant mode, sends
+ * plain word lookup: a dictation, a "Say it" session, and since 2026-10-12
+ * (Gadi: "everything the child does and finished") a lesson, a game,
+ * "listen and pick" and reading a text. In daily mode it waits for the
+ * end-of-day summary (notified: false), in instant mode it goes out now. Records it to the family activity feed and, in instant mode, sends
  * the parent a push + email so they feel they see everything the child learns
  * (Gadi 2026-09-19). Mirrors notify-search: non-kids / non-family are a silent
  * no-op, and any error is swallowed so it never disrupts the child's flow.
  *
- *   POST { kind: "spell" | "say", label, score?, total? }
+ *   POST { kind: "spell" | "say" | "pick" | "lesson" | "game" | "read", label, score?, total? }
  */
 export async function POST(req: NextRequest) {
   try {
@@ -28,7 +30,8 @@ export async function POST(req: NextRequest) {
     const body = (await req.json().catch(() => null)) as
       | { kind?: string; label?: string; score?: number; total?: number }
       | null;
-    const kind = body?.kind === "say" ? "say" : body?.kind === "spell" ? "spell" : null;
+    const KINDS = ["spell", "say", "pick", "lesson", "game", "read"] as const;
+    const kind = (KINDS as readonly string[]).includes(body?.kind ?? "") ? (body!.kind as (typeof KINDS)[number]) : null;
     const label = (body?.label ?? "").toString().trim().slice(0, 120);
     if (!kind) return NextResponse.json({ ok: true, skipped: "bad_kind" });
     const score = typeof body?.score === "number" ? Math.max(0, Math.floor(body.score)) : undefined;
@@ -51,17 +54,21 @@ export async function POST(req: NextRequest) {
       if (typeof mn === "string" && mn.trim()) kidName = mn.trim();
     }
 
-    const nowIso = new Date().toISOString();
-    await db.collection("families").doc(ownerUid).collection("kidActivity").add({
-      kind, label, score: score ?? null, total: total ?? null,
-      memberId: u.memberId ?? null, kidName, at: nowIso,
-    });
-
     const famRef = db.collection("families").doc(ownerUid);
     const prefs = (await famRef.get()).data()?.notifyPrefs as
       | { enabled?: boolean; mode?: string }
       | undefined;
-    if (prefs?.enabled && prefs.mode !== "daily") {
+    const daily = !!prefs?.enabled && prefs.mode === "daily";
+
+    const nowIso = new Date().toISOString();
+    await famRef.collection("kidActivity").add({
+      kind, label, score: score ?? null, total: total ?? null,
+      memberId: u.memberId ?? null, kidName, at: nowIso,
+      // Waits for the daily summary only when the parent chose it.
+      notified: !daily,
+    });
+
+    if (prefs?.enabled && !daily) {
       await notifyOwnerActivity(ownerUid, kidName, kind, { label, score, total });
     }
 
