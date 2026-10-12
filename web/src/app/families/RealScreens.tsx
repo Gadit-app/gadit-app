@@ -417,6 +417,10 @@ export const REAL_CSS = `
 .fam-hw .fam-real-points li::before { background: #5EEAD4; }
 .fam-hw .fam-real-pair .fam-phone { box-shadow: 0 34px 70px -20px rgba(0,20,20,0.7), 0 10px 22px rgba(0,20,20,0.3); }
 
+/* Headings on the teal CTA bands stay white (the premium layer painted them dark). */
+.fam-premium .fam-band-teal .fam-h2-onteal { color: #fff; }
+.fam-premium .fam-band-teal { background: linear-gradient(155deg, #0B7D7C 0%, #0EA5A5 60%, #14B8A6 100%); }
+
 /* Games: warm amber band */
 .fam-premium .fam-band-sun { background: linear-gradient(160deg, #FFF1D6 0%, #FFF8EA 55%, #FFFFFF 100%); }
 .fam-band-sun .fam-kicker { color: #B45309; }
