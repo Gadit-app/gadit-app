@@ -1,4 +1,5 @@
 import { getAdminDb } from "@/lib/firebase-admin";
+import { readPracticeDays } from "@/lib/practice-days";
 import { computeGamification, toLocalDateStr } from "@/lib/gamification";
 
 /**
@@ -28,7 +29,7 @@ async function readChildren(familyId: string): Promise<Child[]> {
         .map((d) => ({ word: (d.get("word") as string) || "", at: (d.get("addedAt") as string) || "" }))
         .filter((r) => r.at);
       const now = Date.now();
-      const g = computeGamification(rows.map((r) => r.at), now, toLocalDateStr(new Date(now).toISOString()));
+      const g = computeGamification(rows.map((r) => r.at), now, toLocalDateStr(new Date(now).toISOString()), 0, await readPracticeDays(m.userId).catch(() => []));
       return {
         ...base,
         total: g.distinct,

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readPracticeDays } from "@/lib/practice-days";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { computeGamification, toLocalDateStr, type RankKey } from "@/lib/gamification";
 
@@ -128,7 +129,7 @@ export async function GET(req: NextRequest) {
               .filter((r) => r.addedAt);
             const addedAt = rows.map((r) => r.addedAt);
             const now = Date.now();
-            const g = computeGamification(addedAt, now, toLocalDateStr(new Date(now).toISOString()));
+            const g = computeGamification(addedAt, now, toLocalDateStr(new Date(now).toISOString()), 0, await readPracticeDays(uid).catch(() => []));
             const recent = rows
               .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
               .slice(0, 6)

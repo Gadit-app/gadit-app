@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth } from "@/lib/firebase-admin";
 import { kidOf, recordKidActivity } from "@/lib/kid-activity";
+import { practiceDayFrom, recordPracticeDay } from "@/lib/practice-days";
 
 /**
  * Called by the client when a CHILD finishes a learning ACTIVITY that isn't a
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = (await req.json().catch(() => null)) as
-      | { kind?: string; label?: string; score?: number; total?: number }
+      | { kind?: string; label?: string; score?: number; total?: number; day?: string }
       | null;
     const KINDS = ["spell", "say", "pick", "lesson", "game", "read"] as const;
     const kind = (KINDS as readonly string[]).includes(body?.kind ?? "") ? (body!.kind as (typeof KINDS)[number]) : null;
@@ -36,6 +37,9 @@ export async function POST(req: NextRequest) {
     if (!kind) return NextResponse.json({ ok: true, skipped: "bad_kind" });
     const score = typeof body?.score === "number" ? Math.max(0, Math.floor(body.score)) : undefined;
     const total = typeof body?.total === "number" ? Math.max(0, Math.floor(body.total)) : undefined;
+
+    // A practice day for the streak, for anyone signed in.
+    await recordPracticeDay(uid, practiceDayFrom(body?.day)).catch(() => {});
 
     const kid = await kidOf(uid);
     if (!kid) return NextResponse.json({ ok: true, skipped: "not_kid" });

@@ -5,6 +5,7 @@ import { computeGamification, toLocalDateStr, RANKS } from "@/lib/gamification";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
 import { KID_THEMES, themeName } from "@/lib/appearance";
 import { KidsCelebration } from "./KidsCelebration";
+import { useAuth } from "@/lib/auth-context";
 
 // Streak days that earn a celebration. streakTier() returns the highest one
 // reached, so we can tell when the child crosses into a new tier.
@@ -97,11 +98,32 @@ export function KidsGameHeader({
   lang: string;
   dir: "rtl" | "ltr";
 }) {
+  // Practice days (games, lessons, homework, reading, "say it") also keep
+  // the streak alive (Gadi 2026-10-12). Seeded from the session so the
+  // number does not jump on every page.
+  const { user } = useAuth();
+  const [practiceDays, setPracticeDays] = useState<string[]>(() => {
+    try { return JSON.parse(sessionStorage.getItem("gadit-practice-days") || "[]") as string[]; } catch { return []; }
+  });
+  useEffect(() => {
+    if (!user) return;
+    let off = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/practice-days", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const j = (await r.json()) as { days?: string[] };
+        if (off || !Array.isArray(j.days)) return;
+        setPracticeDays(j.days);
+        try { sessionStorage.setItem("gadit-practice-days", JSON.stringify(j.days)); } catch { /* ignore */ }
+      } catch { /* the streak still counts word days */ }
+    })();
+    return () => { off = true; };
+  }, [user]);
   const g = useMemo(() => {
     const now = Date.now();
     const todayStr = toLocalDateStr(new Date(now).toISOString());
-    return computeGamification(addedAtDates, now, todayStr, understoodCount);
-  }, [addedAtDates, understoodCount]);
+    return computeGamification(addedAtDates, now, todayStr, understoodCount, practiceDays);
+  }, [addedAtDates, understoodCount, practiceDays]);
 
   const [celebrateId, setCelebrateId] = useState(0);
   const [ranksOpen, setRanksOpen] = useState(false);
@@ -144,26 +166,26 @@ export function KidsGameHeader({
         {/* Streak */}
         <div className="wb-kids-tile">
           <div className="wb-kids-tile-head">
-            <Chip color={AMBER} emoji="🔥" dim={g.streak === 0} />
+            <Chip color={TEAL} emoji="🔥" dim={g.streak === 0} />
             <div>
               <div className="wb-kids-tile-label">{c.streakTitle}</div>
-              <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.streak}</div>
+              <div className="wb-kids-tile-num" style={{ color: TEAL }}>{g.streak}</div>
             </div>
           </div>
-          <Bar pct={streakProgress(g.streak)} color={AMBER} />
+          <Bar pct={streakProgress(g.streak)} color={TEAL} />
           <div className="wb-kids-tile-cap">{g.streak > 0 ? c.streakDays(g.streak) : c.streakStart}</div>
         </div>
 
         {/* Weekly goal */}
         <div className="wb-kids-tile">
           <div className="wb-kids-tile-head">
-            <Chip color={TEAL} emoji="🎯" />
+            <Chip color={AMBER} emoji="🎯" />
             <div>
               <div className="wb-kids-tile-label">{c.weeklyTitle}</div>
-              <div className="wb-kids-tile-num" style={{ color: TEAL }}>{g.weekly}<span className="wb-kids-tile-of">/{g.weeklyGoal}</span></div>
+              <div className="wb-kids-tile-num" style={{ color: AMBER }}>{g.weekly}<span className="wb-kids-tile-of">/{g.weeklyGoal}</span></div>
             </div>
           </div>
-          <Bar pct={weeklyPct} color={weeklyDone ? "#059669" : TEAL} />
+          <Bar pct={weeklyPct} color={weeklyDone ? "#059669" : AMBER} />
           <div className="wb-kids-tile-cap">{weeklyDone ? `✅ ${c.weeklyDone}` : c.weeklyProgress(g.weekly, g.weeklyGoal)}</div>
         </div>
 

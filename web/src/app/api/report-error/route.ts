@@ -20,6 +20,7 @@ type ReportCategory =
   | "idioms"
   | "image"
   | "quiz_wrong_answer"
+  | "play_question"
   | "compose_feedback"
   | "compare_words"
   | "other";
@@ -32,6 +33,7 @@ const ALLOWED_CATEGORIES: ReportCategory[] = [
   "idioms",
   "image",
   "quiz_wrong_answer",
+  "play_question",
   "compose_feedback",
   "compare_words",
   "other",

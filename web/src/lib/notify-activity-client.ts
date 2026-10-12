@@ -1,4 +1,5 @@
 import type { User } from "firebase/auth";
+import { toLocalDateStr } from "@/lib/gamification";
 
 /**
  * Tell the server a child finished something (Gadi 2026-10-12: the parent
@@ -17,7 +18,7 @@ export async function notifyActivity(
       method: "POST",
       keepalive: true,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, day: toLocalDateStr(new Date().toISOString()) }),
     });
   } catch { /* best-effort */ }
 }

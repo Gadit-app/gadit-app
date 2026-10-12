@@ -10,6 +10,8 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
+import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
+import { toLocalDateStr } from "@/lib/gamification";
 import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
@@ -639,6 +641,7 @@ export function SpellClient() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({
           kind: "spell",
+          day: toLocalDateStr(new Date().toISOString()),
           label: setTitle(set),
           score: set.words.length - wrongEver.size,
           total: set.words.length,
@@ -1251,6 +1254,9 @@ export function SpellClient() {
                   </button>
                 ))}
               </span>}
+              {set && current && (
+                <ReportQuestionButton where={drill === "pick" ? "homework-pick" : "homework-dictation"} snapshot={() => ({ set: setTitle(set), word: current, dir: qdir, drill })} />
+              )}
               {set && (
                 <button type="button" className="wb-dict-change" onClick={() => {
                   if (drill === "pick") setSetupWrite(pickLang ?? "en");

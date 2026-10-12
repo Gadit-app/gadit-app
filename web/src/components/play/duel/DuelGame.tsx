@@ -1,5 +1,6 @@
 "use client";
 
+import { ReportQuestionButton } from "../ReportQuestionButton";
 import { DuelPrompt, duelOpt } from "./DuelPrompt";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -166,7 +167,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
       {(ph.kind === "round" || ph.kind === "reveal") && view.question && (
         <div className="duel-card">
           {board}
-          <div className="duel-progress">{t.round(ph.round + 1, view.total)}</div>
+          <div className="duel-progress">{t.round(ph.round + 1, view.total)} <ReportQuestionButton where="duel" snapshot={() => ({ prompt: view.question?.prompt, options: view.question?.options, round: ph.round })} /></div>
           {ph.kind === "round" && (
             <div className="duel-timer"><span style={{ width: `${Math.max(0, Math.min(100, ((ph.endsAt - now) / ROUND_MS) * 100))}%` }} /></div>
           )}

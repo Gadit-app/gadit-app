@@ -1,4 +1,5 @@
 import { getAdminDb } from "@/lib/firebase-admin";
+import { readPracticeDays } from "@/lib/practice-days";
 import { computeGamification, toLocalDateStr } from "@/lib/gamification";
 
 /**
@@ -19,7 +20,7 @@ async function readNumbers(uid: string): Promise<Numbers> {
       .filter((r) => r.at);
     const now = Date.now();
     const cutoff = new Date(now - WEEK_MS).toISOString();
-    const g = computeGamification(rows.map((r) => r.at), now, toLocalDateStr(new Date(now).toISOString()));
+    const g = computeGamification(rows.map((r) => r.at), now, toLocalDateStr(new Date(now).toISOString()), 0, await readPracticeDays(uid).catch(() => []));
     return {
       total: g.distinct,
       week: rows.filter((r) => r.at >= cutoff).length,

@@ -229,6 +229,10 @@ export function computeGamification(
   nowMs: number,
   todayStr: string,
   understoodCount = 0,
+  /** Local days with a finished game, lesson, dictation, reading or "say
+   *  it" (users/{uid}.practiceDays). One streak = days practised (Gadi
+   *  2026-10-12). */
+  practiceDays: string[] = [],
 ): { distinct: number; understood: number; points: number; rank: RankInfo; streak: number; weekly: number; weeklyGoal: number } {
   const distinct = addedAtIsoDates.length;
   const understood = Math.max(0, Math.min(distinct, understoodCount));
@@ -239,7 +243,7 @@ export function computeGamification(
     understood,
     points,
     rank: rankFor(points),
-    streak: computeStreak(localDates, todayStr),
+    streak: computeStreak([...localDates, ...practiceDays], todayStr),
     weekly: weeklyCount(addedAtIsoDates, nowMs),
     weeklyGoal: computeGoal(addedAtIsoDates, nowMs),
   };

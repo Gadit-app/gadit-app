@@ -76,7 +76,7 @@ export const GAME_COPY: Record<string, GameCopy> = {
   en: {
     streakTitle: "Day streak",
     streakDays: (n) => (n === 1 ? "1 day in a row" : `${n} days in a row`),
-    streakStart: "Look up a word to start a streak",
+    streakStart: "Look up a word or play to start a streak",
     weeklyTitle: "Weekly goal",
     weeklyProgress: (n, goal) => `${n} / ${goal} new words`,
     weeklyDone: "Goal complete!",
@@ -88,7 +88,7 @@ export const GAME_COPY: Record<string, GameCopy> = {
   he: {
     streakTitle: "רצף ימים",
     streakDays: (n) => (n === 1 ? "יום אחד ברצף" : `${n} ימים ברצף`),
-    streakStart: "חפשו מילה כדי להתחיל רצף",
+    streakStart: "חפשו מילה או שחקו כדי להתחיל רצף",
     weeklyTitle: "יעד שבועי",
     weeklyProgress: (n, goal) => `${n} / ${goal} מילים חדשות`,
     weeklyDone: "היעד הושלם!",

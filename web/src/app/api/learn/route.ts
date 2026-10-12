@@ -28,7 +28,14 @@ const DAY = 86_400_000;
 /** A lesson built from photographed workbook pages (Gadi 2026-10-11, Ziv's
  *  English workbook): the unit's words, its own sentences, and the grammar
  *  point it practices, played as one ordered path. */
-export type LessonUnit = { topic: string; sentences: string[]; pronouns: Array<{ phrase: string; answer: string }> };
+export type LessonUnit = {
+  topic: string; sentences: string[]; pronouns: Array<{ phrase: string; answer: string }>;
+  /** A short reading text with the unit's words and yes/no checks (Gadi
+   *  2026-10-12). Missing on units built before it; null when it could not
+   *  be made, so it is not retried. */
+  reading?: LessonReading | null;
+};
+type LessonReading = { title: string; text: string; checks: Array<{ s: string; yes: boolean }> };
 type ListDoc = { lang: LearnLang; items: Array<{ w: string; t: string; nq?: string }>; testDate?: string | null; at: number; unit?: LessonUnit | null };
 type LearnDoc = {
   lang?: LearnLang | null;
@@ -102,7 +109,13 @@ export async function GET(req: NextRequest) {
   };
   // The whole lesson (all its words, not just today's session) when the
   // active list came from workbook pages.
-  const lesson = list && doc?.list?.unit ? { ...doc.list.unit, items: doc.list.items } : null;
+  let unit = list && doc?.list?.unit ? doc.list.unit : null;
+  if (unit && doc?.list && unit.reading === undefined) {
+    const reading = await makeReading(doc.list.items, unit.topic, doc.list.lang);
+    unit = { ...unit, reading };
+    await getAdminDb().collection("users").doc(uid).set({ learn: { list: { unit: { reading } } } }, { merge: true });
+  }
+  const lesson = unit && doc?.list ? { ...unit, items: doc.list.items } : null;
   const lessons = lessonList(lang, ui, doc?.lessonsDone ?? {});
   return NextResponse.json({ profile: { lang, reads: doc?.reads ?? null }, targets, pool, stats, lesson, lessons });
 }
@@ -162,7 +175,42 @@ async function translateMissing(words: string[], lang: LearnLang, ui: string): P
 /** One call: the unit's words (translated to the child's language), the
  *  pages' own sentences completed and cleaned, and the pronoun items when
  *  the pages practice he/she/it. */
-async function extractUnit(text: string, lang: LearnLang, ui: string): Promise<{ topic: string; items: ListDoc["items"]; sentences: string[]; pronouns: LessonUnit["pronouns"] } | null> {
+/** Cleans the model's reading block; null unless it has a real text and at
+ *  least 3 checks. */
+function cleanReading(r: unknown): LessonReading | null {
+  if (!r || typeof r !== "object") return null;
+  const o = r as { title?: unknown; text?: unknown; checks?: unknown };
+  const clean = (x: string) => x.replace(/[–—]/g, ",").replace(/\s+/g, " ").trim();
+  const text = clean(String(o.text ?? "")).slice(0, 900);
+  const checks = (Array.isArray(o.checks) ? o.checks : [])
+    .map((c) => ({ s: clean(String((c as { s?: unknown })?.s ?? "")).slice(0, 140), yes: (c as { yes?: unknown })?.yes === true }))
+    .filter((c) => c.s.length > 3)
+    .slice(0, 5);
+  if (text.split(" ").length < 15 || checks.length < 3) return null;
+  return { title: clean(String(o.title ?? "")).slice(0, 60), text, checks };
+}
+
+/** For a unit built before the reading text existed: one small call from its
+ *  words and topic, saved on the unit so it runs once. */
+async function makeReading(items: ListDoc["items"], topic: string, lang: LearnLang): Promise<LessonReading | null> {
+  if (!process.env.OPENAI_API_KEY || items.length < 2) return null;
+  const learn = lang === "en" ? "English" : "Hebrew";
+  const sys = `Write a short reading text for a child learning ${learn} at school. Return JSON only:
+{"title": "<a short title in ${learn}>", "text": "<4 to 7 simple ${learn} sentences on the topic, using as many of the given words as possible>", "checks": [{"s": "<a short ${learn} statement about the text>", "yes": true}]}
+Give 4 checks, two true and two false, each answerable from the text alone. No long dashes.`;
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({ model: "gpt-4o-mini", temperature: 0.4, response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: `Topic: ${topic || "school"}\nWords: ${items.map((x) => x.w).join(", ")}` }] }),
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const u = usageFrom(data);
+  void logAiUsage({ feature: "learn_reading", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  try { return cleanReading(JSON.parse(data.choices?.[0]?.message?.content ?? "{}")); } catch { return null; }
+}
+
+async function extractUnit(text: string, lang: LearnLang, ui: string): Promise<{ topic: string; items: ListDoc["items"]; sentences: string[]; pronouns: LessonUnit["pronouns"]; reading: LessonReading | null } | null> {
   if (!process.env.OPENAI_API_KEY) return null;
   const learn = lang === "en" ? "English" : "Hebrew";
   const to = LANG_NAME[ui] ?? "English";
@@ -171,8 +219,9 @@ Return JSON only:
 {"topic": "<the unit's topic, 1-3 words, in ${to}>",
  "words": [{"w": "<a vocabulary word of the unit, in ${learn}, dictionary form>", "t": "<its child-friendly translation in ${to}>"${lang === "he" ? ', "nq": "<the Hebrew word with full niqqud>"' : ""}}],
  "sentences": ["<a complete, correct ${learn} sentence from the pages>"],
- "pronouns": [{"phrase": "<a noun phrase from the pages, e.g. My grandmother>", "answer": "<the pronoun that replaces it: He, She, It, They, I, You or We>"}]}
-Rules: 8 to 20 words, the ones the unit teaches (not "the", "is", names). Up to 20 sentences of 3 to 10 words, taken from the exercises and reading texts, with every blank filled with the correct answer and every choice resolved to the right option. "pronouns" only when the pages practice pronouns (he, she, it...), up to 12 items, otherwise []. No long dashes.`;
+ "pronouns": [{"phrase": "<a noun phrase from the pages, e.g. My grandmother>", "answer": "<the pronoun that replaces it: He, She, It, They, I, You or We>"}],
+ "reading": {"title": "<a short title in ${learn}>", "text": "<a new short ${learn} text for a child, 4 to 7 simple sentences, on the unit's topic, using as many of the unit's words as possible>", "checks": [{"s": "<a short ${learn} statement about the text>", "yes": true}]}}
+Rules: 8 to 20 words, the ones the unit teaches (not "the", "is", names). Up to 20 sentences of 3 to 10 words, taken from the exercises and reading texts, with every blank filled with the correct answer and every choice resolved to the right option. "pronouns" only when the pages practice pronouns (he, she, it...), up to 12 items, otherwise []. "reading": 4 checks, two true and two false, each answerable from the text alone. No long dashes.`;
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -183,7 +232,7 @@ Rules: 8 to 20 words, the ones the unit teaches (not "the", "is", names). Up to 
   const u = usageFrom(data);
   void logAiUsage({ feature: "learn_unit", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   try {
-    const j = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as { topic?: string; words?: Array<{ w?: string; t?: string; nq?: string }>; sentences?: string[]; pronouns?: Array<{ phrase?: string; answer?: string }> };
+    const j = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as { topic?: string; words?: Array<{ w?: string; t?: string; nq?: string }>; sentences?: string[]; pronouns?: Array<{ phrase?: string; answer?: string }>; reading?: unknown };
     const seen = new Set<string>();
     const items = (j.words ?? []).flatMap((x) => {
       const w = String(x.w ?? "").trim().slice(0, 40);
@@ -197,7 +246,7 @@ Rules: 8 to 20 words, the ones the unit teaches (not "the", "is", names). Up to 
     const PR = new Set(["He", "She", "It", "They", "I", "You", "We"]);
     const pronouns = (j.pronouns ?? []).map((x) => ({ phrase: clean(String(x.phrase ?? "")), answer: String(x.answer ?? "").trim().replace(/^./, (c) => c.toUpperCase()) }))
       .filter((x) => x.phrase && PR.has(x.answer)).slice(0, 12);
-    return { topic: clean(String(j.topic ?? "")).slice(0, 40), items, sentences, pronouns };
+    return { topic: clean(String(j.topic ?? "")).slice(0, 40), items, sentences, pronouns, reading: cleanReading(j.reading) };
   } catch { return null; }
 }
 
@@ -283,7 +332,7 @@ export async function POST(req: NextRequest) {
     const unit = await extractUnit(text, lang, ui);
     if (!unit || unit.items.length < 2) return NextResponse.json({ error: "too_few_words" }, { status: 400 });
     const testDate = typeof body.testDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.testDate) ? body.testDate : null;
-    const list: ListDoc = { lang, items: unit.items, testDate, at: now, unit: { topic: unit.topic, sentences: unit.sentences, pronouns: unit.pronouns } };
+    const list: ListDoc = { lang, items: unit.items, testDate, at: now, unit: { topic: unit.topic, sentences: unit.sentences, pronouns: unit.pronouns, reading: unit.reading } };
     await ref.set({ learn: { list } }, { merge: true });
     return NextResponse.json({ ok: true, list });
   }

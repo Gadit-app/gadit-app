@@ -10,6 +10,7 @@
  * After each answer: ~900ms reveal (correct/wrong tinting) → auto-advance.
  */
 
+import { ReportQuestionButton } from "./ReportQuestionButton";
 import { useState, useMemo } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildQuizQuestions, SESSION_SIZE } from "@/lib/play-engine";
@@ -150,6 +151,7 @@ export function PlayHeader({
       </button>
       <div className="wb-play-header-title">{title}</div>
       <div className="wb-play-header-meta">
+        <ReportQuestionButton where={title} />
         <NiqqudToggle />
         {progress && <span className="wb-play-progress">{progress}</span>}
         {typeof timeLeft === "number" && (
