@@ -23,7 +23,7 @@ ${parent} נתנ/ה לכם גישה לפרופיל של **${child}** ב-Gadit, �
 
 ## איך נכנסים
 1. פותחים את [עמוד המאמנים](/coach).
-2. נכנסים עם כתובת המייל הזו: **${opts.to}**. אם עוד אין לכם חשבון, אפשר לפתוח אחד בחינם, עם אותה כתובת.
+2. נכנסים עם כתובת המייל הזו: **${opts.to}**. כדי לאמן תלמידים צריך מנוי Individual או Family של Gadit, באותה כתובת.
 3. לוחצים על ${child}, ונכנסים לפרופיל שלו/ה: מוסיפים מילים לאוצר המילים, מתרגלים יחד ומשחקים.
 
 כשמסיימים, לוחצים "יציאה" בראש המסך וחוזרים לעמוד המאמנים.
@@ -34,7 +34,7 @@ ${parent} gave you access to **${child}**'s profile on Gadit, so you can work wi
 
 ## How to get in
 1. Open the [coach page](/coach).
-2. Sign in with this email address: **${opts.to}**. No account yet? You can open one for free, with the same address.
+2. Sign in with this email address: **${opts.to}**. Coaching needs an Individual or Family plan on Gadit, with the same address.
 3. Tap ${child} to enter their profile: add words to the notebook, practise together and play.
 
 When you're done, tap "Exit" at the top of the screen to return to the coach page.

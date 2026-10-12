@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { syntheticUidFor, isParentRole, type MemberRole } from "@/lib/family";
-import { verifyCoach, bearer } from "@/lib/coach";
+import { verifyCoach, bearer, coachHasPlan } from "@/lib/coach";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,6 +16,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   const coach = await verifyCoach(bearer(req));
   if (!coach) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!(await coachHasPlan(coach.uid, coach.email))) return NextResponse.json({ error: "needs_plan" }, { status: 402 });
 
   let grantId = "";
   try {

@@ -9,6 +9,7 @@
  * across families by their email. Access is by verified email: the parent
  * grants to an email, and whoever signs in with that email sees the student.
  */
+import { isInternalEmail, isPayingStatus } from "@/lib/internal-accounts";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
 export type CoachGrant = {
@@ -49,6 +50,28 @@ export async function resolveOwner(idToken: string | null): Promise<{ familyId: 
   } catch {
     return null;
   }
+}
+
+/**
+ * A coach must be a paying subscriber (Gadi 2026-10-12: "no coach uses
+ * Gadit for free to coach students"): their own Individual or Family plan
+ * (active, past_due or trialing), a parent inside a paying family, a gifted
+ * (comp) account, or one of ours. Coaches tell parents to buy Gadit and
+ * parents bring their coaches in, so it markets both ways.
+ */
+export async function coachHasPlan(uid: string, email: string): Promise<boolean> {
+  if (isInternalEmail(email)) return true;
+  const db = getAdminDb();
+  const d = (await db.collection("users").doc(uid).get()).data() as Record<string, unknown> | undefined;
+  if (!d) return false;
+  if (d.comp === true) return true;
+  const live = (s: unknown) => isPayingStatus(s) || s === "trialing";
+  if ((d.plan === "clear" || d.plan === "deep") && live(d.subscriptionStatus)) return true;
+  if (typeof d.familyId === "string" && d.familyId && d.familyRole !== "kid" && d.familyId !== uid) {
+    const o = (await db.collection("users").doc(d.familyId).get()).data() as Record<string, unknown> | undefined;
+    if (o && (o.comp === true || live(o.subscriptionStatus))) return true;
+  }
+  return false;
 }
 
 export function bearer(req: { headers: { get(name: string): string | null } }): string | null {

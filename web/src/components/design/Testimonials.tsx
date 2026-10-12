@@ -52,7 +52,7 @@ export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
       "הוא ממש עוזר לי ללמוד טוב יותר ולהבין את מה שאני קוראת.",
       "ממליצה מאוד!",
     ].join("\n"),
-    who: "תום",
+    who: "תום, בת 15",
   },
 ];
 

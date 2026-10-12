@@ -5,7 +5,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { verifyCoach, bearer } from "@/lib/coach";
+import { verifyCoach, bearer, coachHasPlan } from "@/lib/coach";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,5 +39,7 @@ export async function GET(req: NextRequest) {
     }),
   );
   students.sort((a, b) => a.memberName.localeCompare(b.memberName));
-  return NextResponse.json({ students });
+  // The list shows, but entering a profile needs a paid plan.
+  const needsPlan = students.length > 0 && !(await coachHasPlan(coach.uid, coach.email));
+  return NextResponse.json({ students, needsPlan });
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { payUrl } from "@/lib/pay-url";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -386,6 +387,43 @@ const T: Record<string, {
     signedInAs: "Bejelentkezve mint",
   },
 };
+/** A coach needs a paid plan (Gadi 2026-10-12). [message, button] */
+const NEEDS_PLAN: Record<string, [string, string]> = {
+  en: ["To coach students on Gadit you need an Individual or Family plan.", "Choose a plan"],
+  he: ["כדי לאמן תלמידים ב-Gadit צריך מנוי Individual או Family.", "לבחירת מנוי"],
+  ar: ["لتدريب الطلاب على Gadit تحتاجون اشتراك Individual أو Family.", "اختيار اشتراك"],
+  ru: ["Чтобы заниматься с учениками в Gadit, нужен тариф Individual или Family.", "Выбрать тариф"],
+  es: ["Para entrenar alumnos en Gadit necesitas un plan Individual o Family.", "Elegir un plan"],
+  pt: ["Para treinar alunos no Gadit você precisa de um plano Individual ou Family.", "Escolher um plano"],
+  fr: ["Pour accompagner des élèves sur Gadit, il faut un abonnement Individual ou Family.", "Choisir un abonnement"],
+  de: ["Um Schüler in Gadit zu betreuen, braucht ihr ein Individual- oder Family-Abo.", "Abo wählen"],
+  cs: ["Pro práci s žáky v Gadit potřebujete předplatné Individual nebo Family.", "Vybrat předplatné"],
+  sk: ["Na prácu so žiakmi v Gadit potrebujete predplatné Individual alebo Family.", "Vybrať predplatné"],
+  it: ["Per seguire studenti su Gadit serve un abbonamento Individual o Family.", "Scegli un abbonamento"],
+  ja: ["Gaditで生徒を指導するには、IndividualまたはFamilyプランが必要です。", "プランを選ぶ"],
+  hi: ["Gadit पर छात्रों को सिखाने के लिए Individual या Family प्लान चाहिए।", "प्लान चुनें"],
+  am: ["በGadit ተማሪዎችን ለማሰልጠን Individual ወይም Family ምዝገባ ያስፈልጋል።", "ምዝገባ ምረጡ"],
+  uk: ["Щоб займатися з учнями в Gadit, потрібен тариф Individual або Family.", "Обрати тариф"],
+  tr: ["Gadit'te öğrenci çalıştırmak için Individual veya Family planı gerekir.", "Plan seç"],
+  pl: ["Aby uczyć uczniów w Gadit, potrzebny jest plan Individual lub Family.", "Wybierz plan"],
+  fa: ["برای آموزش شاگردان در Gadit به اشتراک Individual یا Family نیاز دارید.", "انتخاب اشتراک"],
+  id: ["Untuk melatih murid di Gadit, Anda perlu paket Individual atau Family.", "Pilih paket"],
+  nl: ["Om leerlingen te begeleiden in Gadit heb je een Individual- of Family-abonnement nodig.", "Kies een abonnement"],
+  el: ["Για να εκπαιδεύετε μαθητές στο Gadit χρειάζεστε συνδρομή Individual ή Family.", "Επιλογή συνδρομής"],
+  zu: ["Ukuze uqeqeshe abafundi ku-Gadit udinga uhlelo lwe-Individual noma lwe-Family.", "Khetha uhlelo"],
+  vi: ["Để kèm học sinh trên Gadit, bạn cần gói Individual hoặc Family.", "Chọn gói"],
+  fil: ["Para mag-coach ng mga estudyante sa Gadit, kailangan mo ng Individual o Family na plano.", "Pumili ng plano"],
+  af: ["Om leerders op Gadit af te rig, het julle 'n Individual- of Family-plan nodig.", "Kies 'n plan"],
+  sw: ["Kufundisha wanafunzi kwenye Gadit unahitaji mpango wa Individual au Family.", "Chagua mpango"],
+  "zh-CN": ["要在 Gadit 上辅导学生，需要 Individual 或 Family 订阅。", "选择订阅"],
+  "zh-TW": ["要在 Gadit 上輔導學生，需要 Individual 或 Family 訂閱。", "選擇訂閱"],
+  ko: ["Gadit에서 학생을 지도하려면 Individual 또는 Family 요금제가 필요해요.", "요금제 선택"],
+  th: ["หากต้องการสอนนักเรียนใน Gadit ต้องมีแพ็กเกจ Individual หรือ Family", "เลือกแพ็กเกจ"],
+  bn: ["Gadit-এ শিক্ষার্থীদের শেখাতে Individual বা Family প্ল্যান লাগবে।", "প্ল্যান বেছে নিন"],
+  da: ["For at undervise elever i Gadit skal I have et Individual- eller Family-abonnement.", "Vælg abonnement"],
+  hu: ["Ahhoz, hogy a Gaditban tanítványokkal foglalkozzatok, Individual vagy Family előfizetés kell.", "Előfizetés választása"],
+};
+
 function t(lang: string) { return T[lang] ?? T.en; }
 
 export function CoachClient() {
@@ -399,6 +437,7 @@ export function CoachClient() {
   const [loading, setLoading] = useState(true);
   const [entering, setEntering] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [needsPlan, setNeedsPlan] = useState(false);
 
   const load = useCallback(async () => {
     if (!user) { setLoading(false); return; }
@@ -407,8 +446,9 @@ export function CoachClient() {
       const idToken = await user.getIdToken();
       const res = await fetch("/api/coach/students", { headers: { Authorization: `Bearer ${idToken}` } });
       if (!res.ok) throw new Error(String(res.status));
-      const data = (await res.json()) as { students?: Student[] };
+      const data = (await res.json()) as { students?: Student[]; needsPlan?: boolean };
       setStudents(data.students ?? []);
+      setNeedsPlan(!!data.needsPlan);
     } catch {
       setError(c.err);
       setStudents([]);
@@ -467,6 +507,12 @@ export function CoachClient() {
           </button>
         ) : loading ? (
           <div style={{ color: "var(--ink-muted)", padding: "24px 0" }}>…</div>
+        ) : needsPlan && students && students.length > 0 ? (
+          <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule)", borderRadius: 16, padding: "20px 20px 18px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[0]}</div>
+            <div style={{ fontSize: 14, color: "var(--ink-muted)" }}>{students.map((s) => s.memberName).join(", ")}</div>
+            <a className="gd-buy" href={payUrl(lang === "en" ? "/pricing" : `/${lang}/pricing`)} style={{ background: "#0EA5A5", color: "#fff", borderRadius: 12, padding: "12px 22px", fontSize: 15, fontWeight: 800, textDecoration: "none" }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[1]}</a>
+          </div>
         ) : students && students.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 8 }}>
             {students.map((s) => {
