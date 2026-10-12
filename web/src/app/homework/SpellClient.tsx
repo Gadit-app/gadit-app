@@ -18,7 +18,7 @@ import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIn
 import { LearnCard } from "@/components/play/learn/LearnCard";
 import { LEARN_CSS } from "@/components/play/learn/learn-css";
 import { ToolPage } from "@/components/design/ToolPage";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -176,6 +176,13 @@ function fmtDate(d: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
   return m ? `${+m[3]}/${+m[2]}` : d;
 }
+/** A stable shuffle (no randomness while rendering): order by a hash of the
+ *  word and a salt, so the options stay put for one question. */
+function stableShuffle(items: string[], salt: string): string[] {
+  const h = (x: string) => { let n = 2166136261; for (const ch of x + "|" + salt) { n ^= ch.charCodeAt(0); n = Math.imul(n, 16777619); } return n >>> 0; };
+  return [...items].sort((a, b) => h(a) - h(b));
+}
+
 function norm(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -329,6 +336,16 @@ export function SpellClient() {
   const DIR_KEY = "gadit-dict-dir";
   const MODE_KEY = "gadit-dict-mode";
   const [dirRemembered, setDirRemembered] = useState(false);
+  // "Listen and pick" (Gadi 2026-10-12, the council's one new practice):
+  // hear a word, pick it from three of the same set. Same word sources as
+  // dictation; asks once which language is heard.
+  const PICK_KEY = "gadit-pick-lang";
+  const [drill, setDrillState] = useState<"spell" | "pick">("spell");
+  const drillRef = useRef<"spell" | "pick">("spell");
+  const setDrill = (d: "spell" | "pick") => { drillRef.current = d; setDrillState(d); };
+  const [pickLang, setPickLang] = useState<"native" | "en" | null>(null);
+  const [picked, setPicked] = useState<string | null>(null);
+  const hearRef = useRef<HTMLSpanElement>(null);
   const [setupFor, setSetupFor] = useState<DictationSet | null>(null);
   const [setupWrite, setSetupWrite] = useState<"native" | "en">("en");
   const [setupHear, setSetupHear] = useState<"same" | "other">("other");
@@ -420,6 +437,7 @@ export function SpellClient() {
   // Open the saved task: a list starts its dictation, a text opens in the
   // reader inside Homework, workbook pages play their lesson.
   function openTask(tk: SavedTask) {
+    setDrill("spell");
     if (tk.kind === "list" && tk.words && tk.words.length >= 2) {
       begin({ id: `hw-${tk.at}`, icon: "📝", titleEn: tk.title || ic.kList, titleHe: tk.title || ic.kList, words: tk.words });
     } else if (tk.kind === "text" && tk.text) {
@@ -474,6 +492,7 @@ export function SpellClient() {
   }
 
   async function createFromList(override?: string, photo = false) {
+    setDrill("spell");
     const lt = (override ?? listText).trim();
     if (lt.length < 2 || creating || !user) return;
     setCreating(true);
@@ -661,6 +680,21 @@ export function SpellClient() {
   const promptRtl = RTL_SET.has(promptLang);
 
   const current = queue[idx] ?? null;
+  const pickSide = (w: WordPair) => (pickLang === "en" ? w.en : w.he);
+  const pickAudio = pickLang === "en" ? "en" : nativeLang;
+  const pickOptions = useMemo(() => {
+    if (drill !== "pick" || !current || !set) return [] as string[];
+    const ans = pickSide(current);
+    const others = [...new Set(set.words.map(pickSide))].filter((x) => x && norm(x) !== norm(ans));
+    return stableShuffle([ans, ...stableShuffle(others, ans).slice(0, 2)], ans + idx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drill, current, set, pickLang, idx]);
+  // The word plays by itself on every new question.
+  useEffect(() => {
+    if (phase !== "quiz" || drill !== "pick" || !current) return;
+    const tm = setTimeout(() => hearRef.current?.querySelector("button")?.click(), 350);
+    return () => clearTimeout(tm);
+  }, [phase, drill, current, idx]);
   const total = set?.words.length ?? 0;
 
   // Remembered choices on this device.
@@ -671,12 +705,21 @@ export function SpellClient() {
       if (isDir(d)) { setQdir(d); setDirRemembered(true); }
       const m = localStorage.getItem(MODE_KEY);
       if (m === "type" || m === "trace") setModeState(m);
+      const pl = localStorage.getItem(PICK_KEY);
+      if (pl === "native" || pl === "en") setPickLang(pl);
     } catch { /* ask each time */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** Start a set: straight away when the choices are known, else ask once. */
   function begin(s: DictationSet) {
+    if (drillRef.current === "pick") {
+      if (pickLang) { start(s); return; }
+      setSetupWrite(nativeLang === "he" ? "en" : "native");
+      setSetupFor(s);
+      try { window.scrollTo({ top: 0 }); } catch { /* fine */ }
+      return;
+    }
     if (dirRemembered) { start(s); return; }
     setSetupWrite(qdir === "he2en" || qdir === "en2en" ? "en" : "native");
     setSetupHear(qdir === "he2he" || qdir === "en2en" ? "same" : "other");
@@ -685,6 +728,14 @@ export function SpellClient() {
   }
   function confirmSetup() {
     if (!setupFor) return;
+    if (drillRef.current === "pick") {
+      setPickLang(setupWrite);
+      try { localStorage.setItem(PICK_KEY, setupWrite); } catch { /* this visit only */ }
+      const s1 = setupFor;
+      setSetupFor(null);
+      start(s1);
+      return;
+    }
     const d: Dir = setupWrite === "en" ? (setupHear === "same" ? "en2en" : "he2en") : (setupHear === "same" ? "he2he" : "en2he");
     setQdir(d);
     setDirRemembered(true);
@@ -720,9 +771,23 @@ export function SpellClient() {
     }
   }
 
+  function choose(opt: string) {
+    if (!current || result) return;
+    setPicked(opt);
+    if (norm(opt) === norm(pickSide(current))) {
+      setResult("correct");
+      setTimeout(() => nextRef.current(), 900);
+    } else {
+      setResult("wrong");
+      setMisses((m) => [...m, current]);
+      setWrongEver((s) => new Set(s).add(pickSide(current) + "|pick"));
+    }
+  }
+
   function next() {
     setResult(null);
     setTyped("");
+    setPicked(null);
     if (idx + 1 < queue.length) {
       setIdx(idx + 1);
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -735,13 +800,16 @@ export function SpellClient() {
       setIdx(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
-      void saveSet();
+      // "Listen and pick" is not a dictation: not saved under "my dictations".
+      if (drill !== "pick") void saveSet();
       setCelebration(randomCelebration(lang));
       setCelebrateId((n) => n + 1);
       setPhase("done");
-      void notifyParentDictation();
+      if (drill !== "pick") void notifyParentDictation();
     }
   }
+  const nextRef = useRef(next);
+  nextRef.current = next;
 
   // Letter-level highlight of the correct answer vs what the kid typed.
   function AnswerDiff({ answer, typedVal }: { answer: string; typedVal: string }) {
@@ -797,7 +865,7 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? dc.name : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
+    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? (drill === "pick" ? dc.pickName : dc.name) : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
         {phase === "pick" && hw === "hub" && (
           <div className="wb-hw-hub">
@@ -886,7 +954,18 @@ export function SpellClient() {
         )}
 
         {/* The one dictation setup screen (asked once, then remembered). */}
-        {phase === "pick" && setupFor && (
+        {phase === "pick" && setupFor && drill === "pick" && (
+          <div className="wb-dict-setup">
+            <div className="wb-hw-intake-q">{dc.hearIn}</div>
+            <div className="wb-hw-intake-chips" role="radiogroup" aria-label={dc.hearIn}>
+              {([["native", nativeName], ["en", englishName]] as const).map(([k, label]) => (
+                <button key={k} type="button" role="radio" aria-checked={setupWrite === k} className={`wb-hw-chip${setupWrite === k ? " is-on" : ""}`} onClick={() => setSetupWrite(k)}>{label}</button>
+              ))}
+            </div>
+            <button type="button" className="wb-hw-intake-save" onClick={confirmSetup}>{dc.go}</button>
+          </div>
+        )}
+        {phase === "pick" && setupFor && drill !== "pick" && (
           <div className="wb-dict-setup">
             <div className="wb-hw-intake-q">{dc.writeIn}</div>
             <div className="wb-hw-intake-chips" role="radiogroup" aria-label={dc.writeIn}>
@@ -919,10 +998,20 @@ export function SpellClient() {
                   <span>{dc.sub}</span>
                 </div>
               </div>
-              <button type="button" className="wb-learn-simple-go" onClick={() => setHw("dict")}>{dc.choose}</button>
+              <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("spell"); setHw("dict"); }}>{dc.choose}</button>
               {history.length > 0 && (
-                <button type="button" className="wb-learn-simple-link" onClick={() => setHw("dict")}>{t("yourDictations", lang)}</button>
+                <button type="button" className="wb-learn-simple-link" onClick={() => { setDrill("spell"); setHw("dict"); }}>{t("yourDictations", lang)}</button>
               )}
+            </section>
+            <section className="wb-learn-simple" dir={dir}>
+              <div className="wb-learn-simple-head">
+                <span className="wb-learn-simple-icon" aria-hidden="true">👂</span>
+                <div className="wb-learn-text">
+                  <b>{dc.pickName}</b>
+                  <span>{dc.pickSub}</span>
+                </div>
+              </div>
+              <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("pick"); setHw("dict"); }}>{dc.choose}</button>
             </section>
           </div>
         )}
@@ -1049,20 +1138,42 @@ export function SpellClient() {
           <div style={{ marginTop: 24 }}>
             <div className="wb-dict-bar">
               <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{idx + 1} / {queue.length}</span>
-              <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
+              {drill !== "pick" && <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
                 {(["type", "trace"] as const).map((m) => (
                   <button key={m} type="button" role="radio" aria-checked={mode === m} className={`wb-dict-mode${mode === m ? " is-on" : ""}`} onClick={() => setMode(m)}>
                     {m === "type" ? "⌨️" : "✍️"} {t(m === "type" ? "modeType" : "modeTrace", lang)}
                   </button>
                 ))}
-              </span>
+              </span>}
               {set && (
-                <button type="button" className="wb-dict-change" onClick={() => { setSetupWrite(qdir === "he2en" || qdir === "en2en" ? "en" : "native"); setSetupHear(sameLang ? "same" : "other"); setSetupFor(set); setPhase("pick"); }}>{dc.change}</button>
+                <button type="button" className="wb-dict-change" onClick={() => {
+                  if (drill === "pick") setSetupWrite(pickLang ?? "en");
+                  else { setSetupWrite(qdir === "he2en" || qdir === "en2en" ? "en" : "native"); setSetupHear(sameLang ? "same" : "other"); }
+                  setSetupFor(set); setPhase("pick");
+                }}>{dc.change}</button>
               )}
             </div>
 
+            {drill === "pick" && (
+              <div className="wb-pick">
+                <span ref={hearRef} className="wb-spell-hear"><TTSButton text={pickSide(current)} audioLang={pickAudio} ariaLabel={t("listen", lang)} /></span>
+                <div className="wb-pick-opts">
+                  {pickOptions.map((o) => {
+                    const right = !!result && norm(o) === norm(pickSide(current));
+                    const wrong = result === "wrong" && picked === o;
+                    return (
+                      <button key={o} type="button" dir="auto" disabled={!!result} onClick={() => choose(o)}
+                        className={`wb-pick-opt${right ? " is-right" : ""}${wrong ? " is-wrong" : ""}`}>{o}</button>
+                    );
+                  })}
+                </div>
+                {result === "correct" && <div className="wb-pick-ok">✓ {t("correct", lang)}</div>}
+                {result === "wrong" && <button type="button" className="wb-learn-simple-go" onClick={next}>{dc.cont}</button>}
+              </div>
+            )}
+
             {/* Prompt word + speaker (reads it aloud like a teacher dictating) */}
-            <div style={{ background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 18, padding: "26px 20px", textAlign: "center" }}>
+            {drill !== "pick" && <div style={{ background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 18, padding: "26px 20px", textAlign: "center" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
                 {sameLang ? (
                   // Same-language dictation: hear it, don't see it.
@@ -1125,7 +1236,7 @@ export function SpellClient() {
                   </button>
                 </>
               )}
-            </div>
+            </div>}
 
             <div style={{ textAlign: "center", marginTop: 14 }}>
               <button type="button" onClick={() => setPhase("pick")} style={{ background: "none", border: "none", color: "var(--ink-muted,#6B7280)", fontSize: 13, cursor: "pointer" }}>{t("back", lang)}</button>
