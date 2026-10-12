@@ -8,6 +8,8 @@ export type LearnCopy = {
   english: string; hebrew: string; beta: string; stop: string;
   readsQ: (lang: string) => string; readsSub: string; reads: { no: string; little: string; yes: string };
   learning: (lang: string) => string; learningSub: string; change: string;
+  /** The simple course card (Gadi 2026-10-12, the council): sub, "continue", "change language". */
+  simpleSub: string; cont: string; changeLang: string;
   learnedWeek: string; reinforce: string; listReady: (testDate: string | null) => string;
   listAdd: string; listReplace: string; listClear: string;
   listTitle: string; listSub: (lang: string) => string; listPlaceholder: string;
@@ -29,6 +31,7 @@ const he: LearnCopy = {
   reads: { no: "עוד לא", little: "קצת", yes: "כן" },
   learning: (l) => `לומדים ${l}`,
   learningSub: "השיעורים כאן מותאמים לרמה, עם תרגום, תמונה וקול.",
+  simpleSub: "מילים חדשות ומשפטים", cont: "המשיכו", changeLang: "שינוי שפה",
   change: "לשנות",
   learnedWeek: "מילים נלמדו השבוע",
   reinforce: "מילים לחיזוק",
@@ -60,6 +63,7 @@ const en: LearnCopy = {
   reads: { no: "Not yet", little: "A little", yes: "Yes" },
   learning: (l) => `Learning ${l}`,
   learningSub: "The lessons here match the level, with a translation, a picture and sound.",
+  simpleSub: "New words and sentences", cont: "Continue", changeLang: "Change language",
   change: "Change",
   learnedWeek: "words learned this week",
   reinforce: "words to practise again",
@@ -91,6 +95,7 @@ const ar: LearnCopy = {
   reads: { no: "ليس بعد", little: "قليلًا", yes: "نعم" },
   learning: (l) => `نتعلّم ${l}`,
   learningSub: "الدروس هنا تناسب المستوى، مع ترجمة وصورة وصوت.",
+  simpleSub: "كلمات جديدة وجمل", cont: "تابعوا", changeLang: "تغيير اللغة",
   change: "تغيير",
   learnedWeek: "كلمات تعلّمناها هذا الأسبوع",
   reinforce: "كلمات للتمرين من جديد",
@@ -122,6 +127,7 @@ const ru: LearnCopy = {
   reads: { no: "Ещё нет", little: "Немного", yes: "Да" },
   learning: (l) => `Учим ${l}`,
   learningSub: "Уроки здесь подстроены под уровень: с переводом, картинкой и звуком.",
+  simpleSub: "Новые слова и предложения", cont: "Продолжить", changeLang: "Сменить язык",
   change: "Изменить",
   learnedWeek: "слов выучено за неделю",
   reinforce: "слов повторить",

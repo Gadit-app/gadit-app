@@ -14995,3 +14995,29 @@ html[data-theme="dark"] .wb-hw-add-paste, html[data-theme="dark"] .wb-hw-add-sma
 .wb-hw-add-btn:hover { background: rgba(14, 165, 165, .08); }
 .wb-hw-add-btn:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
 html[data-theme="dark"] .wb-hw-add-btn, html[data-theme="space"] .wb-hw-add-btn, html[data-theme="ocean"] .wb-hw-add-btn, html[data-theme="jungle"] .wb-hw-add-btn, html[data-theme="neon"] .wb-hw-add-btn, html[data-theme="sunset"] .wb-hw-add-btn, html[data-theme="aurora"] .wb-hw-add-btn, html[data-theme="cosmos"] .wb-hw-add-btn, html[data-theme="lava"] .wb-hw-add-btn, html[data-theme="royal"] .wb-hw-add-btn { color: #5EEAD4; }
+
+/* Learning words (Gadi 2026-10-12, the council): two white cards, one teal
+   button each; dictation asks once, on one screen. */
+.wb-learn-home { display: flex; flex-direction: column; gap: 14px; }
+.wb-learn-simple { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 18px 14px; }
+.wb-learn-simple-head { display: flex; align-items: center; gap: 12px; }
+.wb-learn-simple-icon { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: rgba(14, 165, 165, .1); }
+.wb-learn-simple .wb-learn-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wb-learn-simple .wb-learn-text b { font-size: 17px; font-weight: 800; color: var(--ink, #0B1220); }
+.wb-learn-simple .wb-learn-text span { font-size: 13.5px; color: var(--ink-muted, #6B7280); }
+.wb-learn-simple-next { font-size: 14.5px; color: var(--ink-muted, #6B7280); }
+.wb-learn-simple-next b { color: var(--ink, #0B1220); font-weight: 700; }
+.wb-learn-simple-go { width: 100%; min-height: 48px; border: 0; border-radius: 12px; background: #0EA5A5; color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; }
+.wb-learn-simple-go:disabled { opacity: .6; cursor: default; }
+.wb-learn-simple-go:focus-visible, .wb-learn-simple-link:focus-visible, .wb-dict-mode:focus-visible, .wb-dict-change:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
+.wb-learn-simple-link { align-self: center; background: none; border: 0; padding: 4px 6px; font: inherit; font-size: 14.5px; font-weight: 700; color: #0A7472; cursor: pointer; }
+.wb-learn-simple-link.is-quiet { font-weight: 500; color: var(--ink-muted, #6B7280); }
+.wb-dict-setup { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 16px; }
+.wb-dict-setup .wb-hw-intake-save { align-self: flex-start; margin-top: 6px; }
+.wb-dict-h { font-size: 17px; font-weight: 800; color: var(--ink, #0B1220); margin: 0 0 4px; }
+.wb-dict-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12.5px; font-weight: 600; color: var(--ink-muted, #6B7280); }
+.wb-dict-modes { display: inline-flex; gap: 4px; margin-inline-start: auto; background: var(--paper, #F3F4F6); border-radius: 999px; padding: 3px; }
+.wb-dict-mode { border: 0; background: transparent; border-radius: 999px; padding: 5px 10px; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink-muted, #6B7280); cursor: pointer; }
+.wb-dict-mode.is-on { background: var(--surface, #fff); color: var(--ink, #0B1220); box-shadow: 0 1px 2px rgba(15, 23, 42, .15); }
+.wb-dict-change { border: 0; background: none; padding: 4px 2px; font: inherit; font-size: 13px; font-weight: 700; color: #0A7472; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+html[data-theme="dark"] .wb-learn-simple-link, html[data-theme="dark"] .wb-dict-change, html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dict-change, html[data-theme="ocean"] .wb-learn-simple-link, html[data-theme="ocean"] .wb-dict-change, html[data-theme="jungle"] .wb-learn-simple-link, html[data-theme="jungle"] .wb-dict-change, html[data-theme="neon"] .wb-learn-simple-link, html[data-theme="neon"] .wb-dict-change, html[data-theme="sunset"] .wb-learn-simple-link, html[data-theme="sunset"] .wb-dict-change, html[data-theme="aurora"] .wb-learn-simple-link, html[data-theme="aurora"] .wb-dict-change, html[data-theme="cosmos"] .wb-learn-simple-link, html[data-theme="cosmos"] .wb-dict-change, html[data-theme="lava"] .wb-learn-simple-link, html[data-theme="lava"] .wb-dict-change, html[data-theme="royal"] .wb-learn-simple-link, html[data-theme="royal"] .wb-dict-change { color: #5EEAD4; }

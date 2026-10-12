@@ -39,7 +39,7 @@ const he: LessonCopy = {
   pronounTitle: "הוא, היא או זה",
   pronounPrompt: "איזו מילה מתאימה במקום:",
   readingTitle: "קוראים ועונים", readingAsk: "נכון או לא נכון?", yes: "נכון", no: "לא נכון",
-  nextLesson: "השיעור הבא", allLessons: "כל השיעורים", hideLessons: "להסתיר את השיעורים", startBtn: "להתחיל", loading: "מכינים את השיעור…",
+  nextLesson: "השיעור הבא", allLessons: "כל השיעורים", hideLessons: "להסתיר את השיעורים", startBtn: "מתחילים", loading: "מכינים את השיעור…",
 };
 const en: LessonCopy = {
   photoBtn: "A lesson from workbook pages",

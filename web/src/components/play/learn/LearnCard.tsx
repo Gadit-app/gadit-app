@@ -25,8 +25,12 @@ export type LearnState = {
   lessons: { list: Array<{ id: string; topic: string; title: string; icon: string; d: number; done: boolean }>; next: string | null } | null;
 };
 
-export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
+export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: {
   lang: string;
+  /** Homework's course card (Gadi 2026-10-12, the council): the title, the
+   *  next lesson, one button and "all lessons". No stats, no list, no
+   *  workbook button (those live in "add homework" and the test section). */
+  simple?: boolean;
   dir: "rtl" | "ltr";
   /** Bump to reload the next words (after a game). */
   refreshKey: number;
@@ -229,6 +233,44 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson }: {
           <button type="button" className="wb-learn-btn" disabled={busy || text.trim().length < 3} onClick={() => void saveList()}>{t.listSave}</button>
           <button type="button" className="wb-learn-chip is-soft" onClick={() => { setStep("view"); setMsg(""); }}>{t.cancel}</button>
         </div>
+      </section>
+    );
+  }
+
+  // Homework's simple course card.
+  if (simple && state.lang) {
+    const L = state.lessons;
+    const next = L?.list.find((l) => l.id === L.next) ?? L?.list[0];
+    const started = !!L?.list.some((l) => l.done);
+    return (
+      <section className="wb-learn-simple" dir={dir}>
+        <div className="wb-learn-simple-head">
+          <span className="wb-learn-simple-icon" aria-hidden="true">📖</span>
+          <div className="wb-learn-text">
+            <b>{t.learning(name(state.lang))}{state.lang === "he" ? <small className="wb-learn-beta">{t.beta}</small> : null}</b>
+            <span>{t.simpleSub}</span>
+          </div>
+        </div>
+        {next && onLesson && (
+          <>
+            <div className="wb-learn-simple-next"><span>{lc.nextLesson}:</span> <b>{next.icon} {next.title}</b></div>
+            <button type="button" className="wb-learn-simple-go" disabled={busy} onClick={() => void openLesson(next.id)}>{started ? t.cont : lc.startBtn}</button>
+          </>
+        )}
+        <button type="button" className="wb-learn-simple-link" onClick={() => setShowAll((v) => !v)}>{showAll ? lc.hideLessons : lc.allLessons}</button>
+        {showAll && L && (
+          <>
+            <div className="wb-learn-lesson-grid">
+              {L.list.map((l) => (
+                <button key={l.id} type="button" className={`wb-learn-lesson-chip${l.done ? " is-done" : ""}${l.id === L.next ? " is-next" : ""}`} disabled={busy} onClick={() => void openLesson(l.id)}>
+                  <span aria-hidden="true">{l.done ? "✓" : l.icon}</span> {l.title}
+                </button>
+              ))}
+            </div>
+            <button type="button" className="wb-learn-simple-link is-quiet" onClick={() => setStep("pick")}>{t.changeLang}</button>
+          </>
+        )}
+        {busy && msg && <p className="wb-learn-msg">{msg}</p>}
       </section>
     );
   }

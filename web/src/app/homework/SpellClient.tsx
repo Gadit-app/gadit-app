@@ -13,6 +13,7 @@
 import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
+import { dictCopy } from "@/lib/dictation-i18n";
 import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIntake";
 import { LearnCard } from "@/components/play/learn/LearnCard";
 import { LEARN_CSS } from "@/components/play/learn/learn-css";
@@ -294,6 +295,7 @@ export function SpellClient() {
   const { lang, dir } = useLang();
   const hc = homeworkCopy(lang);
   const ic = intakeCopy(lang);
+  const dc = dictCopy(lang);
   const href = useHref();
   const router = useRouter();
   const { user, plan, planReady, kidsAccess } = useAuth();
@@ -319,7 +321,21 @@ export function SpellClient() {
   const setTitle = (s: DictationSet) => (lang === "he" || nativeLang !== "he" ? s.titleHe : s.titleEn);
 
   const [qdir, setQdir] = useState<Dir>("he2en");
-  const [mode, setMode] = useState<"type" | "trace">("type");
+  const [mode, setModeState] = useState<"type" | "trace">("type");
+  // Dictation choices are asked once, on one screen, then remembered on this
+  // device (Gadi 2026-10-12, the council): "which language do we write in?"
+  // and "what do we hear?". Typing or tracing is a small switch inside the
+  // exercise. "Change" on the exercise reopens the screen.
+  const DIR_KEY = "gadit-dict-dir";
+  const MODE_KEY = "gadit-dict-mode";
+  const [dirRemembered, setDirRemembered] = useState(false);
+  const [setupFor, setSetupFor] = useState<DictationSet | null>(null);
+  const [setupWrite, setSetupWrite] = useState<"native" | "en">("en");
+  const [setupHear, setSetupHear] = useState<"same" | "other">("other");
+  const setMode = (m: "type" | "trace") => {
+    setModeState(m);
+    try { localStorage.setItem(MODE_KEY, m); } catch { /* this visit only */ }
+  };
   const [set, setSet] = useState<DictationSet | null>(null);
   const setIdRef = useRef<string>("");
   const [queue, setQueue] = useState<WordPair[]>([]);
@@ -333,7 +349,7 @@ export function SpellClient() {
   // getting ready for a test (a dictation is a test too), learning words,
   // reading a text. Dictation is a way to practise, not a place. Each opens
   // its own view; the browser's back button returns to the sections.
-  type HwView = "hub" | "test" | "learn" | "add";
+  type HwView = "hub" | "test" | "learn" | "add" | "dict";
   const [hw, setHwState] = useState<HwView>("hub");
   const setHw = useCallback((v: HwView) => {
     setHwState(v);
@@ -348,7 +364,7 @@ export function SpellClient() {
     const read = () => {
       const v = new URLSearchParams(window.location.search).get("v");
       // ?v=dict and ?v=langs were the old four cards' views.
-      setHwState(v === "test" ? "test" : v === "add" ? "add" : v === "learn" || v === "dict" || v === "langs" ? "learn" : "hub");
+      setHwState(v === "test" ? "test" : v === "add" ? "add" : v === "dict" ? "dict" : v === "learn" || v === "langs" ? "learn" : "hub");
     };
     read();
     window.addEventListener("popstate", read);
@@ -405,7 +421,7 @@ export function SpellClient() {
   // reader inside Homework, workbook pages play their lesson.
   function openTask(tk: SavedTask) {
     if (tk.kind === "list" && tk.words && tk.words.length >= 2) {
-      start({ id: `hw-${tk.at}`, icon: "📝", titleEn: tk.title || ic.kList, titleHe: tk.title || ic.kList, words: tk.words });
+      begin({ id: `hw-${tk.at}`, icon: "📝", titleEn: tk.title || ic.kList, titleHe: tk.title || ic.kList, words: tk.words });
     } else if (tk.kind === "text" && tk.text) {
       try { sessionStorage.setItem("gadit-reader-text", tk.text); } catch { /* the reader opens empty */ }
       router.push(href("/read?from=homework"));
@@ -474,7 +490,7 @@ export function SpellClient() {
         setCreateMsg(data.safe === false ? t("unsafe", lang) : t("createErr", lang));
         return;
       }
-      start({ id: "custom", icon: "📝", titleEn: data.title || "My list", titleHe: data.title || "הרשימה שלי", words: data.words });
+      begin({ id: "custom", icon: "📝", titleEn: data.title || "My list", titleHe: data.title || "הרשימה שלי", words: data.words });
       setListText("");
     } catch {
       setCreateMsg(t("createErr", lang));
@@ -500,7 +516,7 @@ export function SpellClient() {
         setCreateMsg(data.safe === false ? t("unsafe", lang) : t("createErr", lang));
         return;
       }
-      start({ id: "custom", icon: "✨", titleEn: data.title || tp, titleHe: data.title || tp, words: data.words });
+      begin({ id: "custom", icon: "✨", titleEn: data.title || tp, titleHe: data.title || tp, words: data.words });
       setTopic("");
     } catch {
       setCreateMsg(t("createErr", lang));
@@ -514,7 +530,7 @@ export function SpellClient() {
   // language on the fly (cached server-side per language). Gadi 2026-09-19.
   const [loadingCat, setLoadingCat] = useState<string>("");
   async function startCategory(s: DictationSet) {
-    if (nativeLang === "he") { start(s); return; }
+    if (nativeLang === "he") { begin(s); return; }
     if (!user || loadingCat) return;
     setLoadingCat(s.id);
     setCreateMsg("");
@@ -531,7 +547,7 @@ export function SpellClient() {
         return;
       }
       // Keep the curated icon + stable id so re-practice + history line up.
-      start({ id: s.id, icon: s.icon, titleEn: s.titleEn, titleHe: data.title || s.titleEn, words: data.words });
+      begin({ id: s.id, icon: s.icon, titleEn: s.titleEn, titleHe: data.title || s.titleEn, words: data.words });
     } catch {
       setCreateMsg(t("createErr", lang));
     } finally {
@@ -647,6 +663,37 @@ export function SpellClient() {
   const current = queue[idx] ?? null;
   const total = set?.words.length ?? 0;
 
+  // Remembered choices on this device.
+  useEffect(() => {
+    try {
+      const d = localStorage.getItem(DIR_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
+      if (isDir(d)) { setQdir(d); setDirRemembered(true); }
+      const m = localStorage.getItem(MODE_KEY);
+      if (m === "type" || m === "trace") setModeState(m);
+    } catch { /* ask each time */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /** Start a set: straight away when the choices are known, else ask once. */
+  function begin(s: DictationSet) {
+    if (dirRemembered) { start(s); return; }
+    setSetupWrite(qdir === "he2en" || qdir === "en2en" ? "en" : "native");
+    setSetupHear(qdir === "he2he" || qdir === "en2en" ? "same" : "other");
+    setSetupFor(s);
+    try { window.scrollTo({ top: 0 }); } catch { /* fine */ }
+  }
+  function confirmSetup() {
+    if (!setupFor) return;
+    const d: Dir = setupWrite === "en" ? (setupHear === "same" ? "en2en" : "he2en") : (setupHear === "same" ? "he2he" : "en2he");
+    setQdir(d);
+    setDirRemembered(true);
+    try { localStorage.setItem(DIR_KEY, d); } catch { /* this visit only */ }
+    const s0 = setupFor;
+    setSetupFor(null);
+    start(s0);
+  }
+
   function start(s: DictationSet) {
     setIdRef.current = s.id === "custom" ? hashWords(s.words) : s.id;
     const shuffled = [...s.words].sort(() => Math.random() - 0.5);
@@ -750,7 +797,7 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
+    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? dc.name : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
         {phase === "pick" && hw === "hub" && (
           <div className="wb-hw-hub">
@@ -827,7 +874,7 @@ export function SpellClient() {
         )}
 
         {phase === "pick" && hw !== "hub" && (
-          <button type="button" className="wb-hw-back" onClick={() => setHw("hub")}>
+          <button type="button" className="wb-hw-back" onClick={() => { setSetupFor(null); setHw("hub"); }}>
             {dir === "rtl" ? "→" : "←"} {hc.back}
           </button>
         )}
@@ -838,49 +885,52 @@ export function SpellClient() {
             onCancel={() => { setIntakeFiles(null); setHw("hub"); }} />
         )}
 
-        {phase === "pick" && (hw === "test" || hw === "learn") && (
-          <>
-            {/* Learning words: lessons by topic and a lesson from workbook
-                pages (a lesson plays on the games page and comes back here),
-                then a set from a topic and the ready topics below. */}
-            {hw === "learn" && <>
-              <style>{LEARN_CSS}</style>
-              <LearnCard lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
-            </>}
-            {/* Getting ready for a test: paste or photograph the word list */}
-            {hw === "test" && <div style={{ marginTop: 4, marginBottom: 4, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: "#EEF2F3", display: "grid", placeItems: "center", fontSize: 18 }}>📝</span>
-                <div>
-                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("pasteTitle", lang)}</div>
-                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("pasteSub", lang)}</div>
+        {/* The one dictation setup screen (asked once, then remembered). */}
+        {phase === "pick" && setupFor && (
+          <div className="wb-dict-setup">
+            <div className="wb-hw-intake-q">{dc.writeIn}</div>
+            <div className="wb-hw-intake-chips" role="radiogroup" aria-label={dc.writeIn}>
+              {([["native", nativeName], ["en", englishName]] as const).map(([k, label]) => (
+                <button key={k} type="button" role="radio" aria-checked={setupWrite === k} className={`wb-hw-chip${setupWrite === k ? " is-on" : ""}`} onClick={() => setSetupWrite(k)}>{label}</button>
+              ))}
+            </div>
+            <div className="wb-hw-intake-q">{dc.hearQ}</div>
+            <div className="wb-hw-intake-chips" role="radiogroup" aria-label={dc.hearQ}>
+              <button type="button" role="radio" aria-checked={setupHear === "same"} className={`wb-hw-chip${setupHear === "same" ? " is-on" : ""}`} onClick={() => setSetupHear("same")}>{dc.hearSame}</button>
+              <button type="button" role="radio" aria-checked={setupHear === "other"} className={`wb-hw-chip${setupHear === "other" ? " is-on" : ""}`} onClick={() => setSetupHear("other")}>
+                {dc.hearOther.replace("{lang}", setupWrite === "en" ? nativeName : englishName)}
+              </button>
+            </div>
+            <button type="button" className="wb-hw-intake-save" onClick={confirmSetup}>{dc.go}</button>
+          </div>
+        )}
+
+        {/* Learning words: two cards, the language course and dictation
+            (Gadi 2026-10-12, the council). */}
+        {phase === "pick" && !setupFor && hw === "learn" && (
+          <div className="wb-learn-home">
+            <style>{LEARN_CSS}</style>
+            <LearnCard simple lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
+            <section className="wb-learn-simple" dir={dir}>
+              <div className="wb-learn-simple-head">
+                <span className="wb-learn-simple-icon" aria-hidden="true">✏️</span>
+                <div className="wb-learn-text">
+                  <b>{dc.name}</b>
+                  <span>{dc.sub}</span>
                 </div>
               </div>
-              <textarea
-                value={listText}
-                onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
-                placeholder={t("pastePlaceholder", lang)}
-                dir={dir === "rtl" ? "rtl" : "auto"}
-                rows={4}
-                maxLength={800}
-                style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
-              />
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
-                <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
-                  style={{ padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
-                  {creating ? t("creating", lang) : t("pasteBtn", lang)}
-                </button>
-                <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
-                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
-                  📷 {t("photoBtn", lang)}
-                </button>
-                <input ref={photoRef} type="file" accept="image/*" hidden
-                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
-              </div>
-            </div>}
+              <button type="button" className="wb-learn-simple-go" onClick={() => setHw("dict")}>{dc.choose}</button>
+              {history.length > 0 && (
+                <button type="button" className="wb-learn-simple-link" onClick={() => setHw("dict")}>{t("yourDictations", lang)}</button>
+              )}
+            </section>
+          </div>
+        )}
 
-            {/* Your dictations — re-practice a whole series (esp. missed words) */}
-            {hw === "test" && history.length > 0 && (
+        {/* Dictation, step 1: which words. */}
+        {phase === "pick" && !setupFor && hw === "dict" && (
+          <>
+            {history.length > 0 && (
               <div style={{ marginTop: 16 }}>
                 <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "0 0 10px" }}>
                   {t("yourDictations", lang)}
@@ -912,36 +962,25 @@ export function SpellClient() {
               </div>
             )}
 
-            {/* Direction toggle */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, margin: "16px 0 6px" }}>
-              {(["he2en", "en2he", "he2he", "en2en"] as Dir[]).map((d) => (
-                <button key={d} type="button" onClick={() => setQdir(d)}
+            <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
+              {DICTATION_SETS.map((s) => (
+                <button key={s.id} type="button" onClick={() => startCategory(s)} disabled={!!loadingCat}
                   style={{
-                    minWidth: 0, padding: "11px 10px", borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: "pointer",
-                    border: "1px solid", borderColor: qdir === d ? TEAL : "var(--hairline,#E5E7EB)",
-                    background: qdir === d ? TEAL : "var(--surface,#fff)", color: qdir === d ? "#fff" : "var(--ink,#0B1220)",
+                    display: "flex", alignItems: "center", gap: 12, textAlign: dir === "rtl" ? "right" : "left",
+                    background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 15,
+                    padding: "14px 15px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
+                    opacity: loadingCat && loadingCat !== s.id ? 0.5 : 1,
                   }}>
-                  {dirText(d)}
+                  <span style={{ width: 40, height: 40, flex: "none", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 20, background: TEAL + "1A" }}>{loadingCat === s.id ? "⏳" : s.icon}</span>
+                  <span>
+                    <span style={{ display: "block", fontSize: 15, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{getCatTitle(s.id, lang)}</span>
+                    <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{s.words.length} {misc("words", lang)}</span>
+                  </span>
                 </button>
               ))}
             </div>
-
-            {/* Practice mode toggle: type the word, or trace it with a finger */}
-            <div style={{ display: "flex", gap: 8, marginBottom: 6 }}>
-              {(["type", "trace"] as const).map((m) => (
-                <button key={m} type="button" onClick={() => setMode(m)}
-                  style={{
-                    flex: 1, padding: "9px 10px", borderRadius: 12, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
-                    border: "1px solid", borderColor: mode === m ? "var(--teal-deep,#0A7472)" : "var(--hairline,#E5E7EB)",
-                    background: mode === m ? "#0A7472" : "var(--surface,#fff)", color: mode === m ? "#fff" : "var(--ink,#0B1220)",
-                  }}>
-                  {m === "type" ? "⌨️ " : "✍️ "}{t(m === "type" ? "modeType" : "modeTrace", lang)}
-                </button>
-              ))}
-            </div>
-
-            {/* Create your own set — kid types a topic, Gadit generates 10 words */}
-            {hw === "learn" && <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
+            <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                 <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
                 <div>
@@ -965,35 +1004,61 @@ export function SpellClient() {
                 </button>
               </div>
               {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
-            </div>}
-
-            {hw === "learn" && <>
-            <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
-              {DICTATION_SETS.map((s) => (
-                <button key={s.id} type="button" onClick={() => startCategory(s)} disabled={!!loadingCat}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 12, textAlign: dir === "rtl" ? "right" : "left",
-                    background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 15,
-                    padding: "14px 15px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
-                    opacity: loadingCat && loadingCat !== s.id ? 0.5 : 1,
-                  }}>
-                  <span style={{ width: 40, height: 40, flex: "none", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 20, background: TEAL + "1A" }}>{loadingCat === s.id ? "⏳" : s.icon}</span>
-                  <span>
-                    <span style={{ display: "block", fontSize: 15, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{getCatTitle(s.id, lang)}</span>
-                    <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{s.words.length} {misc("words", lang)}</span>
-                  </span>
-                </button>
-              ))}
             </div>
-            </>}
+          </>
+        )}
+
+        {/* Getting ready for a test: paste or photograph the word list. */}
+        {phase === "pick" && !setupFor && hw === "test" && (
+          <>
+            <div style={{ marginTop: 4, marginBottom: 4, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: "#EEF2F3", display: "grid", placeItems: "center", fontSize: 18 }}>📝</span>
+                <div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("pasteTitle", lang)}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("pasteSub", lang)}</div>
+                </div>
+              </div>
+              <textarea
+                value={listText}
+                onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
+                placeholder={t("pastePlaceholder", lang)}
+                dir={dir === "rtl" ? "rtl" : "auto"}
+                rows={4}
+                maxLength={800}
+                style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
+              />
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
+                  style={{ padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
+                  {creating ? t("creating", lang) : t("pasteBtn", lang)}
+                </button>
+                <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
+                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  📷 {t("photoBtn", lang)}
+                </button>
+                <input ref={photoRef} type="file" accept="image/*" hidden
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
+              </div>
+            </div>
+            {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
           </>
         )}
 
         {phase === "quiz" && current && (
           <div style={{ marginTop: 24 }}>
-            <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)", fontWeight: 600, marginBottom: 10 }}>
+            <div className="wb-dict-bar">
               <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{idx + 1} / {queue.length}</span>
+              <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
+                {(["type", "trace"] as const).map((m) => (
+                  <button key={m} type="button" role="radio" aria-checked={mode === m} className={`wb-dict-mode${mode === m ? " is-on" : ""}`} onClick={() => setMode(m)}>
+                    {m === "type" ? "⌨️" : "✍️"} {t(m === "type" ? "modeType" : "modeTrace", lang)}
+                  </button>
+                ))}
+              </span>
+              {set && (
+                <button type="button" className="wb-dict-change" onClick={() => { setSetupWrite(qdir === "he2en" || qdir === "en2en" ? "en" : "native"); setSetupHear(sameLang ? "same" : "other"); setSetupFor(set); setPhase("pick"); }}>{dc.change}</button>
+              )}
             </div>
 
             {/* Prompt word + speaker (reads it aloud like a teacher dictating) */}
