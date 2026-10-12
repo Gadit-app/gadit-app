@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     if (typeof b.setId === "string") setId = b.setId.trim().slice(0, 80).replace(/[^A-Za-z0-9_-]/g, "");
     if (typeof b.title === "string") title = b.title.trim().slice(0, 60);
     if (typeof b.icon === "string") icon = b.icon.trim().slice(0, 8);
-    if (typeof b.direction === "string" && (b.direction === "he2en" || b.direction === "en2he")) direction = b.direction;
+    if (typeof b.direction === "string" && ["he2en", "en2he", "he2he", "en2en"].includes(b.direction)) direction = b.direction;
     if (typeof b.score === "number") score = Math.max(0, Math.floor(b.score));
     if (typeof b.total === "number") total = Math.max(0, Math.floor(b.total));
     if (Array.isArray(b.words)) {

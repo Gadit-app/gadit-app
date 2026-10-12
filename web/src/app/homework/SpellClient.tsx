@@ -31,8 +31,48 @@ import { misc } from "@/lib/misc-i18n";
 
 // Internal direction ids: "he2en" = native → English, "en2he" = English →
 // native. The "he" in the name is legacy — the non-English side is the
-// learner's OWN language, not necessarily Hebrew.
-type Dir = "he2en" | "en2he";
+// learner's OWN language, not necessarily Hebrew. "he2he" and "en2en" are
+// the same-language dictation (Gadi 2026-10-12, Homework stage 3: hear a
+// word, write the SAME word; the school dictation of grades 1 to 3 and the
+// weekly spelling test). The word is not shown, only heard.
+type Dir = "he2en" | "en2he" | "he2he" | "en2en";
+const isDir = (d: unknown): d is Dir => d === "he2en" || d === "en2he" || d === "he2he" || d === "en2en";
+/** "Hear and write in {lang}" for the same-language buttons. */
+const SAME_LANG: Record<string, string> = {
+  he: "שומעים וכותבים ב{lang}",
+  en: "Hear and write in {lang}",
+  ar: "{lang}: نسمع ونكتب",
+  ru: "{lang}: слушаем и пишем",
+  es: "{lang}: escuchar y escribir",
+  pt: "{lang}: ouvir e escrever",
+  fr: "{lang} : écouter et écrire",
+  de: "{lang}: hören und schreiben",
+  cs: "{lang}: poslouchat a psát",
+  sk: "{lang}: počúvať a písať",
+  it: "{lang}: ascolta e scrivi",
+  ja: "{lang}：聞いて書く",
+  hi: "{lang}: सुनें और लिखें",
+  am: "{lang}፦ ሰምቶ መጻፍ",
+  uk: "{lang}: слухаємо й пишемо",
+  tr: "{lang}: dinle ve yaz",
+  pl: "{lang}: słuchamy i piszemy",
+  fa: "{lang}: بشنوید و بنویسید",
+  id: "{lang}: dengar dan tulis",
+  nl: "{lang}: luisteren en schrijven",
+  el: "{lang}: ακούμε και γράφουμε",
+  zu: "{lang}: lalela ubhale",
+  vi: "{lang}: nghe và viết",
+  fil: "{lang}: makinig at isulat",
+  af: "{lang}: luister en skryf",
+  sw: "{lang}: sikiliza uandike",
+  "zh-CN": "{lang}：听写",
+  "zh-TW": "{lang}：聽寫",
+  ko: "{lang}: 듣고 쓰기",
+  th: "{lang}: ฟังแล้วเขียน",
+  bn: "{lang}: শুনে লিখুন",
+  da: "{lang}: lyt og skriv",
+  hu: "{lang}: hallgasd és írd le",
+};
 const RTL_SET = new Set(["he", "ar", "fa"]);
 
 // Language-major so translated languages can be appended verbatim from the
@@ -271,7 +311,9 @@ export function SpellClient() {
   const nativeName = langNameIn(nativeLang, lang);
   const englishName = langNameIn("en", lang);
   const arrow = dir === "rtl" ? "←" : "→";
-  const dirText = (d: Dir) => (d === "he2en" ? `${nativeName} ${arrow} ${englishName}` : `${englishName} ${arrow} ${nativeName}`);
+  const dirText = (d: Dir) => (d === "he2en" ? `${nativeName} ${arrow} ${englishName}`
+    : d === "en2he" ? `${englishName} ${arrow} ${nativeName}`
+    : (SAME_LANG[lang] ?? SAME_LANG.en).replace("{lang}", d === "he2he" ? nativeName : englishName));
   // The set's display title: he UI → Hebrew title; en UI → English title; any
   // other UI → the localized title we stored in titleHe when generating.
   const setTitle = (s: DictationSet) => (lang === "he" || nativeLang !== "he" ? s.titleHe : s.titleEn);
@@ -536,7 +578,7 @@ export function SpellClient() {
       const data = (await res.json()) as { set?: { setId?: string; title?: string; icon?: string; direction?: string; words?: WordPair[] } };
       const sv = data.set;
       if (sv && Array.isArray(sv.words) && sv.words.length >= 2) {
-        if (sv.direction === "he2en" || sv.direction === "en2he") setQdir(sv.direction);
+        if (isDir(sv.direction)) setQdir(sv.direction);
         start({ id: sv.setId || setId, icon: sv.icon || "📝", titleEn: sv.title || "", titleHe: sv.title || "", words: sv.words });
       }
     } catch { /* ignore */ }
@@ -569,7 +611,7 @@ export function SpellClient() {
         const data = (await res.json()) as { set?: { setId?: string; title?: string; icon?: string; direction?: string; words?: WordPair[] } };
         const sv = data.set;
         if (sv && Array.isArray(sv.words) && sv.words.length >= 2) {
-          if (sv.direction === "he2en" || sv.direction === "en2he") setQdir(sv.direction);
+          if (isDir(sv.direction)) setQdir(sv.direction);
           start({ id: sv.setId || id, icon: sv.icon || "📝", titleEn: sv.title || "", titleHe: sv.title || "", words: sv.words });
         }
       } catch { /* ignore */ }
@@ -578,10 +620,14 @@ export function SpellClient() {
   }, [user]);
 
   // The "he" slot holds the native-language word (see WordPair note).
-  const promptOf = (w: WordPair) => (qdir === "he2en" ? w.he : w.en);
-  const answerOf = (w: WordPair) => (qdir === "he2en" ? w.en : w.he);
-  const answerLang = qdir === "he2en" ? "en" : nativeLang;
-  const promptLang = qdir === "he2en" ? nativeLang : "en";
+  const sameLang = qdir === "he2he" || qdir === "en2en";
+  const nativeSide = qdir === "he2en" || qdir === "he2he";
+  const promptOf = (w: WordPair) => (nativeSide ? w.he : w.en);
+  const answerOf = (w: WordPair) => (qdir === "he2en" || qdir === "en2en" ? w.en : w.he);
+  // Same-language: the word in the other language, as a hint to the meaning.
+  const hintOf = (w: WordPair) => (qdir === "he2he" ? w.en : w.he);
+  const answerLang = qdir === "he2en" || qdir === "en2en" ? "en" : nativeLang;
+  const promptLang = nativeSide ? nativeLang : "en";
   const answerRtl = RTL_SET.has(answerLang);
   const promptRtl = RTL_SET.has(promptLang);
 
@@ -735,23 +781,24 @@ export function SpellClient() {
             ) : null}
             <input ref={bigPhotoRef} type="file" accept="image/*" multiple hidden
               onChange={(e) => { const f = e.target.files ? Array.from(e.target.files) : []; e.target.value = ""; if (f.length) { setIntakeFiles(f); setHw("add"); } }} />
+            {/* Order (Gadi 2026-10-12): learn the words, read, then get ready for the test. */}
             <div className="wb-hw-grid">
-              {([
-                { k: "test", icon: "📝", t: hc.test, d: hc.testD },
-                { k: "learn", icon: "🌍", t: hc.learn, d: hc.learnD },
-              ] as const).map((c) => (
-                <button key={c.k} type="button" className="wb-hw-card" onClick={() => setHw(c.k)}>
-                  <span className="wb-hw-card-i" aria-hidden>{c.icon}</span>
-                  <span className="wb-hw-card-t">{c.t}</span>
-                  <span className="wb-hw-card-d">{c.d}</span>
-                </button>
-              ))}
+              <button type="button" className="wb-hw-card" onClick={() => setHw("learn")}>
+                <span className="wb-hw-card-i" aria-hidden>🌍</span>
+                <span className="wb-hw-card-t">{hc.learn}</span>
+                <span className="wb-hw-card-d">{hc.learnD}</span>
+              </button>
               {/* Every Word inside Homework: the reader keeps a way back. */}
               <Link href={href("/read?from=homework")} className="wb-hw-card">
                 <span className="wb-hw-card-i" aria-hidden>📖</span>
                 <span className="wb-hw-card-t">{hc.read}</span>
                 <span className="wb-hw-card-d">{hc.readD}</span>
               </Link>
+              <button type="button" className="wb-hw-card" onClick={() => setHw("test")}>
+                <span className="wb-hw-card-i" aria-hidden>📝</span>
+                <span className="wb-hw-card-t">{hc.test}</span>
+                <span className="wb-hw-card-d">{hc.testD}</span>
+              </button>
             </div>
           </div>
         )}
@@ -843,11 +890,11 @@ export function SpellClient() {
             )}
 
             {/* Direction toggle */}
-            <div style={{ display: "flex", gap: 8, margin: "16px 0 6px" }}>
-              {(["he2en", "en2he"] as Dir[]).map((d) => (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, margin: "16px 0 6px" }}>
+              {(["he2en", "en2he", "he2he", "en2en"] as Dir[]).map((d) => (
                 <button key={d} type="button" onClick={() => setQdir(d)}
                   style={{
-                    flex: 1, padding: "11px 10px", borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: "pointer",
+                    minWidth: 0, padding: "11px 10px", borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: "pointer",
                     border: "1px solid", borderColor: qdir === d ? TEAL : "var(--hairline,#E5E7EB)",
                     background: qdir === d ? TEAL : "var(--surface,#fff)", color: qdir === d ? "#fff" : "var(--ink,#0B1220)",
                   }}>
@@ -929,9 +976,19 @@ export function SpellClient() {
             {/* Prompt word + speaker (reads it aloud like a teacher dictating) */}
             <div style={{ background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 18, padding: "26px 20px", textAlign: "center" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
-                <span dir={promptRtl ? "rtl" : "ltr"} style={{ fontSize: 30, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{promptOf(current)}</span>
-                <TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} />
+                {sameLang ? (
+                  // Same-language dictation: hear it, don't see it.
+                  <span className="wb-spell-hear"><TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} /></span>
+                ) : (
+                  <>
+                    <span dir={promptRtl ? "rtl" : "ltr"} style={{ fontSize: 30, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{promptOf(current)}</span>
+                    <TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} />
+                  </>
+                )}
               </div>
+              {sameLang && hintOf(current) && (
+                <div dir="auto" style={{ marginTop: 10, fontSize: 14, color: "var(--ink-muted,#6B7280)" }}>({hintOf(current)})</div>
+              )}
 
               {mode === "type" ? (
                 <>

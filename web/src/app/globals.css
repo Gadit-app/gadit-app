@@ -14977,3 +14977,8 @@ a.wb-hw-back { text-decoration: none; }
 .wb-hw-intake-save:disabled, .wb-hw-intake-photo:disabled { opacity: .6; cursor: default; }
 .wb-hw-add-photo:focus-visible, .wb-hw-chip:focus-visible, .wb-hw-intake-save:focus-visible, .wb-hw-intake-photo:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
 html[data-theme="dark"] .wb-hw-add-paste, html[data-theme="dark"] .wb-hw-add-small, html[data-theme="space"] .wb-hw-add-paste, html[data-theme="space"] .wb-hw-add-small, html[data-theme="ocean"] .wb-hw-add-paste, html[data-theme="ocean"] .wb-hw-add-small, html[data-theme="jungle"] .wb-hw-add-paste, html[data-theme="jungle"] .wb-hw-add-small, html[data-theme="neon"] .wb-hw-add-paste, html[data-theme="neon"] .wb-hw-add-small, html[data-theme="sunset"] .wb-hw-add-paste, html[data-theme="sunset"] .wb-hw-add-small, html[data-theme="aurora"] .wb-hw-add-paste, html[data-theme="aurora"] .wb-hw-add-small, html[data-theme="cosmos"] .wb-hw-add-paste, html[data-theme="cosmos"] .wb-hw-add-small, html[data-theme="lava"] .wb-hw-add-paste, html[data-theme="lava"] .wb-hw-add-small, html[data-theme="royal"] .wb-hw-add-paste, html[data-theme="royal"] .wb-hw-add-small { color: #5EEAD4; }
+
+/* Same-language dictation (Gadi 2026-10-12): the word is heard, not seen,
+   so the speaker is the big thing on the card. */
+.wb-spell-hear { display: inline-flex; padding: 10px; border-radius: 50%; background: rgba(14, 165, 165, .1); }
+.wb-spell-hear > * { transform: scale(1.7); margin: 10px; }
