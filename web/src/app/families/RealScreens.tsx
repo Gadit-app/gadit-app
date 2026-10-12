@@ -429,7 +429,7 @@ export const REAL_CSS = `
 
 /* Testimonials: sand band, three cards in a row */
 .fam-premium .fam-band-sand { background: linear-gradient(180deg, #FBF5EA 0%, #FFFFFF 100%); }
-.fam-band-sand .gt-quotes-grid { align-items: start; max-width: 1040px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+.fam-band-sand .gt-quotes-grid { align-items: start; max-width: 1040px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
 .fam-band-sand .gt-quote { border-color: rgba(180,83,9,0.10); box-shadow: 0 2px 6px rgba(60,40,10,0.06), 0 24px 50px -24px rgba(60,40,10,0.35); }
 .fam-band-sand .fam-section { max-width: 1080px; }
 
