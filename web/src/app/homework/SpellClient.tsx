@@ -1262,7 +1262,7 @@ export function SpellClient() {
 
             {drill === "pick" && (
               <div className="wb-pick">
-                <span ref={hearRef} className="wb-spell-hear"><TTSButton text={pickSide(current)} audioLang={pickAudio} ariaLabel={t("listen", lang)} /></span>
+                <span ref={hearRef} className="wb-spell-hear"><TTSButton text={pickSide(current)} audioLang={pickAudio} ariaLabel={t("listen", lang)} rate={0.7} /></span>
                 <div className="wb-pick-opts">
                   {pickOptions.map((o) => {
                     const right = !!result && norm(o) === norm(pickSide(current));
@@ -1283,7 +1283,7 @@ export function SpellClient() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
                 {sameLang ? (
                   // Same-language dictation: hear it, don't see it.
-                  <span className="wb-spell-hear"><TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} /></span>
+                  <span className="wb-spell-hear"><TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} rate={0.7} /></span>
                 ) : (
                   <>
                     <span dir={promptRtl ? "rtl" : "ltr"} style={{ fontSize: 30, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{promptOf(current)}</span>

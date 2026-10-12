@@ -45,6 +45,9 @@ type Props = {
   /** Optional className so callers can drop the button into the same
    *  visual row as Save/Share without needing custom CSS. */
   className?: string;
+  /** Speaking speed, 1 = normal. Kids' listening drills pass a slower one
+   *  (Gadi 2026-10-12: "Sun, cold, hot" sounded too fast). */
+  rate?: number;
 };
 
 /**
@@ -119,6 +122,7 @@ export function TTSButton({
   useOpenAI = false,
   ariaLabel,
   className = "wb-word-act-icon",
+  rate = 0.95,
 }: Props) {
   const [state, setState] = useState<"idle" | "loading" | "playing">("idle");
   const [supported, setSupported] = useState(true);
@@ -160,14 +164,14 @@ export function TTSButton({
     // silently substitute the system default.
     if (voice) u.voice = voice;
     // Slightly slower than default so single words land clearly.
-    u.rate = 0.95;
+    u.rate = rate;
     u.pitch = 1.0;
     u.onend = () => setState("idle");
     u.onerror = () => setState("idle");
     utterRef.current = u;
     setState("playing");
     window.speechSynthesis.speak(u);
-  }, [text, audioLang]);
+  }, [text, audioLang, rate]);
 
   const { user } = useAuth();
   const playOpenAITTS = useCallback(async () => {
@@ -195,6 +199,8 @@ export function TTSButton({
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const audio = new Audio(url);
+      // Same speed on the server voice; the pitch stays natural.
+      audio.playbackRate = Math.min(1, rate / 0.95);
       audioRef.current = audio;
       audio.onended = () => {
         URL.revokeObjectURL(url);
@@ -212,7 +218,7 @@ export function TTSButton({
       // Last-resort fallback so the click still does something.
       playWebSpeech();
     }
-  }, [text, audioLang, playWebSpeech]);
+  }, [text, audioLang, playWebSpeech, rate]);
 
   // Web Speech, but voice-aware. Many devices ship no voice for less-common
   // languages (Arabic, Amharic, Persian, Zulu…), and speechSynthesis.speak()
