@@ -178,8 +178,11 @@ export async function POST(req: NextRequest) {
   // to uiLang; English UI falls back to Hebrew (there's no en↔en dictation).
   let nativeLang = "he";
   let fromPhoto = false;
+  // A fixed list we ship (the Ministry's Band sets) can be cached like a topic.
+  let cacheId = "";
   try {
-    const b = (await req.json()) as { topic?: unknown; list?: unknown; uiLang?: unknown; nativeLang?: unknown; fromPhoto?: unknown };
+    const b = (await req.json()) as { topic?: unknown; list?: unknown; uiLang?: unknown; nativeLang?: unknown; fromPhoto?: unknown; cacheId?: unknown };
+    if (typeof b.cacheId === "string" && /^[a-z0-9-]{3,60}$/.test(b.cacheId)) cacheId = b.cacheId;
     if (typeof b.topic === "string") topic = b.topic.trim().slice(0, 40);
     fromPhoto = b.fromPhoto === true;
     // A photographed page carries more text around the words.
@@ -192,11 +195,23 @@ export async function POST(req: NextRequest) {
   }
   const nativeName = LANG_NAME[nativeLang] ?? "Hebrew";
 
-  // Pasted-list path (not cached — lists are one-off and varied).
+  // Pasted-list path (not cached, lists are one-off and varied), except our
+  // own fixed lists, which carry a cacheId (Gadi 2026-10-12).
   if (list) {
     if (list.length < 2) return NextResponse.json({ error: "list_too_short" }, { status: 400 });
+    const cref = cacheId ? getAdminDb().collection("spellSets").doc(hashKey(nativeLang + ":" + lang, "list:" + cacheId)) : null;
+    if (cref) {
+      try {
+        const snap = await cref.get();
+        if (snap.exists) {
+          const d = snap.data() as { safe?: boolean; title?: string; words?: Pair[] };
+          return NextResponse.json({ safe: d.safe ?? false, title: d.title ?? "", words: d.words ?? [], cached: true });
+        }
+      } catch { /* cache read best-effort */ }
+    }
     try {
       const out = await generateList(list, LANG_NAME[lang], nativeName, fromPhoto);
+      if (cref && out.safe) { try { await cref.set({ lang, nativeLang, cacheId, ...out, at: new Date().toISOString() }); } catch { /* ignore */ } }
       return NextResponse.json(out);
     } catch {
       return NextResponse.json({ error: "generate_failed" }, { status: 502 });

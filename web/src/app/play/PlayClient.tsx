@@ -3447,7 +3447,14 @@ export function PlayPage() {
     };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => { void flushLearn(); router.push(href("/homework")); }} />
+        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => {
+          void flushLearn();
+          // Back to where the lesson was opened (Gadi 2026-10-12, navigation QA):
+          // "learning words" when it came from there, else the Homework page.
+          let from: string | null = null;
+          try { from = new URLSearchParams(window.location.search).get("from"); } catch { /* the Homework page */ }
+          router.push(href(from === "learn" ? "/homework?v=learn" : "/homework"));
+        }} />
       </div>
     );
   }

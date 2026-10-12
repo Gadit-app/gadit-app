@@ -15,6 +15,7 @@ import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
 import { dictCopy } from "@/lib/dictation-i18n";
 import { notifyActivity } from "@/lib/notify-activity-client";
+import { BAND_SETS, BAND_COPY, BAND_TOPIC_ICON, bandSetTitle, type BandSet } from "@/lib/band-sets";
 import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIntake";
 import { LearnCard } from "@/components/play/learn/LearnCard";
 import { LEARN_CSS } from "@/components/play/learn/learn-css";
@@ -379,8 +380,11 @@ export function SpellClient() {
     } catch { /* view still switches */ }
   }, []);
   useEffect(() => {
-    const read = () => {
+    const read = (e?: PopStateEvent) => {
       const v = new URLSearchParams(window.location.search).get("v");
+      // The browser's back button also leaves an exercise or the setup screen,
+      // so the page always matches the address (navigation QA, 2026-10-12).
+      if (e) { setSetupFor(null); setPhase("pick"); }
       // ?v=dict and ?v=langs were the old four cards' views.
       setHwState(v === "test" ? "test" : v === "add" ? "add" : v === "dict" ? "dict" : v === "learn" || v === "langs" ? "learn" : "hub");
     };
@@ -549,6 +553,32 @@ export function SpellClient() {
   // learner whose language isn't Hebrew we generate the SAME topic in their
   // language on the fly (cached server-side per language). Gadi 2026-09-19.
   const [loadingCat, setLoadingCat] = useState<string>("");
+  // The Ministry's Band sets (Israeli interface languages): English words,
+  // paired in the child's language by /api/spell-set, cached per set.
+  const [bandSel, setBandSel] = useState<"band1" | "band2">("band1");
+  // Topics first, then that topic's parts (not 70 tiles at once).
+  const [bandTopic, setBandTopic] = useState<string | null>(null);
+  async function startBand(b: BandSet) {
+    if (!user || loadingCat) return;
+    setLoadingCat(b.id);
+    setCreateMsg("");
+    try {
+      const res = await fetch("/api/spell-set", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ list: b.words.join(", "), uiLang: lang, nativeLang, cacheId: b.id }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { safe?: boolean; words?: WordPair[] };
+      if (!res.ok || !data.safe || !Array.isArray(data.words) || data.words.length < 2) { setCreateMsg(t("createErr", lang)); return; }
+      const title = bandSetTitle(b, lang);
+      begin({ id: `moe-${b.id}`, icon: BAND_TOPIC_ICON[b.topic] ?? "📘", titleEn: bandSetTitle(b, "en"), titleHe: title, words: data.words });
+    } catch {
+      setCreateMsg(t("createErr", lang));
+    } finally {
+      setLoadingCat("");
+    }
+  }
+
   async function startCategory(s: DictationSet) {
     if (nativeLang === "he") { begin(s); return; }
     if (!user || loadingCat) return;
@@ -949,11 +979,25 @@ export function SpellClient() {
           </div>
         )}
 
-        {phase === "pick" && hw !== "hub" && (
-          <button type="button" className="wb-hw-back" onClick={() => { setSetupFor(null); setHw("hub"); }}>
-            {dir === "rtl" ? "→" : "←"} {hc.back}
-          </button>
-        )}
+        {/* One step back, named after where it goes (navigation QA,
+            2026-10-12): the setup screen goes back to the words, "choose
+            words" to Learning words, every section to the Homework page. */}
+        {(phase !== "pick" || hw !== "hub" || setupFor) && (() => {
+          // The section the child is in, by name (for the exercise and setup).
+          const here = hw === "hub" ? hc.back : hw === "dict" ? dc.pick : hw === "test" ? hc.test : hw === "learn" ? hc.learn : hc.back;
+          const back = phase !== "pick"
+            ? { label: here, go: () => setPhase("pick") }
+            : setupFor
+            ? { label: here, go: () => setSetupFor(null) }
+            : hw === "dict"
+              ? { label: hc.learn, go: () => setHw("learn") }
+              : { label: hc.back, go: () => setHw("hub") };
+          return (
+            <button type="button" className="wb-hw-back" onClick={back.go}>
+              {dir === "rtl" ? "→" : "←"} {back.label}
+            </button>
+          );
+        })()}
 
         {phase === "pick" && hw === "add" && (
           <HomeworkIntake lang={lang} dir={dir} nativeLang={nativeLang} learnLang={learnLang} initialFiles={intakeFiles}
@@ -997,7 +1041,7 @@ export function SpellClient() {
         {phase === "pick" && !setupFor && hw === "learn" && (
           <div className="wb-learn-home">
             <style>{LEARN_CSS}</style>
-            <LearnCard simple lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}`))} />
+            <LearnCard simple lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}&from=learn`))} />
             <section className="wb-learn-simple" dir={dir}>
               <div className="wb-learn-simple-head">
                 <span className="wb-learn-simple-icon" aria-hidden="true">✏️</span>
@@ -1077,6 +1121,60 @@ export function SpellClient() {
                 </button>
               ))}
             </div>
+            {/* The Ministry of Education's English lists, by Band (Israel). */}
+            {BAND_COPY[lang] && (
+              <>
+                <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", color: "var(--teal-deep,#0A7472)", margin: "26px 0 10px" }}>{BAND_COPY[lang].title}</h2>
+                <div className="wb-hw-intake-chips" role="radiogroup" aria-label={BAND_COPY[lang].title} style={{ marginBottom: 12 }}>
+                  {(["band1", "band2"] as const).map((b) => (
+                    <button key={b} type="button" role="radio" aria-checked={bandSel === b} className={`wb-hw-chip${bandSel === b ? " is-on" : ""}`} onClick={() => { setBandSel(b); setBandTopic(null); }}>{BAND_COPY[lang][b]}</button>
+                  ))}
+                </div>
+                {!bandTopic && (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 10 }}>
+                    {[...new Set(BAND_SETS.filter((b) => b.band === bandSel).map((b) => b.topic))].map((tp) => {
+                      const parts = BAND_SETS.filter((b) => b.band === bandSel && b.topic === tp);
+                      const n = parts.reduce((a, b) => a + b.words.length, 0);
+                      return (
+                        <button key={tp} type="button" disabled={!!loadingCat}
+                          onClick={() => (parts.length === 1 ? void startBand(parts[0]) : setBandTopic(tp))}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10, textAlign: dir === "rtl" ? "right" : "left",
+                            background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 14,
+                            padding: "11px 12px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
+                          }}>
+                          <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 17, background: TEAL + "1A" }}>{parts.length === 1 && loadingCat === parts[0].id ? "⏳" : BAND_TOPIC_ICON[tp] ?? "📘"}</span>
+                          <span>
+                            <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{bandSetTitle({ ...parts[0], part: 0 }, lang)}</span>
+                            <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{n} {misc("words", lang)}</span>
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                {bandTopic && (
+                  <button type="button" className="wb-hw-back" onClick={() => setBandTopic(null)}>{dir === "rtl" ? "→" : "←"} {BAND_COPY[lang][bandSel]}</button>
+                )}
+                {bandTopic && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 10 }}>
+                  {BAND_SETS.filter((b) => b.band === bandSel && b.topic === bandTopic).map((b) => (
+                    <button key={b.id} type="button" onClick={() => void startBand(b)} disabled={!!loadingCat}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10, textAlign: dir === "rtl" ? "right" : "left",
+                        background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 14,
+                        padding: "11px 12px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
+                        opacity: loadingCat && loadingCat !== b.id ? 0.5 : 1,
+                      }}>
+                      <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 17, background: TEAL + "1A" }}>{loadingCat === b.id ? "⏳" : BAND_TOPIC_ICON[b.topic] ?? "📘"}</span>
+                      <span>
+                        <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{bandSetTitle(b, lang)}</span>
+                        <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{b.words.length} {misc("words", lang)}</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>}
+              </>
+            )}
             <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                 <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
@@ -1246,9 +1344,6 @@ export function SpellClient() {
               )}
             </div>}
 
-            <div style={{ textAlign: "center", marginTop: 14 }}>
-              <button type="button" onClick={() => setPhase("pick")} style={{ background: "none", border: "none", color: "var(--ink-muted,#6B7280)", fontSize: 13, cursor: "pointer" }}>{t("back", lang)}</button>
-            </div>
           </div>
         )}
 
