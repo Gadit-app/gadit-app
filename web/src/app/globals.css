@@ -14888,12 +14888,18 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 /* Kids Mode beside the logo (Gadi 2026-10-12): the mascot awake = on,
    asleep = off; the label hides on narrow screens. */
 .wordbook .wb-shell-topbar { position: sticky; }
-.wordbook .wb-kids-mini { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 4px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink-soft, #475569); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; flex: none; margin-inline-start: 10px; margin-inline-end: auto; }
-.wordbook .wb-kids-mini img { width: 28px; height: 28px; object-fit: contain; filter: grayscale(0.85) opacity(0.75); transition: filter 160ms; }
+.wordbook .wb-kids-mini { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 10px 0 6px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink-soft, #475569); font: inherit; font-size: 14px; font-weight: 700; line-height: 1; cursor: pointer; flex: none; margin-inline-start: 14px; margin-inline-end: auto; box-sizing: border-box; }
+.wordbook .wb-kids-mini:focus-visible { outline: 2px solid var(--accent, #0EA5A5); outline-offset: 2px; }
+.wordbook .wb-kids-mini img { width: 30px; height: 30px; object-fit: contain; display: block; filter: grayscale(0.85) opacity(0.75); transition: filter 160ms; }
+.wordbook .wb-kids-mini-track { position: relative; width: 32px; height: 18px; border-radius: 999px; background: var(--rule, #CBD5E1); flex: none; transition: background 160ms; }
+.wordbook .wb-kids-mini-track span { position: absolute; top: 2px; inset-inline-start: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .3); transition: inset-inline-start 160ms; }
 .wordbook .wb-kids-mini.is-on { color: var(--ink, #0f172a); border-color: color-mix(in srgb, var(--accent, #0EA5A5) 50%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
 .wordbook .wb-kids-mini.is-on img { filter: none; }
+.wordbook .wb-kids-mini.is-on .wb-kids-mini-track { background: var(--accent, #0EA5A5); }
+.wordbook .wb-kids-mini.is-on .wb-kids-mini-track span { inset-inline-start: 16px; }
 @media (max-width: 640px) {
-  .wordbook .wb-kids-mini { padding: 2px; margin-inline-start: 6px; }
+  .wordbook .wb-kids-mini { height: 36px; gap: 6px; padding: 0 8px 0 4px; margin-inline-start: 8px; }
+  .wordbook .wb-kids-mini img { width: 28px; height: 28px; }
   .wordbook .wb-kids-mini-label { display: none; }
 }
 .wordbook .wb-play-card-cover.is-mascot { object-fit: contain; background: linear-gradient(160deg, #FFF6DA, #FFFFFF); padding: 10px; box-sizing: border-box; }
@@ -14941,3 +14947,33 @@ a.wb-hw-back { text-decoration: none; }
   background: #0EA5A5; color: #fff; font-size: 15.5px; font-weight: 700; text-decoration: none;
 }
 .wb-hw-done:focus-visible { outline: 2px solid #0A7472; outline-offset: 3px; }
+
+/* Homework stage 2: the task card, adding homework (Gadi 2026-10-12). */
+.wb-hw-tonight-main { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: start; }
+.wb-hw-tonight-x { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 0; background: transparent; color: var(--ink-muted, #6B7280); font-size: 14px; cursor: pointer; }
+.wb-hw-tonight-x:hover { background: rgba(14, 165, 165, .12); }
+.wb-hw-add-big { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0 4px; }
+.wb-hw-add-photo {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 420px;
+  min-height: 60px; padding: 14px 22px; border-radius: 16px; border: 0; background: #0EA5A5; color: #fff;
+  font: inherit; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 22px -12px rgba(14, 165, 165, .8);
+}
+.wb-hw-add-photo span { font-size: 22px; }
+.wb-hw-add-paste, .wb-hw-add-small { background: none; border: 0; padding: 6px 4px; font: inherit; font-size: 14.5px; font-weight: 700; color: #0A7472; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.wb-hw-add-small { align-self: flex-start; text-decoration: none; }
+.wb-hw-intake { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 16px; }
+.wb-hw-intake-sub { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-muted, #6B7280); }
+.wb-hw-intake-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.wb-hw-intake-photo { padding: 12px 20px; border-radius: 12px; border: 0; background: #0EA5A5; color: #fff; font: inherit; font-size: 15.5px; font-weight: 700; cursor: pointer; }
+.wb-hw-intake-text { width: 100%; box-sizing: border-box; padding: 12px 14px; font: inherit; font-size: 15px; line-height: 1.6; border-radius: 12px; border: 1px solid var(--hairline, #E5E7EB); background: var(--paper, #F9FAFB); color: var(--ink, #0B1220); resize: vertical; outline: none; }
+.wb-hw-intake-text:focus { border-color: #0EA5A5; }
+.wb-hw-intake-msg { margin: 0; font-size: 13.5px; color: var(--ink-muted, #6B7280); }
+.wb-hw-intake-q { font-size: 14.5px; font-weight: 800; color: var(--ink, #0B1220); margin-top: 4px; }
+.wb-hw-intake-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.wb-hw-chip { padding: 9px 15px; border-radius: 999px; border: 1px solid var(--hairline, #E5E7EB); background: var(--surface, #fff); color: var(--ink, #0B1220); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.wb-hw-chip.is-on { background: #0A7472; border-color: #0A7472; color: #fff; }
+.wb-hw-intake-date { align-self: flex-start; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--hairline, #E5E7EB); font: inherit; background: var(--surface, #fff); color: var(--ink, #0B1220); }
+.wb-hw-intake-save { padding: 12px 30px; border-radius: 12px; border: 0; background: #0EA5A5; color: #fff; font: inherit; font-size: 15.5px; font-weight: 800; cursor: pointer; }
+.wb-hw-intake-save:disabled, .wb-hw-intake-photo:disabled { opacity: .6; cursor: default; }
+.wb-hw-add-photo:focus-visible, .wb-hw-chip:focus-visible, .wb-hw-intake-save:focus-visible, .wb-hw-intake-photo:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
+html[data-theme="dark"] .wb-hw-add-paste, html[data-theme="dark"] .wb-hw-add-small, html[data-theme="space"] .wb-hw-add-paste, html[data-theme="space"] .wb-hw-add-small, html[data-theme="ocean"] .wb-hw-add-paste, html[data-theme="ocean"] .wb-hw-add-small, html[data-theme="jungle"] .wb-hw-add-paste, html[data-theme="jungle"] .wb-hw-add-small, html[data-theme="neon"] .wb-hw-add-paste, html[data-theme="neon"] .wb-hw-add-small, html[data-theme="sunset"] .wb-hw-add-paste, html[data-theme="sunset"] .wb-hw-add-small, html[data-theme="aurora"] .wb-hw-add-paste, html[data-theme="aurora"] .wb-hw-add-small, html[data-theme="cosmos"] .wb-hw-add-paste, html[data-theme="cosmos"] .wb-hw-add-small, html[data-theme="lava"] .wb-hw-add-paste, html[data-theme="lava"] .wb-hw-add-small, html[data-theme="royal"] .wb-hw-add-paste, html[data-theme="royal"] .wb-hw-add-small { color: #5EEAD4; }

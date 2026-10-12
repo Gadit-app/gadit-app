@@ -12,6 +12,8 @@
 
 import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
+import { intakeCopy } from "@/lib/homework-intake-i18n";
+import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIntake";
 import { LearnCard } from "@/components/play/learn/LearnCard";
 import { LEARN_CSS } from "@/components/play/learn/learn-css";
 import { ToolPage } from "@/components/design/ToolPage";
@@ -251,6 +253,7 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
 export function SpellClient() {
   const { lang, dir } = useLang();
   const hc = homeworkCopy(lang);
+  const ic = intakeCopy(lang);
   const href = useHref();
   const router = useRouter();
   const { user, plan, planReady, kidsAccess } = useAuth();
@@ -288,7 +291,7 @@ export function SpellClient() {
   // getting ready for a test (a dictation is a test too), learning words,
   // reading a text. Dictation is a way to practise, not a place. Each opens
   // its own view; the browser's back button returns to the sections.
-  type HwView = "hub" | "test" | "learn";
+  type HwView = "hub" | "test" | "learn" | "add";
   const [hw, setHwState] = useState<HwView>("hub");
   const setHw = useCallback((v: HwView) => {
     setHwState(v);
@@ -303,7 +306,7 @@ export function SpellClient() {
     const read = () => {
       const v = new URLSearchParams(window.location.search).get("v");
       // ?v=dict and ?v=langs were the old four cards' views.
-      setHwState(v === "test" ? "test" : v === "learn" || v === "dict" || v === "langs" ? "learn" : "hub");
+      setHwState(v === "test" ? "test" : v === "add" ? "add" : v === "learn" || v === "dict" || v === "langs" ? "learn" : "hub");
     };
     read();
     window.addEventListener("popstate", read);
@@ -312,20 +315,54 @@ export function SpellClient() {
   // "To do": only what a grown-up set (a word list with its test date,
   // or a lesson from workbook pages), never a generic suggestion.
   const [tonight, setTonight] = useState<null | { title: string; words: number; testDate: string | null; lesson: boolean }>(null);
+  // What a grown-up added through "add homework" (stage 2); it wins over the
+  // older learning-card list. learnLang = the language workbook pages use.
+  const [task, setTask] = useState<SavedTask | null>(null);
+  const [taskReady, setTaskReady] = useState(false);
+  const [learnLang, setLearnLang] = useState<string | null>(null);
+  const [intakeFiles, setIntakeFiles] = useState<File[] | null>(null);
+  const bigPhotoRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!user) return;
     let alive = true;
     void (async () => {
+      const headers = { Authorization: `Bearer ${await user.getIdToken()}` };
       try {
-        const r = await fetch(`/api/learn?ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` }, cache: "no-store" });
+        const r = await fetch("/api/homework-task", { headers, cache: "no-store" });
+        const j = (await r.json().catch(() => ({}))) as { task?: SavedTask | null };
+        if (alive) setTask(j.task ?? null);
+      } catch { /* no task card */ }
+      if (alive) setTaskReady(true);
+      try {
+        const r = await fetch(`/api/learn?ui=${encodeURIComponent(lang)}`, { headers, cache: "no-store" });
         const j = await r.json();
+        if (!alive) return;
+        setLearnLang(j?.profile?.lang ?? (Array.isArray(j?.targets) ? j.targets[0] ?? null : null));
         const list = j?.stats?.list as { total: number; testDate: string | null } | null | undefined;
-        if (!alive || !list || !list.total) return;
+        if (!list || !list.total) return;
         setTonight({ title: j.lesson?.topic ?? "", words: list.total, testDate: list.testDate ?? null, lesson: !!j.lesson });
       } catch { /* no strip */ }
     })();
     return () => { alive = false; };
   }, [user, lang]);
+
+  // Open the saved task: a list starts its dictation, a text opens in the
+  // reader inside Homework, workbook pages play their lesson.
+  function openTask(tk: SavedTask) {
+    if (tk.kind === "list" && tk.words && tk.words.length >= 2) {
+      start({ id: `hw-${tk.at}`, icon: "📝", titleEn: tk.title || ic.kList, titleHe: tk.title || ic.kList, words: tk.words });
+    } else if (tk.kind === "text" && tk.text) {
+      try { sessionStorage.setItem("gadit-reader-text", tk.text); } catch { /* the reader opens empty */ }
+      router.push(href("/read?from=homework"));
+    } else if (tk.kind === "pages") {
+      router.push(href("/play?lesson=photo"));
+    }
+  }
+  async function removeTask() {
+    if (!user) return;
+    setTask(null);
+    try { await fetch("/api/homework-task", { method: "DELETE", headers: { Authorization: `Bearer ${await user.getIdToken()}` } }); } catch { /* gone locally */ }
+  }
   const [celebration, setCelebration] = useState("");
   // Bumped on a successful finish → fires the full-screen confetti burst
   // (same KidsCelebration used on rank-up), Gadi 2026-09-19.
@@ -654,11 +691,26 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
+    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
         {phase === "pick" && hw === "hub" && (
           <div className="wb-hw-hub">
-            {tonight && (
+            {task && (
+              <div className="wb-hw-tonight">
+                <button type="button" className="wb-hw-tonight-main" onClick={() => openTask(task)}>
+                  <span className="wb-hw-tonight-k">{hc.tonight}</span>
+                  <span className="wb-hw-tonight-t">
+                    {task.kind === "list" ? "📝 " : task.kind === "text" ? "📖 " : "📘 "}
+                    {task.title || (task.kind === "list" ? ic.kList : task.kind === "text" ? ic.kText : ic.kPages)}
+                    {task.kind === "list" && task.words && <span className="wb-hw-tonight-d"> · <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{task.words.length}</span> {misc("words", lang)}</span>}
+                    {task.testDate && <span className="wb-hw-tonight-d"> · {hc.testOn} <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{fmtDate(task.testDate)}</span></span>}
+                  </span>
+                  <span className="wb-hw-tonight-go">{hc.start}</span>
+                </button>
+                <button type="button" className="wb-hw-tonight-x" aria-label={ic.remove} title={ic.remove} onClick={() => void removeTask()}>✕</button>
+              </div>
+            )}
+            {!task && tonight && (
               <button type="button" className="wb-hw-tonight"
                 onClick={() => (tonight.lesson ? router.push(href("/play?lesson=photo")) : setHw("learn"))}>
                 <span className="wb-hw-tonight-k">{hc.tonight}</span>
@@ -669,6 +721,20 @@ export function SpellClient() {
                 <span className="wb-hw-tonight-go">{hc.start}</span>
               </button>
             )}
+            {/* Adding homework: one big photo button when nothing is set,
+                a small link once something is. */}
+            {taskReady && !task && !tonight ? (
+              <div className="wb-hw-add-big">
+                <button type="button" className="wb-hw-add-photo" onClick={() => bigPhotoRef.current?.click()}>
+                  <span aria-hidden="true">📷</span> {ic.big}
+                </button>
+                <button type="button" className="wb-hw-add-paste" onClick={() => { setIntakeFiles(null); setHw("add"); }}>{ic.paste}</button>
+              </div>
+            ) : taskReady ? (
+              <button type="button" className="wb-hw-add-small" onClick={() => { setIntakeFiles(null); setHw("add"); }}>+ {ic.add}</button>
+            ) : null}
+            <input ref={bigPhotoRef} type="file" accept="image/*" multiple hidden
+              onChange={(e) => { const f = e.target.files ? Array.from(e.target.files) : []; e.target.value = ""; if (f.length) { setIntakeFiles(f); setHw("add"); } }} />
             <div className="wb-hw-grid">
               {([
                 { k: "test", icon: "📝", t: hc.test, d: hc.testD },
@@ -694,6 +760,12 @@ export function SpellClient() {
           <button type="button" className="wb-hw-back" onClick={() => setHw("hub")}>
             {dir === "rtl" ? "→" : "←"} {hc.back}
           </button>
+        )}
+
+        {phase === "pick" && hw === "add" && (
+          <HomeworkIntake lang={lang} dir={dir} nativeLang={nativeLang} learnLang={learnLang} initialFiles={intakeFiles}
+            onSaved={(tk) => { setTask(tk); setIntakeFiles(null); setHw("hub"); }}
+            onCancel={() => { setIntakeFiles(null); setHw("hub"); }} />
         )}
 
         {phase === "pick" && (hw === "test" || hw === "learn") && (
