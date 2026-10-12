@@ -364,6 +364,19 @@ export function SpellClient() {
   const [learnLang, setLearnLang] = useState<string | null>(null);
   const [intakeFiles, setIntakeFiles] = useState<File[] | null>(null);
   const bigPhotoRef = useRef<HTMLInputElement>(null);
+  const camRef = useRef<HTMLInputElement>(null);
+  // "Photograph" only where there is a camera to open (phones, tablets);
+  // on a computer the same button would open the file picker (Gadi 2026-10-12).
+  const [canCamera, setCanCamera] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
+    try { setCanCamera(window.matchMedia("(pointer: coarse)").matches); } catch { /* upload only */ }
+  }, []);
+  const takeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files ? Array.from(e.target.files) : [];
+    e.target.value = "";
+    if (f.length) { setIntakeFiles(f); setHw("add"); }
+  };
   useEffect(() => {
     if (!user) return;
     let alive = true;
@@ -771,16 +784,26 @@ export function SpellClient() {
                 a small link once something is. */}
             {taskReady && !task && !tonight ? (
               <div className="wb-hw-add-big">
-                <button type="button" className="wb-hw-add-photo" onClick={() => bigPhotoRef.current?.click()}>
-                  <span aria-hidden="true">📷</span> {ic.big}
-                </button>
-                <button type="button" className="wb-hw-add-paste" onClick={() => { setIntakeFiles(null); setHw("add"); }}>{ic.paste}</button>
+                <span className="wb-hw-add-label">{ic.add}</span>
+                <div className="wb-hw-add-btns">
+                  {canCamera && (
+                    <button type="button" className="wb-hw-add-btn" onClick={() => camRef.current?.click()}>
+                      <span aria-hidden="true">📷</span> {ic.photo}
+                    </button>
+                  )}
+                  <button type="button" className="wb-hw-add-btn" onClick={() => bigPhotoRef.current?.click()}>
+                    <span aria-hidden="true">⬆️</span> {ic.upload}
+                  </button>
+                  <button type="button" className="wb-hw-add-btn" onClick={() => { setIntakeFiles(null); setHw("add"); }}>
+                    <span aria-hidden="true">📋</span> {ic.pasteBtn}
+                  </button>
+                </div>
               </div>
             ) : taskReady ? (
               <button type="button" className="wb-hw-add-small" onClick={() => { setIntakeFiles(null); setHw("add"); }}>+ {ic.add}</button>
             ) : null}
-            <input ref={bigPhotoRef} type="file" accept="image/*" multiple hidden
-              onChange={(e) => { const f = e.target.files ? Array.from(e.target.files) : []; e.target.value = ""; if (f.length) { setIntakeFiles(f); setHw("add"); } }} />
+            <input ref={bigPhotoRef} type="file" accept="image/*" multiple hidden onChange={takeFiles} />
+            <input ref={camRef} type="file" accept="image/*" capture="environment" hidden onChange={takeFiles} />
             {/* Order (Gadi 2026-10-12): learn the words, read, then get ready for the test. */}
             <div className="wb-hw-grid">
               <button type="button" className="wb-hw-card" onClick={() => setHw("learn")}>

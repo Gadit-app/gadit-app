@@ -14982,3 +14982,16 @@ html[data-theme="dark"] .wb-hw-add-paste, html[data-theme="dark"] .wb-hw-add-sma
    so the speaker is the big thing on the card. */
 .wb-spell-hear { display: inline-flex; padding: 10px; border-radius: 50%; background: rgba(14, 165, 165, .1); }
 .wb-spell-hear > * { transform: scale(1.7); margin: 10px; }
+
+/* Adding homework: three equal, modest buttons (Gadi 2026-10-12: the one
+   huge "photograph" button opened the file picker on a computer). */
+.wb-hw-add-big { gap: 10px; }
+.wb-hw-add-label { font-size: 15px; font-weight: 800; color: var(--ink, #0B1220); }
+.wb-hw-add-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.wb-hw-add-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 20px; border-radius: 12px;
+  border: 1.5px solid #0EA5A5; background: var(--surface, #fff); color: #0A7472; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.wb-hw-add-btn:hover { background: rgba(14, 165, 165, .08); }
+.wb-hw-add-btn:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
+html[data-theme="dark"] .wb-hw-add-btn, html[data-theme="space"] .wb-hw-add-btn, html[data-theme="ocean"] .wb-hw-add-btn, html[data-theme="jungle"] .wb-hw-add-btn, html[data-theme="neon"] .wb-hw-add-btn, html[data-theme="sunset"] .wb-hw-add-btn, html[data-theme="aurora"] .wb-hw-add-btn, html[data-theme="cosmos"] .wb-hw-add-btn, html[data-theme="lava"] .wb-hw-add-btn, html[data-theme="royal"] .wb-hw-add-btn { color: #5EEAD4; }

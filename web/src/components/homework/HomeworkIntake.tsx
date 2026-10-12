@@ -60,6 +60,12 @@ export function HomeworkIntake({ lang, dir, nativeLang, learnLang, initialFiles,
   const { user } = useAuth();
   const c = intakeCopy(lang);
   const fileRef = useRef<HTMLInputElement>(null);
+  const camRef = useRef<HTMLInputElement>(null);
+  const [canCamera, setCanCamera] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
+    try { setCanCamera(window.matchMedia("(pointer: coarse)").matches); } catch { /* upload only */ }
+  }, []);
   const [text, setText] = useState("");
   const [pages, setPages] = useState(0);
   const [kind, setKind] = useState<Kind | null>(null);
@@ -169,9 +175,17 @@ export function HomeworkIntake({ lang, dir, nativeLang, learnLang, initialFiles,
     <div className="wb-hw-intake" dir={dir}>
       <p className="wb-hw-intake-sub">{c.addSub}</p>
       <div className="wb-hw-intake-row">
-        <button type="button" className="wb-hw-intake-photo" disabled={busy} onClick={() => fileRef.current?.click()}>
-          📷 {pages ? c.more : c.photo}
+        {/* Photograph (camera, on phones and tablets) or upload a picture. */}
+        {canCamera && (
+          <button type="button" className="wb-hw-intake-photo" disabled={busy} onClick={() => camRef.current?.click()}>
+            📷 {pages ? c.more : c.photo}
+          </button>
+        )}
+        <button type="button" className={canCamera ? "wb-hw-chip" : "wb-hw-intake-photo"} disabled={busy} onClick={() => fileRef.current?.click()}>
+          ⬆️ {c.upload}
         </button>
+        <input ref={camRef} type="file" accept="image/*" capture="environment" hidden
+          onChange={(e) => { const f = e.target.files ? Array.from(e.target.files) : []; e.target.value = ""; void readPhotos(f); }} />
         <input ref={fileRef} type="file" accept="image/*" multiple hidden
           onChange={(e) => { const f = e.target.files ? Array.from(e.target.files) : []; e.target.value = ""; void readPhotos(f); }} />
       </div>
