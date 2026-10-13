@@ -44,6 +44,43 @@ const OCR_SYSTEM =
   "the transcribed text. If there is genuinely no readable text, return an " +
   "empty string (never a sentence explaining that you cannot read it).";
 
+/**
+ * A sideways or upside-down photo makes the model guess words instead of
+ * reading them (Gadi 2026-10-13: Ziv's "בוודאי הבנתם" came back "בוודאי
+ * נזכרתם"). So the photo is turned upright first: EXIF orientation, then the
+ * same photo in 4 rotations, small, and the model picks the upright one
+ * (4 out of 4 in testing, about 400 tokens). Any failure keeps the photo as it is.
+ */
+async function uprightImage(buf: Buffer): Promise<{ buf: Buffer; type: string } | null> {
+  try {
+    const sharp = (await import("sharp")).default;
+    const base = await sharp(buf).rotate().jpeg({ quality: 90 }).toBuffer();
+    const ROT = [0, 90, 180, 270];
+    const variants = await Promise.all(ROT.map((d) => sharp(base).rotate(d).resize(512, 512, { fit: "inside" }).jpeg({ quality: 70 }).toBuffer()));
+    const content = [
+      { type: "text", text: 'These are the same photo in 4 rotations, labelled A, B, C, D in order. In which one is the text upright and readable (letters standing the right way, lines horizontal)? Reply with JSON only: {"upright": "A"}.' },
+      ...variants.flatMap((b, i) => [
+        { type: "text", text: "ABCD"[i] },
+        { type: "image_url", image_url: { url: `data:image/jpeg;base64,${b.toString("base64")}`, detail: "low" } },
+      ]),
+    ];
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+      body: JSON.stringify({ model: "gpt-4o", temperature: 0, response_format: { type: "json_object" }, messages: [{ role: "user", content }] }),
+    });
+    if (!res.ok) return { buf: base, type: "image/jpeg" };
+    const data = await res.json();
+    { const u = usageFrom(data); void logAiUsage({ feature: "ocr_orient", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut }); }
+    const letter = String(JSON.parse(data.choices?.[0]?.message?.content ?? "{}").upright ?? "A").trim().toUpperCase();
+    const deg = ROT["ABCD".indexOf(letter)] ?? 0;
+    return { buf: deg ? await sharp(base).rotate(deg).jpeg({ quality: 90 }).toBuffer() : base, type: "image/jpeg" };
+  } catch (e) {
+    console.warn("[ocr] upright step skipped:", e);
+    return null;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const authHeader = req.headers.get("Authorization") || "";
@@ -68,7 +105,12 @@ export async function POST(req: NextRequest) {
     }
 
     const isPdf = file.type === "application/pdf";
-    const buf = Buffer.from(await file.arrayBuffer());
+    let buf: Buffer = Buffer.from(await file.arrayBuffer());
+    let imgType = file.type && file.type.startsWith("image/") ? file.type : "image/jpeg";
+    if (!isPdf) {
+      const up = await uprightImage(buf);
+      if (up) { buf = up.buf; imgType = up.type; }
+    }
     const b64 = buf.toString("base64");
 
     // Images -> image_url part; PDFs -> file part (OpenAI reads the PDF itself).
@@ -91,7 +133,7 @@ export async function POST(req: NextRequest) {
             // default down-tiled pass — materially better on small Hebrew print
             // where a thin yod/vav is easily lost or hallucinated (Gadi 2026-09-19).
             image_url: {
-              url: `data:${file.type && file.type.startsWith("image/") ? file.type : "image/jpeg"};base64,${b64}`,
+              url: `data:${imgType};base64,${b64}`,
               detail: "high",
             },
           },
