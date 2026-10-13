@@ -15086,3 +15086,9 @@ a.wb-play-card { text-decoration: none; }
 /* The rank name: smaller and allowed to wrap, never cut off (Gadi 2026-10-12). */
 .wordbook .wb-kids-tile-num.is-rank { font-size: 14.5px; line-height: 1.25; white-space: normal; overflow: visible; text-overflow: clip; }
 .wb-read-btn-ico { margin-inline-end: 6px; margin-block: -6px; }
+/* Dark mode: the home search pill and the sentence box were too dark to find (Gadi 2026-10-13).
+   A lighter grey with a hint of teal, a clearer border and a brighter placeholder. */
+html[data-theme="dark"] .wordbook .wb-home-search-box, html[data-theme="dark"] .wordbook .wb-home-sentence-input { background: #2A3634; border-color: rgba(255, 255, 255, .2); }
+html[data-theme="dark"] .wordbook .wb-home-search-box:hover { border-color: rgba(94, 234, 212, .45); }
+html[data-theme="dark"] .wordbook .wb-home-search-box:focus-within, html[data-theme="dark"] .wordbook .wb-home-sentence-input:focus { border-color: #5EEAD4; }
+html[data-theme="dark"] .wordbook .wb-home-search-input::placeholder, html[data-theme="dark"] .wordbook .wb-home-sentence-input::placeholder { color: #A9B8B5; opacity: 1; }
