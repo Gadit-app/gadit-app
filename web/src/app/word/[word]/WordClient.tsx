@@ -34,7 +34,6 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
-import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
@@ -1947,16 +1946,6 @@ export function WordClient({
                 page too (it was on home/notebook/play but missing here, where
                 the skin is most visible). Gadi 2026-08-21. */}
             {familyRole === "kid" && <AppearancePicker scope="kid" />}
-            <KidsModeToggle
-              plan={plan}
-              onBasicGate={() => {
-                if (!user) {
-                  promptLogin(planCopy(lang, "kidsGate"));
-                  return;
-                }
-                setUpgradeTrigger({ feature: "kids", tier: "deep" });
-              }}
-            />
             {user && (
               <ShareButton
                 url="https://www.gadit.app/"
@@ -2005,22 +1994,6 @@ export function WordClient({
             <WbUserMenu />
           </div>
         )}
-        <div className="wb-shell-share-mobile-wrap">
-          {/* Mobile mirror of the Kids toggle. The desktop toggle lives
-              inside .wb-shell-actions (hidden under 767px), so without
-              this mirror a parent on a phone could not flip the mode
-              mid-read. */}
-          <KidsModeToggle
-            plan={plan}
-            onBasicGate={() => {
-              if (!user) {
-                promptLogin(planCopy(lang, "kidsGate"));
-                return;
-              }
-              setUpgradeTrigger({ feature: "kids", tier: "deep" });
-            }}
-          />
-        </div>
         <div className="wb-shell-mobile-menu-cluster">
           {/* Burger FIRST so in RTL it sits at the inline-start (right) of the
               cluster and stays on-screen even if the row overflows — the lang
