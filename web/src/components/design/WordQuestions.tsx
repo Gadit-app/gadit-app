@@ -252,8 +252,9 @@ const chipStyle = (active: boolean): CSSProperties => ({
   cursor: "pointer",
   border: "1px solid",
   transition: "background .15s, border-color .15s, color .15s",
-  borderColor: active ? "var(--brand,#0EA5A5)" : "var(--line,#E2E8E9)",
-  background: active ? "var(--brand,#0EA5A5)" : "var(--card,#fff)",
+  borderColor: active ? "var(--brand,#0EA5A5)" : "var(--rule,#E2E8E9)",
+  // --surface follows the theme (the old --card was not defined, so dark mode got white chips with light text).
+  background: active ? "var(--brand,#0EA5A5)" : "var(--surface,#fff)",
   color: active ? "#fff" : "var(--ink,#16242B)",
 });
 
@@ -375,7 +376,7 @@ export default function WordQuestions({
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 7,
                       fontSize: 14, fontWeight: 700, padding: "7px 13px", borderRadius: 999,
-                      border: "1px solid var(--line,#E2E8E9)", background: "var(--paper,#F7FAFA)",
+                      border: "1px solid var(--line,#E2E8E9)", background: "var(--paper, var(--surface,#F7FAFA))",
                       textDecoration: "none", color: "var(--ink,#16242B)", lineHeight: 1.25,
                     }}
                   >

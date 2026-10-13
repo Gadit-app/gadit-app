@@ -1,4 +1,5 @@
 import { curriculumHint } from "@/lib/curriculum-words";
+import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
@@ -360,6 +361,7 @@ DOCUMENTED CASE — SHORT HEBREW WORDS: LIST EVERY REAL SENSE, INVENT NONE (Gadi
 Short Hebrew words are dense with homonyms, and people-nouns are easy to miss. "פג" = (1) a baby born before term, premature ("התינוק נולד פג", noun, feminine "פגה"); (2) expired, no longer valid ("פג תוקף"); (3) faded, wore off, passed ("הכאב פג", "ההשפעה פגה"); (4) an unripe fruit, especially an unripe fig ("פגה", literary). It NEVER means "broken" or "damaged".
 More senses the model tends to miss (from a 2026-09-29 audit of the most-searched short words): "שזר" = to twist/weave threads or strands together, and figuratively to interweave ("שזר סיפורים"); it is ALSO a surname (President Zalman Shazar), which is never the only sense. "שמש" = the sun / a synagogue beadle / the helper candle that lights the others on the Hanukkah menorah. "מפתח" = a key / a key to understanding / a legend of a map or table / a musical clef ("מפתח סול"). "ישראל" = the State of Israel / the Jewish people ("עם ישראל", "כל ישראל") / Jacob's other name / a first name. "תנועה" = motion / a movement or organization / traffic ("תנועה בכביש") / a vowel sign (קמץ, פתח). "תקליט" is a vinyl record, never a CD.
 Before answering, recall how a standard Hebrew dictionary (Even-Shoshan / Milog) lists the word and include each of its senses. NEVER invent a sense to fill the list: every meaning must be one a Hebrew dictionary actually records, with an example a native speaker would really say. Fewer true meanings are always better than an extra false one.
+SOUND-ALIKE SPELLINGS ARE DIFFERENT WORDS (Gadi 2026-10-13): Hebrew letters that sound the same today (א/ע/ה, ח/כ, ט/ת, ק/כ, ס/ש, ו/ב) make different words. Give ONLY the meanings of the exact spelling typed. "שאון" (noise, uproar) is NEVER "שעון" (a clock); "כל" is never "קל"; "חלה" is never "כלה"; "טל" is never "תל". Every example must use the exact typed spelling.
 
 DOCUMENTED CASE — NAMES OF MONTHS, DAYS AND HOLIDAYS ARE MEANINGS TOO (Gadi 2026-09-28: "שבט" came back with only tribe + rod and no month).
 When a word is ALSO the name of a calendar month, a day, a holiday or a festival, that sense is a real, required meanings[] item (pos "proper noun"), never skipped because it is a name. Order it by how common it is for the reader.
@@ -1892,6 +1894,8 @@ export async function POST(req: NextRequest) {
               const typoLike = inN.length > 0 && wN.length > 0 && inN !== wN && Math.abs(inN.length - wN.length) <= 4;
               r.correctedFrom = hasDef && typoLike ? String(word).trim() : null;
             } catch { /* leave whatever the model returned */ }
+            // Never keep a meaning that belongs to a sound-alike spelling.
+            acceptedResult = dropSoundAlikeMeanings(acceptedResult, word);
 
             // Cache the validated result regardless of whether it was
             // the streamed attempt or a retry — both produced the same
