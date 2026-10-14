@@ -19,7 +19,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
+export const maxDuration = 60;
 
 const DICTA_URL = "https://nakdan-u1-0.loadbalancer.dicta.org.il/api";
 const HEBREW = /[֐-׿]/;

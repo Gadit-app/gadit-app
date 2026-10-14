@@ -39,15 +39,23 @@ export function repeatsDefinition(r: Result): boolean {
   return hit / orig.length >= 0.6;
 }
 
+/** The result with a repeated originalMeaning removed (the history note stays). */
+export function dropRepeatedOrigin<T>(result: T): T {
+  const r = result as unknown as Result;
+  if (!r?.etymology) return result;
+  return { ...(r as object), etymology: { ...r.etymology, originalMeaning: "" } } as unknown as T;
+}
+
 const strip = (s: unknown) => String(s ?? "").normalize("NFC").replace(/[֑-ׇ]/g, "").replace(/[–—]/g, ",").trim();
 
 export async function fixEtymology<T>(result: T, word: string, uiLangName: string): Promise<T> {
   const r = result as unknown as Result;
   if (!r?.etymology || !repeatsDefinition(r)) return result;
   // Whatever happens below, the definition is never shown again as the origin.
-  // The note that came with a repeated definition is usually as weak (for
-  // "גרב" it cited a verse in Isaiah that is not there), so it goes too.
-  const dropped = { ...(r as object), etymology: { ...r.etymology, originalMeaning: "", historyNote: "" } } as unknown as T;
+  // The history note stays: gpt-4o's were weak (for "גרב" it cited a verse in
+  // Isaiah that is not there), but gpt-5.4's are sound (the Proverbs verse for
+  // "חרולים"), and it is the main model since 2026-10-14.
+  const dropped = dropRepeatedOrigin(result);
   if (!process.env.OPENAI_API_KEY) return dropped;
   const defs = (r.meanings ?? []).map((m) => m?.meaning ?? "").filter(Boolean).join("; ");
   const sys = `You are an etymologist. The user gives a word and its current definitions. Explain WHERE THE WORD CAME FROM, not what it means today. All text in ${uiLangName}. Return JSON only:
@@ -61,7 +69,7 @@ No niqqud. Never invent: a guessed origin is worse than none. If you are not sur
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-      signal: AbortSignal.timeout(12000),
+      signal: AbortSignal.timeout(20000),
       body: JSON.stringify({ model: SMART_MODEL, reasoning_effort: "low", response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: `Word: ${word}\nCurrent definitions (do not repeat): ${defs}` }] }),
     });
     if (!res.ok) return dropped;

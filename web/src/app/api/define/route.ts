@@ -1,11 +1,11 @@
 import { curriculumHint } from "@/lib/curriculum-words";
 import { noteUncertainWord } from "@/lib/uncertain-words";
-import { fixEtymology } from "@/lib/etymology-guard";
+import { fixEtymology, repeatsDefinition, dropRepeatedOrigin } from "@/lib/etymology-guard";
 import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST, SMART_MODEL, costWithCache } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST, SMART_MODEL, FALLBACK_MODEL, costWithCache } from "@/lib/ai-cost";
 import { adminBudgetExceeded, hardCapReached, ADMIN_DAILY_CAP } from "@/lib/ai-budget";
 import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
@@ -1503,7 +1503,7 @@ async function backfillTranslation(word: string, wordLangName: string, uiLangNam
       body: JSON.stringify({
         model: TEXT_MODEL_FAST,
         temperature: 0,
-        max_tokens: 16,
+        max_completion_tokens: 16,
         messages: [
           { role: "system", content: "Reply with ONLY the single most common everyday equivalent WORD of the given word in the target language (its primary sense). No quotes, no punctuation, no explanation. Give a short phrase only if there is no single word." },
           { role: "user", content: `Word (${wordLangName}): ${word}\nTarget language: ${uiLangName}\nEquivalent word:` },
@@ -1768,10 +1768,10 @@ export async function POST(req: NextRequest) {
     let usingFallback = false;
     try {
       openAIResponse = await openAIStream(TEXT_MODEL, systemPrompt, userContent);
-      if (!openAIResponse.ok || !openAIResponse.body) throw new Error(`gpt-4o HTTP ${openAIResponse.status}`);
+      if (!openAIResponse.ok || !openAIResponse.body) throw new Error(`${TEXT_MODEL} HTTP ${openAIResponse.status}`);
     } catch (e) {
-      console.error("gpt-4o stream failed, falling back to gpt-4o-mini:", e);
-      openAIResponse = await openAIStream(TEXT_MODEL_FAST, systemPrompt, userContent);
+      console.error(`${TEXT_MODEL} stream failed, falling back to ${FALLBACK_MODEL}:`, e);
+      openAIResponse = await openAIStream(FALLBACK_MODEL, systemPrompt, userContent);
       usingFallback = true;
       if (!openAIResponse.ok || !openAIResponse.body) {
         // Both models failed. The most common cause is upstream — an
@@ -1806,6 +1806,9 @@ export async function POST(req: NextRequest) {
     const decoder = new TextDecoder();
     const upstream = openAIResponse.body;
 
+    // Work that finishes after the answer is sent (the etymology repair below).
+    const afterJobs: Promise<unknown>[] = [];
+    after(async () => { await Promise.allSettled(afterJobs); });
     const stream = new ReadableStream({
       async start(controller) {
         let accumulated = "";
@@ -1870,11 +1873,11 @@ export async function POST(req: NextRequest) {
           // (Reader / "Every Word") lookups; model reflects the fallback.
           void logAiUsage({
             feature: contextSentence ? "define_context" : "define",
-            model: usingFallback ? TEXT_MODEL_FAST : TEXT_MODEL,
+            model: usingFallback ? FALLBACK_MODEL : TEXT_MODEL,
             tokensIn: capturedUsage?.prompt_tokens ?? 0,
             tokensOut: capturedUsage?.completion_tokens ?? 0,
             // Real cost: the long system prompt is ~97% cached by OpenAI.
-            costUsd: costWithCache(usingFallback ? TEXT_MODEL_FAST : TEXT_MODEL, capturedUsage?.prompt_tokens ?? 0, capturedUsage?.prompt_tokens_details?.cached_tokens ?? 0, capturedUsage?.completion_tokens ?? 0),
+            costUsd: costWithCache(usingFallback ? FALLBACK_MODEL : TEXT_MODEL, capturedUsage?.prompt_tokens ?? 0, capturedUsage?.prompt_tokens_details?.cached_tokens ?? 0, capturedUsage?.completion_tokens ?? 0),
             plan: isRefresh ? "admin" : userInfo?.plan ?? "anon",
             admin: isRefresh,
           });
@@ -1966,8 +1969,15 @@ export async function POST(req: NextRequest) {
               if (better) acceptedResult = better;
               else void noteUncertainWord(word, uiLangCode);
             }
-            // The etymology says where the word came from, never the definition again.
-            acceptedResult = await fixEtymology(acceptedResult, word, uiLangName);
+            // The etymology says where the word came from, never the definition
+            // again. The repair is a second gpt-5.4 call of up to 20s, so the
+            // user gets the answer without the repeated line right away and
+            // the repaired origin goes into the cache for the next search.
+            if (repeatsDefinition(acceptedResult)) {
+              const original = acceptedResult;
+              acceptedResult = dropRepeatedOrigin(original);
+              afterJobs.push(fixEtymology(original, word, uiLangName).then((fixed) => setCachedResult(cacheKey, fixed)));
+            }
 
             // Cache the validated result regardless of whether it was
             // the streamed attempt or a retry — both produced the same

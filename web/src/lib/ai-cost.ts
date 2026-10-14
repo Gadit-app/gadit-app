@@ -67,17 +67,24 @@ export function costWithCache(model: string, promptTokens: number, cachedTokens:
 }
 
 /**
- * Text models, one constant per role (Gadi 2026-10-14). OpenAI retires
- * gpt-4o and gpt-4o-mini on 2027-01-14; switching a role is this one line,
- * after a measured sample. Note: gpt-5.x takes no `temperature` (use
- * `reasoning_effort`), so callers that pass one must drop it when switching.
+ * Text models, one constant per role. OpenAI retires gpt-4o and gpt-4o-mini
+ * on 2027-01-14. A 20-word sample (2026-10-14) put gpt-5.4 well ahead on
+ * Hebrew (no invented meanings for גרב / חרולים / שעון) at ~40% less per
+ * definition, so Gadi moved every role to it the same day. gpt-5.4 runs with
+ * no reasoning by default and accepts `temperature`, but wants
+ * `max_completion_tokens` instead of `max_tokens`. It writes ~3x slower than
+ * gpt-4o, so long outputs need a longer maxDuration.
+ * gpt-5.4-mini was faster and cheaper but invented rare Hebrew words, so it is
+ * only the fallback when gpt-5.4 itself is down.
  *   TEXT_MODEL       the main quality model: definitions, OCR, Say it, class activities
- *   TEXT_MODEL_FAST  short cheap jobs: briefs, lists, idioms, quick definitions
+ *   TEXT_MODEL_FAST  short jobs: briefs, lists, idioms, quick definitions
  *   SMART_MODEL      second opinions: unsure words, etymology repair, curriculum
+ *   FALLBACK_MODEL   only when the main model is unavailable
  */
-export const TEXT_MODEL = "gpt-4o";
-export const TEXT_MODEL_FAST = "gpt-4o-mini";
+export const TEXT_MODEL = "gpt-5.4";
+export const TEXT_MODEL_FAST = "gpt-5.4";
 export const SMART_MODEL = "gpt-5.4";
+export const FALLBACK_MODEL = "gpt-5.4-mini";
 
 /** The image model every surface draws with. gpt-image-1 is shut down on
  *  2026-10-23; gpt-image-2.5-flare was picked on 2026-10-08 (same speed,

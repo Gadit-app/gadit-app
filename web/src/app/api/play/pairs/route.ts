@@ -20,7 +20,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
+export const maxDuration = 60;
 
 const LANG_NAME: Record<string, string> = {
   he: "Hebrew", en: "English", ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French",
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           model: TEXT_MODEL_FAST,
           temperature: 0,
-          max_tokens: 600,
+          max_completion_tokens: 600,
           response_format: { type: "json_object" },
           messages: [
             { role: "system", content: "For each numbered word, give its most common everyday equivalent in the target language named after the arrow: 1 to 3 words, no explanation, no quotes, child-safe. Reply as JSON mapping each number to the equivalent, e.g. {\"1\":\"weather\"}." },

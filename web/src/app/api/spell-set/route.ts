@@ -19,7 +19,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 20;
+export const maxDuration = 60;
 
 const LANG_NAME: Record<string, string> = {
   en: "English", he: "Hebrew", ar: "Arabic", ru: "Russian", es: "Spanish",
@@ -44,7 +44,7 @@ async function generate(topic: string, uiLangName: string, nativeLangName: strin
     body: JSON.stringify({
       model: TEXT_MODEL_FAST,
       temperature: 0.4,
-      max_tokens: 500,
+      max_completion_tokens: 500,
       response_format: { type: "json_object" },
       messages: [
         {
@@ -96,7 +96,7 @@ async function generateList(list: string, uiLangName: string, nativeLangName: st
     body: JSON.stringify({
       model: TEXT_MODEL_FAST,
       temperature: 0.2,
-      max_tokens: 900,
+      max_completion_tokens: 900,
       response_format: { type: "json_object" },
       messages: [
         {

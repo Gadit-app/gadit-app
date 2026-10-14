@@ -22,7 +22,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
  *   Returns: { translation, romanization?, tip? }
  */
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const MAX_TEXT_LENGTH = 500;
 

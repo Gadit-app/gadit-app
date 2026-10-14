@@ -17,7 +17,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
  * → { quiz: QuizItem[], game: GameItem[], cached }
  */
 export const runtime = "nodejs";
-export const maxDuration = 45;
+export const maxDuration = 90;
 
 export type QuizItem = { q: string; options: string[]; answer: number; explain: string };
 export type GameItem = { s: string; t: boolean; explain: string };

@@ -30,7 +30,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
  *   { error: 'not_cached' }                ← caller falls back to /word/X
  */
 
-export const maxDuration = 10;
+export const maxDuration = 30;
 
 const SUPPORTED_LANGS = new Set([
   "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
@@ -116,7 +116,7 @@ async function generatePreview(
         ],
         response_format: { type: "json_object" },
         temperature: 0.3,
-        max_tokens: 160,
+        max_completion_tokens: 160,
       }),
     });
     if (!res.ok) return null;

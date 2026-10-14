@@ -88,7 +88,7 @@ async function brief(word: string, meaning: string, lang: string, admin = false)
       body: JSON.stringify({
         model: TEXT_MODEL_FAST,
         temperature: 0.3,
-        max_tokens: 110,
+        max_completion_tokens: 110,
         messages: [
           { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject, with simple visual teaching cues (countable objects, arrows, a highlight) that let a student understand it at a glance. Include a child only when the idea is an action or experience a person does; otherwise show no people. Never use digits unless the idea is about numbers, and never chemical symbols or labels; show amounts as countable objects and substances as simple drops, bubbles or particles. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." },
           { role: "user", content: `Word (${lang}): ${word}\nMeaning in the lesson: ${meaning}\n\nDescribe the illustration:` },

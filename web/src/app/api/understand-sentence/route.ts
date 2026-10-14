@@ -21,7 +21,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
+export const maxDuration = 60;
 
 const LANG_NAME: Record<string, string> = {
   en: "English", he: "Hebrew", ar: "Arabic", ru: "Russian", es: "Spanish",
@@ -44,7 +44,7 @@ async function explain(sentence: string, langName: string): Promise<string> {
     body: JSON.stringify({
       model: TEXT_MODEL_FAST,
       temperature: 0.2,
-      max_tokens: 160,
+      max_completion_tokens: 160,
       messages: [
         {
           role: "system",

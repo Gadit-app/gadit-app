@@ -100,7 +100,7 @@ export async function generateExamples(word: string, meaning: string, uiLang: st
       body: JSON.stringify({
         model: TEXT_MODEL_FAST,
         temperature: 0.4,
-        max_tokens: 220,
+        max_completion_tokens: 220,
         messages: [
           {
             role: "system",
