@@ -684,8 +684,8 @@ export function AccountPage() {
           </div>
         )}
         <div className="wb-shell-mobile-menu-cluster">
-          <LangSwitchMobile />
           <WbShellBurger />
+          <LangSwitchMobile />
         </div>
       </header>
 

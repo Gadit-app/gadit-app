@@ -31,7 +31,7 @@ export function ToolKidsToggle() {
   return (
     <button type="button" role="switch" aria-checked={on} aria-label={state} title={state} className={`wb-kids-mini${on ? " is-on" : ""}`} onClick={() => setOn(!on)}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={on ? "/play/kids-mascot.webp" : "/play/kids-mascot-sleep.webp"} alt="" width={30} height={30} />
+      <img src="/play/kids-mascot.webp" alt="" width={30} height={30} />
       <span className="wb-kids-mini-label">{NAME[lang] ?? NAME.en}</span>
       {/* A real switch, so it reads as a button that turns something on. */}
       <span className="wb-kids-mini-track" aria-hidden="true"><span /></span>

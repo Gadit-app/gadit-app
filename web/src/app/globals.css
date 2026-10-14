@@ -14890,7 +14890,7 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-shell-topbar { position: sticky; }
 .wordbook .wb-kids-mini { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 10px 0 6px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink-soft, #475569); font: inherit; font-size: 14px; font-weight: 700; line-height: 1; cursor: pointer; flex: none; margin-inline-start: 14px; margin-inline-end: auto; box-sizing: border-box; }
 .wordbook .wb-kids-mini:focus-visible { outline: 2px solid var(--accent, #0EA5A5); outline-offset: 2px; }
-.wordbook .wb-kids-mini img { width: 30px; height: 30px; object-fit: contain; display: block; filter: grayscale(0.85) opacity(0.75); transition: filter 160ms; }
+.wordbook .wb-kids-mini img { width: 30px; height: 30px; object-fit: contain; display: block; transition: filter 160ms; }
 .wordbook .wb-kids-mini-track { position: relative; width: 32px; height: 18px; border-radius: 999px; background: var(--rule, #CBD5E1); flex: none; transition: background 160ms; }
 .wordbook .wb-kids-mini-track span { position: absolute; top: 2px; inset-inline-start: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .3); transition: inset-inline-start 160ms; }
 .wordbook .wb-kids-mini.is-on { color: var(--ink, #0f172a); border-color: color-mix(in srgb, var(--accent, #0EA5A5) 50%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
@@ -15092,3 +15092,21 @@ html[data-theme="dark"] .wordbook .wb-home-search-box, html[data-theme="dark"] .
 html[data-theme="dark"] .wordbook .wb-home-search-box:hover { border-color: rgba(94, 234, 212, .45); }
 html[data-theme="dark"] .wordbook .wb-home-search-box:focus-within, html[data-theme="dark"] .wordbook .wb-home-sentence-input:focus { border-color: #5EEAD4; }
 html[data-theme="dark"] .wordbook .wb-home-search-input::placeholder, html[data-theme="dark"] .wordbook .wb-home-sentence-input::placeholder { color: #A9B8B5; opacity: 1; }
+/* Mobile language chip for signed-in users: globe + code, no chevron (Gadi 2026-10-14). */
+.wordbook .wb-shell-lang-mobile-trigger.is-compact { padding: 0 7px; gap: 3px; }
+.wordbook .wb-shell-lang-mobile-trigger.is-compact > svg:last-of-type { display: none; }
+/* Signed in, on a phone: the language chip stays in the top bar (Gadi 2026-10-14: switching Hebrew/English
+   meant opening the burger every time). To make room on narrow phones, the share button leaves the top bar there. */
+@media (max-width: 430px) {
+  .wordbook .wb-shell-topbar .wb-shell-lang-mobile-wrap:has(.is-compact) { display: inline-flex; }
+  .wordbook .wb-shell-topbar:has(.wb-shell-lang-mobile-trigger.is-compact) .wb-shell-mobile-identity .wb-shell-share { display: none; }
+}
+/* Narrow phones, signed in: make room for the language chip (Gadi 2026-10-14). */
+@media (max-width: 400px) {
+  .wordbook .wb-shell-topbar:has(.wb-shell-lang-mobile-trigger.is-compact) { gap: 4px; }
+  .wordbook .wb-shell-topbar:has(.wb-shell-lang-mobile-trigger.is-compact) .wb-shell-mobile-identity, .wordbook .wb-shell-topbar:has(.wb-shell-lang-mobile-trigger.is-compact) .wb-shell-mobile-menu-cluster { gap: 4px; }
+  .wordbook .wb-shell-lang-mobile-trigger.is-compact > svg { display: none; }
+  .wordbook .wb-shell-lang-mobile-trigger.is-compact { padding: 0 6px; min-width: 34px; justify-content: center; }
+  .wordbook .wb-shell-topbar .wb-skin-dd-trigger > svg { display: none; }
+  .wordbook .wb-shell-topbar .wb-skin-dd-trigger { padding: 7px 8px; }
+}

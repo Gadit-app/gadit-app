@@ -3612,8 +3612,8 @@ export function PlayPage() {
           </div>
         )}
         <div className="wb-shell-mobile-menu-cluster">
-          <LangSwitchMobile />
           <WbShellBurger active="play" />
+          <LangSwitchMobile />
         </div>
       </header>
 

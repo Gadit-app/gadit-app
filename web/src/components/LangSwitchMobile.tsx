@@ -60,13 +60,15 @@ export function LangSwitchMobile() {
   // crowded family/kid topbar from overflowing). Anonymous visitors — whose
   // topbar is sparse and who may have landed in the wrong locale — keep this
   // visible affordance. Gadi 2026-09-19.
-  if (user) return null;
+  // Since 2026-10-14 (Gadi: switching Hebrew/English meant opening the burger
+  // every time) it shows for signed-in users too, compact: globe + code only.
+  const compact = !!user;
 
   return (
     <div ref={wrapRef} className="wb-shell-lang-mobile-wrap">
       <button
         type="button"
-        className="wb-shell-lang-mobile-trigger"
+        className={`wb-shell-lang-mobile-trigger${compact ? " is-compact" : ""}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         // The accessible name must contain the visible text (the language

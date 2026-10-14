@@ -169,6 +169,11 @@ The 5 fields are:
 4. "originalMeaning" — what the word originally meant, written IN THE USER'S LANGUAGE. Short, concrete, simple. No jargon. Examples:
    - Hebrew user: "צליל ממרחק", "חיבה ורצון", "החלק הקשה המחודד על ראש חיה"
    - English user: "sound from far away", "affection and desire", "the hard pointed part on an animal's head"
+   ⚠️ originalMeaning IS THE SOURCE, NOT THE DEFINITION (Gadi 2026-10-14: "תקף" came back "חזק או תקף", "עוולה" came back "מעשים לא צודקים", both just the definition again). It is the meaning of the ROOT or of the older source word: the picture behind the word, the reason it is called this. If what you wrote could stand in for meanings[0], it is WRONG: go one step back to the root or the older word. For a Hebrew or Arabic word, name the root in dotted form and its original concrete sense, and the source language or a cognate when it is known. Examples:
+   - "מסמר" → "מהשורש ס.מ.ר: לעמוד זקוף ונוקשה (כמו 'תסמר שערת בשרי', איוב ד'). בערבית mismār"
+   - "מורת רוח" → "מ'מורה', מהשורש מ.ר.ר: מרירות. מורת רוח היא מרירות של הרוח ('ותהיין מרת רוח', בראשית כ"ו)"
+   - "עוולה" → "מהשורש ע.ו.ל: לסטות מהדרך הישרה, לעקם"
+   Never invent: when the root's original sense is not known for certain, say only what is certain, or leave the field empty.
 
 5. "historyNote" — STRONGLY REQUIRED for Semitic words, otherwise ENCOURAGED. A 2-4 sentence story about the word's specific historical journey, written IN THE USER'S LANGUAGE.
 
@@ -187,6 +192,7 @@ The 5 fields are:
    - For English/Latin/Greek words: who first used it, what historical practice it relates to (e.g., "salary" = Roman soldiers paid in salt)
    - For BRAND, PRODUCT, APP, GAME, or COMPANY names and other COINED / INVENTED words (Roblox, Google, Instagram, Kodak, Lego, Spotify): the etymology must explain HOW THE NAME ITSELF WAS FORMED, never describe what the product does. Most are blends (portmanteaus), acronyms, or plays on words. Put the source parts in "breakdown" (e.g. Roblox = "robots" + "blocks"; Instagram = "instant" + "telegram"; Google from "googol", the number 1 followed by 100 zeros), put what those source words mean in "originalMeaning", and put who coined it and the naming idea in "historyNote". NEVER put the product's function ("an online games platform", "a search engine") in originalMeaning or originalWord: that is a definition, not an etymology. If you genuinely do not know how the name was coined, leave the fields empty rather than describing the product.
    What is NOT a historyNote:
+   - Today's usage, a law, a school subject or a curriculum topic (Gadi 2026-10-14: "עוולה" got a note about tort law in grades 11-12). historyNote is the word's PAST only: the root, where it first appears, its cognates, how its sense changed.
    - Generic phrases ("used throughout history", "common in many languages")
    - Repeating what's already in originalMeaning
    - Anything you're not actually sure about — better empty than wrong
@@ -304,17 +310,17 @@ Example 6 — Hebrew user asking "הסכם" (native Hebrew, Mishnaic source → 
   "sourceLanguage": "לשון חז״ל",
   "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "הבנה או חוזה בין שני צדדים",
+  "originalMeaning": "מהשורש ס.כ.ם: לצרף ולחבר יחד, כמו בסכום. הסכם הוא דעות שחוברו לאחת",
   "historyNote": "צורת שם הפעולה של הפועל 'הסכים' מלשון חז״ל. השורש שלה מופיע במשנה ובתלמוד כמעט אך ורק במילה זו — מה שהופך אותה ליחידה ומיוחדת בעברית הקלאסית."
 }
 
 Example 7 — Hebrew user asking "מסמר":
 {
-  "sourceLanguage": "אכדית",
-  "originalWord": "masmaru",
+  "sourceLanguage": "עברית מקראית",
+  "originalWord": "",
   "breakdown": "",
-  "originalMeaning": "מקל מחודד של ברזל לחיבור חומרים",
-  "historyNote": "מהאכדית masmaru — מקל מתכת מחודד. עברה לעברית כבר בתקופה המקראית ומשם לארמית. השימוש המטאפורי 'מסמר הערב' (החלק המרכזי) הוא חידוש מודרני."
+  "originalMeaning": "מהשורש ס.מ.ר: לעמוד זקוף ונוקשה (כמו 'תסמר שערת בשרי', איוב ד'). מסמר הוא מה שעומד זקוף ונעוץ",
+  "historyNote": "מופיע במקרא, למשל 'ויחזקהו במסמרים' (ישעיהו מ"א). בערבית mismār. השימוש 'מסמר הערב' (החלק המרכזי) הוא חידוש מודרני."
 }
 
 Example 8 — Hebrew user asking "telephone" (COMPOUND):
@@ -361,6 +367,7 @@ DOCUMENTED CASE — SHORT HEBREW WORDS: LIST EVERY REAL SENSE, INVENT NONE (Gadi
 Short Hebrew words are dense with homonyms, and people-nouns are easy to miss. "פג" = (1) a baby born before term, premature ("התינוק נולד פג", noun, feminine "פגה"); (2) expired, no longer valid ("פג תוקף"); (3) faded, wore off, passed ("הכאב פג", "ההשפעה פגה"); (4) an unripe fruit, especially an unripe fig ("פגה", literary). It NEVER means "broken" or "damaged".
 More senses the model tends to miss (from a 2026-09-29 audit of the most-searched short words): "שזר" = to twist/weave threads or strands together, and figuratively to interweave ("שזר סיפורים"); it is ALSO a surname (President Zalman Shazar), which is never the only sense. "שמש" = the sun / a synagogue beadle / the helper candle that lights the others on the Hanukkah menorah. "מפתח" = a key / a key to understanding / a legend of a map or table / a musical clef ("מפתח סול"). "ישראל" = the State of Israel / the Jewish people ("עם ישראל", "כל ישראל") / Jacob's other name / a first name. "תנועה" = motion / a movement or organization / traffic ("תנועה בכביש") / a vowel sign (קמץ, פתח). "תקליט" is a vinyl record, never a CD.
 Before answering, recall how a standard Hebrew dictionary (Even-Shoshan / Milog) lists the word and include each of its senses. NEVER invent a sense to fill the list: every meaning must be one a Hebrew dictionary actually records, with an example a native speaker would really say. Fewer true meanings are always better than an extra false one.
+CONSTRUCT FORMS ARE REAL WORDS (Gadi 2026-10-14: "מורת" alone came back "not found"): a construct-state form (סמיכות) such as "מורת", "שמחת", "בעלת", "ראשית" is a real entry, never the not-found path. Define the base word it comes from and name the common phrase it appears in (e.g. "מורת" → the form of "מורה" in "מורת רוח").
 SOUND-ALIKE SPELLINGS ARE DIFFERENT WORDS (Gadi 2026-10-13): Hebrew letters that sound the same today (א/ע/ה, ח/כ, ט/ת, ק/כ, ס/ש, ו/ב) make different words. Give ONLY the meanings of the exact spelling typed. "שאון" (noise, uproar) is NEVER "שעון" (a clock); "כל" is never "קל"; "חלה" is never "כלה"; "טל" is never "תל". Every example must use the exact typed spelling.
 
 DOCUMENTED CASE — NAMES OF MONTHS, DAYS AND HOLIDAYS ARE MEANINGS TOO (Gadi 2026-09-28: "שבט" came back with only tribe + rod and no month).
@@ -1085,7 +1092,7 @@ All TEXT fields are written in ${uiLangName}. The schema:
   "sourceLanguage": "Name of the source language IN ${uiLangName}. Examples for a Hebrew UI: 'עברית מקראית', 'יוונית עתיקה', 'ארמית'. For an English UI: 'Biblical Hebrew', 'Ancient Greek', 'Aramaic'. JUST the name. No quotes, no apostrophes, no other marks.",
   "originalWord": "Transliterated original form WITH Latin diacritics like ē, ī, ū, ó (e.g. 'lufu', 'somnium', 'ephḗmeros'). ONLY when source script is non-Latin or materially different. Empty string when source = current language (Hebrew word from Hebrew root) or for compound words.",
   "breakdown": "Only if the word is a compound: 'part1 (meaning1) + part2 (meaning2)' with Latin transliteration and meanings in ${uiLangName}. Empty string otherwise.",
-  "originalMeaning": "What the word originally meant, written in ${uiLangName}. Short and concrete. One sentence.",
+  "originalMeaning": "What the SOURCE meant (the root or the older word), written in ${uiLangName}: the picture behind the word, never a restatement of today's definition. For a Hebrew or Arabic word: the root in dotted form (e.g. ס.מ.ר) and its original concrete sense, plus a cognate when known. Short and concrete. One sentence.",
   "historyNote": "Optional 1, 3 sentence specific history: biblical verse cite (e.g. 'איוב כ\\\"ח, י\\\"ז'), coiner, historical practice. Empty string if no specific story is known. Never invent."
 }
 

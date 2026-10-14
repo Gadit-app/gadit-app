@@ -23,7 +23,6 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import VoiceInput from "@/components/VoiceInput";
-import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
@@ -317,8 +316,8 @@ export function HomePage() {
           </div>
         )}
         <div className="wb-shell-mobile-menu-cluster">
-        <LangSwitchMobile />
         <WbShellBurger active="home" />
+        <LangSwitchMobile />
         </div>
       </header>
 
@@ -354,18 +353,6 @@ export function HomePage() {
                 className="wb-home-search-input"
                 aria-label={c.placeholder}
               />
-              <div className="wb-home-search-kids">
-                <KidsModeToggle
-                  plan={plan}
-                  onBasicGate={() => {
-                    if (!user) {
-                      promptLogin(planCopy(lang, "kidsGate"));
-                      return;
-                    }
-                    setUpgradeTrigger({ feature: "kids", tier: "deep" });
-                  }}
-                />
-              </div>
               <div className="wb-home-search-mic">
                 <VoiceInput
                   uiLang={lang}
