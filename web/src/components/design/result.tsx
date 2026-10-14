@@ -1217,7 +1217,7 @@ export function MeaningCard({ n, meaning }: { n: number; meaning: Meaning; onRep
           <div className="wb-meaning-num">{n}</div>
           <div className="wb-meaning-body">
             {meaning.meaning && <div className="wb-meaning-def">{meaning.meaning}</div>}
-            {(meaning.examples ?? []).map((ex, j) => (
+            {(meaning.examples ?? []).filter((ex) => String(ex ?? "").trim()).map((ex, j) => (
               <div className="wb-meaning-ex" key={j}>{ex}</div>
             ))}
           </div>

@@ -1,4 +1,5 @@
 import { curriculumHint } from "@/lib/curriculum-words";
+import { noteUncertainWord } from "@/lib/uncertain-words";
 import { fixEtymology } from "@/lib/etymology-guard";
 import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse } from "next/server";
@@ -486,6 +487,7 @@ The operation names are different words: חיבור, חיסור, כפל, חיל�
 The same holds in every language (English minuend / subtrahend / difference / quotient, and their equivalents).
 
 ⚠️ CRITICAL RULE #5, NEVER HALLUCINATE MEANINGS:
+"NOT SURE" IS AN ANSWER (Gadi 2026-10-14: rare words from a 5th-grade reader came back with invented meanings, "כמדומים" as dim light, "אנקורים" as ducklings). If you do not know this word for CERTAIN (a rare, old or literary word you cannot place with full confidence), do NOT guess. Return "uncertain": true, and as the only meaning, in the user's UI language: "We're not sure about this word yet. Try it with the sentence it appears in." (Hebrew: "אנחנו עוד לא בטוחים במילה הזאת. נסו לחפש אותה עם המשפט שבו היא מופיעה."), with "examples": [] and an empty etymology. A wrong meaning taught to a child is the worst possible outcome; "not sure" is always better.
 Do NOT invent meanings that don't exist in real dictionaries. If a meaning sounds odd, borderline, or you're not sure, OMIT IT. Better to return 1 real meaning than 2 with one invented. When in doubt, cross-reference: would a native speaker actually use this word this way in a real sentence?
 
 ⚠️ Documented hallucinations, NEVER repeat these:
@@ -1906,6 +1908,8 @@ export async function POST(req: NextRequest) {
             } catch { /* leave whatever the model returned */ }
             // Never keep a meaning that belongs to a sound-alike spelling.
             acceptedResult = dropSoundAlikeMeanings(acceptedResult, word);
+            // "Not sure" words go to a list Gadi can review (2026-10-14).
+            if ((acceptedResult as { uncertain?: boolean }).uncertain === true) void noteUncertainWord(word, uiLangCode);
             // The etymology says where the word came from, never the definition again.
             acceptedResult = await fixEtymology(acceptedResult, word, uiLangName);
 
