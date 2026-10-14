@@ -1031,6 +1031,56 @@ async function callOpenAI(model: string, systemPrompt: string, userContent: stri
   return JSON.parse(data.choices[0].message.content);
 }
 
+/** A word gpt-4o was not sure about gets one more try with gpt-5.4, which
+ *  knew rare and literary Hebrew far better in testing (Gadi 2026-10-14:
+ *  "only the words GPT does not know go to 5.4"). Same prompt; null when
+ *  gpt-5.4 is not sure either, fails, or returns something degenerate. */
+function isUncertainResult(r: unknown): boolean {
+  const o = r as { uncertain?: boolean; meanings?: Array<{ meaning?: string }> };
+  if (o?.uncertain === true) return true;
+  const m = o?.meanings?.[0]?.meaning ?? "";
+  return (o?.meanings?.length ?? 0) === 1 && /לא בטוחים במילה הזאת|not sure about this word/i.test(m);
+}
+
+async function escalateUncertain(systemPrompt: string, userContent: string, word: string, uiLangCode: string): Promise<object | null> {
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+      signal: AbortSignal.timeout(40000),
+      body: JSON.stringify({
+        model: "gpt-5.4",
+        reasoning_effort: "low",
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "system", content: "A first pass was not sure about this word. You are the expert second opinion. If you KNOW it, including Mishnaic, Talmudic, Biblical and literary forms (e.g. 'כמדומים' = it seems, 'כמדומני' = I think), define it fully and set uncertain to false. Return uncertain only when you genuinely do not know the word." },
+          { role: "user", content: userContent },
+        ],
+      }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const u = usageFrom(data);
+    void logAiUsage({ feature: "define_escalate", model: "gpt-5.4", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+    const parsed = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as Record<string, unknown>;
+    if (isUncertainResult(parsed) || !Array.isArray(parsed.meanings) || !parsed.meanings.length) { console.info(`[define] escalate: gpt-5.4 not sure either for "${word}": ${JSON.stringify(parsed).slice(0, 300)}`); return null; }
+    let out: Record<string, unknown> = parsed;
+    let v = isDegenerate(out, word, uiLangCode);
+    // gpt-5.4 likes niqqud and gershayim in the origin card; the definition is
+    // what was missing, so repair or clear just the etymology.
+    if (v.degenerate && (v.reason ?? "").startsWith("etymology.")) {
+      out = sanitizeDegenerateEtymology(out) as Record<string, unknown>;
+      v = isDegenerate(out, word, uiLangCode);
+    }
+    if (v.degenerate) { console.info(`[define] escalate: degenerate for "${word}": ${v.reason}`); return null; }
+    console.info(`[define] gpt-5.4 knew "${word}" (gpt-4o was not sure)`);
+    return out;
+  } catch {
+    return null;
+  }
+}
+
 async function openAIStream(model: string, systemPrompt: string, userContent: string): Promise<Response> {
   return fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -1909,7 +1959,11 @@ export async function POST(req: NextRequest) {
             // Never keep a meaning that belongs to a sound-alike spelling.
             acceptedResult = dropSoundAlikeMeanings(acceptedResult, word);
             // "Not sure" words go to a list Gadi can review (2026-10-14).
-            if ((acceptedResult as { uncertain?: boolean }).uncertain === true) void noteUncertainWord(word, uiLangCode);
+            if (isUncertainResult(acceptedResult)) {
+              const better = await escalateUncertain(systemPrompt, userContent, word, uiLangCode);
+              if (better) acceptedResult = better;
+              else void noteUncertainWord(word, uiLangCode);
+            }
             // The etymology says where the word came from, never the definition again.
             acceptedResult = await fixEtymology(acceptedResult, word, uiLangName);
 
