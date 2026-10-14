@@ -1,4 +1,5 @@
 import { curriculumHint } from "@/lib/curriculum-words";
+import { fixEtymology } from "@/lib/etymology-guard";
 import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
@@ -367,6 +368,8 @@ DOCUMENTED CASE — SHORT HEBREW WORDS: LIST EVERY REAL SENSE, INVENT NONE (Gadi
 Short Hebrew words are dense with homonyms, and people-nouns are easy to miss. "פג" = (1) a baby born before term, premature ("התינוק נולד פג", noun, feminine "פגה"); (2) expired, no longer valid ("פג תוקף"); (3) faded, wore off, passed ("הכאב פג", "ההשפעה פגה"); (4) an unripe fruit, especially an unripe fig ("פגה", literary). It NEVER means "broken" or "damaged".
 More senses the model tends to miss (from a 2026-09-29 audit of the most-searched short words): "שזר" = to twist/weave threads or strands together, and figuratively to interweave ("שזר סיפורים"); it is ALSO a surname (President Zalman Shazar), which is never the only sense. "שמש" = the sun / a synagogue beadle / the helper candle that lights the others on the Hanukkah menorah. "מפתח" = a key / a key to understanding / a legend of a map or table / a musical clef ("מפתח סול"). "ישראל" = the State of Israel / the Jewish people ("עם ישראל", "כל ישראל") / Jacob's other name / a first name. "תנועה" = motion / a movement or organization / traffic ("תנועה בכביש") / a vowel sign (קמץ, פתח). "תקליט" is a vinyl record, never a CD.
 Before answering, recall how a standard Hebrew dictionary (Even-Shoshan / Milog) lists the word and include each of its senses. NEVER invent a sense to fill the list: every meaning must be one a Hebrew dictionary actually records, with an example a native speaker would really say. Fewer true meanings are always better than an extra false one.
+RARE, OLD AND LITERARY FORMS ARE REAL WORDS (Gadi 2026-10-14: a 5th grader reading the legend of חוני המעגל got "not found" for "עג" in "עג עוגה ועמד בתוכה"): a Biblical, Mishnaic or literary form that children meet in school texts is a real entry. "עג" = drew (a circle), past tense of the root ע.ו.ג; "עוגה" there = a circle drawn on the ground. Define such a form in plain words, say it is old or literary, and name the phrase it comes from.
+PHRASES FROM A TEXT ARE REAL ENTRIES: a short phrase that is not a fixed idiom but means something ("רוב אדר" = most of the month of Adar; "גשמים מנטפים" = rain falling in small drops, a drizzle) is never the not-found path. Explain what the phrase means as a whole, simply.
 CONSTRUCT FORMS ARE REAL WORDS (Gadi 2026-10-14: "מורת" alone came back "not found"): a construct-state form (סמיכות) such as "מורת", "שמחת", "בעלת", "ראשית" is a real entry, never the not-found path. Define the base word it comes from and name the common phrase it appears in (e.g. "מורת" → the form of "מורה" in "מורת רוח").
 SOUND-ALIKE SPELLINGS ARE DIFFERENT WORDS (Gadi 2026-10-13): Hebrew letters that sound the same today (א/ע/ה, ח/כ, ט/ת, ק/כ, ס/ש, ו/ב) make different words. Give ONLY the meanings of the exact spelling typed. "שאון" (noise, uproar) is NEVER "שעון" (a clock); "כל" is never "קל"; "חלה" is never "כלה"; "טל" is never "תל". Every example must use the exact typed spelling.
 
@@ -1903,6 +1906,8 @@ export async function POST(req: NextRequest) {
             } catch { /* leave whatever the model returned */ }
             // Never keep a meaning that belongs to a sound-alike spelling.
             acceptedResult = dropSoundAlikeMeanings(acceptedResult, word);
+            // The etymology says where the word came from, never the definition again.
+            acceptedResult = await fixEtymology(acceptedResult, word, uiLangName);
 
             // Cache the validated result regardless of whether it was
             // the streamed attempt or a retry — both produced the same

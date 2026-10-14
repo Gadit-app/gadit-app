@@ -3531,7 +3531,7 @@ const he: V2Strings = {
   meaningsEyebrow: "הגדרות",
   takeItFurtherEyebrow: "קחו את זה הלאה",
   wordOriginLanguage: "שפה",
-  wordOriginOriginallyMeant: "משמעות מקורית",
+  wordOriginOriginallyMeant: "המקור",
   actionCompose: "חברו משפט",
   actionQuiz: "חידון",
   actionCompare: "השוואת מילים",
