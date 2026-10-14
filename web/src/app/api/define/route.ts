@@ -5,7 +5,7 @@ import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST, SMART_MODEL } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST, SMART_MODEL, costWithCache } from "@/lib/ai-cost";
 import { adminBudgetExceeded, hardCapReached, ADMIN_DAILY_CAP } from "@/lib/ai-budget";
 import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
@@ -1811,7 +1811,7 @@ export async function POST(req: NextRequest) {
         let accumulated = "";
         let buffer = "";
         let closed = false;
-        let capturedUsage: { prompt_tokens?: number; completion_tokens?: number } | null = null;
+        let capturedUsage: { prompt_tokens?: number; completion_tokens?: number; prompt_tokens_details?: { cached_tokens?: number } } | null = null;
         const reader = upstream.getReader();
 
         const safeEnqueue = (chunk: Uint8Array) => {
@@ -1873,6 +1873,8 @@ export async function POST(req: NextRequest) {
             model: usingFallback ? TEXT_MODEL_FAST : TEXT_MODEL,
             tokensIn: capturedUsage?.prompt_tokens ?? 0,
             tokensOut: capturedUsage?.completion_tokens ?? 0,
+            // Real cost: the long system prompt is ~97% cached by OpenAI.
+            costUsd: costWithCache(usingFallback ? TEXT_MODEL_FAST : TEXT_MODEL, capturedUsage?.prompt_tokens ?? 0, capturedUsage?.prompt_tokens_details?.cached_tokens ?? 0, capturedUsage?.completion_tokens ?? 0),
             plan: isRefresh ? "admin" : userInfo?.plan ?? "anon",
             admin: isRefresh,
           });

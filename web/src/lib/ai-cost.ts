@@ -32,7 +32,10 @@ import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { maybeAlertSpend } from "@/lib/ai-budget";
 
-/** USD per 1,000,000 tokens. Update when OpenAI list prices change. */
+/** USD per 1,000,000 tokens. Update when OpenAI list prices change.
+ *  Repeated prompt prefixes are cached by OpenAI automatically and billed at
+ *  CACHED_IN (measured 2026-10-14: ~97% of a definition's 20k prompt tokens
+ *  come back as cached). */
 export const PRICING: Record<string, { in: number; out: number }> = {
   "gpt-4o": { in: 2.5, out: 10 },
   "gpt-4o-mini": { in: 0.15, out: 0.6 },
@@ -43,12 +46,26 @@ export const PRICING: Record<string, { in: number; out: number }> = {
   // list prices (text in $0.50/M, audio out $10/M): about 0.6c a sentence.
   "gemini-3.8-flash-tts": { in: 0.5, out: 10 },
   "gpt-5.4": { in: 2.5, out: 15 },
+  "gpt-5.4-mini": { in: 0.75, out: 4.5 },
 };
 
-/** The image model every surface draws with. gpt-image-1 is shut down on
- *  2026-10-23; gpt-image-2.5-flare was picked on 2026-10-08 (same speed,
- *  about half the price, cleaner pictures). It does NOT accept
- *  input_fidelity on /images/edits. */
+/** Cached-input price per 1M tokens (OpenAI list prices, checked 2026-10-14). */
+export const CACHED_IN: Record<string, number> = {
+  "gpt-4o": 1.25,
+  "gpt-4o-mini": 0.075,
+  "gpt-5.4": 0.25,
+  "gpt-5.4-mini": 0.075,
+};
+
+/** Cost of one call, counting cached prompt tokens at the cached price. */
+export function costWithCache(model: string, promptTokens: number, cachedTokens: number, outTokens: number): number {
+  const p = PRICING[model];
+  if (!p) return 0;
+  const cached = Math.min(cachedTokens, promptTokens);
+  const cachedPrice = CACHED_IN[model] ?? p.in;
+  return ((promptTokens - cached) * p.in + cached * cachedPrice + outTokens * p.out) / 1_000_000;
+}
+
 /**
  * Text models, one constant per role (Gadi 2026-10-14). OpenAI retires
  * gpt-4o and gpt-4o-mini on 2027-01-14; switching a role is this one line,
@@ -61,6 +78,11 @@ export const PRICING: Record<string, { in: number; out: number }> = {
 export const TEXT_MODEL = "gpt-4o";
 export const TEXT_MODEL_FAST = "gpt-4o-mini";
 export const SMART_MODEL = "gpt-5.4";
+
+/** The image model every surface draws with. gpt-image-1 is shut down on
+ *  2026-10-23; gpt-image-2.5-flare was picked on 2026-10-08 (same speed,
+ *  about half the price, cleaner pictures). It does NOT accept
+ *  input_fidelity on /images/edits. */
 
 export const IMAGE_MODEL = "gpt-image-2.5-flare";
 
